@@ -1,0 +1,65 @@
+/**
+ * ----------------------------------------------------------------------------
+ * toggleElements.css - Stylesheet for jQuery-Plugin toggleElements
+ * ----------------------------------------------------------------------------
+ */
+
+ /* Screen ------------------------------------------------------------------- */
+
+@media projection, screen {
+
+	/* Toggler2 - example simple style */
+	.toggler2 {
+	   margin:25px 0 25px 0;
+		cursor:pointer;
+		text-decoration: none;
+		font-size: 1.4em;
+		font-weight:bold;
+		line-height:30px;
+		display: block;
+		border:solid 1px #d4d4d4;
+		padding:5px;
+	}
+	.toggler2-closed {
+		color:#999;
+	}
+	.toggler2-closed:hover {
+		color: #000;
+	}
+	.toggler2-opened {
+		color:#999;
+	}
+	.toggler2-opened:hover {
+		color: #000;
+	}
+
+	/* Container */
+	.toggler2-c {
+		margin-bottom:25px;
+	}
+	.toggler2-c-closed {
+		margin:-25px 0px 25px 0px;
+	   background:#fff;
+	   border:solid 1px #d4d4d4;
+	   border-top:0;
+	   padding:20px;
+		width:536px;
+	}
+	.toggler2-c-opened {
+	   margin:-25px 0px 25px 0px;
+	   background:#FFF8DC;
+	   border:solid 1px #d4d4d4;
+		border-top:0;
+	   padding:20px;
+		width:536px;
+	}
+
+}
+
+/* Print -------------------------------------------------------------------- */
+@media print {
+
+	.toggler2-c { margin-bottom:25px; }
+	.toggler2 { display: none; }
+	
+}

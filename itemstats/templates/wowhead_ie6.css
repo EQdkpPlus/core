@@ -1,0 +1,19 @@
+table.wowhead_tooltip td.top-left {
+	background-image: url(./wowhead/tooltip.gif); 
+}
+
+table.wowhead_tooltip td.top-right {
+	background-image: url(./wowhead/tooltip.gif); 
+}
+
+table.wowhead_tooltip td.bottom-left {
+	background-image: url(./wowhead/tooltip.gif); 
+}
+
+table.wowhead_tooltip td.bottom-right {
+	background-image: url(./wowhead/tooltip.gif); 
+}
+
+table.wowhead_tooltip td.wh_left {
+	background-image: url(./wowhead/tooltip.gif); 
+}
