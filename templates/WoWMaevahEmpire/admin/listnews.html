@@ -1,0 +1,31 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{NEWS_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="150" nowrap="nowrap"><a href="{U_LIST_NEWS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_NEWS}&amp;o={O_USERNAME}&amp;start={START}">{L_USERNAME}</a></th>
+    <th align="left" width="100%"><a href="{U_LIST_NEWS}&amp;o={O_HEADLINE}&amp;start={START}">{L_HEADLINE}</a></th>
+  </tr>
+  <!-- BEGIN news_row -->
+  <tr class="{news_row.ROW_CLASS}">
+    <td width="16" nowrap="nowrap" align="center"><a href="{news_row.U_VIEW_NEWS}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
+    <td width="150" nowrap="nowrap">{news_row.DATE}</td>
+    <td width="100" nowrap="nowrap">{news_row.USERNAME}</td>
+    <td width="100%"><a href="{news_row.U_VIEW_NEWS}">{news_row.HEADLINE}</a></td>
+  </tr>
+  <!-- END news_row -->
+  <tr>
+    <th colspan="4" class="footer">{LISTNEWS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{NEWS_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

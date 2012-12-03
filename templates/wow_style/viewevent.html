@@ -1,0 +1,75 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+      <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+        <tr>
+          <th align="center" colspan="2">{L_RECORDED_RAID_HISTORY}</th>
+        </tr>
+        <tr>
+          <td width="50%" class="row1"><b>{L_ADDED_BY}:</b> {EVENT_ADDED_BY}</td>
+          <td width="50%" class="row2"><b>{L_UPDATED_BY}:</b> {EVENT_UPDATED_BY}</td>
+        </tr>
+      </table>
+      <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+        <tr>
+          <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+          <th align="left" width="70" nowrap="nowrap"><a href="{U_VIEW_EVENT}o={O_DATE}">{L_DATE}</a></th>
+          <th align="left" width="100" nowrap="nowrap" class="rowhead">{L_ATTENDEES}</th>
+          <th align="left" width="50" nowrap="nowrap">{L_DROPS}</th>
+          <th align="left" width="100%"><a href="{U_VIEW_EVENT}o={O_NOTE}">{L_NOTE}</a></th>
+          <th align="left" width="60" nowrap="nowrap"><a href="{U_VIEW_EVENT}o={O_VALUE}">{L_VALUE}</a></th>
+        </tr>
+        <!-- BEGIN raids_row -->
+        <tr class="{raids_row.ROW_CLASS}">
+          <td width="16" align="center" nowrap="nowrap"><a href="{raids_row.U_VIEW_RAID}"><img src="{EQDKP_ROOT_PATH}images/glyphs/view.gif" width="16" height="16" alt="View" /></a></td>
+          <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
+          <td width="100" nowrap="nowrap">{raids_row.ATTENDEES}</td>
+          <td width="50" nowrap="nowrap">{raids_row.DROPS}</td>
+          <td width="100%">{raids_row.NOTE}</td>
+          <td width="60" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+        </tr>
+        <!-- END raids_row -->
+        <tr class="rowhead">
+          <th colspan="6">&nbsp;</th>
+        </tr>
+        <tr class="{ROW_CLASS}">
+          <td colspan="2" nowrap="nowrap" class="{ROW_CLASS}"><b>{L_AVERAGE}:</b></td>
+          <td width="100" nowrap="nowrap" class="{ROW_CLASS}">{AVERAGE_ATTENDEES}</td>
+          <td width="50" nowrap="nowrap" class="{ROW_CLASS}">{AVERAGE_DROPS}</td>
+          <td align="right" class="{ROW_CLASS}"><b>{L_TOTAL_EARNED}:</b></td>
+          <td width="60" nowrap="nowrap" class="positive">{TOTAL_EARNED}</td>
+        </tr>
+        <tr>
+          <th colspan="6" class="footer">{VIEWEVENT_FOOTCOUNT}</th>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_ITEMS}</th>
+  </tr>
+  <tr>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="15%" nowrap="nowrap">{L_BUYER}</th>
+    <th align="left" width="100%">{L_NAME}</th>
+    <th align="left" width="60" nowrap="nowrap">{L_SPENT}</th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+    <td width="16" align="center" nowrap="nowrap"><a href="{items_row.U_VIEW_RAID}"><img src="{EQDKP_ROOT_PATH}images/glyphs/view.gif" width="16" height="16" alt="View" /></a></td>
+    <td width="70" nowrap="nowrap">{items_row.DATE}</td>
+    <td width="150" nowrap="nowrap"><a href="{items_row.U_VIEW_MEMBER}">{items_row.BUYER}</a></td>
+    <td width="100%"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td width="60" nowrap="nowrap" class="negative">{items_row.SPENT}</td>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="5" class="footer">{ITEM_FOOTCOUNT}</th>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->
