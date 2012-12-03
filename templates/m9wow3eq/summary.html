@@ -1,0 +1,79 @@
+<!-- INCLUDE page_header.html -->
+<!-- IF S_STEP1 --><form method="post" action="summary.php" name="post"><!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <!-- IF S_STEP1 -->
+  <tr>
+    <th align="center" colspan="2">{L_ENTER_DATES}</th>
+  </tr>
+  <tr>
+    <td width="50%" class="row1" align="center">
+    <b>{L_STARTING_DATE}:</b> <input type="text" name="mo1" size="3" maxlength="2" class="input" />/<input type="text" name="d1" size="3" maxlength="2" class="input" />/<input type="text" name="y1" size="3" maxlength="2" class="input" />
+    </td>
+    <td width="50%" class="row2" align="center">
+    <b>{L_ENDING_DATE}:</b> <input type="text" name="mo2" size="3" maxlength="2" value="{MO2}" class="input" />/<input type="text" name="d2" size="3" maxlength="2" value="{D2}" class="input" />/<input type="text" name="y2" size="3" maxlength="2" value="{Y2}" class="input" />
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="submit" value="{L_CREATE_NEWS_SUMMARY}" class="mainoption" /></th>
+  </tr>
+  <!-- ELSE -->
+  <tr>
+    <th align="center" colspan="4">{L_SUMMARY_DATES}</th>
+  </tr>
+  <tr>
+    <td width="25%" class="row1"><b>{L_TOTAL_RAIDS}:</b> {TOTAL_RAIDS}</td>
+    <td width="25%" class="row2"><b>{L_TOTAL_ITEMS}:</b> {TOTAL_ITEMS}</td>
+    <td width="25%" class="row1"><b>{L_TOTAL_EARNED}:</b> <span class="positive">{TOTAL_EARNED}</span></td>    
+    <td width="25%" class="row2"><b>{L_TOTAL_SPENT}:</b> <span class="negative">{TOTAL_SPENT}</span></td>    
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="50%" nowrap="nowrap">{L_EVENT}</th>
+    <th align="left" width="50%">{L_NOTE}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_ATTENDEES}</th>
+    <th align="left" width="50" nowrap="nowrap">{L_ITEMS}</th>
+    <th align="left" width="60" nowrap="nowrap">{L_VALUE}</th>
+  </tr>
+  <!-- BEGIN raids_row -->
+  <tr class="{raids_row.ROW_CLASS}">
+    <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="50%" nowrap="nowrap"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="50%">{raids_row.NOTE}</td>
+    <td width="40" nowrap="nowrap">{raids_row.ATTENDEES}</td>
+    <td width="40" nowrap="nowrap" class="{raids_row.C_ATTENDEES_PCT}">{raids_row.ATTENDEES_PCT}</td>
+    <td width="50" nowrap="nowrap">{raids_row.ITEMS}</td>
+    <td width="60" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+  </tr>
+  <!-- END raids_row -->
+  <tr>
+    <th colspan="7" class="footer">&nbsp;</th>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="100%">{L_CLASS_SUMMARY}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_LOOTS}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_MEMBERS}</th>
+    <th align="left" nowrap="nowrap">{L_LOOT_FACTOR}</th>
+  </tr>
+  <!-- BEGIN class_row -->
+  <tr class="{class_row.ROW_CLASS}">
+    <td width="100%"><a href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_COUNT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_PCT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_COUNT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_PCT}</td>
+    <td nowrap="nowrap" align="center" class="{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</td>
+  </tr>
+  <!-- END class_row -->
+  <tr>
+    <th colspan="6" class="footer">&nbsp;</th>
+  </tr>
+  <!-- ENDIF -->
+</table>
+<!-- IF S_STEP1 --></form><!-- ENDIF -->
+<!-- INCLUDE page_tail.html -->

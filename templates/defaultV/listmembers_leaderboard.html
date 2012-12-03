@@ -1,0 +1,170 @@
+<!-- DKP Leaderboard by Legedric (www.derdunklepakt.de) START -->
+
+<!-- IF SHOW_MULTI -->
+	<form method="get" action="{F_MEMBERS}">
+	<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+<input type="hidden" name="filter" value="{GIVEN_FILTER}" />
+	 <table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+	  <tr>
+	    <th align="right" width="120" nowrap="nowrap">{L_FILTER}:
+	    	<select name="multifilter" class="input" onchange="javascript:form.submit();">
+	        <!-- BEGIN multi_row -->
+	        <option value="{multi_row.VALUE}"{multi_row.SELECTED}>{multi_row.OPTION}</option>
+	        <!-- END filter_row -->
+	      </select>
+	    	</th>
+	    <th align="center">MultiDKP Leaderboard {SHOW_MULTI_FILTER}</th>
+	  </tr>
+	</table>
+	</form>
+	<!-- IF SHOW_CAPTIONS -->
+	<!-- ELSE -->	
+		<br/>
+	<!-- ENDIF -->
+<!-- ENDIF -->
+
+<!-- IF SHOW_CAPTIONS -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" nowrap="nowrap">
+			<a style='color:#FF7C0A;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Druid}'>
+			<img src='./games/WoW/class/Druid.gif' alt=''>{Caption_Druid} </a>
+			</th>
+		<th align="center" nowrap="nowrap"> 
+			<a style='color:#AAD372;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Hunter}'>
+			<img src='./games/WoW/class/Hunter.gif' alt=''>{Caption_Hunter}</a>
+			</th>
+		<th align="center" nowrap="nowrap">
+			<a style='color:#68CCEF;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Mage}'>
+			<img src='./games/WoW/class/Mage.gif' alt=''>{Caption_Mage}</a>
+			</th>
+		<!-- IF S_ISALLIANCE -->
+			<th align="center" nowrap="nowrap">
+				<a style='color:#F48CBA;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Paladin}'>
+				<img src='./games/WoW/class/Paladin.gif' alt=''>{Caption_Paladin}</a>
+				 </th>
+		<!-- ENDIF -->
+		<th align="center" nowrap="nowrap">
+			<a style='color:#FFFFFF;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Priest}'>
+			<img src='./games/WoW/class/Priest.gif' alt=''> {Caption_Priest}</a>
+			</th>
+		<th align="center" nowrap="nowrap">
+			<a style='color:#FFF468;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Rogue}'>
+			<img src='./games/WoW/class/Rogue.gif' alt=''> {Caption_Rogue}</a>
+			</th>
+		<!-- IF S_ISHORDE -->
+			<th align="center" nowrap="nowrap">
+				<a style='color:#1a3caa;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Shaman}'>
+				<img src='./games/WoW/class/Shaman.gif' alt=''>{Caption_Shaman}</a>
+				 </th>
+		<!-- ENDIF -->
+		<th align="center" nowrap="nowrap">
+			<a style='color:#9382C9;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Warlock}'>
+			 <img src='./games/WoW/class/Warlock.gif' alt=''>{Caption_Warlock}</a>
+			 </th>
+		<th align="center" nowrap="nowrap">
+			<a style='color:#C69B6D;text-decoration: none;' href='listmembers.php?s=&filter={Caption_Warrior}'>
+			<img src='./games/WoW/class/Warrior.gif' alt=''> {Caption_Warrior}</a>
+			</th>
+	</tr>
+	<tr>
+		<td align="left" valign="top" class="row2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_druid -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_druid.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_druid.U_VIEW_MEMBER}">{classlist_row_druid.NAME}</a></td>
+					<td align="right" class="{classlist_row_druid.C_CURRENT}" nowrap="nowrap">{classlist_row_druid.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_druid -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_hunter -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_hunter.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_hunter.U_VIEW_MEMBER}">{classlist_row_hunter.NAME}</a></td>
+					<td align="right" class="{classlist_row_hunter.C_CURRENT}" nowrap="nowrap">{classlist_row_hunter.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_hunter -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_mage -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_mage.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_mage.U_VIEW_MEMBER}">{classlist_row_mage.NAME}</a></td>
+					<td align="right" class="{classlist_row_mage.C_CURRENT}" nowrap="nowrap">{classlist_row_mage.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_mage -->
+			</table>
+		</td>
+		<!-- IF S_ISALLIANCE -->
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_paladin -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_paladin.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_paladin.U_VIEW_MEMBER}">{classlist_row_paladin.NAME}</a></td>
+					<td align="right" class="{classlist_row_paladin.C_CURRENT}" nowrap="nowrap">{classlist_row_paladin.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_paladin -->
+			</table>
+		</td>
+		<!-- ENDIF -->
+		<td align="left" valign="top" class="row<!-- IF S_ISALLIANCE -->2<!-- ELSE -->1<!-- ENDIF -->">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_priest -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_priest.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_priest.U_VIEW_MEMBER}">{classlist_row_priest.NAME}</a></td>
+					<td align="right" class="{classlist_row_priest.C_CURRENT}" nowrap="nowrap">{classlist_row_priest.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_priest -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row<!-- IF S_ISALLIANCE -->1<!-- ELSE -->2<!-- ENDIF -->">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_rogue -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_rogue.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_rogue.U_VIEW_MEMBER}">{classlist_row_rogue.NAME}</a></td>
+					<td align="right" class="{classlist_row_rogue.C_CURRENT}" nowrap="nowrap">{classlist_row_rogue.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_rogue -->
+			</table>
+		</td>
+		<!-- IF S_ISHORDE -->
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing=0" cellpadding="2">
+				<!-- BEGIN classlist_row_shaman -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_shaman.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_shaman.U_VIEW_MEMBER}">{classlist_row_shaman.NAME}</a></td>
+					<td align="right" class="{classlist_row_shaman.C_CURRENT}" nowrap="nowrap">{classlist_row_shaman.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_shaman -->
+			</table>
+		</td>
+		<!-- ENDIF -->
+		<td align="left" valign="top" class="row2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_warlock -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_warlock.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_warlock.U_VIEW_MEMBER}">{classlist_row_warlock.NAME}</a></td>
+					<td align="right" class="{classlist_row_warlock.C_CURRENT}" nowrap="nowrap">{classlist_row_warlock.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_warlock -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<!-- BEGIN classlist_row_warrior -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classlist_row_warrior.ROW_CLASS}';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_warrior.U_VIEW_MEMBER}">{classlist_row_warrior.NAME}</a></td>
+					<td align="right" class="{classlist_row_warrior.C_CURRENT}" nowrap="nowrap">{classlist_row_warrior.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_warrior -->
+			</table>
+		</td>
+	</tr>
+</table>
+<br>
+<!-- ENDIF -->
+ 
+<!-- DKP Leaderboard by Legedric (www.derdunklepakt.de) modded by Corgan -> MultiDKP END -->
