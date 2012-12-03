@@ -1,0 +1,42 @@
+/* runesofmagic tooltip from blasc */
+/* TOOLTIP */
+.db-tooltip				{ color:white; width:420px; text-align:left; }
+.db-tooltip a			{ color: inherit }
+.db-tooltip table		{ border-collapse:collapse; border-spacing:0; width:100%; color:white; }
+.db-tooltip table th 	{ padding:6px; }
+.db-tooltip td			{ padding:7px 3px 0 7px; }
+.db-tooltip td, .db-tooltip th	{ font-family:Verdana,sans-serif; line-height:17px; font-size: 13px; }
+.db-tooltip td th,
+.db-tooltip td td		{ background:transparent none; }
+.db-tooltip td td 		{ padding:0; }
+.db-tooltip td th 		{ padding:0; text-align:right; font-weight:normal; }
+.db-tooltip .normal			{ background:transparent url(./buffed/tooltip.png); }
+.db-tooltip .right			{ background:transparent url(./buffed/tooltip.png); background-position: top right; width: 5px; }
+.db-tooltip .bottomleft		{ background:transparent url(./buffed/tooltip.png); background-position: bottom left; height: 5px; }
+.db-tooltip .bottomright	{ background:transparent url(./buffed/tooltip.png); background-position: bottom right; }
+
+
+/* QUALITY COLORS */
+
+.q	{ color: #FFD100; font-family: verdana, sans-serif; }
+.q0 { color: #ffffff; font-family: verdana, sans-serif;  }
+.q1 { color: #00ff00; font-family: verdana, sans-serif;  }
+.q2 { color: #0072bc; font-family: verdana, sans-serif;  }
+.q3 { color: #c805f8; font-family: verdana, sans-serif;  }
+.q4 { color: #f68e56; font-family: verdana, sans-serif;  }
+.q5 { color: #a37d50; font-family: verdana, sans-serif;  }
+.q6 { color: #6dcff6; font-family: verdana, sans-serif;  }
+.q7 { color: #ed145b; font-family: verdana, sans-serif;  }
+.q8 { color: #a864a8; font-family: verdana, sans-serif;  }
+.q9 { color: #f7941d; font-family: verdana, sans-serif;  }
+.q10 { color: #ffffff; font-family: verdana, sans-serif;  }
+
+
+.statbonus { color:#18F000; }
+
+/* SONSTIGES */
+.indent	{ padding-left:10px; }
+.higher	{ padding-bottom:5px; }
+
+#content-box-content .q0 {color:black !important}
+

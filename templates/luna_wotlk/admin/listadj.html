@@ -1,0 +1,58 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ADJUSTMENT_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<!-- IF S_GROUP_ADJ -->
+  <tr>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="90" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
+    <th align="left" width="100%"><a href="{U_LIST_ADJUSTMENTS}o={O_ADDED_BY}&amp;start={START}">{L_ADDED_BY}</a></th>
+  </tr>
+  <!-- BEGIN adjustments_row -->
+  <tr class="{adjustments_row.ROW_CLASS}">
+    <td width="16" nowrap="nowrap" align="center"><a href="{adjustments_row.U_ADD_ADJUSTMENT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="Edit" /></a></td>
+    <td width="70" nowrap="nowrap">{adjustments_row.DATE}</td>
+    <td width="90" nowrap="nowrap" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT}</td>
+    <td width="100%">{adjustments_row.ADDED_BY}</td>
+  </tr>
+  <!-- END adjustments_row -->
+  <tr>
+    <th colspan="4" class="footer">{LISTADJ_FOOTCOUNT}</th>
+  </tr>
+<!-- ELSE -->
+  <tr class="rowhead">
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="150" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}o={O_MEMBER}&amp;start={START}">{L_MEMBER}</a></th>
+    <th align="left" width="150" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}o={O_RAID}&amp;start={START}">{L_MULTI_EVENTNAME}</a></a></th>
+    
+    <th align="left" width="100%"><a href="{U_LIST_ADJUSTMENTS}o={O_REASON}&amp;start={START}">{L_REASON}</a></th>
+    <th align="left" width="90" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
+  </tr>
+  <!-- BEGIN adjustments_row -->
+  <tr class="{adjustments_row.ROW_CLASS}">
+    <td width="16" nowrap="nowrap" align="center"><a href="{adjustments_row.U_ADD_ADJUSTMENT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="Edit" /></a></td>
+    <td width="70" nowrap="nowrap">{adjustments_row.DATE}</td>
+    <td width="150" nowrap="nowrap"><a href="{adjustments_row.U_VIEW_MEMBER}">{adjustments_row.MEMBER}</a></td>
+    
+    <td width="150" nowrap="nowrap">{adjustments_row.RAID_NAME}</td>
+    <td width="100%">{adjustments_row.REASON}</td>
+    <td width="90" nowrap="nowrap" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT}</td>
+  </tr>
+  <!-- END adjustments_row --> 
+  <tr>
+    <th colspan="6" class="footer">{LISTADJ_FOOTCOUNT}</th>
+  </tr>
+<!-- ENDIF -->
+
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ADJUSTMENT_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

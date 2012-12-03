@@ -1,0 +1,35 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_TRANSFER}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_TRANSFER_MEMBER_HISTORY}</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="row1">{L_TRANSFER_MEMBER_HISTORY_DESCRIPTION}{FV_TRANSFER}</td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" class="row2">
+    <b>{L_FROM}:</b>
+      <select name="transfer_from" class="input">
+        <option value="">{L_SELECT_1_OF_X_MEMBERS}</option>
+        <!-- BEGIN transfer_from_row -->
+        <option value="{transfer_from_row.VALUE}"{transfer_from_row.SELECTED}>{transfer_from_row.OPTION}</option>
+        <!-- END transfer_from_row -->
+      </select>
+    </td>
+    <td width="50%" align="center" class="row2">
+    <b>{L_TO}:</b>
+      <select name="transfer_to" class="input">
+        <option value="">{L_SELECT_1_OF_X_MEMBERS}</option>
+        <!-- BEGIN transfer_to_row -->
+        <option value="{transfer_to_row.VALUE}"{transfer_to_row.SELECTED}>{transfer_to_row.OPTION}</option>
+        <!-- END transfer_to_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="transfer" value="{L_TRANSFER_HISTORY}" class="mainoption" /></th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

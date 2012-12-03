@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS eqdkp_classcolors;
+CREATE TABLE IF NOT EXISTS eqdkp_classcolors ( id int(11) unsigned NOT NULL auto_increment, `template` varchar(255) default NULL, `name` varchar(255) default NULL, `color` varchar(255) default NULL, `class` varchar(255) default NULL, PRIMARY KEY  (id)) TYPE=MyISAM ;
