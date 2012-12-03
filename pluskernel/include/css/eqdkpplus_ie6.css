@@ -1,0 +1,19 @@
+table.eqdkpplus_tooltip td.top-left {
+	background-image: url(tooltip.gif);
+}
+
+table.eqdkpplus_tooltip td.top-right {
+	background-image: url(tooltip.gif);
+}
+
+table.eqdkpplus_tooltip td.bottom-left {
+	background-image: url(tooltip.gif);
+}
+
+table.eqdkpplus_tooltip td.bottom-right {
+	background-image: url(tooltip.gif);
+}
+
+table.eqdkpplus_tooltip td.wh_left {
+	background-image: url(tooltip.gif);
+}

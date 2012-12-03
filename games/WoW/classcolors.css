@@ -1,0 +1,81 @@
+.Druid, .Druid:link, .Druid:visited, .Druid:active,
+td.Druid, td.Druid a:link, td.Druid a:visited, td.Druid a:active {
+  text-decoration: none; 
+  color: #FF7C0A;
+}
+.Druid:link:hover, td.Druid a:hover {
+  text-decoration: none;
+  color: #FF7C0A;
+}
+.Hunter,  .Hunter:link, .Hunter:visited, .Hunter:active,
+td.Hunter,  td.Hunter a:link, td.Hunter a:visited, td.Hunter a:active {
+  text-decoration: none;
+  color: #AAD372; 
+}
+.Hunter:link:hover, td.Hunter a:hover {
+  text-decoration: underline;
+  color: #AAD372;
+}
+.Mage, .Mage:link, .Mage:visited, .Mage:active,
+td.Mage, td.Mage a:link, td.Mage a:visited, td.Mage a:active {
+  text-decoration: none;
+  color: #68CCEF;
+}
+.Mage:link:hover, td.Mage a:hover {
+  text-decoration: underline;
+  color: #68CCEF;
+}
+.Paladin, .Paladin:link, .Paladin:visited, .Paladin:active,
+td.Paladin, td.Paladin a:link, td.Paladin a:visited, td.Paladin a:active {
+  text-decoration: none;
+  color: #F48CBA;
+}
+.Paladin:link:hover, td.Paladin a:hover {
+  text-decoration: underline;
+  color: #F48CBA;
+  }
+.Shaman, .Shaman:link, .Shaman:visited, .Shaman:active,
+td.Shaman, td.Shaman a:link, td.Shaman a:visited, td.Shaman a:active {
+  text-decoration: none;
+  color: #1a3caa;
+}
+.Shaman:link:hover, td.Shaman a:hover {
+  text-decoration: underline;
+  color: #1a3caa;
+}
+.Priest, .Priest:link, .Priest:visited, .Priest:active,
+td.Priest,  td.Priest a:link, td.Priest a:visited, td.Priest a:active {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+.Priest:link:hover, td.Priest a:hover {
+  text-decoration: underline;
+  color: #FFFFFF;
+}
+.Rogue, .Rogue:link, .Rogue:visited, .Rogue:active,
+td.Rogue, td.Rogue a:link, td.Rogue a:visited, td.Rogue a:active {
+  text-decoration: none;
+  color: #FFF468;
+}
+.Rogue:link:hover, td.Rogue a:hover {
+  text-decoration: underline;
+  color: #FFF468;
+}
+.Warlock, .Warlock:link, .Warlock:visited, .Warlock:active,
+td.Warlock, td.Warlock a:link, td.Warlock a:visited, td.Warlock a:active {
+  text-decoration: none;
+  color: #9382C9;
+}
+.Warlock:link:hover, td.Warlock a:hover {
+  text-decoration: underline;
+  color: #9382C9;
+}
+.Warrior, .Warrior:link, .Warrior:visited, .Warrior:active,
+td.Warrior, td.Warrior a:link, td.Warrior a:visited, td.Warrior a:active {
+  text-decoration: none;
+  color: #C69B6D;
+}
+.Warrior:link:hover, td.Warrior a:hover {
+  text-decoration: underline;
+  color: #C69B6D;
+}
