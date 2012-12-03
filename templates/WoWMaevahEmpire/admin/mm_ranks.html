@@ -1,0 +1,32 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_EDIT_RANKS}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="4">{L_EDIT_RANKS_TITLE}</th>
+  </tr>
+  <tr>
+    <th align="left">{L_TITLE}</th>
+    <th align="center">{L_HIDE}</th>
+    <th align="left">{L_LIST_PREFIX}</th>
+    <th align="left">{L_LIST_SUFFIX}</th>
+  </tr>  
+  <!-- BEGIN ranks_row -->
+  <tr class="{ranks_row.ROW_CLASS}">
+    <td><input type="text" name="ranks[{ranks_row.RANK_ID}]" size="30" maxlength="50" value="{ranks_row.RANK_NAME}" class="input" /></td>
+    <td nowrap="nowrap" align="center"><input type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1"{ranks_row.HIDE_CHECKED} /></td>
+    <td nowrap="nowrap"><input type="text" name="prefix[{ranks_row.RANK_ID}]" size="35" maxlength="75" value="{ranks_row.RANK_PREFIX}" class="input" /></td>
+    <td nowrap="nowrap"><input type="text" name="suffix[{ranks_row.RANK_ID}]" size="35" maxlength="75" value="{ranks_row.RANK_SUFFIX}" class="input" /></td>
+  </tr>
+  <!-- END ranks_row -->
+  <tr class="{ROW_CLASS}">
+    <td><input type="text" name="ranks[{RANK_ID}]" size="30" maxlength="50" value="" class="input" /></td>
+    <td nowrap="nowrap" align="center"><input type="checkbox" name="hide[{RANK_ID}]" value="1" /></td>
+    <td nowrap="nowrap"><input type="text" name="prefix[{RANK_ID}]" size="35" maxlength="75" value="" class="input" /></td>
+    <td nowrap="nowrap"><input type="text" name="suffix[{RANK_ID}]" size="35" maxlength="75" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="4"><input type="submit" name="submit" value="{L_EDIT_RANKS}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" /></th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
