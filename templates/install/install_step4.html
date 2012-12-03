@@ -1,0 +1,104 @@
+<!-- INCLUDE install_header.html -->
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+<input type="hidden" name="install_step" value="5" />
+
+<input type="hidden" name="table_prefix" size="25" value="{TABLE_PREFIX}" />
+<input type="hidden" name="dbpass" size="25" value="{DB_PASS}" />
+<input type="hidden" name="dbuser" size="25" value="{DB_USER}" />
+<input type="hidden" name="dbname" size="25" value="{DB_NAME}" />
+<input type="hidden" name="dbhost" size="25" value="{DB_HOST}" />
+<input type="hidden" name="dbtype" size="25" value="{DB_TYPE}" />
+
+<!-- ENDIF -->
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">{L_LANG_CONF}</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DEF_LANG}:</td>
+    <td width="60%" class="row1">
+      <select name="default_lang" class="input">
+        <!-- BEGIN language_row -->
+        <option value="{language_row.VALUE}" {language_row.SELECTED}>{language_row.OPTION}</option>
+        <!-- END language_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DEF_LOCA}:</td>
+    <td width="60%" class="row1">
+      <select name="default_locale" class="input">
+        <!-- BEGIN locale_row -->
+        <option value="{locale_row.VALUE}" {locale_row.SELECTED}>{locale_row.OPTION}</option>
+        <!-- END locale_row -->
+      </select>
+    </td>
+  </tr>
+</table><br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">{L_GAME_CONF}</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DEF_GAME}:</td>
+    <td width="60%" class="row1">
+      <select name="default_game" class="input">
+        <!-- BEGIN game_row -->
+        <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+        <!-- END game_row -->
+      </select>
+      <select name="game_language" class="input">
+        <!-- BEGIN gamelang_row -->
+        <option value="{gamelang_row.VALUE}"{gamelang_row.SELECTED}>{gamelang_row.OPTION}</option>
+        <!-- END gamelang_row -->
+      </select>
+    </td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">{L_SERVER_CONF}</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_SERVERNAME}:</td>
+    <td width="60%" class="row1"><input type="text" name="server_name" size="25" value="{SERVER_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_SERVERPORT}:</td>
+    <td width="60%" class="row1"><input type="text" name="server_port" size="25" value="{SERVER_PORT}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_SERVERPATH}:</td>
+    <td width="60%" class="row1"><input type="text" name="server_path" size="25" value="{SERVER_PATH}" class="input" /></td>
+  </tr>
+</table></p><br/>
+</div>
+ <div class="b"><div></div></div>
+</div>
+
+<!-- IF MSG_TEXT != '' -->
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">&nbsp;{MSG_TEXT}</div><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<br />
+<!-- ENDIF -->
+<div align="center"><input type="button" name="back" value="{L_BUTTON_BACK}" class="mainoption" onClick="history.back()"/>
+<!-- IF S_SHOW_BUTTON -->
+<input type="submit" name="submit" value="{L_BUTTON4}" class="mainoption" />
+</form>
+<!-- ENDIF -->
+</div>
+<!-- INCLUDE install_tail.html -->

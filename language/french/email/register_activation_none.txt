@@ -1,0 +1,13 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account Activated
+Charset: iso-8859-1
+
+Veuillez sauvegarder une copie de cet e-mail. Voici les informations de votre compte :
+
+Nom d'utilisateur : {USERNAME}
+Mot de passe : {PASSWORD}
+
+Dépendamment des permissions accordées par l'administrateur d'EQdkp pour les utilisateurs par défaut, vous serez limité dans les actions que vous pourrez effectuer jusqu'à ce que des permissions supplémentaires vous ait été accordées par l'administrateur.
+
+Votre mot de passe a été crypté dans notre base de données et ne peut pas être réccupéré. Si vous oubliez votre mot de passe, vous devrez faire une demande de nouveau mot de passe qui sera activé de la même façon que ce compte.
+
+Merci de votre enregistrement.

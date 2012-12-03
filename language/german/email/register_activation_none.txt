@@ -1,0 +1,18 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account aktiviert
+Charset: iso-8859-1
+
+Bitte speicher eine Kopie dieser Mail für Deine Unterlagen.  Du hast folgende
+Accountdaten:
+
+Benutzername: {USERNAME}
+Passwort: {PASSWORD}
+
+Je nachdem was für Standard-Berechtigungen durch den Administrator eingestellt
+wurden, könnten einige Aktionen eingeschränkt sein, bist Deine Berechtigungen
+durch einen Administrator aktualisiert wurden.
+
+Dein Passwort wurde verschlüsselt in unserer Datenbank gespeichert und kann
+von keinem eingesehen werden.  Wenn Du Dein Passwort vergißt, musst Du ein
+neues anfordern, was auf gleiche Weise aktiviert werden muß.
+
+Danke für Deine Registrierung.
