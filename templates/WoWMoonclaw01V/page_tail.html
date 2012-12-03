@@ -1,0 +1,56 @@
+                    <script>
+                      <!-- BEGIN msystem -->
+                        {msystem.MESSAGE}
+                      <!-- END msystem -->
+                    </script>
+<!-- IF S_IN_ADMIN -->
+    </td>
+  </tr>
+</table>
+<!-- ENDIF -->
+
+
+	<!-- IF THIRD_C -->
+	<!-- dritte Spalte -->
+	<td width="15%" valign="top" >
+										{PORTAL_RIGHT}
+	</td>
+	<!-- ENDIF -->
+
+    </td>
+  </tr>
+  </table>
+
+
+<br />
+<!-- IF S_NORMAL_FOOTER -->
+<!-- IF S_SHOW_QUERIES -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">Queries</th>
+  </tr>
+  <!-- BEGIN query_row -->
+  <tr class="{query_row.ROW_CLASS}">
+    <td width="100%">{query_row.QUERY}</td>
+  </tr>
+  <!-- END query_row -->
+</table>
+<br />
+<!-- ENDIF -->
+<!--
+    If you use this software and find it to be useful, we ask that you
+    retain the copyright notice below.  While not required for free use,
+    it will help build interest in the EQdkp project.
+//-->
+{EQDKP_PLUS_COPYRIGHT}
+<br />
+<!-- IF S_SHOW_DEBUG -->
+<center><span class="copy">Rendertime: {EQDKP_RENDERTIME} | SQL Querys: {EQDKP_QUERYCOUNT} | <a href="http://validator.w3.org/check/referer" target="_top" class="copy">XHTML Validate</a></span></center>
+<!-- ENDIF -->
+<!-- ENDIF -->
+
+{H}
+{G}
+
+</body>
+</html>

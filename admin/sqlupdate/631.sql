@@ -1,0 +1,6 @@
+DELETE FROM eqdkp_auth_options WHERE auth_value LIKE 'a_soap_%';
+INSERT INTO eqdkp_auth_options (auth_id, auth_value, auth_default) VALUES ('34','u_userlist','Y');
+INSERT INTO eqdkp_auth_options (auth_id, auth_value, auth_default) VALUES ('35','a_sms_send','N');
+UPDATE __styles SET `body_background` = '2B577C', `body_link` = 'C3E5FF', `body_link_style` = 'none', `body_hlink` = 'EEEEEE', `body_hlink_style` = 'none', `header_link` = 'FFFFFF', `header_link_style` = 'none', `header_hlink` = 'C3E5FF', `header_hlink_style` = 'none', `tr_color1` = '14293B', `tr_color2` = '1D3953', `th_color1` = '2B577C', `fontface1` = 'Verdana, Arial, Helvetica, sans-serif', `fontface2` = 'Verdana, Arial, Helvetica, sans-serif', `fontface3` = 'Verdana, Arial, Helvetica, sans-serif', `fontsize1` = '11', `fontsize2` = '12', `fontsize3` = '13', `fontcolor1` = 'EEEEEE', `fontcolor2` = 'C3E5FF', `fontcolor3` = '000000', `fontcolor_neg` = 'FF0000', `fontcolor_pos` = '008800', `table_border_width` = '1', `table_border_color` = '999999', `table_border_style` = 'solid', `input_color` = 'EEEEEE', `input_border_width` = '1', `input_border_color` = '2B577C', `input_border_style` = 'solid' WHERE `style_id` =36 LIMIT 1;
+DELETE FROM __config WHERE config_name like 'plus_version';
+INSERT INTO __config VALUES ('plus_version', '0.6.3.1' );

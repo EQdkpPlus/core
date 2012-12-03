@@ -1,0 +1,44 @@
+<!-- INCLUDE page_header.html -->
+{RSS_FEED}
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+  <tr><th colspan=5 align="left">
+  {SEARCH} <form action="{SEARCH_ITEM_SITE}" method="get">
+  	<input name="search" class="input" type="text" size="40" />
+  </td>
+  </tr>
+
+<input type="hidden" name="search_type" value="itemname">
+  </form>
+
+  <tr>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <!-- IF S_HISTORY --><th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_BUYER}&amp;start={START}">{L_BUYER}</a></th><!-- ENDIF -->
+    <th align="left" width="65%"><a href="{U_LIST_ITEMS}o={O_NAME}&amp;start={START}">{L_ITEM}</a></th>
+    <th align="left" width="35%"><a href="{U_LIST_ITEMS}o={O_RAID}&amp;start={START}">{L_RAID}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{items_row.ROW_CLASS}';">
+    <td width="70" nowrap="nowrap">{items_row.DATE}</td>
+    <!-- IF S_HISTORY --><td width="100" nowrap="nowrap">{items_row.BUYER}</td><!-- ENDIF -->
+    <td width="65%"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td width="35%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td width="60" nowrap="nowrap" class="negative">{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="5" class="footer">{LISTITEMS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

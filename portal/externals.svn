@@ -1,0 +1,42 @@
+svn externales tags
+
+//0.6.2.5 Release
+quicklogin https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/quicklogin/tags/0.0.3/
+advertising https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/advertising/tags/1.0.1/
+bossguides https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/bossguides/tags/1.0.1/
+dkpinfo https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/dkpinfo/tags/1.0.2/
+lastitems https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/lastitems/tags/1.0.1/
+lastraids https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/lastraids/tags/1.0.1/
+latestposts https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/latestposts/tags/1.1.0/
+quickdkp https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/quickdkp/tags/1.0.2/
+quicksearch https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/quicksearch/tags/0.0.1/
+rankimage https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/rankimage/tags/1.0.2/
+realmstatus https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/realmstatus/tags/1.0.1/
+recruitment https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/recruitment/tags/1.0.4/
+rsslinks https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/rsslinks/tags/1.0.0/
+teamspeak https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/teamspeak/tags/1.2.0/
+ventrilo https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/ventrilo/tags/0.1.1/
+whoisonline https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/whoisonline/tags/0.0.2/
+mycontent https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/mycontent/tags/1.0.0/
+
+//Dev
+advertising https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/advertising/trunk/advertising
+bossguides https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/bossguides/trunk/bossguides
+dkpinfo https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/dkpinfo/trunk/dkpinfo
+lastitems https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/lastitems/trunk/lastitems
+lastraids https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/lastraids/trunk/lastraids
+latestposts https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/latestposts/branches/late-night/latestposts
+mycontent https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/mycontent/branches/late-night/mycontent
+quickdkp https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/quickdkp/trunk/quickdkp
+quicklogin https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/quicklogin/tags/0.0.2/
+quicksearch https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/quicksearch/branches/late-night/quicksearch/
+rankimage https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/rankimage/trunk/rankimage
+realmstatus https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/realmstatus/trunk/realmstatus
+recruitment https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/recruitment/trunk/recruitment
+teamspeak https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/teamspeak/trunk/teamspeak
+whoisonline https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/whoisonline/trunk/whoisonline
+ventrilo https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/ventrilo/trunk/ventrilo
+rsslinks https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/rsslinks/trunk/rsslinks
+
+membermap https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/membermap/branches/late-night/membermap/
+weather https://eqdkp-plus.svn.sourceforge.net/svnroot/eqdkp-plus/portal_moduls/weather/branches/late-night/weather/
