@@ -1,0 +1,6 @@
+.jBox{position: absolute;border: 1px solid #72C5F9;visibility: hidden;background-color: white;text-align:left;}
+.jBoxHandler{padding: 5px 0px;text-indent: 3px;font: bold 14px Arial;background-color: #72C5F9;color: white;cursor: move;overflow: hidden;width: auto;height: 15px; }
+.jBoxHandler .jBoxControls{position: absolute;right: 8px;top: 0px;cursor: hand;cursor: pointer;}
+.jBoxContent{background-color: #fff;color: #000;height: 150px;padding: 5px 10px;overflow: auto;}
+.jBoxStatus{border-top: 1px solid #B9B9B9;background-color: #F8F8F8;height: 13px; }
+.jBoxResize{float: right;width: 13px;height: 13px;cursor: nw-resize;font-size: 0;}

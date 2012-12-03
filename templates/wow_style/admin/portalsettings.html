@@ -1,0 +1,34 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_SETTINGS}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+  <!-- IF NOGAME_SELECTED -->
+  <tr>
+    <td align="center" colspan="2" class="row2">{L_NOGAMESELECT}</td>
+  </tr>
+  <!-- ELSE -->
+	<!-- BEGIN config_row -->
+	<tr>
+		<td width="60%" class="row2">{config_row.NAME}</td>
+		<td width="40%" class="row1">{config_row.FIELD}</td>
+	</tr>
+	<!-- END config_row -->
+	<!-- ENDIF -->
+	<!-- IF IMPORT_ON -->
+	<tr>
+    <th align="center" colspan="2">{L_IMPORT}</th>
+  </tr>
+	<tr>
+		<td width="60%" class="row2">{L_UPDATE_ALL}</td>
+		<td width="40%" class="row1">
+				    <!-- IF U_IMPORT_DISBLD -->
+				      <input type="button" name="add" value="{L_BTTN_UPDATE}" disabled=true />	[{LAST_UPDATED}]
+				    <!-- ELSE -->
+						  <input type="button" name="add" value="{L_BTTN_UPDATE}" class="mainoption" onclick="javascript:UpdateProfiles()" />	[{LAST_UPDATED}]
+				    <!-- ENDIF -->
+    </td>
+	</tr>
+	<!-- ENDIF -->
+	<tr><th align="center" colspan="2"><input type="submit" name="issavebu" value="{L_SUBMIT}" class="mainoption" />
+  </th></tr>
+</table>
+</form>

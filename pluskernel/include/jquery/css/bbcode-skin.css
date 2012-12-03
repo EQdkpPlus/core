@@ -1,0 +1,104 @@
+/* -------------------------------------------------------------------
+// BBCode Editor Skin 
+// j(Universal?)TagEditor, JQuery plugin
+// By Jay Salvat - http://www.jaysalvat.com/jquery/jtageditor/
+// -------------------------------------------------------------------
+// Icons based on http://www.famfamfam.com/
+// ------------------------------------------------------------------*/
+#bbcode {
+	width:805px;
+	border:1px solid #666666;	
+	background:#FFF url(../img/editor/bg-container.png) repeat-x top left;
+	padding:5px;
+}
+#bbcode .jTagEditor-toolBar {
+	list-style:none;
+}
+#bbcode .jTagEditor-toolBar ul	{
+	margin:0px; padding:0px;
+}
+#bbcode .jTagEditor-toolBar li	{
+	float:left;
+	margin-bottom:5px;
+}
+#bbcode .jTagEditor-toolBar a	{
+	display:block;
+	width:16px; height:16px;
+	margin:1px 3px;
+	text-indent:-1000px;
+	overflow:hidden;
+}
+#bbcode .jTagEditor-editor {
+	font:12px "Courier New", Courier, monospace;
+	padding:5px 5px 5px 5px; margin-top:10px;
+	border:3px solid #666666;
+	width:760px;
+	height:150px;
+	background-repeat:no-repeat;
+	clear:both; display:block;
+	line-height:18px;
+}
+#bbcode .jTagEditor-button1 a	{
+	background-image:url(../img/editor/icons/picture.png);
+}
+#bbcode .jTagEditor-button2 a	{
+	background-image:url(../img/editor/icons/link.png);
+	margin-right:20px;
+}
+#bbcode .jTagEditor-button3 a	{
+	background-image:url(../img/editor/icons/font.png);
+}
+#bbcode .jTagEditor-button4 a	{
+	background-image:url(../img/editor/icons/color.png);
+	margin-right:20px;
+}
+#bbcode .jTagEditor-button5 a	{
+	background-image:url(../img/editor/icons/bold.png);
+}
+#bbcode .jTagEditor-button6 a	{
+	background-image:url(../img/editor/icons/italic.png);
+}
+#bbcode .jTagEditor-button7 a	{
+	background-image:url(../img/editor/icons/underline.png);
+	margin-right:20px;
+}
+#bbcode .jTagEditor-button8 a	{
+	background-image:url(../img/editor/icons/list-bullets.png);
+}
+
+#bbcode .jTagEditor-button9 a	{
+	background-image:url(../img/editor/icons/list-item.png);
+	margin-right:20px;
+}
+#bbcode .jTagEditor-button10 a	{
+	background-image:url(../img/editor/icons/code.png);
+	margin-right:20px;
+}
+#bbcode .jTagEditor-button11 a	{
+	background-image:url(../img/editor/icons/emoticon-smile.png);
+}
+#bbcode .jTagEditor-button12 a	{
+	background-image:url(../img/editor/icons/emoticon-wink.png);
+}
+#bbcode .jTagEditor-button13 a	{
+	background-image:url(../img/editor/icons/emoticon-tongue.png);
+}
+#bbcode .jTagEditor-button14 a	{
+	background-image:url(../img/editor/icons/emoticon-surprised.png);
+	margin-right:20px;
+}
+#bbcode .jTagEditor-button15 a	{
+	background-image:url(../img/editor/icons/tags-close.png);
+}
+#bbcode .jTagEditor-button16 a	{
+	background-image:url(../img/editor/icons/tags-delete.png);
+}
+#bbcode .jTagEditor-button17 a	{
+	background-image:url(../img/editor/icons/preview.png);
+}
+#bbcode .jTagEditor-resizeHandle {
+	width:22px; height:6px;
+	margin:5px 0 0 394px;
+	background-image:url(../img/editor/handle.png);
+	cursor:n-resize;
+}

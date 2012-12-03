@@ -1,0 +1,246 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if ((document.post.select_item_name.value.length < 2) && (document.post.item_name.value.length < 2))
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    if (document.post.raid_id.value.length < 1)
+    {
+        alert('{MSG_RAID_ID_EMPTY}');
+        return false;
+    }
+    if (document.post.item_value.value.length < 1)
+    {
+        alert('{MSG_VALUE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+
+function switch_item_val()
+{
+		var item_string = document.post.select_item_name.options[document.post.select_item_name.selectedIndex].text ;	
+	  
+		document.post.item_name.value  = document.post.select_item_name.options[document.post.select_item_name.selectedIndex].value;	  		
+	  	item_string = item_string.substring(item_string.indexOf("-")+2);	  		  			  	
+	  	gameID_string = item_string.substring(item_string.lastIndexOf("-")+2);	  	  	
+	  	item_string = item_string.substring(0,item_string.indexOf("-"));	  		  			  		  	
+	  	
+    	document.post.item_value.value = item_string.replace(",", ".");
+    	document.post.game_itemid.value = gameID_string;
+}
+function pop_search()
+{
+    search = window.open('additem.php{SID}&mode=search','search','resizable=yes,toolbar=no,status=yes,height=150,width=400,screenX=50,screenY=25,left=100,top=75')
+    search.focus();
+}
+function fnSearch( searchField, searchItem )
+{
+    thisForm = document.post;
+    
+    searchBox = thisForm.elements[searchField];
+    selectBox = thisForm.elements[searchItem];
+    
+    // Don't select anybody if the search box is blank
+    if ( searchBox.value == "" )
+    {
+        return;
+    }
+    
+    reSearch = new RegExp( searchBox.value, "i" );
+    
+    len = selectBox.options.length;
+    for ( var i = 0; i < len; i++ )
+    {
+        selectBox.options[i].selected = false;
+        
+        if ( reSearch.test(selectBox.options[i].value) )
+        {
+            selectBox.options[i].selected = true;
+            break;
+        }
+    }
+}
+
+function fnAddMember()
+{
+    form = document.post;
+    fromField = form.all_members;
+    toField = form.elements["item_buyers[]"];
+
+    fromSize = fromField.options.length
+    toSize = toField.options.length
+
+    aSelected = new Array();
+
+    // Build an array of the selected members
+    for ( i = 0; i < fromSize; i++ )
+    {
+        if ( fromField.options[i].selected == true )
+        {
+            aSelected[aSelected.length] = i;
+        }
+    }
+
+    offset = 0;
+    for( i = 0; i < aSelected.length; i++ )
+    {
+        index = aSelected[i];
+
+        memberValue = fromField.options[index].value;
+        memberText = fromField.options[index].text;
+
+        // Remove the initial spacer member
+        if ( (toSize == 1) && (toField.options[0].value == "") )
+        {
+            toSize = 0;
+        }
+
+        // Loop through the item_buyers list, don't add if it's a duplicate
+        for ( j = 0, exists = false; j < toSize; j++ )
+        {
+            // Buyer already exists
+            if ( toField.options[ j ].value == memberValue )
+            {
+                exists = true;
+                offset++;
+            }
+        }
+
+        // Buyer doesn't exist, add them
+        if ( exists != true )
+        {
+            toField.options[toSize + i - offset] = new Option(memberText, memberValue);
+            toField.options[toSize + i - offset].selected = true;
+        }
+    }
+    
+    // We're done - clear the search box and focus it for the next entry
+    form.memberSearch.value = "";
+    form.memberSearch.focus();
+
+    return false;
+}
+
+function fnRemoveMember()
+{
+    form = document.post;
+    toField = form.elements["item_buyers[]"];
+
+    toSize = toField.options.length
+
+    aSelected = new Array();
+
+    for ( i = 0; i < toSize; i++ )
+    {
+        if ( toField.options[i].selected == true )
+        {
+            aSelected[aSelected.length] = i;
+        }
+    }
+
+    selectedSize = aSelected.length;
+    if ( selectedSize > 0 )
+    {
+        for ( i = selectedSize; i > -1; i-- )
+        {
+            index = aSelected[i];
+
+            if ( index )
+            {
+                toField.options.remove(index);
+            }
+        }
+    }
+}
+//-->
+</script>
+
+<form method="post" action="{F_ADD_ITEM}" name="post">
+<input type="hidden" name="{URI_ITEM}" value="{ITEM_ID}" />
+<input type="hidden" name="mode" value="{MODE}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADD_ITEM_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="350" valign="top" rowspan="3" nowrap="nowrap" class="row1">
+    {FV_ITEM_BUYERS}<br /><b>{L_BUYERS}:</b> <span class="small">{L_HOLD_CTRL_NOTE}</span><br />
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="borderless">
+        <tr>
+          <td colspan="3">{L_SEARCH_MEMBERS}: <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" /></td>
+        </tr>
+        <tr>
+          <td>
+          <select name="all_members" size="25" multiple="multiple" class="input">
+            <!-- BEGIN members_row -->
+            <option value="{members_row.VALUE}">{members_row.OPTION}</option>
+            <!-- END members_row -->
+          </select>
+          </td>
+          <td width="50" align="center" valign="middle">
+            <input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveMember()" class="liteoption" />
+            <input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddMember()" class="liteoption" />
+          </td>
+          <td>
+          <select name="item_buyers[]" size="25" multiple="multiple" class="input">
+            <option value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+            <!-- BEGIN buyers_row -->
+            <option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
+            <!-- END buyers_row -->
+          </select>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td width="100%" valign="top" class="row2">
+    <b>{L_RAID}:</b> <span class="small">(<a href="{U_ADD_RAID}" class="small">{L_ADD_RAID}</a>)</span><br />
+    <select name="raid_id" class="input">
+      <option value=""></option>
+      <!-- BEGIN raids_row -->
+      <option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
+      <!-- END raids_row -->
+    </select>{FV_RAID_ID}
+    <br /><br />
+    <b class="small">{L_NOTE}:</b> <span class="small">{L_ADDITEM_RAIDID_NOTE}</span>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+    <b>{L_ITEM}:</b> <span class="small">(<a href="javascript:pop_search();" class="small">{L_SEARCH}</a>)</span><br /><br />
+    {L_SEARCH_EXISTING}: <input type="text" name="itemSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'select_item_name'); switch_item_val();" /><br />
+    {L_SELECT_EXISTING}:
+    <select name="select_item_name" onchange="javascript:switch_item_val();" class="input">
+      <option value=""></option>
+      <!-- BEGIN items_row -->
+      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
+      <!-- END items_row -->
+    </select>
+    <br /><br /><b>- {L_OR} -</b><br /><br />
+    	<table align=left>
+    		<tr><td align=left>{L_ENTER_NEW}: </td><td align=left><input type="text" name="item_name" size="40" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME} </td></tr>
+    		<tr><td align=left>GameItemID: </td><td align=left><input type="text" name="game_itemid" size="10" maxlength="255" value="{GAME_ITEMID}" class="input" /></td></tr>
+    	</table>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+    <b>{L_VALUE}:</b> <input type="text" name="item_value" size="20" maxlength="20" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_ITEM}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_ITEM}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_ITEM}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
