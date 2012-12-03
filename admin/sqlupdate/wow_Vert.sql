@@ -1,0 +1,5 @@
+#WoWV by Urox
+DELETE FROM eqdkp_styles where style_id=33;
+DELETE FROM eqdkp_style_config where style_id=33;
+INSERT INTO eqdkp_styles (style_id, style_name, template_path, body_background, body_link, body_link_style, body_hlink, body_hlink_style, header_link, header_link_style, header_hlink, header_hlink_style, tr_color1, tr_color2, th_color1, fontface1, fontface2, fontface3, fontsize1, fontsize2, fontsize3, fontcolor1, fontcolor2, fontcolor3, fontcolor_neg, fontcolor_pos, table_border_width, table_border_color, table_border_style, input_color, input_border_width, input_border_color, input_border_style) VALUES (33, 'wow_Vert', 'wowV', '000000', 'CBA300', 'none', 'CBA300', 'none', 'D7CEA4', 'none', 'C60000', 'none', '2F2F2F', '202020', '2D2D2D', 'Verdana, Tahoma, Arial', 'Verdana, Tahoma, Arial', 'Verdana, Tahoma, Arial', 10, 11, 12, 'D7CEA4', 'CBA300', '000000', 'F80000', '008800', 1, '000000', 'solid', 'D1D1D1', 1, '000000', 'solid');
+INSERT INTO eqdkp_style_config (style_id, attendees_columns, logo_path) VALUES (33, '6', '/logo/logo_wow.gif');
