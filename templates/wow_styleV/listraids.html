@@ -1,0 +1,32 @@
+<!-- INCLUDE page_header.html -->
+{RSS_FEED}
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="35%"><a href="{U_LIST_RAIDS}o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="65%"><a href="{U_LIST_RAIDS}o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN raids_row -->
+  <tr class="{raids_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{raids_row.ROW_CLASS}';">
+    <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="35%"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="65%">{raids_row.NOTE}</td>
+    <td width="60" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+  </tr>
+  <!-- END raids_row -->
+  <tr>
+    <th colspan="4" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

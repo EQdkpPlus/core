@@ -1,0 +1,36 @@
+<!-- INCLUDE page_header.html -->
+{RSS_FEED}
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="border01">
+  <!-- BEGIN date_row -->  <!-- Removed by Maëvah -->
+  <!-- BEGIN news_row -->
+  <tr>
+    <th align="left"><b style="font-size:13px">{date_row.news_row.HEADLINE}</b></th>
+  </tr>
+  <tr class=row1>
+    <td class="{date_row.news_row.ROW_CLASS}viewnews">
+   	<span style="float:left">{date_row.DATE} - {date_row.news_row.SUBMITTER} {date_row.news_row.AUTHOR} {date_row.news_row.SUBMITAT} {date_row.news_row.TIME}</span>
+    <!-- IF date_row.news_row.SHOWCOMMENT -->
+		 <span style="float:right"><a href='viewnews.php?id={date_row.news_row.ID}'>{date_row.news_row.COMMENTS_COUNTER}</a></span>
+   	<!-- ENDIF --> 
+   	<br><hr noshade>
+
+    <div class="newscontainer">{date_row.news_row.MESSAGE}</div>
+
+    <!-- IF date_row.news_row.DETAIL -->
+     		<hr noshade>
+    		{date_row.news_row.COMMENT}
+   <!-- ENDIF -->
+    </td>
+  </tr>
+  <!-- END news_row -->
+  <!-- END date_row -->
+  <tr>
+    <th class="footer">&nbsp;</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{NEWS_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

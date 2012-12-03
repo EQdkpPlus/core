@@ -1,0 +1,4 @@
+ALTER TABLE eqdkp_users ADD privacy_settings BLOB NOT NULL ;
+ALTER TABLE `eqdkp_users` CHANGE `first_name` `first_name` VARCHAR(255) NULL,  CHANGE `last_name` `last_name` VARCHAR(255)  NULL,  CHANGE `country` `country` VARCHAR(255)  NULL,  CHANGE `town` `town` VARCHAR(250) NULL,  CHANGE `state` `state` VARCHAR(250) NULL,  CHANGE `ZIP_code` `ZIP_code` INT(11) NULL, CHANGE `phone` `phone` VARCHAR(255)  NULL, CHANGE `cellphone` `cellphone` VARCHAR(255) NULL, CHANGE `address` `address` TEXT NULL, CHANGE `allvatar_nick` `allvatar_nick` VARCHAR(255) NULL, CHANGE `icq` `icq` VARCHAR(255)  NULL, CHANGE `skype` `skype` VARCHAR(255) NULL, CHANGE `msn` `msn` VARCHAR( 255 ) NULL , CHANGE `irq` `irq` VARCHAR( 255 ) NULL , CHANGE `gender` `gender` VARCHAR( 255 )  NULL , CHANGE `birthday` `birthday` VARCHAR( 255 )  NULL;
+DELETE FROM eqdkp_config WHERE config_name like 'plus_version';
+INSERT INTO eqdkp_config VALUES ('plus_version', '0.6.3.0' );

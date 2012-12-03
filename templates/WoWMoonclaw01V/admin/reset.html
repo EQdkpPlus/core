@@ -1,0 +1,69 @@
+<!-- INCLUDE page_header.html -->
+<!-- IF UPDATE_DONE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">  
+  <tr>
+    <th colspan="3">{L_STATUS}</th>
+  </tr>
+    <tr>
+    <th align="left" colspan="2">{L_STATUS}</th>
+    <th align="left">{L_SQL_STRING}</th>
+  </tr>
+  <!-- BEGIN logs_row -->
+  <tr class="{logs_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{logs_row.ROW_CLASS}';">
+  	{logs_row.LOG_STRING}
+  </tr>	
+  <!-- END logs_row -->
+  <tr>
+    <th align="right" colspan=3">{QUERYS_DONE} {SQL_FOOTER}</th>
+  </tr>  
+</table>
+<br/>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">  
+  <tr>
+    <th colspan="3">{L_STATUS}</th>
+  </tr>
+  <tr class="row1" height="50">
+  	<td align=center><b>{L_BACK_TO} </b> </td>
+  </tr>	
+  <tr>
+    <th align="right" colspan="3"></th>
+  </tr>  
+</table>
+
+<!-- ELSE -->
+<form method="post" action="{F_ADD_ADJUSTMENT}" name="post">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="4">{L_RESET_HEADER}</th>
+  </tr>
+    <tr class="row1" height="50">
+  	<td align=center><img src='../images/false.png'></td> <td> {L_RESET_INFO} </td>
+  	<td nowrap="nowrap">{L_RESET_CONFIRM} {L_RESET_CONFIRM_TEXT} <input type="text" name="confirm_box" class="input" >  </td>
+  </tr>	
+
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">  
+  <tr>
+    <th align="left">{L_RESET_TYPE}</th>
+    <th align="left">{L_RESET_DISC}</th>
+    <th align="left">{L_RESET_ACTION}</th>
+  </tr>
+    <!-- BEGIN reset_row -->
+  <tr class="{reset_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{reset_row.ROW_CLASS}';">
+    <td nowrap="nowrap">{reset_row.TYPE}</td>
+    <td >{reset_row.DISC}</td>
+    <td nowrap="nowrap"><input type="submit" name="{reset_row.VAL_NAME}" value="{L_RESET_ACTION}" class="mainoption" /> </td>
+  </tr>
+  <!-- END reset_row -->
+  
+  <tr>
+    <th align="left" colspan="5"></th>
+    
+  </tr>
+</table>
+<!-- ENDIF -->
+</form>
+<!-- INCLUDE page_tail.html -->
