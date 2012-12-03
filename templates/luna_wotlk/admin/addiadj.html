@@ -1,0 +1,71 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if (document.post.adjustment_value.value.length < 1)
+    {
+        alert('{MSG_VALUE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+//-->
+</script>
+<form method="post" action="{F_ADD_ADJUSTMENT}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_ADJUSTMENT}" value="{ADJUSTMENT_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADD_IADJ_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="350" valign="top" rowspan="4" nowrap="nowrap" class="row1">
+    {FV_MEMBERS}<br /><b>{L_MEMBERS}:</b><br />{L_HOLD_CTRL_NOTE}
+      <select name="member_names[]" size="25" multiple="multiple" class="input">
+        <!-- BEGIN members_row -->
+        <option value="{members_row.VALUE}"{members_row.SELECTED}>{members_row.OPTION}</option>
+        <!-- END members_row -->
+      </select>
+    </td>
+    <td width="100%" valign="top" class="row2">
+      <b>{L_EVENT}:</b> <span class="small">(<a href="{U_ADD_EVENT}" class="small">{L_ADD_EVENT}</a>)</span><br />
+      <!-- IF S_EVENT_MULTIPLE -->
+      <select name="raid_name[]" class="input" size="10" multiple="multiple">
+      <!-- ELSE -->
+      <select name="raid_name" class="input">
+        <option value=""></option>
+      <!-- ENDIF -->
+        <!-- BEGIN events_row -->
+        <option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
+        <!-- END events_row -->
+      </select>{FV_EVENT_NAME}
+      </td>
+</tr>
+<tr>
+<td width="100%" valign="top" class="row2"><b>{L_REASON}:</b><br /><input type="text" name="adjustment_reason" size="35" maxlength="255" value="{ADJUSTMENT_REASON}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+    <b>{L_VALUE}:</b> <span class="small">({L_ADJUSTMENT_VALUE_NOTE})</span>
+    <br /><input type="text" name="adjustment_value" size="7" maxlength="10" value="{ADJUSTMENT_VALUE}" class="input" />{FV_ADJUSTMENT}
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+	  <b>{L_DATE}:</b> {DATEPICK}<br /> {FV_DATE}
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_ADJUSTMENT}" class="mainoption" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_ADJUSTMENT}" class="mainoption" /> 
+<input type="submit"  name="delete" value="{L_DELETE_ADJUSTMENT}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

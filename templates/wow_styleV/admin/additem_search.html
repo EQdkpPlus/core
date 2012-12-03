@@ -1,0 +1,47 @@
+<!-- INCLUDE page_header.html -->
+<script language="javascript" type="text/javascript">
+<!--
+function select_item()
+{
+    opener.document.post.item_name.value = document.post.items.options[document.post.items.selectedIndex].value;
+    
+    opener.changed = "True";
+    window.close();
+    opener.window.focus();
+}
+//-->
+</script>
+<!-- IF S_STEP1 -->
+<form method="post" action="{F_SEARCH_ITEM}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_ITEM_SEARCH}</th>
+  </tr>
+  <tr>
+    <td class="row1" align="center"><input type="text" name="query" size="30" maxlength="255" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <th align="center"><input type="submit" name="search" value="{L_SEARCH}" class="mainoption" />  <input type="button" name="button" value="{L_CLOSE_WINDOW}" onclick="javascript:window.close(); window.opener.window.focus();" class="liteoption" /></th>
+  </tr>
+<!-- ELSE -->
+<form method="post" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_RESULTS}</th>
+  </tr>
+  <tr>
+    <td class="row1" align="center">
+      <select name="items" class="input">
+        <!-- BEGIN items_row -->
+        <option value="{items_row.VALUE}">{items_row.OPTION}</option>
+        <!-- END items_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <th align="center"><input type="button" name="select" value="{L_SELECT}" class="mainoption" onclick="javascript:select_item();" /></th>
+  </tr>
+<!-- ENDIF -->
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
