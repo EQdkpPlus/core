@@ -1,0 +1,1 @@
+ALTER TABLE eqdkp_items ADD game_itemid INT(10) UNSIGNED NULL;

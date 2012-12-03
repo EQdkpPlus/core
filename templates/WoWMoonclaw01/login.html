@@ -1,0 +1,58 @@
+<!-- INCLUDE page_header.html -->
+<!-- IF S_LOGIN -->
+<form method="post" action="login.php" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_LOGIN}</th>
+  </tr>
+  <tr>
+    <td class="row1" align="center">
+      <table border="0" cellspacing="0" cellpadding="3" align="center" class="borderless">
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap" align="center">{L_USERNAME}:</td>
+          <td class="row1" width="100" align="center"><input type="text" name="username" size="20" maxlength="30" class="input" /></td>
+        </tr>
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap">{L_PASSWORD}:</td>
+          <td class="row1" width="100"><input type="password" name="password" size="20" maxlength="32" class="input" /></td>
+        </tr>
+        <tr>
+          <td class="row1" colspan="2" valign="middle">
+            {L_REMEMBER_PASSWORD}: <input type="checkbox" name="auto_login" class="checkbox" />
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <th align="center"><input type="submit" name="login" value="{L_LOGIN}" class="mainoption" /> <input type="submit" name="lost_password" value="{L_LOST_PASSWORD}" class="liteoption" /></th>
+  </tr>
+</table>
+</form>
+<!-- ELSE -->
+<form method="post" action="register.php?mode=lostpassword" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_GET_NEW_PASSWORD}</th>
+  </tr>
+  <tr>
+    <td class="row1" align="center">
+      <table border="0" cellspacing="0" cellpadding="3" align="center" class="borderless">
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap" align="center">{L_USERNAME}:</td>
+          <td class="row1" width="100" align="center"><input type="text" name="username" size="20" maxlength="30" class="input" /></td>
+        </tr>
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap">{L_EMAIL}:</td>
+          <td class="row1" width="100"><input type="text" name="user_email" size="20" maxlength="100" class="input" /></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <th align="center"><input type="submit" name="send_password" value="{L_SUBMIT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" /></th>
+  </tr>
+</table>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE page_tail.html -->

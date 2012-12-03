@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+{META}
+<title>{PAGE_TITLE}</title>
+<link rel="stylesheet" href="{EQDKP_ROOT_PATH}templates/m9wow3eq/m9wow3eq.css" type="text/css" />
+<link REL=StyleSheet HREF="{EQDKP_ROOT_PATH}{ITEMSTATS_PATH}{ITEMSTATS_CSS_PATH}" TYPE="text/css" MEDIA=screen />
+<script type="text/javascript" src="{EQDKP_ROOT_PATH}{ITEMSTATS_PATH}{ITEMSTATS_JS_PATH}"><!-- overLIB (c) Erik Bosrup --></script>
+
+
+{PLUS_HEADER}
+{PLUS_JS_WIN}
+{PLUS_COOKIE}
+{EXTRA_CSS}
+
+<style type="text/css">
+{PLUS_CLASS_CSS}
+</style>
+</head>
+
+<body{ONLOAD}>
+<!-- IF S_NORMAL_HEADER -->
+<table class="bodyline" width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr colspan="3"><img id="formStyleTestImage" src="{EQDKP_ROOT_PATH}templates/m9wow3eq/images/spacer.gif" /></tr>
+	<tr>
+		<td class="border_top_left"></td>
+		<td>
+
+			<table class="header_background" width="100%" cellspacing="0" cellpadding="0" border=0">
+				<tr>
+				<td rowspan="2"><img src="{TEMPLATE_PATH}/images/wowlogo3.png" alt="Logo" /></td>
+				<td class="half_header_background" height="65px" align="right" valign="bottom">
+				<span class="maintitle">{MAIN_TITLE}</span><br />
+      			<span class="subtitle">{SUB_TITLE}</span>
+				</td>
+				</tr>
+			</table>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="left">
+				<tr valign="top">
+				<td><a href=""><img src="templates/m9wow3eq/images/qportal.jpg"><a href=""><img src="templates/m9wow3eq/images/qforum.jpg"></a>
+				    <a href=""><img src="templates/m9wow3eq/images/qdkp.jpg">
+				    <!--<a href=""><img src="templates/m9wow3eq/images/qraidplan.jpg">-->
+				    <!--<a href=""><img src="templates/m9wow3eq/images/qalbum.jpg">-->
+				    <!--<a href=""><img src="templates/m9wow3eq/images/qdownload.jpg">-->
+				    <img src="templates/m9wow3eq/images/qlinks_right.gif"></td>
+				</tr>
+			</table>
+
+		</td>
+		<td class="border_top_right"></td>
+	</tr>
+	<tr>
+		<td class="border_side_left"></td>
+		<td>
+			<table width="100%" border="0" cellspacing="0" cellpadding="10">
+			<tr>
+				<td width="100%" class="doiley">
+
+<table border="0" width="100%" align="right" cellspacing="0" cellpadding="2">
+<tr><td width="5%" valign="top" >
+
+  <table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#000000" class="forumline">
+ 	{POINTSV}
+  </table>
+  <table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#000000" class="forumline">
+	  <tr>
+	  	<th class="smalltitle" align="center">Menu</th>
+	  </tr>
+		{MAIN_MENU1}
+	  <th class="smalltitle" align="center">EQDKP</th>
+		{MAIN_MENU2}
+	  <!-- IF MENU3NAME -->
+	  <th class="smalltitle" align="center">{MENU3NAME}</th>
+		{MAIN_MENU3}
+	  <!-- ENDIF -->
+  </table>
+  <table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#000000" class="forumline">
+  	{DKP_INFO}
+  </table>
+  <table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#000000" class="forumline">
+  	<tr><td>{BOSSKILLV} </td></tr>
+  </table>
+
+
+
+</td>
+<td valign="top">
+<!-- IF S_IN_ADMIN -->
+				<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<tr>
+					<td width="175" valign="top" nowrap="nowrap">
+						<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#000000" class="forumline">
+						<tr>
+							<th class="smalltitle" align="center">{L_ADMINISTRATION}</th>
+        				</tr>
+        				<tr>
+          					<td class="row1">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;<a href="index.php{SID}">{L_ADMIN_INDEX}</a></td>
+        				</tr>
+        				<tr>
+          					<td class="row2">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;<a href="{EQDKP_ROOT_PATH}{SID}">{L_EQDKP_INDEX}</a></td>
+        				</tr>
+        				<!-- BEGIN header_row -->
+        				<tr>
+          					<th align="left" class="smalltitle"><img src="{EQDKP_ROOT_PATH}images/admin/{header_row.HEADER_IMG}" alt="img" /> {header_row.HEADER}</th>
+        				</tr>
+        				<!-- BEGIN menu_row -->
+        				<tr>
+          					<td class="{header_row.menu_row.ROW_CLASS}">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;{header_row.menu_row.LINK}</td>
+        				</tr>
+        				<!-- END menu_row -->
+						<!-- END header_row -->
+						</table>
+    				</td>
+    				<td width="100%" valign="top">
+<!-- ENDIF -->
+<!-- ENDIF -->
+
+
