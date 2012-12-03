@@ -1,0 +1,562 @@
+body {
+	background: url("./../templates/swtor_allvatar/images/template-background.jpg") no-repeat scroll center top #000000;
+	color: #{T_FONTCOLOR1};
+	font-size: {T_FONTSIZE1}px;
+	font-family: {T_FONTFACE1};
+	margin: 0;
+	padding: 0;
+}
+
+/* General page style */
+
+a:link, a:active, a:visited, a.postlink {
+	color: #{T_BODY_LINK};
+	text-decoration: {T_BODY_LINK_STYLE};
+}
+
+a:hover{
+	color: #{T_BODY_HLINK};
+	text-decoration: {T_BODY_HLINK_STYLE};
+}
+
+.checkbox {
+	background: url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/CheckboxUnchecked.gif) no-repeat center center;
+	display: block;
+	width: 16px;
+	height:16px;
+}
+a.checkbox, a.checkboxchecked {
+	display: block;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+a.checkbox {
+	background: url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/CheckboxUnchecked.gif) no-repeat center center;
+}
+
+a.checkboxchecked {
+	background: url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/CheckboxChecked.gif) no-repeat center center;
+}
+
+.radiobox {
+	background: url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/RadioboxUnchecked.gif) no-repeat center center;
+	display: block;
+	width: 16px;
+	height:16px;
+}
+
+a.radiobox, a.radioboxchecked {
+	display: block;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+}
+
+a.radiobox {
+	background: url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/RadioboxUnchecked.gif) no-repeat center center;
+}
+
+a.radioboxchecked {
+	background: url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/RadioboxChecked.gif) no-repeat center center;
+}
+
+img {
+	border: 0px; vertical-align: middle;
+}
+
+table {
+	color: #{T_FONTCOLOR1};
+	font-size: {T_FONTSIZE2}px;
+	font-family: {T_FONTFACE1};
+}
+
+th {
+	background: #2b577c url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/head.jpg) repeat-x;
+	color:#{T_HEADER_LINK};
+	font-size: {T_FONTSIZE2}px;
+	font-family: {T_FONTFACE1};
+	height:25px;
+	white-space:nowrap;
+	text-align:left;
+	padding-left:8px;
+	padding-right:8px;
+}
+
+th a, th a:visited, th a:active {
+	color: #{T_HEADER_LINK};
+	text-decoration: {T_HEADER_LINK_STYLE};
+	font-weight: bold;
+}
+th a:hover {
+	color: #{T_HEADER_HLINK};
+	text-decoration: {T_HEADER_HLINK_STYLE};
+	font-weight: bold;
+}
+
+th.smalltitle {
+	font-size: {T_FONTSIZE1}px;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+th.footer {
+	text-align: right;
+	white-space: nowrap;
+	font-weight: normal;
+}
+
+td {
+	font-family: {T_FONTFACE1};
+	font-size: {T_FONTSIZE2}px;
+}
+
+td.spacerow	{
+	background: #{T_BODY_BACKGROUND};
+	height: 9px;
+}
+
+td.cat {
+	font-weight:bold;
+	letter-spacing:1px;
+	background: #2b577c url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/head.jpg) repeat-x;
+	height:22px;
+	text-indent:4px;
+}
+
+.row1viewnews {
+	background: #{T_TR_COLOR1} url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/table.jpg) repeat-x top;
+}
+	
+.row2viewnews {
+	background:#{T_TR_COLOR2} url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/table.jpg) repeat-x top;
+}
+
+.row1 {
+	background:#{T_TR_COLOR1};
+	color: #{T_FONTCOLOR1};
+}
+	
+.row2,.helpline	{
+	background:#{T_TR_COLOR2};
+	color: #{T_FONTCOLOR1};
+}
+
+.row3 {
+	background:#{T_TR_COLOR1};
+}
+	
+.row4 {
+	background: #{T_BODY_BACKGROUND} url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/head.jpg) repeat-x;
+	height: 23px;
+	font-size:9px;
+	color: #{T_HEADER_LINK};
+	font-weight:bold;
+}
+
+.positive {
+	color: #{T_FONTCOLOR_POS};
+}
+
+.negative {
+	color: #{T_FONTCOLOR_NEG};
+}
+
+.maintitle {
+	font-size: 24px;
+	font-weight: bold;
+	color:#{T_FONTCOLOR2};
+}
+.subtitle  {
+	font-size: 12px;
+	color:#{T_FONTCOLOR2};
+}
+
+.menu {
+	/* font-size: 9px; */
+}
+.a:link, .menu a:active, .menu a:visited {
+	color:#{T_FONTCOLOR2};
+	text-decoration: none;
+}
+.menu a:hover {
+	text-decoration: underline;
+}
+
+.small {
+	font-size: {T_FONTSIZE1}px;
+}
+.small:hover {
+	color: #{T_HEADER_LINK};
+}
+
+.copy {
+	color: #{T_FONTCOLOR2};
+}
+
+.copy a:link, .copy a:active, .copy a:visited {
+	color: #{T_FONTCOLOR2};
+}
+
+.copy a:hover {
+	color: #{T_FONTCOLOR2};
+}
+
+form {
+	display: inline;
+}
+
+.forumline {
+	background:#14293b url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/table.jpg) repeat-x top;
+}
+
+.input {
+	background:#{T_INPUT_BACKGROUND};
+	color: #{T_FONTCOLOR3};
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	font-size: {T_FONTSIZE2}px;
+}
+
+
+input.helpline1 , input.helpline2 {
+	background:#{T_INPUT_BACKGROUND};
+	color: #{T_FONTCOLOR3};
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	font-size: {T_FONTSIZE2}px;
+}
+
+input {
+	color: #{T_FONTCOLOR3};
+	padding-bottom:2px;
+	padding-left:2px;
+}
+
+input.post {
+	color:#{T_FONTCOLOR3};
+	background:#{T_INPUT_BACKGROUND};
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	border-top: 1px solid #ABABAB;
+	border-bottom: 1px solid #9A9A9A;
+	border-right: 1px solid #9A9A9A;
+	padding-bottom:2px;
+	padding-left:2px;
+}
+
+textarea {
+	color:#{T_FONTCOLOR3};
+	background:#{T_INPUT_BACKGROUND};
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	border-top: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #ABABAB;
+	border-bottom: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #9A9A9A;
+	border-right: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #9A9A9A;
+	padding-bottom:2px;
+	padding-left:2px;
+}
+
+input.button, input.liteoption, input.mainoption {
+	color:#{T_FONTCOLOR3};
+	background:#{T_INPUT_BACKGROUND};
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	border-bottom: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #9A9A9A;
+	border-right: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #9A9A9A;
+	background:#e5e3e3;
+	font-size:9px;
+	padding : 1px;
+}
+
+input.mainoption {
+	font-weight: bold;
+}
+
+input[disabled]{
+  background:gray;
+  color:silver;
+}
+
+input.hasDatepicker {
+	font-weight:normal;
+}
+
+input.button:hover,	input.liteoption:hover,	input.mainoption:hover {
+	color:#{T_FONTCOLOR3};
+	background:#{T_INPUT_BACKGROUND};
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	border-bottom: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #9A9A9A;
+	border-right: {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px #9A9A9A;
+	background:#e5e3e3;
+	font-size:9px;
+	padding : 1px;
+}
+
+.rowHover {
+	background-color: #{T_BODY_BACKGROUND}; color:#{T_FONTCOLOR1};
+}
+
+div.graph {
+	position: relative;
+	width: 98%;
+	border: #{T_INPUT_BORDER_COLOR} {T_INPUT_BORDER_STYLE} {T_INPUT_BORDER_WIDTH}px;
+	padding: 2px;
+	margin: 2px 0;
+	text-align: center;
+}
+
+div.graph .bar {
+	display: block;
+	position: relative;
+	background: #{T_TR_COLOR2};
+	color: #{T_FONTCOLOR1};
+	height: 1.3em;
+	line-height: 1.3em;
+}
+
+div.graph .bar span {
+	position: absolute; left: 1em;
+}
+
+/* News Accodrion */
+#rrs_news  {
+/*	width: 180px; */
+	margin:  0px;
+	padding: 0px;
+	border: 0px solid black;
+}
+
+#rrs_news div.content a {
+	color: #{T_BODY_LINK};
+	text-decoration: {T_BODY_LINK_STYLE};
+	font-size: {T_FONTSIZE2}px;
+}
+
+#rrs_news div.content a:hover {
+	color: #{T_BODY_HLINK};
+	text-decoration: {T_BODY_HLINK_STYLE};
+}
+
+#rrs_news div.content {
+	margin-bottom : 10px;
+	border: none;
+	color: #{T_FONTCOLOR1};
+	font-size: {T_FONTSIZE1}px;
+	margin: 0px;
+	padding: 10px;
+	background-color: #{T_TH_COLOR1};
+	overflow: hidden;
+}
+
+#rrs_news div.title {
+	cursor: pointer;
+	display: block;
+	padding: 5px;
+	margin-top: 0px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: {T_FONTSIZE1}px;
+	color: #{T_HEADER_LINK};
+	background: #2b577c url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/head.jpg) repeat-x top;
+	border: 0px solid #252525;
+}
+
+#rrs_news div.title:hover {
+	color: #{T_HEADER_HLINK};
+	background: #346995 url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/head_hl.jpg) repeat-x top;
+}
+
+#rrs_news div.title.selected {
+	color: #{T_HEADER_LINK};
+	background: #43759f url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/head_active.jpg) repeat-x top;
+	border-bottom: 1px solid black;
+}
+
+#wrapper{
+	background: transparent;
+	width: 1050px;
+	margin: 0px auto;
+}
+
+#toptitles{
+	position: absolute;
+	right: 70px;
+	top: 30%;
+	text-transform: uppercase;
+	color: #{T_HEADER_LINK};
+	text-align: right;
+}
+
+#header{
+  width: 1150px;
+	margin: 0px auto;
+	position: relative;
+	height: 180px;
+}
+
+#header h1{
+	margin-left: 100px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	text-indent: -9999px;
+	height: 180px;
+}
+
+// Top Navigation
+#navigation{
+	position: absolute;
+	right: 60px;
+	bottom: 0px;
+}
+#navigation ul{
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+#navigation ul li{
+	float: left;
+}
+#navigation ul li a{
+	background: transparent url(images/nava.png) repeat-x top;
+	/*text-transform: uppercase;*/
+	margin-left: 5px;
+	display: block;
+	float: left;
+	padding: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	color: #EEEEEE;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 15px;
+  border-top: 1px solid #999999;
+  border-left: 1px solid #999999;
+  border-right: 1px solid #999999;
+}
+#navigation ul li a:hover{
+	background: #333333;
+	text-decoration: underline;
+	border-top: 1px solid #BBBBBB;
+  border-left: 1px solid #BBBBBB;
+  border-right: 1px solid #BBBBBB;
+}
+#navigation ul li a:active{
+	background: transparent url(images/nava.png) repeat-x top;
+	border-top: 1px solid #999999;
+  border-left: 1px solid #999999;
+  border-right: 1px solid #999999;
+}
+
+#footer{
+	text-align: center;
+	padding: 20px;
+	background: #333333 url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/footbg.jpg) repeat-x top;
+}
+
+td.menu{
+	background:#14293b url({EQDKP_ROOT_PATH}templates/luna_wotlk/images/table.jpg) repeat-x top;
+	margin:0px;
+	font-weight:bold;
+}	
+	
+td.channel {
+	font-weight:bold;
+}
+	
+td.channel, td.player{
+	font-size:9px
+}
+
+.errortable a {
+	color:red;
+	text-decoration: underline;
+}
+	
+.image-warning a {
+	color:black;
+}
+
+.image-warning {
+	text-align: left;
+}
+
+#inner_wrapper {
+	width:720px;
+	margin-top: 10px;
+	margin-right : auto;
+	margin-bottom: 10px;
+	margin-left: auto;
+}
+
+
+.member_wrapper {
+	width:690px;
+	margin-top: 10px;
+	margin-right : auto;
+	margin-bottom: 10px;
+	margin-left:auto;
+}
+
+.class_header {
+	font-weight: bold;
+	font-size: 15px;	
+}
+
+.roster_hr_member {
+	border: none 0;
+	border-top: 1px dashed ;
+	height: 1px;
+}
+
+roster_member_right {
+	text-align: right;
+}
+
+
+.floatR {
+	float:right;
+}
+
+.right {
+	text-align:right;
+	margin-top: 8px;
+}
+
+/* News Style */
+.newscontainer {
+	margin-top: 10px;
+	margin-left: 30px;
+	margin-right: 10px;
+	margin-bottom: 3.5em;
+}
+
+blockquote {
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
+	margin-left: 0.1em;
+	padding: 0;
+	color: #CFCFCF;
+	padding-left: 0.6em;
+	border-left: solid 4px #336796;
+	background-image: none;
+}
+
+/* Module Addisions */
+.birthday_today{
+	color:#{T_HEADER_LINK};
+	background:#285E8D;
+}
+
+.weather_temp {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: right;
+}
+
+.weather_wind {
+	font-size: 11px;
+}
+
+.weather_city {
+	font-size: 13px;
+	font-weight: bold;
+	text-align:center;
+}

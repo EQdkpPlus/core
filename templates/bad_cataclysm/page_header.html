@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{XML_LANG}" lang="{XML_LANG}">
+  <head>
+		<meta http-equiv="X-UA-Compatible" content="IE=8" />
+    <meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+    {META}
+
+    <title>{PAGE_TITLE}</title>
+
+    <script type="text/javascript" src="{EQDKP_ROOT_PATH}/pluskernel/include/javascripts/overlib.js"></script>
+    <!-- IF ITEMSTATS_CSS_PATH -->
+    	<link rel="stylesheet" href="{EQDKP_ROOT_PATH}{ITEMSTATS_PATH}{ITEMSTATS_CSS_PATH}" type="text/css" media="screen" />
+    <!-- ENDIF -->
+    <link rel="shortcut icon" href="{EQDKP_ROOT_PATH}templates/bad_cataclysm/images/favicon.png" type="image/png">
+    <link rel="icon" href="{EQDKP_ROOT_PATH}templates/bad_cataclysm/images/favicon.png" type="image/png">
+		{PLUS_HEADER}
+    {PLUS_JS_WIN}
+    {EXTRA_CSS}
+    {PORTAL_JAVASCRIPT}
+    <!-- IF S_IMG_RESIZE_ENABLE -->
+	    <link rel="stylesheet" href="{EQDKP_ROOT_PATH}pluskernel/include/css/lytebox.css" type="text/css" />
+			<script type="text/javascript" src="{EQDKP_ROOT_PATH}pluskernel/include/javascripts/lytebox.js"></script>
+			<script type="text/javascript" >
+			 	if (window.addEventListener) {
+			 		window.addEventListener("load",initLytebox,false);
+			 	} else if (window.attachEvent) {
+			 		window.attachEvent("onload",initLytebox);
+			 	} else {
+			 		window.onload = function() {initLytebox();}
+			 	}
+			 	function initLytebox()
+			 	{
+			 		myLytebox = new LyteBox({S_MAX_POST_IMG_RESIZE_WIDTH}, '{S_IMG_RESIZE_WARNING}', '{S_LYTEBOX_THEME}', {S_LYTEBOX_AUTO_RESIZE}, {S_LYTEBOX_ANIMATION},'{S_IMG_WARNING_ACTIVE}') ;
+			 	}
+			</script>
+		<!-- ENDIF -->
+		<style type="text/css">
+			<!-- INCLUDE style.css -->
+		</style>
+	</head>
+	<body>
+		<!-- IF S_NORMAL_HEADER -->
+		{HEADER_BAR}
+			<div id="wrapper">
+				<div id="body_topleft"></div>
+				<div id="body_topright"></div>
+				<div id="body_top"></div>
+				<div class="clear"></div>
+				<div id="body_left">
+					<div id="body_right">
+						<div id="body_main">
+
+							<div id="cat_header">
+								<img src="{HEADER_LOGO}" />
+								<div id="toptitles">
+									<span class="maintitle">{MAIN_TITLE}</span><br />
+									<span class="subtitle">{SUB_TITLE}</span>
+								</div>
+								<div class="clear"></div>
+								<div id="navigation">
+									<ul>
+										<li>
+											<a href='{PORTAL_URL}'>Portal</a>
+										</li>
+										<!-- IF PORTAL_IS_FORUM -->
+											<li>
+												<a href='{PORTAL_FORUM_URL}' target='_parent'>Forum</a>
+											</li>
+										<!-- ENDIF -->
+										<!-- IF PORTAL_DKP_URL -->
+											<li>
+												<a href='{PORTAL_DKP_URL}' rel='external'>{PORTAL_DKP_SYSTEM_NAME}</a>
+											</li>
+										<!-- ENDIF -->
+										<!-- IF IS_RP_INSTALLED -->
+											<li>
+												<a href='{IS_RP_URL}'>{RP_LINK_NAME}</a>
+											</li>
+										<!-- ENDIF -->
+										{MAIN_MENU4}
+									</ul>
+								</div><!-- end of the navigation -->
+								<div class="clear"></div>
+							</div><!-- end of the header -->
+							<div id="cat_left">
+								{PORTAL_LEFT1}
+								{MAIN_MENU1_V}<br />
+								{MAIN_MENU2_V}<br />
+								{MAIN_MENU3_V}<br />
+								{PORTAL_LEFT2}						
+							</div>
+							<!-- IF THIRD_C -->
+								<div id="cat_right">
+									{PORTAL_RIGHT}
+								</div>
+								<div id="maincontent_3_cols">
+							<!-- ELSE -->
+								<div id="maincontent_2_cols">
+							<!-- ENDIF -->
+							<!-- IF S_IN_ADMIN -->
+								<div id="cat_admin_menu">
+									<ul>
+										<li>
+											{L_ADMINISTRATION}
+											<ul>
+												<li>
+													<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;
+													<a href="{EQDKP_ROOT_PATH}admin/index.php{SID}">{L_ADMIN_INDEX}</a>
+												</li>
+												<li>
+													<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;
+													<a href="{EQDKP_ROOT_PATH}{SID}">{L_EQDKP_INDEX}</a>
+												</li>
+											</ul>
+										</li>
+										<!-- BEGIN header_row -->
+											<li>
+												<img src="{EQDKP_ROOT_PATH}images/admin/{header_row.HEADER_IMG}" alt="img" /> {header_row.HEADER}
+												<ul>
+													<!-- BEGIN menu_row -->
+														<li>
+															<td>&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;{header_row.menu_row.LINK}</td>
+														</li>
+													<!-- END menu_row -->
+												</ul>
+											</li>
+										<!-- END header_row -->
+									</ul>
+								</div>
+							<!-- ENDIF -->
+							{NEWS_TICKER_H}	
+							{PORTAL_MIDDLE}
+						<!-- ENDIF -->
+						{TOP}

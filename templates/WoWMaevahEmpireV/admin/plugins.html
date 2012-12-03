@@ -1,0 +1,32 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+  <tr>
+    <th align="left" width="16">&nbsp;</th>
+    <th align="left" nowrap="nowrap">{L_ACTION}</th>
+    <th align="left" nowrap="nowrap">{L_NAME}</th>
+    <th align="left" nowrap="nowrap">{L_VERSION}</th>
+    <th align="left" nowrap="nowrap">{L_CONTACT}</th>
+    <th align="left" nowrap="nowrap">{L_DESCRIPTION}</th>
+    <th align="left" nowrap="nowrap">{L_INFOS}</th>
+  </tr>
+  <!-- IF NO_PLUGS -->
+    <tr class="row1">
+    <td width="16" align="center" nowrap="nowrap" colspan=6>{L_NO_PLUG}</td>
+    </tr>
+  <!-- ELSE -->
+  <!-- BEGIN plugins_row -->
+  <tr class="{plugins_row.ROW_CLASS}">
+    <td width="16" align="center" nowrap="nowrap"><img src="{EQDKP_ROOT_PATH}images/glyphs/{plugins_row.glyph}" width="16" height="16" alt="Plugin" /></td>
+    <td nowrap="nowrap"><a href="{plugins_row.U_ACTION}">{plugins_row.ACTION}</a></td>
+    <td nowrap="nowrap">{plugins_row.NAME}</td>
+    <td nowrap="nowrap">{plugins_row.VERSION}</td>
+    <td nowrap="nowrap">{plugins_row.CONTACT}</td>
+    <td >{plugins_row.DESCRIPTION}</td>
+    <td nowrap="nowrap">{plugins_row.LONG_DESCRIPTION}  {plugins_row.HOMEPAGE} {plugins_row.MANUAL}</td> 
+  <!-- END plugins_row -->
+  <!-- ENDIF -->
+</table>
+<br />
+{L_MORE}
+<br />
+<!-- INCLUDE page_tail.html -->

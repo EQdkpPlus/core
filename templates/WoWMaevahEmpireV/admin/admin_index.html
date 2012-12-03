@@ -1,0 +1,286 @@
+<!-- INCLUDE page_header.html -->
+<!-- IF SHOW_BETA_WARNING -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+	 <tr>
+	    <td class="row1" align="right">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	    <td class="row1" align="center">{BETA_WARNING}</td>
+	    <td class="row1" align="left">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+
+{TAB_HEAD_ADMINSETT}
+{TAB_SELECT_UPDATES}
+<div id='admininfos_tabs'>
+  <ul>
+    <li><a href='#fragment-1'><span>{L_TAB_NEWS}</span></a></li>
+    <li><a href='#fragment-2'><span>{L_TAB_UPDATECHECK}</span></a></li>
+    <li><a href='#fragment-3'><span>{L_TAB_STATISTIC}</span></a></li>
+    <li><a href='#fragment-4'><span>{L_TAB_SERVER}</span></a></li>
+    <li><a href='#fragment-5'><span>{L_TAB_SUPPORT}</span></a></li>
+  </ul>
+
+  <div id="fragment-1">
+    <style>
+    /*############################### News-Feed #############################*/
+		#newsfeed_left,
+		#newsfeed_right,
+		#twitterfeed_left {
+		  background: #{T_TR_COLOR1};
+			margin:0;
+			padding:5px;
+			border:1px solid #{T_TABLE_BORDER_COLOR};
+			width:auto;
+			overflow: auto;
+		}
+		#newsfeed_right{
+			height:300px;
+		}
+		#newsfeed_left,
+		#twitterfeed_left {
+			height:128px;
+		}
+		#newsfeed_left a,
+		#newsfeed_right a,
+		#twitterfeed_left a {
+			color:#{T_BODY_LINK};
+			font-size:10px;
+		}
+		#newsfeed_left .date,
+		#newsfeed_right .date,
+		#twitterfeed_left .date {
+			margin:0;
+			color: #{T_FONTCOLOR1};
+			font-size:x-small;
+			letter-spacing:0.2em;
+		}
+		#newsfeed_left .description,
+		#newsfeed_right .description,
+		#twitterfeed_left .description {
+		 	margin:0;
+		 	padding:0;
+		}
+		#newsfeed_left .description p,
+		#newsfeed_right .description p,
+		#twitterfeed_left .description p {
+			font-size:10px;
+		}
+		.loading{
+			margin:20% 0% 0% 40%;
+			float:left;
+		}
+    </style>
+    <table width="100%" align="center"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="50%">
+          <table width="100%">
+            <tr>
+              <th>{L_RSS_HEAD1}</th>
+            </tr>
+            <tr>
+              <td style="width:100%;"><div id="rss"><div id="newsfeed_left"></div></div></td>
+            </tr>
+            <tr>
+              <th>{L_RSS_HEAD3}  
+			| follow us on <a href="http://twitter.com/EQdkpPlus" target="_new" ><img src='../images/Twitter-icon-16.png'></a>
+				<a href="http://www.facebook.com/pages/EQdkp-Plus/164694353225" target="_new" ><img src='../images/FaceBook-icon-16.png'></a>
+			</th>
+            </tr>
+            <tr>
+              <td style="width:100%;"><div id="rss"><div id="twitterfeed_left"></div></div></td>
+            </tr>
+          </table>
+        </td>
+        <td width="20px"> </td>
+        <td width="50%">
+          <table width="100%">
+            <tr>
+              <th>{L_RSS_HEAD2}</th>
+            </tr>
+            <tr>
+              <td><div id="newsfeed_right"></div></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		{RSS_FEED1_JQUERY}
+
+    		{RSS_FEED2_JQUERY}
+    		
+    		{RSS_TWITTER_JQUERY}
+    	});
+    	</script>
+  </div>
+
+    <div id="fragment-2">
+  
+  <!-- IF SHOW_UPDATE_WARNING -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+	  <tr>
+	    <td colspan="3" align="center"><b>{L_VERSION_UPDATE}</b></td>
+	  </tr>
+	  <tr>
+	    <td class="row1" align="right">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	    <td class="row1" align="center">{L_NEW_VERSION_NOTICE}</td>
+	    <td class="row1" align="left">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+  
+  <!-- IF SHOW_CHMOD_THING -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+	 <tr>
+	    <td class="row1" align="right"><img src="../images/false.png"></td>
+	    <td class="row1" align="center">{CHMOD_TXT}</td>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+
+  
+  {PLUG_DB_CHECK}
+  {PLUS_UPDATE_CHECK}
+  
+
+  </div>
+
+  <div id="fragment-3">
+    <table width="100%" border="0" cellspacing="1" cellpadding="2">
+      <tr>
+        <th align="center" colspan="4">{L_STATISTICS}</th>
+      </tr>
+      <tr>
+        <td class="row2" width="25%">{L_NUMBER_OF_MEMBERS}:</td>
+        <td class="row1" width="25%">{NUMBER_OF_MEMBERS}</td>
+        <td class="row2" width="25%">{L_NUMBER_OF_LOGS}:</td>
+        <td class="row1" width="25%">{NUMBER_OF_LOGS}</td>
+      </tr>
+      <tr>
+        <td class="row2" width="25%">{L_NUMBER_OF_RAIDS}:</td>
+        <td class="row1" width="25%">{NUMBER_OF_RAIDS}</td>
+        <td class="row2" width="25%">{L_RAIDS_PER_DAY}:</td>
+        <td class="row1" width="25%">{RAIDS_PER_DAY}</td>
+      </tr>
+      <tr>
+        <td class="row2" width="25%">{L_NUMBER_OF_ITEMS}:</td>
+        <td class="row1" width="25%">{NUMBER_OF_ITEMS}</td>
+        <td class="row2" width="25%">{L_ITEMS_PER_DAY}:</td>
+        <td class="row1" width="25%">{ITEMS_PER_DAY}</td>
+      </tr>
+      <tr>
+        <td class="row2" width="25%">{L_DATABASE_SIZE}:</td>
+        <td class="row1" width="25%">{DATABASE_SIZE}</td>
+        <td class="row2" width="25%">{L_EQDKP_STARTED}:</td>
+        <td class="row1" width="25%">{EQDKP_STARTED}</td>
+      </tr>
+      <tr>
+        <th align="center" colspan="4">&nbsp;</th>
+      </tr>
+    </table>
+  </div>
+
+  <div id="fragment-4">
+    <table width="100%" border="0">
+     <tr>
+          <th>{L_SERVERINFO_PHPS}</th>
+          <th>{L_SERVERINFO_PHPV}</th>
+        </tr>
+        <tr>
+          <td>PHP Safe Mode</td>
+          <td>{SERVERINFO_SAFEMODE}</td>
+        </tr>
+        <tr>
+          <td>Register Globals</td>
+          <td>{SERVERINFO_REGGLOBAL}</td>
+        </tr>
+         <tr>
+          <td>CURL</td>
+          <td>{SERVERINFO_CURL}</td>
+        </tr>
+         <tr>
+          <td>Fopen</td>
+          <td>{SERVERINFO_FOPEN}</td>
+        </tr>
+         <tr>
+          <td>PHP Version</td>
+          <td>{SERVERINFO_PHP}</td>
+        </tr>
+        <tr>
+          <td>Mysql Version</td>
+          <td>{SERVERINFO_MYSQL}</td>
+        </tr>
+        <tr>
+          <td>Mysql Strict Mode</td>
+          <td>{SERVERINFO_STRICT}</td>
+        </tr>
+        <tr>
+        <td></td><td></td>
+        </tr>
+			</table>
+  </div>
+
+  <div id="fragment-5">
+    {L_SUPPORT_INTRO}<br/><br/>
+    <table width="100%" border="0">
+
+      <tr>
+        <td><img src="../images/support_wiki.png" alt="WIKI"></td>
+        <td>{L_SUPPORT_WIKI}</td>
+      </tr>
+       <tr>
+        <td><img src="../images/support_bug.png" alt="Bugtracker"></td>
+        <td>{L_SUPPORT_BUGTRACKER}</td>
+      </tr>
+      <tr>
+        <td><img src="../images/support_community.png" alt="Community"></td>
+        <td>{L_SUPPORT_FORUMS}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<br/>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+      <th align="center" colspan="5">{L_WHO_ONLINE}</th>
+    </tr>
+    <tr>
+      <th align="left" width="20%" nowrap="nowrap">{L_USERNAME}</th>
+      <th align="left" width="20%" nowrap="nowrap">{L_LOGIN}</th>
+      <th align="left" width="20%" nowrap="nowrap">{L_LAST_UPDATE}</th>
+      <th align="left" width="20%" nowrap="nowrap">{L_LOCATION}</th>
+      <th align="left" width="20%" nowrap="nowrap">{L_IP_ADDRESS}</th>
+    </tr>
+    <!-- BEGIN online_row -->
+    <tr class="{online_row.ROW_CLASS}">
+      <td width="20%" nowrap="nowrap">{online_row.USERNAME}</td>
+      <td width="20%" nowrap="nowrap">{online_row.LOGIN}</td>
+      <td width="20%" nowrap="nowrap">{online_row.LAST_UPDATE}</td>
+      <td width="20%" nowrap="nowrap">{online_row.LOCATION}</td>
+      <td width="20%" nowrap="nowrap">{online_row.IP_ADDRESS}</td>
+    </tr>
+    <!-- END online_row -->
+    <tr>
+      <th colspan="5" class="footer">{ONLINE_FOOTCOUNT}</th>
+    </tr>
+  </table>
+
+<!-- IF S_LOGS -->
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_NEW_ACTIONS}</th>
+  </tr>
+  <!-- BEGIN actions_row -->
+  <tr class="{actions_row.ROW_CLASS}">
+    <td align="center" width="16" nowrap="nowrap"><a href="{actions_row.U_VIEW_LOG}"><img src="{EQDKP_ROOT_PATH}images/glyphs/view.png" width="16" height="16" alt="View" /></a></td>
+    <td width="100%">{actions_row.ACTION}</td>
+  </tr>
+  <!-- END actions_row -->
+</table>
+<!-- ENDIF -->
+<!-- INCLUDE page_tail.html -->
