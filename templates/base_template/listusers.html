@@ -1,0 +1,59 @@
+<form method="post" action="{ACTION}&amp;send=sms" name="post">
+<!-- BEGIN group_row -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	<tr >
+		<th colspan="<!-- IF F_SMS -->8<!-- ELSE -->7<!-- ENDIF -->" align="left" class="nowrap">{group_row.NAME}</th>
+	</tr>
+	<tr >
+		<!-- IF F_SMS --><th align="left" width="10" class="nowrap"><input type="checkbox" name="" id="selall_usergr_{group_row.ID}" /></th><!-- ENDIF -->
+		<th align="left" class="nowrap">{L_username}</th>
+		<th align="left" class="nowrap">{L_name}</th>
+		<th align="left" class="nowrap">{L_adduser_country}</th>
+		<th align="left" class="nowrap">{L_email}</th>
+		<th align="left" class="nowrap">{L_user_contact}</th>
+		<th align="left" class="nowrap">{L_menu_members}</th>
+		<th align="left" class="nowrap">{L_registered_at}</th> 
+	</tr>
+	<!-- BEGIN row_users -->
+	<tr>
+		<!-- IF F_SMS --><td align="left" width="10">{group_row.row_users.cellphone_checkbox}</td><!-- ENDIF -->
+		<td align="left" class="nowrap"><a href="{EQDKP_ROOT_PATH}listusers.php{SID}&amp;u={group_row.row_users.userid}">{group_row.row_users.username}</a></td>
+		<td align="left" class="nowrap">{group_row.row_users.firstandlastname}</td>
+		<td align="left" class="nowrap">{group_row.row_users.country_flag}</td>
+		<td align="left" class="nowrap">{group_row.row_users.email}</td>
+		<td align="left" class="nowrap">{group_row.row_users.icq} {group_row.row_users.skype} {group_row.row_users.msn} {group_row.row_users.irq} {group_row.row_users.twitter} {group_row.row_users.facebook} {group_row.row_users.cellphone} {group_row.row_users.phone}</td>
+		<td align="left" class="nowrap">{group_row.row_users.charakter_count}</td>
+		<td align="left" class="nowrap">{group_row.row_users.registered}</td>
+	</tr>
+	<!-- END row_users -->
+	<tr>
+		<th colspan="<!-- IF F_SMS -->8<!-- ELSE -->7<!-- ENDIF -->" class="footer">
+		{group_row.FOOTCOUNT}
+		</th>
+	</tr>
+</table>
+<br />
+<!-- END group_row -->
+<!-- IF F_SMS -->
+<fieldset class="settings">
+	<legend>{L_sms_header}</legend>
+	<p> {L_sms_info}<br />{L_sms_send_info}</p>
+	{F_ACC_INFO}
+	<br />
+	<textarea name="text_area" rows="5" onkeyup="count_chars()" style="width:550px;" cols="10"></textarea>
+	<br /><span id="counter">0</span> {L_sms_chars}<br />
+	<input type="submit" name="submit" value="{L_submit}" class="mainoption bi_cellphone" />
+</fieldset>
+<script type="text/javascript">
+//<![CDATA[
+
+var count = 0;
+function count_chars(){
+	count = document.post.text_area.value.length;
+	$('#counter').html(count);	
+}
+//]]>
+</script>
+<!-- ENDIF -->
+{CSRF_TOKEN}
+</form>

@@ -1,0 +1,54 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
+	<tr>
+		<th colspan="7">{L_apa_manager}</th>
+	</tr>
+	<tr>
+		<th colspan="3">{L_action}</th>
+		<th width="300" class="nowrap">{L_apa_type}</th>
+		<th width="150" class="nowrap">{L_name}</th>
+		<th width="80" class="nowrap">{L_apa_exectime}</th>
+		<th>{L_apa_pools}</th>
+	</tr>
+	<!-- BEGIN apa_row -->
+	<tr>
+		<td width="20"><img src="{EQDKP_IMAGE_PATH}glyphs/edit.png" alt="{apa_row.ID}" class="apa_edit hand" title="{L_edit}" /></td>
+		<td width="20"><img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="{apa_row.ID}" class="apa_del hand" title="{L_delete}" /></td>
+		<td width="20"><a href="manage_auto_points.php{SID}&amp;recalc=true&amp;id={apa_row.ID}" title="{L_apa_recalculate}"><img src="{EQDKP_IMAGE_PATH}glyphs/recalculate.png" alt="" /></a></td>
+		<td>{apa_row.TYPE}</td>
+		<td>{apa_row.NAME}</td>
+		<td>{apa_row.EXECTIME}</td>
+		<td>{apa_row.POOLS}</td>
+	</tr>
+	<!-- END apa_row -->
+	<tr>
+		<th colspan="9"><input type="button" id="add_apa" value="{L_APA_ADD}" class="mainoption bi_new" /> {TYPE_DD}</th>
+	</tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
+	<tr>
+		<th colspan="5">{L_apa_calc_funcs}</th>
+	</tr>
+	<tr>
+		<th colspan="2">{L_action}</th>
+		<th width="200">{L_apa_func_name}</th>
+		<th width="300">{L_apa_func_used}</th>
+		<th>call function(100, now-2weeks, now, 14)</th>
+	</tr>
+	<!-- BEGIN func_row -->
+	<tr>
+		<td width="20"><img src="{EQDKP_IMAGE_PATH}glyphs/edit.png" alt="{func_row.NAME}" class="func_edit hand" title="{L_edit}" /></td>
+		<td width="20"><img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="{func_row.NAME}" class="func_del hand" title="{L_delete}"<!-- IF func_row.NODEL --> style="display:none;"<!-- ENDIF --> /></td>
+		<td>{func_row.NAME}</td>
+		<td>{func_row.USED}</td>
+		<td>{func_row.EXPL}</td>
+	</tr>
+	<!-- END func_row -->
+	<tr>
+		<th colspan="5">
+			<input type="button" id="add_func" value="{L_apa_add_func}" class="mainoption bi_new" />
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

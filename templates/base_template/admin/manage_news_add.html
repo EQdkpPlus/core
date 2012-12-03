@@ -1,0 +1,85 @@
+<form method="post" action="{ACTION}" name="addnews" id="addnews">
+<div id="manage_news_tabs">
+	<ul>
+		<li><a href='#newstab-1'><span>{L_message_edit_news}</span></a></li>
+		<li><a href='#newstab-2'><span>{L_message_show_loot_raid}</span></a></li>
+		<li><a href='#newstab-3'><span>{L_settings}</span></a></li>
+	</ul>
+	<div id="newstab-1">
+		<fieldset class="settings">
+			<legend>{L_headline}</legend>
+			<input type="text" name="news_headline" style="width:100%;" maxlength="255" value="{HEADLINE}" class="input required" />
+		</fieldset>
+		<fieldset class="settings">
+			<legend>{L_message_body}</legend>
+			<textarea name="news_message" id="news_message" class="mceEditor" rows="3" cols="60" class="required" style="width:100%;height:500px;">{MESSAGE}</textarea>
+			<input type="button" id="readmorebutton" value="{L_news_readmore_button}" class="mainoption" {EXTENDNEWSBUTTON_ENABLED}/>
+		</fieldset>
+	</div>
+
+	<div id="newstab-2">
+	
+	<fieldset class="settings">
+			<legend>{L_message_show_loot_raid}</legend>
+			<dl>
+				<dt><label>{L_message_select_raids}</label></dt>
+				<dd>{RAID_DROPDOWN}</dd>
+			</dl>
+	</fieldset>
+	</div>
+
+<div id="newstab-3">
+	<fieldset class="settings">
+			<legend>{L_settings}</legend>
+			<!-- IF S_NEWS_CATEGORIES-->
+			<dl>
+				<dt><label>{L_select_newscategories}:</label></dt>
+				<dd>{NEWS_CATEGORY_DROPDOWN}</dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<dt><label>{L_news_permissions}:</label></dt>
+				<dd>{PERMISSION_DROPDOWN}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_news_nocomments}</label></dt>
+				<dd><input type="checkbox" name="nocomments" id="nocomments" value="1" {NOCOMMENTS_CHECKED} /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_news_sticky}</label></dt>
+				<dd><input type="checkbox" name="news_flags" id="news_flags" value="1" {STICKY_CHECKED} /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_portalplugin_author}</label></dt>
+				<dd>{NEWS_USER_DROPDOWN}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_news_date}</label></dt>
+				<dd>{DATE_PICKER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_show_news_from}</label><br /><span>{L_show_news_from_help}</span></dt>
+				<dd>{DATE_FROM_PICKER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_show_news_to}</label><br /><span>{L_show_news_to_help}</span></dt>
+				<dd>{DATE_TO_PICKER}</dd>
+			</dl>
+	</fieldset>
+	
+</div>
+
+
+<div class="contentFooter">
+	<input type="hidden" name="ref" value="{REF}" />
+	<!-- IF S_ADD -->
+	<input type="submit" name="upd" value="{L_ADD_NEWS}" class="mainoption bi_ok" />
+	<!-- ELSE -->
+	<input type="submit" name="upd" value="{L_update_news}" class="mainoption bi_ok" /> <input type="button"  name="del" value="{L_delete_news}" class="liteoption bi_delete" onclick="delete_warning();"/> <input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" />
+	<!-- ENDIF -->
+	<input type="hidden" name="show">
+</div>
+
+</div>
+{CSRF_TOKEN}
+</form>

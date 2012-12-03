@@ -1,0 +1,26 @@
+<!-- IF S_MESSAGE -->
+
+	<div class="{MSG_CLASS} roundbox">
+		<div class="{MSG_ICON}"><span><span class="bold">{MSG_TITLE}</span><br />{MSG_TEXT}</span></div>
+	</div>
+
+<!-- ELSE -->
+
+	<div class="content">
+		<div class="contentHead">
+			{MSG_TITLE}
+		</div>
+		<div class="contentInner row1">
+			{MSG_TEXT}
+		</div>
+		<div class="contentFooter">
+			<!-- IF S_BUTTON -->{BU_FORM}<input type="submit" class="mainoption" {BU_ONCLICK} value="{BU_VALUE}">{BU_FORM_END}<!-- ENDIF -->
+		</div>
+	</div>
+
+<!-- ENDIF -->
+
+<!-- IF S_LOGIN -->
+	<br />
+	<!-- INCLUDE login.html -->
+<!-- ENDIF -->

@@ -1,0 +1,75 @@
+<div id="guild_header_wrap">	
+	<div id="guild_header_banner_{FACTION}">
+		<div id="guild_emblem">
+			<img src="{TABARD}" alt="Guildtabard" />
+		</div>	
+		<div id="guild_name">{GUILD}</div>
+		<div id="guild_realm">{L_level} {LEVEL} &bull; {REGION}-{REALM} &bull; {ACHIEV_POINTS} <img src="games/wow/profiles/achievements.png" class="absmiddle" alt="AchievementPoints" /></div>
+	</div>
+</div>
+<br clear="left" />
+
+<div id="wow_roster">
+	<!-- IF S_ARMORY_INFO -->
+	<ul>
+		<li><a href='#roster'><span>{L_menu_roster}</span></a></li>
+		<li><a href='#news'><span>{GL_guildnews}</span></a></li>
+		<li><a href='#achievements'><span>{GL_achievements}</span></a></li>
+	</ul>
+	
+		
+	<div id="news">
+		<table width="100%" class="colorswitch hoverrows" cellspacing="0" cellpadding="6">
+		<!-- BEGIN guildnews -->
+		<tr>
+			<td width="25">{guildnews.ICON}
+			</td>
+			<td>{guildnews.TEXT}
+			</td>
+			<td width="30" class="nowrap">{guildnews.DATE}
+			</td>
+		</tr>
+		<!-- END guildnews -->
+		</table>
+	</div>
+	
+	<div id="achievements">
+		<!-- BEGIN guildachievs -->
+		<div id="bar_{guildachievs.ID}" onclick="window.open('{guildachievs.LINK}', '_blank')">
+			{guildachievs.NAME}
+			{guildachievs.BAR}
+		</div>
+		<!-- END guildachievs -->
+		<div class="clear"></div>
+		<h2>{GL_latest_guildachievs}</h2>
+		<table width="100%" class="colorswitch hoverrows" cellspacing="0" cellpadding="6">
+		<!-- BEGIN latestachievs -->
+		<tr>
+			<td width="25">{latestachievs.ICON}
+			</td>
+			<td>{latestachievs.NAME} &nbsp;&nbsp;&nbsp; {latestachievs.DESC}
+			</td>
+			<td width="60" class="nowrap">{latestachievs.POINTS} <img src="games/wow/profiles/achievements.png" class="absmiddle" alt="AchievementPoints" />
+			</td>
+			<td width="30" class="nowrap">{latestachievs.DATE}
+			</td>
+		</tr>
+		<!-- END latestachievs -->
+		</table>
+	</div>
+	
+	<!-- ENDIF  -->
+	
+	<div id="roster">
+	<!-- BEGIN class_row -->
+		<h1 class="class_{class_row.CLASS_ID}">{class_row.CLASS_ICONS} {class_row.CLASS_NAME}</h1>
+
+		<table width="100%" class="colorswitch hoverrows" cellspacing="0" cellpadding="2">
+			{class_row.MEMBER_LIST}
+		</table>
+
+		<br /><br />
+	<!-- END class_row -->
+		</div>
+
+</div>

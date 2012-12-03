@@ -1,0 +1,502 @@
+<!-- IF ARMORY == 1 -->
+	<div class="row1">
+		<div style="max-width:1140px;">
+			<table width="100%" cellspacing="0" cellpadding="1" border="0">
+				<tr>
+					<td><div id="profile">
+							<div id="profile_charicon">
+								<img border='0' src="{CHARDATA_ICON}" alt="" />
+							</div>
+							<div class="floatLeft">
+								<div id="profile_charname">
+									<a target="_blank" href="{bnetlinks:profil}">{CHARDATA_NAME}</a>
+								</div>
+								<div id="profile_titel_guild">
+									{CHARDATA_TITLE}
+									<br />
+									<span class="profile_guild"><a target="_blank" href="{bnetlinks:guild}">{CHARDATA_GUILDNAME}</a> @ {CHARDATA_GUILDREALM}</span>
+								</div>
+								<div class="clear"></div>
+								<div id="profile_charinfos">
+									{L_level} {DATA_LEVEL}, {DATA_RACENAME}, {DATA_CLASSNAME}, {CHARDATA_POINTS} <img src="{EQDKP_ROOT_PATH}games/wow/profiles/achievements.png" alt="" />
+								</div>
+							</div>
+							<div>
+								<div class="profile_itemlevel">
+									<div class="profile_itemlevel_avg">{itemlevel:averageItemLevel}</div>
+									<div class="profile_itemlevel_txt">
+										<div class="profile_itemlevel_avgtxt">{GL_avg_itemlevel}</div>
+										<div class="profile_itemlevel_eq">({itemlevel:averageItemLevelEquipped} {GL_avg_itemlevel_equiped})</div>
+									</div>
+								</div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</td>
+				</tr>
+				<tr class="row1" >
+					<td valign="top" align="center">
+						<table border="0" align="left" width="100%">
+							<tr valign="top">
+								<td  width="27"> &nbsp;</td>
+								<td style="background: #1e130d url({CHARACTER_IMG}) center top no-repeat;">
+									<table border="0" style="min-width: 450px;" width="100%">
+										<tr style="height:479px;">
+											<td valign="top" width="50" >
+												<ul id="wow_icons_left">
+													<!-- BEGIN itemicons_left -->
+													<li>{itemicons_left.SLOTS}</li>
+													<!-- END itemicons_left -->
+												</ul>
+											</td>
+											<td width="100%" valign="top" align="center" class="nowrap">
+												<br />
+											</td>
+											<td valign="top" width="50" >
+												<ul id="wow_icons_right">
+													<!-- BEGIN itemicons_right -->
+													<li>{itemicons_right.SLOTS}</li>
+													<!-- END itemicons_right -->
+												</ul>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3" align="center" >
+												<ul id='wow_icons_bottom'>
+													<!-- BEGIN itemicons_bottom -->
+													<li>{itemicons_bottom.SLOTS}</li>
+													<!-- END itemicons_bottom -->
+												</ul>
+												{itemicons:bottom}
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td width="400">
+									<div class="healthpowerbar">
+										<ul>
+											<li class="health"><span class="name">{GL_health}</span><span class="value">{HEALTH_VALUE}</span></li>
+											<li class="{POWER_TYPE}"><span class="name">{POWER_NAME}</span><span class="value">{POWER_VALUE}</span></li>
+										</ul>
+									</div>
+									<table width="100%" border="0">
+										<tr valign="top" >
+											<td width="100%">
+												<table border="0" cellspacing="0" cellpadding="2" width="100%" >
+													<tr>
+														<th align="center" ><a target="_blank" href="{bnetlinks:talents}">{GL_skills}</a></th>
+													</tr>
+													<tr class="row2">
+														<td>
+															<div id='talent_tabs'>
+																<ul>
+																	<!-- BEGIN talents -->
+																	<li>
+																		<a href='#talenttab-{talents.ID}'>
+																			<span class="talenttab_icon"><img class="icon-frame" src="{talents.ICON}" alt=""/></span>
+																			<span class="talenttab_name">{talents.NAME}</span>
+																			<!-- IF talents.SELECTED --><span class="talenttab_select"><img src="games/wow/profiles/talents/talents-check.gif" width="15" height="11" alt="" /></span><!-- ENDIF -->
+																		</a>
+																	</li>
+																	<!-- END talents -->
+																</ul>
+																<!-- BEGIN talents -->
+																<div id="talenttab-{talents.ID}">
+																	<table border="0" width="100%" cellspacing="0" cellpadding="0" id="talents_{talents.ID}">
+																		<tr>
+																			<td width="70%">
+																				<table border="0" width="100%" cellspacing="0" cellpadding="0">
+																					<!-- BEGIN special -->
+																					<tr <!-- IF talents.special.DESCRIPTION --> class="coretip" data-coretip="{talents.special.DESCRIPTION}" <!-- ENDIF -->>
+																						<td class="absmiddle" width="34" align="center">{talents.special.ICON}</td>
+																						<td class="absmiddle">{talents.special.NAME}</td>
+																					</tr>
+																					<!-- END special -->
+																				</table>
+																			</td>
+																			<td width="30%">
+																			<table border="0" width="100%" cellspacing="0" cellpadding="0">
+																					<tr height="24px">
+																						<td colspan="3">{GL_major_glyphs}</td>
+																					</tr>
+																					<tr height="24px">
+																						<!-- BEGIN glyphs_major -->
+																						<td width="34" align="center" <!-- IF talents.glyphs_major.NAME --> class="coretip absmiddle" data-coretip="{talents.glyphs_major.NAME}" <!-- ELSE -->class="absmiddle"<!-- ENDIF -->>{talents.glyphs_major.ICON}</td>
+																						<!-- END glyphs_major -->
+																					</tr>
+																					<tr height="30px">
+																						<td colspan="3"></td>
+																					</tr>
+																					<tr height="24px">
+																						<td colspan="3">{GL_minor_glyphs}</td>
+																					</tr>
+																					<tr height="24px">
+																						<!-- BEGIN glyphs_minor -->
+																						<td width="34" align="center" <!-- IF talents.glyphs_minor.NAME --> class="coretip absmiddle" data-coretip="{talents.glyphs_minor.NAME}" <!-- ELSE -->class="absmiddle"<!-- ENDIF -->>{talents.glyphs_minor.ICON}</td>
+																						<!-- END glyphs_minor -->
+																					</tr>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</div>
+																<!-- END talents -->
+															</div>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+													<tr>
+														<th colspan="2" align="center" ><a target="_blank" href="{bnetlinks:profession}">{GL_uc_prof_professions}</a></th>
+													</tr>
+													<!-- BEGIN professions -->
+													<tr class="row2 profession-row">
+														<td>
+															<span class="profession-icon icon-frame frame-14"><img src="{professions.ICON}" alt="" /></span><span class="profession-name">{professions.NAME}</span>
+														</td>
+														<td>
+															{professions.BAR}
+														</td>
+													</tr>
+													<!-- END professions -->
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+													<tr>
+														<th>
+															<div class="floatLeft" style="line-height: 25px;">
+																<a target="_blank" href="{bnetlinks:profil}">{GL_values}</a>
+															</div>
+															<div class="floatRight" style="width: 70%">
+																<select id="char_infos" style="width: 100%; ">
+																	<!-- BEGIN charattribute_group -->
+																	<option value="{charattribute_group.ID}">{charattribute_group.NAME}</option>
+																	<!-- END charattribute_group -->
+																	<option value="all">{GL_all}</option>
+																</select>
+															</div>
+														</th>
+													</tr>
+													<tr class="row2" valign="top" >
+														<td width="100%">
+															
+															<div id="boxes">
+																<!-- BEGIN charattribute_group -->
+																<div id='{charattribute_group.ID}'>
+																	<table width='100%' cellspacing='0' cellpadding='2' class='colorswitch hoverrows'>
+																	<!-- BEGIN charattributes -->
+																		<tr>
+																			<td width='170'>{charattribute_group.charattributes.NAME}</td>
+																			<td>{charattribute_group.charattributes.VALUE}</td>
+																		</tr>
+																	<!-- END charattributes -->
+																	</table>
+																</div>
+																<!-- END charattribute_group -->
+															</div>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+					 	</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<br />
+
+	<table width="100%" border="0" cellspacing="1" cellpadding="1" class="borderless">
+		<tr>
+			<td valign="top" width="95%">
+				<div id='char1_tabs'>
+					<ul>
+						<li><a href='#char1tabs-1'><span>{GL_uc_bosskills}</span></a></li>
+						<li><a href='#char1tabs-2'><span>{GL_uc_achievements}</span></a></li>
+						<li><a href='#char1tabs-3'><span>{GL_char_news}</span></a></li>
+						<!-- IF S_ADMIN --><li><a href='#char1tabs-4'><span><img src="images/global/admin_flag.png" alt="" /> {L_tab_notes}</span></a></li><!-- ENDIF -->
+					</ul>
+
+					<div id="char1tabs-1">
+						<div class="tab-content">
+							<div id='achievement_tabs'>
+								<ul>
+									<!-- BEGIN bossprogress_cat -->
+									<li><a href='#achievementtab-{bossprogress_cat.ID}'><span>{bossprogress_cat.NAME}</span></a></li>
+									<!-- END bossprogress_cat -->
+								</ul>
+
+								<!-- BEGIN bossprogress_cat -->
+								<div id="achievementtab-{bossprogress_cat.ID}">
+									<table border="0" width="100%" cellspacing="0" cellpadding="2" class="colorswitch">
+									<!-- BEGIN bossprogress_val -->
+										<tr>
+											<td width="470">
+												<table border="0" width="400">
+													<tr>
+														<td class="raideventicon id{bossprogress_cat.bossprogress_val.ID}">
+														</td>
+														<td align="center" class="nowrap">
+															<b>{bossprogress_cat.bossprogress_val.NAME}</b>
+															<hr />{bossprogress_cat.bossprogress_val.RUNS}
+														</td>
+													</tr>
+												</table>
+											</td>
+											<td width="250">{bossprogress_cat.bossprogress_val.BARS}</td>
+										</tr>
+										<!-- END bossprogress_val -->
+									</table>
+								</div>
+								<!-- END bossprogress_cat -->
+							</div>
+						</div>
+					</div>
+
+					<div id="char1tabs-2">
+						<div class="tab-content">
+							<!-- BEGIN achievements -->
+							<div id="bar_{achievements.ID}" onclick="window.location='{achievements.LINK}'">
+								{achievements.NAME}
+								{achievements.BAR}
+							</div>
+							<!-- END achievements -->
+
+							<div class="clear"></div>
+							<h2>{GL_latest_guildachievs}</h2>
+							<table width="100%" class="colorswitch hoverrows" cellspacing="0" cellpadding="6">
+							<!-- BEGIN latestachievements -->
+							<tr>
+								<td width="25">{latestachievements.ICON}
+								</td>
+								<td>{latestachievements.NAME} &nbsp;&nbsp;&nbsp; {latestachievements.DESC}
+								</td>
+								<td width="60" class="nowrap">{latestachievements.POINTS} <img src="games/wow/profiles/achievements.png" class="absmiddle" alt="AchievementPoints" />
+								</td>
+								<td width="30" class="nowrap">{latestachievements.DATE}
+								</td>
+							</tr>
+							<!-- END latestachievements -->
+							</table>
+						</div>
+					</div>
+
+					<div id="char1tabs-3">
+						<div class="tab-content">
+							<table width='100%' border='0' cellspacing='1' cellpadding='2' class='colorswitch'>
+								<tr>
+									<th  align='center' colspan='4' class='nowrap'>{GL_charnewsfeed}</th>
+								</tr>
+								<!-- BEGIN charfeed -->
+								<tr style='height:28;' align='center'>
+									<td width='28' height='28'><img src='{charfeed.ICON}' alt='feedicon' /></td>
+									<td align='left'>{charfeed.TEXT}</td>
+									<td width='120' align='center'>{charfeed.DATE}</td>
+								</tr>
+								<!-- END charfeed -->
+							</table>
+						</div>
+					</div>
+
+					<!-- IF S_ADMIN -->
+					<div id="char1tabs-4">
+						<div class="tab-content">
+							<table width="100%" border="0" cellspacing="0" cellpadding="1">
+								<tr class="row1" >
+									<td align="left" width="40%" class="nowrap">
+										{NOTES}
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<!-- ENDIF -->
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br />
+	<br />
+<!-- ELSE -->
+<div class="row1">
+	<table width="100%" cellspacing="0" cellpadding="1" border="0" style="max-width:1140px;">
+		<tr>
+			<td><div id="profile">
+					<div id="profile_charicon">
+						<img border='0' src="{CHARDATA_ICON}" alt="" />
+					</div>
+					<div class="floatLeft">
+						<div id="profile_charname">
+							{DATA_NAME}
+						</div>
+						<div id="profile_titel_guild">
+							{CHARDATA_TITLE}
+							<br />
+							<span class="profile_guild"><a target="_blank" href="{bnetlinks:guild}">{DATA_GUILDTAG}</a> @ {CHARDATA_GUILDREALM}</span>
+						</div>
+						<div class="clear"></div>
+						<div id="profile_charinfos">
+							{L_level} {DATA_LEVEL}, {DATA_RACENAME}, {DATA_CLASSNAME}, {CHARDATA_POINTS} <img src="{EQDKP_ROOT_PATH}games/wow/profiles/achievements.png" alt="" />
+						</div>
+					</div>
+					<div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</td>
+		</tr>
+
+		<tr class="row1" >
+			<td valign="top" align="center">
+
+				<table border="0" align="left" width="100%" style="height: 550px;">
+					<tr valign="top">
+						<td  width="27"> &nbsp;</td>
+						<td style="background: #1e130d url({CHARACTER_IMG}) center top no-repeat;"></td>
+						<td width="400">
+
+							<div class="healthpowerbar">
+								<ul>
+									<li class="health"><span class="name">{GL_health}</span><span class="value">{DATA_HEALTH_BAR}</span></li>
+									<li class="{DATA_SECOND_NAME}"><span class="name">{POWER_BAR_NAME}</span><span class="value">{DATA_SECOND_BAR}</span></li>
+								</ul>
+							</div>
+
+							<table width="100%" border="0">
+								<tr valign="top" >
+									<td width="100%">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+											<tr>
+												<th colspan="2" align="center" >{GL_uc_prof_professions}</th>
+											</tr>
+											<!-- BEGIN professions -->
+											<tr class="row2 profession-row">
+												<td>
+													<span class="profession-icon icon-frame frame-14"><img src="{professions.ICON}" alt="" /></span><span class="profession-name">{professions.NAME}</span>
+												</td>
+												<td>
+													{professions.BAR}
+												</td>
+											</tr>
+											<!-- END professions -->
+										</table>
+									</td>
+								</tr>
+							</table>
+							<br/>
+							<div class="errorbox roundbox">
+								<div class="icon_noconnection">
+									{ERRORMSG_BNET}
+								</div>
+							</div>
+							<!-- IF NO_SERVER_SET -->
+							<div class="errorbox roundbox">
+								<div class="icon_false">
+									{GL_no_realm}
+								</div>
+							</div>
+							<!-- ENDIF -->
+						</td>
+					</tr>
+			 	</table>
+			</td>
+		</tr>
+	</table>
+	</div>
+<!-- ENDIF -->
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
+	<tr>
+		<th align="center" colspan="9">{L_DKP_NAME}</th>
+	</tr>
+	{MEMBER_POINTS}
+</table>
+<br />
+
+<div id='profile_information'>
+	<ul>
+		<li><a href='#fragment-2-1'><span>{L_tab_raids}</span></a></li>
+		<li><a href='#fragment-2-2'><span>{L_tab_items}</span></a></li>
+		<li><a href='#fragment-2-3'><span>{L_tab_adjustments}</span></a></li>
+		<li><a href='#fragment-2-4'><span>{L_tab_attendance}</span></a></li>
+	</ul>
+
+	<!-- RAIDS TABLE -->
+	<div id="fragment-2-1">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<th align="center" colspan="5">{L_raid_attendance_history}</th>
+		</tr>
+		<tr>
+			<td align="center" class="menu">{RAID_PAGINATION}</td>
+		</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{RAID_OUT}
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{RAID_PAGINATION}</td>
+		</tr>
+		</table>
+	</div>
+
+	<!-- ITEMS TABLE -->
+	<div id="fragment-2-2">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<th align="center" colspan="5">{L_item_purchase_history}</th>
+		</tr>
+		<tr>
+			<td align="center" class="menu">{ITEM_PAGINATION}</td>
+		</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{ITEM_OUT}
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{ITEM_PAGINATION}</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- ADJUSTMENTS TABLE-->
+	<div id="fragment-2-3">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+			<tr>
+				<th align="center" colspan="4">{L_individual_adjustment_history}</th>
+			</tr>
+			<tr>
+				<td align="center" class="menu">{ADJUSTMENT_PAGINATION}</td>
+			</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{ADJUSTMENT_OUT}
+		</table>
+	</div>
+
+	<!-- ATTENDANCE -->
+	<div id="fragment-2-4">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{EVENT_ATT_OUT}
+		</table>
+	</div>
+</div>
+<br />
+{COMMENT}

@@ -1,0 +1,423 @@
+<script type="text/javascript">
+	function show_div(divid){
+		$('#'+divid).show();
+	}
+
+	function hide_div(divid){
+		$('#'+divid).hide();
+	}
+
+	function disable_bridge(){
+		$.post("manage_bridge.php{SID}&ajax=disable", { disable: 1});
+	}
+
+	function check_database(){
+		hide_div('button_check_database');
+		loading();
+
+		var varhost = $('#db_host').val();
+		var varuser = $('#db_user').val();
+		var varpw 	= $('#db_password').val();
+		var varname 	= $('#db_name').val();
+
+		$.post("manage_bridge.php{SID}&ajax=checkdb", { host: varhost, user: varuser, pw: varpw, name: varname},
+		   function(data){
+				hide_div('loading_area');
+
+				if ($.trim(data) == 'true'){
+					handle_prefix(1);
+					load_prefixes(false);
+				} else {
+					error_message('{L_bridge_error_db}');
+					show_div('button_check_database');
+				}
+		 });
+	}
+
+	function load_prefixes(samedb){
+
+		if (samedb) {
+			var varsamedb = 0;
+		} else {
+			var varsamedb = 1;
+		}
+
+		$.post("manage_bridge.php{SID}&ajax=prefix", { notsamedb: varsamedb},
+		 function(data){
+				$('#ddprefix').html(data);
+		 });
+	}
+
+	function load_usergroups(){
+
+		$.post("manage_bridge.php{SID}&ajax=usergroups", false,
+		 function(data){
+			$('#dw_usergroups').html('');
+			 $('#dw_usergroups').append(data);
+			 $('#dw_usergroups').multiselect('refresh');
+		 });
+	}
+
+	function check_usertable(){
+
+		hide_div('button_check_usertable');
+		loading();
+
+		if ($('#db_ownprefix').val() == ''){
+			var varprefix = $('#db_prefix option:selected').val();
+		} else {
+			var varprefix = $('#db_ownprefix').val();
+		}
+		var vartype = $('#cms_type').val();
+		$.post("manage_bridge.php{SID}&ajax=usertable", { prefix: varprefix, type: vartype},
+		 function(data){
+				$.post("manage_bridge.php{SID}&ajax=usertable", { prefix: varprefix, type: vartype},
+				 function(data){
+					hide_div('loading_area');
+
+					if ($.trim(data) == 'true'){
+						handle_usergroups(1);
+						load_usergroups();
+					} else {
+						error_message('{L_bridge_error_usertable}');
+						show_div('button_check_usertable') ;
+					}
+
+				 });
+
+		 });
+	}
+
+	function loading(){
+		hide_div('error_message');
+		hide_div('success_message');
+		show_div('loading_area');
+	}
+
+	function error_message(message){
+		show_div('error_message');
+		$('#error_message_txt').html(message);
+	}
+	var selected = '';
+
+	function check_useraccount(){
+		hide_div('button_check_useraccount');
+		loading();
+
+		var varuser = $('#acc_username').val();
+		var varpw = $('#acc_password').val();
+
+		var selectedIdsStr = $("#dw_usergroups").multiselect("getChecked").map(function(){
+			 return this.value;
+		}).get().join("|");
+
+
+		$.post("manage_bridge.php{SID}&ajax=checkuser", { user: varuser, pw: varpw, groups: selectedIdsStr},
+		  function(data){
+			 $.post("manage_bridge.php{SID}&ajax=checkuser", { user: varuser, pw: varpw, groups: selectedIdsStr},
+			  function(data){
+				 hide_div('loading_area');
+
+				 if ($.trim(data) == 'true'){
+					window.location = 'manage_bridge.php{SID}&activate=true';
+				} else {
+					error_message('{L_bridge_error_login}');
+					show_div('button_check_useraccount');
+				}
+			});
+		});
+	}
+
+	function onchange_options(value){
+		if (value == 'no'){
+			$('.options').hide();
+			handle_samedb(0);
+			handle_usergroups(0);
+			handle_prefix(0);
+			reset_bridge();
+			hide_div('error_message');
+			hide_div('success_message');
+
+		} else if (value == 'yes'){
+			$('.options').show();
+			handle_samedb(0);
+			handle_usergroups(0);
+			handle_prefix(0);
+			hide_div('error_message');
+			hide_div('success_message');
+		}
+	}
+
+	function onchange_samedb(value){
+		reset_bridge();
+		if (value == 'yes'){
+
+			handle_prefix(1);
+			load_prefixes(true);
+			handle_samedb(0);
+			handle_usergroups(0);
+
+		} else if (value == 'no'){
+
+			handle_samedb(1);
+			handle_usergroups(0);
+			handle_prefix(0);
+
+		}
+	}
+
+	function onchange_db(){
+		reset_bridge();
+		handle_samedb(1);
+		handle_prefix(0);
+		handle_usergroups(0);
+	}
+
+	function onchange_type(){
+			reset_bridge();
+			handle_samedb(0);
+			handle_usergroups(0);
+			handle_prefix(0);
+			hide_div('error_message');
+			hide_div('success_message');
+			$("#radio_samedb1").attr("checked", false);
+			$("#radio_samedb2").attr("checked", false);
+	}
+
+	function onchange_prefix(){
+		reset_bridge();
+		show_div('button_check_usertable');
+		handle_usergroups(0);
+	}
+
+	function handle_prefix(value){
+		if (value){
+			show_div('prefix');
+			show_div('button_check_usertable');
+
+		} else {
+			hide_div('prefix');
+			hide_div('button_check_usertable');
+		}
+	}
+
+	function handle_samedb(value){
+		if (value){
+			show_div('samedb');
+			show_div('button_check_database');
+		} else {
+			hide_div('samedb');
+			hide_div('button_check_database');
+		}
+	}
+
+	function handle_usergroups(value){
+		if (value){
+			show_div('usergroups');
+			show_div('useraccount');
+			show_div('button_check_useraccount');
+		} else {
+			hide_div('usergroups');
+			hide_div('button_check_useraccount');
+		}
+	}
+
+	function reset_bridge(){
+		hide_div('submit_button');
+		hide_div('integration');
+		hide_div('bridge_options')
+		disable_bridge();
+	}
+
+</script>
+
+<div id="error_message" style="display:none;">
+	<div class="errorbox roundbox">
+		<div class="icon_false" id="error_message_txt"></div>
+	</div>
+</div>
+
+<!-- IF S_ACTIVATE_MESSAGE -->
+<div id="success_message">
+<div class="greenbox roundbox">
+	<div class="icon_ok" id="error_message_txt">{L_bridge_success}</div>
+</div>
+</div>
+<!-- ENDIF -->
+
+<form method="post" action="{ACTION}&amp;edit=true" name="post">
+  <fieldset class="settings">
+		<legend>{L_bridge_common}</legend>
+			<dl>
+				<dt><label>{L_bridge_activate}</label><br /><span>{L_bridge_activate_help}</span></dt>
+				<dd>
+					<label><input type="radio" name="radio_activate" value="yes" onchange="onchange_options('yes')" <!-- IF S_BRIDGE_ACTIVE --> checked="checked"<!-- ENDIF --> /> {L_yes}</label>
+					<label><input type="radio" name="radio_activate" value="no" onchange="onchange_options('no')" <!-- IF not S_BRIDGE_ACTIVE --> checked="checked"<!-- ENDIF --> /> {L_no}</label>
+				</dd>
+			</dl>
+
+			<div class="options" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->>
+
+				<dl>
+					<dt><label>{L_bridge_select_type}</label><br /><span>{L_bridge_select_type_help}</span></dt>
+					<dd><label>
+						{DD_SYSTEMS}
+					</label></dd>
+				</dl>
+
+			</div>
+		</fieldset>
+
+		<fieldset class="settings options" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->>
+			<legend>{L_bridge_database}</legend>
+			<dl>
+				<dt><label>{L_bridge_samedb}</label><br /><span>{L_bridge_samedb_help}</span></dt>
+				<dd>
+				<label><input id="radio_samedb1" type="radio" name="radio_samedb" value="yes" onclick="onchange_samedb('yes')" <!-- IF S_SAMEDB --> checked="checked"<!-- ENDIF --> /> {L_yes}</label>
+				<label><input id="radio_samedb2" type="radio" name="radio_samedb" value="no" onclick="onchange_samedb('no')" <!-- IF S_NOTSAMEDB --> checked="checked"<!-- ENDIF --> /> {L_no}</label>
+				</dd>
+			</dl>
+			<div id="samedb" <!-- IF not S_NOTSAMEDB --> style="display:none;" <!-- ENDIF -->>
+			<!-- nicht selbe DB -->
+			<dl>
+				<dt><label>{L_bridge_db_host}</label><br /><span>{L_bridge_db_host_help}</span></dt>
+				<dd><label>
+					<input type="text" name="db_host" id="db_host" value="{DB_HOST}" class="input"  onchange="onchange_db()" />
+				</label></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{L_bridge_db_name}</label><br /><span>{L_bridge_db_name_help}</span></dt>
+				<dd><label>
+					<input type="text" name="db_name" id="db_name" value="{DB_DATABASE}" class="input"  onchange="onchange_db()" />
+				</label></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{L_bridge_db_user}</label><br /><span>{L_bridge_db_user_help}</span></dt>
+				<dd><label>
+					<input type="text" name="db_user" id="db_user" value="{DB_USER}" class="input"  onchange="onchange_db()" />
+				</label></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{L_bridge_db_pw}</label><br /><span>{L_bridge_db_pw_help}</span></dt>
+				<dd><label>
+					<input type="password" name="db_password" id="db_password" value="{DB_PW}" class="input" onchange="onchange_db()" />
+				</label></dd>
+			</dl>
+			<!-- nicht selbe DB -->
+			</div>
+
+			<div id="prefix" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->>
+			<dl>
+				<dt><label>{L_bridge_prefix}</label><br /><span>{L_bridge_prefix_help}</span></dt>
+				<dd><label>
+					<span id="ddprefix">{DD_PREFIX}</span>
+				</label></dd>
+
+				<dt><label>{L_bridge_prefix_alt}</label><br /><span>{L_bridge_prefix_alt_help}</span></dt>
+				<dd><label>
+
+				<br /><input type="text" name="db_ownprefix" id="db_ownprefix" class="input" onchange="onchange_prefix()" value="{OWN_PREFIX}" />
+				</label></dd>
+			</dl>
+
+			</div>
+
+		</fieldset>
+
+
+		<div class="options">
+		<fieldset class="settings" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF --> id="usergroups">
+			<legend>{L_bridge_usergroups}</legend>
+
+			<dl>
+				<dt><label>{L_bridge_usergroups}</label><br /><span>{L_bridge_usergroups_help}</span></dt>
+				<dd><label>
+					{MS_USERGROUPS}
+				</label></dd>
+			</dl>
+
+
+			<dl id="useraccount" <!-- IF S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->>
+				<dt><label>{L_bridge_userlogin}</label><br /><span>{L_bridge_userlogin_help}</span></dt>
+				<dd>
+					<input type="text" name="acc_username" id="acc_username" class="input username" />
+					<input type="password" name="acc_password" id="acc_password" class="input password" />
+				</dd>
+			</dl>
+
+	</fieldset>
+
+	<!-- IF S_BRIDGE_ACTIVE -->
+	<fieldset id="integration" class="settings">
+		<legend>{L_bridge_integration}</legend>
+			<dl>
+				<dt><label>{L_bridge_show_link}</label><br /><span>{L_bridge_show_link_help}</span></dt>
+				<dd><label>
+					<input type="checkbox" name="cms_show_link" value="1" <!-- IF S_CMS_LINK -->checked="checked"<!-- ENDIF --> />
+				</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_bridge_url}</label><br /><span>{L_bridge_url_help}</span></dt>
+				<dd><label>
+					<input type="text" name="cms_url" class="input" value="{CMS_URL}" />
+				</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_bridge_url_open}</label><br /><span>{L_bridge_url_open_help}</span></dt>
+				<dd><label>
+					{DD_EMBEDD_OPTIONS}
+				</label></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{L_bridge_reg_redirect}</label><br /><span>{L_bridge_reg_redirect_help}</span></dt>
+				<dd><label>
+					<input type="checkbox" name="cms_reg_redirect" value="1" <!-- IF S_CMS_REG_REDIRECT -->checked="checked"<!-- ENDIF --> />
+				</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_bridge_reg_redirect_url}</label><br /><span>{L_bridge_reg_redirect_url_help}</span></dt>
+				<dd><label>
+					<input type="text" name="cms_reg_url" class="input" value="{CMS_REG_URL}" />
+				</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_bridge_reg_redirect_open}</label><br /><span>{L_bridge_reg_redirect_open_help}</span></dt>
+				<dd><label>
+					{DD_REG_EMBEDDED_OPTIONS}
+				</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_bridge_onlycmsuserlogin}</label><br /><span>{L_bridge_onlycmsuserlogin_help}</span></dt>
+				<dd><label>
+					<input type="checkbox" name="cms_onlycmsuserlogin" value="1" <!-- IF S_ONLYCMSUSERLOGIN -->checked="checked"<!-- ENDIF --> />
+				</label></dd>
+			</dl>
+	</fieldset>
+	<!-- IF S_BRIDGE_SETTINGS -->
+	<fieldset id="bridge_options" class="settings">
+		<legend>{L_bridge_settings}</legend>
+			<!-- BEGIN field -->
+			<dl>
+				<dt><label>{field.NAME}</label><br /><span>{field.HELP}</span></dt>
+				<dd>{field.FIELD}</dd>
+			</dl>
+			<!-- END field -->
+	</fieldset>
+	<!-- ENDIF -->
+	<!-- ENDIF -->
+
+	<div align="center">
+	<input type="button" class="mainoption bi_ok" id="button_check_database" onclick="check_database()" value="{L_bridge_continue}" style="display:none;" />
+	<input type="button" class="mainoption bi_ok" id="button_check_usertable" onclick="check_usertable()" value="{L_bridge_continue}" style="display:none;" />
+	<input type="button" class="mainoption bi_ok" id="button_check_useraccount" onclick="check_useraccount()" value="{L_bridge_continue}" style="display:none;" />
+	<input type="submit" class="mainoption bi_ok" id="submit_button" value="{L_save}" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF --> />
+	</div>
+	<div id="loading_area" style="display:none;" align="center"><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="{L_bridge_loading}" />{L_bridge_loading}</div>
+
+	</div>
+{CSRF_TOKEN}
+</form>

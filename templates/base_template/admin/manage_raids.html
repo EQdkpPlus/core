@@ -1,0 +1,15 @@
+<form action='' method='post'>
+<table width="100%" cellpadding="2" cellspacing="1" border="0" class="colorswitch">
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_manraid_title}</span><span style="float:right;"><input type="button" name="addraid" value="{L_add_raid}" class="mainoption bi_new" onclick="window.location='manage_raids.php{SID}&amp;upd=true'"/></span></th>
+	</tr>
+	{RAID_LIST}
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}">{IMPORT_DKP}</th>
+	</tr>
+	<tr class="pagination_row">
+		<td colspan="{HPTT_COLUMN_COUNT}" align="center">{PAGINATION}</td>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

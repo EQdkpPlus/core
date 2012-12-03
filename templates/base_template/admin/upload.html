@@ -1,0 +1,55 @@
+<form action="upload.php{SID}" enctype="multipart/form-data" method="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr>
+			<th align="left" class="nowrap">{L_file_manager}</th>
+			<th width="10" align="left" class="nowrap"><a href="#" onclick="$('#table_upload').slideToggle('medium');$('#table_folder').slideUp('medium');"><img src="{EQDKP_IMAGE_PATH}glyphs/new.png" border="0" class="absmiddle"> {L_upload_file}</a> &nbsp;&nbsp; <a href="#" onclick="$('#table_folder').slideToggle('medium'); $('#table_upload').slideUp('medium');"><img src="{EQDKP_IMAGE_PATH}glyphs/add_folder.png" border="0" class="absmiddle"> 					{L_add_folder}</a>
+			</th>
+		</tr>
+	</table>
+	<div id="table_upload" style="display:none;">
+		<table width="100%" border="0" cellpadding="2" cellspacing="1" class="colorswitch">
+			<tr>
+				<th colspan="2" align="left" class="nowrap">{L_upload_file}</th>
+			</tr>
+			<tr>
+				<td align="left">{L_select_dest_folder}</td>
+			</tr>
+			<tr>
+				<td align="left">{L_upload_file}</td>
+				<td align="left"><input type="file" name="upload" /></td>
+			</tr>
+			<tr>
+				<th colspan="2" align="center"><input name="upload" type="submit" value="{L_upload_file}" class="mainoption bi_ok" /></th>
+			</tr>
+		</table>
+	</div>
+	<div id="table_folder" style="display:none;">
+	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="colorswitch">
+		<tr>
+			<th colspan="2" align="left" class="nowrap">{L_add_folder}</th>
+		</tr>
+		<tr>
+			<td align="left">{L_select_dest_folder}</td>
+			<td align="left">{SRC_FOLDER_DD}</td>
+		</tr>
+		<tr>
+			<td align="left">{L_folder_name}</td>
+			<td align="left"><input type="text" name="name" class="input"/></td>
+		</tr>
+		<tr>
+			<th colspan="2" align="center"><input name="create_folder" type="submit" value="{L_add_folder}" class="mainoption bi_ok" /></th>
+		</tr>
+	</table>
+	</div>
+	<table width="100%" border="0" cellpadding="2" cellspacing="1">
+		<tr class="row1">
+			<td colspan="2">{FILE_TREE} </td>
+		</tr>
+		<tr class="footer">
+			<th colspan="2">{L_selected_files}
+				{ACTION_DD}<span id="target_dd"> {L_move_to} {DEST_DD}</span>  <input type="submit" value="{L_go}" class="mainoption bi_ok">
+			</th>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

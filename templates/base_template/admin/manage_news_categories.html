@@ -1,0 +1,48 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr>
+			<th align="center" colspan="4"><span style="float:left">{L_manage_newscategories}</span><span style="float:right"><input type="button" onclick="window.location='manage_news.php{SID}'" value="{L_manage_news}" class="mainoption bi_manage" /></span></th>
+		</tr>
+		<tr>
+			<th></th>
+			<th>
+				<a href="{ACTION}&amp;o=0.0" class="down_arrow_green"></a><a href="{ACTION}&amp;o=0.1" class="up_arrow_green"></a><a href="{ACTION}&amp;o={O_DATE}"> {L_name}</a>
+			</th>
+			<th>
+				<a href="{ACTION}&amp;o=2.1"  class="down_arrow_green"></a><a href="{ACTION}&amp;o=2.0"  class="up_arrow_green"></a><a href="{ACTION}&amp;o={O_USERNAME}"> {L_icon}</a>
+			</th>
+			<th>
+				<span style="float:left"><a href="{ACTION}&amp;o=1.1"  class="down_arrow_green"></a><a href="{ACTION}&amp;o=1.0"  class="up_arrow_green"></a><a href="{ACTION}&amp;o={O_HEADLINE}"> {L_color}</a></span>
+			</th>
+		</tr>
+		<!-- BEGIN news_categories -->
+		<tr>
+			<td width="32" style="text-align: center;">
+				<img src="../images/global/delete.png" alt="{L_delete}" onclick="delete_warning({news_categories.ID});" class="hand" />
+			</td>
+			<td width="33%">
+				<input type="text" name="news_categories[{news_categories.ID}][name]" size="50" maxlength="50" value="{news_categories.NAME}" class="maininput" />
+			</td>
+			<td>
+				{news_categories.ICON}
+			</td>
+			<td width="22%">{news_categories.COLORPICKER}</td>
+		</tr>
+		<!-- END news_categories -->
+		<tr>
+			<th colspan="4">{L_add_newscategorie}</th>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="text" name="new_cat_name" size="50" maxlength="50" value="" class="maininput" />
+			</td>    
+			<td>{ICON_UPLOADER}</td>
+			<td width="22%">{NEW_COLORPICKER}</td>
+		</tr>
+		<tr>
+			<th colspan="4"><input type="submit" name="add" value="{L_save}" class="mainoption bi_ok" /></th>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

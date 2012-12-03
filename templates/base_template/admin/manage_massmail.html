@@ -1,0 +1,177 @@
+<!-- IF S_DATA -->
+<form method="post" name="massmail_content">
+
+<div id='massmail_content_tabs'>
+	<ul>
+		<!-- BEGIN type_row -->
+		<li><a href='#{type_row.KEY}'><span id="title_{type_row.KEY}">{type_row.NAME}</span></a></li>
+		<!-- END type_row -->
+	</ul>
+	
+	<!-- BEGIN type_row -->
+	<div id="{type_row.KEY}">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		  <tr>
+			<th colspan="3">{type_row.NAME}</th>
+			</tr>
+			<tr>
+			  <th><input type="checkbox" id="selall_{type_row.KEY}" name="all_nr" value="all_nr" /></th>
+			  <th>{L_date}</th>
+			  <th>{L_headline}</th>
+			</tr>
+			<!-- BEGIN content_row -->
+		  <tr>
+			<td width="5"><input type="checkbox" name="cb_{type_row.KEY}[]" value="cb_{type_row.content_row.ID}" /><div style="display:none;" id="content_cb_{type_row.content_row.ID}">{type_row.content_row.CONTENT}</div></td>
+			<td width="100">{type_row.content_row.DATE}</td>
+			<td>{type_row.content_row.HEADLINE}</td>
+		  </tr>
+		  <!-- END content_row -->
+		  <tr>
+			<th colspan="3" nowrap="nowrap"><input type="button" value="{L_massmail_add_content}" onclick="insert('{type_row.KEY}');" class="mainoption bi_ok"></th>
+			</tr> 
+		</table>
+	</div>
+	<!-- END type_row -->
+</div>				  
+</form>
+<script type="text/javascript">
+function insert(key){
+	var output = '<br /><br /><b>'+$('#title_'+key).html()+':</b><br />';
+	
+	$(":checkbox[name='cb_"+key+"[]']:checked").each(
+      function(i, l) {
+		var id = $(l).val();
+		output = output + '<br />' + $('#content_'+id).html();
+      }
+    );
+	
+	window.parent.insert(output);
+}
+</script>
+<!-- ELSEIF not S_SEND -->
+<script type="text/javascript">
+function insert(text){
+	$('#mm_body').tinymce().execCommand('mceInsertContent',false,text);
+}
+</script>
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_massmail_template_info}</div>
+</div>
+	
+<form method="post" action="{ACTION}{EVENT_ID}" name="massmail">
+	<fieldset class="settings smallsettings">
+		<legend>{L_massmail}</legend>
+		<dl>
+			<dt><label>{L_massmail_to_group}</label></dt>
+			<dd>{DD_GROUPS}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_massmail_to_user}</label></dt>
+			<dd>{DD_USERS}</dd>
+		</dl>
+		<!-- IF S_EVENT_ID -->
+		<dl>
+			<dt><label>{L_massmail_to_status}</label></dt>
+			<dd>{DD_STATUS}</dd>
+		</dl>
+		<!-- ENDIF -->
+		<dl>
+			<dt><label>{L_massmail_select_template}</label></dt>
+			<dd>{DD_TEMPLATE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_adduser_send_mail_subject}</label></dt>
+			<dd><input name="subject" type="text" class="input" id="subject" size="65" value="{SUBJECT}"/></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_adduser_send_mail_body}</label><br /><br />			
+			<span>{L_massmail_vars}<br />
+			&#123;DKP_NAME&#125;<br />
+			&#123;EQDKP_LINK&#125;<br />
+			&#123;DATE&#125;<br />
+			&#123;USERNAME&#125;<br />
+			<!-- IF S_EVENT_ID -->
+			&#123;EVENT_NAME&#125;<br />
+			&#123;EVENT_DATE&#125;<br />
+			&#123;EVENT_LINK&#125;
+			<!-- ENDIF -->
+			</span></dt>
+			<dd><textarea name="body" class="mceEditor" cols="70" rows="15" style="width:100%;" id="mm_body">{BODY}</textarea>
+				<br /><input type="button" onclick="massmailContentDialog();" value="{L_massmail_add_content}" class="mainoption bi_new" />
+			</dd>
+		</dl>
+	</fieldset>
+	<input type="submit" name="submit" value="{L_maintenanceuser_send}" class="mainoption bi_mail" /> <input type="reset" name="reset" value="{L_reset}" class="mainoption bi_reset" />
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<style type="text/css">
+	.ui-progressbar { position:relative; }
+	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 1.9em; left:5%; right:5%;}
+</style>
+<script type="text/javascript">
+//total mails
+var totalMails = {RECIPIENTS_COUNT};
+
+//Sets the value of the progressbar
+function set_progress_bar_value(recentNumber){
+	percent = Math.round((recentNumber / totalMails) * 100);
+	$("#nl_progressbar").progressbar('destroy');
+
+	$("#nl_progressbar").progressbar({
+		value: percent
+	});
+}
+
+$(document).ready(function(){
+	set_progress_bar_value(0);
+	send_mail(0);
+});
+
+ function send_mail(recentNumber){
+	var recipients = [{RECIPIENTS}];
+	$.post("manage_massmail.php{SID}&send=true&link_hash={CSRF_SEND_TOKEN}", { userid: recipients[recentNumber], subject: "{ENCR_SUBJECT}", message: "{ENCR_MESSAGE}", event_id: "{EVENT_ID}"})
+	.success(function(data) {
+		if (data == 'true'){
+			if (recentNumber < totalMails){
+				set_progress_bar_value(recentNumber+1);
+				send_mail(recentNumber+1);
+			} else {
+				set_progress_bar_value(totalMails);
+				success();
+			}
+		
+		} else {
+			error();
+		}
+	})
+	.error(function(data) { error(); });
+}
+
+function error(){
+	$('#massmail_dontclose').hide();
+	$('#massmail_error').show();
+}
+
+function success(){
+	$('#massmail_dontclose').hide();
+	$('#massmail_success').show();
+}
+</script>
+
+<div class="bluebox roundbox" id="massmail_dontclose">
+		<div class="icon_info"><strong>{L_massmail_dontclose}</strong></div>
+</div>
+
+<div class="errorbox roundbox" id="massmail_error" style="display:none;">
+	<div class="icon_false">{L_massmail_error}</div>
+</div>
+
+<div class="greenbox roundbox" id="massmail_success" style="display:none;">
+	<div class="icon_ok">{L_MASSMAIL_SUCCESS}</div>
+</div>
+<br /><br />
+<div id="nl_progressbar">
+	<span class="nl_progressbar_label">{L_massmail_sending}</span></div>
+</div>
+<!-- ENDIF -->

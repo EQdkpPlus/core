@@ -1,0 +1,37 @@
+<form method="get" action="{ACTION}" id="form_listcharacters">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr>
+			<th align="left">
+				<select name="mdkpid" class="input" onchange="form.submit();" >
+					<!-- BEGIN mdkpid_row -->
+					<option value="{mdkpid_row.VALUE}"{mdkpid_row.SELECTED}>{mdkpid_row.OPTION}</option>
+					<!-- END mdkpid_row -->
+				</select>
+				<select name="filter" class="input" onchange="form.submit();" >
+					<!-- BEGIN filter_row -->
+					<option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
+					<!-- END filter_row -->
+				</select>
+				<label><input type="checkbox" name="show_inactive" value="1" onchange="form.submit();" {SHOW_INACTIVE_CHECKED} /> {L_show_inactive}</label>
+				<label><input type="checkbox" name="show_hidden" value="1" onchange="form.submit();" {SHOW_HIDDEN_RANKS_CHECKED} /> {L_show_hidden_ranks}</label>
+				<!-- IF S_SHOW_TWINKS -->
+				<label><input type="checkbox" name="show_twinks" value="1" onchange="form.submit();" {SHOW_TWINKS_CHECKED} /> {L_show_twinks}</label>
+				<!-- ENDIF -->
+			</th>
+			<th align="right">
+				{COMPARE_LINK}
+				{MANAGE_LINK}
+			</th>
+		</tr>
+	</table>
+
+	{LEADERBOARD}
+
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="trcheckboxclick colorswitch">
+		{POINTOUT}
+	</table>
+
+	<br />
+	<img src="{EQDKP_IMAGE_PATH}arrows/turn_left_arrow.png" alt="arrow" /> <input type="submit" name="{BUTTON_NAME}" value="{L_compare_members}" class="mainoption bi_compare" onclick="$('#form_listcharacters').attr('method', 'post');" />
+</form>
+<br />

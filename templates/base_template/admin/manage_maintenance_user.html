@@ -1,0 +1,60 @@
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_maintenanceuser_info}</div>
+</div>
+<br />
+<div class="errorbox roundbox">
+	<div class="icon_false">{L_maintenanceuser_warning}</div>
+</div>
+<br />
+<form action="{ACTION}" method="post">
+
+<!-- IF not USER_ACTIVE -->
+<fieldset class="settings smallsettings">
+<legend>{L_maintenanceuser_create}</legend>
+<dl>
+	<dt>
+		<label>{L_maintenanceuser_valid}:</label><br />
+	</dt>
+	<dd>
+		{DAY_DROPDOWN} {L_days}
+	</dd>
+</dl>
+</fieldset>
+<input name="create" type="submit" id="create" value="{L_maintenanceuser_create}" class="mainoption bi_ok" />
+<!-- ELSE -->
+<fieldset class="settings smallsettings">
+<legend>{L_maintenanceuser_user}</legend>
+<dl>
+	<dt>
+		<label>{L_infos}:</label><br />
+	</dt>
+	<dd>
+		<textarea cols="50" rows="3" onclick="this.form.data.select()" name="data" readonly="readonly">{USER_DATA}</textarea>
+	</dd>
+</dl>
+</fieldset>
+<input name="del" type="submit" id="create" value="{L_maintenanceuser_delete}" class="mainoption bi_delete" /> <input name="renew" type="submit" id="renew" value="{L_maintenanceuser_renew}" class="mainoption bi_reload" />
+
+<fieldset class="settings smallsettings">
+<legend>{L_maintenanceuser_send}</legend>
+<dl>
+	<dt>
+		<label>{L_email_address}:</label><br />
+	</dt>
+	<dd>
+		<input name="email" type="text" id="email" size="30" class="input"/>
+	</dd>
+</dl>
+<dl>
+	<dt>
+		<label>{L_email_confirm}:</label><br />
+	</dt>
+	<dd>
+		<input name="email_repeat" type="text" id="email_repeat" size="30" class="input" />
+	</dd>
+</dl>
+</fieldset>
+<input type="submit" name="email_submit" class="mainoption bi_mail" value="{L_maintenanceuser_send_mail}" />
+<!-- ENDIF -->
+{CSRF_TOKEN}
+</form>

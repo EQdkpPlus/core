@@ -1,0 +1,503 @@
+.aion_tooltip {position:absolute;z-index:10;font-family:Verdana, Helvetica, Arial, sans-serif;color:#FFFFFF;font-size:11px;line-height:14px;width:400px;}
+.aion_tooltip_container {padding:0px;border:0px;width:100%;border-spacing:0px;margin:0px;}
+.aion_tooltip_border {padding:3px;background:url(./images/aion/tooltip.gif);}
+
+.aion_tooltip_icon
+{
+	background-repeat:no-repeat;
+	background-position:2px 2px;
+	height:44px;
+	width:44px;
+}
+.aion_tooltip_icon_border {background:url(./images/aion/icon_border_medium.gif);height:44px;width:44px;}
+
+.map_tooltip {position:absolute;z-index:9999;font-family:Verdana, Helvetica, Arial, sans-serif;color:#FFFFFF;font-size:11px;line-height:14px;max-width:400px;}
+.map_tooltip_container {padding:0px;border:0px;width:100%;border-spacing:0px;margin:0px;}
+.map_tooltip_border {padding:3px;background:url(./images/aion/tooltip.gif);}
+
+.aion_tooltip_hr {
+	border: 0px;
+	color: #362d24;
+	background-color: #645848;
+	height: 2px;
+	display: block;
+}
+.aion_itemlabel 		{ color: #EFDFA7;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_itemlabel a		{ text-decoration:none;color: #EFDFA7;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_itemlabel a:hover	{ text-decoration:underline;color: #EFDFA7;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.aion_infolabel 		{ color: #c5bfb6;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_infolabel a		{ text-decoration:none;text-decoration:none;color: #c5bfb6;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_infolabel a:hover	{ text-decoration:underline;text-decoration:none;color: #c5bfb6;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.aion_loading 			{ color: white;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.aion_skillname
+{
+	font-size: 14px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.aion_gathername
+{
+	font-size: 14px;
+	font-weight: bold;
+    color: #E1CC59;
+}
+.aion_recipename
+{
+	font-size: 14px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.aion_tooltiptitle {
+	font-size: 14px;
+	font-weight: bold;
+}
+.aion_skill {
+    color: #E1CC59;
+}
+.aion_quest {
+    color: #E1CC59;
+}
+.aion_default {
+    color: #FFFFFF;
+}
+.aion_q1 {
+	color: #ADADAD;
+}
+.aion_q2 {
+	color: #F1F1F1;
+}
+.aion_q3 {
+	color: #69E15E;
+}
+.aion_q4 {
+	color: #4CCFFF;
+}
+.aion_q5 {
+	color: #FF8033;
+}
+.aion_q6 {
+	color: #FFC103;
+}
+.aion_npcr0 {
+	color: #FFFFFF;
+}
+.aion_npcr1 {
+	color: #F5F5A5;
+}
+.aion_npcr2 {
+	color: #FADC14;
+}
+.aion_npcr3 {
+	color: #FA8214;
+}
+.aion_npcr4 {
+	color: #FF0000;
+}
+.aion_npcr5 {
+	color: #9EB5B2;
+}
+
+
+/* Yellow Gremlin */
+.aion_item_manastone {
+	background:url(./images/aion/manastonesocket.png) no-repeat;
+	width:19px;
+	height:19px;
+}
+.smallitemicon { width: 15px; height: 15px; }
+
+.yg_aion_tooltip a {
+	outline: none;
+}
+
+.yg_aion_tooltip table
+{
+	color: white;
+	font-size: 12px !important;
+	font-family: verdana !important;
+	background-color: transparent;
+}
+
+.yg_aion_tooltip .yg_itemdetailscontent table table td
+{
+	vertical-align: top;
+}
+
+.yg_aion_tooltip .yg_itemdetails {
+	color:white;
+	max-width:450px;
+	min-width:250px;
+	position:relative;
+}
+
+.yg_aion_tooltip .yg_itemdetails .yg_page {
+	background:transparent url(http://static.ygcdn.com/aion/img/tooltip/content_background.png) repeat scroll 0 0;
+	border:2px solid #262626;
+	padding:5px;
+}
+
+.yg_aion_tooltip .yg_itemdetails .yg_pageBorder .yg_TL {
+	background:transparent url(http://static.ygcdn.com/aion/img/tooltip/corners.png) no-repeat scroll 0 0;
+	height:5px;
+	left:0px;
+	position:absolute;
+	top:0;
+	width:5px;
+}
+
+.yg_aion_tooltip .yg_itemdetails .yg_pageBorder .yg_TR {
+	background:transparent url(http://static.ygcdn.com/aion/img/tooltip/corners.png) no-repeat scroll right 0;
+	height:5px;
+	position:absolute;
+	right:0px;
+	top:0;
+	width:5px;
+	z-index:2;
+}
+
+.yg_aion_tooltip .yg_itemdetails .yg_pageBorder .yg_BL {
+	background:transparent url(http://static.ygcdn.com/aion/img/tooltip/corners.png) no-repeat scroll 0 bottom;
+	bottom:0;
+	height:5px;
+	left:0px;
+	position:absolute;
+	width:5px;
+}
+
+.yg_aion_tooltip .yg_itemdetails .yg_pageBorder .yg_BR {
+	background:transparent url(http://static.ygcdn.com/aion/img/tooltip/corners.png) no-repeat scroll right bottom;
+	bottom:0;
+	height:5px;
+	position:absolute;
+	right:0px;
+	width:5px;
+}
+
+.yg_aion_tooltip .yg_slot {
+	background:url("http://static.ygcdn.com/aion/img/tooltip/slot.png") no-repeat scroll left 0 transparent;
+	display:inline-block;
+	height:14px;
+	vertical-align:top;
+	width:16px;
+}
+
+.yg_aion_tooltip td.slotsrow
+{
+	vertical-align:top;
+	white-space:nowrap;
+	width: 50%;
+}
+
+.yg_aion_tooltip, .yg_aion_tooltip td, .yg_aion_tooltip tr
+{
+	border-style:none;
+	border-spacing:0px;
+	padding:0;
+	margin:0;
+	text-align: left;
+	font-family:verdana !important;
+	font-size:12px !important;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	background: transparent;
+}
+
+.yg_aion_tooltip .yg_aion_tooltip_line {
+	border-top: 1px solid #FFFFFF;
+	background-color:#FFFFFF;
+	height:0px;
+	margin-top: 2px;
+	margin-bottom: 1px;
+}
+
+.yg_aion_tooltip .yg_aion_tooltip_area_icon {
+	height:70px;
+	width:70px;
+	vertical-align:top;
+}
+
+.yg_aion_tooltip .yg_aion_tooltip_area_tip {
+	width:325px;
+	min-width:275px;
+	max-width:375px;
+	vertical-align:top;
+	background-color:transparent;
+	display: inline;
+}
+
+.yg_aion_tooltip .yg_aion_tooltip_icon {
+	background-repeat:no-repeat;
+	height:56px;
+	margin-left:6px;
+	margin-top:6px;
+	float: left;
+	position:relative;
+	width:56px;
+	z-index:5;
+}
+
+.yg_aion_tooltip .yg_aion_tooltip_iconborder {
+	background-image: url(http://static.ygcdn.com/aion/img/icon/icon_border_large.png);
+	background-repeat:no-repeat;
+	height:68px;
+	position:relative;
+	float: left;
+	width:68px;
+	z-index:10;
+	top: -62px;
+}
+
+.yg_aion_tooltip .yg_pad_td_col {
+	padding-left:15px;
+	padding-right:5px;
+	vertical-align:top;
+}
+
+.yg_aion_tooltip .yg_pad_td_col_dbl {
+	padding-left: 30px;
+}
+
+.yg_aion_tooltip .yg_pad_td_col_triple {
+	padding-left: 45px;
+}
+
+.yg_aion_tooltip .yg_aion_small_icon {
+	background-repeat:no-repeat;
+	height:18px;
+	float: left;
+	position:relative;
+	width:18px;
+	z-index:5;
+	padding-right: 5px;
+	vertical-align: middle;
+}
+
+.yg_aion_tooltip .yg_aion_small_icon_text {
+	padding-top: 2px;
+	padding-right: 2px;
+	padding-left: 0;
+	vertical-align: middle;
+}
+
+.yg_aion_tooltip .yg_aion_text_no_underline
+{
+	text-decoration: none;
+}
+
+.yg_aion_tooltip .yg_aion_text_no_underline:hover
+{
+	text-decoration: underline;
+}
+/*SMALL*/
+.YG_aion.icon.small
+{
+	display:inline-block;
+	height:18px;
+	margin:2px;
+	position:relative;
+	vertical-align:middle;
+	width:18px;
+}
+
+.YG_aion.icon.small .yg_img
+{
+	background-position:center center;
+	background-repeat:no-repeat;
+	display:block;
+	height:20px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:20px;
+}
+
+.YG_aion.icon.small .yg_brdr
+{
+	background:url("http://static.ygcdn.com/aion/img/icon/icon_border_small_spry.png") repeat-x scroll 23px -3px transparent;
+	display:block;
+	height:20px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:20px;
+}
+
+.YG_aion.icon.small .yg_link
+{
+	background: none;
+	display:block;
+	height:20px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:20px;
+	z-index:51;
+}
+
+.YG_aion.icon.small:hover > .yg_brdr
+{
+	background-position: 23px -29px;
+}
+
+/*MEDIUM*/
+.YG_aion.icon.medium
+{
+	display:inline-block;
+	height:47px;
+	margin:2px;
+	position:relative;
+	vertical-align:middle;
+	width:46px;
+}
+
+.YG_aion.icon.medium .yg_img
+{
+	background-position:4px 4px;
+	background-repeat:no-repeat;
+	display:block;
+	height:47px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:47px;
+}
+
+.YG_aion.icon.medium .yg_brdr
+{
+	background:transparent url(http://static.ygcdn.com/aion/img/icon/icon_border_small.png) repeat-x scroll -3px -2px;
+	display:block;
+	height:47px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:47px;
+}
+
+.YG_aion.icon.medium .yg_link
+{
+	background:transparent url(http://static.ygcdn.com/aion/img/icon/glow/glow_small_blue_aion.png) no-repeat scroll 54px 0;
+	display:block;
+	height:47px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:47px;
+	z-index:1;
+}
+
+.YG_aion.icon.medium .yg_link:hover
+{
+	background-position: 4px 4px;
+}
+
+/*MEDIUM bubble addon*/
+.YG_aion.icon.medium .icon-bubble
+{
+	color:#E7BA00;
+	cursor:default;
+	font-family:Verdana,sans-serif !important;
+	font-size:9px !important;
+	height:13px;
+	padding-bottom:0;
+	padding-left:0;
+	padding-top:5px;
+	position:absolute;
+	right:-2px;
+	text-align:center;
+	top:29px;
+	visibility:hidden;
+	width:55px;
+	z-index:2;
+}
+
+.YG_aion.icon.medium .icon-bubble .l
+{
+	background:transparent url(http://static.ygcdn.com/aion/img/icon/bubble_r.png) no-repeat scroll left top;
+	width: 3px;
+	height:13px;
+	float: right;
+	margin-right:1px;
+}
+
+.YG_aion.icon.medium .icon-bubble .m
+{
+	background:transparent url(http://static.ygcdn.com/aion/img/icon/bubble_m.png) repeat-x scroll left top;
+	width: auto;
+	height:13px;
+	float: right;
+}
+
+.YG_aion.icon.medium .icon-bubble .r
+{
+	background:transparent url(http://static.ygcdn.com/aion/img/icon/bubble_l.png) no-repeat scroll left top;
+	width: 3px;
+	height:13px;
+	float: right;
+}
+
+.YG_aion.icon.medium .icon-bubble a
+{
+	width: auto;
+	height: auto;
+	background: transparent;
+}
+
+/*icon container tweaks*/
+#npcList .YG_aion.icon.medium .yg_link,
+#npcList_grind .YG_aion.icon.medium .yg_link,
+#npcDropList .YG_aion.icon.medium .yg_link
+{
+	background: none;
+}
+
+/*LARGE*/
+.YG_aion.icon.large
+{
+	display:inline-block;
+	height:68px;
+	margin:0;
+	position:relative;
+	vertical-align:middle;
+	width:68px;
+}
+
+.YG_aion.icon.large .yg_img
+{
+	background-position:center center;
+	background-repeat:no-repeat;
+	display:block;
+	height:68px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:68px;
+}
+
+.YG_aion.icon.large .yg_brdr
+{
+	background:transparent url(http://static.ygcdn.com/aion/img/icon/icon_border_large.png) no-repeat scroll 0 0;
+	display:block;
+	height:68px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:68px;
+}
+
+.YG_aion.icon.large .yg_link
+{
+	background:none;
+	display:block;
+	height:68px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:68px;
+	z-index:51;
+}
+

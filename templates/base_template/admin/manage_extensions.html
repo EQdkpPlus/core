@@ -1,0 +1,528 @@
+<script type="text/javascript">
+//<![CDATA[
+var totalSteps = 4;
+function set_progress_bar_value(recentNumber, labeltext){
+	percent = Math.round((recentNumber / totalSteps) * 100);
+	$("#nl_progressbar").progressbar("destroy");
+
+	$("#nl_progressbar").progressbar({
+		value: percent
+	});
+	
+	$("#nl_progressbar_label").html(labeltext);
+}
+
+function update_error(data){
+	$("#lu_error").show();
+	$("#lu_error_label").html("<b>{L_liveupdate_step_error}</b>" + data);
+	$("#lu_loading_img").hide();
+}
+
+function repo_update(cat, extensioncode){
+	<!-- IF S_HIDE_UPDATEWARNING -->
+	repo_update_start(cat, extensioncode);
+	<!-- ELSE -->
+	if (cat != 2) {
+		update_confirm(cat, extensioncode);
+	} else {
+		repo_update_start(cat, extensioncode);
+	}
+	<!-- ENDIF -->
+}
+
+function repo_update_start(cat, extensioncode){
+	$("#lu_error").hide();
+	$("#nl_progressbar").show();
+	$("#lu_loading_img").show();
+
+	repo_step1(cat, extensioncode, 'update');
+}
+
+function repo_install(cat, extensioncode){
+	
+	$("#lu_error").hide();
+	$("#nl_progressbar").show();
+	$("#lu_loading_img").show();
+
+	repo_step1(cat, extensioncode, 'install');
+}
+
+function repo_step1(cat, extensioncode, mode){
+	set_progress_bar_value(0, '{L_repo_step1}...');
+	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode, function(data) {
+		  if (data == 'true'){
+			repo_step2(cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	});
+}
+
+function repo_step2(cat, extensioncode, mode){
+	set_progress_bar_value(1, '{L_repo_step2}...');
+	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode, function(data) {
+		  if (data == 'true'){
+			repo_step3(cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	});
+}
+
+function repo_step3(cat, extensioncode, mode){
+	set_progress_bar_value(2, '{L_repo_step3}...');
+	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode, function(data) {
+		  if (data == 'true'){
+			repo_step4(cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	});
+}
+
+function repo_step4(cat, extensioncode, mode){
+	set_progress_bar_value(3, '{L_repo_step4}...');
+	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode, function(data) {
+		  if (data == 'true'){
+			repo_step5(cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	});
+}
+
+function repo_step5(cat, extensioncode, mode){
+	window.location='manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&link_hash={CSRF_MODE_TOKEN}';
+	return;	
+}
+
+function hide_update_warning(status){
+	var hide = (status) ? 1 : 0;
+	$.get('manage_extensions.php{SID}&hide_update_warning=true&hide='+hide+'&link_hash={CSRF_UPDATEWARNING_TOKEN}');
+}
+//]]>
+</script>
+<!-- IF not S_REQUIREMENTS -->
+<div class="errorbox roundbox">
+	<div class="icon_false"><b>{L_repo_requirements_failed}</b></div>
+</div>
+<!-- ENDIF -->
+
+<div class="errorbox roundbox" id="lu_error" style="display:none;">
+		<div class="icon_false"><span id="lu_error_label"></span></div>
+</div>
+
+<div id="nl_progressbar" style="display:none;">
+	<span class="nl_progressbar_label"><img src="{EQDKP_IMAGE_PATH}global/loading.gif" id="lu_loading_img" alt="Loading..." /> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
+</div>
+
+<div id='plus_plugins_tab'>
+
+	<ul>
+		<li><a href='#fragment-1'><span>{L_CATEGORY_1}</span></a>{BADGE_1}</li>
+		<li><a href='#fragment-2'><span>{L_CATEGORY_2}</span></a>{BADGE_2}</li>
+		<li><a href='#fragment-3'><span>{L_CATEGORY_3}</span></a>{BADGE_3}</li>
+		<li><a href='#fragment-7'><span>{L_CATEGORY_7}</span></a>{BADGE_7}</li>
+		<li><a href='#fragment-upload'><span>{L_pi_manualupload}</span></a></li>
+	</ul>
+
+	<div id="fragment-1">
+		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
+		<tr>
+			<th align="left" width="16">&nbsp;</th>
+			<th align="left" class="nowrap" width="16">{L_action}</th>
+			<th align="left" class="nowrap">{L_name}</th>
+			<th align="left" class="nowrap" colspan="{DEP_COUNT}">{L_plug_dep_title}</th>
+			<th align="left" class="nowrap">{L_version}</th>
+			<th align="left" class="nowrap">{L_portalplugin_author}</th>
+			<th align="left" class="nowrap">{L_description}</th>
+			<th align="left" class="nowrap">{L_infos}</th>
+		</tr>
+		<!-- BEGIN plugins_row_red -->
+		<tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{plugins_row_red.ACTION_LINK}</td>
+			<td class="nowrap">{plugins_row_red.NAME}</td>
+			<!-- BEGIN dep_row -->
+			<td class="nowrap">{plugins_row_red.dep_row.DEPENDENCY_STATUS}</td>
+			<!-- END dep_row -->
+			<td class="nowrap">{plugins_row_red.VERSION}</td>
+			<td class="nowrap">{plugins_row_red.CONTACT}</td>
+			<td>{plugins_row_red.DESCRIPTION}</td>
+			<td class="nowrap">{plugins_row_red.LONG_DESCRIPTION}  {plugins_row_red.HOMEPAGE} {plugins_row_red.MANUAL}</td>
+		</tr>
+		<!-- END plugins_row_red -->
+		<!-- BEGIN plugins_row_yellow -->
+		<tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{plugins_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap">{plugins_row_yellow.NAME}</td>
+			<!-- BEGIN dep_row -->
+			<td class="nowrap">{plugins_row_yellow.dep_row.DEPENDENCY_STATUS}</td>
+			<!-- END dep_row -->
+			<td class="nowrap">{plugins_row_yellow.VERSION}</td>
+			<td class="nowrap">{plugins_row_yellow.CONTACT}</td>
+			<td>{plugins_row_yellow.DESCRIPTION}</td>
+			<td class="nowrap">{plugins_row_yellow.LONG_DESCRIPTION}  {plugins_row_yellow.HOMEPAGE} {plugins_row_yellow.MANUAL}</td>
+		</tr>
+		<!-- END plugins_row_yellow -->
+		<!-- BEGIN plugins_row_green -->
+		<tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{plugins_row_green.ACTION_LINK}</td>
+			<td class="nowrap">{plugins_row_green.NAME}</td>
+			<!-- BEGIN dep_row -->
+			<td class="nowrap">{plugins_row_green.dep_row.DEPENDENCY_STATUS}</td>
+			<!-- END dep_row -->
+			<td class="nowrap">{plugins_row_green.VERSION}</td>
+			<td class="nowrap">{plugins_row_green.CONTACT}</td>
+			<td>{plugins_row_green.DESCRIPTION}</td>
+			<td class="nowrap">{plugins_row_green.LONG_DESCRIPTION}  {plugins_row_green.HOMEPAGE} {plugins_row_green.MANUAL}</td>
+		</tr>
+		<!-- END plugins_row_green -->
+		<!-- BEGIN plugins_row_grey -->
+		<tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{plugins_row_grey.ACTION_LINK}</td>
+			<td class="nowrap">{plugins_row_grey.NAME}</td>
+			<!-- BEGIN dep_row -->
+			<td class="nowrap">{plugins_row_grey.dep_row.DEPENDENCY_STATUS}</td>
+			<!-- END dep_row -->
+			<td class="nowrap">{plugins_row_grey.VERSION}</td>
+			<td class="nowrap">{plugins_row_grey.CONTACT}</td>
+			<td>{plugins_row_grey.DESCRIPTION}</td>
+			<td class="nowrap">{plugins_row_grey.LONG_DESCRIPTION}  {plugins_row_grey.HOMEPAGE} {plugins_row_grey.MANUAL}</td>
+		</tr>
+		<!-- END plugins_row_grey -->
+		<!-- BEGIN plugins_row_grey_repo -->
+		<tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{plugins_row_grey_repo.ACTION_LINK}</td>
+			<td class="nowrap">{plugins_row_grey_repo.NAME}</td>
+			<!-- BEGIN dep_row -->
+			<td class="nowrap">{plugins_row_grey_repo.dep_row.DEPENDENCY_STATUS}</td>
+			<!-- END dep_row -->
+			<td class="nowrap">{plugins_row_grey_repo.VERSION}</td>
+			<td class="nowrap">{plugins_row_grey_repo.CONTACT}</td>
+			<td>{plugins_row_grey_repo.DESCRIPTION}</td>
+			<td class="nowrap">{plugins_row_grey_repo.LONG_DESCRIPTION}  {plugins_row_grey_repo.HOMEPAGE} {plugins_row_grey_repo.MANUAL}</td>
+		</tr>
+		<!-- END plugins_row_grey_repo -->
+		<!-- BEGIN plugins_row_broken -->
+		<tr>
+			 <td width="16" align="center" class="nowrap"></td>
+			<td><!-- IF plugins_row_broken.DELETE --><a href="{plugins_row_broken.DEL_LINK}" title="{L_delete_plugin}"><img src="{EQDKP_IMAGE_PATH}false.png" width="20" height="20" alt="!" />&nbsp;{L_delete}</a><!-- ENDIF -->&nbsp;</td>
+			<td colspan="20">{plugins_row_broken.NAME}: {L_broken_plugin}</td>
+		</tr>
+		<!-- END plugins_row_broken -->
+		</table>
+	</div>
+
+	<div id="fragment-2">
+		<script type="text/javascript" language="javascript">
+
+		var override = 0;
+		function change_override(value){
+			override = value;
+		}
+
+		function submit_form(){
+			document.post.override.value = override;
+			document.post.submit();
+		}
+		</script>
+		<form method="post" action="{ACTION}&amp;cat=2&amp;mode=default_style" name="post">
+		<input type="hidden" name="override" value="0" />
+		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
+		  <tr>
+			<th width="16" class="nowrap">&nbsp;</th>
+			<th colspan="6" align="left" class="nowrap">{L_action}</th>
+			<th width="16" align="left" class="nowrap">&nbsp;</th>
+			<th align="left" class="nowrap">{L_name}</th>
+			<th align="left" class="nowrap">{L_template_files}</th>
+			<th align="left" class="nowrap">{L_users}</th>
+			<th align="left" class="nowrap">{L_version}</th>
+			<th align="left" class="nowrap">{L_portalplugin_author}</th>
+			<th align="left" class="nowrap">{L_preview}</th>
+			</tr>
+		  <!-- BEGIN styles_row_red_local -->
+		  <tr>
+		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="10" class="nowrap">{styles_row_red_local.ACTION_LINK}</td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
+			  <a href="{styles_row_red_local.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_red_local.ENABLE}.png" width="16" height="16" title="{styles_row_red_local.L_ENABLE}" alt="{styles_row_red_local.L_ENABLE}" /></a>  
+			  <!-- ENDIF --></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
+				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<!-- ENDIF --></td>
+			<td width="10" class="nowrap">
+				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+			</td>
+			
+			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red_local.U_EDIT_STYLE}">{styles_row_red_local.NAME}</a> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
+
+			<td class="nowrap">{styles_row_red_local.TEMPLATE}</td>
+			<td class="nowrap">{styles_row_red_local.USERS}</td>
+			<td class="nowrap">{styles_row_red_local.VERSION}</td>
+			<td class="nowrap">{styles_row_red_local.AUTHOR}</td>
+			<td class="nowrap"><a href="javascript:style_preview({styles_row_red_local.ID});">{L_preview}</a></td>
+			</tr>
+		   <!-- END styles_row_red_local -->
+		  <!-- BEGIN styles_row_red -->
+		  <tr>
+		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="10" class="nowrap">{styles_row_red.ACTION_LINK}</td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
+			  <a href="{styles_row_red.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_red.ENABLE}.png" width="16" height="16" title="{styles_row_red.L_ENABLE}" alt="{styles_row_red.L_ENABLE}" /></a>  
+			  <!-- ENDIF --></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
+				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<!-- ENDIF --></td>
+			<td width="10" class="nowrap">
+				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+			</td>
+			
+			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}">{styles_row_red.NAME}</a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
+
+			<td class="nowrap">{styles_row_red.TEMPLATE}</td>
+			<td class="nowrap">{styles_row_red.USERS}</td>
+			<td class="nowrap">{styles_row_red.VERSION}</td>
+			<td class="nowrap">{styles_row_red.AUTHOR}</td>
+			<td class="nowrap"><a href="javascript:style_preview({styles_row_red.ID});">{L_preview}</a></td>
+			</tr>
+		   <!-- END styles_row_red -->
+			<!-- BEGIN styles_row_yellow -->
+		  <tr>
+		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="10" class="nowrap">{styles_row_yellow.ACTION_LINK}</td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
+			  <a href="{styles_row_yellow.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_yellow.ENABLE}.png" width="16" height="16" title="{styles_row_yellow.L_ENABLE}" alt="{styles_row_yellow.L_ENABLE}" /></a>  
+			  <!-- ENDIF --></td>
+			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
+				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<!-- ENDIF --></td>
+			<td width="10" class="nowrap">
+				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+			</td>
+			
+			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}">{styles_row_yellow.NAME}</a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
+
+			<td class="nowrap">{styles_row_yellow.TEMPLATE}</td>
+			<td class="nowrap">{styles_row_yellow.USERS}</td>
+			<td class="nowrap">{styles_row_yellow.VERSION}</td>
+			<td class="nowrap">{styles_row_yellow.AUTHOR}</td>
+			<td class="nowrap"><a href="javascript:style_preview({styles_row_yellow.ID});">{L_preview}</a></td>
+			</tr>
+		   <!-- END styles_row_yellow -->
+		<!-- BEGIN styles_row_green -->
+		  <tr>
+		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="10" class="nowrap">{styles_row_green.ACTION_LINK}</td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
+			  <a href="{styles_row_green.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_green.ENABLE}.png" width="16" height="16" title="{styles_row_green.L_ENABLE}" alt="{styles_row_green.L_ENABLE}" /></a>  
+			  <!-- ENDIF --></td>
+			<td width="10" class="nowrap"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
+			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
+				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<!-- ENDIF --></td>
+			<td width="10" class="nowrap">
+				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+			</td>
+			
+			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_green.U_EDIT_STYLE}">{styles_row_green.NAME}</a> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
+
+			<td class="nowrap">{styles_row_green.TEMPLATE}</td>
+			<td class="nowrap">{styles_row_green.USERS}</td>
+			<td class="nowrap">{styles_row_green.VERSION}</td>
+			<td class="nowrap">{styles_row_green.AUTHOR}</td>
+			<td class="nowrap"><a href="javascript:style_preview({styles_row_green.ID});">{L_preview}</a></td>
+			</tr>
+		   <!-- END styles_row_green -->
+		<!-- BEGIN styles_row_grey -->
+		  <tr>
+		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="10" class="nowrap">{styles_row_grey.ACTION_LINK}</td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>			
+			<td width="25" class="nowrap" align="center"></td>
+			<td class="nowrap">{styles_row_grey.NAME}</td>
+			<td class="nowrap">{styles_row_grey.TEMPLATE}</td>
+			<td class="nowrap">0</td>
+			<td class="nowrap">{styles_row_grey.VERSION}</td>
+			<td class="nowrap">{styles_row_grey.AUTHOR}</td>
+			<td class="nowrap"></td>
+			</tr>
+		   <!-- END styles_row_grey -->
+		<!-- BEGIN styles_row_grey_repo -->
+		  <tr>
+		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="10" class="nowrap">{styles_row_grey_repo.ACTION_LINK}</td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>
+			<td width="10" class="nowrap"></td>		
+			<td width="25" class="nowrap">{styles_row_grey_repo.NAME}</td>
+			<td class="nowrap">{styles_row_grey_repo.TEMPLATE}</td>
+			<td class="nowrap">0</td>
+			<td class="nowrap">{styles_row_grey_repo.VERSION}</td>
+			<td class="nowrap">{styles_row_grey_repo.AUTHOR}</td>
+			<td class="nowrap"></td>
+			</tr>
+		   <!-- END styles_row_grey_repo -->
+		  <tr>
+			<th colspan="14" align="center"><input name="standard" type="button" id="standard" value="{L_make_default_style}" class="mainoption bi_ok" onclick="style_default_info();" /> <input name="cache_reset" type="button" value="{L_delete_template_cache}" class="liteoption bi_delete" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'" /></th>
+		  </tr>
+		</table>
+		{CSRF_TOKEN}
+		</form>
+	</div>
+
+	<div id="fragment-3">
+		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
+		  <tr>
+			<th align="left" width="16">&nbsp;</th>
+			<th align="left" class="nowrap" width="16">{L_action}</th>
+			<th align="left" class="nowrap">{L_name}</th>
+			<th align="left" class="nowrap">{L_version}</th>
+			<th align="left" class="nowrap">{L_contact}</th>
+			<th align="left" class="nowrap">{L_description}</th>
+			<th align="left" class="nowrap">{L_pi_rating}</th>
+		  </tr>
+		  <!-- BEGIN pm_row_red -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{pm_row_red.ACTION_LINK}</td>
+			<td class="nowrap">{pm_row_red.NAME}</td>
+			<td class="nowrap">{pm_row_red.VERSION}</td>
+			<td class="nowrap">{pm_row_red.CONTACT}</td>
+			<td>{pm_row_red.DESCRIPTION}</td>
+			<td class="nowrap">{pm_row_red.RATING}</td>
+		  </tr>
+		  <!-- END pm_row_red -->
+		  <!-- BEGIN pm_row_yellow -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{pm_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap">{pm_row_yellow.NAME}</td>
+			<td class="nowrap">{pm_row_yellow.VERSION}</td>
+			<td class="nowrap">{pm_row_yellow.CONTACT}</td>
+			<td>{pm_row_yellow.DESCRIPTION}</td>
+			<td class="nowrap">{pm_row_yellow.RATING}</td>
+		  </tr>
+		  <!-- END pm_row_yellow -->
+		  <!-- BEGIN pm_row_green -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{pm_row_green.ACTION_LINK}</td>
+			<td class="nowrap">{pm_row_green.NAME}</td>
+			<td class="nowrap">{pm_row_green.VERSION}</td>
+			<td class="nowrap">{pm_row_green.CONTACT}</td>
+			<td>{pm_row_green.DESCRIPTION}</td>
+			<td class="nowrap">{pm_row_green.RATING}</td>
+		  </tr>
+		  <!-- END pm_row_green -->
+		  <!-- BEGIN pm_row_grey -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{pm_row_grey.ACTION_LINK}</td>
+			<td class="nowrap">{pm_row_grey.NAME}</td>
+			<td class="nowrap">{pm_row_grey.VERSION}</td>
+			<td class="nowrap">{pm_row_grey.CONTACT}</td>
+			<td>{pm_row_grey.DESCRIPTION}</td>
+			<td class="nowrap">{pm_row_grey.RATING}</td>
+		  </tr>
+		  <!-- END pm_row_grey -->
+		</table>
+	</div>
+
+	<div id="fragment-7">
+		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
+		  <tr>
+			<th align="left" width="16">&nbsp;</th>
+			<th align="left" class="nowrap" width="16">{L_action}</th>
+			<th align="left" class="nowrap">{L_name}</th>
+			<th align="left" class="nowrap">{L_version}</th>
+			<th align="left" class="nowrap">{L_contact}</th>
+			<th align="left" class="nowrap">{L_description}</th>
+			<th align="left" class="nowrap">{L_pi_rating}</th>
+		  </tr>
+		  <!-- BEGIN games_row_red -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{games_row_red.ACTION_LINK}</td>
+			<td class="nowrap">{games_row_red.NAME}</td>
+			<td class="nowrap">{games_row_red.VERSION}</td>
+			<td class="nowrap">{games_row_red.CONTACT}</td>
+			<td>{games_row_red.DESCRIPTION}</td>
+			<td class="nowrap">{games_row_red.RATING}</td>
+		  </tr>
+		  <!-- END games_row_red -->
+		  <!-- BEGIN games_row_yellow -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{games_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap">{games_row_yellow.NAME}</td>
+			<td class="nowrap">{games_row_yellow.VERSION}</td>
+			<td class="nowrap">{games_row_yellow.CONTACT}</td>
+			<td>{games_row_yellow.DESCRIPTION}</td>
+			<td class="nowrap">{games_row_yellow.RATING}</td>
+		  </tr>
+		  <!-- END games_row_yellow -->
+		  <!-- BEGIN games_row_green -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{games_row_green.ACTION_LINK}</td>
+			<td class="nowrap">{games_row_green.NAME}</td>
+			<td class="nowrap">{games_row_green.VERSION}</td>
+			<td class="nowrap">{games_row_green.CONTACT}</td>
+			<td>{games_row_green.DESCRIPTION}</td>
+			<td class="nowrap">{games_row_green.RATING}</td>
+		  </tr>
+		  <!-- END games_row_green -->
+		  <!-- BEGIN games_row_grey -->
+		  <tr>
+			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td class="nowrap">{games_row_grey.ACTION_LINK}</td>
+			<td class="nowrap">{games_row_grey.NAME}</td>
+			<td class="nowrap">{games_row_grey.VERSION}</td>
+			<td class="nowrap">{games_row_grey.CONTACT}</td>
+			<td>{games_row_grey.DESCRIPTION}</td>
+			<td class="nowrap">{games_row_grey.RATING}</td>
+		  </tr>
+		  <!-- END games_row_grey -->
+		  </table>
+	</div>
+
+	<div id="fragment-upload">
+		<div class="roundbox bluebox">
+			<div class="icon_info">{L_pi_manualupload_info}</div>
+		</div>
+		<br />
+		<form enctype="multipart/form-data" action="{ACTION}" method="post">
+			<fieldset class="settings">
+				<legend>{L_pi_manualupload}</legend>
+				<dl>
+					<dt><label>{L_pi_choose_file}</label><br /><span></span></dt>
+					<dd><input type="file" name="extension" class="input" style="width:90%" /></dd>
+				</dl>
+			</fieldset>
+			<input type="submit" value="{L_pi_upload_button}" name="upload" class="mainoption bi_ok" />
+			{CSRF_TOKEN}
+		  </form>
+	</div>
+</div>

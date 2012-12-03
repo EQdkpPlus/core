@@ -1,0 +1,21 @@
+<form action='manage_members.php{SID}' method='post' class="colorswitch">
+<table width="100%" cellpadding="2" cellspacing="1" border="0">
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_group_members}</span><span style="float:right;"><input type="button" name="madd" value="{L_add_member}" class="mainoption bi_new" onclick="AddChar()"/></span></th>
+	</tr>
+	{MEMBER_LIST}
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}">
+			<input type="button" name="mdel" value="{L_delete_selected_members}" class="mainoption bi_delete" onclick="delete_warning();" />
+			<input type="hidden" name="mdel" value="1" disabled="disabled" id="mass_del_submit" />
+			<input type="submit" name="mstatus" value="{L_mass_stat_change}" class="mainoption" />
+			<input type="submit" name="rankc" value="{L_mass_rank_change}" class="mainoption" />
+			{RANK_SEL}
+		</th>
+	</tr>
+	<tr class="pagination_row">
+		<td colspan="{HPTT_COLUMN_COUNT}" align="center">{PAGINATION}</td>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

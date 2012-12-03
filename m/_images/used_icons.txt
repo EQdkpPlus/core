@@ -1,0 +1,3 @@
+info.png - http://www.iconfinder.com/icondetails/65621/48/info_orb_icon
+ok.png - http://www.iconfinder.com/icondetails/5976/128/approved_aprovado_check_ok_okay_submit_tick_verified_verify_yes_icon
+error.png - http://www.iconfinder.com/icondetails/17834/128/alert_error_exclamation_mistake_warning_icon

@@ -1,0 +1,189 @@
+<!-- IF S_LICENCE -->
+<form action="{FORM_ACTION}" method="post">
+	<div class="content">
+		<div class="contentHead">
+			{HEADER}
+		</div>
+		<div class="contentInner row1">
+			{TEXT}
+		</div>
+		<div class="contentFooter">
+			<input type="submit" name="deny" value="{L_deny}" class="liteoption bi_delete" /> <input type="submit" name="{SUBMIT_BUTTON}" value="{L_accept}" class="mainoption bi_ok" />
+		</div>
+	</div>
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$("#register").validate({
+		rules: {
+			username: {
+				required: true,
+				minlength: 2,
+				remote: {
+					type: "POST",
+					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_USER}"
+				}
+			},
+			user_email: {
+				required: true,
+				email: true,
+				minlength: 2,
+				remote: {
+					type: "POST",
+					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_MAIL}"
+				}
+			},<!-- IF S_DISPLAY_CATPCHA -->recaptcha_response_field: { required: true},<!-- ENDIF -->
+			new_user_password1: {
+				required: true
+			},
+			new_user_password2: {
+				required: true, equalTo: "#password1"
+			},
+			user_email2: {
+				required: true,
+				email: true,
+				equalTo: "#useremail"
+			}
+		},
+		onkeyup: false,
+		messages: {
+			username: {
+				required: "{L_fv_required_username}",
+				minlength: jQuery.format("{L_fv_username_toshort}"),
+				remote: jQuery.format("{L_fv_username_alreadyuse}")
+			},
+			user_email: {
+				required: "{L_fv_required_email}",
+				minlength: "{L_fv_email_notvalid}",
+				remote: jQuery.format("{L_fv_email_alreadyuse}")
+			},
+			new_user_password1: '{L_fv_required_password}',
+			new_user_password2: '{L_fv_required_password_repeat}',
+			recaptcha_response_field: '{L_fv_recaptcha}',
+			user_email2: '{L_fv_required_email2}'
+		},
+		ignore: ".ignore_validation",
+		success: function(label) {
+			if(label.attr('for') == 'username'){
+				$("#tick_username").show();
+			}
+			if(label.attr('for') == 'useremail'){
+				$("#tick_mail").show();
+			}
+			label.remove();
+		}
+	});
+
+	// possible fix for double-click problem
+	// http://forum.jquery.com/topic/validate-plugin-and-remote-have-to-submit-twice
+	$.ajaxSetup ({
+		async: false
+	});
+});
+//]]>
+</script>
+<form method="post" action="{ACTION}" name="register" id="register">
+	<div class="content">
+
+		<input type="hidden" name="old_username" value="{USERNAME}" />
+		<input type="hidden" name="user_id[]" value="{USER_ID}" />
+
+		<div id="account">
+			<fieldset class="settings">
+				<legend>{L_adduser_tab_registration_information}</legend>
+				<img src="{EQDKP_ROOT_PATH}images/global/info.png" class="absmiddle" alt="Info" /> {L_required_field_note}
+
+				<dl>
+					<dt>
+						<label>* {L_username}</label><br /><span>{L_register_help_username}</span>
+					</dt>
+					<dd>
+						<input type="text" name="username" id="username" size="40" maxlength="30" value="{USERNAME}" class="input" />
+						<img id="tick_username" src="{EQDKP_ROOT_PATH}images/register/tick.png" style="display:none;" width="16" height="16" alt="" />
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						<label>* {L_email_address}</label><br /><span>{L_register_help_email}<br/>{VALID_EMAIL_INFO}</span>
+					</dt>
+					<dd>
+						<input type="text" name="user_email" size="40" maxlength="100" value="{USER_EMAIL}" id="useremail" class="input" />
+						<img id="tick_mail" src="{EQDKP_ROOT_PATH}images/register/tick.png" style="display:none;" width="16" height="16" alt="" />
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						<label>* {L_email_confirm}</label><br /><span>{L_register_help_email_confirm}</span>
+					</dt>
+					<dd>
+						<input name="user_email2" type="text" class="input" id="user_email2" value="{USER_EMAIL2}" size="40" maxlength="100" />
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						<label>{L_password}</label><br /><span></span>
+					</dt>
+					<dd>
+						<input type="password" id="password1" name="new_user_password1" size="40" maxlength="100" value="" class="input" />
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						<label>* {L_confirm_password}</label>
+						<br />
+						<span>{L_confirm_password_repeat_note}</span>
+					</dt>
+					<dd>
+						<input type="password" id="password2" name="new_user_password2" size="40" maxlength="100" value="" class="input" />
+					</dd>
+				</dl>
+			</fieldset>
+
+		</div>
+
+		<div id="view">
+			<fieldset class="settings">
+				<legend>{L_adduser_tab_view_options}</legend>
+				<dl>
+					<dt>
+						<label>{L_language}</label><br /><span>{L_register_help_language}</span>
+					</dt>
+					<dd>{DD_LANGUAGE}</dd>
+				</dl>
+				<dl>
+					<dt>
+						<label>{L_user_timezones}</label><br /><span>{HELP_TIMEZONES}</span>
+					</dt>
+					<dd>{DD_TIMEZONES}</dd>
+				</dl>
+			</fieldset>
+		</div>
+	<!-- IF S_DISPLAY_CATPCHA -->
+	<div id="captcha">
+		<fieldset class="settings">
+			<legend>{L_lib_captcha_head}</legend>
+			<dl>
+				<dt>
+					<label>{L_lib_captcha_head}</label><br /><span>{L_lib_captcha_insertword}</span>
+				</dt>
+				<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><img src="{EQDKP_ROOT_PATH}images/global/update.png" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" alt="{L_lib_captcha_reload}" style="cursor:pointer; padding-top:20px;" /><div style="clear:both;"></div>
+				<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input"/>
+				{FV_CAPTCHA}
+				{CAPTCHA}</dd>
+			</dl>
+		</fieldset>
+	</div>
+	<!-- ENDIF -->
+		<div class="contentFooter">
+					<input type="submit" name="submit" value="{L_submit}" class="mainoption bi_ok" /> {AUTH_REGISTER_BUTTON}
+					<input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" onclick="reset_validator_register();"/>
+		</div>
+	</div>
+	{HIDDEN_FIELDS}
+	{CSRF_TOKEN}
+</form>
+
+<!-- ENDIF -->

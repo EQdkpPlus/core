@@ -1,0 +1,78 @@
+<form action='manage_raids.php{SID}&r={RAID_ID}' method='post' name='post'>
+<fieldset class="settings smallsettings">
+<legend><!-- IF S_RAID_UPD -->{L_editing_raid} <!-- ELSE -->{L_addraid_title}<!-- ENDIF --></legend>
+<!-- IF not S_RAID_UPD -->
+			<dl>
+				<dt><label>{L_select_raid_draft}:</label></dt>
+				<dd>{RAID_DROPDOWN}</dd>
+			</dl>
+<!-- ENDIF -->
+			<dl>
+				<dt><label>{L_date}:</label></dt>
+				<dd>{DATE}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_note}:</label></dt>
+				<dd><input type="text" name="rnote" value="{NOTE}" class="input" size="55" id="note" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_event}:</label></dt>
+				<dd>{EVENT}
+			<input type="button" name="addevent" class="liteoption bi_new" id="r_add_event" value="{L_add_event}" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_value}:</label></dt>
+				<dd><input type="text" name="value" value="{VALUE}" class="input" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_attendees}:</label></dt>
+				<dd>{NEW_MEM_SEL}
+			<input type="button" name="addmem" class="liteoption bi_new" id="r_add_mem" value="{L_add_member}" /></dd>
+			</dl>
+</fieldset>
+
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="colorswitch">
+	<tr>
+		<th colspan="6"><span style="float:left;">{L_adjustments}</span><span style="float:right"><input type="submit" name="refresh" value="{L_add_aadjustment}" class="mainoption bi_new" /></span></th>
+	</tr>
+	<tr>
+		<th width="25">&nbsp;</th><th width="200">{L_member}</th><th colspan="2">{L_reason}</th><th width="170">{L_event}</th><th width="120">{L_value}</th>
+	</tr>
+	<!-- BEGIN adjs -->
+	<tr>
+		<td><input type="checkbox" name="adjs[{adjs.KEY}][delete]" value="true" class="input" /><input type="hidden" name="adjs[{adjs.KEY}][group_key]" value="{adjs.GK}" /></td>
+		<td>{adjs.MEMBER}</td>
+		<td colspan="2"><input type="text" name="adjs[{adjs.KEY}][reason]" value="{adjs.REASON}" class="input" size="80" id="adjs_{adjs.KEY}" /></td>
+		<td>{adjs.EVENT}</td>
+		<td><input type="text" name="adjs[{adjs.KEY}][value]" value="{adjs.VALUE}" class="input" /></td>
+	</tr>
+	<!-- END adjs -->
+  <tr>
+		<th colspan="6"><span style="float:left;">{L_items}</span><span style="float:right"><input type="submit" name="refresh" value="{L_add_aitem}" class="mainoption bi_new" /></span></th>
+	</tr>
+	<tr>
+		<th width="25">&nbsp;</th><th>{L_item}</th><th>{L_item_id}</th><th>{L_itempool}</th><th>{L_member}</th><th>{L_value}</th>
+	</tr>
+	<!-- BEGIN items -->
+	<tr>
+		<td><input type="checkbox" name="items[{items.KEY}][delete]" value="true" class="input" /><input type="hidden" name="items[{items.KEY}][group_key]" value="{items.GK}" /></td>
+		<td><input type="text" name="items[{items.KEY}][name]" value="{items.NAME}" class="input" size="40" id="items_{items.KEY}"/></td>
+		<td><input type="text" name="items[{items.KEY}][itemid]" value="{items.ITEMID}" class="input" /></td>
+		<td>{items.ITEMPOOL}</td>
+		<td>{items.MEMBER}</td>
+		<td><input type="text" name="items[{items.KEY}][value]" value="{items.VALUE}" class="input" /></td>
+	</tr>
+	<!-- END items -->
+	<tr>
+		<th colspan="6"><input type="hidden" name="raid_id" value="{RAID_ID}" />
+						<input type="submit" name="itemadj_del" value="{L_adjitem_del}" class="liteoption bi_delete" />
+						<!-- IF S_RAID_UPD -->
+						<input type="button" name="del" value="{L_delete_raid}" class="mainoption bi_delete" onclick="delete_warning();" />
+						<input type="reset" name="reset" value="{L_reset}" class="mainoption bi_reset" />
+						<!-- ENDIF -->
+						<input type="submit" name="save" value="{L_RAID_SAVE}" class="mainoption bi_ok" id="save_button"/>
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

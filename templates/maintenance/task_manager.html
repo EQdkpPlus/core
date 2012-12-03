@@ -1,0 +1,78 @@
+<div class="contentWrapper">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_MMODE_INFO}</div>
+	</div>
+</div>
+
+  <ul class="tabnav">
+	<!-- BEGIN task_types -->
+	<li><a href="task_manager.php{SID}&amp;type={task_types.TYPE}" {task_types.ACTIVE}>{task_types.L_TYPE}</a></li>
+	<!-- END task_types -->
+  </ul>
+<br />
+<div class="contentWrapper">
+<!-- IF S_PFH_ERROR -->
+<div class="errorbox roundbox">
+	<div class="false">
+		<strong>{L_pfh_ERROR}</strong>
+		<ul>
+			<!-- BEGIN pfh_errors -->
+			<li>{pfh_errors.PFH_ERROR}</li>
+			<!-- END pfh_errors -->
+		</ul>
+	</div>
+</div>
+<br />
+<!-- ENDIF -->
+<!-- IF S_NEC_TASKS -->
+<div class="errorbox roundbox">
+	<div class="false">{L_NEC_TASK}</div>
+</div>
+<br />
+<!-- ENDIF -->
+<!-- IF S_NO_NEC_TASKS -->
+<div class="greenbox roundbox">
+	<div class="icon_ok">{L_NO_NEC_TASK}</div>
+</div>
+<br />
+<!-- ENDIF -->
+<div id="container">
+<!-- IF not S_HIDE_TASK_TABLE -->
+<table width='100%' border='1' cellpadding="2" cellspacing="1" class="task_table colorswitch hoverrows">
+  <tr>
+  	<th width='20'>&nbsp;</th>
+    <th width='20%'>{L_NAME}</th>
+	<th width='45%'>{L_DESCRIPTION}</th>
+	<th width='10%'>{L_VERSION}</th>
+	<th width='10%'>{L_AUTHOR}</th>
+	<th width='15%'>{L_CLICK_ME}</th>
+  </tr>
+  <!-- BEGIN tasks_list -->
+  <tr>
+    <th colspan="6" class="th_sub">{tasks_list.L_TASKS}</th>
+  </tr>
+
+  <!-- BEGIN spec_task_list -->
+  <tr>
+  	<td width="20" class="nowrap">{tasks_list.spec_task_list.STATUS}</td>
+	<td>{tasks_list.spec_task_list.NAME}</td>
+	<td>{tasks_list.spec_task_list.DESCRIPTION}</td>
+	<td>{tasks_list.spec_task_list.VERSION}</td>
+	<td>{tasks_list.spec_task_list.AUTHOR}</td>
+	<td class="nowrap"><!-- IF not tasks_list.spec_task_list.S_NOT_APPLICABLE --><a href="{tasks_list.spec_task_list.LINK}">{L_CLICK_ME}</a><!-- ENDIF --></td>
+  </tr>
+  <!-- END spec_task_list -->
+  <!-- END tasks_list -->
+<!-- IF UPDATE_ALL -->
+  <tr>
+	<th colspan='6'>
+	  <form method='post' action='task.php{SID}&amp;update_all=1&amp;task={UPDATE_ALL}'>
+		<input type='submit' name='start_sql_update' value='{L_UPDATE_ALL}' class='mainoption' />
+	  </form>
+	</th>
+  </tr>
+<!-- ENDIF -->
+</table>
+<!-- ENDIF -->
+</div>
+</div>

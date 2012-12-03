@@ -1,0 +1,529 @@
+<?php
+ /*
+ * Project:		EQdkp-Plus
+ * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+ * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * -----------------------------------------------------------------------
+ * Began:		2010
+ * Date:		$Date$
+ * -----------------------------------------------------------------------
+ * @author		$Author$
+ * @copyright	2006-2011 EQdkp-Plus Developer Team
+ * @link		http://eqdkp-plus.com
+ * @package		eqdkp-plus
+ * @version		$Rev$
+ * 
+ * $Id$
+ */
+
+if ( !defined('EQDKP_INC') ){
+	header('HTTP/1.0 404 Not Found');exit;
+}
+
+if (!class_exists("timehandler")){
+	class timehandler extends gen_class {
+		public static $shortcuts = array('pdl', 'user', 'config');
+
+		private $ArrTimezones = '';
+		
+		private $formtrans = array(
+			//php		//js
+			'd'		=> 'dd',
+			'j'		=> 'd',
+			'z'		=> 'o',
+			'l'		=> 'DD',
+			'm'		=> 'mm',
+			'n'		=> 'm',
+			'F'		=> 'MM',
+			'Y'		=> 'yy',
+			'a'		=> 'T',
+			'A'		=> 'TT',
+			'h'		=> 'hh',
+			'H'		=> 'hh',
+			'g'		=> 'h',
+			'G'		=> 'h',
+			'i'		=> 'mm',
+			's'		=> 'ss'
+		);
+		private $possible_formats = array(
+			'd'		=> 2,
+			'D'		=> 3,
+			'j'		=> array(1, 2),
+			'l'		=> 'string',
+			'N'		=> 1,
+			'S'		=> 2,
+			'w'		=> 1,
+			'z'		=> array(1, 3),
+			'W'		=> array(1, 2),
+			'F'		=> 'string',
+			'm'		=> 2,
+			'M'		=> 3,
+			'n'		=> array(1, 2),
+			't'		=> 2,
+			'L'		=> 1,
+			'o'		=> 4,
+			'Y'		=> 4,
+			'y'		=> 2,
+			'a'		=> 2,
+			'A'		=> 2,
+			'B'		=> 3,
+			'g'		=> array(1, 2),
+			'G'		=> array(1, 2),
+			'h'		=> 2,
+			'H'		=> 2,
+			'i'		=> 2,
+			's'		=> 2,
+			'u'		=> array(1, 6),
+			'e'		=> 'string',
+			'I'		=> 1,
+			'O'		=> 5,
+			'P'		=> 6,
+			'T'		=> 3,
+			'Z'		=> array(1, 5),
+			'c'		=> '#Y-d-m\TH:i:sP',
+			'r'		=> '#D, j M Y H:i:s O',
+			'U'		=> 'return',
+		);
+		private $backslash_sequence = array('t', 'r', 'n');
+
+		public function __construct() {
+			$tmp_timezone			= $this->get_serverTimezone();
+			date_default_timezone_set($tmp_timezone);
+			$this->timestamp		= time();
+			$this->userTimeZone		= new DateTimeZone('GMT');
+			$this->serverTimeZone	= new DateTimeZone($tmp_timezone);
+			$this->pdl->register_type('time_error', null, null, array(2,3,4));
+		}
+
+		public function setTimezone($value){
+			$this->userTimeZone	= new DateTimeZone($value);	
+		}
+
+		/**
+		* Fetch the data provided in this class
+		*
+		*/
+		public function __get($strKey){
+			switch ($strKey){
+				case 'user_tz':
+					return $this->userTimeZone->getName();
+				break;
+				case 'gmt_tz':
+					return $this->serverTimeZone->getName();
+				break;
+				case 'timezones':
+					return $this->fetch_timezones();
+				break;
+				case 'time':
+					return $this->gen_time();
+				break;
+				case 'minDate':
+					return $this->gen_time("1980-01-01 0:0:0");
+				break;
+				case 'maxDate':
+					return $this->gen_time("2038-01-19 0:0:0");
+				break;
+			}
+			return parent::__get($strKey);
+		}
+
+		/**
+		* Return the Date, an timestamp or now...
+		*
+		* @return timestamp
+		*/
+		private function helper_dtime($dtime){
+			return (($dtime && !is_object($dtime)) ? ((is_numeric($dtime)) ? "@$dtime" : $dtime) : "now");	
+		}
+
+		/**
+		* Return the default timezone if needed
+		*
+		* @return timestamp
+		*/
+		public function get_serverTimezone(){
+			if($this->config->get('timezone')){
+				return $this->config->get('timezone');
+			}elseif(ini_get('date.timezone')){
+				return ini_get('date.timezone');
+			}elseif(date_default_timezone_get()){
+				return @date_default_timezone_get();
+			}else{
+				return 'GMT';
+			}
+		}
+		
+		/**
+		* Generate time() in GMT
+		*
+		* @return timestamp
+		*/
+		private function gen_time($dtime=''){
+			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
+			return strtotime($dateTime->format("Y-m-d H:i:s"));
+		}
+
+		/**
+		* Mktime in GMT
+		*
+		* @param $hour		Hour		int
+		* @param $min		Minutes		int
+		* @param $sec		Seconds		int
+		* @param $month		Month		int
+		* @param $day		Day			int
+		* @param $year		Year		int
+		* @return Timestamp
+		*/
+		public function mktime($hour='0', $min='0', $sec='0', $month='0', $day='0', $year='0'){
+			return  $this->gen_time((($year>0) ? $year : '0').'-'.(($month>0) ? $month : '0').'-'.(($day>0) ? $day : '0').' '.(($hour>0) ? $hour : '0').':'.(($min>0) ? $min : '0').':'.(($sec>0) ? $sec : '0'));
+		}
+		
+		/**
+		* Output proper Time
+		*
+		* @param $format		Format of the Output
+		* @param $tstamp		Timestamp
+		* @return Formatted		time string
+		*/
+		public function date($format="Y-m-d H:i:s", $dtime='', $chk_summer=true){
+			//check for summer time
+			if($chk_summer && $this->date('I', $dtime, false) == '1') {
+				$dtime += 3600;
+			}
+			
+			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
+			$dateTime->setTimezone($this->userTimeZone);
+			return $dateTime->format($format);
+		}
+
+		/**
+		 * Output Date in user-format
+		 *
+		 * @int 	$time			Timestamp
+		 * @bool 	$withtime		also display time?
+		 * @bool 	$long			Date in Long-format?
+		 * @bool	$timeonly		only display time?
+		 * @return 	formatted String
+		 */
+		public function user_date($time=false, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false) {
+			if($time === 0 || $time === '0') return $this->user->lang('never');
+			if(!$time) return '';
+			
+			$format = (($withday) ? 'l, ' : '').(($long) ? $this->user->style['date_notime_long'] : $this->user->style['date_notime_short']);
+			if($withtime) $format .= ' '.$this->user->style['time'];
+			if($timeonly) $format = $this->user->style['time'];
+			if(!$fromformat) $format = 'Y-m-d'.(($withtime) ? ' H:i' : '');
+			return $this->date($format, $time);
+		}
+		
+		/**
+		 * Output Date in nice-format, like 7 days ago
+		 *
+		 * @int 	$time			Unix-Timestamp
+		 * @bool 	$differenceForDeactivating	Difference in ms when user_date should be output instead of nice format
+		 * @bool 	$withtime		also display time?
+		 * @bool 	$long			Date in Long-format?
+		 * @bool	$timeonly		only display time?
+		 * @return 	formatted String
+		 */
+		public function nice_date($time=false, $differenceForDeactivating=false, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false) {
+			
+			if($time === 0 || $time === '0') return $this->user->lang('never');
+			if(!$time) return '';
+
+			$lengths	= array("60","60","24","7","4.35");
+			$now		= $this->time;
+			
+			if (!is_numeric($time)){
+				$unix_date	= strtotime($time);
+			} else {
+				$unix_date = $time;
+			}
+
+			// check validity of date
+			if(empty($unix_date)) {   
+				return "Bad date";
+			}
+
+			// is it future date or past date
+			$langTense = $this->user->lang('time_tense');
+			if($now > $unix_date) {   
+				$difference     = $now - $unix_date;
+				$tense         = $langTense[1];		   
+			} else {
+				$difference     = $unix_date - $now;
+				$tense         = $langTense[0];
+			}
+			
+			if ($differenceForDeactivating && $difference > $differenceForDeactivating) return $this->user_date($time, $withtime, $timeonly, $long, $fromformat, $withday);
+		   
+			for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+				$difference /= $lengths[$j];
+			}
+		   
+			$difference = round($difference);
+		   
+			if($difference != 1) {
+				$langPeriods = $this->user->lang('time_periods');
+				$period = $langPeriods[$j];
+			} else {
+				$langPeriod = $this->user->lang('time_period');
+				$period = $langPeriod[$j];
+			}
+			return sprintf($this->user->lang('nicetime_format'), "$difference $period", $tense);
+
+		}
+		
+		/**
+		 * Checks if $string is given in format $format
+		 * @string 	$string		a formatted timestring
+		 * @string 	$format		a correct format for date()
+		 * @return	boolean
+		 */
+		private function check_format($string, $format) {
+			$flen = strlen($format);
+			$slen = strlen($string);
+			$cb = '';
+			$ca = '';
+			$escape = false;
+			$stroff = 0;
+			for($i=0; $i<$flen; $i++) {
+				if($stroff && $stroff >= $slen) {
+					$this->pdl->log('time_error', 'Unexpected end in '.$string.' compared to format '.$format.'.');
+					return false;
+				}
+				$c = substr($format, $i, 1);
+				$ca = substr($format, ($i+1), 1);
+				if($c == '/' && ($cb != '/' || in_array($ca, $this->backslash_sequence))) {
+					$escape = true;
+					$cb = $c;
+					continue;
+				}
+				if(in_array($c, array_keys($this->possible_formats)) && !$escape) {
+					if(is_string($this->possible_formats[$c])) {
+						if(strpos($this->possible_formats[$c], '#') === 0) {
+							$new_format = substr($format, 0, $i).substr($this->possible_formats[$c], 1).substr($format, ($i+1));
+							return $this->check_format($string, $new_format);
+						}
+						//handle strings with no given length
+						$partial_string = substr($string, $stroff);
+						$match = array();
+						preg_match('#^([a-zA-Z]+)#', $partial_string, $match);
+						if(isset($match[1])) $stroff += strlen($match[1])-1;
+						else {
+							$this->pdl->log('time_error', 'Format mismatch at position ('.($stroff+1).'.) in '.$string.' compared to format '.$format.'.');
+							return false;
+						}
+					} elseif(is_array($this->possible_formats[$c])) {
+						//Search for next char in the string which is no number
+						$partial_string = substr($string, $stroff, $this->possible_formats[$c][1]); //maximum length string
+						$k = 0;
+						for($j=$this->possible_formats[$c][0]; $j<=$this->possible_formats[$c][1]; $j++) {
+							$psc = substr($partial_string, $j, 1);
+							if(!is_number($psc)) {
+								$k = $j;
+								break;
+							}
+						}
+						if($k) $stroff += ($k-1);
+						else {
+							$this->pdl->log('time_error', 'Format mismatch at position ('.($stroff+$this->possible_formats[$c][1]).') in '.$string.' compared to format '.$format.'.');
+							return false;
+						}
+					} elseif($this->possible_formats[$c] > 0) $stroff += $this->possible_formats[$c]-1;
+				} elseif($c != substr($string, $stroff, 1)) {
+					$this->pdl->log('time_error', 'Format mismatch at position ('.($stroff+1).') in '.$string.' compared to format '.$format.'.');
+					return false;
+				}
+				$escape = false;
+				$cb = $c;
+				$stroff++;
+			}
+			return true;
+		}
+		
+		/*
+		 * Create Timestamp from formatted string
+		 *
+		 * @string	$string		Date-String (e.g. '14. February 1993 13:40:12')
+		 * @string	$format		format of date-string (e.g. 'd. F Y H:i:s')
+		 * @return 	string		timestamp
+		 */
+		public function fromformat($string, $format=0) {
+			if($format === 0) $format = $this->user->style['date_notime_short'];
+			if($format === 1) $format = $this->user->style['date_notime_short'].' '.$this->user->style['time'];
+			if(function_exists('date_create_from_format')) {
+				if(!$this->check_format($string, $format)) return $this->time;
+				$dateTime = DateTimeLocale::createFromFormat($format, $string, $this->userTimeZone);
+				if(!is_object($dateTime)) {
+					$this->pdl->log('time_error', "parsing string '".$string."' in format '".$format."' did not work");
+					return $this->time;
+				}
+			} else {
+				list($year, $month, $day, $hour, $minute) = sscanf($string, '%04s-%02s-%02s %02s:%02s');
+				$pstring = $year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':00';
+				$dateTime = new DateTimeLocale($this->helper_dtime($pstring), $this->userTimeZone);
+				if(!is_object($dateTime)) {
+					$this->pdl->log('time_error', "unable to parse '".$pstring."' into a correct time, input string was '".$string."'.");
+					return $this->time;
+				}
+			}
+			$dateTime->setTimezone($this->serverTimeZone);
+			$stamp = $dateTime->getTimestamp();
+			//check for summer time
+			if($this->date('I', $stamp, false) == 1) $stamp -= 3600;
+			return $stamp;
+		}
+		
+		/*
+		 * Transforms a php-date-format so it can be used for jquery
+		 *
+		 * @string	$format		PHP-Date-Format
+		 * @return 	string		JS-Date-Format
+		 */		
+		public function translateformat2js($format) {
+			return str_replace(array_keys($this->formtrans), array_values($this->formtrans), $format);
+		}
+		
+		/**
+		* Fetch the timezones from server
+		*
+		* @return array of timezones
+		*/
+		private function fetch_timezones(){
+			if(!is_array($this->ArrTimezones) || empty($this->ArrTimezones)) {
+				$timezone_data = DateTimeZone::listIdentifiers(1022);
+				$timezone_ab = DateTimeZone::listAbbreviations();
+
+				$this->ArrTimezones = array();
+				foreach($timezone_ab as $more_data) {
+					foreach($more_data as $tz) {
+						$value = $tz['timezone_id'];
+						if(!in_array($value, $timezone_data) || $tz['dst']) continue;
+						$slash = strpos($value, '/');
+						$continent = substr($value, 0, $slash);
+						$region = substr($value, $slash+1);
+						$offset = '';
+						if($tz['offset']) $offset = '   (GMT '.(($tz['offset'] > 0) ? '+' : '-').round($tz['offset']/3600, 1).')';
+						$this->ArrTimezones[$continent][$value] = str_replace(array('_', '/'), array(' ', ' - '), $region).$offset;
+					}
+				}
+			}
+			return $this->ArrTimezones;
+		}
+
+		/**
+		* Return Date in RFC 2822 Compatible Output
+		*
+		* @param $tstamp		Timestamp
+		* @return RFC2822 Time String
+		*/
+		public function RFC2822($dtime){
+			$date = new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
+			return $date->format(DATE_RFC3339);
+		}
+
+		public function toSeconds($time, $ff='day'){
+			switch($ff){
+				case 'day':			$out = $time*24*60*60;
+				case 'hour':		$out = $time*60*60;
+				case 'minute':		$out = $time*60;
+			}
+			return $out;
+		}
+
+		public function dateDiff($ts1, $ts2, $out='sec'){
+			// Build the Dates
+			if(!is_numeric($ts1)) {
+				$dt1	= new DateTimeLocale($dt1, $this->userTimeZone);
+				$ts1	= $dt1->format('U');
+			}
+			if(!is_numeric($ts2)) {
+				$dt2	= new DateTimeLocale($dt2, $this->userTimeZone);
+				$ts2	= $dt2->format('U');
+			}
+			// calculate the difference
+			switch($out) {
+				case 'min':		return ($ts2 - $ts1 - ($ts2 - $ts1)%60)/60;
+				case 'hour':	return ($ts2 - $ts1 - ($ts2 - $ts1)%3600)/3600;
+				default:		return $ts2 - $ts1;
+			}
+		}
+
+		public function age($date) {
+			if(!$date) return 0;
+			list($day,$mon,$year) = explode(".",$date);
+			$today = getdate(time());
+			$yeardiff = ($today['mon'] > $mon) ? ($today['year']+1) - $year : $today['year'] - $year;
+			return($yeardiff);
+		}
+
+		// Count Entries in an array between two dates
+		function countBetweenDates($array, $startdate, $enddate){
+			$this->cbd_enddate    = ($enddate) ? $enddate : $this->gen_time();
+			$this->cbd_startdate  = $startdate;
+			if(is_array($array)){
+				return count(array_filter($array, array($this, 'helper_countbetweendates')));
+			}else{
+				return false;
+			}
+		}
+
+		// HELPER FUNCTIONS
+		private function helper_countbetweendates($timez){
+			return $timez < $this->cbd_enddate && $timez > $this->cbd_startdate;
+		}
+
+		private function helper_countfuturedays($timez){
+			return $timez[$this->cfd_tmpfuncname] > $this->cfd_startdate;
+		}
+	}
+}
+
+// Helper to make the datetime translatable
+class DateTimeLocale extends DateTime {
+	public function __construct($time='now', $timezone=null) {
+		try {
+			parent::__construct($time, $timezone);
+		} catch(Exception $e) {
+			parent::__construct('now', $timezone);
+			registry::register('plus_debug_logger')->log('time_error', 'Unable to create DateTime-object with given time-string \''.$time.'\', using \'now\' as fallback.');
+			registry::register('plus_debug_logger')->log('php_error', 'EXCEPTION', 0, $e->getMessage(), __FILE__, __LINE__);
+		}
+	}
+	
+	public function __call($name, $arguments) {
+		switch($name) {
+			case 'getTimestamp':
+				return $this->format('U');
+			
+			default:
+				return;
+		}
+	}
+
+	public function format($format) {
+		// define the english names
+		$english_days		= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+		$english_months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
+			$out = str_replace($english_days, registry::fetch('user')->lang('time_daynames', false, false), parent::format($format));
+			return str_replace($english_months, registry::fetch('user')->lang('time_monthnames', false, false), $out);
+		}else{
+			return parent::format($format);
+		}
+	}
+	
+	public static function createFromFormat($format, $string, $timezone=null) {
+		// define the english names
+		$english_days		= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+		$english_months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
+			$string = str_replace(registry::fetch('user')->lang('time_daynames', false, false), $english_days, $string);
+			$string = str_replace(registry::fetch('user')->lang('time_monthnames', false, false), $english_months, $string);
+		}
+		return parent::createFromFormat($format, $string, $timezone);
+	}
+}
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_timehandler', timehandler::$shortcuts);
+?>

@@ -1,0 +1,47 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="rank_table" class="colorswitch">
+		<thead>
+		<tr class="not-sortable">
+			<th align="center" colspan="6">{L_edit_ranks}</th>
+		</tr>
+		<tr class="not-sortable">
+			<th width="10px"></th>
+			<th width="20px;"><input type="checkbox" name="" id="selall_ranks" /></th>
+			<th>{L_name}</th>
+			<th>{L_hide}</th>
+			<th>{L_list_prefix}</th>
+			<th>{L_list_suffix}</th>
+		</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN ranks -->
+		<tr>
+			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
+			<td><input type="checkbox" name="rank_ids[]" value="{ranks.ID}" /><input type="hidden" name="ranks[{ranks.KEY}][id]" value="{ranks.ID}" /></td>
+			<td><input type="text" name="ranks[{ranks.KEY}][name]" size="30" maxlength="50" value="{ranks.NAME}" class="maininput" /></td>
+			<td><input type="checkbox" name="ranks[{ranks.KEY}][hide]" value="1" {ranks.HIDE} /></td>
+			<td><input type="text" name="ranks[{ranks.KEY}][prefix]" size="35" maxlength="75" value="{ranks.PREFIX}" class="maininput" /></td>
+			<td><input type="text" name="ranks[{ranks.KEY}][suffix]" size="35" maxlength="75" value="{ranks.SUFFIX}" class="maininput" /></td>
+		</tr>
+		<!-- END ranks -->
+		<tr>
+			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
+			<td><input type="hidden" name="ranks[{KEY}][id]" value="{ID}" /></td>
+			<td><input type="text" name="ranks[{KEY}][name]" size="30" maxlength="50" value="" class="maininput" /></td>
+			<td><input type="checkbox" name="ranks[{KEY}][hide]" value="1" /></td>
+			<td><input type="text" name="ranks[{KEY}][prefix]" size="35" maxlength="75" value="" class="maininput" /></td>
+			<td><input type="text" name="ranks[{KEY}][suffix]" size="35" maxlength="75" value="" class="maininput" /></td>
+		</tr>
+		</tbody>
+		<tfoot>
+		<tr>
+			<th colspan="6">
+				<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+				<input type="button" name="del" value="{L_del_selected_ranks}" class="liteoption bi_delete" onclick="delete_warning();" />
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+			</th>
+		</tr>
+		</tfoot>
+	</table>
+{CSRF_TOKEN}
+</form>

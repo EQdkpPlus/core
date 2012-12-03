@@ -1,0 +1,74 @@
+<!-- IF not S_EDIT -->
+<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
+	<tr>
+		<th colspan="7" align="left" class="nowrap">{L_manage_cronjobs}</th>
+	</tr>
+	<tr>
+		<th align="left" class="nowrap">&nbsp;</th>
+		<th align="left" class="nowrap">{L_action}</th>
+		<th align="left" class="nowrap">{L_name}</th>
+		<th align="left" class="nowrap">{L_repeat_interval}</th>
+		<th align="left" class="nowrap">{L_cron_start_time}</th>
+		<th align="left" class="nowrap">{L_last_run}</th>
+		<th align="left" class="nowrap">{L_next_run}</th>
+	</tr>
+	<!-- BEGIN cron_row -->
+	<tr>
+		<td width="25" class="nowrap" align="center"><img src="{EQDKP_IMAGE_PATH}/glyphs/status_{cron_row.ENABLE_ICON}.gif" alt="" /></td>
+		<td width="20" class="nowrap"><a href="{cron_row.U_RUN_CRON}" title="{L_execute}"><img src="{EQDKP_IMAGE_PATH}glyphs/run.png" alt="" /></a> <!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_ACTIVATE_CRON}" title="{cron_row.L_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{cron_row.ACTIVATE_ICON}.png" alt="" /></a> <a href="{cron_row.U_EDIT_CRON}" title="{L_edit}"><img src="{EQDKP_IMAGE_PATH}glyphs/edit.png" alt="edit" /></a><!-- ENDIF --></td>
+		<td width="50%" class="nowrap"><!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_EDIT_CRON}">{cron_row.NAME}</a><!-- ELSE -->{cron_row.NAME}<!-- ENDIF --></td>
+		<td class="nowrap">{cron_row.REPEAT}</td>
+		<td class="nowrap">{cron_row.START}</td>
+		<td class="nowrap">{cron_row.LAST_RUN}</td>
+		<td class="nowrap">{cron_row.NEXT_RUN}</td>
+	</tr>
+	<!-- END cron_row -->
+	<tr >
+		<th colspan="7" class="footer">{FC_CRONJOBS}</th>
+	</tr>  
+</table>
+<!-- ELSE -->
+<form action="{ACTION}&amp;cron={CRON_NAME}" method="post">
+	<div class="bluebox roundbox">
+		<div class="icon_info"><strong>{L_repeat_note}</strong></div>
+	</div>
+		
+	<fieldset class="settings">
+	<legend>{CRON_DESC}</legend>
+		<dl>
+			<dt><label>{L_name}:</label></dt>
+			<dd>{CRON_NAME}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}:</label></dt>
+			<dd><input name="cron_desc" type="text" class="input" id="cron_desc" value="{CRON_DESC}" style="width:95%;" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_cron_start_time}:</label></dt>
+			<dd>{START_PICKER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_repeat}:</label></dt>
+			<dd><input type="checkbox" name="cron_repeat" value="1" {CRON_REPEAT} /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_repeat_interval}:</label></dt>
+			<dd><input name="repeat_value" type="text" class="input" id="start_h2" value="{CRON_REPEAT_VALUE}" size="5" maxlength="2" /> - {REPEAT_DD}</dd>
+		</dl>
+	</fieldset>
+	<!-- IF S_PARAMS -->
+	<fieldset class="settings">
+	<legend>{L_settings}</legend>
+		<!-- BEGIN param_row -->
+		<dl>
+			<dt><label>{param_row.NAME}:</label><br /><span>{param_row.HELP}</span></dt>
+			<dd>{param_row.FIELD}</dd>
+		</dl>
+		<!-- END param_row -->
+	</fieldset>
+	<!-- ENDIF -->
+	<input name="upd" type="submit" class="mainoption bi_ok" id="update" value="{L_save}" />
+    <input name="cancel" type="submit" class="liteoption bi_back" id="cancel" value="{L_cancel}" />
+{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->

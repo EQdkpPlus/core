@@ -1,0 +1,111 @@
+##
+# Project:		EQdkp-Plus
+# License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+# Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
+# -----------------------------------------------------------------------
+# Began:		2010
+# Date:			$Date$
+# -----------------------------------------------------------------------
+# @author		$Author$
+# @copyright	2006-2011 EQdkp-Plus Developer Team
+# @link			http://eqdkp-plus.com
+# @package		eqdkp-plus
+# @version		$Rev$
+#
+# $Id$
+##
+
+##
+# By removing the ETag header, you disable caches and browsers from being able to validate files, so
+# they are forced to rely on your Cache-Control and Expires header.
+##
+<IfModule mod_headers.c>
+Header unset ETag
+FileETag None
+</IfModule>
+
+##
+# Gzip compression
+# @see https://github.com/h5bp/html5-boilerplate
+##
+<IfModule mod_deflate.c>
+  # Current Apache versions (>= 2.2)
+  <IfModule filter_module>
+    FilterDeclare   COMPRESS
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/html
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/css
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/plain
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/xml
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/x-component
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/javascript
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/json
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xml
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xhtml+xml
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/rss+xml
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/atom+xml
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/vnd.ms-fontobject
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $image/svg+xml
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $image/x-icon
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/x-font-ttf
+    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $font/opentype
+    FilterChain     COMPRESS
+    FilterProtocol  COMPRESS  DEFLATE change=yes;byteranges=no
+  </IfModule>
+  # Legacy Apache versions
+  <IfModule !mod_filter.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css application/json
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE text/xml application/xml text/x-component
+    AddOutputFilterByType DEFLATE application/xhtml+xml application/rss+xml application/atom+xml
+    AddOutputFilterByType DEFLATE image/x-icon image/svg+xml application/vnd.ms-fontobject application/x-font-ttf font/opentype
+  </IfModule>
+</IfModule>
+
+##
+# Expires headers (for better cache control)
+# @see https://github.com/h5bp/html5-boilerplate
+##
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType text/cache-manifest           "access plus 0 seconds"
+  ExpiresByType text/html                     "access plus 0 seconds"
+  # Data
+  ExpiresByType text/xml                      "access plus 0 seconds"
+  ExpiresByType application/xml               "access plus 0 seconds"
+  ExpiresByType application/json              "access plus 0 seconds"
+  # Feed
+  ExpiresByType application/rss+xml           "access plus 1 hour"
+  ExpiresByType application/atom+xml          "access plus 1 hour"
+  # Media: images, video, audio
+  ExpiresByType image/gif                     "access plus 1 month"
+  ExpiresByType image/png                     "access plus 1 month"
+  ExpiresByType image/jpg                     "access plus 1 month"
+  ExpiresByType image/jpeg                    "access plus 1 month"
+  ExpiresByType image/x-icon                  "access plus 1 month"
+  ExpiresByType video/ogg                     "access plus 1 month"
+  ExpiresByType audio/ogg                     "access plus 1 month"
+  ExpiresByType video/mp4                     "access plus 1 month"
+  ExpiresByType video/webm                    "access plus 1 month"
+  # HTC files  (css3pie)
+  ExpiresByType text/x-component              "access plus 1 month"
+  # Webfonts
+  ExpiresByType application/x-font-ttf        "access plus 1 month"
+  ExpiresByType font/opentype                 "access plus 1 month"
+  ExpiresByType application/x-font-woff       "access plus 1 month"
+  ExpiresByType image/svg+xml                 "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+  # CSS and JavaScript
+  ExpiresByType text/css                      "access plus 1 year"
+  ExpiresByType application/javascript        "access plus 1 year"
+</IfModule>
+
+##
+# Add a Vary Accept-Encoding header for the compressed resources. If you
+# modify the file types above, make sure to change them here accordingly.
+# @see http://developer.yahoo.com/performance/rules.html#gzip
+##
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary Accept-Encoding
+  </FilesMatch>
+</IfModule>

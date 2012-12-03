@@ -1,0 +1,52 @@
+<form method="post" action="{EQDKP_ROOT_PATH}login.php{SID}" name="login" id="login">
+<div class="content row1">
+	<div class="contentHead">
+		{L_login}
+	</div>
+	<div class="contentInner center ">
+		<!-- IF S_BRIDGE_INFO -->
+			<div class="bluebox roundbox">
+				<div class="icon_info">{L_login_bridge_notice}</div>
+			</div>
+		<!-- ENDIF -->
+		
+		<div class="contentSideLeft <!-- IF not S_LOGGED_IN -->contentWidth60<!-- ENDIF -->">
+			
+			<fieldset class="invisible smallsettings">
+			<div class="loginform">
+				<dl>
+					<dt><label>{L_username}:</label></dt>
+					<dd><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_password}:</label></dt>
+					<dd><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password"/>
+						<!-- IF not S_BRIDGE_INFO -->
+						<br /><img src="{EQDKP_IMAGE_PATH}glyphs/key_lost.png" class="absmiddle" alt=""/><a href="{EQDKP_ROOT_PATH}login.php{SID}&amp;mode=lostpassword">{L_lost_password}</a>
+						<!-- ENDIF -->
+						<br /><br /><label><input type="checkbox" name="auto_login" />{L_remember_password}</label>
+					</dd>
+				</dl>
+			</div>
+			</fieldset>
+		</div>
+		
+		<!-- IF not S_LOGGED_IN -->
+		<div class="contentSideRight contentWidth30">
+			<!-- IF S_REGISTER -->
+			<h3>{L_no_account}</h3>
+			<a href="{REGISTER_LINK}">{L_menu_register}</a>
+			<!-- ENDIF -->
+			<!-- IF S_USER_ACTIVATION and not S_BRIDGE_INFO -->
+			<h3>{L_no_activation_mail}</h3>
+			<a href="{EQDKP_ROOT_PATH}register.php{SID}&amp;mode=resend_activation">{L_get_new_activation_mail}</a>
+			<!-- ENDIF -->
+		</div>
+		<!-- ENDIF -->
+	</div>
+	<div class="contentFooter">
+		{REDIRECT}<input type="submit" name="login" value="{L_login}" class="mainoption bi_key" /> {AUTH_LOGIN_BUTTON}
+	</div>
+</div>
+{CSRF_TOKEN}
+</form>

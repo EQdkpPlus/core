@@ -1,0 +1,30 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{RAID_PAGINATION}</td>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr align="right">
+			<th align="center" colspan="2">{L_create_raid_summary}:</th>
+			<th width="50%" align="center">
+				<b>{L_starting_date}:</b> {DATEPICK_DATE_FROM}
+			</th>
+			<th width="50%" align="center">
+				<b>{L_ending_date}:</b> {DATEPICK_DATE_TO}
+			</th>
+			<th align="center" colspan="2"><input type="submit" name="submit" value="{L_viewraid_create_summ}" class="mainoption" />
+				<a href="listraids.php{SID}" title="{L_cl_ms_uncheckall}"><img src="{EQDKP_IMAGE_PATH}glyphs/reset.png" alt="reset" /></a></th>
+			<th>{MANAGE_LINK}</th>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{PAGE_OUT}
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{RAID_PAGINATION}</td>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

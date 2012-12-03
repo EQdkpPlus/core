@@ -1,0 +1,41 @@
+<form method="post" action="{ACTION}" name="post">
+<fieldset class="settings smallsettings">
+	<legend>{L_apa_func_name}</legend>
+	<dl>
+		<dt><label>{L_apa_func_name}</label></dt>
+		<dd><input type="text" id="func_name" name="func" value="{FUNC_NAME}" class="input" size="30" /></dd>
+	</dl>
+</fieldset>
+
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_apa_func_help}</div>
+</div>
+
+<fieldset class="settings smallsettings">
+	<legend>{L_apa_edit_function}</legend>
+	<dl>{L_apa_valid_symbols}: {VALID_SYMBOLS}</dl>
+	<dl>{L_apa_func_args}: {AVAILABLE_ARGS}</dl>
+	<dl>{L_apa_func_example}: {EXAMPLE_FUNCS}</dl>
+	<div id="exprs_block">
+		<!-- BEGIN exprs -->
+		<dl>
+			<img src="{EQDKP_IMAGE_PATH}/global/delete.png" title="{L_delete}" alt="" class="del_me hand" /> <span class="apa_var">{exprs.VAR}</span> = <input type="text" size="70" name="exprs[]" value="{exprs.EXPR}" class="input expr_field" />;
+		</dl>
+		<!-- END exprs -->
+	</div>
+
+	<dl>
+		{L_tab_points} = <input type="text" size="70" name="exprs[]" value="{POINT_EXPR}" class="input expr_field expr_last points" />;
+	</dl>
+	
+	<input type="button" id="add_expr" value="{L_apa_func_add_expr}" class="mainoption bi_new" />
+</fieldset>
+<input type="submit" name="save_func" value="{L_save}" class="mainoption bi_ok" />
+<input type="reset" name="reset" value="{L_reset}" class="mainoption bi_reset" />
+{CSRF_TOKEN}
+</form>
+<div id="clone" style="display:none;">
+	<dl>
+		<img src="{EQDKP_IMAGE_PATH}/global/delete.png" title="{L_delete}" alt="" class="del_me hand" /> <span class="apa_var">Var0</span> = <input type="text" size="70" name="exprs[]" value="{exprs.EXPR}" class="input expr_field" />;
+	</dl>
+</div>
