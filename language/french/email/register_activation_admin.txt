@@ -1,0 +1,13 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account Activation Pending
+Charset: iso-8859-1
+
+Veuillez sauvegarder une copie de cet e-mail. Voici les informations de votre compte :
+
+Nom d'utilisateur : {USERNAME}
+Mot de passe : {PASSWORD}
+
+Votre compte est actuellement inactif. L'administrateur doit l'activer avant que vous puissiez vous connecter. Vous recevrez un autre e-mail lorsque votre compte sera activé.
+
+Votre mot de passe a été crypté dans notre base de données et ne peut pas être réccupéré. Si vous oubliez votre mot de passe, vous devrez faire une demande de nouveau mot de passe qui sera activé de la même façon que ce compte.
+
+Merci de votre enregistrement.

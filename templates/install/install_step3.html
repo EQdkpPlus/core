@@ -1,0 +1,47 @@
+<!-- INCLUDE install_header.html -->
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+<input type="hidden" name="install_step" value="4" />
+
+<input type="hidden" name="table_prefix" size="25" value="{TABLE_PREFIX}" />
+<input type="hidden" name="dbpass" size="25" value="{DB_PASS}" />
+<input type="hidden" name="dbuser" size="25" value="{DB_USER}" />
+<input type="hidden" name="dbname" size="25" value="{DB_NAME}" />
+<input type="hidden" name="dbhost" size="25" value="{DB_HOST}" />
+<input type="hidden" name="dbtype" size="25" value="{DB_TYPE}" />
+
+<!-- ENDIF -->
+<br />
+<!-- IF MSG_TEXT != '' -->
+
+  <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <div class="msgtext" style="padding:10px;height:70px;">{MSG_TEXT}</div>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+
+<!-- IF SHOW_SQLINFO -->
+  <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+    <p><h1>{SQL_TITLE}</h1></p>
+	<p><div class="msgtext">{SQL_TEXT}</div>
+	</div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+
+<br/>
+<div align="center"><input type="button" name="back" value="{L_BUTTON_BACK}" class="mainoption" onClick="history.back()"/>
+<!-- IF S_SHOW_BUTTON -->
+<input type="submit" name="submit" value="{L_BUTTON3}" class="mainoption" />
+</form>
+<!-- ENDIF -->
+</div>
+<!-- INCLUDE install_tail.html -->
