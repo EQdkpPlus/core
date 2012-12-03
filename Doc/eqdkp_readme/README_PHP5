@@ -1,0 +1,34 @@
+You have to modify some lines
+
+File: eqdkp/includes/eqdkp_plugins.php
+Line 640
+Old: $menu_array = array_merge($menu_array, $plugin_array[$plugin_code]);
+New: $menu_array = (is_array($plugin_array[$plugin_code])) ? array_merge($menu_array, $plugin_array[$plugin_code]) : $menu_array;
+
+
+File: eqdkp/includes/eqdkp.php
+Line 370
+Old: $main_menu2 = array_merge($main_menu2, $pm->get_menus('main_menu2'));
+New: $main_menu2 = (is_array($pm->get_menus('main_menu2'))) ? array_merge($main_menu2, $pm->get_menus('main_menu2')) : $main_menu2;
+
+
+File: eqdkp/includes/eqdkp.php
+Line 339
+Old: $main_menu1 = array_merge($main_menu1, $pm->get_menus('main_menu1'));
+New: $main_menu1 = (is_array($pm->get_menus('main_menu1'))) ? array_merge($main_menu1, $pm->get_menus('main_menu1')) : $main_menu1;
+
+File: eqdkp/admin/index.php
+Line 632
+Old: $admin_menu = array_merge($admin_menu, $pm->get_menus('admin_menu'));
+New: $admin_menu = (is_array($pm->get_menus('admin_menu'))) ? array_merge($admin_menu, $pm->get_menus('admin_menu')) : $admin_menu;
+
+File: eqdkp/admin/index.php
+Line 638
+Old: ksort($admin_menu);
+New: if(is_array($admin_menu)) ksort($admin_menu);
+
+File: eqdkp/admin/index.php
+Line 639
+Old: reset($admin_menu);
+New: if(is_array($admin_menu)) reset($admin_menu);
+

@@ -1,0 +1,194 @@
+Version 1.3.0p2 - October 19, 2005
+------------------------------------
+[*] [1.3.0p1] Fixed the new (again) addraid 
+[*] [1.3.0p1] Fixed a problem with install.php
+[*] [1.3.0p1] Fixed the parse_Everquest.php file to return all values
+[*] [1.3.0p1] We now correctly pass the class name for stats filtering
+[*] [1.3.0p1] Subversion directories in the plugin directory fixed
+
+Version 1.3.0p1 - September 15, 2005
+------------------------------------
+[*] [1.3] Column wraps around if value is too long
+[*] [1.3] [WoW] Armor types wrong :: "cloth and chain", not "silk and mail"
+[*] [1.3] Edited member name not updated everywhere adjustment table not updated correctly
+[*] [1.3] [Everquest] Problems with Shadow Knights
+[*] [1.3] Item prices getting truncated or corrupted
+
+
+Version 1.3.0 - August 1, 2005
+------------------------------
+[+] Moved Race, Class, and Faction data to the database
+[*] Fixed a bug related to files from FrontPage that contain an underscore.
+[*] Fixed sort order of items in listitems.php
+[+] Added parse_{DEFAULT_GAME}.php files for raid dump parsing across games
+[+] Modularized the population of game information via config.php line
+[*] Fixed a session.php security bug.
+[*] Fixed the dbal.php file
+[+] upgrade.php works for going from 1.2 -> 1.3
+[+] Made InnoDB the standard MySQL database
+[+] Added Armor Type to standings page
+[+] Check and fix all names for proper name capitalization
+[*] Added SOAP interface to the database
+[*] Added perliminary support for CTRaidTracker
+[ ] Requires MySQL version 4.x and PHP 4.3.10 or higher
+[ ] Next release will require PHP 5.x and MySql 5.x
+[+] Added German language SQL info for races/classes (thx Esmeroth)
+
+
+
+Version 1.2.0 - Oct 4, 2003
+---------------------------
+[*] Fixed a bug in viewmember.php that might have resulted in a miscalculated percentage for attendance-by-event.
+[*] Fixed a language error in User::check_auth()
+[ ] Consolidated page_header.php and page_tail.php into the EQdkp class.
+[ ] Moved Session and User classes to session.php.
+[*] We believe we've isolated the bug that only let users log in while using cookies.  Please test this before the final release to make sure.
+[*] The newest admin actions in the admin index are now only viewable by admins with permission to view logs.
+[*] Improved efficiency in viewevent.php
+[*] Improved efficiency in summary.php
+[+] New base class EQdkp_Admin to be extended by admin scripts.
+[*] Improved efficiency in addadj.php
+[*] Improved efficiency in addiadj.php
+[*] Improved efficiency in additem.php
+[*] Improved efficiency in addraid.php
+[*] Fixed eqdkp_start being replaced by (table prefix)start during install [ #714246 ].
+[+] Added a config option to let the admin set which page acts as the index.  Useful for guilds that didn't make use of the news page and wanted to go straight to the member listings, for example.
+[+] The username field is auto-focused on login.php to make logging in faster.
+[+] Added logging for all fields when adding/updating/deleting members [ #714986 and #714320 ].
+[+] A notice is displayed on the admin index page if a new version of EQdkp is available.
+[+] Added a small admin page to display information about the EQdkp database tables.     
+[+] Added a small pop-up window to let admins search for items by name rather than using the drop-down list on additem.php.  Search results can also be populated by the stats database if the Item Stats plugin is installed.
+[+] Added a checkbox to the addnews page to let the user choose whether or not the post's date is updated along with the rest of the post [ #705786 ].
+[+] Added a field to the plugin table and plugin classes to show the version of the plugin.
+[+] Added options to parse_log that lets the admin select which members to include or exclude based on their membership flag [ #724043 ].
+[+] Added a nice feature to addraid and additem that lets you type in a partial member or item name and it matches the closest name in a drop-down list for easy selection [ #722884 ].
+[+] The "Location" field of the "Who's Online" list on the admin index page now outputs more cleanly.
+[+] When adding a new member, the earned, spent, and adjustment fields automatically fill in as 0.00 to speed up adding guild members [ #726078 ].
+[*] Logging errors were created when adding data with apostrophes in certain fields [ #726141 ].
+[*] When adding a member with no previous firstraid to a raid, the firstraid date was computed improperly [ #705206 ].
+[+] Added the user-to-member association table used in the Magelo and Guild Flags plugin to the core of EQdkp to make installing and using these plugins easier.
+[*] An error occurred if the user tried to 'Deleted Selected Member(s)' with no members selected.
+[+] Added a 'Mass Update' area to the Manage Users panel that allows the administrator to update many users' account permissions at one time.
+[+] User accounts can now be deleted en-masse using the above addition [ #731002 ].
+[*] Resolved all IIS-specific errors for IIS 5.  Please make us aware of any remaining errors.
+[+] Added quick-links to add another new member and to list existing members after a new member was successfully added.
+[+] Listmembers can now be filtered and the resulting list can then be sorted [ #739589 ].
+[+] On viewevent, all items obtained from the viewed event are listed.
+[*] A template wasn't selected correctly on the Manage Styles page.
+[+] Updated all templates to be XHTML 1.0-compliant.
+[+] No more frames in the admin panel!
+[+] Members can now be hidden based on their membership flag - go to the Manage Members / Edit Flags panel to define which flags are hidden.
+[+] When showing all members on the Standings page, members that are inactive have their names in italics.  Similarly, flags that would normally be hidden are displayed in italics as well.
+[+] On the Manage Styles page, administrators can now easily preview each style before selecting one to edit.
+[+] Style configuration fields now default to acceptable values when creating a new style.
+[*] When adding/updating/deleting raids, members' first and last raids are finally calculated correctly in all situations [ #749201 ].
+[*] If Hide Inactive Members was set to off, inactive members still wouldn't be shown [ #756747 ].
+[ ] Renamed Membership flags to Membership Ranks to avoid confusion with the Planes of Power flags.
+[*] Members with no flag (rank!) were ignored when parsing a log; thanks ryunosuke.
+[*] Members added during addraid were set to inactive; thanks ryunosuke.
+[*] Fixed a minor security flaw in the CVS versions of the administrative list pages; thanks ryunosuke.
+[+] Member flags can now have HTML prefixes and suffixes so you can, for example, color-code members based on their flags.
+[*] Fixed a bug where some members would be individually updated for no reason when processing a raid; thanks ryunosuke.
+[+] Items on the main menus and administrative menu are not shown to users that don't have permission to access their linked pages.
+[*] When editing a raid that occurred between after noon using a 24-hour format, the time would be reset to its 12-hour format (10:00 PM would become 10:00 AM); thanks ryunosuke.
+[ ] When viewing a member, attendance percentages are only shown for events that still exist in the database.
+[+] Added a class distribution breakdown to the viewraid page; thanks ryunosuke.
+[*] Users can now log in without the use of cookies [ #752542 and #749108 ]; thanks ryunosuke.
+[*] Undefined index: member_rank in mm_addmember.php.
+[*] When upgrading, eqdkp_member_user table wasn't created correctly.
+[*] member_raidcount wasn't updated correctly if the member was added manually rather than through a raid.
+[+] Added a 60-day and a lifetime percentage for raid attendance to the viewmember page.
+[*] Fixed an uninitialized var error in login.php after using an incorrect username/password.
+[*] Fixed an undefined index error in styles.php when a valid style id was not provided.
+[*] Fixed query syntax errors in upgrade.php that prevented some queries from running.
+[*] Fixed user accounts not being activated when user registration was set to none.
+[+] Event names in the Attendance by Event table on the viewmember page are now linked to their respective events.
+[*] Fixed the resulting page URL containing ?s=?s= after being redirected from index.php. (tsigo)
+[*] On the configuration page, field values wouldn't be saved if they were blank. This could have prevented users from removing their site description, for example. (tsigo)
+[*] Class filtering was ignored if hiding inactive members was disabled [ #776348 ]. (tsigo)
+[*] Hidden member ranks weren't hidden if hiding inactive members was disabled [ #776343 ]. (tsigo)
+[*] Fixed a deprecated call-time pass-by-reference in several admin pages [ #774135 ]. (tsigo, rillaith)
+[*] The "To" date for summaries is now inclusive, meaning raids occurring on that date will be included [ #781819 ]. (tsigo)
+[*] Output a message if no raids are present in the given range for summaries [ #781819 ]. (tsigo)
+[*] Fixed an infinite loop bug in upgrade.php [ #776335 ]. (tsigo)
+[*] Created a primary key index on the eqdkp_config table to prevent duplicate entries [ #776335 ]. (tsigo)
+[*] Added the Froglok race as an option in the addmember page [ #776220 ]. (tsigo)
+[*] Member active/inactive status was only updated after adding a new raid, not updating/deleting an old raid [ #776396 ]. (tsigo)
+[*] A member's first and last raid dates may not have been reset if they were removed from their only attended raid [ #776396 and #777984 ]. (tsigo)
+[*] Class names at the end of a summary now link correctly to listmembers.php with a filter [ #783903 ]. (tsigo)
+[*] Fixed apostrophe errors in addraid.php [ #785528 and #785683 ]. (tsigo)
+[*] Quotes in item names were being escaped twice after changes in 1.2 [ #785685 ]. (tsigo)
+[*] Fixed a rare bug that occurred if there was data in the raid_attendees table, but not in the members table.
+[*] News pagination was pointing to index.php instead of viewnews.php [ #789563 ]. (tsigo)
+[*] Added a 5-second timeout in waiting for eqdkp.com to respond with the latest version information. (tsigo)
+[*] Fixed yet another quote-related error, this time in manage_users [ #789808 ]. (tsigo)
+[*] When a user is deleted, any associated members are now disassociated [ #805250 ]. (tsigo)
+[*] Added a 5-second timeout to contacting EQdkp.com in install.php [ #805250 ]. (tsigo)
+[*] Reduced error output if EQdkp.com could not be contacted in install.php and admin/index.php. (tsigo)
+[*] Fixed several errors that occurred when a member's name has an apostrophe in it[ #808308 ]. (tsigo)
+[*] Added rank formatting to stats.php [ #813307 ]. (tsigo) 
+
+Version 1.1.0 - Mar 22, 2003
+----------------------------
+[*] If a log was pasted directly from notepad, any roleplay members wouldn't be found because EverQuest inserts two spaces between the name and the guildtag.  Added a check for either 1 or 2 spaces.  Thanks Fenicks.
+[*] #679701
+[+] parse_log now displays how many log lines were parsed and how many members were found.
+[+] Member comparison can now be sorted like listmembers
+[ ] Did away with 'magic numbers' for auth_options and replaced them with constants as defined in common.php and individually by each plugin that uses its own permissions.
+[*] Fixed a bug that ocurred with log pagination and searching.
+[*] Fixed two more bugs relating to irregular spacing in EverQuest logs.
+[+] Added membership flags.  They're completely customizable and can be assigned to members of your guild.  See Feature Request #683599.
+[*] Database Size calculation now only applies to EQdkp tables.
+[+] Admin Panel menu is now dynamic and has a hook 'admin_menu' for plugins to use.
+[+] Added hook log_actions to admin/logs.php.
+[+] Added hook user_permissions_update to admin/manage_users.php.
+[+] Added an attendance by event breakdown on the viewmember page.
+[+] Added a filter drop-down to the listmembers page.  Thanks Draelon.
+[*] Added error-checking to redirect() to make sure the URL exists.
+[ ] The guildtag option in the Configuration panel has been changed.  The field that must match a /who GUILD log is now the second field, 'Guildtags to parse' (see below).
+[+] To support guild alliances wanting to use EQdkp and allow greater flexibility when parsing logs, the log parser now supports various options at run-time, including whether or not to include roleplay members, and which guildtag(s) to parse for.
+[*] If account validation was set to admin, the administrator wouldn't be able to validate accounts without first logging out.
+[ ] Checkbox generation for permissions on Configuration and Manage Users is now dynamic to allow easier integration for plugins.
+[ ] User::check_auth now stores permission settings for the previous call to itself if $user_id is set.  This lowers the query count on certain pages by as much as 40.
+[*] Improved query efficiency in stats.php and summary.php.
+[ ] Settings menus are now array-driven.
+[+] Implemented a new, entirely object-oriented plugin system.  Draelon did a ton of work on this, so many thanks to him for contributing to making this work.  Aside from being very easy to utilize in plugins, it also vastly improved the efficiency of EQdkp's plugin foundation.
+[*] #705213
+[+] Multiple events can now be selected when adding a raid.  This will enter one raid per event selected.
+[*] Fixed a bug in the Location field for the "Who's Online" list on the admin index.
+[*] Fixed a bug in settings.php that occurred if no plugins were installed.
+[*] Fixed a bug in install.php with the admin's e-mail address.  
+
+Version 1.0.0 - Feb 01, 2003
+----------------------------
+[*] #664038
+[*] #664105
+[*] Fixed a bug that stopped getting item stats if only one mirror existed.
+[*] #664046
+[+] An automatic individual adjustment can now be made when a member becomes active or inactive.
+[+] Added the plugin management control panel.
+[+] Added a plugin foundation.
+[+] Added the preview link for styles to the configuration panel.
+[+] Added control panels to manage and create styles.
+[*] Fixed a major bug that occurred when magic_quotes_gpc was off.
+[+] Added a 'Last 90 days' column to viewmember and listmembers (compare) to get a better overview of raid attendance.
+[+] Added a verbose list of the last 10 administrative actions to the admin index page.
+[+] Added a color preview next to the style color settings.
+[+] Added the raid note to a Summary view.
+[+] Added a check for the GET variable 'class' to listmembers.  If set the one of the valid EverQuest classes, only members of that class will be displayed.
+[+] Added a stats and summary table for classes.  Shows how many items that class got, the percentage of items, the number of members who are that class, and the percentage of members.  Clicking on a class name will find all members of that class.
+[+] Users with administrative permissions now show up in bold on the Manage Users list.
+[+] Added a tag for text to be centered on the addnews page.
+[+] Install script now presents the user with EQdkp requirements and their server settings, to see if they meet the requirements.
+[+] Added a 'Loot Factor' to the class stats - see Feature Request #672751
+[+] Added a 'Last Loot' column when comparing members.  This indicates when the member last purchased an item, if ever.
+[ ] Restructured manage_members.php.
+[+] Added a form to add/edit/delete individual members.  Permissions are based off of a_members_man.
+[+] Added logging for adding, updating and deleting members.
+
+Legend
+------
+[+] New Feature
+[-] Removed Feature
+[ ] Note
+[*] Bugfix

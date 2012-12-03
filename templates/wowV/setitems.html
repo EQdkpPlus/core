@@ -1,0 +1,92 @@
+<style type="text/css">
+.style1 {
+	text-align: center;
+}
+.noline a, .noline a:link, .noline a:visited, .noline {
+text-decoration:none;
+}
+</style>
+
+<!-- INCLUDE page_header.html -->
+<table width="812" align="center" class="borderless" cellpadding="0" cellspacing="0">
+	<!-- Creating the Sourrounding Graphics ;) -->
+	<tr>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/top_left.gif); background-repeat:no-repeat; background-position:right;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" height="12" />
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/top.gif); background-repeat:repeat-x;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" height="12" />
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/top_right.gif); background-repeat:no-repeat;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" height="12" />
+		</td>
+	</tr>
+	<tr>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/left.gif); background-repeat:repeat-y; background-position:right;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" />
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/back.jpg); background-repeat:repeat">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+<!-- BEGIN CLASSES -->
+    <th align="center" class="menu" width="{CLASSWIDTH}"><img src="images/class/{CLASSES.img}.gif"><a href="{U_SET_ITEMS}&amp;class={CLASSES.name}"> {CLASSES.name}</a></th>
+<!-- END CLASSES -->
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  <table border="0" cellspacing="1" cellpadding="2" width="100%">
+  <tr class="{ROW_CLASS}"> 
+  			<td class="smalltitle"><a href="{U_SET_ITEMS}&amp;class={CLASSNAME}&amp;tier=Tier1">Tier 1</a></td>
+  			<td class="smalltitle"><a href="{U_SET_ITEMS}&amp;class={CLASSNAME}&amp;tier=Tier2">Tier 2</a></td>
+	  	</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		<tr> 
+			<td class="smalltitle">{LANG_TIER}</td>
+			<td colspan="8" class="smalltitle">{TIER}</td>
+</tr>
+
+	<tr class="{ROW_CLASS}">
+		<td>&nbsp;</td>
+		<td>{LANG_BELT}</td>
+		<td>{LANG_BOOTS}</td>
+		<td>{LANG_WRIST}</td>
+		<td>{LANG_CHEST}</td>
+		<td>{LANG_SHOULDERS}</td>
+		<td>{LANG_HANDS}</td>
+		<td>{LANG_HEAD}</td>
+		<td>{LANG_LEGS}</td>
+	</tr>
+	
+	<!-- BEGIN MEMBERS -->
+	<tr class="{MEMBERS.ROW_CLASS}">
+		<td><a href="{MEMBERS.link}">{MEMBERS.name}</a></td>
+		<!-- BEGIN MEMBERITEMS_NEED -->
+<td class="style1"><a href="{MEMBERS.MEMBERITEMS_NEED.link}">{MEMBERS.MEMBERITEMS_NEED.item_image}</a></td>
+		<!-- END MEMBERITEMS_NEED -->
+	</tr>
+	<!-- END MEMBERS -->
+</table>
+	
+	<!-- That's the End of the Data Table ;) -->
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/right.gif); background-repeat:repeat-y; ">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" />
+		</td>
+	</tr>
+	<tr>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/bottom_left.gif); background-repeat:no-repeat; background-position:right;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" height="12" />
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/bottom.gif); background-repeat:repeat-x;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" height="12" />
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/bottom_right.gif); background-repeat:no-repeat;">
+			<img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" height="13" />
+		</td>
+	</tr>
+</table>
+<!-- INCLUDE page_tail.html -->
+

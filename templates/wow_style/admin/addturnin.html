@@ -1,0 +1,74 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if ((document.post.turnin_from.value == '') || (document.post.turnin_to.value == ''))
+    {
+        return false;
+    }
+    
+    turnin_from = document.post.turnin_from.options[document.post.turnin_from.selectedIndex];
+    turnin_to = document.post.turnin_to.options[document.post.turnin_to.selectedIndex];
+    if (turnin_from.value == turnin_to.value)
+    {
+        alert('{MSG_FROM_TO_SAME}');
+        return false;
+    }
+    return true;
+}
+//-->
+</script>
+<form method="post" action="{F_ADD_TURNIN}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="from" value="{FROM}" />
+<input type="hidden" name="to" value="{TO}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADD_TURNIN_TITLE}</th>
+  </tr>
+  <!-- IF S_STEP1 -->
+  <tr>
+    <td width="50%" valign="top" align="center" class="row1">
+    {FV_TURNIN_FROM}<br /><b>{L_FROM}:</b><br />
+      <select name="turnin_from" size="35" class="input">
+        <!-- BEGIN turnin_from_row -->
+        <option value="{turnin_from_row.VALUE}"{turnin_from_row.SELECTED}>{turnin_from_row.OPTION}</option>
+        <!-- END turnin_from_row -->
+      </select>
+      <br />&nbsp;
+    </td>
+    <td width="50%" valign="top" align="center" class="row2">
+    {FV_TURNIN_TO}<br /><b>{L_TO}:</b><br />
+      <select name="turnin_to" size="35" class="input">
+        <!-- BEGIN turnin_to_row -->
+        <option value="{turnin_to_row.VALUE}"{turnin_to_row.SELECTED}>{turnin_to_row.OPTION}</option>
+        <!-- END turnin_to_row -->
+      </select>
+      <br />&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="proceed" value="{L_PROCEED}" class="mainoption" /></th>
+  </tr>
+  <!-- ELSE -->
+  <tr>
+    <td width="200" nowrap="nowrap" class="row1"><b>{L_FROM}:</b> {TURNIN_FROM}</td>
+    <td width="100%" class="row1">
+    <b>{L_ITEM}:</b>&nbsp;
+      <select name="item_id" class="input">
+        <!-- BEGIN items_row -->
+        <option value="{items_row.VALUE}">{items_row.OPTION}</option>
+        <!-- END items_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="row2"><b>{L_TO}:</b> {TURNIN_TO}</td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="add" value="{L_ADD_TURNIN}" class="mainoption" /></th>
+  </tr>
+  <!-- ENDIF -->
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
