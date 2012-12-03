@@ -1,0 +1,11 @@
+#ALTER TABLE eqdkp_styles DROP classfontcolor_Warrior, DROP classfontcolor_Rogue, DROP classfontcolor_Hunter, DROP classfontcolor_Paladin, DROP classfontcolor_Priest, DROP classfontcolor_Druid, DROP classfontcolor_Shaman, DROP classfontcolor_Warlock, DROP classfontcolor_Mage;
+ALTER TABLE eqdkp_styles ADD classfontcolor_Warrior VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Rogue VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Hunter VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Paladin VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Priest VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Druid VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Shaman VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Warlock VARCHAR( 6 ) NOT NULL , ADD classfontcolor_Mage VARCHAR( 6 ) NOT NULL ; 
+UPDATE eqdkp_styles SET classfontcolor_Warrior = 'C69B6D' WHERE eqdkp_styles.classfontcolor_Warrior ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Rogue   = 'FFF468' WHERE eqdkp_styles.classfontcolor_Rogue ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Hunter  = 'AAD372' WHERE eqdkp_styles.classfontcolor_Hunter ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Paladin = 'F48CBA' WHERE eqdkp_styles.classfontcolor_Paladin ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Priest  = 'FFFFFF' WHERE eqdkp_styles.classfontcolor_Priest ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Druid   = 'FF7C0A' WHERE eqdkp_styles.classfontcolor_Druid ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Shaman  = '00DBBA' WHERE eqdkp_styles.classfontcolor_Shaman ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Warlock = '9382C9' WHERE eqdkp_styles.classfontcolor_Warlock ='' ;
+UPDATE eqdkp_styles SET classfontcolor_Mage    = '68CCEF' WHERE eqdkp_styles.classfontcolor_Mage ='' ;

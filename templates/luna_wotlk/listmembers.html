@@ -1,0 +1,238 @@
+<!-- INCLUDE page_header.html -->
+
+<!-- IF S_NOTMM -->
+<!-- IF SHOW_LEADERB -->
+	<!-- IF LEADERBOARD_2ROW -->
+		<!-- INCLUDE listmembers_leaderboard.html -->
+		<br />
+	<!-- ELSE -->
+		<!-- INCLUDE listmembers_leaderboard.html -->
+		<br />
+	<!-- ENDIF -->
+<!-- ENDIF -->
+<form method="get" action="{F_MEMBERS}">
+<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+<input type="hidden" name="multifilter" value="{GIVEN_MULTIFILTER}" />
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+  <tr>
+    <th align="right" width="56" nowrap="nowrap">{L_FILTER}:</th>
+    <th align="left">&nbsp;
+      <select name="filter" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN filter_row -->
+        <option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
+        <!-- END filter_row -->
+      </select>
+    </th>
+  </tr>
+</table>
+</form>
+<!-- ENDIF -->
+<form method="post" action="{F_MEMBERS}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="20" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+
+    <!-- IF SHOW_CMC_PROFILES -->
+    <th align="left" width="80">Profil</th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_RANK -->
+    <th align="left" ><a href="{U_LIST_MEMBERS}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_LEVEL -->
+    <th align="left" width="40" nowrap="nowrap"> <a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CLASS -->
+    <th align="left" width="120" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>
+		<!-- ENDIF -->
+
+		<!-- IF SHOW_CMC_SKILL -->
+		<th align="left" width="110" nowrap>{L_SKILL}</th>
+		<!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_ARKAN -->
+    <th align="left" width="20"><a href="{U_LIST_MEMBERS}o={O_ARCANE}{URI_ADDON}"><img src="plugins/charmanager/images/resistence/arcane_resistance.gif" alt="{L_ARCANE}" /></a></th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_FIRE -->
+    <th align="left" width="20"><a href="{U_LIST_MEMBERS}o={O_FIRE}{URI_ADDON}"><img src="plugins/charmanager/images/resistence/fire_resistance.gif" alt="{L_FIRE}" /></a></th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_NATURE -->
+    <th align="left" width="20"><a href="{U_LIST_MEMBERS}o={O_NATURE}{URI_ADDON}"><img src="plugins/charmanager/images/resistence/nature_resistance.gif" alt="{L_NATURE}" /></a></th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_ICE-->
+    <th align="left" width="20"><a href="{U_LIST_MEMBERS}o={O_FROST}{URI_ADDON}"><img src="plugins/charmanager/images/resistence/frost_resistance.gif" alt="{L_FROST}" /></a></th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_SHADOW -->
+    <th align="left" width="20"><a href="{U_LIST_MEMBERS}o={O_SHADOW}{URI_ADDON}"><img src="plugins/charmanager/images/resistence/shadow_resistance.gif" alt="{L_SHADOW}" /></a></th>
+		<!-- ENDIF -->
+
+		 <!-- IF IS_MULTIDKP -->
+		<!-- BEGIN custom_header -->
+    <th align="left" width="60" nowrap="nowrap"><div align="center">{custom_header.HEADER_DISC}</div></th>
+    <!-- END custom_header -->
+    <!-- ELSE -->
+		<th align="left" width="65" nowrap="nowrap"><a href="{U_COMPARE_MEMBERS}o={O_EARNED}{URI_ADDON}">{L_EARNED}</a></th>
+    <th align="left" width="65" nowrap="nowrap"><a href="{U_COMPARE_MEMBERS}o={O_SPENT}{URI_ADDON}">{L_SPENT}</a></th>
+    <th align="left" width="90" nowrap="nowrap"><a href="{U_COMPARE_MEMBERS}o={O_ADJUSTMENT}{URI_ADDON}">{L_ADJUSTMENT}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_COMPARE_MEMBERS}o={O_CURRENT}{URI_ADDON}">{L_CURRENT}</a></th>
+		<!-- ENDIF -->
+		<!-- IF SHOW_LASTRAID -->
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_LASTRAID}{URI_ADDON}">{L_LASTRAID}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_LASTLOOT -->
+    <th align="left" width="70" nowrap="nowrap">{L_LASTLOOT}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATTEND_30 -->
+    <th align="left" width="100" nowrap="nowrap">{L_RAIDS_30_DAYS}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATTEND_60 -->
+    <th align="left" width="100" nowrap="nowrap">{L_RAIDS_60_DAYS}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATTEND_90 -->
+    <th align="left" width="100" nowrap="nowrap">{L_RAIDS_90_DAYS}</th>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_ATTEND_ALL -->
+    <th align="left" width="100" nowrap="nowrap">{L_RAIDS_ALL}</th>
+    <!-- ENDIF -->
+
+  </tr>
+  <!-- BEGIN members_row -->
+  <tr class="{members_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{members_row.ROW_CLASS}';">
+    <td width="13" nowrap="nowrap" align="center"><input type="checkbox" name="compare_ids[]" value="{members_row.ID}" /></td>
+
+    <td width="35" nowrap="nowrap" align="right"> {members_row.COUNT}</span></td>
+        <script>
+					linkset[{members_row.COUNT}]='<div class="menuitems"><a href="{members_row.ARMORY_LINK1}" target="_blank">{L_ARMORY_LINK1}</a></div>'
+					linkset[{members_row.COUNT}]+='<div class="menuitems"><a href="{members_row.ARMORY_LINK2}" target="_blank">{L_ARMORY_LINK2}</a></div>'
+					<!-- IF members_row.ARMORY_LINK3 -->
+					linkset[{members_row.COUNT}]+='<div class="menuitems"><a href="{members_row.ARMORY_LINK3}" target="_blank">{L_ARMORY_LINK3}</a></div>'
+					<!-- ENDIF -->
+				</script>
+
+    <td width="100%" nowrap="nowrap">
+
+    	<!-- IF SHOW_AMORY -->
+    		<span onmouseover="showmenu(event,linkset[{members_row.COUNT}])"> {members_row.CLASS_ICONS}</span>
+    	<!-- ELSE -->
+    	  {members_row.CLASS_ICONS}
+    	<!-- ENDIF -->
+
+    	<a class="{members_row.CLASSENG}" href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a>
+    	</td>
+
+    <!-- IF SHOW_CMC_PROFILES -->
+	    <td nowrap="nowrap">
+	    	<!-- IF members_row.SHOW_BLASC -->
+    			<a target="_blank" href="http://www.buffed.de/?c={members_row.BLASC_ID}"><img src="plugins/charmanager/images/profilers/blasc_icon.png" width=16 height=16 border=0 alt="{L_BUFFED}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF members_row.SHOW_CTPROFILE -->
+    			<a target="_blank" href="http://ctprofiles.net/{members_row.CTPROFILE_ID}"><img src="plugins/charmanager/images/profilers/ctprofile_icon.png" border=0 alt="{L_CTPROFILES}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF members_row.SHOW_ALLA -->
+    			<a target="_blank" href="http://wow.allakhazam.com/profile.html?{members_row.ALLA_ID}"><img src="plugins/charmanager/images/profilers/alla_icon.png" width=16 height=16 border=0 alt="{L_ALLAKHAZAM}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF members_row.SHOW_CURSE -->
+    			<a target="_blank" href="{members_row.CURSE_ID}"><img src="plugins/charmanager/images/profilers/curse_icon.png" width=16 height=16 border=0 alt="{L_CURSEPROFILES}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF members_row.SHOW_TALENT -->
+    			<a target="_blank" href="{members_row.TALENT_URL}"><img src="plugins/charmanager/images/profilers/talent.jpg" width=16 height=16 border=0 alt="{L_TALENTPLANER}" /></a>
+    		<!-- ENDIF -->
+
+	    </td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_RANK -->
+    <td nowrap="nowrap">{members_row.RANK}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_LEVEL -->
+    <td width="40" nowrap="nowrap">{members_row.LEVEL}</td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CLASS -->
+    	<!-- IF S_FROM_EDIT_MEMBER -->
+    		<td width="100" nowrap="nowrap">{members_row.CLASS_TEXT}</td>
+    	<!-- ELSE -->
+    		<td width="130" nowrap="nowrap">{members_row.CLASS}</td>
+    	<!-- ENDIF -->
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_SKILL -->
+    <td width="110" nowrap>
+    		<!-- IF members_row.SHOW_TALENT -->
+    			<a target="_blank" href="{members_row.TALENT_URL}">{members_row.SKILL}</a>
+    		<!-- ELSE -->
+    			{members_row.SKILL}
+    		<!-- ENDIF -->
+    	</td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_ARKAN -->
+    <td width="20" nowrap="nowrap">{members_row.ARCANE}</td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_FIRE -->
+    <td width="20" nowrap="nowrap">{members_row.FIRE}</td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_NATURE -->
+    <td width="20" nowrap="nowrap">{members_row.NATURE}</td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_ICE-->
+    <td width="20" nowrap="nowrap">{members_row.FROST}</td>
+    <!-- ENDIF -->
+
+    <!-- IF SHOW_CMC_SHADOW -->
+    <td width="20" nowrap="nowrap">{members_row.SHADOW}</td>
+    <!-- ENDIF -->
+
+
+    <!-- IF IS_MULTIDKP -->
+    <!-- BEGIN multidkp -->
+    <td width="65" nowrap="nowrap"  align="right" class="{members_row.multidkp.C_CURRENT}">{members_row.multidkp.CURRENT}</td>
+    <!-- END multidkp -->
+    <!-- ELSE -->
+    <td width="65" nowrap="nowrap" align="right" class="positive">{members_row.EARNED}</td>
+    <td width="65" nowrap="nowrap" align="right" class="negative">{members_row.SPENT}</td>
+    <td width="90" nowrap="nowrap" align="right" class="{members_row.C_ADJUSTMENT}">{members_row.ADJUSTMENT}</td>
+    <td width="60" nowrap="nowrap" align="right" class="{members_row.C_CURRENT}">{members_row.CURRENT}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_LASTRAID -->
+    <td width="70" align="center" nowrap="nowrap" class="{members_row.C_LASTRAID}">{members_row.LASTRAID}</td>
+    <!-- ENDIF -->
+     <!-- IF SHOW_LASTLOOT -->
+    <td width="70" nowrap="nowrap">{members_row.LASTLOOT}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATTEND_30 -->
+    <td width="100" align="center" nowrap="nowrap" class="{members_row.C_RAIDS_30_DAYS}">{members_row.RAIDS_30_DAYS} % ({members_row.RAIDS_30_DAYS_C})</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATTEND_60 -->
+    <td width="100" align="center" nowrap="nowrap" class="{members_row.C_RAIDS_60_DAYS}">{members_row.RAIDS_60_DAYS} % ({members_row.RAIDS_60_DAYS_C})</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATTEND_90 -->
+    <td width="100" align="center" nowrap="nowrap" class="{members_row.C_RAIDS_90_DAYS}">{members_row.RAIDS_90_DAYS} % ({members_row.RAIDS_90_DAYS_C})</td>
+  	<!-- ENDIF -->
+   <!-- IF SHOW_ATTEND_ALL -->
+    <td width="100" align="center" nowrap="nowrap" class="{members_row.C_RAIDS_ALL}">{members_row.RAIDS_ALL} % ({members_row.RAIDS_ALL_C})</td>
+  	<!-- ENDIF -->
+
+  </tr>
+  <!-- END members_row -->
+  <tr>
+    <th colspan="{COLSPAN}" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+<center><input type="submit" name="{BUTTON_NAME}" value="{BUTTON_VALUE}" class="liteoption" /></center>
+</form>
+
+<!-- INCLUDE page_tail.html -->

@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS eqdkp_pdh_preset_aliases (`id` int(11) unsigned NOT NULL auto_increment, `alias` varchar(255) default NULL, `preset` varchar(255) default NULL, PRIMARY KEY  (`id`));
+INSERT INTO eqdkp_pdh_preset_aliases (alias, preset) VALUES('CURRENT','current');

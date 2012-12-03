@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS eqdkp_data_cache;
+CREATE TABLE IF NOT EXISTS eqdkp_data_cache (`id` int(11) unsigned NOT NULL auto_increment, `entity` varchar(32) NOT NULL default '', `date` int(11) NOT NULL default '0', `ttl` int(11) NOT NULL default '0', `data` LONGBLOB,  PRIMARY KEY  (`id`));

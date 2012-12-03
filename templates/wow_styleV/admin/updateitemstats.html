@@ -1,0 +1,115 @@
+<!-- INCLUDE page_header.html -->
+
+<script language="JavaScript" type="text/javascript">
+
+{JS_CLOSE_CODE}
+
+function UpdateItemstats(step){
+  {JS_IS_UPDATEWINDOW}
+}
+</script>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="100%" colspan="2">{UPDI_HEADER2}
+    </th>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap" width="20%">{UPDI_ITEMS}</td><td>{ITEMS} {UPDI_ITEMS_DUPLICATE}</td>
+  </tr>
+  <tr class=row2 onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+  	<td nowrap="nowrap">{UPDI_ITEMSCOUNT}</td><td>{ALL_COUNT} </td>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">{UPDI_BADITEMSCOUNT}</td><td>{BAD_COUNT} </td>
+  </tr>
+  <tr class=row2 onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+  	<td nowrap="nowrap">cUrl:</td><td>{CURL}</td>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">fopen:</td><td>{FOPEN}</td>
+  </tr>
+  <!--
+  <tr class=row2 onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+  	<td nowrap="nowrap">Debug:</td><td>{DEBUG_STATE}</td>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">Debug File:</td><td>{DEBUG_FILE}</td>
+  </tr>
+  -->
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">WebDB:</td><td>{WEB_DB_STATE}</td>
+  </tr>
+
+
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="100%" colspan="2">{UPDI_HEADER}
+    </th>
+  </tr>
+  <tr>
+  	<th width="20%">{UPDI_ACTION}</th><th>{UPDI_HELP}</th>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">
+  		<input type="button" size="20" name="add" value="Update Itemtable" class="mainoption" onclick="javascript:UpdateItemstats('items')" />
+  		</td><td>{UPDI_HELP_SHOW_ALL} <br> <a href="updateitemstats.php?show=yes">{UPDI_SHOW_ALL}</a></td>
+  </tr>
+  <tr class=row2 onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+  	<td nowrap="nowrap">
+  	<!--<a href="updateitemstats.php?delete=yes">{UPDI_REFRESH_ALL}</a>-->
+  	<input type="button"  size="20" name="add" value="Clear Cache" class="mainoption" onclick="javascript:UpdateItemstats('clear')" />
+  		<br><br>
+  	<input type="button"  size="20" name="add" value="Update all Items" class="mainoption" onclick="javascript:UpdateItemstats('all')" />
+
+  		</td><td>{UPDI_HELP_REFRESH_ALL} </td>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">
+  	<!--<a href="updateitemstats.php?refreshbad=yes">{UPDI_REFRESH_BAD}</a>-->
+  		<input type="button"  size="20" name="add" value="Update Bad Items" class="mainoption" onclick="javascript:UpdateItemstats('bad')" />
+  		</td><td>{UPDI_HELP_REFRESH_BAD} </td>
+  </tr>
+  <tr class=row2 onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+  	<td nowrap="nowrap">
+  	<!--<a href="updateitemstats.php?raidbanker=yes">{UPDI_REFRESH_RAIDBANK}</a>-->
+  		<input type="button"  size="20" name="add" value="Update Raidbank Items" class="mainoption" onclick="javascript:UpdateItemstats('bank')" /> </td><td>{UPDI_HELP_REFRESH_RAIDBANK} </td>
+  </tr>
+  <tr class=row1 onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+  	<td nowrap="nowrap">
+  	<!--<a href="updateitemstats.php?tradeskill=yes">{UPDI_REFRESH_TRADESKILL}</a>-->
+  		<input type="button"  size="20" name="add" value="Update Tradeskill" class="mainoption" onclick="javascript:UpdateItemstats('trade')" />
+  		 </td><td>{UPDI_HELP_REFRESH_TRADESKILL} </td>
+  </tr>
+
+  </tr>
+
+
+  <tr>
+    <th colspan="2" class="footer">{LISTITEMS_FOOTCOUNT} </th>
+  </tr>
+</table>
+<br>
+
+
+<!-- IF SHOW -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+	<tr>
+    <th align="center" width="100%" colspan="2">Items
+    </th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+    <td align=center width="65%">{items_row.NAME}</a></td>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="5" class="footer">{FOOTCOUNT}</th>
+  </tr>
+</table>
+<!-- ENDIF -->
+
+<!-- INCLUDE page_tail.html -->

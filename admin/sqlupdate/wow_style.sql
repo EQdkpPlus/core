@@ -1,0 +1,5 @@
+#WOW
+DELETE FROM eqdkp_styles where style_id=14;
+DELETE FROM eqdkp_style_config where style_id=14;
+INSERT INTO eqdkp_styles (style_id, style_name, template_path, body_background, body_link, body_link_style, body_hlink, body_hlink_style, header_link, header_link_style, header_hlink, header_hlink_style, tr_color1, tr_color2, th_color1, fontface1, fontface2, fontface3, fontsize1, fontsize2, fontsize3, fontcolor1, fontcolor2, fontcolor3, fontcolor_neg, fontcolor_pos, table_border_width, table_border_color, table_border_style, input_color, input_border_width, input_border_color, input_border_style) VALUES (14, 'wow_style', 'wow_style', '000000', '003366', 'underline', 'C60000', 'underline', 'CBA300', 'underline', 'C60000', 'underline', 'F2F2F2', 'FAFAFA', '', 'Verdana, Tahoma, Arial', 'Verdana, Tahoma, Arial', 'Verdana, Tahoma, Arial', 10, 11, 12, '003366', 'CBA300', '003366', 'F80000', '008800', 1, '000000', 'solid', 'D1D1D1', 1, '000000', 'solid');
+INSERT INTO eqdkp_style_config (style_id, attendees_columns, logo_path) VALUES (14, '6', '/logo/logo_wow.gif');
