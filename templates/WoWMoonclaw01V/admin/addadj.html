@@ -1,0 +1,38 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if (document.post.adjustment_value.value.length < 1)
+    {
+        alert('{MSG_VALUE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+//-->
+</script>
+<form method="post" action="{F_ADD_ADJUSTMENT}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_ADJUSTMENT}" value="{ADJUSTMENT_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="100%">{L_ADD_ADJ_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="100%" align="center" class="row1">
+    <br />{L_ADJUSTMENT_VALUE}: <input type="text" name="adjustment_value" size="6" maxlength="10" value="{ADJUSTMENT}" class="input" />
+    <br /><span class="small">{L_ADJUSTMENT_VALUE_NOTE}</span><br />{FV_ADJUSTMENT}&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_ADJUSTMENT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_ADJUSTMENT}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_ADJUSTMENT}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
