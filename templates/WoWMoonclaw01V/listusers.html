@@ -1,0 +1,23 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_LISTUSERS}" name="post">
+<div id="inner_wrapper">	
+		<div class="member_wrapper">
+
+		<!-- IF SENDTO -->	 
+			<span class="maintitle">{F_NOTICE_IMG} </span> {F_NOTICE}
+		<!-- ELSE -->
+			<!-- BEGIN row_users -->
+				<div class="floatR right">{row_users.USER_MAIL} {row_users.USER_ICQ} {row_users.USER_SKYPE} {row_users.USER_MSN} {row_users.USER_IRC}    </div> 	
+				{row_users.USER_CHECKBOX} {row_users.USER_FLAG} <b>{row_users.USER_NAME}</b> {row_users.USER_NAMES}  {row_users.USER_PHONE} {row_users.USER_CELLPHONE} 
+				<hr class="roster_hr_member">
+			<!-- END row_users -->
+			<br><br>		
+			<b>{F_SMS_HEADER}  {F_ACC_INFO} </b><br>{F_TEXTAREA} 			
+			<br><br>{F_SUBMIT}<br><br>{F_SMS_INFO}{F_SEND_INFO}		 				
+		<!-- ENDIF -->
+
+		</div>		
+		
+</div>
+</form>
+<!-- INCLUDE page_tail.html -->

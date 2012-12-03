@@ -1,0 +1,74 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if ((document.post.multidkp_name.value.length < 2))
+    {
+        alert('{L_MULTI_REQUIRED_NAME}');
+        return false;
+    }
+
+    if ((document.post.multidkp_disc.value.length < 2))
+    {
+        alert('{L_MULTI_REQUIRED_DISC}');
+        return false;
+    }
+    
+   
+    if(document.getElementById("event_select").value==0)
+    {	
+  			alert('{L_MULTI_REQUIRED_EVENT}');
+        return false;
+    }
+    return true;
+}
+//-->
+</script>
+
+<form method="post" action="{F_ADD_ADJUSTMENT}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_ADJUSTMENT}" value="{ADJUSTMENT_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADD_MULTI_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="350" valign="top" rowspan="3" nowrap="nowrap" class="row1">
+    <b>{L_EVENTS}:</b><br />{L_HOLD_CTRL_NOTE}<br />
+      <select name="events[]" size="25" multiple="multiple" class="input" id="event_select">
+        <!-- BEGIN events_row -->
+        <option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
+        <!-- END events_row -->
+      </select>
+    </td>
+    
+    <td width="100%" valign="top" class="row2"><b>{L_KONTONAME}</b><br />{L_KONTONAMENOTTOLONG}<br />
+    
+    	<input type="text" name="multidkp_name" size="35" maxlength="254" value="{MULTIDKP_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+    <b>{L_DISC}</b> 
+    
+    <br /><input type="text" name="multidkp_disc" size="55" maxlength="250" value="{MULTIDKP_DISC}" class="input" />
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+      
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+	    <input type="submit" name="add" value="{L_ADD_MULTI}" class="mainoption" /> 
+	    <input type="reset"  name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+	    <input type="submit" name="update" value="{L_UPDATE_MULTI}" class="mainoption" /> 
+	    <input type="submit" name="delete" value="{L_DELETE_MULTI}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

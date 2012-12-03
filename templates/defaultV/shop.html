@@ -1,0 +1,41 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <th align="center">{CONTENT_TITLE}</th>
+  </tr>
+  <tr>
+  	<td class="row2" align="left">
+  	<table width="100%" border="0">
+  		<tr>
+  			<td>
+			{L_CHOOSE}<br><br>
+		  	<form method="get">
+		  	     <select name="id" class="input" onchange="javascript:form.submit();">
+		        <!-- BEGIN members_row -->
+		        <option value="{members_row.VALUE}"{members_row.SELECTED}>{members_row.OPTION}</option>
+		        <!-- END members_row -->
+		      	</select>
+		    </form>
+  			</td>
+  			<td>
+  			{L_SHIRT4}
+  			</td>
+
+  		</tr>
+  	</table>
+  	</td>
+  </tr>
+
+  <tr>
+    <td class="row1" align="center">
+    <br>
+    <iframe src="{SHOP_URL}" width="750" height="1200" id="shirtshop" frameborder="0">
+	    {L_ERROR_IFRAME}
+	</iframe>
+	<br>
+	<a href="{SHOP_URL}">{L_NEW_WINDOW}</a>
+
+    </td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

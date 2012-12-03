@@ -1,0 +1,284 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function pop_preview()
+{
+    selected_style = document.post.user_style.options[document.post.user_style.selectedIndex].value;
+    preview = window.open('{EQDKP_ROOT_PATH}viewnews.php{SID}&style='+selected_style,'preview','resizable=yes,toolbar=no,status=yes,height=500,width=600,screenX=50,screenY=25,left=100,top=75')
+    preview.focus();
+}
+//-->
+</script>
+<form method="post" action="{F_SETTINGS}" name="post">
+<input type="hidden" name="{URI_NAME}" value="{NAME}" />
+<input type="hidden" name="user_id[]" value="{USER_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_REGISTRATION_INFORMATION}</th>
+  </tr>
+  <tr>
+    <td class="row1" colspan="2">{L_REQUIRED_FIELD_NOTE}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">* {L_USERNAME}:</td>
+    <td width="60%" class="row1"><input type="text" name="username" size="25" maxlength="30" value="{USERNAME}" class="input" />{FV_USERNAME}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">* {L_EMAIL_ADDRESS}:</td>
+    <td width="60%" class="row1"><input type="text" name="user_email" size="30" maxlength="100" value="{USER_EMAIL}" class="input" />{FV_USER_EMAIL}</td>
+  </tr>
+  <!-- IF S_CURRENT_PASSWORD -->
+  <tr>
+    <td width="40%" class="row2">* {L_CURRENT_PASSWORD}:<br /><span class="small">{L_CURRENT_PASSWORD_NOTE}</span></td>
+    <td width="60%" class="row1"><input type="password" name="user_password" size="25" maxlength="100" value="" class="input" />{FV_PASSWORD}</td>
+  </tr>
+  <!-- ENDIF -->
+  <!-- IF S_NEW_PASSWORD -->
+  <tr>
+    <td width="40%" class="row2">{L_NEW_PASSWORD}:<br /><span class="small">{L_NEW_PASSWORD_NOTE}</span></td>
+    <td width="60%" class="row1"><input type="password" name="new_user_password1" size="25" maxlength="100" value="" class="input" />{FV_NEW_PASSWORD}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_CONFIRM_PASSWORD}:<br /><span class="small">{L_CONFIRM_PASSWORD_NOTE}</span></td>
+    <td width="60%" class="row1"><input type="password" name="new_user_password2" size="25" maxlength="100" value="" class="input" /></td>
+  </tr>
+  <!-- ELSE -->
+  <tr>
+    <td width="40%" class="row2">* {L_PASSWORD}:</td>
+    <td width="60%" class="row1"><input type="password" name="user_password1" size="25" maxlength="100" value="" class="input" />{FV_USER_PASSWORD}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">* {L_CONFIRM_PASSWORD}:</td>
+    <td width="60%" class="row1"><input type="password" name="user_password2" size="25" maxlength="100" value="" class="input" /></td>
+  </tr>
+  <!-- ENDIF -->
+</table>
+<br />
+
+<!-- add userinfos -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADDINFOS}</th>
+  </tr>
+
+  <tr>
+    <td class="row1" colspan="2">{L_REQUIRED_FIELD_NOTE}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">* {L_ADDUSER_FIRST_NAME}:</td>
+    <td width="60%" class="row1"><input type="text" name="first_name" size="25" maxlength="100" value="{FIRST_NAME}" class="input" /> {FV_FIRST_NAME} </td>
+  </tr>  
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_LAST_NAME}:</td>
+    <td width="60%" class="row1"><input type="text" name="last_name" size="25" maxlength="30" value="{LAST_NAME}" class="input" />{}</td>
+  </tr>
+  
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_GENDER}:</td>
+    <td width="60%" class="row1"> 
+    	<select name="gender" class="input">
+        <!-- BEGIN gender_row -->
+        <option value="{gender_row.VALUE}"{gender_row.SELECTED}>{gender_row.OPTION}</option>
+        <!-- END gender_row -->
+      </select>
+      {FV_GENDER}	
+    </td>
+  </tr>   
+  <tr>
+    <td width="40%" class="row2">* {L_ADDUSER_COUNTRY}:</td>
+    <td width="60%" class="row1">
+        	<select name="country" class="input">
+        <!-- BEGIN country_row -->
+        <option value="{country_row.VALUE}"{country_row.SELECTED}>{country_row.OPTION}</option>
+        <!-- END country_row -->
+      </select>
+      {FV_COUNTRY}	
+    </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_TOWN}:</td>
+    <td width="60%" class="row1"><input type="text" name="town" size="30" maxlength="100" value="{TOWN}" class="input" />{}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_STATE}:</td>
+    <td width="60%" class="row1"><input type="text" name="state" size="25" maxlength="100" value="{STATE}" class="input" />{}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_ZIP_CODE}:</td>
+    <td width="60%" class="row1"><input type="text" name="ZIP_code" size="25" maxlength="100" value="{ZIP_CODE}" class="input" />{}</td>
+  </tr>  
+  <!-- IF IS_USER -->
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_PHONE}:<br /><span class="small">{L_ADDUSER_FONEINFO}</span></td>
+    <td width="60%" class="row1"><input type="text" name="phone" size="25" maxlength="100" value="{PHONE}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_CELLPHONE}:<br><span class="small">{L_ADDUSER_FONEINFO}</span> </td>
+    <td width="60%" class="row1"><input type="text" name="cellphone" size="25" maxlength="100" value="{CELLPHONE}" class="input" />{}</td>
+  </tr>
+   <!-- ENDIF -->
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_ADDRESS}:</td>
+    <td width="60%" class="row1"><input type="text" name="address" size="25" maxlength="100" value="{ADDRESS}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_ALLVATAR_NICK}:</td>
+    <td width="60%" class="row1"><input type="text" name="allvatar_nick" size="25" maxlength="100" value="{ALLVATAR_NICK}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_ICQ}:</td>
+    <td width="60%" class="row1"><input type="text" name="icq" size="25" maxlength="100" value="{ICQ}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_SKYPE}:</td>
+    <td width="60%" class="row1"><input type="text" name="skype" size="25" maxlength="100" value="{SKYPE}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_MSN}:</td>
+    <td width="60%" class="row1"><input type="text" name="msn" size="25" maxlength="100" value="{MSN}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_IRQ}:</td>
+    <td width="60%" class="row1"><input type="text" name="irq" size="25" maxlength="100" value="{IRQ}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADDUSER_BIRTHDAY}:</td>
+    <td width="60%" class="row1">{BIRTHDAY}</td>
+  </tr>
+ <!-- IF IS_USER -->
+  <tr>
+    <th align="center" colspan="2">{L_USER_PRIV}</th>
+  </tr>  
+  <tr>
+    <td width="40%" class="row2">{L_USER_PRIV_SET_GLOBAL}:</td>
+    <td width="60%" class="row1"> 
+        <select name="priv_set" class="input">
+        	<!-- BEGIN priv_row -->
+        		<option value="{priv_row.VALUE}"{priv_row.SELECTED}>{priv_row.OPTION}</option>
+        	<!-- END priv_row -->
+      </select>    
+    </td>
+  </tr>    
+<tr>
+    <td width="40%" class="row2">{L_USER_PRIV_TEL_ALL}:</td>
+    <td width="60%" class="row1"> <input type="checkbox" name="priv_tel_all" value="1" class="input" {PRIV_TEL_ALL} /></td>
+</tr>  
+<tr>
+    <td width="40%" class="row2">{L_USER_PRIV_TEL_CRIPT}:</td>
+    <td width="60%" class="row1"> <input type="checkbox" name="priv_tel_cript" value="1" class="input" {PRIV_TEL_CRIPT} /></td>
+</tr>  
+<tr>
+    <td width="40%" class="row2">{L_USER_PRIV_TEL_SMS}:</td>
+    <td width="60%" class="row1"> <input type="checkbox" name="priv_nosms" value="1" class="input" {PRIV_NOSMS}/></td>
+  </tr>  
+   <!-- ENDIF -->  
+</table>
+<br />      
+           
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_PREFERENCES}</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ADJUSTMENTS_PER_PAGE}:</td>
+    <td width="60%" class="row1"><input type="text" name="user_alimit" size="5" maxlength="255" value="{USER_ALIMIT}" class="input" />{FV_USER_ALIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_EVENTS_PER_PAGE}:</td>
+    <td width="60%" class="row1"><input type="text" name="user_elimit" size="5" maxlength="255" value="{USER_ELIMIT}" class="input" />{FV_USER_ELIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ITEMS_PER_PAGE}:</td>
+    <td width="60%" class="row1"><input type="text" name="user_ilimit" size="5" maxlength="255" value="{USER_ILIMIT}" class="input" />{FV_USER_ILIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_NEWS_PER_PAGE}:</td>
+    <td width="60%" class="row1"><input type="text" name="user_nlimit" size="5" maxlength="255" value="{USER_NLIMIT}" class="input" />{FV_USER_NLIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_RAIDS_PER_PAGE}:</td>
+    <td width="60%" class="row1"><input type="text" name="user_rlimit" size="5" maxlength="255" value="{USER_RLIMIT}" class="input" />{FV_USER_RLIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_LANGUAGE}:</td>
+    <td width="60%" class="row1">
+      <select name="user_lang" class="input">
+        <!-- BEGIN lang_row -->
+        <option value="{lang_row.VALUE}"{lang_row.SELECTED}>{lang_row.OPTION}</option>
+        <!-- END lang_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_STYLE}:</td>
+    <td width="60%" class="row1">
+      <select name="user_style" class="input">
+        <!-- BEGIN style_row -->
+        <option value="{style_row.VALUE}"{style_row.SELECTED}>{style_row.OPTION}</option>
+        <!-- END style_row -->
+      </select>
+      &nbsp;&nbsp; (<a href="javascript:pop_preview()">{L_PREVIEW}</a>)
+    </td>
+  </tr>
+  <!-- IF S_SETTING_ADMIN -->
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_PERMISSIONS}</th>
+  </tr>
+  <tr>
+    <td colspan="2" class="row1">{L_S_ADMIN_NOTE}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2">{L_ACCOUNT_ENABLED}:</td>
+    <td width="60%" class="row1"><span class="small"><input type="radio" name="user_active" value="1"{USER_ACTIVE_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="user_active" value="0"{USER_ACTIVE_NO_CHECKED} /> {L_NO}</span></td>
+  </tr>
+ <!-- BEGIN permissions_row -->
+ <tr>
+   <th width="40%" colspan="2">{permissions_row.GROUP}:</td>
+</tr>
+<tr>
+   <td width="60%" class="row2" colspan="2" >
+     <!-- BEGIN check_group -->
+     <div style="float:left"><input type="checkbox" name="{permissions_row.check_group.CBNAME}" value="Y"{permissions_row.check_group.CBCHECKED} />
+     <span class="small">{permissions_row.check_group.TEXT}</span></div>
+     <!-- END check_group -->
+   </td>
+ </tr>
+ <!-- END permissions_row --> 
+  <!-- ENDIF -->
+<!-- IF S_MU_TABLE -->
+</table>
+<br />
+
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+<th align="center" colspan="2">{L_ASSOCIATED_MEMBERS}</th>
+</tr>
+<tr>
+<td width="40%" class="row2">{L_MEMBERS}</td>
+<td width="60%" class="row1">
+<select name="member_id[]" multiple="multiple" size="10" class="input">
+<!-- BEGIN member_row -->
+<option value="{member_row.VALUE}"{member_row.SELECTED}>{member_row.OPTION}</option>
+<!-- END member_row -->
+</select>
+{FV_MEMBER_ID}
+</td>
+</tr>
+<!-- ENDIF -->
+  <tr>
+    <th colspan="2" align="center"><input type="submit" name="submit" value="{L_SUBMIT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+
+    	<!-- IF REGISTER  -->
+      <!-- ELSE -->
+      <input type="submit" name="delete" value="{L_DELETE}" class="mainoption" />
+    <!-- ENDIF -->
+
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

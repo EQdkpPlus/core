@@ -1,0 +1,58 @@
+<!-- INCLUDE page_header.html -->
+
+<!-- IF IS_MULTIDKP -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr class="rowhead">
+    <th align="center" width="150" nowrap="nowrap">{L_MULTI}</a></th>
+ </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr class="rowhead">
+    <th align="left" width="150" nowrap="nowrap">{L_NAME}</a></th>
+    <th align="left" width="250" nowrap="nowrap">{L_DISC}</th>
+    <th align="left" width="100%">{L_EVENTS}</th>
+  </tr>
+  <!-- BEGIN multi_row -->
+  <tr class="{multi_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{multi_row.ROW_CLASS}';">
+    <td width="150" nowrap="nowrap">{multi_row.U_NAME}</td>
+    <td width="250" nowrap="nowrap">{multi_row.U_DISC}</td>
+    <td width="100%">{multi_row.U_EVENTS}</td>   
+  </tr>
+  <!-- END multi_row --> 
+  <tr>
+    <th colspan="5" class="footer">{LISTMULTI_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br/>
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr class="rowhead">
+    <th align="center" width="150" nowrap="nowrap">{L_EVETNS}</a></th>
+ </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{EVENT_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="100%"><a href="{U_LIST_EVENTS}o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_EVENTS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN events_row -->
+  <tr class="{events_row.ROW_CLASS}"  onmouseover="this.className='rowHover';" onmouseout="this.className='{events_row.ROW_CLASS}';">
+    <td width="100%"><a href="{events_row.U_VIEW_EVENT}">{events_row.NAME}</a></td>
+    <td width="60" nowrap="nowrap" class="{events_row.COLOR}">{events_row.VALUE}</td>
+  </tr>
+  <!-- END events_row -->
+  <tr>
+    <th colspan="2" class="footer">{LISTEVENTS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{EVENT_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

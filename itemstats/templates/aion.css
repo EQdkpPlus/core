@@ -1,0 +1,108 @@
+.aion_tooltip {position:absolute;z-index:10;font-family:Verdana, Helvetica, Arial, sans-serif;color:#FFFFFF;font-size:11px;line-height:14px;width:400px;}
+.aion_tooltip_container {padding:0px;border:0px;width:100%;border-spacing:0px;margin:0px;}
+.aion_tooltip_border {padding:3px;background:url(./aion/tooltip.gif);}
+
+.aion_tooltip_icon
+{
+	background-repeat:no-repeat;
+	background-position:2px 2px;
+	height:44px;
+	width:44px;
+}
+.aion_tooltip_icon_border {background:url(./aion/icon_border_medium.gif);height:44px;width:44px;}
+
+.map_tooltip {position:absolute;z-index:9999;font-family:Verdana, Helvetica, Arial, sans-serif;color:#FFFFFF;font-size:11px;line-height:14px;max-width:400px;}
+.map_tooltip_container {padding:0px;border:0px;width:100%;border-spacing:0px;margin:0px;}
+.map_tooltip_border {padding:3px;background:url(./aion/tooltip.gif);}
+
+.aion_tooltip_hr {
+	border: 0px;
+	color: #362d24;
+	background-color: #645848;
+	height: 2px;
+	display: block;
+}
+.aion_itemlabel 		{ color: #EFDFA7;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_itemlabel a		{ text-decoration:none;color: #EFDFA7;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_itemlabel a:hover	{ text-decoration:underline;color: #EFDFA7;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.aion_infolabel 		{ color: #c5bfb6;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_infolabel a		{ text-decoration:none;text-decoration:none;color: #c5bfb6;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+.aion_infolabel a:hover	{ text-decoration:underline;text-decoration:none;color: #c5bfb6;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.aion_loading 			{ color: white;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.aion_skillname
+{
+	font-size: 14px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.aion_gathername
+{
+	font-size: 14px;
+	font-weight: bold;
+    color: #E1CC59;
+}
+.aion_recipename
+{
+	font-size: 14px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.aion_tooltiptitle {
+	font-size: 14px;
+	font-weight: bold;
+}
+.aion_skill {
+    color: #E1CC59;
+}
+.aion_quest {
+    color: #E1CC59;
+}
+.aion_default {
+    color: #FFFFFF;
+}
+.aion_q1 {
+	color: #ADADAD;
+}
+.aion_q2 {
+	color: #F1F1F1;
+}
+.aion_q3 {
+	color: #69E15E;
+}
+.aion_q4 {
+	color: #4CCFFF;
+}
+.aion_q5 {
+	color: #FF8033;
+}
+.aion_q6 {
+	color: #FFC103;
+}
+.aion_npcr0 {
+	color: #FFFFFF;
+}
+.aion_npcr1 {
+	color: #F5F5A5;
+}
+.aion_npcr2 {
+	color: #FADC14;
+}
+.aion_npcr3 {
+	color: #FA8214;
+}
+.aion_npcr4 {
+	color: #FF0000;
+}
+.aion_npcr5 {
+	color: #9EB5B2;
+}
+
+.aion_item_manastone {
+	background:url(./aion/manastonesocket.png) no-repeat;
+	width:19px;
+	height:19px;
+}
+.smallitemicon { width: 15px; height: 15px; }

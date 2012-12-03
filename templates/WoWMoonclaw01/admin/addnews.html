@@ -1,0 +1,79 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_ADD_NEWS}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_NEWS}" value="{NEWS_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2" >{L_ADD_NEWS}</th>
+  </tr>
+  <tr>
+    <td width="200" class="row1" nowrap="nowrap"><b>{L_HEADLINE}:</b></td>
+    <td width="100%" class="row2"><input type="text" name="news_headline" size="40" maxlength="255" value="{HEADLINE}" style="width: 450px" class="input" />{FV_HEADLINE}</td>
+  </tr>
+
+  <tr>
+    <td width="200" class="row1" nowrap="nowrap"><b>{L_MESSAGE_BODY}:</b></td>
+    <td width="100%" class="row2">
+      <table border="0" cellspacing="0" cellpadding="2" class="borderless">
+        <tr>
+          <td><span class="small">{L_VIDEO_HELP} </span></td>
+        </tr>
+        <tr><td> </td></tr>
+        <tr>
+          <td>{L_NEWS_MSG}<br>
+          {WYSIWYG_SHORT}
+          <textarea name="news_message" id="shortinput" rows="20" cols="40" style="width: 650px; height:300px;" class="jTagEditor">{MESSAGE}</textarea>{FV_MESSAGE}
+        {L_READMORE_HLP}<br/><input type="button" id="blubberblabber" value="{L_READMORE}" class="mainoption" onclick="$.markItUp({ target:'#shortinput', openWith:'[READ MORE]', closeWith:''});document.getElementById('blubberblabber').disabled = true;"/>
+        </td>
+        </tr>
+       </table>
+    </td>
+  </tr>
+
+    <tr>
+      <td width="200" class="row1" nowrap="nowrap"><b>{L_MESSAGE_SHOW_LOOT_RAID}</b></td>
+      <td width="100%" class="row2">
+
+         <select name="raid_id[]" size="10" multiple="multiple" class="input">
+	          <option value=""></option>
+	          <!-- BEGIN raids_row -->
+	          <option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
+	          <!-- END raids_row -->
+    </select>
+
+      </td>
+  </tr>
+  <tr>
+      <td width="200" class="row1" nowrap="nowrap"><b>{L_NEWS_NOCOMMENTS}</b></td>
+      <td width="100%" class="row2"><input type="checkbox" name="nocomments" value="1" {NOCOMMENTS_CHECKED}> </td>
+  </tr>
+  <tr>
+      <td width="200" class="row1" nowrap="nowrap"><b>{L_PERMISSIONS}</b></td>
+      <td width="100%" class="row2">{L_PERMISSIONS_HELP}<br>
+
+      <input type="radio" name="news_permissions" value="0" {PERM0CHECKED}> {L_PERMISSIONS_ALL} <br>
+      <input type="radio" name="news_permissions" value="1" {PERM1CHECKED}> {L_PERMISSIONS_GUEST} <br>
+      <input type="radio" name="news_permissions" value="2" {PERM2CHECKED}> {L_PERMISSIONS_MEMBER} <br>
+      </td>
+  </tr>
+  <tr>
+      <td width="200" class="row1" nowrap="nowrap"><b>{L_STICKY_NEWS}</b></td>
+      <td width="100%" class="row2"><input type="checkbox" name="news_flags" value="1" {STICKY_CHECKED}> </td>
+  </tr>
+  <!-- IF S_UPDATE -->
+  <tr>
+    <td width="200" class="row1" nowrap="nowrap"><b>{L_UPDATE_DATE_TO}</b></td>
+    <td width="100%" class="row2"><input type="checkbox" name="update_date" value="1" /></td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_NEWS}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_NEWS}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_NEWS}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
