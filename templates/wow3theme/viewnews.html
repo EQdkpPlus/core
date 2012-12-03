@@ -1,0 +1,31 @@
+<!-- INCLUDE page_header.html -->
+<table width="90%" cellspacing="0" cellpadding="0" class="outline" align="center">
+  <!-- BEGIN date_row -->
+  <tr>
+    <th class="with_image">{date_row.DATE}</th>
+  </tr>
+  <!-- BEGIN news_row -->
+  <tr>
+    <td class="newsnav">
+		{date_row.news_row.HEADLINE} 
+		{date_row.DATE} - {date_row.news_row.SUBMITTER}
+		<font class="name">{date_row.news_row.AUTHOR}</font>
+		{date_row.news_row.SUBMITAT}
+		{date_row.news_row.TIME})
+    </td>
+  </tr>
+  <tr>
+  	<td class="newsmessage">
+	{date_row.news_row.MESSAGE}
+	</td>
+  </tr>
+  <tr>
+  	<td class="spacerow"></td>
+  </tr>
+  <!-- END news_row -->
+  <!-- END date_row -->
+  <tr>
+    <th class="pageingnav">{NEWS_PAGINATION}</th>
+ </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

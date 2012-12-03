@@ -1,0 +1,104 @@
+<!-- INCLUDE page_header.html -->
+
+<form method="post" action="{F_PARSE_LOG}" name="post">
+<!-- IF S_STEP1 -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	  <tr>
+	    <th align="center" width="100%">{L_PASTE_LOG}</th>
+	  </tr>
+	  <tr>
+	    <td width="100%" align="center" class="row2">&nbsp;<br /><textarea name="log" rows="20" cols="60" id="log" style="width: 100%" class="input"></textarea><br />&nbsp;</td>
+	  </tr>
+	  <tr>
+	    <th align="center"><input type="submit" name="parse" value="{L_PARSE_LOG}" class="mainoption" /></th>
+	  </tr>
+	</table>
+<!-- ELSE -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	  <tr>
+	    <th align="center" colspan="2">{L_FOUND_RAIDS}</th>
+	  </tr>
+	</table>
+	<!-- BEGIN allplayers_row -->
+		<input type="hidden" name="allplayers[{allplayers_row.ALLPLAYERNAME}][race]" value="{allplayers_row.ALLPLAYERRACE}">
+		<input type="hidden" name="allplayers[{allplayers_row.ALLPLAYERNAME}][class]" value="{allplayers_row.ALLPLAYERCLASS}">
+		<input type="hidden" name="allplayers[{allplayers_row.ALLPLAYERNAME}][level]" value="{allplayers_row.ALLPLAYERLEVEL}">
+	<!-- END allplayers_row -->
+	  <!-- BEGIN events_row -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<input type="hidden" name="events[]" value="{events_row.HEVENT}">
+		<tr class="row1">
+			<td align="left" valign="top" width="150">Event:</td>
+			<td align="left" valign="top"><input type="text" name="newevents[{events_row.HEVENT}]" size="50" value="{events_row.STRIPPEDHEVENT}" class="input"></td>
+		</tr>
+	</table>
+	<br />
+		<!-- BEGIN raids_row -->
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+			<tr>
+		    <th align="center" colspan="2">{L_RAIDS_DROPS_DETAILS}</th>
+		  </tr>
+			<input type="hidden" name="raids[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}]" value="{events_row.raids_row.HRAIDTIME}">
+  		<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top" width="150">Raid Note:</td>
+				<td align="left" valign="top"><input type="text" name="newraidnotes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}]" size="50" value="{events_row.raids_row.STRIPPEDHRAIDNOTE}" class="input"></td>
+			</tr>
+			<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top" width="150">DKP Value:</td>
+				<td align="left" valign="top"><input type="text" name="raiddkpvalues[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}]" size="50" value="{events_row.raids_row.RAIDDKPVALUE}" class="input"><input type="checkbox" name="addlootdkpvalues[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}]" value="1"<!-- IF S_ADDLOOTDKPVALUES --> checked<!-- ENDIF -->>{L_DKP_VALUE_TIP}</td>
+			</tr>
+			<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top" width="150">Raid Time:</td>
+				<td align="left" valign="top">
+					<input type="text" name="raidtimes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][mo]" size="3" maxlength="2" value="{events_row.raids_row.HRAIDTIME_MO}" class="input">
+		      /<input type="text" name="raidtimes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][d]" size="3" maxlength="2" value="{events_row.raids_row.HRAIDTIME_D}" class="input">
+		      /<input type="text" name="raidtimes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][y]" size="5" maxlength="4" value="{events_row.raids_row.HRAIDTIME_Y}" class="input">
+		      &nbsp;<input type="text" name="raidtimes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][h]" size="3" maxlength="2" value="{events_row.raids_row.HRAIDTIME_H}" class="input">
+		      :<input type="text" name="raidtimes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][mi]" size="3" maxlength="2" value="{events_row.raids_row.HRAIDTIME_MI}" class="input">
+		      :<input type="text" name="raidtimes[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][s]" size="3" maxlength="2" value="{events_row.raids_row.HRAIDTIME_S}" class="input">
+				</td>
+			</tr>
+			
+			
+			<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top">Attendees ({events_row.raids_row.ATTENDEESCOUNT}):</td>
+				<td align="left" valign="top"><textarea name="newraidattendees[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}]" rows="20" cols="20" class="input">{events_row.raids_row.ATTENDEES}</textarea></td>
+			</tr>
+			<!-- BEGIN loot_row -->
+			<tr class="{events_row.raids_row.ROW_CLASS}">	
+				<td height="30" colspan="2"></td>
+			</tr>
+			<tr class="{events_row.raids_row.ROW_CLASS}">	
+				<td align="left" valign="top">Item Name:</td>
+				<td align="left" valign="top"><input type="text" name="loots[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][{events_row.raids_row.loot_row.HNR}][name]" size="50" value="{events_row.raids_row.loot_row.HNAME}" class="input"></td>
+			</tr>
+			<!--
+			<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top">Item ID:</td>
+				<td align="left" valign="top"><input type="text" name="loots[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][{events_row.raids_row.loot_row.HNR}][id]" size="50" value="{events_row.raids_row.loot_row.HID}" class="input"></td>
+			</tr>
+			-->
+			<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top">Looter:</td>
+				<td align="left" valign="top"><input type="text" name="loots[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][{events_row.raids_row.loot_row.HNR}][looter]" size="50" value="{events_row.raids_row.loot_row.HLOOTER}" class="input"></td>
+			</tr>
+			<tr class="{events_row.raids_row.ROW_CLASS}">
+				<td align="left" valign="top">DKP Value:</td>
+				<td align="left" valign="top"><input type="text" name="loots[{events_row.HEVENT}][{events_row.raids_row.HRAIDNOTE}][{events_row.raids_row.loot_row.HNR}][dkp]" size="50" value="{events_row.raids_row.loot_row.HDKP}" class="input"></td>
+			</tr>
+			<!-- END loot_row -->
+			<br />
+		</table>
+		<!-- END raids_row -->
+		<br />
+		<br />
+  <!-- END events_row -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="insertraids" value="{L_RAIDS_INSERT}" class="mainoption"/></th>
+  </tr>
+</table>
+<!-- ENDIF -->
+
+</form>
+<!-- INCLUDE page_tail.html -->

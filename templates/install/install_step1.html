@@ -1,0 +1,73 @@
+<!-- INCLUDE install_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="3">EQdkp</th>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap">EQDKP Version:</td>
+    <td width="50%" class="row1">EQDKP 1.3.1</td>
+    <td width="50%" class="row2">Latest: {THEIR_EQDKP_VERSION}</td>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap">EQDKP Plus Version:</td>
+    <td width="50%" class="row1">EQDKP Plus (WoW-Mod) v0.4</td>
+    <td width="50%" class="row2">Latest stable: 0.3 Final</td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="3">PHP</th>
+  </tr>
+  <tr>
+    <td colspan="3" class="row2"><a href="install.php?mode=phpinfo">View phpinfo()</a></td>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap">Version:</td>
+    <td width="50%" class="row1">Using: {OUR_PHP_VERSION}</td>
+    <td width="50%" class="row2">Required: {THEIR_PHP_VERSION}</td>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap">MySQL Module:</td>
+    <td width="50%" class="row1">Available: {OUR_MYSQL}</td>
+    <td width="50%" class="row2">Required: {THEIR_MYSQL}</td>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap">zLib Module:</td>
+    <td width="50%" class="row1">Available: {OUR_ZLIB}</td>
+    <td width="50%" class="row2">Required: {THEIR_ZLIB}</td>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap">cURL Module:</td>
+    <td width="50%" class="row1">Available: {THEIR_CURL}</td>
+    <td width="50%" class="row2">Required: YES</td>
+  </tr>
+    <tr>
+    <td width="200" class="row2" nowrap="nowrap">fopen :</td>
+    <td width="50%" class="row1">Available: {THEIR_FOPEN}</td>
+    <td width="50%" class="row2">Required: YES</td>
+  </tr>
+</table>
+<br />
+<!-- IF MSG_TEXT != '' -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left">{MSG_TITLE}</th>
+  </tr>
+  <tr>
+    <td align="left" class="row1">&nbsp;<br />{MSG_TEXT}<br />&nbsp;</td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+  </tr>
+</table>
+<br />
+<!-- ENDIF -->
+
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="install.php" name="post">
+<input type="hidden" name="install_step" value="2" />
+<div align="center"><input type="submit" name="submit" value="Start Install" class="mainoption" /></div>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE install_tail.html -->

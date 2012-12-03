@@ -1,0 +1,18 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account Aktivierung offen
+Charset: iso-8859-1
+
+Bitte speicher eine Kopie dieser Mail für Deine Unterlagen.  Du hast folgende
+Accountdaten:
+
+Benutzername: {USERNAME}
+Passwort: {PASSWORD}
+
+Dein Account ist z.Zt. inaktiv.  Der Administrator muß ihn aktivieren, bevor
+Du Dich einloggen kannst.  Über die Aktivierung wirst Du in einer weiteren
+Mail benachrichtigt.
+
+Dein Passwort wurde verschlüsselt in unserer Datenbank gespeichert und kann
+von keinem eingesehen werden.  Wenn Du Dein Passwort vergißt, musst Du ein
+neues anfordern, was auf gleiche Weise aktiviert werden muß.
+
+Danke für Deine Registrierung.

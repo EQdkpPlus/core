@@ -1,0 +1,23 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="outline">
+  <tr class="row4">
+    <th align="left" width="100%"><a href="{U_LIST_EVENTS}o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="60" nowrap="nowrap" ><a href="{U_LIST_EVENTS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN events_row -->
+  <tr class="{events_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{events_row.ROW_CLASS}';">
+    <td width="100%"><a href="{events_row.U_VIEW_EVENT}">{events_row.NAME}</a></td>
+    <td width="60" nowrap="nowrap" class="positive">{events_row.VALUE}</td>
+  </tr>
+  <!-- END events_row -->
+  <tr>
+    <th colspan="2" class="with_image">{LISTEVENTS_FOOTCOUNT}</th>
+  </tr>
+  <tr>
+    <th colspan="2" align="center" class="pageingnav">{EVENT_PAGINATION}</td>
+  </tr>
+  <tr>
+  	<td colspan="2" class="spacerow">
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

@@ -1,0 +1,745 @@
+/* Based on the original Style Sheet for the fisubsilver v2 Theme for phpBB version 2+
+Edited by Daz  - http://www.forumimages.com - last updated 26-06-03 */
+
+/* The content of the posts (body of text) */
+body
+	{
+	background:#000000;
+	color:#FFFFFF;
+	font:12px Verdana,Arial,Helvetica,sans-serif;
+	margin:0px;
+	padding:0;
+	scrollbar-face-color: #202020;
+	scrollbar-highlight-color: #606060;
+	scrollbar-shadow-color: #303030;
+	scrollbar-3dlight-color: #202020;
+	scrollbar-arrow-color:  #FFAC04;
+	scrollbar-track-color: #000000;
+	scrollbar-darkshadow-color: #202020;
+}
+
+/* General font families for common tags */
+font,th,td,p{font:12px Verdana,Arial,Helvetica,sans-serif}
+
+/* General text */
+.gensmall{font-size:10px}
+td.genmed,.genmed{font-size:11px}
+.explaintitle{font-size:11px;font-weight:bold;color:#FFAC04}
+
+/* General page style */
+
+a:hover{color:#00C0FF}
+
+a.link2{color:#DEEEF3}
+a.link2:visited{color:#DEEEF3}
+
+/* titles for the topics:could specify viewed link colour too */
+.topictitle{font-size:11px;font-weight:bold}
+a.topictitle:visited{color:#FFAC04}
+a.topictitle:hover{color:#00C0FF}
+
+/* titles for the topics:could specify viewed link colour too */
+td.cathead
+	{
+	font-weight:bold;
+	letter-spacing:1px;
+	background:#212121 url(../images/cellpic1.gif);
+	height:29px;
+	text-indent:4px;
+	}
+
+/* Name of poster in viewmsg.php and viewtopic.php and other places */
+.name{font-size:11px;font-weight: bold}
+
+hr
+	{
+	border: 1px inset #252525;
+	}
+
+/* Category gradients*/
+td.cat,td.catBottom
+	{
+	font-weight:bold;
+	letter-spacing:1px;
+	background:#1E1E1E url(../images/cellpic1.gif);
+	height:22px;
+	text-indent:4px;
+	}
+
+/* Main table cell colours and backgrounds */
+
+.newsmessage
+{
+	background:#161616;
+	padding:10px;
+}
+
+.row6
+	{
+	background: #000000 url(../images/rowpic6.gif) repeat-x;
+	height: 23px;
+	}
+
+
+/* This is for the table cell above the Topics,Post & Last posts on the index.php */
+td.rowpic
+	{
+	background:url(../images/cellpic1.gif) #000000 repeat-x;
+	height: 22px;
+	}
+/* Table Header cells */
+
+th
+{
+   color:#FFAC04;
+	font-size:11px;
+	font-weight:bold;
+	height:25px;
+	white-space:nowrap;
+	text-align:center;
+	padding-left:8px;
+	padding-right:8px;
+}
+.view_bg
+	{
+	background: url(../images/view_bg.gif) repeat-x;
+	}
+
+/* This is the border line & background colour round the entire page */
+.bodyline
+	{
+	background: url(../images/alliance-tile.jpg) repeat-x;
+	border:0px solid #000000;
+	}
+
+/* This is the outline round the main tables */
+
+
+/* The largest text used in the index page title and toptic title etc. */
+.maintitle,h1
+	{
+	font:bold 20px/120% "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+	text-decoration:none;
+	color:#FFAC04;
+	}
+
+.subtitle,h2
+	{
+	font:bold 18px/180% "Trebuchet MS",Verdana,Arial,Helvetica,sans-serif;
+	text-decoration:none;
+	}
+
+/* Used for the navigation text,(Page 1,2,3 etc) and the navigation bar when in a forum */
+.nav
+	{
+	font-size:11px;
+	font-weight:bold;
+	}
+	
+.postbody
+	{
+	font-size:12px;line-height:125%;
+	}
+
+/* Location,number of posts,post date etc */
+.postdetails{font-size:10px;color:#FFAC04}
+
+/* Quote blocks */
+.quote
+	{
+	background:#212121;
+	border:1px solid #000000;
+	font-size:11px;
+	line-height:125%
+	}
+	
+.quotediv
+	{
+	background:#000000;
+	border: 1px solid #000000;
+	border-top:0; 
+	padding:5px;
+	overflow:auto;
+	width:90%;
+	text-align:left
+	}
+
+/* Code blocks */
+.code
+	{
+	background:#212121;
+	border:1px solid #000000;
+	color:#006600;
+	font:12px Courier,"Courier New",sans-serif;
+	padding:5px;
+	}
+
+/* This is for the error messages that pop up */
+.errorline{background:#000000;border:1px solid #FFAC04}
+
+/* Form elements */
+form{display:inline}
+
+input
+	{
+	font:11px Verdana,Arial,Helvetica,sans-serif;
+	}
+
+select	{
+	color:#FFFFFF;
+	background:#161616;
+	font:11px Verdana,Arial,Helvetica,sans-serif
+	}
+
+input.post,textarea.post
+	{
+	color:#FFFFFF;
+	background: #202020;
+	border : 1px inset #606060;
+	font:11px Verdana,Arial,Helvetica,sans-serif;
+	padding-bottom:2px;
+	padding-left:2px
+	}
+
+input.button,input.liteoption,.fakebut
+	{
+	color: #F7E802;
+	border: 1px outset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+}
+	
+input.button:hover,input.liteoption:hover
+	{
+	color:#FFFFFF;
+	border: 1px inset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+	}	
+	
+	
+input.catbutton
+	{
+	color:#FFAC04;
+	border:1px solid #343434;
+	background:#202020;
+	font-size:10px;
+	}
+	
+input.catbutton:hover
+	{
+	color:#FFFFFF;
+	border:1px inset #FFFFFF;
+	background:#161616;
+	font-size:10px
+	}
+	
+.mainoption	
+	{
+	color:#F7E802;
+	border:1px outset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+	}
+	
+input.mainoption
+	{
+	color: #F7E802;
+	border:1px outset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+}
+
+input.mainoption:hover
+	{
+	color:#FFFFFF;
+	border: 1px inset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+}
+
+a.but,a.but:visited
+	{
+	color:#FFFFFF;
+	text-decoration:none
+	}
+
+a.but:hover
+	{
+	color:#FFFFFF;
+	text-decoration:none
+	}
+
+/* This is the line in the posting page which shows the rollover
+help line. Colour value in row2 */
+.helpline
+	{
+	color:#FFAC04;
+	background:#000000;
+	border:0 solid;
+	font-size:10px
+	}
+
+
+/* This is the gradient background at the top of the page */
+.topnav{font-size:10px;background: #e5ebf3 url(../images/cellpic_nav.gif) repeat-x;color:#00C0FF;
+height:21px;white-space:nowrap;border: 0px solid #91a0ae;border-width: 1px 0px 1px 0px}
+
+/* Admin & Moderator Colours MODification */
+.admin,.mod{font-size:11px;font-weight:bold}
+.admin,a.admin,a.admin:visited{color:#FFAC04}
+.mod,a.mod,a.mod:visited{color:#006600}
+a.admin:hover,a.mod:hover{color:#00C0FF}
+
+/* Specify the space around images */
+.imgtopic,.imgicon{margin-left:3px}
+.imgspace{margin-left:1px;margin-right:2px}
+.imgfolder{margin:1px 4px 1px 4px}
+
+/* Gets rid of the need for border="0" on hyperlinked images */
+img{border:0 solid}
+
+
+/* Code blocks */ 
+.codetitle{background: #cdd6de;border:1px solid #9ca9b4;padding:5px;width:90%;font-weight:bold; text-align:left; 
+margin-top:10px} 
+.codediv{background:#fafafa;border: 1px solid #9ca9b4;color:#006600;border-top:0; 
+font:12px Courier,"Courier New",sans-serif;padding:5px;overflow:auto;width:90%;height:50px;text-align:left}
+
+/* FI Colour Palette MOD - START */
+.colouter,.col{border:1px solid #000;margin-left:10px}
+.colouter{border-right-width:0;cursor:pointer}
+.col{margin:0;padding:0 0 0 7px;display:inline;border-width:1px 1px 0 0;font-size:7px}
+/* FI Colour Palette MOD - END */
+
+abbr, acronym {
+	border-bottom: 1px dotted #333;
+	cursor: help;
+}
+
+.tab_links, a.tab_links:hover, a.tab_links:link, a.tab_links:active, a.tab_links:visited { 
+	font-size: 11px;
+	color: #FFAC04; 
+	text-decoration: none;
+}
+
+a.tab_links:hover { 
+	text-decoration: underline;
+}
+
+.tab_headers, th.tab_headers {
+	color: #FFAC04; 
+	font-size: 11px; 
+	font-weight : bold;
+	padding-left: 4px;
+	padding-right: 8px;
+	border: #FFAC04; 
+	border-style: solid; 
+	border-width: 1px 1px 0px 1px;
+	background-color: #FFAC04;
+}
+
+.tab_border	{ background-color: #E5E5E5; border: 0px;}
+
+.filler, th.filler {
+	background-color:#E5E5E5; 
+	background-image:none;
+}
+
+.header_background
+	{
+	font-size:10px;
+	color:#00C0FF;
+	background: #000000 url(../images/full_header_background.gif) repeat-x;
+	height: 95px;
+	}
+.half_header_background
+	{
+	color:#00C0FF;
+	background: #000000 url(../images/half_header_background.gif) repeat-x;
+	height: 73px;
+	}	
+.nav_background
+	{
+	font-size:10px;
+	background: #000000 url(../images/nav_background.gif) repeat-x;
+	color:#00C0FF;
+	height:33px;
+	text-align:left;
+	white-space:nowrap;
+	border: 0px solid #91a0ae;
+	border-width: 0px 0px 0px 0px;
+	}
+
+
+.header_qlinks
+	{
+	background: #000000 url(../images/qlinks_background.gif) repeat-x;
+	font-size: 9px;
+	v-align: top;
+	}
+
+
+
+
+input.lsub1 { 
+background-image: url(../images/menu-search.gif);	
+background-repeat: repeat-x;	
+height: 33px;	
+width: 74px;
+border: 0px; 
+cursor: default;
+}
+
+
+
+input.log { 
+background: #081310;	
+border: 1px inset #60A874; 
+font: 9px  Verdana, Arial, Helvetica, sans-serif,; 
+line-height: 11px; 
+padding-right: 4px;
+color:#50BEA0;
+}	
+
+.doiley { 
+background: #0B0B0B url(../images/doiley.gif) no-repeat right -4px; 
+padding:5px 20px 0px 10px; 
+background-color: TRANSPARENT; 
+}
+
+
+.border_bot_center
+	{
+	background: #000000 url(../images/border_bot_center.gif) repeat-x;
+	color : #505050; 
+	font: bold 9px  Verdana, Arial, Helvetica, sans-serif,; 
+	line-height: 11px; 
+	}
+	
+.border_side_left
+	{
+	background: #000000 url(../images/border_side_left.gif) repeat-y;
+	width: 45px;
+	}
+.border_side_right
+	{
+	background: #000000 url(../images/border_side_right.gif) repeat-y;
+	width: 45px;
+	}
+	
+.border_top_right
+	{
+	background: #000000 url(../images/border_top_right.gif) no-repeat;
+	width: 45px;
+	}	
+.border_top_left
+	{
+	background: #000000 url(../images/border_top_left.gif) no-repeat;
+	width: 45px;
+	}	
+	
+.topper	
+	{
+	background: TRANSPARENT url(../images/search-bg.gif) repeat-x;
+	height: 34px;
+	}	
+.btopper	
+	{
+	background: TRANSPARENT url(../images/search-bbg.gif) repeat-x;
+	height: 34px;
+	}
+	
+	
+	tr.compare_settings
+{
+	background:#000000 url(../images/thcellpic.gif);
+	color:#FFAC04;
+	font-size:11px;
+	font-weight:bold;
+	height:25px;
+	white-space:nowrap;
+	text-align:center;
+	padding-left:8px;
+	padding-right:8px;
+}
+.rowHover {background-color: #3a3a3a;}
+
+/* Body */
+body
+	{
+	background:#000000;
+	color:#FFFFFF;
+	font:12px Verdana,Arial,Helvetica,sans-serif;
+	margin:0px;
+	padding:0;
+	scrollbar-face-color: #202020;
+	scrollbar-highlight-color: #606060;
+	scrollbar-shadow-color: #303030;
+	scrollbar-3dlight-color: #202020;
+	scrollbar-arrow-color:  #FFAC04;
+	scrollbar-track-color: #000000;
+	scrollbar-darkshadow-color: #202020;
+}
+/* General page style */
+a:link,a:active,a:visited,a.postlink{color:#FFAC04;text-decoration:none}
+a:hover{color:#00C0FF}
+
+a.link2{color:#DEEEF3}
+a.link2:visited{color:#DEEEF3}
+
+/* Name of the news poster*/
+.name{font-size:11px;font-weight: bold}
+
+/* General font families for common tags */
+font,th,td,p{font:12px Verdana,Arial,Helvetica,sans-serif}
+/*Hintergrund des Headers*/
+.header_background
+	{
+	font-size:10px;
+	color:#00C0FF;
+	background: #000000 url(../images/full_header_background.gif) repeat-x;
+	height: 95px;
+	}
+.half_header_background
+	{
+	color:#00C0FF;
+	background: #000000 url(../images/half_header_background.gif) repeat-x;
+	height: 73px;
+	}	
+/* Table Header cells */
+th
+	{
+	color:#FFAC04;
+	font-size:11px;
+	font-weight:bold;
+	height:25px;
+	white-space:nowrap;
+	text-align:center;
+	padding-left:8px;
+	padding-right:8px;
+	}
+	
+/*Tabellen einstellungen */
+.newsmessage
+{
+	background:#161616;
+	padding:10px;
+}
+/*Tabellen Kopf mit Hintergrund*/
+th.with_image
+	{
+	background:#000000 url(../images/thcellpic.gif);
+	}
+/* Tabel Header für das Pageing auf der News seite*/
+th.pageingnav
+{
+	background: #000000 url(../images/newsnav.gif) repeat-x;
+	color:#FFFFFF;
+	height:29px;
+	text-align:center;
+	white-space:nowrap;
+	border: 0px solid #91a0ae;
+	border-width: 0px 0px 0px 0px;
+}
+/*Linkes Seiten Image*/
+.border_side_left
+	{
+	background: #000000 url(../images/border_side_left.gif) repeat-y;
+	width: 45px;
+	}
+/*Rechtes Seiten image*/
+.border_side_right
+	{
+	background: #000000 url(../images/border_side_right.gif) repeat-y;
+	width: 45px;
+	}
+.border_bot_center
+	{
+	background: #000000 url(../images/border_bot_center.gif) repeat-x;
+	color : #505050; 
+	font: bold 9px  Verdana, Arial, Helvetica, sans-serif,; 
+	line-height: 11px; 
+	}
+/*Hintergrund Bild*/
+.bodyline
+	{
+	background: url(../images/alliance-tile.jpg) repeat-x;
+	border:0px solid #000000;
+	}
+/* This is the outline round the main tables */
+.outline
+{
+	border:1px solid #EED96D;
+}
+/*Table Row Compare*/
+tr.compare_settings
+{
+	background:#000000 url(../images/thcellpic.gif);
+	color:#FFAC04;
+	font-size:11px;
+	font-weight:bold;
+	height:25px;
+	white-space:nowrap;
+	text-align:center;
+	padding-left:8px;
+	padding-right:8px;
+}
+/*Mouseover Effect*/
+.rowHover {background-color: #3a3a3a;}
+/*Buttons*/
+input.button,input.liteoption,.fakebut
+	{
+	color: #F7E802;
+	border: 1px outset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+}
+input.button:hover,input.liteoption:hover
+	{
+	color:#FFFFFF;
+	border: 1px inset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+	}	
+.login_bg
+	{
+	background: url(../images/login_bg.gif) repeat-x;
+	font-size: 9px;
+	color: #FFFFFF;
+	}
+	input.lsub { 
+background-image: url(../images/l_go.gif);	
+background-repeat: no-repeat;	
+height: 29px;	
+width: 42px;
+border: 0px; 
+cursor: default;
+}
+input.lsub_lite { 
+background: url(../images/l_go_lite.gif) repeat-x;	
+height: 29px;	
+width: 42px; 
+border: 0px; 
+cursor: hand;
+}
+.u_login
+	{
+	background: url(../images/u_login.gif) no-repeat;
+	height: 27px;
+	}
+	
+.u_password
+	{
+	background: url(../images/u_password.gif) no-repeat;
+	height: 27px
+	}
+	th.pageingnav
+{
+	background: #000000 url(../images/newsnav.gif) repeat-x;
+	height:29px;
+	text-align:center;
+	white-space:nowrap;
+	border: 0px solid #91a0ae;
+	border-width: 0px 0px 0px 0px;
+}
+.row1
+	{
+	background:#252525;
+	}
+.row2
+	{
+	background:#161616;
+	}
+.row3{background:#161616}
+.row4
+	{
+	background: #000000 url(../images/nav_background.gif) repeat-x;
+	height: 33px;
+	}
+	td.spacerow
+	{
+	background:#000000 url(../images/chains.gif) repeat-x;
+	height: 9px;
+	}
+	.newsnav
+	{
+	background: #000000 url(../images/newsnav.gif) repeat-x;
+	color:#FFFFFF;
+	height:29px;
+	text-align:left;
+	white-space:nowrap;
+	border: 0px solid #91a0ae;
+	border-width: 0px 0px 0px 0px;
+	}
+.outline_viewitem
+{
+	border:1px solid #EED96D;
+	background: #252525;
+}
+input
+	{
+	font:11px Verdana,Arial,Helvetica,sans-serif;
+	}
+	input.button,input.liteoption,.fakebut
+	{
+	color: #F7E802;
+	border: 1px outset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+}
+	
+input.button:hover,input.liteoption:hover
+	{
+	color:#FFFFFF;
+	border: 1px inset #006BDB;
+	background:#06143D;
+	font-size:11px;
+	font-weight:bold;
+	padding : 1px;
+	}
+	img{border:0 solid}
+input.log { 
+background: #081310;	
+border: 1px inset #60A874; 
+font: 9px  Verdana, Arial, Helvetica, sans-serif,; 
+line-height: 11px; 
+padding-right: 4px;
+color:#50BEA0;
+}
+input.post,textarea.post
+	{
+	color:#FFFFFF;
+	background: #202020;
+	border : 1px inset #606060;
+	font:11px Verdana,Arial,Helvetica,sans-serif;
+	padding-bottom:2px;
+	padding-left:2px
+	}
+
+select	{
+	color:#FFFFFF;
+	background:#161616;
+	font:11px Verdana,Arial,Helvetica,sans-serif
+	}
+	.bodyline
+	{
+	background: url(../images/alliance-tile.jpg) repeat-x;
+	border:0px solid #000000;
+	}

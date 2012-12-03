@@ -1,0 +1,186 @@
+EQdkp OpenSource DKP
+Copyright (C) 2002-2005 The EQdkp Project Team
+
+Installation:
+-------------
+Pre-install:
+    Create, or have ready a MySQL database that EQdkp can use. It 
+    should already have a username and password assigned to it.
+    
+Step 1:
+    Making sure to keep the directory structure intact, move the
+    unzipped files to a web-accessible directory.
+     
+Step 2:
+    All files and directories should be owned by your webserver's user/group
+    (Example: chown apache.apache -R *).  All .php files should be
+    readable/executable 
+    
+    $ chmod a+rx -R *.php
+
+Step 3:
+    Make sure the directory 'templates/cache' exists and that all sub-directories
+    are readable/writable/executable
+    
+    Note: The installer will attempt to do this for you, but should an error occurr,
+    you will need to do this manually:
+    
+    $ mkdir templates/cache ; chmod -R 777 templates/cache
+     
+Step 4:
+    If you want the installation script to automatically set up your config.php file for
+    you, it should be readable/writeable
+    
+    Note: The installer will attempt to do this for you, but should an error occurr,
+    you will need to do this manually:
+    
+    $ chmod 666 config.php
+     
+Step 5:
+    Browse to http://www.yourserver.com/eqdkp/install.php
+     
+    You should be presented with a page describing your server's settings and information.
+    Once you are sure that your server meets EQdkp's requirements, you can click the
+    'Start Install' button.
+    
+    Step 5-1:
+        Database Host:
+            Your MySQL server name.  If it resides on the same server as the web server,
+            you should enter 'localhost'
+        Database Name:
+            The name of the database you created for EQdkp, usually 'eqdkp'.
+        Database Username:
+            The username with permission to access the database.  If you didn't
+            create the database yourself, your host should have given you this
+            information.
+        Database Password:
+            The password used with the username from above.
+        Prefix for EQdkp tables:
+            Simply prefixes the name of each table that EQdkp creates and uses.
+            The default of 'eqdkp_' should be sufficient for most installations.
+
+        Domain Name:
+            Should be detected automatically by the installation script, but if not
+            just put the domain name of your server here (ex: mydomain.com, www.myhost.com).
+        Webserver port:
+            Unless the web server is running on a port other than the default (80), just leave
+            the setting as-is.
+        Script path:
+            The path following the domain name where the script is located.  Example: If the full
+            path to the install script is http://mydomain.com/user/eqdkp/, you would enter 
+            '/user/eqdkp/', if the full path was http://mydomain.com/eqdkp/', the path would be
+            '/eqdkp/'.
+    
+    Step 5-2:
+        Administrator Username:
+            This should be a username of your choosing.  It will be your administrative account
+            for your EQdkp installation.
+        Administrator Password:
+            A password of your choosing.
+        Administrator Password [ confirm ]:
+            Simply re-type the password to verify it.
+        Administrator Email Address:
+            Your (valid) e-mail address.
+            
+    After you're satisfied with the values for the above fields, click the button to proceed.  The
+    installer will automatically fill your config.php file and present you with a login field.
+    
+    You will be notified if your passwords didn't match, and it will be reset to a default of "admin" -
+    change this later by going to Settings.
+    
+    Log in to automatically be redirected to the EQdkp configuration panel where you can configure all
+    aspects of EQdkp.  After that, you're ready to begin using EQdkp.
+       
+You should now have a functional installation of EQdkp.  Remove the install.php file for extra security.
+
+Upgrading:
+----------
+Step 1:
+    BACK UP YOUR DATABASE.  This cannot be stressed enough.  Because some tables in EQdkp can
+    get to be VERY large (eqdkp_raid_attendees, eqdkp_logs), you should consider using 
+    phpMyAdmin (http://www.phpmyadmin.net) which can use Completed Inserts that will be
+    necessary if you need to restore the database.
+
+Step 2: 
+    Seriously, go back up your database since you skipped step 1.
+    
+Step 3:
+    Back up your config.php file.  You will not need to change any values in this file and you'll
+    want to be sure that unzipping the new version of EQdkp won't overwrite your old settings. 1.3.0
+    doesn't have a new config.php file, so you shouldn't have an issue here - but back it up anyway.
+    
+Step 4:
+    Unzip the new EQdkp version.  Copy your old config.php file from Step 2, overwriting the
+    new version's config.php file into the unzipped directory to retain your old settings.
+    
+Step 5:
+    Access http://www.yourserver.com/eqdkp/upgrade.php and select the version you're upgrading
+    from.  The script will perform all the necessary changes to upgrade from the version you selected
+    to the newest version.
+
+Step 5:
+    Delete everything in the templates/cache directory ( rm  ./templates/cache/* ).
+
+Step 6:
+    Seriously, delete everything in the templates/cache directory. Your new install may
+    not work right until you do this.
+    
+Remove the upgrade.php file (or rename it to something else).
+
+Configuration:
+--------------
+Once you've logged in to your administrator account, your next step should be changing
+the EQdkp configuration settings.  Click on the 'Administration Panel' link in the top
+menu, and then on the 'Configuration' link in the left frame.  This is where you can 
+control all of EQdkp's settings.
+
+Most of the fields have descriptions where appropriate, but some need to be reinforced.
+
+    Site Name:
+        Optional, appears in a large font above the menu of each page.  Usually it's something like
+        'Guild Point System'.
+
+    Site Description:
+        Also optional, appears below the site name in a smaller font.  Usually a short tagline or a
+        URL to the guild's official web site.
+
+    Point Name:
+        Some guilds may find the use of the 'DKP' acronym archaic (or even stupid) and may wish to change
+        their point system name to something else.
+
+    Enable Account Activation:
+        None - Everyone who registers is given an account and automatically set up with the default 
+            permissions (see below).
+        User - A user must validate their e-mail address in order for the account to become active.
+        Admin - The administrator must approve the account personally for it to become active.
+
+    Enable Gzip Compression:
+        If your PHP installation supports Zlib, you may consider using this option.  It compresses
+        the output of pages to save you some bandwidth, but may use slightly more processing power.
+        
+    Default Permissions:
+        Probably the MOST important thing you'll set up here.  When a person comes to your EQdkp site and
+        isn't logged in, you may not want them seeing what your guild has killed in the last couple of
+        days, or who got what item.
+        
+        These default permissions are also given to people when they register and can only be changed by
+        an administrator with the 'Manage Users' permission.  Items in bold text should only be given
+        to trusted members of your guild who will be responsible for maintaining the point system.
+        
+    Cookie Settings:
+        For 99% of the installations, the default values should be sufficient.
+        
+
+    Default Game:
+	If you are running something other than EverQuest for your game, you'll need to change it
+	now.  Select WoW, Everquest2, or any of the other games available.
+
+    Backup Database:
+	This will take you to an add-on that will let you back-up your eqdkp database without having to 
+	use phpMyAdmin - very useful if you don't have access to the box after the admin leaves the 
+	guild, no?  Can also be used to restore a database - so be very careful as there are no
+	special permissions needed for this functionality - admin access allows access to backup (this
+	is intentional)
+
+Have Fun!
+

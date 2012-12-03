@@ -1,0 +1,25 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="upgrade.php">
+<table width="80%" border="0" cellspacing="0" cellpadding="2" class="outline" align="center">
+  <tr class="row4">
+    <th align="center">{L_EQDKP_UPGRADE}</th>
+  </tr>
+  <tr>
+    <td class="row1" align="center">
+      {L_SELECT_VERSION}<br /><br />
+      <select name="version" class="input">
+        <!-- BEGIN version_row -->
+        <option value="{version_row.VALUE}"{version_row.SELECTED}>{version_row.OPTION}</option>
+        <!-- END version_row -->
+      </select><br />&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <th class="pageingnav"><input type="submit" name="upgrade" value="{L_UPGRADE}" class="mainoption" /></th>
+  </tr>
+  <tr>
+  	<td class="spacerow"></td>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

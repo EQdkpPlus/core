@@ -1,0 +1,129 @@
+<!-- WoW-EQDKP Template, Based Upon the phpbb-theme from www.mergenine.com 
+	 Created from: Hirork, Dalvengyr, aka Hirogen(CD)
+	 Created for: Revaluation-Guild, one of the biggest Horde Guilds on Dalvengyr 120+ Members (Accounts)
+	 Special Thanks: jonny b for asking me to do this template and for his superb images
+	 				 Laures, Fafnir and sshd (women who playes wow) for being my friends
+	 				 Legion(CD) Admin from http://www.startrek-club.de ==> Thanks for being my best Friend for all the years
+					 Technofreak ==> Thanks for being my best friend over the past 5 years
+					 Corgan, Wallenium ==> Creators of EQDKP-Plus for WOW
+	You are Allowed to change this Template, but please refer to one of the following pages :) due the fact that I created this Template
+	http://www.startrek-club.de
+	http://www.startrekonline.at
+	http://www.revaluation.de
+	http://www.ex-astris-scientia.org ==> Bernd Schneiders Star Trek Homepage ==> A hell of Trek Page ;)
+	http://www.mergenine.com
+
+	Thanks for using this Template, I'm trying to update and correct the template as often as possible
+
+	Update: 17-10-2006: Alpha for EQDKP+
+
+	Version: 0.5-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+{META}
+<title>{PAGE_TITLE}</title>
+<link REL=StyleSheet HREF="{EQDKP_ROOT_PATH}itemstats/templates/itemstats.css" TYPE="text/css" MEDIA="screen" />
+<link rel=stylesheet href="{TEMPLATE_PATH}/css/wow3theme.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{EQDKP_ROOT_PATH}itemstats/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+</head>
+<body{ONLOAD}>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="bodyline">
+	<tr>
+		<td width="45" height="128" class="border_side_left">
+			<img src="{TEMPLATE_PATH}/images/border_top_left_new.gif" />
+		</td>
+		<td valign="top">
+ 			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="header_background">
+				  <tr>
+					  <td rowspan="2"><img src="{TEMPLATE_PATH}/images/logo_wow.gif" width="262" height="106"/></td>
+					  <td class="half_header_background" align="right" valign="bottom">
+					      <form method="post" action="{EQDKP_ROOT_PATH}login.php" name="post">
+							<table cellspacing="0" cellpadding="0" border="0">
+							  <tr valign="mitddle" align="right">
+								<td><img src="{TEMPLATE_PATH}/images/login_lft.gif" height="33" width="41" /></td>
+								<td class="u_login" align="right" width="131px" valign="middle"><input class="log" type="text" name="username" size="12" /></td>
+								<td class="u_password" align="right" width="183px" valign="middle"><input class="log" type="password" name="password" size="12" maxlength="32"/>&nbsp;</td>
+								<td><input class="lsub" type="submit" name="login" height="29px" onmouseover="this.className='lsub_lite';" onmouseout="this.className='lsub';" value="&nbsp;"/></td>
+								<td><img src="{TEMPLATE_PATH}/images/l_div.gif" /><img src="{TEMPLATE_PATH}/images/reg.gif" /></td>
+							  </tr>
+							  <tr>
+								<td colspan="2" align="right"><img src="{TEMPLATE_PATH}/images/l_lft_bot.gif" height="22" width="35" /></td>
+								<td class="login_bg" align="right" valign="middle">{L_REMEMBER_PASSWORD}<input class="text" type="checkbox" name="auto_login" /></td>
+								<td><img src="{TEMPLATE_PATH}/images/login_bot_r.gif" /></td>
+							  </tr>
+							</table>
+						  </form>
+						</td>
+				  </tr>
+				  <tr>
+					<td class="nav_background"></td>
+				  </tr>
+            </table>
+		</td>
+		<td width="45" height="128" class="border_side_right">
+			<img src="{TEMPLATE_PATH}/images/border_top_right.gif" />
+		</td>
+	</tr>
+	<tr>
+		<td class="border_side_left">
+		</td>
+		<td>
+			<!-- IF S_NORMAL_HEADER -->
+			<table width="100%" cellspacing="1" cellpadding="2" class="borderless">
+				<tr valign=top>
+					<td width="9%" nowrap>
+					{POINTSV}
+					<table width="100%" cellspacing="0" cellpadding="2" class="outline">
+						<tr>
+							<th class="row4">Menu</th>
+						</tr>
+							{MAIN_MENU1}<br />
+							<th class="row4">EQDKP</th>
+							{MAIN_MENU2}
+							<!-- IF MENU3NAME -->
+							<th class="row4">{MENU3NAME}</th>
+							{MAIN_MENU3}
+						<!-- ENDIF -->
+						<tr>
+							<td>{BOSSKILLV}</td>
+						</tr>
+					</table>
+				</td>
+					<td width="91%">
+						<!-- IF S_IN_ADMIN -->
+						<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+						  <tr>
+							<td width="175" valign="top" nowrap="nowrap">
+							  <table width="100%" cellspacing="0" cellpadding="2" class="outline">
+								<tr class="row4">
+								  <th align="center">{L_ADMINISTRATION}</th>
+								</tr>
+								<tr>
+								  <td class="row1" onmouseover="this.className='rowHover';" onmouseout="this.className='row1';"> <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" /> <a href="index.php{SID}">{L_ADMIN_INDEX}</a></td>
+								</tr>
+								<tr>
+								  <td class="row2" onmouseover="this.className='rowHover';" onmouseout="this.className='row2';"> <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" /> <a href="{EQDKP_ROOT_PATH}{SID}">{L_EQDKP_INDEX}</a></td>
+								</tr>
+								<!-- BEGIN header_row -->
+								<tr class="row4">
+								  <th align="left">{header_row.HEADER}</th>
+								</tr>
+								<!-- BEGIN menu_row -->
+								<tr>
+								  <td class="{header_row.menu_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{header_row.menu_row.ROW_CLASS}';"> <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" /> {header_row.menu_row.LINK}</td>
+								</tr>
+								<!-- END menu_row -->
+								<!-- END header_row -->
+								<tr>
+									<th class="pageingnav"></th>
+								</tr>
+								<tr>
+									<td class="spacerow"></td>
+								</tr>
+							  </table>
+							</td>
+							<td width="100%" valign="top">
+					<!-- ENDIF -->
+			<!-- ENDIF -->

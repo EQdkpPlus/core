@@ -1,0 +1,116 @@
+<!-- DKP Leaderboard by Legedric (www.derdunklepakt.de) START -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="outline">
+	<tr class="row4">
+		<th align="center" nowrap="nowrap"><img src='./images/class/Druid.gif' alt=''> {Caption_Druid}</th>
+		<th align="center" nowrap="nowrap"><img src='./images/class/Hunter.gif' alt=''> {Caption_Hunter}</th>
+		<th align="center" nowrap="nowrap"><img src='./images/class/Mage.gif' alt=''>{Caption_Mage}</th>
+		<!-- IF S_ISALLIANCE --><th align="center" nowrap="nowrap"><img src='./images/class/Paladin.gif' alt=''> {Caption_Paladin}</th><!-- ENDIF -->
+		<th align="center" nowrap="nowrap"><img src='./images/class/Priest.gif' alt=''> {Caption_Priest}</th>
+		<th align="center" nowrap="nowrap"><img src='./images/class/Rogue.gif' alt=''> {Caption_Rogue}</th>
+		<!-- IF S_ISHORDE --><th align="center" nowrap="nowrap"><img src='./images/class/Shaman.gif' alt=''> {Caption_Shaman}</th><!-- ENDIF -->
+		<th align="center" nowrap="nowrap"><img src='./images/class/Warlock.gif' alt=''> {Caption_Warlock}</th>
+		<th align="center" nowrap="nowrap"><img src='./images/class/Warrior.gif' alt=''> {Caption_Warrior}</th>
+	</tr>
+	<tr>
+		<td align="left" valign="top" class="row2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_druid -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_druid.U_VIEW_MEMBER}">{classlist_row_druid.NAME}</a></td>
+					<td align="right" class="{classlist_row_druid.C_CURRENT}" nowrap="nowrap">{classlist_row_druid.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_druid -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_hunter -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_hunter.U_VIEW_MEMBER}">{classlist_row_hunter.NAME}</a></td>
+					<td align="right" class="{classlist_row_hunter.C_CURRENT}" nowrap="nowrap">{classlist_row_hunter.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_hunter -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_mage -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_mage.U_VIEW_MEMBER}">{classlist_row_mage.NAME}</a></td>
+					<td align="right" class="{classlist_row_mage.C_CURRENT}" nowrap="nowrap">{classlist_row_mage.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_mage -->
+			</table>
+		</td>
+		<!-- IF S_ISALLIANCE -->
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_paladin -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_paladin.U_VIEW_MEMBER}">{classlist_row_paladin.NAME}</a></td>
+					<td align="right" class="{classlist_row_paladin.C_CURRENT}" nowrap="nowrap">{classlist_row_paladin.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_paladin -->
+			</table>
+		</td>
+		<!-- ENDIF -->
+		<td align="left" valign="top" class="row<!-- IF S_ISALLIANCE -->2<!-- ELSE -->1<!-- ENDIF -->">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_priest -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='<!-- IF S_ISALLIANCE -->2<!-- ELSE -->1<!-- ENDIF -->';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_priest.U_VIEW_MEMBER}">{classlist_row_priest.NAME}</a></td>
+					<td align="right" class="{classlist_row_priest.C_CURRENT}" nowrap="nowrap">{classlist_row_priest.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_priest -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row<!-- IF S_ISALLIANCE -->1<!-- ELSE -->2<!-- ENDIF -->">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_rogue -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row<!-- IF S_ISALLIANCE -->1<!-- ELSE -->2<!-- ENDIF -->';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_rogue.U_VIEW_MEMBER}">{classlist_row_rogue.NAME}</a></td>
+					<td align="right" class="{classlist_row_rogue.C_CURRENT}" nowrap="nowrap">{classlist_row_rogue.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_rogue -->
+			</table>
+		</td>
+		<!-- IF S_ISHORDE -->
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_shaman -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_shaman.U_VIEW_MEMBER}">{classlist_row_shaman.NAME}</a></td>
+					<td align="right" class="{classlist_row_shaman.C_CURRENT}" nowrap="nowrap">{classlist_row_shaman.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_shaman -->
+			</table>
+		</td>
+		<!-- ENDIF -->
+		<td align="left" valign="top" class="row2">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_warlock -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row2';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_warlock.U_VIEW_MEMBER}">{classlist_row_warlock.NAME}</a></td>
+					<td align="right" class="{classlist_row_warlock.C_CURRENT}" nowrap="nowrap">{classlist_row_warlock.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_warlock -->
+			</table>
+		</td>
+		<td align="left" valign="top" class="row1">
+			<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+				<!-- BEGIN classlist_row_warrior -->
+				<tr onmouseover="this.className='rowHover';" onmouseout="this.className='row1';">
+					<td align="left" nowrap="nowrap"><a href="{classlist_row_warrior.U_VIEW_MEMBER}">{classlist_row_warrior.NAME}</a></td>
+					<td align="right" class="{classlist_row_warrior.C_CURRENT}" nowrap="nowrap">{classlist_row_warrior.CURRENT}</td>
+				</tr>
+				<!-- END classlist_row_warrior -->
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="8" class="spacerow">
+		</td>
+	</tr>
+</table>
+<br>
+<!-- DKP Leaderboard by Legedric (www.derdunklepakt.de) END -->

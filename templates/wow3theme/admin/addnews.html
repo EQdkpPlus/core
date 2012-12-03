@@ -1,0 +1,116 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+b_help = "{L_B_HELP}";
+i_help = "{L_I_HELP}";
+u_help = "{L_U_HELP}";
+q_help = "{L_Q_HELP}";
+c_help = "{L_C_HELP}";
+p_help = "{L_P_HELP}";
+w_help = "{L_W_HELP}";
+
+var theSelection = false;
+bbcode = new Array();
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[img]http://','[/img]','[url]http://','[/url]','[center]','[/center]');
+
+function helpline(help)
+{
+    document.post.helpbox.value = eval(help + "_help");
+}
+
+function check_form()
+{
+    if (document.post.news_message.value.length < 2)
+    {
+        alert('{MSG_MESSAGE_EMPTY}');
+        return false;
+    }
+    if (document.post.news_headline.value.length < 1)
+    {
+        alert('{MSG_HEADLINE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+
+function bbstyle(bbnumber)
+{
+    // Insert opening/closing tags
+    document.post.news_message.value += bbtags[bbnumber] + bbtags[bbnumber+1];
+	document.alert(post.news_message.value);
+    document.post.news_message.focus();
+    return;
+
+}
+//-->
+</script>
+<form method="post" action="{F_ADD_NEWS}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_NEWS}" value="{NEWS_ID}" />
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="outline">
+  <tr class="row4">
+    <th align="center" colspan="2" >{L_ADD_NEWS}</th>
+  </tr>
+  <tr class="row1">
+    <td width="200" nowrap="nowrap"><b>{L_HEADLINE}:</b></td>
+    <td width="100%"><input type="text" id="news_headline" size="40" maxlength="255" value="{HEADLINE}" style="width: 450px" class="input" />{FV_HEADLINE}</td>
+  </tr>
+  
+  <tr class="row2">
+    <td width="200"nowrap="nowrap"><b>{L_MESSAGE_BODY}:</b></td>
+    <td width="100%">
+      <table border="0" cellspacing="0" cellpadding="2">
+        <tr>
+          <td><input type="button" accesskey="b" name="addcode0" value=" B " style="font-weight: bold; width: 30px" onmouseover="helpline('b')" onclick="bbstyle(0)" class="input" /></td>
+          <td><input type="button" accesskey="i" name="addcode2" value=" i " style="font-style: italic; width: 30px" onmouseover="helpline('i')" onclick="bbstyle(2)" class="input" /></td>
+          <td><input type="button" accesskey="u" name="addcode4" value=" u " style="text-decoration: underline; width: 30px" onmouseover="helpline('u')" onclick="bbstyle(4)" class="input" /></td>
+          <td><input type="button" accesskey="q" name="addcode6" value=" Quote " style="width: 50px" onmouseover="helpline('q')" onclick="bbstyle(6)" class="input" /></td>
+          <td><input type="button" accesskey="c" name="addcode12" value=" Center " style="width: 50px" onmouseover="helpline('c')" onclick="bbstyle(12)" class="input" /></td>
+          <td><input type="button" accesskey="p" name="addcode8" value=" IMG " style="width: 50px" onmouseover="helpline('p')" onclick="bbstyle(8)" class="input" /></td>
+          <td><input type="button" accesskey="w" name="addcode10" value=" URL " style="width: 50px" onmouseover="helpline('w')" onclick="bbstyle(10)" class="input" /></td>
+        </tr>
+      </table>
+      <table border="0" cellspacing="0" cellpadding="2" class="borderless">
+        <tr>
+          <td><input type="text" name="helpbox" size="45" maxlength="100" style="width: 450px; font-size: 10px;" class="helpline2" value="" /></td>
+        </tr>
+        <tr>
+          <td><textarea name="news_message" rows="15" cols="60" style="width: 450px" class="input">{MESSAGE}</textarea>{FV_MESSAGE}</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+    <tr>
+      <td width="200" class="row1" nowrap="nowrap"><b>{L_MESSAGE_SHOW_LOOT_RAID}</b></td>
+      <td width="100%" class="row2">
+	  
+         <select name="raid_id" class="input">
+	          <option value=""></option>
+	          <!-- BEGIN raids_row -->
+	          <option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
+	          <!-- END raids_row -->
+    </select>
+	
+      </td>
+  </tr>
+  <!-- IF S_UPDATE -->
+  <tr>
+    <td width="200" class="row1" nowrap="nowrap"><b>{L_UPDATE_DATE_TO}</b></td>
+    <td width="100%" class="row2"><input type="checkbox" name="update_date" value="1" /></td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <th align="center" colspan="2" class="pageingnav">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_NEWS}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_NEWS}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_NEWS}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+  <tr>
+  	<td colspan="2" class="spacerow"></td>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
