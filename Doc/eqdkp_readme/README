@@ -1,0 +1,121 @@
+EQdkp OpenSource DKP
+Copyright (C) 2002-2005 The EQdkp Project Team
+
+Introduction:
+-------------
+    What is DKP?
+    ------------
+    DKP, short for Dragon Kill Points, is a concept originally created by Thott of Afterlife.
+    These points are awarded to each guild member as they attend a guild raid. The current DKP
+    of each member reflects his or her priority for loot. When a member 'wins' an item, they
+    lose a DKP amount that reflects the value of that item.
+
+    DKP allows for an unbiased comparison between guild members when decisions about loot are to
+    be made based on attendance and recent items that have been awarded.
+
+    What is EQdkp?
+    --------------
+    EQdkp is an OpenSource DKP system created out of necessity.  Many guilds wanted to use the
+    point system but didn't have the means or time or will to create their own set of scripts
+    for managing it. The main focus of EQdkp is to make loot distribution as easy as possible for
+    guild leaders while still allowing it to be easy to maintain.
+
+    EQdkp was originally created with the notion that one closed-source installation of it would
+    support many guilds' point systems.  It was later changed to an OpenSource orientation so
+    that it would much more customizable for each guild.
+
+Contact:
+--------
+    Bug reports and feature requests should be directed to the SourceForge tracker:
+    http://sourceforge.net/projects/eqdkp/
+
+    Installation issues, general discussion - just about anything that's not a bug
+    report or feature request can be directed to the forums:
+    http://forums.eqdkp.com/
+
+    If you're using EQdkp, we'd love to hear from you.  If you have a moment, post your site in
+    the 'Examples' forum.
+
+Donations:
+----------
+
+    If you and your guild use and enjoy EQdkp and want to see it continue to be developed, donating
+    whatever money you can is a good way to show your appreciation for all of the work that's gone into the
+    development and maintenance of the EQdkp project.
+
+    Why do you need donations?
+    --------------------------
+    A lot of time went into creating EQdkp, and still goes into maintaining it by fixing bugs and adding requested
+    features - in general, making it better.
+
+    In addition to that, hosting fees for EQdkp.com need to be paid on a monthly basis, and donations would help greatly
+    with that.
+
+    If half of the guilds currently using EQdkp had around half of its members donate 50 cents one time, 
+    that would probably cover the cost of the EQdkp.com server for one year. Additional money would go 
+    to the developers of EQdkp for donating their time.
+
+    For more information and for instructions on how to donate, please see: http://eqdkp.com/?p=donate
+
+Installation:
+-------------
+    See the INSTALL file for detailed information.
+
+Licensing:
+----------
+    EQdkp is distributed under the GPL.  Please read through the files COPYING and LICENSE
+    for more information.
+
+Credits:
+--------
+    DKP Concept: Thott of Afterlife [ www.afterlifeguild.org ]
+
+    Developers:
+        Rob Speicher [ tsigo@eqdkp.com ]
+        Adam Wasserman [ draelon@eqdkp.com ]
+	TJ [thundarr@gmail.com]
+
+    Translators:
+        If you fluently speak a language other than English and want to contribute a language
+        pack, please contact tsigo@eqdkp.com
+	
+	Thanks to Taleth for doing some translation of the WoW information to German.
+	http://forums.eqdkp.com/index.php?showtopic=1374
+	
+	Thanks to Esmeroth for the German SQL for races/classes for EQ2
+
+    Thanks:
+        SourceForge [ www.sourceforge.net ]
+
+        Nathan Codding, Paul Owen and The phpBB Group [ www.phpbb.com ]
+            - Template class, Session class foundation
+        Chris Monson
+            - XMLFile class (deprecated)
+        Imex - Developer, EQCPS [ www.akanon.org ]
+            - Item and Spell database (EQdkp plugin)
+	Zeller, Ansar, and Landiin @ crusadersvalorous.org
+	    - SOAP class definitions and assistance
+	The Beta Test Crew @ forums.eqdkp.com
+	    - countless bug fixes for the 1.3 release
+	    - Loopi of Dark Ritual guild (Stormreaver guild, WoW) 
+
+        Blood of the Spider Guild 
+	   - [ www.drow.org ]
+
+	Crusaders Valorous of Tholuxe Paells 
+	   - [ www.crusadersvalorous.org]
+	   - Ansar and Zeller for the SOAP help
+
+        Necessary Evil Guild      
+	   - [ www.wickedintentions.com ]
+
+        Science of War Guild      
+	   - [ www.scienceofwar.net ]
+	 (now known as Precision Strike @ www.precisionstrike.com)
+
+
+
+        Robert Brisson
+            - 'What is DKP?'
+
+        Everyone who reported bugs and posted feature requests at SF, and even discussed EQdkp in the forums.
