@@ -1,0 +1,54 @@
+<!-- INCLUDE install_header.html -->
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+<input type="hidden" name="install_step" value="6" />
+<!-- ENDIF -->
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">{L_ADMINACC}</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_ADM_USERN}:</td>
+    <td width="60%" class="row1" align="left"><input type="text" name="username" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_ADM_PW}:</td>
+    <td width="60%" class="row1" align="left"><input type="password" name="user_password1" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_ADM_PW_CONF}:</td>
+    <td width="60%" class="row1" align="left"><input type="password" name="user_password2" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_ADM_EMAIL}:</td>
+    <td width="60%" class="row1" align="left"><input type="text" name="user_email" value="" class="input" size="30"  /></td>
+  </tr>
+</table></p><br/>
+</div>
+ <div class="b"><div></div></div>
+</div>
+
+<!-- IF MSG_TEXT != '' -->
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">&nbsp;{MSG_TEXT}</div><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+<div align="center"><input type="button" name="back" value="{L_BUTTON_BACK}" class="mainoption" onClick="history.back()"/>
+<!-- IF S_SHOW_BUTTON -->
+<input type="submit" name="submit" value="{L_BUTTON5}" class="mainoption" />
+</form>
+<!-- ENDIF -->
+</div>
+</div>
+<!-- INCLUDE install_tail.html -->
