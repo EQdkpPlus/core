@@ -1,0 +1,464 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+	$('#base').hide();
+	$('#melee').hide();
+	$('#range').hide();
+	$('#spell').hide();
+	$('#defenses').hide();
+	$('#resistances').hide();
+	$("#char_infos").change(function(){
+	if(this.value == 'all')
+	{$("#boxes").children().show();}
+	else
+	{$("#" + this.value).show().siblings().hide();}
+	});
+	
+	$("#char_infos").change();
+	});
+</script>
+
+<!-- IF ARMORY == 1 -->
+	<table width="100%" cellspacing="0" cellpadding="1" border="0">
+		<tr>
+	    	<th align="center"  colspan="2" nowrap="nowrap">{DATA_GUILDTAG} {DATA_NAME} | {DATA_RACENAME} - {DATA_CLASSNAME}</th>
+		</tr>   
+		<tr class="row1" >
+			<td valign="top" align="center">
+		    	
+		    	<table width="100%" height="100" cellspacing="0" cellpadding="0"  border="0"  class="row2">
+		        	<tr style="background:url(games/wow/profiles/{PROF_FACTION}.jpg);background-repeat:no-repeat;background-position: 0px 0px;">
+		        		<td width="20">  <img style="position:relative; top:-1px; left:22px;" border='0' src='{armory:ac_charicon}'> 	              
+		             	</td>
+		        		<td valign="top" width="500">	        		                  
+		          			<table height="100%" width="100%" border="0" >
+					            <tr >
+					                <td colspan=2> 
+					                    <span style="font-size: 17px; color: #FFCC33 ;position:relative; top:0px; left:0px;"><strong>{armory:character:@attributes:prefix}&nbsp;&nbsp;</strong></span>
+					                    <span style="font-size: 25px; color: #white ;position:relative; top:0px; left:0px;"><strong>{armory:character:@attributes:name}</strong></span>
+					                    <span style="font-size: 17px; color: #FFCC33 ;position:relative; top:0px; left:0px;"><strong>&nbsp;{armory:character:@attributes:suffix}</strong></span>
+					                </td>
+					          	</tr>			
+					          	<tr>
+					                <td> 
+					                    <div style="font-size: 16px; color: #FFCC33 ;position:relative; top:0px; left:18px;"><strong> {armory:character:@attributes:guildName} - {armory:character:@attributes:realm}</strong></div>    
+					                </td>
+					                <td align="right">
+					                    <div style="font-size: 17px; color: #white ;position:relative; top:0px; left:0px;"><strong><!--  {armory:summary:c:@attributes:totalPoints}   --> </strong></div>    
+					                </td>			                
+					          	</tr> 
+				        	</table>
+		        		</td>
+		        	</tr>
+		     	</table>
+		      
+			 	<table border="0"  align="left" >
+			 		<tr valign="top">
+		  	 			<td  width="27"> &nbsp;</td>
+		  	  			<td>
+			  	     		<table border="0">  
+			  	     			<tr height="479"> 
+			        	 			<td valign="top" width="50" >
+			        	 				<br>
+			        	 				{items:left}
+			        	 			</td>
+			      	   				<td width="346" valign="top" align="center" nowrap >
+			             				<br> {ARMORY_3D} 
+			             			</td>
+			      	   				<td valign="top" width="80" >
+			      	   					<br>      	   
+			      	   					{items:right}
+			      	   				</td>
+			      	  			</tr>
+			          			<tr>              
+			            			<td colspan=3 align="center">{items:bottom} </td>  
+			          			</tr>
+			        		</table>
+			   			</td>
+		     			<td width="200" >
+		     			<br></br>
+			        		<table width="100%"   border="0">
+			           			<tr valign="top" >
+			           				<td width="100%">
+		                				<table border=0" cellspacing="0" cellpadding="2">
+		                    				<tr>
+		                         				<th colspan="2" align="center" >{L_SKILLS}</th>
+		                    				</tr>
+		                					<tr class="row2">
+		                						<td >	                        					 
+	                        						<a target="_blank" href={armory_links:talents1}>
+	                    							<table border="0" >
+	                   									<tr> 
+	                   										<td>
+	                          									<img width="42" height="42" border='0' src='http://eu.wowarmory.com/wow-icons/_images/43x43/{spec:active:icon}.png'>  
+	                          								</td>
+	                          								<td width="150" align="center">
+	                            								{spec:active:prim}<hr height="1"  >{spec:active:treeOne}/{spec:active:treeTwo}/{spec:active:treeThree}    
+	                         								</td>
+	                         							</tr>  
+	                    							</table>
+	                    							</a> 	                    						
+		                						</td>
+		                						<td>                   
+		                    						<div style="opacity : 0.5;">
+		                    							<a target="_blank" href={armory_links:talents2}>
+			                    						<table>
+			                    							<tr> 
+			                    								<td>
+			                          								<img width="42" height="42" border='0'  src='http://eu.wowarmory.com/wow-icons/_images/43x43/{spec:non_active:icon}.png'>  
+			                          							</td>
+			                          							<td width="150" align="center">                          
+			                            							{spec:non_active:prim}<hr height="1" >{spec:non_active:treeOne}/{spec:non_active:treeTwo}/{spec:non_active:treeThree}   
+			                         							</td>
+			                         						</tr>  
+			                    						</table> 
+			                    						</a>
+		                    						</div>                    
+		                						</td>
+		                					</tr>
+		                				</table>
+		                			</td>
+		                		</tr>
+			             		<tr>
+			             			<td>	
+			             				<a target="_blank" href={armory_links:profil}>	             				
+			              				<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+		                    				<tr>
+		                         				<th colspan="2" align="center" >{L_PROFESSIONS}</th>
+		                    				</tr>
+		                					<tr class="row2">
+		                						<td >	  	                						                      					                         						
+	                    							<table border="0" >
+	                   									<tr> 
+	                   										<td>
+	                          									{profs:0:img}
+	                          								</td>
+	                          								<td width="150" align="center">
+	                            								{profs:0:name}<hr height="1"> {profs:0:container}    
+	                         								</td>
+	                         							</tr>  
+	                    							</table>	                    						
+		                						</td>
+		                						<td>                   
+		                    						<table>
+		                    							<tr> 
+		                    								<td>
+		                          								{profs:1:img}  
+		                          							</td>
+		                          							<td width="150" align="center">                          
+		                            							{profs:1:name}<hr height="1" > {profs:1:container}   
+		                         							</td>
+		                         						</tr>  
+		                    						</table>                    
+		                						</td>
+		                					</tr>	                    					                    				
+		 	            				</table>
+		 	            				</a>
+			              			</td>
+			              		</tr>
+			              		<tr>
+			              			<td>
+			              				<a target="_blank" href={armory_links:profil}>	
+			              				<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+		                    				<tr>
+		                         				<th colspan="2" align="center" >{L_corevalues}</th>
+		                    				</tr>
+		                    				
+		                					<tr class="row2"  align=center>
+		                						<td  align=center>	                        					                         						
+	                    							<table border="0" align=center >
+	                   									<tr> 
+	                          								<td width="150" align="center">                          									
+	                            								{L_health}<hr height="1"> {basicBars:health}    
+	                         								</td>
+	                         							</tr>  
+	                    							</table>	                    						
+		                						</td>
+		                						<td align=center>                   
+		                    						<table border="0" align=center>
+		                    							<tr> 
+		                          							<td width="150" align="center">                          
+		                            							{SECONDBAR_NAME}<hr height="1" > {basicBars:secondBar}   
+		                         							</td>
+		                         						</tr>  
+		                    						</table>                    
+		                						</td>
+		                					</tr>	                    				
+		        			            </table>
+		        			            </a>
+			              			</td>
+			              		</tr>
+			              		<tr>
+			              			<td>
+			              				
+		        			        	<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+		                     				<tr>
+		                         				<th>{L_values} &nbsp;&nbsp;	                         				
+													<select id="char_infos" align="right" style="width: 82%; ">
+													<option value="base">{char_infos:header:base} </option>
+													<option value="melee">{char_infos:header:melee} </option>
+													<option value="range">{char_infos:header:range} </option>
+													<option value="spell">{char_infos:header:spell} </option>
+													<option value="defenses">{char_infos:header:defenses} </option>
+													<option value="resistances">{char_infos:header:resistances} </option>
+													<option value="all">{char_infos:header:all}</option>
+													</select>	                         					                         				
+		                         				</th>
+		                    				</tr>
+		               						<tr class="row2" valign="top" >
+		               							<td width="100%">  
+													<a target="_blank" href={armory_links:profil}>										
+													<div id="boxes">
+													{char_infos:html}
+													</div>
+													</a> 
+												</td>
+		                                   </tr>
+		 	            				</table>
+		 	            					            
+		               				</td>
+		               			</tr>
+			              		<tr>
+			              			<td>
+			              				
+		        			        	<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+		                     				<tr>
+		                         				<th colspan="2">{L_gearscoreHeader}</th>
+		                    				</tr>
+		               						<tr class="row2" valign="top" >
+		               							 
+		               							
+		                						<td  align=center>	                        					                         						
+	                    							<table border="0" align=center  cellspacing="2" cellpadding="2" >
+	                   									<tr> 
+	                          								<td width="150" align="center">                          									
+	                            								{L_itemlevel} <b> {items:itemlevel:avg} </b><hr height="1"> {items:itemlevel:avgBar}    
+	                         								</td>
+	                         							</tr>  
+	                   									<tr> 
+	                          								<td width="150" align="left">{items:itemlevel:min:item} {L_min_itemlevel}: <b>{items:itemlevel:min:val}</b></td>
+	                          							</tr>								
+														<tr>
+															<td  width="150" align="left">{items:itemlevel:max:item} {L_max_itemlevel}: <b>{items:itemlevel:max:val}</b></td>
+	                         							</tr>  
+	                    							</table>	                    						
+		                						</td>
+		                						<td align=center>                   
+		                    						<table border="0" align=center cellspacing="2" cellpadding="2" >
+		                    							<tr> 
+		                          							<td width="150" align="center">                          
+		                            							{L_gearscore}<hr height="1" >    
+		                         							</td>
+		                         						</tr>  
+		                    							<tr> 
+		                          							<td width="150" align="center">                          
+		                            							comming soon    
+		                         							</td>
+		                         						</tr>  
+		                    						</table>                    
+		                						</td>	               							
+												
+		                                   </tr>
+		 	            				</table>
+		 	            					            
+		               				</td>
+		               			</tr>
+		            		</table>
+		        		</td>
+		       		</tr>
+			 	</table>	    
+		  	</td>
+		</tr>
+	</table>
+	<br></br>
+ 
+	<table width="100%" border="0" cellspacing="1" cellpadding="1" class=borderless>
+		<tr>
+			<td valign="top" width="95%">
+			
+				<div id='char1_tabs'>
+						<ul>
+							<li><a href='#fragment-1'><span>{L_bosskills}</span></a></li>
+							<li><a href='#fragment-2'><span>{L_achievements}</span></a></li>
+							<li><a href='#fragment-3'><span>{L_char_news}</span></a></li>						
+							<li><a href='#fragment-4'><span><img src="images/admin/updates.png" /> {L_TAB_NOTES}</span></a></li>
+						</ul>
+	
+					<div id="fragment-1">
+						<div class="tab-content">
+							{bosskillData:html}
+						</div>
+					</div>
+	
+						
+					<div id="fragment-2">
+						<div class="tab-content">
+						<table width="95%" cellpadding=10>
+						<tr>
+							<td width="45%" valign='top'>
+								{achievements}
+							</td>
+							<td width="45%" valign='top'>						
+								{achievement_list}
+							</td>
+						</tr>
+	
+						</table>  
+						</div>
+					</div>
+					
+					<div id="fragment-3">
+						<div class="tab-content">					
+							{charRSSdata}					  
+						</div>
+					</div>
+					
+					<div id="fragment-4">
+						<div class="tab-content">
+							<table width="100%" border="0" cellspacing="0" cellpadding="1">
+							    <tr class="row1" >
+							      <td align="left" width="40%" nowrap="nowrap">
+							        {NOTES}
+							      </td>
+							    </tr>
+							</table> 
+						</div>
+					</div>
+					
+				</div>
+			</td>
+		</tr>
+	</table>
+	<br />
+	<br></br>
+<!-- ELSE -->
+
+	<table class="errortable" width="95%" align="center">
+	<tr>
+		<td></td> <td> <br></br>{L_NO_ARMORY_INFO} <br></br> {L_NO_REALM_INFO} </td>
+	</tr>
+	
+	</table>
+	<br></br>
+<!-- ENDIF -->
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+	<tr>
+ 		<th align="center" colspan="9">{L_DKP_NAME}</th>
+	</tr> 		
+	<tr>
+ 		<th>{L_account}</th>
+ 		<th>{L_current}</th>
+ 		<th>{L_earned}</th>
+ 		<th>{L_spent}</th>
+ 		<th>{L_adjustment}</th>
+ 		<th>{L_attendance} 7</th>
+ 		<th>{L_attendance} 14</th>
+ 		<th>{L_attendance} 30</th>
+ 		<th>{L_attendance} all</th>
+	</tr>	
+{MEMBER_POINTS}	
+</table>
+<br></br>
+
+<div id='profile_information'>
+	<ul>
+		<li><a href='#fragment-2-1'><span>{L_TAB_RAIDS}</span></a></li>
+		<li><a href='#fragment-2-2'><span>{L_TAB_ITEMS}</span></a></li>
+		<li><a href='#fragment-2-3'><span>{L_TAB_ADJUSTMENTS}</span></a></li>
+		<li><a href='#fragment-2-4'><span>{L_TAB_ATTENDANCE}</span></a></li>
+		
+	</ul>
+	
+	<!-- RAIDS TABLE -->
+	<div id="fragment-2-1">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  		<tr>
+    		<th align="center" colspan="5">{L_RAID_ATTENDANCE_HISTORY}</th>
+  		</tr>
+  		<tr>
+    		<td align="center" class="menu">{RAID_PAGINATION}</td>
+  		</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		{RAID_OUT}
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  		<tr>
+    		<td align="center" class="menu">{RAID_PAGINATION}</td>
+  		</tr>
+		</table>
+	</div>
+	
+	<!-- ITEMS TABLE -->
+	<div id="fragment-2-2">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  		<tr>
+    		<th align="center" colspan="5">{L_ITEM_PURCHASE_HISTORY}</th>
+  		</tr>
+  		<tr>
+    		<td align="center" class="menu">{ITEM_PAGINATION}</td>
+  		</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		{ITEM_OUT}
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  		<tr>
+    		<td align="center" class="menu">{ITEM_PAGINATION}</td>
+ 			</tr>
+		</table>
+	</div>
+	
+	<!-- ADJUSTMENTS TABLE-->
+	<div id="fragment-2-3">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		<tr>
+    		<th align="center" colspan="4">{L_INDIVIDUAL_ADJUSTMENT_HISTORY}</th>
+  		</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		{ADJUSTMENT_OUT}
+		</table>
+	</div>
+	
+	<!-- ATTENDANCE -->
+	<div id="fragment-2-4">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		<tr>
+    		<th align="center" colspan="2">{L_ATTENDANCE_BY_EVENT}</th>
+  		</tr>
+  		<tr>
+    		<th align="left" width="200"><a href="{U_VIEW_MEMBER}o={O_EVENT}#byevent">{L_EVENT}</a></th>
+    		<th align="left" width="100%"><a href="{U_VIEW_MEMBER}o={O_PERCENT}#byevent">{L_PERCENT}</a></th>
+  		</tr>
+  		<!-- BEGIN event_row -->
+  		<tr>
+    		<td width="200" class="row2" nowrap="nowrap"><a href="{event_row.U_VIEW_EVENT}" class="small">{event_row.EVENT}</a></td>
+    		<td width="100%" class="row1">{event_row.BAR}</td>
+  		</tr>
+  		<!-- END event_row -->
+  		<tr>
+    		<th colspan="2">&nbsp;</th>
+  		</tr>
+		</table>
+	</div>
+</div>
+<br />
+{COMMENT}
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="1" border="1">
+	<tr>
+		<th>
+			{L_SERVICE}
+		</th>
+	<tr>
+		<td class="row1">
+			<table class="borderless" align="center" border="0" cellpadding="0" cellspacing="5" width="100%">
+				<tr>
+					<td>{SIGNATUR}</td>
+					<td>{SHIRT_SHOP}</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

@@ -1,0 +1,15 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{MSG_TITLE}</th>
+  </tr>
+  <tr>
+    <td class="row1">{MSG_TEXT}</td>
+  </tr>
+  <tr>
+    <th><!-- IF S_BUTTON -->{BU_FORM}<input type="submit" class="mainoption" {BU_ONCLICK} value="{BU_VALUE}">{BU_FORM_END}<!-- ENDIF --></th>
+  </tr>
+</table>
+<!-- IF S_LOGIN -->
+<br />
+<!-- INCLUDE login.html -->
+<!-- ENDIF -->

@@ -1,0 +1,67 @@
+<!-- IF S_LOGIN -->
+
+<form method="post" action="{EQDKP_ROOT_PATH}login.php" name="login" id="login">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_LOGIN}</th>
+  </tr>
+  <tr>
+    <td class="row1">
+      <table border="0" cellspacing="0" cellpadding="3" align="center" class="borderless">
+        <!-- IF S_BRIDGE_INFO -->
+        <tr>
+          <td colspan="2" align="center" nowrap="nowrap" class="row1"><table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+            <tr>
+              <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="27"></td>
+              <td class="row1" align="center"><strong>{L_BRIDGE_INFO}</strong></td>
+            </tr>
+          </table></td>
+          </tr>
+        <!-- ENDIF -->
+        <tr>
+          <td class="row1" width="40"><strong>{L_USERNAME}:</strong></td>
+          <td width="40" class="row1"><input type="text" name="username" size="40" maxlength="30" class="input required username" id="username"/></td>
+        </tr>
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap"><strong>{L_PASSWORD}:</strong></td>
+          <td class="row1"><input type="password" name="password" size="40" maxlength="32" class="input required password" id="password"/></td>
+        </tr>
+        <tr>
+          <td valign="middle" nowrap="nowrap" class="row1">&nbsp;</td>
+          <td valign="middle" nowrap="nowrap"  class="row1"><label><input type="checkbox" name="auto_login" />
+            {L_REMEMBER_PASSWORD}</label></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <th align="center">{REDIRECT}<input type="submit" name="login" value="{L_LOGIN}" class="mainoption bi_key" /> <input type="submit" name="lost_password" value="{L_LOST_PASSWORD}" onClick="$('#username, #password').removeClass('required');" class="liteoption  bi_key_lost"/> <!-- IF S_USER_ACTIVATION --><input type="submit" name="resend_activation_mail" value="{L_RESEND_ACTIVATION}" onClick="$('#username, #password').removeClass('required');" class="liteoption"/><!-- ENDIF --></th>
+  </tr>
+</table>
+</form>
+<!-- ELSE -->
+<form method="post" action="register.php?mode={F_ACTION}" name="lost_password" id="lost_password">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_GET_NEW_PASSWORD}</th>
+  </tr>
+  <tr>
+    <td class="row1"><table border="0" cellspacing="0" cellpadding="3" align="center" class="borderless">
+      <tr>
+          <td class="row1" width="60" nowrap="nowrap"><strong>{L_USERNAME}:</strong></td>
+          <td class="row1" width="100"><input type="text" name="username" size="40" maxlength="30" class="required input username" /></td>
+        </tr>
+        <tr>
+          <td class="row1"><strong>{L_EMAIL}:</strong><br></td>
+          <td width="100" nowrap="nowrap" class="row1"><input type="text" name="user_email" size="40" maxlength="100" class="required email input e_mail" />
+            {L_EMAIL_NOTE}</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <th align="center"><input type="submit" name="send_password" value="{L_SUBMIT}" class="mainoption bi_ok" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption bi_reset" onClick="reset_validator_lost_password();"; /></th>
+  </tr>
+</table>
+</form>
+<!-- ENDIF -->

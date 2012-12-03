@@ -1,0 +1,140 @@
+<link rel='stylesheet' href='{TEMPLATE_PATH}/admin/settings.css' type='text/css' />
+<form method="post" action="{F_ACTION}" name="post">
+  <fieldset>
+		<legend>{L_CACHE_HEAD_SETTINGS}</legend>
+		<dl>
+			<dt><label>{L_CACHE_SELECT}</label><br><span>{I_CACHE_SELECT}</span></dt>
+			<dd><label>
+  			<select name="cache_selection" class="input" onChange="selectDiv(this.options[this.selectedIndex].value)">
+        <!-- BEGIN cache_selection_row -->
+          <option value="{cache_selection_row.VALUE}"{cache_selection_row.SELECTED}>{cache_selection_row.OPTION}</option>
+        <!-- END cache_selection_row -->
+        </select>
+      </label></dd>
+		</dl>
+		<div id="allCacheDivs">
+      <div id="div_cache_none" style="display:{DIV_CACHE_NONE_VISIBLE}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+    			<tr>
+    				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/false.png" alt="" height="35"></td>
+    				<td class="row1" align="center">{L_CACHE_NONE_INFO}</td>
+    			</tr>
+    		</table>
+      </div>
+      
+      <div id="div_cache_file" style="display:{DIV_CACHE_FILE_VISIBLE}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+    			<tr>
+    				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="35"></td>
+    				<td class="row1" align="center">{L_CACHE_FILE_INFO}</td>
+    			</tr>
+    		</table>  
+    		<br>      
+        <dl>
+    			<dt><label>{L_CACHE_DTTL}</label><br><span>{H_CACHE_DTTL}</span></dt>
+    			<dd><label><input type='text' name='cache_file[dttl]' size='32' value="{V_CACHE_FILE_DTTL}" class='input' /></label></dd>
+    		</dl>
+        <dl>
+    			<dt><label>{L_CACHE_PREFIX}</label><br><span>{H_CACHE_PREFIX}</span></dt>
+    			<dd><label><input type='text' name='cache_file[prefix]' size='32' value="{V_CACHE_FILE_PREFIX}" class='input' /></label></dd>
+    		</dl>  
+      </div>
+
+      <div id="div_cache_xcache" style="display:{DIV_CACHE_XCACHE_VISIBLE}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+    			<tr>
+    				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="35"></td>
+    				<td class="row1" align="center">{L_CACHE_XCACHE_INFO}</td>
+    			</tr>
+    		</table>  
+    		<br>
+        <dl>
+    			<dt><label>{L_CACHE_DTTL}</label><br><span>{H_CACHE_DTTL}</span></dt>
+    			<dd><label><input type='text' name='cache_xcache[dttl]' size='32' value="{V_CACHE_XCACHE_DTTL}" class='input' /></label></dd>
+    		</dl>
+        <dl>
+    			<dt><label>{L_CACHE_PREFIX}</label><br><span>{H_CACHE_PREFIX}</span></dt>
+    			<dd><label><input type='text' name='cache_xcache[prefix]' size='32' value="{V_CACHE_FILE_PREFIX}" class='input' /></label></dd>
+    		</dl>  
+      </div>
+      <div id="div_cache_apc" style="display:{DIV_CACHE_APC_VISIBLE}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+    			<tr>
+    				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="35"></td>
+    				<td class="row1" align="center">{L_CACHE_APC_INFO}</td>
+    			</tr>
+    		</table>  
+    		<br>
+        <dl>
+    			<dt><label>{L_CACHE_DTTL}</label><br><span>{H_CACHE_DTTL}</span></dt>
+    			<dd><label><input type='text' name='cache_apc[dttl]' size='32' value="{V_CACHE_APC_DTTL}" class='input' /></label></dd>
+    		</dl>
+        <dl>
+    			<dt><label>{L_CACHE_PREFIX}</label><br><span>{H_CACHE_PREFIX}</span></dt>
+    			<dd><label><input type='text' name='cache_apc[prefix]' size='32' value="{V_CACHE_FILE_PREFIX}" class='input' /></label></dd>
+    		</dl>  
+      </div>      
+      <div id="div_cache_memcache" style="display:{DIV_CACHE_MEMCACHE_VISIBLE}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+    			<tr>
+    				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="35"></td>
+    				<td class="row1" align="center">{L_CACHE_MEMCACHE_INFO}</td>
+    			</tr>
+    		</table>  
+    		<br>
+        <dl>
+    			<dt><label>{L_CACHE_DTTL}</label><br><span>{H_CACHE_DTTL}</span></dt>
+    			<dd><label><input type='text' name='cache_memcache[dttl]' size='32' value="{V_CACHE_MEMCACHE_DTTL}" class='input' /></label></dd>
+    		</dl>
+        <dl>
+    			<dt><label>{L_CACHE_PREFIX}</label><br><span>{H_CACHE_PREFIX}</span></dt>
+    			<dd><label><input type='text' name='cache_memcache[prefix]' size='32' value="{V_CACHE_MEMCACHE_PREFIX}" class='input' /></label></dd>
+    		</dl>
+        <dl>
+    			<dt><label>{L_CACHE_MEMCACHE_SERVER}</label><br><span>{H_CACHE_MEMCACHE_SERVER}</span></dt>
+    			<dd><label><input type='text' name='cache_memcache[server]' size='32' value="{V_CACHE_MEMCACHE_SERVER}" class='input' /></label></dd>
+    		</dl>
+        <dl>
+    			<dt><label>{L_CACHE_MEMCACHE_PORT}</label><br><span>{H_CACHE_MEMCACHE_PORT}</span></dt>
+    			<dd><label><input type='text' name='cache_memcache[port]' size='32' value="{V_CACHE_MEMCACHE_PORT}" class='input' /></label></dd>
+    		</dl>            
+      </div>
+    </div>  
+    <br />
+	  <div align='center'>
+      <input type="submit" name="cache_save" value="{L_SAVE_CACHE_SETTINGS}" class="mainoption bi_ok" />
+    </div> 
+	</fieldset>
+  
+  <!-- IF PDC_CACHE_ENABLED -->
+  <fieldset>
+		<legend>{L_CACHE_HEAD_TABLE}</legend>
+    <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+			<tr>
+				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="35"></td>
+				<td class="row1" align="center">{L_CACHE_TABLE_INFO}</td>
+			</tr>
+		</table>  
+		<br>
+    <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    	<tr>
+  			<th>{L_CACHE_GPRE}</th>
+  			<th>{L_CACHE_KEY}</th>
+  			<th>{L_CACHE_STATUS}</th>
+  		</tr>
+  		<!-- BEGIN cache_entity_list_row -->
+  		<tr class="{cache_entity_list_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{cache_entity_list_row.ROW_CLASS}';">
+  		    <td>{cache_entity_list_row.GLOBAL_PREFIX}</td>
+  		    <td>{cache_entity_list_row.KEY}</td>
+  		    <td>{cache_entity_list_row.EXPIRED}</td>
+  		</tr>
+  		<!-- END cache_entity_list_row -->
+  	</table>
+  	<br />
+	  <div align='center'>
+      <input type="submit" name="cache_clear" value="{L_CLEAR_CACHE}" class="mainoption bi_delete" />
+      <input type="submit" name="cache_cleanup" value="{L_CLEANUP_CACHE}" class="mainoption bi_reset" />
+    </div>
+  </fieldset>
+  <!-- ENDIF -->
+</form>

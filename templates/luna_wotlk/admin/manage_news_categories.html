@@ -1,0 +1,30 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="3"><span style="float:left">{L_NEWS_CATEGORIES}</span><span style="float:right"><input type="button" onClick="window.location='manage_news.php{SID}'" value="{L_MANAGE_NEWS}" class="mainoption bi_manage"></span></th>
+  </tr>
+  <tr>
+  	<th><a href="{U_LIST_NEWS}&o=0.0"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED00}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&o=0.1"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED01}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_DATE}">{L_NAME}</a></th>
+    <th><a href="{U_LIST_NEWS}&o=2.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED21}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&o=2.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED20}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_USERNAME}">{L_ICON}</a></th>
+    <th><span style="float:left"><a href="{U_LIST_NEWS}&o=1.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED11}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&o=1.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED10}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_HEADLINE}">{L_COLOR}</a></span></th>
+  </tr>
+  <!-- BEGIN user_groups -->
+  <tr class="{user_groups.ROW_CLASS}">
+  	<td width="33%"><input type="text" name="user_groups[{user_groups.ID}][name]" size="50" maxlength="50" value="{user_groups.NAME}" class="maininput" /></td>    
+    <td>{user_groups.ICON}<!-- IF user_groups.S_ICON --><a href="manage_news_categories.php{SID}&mode=delicon&id={user_groups.ID}"><img src="../images/delete.png" alt="Delete Icon" border="0"></a><!-- ENDIF --></td>
+    <td width="22%">{user_groups.COLORPICKER}</td>
+  </tr>
+  <!-- END user_groups -->
+  <tr>
+    <th colspan="3">{L_ADD_CATEGORY}</th>
+    </tr>
+  <tr class="{ROW_CLASS}">
+  	<td><input type="text" name="new_cat_name" size="50" maxlength="50" value="" class="maininput" /></td>    
+    <td>{ICON_UPLOADER}{TEXT_FIELD}</td>
+    <td width="22%">{NEW_COLORPICKER}</td>
+  </tr>
+  <tr>
+    <th colspan="3"><input type="submit" name="add" value="{L_SAVE}" class="mainoption bi_ok" /></th>
+  </tr>
+</table>
+</form>

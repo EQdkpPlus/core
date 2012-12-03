@@ -1,0 +1,473 @@
+<script language="JavaScript" type="text/javascript">
+<!--
+function pop_preview()
+{
+    selected_style = document.register.user_style.options[document.register.user_style.selectedIndex].value;
+    preview = window.open('{EQDKP_ROOT_PATH}viewnews.php{SID}&style='+selected_style,'preview','resizable=yes,toolbar=no,status=yes,height=500,width=600,screenX=50,screenY=25,left=100,top=75')
+    preview.focus();
+}
+//-->
+</script>
+
+<form method="post" action="{F_SETTINGS}" name="register" id="register">
+<div id="usersettings_tabs">
+<!-- IF not REGISTER -->
+ <ul>
+
+<li><a href='#account'><span{REGISTRATION_ERROR_CLASS}>{L_REGISTRATION_INFORMATION}</span></a></li>
+<li><a href='#profile'><span{ADDINFOS_ERROR_CLASS}>{L_ADDINFOS}</span></a></li>
+<li><a href='#view'><span{PREFERENCES_ERROR_CLASS}>{L_PREFERENCES}</span></a></li>
+<!-- BEGIN plugin_settings_row -->
+<li><a href='#{plugin_settings_row.KEY}'><img src="{plugin_settings_row.ICON}">{plugin_settings_row.PLUGIN}</a></li>
+<!-- END plugin_settings_row -->
+<!-- IF S_SETTING_ADMIN -->
+<li><a href='#permissions'><span>{L_PERMISSIONS}</span></a></li>
+<li><a href='#members'><span{MEMBERS_ERROR_CLASS}>{L_ASSOCIATED_MEMBERS}</span></a></li>
+<!-- IF ENABLE_COMMENTS -->
+<li><a href='#comments'><span>{L_COMMENTS}</span></a></li>
+<!-- ENDIF -->
+<!-- IF S_SEND_MAIL -->
+<li><a href='#email'><span>{L_SEND_MAIL}</span></a></li>
+<!-- ENDIF -->
+<!-- ENDIF -->
+</ul>
+<!-- ENDIF -->
+
+<input type="hidden" name="old_username" value="{USERNAME}" />
+<input type="hidden" name="user_id[]" value="{USER_ID}" />
+
+<div id="account">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_REGISTRATION_INFORMATION}: <!-- IF S_SETTING_ADMIN -->{USERNAME} <!-- ENDIF --></th>
+  </tr>
+  <tr>
+    <td class="row1" colspan="2"><img src="{EQDKP_ROOT_PATH}images/info.png" align="absmiddle"> {L_REQUIRED_FIELD_NOTE} </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_USERNAME}:</strong></td>
+    <td width="60%" class="row1"><!-- IF S_USERNAME_DISABLED -->{USERNAME}<input type="hidden" name="username" size="40" maxlength="30" value="{USERNAME}" class="input required"/><!-- ELSE --><input type="text" name="username" size="40" maxlength="30" value="{USERNAME}" class="input required"/><!-- ENDIF -->
+    {HELP_USERNAME}{FV_USERNAME}</td>
+  </tr> 
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_EMAIL_ADDRESS}:</strong>{VALID_EMAIL_INFO}</td>
+    <td width="60%" class="row1"><input type="text" name="user_email" size="40" maxlength="100" value="{USER_EMAIL}" class="input required email" />
+      {HELP_EMAIL}{FV_USER_EMAIL}</td>
+  </tr>
+  <!-- IF REGISTER -->
+    <tr>
+    <td width="40%" class="row2"><strong>* {L_CONFIRM_EMAIL_ADDRESS}:</strong></td>
+    <td width="60%" class="row1"><input name="user_email2" type="text" class="input required email" id="user_email2" value="{USER_EMAIL2}" size="40" maxlength="100" />
+      {HELP_EMAIL_CONFIRM}</td>
+  </tr>
+  <!-- ENDIF -->
+  <!-- IF S_CURRENT_PASSWORD -->
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_CURRENT_PASSWORD}:</strong><br /><span class="small">{L_CURRENT_PASSWORD_NOTE}</span></td>
+    <td width="60%" class="row1"><input type="password" name="user_password" size="40" maxlength="100" value="" class="input" />
+      {FV_PASSWORD}</td>
+  </tr>
+  <!-- ENDIF -->
+  <!-- IF S_NEW_PASSWORD -->
+  <tr>
+    <td width="40%" class="row2"><strong>{L_NEW_PASSWORD}:</strong><br /><span class="small">{L_NEW_PASSWORD_NOTE}</span></td>
+    <td width="60%" class="row1"><input type="password" name="new_user_password1" size="40" maxlength="100" value="" class="input" />
+      {FV_NEW_PASSWORD}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_CONFIRM_PASSWORD}:</strong><br /><span class="small">{L_CONFIRM_PASSWORD_NOTE}</span></td>
+    <td width="60%" class="row1"><input type="password" name="new_user_password2" size="40" maxlength="100" value="" class="input" /></td>
+  </tr>
+  <!-- ELSE -->
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_PASSWORD}:</strong>{PASSWORD_NOTE}</td>
+    <td width="60%" class="row1"><input type="password" name="user_password1" size="40" maxlength="100" value="{USER_PASSWORD1}" class="input required" />
+      {HELP_PASSWORD}{FV_USER_PASSWORD}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_CONFIRM_PASSWORD}:</strong></td>
+    <td width="60%" class="row1"><input type="password" name="user_password2" size="40" maxlength="100" value="" class="input required" />
+      {HELP_PASSWORD_REPEAT}</td>
+   </tr>
+  <!-- ENDIF -->
+  <!-- IF S_CREATE_NEW_PW -->
+    <tr>
+    <td width="40%" class="row2"><strong> {L_SEND_NEW_PASSWORD}:</strong><br />{L_SEND_NEW_PASSWORD_NOTE}</td>
+    <td width="60%" class="row1"><input name="send_new_pw" type="submit" id="send_new_pw" value="{L_SEND_NEW_PASSWORD}" class="mainoption bi_mail"></td>   
+  </tr>
+  <!-- ENDIF -->
+</table>
+</div>
+
+<div id="profile">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADDINFOS}: <!-- IF S_SETTING_ADMIN -->{USERNAME} <!-- ENDIF --></th>
+  </tr>
+<!-- IF not REGISTER -->
+  <tr>
+    <td class="row1" colspan="2"><img src="{EQDKP_ROOT_PATH}images/info.png" align="absmiddle"> {L_REQUIRED_FIELD_NOTE}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_ADDUSER_FIRST_NAME}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="first_name" size="40" maxlength="100" value="{FIRST_NAME}" class="input required" />       
+      {HELP_NAME}{FV_FIRST_NAME} </td>
+  </tr>  
+  <!-- IF not REGISTER -->
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_LAST_NAME}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="last_name" size="40" maxlength="30" value="{LAST_NAME}" class="input" />{}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_ADDUSER_GENDER}:</strong></td>
+    <td width="60%" class="row1">{DD_GENDER} {HELP_GENDER}{FV_GENDER}	
+    </td>
+  </tr>
+  
+  <tr>
+    <td width="40%" class="row2"><strong>* {L_ADDUSER_COUNTRY}:</strong></td>
+    <td width="60%" class="row1">{DD_COUNTRIES} {HELP_COUNTRY}{FV_COUNTRY}	
+    </td>
+  </tr>
+  <!-- IF not REGISTER -->
+  <tr>
+    <td class="row2"><strong>{L_ADDUSER_ADDRESS}:</strong></td>
+    <td class="row1"><input type="text" name="address" size="40" maxlength="100" value="{ADDRESS}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_STATE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="state" size="40" maxlength="100" value="{STATE}" class="input" />{}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_ZIP_CODE} / <strong>{L_ADDUSER_TOWN}:</strong></strong></td>
+    <td width="60%" class="row1"><input type="text" name="ZIP_code" size="5" maxlength="100" value="{ZIP_CODE}" class="input" />
+      <input type="text" name="town" size="30" maxlength="100" value="{TOWN}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_PHONE}:</strong><br /></td>
+    <td width="60%" class="row1"><input type="text" name="phone" size="40" maxlength="100" value="{PHONE}" class="input" />
+      {L_ADDUSER_FONEINFO}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_CELLPHONE}:</strong><br></td>
+    <td width="60%" class="row1"><input type="text" name="cellphone" size="40" maxlength="100" value="{CELLPHONE}" class="input" />
+      {L_ADDUSER_FONEINFO2}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_ALLVATAR_NICK}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="allvatar_nick" size="40" maxlength="100" value="{ALLVATAR_NICK}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_ICQ}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="icq" size="40" maxlength="100" value="{ICQ}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_SKYPE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="skype" size="40" maxlength="100" value="{SKYPE}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_MSN}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="msn" size="40" maxlength="100" value="{MSN}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADDUSER_IRQ}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="irq" size="40" maxlength="100" value="{IRQ}" class="input" />
+    {IRC_HELP}</td>
+  </tr>
+  <tr>
+    <td class="row2"><strong>{L_ADDUSER_TWITTER}:</strong></td>
+    <td class="row1"><input name="twitter" type="text" class="input" id="twitter" value="{TWITTER}" size="40" maxlength="100" /></td>
+  </tr>
+  <tr>
+    <td class="row2"><strong>{L_ADDUSER_FACEBOOK}:</strong></td>
+    <td class="row1"><input name="facebook" type="text" class="input" id="facebook" value="{FACEBOOK}" size="40" maxlength="100" />
+      {FACEBOOK_HELP}</td>
+  </tr>
+  <tr>
+    <td class="row2"><strong>{L_ADDUSER_BIRTHDAY}:</strong></td>
+    <td class="row1">{BIRTHDAY}</td>
+  </tr>
+  <tr>
+    <td class="row2"><strong>{L_USER_IMAGE}:</strong></td>
+    <td class="row1">{IMAGE_UPLOAD}
+      <!-- IF S_IMAGE --><a href="{IMAGE_DELETE}"><img src="{EQDKP_ROOT_PATH}images/delete.png" alt="Delete" border="0"></a><!-- ENDIF --></td>
+  </tr>
+  <tr>
+    <td class="row2"><strong>{L_WORK}:</strong></td>
+    <td class="row1"><input name="work" type="text" class="input" id="work" value="{WORK}" size="40" maxlength="400" /></td>
+  </tr>
+  <tr>
+    <td class="row2"><strong>{L_INTERESTS}:</strong></td>
+    <td class="row1"><input name="interests" type="text" class="input" id="interests" value="{INTERESTS}" size="40" maxlength="400" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_HARDWARE}:</strong></td>
+    <td width="60%" class="row1"><input name="hardware" type="text" class="input" id="hardware" value="{HARDWARE}" size="40" maxlength="400" /></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">{L_USER_PRIV}</th>
+  </tr>  
+  <tr>
+    <td width="40%" class="row2"><strong>{L_USER_PRIV_SET_GLOBAL}:</strong></td>
+    <td width="60%" class="row1">{PRIV_SET_DROPDOWN}</td>
+  </tr> 
+  <tr>
+    <td width="40%" class="row2"><strong>{L_USER_PRIV_TEL_ALL}:</strong></td>
+    <td width="60%" class="row1">{PRIV_PHONE_DROPDOWN}</td>
+</tr>  
+<tr>
+    <td width="40%" class="row2">{L_USER_PRIV_TEL_SMS}</td>
+    <td width="60%" class="row1"><input name="priv_nosms" type="checkbox" class="input" id="priv_nosms" value="1" {PRIV_NOSMS}/></td>
+</tr>  
+<tr>
+  <td class="row2"><strong>{L_USER_PRIV_BDAY}:</strong></td>
+  <td class="row1"><input name="priv_bday" type="checkbox" class="input" id="priv_bday" value="1" {PRIV_BDAY}/></td>
+</tr>
+<tr>
+    <td width="40%" class="row2"><strong>{L_USER_PRIV_GALLERY}</strong></td>
+    <td width="60%" class="row1"><input name="priv_gallery" type="checkbox" class="input" id="priv_gallery" value="1" {PRIV_GALLERY}/></td>
+  </tr>
+<tr>
+	<th colspan="2"><strong>{L_MISC}</strong></th>
+</tr>
+<tr>
+	<td class="row2">{L_HIDE_SHOP}</td>
+	<td class="row1"><input name="hide_shop" type="checkbox" class="input" id="hide_shop" value="1" {HIDE_SHOP}/></td>
+</tr>
+<tr>
+	<td class="row2">{L_HIDE_MINI_GAMES}</td>
+	<td class="row1"><input name="hide_mini_games" type="checkbox" class="input" id="hide_mini_games" value="1" {HIDE_MINI_GAMES}/></td>
+</tr>     
+  <!-- ENDIF -->
+</table>
+</div>
+
+<div id="view">           
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_PREFERENCES}: <!-- IF S_SETTING_ADMIN -->{USERNAME} <!-- ENDIF --></th>
+  </tr>
+  <!-- IF not REGISTER -->
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ADJUSTMENTS_PER_PAGE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="user_alimit" size="5" maxlength="255" value="{USER_ALIMIT}" class="input" />{FV_USER_ALIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_EVENTS_PER_PAGE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="user_elimit" size="5" maxlength="255" value="{USER_ELIMIT}" class="input" />{FV_USER_ELIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_ITEMS_PER_PAGE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="user_ilimit" size="5" maxlength="255" value="{USER_ILIMIT}" class="input" />{FV_USER_ILIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_NEWS_PER_PAGE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="user_nlimit" size="5" maxlength="255" value="{USER_NLIMIT}" class="input" />{FV_USER_NLIMIT}</td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2"><strong>{L_RAIDS_PER_PAGE}:</strong></td>
+    <td width="60%" class="row1"><input type="text" name="user_rlimit" size="5" maxlength="255" value="{USER_RLIMIT}" class="input" />{FV_USER_RLIMIT}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <td width="40%" class="row2"><strong>{L_LANGUAGE}:</strong></td>
+    <td width="60%" class="row1">{DD_LANGUAGE} {HELP_LANGUAGE} </td>
+  </tr>
+	<tr>
+    <td width="40%" class="row2"><strong>* {L_TIMEZONES}:</strong></td>
+    <td width="60%" class="row1">{DD_TIMEZONES} {HELP_TIMEZONES}</td>
+  </tr>
+  <!-- IF not REGISTER -->
+  <tr>
+    <td width="40%" class="row2"><strong>{L_STYLE}:</strong></td>
+    <td width="60%" class="row1">{DD_STYLES}
+      &nbsp;&nbsp; (<a href="javascript:pop_preview()">{L_PREVIEW}</a>)
+    {HELP_STYLE}</td>
+  </tr>
+  <tr>
+  	<td class="row2"><strong>{L_DATE_TIME}:</strong></td>
+  	<td class="row1"><input name="user_date_time" type="text" class="input" id="user_date_time" value="{USER_DATE_TIME}" maxlength="255" /><br />{L_DATE_NOTE}</td>
+  	</tr>
+  <tr>
+  	<td class="row2"><strong>{L_DATE_SHORT}:</strong></td>
+  	<td class="row1"><input name="user_date_short" type="text" class="input" id="user_date_short" value="{USER_DATE_SHORT}" maxlength="255" /><br />{L_DATE_NOTE}</td>
+  	</tr>
+  <tr>
+  	<td class="row2"><strong>{L_DATE_LONG}:</strong></td>
+  	<td class="row1"><input name="user_date_long" type="text" class="input" id="user_date_long" value="{USER_DATE_LONG}" maxlength="255" /><br />{L_DATE_NOTE}</td>
+  	</tr>
+  <!-- ENDIF -->
+</table>
+</div>
+ 
+<!-- BEGIN plugin_usersettings_div -->
+<div id="{plugin_usersettings_div.KEY}">
+
+ 
+ <table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{plugin_usersettings_div.PLUGIN}</th>
+  </tr>
+  <!-- BEGIN plugin_usersettings -->
+	<!-- IF plugin_usersettings_div.plugin_usersettings.S_TH -->
+	<tr>
+		<th align="center" colspan="2">{plugin_usersettings_div.plugin_usersettings.NAME}</th>
+	</tr>
+	<!-- ELSE -->
+	<tr>
+    <td class="row1">{plugin_usersettings_div.plugin_usersettings.NAME}</td>
+		<td class="row2">{plugin_usersettings_div.plugin_usersettings.FIELD} {plugin_usersettings_div.plugin_usersettings.HELP}</td>
+	</tr>
+	<!-- ENDIF -->
+	<!-- END plugin_usersettings -->
+	</table>
+</div>
+<!-- END plugin_usersettings_div -->		
+		
+<!-- IF S_SETTING_ADMIN --> 
+<div id="permissions">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_PERMISSIONS}: {USERNAME}</th>
+  </tr>
+  <tr>
+    <td colspan="2" class="row1"><div style="float:left; height:48px; width:52px;"><img src="{EQDKP_ROOT_PATH}images/info_big.png"></div><div style="height:48px;"><img src="{EQDKP_ROOT_PATH}images/admin/updates.png" align="absmiddle"> {L_ADMIN_NOTE}<br>
+      <input type="checkbox" checked disabled>
+      {L_GROUP_NOTE}</div></td>
+    </tr>
+  <tr>
+    <th colspan="2">{L_ACCOUNT_ENABLED}</th>
+    </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ACCOUNT_ENABLED}:</td>
+    <td width="60%" class="row1"><span class="small"><label><input type="radio" name="user_active" value="1"{USER_ACTIVE_YES_CHECKED} /> {L_YES}</label>&nbsp;&nbsp;<label><input type="radio" name="user_active" value="0"{USER_ACTIVE_NO_CHECKED} /> {L_NO}</label></span></td>
+  </tr>
+
+<tr>
+<th align="center" colspan="2">{L_USER_GROUPS}</th>
+</tr>
+<tr>
+<td class="row2">{L_USER_GROUPS}</td>
+<td width="60%" class="row1">
+  {USER_GROUP_SELECT}</td>
+</tr>
+<script language="javascript">
+function change_perm_color(id){
+
+	var status = document.getElementById(id).checked;
+	
+	if (status){
+		document.getElementById('span_'+id).className = 'positive'; 
+	} else {
+		document.getElementById('span_'+id).className = 'negative'; 
+	}
+
+}
+
+</script>
+  
+  
+ <!-- BEGIN permissions_row -->
+ <tr>
+   <th width="60%" colspan="2">{permissions_row.GROUP}:</td>
+</tr>
+<tr>
+   <td width="60%" class="row2" colspan="2" >
+     <!-- BEGIN check_group -->
+     <!-- IF not permissions_row.check_group.S_SUPERADMIN_PERM -->
+     <div style="float:left; margin-right:20px;" class="small"><label><!-- IF permissions_row.check_group.S_IS_GROUP --><input type="checkbox" {permissions_row.check_group.CBCHECKED} disabled/><!-- ELSE --><input type="checkbox" name="{permissions_row.check_group.CBNAME}" value="Y"{permissions_row.check_group.CBCHECKED} onChange="change_perm_color(this.id)" id="cb_{permissions_row.check_group.CBNAME}"/><!-- ENDIF -->
+     <span id="span_cb_{permissions_row.check_group.CBNAME}" class="{permissions_row.check_group.CLASS}">{permissions_row.check_group.TEXT}</span></label></div>
+     <!-- ENDIF -->
+     <!-- END check_group -->
+   </td>
+ </tr>
+ <!-- END permissions_row --> 
+
+
+</table>
+</div>
+
+<!-- IF S_MU_TABLE -->
+<div id="members">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+<th align="center" colspan="2">{L_ASSOCIATED_MEMBERS}: {USERNAME}</th>
+</tr>
+<tr>
+<td width="40%" class="row2"><strong>{L_MEMBERS}:</strong></td>
+<td width="60%" class="row1">
+{JS_CONNECTIONS}
+{FV_MEMBER_ID} </td>
+</tr>
+</table>
+</div>
+<!-- ENDIF -->
+<!-- IF ENABLE_COMMENTS -->
+<div id="comments">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+<th align="center">{L_COMMENTS}</th>
+</tr>
+<tr>
+<td>{COMMENTS}</td>
+</tr>
+</table>
+</div>
+<!-- ENDIF -->
+
+<!-- IF S_SEND_MAIL -->
+<div id="email">
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+      <th align="center" colspan="2">{L_SEND_MAIL2}</th>
+    </tr>
+    <tr>
+      <td width="5%" nowrap="nowrap" class="row2"><strong>{L_SUBJECT}:</strong></td>
+      <td width="80%" class="row1"><input name="subject" type="text" class="input" id="subject" size="65"/></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row2"><strong>{L_BODY}:</strong></td>
+      <td class="row1">{WYSIWYG_EDITOR}
+        <textarea name="body" id="body" cols="70" rows="15" class="jTagEditor" style="height:250px;"></textarea>
+        <input type="button" value=" + " onclick="textbox_resize('body', 50);" class="input"/>
+        <input type="button" value=" - " onclick="textbox_resize('body', -50);" class="input"/></td>
+    </tr>
+    <tr>
+      <th colspan="2"><input type="submit" name="send_mail" value="{L_SEND}" class="mainoption bi_mail"></th>
+    </tr>
+  </table>
+</div>
+<!-- ENDIF -->
+<!-- ENDIF -->
+</div>
+<!-- IF S_DISPLAY_CATPCHA -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+<th align="center" colspan="2">{L_CONFIRM}</th>
+</tr>
+<tr>
+<td width="40%" class="row2"><strong>{L_CONFIRM_TEXT}:</strong><br>{L_CONFIRM_INFO}</td>
+<td width="60%" class="row1">
+<div id="recaptcha_image" style="float:left; cursor:pointer;" onClick="javascript:Recaptcha.reload();" title="{L_RELOAD_CAPTCHA}"></div><img src="{EQDKP_ROOT_PATH}images/glyphs/reload.png" onClick="javascript:Recaptcha.reload();" title="{L_RELOAD_CAPTCHA}" alt="{L_RELOAD_CAPTCHA}" style="cursor:pointer; padding-top:20px;"><div style="clear:both;"></div>
+<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input required"/>
+
+{FV_CAPTCHA}
+{CAPTCHA}
+</td>
+</tr>
+</table>
+<!-- ENDIF -->
+<table width="100%" cellpadding="0" cellspacing="0">
+
+<tr><th><input type="submit" name="submit" value="{L_SUBMIT}" class="mainoption bi_ok" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption bi_reset" <!-- IF REGISTER -->onClick="reset_validator_register();"<!-- ENDIF -->/>
+
+ <!-- IF S_SETTING_ADMIN -->
+ <input type="submit" name="" value="{L_BACK}" class="mainoption bi_back" />
+ <!-- IF not S_PROTECT_USER -->
+      <input type="submit" name="delete" value="{L_DELETE}" class="liteoption bi_delete" />
+    <!-- ENDIF --><!-- ENDIF --></th></tr></table>
+
+</form>
+<!-- IF S_SETTING_ADMIN -->{JS_TAB_SELECT}<!-- ENDIF -->

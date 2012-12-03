@@ -1,0 +1,56 @@
+<form action='manage_members.php{SID}' method='post'>
+<table width="100%" cellpadding="2" cellspacing="1" border="0">
+	<tr>
+		<th colspan="3">{L_MEMBER}</th>
+	</tr>
+	<tr>
+		<td class="row1">&nbsp;</td>
+		<td class="row1"><strong>{L_NAME}: </strong></td>
+		<td class="row2"><input type="text" name="name" value="{NAME}" class="maininput" /></td>
+		</tr>
+    <tr>
+    	<td class="row1">&nbsp;</td>
+    	<td class="row1"><strong>{L_LVL}: </strong></td>
+			<td class="row2"><input type="text" name="level" value="{LVL}" size="3" class="maininput" /></td>
+   	</tr>
+    <tr>
+    	<td class="row1">&nbsp;</td>
+    	<td class="row1"><strong>{L_CLASS}:</strong></td>
+    	<td class="row2">{CLASS}</td>
+   	</tr>
+		<!-- IF S_RACE -->
+    <tr>
+    	<td class="row1">&nbsp;</td>
+    	<td class="row1"><strong>{L_RACE}: </strong></td>
+    	<td class="row2">{RACE}&nbsp;</td>
+   	</tr>
+		<!-- ENDIF -->
+    <tr>
+    	<td width="20" class="row1">{MAINCHAR_HELP}</td>
+    	<td class="row1"><strong>{L_MAINCHAR}: </strong></td>
+    	<td class="row2">{MAINCHAR}</td>
+   	</tr>
+    <tr>
+    	<td class="row1">&nbsp;</td>
+    	<td class="row1"><strong>{L_RANK}: </strong></td>
+    	<td class="row2">{RANK}</td>
+   	</tr>
+    <tr>
+    	<td class="row1">&nbsp;</td>
+        <td class="row1"><strong>{L_ACTIVE}: </strong></td>
+				<td class="row2"><input type="checkbox" name="status" value="1" class="maininput" <!-- IF STATUS -->checked="checked"<!-- ENDIF --> /></td>
+    </tr>
+
+    <!-- IF S_UPD -->
+    <tr>
+    	<th colspan="3">{L_HISTORY}: {MEMBERS} <input type="submit" name="mhistory" value="{L_DOIT}" class="mainoption bi_next" /></th>
+    </tr>
+    <!-- ENDIF -->
+	<tr>
+		<th colspan="3"><input type="hidden" name="member_id" value="{ID}" />
+                        <!-- IF S_UPD --><input type="submit" name="mdel" value="{L_DEL}" class="mainoption bi_delete" /><!-- ENDIF -->
+						<input type="submit" name="msave" value="{L_ADDUPD}" class="mainoption bi_ok" /> <input type="submit" value="{L_CANCEL}" class="liteoption bi_back" />
+		</th>
+	</tr>
+</table>
+</form>

@@ -1,0 +1,63 @@
+<div align="center">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="welcome">
+<tr>
+<td><img src="../templates/install/images/install_icon.png"></td>
+<td><h2>{L_WELCOME}</h2></td>
+</tr>
+</table>
+
+</div>
+<form method="get" action="index.php" name="langget">
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{L_INSTALL_LANGUAGE}</h1></p>
+  <p><span style="float:left;"><strong>{L_LANGUAGE_SELECT}:&nbsp;</strong></span><span class="left">
+        {LANG_DD}
+      </span></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+</form>
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="3"><h1><strong>{L_LICENSE}</strong></h1></th>
+  </tr>
+  <tr>
+    <td class="row2">{L_LICENSE_TEXT}</td>
+
+  </tr>
+</table></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+
+
+<!-- IF MSG_TEXT != '' -->
+
+  <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">{MSG_TEXT}</div></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+<br/>
+
+
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+
+<input type="hidden" name="install_step" value="1" />
+<div align="center"><input type="submit" name="submit" value="{L_ACCEPT}" class="mainoption" /></div>
+</form>
+<!-- ENDIF -->

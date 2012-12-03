@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<install type="template" version="0.7.0.1">
+	<name>Luna WotLK</name>
+	<author>GodMod</author>
+	<authorEmail>admin@admin.de</authorEmail>
+	<authorUrl>http://www.eqdkp-plus.com</authorUrl>
+	<creationDate>19-DEC-2009</creationDate>
+	<copyright>GodMod</copyright>
+	<license>CC</license>
+	<version>1.0.0</version>
+	<description></description>
+					
+	<settings>
+		<template_path>luna_wotlk</template_path>
+		<body_background>2B577C</body_background>
+		<body_link>C5E5FF</body_link>
+		<body_link_style>0</body_link_style>
+		<body_hlink>EEEEEE</body_hlink>
+		<body_hlink_style>0</body_hlink_style>
+		<header_link>FFFFFF</header_link>
+		<header_link_style>0</header_link_style>
+		<header_hlink>C3E5FF</header_hlink>
+		<header_hlink_style>0</header_hlink_style>
+		<tr_color1>14293B</tr_color1>
+		<tr_color2>1D3953</tr_color2>
+		<th_color1>2B577C</th_color1>
+		<fontface1>Verdana, Arial, Helvetica, sans-serif</fontface1>
+		<fontface2>Verdana, Arial, Helvetica, sans-serif</fontface2>
+		<fontface3>Verdana, Arial, Helvetica, sans-serif</fontface3>
+		<fontsize1>10</fontsize1>
+		<fontsize2>11</fontsize2>
+		<fontsize3>12</fontsize3>
+		<fontcolor1>EEEEEE</fontcolor1>
+		<fontcolor2>C3E5FF</fontcolor2>
+		<fontcolor3>000000</fontcolor3>
+		<fontcolor_neg>FF0000</fontcolor_neg>
+		<fontcolor_pos>008800</fontcolor_pos>
+		<table_border_width>1</table_border_width>
+		<table_border_color>999999</table_border_color>
+		<table_border_style>4</table_border_style>
+		<input_color>EEEEEE</input_color>
+		<input_border_width>1</input_border_width>
+		<input_border_color>2B577C</input_border_color>
+		<input_border_style>4</input_border_style>
+		<attendees_columns>6</attendees_columns>
+		<logo_path>logo.png</logo_path>
+		<background_img></background_img>
+		<css_file></css_file>
+		<use_db_vars>1</use_db_vars>
+	</settings>
+
+	<classcolors>
+		<cc_1>#C41F3B</cc_1>
+		<cc_2>#FF7C0A</cc_2>
+		<cc_3>#AAD372</cc_3>
+		<cc_4>#68CCEF</cc_4>
+		<cc_5>#F48CBA</cc_5>
+		<cc_6>#FFFFFF</cc_6>
+		<cc_7>#FFF468</cc_7>
+		<cc_8>#1a3caa</cc_8>
+		<cc_9>#9382C9</cc_9>
+		<cc_10>#C69B6D</cc_10>
+	</classcolors>
+</install>

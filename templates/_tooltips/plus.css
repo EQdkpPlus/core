@@ -1,0 +1,114 @@
+/* Define the new Eqdkp Plus Tooltip - original gtom the WoW-Head Tooltip */
+table.eqdkpplus_tooltip {
+	border: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+	background: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	float: none;
+	width: auto;
+	height: 0;
+	max-width: 500px;
+	width:expression(this.width > 500 ? "500px" : true);
+}
+table.eqdkpplus_tooltip td, table.eqdkpplus_tooltip tr, table.eqdkpplus_tooltip th {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: 0;
+	text-align: left;
+	background: none;
+}
+table.eqdkpplus_tooltip td.top-left {
+	background-image: url(images/tooltip.png);
+	background-position: top left;
+	height: 4px;
+}
+table.eqdkpplus_tooltip td.top-right {
+	background-image: url(images/tooltip.png);
+	background-position: top right;
+	height: 4px;
+}
+table.eqdkpplus_tooltip td.bottom-left {
+	background-image: url(images/tooltip.png);
+	background-position: bottom left;
+	height: 4px;
+}
+table.eqdkpplus_tooltip td.bottom-right {
+	background-image: url(images/tooltip.png);
+	background-position: bottom right;
+	height: 4px;
+}
+table.eqdkpplus_tooltip td.wh_left {
+	background-image: url(images/tooltip.png);
+	background-position: center left;
+}
+table.eqdkpplus_tooltip td.wh_left div.wh_right {
+	background-image: url(images/tooltip-right.gif);
+	background-position: center right;
+	background-repeat: repeat-y;
+	padding: 0 8px 0 8px;
+	margin: 0;
+	float: none;
+	text-align: left;
+	width: auto;
+	height: auto;
+	max-width: 500px;
+	width:expression(this.width > 500 ? "500px" : true);
+}
+table.eqdkpplus_tooltip td, table.eqdkpplus_tooltip tr, table.eqdkpplus_tooltip th {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: 0;
+	text-align: left;
+	background: none;
+	color: #cccccc !important;
+}
+
+/* item icon */
+.iconmedium {
+	width: 44px;
+	height: 44px;
+	background: 4px 4px no-repeat;
+	position: relative;
+}
+.iconmedium .tilee {
+	width: 44px;
+	height: 44px;
+}
+/*.iconmedium .tilee {
+	background-image: url(images/icon_border_medium.gif);
+}*/
+
+/* icon */
+.iconsmall {
+	width: 27px;
+	height: 27px;
+	background: 4px 4px no-repeat;
+	position: relative;
+}
+.iconsmall .tilee {
+	width: 27px;
+	height: 27px;
+}
+table.wh_outer tbody {
+	border: 0;
+}
+table.wh_outer {
+	border: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+	background: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	float: none;
+	height: 0;
+	min-width: 350px;
+	width:expression(this.width < 350 ? "350px" : true);
+}

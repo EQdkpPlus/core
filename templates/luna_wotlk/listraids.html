@@ -1,0 +1,31 @@
+<form method="post" action="{F_RAIDS}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr colspan="22" align="right">                 
+    <th align="center" colspan="2">{L_ENTER_DATES}:</th>
+    <th width="50%" align="center">
+	    <b>{L_STARTING_DATE}:</b> {DATEPICK_DATE_FROM}
+    </th>
+    <th width="50%" align="center">
+	    <b>{L_ENDING_DATE}:</b> {DATEPICK_DATE_TO}
+    </th>
+    <th align="center" colspan="2"><input type="submit" name="submit" value="{L_CREATE_NEWS_SUMMARY}" class="mainoption" />
+			<a href="listraids.php{SID}" title="{L_UNCHECK}"><img src="{IMAGE_PATH}glyphs/reset.png"></a></th>
+    <th>   
+      {MANAGE_LINK}
+    </th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  {PAGE_OUT}
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+</form>

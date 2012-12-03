@@ -1,0 +1,60 @@
+<form method="post" action="{F_ACTION}" name="post" onSubmit="return info_check_form()">
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
+	<input name="changed" value="" type="hidden" /> 
+	  <tr>
+	    <th colspan="3"><a href="manage_infopages.php{SID}">{L_MANAGE_PAGES}</a> &raquo; {PAGE_HEADER}:</th>
+    </tr>
+	  <tr>
+	    <th colspan="3">{L_INFO_PAGEOPT}
+</th>
+      </tr>
+      <tr>
+        <td width="20" nowrap="nowrap" class="row1">{HELP_TITLE}</td>
+		<td class="row1"><strong>{L_INFO_PAGE_TITLE}*</strong></td>
+		<td class="row2">
+			<input type="text" name="title" size="50" value="{INFO_PAGE_TITLE}" class="input" />		  {FV_TITLE} </td>
+		</tr>
+      <tr>
+        <td class="row1">{HELP_ALIAS}</td>
+        <td class="row1"><strong>{L_INFO_PAGE_ALIAS}:</strong></td>
+        <td class="row2"><input name="alias" type="text" class="input" id="alias" value="{INFO_PAGE_ALIAS}" size="50" />
+          {FV_ALIAS}</td>
+      </tr>
+		<tr>
+				<td class="row1">{HELP_ML}</td>
+				<td class="row1"><strong>{L_INFO_PAGE_ML}</strong></td>
+				<td class="row2">{INFO_PAGE_ML_DROPDOWN} </td>
+		</tr>
+		<tr>
+ 				<td class="row1">{HELP_VIS}</td>
+ 				<td class="row1"><strong>{L_INFO_PAGE_VIS}:</strong></td>
+ 				<td class="row2">{INFO_PAGE_VIS_DROPDOWN}</td>
+		</tr>
+		<tr>
+   			<td class="row1">{HELP_COMMENTS}</td>
+   			<td class="row1"><strong>{L_INFO_PAGE_COMMENTS}:</strong></td>
+   			<td class="row2"><input name="comments" type="checkbox" class="input" id="comments" value="1" {info_page_comments}/>
+			<!-- IF not S_NEW_PAGE -->(<a href="manage_infopages.php{SID}&amp;mode=delete_comments&amp;page={PAGE_ID}">{L_DELETE_COMMENTS}</a>)<!-- ENDIF --></td>
+		</tr>
+ 		<tr>
+    		<td class="row1">{HELP_VOTING}</td>
+    		<td class="row1"><strong>{L_INFO_PAGE_VOTING}</strong></td>
+    		<td class="row2"><input name="voting" type="checkbox" class="input" id="voting" value="1" {info_page_voting}/>
+<!-- IF not S_NEW_PAGE -->(<a href="manage_infopages.php{SID}&mode=reset_votings&page={PAGE_ID}">{L_RESET_VOTINGS}</a>)<!-- ENDIF --></td>
+ 		</tr>
+	
+	<tr>
+		<th colspan="3" align="center">{L_INFO_PAGE_CONTENT}*</th>
+	</tr>
+	<tr>
+		<td colspan="3"  class="row1">		<div>
+
+		</div><textarea class="mceEditor" name="page_content" style="width:100%" id="page_content" rows="20">{INFO_PAGE_CONTENT}</textarea></td>
+  	</tr>
+	<tr><th colspan="3"><input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_SAVE}"/>
+		<input name="reset" type="reset" class="liteoption bi_reset" id="reset" value="{L_RESET}"/>
+		<input name="" type="submit" class="mainoption bi_back" id="infocancelbu" value="{L_CANCEL}" /><input type="hidden" name="page_id" value="{PAGE_ID}"></th>
+	  </tr>
+</table>
+</form>
+{JS_GUILDRULES_INFO}

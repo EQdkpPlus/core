@@ -1,0 +1,500 @@
+form { 
+	display: inline; 
+	}
+img { 
+	vertical-align: middle; 
+	border: 0px; 
+	}
+
+html {
+	color: #536482;
+	background: #EFEFEF;
+	/* Always show a scrollbar for short pages - stops the jump when the scrollbar appears. non-ie browsers */
+	height: 100%;
+	margin-bottom: 1px;
+}
+
+body {
+	/* Text-Sizing with ems: http://www.clagnut.com/blog/348/ */
+	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	color: #536482;
+	background: #EFEFEF;
+	font-size: 11px;	/* This sets the default font size to be equivalent to 10px */
+	margin: 10px 15px;
+}
+
+.header {
+background-image: url(../install/images/header_background.png);
+background-position: bottom;
+height:120px;
+font-family:'Trebuchet MS',Arial,sans-serif;
+border-bottom: 2px solid #666;
+}
+
+.welcome {
+	font-family:'Trebuchet MS',Arial,sans-serif;
+  font-size: 11px;
+}
+
+/*h1 { 
+	font-weight: bold; 
+	color: #CECFEF; 
+	font-size: 1em; 
+	background-image: url(../templates/install/images/gradient3dblank.gif);
+	white-space: nowrap;
+	text-transform: uppercase;
+	padding: 2px; 
+	
+	}
+*/
+
+/* Mainsite Structure */
+#outer {
+ text-align:left;
+ width:800px;
+ border:1px solid #000000;
+ background:#ffffff;
+ min-height:400px;
+ 
+ }
+
+#outer_border {
+	width:802px;
+  min-height:400px;
+  margin:auto;
+	border-right:1px solid #a4a4a4;
+	border-bottom:1px solid #a4a4a4;
+ }
+
+#hdr {
+ height:140px;
+ background:#ffffff;
+ color: #333333;
+ 
+ 
+ }
+
+#bar {
+ height:25px;
+ background:#ffffff;
+ color: #333333;
+ }
+
+#bodyblock {
+ position:relative;
+ background: #ffffff;
+ color: #333333;
+ width:750px;
+ padding:10px;
+ margin: auto;
+ }
+
+#l-col {
+ float:left;
+ background:#ffffff;
+ color: #333333;
+ width:165px;
+ }
+
+#cont {
+ width:585px;
+ background:#ffffff;
+ color: #333333;
+ text-align:left;
+ }
+
+#ftr {
+ height:25px;
+ background:#ffffff;
+ color: #333333;
+ margin:0;
+ }
+	
+/* Rounded Corner Boxes */
+
+.dialog {
+ position:relative;
+ margin:0px auto;
+ min-width:8em;
+ max-width:760px; /* based on image dimensions - not quite consistent with drip styles yet */
+ color:#000000;
+ z-index:1;
+ margin-left:12px; /* default, width of left corner */
+ margin-bottom:0.5em; /* spacing under dialog */
+}
+
+.dialog .content,
+.dialog .t,
+.dialog .b,
+.dialog .b div {
+ background:transparent url(../install/images/dialog-800x1600_white.jpg) no-repeat top right;
+ /*background-image:url(../templates/install/images/dialog2-blue.gif);*/
+}
+
+.dialog .content {
+ position:relative;
+ zoom:1;
+ _overflow-y:hidden;
+ padding:0px 20px 0px 0px;
+}
+
+.dialog .t {
+ /* top+left vertical slice */
+ position:absolute;
+ left:0px;
+ top:0px;
+ width:12px; /* top slice width */
+ margin-left:-12px;
+ height:100%;
+ _height:1600px; /* arbitrary long height, IE 6 */
+ background-position:top left;
+}
+
+.dialog .b {
+ /*bottom*/
+ position:relative;
+ width:100%;
+ margin-top:-4px;
+ background-position:bottom right;
+}
+
+.dialog .b,
+.dialog .b div {
+ height:15px; /* height of bottom cap/shade */
+ font-size:1px;
+}
+
+.dialog .b div {
+ position:relative;
+ width:12px; /* bottom corner width */
+ margin-left:-12px;
+ background-position:bottom left;
+}
+
+.dialog .hd,
+.dialog .bd,
+.dialog .ft {
+ position:relative;
+}
+
+.dialog .wrapper {
+ /* extra content protector - preventing vertical overflow (past background) */
+ position:static;
+ max-height:1000px;
+ overflow:auto; /* note that overflow:auto causes a rather annoying redraw "lag" in Firefox 2, and may degrade performance. Might be worth trying without if you aren't worried about height/overflow issues. */
+}
+
+.dialog h1,
+.dialog p {
+ margin:0px; /* margins will blow out backgrounds, leaving whitespace. */
+ padding:0.5em 0px 0.5em 0px;
+}
+
+.dialog h1 {
+	font-weight: bold; 
+	color: #208bc9; 
+	font-size: 1.1em; 
+	white-space: nowrap;
+	text-transform: uppercase;
+	border-bottom: 1px solid #538ac5;
+	margin-top: -5px;
+}
+
+	
+/* Msgtext */
+
+.msgtext {
+	font-family: Verdana, Tahoma, Arial; 
+	font-size: 1em; 
+	color: #000000; 
+	/*border-top: 1px; 
+	border-right: 1px; 
+	border-bottom: 1px; 
+	border-left: 1px; 
+	border-color: #7B819A; 
+	border-style: solid;*/
+	padding: 4px;
+	margin: 4px;
+	}
+	
+.msgtext li{
+	font-family: Verdana, Tahoma, Arial; 
+	font-size: 1em; 
+	color: #000000; 
+	list-style-image: url(../install/images/file_conflict.gif);
+	}
+	
+	
+	
+/*TABLE { 
+	background-image: url(../templates/install/images/box.gif);
+	border-top: 1px; 
+	border-right: 1px; 
+	border-bottom: 1px; 
+	border-left: 1px; 
+	border-color: #7B819A; 
+	border-style: solid;
+	}
+	
+TABLE.borderless { 
+	border-style: none; 
+	}
+	
+th { 
+	font-weight: bold; 
+	color: #CECFEF; 
+	font-size: 1em; 
+	background-image: url(../templates/install/images/gradient3dblank.gif);
+	white-space: nowrap;
+	text-transform: uppercase; 
+	}
+	
+tr, td { 
+	font-family: Verdana, Tahoma, Arial; 
+	font-size: 11px; 
+	color: #000000; 
+	}
+*/
+	
+a:link, a:visited, a:active { 
+	text-decoration: underline; 
+	color: #336c99;;
+	background: url(../install/images/icon_trace.gif);
+ 	background-repeat: no-repeat;
+ 	background-position: left;
+ 	padding-left:16px;
+ 
+	}
+	
+a:hover { 
+	text-decoration: underline; 
+	color: #a90000; 
+	}
+	
+th a:link, th a:visited, th a:active { 
+	text-decoration: underline; 
+	color: #CECFEF; 
+	font-weight: bold; 
+	}
+	
+th a:hover { 
+	text-decoration: underline; 
+	color: #E6E6F5; 
+	font-weight: bold; 
+	}
+	
+th.smalltitle { 
+	font-weight: bold; 
+	color: #CECFEF; 
+	background-color: #5588CC; 
+	white-space: nowrap; 
+	font-size: 10px; 
+	}
+	
+th.smalltitle a:link, th.smalltitle a:visited, th.smalltitle a:active { 
+	text-decoration: underline; 
+	color: #CECFEF; 
+	font-weight: bold; 
+	font-size: 10px; 
+	}
+	
+th.smalltitle a:hover { 
+	color: #E6E6F5; 
+	font-weight: bold; 
+	font-size: 10px; 
+	text-decoration: underline; 
+	}
+	
+th.footer { 
+	color: #CECFEF; 
+	text-align: right; 
+	background-color: #5588CC; 
+	white-space: nowrap; 
+	font-weight: normal; 
+	}
+	
+th.footer a:link, th.footer a:visited, th.footer a:active { 
+	color: #CECFEF; 
+	text-decoration: underline;  
+	font-weight: normal; 
+	}
+	
+th.footer a:hover { 
+	color: #E6E6F5; 
+	text-decoration: underline; 
+	font-weight: normal; 
+	}
+	
+/*.row1 { 
+	background-color: #FFFFFF; 
+	}
+	
+.row2 { 
+	background-color: #FFFFFF; 
+	}*/
+	
+.quote1 { 
+	background-color: #FFFFFF; 
+	font-size: 11px; 
+	line-height: 125%; 
+	}
+	
+.quote2 { 
+	background-color: #EFEFEF; 
+	font-size: 11px; 
+	line-height: 125%; 
+	}
+	
+.positive { 
+	color: #008800;
+  font-weight:bold; 
+	}
+	
+.negative { 
+	color: #F80000; 
+  font-weight:bold; 
+	}
+	
+.neutral  { 
+	color: #000000; 
+	}
+	
+.maintitle { 
+	font-size: 23px; 
+	font-weight: bold; 
+	color: #ffffff; 
+	}
+	
+.subtitle  { 
+	font-size: 12px; 
+	color: #CECFEF; 
+	}
+	
+.menu { 
+	font-size: 10px; 
+	color: #CECFEF; 
+	}
+	
+.menu a:link, .menu a:active, .menu a:visited { 
+	text-decoration: none; 
+	font-size: 10px; 
+	color: #CECFEF; 
+	}
+	
+.menu a:hover { 
+	text-decoration: underline; 
+	font-size: 10px; 
+	color: #E6E6F5; 
+	}
+	
+.small { 
+	font-size: 10px; 
+	}
+	
+.copy { 
+	font-size: 10px; 
+	color: #949494; 
+  text-align:center;
+	}
+	
+.copy a:link, .copy a:active, .copy a:visited { 
+	font-size: 10px; 
+	color: #949494; 
+	}
+	
+.copy a:hover { 
+	font-size: 10px; 
+	color: #000000; 
+	}
+	
+.input { 
+  padding:2px 5px;
+  background-color:#FFF;
+  border:1px solid #b2b2b2;
+	font-size: 12px; 
+	}
+	
+.input:hover, .input:focus {
+	border:1px solid #666;
+	}
+	
+input.helpline1 { 
+	background-color: #EFEFEF; 
+	border-style: none; 
+	}
+	
+input.helpline2 { 
+	background-color: #FFFFFF; 
+	border-style: none; 
+	}
+	
+.mainoption {
+	border:1px solid #999;
+  background:#d9d9d9 url('../install/images/button_bg.png') top repeat-x;
+  font-weight:bold;
+}
+.mainoption:hover {
+	border:1px solid #666;
+	background:#d9d9d9 url('../install/images/button_bg_hover.png') top repeat-x;
+  font-weight:bold;
+	color:#FFF;
+}
+
+input.liteoption { 
+	font-family: Verdana, Tahoma, Arial; 
+	font-size: 10px; 
+	font-weight: normal; 
+	color: #CECFEF; 
+	background-color: #5588CC; 
+	border-top: 1px;
+	border-right: 1px;
+	border-bottom: 1px; 
+	border-left: 1px; 
+	border-color: #CECFEF; 
+	border-style: solid; 
+	}
+	
+	
+/* Install Progress*/
+div#StepIndicatorList ul,
+div#StepIndicatorList ol {
+	 list-style: none;
+	 margin: 4px -20px 0 -50px;
+	 width: 145px;
+	 font-size: 12px;
+	}
+	
+div#StepIndicatorList li {
+		
+	/*display:inline;*/
+	padding: 5px 6px;
+	color: #666;
+	border-bottom: 1px solid #666666;
+	border-top: 1px solid #666666;
+	text-align: left;
+	font-size: 0.75em;
+	text-transform: uppercase;
+	background-color:#f2f2f2;
+	margin-top:-1px;
+	}
+	
+div#StepIndicatorList li.current {
+	padding: 3px 4px;
+	color: #000000;
+	background: #70AED3 url("../install/images/gradient3d.gif") center left repeat-x;
+	border-bottom: 1px solid #666666;
+	border-top: 1px solid #666666;
+	text-align: left;
+	font-size: 0.80em;
+	text-transform: uppercase;
+ 	font-weight:bold;
+	}
+	
+div#StepIndicatorList li a,
+div#StepIndicatorList ol a {
+	 color: white;
+	 text-decoration: underline;
+	 border-top: 4px solid #dedede;
+	 padding-top: 6px;
+	}
+

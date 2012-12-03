@@ -1,0 +1,13 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_ITEMS}</span><span style="float:right;"><input type="button" name="additem" value="{L_ADD_ITEM}" class="mainoption bi_new" onclick="window.location='manage_items.php{SID}&update=true'"/></span></th>
+  </tr>
+{ITEM_LIST}
+  <tr>
+    <th colspan="{HPTT_COLUMN_COUNT}"><input type="submit" name="delete" value="{L_MASS_DEL}" class="mainoption bi_delete" />
+    </th>
+  </tr>
+  <tr><td colspan="{HPTT_COLUMN_COUNT}" align="center">{PAGINATION}</td></tr>
+</table>
+</form>

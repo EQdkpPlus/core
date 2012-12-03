@@ -1,0 +1,214 @@
+<!-- IF not S_VIEW -->
+<!-- IF SENDTO -->	
+<div id="inner_wrapper">	
+		<div class="member_wrapper">
+
+		 
+			<span class="maintitle">{F_NOTICE_IMG} </span> {F_NOTICE}
+
+
+		</div>		
+		
+</div>
+<!-- ELSE -->
+<form method="post" action="{F_LISTUSERS}" name="post">
+<table width="90%" align="center" cellpadding="2" cellspacing="1">
+<!-- BEGIN group_row -->
+
+<tr><td colspan="8"><span class="maintitle"><!-- IF F_SMS --><input type="checkbox" onClick="if(this.checked == false){deselect_all_chechboxes('group_{group_row.ID}');} else {select_all_chechboxes('group_{group_row.ID}');};"><!-- ENDIF --> {group_row.NAME} </span>
+  <hr></td></tr>
+  <tbody id="group_{group_row.ID}">
+  <!-- BEGIN row_users -->
+  <tr>
+    <td width="20" nowrap="nowrap">&nbsp;</td>
+  <td width="20" nowrap="nowrap">{group_row.row_users.USER_CHECKBOX}</td>
+  <td width="10">{group_row.row_users.USER_FLAG}</td>
+  <td width="20%"><a href="listusers.php{SID}&u={group_row.row_users.USER_ID}" title="{group_row.row_users.USER_LINK_TITLE}"> <strong>{group_row.row_users.USER_NAME}</strong></a></td>
+  <td width="20%" nowrap="nowrap">{group_row.row_users.USER_FIRST_NAME} {group_row.row_users.USER_LAST_NAME}</td>
+  <td width="25%" nowrap="nowrap">&nbsp;</td>
+  <td width="15%">{group_row.row_users.USER_MAIL} {group_row.row_users.USER_ICQ} {group_row.row_users.USER_SKYPE} {group_row.row_users.USER_MSN} {group_row.row_users.USER_IRC} {group_row.row_users.USER_TWITTER} {group_row.row_users.USER_FACEBOOK}</td>
+  <td width="80">{group_row.row_users.USER_REGISTERED}</td>
+  </tr>
+  <tr>
+    <td colspan="8"><hr align="right" width="97%" class="roster_hr_member"></td></tr>
+  <!-- END row_users -->
+</tbody>
+<!-- END group_row -->
+<!-- IF F_SMS -->
+<tr>
+  <td colspan="8"><h1>{F_SMS_HEADER}</h1>
+    <p> {F_SMS_INFO}<br>{F_SEND_INFO}</p>
+    <p>
+      <b>{F_ACC_INFO} </b><br><br>{F_TEXTAREA} 			
+      <br><br>{F_SUBMIT}<br><br>
+    </p></td>
+</tr>
+<!-- ENDIF -->
+</table>
+
+			 			
+</form>
+
+<script type="text/javascript">
+function select_all_chechboxes(area_id){
+				
+	var area = document.getElementById(area_id);
+	var checkboxes = area.getElementsByTagName('input');
+
+	for (var i=0; i<checkboxes.length; i++){
+		checkboxes[i].checked = true;
+
+	}
+	
+}
+			
+function deselect_all_chechboxes(area_id){
+
+	var area = document.getElementById(area_id);
+
+	var checkboxes = area.getElementsByTagName('input');
+
+	for (var i=0; i<checkboxes.length; i++){
+		checkboxes[i].checked = false;
+
+	}
+		
+}
+
+var count = 0;
+function count_chars()
+ 	{
+		count = document.post.text_area.value.length;
+		document.getElementById('counter').innerHTML = count;
+		
+	}
+</script>
+
+<!-- ENDIF -->
+
+<!-- ELSE -->
+
+<table width="100%" cellpadding="4" cellspacing="0">
+<tr>
+<th colspan="2"><span style="float:left;"><a href="listusers.php{SID}">{L_USERLIST}</a> &raquo; {L_USER}: {USER_NAME}</span><span style="float:right;">{ADMIN_EDIT}</span></th>
+</tr>
+<tr>
+<td height="100%" valign="top"><table width="100%" height="100%" cellpadding="1" cellspacing="1">
+  <tr>
+    <th>{L_IMAGE}</th>
+    </tr>
+  <tr class="row2" align="center">
+    <td height="100%"><a href="{USER_IMAGE}" rel="lightbox"><img src="{USER_IMAGE}"></a></td>
+    </tr>
+  </table></td>
+<td width="50%" valign="top"><table width="100%" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <th colspan="4">{L_PROFILE}</th>
+  </tr>
+  <tr class="row1">
+    <td width="20%" nowrap="nowrap"><strong>{L_NAME}:</strong></td>
+    <td width="90%" colspan="3">{USER_FIRST_NAME} {USER_LAST_NAME}</td>
+  </tr>
+  <tr class="row2">
+    <td nowrap="nowrap"><strong>{L_AGE}:</strong></td>
+    <td colspan="3">{USER_BIRTHDAY}</td>
+  </tr>
+  <tr class="row1">
+    <td nowrap="nowrap"><strong>{L_TOWN}:</strong></td>
+    <td colspan="3">{USER_TOWN}</td>
+  </tr>
+  <tr class="row2">
+    <td nowrap="nowrap"><strong>{L_COUNTRY}:</strong></td>
+    <td colspan="3">{USER_FLAG} {USER_COUNTRY}</td>
+  </tr>
+  <tr class="row1">
+    <td nowrap="nowrap"><strong>{L_REGISTERED}:</strong></td>
+    <td colspan="3">{USER_REGISTERED}</td>
+  </tr>
+  <tr class="row2">
+    <td nowrap="nowrap"><strong>{L_WORK}:</strong></td>
+    <td colspan="3">{USER_WORK}</td>
+  </tr>
+  <tr class="row1">
+    <td nowrap="nowrap"><strong>{L_INTERESTS}:</strong></td>
+    <td colspan="3">{USER_INTERESTS}</td>
+  </tr>
+  <tr class="row2">
+    <td nowrap="nowrap"><strong>{L_HARDWARE}:</strong></td>
+    <td colspan="3">{USER_HARDWARE}</td>
+  </tr>
+</table>
+  <table width="100%" align="center" cellpadding="1" cellspacing="1">
+    <tr class="row1">
+      <th colspan="4">{L_CONTACT}</th>
+    </tr>
+    <tr>
+      <td width="10%" nowrap="nowrap" class="row1"><strong>{L_EMAIL}:</strong></td>
+      <td width="40%" class="row2">{USER_MAIL}</td>
+      <td width="10%" nowrap="nowrap" class="row1"><strong>{L_PHONE}:</strong></td>
+      <td width="40%" class="row2">{USER_PHONE}</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>ICQ:</strong></td>
+      <td class="row2">{USER_ICQ}</td>
+      <td nowrap="nowrap" class="row1"><strong>{L_CELLPHONE}:</strong></td>
+      <td class="row2">{USER_CELLPHONE}</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>Skype:</strong></td>
+      <td class="row2">{USER_SKYPE}</td>
+      <td nowrap="nowrap" class="row1"><strong>Facebook:</strong></td>
+      <td class="row2">{USER_FACEBOOK}</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>MSN: </strong></td>
+      <td class="row2">{USER_MSN}</td>
+      <td nowrap="nowrap" class="row1"><strong>Twitter:</strong></td>
+      <td class="row2">{USER_TWITTER}</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>IRC:</strong></td>
+      <td class="row2">{USER_IRC}</td>
+      <td nowrap="nowrap" class="row1">&nbsp;</td>
+      <td class="row2">&nbsp;</td>
+    </tr>
+  </table></td>
+</tr>
+<tr>
+  <td colspan="2"><table width="100%" align="center" cellpadding="1" cellspacing="1">
+    <tr>
+      <th colspan="6">{L_CHARS}</th>
+    </tr>
+    <tr>
+      <th>{L_NAME}</th>
+      <th>{L_LEVEL}</th>
+      <th>{L_CLASS}</th>
+      <th>{L_RACE}</th>
+      <th>{L_RANK}</th>
+      <th>{L_TYPE}</th>
+      </tr>
+    <!-- BEGIN char_row -->
+    <tr class="{char_row.ROW_CLASS}">
+      <td>{char_row.NAME}</td>
+      <td>{char_row.LEVEL}</td>
+      <td>{char_row.CLASS}</td>
+      <td>{char_row.RACE}</td>
+      <td>{char_row.RANK}</td>
+      <td>{char_row.TYPE}</td>
+      </tr>
+    <!-- END char_row -->
+    <tr >
+      <th colspan="6" class="footer">{USER_CHAR_FC}</th>
+      </tr>
+    <!-- IF ENABLE_COMMENTS -->
+     <tr >
+      <td colspan="6" >&nbsp;</td>
+      </tr><tr>
+      <th colspan="6" >{L_COMMENTS}</th>
+      </tr>
+    <!-- ENDIF -->
+    
+  </table><!-- IF ENABLE_COMMENTS -->{COMMENTS}<!-- ENDIF --></td>
+</tr>
+</table>
+<!-- ENDIF -->

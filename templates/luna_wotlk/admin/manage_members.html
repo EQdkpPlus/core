@@ -1,0 +1,19 @@
+<form action='manage_members.php{SID}' method='post'>
+<table width="100%" cellpadding="2" cellspacing="1" border="0">
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_MEMBERS}</span><span style="float:right;"><input type="button" name="madd" value="{L_ADD_MEMBER}" class="mainoption bi_new" onclick="window.location='manage_members.php{SID}&mupd=true'"/></span></th>
+	</tr>
+	{MEMBER_LIST}
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}"><input type="submit" name="mdel" value="{L_MASS_DEL}" class="mainoption bi_delete" />
+						<input type="submit" name="mstatus" value="{L_MASS_STAT}" class="mainoption" />
+						<input type="submit" name="rankc" value="{L_MASS_RANK}" class="mainoption" />
+						{RANK_SEL}
+
+		</th>
+	</tr>
+	<tr>
+		<td colspan="{HPTT_COLUMN_COUNT}">{PAGINATION}</td>
+	</tr>
+</table>
+</form>

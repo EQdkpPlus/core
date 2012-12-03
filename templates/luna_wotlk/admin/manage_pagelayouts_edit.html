@@ -1,0 +1,138 @@
+<form method="post" action="{F_PAGE_MANAGER}" name="post">
+  <table width="100%">
+    <tr>
+      <th colspan="2"><a href="manage_pagelayouts.php{SID}">{L_LM_TITLE}</a> &raquo; {FILENAME}</th>
+    </tr>
+    <tr class="row1">
+      <td width="20">{L_DESCRIPTION}:</td>
+      <td><input type="text" name="description" value="{DESCRIPTION}" class="input" style="width:99%"></td>
+    </tr>
+    <!-- BEGIN param_row -->
+    <tr>
+      <td nowrap="nowrap" class="row1">{param_row.NAME}</td>
+      <td nowrap="nowrap" class="row2">{param_row.FIELD}</td>
+    </tr>
+    <!-- END param_row -->
+    <!-- BEGIN subs_row -->
+    <tr>
+      <td nowrap="nowrap" class="row1">{subs_row.NAME}</td>
+      <td nowrap="nowrap" class="row2">{subs_row.FIELD}</td>
+    </tr>
+    <!-- END subs_row -->
+  </table>
+  <div id='plus_pm_pages_tabs'>
+    <ul>
+      {PAGE_TAB_LIST}
+    </ul>
+  		<!-- BEGIN page_row -->
+  		  <div id="page-{page_row.ID}">
+        <!-- IF page_row.S_LEADERBORD -->
+        <table width="100%" id="table_leaderbord" class="sortingtable">
+            <tr class="not-sortable">
+              <th colspan="3">{L_LEADERBORD_SETTINGS}</th>
+            </tr>
+            <tr class="not-sortable">
+              <td colspan="2" nowrap="nowrap">{L_MAX_PER_CLASS}</td>
+              <td>{LB_MAXPERCLASS}</td>
+            </tr>
+             <tr class="not-sortable">
+              <td colspan="2" nowrap="nowrap">{L_MAX_PER_ROW}</td>
+              <td>{LB_MAXPERROW}</td>
+             </tr>
+             <tr class="not-sortable">
+              <td colspan="2" nowrap="nowrap">{L_SORT_DIR}</td>
+              <td>{LB_SORTDIR}</td>
+             </tr>
+             <tr class="not-sortable">
+               <th colspan="3">{L_CLASS_SORT}</th>
+              </tr>
+             <tbody>
+             <!-- BEGIN class_row -->
+             <tr>
+                <td width="10" align="center">
+                  <span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span>
+                </td>
+               <td colspan="2">{page_row.class_row.HIDDEN}{page_row.class_row.NAME}</td>
+             </tr>
+             <!-- END class_row -->
+            </tbody>
+        </table>
+        <br />
+        <!-- ENDIF -->
+        
+          <!-- BEGIN page_object_row -->
+          <table width="100%" id="table_{page_row.page_object_row.ID}" class="sortingtable">
+            <tr class="not-sortable">
+              <th colspan="8">{page_row.page_object_row.TABLE_TITLE}</th>
+            </tr>
+            <tr class="not-sortable">
+              <th colspan="8">{L_TABLE_SETTINGS}</th>
+            </tr>
+            <tr class="not-sortable">
+              <td colspan="2" nowrap="nowrap" class="row1">{L_NUMBERS}</td>
+              <td colspan="6" class="row1">{page_row.page_object_row.NUMBERS}</td>
+            </tr>
+            <tr class="not-sortable">
+              <td colspan="2" nowrap="nowrap" class="row2">{L_SORT_DIR}</td>
+              <td colspan="6" class="row2">{page_row.page_object_row.TABLE_SORT_DIR}</td>
+            </tr>
+            <tr class="not-sortable">
+              <th colspan="8">{L_TABLE_COLUMNS}</th>
+            </tr>
+            <tr class="not-sortable">
+            	<th width="24px" class="not-sortable">&nbsp;</th>
+            	<th width="24px">&nbsp;</th>
+              <th width="80px">{L_LM_PRESETNAME}</th>
+              <th>{L_LM_SORTABLE}</th>
+              <th>{L_LM_DEFAULT_SORT}</th>
+              <th>{L_LM_TH_ADD}</th>
+              <th>{L_LM_TD_ADD}</th>       
+            </tr>
+            <tbody>
+              <!-- BEGIN preset_row -->
+              <tr>
+              	<td align="center">
+                  <span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span>
+                </td>
+                <td align="center">
+                  <img src="{EQDKP_ROOT_PATH}images/delete.png" class="delRow" border="0" title="{L_DELETE_ROW}"/>
+                  <span class="delete_id" style="display:none;">{page_row.page_object_row.preset_row.ID}</span>
+                  <span class="prefix_id" style="display:none;">{page_row.page_object_row.PREFIX}</span>
+                </td>
+                <td nowrap="nowrap" class="presetname">
+                  {page_row.page_object_row.preset_row.NAME}
+                </td>
+                <td>
+                  {page_row.page_object_row.preset_row.SORTABLE}
+                </td>
+                <td>
+                  <input class="default_sort" type="radio" name="{page_row.page_object_row.PREFIX}[default_sort]" value="{page_row.page_object_row.preset_row.CODE}" {page_row.page_object_row.preset_row.DEFAULT_SORT}>
+                </td>
+                <td>
+                  <input class="th_add" type="text" name="{page_row.page_object_row.PREFIX}[th_add][{page_row.page_object_row.preset_row.CODE}]" size="40" value="{page_row.page_object_row.preset_row.TH_ADD}" />
+                </td>
+                <td>
+                  <input class="td_add" type="text" name="{page_row.page_object_row.PREFIX}[td_add][{page_row.page_object_row.preset_row.CODE}]" size="40" value="{page_row.page_object_row.preset_row.TD_ADD}" />
+                </td>
+              </tr>
+              <!-- END preset_row -->
+            <tbody>
+            <tr>
+              <th colspan="99" class="not-sortable">
+              {page_row.page_object_row.DROPDOWN}
+              <input type="button" value="{L_ADD_ROW}" class="alternativeRow" id="button_{page_row.page_object_row.ID}"/></th>
+            </tr>  
+          </table>
+          <br>
+          <!-- END page_object_row -->
+  		  </div>
+  		<!-- END page_row -->
+    </div>
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+    <th colspan="3">
+      <input type="hidden" name="filename" value="{FILENAME}"><input type="submit" name="save" value="{L_SAVE}" class="mainoption bi_ok" /> <input type="submit" name="" value="{L_CANCEL}" class="liteoption bi_back" />
+    </th>
+  </tr>
+  </table>
+</form>

@@ -1,0 +1,152 @@
+<form method="post" action="{F_PLUGINS}" name="post">
+<div id="portal_tabs">
+<ul>
+<li><a href="#settings">{L_OVERVIEW}</a></li>
+<li><a href="#positions">{L_POSITIONING}</a></li>
+</ul>
+<div id="settings">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  	<th align="left" width="100%">{L_FILTER}: {POS_FILTER} {ENABLED_FILTER} {PERM_FILTER}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="100%">{L_NAME}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_ENABLED}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_RIGHTS}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_COLLAPSE}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_CONTACT}</th>
+    <th align="left" width="100" nowrap="nowrap">{L_VERSION_N}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_SETTINGS}</th>  
+  </tr>
+  <!-- BEGIN plugins_row -->
+  <tr class="{plugins_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{plugins_row.ROW_CLASS}';">
+    <td width="100%" nowrap="nowrap"><input type="hidden" name="processid[]" value="{plugins_row.ID}"/>{plugins_row.NAME} <!-- IF plugins_row.S_PLUGIN --><img src="../images/admin/plugin.png" alt="" title="{plugins_row.PLUGIN}"/><!-- ENDIF --></td>
+    <td width="35" nowrap="nowrap" align="center">{plugins_row.ENABLED}</td>
+    <td width="40" nowrap="nowrap">{plugins_row.RIGHTS}</td>
+    <td width="40" nowrap="nowrap">{plugins_row.COLLAPSABLE}</td>
+    <td width="40" nowrap="nowrap">{plugins_row.CONTACT}</td>
+    <td width="100" nowrap="nowrap">{plugins_row.VERSION}</td>
+    <td width="40" nowrap="nowrap"><!-- IF plugins_row.S_SETTINGS --><input type="button" value="{L_EDIT}" onclick="Settings('{plugins_row.ID}')" class="mainoption bi_edit"/><!-- ENDIF --></td>
+  </tr>
+  <!-- END plugins_row -->
+</table>
+
+<br/>
+{L_MORE}
+</div>
+
+<div id="positions">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr><td>
+<style>
+.portal_block { list-style-type: none; padding: 5px; margin:10px; border:1px dashed #666;
+
+}
+.red {
+	background:url({EQDKP_ROOT_PATH}libraries/jquery/core/images/rotglas.png); 
+
+
+}
+.green {background-color:#00FF00; 
+	background:url({EQDKP_ROOT_PATH}libraries/jquery/core/images/gruenglas.png);  
+}
+
+
+
+.portal_block li { list-style-type: none; padding: 10px;
+margin:10px; background-color:#fff; cursor:pointer;
+}
+.portal_block_light { list-style-type: none; padding: 5px; margin:10px; border:1px dashed #666;
+
+}
+.portal_block_light li { list-style-type: none; padding: 10px;
+margin:10px; background-color:#CCC; color:#333;
+}
+
+
+</style>
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+            <tr>
+              <td class="row1" align="left"><img src="{IMAGE_PATH}info_big.png" alt=""></td>
+              <td class="row1" align="center">{L_DRAGNDROP_INFO}</td>
+            </tr>
+          </table>
+<br />
+<div style="float:left; width:200px;">
+<div id="left1" class="connectedSortable portal_block">
+ <span class="not-sortable">{L_LEFT1}:</span>
+  <!-- BEGIN left1_row -->
+  <li {left1_row.ENABLED} class="ui-state-hover {left1_row.CLASS}" id="item_{left1_row.ID}">{left1_row.NAME}<input name="sort[][{left1_row.ID}]" type="hidden" value="1"><input type="hidden" name="pos[{left1_row.ID}]" value="{left1_row.POS}" id="block_item_{left1_row.ID}"></li>
+  <!-- END left1_row-->
+</div>
+
+<div class="portal_block_light">
+<li style="height:100px;">{L_MAINMENU}</li>
+</div>
+
+<div id="left2" class="connectedSortable portal_block">
+  <span class="not-sortable">{L_LEFT2}:</span>
+  <!-- BEGIN left2_row -->
+  <li {left2_row.ENABLED} class="ui-state-hover {left2_row.CLASS}" id="item_{left2_row.ID}">{left2_row.NAME}<input name="sort[][{left2_row.ID}]" type="hidden" value="1"><input type="hidden" name="pos[{left2_row.ID}]" value="{left2_row.POS}" id="block_item_{left2_row.ID}"></li>
+  <!-- END left2_row-->
+</div>
+
+</div>
+
+<div style="float:left; width:400px;">
+
+	<div id="middle" class="connectedSortable portal_block">
+  <span class="not-sortable">{L_MIDDLE}:</span>
+  <!-- BEGIN middle_row -->
+  <li {middle_row.ENABLED} class="ui-state-hover {middle_row.CLASS}" id="item_{middle_row.ID}">{middle_row.NAME}<input name="sort[][{middle_row.ID}]" type="hidden" value="1"><input type="hidden" name="pos[{middle_row.ID}]" value="{middle_row.POS}" id="block_item_{middle_row.ID}"></li>
+  <!-- END middle_row-->
+</div>
+
+<div class="portal_block_light">
+<li style="height:100px;">{L_NEWS}</li>
+</div>
+
+	<div id="bottom" class="connectedSortable portal_block">
+  <span class="not-sortable">{L_BOTTOM}:</span>
+  <!-- BEGIN bottom_row -->
+  <li {bottom_row.ENABLED} class="ui-state-hover {bottom_row.CLASS}" id="item_{bottom_row.ID}">{bottom_row.NAME}<input name="sort[][{bottom_row.ID}]" type="hidden" value="1"><input type="hidden" name="pos[{bottom_row.ID}]" value="{bottom_row.POS}" id="block_item_{bottom_row.ID}"></li>
+  <!-- END bottom_row-->
+</div>
+  
+</div>
+
+<div style="float:left; width:200px;">
+
+<div id="right" class="connectedSortable portal_block">
+  <span class="not-sortable">{L_RIGHT}:</span>
+  <!-- BEGIN right_row -->
+  <li {right_row.ENABLED} class="ui-state-hover {right_row.CLASS}" id="item_{right_row.ID}">{right_row.NAME}<input name="sort[][{right_row.ID}]" type="hidden" value="1"><input type="hidden" name="pos[{right_row.ID}]" value="{right_row.POS}" id="block_item_{right_row.ID}"></li>
+  <!-- END right_row-->
+</div>
+
+</div>
+<div style="clear:both;"></div>
+</td></tr>
+</table>
+
+</div>
+</div>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">
+    <input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_SAVE}" />
+      <input type="button" name="reset" value="{L_RESET}" class="liteoption bi_reset" onClick="window.location='manage_portal.php{SID}'"/></th>
+  </tr>
+  </table>
+</form>
+<script>
+function hide_item(id){
+	$("#item_"+id).attr("style", "display:none;");
+}
+function show_item(id){
+	$("#item_"+id).attr("style", "display:block;");
+}
+</script>

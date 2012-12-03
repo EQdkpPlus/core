@@ -1,0 +1,25 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADD_ITEMPOOL_TITLE}</th>
+  </tr>
+  <tr class="row1">
+  	<td><b>{L_IPNAME}:</b></td>
+  	<td><input type="text" name="name" value="{NAME}" class="maininput" /></td>
+  	</tr>
+  <tr class="row2">
+    <td width="50%"><b>{L_DESC}:</b></td>
+    <td width="50%"><input type="text" name="desc" value="{DESC}" class="maininput" /></td>
+  </tr>
+  <tr>
+    <th colspan="2">
+	    <input type="submit" name="save" value="{L_SAVE}" class="mainoption bi_ok" />
+    <!-- IF IID -->
+    	<input type="hidden" name="ip_id" value="{IID}" />
+	    <input type="submit" name="delete" value="{L_DELETE}" class="mainoption bi_delete" />
+    <!-- ENDIF -->
+    <input type="submit" name="cancel" value="{L_CANCEL}" class="mainoption bi_back" />
+    </th>
+  </tr>
+</table>
+</form>

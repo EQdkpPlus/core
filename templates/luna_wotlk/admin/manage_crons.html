@@ -1,0 +1,88 @@
+<!-- IF not S_EDIT -->
+
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+  <tr>
+    <th colspan="7" align="left" nowrap="nowrap">{MANAGE_CRONJOBS}</th>
+  </tr>
+  <tr>
+    <th align="left" nowrap="nowrap">&nbsp;</th>
+    <th align="left" nowrap="nowrap">{L_ACTION}</th>
+    <th align="left" nowrap="nowrap">{L_NAME}</th>
+    <th align="left" nowrap="nowrap">{L_REPEAT}</th>
+    <th align="left" nowrap="nowrap">{L_START}</th>
+    <th align="left" nowrap="nowrap">{L_LAST_RUN}</th>
+    <th align="left" nowrap="nowrap">{L_NEXT_RUN}</th>
+  </tr>
+  <!-- BEGIN cron_row -->
+  <tr class="{cron_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{cron_row.ROW_CLASS}';">
+    <td width="25" nowrap="nowrap" align="center"><img src="{IMAGE_PATH}/glyphs/status_{cron_row.ENABLE_ICON}.gif"></td>
+    <td width="20" nowrap="nowrap"><a href="{cron_row.U_RUN_CRON}" title="{L_RUN}"><img src="{IMAGE_PATH}glyphs/run.png"></a> <!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_ACTIVATE_CRON}" title="{cron_row.L_ENABLE}"><img src="{IMAGE_PATH}glyphs/{cron_row.ACTIVATE_ICON}.png"></a> <a href="{cron_row.U_EDIT_CRON}" title="{L_EDIT}"><img src="{IMAGE_PATH}glyphs/edit.png"></a><!-- ENDIF --></td>
+    <td width="50%" nowrap="nowrap"><!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_EDIT_CRON}">{cron_row.NAME}</a><!-- ELSE -->{cron_row.NAME}<!-- ENDIF --></td>
+    <td nowrap="nowrap">{cron_row.REPEAT}</td>
+    <td nowrap="nowrap">{cron_row.START}</td>
+    <td nowrap="nowrap">{cron_row.LAST_RUN}</td>
+    <td nowrap="nowrap">{cron_row.NEXT_RUN}</td>
+  </tr>
+   <!-- END cron_row -->
+  <tr >
+    <th colspan="7" class="footer">{FC_CRONJOBS}</th>
+  </tr>  
+</table>
+</form>
+<!-- ELSE -->
+<form action="manage_crons.php{SID}&cron={CRON_NAME}" method="post">
+<table width="100%" cellpadding="2" cellspacing="1">
+  <tr>
+    <th colspan="2"><a href="manage_crons.php{SID}">{MANAGE_CRONJOBS}</a> &raquo; {CRON_DESC}</th>
+  </tr>
+  <tr>
+  	<td colspan="2" ><table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+  		<tr>
+  			<td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+  			<td class="row1" align="center"><strong>{L_REPEAT_INFO}</strong></td>
+  			</tr>
+  		</table></td>
+  	</tr>
+  <tr>
+    <td width="50%" nowrap="nowrap" class="row1"><strong>{L_NAME}:</strong></td>
+    <td width="50%" nowrap="nowrap" class="row2">{CRON_NAME}</td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap" class="row1"><strong>{L_DESC}:</strong></td>
+    <td nowrap="nowrap" class="row2"><input name="cron_desc" type="text" class="input" id="cron_desc" value="{CRON_DESC}" style="width:95%;"/></td>
+  </tr>
+  <tr>
+  	<td nowrap="nowrap" class="row1"><strong>{L_START}:</strong></td>
+  	<td nowrap="nowrap" class="row2">{START_PICKER}
+  		<input name="start_h" type="text" class="input" id="start_h" value="{START_H}" size="2" maxlength="2" />
+  		:
+  		<input name="start_m" type="text" class="input" id="start_m" value="{START_M}" size="2" maxlength="2" /></td>
+  	</tr>
+  <tr>
+    <td nowrap="nowrap" class="row1"><strong>{L_REPEAT}:</strong></td>
+    <td nowrap="nowrap" class="row2"><input type="checkbox" name="cron_repeat" value="1" {CRON_REPEAT}></td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap" class="row1"><strong>{L_REPEAT_INTERVAL}:</strong></td>
+    <td nowrap="nowrap" class="row2"><input name="repeat_value" type="text" class="input" id="start_h2" value="{CRON_REPEAT_VALUE}" size="5" maxlength="2" />
+    	- {REPEAT_DD}</td>
+  </tr>
+  <!-- IF S_PARAMS -->
+  <tr>
+    <th colspan="2" nowrap="nowrap">{L_SETTINGS}</th>
+    </tr>
+  <!-- ENDIF -->
+  <!-- BEGIN param_row -->
+    <tr>
+    <td nowrap="nowrap" class="row1"><strong>{param_row.NAME}</strong></td>
+    <td nowrap="nowrap" class="row2"><strong>{param_row.FIELD}</strong></td>
+  </tr>
+  <!-- END param_row -->
+  <tr >
+    <th colspan="2"><input name="update" type="submit" class="mainoption bi_ok" id="update" value="{L_SAVE}" />
+      <input name="cancel" type="submit" class="liteoption bi_back" id="cancel" value="{L_CANCEL}" /></th>
+  </tr>
+
+</table>
+</form>
+<!-- ENDIF -->

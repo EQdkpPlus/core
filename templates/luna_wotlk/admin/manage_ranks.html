@@ -1,0 +1,38 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" id="rank_table">
+  <tr>
+    <th align="center" colspan="5">{L_RANKS}</th>
+  </tr>
+  <tr>
+  	<th width="20px;"><input type="checkbox" onClick="if(this.checked == false){deselect_all_chechboxes('rank_table');} else {select_all_chechboxes('rank_table');};"></th>
+    <th><a href="manage_ranks.php{SID}&order=0.0"><img src="./../images/arrows/down_arrow{RED00}.png" alt="down" /></a>
+		<a href="manage_ranks.php{SID}&order=0.1"><img src="./../images/arrows/up_arrow{RED01}.png" alt="up" /></a>
+		{L_NAME}
+	</th>
+    <th>{L_HIDE}</th>
+    <th>{L_PREFIX}</th>
+    <th>{L_SUFFIX}</th>
+  </tr>
+  <!-- BEGIN ranks -->
+  <tr class="{ranks.ROW_CLASS}">
+  	<td><input type="checkbox" name="ranks[{ranks.KEY}][selected]" value="{ranks.ID}" /><input type="hidden" name="ranks[{ranks.KEY}][id]" value="{ranks.ID}" /></td>
+    <td><input type="text" name="ranks[{ranks.KEY}][name]" size="30" maxlength="50" value="{ranks.NAME}" class="maininput" /></td>
+    <td><input type="checkbox" name="ranks[{ranks.KEY}][hide]" value="1" {ranks.HIDE} /></td>
+    <td><input type="text" name="ranks[{ranks.KEY}][prefix]" size="35" maxlength="75" value="{ranks.PREFIX}" class="maininput" /></td>
+    <td><input type="text" name="ranks[{ranks.KEY}][suffix]" size="35" maxlength="75" value="{ranks.SUFFIX}" class="maininput" /></td>
+  </tr>
+  <!-- END ranks -->
+  <tr class="{ROW_CLASS}">
+  	<td><input type="hidden" name="ranks[{KEY}][id]" value="{ID}" /></td>
+    <td><input type="text" name="ranks[{KEY}][name]" size="30" maxlength="50" value="" class="maininput" /></td>
+    <td><input type="checkbox" name="ranks[{KEY}][hide]" value="1" /></td>
+    <td><input type="text" name="ranks[{KEY}][prefix]" size="35" maxlength="75" value="" class="maininput" /></td>
+    <td><input type="text" name="ranks[{KEY}][suffix]" size="35" maxlength="75" value="" class="maininput" /></td>
+  </tr>
+  <tr>
+    <th colspan="5"><input type="submit" name="save" value="{L_SAVE}" class="mainoption bi_ok" />
+    				<input type="submit" name="del" value="{L_DEL}" class="liteoption bi_delete" />
+    </th>
+  </tr>
+</table>
+</form>

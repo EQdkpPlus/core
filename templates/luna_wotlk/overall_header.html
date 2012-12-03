@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{XML_LANG}" lang="{XML_LANG}">
+  <head>
+  	 <!--[if IE]><meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\" /><![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {META}
+    <title>{PAGE_TITLE}</title>
+    
+    {CSS_FILES}
+    {JS_FILES}
+    <link rel="shortcut icon" href="{EQDKP_ROOT_PATH}templates/luna_wotlk/images/favicon.png" type="image/png">
+    <link rel="icon" href="{EQDKP_ROOT_PATH}templates/luna_wotlk/images/favicon.png" type="image/png">
+    {RSS_FEEDS}
+		<style type="text/css">
+			body{
+		    background:#000000 url({TEMPLATE_BACKGROUND}) no-repeat center top;
+		  }
+		  
+		{CSS_CODE}
+		</style>
+		<script>
+		 {JS_CODE}
+		</script>
+  </head>
+	<body>
+
+  <!--[if lt IE 8]>
+	<div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 75px; position: relative;'>
+		<div style='position: absolute; right: 3px; top: 3px; font-family: courier new; font-weight: bold;'><a href='#' onclick='javascript:this.parentNode.parentNode.style.display=\"none\"; return false;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-cornerx.jpg' style='border: none;' alt='Close this notice'/></a></div>
+			<div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
+				<div style='width: 75px; float: left;'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-warning.jpg' alt='Warning!'/></div>
+				<div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
+					<div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>You are using an outdated browser</div>
+					<div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>For a better experience using this site, please upgrade to a modern web browser.</div>
+				</div>
+				<div style='width: 75px; float: left;'><a href='http://www.firefox.com' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-firefox.jpg' style='border: none;' alt='Get Firefox 3.5'/></a></div>
+				<div style='width: 75px; float: left;'><a href='http://www.browserforthebetter.com/download.html' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-ie8.jpg' style='border: none;' alt='Get Internet Explorer 8'/></a></div>
+				<div style='width: 73px; float: left;'><a href='http://www.apple.com/safari/download/' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-safari.jpg' style='border: none;' alt='Get Safari 4'/></a></div>
+				<div style='float: left;'><a href='http://www.google.com/chrome' target='_blank'><img src='http://www.ie6nomore.com/files/theme/ie6nomore-chrome.jpg' style='border: none;' alt='Get Google Chrome'/></a></div>
+			</div>
+		</div>
+		<![endif]-->
+      
+	<!-- IF S_NORMAL_HEADER -->
+	<table cellspacing="0" style="width: 100%; margin: 0px; padding 0px; table-layout:auto;">
+		<tr>
+			<td style="width: 3%;">&nbsp;</td>
+			<td style="width: 94%; margin: 0px; padding: 0px;" valign="bottom">
+		    <div id="header">
+		      <h1 style="background: url({HEADER_LOGO}) no-repeat left center;">EQDKP Plus <small>{L_PLSLOGO_ALT}</small></h1>
+		      <div id="navigation">
+		        <ul>
+		          <!-- BEGIN main_menu4_menu -->
+              <li><a href='{main_menu4_menu.LINK}' target="{main_menu4_menu.TARGET}">{main_menu4_menu.TEXT}</a></li>
+							<!-- END main_menu4_menu -->
+		        </ul>
+		      </div>
+		      <div id="toptitles">
+						<span class="maintitle">{MAIN_TITLE}</span><br />
+		      	<span class="subtitle">{SUB_TITLE}</span>
+		    	</div>
+		    </div>
+			</td>
+			<td style="width: 3%;">&nbsp;</td>
+		</tr>
+	</table>
+
+	<table cellspacing="0" style="width: 100%; margin: 0px; margin-bottom: 20px; padding 0px; table-layout:auto;">
+		<tr>
+			<td style="width: 3%;">&nbsp;</td>
+			<td style="min-width: 1100px; width: 94%; margin: 0px; padding: 0px; background: transparent url({TEMPLATE_PATH}/images/background.png) top; border: #AAAAAA 1px solid ;">
+				<div style="padding:7px;">
+				<table width="100%">
+					<!-- IF S_IN_ADMIN -->
+					<tr>
+						<td colspan="3">
+						{ADMIN_MENU}
+						</td>
+					</tr>
+					<!-- ENDIF -->
+          <tr>
+            <td class="portal_sidebar" valign="top" style="min-width: 180px;">
+							{PORTAL_LEFT1}
+              
+              <div id="main_menu1">
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="forumline">
+			  	        <tr>
+	  			   	      <th class="smalltitle" align="left" style="padding:3px;">
+                      <div class="toggle_button" ><span class="togglebutton_name"><span align="center">{L_MENU1_HEADLINE}</span></span></div>
+                      
+                    </th>
+	  			        </tr>
+                  <tr>
+                    <td>
+                    	<div class="toggle_container">
+                        <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+												<!-- BEGIN main_menu1_menu -->
+                        <tr class="{main_menu1_menu.CLASS}" nowrap onmouseover="this.className='rowHover';" onmouseout="this.className='{main_menu1_menu.CLASS}';">
+					     					<td nowrap>&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow"/> &nbsp;
+						      			<a href="{main_menu1_menu.LINK}" class="copy" target="{main_menu1_menu.TARGET}">{main_menu1_menu.TEXT}</a>
+						      			</td></tr>
+              					<!-- END main_menu1_menu -->
+                        </table>
+                       <div>
+                    </td>
+                  </tr>
+                </table>
+                </div> 
+                <div id="main_menu2">          
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="forumline">
+			  	        <tr>
+	  			   	      <th class="smalltitle" align="left" style="padding:3px;">
+                      <div class="toggle_button" ><span class="togglebutton_name"><span align="center">{L_MENU2_HEADLINE}</span></span></div>
+                    </th>
+	  			        </tr>
+                  <tr>
+                    <td>
+                      <div class="toggle_container">
+                        <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+												<!-- BEGIN main_menu2_menu -->
+                        <tr class="{main_menu2_menu.CLASS}" nowrap onmouseover="this.className='rowHover';" onmouseout="this.className='{main_menu2_menu.CLASS}';">
+					     					<td nowrap>&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow"/> &nbsp;
+						      			<a href="{main_menu2_menu.LINK}" class="copy" target="{main_menu2_menu.TARGET}">{main_menu2_menu.TEXT}</a>
+						      			</td></tr>
+              					<!-- END main_menu2_menu -->
+                        </table>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+               </div>
+							 <!-- IF S_MAIN_MENU3-->
+               <div id="main_menu3">
+                 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="forumline">
+			  	        <tr>
+	  			   	      <th class="smalltitle" align="left" style="padding:3px;">
+                      <div class="toggle_button" ><span class="togglebutton_name"><span align="center">{L_MENU3_HEADLINE}</span></span></div>
+                    </th>
+	  			        </tr>
+                  <tr>
+                    <td>
+                      <div class="toggle_container">
+                        <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+												<!-- BEGIN main_menu3_menu -->
+                        <tr class="{main_menu3_menu.CLASS}" nowrap onmouseover="this.className='rowHover';" onmouseout="this.className='{main_menu3_menu.CLASS}';">
+					     					<td nowrap>&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow"/> &nbsp;
+						      			<a href="{main_menu3_menu.LINK}" class="copy" target="{main_menu3_menu.TARGET}">{main_menu3_menu.TEXT}</a>
+						      			</td></tr>
+              					<!-- END main_menu3_menu -->
+                        </table>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+							<!-- ENDIF -->
+              <br />
+							{PORTAL_LEFT2}
+            </td>
+            <td valign="top" width="100%">
+              <!-- BEGIN global_warnings -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="2" class="{global_warnings.CLASS}">
+               <tr>
+                  <td class="row1" align="left"><img src="{global_warnings.ICON}"></td>
+                  <td class="row1" align="center">{global_warnings.MESSAGE}</td>
+                </tr>
+              </table>
+              <br>
+              <!-- END global_warnings -->
+							{NEWS_TICKER_H}
+
+                  {PORTAL_MIDDLE}
+									<!-- ENDIF -->
+									{TOP}

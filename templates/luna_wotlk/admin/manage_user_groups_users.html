@@ -1,0 +1,107 @@
+<div id="groups_tabs">
+ <ul>
+<li><a href='#members'><span>{L_MEMBERS}</span></a></li>
+<li><a href='#permissions'><span>{L_PERMISSIONS}</span></a></li>
+</ul>
+
+<form method="post" action="{ACTION}" name="post">
+<div id="members">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table">
+  <tr>
+    <th align="center" colspan="7"><a href="manage_user_groups.php{SID}">{L_USER_GROUPS}</a> &raquo; {GROUP_NAME}</th>
+  </tr>
+  <tr>
+  	<th width="20"><input type="checkbox" onclick="if(this.checked == false){deselect_all_chechboxes('user_groups_table');} else {select_all_chechboxes('user_groups_table');};" />  	  &nbsp;</th>
+    <th><a href="{U_MANAGE_USERS}&o=0.0"><img src="./../images/arrows/down_arrow{RED00}.png" alt="down" border="0" /></a> <a href="{U_MANAGE_USERS}&o=0.1"><img src="./../images/arrows/up_arrow{RED01}.png" alt="up" border="0" /></a> {L_USERNAME}</th>
+    <th>{L_EMAIL}</th>
+    <th>{L_LAST_VISIT}</th>
+    <th>{L_ACTIVE}</th>
+    <th>{L_ONLINE}</th>
+  </tr>
+  <!-- BEGIN user_row -->
+  <tr class="{user_row.ROW_CLASS}">
+  	<td><!-- IF not user_row.S_UNDELETABLE --><input type="checkbox" name="group_user[{user_row.ID}]" value="{user_row.ID}" /><!-- ENDIF --></td>
+    <td><a href="manage_users.php{SID}&u={user_row.ID}">{user_row.NAME}</a></td>    
+    <td>{user_row.EMAIL}</td>
+    <td>{user_row.LAST_VISIT}</td>
+    <td>{user_row.ACTIVE}</td>
+    <td>{user_row.ONLINE}</td>
+  </tr>
+  <!-- END user_row -->
+  <tr>
+  	<th colspan="6">{L_ADD_USER}</th>
+    </tr>
+  <tr class="{ROW_CLASS}">
+    <td colspan="6">{ADD_USER_DROPDOWN}</td>
+  </tr>
+  <tr>
+    <th colspan="6"><input type="submit" name="add_group_users" value="{L_ADD_SELECTED}" class="mainoption bi_new" id="add_group_users" /> <input type="submit" name="del_group_users" value="{L_DEL_SELECTED}" class="mainoption bi_delete" id="del_group_users" /> </th>
+  </tr>
+</table>
+</div>
+<div id="permissions">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" id="permissions_table">
+  <!-- BEGIN permissions_row -->
+ <tr>
+   <th width="100%">{permissions_row.GROUP}:</td>
+</tr>
+<tr>
+   <td width="100%" class="row2">
+     <!-- BEGIN check_group -->
+     <!-- IF not permissions_row.check_group.S_SUPERADMIN_PERM -->
+     <div style="float:left; margin-right:20px;" class="small"><label><input type="checkbox" name="{permissions_row.check_group.CBNAME}" value="Y"{permissions_row.check_group.CBCHECKED} onChange="change_perm_color(this.id)" id="cb_{permissions_row.check_group.CBNAME}" {permissions_row.check_group.DISABLED}/>
+     <span id="span_cb_{permissions_row.check_group.CBNAME}" class="{permissions_row.check_group.CLASS}">{permissions_row.check_group.TEXT}</span></label></div>
+     <!-- ENDIF -->
+     <!-- END check_group -->
+   </td>
+ </tr>
+ <!-- END permissions_row --> 
+  <tr>
+  	<th><input type="submit" name="save_group_perms" value="{L_SAVE}" class="mainoption bi_ok" id="save_group_perms" /></th>
+    </tr>
+</table>
+</div>
+
+</form>
+</div>
+<script type="text/javascript">
+function select_all_chechboxes(area_id){
+				
+	var area = document.getElementById(area_id);
+	var checkboxes = area.getElementsByTagName('input');
+
+	for (var i=0; i<checkboxes.length; i++){
+		checkboxes[i].checked = true;
+
+	}
+	
+}
+			
+function deselect_all_chechboxes(area_id){
+
+	var area = document.getElementById(area_id);
+
+	var checkboxes = area.getElementsByTagName('input');
+
+	for (var i=0; i<checkboxes.length; i++){
+		checkboxes[i].checked = false;
+
+	}
+		
+}
+
+
+function change_perm_color(id){
+
+	var status = document.getElementById(id).checked;
+	
+	if (status){
+		document.getElementById('span_'+id).className = 'positive'; 
+	} else {
+		document.getElementById('span_'+id).className = 'negative'; 
+	}
+
+}
+
+
+</script>

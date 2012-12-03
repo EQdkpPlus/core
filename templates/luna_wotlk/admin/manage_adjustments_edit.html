@@ -1,0 +1,40 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th colspan="2">{L_EDIT_ADJ}</th>
+	</tr>
+	<tr>
+		<td class="row1"><strong>{L_REASON}: </strong></td>
+		<td class="row2"><input type="text" name="reason" value="{REASON}" class="input" size='60' id="reason" /></td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_VALUE}:</strong></td>
+		<td class="row2"><input type="text" name="value" value="{VALUE}" class="input" /></td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_RAID}: </strong></td>
+		<td class="row2">{RAID}</td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_EVENT}: </strong></td>
+		<td class="row2">{EVENT}</td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_DATE}: </strong></td>
+		<td class="row2">{DATE} &nbsp; <strong>{L_TIME}:</strong>
+			<input type="text" name="hour" value="{HOUR}" size="2" class="input" />
+			:
+	<input type="text" name="min" value="{MIN}" size="2" class="input" />
+			:
+	<input type="text" name="sec" value="{SEC}" size="2" class="input" /></td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_MEMBERS}: </strong></td>
+		<td class="row2">{MEMBERS}</td>
+		</tr>
+	<tr><th colspan="2"><input type="hidden" name="selected_ids" value="{GRP_KEY}" />
+						<input type="submit" name="save" value="{L_SAVE}" class="mainoption bi_ok" />					
+            <input type="submit" name="delete" value="{L_DEL}" class="liteoption bi_delete" />
+            <input type="button" name="" value="{L_CANCEL}" class="mainoption bi_back" onClick="window.location.href='manage_adjustments.php{SID}'"/>
+</table>
+</form>

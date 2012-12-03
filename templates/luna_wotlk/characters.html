@@ -1,0 +1,56 @@
+<form method="post" action="{F_UPDATE}" name="data">
+<input type='hidden' name='delete_id' value=''>
+</form>
+<!-- IF S_SHOW_NO_CONN_INFO -->
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+	<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="left">{L_NO_CONN_INFO}</td>
+	</tr>
+</table>
+<br >
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <!-- IF CONNECT_CHARS -->
+  <tr>
+    <th colspan="10" >
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    		<tr>
+    			<td width="80%" align="left">
+			      <form method="POST" action="{F_UPDATE}">{L_CONN_MEMBERS}: {JS_CONNECTIONS} <input type="submit" name="connection_submit" value="{L_SUBMIT}" class="mainoption bi_ok" />
+			      </form>
+			    </td>
+			    <td width="20%">
+      			{ADD_MENU}
+      		</td>
+      	</tr>
+      </table>
+    </th>
+  </tr>
+  <!-- ENDIF --> 
+  <tr>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="100%"><a href="{U_CHARACTERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <th align="left" width="160" nowrap="nowrap"><a href="{U_CHARACTERS}o={O_GUILD}{URI_ADDON}">{L_GUILD}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_CHARACTERS}o={O_CLASS}{URI_ADDON}">{L_RANK}</a></th>
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_CHARACTERS}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+
+    <th align="left" width="100" nowrap="nowrap">{L_SPEC}</th>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+  </tr>
+  <!-- BEGIN members_row -->
+  <tr class="{members_row.ROW_CLASS}{members_row.TBA}">
+    <td width="35" nowrap="nowrap" align="right">{members_row.COUNT}</td>
+    <td width="100%" nowrap="nowrap"><span class="classes{members_row.CLASSID}">{members_row.CLASS_ICON}{members_row.RACE_ICON} {members_row.NAME} {members_row.MBCONFIRMED}</span></td>
+    <td width="160" nowrap="nowrap">{members_row.GUILD}</td>
+    <td width="100" nowrap="nowrap">{members_row.RANK}</td>
+    <td width="40" nowrap="nowrap">{members_row.LEVEL}</td>
+    
+    <td width="100" nowrap="nowrap">{members_row.SPEC} {members_row.SPEC2}</td>		
+    <td align="left" width="35" nowrap="nowrap">{members_row.ACTIONMENU}</td>
+  </tr>
+  <!-- END members_row -->
+  <tr>
+    <th colspan="10" class="footer">{US_FOOTCOUNT}</th>
+  </tr>
+</table>

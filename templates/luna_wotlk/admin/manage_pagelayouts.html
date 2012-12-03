@@ -1,0 +1,129 @@
+<form method="post" action="{F_PAGE_MANAGER}" name="post">
+  
+  <table width="100%">
+    <tr>
+      <th>{L_LM_TITLE}</th>
+    </tr>
+  </table>
+  <div id="lm_tabs">
+        <ul>
+        	<li><a href="#normal">{L_MANAGE}</a></li>
+        	<li><a href="#advanced">{L_ADVANCED}</a></li>
+    </ul>
+       <div id="normal">
+  <table width="100%">
+    <tr>
+      <td>
+        <table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+          <tr>
+            <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt=""></td>
+            <td class="row1" align="center"><strong>{L_LM_INFO}</strong></td>
+            </tr>
+          </table>
+        <br/><br/>
+        
+        
+        <table width="100%" cellpadding="2" cellspacing="1">
+          <tr>
+            <th colspan="4">{L_DEFAULT_LAYOUTS}</th>
+            </tr>
+          <tr>
+            <th width="1%">&nbsp;</th>
+            <th width="15%">{L_NAME}</th>
+            <th colspan="2">{L_DESC}</th>
+            </tr>
+          <!-- BEGIN layouts_row -->
+          <tr class="{layouts_row.ROW_CLASS}">
+            <td><input type="radio" name="current_layout" value="{layouts_row.NAME}" {layouts_row.IS_CURRENT}></td>
+            <td>{layouts_row.NAME}</td>
+            <td colspan="2">{layouts_row.DESC}</td>
+            </tr>
+          <!-- END layouts_row -->
+					<tr>
+            <th colspan="4">{L_USER_LAYOUTS}</th>
+          </tr>
+					 <!-- BEGIN user_layouts_row -->
+          <tr class="{user_layouts_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{user_layouts_row.ROW_CLASS}';">
+            <td><input type="radio" name="current_layout" value="{user_layouts_row.NAME}" {user_layouts_row.IS_CURRENT}></td>
+            <td><a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}">{user_layouts_row.NAME}</a></td>
+            <td width="84%">{user_layouts_row.DESC}</td>
+            <td width="20" nowrap="nowrap">
+              <a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}" title="{L_EDIT}"><img src="{EQDKP_ROOT_PATH}images/global/edit.png" border="0" /></a> &nbsp;
+              <a href="manage_pagelayouts.php{SID}&amp;delete=true&amp;layout={user_layouts_row.NAME}" title="{L_DELETE}"> <img src="{EQDKP_ROOT_PATH}images/delete.png" border="0" /></a>
+            </td>
+          </tr>
+          <!-- END user_layouts_row -->
+					<th colspan="4"><input type="submit" name="set_current_layout" value="{L_SET_CURRENT_LAYOUT}" class="mainoption bi_ok" /></th>
+          </table>
+        </td>
+    </tr>
+  </table>
+  <br>
+  <table width="100%" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="2">{L_ADD_NEW_LAYOUT}</th>
+    </tr>
+    <tr class="row1">
+      <td><strong>* {L_NAME}:</strong></td>
+      <td><input name="new_layout_name" type="text" size="80" maxlength="30"></td>
+    </tr>
+    <tr class="row2">
+      <td><strong>{L_DESC}:</strong></td>
+      <td><input name="new_layout_desc" type="text" size="80" maxlength="80"></td>
+    </tr>
+    <tr class="row1">
+      <td><strong>{L_SOURCE_LAYOUT}:</strong></td>
+      <td>{LAYOUT_DROPDOWN}</td>
+    </tr>
+    <tr>
+      <th colspan="2"><input type="submit" name="add_layout" value="{L_ADD_LAYOUT}" class="mainoption bi_new" /></th>
+    </tr>
+  </table>
+  </div>
+  <div id="advanced">
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+               <tr>
+                  <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/false.png"></td>
+                  <td class="row1" align="center"><strong>{L_LM_WARNING}</strong></td>
+        </tr>
+              </table>
+              <br />
+  <table width="100%" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="6">{L_USER_PRESETS}</th>
+    </tr>
+    <tr class="row1">
+      <th>{L_NAME}</th>
+      <th>{L_MODULE}</th>
+      <th>{L_TAG}</th>
+      <th>{L_APARAM}</th>
+      <th>{L_DPARAM}</th>
+      <th>{L_ACTION}</th>
+    </tr>
+    <!-- BEGIN preset_row -->
+    <tr class="{preset_row.ROW_CLASS}">
+      <td>{preset_row.NAME}</td>
+      <td>{preset_row.MODULE}</td>
+      <td>{preset_row.TAG}</td>
+      <td>{preset_row.APARAM}</td>
+      <td>{preset_row.DPARAM}</td>
+      <td width="20"><a href="manage_pagelayouts.php{SID}&amp;del_pre={preset_row.NAME}" title="{L_DELETE}"><img src="{EQDKP_ROOT_PATH}images/delete.png" border="0" /></a></td>
+    </tr>
+    <!-- END preset_row -->
+  </table>
+  <br />
+  <table width="100%" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="2">{L_ADD_NEW_PRESET}</th>
+    </tr>
+    <tr class="row2">
+      <td><strong>* {L_PRESET_XML}:</strong></td>
+      <td><textarea name="new_preset_xml" cols="80" rows="30" class="input"></textarea></td>
+    </tr>
+    <tr>
+      <th colspan="2"><input name="add_preset" type="submit" class="mainoption bi_new" id="add_preset" value="{L_ADD_NEW_PRESET}" /></th>
+    </tr>
+  </table>
+  </div>
+  </div>
+</form>

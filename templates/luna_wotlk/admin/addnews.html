@@ -1,0 +1,148 @@
+<script>
+var last_id = "shortinput";
+
+//Get the ID of the latest textarea
+function write_id(id){
+		last_id = id;
+}
+
+
+function bbTagInsertIntoText(aTag,eTag,smilie,textareaId){var input=document.getElementById(textareaId);var wert;var opentag;var closetag;if(!smilie){opentag='[';closetag=']';}else{opentag='';closetag='';aTag=''+aTag+' ';}
+input.focus();if(typeof document.selection!='undefined'){var range=document.selection.createRange();var insText=range.text;range.text=opentag+aTag+closetag+insText+opentag+eTag+closetag;range=document.selection.createRange();if(insText.length==0){range.move('character',-eTag.length);}
+else{range.moveStart('character',aTag.length+insText.length+eTag.length);}
+range.select();}
+else if(typeof input.selectionStart!='undefined'){var start=input.selectionStart;var end=input.selectionEnd;var insText=input.value.substring(start,end);input.value=input.value.substr(0,start)+opentag+aTag+closetag+insText+opentag+eTag+closetag+input.value.substr(end);var pos;if(insText.length==0){pos=start+aTag.length+opentag.length+closetag.length;}else{pos=start+aTag.length+insText.length+eTag.length;}
+input.selectionStart=pos;input.selectionEnd=pos;}
+else
+{var pos;var re=new RegExp('^[0-9]{0,3}$');while(!re.test(pos)){pos=prompt("Einfügen an Position (0.."+input.value.length+"):","0");}
+if(pos>input.value.length){pos=input.value.length;}
+var insText=prompt("Bitte den zu formatierenden Text eingeben:");input.value=input.value.substr(0,pos)+openTag+aTag+closeTag+insText+openTag+eTag+closeTag+input.value.substr(pos);}};function AddClass(obj,cName){KillClass(obj,cName);return obj&&(obj.className+=(obj.className.length>0?' ':'')+cName);}
+
+function set_actuell_date(){
+	document.getElementById('cal_news_date').value = '{ACTUELL_DATE}';
+	document.post.news_date_time_hour.value = '{ACTUELL_HOUR}';
+	document.post.news_date_time_min.value = '{ACTUELL_MIN}';
+}
+
+</script>
+<form method="post" action="{F_ADD_NEWS}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_NEWS}" value="{NEWS_ID}" />
+{JS_TABS}
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="4" >{L_ADD_NEWS}</th>
+  </tr>
+  <tr>
+    <td width="200" class="row1" nowrap="nowrap"><b>{L_HEADLINE}:</b></td>
+    <td width="100%" colspan="3" class="row2"><input type="text" name="news_headline" size="100" maxlength="255" value="{HEADLINE}" class="input" />{FV_HEADLINE}</td>
+  </tr>
+
+  <tr id="message">
+    <td width="200" class="row1" nowrap="nowrap"><b><div class="toggle_button" ><span class="togglebutton_name"><span align="center">{L_MESSAGE}:</span></span></div></b></td>
+    <td width="100%" colspan="3" class="row2"><div class="toggle_container"><textarea name="news_message" id="shortinput" rows="3" cols="40" class="jTagEditor" style="height:" onClick="write_id('shortinput')">{MESSAGE}</textarea></div>
+{WYSIWYG_SHORT}          {FV_MESSAGE} </td>
+  </tr>
+  <tr id="extended">
+    <td class="row1" nowrap="nowrap"><b><div class="toggle_button" ><span class="togglebutton_name"><span align="center">{L_EXTENDED}:</span></span></div></b></td>
+    <td colspan="3" class="row2"><div class="toggle_container"><textarea name="news_message_ext" id="news_message_ext" rows="4" cols="40" class="jTagEditor" onClick="write_id('news_message_ext')">{EXT_MESSAGE}</textarea></div>
+      {WYSIWYG_EXT}      </td>
+  </tr>
+  <tr>
+    <td colspan="4" class="row1"><div id="news_tabs">
+      <ul>
+        <li><a href='#settings'><span>{L_SETTINGS}</span></a></li>
+        <li><a href='#loot'><span>{L_MESSAGE_SHOW_LOOT_RAID}</span></a></li>
+        <li><a href='#bbcodes'><span>{L_BBCODES}</span></a></li>
+        </ul>
+      <div id="settings">
+        <table width="100%">
+          <!-- IF S_NEWS_CATEGORIES-->
+          
+          <tr>
+            <td nowrap="nowrap" class="row1"><strong>{L_NEWS_CATEGORY}:</strong></td>
+            <td colspan="3" class="row2">{NEWS_CATEGORY_DROPDOWN}</td>
+            </tr>
+            <!-- ENDIF -->
+          <tr>
+            <td width="177" nowrap="nowrap" class="row1"><b>{L_PERMISSIONS}</b></td>
+            <td width="30%" class="row2">{PERMISSION_DROPDOWN}</td>
+            <td width="220" class="row1"><b><label for="nocomments">{L_NEWS_NOCOMMENTS}</label></b></td>
+            <td width="30%" class="row2"><input type="checkbox" name="nocomments" id="nocomments" value="1" {NOCOMMENTS_CHECKED} /></td>
+            </tr>
+          <tr>
+            <td width="177" nowrap="nowrap" class="row1"><b><label for="news_flags">{L_STICKY_NEWS}</label></b></td>
+            <td width="209" class="row2"><input type="checkbox" name="news_flags" id="news_flags" value="1" {STICKY_CHECKED}></td>
+            <td nowrap="nowrap" class="row1"><strong>{L_DATE_FROM}{L_DATE_FROM_HELP}</strong></td>
+            <td class="row2"><table>
+                <tr>
+                  <td>{DATE_FROM_PICKER}</td>
+                  <td>{DATE_FROM_TIME}</td>
+                </tr>
+              </table></td>
+            </tr>
+          <tr>
+            <td nowrap="nowrap" class="row1"><b>{L_DATE}</b></td>
+            <td class="row2"><table><tr><td>{DATE_PICKER}</td><td>{DATE_TIME}</td></tr></table><a href="javascript:set_actuell_date();">{L_UPDATE_DATE}</a></td>
+            <td nowrap="nowrap" class="row1"><strong>{L_DATE_TO}{L_DATE_TO_HELP}</strong></td>
+            <td class="row2"><table>
+                <tr>
+                  <td>{DATE_TO_PICKER}</td>
+                  <td>{DATE_TO_TIME}</td>
+                </tr>
+              </table></td>
+          </tr>
+          </table>
+        </div>
+      <div id="loot">
+        <table width="100%">
+          <tr>
+            <td width="200" class="row1" nowrap="nowrap"><b>{L_SELECT_RAIDS}</b></td>
+            <td width="100%" colspan="3" class="row2">{RAID_DROPDOWN}<br><a href="#" onClick="document.post.show.value = 'all'; document.post.submit();">{L_SHOW_ALL}</a></td>
+            </tr>
+          </table>
+        </div>
+      <div id="bbcodes">
+      {L_BBCODES_NOTE}
+        <table width="100%" cellpadding="2" cellspacing="1">
+          <tr>
+            <th align="center">{L_BBCODES}</th>
+            <th align="center">{L_EXPLANATION}</th>
+          </tr>
+          <tr class="row1">
+            <td><a href="javascript:bbTagInsertIntoText('video','/video',false,last_id);">{BBCODE_VIDEO}</a></td>
+            <td>{BBCODE_VIDEO_NOTE}</td>
+            </tr>
+          <tr class="row2">
+            <td><a href="javascript:bbTagInsertIntoText('item','/item',false,last_id);">{BBCODE_ITEM}</a></td>
+            <td>{BBCODE_ITEM_NOTE}</td>
+          </tr>
+					<!-- BEGIN bbcode_notes -->
+          <tr class="{bbcode_notes.ROW_CLASS}">
+            <td><a href="javascript:bbTagInsertIntoText('{bbcode_notes.STARTTAG}','{bbcode_notes.ENDTAG}',false,last_id);">{bbcode_notes.TAG}</a></td>
+            <td>{bbcode_notes.NOTE}</td>
+            </tr>
+					<!-- END bbcode_notes -->
+        </table>
+      </div>
+      </div>
+
+      </td>
+  </tr>
+ 
+
+</table>
+
+<table width="100%">
+  <tr>
+    <th align="center" colspan="4">
+    <input type="hidden" name="ref" value="{REF}">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_NEWS}" class="mainoption bi_ok" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption bi_reset" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_NEWS}" class="mainoption bi_ok" /> <input type="button"  name="delete" value="{L_DELETE_NEWS}" class="liteoption bi_delete" onClick="delete_warning();"/>
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+<input type="hidden" name="show">
+</form>

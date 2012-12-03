@@ -1,0 +1,90 @@
+
+<form action="upload.php{SID}" enctype="multipart/form-data" method="post">
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+    <th align="left" nowrap="nowrap">{L_FILE_MANAGER}</th>
+    <th width="10" align="left" nowrap="nowrap"><a href="#" onclick="$('#table_upload').slideToggle('medium');$('#table_folder').slideUp('medium');"><img src="{IMAGE_PATH}glyphs/new.png" border="0" align="absmiddle"> {L_UPLOAD_FILE}</a> &nbsp;&nbsp; <a href="#" onclick="$('#table_folder').slideToggle('medium'); $('#table_upload').slideUp('medium');"><img src="{IMAGE_PATH}glyphs/add_folder.png" border="0" align="absmiddle"> {L_ADD_FOLDER}</a></th>
+  </tr>
+</table>
+<div id="table_upload" style="display:none;">
+  <table width="100%" border="0" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="2" align="left" nowrap="nowrap">{L_UPLOAD_FILE}</th>
+    </tr>
+    <tr class="row1">
+      <td align="left">{L_SELECT_DEST_FOLDER}</td>
+      <td align="left">{FOLDER_DD}</td>
+    </tr>
+    <tr  class="row2">
+      <td align="left">{L_SELECT_FILE}</td>
+      <td align="left"><input type="file" name="upload" /></td>
+    </tr>
+    <tr class="{styles_row.ROW_CLASS}">
+      <th colspan="2" align="center"><input name="upload" type="submit" value="{L_UPLOAD}" class="mainoption bi_ok" /></th>
+    </tr>
+  </table>
+  </div>
+  <div id="table_folder" style="display:none;">
+  <table width="100%" border="0" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="2" align="left" nowrap="nowrap">{L_ADD_FOLDER}</th>
+    </tr>
+    <tr class="row1">
+      <td align="left">{L_SELECT_DEST_FOLDER}</td>
+      <td align="left">{SRC_FOLDER_DD}</td>
+    </tr>
+    <tr  class="row2">
+      <td align="left">{L_FOLDER_NAME}</td>
+      <td align="left"><input type="text" name="name" class="input"/></td>
+    </tr>
+    <tr class="{styles_row.ROW_CLASS}">
+      <th colspan="2" align="center"><input name="create_folder" type="submit" value="{L_ADD_FOLDER}" class="mainoption bi_ok" /></th>
+    </tr>
+  </table>
+  </div>
+  <table width="100%" border="0" cellpadding="2" cellspacing="1">
+    <tr class="row1">
+      <td colspan="2">{FILE_TREE} </td>
+    </tr>
+    <tr class="footer">
+      <th colspan="2">{L_MARKED}
+        {ACTION_DD}<span id="target_dd"> {L_TO} {DEST_DD}</span>  <input type="submit" value="{L_GO}" class="mainoption bi_ok"></th>
+    </tr>
+  </table>
+</form>
+<script>
+	function insertFile(name)	{
+		name = replace_url(name);
+		try {
+			if (is_image(name)){			
+				parent.$.markItUp( { replaceWith:'[img]'+name+'[/img]' } );
+			} else {
+				
+				parent.$.markItUp( { replaceWith:'[url='+name+'][![Alt Text:!:'+name+']!][/url]' } );
+			}
+
+		} catch(e) {
+			alert("No markItUp! Editor found");
+		}
+	}
+	
+	function is_image(file_name) {
+  // Die erlaubten Dateiendungen
+  var image_extensions = new Array('jpg','gif','png');
+
+  // Dateiendung der Datei
+  var extension = file_name.split('.');
+  extension = extension[extension.length - 1];
+
+  for (var k in image_extensions) {
+    if (image_extensions[k] == extension) return true;
+  }
+  return false;
+}
+
+function replace_url(string){
+
+	return string.replace("{EQDKP_ROOT_PATH}","{DKP_URL}");
+}
+
+</script>

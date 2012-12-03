@@ -1,0 +1,103 @@
+<script type="text/javascript" language="javascript">
+function style_preview(style_id)
+{
+    selected_style = style_id;
+    preview = window.open('{EQDKP_ROOT_PATH}viewnews.php{SID}&style='+selected_style,'preview','resizable=yes,toolbar=no,status=yes,height=500,width=600,screenX=50,screenY=25,left=100,top=75')
+    preview.focus();
+}
+
+var override = 0;
+function change_override(value){
+	override = value;
+}
+
+function submit_form(){
+	document.post.override.value = override;
+	document.post.submit();
+}
+</script>
+<div id="style_tabs">
+<!-- IF S_UPDATES -->
+<ul>
+<li><a href="#styles">{L_MANAGE}</a></li>
+<li><a href="#updates">{L_UPDATES}</a></li>
+</ul>
+<!-- ENDIF -->
+<div id="styles">
+<form method="post" action="styles.php{SID}&default=true" name="post">
+<input type="hidden" name="override" value="0">
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+  <tr>
+    <th align="left" nowrap="nowrap">&nbsp;</th>
+    <th width="30" align="left" nowrap="nowrap">&nbsp;</th>
+    <th align="left" nowrap="nowrap">{L_NAME}</th>
+    <th colspan="4" align="left" nowrap="nowrap">{L_ACTION}</th>
+    <th align="left" nowrap="nowrap">{L_STYLE_CODE}</th>
+    <th align="left" nowrap="nowrap">{L_TEMPLATE}</th>
+    <th align="left" nowrap="nowrap">{L_USERS}</th>
+    <th align="left" nowrap="nowrap">{L_VERSION}</th>
+    <th align="left" nowrap="nowrap">{L_AUTHOR}</th>
+    <th align="left" nowrap="nowrap">{L_PREVIEW}</th>
+    </tr>
+  <!-- BEGIN styles_row -->
+  <tr class="{styles_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{styles_row.ROW_CLASS}';">
+    <td width="25" nowrap="nowrap" align="center"><img src="{EQDKP_ROOT_PATH}images/glyphs/status_{styles_row.ENABLE_ICON}.gif" title="{styles_row.ENABLE_ICON_INFO}"></td>
+    <td width="25" nowrap="nowrap" align="center"><!-- IF not styles_row.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row.STANDARD} value="{styles_row.ID}"><!-- ENDIF --></td>
+    <td nowrap="nowrap"><!-- IF styles_row.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row.U_EDIT_STYLE}">{styles_row.NAME}</a> <!-- IF styles_row.S_DEFAULT --> * </b><!-- ENDIF --></td>
+    <td width="10" nowrap="nowrap"><!-- IF not styles_row.S_DEFAULT -->
+      <a href="{styles_row.U_ENABLE}"><img src="{IMAGE_PATH}glyphs/{styles_row.ENABLE}.png" width="16" height="16" title="{styles_row.L_ENABLE}"></a>  
+      <!-- ENDIF --></td>
+    <td width="10" nowrap="nowrap"><a href="{styles_row.U_EDIT_STYLE}" title="{L_EDIT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_EDIT}" /></a></td>
+    <td width="10" nowrap="nowrap"><a href="{styles_row.U_DOWNLOAD_STYLE}" title="{L_DOWNLOAD}"><img src="{EQDKP_ROOT_PATH}images/admin/save.png" width="16" height="16" alt="{L_DOWNLOAD}" /></a></td>
+    <td width="10" nowrap="nowrap"><!-- IF not styles_row.S_DEFAULT -->
+      <a href="{styles_row.U_DELETE_STYLE}" title="{L_DELETE}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_DELETE}" /></a>
+      <!-- ENDIF --></td>
+    <td nowrap="nowrap">{styles_row.CODE}</td>
+    <td nowrap="nowrap">{styles_row.TEMPLATE}</td>
+    <td nowrap="nowrap">{styles_row.USERS}</td>
+    <td nowrap="nowrap">{styles_row.VERSION}</td>
+    <td nowrap="nowrap">{styles_row.AUTHOR}</td>
+    <td nowrap="nowrap"><a href="javascript:style_preview({styles_row.ID});">{L_PREVIEW}</a></td>
+    </tr>
+   <!-- END styles_row -->
+  <tr class="{styles_row.ROW_CLASS}">
+    <th colspan="13" align="center"><input name="standard" type="button" id="standard" value="{L_MAKE_DEFAULT}" class="mainoption bi_ok" onClick="style_default_info();"> <input name="cache_reset" type="button" id="" value="{L_RESET_CACHE}" class="liteoption bi_delete" onclick="window.location='styles.php{SID}&cache=reset'"></th>
+  </tr>  
+</table>
+</form>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+  <tr>
+    <th colspan="4" align="left" nowrap="nowrap">{L_INSTALL_STYLES}</th>
+  </tr>
+  <!-- BEGIN install_row -->
+  <tr class="{install_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{install_row.ROW_CLASS}';">
+    <td nowrap="nowrap">{install_row.NAME}</td>
+    <td nowrap="nowrap">{install_row.VERSION}</td>
+    <td nowrap="nowrap">{install_row.AUTHOR}</td>
+    <td nowrap="nowrap"><a href="{install_row.U_INSTALL}"><strong>{L_INSTALL}</strong></a></td>
+  </tr>
+  <!-- END install_row -->
+  <!-- IF S_NO_STYLES_TO_INSTALL -->
+    <tr class="row1">
+    <td colspan="4" align="left" nowrap="nowrap"><em>{L_NO_STYLES_TO_INSTALL}</em></td>
+  </tr>
+  <!-- ENDIF -->
+</table>
+</div>
+<!-- IF S_UPDATES -->
+<div id="updates">
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+  <tr>
+    <td width="50" align="left" nowrap="nowrap"><img src="{IMAGE_PATH}updates.png"></td>
+    <td align="left"><b>{L_UPDATE_INFO}</b></td>
+    </tr>
+ </table>
+
+
+{JS_UPDATE_ACCORDION}
+</div>
+<!-- ENDIF -->
+</div>
+<br/>
+{L_MORE}

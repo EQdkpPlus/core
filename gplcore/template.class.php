@@ -1,0 +1,930 @@
+<?php
+ /*
+ * Project:     EQdkp-Plus
+ * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+ * Link:        http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * -----------------------------------------------------------------------
+ * Began:       30.06.2009
+ * Date:        $Date$
+ * -----------------------------------------------------------------------
+ * @author      $Author$
+ * @copyright   2006-2009 Corgan - Stefan Knaak | Wallenium & the EQdkp-Plus Developer Team
+ * @link        http://eqdkp-plus.com
+ * @package     eqdkp-plus
+ * @version     $Rev$
+ *
+ * $Id$
+ */
+
+if ( !defined('EQDKP_INC') ){
+	header('HTTP/1.0 404 Not Found');
+	exit;
+}
+
+/**
+* NOTICE: This class was not written for the EQdkp project.
+* It was originally written for the phpBB project and used here
+* under the GNU GPL.
+*
+* It has been modified and adapted to fit the EQdkp project's needs.
+* The phpBB Group's original notice appears below
+*/
+
+/***************************************************************************
+ *                              template.php
+ *                            -------------------
+ *   begin                : Saturday, Feb 13, 2001
+ *   copyright            : (C) 2001 The phpBB Group
+ *   email                : support@phpbb.com
+ *
+ *   $Id$
+ *
+ ***************************************************************************/
+
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ ***************************************************************************/
+
+/*
+	Template class.
+
+	Nathan Codding - Original version design and implementation
+	Crimsonbane - Initial caching proposal and work
+	psoTFX - Completion of file caching, decompilation routines and implementation of
+	conditionals/keywords and associated changes
+
+	The interface was inspired by PHPLib templates,  and the template file (formats are
+	quite similar)
+
+	The keyword/conditional implementation is currently based on sections of code from
+	the Smarty templating engine (c) 2001 ispi of Lincoln, Inc. which is released
+	(on its own and in whole) under the LGPL. Section 3 of the LGPL states that any code
+	derived from an LGPL application may be relicenced under the GPL, this applies
+	to this source
+*/
+
+class Template {
+
+	var $classname						= 'Template';
+
+	// variable that holds all the data we'll be substituting into
+	// the compiled templates. Takes form:
+	// --> $this->_tpldata[block.][iteration#][child.][iteration#][child2.][iteration#][variablename] == value
+	// if it's a root-level variable, it'll be like this:
+	// --> $this->_tpldata[.][0][varname] == value
+	var $_tpldata							= array();
+
+	// Root dir and hash of filenames for each template handle.
+	var $root									= '';
+	var $datafolder						= '';
+	var $fallback							= '';
+	var $style_code						= '';
+	var $template							= '';
+	var $files								= array();
+	var $error_message 				= false;
+
+	// this will hash handle names to the compiled/uncompiled code for that handle.
+	var $compiled_code				= array();
+	var $uncompiled_code			= array();
+	
+	//Blabla..
+	var $static_files					= array(
+																'header'	=> 'overall_header.html',
+																'footer'	=> 'overall_footer.html'
+															);
+	
+	// Various counters and storage arrays
+	var $block_names					= array();
+	var $block_else_level 		= array();
+	var $include_counter			= 1;
+	var $block_nesting_level	= 0;
+	var $tplout_set						= array(
+																'js_code'		=> false,
+																'js_file'		=> false,
+																'css_code'	=> false,
+																'css_file'	=> false,
+																'rss_feeds'	=> false
+															);
+	var $tpl_output						= array();
+
+	function set_template($style_code = '', $template = '', $root_dir = 'templates/'){
+		global $eqdkp_root_path, $pcache;
+		$this->style_code = $style_code;
+		$this->template = $template;
+
+		if( substr($root_dir, strlen($root_dir)-1) != '/' ){
+			$root_dir .= '/';
+		}
+		//'templates/'.
+		$this->datafolder 	= $pcache->FolderPath($root_dir.$style_code, 'eqdkp');		//The data-Folder, if the style has edited templates
+		$this->root 				= $eqdkp_root_path.$root_dir.$style_code;									//If the Style has templates in his template folders
+		$this->base_template= $eqdkp_root_path.$root_dir.'base_template';	
+		$this->fallback 		= $eqdkp_root_path.$root_dir.$template;										//The Fallback-style it no other templates have been found
+		
+				
+		// Cache part...
+		$myPlugin = (defined('PLUGIN')) ? PLUGIN : '';
+		$this->cachedir = $pcache->FolderPath(array('template',$template,$myPlugin), 					'cache');
+		$admin_folder		= $pcache->FolderPath(array('template',$template,$myPlugin,	'admin'), 'cache');
+		return true;
+	}
+  
+  /**
+	* Assign custom JS Code to the Header
+	*/
+	function add_js($varval, $eop=false){
+		switch($eop){
+			case 'eop':		$identifier = 'js_code_eop'; break;
+			case 'eop2':	$identifier = 'js_code_eop2'; break;
+			default:			$identifier = 'js_code';
+		}
+		$this->tpl_output[$identifier][] = $varval;
+	}
+  
+	/**
+	* Assign custom JS File to the Header
+	*/
+	function js_file($varval){
+		global $eqdkp_root_path;
+		$varval = str_replace($eqdkp_root_path ,'' , $varval);
+		$this->tpl_output['js_file'][] = $varval;
+	}
+  	
+	/**
+	* Assign custom CSS File to the Header
+	*/
+	function css_file($varval){
+		global $eqdkp_root_path;
+		#$varval = str_replace($eqdkp_root_path ,'' , $varval);
+		
+		// tmp!!
+		$this->tpl_output['css_file'][] = $varval;
+	}
+	
+	/**
+	* Assign custom CSS Code to the Header
+	*/
+	function add_css($varval){
+		$this->tpl_output['css_code'][] = $varval;
+	}
+	
+	/**
+	* Assign RSS-Feeds to the Header
+	*/
+	function add_rssfeed($name, $url, $type='application/rss+xml'){
+		$this->tpl_output['rss_feeds'][] = array(
+			'name'	=> $name,
+			'url'		=> $url,
+			'type'	=> $type,
+		);
+	}
+  
+	/**
+	 * Sets the template filenames for handles. $filename_array
+	 * should be a hash of handle => filename pairs.
+	 */
+	function set_filenames($filename_array){
+		if (!is_array($filename_array)){
+			return false;
+		}
+
+		$template_names = '';
+		$new_files = array_merge($this->static_files, $filename_array);
+		foreach ($new_files as $handle => $filename){
+			if (empty($filename)){
+				$this->generate_error('templates_error1', $handle, $handle, 'set_filenames()');
+			}
+			$this->filename[$handle]	= $filename;
+			$this->files[$handle]			= $this->make_filename($filename, (($handle == 'header' || $handle == 'footer') ? true : false));
+		}
+		return true;
+	}
+
+	/**
+	 * Generates a full path+filename for the given filename, which can either
+	 * be an absolute name, or a name relative to the rootdir for this Template
+	 * object.
+	 */
+	function make_filename($filename, $foothead = false){
+		global $pcache, $eqdkp_root_path;
+		
+		if ($foothead){
+			$tmp_datafolder = $pcache->FolderPath('templates/'.$this->style_code, 'eqdkp');
+			$tmp_root 			= $eqdkp_root_path.'templates/'.$this->style_code;
+			$tmp_fallback 	= $eqdkp_root_path.'templates/'.$this->template;
+		} else {
+			$tmp_datafolder = $this->datafolder;
+			$tmp_root 			= $this->root;
+			$tmp_fallback 	= $this->fallback;
+		}
+		
+		
+		if(substr($filename, 0, 1) == '/' || substr($filename, 0, 2) == './'){
+			$myfile = $filename;
+		}else{
+			if (file_exists($tmp_datafolder.'/'.$filename)){
+				$myfile = $tmp_datafolder.'/'.$filename;
+			} elseif(file_exists($tmp_root.'/'.$filename)){
+				$myfile = $tmp_root.'/'.$filename;
+			} elseif(file_exists($this->base_template.'/'.$filename)){
+			$myfile = $this->base_template.'/'.$filename;
+			} else {
+				$myfile = $tmp_fallback.'/'.$filename;
+			}
+		}
+		return $myfile;
+	}
+
+	/**
+	 * If not already done, load the file for the given handle and populate
+	 * the uncompiled_code[] hash with its code. Do not compile.
+	 */
+	function loadfile($handle){
+		global $user;
+		// If the file for this handle is already loaded and compiled, do nothing.
+		if (!empty($this->uncompiled_code[$handle])){
+			return true;
+		}
+		// If we don't have a file assigned to this handle, die.
+		if (!isset($this->files[$handle])){
+			$this->generate_error('templates_error1', $handle, $handle, 'loadfile()');
+		}
+		if (!($fp = @fopen($this->files[$handle], 'r'))){
+			$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'loadfile()');
+		}
+
+		$str = '';
+		$str = fread($fp, filesize($this->files[$handle]));
+		@fclose($fp);
+		$this->uncompiled_code[$handle] = trim($str);
+		return true;
+	}
+
+	/**
+	 * Destroys this template object. Should be called when you're done with it, in order
+	 * to clear out the template data so you can load/parse a new template set.
+	 */
+	function destroy(){
+		$this->_tpldata = array();
+	}
+
+	function security(){
+		return true;
+	}
+
+	/**
+	 * Load the file for the handle, compile the file,
+	 * and run the compiled code. This will print out
+	 * the results of executing the template.
+	 */
+	function display($handle){
+		global $user;
+		$_str = '';
+		if (!$this->compile_load($_str, $handle, true)){
+			if (!$this->loadfile($handle)){
+				$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'display()');
+			}
+
+			// Actually compile the code now.
+			$this->compiled_code[$handle] = $this->compile($this->uncompiled_code[$handle]);
+			if ($this->compiled_code[$handle] == ""){
+				$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'display()');
+			}else {
+				$this->compile_write($handle, $this->compiled_code[$handle]);
+				@eval($this->compiled_code[$handle]);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Inserts the uncompiled code for $handle as the
+	 * value of $varname in the root-level. This can be used
+	 * to effectively include a template in the middle of another
+	 * template.
+	 * Note that all desired assignments to the variables in $handle should be done
+	 * BEFORE calling this function.
+	 */
+	function assign_var_from_handle($varname, $handle){
+		$_str = '';
+		if (!($this->compile_load($_str, $handle, false))){
+			if (!$this->loadfile($handle)){
+				$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'assign_var_from_handle()');
+			}
+
+			$code = $this->compile($this->uncompiled_code[$handle], true, '_str');
+			$this->compile_write($handle, $code);
+
+			// evaluate the variable assignment.
+			eval($code);
+		}
+
+		// assign the value of the generated variable to the given varname.
+		$this->assign_var($varname, $_str);
+		return true;
+	}
+
+	function assign_from_include($filename){
+		global $user;
+		$handle										= 'include_' . $this->include_counter++;
+		$this->filename[$handle]	= $filename;
+		$this->files[$handle]			= $this->make_filename($filename);
+		$_str											= '';
+
+		if (!($this->compile_load($_str, $handle, false))){
+			if (!$this->loadfile($handle)){
+				$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'assign_from_include()');
+			}
+
+			$this->compiled_code[$handle] = $this->compile($this->uncompiled_code[$handle]);
+			if ($this->compiled_code[$handle] == ""){
+				$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'assign_from_include()');
+			} else {
+				$this->compile_write($handle, $this->compiled_code[$handle]);
+				eval($this->compiled_code[$handle]);
+			}
+		}
+	}
+	
+	/**
+	 * Multilevel variable assignment. Adds to current assignments, overriding
+	 * any existing variable assignment with the same name.
+	 */
+	function assign_array($array, $name, $morekeys='') {
+		foreach($array as $key => $val){
+			if(is_array($val)){
+				$keys = (!empty($morekeys)) ? $morekeys.':'.$key : ':'.$key;
+				$this->assign_array($val, $name, $keys);
+				continue;
+			}else{
+				$keys = ':'.$key;	
+			}
+			if((!empty($morekeys))){
+				$this->_tpldata['.'][0][$name.$morekeys.$keys] = $val;
+			}else{
+				$this->_tpldata['.'][0][$name.$keys] = $val;
+			}
+		}
+	}
+	
+	function demo(){
+		return $this->_tpldata['.'][0];
+	}
+	
+	/**
+	 * Root-level variable assignment. Adds to current assignments, overriding
+	 * any existing variable assignment with the same name.
+	 */
+	function assign_vars($vararray){
+		foreach ($vararray as $key => $val){
+			$this->_tpldata['.'][0][$key] = $val;
+		}
+		return true;
+	}
+
+	/**
+	 * Root-level variable assignment. Adds to current assignments, overriding
+	 * any existing variable assignment with the same name.
+	 */
+	function assign_var($varname, $varval){
+		$this->_tpldata['.'][0][$varname] = $varval;
+		return true;
+	}
+
+	/**
+	 * Block-level variable assignment. Adds a new block iteration with the given
+	 * variable assignments. Note that this should only be called once per block
+	 * iteration.
+	 */
+	function assign_block_vars($blockname, $vararray){
+		if (strpos($blockname, '.') !== false){
+			// Nested block.
+			$blocks			= explode('.', $blockname);
+			$blockcount = sizeof($blocks) - 1;
+			$str				= '$this->_tpldata';
+			for ($i = 0; $i < $blockcount; $i++){
+				$str .= '[\'' . $blocks[$i] . '.\']';
+				eval('$lastiteration = sizeof(' . $str . ') - 1;');
+				$str .= '[' . $lastiteration . ']';
+			}
+
+			// Now we add the block that we're actually assigning to.
+			// We're adding a new iteration to this block with the given
+			// variable assignments.
+			$str .= '[\'' . $blocks[$blockcount] . '.\'][] = $vararray;';
+			
+			// Now we evaluate this assignment we've built up.
+			$str = eval($str);
+			$s_row_count = isset($str[$blocks[$blockcount]]) ? sizeof($str[$blocks[$blockcount]]) : 0;
+			$vararray['S_ROW_COUNT'] = $s_row_count;
+
+			// Assign S_FIRST_ROW
+			if( !$s_row_count ){
+				$vararray['S_FIRST_ROW'] = true;
+			}
+
+			// Now the tricky part, we always assign S_LAST_ROW and alter the entry before
+			// This is much more clever than going through the complete template data on display (phew)
+			$vararray['S_LAST_ROW'] = true;
+			if ($s_row_count > 0){
+				unset($this->_tpldata[$blocks[$blockcount]][($s_row_count - 1)]['S_LAST_ROW']);
+			}
+		}else{
+			// Top-level block.
+			$s_row_count = (isset($this->_tpldata[$blockname . '.'])) ? sizeof($this->_tpldata[$blockname . '.']) : 0;
+			$vararray['S_ROW_COUNT'] = $s_row_count;
+
+			// Assign S_FIRST_ROW
+			if( !$s_row_count ){
+				$vararray['S_FIRST_ROW'] = true;
+			}
+            
+			// We always assign S_LAST_ROW and remove the entry before
+			$vararray['S_LAST_ROW'] = true;
+			if ($s_row_count > 0){
+				unset($this->_tpldata[$blockname . '.'][($s_row_count - 1)]['S_LAST_ROW']);
+			}
+            
+			// Add a new iteration to this block with the variable assignments we were given.
+			$this->_tpldata[$blockname . '.'][] = $vararray;
+		}
+		return true;
+	}
+	
+	/**
+	* Remove any PHP tags that do not belong, these regular expressions are derived from
+	* the ones that exist in zend_language_scanner.l
+	* @access private
+	*/
+	function remove_php_tags(&$code){
+		// This matches the information gathered from the internal PHP lexer
+		$match = array(
+			'#<([\?%])=?.*?\1>#s',
+			'#<script\s+language\s*=\s*(["\']?)php\1\s*>.*?</script\s*>#s',
+			'#<\?php(?:\r\n?|[ \n\t]).*?\?>#s'
+		);
+		$code = preg_replace($match, '', $code);
+	}
+	
+	/**
+	 * Compiles the given string of code, and returns
+	 * the result in a string.
+	 * If "do_not_echo" is true, the returned code will not be directly
+	 * executable, but can be used as part of a variable assignment
+	 * for use in assign_code_from_handle().
+	 *
+	 * Parts of this were inspired by Smarty
+	 */
+	function compile($code, $do_not_echo = false, $retvar = ''){
+		
+		$this->remove_php_tags($code);
+		
+		preg_match_all('#<!-- PHP -->(.*?)<!-- ENDPHP -->#s', $code, $matches);
+		$php_blocks = $matches[1];
+		$code = preg_replace('#<!-- PHP -->(.*?)<!-- ENDPHP -->#s', '<!-- PHP -->', $code);
+
+		preg_match_all('#<!-- (.*?) (.*?)?[ ]?-->#s', $code, $blocks);
+		$text_blocks = preg_split('#<!-- (.*?) (.*?)?[ ]?-->#s', $code);
+		for($i = 0; $i < count($text_blocks); $i++){
+			$this->compile_var_tags($text_blocks[$i]);
+		}
+
+		$compile_blocks = array();
+		for ($curr_tb = 0; $curr_tb < count($text_blocks); $curr_tb++){
+			if ( isset($blocks[1][$curr_tb]) ){
+				switch ($blocks[1][$curr_tb]){
+    				case 'BEGIN':
+    					$this->block_else_level[] = false;
+    					$compile_blocks[] = '// BEGIN ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_block($blocks[2][$curr_tb]);
+    					break;
+    				case 'BEGINELSE':
+    					$this->block_else_level[sizeof($this->block_else_level) - 1] = true;
+    					$compile_blocks[] = "// BEGINELSE\n}} else {\n";
+    					break;
+    				case 'END':
+    					$compile_blocks[] = ((array_pop($this->block_else_level)) ? "}\n" : "}}\n") . '// END ' . array_pop($this->block_names) . "\n";
+    					break;
+    				case 'IF':
+    					$compile_blocks[] = '// IF ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_if($blocks[2][$curr_tb], false);
+    					break;
+    				case 'ELSE':
+    					$compile_blocks[] = "// ELSE\n} else {\n";
+    					break;
+    				case 'ELSEIF':
+    					$compile_blocks[] = '// ELSEIF ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_if($blocks[2][$curr_tb], true);
+    					break;
+    				case 'ENDIF':
+    					$compile_blocks[] = "// ENDIF\n}\n";
+    					break;
+    				case 'INCLUDE':
+    					$compile_blocks[] = '// INCLUDE ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_include($blocks[2][$curr_tb]);
+    					break;
+    				case 'INCLUDEPHP':
+    					$compile_blocks[] = ($core->config['tpl_allow_php']) ? '// INCLUDEPHP ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_include_php($blocks[2][$curr_tb]) : '';
+    					break;
+    				case 'PHP':
+    					$temp = '';
+    					list(, $temp) = each($php_blocks);
+    					$compile_blocks[] = ($core->config['tpl_allow_php']) ? "// PHP START\n" . $temp . "\n// PHP END\n" : '';
+    					break;
+    				default:
+    					$this->compile_var_tags($blocks[0][$curr_tb]);
+    					$trim_check = trim($blocks[0][$curr_tb]);
+    					$compile_blocks[] = (!$do_not_echo) ? ((!empty($trim_check)) ? 'echo \'' . $blocks[0][$curr_tb] . '\';' : '') : ((!empty($trim_check)) ? $blocks[0][$curr_tb] : '');
+    					break;
+				} // switch
+			} // isset
+		} // for
+
+		$template_php = '';
+		for ($i = 0; $i < count($text_blocks); $i++){
+			$trim_check_text		= ( isset($text_blocks[$i]) ) ? trim($text_blocks[$i]) : '';
+			$trim_check_block		= ( isset($compile_blocks[$i]) ) ? trim($compile_blocks[$i]) : '';
+			$template_php				.= (!$do_not_echo) ? ((!empty($trim_check_text)) ? 'echo \'' . $text_blocks[$i] . '\';' : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] : '') : ((!empty($trim_check_text)) ? $text_blocks[$i] . "\n" : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] . "\n" : '');
+		}
+		return  (!$do_not_echo) ? $template_php : '$' . $retvar . '.= \'' . $template_php . '\'';
+	}
+
+	function compile_var_tags(&$text_blocks){
+		// change template varrefs into PHP varrefs
+		$varrefs = array();
+
+		$text_blocks = str_replace('\\', '\\\\', $text_blocks);
+		$text_blocks = str_replace('\'', '\\\'', $text_blocks);
+
+		// This one will handle varrefs WITH namespaces
+		preg_match_all('#\{(([a-z0-9\-_]+?\.)+?)([a-z0-9\-_]+?)\}#is', $text_blocks, $varrefs);
+		for ($j = 0; $j < sizeof($varrefs[1]); $j++){
+			$namespace		= $varrefs[1][$j];
+			$varname			= $varrefs[3][$j];
+			$new					= $this->generate_block_varref($namespace, $varname);
+			$text_blocks	= str_replace($varrefs[0][$j], $new, $text_blocks);
+		}
+
+		// This will handle the remaining root-level varrefs
+		$text_blocks = preg_replace('#\{L_([a-z0-9\-_]*?)\}#is', "' . ((isset(\$this->_tpldata['.'][0]['L_\\1'])) ? \$this->_tpldata['.'][0]['L_\\1'] : ((isset(\$user->lang['\\1'])) ? \$user->lang['\\1'] : '{ ' . ucfirst(strtolower(str_replace('_', ' ', '\\1'))) . ' 	}')) . '", $text_blocks);
+		$text_blocks = preg_replace('#\{([a-z0-9\:\@\-_]*?)\}#is', "' . ((isset(\$this->_tpldata['.'][0]['\\1'])) ? \$this->_tpldata['.'][0]['\\1'] : '') . '", $text_blocks);
+		return;
+	}
+
+	function compile_tag_block($tag_args){
+		$tag_template_php = '';
+		array_push($this->block_names, $tag_args);
+
+		if (sizeof($this->block_names) < 2){
+			// Block is not nested.
+			$tag_template_php  = '$_' . $tag_args . '_count = (isset($this->_tpldata[\'' . $tag_args . '.\'])) ?  sizeof($this->_tpldata[\'' . $tag_args . '.\']) : 0;' . "\n";
+			$tag_template_php .= 'if ($_' . $tag_args . '_count) {' . "\n";
+			$tag_template_php .= 'for ($_' . $tag_args . '_i = 0; $_' . $tag_args . '_i < $_' . $tag_args . '_count; $_' . $tag_args . '_i++)';
+		
+		// This block is nested.
+		}else{
+			// Generate a namespace string for this block.
+			$namespace = implode('.', $this->block_names);
+
+			// Get a reference to the data array for this block that depends on the
+			// current indices of all parent blocks.
+			$varref = $this->generate_block_data_ref($namespace, false);
+
+			// Create the for loop code to iterate over this block.
+			$tag_template_php  = '$_' . $tag_args . '_count = (isset(' . $varref . ')) ? sizeof(' . $varref . ') : 0;' . "\n";
+			$tag_template_php .= 'if ($_' . $tag_args . '_count) {' . "\n";
+			$tag_template_php .= 'for ($_' . $tag_args . '_i = 0; $_' . $tag_args . '_i < $_' . $tag_args . '_count; $_' . $tag_args . '_i++)';
+		}
+		$tag_template_php .= "\n{\n";
+		return $tag_template_php;
+	}
+
+	//
+	// Compile IF tags - much of this is from Smarty with
+	// some adaptions for our block level methods
+	//
+	function compile_tag_if($tag_args, $elseif){
+		/* Tokenize args for 'if' tag. */
+		preg_match_all('/(?:
+			"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"         |
+			\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'     |
+			[(),]                                  |
+			[^\s(),]+)/x', $tag_args, $match);
+		
+		$tokens = $match[0];
+		$is_arg_stack = array();
+		for ($i = 0, $size = count($tokens); $i < $size; $i++){
+			$token = &$tokens[$i];
+			switch ($token){
+				case '!==':
+				case '===':
+				case '<<':
+				case '>>':
+				case '|':
+				case '^':
+				case '&':
+				case '~':
+				case ')':
+				case ',':
+				case '+':
+				case '-':
+				case '*':
+				case '/':
+				case '@':
+				break;
+				
+				case '==':
+				case 'eq':
+					$token = '==';
+				break;
+				
+				case '!=':
+				case '<>':
+				case 'ne':
+				case 'neq':
+					$token = '!=';
+				break;
+				
+				case '<':
+				case 'lt':
+					$token = '<';
+				break;
+
+				case '<=':
+				case 'le':
+				case 'lte':
+					$token = '<=';
+				break;
+
+				case '>':
+				case 'gt':
+					$token = '>';
+				break;
+
+				case '>=':
+				case 'ge':
+				case 'gte':
+					$token = '>=';
+				break;
+
+				case '&&':
+				case 'and':
+					$token = '&&';
+				break;
+
+				case '||':
+				case 'or':
+					$token = '||';
+				break;
+
+				case '!':
+				case 'not':
+					$token = '!';
+				break;
+
+				case '%':
+				case 'mod':
+					$token = '%';
+				break;
+
+				case '(':
+					array_push($is_arg_stack, $i);
+				break;
+
+				case 'is':	$is_arg_start	= ($tokens[$i-1] == ')') ? array_pop($is_arg_stack) : $i-1;
+										$is_arg				= implode('    ', array_slice($tokens,    $is_arg_start, $i -    $is_arg_start));
+										$new_tokens		= $this->_parse_is_expr($is_arg, array_slice($tokens, $i+1));
+										array_splice($tokens, $is_arg_start, count($tokens), $new_tokens);
+										$i						= $is_arg_start;
+                // no break
+
+				default:		if (preg_match('#^(([a-z0-9\-_]+?\.)+?)?([A-Z]+[A-Z0-9\-_]+?)$#s', $token, $varrefs)){
+											$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '$this->_tpldata[\'.\'][0][\'' . $varrefs[3] . '\']';
+                    }
+										break;
+			}	// end switch
+		} // end for
+		
+		// If there are no valid tokens left or only control/compare characters left, we do skip this statement
+		if (!sizeof($tokens) || str_replace(array(' ', '=', '!', '<', '>', '&', '|', '%', '(', ')'), '', implode('', $tokens)) == ''){
+			$tokens = array('false');
+		}
+		return (($elseif) ? '} else if (' : 'if (') . (implode(' ', $tokens) . ') { ' . "\n");
+	}
+
+	function compile_tag_include($tag_args){
+		global $user;
+		
+		// have a look if the filename is an dynamic content
+		preg_match_all('#\{([A-Z0-9\-_]+)\}#is', $tag_args, $mymatch);
+		if(count($mymatch) > 0){
+			foreach ($mymatch as $var_val){
+				$tag_args = str_replace($var_val[0], $this->_tpldata['.'][0][$mymatch[1][0]], $tag_args);
+			}
+		}
+		return "\$this->assign_from_include('$tag_args');\n";
+	}
+	
+	function compile_tag_include_php($tag_args){
+		return "include('" . $this->root . '/' . $tag_args . "');\n";
+	}
+
+	// This is from Smarty
+	function _parse_is_expr($is_arg, $tokens){
+		$expr_end =	0;
+		$negate_expr = false;
+
+		if (($first_token = array_shift($tokens)) == 'not'){
+			$negate_expr = true;
+			$expr_type = array_shift($tokens);
+		}else{
+			$expr_type = $first_token;
+		}
+
+		switch ($expr_type){
+			case 'even':
+				if (@$tokens[$expr_end] == 'by'){
+					$expr_end++;
+					$expr_arg =	$tokens[$expr_end++];
+					$expr =	"!(($is_arg	/ $expr_arg) % $expr_arg)";
+				}else{
+					$expr =	"!($is_arg % 2)";
+				}
+				break;
+
+			case 'odd':
+				if (@$tokens[$expr_end] == 'by'){
+					$expr_end++;
+					$expr_arg =	$tokens[$expr_end++];
+					$expr =	"(($is_arg / $expr_arg)	% $expr_arg)";
+				}else{
+					$expr =	"($is_arg %	2)";
+				}
+				break;
+
+			case 'div':
+				if (@$tokens[$expr_end] == 'by'){
+					$expr_end++;
+					$expr_arg =	$tokens[$expr_end++];
+					$expr =	"!($is_arg % $expr_arg)";
+				}
+				break;
+
+			default:
+				break;
+		}
+
+		if ($negate_expr){
+			$expr =	"!($expr)";
+		}
+		array_splice($tokens, 0, $expr_end,	$expr);
+		return $tokens;
+	}
+
+	/**
+	 * Generates a reference to the given variable inside the given (possibly nested)
+	 * block namespace. This is a string of the form:
+	 * ' . $this->_tpldata['parent'][$_parent_i]['$child1'][$_child1_i]['$child2'][$_child2_i]...['varname'] . '
+	 * It's ready to be inserted into an "echo" line in one of the templates.
+	 * NOTE: expects a trailing "." on the namespace.
+	 */
+	function generate_block_varref($namespace, $varname){
+		// Strip the trailing period.
+		$namespace = substr($namespace, 0, -1);
+
+		// Get a reference to the data block for this namespace.
+		$varref = $this->generate_block_data_ref($namespace, true);
+
+		// Append the variable reference.
+		$varref .= '[\'' . $varname . '\']';
+		return '\' . ((isset(' . $varref . ')) ? ' . $varref . ' : \'\') . \'';
+	}
+
+	/**
+	 * Generates a reference to the array of data values for the given
+	 * (possibly nested) block namespace. This is a string of the form:
+	 * $this->_tpldata['parent'][$_parent_i]['$child1'][$_child1_i]['$child2'][$_child2_i]...['$childN']
+	 *
+	 * If $include_last_iterator is true, then [$_childN_i] will be appended to the form shown above.
+	 * NOTE: does not expect a trailing "." on the blockname.
+	 */
+	function generate_block_data_ref($blockname, $include_last_iterator){
+		// Get an array of the blocks involved.
+		$blocks = explode('.', $blockname);
+		$blockcount = sizeof($blocks) - 1;
+		$varref = '$this->_tpldata';
+
+		// Build up the string with everything but the last child.
+		for ($i = 0; $i < $blockcount; $i++){
+			$varref .= '[\'' . $blocks[$i] . '.\'][$_' . $blocks[$i] . '_i]';
+		}
+
+		// Add the block reference for the last child.
+		$varref .= '[\'' . $blocks[$blockcount] . '.\']';
+
+		// Add the iterator for the last child if requried.
+		if ($include_last_iterator){
+			$varref .= '[$_' . $blocks[$blockcount] . '_i]';
+		}
+
+		return $varref;
+	}
+
+	//
+	// Compilation stuff
+	//
+	function compile_load(&$_str, &$handle, $do_echo)
+	{
+		$filename = $this->cachedir . $this->filename[$handle] . '.php';
+
+		// Recompile page if the original template is newer, otherwise load the compiled version
+		if (file_exists($filename) && @filemtime($filename) >= @filemtime($this->files[$handle]))
+		{
+			$_str = '';
+			include($filename);
+
+			if ($do_echo && $_str != '')
+			{
+				echo $_str;
+			}
+
+			return true;
+		}
+		return false;
+	}
+
+	function compile_write(&$handle, $data){
+		$handle_filename = $this->filename[$handle];
+		if ( $m = preg_match("/^\.{1,2}\/(\.{1,2}\/)*/", $handle_filename) ){
+			$handle_filename_array = explode("/", $handle_filename);
+			$handle_filename = $handle_filename_array[ count($handle_filename_array) - 1 ];
+		}
+		$filename = $this->cachedir . $handle_filename . '.php';
+		$data = '<?php' . "\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
+
+		$fp = @fopen($filename, 'w+');
+		@fwrite ($fp, $data);
+		@fclose($fp);
+
+		@touch($filename, filemtime($this->files[$handle]));
+		@chmod($filename, 0644);
+		return;
+	}
+	
+	function delete_cache($template = ''){
+		global $pcache;
+		$pcache->Delete($pcache->FolderPath('template/'.$template,'cache'));
+	}
+	
+	
+	function generate_error($content, $handle, $sprintf = '', $function = ''){
+		global $user;
+	 	
+		if (!$this->error_message){
+	 		$title = $user->lang['templates_error'];
+			
+			$content = (!isset($user->lang[$content])) ? $content : $user->lang[$content];
+			
+			if ($sprintf !=""){
+				$content = sprintf($content, $sprintf);
+			}	
+			
+			$message = '<h2>'.$user->lang['templates_error_desc'].':</h2>';
+			$message .= $content;
+			$message .= '<br /><h2>'.$user->lang['templates_error_more'].'</h2>';			
+			$message .= '<b>File:</b> '.$this->filename[$handle].'<br />';
+			$message .= '<b>Path:</b> '.$this->files[$handle].'<br />';
+			$message .= ($function != "") ? '<b>Function:</b> '.$function.'<br />' : '';
+			$message .= '<b>Style-Code:</b> '.$this->style_code.'<br />';
+			$message .= '<b>Template:</b> '.$this->template.'<br />';
+			$message .= '<b>Handler:</b> '.$handle.'<br />';
+			
+			$this->display_error($title, $message);
+			
+			$this->error_message = true;
+		}
+
+	}
+	
+	
+	function display_error($title, $message){
+		
+		$this->set_template('maintenance', 'maintenance');
+	 	$this->set_filenames(array(
+				'body' => 'template_error.html')
+		);
+	 	
+		$this->assign_vars(array(
+			'ERROR_TITLE'	=> $title,
+			'ERROR_MESSAGE'	=> $message,
+			'TYEAR'				=> date('Y'),
+		));
+		
+		$this->display('body');
+		die();
+	}
+	
+}
+
+?>

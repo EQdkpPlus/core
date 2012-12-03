@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>EQdkp Plus {L_HEADER} {L_STEP}</title>
+{CSS_FILES}
+{JS_FILES}
+<link rel="stylesheet" href="../templates/install/install.css" type="text/css" />
+<style>
+{CSS_CODE}
+</style>
+
+<script>
+{JS_CODE}
+</script>
+</head>
+
+<body>
+<div id="outer_border">
+<div id="outer">
+<div id="hdr" align="left">
+ <table width="100%" border="0" cellspacing="1" cellpadding="2" class="header">
+  <tr>
+    <td width="200" nowrap="nowrap">
+	  <img src="../templates/install/images/logo.png" alt="Logo" /><br />
+    </td>
+    <td align="center"><span class="maintitle">{L_HEADER} {L_STEP}</span></td>
+  </tr>
+</table>
+</div>
+<div id="bodyblock" align="right">
+<div id="l-col" align="left">
+<div id="StepIndicatorList">
+        <ol>
+          <!-- BEGIN step_row -->
+          <li{step_row.SELECTED}>{step_row.VALUE}</li>
+          <!-- END step_row -->
+        </ol>
+      </div>
+</div>
+
+<div id="cont">

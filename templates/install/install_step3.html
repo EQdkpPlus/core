@@ -1,0 +1,41 @@
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+<input type="hidden" name="install_step" value="4" />
+<input type="hidden" name="ftpdata" value="{FTP_DATA}" />
+<!-- ENDIF -->
+<!-- IF S_NO_FTP -->
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <br/>
+<div><table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <td width="10" class="row2" align="right"><img src="../templates/install/images/info.png"></td>
+    <td class="row1">{L_NO_FTP}</td>
+  </tr>
+  </table></div><br/>
+</div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+
+<!-- IF MSG_TEXT != '' -->
+
+ <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">{MSG_TEXT}</div></p>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+<br/>
+<div align="center"><input type="button" name="back" value="{L_BUTTON_BACK}" class="mainoption" onClick="history.back()"/>
+<!-- IF S_SHOW_BUTTON -->
+<input type="submit" name="submit" value="{L_BUTTON_3}" class="mainoption" />
+</form>
+<!-- ENDIF -->
+</div>

@@ -1,0 +1,31 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="3">{L_ADD_MULTI_TITLE}</th>
+  </tr>
+  <tr class="row1">
+    <td width="63%"><b>{L_EVENTS}:</b></td><td width="37%" colspan="2"> {EVENT_SEL}</td>
+  </tr>
+  <tr class="row2">
+    <td><b>{L_ITEMPOOLS}:</b></td>
+    <td colspan="2">{ITEMPOOL_SEL}</td>
+  </tr>
+  <tr class="row1">
+    <td><b>{L_KONTONAME}:</b><br>{L_KONTONAMENOTTOLONG}</td>
+    <td colspan="2"><input type="text" name="name" size="10" maxlength="254" value="{NAME}" class="maininput" /></td>
+  </tr>
+  <tr class="row2">
+  	<td><b>{L_DESC}:</b></td><td colspan="2"><input type="text" name="desc" size="55" maxlength="250" value="{DESC}" class="maininput" /></td>
+  </tr>
+  <tr>
+    <th colspan="3">
+      <input type="submit" name="save" value="{L_SAVE}" class="mainoption bi_ok" />
+      <!-- IF MDKP_ID -->
+      <input type="hidden" name="mdkp_id" value="{MDKP_ID}" />
+      <input type="submit" name="delete" value="{L_DELETE}" class="mainoption bi_delete" />
+      <!-- ENDIF -->
+      <input type="submit" name="cancel" value="{L_CANCEL}" class="liteoption bi_back" />
+      </th>
+  </tr>
+</table>
+</form>

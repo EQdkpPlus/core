@@ -1,0 +1,93 @@
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+	<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="center"><strong>{L_TASKS_INFO}</strong></td>
+	</tr>
+</table>
+<br />
+<!-- IF S_NOTHING -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="greentable">
+  <tr>
+	<td width="50" align="left" class="row1"><img src="../images/ok.png" alt="" height="35"></td>
+	<td width="100%" align="center" class="row1">{L_NO_TASKS}</td>
+  </tr>
+</table>
+<!-- ENDIF -->
+
+<form method="post" action="{F_ACTION}" name="manage_tasks">
+	<!-- IF S_CONFIRM -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th colspan="5">
+			{L_CONFIRM_LIST}</th>
+	</tr>
+  <tr>
+    <th colspan="2" align="left">{L_ACTION}</th>
+    <th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+  	</tr>
+  <!-- BEGIN confirm_row -->
+  <tr class="{confirm_row.ROW_CLASS}">
+    <td width="9" nowrap="nowrap" align="center"><img src="{IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_DELETE_CHARS}" alt="{L_DELETE_CHARS}" onclick="DeleteChar({confirm_row.ID})"/></td>
+    <td width="10" nowrap="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=confirm&amp;member={confirm_row.ID}"><img src="{IMAGE_PATH}ok.png" alt="{L_CONFIRM_CHARS}" height="16" border="0" style="cursor:pointer;" title="{L_CONFIRM_CHARS}" /></a></td>
+    <td width="100%" nowrap="nowrap"><span class="classes{confirm_row.CLASSID}">{confirm_row.CLASS_ICON}{confirm_row.RACE_ICON} {confirm_row.NAME}</span></td>
+    <td width="40" nowrap="nowrap">{confirm_row.LEVEL}</td>
+    </tr>
+  <!-- END confirm_row -->
+  <tr>
+    <th colspan="5"><span style="float:left;"><input type="button" name="confirm_all" value="{L_CONFIRM_ALL}" class="mainoption" onclick="ConfirmAllChars();"/></span><span style="float:right;">{FC_CONFIRM}</span></th>
+    </tr>
+</table>
+<br/>
+<!-- ENDIF -->
+<!-- IF S_DELETE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th colspan="5">
+		{L_DELETE_LIST}</th>
+	</tr>
+  <tr>
+    <th width="35" colspan="2" align="left" nowrap="nowrap">{L_ACTION}</th>
+    <th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+  	</tr>
+  <!-- BEGIN delete_row -->
+  <tr class="{delete_row.ROW_CLASS}">
+  	<td align="center" nowrap="nowrap" class="{confirm_row.ROW_CLASS}"><img src="{IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_DELETE_CHARS}" alt="{L_DELETE_CHARS}" onclick="DeleteChar({delete_row.ID})"/></td>
+  	<td align="center" nowrap="nowrap"><span class="{confirm_row.ROW_CLASS}"><a href="manage_tasks.php{SID}&amp;mode=rewoke&amp;member={delete_row.ID}"><img src="{IMAGE_PATH}glyphs/reload.png" alt="{L_REWOKE_CHARS}" border="0" style="cursor:pointer;" title="{L_REWOKE_CHARS}"/></a></span></td>
+  	<td nowrap="nowrap"><span class="classes{confirm_row.CLASSID}">{delete_row.CLASS_ICON}{delete_row.RACE_ICON} {delete_row.NAME}</span></td>
+    <td width="40" nowrap="nowrap">{delete_row.LEVEL}</td>
+    </tr>
+  <!-- END delete_row -->
+  <tr>
+    <th colspan="5"><span style="float:left;"><input type="button" name="delete_all" value="{L_DELETE_ALL}" class="mainoption" onclick="DeleteAllChars()"/></span><span style="float:right;">{FC_DELETE}</span></th>
+  </tr>
+</table>
+<br>
+<!-- ENDIF -->
+<!-- IF S_INACTIVE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th colspan="6"> {L_ACTIVATE_LIST}</th>
+  </tr>
+  <tr>
+    <th width="35" colspan="2" align="left" nowrap="nowrap">{L_ACTION}</th>
+    <th align="left" width="50%">{L_NAME}</th>
+    <th align="left" width="50%" nowrap="nowrap">{L_EMAIL}</th>
+    <th align="left" width="50%" nowrap="nowrap">{L_REGISTERED}</th>
+    </tr>
+  <!-- BEGIN activate_row -->
+  <tr class="{activate_row.ROW_CLASS}">
+    <td width="16" nowrap="nowrap" align="right"><span class="{confirm_row.ROW_CLASS}"><img src="{IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_DELETE_USER}" alt="{L_DELETE_USER}" onclick="javascript:DeleteUser({activate_row.ID})"/></span></td>
+    <td width="16" nowrap="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=activate&amp;user={activate_row.ID}"><img src="{IMAGE_PATH}ok.png" alt="{L_ACTIVATE_USER}" height="16" border="0" style="cursor:pointer;" title="{L_ACTIVATE_USER}"/></a></td>
+    <td nowrap="nowrap"><a href="manage_users.php{SID}&u={activate_row.ID}">{activate_row.NAME}</a></td>
+    <td nowrap="nowrap">{activate_row.EMAIL}</td>
+    <td nowrap="nowrap">{activate_row.REG}</td>
+    </tr>
+  <!-- END activate_row -->
+  <tr>
+    <th colspan="6"><input type="button" name="activateall" value="{L_ACTIVATE_ALL}" class="mainoption" onclick="ActivateAllUsers()"/></th>
+  </tr>
+</table>
+<!-- ENDIF -->
+</form>

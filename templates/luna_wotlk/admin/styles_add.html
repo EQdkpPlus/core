@@ -1,0 +1,257 @@
+<form method="post" action="{F_ADD_STYLE}" name="post">
+{JS_STYLE_TABS}
+{JS_SELECT_TAB}
+<div id="style_tabs">
+<ul>
+<li><a href="#settings">{L_STYLE_SETTINGS}</a></li>
+<!-- IF S_USE_DBVARS --><li><a href="#colors">{L_COLORS}</a></li><!-- ENDIF -->
+<li><a href="#class_colors">{L_CLASS_COLORS}</a></li>
+<!-- IF not S_ADD --><li><a href="#templates">{L_TEMPLATES}</a></li><!-- ENDIF -->
+</ul>
+
+<input type="hidden" name="styleid" value="{STYLE_ID}" />
+<input type="hidden" name="style_code" value="{STYLE_CODE}" />
+<input type="hidden" name="use_db_vars" value="1" />
+<div id="settings">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_STYLE_SETTINGS}</th>
+  </tr>
+   <!-- IF not S_ADD -->
+   <tr>
+    <td width="60%" class="row2">{L_STYLE_CODE}: </td>
+    <td width="40%" class="row1">{STYLE_CODE}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <td width="60%" class="row2">{L_STYLE_NAME}: *</td>
+    <td width="40%" class="row1"><input type="text" name="style_name" size="35" maxlength="100" value="{STYLE_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TEMPLATE}</td>
+    <td width="40%" class="row1">
+      {DD_TEMPLATES}
+    </td>
+  </tr>
+  <!-- IF S_ADD -->
+  <tr>
+    <td class="row2">{L_VERSION}:</td>
+    <td class="row1"><input name="style_version" type="text" class="input" id="style_version" value="{STYLE_VERSION}" size="35" maxlength="100" /></td>
+  </tr>
+  <tr>
+    <td class="row2">{L_AUTHOR}:</td>
+    <td class="row1"><input name="style_author" type="text" class="input" id="style_author" value="{STYLE_AUTHOR}" size="35" maxlength="100" /></td>
+  </tr>
+  <tr>
+    <td class="row2">{L_CONTACT}:</td>
+    <td class="row1"><input name="style_contact" type="text" class="input" id="style_contact" value="{STYLE_CONTACT}" size="35" maxlength="100" /></td>
+  </tr>
+  <!-- ENDIF -->
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2"></th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ATTENDEES_COLUMNS}<br /><span class="small">{L_ATTENDEES_COLUMNS_NOTE}</span></td>
+    <td width="40%" class="row1">{DD_ATTENDEE_COLUMNS}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_LOGO_PATH} <span class="small">{L_LOGO_PATH_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="logo_path" size="25" maxlength="255" value="{STYLE_LOGO_PATH}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BACKGROUND_IMG}</td>
+    <td width="40%" class="row1"><input type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_CSS_FILE}</td>
+    <td width="40%" class="row1"><input type="text" name="css_file" size="25" maxlength="255" value="{CSS_FILE}" class="input" /></td>
+  </tr>
+</table>
+</div>
+<!-- IF S_USE_DBVARS -->
+<div id="colors">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="60%">{L_ELEMENT}</th>
+    <th align="center" width="40%">{L_VALUE}</th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BACKGROUND_COLOR}</td>
+    <td width="40%" class="row1">{CP_BODY_BG}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTFACE1}<br /><span class="small">{L_FONTFACE1_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontface1" size="35" maxlength="60" value="{FONTFACE1}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTFACE2}<br /><span class="small">{L_FONTFACE2_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontface2" size="35" maxlength="60" value="{FONTFACE2}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTFACE3}<br /><span class="small">{L_FONTFACE3_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontface3" size="35" maxlength="60" value="{FONTFACE3}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTSIZE1}<br /><span class="small">{L_FONTSIZE1_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontsize1" size="3" maxlength="4" value="{FONTSIZE1}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTSIZE2}<br /><span class="small">{L_FONTSIZE2_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontsize2" size="3" maxlength="4" value="{FONTSIZE2}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTSIZE3}<br /><span class="small">{L_FONTSIZE3_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontsize3" size="3" maxlength="4" value="{FONTSIZE3}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR1}<br /><span class="small">{L_FONTCOLOR1_NOTE}</span></td>
+    <td width="40%" class="row1">{CP_FONTCOLOR1}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR2}<br /><span class="small">{L_FONTCOLOR2_NOTE}</span></td>
+    <td width="40%" class="row1">{CP_FONTCOLOR2}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR3}<br /><span class="small">{L_FONTCOLOR3_NOTE}</span></td>
+    <td width="40%" class="row1">{CP_FONTCOLOR3}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR_NEG}<br /><span class="small">{L_FONTCOLOR_NEG_NOTE}</span></td>
+    <td width="40%" class="row1">{CP_FONTCOLOR_NEG}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR_POS}<br /><span class="small">{L_FONTCOLOR_POS_NOTE}</span></td>
+    <td width="40%" class="row1">{CP_FONTCOLOR_POS}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_LINK}</td>
+    <td width="40%" class="row1">{CP_BODY_LINK}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_LINK_STYLE}</td>
+    <td width="40%" class="row1">{DD_LINK_STYLE}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_HLINK}</td>
+    <td width="40%" class="row1">{CP_BODY_HLINK}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_HLINK_STYLE}</td>
+    <td width="40%" class="row1">{DD_HLINK_STYLE}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_LINK}</td>
+    <td width="40%" class="row1">{CP_HEADER_LINK}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_LINK_STYLE}</td>
+    <td width="40%" class="row1">{DD_HEAD_LINK_STYLE}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_HLINK}</td>
+    <td width="40%" class="row1">{CP_HEADER_HLINK}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_HLINK_STYLE}</td>
+    <td width="40%" class="row1">{DD_HEAD_HLINK_STYLE}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TR_COLOR1}</td>
+    <td width="40%" class="row1">{CP_TR_COLOR1}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TR_COLOR2}</td>
+    <td width="40%" class="row1">{CP_TR_COLOR2}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TH_COLOR1}</td>
+    <td width="40%" class="row1">{CP_TH_COLOR1}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TABLE_BORDER_WIDTH}</td>
+    <td width="40%" class="row1"><input type="text" name="table_border_width" size="2" maxlength="3" value="{TABLE_BORDER_WIDTH}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TABLE_BORDER_COLOR}</td>
+    <td width="40%" class="row1">{CP_TABLE_BORDER}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TABLE_BORDER_STYLE}</td>
+    <td width="40%" class="row1">{DD_TABLE_BORDERSTYLE}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_COLOR}</td>
+    <td width="40%" class="row1">{CP_INPUT_COLOR}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_BORDER_WIDTH}</td>
+    <td width="40%" class="row1"><input type="text" name="input_border_width" size="2" maxlength="3" value="{INPUT_BORDER_WIDTH}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_BORDER_COLOR}</td>
+    <td width="40%" class="row1">{CP_INPUT_BORDER}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_BORDER_STYLE}</td>
+    <td width="40%" class="row1">{DD_INPUT_BORDERSTYLE}</td>
+  </tr>
+</table>
+</div>
+<!-- ENDIF -->
+<div id="class_colors">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_CLASS_COLORS}</th>
+  </tr>
+  <!-- BEGIN classes -->
+   <tr>
+    <td width="60%" class="row2">{classes.NAME}</td>
+    <td width="40%" class="row1">{classes.CPICKER}</td>
+  </tr>
+  <!-- END classes -->
+</table>
+</div>
+<!-- IF not S_ADD -->
+<div id="templates">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr class="row1">
+    <th colspan="2">{L_TEMPLATES}</td>
+  </tr>
+  <tr>
+    <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+      <tr>
+        <td class="row1" align="left"><img src="{EQDKP_ROOT_PATH}images/false.png"></td>
+        <td class="row1" align="center"><strong>{L_TEMPLATE_WARNING}</strong></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr class="row2">
+    <td colspan="2">{L_SELECT_TEMPLATE}: {DD_EDIT_TEMPLTES}</td>
+  </tr>
+  <tr class="row1">
+    <td colspan="2"><input type="hidden" name="template">{TEMPLATE_CONTENT}<br /></td>
+  </tr>
+  <tr>
+    <th colspan="2"><input name="template_edit_button" type="submit" class="mainoption bi_ok" id="template_edit_button" value="{L_SAVE}"></th>
+  </tr>
+</table>
+</div>
+<!-- ENDIF -->
+</div>
+<table width="100%" border="0" cellpadding="2" cellspacing="1">
+  <tr>
+    <th align="center" colspan="2"> <!-- IF S_ADD -->
+      <input type="submit" name="add" value="{L_ADD_STYLE}" class="mainoption bi_ok" />
+      <input type="reset" name="reset" value="{L_RESET}" class="liteoption bi_reset" />
+      <!-- ELSE -->
+      <input type="submit" name="update" value="{L_UPDATE_STYLE}" class="mainoption bi_ok" />
+      <input type="submit" name="" value="{L_CANCEL}" class="liteoption bi_back" />
+      <input type="submit"  name="delete" value="{L_DELETE_STYLE}" class="liteoption bi_delete" />     
+      <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>

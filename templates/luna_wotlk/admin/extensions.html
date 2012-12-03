@@ -1,0 +1,79 @@
+	<div id='plus_plugins_tab'>
+	<ul>
+		<li><a href='#fragment-1'><span>{L_TAB_INSTALL}</span></a></li>
+		<!-- IF REPO_ON --><li><a href='#fragment-2'><span>{L_TAB_REPO}</span></a></li><!-- ENDIF -->
+	</ul>
+	<div id="fragment-1">
+	<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+		<tr>
+			<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+			<td align="center">{L_MANUALUPLOAD_INFO}</td>
+		</tr>
+	</table>
+	<br />
+<form enctype="multipart/form-data" action="{F_MANAGE}" method="post">
+  <table width="100%" border="0" cellspacing="1" cellpadding="0" id="rowheader">
+	      <tr>
+	        <th colspan="2">{L_MANUALUPLOAD}</th>
+	      </tr>
+	      <tr>
+	        <td class="row1" align="center"><strong>{L_CHOOSE_FILE}:</strong></td>
+	        <td class="row1" align="center"><input type="file" name="file" class="input" style="width:90%"/></td>
+	      </tr>
+	      <tr> 
+	        <th colspan="2" align="center"><input type="hidden" name="sent" value="1"><input type="submit" value="{B_UPLOAD}" class="mainoption bi_ok"></th>
+	      </tr>
+	    </table> 
+	  </form>
+  </div>
+  <!-- IF REPO_ON -->
+  <div id="fragment-2">
+  	<!-- IF REPO_AVAILABLE -->
+	  <table width="100%" border="0" cellspacing="1" cellpadding="0" id="rowheader">
+	    <tr>
+	      <th colspan="6">{L_ONLINEREPO}</th>
+	      <th colspan="1">
+	      	<form method="get" action="{F_FILTER}">
+	      	{FILTER_CAT}
+	      	</form>
+	      </th>
+	    </tr>
+	    <tr>
+	      <th align="center" width="16%">{L_DATE}</th>
+	      <th align="center" width="12%">{L_PLUGIN}</th>
+	      <th align="center" width="8%">{L_VERSION}</th>
+	      <th align="center" width="8%">{L_INSTALLED}</th>
+	  		<th align="left" width="12%">{L_AUTHOR}</th>
+	  		<th align="left" width="35%">{L_SHORTDESC}</th>
+	      <th align="center" width="15%">{L_ACTION}</th>
+	    </tr>
+	    <!-- BEGIN online_row -->
+	    <tr class="{online_row.ROW_CLASS}" height="20px">
+	    	<td width="18%" align="center">{online_row.DATE}</td>
+	      <td width="12%">{online_row.PLUGIN}</td>
+	      <td width="8%" align="center">{online_row.VERSION}</td>
+	      <td width="8%" align="center">{online_row.INST_UPD}</td>
+	  		<td width="12%" align="center">{online_row.AUTHOR}</td>
+	  		<td width="35%">{online_row.SHORTDESC}</td>
+	      <td width="15%" valign="middle" align="center">
+	        <!-- IF online_row.DESCRIPTION -->{online_row.DESCRIPTION}<!-- ENDIF -->
+	        <!-- IF online_row.CHANGELOG -->{online_row.CHANGELOG}<!-- ENDIF -->
+	        <a href="{online_row.LINK}"><img src="../images/install.png" alt="{L_DOWNLOAD}" /></a>
+	      </td>
+	    </tr>
+	    <!-- END online_row -->
+	    <tr>
+	      <th colspan="7" class="footer">{L_LAST_UPDATED} (<a href="{UPD_LINK}">{L_UPDATE_NOW}</a>)</th>
+	    </tr>
+	  </table><br/>
+	  <!-- ELSE -->
+	  	<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+	 <tr>
+	    <td class="row1" align="right"><img src="../images/false.png"></td>
+	    <td class="row1" align="center">{L_REPOBLOCKED_TXT}</td>
+	  </tr>
+	</table>
+	<br />
+	  <!-- ENDIF -->
+  </div>
+  <!-- ENDIF -->

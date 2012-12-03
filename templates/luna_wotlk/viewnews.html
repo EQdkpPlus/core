@@ -1,0 +1,156 @@
+<table width="101%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <!-- IF S_NEWSARCHIVE_LEFT -->
+    <td width="150" valign="top">
+    <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+      <tr>
+        <th align="center">{L_SEARCH}</th>
+      </tr>
+      <tr>
+        <td class="row1"><form action="viewnews.php{SID}" method="post"><input type="text" class="input" value="{L_SEARCH}..." name="sv" onFocus="if(this.value == '{L_SEARCH}...'){ this.value=''; };" onBlur="if(this.value == ''){ this.value='{L_SEARCH}...'; };"><input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_SEARCH}"></form></td>
+      </tr>
+    </table>
+    <br />
+<table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+  <!-- BEGIN year_row -->
+  <tr>
+        <th align="center">{year_row.YEAR}</th>
+      </tr>
+      <!-- BEGIN month_row -->
+      <tr>
+        <td class="{year_row.month_row.ROW_CLASS}">&nbsp;<a href="{year_row.month_row.U_MONTH_VIEW}"><img src="{EQDKP_ROOT_PATH}images/arrow.gif" />&nbsp;&nbsp;{year_row.month_row.MONTH}</a> ({year_row.month_row.COUNT})</td>
+      </tr>
+      <!-- END month_row -->
+      <!-- END year_row -->
+    </table>
+      <!-- IF S_CATS_ENABLED -->
+      <br />
+      <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+        <tr>
+          <th align="center">{L_CATEGORIES}</th>
+        </tr>
+        <!-- BEGIN cat_row -->
+        <tr>
+          <td class="{cat_row.ROW_CLASS}"><a href="{cat_row.U_CAT_VIEW}">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" />&nbsp;&nbsp;{cat_row.CAT}</a> ({cat_row.COUNT})</td>
+        </tr>
+        <!-- END cat_row -->
+      </table>
+      <!-- ENDIF -->
+      <p>&nbsp;</p></td>
+    <td width="5">&nbsp;</td>
+    <!-- ENDIF -->
+    <td valign="top"><!-- IF not S_NO_NEWS -->
+      <table width="100%" border="0" cellspacing="1" cellpadding="2" class="border01">
+      <!-- IF S_NEWSARCHIVE_MIDDLE -->    
+		<tr><th width="33%"><form action="viewnews.php{SID}" method="post">
+          {L_SEARCH}: <input name="sv" type="text" class="input search" onfocus="if(this.value == '{L_SEARCH}...'){ this.value=''; };" onblur="if(this.value == ''){ this.value='{L_SEARCH}...'; };" value="{L_SEARCH}..." style="width:95px"/>
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_SEARCH}" />
+        </form></th>
+			<th width="33%">{L_MONTHS}: {MONTH_DD}</th>
+			<th width="33%"><!-- IF S_CATS_ENABLED -->{L_CATEGORIES}: {CATEGORIES_DD}<!-- ENDIF --></th>
+		</tr>
+		<!-- ENDIF -->
+				
+				<!-- BEGIN date_row -->
+        <!-- Removed by Ma&euml;vah -->
+        <!-- BEGIN news_row -->
+        <tr>
+          <th colspan="3" align="left"><b style="font-size:13px; float:left;">{date_row.news_row.ICON} {date_row.news_row.HEADLINE}</b><span style="float:right">
+            <!-- IF S_NEWSADM_UPD -->
+            <a href="javascript:editNews({date_row.news_row.ID});" title="{L_MANAGE_NEWS}"><img src="{EQDKP_ROOT_PATH}images/global/edit.png" border="0" /></a>
+            <!-- ENDIF -->
+            <!-- IF S_NEWSADM_ADD -->
+            <a href="javascript:addNews();" title="{L_ADD_NEWS}"><img src="{EQDKP_ROOT_PATH}images/glyphs/add.png" border="0" /></a>
+            <!-- ENDIF -->
+          </span></th>
+        </tr>
+        <tr class="row1">
+          <td colspan="3" class="{date_row.news_row.ROW_CLASS}viewnews"><span style="float:left">{date_row.DATE} - {date_row.news_row.SUBMITTED}  {date_row.news_row.CATEGORY}</span>
+            <!-- IF date_row.news_row.SHOWCOMMENT -->
+            <span style="float:right"><a href='viewnews.php?id={date_row.news_row.ID}#comments'><img src="{EQDKP_ROOT_PATH}images/glyphs/comments.png" border="0" /> {date_row.news_row.COMMENTS_COUNTER}</a></span>
+            <!-- ENDIF -->
+            <br />
+            <hr noshade="noshade" />
+            <div class="newscontainer">{date_row.news_row.MESSAGE}</div>
+            <!-- IF date_row.news_row.DETAIL -->
+            <hr noshade="noshade" />
+            <a name="comments" id="comments"></a> {date_row.news_row.COMMENT}
+            <!-- ENDIF --></td>
+        </tr>
+        <!-- END news_row -->
+        <!-- END date_row -->
+				<!-- IF S_NEWSARCHIVE_BOTTOM -->
+        <tr>
+          <td align="center" class="menu" colspan="3">{NEWS_PAGINATION}</td>
+        </tr>
+		<tr><th width="33%"><form action="viewnews.php{SID}" method="post">
+          {L_SEARCH}: <input name="sv" type="text" class="input search" onfocus="if(this.value == '{L_SEARCH}...'){ this.value=''; };" onblur="if(this.value == ''){ this.value='{L_SEARCH}...'; };" value="{L_SEARCH}..." style="width:95px"/>
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_SEARCH}" />
+        </form></th>
+			<th width="33%">{L_MONTHS}: {MONTH_DD}</th>
+			<th width="33%"><!-- IF S_CATS_ENABLED -->{L_CATEGORIES}: {CATEGORIES_DD}<!-- ENDIF --></th>
+		</tr>
+		<!-- ELSE -->
+		<tr>
+          <th colspan="3" class="footer">&nbsp;</th>
+        </tr>
+			<tr>
+          <td align="center" class="menu" colspan="3">{NEWS_PAGINATION}</td>
+        </tr>
+    <!-- ENDIF -->
+
+      </table>
+      <!-- ELSE -->
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+        <tr>
+          <th align="right"><a href="javascript:addNews();" title="{L_ADD_NEWS}"><img src="{EQDKP_ROOT_PATH}images/glyphs/add.png" border="0" /></a></th>
+        </tr>
+        <tr>
+          <td class="row1">{L_NO_NEWS}</td>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+        </tr>
+      </table>
+   <!-- ENDIF --></td>
+     <!-- IF S_NEWSARCHIVE_RIGHT -->
+    <td width="5" valign="top">&nbsp;</td>
+    <td width="150" valign="top"><table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+      <tr>
+        <th align="center">{L_SEARCH}</th>
+      </tr>
+      <tr>
+        <td class="row1" nowrap="nowrap"><form action="viewnews.php{SID}" method="post">
+          <input name="sv" type="text" class="input search" onfocus="if(this.value == '{L_SEARCH}...'){ this.value=''; };" onblur="if(this.value == ''){ this.value='{L_SEARCH}...'; };" value="{L_SEARCH}..." style="width:95px"/>
+          <input type="image" src="{EQDKP_ROOT_PATH}images/glyphs/view.png" value="Go" style="vertical-align:middle;" title="{L_SEARCH}" />
+        </form></td>
+      </tr>
+    </table><br />
+      <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+      <!-- BEGIN year_row -->
+      <tr>
+        <th align="center">{year_row.YEAR}</th>
+      </tr>
+      <!-- BEGIN month_row -->
+      <tr>
+        <td class="{year_row.month_row.ROW_CLASS}">&nbsp;<a href="{year_row.month_row.U_MONTH_VIEW}"><img src="{EQDKP_ROOT_PATH}images/arrow.gif" />&nbsp;&nbsp;{year_row.month_row.MONTH}</a> ({year_row.month_row.COUNT})</td>
+      </tr>
+      <!-- END month_row -->
+      <!-- END year_row -->
+    </table>
+      <!-- IF S_CATS_ENABLED -->
+      <br />
+      <table width="150" border="0" cellspacing="1" cellpadding="2" class="forumline">
+        <tr>
+          <th align="center">{L_CATEGORIES}</th>
+        </tr>
+        <!-- BEGIN cat_row -->
+        <tr>
+          <td class="{cat_row.ROW_CLASS}"><a href="{cat_row.U_CAT_VIEW}">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" />&nbsp;&nbsp;{cat_row.CAT}</a> ({cat_row.COUNT})</td>
+        </tr>
+        <!-- END cat_row -->
+      </table>
+    <!-- ENDIF --></td>
+      <!-- ENDIF -->
+  </tr>
+</table>

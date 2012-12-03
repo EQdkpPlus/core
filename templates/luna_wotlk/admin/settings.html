@@ -1,0 +1,544 @@
+<link rel='stylesheet' href='{TEMPLATE_PATH}/admin/settings.css' type='text/css' />
+<form method="post" action="{FORM_ACTION}" name="settings">
+<div id='plus_sett_tabs'>
+	<ul>
+		<li><a href='#fragment-global'><span>{L_TAB_GLOBAL}</span></a></li>
+		<li><a href='#fragment-system'><span>{L_TAB_SYSTEM}</span></a></li>
+		<li><a href='#fragment-user'><span>{L_TAB_USER}</span></a></li>
+		<li><a href='#fragment-chars'><span>{L_TAB_CHARS}</span></a></li>
+		<li><a href='#fragment-contact'><span>{L_TAB_CONTACT}</span></a></li>
+		<li><a href='#fragment-game'><span>{L_TAB_GAME}</span></a></li>
+		<li><a href='#fragment-portal'><span>{L_TAB_PORTAL}</span></a></li>
+		<li><a href='#fragment-layout'><span>{L_TAB_LAYOUT}</span></a></li>
+		<li><a href='#fragment-itemstats'><span>{L_TAB_ITEMSTATS}</span></a></li>
+		<li><a href='#fragment-sms'><span>{L_TAB_SMS}</span></a></li>
+	</ul>
+	
+	<div id="fragment-global">
+		<fieldset>
+			<legend>{HEAD_GLOBAL}</legend>
+			
+			<!-- IF GLOBAL_NO_HMODE -->
+			<dl>
+				<dt><label>{L_UPDATECHECK}</label><br><span>{H_UPDATECHECK}</span></dt>
+				<dd><label>{C_UPDATECHECK}</label></dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<dt><label>{L_GUILDTAG}</label><br><span>{H_GUILDTAG}</span></dt>
+				<dd><label>{T_GUILDTAG}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_PARSETAGS}</label><br><span>{H_PARSETAGS}</span></dt>
+				<dd><label>{TA_PARSETAGS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_MAIN_TITLE}</label><br><span>{H_MAIN_TITLE}</span></dt>
+				<dd><label>{T_MAIN_TITLE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SUB_TITLE}</label><br><span>{H_SUB_TITLE}</span></dt>
+				<dd><label>{T_SUB_TITLE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DKP_NAME}</label><br><span>{H_DKP_NAME}</span></dt>
+				<dd><label>{T_DKP_NAME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_COMMENTS}</label><br><span>{H_COMMENTS}</span></dt>
+				<dd><label>{C_COMMENTS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_COLOR_ITEMS}</label><br><span>{H_COLOR_ITEMS}</span></dt>
+				<dd><label>{S_COLOR_ITEMS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ROUND_ACTIVATE}</label><br><span>{H_ROUND_ACTIVATE}</span></dt>
+				<dd><label>{C_ROUND_ACTIVATE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ROUND_PRECISION}</label><br><span>{H_ROUND_PRECISION}</span></dt>
+				<dd><label>{T_ROUND_PRECISION}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEBUGMODE}</label><br><span>{H_DEBUGMODE}</span></dt>
+				<dd><label>{D_DEBUGMODE}</label></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{L_IMAGE_UPLOAD}</legend>
+
+				<div>{T_LOGO_PATH}{A_IMAGE_UPLOAD}</div>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-system">
+		<fieldset>
+			<legend>{HEAD_DEFAULT_SYSTEM}</legend>
+			
+			<dl>
+				<dt><label>{L_DEFAULT_LOCALE}</label><br><span>{H_DEFAULT_LOCALE}</span></dt>
+				<dd><label>{D_DEFAULT_LOCALE}</label></dd>
+			</dl>
+			<!-- IF GLOBAL_NO_HMODE -->
+			<dl>
+				<dt><label>{L_SERVER_PATH}</label><br><span>{H_SERVER_PATH}</span></dt>
+				<dd><label>{T_SERVER_PATH}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_GZIP}</label><br><span>{H_GZIP}</span></dt>
+				<dd><label>{C_GZIP}</label></dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<dt><label>{L_ALLOWED_EXTENSIONS}</label><br><span>{H_ALLOWED_EXTENSIONS}</span></dt>
+				<dd><label>{T_ALLOWED_EXTENSIONS}</label></dd>
+			</dl>
+		</fieldset>
+		<!-- IF GLOBAL_NO_HMODE -->
+		<fieldset>
+			<legend>{HEAD_COOKIE_SETTINGS}</legend>
+			
+			<dl>
+				<dt><label>{L_COOKIE_DOMAIN}</label><br><span>{H_COOKIE_DOMAIN}</span></dt>
+				<dd><label>{T_COOKIE_DOMAIN}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_COOKIE_NAME}</label><br><span>{H_COOKIE_NAME}</span></dt>
+				<dd><label>{T_COOKIE_NAME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_COOKIE_PATH}</label><br><span>{H_COOKIE_PATH}</span></dt>
+				<dd><label>{T_COOKIE_PATH}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SESSION_LENGTH}</label><br><span>{H_SESSION_LENGTH}</span></dt>
+				<dd><label>{T_SESSION_LENGTH}</label></dd>
+			</dl>
+		</fieldset>
+		<!-- ENDIF -->
+		<fieldset>
+			<legend>{HEAD_EMAIL}</legend>
+			
+			<dl>
+				<dt><label>{L_EMAIL_METHOD}</label><br><span>{H_EMAIL_METHOD}</span></dt>
+				<dd><label>{D_EMAIL_METHOD}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ADMIN_EMAIL}</label><br><span>{H_ADMIN_EMAIL}</span></dt>
+				<dd><label>{T_ADMIN_EMAIL}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SENDER_NAME}</label><br><span>{H_EMAIL_SENDER_NAME}</span></dt>
+				<dd><label>{T_EMAIL_SENDER_NAME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SENDER_PATH}</label><br><span>{H_EMAIL_SENDER_PATH}</span></dt>
+				<dd><label>{T_EMAIL_SENDER_PATH}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SENDER_HOST}</label><br><span>{H_EMAIL_SENDER_HOST}</span></dt>
+				<dd><label>{T_EMAIL_SENDER_HOST}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SMTP_AUTH}</label><br><span>{H_EMAIL_SMTP_AUTH}</span></dt>
+				<dd><label>{C_EMAIL_SMTP_AUTH}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SMTP_USER}</label><br><span>{H_EMAIL_SMTP_USER}</span></dt>
+				<dd><label>{T_EMAIL_SMTP_USER}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SMTP_PASSWORD}</label><br><span>{H_EMAIL_SMTP_PASSWORD}</span></dt>
+				<dd><label>{T_EMAIL_SMTP_PASSWORD}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SIGNATURE}</label><br><span>{L_EMAIL_SIGNATURE}</span></dt>
+				<dd><label>{C_EMAIL_SIGNATURE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EMAIL_SIGNATURE_V}</label><br><span>{H_EMAIL_SIGNATURE_V}</span></dt>
+				<dd><label>{TA_EMAIL_SIGNATURE_V}</label></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{HEAD_CAPTCHA}</legend>
+			
+			<dl>
+				<dt><label>{L_RECAPTCHA_OKEY}</label><br><span>{H_RECAPTCHA_OKEY}</span></dt>
+				<dd><label>{T_RECAPTCHA_OKEY}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_RECAPTCHA_PKEY}</label><br><span>{H_RECAPTCHA_PKEY}</span></dt>
+				<dd><label>{T_RECAPTCHA_PKEY}</label></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{HEAD_DEFAULT_DATESETT}</legend>
+			<dl>
+				<dt><label>{L_TIMEZONE}</label><br><span>{H_TIMEZONE}</span></dt>
+				<dd><label>{D_TIMEZONE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_DATETIME}</label><br><span>{H_DEFAULT_DATETIME}</span></dt>
+				<dd><label>{T_DEFAULT_DATETIME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_DATESHORT}</label><br><span>{H_DEFAULT_DATESHORT}</span></dt>
+				<dd><label>{T_DEFAULT_DATESHORT}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_DATELONG}</label><br><span>{H_DEFAULT_DATELONG}</span></dt>
+				<dd><label>{T_DEFAULT_DATELONG}</label></dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-user">
+		<fieldset>
+			<legend>{HEAD_USER_SETTINGS}</legend>
+			
+			<dl>
+				<dt><label>{L_DEFAULT_LANGUAGE}</label><br><span>{H_DEFAULT_LANGUAGE}</span></dt>
+				<dd><label>{D_DEFAULT_LANGUAGE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ACCOUNT_ACTIVATION}</label><br><span>{H_ACCOUNT_ACTIVATION}</span></dt>
+				<dd><label>{R_ACCOUNT_ACTIVATION}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_REGISTRATION_ACC}</label><br><span>{H_REGISTRATION_ACC}</span></dt>
+				<dd><label>{C_REGISTRATION_ACC}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_CAPTCHA}</label><br><span>{H_CAPTCHA}</span></dt>
+				<dd><label>{C_CAPTCHA}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_USERNAME_CHANGE}</label><br><span>{H_USERNAME_CHANGE}</span></dt>
+				<dd><label>{C_USERNAME_CHANGE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_GAME_OR}</label><br><span>{H_DEFAULT_GAME_OR}</span></dt>
+				<dd><label>{C_DEFAULT_GAME_OR}</label></dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-chars">
+		<fieldset>
+			<legend>{HEAD_CHARS}</legend>
+			
+			<dl>
+				<dt><label>{L_CLASSCOLOR}</label><br><span>{H_CLASSCOLOR}</span></dt>
+				<dd><label>{C_CLASSCOLOR}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SPECIALMEMBER}</label><br><span>{H_SPECIALMEMBER}</span></dt>
+				<dd>{M_SPECIALMEMBER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOW_TWINKS}</label><br><span>{H_SHOW_TWINKS}</span></dt>
+				<dd><label>{C_SHOW_TWINKS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DETAIL_TWINK}</label><br><span>{H_DETAIL_TWINK}</span></dt>
+				<dd><label>{C_DETAIL_TWINK}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_HIDE_INACTIVE}</label><br><span>{H_HIDE_INACTIVE}</span></dt>
+				<dd><label>{C_HIDE_INACTIVE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_INACTIVE_PERIOD}</label><br><span>{H_INACTIVE_PERIOD}</span></dt>
+				<dd><label>{T_INACTIVE_PERIOD}</label></dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-contact">
+		<fieldset>
+			<legend>{HEAD_CONTACT}</legend>
+			
+			<dl>
+				<dt><label>{L_CONTACT_NAME}</label><br><span>{H_CONTACT_NAME}</span></dt>
+				<dd><label>{T_CONTACT_NAME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_CONTACT_EMAIL}</label><br><span>{H_CONTACT_EMAIL}</span></dt>
+				<dd><label>{T_CONTACT_EMAIL}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_CONTACT_WEBSITE}</label><br><span>{H_CONTACT_WEBSITE}</span></dt>
+				<dd><label>{T_CONTACT_WEBSITE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_CONTACT_IRC}</label><br><span>{H_CONTACT_IRC}</span></dt>
+				<dd><label>{T_CONTACT_IRC}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_CONTACT_MESSENGER}</label><br><span>{H_CONTACT_MESSENGER}</span></dt>
+				<dd><label>{T_CONTACT_MESSENGER}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_CONTACT_CINFO}</label><br><span>{H_CONTACT_CINFO}</span></dt>
+				<dd><label>{T_CONTACT_CINFO}</label></dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-game">
+		<fieldset>
+			<legend>{HEAD_GAME_SELECTION}</legend>
+			
+			<dl>
+				<dt><label>{L_DEFAULT_GAME}</label><br><span>{H_DEFAULT_GAME}</span></dt>
+				<dd><label>{D_DEFAULT_GAME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_GAME_LANGUAGE}</label><br><span>{H_GAME_LANGUAGE}</span></dt>
+				<dd><label>{D_GAME_LANGUAGE}</label></dd>
+			</dl>
+		</fieldset>
+		
+		<fieldset>
+			<legend>{HEAD_GAME_SETTINGS}</legend>
+			
+			<!-- BEGIN config_row -->
+			<dl>
+				<dt><label>{config_row.NAME}</label><br><span>{config_row.HELP}</span></dt>
+				<dd><label>{config_row.FIELD}</label></dd>
+			</dl>
+			<!-- END config_row -->
+		</fieldset>
+		
+		<fieldset>
+			<legend>{HEAD_GAME_IMPORTERS}</legend>
+			
+			<!-- IF ENABLED_MASSUPDATE -->
+			<dl>
+				<dt><label>{L_GAME_MASSUPDATE}</label><br><span>{H_GAME_MASSUPDATE}</span></dt>
+				<dd>
+					<label>
+						<!-- IF DISABLE_IU_BUTTONS -->
+						<input type="button" name="add" value="{B_GAME_MASSUPDATE}" disabled=true />	[{LU_GAME_MASSUPDATE}]
+						<!-- ELSE -->
+						<input type="button" name="add" value="{B_GAME_MASSUPDATE}" class="mainoption" onclick="javascript:MassUpdateChars()" />	[{LU_GAME_MASSUPDATE}]
+						<!-- ENDIF -->
+					</label>
+				</dd>
+			</dl>
+			<!-- ENDIF -->
+			<!-- IF ENABLED_GUILDIMPORT -->
+			<dl>
+				<dt><label>{L_GAME_GUILDIMPORT}</label><br><span>{H_GAME_GUILDIMPORT}</span></dt>
+				<dd>
+					<label>
+						<!-- IF DISABLE_IU_BUTTONS -->
+				     	<input type="button" name="add" value="{B_GAME_GUILDIMPORT}" disabled=true />
+				   	 	<!-- ELSE -->
+						 <input type="button" name="add" value="{B_GAME_GUILDIMPORT}" class="mainoption" onclick="javascript:GuildImport()" />
+				    	<!-- ENDIF -->
+					</label>
+				</dd>
+			</dl>
+			<!-- ENDIF -->
+		</fieldset>
+	</div>
+	
+	<div id="fragment-portal">
+		<fieldset>
+			<legend>{HEAD_PORTAL}</legend>
+			
+			<dl>
+				<dt><label>{L_STARTPAGE}</label><br><span>{H_STARTPAGE}</span></dt>
+				<dd><label>{D_STARTPAGE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_PERMANENT_PORTAL}</label><br><span>{H_PERMANENT_PORTAL}</span></dt>
+				<dd>{M_PERMANENT_PORTAL}</dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{HEAD_NEWS}</legend>
+			
+			<dl>
+				<dt><label>{L_LIGHTBOX}</label><br><span>{H_LIGHTBOX}</span></dt>
+				<dd><label>{C_LIGHTBOX}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_LB_MAXRESIZEWIDTH}</label><br><span>{H_LB_MAXRESIZEWIDTH}</span></dt>
+				<dd><label>{T_LB_MAXRESIZEWIDTH}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SHOW_NEWSARCHIVE}</label><br><span>{H_SHOW_NEWSARCHIVE}</span></dt>
+				<dd><label>{C_SHOW_NEWSARCHIVE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_NARCHIVE_POSITION}</label><br><span>{H_NARCHIVE_POSITION}</span></dt>
+				<dd><label>{D_NARCHIVE_POSITION}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_NEWSCATEGORIES}</label><br><span>{H_NEWSCATEGORIES}</span></dt>
+				<dd><label>{C_NEWSCATEGORIES}</label></dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-layout">
+		<fieldset>
+			<legend>{HEAD_LAYOUT}</legend>
+			
+			<dl>
+				<dt><label>{L_DIAGRAMMS}</label><br><span>{H_DIAGRAMMS}</span></dt>
+				<dd><label>{C_DIAGRAMMS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_3DITEM}</label><br><span>{H_3DITEM}</span></dt>
+				<dd><label>{C_3DITEM}</label></dd>
+			</dl>
+			<!-- IF GLOBAL_NO_HMODE -->
+			<dl>
+				<dt><label>{L_SHOP}</label><br><span>{H_SHOP}</span></dt>
+				<dd><label>{C_SHOP}</label></dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<dt><label>{L_NORAIDS}</label><br><span>{H_NORAIDS}</span></dt>
+				<dd><label>{C_NORAIDS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_EVENTS}</label><br><span>{H_EVENTS}</span></dt>
+				<dd><label>{C_EVENTS}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ITEMPRICES}</label><br><span>{H_ITEMPRICES}</span></dt>
+				<dd><label>{C_ITEMPRICES}</label></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{HEAD_DEFAULT_SETTINGS}</legend>
+			
+			<dl>
+				<dt><label>{L_DEFAULT_ALIMIT}</label><br><span>{H_DEFAULT_ALIMIT}</span></dt>
+				<dd><label>{T_DEFAULT_ALIMIT}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_ELIMIT}</label><br><span>{H_DEFAULT_ELIMIT}</span></dt>
+				<dd><label>{T_DEFAULT_ELIMIT}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_ILIMIT}</label><br><span>{H_DEFAULT_ILIMIT}</span></dt>
+				<dd><label>{T_DEFAULT_ILIMIT}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_NLIMIT}</label><br><span>{H_DEFAULT_NLIMIT}</span></dt>
+				<dd><label>{T_DEFAULT_NLIMIT}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DEFAULT_RLIMIT}</label><br><span>{H_DEFAULT_RLIMIT}</span></dt>
+				<dd><label>{T_DEFAULT_RLIMIT}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_NEWSLOOT_LIMIT}</label><br><span>{H_NEWSLOOT_LIMIT}</span></dt>
+				<dd><label>{D_NEWSLOOT_LIMIT}</label></dd>
+			</dl>
+		</fieldset>
+		<fieldset>
+			<legend>{HEAD_ROSTER}</legend>
+			
+			<dl>
+				<dt><label>{L_NODKP}</label><br><span>{H_NODKP}</span></dt>
+				<dd><label>{C_NODKP}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ROSTER}</label><br><span>{H_ROSTER}</span></dt>
+				<dd><label>{C_ROSTER}</label></dd>
+			</dl>
+		</fieldset>
+	</div>
+	
+	<div id="fragment-itemstats">
+		<table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+			<tr>
+				<td width="40" align="left" class="row1"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="35"></td>
+				<td class="row1" align="center">{L_ITEMSTATS_INFO}</td>
+			</tr>
+		</table>
+		<!-- IF ITEMTOOLTIP_AVAIL -->
+			<fieldset>
+				<legend>{HEAD_ITEMTOOLTIP}</legend>
+				<dl>
+					<dt><label>{L_USE_ITEMTOOLTIP}</label><br><span>{H_USE_ITEMTOOLTIP}</span></dt>
+					<dd><label>{C_USE_ITEMTOOLTIP}</label></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_ITEMTOOLTIP_DEBUG}</label><br><span>{H_ITEMTOOLTIP_DEBUG}</span></dt>
+					<dd><label>{C_ITEMTOOLTIP_DEBUG}</label></dd>
+				</dl>
+				<div><input type="submit" name="itt_reset" value="{ITT_RESET_BUTTON}" class="mainoption bi_reset" style="margin-left:30px;"></div>
+			</fieldset>
+			<fieldset>
+			<legend>{HEAD_ITEMPRIORITY}</legend>
+				<dl>
+					<dt><label>{L_ITT_PRIO1}</label><br><span>{H_ITT_PRIO1}</span></dt>
+					<dd><label>{D_ITT_PRIO1}</label></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_ITT_PRIO2}</label><br><span>{H_ITT_PRIO2}</span></dt>
+					<dd><label>{D_ITT_PRIO2}</label></dd>
+				</dl>
+			</fieldset>
+			<fieldset>
+				<legend>{HEAD_ITEMLANGPRIORITY}</legend>
+
+				<!-- BEGIN itt_lang_row -->
+				<dl>
+					<dt><label>{itt_lang_row.NAME}</label><br><span>{itt_lang_row.HELP}</span></dt>
+					<dd><label>{itt_lang_row.FIELD}</label></dd>
+				</dl>
+				<!-- END itt_lang_row -->
+			</fieldset>
+			<fieldset>
+				<legend>{HEAD_ITEMDBSPECIFY}</legend>
+			
+				<!-- BEGIN itt_extrasett_row -->
+				<dl>
+					<dt><label>{itt_extrasett_row.NAME}</label><br><span>{itt_extrasett_row.HELP}</span></dt>
+					<dd><label>{itt_extrasett_row.FIELD}</label></dd>
+				</dl>
+				<!-- END itt_extrasett_row -->
+			</fieldset>
+			<!-- ELSE -->
+			<fieldset>
+				<legend>{HEAD_ITEMTOOLTIP}</legend>
+				{L_ITEMTOOLTIP_NA}
+			</fieldset>
+		<!-- ENDIF -->
+	</div>
+
+	<div id="fragment-sms">
+		<fieldset>
+			<legend>{HEAD_SMS}</legend>
+			
+			<dl>
+				<dt><label>{L_SMS_DISABLE}</label><br><span>{H_SMS_DISABLE}</span></dt>
+				<dd><label>{C_SMS_DISABLE}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SMS_USERNAME}</label><br><span>{H_SMS_USERNAME}</span></dt>
+				<dd><label>{T_SMS_USERNAME}</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_SMS_PASSWORD}</label><br><span>{H_SMS_PASSWORD}</span></dt>
+				<dd><label>{T_SMS_PASSWORD}</label></dd>
+			</dl>
+			<div></div>
+			<div>{FOOTER_SMS}</div>
+		</fieldset>
+	</div>
+
+	<br />
+	<div align='center'>{SAVE_BUTTON} {RESET_BUTTON}</div>
+	</div>
+	</form>

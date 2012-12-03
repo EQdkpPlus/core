@@ -1,0 +1,55 @@
+<script>
+  function AllMessages()
+  {
+      for(var x=0;x<document.post.elements.length;x++)
+      {
+          var y=document.post.elements[x];
+          if(y.id!='all_nr')
+          {
+              y.checked=document.post.all_nr.checked;
+          }
+      }
+  }
+</script>
+<form name="post" method="post" action="manage_news.php">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{NEWS_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th colspan="8" align="center" nowrap="nowrap"><span style="float:left">{L_MANAGE_NEWS}</span><span style="float:right"><!-- IF NEWS_CATEGEGORIES --><input type="button" onClick="window.location.href='manage_news_categories.php{SID}'" value="{L_MANAGE_NEWSCATEGORIES}" class="mainoption bi_edit"><!-- ENDIF --> <input type="button" onClick="window.location.href='addnews.php{SID}'" value="{L_ADD_NEWS}" class="mainoption bi_new"></span></th>
+    </tr>
+  <tr>
+    <th align="center" width="16" nowrap="nowrap"><input type="checkbox" name="all_nr" value="all_nr" onclick="AllMessages(this.form);" /></th>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="150" nowrap="nowrap"><a href="{U_LIST_NEWS}&start={START}&o=0.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED01}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&start={START}&o=0.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED00}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" nowrap="nowrap"><a href="{U_LIST_NEWS}&start={START}&o=1.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED11}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&start={START}&o=1.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED10}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_HEADLINE}&amp;start={START}">{L_HEADLINE}</a>&nbsp;</th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_NEWS}&start={START}&o=4.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED41}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&start={START}&o=4.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED40}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&o={O_START}&start={START}">{L_SHOW_START}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_NEWS}&start={START}&o=5.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED51}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&start={START}&o=5.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED50}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&o={O_STOP}&start={START}">{L_SHOW_STOP}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_NEWS}&start={START}&o=2.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED21}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&start={START}&o=2.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED20}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_USERNAME}&amp;start={START}">{L_USERNAME}</a></th>
+    <!-- IF NEWS_CATEGEGORIES --><th align="left"><a href="{U_LIST_NEWS}&start={START}&o=3.1"><img src="{EQDKP_ROOT_PATH}images/arrows/down_arrow{RED31}.png" alt="down" title="{L_SORT_DESC}" border="0"></a><a href="{U_LIST_NEWS}&start={START}&o=3.0"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow{RED30}.png" alt="up" title="{L_SORT_ASC}" border="0"></a><a href="{U_LIST_NEWS}&amp;o={O_CATEGORY}&amp;start={START}">{L_CATEGORY}</a></th><!-- ENDIF -->
+  </tr>
+  <!-- BEGIN news_row -->
+  <tr class="{news_row.ROW_CLASS}">
+    <td width="16" nowrap="nowrap" align="center"><input type="checkbox" name="news_id[]" value="{news_row.ID}" /></td>
+    <td width="16" nowrap="nowrap" align="center"><a href="{news_row.U_VIEW_NEWS}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></a></td>
+    <td width="150" nowrap="nowrap">{news_row.DATE}</td>
+    <td width="80%" nowrap="nowrap"><a href="{news_row.U_VIEW_NEWS}">{news_row.HEADLINE}</a></td>
+    <td width="100" nowrap="nowrap">{news_row.START}</td>
+    <td width="100" nowrap="nowrap">{news_row.STOP}</td>
+    <td width="100" nowrap="nowrap">{news_row.USERNAME}</td>
+    <!-- IF NEWS_CATEGEGORIES --><td width="10%">{news_row.CATEGORY}</td><!-- ENDIF -->
+  </tr>
+  <!-- END news_row -->
+  <tr>
+    <th colspan="8" class="footer"><span style="float:left;"><input type="submit" name="delete" value="{L_DELETE}" class="mainoption bi_delete"></span><span style="float:right;">{LISTNEWS_FOOTCOUNT}</span></th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{NEWS_PAGINATION}</td>
+  </tr>
+</table>
+</form>

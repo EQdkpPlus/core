@@ -1,0 +1,104 @@
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2"><h1><strong>{L_EQDKPPVERSION}</strong></h1></th>
+  </tr>
+  <tr>
+    <td width="50%" nowrap="nowrap" class="row2"><strong>{L_EQDKPPVERSION}:</strong> {L_EQDKPPNAME} {OUR_EQDKPP_VERSION}</td>
+    <td width="50%" class="row2"><strong>{L_SERVER_VERSION}:</strong> {THEIR_EQDKPP_VERSION}</td>
+  </tr>
+</table></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <p><table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="4"><h1>{L_INST_PHP}</h1></th>
+  </tr>
+  <tr>
+    <td colspan="4" class="row2"><a href="index.php?mode=phpinfo" target="_blank">{L_VIEWPHPINFO}</a></td>
+  </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_VERSION}:</strong></td>
+    <td width="30%" class="row1">{L_USING}: {OUR_PHP_VERSION}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_PHP_VERSION}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATUS_PHP}</td>
+    </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_MYSQLMODULE}:</strong></td>
+    <td width="30%" class="row1">{L_AVAILABLE}: {OUR_MYSQL}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_MYSQL}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATUS_MYSQL}</td>
+    </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_ZLIBMODULE}:</strong></td>
+    <td width="30%" class="row1">{L_AVAILABLE}: {OUR_ZLIB}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_ZLIB}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATUS_ZLIB}</td>
+    </tr>
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_SAFEMODE}:</strong></td>
+    <td width="30%" class="row1">{L_ENABLED}: {OUR_SAFEMODE}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_SAFEMODE}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATUS_SAFEMODE}</td>
+    </tr>
+  <tr valign="top">
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_CURLMODULE}:</strong></td>
+    <td width="30%" class="row1">{L_AVAILABLE}: {OUR_CURL}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_CURL}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATUS_CURL}</td>
+    </tr>
+    <tr>
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_FOPEN}:</strong></td>
+    <td width="30%" class="row1">{L_AVAILABLE}: {OUR_FOPEN}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_FOPEN}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATUS_FOPEN}</td>
+    </tr>
+    <tr>
+      <td class="row2" nowrap="nowrap"><strong>{L_SOAP}:</strong></td>
+      <td class="row1">{L_AVAILABLE}: {OUR_SOAP}</td>
+      <td class="row2">{L_REQUIRED}: {THEIR_SOAP}</td>
+      <td nowrap="nowrap" class="row2">{STATUS_SOAP}</td>
+    </tr>
+    <tr>
+    <td width="200" class="row2" nowrap="nowrap"><strong>{L_OTHER_FUNCTIONS}:</strong></td>
+    <td width="30%" class="row1">{L_AVAILABLE}: {OUR_OTHER_FUNCTIONS}</td>
+    <td width="30%" class="row2">{L_REQUIRED}: {THEIR_OTHER_FUNCTIONS}</td>
+    <td width="24" nowrap="nowrap" class="row2">{STATURS_OTHER_FUNCTIONS}</td>
+    </tr>
+</table>
+</p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+
+<!-- IF MSG_TEXT != '' -->
+
+  <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">{MSG_TEXT}</div></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+<br/>
+
+
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+
+<input type="hidden" name="install_step" value="2" />
+<div align="center"><input type="submit" name="retry" value="{L_INST_BUTTON_RETRY}" class="mainoption" /> <input type="submit" name="submit" value="{L_INST_BUTTON1}" class="mainoption" /></div>
+</form>
+<!-- ENDIF -->

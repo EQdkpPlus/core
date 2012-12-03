@@ -1,0 +1,62 @@
+</div>
+<br />
+<div id="ftr" align="center">
+	<style type="text/css">
+		.debug_show {
+			position:relative;
+			display:inline;
+		}
+		.debug_hide {
+			position:relative;
+			display:none;
+		}
+	</style>
+	<script type="text/javascript" language="javascript">
+		function debug_show_me(id) {
+
+            for(var i=1; i<={MAX_ID}; i++) {
+            	var container = document.getElementById('debug_'+i);
+            	if(i != id) {
+            		container.className = 'debug_hide';
+            	} else {
+								if (container.className == 'debug_show'){
+            			container.className = 'debug_hide';
+								} else {
+									container.className = 'debug_show';
+								}
+            	}
+            }
+        }
+    </script>
+    <!-- IF not S_HIDE_DEBUG -->
+		<ul id="tabnav">
+		<!-- BEGIN debug_types -->
+		<li><a href="javascript:debug_show_me('{debug_types.ID}')"><img src="../libraries/jquery/core/images/toggleportal.png" alt="EQdkp Plus" align="absmiddle" border="0" height="14"/> {debug_types.TYPE} {L_CLICK}</a></li>
+		<!-- END debug_types -->
+		</ul>
+
+		<!-- BEGIN debug_types -->
+	  	<div id='debug_{debug_types.ID}' class='debug_hide'>
+			<table border='1' cellspacing='0' cellpadding='1' class="task_table">
+	  		<th>{debug_types.TYPE}</th>
+				<!-- BEGIN debug_messages -->
+	  		<tr class="{debug_types.debug_messages.ROW_CLASS}">
+					<td>{debug_types.debug_messages.MESSAGE}</td>
+				</tr>
+	  		<!-- END debug_messages -->
+	  	</table>
+			</div>
+	  <!-- END debug_types -->
+  <!-- ENDIF -->
+  <!--
+      If you use this software and find it to be useful, we ask that you
+      retain the copyright notice below.  While not required for free use,
+      it will help build interest in the EQdkp-Plus project.
+  //-->
+  <div class="copy" <!-- IF S_HIDE_DEBUG -->style="border-top:1px solid #000;"<!-- ENDIF -->>
+    <a href=http://www.eqdkp-plus.com target='_new'>EQDKP Plus</a> &copy; 2003 - {TYEAR} by EQDKP Plus Developer Team
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th colspan="6" >{L_ADD_EVENT}</th>
+  </tr>
+  <tr>
+    <td colspan="3" width="50%" align="center" class="row1">{L_NAME}: <input type="text" name="name" size="35" maxlength="255" value="{NAME}" class="input" /></td>
+    <td colspan="3" width="50%" align="center" class="row2">{L_DKP_VALUE}: <input type="text" name="value" size="8" maxlength="7" value="{VALUE}" class="input" /></td>
+  </tr>
+  <tr>
+    <th colspan="6">{L_SELECT_ICON}</th>
+  </tr>
+    <!-- BEGIN files_row -->
+  <tr>
+    <!-- BEGIN fields -->
+    	<td class="{files_row.fields.ROWCLASS}" nowrap="nowrap">
+        <!-- IF files_row.fields.CHECKBOX -->
+    		<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
+    		{files_row.fields.IMAGE}</label>
+    		<!-- ENDIF -->
+    	</td>
+    <!-- END fields -->
+  </tr>
+  <!-- END files_row -->
+  <tr>
+    <th colspan="6"></th>
+  </tr>
+  <tr>
+    <th align="center" colspan="6">
+     <input type="submit" name="save" value="{L_SAVE}" class="mainoption bi_ok" />
+    <!-- IF S_UPD -->
+     <input type="hidden" name="event_id" value="{EVENT_ID}" />
+	 <input type="submit" name="delete" value="{L_DELETE}" class="mainoption bi_delete" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+
+
+
+</form>

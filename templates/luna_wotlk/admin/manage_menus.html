@@ -1,0 +1,332 @@
+<form method="post" action="{ACTION}" name="post">
+ <div id='menu_tabs'>
+          <ul>
+            <li><a href='#menu1'>{L_MENU1}</a></li>
+            <li><a href="#menu2">{L_MENU2}</a></li>
+            <li><a href="#menu4">{L_MENU4}</a></li>
+            <li><a href="#links">{L_LINKS}</a></li>
+            <li><a href="#admin">{L_ADMIN_FAVS}</a></li>
+					</ul>
+<div id="menu1">
+	<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+		<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="center">{L_MENUS_INFO}</td>
+	</tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable" id="sortable1">
+	<thead>
+  <tr class="not-sortable">
+  	<th colspan="3" class="not-sortable">{L_MENU1}</th>
+  	</tr>
+  <tr class="not-sortable">
+    <th width="10" class="not-sortable">&nbsp;</th>
+  	<th class="not-sortable">{L_NAME}</th>
+    <th class="not-sortable">{L_LINK}</th>
+    </tr>
+  </thead>
+  <tbody id="show">
+  <!-- BEGIN menu1_row -->
+  <tr class="{menu1_row.ROW_CLASS}" id="{menu1_row.LINK}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+  	<td width="33%">{menu1_row.NAME}</td>    
+    <td>{menu1_row.LINK}
+      <input name="sort1[]" value="{menu1_row.LINK}" type="hidden"/>
+      <input type="checkbox" value="1" name="hide1[{menu1_row.LINK}]" {menu1_row.HIDE} id="cb_{menu1_row.LINK}" style="display:none;"/></td>
+    </tr>
+  <!-- END menu1_row -->
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable" id="sortable2">
+  
+
+  <tr class="not-sortable">
+    <th colspan="3">{L_INACTIVE}</th>
+  	</tr>
+    <tbody id="hide">
+  <!-- BEGIN menu1hide_row -->
+  <tr class="{menu1hide_row.ROW_CLASS}" id="{menu1hide_row.LINK}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+  	<td width="33%">{menu1hide_row.NAME}</td>    
+    <td>{menu1hide_row.LINK}
+      <input name="sort1[]" value="{menu1hide_row.LINK}" type="hidden"/>
+      <input type="checkbox" value="1" name="hide1[{menu1hide_row.LINK}]" {menu1hide_row.HIDE} id="cb_{menu1hide_row.LINK}" style="display:none;"/></td>
+    </tr>
+  <!-- END menu1hide_row -->
+
+  </tbody>
+  <tfoot>
+  <!-- IF S_NO_INACTIVE_1 -->
+  <tr class="row1" id="menu1_nohidden">
+    <td colspan="3"><em>{L_NO_INACTIVE}</em></td></tr>
+  <!-- ENDIF -->
+  <tr class="not-sortable"><th colspan="3"></th>
+  </tr>
+  </tfoot>
+</table>
+</div>
+  <div id="menu2">
+		<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+		<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="center">{L_MENUS_INFO}</td>
+	</tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable2" id="sortable3">
+	<thead>
+  <tr class="not-sortable">
+  	<th colspan="3" class="not-sortable">{L_MENU2}</th>
+  	</tr>
+  <tr class="not-sortable">
+    <th width="10" class="not-sortable">&nbsp;</th>
+  	<th class="not-sortable">{L_NAME}</th>
+    <th class="not-sortable">{L_LINK}</th>
+    </tr>
+  </thead>
+  <tbody id="show2">
+  <!-- BEGIN menu2_row -->
+  <tr class="{menu2_row.ROW_CLASS}" id="{menu2_row.LINK}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+  	<td width="33%">{menu2_row.NAME}</td>    
+    <td>{menu2_row.LINK}
+      <input name="sort2[]" value="{menu2_row.LINK}" type="hidden"/>
+      <input type="checkbox" value="1" name="hide2[{menu2_row.LINK}]" {menu2_row.HIDE} id="cb2_{menu2_row.LINK}" style="display:none;"></td>
+    </tr>
+  <!-- END menu2_row -->
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable2" id="sortable4">
+  
+
+  <tr class="not-sortable">
+    <th colspan="3">{L_INACTIVE}</th>
+  	</tr>
+    <tbody id="hide2">
+  <!-- BEGIN menu2hide_row -->
+  <tr class="{menu2hide_row.ROW_CLASS}" id="{menu2hide_row.LINK}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+  	<td width="33%">{menu2hide_row.NAME}</td>    
+    <td>{menu2hide_row.LINK}
+      <input name="sort2[]" value="{menu2hide_row.LINK}" type="hidden"/>
+      <input type="checkbox" value="1" name="hide2[{menu2hide_row.LINK}]" {menu2hide_row.HIDE} id="cb2_{menu2hide_row.LINK}" style="display:none;"/></td>
+    </tr>
+  <!-- END menu2hide_row -->
+
+  </tbody>
+
+  <tfoot>
+  <!-- IF S_NO_INACTIVE_2 -->
+  <tr class="row1" id="menu2_nohidden">
+    <td colspan="3"><em>{L_NO_INACTIVE}</em></td></tr>
+  <!-- ENDIF -->
+  <tr class="not-sortable"><th colspan="3"></th>
+  </tr>
+  </tfoot>
+</table>
+  </div>
+  
+  <div id="menu4">
+		<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+		<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="center">{L_MENUS_INFO}</td>
+	</tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable5" id="sortable9">
+	<thead>
+  <tr class="not-sortable">
+  	<th colspan="3" class="not-sortable">{L_MENU4}</th>
+  	</tr>
+  <tr class="not-sortable">
+    <th width="10" class="not-sortable">&nbsp;</th>
+  	<th class="not-sortable">{L_NAME}</th>
+    <th class="not-sortable">{L_LINK}</th>
+    </tr>
+  </thead>
+  <tbody id="show4">
+  <!-- BEGIN menu4_row -->
+  <tr class="{menu4_row.ROW_CLASS}" id="{menu4_row.LINK}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+  	<td width="33%">{menu4_row.NAME}</td>    
+    <td>{menu4_row.LINK}
+      <input name="sort4[]" value="{menu4_row.LINK}" type="hidden"/>
+      <input type="checkbox" value="1" name="hide4[{menu4_row.LINK}]" {menu4_row.HIDE} id="cb4_{menu4_row.LINK}" style="display:none;"></td>
+    </tr>
+  <!-- END menu4_row -->
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable5" id="sortable10">
+  
+
+  <tr class="not-sortable">
+    <th colspan="3">{L_INACTIVE}</th>
+  	</tr>
+    <tbody id="hide4">
+  <!-- BEGIN menu4hide_row -->
+  <tr class="{menu4hide_row.ROW_CLASS}" id="{menu4hide_row.LINK}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+  	<td width="33%">{menu4hide_row.NAME}</td>    
+    <td>{menu4hide_row.LINK}
+      <input name="sort4[]" value="{menu4hide_row.LINK}" type="hidden"/>
+      <input type="checkbox" value="1" name="hide4[{menu4hide_row.LINK}]" {menu4hide_row.HIDE} id="cb4_{menu4hide_row.LINK}" style="display:none;"/></td>
+    </tr>
+  <!-- END menu4hide_row -->
+
+  </tbody>
+
+  <tfoot>
+  <!-- IF S_NO_INACTIVE_4 -->
+  <tr class="row1" id="menu4_nohidden">
+    <td colspan="3"><em>{L_NO_INACTIVE}</em></td></tr>
+  <!-- ENDIF -->
+  <tr class="not-sortable"><th colspan="3"></th>
+  </tr>
+  </tfoot>
+</table>
+  </div>
+  <div id="links">
+  	<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+  		<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="center">{L_LINKS_INFO}</td>
+	</tr>
+</table>
+<br />
+  <table width="100%" border="0" cellspacing="1" cellpadding="2" id="sortable5">
+   <thead>
+  	<tr class="row1">
+  		<th colspan="7" nowrap="nowrap">{L_LINKS}</th>
+  		</tr>
+  	<tr class="row1">
+  	  <td nowrap="nowrap">{LINK_CB_HELP}</td>
+  	  <td colspan="6"><label><input type="checkbox" {LINK_CB} name="pk_links" value="1">{LINK_CB_TEXT}</label></td>
+	  </tr>
+  <tr>
+    <th nowrap="nowrap">&nbsp;</th>
+    <th>&nbsp;</th>
+    <th>{L_LINKNAME}</th>
+    <th>{L_LINK_URL}</th>
+    <th>{L_LINK_TYPE}</th>
+    <th>{L_LINK_MENU}</th>
+    <th>{L_LINK_VIS}</th>
+  </tr>
+  </thead>
+  <!-- BEGIN pluslink_row -->
+  <tr class="{pluslink_row.ROW_CLASS}" id="{pluslink_row.ID}" style="cursor:pointer;">
+    <td width="10" nowrap="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_DRAGNDROP}"></span> </td>
+    <td width="15"><img src="{EQDKP_ROOT_PATH}images/delete.png" class="td_add" onClick="window.location.href='manage_menus.php{SID}&mode=del_plink&id={pluslink_row.ID}'" alt="{L_DELETE}" title="{L_DELETE}"></td>
+  	<td width="40%"><input name="linkname[{pluslink_row.ID}]" type="text" value="{pluslink_row.NAME}" style="width:98%" class="td_add"></td>    
+    <td width="60%"><input name="linksortid[]" value="{pluslink_row.ID}" type="hidden"/>
+      <input name="linkurl[{pluslink_row.ID}]2" type="text" value="{pluslink_row.URL}"  style="width:98%" class="td_add">
+</td>
+    <td nowrap="nowrap">{pluslink_row.WINDOW}</td>
+    <td>{pluslink_row.MENU}</td>
+    <td>{pluslink_row.VIS}</td>
+    </tr>
+  <!-- END pluslink_row -->
+
+  <tfoot>
+  <tr class="not-sortable"><th colspan="7"></th>
+  </tr>
+  </tfoot>
+</table>
+  </div>
+  
+  <div id="admin">
+  <style>
+	.portal_block { list-style-type: none; padding: 3px; margin:6px; border:1px dashed #666; min-width:180px;
+
+}
+	.portal_block2 { list-style-type: none; padding: 3px; margin:6px; border:3px dashed #666; min-width:180px;
+
+}
+.portal_block li, .portal_block2 li { list-style-type: none; padding: 5px;
+margin:5px; background-color:#fff; cursor:pointer; color:#666;
+}
+	</style>
+	<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+	<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" /></td>
+		<td align="center">{L_ADMIN_FAVS_INFO}</td>
+	</tr>
+</table>
+<br />
+  <table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable" id="sortable8">
+    <thead>
+      <tr class="not-sortable row1">
+      	<th colspan="2" align="center">{L_ADMIN_FAVS}</th>
+      	</tr>
+      <tr class="not-sortable row1">
+        <td align="center">&nbsp;</td>
+        <td width="100%"><label><input name="enable_admin_favs" type="checkbox" id="enable_admin_favs" value="1" {ADMIN_FAVS_CB} />
+{L_ENABLE_ADMIN_FAVS}</label></td>
+      </tr>
+    </thead>
+  </table>
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  <td>
+  <div class="receiver connectedSortable3 portal_block2" id="sortable6" style="min-height:120px;">
+<div class="not-sortable"><img src="{EQDKP_ROOT_PATH}images/admin/favorits.png" class="not-sortable">{L_FAVORITS}:</div>
+      <!-- BEGIN fav_row -->
+   <li class="t_{fav_row.IDENT}" id="{fav_row.ID}" title="{fav_row.GROUP}"><img src="{fav_row.ICON}"> {fav_row.NAME}<input name="fav[]" type="checkbox" id="cb_{fav_row.ID}" value="{fav_row.DATA}" style="display:none;"><span id="icon_{fav_row.ID}" style="display:none;">{fav_row.ICON}</span><img src="../images/delete.png" onClick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16"></li>
+   <!-- END fav_row -->
+
+  </div>
+  
+  <div class="connectedSortable3" id="sortable7" >
+  
+  <!-- BEGIN group_row -->
+  <div class="portal_block connector" style="float:left;">
+
+  <!-- BEGIN menu_row -->
+	<div id="container_{group_row.menu_row.IDENT}">
+  <div class="not-sortable"><div class="toggle_button" ><span class="togglebutton_name"><span align="center">{group_row.menu_row.NAME}</span></span></div></div>
+  <div id="tt_{group_row.menu_row.IDENT}" class="toggle_container">
+    
+    <!-- BEGIN item_row -->
+   <li class="t_{group_row.menu_row.IDENT}" id="{group_row.menu_row.item_row.ID}" title="{group_row.menu_row.GROUP}">{group_row.menu_row.item_row.NAME}<input type="checkbox" id="cb_{group_row.menu_row.item_row.ID}" name="fav[]" value="{group_row.menu_row.item_row.DATA}" style="display:none;"><span id="icon_{group_row.menu_row.item_row.ID}" style="display:none;">{group_row.menu_row.item_row.ICON}</span></li>
+   <!-- END item_row -->
+   </div>
+	 </div>
+  <!-- END menu_row -->
+  </div>
+  <!-- END group_row -->
+  </div>
+  </td>
+  </tr>
+  </table>
+  </div>
+  </div>
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr class="not-sortable">
+      <th colspan="5"><input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_SAVE}" /> <input name="save" type="button" class="mainoption bi_reset" id="reset" value="{L_RESET}" onClick="window.location='manage_menus.php{SID}'"/></th>
+    </tr>
+  </table>
+</form>
+<script>
+
+function removeThis(test){
+document.getElementById("cb_"+test).checked = false;
+
+	var name = document.getElementById(test).innerHTML;
+	var clas = document.getElementById(test).className;
+
+regex = new RegExp('(<img.*?>)','gi');
+do {    
+    found = false;
+    if (regex.exec(name)) {
+      found = true;
+			name = name.replace(RegExp.$1, '');
+
+    }
+  } while (found != false)
+
+	$("#t"+clas).append('<li class="'+clas+'" id="'+test+'">'+name+'</li>');
+document.getElementById("cb_"+test).checked = false;
+}
+
+</script>

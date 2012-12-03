@@ -1,0 +1,53 @@
+<form method="post" action="manage_infopages.php{SID}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr >
+    <th colspan="8" align="left" nowrap="nowrap"><span style="float:left">{L_MANAGE_PAGES}</span><span style="float:right;"><input name="create" type="submit" class="mainoption bi_new" id="create" value="{L_CREATE}"></span></th>
+    </tr>
+  <tr >
+    <th align="left" width="10" nowrap="nowrap"><input type="checkbox" onclick="if(this.checked == false){info_deselectall('page[]');} else {info_selectall('page[]');};" /></th>
+    <th align="left" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="20" nowrap="nowrap">{L_ID}</th>
+    <th align="left" nowrap="nowrap">{L_ALIAS}</th>
+    <th align="left" nowrap="nowrap">{L_INFO_PAGE_TITLE}</th>
+    <th align="left" width="50" nowrap="nowrap">{L_INFO_PAGE_ML}</th>
+    <th align="left">{L_INFO_PAGE_VIS}</th>
+    <th align="left" width="10" nowrap="nowrap">{L_LAST_CHANGE}</th> 
+  </tr>
+  <!-- BEGIN pages_row -->
+  <tr class="{pages_row.ROW_CLASS}">
+      <td align="left" width="10"><input name="page[]" type="checkbox" id="page[]" value="{pages_row.ID}"></td>
+      <td width="20" align="left" nowrap="nowrap"><a href="manage_infopages.php{SID}&page={pages_row.ID}"><img border="0" style="cursor:pointer;" src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit"/></a></td>
+      <td align="left" nowrap="nowrap">{pages_row.ID}</td>
+      <td width="20" align="left" nowrap="nowrap">{pages_row.ALIAS}</td>
+      <td align="left" nowrap="nowrap"><a href="manage_infopages.php{SID}&page={pages_row.ID}">{pages_row.TITLE}</a></td>
+      <td align="left" nowrap="nowrap">{pages_row.ML}</td>
+      <td align="left">{pages_row.VIS}</td>
+      <td align="left" nowrap="nowrap">{pages_row.EDITED}</td>
+  </tr>
+  <!-- END pages_row -->
+  <!-- IF S_NO_PAGES -->
+  <tr class="row1">
+  	<td colspan="8"><em>{L_NO_PAGES}</em></td>
+  </tr>
+  <!-- ENDIF -->
+    <th colspan="8"><input name="delete" type="submit" class="mainoption bi_delete" id="delete" value="{L_DELETE}"/>
+  </th>
+</table>
+</form>
+<script>
+function info_selectall(name){
+
+	for (var i = 0;i < document.getElementsByName(name).length;i++)
+	{
+		document.getElementsByName(name)[i].checked = true;
+	}
+}
+			
+function info_deselectall(name){
+
+	for (var i = 0;i < document.getElementsByName(name).length;i++)
+	{
+		document.getElementsByName(name)[i].checked = false;
+	}
+}
+</script>

@@ -1,0 +1,32 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  	<th colspan="5"><span style="float:left;">{L_MULTIDKPS}</span><a href="manage_multidkp.php{SID}&update=true" style="float:right;"><input type="button" name="add" value="{L_ADD_MULTI}" class="mainoption bi_new" /></a></th>
+  </tr>
+  <tr>
+    <th width="16">&nbsp;</th>
+  	<th width="150">
+  		<a href="manage_multidkp.php{SID}&sort=0.0"><img src="./../images/arrows/down_arrow{RED00}.png" alt="down"></a>
+  		<a href="manage_multidkp.php{SID}&sort=0.1"><img src="./../images/arrows/up_arrow{RED01}.png" alt="up"></a>
+  		{L_NAME}
+  	</th>
+  	<th width="250">
+  		<a href="manage_multidkp.php{SID}&sort=1.0"><img src="./../images/arrows/down_arrow{RED10}.png" alt="down"></a>
+  		<a href="manage_multidkp.php{SID}&sort=1.1"><img src="./../images/arrows/up_arrow{RED11}.png" alt="up"></a>
+  		{L_DESC}
+  	</th>
+    <th width="50%">{L_EVENTS}</th>
+    <th width="50%">{L_ITEMPOOLS}</th>
+  </tr>
+  <!-- BEGIN multi_row -->
+  <tr class="{multi_row.ROW_CLASS}">
+    <td width="16"><a href="manage_multidkp.php{SID}&update=true&id={multi_row.ID}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="Edit" /></a></td>
+    <td width="150"><a href="manage_multidkp.php{SID}&update=true&id={multi_row.ID}">{multi_row.NAME}</a></td>
+    <td width="250">{multi_row.DESC}</td>
+    <td width="50%">{multi_row.EVENTS}</td>
+    <td width="50%">{multi_row.ITEMPOOLS}</td>
+  </tr>
+  <!-- END multi_row -->
+  <tr>
+    <th colspan="5" class="footer">{LISTMULTI_FOOTCOUNT}</th>
+  </tr>
+</table>

@@ -1,0 +1,84 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="infotable">
+  <tr>
+    <td width="50" align="left" class="row1"><img src="../images/info_big.png" alt="" height="35"></td>
+    <td class="row1" align="center"><strong>{L_MMODE_INFO}</strong></td>
+  </tr>
+</table>
+  <ul id="tabnav">
+	<!-- BEGIN task_types -->
+	<li><a href="task_manager.php?type={task_types.TYPE}" {task_types.ACTIVE}>{task_types.L_TYPE}</a></li>
+	<!-- END task_types -->
+  </ul>
+<br />
+<!-- IF S_PCACHE_ERROR -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+  <tr>
+    <td width="50" align="left" class="row1"><img src="../images/false.png" alt="" height="35"></td>
+    <td width="100%" align="center" class="row1"><strong>{L_PCACHE_ERROR}</strong>
+  	  <ul>
+  		<!-- BEGIN pcache_errors -->
+  		<li>{pcache_errors.PCACHE_ERROR}</li>
+  		<!-- END pcache_errors -->
+  	  </ul>
+	</td>
+  </tr>
+</table>
+<br />
+<!-- ENDIF -->
+<!-- IF S_NEC_TASKS -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+  <tr>
+    <td width="50" align="left" class="row1"><img src="../images/false.png" alt="" height="35"></td>
+    <td width="100%" align="center" class="row1"><strong>{L_NEC_TASK}</strong>
+  </tr>
+</table>
+<br />
+<!-- ENDIF -->
+<!-- IF S_NO_NEC_TASKS -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="greentable">
+  <tr>
+	<td width="50" align="left" class="row1"><img src="../images/ok.png" alt="" height="35"></td>
+	<td width="100%" align="center" class="row1">{L_NO_NEC_TASK}</td>
+  </tr>
+</table>
+<br />
+<!-- ENDIF -->
+<div id="container">
+<!-- IF not S_HIDE_TASK_TABLE -->
+<table width='100%' border='1' cellpadding="2" cellspacing="1" class="task_table">
+  <tr>
+  	<th width='20'>&nbsp;</th>
+    <th width='20%'>{L_NAME}</th>
+	<th width='45%'>{L_DESCRIPTION}</th>
+	<th width='10%'>{L_VERSION}</th>
+	<th width='10%'>{L_AUTHOR}</th>
+	<th width='15%'>{L_CLICK_ME}</th>
+  </tr>
+  <!-- BEGIN tasks_list -->
+  <tr>
+    <th colspan="6" class="th_sub">{tasks_list.L_TASKS}</th>
+  </tr>
+
+  <!-- BEGIN spec_task_list -->
+  <tr class="{tasks_list.spec_task_list.CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{tasks_list.spec_task_list.CLASS}';">
+  	<td width="20" nowrap="nowrap">{tasks_list.spec_task_list.STATUS}</td>
+	<td>{tasks_list.spec_task_list.NAME}</td>
+	<td>{tasks_list.spec_task_list.DESCRIPTION}</td>
+	<td>{tasks_list.spec_task_list.VERSION}</td>
+	<td>{tasks_list.spec_task_list.AUTHOR}</td>
+	<td nowrap="nowrap"><!-- IF not tasks_list.spec_task_list.S_NOT_APPLICABLE --><a href="{tasks_list.spec_task_list.LINK}">{L_CLICK_ME}</a><!-- ENDIF --></td>
+  </tr>
+  <!-- END spec_task_list -->
+  <!-- END tasks_list -->
+<!-- IF UPDATE_ALL -->
+  <tr>
+	<th colspan='6'>
+	  <form method='post' action='task.php?update_all=1&task={UPDATE_ALL}'>
+		<input type='submit' name='start_sql_update' value='{L_UPDATE_ALL}' class='mainoption' />
+	  </form>
+	</th>
+  </tr>
+<!-- ENDIF -->
+</table>
+<!-- ENDIF -->
+</div>

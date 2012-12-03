@@ -1,0 +1,37 @@
+									<!-- IF S_NORMAL_FOOTER -->
+									{PORTAL_BOTTOM}
+										<!-- IF S_SHOW_QUERIES -->{DEBUG_TABS}<!-- ENDIF -->	
+										<!-- IF S_SHOW_DEBUG -->										
+										<center>
+											<span class="copy">SQL Querys: {EQDKP_QUERYCOUNT} | in {EQDKP_RENDERTIME} sec | {EQDKP_MEM_PEAK} |
+												<a href="http://validator.w3.org/check/referer" target="_top" class="copy">XHTML Validate</a>
+											</span>
+										</center>										
+										<!-- ENDIF -->
+									</td>										
+									<!-- IF THIRD_C -->																			
+									<td class="portal_sidebar" valign="top">
+										{PORTAL_RIGHT}
+									</td>										
+									<!-- ENDIF -->									
+								</tr>								
+							</table>							
+							<!-- IF S_NORMAL_FOOTER -->
+							<br />  
+						</div>
+						<div id="footer">    
+							{EQDKP_PLUS_COPYRIGHT}
+							{H}   
+						</div>
+					</td>
+					<td style="width: 3%">&nbsp;</td>
+				</tr>
+			</table>
+			<script>
+				{JS_CODE_EOP}
+				{JS_CODE_EOP2}
+			</script>
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+	</body>
+</html>

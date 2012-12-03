@@ -1,0 +1,100 @@
+<!-- IF not S_EDIT -->
+<script>
+  function AllMessages()
+  {
+      for(var x=0;x<document.post.elements.length;x++)
+      {
+          var y=document.post.elements[x];
+          if(y.id!='all_nr')
+          {
+              y.checked=document.post.all_nr.checked;
+          }
+      }
+  }
+</script>
+<form method="post" action="{F_PAGE_MANAGER}" name="post">
+  
+  <table width="100%" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="8"><span style="float:left;">{L_MANAGE_PROFILEFIELDS}</span><span style="float:right"><input name="new" type="submit" class="mainoption bi_new" id="new" value="{L_NEW_PROFILEFIELD}"></span></th>
+    </tr>    
+    <tr class="{profile_row.ROW_CLASS}">
+      <th nowrap="nowrap">&nbsp;</th>
+      <th nowrap="nowrap"><input type="checkbox" name="all_nr" value="all_nr" onclick="AllMessages(this.form);" /></th>
+      <th colspan="2" nowrap="nowrap">{L_ACTION}</th>
+      <th nowrap="nowrap">{L_NAME}</th>
+      <th nowrap="nowrap">{L_ID}</th>
+      <th nowrap="nowrap">{L_TYPE}</th>
+      <th nowrap="nowrap">{L_CATEGORY}</th>
+    </tr>
+    <!-- BEGIN profile_row -->
+    <tr class="{profile_row.ROW_CLASS}">
+      <td width="20" nowrap="nowrap" align="center"><img src="{EQDKP_ROOT_PATH}images/glyphs/status_{profile_row.ENABLED_ICON}.gif"></td>
+      <td width="15" nowrap="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del[]" type="checkbox" id="del" value="{profile_row.ID}"><!-- ENDIF --></td>
+      <td width="10" align="center" nowrap="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><img src="{IMAGE_PATH}glyphs/{profile_row.ENABLE}.png" width="16" height="16"></a><!-- ENDIF --></td>
+      <td width="10" align="center" nowrap="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_EDIT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></a><!-- ENDIF --></td>
+      <td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
+      <td>{profile_row.ID}</td>
+      <td>{profile_row.TYPE}</td>
+      <td>{profile_row.CATEGORY}</td>
+    </tr>
+    <!-- END profile_row -->
+    <tr >
+      <th colspan="8" class="footer"><span style="float:left;"><input name="delete" type="submit" class="mainoption bi_delete" id="delete" value="{L_DELETE}"></span><span style="float:right;">{FC_PROFILEFIELDS}</span></th>
+    </tr>
+  </table>
+</form>
+<!-- ELSE -->
+<script>
+function handle_fieldtypes(value){
+	if (value == 'dropdown'){
+		$("#options_row").show();
+	} else {
+		$("#options_row").hide();
+	}
+}
+
+function add_option(value){
+	
+		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input"> {L_NAME}: <input type="text" value="" name="option_lang[]" class="input"> <img src="{IMAGE_PATH}glyphs/add.png" onClick="add_option(); this.style.display=\'none\'">');
+}
+</script>
+<form method="post" action="{F_PAGE_MANAGER}" name="post">
+  
+  <table width="100%" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="2"><span style="float:left;">{L_MANAGE_PROFILEFIELDS}</span></th>
+    </tr>    
+    <tr>
+      <td width="50%" nowrap="nowrap" class="row1"><strong>{L_NAME}:</strong></td>
+      <td width="50%" nowrap="nowrap" class="row2"><input type="hidden" name="id" value="{ID}"><input name="language" type="text" class="input" value="{LANGUAGE}" size="100"></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>{L_TYPE}:</strong></td>
+      <td nowrap="nowrap" class="row2">{TYPE_DD}</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>{L_CATEGORY}:</strong></td>
+      <td nowrap="nowrap" class="row2">{CATEGORY_DD}</td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1"><strong>{L_SIZE}:</strong></td>
+      <td nowrap="nowrap" class="row2"><input name="size" type="text"  class="input" id="size" value="{SIZE}" size="4" maxlength="4"></td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" class="row1">{L_IMAGE}:</td>
+      <td nowrap="nowrap" class="row2"><input name="image" type="text"  class="input" id="image" value="{IMAGE}" size="100"></td>
+    </tr>
+    <tr id="options_row" {S_SHOW_OPTIONS}>
+      <td nowrap="nowrap" class="row1"><strong>{L_OPTIONS}:</strong></td>
+      <td nowrap="nowrap" class="row2"><!-- BEGIN options_row -->{L_ID}: <input type="text" value="{options_row.ID}" name="option_id[]" class="input"> {L_NAME}: <input type="text" value="{options_row.LANGUAGE}" name="option_lang[]" class="input"><br /><!-- END options_row -->
+      {L_ID}: <input type="text" value="" name="option_id[]" class="input"> {L_NAME}: <input type="text" value="" name="option_lang[]" class="input">
+      <img src="{IMAGE_PATH}glyphs/add.png" onClick="add_option(); this.style.display='none'"><span id="new_options"></span></td>
+    </tr>
+   
+    <tr >
+      <th colspan="2"><input name="add" type="submit" class="mainoption bi_ok" id="add" value="{L_SAVE}"> <input name="cancel" type="submit" class="liteoption bi_back" id="cancel" value="{L_CANCEL}"></th>
+    </tr>
+  </table>
+</form>
+<!-- ENDIF -->

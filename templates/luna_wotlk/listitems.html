@@ -1,0 +1,29 @@
+<form method="get" action="{F_ITEMS}">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr colspan="22" align="right">                 
+   	<th align="left" nowrap="nowrap" >
+      {L_SEARCHBY}
+      <label><input name="search_type" class="input" type="radio"value="itemname" checked>{L_ITEMM}</label>
+      <label><input name="search_type" class="input" type="radio"value="buyer">{L_BUYERR}</label>
+      <label><input name="search_type" class="input" type="radio"value="raidname">{L_RAIDD}</label>
+      &nbsp;<input name="search" class="input" type="text" size="40" />
+    {SEARCH_LINK}</th>
+    <th>   
+     {MANAGE_LINK}
+    </th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  {PAGE_OUT}
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+</form>

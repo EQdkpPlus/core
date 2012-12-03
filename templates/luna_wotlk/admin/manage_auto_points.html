@@ -1,0 +1,82 @@
+<!-- IF not S_EDIT -->
+<form method="post" action="{F_ACTION}" name="post">
+  <table width="100%" border="0" cellspacing="1" cellpadding="4">
+  <tr>
+  	<th colspan="4" align="left" width="20">{L_ACTION}</th>
+    <th width="25%" align="left" nowrap="nowrap">{L_APA_TYPE}</th>
+    <th width="25%" align="left" nowrap="nowrap">{L_APA_POOL}</th>
+    <th width="25%" align="left" nowrap="nowrap">{L_APA_EVENT}</th>
+    <th width="25%" align="left" nowrap="nowrap">{L_APA_REASON}</th>
+    </tr>
+  <!-- BEGIN apa_row -->
+  <tr class="{apa_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{apa_row.ROW_CLASS}';">
+  	<td><a href="javascript:apa_edit('{apa_row.ID}');" title="{L_EDIT}"><img src="{IMAGE_PATH}glyphs/edit.png"></a></td>
+  	<td><a href="manage_auto_points.php{SID}&mode=delete&id={apa_row.ID}" title="{L_DELETE}"><img src="{IMAGE_PATH}global/delete.png"></a></td>
+  	<td><a href="manage_auto_points.php{SID}&mode=list&id={apa_row.ID}" title="{L_LIST}"><img src="{IMAGE_PATH}glyphs/list.png"></a></td>
+  	<td><a href="manage_auto_points.php{SID}&mode=recalculate&id={apa_row.ID}" title="{L_RECALCULATE}"><img src="{IMAGE_PATH}glyphs/recalculate.png"></a></td>
+    <td>{apa_row.TYPE}</td>
+    <td>{apa_row.POOL}</td>
+    <td>{apa_row.EVENT}</td>
+    <td>{apa_row.REASON}</td>
+    </tr>
+   <!-- END apa_row -->
+	 </table>
+	   <table width="100%" border="0" cellspacing="1" cellpadding="4">
+		
+  <tr>
+    <th colspan="2" align="center">{L_APA_NEW}</th>
+  </tr>
+  <tr>
+  	<td width="50%" class="row1"><strong>{L_APA_TYPE}:</strong></td>
+  	<td class="row2">{TYPE_DD}</td>
+  	</tr>
+  <tr>
+  	<td class="row1"><strong>{L_APA_REASON}:</strong></td>
+  	<td class="row2"><input name="apa_reason" type="text" class="input" id="apa_reason" style="width:90%"></td>
+  	</tr>
+  <tr>
+  	<td class="row1"><strong>{L_APA_POOL}:</strong></td>
+  	<td class="row2">{POOL_DD}</td>
+  	</tr>
+  <tr>
+  	<td class="row1"><strong>{L_APA_EVENT}:</strong></td>
+  	<td class="row2">{EVENT_DD} <input type="button" name="addevent" class="mainoption bi_new" id="r_add_event" value="{L_ADD_EVENT}" /></td>
+  	</tr>
+  <tr>
+  	<th colspan="2"><input type="button" name="add_apa" id="r_add_apa" value="{L_APA_ADD}" class="mainoption bi_new" /></th>
+  	</tr>
+  </table>
+</form>
+<!-- ELSE -->
+<form method="post" action="{F_ACTION}" name="post">
+
+
+<table width="100%" border="0" cellspacing="1" cellpadding="4">
+
+	<!-- IF not S_ADD -->
+	<tr>
+  	<td class="row1"><strong>{L_APA_REASON}:</strong></td>
+  	<td class="row2"><input name="apa_reason" type="text" class="input" id="apa_reason" style="width:90%" value="{APA_REASON}"></td>
+  	</tr>
+  <tr>
+  	<td class="row1"><strong>{L_APA_POOL}:</strong></td>
+  	<td class="row2">{POOL_DD}</td>
+  	</tr>
+  <tr>
+  	<td class="row1"><strong>{L_APA_EVENT}:</strong></td>
+  	<td class="row2">{EVENT_DD}</td>
+  	</tr>
+<!-- ENDIF --> 
+<!-- BEGIN option_row --> 
+<tr>
+  	<td class="row1"><strong>{option_row.NAME}:</strong></td>
+  	<td class="row2">{option_row.FIELD}</td>
+  </tr>
+	<!-- END option_row -->
+	  <tr>
+  	<th colspan="2"><!-- IF S_ADD --><input type="hidden" name="hidden_options" value="{F_HIDDEN_OPTIONS}"><input type="submit" name="add" id="r_add_apa" value="{L_APA_ADD}" class="mainoption bi_new" />
+<!-- ELSE --><input type="submit" name="edit" id="r_add_apa" value="{L_SAVE}" class="mainoption bi_ok" /><!-- ENDIF --></th>
+  	</tr> 	
+  </table>
+</form>	
+<!-- ENDIF -->

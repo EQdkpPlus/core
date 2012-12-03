@@ -1,0 +1,38 @@
+<script>window.onload=Init_RowClick;</script>
+<form method="get" action="{F_MEMBERS}">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left">                    
+      <select name="mdkpid" class="input" onchange="javascript:form.submit();">
+      <!-- BEGIN mdkpid_row -->
+        <option value="{mdkpid_row.VALUE}"{mdkpid_row.SELECTED}>{mdkpid_row.OPTION}</option>
+      <!-- END mdkpid_row -->
+                      
+      <select name="filter" class="input" onchange="javascript:form.submit();">
+      <!-- BEGIN filter_row -->
+        <option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
+      <!-- END filter_row -->
+      </select>
+      <label><input type="checkbox" name="show_inactive" value="1" onchange="javascript:form.submit();" {SHOW_INACTIVE_CHECKED}> {SHOW_INACTIVE}</label>
+      <label><input type="checkbox" name="show_hidden" value="1" onchange="javascript:form.submit();" {SHOW_HIDDEN_RANKS_CHECKED}> {SHOW_HIDDEN_RANKS}</label>
+	  <!-- IF S_SHOW_TWINKS -->
+      <label><input type="checkbox" name="show_twinks" value="1" onchange="javascript:form.submit();" {SHOW_TWINKS_CHECKED}> {SHOW_TWINKS}</label>
+	  <!-- ENDIF -->
+    </th>
+    <th align="right">   
+      {COMPARE_LINK}
+      {MANAGE_LINK}
+    </th>
+  </tr>
+</table>
+
+{LEADERBOARD}
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  {POINTOUT}
+</table>
+
+<br />
+<center><input type="submit" name="{BUTTON_NAME}" value="{BUTTON_VALUE}" class="mainoption bi_compare" /></center>
+</form>
+<br />

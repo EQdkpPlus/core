@@ -1,0 +1,84 @@
+<form action='manage_raids.php{SID}' method='post' name='post'>
+<table cellpadding="2" cellspacing="1" border="0" width="100%">
+	<tr>
+		<th colspan="2">{L_RAID_ADDUPD}</th>
+	</tr>
+	<!-- IF not S_RAID_UPD -->
+	<tr>
+		<td nowrap="nowrap" class="row1"><strong>{L_SELECT_RAID}:</strong></td>
+		<td valign="middle" class="row2">{RAID_DROPDOWN}</td>
+	</tr>
+	<!-- ENDIF -->
+    <tr>
+    	<td nowrap="nowrap" class="row1">
+   		<strong>{L_DATE}: </strong><br /></td>
+    	<td class="row2">{DATE}  &nbsp;&nbsp;<strong>{L_TIME}:</strong>
+    		<input type="text" size="2" name="rhour" value="{HOUR}" class="input" />
+    		:
+    		<input type="text" size="2" name="rminute" value="{MINUTE}" class="input" />
+    		:
+   		<input type="text" size="2" name="rsecond" value="{SECOND}" class="input" /></td>
+   	</tr>
+	<tr>
+        <td class="row1"><strong>{L_NOTE}: </strong></td>
+        <td class="row2"><input type="text" name="rnote" value="{NOTE}" class="input" size="55" id="event" /></td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_EVENT}: </strong></td>
+		<td class="row2">{EVENT}
+			<input type="button" name="addevent" class="liteoption bi_new" id="r_add_event" value="{L_ADD_EVENT}" /></td>
+		</tr>
+	<tr>
+		<td class="row1"><strong>{L_VALUE}: </strong></td>
+		<td class="row2"><input type="text" name="value" value="{VALUE}" class="input" /></td>
+		</tr>
+	<tr>
+		<td class="row1"><b>{L_ATTENDEES}:</b></td>
+		<td class="row2">{NEW_MEM_SEL}
+			<input type="button" name="addmem" class="liteoption bi_new" id="r_add_mem" value="{L_ADD_MEM}" /></td>
+		</tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1">
+	<tr>
+		<th colspan="6"><span style="float:left;">{L_ADJUSTMENTS}</span><span style="float:right"><input type="submit" name="refresh" value="{L_ADD_ADJ}" class="mainoption bi_new" /></span></th>
+	</tr>
+	<tr>
+		<th width="25">&nbsp;</td><th width="200">{L_MEMBER}</th><th colspan="2">{L_REASON}</th><th width="170">{L_EVENT}</th><th width="120">{L_VALUE}</th>
+	</tr>
+	<!-- BEGIN adjs -->
+	<tr class="{adjs.RCLASS}">
+		<td><input type="checkbox" name="adjs[{adjs.KEY}][delete]" value="true" class="input" /><input type="hidden" name="adjs[{adjs.KEY}][group_key]" value="{adjs.GK}" /></td>
+		<td>{adjs.MEMBER}</td>
+		<td colspan="2"><input type="text" name="adjs[{adjs.KEY}][reason]" value="{adjs.REASON}" class="input" size="80" id="adjs_{adjs.KEY}" /></td>
+		<td>{adjs.EVENT}</td>
+		<td><input type="text" name="adjs[{adjs.KEY}][value]" value="{adjs.VALUE}" class="input" /></td>
+	</tr>
+	<!-- END adjs -->
+  <tr>
+		<th colspan="6"><span style="float:left;">{L_ITEMS}</span><span style="float:right"><input type="submit" name="refresh" value="{L_ADD_ITEM}" class="mainoption bi_new" /></span></th>
+	</tr>
+	<tr>
+		<th width="25">&nbsp;</th><th>{L_ITEM}</th><th>{L_ITEMID}</th><th>{L_ITEMPOOL}</th><th>{L_MEMBER}</th><th>{L_VALUE}</th>
+	</tr>
+	<!-- BEGIN items -->
+	<tr class="{items.RCLASS}">
+		<td><input type="checkbox" name="items[{items.KEY}][delete]" value="true" class="input" /><input type="hidden" name="items[{items.KEY}][group_key]" value="{items.GK}" /></td>
+		<td><input type="text" name="items[{items.KEY}][name]" value="{items.NAME}" class="input" size="40" id="items_{items.KEY}"/></td>
+		<td><input type="text" name="items[{items.KEY}][itemid]" value="{items.ITEMID}" class="input" /></td>
+		<td>{items.ITEMPOOL}</td>
+		<td>{items.MEMBER}</td>
+		<td><input type="text" name="items[{items.KEY}][value]" value="{items.VALUE}" class="input" /></td>
+	</tr>
+	<!-- END items -->
+	<tr>
+		<th colspan="6"><input type="hidden" name="raid_id" value="{RAID_ID}" />
+						<input type="submit" name="itemadj_del" value="{L_ADJITEM_DEL}" class="liteoption bi_delete" />
+						<!-- IF S_RAID_UPD -->
+						<input type="submit" name="raid_del" value="{L_RAID_DEL}" class="mainoption bi_delete" />
+						<input type="reset" name="reset" value="{L_RESET}" class="mainoption bi_reset" />
+						<!-- ENDIF -->
+						<input type="submit" name="save" value="{L_RAID_SAVE}" class="mainoption bi_ok" />
+		</th>
+	</tr>
+</table>
+</form>

@@ -1,0 +1,113 @@
+<script language="JavaScript" type="text/javascript">
+function check_form()
+{
+    if (document.post.member_name.value.length < 2)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}               
+</script>
+
+<form method="post" action="{F_ADD_MEMBER}" name="post" onsubmit="return check_form(this)">
+
+{TAB_HEAD_CM}
+<div id='addchar_tab'>
+			<ul>
+				<li><a href='#fragment-chars'><span>{TAB_CHARS}</span></a></li>
+				<!-- BEGIN cmrow -->
+			    <li><a href='#fragment-{cmrow.ID}'><span>{cmrow.NAME}</span></a></li>
+			  <!-- END cmrow -->
+			  <li><a href='#fragment-notes'><span>{TAB_NOTES}</span></a></li>
+			</ul>
+<div id="fragment-chars">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+    <td width="100" nowrap="nowrap" class="row1" colspan=2>
+    	<input type="hidden" name="member_pic" id="member_pic" size="20" value="{UCV_PICTURE_NAME}" class="input" />
+    	{UCV_PICTURE}
+    	</td>
+    </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_NAME}:</td>
+    <!-- IF U_IS_EDIT -->
+    <td width="50%" nowrap="nowrap" class="row2">{UCV_MEMBER_NAME}
+    	<input type="hidden" name="member_name" size="60" value="{UCV_MEMBER_NAME}" class="input" />
+    	<input type="hidden" name="memberid" size="20" value="{UCV_MEMBER_ID}" class="input" />
+    	</td>
+    <!-- ELSE -->
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_name" size="20" value="{UCV_MEMBER_NAME}" class="input" /></td>
+		<!-- ENDIF -->  
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RACE}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">{DRPWN_RACE}</td>
+  </tr>
+
+	<!-- BEGIN character_row -->
+	<tr>
+		<td width="100" nowrap="nowrap" class="row1">{character_row.NAME}</td>
+		<td width="50%" nowrap="nowrap" class="row2">{character_row.FIELD}</td>
+	</tr>
+	<!-- END character_row -->
+
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CLASS}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">{DRPWN_CLASS}</td>
+   </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_LEVEL}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_level" size="3" maxlength="3" value="{UCV_MEMBER_LEVEL}" class="input" /></td>
+   </tr>
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_GUILD}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="guild" size="25" maxlength="50" value="{UCV_GUILD}" class="input" /></td>
+   </tr>
+   
+
+  <!-- IF U_ISNOT_EDIT -->
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_OVERTAKE}:</td>
+    <!-- IF USER_CAN_CONNECT -->
+    <td width="50%" nowrap="nowrap" class="row2"><input type="checkbox" name="overtakeuser" value="1" checked="checked" /></td>
+   	<!-- ELSE -->
+   	<td width="50%" nowrap="nowrap" class="row2"><input type="checkbox" name="overtakeuser" value="1" disabled="disabled" checked="checked" /></td>
+   	<!-- ENDIF -->
+   </tr>
+   <!-- ENDIF -->
+  <tr>
+  </tr>
+</table>
+</div>
+
+<!-- BEGIN cmrow -->
+<div id="fragment-{cmrow.ID}">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<!-- BEGIN tabs -->
+    <tr>
+      <td width="100" nowrap="nowrap" class="row1">{cmrow.tabs.NAME}</td>
+      <td width="50%" nowrap="nowrap" class="row2">{cmrow.tabs.FIELD}</td>
+    </tr>
+    <!-- END tabs -->
+  </table>
+</div>
+<!-- END cmrow -->
+
+<div id="fragment-notes">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_NOTES}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><textarea name="notes" class="input" rows="12" cols="75">{UCV_NOTES}</textarea></td>
+   </tr>
+</table>
+</div>
+</div>
+<br><center>
+  <!-- IF U_IS_EDIT -->
+    <input type="submit" name="edit" value="{L_EDIT_MEMBER}" class="mainoption" /> 
+  <!-- ELSE -->
+    <input type="submit" name="add" value="{L_ADD_MEMBER}" class="mainoption" />
+  <!-- ENDIF -->
+</center>
+</form>

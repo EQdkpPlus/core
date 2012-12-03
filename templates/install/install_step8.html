@@ -1,0 +1,59 @@
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="../maintenance/maintenance.php" name="post">
+<input type="hidden" name="redirect" value="maintenance/task_manager.php?splash=true" />
+
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p>
+<table width="100%" border="0" cellspacing="1" cellpadding="7">
+  <tr>
+		<th align="left" colspan="2"><h1>{L_LOGIN}</h1></th>
+  </tr>
+  <tr>
+    <td class="row1" align="center">
+      <table border="0" cellspacing="0" cellpadding="3" align="center" class="borderless">
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap" align="center"><strong>{L_USERNAME}:</strong></td>
+          <td class="row1" width="100" align="center"><input type="text" name="username" size="20" maxlength="30" class="input" /></td>
+        </tr>
+        <tr>
+          <td class="row1" width="40" nowrap="nowrap"><strong>{L_PASSWORD}:</strong></td>
+          <td class="row1" width="100"><input type="password" name="password" size="20" maxlength="32" class="input" /></td>
+        </tr>
+        <tr>
+          <td class="row1" colspan="2" valign="middle">
+            <strong>{L_COOKIE_SET}: </strong>            <input type="checkbox" name="auto_login" class="checkbox" />
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <th align="center"><input type="submit" name="login" value="{L_LOGBUTTON}" class="mainoption" /></th>
+  </tr>
+</table>
+</p><br/>
+</div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+
+<!-- IF MSG_TEXT != '' -->
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">&nbsp;{MSG_TEXT}</div><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+<!-- ENDIF -->
+<!-- IF not S_SHOW_BUTTON -->
+<div align="center"><input type="button" name="back" value="{L_BUTTON_BACK}" class="mainoption" onClick="history.back()"/>
+</div>
+<!-- ENDIF -->
+</form>

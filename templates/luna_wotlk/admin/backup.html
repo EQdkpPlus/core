@@ -1,0 +1,164 @@
+<script type="text/javascript">
+function checkForm(value){
+	//data-Folder
+	if (value){
+	$('#action_download, #method_zip, #create_table_n').attr('checked', true);
+	$('#action_download, #action_store, #action_both, #create_table_y, #create_table_n, #method_zip, #method_text').attr('disabled', true);
+	
+	} else {
+	//DB
+	$('#action_store, #create_table_y').attr('checked', true);
+	$('#action_download, #action_store, #action_both, #create_table_y, #create_table_n, #method_zip, #method_text').attr('disabled', false);
+	
+	}
+}
+</script>
+
+<form method="post" action="{F_BACKUP}" name="post" onsubmit="return check_form(this)">
+<div id="backup_tabs">
+<ul>
+		<li><a href='#create'><span>{L_BACKUP_DATABASE}</span></a></li>
+		<li><a href='#trestore'><span>{L_BACKUP_RESTORE}</span></a></li>
+</ul>
+<div id="create">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="6">{L_BACKUP_TITLE}</th>
+  </tr>
+  <!-- IF TABLE_PREFIX_WARNING -->
+  <tr>
+    <td colspan="2" class="row2">{TABLE_PREFIX_WARNING}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+  	<td nowrap="nowrap" class="row1"><strong>{L_BACKUP_SYSTEM}</strong></td>
+  	<td nowrap="nowrap" class="row2"><label>
+  		<input type="radio" name="system" value="db" checked="checked" onchange="checkForm(false);"/>
+  		{L_DB}</label>
+&nbsp;
+<label>
+	<input type="radio" name="system" value="data" onchange="checkForm(true);" />
+	{L_DATA_FOLDER}</label></td>
+  	</tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1"><strong>{L_CREATE_TABLE}</strong></td>
+    <td width="50%" nowrap="nowrap" class="row2"><label><input type="radio" name="create_table" value="Y" checked="checked" id="create_table_y" />{L_YES}</label> &nbsp;<label><input type="radio" name="create_table" value="N" id="create_table_n" />{L_NO}</label></td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1"><strong>{L_BACKUP_TYPE}</strong></td>
+    <td width="50%" nowrap="nowrap" class="row2">
+    <label><input name="method" type="radio" class="radio" id="method_zip" value="zip" checked="checked"> 
+    	<strong>zip</strong> <em>({L_RECOMMENDED})</em></label>
+    
+    <label>
+    	<input name="method" class="radio" value="text" id="method_text" type="radio"> text</label>
+
+    </td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap" class="row1"><strong>{L_BACKUP_ACTION}</strong></td>
+    <td nowrap="nowrap" class="row2"><label>
+      <input type="radio" name="action" value="store" checked="checked" id="action_store"/>
+      {L_STORE} &nbsp;</label>
+      <label>
+        <input type="radio" name="action" value="download" id="action_download"/>
+        {L_DOWNLOAD}</label>
+&nbsp;
+<label>
+  <input type="radio" name="action" value="both" id="action_both"/>
+  <strong>{L_BOTH}</strong> <em>({L_RECOMMENDED})</em></label></td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap" class="row1"><strong>{L_SELECT_TABLES}</strong></td>
+    <td nowrap="nowrap" class="row2">{TABLE_SELECT}</td>
+    </tr>
+  <tr>
+    <th align="center" colspan="6">
+        <input type="submit" name="backup" value="{L_BACKUP_DATABASE}" class="mainoption bi_ok" />
+    </th>
+  </tr>
+</table>
+</div>
+<div id="trestore">
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="errortable">
+	<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/false.png" /></td>
+		<td align="center">{L_RESTORE_INFO}</td>
+	</tr>
+</table>
+<br />
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="infotable">
+	<tr>
+		<td align="left"><img src="{EQDKP_ROOT_PATH}images/info_big.png" alt="" height="27" /></td>
+		<td align="center"><strong>{L_UNCOMPLETE_INFO}</strong></td>
+	</tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+  	<th colspan="3" nowrap="nowrap">{L_BACKUP_RESTORE}</th>
+  	</tr>
+  <tr>
+    <td nowrap="nowrap" class="row1"><strong>{L_SELECT_BACKUP}:</strong></td>
+    <td width="10" valign="top" nowrap="nowrap" class="row2"><!-- IF not NO_BACKUPS --><select size="10" name="backups" onchange="show_metadata(this.value)"> <!-- BEGIN backup_list --><option value="{backup_list.FILE}">{backup_list.NAME}</option><!-- END backup_list --></select><!-- ELSE --> {L_NO_BACKUPS}<!-- ENDIF --></td>
+   <td width="50%" valign="top" nowrap="nowrap" class="row2"> <!-- IF not NO_BACKUPS --><b>{L_METADATA}:</b><br />
+      <br /><div id="metadata"></div></td><!-- ENDIF -->
+  </tr>
+  <tr>
+    <th align="center" colspan="7"> <input name="restore" type="submit" class="mainoption bi_ok" id="restore" value="{L_START_RESTORE}" onClick="set_warning('restore');"/>
+      <input name="backup_delete" type="submit" class="liteoption bi_delete" id="backup_delete" value="{L_BACKUP_DELETE}" onClick="set_warning('delete');"/>
+      <input name="backup_download" type="submit" class="mainoption bi_save" id="backup_download" value="{L_BACKUP_DOWNLOAD}" /><input type="hidden" name="restore_data" id="restore_data" value="0" /></th>
+  </tr>
+</table>
+</div>
+</div>
+</form>
+<script type="text/javascript" language="javascript">
+
+var stop_button = '';
+var checked = '';
+
+function set_warning(button_name){
+	stop_button = button_name;
+}
+
+function submit_form(button){
+	checked = true;
+	abutton = '#'+button;
+	document.getElementById('restore').click();
+}
+
+function check_form(form){
+	if (!checked){
+		if (stop_button == 'delete'){
+			var ret = delete_warning();
+			if (!ret){stop_button = '';}
+			return false;
+		} else if (stop_button == 'restore'){
+			if (!ret){stop_button = '';}
+			var ret = restore_warning();
+			
+			return false;
+		}
+	} else {
+		return true;
+	}
+	
+}
+
+function restore_data(value){
+	if (value){
+		$('#restore_data').val(1);
+	} else {
+		$('#restore_data').val(0);
+	}
+}
+
+function show_metadata(value){
+	var metadata = new Array();
+	{JS_METADATA}	
+ 	$("#metadata").html(metadata[value]);
+ 
+}
+
+</script>
