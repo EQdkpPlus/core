@@ -1,0 +1,10 @@
+﻿Subject: {GUILDTAG} {DKP_NAME}: Petición de Activación de Cuenta
+Charset: iso-8859-1
+
+Una nueva cuenta "{USERNAME}" ha sido creada y necesita la activación por el administrador antes de que pueda iniciar sesión.
+
+Para activar la cuenta, haga click en el enlace de abajo.
+
+{U_ACTIVATE}
+
+También puede cambiar los permisos de la cuenta. Para cambiarlos deberá acceder a "Administrar Usuarios" dentro del "Panel de Administracion".

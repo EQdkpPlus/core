@@ -1,0 +1,28 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_EQDKP_TABLES}</th>
+  </tr>
+  <tr>
+    <th align="left" width="25" nowrap="nowrap">&nbsp;</th>
+    <th align="left">{L_TABLE_NAME} ({NUM_TABLES})</th>
+    <th align="left" nowrap="nowrap">{L_ROWS}</th>
+    <th align="left" nowrap="nowrap">{L_TABLE_SIZE}</th>
+    <th align="left" nowrap="nowrap">{L_INDEX_SIZE}</th>
+  </tr>
+  <!-- BEGIN table_row -->
+  <tr class="{table_row.ROW_CLASS}">
+    <td width="25" nowrap="nowrap">&nbsp;</td>
+    <td nowrap="nowrap">{table_row.TABLE_NAME}</td>
+    <td nowrap="nowrap">{table_row.ROWS}</td>
+    <td nowrap="nowrap">{table_row.TABLE_SIZE}</td>
+    <td nowrap="nowrap">{table_row.INDEX_SIZE}</td>
+  </tr>
+  <!-- END table_row -->
+  <tr>
+    <th align="left" colspan="3"><b>{L_TOTALS}:</b> {TOTAL_SIZE}</th>
+    <th align="left" width="75">{TOTAL_TABLE_SIZE}</th>
+    <th align="left" width="100">{TOTAL_INDEX_SIZE}</th>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

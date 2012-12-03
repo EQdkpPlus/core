@@ -1,0 +1,75 @@
+<!-- INCLUDE page_header.html -->
+
+<!-- IF POPMOG -->
+<style type="text/css">
+
+.left_column {
+	width: 605px;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	position: absolute;
+	top: auto;
+}
+.right_column_top {
+	position: relative;
+	height: 500px;
+	width: 200px;
+	left: 640px;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	
+}
+.right_column_middle {
+	position: relative;
+	height: 800px;
+	width: 200px;
+	left: 640px;
+	top: 50px;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	
+}
+</style>
+   
+<div class="left_column">
+<h3>{PM_GAMES}</h3>
+<iframe src="{GAMES}" frameborder="0" width="600" height="1900" allowtransparency="true" SCROLLING=NO> </iframe>
+</div>
+
+<div class="right_column_top">
+<h3>{PM_PLAYER}</h3>
+<iframe src="{TOPPLAYER}" frameborder="0" width="180" height="470" allowtransparency="true" SCROLLING=NO>  </iframe>
+</div>
+
+<div class="right_column_middle">
+<h3>{PM_ACTIVITY}</h3>
+<iframe src="{ACTIV}" frameborder="0" width="180" height="620" allowtransparency="true" SCROLLING=NO>  </iframe>
+</div>
+
+<!-- ELSE -->
+
+<table width="95%" align=center class="forumline">
+<tr>
+<td align=center><a href="wrapper.php?id=sf"><img src="images/{SF_IMAGE}"></img></a></td>
+<td align=center><a href="mini_games.php?popmog=1"><img src="images/{PM_IMAGE}"></img></a></td>
+<td>&nbsp;&nbsp;</td>
+</tr>
+
+<tr>
+<td><p style="margin-left: 20; margin-right: 50"><a href="wrapper.php?id=sf">{SF_TEXT}</a></p></td>
+<td><p style="margin-left: 20; margin-right: 50"><a href="mini_games.php?popmog=1">{POPMOG_TEXT}</a></p></td>
+<td>&nbsp;&nbsp;</td>
+</tr>
+
+</table>
+
+
+<!-- ENDIF -->
+
+<!-- INCLUDE page_tail.html -->

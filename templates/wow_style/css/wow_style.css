@@ -1,0 +1,308 @@
+/*
+Created by:
+	Name: Patrick Bruner
+	Charactername: Hirork
+	LVL: 60
+	Race: Ork
+	Server: Dalvengyr
+	Guild: Revaluation
+	Website: www.revaluation.de (2nd Site Admin)
+				www.startrek-club.de (Site Admin)
+				www.startrekonline.at (Site Admin)
+	Special Thanks:
+		Jonny B (style inspiration phpbb)
+		Laures (Warlock lvl 60)
+		Fafnir (Warrior, Druid, Hunter LvL 60)
+		Legion(CD) best friend over the last 7 Years
+		Manuel Schneider best friend over the last 5 years
+ */
+body
+{
+	background-image: url(../images/back/kalidar-bg.jpg);
+	background-repeat: repeat-x;
+	background-color: Black;
+}
+table.backgroundfordata
+{
+	border-style: none;
+	background-image: url(../images/databorder/back.jpg);
+	background-repeat: repeat;
+}
+tr.topborder
+{
+	background-image: url(../images/top/topborder.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	height: 65px;
+	width: 186px;	
+}
+td.gryphenleft
+{
+	background-image: url(../images/top/gryph-left.gif);
+	background-repeat: no-repeat;
+	background-position: left;
+	height: 80px;
+	width: 68px;
+}
+td.gryphenright
+{
+	background-image: url(../images/top/gryph-right.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+	height: 80px;
+	width: 68px;
+}
+td.wowlogo
+{
+	background-image: url(../images/logo/wowlogo.gif);
+	background-repeat: no-repeat;
+	height: 108px;
+	width: 262px;
+}
+td.mainmenurighthand
+{
+	background-image: url(../images/top/righthand.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+	height: 88px;
+	width: 63px;
+}
+td.mainmenulefthand
+{
+	background-image: url(../images/top/lefthand.gif);
+	background-repeat: no-repeat;
+	background-position: left;
+	height: 88px;
+	width: 63px;
+	
+}
+tr.mainmenubackground
+{
+	background-image: url(../images/top/linksbar-bg.gif);
+	background-repeat: repeat-x;
+	background-position: center;
+	height: 88px;
+}
+tr.backgroundheader
+{
+	background-image: url(../images/top/hintergrund.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+/*----------------------- Anfang Äußerer Kreis -------------------*/
+/*Äußerer Circle*/
+/*Header*/
+tr.outercircletopbackground
+{
+	background-image: url(../images/top/topborder.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	position: relative;
+}
+td.outercircletopmiddle
+{
+	background-image: url(../images/top/top-bg2.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	position: relative;
+}
+td.outercircletopleft
+{
+	background-image: url(../images/top/topleft.gif);
+	background-repeat: no-repeat; 
+	background-position: bottom;
+	height: 65px;
+	width: 135px;
+	position: relative;
+}
+td.outercircletopright
+{
+	background-image: url(../images/top/topright.gif);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	position: relative;
+}
+td.outercircledata
+{
+	background-image: url(../images/databorder/light2.jpg);
+	background-repeat: repeat;
+	position: relative;
+}
+/*--------------------------------------------------------------*/
+/*Linke Seite inklusive Menu*/
+td.outercircleleftmenu
+{
+	background-image: url(url(../images/left/left-bgmenu.gif);
+	background-repeat: repeat-y;
+	background-position: bottom;
+	position: relative;
+}
+td.outercircleleftbackground
+{
+	background-image: url(../images/left/left-bg3.gif);
+	background-repeat: repeat-y;
+	background-position: left;
+	position: relative;
+	width: 53px;
+}
+/*------------------------------------------------------------*/
+/*Footer*/
+td.outercirclebottomleft
+{
+	background-image: url(../images/bottom/bottomleft.gif);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	position: relative;
+}
+td.outercirclebottomright
+{
+	background-image: url(../images/bottom/bot-right.gif);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	position: relative;
+}
+tr.outercirclebottombackground
+{
+	background-image: url(../images/bottom/bot-bg.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	position: relative;
+}
+/*--------------------------------------------------------------*/
+/*Rechte Seite*/
+td.outercirclerightbackground
+{
+	background-image: url(../images/right/right-bg.gif);
+	background-repeat: repeat-y;
+	background-position: right;
+	position: relative;
+	width: 53px;
+}
+/*-------------------------- Ende Äußerer Kreis ------------------------*/
+/*-------------------------- Beginn Innerer Kreis ----------------------*/
+/* Top Innerer Kreis */
+td.innercircletopleftcorner
+{
+	background:url(../images/databorder/topleft.gif);
+	background-repeat:no-repeat;
+	background-position:left;
+	position: relative;
+	height: 12px;
+	width: 12px;
+}
+tr.innercircletopbackground
+{
+	background:url(../images/databorder/top.gif);
+	background-repeat:repeat-x;
+	position: relative;
+}
+td.innercircletoprightcorner
+{
+	background:url(../images/databorder/topright.gif);
+	background-repeat:no-repeat;
+	background-position: right;
+	position: relative;
+	height: 12px;
+	width: 14px;
+}
+/*--------------------------------------------------------------*/
+/* Rechter Teil innerer Kreis*/
+td.innercirclerightside
+{
+	background:url(../images/databorder/right.gif);
+	background-repeat:repeat-y;
+	background-position:right;
+	width: 13px;
+}
+/*--------------------------------------------------------------*/
+/* Linker Teil innerer Kreis*/
+td.innercircleleftside
+{
+	background-image: url(../images/databorder/left.gif);
+	background-repeat: repeat-y;
+	background-position: left;
+	width: 12px;
+}
+/*--------------------------------------------------------------*/
+/* Bottom innerer Kreis*/
+td.innercirclebottomleftcorner
+{
+	background-image: url(../images/databorder/bottomleft.gif);
+	background-repeat: no-repeat;
+	background-position: left;
+	width: 12px;
+	height: 14px;
+}
+tr.innercirclebottombackground
+{
+	background-image: url(../images/databorder/bottom.gif);
+	background-repeat: repeat-x;
+}
+td.innercirclebottomrightcorner
+{
+	background-image: url(../images/databorder/bottomright.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+	width: 13px;
+	height: 14px;
+}
+/*--------------------------------------------------------------*/
+/* Hintergrund innerer Kreis*/
+td.innercirclebackground
+{
+	background-image: url(../images/databorder/back.jpg);
+	background-repeat: repeat;
+}
+
+#inner_wrapper 
+{
+	width:720px;
+	margin-top: 10px;
+	margin-right : auto;
+	margin-bottom: 10px;
+	margin-left:auto;
+}
+
+
+.member_wrapper 
+{
+	width:690px;
+	margin-top: 10px;
+	margin-right : auto;
+	margin-bottom: 10px;
+	margin-left:auto;
+}
+
+.class_header
+{
+	font-weight:bold
+	font-weight: bold;
+	font-size: 15px;	
+}
+
+.roster_hr_member
+{
+	border: none 0;
+	border-top: 1px dashed ;
+	height: 1px;
+}
+
+
+roster_member_right
+{
+	align:right;
+	text-align: right;
+}
+
+
+.floatR 
+{
+	float:right;
+	
+}
+
+.right {
+	text-align:right;
+	margin-top: 8px;
+	
+}

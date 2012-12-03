@@ -1,0 +1,267 @@
+/* The whole body of the popup frame */
+.lotritem, .lotritemt, .lotritemname
+{
+	background-color: #000000;
+	text-align: left;
+	width: 305px;
+	border: 1px;
+	border-color: #CCCCCC;
+	border-style: solid;
+	position: relative;
+    line-height:normal;
+}
+/* Default link colors for the whole frame */
+.lotritem a:link, .lotritem a:visited, .lotritem a:active { color: #FFFF99; text-decoration: none; font-weight: normal }
+.lotritemt a:link, .lotritemt a:visited, .lotritemt a:active { color: #FFFF99; text-decoration: none; font-weight: normal }
+.lotritemt a:hover, .lotritem a:hover { color: #FFFF99; text-decoration: none; font-weight: normal }
+
+.lotritemt td, .lotritem th, .lotritem
+{
+    font-family:Helvetica, Arial, sans-serif;
+    font-size:9pt;
+    color:#FAFAFA;
+}
+.lotrrttxt {
+    display: compact;
+    position: absolute;
+    text-align: right;
+    right: 3px;
+    top: inherit;
+    color: #FFFFFF;
+}
+
+/* The whole body of the popup frame */
+.wowitemt
+{
+	background-color: #000000;
+	text-align: left;
+	width: 385px;
+	border-top: 1px;
+	border-right: 1px;
+	border-bottom: 1px;
+	border-left: 1px;
+	border-color: #B08617;
+	border-style: ridge;
+	color: white;
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 12px;
+	padding: 3px;
+}
+
+.wowitem
+{
+	background-color: #000000;
+	text-align: left;
+	width: 385px;
+	border-top: 1px;
+	border-right: 1px;
+	border-bottom: 1px;
+	border-left: 1px;
+	border-color: #B08617;
+	border-style: ridge;
+	color: white;
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 12px;
+	padding: 3px;
+}
+
+div#overlib_light
+{
+  position:absolute; visibility:hidden; left:0; top:0; z-index:10000;
+  color:#000; font-size:11px; line-height:1.2;
+}
+
+/* Default link colors for the whole frame */
+.wowitemt a:link, .wowitemt a:visited, .wowitemt a:active { color: #FFB019; text-decoration: none; font-weight: normal }
+.wowitemt a:hover { color: #FFB019; text-decoration: underline; font-weight: normal }
+
+.wowitemt td
+{
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+.wowitem td
+{
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+/* Item icon stuff */
+.itemicon { width: 40px; height: 40px; }
+.smallitemicon { width: 20px; height: 20px; }
+
+/* Item colors */
+.redname,    .quality6 { color: #FF0000; font-weight: bold; }
+.orangename, .quality5 { color: #FF8000; font-weight: bold; }
+.purplename, .quality4 { color: #A335EE; font-weight: bold; }
+.bluename,   .quality3 { color: #0070DD; font-weight: bold; }
+.greenname,  .quality2 { color: #00CC00; font-weight: bold; }
+.whitename,  .quality1 { color: #FFFFFF; font-weight: bold; }
+.greyname              { color: #9D9D9D; font-weight: bold; }
+
+/* lotro css */
+.itemPurple{color: #8b008b}
+.itemGreen{color: #228b22}
+.itemGold{color: #ffd700}
+.itemBlue{color: #1e90ff}
+
+/* Item link (Name of items on ViewItem page) */
+a:link.itemlink, a:visited.itemlink, a:active.itemlink { text-decoration: none; }
+a:hover.itemlink { text-decoration: none; }
+
+/* Forum link */
+a:link.forumitemlink, a:visited.forumitemlink, a:active.forumitemlink { text-decoration: none; font-weight: normal }
+a:hover.forumitemlink { text-decoration: none; font-weight: normal }
+
+/* Armor set info link */
+.setbonus { color: #1EFF00; font-weight: normal; }
+a:link.setbonus, a:visited.setbonus, a:active.setbonus { text-decoration: none; font-weight: normal; color: #1EFF00; }
+a:hover.setbonus { text-decoration: underline; font-weight: normal; color: #1EFF00; }
+a:link.set, a:visited.set, a:active.set { text-decoration: none; font-weight: normal; color: #FFA500; }
+a:hover.set { text-decoration: underline; font-weight: normal; color: #FFA500; }
+
+/* Item effects */
+.itemeffectlink { color: #FFFFFF; font-weight: normal; }
+a:link.itemeffectlink, a:visited.itemeffectlink, a:active.itemeffectlink { text-decoration: none; font-weight: normal; color: #1EFF00; }
+a:hover.itemeffectlink { text-decoration: underline; font-weight: normal; color: #1EFF00; }
+
+/* Refresh link */
+a:link.itemrefresh, a:visited.itemrefresh, a:active.itemrefresh { text-decoration: none; font-weight: normal; font-size: x-small }
+a:hover.itemrefresh { text-decoration: none; font-weight: normal; font-size: x-small }
+
+/* Item Create link, used for certain recipes */
+.itemeffectlink { color: #FFFFFF; font-weight: normal; }
+a:link.itemcreatelink, a:visited.itemcreatelink, a:active.itemcreatelink { text-decoration: none; font-weight: normal; color: #1EFF00; }
+a:hover.itemcreatelink { text-decoration: underline; font-weight: normal; color: #1EFF00; }
+
+/* Item Description Text */
+.itemdesc { color: #FFD200; }
+.goldtext { color: #FFD200; }
+
+/* Allakhazam credits stuff */
+.akznotice a:link, .akznotice a:visited, .akznotice a:active { text-decoration: underline; font-weight: normal; color: #FFFFFF; }
+.akznotice a:hover { text-decoration: underline; font-weight: normal }
+.akznotice {  display: none;  color: #FFFFFF; font-size: smaller; text-align: center; background-color: #0B0B0B; }
+
+/* Blasc Update */
+.itemspells {
+	color: #1EFF00;
+}
+.tooldiv  {
+	color: white;
+	display: block;
+	font-size: 12px;
+	padding: 0px;
+	margin: 0px;
+}
+.tooldiv table, .tooldiv td  {
+	border-width: 0px;
+	color: white;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.wowitemt td {
+	color: white;
+}
+
+.wowitemt table {
+	border-width: 0px;
+}
+
+.wowitemt spacer {
+	height: 10px;
+	margin-bottom: 10px;
+	min-height: 10px;
+}
+
+.wowitem td {
+	color: white;
+}
+
+.wowitem table {
+	border-width: 0px;
+}
+
+.wowitem spacer {
+	height: 10px;
+	margin-bottom: 10px;
+	min-height: 10px;
+}
+
+.textitemstats
+{
+    font-family:Arial, Helvetica, sans-serif;
+    font-style:normal;
+    font-size:7pt;
+    color:#8C8C8C;
+    margin-top:0;
+    margin-bottom:0;
+    text-align:right;
+    text-decoration:underline;
+    font-weight:lighter;
+}
+
+.wowtooltip {
+	background-color:#1B1B1B;
+	border:1px solid;
+	border-color:#2E2E2E;
+	color:#ffffff;
+	overflow:hidden;
+	padding: 4px;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	width: 275px;
+}
+
+
+.wowtooltip .q0 { color:#9D9D9D; }
+.wowtooltip .q1 { color:#FFFFFF; }
+.wowtooltip .q2 { color:#1EFF00; }
+.wowtooltip .q3 { color:#0070DD; }
+.wowtooltip .q4 { color:#9F3FFF; }
+.wowtooltip .q5 { color:#FF8400; }
+.wowtooltip .q6 { color:#FF0000; }
+
+.wowtooltip .itemdesc { color: #FFD200; }
+.wowtooltip .itemspells { color: #1EFF00; }
+.wowtooltip .itemeffectlink { color: #1EFF00; }
+.wowtooltip .itemdisabled { color:#AAAAAA; }
+
+
+
+.wowtooltip .spacer { margin-top: 3px; }
+.wowtooltip .itemtitle { font-weight: bold; font-size:13px; margin-bottom: 5px; }
+
+.wowtooltip table {
+	color: #FFFFFF;
+	border-spacing: 0px;
+	margin:0px;
+	padding:0px;
+}
+
+.wowtooltip table td {
+	margin:0px;
+	padding:0px;
+	font-size: 12px;
+}
+
+/* BUFFED - TOOLTIP */
+.wowbuffed				{ color:white; width:420px; text-align:left; }
+.wowbuffed a			{ color: inherit }
+.wowbuffed table		{ border-collapse:collapse; border-spacing:0; width:100%; color:white; }
+.wowbuffed table th 	{ padding:6px; }
+.wowbuffed td			{ padding:7px 3px 0 7px; }
+.wowbuffed td, .wowbuffed th	{ font-family:Verdana,sans-serif; line-height:17px; font-size: 13px; }
+.wowbuffed td th,
+.wowbuffed td td		{ background:transparent none; }
+.wowbuffed td td 		{ padding:0; }
+.wowbuffed td th 		{ padding:0; text-align:right; font-weight:normal; }
+.wowbuffed .normal			{ background:transparent url(./buffed/tooltip.png); }
+.wowbuffed .right			{ background:transparent url(./buffed/tooltip.png); background-position: top right; width: 5px; }
+.wowbuffed .bottomleft		{ background:transparent url(./buffed/tooltip.png); background-position: bottom left; height: 5px; }
+.wowbuffed .bottomright	{ background:transparent url(./buffed/tooltip.png); background-position: bottom right; }

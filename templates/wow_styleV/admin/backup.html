@@ -1,0 +1,31 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_BACKUP}" name="post" onsubmit="return check_form(this)">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="6">{L_BACKUP_TITLE}</th>
+  </tr>
+  <!-- IF TABLE_PREFIX_WARNING -->
+  <tr>
+    <td colspan="2" class="row2">{TABLE_PREFIX_WARNING}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CREATE_TABLE}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="radio" name="create_table" value="Y" checked/>{L_YES} &nbsp;<input type="radio" name="create_table" value="N" />{L_NO}</td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_BACKUP_TYPE}</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+    <!-- BEGIN methods -->
+    <label><!-- IF methods.S_LAST_ROW --><input name="method" id="method" checked="checked"<!-- ELSE --><input name="method"<!-- ENDIF --> type="radio" class="radio" value="{methods.TYPE}" /> {methods.TYPE}</label>&nbsp;
+    <!-- END methods -->
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="6">
+        <input type="submit" name="backup" value="{L_BACKUP_DATABASE}" class="mainoption" />
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
