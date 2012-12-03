@@ -1,0 +1,18 @@
+itemstats Change History
+========================
+
+Version 1.2
+- Fixed regular expression to match changes to Allakhazam's search page.
+
+Version 1.11
+- Fixed a small error with the cURL code.
+- Removed the reference in the xml_set_object call
+
+Version 1.1
+- Added support for cURL
+- Moved all configuration options into one file (itemstats/config.php).
+- Fixed item HTML for some recipes.
+- Item cache database table is now created by the code if it doesn't exist.
+
+Version 1.0
+- Initial Version

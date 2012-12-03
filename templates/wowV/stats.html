@@ -1,0 +1,71 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="3">
+  <tr>
+    <th align="left" rowspan="1" width="100%"><a href="{U_STATS}o={O_NAME}&amp;show={SHOW}">{L_NAME}</a></th>
+    <th colspan="4">{L_RAIDS}</th>
+    <th colspan="3">{L_EARNED}</th>
+    <th colspan="3">{L_SPENT}</th>
+    <th colspan="2">{L_PCT_EARNED_LOST_TO}</th>
+    <th class="smalltitle" rowspan="1"><a href="{U_STATS}o={O_CURRENT}&amp;show={SHOW}">{L_CURRENT}</a></th>
+  </tr>
+  <tr>
+    <th align="left" class="smalltitle">&nbsp;</th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_FIRSTRAID}&amp;show={SHOW}">{L_FIRST}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_LASTRAID}&amp;show={SHOW}">{L_LAST}</a></th>
+    <th align="left" class="smalltitle" colspan="2"><a href="{U_STATS}o={O_RAIDCOUNT}&amp;show={SHOW}">{L_ATTENDED}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_EARNED}&amp;show={SHOW}">{L_TOTAL}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_EARNED_PER_DAY}&amp;show={SHOW}">{L_PER_DAY}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_EARNED_PER_RAID}&amp;show={SHOW}">{L_PER_RAID}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_SPENT}&amp;show={SHOW}">{L_TOTAL}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_SPENT_PER_DAY}&amp;show={SHOW}">{L_PER_DAY}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_SPENT_PER_RAID}&amp;show={SHOW}">{L_PER_RAID}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_LOST_TO_ADJUSTMENT}&amp;show={SHOW}">{L_ADJUSTMENT}</a></th>
+    <th align="left" class="smalltitle"><a href="{U_STATS}o={O_LOST_TO_SPENT}&amp;show={SHOW}">{L_SPENT}</a></th>
+    <th align="left" class="smalltitle">&nbsp;</th>
+  </tr>
+  <!-- BEGIN stats_row -->
+  <tr class="{stats_row.ROW_CLASS}">
+    <td><a href="{stats_row.U_VIEW_MEMBER}">{stats_row.NAME}</a></td>
+    <td>{stats_row.FIRST_RAID}</td>
+    <td>{stats_row.LAST_RAID}</td>
+    <td>{stats_row.ATTENDED_COUNT}</td>
+    <td class="{stats_row.C_ATTENDED_PERCENT}">{stats_row.ATTENDED_PERCENT}%</td>
+    <td class="positive">{stats_row.EARNED_TOTAL}</td>
+    <td class="positive">{stats_row.EARNED_PER_DAY}</td>
+    <td class="positive">{stats_row.EARNED_PER_RAID}</td>
+    <td class="negative">{stats_row.SPENT_TOTAL}</td>
+    <td class="negative">{stats_row.SPENT_PER_DAY}</td>
+    <td class="negative">{stats_row.SPENT_PER_RAID}</td>
+    <td>{stats_row.LOST_TO_ADJUSTMENT}%</td>
+    <td>{stats_row.LOST_TO_SPENT}%</td>
+    <td class="{stats_row.C_CURRENT}">{stats_row.CURRENT}</td>
+  </tr>
+  <!-- END stats_row -->
+  <tr>
+    <th colspan="14" class="footer">{STATS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+<a name="classes" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="100%">{L_CLASS}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_LOOTS}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_MEMBERS}</th>
+    <th align="left" nowrap="nowrap">{L_LOOT_FACTOR}</th>
+  </tr>
+  <!-- BEGIN class_row -->
+  <tr class="{class_row.ROW_CLASS}">
+    <td width="100%"><a href="{class_row.U_LIST_MEMBERS}" class="{class_row.LINK_CLASS}">{class_row.CLASS}</a></td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_COUNT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_PCT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_COUNT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_PCT}</td>
+    <td nowrap="nowrap" align="center" class="{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</td>
+  </tr>
+  <!-- END class_row -->
+  <tr>
+    <th colspan="6" class="footer">&nbsp;</th>
+  </tr>
+</table>
+<!-- INCLUDE page_tail.html -->

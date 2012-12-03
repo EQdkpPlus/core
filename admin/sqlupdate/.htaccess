@@ -1,0 +1,4 @@
+<FilesMatch "\.inc$">
+ Order allow,deny
+ Deny from all
+</FilesMatch>

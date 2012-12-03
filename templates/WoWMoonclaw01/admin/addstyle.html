@@ -1,0 +1,287 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function preview(preview, new_value)
+{
+    preview.style.backgroundColor = new_value;
+}
+//-->
+</script>
+<form method="post" action="{F_ADD_STYLE}" name="post">
+<input type="hidden" name="styleid" value="{STYLE_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_STYLE_SETTINGS}</th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_STYLE_NAME}</td>
+    <td width="40%" class="row1"><input type="text" name="style_name" size="35" maxlength="100" value="{STYLE_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TEMPLATE}</td>
+    <td width="40%" class="row1">
+      <select name="template_path" class="input">
+        <!-- BEGIN template_row -->
+        <option value="{template_row.VALUE}"{template_row.SELECTED}>{template_row.OPTION}</option>
+        <!-- END template_row -->
+      </select>
+    </td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" width="60%">{L_ELEMENT}</th>
+    <th align="center" width="40%">{L_VALUE}</th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BACKGROUND_COLOR}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="body_background" size="8" maxlength="6" value="{BODY_BACKGROUND}" class="input" onchange="preview(this.form.body_background_preview, this.value)" />
+      <input type="button" name="body_background_preview" value="       " disabled="disabled" class="input" style="background-color: #{BODY_BACKGROUND}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTFACE1}<br /><span class="small">{L_FONTFACE1_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontface1" size="35" maxlength="60" value="{FONTFACE1}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTFACE2}<br /><span class="small">{L_FONTFACE2_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontface2" size="35" maxlength="60" value="{FONTFACE2}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTFACE3}<br /><span class="small">{L_FONTFACE3_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontface3" size="35" maxlength="60" value="{FONTFACE3}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTSIZE1}<br /><span class="small">{L_FONTSIZE1_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontsize1" size="3" maxlength="4" value="{FONTSIZE1}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTSIZE2}<br /><span class="small">{L_FONTSIZE2_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontsize2" size="3" maxlength="4" value="{FONTSIZE2}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTSIZE3}<br /><span class="small">{L_FONTSIZE3_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="fontsize3" size="3" maxlength="4" value="{FONTSIZE3}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR1}<br /><span class="small">{L_FONTCOLOR1_NOTE}</span></td>
+    <td width="40%" class="row1">
+      <input type="text" name="fontcolor1" size="8" maxlength="6" value="{FONTCOLOR1}" class="input" onchange="preview(this.form.fontcolor1_preview, this.value)" />
+      <input type="button" name="fontcolor1_preview" value="       " disabled="disabled" class="input" style="background-color: #{FONTCOLOR1}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR2}<br /><span class="small">{L_FONTCOLOR2_NOTE}</span></td>
+    <td width="40%" class="row1">
+      <input type="text" name="fontcolor2" size="8" maxlength="6" value="{FONTCOLOR2}" class="input" onchange="preview(this.form.fontcolor2_preview, this.value)" />
+      <input type="button" name="fontcolor2_preview" value="       " disabled="disabled" class="input" style="background-color: #{FONTCOLOR2}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR3}<br /><span class="small">{L_FONTCOLOR3_NOTE}</span></td>
+    <td width="40%" class="row1">
+      <input type="text" name="fontcolor3" size="8" maxlength="6" value="{FONTCOLOR3}" class="input" onchange="preview(this.form.fontcolor3_preview, this.value)" />
+      <input type="button" name="fontcolor3_preview" value="       " disabled="disabled" class="input" style="background-color: #{FONTCOLOR3}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR_NEG}<br /><span class="small">{L_FONTCOLOR_NEG_NOTE}</span></td>
+    <td width="40%" class="row1">
+      <input type="text" name="fontcolor_neg" size="8" maxlength="6" value="{FONTCOLOR_NEG}" class="input" onchange="preview(this.form.fontcolor_neg_preview, this.value)" />
+      <input type="button" name="fontcolor_neg_preview" value="       " disabled="disabled" class="input" style="background-color: #{FONTCOLOR_NEG}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_FONTCOLOR_POS}<br /><span class="small">{L_FONTCOLOR_POS_NOTE}</span></td>
+    <td width="40%" class="row1">
+      <input type="text" name="fontcolor_pos" size="8" maxlength="6" value="{FONTCOLOR_POS}" class="input" onchange="preview(this.form.fontcolor_pos_preview, this.value)" />
+      <input type="button" name="fontcolor_pos_preview" value="       " disabled="disabled" class="input" style="background-color: #{FONTCOLOR_POS}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_LINK}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="body_link" size="8" maxlength="6" value="{BODY_LINK}" class="input" onchange="preview(this.form.body_link_preview, this.value)" />
+      <input type="button" name="body_link_preview" value="       " disabled="disabled" class="input" style="background-color: #{BODY_LINK}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_LINK_STYLE}</td>
+    <td width="40%" class="row1">
+      <select name="body_link_style" class="input">
+        <!-- BEGIN body_link_style_row -->
+        <option value="{body_link_style_row.VALUE}"{body_link_style_row.SELECTED}>{body_link_style_row.OPTION}</option>
+        <!-- END body_link_style_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_HLINK}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="body_hlink" size="8" maxlength="6" value="{BODY_HLINK}" class="input" onchange="preview(this.form.body_hlink_preview, this.value)" />
+      <input type="button" name="body_hlink_preview" value="       " disabled="disabled" class="input" style="background-color: #{BODY_HLINK}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_BODY_HLINK_STYLE}</td>
+    <td width="40%" class="row1">
+      <select name="body_hlink_style" class="input">
+        <!-- BEGIN body_hlink_style_row -->
+        <option value="{body_hlink_style_row.VALUE}"{body_hlink_style_row.SELECTED}>{body_hlink_style_row.OPTION}</option>
+        <!-- END body_hlink_style_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_LINK}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="header_link" size="8" maxlength="6" value="{HEADER_LINK}" class="input" onchange="preview(this.form.header_link_preview, this.value)" />
+      <input type="button" name="header_link_preview" value="       " disabled="disabled" class="input" style="background-color: #{HEADER_LINK}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_LINK_STYLE}</td>
+    <td width="40%" class="row1">
+      <select name="header_link_style" class="input">
+        <!-- BEGIN header_link_style_row -->
+        <option value="{header_link_style_row.VALUE}"{header_link_style_row.SELECTED}>{header_link_style_row.OPTION}</option>
+        <!-- END header_link_style_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_HLINK}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="header_hlink" size="8" maxlength="6" value="{HEADER_HLINK}" class="input" onchange="preview(this.form.header_hlink_preview, this.value)" />
+      <input type="button" name="header_hlink_preview" value="       " disabled="disabled" class="input" style="background-color: #{HEADER_HLINK}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HEADER_HLINK_STYLE}</td>
+    <td width="40%" class="row1">
+      <select name="header_hlink_style" class="input">
+        <!-- BEGIN header_hlink_style_row -->
+        <option value="{header_hlink_style_row.VALUE}"{header_hlink_style_row.SELECTED}>{header_hlink_style_row.OPTION}</option>
+        <!-- END header_hlink_style_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TR_COLOR1}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="tr_color1" size="8" maxlength="6" value="{TR_COLOR1}" class="input" onchange="preview(this.form.tr_color1_preview, this.value)" />
+      <input type="button" name="tr_color1_preview" value="       " disabled="disabled" class="input" style="background-color: #{TR_COLOR1}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TR_COLOR2}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="tr_color2" size="8" maxlength="6" value="{TR_COLOR2}" class="input" onchange="preview(this.form.tr_color2_preview, this.value)" />
+      <input type="button" name="tr_color2_preview" value="       " disabled="disabled" class="input" style="background-color: #{TR_COLOR2}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TH_COLOR1}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="th_color1" size="8" maxlength="6" value="{TH_COLOR1}" class="input" onchange="preview(this.form.th_color1_preview, this.value)" />
+      <input type="button" name="th_color1_preview" value="       " disabled="disabled" class="input" style="background-color: #{TH_COLOR1}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TABLE_BORDER_WIDTH}</td>
+    <td width="40%" class="row1"><input type="text" name="table_border_width" size="2" maxlength="3" value="{TABLE_BORDER_WIDTH}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TABLE_BORDER_COLOR}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="table_border_color" size="8" maxlength="6" value="{TABLE_BORDER_COLOR}" class="input" onchange="preview(this.form.table_border_color_preview, this.value)" />
+      <input type="button" name="table_border_color_preview" value="       " disabled="disabled" class="input" style="background-color: #{TABLE_BORDER_COLOR}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_TABLE_BORDER_STYLE}</td>
+    <td width="40%" class="row1">
+      <select name="table_border_style" class="input">
+        <!-- BEGIN table_border_style_row -->
+        <option value="{table_border_style_row.VALUE}"{table_border_style_row.SELECTED}>{table_border_style_row.OPTION}</option>
+        <!-- END table_border_style_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_COLOR}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="input_color" size="8" maxlength="6" value="{INPUT_COLOR}" class="input" onchange="preview(this.form.input_color_preview, this.value)" />
+      <input type="button" name="input_color_preview" value="       " disabled="disabled" class="input" style="background-color: #{INPUT_COLOR}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_BORDER_WIDTH}</td>
+    <td width="40%" class="row1"><input type="text" name="input_border_width" size="2" maxlength="3" value="{INPUT_BORDER_WIDTH}" class="input" /> px</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_BORDER_COLOR}</td>
+    <td width="40%" class="row1">
+      <input type="text" name="input_border_color" size="8" maxlength="6" value="{INPUT_BORDER_COLOR}" class="input" onchange="preview(this.form.input_border_color_preview, this.value)" />
+      <input type="button" name="input_border_color_preview" value="       " disabled="disabled" class="input" style="background-color: #{INPUT_BORDER_COLOR}" />
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INPUT_BORDER_STYLE}</td>
+    <td width="40%" class="row1">
+      <select name="input_border_style" class="input">
+        <!-- BEGIN input_border_style_row -->
+        <option value="{input_border_style_row.VALUE}"{input_border_style_row.SELECTED}>{input_border_style_row.OPTION}</option>
+        <!-- END input_border_style_row -->
+      </select>
+    </td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_STYLE_CONFIGURATION}</th>
+  </tr>
+  <tr>
+    <td colspan="2" class="row1">{L_STYLE_DATE_NOTE}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ATTENDEES_COLUMNS}<br /><span class="small">{L_ATTENDEES_COLUMNS_NOTE}</span></td>
+    <td width="40%" class="row1">
+      <select name="attendees_columns" class="input">
+        <!-- BEGIN attendees_columns_row -->
+        <option value="{attendees_columns_row.VALUE}"{attendees_columns_row.SELECTED}>{attendees_columns_row.OPTION}</option>
+        <!-- END attendees_columns_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_DATE_NOTIME_LONG}</td>
+    <td width="40%" class="row1"><input type="text" name="date_notime_long" size="15" maxlength="10" value="{DATE_NOTIME_LONG}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_DATE_NOTIME_SHORT}</td>
+    <td width="40%" class="row1"><input type="text" name="date_notime_short" size="15" maxlength="10" value="{DATE_NOTIME_SHORT}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_DATE_TIME}</td>
+    <td width="40%" class="row1"><input type="text" name="date_time" size="20" maxlength="20" value="{DATE_TIME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_LOGO_PATH}</td>
+    <td width="40%" class="row1"><input type="text" name="logo_path" size="25" maxlength="255" value="{STYLE_LOGO_PATH}" class="input" /></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_STYLE}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_STYLE}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_STYLE}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->
