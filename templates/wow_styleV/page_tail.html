@@ -1,0 +1,44 @@
+		</td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/right.gif); background-repeat:repeat-y; "><img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12" /></td>
+	</tr>
+	<tr>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/bottom_left.gif); background-repeat:no-repeat; background-position:right;"><img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12"/></td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/bottom.gif); background-repeat:repeat-x;"><img src="{TEMPLATE_PATH}/images/therest/spacer.gif" height="12"/></td>
+		<td style="background:url({TEMPLATE_PATH}/images/data_border/bottom_right.gif); background-repeat:no-repeat;"><img src="{TEMPLATE_PATH}/images/therest/spacer.gif" width="12"/></td>
+	</tr>
+	</table>
+
+<!-- IF S_IN_ADMIN -->
+
+    </td>
+  </tr>
+</table>
+<!-- ENDIF -->
+
+<!-- IF S_NORMAL_FOOTER -->
+<!-- IF S_SHOW_QUERIES -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">Queries</th>
+  </tr>
+  <!-- BEGIN query_row -->
+  <tr class="{query_row.ROW_CLASS}">
+    <td width="100%">{query_row.QUERY}</td>
+  </tr>
+  <!-- END query_row -->
+</table>
+<br />
+<!-- ENDIF -->
+<!--
+    If you use this software and find it to be useful, we ask that you
+    retain the copyright notice below.  While not required for free use,
+    it will help build interest in the EQdkp project.
+//-->
+
+
+		<!-- IF S_SHOW_DEBUG -->
+<center><span class="copy">{EQDKP_RENDERTIME} | {EQDKP_QUERYCOUNT} | <a href="http://validator.w3.org/check/referer" target="_top" class="copy">XHTML Validate</a></span></center>
+<!-- ENDIF -->
+<!-- ENDIF -->
+</body>
+</html>

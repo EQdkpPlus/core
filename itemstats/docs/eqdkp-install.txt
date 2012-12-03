@@ -1,0 +1,192 @@
+EQdkp Installation (Based on EQdkp v1.3.0)
+==========================================
+
+1. Configuration
+
+Make sure you complete the instructions in 'config.txt' before doing this part.
+
+
+2. Copying it over
+
+Copy the 'itemstats' folder to the root of your eqdkp installation.
+
+
+3. EQDKP modifications
+
+These hopefully simple instructions will guide you in modifying the pages: List Items (Normal and Admin), View Item, View Member, View News, View Raid, View Event.
+
+
+OPEN
+{eqdkp_root}/templates/default/page_header.html
+
+FIND
+<title>{PAGE_TITLE}</title>
+
+ADD-AFTER
+<link REL=StyleSheet HREF="{EQDKP_ROOT_PATH}itemstats/templates/itemstats.css" TYPE="text/css" MEDIA=screen />
+<script type="text/javascript" src="{EQDKP_ROOT_PATH}itemstats/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+
+SAVE AND CLOSE
+{eqdkp_root}/templates/default/page_header.html
+
+
+OPEN
+{eqdkp_root}/viewitem.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+        'L_PURCHASE_HISTORY_FOR' => sprintf($user->lang['purchase_history_for'], stripslashes($item_name)),
+
+ADD-BEFORE
+        'ITEM_STATS' => itemstats_get_html($item_name),
+
+SAVE AND CLOSE
+{eqdkp_root}/viewitem.php
+
+
+OPEN
+{eqdkp_root}/templates/default/viewitem.html
+
+FIND
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+ADD-AFTER
+  {ITEM_STATS}
+
+SAVE AND CLOSE
+{eqdkp_root}/templates/default/viewitem.html
+
+
+OPEN
+{eqdkp_root}/listitems.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+        'NAME' => stripslashes($item['item_name']),
+
+REPLACE-WITH
+        'NAME' => itemstats_decorate_name(stripslashes($item['item_name'])),
+
+SAVE AND CLOSE
+{eqdkp_root}/listitems.php
+
+
+OPEN
+{eqdkp_root}/viewevent.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+            'NAME'          => stripslashes($row['item_name']),
+
+REPLACE-WITH
+            'NAME'          => itemstats_decorate_name(stripslashes($row['item_name'])),
+
+SAVE AND CLOSE
+{eqdkp_root}/viewevent.php
+
+
+OPEN
+{eqdkp_root}/viewraid.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+            'NAME'         => stripslashes($item['item_name']),
+
+REPLACE-WITH
+            'NAME'         => itemstats_decorate_name(stripslashes($item['item_name'])),
+
+SAVE AND CLOSE
+{eqdkp_root}/viewraid.php
+
+
+OPEN
+{eqdkp_root}/viewmember.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+            'NAME'          => stripslashes($item['item_name']),
+
+REPLACE-WITH
+            'NAME'          => itemstats_decorate_name(stripslashes($item['item_name'])),
+
+SAVE AND CLOSE
+{eqdkp_root}/viewmember.php
+
+
+OPEN
+{eqdkp_root}/viewnews.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+    $message = preg_replace('#(\&amp;){2,}#', '&amp;', $message);
+
+ADD-AFTER
+    $message = itemstats_parse($message);
+
+SAVE AND CLOSE
+{eqdkp_root}/viewnews.php
+
+
+OPEN
+{eqdkp_root}/include/functions.php
+
+FIND
+    $patterns[6] = "#\[item\](.*?)\[/item\]#si";
+    $replacements[6] = "<iframe name=\"item_stats\" src=\"http://www.crusadersvalorous.org/items/index.php?linked=1&amp;news=true&amp;item=\\1\" width=\"450\" height=\"260\" scrolling=\"no\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\"></iframe>";
+
+REPLACE-WITH
+//    $patterns[6] = "#\[item\](.*?)\[/item\]#si";
+//    $replacements[6] = "<iframe name=\"item_stats\" src=\"http://www.crusadersvalorous.org/items/index.php?linked=1&amp;news=true&amp;item=\\1\" width=\"450\" height=\"260\" scrolling=\"no\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\"></iframe>";
+
+SAVE AND CLOSE
+{eqdkp_root}/include/functions.php
+
+
+OPEN
+{eqdkp_root}/admin/listitems.php
+
+FIND
+include_once($eqdkp_root_path . 'common.php');
+
+ADD-AFTER
+include_once($eqdkp_root_path . 'itemstats/eqdkp_itemstats.php');
+
+FIND
+        'NAME' => stripslashes($item['item_name']),
+
+REPLACE-WITH
+        'NAME' => itemstats_decorate_name(stripslashes($item['item_name'])),
+
+SAVE AND CLOSE
+{eqdkp_root}/listitems.php

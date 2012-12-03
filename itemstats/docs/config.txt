@@ -1,0 +1,42 @@
+Basic Configuration
+===================
+
+1. Cache database
+
+Find a home for your item cache table.  If your system will be used for phpbb and eqdkp, you probably want to make sure this table will be accessible by both systems.  This will let you point both to the same database so they can share data.  If you are only using the eqdkp features, you can simply use that database.
+
+Once you've figured out what database to use, you will need to configure itemstats to use it.  Open 'itemstats/config.php'.  This file contains all configurations for itemstats.  You'll see the following lines in this file:
+
+define('dbhost', 'localhost');
+define('dbname', 'itemdb');
+define('dbuser', 'user');
+define('dbpass', 'pass');
+define('item_cache_table', 'item_cache');
+
+Simply replace the 'localhost', 'itemdb', 'user', 'pass' and 'items_cache' strings with values that match your SQL setup.  Leave this file open for now, you might need it in the next part.
+
+
+2. Icon store
+
+You may wish to create a local store of icons on your server.  This helps to reduce the bandwidth between your server and allakhazam.  I would say it also speeds up your page refreshes, but it's actually the opposite in my case.  I still use my own local cache out of respect for Allakhazam's bandwith.  The default installation points to allakhazam.  If you wish to change this, open 'itemstats/config.php' and look for the following lines:
+
+define('ICON_STORE_LOCATION', 'http://wow.allakhazam.com/images/icons/');
+define('ICON_EXTENSION', '.png');
+
+
+3. Stylesheet: itemstats/itemstats.css
+
+This stylesheet is used to display the HTML for this mod.  You can modify this file to match your taste.  It has some comments that try to explain where each style is used.
+
+
+4. EQDKP / PHPBB Forum installation
+
+Now that the basic configuration is complete, you'll want to install it:
+
+- To install the mod for EQDKP, follow the instructions in eqdkp-install.txt
+- To install the mod for PHPBB Forum, follow the instructions in phpbb-install.txt
+
+
+
+
+

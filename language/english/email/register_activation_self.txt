@@ -1,0 +1,17 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account Activation Required
+Charset: iso-8859-1
+
+Please save a copy of this e-mail for your records.  Your account information is as follows:
+
+Username: {USERNAME}
+Password: {PASSWORD}
+
+Your account is currently inactive.  You will not be able to log in until you visit the following link to activate the account:
+
+{U_ACTIVATE}
+
+Depending on what the EQdkp administrator has set as the default user permissions, you may be limited in what actions you are able to perform until your permissions are updated by an administrator.
+
+Your password has been encrypted in our database and cannot be retrieved by anyone.  If you forget your password, you may request a new one that will be activated in the same way as this account.
+
+Thank you for registering.
