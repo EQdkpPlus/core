@@ -1,0 +1,119 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+    <tr>
+    <th align="center">{L_AD_MEMBERSKILLS_EXP}</th>
+  </tr>
+</table>
+<!-- BEGIN trade_row -->
+<!-- IF !trade_row.S_ADD -->
+<a name="{trade_row.ID}">
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" height="30" colspan="4" valign="middle">
+      <table border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tr>
+          <td width="32"><img src="{trade_row.TRADESKILL_ICON}" height="32" width="32"></td>
+          <th> <font size="4">&nbsp;{trade_row.TRADESKILL}</font><!-- IF trade_row.S_INFO --> <img src="images/info.gif">{trade_row.INFO} <!-- ENDIF -->
+          <td width="100" align="center">
+            <!-- IF trade_row.HIDE -->
+{LSTAT_HIDDEN} <a href="{trade_row.SHOW}"><img border="0" src="../images/show.gif" width="16" height="16"></a>
+			<!-- ELSE -->
+{LSTAT_SHOWN} <a href="{trade_row.SHOW}"><img border="0" src="../images/hide.gif" width="16" height="16"></a>
+			<!-- ENDIF -->
+
+		</td>
+        </tr>
+      </table>
+    </th>
+  </tr>
+  <tr>
+    <th align="left" width="400"></a><a href="{U_LIST}o={trade_row.O_RECIPE}">{L_RECIPE}</a>
+    / <a href="{U_LIST}o={trade_row.O_QUALITY}">{L_QUALITY}</a></th>
+    <th align="left">{L_REAGENT} <font size="1"> (<a href="{trade_row.U_FULLRINFO}">{L_FULLRINFO}</a>)</font></th>
+    <th align="right" width="200">{L_OWNER}</th>
+  </tr>
+  <!-- BEGIN recipe_row -->
+  <form method="POST" action="{trade_row.recipe_row.F_UPDATE}" name="update">
+  <tr class="{trade_row.recipe_row.ROW_CLASS}">
+    <td width="400" valign="top">
+        <!-- MODDED BY ROKI: Moved this here to remove white scpace that appears in IE -->  
+		<input type="hidden" name="recipe_id" value="{trade_row.recipe_row.ID}">
+  		<input type="hidden" name="do_own" value="{trade_row.recipe_row.VALUE}">
+  		<input type="hidden" name="member_id" value="{CURRENT_MEMBER_ID}">
+      	<table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+        <tr>
+             <td><a href="{trade_row.recipe_row.U_VIEW_RECIPE}">{trade_row.recipe_row.RECIPE}</a></td>
+             <td width="40"><!-- IF trade_row.recipe_row.S_AUTHOR --><a href="{trade_row.recipe_row.EDIT}"><img border="0" src="../images/edit.gif" width="18" height="17"></a>&nbsp<a href="{trade_row.recipe_row.DELETE}"><img border="0" src="../images/delete.gif" width="18" height="17"></a><!-- ENDIF --></td>
+        </tr>
+      </table>
+    </td>
+    <td valign="top">{trade_row.recipe_row.REAGENT}</td>
+    <td align="right" width="200">{trade_row.recipe_row.OWNER}</td>
+   </tr>
+   </form>
+   <!-- END recipe_row -->
+   <!-- IF trade_row.S_ADD -->
+        <a name="{trade_row.ID}"></a>
+        <form method="POST" action="{trade_row.F_ADDNEW}" name="new">
+              <input type="hidden" name="new_trade_id" value="{trade_row.ID}">
+              <input type="hidden" name="member_id" value="{CURRENT_MEMBER_ID}">
+              <tr class="{trade_row.ROW_CLASS}">
+              <td width="400" valign="middle" nowrap><img src="images/add.gif"> <input type="text" class="input" name="new_recipe" size="70%"><br><font size="1">{L_ENTERNAME}</font></td>
+              <td valign="top"> <input type="text" class="input" name="new_reagent" size="70%"><br>
+	             <font size="1">{L_ENTERREAGENTS}</font></td>
+              <td align="right" width="200"><input type="submit" class="liteoption" value="Submit" name="B1"></td>
+              </tr>
+        </form>
+
+  <tr>
+    <th class="footer" colspan="3">
+       <table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+        <tr>
+          <td width="50%" align="left"></td>
+          <th class="footer" width="50%" align="right">{trade_row.FOOTCOUNT}
+
+     <!-- ELSEIF trade_row.S_EDIT -->
+          <a name="{trade_row.ID}"></a>
+          <form method="POST" action="{trade_row.F_EDIT}" name="edited">
+                <input type="hidden" name="edit_recipe" value="{IDTOEDIT}">
+                <input type="hidden" name="trade_id" value="{trade_row.ID}">
+                 <input type="hidden" name="member_id" value="{CURRENT_MEMBER_ID}">
+                <tr class="{trade_row.ROW_CLASS}">
+                <td width="400" valign="middle" nowrap><img src="images/add.gif"> <input type="text" class="input" name="edited_name" value="{UNEDITEDNAME}"size="70%"><br><font size="1">{L_ENTERNAME}</font></td>
+                <td valign="top"> <input type="text" class="input" name="edited_reagents" value="{UNEDITREAGENTS}" size="70%"><br>
+	               <font size="1">{L_ENTERREAGENTS}</font></td>
+                <td align="right" width="200"><input type="submit" class="liteoption" value="Submit Change" name="B2"></td>
+                </tr>
+          </form>
+
+  <tr>
+    <th class="footer" colspan="3">
+       <table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+        <tr>
+          <td width="50%" align="left"></td>
+          <th class="footer" width="50%" align="right">{trade_row.FOOTCOUNT}
+     	<!-- ELSE -->
+    	  <tr>
+    <th class="footer" colspan="3">
+       <table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+        <tr>
+
+          <td width="50%" align="left"><a href="{trade_row.ADD}">{trade_row.L_ADD}</a>
+          <th class="footer" width="50%" align="right">{trade_row.FOOTCOUNT}
+        <!-- ENDIF -->
+      </table>
+    </th>
+  </tr>
+</table>
+<br>
+
+<!-- END trade_row -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu"></td>
+  </tr>
+</table>
+<br />

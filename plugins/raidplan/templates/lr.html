@@ -1,0 +1,108 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<center><b>{L_CURRENT_RAID}</b></center>
+<table width="100%" border="0" cellspacing="1" cellpadding="0">
+  <tr>
+	<th align="left" width="10"></th>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="60" nowrap="nowrap">{L_STATUS}</th>
+    <th align="left" width="70" nowrap="nowrap">{L_DAY}</th>
+    <th align="left" width="70" nowrap="nowrap">{L_INVITE}</th>
+    <th align="left" width="70" nowrap="nowrap">{L_START}</th>
+    <th align="left" width="35%"><a href="{U_LIST_RAIDS}o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="65%"><a href="{U_LIST_RAIDS}o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+    <th align="left" width="20" nowrap="nowrap"></th>
+    <th align="left" width="18" nowrap="nowrap"></th>
+  </tr>
+  <!-- BEGIN raids_row -->
+  <tr class="{raids_row.ROW_CLASS}">
+	<td width="10" nowrap="nowrap"><a href="{raids_row.U_VIEW_RAID}" onMouseOver="overlib('{raids_row.RAIDSTATUS_TXT}', CAPTION, '{raids_row.RAIDSTATUS_HEADER}');" onMouseOut="nd();">{raids_row.RAIDSTATUS_ICON}</a></td>
+    <td width="70" align="center" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="60" align="center" nowrap="nowrap">(<a href="{raids_row.U_VIEW_RAID}" onMouseOver="overlib('{raids_row.RAIDSTATUS_TXT}', CAPTION, '{raids_row.RAIDSTATUS_HEADER}');" onMouseOut="nd();">{raids_row.COUNT}</a>)</td>
+    <td width="70" align="center" nowrap="nowrap">{raids_row.DAY}</td>
+    <td width="70" align="center" nowrap="nowrap">{raids_row.INVITE}</td>
+    <td width="70" align="center" nowrap="nowrap">{raids_row.START}</td>
+    <td width="35%"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="65%">{raids_row.NOTE}</td>
+    <td width="60" align="right" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+	<td width="20" nowrap="nowrap" class="positive" align="center">{raids_row.CONFIRMED}</td>
+    <td width="18" nowrap="nowrap" class="positive">{raids_row.EDIT}</td>
+  </tr>
+  <!-- END raids_row -->
+  <tr><td colspan="11">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+	<th align="left"> {L_STATUS} <font class="signedin">{L_SIGNIN}</font> / <font class="approved">{L_APPROVED}</font> / <font class="signedout">{L_SIGNOUT}</font> / <font class="need">{L_NEED}</font> </th>
+    <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+	</tr>
+	</table>
+  </td></tr>
+</table>
+
+<br><center><b>{L_RECENT_RAID}</b></center>
+<table width="100%" border="0" cellspacing="1" cellpadding="0">
+  <tr>
+    <th align="left" width="10" nowrap="nowrap"></th>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+		<th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_DATE}&amp;start={START}">{L_STATUS}</a></th>
+    <th align="left" width="35%"><a href="{U_LIST_RAIDS}o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="65%"><a href="{U_LIST_RAIDS}o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN recent_raids -->
+  <tr class="{recent_raids.ROW_CLASS}">
+  	<td width="10"><a href="JavaScript:void()" onMouseOver="overlib  ('{recent_raids.RAIDSTATUS_TXT}', CAPTION, '{recent_raids.RAIDSTATUS_HEADER}');" onMouseOut="nd();">{recent_raids.RAIDSTATUS_ICON}</a></td>
+    <td width="70" nowrap="nowrap">{recent_raids.DATE}</td>
+	<td width="60" align="center" nowrap="nowrap">(<a href="{recent_raids.U_VIEW_RAID}" target="_blank" onMouseOver="overlib('{recent_raids.RAIDSTATUS_TXT}', CAPTION, '{recent_raids.RAIDSTATUS_HEADER}');" onMouseOut="nd();">{recent_raids.COUNT}</a>)</td>
+    <td width="35%"><a href="{recent_raids.U_VIEW_RAID}">{recent_raids.NAME}</a></td>
+    <td width="65%">{recent_raids.NOTE}</td>
+    <td width="60" nowrap="nowrap" class="positive">{recent_raids.VALUE}</td>
+  </tr>
+  <!-- END raids_row -->
+  <tr><td colspan="6">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+		<th align="left"> {L_STATUS} <font class="signedin">{L_SIGNIN}</font> / <font class="approved">{L_APPROVED}</font> / <font class="signedout">{L_SIGNOUT}</font> / <font class="need">{L_NEED}</font> </th>
+    	<th class="footer">{LISTRECENTRAIDS_FOOTCOUNT}</th>
+		</tr>
+		</table>
+  </td></tr>
+</table>
+
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">
+		<tr>
+		<th align="center" valign="center"> <img src="./images/status_red.gif"/> : {L_SIGNUP_OVER}</th>
+		<th align="center" valign="center"> <img src="./images/status_green.gif"/> : {L_SIGNUP_POSS}</th>
+		<th align="center" valign="center"> <img src="./images/status_yellow.gif"/> : {L_SIGNUP_24H}</th>
+		</tr>
+	</table>
+	</td></tr><tr><td>
+	<table width="100%" border="0" cellspacing="1" cellpadding="0">	
+		<tr>
+		<th align="center" valign="center"> <img src="./images/confirmed.gif"/> : {L_APPROVED}</th>
+		<th align="center" valign="center"> <img src="./images/notconfirmed.gif"/> : {L_SIGNIN}</th>
+		<th align="center" valign="center"> <img src="./images/unconfirmed.gif"/> : {L_SIGNOUT}</th>
+		<th align="center" valign="center"> <img src="./images/away.gif"/> : {L_AWAY}</th>
+		</tr>
+	</table>
+	</td></tr>
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<!-- IF S_ADD_RAID -->
+<br />
+<center><button type="button" class="liteoption" onClick="self.location.href='{F_ADD_RAID}'">{L_ADD_RAID}</button></center>
+<!-- ENDIF -->
+<center><span class="copy">EQDKP Raidplaner v{L_VERSION}
+<br />&copy; 2005 by A.Stranger | Continued 2006 by Urox & Wallenium </span></center>

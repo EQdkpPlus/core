@@ -1,0 +1,25 @@
+<!-- INCLUDE page_header.html -->
+			<table width="100%" class="borderless" align="center" cellpadding="2" cellspacing="1">
+			  <!-- BEGIN date_row -->
+			  <tr>
+				<th align="left">{date_row.DATE}</th>
+			  </tr>
+			  <!-- BEGIN news_row -->
+			  <tr>
+				<td class="{date_row.news_row.ROW_CLASS}">
+				  <b style="font-size:13px">{date_row.news_row.HEADLINE}</b> <span class="small">({date_row.DATE} - {date_row.news_row.SUBMITTER} {date_row.news_row.AUTHOR} {date_row.news_row.SUBMITAT} {date_row.news_row.TIME})&nbsp;&nbsp;</span><br /><br />
+				  {date_row.news_row.MESSAGE}
+				</td>
+			  </tr>
+			  <!-- END news_row -->
+			  <!-- END date_row -->
+			  <tr>
+				<th class="footer">&nbsp;</th>
+			  </tr>
+			</table>
+			<table width="100%" align="center" cellpadding="2" cellspacing="1" class="borderless">
+			  <tr>
+				<td align="center" class="menu">{NEWS_PAGINATION}</td>
+			  </tr>
+			</table>
+<!-- INCLUDE page_tail.html -->

@@ -1,0 +1,37 @@
+/******************************
+ * EQDKP PLUGIN: Charmanager
+ * (c) 2006 - 2007 by WalleniuM [Simon Wallmann]
+ * http://www.wallenium.de   
+ * ------------------
+ * addchar.php
+ * Changed: January 06, 2007
+ * 
+ ******************************/
+
+Changelog
+--------------------------------------------------------------------------------------------------
+1.0.2 [01/06/2007]
+	Fixed - [#279] Skill with nil in first value didn&#039;t show in listprofiles.php
+	Implemented - [#278] Settings Menu entry only viewable on permission
+	Implemented - [#280] Abstract Error Messages for Language Pack
+	Implemented - [#281] Add some explanation texts to the user settings
+
+1.0.1 [12/17/2006]
+	Fixed - [#271] Several small Bugfixes in the template files
+	Fixed - [#273] Some wrong database links in the profile.php
+	Implemented - [#272] Update JS Window Class to current Version
+
+1.0.0 [12/10/2006]
+	Fixed - [#106] Users not logged in could add/edit chars
+	Fixed - [#154] Setup: Table members_additions was not created
+	Fixed - [#155] Could not obtain member information
+	Implemented - [#50] resitences
+	Implemented - [#51] Char photo
+	Implemented - [#52] better usability
+	Implemented - [#53] overview page
+	Implemented - [#54] rename plugin to CharManager
+	Implemented - [#55] Links to Blasc/ctprofiles
+	Implemented - [#57] integrate TradeSkills Plugin (if installed)
+	Implemented - [#108] Update Check
+	Implemented - [#109] Sort by Resitences
+	Implemented - [#110] Admin could edit all chars on profileList

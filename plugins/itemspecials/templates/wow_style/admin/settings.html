@@ -1,0 +1,505 @@
+<!-- INCLUDE ../../../../templates/wow_style/page_header.html -->
+<!-- INCLUDE backend_header.html -->
+
+<script language="JavaScript" type="text/javascript"><!--
+{CSS_AJAX}
+
+      function confirmm(z)
+       {
+          window.status = 'Sajax version updated';
+       }
+
+        function onDrop() {
+          var data = DragDrop.serData('g2'); 
+          x_sajax_update(data, confirmm);
+       }
+
+	window.onload = function() {
+        
+		var list = document.getElementById("itempool");
+                DragDrop.makeListContainer( list, 'g2' );
+                list.onDragOver = function() { this.style["background"] = "#EEF"; };
+                list.onDragOut = function() {this.style["background"] = "none"; };
+                list.onDragDrop = function() {onDrop(); };
+                
+                list = document.getElementById("itemshow");
+                DragDrop.makeListContainer( list, 'g2' );
+                list.onDragOver = function() { this.style["background"] = "#EEF"; };
+                list.onDragOut = function() {this.style["background"] = "none"; };
+                list.onDragDrop = function() {onDrop(); };
+	};
+        
+        function getSort()
+        {
+          order = document.getElementById("order");
+          order.value = DragDrop.serData('g1', null);
+        }
+        
+        function showValue()
+        {
+          order = document.getElementById("order");
+          alert(order.value);
+        }
+	//-->
+
+var contentWin = null;
+    function openConfirmDialog() 
+    {
+		Dialog.confirm("{L_DEL_WARNING}", 
+              {windowParameters: {
+              className: "alphacube",
+               width:300}, 
+               okLabel: "{L_BUTTON_ACTION}", 
+               cancelLabel: "{L_BUTTON_CANCEL}",
+               buttonClass: "myButtonClass",
+               id: "myDialogId",
+               ok:function(win) {
+                  langvalue = document.getElementById('languagereset').value
+                  document.data.langval.value=langvalue;
+                  document.data.submit();
+                  return true;}
+              });
+	 }
+	 
+    function stopLoading() {
+    Dialog.closeInfo();
+  }
+
+function startLoading() {
+    Dialog.info("{L_AJAX_LOADING} ...",
+               {windowParameters: {className:"alphacube", width:250, height:100}, showProgress: true});
+  }
+
+function LoadCache(){
+  var url = "settings.php";
+  var pars = "cache=reset"
+	 var myAjax = new Ajax.Request(url, 
+   { 
+	      method: 'post',
+				postBody: pars, 
+				onComplete: stopLoading
+	 });
+}
+
+Ajax.Responders.register({
+    onCreate : startLoading
+  });
+	 
+	 function ResetDialog() 
+    {
+		Dialog.confirm("{L_RESET_WARNING}", 
+              {windowParameters: {
+              className: "alphacube",
+               width:300}, 
+               okLabel: "{L_BUTTON_ACTION}", 
+               cancelLabel: "{L_BUTTON_CANCEL}",
+               buttonClass: "myButtonClass",
+               id: "myDialogId",
+               ok:function(win) {
+                  document.settings.del.value='reset';
+                  document.settings.submit();
+                  return true;}
+              });
+	 }
+	 
+	 function AddItemDialog() {
+	var win = new Window('AddItem', {className: "alphacube", title: "{L_BUTTON_I_ADD}", 
+                                              top:70, left:100, width:540, 
+                                              resizable: true, url: "templ_additem.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+
+  }
+	
+		 function ManageItemDialog() {
+	var win = new Window('DeleteItem', {className: "alphacube", title: "{L_BUTTON_I_DEL}", 
+                                              top:70, left:100, width:540, 
+                                              resizable: true, url: "customitems.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+
+  }
+
+    </script>
+    <style type="text/css">
+
+#itempool {
+    width: 180px;
+    float: left;
+    margin-left: 5px;
+}
+
+#itemshow {
+    width: 180px;
+    float: left;
+    margin-left: 5px;
+}
+
+form {
+  clear: left;
+}
+
+h2 {
+	color: #7DA721;
+	font-weight: normal;
+	font-size: 14px;
+	margin: 20px 0 0 0;
+	}
+
+br {
+        clear: left;
+}
+
+      #myDialogId .myButtonClass {
+      padding:3px;
+      font-size:18px;
+      width:100px;
+      }
+      #myDialogId .ok_button {
+      color:#2F2;
+      }
+      #myDialogId .cancel_button {
+      color:#F88;
+      }
+#drag_info {
+	font-size: 13px;
+	font-family: Arial, sans-serif;
+  border: 1px solid red;
+  width:380px;
+  padding: 8px;
+}
+      
+</style>
+<script language="JavaScript" type="text/javascript" src="../include/javascripts/admin.js"></script>
+<!-- IF VC_SHOW -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_INFO_BOX}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="../images/false.png" /></td>
+    <td class="row1"><font color="red">{VC_TEXT}</font></td>
+  </tr>
+  <tr>
+</table>
+<br>
+<!-- ENDIF -->
+<!-- IF U_INFO_BOX -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_INFO_BOX}</th>
+  </tr>
+  <tr>
+    <!-- IF U_SAVED_SUCC -->
+    <td class="row1" width ="48px"><img src="../images/ok.png" /></td>
+    <td class="row1">{L_SAVED_SUCC}</td>
+    <!-- ENDIF -->
+    <!-- IF U_SAVED_NOT -->
+    <td class="row1" width ="48px"><img src="../images/false.png" /></td>
+    <td class="row1">{L_SAVED_NOT}</td>
+    <!-- ENDIF -->
+  </tr>
+  <tr>
+</table>
+<br>
+<!-- ENDIF -->
+<form method="post" action="{F_CUSTOM}" name="sett_customs">
+<input type='hidden' name='task' value=''>
+</form>
+<form method="post" action="{F_CONFIG}" name="data">
+<input type='hidden' name='langval' value=''>
+</form>
+<form method="post" action="{F_CONFIG}" name="settings">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+	<tr>
+    <th align="left" align="center">
+    	<span style="cursor: pointer;"><a href="javascript:expand();"><img src="../images/descending.gif" alt="" title="{L_ALLEXPAND}" border="0" height="9" width="9"> {L_ALLEXPAND}</a></span>
+    </th>
+	</tr>
+	<tr>
+    <th align="left" onclick="show_section('section0')">
+    	<span style="cursor: pointer;"><img src="../images/descending.gif" alt="" title="{L_HEADER_HELP}" border="0" height="9" width="9"> {L_GENERAL}</span>
+    	</th>
+	</tr>
+	<tr>
+		<td>
+			<div style="display: block;" id="section0" >
+			<table align="center" border="0" cellpadding="0" cellspacing="1" width="100%"> 
+				<tr>
+					<td width="60%" class="row2">{L_LANGUAGE}</td>
+					<td width="40%" class="row1">
+						<select size="1" name="locale">
+						<option value="de" {LOCAL_SEL_DE}>{L_GERMAN}</option>
+						<option value="en" {LOCAL_SEL_EN}>{L_ENGLISH}</option>
+						<option value="fr" {LOCAL_SEL_FR}>{L_FRENCH}</option>
+						<option value="ch" {LOCAL_SEL_CH}>{L_CHINESE}</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">
+						{L_UPDATECHECK} <a onmouseover="return overlib('{L_HELP_UPDATECH}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span>
+					</td>
+					<td width="40%" class="row1"><input type="checkbox" name="is_updatecheck" value="1" {UPDATE_CHECK} />
+					</td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">{L_SHOW_EXEC}</td>
+					<td width="40%" class="row1"><input type="checkbox" name="is_exec_time" value="1" {EXEC_TIME} /></td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">{L_HIDE_INACT}</td>
+					<td width="40%" class="row1"><input type="checkbox" name="hide_inactives" value="1" {HIDE_INACTIVE} /></td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">{L_HIDEN_GRP}</td>
+					<td width="40%" class="row1"><input type="checkbox" name="hidden_groups" value="1" {HIDDEN_GRP} /></td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">{L_COLORD_CLS}</td>
+					<td width="40%" class="row1"><input type="checkbox" name="colouredcls" value="1" {COLOREDCLS} /></td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">&nbsp;</td>
+					<td width="40%" class="row1">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="100%" class="row2" colspan="2">
+						<table border="0" width="100%" class="borderless">
+							<tr>
+								<td>&nbsp;</td>
+								<td>{L_SHOW_POINTS}</td>
+								<td>{L_SHOW_TOTAL}</td>
+								<td>{L_SHOW_RANK}</td>
+								<td>{L_SHOW_CLS}</td>
+								<td>{L_SHOW_CLS_IMG}</td>
+							</tr>
+							<tr>
+								<td>{L_SPECIALIT}</td>
+								<td align="center"><input type="checkbox" name="si_points" value="1" {SI_POINTS} /></td>
+								<td align="center"><input type="checkbox" name="si_total" value="1" {SI_TOTAL} /></td>
+								<td align="center"><input type="checkbox" name="si_rank" value="1" {SI_RANK} /></td>
+								<td align="center"><input type="checkbox" name="si_class" value="1" {SI_CLASS} /></td>
+								<td align="center"><input type="checkbox" name="si_cls_icon" value="1" {SI_CLS_ICON} /></td>
+							</tr>
+							<tr>
+								<td>{L_SETITEM}</td>
+								<td align="center"><input type="checkbox" name="set_points" value="1" {SET_POINTS} /></td>
+								<td align="center"><input type="checkbox" name="set_total" value="1" {SET_TOTAL} /></td>
+								<td align="center"><input type="checkbox" name="set_rank" value="1" {SET_RANK} /></td>
+								<td align="center"><input type="checkbox" name="set_class" value="1" {SET_CLASS} /></td>
+								<td align="center"><input type="checkbox" name="set_cls_icon" value="1" {SET_CLS_ICON} /></td>
+							</tr>
+							<tr>
+								<td>{L_SHOWONPAGE}</td>
+								<td align="center"><input type="checkbox" name="set_op_points" value="1" {SET_OP_POINTS} /></td>
+								<td align="center"><input type="checkbox" name="set_op_total" value="1" {SET_OP_TOTAL} /></td>
+								<td align="center"><input type="checkbox" name="set_op_rank" value="1" {SET_OP_RANK} /></td>
+								<td align="center"><input type="checkbox" name="set_op_class" value="1" {SET_OP_CLASS} /></td>
+								<td align="center"><input type="checkbox" name="set_op_cls_icon" value="1" {SET_OP_CLS_ICON} /></td>
+							</tr>
+							<tr>
+								<td>{L_SETRIGHT}</td>
+								<td align="center"><input type="checkbox" name="sr_points" value="1" {SR_POINTS} /></td>
+								<td align="center">&nbsp;</td>
+								<td align="center"><input type="checkbox" name="sr_rank" value="1" {SR_RANK} /></td>
+								<td align="center"><input type="checkbox" name="sr_class" value="1" {SR_CLASS} /></td>
+								<td align="center"><input type="checkbox" name="sr_cls_icon" value="1" {SR_CLS_ICON} /></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table></div>
+		</td></tr>
+	<tr>
+		<th align="left" onclick="show_section('section1')">
+		<span style="cursor: pointer;"><img src="../images/descending.gif" alt="" title="{L_HEADER_HELP}" border="0" height="9" width="9"> {L_HEADER_DBS}</span>
+			</th>
+	</tr>
+	<tr><td>
+		<div  style="display: none;" id="section1">
+		<table class="borderless" align="center" border="0" cellpadding="0" cellspacing="1" width="100%"> 
+			<tr>
+					<td width="60%" class="row2">{L_USE_SETDB}</td>
+					<td width="40%" class="row1"><input type="checkbox" name="nonset_set" value="1" {NONSET_SET} />
+					</td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">{L_IS_NONSET}
+					<a onmouseover="return overlib('{L_HELP_NONSET}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span>
+					</td>
+					<td width="40%" class="row1"><input type="text" name="nonsettable" size="32" value="{NONSETTABLE}" class="input" /></td>
+				</tr>
+				<tr>
+					<td width="60%" class="row2">{L_IS_SET}</td>
+					<td width="40%" class="row1"><input type="text" name="settable" size="32" value="{SETTABLE}" class="input" /></td>
+				</tr>
+		</table></div></td></tr>
+		</td></tr>
+	<tr>
+		<th align="left" onclick="show_section('section2')">
+		<span style="cursor: pointer;"><img src="../images/descending.gif" alt="" title="{L_HEADER_HELP}" border="0" height="9" width="9"> {L_ISTT_HEADER}</span>
+			</th>
+	</tr>
+	<tr><td>
+		<div  style="display: none;" id="section2">
+		<table class="borderless" align="center" border="0" cellpadding="0" cellspacing="1" width="100%"> 
+			<tr>
+				<td width="60%" class="row2">{L_ITEMSTATS}</td>
+				<td  class="row1"><input type="checkbox" name="itemstats" value="1" {ITEMSTATS} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_ITEMSTATS}<br /> </td>
+				<td class="row1">{SETITEM_TEMP}</td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_ICONS}</td>
+				<td width="40%" class="row1"><input type="text" name="imgwidth" size="9" value="{IMGWIDTH}" class="input" /> x
+				<input type="text" name="imgheight" size="9" value="{IMGHEIGHT}" class="input"> {L_ICONS_HLP}</td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_NAME_CORRECT}
+					<span class="error"><a onmouseover="return overlib('{L_NAME_CORR_EX}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span></td>
+				<td width="40%" class="row1"><input type="checkbox" name="is_correctmode" value="1" {IS_NAME_CORRECT} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_IS_REPLACE}
+					<a onmouseover="return overlib('{L_HELP_REPLACE}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span>
+					</td>
+				<td width="40%" class="row1"><input type="text" name="is_replace" size="32" value="{IS_REPLACE}" class="input" /></td>
+			</tr>
+		</table></div></td></tr>
+	<tr>
+		<th align="left" onclick="show_section('section3')">
+			<span style="cursor: pointer;"><img src="../images/descending.gif" alt="" title="{L_HEADER_HELP}" border="0" height="9" width="9"> {L_SPECIALIT}</span>
+			</th>
+	</tr>
+	<tr><td>
+		<div style="display: none;" id="section3">
+		<table class="borderless" align="center" border="0" cellpadding="0" cellspacing="1" width="100%"> 
+			<tr>
+				<td width="60%" class="row2">{L_HEADER_IMG}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="header_images" value="1" {HEADER_IMG} /></td>
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_CROSS}
+					<a onmouseover="return overlib('{L_HELP_CROSS}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span>
+					</td>
+				<td width="40%" class="row1"><input type="checkbox" name="si_only_crosses" value="1" {SI_CROSSES} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_ITEMSTA}
+					<a onmouseover="return overlib('{L_HELP_JJSTATUS}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span>
+					</td>
+				<td width="40%" class="row1"><input type="checkbox" name="si_itemstatus_show" value="1" {SI_STATUSSHOW} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2" colspan=2>
+				{L_ITEMLIST} <span class="error"><a onmouseover="return overlib('{L_INFO_DRAGDROP}', CAPTION, '{L_HELP_BOX_HEAD}', BELOW, RIGHT);" onmouseout="return nd();"><img src="../images/help_small.png" border="0"  alt="" /></a></span>
+				<p align="center">
+          <ul id="itempool" class="sortable boxy">
+          <center>{L_AX_UNUSED_I}</center>
+					<!-- BEGIN itempool_row -->
+					<li id="{itempool_row.ID}">{itempool_row.NAME}</li>
+					<!-- END itempool_row -->
+          </ul>
+          <ul id="itemshow" class="sortable boxy">
+          <center>{L_AX_ENABLED_I}</center>
+					<!-- BEGIN itemshow_row -->
+					<li id="{itemshow_row.ID}">{itemshow_row.NAME}</li>
+					<!-- END itemshow_row -->
+          </ul><br /><br /><center>
+				  <input type="button" name="add" value="{L_BUTTON_I_DEL}" class="mainoption" onclick="javascript:ManageItemDialog()" />
+          <input type="button" name="add" value="{L_BUTTON_I_ADD}" class="mainoption" onclick="javascript:AddItemDialog()" />
+          </center>
+				</td>
+	<tr>
+				<td width="40%" class="row2" valign="top" colspan=2>
+				  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+	           <tr>
+	           <td><img src="../images/false.png" border=0 alt=''/></td>
+				      <td>{L_WARNING}: {L_WARN_TXT}<br/>
+				      	<select size="1" name="language" id="languagereset">
+	         <option value='german'>{L_GERMAN}</option>
+	         <option value='english'>{L_ENGLISH}</option>
+	         <option value='french'>{L_FRENCH}</option>
+	         <option value='chinese'>{L_CHINESE}</option>
+	      </select>
+	      <input type="button" onClick='openConfirmDialog()' name="populate" value="{L_POPULATE}" class="mainoption" /></td>
+				  </tr>
+</table>
+				</td>
+			</tr>
+			</tr>
+					<tr>
+						<td width="30%" class="row2">{L_TRINKET}</td>
+						<td width="30%" class="row1"><input type="checkbox" name="si_bwltrinket" value="1" {SI_BWLTRINKET} /></td>
+					</tr><tr>
+						<td width="20%" class="row2">{L_AQMOUNT}</td>
+						<td width="20%" class="row1"><input type="checkbox" name="si_aqmount" value="1" {SI_AQMOUNT} /></td>
+					</tr>
+					<tr>
+						<td width="30%" class="row2">{L_AQ_BOOK}</td>
+						<td width="20%" class="row1"><input type="checkbox" name="si_aqbook" value="1" {SI_AQBOOK} /></td>
+					</tr><tr>
+						<td width="30%" class="row2">{L_ATIESH}</td>
+						<td width="20%" class="row1"><input type="checkbox" name="si_atiesh" value="1" {SI_ATIESH} /></td>
+			</tr>
+		</table></div></td></tr>
+	<tr>
+		<th align="left" onclick="show_section('section4')">
+		<span style="cursor: pointer;"><img src="../images/descending.gif" alt="" title="{L_HEADER_HELP}" border="0" height="9" width="9"> {L_SETITEM}</span>
+			</th>
+	</tr>
+	<tr><td>
+		<div style="display: none;" id="section4">
+		<table class="borderless" align="center" border="0" cellpadding="0" cellspacing="1" width="100%"> 
+	<tr>
+				<td width="60%" class="row2">{L_RACE}</td>
+				<td width="40%" class="row1"><select size="1" name="race">
+				<option value="Al" {RACE_SEL_AL}>{L_ALLIANCE}</option>
+				<option value="Ho" {RACE_SEL_HO}>{L_HORDE}</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_DRPDWN}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="set_drpdwn_cls" value="1" {SET_DROPDOWN} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_INDEX}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="set_show_index" value="1" {SET_INDEX} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_OLDSTYLE_LINKS}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="set_oldLink" value="1" {SET_OLD_LINKSTY} /></td>
+			</tr>
+						<tr>
+							<td colspan=2 class="row2">
+				<table border="0" width="100%" id="table1">
+					<tr>
+						<td align="center">{L_SHOW_TIER} 1</td>
+						<td align="center">{L_SHOW_TIER} 2</td>
+						<td align="center">{L_SHOW_TIER} 3</td>
+						<td align="center">{L_SHOW_TIER} AQ</td>
+					</tr>
+					<tr>
+						<td align="center"><input type="checkbox" name="set_show_t1" value="1" {SET_TIER_1} /></td>
+						<td align="center"><input type="checkbox" name="set_show_t2" value="1" {SET_TIER_2} /></td>
+						<td align="center"><input type="checkbox" name="set_show_t3" value="1" {SET_TIER_3} /></td>
+						<td align="center"><input type="checkbox" name="set_show_tAQ" value="1" {SET_TIER_AQ} /></td>
+					</tr>
+				</table>
+           </td> </tr>
+				</table></div></td></tr>
+		</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr><th align="center"><input type="submit" name="issavebu" value="{L_SUBMIT}" class="mainoption" />
+	<input type='hidden' name='del' value=''>
+  <input type="button" onClick='ResetDialog()' name="setdefaults" value="{L_SETDEFAULTS}" class="mainoption" />
+  </th></tr>
+</table>
+</form>
+
+<br /><center><span class="copy">EQDKP ItemSpecials v{L_VERSION}
+<br />&copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/wow_style/page_tail.html -->

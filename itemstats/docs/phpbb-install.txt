@@ -1,0 +1,52 @@
+phpBB Installation (Based on phpBB 2.0.17)
+==========================================
+
+1. Configuration
+
+Make sure you complete the instructions in 'config.txt' before doing this part.
+
+
+2. Copying it over
+
+Copy the 'itemstats' folder to the root of your forum installation.
+
+
+3. PHPBB modifications
+
+Follow the instructions below to modify the phpbb files with data specific to your environment.  This can vary from version to version.  The goal is to inject a call to 'itemstats_parse()' in the location where the forum bbcodes are handled.  In my installation, the main entry point for this is the  bencode_second_pass() function, so I added the call at the beginning of this function.  For the HTML changes, the goal is to have allakhazam.css and Overlib loaded for forum page that will display itemstats.  For simplicity, I put this in the 'overall_healer.tpl' file.  The changes listed below are for the default subSilver template.  If you are using multiple templates for your forum, you will need to apply it to each one.
+
+These changes do not follow any BBCode mod standards.  I tried to do that, but it was too complicated for my taste.  I wanted to make the smallest possible change in the phpbb php code, something that would be easy to fix if a phpbb patch somehow overwrote it somehow.
+
+OPEN
+{forum_root}/include/bbcode.php
+
+FIND
+define("BBCODE_UID_LEN", 10);
+
+ADD-AFTER
+include('./itemstats/phpbb_itemstats.php');
+
+FIND
+function bbencode_second_pass($text, $uid)
+{
+	global $lang, $bbcode_tpl;
+
+ADD-AFTER
+	// Parse text for ItemStats mod
+	$text = itemstats_parse($text);
+
+SAVE AND CLOSE
+{forum_root}/include/bbcode.php
+
+OPEN
+{forum_root}/templates/subSilver/overall_header.tpl
+
+FIND
+<!-- link rel="stylesheet" href="templates/subSilver/{T_HEAD_STYLESHEET}" type="text/css" -->
+
+ADD-AFTER
+<link rel="stylesheet" href="itemstats/templates/itemstats.css" type="text/css">
+<script type="text/javascript" src="itemstats/overlib/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+
+SAVE AND CLOSE
+{forum_root}/templates/subSilver/overall_header.tpl

@@ -1,0 +1,45 @@
+<form method="post" action="{F_CONFIG}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+<tr>
+    <th align="center" colspan="2">{L_GENERAL}</th>
+</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_RANKS}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rp_show_ranks" value="1" {SHOW_RANKS} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SHORT_RANK}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rp_short_rank" value="1" {SHORT_RANKS}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SEND_EMAIL}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rp_send_email" value="1" {SEND_EMAIL}"  /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_ROLL_SYSTEM}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rp_roll_systm" value="1" {ROLL_SYSTEM}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_WILDCARD_SYS}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rp_wildcard" value="1" {WILDCARD}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_USE_CSS}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rp_use_css" value="1" {USE_CSS}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_LAST_X_DAYS}</td>
+				<td width="40%" class="row1"><input type="text" name="rp_last_days" size="32" value="{LAST_X_DAYS}" class="input" /></td>
+			</tr>
+	   <tr>
+				<td width="60%" class="row2">{L_SECRET_HASH}</td>
+				<td width="40%" class="row1"><input type="text" name="rp_auto_hash" size="32" value="{AUTOHASH}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_RP_PATH}</td>
+				<td width="40%" class="row1"><input type="text" name="rp_auto_path" size="32" value="{AUTOPATH}" class="input" /></td>
+			</tr>
+	<tr><th align="center" colspan="2"><input type="submit" name="issavebu" value="{L_SUBMIT}" class="mainoption" />
+  </th></tr>
+</table>
+</form>

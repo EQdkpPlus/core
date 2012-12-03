@@ -1,0 +1,96 @@
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpire/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<script language="JavaScript" type="text/javascript">
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }	
+
+function EditChar(editid) {
+	var win = new Window('EditChars', {className: "alphacube", title: "{L_EDIT_CHAR}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "addchar.php?mode=edit&secrethash=blubber&editid=" + editid, showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+win.setDelegate(myDelegate);
+  }
+
+	// Sample code to see how to implement a delegate
+	var myDelegate = {
+		canClose: function(win) {
+			location.reload();
+			// return false, the window cannot be closed
+			return true;
+		}		
+	}
+  </script>
+<!-- IF S_NOTMM -->
+<form method="get" action="{F_MEMBERS}">
+<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+  <tr>
+    <th align="right" width="56" nowrap="nowrap">{L_FILTER}:</th>
+    <th align="left">&nbsp;
+      <select name="filter" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN filter_row -->
+        <option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
+        <!-- END filter_row -->
+      </select>
+    </th>
+  </tr>
+</table>
+</form>
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="100%"><a href="{U_LIST_PROFILES}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    
+    <th align="left" width="80">{L_SKILL}</th>
+    <th align="left" width="20"><a href="{U_LIST_PROFILES}o={O_ARCANE}{URI_ADDON}"><img src="images/resistence/arcane_resistance.gif" alt="{L_ARCANE}" /></a></th>
+    <th align="left" width="20"><a href="{U_LIST_PROFILES}o={O_FIRE}{URI_ADDON}"><img src="images/resistence/fire_resistance.gif" alt="{L_FIRE}" /></a></th>
+    <th align="left" width="20"><a href="{U_LIST_PROFILES}o={O_NATURE}{URI_ADDON}"><img src="images/resistence/nature_resistance.gif" alt="{L_NATURE}" /></a></th>
+    <th align="left" width="20"><a href="{U_LIST_PROFILES}o={O_FROST}{URI_ADDON}"><img src="images/resistence/frost_resistance.gif" alt="{L_FROST}" /></a></th>
+    <th align="left" width="20"><a href="{U_LIST_PROFILES}o={O_SHADOW}{URI_ADDON}"><img src="images/resistence/shadow_resistance.gif" alt="{L_SHADOW}" /></a></th>
+    
+    <th align="left" width="100"><a href="{U_LIST_PROFILES}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_PROFILES}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_PROFILES}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>
+    <th align="left" width="80" nowrap="nowrap"><a href="{U_LIST_PROFILES}o={O_CURRENT}{URI_ADDON}">{L_CURRENT}</a></th>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_PROFILES}o={O_LASTRAID}{URI_ADDON}">{L_LASTRAID}</a></th>
+  	<!-- IF IS_EDITOR -->
+  	<th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+  	<!-- ENDIF -->
+  </tr>
+  <!-- BEGIN members_row -->
+  <tr class="{members_row.ROW_CLASS}">
+    <td width="35" nowrap="nowrap" align="right">{members_row.COUNT}</td>
+    <td width="100%" nowrap="nowrap"><a href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></td>
+    
+    <td width="80" nowrap="nowrap">{members_row.SKILL}</td>
+    <td width="20" nowrap="nowrap">{members_row.ARCANE}</td>
+    <td width="20" nowrap="nowrap">{members_row.FIRE}</td>
+    <td width="20" nowrap="nowrap">{members_row.NATURE}</td>
+    <td width="20" nowrap="nowrap">{members_row.FROST}</td>
+    <td width="20" nowrap="nowrap">{members_row.SHADOW}</td>
+    
+    <td width="100" nowrap="nowrap">{members_row.RANK}</td>
+    <td width="40" nowrap="nowrap">{members_row.LEVEL}</td>
+    <td width="100" nowrap="nowrap">{members_row.CLASS}</td>
+    <td width="60" nowrap="nowrap" class="{members_row.C_CURRENT}">{members_row.CURRENT}</td>
+    <td width="70" nowrap="nowrap" class="{members_row.C_LASTRAID}">{members_row.LASTRAID}</td>
+  	<!-- IF IS_EDITOR -->
+  	<td width="35" nowrap="nowrap" align="right"><input type="button" name="edit" value="{L_BUTTON_EDIT}" onclick="javascript:EditChar({members_row.ID})" class="mainoption"/></td>
+  	<!-- ENDIF -->
+  </tr>
+  <!-- END members_row -->
+  <tr>
+    <th colspan="14" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<center><br /><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="{ICON_INFO}" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">{L_CREDIT_NAME} v{L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpire/page_tail.html -->

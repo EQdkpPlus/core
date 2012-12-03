@@ -1,0 +1,6 @@
+Subject: {GUILDTAG} {DKP_NAME}: Ticket submitted!
+Charset: iso-8859-1
+
+A ticket was submitted by a user, please check the adminpanel and reply to it as soon as possible.
+
+Your DKP-Team

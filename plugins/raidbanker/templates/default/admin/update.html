@@ -1,0 +1,112 @@
+<!-- INCLUDE ../../../../templates/default/page_header.html -->
+<!-- INCLUDE backend_header.html -->
+<!-- IF RB_IS_UPDATE -->
+<form method="POST" action="editbankdata.php"> 
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+		<th align="center" colspan="8">{L_FOUND_ITEMS}</th>
+	</tr>
+	<tr>
+	 <th align="center" colspan="8"><input type="hidden" name="charName" value="{CHARNAME}" size="100">{CHARNAME}</th>
+	</tr>
+	
+	<tr> 
+	    <td colspan="3" class="row1">{L_MAINCHAR}</td>
+			<td colspan="5" class="row1"><input class="input" type="text" name="mainchar" value="{I_MAINCHAR}" size="25">
+	</tr>
+	<tr>
+	     <td colspan="3" class="row1">{L_NOTE}</td>
+			<td colspan="5" class="row1"><input class="input" type="text" name="note" value="{I_NOTE}" size="35">
+	</tr>
+	
+	<tr>
+		<th align="center"width="15">{Lang_QTY}</th>
+		<th align="center" width="150">{Lang_Name}</th>
+		<th align="center" width="25">{lang_quality}</th>
+		<th align="center" width="40">{Lang_Type}</th>
+		<th align="center" width="100">{L_MONEY_VALUE}</th>
+		<th align="center" width="40">{L_DKP_VALUE}</th>
+		<th align="center">{L_STATUS}</th>
+		<th align="left" width="10">{lang_delete}</th>
+	</tr>
+	<!-- BEGIN items_row -->
+	<tr class="{items_row.ROW_CLASS}">
+		<td align="center"><input class="input" type="text" name="item[{items_row.NUMBER}][amount]" value="{items_row.AMOUNT}" size="3">
+		<input class="input" type="hidden" name="item[{items_row.NUMBER}][itemid]" value="{items_row.ITEMID}" size="10"></td>
+    <td><input class="input" type="text" name="item[{items_row.NUMBER}][name]" value="{items_row.NAME}" size="50"></td>
+    <td align="center"><input class="input" type="text" name="item[{items_row.NUMBER}][quality]" value="{items_row.QUALITY}" size="5"></td>
+		<td align="center"><input class="input" type="text" name="item[{items_row.NUMBER}][type]" value="{items_row.TYPE}" size="15"></td>
+		<td align="center">
+		  <input class="input" type="text" name="item[{items_row.NUMBER}][gold_value]" value="{items_row.GOLD_VALUE}" size="5">
+      <input class="input" type="text" name="item[{items_row.NUMBER}][silver_value]" value="{items_row.SILVER_VALUE}" size="2">
+      <input class="input" type="text" name="item[{items_row.NUMBER}][copper_value]" value="{items_row.COPPER_VALUE}" size="2">
+      </td>
+    <td align="center"><input class="input" type="text" name="item[{items_row.NUMBER}][dkp_value]" value="{items_row.DKP_VALUE}" size="5"></td>
+    <td align="center">
+    <select name="item[{items_row.NUMBER}][status]" class="input">
+    <option value=0 {items_row.SELECT0}>{L_PRIO_0}</option>
+    <option value=1 {items_row.SELECT1}>{L_PRIO_1}</option>
+    <option value=2 {items_row.SELECT2}>{L_PRIO_2}</option>
+    <option value=3 {items_row.SELECT3}>{L_PRIO_3}</option>
+    <option value=4 {items_row.SELECT4}>{L_PRIO_4}</option>
+    </select>
+    </td>
+		<td ><input type="checkbox" class="input" name="item[{items_row.NUMBER}][delete]"></td>
+	</tr>
+	<!-- END items_row -->
+	<tr>
+		<th align="center" colspan="8"><input type="submit" name="MakeMeHappy" value="{L_BANK_UPDATE}" class="mainoption"/></th>
+	</tr>
+</table>
+</form>
+<!-- ELSE -->
+<script language="JavaScript" type="text/javascript">
+function AddItem() {
+	var win = new Window('RBAddItem', {className: "alphacube", title: "{L_ADD}", 
+                                              top:70, left:100, width:540, 
+                                              resizable: true, url: "addbankdata.php", showEffectOptions: {duration:1}})
+	win.setDestroyOnClose();
+	win.showCenter();
+}	
+
+function ImportLog() {
+	var win = new Window('RBImportLog', {className: "alphacube", title: "{L_IMPORT_LOG_HEAD}", 
+                                              top:70, left:100, width:700, height:330, 
+                                              resizable: false, minimizable:false, maximizable:false, url: "importbankdata.php", showEffectOptions: {duration:1}})
+	win.setDestroyOnClose();
+	win.showCenter();
+}	
+
+function AddBanker() {
+	var win = new Window('RBAddBanker', {className: "alphacube", title: "{L_ADDBANKER}", 
+                                              top:70, left:100, width:540, 
+                                              resizable: true, url: "addbanker.php", showEffectOptions: {duration:1}})
+	win.setDestroyOnClose();
+	win.showCenter();
+}	
+    </script>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr >
+    <th align="left" width="30%" nowrap="nowrap">{Lang_Banker}</th>
+    <th align="left" width="30%" nowrap="nowrap">{Lang_Update}</th> 
+    <th align="left" width="20%" nowrap="nowrap"></th> 
+    <th align="left" width="20%" nowrap="nowrap"></th> 
+  </tr>
+  <!-- BEGIN chars_row -->
+  <tr class="{chars_row.ROW_CLASS}">
+      <td align="center" nowrap="nowrap">{chars_row.NAME}</td>
+      <td align="left" nowrap="nowrap">{chars_row.UPDATE}</td>
+      <td align="left" nowrap="nowrap">{chars_row.MANAGE}</td> 
+      <td align="left" nowrap="nowrap">{chars_row.DELETE}</td> 
+  </tr>
+  <!-- END chars_row -->
+  <th colspan=4>
+  <!-- IF RB_PERM_ADD -->
+  <input type="button" name="add" value="{L_ADD}" onclick="javascript:AddItem()" class="mainoption"/>
+  <input type="button" name=import" value="{L_IMPORT}" onclick="javascript:ImportLog()" class="mainoption"/>
+  <input type="button" name="add2" value="{L_ADDBANKER}" onclick="javascript:AddBanker()" class="mainoption"/>
+  <!-- ENDIF -->
+  </th>
+</table>
+<!-- ENDIF -->
+<!-- INCLUDE ../../../../templates/default/page_tail.html -->

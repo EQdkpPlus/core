@@ -1,0 +1,312 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr><td align="center" class="menu">{RAID_PAGINATION}</td></tr>
+</table>
+
+<form method="post" action="{F_CHANGE_CHAR}" name="post" onsubmit="return check_form(this)">
+  	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr>
+			<th align="center" colspan="2">
+			<table width="100%" class="borderless"  cellpadding="0" cellspacing="0" >
+				<tr>
+					<!-- IF S_LOGGED_IN -->
+						<!-- IF S_NO_USER_ASSIGN -->
+							<th>
+							  	<table width="100%" bgcolor="black" bordercolor="red">
+							  		<tr>
+							  			<td align="center">
+							  				<center>
+							  					<font color="red">{L_NO_USER_ASSIGNED}</font>
+							  				</center>
+							  			</td>
+							  		</tr>
+							  	</table>
+							</th>
+						<!-- ELSE -->
+							<th align="left" width="33%">
+							  	{L_CHAR}: 
+							  	<select name="member_id" class="input">
+							  		<!-- BEGIN members -->
+							  			<option value="{members.VALUE}"{members.SELECTED}>{members.NAME} [{members.CLASS}]</option>
+							  		<!-- END members -->
+							  	</select>
+							</th>
+		                  	<th width="33%" align="right">
+		                  		<input type="submit" name="signup" value="{B_SELECTCHAR}" class="mainoption" />
+		                  		<th widht="33%" align="right">{L_CHAR_CHOSEN}{CURRENT_CHAR}</th>
+							</th>
+						<!-- ENDIF -->
+					<!-- ELSE -->
+						<th>
+							<table width="100%" bordercolor="red">
+								<tr>
+									<td align="center">
+										<center><font color="red">{L_NOT_LOGGED_IN}</font></center>
+									</td>
+								</tr>
+							</table>
+						</th>
+					<!-- ENDIF -->
+				</tr>
+			</table>
+			</th>
+		</tr>
+	</table>
+</form>
+<br />
+
+<!-- IF S_IN_SINGLE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<td style="vertical-aign:middle;"><a href="index.php?member_id={CURRENT_MEMBER_ID}"><img src="http://wow.allakhazam.com/images/icons/INV_TradeskillItem_02.png" height="32" width="32"> {L_OVERVIEW}</a></td>
+		<!-- BEGIN icon_row -->
+			<td style="vertical-aign:middle;"><a href="index.php?sshow={icon_row.TRADESKILL_ID}&member_id={CURRENT_MEMBER_ID}"><img src="{icon_row.TRADESKILL_ICON}" height="32" width="32"> {icon_row.TRADESKILL}</a></td>
+		<!-- END icon_row -->
+	</tr>
+</table>
+
+<br />
+<!-- ENDIF -->
+
+<!-- BEGIN trade_row -->
+	<!-- IF !trade_row.S_ADD -->
+		<a name="{trade_row.ID}">
+	<!-- ENDIF -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		<tr>
+			<th align="left" height="30" colspan="4" valign="middle">
+				<table border="0" cellspacing="0" cellpadding="0" width="100%">
+					<tr>
+						<td width="32"><a href="{trade_row.U_SINGLE_LINK}"><img src="{trade_row.TRADESKILL_ICON}" height="32" width="32"></a></td>
+						<th>
+							<font size="4">&nbsp;<a href="{trade_row.U_SINGLE_LINK}">{trade_row.TRADESKILL}</a></font>
+							<!-- IF trade_row.S_INFO -->
+								<img src="images/info.gif">{trade_row.INFO}
+							<!-- ENDIF -->
+							<td width="100" align="center">
+								<!-- IF S_SSHOW_ONLY -->
+								<!-- ELSE -->
+									<!-- IF S_IN_SINGLE -->
+									<!-- ELSE -->
+										<!-- IF trade_row.HIDE -->
+										{LSTAT_HIDDEN}<a href="{trade_row.SHOW}"><img border="0" src="images/show.gif" width="16" height="16"></a>
+										<!-- ELSE -->
+										{LSTAT_SHOWN} <a href="{trade_row.SHOW}"><img border="0" src="images/hide.gif" width="16" height="16"></a>
+										<!-- ENDIF -->
+									<!-- ENDIF -->
+								<!-- ENDIF -->
+							</td>
+        				</th>
+					</tr>
+				</table>
+			</th>
+		</tr>
+  		<!-- IF S_SSHOW_ONLY && S_IN_SINGLE || S_SSHOW_ONLY neq 1 -->
+  			<!-- IF S_SHOW_ONLY eq 0 && S_IN_SINGLE eq 0 && trade_row.HIDE -->
+			<!-- ELSE --> 
+				<!-- IF trade_row.ID eq 2 || trade_row.ID eq 3 || trade_row.ID eq 5 -->
+					<tr colspan="4">
+						<td>
+							<!-- IF S_IN_SINGLE -->
+								<form method="GET" action="index.php#{trade_row.ID}" name="viewfilterform{trade_row.ID}">
+									<input type="hidden" name="sshow" value="{trade_row.ID}">
+							<!-- ELSE -->
+								<form method="GET" action="index.php#{trade_row.ID}" name="viewfilterform{trade_row.ID}">
+							<!-- ENDIF -->
+									<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+										<tr>
+											<td width="20">Filter:</td>
+											<td>
+												<select name="viewfilter" size="1" onChange="JavaScript:document.viewfilterform{trade_row.ID}.submit();">
+													<option>{L_SELECT_FILTER}</option>
+													<option value="1">{L_HEAD}</option>
+													<option value="2">{L_SHOULDER}</option>
+													<option value="3">{L_CHEST}</option>
+													<option value="4">{L_WRIST}</option>
+													<option value="5">{L_HANDS}</option>
+													<option value="6">{L_WAIST}</option>
+													<option value="7">{L_LEGS}</option>
+													<option value="8">{L_FEET}</option>
+													<!-- IF trade_row.ID eq 5 -->
+														<option value="9">{L_BACK}</option>
+													<!-- ENDIF -->
+													<!-- IF trade_row.ID eq 3 -->
+														<option value="10">{L_DPS}</option>
+													<!-- ENDIF -->
+													<option value="11">{L_OTHER}</option>
+													<option value="12">{L_ALL}</option>
+												</select>
+											</td>
+										<tr>
+									</table>
+									<input type="hidden" name="vfilter_id" value="{trade_row.ID}">
+								</form>
+						</td>
+					</tr>
+				<!-- ENDIF -->
+				
+				<!-- IF trade_row.ID eq 1 -->
+					<tr colspan="4">
+						<td>
+							<!-- IF S_IN_SINGLE -->
+								<form method="GET" action="index.php#1" name="filterform1">
+									<input type="hidden" name="sshow" value="1">
+							<!-- ELSE -->
+								<form method="GET" action="index.php#1" name="filterform1">
+							<!-- ENDIF -->
+									<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+										<tr>
+											<td width="20">Filter:</td>
+											<td>
+							      				<select name="dbfilter1" size="1" onChange="JavaScript:document.filterform1.submit();">
+							        				<option>{L_SELECT_FILTER}</option>
+							        				<option value="1">{L_BRACER}</option>
+							        				<option value="2">{L_CHEST}</option>
+							        				<option value="3">{L_GLOVES}</option>
+							        				<option value="4">{L_BOOTS}</option>
+							        				<option value="5">{L_CLOAK}</option>
+							        				<option value="6">{L_WEAPON}</option>
+							        				<option value="7">{L_SHIELD}</option>
+							        				<option value="8">{L_OTHER}</option>
+													<option value="9">{L_ALL}</option>
+							      				</select>
+											</td>
+  										<tr>
+									</table>
+								</form>
+    					</td>
+  					</tr>
+				<!-- ENDIF -->
+				
+				<!-- IF trade_row.ID eq 6 -->
+					<tr colspan="4">
+						<td>
+							<!-- IF S_IN_SINGLE -->
+								<form method="GET" action="index.php#6" name="filterform6">
+									<input type="hidden" name="sshow" value="6">
+							<!-- ELSE -->
+								<form method="GET" action="index.php#6" name="filterform6">
+							<!-- ENDIF -->
+									<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+										<tr>
+    										<td width="20">Filter:</td>
+							    			<td>
+							      				<select name="dbfilter6" size="1" onChange="JavaScript:document.filterform6.submit();">
+							        				<option>{L_SELECT_FILTER}</option>
+							        				<option value="1">{L_PROTECTION}</option>
+							          				<option value="2">{L_FLASK}</option>
+							        				<option value="3">{L_OTHER}</option>
+							        				<option value="4">{L_ALL}</option>
+							      				</select>
+											</td>
+										<tr>
+									</table>
+								</form>
+    					</td>
+  					</tr>
+				<!-- ENDIF -->
+  				<tr>
+					<th align="left" width="400"></a><a href="{U_LIST}o={trade_row.O_RECIPE}">{L_RECIPE}</a> / <a href="{U_LIST}o={trade_row.O_QUALITY}">{L_QUALITY}</a></th>
+				    <th align="left">{L_REAGENT} <font size="1"> (<a href="{trade_row.U_FULLRINFO}">{L_FULLRINFO}</a>)</font></th>
+				    <th align="right" width="20"></th>
+				    <th align="right" width="200">{L_OWNER}</th>
+				</tr>
+			<!-- ENDIF -->
+			
+  			<!-- BEGIN recipe_row -->
+  				<form method="POST" action="{trade_row.recipe_row.F_UPDATE}" name="update">
+					<tr class="{trade_row.recipe_row.ROW_CLASS}">
+						<td width="400" valign="top">
+						    <!-- MODDED BY ROKI: Moved this here to remove white scpace that appears in IE this is only noticable here since it is inside a loop-->
+							<input type="hidden" name="recipe_id" value="{trade_row.recipe_row.ID}">
+							<input type="hidden" name="do_own" value="{trade_row.recipe_row.VALUE}">
+							<input type="hidden" name="member_id" value="{CURRENT_MEMBER_ID}">
+							<table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+								<tr>
+		             				<td><a href="{trade_row.recipe_row.U_VIEW_RECIPE}">{trade_row.recipe_row.RECIPE}</a></td>
+		             				<td width="40"><!-- IF trade_row.recipe_row.S_AUTHOR --><a href="{trade_row.recipe_row.EDIT}"><img border="0" src="images/edit.gif" width="18" height="17"></a>&nbsp<a href="{trade_row.recipe_row.DELETE}"><img border="0" src="images/delete.gif" width="18" height="17"></a><!-- ENDIF --></td>
+								</tr>
+							</table>
+		    			</td>
+		    			<td valign="top">{trade_row.recipe_row.REAGENT}</td>
+		    			<td align="center" width="20">
+		    				<!-- IF trade_row.recipe_row.S_TRADE -->
+		    					<input type="checkbox" name="recipe" value="dummy" class="input" onClick="submit()" {trade_row.recipe_row.ISOWNER}>
+		    				<!-- ENDIF -->
+		    			</td>
+		    			<td align="right" width="200">{trade_row.recipe_row.OWNER}</td>
+		   			</tr>
+		   		</form>
+			   
+		   	<!-- END recipe_row -->
+
+			<!-- IF trade_row.S_ADD -->
+				<a name="{trade_row.ID}"></a>
+				<form method="POST" action="{trade_row.F_ADDNEW}" name="new">
+					<input type="hidden" name="new_trade_id" value="{trade_row.ID}">
+					<input type="hidden" name="member_id" value="{CURRENT_MEMBER_ID}">
+					<tr class="{trade_row.ROW_CLASS}">
+						<td width="400" valign="middle" nowrap><img src="images/add.gif"> <input type="text" class="input" name="new_recipe" size="70%"><br><font size="1">{L_ENTERNAME}</font></td>
+						<td valign="top"> <input type="text" class="input" name="new_reagent" size="70%"><br>
+							<font size="1">{L_ENTERREAGENTS}</font>
+						</td>
+						<td align="center" width="20">
+						</td>
+						<td align="right" width="200"><input type="submit" class="liteoption" value="Submit" name="B1"></td>
+					</tr>
+				</form>
+
+				<tr>
+					<th class="footer" colspan="4">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+    				    	<tr>
+    				      		<td width="50%" align="left"></td>
+    					      		<th class="footer" width="50%" align="right">{trade_row.FOOTCOUNT}
+
+			<!-- ELSEIF trade_row.S_EDIT -->
+    			<a name="{trade_row.ID}"></a>
+    			<form method="POST" action="{trade_row.F_EDIT}" name="edited">
+					<input type="hidden" name="edit_recipe" value="{IDTOEDIT}">
+					<input type="hidden" name="trade_id" value="{trade_row.ID}">
+					<input type="hidden" name="member_id" value="{CURRENT_MEMBER_ID}">
+					<tr class="{trade_row.ROW_CLASS}">
+						<td width="400" valign="middle" nowrap><img src="images/add.gif"> <input type="text" class="input" name="edited_name" value="{UNEDITEDNAME}"size="70%"><br><font size="1">{L_ENTERNAME}</font></td>
+						<td valign="top"> <input type="text" class="input" name="edited_reagents" value="{UNEDITREAGENTS}" size="70%"><br>
+							<font size="1">{L_ENTERREAGENTS}</font>
+						</td>
+            			<td align="center" width="20">
+                		</td>
+                		<td align="right" width="200"><input type="submit" class="liteoption" value="Submit Change" name="B2"></td>
+					</tr>
+				</form>
+
+				<tr>
+					<th class="footer" colspan="4">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+							<tr>
+								<td width="50%" align="left"></td>
+									<th class="footer" width="50%" align="right">{trade_row.FOOTCOUNT}
+			<!-- ELSE -->
+				<tr>
+					<th class="footer" colspan="4">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0" class="borderless">
+							<tr>
+								<td width="50%" align="left"><a href="{trade_row.ADD}">{trade_row.L_ADD}</a>
+									<th class="footer" width="50%" align="right">{trade_row.FOOTCOUNT}
+        	<!-- ENDIF -->
+        							</th>
+        						</td>
+        					</tr>
+      					</table>
+    				</th>
+  				</tr>
+		<!-- ENDIF -->
+		</table>
+<br>
+
+<!-- END trade_row -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu"></td>
+  </tr>
+</table>
+<br />

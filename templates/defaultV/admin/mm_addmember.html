@@ -1,0 +1,86 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if (document.post.member_name.value.length < 2)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}               
+//-->
+</script>
+
+<form method="post" action="{F_ADD_MEMBER}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_NAME}" value="{V_MEMBER_NAME}" />
+<input type="hidden" name="compare_ids[]" value="{MEMBER_ID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="6">{L_ADD_MEMBER_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_NAME}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" />{FV_MEMBER_NAME}</td>
+    <td width="100" nowrap="nowrap" class="row1">{L_EARNED}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+      <input type="text" name="member_earned" size="8" maxlength="14" value="{MEMBER_EARNED}" class="input" />{FV_MEMBER_EARNED}
+      / {L_SHOULD_BE}: <span class="positive">{CORRECT_MEMBER_EARNED}</span>
+    </td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RACE}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+      <select name="member_race_id" class="input">
+        <!-- BEGIN race_row -->
+        <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
+        <!-- END race_row -->
+      </select>
+    </td>
+    <td width="100" nowrap="nowrap" class="row1">{L_SPENT}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+      <input type="text" name="member_spent" size="8" maxlength="14" value="{MEMBER_SPENT}" class="input" />{FV_MEMBER_SPENT}
+      / {L_SHOULD_BE}: <span class="negative">{CORRECT_MEMBER_SPENT}</span>
+    </td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CLASS}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+      <select name="member_class_id" class="input">
+        <!-- BEGIN class_row -->
+        <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
+        <!-- END class_row -->
+      </select>
+    </td>
+    <td width="100" nowrap="nowrap" class="row1">{L_ADJUSTMENT}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_adjustment" size="8" maxlength="14" value="{MEMBER_ADJUSTMENT}" class="input" />{FV_MEMBER_ADJUSTMENT}</td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_LEVEL}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_level" size="3" maxlength="2" value="{MEMBER_LEVEL}" class="input" />{FV_MEMBER_LEVEL}</td>
+    <td width="100" nowrap="nowrap" class="row1">{L_CURRENT}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><span class="{C_MEMBER_CURRENT}">{MEMBER_CURRENT}</span></td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_MEMBER_RANK}</td>
+    <td colspan="3" nowrap="nowrap" class="row2">
+      <select name="member_rank_id" class="input">
+        <!-- BEGIN rank_row -->
+        <option value="{rank_row.VALUE}"{rank_row.SELECTED}>{rank_row.OPTION}</option>
+        <!-- END rank_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <th align="center" colspan="6">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_MEMBER}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_MEMBER}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_MEMBER}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

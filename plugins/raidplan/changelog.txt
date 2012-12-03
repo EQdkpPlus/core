@@ -1,0 +1,63 @@
+/******************************
+ * EQdkp Raid Planner V2
+ * Copyright 2005 by A.Stranger
+ * Continued 2006 by Urox and Wallenium 
+ * ------------------
+ * Began: Tue June 1, 2006
+ * Changed: Tue July 19, 2006
+ * 
+ ******************************/
+
+Changelog
+--------------------------------------------------------------------------------------------------
+19.07.2006 [Urox]
+- ein paar Optische verbesserungen vorgenommen
+- Release Paket zusammen gestellt.
+- Versionsnummer auf 2.0 geändert
+
+18.07.2006 [Urox]
+- Sprachdatei des calendar-scripts geänderet (bugfix)
+- Überflüssige Dateien entfernt (*.bak, rpdefault)
+- Anmeldefrist Icons durch Transparente ersetzt
+- Status Legende eingefügt (Listraids)
+- updaterpconfig() Fehler behoben (bugfix)
+- Divide by Zero Fehler wird nun abgefangen und eine Fehlermeldung angezeigt
+- Listraids Footcounter gefixt
+- RecentRaid Status Link gefixt
+- Kalendermod für IE gefixt
+- Styles wieder dynamisch generieren lassen.
+- wowV Style angepasst/eingefügt
+- Fehlermeldung für das Speicher der Klasseneinteilung geändert
+- "Alle Mitglieder bestätigen" im Admin Panel gefixt so das abgemeldete nicht bestätigt werden
+
+17.07.2006 [WalleniuM]
+- Kleiner Bugfix. Kam zu Sonderbaren verwurstelungen mit der Datenbank.
+- Klassenverteilung: Array wird jetzt überprüft
+
+16.07.2006 [WalleniuM]
+- Alle mitglider hinzufügen nun als Button, Code cleanup an der Stelle
+- Fehler wo irgendwas mit ItemBlaBla angezeigt wurde
+
+15.07.2006 [WalleniuM]
+- alle config Sachen in die Datenbank verschoben, Einstellungen im ACP
+- Bugfix: <i>-Fehler sollte jetzt gehen
+- diverse kleine Bugfixes & verbesserungen
+- neue Icons (thx Carnivore)
+- Emails nun als templates in den languages Ordnern
+- Neue Ordnerstrukturen angelegt
+- Bugfix: Emails sollten nun versand werden wenn aktiviert
+- Bugfix: Klasseneinteilung kann nun gespeichert werden
+
+14.06.2006 [Urox]
+- Invite und Startzeit anzeige in listraids und viewraid eingebaut.
+
+13.06.2006 [Urox]
+- raidplan_plugin_class wurde verbessert bzw. Fehler behoben
+- Beim Installieren / Deinstallieren werden nun die Tabellen GELÖSCHT!
+- Invite Zeit hinzugefügt. Sowie Kalendermod fertiggestellt.
+- Einzelne Raids können nun auch gelöscht werden.
+
+10.06.2006 [Urox]
+- Includes wurden Zentral in die config.php verschoben.
+  sowie die Tabellenvariablen etc.
+- Kalendermod wurde weiter entwickelt (InviteFeld) hinzugefügt.	 

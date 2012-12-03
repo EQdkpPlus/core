@@ -1,0 +1,10 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account Activation Request
+Charset: iso-8859-1
+
+A new account for "{USERNAME}" has been created and needs activation by the EQdkp administrator before it can be used.
+
+To activate the account, click the link below.
+
+{U_ACTIVATE}
+
+You can also change the permissions for the account by going to the Manage Users area of the Admnistration Panel.

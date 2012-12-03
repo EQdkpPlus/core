@@ -1,0 +1,85 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<!-- IF NOPROFS -->
+  <tr>
+        <td class="row1">
+    		<center>{E_NO_USE_PROFS}</center>
+	</td>
+  </tr> 
+  <!-- ELSE -->
+  <tr>
+    <th align="center">{L_MEMBER_TRADESKILLS}</th>
+  </tr>
+  <tr>
+    <td class="row1">{L_MANAGE_TRADESKILLS}</td>
+  </tr>
+  <!-- IF COOKING -->
+  <tr>
+    <td class="row1">{L_COOKING_SHOWN}</td>
+  </tr>
+  <!-- ENDIF -->
+  <tr>
+    <td class="row1">
+    <!-- IF NOMEMBER -->
+	<center>{E_NO_MEMBER}</center>
+	<!-- ENDIF -->
+    </td>
+  </tr>
+  <!-- ENDIF -->
+</table>
+<br>
+<!-- IF PROFS -->
+<!-- BEGIN member_row -->
+<form method="POST" action="{F_UPDATE}" name="{member_row.MEMBER_ID}">
+<input type="hidden" name="member_id" value="{member_row.MEMBER_ID}">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{member_row.MEMBER_NAME}</td>
+  </tr>
+  <tr>
+    <td class="row1">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td class="row2">{L_SELECT_TRADESKILLS}</td>
+    <td width="32" class="row2" height="32" align="center"><img border="0" src="http://wow.allakhazam.com/images/icons/INV_Misc_QuestionMark.png" title="No tradeskill" width="32" height="32"></td>
+    <!-- BEGIN trade_row -->
+    <td width="32" class="row2" height="32" align="center"><img border="0" src="{member_row.trade_row.TRADESKILL_ICON}" title="{member_row.trade_row.TRADESKILL_NAME}" width="32" height="32"></td>
+    <!-- END trade_row -->
+    <td width="" class="row2" align="center"></td>
+  </tr>
+  <tr>
+    <td class="row1">
+      <blockquote>
+        {L_PROF1}
+      </blockquote>
+    </td>
+    <td width="32" align="center"><input type="radio" value="0" name="trade1" checked></td>
+    <!-- BEGIN trade_row -->
+    <td width="32" align="center"><input type="radio" value="{member_row.trade_row.ID}" name="trade1" {member_row.trade_row.TRADE1}></td>
+     <!-- END trade_row -->
+    <td class="row1" align="center"></td>
+  </tr>
+    <tr>
+    <td class="row1">
+      <blockquote>
+        {L_PROF2}
+      </blockquote>
+    </td>
+    <td width="32"  align="center"><input type="radio" value="0" name="trade2" checked></td>
+    <!-- BEGIN trade_row -->
+    <td width="32"  align="center"><input type="radio" value="{member_row.trade_row.ID}" name="trade2" {member_row.trade_row.TRADE2}></td>
+    <!-- END trade_row -->
+    <td class="row1" align="center"></td>
+  </tr>
+</table>
+
+    </td>
+  </tr>
+    <tr>
+    <td class="row1" align="right"><input class="liteoption" type="submit" value="Submit" name="B1"></td>
+  </tr>
+
+</table>
+<br>
+</form>
+<!-- END member_row -->
+<!-- ENDIF -->

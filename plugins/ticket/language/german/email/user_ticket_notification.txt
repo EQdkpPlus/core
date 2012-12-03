@@ -1,0 +1,6 @@
+Subject: {GUILDTAG} {DKP_NAME}: Antwort zu Ticket erstellt!
+Charset: iso-8859-1
+
+Eine Antwort zu einem Ticket von Dir ist von einem Admin erstellt worden!
+
+Dein DKP-Team

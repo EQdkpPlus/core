@@ -1,0 +1,67 @@
+<!-- INCLUDE ../../../../templates/WoWMoonclaw01V/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<script language="JavaScript" type="text/javascript">
+ function AddItem() {
+	var win = new Window('AddItem', {className: "alphacube", title: "{L_BUTTON_I_ADD}", 
+                                              top:70, left:100, width:540, 
+                                              resizable: true, url: "templ_useradd.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+ function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+</script>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_MEMBER_SETITEMS}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="images/help.png" /></td>
+    <td class="row1">{L_MEMBER_SETINFO}</td>
+  </tr>
+  <tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr><th colspan=5 align="left">
+  	<input type="button" name="add" value="{L_BUTTON_ADDITEM}" class="mainoption" onclick="javascript:AddItem()" />
+  </td>
+  </tr>
+  <tr>
+    <!-- IF S_HISTORY --><th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_BUYER}&amp;start={START}">{L_BUYER}</a></th><!-- ENDIF -->
+    <th align="left" width="65%"><a href="{U_LIST_ITEMS}o={O_NAME}&amp;start={START}">{L_ITEM}</a></th>
+ 		<th></th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+  	<form method="post" action="useritem.php" name="sett_items" >
+    <!-- IF S_HISTORY --><td width="100" nowrap="nowrap"><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td><!-- ENDIF -->
+    <td width="65%"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+  	<td>
+  		<input type="hidden" name="delete_id" size="4" value="{items_row.ID}">
+  		<input type="submit" name="delete" value="{L_BUTTON_DELETE}" class="mainoption"/></td>
+  	</form>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="5" class="footer">{LISTITEMS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<br /><center><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="images/info.png" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">ItemSpecials {L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/WoWMoonclaw01V/page_tail.html -->

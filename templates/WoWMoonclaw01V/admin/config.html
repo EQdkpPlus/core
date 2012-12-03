@@ -1,0 +1,220 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function pop_preview()
+{                   
+    selected_style = document.post.default_style.options[document.post.default_style.selectedIndex].value;
+    preview = window.open('{EQDKP_ROOT_PATH}viewnews.php{SID}&style='+selected_style,'preview','resizable=yes,toolbar=no,status=yes,height=500,width=600,screenX=50,screenY=25,left=100,top=75')
+    preview.focus();
+}
+//-->
+</script>
+<form method="post" action="{F_CONFIG}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_GENERAL_SETTINGS}</th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_GUILDTAG}:<br /><span class="small">{L_GUILDTAG_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="guildtag" size="35" maxlength="255" value="{GUILDTAG}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_PARSETAGS}:<br /><span class="small">{L_PARSETAGS_NOTE}</span></td>
+    <td width="40%" class="row1"><textarea name="parsetags" rows="4" cols="35" class="input">{PARSETAGS}</textarea></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_DOMAIN_NAME}:</td>
+    <td width="40%" class="row1"><input type="text" name="server_name" size="30" maxlength="255" value="{SERVER_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_SERVER_PORT}:<br /><span class="small">{L_SERVER_PORT_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="server_port" size="5" maxlength="255" value="{SERVER_PORT}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_SCRIPT_PATH}:<br /><span class="small">{L_SCRIPT_PATH_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="server_path" size="15" maxlength="255" value="{SERVER_PATH}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_SITE_NAME}:</td>
+    <td width="40%" class="row1"><input type="text" name="main_title" size="40" maxlength="255" value="{MAIN_TITLE}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_SITE_DESCRIPTION}:</td>
+    <td width="40%" class="row1"><input type="text" name="sub_title" size="40" maxlength="255" value="{SUB_TITLE}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_POINT_NAME}:<br /><span class="small">{L_POINT_NAME_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="dkp_name" size="5" maxlength="255" value="{DKP_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ENABLE_ACCOUNT_ACTIVATION}:</td>
+    <td width="40%" class="row1"><span class="small">
+      <input type="radio" name="account_activation" value="0"{ACTIVATION_NONE_CHECKED} /> {L_NONE}&nbsp;&nbsp;
+      <input type="radio" name="account_activation" value="1"{ACTIVATION_USER_CHECKED} /> {L_USER}&nbsp;&nbsp;
+      <input type="radio" name="account_activation" value="2"{ACTIVATION_ADMIN_CHECKED} /> {L_ADMIN}</span>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ADJUSTMENTS_PER_PAGE}:</td>
+    <td width="40%" class="row1"><input type="text" name="default_alimit" size="5" maxlength="255" value="{DEFAULT_ALIMIT}" class="input" />{FV_DEFAULT_ALIMIT}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_EVENTS_PER_PAGE}:</td>
+    <td width="40%" class="row1"><input type="text" name="default_elimit" size="5" maxlength="255" value="{DEFAULT_ELIMIT}" class="input" />{FV_DEFAULT_ELIMIT}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ITEMS_PER_PAGE}:</td>
+    <td width="40%" class="row1"><input type="text" name="default_ilimit" size="5" maxlength="255" value="{DEFAULT_ILIMIT}" class="input" />{FV_DEFAULT_ILIMIT}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_NEWS_PER_PAGE}:</td>
+    <td width="40%" class="row1"><input type="text" name="default_nlimit" size="5" maxlength="255" value="{DEFAULT_NLIMIT}" class="input" />{FV_DEFAULT_NLIMIT}</td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_RAIDS_PER_PAGE}:</td>
+    <td width="40%" class="row1"><input type="text" name="default_rlimit" size="5" maxlength="255" value="{DEFAULT_RLIMIT}" class="input" />{FV_DEFAULT_RLIMIT}</td>
+  </tr>
+
+  <tr>
+    <td width="60%" class="row2">{L_DEFAULT_LANGUAGE}:</td>
+    <td width="40%" class="row1">
+      <select name="default_lang" class="input">
+        <!-- BEGIN lang_row -->
+        <option value="{lang_row.VALUE}"{lang_row.SELECTED}>{lang_row.OPTION}</option>
+        <!-- END lang_row -->
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td width="60%" class="row2">{L_DEFAULT_LOCALE}:</td>
+    <td width="40%" class="row1">
+      <select name="default_locale" class="input">
+        <!-- BEGIN locale_row -->
+        <option value="{locale_row.VALUE}"{locale_row.SELECTED}>{locale_row.OPTION}</option>
+        <!-- END locale_row -->
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td width="60%" class="row2">{L_BACKUP_DB}:</td>
+    <td width="40%" class="row1">
+      <select name="backup_db" class="input">
+        <!-- BEGIN backup_row -->
+        <option value="{backup_row.VALUE}"{backup_row.SELECTED}>{backup_row.OPTION}</option>
+        <!-- END backup_row -->
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td width="60%" class="row2">{L_DEFAULT_GAME}:</td>
+    <td width="40%" class="row1">
+      <select name="default_game" class="input">
+        <!-- BEGIN game_row -->
+        <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+        <!-- END game_row -->
+      </select>
+    </td>
+  </tr>
+    <td align="center" width="100%" colspan=2 class="row1">{L_DEFAULT_GAME_WARN}</td>
+  <tr>
+    <td width="60%" class="row2">{L_DEFAULT_STYLE}:</td>
+    <td width="40%" class="row1">
+      <select name="default_style" class="input">
+        <!-- BEGIN style_row -->
+        <option value="{style_row.VALUE}"{style_row.SELECTED}>{style_row.OPTION}</option>
+        <!-- END style_row -->
+      </select>
+      &nbsp;&nbsp; (<a href="javascript:pop_preview()">{L_PREVIEW}</a>)
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_DEFAULT_PAGE}:</td>
+    <td width="40%" class="row1">
+      <select name="start_page" class="input">
+        <!-- BEGIN page_row -->
+        <option value="{page_row.VALUE}"{page_row.SELECTED}>{page_row.OPTION}</option>
+        <!-- END page_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_HIDE_INACTIVE}:<br /><span class="small">{L_HIDE_INACTIVE_NOTE}</span></td>
+    <td width="40%" class="row1"><span class="small"><input type="radio" name="hide_inactive" value="1"{HIDE_INACTIVE_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="hide_inactive" value="0"{HIDE_INACTIVE_NO_CHECKED} /> {L_NO}</span></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INACTIVE_PERIOD}:<br /><span class="small">{L_INACTIVE_PERIOD_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="inactive_period" size="5" maxlength="255" value="{INACTIVE_PERIOD}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ACTIVE_POINT_ADJ}:<br /><span class="small">{L_ACTIVE_POINT_ADJ_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="active_point_adj" size="7" maxlength="10" value="{ACTIVE_POINT_ADJ}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_INACTIVE_POINT_ADJ}:<br /><span class="small">{L_INACTIVE_POINT_ADJ_NOTE}</span></td>
+    <td width="40%" class="row1"><input type="text" name="inactive_point_adj" size="7" maxlength="10" value="{INACTIVE_POINT_ADJ}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ENABLE_GZIP}:</td>
+    <td width="40%" class="row1"><span class="small"><input type="radio" name="enable_gzip" value="1"{GZIP_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="enable_gzip" value="0"{GZIP_NO_CHECKED} /> {L_NO}</span></td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_DEFAULT_PERMISSIONS}</th>
+  </tr>
+  <tr>
+    <td class="row1" colspan="2"><span class="small">{L_DEFAULT_PERMISSIONS_NOTE}</span></td>
+  </tr>
+  <!-- BEGIN permissions_row -->
+  <tr>
+    <td width="40%" class="row2">{permissions_row.GROUP}:</td>
+    <td width="60%" class="row1" nowrap="nowrap">
+      <!-- BEGIN check_group -->
+      <input type="checkbox" name="{permissions_row.check_group.CBNAME}" value="Y"{permissions_row.check_group.CBCHECKED} />
+      <span class="small">{permissions_row.check_group.TEXT}</span>
+      <!-- END check_group -->
+    </td>
+  </tr>
+  <!-- END permissions_row -->
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_COOKIE_SETTINGS}</th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_COOKIE_DOMAIN}:</td>
+    <td width="40%" class="row1"><input type="text" name="cookie_domain" size="25" maxlength="255" value="{COOKIE_DOMAIN}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_COOKIE_NAME}:</td>
+    <td width="40%" class="row1"><input type="text" name="cookie_name" size="25" maxlength="255" value="{COOKIE_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_COOKIE_PATH}:</td>
+    <td width="40%" class="row1"><input type="text" name="cookie_path" size="25" maxlength="255" value="{COOKIE_PATH}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_SESSION_LENGTH}:</td>
+    <td width="40%" class="row1"><input type="text" name="session_length" size="7" maxlength="255" value="{SESSION_LENGTH}" class="input" /></td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_EMAIL_SETTINGS}</th>
+  </tr>
+  <tr>
+    <td width="60%" class="row2">{L_ADMIN_EMAIL}:</td>
+    <td width="40%" class="row1"><input type="text" name="admin_email" size="30" maxlength="255" value="{ADMIN_EMAIL}" class="input" /></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="submit" value="{L_SUBMIT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" /></th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

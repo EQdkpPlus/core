@@ -1,0 +1,85 @@
+<!-- INCLUDE ../../../../templates/defaultV/page_header.html -->
+<!-- IF IS_ADD -->
+<form method="post" action="{F_ADD_ACL}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+	    <th align="center" width="100%" COLSPAN="4">{L_ADD_ACL}</th>
+	  </tr>
+	<tr class="{ROW_CLASS}">
+	<td>{L_CHAR_DATA}</td>
+	<td><select name="members" class="input">
+    <!-- BEGIN members_row -->
+    <option value="{members_row.NAME}" >{members_row.NAME}</option>
+    <!-- END members_row -->
+    </select></td>
+	<tr>
+	<tr class="{ROW_CLASS}">
+	<td>{L_BANK_QTY}</td>
+	<td><input class="input" type="text" name="amount" value="" size="6"></td>
+	<tr>
+	
+	<tr>
+	<tr class="{ROW_CLASS}">
+	<td>{L_ITEMCOST_MON}</td>
+	<td>
+    <input class="input" type="text" name="gold_value" value="0" size="5">
+    <input class="input" type="text" name="silver_value" value="0" size="2">
+    <input class="input" type="text" name="copper_value" value="0" size="2">
+  </td>
+	<tr>
+	<tr>
+	<tr class="{ROW_CLASS}">
+	<td>{L_ITEMCOST_DKP}</td>
+	<td><input class="input" type="text" name="dkp_value" value="0" size="6"></td>
+	<tr>
+	
+	<tr class="{ROW_CLASS}">
+	<td>{L_RB_ACT}</td>
+	<td><select name="action" class="input">
+    <option value="spent" >{L_AC_SPENT}</option>
+    <option value="got" >{L_AC_GOT}</option>
+    </select></td>
+	<tr>
+	<tr class="{ROW_CLASS}">
+	<td>{L_ITEMNAME}</td>
+	<td><select name="item_name" class="input">
+    <!-- BEGIN bank_row -->
+    <option value="{bank_row.ID}" >{bank_row.NAME}</option>
+    <!-- END bank_row -->
+    </select></td>
+	<tr>
+		<th align="center" colspan="5"><input type="submit" name="doInsert" value="{L_ACL_SAVE}" class="mainoption"/></th>
+	</tr>
+</table>
+</form>
+<!-- ELSE -->
+<form method="post" action="{F_ADD_ACL}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+	    <th align="center" width="100%" COLSPAN="6">{L_LIST_ACL}</th>
+	  </tr>
+	<tr>
+		<th align="left">{L_ID}</th>
+    <th align="left">{L_CHARNAME}</th>
+    <th align="left">{L_AMOUNT}</th>
+    <th align="left">{L_ITEM_NAME}</th>
+    <th align="left">{L_RB_ACT}</th>
+    <th align="left">{L_DELETE}</th>
+    </tr>
+    <!-- BEGIN acl_row -->
+		<tr class="{acl_row.ROW_CLASS}">
+    <td align="left">{acl_row.ID}</td>
+    <td align="left">{acl_row.NAME}</td>
+    <td align="left">{acl_row.QTY}</td>
+    <td align="left">{acl_row.ITEM_NAME}</td>
+    <td align="left">{acl_row.ACTION}</td>
+    <td align="left"><input name="delete[]" value="{acl_row.ID}" type="checkbox"></td>
+    </tr>
+    <!-- END acl_row -->
+	<tr>
+		<th align="center" colspan="6"><input type="submit" name="doAdd" value="{L_ACL_ADD}" class="mainoption"/> <input type="submit" name="doDelete" value="{L_DELETE}" class="mainoption"/></th>
+	</tr>
+</table>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE ../../../../templates/defaultV/page_tail.html -->

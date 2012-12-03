@@ -1,0 +1,50 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+{ITEM_STATS}
+  <!-- IF S_STATS -->
+  <tr>
+    <td class="row1" height="0" colspan="4" align="center">
+      <iframe name="item_stats" src="{U_VIEW_STATS}" width="451" height="183" scrolling="no" frameborder="0"></iframe>
+    </td>
+  </tr>
+  <!-- ENDIF -->
+</table>
+<br />
+<table align="center" width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  	<th align="center" width="100">{L_TRADE}</th>
+	<th align="center" width="100">{L_ADDEDBY}</th>
+  	<th align="center">{L_OWNER}</th>
+  </tr>
+  <tr>
+  	<td align="center" width="100">{TRADE}</td>
+  	<td align="center" width="100">{ADDEDBY}</td>
+  	<td align="center">{OWNER}</td>
+  </tr>  
+</table>
+<br />
+<table align="center" width="65%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+	<th align="left" width="40%">{L_MEMBERNAME}</th>
+	<!-- IF S_PROFS -->
+	<th align="center">{L_FIRST_SKILL}</th>
+	<th align="center">{L_SECOND_SKILL}</th>
+	<!-- ENDIF -->
+	<th align="left" width="40">{L_OWNER}</th>
+  </tr>
+<!-- BEGIN members_row -->
+  <form method="POST" action="{members_row.F_UPDATE}" name="update">
+  <input type="hidden" name="recipe_id" value="{RECIPEID}">
+  <input type="hidden" name="chosen_member_id" value="{members_row.ID}">
+  <tr class="{members_row.ROW_CLASS}">
+	<td align="left">{members_row.NAME} </td>
+	<!-- IF S_PROFS -->
+	<td align="center">{members_row.FIRST_SKILL} </td>
+	<td align="center">{members_row.SECOND_SKILL} </td>
+	<!-- ENDIF -->
+	<td align="center" width="40">
+    		<input type="checkbox" name="recipe" value="dummy" class="input" onClick="submit()" {members_row.ISOWNER}>
+    	</td>
+  </tr>  
+  </form>
+<!-- END members_row -->
+</table>

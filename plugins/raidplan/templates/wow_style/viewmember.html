@@ -1,0 +1,19 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" class="borderless" cellpadding="0" cellspacing="0">
+	<tr>
+		<th colspan="4" nowrap width="50" align="center">{L_CHARS_OF} {USERNAME}</th>
+	</tr>
+<!-- BEGIN members -->
+	<tr>
+	<td width="50">{L_Name}:			</td><td width="50">{members.NAME}		</td><td width="50">{L_LEVEL}: </td><td width="50">{members.LEVEL}</td>
+	</tr><tr>
+	<td width="50">Member ID:		</td><td width="50">{members.ID}		</td><td width="50">{L_RACE}: </td><td width="50"><img width="15" height="15" src="images/races/{members.RACE_EN}_male.gif" alt="">{members.RACE}</td>
+	</tr><tr>
+	<td width="50">{L_RANK}:			</td><td width="50">{members.RANK}		</td><td width="50">{L_CLASS}:</td><td width="50"><img width="15" height="15" src="images/class/{members.CLASS_EN}.gif" alt="">{members.CLASS}</td>
+	</tr>
+	<tr><td colspan="4">--</td></tr>
+<!-- END members -->
+	<tr>
+	<td colspan="4"> es wurden X Charaktäre gefunden </td>
+	</tr>
+</table>

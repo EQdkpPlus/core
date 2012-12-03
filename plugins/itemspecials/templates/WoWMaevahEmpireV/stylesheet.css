@@ -1,0 +1,35 @@
+.tableheader_Druide, .tableheader_Druid {
+	color	: #CC6600;
+}
+
+.tableheader_Hexenmeister, .tableheader_Warlock {
+	color	: #855BCC;
+}
+
+.tableheader_Jäger, .tableheader_Hunter {
+	color	: #99CC66;
+}
+
+.tableheader_Krieger, .tableheader_Warrior {
+	color	: #CC9966;
+}
+
+.tableheader_Magier, .tableheader_Mage {
+	color	: #66CCFF;
+}
+
+.tableheader_Priester, .tableheader_Priest {
+	color	: #FFFFFF;
+}
+
+.tableheader_Schamane, .tableheader_Shaman {
+	color	: #FF99CC;
+}
+
+.tableheader_Paladin {
+	color	: #F48CBA;
+}
+
+.tableheader_Schurke, .tableheader_Rogue {
+	color	: #FFFF66;
+}
