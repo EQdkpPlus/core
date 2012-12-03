@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS eqdkp_portal;
+CREATE TABLE IF NOT EXISTS eqdkp_portal (id mediumint(8) unsigned NOT NULL auto_increment, name varchar(50) NOT NULL default '', enabled enum('0','1') NOT NULL default '0', settings enum('0','1') NOT NULL default '0', path varchar(255) NOT NULL default '', contact varchar(100) default NULL, url varchar(100) default NULL, autor varchar(100) default NULL, version varchar(7) NOT NULL default '', position varchar(255) NOT NULL default '0', number mediumint(8), plugin varchar(255) NOT NULL default '', visibility ENUM( '0', '1', '2' ) NOT NULL DEFAULT '0', collapsable ENUM( '0', '1' ) NOT NULL DEFAULT '1', PRIMARY KEY  (id));
+

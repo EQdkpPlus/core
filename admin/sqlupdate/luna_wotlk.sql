@@ -1,0 +1,5 @@
+#luna_wotlk
+DELETE FROM eqdkp_styles where style_id=36;
+DELETE FROM eqdkp_style_config where style_id=36;
+INSERT INTO eqdkp_style_config (style_id, attendees_columns, logo_path) VALUES (36, '6', 'logo.png');
+INSERT INTO eqdkp_styles (style_id, style_name, template_path, body_background, body_link, body_link_style, body_hlink, body_hlink_style, header_link, header_link_style, header_hlink, header_hlink_style, tr_color1, tr_color2, th_color1, fontface1, fontface2, fontface3, fontsize1, fontsize2, fontsize3, fontcolor1, fontcolor2, fontcolor3, fontcolor_neg, fontcolor_pos, table_border_width, table_border_color, table_border_style, input_color, input_border_width, input_border_color, input_border_style) VALUES (36, 'luna_wotlk', 'luna_wotlk', '2B577C', 'C3E5FF', 'none', 'EEEEEE', 'none', 'FFFFFF', 'none', 'C3E5FF', 'none', '14293B', '1D3953', '2B577C', 'Verdana, Arial, Helvetica, sans-serif', 'Verdana, Arial, Helvetica, sans-serif', 'Verdana, Arial, Helvetica, sans-serif', 11, 12, 13, 'EEEEEE', 'C3E5FF', '000000', 'FF0000', '008800', 1, '999999', 'solid', 'EEEEEE', 1, '2B577C', 'solid');

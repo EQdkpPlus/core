@@ -1,0 +1,105 @@
+<!-- INCLUDE install_header.html -->
+
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{L_INSTALL_LANGUAGE}</h1></p>
+  <p><span style="float:left;">{L_LANGUAGE_SELECT}:&nbsp;</span><span class="left"><form method="get" action="index.php" name="langget">
+        <select name="lang" class="input" onchange="javascript:form.submit();">
+          <!-- BEGIN lang_row -->
+          <option value="{lang_row.VALUE}" {lang_row.SELECTED}>{lang_row.OPTION}</option>
+          <!-- END lang_row -->
+        </select>
+      </form></span></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="3">{L_EQDKPPNAME}</th>
+  </tr>
+  <tr>
+    <td width="250" class="row2" nowrap="nowrap">{L_EQDKPPVERSION}:</td>
+    <td width="50%" class="row1">{L_EQDKPPNAME} {OUR_EQDKPP_VERSION}</td>
+    <td width="100%" class="row2">{L_SERVER_VERSION}: {THEIR_EQDKPP_VERSION}</td>
+  </tr>
+</table></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+<div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <p><table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="3">{L_INST_PHP}</th>
+  </tr>
+  <tr>
+    <td colspan="3" class="row2"><a href="index.php?mode=phpinfo" target="_blank">{L_VIEWPHPINFO}</a></td>
+  </tr>
+  <tr>
+    <td width="300" class="row2" nowrap="nowrap">{L_VERSION}:</td>
+    <td width="50%" class="row1">{L_USING}: {OUR_PHP_VERSION}</td>
+    <td width="50%" class="row2">{L_REQUIRED}: {THEIR_PHP_VERSION}</td>
+  </tr>
+  <tr>
+    <td width="300" class="row2" nowrap="nowrap">{L_MYSQLMODULE}:</td>
+    <td width="50%" class="row1">{L_AVAILABLE}: {OUR_MYSQL}</td>
+    <td width="50%" class="row2">{L_REQUIRED}: {THEIR_MYSQL}</td>
+  </tr>
+  <tr>
+    <td width="300" class="row2" nowrap="nowrap">{L_ZLIBMODULE}:</td>
+    <td width="50%" class="row1">{L_AVAILABLE}: {OUR_ZLIB}</td>
+    <td width="50%" class="row2">{L_REQUIRED}: {THEIR_ZLIB}</td>
+  </tr>
+  <tr>
+    <td width="300" class="row2" nowrap="nowrap">{L_SAFEMODE}:</td>
+    <td width="50%" class="row1">{L_ENABLED}: {OUR_SAFEMODE}</td>
+    <td width="50%" class="row2">{L_REQUIRED}: {THEIR_SAFEMODE}</td>
+  </tr>
+  <tr valign="top">
+    <td width="300" class="row2" nowrap="nowrap">{L_CURLMODULE}:</td>
+    <td width="50%" class="row1">{L_AVAILABLE}: {OUR_CURL}</td>
+    <td width="50%" class="row2">{L_REQUIRED}: {THEIR_CURL}</td>
+  </tr>
+    <tr>
+    <td width="300" class="row2" nowrap="nowrap">{L_FOPEN}:</td>
+    <td width="50%" class="row1">{L_AVAILABLE}: {OUR_FOPEN}</td>
+    <td width="50%" class="row2">{L_REQUIRED}: {THEIR_FOPEN}</td>
+  </tr>
+</table>
+</p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+
+
+<!-- IF MSG_TEXT != '' -->
+
+  <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext">{MSG_TEXT}</div></p><br/>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+<br/>
+
+
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+<input type="hidden" name="install_step" value="2" />
+<div align="center"><input type="submit" name="submit" value="{L_INST_BUTTON1}" class="mainoption" /></div>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE install_tail.html -->

@@ -1,0 +1,12 @@
+Subject: {GUILDTAG} {DKP_NAME}: Account AKtivierungsanfrage
+Charset: iso-8859-1
+
+Ein neuer Account für "{USERNAME}" wurde erstellt und benötigt Aktivierung
+bevor er genutzt werden kann.
+
+Um den Account zu aktivieren, klicke auf den folgenden Link:
+
+{U_ACTIVATE}
+
+Du kannst die Berechtigungen ändern, indem Du zur Benutzerverwaltung im
+Administrationsbereich gehst.
