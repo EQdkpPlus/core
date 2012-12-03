@@ -1,0 +1,313 @@
+<script type='text/javascript'>
+//<![CDATA[
+	$(document).ready(function() {
+		$('#calendar').fullCalendar({
+			allDayDefault: false,
+			buttonText: {
+				today: '{L_calendar_today}',
+				month: '{L_calendar_month}',
+				week: '{L_calendar_week}',
+				day: '{L_calendar_day}'
+			},
+			allDayText: '{calendar_allday}',
+			monthNames: ['{monthnames:0}','{monthnames:1}','{monthnames:2}','{monthnames:3}','{monthnames:4}','{monthnames:5}','{monthnames:6}','{monthnames:7}','{monthnames:8}','{monthnames:9}','{monthnames:10}','{monthnames:11}'],
+			monthNamesShort: ['{monthnames_short:0}','{monthnames_short:1}','{monthnames_short:2}','{monthnames_short:3}','{monthnames_short:4}','{monthnames_short:5}','{monthnames_short:6}','{monthnames_short:7}','{monthnames_short:8}','{monthnames_short:9}','{monthnames_short:10}','{monthnames_short:11}'],
+			dayNames: ['{daynames:6}','{daynames:0}','{daynames:1}','{daynames:2}','{daynames:3}','{daynames:4}','{daynames:5}'],
+			dayNamesShort: ['{daynames_short:6}','{daynames_short:0}','{daynames_short:1}','{daynames_short:2}','{daynames_short:3}','{daynames_short:4}','{daynames_short:5}'],
+			firstDay: {STARTDAY},
+
+			// define the time formats
+			axisFormat: 'H(:mm)',
+			columnFormat: {
+				month: 'ddd',		// Mo
+				week: 'ddd d.M',	// Do 16.12.
+				day: 'dddd d.M'		//Samstag, 13.12.
+			},
+
+			// The rest
+			theme: true,
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+			timeFormat: {
+				agenda: 'H:mm{ - H:mm}',	// 5:00 - 6:30
+				'': ''
+			},
+			dayClick: function(date, allDay, jsEvent, view) {
+				if (allDay) {
+					jQuery.FrameDialog.create({
+						url: 'calendar/addevent.php{SID}&simple_head=true&timestamp='+(Date.parse(date)/1000),
+						title: "{L_calendar_win_add}",
+						width: 900,
+						height:700,
+						modal: false,
+						buttons: false,
+						close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
+					});
+					return false;
+				}
+			},
+			eventRender: function(event, element) {
+				if(event.icon){
+					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='absmiddle' />"));
+				}
+
+				if(event.flag){
+					element.find(".fc-event-title").after($("<span class=\"fc-event-flag\"></span>").html(event.flag));
+				}
+
+				if(event.closed){
+					element.find(".fc-event-title").addClass("linethrough");
+				}
+
+				// onclick Event Tooltip
+				if(!event.url){
+					if(event.allDay){
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, 'dd.MM.yyyy')+"</div>";
+						if(($.fullCalendar.formatDate(event.end, 'dd') != $.fullCalendar.formatDate(event.start, 'dd')) || ($.fullCalendar.formatDate(event.end, 'MM') != $.fullCalendar.formatDate(event.start, 'MM'))){
+							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, 'dd.MM.yyyy')+"</div>";
+						}
+						tmpttcontent += "<div class='calendartt_allday'>{L_calendar_allday}</div>";
+					}else{
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, 'dd.MM.yyyy, H:mm')+"</div>";
+						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, 'dd.MM.yyyy, H:mm')+"</div>";
+					}
+					if(event.note){
+						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
+					}
+					element.qtip({
+						content: tmpttcontent,
+					});
+				}else{
+					tmpttcontent = '';
+					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
+					tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, 'dd.MM.yyyy, H:mm')+"</div>";
+					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, 'dd.MM.yyyy, H:mm')+"</div>";
+
+					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
+
+					tmpttcontent += (event.note) ? "<br/><div class='calendartt_note'>{L_note}: "+event.note+"</div>" : '';
+					element.qtip({
+						content: tmpttcontent,
+						position: {
+							at: "bottom center",
+							my: "top center"
+						},
+						style: {
+							classes: 'ui-tooltip-shadow',
+							tip: {
+								corner: true,
+								width: 20
+							},
+							widget: true
+						}
+					});
+				}
+			},
+			eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+				// Save after event-drop is finished, use ajax() cause of error callback
+				$.ajax({
+					type: "POST",
+					url: 'calendar.php{SID}&link_hash={CSRF_RESIZE_TOKEN}',
+					data: { "resize": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "eventid": event.eventid },
+					error: function(){
+						revertFunc();
+					},
+					success: function(msg){
+						$("#notify_container").notify("create", "success", msg);
+					}
+				});
+			},
+			eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+				// Save after event-drop is finished, use ajax() cause of error callback
+				$.ajax({
+					type: "POST",
+					url: 'calendar.php{SID}&link_hash={CSRF_MOVE_TOKEN}',
+					data: { "move": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "allday": allDay, "eventid": event.eventid },
+					error: function(){
+						revertFunc();
+					},
+					success: function(msg){
+						$("#notify_container").notify("create", "success", msg);
+					}
+				});
+			},
+			loading: function(bool) {
+				if (bool) $('#calendar_loading').show();
+				else $('#calendar_loading').hide();
+			},<!-- IF IS_OPERATOR -->
+			eventMouseover: function(event, jsEvent, view) {
+				var layer =	"<div id='events-layer'><img class='hand' height='16' width='16' src='images/global/edit.png' alt='edit' onClick='editEvent("+event.eventid+");'>  <img class='hand' height='16' width='16' src='images/global/delete.png' alt='delete' onClick='deleteEvent("+event.eventid+");'></div>";
+				$(this).append(layer);
+			},
+			eventMouseout: function(calEvent, domEvent) {
+				$("#events-layer").remove();
+			},<!-- ENDIF -->
+			events: "calendar.php{SID}&json=true"
+		});
+
+		$("#iCalLink").qtip({
+			content: {
+				text: '<img class="throbber" src="images/global/loading.gif" alt="Loading..." />',
+				ajax: {
+					url: 'calendar.php{SID}&export_tooltip=true'
+				},
+				title: {
+					text: '{L_calendar_export_head}',
+					button: true
+				}
+			},
+			position: {
+				at: "bottom left",
+				my: "top left"
+			},
+			style: {
+				width: 500,
+				tip: {
+					corner: true,
+					width: 20
+				},
+				widget: true
+			},
+			hide: false
+		});
+
+		$("#calendar_tab").tabs({
+			fxSlide: true,
+			fxFade: true,
+			fxSpeed: 'normal',
+			selected: ($.cookie('eqdkpCalendarTabs') || 0),
+			select: function(e, ui) {
+				$.cookie('eqdkpCalendarTabs', ui.index, { expires: 30 });
+			},
+			show: function(event, ui) {
+				$('#calendar').fullCalendar('render');
+			}
+		});
+
+		$('[name="selected_ids[]"], #pdh_selectall1').change( function() {
+			if($(this).prop('checked') == true && $('#raid_masssignin_panel').is(':hidden')){
+				$('#raid_masssignin_panel').fadeIn(2000);
+			}else{
+				if($('#raid_masssignin_panel').is(':visible') && $('[name="selected_ids[]"]').filter(":checked").length == 0){
+					$('#raid_masssignin_panel').fadeOut("slow");
+				}
+			}
+		});
+	});
+
+	function editEvent(editid){
+		jQuery.FrameDialog.create({
+			url: 'calendar/addevent.php{SID}&simple_head=true&eventid='+editid,
+			title: "{L_calendar_win_edit}",
+			width: 900,
+			height:650,
+			modal: false,
+			buttons: false,
+			close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
+		});
+	}
+
+	function deleteEvent(deleteid){
+		$.get("calendar.php{SID}&checkrepeatable="+deleteid, function(data){
+			if(data == 'true'){
+				var delclones_checked = '';
+				$("#confirm_caleventdelete_all").dialog({
+					resizable: false,
+					height:200,
+					width: 400,
+					modal: true,
+					buttons: {
+						"{L_delete}": function() {
+							if($('#delete_all_clones').prop('checked')){
+								delclones_checked = '&delete_clones=true';
+							}
+							$.post('calendar.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid+delclones_checked);
+							$( this ).dialog( "close" );
+							$('#calendar').fullCalendar('refetchEvents');
+						},
+						{L_cancel}: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				});
+			}else{
+				$("#confirm_caleventdelete").dialog({
+					resizable: false,
+					height:180,
+					modal: true,
+					buttons: {
+						"{L_delete}": function() {
+							$.post('calendar.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid);
+							$( this ).dialog( "close" );
+							$('#calendar').fullCalendar('refetchEvents');
+						},
+						{L_cancel}: function() {
+							$( this ).dialog( "close" );
+						}
+					}
+				});
+			}
+		});
+	}
+
+//]]>
+</script>
+<div class="calendar_export"><span id="iCalLink"><img src="images/calendar/vcalendar_s.png" alt="iCal"/> {L_raideventlist_export_ical}</span></div>
+<div id="confirm_caleventdelete_all" style="display:none;" title="{L_calendars_delete_title}">
+	<p>
+		<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+		{L_calendars_delete_text}
+	</p>
+	<p>
+		<input type="checkbox" name="deleteall" value="true" id="delete_all_clones" /> {L_calendars_deleteall_text}
+	</p>
+</div>
+<div id="confirm_caleventdelete" style="display:none;" title="{L_calendars_delete_title}">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{L_calendars_delete_text}</p>
+</div>
+
+<div id='calendar_tab'>
+	<ul>
+		<li><a href='#fragment-calendar'><span>{L_calendar}</span></a></li>
+		<li><a href='#fragment-list'><span>{L_calendar_list}</span></a></li>
+	</ul>
+
+	<div id="fragment-calendar">
+		<div id="calDialog"></div>
+		<div id='calendar_loading'><img src="{TEMPLATE_PATH}/images/calendar_loading.gif" alt="loading" /> {L_lib_loading}</div>
+		<div id='calendar'></div>
+	</div>
+
+	<div id="fragment-list">
+		<form name="masssignin" method="post" action="{ACTION}">
+		<table width="100%" cellpadding="1" cellspacing="1" border="0">
+			<tr id="raid_masssignin_panel" style="display:none;">
+				<td class="row1" colspan="10">
+					<table cellpadding="1" cellspacing="2" border="0" width="100%">
+						<tr>
+							<td width="35%">{L_raideventlist_masssignin}</td>
+							<td width="10%">{DD_CHARS}</td>
+							<td width="10%">{DD_ROLES}</td>
+							<td width="25%" align="right"><div class="rcal_comment_add">&nbsp;</div> {TXT_NOTE}</td>
+							<td width="10%">{DD_STATUS}</td>
+							<td width="10%"><input type="submit" name="mass_signin" value="{L_raideventlist_masssignbttn}" class="mainoption bi_ok" /></td>
+						</tr>
+					</table>
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+						{RAID_LIST}
+					</table>
+				</td>
+			</tr>
+		</table>
+		{CSRF_TOKEN}
+		</form>
+	</div>
+</div>

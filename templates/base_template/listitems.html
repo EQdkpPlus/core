@@ -1,0 +1,29 @@
+<form method="get" action="{ACTION}">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{ITEM_PAGINATION}</td>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr align="right">
+			<th align="left" class="nowrap" >
+				{L_Itemsearch_searchby}
+				<label><input name="search_type" class="input" type="radio"value="itemname" checked="checked" />{L_Itemsearch_item}</label>
+				<label><input name="search_type" class="input" type="radio"value="buyer" />{L_Itemsearch_buyer}</label>
+				<label><input name="search_type" class="input" type="radio"value="raidname" />{L_Itemsearch_raid}</label>
+				&nbsp;<input name="search" class="input" type="text" size="40" />
+				{SEARCH_LINK}
+			</th>
+			<th>{MANAGE_LINK}</th>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{PAGE_OUT}
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{ITEM_PAGINATION}</td>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

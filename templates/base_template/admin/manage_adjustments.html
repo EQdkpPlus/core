@@ -1,0 +1,15 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr>
+			<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_manadjs_title}</span><span style="float:right;"><input type="button" name="addadj" value="{L_add_adjustment}" class="mainoption bi_new" onclick="window.location='manage_adjustments.php{SID}&amp;upd=true'"/></span></th>
+		</tr>
+			{ADJ_LIST}
+		<tr>
+			<th colspan="{HPTT_COLUMN_COUNT}"><input type="button" name="del" value="{L_delete_selected_adjs}" class="mainoption bi_delete" onclick="delete_warning();" />
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+			</th>
+		</tr>
+		<tr class="pagination_row"><td colspan="{HPTT_COLUMN_COUNT}" align="center">{PAGINATION}</td></tr>
+	</table>
+	{CSRF_TOKEN}
+</form>

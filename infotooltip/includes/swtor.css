@@ -1,0 +1,696 @@
+/*
+ * Tooltips.css
+ */
+
+.sw_tooltip .d {color: #FFBB00 }
+.r  { color: #FFBB00 }
+a.sw_r1 {color: #1eff00 !important; font-weight:normal !important; }
+a.sw_r2 { color: #FFFFFF !important; font-weight:normal !important; }
+a.sw_r3 { color: #0070dd !important; font-weight:normal !important; }
+a.sw_r4 { color: #a335ee !important; font-weight:normal !important; }
+a.sw_r5 {  color: #9d9d9d !important; font-weight:normal !important; }
+a.sw_r6 { color: #ff8000 !important; font-weight:normal !important; }
+
+.ability-name { color: #ffffff }
+.sw_tooltip .ability-name { color: #F0C060; font-size: 14px; }
+.ability-desc { color: #0072bc; }
+.ability-border { border-top: solid 3px #828282; }
+.ability-info { white-space: nowrap; }
+.item-tooltip-bonus { color: #FFFF00; }
+
+.swdb-table .iconlarge { height:56px; position:relative; width:56px; margin-right: 5px; }
+.swdb-table .iconlarge .glow {cursor:default; font-size:18px; font-weight:bold; margin:5px 7px; }
+.swdb-table .iconlarge a { width: 62px; height: 62px; left: 2px; top: 2px; position: absolute; z-index: 20; display: block; border: 0; background:  no-repeat -64px 0; }
+.swdb-table .iconlarge a:hover { background-position: 0 0 }
+
+.swdb-table .iconmedium { width: 48px; height: 48px; position: relative; margin-right: 5px; }
+.swdb-table .iconmedium a { width: 48px; height: 48px; position: absolute; z-index: 20; display: block; border: 0; }
+.swdb-table .iconmedium a:hover { background-position: 0 0 }
+
+.swdb-table .iconsmall { background:transparent none no-repeat scroll 1px; height:26px; position:relative; width:26px; margin-right: 5px; }
+.swdb-table .iconsmall a { width: 30px; height: 30px; left: 0px; top: 0px; position: absolute; z-index: 20; display: block; border: 0; }
+.swdb-table .iconsmall a:hover { background-position: 0 0 }
+.swdb-table .iconsmall .glow
+{
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 2px 5px 2px 4px;
+}
+.sw_tooltip .iconlarge,
+.sw_tooltip .iconmedium,
+.sw_tooltip .iconsmall 
+{
+	overflow: hidden;
+	
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	
+	border: 1px solid #888;
+	border-top-color: #b1b2b4;
+	border-bottom-color: #2f3032;
+	
+	border: 1px solid rgba(255,255,255,.4);
+	border-top-color: #b1b2b4;
+}
+.sw_tooltip .c0
+{
+    color: #ff5503 ;
+}
+.sw_tooltip .c1
+{
+    color: #b5b5b5 ;
+}
+.sw_tooltip .c2
+{
+    color: #888887 ;
+}
+.sw_tooltip .c3
+{
+    color: #7be15c ;
+}
+.sw_tooltip .c4
+{
+    color: #fd2f1f ;
+}
+.sw_tooltip .c5
+{
+    color: #ffffff ;
+}
+
+.sw_tooltip .r1
+{
+    color: #1eff00 !important; font-weight : normal !important;
+}
+.sw_tooltip .r2
+{
+    color: #FFFFFF !important; font-weight: normal !important; 
+}
+.sw_tooltip .r3
+{
+   color: #0070dd !important; font-weight: normal !important;
+}
+.sw_tooltip .r4
+{
+     color: #a335ee !important; font-weight: normal !important; 
+}
+.sw_tooltip .r5
+{
+    color: #9d9d9d !important; font-weight: normal !important; 
+}
+.sw_tooltip .r6
+{
+   color: #ff8000 !important; font-weight: normal !important;
+}
+.tooltip-cache
+{
+    background:transparent url(http://www.swdb.com/images/tooltip.png);
+    width: 0px;
+    height: 0px;
+    position: absolute;
+}
+#tooltipContainer, .sw_tooltip-container
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 100001;	
+	white-space: nowrap;
+}
+
+.tooltip-icon
+{
+    display: none;
+    float: left;
+    position: relative;
+    background: transparent none no-repeat scroll 4px;
+    height:44px;                
+    width:44px;
+    
+}
+.tooltip-icon div
+{
+    height:44px;
+    width:44px;
+}
+
+.sw_tooltip-icon,.tooltip-icon    
+{
+    display: none;    
+    float: left;    
+    position: relative;    
+    background: transparent none no-repeat scroll;    
+    height:44px;                    
+    width:44px;        
+    overflow: hidden;        
+    -webkit-border-radius:3px;    
+    -moz-border-radius:3px;    
+    border-radius:3px;        
+    border: 1px solid #888;    
+    border-top-color: #b1b2b4;    
+    border-bottom-color: #2f3032;
+}
+.sw_tooltip-icon div   
+{
+     height:44px;    
+     width:44px;        
+     -webkit-border-radius:3px;    
+     -moz-border-radius:3px;    
+     border-radius:3px;
+}
+.sw_tooltip table {
+    border-collapse:collapse;
+    border-spacing:0pt;        
+}
+.sw_tooltip td, .sw_tooltip th {
+    background:transparent url(http://www.swdb.com/images/tooltip.png) repeat scroll 0% 0%;
+    color:white;
+    font-family:Arial;
+    font-size:12px;
+    line-height:17px;
+}
+.sw_tooltip td td {
+    padding:0pt;
+}
+.sw_tooltip td th, .sw_tooltip td td {
+    background:transparent none repeat scroll 0%;
+}
+.sw_tooltip td th {
+    font-weight:normal;
+    padding:0pt 0pt 0pt 4em;
+    text-align:right;
+}
+.sw_tooltip td th, .sw_tooltip td td {
+    background:transparent none repeat scroll 0%;
+}
+.sw_tooltip b { font-size: 15px; line-height: 19px; font-weight: normal }
+.sw_tooltip a {text-decoration: none;}
+.sw_tooltip a:hover {
+    text-decoration:underline;
+}
+.sw_tooltip div.indent {
+    padding-left:0.6em;
+}
+.sw_tooltip var
+{
+    display: block;
+    background: transparent url(http://www.swdb.com/images/tooltip_divider.png) repeat-x;
+    position: relative;    
+    height: 10px;
+    margin-top: 10px;
+}
+
+.swdb-table
+{
+    display:inline-table;    
+}
+
+
+.item-tip-extra-stats
+{
+
+}
+
+.item-tip-misc
+{
+
+}
+
+.item-tip-stats
+{
+
+}
+
+
+.item-tip-strike
+{
+
+}
+
+.item-tip-strike .tipColOne
+{
+    color:#eef08f ;
+}
+
+.item-tip-attack .tipColOne
+{
+    width: 114px;
+}
+
+.item-tip-stats .tipColOne
+{
+    width: 120px;
+}
+
+.item-tip-stats .tipColTwo
+{
+    width: 40px;
+}
+
+
+
+.item-tip-stats .tipColThree
+{
+    width: 120px;
+}
+
+.item-tip-stats .tipColFour
+{
+    width: 40px;
+}
+
+
+
+.item-tip-extra-stats .tipColOne
+{
+    width: 120px;
+}
+
+.item-tip-extra-stats .tipColTwo
+{
+    width: 40px;
+}
+
+.item-tip-extra-stats .tipColThree
+{
+    width: 120px;
+}
+
+.item-tip-extra-stats .tipColFour
+{
+    width: 40px;
+}
+
+
+.tooltipExtraText
+{
+    color:#eef08f ;
+}
+
+
+.item-tip-line
+{
+
+}
+
+.item-tip-line2
+{
+    width:267%;
+}
+
+.item-tip-line-table
+{
+    width:100%;
+}
+
+.item-socket
+{
+
+    background: transparent url(http://www.swdb.com/images/socket_image.png) left no-repeat ;
+    width: 120px;
+    height: 25px;
+}
+
+.socket-images
+{
+    width:100%;
+}
+
+.d3 {
+    color: #00CC00 !important;
+}
+.d2 {
+    color: #FFFF00 !important;
+}
+.d1 {
+    color: #FF8040 !important;
+}
+.d4 {
+    color: #DD2222 !important;
+}
+.rarity-flavor {
+    color: #DBC37D !important;
+}
+
+span.moneyplat {
+    background: url("/images/coins-plat.png") no-repeat 0px -1px;
+    padding: 0px 0px 0px 20px;
+}
+span.moneygold {
+    background: url("/images/coins-gold.png") no-repeat 0px -1px;
+    padding: 0px 0px 0px 20px;
+}
+span.moneysilver {
+    background: url("/images/coins-silver.png") no-repeat 0px -1px;
+    padding: 0px 0px 0px 20px;
+}
+
+.sw_tooltip .right { margin-top:10px; float:right; }
+
+
+#tooltipContainer, 
+.sw_tooltip-container, 
+#detailsTooltip
+{
+    background-color: #070f12;
+    border: 1px solid #3f7086;
+    -webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-moz-box-shadow: inset 0px 0px 8px #1f555a, inset 0px 0px 4px #1f555a;
+	-webkit-box-shadow: inset 0px 0px 8px #1f555a, inset 0px 0px 4px #1f555a;
+	box-shadow: 0 0 10px rgba(0,0,0,.8), inset 0px 0px 4px #1f555a, inset 0px 0px 2px #1f555a;
+	position: absolute;
+	top: 0px;
+	left: 56px;
+	z-index: 100001;
+	padding: 8px;	
+	white-space: nowrap;
+	font-family: Verdana;
+	width:auto !important; 
+}
+
+/*** Details Page Tooltips ***/
+#detailsTooltip
+{
+    position:static;
+    float: left;
+    padding: 0 5px;
+    visibility: visible;
+    display: block;
+    margin-left: 10px;
+    min-width: 245px;
+}
+.ui-tooltip-content #detailsTooltip {
+	margin-left: 65px;
+}
+
+/*** Item Tooltips ***/
+.sw_tooltip
+{
+    max-width: 380px;    
+    float: left;
+    display: none;        
+    white-space: normal;
+}
+/*** Tooltip Icons ***/
+.sw_tooltip-icon,
+.tooltip-icon
+{
+	display: none;
+	float: left;
+	position: relative;
+	height:42px;				
+	width:42px;
+	margin-right: 7px;
+	overflow: hidden;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	border: 1px solid #1E4F85;
+}
+.sw_tooltip table {
+    border-collapse:collapse;
+    border-spacing:0;        
+}
+.sw_tooltip td, .sw_tooltip th {
+    color:#aee2ef;
+    font-size:12px;
+    line-height:17px;
+}
+.sw_tooltip td td {
+    padding:0 0 0 15px;
+}
+.sw_tooltip td th, 
+.sw_tooltip td td {
+    background:none;
+}
+.sw_tooltip td th {
+    font-weight:normal;
+    padding:0pt 0pt 0pt 4em;
+    text-align:right;
+}
+.sw_tooltip td th, 
+.sw_tooltip td td {
+    background:none;
+}
+.sw_tooltip b { font-size: 15px; line-height: 19px; font-weight: normal }
+.sw_tooltip a {text-decoration: none;}
+.sw_tooltip a:hover {
+    text-decoration:underline;
+}
+.sw_tooltip div.indent {
+    padding-left:0.6em;
+}
+.sw_tooltip var
+{
+    display: block;
+    background: transparent url(images/tooltip_divider.png) repeat-x;
+    position: relative;    
+    height: 10px;
+    margin-top: 10px;
+}
+.tooltip-cache
+{
+    background:transparent url(http://localhost/HolocronDB/images/tooltip.png);
+    width: 0px;
+    height: 0px;
+    position: absolute;
+}
+#tooltipContainer, 
+.tooltip-container
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 100001;    
+    white-space: nowrap;
+}
+
+.tooltip
+{    
+    max-width: 420px;    
+    float: left;
+    display: none;        
+    white-space: normal;
+    
+}
+.tooltip table
+{
+    width: 100%;
+}
+.tooltip-icon
+{
+    display: none;
+    float: left;
+    position: relative;
+    height:42px;                
+    width:42px;
+}
+.tooltip-icon div
+{
+    height:44px;
+    width:44px;
+}
+.tooltip-icon.tactic div
+{
+    background: none;
+}
+.tooltip table {
+    border-collapse:collapse;
+    border-spacing:0pt;        
+}
+.tooltip th {
+    padding:4px;    
+}
+.tooltip td {
+      padding: 8px 4px 1px 9px;
+}
+.tooltip td, .tooltip th {
+    color:white;
+    font-size:12px;
+    line-height:17px;
+}
+.tooltip td td {
+    padding:0 0 0 15px;
+    width:100%;
+}
+.tooltip td th, .tooltip td td {
+    background:transparent none repeat scroll 0%;
+}
+.tooltip td th {
+    font-weight:normal;
+    padding: 0pt 0pt 0pt 4em;
+    text-align:right;
+}
+.tooltip td th, .tooltip td td {
+    background:transparent none repeat scroll 0%;
+}
+.tooltip b { font-size: 15px; line-height: 19px; font-weight: normal }
+.tooltip a {text-decoration: none;}
+.tooltip a:hover {
+    text-decoration:underline;
+}
+.tooltip div.indent {
+    padding-left:0.6em;
+}
+
+.tooltip .right
+{
+    float:right;
+}
+
+.tooltip var
+{
+    display: block;
+    background: transparent url(images/tooltip_divider.png) repeat-x;
+    position: relative;    
+    height: 10px;
+    margin-top: 10px;
+}
+
+/* Pinned Tooltips */
+.sw_tooltip-container > div:nth-child(3),
+.sw_tooltip-container > div:nth-child(5) { margin-left: 40px; }
+
+.sw_tooltip .itemTooltipStatChangeList { padding:10px 0; font-size: 12px; max-width:270px; } 
+.sw_tooltip .itemTooltipStatChangeList .item-name { font-size: 12px; padding:0; }
+.sw_tooltip .itemTooltipStatChangeList > .item-name > .item-name { font-weight:bold; padding:0; display:block; font-size: 12px; }
+
+/*** Tool Tip Sections ***/
+.tooltip td { line-height: 15px; padding-left: 17px; }
+/* Tooltip Items */
+.tooltip .item-location,
+.tooltip .item-main-stat,
+.tooltip .item-durability,
+.tooltip .item-time,
+.tooltip .item-cooldown { color:#aee2ef; }
+/* Item Header */
+.tooltip .item-header,
+.sw_tooltip .item-header { color: #a7dae9; font-weight: bold; padding-top:10px; }
+/* Item Stats */
+.tooltip .item-stat,
+.sw_tooltip .item-stat { color: #b79c55; padding-left: 26px;}
+/* Item Requirements */
+.tooltip .item-requirement,
+.sw_tooltip .item-requirement { color: #E83A26; padding-top: 10px; }
+/* Item Desecription */
+.tooltip .item-description,
+.sw_tooltip .item-description { color: #bbaa75; padding-top: 10px; width:300px; white-space:normal; }
+/* Item Name */
+.tooltip .item-name,
+.sw_tooltip .item-name { font-size:15px; padding-bottom:10px; padding-left:0; }
+/* Item Location */   
+.tooltip .item-location,
+.sw_tooltip .item-location { color: #59b6c8; padding-bottom:10px; font-size:11px; }
+/* Item Bind */
+.tooltip .item-bind,
+.sw_tooltip .item-bind { color: #59b6c8; font-size:11px; }
+/* Item Main Stat */
+.tooltip tr:last-child .item-main-stat,
+.sw_tooltip tr:last-child .item-main-stat { color: #E83A26; padding-top: 10px; }
+/* Inline Break */
+.tooltip .item-tip-line-table td,
+.sw_tooltip .item-tip-line-table td { padding:0; }
+/* Item Name Recipes */
+/* ---- GRRRRRRRRRRRRRRR!!!! ------
+.tooltip > table > tbody > tr > td > table:first-child > tbody > tr > td,
+.sw_tooltip > table > tbody > tr > td > table:first-child > tbody > tr > td { padding-left:0; padding-bottom:5px; }; */
+
+/***
+End Toolips 
+------------------------------------------------------------***/
+
+/***
+Icons
+------------------------------------------------------------***/
+.iconlarge, .iconmedium, .iconsmall {
+	float:left;
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: -moz-linear-gradient(center top , #004AE1 0%, #1B8BBA 100%);
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-bottom-color: #004AE1;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #004AE1;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #004AE1;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #004AE1;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 0 10px rgba(0, 74, 225, 0.8);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.ui-tooltip-content .iconlarge, .iconmedium, .iconsmall {
+	top: 56px;
+}
+.iconlarge .sprite, .iconmedium .sprite, .iconsmall .sprite {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.iconlarge {
+    height: 56px;
+    position: relative;
+    width: 56px;
+}
+.iconlarge a {
+    display: block;
+    height: 56px;
+    width: 56px;
+}
+.iconmedium {
+    height: 42px;
+    position: relative;
+    width: 42px;
+}
+.iconmedium a {
+    display: block;
+    height: 42px;
+    width: 42px;
+}
+.iconmedium a:hover {
+    background-position: 0 0;
+}
+.iconsmall {
+    height: 26px;
+    position: relative;
+    width: 26px;
+}
+.iconsmall a {
+    display: block;
+    height: 26px;
+    width: 26px;
+}

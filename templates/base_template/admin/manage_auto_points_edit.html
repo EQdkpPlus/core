@@ -1,0 +1,16 @@
+<form method="post" action="{ACTION}" name="apa_post" id="apa_post">
+<div align="center">
+	<fieldset class="settings">
+		<legend>{HEAD_TEXT}</legend>
+	<!-- BEGIN input -->
+		<dl>
+			<dt><label>{input.NAME}</label><br /><span>{input.HELP}</span></dt>
+			<dd>{input.FIELD}<!-- IF input.FUNC --><input type="button" id="add_func" value="{L_apa_add_func}" class="mainoption bi_new" /><!-- ENDIF --></dd>
+		</dl>
+	<!-- END input -->
+	</fieldset>
+	<input type="hidden" name="{HIDDEN_NAME}" value="{HIDDEN_VAL}" />
+	<input type="submit" name="upd" value="{L_save}" class="mainoption bi_save" />
+</div>
+{CSRF_TOKEN}
+</form>	

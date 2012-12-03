@@ -1,0 +1,57 @@
+#headjs {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 999999999;
+}
+.tt-source {
+    clear: both;
+    font-size: 11px;
+    padding: 0 5px 0 0;
+    text-align: right;
+    text-shadow: 0 1px 3px #000000;
+}
+.tooltip-icon {
+    left: -36px;
+    position: absolute;
+    top: 0;
+}
+.hide-icon .tooltip-icon {
+    display: none;
+}
+.rtt-gen td {
+    color: #FBFBFB !important;
+}
+.rtt-gen .clear {
+    clear: both;
+}
+.rtt-gen .icon-link {
+    line-height: 38px;
+}
+.rtt-gen .icon-link.block {
+    display: block;
+    height: 38px;
+    padding: 0 0 0 43px;
+    position: relative;
+}
+.rtt-gen .icon-link-sml {
+    font-size: 12px;
+    line-height: 18px;
+}
+.rtt-gen a.icon-link *, .rtt-gen a.icon-link-sml * {
+    cursor: pointer;
+}
+
+/* EQ */
+.eqitem a.shot {text-decoration:none;color:yellow}
+.eqitem a.shot:visited {color:yellow}
+.eqitem {background:#333;border:1px solid #a9a9a9;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;box-shadow:0 0 3px #000;color:#e5e0dd;font:13px Arial,Helvetica,sans-serif;max-width:350px;min-width:150px;padding:3px;margin-left: 44px;}
+.eqitem a {color:#ffd200}
+.eqitem .iname {font-size:18px}
+.eqitem span.herosta {color:cyan}
+.eq-link-icon {border:0;height:16px;margin-right:3px;vertical-align:bottom;width:16px}
+.eq.itemicon.tooltip-icon {background:#333;border:1px solid #a9a9a9;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;box-shadow:0 0 3px #000;height:32px;padding:3px;left:0px;top:0;width:32px}
+
+/* make sure div shows up on top */
+#tmpItemFrm {z-index:499}

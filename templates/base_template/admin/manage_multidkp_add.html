@@ -1,0 +1,33 @@
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings">
+		<legend>{L_Multi_addkonto}</legend>
+		<dl>
+			<dt><label>{L_Multi_chooseevents}:</label></dt>
+			<dd>{EVENT_SEL}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_Multi_eventsnoatt}:</label></dt>
+			<dd>{NO_ATT_SEL}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_Multi_chooseitempools}:</label></dt>
+			<dd>{ITEMPOOL_SEL}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_Multi_kontoname_short}:</label><br /><span>{L_Multi_discnottolong}</span></dt>		
+			<dd><input type="text" name="name" size="10" maxlength="254" value="{NAME}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}:</label></dt>
+			<dd><input type="text" name="desc" size="55" maxlength="250" value="{DESC}" class="input" /></dd>
+		</dl>
+	</fieldset>
+
+	<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+	<!-- IF MDKP_ID -->
+	<input type="hidden" name="mdkp_id" value="{MDKP_ID}" />
+	<input type="button" name="del" value="{L_delete}" class="mainoption bi_delete" onclick="delete_warning();" />
+	<!-- ENDIF -->
+	<input type="submit" name="cancel" value="{L_cancel}" class="liteoption bi_back" />
+{CSRF_TOKEN}
+</form>

@@ -1,0 +1,272 @@
+<!-- IF S_LOCAL_UPDATE -->
+<form method="post" action="{ACTION}&amp;cat=2&amp;code={TEMPLATE_ID}&amp;mode=process_update" name="post">
+	<fieldset class="settings">
+		<legend>{L_style_localupdate}</legend>
+		<dl>
+			<dt><label>{L_template_files}</label></dt>
+			<dd><label><input type="radio" name="template" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label> 
+				<label><!-- IF S_CHANGED_FILES --><input type="radio" name="template" value="0" />{L_style_localupdate_dontoverwrite}<!-- ENDIF --></label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_color_settings}</label></dt>
+			<dd><label><input type="radio" name="colors" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label> 
+				<label><input type="radio" name="colors" value="0" />{L_style_localupdate_dontoverwrite}</label>
+			</dd>
+		</dl>
+	</fieldset>
+	<!-- IF S_CHANGED_FILES -->
+	<fieldset class="settings">
+		<legend>{L_style_localupdate_changedfiles}</legend>
+		<!-- BEGIN changed_files_row -->
+		&bull; {changed_files_row.FILE}
+		<!-- END changed_files_row -->
+	</fieldset>
+	<!-- ENDIF -->
+	
+	<input type="submit" name="process_update" value="{L_bridge_continue}" class="mainoption bi_ok" /> <!-- IF S_CHANGED_FILES --><input type="button" value="{L_style_localupdate_dlchangedfiles}" class="mainoption bi_save" onclick="window.location='manage_styles.php{SID}&export_changed_files=true&styleid={TEMPLATE_ID}'"/><!-- ENDIF -->
+{CSRF_TOKEN}
+	</form>
+<!-- ELSE -->
+
+<form method="post" action="{F_ADD_STYLE}" name="post">
+<div id="style_tabs">
+<ul>
+<li><a href="#settings">{L_style_settings}</a></li>
+<!-- IF S_USE_DBVARS --><li><a href="#colors">{L_color_settings}</a></li><!-- ENDIF -->
+<li><a href="#class_colors">{L_class_colors}</a></li>
+<li><a href="#templates">{L_edit_templates}</a></li>
+</ul>
+
+<input type="hidden" name="styleid" value="{STYLE_ID}" />
+<!-- IF S_USE_DBVARS -->
+<input type="hidden" name="use_db_vars" value="1" />
+<!-- ENDIF -->
+<div id="settings">
+	<fieldset class="settings">
+		<legend>{L_style_settings}</legend>
+		<dl>
+			<dt><label>{L_style_name}: *</label></dt>
+			<dd><input type="text" name="style_name" size="35" maxlength="100" value="{STYLE_NAME}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_style_version}: *</label></dt>
+			<dd><input type="text" name="style_version" size="35" maxlength="100" value="{STYLE_VERSION}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_attendees_columns}</label><br /><span>{L_attendees_columns_note}</span></dt>
+			<dd>{DD_ATTENDEE_COLUMNS}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_logo_position}</label></dt>
+			<dd>{DD_LOGO_POSITION}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_background_image}</label><br /><span>{L_logo_path_note}</span></dt>
+			<dd><input type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" /></dd>
+		</dl>
+	</fieldset>
+
+	<fieldset class="settings">
+		<legend>{L_pk_set_portal_head}</legend>
+		<dl>
+			<dt><label>{L_style_portal_width}</label></dt>
+			<dd><input type="text" name="portal_width" size="5" maxlength="5" value="{STYLE_PORTAL_WIDTH}" class="input" /> {DD_PORTAL_WIDTH}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_style_column_left_width}</label></dt>
+			<dd><input type="text" name="column_left_width" size="5" maxlength="5" value="{STYLE_COLUMN_LEFT_WIDTH}" class="input" /> {DD_COLUMN_LEFT_WIDTH}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_style_column_right_width}</label></dt>
+			<dd><input type="text" name="column_right_width" size="5" maxlength="5" value="{STYLE_COLUMN_RIGHT_WIDTH}" class="input" /> {DD_COLUMN_RIGHT_WIDTH}</dd>
+		</dl>
+	</fieldset>
+
+
+</div>
+<!-- IF S_USE_DBVARS -->
+<div id="colors">
+	<fieldset class="settings">
+		<legend>{L_color_settings}</legend>
+		<dl>
+			<dt><label>{L_background_color}</label></dt>
+			<dd>{CP_BODY_BG}</dd>
+		</dl>
+	</fieldset>
+	<fieldset class="settings">
+		<legend>{L_fonts}</legend>
+		<dl>
+			<dt><label>{L_fontface1}</label><br /><span>{L_fontface1_note}</span></dt>
+			<dd><input type="text" name="fontface1" size="35" maxlength="60" value="{FONTFACE1}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontface2}</label><br /><span>{L_fontface2_note}</span></dt>
+			<dd><input type="text" name="fontface2" size="35" maxlength="60" value="{FONTFACE2}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontface3}</label><br /><span>{L_fontface3_note}</span></dt>
+			<dd><input type="text" name="fontface3" size="35" maxlength="60" value="{FONTFACE3}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontsize1}</label><br /><span>{L_fontsize1_note}</span></dt>
+			<dd><input type="text" name="fontsize1" size="3" maxlength="4" value="{FONTSIZE1}" class="input" /> px</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontsize2}</label><br /><span>{L_fontsize2_note}</span></dt>
+			<dd><input type="text" name="fontsize2" size="3" maxlength="4" value="{FONTSIZE2}" class="input" /> px</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontsize3}</label><br /><span>{L_fontsize3_note}</span></dt>
+			<dd><input type="text" name="fontsize3" size="3" maxlength="4" value="{FONTSIZE3}" class="input" /> px</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontcolor1}</label><br /><span>{L_fontcolor1_note}</span></dt>
+			<dd>{CP_FONTCOLOR1}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontcolor2}</label><br /><span>{L_fontcolor2_note}</span></dt>
+			<dd>{CP_FONTCOLOR2}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontcolor3}</label><br /><span>{L_fontcolor3_note}</span></dt>
+			<dd>{CP_FONTCOLOR3}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontcolor_neg}</label><br /><span>{L_fontcolor_neg_note}</span></dt>
+			<dd>{CP_FONTCOLOR_NEG}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_fontcolor_pos}</label><br /><span>{L_fontcolor_pos_note}</span></dt>
+			<dd>{CP_FONTCOLOR_POS}</dd>
+		</dl>
+	</fieldset>	
+	<fieldset class="settings">
+		<legend>{L_pk_set_linkstable}</legend>
+		<dl>
+			<dt><label>{L_body_link}</label></dt>
+			<dd>{CP_BODY_LINK}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_body_link_style}</label></dt>
+			<dd>{DD_LINK_STYLE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_body_hlink}</label></dt>
+			<dd>{CP_BODY_HLINK}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_body_hlink_style}</label></dt>
+			<dd>{DD_HLINK_STYLE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_header_link}</label></dt>
+			<dd>{CP_HEADER_LINK}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_header_link_style}</label></dt>
+			<dd>{DD_HEAD_LINK_STYLE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_header_hlink}</label></dt>
+			<dd>{CP_HEADER_HLINK}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_header_hlink_style}</label></dt>
+			<dd>{DD_HEAD_HLINK_STYLE}</dd>
+		</dl>
+	</fieldset>
+	<fieldset class="settings">
+		<legend>{L_tables}</legend>
+		<dl>
+			<dt><label>{L_tr_color1}</label></dt>
+			<dd>{CP_TR_COLOR1}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_tr_color2}</label></dt>
+			<dd>{CP_TR_COLOR2}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_th_color1}</label></dt>
+			<dd>{CP_TH_COLOR1}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_table_border_width}</label></dt>
+			<dd><input type="text" name="table_border_width" size="2" maxlength="3" value="{TABLE_BORDER_WIDTH}" class="input" /> px</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_table_border_color}</label></dt>
+			<dd>{CP_TABLE_BORDER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_table_border_style}</label></dt>
+			<dd>{DD_TABLE_BORDERSTYLE}</dd>
+		</dl>
+	</fieldset>
+	<fieldset class="settings">
+		<legend>{L_inputs}</legend>
+		<dl>
+			<dt><label>{L_input_color}</label></dt>
+			<dd>{CP_INPUT_COLOR}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_input_border_width}</label></dt>
+			<dd><input type="text" name="input_border_width" size="2" maxlength="3" value="{INPUT_BORDER_WIDTH}" class="input" /> px</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_input_border_color}</label></dt>
+			<dd>{CP_INPUT_BORDER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_input_border_style}</label></dt>
+			<dd>{DD_INPUT_BORDERSTYLE}</dd>
+		</dl>
+	</fieldset>
+</div>
+<!-- ENDIF -->
+
+
+<div id="class_colors">
+	<fieldset class="settings">
+		<legend>{L_class_colors}</legend>
+		<!-- BEGIN classes -->
+		<dl>
+			<dt><label>{classes.NAME}</label></dt>
+			<dd>{classes.CPICKER}</dd>
+		</dl>
+		<!-- END classes -->
+	</fieldset>
+</div>
+
+<div id="templates">
+		
+	<div class="errorbox roundbox">
+		<div class="icon_false">{L_TEMPLATE_WARNING}</div>
+	</div>
+	
+	<fieldset class="settings smallsettings">
+		<legend>{L_edit_templates}</legend>
+		<dl>
+			<dt><label>{L_select_template}:</label></dt>
+			<dd>{DD_EDIT_TEMPLTES}</dd>
+		</dl>
+
+		<input type="hidden" name="template" />{TEMPLATE_CONTENT}
+	</fieldset>
+	<input name="template_edit_button" type="submit" class="mainoption bi_ok" id="template_edit_button" value="{L_save}" /> <input name="template_reset_button" type="submit" class="mainoption bi_delete" id="template_reset_button" value="{L_reset}" />
+
+</div>
+
+</div>
+<table width="100%" border="0" cellpadding="2" cellspacing="1">
+  <tr>
+    <th align="center" colspan="2"> 
+      <input type="submit" name="update" value="{L_update_style}" class="mainoption bi_ok" />
+      <input type="submit" name="" value="{L_cancel}" class="liteoption bi_back" />
+      <input type="button"  name="del" value="{L_delete_style}" class="liteoption bi_delete" onclick="delete_warning();" />
+    </th>
+  </tr>
+</table>
+{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->

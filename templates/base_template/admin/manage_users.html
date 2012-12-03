@@ -1,0 +1,98 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{USER_PAGINATION}</td>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch hoverrows">
+		<tr>
+			<th align="center" colspan="13"><span style="float:left;">{L_manage_users}</span><span style="float:right;"><input type="button" class="mainoption bi_new" value="{L_user_creation}" name="create" onclick="window.location.href='{U_MANAGE_USERS}u=0'" /></span></th>
+		</tr>
+		<tr>
+			<th align="center" width="25" class="nowrap"><input type="checkbox" id="selall_user" name="all_nr" value="all_nr" /></th>
+			<th align="left" width="10">&nbsp;</th>
+			<th align="left">
+				<a href="{U_MANAGE_USERS}o=0.0"><span class="down_arrow{RED00}"></span></a><a href="{U_MANAGE_USERS}o=0.1"><span class="up_arrow{RED01}"></span></a>
+				<a href="{U_MANAGE_USERS}o={O_USERNAME}">{L_username}</a>
+			</th>
+			<th colspan="4" align="left">{L_action}</th>
+			<th align="left" width="35%">{L_associated_members}</th>
+			<th align="left" width="100">
+				<a href="{U_MANAGE_USERS}o=1.0"><span class="down_arrow{RED10}"></span></a><a href="{U_MANAGE_USERS}o=1.1"><span class="up_arrow{RED11}"></span></a>
+				<a href="{U_MANAGE_USERS}o={O_EMAIL}">{L_email_address}</a>
+			</th>
+			<th align="left" width="150" class="nowrap"><a href="{U_MANAGE_USERS}o=4.0"><span class="down_arrow{RED40}"></span></a><a href="{U_MANAGE_USERS}o=4.1"><span class="up_arrow{RED41}"></span></a>
+				<a href="{U_MANAGE_USERS}o={O_REG_DATE}">{L_registered_at}</a></th>
+			<th align="left" width="150" class="nowrap">
+				<a href="{U_MANAGE_USERS}o=2.0"><span class="down_arrow{RED20}"></span></a><a href="{U_MANAGE_USERS}o=2.1"><span class="up_arrow{RED21}"></span></a>
+				<a href="{U_MANAGE_USERS}o={O_LAST_VISIT}">{L_last_visit}</a>
+			</th>
+			<th align="left" width="60" class="nowrap">
+				<a href="{U_MANAGE_USERS}o=3.0"><span class="down_arrow{RED30}"></span></a><a href="{U_MANAGE_USERS}o=3.1"><span class="up_arrow{RED31}"></span></a>
+				<a href="{U_MANAGE_USERS}o={O_ACTIVE}">{L_active}</a>
+			</th>
+			<th align="left" width="60" class="nowrap">{L_online}</th>
+		</tr>
+		<!-- BEGIN users_row -->
+		<tr>
+			<td width="25" align="center" class="nowrap"><!-- IF not users_row.PROTECT_SUPERADMIN --><input type="checkbox" name="user_id[]" value="{users_row.USER_ID}" id="user_id_{users_row.USER_ID}"/><!-- ENDIF --></td>
+			<td width="5">{users_row.ADMIN_ICON}</td>
+			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
+			<td width="20"><a href="{users_row.U_MANAGE_USER}" title="{L_edit}"><img src="{EQDKP_IMAGE_PATH}glyphs/edit.png" border="0" alt="edit" /></a></td>
+			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><img src="{EQDKP_IMAGE_PATH}glyphs/userpermissions.png" border="0" alt="" /></a><!-- ENDIF --></td>
+			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->{users_row.ACTIVATE_ICON}<!-- ENDIF --></td>
+			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->
+				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><img src="{EQDKP_IMAGE_PATH}global/delete.png" border="0" alt="" /></a>    	<!-- ENDIF -->
+			</td>
+			<td width="35%">
+				<!-- BEGIN members_row -->
+				{users_row.members_row.CLASS} <span class="hand" onclick="EditChar({users_row.members_row.MEMBER_ID});">{users_row.members_row.NAME}</span> - {users_row.members_row.RANK}<br />
+				<!-- END members_row -->
+			</td>
+			<td width="100" class="nowrap"><a href="mailto:{users_row.EMAIL}">{users_row.EMAIL}</a></td>
+			<td width="150" class="nowrap">{users_row.REG_DATE}</td>
+			<td width="150" class="nowrap">{users_row.LAST_VISIT}</td>
+			<td width="60" align="center" class="nowrap">{users_row.ACTIVE}</td>
+			<td width="60" align="center" class="nowrap">{users_row.ONLINE}</td>
+		</tr>
+		<!-- END users_row -->
+		<tr>
+			<th colspan="13" class="footer">
+				<span style="float:left"><img src="{EQDKP_IMAGE_PATH}arrows/turn_left_arrow.png" alt="left" />
+					<input type="hidden" name="del_assocmem" value="0" id="del_assocmem" />
+					<input type="button" name="del" value="{L_mass_delete}" class="mainoption bi_delete" onclick="delete_warning();" />
+					<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+				</span>
+				<span style="float:right">{LISTUSERS_FOOTCOUNT}</span>
+			</th>
+		</tr>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<td align="center" class="menu">{USER_PAGINATION}</td>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>
+
+<script type="text/javascript">
+function handle_assoc_members(){
+	if ($('input[name=delete_associated_members]').is(':checked')){
+		$('#del_assocmem').val('1');
+	} else {
+		$('#del_assocmem').val('0');
+	}
+}
+
+function delete_single(id){
+	$('input:checkbox[name="user_id[]"]').attr('checked', false);
+	if ($('input[name=delete_associated_members_single]').is(':checked')){
+		$('#del_assocmem').val('1');
+	} else {
+		$('#del_assocmem').val('0');
+	}
+	$('#user_id_'+id).attr('checked', true);
+	$('#mass_del_submit').removeAttr('disabled'); 
+	$('form:has(#mass_del_submit)').submit();
+}
+</script>

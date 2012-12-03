@@ -1,0 +1,149 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="left" width="100%">{L_portalplugin_management} &nbsp; {L_portalplugin_filter}: {PERM_FILTER}</th>
+	</tr>
+</table>
+<div id="positions">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_portal_dragndrop_info}</div>
+	</div>
+	<br />
+	<div style="float:left; width:25%; min-width:200px;">
+		<div id="left1" class="connectedSortable portal_block">
+			<span class="not-sortable">{L_portalplugin_left1}:</span>
+			<!-- BEGIN left1_row -->
+			<div class="ui-state-hover {left1_row.CLASS}" id="item_{left1_row.ID}" style="padding: 7px; margin-top: 4px;">
+				{left1_row.INFO}
+				{left1_row.NAME}
+				<!-- IF left1_row.S_MULTIPLE -->
+				&nbsp;&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={left1_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
+				<!-- ENDIF -->
+				<!-- IF left1_row.S_CHILD -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({left1_row.ID});" style="float:right;" class="hand" />
+				<!-- ENDIF -->
+				&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+				<input name="sort[][{left1_row.ID}]" type="hidden" value="1" />
+				<input type="hidden" name="pos[{left1_row.ID}]" value="{left1_row.POS}" id="block_item_{left1_row.ID}" />
+			</div>
+			<!-- END left1_row-->
+		</div>
+		<div class="portal_block_light">
+			<div style="height:100px;">{L_info_opt_ml_1}</div>
+		</div>
+		<div id="left2" class="connectedSortable portal_block">
+			<span class="not-sortable">{L_portalplugin_left2}:</span>
+			<!-- BEGIN left2_row -->
+			<div class="ui-state-hover {left2_row.CLASS}" id="item_{left2_row.ID}" style="padding: 7px; margin-top: 4px;">
+				{left2_row.INFO}
+				{left2_row.NAME}
+				<!-- IF left2_row.S_MULTIPLE -->
+				&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={left2_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
+				<!-- ENDIF -->
+				<!-- IF left2_row.S_CHILD -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({left2_row.ID});" style="float:right;" class="hand" />
+				<!-- ENDIF -->
+				&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+				<input name="sort[][{left2_row.ID}]" type="hidden" value="1" />
+				<input type="hidden" name="pos[{left2_row.ID}]" value="{left2_row.POS}" id="block_item_{left2_row.ID}" />
+			</div>
+			<!-- END left2_row-->
+		</div>
+	</div>
+	<div style="float:left; width:50%; min-width:400px;">
+		<div id="middle" class="connectedSortable portal_block">
+			<span class="not-sortable">{L_portalplugin_middle}:</span>
+			<!-- BEGIN middle_row -->
+			<div class="ui-state-hover {middle_row.CLASS}" id="item_{middle_row.ID}" style="padding: 7px; margin-top: 4px;">
+				{middle_row.INFO}
+				{middle_row.NAME}
+				<!-- IF middle_row.S_MULTIPLE -->
+				&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={middle_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
+				<!-- ENDIF -->
+				<!-- IF middle_row.S_CHILD -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});" style="float:right;" class="hand" />
+				<!-- ENDIF -->
+				&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+				<input name="sort[][{middle_row.ID}]" type="hidden" value="1" />
+				<input type="hidden" name="pos[{middle_row.ID}]" value="{middle_row.POS}" id="block_item_{middle_row.ID}" />
+			</div>
+			<!-- END middle_row-->
+		</div>
+		<div class="portal_block_light">
+			<div style="height:100px;">{L_portalplugin_startpage}</div>
+		</div>
+		<div id="bottom" class="connectedSortable portal_block">
+			<span class="not-sortable">{L_portalplugin_bottom}:</span>
+			<!-- BEGIN bottom_row -->
+			<div class="ui-state-hover {bottom_row.CLASS}" id="item_{bottom_row.ID}" style="padding: 7px; margin-top: 4px;">
+				{bottom_row.INFO}
+				{bottom_row.NAME}
+				<!-- IF bottom_row.S_MULTIPLE -->
+				&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={bottom_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
+				<!-- ENDIF -->
+				<!-- IF bottom_row.S_CHILD -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});" style="float:right;" class="hand" />
+				<!-- ENDIF -->
+				&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+				<input name="sort[][{bottom_row.ID}]" type="hidden" value="1" />
+				<input type="hidden" name="pos[{bottom_row.ID}]" value="{bottom_row.POS}" id="block_item_{bottom_row.ID}" />
+			</div>
+			<!-- END bottom_row-->
+		</div>  
+	</div>
+	<div style="float:left; width:25%; min-width:200px;">
+		<div id="right" class="connectedSortable portal_block">
+			<span class="not-sortable">{L_portalplugin_right}:</span>
+			<!-- BEGIN right_row -->
+			<div class="ui-state-hover {right_row.CLASS}" id="item_{right_row.ID}" style="padding: 7px; margin-top: 4px;">
+				{right_row.INFO}
+				{right_row.NAME}
+				<!-- IF right_row.S_MULTIPLE -->
+				&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={right_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
+				<!-- ENDIF -->
+				<!-- IF right_row.S_CHILD -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});" style="float:right;" class="hand" />
+				<!-- ENDIF -->
+				&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+				<input name="sort[][{right_row.ID}]" type="hidden" value="1" />
+				<input type="hidden" name="pos[{right_row.ID}]" value="{right_row.POS}" id="block_item_{right_row.ID}" />
+			</div>
+			<!-- END right_row-->
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+	<div style="width:100%;">
+		<div id="disabled" class="connectedSortable portal_block" style="float:left;">
+			<div class="not-sortable">{L_portalplugin_disabled}:</div>
+			<!-- BEGIN disabled_row -->
+			<div class="ui-state-hover {disabled_row.CLASS} portal_disabled equalHeights" id="item_{disabled_row.ID}" style="padding: 7px; margin-top: 4px;">
+				{disabled_row.INFO}
+				{disabled_row.NAME}
+				<!-- IF disabled_row.S_MULTIPLE -->
+				<a href="{ACTION}&amp;duplicate=true&amp;selected_id={disabled_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
+				<!-- ENDIF -->
+				<!-- IF right_row.S_CHILD -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});" style="float:right;" class="hand" />
+				<!-- ENDIF -->
+				&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+				<input name="sort[][{disabled_row.ID}]" type="hidden" value="1" />
+				<input type="hidden" name="pos[{disabled_row.ID}]" value="{disabled_row.POS}" id="block_item_{disabled_row.ID}" />
+			</div>
+			<!-- END disabled_row-->
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<td>{L_more_moduls}</td>
+	</tr>
+	<tr>
+		<th align="center">
+			<input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_save}" />
+			<input type="button" name="reset" value="{L_reset}" class="liteoption bi_reset" onclick="window.location='manage_portal.php{SID}'"/>
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

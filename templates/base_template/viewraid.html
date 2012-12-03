@@ -1,0 +1,101 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_MEMBERS_PRESENT_AT}</th>
+  </tr>
+  <tr>
+    <td align="left" width="100%">
+  	  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+  		  <tr>
+  		    <td align="left" width="100%" colspan="2"><h2>{EVENT_ICON} {EVENT_NAME}</h2></td>
+  		  </tr>
+  		  <tr>
+  		    <td class="row2" width="50%"><b>{L_added_by}:</b> {RAID_ADDED_BY}</td>
+  		    <td class="row1" width="50%"><b>{L_updated_by}:</b> {RAID_UPDATED_BY}</td>
+  		  </tr>
+  		  <tr>
+  		    <td class="row2" width="50%"><b>{L_note}:</b> {RAID_NOTE}</td>
+  		    <td class="row1" width="50%"><b>{DKP_NAME} {L_value}:</b> <span class="positive">{RAID_VALUE}</span></td>
+  		  </tr>
+  		</table>
+    </td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="{COLSPAN}">{L_attendees}</th>
+  </tr>
+  <!-- BEGIN attendees_row -->
+  <tr>
+    <!-- IF S_COLUMN0 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN1 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN2 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN3 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN4 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN5 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN6 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN7 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN8 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN9 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
+  </tr>
+  <!-- END attendees_row -->
+  <tr>
+    <th colspan="{COLSPAN}" class="footer">{ATTENDEES_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+  <tr>
+    <th align="center" colspan="3">{L_drops}</th>
+  </tr>
+  <tr>
+    <th align="left" width="100" class="nowrap">{L_buyer}</th>
+    <th align="left" width="100%">{L_item}</th>
+    <th align="left" width="60" class="nowrap">{L_spent}</th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr>
+    <td width="120" class="nowrap">{items_row.BUYER}</td>
+    <td width="100%">{items_row.ITEM}</td>
+    <td width="60" class="negative">{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="3" class="footer">{ITEM_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_class_distribution}</th>
+    <th align="center">{L_loot_distribution}</th>
+  </tr>
+ <tr>
+ <td class="row2" align="center">
+  {CLASS_PERCENT_CHART}
+ </td>
+ <td class="row2" align="center">
+  {LOOT_PERCENT_CHART}
+ </td>
+ </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="3">{L_class_distribution}</th>
+  </tr>
+  <tr>
+    <th align="left" width="100">{L_class}</th>
+    <th align="left" width="50%">{L_percent}</th>
+    <th align="left" width="50%">{L_attendees}</th>
+  </tr>
+  <!-- BEGIN class_row -->
+  <tr>
+    <td width="100" class="row2 nowrap">{class_row.CLASS}</td>
+    <td width="50%" class="row1">{class_row.BAR}</td>
+    <td width="50%" class="row2"><span class="small">{class_row.ATTENDEES}</span></td>
+  </tr>
+  <!-- END class_row -->
+</table>
+<br/>
+{COMMENT}

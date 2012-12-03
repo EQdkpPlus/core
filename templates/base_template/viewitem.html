@@ -1,0 +1,22 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
+	<tr class="rowhead">
+		<th align="center" colspan="{SHOW_COLSPAN}">{L_PURCHASE_HISTORY_FOR}</th>
+	</tr>
+	<tr class="row1">
+		<!-- IF SHOW_ITEMSTATS -->
+		<td align="center">{ITEM_STATS}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_ITEMHISTORYA -->  
+		<td align="center">{ITEM_CHART} </td>
+		<!-- ENDIF -->
+	</tr>
+	<tr>
+		<td colspan="{SHOW_COLSPAN}">
+			<table width="100%" class="colorswitch">
+				{BUYERS_TABLE}
+			</table>
+		</td>
+	</tr>
+</table>
+<br />
+{COMMENT}
