@@ -1,0 +1,97 @@
+<div class="profile_header">
+	{IMG_CLASSICON}
+	<div class="charname">{DATA_NAME} {IMG_MAINCHAR}</div>
+	<div class="charlevel">{L_level} {DATA_LEVEL}, {DATA_CLASSNAME} ({DATA_RACENAME})</div>
+	<div class="charguild">{DATA_GUILDTAG}</div>
+</div>
+
+<div class="profile_information">
+	<fieldset class="settings mediumsettings">
+		<!-- BEGIN pfield_data -->
+		<dl>
+			<dt><label>{pfield_data.NAME}</label></dt>
+			<dd>{pfield_data.VALUE}</dd>
+		</dl>
+		<!-- END pfield_data -->
+	</fieldset>
+</div>
+
+<div id='profile_information'>
+	<ul>
+		<li><a href='#fragment-2'><span>{L_tab_raids}</span></a></li>
+		<li><a href='#fragment-3'><span>{L_tab_items}</span></a></li>
+		<li><a href='#fragment-4'><span>{L_tab_adjustments}</span></a></li>
+		<li><a href='#fragment-5'><span>{L_tab_attendance}</span></a></li>
+		<li><a href='#fragment-6'><span><img src="images/global/admin_flag.png" /> {L_tab_notes}</span></a></li>
+	</ul>
+
+	<!-- RAIDS TABLE -->
+	<div id="fragment-2">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+		<tr>
+			<th align="center" colspan="5">{L_raid_attendance_history}</th>
+		</tr>
+		<tr>
+			<td align="center" class="menu">{RAID_PAGINATION}</td>
+		</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+			{RAID_OUT}
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+			<tr>
+				<td align="center" class="menu">{RAID_PAGINATION}</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- ITEMS TABLE -->
+	<div id="fragment-3">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+			<tr>
+				<th align="center" colspan="5">{L_item_purchase_history}</th>
+			</tr>
+			<tr>
+				<td align="center" class="menu">{ITEM_PAGINATION}</td>
+			</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+			{ITEM_OUT}
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+			<tr>
+				<td align="center" class="menu">{ITEM_PAGINATION}</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- ADJUSTMENTS TABLE-->
+	<div id="fragment-4">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+			<tr>
+				<th align="center" colspan="4">{L_individual_adjustment_history}</th>
+			</tr>
+			<tr>
+				<td align="center" class="menu">{ADJUSTMENT_PAGINATION}</td>
+			</tr>
+		</table>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+			{ADJUSTMENT_OUT}
+		</table>
+	</div>
+
+	<!-- ATTENDANCE -->
+	<div id="fragment-5">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		{EVENT_ATT_OUT}
+		</table>
+	</div>
+
+	<!-- NOTES TABLE -->
+	<div id="fragment-6">
+		{NOTES}
+	</div>
+</div>
+<br />
+{COMMENT}
+<br />

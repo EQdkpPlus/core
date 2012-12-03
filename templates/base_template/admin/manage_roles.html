@@ -1,0 +1,46 @@
+<!-- IF S_ADD -->
+<form method="post" action="{ACTION}" name="editNote">
+	<input type="hidden" name="editid" value="{EDITID}" />
+
+	<fieldset class="settings">
+		<dl>
+			<dt>
+				<label>{L_name}</label><br />
+			</dt>
+			<dd>
+				<input type="text" name="role_name" size="20" value="{REALNAME}" class="input" />
+			</dd>
+		</dl>
+		<dl>
+			<dt>
+				<label>{L_role_classes}</label><br />
+			</dt>
+			<dd>
+				{MULTISELECT}
+			</dd>
+		</dl>
+	</fieldset>
+	<input type="submit" name="{BUTTON_NAME}" value="{L_save}" class="mainoption bi_ok" />
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<form method="post" action="{ACTION}" name="managerole">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	<tr >
+		<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_rolemanager}</span><span style="float:right;"><input type="button" name="newRoleManager" value="{L_add_role}" onclick="newRole()" class="mainoption bi_new" /> 
+<input type="button" name="ResetRoles3" value="{L_reset_roles}" class="mainoption bi_reload" onclick="ResetRoles();" /></span></th>
+	</tr>
+	{ROLES}
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}">
+			<span style="float:left;">
+				<input type="button" name="del" value="{L_delete_selected}" class="mainoption bi_delete" onclick="delete_warning();"/>
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+			</span>
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->

@@ -1,0 +1,392 @@
+/* Rift Zam */
+.rtt-gen {float:right !important;}
+.rtt-gen td {color:#fbfbfb !important}
+.rtt-gen .clear {clear:both}
+.rtt-gen .icon-link {line-height:38px}
+.rtt-gen .icon-link.block {display:block;height:38px;padding:0 0 0 43px;position:relative}
+.rtt-gen .icon-link-sml {font-size:12px;line-height:18px}
+.rtt-gen a.icon-link *, .rtt-gen a.icon-link-sml * {cursor:pointer}
+.rifticon {cursor:default;display:inline-block;height:38px;margin:0 4px 0 0;overflow:hidden;position:relative;text-decoration:none !important;vertical-align:middle;width:39px}
+.rifticon-sml {height:19px;margin:0 2px 0 0;vertical-align:top;width:20px}
+a .rifticon {cursor:pointer}
+.rtt-gen .icon-link.block .rifticon {left:0;position:absolute;top:0}
+.rifticon b {background:url(http://zam.zamimg.com/rift/i/icon-borders-32.png) no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/icon-borders-32.gif);display:block;height:38px;left:0;position:absolute;top:0;width:43px;z-index:1}
+.rifticon-sml b {background-image:url(http://zam.zamimg.com/rift/i/icon-borders-16.png);_background-image:url(http://zam.zamimg.com/rift/i/icon-borders-16.gif);height:19px;width:20px}
+a:hover .rifticon b {background-position:bottom left}
+.rifticon img {height:32px;left:3px;position:absolute;top:3px;width:32px}
+a:active .rifticon img {height:30px;left:4px;top:4px;width:30px}
+.rifticon-sml img {height:16px;left:2px;top:2px;width:16px}
+a:active .rifticon-sml img {height:14px;left:3px;top:3px;width:14px}
+a:hover .rifticon, .rtt-gen a:hover .rifticon * {text-decoration:none !important}
+.rifticon .icon-count {bottom:0;color:#000;font:bold 13px Arial,Helvetica,sans-serif;position:absolute;right:0}
+.rifticon .icon-count, .rtt-gen .icon-count span {text-decoration:none !important}
+.rifticon .icon-count span {left:2px;position:absolute;top:0}
+.rifticon .icon-count span span span {left:-2px;top:0}
+.rifticon .icon-count span span {left:0;top:2px}
+.rifticon .icon-count span span span span {color:#fff;left:1px;top:-1px}
+.rifticon-sml .icon-count {font:bold 10px Verdana,Arial,Helvetica,sans-serif;margin:2px 3px !important}
+.rifticon .icon-count {margin:2px 4px}
+.rifticon .icon-text {color:#000;font:bold 8px Verdana,Arial,Helvetica,sans-serif;left:0;position:absolute;right:0;top:-1px;width:32px}
+.rifticon .icon-text span {position:relative}
+.rifticon .icon-text, .rtt-gen .icon-text span {text-decoration:none !important}
+.rifticon .icon-text span span {left:2px;position:absolute;top:0}
+.rifticon .icon-text span span span {left:0;top:2px}
+.rifticon .icon-text span span span span {left:-2px;top:0}
+.rifticon .icon-text span span span span span {color:#f0d080;left:1px;top:-1px}
+.rifticon-sml .icon-text {display:none}
+.rtt-gen .icon-link.has-desc {line-height:normal;text-decoration:none !important}
+.rtt-gen .icon-link.has-desc .text {position:relative;top:3px}
+.rtt-gen .icon-link.has-desc .desc {color:#d3d3d3;font-size:11px;opacity:1;filter:alpha(opacity=100);position:relative;text-decoration:none !important;top:3px}
+.rtt {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;max-width:256px;position:relative;_width:256px}
+.rtt table {border-collapse:collapse;color:#fbfbfb;font:13px Arial,Helvetica,sans-serif;*table-layout:fixed}
+.rtt td {overflow:hidden;padding:0}
+.rtt th {background:url(http://zam.zamimg.com/rift/i/tooltip.png) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);font-size:1px;height:14px;padding:0;width:50%}
+.rtt th.r {background-position:bottom right}
+.rtt .rtt-cont {background:url(http://zam.zamimg.com/rift/i/tooltip.png) 0 -8px;_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);margin:0 15px 0 0;padding:10px 0 0 15px;position:relative}
+.rtt .rtt-cont-cap {background:url(http://zam.zamimg.com/rift/i/tooltip.png) right -8px;_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);bottom:0;_font-size:expression((this.parentNode.offsetHeight*.91)+'px');position:absolute;right:-15px;_right:0;top:0;width:15px}
+.rtt .rtt-name {color:#fc3;font-size:15px !important;width:228px;word-wrap:break-word}
+.rtt .rtt-name.auto-width {width:auto}
+.rtt .rtt-indent {margin-left:10px}
+.rtt .rtt-r {float:right}
+.rtt .rtt-div {background:url(http://zam.zamimg.com/rift/i/tooltip.png);_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);font-size:1px;height:8px;margin:2px -7px;width:242px}
+.rtt .rtt-vendor {margin:3px 0 0;text-align:right}
+.rtt-s, .rtt-g, .rtt-p, .rift-s, .rift-g, .rift-p {background:url(http://zam.zamimg.com/rift/i/coins.png?1) top right no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/coins.gif?1);padding:0 17px 0 0}
+.rtt-g, .rift-g {background-position:right}
+.rtt-p, .rift-p {background-position:bottom right}
+.rtt .rtt-invalid {color:#f00;margin:5px 0 0}
+.rtt-recipe {margin:0 -5px 20px 0}
+.rtt-ingredients {line-height:18px}
+.rtt-ingredients div {margin-left:10px}
+.tooltip-icon.rift {left:-38px}
+.rift-q0 a, .rift-q1 a, .rift-q2 a, .rift-q3 a, .rift-q4 a, .rift-q5 a, .rift-q6 a, .rift-quest a, .rift-quest-item a, .rift-questitem a {text-decoration:underline !important}
+.rift-quest, .rift-quest-item, .rift-questitem {color:#fbf200 !important}
+.rift-q0, .rift-trash {color:#888 !important}
+.rift-q1, .rift-common {color:#fbfbfb !important}
+.rift-q2, .rift-uncommon {color:#0c0 !important}
+.rift-q3, .rift-rare {color:#267ffa !important}
+.rift-q4, .rift-epic {color:#ad48fb !important}
+.rift-q5, .rift-relic {color:#ff8000 !important}
+.rift-q6 {color:red !important}
+.rift-flavortext {color:#fbc864}
+.riftitem-q0 {color:#888 !important}
+.riftitem-q1 {color:#fbfbfb !important}
+.riftitem-q2 {color:#0c0 !important}
+.riftitem-q3 {color:#fbf200 !important}
+.riftitem-q4 {color:#267ffa !important}
+.riftitem-q5 {color:#ad48fb !important}
+.riftitem-q6 {color:#ff8000 !important}
+.riftitem-q7 {color:red !important}
+.rift-diff-0 {color:#888 !important}
+.rift-diff-1 {color:#0c0 !important}
+.rift-diff-2 {color:#ff0 !important}
+.rift-diff-3 {color:#ff8040 !important}
+.rift-diff-4 {color:#d22 !important}
+.rach {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;position:relative;text-shadow:1px 1px 1px #000;width:412px}
+.rach table {border-collapse:collapse;*table-layout:fixed;width:412px}
+.rach td {padding:0}
+.rach th {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);font-size:1px;height:58px;padding:0;width:50%}
+.rach th.r {background-position:bottom right}
+.rach .rach-icon {position:absolute;left:1px;top:6px;z-index:1}
+.rach .rach-icon img {background:#000;height:48px;left:14px;max-width:none !important;position:absolute;top:15px;width:48px}
+.rach .rach-icon div {background:url(http://zam.zamimg.com/rift/i/achievement.png?2);_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);height:78px;left:0;position:absolute;top:0;width:77px}
+.rach .rach-cont {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) 0 -142px;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);padding:17px 0 0 18px;position:relative;_zoom:100%}
+.rach .rach-name {color:#d8cb99;font-size:18px;left:78px;margin:0 0 0 60px;text-transform:uppercase;width:285px;word-wrap:break-word;z-index:1}
+.rach .rach-time {color:#d8cb99;position:absolute;right:56px;top:21px;z-index:1}
+.rach .rach-desc {margin:-1px 0 14px 60px;padding:0 55px 0 0;z-index:1}
+.rach .rach-points {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) -77px 0;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);color:#fb8b48;font-size:24px;height:69px;line-height:70px;padding:0 1px 0 0;position:absolute;right:-14px;text-align:center;top:6px;width:68px;_width:69px;z-index:1}
+.rach ul {list-style:none;margin:30px 0 0 -2px;overflow:visible;padding:0;_padding-top:17px;*zoom:100%}
+.rach ul li {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) -146px 4px no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);line-height:19px;margin:0;padding:0 0 0 20px;float:left;position:relative;top:0;width:172px;_width:182px;z-index:1}
+.rach ul li.check {background-position:-358px 2px}
+.rach ul .clear {clear:left;float:none;font-size:0;height:0}
+.rach ul .rach-cont-cap {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) right -142px;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);bottom:0;_font-size:expression((this.parentNode.offsetHeight-15)+'px');position:absolute;right:0;top:0;width:15px;z-index:0;*z-index:-1}
+.rquest {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;position:relative;width:320px}
+.rquest table {border-collapse:collapse;color:#fbfbfb;font:13px Arial,Helvetica,sans-serif;*table-layout:fixed;width:320px}
+.rquest td {padding:0}
+.rquest th {background:url(http://zam.zamimg.com/rift/i/quest.png) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);font-size:1px;height:29px;padding:0;width:50%}
+.rquest th.r {background-position:bottom right}
+.rquest .rquest-cont-wrap {position:relative}
+.rquest .rquest-cont {line-height:20px !important;margin:0 0 -14px 0;overflow:hidden;padding:14px 32px 0;position:relative}
+.rquest .rquest-bg {background:url(http://zam.zamimg.com/rift/i/quest.png) 0 -234px;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);bottom:14px;_font-size:expression(((this.parentNode.offsetHeight-14)*.91)+'px');left:0;position:absolute;right:0;top:0;_width:320px}
+.rquest .rquest-name {color:#f8f3c8;font-size:17px !important;line-height:normal !important;width:256px;word-wrap:break-word}
+.rquest .rquest-name div {background:url(http://zam.zamimg.com/rift/i/quest.png) no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);height:29px;margin:-17px 0 0 -15px;*position:relative;*z-index:-1}
+.rquest .rquest-header, .rquest .rquest-subhead {color:#f8f3c8;line-height:normal !important;text-transform:uppercase}
+.rquest .rquest-subhead {font-size:11px !important;line-height:20px !important}
+.rquest .rquest-indent {margin-left:10px}
+.rquest .rquest-header div {background:url(http://zam.zamimg.com/rift/i/quest.png) 0 -29px no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);_font-size:4px;height:5px;margin:0 0 0 -8px}
+.rquest .rquest-topmargin {margin-top:15px}
+.rquest .rquest-objectives {line-height:normal !important;list-style:none;margin:2px 0 10px;padding:0}
+.rquest .rquest-objectives li {background:url(http://zam.zamimg.com/rift/i/quest.png) 2px -37px no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);background-position:2px -38px\9;padding:0 0 0 18px}
+.rquest .rquest-objectives li.check {background-position:0 -140px;background-position:0 -142px\9}
+.pre-ie9 .rquest .rquest-objectives li {background-position:2px -37px;*background-position:2px -35px;_background-position:2px -37px}
+.pre-ie9 .rquest .rquest-objectives li.check {background-position:0 -140px;*background-position:0 -138px;_background-position:0 -140px}
+.rquest .rquest-rewards {line-height:normal !important;margin:2px 0 10px}
+.rquest .rquest-rewards:last-child {margin-bottom:0}
+.rquest .rquest-reward {float:left;height:auto;margin:0 0 4px;overflow:hidden;position:relative;width:128px}
+.rquest .rquest-reward .text {float:left;height:auto;left:39px;line-height:normal;min-height:38px;padding:0;position:static;word-wrap:break-word;width:85px}
+.rquest .rquest-reward .rifticon, .rquest .rquest-rewards .rifticon {float:left}
+.rquest .rquest-xp span {color:#199ba5}
+.rquest .rquest-r {float:right}
+.rquest .rquest-div {background:url(http://zam.zamimg.com/rift/i/quest.png);_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);font-size:1px;height:8px;margin:2px -7px;width:242px}
+.rquest .rquest-vendor {text-align:right}
+.rquest .rquest-invalid {color:#f00;margin:5px 0 0}
+.rcol {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;position:relative;width:290px}
+.rcol table {border-collapse:collapse;color:#fbfbfb;font:13px Arial,Helvetica,sans-serif;*table-layout:fixed}
+.rcol td {overflow:hidden;padding:0}
+.rcol th {background:url(http://zam.zamimg.com/rift/i/collection.png) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);font-size:1px;height:14px;padding:0;width:50%}
+.rcol th.r {background-position:bottom right}
+.rcol .rcol-cont {background:url(http://zam.zamimg.com/rift/i/collection.png) 0 -234px;_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);padding:12px 15px 0;position:relative}
+.rcol .rcol-name {color:#fc3;color:#f8f3c8;font-size:17px !important;line-height:normal !important;width:260px;word-wrap:break-word}
+.rcol .rcol-name div {background:url(http://zam.zamimg.com/rift/i/collection.png) no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);height:29px;margin:-17px 0 0 -3px;*position:relative;*z-index:-1}
+.rcol .rcol-desc {margin:0 0 10px}
+.rcol .rcol-items {margin:0 0 0 1px;padding:0 0 4px}
+.rcol .rcol-items .rifticon {margin:0 2px}
+.rcol .rcol-indent {margin-left:10px}
+.rcol .rcol-r {float:right}
+.rcol .rcol-div {background:url(http://zam.zamimg.com/rift/i/collection.png);_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);font-size:1px;height:8px;margin:2px -7px;width:242px}
+.rcol .clear {*font-size:0;*height:0}
+.rcol .zam-icon {float:left}
+
+.zr-addicon {padding:0 0 0 22px}
+.zamrift-icon {position:relative}
+.zamrift-icon img {border:0;height:16px;left:-19px;position:absolute;top:-1px;width:16px}
+.zamrift-icon b {background:url(http://zam.zamimg.com/rift/i/icon-borders-16.png);_background:url(http://zam.zamimg.com/rift/i/icon-borders-16.gif);display:block;height:19px;left:-21px;position:absolute;top:-2px;width:20px}
+
+
+
+/* Riftspot */
+.rift_tooltip {
+	position:absolute;
+	z-index:10;
+	font-family:Verdana, Helvetica, Arial, sans-serif;
+	color:#FFFFFF;
+	font-size:12px;
+	line-height:15px;
+	width:300px;	
+}
+
+.rift_tooltip_container {
+	padding:0px;
+	border:0px;
+	width:100%;
+	border-spacing:0px;
+	margin:0px;
+}
+
+.rift_tooltip_container table,
+.rift_tooltip_container table tr,
+.rift_tooltip_container table tr td {
+	margin: 0px;
+	background: none;
+	border:0px;
+	padding: 1px;
+	border-collapse: inherit;
+}
+
+.rift_tooltip_border {
+	border:0px;
+	padding:5px;
+	background:url(http://www.riftspot.com//img/tooltip.png);
+}
+
+.rift_tooltip_icon 
+{
+	background-repeat:no-repeat;
+	background-position:2px 2px;
+	height:44px;
+	width:44px;
+}
+
+.rift_tooltip_icon table,
+.rift_tooltip_icon table tr,
+.rift_tooltip_icon table tr td {
+	background-color: transparent;
+	margin: 0px;
+	border:0px;
+	padding: 1px;
+	border-collapse: inherit;
+}
+
+.rift_tooltip_icon_border {background:url(http://www.riftspot.com//img/icon_border_medium.gif);height:44px;width:44px;}
+
+.map_tooltip {position:absolute;z-index:9999;font-family:Verdana, Helvetica, Arial, sans-serif;color:#FFFFFF;font-size:11px;line-height:14px;max-width:400px;}
+.map_tooltip_container {padding:0px;border:0px;width:100%;border-spacing:0px;margin:0px;}
+.map_tooltip_border {padding:3px;background:url(http://www.riftspot.com//img/tooltip.gif);}
+
+.rift_tooltip_hr {
+	border: 0px;
+	color: #362d24;
+	background:url(..http://www.riftspot.com//img/tooltip-hr.png) center no-repeat;
+	height: 8px;
+	display: block;
+}
+.rift_mc {
+	background:url(http://www.riftspot.com//imghttp://zam.zamimg.com/rift/money_copper.png);
+	height:10px;
+	width:10px;
+	padding-right: 13px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+.rift_ms {
+	background:url(http://www.riftspot.com//imghttp://zam.zamimg.com/rift/money_silver.png);
+	height:10px;
+	width:10px;
+	padding-right: 13px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+.rift_mg {
+	background:url(http://www.riftspot.com//imghttp://zam.zamimg.com/rift/money_gold.png);
+	height:10px;
+	width:10px;
+	padding-right: 13px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+
+.rift_loading 		{ color: white;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.rift_skillname
+{
+	font-size: 12px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.rift_recipename
+{
+	font-size: 12px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.rift_tooltiptitle {
+	font-size: 15px;
+	font-weight: bold;
+	background: none;
+}
+.rift_skill {
+    color: #E1CC59;
+}
+.rift_quest {
+    color: #E1CC59;
+}
+
+.rift_default {
+    color: #FFFFFF;
+}
+.rift_yellow {
+    color: #FFD100;
+}
+.rift_green {
+    color: #00FF00;
+}
+.rift_gray {
+    color: gray;
+}
+.rift_blue {
+    color: #00B8E9;
+}
+.rift_brown {
+    color: #D0B37A;
+}
+.rift_magenta, .rift_magenta a {
+    color: purple;
+}
+.rift_brightyellow {
+    color: yellow;
+}
+.rift_brightyellow, .rift_brightyellow a {
+    color: yellow;
+}
+
+.rift_q0 {
+	color: #888888;
+}
+.rift_q1 {
+	color: #888888;
+}
+.rift_q2 {
+	color: #ffffff;
+}
+.rift_q3 {
+	color: #00ff00;
+}
+.rift_q4 {
+	color: #0070DD;
+}
+.rift_q5 {
+	color: #9F3FFF;
+}
+.rift_q6 {
+	color: #ECE123;
+}
+.rift_q7 {
+	color: #FF8000;
+}
+.sq0 {
+	color:#ffffff;
+}
+.sq1 { 
+	color:#F0E660;
+}
+.sq2 {
+	color:#2E8B62;
+}
+
+
+.rift_d1 {
+	color: #00CC00;
+}
+.rift_d2 {
+	color: #FFFF00;
+}
+.rift_d3 {
+	color: #FF8040;
+}
+.rift_d4 {
+	color: #DD2222;
+}
+
+a.rift_d1 {
+	color: #00CC00 !important;
+}
+a.rift_d2 {
+	color: #FFFF00 !important;
+}
+a.rift_d3 {
+	color: #FF8040 !important;
+}
+a.rift_d4 {
+	color: #DD2222 !important;
+}
+
+a.rift_q0 {
+	color: #888888 !important;
+}
+a.rift_q1 {
+	color: #888888 !important;
+}
+a.rift_q2 {
+	color: #ffffff !important;
+}
+a.rift_q3 {
+	color: #00ff00 !important;
+}
+a.rift_q4 {
+	color: #0070DD !important;
+}
+a.rift_q5 {
+	color: #9F3FFF !important;
+}
+a.rift_q6 {
+	color: #ECE123 !important;
+}
+
+a.sq0 {
+	color:#ffffff !important;
+}
+a.sq1 { 
+	color:#F0E660 !important;
+}
+a.sq2 {
+	color:#2E8B62 !important;
+}

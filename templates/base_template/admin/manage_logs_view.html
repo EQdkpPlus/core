@@ -1,0 +1,42 @@
+<fieldset class="settings">
+	<legend>{LOG_ACTION}</legend>
+	
+	<dl>
+		<dt><label>{L_date}:</label></dt>
+		<dd>{LOG_DATE}</dd>
+	</dl>
+	
+	<dl>
+		<dt><label>{L_username}:</label></dt>
+		<dd>{LOG_USERNAME}</dd>
+	</dl>
+	
+	<dl>
+		<dt><label>{L_ip_address}:</label></dt>
+		<dd>{LOG_IP_ADDRESS}</dd>
+	</dl>
+	
+	<dl>
+		<dt><label>{L_session_id}:</label></dt>
+		<dd>{LOG_SESSION_ID}</dd>
+	</dl>
+	<!-- IF LOG_PLUGIN -->
+	<dl>
+		<dt><label>{L_title}:</label></dt>
+		<dd>{LOG_PLUGIN}</dd>
+	</dl>
+	<!-- ENDIF -->
+</fieldset>
+
+<!-- IF S_MORE_INFOS -->
+<fieldset class="settings">
+	<legend>{L_templates_error_more}</legend>
+	<!-- BEGIN log_row -->
+	<dl>
+		<dt><label>{log_row.KEY}</label></dt>
+		<dd>{log_row.VALUE}</dd>
+	</dl>
+	<!-- END log_row -->
+</fieldset>
+<!-- ENDIF -->
+<input type="button" name="back" value="{L_back}" class="mainoption bi_back" id="back2view" />

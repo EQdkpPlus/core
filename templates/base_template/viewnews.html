@@ -1,0 +1,79 @@
+<div class="portalbox">
+	<div class="portalbox_head">
+		<div class="floatLeft">{L_news}</div>
+		<!-- IF S_NEWSADM_ADD -->
+		<div class="floatRight">
+		&nbsp;<a href="javascript:addNews();" title="{L_add_news}"><img src="{EQDKP_ROOT_PATH}images/glyphs/add.png" border="0" alt="add" /></a>
+		</div>
+		<!-- ENDIF -->
+	</div>
+	<div class="content colorswitch">
+	<!-- BEGIN date_row -->
+	<!-- BEGIN news_row -->
+		<div class="news">
+			<div class="news_header">
+				<div class="news_category_icon floatRight">
+					<!-- IF S_CATS_ENABLED -->
+					<a href="{date_row.news_row.CATEGORY_LINK}">
+					{date_row.news_row.ICON}
+					</a>
+					<!-- ENDIF -->
+				</div>
+				<div>
+					<div class="news_headline">
+						<h1>{date_row.news_row.HEADLINE}</h1>
+					</div>
+					<hr />
+					<div>
+						<div class="news_author">
+							{date_row.DATE} - {date_row.news_row.SUBMITTED} <!-- IF S_CATS_ENABLED --> &bull; <a href="{date_row.news_row.CATEGORY_LINK}">{date_row.news_row.CATEGORY_NAME}</a><!-- ENDIF -->
+							<!-- IF S_NEWSADM_UPD -->
+							&bull; <a href="javascript:editNews({date_row.news_row.ID});" title="{L_edit_news}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" border="0" alt="edit" /> {L_edit_news}</a>
+							<!-- ENDIF -->
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<div class="news_content">
+				{date_row.news_row.MESSAGE}
+			</div>			
+
+			<hr />
+			<div class="news_social floatLeft">
+				{date_row.news_row.SOCIAL_BUTTONS}
+			</div>
+			
+			<div class="news_comments floatRight">
+				<!-- IF date_row.news_row.SHOWCOMMENT -->
+				<a href="{EQDKP_ROOT_PATH}viewnews.php{SID}&amp;id={date_row.news_row.ID}#comments" class="button"><img src="{EQDKP_ROOT_PATH}images/glyphs/comments.png" border="0" alt="comments" /> {date_row.news_row.COMMENTS_COUNTER}</a>
+				<!-- ENDIF -->
+				<a href="#top" class="button"><img src="{EQDKP_ROOT_PATH}images/arrows/up_arrow.png" border="0" alt="up" /><span></span></a>
+			</div>
+			<div class="clear"></div>
+			<!-- IF S_NEWSDETAILS and date_row.news_row.SHOWCOMMENT -->
+			<hr />
+			<a name="comments" id="comments"></a>
+			{date_row.news_row.COMMENT}
+			<!-- ENDIF -->
+
+		</div>
+		<!-- END news_row -->
+		<!-- END date_row -->
+		
+		<!-- IF S_NO_NEWS -->
+		<div class="news">
+			{L_no_news}
+		</div>
+		<!-- ENDIF -->
+		
+	</div>
+	<!-- IF not S_NEWSDETAILS and not S_NO_NEWS -->
+	<div class="center pagination_wrapper">
+		{NEWS_PAGINATION}
+	</div>
+	<!-- ENDIF -->
+</div>
+

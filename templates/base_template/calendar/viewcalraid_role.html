@@ -1,0 +1,101 @@
+<!-- BEGIN raidstatus -->
+<div id="viewraidcal_colapse_{raidstatus.ID}" align="center" >
+	<table width="100%" border="0" cellspacing="1" cellpadding="1">
+		<tr>
+			<td align="left" width="100%">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="borderless">
+					<tr valign="middle">
+						<th align="left" width="14px">
+							<span class="toggle_button">&nbsp;</span>
+						</th>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">
+							<font class="status{raidstatus.ID}"> {raidstatus.NAME}</font>
+							({raidstatus.COUNT}/{raidstatus.MAXCOUNT})
+						</th>
+						<!-- IF S_NOTSIGNED_VISIBLE && raidstatus.ID eq 0 -->
+						<th align="right">
+							<input type="button" value="{L_raidevent_raid_unsigned_button}" class="bi_plus notsigned_button" />
+						</th>
+						<!-- ENDIF -->
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+		
+	<div class="toggle_container">
+		<table width="100%" border="0" cellspacing="1" cellpadding="1">
+			<tr>
+				<!-- BEGIN classes -->
+				<td valign="top" width="{COLUMN_WIDTH}%">
+					<table border="0" cellpadding="0" cellspacing="0" class="borderless" width="100%">
+						<tr>
+							<th width="100%"> {raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
+						</tr>
+						<tr>
+							<td valign="top">
+								<!-- BEGIN status -->
+								<div class="ui-state-hover charchange_menucontainer" id="item_{raidstatus.classes.status.MEMBERID}" style="padding: 5px; margin-top: 4px;">
+									<!-- IF IS_OPERATOR --><input id="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
+									<span class="membertooltip" title="{raidstatus.classes.status.TOOLTIP}">
+										<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}"<!-- ENDIF --> href="../viewcharacter.php{SID}&amp;member_id={raidstatus.classes.status.MEMBERID}" target="_blank">{raidstatus.classes.status.NAME}</a>
+										<!-- IF SHOW_RANDOMVALUE -->
+										<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
+										  [{raidstatus.classes.status.RANDOM}]
+										<!-- ENDIF -->
+										<!-- ENDIF -->
+									</span>
+									<span style="float:right;">
+										<!-- IF NOTEPERMISSION -->
+										<!-- IF raidstatus.classes.status.NOTE -->
+										<span class="rcal_comment<!-- IF raidstatus.classes.status.ADMINNOTE -->_admin<!-- ENDIF --> membertooltip <!-- IF IS_OPERATOR --> charnote_toggle hand<!-- ENDIF -->" title="{raidstatus.classes.status.NOTE}"></span>
+										<!-- ELSE -->
+											<!-- IF IS_OPERATOR -->
+											<span class="rcal_comment_add charnote_toggle hand"></span>
+											<!-- ENDIF -->
+										<!-- ENDIF -->
+										<!-- ENDIF -->
+										<!-- IF IS_OPERATOR -->
+										<span class="charchange_button charname_toggle hand" title="{L_raidevent_raid_changecharmenu}"></span>
+										<!-- ENDIF -->
+									</span>
+									<!-- IF IS_OPERATOR -->
+									<div class="charchange_menu" style="width:100%;">
+										<br/>
+										<fieldset class='blubb'>
+											<legend>{L_raidevent_raid_changecharmenu}</legend>
+											<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+											<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
+											{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
+											<input type="button" name="submit_charchange" value="" class="imagebutton bi_changechar" />
+										</fieldset>
+									</div>
+									<div class="notechange_menu" style="width:100%;">
+										<br/>
+										<fieldset class='blubb'>
+											<legend>{L_raidevent_raid_changenotemenu}</legend>
+											<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+											<textarea name="notechange_note" cols="18" rows="3">{raidstatus.classes.status.NOTE}</textarea>
+											<input type="button" name="submit_notechange" value="" class="imagebutton bi_changenote" />
+										</fieldset>
+									</div>
+									<!-- ENDIF -->
+								</div>
+								<!-- END status -->
+							</td>
+						</tr>
+					</table>
+				</td>
+			<!-- IF raidstatus.classes.BREAK -->
+			</tr><tr>
+			<!-- ENDIF -->
+			<!-- END classes -->
+			</tr>
+			<!-- IF raidstatus.ID eq 0 -->
+				<!-- INCLUDE calendar/viewcalraid_guests.html -->
+			<!-- ENDIF -->
+		</table>
+	</div>
+</div>
+<br />
+ <!-- END raidstatus -->

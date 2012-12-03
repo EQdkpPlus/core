@@ -1,0 +1,41 @@
+<form method="{FORM_METHOD}" action="task.php{SID}">
+  <input type="hidden" name="task" value="{TASK_NAME}" />
+  <table class="task_table">
+    <tr>
+      <th width="90%">
+       {TASK_DESC}
+      </th>
+    </tr>
+		<!-- IF S_APPLICABLE_WARNING-->
+    <tr>
+    	<td colspan="2" align="center">
+			<div class="errorbox roundbox">
+				<div class="false">{L_APPLICABLE_WARNING}</div>
+			</div><br />
+			</td>
+   	</tr>
+		<!-- ENDIF -->
+		<!-- IF S_STEP_END -->
+		  <tr>
+    	<td colspan="2" align="center">
+    		<div class="bluebox roundbox">
+				<div class="icon_info">{L_STEPEND_INFO}</div>
+			</div>
+			<br />
+		</td>
+   	</tr>
+		
+		<!-- ENDIF -->
+    <tr>
+      <td colspan="2">
+			<!-- output -->
+        {TASK_OUTPUT}
+      </td>
+    </tr>
+    <tr>
+      <th colspan="2">
+        {TIMER_OUT}s
+      </th>
+    </tr>
+  </table>
+</form>

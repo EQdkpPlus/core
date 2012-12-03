@@ -1,0 +1,32 @@
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_MAINTENANCE_MESSAGE} {REASON}</div>
+</div>
+<br />
+<form method="post" action="maintenance.php{SID}" name="post">
+<table border="0" align="center" cellpadding="2" cellspacing="1" style="width:300px;" class="task_table">
+  <tr>
+    <th align="center">{L_ADMIN_LOGIN}</th>
+  </tr>
+  <tr>
+    <td class="row1" align="center">
+      <table border="0" cellspacing="0" cellpadding="3" align="center" class="borderless">
+        <tr>
+          <td class="row1 nowrap" width="50%" align="right">{L_USERNAME}:</td>
+          <td class="row1" align="left"><input type="text" name="username" size="20" maxlength="30" /></td>
+        </tr>
+        <tr>
+          <td class="row1 nowrap" align="right">{L_PASSWORD}:</td>
+          <td class="row1" align="left"><input type="password" name="password" size="20" maxlength="32" /></td>
+        </tr>
+        <tr>
+          <td class="row1" width="40" align="right">{L_REMEMBER_PASSWORD}</td>
+          <td class="row1" width="100" align="left"><input type="checkbox" name="auto_login" /></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <th align="center"><input type="hidden" name="splash" value="{SPLASH}" /><input type="submit" name="login" value="{L_LOGIN}" class="mainoption" /></th>
+  </tr>
+</table>
+</form>

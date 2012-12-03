@@ -1,0 +1,37 @@
+<!-- IF S_ADD -->
+<form method="post" action="{ACTION}" name="addWC">
+<input type="hidden" name="eventid" value="{EVENT_ID}">
+<input type="hidden" name="guestid" value="{GUEST_ID}">
+
+<fieldset class="settings smallsettings">
+	<dl>
+		<dt><label>{L_name}:</label></dt>
+		<dd>
+			<!-- IF GUEST_ID -->
+			{MEMBER_NAME}
+			<input type="hidden" name="membername" size="20" value="{MEMBER_NAME}" class="input" />
+			<!-- ELSE -->
+			<input type="text" name="membername" size="20" value="" class="input" />
+			<!-- ENDIF -->
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_class}:</label></dt>
+		<dd>{CLASS_DD}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_note}:</label></dt>
+		<dd><input type="text" name="note" size="50" maxlength="255" value="{NOTE}" class="input" /></dd>
+	</dl>
+</fieldset>
+<input type="submit" name="add" value="{L_raidevent_raid_gbutton}" class="mainoption bi_ok" />
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<fieldset class="settings smallsettings">
+	<dl>
+		<dt></dt>
+		<dd>No Permission</dd>
+	</dl>
+</fieldset>
+<!-- ENDIF -->

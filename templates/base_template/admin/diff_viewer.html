@@ -1,0 +1,28 @@
+<form action="{ACTION}" method="post">
+
+<style  type="text/css">
+	.showfile{
+		height: 420px;
+		overflow: auto;
+	}
+</style>
+<fieldset class="settings">
+			<legend>{L_liveupdate_show_differences}</legend>
+			<dl>
+				<dt><label>{L_imageuploader_file}</label></dt>
+				<dd>{FILENAME}</dd>
+			</dl>
+			<!-- IF S_RENDERER -->
+			<dl>
+				<dt><label>{L_liveupdate_select_renderer}</label></dt>
+				<dd>{RENDERER_DROPDOWN}</dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<div style="background-color:#eee;color:#000;">{CONTENT}
+				</div>
+			</dl>
+</fieldset>
+
+<input type="hidden" name="diff" value="{ENCODED_FILENAME}" />
+</form>

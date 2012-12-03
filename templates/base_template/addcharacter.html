@@ -1,0 +1,99 @@
+<form method="post" action="{ACTION}" name="post">
+<input type="hidden" name="adminmode" size="2" value="{ADMINMODE}"/>
+<div id='addchar_tab'>
+	<ul>
+		<li><a href='#fragment-chars'><span>{L_uc_tab_Character}</span></a></li>
+		<!-- BEGIN cmrow --> <li><a href='#fragment-{cmrow.ID}'><span>{cmrow.NAME}</span></a></li><!-- END cmrow -->
+		<li><a href='#fragment-notes'><span>{L_uc_tab_notes}</span></a></li>
+		<!-- IF ADMINMODE -->
+		<li><a href='#fragment-history'><span>{L_uc_transfer_history}</span></a></li>
+		<!-- ENDIF -->
+	</ul>
+
+	<div id="fragment-chars">
+		<fieldset class="settings">
+			<dl>
+				<dt><label>{L_name}</label><br /><span></span></dt>
+				<dd>
+					<!-- IF U_IS_EDIT -->
+					<input type="hidden" name="editid" size="20" value="{MEMBER_ID}" class="input" />
+					<!-- IF not ADMINMODE -->
+					{MEMBER_NAME}
+					<input type="hidden" name="member_name" size="60" value="{MEMBER_NAME}" class="input" />
+					<!-- ELSE -->
+					<input type="text" name="member_name" id="member_name" size="20" value="{MEMBER_NAME}" class="input {validate:{required:true, minlength:3}}"  />
+					<!-- ENDIF -->
+					<!-- ELSE -->
+					<input type="text" name="member_name" id="member_name" size="20" value="{MEMBER_NAME}" class="input {validate:{required:true, minlength:3}}"  />
+					<!-- ENDIF -->
+				</dd>
+			</dl>
+			<!-- BEGIN character_row -->
+			<dl>
+				<dt><label>{character_row.NAME}</label><br /><span>{character_row.HELP}</span></dt>
+				<dd>{character_row.FIELD}</dd>
+			</dl>
+			<!-- END character_row -->
+
+			<!-- IF U_IS_EDIT && ADMINMODE -->
+			<dl>
+				<dt><label>{L_member_active}</label><br /><span></span></dt>
+				<dd><label><input type="radio" name="status" value="1" class="input" <!-- IF STATUS -->checked="checked"<!-- ENDIF --> />{L_yes}</label> <label><input type="radio" name="status" value="0"  <!-- IF not STATUS -->checked="checked"<!-- ENDIF -->/> {L_no}</label> </dd>
+			</dl>
+			<!-- ELSE -->
+			<dl>
+				<dt><label>{L_overtake_char}</label><br /><span></span></dt>
+				<dd>
+					<!-- IF USER_CAN_CONNECT -->
+					<input type="checkbox" name="overtakeuser" value="1" <!-- IF not ADMINMODE -->checked="checked"<!-- ENDIF --> />
+					<!-- ELSE -->
+					<input type="checkbox" name="overtakeuser" value="1" disabled="disabled" checked="checked" />
+					<!-- ENDIF -->
+				</dd>
+			</dl>
+			<!-- ENDIF -->
+		</fieldset>
+	</div>
+
+	<!-- BEGIN cmrow -->
+	<div id="fragment-{cmrow.ID}">
+		<fieldset class="settings">
+			<!-- BEGIN tabs -->
+			<dl>
+				<dt><label>{cmrow.tabs.NAME}</label><br /><span>{cmrow.tabs.HELP}</span></dt>
+				<dd>{cmrow.tabs.FIELD}</dd>
+			</dl>
+			<!-- END tabs -->
+		</fieldset>
+	</div>
+	<!-- END cmrow -->
+
+	<div id="fragment-notes">
+		<fieldset class="settings">
+			<dl>
+				<dt><label>{L_uc_notes}</label><br /><span>{L_uc_notes_help}</span></dt>
+				<dd><textarea name="notes" class="input" rows="12" cols="75">{NOTES}</textarea></dd>
+			</dl>
+		</fieldset>
+	</div>
+	<!-- IF ADMINMODE -->
+	<div id="fragment-history">
+		<fieldset class="settings">
+			<dl>
+				<dt><label>{L_uc_transfer_history_receiver}</label><br /><span>{L_uc_transfer_history_receiver_note}</span></dt>
+				<dd>{DD_HISTORY_RECEIVER}</dd>
+			</dl>
+		</fieldset>
+	</div>
+	<!-- ENDIF -->
+</div>
+<br />
+
+	<!-- IF U_IS_EDIT -->
+	<input type="submit" name="edit" value="{L_uc_save_char}" class="mainoption bi_ok" /> 
+	<!-- ELSE -->
+	<input type="submit" name="add" value="{L_uc_add_char}" class="mainoption bi_new" />
+	<!-- ENDIF -->
+{CSRF_TOKEN}
+{MEMBER_PICTURE}
+</form>

@@ -1,0 +1,33 @@
+<form method="post" action="{ACTION}" name="transformRaids">
+	<input type="hidden" name="eventid" value="{EVENTID}" />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr >
+			<td width="20%" class="row2 nowrap"><input type="checkbox" name="confirmed" value="1" checked="checked" /></td>
+			<td width="80%" class="row2 nowrap">{L_raidevent_transform_confim}</td>
+		</tr>
+		<tr >
+			<td width="20%" class="row2 nowrap"><input type="checkbox" name="signedin" value="1" /></td>
+			<td width="80%" class="row2 nowrap">{L_raidevent_transform_signin}</td>
+		</tr>
+		<tr >
+			<td width="20%" class="row2 nowrap"><input type="checkbox" name="notsure" value="1" /></td>
+			<td width="80%" class="row2 nowrap">{L_raidevent_transform_notsure}</td>
+		</tr>
+		<tr >
+			<td width="20%" class="row2 nowrap"><input type="checkbox" name="unsigned" value="1" /></td>
+			<td width="80%" class="row2 nowrap">{L_raidevent_transform_unsigned}</td>
+		</tr>
+		<tr >
+			<td width="20%" class="row2 nowrap"><input type="checkbox" name="raidleaders" value="1" /></td>
+			<td width="80%" class="row2 nowrap">{L_raidevent_transform_leaders}</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<center>
+					<input type="submit" name="transformraid" value="{L_raidevent_transform_button}" class="mainoption" /> 
+				</center>
+			</td>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

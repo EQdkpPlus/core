@@ -1,0 +1,34 @@
+<form method="post" action="{ACTION}" name="post">
+<fieldset class="settings smallsettings">
+	<legend>{L_editing_adj}</legend>
+	<dl>
+		<dt><label>{L_reason}:</label></dt>
+		<dd><input type="text" name="reason" value="{REASON}" class="input" size='60' id="reason" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_value}:</label></dt>
+		<dd><input type="text" name="value" value="{VALUE}" class="input" size='60' id="value" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_raid}:</label></dt>
+		<dd>{RAID}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_event}:</label></dt>
+		<dd>{EVENT}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_date}:</label></dt>
+		<dd>{DATE}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_members}:</label></dt>
+		<dd>{MEMBERS}</dd>
+	</dl>
+
+</fieldset>
+<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+<input type="button" name="del" value="{L_delete}" class="liteoption bi_delete" onclick="delete_warning('{GRP_KEY}');" />
+<input type="button" name="" value="{L_cancel}" class="mainoption bi_back" onclick="window.location.href='manage_adjustments.php{SID}'"/>
+{CSRF_TOKEN}
+</form>

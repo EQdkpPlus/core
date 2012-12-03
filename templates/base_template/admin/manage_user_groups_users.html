@@ -1,0 +1,126 @@
+<form method="post" action="{ACTION}" name="post">
+	<div id="groups_tabs">
+		<ul>
+			<li><a href='#members'><span>{L_group_members}</span></a></li>
+			<li><a href='#permissions'><span>{L_permissions}</span></a></li>
+		</ul>
+
+		<div id="members">
+			<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
+				<tr>
+					<th align="center" colspan="6"><a href="manage_user_groups.php{SID}">{L_manage_user_groups}</a> &raquo; {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></th>
+				</tr>
+				<tr>
+					<th width="20"><input type="checkbox" id="selall_usergr" /></th>
+					<th>
+						<a href="{U_MANAGE_USERS}&amp;o=0.0">
+							<span class="down_arrow{RED00}"></span>
+						</a> 
+						<a href="{U_MANAGE_USERS}&amp;o=0.1">
+							<span class="up_arrow{RED01}"></span>
+						</a> 
+						{L_username}
+					</th>
+					<th>{L_email}</th>
+					<th>{L_last_visit}</th>
+					<th>{L_active}</th>
+					<th>{L_online}</th>
+				</tr>
+				<!-- BEGIN user_row -->
+				<tr>
+					<td><!-- IF not user_row.S_UNDELETABLE --><input type="checkbox" name="group_user[{user_row.ID}]" value="{user_row.ID}" class="usercheckbox" /><!-- ENDIF --></td>
+					<td>
+						<a href="manage_users.php{SID}&amp;u={user_row.ID}">{user_row.NAME}</a>
+					</td>
+					<td>{user_row.EMAIL}</td>
+					<td>{user_row.LAST_VISIT}</td>
+					<td>{user_row.ACTIVE}</td>
+					<td>{user_row.ONLINE}</td>
+				</tr>
+				<!-- END user_row -->
+				<tr>
+					<th colspan="6">{L_add_user_to_group}</th>
+				</tr>
+				<tr>
+					<td colspan="6">{ADD_USER_DROPDOWN}</td>
+				</tr>
+				<tr>
+					<th colspan="6"><input type="submit" name="add_group_users" value="{L_add_selected_to_group}" class="mainoption bi_new" id="add_group_users" /> <input type="submit" name="del_group_users" value="{L_delete_selected_from_group}" class="mainoption bi_delete" id="del_group_users" /> <input type="button" name="back" value="{L_back}" class="liteoption bi_back" onclick="window.location='manage_user_groups.php{SID}'"/> </th>
+				</tr>
+			</table>
+
+		</div>
+
+		<div id="permissions">	
+			<div id="permission_tabs">
+				<ul>
+					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
+					<li><a href='#admin_perms'><span><img src="{EQDKP_IMAGE_PATH}global/admin_flag.png" alt="admin"/>{L_admin_permissions}</span></a></li>
+				</ul>
+				
+				<div id="user_perms">
+					<!-- BEGIN u_permissions_row -->
+					<fieldset class="settings mediumsettings" class="settings">
+						<legend>{u_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<div class="permissions">
+							<label>
+								<input type="checkbox" name="{u_permissions_row.check_group.CBNAME}" value="Y" {u_permissions_row.check_group.CBCHECKED} class="changepermcolor" id="cb_{u_permissions_row.check_group.CBNAME}"/>
+								<span id="span_cb_{u_permissions_row.check_group.CBNAME}" class="perm_text {u_permissions_row.check_group.CLASS}">{u_permissions_row.check_group.TEXT}</span>
+							</label>
+						</div>
+						<!-- END check_group -->
+					</fieldset>
+					<!-- END u_permissions_row -->
+				</div>
+				
+				<div id="admin_perms">
+					<!-- IF GRP_ID == 1 -->
+					<div class="bluebox roundbox">
+						<div class="icon_info">{L_guest_no_admin_perms_note}</div>
+					</div>
+					<!-- ENDIF -->
+					
+					<!-- BEGIN a_permissions_row -->
+					<fieldset class="settings mediumsettings" class="settings">
+						<legend>{a_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<div class="permissions">
+							<label>
+								<input type="checkbox" name="{a_permissions_row.check_group.CBNAME}" value="Y" {a_permissions_row.check_group.CBCHECKED} class="changepermcolor" id="cb_{a_permissions_row.check_group.CBNAME}"/>
+								<span id="span_cb_{a_permissions_row.check_group.CBNAME}" class="perm_text {a_permissions_row.check_group.CLASS}">{a_permissions_row.check_group.TEXT}</span>
+							</label>
+						</div>
+						<!-- END check_group -->
+					</fieldset>
+					<!-- END a_permissions_row -->				
+				</div>
+				
+			</div>
+			<div class="contentFooter">
+				<input type="submit" class="bi_ok mainoption" name="save_group_perms" value="{L_save}" />
+			</div>
+		</div>
+	</div>
+{CSRF_TOKEN}
+</form>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$('.changepermcolor').change(function() {
+		if($(this).prop('checked')){
+			$('#span_'+this.id).attr('class', 'positive');
+		}else{
+			$('#span_'+this.id).attr('class', 'negative');
+		}
+	});
+	
+	$("#selall_usergr").click(function(){
+		var checked_status = this.checked;
+		$(".usercheckbox").each(function(){
+			this.checked = checked_status;
+		});
+	});
+});
+//]]>
+</script>

@@ -1,0 +1,97 @@
+<!-- IF not S_EDIT -->
+<form method="post" action="{ACTION}" name="post" class="colorswitch">
+  
+  <table width="100%" cellpadding="2" cellspacing="1">
+    <tr>
+      <th colspan="8"><span style="float:left;">{L_manage_profilefields}</span><span style="float:right"><input name="new" type="submit" class="mainoption bi_new" id="new" value="{L_new_profilefield}" /></span></th>
+    </tr>    
+    <tr>
+      <th class="nowrap">&nbsp;</th>
+      <th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
+      <th colspan="2" class="nowrap">{L_action}</th>
+      <th class="nowrap">{L_name}</th>
+      <th class="nowrap">{L_ID}</th>
+      <th class="nowrap">{L_type}</th>
+      <th class="nowrap">{L_category}</th>
+    </tr>
+    <!-- BEGIN profile_row -->
+    <tr>
+      <td width="20" class="nowrap" align="center"><img src="{EQDKP_ROOT_PATH}images/glyphs/status_{profile_row.ENABLED_ICON}.gif" alt="" /></td>
+      <td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
+      <td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{profile_row.ENABLE}.png" width="16" height="16" alt="" /></a><!-- ENDIF --></td>
+      <td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_EDIT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></a><!-- ENDIF --></td>
+      <td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
+      <td>{profile_row.ID}</td>
+      <td>{profile_row.TYPE}</td>
+      <td>{profile_row.CATEGORY}</td>
+    </tr>
+    <!-- END profile_row -->
+    <tr >
+      <th colspan="8" class="footer">
+		<span style="float:left;">
+			<input name="del" type="button" class="mainoption bi_delete" id="delete" value="{L_delete_selected}" onclick="delete_warning();" />
+			<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		</span>
+		<span style="float:right;">{FC_PROFILEFIELDS}</span>
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<script type="text/javascript">
+//<![CDATA[
+function handle_fieldtypes(value){
+	if (value == 'dropdown'){
+		$("#options_row").show();
+	} else {
+		$("#options_row").hide();
+	}
+}
+
+function add_option(value){
+	
+		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /> <img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display=\'none\'" alt="add" />');
+}
+//]]>
+</script>
+<form method="post" action="{F_PAGE_MANAGER}" name="post">
+	<fieldset class="settings">
+		<legend>{L_manage_profilefields}</legend>
+		<dl>
+			<dt><label>{L_name}:</label></dt>
+			<dd><input type="hidden" name="id" value="{ID}" /><input name="language" type="text" class="input" value="{LANGUAGE}" size="100" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_type}:</label></dt>
+			<dd>{TYPE_DD}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_category}:</label></dt>
+			<dd>{CATEGORY_DD}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_field_length}:</label></dt>
+			<dd><input name="size" type="text"  class="input" id="size" value="{SIZE}" size="4" maxlength="4" /></dd>
+		</dl>	
+		<dl>
+			<dt><label>{L_profilefield_image}:</label><br /><span>{L_IMAGE_NOTE}</span></dt>
+			<dd><input name="image" type="text"  class="input" id="image" value="{IMAGE}" size="100" /></dd>
+		</dl>
+	</fieldset>
+	
+	<fieldset class="settings" {S_SHOW_OPTIONS} id="options_row">
+		<legend>{L_profilefield_optionen}</legend>
+		<dl>
+			<dt><label>{L_profilefield_optionen}:</label></dt>
+			<dd><!-- BEGIN options_row -->{L_ID}: <input type="text" value="{options_row.ID}" name="option_id[]" class="input" /> {L_name}: <input type="text" value="{options_row.LANGUAGE}" name="option_lang[]" class="input" /><br /><!-- END options_row -->
+			{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" />
+			<img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display='none'" alt="add" /><span id="new_options"></span></dd>
+		</dl>
+	</fieldset>
+
+	<input name="add" type="submit" class="mainoption bi_ok" id="add" value="{L_save}" />
+	<input name="cancel" type="submit" class="liteoption bi_back" id="cancel" value="{L_cancel}" />
+{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->

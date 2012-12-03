@@ -1,0 +1,26 @@
+<form action='{ACTION}' method='post'>
+<table width="100%" cellpadding="2" cellspacing="1" border="0" class="colorswitch">
+	<tr>
+		<th colspan="{HPTT_COLUMN_COUNT}">
+			<span style="float:left;">{L_manage_news}</span>
+			<span style="float:right">
+				<!-- IF NEWS_CATEGEGORIES -->
+				<input type="button" onclick="window.location.href='manage_news_categories.php{SID}'" value="{L_manage_newscategories}" class="mainoption bi_edit" />
+				<!-- ENDIF -->
+				<input type="button" onclick="window.location.href='manage_news.php{SID}&amp;n=0'" value="{L_add_news}" class="mainoption bi_new" />
+			</span>
+		</th>
+	</tr>
+	{NEWS_LIST}
+	<tr>
+		<td colspan="{HPTT_COLUMN_COUNT}">
+			<span style="float:left;">
+				<input type="button" name="del" value="{L_delete_selected}" class="mainoption bi_delete" onclick="delete_warning();" />
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+			</span>
+			<span style="float:right;">{PAGINATION}</span>
+		</td>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

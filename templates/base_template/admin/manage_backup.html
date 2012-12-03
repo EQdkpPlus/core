@@ -1,0 +1,91 @@
+<form method="post" action="{ACTION}" name="post">
+<div id="backup_tabs">
+<ul>
+		<li><a href='#create'><span>{L_backup_database}</span></a></li>
+		<li><a href='#trestore'><span>{L_backup_restore}</span></a></li>
+</ul>
+<div id="create">
+	<!-- IF TABLE_PREFIX_WARNING -->
+	<div class="errorbox roundbox">
+		<div class="icon_false">{TABLE_PREFIX_WARNING}</div>
+	</div>
+	<!-- ENDIF -->	
+
+		
+	<fieldset class="settings">
+		<legend>{L_backup_title}</legend>
+		
+
+		<dl>
+			<dt><label>{L_backup_system}</label><br /><span></span></dt>
+			<dd><label><input type="radio" name="system" value="db" checked="checked" onchange="checkForm(false);" />{L_backup_system_db}</label>&nbsp;<label><input type="radio" name="system" value="data" onchange="checkForm(true);" />{L_backup_system_data}</label></dd>
+		</dl>
+		
+		<dl>
+			<dt><label>{L_create_table}</label><br /><span></span></dt>
+			<dd><label><input type="radio" name="create_table" value="Y" checked="checked" id="create_table_y" />{L_yes}</label> &nbsp;<label><input type="radio" name="create_table" value="N" id="create_table_n" />{L_no}</label></dd>
+		</dl>
+		
+		<dl>
+			<dt><label>{L_backup_type}</label><br /><span></span></dt>
+			<dd><label><input name="method" type="radio" class="radio" id="method_zip" value="zip" checked="checked" /> 
+    	<strong>zip</strong> <em>({L_recommended})</em></label>
+    
+    <label>
+    	<input name="method" class="radio" value="text" id="method_text" type="radio" /> text</label></dd>
+		</dl>
+		
+		<dl>
+			<dt><label>{L_backup_action}</label><br /><span></span></dt>
+			<dd><label>
+      <input type="radio" name="action" value="store" checked="checked" id="action_store" />
+      {L_backup_action_store} &nbsp;</label>
+      <label>
+        <input type="radio" name="action" value="download" id="action_download" />
+        {L_backup_action_download}</label>
+&nbsp;
+<label>
+  <input type="radio" name="action" value="both" id="action_both" />
+  <strong>{L_backup_action_both}</strong> <em>({L_recommended})</em></label></dd>
+		</dl>
+		
+		<dl>
+			<dt><label>{L_select_tables}</label><br /><span></span></dt>
+			<dd>{TABLE_SELECT}</dd>
+		</dl>
+
+	</fieldset>
+<input type="submit" name="backup" value="{L_backup_database}" class="mainoption bi_ok" />
+</div>
+<div id="trestore">
+	<div class="errorbox roundbox">
+		<div class="icon_false">{L_backup_restore_info}</div>
+	</div>
+<br />
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_backup_uncomplete_info}</div>
+	</div>
+
+<br />
+	
+	<fieldset class="settings smallsettings">
+		<legend>{L_backup_restore}</legend>
+		<dl>
+			<dt><label>{L_backup_select}</label><br /><span></span></dt>
+			<dd><!-- IF not NO_BACKUPS --><div style="float:left;"><select size="10" name="backups" onchange="show_metadata(this.value)"> <!-- BEGIN backup_list --><option value="{backup_list.FILE}">{backup_list.NAME}</option><!-- END backup_list --></select></div>
+				<div style="float:left; margin-left: 20px; "><b>{L_metadata}:</b><br />
+      <br /><div id="metadata"></div></div>
+				<!-- ELSE --> {L_backup_no_files}<!-- ENDIF -->
+			</dd>
+		</dl>
+	</fieldset>
+	
+	<input name="restore" type="button" class="mainoption bi_ok" id="restore" value="{L_backup_restore_button}" onclick="restore_warning();" />
+    <input name="backup_delete" type="button" class="liteoption bi_delete" id="backup_delete" value="{L_backup_delete}" onclick="delete_warning();" />
+    <input name="backup_download" type="submit" class="mainoption bi_save" id="backup_download" value="{L_backup_download}" />
+	<input type="hidden" name="restore_data" id="restore_data" value="0" />
+	<input type="hidden" name="" id="mode" value="1" />
+</div>
+</div>
+{CSRF_TOKEN}
+</form>

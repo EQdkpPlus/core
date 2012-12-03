@@ -1,0 +1,112 @@
+<form method="post" action="{ACTION}" name="post">
+<div id="lm_tabs">
+	<ul>
+		<li><a href="#normal">{L_lm_manage_layouts}</a></li>
+		<li><a href="#advanced">{L_lm_manage_advanced}</a></li>
+	</ul>
+	<div id="normal">
+		<div class="bluebox roundbox">
+			<div class="icon_info"><strong>{L_lm_info}</strong></div>
+		</div>
+		<br/><br/>	
+		<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch hoverrows">
+			<tr>
+				<th colspan="4">{L_lm_default_layouts}</th>
+			</tr>
+			<tr>
+				<th width="1%">&nbsp;</th>
+				<th width="1%">{L_action}</th>
+				<th width="15%">{L_name}</th>
+				<th>{L_description}</th>
+			</tr>
+			<!-- BEGIN layouts_row -->
+			<tr>
+				<td><input type="radio" name="current_layout" value="{layouts_row.NAME}" {layouts_row.IS_CURRENT} /></td>
+				<td width="20" class="nowrap">
+					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={layouts_row.NAME}" title="{L_edit}"><img src="{EQDKP_ROOT_PATH}images/global/edit.png" border="0" alt="{L_edit}" /></a>
+				</td>
+				<td>{layouts_row.NAME}</td>
+				<td>{layouts_row.DESC}</td>
+				
+			</tr>
+			<!-- END layouts_row -->
+			<tr>
+				<th colspan="4">{L_lm_user_layouts}</th>
+			</tr>
+			<!-- BEGIN user_layouts_row -->
+			<tr>
+				<td><input type="radio" name="current_layout" value="{user_layouts_row.NAME}" {user_layouts_row.IS_CURRENT} /></td>
+				<td width="20" class="nowrap">
+					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}" title="{L_edit}"><img src="{EQDKP_ROOT_PATH}images/global/edit.png" border="0" alt="{L_edit}" /></a> &nbsp;
+					<a href="manage_pagelayouts.php{SID}&amp;del=true&amp;layout={user_layouts_row.NAME}&amp;link_hash={CSRF_DEL_TOKEN}" title="{L_delete}"> <img src="{EQDKP_ROOT_PATH}images/global/delete.png" border="0" alt="{L_delete}" /></a>
+				</td>
+				<td><a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}">{user_layouts_row.NAME}</a></td>
+				<td width="84%">{user_layouts_row.DESC}</td>
+			</tr>
+			<!-- END user_layouts_row -->
+			<tr>
+				<th colspan="4"><input type="submit" name="set_current_layout" value="{L_lm_make_current}" class="mainoption bi_ok" /></th>
+			</tr>
+		</table>
+		<br />
+		<fieldset class="settings">
+		<legend>{L_lm_new_layout}</legend>
+		<dl>
+			<dt><label>{L_name}: *</label></dt>
+			<dd><input name="new_layout_name" type="text" size="80" maxlength="30" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}: *</label></dt>
+			<dd><input name="new_layout_desc" type="text" size="80" maxlength="80" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_lm_source_layout}:</label></dt>
+			<dd>{LAYOUT_DROPDOWN}</dd>
+		</dl>
+		</fieldset>
+		<input type="submit" name="add_layout" value="{L_lm_new_layout}" class="mainoption bi_new" />
+		
+		
+	</div>
+	<div id="advanced">
+		<div class="errorbox roundbox">
+			<div class="icon_false">{L_lm_warning}</div>
+		</div>
+		<br />
+		<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch">
+			<tr>
+				<th colspan="6">{L_lm_user_presets}</th>
+			</tr>
+			<tr>
+				<th>{L_action}</th>
+				<th>{L_name}</th>
+				
+				<th>{L_lm_module}</th>
+				<th>{L_lm_tag}</th>
+				<th>{L_lm_aparam}</th>
+				<th>{L_lm_dparam}</th>			
+			</tr>
+			<!-- BEGIN preset_row -->
+			<tr>
+				<td width="20" align="center"><a href="manage_pagelayouts.php{SID}&amp;del_pre={preset_row.NAME}&amp;link_hash={CSRF_DELPRESET_TOKEN}" title="{L_delete}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" border="0" alt="{L_delete}" /></a></td>
+				<td>{preset_row.NAME}</td>
+				<td>{preset_row.MODULE}</td>
+				<td>{preset_row.TAG}</td>
+				<td>{preset_row.APARAM}</td>
+				<td>{preset_row.DPARAM}</td>
+			</tr>
+			<!-- END preset_row -->
+		</table>
+		<br />
+		<fieldset class="settings">
+		<legend>{L_lm_add_preset}</legend>
+		<dl>
+			<dt><label>{L_lm_up_xml}: *</label></dt>
+			<dd><textarea name="new_preset_xml" cols="80" rows="30" class="input">{NEW_PRESET_XML}</textarea></dd>
+		</dl>
+		</fieldset>
+		<input name="add_preset" type="submit" class="mainoption bi_new" id="add_preset" value="{L_lm_add_preset}" />
+	</div>
+</div>
+{CSRF_TOKEN}
+</form>

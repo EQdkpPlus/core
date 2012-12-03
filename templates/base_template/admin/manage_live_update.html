@@ -1,0 +1,143 @@
+<div class="errorbox roundbox" id="lu_error" style="display:none;">
+		<div class="icon_false"><span id="lu_error_label"></span></div>
+</div>
+<!-- IF S_START -->
+	<!-- IF S_NEW_VERSION && S_REQUIREMENTS -->
+	<div class="errorbox roundbox">
+		<div class="icon_false"><b>{L_liveupdate_update_available}</b></div>
+	</div>
+	<!-- ELSEIF S_NEW_VERSION && not S_REQUIREMENTS -->
+	<div class="errorbox roundbox">
+		<div class="icon_false"><b>{L_liveupdate_update_requirements_failed}</b></div>
+	</div>
+	<!-- ELSE -->
+	<div class="greenbox roundbox">
+		<div class="icon_ok">{L_liveupdate_no_update_available}</div>
+	</div>
+	<!-- ENDIF -->
+	<form method="post" action="{ACTION}">
+	<fieldset class="settings">
+		<legend>{L_information}</legend>
+		<!-- IF S_RELEASE_CHANNEL -->
+		<dl>
+			<dt><label>{L_liveupdate_release_channel}</label></dt>
+			<dd>{RELEASE_CHANNEL}</dd>
+		</dl>
+		<!-- ENDIF -->
+		<dl>
+			<dt><label>{L_liveupdate_installed_version}</label></dt>
+			<dd><!-- IF S_NEW_VERSION --><span class="negative">{RECENT_VERSION}</span><!-- ELSE -->{RECENT_VERSION}<!-- ENDIF --></dd>
+		</dl>
+		<!-- IF S_NEW_VERSION -->
+		<dl>
+			<dt><label>{L_liveupdate_new_version}</label></dt>
+			<dd><b>{NEW_VERSION}</b> {L_liveupdate_new_version_published} {RELEASE_DATE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_liveupdate_release_level}</label></dt>
+			<dd>{LEVEL}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_liveupdate_changelog}</label></dt>
+			<dd>{CHANGELOG}</dd>
+		</dl>
+		<!-- ENDIF -->
+	</fieldset>
+	<!-- IF S_NEW_VERSION && S_REQUIREMENTS -->
+	<input type="submit" name="show" value="{L_liveupdate_start}" class="mainoption bi_ok" />
+	<!-- ENDIF -->
+	<!-- IF S_RELEASE_CHANNEL && S_REQUIREMENTS && not S_NEW_VERSION -->
+	<input type="submit" name="refresh" value="{L_liveupdate_check_for_updates}" class="mainoption bi_reload" />
+	<!-- ENDIF -->
+	
+	</form>
+<!-- ENDIF -->
+
+
+<!-- IF S_STEP -->
+<style type="text/css">
+	.ui-progressbar { position:relative; height:30px;}
+	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 30px; left:5%; right:5%;}
+</style>
+<div class="bluebox roundbox" id="lu_dontclose">
+		<div class="icon_info"><strong>{L_liveupdate_dontclose}</strong></div>
+</div>
+<br />
+<div id="nl_progressbar">
+	<span class="nl_progressbar_label"><img src="{EQDKP_IMAGE_PATH}global/loading.gif" id="lu_loading_img" /> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span></div>
+</div>
+<!-- ENDIF -->
+
+
+<!-- IF S_SHOW -->
+<style type="text/css">
+	.ui-progressbar { position:relative; height:30px;}
+	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 30px; left:5%; right:5%;}
+</style>
+<div id="nl_progressbar">
+	<span class="nl_progressbar_label"><span id="nl_progressbar_label"></span></span></div>
+</div>
+	<!-- IF S_SHOW_5 -->
+	<form method="post" action="{ACTION}">
+		<!-- IF S_CONFLICTED_FILES -->
+		<div class="errorbox roundbox" id="lu_dontclose">
+			<div class="icon_false">{L_liveupdate_conflictedfiles_note}</div>
+		</div>
+		<br />
+		<fieldset class="settings">
+			<legend>{L_liveupdate_conflictedfiles}</legend>
+			<!-- BEGIN conflicted_row -->
+			<dl>
+				<dt><label>{conflicted_row.FILENAME}</label></dt>
+				<dd><a href="javascript:liveupdate_diff('{conflicted_row.ENCODED_FILENAME}');">{L_liveupdate_show_differences}</a></dd>
+			</dl>
+			<!-- END conflicted_row -->
+			<input type="submit" value="{L_liveupdate_downloadfiles}" name="download" class="mainoption bi_save"/>
+		</fieldset>		
+		<br />
+		<!-- ENDIF -->
+		
+		<!-- IF S_REMOVED_FILES -->
+		<fieldset class="settings">
+			<legend>{L_liveupdate_conflictedfiles}</legend>
+			<!-- BEGIN removed_row -->
+			<dl>
+				<dt><label>{removed_row.FILENAME}</label></dt>
+				<dd><a href="javascript:liveupdate_diff('{conflicted_row.ENCODED_FILENAME}&type=showfile');">{L_liveupdate_show_file}</a></dd>
+			</dl>
+			<!-- END removed_row -->
+		</fieldset>
+		<br />
+		<!-- ENDIF -->
+	<input type="submit" value="{L_bridge_continue}" name="submit" class="mainoption bi_ok" <!-- IF S_CONFLICTED_FILES -->onclick="confirm_conflicted(); return false;"<!-- ENDIF --> />
+	<input type="button" value="{L_cancel}" name="cancel" class="mainoption bi_cancel" onclick="window.location.href='manage_live_update.php{SID}'"/>
+	<input type="hidden" name="show" value="5" >
+	</form>
+	<!-- ENDIF -->
+
+
+	<!-- IF S_SHOW_9 -->
+	<form method="post" action="{ACTION}">
+		<div class="errorbox roundbox" id="lu_dontclose">
+			<div class="icon_false">{L_liveupdate_missingfiles_note}</div>
+		</div>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+			<tr>
+			  <th>{L_liveupdate_missingfiles}</th>
+			</tr>
+			<!-- BEGIN missing_row -->
+		  <tr>
+			<td>&bull; {missing_row.FILENAME}</td>
+		  </tr>
+		  <!-- END missing_row -->
+		  <tr>
+			<th><input type="button" value="{L_liveupdate_checkagain}" name="submit" class="mainoption bi_ok" onclick="lu_step8()" /> <input type="submit" value="{L_liveupdate_downloadfiles}" name="download" class="mainoption bi_save"/></th>
+			</tr> 
+		</table>
+
+	
+	<input type="hidden" name="show" value="9" >
+	</form>
+	<!-- ENDIF -->
+
+<!-- ENDIF -->

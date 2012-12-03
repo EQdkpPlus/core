@@ -1,0 +1,20 @@
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings">
+		<legend>{L_add_itempool}</legend>
+		<dl>
+			<dt><label>{L_name}:</label></dt>
+			<dd><input type="text" name="name" value="{NAME}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}:</label></dt>
+			<dd><input type="text" name="desc" value="{DESC}" class="input" /></dd>
+		</dl>
+	</fieldset>
+	<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+	<!-- IF IID -->
+	<input type="hidden" name="ip_id" value="{IID}" />
+	<input type="button" name="del" value="{L_delete}" class="mainoption bi_delete" onclick="delete_warning();" />
+	<!-- ENDIF -->
+	<input type="submit" name="cancel" value="{L_cancel}" class="mainoption bi_back" />
+{CSRF_TOKEN}
+</form>

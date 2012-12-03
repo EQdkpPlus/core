@@ -1,0 +1,88 @@
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_uc_tasks_info}</div>
+</div>
+<br />
+<!-- IF S_NOTHING -->
+<div class="greenbox roundbox">
+	<div class="icon_ok">{L_uc_no_tasks}</div>
+</div>
+<!-- ENDIF -->
+<form method="post" action="{F_ACTION}" name="manage_tasks">
+	<!-- IF S_CONFIRM -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr>
+			<th colspan="5">
+				{L_uc_confirm_list}
+			</th>
+		</tr>
+		<tr>
+			<th colspan="2" align="left">{L_action}</th>
+			<th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_name}</a></th>
+			<th align="left" width="40" class="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_level}</a></th>
+		</tr>
+		<!-- BEGIN confirm_row -->
+		<tr>
+			<td width="9" class="nowrap" align="center"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_uc_delete_char}" alt="{L_uc_delete_char}" onclick="DeleteChar({confirm_row.ID})" /></td>
+			<td width="10" class="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=confirm&amp;member={confirm_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}ok.png" alt="{L_uc_confirm_char}" height="16" border="0" style="cursor:pointer;" title="{L_uc_confirm_char}" /></a></td>
+			<td width="100%" class="nowrap"><span class="classes{confirm_row.CLASSID}">{confirm_row.CLASS_ICON}{confirm_row.RACE_ICON} {confirm_row.NAME}</span></td>
+			<td width="40" class="nowrap">{confirm_row.LEVEL}</td>
+		</tr>
+		<!-- END confirm_row -->
+		<tr>
+			<th colspan="5"><span style="float:left;"><input type="button" name="confirm_all" value="{L_uc_confirm_all}" class="mainoption" onclick="ConfirmAllChars();"/></span><span style="float:right;">{FC_CONFIRM}</span></th>
+		</tr>
+	</table>
+	<br/>
+	<!-- ENDIF -->
+	<!-- IF S_DELETE -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr>
+			<th colspan="5">
+			{L_uc_delete_list}</th>
+		</tr>
+		<tr>
+			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
+			<th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_name}</a></th>
+			<th align="left" width="40" class="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_level}</a></th>
+		</tr>
+		<!-- BEGIN delete_row -->
+		<tr>
+			<td align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_uc_delete_char}" alt="{L_uc_delete_char}" onclick="DeleteChar({delete_row.ID})" /></td>
+ 			<td align="center" class="nowrap"><span class="{confirm_row.ROW_CLASS}"><a href="manage_tasks.php{SID}&amp;mode=revoke&amp;member={delete_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}global/update.png" alt="{L_uc_rewoke_char}" border="0" style="cursor:pointer;" title="{L_uc_rewoke_char}" /></a></span></td>
+			<td class="nowrap"><span class="classes{confirm_row.CLASSID}">{delete_row.CLASS_ICON}{delete_row.RACE_ICON} {delete_row.NAME}</span></td>
+			<td width="40" class="nowrap">{delete_row.LEVEL}</td>
+		</tr>
+		<!-- END delete_row -->
+		<tr>
+			<th colspan="5"><span style="float:left;"><input type="button" name="delete_all" value="{L_uc_delete_allchar}" class="mainoption" onclick="DeleteAllChars()"/></span><span style="float:right;">{FC_DELETE}</span></th>
+		</tr>
+	</table>
+	<br />
+	<!-- ENDIF -->
+	<!-- IF S_INACTIVE -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr>
+			<th colspan="6"> {L_activate_list}</th>
+		</tr>
+		<tr>
+			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
+			<th align="left" width="50%">{L_name}</th>
+			<th align="left" width="50%" class="nowrap">{L_email}</th>
+			<th align="left" width="50%" class="nowrap">{L_registered_at}</th>
+		</tr>
+		<!-- BEGIN activate_row -->
+		<tr>
+			<td width="16" class="nowrap" align="right"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_delete_user}" alt="{L_delete_user}" onclick="javascript:DeleteUser({activate_row.ID})" /></td>
+			<td width="16" class="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=activate&amp;user={activate_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}global/ok.png" alt="{L_activate_user}" height="16" border="0" style="cursor:pointer;" title="{L_activate_user}" /></a></td>
+			<td class="nowrap"><a href="manage_users.php{SID}&amp;u={activate_row.ID}">{activate_row.NAME}</a></td>
+			<td class="nowrap">{activate_row.EMAIL}</td>
+			<td class="nowrap">{activate_row.REG}</td>
+		</tr>
+		<!-- END activate_row -->
+		<tr>
+			<th colspan="6"><input type="button" name="activateall" value="{L_activate_all}" class="mainoption" onclick="ActivateAllUsers()"/></th>
+		</tr>
+	</table>
+	<!-- ENDIF -->
+{CSRF_TOKEN}
+</form>

@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html> 
+	<head>
+<!--
+ * Project:		EQdkp-Plus
+ * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+ * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * Began:		2010
+ * Date:		$Date: 2012-02-21 11:03:48 +0100 (Di, 21. Feb 2012) $
+ * @author		$Author: Godmod $
+ * @copyright	2006-2012 EQdkp-Plus Developer Team
+ * @link		http://eqdkp-plus.com
+ * @package		eqdkp-plus
+ * @version		$Rev: 11698 $
+ *
+ */
+ --> 
+	<title>My Guild - News</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+
+
+	<script src="_js/lang.js"></script>
+	<script src="_js/jquery.base64.min.js"></script>
+	<script src="_js/sha512.js"></script>
+	<!-- For iPhone 4 with high-resolution Retina display: -->
+	<link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114.png">
+	<!-- For first-generation iPad: -->
+	<link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png">
+	<!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+.footer-docs p {
+    font-size: 0.9em;
+    font-weight: normal;
+    margin-left: 15px;
+}
+
+#content_show_news img {
+	max-width: 100%;
+	height: auto;
+}
+
+.status0{
+	color: #00ff00;
+}
+
+.status1{
+	color: #ffd800;
+}
+
+.status2{
+	color: #ff0000;
+}
+
+.status3{
+	color: #cd00cb;
+}
+
+.notextcut .ui-li-desc {
+	white-space: normal !important;
+}
+
+.message {
+	margin-bottom: 15px;
+	display:none;
+}
+
+.message .ok {
+	background:transparent url('_images/ok.png') center left no-repeat;
+	padding-left: 50px; 
+	min-height: 50px;
+}
+
+.message .error {
+	background:transparent url('_images/error.png') center left no-repeat;
+	padding-left: 50px; 
+	min-height: 50px;
+}
+
+.message .info {
+	background:transparent url('_images/info.png') center left no-repeat;
+	padding-left: 50px; 
+	min-height: 50px;
+}
+
+.positive {
+	color: #3c3;
+}
+.negative {
+	color: #e23b30;
+}
+.nav-glyphish-example .ui-btn .ui-btn-inner { padding-top: 40px !important; }
+.nav-glyphish-example .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
+.a_forum .ui-icon { background:  url(glyphish-icons/09-chat-2.png) 50% 50% no-repeat; background-size: 24px 22px; }
+.a_raids .ui-icon { background:  url(glyphish-icons/83-calendar.png) 50% 50% no-repeat; background-size: 23px 25px; }
+.a_shout .ui-icon { background:  url(glyphish-icons/124-bullhorn.png) 50% 50% no-repeat; background-size: 24px 17px; }
+.a_news .ui-icon { background:  url(glyphish-icons/166-newspaper.png) 50% 50% no-repeat; background-size: 28px 23px; }
+.a_points .ui-icon { background:  url(glyphish-icons/138-scales.png) 50% 50% no-repeat; background-size: 26px 20px; }
+
+</style>
+
+<script type="text/javascript">
+	var sid = ReadCookie('eqdkpm_sid');
+	if (sid == ''){
+		sid = 'eqdkpm';
+	}
+	var news = false;
+	var raids = false;
+	var roles = new Array();
+	var points = new Array();
+	var eventid = 0;
+	var common_infos = false;
+	var cron_news = false;
+	var cron_shouts = false;
+	var cron_raids = false;
+	var cron_points = false;
+	var cron_forum = false;
+	var refresh_news = false;
+	var refresh_shouts = false;
+	var refresh_raids = false;
+	var refresh_points = false;
+	var refresh_forum = false;
+	var common_infos_loaded = false;
+	var loadinginfo_news = false;
+	var loadinginfo_shouts = false;
+	var loadinginfo_raids = false;
+	var loadinginfo_points = false;
+	var loadinginfo_forum = false;
+	var loc = new Array();
+	var lang_loaded = false;
+		
+	$( document ).delegate("#main", "pageinit", function() {
+		load_news();
+	});	
+	$( document ).delegate("#raids", "pageinit", function() {
+		load_raids();
+	});
+	$( document ).delegate("#shout", "pageinit", function() {
+		load_shouts();
+	});
+	$( document ).delegate("#points", "pageinit", function() {
+		load_points();
+	});
+	$( document ).delegate("#forum", "pageinit", function() {
+		load_forum();
+	});
+	
+	
+	//Before pages are created
+	$( '#main, #raids, #shout, #forum, #points, #login, #show_raid, #show_news' ).live( 'pagebeforecreate',function(event){
+		if (!lang_loaded) {load_lang(); lang_loaded = true;}
+	});
+	
+	//Script that should start at each page init
+	$( '#main, #raids, #shout, #forum, #points, #login, #show_raid, #show_news' ).live( 'pageinit',function(event){
+		is_loggedin();
+		if (!common_infos_loaded){load_common_infos(); common_infos_loaded = true;}
+		
+	});
+	
+	//Reset Messages
+	$( '#main, #raids, #shout, #forum, #points, #login, #show_raid, #show_news' ).live( 'pagebeforeshow',function(event, ui){
+		hideMessage();
+	});
+	
+	$( '#main').live( 'pageshow',function(event, ui){
+		if (refresh_news) { load_news(); refresh_news = false;}
+		if (!loadinginfo_news) { $.mobile.showPageLoadingMsg(); loadinginfo_news = true;}
+		if (common_infos) {document.title = common_infos.eqdkp.name + ' - News';}
+	});
+	$( '#raids').live( 'pageshow',function(event, ui){
+		if (refresh_raids) { load_raids(); refresh_raids = false;}
+		if (!loadinginfo_raids) { $.mobile.showPageLoadingMsg(); loadinginfo_raids = true;}
+	});
+	$( '#shout').live( 'pageshow',function(event, ui){
+		if (refresh_shouts) { load_shouts(); refresh_shouts = false;}
+		if (!loadinginfo_shouts) { $.mobile.showPageLoadingMsg(); loadinginfo_shouts = true;}
+	});
+	$( '#forum').live( 'pageshow',function(event, ui){
+		if (refresh_forum) { load_forum(); refresh_forum = false;}
+		if (!loadinginfo_forum) { $.mobile.showPageLoadingMsg(); loadinginfo_forum = true;}
+	});
+	$( '#points').live( 'pageshow',function(event, ui){
+		if (refresh_points) { load_points(); refresh_points = false;}
+		if (!loadinginfo_points) { $.mobile.showPageLoadingMsg(); loadinginfo_points = true;}
+	});
+	
+	$('#show_news, #show_raid').live('swiperight',function(event){
+        //console.log(event.type);
+		window.history.back();
+        event.preventDefault();
+    });
+	
+	function load_lang(){
+		var browser_lang = detect_browser_lang();
+		if (supported_langs[browser_lang] != undefined){
+			var loc_code = supported_langs[browser_lang];
+		} else {
+			var loc_code = supported_langs['en-EN'];
+		}
+		loc = l[loc_code];
+		
+		//Login-Page
+		$('.loc_username').html(loc['username']);
+		$('.loc_password').html(loc['password']);
+		$('.loc_remember').html(loc['remember']);
+		$('.loc_login').html(loc['login']);
+		$('#login_submit').val(loc['login']);
+		//Common
+		$('.loc_fulllink').html(loc['backtofullversion']);
+		$('.loc_points').html(loc['menu_points']);
+		$('.loc_forum').html(loc['menu_forum']);
+		$('.loc_raids').html(loc['menu_raids']);
+		$('.loc_shouts').html(loc['menu_shouts']);
+		$('.loc_news').html(loc['menu_news']);
+		$('.login_button').html(loc['login']);
+		$('.logout_button').html(loc['logout']);
+		$('.loc_back').html(loc['back']);
+		//Show Raid
+		$('.loc_note').html(loc['note']);
+		$('.loc_select_status').html(loc['select_status']);
+		$('.loc_select_role').html(loc['select_role']);
+		$('.loc_select_char').html(loc['select_char']);
+		$('.loc_raid_signup').html(loc['raid_signup']);
+		$('#signup_button').val(loc['signup']);
+		$('.loc_showraid').html(loc['showraid']);
+		//Shouts
+		$('#shoutButton').val(loc['shout']);
+		
+	}
+	
+	function load_common_infos(){
+		$.ajax({
+			   type: "GET",
+			   url: "../api.php?function=data&format=json&s="+sid,
+			   success: function(msg){
+					var obj = msg;
+					if (obj.status == '1'){
+						common_infos = obj;
+						$('.guildname').html(obj.eqdkp.name);
+						document.title = obj.eqdkp.name + ' - News';
+					}
+			   },
+			   error: function (a,b,c){
+					showMessage(loc['load_error']+' load_common_infos()');
+			   }
+			 });
+	}
+	
+	function load_news(id){		
+		$.ajax({
+			   type: "GET",
+			   url: "../api.php?function=latest_news&number=10&format=json&s="+sid,
+			   success: function(msg){					
+					var obj = msg;
+					if (obj.status == '1'){
+						//Start Cron
+						window.clearInterval(cron_news);
+						cron_news = window.setInterval(load_news, 1000 * 60 * 10); //10 Min	
+					
+						news = obj.entries;
+						var output = '<ul data-role="listview" data-inset=\'true\'>';
+						if (obj.entries != null){
+							$.each(obj.entries, function(key, value) {
+								output = output + "<li><a href='javascript:show_news("+value.id+");'><h3>"+value.headline+"</h3><p>"+format_date(value.date)+", "+value.author+"</p><span class='ui-li-count'>"+value.comments.count+"</span></a></li>";
+							});
+						} else {
+							output = output + '<li>'+loc['no_news']+'</li>';
+						}
+						output = output + "</ul>";
+						$('#content_news').html(output).trigger('create');
+						
+						if (id){
+							show_news(id);
+						}
+					} else {
+						//Clear Cron
+						window.clearInterval(cron_news);
+						$('#content_news').html('').trigger('create');
+						if (obj.error == 'access denied'){
+							soft_login();				
+						} else {						
+							showMessage(loc['load_error']+' load_news()');
+						}
+						
+					}
+					$.mobile.hidePageLoadingMsg();
+					loadinginfo_news = true;
+			   },
+			   error: function (a,b,c){
+					showMessage(loc['load_error']+' load_news()');
+			   }
+			 });
+	}
+	
+	function show_news(id){
+		$.mobile.changePage('#show_news');
+		$.mobile.showPageLoadingMsg();
+		var output = "";
+		if (!id) {$.mobile.changePage('#main');}
+		
+		if (news != false){
+			$.each(news, function(key, value) {
+				if (value.id == id){
+					output = output + "<h1>" + value.headline + '</h1><p>' + value.message + "</p>";
+					var comments = '<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d"><h3>'+loc['comments']+'</h3>';
+					
+					if (value.comments.count > 0){
+						comments = comments + '<ul data-role="listview" data-inset="true">';
+						$.each(value.comments.comments, function(ckey, cvalue) {
+							comments = comments + '<li class="notextcut"><img src="../'+cvalue.user_avatar+'" /><h3>' + cvalue.username + ', '+format_date(cvalue.date) + '</h3><p>' + cvalue.message + '</p></li>';
+						});
+						comments = comments + '</ul>';
+						
+					}
+					
+					if (is_loggedin()){
+						comments = comments + '<div><label for="news_comment" class="loc_comment">'+loc['write_comment']+'</label><textarea id="news_comment" name="news_comment"></textarea></div><input type="button" name="news_comment" value="'+loc['comment_button']+'" data-icon="check" data-theme="e" onclick="add_news_comment('+id+');" id="news_comment_button" class="comment_button" /></div>';
+					}
+					
+					comments = comments + '</div>';
+					output = output + comments;
+					$('#content_show_news').show().html(output).trigger('create');
+					$.mobile.hidePageLoadingMsg();
+					return false;
+				}
+			});
+			
+		}
+	}
+	
+	function add_news_comment(id){
+		var page = 'news';
+		var attachid = id;
+		var comment = $("#news_comment").val();
+		$('#news_comment_button').button('disable');
+		
+		add_comment(page, attachid, comment, 'news', id);
+	}
+	
+	function add_raid_comment(id){
+		var page = 'viewcalraid';
+		var attachid = id;
+		var comment = $("#raid_comment").val();
+		$('#raid_comment_button').button('disable');
+		
+		add_comment(page, attachid, comment, 'raid', id);
+	}
+	
+	function load_raids(){
+		var icalfeed = false;
+		$.ajax({
+			   type: "GET",
+			   url: "../api.php?function=calevents_list&number=10&format=json&s="+sid,
+			   success: function(msg){
+					
+					var obj = msg;
+					if (obj.status == '1'){
+						//Start Cron
+						window.clearInterval(cron_raids);
+						cron_raids = window.setInterval(load_raids, 1000 * 60 * 5); //5 Min
+						
+						raids = obj.events;
+						$.mobile.hidePageLoadingMsg();
+						
+						var output = '<ul data-role="listview" data-inset=\'true\'>';
+						if (obj.events != null){
+							$.each(obj.events, function(key, value) {				
+								var statusflag = (value.user_status >= 0) ? '<img src="_images/status'+value.user_status+'.png" class="ui-li-icon" />' : '';
+								var raidstatus = ' (';
+								icalfeed = value.icalfeed;
+								$.each(value.raidstatus, function(key2, value2) {
+									if (value2.id){
+										raidstatus = raidstatus + '<span class="status'+value2.id+'" title="'+value2.name+'">' + value2.count + '</span> | ';
+									}
+								});
+
+								if (value.raidstatus.status0){
+									raidstatus = raidstatus + '<span class="statusfree" title="free">'+(value.raidstatus.required - value.raidstatus.status0.count) + '</span>)';
+								} else {
+									raidstatus = raidstatus + '<span class="statusfree" title="free">&infin;</span>)';
+								}
+								
+								var startdate = format_date(value.start);
+								
+								if (value.closed == 1){
+									output = output + "<li><img src='../images/calendar/closed_s.png' alt='closed' /><h3>"+value.title+"</h3><p>"+startdate + raidstatus +"</p></li>";
+								} else {
+									output = output + "<li><a href='javascript:show_raid("+value.eventid+");'>"+statusflag+"<h3>"+value.title+"</h3><p>"+startdate + raidstatus +"</p></a></li>";
+								}
+							});
+						} else {
+							output = '<div class="ui-body ui-body-c ui-corner-all ui-shadow">'+loc['no_raids']+'</div>';
+						} 
+						output = output + "</ul>";
+						//Ical Feed
+						if (is_loggedin() && icalfeed){
+							output = output + '<br /><a href="'+icalfeed+'" target="_blank"><img src="_images/ical.png" style="vertical-align:middle;"/></a> <a href="'+icalfeed+'" target="_blank">'+loc['icalfeed']+'</a>';
+						}
+						
+						
+						$('#content_raids').html(output).trigger('create');
+					} else {
+						//Clear Cron
+						window.clearInterval(cron_raids);
+						$('#content_raids').html('').trigger('create');
+						
+						if (obj.error == 'access denied'){
+							soft_login();
+						}else {
+							showMessage(loc['load_error']+' load_raids()');
+						}
+						
+					}
+					$.mobile.hidePageLoadingMsg();
+					loadinginfo_raids = true;
+			   },
+			   error: function (a,b,c){
+					showMessage(loc['load_error']+' load_raids()');
+			   }
+			 });
+	}
+	
+	function show_raid(id, message){
+		$.mobile.changePage('#show_raid');
+		var output = "";
+		$('#content_show_raid').hide();
+		$('#signup_form').hide();
+		$('#infos').hide();
+		$.mobile.showPageLoadingMsg();
+		eventid = id;
+		
+		$.ajax({
+			   type: "GET",
+			   url: "../api.php?function=calevents_details&eventid="+id+"&format=json&s="+sid,
+			   success: function(msg){
+					if (message == 'success'){
+						showMessage(loc['raidsignup_success'], 'success');
+					}
+			   
+					var obj = msg;
+					if (obj.status == '1'){
+						
+						var title = '<ul data-role="listview" data-inset="true" id="show_raid_title"><li><img src="../'+obj.icon+'">' + '<h3>'+obj.title+'</h3><p>'+format_date(obj.start)+' - '+format_date(obj.end)+'</p><p>'+obj.note+'</p></li></ul>';
+						$('#show_raid_title').html(title).trigger('create');
+						//Display Status Information
+						$.each(obj.raidstatus, function(key, value){
+							if (value.id == '0'){
+								$('#raid_status_count_'+value.id).html('<span style="float:left;">'+value.name+'</span><span style="float:right;" class="status'+value.id+'">'+value.count+' '+loc['of']+' '+value.maxcount+'</span>');
+							} else {
+								$('#raid_status_count_'+value.id).html('<span style="float:left;">'+value.name+'</span><span style="float:right;" class="status'+value.id+'">'+value.count+'</span>');
+							}
+						});
+						
+						
+						//Display Char-Dropdown
+						$('#charSelect').html('');
+						if (obj.user_chars){
+							$('#signup_form').show();
+							
+							$.each(obj.user_chars, function(key, value){
+								var selected = '';
+								if (value){
+									if (value.main == '1' && obj.user_status.status < 0){
+										selected = ' selected="selected"';
+									} else {
+										if (obj.user_status.status >= 0 && value.id == obj.user_status.char_id){
+											selected = ' selected="selected"';
+										}
+									}
+									$('#charSelect').append( '<option value="'+value.id+'" '+selected+'>'+value.name+'</option>' ).trigger('refresh').selectmenu('refresh');
+								}
+							
+							});
+
+							//Role-raid Display Role-Dropdown
+							if (obj.categories != 'classes'){
+								
+								$.each(obj.user_chars, function(key, value){
+									roles[value.id] = new Array();
+									
+									if (value.main == '1' && obj.user_status.status < 0){
+										$('#roleSelect').html('');
+										$.each(value.roles, function (key2, value2){
+											$('#roleSelect').append( '<option value="'+value2.id+'">'+value2.name+'</option>' ).trigger('create').selectmenu('refresh');
+										});
+									} else {
+										if (obj.user_status.status >= 0 && value.id == obj.user_status.char_id){
+											$('#roleSelect').html('');
+											$.each(value.roles, function (key2, value2){
+												$('#roleSelect').append( '<option value="'+value2.id+'">'+value2.name+'</option>' ).trigger('create').selectmenu('refresh');
+											});
+										}
+									}
+									
+									$.each(value.roles, function (key2, value2){
+										roles[value.id][value2.id] = value2.name;
+									});
+												
+								});
+								$('#rolerow').show();
+							} else {
+								$('#rolerow').hide();
+							}
+							
+							//Display Status-Dropdown
+							$('#statusSelect').html('');
+							$.each(obj.raidstatus, function(key, value){
+								if (value.id != '0'){
+									$('#statusSelect').append( '<option value="'+value.id+'">'+value.name+'</option>' ).trigger('create').selectmenu('refresh');
+								}
+							});
+							
+							//Display Info if user has signed in
+							if (obj.user_status.status >= 0){
+								
+								var role = (obj.categories != 'classes') ? ', '+loc['role']+': ' + obj.user_status.char_role : '';
+								var output = loc['raidstatus']+": <img src=\"_images/status"+obj.user_status.status+".png\" /> " + obj.user_status.status_name + '<br /> '+loc['char']+': ' + obj.user_status.char_name + role + '</div>';
+								$('#infos').html(output).show();
+							}
+							
+							
+						}
+						var comments = '<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d"><h3>'+loc['comments']+'</h3>';
+						
+						//Display Comments
+						if (obj.comments.count > 0){
+							comments = comments + '<ul data-role="listview" data-inset="true">';
+							$.each(obj.comments.comments, function(ckey, cvalue) {
+								comments = comments + '<li class="notextcut"><img src="../'+cvalue.user_avatar+'" /><h3>' + cvalue.username + ', '+format_date(cvalue.date) + '</h3><p>' + cvalue.message + '</p></li>';
+							});
+							comments = comments + '</ul>';
+							
+						}			
+						if (is_loggedin()){
+							comments = comments + '<div><label for="raid_comment" class="loc_comment">'+loc['write_comment']+'</label><textarea id="raid_comment" name="raid_comment"></textarea></div><input type="button" name="raid_comment" value="'+loc['comment_button']+'" data-icon="check" data-theme="e" onclick="add_raid_comment('+id+');" id="raid_comment_button" class="comment_button" /></div>';
+						}
+						
+						comments = comments + '</div>';
+						$('#raid_comments').html(comments).trigger('create').show();
+						
+						
+						$.mobile.hidePageLoadingMsg();
+						$('#content_show_raid').show();
+					} else {
+						$('#content_show_raid').hide();
+						//Try login
+						if (obj.error == 'access denied'){
+							soft_login();				
+						}else {
+							showMessage(loc['load_error']+' show_raid()');
+						}
+					}
+			   },
+			   error: function (a,b,c){
+					showMessage(loc['load_error']+' show_raid()');
+			   }
+			 });
+		
+	}
+	
+	function changeRoles(){
+		var charid = $('#charSelect').val();
+		charid = parseInt(charid);
+		$('#roleSelect').html('');
+		
+		$.each(roles[charid], function(key, value){
+			if (value != undefined){
+				$('#roleSelect').append( '<option value="'+key+'">'+value+'</option>' ).trigger('create').selectmenu('refresh');;	
+			}
+		});
+	}
+	
+	function raid_signup(){
+		$.mobile.showPageLoadingMsg();
+		
+		var memberid = $("#charSelect").val();
+		var roleid = $("#roleSelect").val();
+		var status = $("#statusSelect").val();
+		var note = $("#note").attr('value');
+		$('#signup_button').button('disable');
+		
+		$.ajax({
+		   type: "POST",
+		   url: "../api.php?function=raid_signup&format=json&s="+sid,
+		   data: "<request><eventid>"+eventid+"</eventid><memberid>"+memberid+"</memberid><status>"+status+"</status><role>"+roleid+"</role><note>"+note+"</note></request>",
+		   success: function(msg){
+				var obj = msg;
+				if (obj.status == '1'){
+					//refresh pages
+					show_raid(eventid, 'success');
+					load_raids();
+				} else {
+					if (obj.error == 'access denied'){
+						soft_login();
+					} else {
+						showMessage(loc['raidsignup_failed']);
+					}
+				}
+				$('#signup_button').button('enable');
+		   },
+		   error: function(a, b, c){
+				showMessage(loc['load_error']+' raid_signup()');
+				$('#signup_button').button('enable');
+			}
+		 });	
+	}
+	
+	function add_comment(page, attachid, comment, src, id){
+		$.ajax({
+		   type: "POST",
+		   url: "../api.php?function=comment_add&format=json&s="+sid,
+		   data: "<request><page>"+page+"</page><attachid>"+attachid+"</attachid><comment>"+comment+"</comment></request>",
+		   success: function(msg){
+				var obj = msg;
+				if (obj.status == '1'){
+					//refresh pages
+					if (src == 'news'){
+						load_news(id);
+					}
+					
+					if (src == 'raid'){
+						show_raid(id);
+					}
+						
+				} else {
+					if (obj.error == 'access denied'){
+						soft_login();
+					} else {
+						showMessage(loc['comment_failed']);
+					}
+				}
+				$('.comment_button').button('enable');
+		   },
+		   error: function(a, b, c){
+				showMessage(loc['load_error']+' add_comment()');
+				$('.comment_button').button('enable');
+			}
+		 });	
+	}
+	
+	function load_shouts(){					
+		$.ajax({
+		   type: "GET",
+		   url: "../api.php?function=shoutbox_list&format=json&sort=asc&s="+sid,
+		   success: function(msg){
+				var obj = msg;
+				if (obj.status == '1'){
+					//Start Cron
+					window.clearInterval(cron_shouts);
+					cron_shouts = window.setInterval(load_shouts, 1000 * 60 * 3); //3 Min
+					var output = '<ul data-role="listview" data-inset="true" >';
+					$.each(obj.entries, function(key, value){
+						output = output + '<li class="notextcut"><h3>'+value.name+'</h3><p>'+value.text+'</p><p class="ui-li-aside"><strong>'+format_date(value.date)+'</strong></p></li>';
+					});
+					output = output + '</ul>';
+					$('#shouts').html(output).trigger('create');				
+					if (!is_loggedin()){
+						$('#shoutform').hide();
+					} else {
+						$('#shoutform').show();
+					}
+					$('#content_shouts').show();
+					
+				} else {
+					//Clear Cron
+					window.clearInterval(cron_shouts);
+					$('#content_shouts').hide();
+					//Try login
+					if (obj.error == 'access denied'){
+						soft_login();
+					}else {
+						showMessage(loc['shouts_loading_error']);
+					}
+				}
+				$.mobile.hidePageLoadingMsg();
+				loadinginfo_shouts = true;
+		   },
+		   error: function (a,b,c){
+				showMessage(loc['load_error']+' load_shouts()');
+		   }
+		 });
+	}
+	
+	function shout(){
+		var note = $("#shouttext").val();
+		if (note == '') {
+			return false;
+		}
+		$("#shoutButton").button('disable');
+		$.mobile.showPageLoadingMsg();
+		$.ajax({
+		   type: "POST",
+		   url: "../api.php?function=shoutbox_add&format=json&s="+sid,
+		   data: "<request><text>"+note+"</text></request>",
+		   success: function(msg){
+				var obj = msg;
+				if (obj.status == '1'){
+					load_shouts();
+					$("#shouttext").val('');
+				} else {
+					if (obj.error == 'access denied'){
+						soft_login();
+					}else {
+						showMessage(loc['shout_failed']);
+					}	
+				}
+				$.mobile.hidePageLoadingMsg();
+				$("#shoutButton").button('enable');
+		   },
+		   error: function(a, b, c){
+				showMessage(loc['load_error']+' shout()');
+				$("#shoutButton").button('enable');
+			}
+		 });	
+	}
+	
+	function load_points(){					
+		$.ajax({
+		   type: "GET",
+		   url: "../api.php?function=points&format=json&exclude_memberitems=true&s="+sid,
+		   success: function(msg){
+				var obj = msg;
+				if (obj.status == '1'){
+					//Start Cron
+					window.clearInterval(cron_points);
+					cron_points = window.setInterval(load_points, 1000 * 60 * 10); //10 Min
+					
+					//MultiDKP-Pools
+					var mdkp_select = '<select id="mdkp_select" onchange="switch_points();" data-native-menu="false">';
+					var mdkp_id = 0;
+					$.each(obj.multidkp_pools, function(key, value){
+						if (mdkp_id == 0){
+							mdkp_id = value.id;
+						}
+						mdkp_select = mdkp_select + '<option value="'+value.id+'">'+value.name+'</option>';
+					});
+					mdkp_select = mdkp_select + '</select><br />';
+					
+					var output = mdkp_select + '<div id="points_list"><ul data-role="listview" data-inset="true" data-filter="true">';
+					
+					$.each(obj.players, function(key, value){
+						if (value.active == 0) {
+							return true;
+						}
+						output = output + "<li><h3>"+value.name+"</h3>";
+						points[value.id] = new Array();
+						$.each(value.points, function(pkey, pvalue){
+							if (obj.info.with_twink){
+								points[value.id][pvalue.multidkp_id] = pvalue.points_current_with_twink_html;
+							} else {
+								points[value.id][pvalue.multidkp_id] = pvalue.points_current_html;
+							}
+						});
+						
+						output = output + '<h3 class="ui-li-aside" id="member_points_'+value.id+'">' + points[value.id][mdkp_id] + '</h3><p>'+value.class_name+', '+value.race_name+'</p></li>';
+					});
+					output = output + '</ul></div>';
+					$('#content_points').html(output).trigger('create');				
+					$('#content_points').show();
+					
+				} else {
+					//Clear Cron
+					window.clearInterval(cron_points);
+					$('#content_points').hide();
+					//Try login
+					if (obj.error == 'access denied'){
+						soft_login();
+					}else {
+						showMessage(loc['points_loading_error']);
+					}
+				}
+				$.mobile.hidePageLoadingMsg();
+				loadinginfo_points = true;
+		   },
+		   error: function (a,b,c){
+				showMessage(loc['load_error']+' load_points()');
+		   }
+		 });
+	}
+	
+	function switch_points(){
+		var mdkp_id = $("#mdkp_select").val();
+		$.each(points, function(key, value){
+			if (value != undefined){
+				$('#member_points_'+key).html(value[mdkp_id]);
+			}
+		});
+	}
+	
+	
+	function load_forum(){
+		$.ajax({
+			   type: "GET",
+			   url: "../api.php?function=latestposts&format=json&s="+sid,
+			   success: function(msg){					
+					var obj = msg;
+					if (obj.status == '1'){
+						//Start Cron
+						window.clearInterval(cron_forum);
+						cron_news = window.setInterval(load_forum, 1000 * 60 * 10); //10 Min	
+					
+						var output = '<ul data-role="listview" data-inset=\'true\'>';
+						if (obj.posts != null){
+							$.each(obj.posts, function(key, value) {
+								output = output + '<li><a href="'+value.topic_link+'" rel="external"><h3>'+value.topic_title+'</h3><p>'+format_date(value.topic_lastpost_date)+', '+value.topic_lastpost_username+"</p><span class='ui-li-count'>"+value.topic_replies+"</span></a></li>";
+							});
+						} else {
+							output = '<li>'+loc['no_posts']+'</li>';
+						}
+						output = output + "</ul>";
+						if (obj.forum_url != ""){
+							output = output + '<a href="'+obj.forum_url+'" data-role="button" rel="external" data-theme="e">'+loc['gotoforum']+'</a>'
+						}
+						$('#content_forum').html(output).trigger('create');
+					} else {
+						//Clear Cron
+						window.clearInterval(cron_forum);
+						$('#content_forum').html('').trigger('create');
+						if (obj.error == 'access denied'){
+							soft_login();				
+						} else {
+							if (obj.error == 'function not found'){
+								if (common_infos && common_infos.eqdkp.forum_url != ""){
+									$('#content_forum').html('<a href="'+common_infos.eqdkp.forum_url+'" data-role="button" rel="external" data-theme="b">'+loc['gotoforum']+'</a>').trigger('create');
+								} else {
+									showMessage(loc['posts_loading_error']);
+								}
+							} else {		
+								showMessage(loc['load_error']+' load_forum()');
+							}
+						}
+						
+					}
+					$.mobile.hidePageLoadingMsg();
+					loadinginfo_forum = true;
+			   },
+			   error: function (a,b,c){
+					showMessage(loc['load_error']+' load_forum()');
+			   }
+			 });
+	}
+	
+	function dologin(){
+		var password = $('#eqdkp_password').val();
+		var username = $('#eqdkp_username').val();
+		var remember = ($('#eqdkp_remember').attr('checked') == 'checked');
+		if (password != "" && username != ""){
+			$.ajax({
+				   type: "POST",
+				   url: "../api.php?function=get_salt&format=json",
+				   data: "<request><user>"+ username +"</user></request>",
+				   success: function(msg){
+						var obj = msg;
+						
+						if (obj.status == '1' && obj.salt != ""){
+							salt = $.base64Decode(obj.salt);
+							if (salt != ""){
+								var hash = hex_sha512(salt+password);
+								
+								//Now try an login
+								login(username, hash, remember);
+							}
+							
+						} else {
+							showMessage(loc['login_failed'], 'error', true);
+						}
+						
+				   },
+				   error: function(a, b, c){
+					showMessage(loc['load_error']+' dologin()');
+				   }
+			});
+		} else {
+			showMessage(loc['missing_credentials']);
+			return false;
+		}
+		
+		$.mobile.changePage('#main');
+		loadinginfo_news = false;
+	}
+	
+	function login(username, hash, remember){
+	
+		$.ajax({
+		   type: "POST",
+		   url: "../api.php?function=login&format=json",
+		   data: "<request><user>"+ username +"</user><password>"+hash+"</password></request>",
+		   success: function(msg){
+				var obj = msg;
+				if (obj.status == '1' && obj.sid != ''){
+					sid = obj.sid;
+					if (remember){
+						var rem_data = $.base64Encode(hash + '||' + username);
+						SetCookie('eqdkpm_data', rem_data, 365);
+					}
+					SetCookie('eqdkpm_sid', sid, 365);
+					$('#eqdkp_password').val('');
+					//refresh pages
+					refresh();
+					load_news();
+					//show logout button
+					$('.login_button').hide();
+					$('.logout_button').show();
+				} else {
+					showMessage(loc['login_failed'], 'error', true);
+				}
+		   },
+		   error: function(a, b, c){
+				showMessage(loc['load_error']+' login()');
+			}
+		 });
+
+	}
+	
+	function soft_login(){
+		showMessage(loc['nopermissions'], 'info');
+		var data = ReadCookie('eqdkpm_data');
+		if (data != ""){
+			data = $.base64Decode(data);
+			var arrData = data.split('||');
+			var username = arrData[1];
+			var hash = arrData[0];
+			
+			if (username != "" && hash != ""){
+				login(username, hash, true);
+			}
+		} else {
+			showMessage(loc['loginneeded'], 'info', true);
+		}
+	}
+	
+	function is_loggedin(){
+		var data = ReadCookie('eqdkpm_data');
+		if (data != ""){
+			$('.login_button').hide();
+			$('.logout_button').show();
+			return true;
+		} else {
+			$('.login_button').show();
+			$('.logout_button').hide();
+			return false;
+		}
+	}
+	
+	function logout(){
+		//Send logout-request
+		$.ajax({
+		   type: "POST",
+		   url: "../api.php?function=logout&format=json",
+		   data: "<request><sid>"+ sid +"</sid></request>",
+		   success: function(msg){
+			refresh();
+		   },
+		   error: function(a, b, c){
+				refresh();
+			}
+		 });
+		//Delete Cookies
+		SetCookie('eqdkpm_sid', '', -1);
+		SetCookie('eqdkpm_data', '', -1);
+		//Show login button
+		$('.login_button').show();
+		$('.logout_button').hide();
+	}
+	
+	function refresh(){
+		hideMessage();
+		refresh_news = true;
+		refresh_shouts = true;
+		refresh_raids = true;
+		refresh_points = true;
+		refresh_forum = true;
+		loadinginfo_news = false;
+		loadinginfo_shouts = false;
+		loadinginfo_raids = false;
+		loadinginfo_points = false;
+		loadinginfo_forum = false;
+	}
+	
+	function SetCookie(cookieName,cookieValue,nDays) {
+		 var today = new Date();
+		 var expire = new Date();
+		 if (nDays==null || nDays==0) nDays=1;
+		 expire.setTime(today.getTime() + 3600000*24*nDays);
+		 document.cookie = cookieName+"="+escape(cookieValue)
+						 + ";expires="+expire.toGMTString();
+	}
+	
+	function ReadCookie(cookieName) {
+		 var theCookie=" "+document.cookie;
+		 var ind=theCookie.indexOf(" "+cookieName+"=");
+		 if (ind==-1) ind=theCookie.indexOf(";"+cookieName+"=");
+		 if (ind==-1 || cookieName=="") return "";
+		 var ind1=theCookie.indexOf(";",ind+1);
+		 if (ind1==-1) ind1=theCookie.length; 
+		 return unescape(theCookie.substring(ind+cookieName.length+2,ind1));
+	}
+	
+	function showMessage(message, type, showLogin){
+		$.mobile.hidePageLoadingMsg();
+		
+		if (type == null){
+			type = 'error';
+		}
+		var output = '';
+		if (type == 'error'){
+			output = '<div class="error">' + message + '</div>';
+		};
+		if (type == 'success'){
+			output = '<div class="ok">' + message + '</div>';
+		};
+		if (type == 'info'){
+			output = '<div class="info">' + message + '</div>';
+		};
+		
+		if (showLogin){
+			output = output + '<br /><a href="#login" data-role="button" data-rel="dialog" data-transition="pop" data-icon="gear" data-theme="c">'+loc['login']+'</a>';
+		}
+		
+		$('.message').html(output).show().trigger('create');	
+	}
+	
+	function hideMessage(){
+		$('.message').hide();
+	}
+	
+	function format_date(value){
+		var date = value.split(" ");
+		var formatted = $.datepicker.formatDate(loc['dateformat'], $.datepicker.parseDate('yy-mm-dd', date[0]), {dayNamesShort: loc['daynamesshort']});
+		return formatted + ', ' + date[1];
+	
+	}
+	function detect_browser_lang(){
+		 var l_lang;
+		  if (navigator.userLanguage) // Explorer
+			l_lang = navigator.userLanguage;
+		  else if (navigator.language) // FF
+			l_lang = navigator.language;
+		  else
+			l_lang = "en-EN";
+		return l_lang;
+	}
+	
+
+</script>
+</head>
+<body> 
+
+<div data-role="page" id="main">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1><span class="guildname">My Guild</span> - <span class="loc_news">News</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#" data-theme="a" data-icon="custom" class="a_news loc_news ui-btn-active ui-state-persist">News</a></li>
+				<li><a href="#shout" data-theme="a" class="a_shout loc_shouts" data-icon="custom">Shoutbox</a></li>
+				<li><a href="#raids" data-theme="a" class="a_raids loc_raids" data-icon="custom">Raids</a></li>
+				<li><a href="#forum" data-theme="a" class="a_forum loc_forum" data-icon="custom">Forum</a></li>
+				<li><a href="#points" data-theme="a" class="a_points loc_points" data-icon="custom">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_news">
+		</div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+<div data-role="page" id="show_news">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<a href="#news" data-rel="back" data-icon="arrow-l" class="loc_back">Back</a>
+		<h1><span class="guildname">My Guild</span> - <span class="loc_news">Show News</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#main" data-theme="a" data-icon="custom" class="a_news loc_news ui-btn-active ui-state-persist">News</a></li>
+				<li><a href="#shout" data-theme="a" class="a_shout loc_shouts" data-icon="custom">Shoutbox</a></li>
+				<li><a href="#raids" data-theme="a" class="a_raids loc_raids" data-icon="custom">Raids</a></li>
+				<li><a href="#forum" data-theme="a" class="a_forum loc_forum" data-icon="custom">Forum</a></li>
+				<li><a href="#points" data-theme="a" class="a_points loc_points" data-icon="custom">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_show_news">
+		</div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+<div data-role="page" id="show_raid" data-add-back-btn="true">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<a href="#raids" data-rel="back" data-icon="arrow-l" class="loc_back">Back</a>
+		<h1><span class="guildname">My Guild</span> - <span class="loc_showraid">Show Raid</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#main" data-theme="a" class="a_news loc_news" data-icon="custom">News</a></li>
+				<li><a href="#shout" data-theme="a" class="a_shout loc_shouts" data-icon="custom">Shoutbox</a></li>
+				<li><a href="#raids" data-theme="a" data-icon="custom" class="a_raids loc_raids ui-btn-active ui-state-persist">Raids</a></li>
+				<li><a href="#forum" data-theme="a" class="a_forum loc_forum" data-icon="custom">Forum</a></li>
+				<li><a href="#points" data-theme="a" class="a_points loc_points" data-icon="custom">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_show_raid" style="display:none;">
+			<div id="show_raid_title"></div>
+		
+		<div class="ui-body ui-body-e ui-corner-all ui-shadow" id="infos" style="display:none; margin-bottom: 15px;">
+		</div>
+		
+		
+		<div class="ui-grid-a">
+			<div class="ui-block-a"><div class="ui-bar ui-bar-c ui-corner-tl ui-shadow" style="border-right:none; border-bottom:none;" id="raid_status_count_0"></div></div>
+			<div class="ui-block-b"><div class="ui-bar ui-bar-c ui-corner-tr ui-shadow" style="border-bottom:none;" id="raid_status_count_1"></div></div>
+			<div class="ui-block-a"><div class="ui-bar ui-bar-c ui-corner-bl ui-shadow" style="border-right:none;" id="raid_status_count_2"></div></div>
+			<div class="ui-block-b"><div class="ui-bar ui-bar-c ui-corner-br ui-shadow" id="raid_status_count_3"></div></div>
+		</div><!-- /grid-a -->
+		<br />
+		<div class="ui-body ui-body-c ui-corner-all ui-shadow" id="signup_form" style="display:none;">
+			<h3 class="loc_raid_signup">Signup for this Raid</h3>
+			<div data-role="fieldcontain">
+				<label for="charSelect" class="loc_select_char">Select Char:</label>
+				<select id="charSelect" onchange="changeRoles();" name="charSelect" data-native-menu="false"></select>
+			</div>
+			<div data-role="fieldcontain" id="rolerow">
+				<label for="roleSelect" class="loc_select_role">Select Role:</label>
+				<select id="roleSelect" data-native-menu="false" name="roleSelect"></select>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="statusSelect" class="loc_select_status">Select Status</label>
+				<select id="statusSelect" name="statusSelect" data-native-menu="false"></select>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="note" class="loc_note">Note</label>
+				<input type="text" id="note" name="note" />
+			</div>
+			
+			<input type="button" name="signup" value="Signup" data-icon="check" data-theme="e" onclick="raid_signup();" id="signup_button"/>	
+		</div>
+		
+		<div id="raid_comments"></div>
+		
+		</div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+<div data-role="page" id="shout">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1><span class="guildname">My Guild</span> - <span class="loc_shouts">Shoutbox</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#main" data-theme="a" class="a_news loc_news" data-icon="custom">News</a></li>
+				<li><a href="#" data-theme="a" data-icon="custom" class="a_shout loc_shouts ui-btn-active ui-state-persist">Shoutbox</a></li>
+				<li><a href="#raids" data-theme="a" class="a_raids loc_raids" data-icon="custom">Raids</a></li>
+				<li><a href="#forum" data-theme="a" class="a_forum loc_forum" data-icon="custom">Forum</a></li>
+				<li><a href="#points" data-theme="a" class="a_points loc_points" data-icon="custom">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_shouts" style="display:none;">
+			<div id="shouts"></div>
+			<div id="shoutform">
+				<textarea id="shouttext"></textarea>
+				<input type="button" onclick="shout();" id="shoutButton" data-icon="check" data-theme="e" value="Shout!"/>		
+			</div>
+		</div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+<div data-role="page" id="raids">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1><span class="guildname">My Guild</span> - <span class="loc_raids">Raids</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#main" data-theme="a" class="a_news loc_news" data-icon="custom">News</a></li>
+				<li><a href="#shout" data-theme="a" class="a_shout loc_shouts" data-icon="custom">Shoutbox</a></li>
+				<li><a href="#" data-theme="a" data-icon="custom" class="a_raids loc_raids ui-btn-active ui-state-persist">Raids</a></li>
+				<li><a href="#forum" data-theme="a" class="a_forum loc_forum" data-icon="custom">Forum</a></li>
+				<li><a href="#points" data-theme="a" class="a_points loc_points" data-icon="custom">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_raids">
+		</div>	
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+
+<div data-role="page" id="forum">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1><span class="guildname">My Guild</span> - <span class="loc_forum">Forum</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#main" data-theme="a" class="a_news loc_news" data-icon="custom">News</a></li>
+				<li><a href="#shout" data-theme="a" class="a_shout loc_shouts" data-icon="custom">Shoutbox</a></li>
+				<li><a href="#raids" data-theme="a" class="a_raids loc_raids" data-icon="custom">Raids</a></li>
+				<li><a href="#" data-theme="a" data-icon="custom" class="a_forum loc_forum ui-btn-active ui-state-persist">Forum</a></li>
+				<li><a href="#points" data-theme="a" class="a_points loc_points" data-icon="custom">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_forum">
+		</div>		
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+<div data-role="page" id="points">
+
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1><span class="guildname">My Guild</span> - <span class="loc_points">Points</span></h1>
+		<a href="#login" data-rel="dialog" data-transition="pop" class="login_button ui-btn-right" data-icon="gear">Login</a>
+		<a href="javascript:logout();" data-rel="dialog" data-transition="pop" class="logout_button ui-btn-right" data-icon="gear" style="display:none;">Logout</a>
+		<div data-role="navbar" class="nav-glyphish-example">
+			<ul>
+				<li><a href="#main" data-theme="a" class="a_news loc_news" data-icon="custom">News</a></li>
+				<li><a href="#shout" data-theme="a" class="a_shout loc_shouts" data-icon="custom">Shoutbox</a></li>
+				<li><a href="#raids" data-theme="a" class="a_raids loc_raids" data-icon="custom">Raids</a></li>
+				<li><a href="#forum" data-theme="a" class="a_forum loc_forum" data-icon="custom">Forum</a></li>
+				<li><a href="#" data-theme="a" data-icon="custom" class="a_points loc_points ui-btn-active ui-state-persist">Points</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<div id="content_points"></div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" class="footer-docs" data-theme="c">
+		<p>&copy; 2012 EQdkp Plus Team | <a href="../" rel="external" class="loc_fulllink">Back to full version</a></p>
+	</div>
+
+</div><!-- /page -->
+
+
+<!-- Start of popup: #login -->
+<div data-role="page" id="login">
+
+	<div data-role="header" data-theme="d">
+		<h1 class="loc_login">Login</h1>
+	</div>
+
+	<div data-role="content">
+		<div class="message ui-body ui-body-e ui-corner-all ui-shadow">
+		</div>
+		<form action="#main" method="post" id="form_login" onsubmit="dologin(); return false;" data-ajax="false">
+			<div data-role="fieldcontain">
+				<label for="eqdkp_username" class="loc_username">Username:</label>
+				<input type="text" name="eqdkp_username" id="eqdkp_username" value=""  />
+			</div>
+			<div data-role="fieldcontain">
+				<label for="eqdkp_password" class="loc_password">Password:</label>
+				<input type="password" name="eqdkp_password" id="eqdkp_password" value="" />
+			</div>
+			<div data-role="fieldcontain">
+				<label for="eqdkp_remember" class="loc_remember">Remember me</label>
+				<input type="checkbox" name="eqdkp_remember" id="eqdkp_remember" value="" checked="checked" />
+			</div>
+			
+			<input type="submit" name="login" value="Login" id="login_submit" data-icon="check" data-theme="e" />
+		</form>
+	</div><!-- /content -->
+
+</div><!-- /page login -->
+
+</body>
+</html>

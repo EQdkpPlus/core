@@ -1,0 +1,32 @@
+<form method="post" action="{ACTION}" name="post">
+	<div class="errorbox roundbox">
+		<div class="icon_false">{L_reset_infotext}</div>
+	</div>
+	<br />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch hoverrows">  
+		<tr>
+			<th colspan="3" align="left">{L_reset_header}</th>
+		</tr>
+		<tr>
+			<th width="10" align="left"><input type="checkbox" id="reset_selectall" /></th>
+			<th align="left">{L_reset_type}</th>
+			<th align="left">{L_description}</th>
+		</tr>
+		<!-- BEGIN reset_row -->
+		<tr>
+			<td class="nowrap">
+				<input type="checkbox" name="selected[]" value="{reset_row.VAL_NAME}" id="cb_{reset_row.VAL_NAME}" class="cb_select_class" />
+			</td>
+			<td class="nowrap"><strong>{reset_row.TYPE}</strong></td>
+			<td >{reset_row.DISC}</td>
+		</tr>
+		<!-- END reset_row -->
+		<tr>
+			<th align="left" colspan="5">
+				<input name="del" type="button" class="mainoption bi_delete" id="delete" value="{L_delete_selected}" onclick="delete_warning();" />
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+			</th>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

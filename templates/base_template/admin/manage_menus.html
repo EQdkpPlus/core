@@ -1,0 +1,561 @@
+<form method="post" action="{ACTION}" name="post">
+<div id='menu_tabs'>
+	<ul>
+		<li><a href='#menu1'>{L_info_opt_ml_1}</a></li>
+		<li><a href="#menu2">{L_info_opt_ml_2}</a></li>
+		<li><a href="#menu3">{L_menu_links}</a></li>
+		<li><a href="#menu4">{L_info_opt_ml_3}</a></li>
+		<li><a href="#admin">{L_favorits_admin_menu}</a></li>
+	</ul>
+<div id="menu1">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_menus_info}</div>
+	</div>
+	<br />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable" id="sortable1">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6" class="not-sortable">{L_info_opt_ml_1}</th>
+			</tr>
+			<tr class="not-sortable">
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th class="not-sortable">{L_menu_entry}</th>
+				<th class="not-sortable">{L_link}</th>
+				<th class="not-sortable">{L_pk_set_link_type_header}</th>
+				<th class="not-sortable">{L_info_opt_visibility}</th>
+			</tr>
+		</thead>
+		<tbody id="show" class="colorswitch">
+		<tr class="not-sortable">
+				<td colspan="6"><em>{L_active_entries}</em></td>
+		</tr>
+		<!-- BEGIN menu1_row -->
+			<tr id="{menu1_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" >
+					<!-- IF menu1_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu1_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				
+				</td>
+				<td width="33%">
+					<!-- IF menu1_row.S_PLUSLINK -->
+					<input name="linkname[{menu1_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu1_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu1_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu1_row.S_PLUSLINK -->
+					<input name="linkurl[{menu1_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu1_row.PLUSLINK_URL}" />
+					<input name="sort1[]" value="pluslink_{menu1_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide1[pluslink_{menu1_row.PLUSLINK_ID}]" {menu1_row.HIDE} id="cb_{menu1_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu1_row.LINK}
+					<input name="sort1[]" value="{menu1_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide1[{menu1_row.LINK}]" {menu1_row.HIDE} id="cb_{menu1_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu1_row.PLUSLINK_WINDOW}
+					<!-- IF menu1_row.S_PLUSLINK -->
+					<input name="link_height[{menu1_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu1_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu1_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu1_row -->
+			<tr id="sort1newlink">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" ></td>
+				<td width="33%"><input name="linkname[new1]" type="text" style="width:97%; z-index:400;" class="td_add" /></td>    
+				<td><input name="linkurl[new1]" type="text" class="td_add" style="width:97%" />
+					<input name="sort1[new]" value="new" type="hidden" />
+					<input type="checkbox" value="1" name="hide1[new]" id="cb_sort1newlink" style="display:none;" />
+				</td>
+				<td class="nowrap">{DD_LINK_WINDOW1} <input name="link_height[new1]" type="text" size="4" class="td_add" />px</td>
+				<td>{DD_LINK_VIS1}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable" id="sortable2">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6">{L_inactive_entries_headline}</th>
+			</tr>
+		</thead>
+		<tfoot>	
+			<tr class="not-sortable">
+				<th colspan="6">&nbsp;</th>
+			</tr>
+		</tfoot>
+		<tbody id="hide" class="colorswitch">
+			<tr class="not-sortable">
+				<td colspan="6"><em>{L_inactive_entries}</em></td>
+			</tr>
+		<!-- BEGIN menu1hide_row -->
+			<tr id="{menu1hide_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap">
+					<!-- IF menu1hide_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu1hide_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				</td>
+				<td width="33%">
+				<!-- IF menu1hide_row.S_PLUSLINK -->
+					<input name="linkname[{menu1hide_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu1hide_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu1hide_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu1hide_row.S_PLUSLINK -->
+					<input name="linkurl[{menu1hide_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu1hide_row.PLUSLINK_URL}" />
+					<input name="sort1[]" value="pluslink_{menu1hide_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide1[pluslink_{menu1hide_row.PLUSLINK_ID}]" {menu1hide_row.HIDE} id="cb_{menu1hide_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu1hide_row.LINK}
+					<input name="sort1[]" value="{menu1hide_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide1[{menu1hide_row.LINK}]" {menu1hide_row.HIDE} id="cb_{menu1hide_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu1hide_row.PLUSLINK_WINDOW}
+					<!-- IF menu1hide_row.S_PLUSLINK -->
+					<input name="link_height[{menu1hide_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu1hide_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu1hide_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu1hide_row -->
+		</tbody>
+	</table>
+</div>
+<div id="menu2">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_menus_info}</div>
+	</div>
+	<br />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable2" id="sortable3">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6" class="not-sortable">{L_info_opt_ml_2}</th>
+			</tr>
+			<tr class="not-sortable">
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th class="not-sortable">{L_menu_entry}</th>
+				<th class="not-sortable">{L_link}</th>
+				<th class="not-sortable">{L_pk_set_link_type_header}</th>
+				<th class="not-sortable">{L_info_opt_visibility}</th>
+			</tr>
+		</thead>
+		<tbody id="show2" class="colorswitch">
+		<tr class="not-sortable">
+				<td colspan="6"><em>{L_active_entries}</em></td>
+		</tr>
+		<!-- BEGIN menu2_row -->
+			<tr id="{menu2_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" >
+					<!-- IF menu2_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu2_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				
+				</td>
+				<td width="33%">
+					<!-- IF menu2_row.S_PLUSLINK -->
+					<input name="linkname[{menu2_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu2_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu2_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu2_row.S_PLUSLINK -->
+					<input name="linkurl[{menu2_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu2_row.PLUSLINK_URL}" />
+					<input name="sort2[]" value="pluslink_{menu2_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide2[pluslink_{menu2_row.PLUSLINK_ID}]" {menu2_row.HIDE} id="cb2_{menu2_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu2_row.LINK}
+					<input name="sort2[]" value="{menu2_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide2[{menu2_row.LINK}]" {menu2_row.HIDE} id="cb2_{menu2_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu2_row.PLUSLINK_WINDOW}
+					<!-- IF menu2_row.S_PLUSLINK -->
+					<input name="link_height[{menu2_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu2_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu2_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu2_row -->
+			<tr id="sort2newlink">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" ></td>
+				<td width="33%"><input name="linkname[new2]" type="text" style="width:97%; z-index:400;" class="td_add" /></td>    
+				<td><input name="linkurl[new2]" type="text" class="td_add" style="width:97%" />
+					<input name="sort2[new]" value="new" type="hidden" />
+					<input type="checkbox" value="1" name="hide2[new]" id="cb2_sort2newlink" style="display:none;" />
+				</td>
+				<td class="nowrap">{DD_LINK_WINDOW2} <input name="link_height[new2]" type="text" size="4" class="td_add" />px</td>
+				<td>{DD_LINK_VIS2}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable2" id="sortable4">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6">{L_inactive_entries_headline}</th>
+			</tr>
+		</thead>
+		<tfoot>	
+			<tr class="not-sortable">
+				<th colspan="6">&nbsp;</th>
+			</tr>
+		</tfoot>
+		<tbody id="hide2" class="colorswitch">
+			<tr class="not-sortable">
+				<td colspan="6"><em>{L_inactive_entries}</em></td>
+			</tr>
+		<!-- BEGIN menu2hide_row -->
+			<tr id="{menu2hide_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap">
+					<!-- IF menu2hide_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu2hide_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				</td>
+				<td width="33%">
+				<!-- IF menu2hide_row.S_PLUSLINK -->
+					<input name="linkname[{menu2hide_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu2hide_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu2hide_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu2hide_row.S_PLUSLINK -->
+					<input name="linkurl[{menu2hide_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu2hide_row.PLUSLINK_URL}" />
+					<input name="sort2[]" value="pluslink_{menu2hide_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide2[pluslink_{menu2hide_row.PLUSLINK_ID}]" {menu2hide_row.HIDE} id="cb2_{menu2hide_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu2hide_row.LINK}
+					<input name="sort2[]" value="{menu2hide_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide2[{menu2hide_row.LINK}]" {menu2hide_row.HIDE} id="cb2_{menu2hide_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu2hide_row.PLUSLINK_WINDOW}
+					<!-- IF menu2hide_row.S_PLUSLINK -->
+					<input name="link_height[{menu2hide_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu2hide_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu2hide_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu2hide_row -->
+		</tbody>
+	</table>
+</div>
+
+<div id="menu3">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_menus_info}</div>
+	</div>
+	<br />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable3" id="sortable5">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6" class="not-sortable">{L_menu_links}</th>
+			</tr>
+			<tr class="not-sortable">
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th class="not-sortable">{L_menu_entry}</th>
+				<th class="not-sortable">{L_link}</th>
+				<th class="not-sortable">{L_pk_set_link_type_header}</th>
+				<th class="not-sortable">{L_info_opt_visibility}</th>
+			</tr>
+		</thead>
+		<tbody id="show3" class="colorswitch">
+		<tr class="not-sortable">
+				<td colspan="6"><em>{L_active_entries}</em></td>
+		</tr>
+		<!-- BEGIN menu3_row -->
+			<tr id="{menu3_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" >
+					<!-- IF menu3_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu3_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				
+				</td>
+				<td width="33%">
+					<!-- IF menu3_row.S_PLUSLINK -->
+					<input name="linkname[{menu3_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu3_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu3_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu3_row.S_PLUSLINK -->
+					<input name="linkurl[{menu3_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu3_row.PLUSLINK_URL}" />
+					<input name="sort3[]" value="pluslink_{menu3_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide3[pluslink_{menu3_row.PLUSLINK_ID}]" {menu3_row.HIDE} id="cb3_{menu3_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu3_row.LINK}
+					<input name="sort3[]" value="{menu3_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide3[{menu3_row.LINK}]" {menu3_row.HIDE} id="cb3_{menu3_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu3_row.PLUSLINK_WINDOW}
+					<!-- IF menu3_row.S_PLUSLINK -->
+					<input name="link_height[{menu3_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu3_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu3_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu3_row -->
+			<tr id="sort3newlink">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" ></td>
+				<td width="33%"><input name="linkname[new3]" type="text" style="width:97%; z-index:400;" class="td_add" /></td>    
+				<td><input name="linkurl[new3]" type="text" class="td_add" style="width:97%" />
+					<input name="sort3[new]" value="new" type="hidden" />
+					<input type="checkbox" value="1" name="hide3[new]" id="cb3_sort3newlink" style="display:none;" />
+				</td>
+				<td class="nowrap">{DD_LINK_WINDOW3} <input name="link_height[new3]" type="text" size="4" class="td_add" />px</td>
+				<td>{DD_LINK_VIS3}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable3" id="sortable6">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6">{L_inactive_entries_headline}</th>
+			</tr>
+		</thead>
+		<tfoot>	
+			<tr class="not-sortable">
+				<th colspan="6">&nbsp;</th>
+			</tr>
+		</tfoot>
+		<tbody id="hide3" class="colorswitch">
+			<tr class="not-sortable">
+				<td colspan="6"><em>{L_inactive_entries}</em></td>
+			</tr>
+		<!-- BEGIN menu3hide_row -->
+			<tr id="{menu3hide_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap">
+					<!-- IF menu3hide_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu3hide_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				</td>
+				<td width="33%">
+				<!-- IF menu3hide_row.S_PLUSLINK -->
+					<input name="linkname[{menu3hide_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu3hide_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu3hide_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu3hide_row.S_PLUSLINK -->
+					<input name="linkurl[{menu3hide_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu3hide_row.PLUSLINK_URL}" />
+					<input name="sort3[]" value="pluslink_{menu3hide_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide3[pluslink_{menu3hide_row.PLUSLINK_ID}]" {menu3hide_row.HIDE} id="cb3_{menu3hide_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu3hide_row.LINK}
+					<input name="sort3[]" value="{menu3hide_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide3[{menu3hide_row.LINK}]" {menu3hide_row.HIDE} id="cb3_{menu3hide_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu3hide_row.PLUSLINK_WINDOW}
+					<!-- IF menu3hide_row.S_PLUSLINK -->
+					<input name="link_height[{menu3hide_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu3hide_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu3hide_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu3hide_row -->
+		</tbody>
+	</table>
+</div>
+	
+<div id="menu4">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_menus_info}</div>
+	</div>
+	<br />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable4" id="sortable7">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6" class="not-sortable">{L_info_opt_ml_3}</th>
+			</tr>
+			<tr class="not-sortable">
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th width="10" class="not-sortable">&nbsp;</th>
+				<th class="not-sortable">{L_menu_entry}</th>
+				<th class="not-sortable">{L_link}</th>
+				<th class="not-sortable">{L_pk_set_link_type_header}</th>
+				<th class="not-sortable">{L_info_opt_visibility}</th>
+			</tr>
+		</thead>
+		<tbody id="show4" class="colorswitch">
+		<tr class="not-sortable">
+				<td colspan="6"><em>{L_active_entries}</em></td>
+		</tr>
+		<!-- BEGIN menu4_row -->
+			<tr id="{menu4_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" >
+					<!-- IF menu4_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu4_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				
+				</td>
+				<td width="33%">
+					<!-- IF menu4_row.S_PLUSLINK -->
+					<input name="linkname[{menu4_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu4_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu4_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu4_row.S_PLUSLINK -->
+					<input name="linkurl[{menu4_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu4_row.PLUSLINK_URL}" />
+					<input name="sort4[]" value="pluslink_{menu4_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide4[pluslink_{menu4_row.PLUSLINK_ID}]" {menu4_row.HIDE} id="cb4_{menu4_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu4_row.LINK}
+					<input name="sort4[]" value="{menu4_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide4[{menu4_row.LINK}]" {menu4_row.HIDE} id="cb4_{menu4_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu4_row.PLUSLINK_WINDOW}
+					<!-- IF menu4_row.S_PLUSLINK -->
+					<input name="link_height[{menu4_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu4_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu4_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu4_row -->
+			<tr id="sort4newlink">
+				<td width="10" class="nowrap" ><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap" ></td>
+				<td width="33%"><input name="linkname[new4]" type="text" style="width:97%; z-index:400;" class="td_add" /></td>    
+				<td><input name="linkurl[new4]" type="text" class="td_add" style="width:97%" />
+					<input name="sort4[new]" value="new" type="hidden" />
+					<input type="checkbox" value="1" name="hide4[new]" id="cb4_sort4newlink" style="display:none;" />
+				</td>
+				<td class="nowrap">{DD_LINK_WINDOW4} <input name="link_height[new4]" type="text" size="4" class="td_add" />px</td>
+				<td>{DD_LINK_VIS4}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="connectedSortable4" id="sortable8">
+		<thead>
+			<tr class="not-sortable">
+				<th colspan="6">{L_inactive_entries_headline}</th>
+			</tr>
+		</thead>
+		<tfoot>	
+			<tr class="not-sortable">
+				<th colspan="6">&nbsp;</th>
+			</tr>
+		</tfoot>
+		<tbody id="hide4" class="colorswitch">
+			<tr class="not-sortable">
+				<td colspan="6"><em>{L_inactive_entries}</em></td>
+			</tr>
+		<!-- BEGIN menu4hide_row -->
+			<tr id="{menu4hide_row.ID}" style="cursor:pointer;">
+				<td width="10" class="nowrap"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span> </td>
+				<td width="10" class="nowrap">
+					<!-- IF menu4hide_row.S_PLUSLINK -->
+					<img src="{EQDKP_ROOT_PATH}images/global/delete.png" class="td_add" onclick="window.location.href='manage_menus.php{SID}&amp;mode=del_plink&amp;id={menu4hide_row.PLUSLINK_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" alt="{L_delete}" title="{L_delete}" />
+					<!-- ENDIF -->
+				</td>
+				<td width="33%">
+				<!-- IF menu4hide_row.S_PLUSLINK -->
+					<input name="linkname[{menu4hide_row.PLUSLINK_ID}]" type="text" style="width:97%; z-index:400;" class="td_add" value="{menu4hide_row.PLUSLINK_NAME}"/>
+					<!-- ELSE -->
+					{menu4hide_row.NAME}
+					<!-- ENDIF -->
+				</td>    
+				<td width="33%">
+					<!-- IF menu4hide_row.S_PLUSLINK -->
+					<input name="linkurl[{menu4hide_row.PLUSLINK_ID}]" type="text" class="td_add" style="width:97%" value="{menu4hide_row.PLUSLINK_URL}" />
+					<input name="sort4[]" value="pluslink_{menu4hide_row.PLUSLINK_ID}" type="hidden" />
+					<input type="checkbox" value="1" name="hide4[pluslink_{menu4hide_row.PLUSLINK_ID}]" {menu4hide_row.HIDE} id="cb4_{menu4hide_row.ID}" style="display:none;" />
+					<!-- ELSE -->
+					{menu4hide_row.LINK}
+					<input name="sort4[]" value="{menu4hide_row.LINK}" type="hidden" />
+					<input type="checkbox" value="1" name="hide4[{menu4hide_row.LINK}]" {menu4hide_row.HIDE} id="cb4_{menu4hide_row.ID}" style="display:none;" />
+					<!-- ENDIF -->
+				</td>
+				<td class="nowrap">{menu4hide_row.PLUSLINK_WINDOW}
+					<!-- IF menu4hide_row.S_PLUSLINK -->
+					<input name="link_height[{menu4hide_row.PLUSLINK_ID}]" type="text" size="4" class="td_add" value="{menu4hide_row.PLUSLINK_HEIGHT}" />px
+					<!-- ENDIF -->
+				</td>
+				<td>{menu4hide_row.PLUSLINK_VIS}</td>
+			</tr>
+		<!-- END menu4hide_row -->
+		</tbody>
+	</table>
+</div>
+
+<div id="admin">
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_favorits_info}</div>
+	</div>
+	<br />
+	<div>
+		<div class="not-sortable"><img src="{EQDKP_ROOT_PATH}images/admin/favorites.png" class="not-sortable" alt="" />{L_favorits}:</div>
+		<ul class="receiver connectedSortable5 manage_menues_block2" id="sortable9" style="min-height:120px;">
+		<!-- BEGIN fav_row -->
+			<li class="t_{fav_row.IDENT}" id="{fav_row.ID}" title="{fav_row.GROUP}">
+				<img src="{fav_row.ICON}" alt="" /> {fav_row.NAME}
+				<input name="fav[]" type="checkbox" id="cb_{fav_row.ID}" value="{fav_row.DATA}" style="display:none;" />
+				<span id="icon_{fav_row.ID}" style="display:none;">{fav_row.ICON}</span>
+				<img src="../images/global/delete.png" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16" alt="" />
+			</li>
+		<!-- END fav_row -->
+		<!-- IF S_NO_FAVS -->
+			<li class="t_default" id="default_li">{L_no_favs_message}</li>
+		<!-- ENDIF -->
+		</ul>
+	</div>
+	<div class="connectedSortable5" id="sortable10" >
+		<!-- BEGIN group_row -->
+		<div class="manage_menues_block connector" style="float:left;">
+			<!-- BEGIN menu_row -->
+			<div id="container_{group_row.menu_row.IDENT}">
+				<div class="not-sortable toggle_button">
+					<span class="togglebutton_name center">{group_row.menu_row.NAME}</span>
+				</div>
+				<div id="tt_{group_row.menu_row.IDENT}" class="toggle_container equalHeights">
+					<ul>
+						<!-- BEGIN item_row -->
+						<li class="t_{group_row.menu_row.IDENT}" id="{group_row.menu_row.item_row.ID}" title="{group_row.menu_row.GROUP}">{group_row.menu_row.item_row.NAME}
+							<input type="checkbox" id="cb_{group_row.menu_row.item_row.ID}" name="fav[]" value="{group_row.menu_row.item_row.DATA}" style="display:none;" />
+							<span id="icon_{group_row.menu_row.item_row.ID}" style="display:none;">{group_row.menu_row.item_row.ICON}</span>
+						</li>
+						<!-- END item_row -->
+					</ul>
+				</div>
+			</div>
+			<!-- END menu_row -->
+		</div>
+		<!-- END group_row -->
+	</div>
+	<div class="clear"></div>
+</div> <!-- close admin-div -->
+</div>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr class="not-sortable">
+		<th colspan="5">
+			<input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_save}" />
+			<input name="save" type="button" class="mainoption bi_reset" id="reset" value="{L_reset}" onclick="window.location='manage_menus.php{SID}'"/>
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

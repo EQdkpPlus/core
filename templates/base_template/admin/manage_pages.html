@@ -1,0 +1,45 @@
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr >
+			<th colspan="8" align="left" class="nowrap">
+				<span style="float:left">{L_info_manage_pages}</span>
+				<span style="float:right;">
+					<input type="button" name="add" class="mainoption bi_new" id="create" value="{L_info_create_page}" onclick="window.location.href='manage_pages.php{SID}&page_id=0'" />
+				</span>
+			</th>
+		</tr>
+		<tr >
+			<th align="left" width="10" class="nowrap"><input type="checkbox" name="" id="selall_pages" /></th>
+			<th align="left" class="nowrap">&nbsp;</th>
+			<th align="left" width="20" class="nowrap">{L_ID}</th>
+			<th align="left" class="nowrap">{L_alias}</th>
+			<th align="left" class="nowrap">{L_info_opt_title}</th>
+			<th align="left" width="50" class="nowrap">{L_info_opt_ml}</th>
+			<th align="left">{L_info_opt_visibility}</th>
+			<th align="left" width="10" class="nowrap">{L_info_edit_user}</th>
+		</tr>
+		<!-- BEGIN pages_row -->
+		<tr>
+			<td align="left" width="10"><input name="page[]" type="checkbox" value="{pages_row.ID}" /></td>
+			<td width="20" align="left" class="nowrap"><a href="manage_pages.php{SID}&amp;page_id={pages_row.ID}"><img border="0" style="cursor:pointer;" src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" /></a></td>
+			<td align="left" class="nowrap">{pages_row.ID}</td>
+			<td width="20" align="left" class="nowrap">{pages_row.ALIAS}</td>
+			<td align="left" class="nowrap"><a href="manage_pages.php{SID}&amp;page_id={pages_row.ID}">{pages_row.TITLE}</a></td>
+			<td align="left" class="nowrap">{pages_row.ML}</td>
+			<td align="left">{pages_row.VIS}</td>
+			<td align="left" class="nowrap">{pages_row.EDITED}</td>
+		</tr>
+		<!-- END pages_row -->
+		<!-- IF S_NO_PAGES -->
+		<tr class="row1">
+			<td colspan="8"><em>{L_info_no_pages}</em></td>
+		</tr>
+		<!-- ENDIF -->
+		<tr>
+			<th colspan="8"><input name="del" type="button" class="mainoption bi_delete" id="delete" value="{L_delete_selected}" onclick="delete_warning();" />
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+			</th>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>
