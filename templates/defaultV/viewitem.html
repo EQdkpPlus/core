@@ -1,0 +1,45 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
+  <tr class="rowhead">
+    <th align="center" colspan="{SHOW_COLSPAN}">{L_PURCHASE_HISTORY_FOR}</th>
+  </tr>
+  <tr class="row1">
+  
+  <!-- IF SHOW_ITEMSTATS -->
+	<td align="center">{ITEM_STATS}</td>
+  <!-- ENDIF -->	
+  
+  <!-- IF SHOW_MODELVIEWER -->    
+    <td align="center">{ITEM_MODEL}</td>
+  <!-- ENDIF -->
+  
+  <!-- IF SHOW_ITEMHISTORYA -->  
+	<td align="center">{ITEM_CHART} </td>
+  <!-- ENDIF -->
+
+  
+</tr>
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+ <tr>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_VIEW_ITEM}o={O_DATE}">{L_DATE}</a></th>
+    <th align="left" width="35%"><a href="{U_VIEW_ITEM}o={O_BUYER}">{L_BUYER}</a></th>
+    <th align="left" width="65%" class="header">{L_RAID}</th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_VIEW_ITEM}o={O_VALUE}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+    <td width="70" nowrap="nowrap">{items_row.DATE}</td>
+    <td width="35%">{items_row.BUYER}</td>
+    <td width="65%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td width="60" nowrap="nowrap" class="negative">{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="4" class="footer">{VIEWITEM_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br>
+{COMMENT}
+<!-- INCLUDE page_tail.html -->

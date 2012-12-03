@@ -1,0 +1,43 @@
+<!-- INCLUDE page_header.html -->
+<script>
+function Settings(moduleid){
+  {JS_SETTINGS}
+}
+</script>
+<form method="post" action="{F_PLUGINS}" name="post">
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="100%">{L_NAME}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_ENABLED}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_ORIENTATION}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_POSITION}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_RIGHTS}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_COLLAPSE}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_CONTACT}</th>
+    <th align="left" width="100" nowrap="nowrap">{L_VERSION_N}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_SETTINGS}</th>  
+  </tr>
+  <!-- BEGIN plugins_row -->
+  <tr class="{plugins_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{plugins_row.ROW_CLASS}';">
+    <td width="100%" nowrap="nowrap"><input type="hidden" name="processid[]" value="{plugins_row.ID}"/>{plugins_row.NAME} <!-- IF plugins_row.S_PLUGIN --><img src="../images/admin/plugin.png" alt="" /><!-- ENDIF --></td>
+    <td width="35" nowrap="nowrap" align="center">{plugins_row.ENABLED}</td>
+    <td width="40" nowrap="nowrap" align="center">{plugins_row.POSITION}</td>
+    <td width="40" nowrap="nowrap"><input type="text" name="number[{plugins_row.ID}]" size="4" value="{plugins_row.NUMBER}" class="input" /></td>
+    <td width="40" nowrap="nowrap">{plugins_row.RIGHTS}</td>
+    <td width="40" nowrap="nowrap">{plugins_row.COLLAPSABLE}</td>
+    <td width="40" nowrap="nowrap">{plugins_row.CONTACT}</td>
+    <td width="100" nowrap="nowrap">{plugins_row.VERSION}</td>
+    <td width="40" nowrap="nowrap"><!-- IF plugins_row.S_SETTINGS --><input type="button" value="{L_EDIT}" onclick="Settings('{plugins_row.ID}')"/><!-- ENDIF --></td>
+  </tr>
+  <!-- END plugins_row -->
+  <tr>
+    <th align="center" colspan="9">
+    <input type="submit" name="choose" value="{L_SAVE}" class="mainoption" />
+       </th>
+  </tr>
+</table>
+</form>
+<br/>
+{L_MORE}
+<!-- INCLUDE page_tail.html -->
