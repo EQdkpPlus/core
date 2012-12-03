@@ -1,0 +1,43 @@
+<!-- IF SHOW_MULTI -->
+	<form method="get" action="{F_MEMBERS}">
+	<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+	<input type="hidden" name="filter" value="{GIVEN_FILTER}" />
+	 <table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+	  <tr>
+	    <th align="right" width="120" nowrap="nowrap">{L_FILTER}:
+	    	<select name="multifilter" class="input" onchange="javascript:form.submit();">
+	        <!-- BEGIN multi_row -->
+	        <option value="{multi_row.VALUE}"{multi_row.SELECTED}>{multi_row.OPTION}</option>
+	        <!-- END filter_row -->
+	      </select>
+	    	</th>
+	    <th align="center">MultiDKP Leaderboard {SHOW_MULTI_FILTER}</th>
+	  </tr>
+	</table>
+	</form>
+<!-- ENDIF -->
+
+<table width="100%" border="0" cellspacing="1" cellpadding="1" class="forumline">
+<tr>
+	<!-- BEGIN classheader_row -->
+	<td align="center" nowrap="nowrap" valign="top" class="{classheader_row.ROW_CLASS}">
+	 <table width="100%" class="borderless" border="0" cellspacing="0" cellpadding="2">
+	   <tr>
+	     <th colspan="2"><a href='listmembers.php?s=&filter={classheader_row.NAME}' class="{classheader_row.NAME_ENG}" >{classheader_row.ICON} {classheader_row.NAME} </a></th>
+	   </tr>
+	  <!-- BEGIN classlist_row -->
+      	<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classheader_row.classlist_row.NAME_ENG}';">
+	      	<td align="left"><a href="{classlist_row.U_VIEW_MEMBER}">{classheader_row.classlist_row.NAME}</a></td>
+	      	<td class="{classheader_row.classlist_row.C_CURRENT}" align="right">{classheader_row.classlist_row.CURRENT}</td>
+      </tr>
+    <!-- END  classlist_row -->
+    </table>
+    </td>
+	<!-- END classheader_row -->
+</tr>
+</table>
+
+
+
+
+

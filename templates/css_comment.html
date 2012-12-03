@@ -1,0 +1,87 @@
+<style>
+/**
+ * EQDKP Comment System
+ * Wallenium
+ * StyleSheet
+ */
+
+.floatLeft { 
+  float:left;
+}
+.clear {
+  clear:both;
+}
+
+.bold	{
+  font-weight:bold;
+}
+.italic	{
+  font-style:italic;
+}
+
+.small {
+  font-size:0.93em;
+}
+
+.clearfix:after {
+  content:".";
+  display:block;
+  height:0;
+  clear:both;
+  visibility:hidden;
+}
+.clearfix {
+  display:inline-block;
+}
+/* Hide from IE Mac \*/
+.clearfix {
+  display:block;
+}
+/* End hide from IE Mac */ 
+
+div.contentBox {
+  background-color:#{T_TR_COLOR1};
+  border:1px solid #{T_TABLE_BORDER_COLOR};
+  color: #{T_FONTCOLOR1};
+  padding: 8px 8px 8px 8px;
+  margin-bottom: 10px;
+}
+.contentBox .boxHeader {
+  padding-bottom: 3px;
+  border-bottom:1px solid #{T_TABLE_BORDER_COLOR};
+}
+.contentBox .boxHeader h1	{
+  font-size: 12px;
+  color: #{T_TABLE_BORDER_COLOR};
+}
+.contentBox .boxContent	{
+  padding-top: 6px;
+}
+.contentBox .boxContent h2 a {
+  font-weight:bold;
+  font-size: 12px;
+}
+
+.boxContent .comment_text {
+  font-size: 12px;
+}
+
+.rowcolor1 {
+  padding: 10px;
+  background-color:#{T_TR_COLOR1};
+}
+.rowcolor2 {
+  padding: 10px;
+  background-color: #{T_TR_COLOR2};
+}
+
+.boxContent .comment_link, .boxContent  .comment_link a, .boxContent  .comment_link a:visited {
+  color: {T_BODY_LINK};
+  text-decoration: none;
+}
+
+.boxContent .comment_link a:hover {
+  text-decoration: underline;
+  color: #{T_BODY_HLINK};
+}
+</style>

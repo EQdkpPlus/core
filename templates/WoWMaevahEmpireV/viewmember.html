@@ -1,0 +1,203 @@
+<!-- INCLUDE page_header.html -->
+<table width="100%" border="0" cellspacing="0" cellpadding="1" border="1">
+<tr>
+    <th align="center"  colspan="2" nowrap="nowrap">{GUILDTAG} {NAME} | {RACENAME} - {CLASSNAME}</th>
+</tr>
+<tr class="row1">
+    <td valign="center" align="center">
+	    <table border="0" width="100%">
+	    <tr><td valign="center" align="center" nowrap >{CLASS_RACE_IMG}</td></tr>
+	    </table>
+    </td>
+    <td valign="top">
+   		 <!-- IF IS_MULTIDKP -->
+		<table width="500" border="0" cellspacing="0" cellpadding="2">
+			<tr>
+				<th align="left" width="60" nowrap="nowrap">{L_MULTI_KONTONAME_SHORT}</th>
+				<th align="left" width="60" nowrap="nowrap">{L_EARNED}</th>
+				<th align="left" width="60" nowrap="nowrap">{L_SPENT}</th>
+				<th align="left" width="60" nowrap="nowrap">{L_ADJUSTMENT}</th>
+				<th align="left" width="60" nowrap="nowrap">{L_CURRENT}</th>
+		  	</tr>
+		    <!-- BEGIN multidkp -->
+		    <tr class="{multidkp.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{multidkp.ROW_CLASS}';">
+		    	<td width="65" nowrap="nowrap" >{multidkp.NNAME}</td>
+		    	<td width="65" nowrap="nowrap" class="{multidkp.C_EARNED}">{multidkp.EARNED}</td>
+		    	<td width="65" nowrap="nowrap" class="negative">{multidkp.SPENT}</td>
+		    	<td width="65" nowrap="nowrap" class="{multidkp.C_ADJUST}">{multidkp.ADJUST}</td>
+		    	<td width="65" nowrap="nowrap" class="{multidkp.C_CURRENT}"><b>{multidkp.CURRENT}</b></td>
+		    </tr>
+		    <!-- END multidkp -->
+    	</table>
+    	<br>
+    	<table width="500" border="0" cellspacing="0" cellpadding="1">
+    		<tr>
+				<th align="center" colspan="2" nowrap="nowrap">{L_ATTENDANCE_BY_EVENT}</th> </tr>
+        <tr class="row1"><td align="left" width="20%" nowrap="nowrap"><b>{L_RAIDS_30_DAYS}</b>:</td><td> <span class="{C_RAIDS_30_DAYS}">{RAIDS_30_DAYS}</span></td></tr>
+        <tr class="row2"><td align="left" width="20%" nowrap="nowrap"><b>{L_RAIDS_60_DAYS}</b>:</td><td> <span class="{C_RAIDS_30_DAYS}">{RAIDS_60_DAYS}</span></td></tr>
+        <tr class="row1"><td align="left" width="20%" nowrap="nowrap"><b>{L_RAIDS_90_DAYS}</b>:</td><td> <span class="{C_RAIDS_90_DAYS}">{RAIDS_90_DAYS}</span></td>
+        <tr class="row2"><td align="left" width="40%" nowrap="nowrap"><b>{L_RAIDS_LIFETIME}</b>:</td><td> <span class="{C_RAIDS_LIFETIME}">{RAIDS_LIFETIME}</span></td></tr>
+    </table>
+    <!-- ELSE -->
+    <table height="184" width="500" border="0" cellspacing="0" cellpadding="1">
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_EARNED}</b>: <span class="positive">{EARNED}</span></td></tr>
+        <tr><td align="left" class="row2" width="20%" nowrap="nowrap"><b>{L_SPENT}</b>: <span class="negative">{SPENT}</span></td></tr>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_ADJUSTMENT}</b>: <span class="{C_ADJUSTMENT}">{ADJUSTMENT}</span></td></tr>
+        <tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_CURRENT}</b>: <span class="{C_CURRENT}">{CURRENT}</span></td></tr>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_RAIDS_30_DAYS}</b>: <span class="{C_RAIDS_30_DAYS}">{RAIDS_30_DAYS}</span></td></tr>
+        <tr><td align="left" class="row2" width="20%" nowrap="nowrap"><b>{L_RAIDS_60_DAYS}</b>: <span class="{C_RAIDS_30_DAYS}">{RAIDS_60_DAYS}</span></td></tr>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_RAIDS_90_DAYS}</b>: <span class="{C_RAIDS_90_DAYS}">{RAIDS_90_DAYS}</span></td>
+        <tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_RAIDS_LIFETIME}</b>: <span class="{C_RAIDS_LIFETIME}">{RAIDS_LIFETIME}</span></td></tr>
+    </table>
+    <!-- ENDIF -->
+    </td>
+</tr>
+
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_RAID_ATTENDANCE_HISTORY}</th>
+  </tr>
+  <tr>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="35%">{L_NAME}</th>
+    <th align="left" width="65%">{L_NOTE}</th>
+    <th align="left" width="60" nowrap="nowrap">{L_EARNED}</th>
+    <!-- IF IS_MULTIDKP -->
+    <!-- ELSE -->
+    <th align="left" width="70" nowrap="nowrap">{L_CURRENT}</th>
+    <!-- ENDIF -->
+  </tr>
+  <!-- BEGIN raids_row -->
+  <tr class="{raids_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{raids_row.ROW_CLASS}';">
+    <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="35%"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="65%">{raids_row.NOTE}</td>
+    <td width="60" nowrap="nowrap" class="positive">{raids_row.EARNED}</td>
+    <!-- IF IS_MULTIDKP -->
+    <!-- ELSE -->
+    <td width="70" nowrap="nowrap" class="positive">{raids_row.CURRENT_EARNED}</td>
+    <!-- ENDIF -->
+  </tr>
+  <!-- END raids_row -->
+  <tr>
+    <th colspan="5" class="footer">{RAID_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_ITEM_PURCHASE_HISTORY}</th>
+  </tr>
+  <tr>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="50%">{L_NAME}</th>
+    <th align="left" width="50%">{L_RAID}</th>
+    <th align="left" width="60" nowrap="nowrap">{L_SPENT}</th>
+    <!-- IF IS_MULTIDKP -->
+    <!-- ELSE -->
+    <th align="left" width="70" nowrap="nowrap">{L_CURRENT}</th>
+    <!-- ENDIF -->
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{items_row.ROW_CLASS}';">
+    <td width="70" nowrap="nowrap">{items_row.DATE}</td>
+    <td width="50%"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td width="50%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td width="60" nowrap="nowrap" class="negative">{items_row.SPENT}</td>
+   <!-- IF IS_MULTIDKP -->
+    <!-- ELSE -->
+    <td width="70" nowrap="nowrap" class="negative">{items_row.CURRENT_SPENT}</td>
+    <!-- ENDIF -->
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="5" class="footer">{ITEM_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="4">{L_INDIVIDUAL_ADJUSTMENT_HISTORY}</th>
+  </tr>
+  <tr>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="80" nowrap="nowrap">{L_RAID}</th>
+    <th align="left" width="100%">{L_REASON}</th>
+    <th align="left" width="90" nowrap="nowrap">{L_ADJUSTMENT}</th>
+  </tr>
+  <!-- BEGIN adjustments_row -->
+  <tr class="{adjustments_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{adjustments_row.ROW_CLASS}';">
+    <td width="70" nowrap="nowrap">{adjustments_row.DATE}</td>
+    <td width="80" nowrap="nowrap">{adjustments_row.RAIDNAME}</td>
+    <td width="100%">{adjustments_row.REASON}</td>
+    <td width="90" nowrap="nowrap" class="{adjustments_row.C_INDIVIDUAL_ADJUSTMENT}">{adjustments_row.INDIVIDUAL_ADJUSTMENT}</td>
+  </tr>
+  <!-- END adjustments_row -->
+  <tr>
+    <th colspan="4" class="footer">{ADJUSTMENT_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+<a name="byevent" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ATTENDANCE_BY_EVENT}</th>
+  </tr>
+  <tr>
+    <th align="left" width="200"><a href="{U_VIEW_MEMBER}o={O_EVENT}#byevent">{L_EVENT}</a></th>
+    <th align="left" width="100%"><a href="{U_VIEW_MEMBER}o={O_PERCENT}#byevent">{L_PERCENT}</a></th>
+  </tr>
+  <!-- BEGIN event_row -->
+  <tr>
+    <td width="200" class="row2" nowrap="nowrap"><a href="{event_row.U_VIEW_EVENT}" class="small">{event_row.EVENT}</a></td>
+    <td width="100%" class="row1">{event_row.BAR}</td>
+  </tr>
+  <!-- END event_row -->
+  <tr>
+    <th colspan="2">&nbsp;</th>
+  </tr>
+</table>
+<br>
+{COMMENT}
+<br>
+<table width="100%" border="0" cellspacing="0" cellpadding="1" border="1">
+	<tr>
+		<th>
+			<span id="config1-title" class="iconspan"><img src="./pluskernel/images/minus.gif" alt="" border="0" height="9" width="9"></span> {L_SERVICE}
+		</th>
+	<tr>
+		<td class="row1">
+			<div id="config1" class="icongroup1">
+			<table class="borderless" align="center" border="0" cellpadding="0" cellspacing="5" width="100%">
+				<tr>
+					<td>{SIGNATUR}</td>
+					<td>{SHIRT_SHOP}</td>
+				</tr>
+			</table>
+			</div>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+var csetting=new switchicon("icongroup1", "div") //Limit scanning of switch contents to just "div" elements
+csetting.setHeader('<img src="./pluskernel/images/minus.gif" />', '<img src="./pluskernel/images/plus.gif" />') //set icon HTML
+csetting.collapsePrevious(false) //Allow only 1 content open at any time
+csetting.defaultExpanded(0) //Set 1st content to be expanded by default
+csetting.setPersist(true) //No persistence enabled
+csetting.init()
+</script>
+
+<!-- INCLUDE page_tail.html -->
