@@ -1,0 +1,112 @@
+	<style type="text/css">
+		ul.demo {
+			padding: 0;
+			margin: 0;
+		}
+
+		/* REQUIRED * the "slidingPanelsActivated" class added to container by the plug-in, allows for different presentation if JavaScript is disabled */
+		ul.slidingPanelsActivated {
+			display:block;
+			position:relative;
+			overflow:hidden;
+
+			/* edit "padding" and "margin" with care, as they can mess things up across browser */
+			padding: 0;
+			margin: 0;
+
+			/* adjust "height" as needed, em recommended */
+			height: {MAX_HIGH}em;
+		}
+
+		ul.demo li {
+			display: block;
+			padding:0;
+			margin:0;
+		}
+
+		/* REQUIRED * the "slidingPanelsActivated" class added to container by the plug-in, allows for different presentation if JavaScript is disabled */
+		ul.slidingPanelsActivated li {
+			display:block;
+			position:absolute;
+			overflow:hidden;
+			/* "left" and "width" properties set automatically */
+			top: 0;
+
+			/* edit "padding" and "margin" with care, as they can mess things up across browser */
+			padding: 3;
+			margin: 3;
+
+			/* "height" of 100% recommended to keep panels all the same height as the container */
+			height:100%;
+		}
+
+	</style>
+
+		<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+			$("#leaderboard").slidingPanels();
+		});
+
+	</script>
+
+<!-- IF SHOW_MULTI -->
+	<form method="get" action="{F_MEMBERS}">
+	<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+	<input type="hidden" name="filter" value="{GIVEN_FILTER}" />
+	 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="forumline" style="border-bottom: none">
+	  <tr>
+	    <th align="right" width="120" nowrap="nowrap">{L_FILTER}:
+	    	<select name="multifilter" class="input" onchange="javascript:form.submit();">
+	        <!-- BEGIN multi_row -->
+	        <option value="{multi_row.VALUE}"{multi_row.SELECTED}>{multi_row.OPTION}</option>
+	        <!-- END filter_row -->
+	      </select>
+	    	</th>
+	    <th align="center">MultiDKP Leaderboard {SHOW_MULTI_FILTER}</th>
+	  </tr>
+	</table>
+	</form>
+<!-- ENDIF -->
+
+<!-- IF NORMAL_LEADERBOARD -->
+	<table width="100%" border="0" cellspacing="1" cellpadding="1" class="forumline">
+	<tr>
+		<!-- BEGIN classheader_row -->
+		<td align="center" nowrap="nowrap" valign="top" class="{classheader_row.ROW_CLASS}">
+		 <table width="100%" class="borderless" border="0" cellspacing="0" cellpadding="2">
+		   <tr>
+		     <th colspan="2"><a href='listmembers.php?s=&filter={classheader_row.NAME}' class="{classheader_row.NAME_ENG}" >{classheader_row.ICON} {classheader_row.NAME} </a></th>
+		   </tr>
+		  <!-- BEGIN classlist_row -->
+	      	<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classheader_row.classlist_row.NAME_ENG}';">
+		      	<td align="left"><a href="{classlist_row.U_VIEW_MEMBER}">{classheader_row.classlist_row.NAME}</a></td>
+		      	<td class="{classheader_row.classlist_row.C_CURRENT}" align="right">{classheader_row.classlist_row.CURRENT}</td>
+	      </tr>
+	    <!-- END  classlist_row -->
+	    </table>
+	    </td>
+		<!-- END classheader_row -->
+	</tr>
+	</table>
+<!-- ELSE -->
+	<ul id="leaderboard" class="demo slidingPanelsActivated">
+		<!-- BEGIN classheader_row -->
+		 <li class="{classheader_row.ROW}" slidingpanelstate="Default" />
+			<table  width="100%" class="borderless" border="0" cellspacing="0" cellpadding="3">
+		   		<tr width="100%">
+		     		<th colspan="2" width="100%"><a href='listmembers.php?s=&filter={classheader_row.NAME}' class="{classheader_row.NAME_ENG}" >{classheader_row.ICON} {classheader_row.NAME} </a></th>
+		   		</tr>
+		  		<!-- BEGIN classlist_row -->
+	      			<tr onmouseover="this.className='rowHover';" onmouseout="this.className='{classheader_row.classlist_row.NAME_ENG}';">
+		      			<td align="left" width="10%"><a href="{classlist_row.U_VIEW_MEMBER}">{classheader_row.classlist_row.NAME}</a></td>
+		      			<td class="{classheader_row.classlist_row.C_CURRENT}" align="left"  width="90%">{classheader_row.classlist_row.CURRENT}</td>
+	      			</tr>
+	    		<!-- END  classlist_row -->
+	    	</table>
+	     </li>
+		 <!-- END  classheader_row -->
+	</ul>
+<!-- ENDIF -->
+
+
+

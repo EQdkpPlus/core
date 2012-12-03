@@ -1,0 +1,149 @@
+<!-- INCLUDE page_header.html -->
+<style type="text/css">
+TABLE.errortable { 
+  border-top: 1px;
+  border-bottom: 1px;
+  border-left: 1px;
+  border-right: 1px;
+  border-color: red; 
+  border-style: solid;
+  background: #FFEFEF;
+}
+
+TABLE.errortable_inner { 
+  background: #FFEFEF;
+  border: 0;
+}
+
+TABLE.errortable td{
+	color:red;
+	background: #FFEFEF;
+	padding: 5px;
+}
+
+TABLE.errortable th{
+	color:white;
+	background: red;
+}
+</style>
+<!-- IF SHOW_CHMOD_THING -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+	 <tr>
+	    <td class="row1" align="right">{CHMOD_IMG}</td>
+	    <td class="row1" align="center">{CHMOD_TXT}</td>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+<!-- IF SHOW_BETA_WARNING -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+	 <tr>
+	    <td class="row1" align="right">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	    <td class="row1" align="center">{BETA_WARNING}</td>
+	    <td class="row1" align="left">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+<!-- IF SHOW_UPDATE_WARNING -->
+	<table width="100%" border="0" cellspacing="0" cellpadding="2">
+	  <tr>
+	    <th colspan="3" align="center">{L_VERSION_UPDATE}</th>
+	  </tr>
+	  <tr>
+	    <td class="row1" align="right">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	    <td class="row1" align="center">{L_NEW_VERSION_NOTICE}</td>
+	    <td class="row1" align="left">{L_NEW_VERSION_NOTICE_IMAGE}</td>
+	  </tr>
+	  <tr>
+	    <th colspan="3" align="center">&nbsp;</th>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+<!-- IF SHOW_UPDATE_AVAILABLE -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="errortable">
+	  <tr>
+	    <th colspan="3" align="center">{L_UPDATE_AVAILABLE_HEAD}</th>
+	  </tr>
+	  <tr>
+	    <td class="row1" align="right">{L_UPDATE_AVAILABLE_IMG}</td>
+	    <td class="row1" align="center">{L_UPDATE_AVAILABLE_TXT}</td>
+	  </tr>
+	</table>
+	<br />
+<!-- ENDIF -->
+{PLUG_UPDATE_CHECK}
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+
+  <tr>
+    <th align="center" colspan="4">{L_STATISTICS}</th>
+  </tr>
+  <tr>
+    <td class="row2" width="25%">{L_NUMBER_OF_MEMBERS}:</td>
+    <td class="row1" width="25%">{NUMBER_OF_MEMBERS}</td>
+    <td class="row2" width="25%">{L_NUMBER_OF_LOGS}:</td>
+    <td class="row1" width="25%">{NUMBER_OF_LOGS}</td>
+  </tr>
+  <tr>
+    <td class="row2" width="25%">{L_NUMBER_OF_RAIDS}:</td>
+    <td class="row1" width="25%">{NUMBER_OF_RAIDS}</td>
+    <td class="row2" width="25%">{L_RAIDS_PER_DAY}:</td>
+    <td class="row1" width="25%">{RAIDS_PER_DAY}</td>
+  </tr>
+  <tr>
+    <td class="row2" width="25%">{L_NUMBER_OF_ITEMS}:</td>
+    <td class="row1" width="25%">{NUMBER_OF_ITEMS}</td>
+    <td class="row2" width="25%">{L_ITEMS_PER_DAY}:</td>
+    <td class="row1" width="25%">{ITEMS_PER_DAY}</td>
+  </tr>
+  <tr>
+    <td class="row2" width="25%">{L_DATABASE_SIZE}:</td>
+    <td class="row1" width="25%">{DATABASE_SIZE}</td>
+    <td class="row2" width="25%">{L_EQDKP_STARTED}:</td>
+    <td class="row1" width="25%">{EQDKP_STARTED}</td>
+  </tr>
+  <tr>
+    <th align="center" colspan="4">&nbsp;</th>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_WHO_ONLINE}</th>
+  </tr>
+  <tr>
+    <th align="left" width="20%" nowrap="nowrap">{L_USERNAME}</th>
+    <th align="left" width="20%" nowrap="nowrap">{L_LOGIN}</th>
+    <th align="left" width="20%" nowrap="nowrap">{L_LAST_UPDATE}</th>
+    <th align="left" width="20%" nowrap="nowrap">{L_LOCATION}</th>
+    <th align="left" width="20%" nowrap="nowrap">{L_IP_ADDRESS}</th>
+  </tr>
+  <!-- BEGIN online_row -->
+  <tr class="{online_row.ROW_CLASS}">
+    <td width="20%" nowrap="nowrap">{online_row.USERNAME}</td>
+    <td width="20%" nowrap="nowrap">{online_row.LOGIN}</td>
+    <td width="20%" nowrap="nowrap">{online_row.LAST_UPDATE}</td>
+    <td width="20%" nowrap="nowrap">{online_row.LOCATION}</td>
+    <td width="20%" nowrap="nowrap">{online_row.IP_ADDRESS}</td>
+  </tr>
+  <!-- END online_row -->
+  <tr>
+    <th colspan="5" class="footer">{ONLINE_FOOTCOUNT}</th>
+  </tr>
+</table>
+<!-- IF S_LOGS -->
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_NEW_ACTIONS}</th>
+  </tr>
+  <!-- BEGIN actions_row -->
+  <tr class="{actions_row.ROW_CLASS}">
+    <td align="center" width="16" nowrap="nowrap"><a href="{actions_row.U_VIEW_LOG}"><img src="{EQDKP_ROOT_PATH}images/glyphs/view.png" width="16" height="16" alt="View" /></a></td>
+    <td width="100%">{actions_row.ACTION}</td>
+  </tr>
+  <!-- END actions_row -->
+</table>
+<!-- ENDIF -->
+<!-- INCLUDE page_tail.html -->

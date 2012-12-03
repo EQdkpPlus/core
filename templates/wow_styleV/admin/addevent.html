@@ -1,0 +1,73 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+function check_form()
+{
+    if (document.post.event_name.value.length < 2)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    if (document.post.event_value.value.length < 1)
+    {
+        alert('{MSG_VALUE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+//-->
+</script>
+<form method="post" action="{F_ADD_EVENT}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_EVENT}" value="{EVENT_ID}" />
+<input type="hidden" name="mode" value="{MODE}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2" >{L_ADD_EVENT_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="50%" align="center" class="row1">{L_NAME}: <input type="text" name="event_name" size="35" maxlength="255" value="{EVENT_NAME}" class="input" />{FV_NAME}</td>
+    <td width="50%" align="center" class="row2">{L_DKP_VALUE}: <input type="text" name="event_value" size="8" maxlength="7" value="{EVENT_VALUE}" class="input" />{FV_VALUE}</td>
+  </tr>
+</table>
+
+   <!--<tr class="{imgfiles_row.ROW_CLASS}" colspan="2">
+    <td colspan="2"><input type="radio" name="event_icon" {imgfiles_row.CHECKED} value="{imgfiles_row.FILENAME}" /> &nbsp; {imgfiles_row.SHOW_FILE}</td>
+  </tr>  
+-->
+
+  <table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="{COLSPAN}">{L_SELECT_ICON}</th>
+  </tr>
+    <!-- BEGIN files_row -->
+  <tr>
+    <!-- BEGIN fields -->
+    	<td class="{files_row.fields.ROWCLASS}" width="{COLUMN_WIDTH}%" nowrap="nowrap">
+        <!-- IF files_row.fields.CHECKBOX -->
+    		<input type="radio" name="event_icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" /> 
+    		{files_row.fields.IMAGE}
+    		<!-- ENDIF -->
+    	</td>
+    <!-- END fields -->
+  </tr>
+  <!-- END files_row -->
+  <tr>
+    <th colspan="{COLSPAN}" class="footer">{ATTENDEES_FOOTCOUNT}</th>
+  </tr>
+
+    
+  <tr>
+    <th align="center" colspan="{COLSPAN}">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_EVENT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+
+
+
+</form>
+<!-- INCLUDE page_tail.html -->

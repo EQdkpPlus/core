@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+{META}
+<title>{PAGE_TITLE}</title>
+ <script type="text/javascript" src="{EQDKP_ROOT_PATH}/pluskernel/include/javascripts/overlib.js"></script>
+<!-- IF ITEMSTATS_CSS_PATH -->
+<link REL=StyleSheet HREF="{EQDKP_ROOT_PATH}{ITEMSTATS_PATH}{ITEMSTATS_CSS_PATH}" TYPE="text/css" MEDIA=screen />
+<!-- ENDIF -->
+<link rel="shortcut icon" href="{EQDKP_ROOT_PATH}templates/defaultV/images/favicon.png" type="image/png">
+<link rel="icon" href="{EQDKP_ROOT_PATH}templates/default/imagesV/favicon.png" type="image/png">
+{PLUS_HEADER}
+{PLUS_JS_WIN}
+{EXTRA_CSS}
+{PORTAL_JAVASCRIPT}
+
+<!-- IF S_IMG_RESIZE_ENABLE -->
+<link rel="stylesheet" href="{EQDKP_ROOT_PATH}pluskernel/include/css/lytebox.css" type="text/css" />
+ <script type="text/javascript" src="{EQDKP_ROOT_PATH}pluskernel/include/javascripts/lytebox.js"></script>
+ <script type="text/javascript" >
+ 	if (window.addEventListener) {
+ 		window.addEventListener("load",initLytebox,false);
+ 	} else if (window.attachEvent) {
+ 		window.attachEvent("onload",initLytebox);
+ 	} else {
+ 		window.onload = function() {initLytebox();}
+ 	}
+ 	function initLytebox() 
+ 	{
+ 		myLytebox = new LyteBox({S_MAX_POST_IMG_RESIZE_WIDTH}, '{S_IMG_RESIZE_WARNING}', '{S_LYTEBOX_THEME}', {S_LYTEBOX_AUTO_RESIZE}, {S_LYTEBOX_ANIMATION},'{S_IMG_WARNING_ACTIVE}') ;
+ 	}
+ </script>
+<!-- ENDIF -->
+
+<style type="text/css">
+<!-- BEGIN classcolor_row -->
+.{classcolor_row.NAME}, .{classcolor_row.NAME}:link, .{classcolor_row.NAME}:visited, .{classcolor_row.NAME}:active,
+.{classcolor_row.NAME}:link:hover, td.{classcolor_row.NAME} a:hover, td.{classcolor_row.NAME} a:active,
+td.{classcolor_row.NAME}, td.{classcolor_row.NAME} a:link, td.{classcolor_row.NAME} a:visited, 
+.classes{classcolor_row.ID}, .classes{classcolor_row.ID}:link, .classes{classcolor_row.ID}:visited, .classes{classcolor_row.ID}:active,
+.classes{classcolor_row.ID}:link:hover, td.classes{classcolor_row.ID} a:hover, td.classes{classcolor_row.ID} a:active,
+td.classes{classcolor_row.ID}, td.classes{classcolor_row.ID} a:link, td.classes{classcolor_row.ID} a:visited 
+{
+  text-decoration: none; 
+  color: {classcolor_row.COLOR};
+}
+<!-- END classcolor_row -->
+
+/* PLUScomments CSS */
+.floatLeft { 
+  float:left;
+}
+.floatRight { 
+  float:right;
+}
+.clear {
+  clear:both;
+}
+
+.bold	{
+  font-weight:bold;
+}
+.italic	{
+  font-style:italic;
+}
+
+.small {
+  font-size:0.93em;
+}
+
+.hand {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.clearfix:after {
+  content:".";
+  display:block;
+  height:0;
+  clear:both;
+  visibility:hidden;
+}
+.clearfix {
+  display:inline-block;
+}
+/* Hide from IE Mac \*/
+.clearfix {
+  display:block;
+}
+/* End hide from IE Mac */ 
+
+div.contentBox {
+  background-color:#{T_TR_COLOR1};
+  border:1px solid #{T_TABLE_BORDER_COLOR};
+  color: #{T_FONTCOLOR1};
+  padding: 8px 8px 8px 8px;
+  margin-bottom: 10px;
+}
+.contentBox .boxHeader {
+  padding-bottom: 3px;
+  border-bottom:1px solid #{T_TABLE_BORDER_COLOR};
+}
+.contentBox .boxHeader h1	{
+  font-size: 12px;
+  color: #{T_TABLE_BORDER_COLOR};
+}
+.contentBox .boxContent	{
+  padding-top: 6px;
+}
+.contentBox .boxContent h2 a {
+  font-weight:bold;
+  font-size: 12px;
+}
+
+.boxContent .comment_text {
+  font-size: 12px;
+}
+
+.rowcolor1 {
+  padding: 10px;
+  background-color:#{T_TR_COLOR1};
+}
+.rowcolor2 {
+  padding: 10px;
+  background-color: #{T_TR_COLOR2};
+}
+
+.boxContent .comment_link, .boxContent  .comment_link a, .boxContent  .comment_link a:visited {
+  color: {T_BODY_LINK};
+  text-decoration: none;
+}
+
+.boxContent .comment_link a:hover {
+  text-decoration: underline;
+  color: #{T_BODY_HLINK};
+}
+
+/* Default EQDKP CSS */
+form { display: inline; }
+img { vertical-align: middle; border: 0px; }
+
+BODY { font-family: {T_FONTFACE1}; font-size: {T_FONTSIZE2}px; color: #{T_FONTCOLOR1}; margin-left: 1%; margin-right: 1%; margin-top: 1%; background-color: #{T_BODY_BACKGROUND}; }
+TABLE { border-top: {T_TABLE_BORDER_WIDTH}px; border-right: {T_TABLE_BORDER_WIDTH}px; border-bottom: {T_TABLE_BORDER_WIDTH}px; border-left: {T_TABLE_BORDER_WIDTH}px; border-color: #{T_TABLE_BORDER_COLOR}; border-style: {T_TABLE_BORDER_STYLE}; }
+TABLE.borderless { border-style: none; }
+
+th { font-weight: bold; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; white-space: nowrap; }
+tr, td { font-family: {T_FONTFACE1}; font-size: {T_FONTSIZE2}px; color: #{T_FONTCOLOR1}; }
+
+a:link, a:visited, a:active { text-decoration: {T_BODY_LINK_STYLE}; color: #{T_BODY_LINK}; }
+a:hover { text-decoration: {T_BODY_HLINK_STYLE}; color: #{T_BODY_HLINK}; }
+
+th a:link, th a:visited, th a:active { text-decoration: {T_HEADER_LINK_STYLE}; color: #{T_HEADER_LINK}; font-weight: bold; }
+th a:hover { text-decoration: {T_HEADER_HLINK_STYLE}; color: #{T_HEADER_HLINK}; font-weight: bold; }
+
+th.smalltitle { font-weight: bold; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; white-space: nowrap; font-size: {T_FONTSIZE1}px; }
+th.smalltitle a:link, th.smalltitle a:visited, th.smalltitle a:active { text-decoration: {T_HEADER_LINK_STYLE}; color: #{T_HEADER_LINK}; font-weight: bold; font-size: {T_FONTSIZE1}px; }
+th.smalltitle a:hover { color: #{T_HEADER_HLINK}; font-weight: bold; font-size: {T_FONTSIZE1}px; text-decoration: {T_HEADER_HLINK_STYLE}; }
+
+th.footer { color: #{T_HEADER_LINK}; text-align: right; background-color: #{T_TH_COLOR1}; white-space: nowrap; font-weight: normal; }
+th.footer a:link, th.footer a:visited, th.footer a:active { color: #{T_HEADER_LINK}; text-decoration: {T_HEADER_LINK_STYLE};  font-weight: normal; }
+th.footer a:hover { color: #{T_HEADER_HLINK}; text-decoration: {T_HEADER_HLINK_STYLE}; font-weight: normal; }
+
+.row1 { background-color: #{T_TR_COLOR1}; }
+.row2 { background-color: #{T_TR_COLOR2}; }
+
+.quote1 { background-color: #{T_TR_COLOR2}; font-size: {T_FONTSIZE2}px; line-height: 125%; }
+.quote2 { background-color: #{T_TR_COLOR1}; font-size: {T_FONTSIZE2}px; line-height: 125%; }
+
+.positive { color: #{T_FONTCOLOR_POS}; }
+.negative { color: #{T_FONTCOLOR_NEG}; }
+.neutral  { color: #{T_FONTCOLOR1}; }
+
+.maintitle { font-size: 18px; font-weight: bold; color: #{T_FONTCOLOR2}; }
+.subtitle  { font-size: 12px; color: #{T_FONTCOLOR2}; }
+
+.menu { font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.menu a:link, .menu a:active, .menu a:visited { text-decoration: none; font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.menu a:hover { text-decoration: underline; font-size: {T_FONTSIZE1}px; color: #{T_HEADER_HLINK}; }
+
+.small { font-size: {T_FONTSIZE1}px; }
+
+.copy { font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.copy a:link, .copy a:active, .copy a:visited { font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.copy a:hover { font-size: {T_FONTSIZE1}px; color: #{T_HEADER_HLINK}; }
+
+.input, textarea { font-family: {T_FONTFACE2}; font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR3}; background-color: #{T_INPUT_BACKGROUND};
+         border-top: {T_INPUT_BORDER_WIDTH}px; border-right: {T_INPUT_BORDER_WIDTH}px; border-bottom: {T_INPUT_BORDER_WIDTH}px; border-left: {T_INPUT_BORDER_WIDTH}px; border-color: #{T_INPUT_BORDER_COLOR}; border-style: {T_INPUT_BORDER_STYLE}; }
+
+input.helpline1 { background-color: #{T_TR_COLOR1}; border-style: none; }
+input.helpline2 { background-color: #{T_TR_COLOR2}; border-style: none; }
+
+input.mainoption { font-family: {T_FONTFACE2}; font-size: {T_FONTSIZE1}px; font-weight: bold; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; border-top: {T_INPUT_BORDER_WIDTH}px;
+                   border-right: {T_INPUT_BORDER_WIDTH}px; border-bottom: {T_INPUT_BORDER_WIDTH}px; border-left: {T_INPUT_BORDER_WIDTH}px; border-color: #{T_HEADER_LINK}; border-style: {T_INPUT_BORDER_STYLE}; }
+input.liteoption { font-family: {T_FONTFACE2}; font-size: {T_FONTSIZE1}px; font-weight: normal; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; border-top: {T_INPUT_BORDER_WIDTH}px;
+                   border-right: {T_INPUT_BORDER_WIDTH}px; border-bottom: {T_INPUT_BORDER_WIDTH}px; border-left: {T_INPUT_BORDER_WIDTH}px; border-color: #{T_HEADER_LINK}; border-style: {T_INPUT_BORDER_STYLE}; }
+
+div.graph { position: relative; width: 98%; border: 1px solid #{T_HEADER_LINK}; padding: 2px; margin: 2px 0; }
+div.graph .bar { display: block; position: relative; background: #{T_TR_COLOR1}; text-align: center; color: #{T_HEADER_LINK}; height: 1.3em; line-height: 1.3em; }
+div.graph .bar span { position: absolute; left: 1em; }
+
+/* News Accodrion */
+#rrs_news  {
+	width: 260px;
+	font-family: verdana;
+	margin:  0px;
+	padding: 0px;
+	border: 1px solid black;
+}
+#rrs_news div.content {
+	margin-bottom : 10px;
+	border: none;
+	color: #{T_FONTCOLOR2};
+	text-decoration: none;
+	font-size: 10px;
+	margin: 0px;
+	padding: 10px;
+	background-color: #{T_TR_COLOR1};
+	overflow: hidden;
+	height: 10em;
+}
+#rrs_news div.title {
+	cursor:pointer;
+	display:block;
+	padding:5px;
+	margin-top: 0;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 10px;
+	color:#{T_FONTCOLOR2};
+	background:#{T_TR_COLOR2};
+	border: 1px solid #252525;
+}
+#rrs_news div.title:hover {
+	color: #{T_FONTCOLOR2};
+	background-color: #{T_TR_COLOR1};
+}
+#rrs_news div.title.selected {
+	color: black;
+	background-color: #{T_TR_COLOR2};
+	border-bottom: 1px solid black;
+}
+
+#inner_wrapper 
+{
+	width:720px;
+	margin-top: 10px;
+	margin-right : auto;
+	margin-bottom: 10px;
+	margin-left:auto;
+}
+
+
+.member_wrapper 
+{
+	width:690px;
+	margin-top: 10px;
+	margin-right : auto;
+	margin-bottom: 10px;
+	margin-left:auto;
+}
+
+.class_header
+{
+	font-weight:bold
+	font-weight: bold;
+	font-size: 15px;	
+}
+
+.roster_hr_member
+{
+	border: none 0;
+	border-top: 1px dashed ;
+	height: 1px;
+}
+
+
+roster_member_right
+{
+	align:right;
+	text-align: right;
+}
+
+
+.floatR 
+{
+	float:right;
+	
+}
+
+.right {
+	text-align:right;
+	margin-top: 8px;
+	
+}
+
+/* News Style */
+.newscontainer {
+  margin-top: 10px;
+  margin-left: 30px;
+  margin-right: 10px;
+  margin-bottom: 3.5em;
+}
+
+blockquote {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  margin-left: 0.1em;
+  padding: 0;
+  color: #{T_BODY_LINK};
+  padding-left: 0.6em;
+  border-left: solid 4px #{T_TABLE_BORDER_COLOR};
+  background-image: none;
+}
+
+{EXTRA_CSS}
+</style>
+</head>
+
+<body{ONLOAD}>
+<!-- IF S_NORMAL_HEADER -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless" align=center>
+  <tr>
+    <td width="100%" nowrap="nowrap" align=center><img src="{HEADER_LOGO}" alt="Logo" /><br /></td>
+  </tr>
+</table>
+
+<br />
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+<tr valign=top><td width="9%">
+{PORTAL_LEFT1}
+{MAIN_MENU1_V}
+{MAIN_MENU2_V}
+{MAIN_MENU3_V}
+{PORTAL_LEFT2}
+</td>
+<td width="91%">
+{NEWS_TICKER_H}
+<!-- IF S_IN_ADMIN -->
+<table width="100%" border="0" cellspacing="0" cellpadding="2" class="borderless">
+      <tr>
+        <td width="175" valign="top" nowrap="nowrap">
+          <table width="100%" border="0" cellspacing="1" cellpadding="2">
+            <tr>
+              <th class="smalltitle" align="center">{L_ADMINISTRATION}</th>
+            </tr>
+            <tr>
+              <td class="row1"> <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" /> <a href="{EQDKP_ROOT_PATH}admin/index.php{SID}">{L_ADMIN_INDEX}</a></td>
+            </tr>
+            <tr>
+              <td class="row2"> <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" /> <a href="{EQDKP_ROOT_PATH}{SID}">{L_EQDKP_INDEX}</a></td>
+            </tr>
+            <!-- BEGIN header_row -->
+            <tr>
+              <th align="left" class="smalltitle"><img src="{EQDKP_ROOT_PATH}images/admin/{header_row.HEADER_IMG}" alt="img" /> {header_row.HEADER}</th>
+            </tr>
+            <!-- BEGIN menu_row -->
+            <tr>
+              <td class="{header_row.menu_row.ROW_CLASS}"> <img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" /> {header_row.menu_row.LINK}</td>
+            </tr>
+            <!-- END menu_row -->
+            <!-- END header_row -->
+          </table>
+        </td>
+        <td width="100%" valign="top">
+<!-- ENDIF -->
+                    {PORTAL_MIDDLE}
+                    <!-- ENDIF -->
+                    {TOP}

@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+{META}
+<title>{PAGE_TITLE}</title>
+<link rel="stylesheet" href="{EQDKP_ROOT_PATH}templates/m9wotlk/m9wotlk.css" type="text/css" />
+<script type="text/javascript" src="{EQDKP_ROOT_PATH}/pluskernel/include/javascripts/overlib.js"></script>
+<!-- IF ITEMSTATS_CSS_PATH -->
+<link REL=StyleSheet HREF="{EQDKP_ROOT_PATH}{ITEMSTATS_PATH}{ITEMSTATS_CSS_PATH}" TYPE="text/css" MEDIA=screen />
+<!-- ENDIF -->
+<link rel="shortcut icon" href="{EQDKP_ROOT_PATH}templates/m9wotlk/images/favicon.png" type="image/png">
+<link rel="icon" href="{EQDKP_ROOT_PATH}templates/m9wotlk/images/favicon.png" type="image/png">
+{PLUS_HEADER}
+{PLUS_JS_WIN}
+{EXTRA_CSS}
+{PORTAL_JAVASCRIPT}
+
+<!-- IF S_IMG_RESIZE_ENABLE -->
+<link rel="stylesheet" href="{EQDKP_ROOT_PATH}pluskernel/include/css/lytebox.css" type="text/css" />
+ <script type="text/javascript" src="{EQDKP_ROOT_PATH}pluskernel/include/javascripts/lytebox.js"></script>
+ <script type="text/javascript" >
+ 	if (window.addEventListener) {
+ 		window.addEventListener("load",initLytebox,false);
+ 	} else if (window.attachEvent) {
+ 		window.attachEvent("onload",initLytebox);
+ 	} else {
+ 		window.onload = function() {initLytebox();}
+ 	}
+ 	function initLytebox() 
+ 	{
+ 		myLytebox = new LyteBox({S_MAX_POST_IMG_RESIZE_WIDTH}, '{S_IMG_RESIZE_WARNING}', '{S_LYTEBOX_THEME}', {S_LYTEBOX_AUTO_RESIZE}, {S_LYTEBOX_ANIMATION},'{S_IMG_WARNING_ACTIVE}') ;
+ 	}
+ </script>
+<!-- ENDIF -->
+
+<style type="text/css">
+<!-- BEGIN classcolor_row -->
+.{classcolor_row.NAME}, .{classcolor_row.NAME}:link, .{classcolor_row.NAME}:visited, .{classcolor_row.NAME}:active,
+.{classcolor_row.NAME}:link:hover, td.{classcolor_row.NAME} a:hover, td.{classcolor_row.NAME} a:active,
+td.{classcolor_row.NAME}, td.{classcolor_row.NAME} a:link, td.{classcolor_row.NAME} a:visited, 
+.classes{classcolor_row.ID}, .classes{classcolor_row.ID}:link, .classes{classcolor_row.ID}:visited, .classes{classcolor_row.ID}:active,
+.classes{classcolor_row.ID}:link:hover, td.classes{classcolor_row.ID} a:hover, td.classes{classcolor_row.ID} a:active,
+td.classes{classcolor_row.ID}, td.classes{classcolor_row.ID} a:link, td.classes{classcolor_row.ID} a:visited 
+{
+  text-decoration: none; 
+  color: {classcolor_row.COLOR};
+}
+
+<!-- END classcolor_row -->
+/**
+ * EQDKP Comment System
+ * Wallenium
+ * StyleSheet
+ */
+
+.floatLeft { 
+  float:left;
+}
+.floatRight { 
+  float:right;
+}
+.clear {
+  clear:both;
+}
+
+.bold	{
+  font-weight:bold;
+}
+.italic	{
+  font-style:italic;
+}
+
+.small {
+  font-size:0.93em;
+}
+
+.hand {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.clearfix:after {
+  content:".";
+  display:block;
+  height:0;
+  clear:both;
+  visibility:hidden;
+}
+.clearfix {
+  display:inline-block;
+}
+/* Hide from IE Mac \*/
+.clearfix {
+  display:block;
+}
+/* End hide from IE Mac */ 
+
+div.contentBox {
+  background-color:#{T_TR_COLOR1};
+  border:1px solid #{T_TABLE_BORDER_COLOR};
+  color: #{T_FONTCOLOR1};
+  padding: 8px 8px 8px 8px;
+  margin-bottom: 10px;
+}
+.contentBox .boxHeader {
+  padding-bottom: 3px;
+  border-bottom:1px solid #{T_TABLE_BORDER_COLOR};
+}
+.contentBox .boxHeader h1	{
+  font-size: 12px;
+  color: #{T_TABLE_BORDER_COLOR};
+}
+.contentBox .boxContent	{
+  padding-top: 6px;
+}
+.contentBox .boxContent h2 a {
+  font-weight:bold;
+  font-size: 12px;
+}
+
+.boxContent .comment_text {
+  font-size: 12px;
+}
+
+.rowcolor1 {
+  padding: 10px;
+  background-color:#{T_TR_COLOR1};
+}
+.rowcolor2 {
+  padding: 10px;
+  background-color: #{T_TR_COLOR2};
+}
+
+.boxContent .comment_link, .boxContent  .comment_link a, .boxContent  .comment_link a:visited {
+  color: {T_BODY_LINK};
+  text-decoration: none;
+}
+
+.boxContent .comment_link a:hover {
+  text-decoration: underline;
+  color: #{T_BODY_HLINK};
+}
+
+/* Bad Fix to prevent the glassy Background */
+div.jGrowl div.eqdkp-green {
+  background: #A2DF6F;
+}
+
+</style>
+
+</head>
+
+<body{ONLOAD}>
+<!-- IF S_NORMAL_HEADER -->
+<table class="bodyline" width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tr colspan="3"><img id="formStyleTestImage" src="{EQDKP_ROOT_PATH}templates/m9wotlk/images/spacer.gif" /></tr>
+	<tr>
+		<td class="border_top_left"></td>
+		<td>
+
+			<table class="header_background" width="100%" cellspacing="0" cellpadding="0" border=0">
+				<tr>
+				<td rowspan="2"><img src="{HEADER_LOGO}" alt="Logo" /></td>
+				<td class="header_background" height="65px" align="right" valign="bottom">
+				<span class="maintitle">{MAIN_TITLE}</span><br />
+      			<span class="subtitle">{SUB_TITLE}</span>
+				</td>
+				</tr>
+			</table>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="left">
+				<tr valign="top">
+				<td>
+					<a href="{PORTAL_URL}"> <img src="{TEMPLATE_PATH}/images/qportal.jpg"></a>
+
+					<!-- IF PORTAL_IS_FORUM -->
+					<a href="{PORTAL_FORUM_URL}"><img src="{TEMPLATE_PATH}/images/qforum.jpg"></a>
+				    <!-- ENDIF -->
+
+					<a href="{PORTAL_DKP_URL}"><img src="{TEMPLATE_PATH}/images/qdkp.jpg"></a>
+
+				    <!-- IF IS_RP_INSTALLED -->
+				    <a href="{IS_RP_URL}"><img src="{TEMPLATE_PATH}/images/qraidplan.jpg"></a>
+				    <!-- ENDIF -->
+
+				    <!--
+				    <a href=""><img src="{TEMPLATE_PATH}/images/qalbum.jpg"></a>
+				    <a href=""><img src="{TEMPLATE_PATH}/images/qdownload.jpg"></a>
+				    -->
+				    <img src="{TEMPLATE_PATH}/images/qlinks_right.gif"></td>
+				</tr>
+			</table>
+
+		</td>
+		<td class="border_top_right"></td>
+	</tr>
+	<tr>
+		<td class="border_side_left"></td>
+		<td>
+			<table width="100%" border="0" cellspacing="0" cellpadding="10">
+			<tr>
+				<td width="100%" class="doiley">
+					<table border="0" width="100%" align="right" cellspacing="0" cellpadding="2">
+						<tr>
+							<td width="5%" valign="top" >
+							  {PORTAL_LEFT1}
+								{MAIN_MENU1_V}
+								{MAIN_MENU2_V}
+								{MAIN_MENU3_V}
+								<br>
+								{PORTAL_LEFT2}
+							</td>
+						<td valign="top">
+							{NEWS_TICKER_H}
+				<!-- IF S_IN_ADMIN -->
+				<table width="100%" border="0" cellspacing="0" cellpadding="2">
+				<tr>
+					<td width="175" valign="top" nowrap="nowrap">
+						<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#000000" class="forumline">
+						<tr>
+							<th class="smalltitle" align="center">{L_ADMINISTRATION}</th>
+        				</tr>
+        				<tr>
+          					<td class="row1">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;<a href="{EQDKP_ROOT_PATH}admin/index.php{SID}">{L_ADMIN_INDEX}</a></td>
+        				</tr>
+        				<tr>
+          					<td class="row2">&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;<a href="{EQDKP_ROOT_PATH}{SID}">{L_EQDKP_INDEX}</a></td>
+        				</tr>
+        				<!-- BEGIN header_row -->
+        				<tr>
+          					<th align="left" class="smalltitle"><img src="{EQDKP_ROOT_PATH}images/admin/{header_row.HEADER_IMG}" alt="img" /> {header_row.HEADER}</th>
+        				</tr>
+        				<!-- BEGIN menu_row -->
+        				<tr class="{header_row.menu_row.ROW_CLASS}" onmouseover="this.className='rowHover';" onmouseout="this.className='{header_row.menu_row.ROW_CLASS}';">
+          					<td>&nbsp;<img src="{EQDKP_ROOT_PATH}images/arrow.gif" alt="arrow" />&nbsp;{header_row.menu_row.LINK} </td>
+        				</tr>
+        				<!-- END menu_row -->
+						<!-- END header_row -->
+						</table>
+    				</td>
+    				<td width="100%" valign="top">
+<!-- ENDIF -->
+                    {PORTAL_MIDDLE}
+                    <!-- ENDIF -->
+                    {TOP}
