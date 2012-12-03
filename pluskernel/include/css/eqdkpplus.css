@@ -1,0 +1,102 @@
+/* Define the new Eqdkp Plus Tooltip - original gtom the WoW-Head Tooltip */
+table.eqdkpplus_tooltip {
+	border: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+	background: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	float: none;
+
+	width: auto;
+	height: 0;
+	max-width: 500px;
+	width:expression(this.width > 500 ? "500px" : true);
+}
+
+table.eqdkpplus_tooltip td, table.eqdkpplus_tooltip tr, table.eqdkpplus_tooltip th {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	width: auto;
+	height: 0;
+	text-align: left;
+	background: none;
+}
+
+table.eqdkpplus_tooltip td.top-left {
+	background-image: url(tooltip.png);
+	background-position: top left;
+	height: 4px;
+}
+
+table.eqdkpplus_tooltip td.top-right {
+	background-image: url(tooltip.png);
+	background-position: top right;
+	height: 4px;
+}
+
+table.eqdkpplus_tooltip td.bottom-left {
+	background-image: url(tooltip.png);
+	background-position: bottom left;
+	height: 4px;
+}
+
+table.eqdkpplus_tooltip td.bottom-right {
+	background-image: url(tooltip.png);
+	background-position: bottom right;
+	height: 4px;
+}
+
+table.eqdkpplus_tooltip td.wh_left {
+	background-image: url(tooltip.png);
+	background-position: center left;
+}
+
+table.eqdkpplus_tooltip td.wh_left div.wh_right {
+	background-image: url(tooltip-right.gif);
+	background-position: center right;
+	background-repeat: repeat-y;
+
+	padding: 0 8px 0 8px;
+	margin: 0;
+	float: none;
+	text-align: left;
+	width: auto;
+	height: auto;
+
+	max-width: 500px;
+	width:expression(this.width > 500 ? "500px" : true);
+}
+
+table.eqdkpplus_tooltip td, table.eqdkpplus_tooltip tr, table.eqdkpplus_tooltip th {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: 0;
+    text-align: left;
+    background: none;
+    color: #cccccc !important;
+}
+
+/* The Help Tooltip */
+.pktooldiv  {
+	display: block;
+	font-size: 12px;
+	padding: 5px;
+	margin: 0px;
+}
+.pk_tt_help{
+  width: 200px;
+  min-height:100px;
+	background:#fff url(images/p_bg_small.jpg) bottom right no-repeat;
+  border:1px solid #4f6d81;
+}
+
+.pk_tt_help td{
+	color: black;
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 11px;
+}
