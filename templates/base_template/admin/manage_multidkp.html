@@ -1,0 +1,30 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	<tr>
+		<th colspan="5"><span style="float:left;">{L_manmdkp_title}</span><a href="manage_multidkp.php{SID}&amp;upd=true" style="float:right;"><input type="button" name="add" value="{L_Multi_addkonto}" class="mainoption bi_new" /></a></th>
+	</tr>
+	<tr>
+		<th width="16">&nbsp;</th>
+		<th width="150">
+			<a href="manage_multidkp.php{SID}&amp;sort=0.0"><span class="down_arrow{RED00}" /></a><a href="manage_multidkp.php{SID}&amp;sort=0.1"><span class="up_arrow{RED01}" /></a>
+			{L_Multi_kontoname_short}
+		</th>
+		<th width="25%">
+			<a href="manage_multidkp.php{SID}&amp;sort=1.0"><span class="down_arrow{RED10}" /></a><a href="manage_multidkp.php{SID}&amp;sort=1.1"><span class="up_arrow{RED11}" /></a>
+			{L_description}
+		</th>
+		<th>{L_Multi_events}</th>
+		<th>{L_menu_itempools}</th>
+	</tr>
+	<!-- BEGIN multi_row -->
+	<tr>
+		<td width="16"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="Edit" /></a></td>
+		<td width="150"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}">{multi_row.NAME}</a></td>
+		<td width="250">{multi_row.DESC}</td>
+		<td width="50%">{multi_row.EVENTS}</td>
+		<td width="50%">{multi_row.ITEMPOOLS}</td>
+	</tr>
+	<!-- END multi_row -->
+	<tr>
+		<th colspan="5" class="footer">{LISTMULTI_FOOTCOUNT}</th>
+	</tr>
+</table>

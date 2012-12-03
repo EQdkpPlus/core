@@ -1,0 +1,37 @@
+##
+# Disable Directory Browsing or Indexing
+##
+Options All -Indexes
+
+##
+# Use mod_deflate to compress JavaScript, CSS and XML files.
+##
+<IfModule mod_deflate.c>
+	<FilesMatch "\.(css|js|xml)$">
+		SetOutputFilter DEFLATE
+	</FilesMatch>
+	<Files "perform.php">
+		SetOutputFilter DEFLATE
+	</Files>
+</IfModule>
+
+##
+# By removing the ETag header, you disable caches and browsers from being able to validate files, so
+# they are forced to rely on your Cache-Control and Expires header.
+##
+<IfModule mod_headers.c>
+Header unset ETag
+FileETag None
+</IfModule>
+
+##
+# Specify an expiration one week in the future for images, JavaScripts and
+# CSS files (as recommended by Google Page Speed). Edit or remove the lines
+# to set up your own expiration logic.
+##
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|swf)$">
+	Header set Cache-Control "max-age=290304000, public, must-revalidate"
+</FilesMatch>
+<FilesMatch "\.(js|css)$">
+	Header set Cache-Control "max-age=290304000, public, must-revalidate"
+</FilesMatch>

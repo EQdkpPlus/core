@@ -1,0 +1,18 @@
+<table>
+	<tr>
+		<td>
+			<form name='form'>
+				<select name='link' size='1' onchange='window.location.href = document.form.link.options[document.form.link.selectedIndex].value;'>
+					<!-- BEGIN exportplugin -->
+					<option value='exports.php?eventid={EVENT_ID}&output={exportplugin.OUTPUT}' {exportplugin.SELECTED}> {exportplugin.VALUE} </option>
+					<!-- END exportplugin -->
+				</select>		
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			{EXPORT_OUTPUT}
+		</td>
+	</tr>
+</table>

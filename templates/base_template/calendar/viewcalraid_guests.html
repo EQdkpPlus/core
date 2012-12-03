@@ -1,0 +1,28 @@
+<!-- IF SHOW_GUESTS -->
+	<tr>
+		<td width="100%" valign="top" class="row2" colspan="{ATTENDEES_COLSPAN}"><br/>
+			<table border="0" cellpadding="0" cellspacing="0" class="guesttable" width="100%">
+				<tr>
+					<td width="90%">
+						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}): 
+						<!-- BEGIN guests -->
+							<!-- IF IS_OPERATOR -->
+							<span class="membertooltip guesteditpanel<!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">{guests.NAME} <span style="display:none;cursor:pointer;" class='guestpanel'><img src="../images/global/delete.png" alt="{L_raidevent_raid_guest_del}" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"/>&nbsp;<img src="../images/global/edit.png" alt="{L_raidevent_raid_guest_edit}" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');" /></span></span>
+							<!-- ELSE -->
+							<span class="membertooltip<!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">{guests.NAME} </span>
+							<!-- ENDIF -->
+						<!-- END guests -->
+					</td>
+					<!-- IF IS_OPERATOR -->
+					<td width="10%" align="right">
+					<span id="addguest">
+						<img src="../images/calendar/addguest.png" border="0"  alt="{B_ADDGUEST}" title="{B_ADDGUEST}" />
+					</span>
+						
+					</td>
+					<!-- ENDIF -->	
+				</tr>
+			</table>
+		</td>
+	</tr>
+<!-- ENDIF -->

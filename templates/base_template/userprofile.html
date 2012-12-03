@@ -1,0 +1,124 @@
+<table width="100%" cellpadding="4" cellspacing="0">
+	<tr>
+		<th colspan="2">
+			<span style="float:left;"><a href="listusers.php{SID}">{L_user_list}</a> &raquo; {L_user}: {USERNAME}</span><span style="float:right;">{ADMIN_EDIT}</span>
+		</th>
+	</tr>
+	<tr>
+		<td height="100%" valign="top">
+			<table width="100%" height="100%" cellpadding="1" cellspacing="1">
+				<tr>
+					<th>{L_user_image}</th>
+				</tr>
+				<tr class="row2" align="center">
+					<td height="100%"><a href="{USER_IMAGE}" rel="lightbox"><img src="{USER_IMAGE}" alt="userimg" /></a></td>
+				</tr>
+			</table>
+		</td>
+		<td width="50%" valign="top">
+			<table width="100%" align="center" cellpadding="1" cellspacing="1">
+				<tr>
+					<th colspan="4">{L_adduser_tab_profile}</th>
+				</tr>
+				<tr class="row1">
+					<td width="20%" class="nowrap"><strong>{L_name}:</strong></td>
+					<td width="90%" colspan="3">{firstandlastname}</td>
+				</tr>
+				<tr class="row2">
+					<td class="nowrap"><strong>{L_age}:</strong></td>
+					<td colspan="3">{USER_BIRTHDAY}</td>
+				</tr>
+				<tr class="row1">
+					<td class="nowrap"><strong>{L_adduser_town}:</strong></td>
+					<td colspan="3">{USER_TOWN}</td>
+				</tr>
+				<tr class="row2">
+					<td class="nowrap"><strong>{L_adduser_country}:</strong></td>
+					<td colspan="3">{USER_COUNTRYFLAG} {USER_COUNTRY}</td>
+				</tr>
+				<tr class="row1">
+					<td class="nowrap"><strong>{L_registered_at}:</strong></td>
+					<td colspan="3">{USER_REGISTERED}</td>
+				</tr>
+				<tr class="row2">
+					<td class="nowrap"><strong>{L_user_work}:</strong></td>
+					<td colspan="3">{USER_WORK}</td>
+				</tr>
+				<tr class="row1">
+					<td class="nowrap"><strong>{L_user_interests}:</strong></td>
+					<td colspan="3">{USER_INTERESTS}</td>
+				</tr>
+				<tr class="row2">
+					<td class="nowrap"><strong>{L_user_hardware}:</strong></td>
+					<td colspan="3">{USER_HARDWARE}</td>
+				</tr>
+			</table>
+			<table width="100%" align="center" cellpadding="1" cellspacing="1">
+				<tr class="row1">
+					<th colspan="4">{L_user_contact}</th>
+				</tr>
+				<tr>
+					<td width="10%" class="row1 nowrap"><strong>{L_email}:</strong></td>
+					<td width="40%" class="row2">{USER_MAIL}</td>
+					<td width="10%" class="row1 nowrap"><strong>{L_adduser_phone}:</strong></td>
+					<td width="40%" class="row2">{USER_PHONE}</td>
+				</tr>
+				<tr>
+					<td class="row1 nowrap"><strong>ICQ:</strong></td>
+					<td class="row2">{USER_ICQ}</td>
+					<td class="row1 nowrap"><strong>{L_adduser_cellphone}:</strong></td>
+					<td class="row2">{USER_CELLPHONE}</td>
+				</tr>
+				<tr>
+					<td class="row1 nowrap"><strong>Skype:</strong></td>
+					<td class="row2">{USER_SKYPE}</td>
+					<td class="row1 nowrap"><strong>Facebook:</strong></td>
+					<td class="row2">{USER_FACEBOOK}</td>
+				</tr>
+				<tr>
+					<td class="row1 nowrap"><strong>MSN: </strong></td>
+					<td class="row2">{USER_MSN}</td>
+					<td class="row1 nowrap"><strong>Twitter:</strong></td>
+					<td class="row2">{USER_TWITTER}</td>
+				</tr>
+				<tr>
+					<td class="row1 nowrap"><strong>IRC:</strong></td>
+					<td class="row2">{USER_IRC}</td>
+					<td class="row1 nowrap">&nbsp;</td>
+					<td class="row2">&nbsp;</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table width="100%" align="center" cellpadding="1" cellspacing="1" class="colorswitch">
+				<tr>
+					<th colspan="6">{L_chars}</th>
+				</tr>
+				<tr>
+					<th>{L_name}</th>
+					<th>{L_level}</th>
+					<th>{L_class}</th>
+					<th>{L_race}</th>
+					<th>{L_rank}</th>
+					<th>{L_type}</th>
+				</tr>
+				<!-- BEGIN char_row -->
+				<tr>
+					<td>{char_row.NAME}</td>
+					<td>{char_row.LEVEL}</td>
+					<td>{char_row.CLASS}</td>
+					<td>{char_row.RACE}</td>
+					<td>{char_row.RANK}</td>
+					<td>{char_row.TYPE}</td>
+				</tr>
+				<!-- END char_row -->
+				<tr >
+					<th colspan="6" class="footer">{USER_CHAR_FC}</th>
+				</tr>
+			</table>
+			<!-- IF ENABLE_COMMENTS -->{COMMENTS}<!-- ENDIF -->
+		</td>
+	</tr>
+</table>

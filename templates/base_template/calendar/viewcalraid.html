@@ -1,0 +1,254 @@
+<script language="JavaScript" type="text/javascript">
+$(function(){
+	$(".guesteditpanel").click( function(){
+		$(".guestpanel", this).show();
+	});
+	$(".guesteditpanel").mouseleave( function(){
+		$(".guestpanel", this).hide();
+	});
+	
+	$('#addguest').click( function(){
+		AddGuest('{EVENT_ID}');
+	});
+	
+	$(".membertooltip").qtip({
+		content: {
+			text: true,
+			attr: 'title',
+			title: {
+				text: false,
+				button: false
+			}
+		},
+		position: {
+			at: "bottom center",
+			my: "top center"
+		},
+		style: {
+			classes: "ui-tooltip-shadow",
+			tip: {
+				corner: true,
+				width: 20
+			},
+			widget: true
+		},
+		events: {
+			render: function() {
+				$(this).css({ width: 300 });
+			}
+		}
+	});
+	
+	$('#raidcal_change_signin').click(function(){
+		$('#raidcal_signin_form').show();
+		$('#raidcal_alrdysignin').hide();
+	});
+	
+	$('.charname_toggle').click(function() {
+		$(".charchange_menu", $(this).parent().parent()).slideToggle("slow");
+	});
+
+	$('.charnote_toggle').click(function() {
+		$(".notechange_menu", $(this).parent().parent()).slideToggle("slow");
+	});
+
+	$('[name="submit_charchange"]').click(function(){
+		$.post("viewcalraid.php", { 
+			changecharmenu: true,
+			charchange_status: $(this).parent().find('.charchange_status').val(),
+			charchange_role: $(this).parent().find('[name="charchange_role"]').val(),
+			charchange_char: $(this).parent().find('[name="charchange_char"]').val(),
+			subscribed_member_id : $(this).parent().find('[name="charchange_attendee"]').val(),
+			eventid: $('[name="eventid"]').val()
+		},
+		function(data){
+			window.location = 'viewcalraid.php?eventid='+$('[name="eventid"]').val();
+		});
+	});
+
+	$('[name="submit_notechange"]').click(function(){
+		$.post("viewcalraid.php", { 
+			changenotemenu: true,
+			notechange_note: $(this).parent().find('[name="notechange_note"]').val(),
+			subscribed_member_id: $(this).parent().find('[name="notechange_attendee"]').val(),
+			eventid: $('[name="eventid"]').val()
+		},
+		function(data){
+			window.location = 'viewcalraid.php?eventid='+$('[name="eventid"]').val();
+		});
+	});
+});
+
+<!-- IF S_NOTSIGNED_VISIBLE -->
+$(function(){
+	$(".leftpanel_trigger").click(function(){
+		$(".leftspanel").toggle("fast");
+		$(this).toggleClass("active");
+		return false;
+	});
+
+	$('.notsigned_check').click( function(){
+		var memberid	= $(this).val();
+		var userid		= $(this).attr('title');
+		var userchars	= disabledChars[userid];
+		
+		if(userchars.length > 1){
+			if($(this).prop('checked')) {
+				$.each(userchars, function(index, value){
+					if(memberid != value){
+						$('#member'+value).attr("disabled", true);
+						$('#memberid_'+value).css("textDecoration", "line-through");
+						<!-- IF S_ROLE_DISTRI -->
+						$('#memroles'+value).attr("disabled", true);
+						<!-- ENDIF -->
+					}
+				});
+			}else{
+				$.each(userchars, function(index, value){
+					$('#member'+value).attr("disabled", false);
+					$('#memberid_'+value).css("textDecoration", "none");
+					<!-- IF S_ROLE_DISTRI -->
+					$('#memroles'+value).attr("disabled", false);
+					<!-- ENDIF -->
+				});
+			}
+		}
+	});
+});
+<!-- ENDIF -->
+</script>
+<form name="guestp" method="get" action="{ACTION}">
+	<input type="hidden" name="eventid" value="{EVENT_ID}" />
+	<input type="hidden" name="guestid" value="" id="guestid_field" />
+</form>
+
+<!-- IF S_NOTSIGNED_VISIBLE -->
+<div class="leftspanel">
+	<form name="unsingnn" method="post" action="{ACTION}">
+		<input type="hidden" name="eventid" value="{EVENT_ID}" />
+		<div id='pnlHeader'>{L_NOTSIGNEDIN}</div><br/>
+		<div id="memberScroller">
+			<!-- BEGIN notsignedin -->
+			<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="{notsignedin.ID}" id="member{notsignedin.ID}" title="{notsignedin.USERID}" class="notsigned_check" /> <!-- ENDIF -->{notsignedin.CLASSICON} <span class="class_{notsignedin.CLASSID}" id="memberid_{notsignedin.ID}">{notsignedin.NAME}</span><!-- IF IS_OPERATOR -->  {notsignedin.ROLES}<!-- ENDIF --><br/>
+			<!-- END notsignedin -->
+		</div>
+		<!-- IF IS_OPERATOR -->
+		<div>
+			{DD_NOTSIGNEDINSTATUS} <input type="submit" value="{L_raidevent_raid_nots_button}" name="add_notsigned" class="mainoption" />
+		</div>
+		<!-- ENDIF -->
+	</form>
+</div>
+<!-- ENDIF -->
+
+<form method="post" action="{ACTION}" name="post">
+	<input type="hidden" name="event_id" value="{EVENT_ID}" />
+	<input type="hidden" name="subscribed_member_id" value="{SUBSCRIBED_MEMBER_ID}" />
+	
+	<div>
+		<div class="raidcal_name floatLeft">{RAIDICON} {RAIDNAME}</div>
+		<div class="floatRight">
+		<!-- IF S_NOTSIGNED_VISIBLE --><div class="leftpanel_trigger hand"><img src="../images/calendar/addchar.png"  width="20" alt="{L_raidevent_raid_nots_show}" /></div><!-- ENDIF -->
+			{MENU_OPTIONS}
+		</div>
+	</div>
+	<div class="clear"></div>
+	<fieldset class="settings smallsettings raidcal_infos">
+		<dl class="raidcal_date">
+			<dt><label>{L_date}</label></dt>
+			<dd>{RAIDDATE}, {L_raidevent_raid_time_from} {RAIDTIME_START} {L_raidevent_raid_time_till} {RAIDTIME_END}
+				<!-- IF RAIDDATE_ADDED --><i>({L_raidevent_raid_added_on} {RAIDDATE_ADDED})</i><!-- ENDIF -->
+			</dd>
+		</dl>
+		<dl class="raidcal_deadline">
+			<dt><label>{L_calendar_deadline}</label></dt>
+			<dd>{RAIDTIME_DEADLINE}</dd>
+		</dl>
+		<dl class="raidcal_creator">
+			<dt><label><!-- IF RAIDLEADER -->
+						{L_raidevent_raidleader}
+						<!-- ELSE -->
+						{L_raidevent_raid_addedby}
+						<!-- ENDIF --></label></dt>
+			<dd><!-- IF RAIDLEADER -->
+						{RAIDLEADER}
+						<!-- ELSE -->
+						{RAID_ADDEDBY}
+						<!-- ENDIF --></dd>
+		</dl>
+		<dl class="raidcal_note">
+			<dt><label>{L_raidevent_raid_note}</label></dt>
+			<dd><!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF --></dd>
+		</dl>
+	</fieldset>
+		
+	<!-- IF not RAID_CLOSED and not RAID_DEADLINE and not NO_CHAR_ASSIGNED -->
+	<fieldset class="settings smallsettings" id="raidcal_signin_form" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
+		<legend>{L_raidevent_raid_signin}</legend>
+		<dl>
+			<dt><label>{L_raidevent_raid_char_role}</label></dt>
+			<dd>{DD_MYCHARS} {DD_MYROLE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_note}</label></dt>
+			<dd><input type="text" name="signupnote" size="45" class="input" value="{PLAYER_NOTE}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_status}</label></dt>
+			<dd>{DD_SIGNUPSTATUS} </dd>
+		</dl>
+		<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
+	</fieldset>
+	
+	<div class="greenbox" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
+		<div class="icon_info">
+			{L_SIGNEDIN_MSG}
+			<input type="button" value="{L_raidevent_raid_changesignin}" id="raidcal_change_signin" class="mainoption bi_edit" />
+		</div>
+	</div>
+	<!-- ELSE -->
+	<!-- IF NO_CHAR_ASSIGNED -->
+	<div class="errorbox roundbox">
+		<div class="icon_char">{L_raidevent_raid_nochar}</div>
+	</div>
+	<!-- ENDIF -->
+	<!-- IF RAID_CLOSED -->
+	<div class="errorbox roundbox">
+		<div class="closed">{L_raidevent_raid_closed}</div>
+	</div>
+	<!-- ENDIF -->
+	<!-- IF RAID_DEADLINE -->
+	<div class="errorbox roundbox">
+		<div class="deadline">{L_raidevent_raid_deadl_reach}</div>
+	</div>
+	<!-- ENDIF -->
+	<!-- ENDIF -->
+	<!-- IF NO_STATUSES -->
+	<div class="errorbox roundbox">
+		<div class="icon_false">{L_raidevent_raid_no_status}</div>
+	</div>
+	<!-- ENDIF -->
+	
+	<!-- IF IS_OPERATOR -->
+	<fieldset class="settings smallsettings moderation_panel">
+		<legend>{L_raidevent_raid_moderation}</legend>
+		
+		<dl>
+			<dt><label>{L_raidevent_raid_mod_select}</label></dt>
+			<dd>{DD_MODSIGNUPSTATUS} 
+								<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_raidevent_raid_confirmall}</label></dt>
+			<dd><input type="submit" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" /></dd>
+		</dl>
+	</fieldset>
+	<!-- ENDIF -->
+	
+	<div class="row1">
+	<!-- INCLUDE {MEMBERDATA_FILE} -->
+	</div>
+</form>
+<br />
+{COMMENTS}

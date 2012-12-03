@@ -1,0 +1,236 @@
+.rift_tooltip {
+	position:absolute;
+	z-index:10;
+	font-family:Verdana, Helvetica, Arial, sans-serif;
+	color:#FFFFFF;
+	font-size:12px;
+	line-height:15px;
+	width:300px;	
+}
+
+.rift_tooltip_container {
+	padding:0px;
+	border:0px;
+	width:100%;
+	border-spacing:0px;
+	margin:0px;
+}
+
+.rift_tooltip_container table,
+.rift_tooltip_container table tr,
+.rift_tooltip_container table tr td {
+	margin: 0px;
+	background: none;
+	border:0px;
+	padding: 1px;
+	border-collapse: inherit;
+}
+
+.rift_tooltip_border {
+	border:0px;
+	padding:5px;
+	background:url(http://www.riftspot.com//img/tooltip.png);
+}
+
+.rift_tooltip_icon 
+{
+	background-repeat:no-repeat;
+	background-position:2px 2px;
+	height:44px;
+	width:44px;
+}
+
+.rift_tooltip_icon table,
+.rift_tooltip_icon table tr,
+.rift_tooltip_icon table tr td {
+	background-color: transparent;
+	margin: 0px;
+	border:0px;
+	padding: 1px;
+	border-collapse: inherit;
+}
+
+.rift_tooltip_icon_border {background:url(http://www.riftspot.com//img/icon_border_medium.gif);height:44px;width:44px;}
+
+.map_tooltip {position:absolute;z-index:9999;font-family:Verdana, Helvetica, Arial, sans-serif;color:#FFFFFF;font-size:11px;line-height:14px;max-width:400px;}
+.map_tooltip_container {padding:0px;border:0px;width:100%;border-spacing:0px;margin:0px;}
+.map_tooltip_border {padding:3px;background:url(http://www.riftspot.com//img/tooltip.gif);}
+
+.rift_tooltip_hr {
+	border: 0px;
+	color: #362d24;
+	background:url(..http://www.riftspot.com//img/tooltip-hr.png) center no-repeat;
+	height: 8px;
+	display: block;
+}
+.rift_mc {
+	background:url(http://www.riftspot.com//img/rift/money_copper.png);
+	height:10px;
+	width:10px;
+	padding-right: 13px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+.rift_ms {
+	background:url(http://www.riftspot.com//img/rift/money_silver.png);
+	height:10px;
+	width:10px;
+	padding-right: 13px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+.rift_mg {
+	background:url(http://www.riftspot.com//img/rift/money_gold.png);
+	height:10px;
+	width:10px;
+	padding-right: 13px;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+
+.rift_loading 		{ color: white;font-family:Verdana, Helvetica, Arial, sans-serif;font-size:11px;line-height:14px; }
+
+.rift_skillname
+{
+	font-size: 12px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.rift_recipename
+{
+	font-size: 12px;
+	font-weight: bold;
+    color: #DCD2CE;
+}
+.rift_tooltiptitle {
+	font-size: 15px;
+	font-weight: bold;
+	background: none;
+}
+.rift_skill {
+    color: #E1CC59;
+}
+.rift_quest {
+    color: #E1CC59;
+}
+
+.rift_default {
+    color: #FFFFFF;
+}
+.rift_yellow {
+    color: #FFD100;
+}
+.rift_green {
+    color: #00FF00;
+}
+.rift_gray {
+    color: gray;
+}
+.rift_blue {
+    color: #00B8E9;
+}
+.rift_brown {
+    color: #D0B37A;
+}
+.rift_magenta, .rift_magenta a {
+    color: purple;
+}
+.rift_brightyellow {
+    color: yellow;
+}
+.rift_brightyellow, .rift_brightyellow a {
+    color: yellow;
+}
+
+.rift_q0 {
+	color: #888888;
+}
+.rift_q1 {
+	color: #888888;
+}
+.rift_q2 {
+	color: #ffffff;
+}
+.rift_q3 {
+	color: #00ff00;
+}
+.rift_q4 {
+	color: #0070DD;
+}
+.rift_q5 {
+	color: #9F3FFF;
+}
+.rift_q6 {
+	color: #ECE123;
+}
+.rift_q7 {
+	color: #FF8000;
+}
+.sq0 {
+	color:#ffffff;
+}
+.sq1 { 
+	color:#F0E660;
+}
+.sq2 {
+	color:#2E8B62;
+}
+
+
+.rift_d1 {
+	color: #00CC00;
+}
+.rift_d2 {
+	color: #FFFF00;
+}
+.rift_d3 {
+	color: #FF8040;
+}
+.rift_d4 {
+	color: #DD2222;
+}
+
+a.rift_d1 {
+	color: #00CC00 !important;
+}
+a.rift_d2 {
+	color: #FFFF00 !important;
+}
+a.rift_d3 {
+	color: #FF8040 !important;
+}
+a.rift_d4 {
+	color: #DD2222 !important;
+}
+
+a.rift_q0 {
+	color: #888888 !important;
+}
+a.rift_q1 {
+	color: #888888 !important;
+}
+a.rift_q2 {
+	color: #ffffff !important;
+}
+a.rift_q3 {
+	color: #00ff00 !important;
+}
+a.rift_q4 {
+	color: #0070DD !important;
+}
+a.rift_q5 {
+	color: #9F3FFF !important;
+}
+a.rift_q6 {
+	color: #ECE123 !important;
+}
+
+a.sq0 {
+	color:#ffffff !important;
+}
+a.sq1 { 
+	color:#F0E660 !important;
+}
+a.sq2 {
+	color:#2E8B62 !important;
+}

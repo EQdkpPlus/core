@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="game" version="0.7.0.0">
+	<name>WoW</name>
+	<author>Hoofy</author>
+	<authorEmail>bloodyhoof@gmx.net</authorEmail>
+	<authorUrl>http://www.eqdkp-plus.com</authorUrl>
+	<creationDate>1-JUL-2009</creationDate>
+	<copyright>(C)2009 eqdkp-plus.com.</copyright>
+	<license>CC</license>
+	<version>4.1.0</version>
+	<description>WoW-Game, including: Classicons, Raceicons, Eventicons, Classcolors, etc.</description>
+	<setup>
+	</setup>
+</install>
