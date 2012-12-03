@@ -1,0 +1,44 @@
+<form method="post" action="{ACTION}" name="post">
+<input type="hidden" name="calendar" value="{CALENDAR}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th colspan="6" >{L_addevent_title}</th>
+	</tr>
+	<tr>
+		<td colspan="2" align="center" class="row1">{L_name}: <input type="text" name="name" size="35" maxlength="255" value="{NAME}" class="input" /></td>
+		<td colspan="2" align="center" class="row2">{L_value}: <input type="text" name="value" size="8" maxlength="7" value="{VALUE}" class="input" /></td>
+		<td colspan="2" align="center" class="row1">{L_multidkp_to_event}: {MDKP2EVENT}</td>
+	</tr>
+	<!-- IF ICONS -->
+	<tr>
+		<th colspan="6">{L_event_icon_header}</th>
+	</tr>
+	<!-- BEGIN files_row -->
+	<tr class="colorswitch">
+		<!-- BEGIN fields -->
+		<td class="nowrap" width="16%">
+			<!-- IF files_row.fields.CHECKBOX -->
+			<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
+			{files_row.fields.IMAGE}</label>
+			<!-- ENDIF -->
+		</td>
+		<!-- END fields -->
+	</tr>
+	<!-- END files_row -->
+	<tr>
+		<th colspan="6"></th>
+	</tr>
+	<!-- ENDIF -->
+	<tr>
+		<th align="center" colspan="6">
+			<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+			<!-- IF S_UPD -->
+			<input type="hidden" name="event_id" value="{EVENT_ID}" />
+			<input type="button" name="del" value="{L_delete}" class="mainoption bi_delete" onclick="delete_warning();" />
+			<!-- ENDIF -->
+			<input type="submit" name="cancel" value="{L_cancel}" class="liteoption bi_back" />
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

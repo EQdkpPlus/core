@@ -1,0 +1,37 @@
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings smallsettings">
+		<legend>{L_editing_item}</legend>
+		<dl>
+			<dt><label>{L_name}:</label></dt>
+			<dd><input name="name" type="text" class="input" value="{NAME}" size="100" id="name" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_item_id}:</label></dt>
+			<dd><input type="text" name="item_id" value="{ITEM_ID}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_raid}:</label></dt>
+			<dd>{RAID}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_date}:</label></dt>
+			<dd>{DATE}</dd>
+		</dl>	
+		<dl>
+			<dt><label>{L_value}:</label></dt>
+			<dd><input type="text" name="value" value="{VALUE}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_itempool}:</label></dt>
+			<dd>{ITEMPOOLS}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_buyers}:</label></dt>
+			<dd>{BUYERS}</dd>
+		</dl>
+	</fieldset>
+<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+<input type="hidden" name="selected_ids" value="{GRP_KEY}" />
+<input type="button" name="del" value="{L_delete}" class="mainoption bi_delete" onclick="delete_warning('{GRP_KEY}');" />
+{CSRF_TOKEN}
+</form>

@@ -1,0 +1,306 @@
+
+.yg_tooltip .yg_ffxi_tooltip .yg_page
+{
+	background: none;
+	border: none;
+}
+
+.yg_ffxi_tooltip table
+{
+	color: white;
+	font-size: 12px !important;
+	font-family: verdana !important;
+	padding: 2px;
+}
+
+.yg_ffxi_tooltip
+{
+	background-color: transparent;
+	border-style:none;
+	border-spacing:0px;
+	padding:0;
+	margin:0;
+	text-align: left;
+}
+
+.yg_ffxi_tooltip .yg_ffxi_tooltip_line
+{
+	border-top: 1px solid #FFFFFF;
+	background-color:#FFFFFF;
+	height:0px;
+	margin-top: 2px;
+	margin-bottom: 1px;
+}
+
+.yg_ffxi_tooltip .yg_ffxi_tooltip_area_icon
+{
+	height:40px;
+	position:relative;
+	vertical-align:top;
+	width:40px;
+	z-index:1;
+}
+
+.yg_ffxi_tooltip .yg_ffxi_tooltip_area_tip
+{
+	 min-width:275px;
+ 	 max-width:375px;
+	 vertical-align:top
+}
+
+.yg_ffxi_tooltip .yg_ffxi_tooltip_icon
+{
+	background-position:center center;
+	background-repeat:no-repeat;
+	float:left;
+	height:78px;
+	left:0;
+	position:relative;
+	top:0;
+	width:78px;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails
+{
+	color: #ffffff;
+	font-family:Verdana !important;
+	min-width:260px;
+	max-width:380px;
+	width:100%;
+	position:relative;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_pageBorder .yg_TL.yg_BK
+{
+	background-position: left top;
+	left:0;
+	top:0;
+	position: absolute;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_pageBorder .yg_TR.yg_BK
+{
+	background-position: right top;
+	right:0;
+	top:0;
+	position: absolute;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_pageBorder .yg_BL.yg_BK
+{
+	background-position: left bottom;
+	left:0;
+	bottom:0;
+	position: absolute;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_pageBorder .yg_BR.yg_BK
+{
+	background-position: right bottom;
+	right:0;
+	bottom:0;
+	position: absolute;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_pageBorder .yg_BK
+{
+	background-image:url("http://static.ygcdn.com/ffxi/img/tooltip/corners.png");
+	height:11px;
+	position:absolute;
+	width:11px;
+	z-index:3;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_page
+{
+	min-width:240px;
+	padding:2px;
+}
+
+/*.yg_ffxi_tooltip .yg_slot {
+	background:transparent url(http://static.ygcdn.com/ffxi/img/tooltip/slot.png) no-repeat scroll left 0;
+	width:16px;
+	height:14px;
+}*/
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_itemdetailscontent
+{
+	background:none repeat scroll 0 0 #7D2A00;
+	position:relative;
+	z-index:2;
+	padding: 5px;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .designborder
+{
+	border:3px solid #431500;
+	position:relative;
+}
+
+.yg_ffxi_element_icon, .yg_ffxi_rarity_icon
+{
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right:1px;
+}
+
+.yg_ffxi_tooltip_charges
+{
+ 	color: #AFFFFF;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails .yg_itemdetailscontent .yg_design_border
+{
+	position:relative;
+}
+
+.yg_ffxi_tooltip .yg_design_border .yg_BRD
+{
+	position: absolute;
+}
+
+.yg_ffxi_tooltip .yg_design_border .yg_BRD.yg_L
+{
+	border-left:3px solid #431500;
+	height:100%;
+	left:-7px;
+	width:0;
+}
+
+.yg_ffxi_tooltip .yg_design_border .yg_BRD.yg_T
+{
+	border-top:3px solid #431500;
+	height:0;
+	top:-7px;
+	width:100%;
+}
+
+.yg_ffxi_tooltip .yg_design_border .yg_BRD.yg_R
+{
+	border-right:3px solid #431500;
+	height:100%;
+	right:-7px;
+	width:0;
+}
+
+.yg_ffxi_tooltip .yg_design_border .yg_BRD.yg_B
+{
+	border-bottom:3px solid #431500;
+	height:0;
+	bottom:-7px;
+	width:100%;
+}
+
+a.yg-xdone.yg-iconsmall.yg-ffxi
+{
+	padding:2px 0 2px 27px;
+}
+
+a.yg-xdone.yg-iconmedium.yg-ffxi
+{
+	padding:11px 0 11px 45px;
+}
+
+a.yg-xdone.yg-iconlarge.yg-ffxi
+{
+	padding:28px 0 28px 80px;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails td
+{
+	line-height: 14px;
+	font-size: 12px !important;
+	margin: 0;
+}
+
+.yg_ffxi_tooltip .yg_itemdetails td.yg_ffxi_tooltip_title
+{
+	font-size: 14px !important;
+	line-height: 11px;
+	padding-bottom: 1px;
+}
+
+.yg_ffxi_tooltip .yg_pad_td_col {
+	padding-left: 15px;
+}
+
+.yg_ffxi_tooltip .yg_pad_td_col_dbl {
+	padding-left: 30px;
+}
+
+.yg_ffxi_tooltip .yg_pad_td_col_triple {
+	padding-left: 45px;
+}
+
+.yg_tooltip .yg_ffxiv_tooltip .yg_page
+{
+	background: none;
+	border: none;
+}
+/*MEDIUM*/
+.YG_ffxi.icon.medium
+{
+	background:transparent url(http://static.ygcdn.com/ffxi/img/icon/icon_border_medium.png) repeat-x scroll 0px 0px;
+	display:inline-block;
+	height:40px;
+	margin:2px;
+	position:relative;
+	vertical-align:middle;
+	width:40px;
+}
+
+.YG_ffxi.icon.medium .yg_img
+{
+	background-position:center 4px;
+	background-repeat:no-repeat;
+	display:block;
+	height:40px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:40px;
+}
+
+.YG_ffxi.icon.medium .yg_brdr
+{
+	background:transparent url(http://static.ygcdn.com/ffxi/img/icon/icon_border_medium_glare.png) no-repeat scroll 0 50px;
+	display:block;
+	height:40px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:40px;
+}
+
+.YG_ffxi.icon.medium .yg_link
+{
+	display:block;
+	height:40px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:40px;
+}
+
+.YG_ffxi.icon.medium .yg_link:hover
+{
+	background-position: 0 0;
+}
+
+.YG_ffxi.icon.medium:hover > .yg_brdr
+{
+	background-position: 0 -40px;
+}
+
+.yg_ffxi_tooltip_area_icon .YG_ffxi.icon.medium .yg_link:hover
+{
+	background-position: 0 -50px;
+}
+
+.yg_ffxi_tooltip_area_icon .YG_ffxi.icon.medium:hover > .yg_brdr
+{
+	background-position: 0 -150px;
+}
+

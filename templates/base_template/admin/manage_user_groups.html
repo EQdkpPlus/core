@@ -1,0 +1,100 @@
+<!-- IF not S_GROUP_PERM_LIST -->
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
+		<tr>
+			<th align="center" colspan="9"><span style="float:left;">{L_manage_user_groups}</span><span style="float:right;"><input name="user_group_perms" type="submit" class="mainoption bi_next" id="user_group_perms" value="{L_user_group_permissions}" /></span></th>
+		</tr>
+		<tr>
+			<th width="20"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
+			<th colspan="2" width="20" class="nowrap">{L_action}</th>
+			<th>
+				<a href="{ACTION}&amp;order=0.1"><span class="down_arrow{RED01}"></span></a>
+				<a href="{ACTION}&amp;order=0.0"><span class="up_arrow{RED00}"></span></a>
+				{L_name}
+			</th>
+			<th>{L_description}</th>
+			<th width="50" class="nowrap">{L_group_members}</th>
+			<th>{L_default_group}</th>
+			<th>{L_hide}</th>
+		</tr>
+		<!-- BEGIN user_groups -->
+		<tr>
+			<td align="center"><!-- IF user_groups.S_DELETABLE --><input type="checkbox" name="user_group_ids[]" value="{user_groups.ID}" /><!-- ENDIF --><input type="hidden" name="user_groups[{user_groups.KEY}][id]" value="{user_groups.ID}" /></td>
+			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><img src="{EQDKP_IMAGE_PATH}glyphs/groups.png" border="0" alt="" /></a></td>
+			<td align="center">
+				<!-- IF user_groups.S_DELETABLE -->
+				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><img src="{EQDKP_IMAGE_PATH}global/delete.png" border="0" alt="" /></a>
+				<!-- ENDIF -->
+			</td>
+			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>    
+			<td><input type="text" name="user_groups[{user_groups.KEY}][desc]" size="50" maxlength="75" value="{user_groups.DESC}" class="maininput" style="width:95%" /></td>
+			<td>{user_groups.USER_COUNT}</td>
+			<td width="50" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
+			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][hide]" {user_groups.HIDE} />&nbsp;</td>
+		</tr>
+		<!-- END user_groups -->
+		<tr>
+			<th colspan="8"> <input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" /><input type="button" name="del" value="{L_delete_selected_group}" class="mainoption bi_delete" onclick="delete_warning();" /></th>
+		</tr>
+	</table>
+
+	<fieldset class="settings">
+		<legend>{L_add_user_group}</legend>
+		<dl>
+			<dt><label>{L_name}</label></dt>
+			<dd><input type="hidden" name="user_groups[{KEY}][id]" value="{ID}" /><input type="text" name="user_groups[{KEY}][name]" size="40" maxlength="50" value="" class="maininput" style="width:95%" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}</label></dt>
+			<dd><input type="text" name="user_groups[{KEY}][desc]" size="50" maxlength="75" value="" class="maininput" style="width:95%" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_hide}</label></dt>
+			<dd><input type="checkbox" value="1" name="user_groups[{KEY}][hide]" {user_groups.HIDE} /></dd>
+		</dl>
+	</fieldset>
+	<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table">
+		<tr>
+			<th width="120" align="center">
+				<span style="float:left;">{L_user_group_permissions}</span>
+				<span style="float:right;"><input type="submit" class="mainoption bi_back" value="{L_manage_user_groups}" /></span>
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<table border="0" cellspacing="1" cellpadding="2" id="user_groups_table2" class="colorswitch hoverrows">
+					<!-- BEGIN permissions_row -->
+					<tr>
+						<th width="120">{permissions_row.GROUP}</th>
+						<!-- BEGIN headline_row -->
+						<th>{permissions_row.headline_row.GROUP}</th>
+						<!-- END headline_row -->
+					</tr>
+					<!-- BEGIN check_group -->
+					<tr>
+						<td class="nowrap">
+							<!-- IF permissions_row.check_group.S_ADMIN -->
+							<span class="admin_icon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
+							<b>{permissions_row.check_group.CBNAME}</b>
+							<!-- ELSE -->
+							{permissions_row.check_group.CBNAME}
+							<!-- ENDIF -->
+						</td>
+						<!-- BEGIN group_row -->
+						<td><center>{permissions_row.check_group.group_row.STATUS}</center></td>
+						<!-- END group_row -->
+					</tr>
+					<!-- END check_group -->
+					<!-- END permissions_row -->
+				</table>
+			</td>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->

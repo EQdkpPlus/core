@@ -1,0 +1,17 @@
+<form method="post" action="{ACTION}" name="managerole">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+		<tr >
+			<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_manage_calevents}</span><span style="float:right;"><input type="button" name="newRoleManager" value="{L_calendar_addevent}" onclick="newCalevent()" class="mainoption bi_new" /></span></th>
+		</tr>
+			{CALEVENTS}
+		<tr>
+			<th colspan="{HPTT_COLUMN_COUNT}">
+				<span style="float:left;">
+					<input type="button" name="del" value="{L_delete_selected}" class="mainoption bi_delete" onclick="delete_warning();"/>
+					<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+				</span>
+			</th>
+		</tr>
+	</table>
+{CSRF_TOKEN}
+</form>

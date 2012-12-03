@@ -1,0 +1,28 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	<tr>
+		<th colspan="3"><span style="float:left;">{L_menu_itempools}</span><a href="manage_itempools.php{SID}&amp;upd=true" style="float:right;"><input type="button" name="add" value="{L_add_itempool}" class="mainoption bi_new" /></a></th>
+	</tr>
+	<tr>
+		<th width="16">&nbsp;</th>
+		<th width="200">
+			<a href="manage_itempools.php{SID}&amp;sort=0.0" class="down_arrow_green"></a>
+			<a href="manage_itempools.php{SID}&amp;sort=0.1" class="up_arrow_green"></a>
+			{L_name}
+		</th>
+		<th>
+			<a href="manage_itempools.php{SID}&amp;sort=1.0" class="down_arrow_green"></a>
+			<a href="manage_itempools.php{SID}&amp;sort=1.1" class="up_arrow_green"></a>
+			{L_description}
+		</th>
+	</tr>
+	<!-- BEGIN itempools -->
+	<tr>
+		<td width="16"><a href="manage_itempools.php{SID}&amp;upd=true&amp;id={itempools.ID}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></a></td>
+		<td width="200"><a href="manage_itempools.php{SID}&amp;upd=true&amp;id={itempools.ID}">{itempools.NAME}</a></td>
+		<td>{itempools.DESC}</td>
+	</tr>
+	<!-- END itempools -->
+	<tr>
+		<th colspan="3" class="footer">{ITEMPOOLS_FOOTCOUNT}</th>
+	</tr>
+</table>

@@ -1,0 +1,197 @@
+<form method="post" action="{ACTION}" name="post">
+<table width="100%">
+	<tr>
+		<th colspan="2"><a href="manage_pagelayouts.php{SID}">{L_lm_title}</a> &raquo; {FILENAME}</th>
+	</tr>
+	<tr class="row1">
+		<td width="20">{L_description}:</td>
+		<td><input type="text" name="description" value="{DESCRIPTION}" class="input" style="width:99%" /></td>
+	</tr>
+	<!-- BEGIN param_row -->
+	<tr>
+		<td class="row1 nowrap">{param_row.NAME}</td>
+		<td class="row2 nowrap">{param_row.FIELD}</td>
+	</tr>
+	<!-- END param_row -->
+	<!-- BEGIN subs_row -->
+	<tr>
+		<td class="row1 nowrap">{subs_row.NAME}</td>
+		<td class="row2 nowrap">{subs_row.FIELD}</td>
+	</tr>
+	<!-- END subs_row -->
+</table>
+<div id="plus_pm_pages_tabs">
+	<ul>
+	<!-- BEGIN page_list -->
+		<li><a href="#page-{page_list.ID}" <!-- IF page_list.ADMIN -->class="admin_icon" style="background-position: 7px 3px;" title="{L_admin_page}"<!-- ENDIF -->><span>{page_list.NAME}</span></a></li>
+	<!-- END page_list -->
+	</ul>
+	<!-- BEGIN page_row -->
+	<div id="page-{page_row.ID}">
+		<!-- IF page_row.S_ROSTER -->
+		<table width="100%" id="table_roster" class="colorswitch">
+			<tr>
+				<th colspan="2">{L_lm_roster_settings}</th>
+			</tr>
+			<tr>
+				<td class="nowrap" width="50">{L_lm_roster_classorrole}</td>
+				<td>{ROSTER_DD}</td>
+			</tr>
+			<tr>
+				<td class="nowrap">{L_pk_show_twinks}</td>
+				<td><input type="checkbox" value="1" name="roster_show_twinks" {ROSTER_SHOW_TWINKS}/></td>
+			</tr>
+			
+		</table>
+		<!-- ENDIF -->
+		
+		<!-- IF page_row.S_LEADERBORD -->
+		<table width="100%" id="table_leaderbord" class="colorswitch">
+			<tr>
+				<th colspan="2">{L_lm_leaderbord_settings}</th>
+			</tr>
+			<tr>
+				<td class="nowrap">{L_lm_lb_maxpercolumn}</td>
+				<td><input type="text" size="4" name="lb_maxpercolumn" value="{LB_MAXPERCOLUMN}" class="input" /></td>
+			</tr>
+			<tr>
+				<td class="nowrap">{L_lm_lb_maxperrow}</td>
+				<td><input type="text" size="4" name="lb_maxperrow" value="{LB_MAXPERROW}" class="input" /></td>
+			</tr>
+			<tr>
+				<td class="nowrap">{L_lm_sort_direction}</td>
+				<td>{LB_SORTDIR}</td>
+			</tr>
+			<tr>
+				<td class="nowrap">{L_lm_lb_column_type}</td>
+				<td>{LB_COLUMN_DD}</td>
+			</tr>
+			<tr>
+				<td class="nowrap">{L_lm_default_pool}</td>
+				<td>{LB_POOL_DD}</td>
+			</tr>
+		</table>
+		<table width="100%" id="leaderboard_classid" class="sortingtable" {CLASSDISPLAY}>
+			<tr>
+				<th colspan="2">{L_lm_lb_class_sort}</th>
+			</tr>
+			<!-- BEGIN class_row -->
+			<tr>
+				<td width="50" align="center">
+					<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" />
+				</td>
+				<td>
+					<input type="hidden" name="lb_classes[]" value="{page_row.class_row.CLASS}" /> {page_row.class_row.NAME}
+				</td>
+			</tr>
+			<!-- END class_row -->
+		</table>
+		<table width="100%" id="leaderboard_defaultrole" class="sortingtable" {ROLEDISPLAY}>
+			<tr>
+				<th colspan="2">{L_lm_lb_role_sort}</th>
+			</tr>
+			<!-- BEGIN role_row -->
+			<tr>
+				<td width="50" align="center">
+					<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" />
+				</td>
+				<td>
+					<input type="hidden" name="lb_roles[]" value="{page_row.role_row.ROLE}" /> {page_row.role_row.NAME}
+				</td>
+			</tr>
+			<!-- END role_row -->
+		</table>
+		<br />
+		<!-- ENDIF -->
+		<!-- BEGIN page_object_row -->
+		<table width="100%" id="table_{page_row.page_object_row.ID}" class="colorswitch sortingtable">
+			<thead>
+				<tr class="not-sortable">
+					<th colspan="8">{page_row.page_object_row.TABLE_TITLE}</th>
+				</tr>
+				<tr class="not-sortable">
+					<th colspan="8">{L_lm_table_settings}</th>
+				</tr>
+				<tr class="not-sortable">
+					<td colspan="2" class="nowrap">{L_lm_show_numbers}</td>
+					<td colspan="6">{page_row.page_object_row.NUMBERS}</td>
+				</tr>
+				<tr class="not-sortable">
+					<td colspan="2" class="nowrap">{L_lm_sort_direction}</td>
+					<td colspan="6">{page_row.page_object_row.TABLE_SORT_DIR}</td>
+				</tr>
+				<!-- IF page_row.page_object_row.S_ADD_SETTS -->
+				<!-- BEGIN add_setts -->
+				<tr class="not-sortable">
+					<td colspan="2" class="nowrap">{page_row.page_object_row.add_setts.LANG}</td>
+					<td colspan="6">{page_row.page_object_row.add_setts.FIELD}</td>
+				</tr>
+				<!-- END add_setts -->
+				<!-- ENDIF -->
+				<tr class="not-sortable">
+					<th colspan="8">{L_lm_table_columns}</th>
+				</tr>
+				<tr class="not-sortable">
+					<th width="24">&nbsp;</th>
+					<th width="24">&nbsp;</th>
+					<th width="80">{L_lm_column_preset}</th>
+					<th>{L_lm_column_sortable}</th>
+					<th>{L_lm_column_default_sort}</th>
+					<th>{L_lm_column_th_add}</th>
+					<th>{L_lm_column_td_add}</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr class="not-sortable">
+					<th colspan="99">
+						{page_row.page_object_row.DROPDOWN}
+						<input type="button" value="{L_lm_add_row}" class="add_row_button mainoption bi_new" id="button_{page_row.page_object_row.ID}" {page_row.page_object_row.DISABLED} />
+					</th>
+				</tr>
+			</tfoot>
+			<tbody class="colorswitch">
+				<!-- BEGIN preset_row -->
+				<tr>
+					<td align="center">
+						<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" />
+					</td>
+					<td align="center">
+						<img src="{EQDKP_ROOT_PATH}images/global/delete.png" alt="{L_delete}" class="del_me" border="0" title="{L_lm_delete_row}" />
+						<span class="delete_id" style="display:none;">{page_row.page_object_row.preset_row.ID}</span>
+						<span class="prefix_id" style="display:none;">{page_row.page_object_row.PREFIX}</span>
+					</td>
+					<td class="presetname nowrap">
+						{page_row.page_object_row.preset_row.NAME}
+					</td>
+					<td>
+						{page_row.page_object_row.preset_row.SORTABLE}
+					</td>
+					<td>
+						<input class="default_sort" type="radio" name="{page_row.page_object_row.PREFIX}[default_sort]" value="{page_row.page_object_row.preset_row.CODE}" {page_row.page_object_row.preset_row.DEFAULT_SORT} />
+					</td>
+					<td>
+						<input class="th_add" type="text" name="{page_row.page_object_row.PREFIX}[th_add][{page_row.page_object_row.preset_row.CODE}]" size="40" value="{page_row.page_object_row.preset_row.TH_ADD}" />
+					</td>
+					<td>
+						<input class="td_add" type="text" name="{page_row.page_object_row.PREFIX}[td_add][{page_row.page_object_row.preset_row.CODE}]" size="40" value="{page_row.page_object_row.preset_row.TD_ADD}" />
+					</td>
+				</tr>
+				<!-- END preset_row -->
+			</tbody>
+		</table>
+		<br />
+		<!-- END page_object_row -->
+	</div>
+	<!-- END page_row -->
+</div>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th colspan="3">
+			<input type="hidden" name="filename" value="{FILENAME}" />
+			<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+			<input type="submit" name="" value="{L_cancel}" class="liteoption bi_back" />
+		</th>
+	</tr>
+</table>
+{CSRF_TOKEN}
+</form>

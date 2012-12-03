@@ -1,0 +1,354 @@
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$("#register").validate({
+		rules: {
+			username: {
+				required: true,
+				minlength: 2,
+				remote: {
+					type: "POST",
+					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_USER}"
+				}
+			},
+			user_email: {
+				required: true,
+				email: true,
+				minlength: 2,
+				remote: {
+					type: "POST",
+					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_MAIL}"
+				}
+			},
+			user_email2: {
+				required: true,
+				email: true,
+				equalTo: "#useremail"
+			},
+			user_alimit: {
+				required: true,
+				number: true
+			},
+			user_climit: {
+				required: true,
+				number: true
+			},
+			user_elimit: {
+				required: true,
+				number: true
+			},
+			user_ilimit: {
+				required: true,
+				number: true
+			},
+			user_nlimit: {
+				required: true,
+				number: true
+			},
+			user_rlimit: {
+				required: true,
+				number: true
+			},
+		},
+		onkeyup: false,
+		messages: {
+			username: {
+				required: "{L_fv_required_username}",
+				minlength: jQuery.format("{L_fv_username_toshort}"),
+				remote: jQuery.format("{L_fv_username_alreadyuse}")
+			},
+			user_email: {
+				required: "{L_fv_required_email}",
+				minlength: "{L_fv_email_notvalid}",
+				remote: jQuery.format("{L_fv_email_alreadyuse}")
+			},
+			user_alimit: '{L_fv_required_number}',
+			user_climit: '{L_fv_required_number}',
+			user_elimit: '{L_fv_required_number}',
+			user_ilimit: '{L_fv_required_number}',
+			user_nlimit: '{L_fv_required_number}',
+			user_rlimit: '{L_fv_required_number}',
+			first_name: '{L_fv_required}',
+			country: '{L_fv_required}',
+			gender: '{L_fv_required}',
+			user_password1: '{L_fv_required_password}',
+			user_password2: '{L_fv_required_password_repeat}',
+			recaptcha_response_field: '{L_fv_recaptcha}',
+			user_email2: '{L_fv_required_email2}'
+		},
+		invalidHandler: function(form, validator) {
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var invalidPanels = $(validator.invalidElements()).closest(".ui-tabs-panel", form);
+				if (invalidPanels.size() > 0) {
+					$.each($.unique(invalidPanels.get()), function(){
+						$(this).siblings(".ui-tabs-nav")
+						.find("a[href='#" + this.id + "']").parent().not(".ui-tabs-selected")
+						.addClass("ui-state-error")
+						.show("pulsate",{times: 3});
+					});
+				}
+			}
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).removeClass(errorClass);
+			if(element.id != ''){
+				$(element.form).find("label[for=" + element.id + "]").hide();
+				$(element.form).find("label[for=" + element.id + "]").removeClass(errorClass);
+			}
+			var $panel = $(element).closest(".ui-tabs-panel", element.form);
+			if ($panel.size() > 0) {
+				var removeerror = true;
+				$panel.find("." + errorClass).each(function(index) {
+					if($(this).text()){
+						removeerror = false;
+					}
+				});
+				if (removeerror === true && $panel.find("." + errorClass + ":visible").length === 0) {
+					$panel.siblings(".ui-tabs-nav").find("a[href='#" + $panel[0].id + "']")
+					.parent().removeClass("ui-state-error");
+				}
+			}
+		},
+		ignore: ".ignore_validation"
+	});
+
+	<!-- IF S_SETTING_ADMIN -->
+	$('.changepermcolor').change(function() {
+
+		if($(this).prop('checked')){
+			$('#span_'+this.id).removeClass("negative");
+			$('#span_'+this.id).addClass('positive');
+		}else{
+			$('#span_'+this.id).addClass("negative");
+			$('#span_'+this.id).removeClass('positive');
+		}
+	});
+
+	var user_perms = new Array(''<!-- BEGIN user_permissions -->,'{user_permissions.NAME}'<!-- END user_permissions -->);
+	var group_perms = new Array();
+	<!-- BEGIN group_permissions -->
+	group_perms[{group_permissions.KEY}] = new Array(''<!-- BEGIN group_permission_row -->,'{group_permissions.group_permission_row.NAME}'<!-- END group_permission_row-->);
+	<!-- END group_permissions -->
+	$("#dw_user_groups")
+		.multiselect()
+		.bind("multiselectclick multiselectcheckall multiselectuncheckall", function( event, ui ){
+			var checkedValues = $.map($(this).multiselect("getChecked"), function( input ){
+				return input.value;
+			});
+			reset_permissions();
+			set_user_permissions();
+			$.each(checkedValues, function(index, value) {
+				set_group_permissions(value);
+			});
+		})
+		.triggerHandler("multiselectclick"); // trigger above logic when page first loads
+
+	function reset_permissions(){
+		$('.changepermcolor').removeAttr("checked");
+		$('.changepermcolor').removeAttr("disabled");
+		$('.perm_text').removeClass("positive");
+		$('.perm_text').addClass("negative");
+	}
+
+	function set_user_permissions(){
+		$.each(user_perms, function(index, value) {
+			if (value != ""){
+				$('#span_cb_'+value).removeClass('negative');
+				$('#span_cb_'+value).addClass('positive');
+				$('#cb_'+value).attr('checked', "checked");
+			}
+		});
+	}
+
+	function set_group_permissions(groupid){
+		$.each(group_perms[groupid], function(index, value) {
+			if (value != ""){
+				$('#span_cb_'+value).removeClass('negative');
+				$('#span_cb_'+value).addClass('positive');
+				$('#cb_'+value).attr('checked', "checked");
+				$('#cb_'+value).attr('disabled', "disabled");
+			}
+		});
+	}
+	<!-- ENDIF -->
+
+	// possible fix for double-click problem
+	// http://forum.jquery.com/topic/validate-plugin-and-remote-have-to-submit-twice
+	$.ajaxSetup ({
+		async: false
+	});
+});
+//]]>
+</script>
+
+<form method="post" action="{ACTION}" name="register" id="register">
+<div class="content">
+	<div id="usersettings_tabs">
+
+		<ul>
+			<!-- BEGIN tabs --> <li><a href='#fragment-{tabs.ID}'><span>{tabs.NAME}</span></a></li><!-- END tabs -->
+			<!-- BEGIN plugin_settings_row --><li><a href='#{plugin_settings_row.KEY}'><img src="{plugin_settings_row.ICON}" alt="Icon" />{plugin_settings_row.PLUGIN}</a></li><!-- END plugin_settings_row -->
+			<!-- IF S_SETTING_ADMIN -->
+			<li><a href='#permissions'>{L_permissions}</a></li>
+			<li><a href='#members'>{L_associated_members}</a></li>
+			<!-- ENDIF -->
+		</ul>
+
+		<input type="hidden" name="old_username" value="{USERNAME}" />
+		<input type="hidden" name="user_id[]" value="{USER_ID}" />
+
+		<!-- BEGIN tabs -->
+		<div id="fragment-{tabs.ID}">
+			<!-- BEGIN fieldset -->
+			<!-- IF tabs.fieldset.INFO -->
+			<div class="bluebox roundbox">
+				<div class="icon_info">{tabs.fieldset.INFO}</div>
+			</div>
+
+			<!-- ENDIF -->
+
+			<fieldset class="settings">
+				<legend>{tabs.fieldset.NAME}</legend>
+
+				<!-- BEGIN field -->
+				<dl>
+					<dt><label>{tabs.fieldset.field.NAME}</label><br /><span>{tabs.fieldset.field.HELP}</span></dt>
+					<dd>{tabs.fieldset.field.FIELD}{tabs.fieldset.field.TEXT}</dd>
+				</dl>
+				<!-- END field -->
+			</fieldset>
+			<!-- END fieldset -->
+		</div>
+		<!-- END tabs -->
+
+		<!-- BEGIN plugin_usersettings_div -->
+		<div id="{plugin_usersettings_div.KEY}">
+			<fieldset class="settings">
+				<!-- BEGIN plugin_usersettings -->
+					<!-- IF plugin_usersettings_div.plugin_usersettings.S_TH -->
+						</fieldset><fieldset class="settings">
+						<legend>{plugin_usersettings_div.plugin_usersettings.NAME}</legend>
+					<!-- ELSE -->
+						<dl>
+							<dt>
+								<label>{plugin_usersettings_div.plugin_usersettings.NAME}</label><br /><span>{plugin_usersettings_div.plugin_usersettings.HELP}</span>
+							</dt>
+							<dd>{plugin_usersettings_div.plugin_usersettings.FIELD}</dd>
+						</dl>
+					<!-- ENDIF -->
+				<!-- END plugin_usersettings -->
+			</fieldset>
+		</div>
+		<!-- END plugin_usersettings_div -->
+
+		<!-- IF S_SETTING_ADMIN -->
+		<div id="permissions">
+			<div class="bluebox roundbox">
+				<div class="icon_info"><input type="checkbox" checked="checked" disabled="disabled" />{L_s_group_note}</div>
+			</div>
+			<fieldset class="settings">
+				<legend>{L_account_enabled}</legend>
+
+				<dl>
+					<dt><label>{L_account_enabled}</label></dt>
+					<dd>{ACTIVE_RADIO}</dd>
+				</dl>
+
+			</fieldset>
+			<fieldset class="settings">
+				<legend>{L_user_groups}</legend>
+
+				<dl>
+					<dt><label>{L_user_groups}</label></dt>
+					<dd>{USER_GROUP_SELECT}</dd>
+				</dl>
+
+			</fieldset>
+
+						<div id="permission_tabs">
+				<ul>
+					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
+					<li><a href='#admin_perms'><span><img src="{EQDKP_IMAGE_PATH}global/admin_flag.png" alt="admin"/>{L_admin_permissions}</span></a></li>
+				</ul>
+
+				<div id="user_perms">
+					<!-- BEGIN u_permissions_row -->
+					<fieldset class="settings mediumsettings">
+						<legend>{u_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<!-- IF not u_permissions_row.check_group.S_SUPERADMIN_PERM -->
+						<div class="permissions">
+							<label>
+								<!-- IF u_permissions_row.check_group.S_IS_GROUP -->
+								<input type="checkbox" name="{u_permissions_row.check_group.CBNAME}" value="Y" {u_permissions_row.check_group.CBCHECKED} disabled="disabled" class="changepermcolor" id="cb_{u_permissions_row.check_group.CBNAME}" />
+								<!-- ELSE -->
+								<input type="checkbox" name="{u_permissions_row.check_group.CBNAME}" value="Y" {u_permissions_row.check_group.CBCHECKED} class="changepermcolor" id="cb_{u_permissions_row.check_group.CBNAME}"/>
+								<!-- ENDIF -->
+								<span id="span_cb_{u_permissions_row.check_group.CBNAME}" class="perm_text {u_permissions_row.check_group.CLASS}">{u_permissions_row.check_group.TEXT}</span>
+							</label>
+						</div>
+						<!-- ENDIF -->
+						<!-- END check_group -->
+					</fieldset>
+					<!-- END u_permissions_row -->
+				</div>
+
+				<div id="admin_perms">
+					<!-- BEGIN a_permissions_row -->
+					<fieldset class="settings mediumsettings">
+						<legend>{a_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<div class="permissions">
+							<label>
+								<!-- IF a_permissions_row.check_group.S_IS_GROUP -->
+								<input type="checkbox" name="{a_permissions_row.check_group.CBNAME}" value="Y" {a_permissions_row.check_group.CBCHECKED} disabled="disabled" class="changepermcolor" id="cb_{a_permissions_row.check_group.CBNAME}" />
+								<!-- ELSE -->
+								<input type="checkbox" name="{a_permissions_row.check_group.CBNAME}" value="Y" {a_permissions_row.check_group.CBCHECKED} class="changepermcolor" id="cb_{a_permissions_row.check_group.CBNAME}"/>
+								<!-- ENDIF -->
+								<span id="span_cb_{a_permissions_row.check_group.CBNAME}" class="perm_text {a_permissions_row.check_group.CLASS}">{a_permissions_row.check_group.TEXT}</span>
+							</label>
+						</div>
+						<!-- END check_group -->
+					</fieldset>
+					<!-- END a_permissions_row -->
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- IF S_MU_TABLE -->
+		<div id="members">
+			<fieldset class="settings">
+				<legend>{L_associated_members}</legend>
+
+				<dl>
+					<dt>
+						<label>{L_associated_members}</label><br />
+					</dt>
+					<dd>
+						{JS_CONNECTIONS} {FV_MEMBER_ID}
+					</dd>
+				</dl>
+			</fieldset>
+		</div>
+		<!-- ENDIF -->
+
+		<!-- ENDIF -->
+	</div>
+		<div class="contentFooter">
+			<input type="submit" name="submit" value="{L_uc_connectme}" class="mainoption bi_ok" />
+			<input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" />
+			<!-- IF S_SETTING_ADMIN -->
+			<input type="submit" name="" value="{L_back}" class="mainoption bi_back" />
+			<!-- IF not S_PROTECT_USER -->
+			<input type="button" name="del" value="{L_delete}" class="liteoption bi_delete ignore_validation" onclick="delete_warning({USER_ID});" id="delete123_button" />
+			<!-- ENDIF --><!-- ENDIF -->
+		</div>
+	</div>
+
+	{HIDDEN_FIELDS}
+	{CSRF_TOKEN}
+</form>
+<!-- IF S_SETTING_ADMIN -->{JS_TAB_SELECT}<!-- ENDIF -->

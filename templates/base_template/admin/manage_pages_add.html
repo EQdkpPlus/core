@@ -1,0 +1,91 @@
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$('#alias').change(check_alias);
+});
+
+function check_alias() {
+	var alias = $('#alias').val();
+	if(alias != "") {
+		jQuery.ajax({
+			type: "POST",
+			url: "manage_pages.php{SID}&check=1&page_id="+{PAGE_ID},
+			data: 'alias='+ alias,
+			cache: false,
+			success: function(response){
+				if(response == 'false'){
+					$('#alias').css('border', '3px #C33 solid');
+					$('#tick_alias').hide();
+					$('#cross_alias').fadeIn();
+				}else{
+					$('#alias').css('border', '3px #090 solid');
+					$('#cross_alias').hide();
+					$('#tick_alias').fadeIn();
+				}
+			}
+		});
+	}
+}
+//]]>
+</script>
+<form method="post" action="{F_ACTION}" name="post" onsubmit="return info_check_form()" id="manage_pages">
+<input name="changed" value="" type="hidden" />
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
+	<tr>
+	    <th colspan="3"><a href="manage_pages.php{SID}">{L_info_manage_pages}</a> &raquo; {PAGE_HEADER}:</th>
+    </tr>
+</table>	
+<fieldset class="settings">
+				<legend>{L_info_pageopt}</legend>
+				
+				<dl>
+					<dt><label>{L_info_opt_title}</label><br /><span>{L_info_help_title}</span></dt>
+					<dd><input type="text" name="title" size="50" value="{INFO_PAGE_TITLE}" class="input required" /></dd>
+				</dl>
+				
+				<dl>
+					<dt><label>{L_info_alias}</label><br /><span>{L_info_help_alias}</span></dt>
+					<dd>
+						<input name="alias" type="text" class="input" id="alias" value="{INFO_PAGE_ALIAS}" size="50" />
+						<img id="tick_alias" src="{EQDKP_ROOT_PATH}images/register/tick.png" width="16" height="16" alt="" style="display:none;" />
+						<div id="cross_alias" style="display:none;"><img src="{EQDKP_ROOT_PATH}images/register/cross.png" width="16" height="16" alt="" />{L_info_error_alias}</div>
+					</dd>
+				</dl>
+				
+				<dl>
+					<dt><label>{L_info_opt_ml}</label><br /><span>{L_info_help_ml}</span></dt>
+					<dd>{INFO_PAGE_ML_DROPDOWN}</dd>
+				</dl>
+				
+				<dl>
+					<dt><label>{L_permissions}</label><br /><span>{L_info_help_vis}</span></dt>
+					<dd>{INFO_PAGE_VIS_DROPDOWN}</dd>
+				</dl>
+				
+				<dl>
+					<dt><label>{L_info_comments}</label><br /><span>{L_info_help_comments}</span></dt>
+					<dd><input name="comments" type="checkbox" class="input" id="comments" value="1" {INFO_PAGE_COMMENTS}/>
+			<!-- IF not S_NEW_PAGE -->&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.location='manage_pages.php{SID}&amp;mode=delete_comments&amp;page_id={PAGE_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" value="{L_info_delete_comments}" class="mainoption bi_delete" />
+			<!-- ENDIF --></dd>
+				</dl>
+				
+				<dl>
+					<dt><label>{L_info_voting}</label><br /><span>{L_info_help_voting}</span></dt>
+					<dd><input name="voting" type="checkbox" class="input" id="voting" value="1" {INFO_PAGE_VOTING}/>
+<!-- IF not S_NEW_PAGE -->&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.location='manage_pages.php{SID}&amp;mode=reset_votings&amp;page_id={PAGE_ID}&amp;link_hash={CSRF_MODE_TOKEN}'" value="{L_info_reset_votings}" class="mainoption bi_delete" /><!-- ENDIF --></dd>
+				</dl>
+				
+			</fieldset>
+	
+	<fieldset class="settings">
+				<legend>{L_info_opt_content}</legend>
+				<textarea class="mceEditor required" name="page_content" style="width:100%" id="page_content" rows="20" cols="3">{INFO_PAGE_CONTENT}</textarea>
+				
+	</fieldset>
+
+<input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_save}"/>
+		<input name="reset" type="reset" class="liteoption bi_reset" id="reset" value="{L_reset}"/>
+		<input name="cancel" type="button" class="mainoption bi_back" id="infocancelbu" value="{L_cancel}" onclick="window.location.href='manage_pages.php{SID}'" />
+{CSRF_TOKEN}
+</form>
+{JS_GUILDRULES_INFO}

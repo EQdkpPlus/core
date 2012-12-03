@@ -1,0 +1,34 @@
+<form method="post" action="{ACTION}" name="settings">
+	<div id='plus_sett_tabs'>
+		<ul>
+			<!-- BEGIN tabs --> <li><a href='#fragment-{tabs.ID}'><span>{tabs.NAME}</span></a></li><!-- END tabs -->
+		</ul>
+
+		<!-- BEGIN tabs -->
+		<div id="fragment-{tabs.ID}">
+			<!-- BEGIN fieldset -->
+			<!-- IF tabs.fieldset.INFO -->
+			<div class="bluebox roundbox">
+				<div class="icon_info">{tabs.fieldset.INFO}</div>
+			</div>
+			<!-- ENDIF -->
+			<fieldset class="settings">
+				<legend>{tabs.fieldset.NAME}</legend>
+				<!-- BEGIN field -->
+				<dl>
+					<dt><label>{tabs.fieldset.field.NAME}</label><br /><span>{tabs.fieldset.field.HELP}</span></dt>
+					<dd>{tabs.fieldset.field.FIELD}</dd>
+				</dl>
+				<!-- END field -->
+			</fieldset>
+			<!-- END fieldset -->
+		</div>
+		<!-- END tabs -->
+
+		<div align='center'>
+			<input name="save_plus" type="submit" class="mainoption bi_ok" id="save" value="{L_save}" />
+			<input type="button" name="reset" value="{L_reset}" class="liteoption bi_reset" onclick="window.location='manage_settings.php{SID}'"/>
+		</div>
+	</div>
+{CSRF_TOKEN}
+</form>

@@ -1,0 +1,63 @@
+<form method="post" action="{ACTION}" name="post" id="form_moduleconfig">
+<center>
+<fieldset class="settings" style="width:95%">
+	<!-- IF NOGAME_SELECTED -->
+		{L_NOGAMESELECT}
+	<!-- ELSE -->
+		<!-- BEGIN config_row -->
+			<dl id="config_{config_row.ID}"> 
+				<dt><label>{config_row.NAME}</label><br /><span>{config_row.HELP}</span></dt>
+				<dd>{config_row.FIELD}</dd>
+			</dl>
+		<!-- END config_row -->
+	<!-- ENDIF -->
+</fieldset>
+<input type="submit" name="save_sett" value="{L_save}" class="mainoption bi_ok" />
+<input type="reset" value="{L_reset}" class="liteoption bi_reset" />
+</center>
+{CSRF_TOKEN}
+</form>
+
+<script type="text/javascript">
+function load_settings(){
+	var form = $('#form_moduleconfig').serializeArray();
+	$.post("manage_portal.php{SID}&settings&id={MODULE_ID}", form,
+	 function(data){
+		if (data.reload){
+			$('#form_moduleconfig').submit();
+		}
+	 
+	 
+	  if (data.new){
+		$.each(data.new, function(index, value) {
+			var help = (value.help) ? value.help : '';
+			$('#config_'+index).remove();
+		  $('#config_visibility').before("<dl id=\"config_"+index+"\"><dt><label>"+value.name+"</label><br /><span>"+help+"</span></dt><dd>"+value.field+"</dd></dl>");
+		  if (value.field.indexOf("multiple='multiple'") != -1){
+				create_multiselect(index);
+			}
+		});
+	  }
+	  if (data.changed){
+		$.each(data.changed, function(index, value) {
+		var help = (value.help) ? value.help : '';	
+		  $('#config_'+index).html(
+			"<dt><label>"+value.name+"</label><br /><span>"+help+"</span></dt><dd>"+value.field+"</dd>"
+		  );
+		  if (value.field.indexOf("multiple='multiple'") != -1){
+				create_multiselect(index);
+			}
+		});
+	  }
+	  if (data.removed){
+		$.each(data.removed, function(index, value) {
+			$('#config_'+index).remove();
+		});
+	  }
+	 }, "json");
+}
+
+function create_multiselect(name){
+	$("#"+name).multiselect({height: 200,minWidth: 200,checkAllText: "{L_cl_ms_checkall}",uncheckAllText: "{L_cl_ms_uncheckall}",noneSelectedText: "{L_cl_ms_noneselected}",selectedList: 5,selectedText: "{L_cl_ms_selection}",multiple: true,});
+}
+</script>

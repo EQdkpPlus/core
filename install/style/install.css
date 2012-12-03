@@ -1,0 +1,195 @@
+/* EQDKP+ Installer */
+body {
+	background-color: #DDDDDD;
+	margin: 40px;
+	font-family: Lucida Grande, Verdana, Sans-serif;
+	font-size: 12px;
+	color: #000;
+}
+
+/* Header */
+#header {
+	font-family:'Trebuchet MS',Arial,sans-serif;
+	margin-bottom: -10px;
+	background-image: url(header_background.png);
+	background-position: bottom;
+	border-bottom: 2px solid #666;
+	display: table-cell;
+	vertical-align: middle;
+	width: 800px;
+	height:120px;
+}
+#logo {
+	background-image: url(logo.png);
+	height: 100px;
+	width:269px;
+	margin-left: 15px;
+	float: left;
+}
+#logotext{
+	float: right;
+	width: 300px;
+	margin-top: 32px;
+	padding-right: 20px;
+	color: white;
+	font-size: 30px;
+	text-align:right;
+}
+#languageselect{
+	float: right;
+	width: 300px;
+	margin-top: 14px;
+	padding-right: 20px;
+	text-align:right;
+	color: white;
+}
+
+/* Global */
+#installer{
+	width:800px;
+	overflow: auto;
+	margin:0 auto;
+	padding: 5px;
+	border:1px solid #AEAEAE;
+	background-color: #EFEFEF;
+}
+#main{
+	width: 556px;
+	float:right;
+	font-size: 12px;
+}
+#steps, #content{
+	background-color: #FFFFFF;
+	padding:20px;
+	border:1px solid #AEAEAE;
+}
+#steps{
+	width:230px;
+	display:block;
+	float:left;
+	padding:3px;
+	margin-right:5px;
+}
+#footer {
+	clear:right;
+	margin-top:1em;
+	font-size: 11px;
+	text-align:center;
+	padding:10px;
+}
+
+/* Progress Bar */
+#progressbar{
+	margin: 10px 10px 10px 10px;
+}
+.ui-progressbar {
+	position:relative;
+}
+.install_label {
+	position: absolute;
+	width: 90%;
+	text-align: center;
+	line-height: 1.9em;
+	left:5%;
+	right:5%;
+}
+
+/* Steps links */
+ul.steps li span{
+	display:block;
+	cursor: pointer;
+	text-decoration:none;
+	border:1px solid #FFFFFF;
+	color:#000000;
+	padding:4px 0px 4px 2px;
+}
+ul.steps li.notactive span{
+	color:grey;
+	font-style:italic;
+	cursor: auto;
+}
+ul.steps li.done2 span{
+	cursor: pointer;
+	color:#000000;
+	font-style: normal;
+}
+ul.steps li span:hover{
+	border:1px solid #757575;
+	background-color:#FFFDCC;
+	color:#000000;
+}
+ul.steps{
+	margin:14px 0 10px 0;
+	padding:0px 20px 0px 6px;
+	list-style-type:none;
+}
+ul.steps li{
+	background-repeat: no-repeat;
+	background-position: 4px 3px;
+	margin:10px 0 10px 0;
+	padding:0;
+	padding-left:30px;
+	display:block;
+}
+ul.steps li.now{
+	background-image: url('active.png');
+	font-weight:bold;
+}
+ul.steps li.notactive{
+	background-image: url('notactive.png');
+	color:#707070;
+}
+ul.steps li.done{
+	background-image: url('done.png');
+	color:#707070;
+}
+
+/* Content */
+h1 {
+	padding: 6px 0 5px 0px;
+	margin: 0px;
+	border-bottom:1px solid #AEAEAE;
+	font-size:18px;
+	color: #3C3C3C;
+}
+.buttonbar{
+	margin: 15px 10px 0px 0px;
+	text-align:right;
+}
+
+.positive{
+	color: green;	
+}
+.negative{
+	color: red;
+	font-weight: bold;
+}
+.neutral{
+	color: orange;
+	font-weight: bold;
+}
+th, td { 
+	padding: 0.25em 0.5em;
+	
+}
+th{
+	font-size: 11px;
+	text-align: left;
+	font-weight: bold;	
+}
+td{
+	font-size: 12px;
+}
+.ui-widget-content tr.ui-state-highlight{
+	border:0;
+}
+.subname{
+	font-weight: normal;
+	font-size: 10px;
+	font-style: italic;	
+}
+
+.licence{
+	height: 180px;
+	overflow:auto; 
+}
