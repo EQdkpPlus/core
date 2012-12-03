@@ -1,0 +1,19 @@
+﻿Subject: {GUILDTAG} {DKP_NAME}: Activación de Cuenta Requerida
+Charset: iso-8859-1
+
+Se ha recivido el formulario de ingreso como usuario de {GUILDTAG}. Para pasar a formar parte de la web su cuenta debe ser activada. Por favor guarde una copia de este correo electrónico en un lugar seguro. 
+
+Su información de la cuenta en {GUILDTAG} es:
+
+Nombre de Usuario: {USERNAME}
+Contraseña: {PASSWORD}
+
+Su cuenta esta actualmente inactiva. Usted no será capaz de iniciar sesion en la Web hasta que visite el enlace siguiente para activar la cuenta:
+
+{U_ACTIVATE}
+
+Según el administrador de {GUILDTAG} haya puesto los permisos de usuario por defecto, usted puede estar limitado en ciertas acciones dentro de la Web. Sera capaz de realizar las acciones por defecto hasta que sus permisos sean actualizados por un administrador.
+
+Su contraseña ha sido codificada en nuestra base de datos y no puede ser recuperada por nadie. Si usted olvida su contraseña, puede solicitar una nueva que será activada del mismo modo que esta cuenta.
+
+Gracias por registrarse en {GUILDTAG}.

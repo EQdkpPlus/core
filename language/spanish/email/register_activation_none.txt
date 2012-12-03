@@ -1,0 +1,15 @@
+﻿Subject: {GUILDTAG} {DKP_NAME}: Cuenta Activada
+Charset: iso-8859-1
+
+Su cuenta en {GUILDTAG} a sido Activada. Por favor guarde una copia de este correo electrónico en un lugar seguro. 
+
+Su información de la cuenta en {GUILDTAG} es:
+
+Nombre de Usuario: {USERNAME}
+Contraseña: {PASSWORD}
+
+Según el administrador de {GUILDTAG} haya puesto los permisos de usuario por defecto, usted puede estar limitado en ciertas acciones dentro de la Web. Sera capaz de realizar las acciones por defecto hasta que sus permisos sean actualizados por un administrador.
+
+Su contraseña ha sido codificada en nuestra base de datos y no puede ser recuperada por nadie. Si usted olvida su contraseña, puede solicitar una nueva que será activada del mismo modo que esta cuenta.
+
+Gracias por registrarse en {GUILDTAG}.

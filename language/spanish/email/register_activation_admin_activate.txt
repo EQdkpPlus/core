@@ -1,0 +1,10 @@
+﻿Subject: {GUILDTAG} {DKP_NAME}: Petición de Activación de Cuenta
+Charset: iso-8859-1
+
+Una nueva cuenta "{USERNAME}" ha sido creada y necesita la activación por el administrador de www.SongofWar.net antes de que pueda iniciar sesion.
+
+Para activar la cuenta, haga clic en el enlace de abajo.
+
+{U_ACTIVATE}
+
+Usted también puede cambiar los permisos de la cuenta. Para cambiarlos ir a "Administrar Usuarios" dentro del "Panel de Administracion".

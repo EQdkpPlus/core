@@ -1,0 +1,15 @@
+﻿Subject: {GUILDTAG} {DKP_NAME}: Activación de Cuenta Pendiente
+Charset: iso-8859-1
+
+Este es un correo enviado por la administración de la Web {GUILDTAG} para confirmar que hemos recivido su solicitud de registro.
+
+Su información de la cuenta en {GUILDTAG} es:
+
+Nombre de Usuario: {USERNAME}
+Contraseña: {PASSWORD}
+
+Su cuenta esta actualmente inactiva. El administrador tendrá que activarla antes de que usted pueda iniciar sesion en la Web. Recibirá otro correo electrónico cuando su cuenta haya sido activada.
+
+Su contraseña ha sido codificada en nuestra base de datos y no puede ser recuperada por nadie. Si usted olvida su contraseña, puede solicitar una nueva que será activada del mismo modo que esta cuenta.
+
+Gracias por registrarse en {GUILDTAG}.
