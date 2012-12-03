@@ -1,0 +1,93 @@
+<!-- INCLUDE page_header.html -->
+<script type="text/javascript">
+  function AllMessages()
+  {
+      for(var x=0;x<document.post.elements.length;x++)
+      {
+          var y=document.post.elements[x];
+          if(y.id!='all_nr' && y.name=='user_id[]' && y.value!='{MY_OWN_ID}')
+          {
+              y.checked=document.post.all_nr.checked;
+          }
+      }
+  }
+
+  function AskAdminPermission(checkb)
+  {
+  	if(checkb.value=='{MY_OWN_ID}')
+  	{
+  	 	if(!confirm('{L_MM_User_Confirm}'))
+  	 	{
+  	 		checkb.checked = false;
+  	 	}
+  	}
+  }
+
+  </script>
+<form method="post" action="{F_MASS_UPDATE}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{USER_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="7">{L_MANAGE_USERS}</th>
+  </tr>
+  <tr>
+    <th align="center" width="25" nowrap="nowrap"><input type="checkbox" name="all_nr" value="all_nr" onclick="AllMessages(this.form);" /></th>
+    <th align="left" width="40%"><a href="{U_MANAGE_USERS}o={O_USERNAME}&amp;start={START}">{L_USERNAME}</a></th>
+	<th align="left" width="35%">{L_ACTIVE_CHAR}</th>
+	<th align="left" width="100"><a href="{U_MANAGE_USERS}o={O_EMAIL}&amp;start={START}">{L_EMAIL}</a></th>
+    <th align="left" width="150" nowrap="nowrap"><a href="{U_MANAGE_USERS}o={O_LAST_VISIT}&amp;start={START}">{L_LAST_VISIT}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_MANAGE_USERS}o={O_ACTIVE}&amp;start={START}">{L_ACTIVE}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_MANAGE_USERS}o={O_ONLINE}&amp;start={START}">{L_ONLINE}</a></th>
+  </tr>
+
+  <!-- BEGIN users_row -->
+  <tr class="{users_row.ROW_CLASS}">
+    <td width="25" align="center" nowrap="nowrap"><input type="checkbox" name="user_id[]" onclick="AskAdminPermission(this);" value="{users_row.USER_ID}" /></td>
+    <td width="40%"><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
+    <td width="35%">{users_row.CHARAKTER}</td>
+    <td width="100"><a href="{users_row.U_MAIL_USER}">{users_row.EMAIL}</a></td>
+    <td width="150" nowrap="nowrap">{users_row.LAST_VISIT}</td>
+    <td width="60" align="center" nowrap="nowrap">{users_row.ACTIVE}</td>
+    <td width="60" align="center" nowrap="nowrap">{users_row.ONLINE}</td>
+  </tr>
+  <!-- END users_row -->
+  <tr>
+    <th colspan="7" class="footer">{LISTUSERS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{USER_PAGINATION}</td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center">{L_MASS_UPDATE}</th>
+  </tr>
+  <tr>
+    <td colspan="2" class="row1">{L_MASS_UPDATE_NOTE}</td>
+  </tr>
+ <!-- BEGIN permissions_row -->
+ <tr>
+   <th width="100%">{permissions_row.GROUP}:</td>
+</tr>
+<tr>
+   <td width="100%" class="row2">
+     <!-- BEGIN check_group -->
+     <div style="float:left"><input type="checkbox" name="{permissions_row.check_group.CBNAME}" value="Y"{permissions_row.check_group.CBCHECKED} />
+     <span class="small">{permissions_row.check_group.TEXT}</span></div>
+     <!-- END check_group -->
+   </td>
+ </tr>
+ <!-- END permissions_row --> 
+  <tr>
+    <th align="center" colspan="2"><input type="submit" name="update" value="{L_MASS_UPDATE}" class="mainoption" /> <input type="submit" name="delete" value="{L_MASS_DELETE}" class="liteoption" /></th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

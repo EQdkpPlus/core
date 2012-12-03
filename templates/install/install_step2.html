@@ -1,0 +1,69 @@
+<!-- INCLUDE install_header.html -->
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="index.php" name="post">
+<input type="hidden" name="install_step" value="3" />
+<!-- ENDIF -->
+
+ <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <br/>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">{L_DATABASE_CONF}</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DATABASE_TYPE}:</td>
+    <td width="60%" class="row1">
+      <select name="dbtype" class="input">
+        <!-- BEGIN dbal_row -->
+        <option value="{dbal_row.VALUE}">{dbal_row.OPTION}</option>
+        <!-- END dbal_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DATABASE_HOST}:</td>
+    <td width="60%" class="row1"><input type="text" name="dbhost" size="25" value="{DB_HOST}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DATABASE_NAME}:</td>
+    <td width="60%" class="row1"><input type="text" name="dbname" size="25" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DATABASE_USER}:</td>
+    <td width="60%" class="row1"><input type="text" name="dbuser" size="25" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DATABASE_PW}:</td>
+    <td width="60%" class="row1"><input type="password" name="dbpass" size="25" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">{L_DATABASE_PREFIX}:</td>
+    <td width="60%" class="row1"><input type="text" name="table_prefix" size="25" value="{TABLE_PREFIX}" class="input" /></td>
+  </tr>
+  </table><br/>
+</div>
+ <div class="b"><div></div></div>
+</div>
+<!-- IF MSG_TEXT != '' -->
+
+ <div class="dialog">
+ <div class="content">
+  <div class="t"></div>
+  <!-- Your content goes here -->
+  <p><h1>{MSG_TITLE}</h1></p>
+  <p><div class="msgtext"><img src="../templates/install/images/file_conflict.gif">&nbsp;{MSG_TEXT}</div></p>
+ </div>
+ <div class="b"><div></div></div>
+</div>
+<!-- ENDIF -->
+<br/>
+<div align="center"><input type="button" name="back" value="{L_BUTTON_BACK}" class="mainoption" onClick="history.back()"/>
+<!-- IF S_SHOW_BUTTON -->
+<input type="submit" name="submit" value="{L_BUTTON_2}" class="mainoption" />
+</form>
+<!-- ENDIF -->
+</div>
+<!-- INCLUDE install_tail.html -->

@@ -1,0 +1,64 @@
+                    <script>
+                      <!-- BEGIN msystem -->
+                        {msystem.MESSAGE}
+                      <!-- END msystem -->
+                    </script>
+                    <!-- IF S_SHOW_QUERIES -->
+                    <table width="100%" border="0" cellspacing="1" cellpadding="2">										  
+                      <tr>										    
+                        <th align="center">Queries / Error Messages
+                        </th>										  
+                      </tr>										  
+                      <!-- BEGIN query_row -->										  
+                      <tr class="{query_row.ROW_CLASS}">										    
+                        <td width="100%">{query_row.QUERY}</td>										  
+                      </tr>										  
+                      <!-- END query_row -->										
+                    </table>										
+                    <!-- ENDIF -->										
+                    <!-- IF S_SHOW_DEBUG -->										
+                    <center>
+                      <span class="copy">SQL Querys: {EQDKP_QUERYCOUNT} | in {EQDKP_RENDERTIME} sec | 
+                        <a href="http://validator.w3.org/check/referer" target="_top" class="copy">XHTML Validate</a>
+                      </span>
+                    </center>										
+                    <!-- ENDIF -->
+                  </td>										
+                  <!-- IF THIRD_C -->										
+                  <!-- dritte Spalte -->										
+                  <td class="portal_sidebar" valign="top">
+                  {PORTAL_RIGHT}
+                  </td>										
+                  <!-- ENDIF -->									
+                </tr>								
+              </table>							
+              <!-- IF S_IN_ADMIN -->
+            </td>						  
+          </tr>						
+        </table>						
+        <!-- ENDIF -->					
+        <!-- IF S_NORMAL_FOOTER -->    <br />  
+<table width="1050">
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+</table>
+</div>
+      <div id="footer">    
+                  {EQDKP_PLUS_COPYRIGHT}
+                  {H}   
+      </div>
+
+</td>
+<td style="width: 3%">&nbsp;</td>
+</tr>
+</table>
+    <!-- ENDIF -->
+                  {G}
+    <div style="height: 20px;">
+      <!-- just for placeholding -->
+    </div>
+  </body>
+</html>
