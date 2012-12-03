@@ -1,0 +1,313 @@
+<style type="text/css">@import url(../js/calendar/calendar-blue.css);</style>
+<script type="text/javascript" src="../js/calendar/calendar.js"></script>
+<script type="text/javascript" src="../js/calendar/lang/calendar-{L_CAL_LANG}.js"></script>
+<script type="text/javascript" src="../js/calendar/calendar-setup.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+function check_form()
+{
+    if (document.post.raid_attendees_count.value.length < 1)
+    {
+        alert('{MSG_ATTENDEES_EMPTY}');
+        return false;
+    }
+    if (document.post.raid_name.value.length < 1)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+	
+    return true;
+}
+function CalcMaxAttendees()
+{
+	count = 0;
+	for (var n = 0; n < document.post.elements.length; n++)
+	{
+		if (document.post.elements[n].name.indexOf("raid_class_") == 0)
+		{
+			count = count + 1 * document.post.elements[n].value;
+		}
+	}
+	document.post.raid_attendees_count.value = count;
+}
+function ChangeActionTarget() {
+	document.post.r.name = "raid_id";
+	document.post.raid_name.name = "raid_name[]";
+	document.post.action = '{EQDKP_ROOT_PATH}admin/addraid.php?s=';
+}
+function EventChange(value) {
+	switch (value) {
+		<!-- BEGIN events -->
+		case "{events.NAME}":
+			<!-- BEGIN classes -->
+			document.post.raid_class_{events.classes.NAME}_count.value = {events.classes.COUNT};
+			<!-- END classes -->
+			CalcMaxAttendees();
+			break;
+		<!-- END events -->
+		default:
+			for (var n = 0; n < document.post.elements.length; n++)
+			{
+				if (document.post.elements[n].name.indexOf("raid_class_") == 0)
+				{
+					document.post.elements[n].value = 0;
+				}
+			}
+			document.post.raid_attendees_count.value = 0;
+			break;
+	}
+}
+</script>
+<form method="post" action="{F_ADD_RAID}" name="post" onsubmit="return check_form(this)">
+	<input type="hidden" name="{URI_RAID}" value="{RAID_ID}" />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr>
+			<th align="center" colspan="2">{L_ADD_RAID_TITLE}</th>
+		</tr>
+		<tr>
+			<td valign="top" rowspan="3" nowrap="nowrap" class="row1" style="">
+				<table width="100%" border="0" cellspacing="1" cellpadding="2">
+					<tr><th colspan="2">{L_CLASSES}:</th></tr>
+					<!-- BEGIN raid_classes -->
+					<tr>
+						<td width="50%" valign="top" nowrap="nowrap" class="tableheader_{raid_classes.NAME_EN}">{raid_classes.LABEL}:</td>
+						<td><input type="text" size="3" maxlength="2" name="{raid_classes.NAME}" value="{raid_classes.COUNT}" onchange="CalcMaxAttendees();"></td>
+					</tr>
+					<!-- END classes -->
+					<tr>
+						<td width="50%" valign="top" nowrap="nowrap">{L_ATTENDEES}:</td>
+						<td><input type="text" size="3" maxlength="2" name="raid_attendees_count" value="{F_ATTENDEES_COUNT}"></td>
+					</tr>
+				</table>
+			</td>
+			<td width="100%" valign="top" class="row2">
+				<table width="100%" border="0" cellpadding="3" cellspacing="0" class="borderless">
+					<tr>
+						<td width="34%" valign="top">
+							<b>{L_EVENT}:</b> <span class="small">(<a href="{U_ADD_EVENT}" class="small">{L_ADD_EVENT}</a>)</span><br />
+							<!-- IF S_EVENT_MULTIPLE -->
+							<select name="raid_name[]" onChange="EventChange(this.value)" class="input" size="10" multiple="multiple">
+							<!-- ELSE -->
+							<select name="raid_name" onChange="EventChange(this.value)" class="input">
+								<option value=""></option>
+							<!-- ENDIF -->
+							<!-- BEGIN events_row -->
+								<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
+							<!-- END events_row -->
+							</select>{FV_EVENT_NAME}
+						</td>
+						<td width="33%" valign="top">
+							<b>{L_VALUE}:</b><br /><span class="small">({L_ADDRAID_VALUE_NOTE})</span><br />
+							<input type="text" name="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
+						</td>
+						<td width="33%" valign="top">
+							<b>{L_NOTE}:</b> <input type="text" name="raid_note" size="35" maxlength="255" value="{RAID_NOTE}" class="input" />
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%" valign="top" class="row2">
+				<table width="100%" border="0" cellpadding="3" cellspacing="0" class="borderless">
+					<tr>
+						<td width="50%" valign="top">
+							<br /><b>{L_INVITE_TIME}:</b> 
+							<br /><input type="hidden" name="raid_date_inv_input" value="{F_RAID_DATE_INV_INPUT}" id="RAID_DATE_INV_INPUT" class="input" /> <input type="text" size="50" name="RAID_DATE_INV" value="{F_RAID_DATE_INV}" id="RAID_DATE_INV" class="input" />
+										<button type="reset" id="raid_date_inv_b">...</button>
+							<br /><b>{L_START_TIME}:</b> 
+							<br /><input type="hidden" name="raid_date_input" value="{F_RAID_DATE_INPUT}" id="RAID_DATE_INPUT" class="input" /> <input type="text" size="50" name="RAID_DATE" value="{F_RAID_DATE}" id="RAID_DATE" class="input" />
+										<button type="reset" id="raid_date_b">...</button>
+							<br /><b>{L_SIGNUP_DEADLINE}:</b> 
+							<br /><input type="hidden" name="raid_date_sub_input" value="{F_RAID_DATE_SUB_INPUT}" id="RAID_DATE_SUB_INPUT" class="input" /> <input type="text" size="50" name="RAID_DATE_SUB" value="{F_RAID_DATE_SUB}" id="RAID_DATE_SUB" class="input" />
+										<button type="reset" id="raid_date_sub_b">...</button>							
+						</td>
+						<td width="50%" valign="top">
+
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%" valign="top" class="row2">
+				<!-- IF ! S_ADD -->
+				<table width="100%" border="0" cellspacing="1" cellpadding="2">
+					<tr>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">{L_ATTENDEES}: {L_CONFIRMED}</th>
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<th width="{COLUMN_WIDTH}%" class="tableheader_{classes.NAME_EN}" nowrap="nowrap">{classes.NAME} ({classes.CONFIRMED}/{classes.COUNT})</th>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<td class="row1" valign="top">
+							<!-- BEGIN confirmed_attendees -->
+							<a href="{classes.confirmed_attendees.LINK}">{classes.confirmed_attendees.NAME}</a>
+							<!-- IF S_SHOW_RANKS -->
+							({classes.confirmed_attendees.RANK})
+							<!-- ENDIF -->
+							<!-- IF classes.confirmed_attendees.RANDOM gt 0 -->
+							   <!-- IF classes.confirmed_attendees.S_WILDCARD -->
+							     <img src="images/wildcard.gif" alt="{L_WILDCARD}" title="{L_WILDCARD}" />
+							   <!-- ELSE -->
+							     ({classes.confirmed_attendees.RANDOM})
+							     <!-- ENDIF -->							
+							<!-- ELSE -->
+							     (<a href="{classes.confirmed_attendees.UNLOCK_LINK}" style="color:red; font-weight: bold;">X</a>)
+							<!-- ENDIF -->
+     						<a href="{classes.confirmed_attendees.TOGGLE_LINK}"><img src="images/down.gif"  alt="Confirm" title="Cancel confirmation" /></a>
+							<!-- IF classes.confirmed_attendees.NOTE ne "" -->
+							<br>{classes.confirmed_attendees.NOTE}
+							<!-- ENDIF -->
+							<br />
+							<!-- END confirmed_attendees -->
+						</td>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">{L_ATTENDEES}: {L_SIGNED}</th>
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<th width="{COLUMN_WIDTH}%" class="tableheader_{classes.NAME_EN}" nowrap="nowrap">{classes.NAME} ({classes.SIGNIN})</th>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<td class="row1" valign="top">
+							<!-- BEGIN signin_attendees -->
+							<a href="{classes.signin_attendees.LINK}">{classes.signin_attendees.NAME}</a>
+							<!-- IF S_SHOW_RANKS -->
+							({classes.signin_attendees.RANK})
+							<!-- ENDIF -->
+							<!-- IF classes.signin_attendees.RANDOM gt 0 -->
+							   <!-- IF classes.signin_attendees.S_WILDCARD -->
+							     <img src="images/wildcard.gif" alt="{L_WILDCARD}" title="{L_WILDCARD}" />
+							   <!-- ELSE -->
+							     ({classes.signin_attendees.RANDOM})
+							     <!-- ENDIF -->							
+							<!-- ELSE -->
+							     (<a href="{classes.signin_attendees.UNLOCK_LINK}" style="color:red; font-weight: bold;">X</a>)
+							<!-- ENDIF -->
+							<a href="{classes.signin_attendees.TOGGLE_LINK}"><img src="images/up.gif"  alt="Confirm" title="Confirm Signup" /></a>
+							<!-- IF classes.signin_attendees.NOTE ne "" -->
+							<br>{classes.signin_attendees.NOTE}
+							<!-- ENDIF -->
+							<br />
+							<!-- END signin_attendees -->
+						</td>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">{L_ATTENDEES}: {L_UNSIGNED}</th>
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<th width="{COLUMN_WIDTH}%" class="tableheader_{classes.NAME_EN}" nowrap="nowrap">{classes.NAME} ({classes.UNSIGNED})</th>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<td class="row1" valign="top">
+							<!-- BEGIN unsigned_attendees -->
+							<a href="{classes.unsigned_attendees.LINK}">{classes.unsigned_attendees.NAME}</a>
+							<!-- IF S_SHOW_RANKS -->
+							({classes.unsigned_attendees.RANK})
+							<!-- ENDIF -->
+							<!-- IF classes.unsigned_attendees.RANDOM gt 0 -->
+							   <!-- IF classes.unsigned_attendees.S_WILDCARD -->
+							     <img src="images/wildcard.gif" alt="{L_WILDCARD}" title="{L_WILDCARD}" />
+							   <!-- ELSE -->
+							     ({classes.unsigned_attendees.RANDOM})
+							     <!-- ENDIF -->							
+							<!-- ELSE -->
+							     (<a href="{classes.unsigned_attendees.UNLOCK_LINK}" style="color:red; font-weight: bold;">X</a>)
+							<!-- ENDIF -->
+							<!-- IF classes.unsigned_attendees.NOTE ne "" -->
+							<br>{classes.signin_attendees.NOTE}
+							<!-- ENDIF -->
+							<br />
+							<!-- END unsigned_attendees -->
+						</td>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<th colspan="{ATTENDEES_COLSPAN}" class="footer">{ATTENDEES_FOOTCOUNT}</th>
+					</tr>
+				</table>
+				<!-- ENDIF -->
+			</td>
+		</tr>
+		<tr>
+			<th align="center" colspan="2">
+				<!-- IF S_ADD -->
+				<input type="submit" name="add"				value="{B_ADD_RAID}"		class="mainoption" />
+				<input type="reset"  name="reset"			value="{B_RESET}"			class="liteoption" />
+				<input type="submit" name="distribution"	value="{B_DISTRIBUTE}"		class="liteoption" />
+				<!-- ELSE -->
+				<!-- IF ! S_WILDCARD -->
+				<input type="submit" name="update"			value="{B_UPDATE_RAID}"		class="mainoption" />
+				<input type="submit" name="distribution"	value="{B_DISTRIBUTE}"		class="liteoption" />
+				<input type="submit" name="allupdate"	value="{L_ADDALL}"		class="liteoption" />
+				<!-- ELSE -->
+				<input type="submit" name="wildcard"		value="{B_WILDCARD_RAID}"	class="mainoption" />
+				<input type="submit" name="add"				value="{B_ADD_RAID}"		class="liteoption" onClick="ChangeActionTarget()" />
+				<!-- ENDIF -->
+				<!-- ENDIF -->
+				<input type="submit" name="delete"			value="{B_DELETE_RAID}"		class="liteoption" />
+			</th>
+		</tr>
+	</table>
+<textarea name="raid_attendees" cols="25" rows="30" id="attendees" class="input" style="display:none;">
+<!-- BEGIN classes -->
+<!-- BEGIN confirmed_attendees -->
+<!-- IF classes.confirmed_attendees.RANDOM gt 0 -->{classes.confirmed_attendees.NAME}
+<!-- ENDIF -->
+<!-- END confirmed_attendees -->
+<!-- END classes -->
+</textarea>
+</form>
+
+<script type="text/javascript">
+function displayArea_refresh(cal) {
+        var date 	= cal.date;
+		var field 	= cal.params.displayArea;	
+        field.value = date.print("%s");
+		cal.hide();
+    }
+    
+  Calendar.setup(																	// Invite - Kalender
+    {
+      inputField  : "RAID_DATE",         					// ID of the input field
+      displayArea : "RAID_DATE_INPUT",
+      ifFormat    : "%A, %d.%m.%Y, %H:%M",    		// the date format
+      daFormat		: "%s",
+      button      : "raid_date_b",       					// ID of the button
+	  onClose     : displayArea_refresh
+	  //onUpdate    : displayArea_refresh
+    });
+  Calendar.setup(																	// Anmeldefrist
+    {
+      inputField  : "RAID_DATE_SUB",        			// ID of the input field
+      displayArea : "RAID_DATE_SUB_INPUT",
+      ifFormat    : "%A, %d.%m.%Y, %H:%M",    		// the date format
+      daFormat	  : "%s",
+      button      : "raid_date_sub_b",       			// ID of the button
+	  onClose     : displayArea_refresh
+	  //onUpdate    : displayArea_refresh
+    });
+  Calendar.setup(																	// Anmeldefrist
+    {
+      inputField  : "RAID_DATE_INV",        			// ID of the input field
+      displayArea : "RAID_DATE_INV_INPUT",
+      ifFormat    : "%A, %d.%m.%Y, %H:%M",    		// the date format
+      daFormat	  : "%s",
+      button      : "raid_date_inv_b",       			// ID of the button
+	  onClose     : displayArea_refresh
+	  //onUpdate    : displayArea_refresh
+    });
+</script>

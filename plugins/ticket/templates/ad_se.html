@@ -1,0 +1,69 @@
+<script language=JavaScript src="picker.js"></script>
+<form method="post" action="{F_CONFIG}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+<tr>
+    <th align="center" colspan="2">{L_GENERAL}</th>
+</tr>
+			<!-- other mechanism
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_COOKING}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="ts_show_cooking" value="1" {SHOW_COOKING} /></td>
+			</tr>
+			-->
+			<tr>
+				<td width="60%" class="row2">{L_EMAIL_GENERAL}<br> <span style="font-size:75%">{L_EMAIL_GENERAL_NOTE}</span></td>
+				<td width="40%" class="row1"><input type="checkbox" name="email_general" value="1" {EMAIL_GENERAL} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_EMAIL_ADMIN}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="email_admin" value="1" {EMAIL_ADMIN} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_EMAIL_ADMINCOLOR}</td>
+				<td width="40%" class="row1">
+					<input type="Text" width="20" name="email_admincolor" value="{EMAIL_ADMINCOLOR}">
+					<a href="javascript:TCP.popup(document.forms['post'].elements['email_admincolor'], 1)"><img width="15" height="13" border="0" alt="Click Here to Pick up the color" src="../templates/img/sel.gif"></a>
+
+					<table cellpadding="0" cellspacing="0" width="50" border="1">
+                  				<tr><td bgcolor="{EMAIL_ADMINCOLOR}">&nbsp</td></tr>
+                  			</table>
+				</td>
+			</tr>
+            <tr>
+				<td width="60%" class="row2">{L_DEFAULT_USER_COLOR}</td>
+				<td width="40%" class="row1">
+					<input type="Text" width="20" name="default_user_color" value="{DEFAULT_USER_COLOR}">
+					<a href="javascript:TCP.popup(document.forms['post'].elements['default_user_color'], 1)"><img width="15" height="13" border="0" alt="Click Here to Pick up the color" src="../templates/img/sel.gif"></a>
+
+					<table cellpadding="0" cellspacing="0" width="50" border="1">
+                  				<tr><td bgcolor="{DEFAULT_USER_COLOR}">&nbsp</td></tr>
+                  			</table>
+				</td>
+			</tr>
+		</tr>
+	<tr><th align="center" colspan="2"><input type="submit" name="issavebu" value="{L_SUBMIT}" class="mainoption" />
+  </th></tr>
+</table>
+</form>
+
+<br><br>
+
+<form method="post" action="{F_CONFIG_MAIL}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="4">{L_EDIT_ADMIN_EMAILS}</th>
+  </tr>
+  <!-- BEGIN adminemails_row -->
+  <tr class="{adminemails_row.ROW_CLASS}">
+    <td align="center"><input type="text" name="mails[{adminemails_row.EMAIL_ID}]" size="60" maxlength="80" value="{adminemails_row.EMAIL_ADDRESS}" class="input" /></td>
+     </tr>
+  <!-- END adminemails_row -->
+  <tr class="{ROW_CLASS}">
+    <td align="center"><input type="text" name="mails[{EMAIL_ID}]" size="60" maxlength="80" value="" class="input" /></td>
+   </tr>
+  <tr>
+    <th align="center"><input type="submit" name="submit" value="{L_SUBMIT_EDITED_EMAIL}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" /></th>
+  </tr>
+</table>
+</form>
+

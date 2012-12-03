@@ -1,0 +1,51 @@
+<!-- INCLUDE page_header.html -->
+<center>
+<!-- IF SEARCH_SET -->
+<table width="100%" border="0" cellspacing="0" cellpadding="3" class="borderless">
+  <tr>
+    <td align="center" >{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<!-- ENDIF -->
+<form method="get">
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+    <th align="right" nowrap="nowrap" >{SEARCH}  </th>
+    <th align="left">&nbsp;<input name="search" class="input" type="text" size="40" /></th>
+ 	<th align="right" nowrap="nowrap" >&nbsp {SEARCHBY}</th>
+	<th align="left" ><input name="search_type" class="input" type="radio"value="itemname" checked>{ITEMM}<input name="search_type" class="input" type="radio"value="buyer">{BUYERR} <input name="search_type" class="input" type="radio"value="raidname">{RAIDD} </th>
+ 	<th align="right" nowrap="nowrap" >&nbsp {UNIQUE}</th>
+	<th align="left" ><input name="unique_result" class="input" type="radio"value="no" checked>{NO} <input name="unique_result" class="input" type="radio"value="yes">{YES}</th>
+  </tr>
+</table>
+</form>
+<!-- IF SEARCH_SET -->
+<table width="100%" border="0" cellspacing="0" cellpadding="1" style="border-top: none">
+  <tr>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_BUYER}&amp;start={START}">{L_BUYER}</a></th>
+    <th align="left" width="65%"><a href="{U_LIST_ITEMS}o={O_NAME}&amp;start={START}">{L_ITEM}</a></th>
+    <th align="left" width="35%"><a href="{U_LIST_ITEMS}o={O_RAID}&amp;start={START}">{L_RAID}</a></th>
+    <th align="right" width="60" nowrap="nowrap"><a href="{U_LIST_ITEMS}o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+    <td width="70" nowrap="nowrap">{items_row.DATE}&nbsp</td>
+    <td align="left" width="100" nowrap="nowrap"><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}&nbsp</a></td>
+    <td align="left" width="65%"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td align="left" width="35%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td align="right" width="60" nowrap="nowrap" class="negative">{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+  <tr>
+    <th colspan="5" class="footer">{LISTITEMS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="800" border="0" cellspacing="0" cellpadding="1" class="borderless">
+  <tr>
+    <td align="center" >{ITEM_PAGINATION}</td>
+  </tr>
+</table>
+<!-- ENDIF -->
+</center>
+<!-- INCLUDE page_tail.html -->

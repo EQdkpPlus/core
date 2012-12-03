@@ -1,0 +1,110 @@
+trade_id6
+filename:http://wow.allakhazam.com/db/skill.html?line=171
+Recipename Greater Fire Protection Potion
+1. Preg: >Greater Fire Protection Potion</a><br><small>&lt;<a onmouseover="showstats(event,'id13494');" onmouseout="clearstats('id13494');" href="/db/item.html?witem=13494"><span class="greenname">Recipe: Greater Fire Protection Potion</span></a>&gt;</small></td>
+         <td></td>
+         <td align="center">290</td>
+         <td> 1x&nbsp;<a onmouseover="showstats(event,'id7068');" onmouseout="clearstats('id7068');" href="/db/item.html?witem=7068"><font color="#FFFFFF">Elemental Fire</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id13463');" onmouseout="clearstats('id13463');" href="/db/item.html?witem=13463"><font color="#FFFFFF">Dreamfoil</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id8925');" onmouseout="clearstats('id8925');" href="/db/item.html?witem=8925"><font color="#FFFFFF">Crystal Vial</font></a></td>
+         <td>1x&nbsp;<a onmouseover="showstats(event,'id13457');" onmouseout="clearstats('id13457');" href="/db/item.html?witem=13457"><font color="#FFFFFF">Greater Fire Protection Potion</font></a></td>
+        </tr>
+Quantaty 1. Reagent: 1
+Name 1. Reagent: Elemental Fire
+Durchgang 1 Wert1=1 Wert2=Elemental Fire
+Durchgang 2 Wert1=1 Wert2=Dreamfoil
+Durchgang 3 Wert1=1 Wert2=Crystal Vial
+Durchgang 4 Wert1=1 Wert2=Greater Fire Protection Potion
+-------------
+trade_id6
+filename:http://wow.allakhazam.com/db/skill.html?line=171
+Recipename Greater Fire Protection Potion
+1. Preg: >Greater Fire Protection Potion</a><br><small>&lt;<a onmouseover="showstats(event,'id13494');" onmouseout="clearstats('id13494');" href="/db/item.html?witem=13494"><span class="greenname">Recipe: Greater Fire Protection Potion</span></a>&gt;</small></td>
+         <td></td>
+         <td align="center">290</td>
+         <td> 1x&nbsp;<a onmouseover="showstats(event,'id7068');" onmouseout="clearstats('id7068');" href="/db/item.html?witem=7068"><font color="#FFFFFF">Elemental Fire</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id13463');" onmouseout="clearstats('id13463');" href="/db/item.html?witem=13463"><font color="#FFFFFF">Dreamfoil</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id8925');" onmouseout="clearstats('id8925');" href="/db/item.html?witem=8925"><font color="#FFFFFF">Crystal Vial</font></a></td>
+Quantaty 1. Reagent: 1
+Name 1. Reagent: Elemental Fire
+Durchgang 1 Wert1=1 Wert2=Elemental Fire
+Durchgang 2 Wert1=1 Wert2=Dreamfoil
+Durchgang 3 Wert1=1 Wert2=Crystal Vial
+-------------
+trade_id1
+filename:http://wow.allakhazam.com/db/skill.html?line=333
+Recipename Enchant Bracer - Healing Power
+1. Preg: >Enchant Bracer - Healing Power</a><br><small>&lt;<a onmouseover="showstats(event,'id19447');" onmouseout="clearstats('id19447');" href="/db/item.html?witem=19447"><span class="whitename">Formula: Enchant Bracer - Healing</span></a>&gt;</small></td>
+         <td></td>
+         <td align="center">300</td>
+         <td> 2x&nbsp;<a onmouseover="showstats(event,'id14344');" onmouseout="clearstats('id14344');" href="/db/item.html?witem=14344"><font color="#0070DD">Large Brilliant Shard</font></a>, 20x&nbsp;<a onmouseover="showstats(event,'id16204');" onmouseout="clearstats('id16204');" href="/db/item.html?witem=16204"><font color="#FFFFFF">Illusion Dust</font></a>, 4x&nbsp;<a onmouseover="showstats(event,'id16203');" onmouseout="clearstats('id16203');" href="/db/item.html?witem=16203"><font color="#1EFF00">Greater Eternal Essence</font></a>, 6x&nbsp;<a onmouseover="showstats(event,'id12803');" onmouseout="clearstats('id12803');" href="/db/item.html?witem=12803"><font color="#1EFF00">Living Essence</font></a></td>
+Quantaty 1. Reagent: 2
+Name 1. Reagent: Large Brilliant Shard
+Durchgang 1 Wert1=2 Wert2=Large Brilliant Shard
+Durchgang 2 Wert1=4 Wert2=Greater Eternal Essence
+Durchgang 3 Wert1=6 Wert2=Living Essence
+-------------
+trade_id3
+filename:http://wow.allakhazam.com/db/skill.html?line=164
+Recipename Dark Iron Bracers
+1. Preg: >Dark Iron Bracers</a><br><small>&lt;<a onmouseover="showstats(event,'id17051');" onmouseout="clearstats('id17051');" href="/db/item.html?witem=17051"><span class="bluename">Plans: Dark Iron Bracers</span></a>&gt;</small></td>
+         <td>Plate</td>
+         <td align="center">295</td>
+         <td> 4x&nbsp;<a onmouseover="showstats(event,'id11371');" onmouseout="clearstats('id11371');" href="/db/item.html?witem=11371"><font color="#FFFFFF">Dark Iron Bar</font></a>, 2x&nbsp;<a onmouseover="showstats(event,'id17010');" onmouseout="clearstats('id17010');" href="/db/item.html?witem=17010"><font color="#0070DD">Fiery Core</font></a>, 2x&nbsp;<a onmouseover="showstats(event,'id17011');" onmouseout="clearstats('id17011');" href="/db/item.html?witem=17011"><font color="#0070DD">Lava Core</font></a></td>
+Quantaty 1. Reagent: 4
+Name 1. Reagent: Dark Iron Bar
+Durchgang 1 Wert1=4 Wert2=Dark Iron Bar
+Durchgang 2 Wert1=2 Wert2=Fiery Core
+Durchgang 3 Wert1=2 Wert2=Lava Core
+-------------
+trade_id5
+filename:http://wow.allakhazam.com/db/skill.html?line=197
+Recipename Felcloth Gloves
+1. Preg: >Felcloth Gloves</a><br><small>&lt;<a onmouseover="showstats(event,'id18415');" onmouseout="clearstats('id18415');" href="/db/item.html?witem=18415"><span class="bluename">Pattern: Felcloth Gloves</span></a>&gt;</small></td>
+         <td>Cloth</td>
+         <td align="center">300</td>
+         <td> 12x&nbsp;<a onmouseover="showstats(event,'id14048');" onmouseout="clearstats('id14048');" href="/db/item.html?witem=14048"><font color="#FFFFFF">Bolt of Runecloth</font></a>, 20x&nbsp;<a onmouseover="showstats(event,'id14256');" onmouseout="clearstats('id14256');" href="/db/item.html?witem=14256"><font color="#FFFFFF">Felcloth</font></a>, 6x&nbsp;<a onmouseover="showstats(event,'id12662');" onmouseout="clearstats('id12662');" href="/db/item.html?witem=12662"><font color="#1EFF00">Demonic Rune</font></a>, 8x&nbsp;<a onmouseover="showstats(event,'id12808');" onmouseout="clearstats('id12808');" href="/db/item.html?witem=12808"><font color="#1EFF00">Essence of Undeath</font></a>, 2x&nbsp;<a onmouseover="showstats(event,'id14341');" onmouseout="clearstats('id14341');" href="/db/item.html?witem=14341"><font color="#FFFFFF">Rune Thread</font></a></td>
+Quantaty 1. Reagent: 6
+Name 1. Reagent: Demonic Rune
+Durchgang 1 Wert1=6 Wert2=Demonic Rune
+Durchgang 2 Wert1=8 Wert2=Essence of Undeath
+Durchgang 3 Wert1=2 Wert2=Rune Thread
+-------------
+trade_id2
+filename:http://wow.allakhazam.com/db/skill.html?line=165
+Recipename Shifting Cloak
+1. Preg: >Shifting Cloak</a><br><small>&lt;<a onmouseover="showstats(event,'id18519');" onmouseout="clearstats('id18519');" href="/db/item.html?witem=18519"><span class="purplename">Pattern: Shifting Cloak</span></a>&gt;</small></td>
+         <td>Cloth</td>
+         <td align="center">300</td>
+         <td> 30x&nbsp;<a onmouseover="showstats(event,'id8170');" onmouseout="clearstats('id8170');" href="/db/item.html?witem=8170"><font color="#FFFFFF">Rugged Leather</font></a>, 12x&nbsp;<a onmouseover="showstats(event,'id7082');" onmouseout="clearstats('id7082');" href="/db/item.html?witem=7082"><font color="#1EFF00">Essence of Air</font></a>, 4x&nbsp;<a onmouseover="showstats(event,'id12753');" onmouseout="clearstats('id12753');" href="/db/item.html?witem=12753"><font color="#1EFF00">Skin of Shadow</font></a>, 8x&nbsp;<a onmouseover="showstats(event,'id12809');" onmouseout="clearstats('id12809');" href="/db/item.html?witem=12809"><font color="#1EFF00">Guardian Stone</font></a>, 4x&nbsp;<a onmouseover="showstats(event,'id15407');" onmouseout="clearstats('id15407');" href="/db/item.html?witem=15407"><font color="#FFFFFF">Cured Rugged Hide</font></a>, 8x&nbsp;<a onmouseover="showstats(event,'id14341');" onmouseout="clearstats('id14341');" href="/db/item.html?witem=14341"><font color="#FFFFFF">Rune Thread</font></a></td>
+Quantaty 1. Reagent: 4
+Name 1. Reagent: Skin of Shadow
+Durchgang 1 Wert1=4 Wert2=Skin of Shadow
+Durchgang 2 Wert1=8 Wert2=Guardian Stone
+Durchgang 3 Wert1=4 Wert2=Cured Rugged Hide
+Durchgang 4 Wert1=8 Wert2=Rune Thread
+-------------
+trade_id4
+filename:http://wow.allakhazam.com/db/skill.html?line=202
+Recipename Field Repair Bot 74A
+1. Preg: >Field Repair Bot 74A</a><br></td>
+         <td>Devices</td>
+         <td align="center">300</td>
+         <td> 12x&nbsp;<a onmouseover="showstats(event,'id12359');" onmouseout="clearstats('id12359');" href="/db/item.html?witem=12359"><font color="#FFFFFF">Thorium Bar</font></a>, 4x&nbsp;<a onmouseover="showstats(event,'id8170');" onmouseout="clearstats('id8170');" href="/db/item.html?witem=8170"><font color="#FFFFFF">Rugged Leather</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id7191');" onmouseout="clearstats('id7191');" href="/db/item.html?witem=7191"><font color="#FFFFFF">Fused Wiring</font></a>, 2x&nbsp;<a onmouseover="showstats(event,'id7067');" onmouseout="clearstats('id7067');" href="/db/item.html?witem=7067"><font color="#FFFFFF">Elemental Earth</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id7068');" onmouseout="clearstats('id7068');" href="/db/item.html?witem=7068"><font color="#FFFFFF">Elemental Fire</font></a></td>
+Quantaty 1. Reagent: 4
+Name 1. Reagent: Rugged Leather
+Durchgang 1 Wert1=4 Wert2=Rugged Leather
+Durchgang 2 Wert1=1 Wert2=Fused Wiring
+Durchgang 3 Wert1=2 Wert2=Elemental Earth
+Durchgang 4 Wert1=1 Wert2=Elemental Fire
+-------------
+trade_id7
+filename:http://wow.allakhazam.com/db/skill.html?line=185
+Recipename Dirge's Kickin' Chimaerok Chops
+1. Preg: >Dirge's Kickin' Chimaerok Chops</a><br><small>&lt;<a onmouseover="showstats(event,'id21025');" onmouseout="clearstats('id21025');" href="/db/item.html?witem=21025"><span class="purplename">Recipe: Dirge's Kickin' Chimaerok Chops</span></a>&gt;</small></td>
+         <td></td>
+         <td align="center">300</td>
+         <td> 1x&nbsp;<a onmouseover="showstats(event,'id2692');" onmouseout="clearstats('id2692');" href="/db/item.html?witem=2692"><font color="#FFFFFF">Hot Spices</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id9061');" onmouseout="clearstats('id9061');" href="/db/item.html?witem=9061"><font color="#FFFFFF">Goblin Rocket Fuel</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id8150');" onmouseout="clearstats('id8150');" href="/db/item.html?witem=8150"><font color="#FFFFFF">Deeprock Salt</font></a>, 1x&nbsp;<a onmouseover="showstats(event,'id21024');" onmouseout="clearstats('id21024');" href="/db/item.html?witem=21024"><font color="#FFFFFF">Chimaerok Tenderloin</font></a></td>
+Quantaty 1. Reagent: 1
+Name 1. Reagent: Hot Spices
+Durchgang 1 Wert1=1 Wert2=Hot Spices
+Durchgang 2 Wert1=1 Wert2=Goblin Rocket Fuel
+Durchgang 3 Wert1=1 Wert2=Deeprock Salt
+Durchgang 4 Wert1=1 Wert2=Chimaerok Tenderloin
+-------------

@@ -1,0 +1,42 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_ADD_ITEM}" name="post">
+	<center><br />
+<table width="90%" border="0" cellspacing="1" cellpadding="2">
+	<tr class="{ROW_CLASS}">
+		<td align="left">{L_BANKER}</td><td align="left">
+		<select name="charName" class="input">
+    <!-- BEGIN chars_row -->
+    <option value="{chars_row.NAME}" >{chars_row.NAME}</option>
+    <!-- END chars_row -->
+    </select> 
+		</td></tr>
+		<tr class="{ROW_CLASS}"><td align="left">{L_QTY}</td>
+		<td align="left">
+    <input class="input" type="text" name="amount" value="" size="3"></td></tr>
+    <tr class="{ROW_CLASS}">
+		<td align="left">{L_NAME}</td>
+		<td align="left">
+    <input class="input" type="text" name="name" value="" size="70"></td></tr>
+		<tr class="{ROW_CLASS}">
+		<td align="left">{L_QULAITY}</td>
+		<td align="left">
+    <select name="quality" class="input">
+    <!-- BEGIN quality_filter -->
+    <option value="{quality_filter.ID}" >{quality_filter.NAME}</option>
+    <!-- END quality_filter -->
+    </select>
+    </td></tr>
+		<tr class="{ROW_CLASS}">
+		<td align="left">{L_TYPE}</td>
+    <td align="left">
+    <select name="type" class="input">
+    <!-- BEGIN type_filter -->
+    <option value="{type_filter.NAME}" >{type_filter.NAME}</option>
+    <!-- END type_filter -->
+    </select>
+    </td>
+	</tr>
+</table><br />
+<input type="submit" name="doInsert" value="{L_BANK_INSERT}" class="mainoption"/>
+</center>
+</form>

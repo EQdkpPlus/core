@@ -1,0 +1,304 @@
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpire/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<script language="JavaScript" type="text/javascript"><!--
+
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+
+function ItemInfos(id) {
+	var winn = new Window(id, {className: "alphacube", title: "{L_ITEM_INFO}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "is_item.php?i=" + id, showEffectOptions: {duration:1}})
+winn.setDestroyOnClose();
+winn.showCenter();
+// Set up a windows observer, set open window check to null
+  							myObserver = {
+    							onDestroy: function(eventName, win) {
+      							if (win == winn) {
+        							winn = null;
+        							window.location.reload();
+        							Windows.removeObserver(this);
+      							}
+    							}
+  							}
+  							Windows.addObserver(myObserver);
+  }
+
+function startLoading() {
+    Dialog.info("{L_AJAX_LOADING} ...",
+               {windowParameters: {className:"alphacube", width:250, height:100}, showProgress: true});
+  }
+  
+function stopLoading() {
+    Dialog.closeInfo();
+  }
+
+Ajax.Responders.register({
+    onCreate : startLoading
+  });
+//-->
+</script>
+<style type="text/css">
+.style1 {
+	text-align: center;
+}
+.switchcontent{ /*Definition for state toggling image */
+border-top-width: 0;
+}
+.showstate{ /*Definition for state toggling image */
+cursor:hand;
+cursor:pointer;
+margin-right: 10px;
+vertical-align:baseline;
+}
+</style>
+<script language="JavaScript" type="text/javascript" src="include/javascripts/switchcontent.js"></script>
+<!-- IF ITEMSTATS_TRUE -->
+<style type='text/css'>
+.middleitemicon { width: {ICON_WIDTH}; height: {ICON_HEIGHT}; }
+ </style>
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr><td>
+<!-- IF CLASS_DROPDOWN --> 
+<table border="0" class="borderless" width="869" cellspacing="0" cellpadding="0" height="150" background="images/setitems/sp{IS_CLASS_IMG}.jpg" align="center">
+<tr>
+	<td width="40%"></td>
+<td align="right" valign="bottom" style="padding-right: 20px;padding-bottom: 10px" height="46%"><div id="header_clsname">{HEADER_CLS_TXT}</div></td>
+</tr><tr>
+<td colspan=2 align="right" valign="bottom" style="padding-right: 10px;padding-bottom: 10px" height="20%">
+<form method="get" action="{U_SET_ITEMS}">
+    <select name="class" class="input" onchange="javascript:form.submit();">
+    <!-- IF SHOW_STARTPAGE -->
+      <option value="" {CLASSES.SP_SELECT}>{LANG_HOME}</option>
+      <!-- ENDIF -->	
+    <!-- BEGIN CLASSES -->
+      <option value="{CLASSES.linkname}" {CLASSES.SELECTED}>{CLASSES.name}</option>
+    <!-- END CLASSES -->
+    </select> 
+</form>
+</td>
+	</tr>
+</table></td>
+<!-- ELSE -->
+<!-- BEGIN CLASSES -->
+    <th align="center" class="menu" width="{CLASSWIDTH}"><img src="images/class/{CLASSES.img}.gif"><a href="{U_SET_ITEMS}&amp;class={CLASSES.linkname}"> {CLASSES.name}</a></th>
+<!-- END CLASSES -->
+  <!-- ENDIF -->
+  </tr>
+</table>
+<br/>
+  
+  <!-- IF STARTPAGE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class='borderless'>
+  <tr>
+    <th align="left" ><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <!-- IF SHOW_OP_USR_RANK -->
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_OP_USR_CLS -->
+    <th align="left" width="105" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_OP_CURR_DKP -->
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CURRENT}{URI_ADDON}">{L_CURRENT}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_OP_TOT_DKP -->
+    <th align="left" width="40" nowrap="nowrap">{L_TOTAL}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_ONE -->
+    <th align="left" width="120" nowrap="nowrap">{LANG_TIER1}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_TWO -->
+    <th align="left" width="120" nowrap="nowrap">{LANG_TIER2}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_THREE -->
+    <th align="left" width="120" nowrap="nowrap">{LANG_TIER3}</th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_AQ -->
+    <th align="left" colspan="2"width="120" nowrap="nowrap">{LANG_TIERAQ}</th>
+    <!-- ENDIF -->
+  </tr>
+  <!-- BEGIN SP_MEMBERS -->
+  <tr class="{SP_MEMBERS.ROW_CLASS}" style="height: 24px">
+    <td nowrap="nowrap"><a href="{SP_MEMBERS.link}">{SP_MEMBERS.name}</a></td>
+  <!-- IF SHOW_OP_USR_RANK -->
+    <td nowrap="nowrap">{SP_MEMBERS.RANK}</td>
+  <!-- ENDIF -->
+    <!-- IF SHOW_OP_USR_CLS -->
+		<td align="left" class="tableheader_{SP_MEMBERS.CLASS}">
+		  <!-- IF SHOW_OP_CLS_IMG -->
+       <img src="images/class/{SP_MEMBERS.CLASSIMG}.gif" height="15" width="15" border="0" alt="{SP_MEMBERS.CLASS}" /> {SP_MEMBERS.CLASS}
+      <!-- ELSE -->
+        {SP_MEMBERS.CLASS}
+      <!-- ENDIF -->
+        </td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_OP_CURR_DKP -->
+    <td nowrap="nowrap" class="{SP_MEMBERS.C_CURRENT}">{SP_MEMBERS.CURRENT}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_OP_TOT_DKP -->
+    <td nowrap="nowrap" class="{SP_MEMBERS.C_TOTAL}">{SP_MEMBERS.TOTAL}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_ONE -->
+    <td nowrap="nowrap" align="center">
+    	<div class="kProgressBar">
+				<div class="kprogress" style="width: {SP_MEMBERS.BAR_T1}"></div>
+				<div class="kpercent">{SP_MEMBERS.ITEMS_COUNT_T1}/{ITEMS_TOTAL_T1}</div>
+			</div>
+    	</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_TWO -->
+    <td align="center">
+    	<div class="kProgressBar">
+				<div class="kprogress" style="width: {SP_MEMBERS.BAR_T2}"></div>
+				<div class="kpercent">{SP_MEMBERS.ITEMS_COUNT_T2}/{ITEMS_TOTAL_T2}</div>
+			</div>
+    	</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_THREE -->
+    <td nowrap="nowrap" align="center">
+    	<div class="kProgressBar">
+				<div class="kprogress" style="width: {SP_MEMBERS.BAR_T3}"></div>
+				<div class="kpercent">{SP_MEMBERS.ITEMS_COUNT_T3}/{ITEMS_TOTAL_T3}</div>
+			</div>
+    	</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_AQ -->
+    <td nowrap="nowrap" align="center"><div class="kProgressBar">
+				<div class="kprogress" style="width: {SP_MEMBERS.BAR_AQ}"></div>
+				<div class="kpercent">{SP_MEMBERS.ITEMS_COUNT_AQ}/{ITEMS_TOTAL_AQ}</div>
+			</div></td>
+    <!-- ENDIF -->
+  </tr>
+  <!-- END SP_MEMBERS -->
+  
+  
+   <tr class="row1">
+    <td nowrap="nowrap">{L_SUMM}</td>
+  <!-- IF SHOW_OP_USR_RANK -->
+    <td nowrap="nowrap"></td>
+  <!-- ENDIF -->
+    <!-- IF SHOW_OP_USR_CLS -->
+		<td align="left"> </td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_OP_CURR_DKP -->
+    <td nowrap="nowrap"></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_OP_TOT_DKP -->
+    <td nowrap="nowrap"></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_ONE -->
+    <td nowrap="nowrap" align="center">
+    	<div class="kProgressBar">
+				<div class="kprogress" style="width: {T1_GL_PERCENT}%"></div>
+				<div class="kpercent">{T1_GL_PERCENT}%</div>
+			</div>
+    	 </td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_TWO -->
+    <td nowrap="nowrap" align="center">
+    	<div class="kProgressBar">
+				<div class="kprogress" style="width: {T2_GL_PERCENT}%"></div>
+				<div class="kpercent">{T2_GL_PERCENT}%</div>
+			</div>
+    	</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_THREE -->
+    <td nowrap="nowrap" align="center"><div class="kProgressBar">
+				<div class="kprogress" style="width: {T3_GL_PERCENT}%"></div>
+				<div class="kpercent">{T3_GL_PERCENT}%</div>
+			</div></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TIER_AQ -->
+    <td nowrap="nowrap" align="center"><div class="kProgressBar">
+				<div class="kprogress" style="width: {TAQ_GL_PERCENT}%"></div>
+				<div class="kpercent">{TAQ_GL_PERCENT}%</div>
+			</div></td>
+    <!-- ENDIF -->
+  </tr>
+  
+  
+  <tr>
+    <th colspan="14" class="footer">{FOOTCOUNT}</th>
+  </tr>
+  </th>
+  </table>
+<!-- ENDIF -->
+  
+  
+	<!-- BEGIN TIERS_PAGE -->
+	<img src="images/minus.gif" class="showstate" onClick="expandcontent(this, 'Tier{TIERS_PAGE.NO}')" /><span class="maintitle"> {TIERS_PAGE.TIER_NAME}</span>
+	<div id="Tier{TIERS_PAGE.NO}" class="switchcontent" width="100%" align="center" >
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr class="{ROW_CLASS}">
+		<td>&nbsp;</td>
+		<!-- IF SHOW_USR_RANK -->
+		<td>{L_RANK}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_CURR_DKP -->
+		<td>{L_CURRENT}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_TOTAL_DKP -->
+		<td>{L_TOTAL}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_USR_CLASS -->
+		<td>{L_CLASS}</td>
+		<!-- ENDIF -->
+				{TIERS_PAGE.SHOW_HEAD}
+        {TIERS_PAGE.SHOW_SHOULDERS}
+        {TIERS_PAGE.SHOW_CHEST}
+        {TIERS_PAGE.SHOW_LEGS}
+        {TIERS_PAGE.SHOW_BOOTS}
+        {TIERS_PAGE.SHOW_HANDS}
+        {TIERS_PAGE.SHOW_WRIST}
+        {TIERS_PAGE.SHOW_BELT}
+        {TIERS_PAGE.SHOW_RING}
+	</tr>
+	
+	<!-- BEGIN MEMBERS -->
+	<tr class="{TIERS_PAGE.MEMBERS.ROW_CLASS}">
+		<td><a href="{TIERS_PAGE.MEMBERS.link}">{TIERS_PAGE.MEMBERS.name}</a></td>
+		<!-- IF SHOW_USR_RANK -->
+		 <td width="80" nowrap="nowrap">{TIERS_PAGE.MEMBERS.RANK}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_CURR_DKP -->
+    <td width="20" nowrap="nowrap" class="{TIERS_PAGE.MEMBERS.C_CURRENT}">{TIERS_PAGE.MEMBERS.CURRENT}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_TOTAL_DKP -->
+    <td width="20" nowrap="nowrap" class="{TIERS_PAGE.MEMBERS.C_TOTAL}">{TIERS_PAGE.MEMBERS.TOTAL}</td>
+		<!-- ENDIF -->
+		<!-- IF SHOW_USR_CLASS -->
+		 <td width="100" align="left" class="tableheader_{TIERS_PAGE.MEMBERS.CLASS}">
+		  <!-- IF SHOW_CLSS_IMG -->
+       <img src="images/class/{TIERS_PAGE.MEMBERS.CLASSIMG}.gif" height="15" width="15" border="0" alt="{TIERS_PAGE.MEMBERS.CLASS}" /> {TIERS_PAGE.MEMBERS.CLASS}
+      <!-- ELSE -->
+        {TIERS_PAGE.MEMBERS.CLASS}
+      <!-- ENDIF -->
+        </td>
+		<!-- ENDIF -->
+		<!-- BEGIN MEMBERITEMS_NEED -->
+		<td class="style1">
+			<!-- IF OLDST_ITMLINKS -->
+			<a href="{ITEMLINK}{TIERS_PAGE.MEMBERS.MEMBERITEMS_NEED.id2}">{TIERS_PAGE.MEMBERS.MEMBERITEMS_NEED.item_image}</a>
+			<!-- ELSE -->
+			<a onclick="javascript:ItemInfos('{TIERS_PAGE.MEMBERS.MEMBERITEMS_NEED.id}')" style="cursor:pointer;">{TIERS_PAGE.MEMBERS.MEMBERITEMS_NEED.item_image}</a>
+			<!-- ENDIF -->
+		</td>
+		<!-- END MEMBERITEMS_NEED -->
+	</tr>
+	<!-- END MEMBERS -->
+</table>
+</div><br />
+<!-- END TIERS_PAGE -->
+<br /><center><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="images/info.png" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">ItemSpecials {L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a>
+<!-- IF SHOW_EXEC_TIME -->
+<br />{L_EXEC_TIME}: {EXEC_TIME}
+<!-- ENDIF -->
+</span></center>
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpire/page_tail.html -->

@@ -1,0 +1,92 @@
+<!-- INCLUDE ../../../../templates/wow_style/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<script language="JavaScript" type="text/javascript">
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+
+function startLoading() {
+    Dialog.info("{L_AJAX_LOADING} ...",
+               {windowParameters: {className:"alphacube", width:250, height:100}, showProgress: true});
+  }
+function stopLoading() {
+    Dialog.closeInfo();
+  }
+
+Ajax.Responders.register({
+    onCreate : startLoading
+  });
+</script>
+<!-- IF S_NOTMM -->
+<form method="get" action="{F_MEMBERS}">
+<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+  <tr>
+    <th align="right" width="56" nowrap="nowrap">{L_FILTER}:</th>
+    <th align="left">&nbsp;
+     <select name="filter" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN filter_row -->
+        <option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
+        <!-- END filter_row -->
+      </select>
+    </th>
+  </tr>
+</table>
+</form>
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <!-- IF SHOW_USR_RANK -->
+    <th align="left" width="70"><a href="{U_LIST_MEMBERS}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_LEVEL -->
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_CLASS -->
+    <th align="left" width="120" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>
+    <!-- ENDIF -->
+    <th align="left" width="100" nowrap="nowrap">{L_RAIDSCOUNT}</th>
+    <th align="left" width="100" nowrap="nowrap">{L_SETITEMS}</th>
+    <th align="left" width="100" nowrap="nowrap">{L_GREED}</th>
+  </tr>
+  <!-- BEGIN members_row -->
+  <tr class="{members_row.ROW_CLASS}">
+    <td width="35" nowrap="nowrap" align="right">{members_row.COUNT}</td>
+    <td nowrap="nowrap"><a href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></td>
+    <!-- IF SHOW_USR_RANK -->
+    <td width="70" nowrap="nowrap">{members_row.RANK}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_LEVEL -->
+    <td width="40" nowrap="nowrap">{members_row.LEVEL}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_CLASS -->
+		 <td width="100" align="left" class="tableheader_{members_row.CLASS}">
+		  <!-- IF SHOW_CLSS_IMG -->
+       <img src="images/class/{members_row.CLASSIMG}.gif" height="15" width="15" border="0" alt="{members_row.CLASS}" /> {members_row.CLASS}
+      <!-- ELSE -->
+        {members_row.CLASS}
+      <!-- ENDIF -->
+        </td>
+		<!-- ENDIF -->
+    <td width="100" nowrap="nowrap" class="positive">{members_row.RAIDS}</td>
+    <td width="100" nowrap="nowrap" class="negative">{members_row.SETITEMS}</td>
+    <td width="100" nowrap="nowrap" class="{members_row.C_ADJUSTMENT}">{members_row.GREED}</td>
+  </tr>
+  <!-- END members_row -->
+  <tr>
+    <th colspan="9" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br /><center><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="images/info.png" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">ItemSpecials {L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a>
+<!-- IF SHOW_EXEC_TIME -->
+<br />{L_EXEC_TIME}: {EXEC_TIME}
+<!-- ENDIF -->
+</span></center>
+<!-- INCLUDE ../../../../templates/wow_style/page_tail.html -->

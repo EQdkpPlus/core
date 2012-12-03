@@ -1,0 +1,149 @@
+/* The whole body of the popup frame */
+.wowitemt
+{
+	background-color: #000000;
+	text-align: left;
+	width: 385px;
+	border-top: 1px;
+	border-right: 1px;
+	border-bottom: 1px;
+	border-left: 1px;
+	border-color: #B08617;
+	border-style: ridge;
+	color: white;
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 12px;
+	padding: 3px;
+}
+
+.wowitem
+{
+	background-color: #000000;
+	text-align: left;
+	width: 385px;
+	border-top: 1px;
+	border-right: 1px;
+	border-bottom: 1px;
+	border-left: 1px;
+	border-color: #B08617;
+	border-style: ridge;
+	color: white;
+	font-family: Verdana, Tahoma, Arial;
+	font-size: 12px;
+	padding: 3px;
+}
+
+/* Default link colors for the whole frame */
+.wowitemt a:link, .wowitemt a:visited, .wowitemt a:active { color: #FFB019; text-decoration: none; font-weight: normal }
+.wowitemt a:hover { color: #FFB019; text-decoration: underline; font-weight: normal }
+
+.wowitemt td
+{
+	font-family: Verdana, Tahoma, Arial; 
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+.wowitem td
+{
+	font-family: Verdana, Tahoma, Arial; 
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+/* Item icon stuff */
+.itemicon { width: 40px; height: 40px; }
+.smallitemicon { width: 20px; height: 20px; }
+
+/* Item colors */
+.redname,    .quality6 { color: #FF0000; font-weight: bold; }
+.orangename, .quality5 { color: #FF8000; font-weight: bold; }
+.purplename, .quality4 { color: #A335EE; font-weight: bold; }
+.bluename,   .quality3 { color: #0070DD; font-weight: bold; }
+.greenname,  .quality2 { color: #00CC00; font-weight: bold; }
+.whitename,  .quality1 { color: #FFFFFF; font-weight: bold; }
+.greyname              { color: #9D9D9D; font-weight: bold; }
+
+/* Item link (Name of items on ViewItem page) */
+a:link.itemlink, a:visited.itemlink, a:active.itemlink { text-decoration: none; }
+a:hover.itemlink { text-decoration: none; }
+
+/* Forum link */
+a:link.forumitemlink, a:visited.forumitemlink, a:active.forumitemlink { text-decoration: none; font-weight: normal }
+a:hover.forumitemlink { text-decoration: none; font-weight: normal }
+
+/* Armor set info link */
+.setbonus { color: #1EFF00; font-weight: normal; }
+a:link.setbonus, a:visited.setbonus, a:active.setbonus { text-decoration: none; font-weight: normal; color: #1EFF00; }
+a:hover.setbonus { text-decoration: underline; font-weight: normal; color: #1EFF00; }
+a:link.set, a:visited.set, a:active.set { text-decoration: none; font-weight: normal; color: #FFA500; }
+a:hover.set { text-decoration: underline; font-weight: normal; color: #FFA500; }
+
+/* Item effects */
+.itemeffectlink { color: #FFFFFF; font-weight: normal; }
+a:link.itemeffectlink, a:visited.itemeffectlink, a:active.itemeffectlink { text-decoration: none; font-weight: normal; color: #1EFF00; }
+a:hover.itemeffectlink { text-decoration: underline; font-weight: normal; color: #1EFF00; }
+
+/* Refresh link */
+a:link.itemrefresh, a:visited.itemrefresh, a:active.itemrefresh { text-decoration: none; font-weight: normal; font-size: x-small }
+a:hover.itemrefresh { text-decoration: none; font-weight: normal; font-size: x-small }
+
+/* Item Create link, used for certain recipes */
+.itemeffectlink { color: #FFFFFF; font-weight: normal; }
+a:link.itemcreatelink, a:visited.itemcreatelink, a:active.itemcreatelink { text-decoration: none; font-weight: normal; color: #1EFF00; }
+a:hover.itemcreatelink { text-decoration: underline; font-weight: normal; color: #1EFF00; }
+
+/* Item Description Text */
+.itemdesc { color: #FFD200; }
+
+/* Allakhazam credits stuff */
+.akznotice a:link, .akznotice a:visited, .akznotice a:active { text-decoration: underline; font-weight: normal; color: #FFFFFF; }
+.akznotice a:hover { text-decoration: underline; font-weight: normal }
+.akznotice {  display: none;  color: #FFFFFF; font-size: smaller; text-align: center; background-color: #0B0B0B; }
+
+/* Blasc Update */
+.itemspells {
+	color: #1EFF00;
+}
+.tooldiv  {
+	color: white;
+	display: block;
+	font-size: 12px;
+	padding: 0px;
+	margin: 0px;
+}
+.tooldiv table, .tooldiv td  {
+	border-width: 0px;
+	color: white;
+	font-size: 12px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.wowitemt td {
+	color: white;
+}
+
+.wowitemt table {
+	border-width: 0px;
+}
+
+.wowitemt spacer {
+	height: 10px;
+	margin-bottom: 10px;
+	min-height: 10px;
+}
+
+.wowitem td {
+	color: white;
+}
+
+.wowitem table {
+	border-width: 0px;
+}
+
+.wowitem spacer {
+	height: 10px;
+	margin-bottom: 10px;
+	min-height: 10px;
+}

@@ -1,0 +1,210 @@
+<script language="JavaScript" type="text/javascript">
+function check_form()
+{
+	return true;
+    if (document.post.raid_attendees.value.length < 1)
+    {
+        alert('{MSG_ATTENDEES_EMPTY}');
+        return false;
+    }
+    if (document.post.raid_name.value.length < 1)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}
+</script>
+
+<script type="text/javascript">
+function viewmember(file)
+{
+helpwindow = window.open(file,"viewhelp","scrollbars=no,toolbar=no,toolbar=no,directories=no,status=no,width=400");
+helpwindow.focus();
+return false;
+}
+</script> 
+
+<form method="post" action="{F_ADD_RAID}" name="post" onsubmit="return check_form(this)">
+	<input type="hidden" name="{URI_RAID}" value="{RAID_ID}" />
+	<input type="hidden" name="subscribed_member_id" value="{SUBSCRIBED_MEMBER_ID}" />
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr>
+			<th align="center" colspan="2">{L_VIEW_RAID_TITLE}: {RAID_NAME} - {RAID_DATE}</th>
+		</tr>
+		<tr>
+			<td width="100%" valign="top" class="row2">
+				<table width="100%" border="0" cellpadding="3" cellspacing="0" class="borderless">
+					<tr>
+						<td width="50%" valign="top">
+							<b>{L_RAID}:</b> {RAID_NAME}<br />
+							<b>{L_RAID}ID:</b> {RAID_ID}<br />
+						</td>
+						<td width="50%" valign="top">
+							<b>{L_VALUE}:</b> {RAID_VALUE}<br />
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%" valign="top" class="row2">
+				<table width="100%" border="0" cellpadding="3" cellspacing="0" class="borderless">
+					<tr>
+						<td width="50%" valign="top">
+							<b>{L_INVITE_TIME}:</b> {RAID_DATE_INVITE}<br />
+							<b>{L_START_TIME}:</b> {RAID_DATE}<br />
+							<br />
+							<b>{L_SIGNUP_DEADLINE}:</b> {RAID_SIGNUP_DEADLINE}<br />
+							<br />
+						</td>
+						<td width="50%" valign="top">
+							<b>{L_ADDED_BY}:</b> {RAID_ADDED_BY}<br />
+							<br />
+							<b>{L_NOTE}:</b> {RAID_NOTE}<br />
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width="100%" valign="top" class="row2">
+				<table width="100%" border="0" cellspacing="1" cellpadding="2">
+					<tr>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">{L_ATTENDEES}: {L_CONFIRMED}</th>
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<th width="{COLUMN_WIDTH}%" class="tableheader_{classes.NAME_EN}" nowrap="nowrap"><img src="images/class/{classes.NAME_EN}.gif" > {classes.NAME} ({classes.CONFIRMED}/{classes.COUNT})</th>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<td class="row1" valign="top">			
+							<!-- BEGIN confirmed_attendees -->
+							<table valign="top" height=4px width=100% border="0" cellpadding="0" cellspacing="0" class="borderless">
+							<!-- IF S_SHOW_RANKS -->
+							<tr valign="bottom">
+							<td  align="center" valign="middle"  cellpadding="0" cellspacing="0" colspan="5">({classes.confirmed_attendees.RANK})</td>
+							</tr>
+							<!-- ENDIF -->
+
+							<tr valign="top">					
+								<td align="right" valign="middle" width="19" height="19" cellpadding="0" cellspacing="0"><!-- IF classes.confirmed_attendees.NOTE ne "" --><a href="JavaScript:void()" onMouseOver="overlib('{classes.confirmed_attendees.NOTE}', CAPTION, '{L_NOTE_HEADER}');" onMouseOut="nd();"><img src="images/comment.gif"></a><!-- ENDIF --></td>
+								<td align="left"  valign="middle" width="100%" height="19"cellpadding="0" cellspacing="0"><a href="{classes.confirmed_attendees.LINK}" class="attendee_Link" onclick="return viewmember('{classes.confirmed_attendees.LINK}');" <!-- IF classes.confirmed_attendees.TIME ne "" --> onMouseOver="overlib  ('{classes.confirmed_attendees.TIME}', CAPTION, '{L_TIME_HEADER}');" onMouseOut="nd();" <!-- ENDIF --> ><!-- IF S_SHORT_RANKS -->{classes.confirmed_attendees.RANK_PREFIX}{classes.confirmed_attendees.NAME}{classes.confirmed_attendees.RANK_SUFFIX}<!-- ELSE -->{classes.confirmed_attendees.NAME}<!-- ENDIF --></a></td>								
+								<!-- IF classes.confirmed_attendees.RANDOM gt 0 --><!-- IF classes.confirmed_attendees.S_WILDCARD --><!-- IF S_SHOW_WILDCARD --><td><img src="images/wildcard.gif" alt="{L_WILDCARD}" title="{L_WILDCARD}" /></td><!-- ENDIF --><!-- ELSE --><!-- IF S_SHOW_ROLL --><td><img src="images/dice.gif" alt="{L_ROLLED}" title="{L_ROLLED}" /></td><td width=15px align=right>{classes.confirmed_attendees.RANDOM}</td><!-- ENDIF --><!-- ENDIF --><!-- ELSE -->(<span style="color:red; font-size: smaller;">deleted</span>)<!-- ENDIF -->
+							</tr>
+							</table>
+							<!-- IF classes.CONFIRMED gt 1 --><hr><!-- ENDIF -->
+							<!-- END confirmed_attendees -->
+						</td>
+						<!-- END classes -->
+					</tr>
+					
+					<tr>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">{L_ATTENDEES}: {L_SIGNED}</th>
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<th width="{COLUMN_WIDTH}%" class="tableheader_{classes.NAME_EN}" nowrap="nowrap"><img src="images/class/{classes.NAME_EN}.gif" > {classes.NAME} ({classes.SIGNED})</th>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<td class="row1" valign="top">			
+							<!-- BEGIN signin_attendees -->
+							<table valign="top" height=4px width=100% border="0" cellpadding="0" cellspacing="0" class="borderless">
+							<!-- IF S_SHOW_RANKS -->
+							<tr valign="bottom">
+							<td  align="center" valign="middle"  cellpadding="0" cellspacing="0" colspan="5">({classes.signin_attendees.RANK})</td>
+							</tr>
+							<!-- ENDIF -->
+							<tr valign="top">					
+								<td align="right" valign="middle" width="19" height="19" cellpadding="0" cellspacing="0"><!-- IF classes.signin_attendees.NOTE ne "" --><a href="JavaScript:void()" onMouseOver="overlib('{classes.signin_attendees.NOTE}', CAPTION, '{L_NOTE_HEADER}');" onMouseOut="nd();"><img src="images/comment.gif"></a><!-- ENDIF --></td>
+								<td align="left"  valign="middle" width="100%" height="19"cellpadding="0" cellspacing="0"><a href="{classes.signin_attendees.LINK}" class="attendee_Link" onclick="return viewmember('{classes.signin_attendees.LINK}');" <!-- IF classes.signin_attendees.TIME ne "" --> onMouseOver="overlib  ('{classes.signin_attendees.TIME}', CAPTION, '{L_TIME_HEADER}');" onMouseOut="nd();" <!-- ENDIF --> ><!-- IF S_SHORT_RANKS -->{classes.signin_attendees.RANK_PREFIX}{classes.signin_attendees.NAME}{classes.signin_attendees.RANK_SUFFIX}<!-- ELSE -->{classes.signin_attendees.NAME}<!-- ENDIF --></a></td>								
+								<!-- IF classes.signin_attendees.RANDOM gt 0 --><!-- IF classes.signin_attendees.S_WILDCARD --><!-- IF S_SHOW_WILDCARD --><td><img src="images/wildcard.gif" alt="{L_WILDCARD}" title="{L_WILDCARD}" /></td><!-- ENDIF --><!-- ELSE --><!-- IF S_SHOW_ROLL --><td><img src="images/dice.gif" alt="{L_ROLLED}" title="{L_ROLLED}" /></td><td width=15px align=right>{classes.signin_attendees.RANDOM}</td><!-- ENDIF --><!-- ENDIF --><!-- ELSE -->(<span style="color:red; font-size: smaller;">deleted</span>)<!-- ENDIF -->
+							</tr>
+							</table>
+							<!-- IF classes.SIGNED gt 1 --><hr><!-- ENDIF -->
+							<!-- END signin_attendees -->
+						</td>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}">{L_ATTENDEES}: {L_UNSIGNED}</th>
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<th width="{COLUMN_WIDTH}%" class="tableheader_{classes.NAME_EN}" nowrap="nowrap"><img src="images/class/{classes.NAME_EN}.gif" > {classes.NAME} ({classes.UNSIGNED})</th>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<!-- BEGIN classes -->
+						<td class="row1" valign="top">			
+							<!-- BEGIN unsigned_attendees -->
+							<table valign="top" height=4px width=100% border="0" cellpadding="0" cellspacing="0" class="borderless">
+							<!-- IF S_SHOW_RANKS -->
+							<tr valign="bottom">
+							<td  align="center" valign="middle"  cellpadding="0" cellspacing="0" colspan="5">({classes.unsigned_attendees.RANK})</td>
+							</tr>
+							<!-- ENDIF -->
+
+							<tr valign="top">					
+								<td align="right" valign="middle" width="19" height="19" cellpadding="0" cellspacing="0"><!-- IF classes.unsigned_attendees.NOTE ne "" --><a href="JavaScript:void()" onMouseOver="overlib('{classes.unsigned_attendees.NOTE}', CAPTION, '{L_NOTE_HEADER}');" onMouseOut="nd();"><img src="images/comment.gif"></a><!-- ENDIF --></td>
+								<td align="left"  valign="middle" width="100%" height="19"cellpadding="0" cellspacing="0"><a href="{classes.unsigned_attendees.LINK}" class="attendee_Link" onclick="return viewmember('{classes.unsigned_attendees.LINK}');" <!-- IF classes.unsigned_attendees.TIME ne "" --> onMouseOver="overlib  ('{classes.unsigned_attendees.TIME}', CAPTION, '{L_TIME_HEADER}');" onMouseOut="nd();" <!-- ENDIF --> ><!-- IF S_SHORT_RANKS -->{classes.unsigned_attendees.RANK_PREFIX}{classes.unsigned_attendees.NAME}{classes.unsigned_attendees.RANK_SUFFIX}<!-- ELSE -->{classes.unsigned_attendees.NAME}<!-- ENDIF --></a></td>								
+								<!-- IF classes.unsigned_attendees.RANDOM gt 0 --><!-- IF classes.unsigned_attendees.S_WILDCARD --><!-- IF S_SHOW_WILDCARD --><td><img src="images/wildcard.gif" alt="{L_WILDCARD}" title="{L_WILDCARD}" /></td><!-- ENDIF --><!-- ELSE --><!-- IF S_SHOW_ROLL --><td><img src="images/dice.gif" alt="{L_ROLLED}" title="{L_ROLLED}" /></td><td width=15px align=right>{classes.unsigned_attendees.RANDOM}</td><!-- ENDIF --><!-- ENDIF --><!-- ELSE -->(<span style="color:red; font-size: smaller;">deleted</span>)<!-- ENDIF -->
+							</tr>
+							</table>
+							<!-- IF classes.UNSIGNED gt 1 --><hr><!-- ENDIF -->
+							<!-- END unsigned_attendees -->
+						</td>
+						<!-- END classes -->
+					</tr>
+					<tr>
+						<th colspan="{ATTENDEES_COLSPAN}" class="footer">{ATTENDEES_FOOTCOUNT}</th>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<th align="center" colspan="2">
+			<table width="100%" class="borderless"  cellpadding="0" cellspacing="0" >
+			<tr>
+			<!-- IF S_LOGGED_IN -->
+				<!-- IF S_NO_USER_ASSIGN -->
+				  <th><table width="100%" bgcolor="black" bordercolor="red"><tr><td align="center"><center><font color="red">{L_NO_USER_ASSIGNED}</font></center></td></tr></table></th>
+				<!-- ELSE -->
+				  <th align="left" width="33%">{L_CHAR}: <select name="member_id" class="input"><!-- BEGIN members --><option value="{members.VALUE}"{members.SELECTED}>{members.NAME} [{members.CLASS}]</option><!-- END members --></select></th>
+				  <th align="left" width="33%">{L_NOTE}: <input type="text" name="signupnote" size="50" maxlength="255" value="" class="input" /></th>
+          <th width="33%" align="right">		
+			     <!-- IF S_SUBSCRIPTION -->
+				      <input type="submit" name="signup" value="{B_SIGNUP}" class="mainoption" />
+				      <input type="submit" name="unsign" value="{B_UNSIGN}" class="liteoption" />
+			     <!-- ENDIF -->
+			     <!-- IF S_UPDATE -->
+				      <input type="submit" name="update" value="{B_CHANGE}" class="mainoption" />
+			     <!-- ENDIF -->
+			     <!-- IF S_DELETE -->
+				      <input type="submit" name="delete" value="{B_SIGNOFF}" class="liteoption" />
+			     <!-- ENDIF -->
+				</th>
+
+				<!-- ENDIF -->
+			<!-- ELSE -->
+			<th><table width="100%" bordercolor="red"><tr><td align="center"><center><font color="red">{L_NOT_LOGGED_IN}</font></center></td></tr></table></th>
+			<!-- ENDIF -->	
+			</tr>
+			</table>
+			</th>
+		</tr>
+	</table>
+</form>
+<!-- IF S_ADMIN -->
+<table width="100%">
+	<tr>
+	<td align="center">
+	<a target="_NEW" href="lua_output.php?show=true&raid_id={RAID_ID}">{L_AUTOJOIN_LINKN}</a>
+</td></tr></table>
+<!-- ENDIF -->
+<center><span class="copy">EQDKP Raidplaner v{L_VERSION}
+<br />&copy; 2005 by A.Stranger | Continued 2006 by Urox & Wallenium </span></center>

@@ -1,0 +1,151 @@
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpireV/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<style type="text/css">
+	/* About iframe thing*/
+#AboutUs_content {
+	border:0px;
+}	
+</style>
+<script language="JavaScript" type="text/javascript">
+
+function closeWindow()
+{
+		var myId = window.name.replace('_content', '');   // resolve the id I was given
+		window.parent.Windows.close(myId);  // call parent's windows collection to close me
+		
+  
+}
+
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+</script>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="1" class=borderless>
+<tr>
+	<td valign='top'>
+	<table width=310>
+		<tr>
+			<th align="center"  colspan="2" nowrap="nowrap">{NAME}</th>
+	</tr>
+	<tr>
+    <td align="center"><img src="images/{PROFILE_PICTURE}" border=0/></td>
+		</tr>
+	</table>
+</td>
+<td valign="top">
+	<table width="560">
+		<tr><td valign="top" align="left">
+	<table class=borderless width="270" border="0" cellspacing="0" cellpadding="1">
+	<th align="center"  colspan="2" nowrap="nowrap">{L_CHAR_INFO}</th>
+	<tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_RACE}</b>: {RACENAME}</td></tr>
+		<tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_CLASS}</b>: {CLASSNAME}</td></tr>
+		<tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_GUILD}</b>: {GUILD}</td></tr>
+    		<tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_EXT_PROFILE}</b>: 
+    			<!-- IF SHOW_BLASC -->
+    			<a target="_blank" href="http://www.buffed.de/?c={BLASC_ID}"><img src="images/profilers/blasc_icon.png" width=16 height=16 border=0 alt="{L_BUFFED}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF SHOW_CTPROFILE -->
+    			<a target="_blank" href="http://ctprofiles.net/{CTPROFILE_ID}"><img src="images/profilers/ctprofile_icon.png" border=0 alt="{L_CTPROFILES}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF SHOW_ALLA -->
+    			<a target="_blank" href="http://wow.allakhazam.com/profile.html?{ALLA_ID}"><img src="images/profilers/alla_icon.png" width=16 height=16 border=0 alt="{L_ALLAKHAZAM}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF SHOW_CURSE -->
+    			<a target="_blank" href="{CURSE_ID}"><img src="images/profilers/curse_icon.png" width=16 height=16 border=0 alt="{L_CURSEPROFILES}" /></a>
+    		<!-- ENDIF -->
+    		<!-- IF SHOW_TALENT -->
+    			<a target="_blank" href="{TALENT_URL}"><img src="images/profilers/talent.jpg" width=16 height=16 border=0 alt="{L_TALENTPLANER}" /></a>
+    		<!-- ENDIF -->
+    		</td></tr>
+    		<tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_SKILL}</b>: {SKILL}</td></tr>
+				<tr>
+    		<td align="left" class="row2"><b>{L_RECEIVES}: </b>
+    		<!-- BEGIN ts_ext -->
+    					{ts_ext.ICON}   
+    		<!-- END ts_ext -->
+
+    	</td>
+    </tr>
+   </table><center>
+   <table width="96%" class=borderless border="0" cellspacing="0" cellpadding="1">
+<tr class="row1">
+    <td width="20" nowrap="nowrap" ><img src="images/resistence/arcane_resistance.gif" width="20" height="20" alt="{L_ARCANE}" /></td>
+    <td width="20" nowrap="nowrap" >{ARCANE}</td>
+    <td width="20" nowrap="nowrap" ><img src="images/resistence/fire_resistance.gif" width="20" height="20" alt="{L_FIRE}" /></td>
+    <td width="20" nowrap="nowrap" >{FIRE}</td>
+    <td width="20" nowrap="nowrap" ><img src="images/resistence/nature_resistance.gif" width="20" height="20" alt="{L_NATURE}" /></td>
+    <td width="20" nowrap="nowrap" >{NATURE}</td>
+    <td width="20" nowrap="nowrap" ><img src="images/resistence/frost_resistance.gif" width="20" height="20" alt="{L_FROST}" /></td>
+    <td width="20" nowrap="nowrap" >{FROST}</td>
+    <td width="20" nowrap="nowrap" ><img src="images/resistence/shadow_resistance.gif" width="20" height="20" alt="{L_SHADOW}" /></td>
+    <td width="20" nowrap="nowrap" >{SHADOW}</td>
+    </tr>
+  </table></center>
+</td>
+ <td valign="top" align="right">
+    <table width="330" border="0" cellspacing="0" cellpadding="1">
+    		<th>{L_RAID_INFOS}</th>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_EARNED}</b>: <span class="positive">{EARNED}</span></td></tr>
+        <tr><td align="left" class="row2" width="20%" nowrap="nowrap"><b>{L_SPENT}</b>: <span class="negative">{SPENT}</span></td></tr>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_ADJUSTMENT}</b>: <span class="{C_ADJUSTMENT}">{ADJUSTMENT}</span></td></tr>
+        <tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_CURRENT}</b>: <span class="{C_CURRENT}">{CURRENT}</span></td></tr>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_RAIDS_30_DAYS}</b>: <span class="{C_RAIDS_30_DAYS}">{RAIDS_30_DAYS}</span></td></tr>
+        <tr><td align="left" class="row2" width="20%" nowrap="nowrap"><b>{L_RAIDS_60_DAYS}</b>: <span class="{C_RAIDS_30_DAYS}">{RAIDS_60_DAYS}</span></td></tr>
+        <tr><td align="left" class="row1" width="20%" nowrap="nowrap"><b>{L_RAIDS_90_DAYS}</b>: <span class="{C_RAIDS_90_DAYS}">{RAIDS_90_DAYS}</span></td>
+        <tr><td align="left" class="row2" width="40%" nowrap="nowrap"><b>{L_RAIDS_LIFETIME}</b>: <span class="{C_RAIDS_LIFETIME}">{RAIDS_LIFETIME}</span></td></tr>
+	</table> 
+	</td></tr>   	
+    </table>
+    </td>
+</tr>
+</table>
+<br />
+<table class=borderless>
+	<tr><td width=50% valign="top">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_LAST_5_RAIDS}</th>
+  </tr>
+  <tr>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="35%" nowrap="nowrap">{L_NAME}</th>
+    <th align="left" width="65%" nowrap="nowrap">{L_NOTE}</th>
+    <th align="left" width="60" nowrap="nowrap">{L_EARNED}</th>
+  </tr>
+  <!-- BEGIN raids_row -->
+  <tr class="{raids_row.ROW_CLASS}">
+    <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="35%" nowrap="nowrap"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="65%" nowrap="nowrap">{raids_row.NOTE}</td>
+    <td width="60" nowrap="nowrap" class="positive">{raids_row.EARNED}</td>
+  </tr>
+  <!-- END raids_row -->
+</table>
+</td><td width=50% valign="top">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="5">{L_LAST_5_ITEMS}</th>
+  </tr>
+  <tr>
+    <th align="left" width="70" nowrap="nowrap">{L_DATE}</th>
+    <th align="left" width="50%">{L_NAME}</th>
+    <th align="left" width="60" nowrap="nowrap">{L_SPENT}</th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+    <td width="70" nowrap="nowrap">{items_row.DATE}</td>
+    <td width="50%" nowrap="nowrap"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td width="60" nowrap="nowrap" class="negative">{items_row.SPENT}</td>
+  </tr>
+  <!-- END items_row -->
+</table>
+</td></tr>
+</table>
+<center><br /><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="{ICON_INFO}" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">{L_CREDIT_NAME} v{L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpireV/page_tail.html -->

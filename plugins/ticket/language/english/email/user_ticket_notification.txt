@@ -1,0 +1,6 @@
+Subject: {GUILDTAG} {DKP_NAME}: Answer to your ticket submitted!
+Charset: iso-8859-1
+
+An answer to one of your tickets was submitted by an admin!
+
+Your DKP-Team

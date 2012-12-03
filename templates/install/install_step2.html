@@ -1,0 +1,104 @@
+<!-- INCLUDE install_header.html -->
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="install.php" name="post">
+<input type="hidden" name="install_step" value="3" />
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">Language Configuration</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Default Language:</td>
+    <td width="60%" class="row1">
+      <select name="default_lang" class="input">
+        <!-- BEGIN language_row -->
+        <option value="{language_row.VALUE}"{language_row.SELECTED}>{language_row.OPTION}</option>
+        <!-- END language_row -->
+      </select>
+    </td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">Database Configuration</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Database Type:</td>
+    <td width="60%" class="row1">
+      <select name="dbtype" class="input">
+        <!-- BEGIN dbal_row -->
+        <option value="{dbal_row.VALUE}">{dbal_row.OPTION}</option>
+        <!-- END dbal_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Default Locale:</td>
+    <td width="60%" class="row1">
+      <select name="default_locale" class="input">
+        <!-- BEGIN locale_row -->
+        <option value="{locale_row.VALUE}"{locale_row.SELECTED}>{locale_row.OPTION}</option>
+        <!-- END locale_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Database host:</td>
+    <td width="60%" class="row1"><input type="text" name="dbhost" size="25" value="{DB_HOST}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Database name:</td>
+    <td width="60%" class="row1"><input type="text" name="dbname" size="25" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Database username:</td>
+    <td width="60%" class="row1"><input type="text" name="dbuser" size="25" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Database password:</td>
+    <td width="60%" class="row1"><input type="password" name="dbpass" size="25" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Prefix for EQdkp tables:</td>
+    <td width="60%" class="row1"><input type="text" name="table_prefix" size="25" value="{TABLE_PREFIX}" class="input" /></td>
+  </tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">Server Configuration</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Domain name:</td>
+    <td width="60%" class="row1"><input type="text" name="server_name" size="25" value="{SERVER_NAME}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Server port:</td>
+    <td width="60%" class="row1"><input type="text" name="server_port" size="25" value="{SERVER_PORT}" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Script path:</td>
+    <td width="60%" class="row1"><input type="text" name="server_path" size="25" value="{SERVER_PATH}" class="input" /></td>
+  </tr>
+</table>
+<br />
+<!-- IF MSG_TEXT != '' -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left">{MSG_TITLE}</th>
+  </tr>
+  <tr>
+    <td align="left" class="row1">&nbsp;<br />{MSG_TEXT}<br />&nbsp;</td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+  </tr>
+</table>
+<br />
+<!-- ENDIF -->
+<!-- IF S_SHOW_BUTTON -->
+<div align="center"><input type="submit" name="submit" value="Proceed" class="mainoption" /></div>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE install_tail.html -->

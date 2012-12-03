@@ -1,0 +1,195 @@
+<!-- INCLUDE script_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<script language="JavaScript" type="text/javascript">
+<!--
+
+function closeWindow()
+{
+		var myId = window.name.replace('_content', '');   // resolve the id I was given
+		window.parent.Windows.close(myId);  // call parent's windows collection to close me
+}
+
+function oeffnefenster (url) {
+ fenster = window.open(url, "fenster1", "width=450,height=160,status=yes,scrollbars=yes,resizable=yes");
+ fenster.focus();
+}
+
+function check_form()
+{
+    if (document.post.member_name.value.length < 2)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}               
+//-->
+</script>
+
+<!-- IF U_INFO_BOX -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <!-- IF U_SAVED_SUCC -->
+    <td class="row1" width ="48px"><img src="images/ok.png" /></td>
+    <td class="row1">
+    <!-- IF WAS_UPDATE -->
+    {L_UPDATED_SUCC}
+    <!-- ELSE -->
+    {L_SAVED_SUCC}
+    <!-- ENDIF -->
+    </td>
+    <!-- ENDIF -->
+    <!-- IF U_SAVED_NOT -->
+    <td class="row1" width ="48px"><img src="images/false.png" /></td>
+    <td class="row1">{L_SAVED_NOT}</td>
+    <!-- ENDIF -->
+  </tr>
+  <tr>
+</table>
+<br>
+<!-- ENDIF -->
+
+<form method="post" action="{F_ADD_MEMBER}" name="post" onsubmit="return check_form(this)">
+
+{TAB_PANE_START}
+{TAB_M1_START}
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+    <td width="100" nowrap="nowrap" class="row1" colspan=2>
+    	<input type="hidden" name="member_pic" size="20" value="{UCV_PICTURE}" class="input" />
+    	<!-- IF UCV_SHOW_PIC -->
+    	<span id="picbutton" style="visibility: visible">
+ 			    		<!-- IF UCV_IS_PIC -->
+    			<img src="images/upload/{UCV_PICTURE}" />
+    		<!-- ELSE -->
+    			<img src="images/no_pic.png" />
+    		<!-- ENDIF -->
+    		<input type="button" name="add" value="{L_CHANGE_PIC}" onclick="javascript:oeffnefenster('picture.php')" class="mainoption"/>
+   	</span>
+   	<span id="pictext" style="visibility: hidden">{L_SUCC_CHANGED}</span>
+    	<!-- ELSE -->
+    	<span id="picbutton" style="visibility: visible">
+ <input type="button" name="add" value="{L_ADD_PIC}" onclick="javascript:oeffnefenster('picture.php')" class="mainoption"/>
+</span>
+<span id="pictext" style="visibility: hidden">{L_SUCC_ADDED}</span>
+<!-- ENDIF -->
+    	</td>
+    </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_NAME}:</td>
+    <!-- IF EDIT_BUTTONS -->
+    <td width="50%" nowrap="nowrap" class="row2">{UCV_MEMBER_NAME}
+    	<input type="hidden" name="member_name" size="60" value="{UCV_MEMBER_NAME}" class="input" />
+    	<input type="hidden" name="memberid" size="20" value="{UCV_MEMBER_ID}" class="input" />
+    	</td>
+    <!-- ELSE -->
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_name" size="20" value="{UCV_MEMBER_NAME}" class="input" /></td>
+		<!-- ENDIF -->  
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RACE}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+      <select name="member_race_id" class="input">
+        <!-- BEGIN race_row -->
+        <option value="{race_row.VALUE}" {race_row.SELECT}>{race_row.OPTION}</option>
+        <!-- END race_row -->
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CLASS}:</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+      <select name="member_class_id" class="input">
+        <!-- BEGIN class_row -->
+        <option value="{class_row.VALUE}" {class_row.SELECT}>{class_row.OPTION}</option>
+        <!-- END class_row -->
+      </select>
+    </td>
+   </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_LEVEL}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="member_level" size="3" maxlength="2" value="{UCV_MEMBER_LEVEL}" class="input" /></td>
+   </tr>
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_GUILD}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="guild" size="25" maxlength="50" value="{UCV_GUILD}" class="input" /></td>
+   </tr>
+   
+
+   <!-- IF SHOW_CHECKBOX -->
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_OVERTAKE}:</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="checkbox" name="overtakeuser" value="1" /></td>
+   </tr>
+   <!-- ENDIF -->
+  <tr>
+  </tr>
+</table>
+{TAB_MX_END}
+{TAB_M2_START}
+   <table width="100%" border="0" cellspacing="1" cellpadding="2">
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RESISTENCE}: {L_RESI_ARCANE}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="arcane" size="4" maxlength="3" value="{UCV_ARCANE}" class="input" /></td>
+   </tr>
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RESISTENCE}: {L_RESI_FIRE}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="fire" size="4" maxlength="3" value="{UCV_FIRE}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RESISTENCE}: {L_RESI_NATURE}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="nature" size="4" maxlength="3" value="{UCV_NATURE}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RESISTENCE}: {L_RESI_FROST}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="ice" size="4" maxlength="3" value="{UCV_ICE}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_RESISTENCE}: {L_RESI_SHADOW}</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="shadow" size="4" maxlength="3" value="{UCV_SHADOW}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_SKILL}</td>
+    <td width="50%" nowrap="nowrap" class="row2">
+    	<input type="text" name="skill_1" size="4" maxlength="3" value="{UCV_SKILL_1}" class="input" /> -
+    	<input type="text" name="skill_2" size="4" maxlength="3" value="{UCV_SKILL_2}" class="input" /> -
+    	<input type="text" name="skill_3" size="4" maxlength="3" value="{UCV_SKILL_3}" class="input" />
+    
+    </td>
+   </tr>
+   </table>
+{TAB_MX_END}
+{TAB_M3_START}
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_BUFFED} ID</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="blasc_id" size="15" maxlength="50" value="{UCV_BUFFED}" class="input" /></td>
+   </tr>
+   <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CTPROFILES} ID</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="ct_profile" size="15" maxlength="50" value="{UCV_CTPROFILES}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_ALLAKHAZAM} ID</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="allakhazam" size="15" maxlength="50" value="{UCV_ALLAKHAZAM}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CURSE_PROFILER} URL</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="curse_profiler" size="25" maxlength="255" value="{UCV_CURSE_PROFILER}" class="input" /></td>
+   </tr>
+    <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_TALENTPLANER} URL</td>
+    <td width="50%" nowrap="nowrap" class="row2"><input type="text" name="talentplaner" size="25" maxlength="255" value="{UCV_TALENTPLANER}" class="input" /></td>
+   </tr>
+  </tr>
+</table>
+{TAB_MX_END}
+{TAB_PANE_END}
+<br><center>
+ <!-- IF EDIT_BUTTONS -->
+    <input type="submit" name="edit" value="{L_EDIT_MEMBER}" class="mainoption" /> <input type="button" onclick="javascript:closeWindow()" name="cancel" value="{L_CANCEL}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="add" value="{L_ADD_MEMBER}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+      <!-- ENDIF -->
+</center>
+</form>

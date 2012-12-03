@@ -1,0 +1,252 @@
+<script language="JavaScript" type="text/javascript">
+<!--
+b_help = "{L_B_HELP}";
+i_help = "{L_I_HELP}";
+u_help = "{L_U_HELP}";
+q_help = "{L_Q_HELP}";
+c_help = "{L_C_HELP}";
+p_help = "{L_P_HELP}";
+w_help = "{L_W_HELP}";
+
+var theSelection = false;
+bbcode = new Array();
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[img]http://','[/img]','[url]http://','[/url]','[center]','[/center]');
+
+function helpline(help)
+{
+    document.post.helpbox.value = eval(help + "_help");
+}
+
+function check_form()
+{
+    if (document.post.standalone_message.value.length < 2)
+    {
+        //alert('{MSG_MESSAGE_EMPTY}');
+	    alert('Fehler in Ticket');
+        return false;
+    }
+    return true;
+}
+
+function bbstyle(bbnumber)
+{
+    // Insert opening/closing tags
+    document.post.standalone_message.value += bbtags[bbnumber] + bbtags[bbnumber+1];
+    document.post.standalone_message.focus();
+    return;
+
+}
+function check_form1()
+{
+	if (document.post1.reply_message.value.length < 2)
+	{
+        //alert('{MSG_MESSAGE_EMPTY}');
+		alert('Fehler in Replyticket');
+		return false;
+	}
+	return true;
+}
+function bbstyle1(bbnumber)
+{
+    // Insert opening/closing tags
+	document.post1.reply_message.value += bbtags[bbnumber] + bbtags[bbnumber+1];
+	document.post1.reply_message.focus();
+	return;
+
+}
+//-->
+</script>
+<!-- IF S_SHOWUSERNAMEERROR -->
+<center><h1><b>{USERNAMEERROR}</b></h1><center>
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+<th align="center">{L_REPLYHEADER}</th>
+</tr>
+<!-- IF S_SHOWDELETED -->
+		<tr><td>{L_Helptext}</td></tr>
+		<tr><td><a href="{TOGGLESHOWDEL}">{L_ShowDeleted}</a></td></tr>
+<!-- ELSE -->
+		<tr><td>{L_HelptextDeleted}</td></tr>
+		<tr><td><a href="{TOGGLESHOWDEL}">{L_HideDeleted}</a></td></tr>
+<!-- ENDIF -->
+<tr>
+<td>
+<!-- BEGIN ticket_row -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+    <th align="left" width="50">{L_FROM_USER}</th>
+    <th align="left" width="100">{L_MESSAGE_DATE}</th>
+    <th>{L_MESSAGE_BODY}</th>
+    <th align="center" width="20">{L_DELETE}</th>
+</tr>
+    <tr class="row2">
+    <td align="left" width="50">{ticket_row.USER_NAME}</td>
+    <td align="left" width="100">{ticket_row.MESSAGE_DATE}</td>
+    <td>{ticket_row.MESSAGE_BODY}</td>
+    <td align="center" width="20">
+    <a href="{ticket_row.DELETE}"><img border="0" src="../images/delete.gif" width="18" height="17">
+    </td>
+</tr>
+<!-- IF ticket_row.S_REPLIES -->
+<tr>
+  <td></td>
+    <td colspan="3">
+      <table width="100%" border="0" cellspacing="1" cellpadding="2">
+       <tr>
+        <th align="left" width="50">{L_FROM_ADMIN}</th>
+        <th align="left" width="100">{L_REPLY_DATE}</th>
+        <th>{L_REPLY_BODY}</th>
+        <th align="center" width="20">{L_READ}</th>
+       </tr>
+       <!-- BEGIN reply_row -->
+       <tr class="{ticket_row.reply_row.ROW_CLASS}">
+        <td align="left" width="50">{ticket_row.reply_row.FROM_ADMIN}</td>
+        <td align="left" width="100">{ticket_row.reply_row.REPLY_DATE}</td>
+        <td>{ticket_row.reply_row.REPLY_BODY}</td>
+        <td align="center" width="20">
+            <!-- IF !(ticket_row.reply_row.S_NOTREAD) --><img border="0" src="../images/check.gif"><!-- ENDIF -->
+        </td>
+       </tr>
+       <!-- END reply_row -->
+      </table>
+   </td>
+</tr>
+<!-- ENDIF -->
+<!-- BEGIN replyticket_row -->
+<tr class="{ticket_row.replyticket_row.ROW_CLASS}" >
+	<td align="left" width="50">{ticket_row.replyticket_row.USER_NAME}</td>
+	<td align="left" width="100">{ticket_row.replyticket_row.MESSAGE_DATE}</td>
+	<td colspan="2">{ticket_row.replyticket_row.MESSAGE_BODY}</td>
+</tr>
+	<!-- IF ticket_row.replyticket_row.S_REPLIES -->
+	<tr>
+		<td></td>
+		<td colspan="3">
+		 <table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<!-- BEGIN reply_row -->
+		 <tr class="{ticket_row.replyticket_row.reply_row.ROW_CLASS}">
+		  <td align="left" width="50">{ticket_row.replyticket_row.reply_row.FROM_ADMIN}</td>
+		  <td align="left" width="100">{ticket_row.replyticket_row.reply_row.REPLY_DATE}</td>
+		  <td>{ticket_row.replyticket_row.reply_row.REPLY_BODY}</td>
+		  <td align="center" width="20">
+                <!-- IF !(ticket_row.replyticket_row.reply_row.S_NOTREAD) --><img border="0" src="../images/check.gif" ><!-- ENDIF -->
+		  </td>
+		 </tr>
+		<!-- END reply_row -->
+		 </table>
+		</td>
+	</tr>
+	<!-- ENDIF -->		
+<!-- END replyticket_row -->		
+<!-- IF ticket_row.S_REPLYTICKET -->
+<tr class="{ticket_row.ROW_CLASS}" colspan="3">
+	<form method="post" action="{ticket_row.F_SUBMIT_REPLYTICKET}" name="post1" onsubmit="return check_form1(this)">
+	<input type="hidden" name="ticket_id" value="{ticket_row.TICKET_ID_TO_REPLY}">
+	<input type="hidden" name="session_id" value="{ticket_row.TICKET_ID}">
+ 	<input type="hidden" name="ticketsuser_id" value="{ticket_row.TICKETSUSER_ID}">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<tr>
+		 <th align="center" colspan="2" >{L_SUBMIT_REPLY}</th>
+		</tr>
+		<tr>
+		 <td width="200" class="row1" nowrap="nowrap"><b>{L_MESSAGE_BODY}:</b></td>
+		 <td width="100%" class="row2">
+		  <table border="0" cellspacing="0" cellpadding="2" class="borderless">
+		  <tr>
+		   <td><input type="button" accesskey="b" name="addcode0" value=" B " style="font-weight: bold; width: 30px" onmouseover="helpline('b')" onclick="bbstyle1(0)" class="input" /></td>
+		   <td><input type="button" accesskey="i" name="addcode2" value=" i " style="font-style: italic; width: 30px" onmouseover="helpline('i')" onclick="bbstyle1(2)" class="input" /></td>
+		   <td><input type="button" accesskey="u" name="addcode4" value=" u " style="text-decoration: underline; width: 30px" onmouseover="helpline('u')" onclick="bbstyle1(4)" class="input" /></td>
+		   <td><input type="button" accesskey="q" name="addcode6" value=" Quote " style="width: 50px" onmouseover="helpline('q')" onclick="bbstyle1(6)" class="input" /></td>
+		   <td><input type="button" accesskey="c" name="addcode12" value=" Center " style="width: 50px" onmouseover="helpline('c')" onclick="bbstyle1(12)" class="input" /></td>
+		   <td><input type="button" accesskey="p" name="addcode8" value=" IMG " style="width: 50px" onmouseover="helpline('p')" onclick="bbstyle1(8)" class="input" /></td>
+		   <td><input type="button" accesskey="w" name="addcode10" value=" URL " style="width: 50px" onmouseover="helpline('w')" onclick="bbstyle1(10)" class="input" /></td>
+		  </tr>
+		  </table>
+		  <table border="0" cellspacing="0" cellpadding="2" class="borderless">
+		  <tr>
+		   <td><input type="text" name="helpbox" size="45" maxlength="100" style="width: 450px; font-size: 10px;" class="helpline2" value="" /></td>
+		  </tr>
+		  <tr>
+		   <td><textarea name="reply_message" rows="15" cols="60" style="width: 450px" class="input"></textarea>{FV_MESSAGE}</td>
+		  </tr>
+		  </table>
+		 </td>
+		</tr>
+
+		<tr>
+		 <th align="center" colspan="2">
+		 <input type="submit" name="submit1" value="{L_SUBMIT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+
+		 </th>
+		</tr>
+		</table>
+	</form>
+</tr>
+	<!-- ELSE -->
+	<tr>
+		<th colspan="4" align="center">
+		<!-- IF S_SHOWDELETED -->
+		<a href="{ticket_row.REPLYTICKET}"><img border="0" alt="img" src="../images/replyticket.gif">{L_REPLYTICKET}</a>
+		<!-- ELSE -->
+		<a href="{ticket_row.UNDELETE}">{L_UNDELETE}</a>
+		<!-- ENDIF -->
+		</th>
+	</tr>
+		
+<!-- ENDIF -->
+
+</table>
+<br />
+<!-- END ticket_row -->
+<!-- IF S_NOREPLYOPEN && S_SHOWDELETED -->
+<form method="post" action="{F_SUBMIT_TICKET}" name="post" onsubmit="return check_form(this)">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2" >{L_SUBMIT_ST_REPLY}</th>
+  </tr>
+  <tr>
+    <td width="200" class="row1" nowrap="nowrap"><b>{L_MESSAGE_BODY}:</b></td>
+    <td width="100%" class="row2">
+      <table border="0" cellspacing="0" cellpadding="2" class="borderless">
+        <tr>
+          <td><input type="button" accesskey="b" name="addcode0" value=" B " style="font-weight: bold; width: 30px" onmouseover="helpline('b')" onclick="bbstyle(0)" class="input" /></td>
+          <td><input type="button" accesskey="i" name="addcode2" value=" i " style="font-style: italic; width: 30px" onmouseover="helpline('i')" onclick="bbstyle(2)" class="input" /></td>
+          <td><input type="button" accesskey="u" name="addcode4" value=" u " style="text-decoration: underline; width: 30px" onmouseover="helpline('u')" onclick="bbstyle(4)" class="input" /></td>
+          <td><input type="button" accesskey="q" name="addcode6" value=" Quote " style="width: 50px" onmouseover="helpline('q')" onclick="bbstyle(6)" class="input" /></td>
+          <td><input type="button" accesskey="c" name="addcode12" value=" Center " style="width: 50px" onmouseover="helpline('c')" onclick="bbstyle(12)" class="input" /></td>
+          <td><input type="button" accesskey="p" name="addcode8" value=" IMG " style="width: 50px" onmouseover="helpline('p')" onclick="bbstyle(8)" class="input" /></td>
+          <td><input type="button" accesskey="w" name="addcode10" value=" URL " style="width: 50px" onmouseover="helpline('w')" onclick="bbstyle(10)" class="input" /></td>
+        </tr>
+      </table>
+      <table border="0" cellspacing="0" cellpadding="2" class="borderless">
+        <tr>
+          <td><input type="text" name="helpbox" size="45" maxlength="100" style="width: 450px; font-size: 10px;" class="helpline2" value="" /></td>
+        </tr>
+	<tr>
+		<td>{L_TOUSER} <input type="text" name="touser_id" size="45" maxlength="30" style="width: 300px; font-size: 10px;" class="input"/></td>
+	</tr>
+        <tr>
+		<td><textarea name="standalone_message" rows="15" cols="60" style="width: 450px" class="input">{MESSAGE}</textarea>{FV_MESSAGE}</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_SUBMIT -->
+    <input type="submit" name="submit" value="{L_SUBMIT_ST_REPLY_BUTTON}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_TICKET}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_TICKET}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<br />
+<!-- ENDIF -->
+</td>
+</tr>
+</table>
+

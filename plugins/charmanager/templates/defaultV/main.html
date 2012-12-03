@@ -1,0 +1,154 @@
+<!-- INCLUDE ../../../../templates/defaultV/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<style type="text/css">
+	/* About iframe thing*/
+#AboutUs_content {
+	border:0px;
+}	
+</style>
+<script language="JavaScript" type="text/javascript"><!--
+
+function closeWindow()
+{
+		var myId = window.name.replace('_content', '');   // resolve the id I was given
+		window.parent.Windows.close(myId);  // call parent's windows collection to close m
+}
+
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+
+function ConnectedMembers() {
+	var win = new Window('ConnectedMembers', {className: "alphacube", title: "{L_CONNECT_MEM}", 
+                                              top:70, left:100, width:450, height:310, 
+                                              resizable: true, url: "conected.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();  
+  }
+  
+function AddChars() {
+	var winn = new Window('AddChars', {className: "alphacube", title: "{L_ADD_CHAR}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "addchar.php", showEffectOptions: {duration:1}})
+winn.setDestroyOnClose();
+winn.showCenter();  
+// Set up a windows observer, set open window check to null
+  							myObserver = {
+    							onDestroy: function(eventName, win) {
+      							if (win == winn) {
+        							winn = null;
+        							window.location.reload();
+        							Windows.removeObserver(this);
+      							}
+    							}
+  							}
+  							Windows.addObserver(myObserver);
+  }
+  
+function EditChars() {
+	var win = new Window('EditChars', {className: "alphacube", title: "{L_EDIT_MEMBER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "addchar.php?mode=edit&secrethash=blubber&editid={EDIT_ID}", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();  
+  }
+
+function startLoading() {
+    Dialog.info("{L_AJAX_LOADING} ...",
+               {windowParameters: {className:"alphacube", width:250, height:100}, showProgress: true});
+  }
+  
+function stopLoading() {
+    Dialog.closeInfo();
+  }
+
+Ajax.Responders.register({
+    onCreate : startLoading
+  });
+//-->
+</script>
+<!-- IF CLOSE_WINDOWS -->
+<script type="text/javascript">
+	closeWindow();
+	//window.location.reload();
+</script>
+<!-- ENDIF -->
+<!-- IF EDIT_CHAR -->
+<script type="text/javascript">
+	EditChars();
+</script>
+<!-- ENDIF -->
+<!-- IF IS_ADMIN -->
+<!-- IF VC_SHOW -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_INFO_BOX}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="images/false.png" /></td>
+    <td class="row1"><font color="red">{VC_TEXT}</font></td>
+  </tr>
+  <tr>
+</table>
+<br>
+<!-- ENDIF -->
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_MEMBER_CHARS}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="images/help.png" /></td>
+    <td class="row1">{L_SELECT_CHARS}</td>
+  </tr>
+  <tr>
+</table>
+<br>
+<form method="post" action="{F_MEMBERS}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
+    <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>  </tr>
+  <!-- BEGIN members_row -->
+  <tr class="{members_row.ROW_CLASS}">
+    <td width="35" nowrap="nowrap" align="right"><INPUT TYPE=RADIO NAME="editmember" VALUE="{members_row.ID}"></td>
+    <td width="35" nowrap="nowrap" align="right">{members_row.COUNT}</td>
+    <td width="100%" nowrap="nowrap">{members_row.NAME}</td>
+    <td width="40" nowrap="nowrap">{members_row.LEVEL}</td>
+    <td width="100" nowrap="nowrap">{members_row.CLASS}</td>
+  </tr>
+  <!-- END members_row -->
+  <tr>
+    <th colspan="11" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+  </tr>
+  <tr>
+    <th align="center" colspan="6">
+    	<div class="minitooltip" id="1">
+				{L_TOOLTIP1}
+			</div>
+			
+			<div class="minitooltip" id="2">
+				{L_TOOLTIP2}
+			</div>
+			
+			<div class="minitooltip" id="3">
+				{L_TOOLTIP3}
+			</div>
+			
+    <input type="submit" name="edit" value="{L_EDIT_CHARS}" class="mainoption" onmouseover="showWMTT('1')" onmouseout="hideWMTT()"/>
+    <input type="button" name="connect" value="{L_CHAR_CONN}" onclick="javascript:ConnectedMembers()" class="mainoption" onmouseover="showWMTT('2')" onmouseout="hideWMTT()"/>
+    <input type="button" name="add" value="{L_ADD_CHAR}" onclick="javascript:AddChars()" class="mainoption" onmouseover="showWMTT('3')" onmouseout="hideWMTT()"/>
+       </th>
+  </tr>
+</table>
+</form>
+<center><br /><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="{ICON_INFO}" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">{L_CREDIT_NAME} v{L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/defaultV/page_tail.html -->

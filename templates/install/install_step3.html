@@ -1,0 +1,46 @@
+<!-- INCLUDE install_header.html -->
+<!-- IF S_SHOW_BUTTON -->
+<form method="post" action="install.php" name="post">
+<input type="hidden" name="install_step" value="4" />
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" colspan="2">Administrator Account Configuration</th>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Administrator username:</td>
+    <td width="60%" class="row1" align="left"><input type="text" name="username" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Administrator password:</td>
+    <td width="60%" class="row1" align="left"><input type="password" name="user_password1" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Administrator password [ confirm ]:</td>
+    <td width="60%" class="row1" align="left"><input type="password" name="user_password2" value="" class="input" /></td>
+  </tr>
+  <tr>
+    <td width="40%" class="row2" align="right">Administrator e-mail:</td>
+    <td width="60%" class="row1" align="left"><input type="text" name="user_email" value="" class="input" /></td>
+  </tr>
+</table>
+<br />
+<!-- IF MSG_TEXT != '' -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left">{MSG_TITLE}</th>
+  </tr>
+  <tr>
+    <td align="left" class="row1">&nbsp;<br />{MSG_TEXT}<br />&nbsp;</td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+  </tr>
+</table>
+<br />
+<!-- ENDIF -->
+<!-- IF S_SHOW_BUTTON -->
+<div align="center"><input type="submit" name="submit" value="Proceed" class="mainoption" /></div>
+</form>
+<!-- ENDIF -->
+<!-- INCLUDE install_tail.html -->

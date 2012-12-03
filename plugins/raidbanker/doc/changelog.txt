@@ -1,0 +1,46 @@
+/******************************
+ * EQdkp Raid Banker
+ * Copyright 2006 by WalleniuM
+ * ------------------
+ * viewinfos.php
+ * Changed: October 26, 2006
+ * 
+ ******************************/
+
+Changelog
+--------------------------------------------------------------------------------------------------
+1.0.1 [10/28/2006]
+	Fixed - [#29] doubble links in administration menu
+	Fixed - [#134] Add Updatecheck 2.0/ Bugfix: fsock instead of fopen
+	Fixed - [#137] Info Tooltips don't show
+	Fixed - [#140] if Itemlist.xml is placed in includes/ folder,  -> error (URL)
+	Implemented - [#138] Old Style display of bank, every item & banker
+
+
+1.0.0 [10/26/2006]
+  Fixed - [#22] Admin Menu should be on left side during import
+	Fixed - [#26] Set Tooltip Text Color to Black
+	Fixed - [#27] change bank: forgotten echo (sql statment)
+	Fixed - [#28] wrong link location (item links)
+	Fixed - [#33] IE-Bug: Manage doesn&#039;t work
+	Fixed - [#36] convert all themes for b3
+	Fixed - [#42] cant add banker
+	Fixed - [#49] Money is not correctly displayed
+	Fixed - [#114] xml itemlist translation into DE
+	Implemented - [#11] Add items to raidbanker (manual add)
+	Implemented - [#12] sperate Database Layout
+	Implemented - [#13] Priority System
+	Implemented - [#16] option to choose if DKP or items for an item of the bank
+	Implemented - [#17] invoice system
+	Implemented - [#18] Total bank holdings
+	Implemented - [#19] New Layout, with filters and so on
+	Implemented - [#20] Add actions to the Logfile
+	Implemented - [#21] Manually add bankers
+	Implemented - [#23] Option to enable/disbale the bank holdings
+	Implemented - [#24] move filter settings to functions.php
+	Implemented - [#25] Disable the toolitps
+	Implemented - [#32] Add Mainchar &amp; note to bank
+	Implemented - [#34] Credits-Dialogue
+	Implemented - [#38] Option for automatic dkp adjustment
+	Implemented - [#39] automatic change of amount on item donnations/receive
+

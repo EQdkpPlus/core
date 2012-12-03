@@ -1,0 +1,86 @@
+<!-- INCLUDE ../../../../templates/WoWMoonclaw01V/page_header.html -->
+<!-- IF VC_SHOW -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_INFO_BOX}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="../images/false.png" /></td>
+    <td class="row1"><font color="red">{VC_TEXT}</font></td>
+  </tr>
+  <tr>
+</table>
+<br>
+<!-- ENDIF -->
+<!-- IF U_INFO_BOX -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_INFO_BOX}</th>
+  </tr>
+  <tr>
+    <!-- IF U_SAVED_SUCC -->
+    <td class="row1" width ="48px"><img src="../images/ok.png" /></td>
+    <td class="row1">{L_SAVED_SUCC}</td>
+    <!-- ENDIF -->
+    <!-- IF U_SAVED_NOT -->
+    <td class="row1" width ="48px"><img src="../images/false.png" /></td>
+    <td class="row1">{L_SAVED_NOT}</td>
+    <!-- ENDIF -->
+  </tr>
+  <tr>
+</table>
+<br>
+<!-- ENDIF -->
+<form method="post" action="{F_CONFIG}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+<tr>
+    <th align="center" colspan="2">{L_GENERAL}</th>
+</tr>
+			<tr>
+				<td width="60%" class="row2">{L_USE_ITEMSTATS}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_itemstats" value="1" {USE_ITEMSTATS} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_OLDSTYLE}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_oldstyle" value="1" {OLDSTYLE_ON} /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_HIDE_BANKER}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_hide_banker" value="1" {HIDE_BANKER}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_TOOLTIP}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_show_tooltip" value="1" {SHOW_TOOLTIP}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_AUTO_ADJUST}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_auto_adjustment" value="1" {AUTO_ADJUST}" /></td>
+			</tr>
+				<tr>
+				<td width="60%" class="row2">{L_HIDE_MONEY}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_show_money" value="1" {HIDE_MONEY}" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_LIST_LANG}</td>
+				<td width="40%" class="row1"><select size="1" name="rb_list_lang">
+				<option value="german" {LOCAL_SEL_DE}>{L_GERMAN}</option>
+				<option value="english" {LOCAL_SEL_EN}>{L_ENGLISH}</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_NO_BANKER}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="rb_no_bankers" value="1" {NO_BANKER}"  /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_IS_CACHE}</td>
+				<td width="40%" class="row1"><input type="text" name="rb_is_cache" size="32" value="{IS_CACHE}" class="input" /></td>
+			</tr>
+	   <tr>
+				<td width="60%" class="row2">{L_IS_PATH}</td>
+				<td width="40%" class="row1"><input type="text" name="rb_is_path" size="60" value="{IS_PATH}" class="input" /></td>
+			</tr>
+	<tr><th align="center" colspan="2"><input type="submit" name="issavebu" value="{L_SUBMIT}" class="mainoption" />
+  </th></tr>
+</table>
+</form>
+<!-- INCLUDE ../../../../templates/WoWMoonclaw01V/page_tail.html -->

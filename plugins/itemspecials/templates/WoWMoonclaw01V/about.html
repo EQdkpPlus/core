@@ -1,0 +1,122 @@
+<html>
+<head>
+<style type="text/css">
+img { 
+vertical-align: middle; 
+border: 0px; 
+}
+
+BODY { 
+font-family: Verdana, Tahoma, Arial;
+font-size: 11px;
+color: #000000;
+}
+
+tr, td { 
+font-family: Verdana, Tahoma, Arial;
+font-size: 11px;
+color: #000000; 
+}
+
+h3, td.h3 {
+  font-size: 12px;
+	font-weight: bold; 
+	color:#F37D1F;
+	padding-top:10px;
+}
+ul.intro_message, td.intro_message, tr.intro_message, table.intro_message {
+  text-align:left;
+  font-size: 11px;
+  padding:0, 10px;
+  margin:0;
+  color: black;
+}
+ul.intro_message a, td.intro_message a, tr.intro_message a, table.intro_message a {
+  text-decoration: none;
+  color: #5588cc;
+}
+ul.intro_message a:hover, td.intro_message a:hover, tr.intro_message a:hover, table.intro_message a:hover {
+  text-decoration: underline;
+  color: #5588cc;
+}
+</style>
+</head>
+
+<body>
+<ul class="intro_message">
+  <table border="0" cellpadding="0" cellspacing="0" class="borderless" width="590">
+    <tr>
+      <td style="padding-right: 10px;" valign="top" align="center" width="275"><img src="images/{I_ITEM_NAME}" alt="" border="0"><br>
+      Version {L_VERSION}</td>
+      <td style="padding-right: 10px;" valign="top" width="335">
+		<table border="0" width="100%" id="table1" cellspacing="0" cellpadding="0" class="borderless">
+			<tr>
+				<td valign="top">
+				<table border="0" width="100%" id="table2" cellspacing="1" class="borderless">
+					<tr>
+						<td><b>{L_CREATED_BY}:</b></td>
+					</tr>
+					<tr>
+						<td>{D_AUTHOR_NAME}</td>
+					</tr>
+					<tr>
+						<td>{D_AUTHOR_CITY}</td>
+					</tr>
+					<tr>
+						<td>{L_URL_WEB}: <a class="linkcrap" href="http://{D_WEB_URL}" target="_blank">{D_WEB_URL}</a></td>
+					</tr>
+					<tr>
+						<td>{L_URL_PERSONAL}: <a class="linkcrap" href="http://{D_PERSONAL_URL}" target="_blank">{D_PERSONAL_URL}</a> 
+						</td>
+					</tr>
+				</table>
+				</td>
+				<td>
+				<img src="images/firefox.jpg" />
+			 </td>
+			</tr>
+		</table>
+		</td>
+    </tr>
+    <tr>
+      <td style="padding-right: 10px;" valign="top">&nbsp;</td>
+      <td style="padding-right: 10px;" valign="top">
+		&nbsp;</td>
+    </tr>
+    <tr>
+      <td style="padding-right: 10px;" valign="top" colspan="2">
+		<table border="0" width="100%" id="table4" cellspacing="1" class="borderless">
+			<tr>
+				<td colspan=2><h3>{L_CREDITS}</h3></td>
+			</tr>
+			<tr>
+			<td colspan=2 valign="top">
+				<!-- BEGIN credits_row -->
+              - <b>{credits_row.KEY}</b>{credits_row.VALUE}<br />
+            	<!-- END credits_row -->
+			</td>
+			</tr>
+			<tr>
+				<td><h3>{L_DONATORS}</h3></td>
+				<td><h3>{L_ADDITONS}</h3></td>
+			</tr>
+			<tr>
+				<td  valign="top">
+				      <!-- BEGIN donnators_row -->
+             		<b>{donnators_row.KEY}</b><br />{donnators_row.VALUE}<br />
+            	<!-- END donnators_row -->
+            </td>
+				<td  valign="top">
+            	<!-- BEGIN addition_row -->
+             		<b>{addition_row.KEY}</b><br />{addition_row.VALUE}<br />
+            	<!-- END addition_row -->
+            </td>
+			</tr>
+		</table>
+		</td>
+    </tr>
+  </table>
+</center>
+</ul>
+</body>
+</html>

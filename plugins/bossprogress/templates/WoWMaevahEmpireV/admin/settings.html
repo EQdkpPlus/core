@@ -1,0 +1,466 @@
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpireV/page_header.html -->
+<form method="post" action="{F_CONFIG}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+			<tr>
+   				 <th align="center" colspan="2">{L_GENERAL}</th>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_ZONEINFO}</td>
+				<td width="40%" class="row1">
+					<select size="1" name="zoneInfo">
+						<option value="rname" {ZONEINFO_SEL_RNAME}>{L_RNAME}</option>
+						<option value="rnote" {ZONEINFO_SEL_RNOTE}>{L_RNOTE}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_BOSSINFO}</td>
+				<td width="40%" class="row1">
+					<select size="1" name="bossInfo">
+						<option value="rname" {BOSSINFO_SEL_RNAME}>{L_RNAME}</option>
+						<option value="rnote" {BOSSINFO_SEL_RNOTE}>{L_RNOTE}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_ZHITYPE}</td>
+				<td width="40%" class="row1">
+					<select size="1" name="zhiType">
+						<option value="0" {ZHITYPE_SEL_JITTER}>{L_JITTER}</option>
+						<option value="1" {ZHITYPE_SEL_BW}>{L_BW}</option>
+						<option value="2" {ZHITYPE_SEL_NONE}>{L_NONE}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="30%" class="row2">{L_DETAILBOSS}</td>
+				<td width="70%" class="row1"><input type="checkbox" name="detailBoss" value="1" {BP_DETAILBOSS} /></td>
+			</tr>
+			<tr>
+				<td width="70%" class="row2">{L_SHOWSB}</td>
+				<td width="30%" class="row1"><input type="checkbox" name="showSB" value="1" {BP_SHOWSB} /></td>
+			</tr>
+
+
+			<tr>
+				<td width="30%" class="row2">{L_DYNLOC}</td>
+				<td width="70%" class="row1"><input type="checkbox" name="dynloc" value="1" {BP_DYNLOC} /></td>
+			</tr>
+			<tr>
+				<td width="70%" class="row2">{L_DYNBOSS}</td>
+				<td width="30%" class="row1"><input type="checkbox" name="dynboss" value="1" {BP_DYNBOSS} /></td>
+			</tr>
+			<tr>
+				<td width="10%" class="row2">{L_NOTEDELIM}</td>
+				<td width="90%" class="row1"><input type="text" name="notedelim" size="32" value="{BP_NOTEDELIM}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_NAMEDELIM}</td>
+				<td width="40%" class="row1"><input type="text" name="namedelim" size="32" value="{BP_NAMEDELIM}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_TABLES}</td>
+				<td width="40%" class="row1"><input type="text" name="tables" size="32" value="{BP_TABLES}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{L_PINFO}</th>
+	</tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_MISC}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_MISC}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_misc" size="64" value="{PZ_MISC}" class="input" /></td>
+			</tr>
+			<br>
+			<tr>
+				<td width="40%" class="row2">{LB_AZUREGOS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_azuregos" size="64" value="{PB_AZUREGOS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_KAZZAK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_kazzak" size="64" value="{PB_KAZZAK}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_ONYXIA}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_ONYXIA}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_onyxia" size="64" value="{PZ_ONYXIA}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_ONYXIA}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_onyxia" size="64" value="{PB_ONYXIA}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_DREAM}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_DREAM}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_dream" size="64" value="{PZ_DREAM}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_YSONDRE}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_ysondre" size="64" value="{PB_YSONDRE}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_TAERAR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_taerar" size="64" value="{PB_TAERAR}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_EMERISS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_emeriss" size="64" value="{PB_EMERISS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_LETHON}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_lethon" size="64" value="{PB_LETHON}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_MC}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_MC}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_mc" size="64" value="{PZ_MC}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_LUCIFRON}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_lucifron" size="64" value="{PB_LUCIFRON}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MAGMADAR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_magmadar" size="64" value="{PB_MAGMADAR}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GEHENNAS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_gehennas" size="64" value="{PB_GEHENNAS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GARR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_garr" size="64" value="{PB_GARR}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GEDDON}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_geddon" size="64" value="{PB_GEDDON}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_SHAZZRAH}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_shazzrah" size="64" value="{PB_SHAZZRAH}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_SULFURON}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_sulfuron" size="64" value="{PB_SULFURON}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GOLEMAGG}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_golemagg" size="64" value="{PB_GOLEMAGG}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MAJORDOMO}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_majordomo" size="64" value="{PB_MAJORDOMO}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_RAGNAROS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_ragnaros" size="64" value="{PB_RAGNAROS}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_BWL}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_BWL}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_bwl" size="64" value="{PZ_BWL}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_RAZORGORE}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_razorgore" size="64" value="{PB_RAZORGORE}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_VAELASTRASZ}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_vaelastrasz" size="64" value="{PB_VAELASTRASZ}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_LASHLAYER}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_lashlayer" size="64" value="{PB_LASHLAYER}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_FIREMAW}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_firemaw" size="64" value="{PB_FIREMAW}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_EBONROC}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_ebonroc" size="64" value="{PB_EBONROC}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_FLAMEGOR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_flamegor" size="64" value="{PB_FLAMEGOR}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_CHROMAGGUS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_chromaggus" size="64" value="{PB_CHROMAGGUS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_NEFARIAN}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_nefarian" size="64" value="{PB_NEFARIAN}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_ZG}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_ZG}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_zg" size="64" value="{PZ_ZG}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MANDOKIR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_mandokir" size="64" value="{PB_MANDOKIR}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_JINDO}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_jindo" size="64" value="{PB_JINDO}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GAHZRANKA}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_gahzranka" size="64" value="{PB_GAHZRANKA}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GRILEK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_grilek" size="64" value="{PB_GRILEK}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_HAZZARAH}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_hazzarah" size="64" value="{PB_HAZZARAH}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_RENATAKI}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_renataki" size="64" value="{PB_RENATAKI}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_WUSHOOLAY}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_wushoolay" size="64" value="{PB_WUSHOOLAY}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_THEKAL}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_thekal" size="64" value="{PB_THEKAL}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_ARLOKK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_arlokk" size="64" value="{PB_ARLOKK}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_VENOXIS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_venoxis" size="64" value="{PB_VENOXIS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MARLI}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_marli" size="64" value="{PB_MARLI}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_JEKLIK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_jeklik" size="64" value="{PB_JEKLIK}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_HAKKAR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_hakkar" size="64" value="{PB_HAKKAR}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_AQ20}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_AQ20}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_aq20" size="64" value="{PZ_AQ20}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_KURINNAXX}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_kurinnaxx" size="64" value="{PB_KURINNAXX}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_RAJAXX}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_rajaxx" size="64" value="{PB_RAJAXX}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_AYAMISS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_ayamiss" size="64" value="{PB_AYAMISS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_BURU}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_buru" size="64" value="{PB_BURU}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MOAM}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_moam" size="64" value="{PB_MOAM}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_OSSIRIAN}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_ossirian" size="64" value="{PB_OSSIRIAN}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_AQ40}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_AQ40}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_aq40" size="64" value="{PZ_AQ40}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_SKERAM}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_skeram" size="64" value="{PB_SKERAM}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_KRI}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_kri" size="64" value="{PB_KRI}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_YAUJ}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_yauj" size="64" value="{PB_YAUJ}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_VEM}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_vem" size="64" value="{PB_VEM}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_SARTURA}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_sartura" size="64" value="{PB_SARTURA}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_FANKRISS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_fankriss" size="64" value="{PB_FANKRISS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_HUHURAN}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_huhuran" size="64" value="{PB_HUHURAN}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_VISCIDUS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_viscidus" size="64" value="{PB_VISCIDUS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_VEKNILASH}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_veknilash" size="64" value="{PB_VEKNILASH}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_VEKLOR}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_veklor" size="64" value="{PB_VEKLOR}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_OURO}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_ouro" size="64" value="{PB_OURO}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_CTHUN}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_cthun" size="64" value="{PB_CTHUN}" class="input" /></td>
+			</tr>
+</table>
+<br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{LZ_NAXX}</th>
+	</tr>
+			<tr>
+				<td width="40%" class="row2">{LPZ_NAXX}</td>
+				<td width="60%" class="row1"><input type="text" name="pz_naxx" size="64" value="{PZ_NAXX}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_ANUBREKHAN}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_anubrekhan" size="64" value="{PB_ANUBREKHAN}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_FAERLINA}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_faerlina" size="64" value="{PB_FAERLINA}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MAEXXNA}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_maexxna" size="64" value="{PB_MAEXXNA}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_NOTH}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_noth" size="64" value="{PB_NOTH}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_HEIGAN}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_heigan" size="64" value="{PB_HEIGAN}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_LOATHEB}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_loatheb" size="64" value="{PB_LOATHEB}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_PATCHWERK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_patchwerk" size="64" value="{PB_PATCHWERK}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GROBBULUS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_grobbulus" size="64" value="{PB_GROBBULUS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GLUTH}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_gluth" size="64" value="{PB_GLUTH}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_THADDIUS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_thaddius" size="64" value="{PB_THADDIUS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_RAZUVIOUS}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_razuvious" size="64" value="{PB_RAZUVIOUS}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_GOTHIK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_gothik" size="64" value="{PB_GOTHIK}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_KORTHAZZ}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_korthazz" size="64" value="{PB_KORTHAZZ}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_BLAUMEUX}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_blaumeux" size="64" value="{PB_BLAUMEUX}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_MOGRAINE}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_mograine" size="64" value="{PB_MOGRAINE}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_ZELIEK}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_zeliek" size="64" value="{PB_ZELIEK}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_SAPPHIRON}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_sapphiron" size="64" value="{PB_SAPPHIRON}" class="input" /></td>
+			</tr>
+			<tr>
+				<td width="40%" class="row2">{LB_KELTHUZAD}</td>
+				<td width="60%" class="row1"><input type="text" name="pb_kelthuzad" size="64" value="{PB_KELTHUZAD}" class="input" /></td>
+			</tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+ <tr><th align="center" colspan="2"><input type="submit" name="bpsavebu" value="{L_SUBMIT}" class="mainoption" /></th></tr>
+</table>
+</form>
+<br /><center><span class="copy">EQDKP BossProgress v2.0 by sz3
+<br />General Admin/Config code: &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/WoWMaevahEmpireV/page_tail.html -->

@@ -1,0 +1,42 @@
+<!-- INCLUDE uc_page_header.html -->
+<script language="JavaScript" type="text/javascript"><!--
+
+function closeWindow()
+{
+		var myId = window.name.replace('_content', '');   // resolve the id I was given
+		window.parent.Windows.close(myId);  // call parent's windows collection to close me
+}
+</script>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_MEMBER_CHARS}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="images/help.png" /></td>
+    <td class="row1">{L_MANAGE_CHARS}</td>
+  </tr>
+  <tr>
+</table>
+<br>
+<form method="POST" action="{F_UPDATE}">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<tr>
+<th align="center" colspan="2">{L_ASSOCIATED_MEMBERS}</th>
+</tr>
+<tr>
+<td width="40%" class="row2">{L_MEMBERS}</td>
+<td width="60%" class="row1">
+<select name="member_id[]" multiple="multiple" size="10" class="input">
+<!-- BEGIN member_row -->
+<option value="{member_row.VALUE}"{member_row.SELECTED}>{member_row.OPTION}</option>
+<!-- END member_row -->
+</select>
+{FV_MEMBER_ID}
+</td>
+</tr>
+  <tr>
+    <th colspan="2" align="center"><input type="submit" name="submit" value="{L_SUBMIT}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" /></th>
+  </tr>
+</table>
+<br>
+</form>

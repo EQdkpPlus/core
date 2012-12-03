@@ -1,0 +1,7 @@
+Subject: {GUILDTAG} {DKP_NAME}: Ticket erstellt!
+Charset: iso-8859-1
+
+Ein Ticket ist von einem User abgeschickt worden, bitte schau im Adminbereich
+unter dem Ticketplugin nach und beantworte es möglichst schnell.
+
+Dein DKP-Team

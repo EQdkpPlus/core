@@ -1,0 +1,10 @@
+DROP TABLE eqdkp_tradeskill_config;
+CREATE TABLE eqdkp_tradeskill_config (config_name varchar(255) NOT NULL default '', config_value varchar(255) default NULL, PRIMARY KEY (config_name));
+
+INSERT INTO eqdkp_tradeskill_config VALUES ('ts_restrict_professions', '1');
+INSERT INTO eqdkp_tradeskill_config VALUES ('ts_use_infosite', 'buffed');
+INSERT INTO eqdkp_tradeskill_config VALUES ('ts_single_show', '');
+
+ALTER TABLE `eqdkp_tradeskills` ADD `inuse` ENUM( '0', '1' ) DEFAULT '1' NOT NULL AFTER `trade_name` ;
+INSERT INTO eqdkp_tradeskills VALUES (8, 'http://wow.allakhazam.com/images/icons/INV_Misc_QuestionMark.png', 'Juwelenschleifen','0');
+

@@ -1,0 +1,42 @@
+<!-- INCLUDE ../../../../templates/WoWMoonclaw01V/page_header.html -->
+<!--[if lte IE 6.0]>
+<script type="text/javascript" language="javascript" src="../include/javascripts/ultimatepngfix.js"></script>
+<![endif]-->
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_PLUGIN_MANAGEMENT}</th>
+  </tr>
+  <tr>
+    <td class="row1" width ="48px"><img src="../images/help.png" /></td>
+    <td class="row1">{L_SELECT_PLUGIN}</td>
+  </tr>
+  <tr>
+</table>
+<br>
+<form method="post" action="{F_PLUGINS}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="100%">{L_NAME}</th>
+    <th align="left" width="40" nowrap="nowrap">{L_CONTACT}</th>
+    <th align="left" width="100" nowrap="nowrap">{L_VERSION_N}</th>  
+  </tr>
+  <!-- BEGIN plugins_row -->
+  <tr class="{plugins_row.ROW_CLASS}">
+    <td width="35" nowrap="nowrap" align="right"><INPUT TYPE=RADIO NAME="selectplugin" {plugins_row.INSTALLED} VALUE="{plugins_row.ID}"></td>
+    <td width="100%" nowrap="nowrap">{plugins_row.NAME}</td>
+    <td width="40" nowrap="nowrap">{plugins_row.CONTACT}</td>
+    <td width="100" nowrap="nowrap">{plugins_row.VERSION}</td>
+  </tr>
+  <!-- END plugins_row -->
+  <tr>
+    <th align="center" colspan="6">
+    <input type="submit" name="choose" value="{L_CHOOSE_PLUGIN}" class="mainoption" />
+       </th>
+  </tr>
+</table>
+</form>
+<br /><center><span class="copy">EQDKP ItemSpecials v{L_VERSION}
+<br />&copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a><br>
+</span></center>
+<!-- INCLUDE ../../../../templates/WoWMoonclaw01V/page_tail.html -->

@@ -1,0 +1,161 @@
+<!-- INCLUDE page_header.html -->
+<script language="JavaScript" type="text/javascript">
+function check_form()
+{
+    if (document.post.raid_attendees.value.length < 2)
+    {
+        alert('{MSG_ATTENDEES_EMPTY}');
+        return false;
+    }
+    if (document.post.raid_name.value.length < 1)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}
+function pop_parse_log()
+{
+    log = window.open('parse_{MSG_GAME_NAME}.php{SID}','log','scrollbars=yes,resizable=yes,toolbar=no,status=yes,height=570,width=600,screenX=50,screenY=25,left=100,top=75')
+    log.focus();
+}
+function fnSearch( searchField, searchItem )
+{
+    thisForm = document.post;
+    
+    searchBox = thisForm.elements[searchField];
+    selectBox = thisForm.elements[searchItem];
+    
+    reSearch = new RegExp( searchBox.value, "i" );
+    
+    len = selectBox.options.length;
+    for ( var i = 0; i < len; i++ )
+    {
+        if( reSearch.test( selectBox.options[i].value ) )
+        {
+            selectBox.options[i].selected = true;
+            break;
+        }
+    }
+}
+function addMember( newMember )
+{
+    // poll the select box if newMember doesn't exist
+    if( newMember == null )
+    {
+    }
+    
+    // get the current value of the textarea box
+    thisForm = document.post;
+    strMembers = new String( thisForm.raid_attendees.value );
+    
+    // parse the member names into an array
+    arrMembers = strMembers.split(/[\n\r]/);
+    
+    // add the new member to the array
+    arrMembers.push( newMember );
+    
+    // prune out any duplicates
+    var seenIt = { };
+    for ( var i = arrMembers.length - 1; i >= 0; i-- )
+    {
+        var thisOne = arrMembers[i];
+        if ( seenIt[thisOne] ) 
+        {
+            arrMembers[i] = null;
+    	}
+        seenIt[thisOne] = true;
+    }
+    
+    arrMembersOut = new Array();
+    len = arrMembers.length
+    for ( var i = 0; i < len; i++ )
+    {
+        if ( arrMembers[i] != null )
+        {
+            arrMembersOut.push( arrMembers[i] );
+        }
+    }
+    
+    // join the array and place the value in the textarea box
+    arrMembersOut = arrMembersOut.sort();
+    strMembersOut = arrMembersOut.join("\n");
+    
+    thisForm.raid_attendees.value = strMembersOut;
+    
+    thisForm.memberSearch.value = "";
+    thisForm.memberSearch.focus();
+    
+    return false;
+}
+</script>
+
+<form method="post" action="{F_ADD_RAID}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_RAID}" value="{RAID_ID}" />
+<input type="hidden" name="mode" value="{MODE}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="2">{L_ADD_RAID_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="350" valign="top" rowspan="3" nowrap="nowrap" class="row1">
+      {FV_ATTENDEES}<br /><b>{L_ATTENDEES}:</b><br />
+      &nbsp;&nbsp;- <a href="javascript:pop_parse_log();">{L_PARSE_LOG}</a><br /><br />
+      
+      <table width="100%" border="0" cellpadding="3" cellspacing="0" class="borderless">
+        <tr>
+          <td colspan="3">{L_SEARCH_MEMBERS}: <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'member_name')" /></td>
+		</tr>
+        <tr>
+          <td>
+          <select size="30" name="member_name" class="input" onchange="addMember(this.value);">
+            <!-- BEGIN members_row -->
+            <option value="{members_row.VALUE}">{members_row.OPTION}</option>
+            <!-- END members_row -->
+          </select>
+          </td>
+          <td width="20" valign="middle"><input type="button" name="button" value="&gt;&gt;" accesskey="m" onclick="addMember(document.post.member_name.options[document.post.member_name.selectedIndex].value);" class="liteoption" /></td>
+          <td><textarea name="raid_attendees" cols="25" rows="30" id="attendees" class="input">{RAID_ATTENDEES}</textarea></td>
+        </tr>
+      </table>
+    </td>
+    <td width="100%" valign="top" class="row2">
+      <b>{L_EVENT}:</b> <span class="small">(<a href="{U_ADD_EVENT}" class="small">{L_ADD_EVENT}</a>)</span><br />
+      <!-- IF S_EVENT_MULTIPLE -->
+      <select name="raid_name[]" class="input" size="10" multiple="multiple">
+      <!-- ELSE -->
+      <select name="raid_name" class="input">
+        <option value=""></option>
+      <!-- ENDIF -->
+        <!-- BEGIN events_row -->
+        <option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
+        <!-- END events_row -->
+      </select>{FV_EVENT_NAME}
+      <br /><br />
+      <b>{L_VALUE}:</b><br /><span class="small">({L_ADDRAID_VALUE_NOTE})</span><br />
+      <input type="text" name="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2">
+      <b>{L_DATE}:</b> <input type="text" name="mo" size="3" maxlength="2" value="{MO}" id="mo" class="input" />/<input type="text" name="d" size="3" maxlength="2" value="{D}" id="d" class="input" />/<input type="text" name="y" size="5" maxlength="4" value="{Y}" id="y" class="input" /><br />{FV_MO}{FV_D}{FV_Y}
+      <br />
+      <b>{L_TIME}:</b> <input type="text" name="h" size="3" maxlength="2" value="{H}" id="h" class="input" />:<input type="text" name="mi" size="3" maxlength="2" value="{MI}" id="mi" class="input" />:<input type="text" name="s" size="3" maxlength="2" value="{S}" id="s" class="input" /><br />{FV_H}{FV_MI}{FV_S}
+      <br /><b class="small">{L_NOTE}:</b> <span class="small">{L_ADDRAID_DATETIME_NOTE}</span>
+    </td>
+  </tr>
+  <tr>
+    <td width="100%" valign="top" class="row2"><b>{L_NOTE}:</b> <input type="text" name="raid_note" size="35" maxlength="255" value="{RAID_NOTE}" class="input" /></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="2">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_RAID}" class="mainoption" /> <input type="reset" name="reset" value="{L_RESET}" class="liteoption" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_RAID}" class="mainoption" /> <input type="submit"  name="delete" value="{L_DELETE_RAID}" class="liteoption" />
+    <!-- ENDIF -->
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

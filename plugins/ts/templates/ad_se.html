@@ -1,0 +1,51 @@
+<form method="post" action="{F_CONFIG}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+<tr>
+    <th align="center" colspan="2">{L_GENERAL}</th>
+</tr>
+			<tr>
+				<td width="60%" class="row2">{L_RESTRICT_PROFS}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="ts_restrict_professions" value="1" {RESTRICT_PROFS} /></td>
+			</tr>
+			<!-- other mechanism
+			<tr>
+				<td width="60%" class="row2">{L_SHOW_COOKING}</td>
+				<td width="40%" class="row1"><input type="checkbox" name="ts_show_cooking" value="1" {SHOW_COOKING} /></td>
+			</tr>
+			-->
+			<tr>
+				<td width="60%" class="row2">{L_INFOSITE}</td>
+				<td width="40%" class="row1"><select size="1" name="ts_use_infosite">
+				<option value="buffed" {INFOSITE_SEL_DE}>{L_SEL_DE}</option>
+				<option value="allakhazam" {INFOSITE_SEL_EN}>{L_SEL_EN}</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_SINGLE_SHOW_ONLY}<br> <span style="font-size:75%">{L_SINGLE_SHOW_ONLY_NOTE}</span></td>
+				<td width="40%" class="row1"><input type="checkbox" name="ts_single_show" value="1" {SINGLE_SHOW_ONLY} /></td>
+			</tr>
+	<tr><th align="center" colspan="2"><input type="submit" name="issavebu" value="{L_SUBMIT}" class="mainoption" />
+  </th></tr>
+</table>
+</form>
+<br />
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+  <tr>
+  	<th colspan="2"> 
+{L_SELECT_USED_TRADESKILLS}
+	</th>
+  </tr>
+<!-- BEGIN trades -->  
+  <form method="POST" action="{trades.F_UPDATE}" name="update">
+  <input type="hidden" name="trade_id" value="{trades.TRADE_ID}">
+  <tr class="{trades.ROW_CLASS}">
+    <td width="60%">
+{trades.L_TRADE}
+    </td>
+    <td align="center" width="20">
+    <input type="checkbox" name="trade" value="dummy" class="input" onClick="submit()" {trades.INUSE}>
+    </td>
+  </tr>
+  </form>
+   <!-- END trades -->
+</table>

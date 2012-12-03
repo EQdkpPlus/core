@@ -1,0 +1,17 @@
+Subject: {DKP_NAME}: A New Raid was added
+Charset: iso-8859-1
+
+Hi {USERNAME},
+a new {RAID_NAME} Raid was added.
+
+DKP Admin: {ADMIN_USER}
+Raidtype: {RAID_NAME}
+Raidnote: {RAID_NOTE}
+Date: {DATE}
+
+Please signup here:
+{RAID_LINK}
+
+cu
+the leadership
+

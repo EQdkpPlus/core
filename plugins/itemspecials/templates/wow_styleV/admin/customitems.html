@@ -1,0 +1,20 @@
+<form method="post" action="{F_CUSTOM}" name="manage_items">
+<div style="width:538px;height:300px;overflow:auto;">
+<center><input type='hidden' name='task' value=''>
+<table width="520" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<th align="center" colspan="2">{L_CUSTOM_ITEMS}</th>
+	</tr>
+	<!-- BEGIN items_row -->
+			<tr>
+				<td width="10%" class="row2"><input type="checkbox" name="item_del[]" value="{items_row.NAME}"></td>
+				<td width="90%" class="row1">{items_row.NAME}</td>
+			</tr>
+	<!-- END items_row -->
+			<tr>
+			<td></td>
+			</tr>
+		</table></center>
+		</div>
+				<input type="submit" name="delete" value="{L_B_DELITEM}" class="mainoption" />
+</form>

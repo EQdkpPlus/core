@@ -1,0 +1,45 @@
+<style type="text/css">
+img { 
+vertical-align: middle; 
+border: 0px; 
+}
+
+BODY { 
+font-family: Verdana, Tahoma, Arial;
+font-size: 11px;
+color: #000000;
+}
+
+tr, td { 
+font-family: Verdana, Tahoma, Arial;
+font-size: 11px;
+color: #000000; 
+}
+
+.input { font-family: Verdana, Tahoma, Arial; font-size: 10px; color: #000000; background-color: #FFFFFF;
+         border-top: 1px; border-right: 1px; border-bottom: 1px; border-left: 1px; border-color: #000000; border-style: solid; }
+
+input.helpline1 { background-color: #EFEFEF; border-style: none; }
+input.helpline2 { background-color: #FFFFFF; border-style: none; }
+
+input.mainoption { font-family: Verdana, Tahoma, Arial; font-size: 10px; font-weight: bold; color: #CECFEF; background-color: #424563; border-top: 1px;
+                   border-right: 1px; border-bottom: 1px; border-left: 1px; border-color: #CECFEF; border-style: solid; }
+input.liteoption { font-family: Verdana, Tahoma, Arial; font-size: 10px; font-weight: normal; color: #CECFEF; background-color: #424563; border-top: 1px;
+                   border-right: 1px; border-bottom: 1px; border-left: 1px; border-color: #CECFEF; border-style: solid; }
+
+</style>
+<form method="post" action="{F_CUSTOM}" name="manage_items">
+<center><input type='hidden' name='task' value=''>
+<table width="500" border="0" cellspacing="1" cellpadding="2">
+	<!-- BEGIN items_row -->
+			<tr>
+				<td width="10%" class="row2"><input type="checkbox" name="item_del[]" value="{items_row.NAME}"></td>
+				<td width="90%" class="row1">{items_row.NAME}</td>
+			</tr>
+	<!-- END items_row -->
+			<tr>
+			<td></td>
+			</tr>
+		</table></center>
+				<br /><input type="submit" name="delete" value="{L_B_DELITEM}" class="mainoption" />
+</form>

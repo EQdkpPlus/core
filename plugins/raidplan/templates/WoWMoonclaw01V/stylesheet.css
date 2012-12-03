@@ -1,0 +1,75 @@
+/******************************
+ * Styles for EQdkp Raid Planner
+ * Copyright 2005 by A.Stranger
+ * modified by Urox
+ * ------------------
+ * stylesheet.css
+ * Changed: Thu Mai 30 2006
+ * 
+ ******************************/
+ 
+.tableheader_Druid {
+	color	: #FF7C0A;
+	align	: right;
+}
+
+.tableheader_Warlock {
+	color	: #9382C9;
+	align	: right;
+}
+
+.tableheader_Hunter {
+	color	: #AAD372;
+	align	: right;
+}
+
+.tableheader_Warrior {
+	color	: #C69B6D;
+	align	: right;
+}
+
+.tableheader_Paladin {
+	color	: #F48CBA;
+	align	: right;
+}
+
+.tableheader_Mage {
+	color	: #68CCEF;
+	align	: right;
+}
+
+.tableheader_Priest {
+	color	: #FFFFFF;
+	align	: right;
+}
+
+.tableheader_Shaman {
+	color	: #F48CBA;
+	align	: right;
+}
+
+.tableheader_Rogue {
+	color	: #FFF468;
+	align	: right;
+}
+
+.attendee_Link{
+  font-weight: bold;
+}  
+
+.signedin {
+	color	: yellow;
+	align	: right;
+}
+.approved {
+	color	: lime;
+	align	: right;
+}
+.signedout {
+	color	: red;
+	align	: right;
+}
+.need {
+	color	: blue;
+	align	: right;
+}

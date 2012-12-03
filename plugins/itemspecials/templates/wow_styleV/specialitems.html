@@ -1,0 +1,173 @@
+<!-- INCLUDE ../../../../templates/wow_styleV/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<script language="JavaScript" type="text/javascript"><!--
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+
+function startLoading() {
+    Dialog.info("{L_AJAX_LOADING} ...",
+               {windowParameters: {className:"alphacube", width:250, height:100}, showProgress: true});
+  }
+function stopLoading() {
+    Dialog.closeInfo();
+  }
+
+Ajax.Responders.register({
+    onCreate : startLoading
+  });
+//-->
+</script>
+<!-- IF ITEMSTATS_TRUE -->
+<style type='text/css'>
+.middleitemicon { width: {ICON_WIDTH}; height: {ICON_HEIGHT}; }
+ </style>
+<!-- ENDIF -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr><td>
+<!-- IF S_NOTMM -->
+<form method="get" action="specialitems.php">
+<input type="hidden" name="{URI_SESSION}" value="{V_SID}" />
+<table width="100%" border="0" cellspacing="1" cellpadding="2"class='borderless'>
+  <tr>
+    <th align="right" width="56" nowrap="nowrap">{L_FILTER}:</th>
+    <th align="left">&nbsp;
+      <select name="filter" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN filter_row -->
+        <option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
+        <!-- END filter_row -->
+      </select>
+    </th>
+  </tr>
+</table>
+</form>
+</tr></td><tr><td>
+<!-- ENDIF -->
+<form method="post" action="{F_MEMBERS}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class='borderless'>
+  <tr>
+    <th align="left" width="15" nowrap="nowrap">&nbsp;</th>
+    <th align="left"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
+    <!-- IF SHOW_USR_RANK -->
+    <th align="left" width="80" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_CLASS -->
+   <th align="left" width="105" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_CURR_DKP -->
+    <th align="left" width="28" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_CURRENT}{URI_ADDON}">{L_CURRENT}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TOTAL_DKP -->
+    <th align="left" width="28" nowrap="nowrap"><a href="{U_LIST_MEMBERS}o={O_TOTAL}{URI_ADDON}">{L_TOTAL}</a></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TRINKET -->
+    <th width="40" nowrap="nowrap"><div align="center">{L_TRINKET}</div></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_AQ_MOUNT -->
+    <th width="40" nowrap="nowrap"><div align="center">{L_AQMOUNT}</div></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_AQ_BOOK -->
+    <th width="40" nowrap="nowrap"><div align="center">{L_AQBOOK}</div></th>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATIESH -->
+    <th width="40" nowrap="nowrap"><div align="center">{L_ATIESH}</div></th>
+    <!-- ENDIF -->
+    <!-- BEGIN custom_header -->
+    <th width="55" nowrap="nowrap"><div align="center">{custom_header.HEADER}</div></th>
+    <!-- END custom_header -->
+  </tr>
+  <!-- BEGIN members_row -->
+  <tr class="{members_row.ROW_CLASS}">
+    <td width="15" nowrap="nowrap" align="right">{members_row.COUNT}</td>
+    <td ><a href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></td>
+    <!-- IF SHOW_USR_RANK -->
+    <td width="80" nowrap="nowrap">{members_row.RANK}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_CLASS -->
+		 <td width="100" align="left" class="tableheader_{members_row.CLASS}">
+		  <!-- IF SHOW_CLSS_IMG -->
+       <img src="images/class/{members_row.CLASSIMG}.gif" height="15" width="15" border="0" alt="{members_row.CLASS}" /> {members_row.CLASS}
+      <!-- ELSE -->
+        {members_row.CLASS}
+      <!-- ENDIF -->
+        </td>
+		<!-- ENDIF -->
+    <!-- IF SHOW_CURR_DKP -->
+    <td nowrap="nowrap" class="{members_row.C_CURRENT}">{members_row.CURRENT}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TOTAL_DKP -->
+    <td nowrap="nowrap" class="{members_row.C_TOTAL}">{members_row.TOTAL}</td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TRINKET -->
+    <td nowrap="nowrap"><div align="center">{members_row.ST}</div></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_AQ_MOUNT -->
+    <td nowrap="nowrap"><div align="center">{members_row.AQMOUNT}</div></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_AQ_BOOK -->
+    <td nowrap="nowrap"><div align="center">{members_row.AQ_BOOK}</div></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_ATIESH -->
+    <td nowrap="nowrap"><div align="center">{members_row.ATIESH}</div></td>
+    <!-- ENDIF -->
+    <!-- BEGIN custom_items -->
+    <td nowrap="nowrap"><div align="center">{members_row.custom_items.COUNT}{members_row.custom_items.IMAGE}</div></td>
+    <!-- END custom_items --> 
+  </tr>
+  <!-- END members_row -->
+  
+  <!-- IF SHOW_FOOTER_STAT -->
+    <tr class="row1">
+    <td width="15" nowrap="nowrap" align="right"></td>
+    <td ></td>
+    <!-- IF SHOW_USR_RANK -->
+    <td width="80" nowrap="nowrap"></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_USR_CLASS -->
+		 <td width="100" align="left"></td>
+		<!-- ENDIF -->
+    <!-- IF SHOW_CURR_DKP -->
+    <td nowrap="nowrap" ></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TOTAL_DKP -->
+    <td nowrap="nowrap" ></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_TRINKET -->
+    <td nowrap="nowrap"></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_AQ_MOUNT -->
+    <td nowrap="nowrap"></td>
+    <!-- ENDIF -->
+    <!-- IF SHOW_AQ_BOOK -->
+    <td nowrap="nowrap"></td>
+    <!-- ENDIF -->
+     <!-- IF SHOW_ATIESH -->
+    <td nowrap="nowrap"></td>
+    <!-- ENDIF -->
+    <!-- BEGIN dyn_counts -->
+    <td nowrap="nowrap"><div align="center">({dyn_counts.ITEMS}/{dyn_counts.MEMBER})</div></td>
+    <!-- END dyn_counts -->
+  </tr>
+  <!-- ENDIF -->
+  
+  </th>
+  </table>
+  <tr>
+    <th colspan="14" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+  </tr>
+
+    
+  </tr>
+</table>
+</form>
+<br /><center><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="images/info.png" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">ItemSpecials {L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a>
+<!-- IF SHOW_EXEC_TIME -->
+<br />{L_EXEC_TIME}: {EXEC_TIME}
+<!-- ENDIF -->
+</span></center>
+<!-- INCLUDE ../../../../templates/wow_styleV/page_tail.html -->

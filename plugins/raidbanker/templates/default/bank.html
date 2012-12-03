@@ -1,0 +1,207 @@
+<!-- INCLUDE ../../../../templates/default/page_header.html -->
+<!-- INCLUDE frontend_header.html -->
+<style type="text/css">
+	/* About iframe thing*/
+#AboutUs_content {
+	border:0px;
+}	
+.netflix {
+	position: absolute;
+	visibility:hidden;
+	margin-top: -200px;
+	margin-left: 50px;
+	z-index: 1000;
+	background-color: transparent;
+	width: 328px;
+	height: 299px;
+	background-image: url({ICON_BUBBLE});
+	background-repeat: no-repeat;
+	border: none;
+	padding-left: 60px;
+}
+</style>
+<script language="JavaScript" type="text/javascript"><!--
+function AboutDialog() {
+	var win = new Window('AboutUs', {className: "alphacube", title: "{L_ABOUT_HEADER}", 
+                                              top:70, left:100, width:640, height:450, 
+                                              resizable: true, url: "about.php", showEffectOptions: {duration:1}})
+win.setDestroyOnClose();
+win.showCenter();
+  }
+
+function startLoading() {
+    Dialog.info("{L_AJAX_LOADING} ...",
+               {windowParameters: {className:"alphacube", width:250, height:100}, showProgress: true});
+  }
+function stopLoading() {
+    Dialog.closeInfo();
+  }
+
+Ajax.Responders.register({
+    onCreate : startLoading
+  });
+//-->
+</script>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr><td width="65%">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="100%" nowrap="nowrap">{Lang_Banker}</th>
+    <!-- IF SHOW_NO_MONEY -->
+    <th align="center" width="50px"><img src="images/gold.gif" /></th>
+    <th align="center" width="50px"><img src="images/silver.gif" /></th>
+    <th align="center" width="50px"><img src="images/copper.gif" /></th>
+    <!-- ENDIF -->
+    <th align="left" width="100%" nowrap="nowrap">{Lang_Update}</th> 
+  </tr>
+  <!-- IF SHOW_NO_BANKERS -->
+  <tr class="row1">
+      <td align="left" nowrap="nowrap">{L_ALL_BANKERS}</td>
+      <!-- IF SHOW_NO_MONEY -->
+  	  <td align="center" nowrap="nowrap">{RB_GOLD}</td>
+      <td align="center" nowrap="nowrap">{RB_SILVER}</td>
+      <td align="center" nowrap="nowrap">{RB_COPPER}</td>
+      <!-- ENDIF -->
+      <td align="left" nowrap="nowrap">{L_RB_NA}</td>
+  </tr>
+  <!-- ELSE -->
+  <!-- BEGIN chars_row -->
+  <tr class="{chars_row.ROW_CLASS}">
+  	<!-- IF SHOW_INFO_TOOLTIP -->
+      <td align="right" nowrap="nowrap" >
+      <p>{chars_row.NAME} {chars_row.MAINCHAR}</p>
+      <div class="netflix tooltip">
+                <h1>{chars_row.NAME}</h1>
+                <p><b>{L_MAINCHAR}</b> {chars_row.MAINCHAR2}<br>
+                <b>{L_NOTE}:</b> {chars_row.NOTE}</p>
+      </div>
+      </td>
+       <!-- ELSE -->
+       <td align="left" nowrap="nowrap" >
+       {chars_row.NAME} {chars_row.MAINCHAR}
+       </td>
+        <!-- ENDIF -->
+      <!-- IF SHOW_NO_MONEY -->
+  	  <td align="center" nowrap="nowrap">{chars_row.GOLD}</td>
+      <td align="center" nowrap="nowrap">{chars_row.SILVER}</td>
+      <td align="center" nowrap="nowrap">{chars_row.COPPER}</td>
+      <!-- ENDIF -->
+      <td align="left" nowrap="nowrap">{chars_row.UPDATE}</td>
+  </tr>
+  <!-- END chars_row -->
+  <tr class="row1">
+      <td align="left" nowrap="nowrap">{L_TOT_BANKERS}</td>
+      <!-- IF SHOW_NO_MONEY -->
+  	  <td align="center" nowrap="nowrap">{RB_GOLD}</td>
+      <td align="center" nowrap="nowrap">{RB_SILVER}</td>
+      <td align="center" nowrap="nowrap">{RB_COPPER}</td>
+      <!-- ENDIF -->
+      <td align="center" nowrap="nowrap">---</td>
+  </tr>
+  <!-- ENDIF -->
+  </table>
+  </td><td  width="35%" valign="top">
+  <form method="get" action="{U_RAIDBANKER}">
+    <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <tr>
+    <th align="left" width="100%" nowrap="nowrap">Filter</th>
+    <th></th>
+    </tr>
+    
+    <tr class="row1">
+    <td align="left" nowrap="nowrap">
+    {L_FILTER_BANK}
+    </td>
+    <td align="left" nowrap="nowrap">
+    <select name="banker" class="input" onchange="javascript:form.submit();">
+    <option value="" {chars_SELECT_NO}>{L_ALL_SELECTED}</option>
+    <!-- BEGIN chars_row -->
+    <option value="{chars_row.NAME}" {chars_row.SELECT}>{chars_row.NAME}</option>
+    <!-- END chars_row -->
+    </select>
+    </td>
+    </tr>
+    
+    <tr class="row1">
+    <td align="left" nowrap="nowrap">
+    {L_FILTER_TYPE}
+    </td>
+    <td align="left" nowrap="nowrap">
+    <select name="type" class="input" onchange="javascript:form.submit();">
+    <option value="" {filter_select_no}>----</option>
+    <!-- BEGIN type_filter -->
+    <option value="{type_filter.name}" {type_filter.select}>{type_filter.name}</option>
+    <!-- END type_filter -->
+    </select>
+    </td>
+    </tr>
+    
+    <tr class="row1">
+    <td align="left" nowrap="nowrap">
+    {L_FILTER_PRIO}
+    </td>
+    <td align="left" nowrap="nowrap">
+    <select name="priority" class="input" onchange="javascript:form.submit();">
+    <option value="0" {S_PRIORITY0}>{L_PRIO0}</option>
+    <option value="1" {S_PRIORITY1}>{L_PRIO1}</option>
+    <option value="2" {S_PRIORITY2}>{L_PRIO2}</option>
+    <option value="3" {S_PRIORITY3}>{L_PRIO3}</option>
+    <option value="4" {S_PRIORITY4}>{L_PRIO4}</option>
+    </select>
+    </td>
+    </tr>
+    
+    </table>
+  </form>
+  </td></tr>
+</table>
+<br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  	<th colspan="6">{Bank_Items}</th>
+  </tr>
+  <tr>
+  <!-- IF SHOW_INFO_TOOLTIP -->
+    <th align="left" width="75px"></th>
+  <!-- ENDIF -->
+    <th align="left" width="75px"></th>
+    <th align="left" width="50px"><a href="{QTY_LINK}">{Lang_QTY}</a></th>
+    <th align="left" width="225px"><a href="{NAME_LINK}">{Lang_Name}</a></th>
+    <th align="left" width="200px"><a href="{TYPE_LINK}">{Lang_Type}</a></th>
+    <th align="left" nowrap="nowrap"><a href="{BANKER_LINK}">{Lang_Banker}</a></th>
+  </tr>
+  <!-- BEGIN items_row -->
+  <tr class="{items_row.ROW_CLASS}">
+  <!-- IF SHOW_INFO_TOOLTIP -->
+      <td align="right" nowrap="nowrap" >
+      <p><img src="{ICON_INFO}" alt="" border=0 /></p>
+      <div class="netflix tooltip">
+                <h1>{items_row.REALNAME}</h1>
+                <p><b>{L_PRIO}</b> {items_row.PRIONAME}<br>
+                <b>{L_GOLD_VALUE}:</b> {items_row.GOLD_VALUE}<b>{L_GOLD}</b> {items_row.SILVER_VALUE}<b>{L_SILVER}</b> {items_row.COPPER_VALUE}<b>{L_COPPER}</b><br>
+                <b>{L_DKP_VALUE}:</b> {items_row.DKP_VALUE}<br>
+                <b>{L_TOTAL_AMOUNT}:</b> {items_row.GES_COUNT}</p>
+                <p><b>{L_GOT_BY}</b><br>
+                 <!-- BEGIN items_got -->
+                {items_row.items_got.QTY}x {items_row.items_got.NAME} ({items_row.items_got.MONEY}) <br />
+	               <!-- END items_got -->
+                </p>
+                <p><b>{L_SPENT_BY}</b><br>
+                 <!-- BEGIN items_spent -->
+                {items_row.items_spent.QTY}x {items_row.items_spent.NAME}  ({items_row.items_spent.MONEY})<br />
+	               <!-- END items_spent -->
+                </p>
+      </div>
+      </td>
+      <!-- ENDIF -->
+      <td align="right" nowrap="nowrap" ><img src="images/{ICON_PRIO1}prio/{items_row.PRIO}.{ICON_PRIO2}" alt="" /></td>
+  	  <td align="right" nowrap="nowrap" >{items_row.QTY}</td>
+      <td nowrap="nowrap" width="100%"><a href="{items_row.LINK}" onclick="return viewinfos('{items_row.LINK}');">{items_row.NAME}</a></td>
+      <td nowrap="nowrap">{items_row.TYPE}</td>
+      <td nowrap="nowrap">{items_row.BANKER}</td>
+  </tr>
+  <!-- END items_row -->
+</table>
+<center><br /><span class="copyis"><a onclick="javascript:AboutDialog()" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><img src="{ICON_INFO}" alt="Credits" border="0" /> Credits</a></span>
+<br /><span class="copy">EQDKP Raidbanker v{L_VERSION} &copy; 2006 by <a href="http://www.wallenium.de" target="blank">Wallenium</a></span></center>
+<!-- INCLUDE ../../../../templates/default/page_tail.html -->
