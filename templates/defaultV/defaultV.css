@@ -1,0 +1,57 @@
+form { display: inline; }
+img { vertical-align: middle; border: 0px; }
+
+BODY { font-family: {T_FONTFACE1}; font-size: {T_FONTSIZE2}px; color: #{T_FONTCOLOR1}; margin-left: 1%; margin-right: 1%; margin-top: 1%; background-color: #{T_BODY_BACKGROUND}; }
+TABLE { border-top: {T_TABLE_BORDER_WIDTH}px; border-right: {T_TABLE_BORDER_WIDTH}px; border-bottom: {T_TABLE_BORDER_WIDTH}px; border-left: {T_TABLE_BORDER_WIDTH}px; border-color: #{T_TABLE_BORDER_COLOR}; border-style: {T_TABLE_BORDER_STYLE}; }
+TABLE.borderless { border-style: none; }
+
+th { font-weight: bold; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; white-space: nowrap; }
+tr, td { font-family: {T_FONTFACE1}; font-size: {T_FONTSIZE2}px; color: #{T_FONTCOLOR1}; }
+
+a:link, a:visited, a:active { text-decoration: {T_BODY_LINK_STYLE}; color: #{T_BODY_LINK}; }
+a:hover { text-decoration: {T_BODY_HLINK_STYLE}; color: #{T_BODY_HLINK}; }
+
+th a:link, th a:visited, th a:active { text-decoration: {T_HEADER_LINK_STYLE}; color: #{T_HEADER_LINK}; font-weight: bold; }
+th a:hover { text-decoration: {T_HEADER_HLINK_STYLE}; color: #{T_HEADER_HLINK}; font-weight: bold; }
+
+th.smalltitle { font-weight: bold; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; white-space: nowrap; font-size: {T_FONTSIZE1}px; }
+th.smalltitle a:link, th.smalltitle a:visited, th.smalltitle a:active { text-decoration: {T_HEADER_LINK_STYLE}; color: #{T_HEADER_LINK}; font-weight: bold; font-size: {T_FONTSIZE1}px; }
+th.smalltitle a:hover { color: #{T_HEADER_HLINK}; font-weight: bold; font-size: {T_FONTSIZE1}px; text-decoration: {T_HEADER_HLINK_STYLE}; }
+
+th.footer { color: #{T_HEADER_LINK}; text-align: right; background-color: #{T_TH_COLOR1}; white-space: nowrap; font-weight: normal; }
+th.footer a:link, th.footer a:visited, th.footer a:active { color: #{T_HEADER_LINK}; text-decoration: {T_HEADER_LINK_STYLE};  font-weight: normal; }
+th.footer a:hover { color: #{T_HEADER_HLINK}; text-decoration: {T_HEADER_HLINK_STYLE}; font-weight: normal; }
+
+.row1 { background-color: #{T_TR_COLOR1}; }
+.row2 { background-color: #{T_TR_COLOR2}; }
+
+.quote1 { background-color: #{T_TR_COLOR2}; font-size: {T_FONTSIZE2}px; line-height: 125%; }
+.quote2 { background-color: #{T_TR_COLOR1}; font-size: {T_FONTSIZE2}px; line-height: 125%; }
+
+.positive { color: #{T_FONTCOLOR_POS}; }
+.negative { color: #{T_FONTCOLOR_NEG}; }
+.neutral  { color: #{T_FONTCOLOR1}; }
+
+.maintitle { font-size: 18px; font-weight: bold; color: #{T_FONTCOLOR2}; }
+.subtitle  { font-size: 12px; color: #{T_FONTCOLOR2}; }
+
+.menu { font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.menu a:link, .menu a:active, .menu a:visited { text-decoration: none; font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.menu a:hover { text-decoration: underline; font-size: {T_FONTSIZE1}px; color: #{T_HEADER_HLINK}; }
+
+.small { font-size: {T_FONTSIZE1}px; }
+
+.copy { font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.copy a:link, .copy a:active, .copy a:visited { font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR2}; }
+.copy a:hover { font-size: {T_FONTSIZE1}px; color: #{T_HEADER_HLINK}; }
+
+.input { font-family: {T_FONTFACE2}; font-size: {T_FONTSIZE1}px; color: #{T_FONTCOLOR3}; background-color: #{T_INPUT_BACKGROUND};
+         border-top: {T_INPUT_BORDER_WIDTH}px; border-right: {T_INPUT_BORDER_WIDTH}px; border-bottom: {T_INPUT_BORDER_WIDTH}px; border-left: {T_INPUT_BORDER_WIDTH}px; border-color: #{T_INPUT_BORDER_COLOR}; border-style: {T_INPUT_BORDER_STYLE}; }
+
+input.helpline1 { background-color: #{T_TR_COLOR1}; border-style: none; }
+input.helpline2 { background-color: #{T_TR_COLOR2}; border-style: none; }
+
+input.mainoption { font-family: {T_FONTFACE2}; font-size: {T_FONTSIZE1}px; font-weight: bold; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; border-top: {T_INPUT_BORDER_WIDTH}px;
+                   border-right: {T_INPUT_BORDER_WIDTH}px; border-bottom: {T_INPUT_BORDER_WIDTH}px; border-left: {T_INPUT_BORDER_WIDTH}px; border-color: #{T_HEADER_LINK}; border-style: {T_INPUT_BORDER_STYLE}; }
+input.liteoption { font-family: {T_FONTFACE2}; font-size: {T_FONTSIZE1}px; font-weight: normal; color: #{T_HEADER_LINK}; background-color: #{T_TH_COLOR1}; border-top: {T_INPUT_BORDER_WIDTH}px;
+                   border-right: {T_INPUT_BORDER_WIDTH}px; border-bottom: {T_INPUT_BORDER_WIDTH}px; border-left: {T_INPUT_BORDER_WIDTH}px; border-color: #{T_HEADER_LINK}; border-style: {T_INPUT_BORDER_STYLE}; }

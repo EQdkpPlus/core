@@ -1,0 +1,23 @@
+<!-- INCLUDE page_header.html -->
+<form method="post" action="{F_BACKUP}" name="post" onsubmit="return check_form(this)">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="center" colspan="6">{L_BACKUP_TITLE}</th>
+  </tr>
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_CREATE_TABLE}</td>
+    <td width="50%" nowrap="nowrap" class="row2">{L_YES}<input type="radio" name="create_table" value="Y" checked/> {L_NO}<input type="radio" name="create_table" value="N" /></td>
+  </tr>
+  <tr> 
+  <tr>
+    <td width="100" nowrap="nowrap" class="row1">{L_GZIP_CONTENT}</td>
+    <td width="50%" nowrap="nowrap" class="row2">{L_YES}<input type="radio" name="gzip" value="Y" /> {L_NO}<input type="radio" name="gzip" value="N" checked/></td>
+  </tr>
+  <tr>
+    <th align="center" colspan="6">
+    	<input type="submit" name="backup" value="{L_BACKUP_DATABASE}" class="mainoption" />
+    </th>
+  </tr>
+</table>
+</form>
+<!-- INCLUDE page_tail.html -->

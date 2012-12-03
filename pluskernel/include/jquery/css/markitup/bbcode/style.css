@@ -1,0 +1,93 @@
+/* -------------------------------------------------------------------
+// markItUp!
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.markItUp .markItUpButton1 a	{
+	background-image:url(images/bold.png);
+}
+.markItUp .markItUpButton2 a	{
+	background-image:url(images/italic.png);
+}
+.markItUp .markItUpButton3 a	{
+	background-image:url(images/underline.png);
+}
+
+.markItUp .markItUpButton4 a	{
+	background-image:url(images/picture.png);
+}
+.markItUp .markItUpButton5 a	{
+	background-image:url(images/link.png);
+}
+
+.markItUp .markItUpButton6 a {
+	background-image:url(images/colors.png);
+}
+	.markItUp .markItUpButton6 ul {
+		width:81px;
+		padding:1px;	
+	}
+	.markItUp .markItUpButton6  li {
+		border:1px solid white;
+		width:25px;	height:25px;
+		overflow:hidden;
+		padding:0px; margin:0px;
+		float:left;
+	}
+	.markItUp .markItUpButton6 ul a {
+		width:25px;	height:25px;
+	}
+	.markItUp .markItUpButton6 ul a:hover {
+		background-color:none;
+	}
+	
+	.markItUp .markItUpButton6 .col1-1 a {
+		background:yellow;
+	}
+	.markItUp .markItUpButton6 .col1-2 a {
+		background:orange;
+	}
+	.markItUp .markItUpButton6 .col1-3 a {
+		background:red;
+	}
+	
+	.markItUp .markItUpButton6 .col2-1 a {
+		background:blue;
+	}
+	.markItUp .markItUpButton6 .col2-2 a {
+		background:purple;
+	}
+	.markItUp .markItUpButton6 .col2-3 a {
+		background:green;
+	}
+	
+	.markItUp .markItUpButton6 .col3-1 a {
+		background:white;
+	}
+	.markItUp .markItUpButton6 .col3-2 a {
+		background:gray;
+	}
+	.markItUp .markItUpButton6 .col3-3 a {
+		background:black;
+	}
+
+.markItUp .markItUpButton7 a	{
+	background-image:url(images/fonts.png);
+}
+.markItUp .markItUpButton8 a	{
+	background-image:url(images/list-bullet.png);
+}
+
+.markItUp .markItUpButton9 a	{
+	background-image:url(images/list-item.png);
+}
+
+.markItUp .markItUpButton10 a	{
+	background-image:url(images/code.png);
+}
+	
+.markItUp .clean a {
+	background-image:url(images/clean.png);
+}
+.markItUp .preview a {
+	background-image:url(images/preview.png);
+}
