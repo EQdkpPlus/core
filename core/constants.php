@@ -60,5 +60,5 @@ define('EQDKP_TWITTER_URL', "http://eqdkp-plus.eu/rss/twitter.json");
 define('EQDKP_BOARD_URL', "http://eqdkp-plus.eu/forum");
 define('EQDKP_CRL_URL', "https://eqdkp-plus.googlecode.com/files/crl.txt");
 define('EQDKP_WIKI_URL', "http://eqdkp-plus.eu/wiki/");
-define('EQDKP_BUGTRACKER_URL', "http://eqdkp-plus.eu/forum/");
+define('EQDKP_BUGTRACKER_URL', "http://eqdkp-plus.eu/bugtracker/");
 ?>
