@@ -424,9 +424,7 @@ if (!class_exists("timehandler")){
 					$current_tz =  new DateTimeZone($tz);
 					$offset 	=  $current_tz->getOffset($dt);
 					$timestamp  =  (version_compare(PHP_VERSION, '5.3.0', '<')) ? $dt->format('U') : $dt->getTimestamp();
-					$transition =  $current_tz->getTransitions();
-					$abbr		= ($transition[0]['abbr'] != "GMT") ? $transition[0]['abbr'].', GMT' : 'GMT';
-					$tzdata[$tz] = $abbr.' '.trim($this->formatOffset($offset));
+					$tzdata[$tz] = 'GMT '.trim($this->formatOffset($offset));
 				}
 
 				$timezone_data = DateTimeZone::listIdentifiers(1022);
