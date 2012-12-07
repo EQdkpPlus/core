@@ -36,7 +36,7 @@ if(!version_compare(phpversion(), '5.3.0', ">=")) {
 }
 registry::add_const('root_path', $eqdkp_root_path);
 registry::add_const('lite_mode', true);
-// auf die benutzerdefinierte Fehlerbehandlung umstellen
+// switch to userdefined error-handling
 registry::$aliases['pdl'] = array('plus_debug_logger', array(false, false));
 registry::$aliases['user'] = 'auth_db';
 $pdl = registry::register('plus_debug_logger', array(false, false));

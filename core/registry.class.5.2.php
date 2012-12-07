@@ -29,7 +29,7 @@ final class registry extends super_registry{
 	private static $destruct_started = false;
 	private static $all_deps = array();
 	
-	private static function load($classname) {
+	public static function load($classname) {
 		if(isset(self::$loaded[$classname])) return true;
 		self::$loaded[$classname] = true;
 		if(!isset(self::$locs[$classname]) && !class_exists($classname) && !(self::get_const('lite_mode') && in_array($classname, self::$lite_igno))) {

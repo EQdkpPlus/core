@@ -19,7 +19,7 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class inst_settings extends install_generic {
-	public static $shortcuts = array('pdl', 'in', 'html', 'game', 'config', 'db', 'pfh', 'core');
+	public static $shortcuts = array('pdl', 'in', 'html', 'game', 'config', 'db', 'pfh', 'core', 'time');
 	public static $before 		= 'encryptionkey';
 	public static $ajax			= 'ajax';
 	
@@ -149,24 +149,7 @@ class inst_settings extends install_generic {
 		}
 		$startdays = array('sunday' => $this->lang['sunday'], 'monday' => $this->lang['monday']);
 		
-		
-		
-		$timezone_data = DateTimeZone::listIdentifiers(1022);
-		$timezone_ab = DateTimeZone::listAbbreviations();
-
-		$timezones = array();
-		foreach($timezone_ab as $more_data) {
-			foreach($more_data as $tz) {
-				$value = $tz['timezone_id'];
-				if(!in_array($value, $timezone_data) || $tz['dst']) continue;
-				$slash = strpos($value, '/');
-				$continent = substr($value, 0, $slash);
-				$region = substr($value, $slash+1);
-				$offset = '';
-				if($tz['offset']) $offset = '   (GMT '.(($tz['offset'] > 0) ? '+' : '-').round($tz['offset']/3600, 1).')';
-				$timezones[$continent][$value] = str_replace(array('_', '/'), array(' ', ' - '), $region).$offset;
-			}
-		}
+		registry::load('timehandler');
 		$content = '<table class="ui-widget" style="border-collapse: collapse;" width="100%">
 						<tr>
 							<th class="ui-state-default" colspan="2">'.$this->lang['lang_config'].'</th>
@@ -195,7 +178,7 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['timezone'].':</strong></td>
-							<td>'.$this->html->DropDown('timezone', $this->fetch_timezones(), $this->def_timezone).'</td>
+							<td>'.$this->html->DropDown('timezone', timehandler::fetch_timezones(), $this->def_timezone).'</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['startday'].':</strong></td>
@@ -357,76 +340,6 @@ class inst_settings extends install_generic {
 		if(is_dir($cachefolder)) {
 			$this->pfh->Delete($cachefolder);
 		}
-	}
-	
-	/**
-	 * Converts timezone offset to human-readable form
-	 * Part of timezone fix
-	 *
-	 * @param string $offset
-	 * @return string
-	 */
-	private function formatOffset($offset)
-	{
-			$hours = $offset / 3600;
-			$remainder = $offset % 3600;
-			$sign = $hours > 0 ? '+' : '-';
-			$hour = (int) abs($hours);
-			$minutes = (int) abs($remainder / 60);
-
-			if ($hour == 0 AND $minutes == 0) {
-				$sign = ' ';
-			}
-			
-			return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
-	}
-	
-	/**
-	* Fetch the timezones from server
-	*
-	* @return array of timezones
-	*/
-	private function fetch_timezones(){
-		$utc 	= new DateTimeZone('UTC');
-		$dt  	= new DateTime('now', $utc);
-		$tzdata = array();
-
-		// Defining locales and it's offsets
-		foreach( DateTimeZone::listIdentifiers() as $tz ) {
-			$current_tz =  new DateTimeZone($tz);
-			$offset 	=  $current_tz->getOffset($dt);
-			$transition =  $current_tz->getTransitions($dt->getTimestamp(), $dt->getTimestamp());
-			$abbr		= ($transition[0]['abbr'] != "GMT") ? $transition[0]['abbr'].', GMT' : 'GMT';
-			$tzdata[$tz] = $abbr.' '.trim($this->formatOffset($offset));
-		}
-
-		// Defining necessary active locales
-		// Comment out unnecessary regions (for example 'antarctica' or 'africa')
-		$regions = array(
-			'Africa' => DateTimeZone::AFRICA,
-			'America' => DateTimeZone::AMERICA,
-			// 'Antarctica' => DateTimeZone::ANTARCTICA,
-			'Asia' => DateTimeZone::ASIA,
-			'Atlantic' => DateTimeZone::ATLANTIC,
-			'Europe' => DateTimeZone::EUROPE,
-			'Indian' => DateTimeZone::INDIAN,
-			'Pacific' => DateTimeZone::PACIFIC
-		);
-
-		// Grouping by regions
-		foreach ($regions as $name => $mask) {
-			$tzlist[$name] = DateTimeZone::listIdentifiers($mask);
-		}
-
-		$ArrTimezones = array();
-		
-		foreach ( $tzlist as $region=>$locales ) {
-			foreach( $locales as $locale ) {
-				$city = substr($locale, (stripos($locale, '/')+1));
-				$ArrTimezones[$region][$locale] = $city.' ('.$tzdata[$locale].')';
-			}
-		}
-		return $ArrTimezones;
 	}
 }
 if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_inst_settings', inst_settings::$shortcuts);

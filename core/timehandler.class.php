@@ -24,7 +24,7 @@ if (!class_exists("timehandler")){
 	class timehandler extends gen_class {
 		public static $shortcuts = array('pdl', 'user', 'config');
 
-		private $ArrTimezones = '';
+		private static $ArrTimezones = array();
 		
 		private $formtrans = array(
 			//php		//js
@@ -392,7 +392,7 @@ if (!class_exists("timehandler")){
 		 * @param string $offset
 		 * @return string
 		 */
-		private function formatOffset($offset)
+		private static function formatOffset($offset)
 		{
 				$hours = $offset / 3600;
 				$remainder = $offset % 3600;
@@ -413,19 +413,8 @@ if (!class_exists("timehandler")){
 		*
 		* @return array of timezones
 		*/
-		private function fetch_timezones(){
-			if(!is_array($this->ArrTimezones) || empty($this->ArrTimezones)) {
-				$utc 	= new DateTimeZone('UTC');
-				$dt  	= new DateTime('now', $utc);
-				$tzdata = array();
-
-				// Defining locales and it's offsets
-				foreach( DateTimeZone::listIdentifiers() as $tz ) {
-					$current_tz =  new DateTimeZone($tz);
-					$offset 	=  $current_tz->getOffset($dt);
-					$timestamp  =  (version_compare(PHP_VERSION, '5.3.0', '<')) ? $dt->format('U') : $dt->getTimestamp();
-					$tzdata[$tz] = 'GMT '.trim($this->formatOffset($offset));
-				}
+		public static function fetch_timezones(){
+			if(!is_array(self::$ArrTimezones) || empty(self::$ArrTimezones)) {
 
 				$timezone_data = DateTimeZone::listIdentifiers(1022);
 				$timezone_ab = DateTimeZone::listAbbreviations();
@@ -438,20 +427,19 @@ if (!class_exists("timehandler")){
 						$continent = substr($value, 0, $slash);
 						$region = substr($value, $slash+1);
 						$tzlist[$continent][] = $value;
+						$tzdata[$value] = 'GMT '.trim(self::formatOffset($tz['offset']));
 					}
 				}
-				
-
-				$this->ArrTimezones = array();
-				
+				ksort($tzlist);
 				foreach ( $tzlist as $region=>$locales ) {
+					sort($locales);
 					foreach( $locales as $locale ) {
 						$city = substr($locale, (stripos($locale, '/')+1));
-						$this->ArrTimezones[$region][$locale] = $city.' ('.$tzdata[$locale].')';
+						self::$ArrTimezones[$region][$locale] = $city.' ('.$tzdata[$locale].')';
 					}
 				}
 			}
-			return $this->ArrTimezones;
+			return self::$ArrTimezones;
 		}
 
 		/**
