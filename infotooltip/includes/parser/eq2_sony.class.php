@@ -176,6 +176,9 @@ if(!class_exists('eq2_sony')) {
 			if ($tierName == "TREASURED") {
 				$tierColor = "#8accf0";
 			}
+			if ($tierName == "ETHEREAL") {
+				$tierColor = "#ff8C00";
+			}
 			return "<div style='color: $tierColor;' class='itemd_tier'>$tierName</div>";
 		}
 		
