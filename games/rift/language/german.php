@@ -67,6 +67,7 @@ $german_array = array(
 		'import_status_true'	=> 'Importiert/Aktualisiert',
 		'import_status_false'	=> 'Fehler',
 		'guild_xml_error'		=> 'Das Gilden-XML hat ein nicht gültiges Format.',
+		'uc_delete_chars_onimport'		=> 'Charaktere im System löschen, die nicht mehr in der Gilde sind',
 	),
 );
 ?>

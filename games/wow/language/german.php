@@ -196,6 +196,7 @@ $german_array = array(
 		'uc_importcache_cleared'		=> 'Der Cache des Importers wurde erfolgreich geleert.',
 		'uc_startdkp'					=> 'Start-DKP vergeben',
 		'uc_startdkp_adjreason'			=> 'Start-DKP',
+		'uc_delete_chars_onimport'		=> 'Charaktere im System löschen, die nicht mehr in der Gilde sind',
 
 		'uc_noprofile_found'			=> 'Kein Profil gefunden',
 		'uc_profiles_complete'			=> 'Profile erfolgreich aktualisiert',

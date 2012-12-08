@@ -107,6 +107,7 @@ $german_array = array(
 		'uc_gimp_loading'				=> 'Gildenmitglieder werden geladen, bitte warten...',
 		'uc_gimp_header_fnsh'			=> 'Der Import der Gildenmitglieder wurde beendet. Beim Gildenimport werden nur der Charktername, die Rasse, die Klasse und das Level importiert. Um die restlichen Daten zu importieren, einfach den Updater benutzen.',
 		'uc_importcache_cleared'		=> 'Der Cache des Importers wurde erfolgreich geleert.',
+		'uc_delete_chars_onimport'		=> 'Charaktere im System löschen, die nicht mehr in der Gilde sind',
 		
 		'uc_noprofile_found'			=> 'Kein Profil gefunden',
 		'uc_profiles_complete'			=> 'Profile erfolgreich aktualisiert',

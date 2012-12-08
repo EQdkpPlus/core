@@ -67,6 +67,7 @@ $english_array = array(
 		'import_status_true'	=> 'Imported/Updated',
 		'import_status_false'	=> 'Error',
 		'guild_xml_error'		=> 'The Guild-XML is not valid.',
+		'uc_delete_chars_onimport'		=> 'Delete Chars that have left the guild',
 	),
 );
 ?>

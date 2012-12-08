@@ -197,6 +197,7 @@ $english_array = array(
 		'uc_importcache_cleared'		=> 'The cache of the importer was successfully cleared.',
 		'uc_startdkp'					=> 'Set Start-DKP',
 		'uc_startdkp_adjreason'			=> 'Start-DKP',
+		'uc_delete_chars_onimport'		=> 'Delete Chars that have left the guild',
 
 		'uc_noprofile_found'			=> 'No profile found',
 		'uc_profiles_complete'			=> 'Profiles updated successfully',

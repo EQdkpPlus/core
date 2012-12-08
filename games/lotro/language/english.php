@@ -92,6 +92,7 @@ $english_array = array(
 		'uc_gimp_header_fnsh'			=> 'Guild import finished',
 		'uc_importcache_cleared'		=> 'The cache of the importer was successfully cleared.',
 		"uc_updat_armory" 				=> "Refresh from armory",
+		'uc_delete_chars_onimport'		=> 'Delete Chars that have left the guild',
 		
 		'uc_noprofile_found'			=> 'No profile found',
 		'uc_profiles_complete'			=> 'Profiles updated successfully',

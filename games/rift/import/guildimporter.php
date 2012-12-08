@@ -46,6 +46,10 @@ class guildImporter extends page_generic {
 				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'ranks')).'</dd>
 			</dl>
 			<dl>
+				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
+				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'delete_old_chars')).'</dd>
+			</dl>
+			<dl>
 				<dt><label>'.$this->game->glang('guild_xml_lang').'</label></dt>
 				<dd>'.$this->html->widget(array('fieldtype'=>'dropdown','name'=>'xmllang', 'options' => $arrLangs, 'selected' => $this->config->get('game_language'))).'</dd>
 			</dl>
@@ -81,6 +85,11 @@ class guildImporter extends page_generic {
 				}
 			}
 			
+			//Suspend all Chars
+			if ($this->in->get('delete_old_chars',0)){
+				$this->pdh->put('member', 'suspend', array('all'));
+			}
+			
 			//Import Chars
 			foreach ($xml->Members->Member as $objMember) {	
 				$dataarry = array(
@@ -95,7 +104,14 @@ class guildImporter extends page_generic {
 				}
 
 				$myStatus = $this->pdh->put('member', 'addorupdate_member', array(0, $dataarry));
-				$hmtlout .= "<dl><dt><label><img src=\"".$this->root_path.'images/no_pic.png'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".(string)$objMember->Name."<br/>".(($myStatus[0]) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
+				if ($myStatus){
+					//Revoke Char
+					if ($this->in->get('delete_old_chars',0)){
+						$this->pdh->put('member', 'revoke', array($myStatus));
+					}
+				}
+				
+				$hmtlout .= "<dl><dt><label><img src=\"".$this->root_path.'images/no_pic.png'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".(string)$objMember->Name."<br/>".(($myStatus) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
 			}
 			
 			$hmtlout = "<dl><div class=\"greenbox roundbox\"><div class=\"icon_ok\" id=\"error_message_txt\">".$this->game->glang('uc_gimp_header_fnsh')."</div></div></dl>".$hmtlout;			

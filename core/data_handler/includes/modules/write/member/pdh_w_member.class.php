@@ -264,12 +264,20 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		}
 
 		public function suspend($member_id){
-			$this->db->query("UPDATE __members SET :params WHERE member_id=?", array(
+			if ($member_id == 'all'){
+				$this->db->query("UPDATE __members SET :params", array(
 				'member_status' => 0,
 				'requested_del' => 1,
-			), $member_id);
+				));
+			} else {
+				$this->db->query("UPDATE __members SET :params WHERE member_id=?", array(
+					'member_status' => 0,
+					'requested_del' => 1,
+				), $member_id);
+			}
 			$this->pdh->enqueue_hook('member_update');
 		}
+		
 
 		public function revoke($member_id){
 			$this->db->query("UPDATE __members SET :params WHERE member_id=?", array(

@@ -45,6 +45,10 @@ class guildImporter extends page_generic {
 				<dt><label>'.$this->game->glang('uc_guild_name').'</label></dt>
 				<dd>'.$this->html->widget(array('fieldtype'=>'text','name'=>'guildname','value'=> $this->config->get('guildtag'), 'size'=>'40')).'</dd>
 			</dl>
+			<dl>
+				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
+				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'delete_old_chars')).'</dd>
+			</dl>
 			</fieldset>
 			<fieldset class="settings mediumsettings">
 				<legend>'.$this->game->glang('uc_filter_name').'</legend>
@@ -66,7 +70,12 @@ class guildImporter extends page_generic {
 		if($this->in->get('guildname', '') == ''){
 			return '<div class="errorbox roundbox"><div class="icon_ok" id="error_message_txt">'.$this->game->glang('uc_imp_noguildname').'</div></div>';
 		}
-
+		
+		//Suspend all Chars
+		if ($this->in->get('delete_old_chars',0)){
+			$this->pdh->put('member', 'suspend', array('all'));
+		}
+		
 		// generate output
 		$guilddata	= $this->game->obj['ldata']->guild($this->in->get('guildname', ''), $this->config->get('uc_servername'), true);
 
@@ -119,7 +128,7 @@ class guildImporter extends page_generic {
 					i=0;
 	
 				if (guilddataArry.length >= i){
-					$.post("guildimporter.php?step=2&totalcount="+guilddataArry.length+"&actcount="+i, guilddataArry[i], function(data){
+					$.post("guildimporter.php'.$this->SID.'&del='.(($this->in->get('delete_old_chars',0)) ? 'true' : 'false').'&step=2&totalcount="+guilddataArry.length+"&actcount="+i, guilddataArry[i], function(data){
 						guilddata = $.parseJSON(data);
 						if(guilddata.success == "available"){
 							successdata = "<span style=\"color:orange;\">'.$this->game->glang('uc_armory_impduplex').'</span>";
@@ -148,6 +157,15 @@ class guildImporter extends page_generic {
 	public function perform_step2(){
 		if(in_array($this->in->get('name', ''), $this->pdh->get('member', 'names', array()))){
 			$successmsg = 'available';
+			
+			//Revoke Char
+			if ($this->in->get('del', '') == 'true'){
+				$member_id = $this->pdh->get('member', 'id', array($this->in->get('name', '')));
+				if ($member_id) {
+					$this->pdh->put('member', 'revoke', array($member_id));
+					$this->pdh->process_hook_queue();
+				}
+			}
 		}else{
 			$dataarry = array(
 				'name'		=> $this->in->get('name',''),

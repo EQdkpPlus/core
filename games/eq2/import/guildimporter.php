@@ -45,6 +45,10 @@ class guildImporter extends page_generic {
 				<dt><label>'.$this->game->glang('uc_guild_name').'</label></dt>
 				<dd>'.$this->html->widget(array('fieldtype'=>'text','name'=>'guildname','value'=> $this->config->get('guildtag'), 'size'=>'40')).'</dd>
 			</dl>
+			<dl>
+				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
+				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'delete_old_chars')).'</dd>
+			</dl>
 			</fieldset>
 			<fieldset class="settings mediumsettings">
 				<legend>'.$this->game->glang('uc_filter_name').'</legend>
@@ -65,6 +69,11 @@ class guildImporter extends page_generic {
 	public function perform_step1(){
 		if($this->in->get('guildname', '') == ''){
 			return '<div class="errorbox roundbox"><div class="icon_ok" id="error_message_txt">'.$this->game->glang('uc_imp_noguildname').'</div></div>';
+		}
+		
+		//Suspend all Chars
+		if ($this->in->get('delete_old_chars',0)){
+			$this->pdh->put('member', 'suspend', array('all'));
 		}
 
 		// generate output
@@ -121,7 +130,7 @@ class guildImporter extends page_generic {
 					i=0;
 	
 				if (guilddataArry.length >= i){
-					$.post("guildimporter.php?step=2&totalcount="+guilddataArry.length+"&actcount="+i, guilddataArry[i], function(data){
+					$.post("guildimporter.php'.$this->SID.'&del='.(($this->in->get('delete_old_chars',0)) ? 'true' : 'false').'&step=2&totalcount="+guilddataArry.length+"&actcount="+i, guilddataArry[i], function(data){
 						guilddata = $.parseJSON(data);
 						if(guilddata.success == "available"){
 							successdata = "<span style=\"color:orange;\">'.$this->game->glang('uc_armory_impduplex').'</span>";
@@ -154,6 +163,12 @@ class guildImporter extends page_generic {
 			if ($charid) {
 				$gamecharid = $this->pdh->get('member', 'picture', array($charid));
 				$charicon = $this->game->obj['soe']->characterIcon($gamecharid, true);
+				
+				//Revoke Char
+				if ($this->in->get('del', '') == 'true'){
+					$this->pdh->put('member', 'revoke', array($charid));
+					$this->pdh->process_hook_queue();
+				}
 			} else {
 				$charicon = $this->root_path.'images/no_pic.png';
 			}
