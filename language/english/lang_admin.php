@@ -1070,7 +1070,7 @@ $alang = array(
 "hide_inactive" => "Hide Inactive characters",
 "hide_inactive_help" => "Hide characters, which did not attend on raids the last x days?",
 "inactive_period" => "Inactive Period",
-"inactive_period_help" => "Amount of days, a character can be absent from raids and stay active.",
+"inactive_period_help" => "Amount of days, a character can be absent from raids and stay active. Insert 0 to disable inactivation.",
 "pk_tab_fs_sms" => "SMS settings",
 "pk_tab_info_sms" => "To send SMS' you need login credentials.",
 "sms_info_account_link" => "<a href=\"http://www.allvatar.com/index.php?p=sms\" target=\"_blank\">http://www.allvatar.com/index.php?p=sms</a>",

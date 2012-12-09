@@ -1078,7 +1078,7 @@ $alang = array(
 "hide_inactive" => "Inaktive Charaktere verstecken",
 "hide_inactive_help" => "Charaktere verstecken, die an keinem Raid innerhalb von [inaktiver Zeitraum] Tagen teilgenommen haben?",
 "inactive_period" => "Inaktiver Zeitraum",
-"inactive_period_help" => "Anzahl von Tagen, die ein Charakter vom Raid fernbleiben kann und aktiv bleibt",
+"inactive_period_help" => "Anzahl von Tagen, die ein Charakter vom Raid fernbleiben kann und aktiv bleibt. Trage 0 ein, um die Funktion zu deaktivieren.",
 "pk_tab_fs_sms" => "SMS Einstellungen",
 "pk_tab_info_sms" => "Um SMS versenden zu können benötigt ihr Zugangsdaten.",
 "sms_info_account_link" => "<a href=\"http://www.allvatar.com/index.php?p=sms\" target=\"_blank\">http://www.allvatar.com/index.php?p=sms</a>",

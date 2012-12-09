@@ -34,6 +34,7 @@ if ( !class_exists( "inactive_crontask" ) ) {
 		}
 
 		public function run() {
+			if ((int)$this->config->get('inactive_period') == 0) return;
 			$members = $this->pdh->aget('member_dates', 'last_raid', 0, array($this->pdh->get('member', 'id_list'), null, false));
 			$crit_time = $this->time->time - 24*3600*$this->config->get('inactive_period');
 			foreach($members as $member_id => $last_raid) {
