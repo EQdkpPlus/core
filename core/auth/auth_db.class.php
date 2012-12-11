@@ -132,12 +132,7 @@ class auth_db extends auth {
 			if ($arrStatus && $this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('pk_maintenance_mode') != 1){
 				
 				//Only CMS User are allowed to login
-				if ((int)$this->config->get('cmsbridge_onlycmsuserlogin')){
-					//First, try Bridge-Login without password
-					//Because normal Bridge Login failed, but EQdkp Login was succesful (maybe through Login function like Facebook)
-					//Thats why we need to try bridge login without password
-					$arrStatus = $this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, $boolUseHash, false, false);
-					
+				if ((int)$this->config->get('cmsbridge_onlycmsuserlogin')){					
 					//check if user is Superadmin, if yes, login
 					$blnIsSuperadmin = $this->check_group(2, false, (int)$arrStatus['user_id']);
 					
