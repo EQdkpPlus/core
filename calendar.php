@@ -175,7 +175,7 @@ class viewcalendar extends page_generic {
 			foreach($feeds as $feed){
 				$feedurl = $this->pdh->get('calendars', 'feed', array($feed));
 				if(isValidURL($feedurl)){
-					require($this->root_path.'libraries/icalcreator/iCalcreator.class.php');
+					require_once($this->root_path.'libraries/icalcreator/iCalcreator.class.php');
 					$vcalendar = new vcalendar(array( 'url' => $feedurl ));
 					if( TRUE === $vcalendar->parse()){
 						$vcalendar->sort();
