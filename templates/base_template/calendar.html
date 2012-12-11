@@ -79,6 +79,18 @@
 					}
 					element.qtip({
 						content: tmpttcontent,
+						position: {
+							at: "bottom center",
+							my: "top center"
+						},
+						style: {
+							classes: 'ui-tooltip-shadow',
+							tip: {
+								corner: true,
+								width: 20
+							},
+							widget: true
+						}
 					});
 				}else{
 					tmpttcontent = '';
