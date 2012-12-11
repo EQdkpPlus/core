@@ -557,6 +557,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "tab_adjustments" => "Korrekturen",
 "tab_attendance" => "Raidteilnahme",
 "tab_notes" => "Notizen",
+"tab_customfields" => "Eigene Profildelder",
 "uc_last_update" => "Letzte Aktualisierung",
 "uc_delete_char" => "Charakter löschen",
 "no_connected_char" => "Du hast noch keine zugewiesenen Charaktere. Klicken um einen Charakter anzulegen.",

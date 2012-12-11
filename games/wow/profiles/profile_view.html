@@ -430,11 +430,26 @@
 
 <div id='profile_information'>
 	<ul>
+		<!-- IF CUSTOM_FIELDS --><li><a href='#fragment-2-0'><span>{L_tab_customfields}</span></a></li><!-- ENDIF -->
 		<li><a href='#fragment-2-1'><span>{L_tab_raids}</span></a></li>
 		<li><a href='#fragment-2-2'><span>{L_tab_items}</span></a></li>
 		<li><a href='#fragment-2-3'><span>{L_tab_adjustments}</span></a></li>
 		<li><a href='#fragment-2-4'><span>{L_tab_attendance}</span></a></li>
 	</ul>
+
+	<!-- ALL PROFILE FIELDS TABLE -->
+	<!-- IF CUSTOM_FIELDS -->
+	<div id="fragment-2-0">
+		<fieldset class="settings mediumsettings">
+			<!-- BEGIN pfield_custom -->
+			<dl>
+				<dt><label>{pfield_custom.NAME}</label></dt>
+				<dd>{pfield_custom.VALUE}</dd>
+			</dl>
+			<!-- END pfield_custom -->
+		</fieldset>
+	</div>
+	<!-- ENDIF -->
 
 	<!-- RAIDS TABLE -->
 	<div id="fragment-2-1">

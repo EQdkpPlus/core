@@ -393,7 +393,7 @@ class admin_index extends gen_class {
 
 		// The Jquery Things & Update Check
 		$this->jquery->Tab_header('admininfos_tabs');
-		$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '200');
+		$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '999');
 		$this->jquery->rssFeeder('twitterfeed',	"index.php".$this->SID."&rssajax=twitter");
 
 		$this->tpl->assign_vars(array(

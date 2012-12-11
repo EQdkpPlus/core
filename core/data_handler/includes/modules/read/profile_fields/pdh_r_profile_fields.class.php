@@ -74,6 +74,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 					'enabled'		=> $drow['enabled'],
 					'undeletable'	=> $drow['undeletable'],
 					'options'		=> unserialize($drow['options']),
+					'custom'		=> $drow['custom'],
 				);
 			}
 

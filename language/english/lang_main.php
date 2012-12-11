@@ -612,6 +612,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 "tab_adjustments" => "Adjustments",
 "tab_attendance" => "Raid attendance",
 "tab_notes" => "Notes",
+"tab_customfields" => "Custom Profilefields",
 "uc_last_update" => "Last update",
 "uc_delete_char" => "Delete character",
 "no_connected_char" => "You have no linked characters. Click to create a character.",

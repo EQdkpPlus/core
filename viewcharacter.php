@@ -147,6 +147,20 @@ class viewcharacters extends page_generic {
 					}
 				}
 			}
+		}else{
+			$pfields	= $this->pdh->get('profile_fields', 'fields');
+			$custfields	= false;
+			foreach($pfields as $pfname=>$pfoption){
+				// only relevant data!
+				if($pfoption['custom'] == '1' && $pfoption['enabled'] == '1'){
+					$custfields = true;
+					$this->tpl->assign_block_vars('pfield_custom', array(
+						'NAME'		=> $pfoption['language'],
+						'VALUE'		=> $this->pdh->get('member', 'html_profile_field', array($this->url_id, $pfname))
+					));
+				}
+			}
+			$profile_out['CUSTOM_FIELDS']	= ($custfields) ? true : false;
 		}
 
 		// Start the Output
