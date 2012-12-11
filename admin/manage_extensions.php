@@ -443,9 +443,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[1]['red']){
-			$badge = '<span class="update_available">'.count($arrUpdateCount[1]['red']).'</span>';
+			$badge = '<span class="update_available">'.$arrUpdateCount[1]['red'].'</span>';
 		} elseif ($arrUpdateCount[1]['yellow']){
-			$badge = '<span class="update_available_yellow">'.count($arrUpdateCount[1]['yellow']).'</span>';
+			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[1]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
@@ -547,9 +547,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[2]['red']){
-			$badge = '<span class="update_available">'.count($arrUpdateCount[2]['red']).'</span>';
+			$badge = '<span class="update_available">'.$arrUpdateCount[2]['red'].'</span>';
 		} elseif ($arrUpdateCount[2]['yellow']){
-			$badge = '<span class="update_available_yellow">'.count($arrUpdateCount[2]['yellow']).'</span>';
+			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[2]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
@@ -685,9 +685,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[7]['red']){
-			$badge = '<span class="update_available">'.count($arrUpdateCount[7]['red']).'</span>';
+			$badge = '<span class="update_available">'.$arrUpdateCount[7]['red'].'</span>';
 		} elseif ($arrUpdateCount[7]['yellow']){
-			$badge = '<span class="update_available_yellow">'.count($arrUpdateCount[7]['yellow']).'</span>';
+			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[7]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
