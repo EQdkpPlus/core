@@ -727,6 +727,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "raidevent_raid_time_till" => "bis",
 "raidevent_raid_time_from" => "von",
 "raidevent_raid_deadl_reach" => "Die Anmeldefrist für dieses Ereignis ist bereits überschritten.",
+"raidevent_raid_roleswoclass" => "Mindestens eine Rolle hat keine Klassen zugeweisen. Es kann zu Fehlern kommen, zB. das Rollen-Dropdown könnte leer sein! Ein Administrator kann dies im Rollenmanager prüfen!",
 "raidevent_raid_no_status" => "Es wurden kein Status (angemeldet, abgemeldet, usw.) im Administrationsbereich (Einstellungen, Kalender) gespeichert. Bitte neu setzen.",
 "raidevent_raid_show_title" => "Kalender: %s",
 "raidevent_raid_move_succ" => "Das Verschieben des Kalendereintrages war erfolgreich",

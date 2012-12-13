@@ -780,6 +780,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 "raidevent_raid_time_till" => "from",
 "raidevent_raid_time_from" => "to",
 "raidevent_raid_deadl_reach" => "The signup deadline already over",
+"raidevent_raid_roleswoclass" => "At least one role has no classes assigned. Role select dropdown could be empty!",
 "raidevent_raid_no_status" => "No status (confirmed, signed in, ...) has been selected. Go to settings and select status.",
 "raidevent_raid_show_title" => "Calendar: %s",
 "raidevent_raid_move_succ" => "Moving of the calendar event was successfull.",

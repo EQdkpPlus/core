@@ -341,7 +341,17 @@ class viewcalraid extends page_generic {
 			'auth'		=> 'a_cal_'
 		));
 
-		// get the memners
+		// check if roles are available
+		$allroles		= $this->pdh->get('roles', 'roles', array());
+		$rolewnclass	= false;
+
+		foreach($allroles as $v_roles){
+			if(count($v_roles['classes']) == 0){
+				$rolewnclass	= true;
+			}
+		}
+
+		// get the members
 		$notsigned_filter		= unserialize($this->config->get('calendar_raid_nsfilter'));
 		$this->members			= $this->pdh->maget('member', array('userid', 'name', 'classid', 'memberid'), 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(
 										((in_array('inactive', $notsigned_filter)) ? false : true),
@@ -679,6 +689,7 @@ class viewcalraid extends page_generic {
 			// globals
 			'ENABLE_COMMENTS'		=> ($this->config->get('pk_enable_comments')) ? true : false,
 			'NO_STATUSES'			=> (is_array($raidcal_status) && count($raidcal_status) < 1) ? true : false,
+			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
 			'COMMENTS'				=> $this->comments->Show(),
 			'EVENT_ID'				=> $this->url_id,
 			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
