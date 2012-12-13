@@ -7,9 +7,17 @@
 						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}): 
 						<!-- BEGIN guests -->
 							<!-- IF IS_OPERATOR -->
-							<span class="membertooltip guesteditpanel<!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">{guests.NAME} <span style="display:none;cursor:pointer;" class='guestpanel'><img src="../images/global/delete.png" alt="{L_raidevent_raid_guest_del}" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"/>&nbsp;<img src="../images/global/edit.png" alt="{L_raidevent_raid_guest_edit}" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');" /></span></span>
+							<span class="membertooltip guesteditpanel<!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">
+								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME} 
+								<span style="display:none;cursor:pointer;" class='guestpanel'>
+									<img src="../images/global/delete.png" alt="{L_raidevent_raid_guest_del}" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"/>&nbsp;
+									<img src="../images/global/edit.png" alt="{L_raidevent_raid_guest_edit}" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');" />
+								</span>
+							</span>
 							<!-- ELSE -->
-							<span class="membertooltip<!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">{guests.NAME} </span>
+							<span class="membertooltip<!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">
+								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}
+							</span>
 							<!-- ENDIF -->
 						<!-- END guests -->
 					</td>

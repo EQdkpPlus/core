@@ -566,13 +566,15 @@ class viewcalraid extends page_generic {
 		// raid guests
 		if(is_array($this->guests) && count($this->guests) > 0){
 			foreach($this->guests as $guestid=>$guestsdata){
-				$guest_tooltip =	$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true)."<br/>".
-									$this->game->decorate('classes', array($guestsdata['class'])).'&nbsp;'.$this->game->get_name('classes', $guestsdata['class'])."<br/>".
+				$guest_clssicon	= $this->game->decorate('classes', array($guestsdata['class']));
+				$guest_tooltip 	= $this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true)."<br/>".
+									$guest_clssicon.'&nbsp;'.$this->game->get_name('classes', $guestsdata['class'])."<br/>".
 									$guestsdata['note'];
 				$this->tpl->assign_block_vars('guests', array(
 					'NAME'		=> $guestsdata['name'],
 					'ID'		=> $guestid,
 					'CLASSID'	=> $guestsdata['class'],
+					'CLASSICON'	=> $guest_clssicon,
 					'TOOLTIP'	=> $guest_tooltip
 				));
 			}
