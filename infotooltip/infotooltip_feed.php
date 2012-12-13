@@ -43,7 +43,7 @@ registry::$aliases['bridge'] = 'bridge_generic';
 
 if($in->exists('data')) {
 	$direct = ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
-	$data = unserialize(base64_decode(urldecode(substr($in->get('data'), 1))));
+	$data = unserialize(base64_decode(substr($in->get('data'), 1)));
 } else {
 	$direct = $in->get('direct', 0);
 	$data['lang'] = substr($in->get('lang'),0,2);
