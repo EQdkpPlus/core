@@ -279,7 +279,7 @@ class core extends gen_class {
 
 			function setEQdkpmCookies() {
 				var date = new Date();
-				var days = 90;
+				var days = 14;
 				date.setTime(date.getTime()+(days*24*60*60*1000));
 				var expires = \"; expires=\"+ date.toGMTString();
 				document.cookie = \"eqdkpm_redirect=false\" + expires;
