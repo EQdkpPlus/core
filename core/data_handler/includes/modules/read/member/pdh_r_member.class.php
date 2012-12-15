@@ -611,7 +611,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 		
 		public function comp_user($params1, $params2) {
-			return ($this->pdh->get('user', 'name', array($this->get_user($params1[0]))) < $this->pdh->get('user', 'name', array($this->get_user($params2[0])))) ? -1 : 1 ;
+			return strcasecmp($this->pdh->get('user', 'name', array($this->get_user($params1[0]))), $this->pdh->get('user', 'name', array($this->get_user($params2[0]))));
 		}
 
 		public function get_search($search_value) {
