@@ -37,19 +37,22 @@ $english_array =  array(
 		'Betazoid',
 		'Andorian',
 		'Saurian',
-		'Trill',
 		'Tellarite',
 		'Ferengi',
 		'Pakled',
+		'Caitian',
+		'Rigelian',
 		//Klingon Empire
 		'Orion',
 		'Gorn',
 		'Nausicaan',
 		'Lethean',
+		'Ferasan',
 		//Shared
 		'Klingon',
 		'Liberated Borg',
-		'Alien'
+		'Alien',
+		'Trill',
 	),
 	'factions' => array(
 		'Federation',

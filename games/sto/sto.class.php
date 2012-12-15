@@ -25,7 +25,7 @@ if(!class_exists('sto')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'sto';
 		protected $types		= array('classes', 'races', 'factions');
-		public $icons			= array('classes', 'classes_big');
+		public $icons			= array('classes', 'classes_big', 'races', 'events');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();

@@ -37,19 +37,22 @@ $german_array = array(
 		'Betazoiden',
 		'Andorian',
 		'Saurian',
-		'Trill',
 		'Tellariten',
 		'Ferengi',
 		'Pakled',
+		'Caitian',
+		'Rigelian',
 		//Klingon Empire
 		'Orioner',
 		'Gorn',
 		'Nausicaaner',
 		'Lethean',
+		'Ferasan',
 		//Shared
 		'Klingonen',
 		'Liberated Borg',
 		'Alien',
+		'Trill',
 	),
 	'factions' => array(
 		'Föderation',
