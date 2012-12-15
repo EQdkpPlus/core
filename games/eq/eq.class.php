@@ -25,12 +25,12 @@ if(!class_exists('eq')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'eq';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
-		public $icons			= array('classes', 'races');
+		public $icons			= array('classes', 'classes_big', 'races');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();
 		protected $filters		= array();
-		public  $langs			= array('english');
+		public $langs			= array('english');
 
 		protected $glang		= array();
 		protected $lang_file	= array();
@@ -45,10 +45,9 @@ if(!class_exists('eq')) {
 		* @return array
 		*/
 		public function get_OnChangeInfos($install=false){
-			//Do this SQL Query NOT if the Eqdkp is installed -> only @ the first install
-			if($install) {
-				array_push($aq, "UPDATE __users SET user_style = '32' ;");
-			}
+		
+		$info = array();
+		
 			return $info;
 		}
 
