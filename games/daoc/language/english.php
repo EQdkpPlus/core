@@ -69,7 +69,7 @@ $english_array = array(
 	),
 	'races' => array(
 		'Unknown',
-		'Valonian',
+		'Avalonian',
 		'Briton',
 		'Half Ogre',
 		'Highlander',
@@ -87,7 +87,7 @@ $english_array = array(
 		'Norse',
 		'Troll',
 		'Valkyn',
-		'Stygian'
+		'Minotaur'
 	),
 	'factions' => array(
 		'Albion',

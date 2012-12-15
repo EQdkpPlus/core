@@ -25,6 +25,7 @@ if(!class_exists('daoc')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'daoc';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
+		public $icons			= array('classes', 'classes_big', 'races', 'events');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();
@@ -33,7 +34,7 @@ if(!class_exists('daoc')) {
 
 		protected $glang		= array();
 		protected $lang_file	= array();
-		protected $path			= '';
+		protected $path			= false;
 		public $lang			= false;
 		public $version			= '2.0';
 
@@ -56,6 +57,9 @@ if(!class_exists('daoc')) {
 		}
 
 		public function get_OnChangeInfos($install=false){
+		
+			$info['aq'] = array();
+			
 			/*
 			//Do this SQL Query NOT if the Eqdkp is installed -> only @ the first install
 			if($install){
