@@ -648,12 +648,12 @@ if (!class_exists("jquery")) {
 			// JS Code Output
 			if(isset($options['timepicker'])){
 				$addisettings = array(
-					"timeOnlyTitle: '".$this->user->lang('timepicker_title')."'",
-					"timeText: '".$this->user->lang('timepicker_time')."'",
-					"hourText: '".$this->user->lang('timepicker_hour')."'",
-					"minuteText: '".$this->user->lang('timepicker_minute')."'",
-					"secondText: '".$this->user->lang('timepicker_second')."'",
-					"currentText: '".$this->user->lang('timepicker_nowbutton')."'",
+					"timeOnlyTitle: '".$this->sanitize($this->user->lang('timepicker_title'))."'",
+					"timeText: '".$this->sanitize($this->user->lang('timepicker_time'))."'",
+					"hourText: '".$this->sanitize($this->user->lang('timepicker_hour'))."'",
+					"minuteText: '".$this->sanitize($this->user->lang('timepicker_minute'))."'",
+					"secondText: '".$this->sanitize($this->user->lang('timepicker_second'))."'",
+					"currentText: '".$this->sanitize($this->user->lang('timepicker_nowbutton'))."'",
 					"timeFormat:'".$options['timeformat']."'"
 				);
 				$functioncall = "datetimepicker({".$MySettings.",".implode(", ", $addisettings)."})";
@@ -1247,10 +1247,10 @@ if (!class_exists("jquery")) {
 					resizable: false,
 					draggable: false,
 					buttons: {
-						'".$this->user->lang('cancel')."': function() {
+						'".$this->sanitize($this->user->lang('cancel'))."': function() {
 							$( this ).dialog('close');
 						},
-						'".$this->user->lang('imageuploader_buttondo')."': function() {
+						'".$this->sanitize($this->user->lang('imageuploader_buttondo'))."': function() {
 							 $('#iuForm_".$id."').submit();
 						}
 					}
