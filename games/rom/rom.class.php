@@ -25,7 +25,7 @@ if(!class_exists('rom')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'rom';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
-		public $icons			= array('classes', 'events');
+		public $icons			= array('classes', 'classes_big', 'races', 'events');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();
@@ -34,9 +34,9 @@ if(!class_exists('rom')) {
 
 		protected $glang		= array();
 		protected $lang_file	= array();
-		protected $path			= '';
+		protected $path			= false;
 		public $lang			= false;
-		public $version			= '2.0';
+		public $version			= '0.1';
 
 		/**
 		* Initialises filters
@@ -55,25 +55,9 @@ if(!class_exists('rom')) {
 				}
 			}
 		}
-
-		/**
-		* Returns Information to change the game
-		*
-		* @param bool $install
-		* @return array
-		*/
 		public function get_OnChangeInfos($install=false){
 			//classcolors
-			$info['class_color'] = array(
-				1 => '#80FF00',
-				2 => '#FFFFFF',
-				3 => '#FFFFFF',
-				4 => '#4080FF',
-				5 => '#80FF00',
-				6 => '#7d5ebc',
-				7 => '#7d5ebc',
-				8 => '#4080FF',
-			);
+
 			$info['aq'] = array();
 
 			//Do this SQL Query NOT if the Eqdkp is installed -> only @ the first install

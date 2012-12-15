@@ -4,7 +4,7 @@
  * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
- * Began:		2009
+ * Began:		2011
  * Date:		$Date$
  * -----------------------------------------------------------------------
  * @author		$Author$
@@ -22,18 +22,24 @@ if ( !defined('EQDKP_INC') ){
 $german_array = array(
 	'classes' => array(
 		0 => 'Unbekannt',
-		1 => 'Krieger',
-		2 => 'Kundschafter',
-		3 => 'Magier',
-		4 => 'Priester',
-		5 => 'Ritter',
+		1 => 'Champion',
+		2 => 'Druide',
+		3 => 'Ritter',
+		4 => 'Magier',
+		5 => 'Priester',
 		6 => 'Schurke',
+		7 => 'Kundschafter',
+		8 => 'Bewahrer',
+		9 => 'Hexenmeister',
+	   10 => 'Krieger',
 	),
 	'races' => array(
 		'Mensch',
+		'Elf',
+		'Zwerg'
 	),
 	'factions' => array(
-		'Standard',
+		'Default',
 	),
 	'lang' => array(
 		'rom' => 'Runes of Magic',
