@@ -437,6 +437,7 @@ if( !class_exists( "plus_datahandler")){
 				$this->init_read_module( $module );
 				return $direction * call_user_func_array( array( $this->rm($module), $comp_method ), array( $params1, $params2 ) );
 			} else {
+				if(strpos($tag, 'html_') === 0) $tag = str_replace('html_', '', $tag);
 				$get_method = 'get_'.$tag;
 				$value1		= $this->get( $module, $tag, $params1 );
 				$value2		= $this->get( $module, $tag, $params2 );

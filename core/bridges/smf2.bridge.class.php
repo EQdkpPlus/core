@@ -117,7 +117,7 @@ class smf2_bridge extends bridge_generic {
 	private function _handle_birthday($date){
 		list($y, $m, $d) = explode('-', $date);
 		if ($y != ''){
-			return $d.'.'.$m.'.'.$y;
+			return $this->time->mktime(0,0,0,$m,$d,$y);
 		}
 		return false;
 	}

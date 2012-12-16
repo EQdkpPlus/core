@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("html")) {
 	class html extends gen_class {
-		public static $shortcuts = array('user', 'jquery', 'pm', 'in', 'game', 'editor'=>'tinyMCE', 'crypt'=>'encrypt', 'tpl');
+		public static $shortcuts = array('user', 'jquery', 'pm', 'in', 'game', 'time', 'editor'=>'tinyMCE', 'crypt'=>'encrypt', 'tpl');
 		
 		private $blnDepJS = false;
 
@@ -177,6 +177,7 @@ if (!class_exists("html")) {
 				// Datepicker
 				case 'datepicker':
 					$options['options']['readonly'] = (isset($options['readonly'])) ? $options['readonly'] : false;
+					if(is_numeric($options['value'])) $options['value'] = $this->time->date($this->time->calendarformat($options), $options['value']);
 					$ccfield = $this->jquery->Calendar($options['name'], $options['value'], '', ((isset($options['options'])) ? $options['options'] : array()));
 				break;
 
@@ -271,23 +272,22 @@ if (!class_exists("html")) {
 					$function = $options['function'];
 					//maybe error-catching needed if $objPlugin is no object!
 					return (is_object($objPlugin)) ? $objPlugin->$function($in->get($options['name']), true) : NULL;
-				break;
 				
 				case 'int':
 				case 'checkbox':
 					return $this->in->get($options['name'], 0);
-				break;
 
 				case 'boolean':
 					return (($this->in->get($options['name'], 0) == '1') ? true : false);
-				break;
 
+				case 'datepicker':
+					return $this->time->fromformat($this->in->get($options['name'], ''), $this->time->calendarformat($options));
+					
 				case 'text':
 				case 'textarea':
 				case 'bbcodeeditor':
 				case 'dropdown':
 				case 'autocomplete':
-				case 'datepicker':
 				case 'hidden':
 				case 'password':
 				case 'radio':
@@ -298,7 +298,6 @@ if (!class_exists("html")) {
 						$value = $this->crypt->encrypt($value);
 					}
 					return $value;
-				break;
 
 				case 'sortable':
 				case 'multiselect':
@@ -309,13 +308,9 @@ if (!class_exists("html")) {
 					} else {
 						return array();
 					}
-						
-				break;
 				
 				case 'imageuploader':
-					return $this->jquery->MoveUploadedImage($this->in->get($options['name'], ''), $options['imgpath']);
-				break;
-			
+					return $this->jquery->MoveUploadedImage($this->in->get($options['name'], ''), $options['imgpath']);			
 			}
 		}
 

@@ -217,6 +217,26 @@ if (!class_exists("timehandler")){
 		}
 		
 		/**
+		 * Output dateformat in Calendar format, according to options
+		 *
+		 * @array 	$options		Option-Array in HTML-Widget format
+		 * @return 	dateformat
+		 */
+		public function calendarformat($options) {
+			//we need to use a fixed format if PHP 5.3 isnt in use
+			if(!function_exists('date_create_from_format')) {
+				$options['format'] = $this->time->translateformat2js('Y-m-d');
+				$options['timeformat'] = $this->time->translateformat2js('H:i');
+			}
+			// Load default settings if no custom ones are defined..
+			if(!isset($options['format'])) $options['format'] = $this->user->style['date_notime_short'];
+			if(!isset($options['timeformat'])) $options['timeformat'] = $this->user->style['time'];
+			$format = $options['format'];
+			if(isset($options['timepicker'])) $format .= ' '.$options['timeformat'];
+			return $format;
+		}
+		
+		/**
 		 * Output Date in nice-format, like 7 days ago
 		 *
 		 * @int 	$time			Unix-Timestamp
@@ -452,6 +472,14 @@ if (!class_exists("timehandler")){
 			$date = new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RFC3339);
 		}
+		
+		public function getdate($dtime='') {
+			$dtime = $this->gen_time($dtime);
+			$data = array($dtime);
+			$date = $this->date('s.i.H.d.w.m.Y.z.l.F', $dtime);
+			list($data['seconds'], $data['minutes'], $data['hours'], $data['mday'], $data['wday'], $data['mon'], $data['year'], $data['yday'], $data['weekday'], $data['month']) = explode('.', $date);
+			return $data;
+		}
 
 		public function toSeconds($time, $ff='day'){
 			switch($ff){
@@ -473,23 +501,26 @@ if (!class_exists("timehandler")){
 				$ts2	= $dt2->format('U');
 			}
 			// calculate the difference
-			switch($out) {
-				case 'min':		return ($ts2 - $ts1 - ($ts2 - $ts1)%60)/60;
-				case 'hour':	return ($ts2 - $ts1 - ($ts2 - $ts1)%3600)/3600;
-				default:		return $ts2 - $ts1;
-			}
+			$secs['sec'] = 1;
+			$secs['min'] = 60;
+			$secs['hour'] = $secs['min']*60;
+			$secs['day'] = $secs['hour']*24;
+			$secs['week'] = $secs['day']*7;
+			$secs['month'] = $secs['day']*30;
+			$secs['year'] = $secs['day']*365;
+			return ($ts2 - $ts1 - ($ts2 - $ts1)%$secs[$out])/$secs[$out];
 		}
 
 		public function age($date) {
 			if(!$date) return 0;
-			list($day,$mon,$year) = explode(".",$date);
-			$today = getdate(time());
-			$yeardiff = ($today['mon'] > $mon) ? ($today['year']+1) - $year : $today['year'] - $year;
+			$bday = $this->getdate($date);
+			$today = $this->getdate();
+			$yeardiff = ($today['mon'] > $bday['mon']) ? $today['year'] - $bday['year'] : $today['year'] - $bday['year']-1;
 			return($yeardiff);
 		}
 
 		// Count Entries in an array between two dates
-		function countBetweenDates($array, $startdate, $enddate){
+		public function countBetweenDates($array, $startdate, $enddate){
 			$this->cbd_enddate    = ($enddate) ? $enddate : $this->gen_time();
 			$this->cbd_startdate  = $startdate;
 			if(is_array($array)){
@@ -512,6 +543,10 @@ if (!class_exists("timehandler")){
 
 // Helper to make the datetime translatable
 class DateTimeLocale extends DateTime {
+	// define the english names
+	private static $english_days 	= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+	private static $english_months 	= array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	
 	public function __construct($time='now', $timezone=null) {
 		try {
 			parent::__construct($time, $timezone);
@@ -533,24 +568,18 @@ class DateTimeLocale extends DateTime {
 	}
 
 	public function format($format) {
-		// define the english names
-		$english_days		= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-		$english_months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
-			$out = str_replace($english_days, registry::fetch('user')->lang('time_daynames', false, false), parent::format($format));
-			return str_replace($english_months, registry::fetch('user')->lang('time_monthnames', false, false), $out);
+			$out = str_replace(self::$english_days, registry::fetch('user')->lang('time_daynames', false, false), parent::format($format));
+			return str_replace(self::$english_months, registry::fetch('user')->lang('time_monthnames', false, false), $out);
 		}else{
 			return parent::format($format);
 		}
 	}
 	
 	public static function createFromFormat($format, $string, $timezone=null) {
-		// define the english names
-		$english_days		= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-		$english_months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
-			$string = str_replace(registry::fetch('user')->lang('time_daynames', false, false), $english_days, $string);
-			$string = str_replace(registry::fetch('user')->lang('time_monthnames', false, false), $english_months, $string);
+			$string = str_replace(registry::fetch('user')->lang('time_daynames', false, false), self::$english_days, $string);
+			$string = str_replace(registry::fetch('user')->lang('time_monthnames', false, false), self::$english_months, $string);
 		}
 		return parent::createFromFormat($format, $string, $timezone);
 	}

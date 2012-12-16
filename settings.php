@@ -302,10 +302,12 @@ class user_settings extends page_generic {
 						'size'	=> 40,
 					),
 					'birthday'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'datepicker',
 						'name'	=> 'adduser_birthday',
-						'size'	=> 11,
-						'value'	=> 'DD.MM.YYYY'
+						'options' => array(
+							'year_range' => '-80:0',
+							'change_fields' => true
+						),
 					),
 					'user_avatar'	=> array(
 						'fieldtype'	=> 'imageuploader',
