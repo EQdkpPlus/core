@@ -125,7 +125,7 @@ if(!class_exists('pdh_r_item')){
 					$val = $this->apa->get_decay_val('item', $dkp_id, $date, $data);
 				}
 			}
-			return (isset($val)) ? $val : $this->items[$id]['value'];
+			return (isset($val)) ? (int)$val : (int)$this->items[$id]['value'];
 		}
 
 		public function get_caption_value($dkp_id=0) {
@@ -137,7 +137,7 @@ if(!class_exists('pdh_r_item')){
 		public function get_html_value($id, $dkp_id=0){
 			return '<span class="negative">' . runden($this->get_value($id, $dkp_id)) . '</span>';
 		}
-
+		
 		public function get_buyer($id){
 			return $this->items[$id]['buyer'];
 		}
@@ -254,7 +254,7 @@ if(!class_exists('pdh_r_item')){
 			</a>";
 		}
 
-			public function comp_link($params1, $params2){
+		public function comp_link($params1, $params2){
 			return ($this->get_name($params1[0]) < $this->get_name($params2[0])) ? -1  : 1 ;
 		}
 
