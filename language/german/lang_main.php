@@ -414,7 +414,8 @@ $lang = array(
 "php_too_old" => "Deine PHP-Version %1\$s ist zu alt. Benötigt wird mindestens die PHP-Version %2\$s.",
 "requirements_notfilled" => "Dein Server erfüllt nicht die Voraussetzungen, um EQdkp Plus betreiben zu können.",
 "register_licence" => "
-Diese Richtlinie beschreibt, wie diese Website und ggf. verbundene Institutionen (im Folgenden „das CMS“) und EQdkp Plus die Daten verwenden, die während deines CMS-Besuchs gesammelt werden.
+Diese Richtlinie beschreibt, wie diese Website und ggf. verbundene Institutionen (im Folgenden „das CMS“) und EQdkp Plus die Daten verwenden, die während deines CMS-Besuchs gesammelt werden.<br />
+<b>Du musst diese Richtlinie bestätigen, damit du einen Benutzeraccount in diesem CMS anlegen kannst.</b>
 <h2>Umfang und Art der Datenspeicherung</h2>
 Deine Daten werden auf zwei verschiedene Arten gesammelt:
 <ul><li>EQdkp Plus erstellt bei deinem Besuch des CMS mehrere Cookies. Cookies sind kleine Textdateien, die dein Browser als temporäre Dateien ablegt. Zwei dieser Cookies enthalten eine eindeutige Benutzer-Kennung (u.a. auch das verschlüsselte Passwort, wenn die Funktion \"automatisches Anmelden\" aktiviert ist) sowie eine anonyme Sitzungs-Nummer (Session-ID), die dir von EQdkp Plus automatisch zugewiesen wird. Weitere Cookies können bei Bedarf angelegt werden, um die Benutzbarkeit des CMS zu steigern.</li>

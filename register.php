@@ -355,7 +355,7 @@ class Register extends page_generic {
 		$this->tpl->assign_vars(array(
 			'SUBMIT_BUTTON'	=> ($count > 0) ? 'guildrules' : $button,
 			'FORM_ACTION'	=> 'register.php'.$this->SID,
-			'HEADER'		=> $this->user->lang('licence_agreement'),
+			'HEADER'		=> $this->user->lang('register_title').' - '.$this->user->lang('licence_agreement'),
 			'TEXT'			=> $this->user->lang('register_licence').(($intSocialPlugins) ? $this->user->lang('social_privacy_statement') : ''),
 			'S_LICENCE'		=> true,
 		));

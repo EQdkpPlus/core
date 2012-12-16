@@ -479,7 +479,8 @@ $lang = array(
 "php_too_old" => "Your PHP version %1\$s is too old. The minimum requirement is PHP version %2\$s.",
 "requirements_notfilled" => "Your server doesn't meet the requirements to run EQdkp Plus.",
 "register_licence" => "
-This policy explains in detail how this website along with its affiliated companies (hereinafter “we”, “us”, “our”) and EQdkp Plus (hereinafter “they”, “them”, “their”, “EQdkp Plus software”, “EQdkp Plus Teams”) use any information collected during any session of usage by you (hereinafter “your information”).
+This policy explains in detail how this website along with its affiliated companies (hereinafter “we”, “us”, “our”) and EQdkp Plus (hereinafter “they”, “them”, “their”, “EQdkp Plus software”, “EQdkp Plus Teams”) use any information collected during any session of usage by you (hereinafter “your information”).<br />
+<b>You have to accept this policy to create an account.</b>
 <h2>Information collection</h2>
 Your information is collected via two ways.
 <ul><li>
