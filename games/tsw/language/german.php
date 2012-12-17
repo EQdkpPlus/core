@@ -22,9 +22,11 @@ if ( !defined('EQDKP_INC') ){
 $german_array = array(
 	'classes' => array(
 		0	=> 'Unbekannt',
-		1	=> 'Magier',
-		2	=> 'Schütze',
-		3	=> 'Nahkämpfer',
+		1	=> 'Tank',
+		2	=> 'Heiler',
+		3	=> 'Supporter',
+		4	=> 'Nahk&#228;mpfer',
+		5   => 'Fernk&#228;mpfer',
 	),
 	'races' => array(
 		'Unknown',

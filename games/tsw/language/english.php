@@ -22,9 +22,11 @@ if ( !defined('EQDKP_INC') ){
 $english_array =  array(
 	'classes' => array(
 		0	=> 'Unknown',
-		1	=> 'Caster',
-		2	=> 'Gunner',
-		3	=> 'Melee'
+		1	=> 'Tank',
+		2	=> 'Healer',
+		3	=> 'Supporter',
+		4	=> 'Melee',
+		5	=> 'Ranged',
 	),
 
 	'races' => array(

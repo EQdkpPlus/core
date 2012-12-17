@@ -25,7 +25,7 @@ if(!class_exists('tsw')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'tsw';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
-		public $icons			= array('classes', 'races', 'events');
+		public $icons			= array('classes', 'classes_big', 'races', 'events');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();
@@ -36,7 +36,7 @@ if(!class_exists('tsw')) {
 		protected $lang_file	= array();
 		protected $path			= false;
 		public $lang			= false;
-		public $version			= '1.0';
+		public $version			= '1.1';
 
 		/**
 		* Initialises filters
@@ -58,9 +58,11 @@ if(!class_exists('tsw')) {
 		public function get_OnChangeInfos($install=false){
 			//classcolors
 			$info['class_color'] = array(
-				1	=> '#ff0000',
-				2	=> '#800080',
-				3	=> '#ffff00'
+				1	=> '#C8C8C8',
+				2	=> '#49A03E',
+				3	=> '#3287C1',
+				4	=> '#C66F0A',
+				5	=> '#CA4E4E',
 			);
 			$info['aq'] = array();
 
