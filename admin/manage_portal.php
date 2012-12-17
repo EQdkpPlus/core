@@ -178,9 +178,8 @@ class Manage_Portal extends page_generic {
 				'ID'	=> 'collapsable',
 			));
 
-		}
-
-		$this->tpl->assign_var('ACTION', $_SERVER['PHP_SELF'].$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
+		}		
+		$this->tpl->assign_var('ACTION', $_SERVER['SCRIPT_NAME'].$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
 		$this->tpl->assign_var('MODULE_ID', $id);
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('portalplugin_management'),

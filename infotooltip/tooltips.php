@@ -37,7 +37,7 @@ function httpHost(){
 	return $protocol.(!empty($xhost) ? $xhost . '/' : '').preg_replace('/[^A-Za-z0-9\.:-]/', '', $host);
 }
 	
-$strPath = substr(str_replace(basename($_SERVER['PHP_SELF']), '', $_SERVER['PHP_SELF']), 0, -12);
+$strPath = substr(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']), 0, -12);
 
 $eqdkp_path = httpHost().$strPath;
 

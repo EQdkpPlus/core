@@ -681,7 +681,7 @@ class Manage_Users extends page_generic {
 						'fieldtype'	=> 'datepicker',
 						'name'	=> 'adduser_birthday',
 						'options' => array(
-							'year_range' => '-80:0',
+							'year_range' => '-80:+0',
 							'change_fields' => true
 						),
 					),

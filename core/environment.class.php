@@ -108,7 +108,7 @@ if (!class_exists("environment")) {
 		}
 
 		private function get_server_path(){
-			return str_replace(basename($_SERVER['PHP_SELF']), '', $_SERVER['PHP_SELF']);
+			return str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 		}
 
 		private function get_server_name(){
@@ -117,7 +117,7 @@ if (!class_exists("environment")) {
 		}
 
 		private function get_phpself(){
-			return $_SERVER['PHP_SELF'];
+			return $_SERVER['SCRIPT_NAME'];
 		}
 
 
