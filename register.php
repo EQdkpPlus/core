@@ -442,8 +442,7 @@ class Register extends page_generic {
 			'VALID_EMAIL_INFO'				=> ($this->config->get('account_activation') == 1) ? '<br />'.$this->user->lang('valid_email_note') : '',
 			'AUTH_REGISTER_BUTTON'			=> ($arrRegisterButtons = $this->user->handle_login_functions('register_button')) ? implode(' ', $arrRegisterButtons) : '',
 
-			'REGISTER'						=> true ,
-			'BIRTHDAY'						=> $this->jquery->Calendar('birthday', '', '', array('change_fields'=>true, 'year_range'=>'-80:0')),
+			'REGISTER'						=> true,
 
 			'DD_LANGUAGE'					=> $this->html->DropDown('user_lang', $language_array, $this->data['user_lang']),
 			'DD_TIMEZONES'					=> $this->html->DropDown('user_timezone', $this->time->timezones, $this->data['user_timezone']),
