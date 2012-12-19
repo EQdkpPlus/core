@@ -25,7 +25,7 @@ if(!class_exists('torchlight2')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'torchlight2';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
-		public $icons			= array('classes', 'races', 'events');
+		public $icons			= array('classes', 'classes_big', 'races', 'events');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();
@@ -58,10 +58,10 @@ if(!class_exists('torchlight2')) {
 		public function get_OnChangeInfos($install=false){
 			//classcolors
 			$info['class_color'] = array(
-				1	=> '#E18FF1',
-				2	=> '#C97840',
-				3	=> '#69444B',
-				4	=> '#6CB6CF',
+				1	=> '#2495C4',
+				2	=> '#47AFA7',
+				3	=> '#EB9837',
+				4	=> '#B71F13',
 			);
 			$info['aq'] = array();
 
