@@ -25,7 +25,7 @@ if(!class_exists('eveonline')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'eveonline';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
-		public $icons			= array('classes', 'races', 'events');
+		public $icons			= array('classes', 'classes_big', 'races', 'events');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $factions		= array();
