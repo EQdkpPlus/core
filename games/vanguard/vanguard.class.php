@@ -24,8 +24,10 @@ if(!class_exists('vanguard')) {
 	class vanguard extends game_generic {
 		public static $shortcuts = array();
 		protected $this_game	= 'vanguard';
-		protected $types		= array('classes', 'filters', 'roles');
-		public $icons			= array('classes');
+		protected $types		= array('classes', 'races', 'filters');
+		public $icons			= array('classes', 'classes_big', 'events', 'races');
+		protected $classes		= array();
+		protected $races		= array();
 		protected $factions		= array();
 		protected $filters		= array();
 		public $langs			= array('english');
@@ -64,11 +66,8 @@ if(!class_exists('vanguard')) {
 		}
 
 		public function get_OnChangeInfos($install=false){
-
-		//Do this SQL Query NOT if the Eqdkp is installed -> only @ the first install
-		if($install){
-			array_push($info['aq'], "UPDATE __users SET user_style = '32' ;");
-			}
+		
+			$info = array();
 			return $info;
 		}
 	}
