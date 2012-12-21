@@ -418,7 +418,9 @@ class core extends gen_class {
 					)
 				);
 			}
-
+			
+			//Do portal hook
+			register('hooks')->process('portal', array($this->env->eqdkp_page));
 		}
 
 		public function gen_menus(){

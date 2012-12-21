@@ -51,6 +51,8 @@ class hooks extends gen_class {
 		//Init Plugins and Portal modules for registering hooks
 		register('pm');
 		register('portal');
+		//Register global hooks
+		$this->scanGlobalHookFolder();
 		
 		if (!isset($this->hooks[$strHook])) return ($blnRecursive) ? $arrParams : array();
 		
@@ -69,6 +71,24 @@ class hooks extends gen_class {
 			}
 		}
 		return $arrOutput;
+	}
+	
+	private function scanGlobalHookFolder(){
+		if($dir = @opendir($this->root_path . 'core/hooks/')){
+			while ( $file = @readdir($dir) ){
+				if ((is_file($this->root_path . 'core/hooks/' . $file)) && valid_folder($file)){
+					$path_parts = pathinfo($file);
+					$filename = str_replace("_hook", "", $path_parts['filename']);
+					$filename= str_replace(".class", "", $filename);
+					
+					$strHook = substr($filename, strrpos($filename, '_')+1);
+					$strClassname = str_replace(".class", "", $path_parts['filename']);
+					$strMethodname = $strHook;
+					$strClasspath ='core/hooks';
+					$this->register($strHook, $strClassname, $strMethodname, $strClasspath);
+				}
+			}
+		}
 	}
 	
 }
