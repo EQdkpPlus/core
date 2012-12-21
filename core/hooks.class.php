@@ -37,7 +37,10 @@ class hooks extends gen_class {
 	 */
 	public function register($strHook, $strClassname, $strMethodname, $strClasspath){
 		if (!isset($this->hooks[$strHook])) $this->hooks[$strHook] = array();
-		$this->hooks[$strHook][] = array('class'=> $strClassname, 'method'=> $strMethodname, 'classpath'=>$strClasspath);
+		$strHookHash = md5($strClassname.$strMethodname.$strClasspath);
+		if (!isset($this->hooks[$strHook][$strHookHash])) {
+			$this->hooks[$strHook][$strHookHash] = array('class'=> $strClassname, 'method'=> $strMethodname, 'classpath'=>$strClasspath);
+		}
 	}
 	
 	/*
