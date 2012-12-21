@@ -51,8 +51,10 @@ if(!function_exists('WoWMacroexport')){
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\']:checked").change( function (){
-				genOutput()
+			$("input[type=\'checkbox\']").change(function (){
+				if ($(this).is(":checked")){
+					genOutput()
+				}
 			});
 		', "docready");
 
