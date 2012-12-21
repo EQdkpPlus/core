@@ -145,7 +145,7 @@ class characters extends page_generic {
 
 		$view_list			= $this->pdh->get('member', 'connection_id', array($this->user->data['user_id']));
 		$hptt_psettings		= $this->pdh->get_page_settings('manage_characters', 'hptt_manage_characters');
-		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => ''));
+		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => ''), $this->user->id);
 		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), ((is_array($view_list)) ? count($view_list) : 0));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '&amp;sort='.$this->in->get('sort');
