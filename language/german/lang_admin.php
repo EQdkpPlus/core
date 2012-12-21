@@ -17,6 +17,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 $alang = array( 
+"php_warning" => "Die PHP-Version auf diesem Server wird von künftigen EQdkp Plus-Versionen nicht mehr unterstützt. Du solltest möglichst bald die PHP-Version mindestens auf ".VERSION_PHP_REC." aktualisieren. Solltest du das nicht selber durchführen können, kontaktiere deinen Hoster.",
 "manitempool_title" => "Itempool verwalten",
 "addevent_title" => "Ereignis zufügen",
 "addnews_title" => "Newsbeitrag zufügen",

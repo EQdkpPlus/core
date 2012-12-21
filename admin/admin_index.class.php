@@ -418,6 +418,7 @@ class admin_index extends gen_class {
 			'ITEMS_PER_DAY'			=> $items_per_day,
 			'EQDKP_STARTED'			=> $this->time->user_date($this->config->get('eqdkp_start'), true),
 			'SHOW_BETA_WARNING'		=> VERSION_WIP,
+			'SHOW_PHP_WARNING'		=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<=')) ? true : false,
 			'ONLINE_FOOTCOUNT'		=> sprintf($this->user->lang('online_footcount'), $online_count),
 			'SHOW_LIMITED_FUNCS'	=> false,
 			'DATABASE_NAME'			=> $this->dbname,
