@@ -255,6 +255,16 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_last_item($member_id, $mdkp_id=null, $with_twink=true){
+			$with_twink = ($with_twink) ? 'multi' : 'single';
+			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id'])){
+				return $this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id'];
+			} elseif($mdkp_id AND isset($this->fl_item_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['first']['item_id'])) {
+				return $this->fl_item_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['first']['item_id'];
+			}
+			return false;
+		}
 
 		public function get_html_last_item_date($member_id, $mdkp_id=null, $with_twink=true){
 			return $this->time->user_date($this->get_last_item_date($member_id, $mdkp_id, $with_twink));
