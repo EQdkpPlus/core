@@ -49,7 +49,7 @@
 					<!-- IF S_ADMIN -->&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}admin/index.php{SID}"><img src="{EQDKP_IMAGE_PATH}admin/task_manager.png" class="absmiddle" alt="Admin" /> {L_menu_admin_panel}</a> <!-- ENDIF -->
 					&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}login.php{SID}&amp;logout=true&amp;link_hash={CSRF_LOGOUT_TOKEN}"><img src="{EQDKP_IMAGE_PATH}glyphs/logout.png" alt="user" class="absmiddle" /> {L_logout}</a>		
 					<!-- ENDIF -->
-					!-- BEGIN personal_area_addition -->
+					<!-- BEGIN personal_area_addition -->
 					&nbsp;&bull;&nbsp; {personal_area_addition.TEXT}
 					<!-- END personal_area_addition -->
 				</div>
