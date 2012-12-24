@@ -22,7 +22,10 @@ if ( !defined('EQDKP_INC') ){
 
 class smf2_bridge extends bridge_generic {
 	
-	//dependency 'config' already in bridge_generic, so no need for extra definition here
+	public static function __shortcuts() {
+		$shortcuts = array('time');
+		return array_merge(parent::$shortcuts, $shortcuts);
+	}
 	
 	public $name = "SMF 2";
 	
@@ -123,5 +126,5 @@ class smf2_bridge extends bridge_generic {
 	}
 	
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_smf2_bridge',smf2_bridge::$shortcuts);
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_smf2_bridge',smf2_bridge::__shortcuts());
 ?>
