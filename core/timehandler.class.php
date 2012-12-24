@@ -225,8 +225,8 @@ if (!class_exists("timehandler")){
 		public function calendarformat($options) {
 			//we need to use a fixed format if PHP 5.3 isnt in use
 			if(!function_exists('date_create_from_format')) {
-				$options['format'] = $this->time->translateformat2js('Y-m-d');
-				$options['timeformat'] = $this->time->translateformat2js('H:i');
+				$options['format'] = $this->translateformat2js('Y-m-d');
+				$options['timeformat'] = $this->translateformat2js('H:i');
 			}
 			// Load default settings if no custom ones are defined..
 			if(!isset($options['format'])) $options['format'] = $this->user->style['date_notime_short'];

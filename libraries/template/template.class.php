@@ -509,11 +509,14 @@ class template extends gen_class {
 			// Now we add the block that we're actually assigning to.
 			// We're adding a new iteration to this block with the given
 			// variable assignments.
+			$subStr = $str;
+			
+			eval('$arrSubStr = (isset('.$subStr . '[\'' . $blocks[$blockcount] . '.\'])) ? '.$subStr . '[\'' . $blocks[$blockcount] . '.\'] : array();');
+			
 			$str .= '[\'' . $blocks[$blockcount] . '.\'][] = $vararray;';
-
+			
 			// Now we evaluate this assignment we've built up.
-			$str						= eval($str);
-			$s_row_count				= isset($str[$blocks[$blockcount]]) ? sizeof($str[$blocks[$blockcount]]) : 0;
+			$s_row_count				= isset($arrSubStr) ? sizeof($arrSubStr) : 0;
 			$vararray['S_ROW_COUNT']	= $s_row_count;
 
 			// Assign S_FIRST_ROW
@@ -524,8 +527,13 @@ class template extends gen_class {
 			// Now the tricky part, we always assign S_LAST_ROW and alter the entry before
 			// This is much more clever than going through the complete template data on display (phew)
 			$vararray['S_LAST_ROW'] = true;
+			
+			$str						= eval($str);
+			
+			
 			if($s_row_count > 0){
-				unset($this->_data[$blocks[$blockcount]][($s_row_count - 1)]['S_LAST_ROW']);
+				$subStr.= '[\'' . $blocks[$blockcount] . '.\']['.($s_row_count - 1).'][\'S_LAST_ROW\'] = false;';
+				eval($subStr);
 			}
 		}else{
 			// Top-level block.
