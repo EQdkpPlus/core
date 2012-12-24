@@ -182,7 +182,7 @@ if(!class_exists('pdh_w_user')) {
 			$query_ary['msn']					= $this->in->get('msn');
 			$query_ary['irq']					= $this->in->get('irq');
 			$query_ary['gender']				= $this->in->get('gender');
-			$query_ary['birthday']				= $this->time->fromformat($this->in->get('birthday'));
+			$query_ary['birthday']				= ($this->in->get('birthday', '') != '') ? $this->time->fromformat($this->in->get('birthday')) : '';
 			$query_ary['user_date_time']		= $this->in->get('user_date_time');
 			$query_ary['user_date_short']		= $this->in->get('user_date_short');
 			$query_ary['user_date_long']		= $this->in->get('user_date_long');
