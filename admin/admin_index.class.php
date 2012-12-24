@@ -164,7 +164,15 @@ class admin_index extends gen_class {
 		}
 		$admin_menu['favorits']['icon'] = 'favorites.png';
 		$admin_menu['favorits']['name'] = $this->user->lang('favorits');
-		$i = 1;
+		//Style Management
+		$admin_menu['favorits'][1] = array(
+			'link' => 'admin/manage_extensions.php'.$this->SID.'&tab=1',
+			'text'	=> $this->user->lang('styles_title'),
+			'check'	=> 'a_extensions_man',
+			'icon'	=> 'manage_styles.png',
+		);
+			
+		$i = 2;
 		if (is_array($favs_array) && count($favs_array) > 0){
 			foreach ($favs_array as $fav){
 				$items = explode('|', $fav);
@@ -184,8 +192,8 @@ class admin_index extends gen_class {
 				$i++;
 			}
 		} else { //If there are no links, point to the favorits-management
-			$admin_menu['favorits'][1] = array(
-				'link' => 'admin/manage_menus.php'.$this->SID.'#admin',
+			$admin_menu['favorits'][2] = array(
+				'link' => 'admin/manage_menus.php'.$this->SID.'&tab=4',
 				'text'	=> $this->user->lang('manage_menus'),
 				'check'	=> 'a_config_man',
 				'icon'	=> 'manage_menus.png',

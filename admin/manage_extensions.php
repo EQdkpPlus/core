@@ -700,6 +700,10 @@ class Manage_Extensions extends page_generic {
 
 		//Tabs
 		$this->jquery->Tab_header('plus_plugins_tab', true);
+		if ($this->in->exists('tab')){
+			$this->jquery->Tab_Select('plus_plugins_tab', $this->in->get('tab',0));
+		}
+		
 		$this->jquery->Dialog('update_confirm', '', array('custom_js'	=> 'repo_update_start(cat, extensioncode);', 'message'	=> $this->user->lang('repo_updatewarning').'<br /><br /><input type="checkbox" onclick="hide_update_warning(this.checked);" value="1" />'.$this->user->lang('repo_hide_updatewarning'), 'withid'	=> 'cat, extensioncode'), 'confirm');
 
 		foreach ($this->repo->DisplayCategories() as $key=>$category){

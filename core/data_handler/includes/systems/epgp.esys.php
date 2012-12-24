@@ -337,8 +337,8 @@ $system_def = array(
 				'show_numbers' => true,
 				'show_select_boxes' => true,
 				'show_detail_twink' => true,
-				'table_sort_col' => 0,
-				'table_sort_dir' => 'asc',
+				'table_sort_col' => 4,
+				'table_sort_dir' => 'desc',
 				'table_presets' => array(
 					array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					//array('name' => 'mlevel', 'sort' => true, 'th_add' => '', 'td_add' => ''),

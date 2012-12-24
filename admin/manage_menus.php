@@ -451,6 +451,9 @@ class Manage_Menus extends page_generic {
 				}
 		}
 				$this->jquery->Tab_header('menu_tabs', true);
+				if ($this->in->exists('tab')){
+					$this->jquery->Tab_Select('menu_tabs', $this->in->get('tab',0));
+				}
 				$this->tpl->assign_vars(array(				
 					'LINK_CB_HELP'			=> $this->html->ToolTip($this->user->lang('pk_help_links'), '<img src="'.$this->root_path.'images/global/info.png" alt="" />'),
 					'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
