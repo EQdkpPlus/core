@@ -174,7 +174,7 @@ CREATE TABLE `__items` (
 	`item_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`member_id` smallint(5) unsigned NOT NULL,
 	`raid_id` mediumint(8) unsigned NOT NULL,
-	`item_value` float(6,2) DEFAULT NULL,
+	`item_value` float(10,2) DEFAULT NULL,
 	`item_date` int(11) NOT NULL DEFAULT '0',
 	`item_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`item_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,

@@ -54,7 +54,7 @@ class admin_index extends gen_class {
 			}
 		}
 		echo $out;
-		exit();
+		exit;
 	}
 	
 	private function updatecheck(){

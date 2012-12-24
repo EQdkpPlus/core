@@ -262,6 +262,7 @@ class user_core extends gen_class {
 	}
 
 	private function init_plug_lang($lang_name) {
+		$lang = array();
 		foreach($this->plugs_to_load as $plug) {
 			$file_path = $this->root_path.'plugins/'.$plug.'/language/'.$lang_name.'/lang_main.php';
 			if(file_exists($file_path)) {
