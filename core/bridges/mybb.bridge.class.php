@@ -237,6 +237,14 @@ class mybb_bridge extends bridge_generic {
 	}
 
 	public function mybb_logout(){
+		$query = $this->db->query("SELECT name,value FROM ".$this->prefix."settings");
+		$result = $this->db->fetch_rowset($query);
+		if (is_array($result)){
+			foreach ($result as $row){
+				$arrConfig[$row['name']] = $row['value'];
+			}
+		}
+
 		$arrUserdata = $this->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->db->query("DELETE FROM ".$this->prefix."sessions WHERE uid='".$this->db->escape($arrUserdata['id'])."'");
