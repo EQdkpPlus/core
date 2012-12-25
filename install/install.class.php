@@ -262,7 +262,7 @@ class install extends gen_class {
 			//]]>
 		</script>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>'.sprintf($this->lang['page_title'], VERSION_INT).'</title>
+		<title>'.sprintf($this->lang['page_title'], VERSION_EXT).'</title>
 	</head>
 
 	<body>
@@ -290,7 +290,7 @@ class install extends gen_class {
 		}
 
 		$content .= '
-					<h1 class="hicon home">'.(($this->current_step == 'licence') ? sprintf($this->lang['page_title'], VERSION_INT) : $this->lang[$this->current_step]).'</h1>
+					<h1 class="hicon home">'.(($this->current_step == 'licence') ? sprintf($this->lang['page_title'], VERSION_EXT) : $this->lang[$this->current_step]).'</h1>
 					'.$this->get_content().'
 					<div class="buttonbar">';
 		if($this->previous != 'start' && $this->current_step != 'end') $content .= '
@@ -308,7 +308,7 @@ class install extends gen_class {
 			</div>
 		</div>
 		<div id="footer">
-			EQDKP Plus '.VERSION_INT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team
+			EQDKP Plus '.VERSION_EXT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team
 		</div>
 		</form>
 	</body>
