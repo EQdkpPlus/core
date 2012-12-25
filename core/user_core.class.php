@@ -136,6 +136,7 @@ class user_core extends gen_class {
 			list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
 			$this->data['user_email'] = register('encrypt')->decrypt($this->data['user_email']);
 			$this->data['auth_account'] = @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
+			$this->data['birthday'] = ($this->data['birthday'] === 0) ? '' : $this->data['birthday'];
 		}
 
 		$this->style['column_left_width'] = ($this->style['column_left_width'] != '0px' && $this->style['column_left_width'] != '0%') ? $this->style['column_left_width'] : 0;

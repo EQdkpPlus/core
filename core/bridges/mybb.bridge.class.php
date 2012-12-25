@@ -142,10 +142,10 @@ class mybb_bridge extends bridge_generic {
 
 	private function _handle_birthday($date){
 		list($d, $m, $y) = explode('-', $date);
-		if ($y != ''){
+		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
 			return $this->time->mktime(0,0,0,$m,$d,$y);
 		}
-		return false;
+		return '';
 	}
 
 	public function mybb_sso($arrUserdata, $boolAutoLogin = false){
