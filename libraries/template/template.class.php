@@ -499,21 +499,15 @@ class template extends gen_class {
 			// Nested block.
 			$blocks			= explode('.', $blockname);
 			$blockcount		= sizeof($blocks) - 1;
-			$str			= '$this->_data';
+			$str				= &$this->_data;
 			for($i = 0; $i < $blockcount; $i++){
-				$str		.= '[\'' . $blocks[$i] . '.\']';
-				eval('$lastiteration = sizeof(' . $str . ') - 1;');
-				$str		.= '[' . $lastiteration . ']';
+				$str			= &$str[$blocks[$i] . '.'];
+				$str			= &$str[sizeof($str) - 1];
 			}
 
-			// Now we add the block that we're actually referring to.
-			// The result is an expression that returns the full path
-			// of the target block array.
-			$str .= '[\'' . $blocks[$blockcount] . '.\']';
-			// Retrieve a reference to the block array; use it as
-			// alias to avoid further eval calls.
-			eval('$existing =& ' . $str . ';');
-
+			// Use an additional reference to keep following code a bit
+			// more compact (and less error prone because of the extra '.'
+			$existing					= &$str[$blocks[$blockcount] . '.'];
 			$s_row_count				= isset($existing) ? sizeof($existing) : 0;
 			$vararray['S_ROW_COUNT']	= $s_row_count;
 
@@ -528,7 +522,9 @@ class template extends gen_class {
 			if($s_row_count > 0){
 				unset($existing[($s_row_count - 1)]['S_LAST_ROW']);
 			}
-			// Now we evaluate this assignment we've built up.
+			// Now we add the block that we're actually assigning to.
+			// We're adding a new iteration to this block with the given
+			// variable assignments.
 			$existing[] = $vararray;
 		}else{
 			// Top-level block.
