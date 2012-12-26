@@ -8,45 +8,49 @@ $(document).ready(function(){
 				minlength: 2,
 				remote: {
 					type: "POST",
-					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_USER}"
+					url: "{VALIDTAELNK_PREFIX}settings.php{SID}&ajax=1{AJAXEXTENSION_USER}"
 				}
 			},
-			user_email: {
+			email_address: {
 				required: true,
 				email: true,
 				minlength: 2,
 				remote: {
 					type: "POST",
-					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_MAIL}"
+					url: "{VALIDTAELNK_PREFIX}settings.php{SID}&ajax=1{AJAXEXTENSION_MAIL}"
 				}
 			},
-			user_email2: {
-				required: true,
-				email: true,
-				equalTo: "#useremail"
+			confirm_password: {
+				equalTo: "#password1"
 			},
 			user_alimit: {
 				required: true,
+				min: 1,
 				number: true
 			},
 			user_climit: {
 				required: true,
+				min: 1,
 				number: true
 			},
 			user_elimit: {
 				required: true,
+				min: 1,
 				number: true
 			},
 			user_ilimit: {
 				required: true,
+				min: 1,
 				number: true
 			},
 			user_nlimit: {
 				required: true,
+				min: 1,
 				number: true
 			},
 			user_rlimit: {
 				required: true,
+				min: 1,
 				number: true
 			},
 		},
@@ -57,7 +61,7 @@ $(document).ready(function(){
 				minlength: jQuery.format("{L_fv_username_toshort}"),
 				remote: jQuery.format("{L_fv_username_alreadyuse}")
 			},
-			user_email: {
+			email_address: {
 				required: "{L_fv_required_email}",
 				minlength: "{L_fv_email_notvalid}",
 				remote: jQuery.format("{L_fv_email_alreadyuse}")
@@ -68,13 +72,9 @@ $(document).ready(function(){
 			user_ilimit: '{L_fv_required_number}',
 			user_nlimit: '{L_fv_required_number}',
 			user_rlimit: '{L_fv_required_number}',
-			first_name: '{L_fv_required}',
-			country: '{L_fv_required}',
-			gender: '{L_fv_required}',
-			user_password1: '{L_fv_required_password}',
-			user_password2: '{L_fv_required_password_repeat}',
+			new_password: '{L_fv_required_password}',
+			confirm_password: '{L_fv_required_password_repeat}',
 			recaptcha_response_field: '{L_fv_recaptcha}',
-			user_email2: '{L_fv_required_email2}'
 		},
 		invalidHandler: function(form, validator) {
 			var errors = validator.numberOfInvalids();

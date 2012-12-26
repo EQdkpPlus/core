@@ -144,67 +144,39 @@ if(!class_exists('pdh_w_user')) {
 			$this->pdh->enqueue_hook('user');
 		}
 
-		public function update_user_settings ($user_id) {
+		public function update_user_settings ($user_id, $settingsdata) {
 			$query_ary = array();
 			if ( $this->in->get('username') != $this->in->get('old_username') ){
 				$query_ary['username'] = $this->in->get('username');
 			}
-			if ( $this->in->get('new_user_password1') ){
+			if ( $this->in->get('new_password') ){
 				$new_salt = $this->user->generate_salt();
-				$query_ary['user_password'] = $this->user->encrypt_password($this->in->get('new_user_password1'), $new_salt).':'.$new_salt;
-				$strApiKey = $this->user->generate_apikey($this->in->get('new_user_password1'), $new_salt);
+				$query_ary['user_password'] = $this->user->encrypt_password($this->in->get('new_password'), $new_salt).':'.$new_salt;
+				$strApiKey = $this->user->generate_apikey($this->in->get('new_password'), $new_salt);
 				$query_ary['api_key'] = $strApiKey;
 				$query_ary['user_login_key'] = '';
 			}
 
-			$query_ary['user_email']			= $this->crypt->encrypt($this->in->get('user_email'));
-			$query_ary['user_alimit']			= $this->in->get('user_alimit');
-			$query_ary['user_climit']			= $this->in->get('user_climit');
-			$query_ary['user_elimit']			= $this->in->get('user_elimit');
-			$query_ary['user_ilimit']			= $this->in->get('user_ilimit');
-			$query_ary['user_nlimit']			= $this->in->get('user_nlimit');
-			$query_ary['user_rlimit']			= $this->in->get('user_rlimit');
-			$query_ary['user_lang']				= $this->in->get('user_lang');
-			$query_ary['user_style']			= $this->in->get('user_style');
-			$query_ary['user_timezone']			= $this->in->get('user_timezone');
-
-			$query_ary['first_name']			= $this->in->get('first_name');
-			$query_ary['last_name']				= $this->in->get('last_name');
-			$query_ary['country']				= $this->in->get('country');
-			$query_ary['town']					= $this->in->get('town');
-			$query_ary['state']					= $this->in->get('state');
-			$query_ary['ZIP_code']				= $this->in->get('ZIP_code', 0);
-			$query_ary['phone']					= $this->in->get('phone');
-			$query_ary['cellphone']				= $this->in->get('cellphone');
-			$query_ary['address']				= $this->in->get('address');
-			$query_ary['icq']					= $this->in->get('icq');
-			$query_ary['skype']					= $this->in->get('skype');
-			$query_ary['msn']					= $this->in->get('msn');
-			$query_ary['irq']					= $this->in->get('irq');
-			$query_ary['gender']				= $this->in->get('gender');
-			$query_ary['birthday']				= ($this->in->get('birthday', '') != '') ? $this->time->fromformat($this->in->get('birthday')) : '';
-			$query_ary['user_date_time']		= $this->in->get('user_date_time');
-			$query_ary['user_date_short']		= $this->in->get('user_date_short');
-			$query_ary['user_date_long']		= $this->in->get('user_date_long');
-
+			$query_ary['user_email']			= $this->crypt->encrypt($this->in->get('email_address'));
+			
 			$privArray = array();
-			$privArray['priv_set']				= $this->in->get('priv_set');
-			$privArray['priv_phone']			= $this->in->get('priv_phone');
-			$privArray['priv_nosms']			= $this->in->get('priv_nosms');
-			$privArray['priv_bday']				= $this->in->get('priv_bday');
-			$privArray['priv_gallery']			= $this->in->get('priv_gallery');
-			$privArray['priv_no_boardemails']	= $this->in->get('priv_no_boardemails');
-			$query_ary['privacy_settings']		= serialize($privArray);
-
 			$customArray = array();
-			$customArray['user_avatar']			= $this->jquery->MoveUploadedImage($this->in->get('user_avatar'), $this->pfh->FolderPath('user_avatars','eqdkp'));
-			$customArray['work']				= $this->in->get('work');
-			$customArray['interests']			= $this->in->get('interests');
-			$customArray['hardware']			= $this->in->get('hardware');
-			$customArray['facebook']			= $this->in->get('facebook');
-			$customArray['twitter']				= $this->in->get('twitter');
-			$customArray['hide_shop']			= $this->in->get('hide_shop');
-			$customArray['hide_mini_games']		= $this->in->get('hide_mini_games');
+			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter');
+			foreach($settingsdata as $group => $fieldsets) {
+				if($group == 'registration_information') continue;
+				foreach($fieldsets as $tab => $fields) {
+					foreach($fields as $name => $field) {
+						if($tab == 'user_priv') 
+							$privArray[$name] = $this->html->widget_return($field);
+						elseif(in_array($name, $custom_fields)) 
+							$customArray[$name] = $this->html->widget_return($field);
+						else 
+							$query_ary[$name] = $this->html->widget_return($field);
+					}
+				}
+			}
+			
+			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
 
 			$plugin_settings = array();

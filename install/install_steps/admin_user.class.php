@@ -64,7 +64,7 @@ class admin_user extends install_generic {
 	
 	public function parse_input() {
 		$this->username = $this->in->get('username');
-		$this->useremail = $this->crypt->encrypt($this->in->get('user_email'));
+		$this->useremail = $this->in->get('user_email');
 		if($this->in->get('user_password1') == '' || empty($this->username) || empty($this->useremail)) {
 			$this->pdl->log('install_error', $this->lang['user_required']);
 			return false;
@@ -73,6 +73,7 @@ class admin_user extends install_generic {
 			$this->pdl->log('install_error', $this->lang['no_pw_match']);
 			return false;
 		}
+		$this->useremail = $this->crypt->encrypt($this->useremail);
 		$this->config->set('admin_email', $this->useremail);
 		$salt = $this->user->generate_salt();
 		$password = $this->user->encrypt_password($this->in->get('user_password1'), $salt);
