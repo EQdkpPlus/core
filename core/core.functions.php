@@ -679,6 +679,7 @@ function infotooltip_js() {
 		registry::register('template')->js_file(registry::get_const('root_path').'infotooltip/includes/jquery.infotooltip.js');
 		$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
 			$js .= "$('.infotooltip').tooltip({
+						track: true,
 						content: function(response) {
 							var direct = $(this).attr('title').substr(0,1);
 							var mytitle = $(this).attr('title');
@@ -700,19 +701,6 @@ function infotooltip_js() {
 							var tooltip = $(this).tooltip('widget');
 							tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
 							tooltip.addClass('ui-infotooltip');
-							$(document).mousemove(function(event) {
-								tooltip.position({
-									my: 'left center',
-									at: 'right center',
-									offset: '50 25',
-									of: event
-								});
-							})
-							// trigger once to override element-relative positioning
-							.mousemove();
-						},
-						close: function() {
-							$(document).unbind('mousemove');
 						}
 					});";
 		registry::register('template')->add_js($js, 'docready');
@@ -753,6 +741,7 @@ function chartooltip_js() {
 	if(!$charTTadded && registry::register('game')->type_exists('chartooltip')) {
 		$js = "var cached_charTT = new Array();";
 			$js .= "$('.chartooltip').tooltip({
+						track: true,
 						content: function(response) {
 							mytitle = $(this).attr('title');
 							if (cached_charTT['t_'+$(this).attr('title')] != undefined){
@@ -769,19 +758,6 @@ function chartooltip_js() {
 							var tooltip = $(this).tooltip('widget');
 							tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
 							tooltip.addClass('ui-infotooltip');
-							$(document).mousemove(function(event) {
-								tooltip.position({
-									my: 'left center',
-									at: 'right center',
-									offset: '50 25',
-									of: event
-								});
-							})
-							// trigger once to override element-relative positioning
-							.mousemove();
-						},
-						close: function() {
-							$(document).unbind('mousemove');
 						}
 					});";
 		registry::register('template')->add_js($js, 'docready');

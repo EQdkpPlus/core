@@ -138,6 +138,7 @@ window.onload = function(){
 			$('.infotooltip').infotooltips();
 
 			$('.infotooltip').tooltip({
+				track: true,
 				content: function(response) {
 					var direct = $(this).attr('title').substr(0,1);
 					if(direct == 1) {
@@ -151,19 +152,6 @@ window.onload = function(){
 					var tooltip = $(this).tooltip('widget');
 					tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
 					tooltip.addClass('ui-infotooltip');
-					$(document).mousemove(function(event) {
-						tooltip.position({
-							my: 'left center',
-							at: 'right center',
-							offset: '50 25',
-							of: event
-						});
-					})
-					// trigger once to override element-relative positioning
-					.mousemove();
-				},
-				close: function() {
-					$(document).unbind('mousemove');
 				}
 			});
 		
