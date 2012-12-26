@@ -1,5 +1,5 @@
 <!-- IF S_NO_HEADER_FOOTER -->
-{GBL_CONTENT_BODY}
+	{GBL_CONTENT_BODY}
 <!-- ELSE --><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{L_XML_LANG}" lang="{L_XML_LANG}">
 	<head>

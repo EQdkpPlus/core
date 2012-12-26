@@ -225,8 +225,8 @@ if (!class_exists("timehandler")){
 		public function calendarformat($options) {
 			//we need to use a fixed format if PHP 5.3 isnt in use
 			if(!function_exists('date_create_from_format')) {
-				$options['format'] = $this->translateformat2js('Y-m-d');
-				$options['timeformat'] = $this->translateformat2js('H:i');
+				$options['format'] = 'Y-m-d';
+				$options['timeformat'] = 'H:i';
 			}
 			// Load default settings if no custom ones are defined..
 			if(!isset($options['format'])) $options['format'] = $this->user->style['date_notime_short'];
@@ -390,6 +390,8 @@ if (!class_exists("timehandler")){
 			}
 			$dateTime->setTimezone($this->serverTimeZone);
 			$stamp = $dateTime->getTimestamp();
+			// hack to allow negative timestamps
+			if(!$stamp) $stamp = $dateTime->format('U');
 			//check for summer time
 			if($this->date('I', $stamp, false) == 1) $stamp -= 3600;
 			return $stamp;

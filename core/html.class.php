@@ -145,6 +145,7 @@ if (!class_exists("html")) {
 					}
 					$options['readonly']	= (isset($options['readonly'])) ? $options['readonly'] : false;
 					$options['id']			= (isset($options['id'])) ? $options['id'] : '';
+					if(!isset($options['selected']) && isset($options['value'])) $options['selected'] = $options['value'];
 					$ccfield = $this->DropDown($options['name'], $tmpdrdwnrry, $options['selected'], '', $options['javascript'], 'input', $options['id'],array(), $options['readonly']);
 				break;
 
@@ -177,7 +178,9 @@ if (!class_exists("html")) {
 				// Datepicker
 				case 'datepicker':
 					$options['options']['readonly'] = (isset($options['readonly'])) ? $options['readonly'] : false;
-					if(is_numeric($options['value'])) $options['value'] = $this->time->date($this->time->calendarformat($options), $options['value']);
+					if(is_numeric($options['value'])) $options['value'] = $this->time->date($this->time->calendarformat($options['options']), $options['value']);
+					if(isset($options['options']['format'])) $options['options']['format'] = $this->time->translateformat2js($options['options']['format']);
+					if(isset($options['options']['timeformat'])) $options['options']['timeformat'] = $this->time->translateformat2js($options['options']['timeformat']);
 					$ccfield = $this->jquery->Calendar($options['name'], $options['value'], '', ((isset($options['options'])) ? $options['options'] : array()));
 				break;
 
@@ -190,7 +193,7 @@ if (!class_exists("html")) {
 				case 'password':
 					$encrypt = (isset($options['encrypt'])) ? true : false;
 					$readonly = (isset($options['readonly'])) ? $options['readonly'] : false;
-					$ccfield = $this->TextField($options['name'], $options['size'], $options['value'], 'password', 'id'.$options['name'], 'input', $readonly, $encrypt, $options['javascript']);
+					$ccfield = $this->TextField($options['name'], $options['size'], $options['value'], 'password', $options['id'], 'input', $readonly, $encrypt, $options['javascript']);
 				break;
 
 				// jQuery Multiselect
@@ -275,13 +278,14 @@ if (!class_exists("html")) {
 				
 				case 'int':
 				case 'checkbox':
+				case 'spinner':
 					return $this->in->get($options['name'], 0);
 
 				case 'boolean':
 					return (($this->in->get($options['name'], 0) == '1') ? true : false);
 
 				case 'datepicker':
-					return $this->time->fromformat($this->in->get($options['name'], ''), $this->time->calendarformat($options));
+					return $this->time->fromformat($this->in->get($options['name'], ''), $this->time->calendarformat($options['options']));
 					
 				case 'text':
 				case 'textarea':

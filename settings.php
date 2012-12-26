@@ -20,6 +20,26 @@ define('EQDKP_INC', true);
 $eqdkp_root_path = './';
 include_once($eqdkp_root_path . 'common.php');
 
+//AJAX
+if(registry::fetch('in')->get('ajax', 0) === 1){
+	if($_POST['username']){
+		if(registry::fetch('in')->exists('olduser') && registry::fetch('in')->get('olduser') === $_POST['username']){
+			echo 'true';
+		}else{
+			echo registry::fetch('pdh')->get('user', 'check_username', array(registry::fetch('in')->get('username')));
+		}
+	}
+	if($_POST['email_address']){
+		if(registry::fetch('in')->exists('oldmail') && registry::fetch('in')->get('oldmail') === $_POST['email_address']){
+			echo 'true';
+		}else{
+			echo registry::fetch('pdh')->get('user', 'check_email', array(registry::fetch('in')->get('email_address')));
+		}
+	}
+	exit;
+}
+
+
 class user_settings extends page_generic {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'html', 'pm', 'time', 'pfh', 'bridge');
@@ -83,8 +103,8 @@ class user_settings extends page_generic {
 	public function update() {
 		// Error-check the form
 		$change_username = ( $this->in->get('username') != $this->user->data['username'] ) ? true : false;
-		$change_password = ( $this->in->get('new_user_password1') != '' || $this->in->get('new_user_password2') != '') ? true : false;
-		$change_email = ( $this->in->get('user_email')  != $this->user->data['user_email']) ? true : false;
+		$change_password = ( $this->in->get('new_password') != '' || $this->in->get('confirm_password') != '') ? true : false;
+		$change_email = ( $this->in->get('email_address')  != $this->user->data['user_email']) ? true : false;
 
 		//Check username
 		if ($change_username && $this->pdh->get('user', 'check_username', array($this->in->get('username'))) == 'false'){
@@ -95,20 +115,29 @@ class user_settings extends page_generic {
 
 		//Check email
 		if ($change_email){
-			if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
+			if ($this->pdh->get('user', 'check_email', array($this->in->get('email_address'))) == 'false'){
 				$this->core->message($this->user->lang('fv_email_alreadyuse'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;
-			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$this->in->get('user_email')) ){
+			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$this->in->get('email_address')) ){
 					$this->core->message($this->user->lang('fv_invalid_email'), $this->user->lang('error'), 'red');
 					$this->display();
 					return;
 			}
 		}
 		
+		//Check matching new passwords
+		if($change_password) {
+			if($this->in->get('new_password') != $this->in->get('confirm_password')) {
+				$this->core->message($this->user->lang('fv_required_password_repeat'), $this->user->lang('error'), 'red');
+				$this->display();
+				return;
+			}
+		}
+		
 		// If they changed their username or password, we have to confirm their current password
 		if ( ($change_username) || ($change_password) || ($change_email)){
-			if (!$this->user->checkPassword($this->in->get('user_password'), $this->user->data['user_password'])){
+			if (!$this->user->checkPassword($this->in->get('current_password'), $this->user->data['user_password'])){
 				$this->core->message($this->user->lang('incorrect_password'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;
@@ -116,18 +145,15 @@ class user_settings extends page_generic {
 		}
 
 		// Errors have been checked at this point, build the query
-		$this->pdh->put('user', 'update_user_settings', array($this->user->data['user_id']));
+		$this->pdh->put('user', 'update_user_settings', array($this->user->data['user_id'], $this->get_settingsdata()));
 		$this->pdh->process_hook_queue();
-		redirect('settings.php'.$this->SID.'&amp;save=true');
+		#redirect('settings.php'.$this->SID.'&amp;save=true');
 		return;
 	}
 
-	public function display() {
-		if ($this->in->exists('save')){
-			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
-		}
+	public function get_settingsdata() {
+		$settingsdata = array();
 
-		$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields']);
 		//Privacy - Phone numbers
 		$priv_phone_array = array(
 			'0'=>'user_priv_all',
@@ -150,7 +176,7 @@ class user_settings extends page_generic {
 
 		$cfile = $this->root_path.'core/country_states.php';
 		if (file_exists($cfile)){
-			include_once($cfile);
+			include($cfile);
 		}
 
 		// Build language array
@@ -171,6 +197,12 @@ class user_settings extends page_generic {
 		}
 
 		$auth_options = $this->user->get_loginmethod_options();
+		
+		// hack the birthday format, to be sure there is a 4 digit year in it
+		$birthday_format = $this->user->style['date_notime_short'];
+		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
+		$birthday_format = str_replace('y', 'Y', $birthday_format);
+		
 		$settingsdata = array(
 			'registration_information'	=> array(
 				'adduser_tab_registration_information'	=> array(
@@ -249,7 +281,7 @@ class user_settings extends page_generic {
 						'no_lang'	=> true,
 					),
 					'ZIP_code'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'int',
 						'size'	=> 5,
 						'name'	=> 'adduser_ZIP_code'
 					),
@@ -306,7 +338,8 @@ class user_settings extends page_generic {
 						'name'	=> 'adduser_birthday',
 						'options' => array(
 							'year_range' => '-80:+0',
-							'change_fields' => true
+							'change_fields' => true,
+							'format' => $birthday_format
 						),
 					),
 					'user_avatar'	=> array(
@@ -371,51 +404,51 @@ class user_settings extends page_generic {
 			'view_options'		=> array(
 				'adduser_tab_view_options'	=> array(
 					'user_alimit'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'spinner',
 						'name'	=> 'adjustments_per_page',
 						'size'	=> 5,
-						'id'	=> 'user_alimit',
-						'class'	=> '',
+						'step'	=> 10,
+						'id'	=> 'user_alimit'
 					),
 					'user_climit'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'spinner',
 						'name'	=> 'characters_per_page',
 						'size'	=> 5,
-						'id'	=> 'user_climit',
-						'class'	=> '',
+						'step' => 10,
+						'id'	=> 'user_climit'
 					),
 					'user_elimit'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'spinner',
 						'name'	=> 'events_per_page',
 						'size'	=> 5,
-						'id'	=> 'user_elimit',
-						'class'	=> '',
+						'step' => 10,
+						'id'	=> 'user_elimit'
 					),
 					'user_ilimit'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'spinner',
 						'name'	=> 'items_per_page',
 						'size'	=> 5,
-						'id'	=> 'user_ilimit',
-						'class'	=> '',
-					),
-					'user_nlimit'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'news_per_page',
-						'size'	=> 5,
-						'id'	=> 'user_nlimit',
-						'class'	=> '',
+						'step' => 10,
+						'id'	=> 'user_ilimit'
 					),
 					'user_rlimit'	=> array(
-						'fieldtype'	=> 'text',
+						'fieldtype'	=> 'spinner',
 						'name'	=> 'raids_per_page',
 						'size'	=> 5,
-						'id'	=> 'user_rlimit',
-						'class'	=> '',
+						'step' => 10,
+						'id'	=> 'user_rlimit'
+					),
+					'user_nlimit'	=> array(
+						'fieldtype'	=> 'spinner',
+						'name'	=> 'news_per_page',
+						'size'	=> 5,
+						'id'	=> 'user_nlimit'
 					),
 					'user_lang'	=> array(
 						'fieldtype'	=> 'dropdown',
 						'name'	=> 'language',
 						'options'	=> $language_array,
+						'no_lang' => true
 					),
 					'user_timezone'	=> array(
 						'fieldtype'	=> 'dropdown',
@@ -476,9 +509,17 @@ class user_settings extends page_generic {
 				$settingsdata = array_merge_recursive($settingsdata, $auth_array);
 			}
 		}
+		return $settingsdata;
+	}
 
-
-
+	public function display() {
+		if ($this->in->exists('save')){
+			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
+		}
+		
+		$settingsdata = $this->get_settingsdata();
+		$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields']);
+		
 		//Deactive Profilefields synced by Bridge
 		$synced_fields = array();
 		if ($this->config->get('cmsbridge_active') == 1){
@@ -504,21 +545,17 @@ class user_settings extends page_generic {
 				));
 
 				foreach($fielddata as $name=>$confvars){
-					// continue if hmode == true
-					if((isset($_HMODE) && $confvars['not4hmode'])){
-						continue;
-					}
 					$help = '';
 					if (in_array($name, $synced_fields) && (int)$this->config->get('cmsbridge_disable_sync') != 1){
 						$confvars['readonly'] = true;
 						$help = $this->user->lang('adduser_bridge_note');
  					}
 					$no_lang = (isset($confvars['no_lang'])) ? true : false;
-					$value = (isset($confvars['no_value'])) ? '' : ((isset($userdata[$name]) && $userdata[$name] != "") ? $userdata[$name] : ((isset($confvars['value'])) ? $confvars['value'] : ''));
+					$confvars['value'] = (isset($confvars['no_value'])) ? '' : ((isset($userdata[$name]) && $userdata[$name] != "") ? $userdata[$name] : ((isset($confvars['value'])) ? $confvars['value'] : ''));
 					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
 						'NAME'		=> ((isset($confvars['required'])) ? '* ' : '').(($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name']),
-						'HELP'		=> ((isset($confvars['help'])) ? $this->user->lang($confvars['help']) : '').' '.$help,
-						'FIELD'		=> $this->html->generateField($confvars, $name, $value, $no_lang),
+						'HELP'		=> ((!empty($confvars['help'])) ? $this->user->lang($confvars['help']) : '').' '.$help,
+						'FIELD'		=> $this->html->widget($confvars),
 						'TEXT'		=> isset($confvars['text']) ? $confvars['text'] : '',
 					));
 				}
