@@ -312,7 +312,7 @@ if(!class_exists('pdh_w_user')) {
 		public function reset() {
 			$this->db->query("DELETE FROM __users WHERE user_id != '".$this->db->escape($this->user->data['user_id'])."';");
 			$this->db->query("DELETE FROM __member_user WHERE user_id != '".$this->db->escape($this->user->data['user_id'])."';");
-			$this->pdh->enqueue_hook('user_update');
+			$this->pdh->enqueue_hook('user');
 		}
 	}
 }

@@ -149,7 +149,7 @@ class listusers extends page_generic {
 			'USER_CELLPHONE'	=> ($phone_perm && strlen($row['cellphone'])) ? '<img src="'.$this->root_path.'images/glyphs/phone_cell.png" alt="Cell" /> '.sanitize($row['cellphone']) : '',
 			'USER_PHONE'		=> ($phone_perm && strlen($row['phone'])) ? '<img src="'.$this->root_path.'images/glyphs/phone.png" alt="Phone" /> '.sanitize($row['phone']) : '',
 			'USER_IMAGE'		=> (isset($custom['user_avatar']) && is_file($user_avatar)) ? $user_avatar : $this->root_path.'images/no_pic.png',
-			'USER_BIRTHDAY'		=> ($privacy['priv_bday'] == 1) ? $row['birthday'].' ('.$this->time->age($row['birthday']).')': $this->time->age($row['birthday']),
+			'USER_BIRTHDAY'		=> ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$this->time->age($row['birthday']).')': $this->time->age($row['birthday']),
 			'USER_TOWN'			=> sanitize($row['town']),
 			'USER_HARDWARE'		=> sanitize($custom['hardware']),
 			'USER_WORK'			=> sanitize($custom['work']),
