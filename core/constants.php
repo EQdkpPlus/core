@@ -28,8 +28,8 @@ if ( !defined('EQDKP_INC') ){
 define('VERSION_INT',		'1.0.7');				// the internal version number for updates & update check
 define('VERSION_EXT',		'1.1 Alpha');			// the external version number to be shown in the footer
 define('VERSION_WIP',		true);					// work in progress or stable?
-define('VERSION_PHP_RQ',	'5.2.0');				// required version of PHP
-define('VERSION_PHP_REC', 	'5.3.0');				// recommended version of PHP
+define('VERSION_PHP_RQ',	'5.3.0');				// required version of PHP
+define('VERSION_PHP_REC', 	'5.4.0');				// recommended version of PHP
 
 
 // Plugin states
