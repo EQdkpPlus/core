@@ -82,11 +82,11 @@ class ManageRaids extends page_generic {
 			}
 			$item_upd = array(true);
 			if(!empty($data['items']) && is_array($data['items'])) {
-				foreach($data['items'] as $item) {
+				foreach($data['items'] as $ik => $item) {
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
-						$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']));
+						$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
 					} else {
-						$item_upd[] = $this->pdh->put('item', 'update_item', array($item['group_key'], $item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']));
+						$item_upd[] = $this->pdh->put('item', 'update_item', array($item['group_key'], $item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
 					}
 				}
 			}
@@ -119,7 +119,7 @@ class ManageRaids extends page_generic {
 		}
 
 		//fetch members
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(true,false,false))));
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,false,false))));
 		asort($members);
 
 		//fetch events
@@ -402,6 +402,7 @@ class ManageRaids extends page_generic {
 			}
 		}
 		if(isset($data['false']) AND !$norefresh) {
+			$missing = '';
 			foreach($data['false'] as $miss) {
 				$params = explode('_', $miss);
 				$missing .= $this->user->lang($params[0]).': '.$this->user->lang($params[1]).'<br />';
