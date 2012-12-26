@@ -245,9 +245,10 @@
 		//Equipment
 		$arrTmpEquip = array();
 		foreach($cdata['equipmentslot_list'] as $value){
-			$arrTmpEquip[$value['displayname']] = $value;
+			$arrTmpEquip[] = $value;
+			$arrSort[] = $value['displayname'];
 		}
-		ksort($arrTmpEquip);
+		array_multisort($arrSort, SORT_ASC, $arrTmpEquip);
 		foreach($arrTmpEquip as $value){
 			$this->tpl->assign_block_vars('equipment_list', array(
 				'NAME'  => $value['displayname'],
@@ -258,10 +259,12 @@
 		
 		//Appearance
 		$arrTmpEquip = array();
+		$arrSort = array();
 		foreach($cdata['appearanceslot_list'] as $value){
-			$arrTmpEquip[$value['displayname']] = $value;
+			$arrTmpEquip[] = $value;
+			$arrSort[] = $value['displayname'];
 		}
-		ksort($arrTmpEquip);
+		array_multisort($arrSort, SORT_ASC, $arrTmpEquip);
 		foreach($arrTmpEquip as $value){
 			$this->tpl->assign_block_vars('appearance_list', array(
 				'NAME'  => $value['displayname'],
