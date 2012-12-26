@@ -36,8 +36,9 @@ if (!class_exists("jquery")) {
 			$this->path			= $this->root_path."libraries/jquery/";
 			
 			// Load the core css & js files
-			$this->tpl->css_file($this->path.'core/core.css');
-			$this->tpl->js_file($this->path.'core/core.js');
+			$minified_or_not	= (DEBUG) ? '' : '.min';
+			$this->tpl->css_file($this->path.'core/core'.$minified_or_not.'.css');
+			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js');
 
 			// add the root_path to javascript
 			$this->tpl->add_js("var mmocms_root_path = '".$this->root_path."';");
