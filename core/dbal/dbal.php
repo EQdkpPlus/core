@@ -75,7 +75,7 @@ abstract class dbal_common extends gen_class {
 		if(isset($options['open'])) {
 			$this->open($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass);
 			//dont print any error-messages for this query
-			if(DEBUG) $this->query("SET SESSION sql_mode = 'STRICT_TRANS_TABLES'");
+			if(defined('DEBUG') && DEBUG) $this->query("SET SESSION sql_mode = 'STRICT_TRANS_TABLES'");
 		}
 		$this->in_construct = false;
 	}

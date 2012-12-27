@@ -79,7 +79,7 @@ if(!class_exists('pdh_w_user')) {
 				'user_registered'		=> $this->time->time,
 				'api_key'				=> $strApiKey,
 			);
-			if ($this->user->handle_login_functions('after_register', $strLoginMethod )){
+			if ($strLoginMethod && $this->user->handle_login_functions('after_register', $strLoginMethod )){
 				$arrSave = array_merge($arrSave, $this->user->handle_login_functions('after_register', $strLoginMethod ));
 			}
 

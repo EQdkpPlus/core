@@ -21,9 +21,12 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_facebook extends gen_class {
-	public static $shortcuts = array('config', 'tpl', 'html', 'user', 'db', 'in', 'pdh');
+	public static $shortcuts = array('config', 'tpl', 'html', 'user', 'db', 'in', 'pdh', 'time');
 	public $fb = false;
 	private $js_loaded = false;
+	
+	public $functions = array();
+	public $options = array();
 	
 	public function __construct(){
 		
@@ -190,7 +193,6 @@ class login_facebook extends gen_class {
 	
 	public function pre_register(){
 		$this->init_fb();
-	  		
 		if ($this->get_me()){
 			$me = $this->get_me();
 			$uid = $me['uid'];
@@ -233,7 +235,7 @@ class login_facebook extends gen_class {
 			$out = false;
 			if ($me['birthday']){
 				list ($m, $d, $y) = explode('/', $me['birthday']);
-				$out['birthday'] = $d.'.'.$m.'.'.$y;
+				$out['birthday'] = $this->time->mktime(0,0,0,$m,$d,$y);
 			}
 						
 			if ($this->in->get('user_email') == $me['email']){
