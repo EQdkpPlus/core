@@ -424,7 +424,7 @@ $lang = array(
 "news_permissions_member" => "Guest and characters (only Admin can see)",
 "news_permissions_all" => "Free for all",
 "news_readmore" => "Read more...",
-"login_bridge_notice" => "Login - CMS-Bridge is active. Use your CSM/Board Data to login.",
+"login_bridge_notice" => "Login - CMS-Bridge is active. Use your CMS/Board Data to login.",
 "portalmanager" => "Portalmodule Management",
 "more_plugins" => "For more Plugins visit <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a>.",
 "more_moduls" => "For more Modules visit <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a>.",
