@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_facebook extends gen_class {
-	public static $shortcuts = array('config', 'tpl', 'html', 'user', 'db', 'in', 'pdh', 'time');
+	public static $shortcuts = array('config', 'tpl', 'html', 'user', 'db', 'in', 'pdh', 'time', 'core');
 	public $fb = false;
 	private $js_loaded = false;
 	
@@ -46,22 +46,29 @@ class login_facebook extends gen_class {
 	
 	public function init_fb(){
 		if (!is_object($this->fb)){
-			//Init Facebook Api
-			require_once($this->root_path.'libraries/facebook/facebook.php');
-
-			$facebook = new Facebook(array(
-				'appId'  => $this->config->get('login_fb_appid'),
-				'secret' => $this->config->get('login_fb_appsecret'),
-				'cookie' => true,
-			));
-
-			$this->fb = $facebook;
+			//Init Facebook Api			
+			try {
+				require_once($this->root_path.'libraries/facebook/facebook.php');
+				if (class_exists('Facebook')){
+					$facebook = new Facebook(array(
+						'appId'  => $this->config->get('login_fb_appid'),
+						'secret' => $this->config->get('login_fb_appsecret'),
+						'cookie' => true,
+					));
+					
+					$this->fb = $facebook;
+				}
+			} catch (Exception $e) {
+				$this->core->message('Facebook-Class requires CURL Extension', 'Exception', 'red');
+			}
 		}
 	}
 	
 	public function init_js(){
 		if (!$this->js_loaded){
 			$this->init_fb();
+			if (!$this->fb) return false;
+			
 			$this->tpl->staticHTML('<div id="fb-root"></div>');
 			$this->tpl->add_js("
 				window.fbAsyncInit = function() {
@@ -87,6 +94,7 @@ class login_facebook extends gen_class {
 	
 	public function get_me(){
 		$this->init_fb();
+		if (!$this->fb) return false;
 		
 		$user = $this->fb->getUser();
 		if ($user){
@@ -157,6 +165,7 @@ class login_facebook extends gen_class {
 	
 	public function account_button(){
 		$this->init_fb();
+		if (!$this->fb) return false;
 		
 		if ($this->get_me()){
 			$me = $this->get_me();
@@ -193,6 +202,8 @@ class login_facebook extends gen_class {
 	
 	public function pre_register(){
 		$this->init_fb();
+		if (!$this->fb) return false;
+		
 		if ($this->get_me()){
 			$me = $this->get_me();
 			$uid = $me['uid'];
@@ -257,8 +268,7 @@ class login_facebook extends gen_class {
 	*/	
 	public function login($strUsername, $strPassword, $boolUseHash = false){
 		$blnLoginResult = false;
-		
-			
+				
 		if ($this->get_me() && $strPassword == ''){
 			$me = $this->get_me();
 			$uid = $me['uid'];
@@ -289,6 +299,8 @@ class login_facebook extends gen_class {
 	*/
 	public function logout(){
 		$this->init_fb();
+		if (!$this->fb) return true;
+		
 		if ($this->get_me()){
 			$me = $this->get_me();
 			$uid = $me['uid'];
