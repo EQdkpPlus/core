@@ -123,7 +123,7 @@ CREATE TABLE `__sessions` (
 	`session_current` int(11) NOT NULL,
 	`session_page` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '0',
 	`session_ip` varchar(50) COLLATE utf8_bin NOT NULL,
-	`session_browser` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`session_browser` text COLLATE utf8_bin,
 	`session_key` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_type` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_perm_id` smallint(5) NULL DEFAULT '-1',

@@ -1153,10 +1153,6 @@ fieldset.invisible dt label {
 	margin:0;
 	padding:0;
 }
-#notifications .description p,
-#twitterfeed .description p{
-	font-size:10px;
-}
 #notifications .targetblank ,
 #twitterfeed .targetblank {
 	font-size:12px;
