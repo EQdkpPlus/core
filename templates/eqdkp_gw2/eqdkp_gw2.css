@@ -1177,9 +1177,10 @@ fieldset.invisible dt label {
 	width:auto;
 	overflow: auto;
 }
-#notifications a,
-#twitterfeed a {
+#notifications a.rss_readmore,
+#twitterfeed a.rss_readmore {
 	color:#a90000;
+	font-size:10px;
 }
 #notifications .date,
 #twitterfeed .date {
@@ -1192,6 +1193,10 @@ fieldset.invisible dt label {
 #twitterfeed .description{
 	margin:0;
 	padding:0;
+}
+#notifications .description p,
+#twitterfeed .description p{
+	margin: 0;
 }
 .loading{
 	margin:20% 0% 0% 40%;
