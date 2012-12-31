@@ -21,15 +21,11 @@ include_once('itt_parser.aclass.php');
 if(!class_exists('eq2_sony')) {
 	class eq2_sony extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
-
 		public $supported_games = array('eq2');
 		public $av_langs = array();
-
 		public $settings = array();
-
 		public $itemlist = array();
 		public $recipelist = array();
-
 		private $searched_langs = array();
 
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
@@ -73,22 +69,18 @@ if(!class_exists('eq2_sony')) {
 			parent::__destruct();
 		}
 
-
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
 			$itemInfo = urlencode('displayname=i/' . $itemname . '/');
 			$link = 'http://data.soe.com/json/get/eq2/item/?' . $itemInfo;
 			$data = $this->puf->fetch($link);
 			$this->searched_langs[] = $lang;
-			
 			$itemData = json_decode($data);
-
 			if ($itemData){
 				$myItem = $itemData->{'item_list'}[0];
 				$item_id = $myItem->id;
 				return array($item_id, 'items');
 			}
-			
 			return $item_id;
 		}
 
@@ -97,10 +89,8 @@ if(!class_exists('eq2_sony')) {
 		}
 
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
-
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-			
 			$url = 'http://data.soe.com/json/get/eq2/item/' . $item['id'];
 			$item['link'] = $url;
 			$data = $this->puf->fetch($item['link']);
@@ -109,7 +99,6 @@ if(!class_exists('eq2_sony')) {
 				$myItem = $itemdata->{'item_list'}[0];
 				if ($myItem){
 					$content = $this->GenerateItemStatsHTML($myItem);
-
 					$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/eq2_sony_popup.tpl'));
 					$template_html = str_replace('{ITEM_HTML}', $content, $template_html);
 					$item['html'] = $template_html;
@@ -121,7 +110,6 @@ if(!class_exists('eq2_sony')) {
 			}
 			$item['baditem'] = true;
 			return $item;
-			
 		}
 		
 		protected function OuterDiv($item) 
@@ -138,30 +126,175 @@ if(!class_exists('eq2_sony')) {
 		{
 			return "<div class='itemd_name'>" . $item->{'displayname'} . "</div>\n";
 		}
-		
-		
-		
-		protected function ItemDescription($item) 
+				
+		protected function ItemDescription($item)
 		{
-			$myContent = "";
-		/*
-			if (array_key_exists('description',$item)) {
-				#$description = $item->{'description'};
-				$description = "test";
-				if ($description) {
-					$myContent = "<div class=\"itemd_desc\">" . $description . "</div>\n";
-				}
+		$description = $item->{'description'};
+		if (is_string($description)) {
+		return "<div class='itemd_desc'>" . $description . "</div>\n";
+		} else { return ""; }
+	    }
+			
+		protected function GreenAdornMax($item)
+		{
+		if (array_key_exists('growth_table',$item))
+		{
+		    $content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
+			$itemLevel = $item->{'leveltouse'};
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div>";
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$typeInfo = $item->{'typeinfo'};
+			$typecolor = $typeInfo->{'color'};
+			$typename = $typeInfo->{'name'};
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Type</div>";
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>" . ucfirst($typecolor) . " " . ucfirst($typename) . "</div>";
+			$content .= "<div class='ui-helper-clearfix'></div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Slots</div>";
+			$content .= "<div style='width: 120px; float: left; color: white;'>";
+			$slotList = $typeInfo->{'slot_list'};
+			foreach ($slotList as $slot) {
+				$content .= " " . $slot->{'displayname'};
 			}
-		*/
-			return $myContent;
+		$content .= "</div><br>";
+		$content .= "<div class='ui-helper-clearfix'></div>";
+		$content .= "<br>";
+		$growth = $item->{'growth_table'};
+		$l1 = $growth->{'level1'};
+		$l2 = $growth->{'level2'};
+		$l3 = $growth->{'level3'};
+		$l4 = $growth->{'level4'};
+		$l5 = $growth->{'level5'};
+		$l6 = $growth->{'level6'};
+		$l7 = $growth->{'level7'};
+		$l8 = $growth->{'level8'};
+		$l9 = $growth->{'level9'};
+		$l10 = $growth->{'level10'};
+		$agi = (($l1->{'agi'}) + ($l2->{'agi'}) + ($l3->{'agi'}) + ($l4->{'agi'}) + ($l5->{'agi'}) + 
+		($l6->{'agi'}) + ($l7->{'agi'}) + ($l8->{'agi'}) + ($l9->{'agi'}) + ($l10->{'agi'}));
+		$intel = (($l1->{'int'}) + ($l2->{'int'}) + ($l3->{'int'}) + ($l4->{'int'}) + ($l5->{'int'}) + 
+		($l6->{'int'}) + ($l7->{'int'}) + ($l8->{'int'}) + ($l9->{'int'}) + ($l10->{'int'}));
+		$sta = (($l1->{'sta'}) + ($l2->{'sta'}) + ($l3->{'sta'}) + ($l4->{'sta'}) + ($l5->{'sta'}) + 
+		($l6->{'sta'}) + ($l7->{'sta'}) + ($l8->{'sta'}) + ($l9->{'sta'}) + ($l10->{'sta'}));
+		$str = (($l1->{'str'}) + ($l2->{'str'}) + ($l3->{'str'}) + ($l4->{'str'}) + ($l5->{'str'}) + 
+		($l6->{'str'}) + ($l7->{'str'}) + ($l8->{'str'}) + ($l9->{'str'}) + ($l10->{'str'}));
+		$wis = (($l1->{'wis'}) + ($l2->{'wis'}) + ($l3->{'wis'}) + ($l4->{'wis'}) + ($l5->{'wis'}) + 
+		($l6->{'wis'}) + ($l7->{'wis'}) + ($l8->{'wis'}) + ($l9->{'wis'}) + ($l10->{'wis'}));
+		"<div class='itemd_name'>" . $item->{'displayname'} . "</div>\n";
+		$content .= "<div class='itemd_name'>Spirit Stone at Max Level</div>\n";
+		$content .= "<div class='ui-helper-clearfix'></div>";
+		$content .= "<div class='itemd_green'>";
+		if ($intel != 0) { $content .= "  +" . $intel . " int"; }
+		if ($wis != 0) { $content .= "  +" . $wis . " wis"; }
+		if ($str != 0) { $content .= "  +" . $str . " str"; }
+		if ($agi != 0) { $content .= "  +" . $agi . " agi"; }
+		if ($sta != 0) { $content .= "  +" . $sta . " sta"; }
+		$content .= "</div>\n";
+		$content .= "<div class='itemd_blue'>";
+		$attackspeed = (($l1->{'attackspeed'}) + ($l2->{'attackspeed'}) + ($l3->{'attackspeed'}) + ($l4->{'attackspeed'}) + ($l5->{'attackspeed'}) + 
+		($l6->{'attackspeed'}) + ($l7->{'attackspeed'}) + ($l8->{'attackspeed'}) + ($l9->{'attackspeed'}) + ($l10->{'attackspeed'}));
+		$dps = (($l1->{'dps'}) + ($l2->{'dps'}) + ($l3->{'dps'}) + ($l4->{'dps'}) + ($l5->{'dps'}) + 
+		($l6->{'dps'}) + ($l7->{'dps'}) + ($l8->{'dps'}) + ($l9->{'dps'}) + ($l10->{'dps'}));
+		$doubleattackchance = (($l1->{'doubleattackchance'}) + ($l2->{'doubleattackchance'}) + ($l3->{'doubleattackchance'}) + ($l4->{'doubleattackchance'}) + ($l5->{'doubleattackchance'}) + 
+		($l6->{'doubleattackchance'}) + ($l7->{'doubleattackchance'}) + ($l8->{'doubleattackchance'}) + ($l9->{'doubleattackchance'}) + ($l10->{'doubleattackchance'}));
+		$critbonus = (($l1->{'critbonus'}) + ($l2->{'critbonus'}) + ($l3->{'critbonus'}) + ($l4->{'critbonus'}) + ($l5->{'critbonus'}) + 
+		($l6->{'critbonus'}) + ($l7->{'critbonus'}) + ($l8->{'critbonus'}) + ($l9->{'critbonus'}) + ($l10->{'critbonus'}));
+		$spellweaponattackspeed = (($l1->{'spellweaponattackspeed'}) + ($l2->{'spellweaponattackspeed'}) + ($l3->{'spellweaponattackspeed'}) + ($l4->{'spellweaponattackspeed'}) + ($l5->{'spellweaponattackspeed'}) + 
+		($l6->{'spellweaponattackspeed'}) + ($l7->{'spellweaponattackspeed'}) + ($l8->{'spellweaponattackspeed'}) + ($l9->{'spellweaponattackspeed'}) + ($l10->{'spellweaponattackspeed'}));
+		$spellweapondps = (($l1->{'spellweapondps'}) + ($l2->{'spellweapondps'}) + ($l3->{'spellweapondps'}) + ($l4->{'spellweapondps'}) + ($l5->{'spellweapondps'}) + 
+		($l6->{'spellweapondps'}) + ($l7->{'spellweapondps'}) + ($l8->{'spellweapondps'}) + ($l9->{'spellweapondps'}) + ($l10->{'spellweapondps'}));
+		$spellweapondoubleattackchance = (($l1->{'spellweapondoubleattackchance'}) + ($l2->{'spellweapondoubleattackchance'}) + ($l3->{'spellweapondoubleattackchance'}) + ($l4->{'spellweapondoubleattackchance'}) + ($l5->{'spellweapondoubleattackchance'}) + 
+		($l6->{'spellweapondoubleattackchance'}) + ($l7->{'spellweapondoubleattackchance'}) + ($l8->{'spellweapondoubleattackchance'}) + ($l9->{'spellweapondoubleattackchance'}) + ($l10->{'spellweapondoubleattackchance'}));
+		$weapondamagebonus = (($l1->{'weapondamagebonus'}) + ($l2->{'weapondamagebonus'}) + ($l3->{'weapondamagebonus'}) + ($l4->{'weapondamagebonus'}) + ($l5->{'weapondamagebonus'}) + 
+		($l6->{'weapondamagebonus'}) + ($l7->{'weapondamagebonus'}) + ($l8->{'weapondamagebonus'}) + ($l9->{'weapondamagebonus'}) + ($l10->{'weapondamagebonus'}));
+		$basemodifier = (($l1->{'basemodifier'}) + ($l2->{'basemodifier'}) + ($l3->{'basemodifier'}) + ($l4->{'basemodifier'}) + ($l5->{'basemodifier'}) + 
+		($l6->{'basemodifier'}) + ($l7->{'basemodifier'}) + ($l8->{'basemodifier'}) + ($l9->{'basemodifier'}) + ($l10->{'basemodifier'}));
+		$maxhpperc = (($l1->{'maxhpperc'}) + ($l2->{'maxhpperc'}) + ($l3->{'maxhpperc'}) + ($l4->{'maxhpperc'}) + ($l5->{'maxhpperc'}) + 
+		($l6->{'maxhpperc'}) + ($l7->{'maxhpperc'}) + ($l8->{'maxhpperc'}) + ($l9->{'maxhpperc'}) + ($l10->{'maxhpperc'}));
+		$armormitigationincrease = (($l1->{'armormitigationincrease'}) + ($l2->{'armormitigationincrease'}) + ($l3->{'armormitigationincrease'}) + ($l4->{'armormitigationincrease'}) + ($l5->{'armormitigationincrease'}) + 
+		($l6->{'armormitigationincrease'}) + ($l7->{'armormitigationincrease'}) + ($l8->{'armormitigationincrease'}) + ($l9->{'armormitigationincrease'}) + ($l10->{'armormitigationincrease'}));
+		$strikethrough = (($l1->{'strikethrough'}) + ($l2->{'strikethrough'}) + ($l3->{'strikethrough'}) + ($l4->{'strikethrough'}) + ($l5->{'strikethrough'}) + 
+		($l6->{'strikethrough'}) + ($l7->{'strikethrough'}) + ($l8->{'strikethrough'}) + ($l9->{'strikethrough'}) + ($l10->{'strikethrough'}));
+		$spellcastpct = (($l1->{'spellcastpct'}) + ($l2->{'spellcastpct'}) + ($l3->{'spellcastpct'}) + ($l4->{'spellcastpct'}) + ($l5->{'spellcastpct'}) + 
+		($l6->{'spellcastpct'}) + ($l7->{'spellcastpct'}) + ($l8->{'spellcastpct'}) + ($l9->{'spellcastpct'}) + ($l10->{'spellcastpct'}));
+		$spelltimereusespellonly = (($l1->{'spelltimereusespellonly'}) + ($l2->{'spelltimereusespellonly'}) + ($l3->{'spelltimereusespellonly'}) + ($l4->{'spelltimereusespellonly'}) + ($l5->{'spelltimereusespellonly'}) + 
+		($l6->{'spelltimereusespellonly'}) + ($l7->{'spelltimereusespellonly'}) + ($l8->{'spelltimereusespellonly'}) + ($l9->{'spelltimereusespellonly'}) + ($l10->{'spelltimereusespellonly'}));
+		$all = (($l1->{'all'}) + ($l2->{'all'}) + ($l3->{'all'}) + ($l4->{'all'}) + ($l5->{'all'}) + 
+		($l6->{'all'}) + ($l7->{'all'}) + ($l8->{'all'}) + ($l9->{'all'}) + ($l10->{'all'}));
+		if ($attackspeed != 0) { $content .= "  +" . $attackspeed . "% Attack Speed<br>"; }
+		if ($dps != 0) { $content .= "  +" . $dps . " Damage Per Second<br>"; }
+		if ($doubleattackchance != 0) { $content .= "  +" . $doubleattackchance . "% Multi Attack Chance<br>"; }
+		if ($critbonus != 0) { $content .= "  +" . $critbonus . "% Crit Bonus<br>"; }
+		if ($spellweaponattackspeed != 0) { $content .= "  +" . $spellweaponattackspeed . "% Spell Weapon Attack Speed<br>"; }
+		if ($spellweapondps != 0) {	$content .= "  +" . $spellweapondps . " Spell Weapon Damage Per Second<br>"; }
+		if ($spellweapondoubleattackchance != 0) { $content .= "  +" . $spellweapondoubleattackchance . "% Spell Weapon Multi Attack Chance<br>"; }
+		if ($weapondamagebonus != 0) { $content .= "  +" . $weapondamagebonus . " Weapon Damage Bonus<br>"; }
+		if ($basemodifier != 0) { $content .= "  +" . $basemodifier . "% Potency<br>"; }
+		if ($maxhpperc != 0) { $content .= "  +" . $maxhpperc . "% Max Health<br>"; }
+		if ($armormitigationincrease != 0) { $content .= "  +" . $armormitigationincrease . "% Mitigation Increase<br>"; }
+		if ($strikethrough != 0) { $content .= "  +" . $strikethrough . "% Strikethrough<br>"; }
+		if ($spellcastpct != 0) { $content .= "  +" . $spellcastpct . "% Ability Casting Speed<br>"; }
+		if ($spelltimereusespellonly != 0) { $content .= "  +" . $spelltimereusespellonly . "% Spell Reuse Speed<br>"; }
+		if ($all !=0) { $content .= "  +" . $all . " Ability Modifier<br>"; }
+		return $content;
 		}
+		else { return ""; }
+		}
+				
+		protected function GreenAdorn($item)
+		{
+			$content = "";
+			$typeInfo = $item->{'typeinfo'};
+			$growth = $typeInfo->{'growthdescription'};
+			$growthinfo = $growth->{'growthdescription'};
+			if (array_key_exists('growth_table',$item)) { 
+			$content = "<div class='itemd_desc'>" . $growthinfo . "</div>"; }
+			else { $content = ""; }
+		return $content;
+		}	
 		
+		protected function Adornments($item)
+		{
+			$typeInfo = $item->{'typeinfo'};
+			$typecolor = $typeInfo->{'color'};
+			$typename = $typeInfo->{'name'};
+			if ($typeInfo->{'name'} == "adornment") {
+			//if ($typename = "adornment") {
+			# Item Level
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<br><div style='width: 80px; float: left; color: white;'>Level</div>";
+			$itemLevel = $item->{'leveltouse'};
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div>";
+			# Adornment Color
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Type</div>";
+			$content .= "<div style='width: 150px; float: left;' class='itemd_" . $typecolor . "'>" . ucfirst($typecolor) . " " . ucfirst($typename) . "</div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Slots</div>";
+			$content .= "<div style='width: 120px; float: left; color: white;'>";
+			$slotList = $typeInfo->{'slot_list'};
+			foreach ($slotList as $slot) {
+				$content .= " " . $slot->{'displayname'};
+			}
+			$content .= "</div><br>";
+			$content .= "<div class='ui-helper-clearfix'></div>";
+			$content .= "<br>";
+			# usable by which classes
+			$content .= "<div class='ui-helper-clearfix'></div>";
+			$content .= "<div class='itemd_green'>";
+			$usableByClasses = $this->GetUsableByClasses($typeInfo);
+			$content .= $usableByClasses;
+			$content .= "</div><br>";
+			}
+			else { $content = ""; }
+			return $content;
+		}
+	
 		protected function ItemIcon($item) 
 		{
 			$iconId = $item->{'iconid'};
 			return "<div class='itemd_icon'><img src='http://data.soe.com/img/eq2/icons/$iconId/item/'></div>";
 		}
-
+		
 		protected function ItemTier($item) 
 		{
 			$tierName = $item->{'tier'};
@@ -178,6 +311,9 @@ if(!class_exists('eq2_sony')) {
 			}
 			if ($tierName == "ETHEREAL") {
 				$tierColor = "#ff8C00";
+			}
+			if ($tierName == "MYTHICAL") {
+				$tierColor = "#d99fe9";
 			}
 			return "<div style='color: $tierColor;' class='itemd_tier'>$tierName</div>";
 		}
@@ -213,7 +349,7 @@ if(!class_exists('eq2_sony')) {
 				$type = $value->{'type'};
 				if ($type == "attribute") {
 					if ($count % 3 == 0) {
-						$content .= "<div class='itemd_green'>";
+						$content .= "<br><div class='itemd_green'>";
 					}
 					$content .= "+" . strtoupper($value->{'value'}) . " ";
 					$content .= $value->{'displayname'} . " &nbsp;";
@@ -269,6 +405,7 @@ if(!class_exists('eq2_sony')) {
 			}
 			return $content;
 		}
+		
 		protected function ItemModifyProperties($item)
 		{
 			$content = "";
@@ -291,6 +428,7 @@ if(!class_exists('eq2_sony')) {
 			}
 			return $content;
 		}
+		
 		protected function ItemAdornments($item)
 		{
 			$content = "";
@@ -338,7 +476,6 @@ if(!class_exists('eq2_sony')) {
 			   if ($className == "Bruiser") { $fighterCount++; $fighterList .= "Bruiser "; }
 			   if ($className == "Paladin") { $fighterCount++; $fighterList .= "Paladin "; }
 			   if ($className == "Shadowknight") { $fighterCount++; $fighterList .= "Shadowknight "; }
-
 			   # scouts
 			   if ($className == "Brigand") { $scoutCount++; $scoutList .= "Brigand "; }
 			   if ($className == "Swashbuckler") { $scoutCount++; $scoutList .= "Swashbuckler "; }
@@ -346,10 +483,8 @@ if(!class_exists('eq2_sony')) {
 			   if ($className == "Dirge") { $scoutCount++; $scoutList .= "Dirge "; }
 			   if ($className == "Assassin") { $scoutCount++; $scoutList .= "Assassin "; }
 			   if ($className == "Ranger") { $scoutCount++; $scoutList .= "Ranger "; }
-
 			   # beastlord
 			   if ($className == "Beastlord") { $scoutCount++; $scoutList .= "Beastlord "; }
-
 			   # mages
 			   if ($className == "Illusionist") { $mageCount++; $mageList .= "Illusionist "; }
 			   if ($className == "Coercer") { $mageCount++; $mageList .= "Coercer "; }
@@ -388,11 +523,12 @@ if(!class_exists('eq2_sony')) {
 		protected function ItemTypeWeapon($item)
 		{
 			$content = "";
+			$content .= "<div class='ui-helper-clearfix'></div>";
 			$typeInfo = $item->{'typeinfo'};
 			$content .= "<br/><div style='float: left; color: white;'>";
 			$wieldStyle = $typeInfo->{'wieldstyle'};
 			$skill = $typeInfo->{'skill'};
-			$content .= $wieldStyle . " " . ucfirst($skill);
+			$content .= ucfirst($wieldStyle) . " " . ucfirst($skill);
 			$content .= "</div>";
 			$content .= "<div class='ui-helper-clearfix'></div>";
 			$content .= "<div style='width: 80px; float: left; color: white;'>Slots</div>";
@@ -420,8 +556,10 @@ if(!class_exists('eq2_sony')) {
 			$content .= "<div style='width: 120px; float: left; color: white;'>";
 			$content .= sprintf ("%02.1f",$delay);
 			$content .= " seconds</div>";
-			$content .= "<div class='ui-helper-clearfix'</div><br/>";
+			$content .= "<div class='ui-helper-clearfix'></div>";
+			$content .= "<br/>";
 			# Item Level
+			$content .= "<div class='ui-helper-clearfix'></div>";
 			$content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
 			$itemLevel = $item->{'leveltouse'};
 			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div>";
@@ -440,33 +578,37 @@ if(!class_exists('eq2_sony')) {
 			$content .= "<div class='ui-helper-clearfix'></div>";
 			$mitigation = $typeInfo->{'maxarmorclass'};
 			if ($mitigation == $null) {
-				$content .= "<div style='width: 80px; float: left;'>Slots</div>";
+				$content .= "<br>";
+				$content .= "<div style='width: 80px; float: left; color: white;'>Slots</div>";
 				$slotList = $item->{'slot_list'};
 				foreach ($slotList as $slot) {
-					$content .= " " . $slot->{'name'};
+					$content .= "<div style='color: white;'> " . $slot->{'name'};
 				}
 			} else {
-				$content .= "<div style='width: 150px; float: left; color: white;'>";
+				$content .= "<br>";
+				$content .= "<div style='width: 160px; float: left; color: white;'>";
 				$knowledgeDesc = $typeInfo->{"knowledgedesc"};
-				$content .= $knowledgeDesc . "( ";
+				$content .= $knowledgeDesc . " (";
 				$slotList = $item->{'slot_list'};
 				foreach ($slotList as $slot) {
-					$content .= " " . $slot->{'name'};
+					$content .= "" . $slot->{'name'};
 				}
 				$content .= ")";
 				$content .= "</div>";
 			}
-			#print "<div class=\"ui-helper-clearfix\"></div>";
+			$content .= "<div class=\"ui-helper-clearfix\"></div>";
 			# Mitigation
 			if ($mitigation != $null) {
-				$content .= "<br/><div style='width: 80px; float: left; color: white;'>Mitigation</div>";
+				$content .= "<div style='width: 80px; float: left; color: white;'>Mitigation</div>";
 				$content .= "<div style='width: 150px; float: left; color: white; '>$mitigation</div>";
+				$content .= "<div class='ui-helper-clearfix'</div>";
 			}
 			# Item Level
-			$content .= "<br/><div style='width: 80px; float: left; color: white;'>Level</div>";
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
 			$itemLevel = $item->{'leveltouse'};
-			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br/>";
-			#
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br>";
 			$content .= "<div class='itemd_green'>";
 			$usableByClasses = $this->GetUsableByClasses($typeInfo);
 			$content .= $usableByClasses;
@@ -483,7 +625,6 @@ if(!class_exists('eq2_sony')) {
 			if ($typeInfo->{'name'} == "armor") {
 				return $this->ItemTypeArmor($item);
 			}
-
 		}
 
 		protected function ItemEffects($item) 
@@ -545,14 +686,17 @@ if(!class_exists('eq2_sony')) {
 			}
 			return $content;
 		}
-
+		
 		protected function GenerateItemStatsHTML($myItem) {
 			$content = $this->OuterDivNoHide($myItem);
 			$content .= $this->DisplayName($myItem);
-			$content .= $this->ItemDescription($myItem);
 			$content .= $this->ItemIcon($myItem);
+			$content .= $this->ItemDescription($myItem);
+			$content .= $this->GreenAdorn($myItem);
 			$content .= $this->ItemTier($myItem);
 			$content .= $this->ItemFlags($myItem);
+			$content .= $this->GreenAdornMax($myItem);
+			$content .= $this->Adornments($myItem);
 			$content .= $this->ItemAttributes($myItem);
 			$content .= $this->ItemResists($myItem);
 			$content .= $this->ItemSkillMod($myItem);
