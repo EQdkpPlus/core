@@ -58,7 +58,7 @@ CREATE TABLE `__users` (
 	`msn` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`irq` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`gender` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`birthday` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`birthday` BIGINT(10) NULL DEFAULT '0',
 	`privacy_settings` text COLLATE utf8_bin,
 	`rules` tinyint(3) unsigned DEFAULT '0',
 	`auth_account` text COLLATE utf8_bin,

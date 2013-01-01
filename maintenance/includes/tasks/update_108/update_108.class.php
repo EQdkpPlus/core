@@ -54,13 +54,15 @@ class update_108 extends sql_update_task {
 			if(strpos($row['birthday'], '.') !== false) {
 				list($d,$m,$y) = explode('.', $row['birthday']);
 				$update[$row['user_id']] = $this->time->mktime(0,0,0,$m,$d,$y);
+			} elseif(empty($row['birthday'])) {
+				$update[$row['user_id']] = 0;
 			}
 		}
 		foreach($update as $user_id => $birthday) {
 			$sql = "UPDATE __users SET birthday = '".$birthday."' WHERE user_id = '".$user_id."';";
 			$this->db->query($sql);
 		}
-		if(!$this->db->query("ALTER TABLE `__users`CHANGE COLUMN `birthday` `birthday` BIGINT(11) NULL DEFAULT NULL;")) return false;
+		if(!$this->db->query("ALTER TABLE `__users`CHANGE COLUMN `birthday` `birthday` BIGINT(11) NULL DEFAULT '0';")) return false;
 		return true;
 	}
 }

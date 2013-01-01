@@ -175,7 +175,13 @@ if (!class_exists("timehandler")){
 		* @return Timestamp
 		*/
 		public function mktime($hour='0', $min='0', $sec='0', $month='0', $day='0', $year='0'){
-			return  $this->gen_time((($year>0) ? $year : '0').'-'.(($month>0) ? $month : '0').'-'.(($day>0) ? $day : '0').' '.(($hour>0) ? $hour : '0').':'.(($min>0) ? $min : '0').':'.(($sec>0) ? $sec : '0'));
+			$hour = ($hour>0) ? (int) $hour : 0;
+			$min = ($min>0) ? (int) $min : 0;
+			$sec = ($sec>0) ? (int) $sec : 0;
+			$month = ($month>0) ? (int) $month : 0;
+			$day = ($day>0) ? (int) $day : 0;
+			$year = ($year>0) ? (int) $year : 0;
+			return  $this->gen_time($year.'-'.$month.'-'.$day.' '.$hour.':'.$min.':'.$sec);
 		}
 		
 		/**
