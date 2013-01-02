@@ -442,7 +442,7 @@ if (!class_exists("html")) {
 				);
 			}
 			foreach ($list as $key => $value) {
-				$selected_choice = ($key === $selected) ? 'checked="checked"' : '';
+				$selected_choice = ((string)$key == (string)$selected) ? 'checked="checked"' : '';
 				$radiobox .='<label><input type="radio" name="'.$name.'" value="'.$key.'" '.$selected_choice.' class="'.$class.'"/>'.$value.'</label>&nbsp;';
 			}
 			return $radiobox;
