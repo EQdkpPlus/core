@@ -422,17 +422,6 @@ CREATE TABLE `__plugins` (
 	PRIMARY KEY (`code`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
-DROP TABLE IF EXISTS __itemIDs;
-CREATE TABLE `__itemIDs` (
-	`itemID_id` int(11) NOT NULL AUTO_INCREMENT,
-	`itemID_blizID` int(11) NOT NULL,
-	`itemID_displayID` int(11) NOT NULL,
-	`itemID_armorySlotID` int(11) NOT NULL,
-	`itemID_wowheadSlotID` int(11) NOT NULL,
-	PRIMARY KEY (`itemID_id`)
-)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 # --------------------------------------------------------
 ### Portal
 
