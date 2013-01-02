@@ -57,7 +57,7 @@ class inst_settings extends install_generic {
 		'session_cleanup'				=> '0',
 		'session_last_cleanup'			=> '0',
 		'enable_gzip'					=> '0',
-		'account_activation'			=> '1',
+		'account_activation'			=> 1,
 		'default_style_overwrite'		=> '0',
 		'enable_newscategories'			=> '0',
 		'upload_allowed_extensions'		=> 'zip,rar,jpg,bmp,gif,png',
