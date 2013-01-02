@@ -609,7 +609,7 @@ if(!class_exists('eq2_sony')) {
 			$itemLevel = $item->{'leveltouse'};
 			$content .= "<div class='ui-helper-clearfix'</div>";
 			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br>";
-			$content .= "<div class='itemd_green'>";
+			$content .= "<br><div class='itemd_green'>";
 			$usableByClasses = $this->GetUsableByClasses($typeInfo);
 			$content .= $usableByClasses;
 			$content .= "</div>";
