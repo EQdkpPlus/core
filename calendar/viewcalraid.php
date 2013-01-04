@@ -455,6 +455,7 @@ class viewcalraid extends page_generic {
 			$this->tpl->add_js('var unsigned_attendees = '.$attendee_json);
 		}
 
+		$status_first = true;
 		foreach($this->raidstatus as $statuskey=>$statusname){
 			$this->jquery->Collapse('#viewraidcal_colapse_'.$statuskey);
 			$statuscount	= (isset($this->attendees_count[$statuskey])) ? count($this->attendees_count[$statuskey]) : 0;
@@ -465,6 +466,7 @@ class viewcalraid extends page_generic {
 			}
 			
 			$this->tpl->assign_block_vars('raidstatus', array(
+				'FIRSTROW'	=> ($status_first) ? true : false,
 				'ID'		=> $statuskey,
 				'NAME'		=> $statusname,
 				'COUNT'		=> $statuscount,
@@ -571,6 +573,7 @@ class viewcalraid extends page_generic {
 					}
 				}
 			}
+			$status_first = false;
 		}
 
 		// raid guests
