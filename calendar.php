@@ -318,7 +318,7 @@ class viewcalendar extends page_generic {
 		$settings = $this->pdh->get_page_settings('calendar', 'hptt_calendar_raidlist');
 		$view_list = $this->pdh->get('calendar_events', 'id_list', array(true));
 
-		$hptt = $this->get_hptt($settings, $view_list, $view_list, array('%user_id%' => $this->user->data['user_id']));
+		$hptt = $this->get_hptt($settings, $view_list, $view_list, array('%user_id%' => $this->user->data['user_id']), $this->user->id);
 
 		// Raid List
 		$presel_charid = $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']));
