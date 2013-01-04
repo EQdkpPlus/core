@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class import06 extends task {
 	public static function __shortcuts() {
-		$shortcuts = array('db', 'in', 'pdl', 'user', 'config', 'encrypt');
+		$shortcuts = array('db', 'in', 'pdl', 'user', 'config', 'encrypt', 'time');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -349,6 +349,9 @@ class import06 extends task {
 							$users[$row['user_id']][$field] = serialize($priv);
 						} elseif($field == 'user_email'){
 							$users[$row['user_id']][$field] = $this->encrypt->encrypt($value);
+						} elseif($field == 'birthday') {
+							list($d,$m,$y) = explode('.', $row['birthday']);
+							$users[$row['user_id']][$field] = $this->time->mktime(0,0,0,$m,$d,$y);
 						} elseif($field != 'user_newpassword') {
 							$users[$row['user_id']][$field] = isset($value) ? $value : NULL;
 						}
