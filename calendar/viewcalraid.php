@@ -455,6 +455,7 @@ class viewcalraid extends page_generic {
 			$this->tpl->add_js('var unsigned_attendees = '.$attendee_json);
 		}
 
+		$status_first = true;
 		foreach($this->raidstatus as $statuskey=>$statusname){
 			$this->jquery->Collapse('#viewraidcal_colapse_'.$statuskey);
 			$statuscount	= (isset($this->attendees_count[$statuskey])) ? count($this->attendees_count[$statuskey]) : 0;
@@ -465,6 +466,7 @@ class viewcalraid extends page_generic {
 			}
 			
 			$this->tpl->assign_block_vars('raidstatus', array(
+				'FIRSTROW'	=> ($status_first) ? true : false,
 				'ID'		=> $statuskey,
 				'NAME'		=> $statusname,
 				'COUNT'		=> $statuscount,
@@ -571,6 +573,7 @@ class viewcalraid extends page_generic {
 					}
 				}
 			}
+			$status_first = false;
 		}
 
 		// raid guests
@@ -687,10 +690,9 @@ class viewcalraid extends page_generic {
 			'RAID_DEADLINE'			=> ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->mystatus['member_id'] > 0 && $mysignedstatus != 4 && $eventdata['timestamp_end'] > $this->time->time)) ? false : true,
 
 			// globals
-			'ENABLE_COMMENTS'		=> ($this->config->get('pk_enable_comments')) ? true : false,
 			'NO_STATUSES'			=> (is_array($raidcal_status) && count($raidcal_status) < 1) ? true : false,
 			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
-			'COMMENTS'				=> $this->comments->Show(),
+			'COMMENTS'				=> ($this->config->get('pk_enable_comments') == 1) ? $this->comments->Show() : '',
 			'EVENT_ID'				=> $this->url_id,
 			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
 

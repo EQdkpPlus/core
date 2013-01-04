@@ -118,7 +118,6 @@ class pages extends page_generic {
 				'auth'		=> 'a_pages_man',
 			));
 			$this->tpl->assign_vars(array(
-				'ENABLE_COMMENTS'	=> true,
 				'COMMENTS'			=> $this->comments->Show(),
 			));
 		};
