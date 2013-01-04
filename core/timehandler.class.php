@@ -446,8 +446,10 @@ if (!class_exists("timehandler")){
 
 				$timezone_data = DateTimeZone::listIdentifiers(1022);
 				$timezone_ab = DateTimeZone::listAbbreviations();
-
-				foreach($timezone_ab as $more_data) {
+				
+				$london = new DateTimeZone('Europe/London');
+				$london_dt = new DateTime('now', $london);
+				foreach($timezone_ab as $key => $more_data) {
 					foreach($more_data as $tz) {
 						$value = $tz['timezone_id'];
 						if(!in_array($value, $timezone_data) || $tz['dst']) continue;
@@ -455,7 +457,9 @@ if (!class_exists("timehandler")){
 						$continent = substr($value, 0, $slash);
 						$region = substr($value, $slash+1);
 						$tzlist[$continent][] = $value;
-						$tzdata[$value] = 'GMT '.trim(self::formatOffset($tz['offset']));
+						$current_tz = new DateTimeZone($value);
+						$offset = $current_tz->getOffset($london_dt);
+						$tzdata[$value] = 'GMT '.trim(self::formatOffset($offset));
 					}
 				}
 				ksort($tzlist);
