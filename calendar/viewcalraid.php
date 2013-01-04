@@ -690,10 +690,9 @@ class viewcalraid extends page_generic {
 			'RAID_DEADLINE'			=> ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->mystatus['member_id'] > 0 && $mysignedstatus != 4 && $eventdata['timestamp_end'] > $this->time->time)) ? false : true,
 
 			// globals
-			'ENABLE_COMMENTS'		=> ($this->config->get('pk_enable_comments')) ? true : false,
 			'NO_STATUSES'			=> (is_array($raidcal_status) && count($raidcal_status) < 1) ? true : false,
 			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
-			'COMMENTS'				=> $this->comments->Show(),
+			'COMMENTS'				=> ($this->config->get('pk_enable_comments') == 1) ? $this->comments->Show() : '',
 			'EVENT_ID'				=> $this->url_id,
 			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
 
