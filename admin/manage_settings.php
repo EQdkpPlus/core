@@ -554,7 +554,15 @@ class mmocms_settings extends page_generic {
 					'default_style_overwrite'	=> array(
 						'fieldtype'		=> 'checkbox',
 						'name'			=> 'default_style_overwrite',
-					)
+					),
+					'special_user'	=> array(
+						'fieldtype'		=> 'jq_multiselect',
+						'name'			=> 'special_user',
+						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))),
+						'serialized'	=> true,
+						'datatype'		=> 'int',
+						'no_lang'		=> true
+					),
 				)
 			),
 			'chars'		=> array(
