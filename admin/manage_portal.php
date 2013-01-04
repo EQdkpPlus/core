@@ -83,6 +83,7 @@ class Manage_Portal extends page_generic {
 						'field'=> $ccfield,
 						'help' => (isset($confvars['help'])) ? $this->user->lang($confvars['help'], false, false) : '',
 						'type' => $options['type'],
+						'change' => (isset($options['change'])) ? true : false,
 					);
 				}
 			}

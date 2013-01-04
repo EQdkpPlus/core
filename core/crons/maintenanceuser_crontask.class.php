@@ -36,6 +36,10 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 				$this->db->query("DELETE FROM __users WHERE user_id = '".$this->db->escape($muser['user_id'])."'");
 
 				$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
+				
+				$special_users = unserialize(stripslashes($this->config->get('special_user')));
+				unset($special_users[$muser['user_id']]);
+				$this->config->set('special_user', serialize($special_users));
 			}
 			$this->config->set('maintenance_user', '');
 		}

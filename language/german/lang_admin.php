@@ -16,7 +16,7 @@ if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-$alang = array( 
+$lang = array( 
 "php_warning" => "Die PHP-Version auf diesem Server wird von künftigen EQdkp Plus-Versionen nicht mehr unterstützt. Du solltest möglichst bald die PHP-Version mindestens auf ".VERSION_PHP_REC." aktualisieren. Solltest du das nicht selber durchführen können, kontaktiere deinen Hoster.",
 "manitempool_title" => "Itempool verwalten",
 "addevent_title" => "Ereignis zufügen",
@@ -1074,6 +1074,8 @@ $alang = array(
 "pk_class_color_help" => "Wenn aktiviert, werden die Spieler in den Farben ihrer Klassen und mit ihrem Klassenicon dargestellt.",
 "special_members" => "Besondere Charaktere",
 "special_members_help" => "Besondere Charaktere sind z.B. 'bank' oder 'disenchanted'. Sie werden z.B. auf der Punktestandsliste nicht angezeigt.",
+"special_user" => "Besondere Benutzer",
+"special_user_help" => "Besondere Benutzer sind z.B. 'Wartungsbenutzer'. Sie werden z.B. auf der Benutzerliste nicht angezeigt.",
 "pk_detail_twink" => "Detaillierte Informationen zu Twinks",
 "pk_detail_twink_help" => "Wenn aktiviert, kann auf der Punktestandsseite zu jedem einzelnen Charakter eine Liste ausgeklappt werden, in der seine Twinks aufgelistet stehen mit den zugehörigen Werten.",
 "hide_inactive" => "Inaktive Charaktere verstecken",
@@ -1505,7 +1507,5 @@ $alang = array(
 "thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',
 "thumbnail_defaultsize_help" => 'Trage hier die Breite (in Pixeln) der Vorschaubilder für große Bilder ein',
  );
-$lang = (is_array($lang))? $lang : array();
-$lang = array_merge($lang, $alang);
 
 ?>

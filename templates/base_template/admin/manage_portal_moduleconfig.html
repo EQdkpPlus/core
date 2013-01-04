@@ -36,6 +36,9 @@ function load_settings(){
 		  if (value.field.indexOf("multiple='multiple'") != -1){
 				create_multiselect(index);
 			}
+			if (value.type== 'spinner'){
+				create_spinner(index);
+			}
 		});
 	  }
 	  if (data.changed){
@@ -46,6 +49,10 @@ function load_settings(){
 		  );
 		  if (value.field.indexOf("multiple='multiple'") != -1){
 				create_multiselect(index);
+			}
+			if (value.type== 'spinner'){
+				var change = (value.change) ? true : false;
+				create_spinner(index, change);
 			}
 		});
 	  }
@@ -59,5 +66,12 @@ function load_settings(){
 
 function create_multiselect(name){
 	$("#"+name).multiselect({height: 200,minWidth: 200,checkAllText: "{L_cl_ms_checkall}",uncheckAllText: "{L_cl_ms_uncheckall}",noneSelectedText: "{L_cl_ms_noneselected}",selectedList: 5,selectedText: "{L_cl_ms_selection}",multiple: true,});
+}
+function create_spinner(name, change){
+	if (change){
+		$("#"+name).spinner({change: function( event, ui ) {load_settings();}});
+	} else {
+		$("#"+name).spinner();
+	}
 }
 </script>

@@ -21,7 +21,7 @@ if (!defined('EQDKP_INC')) {
 //File: lang_admin
 //Source-Language: german07
 
-$alang = array(
+$lang = array(
 "php_warning" => "The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version ".VERSION_PHP_REC.". For any questions about updating your php version, please contact your hoster.",
 "manitempool_title" => "Itempool Management",
 "addevent_title" => "Add an event",
@@ -1067,6 +1067,8 @@ $alang = array(
 "pk_class_color_help" => "If activated, all characters are displayed in the color of their class and a class-icon is shown next to their name.",
 "special_members" => "Special characters",
 "special_members_help" => "Special characters are 'bank' or 'disenchanted'. They are not shown on e.g. the points list.",
+"special_user" => "Special users",
+"special_user_help" => "Special user are user like the maintenance user. They are not shown on e.g. the userlist.",
 "pk_detail_twink" => "Detailed twink information",
 "pk_detail_twink_help" => "If activated, you can view a list of Twinks with their corresponding points for each character on the standings page.",
 "hide_inactive" => "Hide Inactive characters",
@@ -1499,6 +1501,4 @@ $alang = array(
 "pk_meta_description" => "Meta-Description",
 "pk_meta_description_help" => "Description used for search engine optimazation.",
  );
-$lang = (is_array($lang))? $lang : array();
-$lang = array_merge($lang, $alang);
 ?>
