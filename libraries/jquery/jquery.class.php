@@ -400,6 +400,7 @@ if (!class_exists("jquery")) {
 			if(isset($options['value'])){ $tmpopt[] = 'value: '.$options['value'];}
 			if(isset($options['numberformat'])){ $tmpopt[] = 'numberformat: '.$options['numberformat'];}
 			if(isset($options['incremental'])){ $tmpopt[] = 'incremental: true';}
+			if(isset($options['change'])) { $tmpopt[] = 'change: function( event, ui ) {'.$options['change'].'}';}
 			$selector = (isset($options['multiselector'])) ? '' : '#';
 			$this->tpl->add_js('$("'.$selector.$id.'").spinner('.$this->gen_options($tmpopt).');', 'docready');
 		}
