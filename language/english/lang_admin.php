@@ -21,7 +21,7 @@ if (!defined('EQDKP_INC')) {
 //File: lang_admin
 //Source-Language: german07
 
-$alang = array(
+$lang = array(
 "php_warning" => "The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version ".VERSION_PHP_REC.". For any questions about updating your php version, please contact your hoster.",
 "manitempool_title" => "Itempool Management",
 "addevent_title" => "Add an event",
@@ -1501,6 +1501,4 @@ $alang = array(
 "pk_meta_description" => "Meta-Description",
 "pk_meta_description_help" => "Description used for search engine optimazation.",
  );
-$lang = (is_array($lang))? $lang : array();
-$lang = array_merge($lang, $alang);
 ?>

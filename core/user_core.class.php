@@ -251,14 +251,28 @@ class user_core extends gen_class {
 		if(!$lang_name) return false;
 		if(isset($this->lang[$lang_name])) return true;
 		$file_path = $this->root_path . 'language/' . $lang_name . '/';
+		$tmp_lang = array();
 		include($file_path . 'lang_main.php');
+		if (is_array($lang)) {
+			$tmp_lang = array_merge($tmp_lang, $lang);
+			unset($lang);
+		}
 		if (defined('IN_ADMIN') || $this->config->get('pk_debug') >= 4) {
 			include($file_path . 'lang_admin.php');
+			if (is_array($lang)) {
+				$tmp_lang = array_merge($tmp_lang, $lang);
+				unset($lang);
+			}
 		}
 		if (defined('MAINTENANCE_MODE')) {
 			include($file_path . 'lang_mmode.php');
+			if (is_array($lang)) {
+				$tmp_lang = array_merge($tmp_lang, $lang);
+				unset($lang);
+			}
 		}
-		$this->lang[$lang_name] = &$lang;
+		
+		$this->lang[$lang_name] = &$tmp_lang;
 		if($this->lang_name == $lang_name && !$this->lite_mode) $this->init_unused_lang($lang_name);
 	}
 
