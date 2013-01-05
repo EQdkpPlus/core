@@ -253,6 +253,14 @@ if (!class_exists("html")) {
 					$imgvalue		= (isset($options['value'])) ? $options['value'] : '';
 					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('imageupl_'.$this->cleanid($options['name']), $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
 				break;
+				
+				case 'filetree':
+					$ccfield = '<div class="filetree"'.((isset($options['style'])) ? $options['style'] : '').'>'.register('uploader')->file_tree($options['dir'], '', $options['extensions'], true, ((isset($options['onlydir'])) ? $options['onlydir'] : false), false, ((isset($options['checkboxes'])) ? $options['checkboxes'] : false), ((isset($options['radio'])) ? $options['name'] : false), $options['selected']).'</div>';
+				break;
+				
+				case 'fileupload':
+					$ccfield = '<input type="file" name="'.$options['name'].'" id="'.$options['name'].'" class="input"/>';
+				break;
 
 				default: $ccfield = '';
 			}
@@ -314,7 +322,21 @@ if (!class_exists("html")) {
 					}
 				
 				case 'imageuploader':
-					return $this->jquery->MoveUploadedImage($this->in->get($options['name'], ''), $options['imgpath']);			
+					return $this->jquery->MoveUploadedImage($this->in->get($options['name'], ''), $options['imgpath']);
+				case 'filetree':
+					if (isset($options['checkbox']) && $options['checkbox']){
+						$in_array = $this->in->getArray('files', 'string');
+						if (is_array($in_array)){
+							return serialize($in_array);
+						} else {
+							return array();
+						}
+					} elseif(isset($options['radio']) && $options['radio']){
+						return $this->in->get($options['name'],'');
+					}
+					return false;
+				case 'fileupload':
+					return register('uploader')->upload_mime($options['name'], $options['folder'], $options['mimetypes'], $options['extensions']);
 			}
 		}
 
