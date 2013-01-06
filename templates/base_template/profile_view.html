@@ -4,7 +4,7 @@
 	<div class="charlevel">{L_level} {DATA_LEVEL}, {DATA_CLASSNAME} ({DATA_RACENAME})</div>
 	<div class="charguild">{DATA_GUILDTAG}</div>
 </div>
-
+<!-- IF S_PFIELDS -->
 <div class="profile_information">
 	<fieldset class="settings mediumsettings">
 		<!-- BEGIN pfield_data -->
@@ -15,6 +15,17 @@
 		<!-- END pfield_data -->
 	</fieldset>
 </div>
+<!-- ENDIF -->
+
+<!-- IF MEMBER_POINTS -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
+	<tr>
+		<th align="center" colspan="9">{L_DKP_NAME}</th>
+	</tr>
+	{MEMBER_POINTS}
+</table>
+<br />
+<!-- ENDIF -->
 
 <div id='profile_information'>
 	<ul>

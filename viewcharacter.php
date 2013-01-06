@@ -146,6 +146,9 @@ class viewcharacters extends page_generic {
 						));
 					}
 				}
+				$this->tpl->assign_var('S_PFIELDS', true);
+			} else {
+				$this->tpl->assign_var('S_PFIELDS', false);
 			}
 		}else{
 			$pfields	= $this->pdh->get('profile_fields', 'fields');
