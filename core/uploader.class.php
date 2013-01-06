@@ -24,11 +24,76 @@ class uploader extends gen_class {
 	public static $shortcuts = array('core', 'pfh', 'in', 'tpl', 'config');
 
 	private $added_js = false;
+	
+	public function upload_mime($strFieldname, $strFolder, $arrMimetypes, $arrExtensions){
+		$tempname		= $_FILES[$strFieldname]['tmp_name'];
+		$filename		= $_FILES[$strFieldname]['name'];
+		$filetype		= $_FILES[$strFieldname]['type'];
+		if ($tempname == '') return false;
+		
+		
+		// get the mine....
+		$fileEnding		= pathinfo($filename, PATHINFO_EXTENSION);
+		$mime = false;
+		if(function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')){
+			$finfo			= finfo_open(FILEINFO_MIME);
+			$mime			= finfo_file($finfo, $tempname);
+			finfo_close($finfo);
+		}elseif(function_exists('mime_content_type')){
+			$mime			= mime_content_type( $tempname );
+		}else{
+			// try to get the extension... not really secure...
+			
+			if (in_array($fileEnding, $arrExtensions)) {
+				$mime			= $arrMimetypes[0];
+			}
+		}
+		
+		$mime = array_shift(preg_split('/[; ]/', $mime));
+
+		if (in_array($mime, $arrMimetypes)){
+			//Do no overwrite existing files
+			$offset = 0;
+			$files = array();
+			$file = scandir($this->pfh->FolderPath('files/'.$strFolder, 'eqdkp'));
+			foreach($file as $this_file) {
+				if( valid_folder($this_file) && !is_dir($this_file)) {
+					$files[] = $this_file;
+				}
+			}
+
+			$pathinfo = pathinfo($filename);
+			$name = $pathinfo['filename'];
+
+			$arrFiles = preg_grep('/^' . preg_quote($name, '/') . '.*\.' . preg_quote($fileEnding, '/') . '/', $files);
+
+			foreach ($arrFiles as $strFile){
+				if (preg_match('/_[0-9]+\.' . preg_quote($pathinfo['extension'], '/') . '$/', $strFile)){
+					$strFile = str_replace('.' . $pathinfo['extension'], '', $strFile);
+					$intValue = intval(substr($strFile, (strrpos($strFile, '_') + 1)));
+					$offset = max($offset, $intValue);
+				}
+			}
+
+			$filename = str_replace($name, $name . '_' . ++$offset, $filename);
+			$strFolder = ($strFolder == '/') ? '' : $strFolder;
+				
+			if (isFilelinkInFolder($this->pfh->FolderPath('files/'.$strFolder, 'eqdkp', true), $this->pfh->FolderPath('files','eqdkp', true))) {
+				$this->pfh->FileMove($tempname, $this->pfh->FolderPath('files/'.$strFolder, 'eqdkp').$filename, true);
+			} else {
+				unlink($tempname);
+			}
+
+			return $filename;
+		}
+		
+		return false;
+	}
 
 	public function upload($fieldname, $folder) {
 		$filename = $_FILES[$fieldname]['name'];
 		if ($filename) {
-			$extension = substr($filename, strrpos($filename, ".") + 1);
+			$extension = pathinfo($filename, PATHINFO_EXTENSION);
 
 			//Extension-Check
 			$allowed_extensions = preg_split('/, */', strtolower($this->config->get('upload_allowed_extensions')));
@@ -62,7 +127,6 @@ class uploader extends gen_class {
 				$folder = ($folder == '/') ? '' : $folder;
 				
 				if (isFilelinkInFolder($this->pfh->FolderPath('files/'.$folder, 'eqdkp', true), $this->pfh->FolderPath('files','eqdkp', true))) {
-					echo "true";
 					$this->pfh->FileMove($_FILES[$fieldname]['tmp_name'], $this->pfh->FolderPath('files/'.$folder, 'eqdkp').$filename, true);
 				} else {
 					unlink($_FILES[$fieldname]['tmp_name']);
@@ -107,13 +171,12 @@ class uploader extends gen_class {
 		}
 	}
 
-	public function file_tree($directory, $return_link = '', $extensions = array(), $first_call = true, $only_dir = false, $dd = false, $checkboxes = false) {
-
-
+	public function file_tree($directory, $return_link = '', $extensions = array(), $first_call = true, $only_dir = false, $dd = false, $checkboxes = false, $radiobox = false, $selected = array()) {
+		if (!is_array($selected)) $selected = array($selected);
 		// Get and sort directories/files
 		$file = scandir($directory);
 		natcasesort($file);
-
+		
 		// Make directories first
 		$files = $dirs = array();
 		foreach($file as $this_file) {
@@ -145,11 +208,11 @@ class uploader extends gen_class {
 				if( $this_file != "." && $this_file != ".." ) {
 					if( is_dir("$directory/$this_file") ) {
 						// Directory
-						$php_file_tree .= "<li class=\"pft-directory\">".(($checkboxes) ? "<input type=\"checkbox\" name=\"files[]\" value=\"".$directory."/".$this_file."\"> " : '')."<a href=\"#\">" . sanitize($this_file) . "</a>";
-						$php_file_tree .= $this->file_tree("$directory/$this_file", $return_link ,$extensions, false, $only_dir, $dd, $checkboxes);
+						$php_file_tree .= "<li class=\"pft-directory\">".(($checkboxes) ? "<input type=\"checkbox\" name=\"files[]\" value=\"".str_replace("//", "/", $directory."/".$this_file)."\"> " : '')."<a href=\"javascript:void();\">" . sanitize($this_file) . "</a>";
+						$php_file_tree .= $this->file_tree("$directory/$this_file", $return_link ,$extensions, false, $only_dir, $dd, $checkboxes, $radiobox, $selected);
 						$php_file_tree .= "</li>";
 						$dd_data["$directory/$this_file"] = $this_file;
-						$bla = $this->file_tree("$directory/$this_file", $return_link ,$extensions, false, $only_dir, $dd);
+						$bla = $this->file_tree(str_replace("//", "/", $directory."/".$this_file), $return_link ,$extensions, false, $only_dir, $dd, $checkboxes, $radiobox, $selected);
 
 						if (is_array($bla)){
 							foreach ($bla as $key => $value){
@@ -162,7 +225,7 @@ class uploader extends gen_class {
 						// Get extension (prepend 'ext-' to prevent invalid classes from extensions that begin with numbers)
 						$ext = "ext-" . substr($this_file, strrpos($this_file, ".") + 1); 
 						$link = str_replace("[link]", "$directory/" . urlencode($this_file), $return_link);
-						$php_file_tree .= "<li class=\"pft-file " . strtolower($ext) . "\">".(($checkboxes) ? '<input type="checkbox" name="files[]" value="'.$directory.'/'.$this_file.'"> ': '')."<a href=\"$link\">" . sanitize($this_file) . "</a></li>";
+						$php_file_tree .= "<li class=\"pft-file " . strtolower($ext) . "\">".(($checkboxes) ? '<input type="checkbox" name="files[]" value="'.str_replace("//", "/", $directory."/".$this_file).'"> ': '').(($radiobox) ? "<input type=\"radio\" name=\"".$radiobox."\" value=\"".str_replace("//", "/", $directory."/".$this_file)."\"".((in_array(str_replace("//", "/", $directory."/".$this_file), $selected)) ? ' checked="checked"' : '')."> " : '')."<a href=\"$link\">" . sanitize($this_file) . "</a></li>";
 					}
 				}
 			}

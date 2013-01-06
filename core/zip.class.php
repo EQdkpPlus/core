@@ -60,7 +60,8 @@ if (!class_exists("zip")) {
 					if ($strAddPath && strlen($strAddPath)){
 						$localfilename = $strAddPath.$localfilename;
 					}
-					$this->files[$localfilename] = $file;
+					$this->files['add'][$localfilename] = $file;
+					if (isset($this->files['delete'][$localfilename])) unset($this->files['delete'][$localfilename]);
 				}
 
 			} elseif (strlen($mixFiles)) {	
@@ -87,7 +88,8 @@ if (!class_exists("zip")) {
 						if ($strAddPath && strlen($strAddPath)){
 							$localfilename = $strAddPath.$localfilename;
 						}
-						$this->files[$localfilename] = $Entry;
+						$this->files['add'][$localfilename] = $Entry;
+						if (isset($this->files['delete'][$localfilename])) unset($this->files['delete'][$localfilename]);
 					}
 					
 				} else {
@@ -99,7 +101,8 @@ if (!class_exists("zip")) {
 					if ($strAddPath && strlen($strAddPath)){
 						$localfilename = $strAddPath.$localfilename;
 					}
-					$this->files[$localfilename] = $mixFiles;
+					$this->files['add'][$localfilename] = $mixFiles;
+					if (isset($this->files['delete'][$localfilename])) unset($this->files['delete'][$localfilename]);
 				}
 			} else {
 				return false;
@@ -113,14 +116,16 @@ if (!class_exists("zip")) {
 			if (substr($strPath, -1) == '/'){
 				foreach($this->files as $key => $value){
 					if (strpos($key, $strPath) === 0){
-						unset($this->files[$key]);
+						unset($this->files['add'][$key]);
+						$this->files['delete'][$key] = $key;
 					}
 				}
 				
 			} else {
 				//File
-				if (isset($this->files[$strPath])){
-					unset($this->files[$strPath]);
+				if (isset($this->files['add'][$strPath])){
+					unset($this->files['add'][$strPath]);
+					$this->files['delete'][$strPath] = $strPath;
 					return true;
 				}
 				return false;
@@ -132,20 +137,54 @@ if (!class_exists("zip")) {
 		
 		//Call create, when you have finished adding and deleting files. Archive will be created in tmp-Folder and moved to the right folder
 		public function create(){
-			$strTempArchiv = $this->pfh->FilePath(md5(uniqid().rand()).'.zip', 'tmp');
-
-			$blnOpen = $this->objZip->open($strTempArchiv, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
-			if ($blnOpen){
-				foreach ($this->files as $key => $value){
-					$blnResult = $this->objZip->addFile($value, $key);
-					if (!$blnResult) return false;
+			//existing archive
+			if ($this->objZip && $this->objZip->numFiles > 0){
+				$tmpExisting = $this->pfh->FilePath(md5(uniqid().rand()).'.zip', 'tmp');
+				//Move archive to temp folder
+				$this->pfh->copy($this->zipfile, $tmpExisting);
+				
+				
+				//open existing zip
+				$objZip = new ZipArchive;
+				$resZip = $objZip->open($tmpExisting);
+				if ($resZip){
+					if (is_array($this->files['add'])){
+						foreach ($this->files['add'] as $key => $value){
+							$blnResult = $objZip->addFile($value, $key);
+							if (!$blnResult) return false;
+						}
+					}
+					if (is_array($this->files['delete'])){
+						foreach ($this->files['delete'] as $key => $value){
+							$blnResult = $objZip->deleteName($value, $key);
+							//if (!$blnResult) return false;
+						}
+					}
+					
+					$this->objZip->close();
+					$objZip->close();
+					$this->pfh->FileMove($tmpExisting, $this->zipfile);
+					return true;
+				} else {
+					return false;
 				}
-				$this->objZip->close();
-				$this->pfh->FileMove($strTempArchiv, $this->zipfile);
-				return true;
+				
 			} else {
-				$this->objZip = false;
-				return false;
+				$strTempArchiv = $this->pfh->FilePath(md5(uniqid().rand()).'.zip', 'tmp');
+				//Create new archive
+				$blnOpen = $this->objZip->open($strTempArchiv, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+				if ($blnOpen){
+					foreach ($this->files['add'] as $key => $value){
+						$blnResult = $this->objZip->addFile($value, $key);
+						if (!$blnResult) return false;
+					}
+					$this->objZip->close();
+					$this->pfh->FileMove($strTempArchiv, $this->zipfile);
+					return true;
+				} else {
+					$this->objZip = false;
+					return false;
+				}
 			}
 		}
 		

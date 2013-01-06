@@ -162,6 +162,7 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 								'updated'			=> $this->time->time,
 								'rating'			=> (int)round((float)$ext->rating),
 								'dep_coreversion'	=> $ext->dep_coreversion,
+								'version_ext'		=> ($ext->version_ext) ? $ext->version_ext : $ext->version,
 							)));
 						}
 					}
@@ -738,7 +739,7 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 								$pluginscheck[$value['plugin']] = array(
 											'plugin'			=> $value['plugin'],
 											'name'				=> $value['name'],
-											'version'			=> $value['version'],
+											'version'			=> $value['version_ext'],
 											'recent_version'	=> $recent_version,
 											'changelog'			=> $value['changelog'],
 											'level'				=> $value['level'],
