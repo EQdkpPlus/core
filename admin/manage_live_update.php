@@ -497,7 +497,6 @@ class Manage_Live_Update extends page_generic {
 				'S_NEW_VERSION'	=> true,
 				'NEW_VERSION'	=> $updates['version'],
 				'CHANGELOG'		=> $updates['changelog'],
-				'LEVEL'			=> $updates['level'],
 				'RELEASE_DATE'	=> $updates['release'],
 			));
 		}
@@ -506,7 +505,7 @@ class Manage_Live_Update extends page_generic {
 			'S_START'			=> true,
 			'S_REQUIREMENTS' 	=> $this->repo->checkRequirements(),
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
-			'RECENT_VERSION' 	=> VERSION_INT,
+			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
 		));
 

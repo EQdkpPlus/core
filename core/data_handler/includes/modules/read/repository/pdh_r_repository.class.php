@@ -55,6 +55,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					'date'			=> $row['date'],
 					'author'		=> $row['author'],
 					'version'		=> $row['version'],
+					'version_ext'	=> $row['version_ext'],
 					'changelog'		=> $row['changelog'],
 					'lastupdate'	=> $row['updated'],
 					'shortdesc'		=> $row['shortdesc'],
