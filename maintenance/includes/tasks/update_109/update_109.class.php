@@ -25,7 +25,7 @@ include_once(registry::get_const('root_path').'maintenance/includes/sql_update_t
 class update_109 extends sql_update_task {
 	public $author		= 'GodMod';
 	public $version		= '1.0.9'; //new plus-version
-	public $name		= '1.0.9 Update';
+	public $name		= '1.0 RC2 Update 2';
 	
 	public static function __shortcuts() {
 		$shortcuts = array('time');
@@ -36,12 +36,12 @@ class update_109 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_109'		=> 'EQdkp Plus 1.0.9 Update',
+				'update_109'		=> 'EQdkp Plus 1.0 RC2 Update 2',
 				'task01'			=> 'Alter repository table',
 				'task02'			=> 'Alter session table',
 			),
 			'german' => array(
-				'update_109'		=> 'EQdkp Plus 1.0.9 Update',
+				'update_109'		=> 'EQdkp Plus 1.0 RC2 Update 2',
 				'task01'			=> 'Alter repository table',
 				'task02'			=> 'Alter session table',
 			),

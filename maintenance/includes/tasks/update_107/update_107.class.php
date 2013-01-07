@@ -25,18 +25,18 @@ include_once(registry::get_const('root_path').'maintenance/includes/sql_update_t
 class update_107 extends sql_update_task {
 	public $author		= 'GodMod';
 	public $version		= '1.0.7'; //new plus-version
-	public $name		= '1.0.7 Update';
+	public $name		= '1.0 RC1 Update';
 
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_107'		=> 'EQdkp Plus 1.0.7 Update',
+				'update_107'		=> 'EQdkp Plus 1.0 RC1 Update',
 				'task01'			=> 'Alter item table',
 			),
 			'german' => array(
-				'update_107'		=> 'EQdkp Plus 1.0.7 Update',
+				'update_107'		=> 'EQdkp Plus 1.0 RC1 Update',
 				'task01'			=> 'Verändere item Tabelle',
 			),
 		);

@@ -544,17 +544,14 @@ if (!class_exists("jquery")) {
 		public function Accordion($name, $list){
 			$this->tpl->add_js("
 					jQuery('#".$name."').accordion({
-						header: '.title',
-						autoHeight: false
+						heightStyle: 'content'
 					});
 			", 'docready');
 			$acccode   = '<div id="'.$name.'">';
 			if(is_array($list)){
 				foreach($list as $title=>$content){
-					$acccode  .= '<div>
-									<div class="title">'.$title.'</div>
-									<div class="content">'.$content.'</div>
-								</div>';
+					$acccode  .= '<h3>'.$title.'</h3>
+								<div>'.$content.'</div>';
 				}
 			}
 			$acccode  .= '</div>';
@@ -689,7 +686,7 @@ if (!class_exists("jquery")) {
 		*/
 		public function Tab_header($name, $cookie=false, $taboptions=false){
 			$mycookie		= ($cookie) ? ', selected: ($.cookie("cookie'.$name.'") || 0), select: function(e, ui) { $.cookie("cookie'.$name.'", ui.index, { expires: 30 }) } ' : '';
-			$taboptions		= ($taboptions) ? $taboptions : '{ fxSlide: true, fxFade: true, fxSpeed: \'normal\' '.$mycookie.'}';
+			$taboptions		= ($taboptions) ? $taboptions : '{ show: { effect: "fade", duration: \'normal\' } '.$mycookie.'}';
 			$this->tpl->add_js('$("#'.$name.'").tabs('.$taboptions.');', 'docready');
 		}
 

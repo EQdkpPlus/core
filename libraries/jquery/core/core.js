@@ -9448,7 +9448,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );
 
 /*!
- * jQuery Migrate - v1.0.0b1 - 2012-12-16
+ * jQuery Migrate - v1.0.0pre - 2012-12-24
  * https://github.com/jquery/jquery-migrate
  * Copyright 2012 jQuery Foundation and other contributors; Licensed MIT
  */
@@ -9458,7 +9458,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 // Use Uglify to do conditional compilation of warning messages;
 // the minified version will set this to false and remove dead code.
-if ( typeof JQMIGRATE_WARN === "undefined" ) {
+if ( typeof window.JQMIGRATE_WARN === "undefined" ) {
 	window.JQMIGRATE_WARN = true;
 }
 
@@ -9468,6 +9468,10 @@ var warnedAbout = {};
 // List of warnings already given; public read only
 jQuery.migrateWarnings = [];
 
+// Set to true to prevent console output; migrateWarnings still maintained
+// Leave as undefined so that it can be set before plugin is loaded
+//jQuery.migrateMute = false;
+
 // Forget any warnings we've already given; public
 jQuery.migrateReset = function() {
 	warnedAbout = {};
@@ -9475,11 +9479,11 @@ jQuery.migrateReset = function() {
 };
 
 function migrateWarn( msg) {
-	if ( JQMIGRATE_WARN ) {
+	if ( window.JQMIGRATE_WARN ) {
 		if ( !warnedAbout[ msg ] ) {
 			warnedAbout[ msg ] = true;
 			jQuery.migrateWarnings.push( msg );
-			if ( window.console && console.warn ) {
+			if ( window.console && console.warn && !jQuery.migrateMute ) {
 				console.warn( "JQMIGRATE: " + msg );
 			}
 		}
@@ -9487,7 +9491,7 @@ function migrateWarn( msg) {
 }
 
 function migrateWarnProp( obj, prop, value, msg ) {
-	if ( JQMIGRATE_WARN && Object.defineProperty ) {
+	if ( window.JQMIGRATE_WARN && Object.defineProperty ) {
 		// On ES5 browsers (non-oldIE), warn if the code tries to get prop;
 		// allow property to be overwritten in case some other plugin wants it
 		try {
@@ -9514,7 +9518,7 @@ function migrateWarnProp( obj, prop, value, msg ) {
 	obj[ prop ] = value;
 }
 
-if ( JQMIGRATE_WARN && document.compatMode === "BackCompat" ) {
+if ( window.JQMIGRATE_WARN && document.compatMode === "BackCompat" ) {
 	// jQuery has never supported or tested Quirks Mode
 	migrateWarn( "jQuery is not compatible with Quirks Mode" );
 }
@@ -9530,22 +9534,18 @@ var attrFn = {},
 	rnoAttrNodeType = /^[238]$/;
 
 // jQuery.attrFn
-if ( JQMIGRATE_WARN ) {
-	migrateWarnProp( jQuery, "attrFn", attrFn, "jQuery.attrFn is deprecated" );
-}
+migrateWarnProp( jQuery, "attrFn", attrFn, "jQuery.attrFn is deprecated" );
 
 jQuery.attr = function( elem, name, value, pass ) {
 	if ( pass ) {
-		if ( JQMIGRATE_WARN ) {
-			migrateWarn("jQuery.fn.attr( props, pass ) is deprecated");
-		}
+		migrateWarn("jQuery.fn.attr( props, pass ) is deprecated");
 		if ( elem && !rnoAttrNodeType.test( elem.nodeType ) && jQuery.isFunction( jQuery.fn[ name ] ) ) {
 			return jQuery( elem )[ name ]( value );
 		}
 	}
 
 	// Warn if user tries to set `type` since it breaks on IE 6/7/8
-	if ( JQMIGRATE_WARN && name === "type" && value !== undefined && rnoType.test( elem.nodeName ) ) {
+	if ( name === "type" && value !== undefined && rnoType.test( elem.nodeName ) ) {
 		migrateWarn("Can't change the 'type' of an input or button in IE 6/7/8");
 	}
 
@@ -9555,21 +9555,23 @@ jQuery.attr = function( elem, name, value, pass ) {
 // attrHooks: value
 jQuery.attrHooks.value = {
 	get: function( elem, name ) {
-		if ( jQuery.nodeName( elem, "button" ) ) {
+		var nodeName = ( elem.nodeName || "" ).toLowerCase();
+		if ( nodeName === "button" ) {
 			return valueAttrGet.apply( this, arguments );
 		}
-		if ( JQMIGRATE_WARN ) {
-			migrateWarn("property-based jQuery.fn.attr('value') is deprecated");
+		if ( nodeName === "input" || nodeName === "textarea" ) {
+			migrateWarn("property-based jQuery.fn.attr('value', val) is deprecated");
 		}
 		return name in elem ?
 			elem.value :
 			null;
 	},
 	set: function( elem, value, name ) {
-		if ( jQuery.nodeName( elem, "button" ) ) {
+		var nodeName = ( elem.nodeName || "" ).toLowerCase();
+		if ( nodeName === "button" ) {
 			return valueAttrSet.apply( this, arguments );
 		}
-		if ( JQMIGRATE_WARN ) {
+		if ( nodeName === "input" || nodeName === "textarea" ) {
 			migrateWarn("property-based jQuery.fn.attr('value', val) is deprecated");
 		}
 		// Does not return so that setAttribute is also used
@@ -9662,10 +9664,8 @@ if ( browser.chrome ) {
 
 jQuery.browser = browser;
 
-if ( JQMIGRATE_WARN ) {
-	// Warn if the code tries to get jQuery.browser
-	migrateWarnProp( jQuery, "browser", browser, "jQuery.browser is deprecated" );
-}
+// Warn if the code tries to get jQuery.browser
+migrateWarnProp( jQuery, "browser", browser, "jQuery.browser is deprecated" );
 
 jQuery.sub = function() {
 	function jQuerySub( selector, context ) {
@@ -9685,9 +9685,7 @@ jQuery.sub = function() {
 	};
 	jQuerySub.fn.init.prototype = jQuerySub.fn;
 	var rootjQuerySub = jQuerySub(document);
-	if ( JQMIGRATE_WARN ) {
-		migrateWarn( "jQuery.sub() is deprecated" );
-	}
+	migrateWarn( "jQuery.sub() is deprecated" );
 	return jQuerySub;
 };
 
@@ -9703,9 +9701,7 @@ jQuery.fn.data = function( name ) {
 		ret = jQuery.data( elem, name );
 		evt = jQuery._data( elem, name );
 		if ( ( ret === undefined || ret === evt ) && evt !== undefined ) {
-			if ( JQMIGRATE_WARN ) {
-				migrateWarn("Use of jQuery.fn.data('events') is deprecated");
-			}
+			migrateWarn("Use of jQuery.fn.data('events') is deprecated");
 			return evt;
 		}
 	}
@@ -9745,7 +9741,7 @@ jQuery.buildFragment = function( args, context, scripts ) {
 var eventAdd = jQuery.event.add,
 	eventRemove = jQuery.event.remove,
 	eventTrigger = jQuery.event.trigger,
-	oldToggle = jQuery.event.toggle,
+	oldToggle = jQuery.fn.toggle,
 	oldLive = jQuery.fn.live,
 	oldDie = jQuery.fn.die,
 	ajaxEvents = "ajaxStart|ajaxStop|ajaxSend|ajaxComplete|ajaxError|ajaxSuccess",
@@ -9755,7 +9751,7 @@ var eventAdd = jQuery.event.add,
 		if ( typeof( events ) != "string" || jQuery.event.special.hover ) {
 			return events;
 		}
-		if ( JQMIGRATE_WARN && rhoverHack.test( events ) ) {
+		if ( rhoverHack.test( events ) ) {
 			migrateWarn("'hover' pseudo-event is deprecated, use 'mouseenter mouseleave'");
 		}
 		return events && events.replace( rhoverHack, "mouseenter$1 mouseleave$1" );
@@ -9768,7 +9764,7 @@ if ( jQuery.event.props && jQuery.event.props[ 0 ] !== "attrChange" ) {
 
 // Support for 'hover' pseudo-event and ajax event warnings
 jQuery.event.add = function( elem, types, handler, data, selector ){
-	if ( JQMIGRATE_WARN && elem !== document && rajaxEvent.test( types ) ) {
+	if ( elem !== document && rajaxEvent.test( types ) ) {
 		migrateWarn( "AJAX events should be attached to document: " + types );
 	}
 	eventAdd.call( this, elem, hoverHack( types || "" ), handler, data, selector );
@@ -9779,9 +9775,7 @@ jQuery.event.remove = function( elem, types, handler, selector, mappedTypes ){
 
 jQuery.fn.error = function( data, fn ) {
 	var args = Array.prototype.slice.call( arguments, 0);
-	if ( JQMIGRATE_WARN ) {
-		migrateWarn("jQuery.fn.error() is deprecated");
-	}
+	migrateWarn("jQuery.fn.error() is deprecated");
 	args.splice( 0, 0, "error" );
 	if ( arguments.length ) {
 		return this.bind.apply( this, args );
@@ -9797,9 +9791,7 @@ jQuery.fn.toggle = function( fn, fn2 ) {
 	if ( !jQuery.isFunction( fn ) || !jQuery.isFunction( fn2 ) ) {
 		return oldToggle.apply( this, arguments );
 	}
-	if ( JQMIGRATE_WARN ) {
-		migrateWarn("jQuery.fn.toggle(handler, handler...) is deprecated");
-	}
+	migrateWarn("jQuery.fn.toggle(handler, handler...) is deprecated");
 
 	// Save reference to arguments for access in closure
 	var args = arguments,
@@ -9827,9 +9819,7 @@ jQuery.fn.toggle = function( fn, fn2 ) {
 };
 
 jQuery.fn.live = function( types, data, fn ) {
-	if ( JQMIGRATE_WARN ) {
-		migrateWarn("jQuery.fn.live() is deprecated");
-	}
+	migrateWarn("jQuery.fn.live() is deprecated");
 	if ( oldLive ) {
 		return oldLive.apply( this, arguments );
 	}
@@ -9838,9 +9828,7 @@ jQuery.fn.live = function( types, data, fn ) {
 };
 
 jQuery.fn.die = function( types, fn ) {
-	if ( JQMIGRATE_WARN ) {
-		migrateWarn("jQuery.fn.die() is deprecated");
-	}
+	migrateWarn("jQuery.fn.die() is deprecated");
 	if ( oldDie ) {
 		return oldDie.apply( this, arguments );
 	}
@@ -9850,12 +9838,12 @@ jQuery.fn.die = function( types, fn ) {
 
 // Turn global events into document-triggered events
 jQuery.event.trigger = function( event, data, elem, onlyHandlers  ){
-	if ( JQMIGRATE_WARN && !elem & !rajaxEvent.test( event ) ) {
+	if ( !elem & !rajaxEvent.test( event ) ) {
 		migrateWarn( "Global events are undocumented and deprecated" );
 	}
 	return eventTrigger.call( this,  event, data, elem || document, onlyHandlers  );
 };
-$.each( ajaxEvents.split("|"),
+jQuery.each( ajaxEvents.split("|"),
 	function( _, name ) {
 		jQuery.event.special[ name ] = {
 			setup: function( data ) {
@@ -9882,8 +9870,6 @@ $.each( ajaxEvents.split("|"),
 
 
 })( jQuery, window );
-
-$.uiBackCompat = false;
 
 /*! jQuery UI - v1.9.2 - 2012-11-23
 * http://jqueryui.com
@@ -44433,174 +44419,6 @@ function log() {
 		}
 	});
 })(jQuery);
-/*
- * Metadata - jQuery plugin for parsing metadata from elements
- *
- * Copyright (c) 2006 John Resig, Yehuda Katz, J�örn Zaefferer, Paul McLanahan
- *
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
- *
- * Version: 2.1 
- *
- */
-
-/**
- * Sets the type of metadata to use. Metadata is encoded in JSON, and each property
- * in the JSON will become a property of the element itself.
- *
- * There are four supported types of metadata storage:
- *
- *   attr:  Inside an attribute. The name parameter indicates *which* attribute.
- *          
- *   class: Inside the class attribute, wrapped in curly braces: { }
- *   
- *   elem:  Inside a child element (e.g. a script tag). The
- *          name parameter indicates *which* element.
- * 
- *   html5: Values are stored in data-* attributes.
- *          
- * The metadata for an element is loaded the first time the element is accessed via jQuery.
- *
- * As a result, you can define the metadata type, use $(expr) to load the metadata into the elements
- * matched by expr, then redefine the metadata type and run another $(expr) for other elements.
- * 
- * @name $.metadata.setType
- *
- * @example <p id='one' class='some_class {item_id: 1, item_label: 'Label'}'>This is a p</p>
- * @before $.metadata.setType('class')
- * @after $('#one').metadata().item_id == 1; $('#one').metadata().item_label == 'Label'
- * @desc Reads metadata from the class attribute
- * 
- * @example <p id='one' class='some_class' data='{item_id: 1, item_label: 'Label'}'>This is a p</p>
- * @before $.metadata.setType('attr', 'data')
- * @after $('#one').metadata().item_id == 1; $('#one').metadata().item_label == 'Label'
- * @desc Reads metadata from a 'data' attribute
- * 
- * @example <p id='one' class='some_class'><script>{item_id: 1, item_label: 'Label'}</script>This is a p</p>
- * @before $.metadata.setType('elem', 'script')
- * @after $('#one').metadata().item_id == 1; $('#one').metadata().item_label == 'Label'
- * @desc Reads metadata from a nested script element
- * 
- * @example <p id='one' class='some_class' data-item_id='1' data-item_label='Label'>This is a p</p>
- * @before $.metadata.setType('html5')
- * @after $('#one').metadata().item_id == 1; $('#one').metadata().item_label == 'Label'
- * @desc Reads metadata from a series of data-* attributes
- *
- * @param String type The encoding type
- * @param String name The name of the attribute to be used to get metadata (optional)
- * @cat Plugins/Metadata
- * @descr Sets the type of encoding to be used when loading metadata for the first time
- * @type undefined
- * @see metadata()
- */
-
-(function($, window, undefined) {
-
-	$.extend({
-		metadata : {
-			defaults : {
-				type: 'class',
-				name: 'metadata',
-				cre: /({.*})/,
-				single: 'metadata'
-			},
-			setType: function( type, name ){
-				this.defaults.type = type;
-				this.defaults.name = name;
-			},
-			get: function( elem, opts ){
-				var settings = $.extend({}, this.defaults,opts), 
-					object = {}, data, match, attr;
-
-				// check for empty string in single property
-				if ( !settings.single.length ) {
-					settings.single = 'metadata';
-				}
-
-				// returned cached data if it already exists
-				data = $.data(elem, settings.single);
-				if(data) { return data; }
-
-				data = '{}';
-
-				function getData(data) {
-					if('string' !== typeof data) {
-						return data;
-					}
-
-					if(data.indexOf('{') < 0) {
-						data = eval('(' + data + ')');
-					}
-				}
-				
-				function getObject(data) {
-					if('string' === typeof data) {
-						data = eval('(' + data + ')');
-					}
-
-					return data;
-				}
-				
-				if(settings.type == 'html5') {
-					$( elem.attributes ).each(function() {
-						var name = this.nodeName;
-						
-						if(name.match(/^data-/)) {
-							name = name.replace(/^data-/, '');
-							object[name] = getObject( this.nodeValue );
-						}
-					});
-				} 
-				else {
-					if(settings.type == 'class') {
-						match = settings.cre.exec( elem.className );
-						if(match) {
-							data = match[1];
-						}
-					} 
-					else if(settings.type == 'elem') {
-						if(!elem.getElementsByTagName) { return; }
-						
-						match = elem.getElementsByTagName( settings.name );
-						if(match.length) {
-							data = $.trim(match[0].innerHTML);
-						}
-					} 
-					else if(undefined !== elem.getAttribute) {
-						attr = elem.getAttribute( settings.name );
-						if(attr) {
-							data = attr;
-						}
-					}
-
-					object = getObject(data.indexOf('{') < 0 ? '{' + data + '}' : data);
-				}
-
-				if(data !== '{}') {
-					$.data( elem, settings.single, object );
-				}
-
-				return object;
-			}
-		}
-	});
-
-	/**
-	 * Returns the metadata object for the first member of the jQuery object.
-	 *
-	 * @name metadata
-	 * @descr Returns element's metadata object
-	 * @param Object opts An object contianing settings to override the defaults
-	 * @type jQuery
-	 * @cat Plugins/Metadata
-	 */
-	$.fn.metadata = function( opts ){
-		return $.metadata.get( this[0], opts );
-	};
-
-})(jQuery, this);
 /* jshint forin:true, noarg:true, noempty:true, eqeqeq:true, boss:true, undef:true, curly:true, browser:true, jquery:true */
 /*
  * jQuery MultiSelect UI Widget Filtering Plugin 1.4
@@ -51133,387 +50951,412 @@ $.format = $.validator.format;
 * and GPL (GPL-LICENSE.txt) licenses.
 * 
 * Requires:
-*	jquery ui dialog
+*   jquery ui dialog
 *
-*	jQuery.FrameDialog namespaced
-*		.create()	function will create an iframe, pass on the options 
-*					and return from a jQueryUI Dialog.
-*					additional url option
+*   jQuery.FrameDialog namespaced
+*       .create()   function will create an iframe, pass on the options 
+*                   and return from a jQueryUI Dialog.
+*                   additional url option
 *
-*	TODO:	- Add logic to allow for relative URLs.
+*   TODO:   - Add logic to allow for relative URLs.
 *
-*	CUSTOMIZATION:
-*		see FrameDialog._defaultOptions below for additional changes from ui dialog defaults
-*		Returns a jQuery.dialog extension, with the same options passed in.
+*   CUSTOMIZATION:
+*       see FrameDialog._defaultOptions below for additional changes from ui dialog defaults
+*       Returns a jQuery.dialog extension, with the same options passed in.
 *
-*		refer to jQueryUI Dialog for more customization options
-*
-*
-*	LOCALIZATION: create a window.localization object
-*				localization.OK			override text for the OK button
-*				localization.Cancel		override text for the Cancel button
+*       refer to jQueryUI Dialog for more customization options
 *
 *
-*	FROM PARENT WINDOW: use the full url, including protocol://host/ portions
-*				jQuery.FrameDialog
-*					.create({
-*						url: baseURL + 'framed-modal-test.aspx',
-*						title: 'test title',
-*						... Other jQueryUI Dialog Options ...
-*					})
-*					.bind('dialogclose', function(event, ui) {
-*						alert("result: " + event.result);
-*					});
-*
-*	INSIDE MODAL:
-*				jQuery.FrameDialog.setResult(value);	//sets the result value
-*				jQuery.FrameDialog.clearResult();		//clears the result value
-*				jQuery.FrameDialog.closeDialog();		//close the dialog (same as OK)
-*				jQuery.FrameDialog.cancelDialog();		//cancel the dialot (same as Cancel
+*   LOCALIZATION: create a window.localization object
+*               localization.OK         override text for the OK button
+*               localization.Cancel     override text for the Cancel button
 *
 *
+*   FROM PARENT WINDOW: use the full url, including protocol://host/ portions
+*               jQuery.FrameDialog
+*                   .create({
+*                       url: baseURL + 'framed-modal-test.aspx',
+*                       title: 'test title',
+*                       ... Other jQueryUI Dialog Options ...
+*                   })
+*                   .bind('dialogclose', function(event, ui) {
+*                       alert("result: " + event.result);
+*                   });
 *
-*	!!!!!!!!!! WARNING WARNING WARNING WARNING !!!!!!!!!!
-*	Modal must set the result from the same host address in order to access 
-*	the parent for setting the result.
+*   INSIDE MODAL:
+*               jQuery.FrameDialog.setResult(value);    //sets the result value
+*               jQuery.FrameDialog.clearResult();       //clears the result value
+*               jQuery.FrameDialog.closeDialog();       //close the dialog (same as OK)
+*               jQuery.FrameDialog.cancelDialog();      //cancel the dialot (same as Cancel
+*
+*
+*
+*   !!!!!!!!!! WARNING WARNING WARNING WARNING !!!!!!!!!!
+*   Modal must set the result from the same host address in order to access 
+*   the parent for setting the result.
 */
 (function($) {
 
-	//create FrameDialog namespace
-	$.FrameDialog = $.FrameDialog || {};
+    //create FrameDialog namespace
+    $.FrameDialog = $.FrameDialog || {};
 
-	//array for return values, placeholder
-	$.FrameDialog._results = $.FrameDialog._results || {};
+    //array for return values, placeholder
+    $.FrameDialog._results = $.FrameDialog._results || {};
 
-	//set localized variables
-	var OK = (window.localization && window.localization.OK) || "OK";
-	var Cancel = (window.localization && window.localization.CANCEL) || "Cancel";
-	var buttons = {};
-	var winSize = { w:$(window).width(), h:$(window).height() }
-	buttons[OK] = function() {
-				$(this).dialog("close");
-			}
-	buttons[Cancel] = function() {
-				var frame = $(this);
-				$.FrameDialog.clearResult(frame.attr("id"));
-				frame.dialog("close");
-			}
+    //set localized variables
+    var OK = (window.localization && window.localization.OK) || "OK";
+    var Cancel = (window.localization && window.localization.CANCEL) || "Cancel";
+    var buttons = {};
+    var winSize = { w:$(window).width(), h:$(window).height() }
+    buttons[OK] = function() {                    
+        $(this).dialog("close");
+    };
+    buttons[Cancel] = function() {
+        var frame = $(this);
+        $.FrameDialog.clearResult(frame.attr("id"));
+        frame.dialog("close");
+    };
 
-	//default options
-	$.FrameDialog._defaultOptions = {
-		modal: true,
-		closeOnEscape: false,
-		position: 'center',
-		buttons: buttons
-	}
+    //default options
+    $.FrameDialog._defaultOptions = {
+        modal: true,
+        closeOnEscape: false,
+        position: 'center',
+        buttons: buttons,        
+        // TDR: class used to style the loading pane container
+        loadingClass: null
+    };
 
-	var retry = false;
-	$.FrameDialog.create = function(options) {
-		try	{
-			//generate unique id
-			var uid = Math.random().toString(16).replace(".", "") + (new Date()).valueOf().toString(16);
+    var retry = false;
+    $.FrameDialog.create = function(options) {
+        try {
+            //generate unique id
+            var uid = Math.random().toString(16).replace(".", "") + (new Date()).valueOf().toString(16);
 
-			//extend frame dialog options with passed in options.
-			var opts = $.extend(
-				$.FrameDialog._defaultOptions,
-				options || {}
-			)
+            //extend frame dialog options with passed in options.
+            var opts = $.extend(
+                $.FrameDialog._defaultOptions,
+                options || {}
+            );
 
-			var url = (opts && opts.url) || null;
-			if (url === null)
-				throw new Error("MODAL ERROR: Option 'url' not specified!"); //diagnostic error
+            var url = (opts && opts.url) || null;
+            if (url === null)
+                throw new Error("MODAL ERROR: Option 'url' not specified!"); //diagnostic error
 
-			//clean up redundant forward slashes in the url.
-			url = url.replace(/(^|[^:])\/+/g, "$1/");
+            //clean up redundant forward slashes in the url.
+            url = url.replace(/(^|[^:])\/+/g, "$1/");
 
-			//remove url argument from options to be passed to dialog.
-			try {
-				delete opts.url;
-			} catch (err) { }
+            //remove url argument from options to be passed to dialog.
+            try { delete opts.url; } catch (err) { }
+            
+            // TDR: create the loading pane and remove the loadingClass from the options hash
+            var $loadingPane = $('<div></div>').addClass(opts.loadingClass);            
+            try { delete opts.loadingClass; } catch (err) {}
+            
+            //create iframe object
+            //  object type="text/html doesn't seem to work in IE :(
+            //  using iframe, which seems to work cross browser, tested in IE7, and Firefox 3.0.7
+            var iframe = $("<iframe frameborder='0' scrolling='auto' background='transparent' />")
+                .attr("id", uid + "-VIEW")
+                .attr("name", uid + "-VIEW")                
+                .css("margin", "0")
+                .css("border", "0")
+                .css("padding", "0")
+                .css("top", "0")
+                .css("left", "0")
+                .css("right", "0")
+                .css("bottom", "0")
+                .css("width", "100px")
+                .css("height", "100px")                
+                // TDR: hide the iframe until it's assoicated page is loaded
+                .css("visibility", "hidden")
+                ;
 
-			//create iframe object
-			//	object type="text/html doesn't seem to work in IE :(
-			//	using iframe, which seems to work cross browser, tested in IE7, and Firefox 3.0.7
-			var iframe = $("<iframe frameborder='0' scrolling='auto' background='transparent' />")
-				.attr("id", uid + "-VIEW")
-				.attr("name", uid + "-VIEW")
-				.attr("src", url)
-				.css("margin", "0")
-				.css("border", "0")
-				.css("padding", "0")
-				.css("top", "0")
-				.css("left", "0")
-				.css("right", "0")
-				.css("bottom", "0")
-				.css("width", "100px")
-				.css("height", "100px")
-				;
+            var overlay = $("<div>&nbsp;</div>")
+                .css("position", "absolute")
+                .css("margin", "0")
+                .css("border", "0")
+                .css("padding", "0")
+                .css("top", "0")
+                .css("left", "0")
+                .css("right", "0")
+                .css("bottom", "0")
+                .css("width", "100%")
+                .css("height", "100%")
+                .css("display", "none")
+                ;
 
-			var overlay = $("<div>&nbsp;</div>")
-				.css("position", "absolute")
-				.css("margin", "0")
-				.css("border", "0")
-				.css("padding", "0")
-				.css("top", "0")
-				.css("left", "0")
-				.css("right", "0")
-				.css("bottom", "0")
-				.css("width", "100%")
-				.css("height", "100%")
-				.css("display", "none")
-				;
+            var ret = $("<div />")
+                .attr("id", uid)
+                .css("margin", "0")
+                .css("border", "0")
+                .css("padding", "0")
+                .css("top", "0")
+                .css("left", "0")
+                .css("right", "0")
+                .css("bottom", "0")
+                .css("overflow", "hidden")
+                .hide()                
+                // TDR: append the loading pane to the dialog's container.
+                .append($loadingPane)
+                .append(iframe)
+                .append(overlay)
+                // TDR: removed(commented out) .appendTo(document.body) - this avoids the iframe's multiple-request issue
+                // TDR: multiple-request issue thread
+                //  - http://bugs.jqueryui.com/ticket/5166
+                //  - http://forum.jquery.com/topic/ui-dialog-with-iframe
+                //.appendTo(document.body)
+                
+                // TDR: 
+                //  - on dialog open, set the height of the loading pane to that of the dialog's content container
+                //  - set the iframe src property here - this avoids the iframe's multiple-request issue 
+                .bind('dialogopen', function(event, ui){
+                    $loadingPane.height($loadingPane.closest('.ui-dialog-content').height());
+                    iframe.attr('src', url).load(function(e){
+                        $(this).css('visibility', 'visible');
+                        $loadingPane.hide();
+                    });             
+                })
+                .bind("dialogbeforeclose", function(event, ui) {
+                    var frame = $(this);
+                    var uid = frame.attr("id");
 
-			var ret = $("<div />")
-				.attr("id", uid)
-				.css("margin", "0")
-				.css("border", "0")
-				.css("padding", "0")
-				.css("top", "0")
-				.css("left", "0")
-				.css("right", "0")
-				.css("bottom", "0")
-				.css("overflow", "hidden")
-				.hide()
-				.append(iframe)
-				.append(overlay)
-				.appendTo(document.body)
-				.bind("dialogbeforeclose", function(event, ui) {
-					var frame = $(this);
-					var uid = frame.attr("id");
+                    //default close (firefox) - clear response
+                    if (event && event.originalTarget && event.originalTarget.nodeName && event.originalTarget.nodeName == "SPAN")
+                        $.FrameDialog.clearResult(uid);
 
-					//default close (firefox) - clear response
-					if (event && event.originalTarget && event.originalTarget.nodeName && event.originalTarget.nodeName == "SPAN")
-						$.FrameDialog.clearResult(uid);
+                    //default close (IE7) - clear response
+                    if (event && event.originalEvent && event.originalEvent.currentTarget && event.originalEvent.currentTarget.tagName && event.originalEvent.currentTarget.tagName == "A")
+                        $.FrameDialog.clearResult(uid);
 
-					//default close (IE7) - clear response
-					if (event && event.originalEvent && event.originalEvent.currentTarget && event.originalEvent.currentTarget.tagName && event.originalEvent.currentTarget.tagName == "A")
-						$.FrameDialog.clearResult(uid);
+                    //get the response value, attach to the object.
+                    var result = $.FrameDialog._results[uid] || null; //result or an explicit null
 
-					//get the response value, attach to the object.
-					var result = $.FrameDialog._results[uid] || null; //result or an explicit null
+                    return result;
+                })
+                .bind('dialogclose', function(event, ui) {
+                    var frame = $(this);
+                    var uid = frame.attr("id");
+                    var result = $.FrameDialog._results[uid] || null; //result or an explicit null
+                    frame.attr("result", result);
+                    
+                    // TDR: remove the iframe - this avoids the iframe's multiple-request issue
+                    iframe.remove();
+                    
+                    //Cleanup remnants in 15 seconds
+                    //      Should be enough time for the results of the close to finish up.
+                    window.setTimeout(
+                        function() {
+                            //cleanup the dialog
+                            frame.dialog('destroy');
+                            
+                            // TDR: remove $loadingPane and reorder the other removals. 
+                            //destroy the iframe, remove from the DOM
+                            $loadingPane.remove();
+                            overlay.remove();
+                            frame.remove();
+                            // TDR: i don't think ret.remove is necessary, bc it points to the same object as frame                            
+                            ret.remove();
 
-					return result;
-				})
-				.bind('dialogclose', function(event, ui) {
-					var frame = $(this);
-					var uid = frame.attr("id");
-					var result = $.FrameDialog._results[uid] || null; //result or an explicit null
-					frame.attr("result", result);
+                            //remove the placeholder for the result
+                            try { delete $.FrameDialog._results[uid]; } 
+                            catch (err) { /*nothing to delete*/ }
+                        },
+                        100
+                    );
 
-					//Cleanup remnants in 15 seconds
-					//		Should be enough time for the results of the close to finish up.
-					window.setTimeout(
-						function() {
-							//cleanup the dialog
-							frame.dialog('destroy')
+                    return result;
+                })
+                .dialog(opts)
+                ;
 
-							//destroy the iframe, remove from the DOM
-							frame.remove();
-							overlay.remove();
-							ret.remove();
+            /*** BEGIN FIX FOR jQueryUI 1.7 Dialog's sizing bug *************************************************/
+            //store the window width at the start
+            var winw = $(document).width();
+            var wrap = ret.parent(".ui-resizable")
 
-							//remove the placeholder for the result
-							try {
-								delete $.FrameDialog._results[uid];
-							} catch (err) { /*nothing to delete*/ }
-						},
-						100
-					);
+            //set the window to the appropriate size - fix bug with jQueryUI's Dialog
+            //  uses an overlay over the iframe, to prevent focus change.
+            wrap
+                .css('width', (opts.minWidth || opts.width || 200) + 'px')
+                .css('height', (opts.minHeight || opts.height || 120) + 'px')
+                .bind('dragstart', function() {
+                    overlay.show();
+                })
+                .bind('dragstop', function() {
+                    overlay.hide();
+                })
+                .bind('resizestart', function() {
+                    overlay.show();
+                })
+                .bind('resize', function() {
+                    iframe
+                        .css('height', ret.height() + 'px')
+                        .css('width', ret.width() + 'px');
+                })
+                .bind('resizestop', function() {
+                    overlay.hide();
+                    iframe
+                        .css('height', ret.height() + 'px')
+                        .css('width', ret.width() + 'px');
+                });
 
-					return result;
-				})
-				.dialog(opts)
-				;
+            //force resize event.
+            window.setTimeout(function(){ 
+                wrap.trigger('resizestop');
+            }, 100);
 
-			/*** BEGIN FIX FOR jQueryUI 1.7 Dialog's sizing bug *************************************************/
-			//store the window width at the start
-			var winw = $(document).width();
-			var wrap = ret.parent(".ui-resizable")
+            //get window's new width
+            var ww = wrap.width();
 
-			//set the window to the appropriate size - fix bug with jQueryUI's Dialog
-			//	uses an overlay over the iframe, to prevent focus change.
-			wrap.css('width', (opts.minWidth || opts.width || 200) + 'px')
-					.css('height', (opts.minHeight || opts.height || 120) + 'px')
-					.bind('dragstart', function() {
-						overlay.show();
-					})
-					.bind('dragstop', function() {
-						overlay.hide();
-					})
-					.bind('resizestart', function() {
-						overlay.show();
-					})
-					.bind('resize', function() {
-						iframe.css('height', ret.height() + 'px')
-									.css('width', ret.width() + 'px');
-					})
-					.bind('resizestop', function() {
-						overlay.hide();
-						iframe.css('height', ret.height() + 'px')
-								.css('width', ret.width() + 'px');
-					});
+            //reset the center position, if needed
+            if (opts.position == 'center' || (opts.position && (opts.position[0] == 'center' || opts.position[1] == 'center'))) {
+                var pos = parseInt(parseFloat(winw - ww) / 2);
+                if (pos < 0) pos = 0;
+                wrap.css('left', pos + 'px');
+            }
 
+            //reset right position, as needed
+            if (opts.position == 'right' || (opts.position && (opts.position[0] == 'right' || opts.position[1] == 'right'))) {
+                var pos = winw - ww - 5; //set to rightmost, - 5 px
+                if (pos < 0) pos = 0;
+                wrap.css('left', pos + 'px');
+            }
+            /*** END FIX FOR jQueryUI 1.7 Dialog's sizing bug *************************************************/
+            retry = false; //reset the retry state.
+            return ret;
+        } catch (err) {
+            //cleanup any left over ui elements...
+            try { ret.dialog('destroy'); } catch(err) {}
+            try { ret.remove(); } catch(err) {}
+            try { overlay.remove(); } catch(err) {}
+            try { iframe.remove(); } catch(err) {}
 
-			//force resize event.
-			window.setTimeout(function(){ 
-				wrap.trigger('resizestop');
-			}, 100);
+            //it was a TypeError (seems to be happening with the modal's overlay mask, retry once.
+            if (err instanceof TypeError && !retry) {
+                retry = true;
+                return $.FrameDialog.create(options); //retry once only
+            }
 
-			//get window's new width
-			var ww = wrap.width();
+            throw err; //rethrow error if something else
+        }
+    }
 
-			//reset the center position, if needed
-			if (opts.position == 'center' || (opts.position && (opts.position[0] == 'center' || opts.position[1] == 'center'))) {
-				var pos = parseInt(parseFloat(winw - ww) / 2);
-				if (pos < 0) pos = 0;
+    //retrieves the uid for the current frame within the parent.
+    $.FrameDialog._getUid = function() {
+        //find the current frame within the parent window
+        if (window.parent && window.parent.frames && window.parent.document && window.parent.document.getElementsByTagName) {
+            var iframes = window.parent.document.getElementsByTagName("IFRAME");
+            for (var i = 0; i < iframes.length; i++) {
+                var id = iframes[i].id || iframes[i].name || i;
+                if (window.parent.frames[id] == window) {
+                    return id.replace("-VIEW", "");
+                }
+            }
+        }
+        return null; //no match
+    };
 
-				wrap.css('left', pos + 'px');
-			}
-
-			//reset right position, as needed
-			if (opts.position == 'right' || (opts.position && (opts.position[0] == 'right' || opts.position[1] == 'right'))) {
-				var pos = winw - ww - 5; //set to rightmost, - 5 px
-				if (pos < 0) pos = 0;
-
-				wrap.css('left', pos + 'px');
-			}
-			/*** END FIX FOR jQueryUI 1.7 Dialog's sizing bug *************************************************/
-			retry = false; //reset the retry state.
-			return ret;
-		} catch (err) {
-			//cleanup any left over ui elements...
-			try { ret.dialog('destroy'); } catch(err) {}
-			try { ret.remove(); } catch(err) {}
-			try { overlay.remove(); } catch(err) {}
-			try { iframe.remove(); } catch(err) {}
-
-			//it was a TypeError (seems to be happening with the modal's overlay mask, retry once.
-			if (err instanceof TypeError && !retry) {
-				retry = true;
-				return $.FrameDialog.create(options); //retry once only
-			}
-
-			throw err; //rethrow error if something else
-		}
-	}
-
-	//retrieves the uid for the current frame within the parent.
-	$.FrameDialog._getUid = function() {
-		//find the current frame within the parent window
-		if (window.parent && window.parent.frames && window.parent.document && window.parent.document.getElementsByTagName) {
-			var iframes = window.parent.document.getElementsByTagName("IFRAME");
-			for (var i = 0; i < iframes.length; i++) {
-				var id = iframes[i].id || iframes[i].name || i;
-				if (window.parent.frames[id] == window) {
-					return id.replace("-VIEW", "");
-				}
-			}
-		}
-		return null; //no match
-	}
-
-	//Returns the current dialog handle in the parent window as a jquery object.
-	$.FrameDialog.current = function() {
-		if (window.parent && window.parent.jQuery)
-			return window.parent.jQuery("#" + $.FrameDialog._getUid());
-		
-		return null;
-	}
-
-
-	//clear the result value
-	//	uid - id for child window, or empty for current in parent.
-	$.FrameDialog.clearResult = function(uid) {
-		if (uid) {
-			//clear child's value
-			try {
-				delete $.FrameDialog._results[uid];
-			} catch (err) { /*nothing to delete*/ }
-		} else {
-			//clear for current dialog
-			var uid = $.FrameDialog._getUid();
-
-			if (uid != null && window.parent && window.parent.jQuery && window.parent.jQuery.FrameDialog && window.parent.jQuery.FrameDialog._results) {
-				try {
-					delete window.parent.jQuery.FrameDialog._results[uid];
-				} catch (err) { /*nothing to delete*/ }
-			}
-		}
-	}
-
-	//helper function to set response value	to the parent
-	//	value - result value for the given FrameDialog
-	//	uid - child id, or empty for current FrameDialog
-	$.FrameDialog.setResult = function(value, uid) {
-		if (uid) {
-			//set child value
-			jQuery.FrameDialog._results[uid] = value;
-		} else {
-			//set value from inside
-			var uid = $.FrameDialog._getUid();
-
-			if (uid != null && window.parent && window.parent.jQuery && window.parent.jQuery.FrameDialog && window.parent.jQuery.FrameDialog._results) {
-				window.parent.jQuery.FrameDialog._results[uid] = value;
-			}
-		}
-	}
-
-	//same as clicking OK button
-	//	uuid - for a child node, or empty for current
-	$.FrameDialog.closeDialog = function(uid) {
-		if (uid) {
-			//close child
-			jQuery("#" + uid).dialog('close');
-		} else {
-			//close self			
-			var uid = $.FrameDialog._getUid();
-			if (uid != null && window.parent && window.parent.jQuery) {
-				window.parent.jQuery("#" + uid).dialog('close');
-			}
-		}
-
-		return false;
-	}
-
-	//same as clicking Cancel button
-	//	uid - for a child node, or empty for current frame
-	$.FrameDialog.cancelDialog = function(uid) {
-		$.FrameDialog.clearResult(uid);
-		$.FrameDialog.closeDialog(uid);
-		return false;
-	}
+    //Returns the current dialog handle in the parent window as a jquery object.
+    $.FrameDialog.current = function() {
+        if (window.parent && window.parent.jQuery)
+            return window.parent.jQuery("#" + $.FrameDialog._getUid());
+        
+        return null;
+    };
 
 
-	//extension methods for shortcuts in dealing with a framedialog handle
-	$.fn.setResult = function(result) {
-		return this.each(function() {
-			$.FrameDialog.setResult(result, $(this).attr("id"));
-		});
-	}
+    //clear the result value
+    //  uid - id for child window, or empty for current in parent.
+    $.FrameDialog.clearResult = function(uid) {
+        if (uid) {
+            //clear child's value
+            try { delete $.FrameDialog._results[uid]; } 
+            catch (err) { /*nothing to delete*/ }
+        } else {
+            //clear for current dialog
+            var uid = $.FrameDialog._getUid();
 
-	$.fn.clearResult = function() {
-		return this.each(function() {
-			$.FrameDialog.clearResult($(this).attr("id"));
-		});
-	}
-	
-	$.fn.closeDialog = function() {
-		return this.dialog('close');
-	}
+            if (uid != null && window.parent && window.parent.jQuery && window.parent.jQuery.FrameDialog && window.parent.jQuery.FrameDialog._results) {
+                try { delete window.parent.jQuery.FrameDialog._results[uid]; } 
+                catch (err) { /*nothing to delete*/ }
+            }
+        }
+    };
 
-	$.fn.cancelDialog = function() {
-		return this.clearResult().closeDialog();
-	}
-	
-	//get the window context for the object/iframe in question
-	$.fn.window = function() {
-		//this item is a frame or iframe
-		if (this.attr('tagName') == "IFRAME" || this.attr('tagName') == "FRAME")
-			return window.frames[this.attr('name') || this.attr('id')];
-			
-		//get the first frame/iframe child
-		var frame = this.find('iframe, frame')[0];
-		return (frame && window.frames[frame.name || frame.id]) || null;
-	}
+    //helper function to set response value to the parent
+    //  value - result value for the given FrameDialog
+    //  uid - child id, or empty for current FrameDialog
+    $.FrameDialog.setResult = function(value, uid) {
+        if (uid) {
+            //set child value
+            jQuery.FrameDialog._results[uid] = value;
+        } else {
+            //set value from inside
+            var uid = $.FrameDialog._getUid();
+
+            if (uid != null && window.parent && window.parent.jQuery && window.parent.jQuery.FrameDialog && window.parent.jQuery.FrameDialog._results) {
+                window.parent.jQuery.FrameDialog._results[uid] = value;
+            }
+        }
+    };
+
+    //same as clicking OK button
+    //  uuid - for a child node, or empty for current
+    $.FrameDialog.closeDialog = function(uid) {
+        if (uid) {
+            //close child
+            jQuery("#" + uid).dialog('close');
+        } else {
+            //close self            
+            var uid = $.FrameDialog._getUid();
+            if (uid != null && window.parent && window.parent.jQuery) {
+                window.parent.jQuery("#" + uid).dialog('close');
+            }
+        }
+
+        return false;
+    };
+
+    //same as clicking Cancel button
+    //  uid - for a child node, or empty for current frame
+    $.FrameDialog.cancelDialog = function(uid) {
+        $.FrameDialog.clearResult(uid);
+        $.FrameDialog.closeDialog(uid);
+        return false;
+    };
+
+
+    //extension methods for shortcuts in dealing with a framedialog handle
+    $.fn.setResult = function(result) {
+        return this.each(function() {
+            $.FrameDialog.setResult(result, $(this).attr("id"));
+        });
+    };
+
+    $.fn.clearResult = function() {
+        return this.each(function() {
+            $.FrameDialog.clearResult($(this).attr("id"));
+        });
+    };
+    
+    $.fn.closeDialog = function() {
+        return this.dialog('close');
+    };
+
+    $.fn.cancelDialog = function() {
+        return this.clearResult().closeDialog();
+    };
+    
+    //get the window context for the object/iframe in question
+    $.fn.window = function() {
+        //this item is a frame or iframe
+        if (this.attr('tagName') == "IFRAME" || this.attr('tagName') == "FRAME")
+            return window.frames[this.attr('name') || this.attr('id')];
+            
+        //get the first frame/iframe child
+        var frame = this.find('iframe, frame')[0];
+        return (frame && window.frames[frame.name || frame.id]) || null;
+    };
 
 })(jQuery);
