@@ -25,7 +25,7 @@ include_once(registry::get_const('root_path').'maintenance/includes/sql_update_t
 class update_108 extends sql_update_task {
 	public $author		= 'Hoofy';
 	public $version		= '1.0.8'; //new plus-version
-	public $name		= '1.0.8 Update';
+	public $name		= '1.0 RC2 Update 1';
 	
 	public static function __shortcuts() {
 		$shortcuts = array('time');
@@ -36,11 +36,11 @@ class update_108 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_108'		=> 'EQdkp Plus 1.0.8 Update',
+				'update_108'		=> 'EQdkp Plus 1.0 RC2 Update 1',
 				'update_function'	=> 'Alter birthday field',
 			),
 			'german' => array(
-				'update_108'		=> 'EQdkp Plus 1.0.8 Update',
+				'update_108'		=> 'EQdkp Plus 1.0 RC2 Update 1',
 				'update_function'	=> 'Verändere birthday Feld',
 			),
 		);

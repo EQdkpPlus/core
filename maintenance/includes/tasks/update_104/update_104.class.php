@@ -25,18 +25,18 @@ include_once(registry::get_const('root_path').'maintenance/includes/sql_update_t
 class update_104 extends sql_update_task {
 	public $author		= 'Wallenium';
 	public $version		= '1.0.4'; //new plus-version
-	public $name		= '1.0.4 Update';
+	public $name		= '1.0 beta 5 Update';
 
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_104'		=> 'EQdkp Plus 1.0.4 Update',
+				'update_104'		=> 'EQdkp Plus 1.0 beta 5 Update',
 				'task01'			=> 'Add new permission for managing raid event confirmations',
 			),
 			'german' => array(
-				'update_104'		=> 'EQdkp Plus 1.0.4 Update',
+				'update_104'		=> 'EQdkp Plus 1.0 beta 5 Update',
 				'task01'			=> 'Füge ein neues Recht hinzu um die Raidevents besser verwalten zu können',
 			),
 		);
