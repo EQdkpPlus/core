@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 if (!version_compare(phpversion(), '5.2.0', ">=")){
 	die('
 		<b>PHP 4 detected!</b><br/><br/>
-		You need PHP5 running on you server! <br />
+		You need PHP5 running on your server! <br />
 		PHP4 is no longer supported! Dont ask in the <a href="http://www.eqdkp-plus.com">EQdkp-Plus Forum</a> for a PHP4 Release!<br />
-		Ask your Admin oder Hoster for a PHP5 update! If they do not update, you should leave your hoster!<br/><br/>
+		Ask your Admin or Hoster for a PHP5 update! If they do not update, you should leave your hoster!<br/><br/>
 		<b>Resources:</b><br/>
 			<a href="http://gophp5.org" target="_blank">goPHP5</a><br/>
 			<a href="http://www.php.net" target="_blank">http://www.php.net</a>
