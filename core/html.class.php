@@ -554,7 +554,7 @@ if (!class_exists("html")) {
 		}
 
 		public function bar($value, $max, $widht, $text, $color=false){
-			if(strpos($widht, '%') !== false && strpos($widht, 'px') !== false) $widht .= 'px';
+			if(strpos($widht, '%') === false && strpos($widht, 'px') === false) $widht .= 'px';
 			if ($color){
 				$html = "<div class='plus_bar_$color' style='width: ".$widht.";'><p>$max</p></div>";
 			}else{
