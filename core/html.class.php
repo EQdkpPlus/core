@@ -554,13 +554,13 @@ if (!class_exists("html")) {
 		}
 
 		public function bar($value, $max, $widht, $text, $color=false){
-			if(strpos($widht, '%') !== false && strpos($widht, 'px')) $widht .= 'px';
+			if(strpos($widht, '%') !== false && strpos($widht, 'px') !== false) $widht .= 'px';
 			if ($color){
 				$html = "<div class='plus_bar_$color' style='width: ".$widht.";'><p>$max</p></div>";
 			}else{
 				$html = "<div class='plus_bar-container' style='width: ".$widht.";'>
 						<b style='width: ".round((($max > 0) ? ($value / $max) * 100 : 0))."%;'></b>
-						<span style='width: ".$widht."px;'>".$text." ".$value."/".$max."</span>
+						<span style='width: ".$widht."'>".$text." ".$value."/".$max."</span>
 					</div>";
 			}
 			return $html;
