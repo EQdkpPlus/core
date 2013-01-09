@@ -1493,6 +1493,7 @@ $lang = array(
 "repo_hide_updatewarning" => "Hide this hint",
 "repo_requirements_failed" => "You have to download updates for extension from our project site <a href=\"".EQDKP_DOWNLOADS_URL."\">, because the php extension 'openssl' is missing.".EQDKP_DOWNLOADS_URL."</a> herunterladen.",
 "liveupdate_update_requirements_failed" => "A new version of EQdkp Plus is available. Because the php extension 'openssl' is missing, you have do download the new version from <a href=\"".EQDKP_DOWNLOADS_URL."\">".EQDKP_DOWNLOADS_URL."</a>.",
+"repo_extensioninfo" => "Informationen to this Extension",
 "thumbnail_defaultsize"	=> 'Defaultwidth of Thumbnails of Lightbox',
 "thumbnail_defaultsize_help" => 'Insert here the width (in Pixel) of the Thumbnails for large images',
 "pk_tab_fs_meta" => "Meta-Information",
