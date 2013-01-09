@@ -259,7 +259,6 @@ if(!class_exists('eq2_sony')) {
 			$typecolor = $typeInfo->{'color'};
 			$typename = $typeInfo->{'name'};
 			if ($typeInfo->{'name'} == "adornment") {
-			//if ($typename = "adornment") {
 			# Item Level
 			$content .= "<div class='ui-helper-clearfix'</div>";
 			$content .= "<br><div style='width: 80px; float: left; color: white;'>Level</div>";
@@ -304,7 +303,7 @@ if(!class_exists('eq2_sony')) {
 				$tierColor = "#ff939d";
 			}
 			if ($tierName == "LEGENDARY") {
-				$tierColor = "#ff939d";
+				$tierColor = "#ffc993";
 			}
 			if ($tierName == "TREASURED") {
 				$tierColor = "#8accf0";
@@ -616,6 +615,26 @@ if(!class_exists('eq2_sony')) {
 			return $content;
 		}
 
+		protected function ItemTypeMount($item)
+		{
+			$content .= "<br>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Slots</div>";
+			$slotList = $item->{'slot_list'};
+				foreach ($slotList as $slot) {
+					$content .= "<div style='color: white;'> " . $slot->{'name'};
+				}
+			$content .= "<br><div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
+			$itemLevel = $item->{'leveltouse'};
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br>";
+			$content .= "<br><div class='itemd_green'>";
+			$usableByClasses = $this->GetUsableByClasses($typeInfo);
+			$content .= $usableByClasses;
+			$content .= "</div>";
+			return $content;
+		}
+		
 		protected function ItemType($item)
 		{
 			$typeInfo = $item->{'typeinfo'};
@@ -625,8 +644,11 @@ if(!class_exists('eq2_sony')) {
 			if ($typeInfo->{'name'} == "armor") {
 				return $this->ItemTypeArmor($item);
 			}
+			if ($typeInfo->{'name'} == "expendable") {
+			    return $this->ItemTypeMount($item);
+			}
 		}
-
+		
 		protected function ItemEffects($item) 
 		{
 			$content = "";
@@ -674,19 +696,17 @@ if(!class_exists('eq2_sony')) {
 			foreach($adornmentslots as $key) {
 					$count++;
 					if ($count == 1) {
-						$content .= "<div class='itemd_adornslots'>Adornment Slots:</div>";
-						$content .= "<div style='font-weight: normal;'>";
+						$content .= "<div class='adorncontainer'>";
 					}
 					$color = $key->{'color'};
-					$content .= "<span style='color: $color;'>" . ucfirst($color) . "</span> ";
+					$content .= "<div class='itemd_adicon".$color."'> </div>";
 			}
 			if ($count > 0) {
-				#$content .= "</div></div>\n";
 				$content .= "</div>\n";
 			}
 			return $content;
 		}
-		
+				
 		protected function GenerateItemStatsHTML($myItem) {
 			$content = $this->OuterDivNoHide($myItem);
 			$content .= $this->DisplayName($myItem);
@@ -695,6 +715,7 @@ if(!class_exists('eq2_sony')) {
 			$content .= $this->GreenAdorn($myItem);
 			$content .= $this->ItemTier($myItem);
 			$content .= $this->ItemFlags($myItem);
+			$content .= $this->ItemAdornmentSlots($myItem);
 			$content .= $this->GreenAdornMax($myItem);
 			$content .= $this->Adornments($myItem);
 			$content .= $this->ItemAttributes($myItem);
@@ -704,7 +725,6 @@ if(!class_exists('eq2_sony')) {
 			$content .= $this->ItemAdornments($myItem);
 			$content .= $this->ItemType($myItem);
 			$content .= $this->ItemEffects($myItem);
-			$content .= $this->ItemAdornmentSlots($myItem);
 			$content .= "</div>\n";
 			return $content;
 		}

@@ -39,6 +39,7 @@ class pages extends page_generic {
 
 	public function perform_vote(){
 		if ($this->in->get('info_vote')){
+			$id = $this->in->get('id', 0);
 			$vote = $this->pdh->get('pages', 'data', array($id));
 			if ($vote && $vote['voting'] == '1'){
 				$users_voted = $vote['voters'];
