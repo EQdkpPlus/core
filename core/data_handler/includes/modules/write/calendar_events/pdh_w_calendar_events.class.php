@@ -252,12 +252,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 			}
 		}
 		
-		public function auto_addchars($raidtype, $raidid){			
+		public function auto_addchars($raidtype, $raidid, $raidleaders=array()){			
 			//Auto confirm Groups
 			$arrAutoconfirmGroups = unserialize($this->config->get('calendar_raid_autoconfirm'));
 			$signupstatus	= 1; //Angemeldet
-			
-			//Auto add groups
+
+			// auto add groups
 			$usergroups = unserialize($this->config->get('calendar_raid_autocaddchars'));
 			if(is_array($usergroups) && count($usergroups) > 0){
 				$userids = $this->pdh->get('user_groups_users', 'user_list', array($usergroups));
@@ -273,7 +273,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 										$signupstatus = 0;
 									}
 								}
-							
+
 								$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 									$raidid,
 									$memberid,
@@ -289,6 +289,21 @@ if(!class_exists('pdh_w_calendar_events')) {
 					$this->pdh->process_hook_queue();
 				}
 			}
+
+			// auto add and confirm the raidleaders
+			foreach($raidleaders as $raidleaderid){
+				$defaultrole	= $this->pdh->get('member', 'defaultrole', array($raidleaderid));
+				$this->pdh->put('calendar_raids_attendees', 'update_status', array(
+					$raidid,
+					$raidleaderid,
+					(($defaultrole) ? $defaultrole : 0),
+					0,	// status
+					0,
+					0,
+					'',
+				));
+			}
+
 		}
 	}
 }

@@ -176,7 +176,7 @@ class addevent extends page_generic {
 					'created_on'		=> $this->time->time,
 				)
 			));
-			$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid));
+			$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int')));
 			$this->email_newraid($raidid);
 		}else{
 			$this->pdh->put('calendar_events', 'add_cevent', array(
