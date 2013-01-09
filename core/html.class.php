@@ -553,33 +553,6 @@ if (!class_exists("html")) {
 			return ;
 		}
 
-		public function bar($value, $max, $widht, $text, $color=false){
-			if(strpos($widht, '%') !== false && strpos($widht, 'px')) $widht .= 'px';
-			if ($color){
-				$html = "<div class='plus_bar_$color' style='width: ".$widht.";'><p>$max</p></div>";
-			}else{
-				$html = "<div class='plus_bar-container' style='width: ".$widht.";'>
-						<b style='width: ".round((($max > 0) ? ($value / $max) * 100 : 0))."%;'></b>
-						<span style='width: ".$widht."px;'>".$text." ".$value."/".$max."</span>
-					</div>";
-			}
-			return $html;
-		}
-
-		public function bars($a_values, $width){
-			if(isset($a_values) && is_array($a_values)){
-				$out = '<div class="plus_multibar" style="width: '.$width.'px;">';
-				foreach ($a_values as $bar){
-					$out .= '<div class="plus_multibar-container" style="width: '.$width.'px;">
-								<b style="width: '.round((($bar['max'] > 0) ? ($bar['value'] / $bar['max']) * 100 : 0)).'%;"></b>
-								<span style="width: '.$width.'px;">'.((isset($bar['text']) && $bar['text']) ? $bar['text'] : '').' '.$bar['value'].'/'.$bar['max'].'</span>
-							</div>';
-				}
-				$out .= '</div>';
-				return $out;
-			}
-		}
-
 		/**
 		* Toggle Icons
 		* 

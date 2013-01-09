@@ -610,12 +610,12 @@
 			0	=> array(
 				'icon'			=> "games/wow/profiles/professions/".(($member['prof1_name']) ? $member['prof1_name'] : '0').".jpg",
 				'name'			=> $a_lang_profession[$member['prof1_name']],
-				'progressbar'	=> $this->html->bar((($member['prof1_value']) ? $member['prof1_value'] : 0), 600, 110, "")
+				'progressbar'	=> $this->jquery->ProgressBar('profession1', (($member['prof1_value'] != 0) ? intval(($member['prof1_value'] / 600) * 100) : 0), $member['prof1_value'] .' / ' . 600)
 			),
 			1	=> array(
 				'icon'			=> "games/wow/profiles/professions/".(($member['prof2_name']) ? $member['prof2_name'] : '0').".jpg",
 				'name'			=> $a_lang_profession[$member['prof2_name']],
-				'progressbar'	=> $this->html->bar((($member['prof2_value']) ? $member['prof2_value'] : 0), 600, 110, "")
+				'progressbar'	=> $this->jquery->ProgressBar('profession2', (($member['prof2_value'] != 0) ? intval(($member['prof2_value'] / 600) * 100) : 0), $member['prof1_value'] .' / ' . 600)
 			)
 		);
 		foreach ($a_professions as $v_professions){
