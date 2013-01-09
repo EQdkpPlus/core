@@ -757,7 +757,7 @@ class Manage_Extensions extends page_generic {
 			$this->jquery->Tab_Select('plus_plugins_tab', $this->in->get('tab',0));
 		}
 		
-		$this->jquery->Dialog('update_confirm', '', array('custom_js'	=> 'repo_update_start(cat, extensioncode);', 'message'	=> $this->user->lang('repo_updatewarning').'<br /><br /><input type="checkbox" onclick="hide_update_warning(this.checked);" value="1" />'.$this->user->lang('repo_hide_updatewarning'), 'withid'	=> 'cat, extensioncode'), 'confirm');
+		$this->jquery->Dialog('update_confirm', '', array('custom_js'	=> 'repo_update_start(cat, extensioncode);', 'message'	=> $this->user->lang('repo_updatewarning').'<br /><br /><input type="checkbox" onclick="hide_update_warning(this.checked);" value="1" />'.$this->user->lang('repo_hide_updatewarning'), 'withid'	=> 'cat, extensioncode', 'width'=> 300, 'height'=>300), 'confirm');
 		
 		$this->jquery->Dialog('repoinfo', $this->user->lang('repo_extensioninfo'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&info='+moduleid+'", 'width'=>'700', 'height'=>'600', 'withid'=>'moduleid'));
 
