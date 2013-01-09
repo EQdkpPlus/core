@@ -147,7 +147,8 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 					$extensions = $arrJson->extensions;
 					if(is_object($extensions)){
 						foreach ($extensions as $ext){
-							if (!isset($this->categories[(int)$ext->category])) continue;
+							if (!in_array((int)$ext->category, $this->categories)) continue;
+							
 							$this->pdh->put('repository', 'insert', array(array(
 								'plugin'			=> $ext->plugin,
 								'name'				=> $ext->name,

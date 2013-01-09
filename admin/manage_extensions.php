@@ -38,6 +38,7 @@ class Manage_Extensions extends page_generic {
 
 		$handler = array(
 			'mode' => array('process' => 'mode', 'csrf'=>true),
+			'info' => array('process' => 'repo_info'),
 			'step' => array(
 				array('value' => '1', 'process'	=> 'process_step1'),
 				array('value' => '2', 'process'	=> 'process_step2'),
@@ -50,6 +51,30 @@ class Manage_Extensions extends page_generic {
 		parent::__construct(false, $handler);
 		$this->code = $this->in->get('code', '');
 		$this->process();
+	}
+	
+	public function repo_info(){
+		$extension = $this->pdh->get('repository', 'row', $this->in->get('info', 0));
+		
+		$this->tpl->assign_vars(array(
+			'CATEGORY'			=> sanitize($extension['category']),
+			'CODE'				=> sanitize($extension['plugin']),
+			'NAME'				=> sanitize($extension['name']),
+			'DATE'				=> $this->time->user_date($extension['date'], true),
+			'AUTHOR'			=> sanitize($extension['author']),
+			'DESCRIPTION'		=> nl2br(sanitize($extension['shortdesc'])),
+			'VERSION'			=> sanitize($extension['version']),
+			'LEVEL'				=> sanitize($extension['level']),
+			'CHANGELOG'			=> nl2br(sanitize($extension['changelog'])),
+			'RATING'			=> $this->jquery->StarRating('extension_'.md5($extension['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $extension['rating'], true),
+		));
+		
+		$this->core->set_vars(array(
+			'page_title'		=> 'Repo Info',
+			'template_file'		=> 'admin/manage_extensions_repoinfo.html',
+			'header_format'		=> 'simple',
+			'display'			=> true
+		));
 	}
 
 	public function process_upload(){
@@ -86,8 +111,6 @@ class Manage_Extensions extends page_generic {
 			case 'application/x-zip': $blnTypeAllowed = true;
 		}
 		
-		
-		
 		if (!strlen($tempname)){
 			$this->core->message($this->user->lang('plugin_upload_error1'), $this->user->lang('error'), 'red');
 		} elseif (!$blnTypeAllowed){
@@ -98,39 +121,36 @@ class Manage_Extensions extends page_generic {
 			$blnResult = $this->repo->unpackPackage($tempname, $this->pfh->FolderPath('tmp/'.$upload_id, 'repository'));
 			if ($blnResult){
 				$src_path = $extension_name = false;
-
-				if ($dh = opendir($this->pfh->FolderPath('tmp/'.$upload_id, 'repository'))) {
-					while (($file = readdir($dh)) !== false) {
-						if (is_dir($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$file) && is_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$file.'/package.xml')){
-							$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$file.'/';
-							$extension_name = $file;
-
-							break;
+				
+				if (is_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml')){
+					$xml = simplexml_load_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml');
+					if ($xml && $xml->folder != ''){
+						$extension_name = $xml->folder;
+						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
+						if (is_dir($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$extension_name)){
+							$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$extension_name;
 						}
-					}
-					closedir($dh);
-				}
-
-				if ($extension_name){
-					$xml = simplexml_load_file($src_path.'/package.xml');
-					switch ($xml['type']){
-						case 'plugin':			$target = $this->root_path.'plugins';	$cat=1; 	break;
-						case 'game':			$target = $this->root_path.'games';		$cat=7;		break;
-						case 'template':		$target = $this->root_path.'templates';	$cat=1;		break;
-						case 'portal':			$target = $this->root_path.'portal';	$cat=3;		break;
-						default: $target = false;
-					}
-					if ($target){
+						
+						$arrAttributes = $xml->attributes();
+						
+						switch ($arrAttributes['type']){
+							case 'plugin':			$target = $this->root_path.'plugins';	$cat=1; 	break;
+							case 'game':			$target = $this->root_path.'games';		$cat=7;		break;
+							case 'template':		$target = $this->root_path.'templates';	$cat=1;		break;
+							case 'portal':			$target = $this->root_path.'portal';	$cat=3;		break;
+							default: $target = false;
+						}
+						
 						$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
-						$this->pfh->Delete('tmp/'.$upload_id, 'repository');
 						if (!$blnResult){
 							$this->core->message($this->user->lang('plugin_package_error3'), $this->user->lang('error'), 'red');
 						} else {
 							$this->pm->search();
 							redirect('admin/manage_extensions.php'.$this->SID.'&cat='.$cat.'&mode=install&code='.$extension_name.'&link_hash='.$this->CSRFGetToken('mode'));
 						}
+						
 					} else {
-						$this->core->message($this->user->lang('plugin_package_error1'), $this->user->lang('error'), 'red');
+						$this->core->message($this->user->lang('plugin_package_error2'), $this->user->lang('error'), 'red');
 					}
 
 				} else {
@@ -307,10 +327,17 @@ class Manage_Extensions extends page_generic {
 
 	public function display(){
 		//Get Extensions
-		if (!defined('USE_REPO')){
-			$arrExtensionList = array();
-		} else {
-			$arrExtensionList = $this->repo->getExtensionList();
+		$arrExtensionList = $this->repo->getExtensionList();
+		$arrExtensionListNamed = array();
+		if (is_array($arrExtensionList)){
+			foreach($arrExtensionList as $catid => $extensions){
+				if (is_array($extensions)){
+					foreach($extensions as $id => $ext){
+						if (!isset($arrExtensionListNamed[$catid])) $arrExtensionListNamed[$catid] = array();
+						$arrExtensionListNamed[$catid][$ext['plugin']] = $id;
+					}
+				}
+			}
 		}
 		
 		$blnRequirements = $this->repo->checkRequirements();
@@ -391,7 +418,7 @@ class Manage_Extensions extends page_generic {
 			}
 
 			$this->tpl->assign_block_vars('plugins_row_'.$row, array(
-				'NAME'				=> $this->pm->get_data($plugin_code, 'name'),
+				'NAME'				=> (isset($arrExtensionListNamed[1][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[1][$plugin_code].')">'.$this->pm->get_data($plugin_code, 'name').'</a>' : $this->pm->get_data($plugin_code, 'name'),
 
 				'VERSION'			=> ( !empty($version) ) ? $version : '&nbsp;',
 				'CODE'				=> $plugin_code,
@@ -417,13 +444,13 @@ class Manage_Extensions extends page_generic {
 			foreach ($arrExtensionList[1] as $id => $extension){
 				if ($this->pm->search($extension['plugin']) || $extension['plugin'] == 'pluskernel') continue;
 				$row = 'grey_repo';
-				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '>='));
+				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
 				$dep['games']	= 'skip';
 				$dep['phpf']	= 'skip';
 				$dl_link = ($blnRequirements) ? '<a href="javascript:repo_install(1, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>' : '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_row_'.$row, array(
-					'NAME'				=> sanitize($extension['name']),
+					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
@@ -460,6 +487,7 @@ class Manage_Extensions extends page_generic {
 		$arrTemplates = $this->pdh->get('styles', 'styles');
 		$arrLocalStyleUpdates = $this->objStyles->getLocalStyleUpdates();
 		$arrUninstalledStyles = $this->objStyles->getUninstalledStyles();
+		$arrStyles = array();
 
 		foreach($arrUninstalledStyles as $key => $install_xml){
 			$plugin_code = $key;
@@ -487,7 +515,7 @@ class Manage_Extensions extends page_generic {
 				'ACTION_LINK'	=> $link,
 				'TEMPLATE'		=> $key,
 			));
-
+			$arrStyles[] = (($install_xml->name) ? $install_xml->name : stripslashes($key));
 		}
 
 		foreach($arrTemplates as $row){
@@ -535,12 +563,37 @@ class Manage_Extensions extends page_generic {
 				'STANDARD'			=> ($row['style_id'] == $default_style) ? 'checked="checked"' : '',
 				'VERSION'			=> $row['style_version'],
 				'AUTHOR'			=> ($row['style_contact'] != "") ? '<a href="mailto:'.$row['style_contact'].'">'.$row['style_author'].'</a>': $row['style_author'],
-				'NAME'				=> $this->html->ToolTip($screenshot, $row['style_name']),
+				'NAME'				=> $this->html->ToolTip($screenshot, ((isset($arrExtensionListNamed[2][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[2][$plugin_code].')">'.$row['style_name'].'</a>' : $row['style_name'])),
 				'TEMPLATE'			=> $row['template_path'],
 				'USERS'				=> $row['users'],
 				'ACTION_LINK'		=> $link,
 			));
+			
+			$arrStyles[] = $plugin_code;
 		}
+		
+		//Now bring the Extensions from the REPO to template
+		if (isset($arrExtensionList[2]) && is_array($arrExtensionList[2])){
+			foreach ($arrExtensionList[2] as $id => $extension){
+				if (in_array($extension['plugin'], $arrStyles)) continue;
+				$row = 'grey';
+
+				$link = '<a href="javascript:repo_install(2, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
+				$this->tpl->assign_block_vars('styles_row_'.$row, array(
+					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
+					'VERSION'			=> sanitize($extension['version']),
+					'CODE'				=> sanitize($extension['plugin']),
+					'AUTHOR'			=> sanitize($extension['author']),
+					'TEMPLATE'			=> sanitize($extension['plugin']),
+					'DESCRIPTION'		=> sanitize($extension['shortdesc']),
+					'ACTION_LINK'		=> $link,
+				));
+
+			}
+		}
+		
+		
 		$this->jquery->dialog('style_default_info', $this->user->lang('default_style'), array('message' => $this->user->lang('style_default_info').'<br /><br /><label><input type="radio" name="override" value="0" onchange="change_override(1);">'.$this->user->lang('yes').'</label>  <label><input type="radio" name="override" value="1" checked="checked" onchange="change_override(0);">'.$this->user->lang('no').'</label>', 'custom_js' => 'submit_form();', 'height' => 200), 'confirm');
 		$this->jquery->dialog('style_reset_warning', $this->user->lang('reset_style'), array('message' => $this->user->lang('style_confirm_reset'), 'height' => 200, 'url' => $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=reset&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
 		$this->jquery->dialog('style_delete_warning', $this->user->lang('delete_style'), array('message' => $this->user->lang('confirm_delete_style'), 'height' => 200, 'url'=> $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=uninstall&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
@@ -585,7 +638,7 @@ class Manage_Extensions extends page_generic {
 				}
 
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
-					'NAME'				=> sanitize($value['name']),
+					'NAME'				=> (isset($arrExtensionListNamed[3][$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.$value['name'].'</a>' : $value['name'],
 					'VERSION'			=> sanitize($value['version']),
 					'CODE'				=> sanitize($value['path']),
 					'CONTACT'			=> sanitize($value['autor']),
@@ -605,7 +658,7 @@ class Manage_Extensions extends page_generic {
 				$link = '<a href="javascript:repo_install(3, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
 				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
-					'NAME'				=> sanitize($extension['name']),
+					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
@@ -653,7 +706,7 @@ class Manage_Extensions extends page_generic {
 				}
 
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
-					'NAME'				=> $this->game->game_name($plugin_code),
+					'NAME'				=> (isset($arrExtensionListNamed[7][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.$this->game->game_name($plugin_code).'</a>' : $this->game->game_name($plugin_code),
 					'VERSION'			=> $arrGameVersions[$plugin_code],
 					'CODE'				=> sanitize($plugin_code),
 					'CONTACT'			=> '',
@@ -671,7 +724,7 @@ class Manage_Extensions extends page_generic {
 				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
 				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
-					'NAME'				=> sanitize($extension['name']),
+					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
@@ -705,6 +758,8 @@ class Manage_Extensions extends page_generic {
 		}
 		
 		$this->jquery->Dialog('update_confirm', '', array('custom_js'	=> 'repo_update_start(cat, extensioncode);', 'message'	=> $this->user->lang('repo_updatewarning').'<br /><br /><input type="checkbox" onclick="hide_update_warning(this.checked);" value="1" />'.$this->user->lang('repo_hide_updatewarning'), 'withid'	=> 'cat, extensioncode'), 'confirm');
+		
+		$this->jquery->Dialog('repoinfo', $this->user->lang('repo_extensioninfo'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&info='+moduleid+'", 'width'=>'700', 'height'=>'600', 'withid'=>'moduleid'));
 
 		foreach ($this->repo->DisplayCategories() as $key=>$category){
 			$this->tpl->assign_vars(array(

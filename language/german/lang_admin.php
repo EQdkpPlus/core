@@ -1503,6 +1503,7 @@ $lang = array(
 "repo_updatewarning" => "Das Update überschreibt die vorhandenen Dateien der Erweiterung und dadurch alle manuell getätigten Änderungen daran. Diese Änderungen können nicht wiederhergestellt werden.",
 "repo_hide_updatewarning" => "Diesen Hinweis nicht mehr anzeigen",
 "repo_requirements_failed" => "Da dir die PHP-Erweiterung 'openssl' fehlt, musst du Updates für die Erweiterungen manuell über unsere Projektseite unter <a href=\"".EQDKP_DOWNLOADS_URL."\">".EQDKP_DOWNLOADS_URL."</a> herunterladen.",
+"repo_extensioninfo" => "Informationen zur Erweiterung",
 
 "thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',
 "thumbnail_defaultsize_help" => 'Trage hier die Breite (in Pixeln) der Vorschaubilder für große Bilder ein',
