@@ -737,38 +737,36 @@ if (!class_exists("jquery")) {
 		* Progress Bar
 		*
 		* @param $id			ID of the div (must be unique)
-		* @param $value			Value between 0 and 100
-		* @param $text			Text to be shown in the progressbar
-		* @param $textalign		Alignment of the text in the processbar
-		* @param $directout		Directly output the code
+		* @param $options		Array with options [completed, total, text, txtalign, directout]
 		* @return CHAR
 		*/
-		public function ProgressBar($id, $value, $text='', $textalign='center', $directout=false){
-			$value	= ($value >= 0 && $value <= 100) ? $value : '0';
-			$value = number_format($value, 2, '.', '');
-			if($text){
-				$mcss = '.ui-progressbar { position:relative; }
-						.'.$id.'_label { position: absolute; width: 90%; text-align: '.$textalign.'; line-height: 1.9em; left:5%; right:5%;}';
-				if($directout){
-					$mhtml = '<style type="text/css">'.$mcss.'</style>';
-				}else{
-					$this->tpl->add_css($mcss);
-				}
-			}
-			$mjs	= '$("#'.$id.'").progressbar({
-							value: '.$value.'
-						});';
-			if($directout){
-				$mhtml .= '<script type="text/javascript">$(function(){ '.$mjs.' });</script>';
+		public function progressbar($id, $value=0, $options=''){
+			$html	= '';
+			
+			// options
+			$value = (isset($options['completed']) && isset($options['total']) && $options['total'] >= $options['completed']) ? (($options['completed'] != 0) ? intval(($options['completed'] / $options['total']) * 100) : 0) : (($value >= 0 && $value <= 100) ? $value : '0');
+
+			// format the number to fit the requirements for jquery.ui
+			$value	= number_format($value, 2, '.', '');
+
+			// the javascript
+			$mjs	= '$("#'.$id.'").progressbar({ value: '.$value.' });';
+
+			// direct output or use the template engine?
+			if(isset($options['directout']) && $options['directout']){
+				$html .= '<script type="text/javascript">$(function(){ '.$mjs.' });</script>';
 			}else{
 				$this->tpl->add_js($mjs, 'docready');
 			}
-			if($text){
-				$html  = '<div id="'.$id.'"><span class="'.$id.'_label">'.$text.'</span></div>';
-			}else{
-				$html  = '<div id="'.$id.'"></div>';
-			}
-			return (($directout) ? $mhtml: '').$html;
+
+			// generate percentage text if required
+			$text					= (isset($options['text']) && strpos($options['text'], "%percentage%") === false) ? $options['text'] : str_replace("%percentage%", $value.'%', $options['text']);
+			$text					= (isset($options['text']) && strpos($text, "%progress%") === false) ? $text : str_replace("%progress%", $options['completed'].'/'.$options['total'], $text);
+			
+
+			// the HTML of the progressbar
+			$html	.= '<div id="'.$id.'">'.((isset($options['text']) && $options['text']) ? '<span class="progressbar_label"'.(($options['txtalign']) ? ' style="text-align: '.$options['txtalign'].'"' : '').'>'.$text.'</span>' : '').'</div>';
+			return $html;
 		}
 
 		/**

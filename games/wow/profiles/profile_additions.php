@@ -545,12 +545,10 @@
 					$tt_bossprogress .= '</table>';
 
 					// normal
-					$percent_bc_normal	= ($v_bossprogress['bosses_normal'] != 0) ? intval(($v_bossprogress['bosses_normal'] / $v_bossprogress['bosses_max']) * 100) : 0;
-					$bar_bc_normal		= $this->jquery->ProgressBar('bcnormal_'.$v_bossprogress['id'], $percent_bc_normal, $v_bossprogress['bosses_normal'] .' / ' . $v_bossprogress['bosses_max'].' ('.$percent_bc_normal.'%)');
+					$bar_bc_normal		= $this->jquery->progressbar('bcnormal_'.$v_bossprogress['id'], 0, array('completed' => $v_bossprogress['bosses_normal'], 'total' => $v_bossprogress['bosses_max'], 'text' => '%progress% (%percentage%)'));
 
 					//Heroic
-					$percent_bc_heroic	= ($v_bossprogress['bosses_heroic'] != 0) ? intval(($v_bossprogress['bosses_heroic'] / $v_bossprogress['bosses_max']) * 100) : 0;
-					$bar_bc_heroic		= $this->jquery->ProgressBar('bcheroic_'.$v_bossprogress['id'], $percent_bc_heroic, 'heroic '.$v_bossprogress['bosses_heroic'] .' / ' . $v_bossprogress['bosses_max'].' ('.$percent_bc_heroic.'%)');
+					$bar_bc_heroic		= $this->jquery->progressbar('bcheroic_'.$v_bossprogress['id'], 0, array('completed' => $v_bossprogress['bosses_heroic'], 'total' => $v_bossprogress['bosses_max'], 'text' => '%progress% (%percentage%)'));
 
 					$this->tpl->assign_block_vars('bossprogress_cat.bossprogress_val', array(
 						'ID'	=> $v_bossprogress['id'],
@@ -565,10 +563,9 @@
 		// achievements
 		$a_achievements = $this->game->callFunc('parseCharAchievementOverview', array($chardata));
 		foreach ($a_achievements as $id_achievements => $v_achievements){
-			$percent_achievements = ($v_achievements['completed'] != 0) ? intval(($v_achievements['completed'] / $v_achievements['total']) * 100) : 0;
 			$this->tpl->assign_block_vars('achievements', array(
 				'NAME'	=> $v_achievements['name'],
-				'BAR'	=> $this->jquery->ProgressBar('guildachievs_'.$id_achievements, $percent_achievements, $v_achievements['completed'] .' / ' . $v_achievements['total'].' ('.$percent_achievements.'%)'),
+				'BAR'	=> $this->jquery->progressbar('guildachievs_'.$id_achievements, 0, array('completed' => $v_achievements['completed'], 'total' => $v_achievements['total'], 'text' => '%progress% (%percentage%)')),
 				'ID'	=> $id_achievements,
 				'LINK'	=> ($id_achievements != 'total') ? $this->game->obj['armory']->bnlink($chardata['name'], register('config')->get('uc_servername'), 'achievements').'#achievement#'.$id_achievements : '',
 			));
@@ -610,12 +607,12 @@
 			0	=> array(
 				'icon'			=> "games/wow/profiles/professions/".(($member['prof1_name']) ? $member['prof1_name'] : '0').".jpg",
 				'name'			=> $a_lang_profession[$member['prof1_name']],
-				'progressbar'	=> $this->jquery->ProgressBar('profession1', (($member['prof1_value'] != 0) ? intval(($member['prof1_value'] / 600) * 100) : 0), $member['prof1_value'] .' / ' . 600)
+				'progressbar'	=> $this->jquery->progressbar('profession1', 0, array('completed' => $member['prof1_value'], 'total' => 600, 'text' => '%progress%'))
 			),
 			1	=> array(
 				'icon'			=> "games/wow/profiles/professions/".(($member['prof2_name']) ? $member['prof2_name'] : '0').".jpg",
 				'name'			=> $a_lang_profession[$member['prof2_name']],
-				'progressbar'	=> $this->jquery->ProgressBar('profession2', (($member['prof2_value'] != 0) ? intval(($member['prof2_value'] / 600) * 100) : 0), $member['prof1_value'] .' / ' . 600)
+				'progressbar'	=> $this->jquery->progressbar('profession2', 0, array('completed' => $member['prof2_value'], 'total' => 600, 'text' => '%progress%'))
 			)
 		);
 		foreach ($a_professions as $v_professions){

@@ -107,11 +107,11 @@
 		
 		
 		$cdata 		= $chardata['character_list'][0];
-		//d($cdata);
+
 		$tradeskill_keys = array_keys($cdata['tradeskills']);
 		$second_tradeskill = "";
 		foreach($cdata['secondarytradeskills'] as $key=>$value){
-			$second_tradeskill .= $this->jquery->ProgressBar('second_tradeskill'.$key, ((int)$value['totalvalue'] / (int)$value['maxvalue'])*100, ucfirst($key).' ('.$value['totalvalue'].')');
+			$second_tradeskill .= $this->jquery->progressbar('second_tradeskill'.$key, 0, array('completed' => (int)$value['totalvalue'], 'total' => (int)$value['maxvalue'],'text' => ucfirst($key).' ('.$value['totalvalue'].')'));
 		}
 		$this->tpl->assign_vars(array(
 			'ARMORY' 		=> 1,
@@ -165,7 +165,7 @@
 			$maxvalue = ((int)$value['maxvalue'] > (int)$value['totalvalue']) ? (int)$value['maxvalue'] : (int)$value['totalvalue'];
 			
 			$this->tpl->assign_block_vars('skill_list', array(
-				'BAR' => $this->jquery->ProgressBar('skills_'.$key, ((int)$value['totalvalue'] / $maxvalue)*100, $value['totalvalue'].' / '.$maxvalue),
+				'BAR' => $this->jquery->progressbar('skills_'.$key, 0, array('completed' => $value['totalvalue'], 'total' => $maxvalue, 'text' => $value['totalvalue'].' / '.$maxvalue))
 				'NAME'=> ucfirst($key),
 			));
 		}

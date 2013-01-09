@@ -400,3 +400,16 @@ div.icon_repeating {
     position: relative;
     top: -3px;
 }
+
+/* Progress Bar with text */
+.ui-progressbar {
+	position:relative;
+}
+.progressbar_label {
+	position: absolute;
+	width: 90%;
+	text-align: center;
+	line-height: 1.9em;
+	left:5%;
+	right:5%;
+}

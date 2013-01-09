@@ -95,10 +95,9 @@ if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 		}
 		
 		foreach ($arrAchievs as $id => $val){
-			$value = ($val['completed'] != 0) ? intval(($val['completed'] / $val['total']) * 100) : 0;
 			$this->tpl->assign_block_vars('guildachievs', array(
 				'NAME'	=> $val['name'],
-				'BAR'	=> $this->jquery->ProgressBar('guildachievs_'.$id, $value, $val['completed'] .' / ' . $val['total'].' ('.$value.'%)'),
+				'BAR'	=> $this->jquery->progressbar('guildachievs_'.$id, 0, array('completed' => $val['completed'], 'total' => $val['total'],'text' => '%progress% (%percentage%)')),
 				'ID'	=> $id,
 				'LINK'	=> ($id != 'total') ? $this->game->obj['armory']->bnlink('', register('config')->get('uc_servername'), 'guild-achievements', register('config')->get('guildtag')).'#achievement#'.$id : '',
 			));

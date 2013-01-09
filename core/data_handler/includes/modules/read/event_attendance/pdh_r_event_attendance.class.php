@@ -166,8 +166,10 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 		public function get_html_attendance($member_id, $event_id, $time_period, $with_twinks=true){
 			$data = $this->get_attendance($member_id, $event_id, $time_period, $with_twinks, true);
 			$percent = runden($data['member_attendance']*100);
-			return $this->jquery->ProgressBar('evatt_'.$member_id.'_'.$event_id, $percent, $percent.'% ('.$data['member_raidcount'].'/'.$data['total_raidcount'].')', 'center', true);
-			return '<span class="'.color_item($percent*100, true).'">'.$percent*100 .'% ('.$data['member_raidcount'].'/'.$data['total_raidcount'].')</span>';
+			return $this->jquery->progressbar('evatt_'.$member_id.'_'.$event_id, $percent, array('text' => '%percentage% ('.$data['member_raidcount'].'/'.$data['total_raidcount'].')', 'directout' => true));
+			
+			// TODO: What the hell is that?
+			#return '<span class="'.color_item($percent*100, true).'">'.$percent*100 .'% ('.$data['member_raidcount'].'/'.$data['total_raidcount'].')</span>';
 		}
 
 		public function get_caption_attendance($period){
