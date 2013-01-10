@@ -179,7 +179,6 @@ class urlfetcher  extends gen_class {
 		);
 		
 		$context	= @stream_context_create($opts);
-		var_dump($context);
 		$getdata	= @file_get_contents($url, false, $context);
 		return $getdata;
 	
