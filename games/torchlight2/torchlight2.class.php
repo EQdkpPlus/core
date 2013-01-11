@@ -36,7 +36,7 @@ if(!class_exists('torchlight2')) {
 		protected $lang_file	= array();
 		protected $path			= false;
 		public $lang			= false;
-		public $version			= '1.0';
+		public $version			= '0.1';
 
 		/**
 		* Initialises filters
