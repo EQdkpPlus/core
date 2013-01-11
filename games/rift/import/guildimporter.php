@@ -22,7 +22,7 @@ include_once ($eqdkp_root_path . 'common.php');
 
 class guildImporter extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'core', 'config');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'core', 'config', 'html');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -55,7 +55,7 @@ class guildImporter extends page_generic {
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('guild_xml').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'textarea','name'=>'guildxml','rows'=>20, 'size'=>100)).'</dd>
+				<dd>'.$this->html->widget(array('fieldtype'=>'textarea','name'=>'guildxml','rows'=>20, 'cols'=>40)).'</dd>
 			</dl>
 			</fieldset>';
 		$hmtlout .= '<br/><input type="submit" name="submiti" value="'.$this->game->glang('uc_import_forw').'" class="mainoption bi_ok" />';
