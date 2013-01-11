@@ -22,6 +22,10 @@ define('NO_MMODE_REDIRECT', true);
 $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
+if (!defined('USE_REPO')){
+	message_die("This Function is not available yet. Please go to ".EQDKP_DOWNLOADS_URL." for Downloading Updates.");
+}
+
 class Manage_Live_Update extends page_generic {
 		public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'jquery', 'core', 'config', 'pfh', 'repo' => 'repository', 'html');

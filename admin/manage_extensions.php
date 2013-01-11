@@ -327,7 +327,11 @@ class Manage_Extensions extends page_generic {
 
 	public function display(){
 		//Get Extensions
-		$arrExtensionList = $this->repo->getExtensionList();
+		if (!defined('USE_REPO')){
+			$arrExtensionList = array();
+		} else {
+			$arrExtensionList = $this->repo->getExtensionList();
+		}
 		$arrExtensionListNamed = array();
 		if (is_array($arrExtensionList)){
 			foreach($arrExtensionList as $catid => $extensions){
