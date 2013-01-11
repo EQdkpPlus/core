@@ -205,7 +205,7 @@ class Manage_Extensions extends page_generic {
 			$this->pfh->secure_folder('','repository');
 			$this->repo->downloadPackage($downloadLink, $destFolder, $filename);
 
-			if ($this->repo->verifyPackage($destFolder.$filename, $downloadHash, $downloadSignature)){
+			if ($this->repo->verifyPackage($destFolder.$filename, $downloadHash, $downloadSignature, 'packages')){
 				echo "true";		
 			} else {
 				echo $this->user->lang('repo_step2_error');
@@ -327,11 +327,7 @@ class Manage_Extensions extends page_generic {
 
 	public function display(){
 		//Get Extensions
-		if (!defined('USE_REPO')){
-			$arrExtensionList = array();
-		} else {
-			$arrExtensionList = $this->repo->getExtensionList();
-		}
+		$arrExtensionList = $this->repo->getExtensionList();
 		$arrExtensionListNamed = array();
 		if (is_array($arrExtensionList)){
 			foreach($arrExtensionList as $catid => $extensions){

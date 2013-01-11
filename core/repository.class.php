@@ -29,20 +29,36 @@ if (!class_exists("repository")) {
 		//Dummy URL, should be a secure connection
 		private $RepoEndpoint	= "";
 		
-		//EQdkp Plus Root Cert
-		private $rootCert = "-----BEGIN CERTIFICATE-----
-MIIB7jCCAVegAwIBAgIBATANBgkqhkiG9w0BAQUFADAtMRMwEQYDVQQKEwpFUWRr
-cCBQbHVzMRYwFAYDVQQLEw1FUWRrcCBQbHVzIENBMB4XDTEyMTEwMzE1MzkwMFoX
+		//EQdkp Plus Core Root Cert
+		private $coreRootCert = "-----BEGIN CERTIFICATE-----
+MIIB4DCCAUmgAwIBAgIBAzANBgkqhkiG9w0BAQUFADAtMRMwEQYDVQQKEwpFUWRr
+cCBQbHVzMRYwFAYDVQQLEw1FUWRrcCBQbHVzIENBMB4XDTEzMDExMTA5NDAwMFoX
 DTQyMTEwMzE1MzkwMFowLTETMBEGA1UEChMKRVFka3AgUGx1czEWMBQGA1UECxMN
-RVFka3AgUGx1cyBDQTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAxRPRiRKf
-YMm9tdR3wRDdxZ0VdcsbPA6JHtoOdYb0UMzehfJkwdGWjYDIi4188QPOah8IaCjz
-/25yh1GLVvs7vUJhJfm6zSEMKM9KFmptuAB2nVWj7vJ8N71WupfqGfhlV/ptm7NY
-SgF1u5Iec3BfF36is4GhV+WpaUQXAjk6H2ECAwEAAaMeMBwwDAYDVR0TBAUwAwEB
-/zAMBgNVHQ8EBQMDB/+AMA0GCSqGSIb3DQEBBQUAA4GBAHijJJt0JmvLoBTrQQpO
-xy4/WbV2cHoGPCkzrSqFsTUVkm4FtvryXwhu1f7LmtEB0kubdjfm0sVsiYqIcSve
-GZ4AWKOmtvP/FnLoGgCrvZ/awt/sCM1giZ9z3fDRmW2fu2OAR10UV33c7fQJsUap
-E8Cl00yOHHLzxkEzjPqv8GpC
+RVFka3AgUGx1cyBDQTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA4+ZMyE7S
+gUQ5g1UqPMsF8Tw2mc256uaJFvsi48fL0yzu60B8uItjQ9Rn0Tkr4WZf6Magy7Qi
+GBPNYerIc2tLHBvBkvlP67Z5IsZi9HxcLZxJujekeo+7sBqYrRxO2Q8jtiNXGUAV
+lObItVHmHF0gAUB1H1gEOPh5iLUB49wAs8MCAwEAAaMQMA4wDAYDVR0TBAUwAwEB
+/zANBgkqhkiG9w0BAQUFAAOBgQC1Ulxr6GZ5okmF3kFcN0n1y3Os9VAmnDDnRY2m
+khKbaXWms2Ezys2QuqMINYYi+g3BbO2AgZDVZ30NMn0WUldSvtykpkPydq+tSBlD
+jVY5Fd7pm4adLV4kkyFRH2sWXlLJdLj8HwEvqFM4W/gDPC1B0hdulfkeXB75aINR
+uN0FRg==
 -----END CERTIFICATE-----";
+		
+		//EQdkp Plus Packages Root Cert
+		private $packagesRootCert = "-----BEGIN CERTIFICATE-----
+MIIB4DCCAUmgAwIBAgIBBDANBgkqhkiG9w0BAQUFADAtMRMwEQYDVQQKEwpFUWRr
+cCBQbHVzMRYwFAYDVQQLEw1FUWRrcCBQbHVzIENBMB4XDTEzMDExMTA5NDEwMFoX
+DTE0MDExMTA5NDEwMFowLTETMBEGA1UEChMKRVFka3AgUGx1czEWMBQGA1UECxMN
+RVFka3AgUGx1cyBDQTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr+WDcCmz
+IwSZ8MzRqubhZwgnzRapiofJ+MMWk1GoLvJo8MnPQa+CQYK9UZGLnZxJTAtywsHS
+FVtwgb/4gd8RbQ3kkrD47QexSMd8auzSDfpXx+knRQMdUmxVIxTDvw9be0XFWrkf
+91GeJUcU+l1Txym5t8IrstgHMA8QhBeRa68CAwEAAaMQMA4wDAYDVR0TBAUwAwEB
+/zANBgkqhkiG9w0BAQUFAAOBgQBID5kZh0SjBX16Np1x4vFC6JSsDPGF7S5vZtZu
+ryZAs5qB971q7IiPjSXYlKC4AErLW6EM5CfimlCSQQBc2UFBIG8gpohIDsomsWP+
+aBesoxBasYqnZZz0J9pS+ISQ15/OD0NVlx4jgtVlvQ5bjm9eZ8MmsEWGHH1LQUDF
+HTP69g==
+-----END CERTIFICATE-----";
+
 		
 		public $cachetime		= 86400; //1 day
 		public $categories		= array(1,2,3,7,8);
@@ -221,66 +237,65 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 		}
 		
 		// verify package
-		public function verifyPackage($src, $hash, $signature, $blnDeleteIfWrong = true, $blnAgain = false){
-			if (file_exists($src) && $signature != "" && $hash != "" && $this->rootCert != ""){
-				$intermCert = $this->getIntermediateCert();
+		public function verifyPackage($src, $hash, $signature, $type="core",$blnDeleteIfWrong = true, $blnAgain = false){
+			if (file_exists($src) && $signature != "" && $hash != ""){
+				$arrIntermCerts = $this->getIntermediateCerts();
+				$arrVerified = array();
+
+				foreach($arrIntermCerts as $cert){
+					if ($this->verifyIntermediateCert($cert, $type)) $arrVerified[] = $cert;
+				}
 				
-				//Verify Intermediate Cert
-				if ($this->verifyIntermediateCert($intermCert)){
+				$strFileHash = sha1_file($src);
+				foreach ($arrVerified as $intermCert){
 					//Check, if $hash is valid
 					$arrPublicKey = openssl_pkey_get_details(openssl_pkey_get_public($intermCert));
 					$blnVerified = openssl_verify($hash, base64_decode($signature), $arrPublicKey['key']);
-
-					$strFileHash = sha1_file($src);
-					
-					if (!$blnVerified) {
-						//cert error or file error?
-						if ($strFileHash === $hash){
-							//load new intermediate Cert
-							$this->loadIntermediateCert();
-							//do the thing again
-							if (!$blnAgain){
-								$blnResult = $this->verifyPackage($src, $hash, $signature, $blnDeleteIfWrong, true);
-								return $blnResult;
-							}
-						}
-					}	
 					
 					//If hashes are eqal, it's a valid package
 					if ($blnVerified && ($strFileHash === $hash)) {
 						return true;
-					} else {
-						//Delete the file because it's a bad file
-						if ($blnDeleteIfWrong) $this->pfh->Delete($src);
 					}
-
-				} else {
-					//Load cert from server, because it has been revoked or is not valid anymore
-					$this->loadIntermediateCert();
-					//do the thing again
-					if (!$blnAgain){
-						$blnResult = $this->verifyPackage($src, $hash, $signature, $blnDeleteIfWrong, true);
-						return $blnResult;
-					}
-					
-					if ($blnDeleteIfWrong) $this->pfh->Delete($src);
-					return false;
-				}	
+				}
+				
+				//We are still here, package not valid
+				
+				//load new intermediate Cert
+				$this->loadIntermediateCert();
+				//do the thing again
+				if (!$blnAgain){
+					$blnResult = $this->verifyPackage($src, $hash, $signature, $type, $blnDeleteIfWrong, true);
+					return $blnResult;
+				}
 			}
 			return false;
 		}
 		
 		//Get local Intermediate Cert
-		private function getIntermediateCert(){
+		private function getIntermediateCerts(){
 			if (is_file($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs', false))){
-				return file_get_contents($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs'));
+				$strCerts = file_get_contents($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs'));
+				return $this->parseIntermediateCerts($strCerts);
 			} else {
 				$blnResult = $this->loadIntermediateCert();
 				if ($blnResult){
-					return file_get_contents($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs'));
+					$strCerts = file_get_contents($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs'));
+					return $this->parseIntermediateCerts($strCerts);
 				}
 			}
 			return false;
+		}
+		
+		private function parseIntermediateCerts($strCerts){
+			$count = preg_match_all('#//(.*?)(-----BEGIN CERTIFICATE-----)(.*?)(-----END CERTIFICATE-----)#s', $strCerts, $arr, PREG_PATTERN_ORDER);
+			$arrCerts = array();
+			if ($count > 0){
+				for($i=0; $i < $count; $i++){
+					$cert = "-----BEGIN CERTIFICATE-----\n".trim($arr[3][$i])."\n-----END CERTIFICATE-----";
+					$arrCerts[$arr[1][$i]] = $cert;
+				}
+			}
+			return $arrCerts;
 		}
 		
 		//Download the Intermediate Cert from our server
@@ -304,13 +319,12 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 		private function loadRevokeList(){
 
 			$response = $this->puf->fetch(EQDKP_CRL_URL, "", 1);
-			$arrJson = json_decode($response);
 
-			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->list)){
+			if ($response){
 				$this->pfh->Delete('crl.txt', 'eqdkp/certs');
 				$this->pfh->CheckCreateFolder('certs', 'eqdkp');
 				$this->pfh->CheckCreateFile('crl.txt', 'eqdkp/certs');
-				$this->pfh->putContent($this->pfh->FilePath('crl.txt', 'eqdkp/certs'), (string)$arrJson->list);
+				$this->pfh->putContent($this->pfh->FilePath('crl.txt', 'eqdkp/certs'), $response);
 				return true;
 			} else {
 				return false;
@@ -355,15 +369,16 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 		}
 		
 		//Check if Intermediate Cert is valid
-		private function verifyIntermediateCert($intermCert){
+		private function verifyIntermediateCert($intermCert, $type="core"){
 			//Root Cert revoked?
-			if ($this->checkIfRevoked($this->rootCert)) {
+			if ($this->checkIfRevoked($this->coreRootCert) || $this->checkIfRevoked($this->packagesRootCert)) {
 				$this->config->set('rootcert_revoked', 1);
 				return false; 
 			}
 			
 			//Intermediate Cert revoked?
 			if ($this->checkIfRevoked($intermCert)) { return false; }
+			
 
 			// Convert the cert to der for feeding to extractSignature.
 			$certDer = $this->pemToDer($intermCert);
@@ -375,7 +390,8 @@ E8Cl00yOHHLzxkEzjPqv8GpC
     
 			// Extract the public key from the ca cert, which is what has
 			// been used to encrypt the signature in the cert.
-			$pubKey = openssl_pkey_get_public($this->rootCert);
+			$rootCert = ($type == 'core') ? $this->coreRootCert : $this->packagesRootCert;
+			$pubKey = openssl_pkey_get_public($rootCert);
 			if ($pubKey === false) {
 				return false;
 			}
@@ -420,7 +436,6 @@ E8Cl00yOHHLzxkEzjPqv8GpC
 			// and if it matches $decryptedHash we have a winner.
 			//$certHash = hash($algo,$origCert);
 			$blnResult = ($decryptedHash === $certHash);
-			
 			//Check timestamp
 			if ($blnResult){
 				$arrCert = openssl_x509_parse($intermCert);
