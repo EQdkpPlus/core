@@ -794,7 +794,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[]	= (!$onevote) ? 'cancelTitle: "Cancel Rating"' : '';
 			$tmpopt[]	= 'callback: function(ui, type, value){
 							$.post("'.$post.'", {'.$name.': value}, function(data){
-								$("#ajax_response").html(data);
+								$("#ajax_response_'.$name.'").html(data);
 							});
 						}';
 			$tmpopt[]	= ($disabled) ? 'disabled: true' : '';
@@ -811,7 +811,7 @@ if (!class_exists("jquery")) {
 			}
 			$html .= '<input type="submit" value="Rate it!" />
 						</form>';
-			$html .= '<p id="ajax_response"></p>';
+			$html .= '<p id="ajax_response_'.$name.'"></p>';
 			return $html;
 		}
 
