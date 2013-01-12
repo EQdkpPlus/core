@@ -25,8 +25,8 @@ $german_array = array(
 		1	=> 'Tank',
 		2	=> 'Heiler',
 		3	=> 'Supporter',
-		4	=> 'Nahk&#228;mpfer',
-		5   => 'Fernk&#228;mpfer',
+		4	=> 'Nahkämpfer',
+		5   => 'Fernkämpfer',
 	),
 	'races' => array(
 		'Unknown',
