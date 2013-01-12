@@ -16,6 +16,7 @@
  * $Id$
  */
 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
@@ -44,6 +45,12 @@ $german_array = array(
 		'cloth' => 'Stoff',
 		'leather' => 'Leder',
 		'mail' => 'Schwere Rüstung',
+		
+		// Profile information
+		'uc_gender'						=> 'Geschlecht',
+		'uc_male'						=> 'Männlich',
+		'uc_female'						=> 'Weiblich',
+		'uc_guild'						=> 'Gilde',
 	),
 );
 

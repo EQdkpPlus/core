@@ -16,6 +16,7 @@
  * $Id$
  */
 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
@@ -25,7 +26,7 @@ if(!class_exists('shakesfidget')) {
 		public static $shortcuts = array();
 		protected $this_game	= 'shakesfidget';
 		protected $types		= array('classes', 'races', 'filters');
-		public $icons			= array('classes', 'classes_big', 'races');
+		public $icons			= array('classes', 'classes_big', 'events', 'races');
 		protected $classes		= array();
 		protected $races		= array();
 		protected $filters		= array();
@@ -35,7 +36,7 @@ if(!class_exists('shakesfidget')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public $lang			= false;
-		public $version			= '2.0';
+		public $version			= '2.1';
 
 		/**
 		* Initialises filters
@@ -56,21 +57,12 @@ if(!class_exists('shakesfidget')) {
 		}
 
 		/**
-		* Returns ImageTag with class-icon
+		* Returns Information to change the game
 		*
-		* @param int $class_id
-		* @param bool $big
-		* @param bool $pathonly
-		* @return html string
+		* @param bool $install
+		* @return array
 		*/
-		public function decorate_classes($class_id, $big=false, $pathonly=false){
-			$icon_path = $this->root_path.'games/'.$this->game.'/classes/'.$class_id.(($big) ? '_b.png' : '.png');
-			if($pathonly) {
-				return $icon_path;
-			}
-			return "<img src='".$icon_path."' />";
-		}
-
+		
 		public function get_OnChangeInfos($install=false){
 			$info['aq'] = array();
 

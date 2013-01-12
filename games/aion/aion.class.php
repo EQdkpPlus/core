@@ -36,7 +36,7 @@ if(!class_exists('aion')) {
 		protected $lang_file	= array();
 		protected $path			= false;
 		public $lang			= false;
-		public $version			= '2.1';
+		public $version			= '2.1.1';
 
 		/**
 		* Initialises filters

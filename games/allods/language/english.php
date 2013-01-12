@@ -29,36 +29,31 @@ $english_array =  array(
 		5 => 'Mage',
 		6 => 'Druid',
 		7 => 'Psionic',
-		8 => 'Stalker',
-		9 => 'Bard',
+		8 => 'Stalker',		
 	),
-	'races' => array(
-		//The League
-		0=> array(
+	
+	'races' => array(			
+			'Unknown',
 			'Kanians',
 			'Elves',
 			'Gibberlings',
-		),
-		//The Empire
-		1=> array(
 			'Xadaganians',
 			'Orcs',
 			'Arisen'
-		),
 	),
-	'factions' => array(
-		'The League',
-		'The Empire'
-	),
+
 	'lang' => array(
 		'allods' => 'Allods Online',
 		'plate' => 'Plate',
 		'cloth' => 'Cloth',
 		'leather' => 'Leather',
-		'mail' => 'Mail',
-		
-		'pk_tab_fs_allodssettings'	=> 'Allods Online Settings',
-		'allods_faction'			=> 'Fraction',
+			
+		// Profile information
+		'uc_gender'						=> 'Gender',
+		'uc_male'						=> 'Male',
+		'uc_female'						=> 'Female',
+		'uc_guild'						=> 'Guild',
+	
 	)
 );
 ?>
