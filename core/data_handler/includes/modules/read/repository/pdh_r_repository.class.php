@@ -73,6 +73,17 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 		public function get_repository(){
 			return $this->repository;
 		}
+		
+		public function get_row($id){
+			foreach ($this->repository as $catid => $extensions){
+				if (is_array($extensions)){
+					foreach($extensions as $eid => $ext){
+						if($eid == $id) return $ext;
+					}
+				}
+			}
+			return false;
+		}
 
 		public function get_lastupdate(){
 			if ($this->repository == NULL) return 0;

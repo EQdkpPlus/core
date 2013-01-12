@@ -243,7 +243,7 @@ class game extends gen_class {
 			if($file){
 				return $this->root_path.'games/'.$this->get_game().'/import/'.$this->gameinfo()->importers[$filter];
 			}else{
-				return (isset($this->gameinfo()->importers[$filter])) ? true : false;
+				return (isset($this->gameinfo()->importers[$filter])) ? ($this->gameinfo()->importers[$filter]) : false;
 			}
 		}else{
 			return $this->gameinfo()->importers;

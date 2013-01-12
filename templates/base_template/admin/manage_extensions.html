@@ -262,7 +262,7 @@ function hide_update_warning(status){
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red_local.U_EDIT_STYLE}">{styles_row_red_local.NAME}</a> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF -->{styles_row_red_local.NAME} <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="nowrap">{styles_row_red_local.TEMPLATE}</td>
 			<td class="nowrap">{styles_row_red_local.USERS}</td>
@@ -401,7 +401,7 @@ function hide_update_warning(status){
 			<th align="left" class="nowrap">{L_version}</th>
 			<th align="left" class="nowrap">{L_contact}</th>
 			<th align="left" class="nowrap">{L_description}</th>
-			<th align="left" class="nowrap">{L_pi_rating}</th>
+			<th align="left" class="nowrap" style="width: 90px">{L_pi_rating}</th>
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
 		  <tr>
@@ -459,7 +459,7 @@ function hide_update_warning(status){
 			<th align="left" class="nowrap">{L_version}</th>
 			<th align="left" class="nowrap">{L_contact}</th>
 			<th align="left" class="nowrap">{L_description}</th>
-			<th align="left" class="nowrap">{L_pi_rating}</th>
+			<th align="left" class="nowrap" style="width: 90px">{L_pi_rating}</th>
 		  </tr>
 		  <!-- BEGIN games_row_red -->
 		  <tr>

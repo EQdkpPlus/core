@@ -73,8 +73,8 @@ class admin_user extends install_generic {
 			$this->pdl->log('install_error', $this->lang['no_pw_match']);
 			return false;
 		}
-		$this->useremail = $this->crypt->encrypt($this->useremail);
-		$this->config->set('admin_email', $this->useremail);
+		$strEmail =  $this->crypt->encrypt($this->useremail);
+		$this->config->set('admin_email', $strEmail);
 		$salt = $this->user->generate_salt();
 		$password = $this->user->encrypt_password($this->in->get('user_password1'), $salt);
 		$this->db->query("TRUNCATE __users;");
@@ -84,12 +84,16 @@ class admin_user extends install_generic {
 			'username'		=> $this->username,
 			'user_password'	=> $password.':'.$salt,
 			'user_lang'		=> $this->config->get('default_lang'),
-			'user_email'	=> $this->useremail,
+			'user_email'	=> $strEmail,
 			'user_active'	=> '1',
 			'rules'			=> 1,
 			'user_style'	=> 1,
 			'user_registered' => $this->time->time,
 			'exchange_key'	=> md5(rand().rand()),
+			'user_timezone' => $this->config->get('timezone'),
+			'user_date_time' => $this->config->get('default_date_time'),
+			'user_date_short' => $this->config->get('default_date_short'),
+			'user_date_long' => $this->config->get('default_date_long'),
 		));
 		$this->db->query("INSERT INTO __groups_users (group_id, user_id) VALUES (2,1);");
 		$this->user->login($this->username, $this->in->get('user_password1'), $this->in->exists('auto_login'));
