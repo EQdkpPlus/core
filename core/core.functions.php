@@ -1107,6 +1107,15 @@ function clean_rootpath($strPath){
 	return preg_replace('/[^\.\/]/', '', $strPath);
 }
 
+function cut_text($strText, $max = 200, $blnAddPoints = true){
+	$v = $strText;
+	if (strlen($strText) > $max) {
+		$v = substr($v.' ' , 0 , $max + 1);
+		$v = substr($v , 0 , strrpos ($v , ' '));
+		if ($blnAddPoints) $v .= '...';
+	}
+	return $v;
+}
 
 //Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
