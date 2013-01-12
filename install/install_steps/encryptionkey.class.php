@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2011-09-05 21:20:49 +0200 (Mo, 05. Sep 2011) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11236 $
+ * @version		$Rev$
  *
- * $Id: db_access.class.php 11236 2011-09-05 19:20:49Z hoofy $
+ * $Id$
  */
 if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
