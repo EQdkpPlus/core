@@ -178,7 +178,9 @@ if (!class_exists("html")) {
 				// Datepicker
 				case 'datepicker':
 					$options['options']['readonly'] = (isset($options['readonly'])) ? $options['readonly'] : false;
-					if(is_numeric($options['value'])) $options['value'] = $this->time->date($this->time->calendarformat($options['options']), $options['value']);
+					if(!($options['allow_empty'] && (empty($options['value']) || $options['value'] == '0')) && is_numeric($options['value'])) {
+						$options['value'] = $this->time->date($this->time->calendarformat($options['options']), $options['value']);
+					}
 					if(isset($options['options']['format'])) $options['options']['format'] = $this->time->translateformat2js($options['options']['format']);
 					if(isset($options['options']['timeformat'])) $options['options']['timeformat'] = $this->time->translateformat2js($options['options']['timeformat']);
 					$ccfield = $this->jquery->Calendar($options['name'], $options['value'], '', ((isset($options['options'])) ? $options['options'] : array()));
@@ -293,7 +295,9 @@ if (!class_exists("html")) {
 					return (($this->in->get($options['name'], 0) == '1') ? true : false);
 
 				case 'datepicker':
-					return $this->time->fromformat($this->in->get($options['name'], ''), $this->time->calendarformat($options['options']));
+					$input = $this->in->get($options['name'], 0);
+					if($options['allow_empty'] && (empty($input) || $input == '0')) return $input;
+					return $this->time->fromformat($input, $this->time->calendarformat($options['options']));
 					
 				case 'text':
 				case 'textarea':
