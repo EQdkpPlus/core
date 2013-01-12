@@ -1,54 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<install type="template" version="0.7.0.1">
+<install type="template" version="1.0.9">
 	<name>EQdkp MOP</name>
 	<author>GodMod</author>
 	<authorEmail></authorEmail>
-	<authorUrl>http://www.eqdkp-plus.com</authorUrl>
-	<creationDate>02-JUL-2011</creationDate>
+	<authorUrl>http://eqdkp-plus.eu</authorUrl>
+	<creationDate>2013-01-12T10:26:46+00:00</creationDate>
 	<copyright>GodMod</copyright>
 	<license>CC</license>
 	<version>0.0.3</version>
 	<description></description>
-					
-					<settings>
-						<template_path>eqdkp_mop</template_path>
-						<body_background>2B577C</body_background>
-						<body_link>C5E5FF</body_link>
-						<body_link_style>none</body_link_style>
-						<body_hlink>EEEEEE</body_hlink>
-						<body_hlink_style>none</body_hlink_style>
-						<header_link>FFFFFF</header_link>
-						<header_link_style>none</header_link_style>
-						<header_hlink>C3E5FF</header_hlink>
-						<header_hlink_style>none</header_hlink_style>
-						<tr_color1>14293B</tr_color1>
-						<tr_color2>1D3953</tr_color2>
-						<th_color1>2B577C</th_color1>
-						<fontface1>Verdana, Arial, Helvetica, sans-serif</fontface1>
-						<fontface2>Verdana, Arial, Helvetica, sans-serif</fontface2>
-						<fontface3>Verdana, Arial, Helvetica, sans-serif</fontface3>
-						<fontsize1>10</fontsize1>
-						<fontsize2>11</fontsize2>
-						<fontsize3>12</fontsize3>
-						<fontcolor1>EEEEEE</fontcolor1>
-						<fontcolor2>C3E5FF</fontcolor2>
-						<fontcolor3>000000</fontcolor3>
-						<fontcolor_neg>FF0000</fontcolor_neg>
-						<fontcolor_pos>008800</fontcolor_pos>
-						<table_border_width>1</table_border_width>
-						<table_border_color>999999</table_border_color>
-						<table_border_style>none</table_border_style>
-						<input_color>EEEEEE</input_color>
-						<input_border_width>1</input_border_width>
-						<input_border_color>2B577C</input_border_color>
-						<input_border_style>none</input_border_style>
-						<attendees_columns>6</attendees_columns>
-						<background_img></background_img>
-						<css_file></css_file>
-						<use_db_vars>0</use_db_vars>
-						<portal_width>0px</portal_width>
-						<column_right_width>0px</column_right_width>
-						<column_left_width>0px</column_left_width>
-			</settings>
+	<folder>eqdkp_mop</folder>
 </install>

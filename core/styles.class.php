@@ -130,19 +130,29 @@ if (!class_exists("styles")){
 						$data_array = array();
 
 						if ($updateColors){
-							foreach($this->allowed_colors as $color){
-								$data_array[$color] = $xml->settings->$color;
+							$settings_file = $this->root_path."templates/".$style['template_path']."/settings.xml";
+							if (file_exists($settings_file)){
+								$settings_xml = simplexml_load_file($settings_file);
+								if ($settings_xml){
+									foreach($this->allowed_colors as $color){
+										$data_array[$color] = $settings_xml->$color;
+									}
+									
+									$data		= array_merge($data, $data_array);
+								
+									$style_id	= $this->pdh->put('styles', 'update_style', array($styleid,$data));
+									
+									if (isset($settings_xml->classcolors) && $style_id > 0){
+										$this->ClassColorManagement($style_id, $settings_xml->classcolors, true);
+									}
+								}
 							}
-
-							$data		= array_merge($data, $data_array);
-							$style_id	= $this->pdh->put('styles', 'update_style', array($styleid,$data));
-							if (isset($xml->classcolors) && $style_id > 0){
-								$this->ClassColorManagement($style_id, $xml->classcolors, true);
-							}
+							
 						} else {
 							$this->pdh->put('styles', 'update_version', array($xml->version, $styleid));
 						}
 					}
+					
 					if (!$update){
 						$this->core->message(sprintf($this->user->lang('style_reset_success'), $style['style_name']), $this->user->lang('success'), 'green');
 					} else {
@@ -180,20 +190,32 @@ if (!class_exists("styles")){
 						'style_version'	=> $xml->version,
 						'style_author'	=> $xml->author,
 						'style_contact'	=> $xml->authorEmail,
-						'template_path'	=>($xml->settings->template_path) ? $xml->settings->template_path : $stylename,
+						'template_path'	=>($xml->folder) ? $xml->folder : $stylename,
 						'enabled'				=> '1'
 					);
 					if (!in_array($data['style_name'], $styles)){
 						$data_array = array();
-
-						foreach($this->allowed_colors as $color){
-							$data_array[$color] = $xml->settings->$color;
+						$blnClassColors = false;
+						
+						$settings_file = $this->root_path."templates/".$stylename."/settings.xml";
+						if (file_exists($settings_file)){
+							$settings_xml = simplexml_load_file($settings_file);
+							if ($settings_xml){
+								foreach($this->allowed_colors as $color){
+									$data_array[$color] = $settings_xml->$color;
+								}
+								$data		= array_merge($data, $data_array);
+								
+								if (isset($settings_xml->classcolors)) $blnClassColors = true;
+							}
+							
+							
 						}
-
-						$data		= array_merge($data, $data_array);
+		
 						$style_id	= $this->pdh->put('styles', 'add_style', array($data));
-						if (isset($xml->classcolors) && $style_id > 0){
-							$this->ClassColorManagement($style_id, $xml->classcolors, false);
+						
+						if ($blnClassColors && $style_id > 0){
+							$this->ClassColorManagement($style_id, $settings_xml->classcolors, false);
 						} else {
 							$arrClassColorsDefaultStyle = $this->pdh->get('class_colors', 'class_colors', array((int)$this->config->get('default_style')));
 							foreach($this->game->get('classes') as $class_id => $class_name){
@@ -231,25 +253,34 @@ if (!class_exists("styles")){
 			$styleid = intval($styleid);
 
 			$data	= $this->pdh->get('styles', 'styles', array($styleid));
+			
 			if ($data){
+				$template_path = $data['template_path'];
+				$style_version = $data['style_version'];
+			
 				//Create here the package.xml
 
 				$fot ='<?xml version="1.0" encoding="utf-8"?>
-						<install type="template" version="'.$this->config->get('plus_version').'">
-						<name>'.$data['style_name'].'</name>
-						<author>'.$data['style_author'].'</author>
-						<authorEmail>'.$data['style_contact'].'</authorEmail>
-						<authorUrl>'.EQDKP_PROJECT_URL.'</authorUrl>
-						<creationDate>19-DEC-2009</creationDate>
-						<copyright>'.$data['style_author'].'</copyright>
-						<license>CC</license>
-						<version>'.$data['style_version'].'</version>
-						<description></description>
+<install type="template" version="'.$this->config->get('plus_version').'">
+	<name>'.$data['style_name'].'</name>
+	<author>'.$data['style_author'].'</author>
+	<authorEmail>'.$data['style_contact'].'</authorEmail>
+	<authorUrl>'.EQDKP_PROJECT_URL.'</authorUrl>
+	<creationDate>'.$this->time->RFC2822($this->time->time).'</creationDate>
+	<copyright>'.$data['style_author'].'</copyright>
+	<license>CC</license>
+	<version>'.$data['style_version'].'</version>
+	<description></description>
+	<folder>'.$template_path.'</folder>
+</install>';
 
-					<settings>
-						<template_path>'.$data['template_path'].'</template_path>';
-				$template_path = $data['template_path'];
-				$style_version = $data['style_version'];
+				$storage_folder  = $this->pfh->FolderPath('templates/'.$template_path, 'eqdkp');
+
+				$this->pfh->putContent($storage_folder.'package.xml', $fot);
+				
+				$fot ='<?xml version="1.0" encoding="utf-8"?>
+<settings styleversion="'.$data['style_version'].'">	
+	<template_path>'.$data['template_path'].'</template_path>'."\n";
 				unset($data['style_id']);
 				unset($data['template_path']);
 				unset($data['style_name']);
@@ -260,23 +291,21 @@ if (!class_exists("styles")){
 				unset($data['users']);
 
 				foreach ($data as $key=>$value){
-					$fot .= "<$key>$value</$key>\n";
+					$fot .= "	<$key>$value</$key>\n";
 				}
-				$fot.='</settings>'."\n\n";
 
-				$fot.='<classcolors>'."\n";
+				$fot.='	<classcolors>'."\n";
 
 				if ($data){
 					foreach($this->pdh->get('class_colors', 'class_colors', array($styleid)) as $tclassid=>$tcolor){
-						$fot .= "<cc_$tclassid>$tcolor</cc_$tclassid>\n";
+						$fot .= "		<cc_$tclassid>$tcolor</cc_$tclassid>\n";
 					}
 				}
 
-				$fot.='</classcolors>'."\n\n";
-				$fot.='</install>';
-
-				$storage_folder  = $this->pfh->FolderPath('templates/'.$template_path, 'eqdkp');
-				$this->pfh->putContent($storage_folder.'package.xml', $fot);
+				$fot.= '	</classcolors>'."\n";
+				$fot.='</settings>';
+				
+				$this->pfh->putContent($storage_folder.'settings.xml', $fot);
 
 
 				$file = $this->pfh->FolderPath('templates', 'eqdkp').$template_path.'_'.$style_version.'.zip';
@@ -286,6 +315,7 @@ if (!class_exists("styles")){
 				//Create the archive
 				$archive->add($template_root_path, $this->root_path."templates/");
 				$archive->delete($template_path.'/package.xml');
+				$archive->delete($template_path.'/settings.xml');
 				$archive->add($this->pfh->FolderPath('templates/'.$template_path, 'eqdkp'), $this->pfh->FolderPath('templates', 'eqdkp'));
 
 				$result = $archive->create();
