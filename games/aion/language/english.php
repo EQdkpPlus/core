@@ -44,6 +44,12 @@ $english_array =  array(
 		'cloth' => 'Cloth',
 		'leather' => 'Leather',
 		'mail' => 'Mail',
+		
+		// Profile information
+		'uc_gender'						=> 'Gender',
+		'uc_male'						=> 'Male',
+		'uc_female'						=> 'Female',
+		'uc_guild'						=> 'Guild',
 	),
 );
 ?>

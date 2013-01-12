@@ -29,36 +29,29 @@ $german_array = array(
 		5 => 'Magier',
 		6 => 'Behüter',
 		7 => 'Psioniker',
-		8 => 'Späher',
-		9 => 'Barde',
+		8 => 'Späher',		
 	),
 	'races' => array(
-		//Liga
-		0=> array(
+			'Unknown',
 			'Kanians',
 			'Elfen',
 			'Gibberlings',
-		),
-		//Imperium
-		1=> array(
 			'Xadaganians',
 			'Orks',
 			'Arisen'
-		),
 	),
-	'factions' => array(
-		'Die Liga',
-		'Das Imperium'
-	),
+
 	'lang' => array(
 		'allods' => 'Allods Online',
 		'plate' => 'Platte',
 		'cloth' => 'Stoff',
 		'leather' => 'Leder',
-		'mail' => 'Schwere Rüstung',
-		
-		'pk_tab_fs_allodssettings'	=> 'Allods Online Einstellungen',
-		'allods_faction'			=> 'Fraktion',
+				
+		// Profile information
+		'uc_gender'						=> 'Geschlecht',
+		'uc_male'						=> 'Männlich',
+		'uc_female'						=> 'Weiblich',
+		'uc_guild'						=> 'Gilde',
 	),
 );
 ?>
