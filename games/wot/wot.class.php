@@ -1,20 +1,5 @@
 <?php
- /*
- * Project:		EQdkp-Plus
- * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:		2011
- * Date:		$Date: 2012-05-11 12:22:52 +0200 (Fri, 11 May 2012) $
- * -----------------------------------------------------------------------
- * @author		$Author: Selistea $
- * @copyright	2006-2011 EQdkp-Plus Developer Team
- * @link		http://eqdkp-plus.com
- * @package		eqdkp-plus
- * @version		$Rev: 00001 $
- * 
- * $Id: wot.class.php 00001 2012-12-19 23:24:52Z wallenium $
- */
+
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
@@ -38,7 +23,7 @@ if(!class_exists('wot')) {
 		protected $lang_file	= array();
 		protected $path			= false;
 		public $lang			= false;
-		public $version			= '0.1a';
+		public $version			= '0.1';
 		
 		/**
 		 * Load classes
