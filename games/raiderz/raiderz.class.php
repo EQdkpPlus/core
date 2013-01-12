@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       08.03.2011
- * Date:        $Date: 2012-08-30 00:58:21 +0200 (Thu, 30 Aug 2012) $
+ * Date:        $Date$
  * -----------------------------------------------------------------------
- * @author      $Author: godmod $
+ * @author      $Author$
  * @copyright   2006-2008 Corgan - Stefan Knaak | Wallenium & the EQdkp-Plus Developer Team
  * @link        http://eqdkp-plus.com
  * @package     eqdkp-plus
- * @version     $Rev: 11999 $
+ * @version     $Rev$
  * 
- * $Id: raiderz.class.php 11999 2012-08-29 22:58:21Z godmod $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){

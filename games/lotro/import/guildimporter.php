@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2011-11-25 16:34:26 +0100 (Fr, 25. Nov 2011) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11442 $
+ * @version		$Rev$
  * 
- * $Id: guildimporter.php 11442 2011-11-25 15:34:26Z hoofy $
+ * $Id$
  */
  
 define('EQDKP_INC', true);

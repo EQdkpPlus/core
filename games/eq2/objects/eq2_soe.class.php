@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2011-12-06 23:10:27 +0100 (Di, 06. Dez 2011) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11507 $
+ * @version		$Rev$
  * 
- * $Id: bnet_armory.class.php 11507 2011-12-06 22:10:27Z wallenium $
+ * $Id$
  *
  * Based on the new battlenet API, see documentation: http://blizzard.github.com/api-wow-docs/
  */

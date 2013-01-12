@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2009
- * Date:		$Date: 2011-10-10 23:23:17 +0200 (Mo, 10. Okt 2011) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11362 $
+ * @version		$Rev$
  * 
- * $Id: profile_additions.php 11362 2011-10-10 21:23:17Z wallenium $
+ * $Id$
  */
 
 	$this->game->new_object('lotro_data', 'ldata', array());
