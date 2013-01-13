@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2012
- * Date:		$Date: 2012-08-15 17:40:44 +0200 (Mi, 15 Aug 2012) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2012 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11931 $
+ * @version		$Rev$
  * 
- * $Id: startpoints_crontask.class.php 11931 2012-08-15 15:40:44Z wallenium $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){

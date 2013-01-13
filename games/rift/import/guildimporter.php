@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2011-08-09 12:51:58 +0200 (Di, 09. Aug 2011) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 10957 $
+ * @version		$Rev$
  * 
- * $Id: guildimporter.php 10957 2011-08-09 10:51:58Z wallenium $
+ * $Id$
  */
  
 define('EQDKP_INC', true);

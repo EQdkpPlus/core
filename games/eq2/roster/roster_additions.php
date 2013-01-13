@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2012-01-03 15:22:59 +0100 (Di, 03. Jan 2012) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: Godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11580 $
+ * @version		$Rev$
  * 
- * $Id: roster_additions.php 11580 2012-01-03 14:22:59Z Godmod $
+ * $Id$
  */
 
 $hptt_page_settings = $this->pdh->get_page_settings('roster', 'hptt_roster');

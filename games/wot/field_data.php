@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2012
- * Date:		$Date: 2012-12-19 23:24:28 +0100 (må, 19 Dec 2012) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 00001 $
+ * @version		$Rev$
  * 
- * $Id: field_data.php 00001 2012-12-19 23:24:28Z wallenium $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){
