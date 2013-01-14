@@ -77,7 +77,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 				$first_date = array('member' => $first_date, 'main' => $first_date);
 			} else {
 				$first_date['member'] = $this->pdh->get('member_dates', 'first_raid', array($member_id, null, false));
-				$first_date['main'] = ($main_id != $member_id) ? $this->pdh->get('member_dates', 'first_raid', array($main_id)) : $first_date['member'];
+				$first_date['main'] = $this->pdh->get('member_dates', 'first_raid', array($main_id));
 			}
 			//count total per event
 			if(!isset($this->counts[$first_date['member']]) || !isset($this->counts[$first_date['main']])) {
