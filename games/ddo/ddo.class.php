@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2013-01-12 18:27:09 +0100 (Sa, 12 Jan 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 12812 $
+ * @version		$Rev$
  * 
- * $Id: ddo.class.php 12812 2013-01-12 17:27:09Z godmod $
+ * $Id$
  */
 
 
