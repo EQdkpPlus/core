@@ -611,6 +611,14 @@ class Manage_Extensions extends page_generic {
 
 		//=================================================================
 		//Portal Modules
+		
+		$arrTmpModules = array();
+		
+		if (isset($arrExtensionList[3]) && is_array($arrExtensionList[3])){
+			foreach ($arrExtensionList[3] as $id => $extension){
+				$arrTmpModules[$extension['plugin']] = $extension;
+			}
+		}
 
 		$arrModules = $this->pdh->aget('portal', 'portal', 0, array($this->pdh->get('portal', 'id_list')));
 		if (is_array($arrModules)){
@@ -643,6 +651,8 @@ class Manage_Extensions extends page_generic {
 					'CODE'				=> sanitize($value['path']),
 					'CONTACT'			=> sanitize($value['autor']),
 					'ACTION_LINK'		=> $link,
+					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['shortdesc'], 100)).'</a>' : '',
+
 				));
 			}
 			$this->confirm_delete($this->user->lang('portal_reinstall_warn'), 'manage_extensions.php'.$this->SID.'&cat=3', true, array('function' => 'reinstall_portal', 'handler' => 'mode'));
@@ -662,7 +672,7 @@ class Manage_Extensions extends page_generic {
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
-					'DESCRIPTION'		=> sanitize($extension['shortdesc']),
+					'DESCRIPTION'		=> '<a href="javascript:repoinfo('.$id.')">'.sanitize(cut_text($extension['shortdesc'])).'</a>',
 					'ACTION_LINK'		=> $link,
 					'RATING'			=> $this->jquery->StarRating('extension_'.md5($extension['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $extension['rating'], true),
 				));
@@ -686,6 +696,13 @@ class Manage_Extensions extends page_generic {
 		//Games
 		$arrGames = $this->game->get_games();
 		$arrGameVersions = $this->game->get_versions();
+		$arrTmpExtension = array();
+		
+		if (isset($arrExtensionList[7]) && is_array($arrExtensionList[7])){
+			foreach ($arrExtensionList[7] as $id => $extension){
+				$arrTmpExtension[$extension['plugin']] = $extension;
+			}
+		}
 
 		if (is_array($arrGames)){
 			foreach($arrGames as $id => $value){
@@ -709,7 +726,9 @@ class Manage_Extensions extends page_generic {
 					'NAME'				=> (isset($arrExtensionListNamed[7][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.$this->game->game_name($plugin_code).'</a>' : $this->game->game_name($plugin_code),
 					'VERSION'			=> $arrGameVersions[$plugin_code],
 					'CODE'				=> sanitize($plugin_code),
-					'CONTACT'			=> '',
+					'CONTACT'			=> (isset($arrTmpExtension[$plugin_code])) ? $arrTmpExtension[$plugin_code]['author'] : '',
+					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['shortdesc'], 100).'</a>' : '',
+					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->StarRating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $arrTmpExtension[$plugin_code]['rating'], true) : '',
 					'ACTION_LINK'		=> $link,
 				));
 			}
@@ -728,7 +747,7 @@ class Manage_Extensions extends page_generic {
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
-					'DESCRIPTION'		=> sanitize($extension['shortdesc']),
+					'DESCRIPTION'		=> sanitize(cut_text($extension['shortdesc'], 100)),
 					'ACTION_LINK'		=> $link,
 					'RATING'			=> $this->jquery->StarRating('extension_'.md5($extension['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $extension['rating'], true),
 				));

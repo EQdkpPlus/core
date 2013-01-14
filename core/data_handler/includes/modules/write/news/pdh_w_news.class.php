@@ -136,10 +136,7 @@ if(!class_exists('pdh_w_news')) {
 
 		public function delete_news($id, $multiple=false) {
 			if(!$multiple) $id = array($id);
-
-			$this->db->query('DELETE FROM __news WHERE news_id IN ('.implode(', ', $id).')');
-			$this->pdh->enqueue_hook('news_update');
-
+			
 			// Logging
 			foreach($id as $news_id){
 				$log_action = array(

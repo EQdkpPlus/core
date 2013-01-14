@@ -77,48 +77,31 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 				$first_date = array('member' => $first_date, 'main' => $first_date);
 			} else {
 				$first_date['member'] = $this->pdh->get('member_dates', 'first_raid', array($member_id, null, false));
-				$first_date['main'] = ($main_id != $member_id) ? $this->pdh->get('member_dates', 'first_raid', array($main_id)) : $first_date['member'];
+				$first_date['main'] = $this->pdh->get('member_dates', 'first_raid', array($main_id));
 			}
 			//count total per event
 			if(!isset($this->counts[$first_date['member']]) || !isset($this->counts[$first_date['main']])) {
-				$raid_ids = $this->pdh->get('raid', 'id_list');
-				foreach($raid_ids as $raid_id) {
-					$date = $this->pdh->get('raid', 'date', array($raid_id));
-					if ($time_period == 'LT'){
+				$raids = $this->pdh->maget('raid', array('date', 'event'), 0, array($this->pdh->get('raid', 'id_list')));
+				foreach($raids as $raid_id => $raid) {
+					$date = $raid['date'];
+					$event_id = $raid['event'];
 						if($date >= $first_date['member']) {
-							$event_id = $this->pdh->get('raid', 'event', array($raid_id));
 							if(!isset($this->counts[$first_date['member']][$event_id])) $this->counts[$first_date['member']][$event_id] = 0;
 							$this->counts[$first_date['member']][$event_id]++;
 						}
 						if($date >= $first_date['main'] && $first_date['main'] != $first_date['member']) {
-							$event_id = $this->pdh->get('raid', 'event', array($raid_id));
+						if(!isset($this->counts[$first_date['main']][$event_id])) $this->counts[$first_date['main']][$event_id] = 0;
 							$this->counts[$first_date['main']][$event_id]++;
 						}
-					} else {
-						if($date > $first_date['member']) {
-							$event_id = $this->pdh->get('raid', 'event', array($raid_id));
-							if(!isset($this->counts[$first_date['member']][$event_id])) $this->counts[$first_date['member']][$event_id] = 0;
-							$this->counts[$first_date['member']][$event_id]++;
 						}
-						if($date > $first_date['main'] && $first_date['main'] != $first_date['member']) {
-							$event_id = $this->pdh->get('raid', 'event', array($raid_id));
-							$this->counts[$first_date['main']][$event_id]++;
 						}
-					}
-				}
-			}
 			//get raids
-			$raid_ids = $this->pdh->get('raid', 'raidids4memberid', array($member_id));
-			foreach($raid_ids as $raid_id){
+			$raids = $this->pdh->maget('raid', array('date', 'event'), 0, array($this->pdh->get('raid', 'raidids4memberid', array($member_id))));
+			foreach($raids as $raid_id => $raid){
+				$date = $raid['date'];
+				$event_id = $raid['event'];
 				//raid not relevant for this attendance calculation
-				$date = $this->pdh->get('raid', 'date', array($raid_id));
-				if ($time_period == 'LT'){
 					if($date < $first_date['main']) continue;
-				} else {
-					if($date <= $first_date['main']) continue;
-				}
-
-				$event_id = $this->pdh->get('raid', 'event', array($raid_id));
 				if(!isset($this->attendance[$time_period][$member_id]['member'][$event_id]['attended'])) $this->attendance[$time_period][$member_id]['member'][$event_id]['attended'] = 0;
 				$this->attendance[$time_period][$member_id]['member'][$event_id]['attended']++;
 				if($main_id != $member_id) {
