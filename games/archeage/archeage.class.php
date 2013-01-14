@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2013-01-14 15:10:51 +0100 (Mo, 14 Jan 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: sionaa $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 12841 $
+ * @version		$Rev$
  * 
- * $Id: archeage.class.php 12841 2013-01-14 14:10:51Z sionaa $
+ * $Id$
  */
 
 
