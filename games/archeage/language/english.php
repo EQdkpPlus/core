@@ -40,7 +40,7 @@ $english_array = array(
 	),
 
 	'lang' => array(
-		'archeage' => 'Archeage',
+		'archeage' => 'ArcheAge',
 		
 		// Profile information
 		'uc_gender'						=> 'Gender',
