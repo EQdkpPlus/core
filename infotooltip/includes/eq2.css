@@ -112,6 +112,25 @@ var.eq2-icon-sml img {height:16px;width:16px}
 .itemd_white {
 	color: white;
 }
+.adorncontainer {
+    display: table;
+	width: auto; 
+}
+.itemd_adicongreen {
+	background-image: url(./images/eq2/green.jpg); width: 32px; height: 32px; display: table-cell;
+}
+.itemd_adiconblue {
+	background-image: url(./images/eq2/blue.jpg); width: 32px; height: 32px; display: table-cell;
+}
+.itemd_adiconyellow {
+	background-image: url(./images/eq2/yellow.jpg); width: 32px; height: 32px; display: table-cell;
+}
+.itemd_adiconred {
+	background-image: url(./images/eq2/red.jpg); width: 32px; height: 32px; display: table-cell;
+}
+.itemd_adiconwhite {
+	background-image: url(./images/eq2/white.jpg); width: 32px; height: 32px; display: table-cell;
+}
 .itemd_recipe {
 	color: #e6e970; margin-top: 12px; height: 150px; overflow: auto;
 }
