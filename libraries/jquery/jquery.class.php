@@ -1065,7 +1065,7 @@ if (!class_exists("jquery")) {
 			if(is_array($id2)){
 				$jscode_p = '';
 				foreach($id2 as $ids2){
-					$ids2		= ereg_replace("[^A-Za-z0-9]", "", $ids2);
+					$ids2		= preg_replace("~[^A-Za-z0-9]~", "", $ids2);
 					$jscode		.= "$('#".$ids2.$this->dyndd_counter."').find('option').remove();";
 					$jscode_p	.= "$('#".$ids2.$this->dyndd_counter."').append(data);";
 				}
@@ -1079,11 +1079,12 @@ if (!class_exists("jquery")) {
 
 			$output[] = $this->html->DropDown($id1, $array1, $selected1, '','', 'input', $id1.$this->dyndd_counter);
 			if(is_array($id2)){
+				$jscode2 = '';
 				$jscode2_p = '';
 				$jscode2_c = 0;
 				foreach($id2 as $ids2){
 					$fieldname	= $ids2;
-					$ids2		= ereg_replace("[^A-Za-z0-9]", "", $ids2);
+					$ids2		= preg_replace("~[^A-Za-z0-9]~", "", $ids2);
 					$output[] = $this->html->DropDown($fieldname, $array2, '', '', '', 'input', $ids2.$this->dyndd_counter);
 
 					// Load the input of the selection
