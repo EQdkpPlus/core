@@ -1493,7 +1493,7 @@ $lang = array(
 "pi_category_3" => "Portal Module",
 "pi_category_7" => "Spiele",
 "repo_step1" => "Suche Erweiterung",
-"repo_step1_error" => "Es konnte kein Paket für diese Erweiterung gefunden werden. Dies kann mehrere Ursachen haben:<ul><li>Das Repository von EQdkp Plus ist zur Zeit nicht zu erreichen</li><li>Dein Server wurde geblacklistet. Wende dich an das EQdkp Plus Team, um mehr darüber zu erfahren.</li></ul>Du kannst die Erweiterung unter <a href=\"".EQDKP_DOWNLOADS_URL."\">".EQDKP_DOWNLOADS_URL."</a> manuell herunterladen und einspielen.",
+"repo_step1_error" => "Es konnte kein Paket für diese Erweiterung gefunden werden. Dies kann mehrere Ursachen haben:<ul><li>Das Repository von EQdkp Plus ist zur Zeit nicht zu erreichen</li><li>Dein Server wurde geblacklistet. Wende dich an das EQdkp Plus Team, um mehr darüber zu erfahren.</li></ul>Du kannst die Erweiterung unter <a href=\"".EQDKP_REPO_URL."\">".EQDKP_REPO_URL."</a> manuell herunterladen und einspielen.",
 "repo_step2" => "Lade Erweiterung herunter",
 "repo_step2_error" => "Beim Herunterladen der Erweiterung ist ein Fehler aufgetreten. Bitte starte den Vorgang erneut.",
 "repo_step3" => "Entpacke Erweiterung",
@@ -1503,7 +1503,7 @@ $lang = array(
 "repo_unknown_error" => "Unbekannter Fehler",
 "repo_updatewarning" => "Das Update überschreibt die vorhandenen Dateien der Erweiterung und dadurch alle manuell getätigten Änderungen daran. Diese Änderungen können nicht wiederhergestellt werden.",
 "repo_hide_updatewarning" => "Diesen Hinweis nicht mehr anzeigen",
-"repo_requirements_failed" => "Da dir die PHP-Erweiterung 'openssl' fehlt, musst du Updates für die Erweiterungen manuell über unsere Projektseite unter <a href=\"".EQDKP_DOWNLOADS_URL."\">".EQDKP_DOWNLOADS_URL."</a> herunterladen.",
+"repo_requirements_failed" => "Da dir die PHP-Erweiterung 'openssl' fehlt, musst du Updates für die Erweiterungen manuell über unsere Projektseite unter <a href=\"".EQDKP_REPO_URL."\">".EQDKP_REPO_URL."</a> herunterladen.",
 "repo_extensioninfo" => "Informationen zur Erweiterung",
 
 "thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',
