@@ -295,7 +295,7 @@ if (!class_exists("html")) {
 					return (($this->in->get($options['name'], 0) == '1') ? true : false);
 
 				case 'datepicker':
-					$input = $this->in->get($options['name'], 0);
+					$input = $this->in->get($options['name']);
 					if($options['allow_empty'] && (empty($input) || $input == '0')) return $input;
 					return $this->time->fromformat($input, $this->time->calendarformat($options['options']));
 					
