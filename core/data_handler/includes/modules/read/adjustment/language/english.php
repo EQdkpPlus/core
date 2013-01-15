@@ -5,15 +5,15 @@
  * Link:		    http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:       2007
- * Date:        $Date$
+ * Date:        $Date: 2011-08-08 13:43:28 +0200 (Mo, 08. Aug 2011) $
  * -----------------------------------------------------------------------
- * @author      $Author$
+ * @author      $Author: wallenium $
  * @copyright   2007-2008 sz3
  * @link        http://eqdkp-plus.com
  * @package     twinkit
- * @version     $Rev$
+ * @version     $Rev: 10925 $
  * 
- * $Id$
+ * $Id: german.php 10925 2011-08-08 11:43:28Z wallenium $
  */
 
 if ( !defined('EQDKP_INC') ){
@@ -21,24 +21,24 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'date' => 'Datum',
-	'link' => 'Grund',
-	'event_name' => 'Ereignis',
-	'm4agk4a' => 'Charaktere',
-	'value' => 'Wert',
+	'date' => 'Date',
+	'link' => 'Reason',
+	'event_name' => 'Event',
+	'm4agk4a' => 'Chars',
+	'value' => 'Value',
 	'raid_id' => 'Raid',
 	'editicon'	=> '',
-	'reason' => 'Grund',
+	'reason' => 'Reason',
 );
 
 $preset_lang = array(
-  'adj_date' => 'Korrektur-Datum',
-	'adj_reason_link' => 'Korrektur-Grund (verlinkt)', 
-  'adj_event' => 'Korrektur-Ereignis',
-  'adj_members' => 'Korrektur-Charaktere',
-  'adj_value' => 'Korrektur-Wert',
-  'adj_raid' => 'Korrektur-Raid',
-	'adj_reason' => 'Korrektur-Grund', 
+  'adj_date' => 'Adjustment-Date',
+	'adj_reason_link' => 'Adjustment-Reason (linked)', 
+  'adj_event' => 'Adjustment-Event',
+  'adj_members' => 'Adjustment-Chars',
+  'adj_value' => 'Adjustment-Value',
+  'adj_raid' => 'Adjustment-Raid',
+	'adj_reason' => 'Adjustment-Reason', 
 );
 
 ?>
