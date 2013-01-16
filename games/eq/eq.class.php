@@ -36,7 +36,7 @@ if(!class_exists('eq')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public  $lang			= false;
-		public $version	= '2.1';
+		public $version	= '2.1.1';
 
 		/**
 		* Returns Information to change the game
@@ -64,9 +64,9 @@ if(!class_exists('eq')) {
 				$names = $this->classes[$this->lang];
 				$this->filters[$lang] = array(
 					array('name' => '-----------', 'value' => false),
-					array('name' => $this->glang('plate', true, $lang), 'value' => array(1 => 'class', 8 => 'class', 11 => 'class', 13 => 'class')),
-					array('name' => $this->glang('chain', true, $lang), 'value' => array(9 => 'class', 10 => 'class', 12 => 'class')),
-					array('name' => $this->glang('leather', true, $lang), 'value' => array(2 => 'class', 3 => 'class', 6 => 'class')),
+					array('name' => $this->glang('plate', true, $lang), 'value' => array(1 => 'class', 8 => 'class', 11 => 'class', 13 => 'class', 15 => 'class')),
+					array('name' => $this->glang('chain', true, $lang), 'value' => array(3 => 'class', 9 => 'class', 10 => 'class', 12 => 'class')),
+					array('name' => $this->glang('leather', true, $lang), 'value' => array(2 => 'class', 6 => 'class', 16 => 'class')),
 					array('name' => $this->glang('silk', true, $lang), 'value' => array(4 => 'class', 5 => 'class', 7 => 'class', 14 => 'class')),
 				);
 			}
