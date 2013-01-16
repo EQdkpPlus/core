@@ -272,7 +272,7 @@ if(!class_exists('wow')) {
 			$arrGuildAchievementsData = $this->game->obj['armory']->getdata('guild');
 
 			if(is_array($arrNews)){
-				int $i = 0;
+				$i = 0;
 				foreach($arrNews as $val){
 					if ($i == $intCount) break;
 					
