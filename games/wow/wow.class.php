@@ -263,7 +263,7 @@ if(!class_exists('wow')) {
 		/*
 		 * Parse the guild news of armory
 		 */
-		public function parseGuildnews($arrNews){
+		public function parseGuildnews($arrNews, $intCount = 50){
 			$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
 
 			$arrOut = array();
@@ -272,7 +272,10 @@ if(!class_exists('wow')) {
 			$arrGuildAchievementsData = $this->game->obj['armory']->getdata('guild');
 
 			if(is_array($arrNews)){
+				int $i = 0;
 				foreach($arrNews as $val){
+					if ($i == $intCount) break;
+					
 					switch($val['type']){
 						case 'guildCreated':
 						$arrOut[] = array(
@@ -344,6 +347,7 @@ if(!class_exists('wow')) {
 						}
 						break;
 					}
+					$i++;
 				}
 			}
 			return $arrOut;
