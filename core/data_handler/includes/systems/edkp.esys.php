@@ -375,7 +375,7 @@ $system_def = array(
 				'show_select_boxes'		=> true,
 				'selectboxes_checkall'	=> true,
 				'show_detail_twink'		=> false,
-				'table_sort_col' => 0,
+				'table_sort_col' => 1,
 				'table_sort_dir' => 'asc',
 				'table_presets' => array(
 					array('name' => 'calevents_weekday', 'sort' => false, 'th_add' => '', 'td_add' => ''),
