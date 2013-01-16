@@ -121,26 +121,27 @@ class Manage_Extensions extends page_generic {
 			$blnResult = $this->repo->unpackPackage($tempname, $this->pfh->FolderPath('tmp/'.$upload_id, 'repository'));
 			if ($blnResult){
 				$src_path = $extension_name = false;
-				
+
 				if (is_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml')){
 					$xml = simplexml_load_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml');
+
 					if ($xml && $xml->folder != ''){
 						$extension_name = $xml->folder;
 						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
 						if (is_dir($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$extension_name)){
 							$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository').$extension_name;
 						}
-						
+
 						$arrAttributes = $xml->attributes();
 						
 						switch ($arrAttributes['type']){
 							case 'plugin':			$target = $this->root_path.'plugins';	$cat=1; 	break;
 							case 'game':			$target = $this->root_path.'games';		$cat=7;		break;
-							case 'template':		$target = $this->root_path.'templates';	$cat=1;		break;
+							case 'template':		$target = $this->root_path.'templates';	$cat=2;		break;
 							case 'portal':			$target = $this->root_path.'portal';	$cat=3;		break;
 							default: $target = false;
 						}
-						
+	
 						$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
 						if (!$blnResult){
 							$this->core->message($this->user->lang('plugin_package_error3'), $this->user->lang('error'), 'red');
