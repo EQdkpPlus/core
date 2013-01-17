@@ -36,7 +36,7 @@ if(!class_exists('eq')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public  $lang			= false;
-		public $version	= '2.1.1';
+		public $version	= '2.1.2';
 
 		/**
 		* Returns Information to change the game
