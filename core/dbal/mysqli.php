@@ -35,7 +35,7 @@ class dbal_mysqli extends dbal_common {
 				$this->error[] = 'mysqli_connect() failed';
 				return false;
 			} else {
-				throw new Exception('mysqli_connect() failed: ' . mysqli_connect_errno() . ' ' . mysqli_connect_error());
+				throw new DBALException('mysqli_connect() failed: ' . mysqli_connect_errno() . ' ' . mysqli_connect_error());
 			}
 		}
 

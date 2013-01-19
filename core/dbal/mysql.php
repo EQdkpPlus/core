@@ -35,7 +35,7 @@ class dbal_mysql extends dbal_common {
 				$this->error[] = 'mysql_connect() failed';
 				return false;
 			} else {
-				throw new Exception('mysql_connect() failed: ' . mysql_errno() . ' ' . mysql_error());
+				throw new DBALException('mysql_connect() failed: ' . mysql_errno() . ' ' . mysql_error());
 			}
 		}
 		// todo: test with older php versions and create workaround if needed
