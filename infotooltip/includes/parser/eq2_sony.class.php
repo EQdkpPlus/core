@@ -71,7 +71,7 @@ if(!class_exists('eq2_sony')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$itemInfo = urlencode('displayname=i/' . $itemname . '/');
+			$itemInfo = urlencode('displayname=' . $itemname );
 			$link = 'http://data.soe.com/json/get/eq2/item/?' . $itemInfo;
 			$data = $this->puf->fetch($link);
 			$this->searched_langs[] = $lang;
