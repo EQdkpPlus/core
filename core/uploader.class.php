@@ -30,7 +30,7 @@ class uploader extends gen_class {
 		$filename		= $_FILES[$strFieldname]['name'];
 		$filetype		= $_FILES[$strFieldname]['type'];
 		if ($tempname == '') return false;
-		
+		$filename = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $filename);
 		
 		// get the mine....
 		$fileEnding		= pathinfo($filename, PATHINFO_EXTENSION);
@@ -93,6 +93,7 @@ class uploader extends gen_class {
 	public function upload($fieldname, $folder) {
 		$filename = $_FILES[$fieldname]['name'];
 		if ($filename) {
+			$filename = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $filename);
 			$extension = pathinfo($filename, PATHINFO_EXTENSION);
 
 			//Extension-Check
@@ -112,6 +113,7 @@ class uploader extends gen_class {
 
 				$pathinfo = pathinfo($filename);
 				$name = $pathinfo['filename'];
+				
 
 				$arrFiles = preg_grep('/^' . preg_quote($name, '/') . '.*\.' . preg_quote($extension, '/') . '/', $files);
 
