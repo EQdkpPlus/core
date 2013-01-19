@@ -343,28 +343,14 @@ if ( !defined('EQDKP_INC') ){
 			$this->logfile_info_changed = true;
 			return true;
 		}
-
-		public function catch_fatals(){
-			chdir($this->eqdkp_cwd);
-
-			if ($error = error_get_last()) {
-				if (isset($error['type']) && ($error['type'] == E_ERROR || $error['type'] == E_PARSE || $error['type'] == E_COMPILE_ERROR)) {
-					while (ob_get_level()) {
-						ob_end_clean();
-					}
-
-					if (!headers_sent()){
-						header('HTTP/1.1 500 Internal Server Error');
-					}
-
-					//log and output
-					$this->myErrorHandler($error['type'], $error['message'], $error['file'], $error['line']);
-					$output = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		
+		private function error_message_header($strErrorName = 'Fatal Error'){
+			return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 						<html>
 						<head>
 							<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
-							<title>EQdkp Plus - Fatal Error</title>
+							<title>EQdkp Plus - '.$strErrorName.'</title>
 							<style type="text/css">
 								body, html {
 								padding:0;
@@ -400,15 +386,44 @@ if ( !defined('EQDKP_INC') ){
 									<tr>
 										<td width="100%">
 											<center>
-												<img src="'.$this->root_path.'templates/maintenance/images/logo.png" alt="EQdkp Plus" class="absmiddle" /> Fatal Error
+												<img src="'.$this->root_path.'templates/maintenance/images/logo.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
 											</center>
 										</td>
 									</tr>
 								</table>
 
 						<div id="cont" align="left" style="margin:15px;">
-						<h1>A Fatal error occured!</h1><br />
-						';
+						<h1>A '.$strErrorName.' occured!</h1><br />';
+		}
+		
+		private function error_message_footer($blnShowEQdkpLink = true){
+			return (($blnShowEQdkpLink) ? '<br /><b><a href="'.EQDKP_PROJECT_URL.'">Please visit the EQdkp Plus Homepage!</a></b>' : '').'
+					</div>
+					</div>
+					<div style="width:700px;">
+					<a href="'.EQDKP_PROJECT_URL.'" target="_new">EQDKP Plus</a> &copy; 2003 - '.date('Y').' by EQDKP Plus Developer Team
+					</div>
+					</div>
+					</body>
+					</html>';
+		}
+
+		public function catch_fatals(){
+			chdir($this->eqdkp_cwd);
+
+			if ($error = error_get_last()) {
+				if (isset($error['type']) && ($error['type'] == E_ERROR || $error['type'] == E_PARSE || $error['type'] == E_COMPILE_ERROR)) {
+					while (ob_get_level()) {
+						ob_end_clean();
+					}
+
+					if (!headers_sent()){
+						header('HTTP/1.1 500 Internal Server Error');
+					}
+
+					//log and output
+					$this->myErrorHandler($error['type'], $error['message'], $error['file'], $error['line']);
+					$output = $this->error_message_header();
 					foreach ($error as $key=>$value){
 						if($key == 'type'){
 							$et = (isset($this->errorType[$value]))?$this->errorType[$value]:'unknown';
@@ -430,19 +445,36 @@ if ( !defined('EQDKP_INC') ){
 							$output .= '<b>'.ucfirst($key).'</b>: '.$value.'<br />';
 						}
 					}
-					$output .= '
-								<br /><b><a href="'.EQDKP_PROJECT_URL.'">Please visit the EQdkp Plus Homepage!</a></b>
-								</div>
-								</div>
-								<div style="width:700px;">
-								<a href="'.EQDKP_PROJECT_URL.'" target="_new">EQDKP Plus</a> &copy; 2003 - '.date('Y').' by EQDKP Plus Developer Team
-								</div>
-								</div>
-								</body>
-								</html>';
+					$output .= $this->error_message_footer();
 					echo $output;
 				}
 			}
+		}
+		
+		public function catch_dbal_exception($e){
+			if (!headers_sent()){
+				header('HTTP/1.1 500 Internal Server Error');
+			}
+			$output = $this->error_message_header('Database error');
+			$strErrorMessage = $e->getMessage();
+			$strErrorMessage = str_replace($this->dbpass, '*******', $strErrorMessage);
+			if (strlen($this->dbuser) > 3){
+				$strSuffix = substr($this->dbuser, 0, 3);
+				$strUserReplace = str_pad($strSuffix, strlen($this->dbuser), '*');
+			}
+			$strErrorMessage = str_replace($this->dbuser, $strUserReplace, $strErrorMessage);
+			if (strlen($this->dbhost) > 6){
+				$strSuffix = substr($this->dbhost, 0, 6);
+				$strHostReplace = str_pad($strSuffix, strlen($this->dbhost), '*');
+			}
+			$strErrorMessage = str_replace($this->dbhost, $strHostReplace, $strErrorMessage);
+			
+			$output .= $strErrorMessage.'<br /><br />';
+			
+			$output .= $this->error_message_footer(false);
+			echo $output;
+			//Die, otherwise the next fatal error will occure
+			die();
 		}
 
 		/*

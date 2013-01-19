@@ -13,15 +13,15 @@
  * @package		eqdkp-plus
  * @version		$Rev: 12785 $
  *
- * $Id: pdh_r_suicide_kings_static.class.php 12785 2013-01-09 19:51:38Z godmod $
+ * $Id: pdh_r_suicide_kings_bottom.class.php 12785 2013-01-09 19:51:38Z godmod $
  */
 
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
 
-if ( !class_exists( "pdh_r_suicide_kings_static" ) ) {
-	class pdh_r_suicide_kings_static extends pdh_r_generic{
+if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
+	class pdh_r_suicide_kings_bottom extends pdh_r_generic{
 		public static function __shortcuts() {
 		$shortcuts = array('pdc', 'pdh', 'user', 'html');
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -41,19 +41,19 @@ if ( !class_exists( "pdh_r_suicide_kings_static" ) ) {
 		);
 
 		public $presets = array(
-			'sk_position_static_all'	=> array('position', array('%member_id%', '%ALL_IDS%', '%with_twink%'), array('%ALL_IDS%', true, true)),
-			'sk_position_static'		=> array('position', array('%member_id%', '%dkp_id%', '%with_twink%'), array('%dkp_id%')),
+			'sk_bottom_position_all'	=> array('position', array('%member_id%', '%ALL_IDS%', '%with_twink%'), array('%ALL_IDS%', true, true)),
+			'sk_bottom_position'		=> array('position', array('%member_id%', '%dkp_id%', '%with_twink%'), array('%dkp_id%')),
 		);
 
 		public function reset(){
-			$this->pdc->del('pdh_suicide_kings_static_table');
+			$this->pdc->del('pdh_suicide_kings_bottom_table');
 			$this->sk_list = NULL;
 		}
 
 
 		public function init(){
 			//cached data not outdated?
-			$this->sk_list = $this->pdc->get('pdh_suicide_kings_static_table');
+			$this->sk_list = $this->pdc->get('pdh_suicide_kings_bottom_table');
 			if($this->sk_list !== null){
 				return true;
 			}
@@ -120,7 +120,7 @@ if ( !class_exists( "pdh_r_suicide_kings_static" ) ) {
 				}
 			}
 
-			$this->pdc->put('pdh_suicide_kings_static_table', $this->sk_list, null);
+			$this->pdc->put('pdh_suicide_kings_bottom_table', $this->sk_list, null);
 		}
 
 		public function sort_item_list($a, $b){
@@ -157,5 +157,5 @@ if ( !class_exists( "pdh_r_suicide_kings_static" ) ) {
 
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_suicide_kings_static', pdh_r_suicide_kings_static::__shortcuts());
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_suicide_kings_bottom', pdh_r_suicide_kings_bottom::__shortcuts());
 ?>

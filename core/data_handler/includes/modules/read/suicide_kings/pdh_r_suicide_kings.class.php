@@ -12,7 +12,7 @@
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
  * @version		$Rev$
- *
+ * 
  * $Id$
  */
 
@@ -47,79 +47,144 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 		public function reset(){
 			$this->pdc->del('pdh_suicide_kings_table');
-			$this->sk_list = NULL;
+			unset($this->sk_list);
 		}
-
-
+		
+		
 		public function init(){
 			//cached data not outdated?
 			$this->sk_list = $this->pdc->get('pdh_suicide_kings_table');
 			if($this->sk_list !== null){
 				return true;
 			}
-
+		
 			//base list for all mdkp pools
 			$member_hash = array();
-			$member_list = $this->pdh->get('member', 'id_list', array(false, false));
-			$member_list = $this->pdh->sort($member_list, 'member', 'creation_date', 'asc');
-
-			foreach($member_list as $member_id){
+			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
 				$member_hash['single'][$member_id] = md5($this->pdh->get('member','name', array($member_id)));
 				$intMainID = $this->pdh->get('member', 'mainid', array($member_id));
 				$member_hash['multi'][$intMainID] = md5($this->pdh->get('member','name', array($intMainID)));
 			}
+			asort($member_hash['single']);
+			asort($member_hash['multi']);
 			
-			//With Twinks (mainchar only)
+			//With twinks (mainchar)
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
-				$tmp_memberarray = array('multi'=>$member_hash['multi'], 'single'=>$member_hash['single']);
-				
-				$sort_list_lastitemdate = array('multi'=>array(), 'single'=>array());
-				$sort_list_lastitemid = array('multi'=>array(), 'single'=>array());
-				$sort_list_member = array('multi'=>array(), 'single'=>array());
-				$sort_list_lastraiddate = array('multi'=>array(), 'single'=>array());
-				
-				//---MULTI--------------------------------------------------------------------
-				foreach($member_hash['multi'] as $member_id => $hash){
-					//Get latest item date
-					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true));
-					$last_raid =  $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, true));
-
-					$sort_list_lastitemdate['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true)) : 0;
-					$sort_list_lastitemid['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, true)) : 0;
-					$sort_list_lastraiddate['multi'][$member_id] = ($last_raid) ? $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, true)) : 0;
-					
-					$sort_list_member['multi'][] = $member_id;
-					unset($tmp_memberarray['multi'][$member_id]);
-				}
-
-				array_multisort($sort_list_lastraiddate['multi'], SORT_DESC, $sort_list_lastitemdate['multi'], SORT_ASC, $sort_list_lastitemid['multi'], SORT_ASC, $sort_list_member['multi']);
-				
-				//Position for member with items
 				$i = 1;
-				foreach ($sort_list_member['multi'] as $member_id){
+				foreach($member_hash['multi'] as $member_id => $hash){
 					$this->sk_list['multi'][$mdkp_id][$member_id] = $i++;
 				}
-				
-				//---SINGLE--------------------------------------------------------------------
-				foreach($member_hash['single'] as $member_id => $hash){
-					//Get latest item date
-					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false));
-					$last_raid =  $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, false));
-					
-
-					$sort_list_lastitemdate['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false)): 0;
-					$sort_list_lastitemid['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, false)): 0;
-					$sort_list_lastraiddate['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, false)): 0;
-					
-					$sort_list_member['single'][] = $member_id;
-					unset($tmp_memberarray['single'][$member_id]);
-					
+			}
+			
+			//now the fun begins
+			$item_list = $this->pdh->get('item', 'id_list');
+			usort($item_list, array(&$this, "sort_item_list"));
+			
+			foreach($item_list as $item_id){
+				$tmp_buyer = $this->pdh->get('item', 'buyer', array($item_id));
+				$buyer = $this->pdh->get('member', 'mainid', array($tmp_buyer));
+				$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
+				$tmp_raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+				foreach($tmp_raid_attendees as $key => $value){
+					$raid_attendees[] = $this->pdh->get('member', 'mainid', array($value));
 				}
-				array_multisort($sort_list_lastraiddate['single'], SORT_DESC, $sort_list_lastitemdate['single'], SORT_ASC, $sort_list_lastitemid['single'], SORT_ASC, $sort_list_member['single']);
-				//Position for member with items
+						
+				//this is really bad, because the buyer didn't attend the raid!
+				//shouldnt need to be in here
+				if(!in_array($buyer, $raid_attendees)){
+					$raid_attendees[] = $buyer;
+				}
+				$raid_attendees = array_unique($raid_attendees);
+		
+				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
+				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
+					$buyer_pos = $this->sk_list['multi'][$mdkp_id][$buyer];
+					$last_pos = -1;
+		
+					//find buyer position and last position of raid attendee
+					$att_pos = array();
+					foreach($raid_attendees as $member_id){
+						$att_pos[$member_id] = $this->sk_list['multi'][$mdkp_id][$member_id];
+						if($this->sk_list['multi'][$mdkp_id][$member_id] > $last_pos){
+							$last_pos = $this->sk_list['multi'][$mdkp_id][$member_id];
+						}
+					}
+					asort($att_pos);
+		
+					$prev_it_pos = -1;
+					//now we need to reorganize our list.
+					foreach($att_pos as $member_id => $pos){
+						if($pos < $buyer_pos){
+							continue;
+						}
+						if($pos == $buyer_pos){
+							$this->sk_list['multi'][$mdkp_id][$buyer] = $last_pos;
+							continue;
+						}
+						if($pos > $buyer_pos){
+							$this->sk_list['multi'][$mdkp_id][$member_id] = ($prev_it_pos < 0) ? $buyer_pos : $prev_it_pos;
+							$prev_it_pos = $pos;
+						}
+					}
+		
+				}
+			}
+			
+			
+			//No twinks (all chars)
+		
+			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
 				$i = 1;
-				foreach ($sort_list_member['single'] as $member_id){
+				foreach($member_hash['single'] as $member_id => $hash){
 					$this->sk_list['single'][$mdkp_id][$member_id] = $i++;
+				}
+			}
+			//now the fun begins
+			$item_list = $this->pdh->get('item', 'id_list');
+			usort($item_list, array(&$this, "sort_item_list"));
+			
+			foreach($item_list as $item_id){
+				$buyer = $this->pdh->get('item', 'buyer', array($item_id));
+				$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
+				$raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+		
+				//this is really bad, because the buyer didn't attend the raid!
+				//shouldnt need to be in here
+				if(!in_array($buyer, $raid_attendees)){
+					$raid_attendees[] = $buyer;
+				}
+		
+				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
+				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
+					$buyer_pos = $this->sk_list['single'][$mdkp_id][$buyer];
+					$last_pos = -1;
+		
+					//find buyer position and last position of raid attendee
+					$att_pos = array();
+					foreach($raid_attendees as $member_id){
+						$att_pos[$member_id] = $this->sk_list['single'][$mdkp_id][$member_id];
+						if($this->sk_list['single'][$mdkp_id][$member_id] > $last_pos){
+							$last_pos = $this->sk_list['single'][$mdkp_id][$member_id];
+						}
+					}
+					asort($att_pos);
+		
+					$prev_it_pos = -1;
+					//now we need to reorganize our list.
+					foreach($att_pos as $member_id => $pos){
+						if($pos < $buyer_pos){
+							continue;
+						}
+						if($pos == $buyer_pos){
+							$this->sk_list['single'][$mdkp_id][$buyer] = $last_pos;
+							continue;
+						}
+						if($pos > $buyer_pos){
+							$this->sk_list['single'][$mdkp_id][$member_id] = ($prev_it_pos < 0) ? $buyer_pos : $prev_it_pos;
+							$prev_it_pos = $pos;
+						}
+					}
+		
 				}
 			}
 
@@ -127,11 +192,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 		}
 
 		public function sort_item_list($a, $b){
-			$compResult = $this->pdh->comp('item', 'date', 1, array($a), array($b));
-			if ($compResult == 0){
-				return ($a < $b) ? -1 : 1;
-			}
-			return $compResult;
+			return $this->pdh->comp('item', 'date', 1, array($a), array($b));
 		}
 
 		public function get_position($member_id, $multidkp_id, $with_twink = true){
@@ -141,14 +202,14 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			}
 			return $this->sk_list[$with_twink][$multidkp_id][$member_id];
 		}
-
+		
 		public function get_html_caption_position($mdkpid, $showname = false, $showtooltip = false, $tt_options = array()){
 			if($showname){
 				$text = $this->pdh->get('multidkp', 'name', array($mdkpid));
 			}else{
 				$text = $this->pdh->get_lang('points', 'current');
 			}
-
+	
 			if($showtooltip){
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));

@@ -21,16 +21,16 @@ if (!defined('EQDKP_INC')) {
 }
 
 $system_def = array(
-	'base_layout' => 'sk_static',
+	'base_layout' => 'sk_bottom',
 
 	'data' => array(
-		'description' => registry::fetch('user')->lang('lm_layout_sk_static'),
+		'description' => registry::fetch('user')->lang('lm_layout_sk_bottom'),
 		'point_direction' => 'asc',
 	),
 
 	'aliases' => array(
-		'current' 		=> 'sk_position_static',
-		'current_all'	=> 'sk_position_static_all',
+		'current' 		=> 'sk_bottom_position',
+		'current_all'	=> 'sk_bottom_position_all',
 	),
 
 	'defaults' => array(
@@ -357,7 +357,7 @@ $system_def = array(
 				'show_select_boxes'		=> true,
 				'selectboxes_checkall'	=> true,
 				'show_detail_twink'		=> false,
-				'table_sort_col' => 0,
+				'table_sort_col' => 1,
 				'table_sort_dir' => 'asc',
 				'table_presets' => array(
 					array('name' => 'calevents_weekday', 'sort' => false, 'th_add' => '', 'td_add' => ''),

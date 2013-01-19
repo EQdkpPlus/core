@@ -27,6 +27,8 @@ $english_array = array(
 		1 => 'Bard',
 		2 => 'Beastlord',
 		3 => 'Berserker',
+		15 => 'Cleric',
+		16 => 'Druid',
 		4 => 'Enchanter',
 		5 => 'Magician',
 		6 => 'Monk',
@@ -37,9 +39,7 @@ $english_array = array(
 		11 => 'Shadow Knight',
 		12 => 'Shaman',
 		13 => 'Warrior',
-		14 => 'Wizard',
-		15 => 'Cleric',
-		16 => 'Druid', //note: new classes need to be added as last spot, else the id => class assignment gets messed up in already existing systems
+		14 => 'Wizard',  //note: new classes need to be added as last spot, else the id => class assignment gets messed up in already existing systems
 	),
 	'races' => array(
 		'Unknown',

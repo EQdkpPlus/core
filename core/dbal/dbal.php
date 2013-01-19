@@ -23,11 +23,11 @@ if(!defined('EQDKP_INC')) {
 class dbal {
 	public static function factory($options = array()) {
 		$dbtype = (isset($options['dbtype'])) ? $options['dbtype'] : registry::get_const('dbtype');
-		if(empty($dbtype)) throw new Exception('dbtype not set');
+		if(empty($dbtype)) throw new DBALException('dbtype not set');
 
 		require_once(registry::get_const('root_path') . 'core/dbal/' . $dbtype . '.php');
 		$classname = 'dbal_' . $dbtype;
-		if(!extension_loaded($dbtype)) throw new Exception('PHP-Extension ' . $dbtype . ' not available');
+		if(!extension_loaded($dbtype)) throw new DBALException('PHP-Extension ' . $dbtype . ' not available');
 		return registry::register($classname, array($options));
 	}
 
@@ -40,6 +40,9 @@ class dbal {
 		}
 		return $arrDbals;
 	}
+}
+
+class DBALException extends Exception {
 }
 
 abstract class dbal_common extends gen_class {

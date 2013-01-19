@@ -28,6 +28,7 @@ $module_lang = array(
 	'value' => 'Wert',
 	'raid_id' => 'Raid',
 	'editicon'	=> '',
+	'reason' => 'Grund',
 );
 
 $preset_lang = array(

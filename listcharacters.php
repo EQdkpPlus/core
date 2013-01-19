@@ -66,7 +66,7 @@ class listcharacters extends page_generic {
 		}
 
 		//redirect on member compare
-		if ( $this->in->exists('manage_b') && $this->in->get('manage_b') == $this->user->lang('manage_members') ){
+		if ( $this->in->exists('manage_b')){
 			$manage_link = './admin/manage_members.php'.$this->SID;
 			redirect($manage_link);
 		}
@@ -153,7 +153,7 @@ class listcharacters extends page_generic {
 			'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']), $view_list, $leaderboard_settings),
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
 			'BUTTON_NAME'				=> 'compare_b',
-			'MANAGE_LINK'				=> ($this->user->check_auth('a_members_man', false)) ? '<input type="image" src="'.$this->root_path.'images/glyphs/edit.png" name="manage_b" value="'.$this->user->lang('manage_members').'" alt="'.$this->user->lang('manage_members').'" title="'.$this->user->lang('manage_members').'" />' : '',
+			'MANAGE_LINK'				=> ($this->user->check_auth('a_members_man', false)) ? '<input type="submit" name="manage_b" value="" alt="'.$this->user->lang('manage_members').'" title="'.$this->user->lang('manage_members').'" class="bi_manage novalue" />' : '',
 			'SHOW_INACTIVE_CHECKED'		=> ($show_inactive)?'checked="checked"':'',
 			'SHOW_HIDDEN_RANKS_CHECKED'	=> ($show_hidden)?'checked="checked"':'',
 			'SHOW_TWINKS_CHECKED'		=> ($show_twinks)?'checked="checked"':'',
