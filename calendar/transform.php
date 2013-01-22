@@ -39,11 +39,11 @@ class calraids_transform extends page_generic {
 		if($this->in->get('signedin')){
 			$statarray[] = '1';
 		}
+		if($this->in->get('signedoff')){
+			$statarray[] = '2';
+		}
 		if($this->in->get('notsure')){
 			$statarray[] = '3';
-		}
-		if($this->in->get('unsigned')){
-			$statarray[] = '4';
 		}
 
 		$attendees	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($this->url_id, $statarray));
