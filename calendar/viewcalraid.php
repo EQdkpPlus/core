@@ -21,7 +21,7 @@ $eqdkp_root_path = '../';
 include_once($eqdkp_root_path . 'common.php');
 
 class viewcalraid extends page_generic {
-	public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
+	public static $shortcuts = array('user', 'db', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
 
 	public function __construct() {
 		$handler = array(
@@ -279,6 +279,18 @@ class viewcalraid extends page_generic {
 
 	public function confirm_all(){
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+
+			//fetch the attendees
+			$a_attendees	= array();
+			$q_attendees	= $this->db->query("SELECT member_id FROM __calendar_raid_attendees WHERE calendar_events_id=".$this->db->escape($this->url_id)." AND signup_status=1");
+			while($arow = $this->db->fetch_record($q_attendees)){
+				$a_attendees[] = $arow['member_id'];
+			}
+
+			// send mail to attendees
+			$this->email_statuschange($a_attendees);
+			
+			// set the new status for the attendees
 			$this->pdh->put('calendar_raids_attendees', 'confirm_all', array($this->url_id));
 			$this->pdh->process_hook_queue();
 		}
