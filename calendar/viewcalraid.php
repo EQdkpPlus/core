@@ -29,9 +29,6 @@ class viewcalraid extends page_generic {
 				array('process' => 'close_raid',	'value' => 'close', 'csrf'=>true),
 				array('process' => 'open_raid',		'value' => 'open', 'csrf'=>true),
 			),
-			'ajax'	=> array(
-				array('process' => 'role_ajax',	'value' => 'role'),
-			),
 			'savenote'			=> array('process' => 'save_raidnote', 'csrf'=>true),
 			'update_status'		=> array('process' => 'update_status', 'csrf'=>true),
 			'moderate_status'	=> array('process' => 'moderate_status', 'csrf'=>true),
@@ -78,14 +75,6 @@ class viewcalraid extends page_generic {
 			break;
 		}
 		return false;
-	}
-
-	// the role dropdown, attached to the character selection
-	public function role_ajax(){
-		$tmp_classID	= $this->pdh->get('member', 'classid', array($this->in->get('requestid')));
-		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
-		$myrole			= ($mystatus['member_role'] > 0) ? $mystatus['member_role'] : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
-		echo $this->jquery->dd_create_ajax($this->pdh->get('roles', 'memberroles', array($tmp_classID)), array('selected'=>$myrole));exit;
 	}
 
 	// user changes his status for that raid
@@ -356,6 +345,7 @@ class viewcalraid extends page_generic {
 		// check if roles are available
 		$allroles		= $this->pdh->get('roles', 'roles', array());
 		$rolewnclass	= false;
+		$drpdwn_roles	= array();
 
 		foreach($allroles as $v_roles){
 			if(count($v_roles['classes']) == 0){
@@ -401,6 +391,7 @@ class viewcalraid extends page_generic {
 		}
 
 		// Guests / rest
+		$this->twinks			= array();
 		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get('classes', 'id_0');
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
@@ -419,6 +410,25 @@ class viewcalraid extends page_generic {
 			}
 		}else{
 			$this->attendees = array();
+		}
+
+		// build the roles array
+		if(is_array($this->attendees_raw)){
+			foreach($this->attendees_raw as $rolecharsid=>$rolecharsdata){
+				
+				// generate the twink array
+				$this->twinks[$rolecharsid] = $this->pdh->get('member', 'connection_id', array($this->pdh->get('member', 'userid', array($rolecharsid))));
+
+				// add the attendees to the roles dropdown
+				$drpdwn_roles[$rolecharsid] = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($rolecharsid))));
+
+				// add the twinks to the roles dropdown
+				if(isset($this->twinks[$rolecharsid]) && is_array($this->twinks[$rolecharsid]) && count($this->twinks[$rolecharsid]) > 0){
+					foreach($this->twinks[$rolecharsid] as $twinkids){
+						$drpdwn_roles[$twinkids] = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($twinkids))));
+					}
+				}
+			}
 		}
 
 		//The Status & Member data
@@ -467,7 +477,7 @@ class viewcalraid extends page_generic {
 			$this->tpl->add_js('var unsigned_attendees = '.$attendee_json);
 		}
 
-		$status_first = true;
+		$status_first	= true;
 		foreach($this->raidstatus as $statuskey=>$statusname){
 			$this->jquery->Collapse('#viewraidcal_colapse_'.$statuskey);
 			$statuscount	= (isset($this->attendees_count[$statuskey])) ? count($this->attendees_count[$statuskey]) : 0;
@@ -514,6 +524,7 @@ class viewcalraid extends page_generic {
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 					foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
+
 						// generate the member tooltip
 						$membertooltip		= array();
 						$memberrank			= $this->pdh->get('member', 'rankname', array($memberid));
@@ -556,9 +567,9 @@ class viewcalraid extends page_generic {
 							}
 						}
 
-						$drpdwn_twinks = $drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->pdh->get('member', 'userid', array($memberid))))));
+						$drpdwn_twinks = $drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->twinks[$memberid]));
 						if($eventdata['extension']['raidmode'] == 'role'){
-							$memberrole = $this->jquery->dd_ajax_request('charchange_char', 'charchange_role', $drpdwn_twinks, array(), 0, 'viewcalraid.php'.$this->SID.'&ajax=role');
+							$memberrole = $this->jquery->json_dropdown('charchange_char', 'charchange_role', $drpdwn_twinks, 'roles_json', 0);
 							$charchangemenu = array(
 								'chars'	=> $memberrole[0],
 								'roles'	=> $memberrole[1]
@@ -587,6 +598,8 @@ class viewcalraid extends page_generic {
 			}
 			$status_first = false;
 		}
+
+		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles));
 
 		// raid guests
 		if(is_array($this->guests) && count($this->guests) > 0){
