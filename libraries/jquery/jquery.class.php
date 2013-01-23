@@ -1056,6 +1056,42 @@ if (!class_exists("jquery")) {
 		* @param $array2		The array for the second (child) dropdown
 		* @param $selected1		Value of the first (parent) dropdown
 		* @param $selected2		Value of the second (child) dropdown
+		* @return array with two dropdowns (parent & child)
+		*/
+		public function json_dropdown($id1, $id2, $array1, $jsonname, $selected1, $selected2=''){
+			$this->tpl->add_js("$('#{$id1}{$this->dyndd_counter}').change(function() {
+				$('#{$id2}{$this->dyndd_counter} option').remove();
+				if($(this).val() > 0){
+					console.log($(this).val());
+					mydata	= {$jsonname}[$(this).val()];
+					if(typeof mydata != 'undefined'){
+						console.log(mydata);
+						$.each(mydata, function(i, val) {
+							var opt = $('<option />');
+							opt.appendTo($('#{$id2}{$this->dyndd_counter}')).text(val).val(val);
+						});
+					}
+				}
+			}).change();", 'docready');
+
+			$output	= array(
+				$this->html->DropDown($id1, $array1, $selected1, '','', 'input', $id1.$this->dyndd_counter),
+				$this->html->DropDown($id2, $array2, '', '', '', 'input', $id2.$this->dyndd_counter)
+			);
+			
+			$this->dyndd_counter++;
+			return $output;
+		}
+
+		/**
+		* Binding DropDowns: Select in first, changes the input of second DD
+		* 
+		* @param $id1			The ID of the first (parent) dropdown
+		* @param $id2			The ID of the second (child) dropdown
+		* @param $array1		The array for the first (parent) dropdown
+		* @param $array2		The array for the second (child) dropdown
+		* @param $selected1		Value of the first (parent) dropdown
+		* @param $selected2		Value of the second (child) dropdown
 		* @param $url			The URL to the ajax call, see "dd_create_ajax"
 		* @return array with two dropdowns (parent & child)
 		*/
