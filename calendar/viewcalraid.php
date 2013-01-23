@@ -29,6 +29,9 @@ class viewcalraid extends page_generic {
 				array('process' => 'close_raid',	'value' => 'close', 'csrf'=>true),
 				array('process' => 'open_raid',		'value' => 'open', 'csrf'=>true),
 			),
+			'ajax'	=> array(
+				array('process' => 'role_ajax',	'value' => 'role'),
+			),
 			'savenote'			=> array('process' => 'save_raidnote', 'csrf'=>true),
 			'update_status'		=> array('process' => 'update_status', 'csrf'=>true),
 			'moderate_status'	=> array('process' => 'moderate_status', 'csrf'=>true),
@@ -75,6 +78,14 @@ class viewcalraid extends page_generic {
 			break;
 		}
 		return false;
+	}
+
+	// the role dropdown, attached to the character selection
+	public function role_ajax(){
+		$tmp_classID	= $this->pdh->get('member', 'classid', array($this->in->get('requestid')));
+		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
+		$myrole			= ($mystatus['member_role'] > 0) ? $mystatus['member_role'] : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
+		echo $this->jquery->dd_create_ajax($this->pdh->get('roles', 'memberroles', array($tmp_classID)), array('selected'=>$myrole));exit;
 	}
 
 	// user changes his status for that raid
