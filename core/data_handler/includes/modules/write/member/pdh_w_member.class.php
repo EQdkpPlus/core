@@ -84,7 +84,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			//dont allow chars without a name
 			if(empty($data['name'])) return false;
 			$querystr = array(
-				'member_name'		=> $this->db->escape($data['name']),
+				'member_name'		=> trim($data['name']),
 				'member_level'		=> !empty($data['lvl']) ? $data['lvl'] : 0,
 				'member_race_id'	=> !empty($data['raceid']) ? $data['raceid'] : 0,
 				'member_class_id'	=> !empty($data['classid']) ? $data['classid'] : 0,
