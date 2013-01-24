@@ -282,7 +282,7 @@ class viewcalraid extends page_generic {
 
 			//fetch the attendees
 			$a_attendees	= array();
-			$q_attendees	= $this->db->query("SELECT member_id FROM __calendar_raid_attendees WHERE calendar_events_id=".$this->db->escape($this->url_id)." AND signup_status=1");
+			$q_attendees	= $this->db->query("SELECT DISTINCT member_id FROM __calendar_raid_attendees WHERE calendar_events_id=".$this->db->escape($this->url_id)." AND signup_status=1");
 			while($arow = $this->db->fetch_record($q_attendees)){
 				$a_attendees[] = $arow['member_id'];
 			}
