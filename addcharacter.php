@@ -66,6 +66,7 @@ class addcharacter extends page_generic {
 		
 		if ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)){
 			$data['mainid'] = $this->in->get('main_id', 0);
+			$data['rankid']	= $this->in->get('rank_id', $this->pdh->get('rank', 'default', array()));
 		}
 		
 		$data = array_merge($this->in->getArray('profilefields', 'string'), $data);
