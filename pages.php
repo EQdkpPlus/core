@@ -82,10 +82,10 @@ class pages extends page_generic {
 			message_die($this->user->lang('noauth_u_information_view'), $this->user->lang('noauth_default_title'));
 		}
 
-		$content = xhtml_entity_decode($this->pdh->get('pages', 'content', array($id)));
+		$content = $this->pdh->get('pages', 'content', array($id));
 		$arrHooks = $this->hooks->process('pages_parse', array('text' => $content), true);
-
 		$content = $arrHooks['text'];
+
 		$myRatings = array(
 			'1'		=> '1',
 			'2'		=> '2',
@@ -101,10 +101,9 @@ class pages extends page_generic {
 
 		$users_voted = $this->pdh->get('pages', 'voters', array($id));
 		$u_has_voted = (!$users_voted[$this->user->data['user_id']]) ? false : true;
-
 		$this->tpl->assign_vars(array(
 			'PAGE_ID'				=> $id,
-			'INFO_PAGE_CONTENT'		=> $this->bbcode->parse_shorttags($content),
+			'INFO_PAGE_CONTENT'		=> $this->bbcode->parse_shorttags(xhtml_entity_decode($content)),
 			'INFO_PAGE_TITLE'		=> sanitize($this->pdh->get('pages', 'title', array($id))),
 			'EDITED' 				=> ($this->pdh->get('pages', 'edit_date', array($id))) ? $this->user->lang('info_edit_user').$this->pdh->get('user', 'name', array($this->pdh->get('pages', 'edit_user', array($id)))).$this->user->lang('info_edit_date').$this->time->user_date($this->pdh->get('pages', 'edit_date', array($id)), false, false, true) : '',
 			'S_IS_ADMIN'			=>	$this->user->check_auth('a_pages_man', false),

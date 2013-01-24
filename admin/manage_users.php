@@ -44,8 +44,6 @@ class Manage_Users extends page_generic {
 	}
 
 	public function send_new_pw(){
-		$username = sanitize($this->in->get('username'));
-
 		$pwkey = $this->pdh->put('user', 'create_new_activationkey', array($this->in->get('u')));
 		if(!strlen($pwkey)) {
 			$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
@@ -59,7 +57,7 @@ class Manage_Users extends page_generic {
 			'U_ACTIVATE'	=> $this->env->link.'login.php?mode=newpassword&amp;key=' . $pwkey,
 		);
 
-		if($this->email->SendMailFromAdmin($this->in->get('user_email'), $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
+		if($this->email->SendMailFromAdmin($this->in->get('email_address'), $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
 			$this->core->message($this->user->lang('password_sent'), $this->user->lang('success'), 'green');
 		} else {
 			$this->core->message($this->user->lang('error_email_send'), $this->user->lang('error'), 'red');
