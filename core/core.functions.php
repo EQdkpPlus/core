@@ -1066,8 +1066,7 @@ function clean_username($strUsername){
 }
 
 function xhtml_entity_decode($string){
-	$string = html_entity_decode($string);
-	$string = str_replace(array('&'), array('&amp;'), $string);
+	$string = html_entity_decode($string, ENT_XHTML, 'UTF-8');
 	return $string;
 }
 
