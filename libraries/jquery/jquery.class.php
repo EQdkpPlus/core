@@ -1062,13 +1062,11 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("$('#{$id1}{$this->dyndd_counter}').change(function() {
 				$('#{$id2}{$this->dyndd_counter} option').remove();
 				if($(this).val() > 0){
-					console.log($(this).val());
 					mydata	= {$jsonname}[$(this).val()];
 					if(typeof mydata != 'undefined'){
-						console.log(mydata);
 						$.each(mydata, function(i, val) {
 							var opt = $('<option />');
-							opt.appendTo($('#{$id2}{$this->dyndd_counter}')).text(val).val(val);
+							opt.appendTo($('#{$id2}{$this->dyndd_counter}')).text(val).val(i);
 						});
 					}
 				}
