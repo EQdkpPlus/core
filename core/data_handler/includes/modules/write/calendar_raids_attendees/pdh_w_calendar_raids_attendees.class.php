@@ -39,9 +39,11 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 		public function update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0){
 			$memberrole = ($memberrole>0) ? $memberrole : 0;
 			if($signed_memberid > 0){
+				// fetch the old note
+				$oldnote	= $this->pdh->get('calendar_raids_attendees', 'note', array($eventid, $signed_memberid));
 				$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE member_id='".$this->db->escape($signed_memberid)."' AND calendar_events_id='".$this->db->escape($eventid)."'", array(
 					'member_id'				=> $memberid,
-					'note'					=> (($note) ? $note : $this->pdh->get('calendar_raids_attendees', 'note', array($signed_memberid))),
+					'note'					=> (trim($note) != '' && $oldnote != $note) ? $note : $oldnote,
 					'timestamp_change'		=> $this->time->time,
 					'raidgroup'				=> $raidgroup,
 					'member_role'			=> $memberrole,

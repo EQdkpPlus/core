@@ -154,7 +154,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		}
 
 		public function get_note($raidid, $memberid){
-			return $this->attendees[$raidid][$memberid]['attendees_note'];
+			return $this->attendees[$raidid][$memberid]['note'];
 		}
 
 		public function get_statuscount($id){
