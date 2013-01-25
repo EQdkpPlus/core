@@ -92,8 +92,12 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 		public function add_notsigned($eventid, $memberids, $status, $roles=false){
 			if(is_array($memberids)){
 				foreach($memberids as $realmemids){
+					// check if the attendee is already in the database
+					$oldmemberid	= ($this->pdh->get('calendar_raids_attendees', 'in_db', array($eventid, $realmemids))) ? $realmemids : 0;
+
+					// do the update
 					$role = (isset($roles[$realmemids])) ? $roles[$realmemids] : '';
-					$this->update_status($eventid, $realmemids, $role, $status, 0, 0, $this->user->lang('raidevent_raid_adminnote'), 1);
+					$this->update_status($eventid, $realmemids, $role, $status, 0, $oldmemberid, $this->user->lang('raidevent_raid_adminnote'), 1);
 				}
 			}
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));

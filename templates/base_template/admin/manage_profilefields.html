@@ -19,8 +19,8 @@
       <td width="20" class="nowrap" align="center"><img src="{EQDKP_ROOT_PATH}images/glyphs/status_{profile_row.ENABLED_ICON}.gif" alt="" /></td>
       <td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
       <td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{profile_row.ENABLE}.png" width="16" height="16" alt="" /></a><!-- ENDIF --></td>
-      <td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_EDIT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></a><!-- ENDIF --></td>
-      <td><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a><!-- ELSE -->{profile_row.NAME}<!-- ENDIF --></td>
+      <td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></a></td>
+      <td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
       <td>{profile_row.ID}</td>
       <td>{profile_row.TYPE}</td>
       <td>{profile_row.CATEGORY}</td>
