@@ -259,6 +259,8 @@ class core extends gen_class {
 			$('a[rel=\"lightbox\"]').each(function(index) {
 				var image = $(this).html();
 				var fullimage = $(this).attr('href');
+				var image_style = $(this).children().attr('style');
+				if (image_style) $(this).attr('style', image_style);
 				var randomId = parseInt(Math.random() * 1000);
 				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a href=\"'+fullimage+'\" rel=\"lightbox\"><img src=\"'+mmocms_root_path+'images/global/zoom.png\" alt=\"Resized\"/><\/a><\/div><a href=\"'+fullimage+'\" rel=\"lightbox\">'+image+'<\/a><\/div>';
 				$(this).html(zoomIcon);
