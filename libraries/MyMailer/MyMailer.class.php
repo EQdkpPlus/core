@@ -127,7 +127,11 @@ class MyMailer extends PHPMailer {
 		if($this->myoptions['template_type'] == 'input'){
 			$body   = $templatename;
 		}else{
-			$body   = $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
+			if (strpos($templatename, $this->root_path) === 0){
+				$body   = $this->getFile($templatename);
+			} else {
+				$body   = $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
+			}
 		}
 		$body   = str_replace("[\]",'',$body);
 		if(is_array($inputs)){
@@ -151,7 +155,7 @@ class MyMailer extends PHPMailer {
 		$this->CharSet	= 'UTF-8';
 		$this->FromName = $this->dkpname;
 		$this->Subject  = $this->generateSubject($subject);
-		$tmp_body		= $this->Template($templatename, $bodyvars, $this->root_path);
+		$tmp_body		= $this->Template($templatename, $bodyvars);
 		$signature 		= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
 
 		if($this->myoptions['mail_type'] == 'text'){

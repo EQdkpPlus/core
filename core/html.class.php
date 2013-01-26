@@ -231,7 +231,7 @@ if (!class_exists("html")) {
 				//Textarea
 				case 'textarea':
 					$encrypt = (isset($options['encrypt'])) ? true : false;
-					$ccfield = $this->TextArea($options['name'],  $options['rows'], $options['cols'],$options['value'], false, 'input', $encrypt);
+					$ccfield = $this->TextArea($options['name'],  $options['rows'], $options['cols'],$options['value'], false, 'input', $encrypt, (isset($options['javascript']) ? $options['javascript'] : ''));
 				break;
 
 				//BBCode-Editor
