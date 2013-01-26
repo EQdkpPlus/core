@@ -99,6 +99,7 @@ if (!class_exists("bbcode")) {
 				'/\[list\](.*?)\[\/list\]/msi',
 				'/\[\*\]\s?(.*?)\n/msi',
 				'/\[br\]/msi',
+				'/&#10;/msi'
 			);
 
 			// And replace them by...
@@ -121,6 +122,7 @@ if (!class_exists("bbcode")) {
 					'<ul>\1</ul>',
 					'<li>\1</li>',
 					'<br/>',
+					'<br/>',
 				);
 			}else{
 				$out = array(
@@ -140,6 +142,7 @@ if (!class_exists("bbcode")) {
 					'<ol start="\1">\2</ol>',
 					'<ul>\1</ul>',
 					'<li>\1</li>',
+					'<br/>',
 					'<br/>',
 				);
 			}
