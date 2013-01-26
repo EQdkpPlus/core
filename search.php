@@ -134,7 +134,7 @@ class search extends page_generic {
 			));
 		}
 
-		$this->jquery->Tab_header('search_result_tabs');
+		$this->jquery->Tab_header('search_result_tabs', true);
 		$this->tpl->assign_vars(array(
 			'S_RESULTS'			=> $blnResults,
 			'S_SEARCHED'		=> $blnSearched,
