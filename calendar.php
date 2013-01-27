@@ -195,8 +195,8 @@ class viewcalendar extends page_generic {
 								'end'			=> $enddate_out,
 								'allDay'		=> $allday,
 								'note'			=> $comp->getProperty('description', 1),
-								'color'			=> '#'.$eventcolor,
-								'textColor'		=> $eventcolor_txt
+								'color'			=> '#'.$eventcolor.' !important',
+								'textColor'		=> $eventcolor_txt.' !important'
 							);
 						}
 					}
@@ -271,8 +271,8 @@ class viewcalendar extends page_generic {
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 							'rstatusdata'	=> $rstatusdata,
-							'color'			=> '#'.$eventcolor,
-							'textColor'		=> $eventcolor_txt
+							'color'			=> '#'.$eventcolor.' !important',
+							'textColor'		=> $eventcolor_txt.' !important'
 						);
 					}else{
 						$event_json[] = array(
