@@ -96,7 +96,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$retu = array(true);
 			$updated_mems = array();
 			$added_mems = array();
-			if($id)	{
+			if($id || (count($item_buyers) == 1 && count($old['buyers']) == 1))	{
 				$succ_data = $this->db->query("UPDATE __items SET :params WHERE item_id=?;",array(
 					'item_name'			=> $item_name,
 					'item_value'		=> $item_value,
