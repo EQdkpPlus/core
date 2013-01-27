@@ -61,7 +61,7 @@ if(!class_exists('rift_zam')) {
 				),
 			);
 			$g_lang = array(
-				'rift' => array('en' => 'en_US'),
+				'rift' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR'),
 			);
 			$this->av_langs = ((isset($g_lang[$this->config['game']])) ? $g_lang[$this->config['game']] : '');
 		}
@@ -77,12 +77,12 @@ if(!class_exists('rift_zam')) {
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
 			$encoded_name = urlencode($itemname);
-			$link = 'http://rift.zam.com/en/search.html?q='.$encoded_name;
+			$link = 'http://rift.zam.com/'.$lang.'/search.html?q='.$encoded_name;
 			
 			$data = $this->puf->fetch($link);
 
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#\<a href=\"\/en\/item\/(.*?)\/(.*?)\"><span class=\"(.*?)\">(.*?)<\/span>\<\/a\>#', $data, $matches))
+			if (preg_match_all('#\<a href=\"\/'.$lang.'\/item\/(.*?)\/(.*?)\"><span class=\"(.*?)\">(.*?)<\/span>\<\/a\>#', $data, $matches))
 			{
 				foreach ($matches[0] as $key => $match)
 				{
@@ -107,7 +107,7 @@ if(!class_exists('rift_zam')) {
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
 
-			$url = 'http://rift.zam.com/en/tooltip.html?item='.$item['id'];
+			$url = 'http://rift.zam.com/'.$lang.'/tooltip.html?item='.$item['id'];
 			$item['link'] = $url;
 			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
 
