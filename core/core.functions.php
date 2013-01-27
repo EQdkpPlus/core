@@ -1042,7 +1042,7 @@ function clean_username($strUsername){
 }
 
 function xhtml_entity_decode($string){
-	$string = html_entity_decode($string,  ENT_QUOTES | ENT_XHTML, 'UTF-8');
+	$string = html_entity_decode($string,  ENT_QUOTES, 'UTF-8');
 	return $string;
 }
 
