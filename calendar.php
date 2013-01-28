@@ -182,9 +182,18 @@ class viewcalendar extends page_generic {
 						while($comp = $vcalendar->getComponent('vevent')){
 							$startdate		= $comp->getProperty('dtstart', 1);
 							$enddate		= $comp->getProperty('dtend', 1);
-							$startdate_out	= $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'].' '.((isset($startdate['hour'])) ? $startdate['hour'].':'.$startdate['min'] : '00:00');
-							$enddate_out	= $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
+							
+							// set the date for the events
 							$allday			= (isset($enddate['hour']) && isset($startdate['hour'])) ? false : true;
+							if($allday){
+								$startdate_out	= $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'].' 00:00';
+								$enddate_out	= $enddate['year'].'-'.$enddate['month'].'-'.sprintf("%02d", $enddate['day']-1).' 00:00';
+							}else{
+								$startdate_out	= $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'].' '.((isset($startdate['hour'])) ? $startdate['hour'].':'.$startdate['min'] : '00:00');
+								$enddate_out	= $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
+							}
+
+							// build the event colours
 							$eventcolor		= $this->pdh->get('calendars', 'color', $feed);
 							$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
 
