@@ -238,8 +238,8 @@ $english_array = array(
 
 		'spell'							=> 'Spell',
 		'spellpower'					=> 'Spell Power',
-		'spellHit'						=> 'Trefferchance',
-		'spellCrit'						=> 'Kritische Trefferchance',
+		'spellHit'						=> 'Hit rating ',
+		'spellCrit'						=> 'Crit rating',
 		'spellPen'						=> 'Spell Penetration',
 		'manaRegen'						=> 'Mana Regeneration',
 		'combatRegen'					=> 'Combat Regeneration',
