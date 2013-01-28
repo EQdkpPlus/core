@@ -1072,9 +1072,18 @@ div.jqplot-noData-container {
 .ui-multiselect-filter { float:left; margin-right:10px; font-size:11px }
 .ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
 
-/*! qTip2 - Pretty powerful tooltips - v2.0.0pre - 2012-12-14
-* http://craigsworks.com/projects/qtip2/
-* Copyright (c) 2012 Craig Michael Thompson; Licensed MIT, GPL */
+/*!
+ * qTip2 - Pretty powerful tooltips - v2.0.1-4-g
+ * http://qtip2.com
+ *
+ * Copyright (c) 2013 Craig Michael Thompson
+ * Released under the MIT, GPL licenses
+ * http://jquery.org/license
+ *
+ * Date: Fri Jan 4 2013 04:05 GMT+0000
+ * Plugins: svg ajax tips modal viewport imagemap ie6
+ * Styles: basic css3
+ */
 
 /* Core qTip styles */
 .qtip, .qtip{
@@ -1310,6 +1319,12 @@ div.jqplot-noData-container {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
+}
+
+.qtip-rounded .qtip-titlebar{
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0 0;
 }
 
 /* Youtube tooltip style */
