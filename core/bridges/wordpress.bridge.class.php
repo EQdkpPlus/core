@@ -344,6 +344,4 @@ class PasswordHash {
 		return $hash == $stored_hash;
 	}
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_wordpress_bridge',wordpress_bridge::$shortcuts);
 ?>

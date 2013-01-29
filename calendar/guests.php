@@ -75,6 +75,5 @@ class calraids_guests extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_calraids_guests', calraids_guests::$shortcuts);
 registry::register('calraids_guests');
 ?>

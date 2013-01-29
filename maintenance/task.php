@@ -103,6 +103,5 @@ class task_display extends gen_class {
 		$this->core->page_tail();
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_task_display', task_display::$shortcuts);
 registry::register('task_display');
 ?>

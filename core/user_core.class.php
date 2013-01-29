@@ -512,9 +512,4 @@ class user_core extends gen_class {
 		parent::__destruct();
 	}
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) {
-	registry::add_const('short_user_core', user_core::$shortcuts);
-	registry::add_const('dep_user_core', user_core::$dependencies);
-}
 ?>

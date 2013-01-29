@@ -72,5 +72,4 @@ if(!class_exists('vanguard')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_vanguard', vanguard::$shortcuts);
 ?>

@@ -193,6 +193,5 @@ class listcharacters extends page_generic {
 		return $view_list;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_listcharacters', listcharacters::__shortcuts());
 registry::register('listcharacters');
 ?>

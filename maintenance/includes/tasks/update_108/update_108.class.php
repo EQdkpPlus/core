@@ -64,6 +64,4 @@ class update_108 extends sql_update_task {
 		return true;
 	}
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_update_108', update_108::__shortcuts());
 ?>

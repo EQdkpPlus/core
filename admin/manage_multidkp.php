@@ -173,6 +173,5 @@ class Manage_Multidkp extends page_generic {
 		return $mdkp;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Multidkp', Manage_Multidkp::__shortcuts());
 registry::register('Manage_Multidkp');
 ?>

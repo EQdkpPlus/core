@@ -66,5 +66,4 @@ if (!class_exists('exchange_user_chars')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_user_chars', exchange_user_chars::$shortcuts);
 ?>

@@ -359,6 +359,5 @@ class Manage_Portal extends page_generic {
 				}).disableSelection();', 'docready');
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Portal', Manage_Portal::__shortcuts());
 registry::register('Manage_Portal');
 ?>

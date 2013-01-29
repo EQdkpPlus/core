@@ -345,8 +345,4 @@ if ( !defined('EQDKP_INC') ){
 			parent::__destruct();
 		}
 	}//end class
-if(version_compare(PHP_VERSION, '5.3.0', '<')) {
-	registry::add_const('short_auto_point_adjustments', auto_point_adjustments::$shortcuts);
-	registry::add_const('dep_auto_point_adjustments', auto_point_adjustments::$dependencies);
-}
 ?>

@@ -139,6 +139,5 @@ function replace_url(string){
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_upload', upload::__shortcuts());
 registry::register('upload');
 ?>

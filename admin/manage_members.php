@@ -168,6 +168,5 @@ class Manage_Members extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Members', Manage_Members::__shortcuts());
 registry::register('Manage_Members');
 ?>

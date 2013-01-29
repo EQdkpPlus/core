@@ -916,5 +916,4 @@ if(!class_exists('game_generic')) {
 		protected abstract function load_filters($langs);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_game', game::$shortcuts);
 ?>

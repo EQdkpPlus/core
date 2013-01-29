@@ -373,5 +373,4 @@ class acl extends acl_manager {
 
 } //Close class
 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_acl', acl::$shortcuts);
 ?>

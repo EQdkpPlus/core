@@ -317,5 +317,4 @@ class drupal_bridge extends bridge_generic {
 	}
 	
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_drupal_bridge',drupal_bridge::__shortcuts());
 ?>

@@ -192,6 +192,5 @@ class ManageAdjs extends page_generic {
 		return $adj;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ManageAdjs', ManageAdjs::__shortcuts());
 registry::register('ManageAdjs');
 ?>

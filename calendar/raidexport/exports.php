@@ -76,6 +76,5 @@ class calraids_export extends page_generic {
 		return $export_array;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_calraids_export', calraids_export::$shortcuts);
 registry::register('calraids_export');
 ?>

@@ -91,5 +91,4 @@ if (!class_exists('exchange_raid_signup')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_raid_signup', exchange_raid_signup::$shortcuts);
 ?>

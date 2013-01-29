@@ -530,7 +530,4 @@ class auth extends user_core {
 	}
 
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_auth', auth::__shortcuts());
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_auth',auth::__dependencies());
 ?>

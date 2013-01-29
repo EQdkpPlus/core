@@ -68,5 +68,4 @@ if(!class_exists('pdh_w_comment')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_comment', pdh_w_comment::__shortcuts());
 ?>

@@ -172,5 +172,4 @@ class php_check extends install_generic {
 		return $this->do_match_req();
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_php_check', php_check::$shortcuts);
 ?>

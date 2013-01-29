@@ -79,6 +79,5 @@ class maintenance_display extends gen_class {
 		$this->core->page_tail();
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_maintenance_display', maintenance_display::$shortcuts);
 registry::register('maintenance_display');
 ?>

@@ -294,5 +294,4 @@ _sql_close / close_db -> close
 _sql_error -> error
 get_version -> client_version
 */
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_dbal_mysql', dbal_mysql::$shortcuts);
 ?>

@@ -259,6 +259,5 @@ class Info_Pages extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Info_Pages', Info_Pages::__shortcuts());
 registry::register('Info_Pages');
 ?>

@@ -82,5 +82,4 @@ if(!class_exists('pdh_w_news_categories')) {
 		
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_news_categories', pdh_w_news_categories::__shortcuts());
 ?>

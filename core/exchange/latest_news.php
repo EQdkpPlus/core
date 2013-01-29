@@ -99,5 +99,4 @@ if (!class_exists('exchange_latest_news')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_latest_news', exchange_latest_news::$shortcuts);
 ?>

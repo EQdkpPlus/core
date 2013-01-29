@@ -1138,5 +1138,4 @@ class template extends gen_class {
 		parent::__destruct();
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_template', template::$shortcuts);
 ?>

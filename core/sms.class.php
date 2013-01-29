@@ -60,7 +60,4 @@ abstract class sms_service extends gen_class {
 	abstract public function send($strMessage, $arrReceiver);
 	abstract public function getError();
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_sms', sms::$shortcuts);
-
 ?>

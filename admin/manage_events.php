@@ -191,6 +191,5 @@ class Manage_Events extends page_generic {
 		return $event;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Events', Manage_Events::__shortcuts());
 registry::register('Manage_Events');
 ?>

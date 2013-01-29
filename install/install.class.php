@@ -373,5 +373,4 @@ abstract class install_generic extends gen_class {
 	abstract public function get_filled_output();
 	abstract public function parse_input();
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_install', install::$shortcuts);
 ?>

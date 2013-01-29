@@ -145,6 +145,5 @@ class Manage_Itempools extends page_generic {
 		return $itemp;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Itempools', Manage_Itempools::__shortcuts());
 registry::register('Manage_Itempools');
 ?>

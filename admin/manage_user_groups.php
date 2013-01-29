@@ -481,6 +481,5 @@ class Manage_User_Groups extends page_generic {
 		return false;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_User_Groups', Manage_User_Groups::__shortcuts());
 registry::register('Manage_User_Groups');
 ?>

@@ -61,5 +61,4 @@ if(!class_exists('sto')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_sto', sto::$shortcuts);
 ?>

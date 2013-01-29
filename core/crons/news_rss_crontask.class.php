@@ -82,5 +82,4 @@ if ( !class_exists( "news_rss_crontask" ) ) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_news_rss_crontask', news_rss_crontask::$shortcuts);
 ?>

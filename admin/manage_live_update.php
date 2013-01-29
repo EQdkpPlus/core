@@ -576,6 +576,5 @@ class Manage_Live_Update extends page_generic {
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Live_Update', Manage_Live_Update::__shortcuts());
 registry::register('Manage_Live_Update');
 ?>

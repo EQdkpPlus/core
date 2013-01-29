@@ -177,6 +177,5 @@ class ManageProfileFields extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ManageProfileFields', ManageProfileFields::__shortcuts());
 registry::register('ManageProfileFields');
 ?>

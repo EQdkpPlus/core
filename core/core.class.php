@@ -705,6 +705,5 @@ class core extends gen_class {
 
 			return $iTaskCount;
 		}
-	}
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_core', core::$shortcuts);
+}
 ?>

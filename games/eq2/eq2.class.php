@@ -131,5 +131,4 @@ if(!class_exists('eq2')) {
 		}
 	}#class
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_eq2', eq2::$shortcuts);
 ?>

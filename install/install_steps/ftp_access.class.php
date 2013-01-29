@@ -212,5 +212,4 @@ class ftp_access extends install_generic {
 		$this->pfh->putContent($this->root_path.'config.php', $content);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ftp_access', ftp_access::$shortcuts);
 ?>

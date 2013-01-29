@@ -39,5 +39,4 @@ if (!class_exists('exchange_login')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_login', exchange_login::$shortcuts);
 ?>

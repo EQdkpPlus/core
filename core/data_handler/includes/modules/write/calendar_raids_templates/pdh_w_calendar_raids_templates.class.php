@@ -59,5 +59,4 @@ if(!class_exists('pdh_w_calendar_raids_templates')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_calendar_raids_templates', pdh_w_calendar_raids_templates::__shortcuts());
 ?>

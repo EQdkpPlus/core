@@ -142,5 +142,4 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 		}
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_epgp', pdh_r_epgp::__shortcuts());
 ?>

@@ -226,7 +226,4 @@ class auth_db extends auth {
 		return false;
 	}
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_auth_db',auth_db::__shortcuts());
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('dep_auth_db',auth_db::__dependencies());
 ?>

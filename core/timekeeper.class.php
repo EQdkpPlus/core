@@ -415,8 +415,4 @@ abstract class crontask extends gen_class {
 		if(isset($this->options)) return $this->options;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) {
-	registry::add_const('short_timekeeper', timekeeper::$shortcuts);
-	registry::add_const('dep_timekeeper', timekeeper::$dependencies);
-}
 ?>

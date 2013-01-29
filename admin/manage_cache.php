@@ -155,6 +155,5 @@ class manage_cache extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_manage_cache', manage_cache::__shortcuts());
 registry::register('manage_cache');
 ?>

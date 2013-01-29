@@ -453,5 +453,4 @@ if(!function_exists('itt_replace_bbcode')) {
 		return $text;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_infotooltip', infotooltip::$shortcuts);
 ?>

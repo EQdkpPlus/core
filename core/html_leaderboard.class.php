@@ -87,5 +87,4 @@ if ( !class_exists( "html_leaderboard" ) ) {
 		}
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_html_leaderboard', html_leaderboard::$shortcuts);
 ?>

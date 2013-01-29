@@ -467,6 +467,5 @@ class Manage_Menus extends page_generic {
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Menus', Manage_Menus::__shortcuts());
 registry::register('Manage_Menus');
 ?>

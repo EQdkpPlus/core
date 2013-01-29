@@ -102,6 +102,5 @@ class listitems extends page_generic {
 		return $filtered_list;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_listitems', listitems::__shortcuts());
 registry::register('listitems');
 ?>

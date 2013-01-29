@@ -197,5 +197,4 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_calendar_raids_attendees', pdh_r_calendar_raids_attendees::__shortcuts());
 ?>

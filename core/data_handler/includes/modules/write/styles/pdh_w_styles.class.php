@@ -76,5 +76,4 @@ if(!class_exists('pdh_w_styles')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_styles', pdh_w_styles::__shortcuts());
 ?>

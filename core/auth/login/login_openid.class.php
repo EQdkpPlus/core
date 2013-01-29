@@ -194,6 +194,4 @@ class login_openid extends gen_class {
 		return false;
 	}
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_login_openid', login_openid::$shortcuts);
 ?>

@@ -806,6 +806,5 @@ class Manage_Extensions extends page_generic {
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Extensions', Manage_Extensions::__shortcuts());
 registry::register('Manage_Extensions');
 ?>

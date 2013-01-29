@@ -415,5 +415,4 @@ if (!class_exists("bbcode")) {
 
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_bbcode', bbcode::$shortcuts);
 ?>

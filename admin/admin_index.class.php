@@ -503,5 +503,4 @@ class admin_index extends gen_class {
 	}
 }
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_admin_index', admin_index::$shortcuts);
 ?>

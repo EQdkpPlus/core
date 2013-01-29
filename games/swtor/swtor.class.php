@@ -90,5 +90,4 @@ if(!class_exists('swtor')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_swtor', swtor::$shortcuts);
 ?>

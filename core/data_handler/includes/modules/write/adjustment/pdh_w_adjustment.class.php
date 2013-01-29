@@ -226,5 +226,4 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 		}
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_adjustment', pdh_w_adjustment::__shortcuts());
 ?>

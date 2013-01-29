@@ -226,6 +226,5 @@ class viewnews extends page_generic {
 		return $message ;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_viewnews', viewnews::__shortcuts());
 registry::register('viewnews');
 ?>

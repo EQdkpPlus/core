@@ -256,5 +256,4 @@ array_push($info['aq'], "INSERT INTO `__multidkp2event` (`multidkp2event_multi_i
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_lotro', lotro::$shortcuts);
 ?>

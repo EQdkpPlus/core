@@ -571,5 +571,4 @@ if ( !defined('EQDKP_INC') ){
 			$this->log('deprecated', $name, $backtrace[2]['file'], $backtrace[2]['line'], $backtrace[1]['file'], $backtrace[1]['line']);
 		}
 	}//end class
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_plus_debug_logger', plus_debug_logger::$shortcuts);
 ?>

@@ -164,6 +164,5 @@ class reset_eqdkp extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_reset_eqdkp', reset_eqdkp::__shortcuts());
 registry::register('reset_eqdkp');
 ?>

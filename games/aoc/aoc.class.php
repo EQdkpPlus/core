@@ -72,5 +72,4 @@ if(!class_exists('aoc')){
 		}
 	}#class
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_aoc', aoc::$shortcuts);
 ?>

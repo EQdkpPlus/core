@@ -772,5 +772,4 @@ if(!class_exists('wow')) {
 		}
 	}#class
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_wow', wow::$shortcuts);
 ?>

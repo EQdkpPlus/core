@@ -81,5 +81,4 @@ class vbulletin_bridge extends bridge_generic {
 		return false;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_vbulletin_bridge',vbulletin_bridge::$shortcuts);
 ?>

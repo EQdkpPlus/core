@@ -110,5 +110,4 @@ if ( !class_exists( "calevents_raids_rss_crontask" ) ) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_calevents_raids_rss_crontask', calevents_raids_rss_crontask::$shortcuts);
 ?>

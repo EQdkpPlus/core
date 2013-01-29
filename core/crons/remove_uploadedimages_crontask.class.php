@@ -44,5 +44,4 @@ if ( !class_exists( "remove_uploadedimages_crontask" ) ) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_remove_uploadedimages_crontask', remove_uploadedimages_crontask::$shortcuts);
 ?>

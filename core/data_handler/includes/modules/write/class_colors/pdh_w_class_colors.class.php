@@ -54,5 +54,4 @@ if(!class_exists('pdh_w_class_colors')) {
 		
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_class_colors', pdh_w_class_colors::__shortcuts());
 ?>

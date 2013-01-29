@@ -150,5 +150,4 @@ if (!class_exists('pdh_r_wow')) {
 
 	} //end class
 } //end if class not exists
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_wow', pdh_r_wow::$shortcuts);
 ?>

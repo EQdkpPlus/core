@@ -97,5 +97,4 @@ if(!class_exists('pdh_w_user_groups')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_user_groups', pdh_w_user_groups::__shortcuts());
 ?>

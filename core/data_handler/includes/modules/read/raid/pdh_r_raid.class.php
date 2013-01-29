@@ -279,5 +279,4 @@ if(!class_exists('pdh_r_raid')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_raid', pdh_r_raid::__shortcuts());
 ?>

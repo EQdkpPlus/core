@@ -72,5 +72,4 @@ if(!class_exists('torchlight2')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_torchlight2', torchlight2::$shortcuts);
 ?>

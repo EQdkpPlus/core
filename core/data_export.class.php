@@ -186,5 +186,4 @@ class content_export extends gen_class {
 		return $out;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_content_export', content_export::$shortcuts);
 ?>

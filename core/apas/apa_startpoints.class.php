@@ -123,5 +123,4 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) { return; }
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_apa_startpoints', apa_startpoints::$shortcuts);
 ?>

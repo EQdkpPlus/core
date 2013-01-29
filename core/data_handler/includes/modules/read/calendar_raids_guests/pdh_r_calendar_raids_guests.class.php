@@ -115,6 +115,4 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 	} //end class
 } //end if class not exists
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_calendar_raids_guests', pdh_r_calendar_raids_guests::__shortcuts());
 ?>

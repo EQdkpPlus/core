@@ -62,5 +62,4 @@ if ( !defined('EQDKP_INC') ){
 			return $variable;
 		}
 	}
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_logs', logs::$shortcuts);
 ?>

@@ -162,5 +162,4 @@ class sql_update extends task {
 	public function is_necessary() { return false; }
 	public function is_applicable(){ return true; }
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_sql_update', sql_update::__shortcuts());
 ?>

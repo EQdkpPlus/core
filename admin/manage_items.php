@@ -199,6 +199,5 @@ class ManageItems extends page_generic {
 		return $item;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ManageItems', ManageItems::__shortcuts());
 registry::register('ManageItems');
 ?>

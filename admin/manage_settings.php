@@ -1090,6 +1090,5 @@ class mmocms_settings extends page_generic {
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_mmocms_settings', mmocms_settings::__shortcuts());
 registry::register('mmocms_settings');
 ?>

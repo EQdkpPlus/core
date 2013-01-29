@@ -35,5 +35,4 @@ if (!class_exists('exchange_logout')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_logout', exchange_logout::$shortcuts);
 ?>

@@ -386,5 +386,4 @@ abstract class portal_generic extends gen_class {
 
 	abstract public function output();
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_portal', portal::$shortcuts);
 ?>

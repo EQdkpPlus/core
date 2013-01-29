@@ -343,5 +343,4 @@ class bridge_generic extends gen_class {
 		return false;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_bridge_generic', bridge_generic::$shortcuts);
 ?>

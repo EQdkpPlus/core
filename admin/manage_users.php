@@ -925,6 +925,5 @@ class Manage_Users extends page_generic {
 		return $settingsdata;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Users', Manage_Users::__shortcuts());
 registry::register('Manage_users');
 ?>

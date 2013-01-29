@@ -92,6 +92,5 @@ class MySQL_Info extends page_generic{
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_MySQL_Info', MySQL_Info::__shortcuts());
 registry::register('MySQL_Info');
 ?>

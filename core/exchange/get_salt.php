@@ -44,5 +44,4 @@ if (!class_exists('exchange_get_salt')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_get_salt', exchange_get_salt::$shortcuts);
 ?>

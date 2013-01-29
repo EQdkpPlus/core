@@ -89,6 +89,5 @@ class calraids_transform extends page_generic {
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_calraids_transform', calraids_transform::$shortcuts);
 registry::register('calraids_transform');
 ?>

@@ -363,5 +363,4 @@ class plugin_manager extends gen_class {
 		return $this->get_plugin($plugin_code)->check_dependency($dependency);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_plugin_manager', plugin_manager::$shortcuts);
 ?>

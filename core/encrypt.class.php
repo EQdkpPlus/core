@@ -56,6 +56,4 @@ class encrypt extends gen_class {
 	}
 
 } //END mmocms_encrypt-class
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_encrypt', encrypt::$shortcuts);
 ?>

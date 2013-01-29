@@ -580,5 +580,4 @@ if (!class_exists("html")) {
 		}
 	}
 } 
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_html', html::$shortcuts);
 ?>

@@ -37,5 +37,4 @@ if (!class_exists('exchange_points')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_exchange_points', exchange_points::$shortcuts);
 ?>

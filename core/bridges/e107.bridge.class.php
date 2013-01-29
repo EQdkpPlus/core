@@ -92,5 +92,4 @@ class e107_bridge extends bridge_generic {
 	}
 	
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_e107_bridge', e107_bridge::$shortcuts);
 ?>

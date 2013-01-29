@@ -231,6 +231,5 @@ class guildImporter extends page_generic {
 		));
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_guildImporter', guildImporter::__shortcuts());
 registry::register('guildImporter');
 ?>

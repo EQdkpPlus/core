@@ -187,6 +187,4 @@ initLogin();
 		return false;
 	}
 }
-
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_login_persona', login_persona::$shortcuts);
 ?>

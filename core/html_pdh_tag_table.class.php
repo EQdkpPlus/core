@@ -368,5 +368,4 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		}
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_html_pdh_tag_table', html_pdh_tag_table::$shortcuts);
 ?>

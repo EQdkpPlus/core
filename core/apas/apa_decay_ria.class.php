@@ -181,5 +181,4 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		}
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_apa_decay_ria', apa_decay_ria::$shortcuts);
 ?>

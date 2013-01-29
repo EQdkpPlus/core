@@ -167,6 +167,5 @@ class maintenance_user extends page_generic {
 		));
 	}
 } //close class
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_maintenance_user', maintenance_user::__shortcuts());
 registry::register('maintenance_user');
 ?>

@@ -342,5 +342,4 @@ class inst_settings extends install_generic {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_inst_settings', inst_settings::$shortcuts);
 ?>

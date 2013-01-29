@@ -618,6 +618,5 @@ class user_settings extends page_generic {
 		);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_user_settings', user_settings::__shortcuts());
 registry::register('user_settings');
 ?>

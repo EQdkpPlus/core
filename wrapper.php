@@ -280,6 +280,5 @@ class wrapper extends page_generic {
 	} #end function
 
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_wrapper', wrapper::__shortcuts());
 registry::register('wrapper');
 ?>

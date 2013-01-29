@@ -142,5 +142,4 @@ class db_access extends install_generic {
 		$this->pfh->putContent($this->root_path.'config.php', $content);
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_db_access', db_access::$shortcuts);
 ?>

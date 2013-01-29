@@ -140,7 +140,6 @@ class ManageAutoPoints extends page_generic {
 		$expr = str_replace(array_values($re_ar), array_keys($re_ar), $expr);
 		//remove all not allowed symbols (note: also letters not allowed here, thats why we replaced them in the line above)
 		$regex = '~\s*[^\d\~\.'.preg_quote(implode('', $syms)).']*\s*~';
-		if(version_compare(PHP_VERSION, '5.3.0', '<')) $regex = str_replace('-', '\-', $regex);
 		$expr = preg_replace($regex, '', $expr);
 		//rereplace the "allowed" words
 		$expr = str_replace(array_keys($re_ar), array_values($re_ar), $expr);
@@ -420,6 +419,5 @@ class ManageAutoPoints extends page_generic {
 		exit;
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ManageAutoPoints', ManageAutoPoints::__shortcuts());
 registry::register('ManageAutoPoints');
 ?>

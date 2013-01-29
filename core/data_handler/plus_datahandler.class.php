@@ -1023,5 +1023,4 @@ if( !class_exists( "plus_datahandler")){
 	//end class
 }
 //end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_plus_datahandler', plus_datahandler::$shortcuts);
 ?>

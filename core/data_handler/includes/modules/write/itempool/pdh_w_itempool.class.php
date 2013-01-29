@@ -88,5 +88,4 @@ if(!class_exists('pdh_w_itempool')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_itempool', pdh_w_itempool::__shortcuts());
 ?>

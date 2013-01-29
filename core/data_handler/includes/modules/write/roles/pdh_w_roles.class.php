@@ -62,5 +62,4 @@ if(!class_exists('pdh_w_roles')){
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_roles', pdh_w_roles::__shortcuts());
 ?>

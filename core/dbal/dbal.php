@@ -316,5 +316,4 @@ sql_build_query -> build_query
 sql_error -> error
 sql_highlight -> highlight
 */
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_dbal_common', dbal_common::$shortcuts);
 ?>

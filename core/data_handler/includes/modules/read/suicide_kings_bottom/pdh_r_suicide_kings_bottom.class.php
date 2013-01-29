@@ -157,5 +157,4 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 
 	}//end class
 }//end if
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_suicide_kings_bottom', pdh_r_suicide_kings_bottom::__shortcuts());
 ?>

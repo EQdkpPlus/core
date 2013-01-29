@@ -74,5 +74,4 @@ class char_creation_date extends task {
 		return $this->lang['fix_creation_date_done'];
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_char_creation_date', char_creation_date::__shortcuts());
 ?>
