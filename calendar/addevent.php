@@ -383,7 +383,7 @@ class addevent extends page_generic {
 			'DR_REPEAT'			=> $this->html->DropDown('repeating', $drpdwn_repeat, ((isset($eventdata['repeating'])) ? $eventdata['repeating'] : '')),
 			'DR_TEMPLATE'		=> $this->html->DropDown('raidtemplate', $this->pdh->get('calendar_raids_templates', 'dropdowndata'), '', '', '', 'input', 'cal_raidtemplate'),
 			'DR_CALENDARMODE'	=> $this->html->DropDown('calendarmode', $calendar_mode_array, $calendermode, '', '', 'input', 'selectmode'),
-			'DR_EVENT'			=> $this->html->DropDown('raid_eventid', $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list'))), ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), '', '', 'input resettemplate_input', 'input_eventid'),
+			'DR_EVENT'			=> $this->html->DropDown('raid_eventid', $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), '', '', 'input resettemplate_input', 'input_eventid'),
 			'DR_RAIDMODE'		=> $this->html->DropDown('raidmode', $raidmode_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), '', '', 'input', 'cal_raidmodeselect'),
 			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidleader'] : ''), array('width' => 300, 'filter' => true)),
 			'CB_ALLDAY'			=> $this->html->widget(array('fieldtype'=>'checkbox','name'=>'allday','selected'=>((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class'=>'allday_cb')),
