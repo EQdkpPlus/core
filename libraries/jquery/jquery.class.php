@@ -80,7 +80,7 @@ if (!class_exists("jquery")) {
 					</div>
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
-				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"75%", height:"75%"});', 'docready');
+				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"90%", height:"90%"});', 'docready');
 				
 		}
 

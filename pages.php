@@ -17,7 +17,6 @@
  */
 
 define('EQDKP_INC', true);
-define('USE_LIGHTBOX', true);
 $eqdkp_root_path = './';
 include_once($eqdkp_root_path . 'common.php');
 
