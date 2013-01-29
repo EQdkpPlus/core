@@ -22,15 +22,17 @@ if (!defined('EQDKP_INC'))
 }
 
 $module_lang = array(
-  'charicon'           => '',
-  'achievementpoints' 	=> 'Achievement Points',
-  'averageItemLevelEquipped' => 'Itemlevel (eqipped)'
+	'charicon'           => '',
+	'achievementpoints' 	=> 'Achievement Points',
+	'averageItemLevelEquipped' => 'Itemlevel (eqipped)',
+	'profilers'				=> 'Externe Profilseiten'
 );
 
 $preset_lang = array(
   'wow_charicon' 			=> 'WoW Charicon',
   'wow_achievementpoints'	=> 'WoW Achievement Points',
   'wow_gearlevel' 			=> 'WoW Itemlevel (eqipped)',
+  'wow_profiler' 			=> 'WoW external profile pages',
 );
 
 ?>

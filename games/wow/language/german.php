@@ -219,6 +219,9 @@ $german_array = array(
 		'intellect'						=> 'Intelligenz',
 		'spirit'						=> 'Willenskraft',
 
+		'profilers'						=> 'Externe Profilseiten',
+		'profiler_askmrrobot'			=> 'AskMrRobot.com',
+
 		'melee'							=> 'Nahkampf',
 		'mainHandDamage'				=> 'Schaden',
 		'mainHandDps'					=> 'DPS',

@@ -22,15 +22,17 @@ if (!defined('EQDKP_INC'))
 }
 
 $module_lang = array(
-  'charicon'           	=> '',
-  'achievementpoints' 	=> 'Erfolgspunkte',
-  'averageItemLevelEquipped' => 'ausger. Gegenstandst.'
+	'charicon'           	=> '',
+	'achievementpoints' 	=> 'Erfolgspunkte',
+	'averageItemLevelEquipped' => 'ausger. Gegenstandst.',
+	'profilers'				=> 'Externe Profilseiten'
 );
 
 $preset_lang = array(
   'wow_charicon' 			=> 'WoW Charbild',
   'wow_achievementpoints'	=> 'WoW Erfolgspunkte',
   'wow_gearlevel' 			=> 'WoW ausger. Gegenstandsstufe',
+  'wow_profiler' 			=> 'WoW externe Profilseiten',
 );
 
 ?>

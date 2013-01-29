@@ -219,6 +219,9 @@ $english_array = array(
 		'stamina'						=> 'Stamina',
 		'intellect'						=> 'Intellect',
 		'spirit'						=> 'Spirit',
+		
+		'profilers'						=> 'External profiler pages',
+		'profiler_askmrrobot'			=> 'AskMrRobot.com',
 
 		'melee'							=> 'Melee',
 		'mainHandDamage'				=> 'Main Hand Damage',

@@ -47,6 +47,7 @@ if (!class_exists('pdh_r_wow')) {
 			'wow_charicon'			=> array('charicon', array('%member_id%'),			array()),
 			'wow_achievementpoints'	=> array('achievementpoints',array('%member_id%'),	array()),
 			'wow_gearlevel'			=> array('averageItemLevelEquipped',array('%member_id%'),	array()),
+			'wow_profiler'			=> array('profilers', array('%member_id%'),			array()),
 		);
 
 		/**
@@ -68,6 +69,7 @@ if (!class_exists('pdh_r_wow')) {
 			$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
 			$this->guilddata = $this->game->obj['armory']->guild($this->config->get('guildtag'), $this->config->get('uc_servername'));
 			$guildMembers = array();
+
 			if (is_array($this->guilddata['members'])){
 				foreach($this->guilddata['members'] as $member){
 					 $this->data[$member['character']['name']] = $member;
@@ -114,7 +116,7 @@ if (!class_exists('pdh_r_wow')) {
 			}
 			return '<img src="'.$charicon.'" alt="Char-Icon" height="48" />';
 		}
-		
+
 		public function get_averageItemLevelEquipped($member_id){
 			$membername = $this->pdh->get('member', 'name', array($member_id));
 			$charinfo = $this->game->obj['armory']->character($membername, $this->config->get('uc_servername'));
@@ -124,9 +126,28 @@ if (!class_exists('pdh_r_wow')) {
 			
 			return '';
 		}
-		
-		
-		
+
+		public function get_profilers($member_id){
+			$membername		= $this->pdh->get('member', 'name', array($member_id));
+			$output			= '';
+			$a_profilers	= array(
+				1	=> array(
+					'icon'	=> 'games/wow/profiles/profilers/askmrrobot.png',
+					'name'	=> 'AskMrRobot.com',
+					'url'	=> $this->game->obj['armory']->bnlink($membername, $this->config->get('uc_servername'), 'askmrrobot')
+				)
+			);
+			
+			
+			if(is_array($a_profilers)){
+				foreach($a_profilers as $v_profiler){
+					$output	.= '<a href="'.$v_profiler['url'].'"><img src="'.$v_profiler['icon'].'" alt="'.$v_profiler['name'].'" width="20" /></a> '; 
+				}
+			}
+			return $output;
+			
+		}
+
 	} //end class
 } //end if class not exists
 if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_r_wow', pdh_r_wow::$shortcuts);

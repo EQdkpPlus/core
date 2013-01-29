@@ -339,6 +339,16 @@
 	$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
 	$chardata = $this->game->obj['armory']->character($member['name'],$this->config->get('uc_servername'));
 	if($this->config->get('uc_servername') != '' && !isset($chardata['status'])){
+
+		// profilers
+		$a_profilers	= array(
+			1	=> array(
+				'icon'	=> 'games/wow/profiles/profilers/askmrrobot.png',
+				'name'	=> 'AskMrRobot.com',
+				'url'	=> $this->game->obj['armory']->bnlink($member['name'], $this->config->get('uc_servername'), 'askmrrobot')
+			)
+		);
+
 		$this->jquery->Tab_header('talent_tabs');
 		$this->jquery->Tab_header('achievement_tabs');
 		$this->tpl->add_js("
@@ -452,6 +462,15 @@
 				$this->game->glang('pvppower')		=> round($chardata['stats']['pvpPower'], 2).'%',
 			)
 		);
+
+		// the profilers
+		foreach ($a_profilers as $v_profilers){
+			$this->tpl->assign_block_vars('profilers', array(
+				'IMG'			=> $v_profilers['icon'],
+				'ALT'			=> $v_profilers['name'],
+				'URL'			=> $v_profilers['url'],
+			));
+		}
 
 		// character attributes
 		foreach ($charattributes as $info_grp_name => $info_grp){
