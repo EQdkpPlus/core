@@ -109,7 +109,6 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 						$temp_list['multi'][] = $main_id;
 						$redistribute['multi'][] = $posi;
 					}
-					pd($temp_list);
 					$items = $this->pdh->aget('item', 'buyer', 0, array($this->pdh->sort($raid['itemsofraid'], 'item', 'date', 'asc')));
 					foreach($items as $memberid) {
 						if(!in_array($memberid, $raid['raid_attendees'])) continue; // ignore items assigned to members not present in raid - most likely special members
@@ -128,7 +127,6 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 					foreach($temp_list['multi'] as $key => $member_id) {
 						$this->sk_list['multi'][$mdkp_id][$member_id] = $redistribute['multi'][$key];
 					}
-					pd($temp_list);
 				}
 			}
 

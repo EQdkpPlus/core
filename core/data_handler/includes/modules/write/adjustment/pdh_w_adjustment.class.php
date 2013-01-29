@@ -83,8 +83,6 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$updated_mems = array();
 			$added_mems = array();
 			$adjs2del = $old['members'];
-			pd($member_ids);
-			pd($old['members']);
 			$log_action['{L_GROUP_KEY}'] = $new_group_key;
 			foreach($member_ids as $member_id){
 				$adj_id = array_search($member_id, $old['members']);
