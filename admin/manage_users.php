@@ -110,7 +110,7 @@ class Manage_Users extends page_generic {
 			$query_ar = array(
 				'username'				=> $this->in->get('username'),
 				'user_password'			=> $new_password,
-				'user_email'			=> $this->crypt->encrypt($this->in->get('user_email'))
+				'user_email'			=> $this->crypt->encrypt($this->in->get('email_address'))
 			);
 			
 			$privArray = array();

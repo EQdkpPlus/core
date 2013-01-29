@@ -1498,8 +1498,6 @@ $lang = array(
 "repo_unknown_error" => "Unknown error",
 "repo_updatewarning" => "This update will overwrite the existing files of the extension and therefore all changes made to it. These changes can not be recovered.",
 "repo_hide_updatewarning" => "Hide this hint",
-"repo_requirements_failed" => "You have to download updates for extensions from our <a href=\"".EQDKP_REPO_URL."\">project site </a>, because the php extension 'openssl' is missing.",
-"liveupdate_update_requirements_failed" => "A new version of EQdkp Plus is available. Because the php extension 'openssl' is missing, you have do download the new version from <a href=\"".EQDKP_DOWNLOADS_URL."\">".EQDKP_DOWNLOADS_URL."</a>.",
 "repo_extensioninfo" => "Informationen to this Extension",
 "thumbnail_defaultsize"	=> 'Defaultwidth of Thumbnails of Lightbox',
 "thumbnail_defaultsize_help" => 'Insert here the width (in Pixel) of the Thumbnails for large images',

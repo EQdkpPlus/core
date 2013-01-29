@@ -341,8 +341,6 @@ class Manage_Extensions extends page_generic {
 			}
 		}
 		
-		$blnRequirements = $this->repo->checkRequirements();
-
 		//Get Updates
 		$urgendUpdates = $this->repo->BuildUpdateArray();
 		$allUpdates = $this->repo->BuildUpdateArray(false);
@@ -402,7 +400,6 @@ class Manage_Extensions extends page_generic {
 				if (isset($urgendUpdates[$plugin_code])){
 					$row = 'red';
 					$link = '<a href="javascript:repo_update(1, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-					if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[1]['red'] ++;
 				} else {
 					$row = 'green';
@@ -411,7 +408,6 @@ class Manage_Extensions extends page_generic {
 			} elseif(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
 				$link = '<a href="javascript:repo_update(1, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 				$arrUpdateCount[1]['yellow'] ++;
 			} else {
 				$row = 'grey';
@@ -448,7 +444,7 @@ class Manage_Extensions extends page_generic {
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
 				$dep['games']	= 'skip';
 				$dep['phpf']	= 'skip';
-				$dl_link = ($blnRequirements) ? '<a href="javascript:repo_install(1, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>' : '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
+				$dl_link = '<a href="javascript:repo_install(1, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
@@ -495,7 +491,6 @@ class Manage_Extensions extends page_generic {
 			if(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
 				$link = '<a href="javascript:repo_update(2, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$row = 'grey';
@@ -535,13 +530,11 @@ class Manage_Extensions extends page_generic {
 				} else {
 					$rowname = 'red';
 					$link = '<a href="javascript:repo_update(2, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-					if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 				}
 				$arrUpdateCount[2]['red'] ++;
 			} elseif(isset($allUpdates[$plugin_code])) {
 				$rowname = 'yellow';
 				$link = '<a href="javascript:repo_update(2, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$rowname = 'green';
@@ -580,7 +573,6 @@ class Manage_Extensions extends page_generic {
 				$row = 'grey';
 
 				$link = '<a href="javascript:repo_install(2, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
-				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('styles_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -632,12 +624,10 @@ class Manage_Extensions extends page_generic {
 					if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
 						$link = '<a href="javascript:repo_update(3, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-						if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[3]['red'] ++;
 					}elseif(isset($allUpdates[$plugin_code])){
 						$row = 'yellow';
 						$link = '<a href="javascript:repo_update(3, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-						if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[3]['yellow'] ++;
 					}
 				}
@@ -667,7 +657,6 @@ class Manage_Extensions extends page_generic {
 				$row = 'grey';
 
 				$link = '<a href="javascript:repo_install(3, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
-				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -711,12 +700,10 @@ class Manage_Extensions extends page_generic {
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
 						$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-						if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[7]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
 					$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
-					if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[7]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -742,7 +729,6 @@ class Manage_Extensions extends page_generic {
 				$row = 'grey';
 
 				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
-				if (!$blnRequirements) $link = '<a href="'.EQDKP_DOWNLOADS_URL.'" target="_blank">'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -789,7 +775,6 @@ class Manage_Extensions extends page_generic {
 		
 		$this->tpl->assign_vars(array(
 			'S_HIDE_UPDATEWARNING'	=> (int)$this->config->get('repo_hideupdatewarning'),
-			'S_REQUIREMENTS' => $blnRequirements,
 			'CSRF_MODE_TOKEN' => $this->CSRFGetToken('mode'),
 			'CSRF_UPDATEWARNING_TOKEN' => $this->CSRFGetToken('hide_update_warning'),
 		));

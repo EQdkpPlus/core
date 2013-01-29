@@ -80,13 +80,6 @@ class php_check extends install_generic {
 				'installed'		=> (function_exists('spl_autoload_register')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (function_exists('spl_autoload_register')) ? true : false
 			),
-			'openssl'		=> array(
-				'required'		=> $this->lang['yes'],
-				'installed'		=> (function_exists('openssl_verify')) ? $this->lang['yes'] : $this->lang['no'],
-				'passfail'		=> (function_exists('openssl_verify')) ? true : false,
-				'adviced_fail'	=> (!function_exists('openssl_verify')) ? true : false,
-				'ignore'		=> true
-			),
 		);
 	}
 

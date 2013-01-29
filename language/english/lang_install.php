@@ -63,7 +63,6 @@ $alang = array(
 "module_fopen" => "fopen PHP function",
 "module_soap" => "SOAP PHP module",
 "module_autoload" => "spl_autoload_register PHP function",
-'module_openssl'		=> 'openSSL PHP module',
 "module_hash" => "hash PHP function",
 "safemode_warning" => "<strong>WARNING</strong><br/>The PHP Safe mode is active, you have to use the FTP mode of EQDKP-Plus!",
 "phpcheck_success" => "The minimum requirements for the installation of EQDKP-Plus are met. The installation can proceed.",

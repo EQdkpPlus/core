@@ -499,7 +499,6 @@ class Manage_Live_Update extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'S_START'			=> true,
-			'S_REQUIREMENTS' 	=> $this->repo->checkRequirements(),
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),

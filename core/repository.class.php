@@ -100,14 +100,6 @@ HTP69g==
 			return "";
 		}
 		
-		
-		//Check for all required php functions
-		public function checkRequirements(){
-			if (function_exists('openssl_verify') && (int)$this->config->get('rootcert_revoked') != 1) return true;
-			
-			return false;
-		}
-
 		//Init Lifeupdate
 		public function InitLifeupdate($new_version){
 			$this->new_version = $new_version;
@@ -245,12 +237,21 @@ HTP69g==
 				foreach($arrIntermCerts as $cert){
 					if ($this->verifyIntermediateCert($cert, $type)) $arrVerified[] = $cert;
 				}
-				
 				$strFileHash = sha1_file($src);
+				
+				include_once('libraries/phpseclib/X509.php');
+				include_once('libraries/phpseclib/RSA.php');
+				$x509 = new File_X509();
+		
 				foreach ($arrVerified as $intermCert){
 					//Check, if $hash is valid
-					$arrPublicKey = openssl_pkey_get_details(openssl_pkey_get_public($intermCert));
-					$blnVerified = openssl_verify($hash, base64_decode($signature), $arrPublicKey['key']);
+					$cert = $x509->loadX509($intermCert);
+					$pkey = $x509->getPublicKey()->getPublicKey();
+					$rsa = new Crypt_RSA();
+					
+					$rsa->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
+					$rsa->loadKey($pkey);
+					$blnVerified = $rsa->verify($hash, base64_decode($signature));
 					
 					//If hashes are eqal, it's a valid package
 					if ($blnVerified && ($strFileHash === $hash)) {
@@ -379,74 +380,18 @@ HTP69g==
 			//Intermediate Cert revoked?
 			if ($this->checkIfRevoked($intermCert)) { return false; }
 			
-
-			// Convert the cert to der for feeding to extractSignature.
-			$certDer = $this->pemToDer($intermCert);
-			if (!is_string($certDer)) { return false; }
-			
-			// Grab the encrypted signature from the der encoded cert.
-			$encryptedSig = $this->extractSignature($certDer);
-			if (!is_string($encryptedSig)) { return false; }
-    
-			// Extract the public key from the ca cert, which is what has
-			// been used to encrypt the signature in the cert.
 			$rootCert = ($type == 'core') ? $this->coreRootCert : $this->packagesRootCert;
-			$pubKey = openssl_pkey_get_public($rootCert);
-			if ($pubKey === false) {
-				return false;
-			}
-			// Attempt to decrypt the encrypted signature using the CA's public
-			// key, returning the decrypted signature in $decryptedSig.  If
-			// it can't be decrypted, this ca was not used to sign it for sure...
-			$rc = openssl_public_decrypt($encryptedSig,$decryptedSig,$pubKey);
-			if ($rc === false) { return false; }
-			// We now have the decrypted signature, which is der encoded
-			// asn1 data containing the signature algorithm and signature hash.
-			// Now we need what was originally hashed by the issuer, which is
-			// the original DER encoded certificate without the issuer and
-			// signature information.
-			$origCert = $this->stripSignerAsn($certDer);
-			if ($origCert === false) {
-				return false;
-			}
-			// Get the oid of the signature hash algorithm, which is required
-			// to generate our own hash of the original cert.  This hash is
-			// what will be compared to the issuers hash.
-			$oid = $this->getSignatureAlgorithmOid($decryptedSig);
-			if ($oid === false) {
-				return false;
-			}
-			switch($oid) {
-				//case '1.2.840.113549.2.2':     $algo = 'md2';    break;
-				//case '1.2.840.113549.2.4':     $algo = 'md4';    break;
-				case '1.2.840.113549.2.5':     $certHash = md5($origCert);    break;
-				//case '1.3.14.3.2.18':          $algo = 'sha';    break;
-				case '1.3.14.3.2.26':          $certHash = sha1($origCert);    break;
-				//case '2.16.840.1.101.3.4.2.1': $algo = 'sha256'; break;
-				//case '2.16.840.1.101.3.4.2.2': $algo = 'sha384'; break;
-				//case '2.16.840.1.101.3.4.2.3': $algo = 'sha512'; break;
-				default:
-					return false;
-				break;
-			}
 			
-			// Get the issuer generated hash from the decrypted signature.
-			$decryptedHash = $this->getSignatureHash($decryptedSig);
-			// Ok, hash the original unsigned cert with the same algorithm
-			// and if it matches $decryptedHash we have a winner.
-			//$certHash = hash($algo,$origCert);
-			$blnResult = ($decryptedHash === $certHash);
-			//Check timestamp
-			if ($blnResult){
-				$arrCert = openssl_x509_parse($intermCert);
-				if ($arrCert){
-					$intValidFrom = (int)$arrCert['validFrom_time_t'];
-					$intValidTo = (int)$arrCert['validTo_time_t'];
-					if (time() > $intValidFrom && time() < $intValidTo) return true;
-				}
-			}
+			include_once($this->root_path.'libraries/phpseclib/X509.php');
+
+			$x509 = new File_X509();
+			$x509->loadCA($rootCert); // see signer.crt
+			$cert = $x509->loadX509($intermCert); // see google.crt
+			if (!$x509->validateSignature(FILE_X509_VALIDATE_SIGNATURE_BY_CA)) return false;
+
+			if (!$x509->validateDate()) return false;			
 			
-			return false;
+			return true;
 		}
 		
 		
@@ -475,167 +420,6 @@ HTP69g==
 				return ($this->UpdateCount() > 0) ? true : false;
 			}
 		}
-		
-		/**
-		 * Extract signature from der encoded cert.
-		 * Expects x509 der encoded certificate consisting of a section container
-		 * containing 2 sections and a bitstream.  The bitstream contains the
-		 * original encrypted signature, encrypted by the public key of the issuing
-		 * signer.
-		 * @param string $der
-		 * @return string on success
-		 * @return bool false on failures
-		 */
-		function extractSignature($der=false) {
-			if (strlen($der) < 5) { return false; }
-			// skip container sequence
-			$der = substr($der,4);
-			// now burn through two sequences and the return the final bitstream
-			while(strlen($der) > 1) {
-				$class = ord($der[0]);
-				$classHex = dechex($class);
-				switch($class) {
-					// BITSTREAM
-					case 0x03:
-						$len = ord($der[1]);
-						$bytes = 0;
-						if ($len & 0x80) {
-							$bytes = $len & 0x0f;
-							$len = 0;
-							for ($i = 0; $i < $bytes; $i++) {
-								$len = ($len << 8) | ord($der[$i + 2]);
-								}
-							}
-						return substr($der,3 + $bytes, $len);
-					break;
-					// SEQUENCE
-					case 0x30:
-						$len = ord($der[1]);
-						$bytes = 0;
-						if ($len & 0x80) {
-							$bytes = $len & 0x0f;
-							$len = 0;
-							for($i = 0; $i < $bytes; $i++) {
-								$len = ($len << 8) | ord($der[$i + 2]);
-								}
-							}
-						$contents = substr($der, 2 + $bytes, $len);
-						$der = substr($der,2 + $bytes + $len);
-					break;
-					default:
-						return false;
-					break;
-					}
-			}
-			return false;
-		}
-
-		/**
-		 * Get signature algorithm oid from der encoded signature data.
-		 * Expects decrypted signature data from a certificate in der format.
-		 * This ASN1 data should contain the following structure:
-		 * SEQUENCE
-		 *    SEQUENCE
-		 *       OID    (signature algorithm)
-		 *       NULL
-		 * OCTET STRING (signature hash)
-		 * @return bool false on failures
-		 * @return string oid
-		 */
-		function getSignatureAlgorithmOid($der=null) {
-			// Validate this is the der we need...
-			if (!is_string($der) or strlen($der) < 5) { return false; }
-			$bit_seq1 = 0;
-			$bit_seq2 = 2;
-			$bit_oid  = 4;
-			if (ord($der[$bit_seq1]) !== 0x30) {
-				die('Invalid DER passed to getSignatureAlgorithmOid()');
-				}
-			if (ord($der[$bit_seq2]) !== 0x30) {
-				die('Invalid DER passed to getSignatureAlgorithmOid()');
-				}
-			if (ord($der[$bit_oid]) !== 0x06) {
-				die('Invalid DER passed to getSignatureAlgorithmOid');
-				}
-			// strip out what we don't need and get the oid
-			$der = substr($der,$bit_oid);
-			// Get the oid
-			$len = ord($der[1]);
-			$bytes = 0;
-			if ($len & 0x80) {
-				$bytes = $len & 0x0f;
-				$len = 0;
-				for ($i = 0; $i < $bytes; $i++) {
-					$len = ($len << 8) | ord($der[$i + 2]);
-					}
-				}
-			$oid_data = substr($der, 2 + $bytes, $len);
-			// Unpack the OID
-			$oid  = floor(ord($oid_data[0]) / 40);
-			$oid .= '.' . ord($oid_data[0]) % 40;
-			$value = 0;
-			$i = 1;
-			while ($i < strlen($oid_data)) {
-				$value = $value << 7;
-				$value = $value | (ord($oid_data[$i]) & 0x7f);
-				if (!(ord($oid_data[$i]) & 0x80)) {
-					$oid .= '.' . $value;
-					$value = 0;
-					}
-				$i++;
-				}
-			return $oid;
-		}
-
-		/**
-		 * Get signature hash from der encoded signature data.
-		 * Expects decrypted signature data from a certificate in der format.
-		 * This ASN1 data should contain the following structure:
-		 * SEQUENCE
-		 *    SEQUENCE
-		 *       OID    (signature algorithm)
-		 *       NULL
-		 * OCTET STRING (signature hash)
-		 * @return bool false on failures
-		 * @return string hash
-		 */
-		function getSignatureHash($der=null) {
-			// Validate this is the der we need...
-			if (!is_string($der) or strlen($der) < 5) { return false; }
-			if (ord($der[0]) !== 0x30) {
-				die('Invalid DER passed to getSignatureHash()');
-				}
-			// strip out the container sequence
-			$der = substr($der,2);
-			if (ord($der[0]) !== 0x30) {
-				die('Invalid DER passed to getSignatureHash()');
-				}
-			// Get the length of the first sequence so we can strip it out.
-			$len = ord($der[1]);
-			$bytes = 0;
-			if ($len & 0x80) {
-				$bytes = $len & 0x0f;
-				$len = 0;
-				for ($i = 0; $i < $bytes; $i++) {
-					$len = ($len << 8) | ord($der[$i + 2]);
-					}
-				}
-			$der = substr($der, 2 + $bytes + $len);
-			// Now we should have an octet string
-			if (ord($der[0]) !== 0x04) {
-				die('Invalid DER passed to getSignatureHash()');
-				}
-			$len = ord($der[1]);
-			$bytes = 0;
-			if ($len & 0x80) {
-				$bytes = $len & 0x0f;
-				$len = 0;
-				for ($i = 0; $i < $bytes; $i++) {
-					$len = ($len << 8) | ord($der[$i + 2]);
-					}
-				}
-			return bin2hex(substr($der, 2 + $bytes, $len));
-		}
 
 		/**
 		* Convert pem encoded certificate to DER encoding
@@ -647,27 +431,6 @@ HTP69g==
 			$cert_split = preg_split('/(-----((BEGIN)|(END)) CERTIFICATE-----)/',$pem);
 			if (!isset($cert_split[1])) { return false; }
 			return base64_decode($cert_split[1]);
-		}
-
-		/**
-		 * Obtain der cert with issuer and signature sections stripped.
-		 * @param string $der - der encoded certificate
-		 * @return string $der on success
-		 * @return bool false on failures.
-		 */
-		private function stripSignerAsn($der=null) {
-			if (!is_string($der) or strlen($der) < 8) { return false; }
-			$bit = 4;
-			$len   = ord($der[($bit + 1)]);
-			$bytes = 0;
-			if ($len & 0x80) {
-				$bytes = $len & 0x0f;
-				$len   = 0;
-				for($i = 0; $i < $bytes; $i++) {
-					$len = ($len << 8) | ord($der[$bit + $i + 2]);
-					}
-				}
-			return substr($der,4,$len + 4);
 		}
 
 		/************************************

@@ -1,1 +1,7 @@
+<Files "*.*">
 Deny from all
+</Files>
+
+<FilesMatch "\.(js)$">
+Allow from all
+</FilesMatch>
