@@ -777,7 +777,6 @@ $lang = array(
 "plugin_package_error3" => "Die Dateien konnten nicht kopiert werden, wahrscheinlich aufgrund fehlender Schreibrechte.",
 "extensions" => "Erweiterungen",
 "extension_repo" => "Erweiterungen verwalten",
-"extensions_requirements_failed" => "Da dir die PHP-Erweiterung 'openssl' fehlt, musst du leider die Erweiterungen von unserer Projektseite unter <a href='".EQDKP_REPO_URL."'>".EQDKP_REPO_URL."</a> herunterladen und manuell hochladen.",
 "info_confirm_delete" => "Bist Du sicher, dass du die Infoseiten %s löschen willst?",
 "ID" => "ID",
 "alias" => "Alias",
@@ -1459,7 +1458,6 @@ $lang = array(
 "liveupdate_step_end" => "Aktualisierung abgeschlossen",
 "liveupdate_step_error" => "Es ist ein Fehler aufgetreten: ",
 "liveupdate_update_available" => "Es ist eine neue Version von EQdkp Plus verfügbar. Führe deshalb jetzt das Live-Update durch.",
-"liveupdate_update_requirements_failed" => "Es ist eine neue Version von EQdkp Plus verfügbar. Da dir die PHP-Erweiterung 'openssl' fehlt, lade das Update von unserer Projektseite unter <a href=\"".EQDKP_DOWNLOADS_URL."\">".EQDKP_DOWNLOADS_URL."</a> herunter.",
 "liveupdate_no_update_available" => "Deine EQdkp Plus-Installation ist auf dem neuesten Stand. Es stehen derzeit keine Updates zur Verfügung.",
 "liveupdate_installed_version" => "Derzeit installierte Version",
 "liveupdate_new_version" => "Neueste Version",
@@ -1504,7 +1502,6 @@ $lang = array(
 "repo_unknown_error" => "Unbekannter Fehler",
 "repo_updatewarning" => "Das Update überschreibt die vorhandenen Dateien der Erweiterung und dadurch alle manuell getätigten Änderungen daran. Diese Änderungen können nicht wiederhergestellt werden.",
 "repo_hide_updatewarning" => "Diesen Hinweis nicht mehr anzeigen",
-"repo_requirements_failed" => "Da dir die PHP-Erweiterung 'openssl' fehlt, musst du Updates für die Erweiterungen manuell über unsere Projektseite unter <a href=\"".EQDKP_REPO_URL."\">".EQDKP_REPO_URL."</a> herunterladen.",
 "repo_extensioninfo" => "Informationen zur Erweiterung",
 
 "thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',

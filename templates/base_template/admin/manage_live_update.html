@@ -2,13 +2,9 @@
 		<div class="icon_false"><span id="lu_error_label"></span></div>
 </div>
 <!-- IF S_START -->
-	<!-- IF S_NEW_VERSION && S_REQUIREMENTS -->
+	<!-- IF S_NEW_VERSION -->
 	<div class="errorbox roundbox">
 		<div class="icon_false"><b>{L_liveupdate_update_available}</b></div>
-	</div>
-	<!-- ELSEIF S_NEW_VERSION && not S_REQUIREMENTS -->
-	<div class="errorbox roundbox">
-		<div class="icon_false"><b>{L_liveupdate_update_requirements_failed}</b></div>
 	</div>
 	<!-- ELSE -->
 	<div class="greenbox roundbox">
@@ -39,10 +35,10 @@
 		</dl>
 		<!-- ENDIF -->
 	</fieldset>
-	<!-- IF S_NEW_VERSION && S_REQUIREMENTS -->
+	<!-- IF S_NEW_VERSION -->
 	<input type="submit" name="show" value="{L_liveupdate_start}" class="mainoption bi_ok" />
 	<!-- ENDIF -->
-	<!-- IF S_RELEASE_CHANNEL && S_REQUIREMENTS && not S_NEW_VERSION -->
+	<!-- IF S_RELEASE_CHANNEL && not S_NEW_VERSION -->
 	<input type="submit" name="refresh" value="{L_liveupdate_check_for_updates}" class="mainoption bi_reload" />
 	<!-- ENDIF -->
 	
