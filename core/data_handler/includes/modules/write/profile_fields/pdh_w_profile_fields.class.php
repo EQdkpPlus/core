@@ -90,8 +90,8 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function insert_field($data=array()){
-			$name = preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower($this->in->get('language')));
-			if (!$name || !strlen($name)) $data['fieldtype'].'_'.rand();
+			$name = preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower((isset($data['lang'])) ? $data['lang'] : $this->in->get('language')));
+			if (!$name || !strlen($name)) $data['name'] = ((isset($data['fieldtype'])) ? $data['fieldtype'] : $this->in->get('type')).'_'.rand();
 			//End if a field with this name exists
 			$fields = $this->pdh->get('profile_fields', 'fields');
 			if ($fields[$name]){
