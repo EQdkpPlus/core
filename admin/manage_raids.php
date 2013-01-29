@@ -82,11 +82,11 @@ class ManageRaids extends page_generic {
 			}
 			$item_upd = array(true);
 			if(!empty($data['items']) && is_array($data['items'])) {
-				foreach($data['items'] as $item) {
+				foreach($data['items'] as $ikey => $item) {
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
-						$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']));
+						$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ikey));
 					} else {
-						$item_upd[] = $this->pdh->put('item', 'update_item', array($item['group_key'], $item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']));
+						$item_upd[] = $this->pdh->put('item', 'update_item', array($item['group_key'], $item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ikey));
 					}
 				}
 			}
