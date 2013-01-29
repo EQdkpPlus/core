@@ -44,6 +44,10 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			'sk_fixed_position_all'	=> array('position', array('%member_id%', '%ALL_IDS%', '%with_twink%'), array('%ALL_IDS%', true, true)),
 			'sk_fixed_position'		=> array('position', array('%member_id%', '%dkp_id%', '%with_twink%'), array('%dkp_id%')),
 		);
+		
+		public $detail_twink = array(
+			'position' => 'summed_up',
+		);
 
 		public function reset(){
 			$this->pdc->del('pdh_suicide_kings_fixed_table');
@@ -67,6 +71,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 				$main_list[$member2main[$member_id]] = $key;
 			}
 			$member_list = array_flip($member_list);
+			$main_list = array_flip(array_values(array_flip($main_list)));
 			
 			// mdkp2event list
 			$mdkplist = $this->pdh->aget('multidkp', 'event_ids', 0, array($this->pdh->get('multidkp',  'id_list', array())));
@@ -89,13 +94,14 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 						$redistribute['single'][] = $posi;
 					}
 					foreach($this->sk_list['multi'][$mdkp_id] as $main_id => $posi) {
-						if(!in_array($main_id, $raid['raid_attendees'])) continue;
-						if(!empty($main2member[$main_id])) {
+						if(!in_array($main_id, $raid['raid_attendees'])) {
 							$cont = true;
-							foreach($main2member[$main_id] as $member_id) {
-								if(in_array($member_id, $raid['raid_attendees'])) {
-									$cont = false;
-									break;
+							if(!empty($main2member[$main_id])) {
+								foreach($main2member[$main_id] as $member_id) {
+									if(in_array($member_id, $raid['raid_attendees'])) {
+										$cont = false;
+										break;
+									}
 								}
 							}
 							if($cont) continue;
@@ -106,6 +112,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 					pd($temp_list);
 					$items = $this->pdh->aget('item', 'buyer', 0, array($this->pdh->sort($raid['itemsofraid'], 'item', 'date', 'asc')));
 					foreach($items as $memberid) {
+						if(!in_array($memberid, $raid['raid_attendees'])) continue; // ignore items assigned to members not present in raid - most likely special members
 						$key = array_search($memberid, $temp_list['single']);
 						unset($temp_list['single'][$key]);
 						$temp_list['single'][] = $memberid;
@@ -121,6 +128,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 					foreach($temp_list['multi'] as $key => $member_id) {
 						$this->sk_list['multi'][$mdkp_id][$member_id] = $redistribute['multi'][$key];
 					}
+					pd($temp_list);
 				}
 			}
 
