@@ -80,6 +80,7 @@ if (!class_exists("jquery")) {
 					</div>
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
+				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"75%", height:"75%"});', 'docready');
 				
 		}
 
@@ -1306,7 +1307,7 @@ if (!class_exists("jquery")) {
 			// the output
 			$out	= '<div id="image_'.$id.'" class="imageuploader_image">';
 			if ($previmgheight > $imgprevheight){
-				$out .= '<a href="'.$imgpreview.'" rel="lightbox"><img src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" height="'.$imgprevheight.'"/></a>';
+				$out .= '<a href="'.$imgpreview.'" class="lightbox"><img src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" height="'.$imgprevheight.'"/></a>';
 			} else {
 				$out .= '<img src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" height="'.$imgprevheight.'"/>';
 			}	

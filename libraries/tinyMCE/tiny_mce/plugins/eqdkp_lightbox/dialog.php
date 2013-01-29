@@ -53,14 +53,14 @@ if ($user->check_auth('a_news_add', false) || $user->check_auth('a_news_upd', fa
 				if (is_file($pfh->FolderPath('news/thumb', 'eqdkp').$path_parts['filename'].'.'.$path_parts['extension'])){
 					$thumb_src = $pfh->FileLink('news/thumb/'.$path_parts['filename'].'.'.$path_parts['extension'], 'eqdkp', 'absolute');
 					
-					$js_code = "var output = '<a href=\"".$img_src."\" rel=\"lightbox\"><img src=\"".$thumb_src."\" alt=\"".$in->get('alt', 'Image')."\" /></a>';
+					$js_code = "var output = '<a href=\"".$img_src."\" class=\"lightbox\"><img src=\"".$thumb_src."\" alt=\"".$in->get('alt', 'Image')."\" /></a>';
 					
 					tinyMCEPopup.editor.execCommand('mceInsertContent', false, output);
 					tinyMCEPopup.close();
 					";
 				} else {
 					$js_code = "
-					var output = '<a href=\"".$img_src."\" rel=\"lightbox\"><img src=\"".$img_src."\" alt=\"".$in->get('alt', 'Image')."\" /></a>';
+					var output = '<a href=\"".$img_src."\" class=\"lightbox\"><img src=\"".$img_src."\" alt=\"".$in->get('alt', 'Image')."\" /></a>';
 					tinyMCEPopup.editor.execCommand('mceInsertContent', false, output);
 					tinyMCEPopup.close();
 					";
