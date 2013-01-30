@@ -197,7 +197,7 @@ class template extends gen_class {
 				'url'	=> $url,
 				'perms'	=> $arrPermissions,
 			);
-			$url = $this->root_path.'exchange.php?out=xml&amp;data='.$this->encrypt->encrypt(serialize($arrData)).'&amp;key='.((isset($this->user->data['exchange_key'])) ? $this->user->data['exchange_key'] : '');
+			$url = $this->root_path.'exchange.php?out=xml&amp;data='.rawurlencode($this->encrypt->encrypt(serialize($arrData))).'&amp;key='.((isset($this->user->data['exchange_key'])) ? $this->user->data['exchange_key'] : '');
 		}
 
 		$this->tpl_output['rss_feeds'][] = array(
