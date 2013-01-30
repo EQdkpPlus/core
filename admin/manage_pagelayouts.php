@@ -76,6 +76,7 @@ class ManagePageLayouts extends page_generic {
 		//roster
 		$this->config->set('roster_classorrole', $this->in->get('roster_classorrole', 'class'));
 		$this->config->set('roster_show_twinks', $this->in->get('roster_show_twinks', 0));
+		$this->config->set('roster_show_hidden', $this->in->get('roster_show_hidden', 0));
 		
 		foreach($page_list as $page){		
 			foreach($layout_def['pages'][$page] as $page_object => $options){
@@ -451,6 +452,7 @@ class ManagePageLayouts extends page_generic {
 				$this->tpl->assign_vars(array(
 					'ROSTER_DD'	=> $this->html->DropDown('roster_classorrole', array('class' => $this->user->lang('class'), 'role' => $this->user->lang('role')), $this->config->get('roster_classorrole')),
 					'ROSTER_SHOW_TWINKS' => ($this->config->get('roster_show_twinks')) ? ' checked="checked"' : '',
+					'ROSTER_SHOW_HIDDEN' => ($this->config->get('roster_show_hidden')) ? ' checked="checked"' : '',
 				));
 			}
 						
