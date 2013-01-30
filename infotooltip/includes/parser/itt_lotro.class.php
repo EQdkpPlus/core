@@ -149,5 +149,4 @@ if(!class_exists('itt_lotro')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_itt_lotro', itt_lotro::$shortcuts);
 ?>

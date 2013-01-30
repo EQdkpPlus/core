@@ -132,5 +132,4 @@ if(!class_exists('eq2_zam')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_eq2_zam', eq2_zam::$shortcuts);
 ?>

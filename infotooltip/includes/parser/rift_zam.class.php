@@ -132,5 +132,4 @@ if(!class_exists('rift_zam')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_rift_zam', rift_zam::$shortcuts);
 ?>

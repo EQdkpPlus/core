@@ -193,5 +193,4 @@ if(!class_exists('rom_blasc')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_rom_blasc', rom_blasc::$shortcuts);
 ?>

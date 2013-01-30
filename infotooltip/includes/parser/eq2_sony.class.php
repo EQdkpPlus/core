@@ -731,5 +731,4 @@ if(!class_exists('eq2_sony')) {
 		
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_eq2_sony', eq2_sony::$shortcuts);
 ?>
