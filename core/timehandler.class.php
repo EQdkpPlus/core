@@ -320,7 +320,7 @@ if (!class_exists("timehandler")){
 				}
 				$c = substr($format, $i, 1);
 				$ca = substr($format, ($i+1), 1);
-				if($c == '/' && ($cb != '/' || in_array($ca, $this->backslash_sequence))) {
+				if($c == '/' && $cb != '/' && in_array($ca, $this->backslash_sequence)) {
 					$escape = true;
 					$cb = $c;
 					continue;
@@ -358,6 +358,8 @@ if (!class_exists("timehandler")){
 						}
 					} elseif($this->possible_formats[$c] > 0) $stroff += $this->possible_formats[$c]-1;
 				} elseif($c != substr($string, $stroff, 1)) {
+					pd($c);
+					pd(substr($string, $stroff, 1));
 					$this->pdl->log('time_error', 'Format mismatch at position ('.($stroff+1).') in '.$string.' compared to format '.$format.'.');
 					return false;
 				}
