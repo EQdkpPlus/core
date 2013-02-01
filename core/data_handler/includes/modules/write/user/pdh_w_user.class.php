@@ -142,6 +142,7 @@ if(!class_exists('pdh_w_user')) {
 
 
 			$this->pdh->enqueue_hook('user');
+			return ($sql) ? true : false;
 		}
 
 		public function update_user_settings ($user_id, $settingsdata) {
@@ -191,7 +192,7 @@ if(!class_exists('pdh_w_user')) {
 				}
 			}
 			$query_ary['plugin_settings']	= serialize($plugin_settings);
-			$this->update_user($user_id, $query_ary);
+			return $this->update_user($user_id, $query_ary);
 		}
 
 		public function delete_avatar($user_id) {

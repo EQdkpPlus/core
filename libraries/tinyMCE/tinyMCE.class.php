@@ -49,6 +49,7 @@ class tinyMCE extends gen_class {
 					plugins : "bbcode",
 					//language : "'.$this->language.'",
 					theme : "advanced",
+					skin: "cirkuit",
 
 					// Theme options
 					theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,forecolor,styleselect,removeformat,cleanup,code",
@@ -83,6 +84,7 @@ class tinyMCE extends gen_class {
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					theme : "advanced",
+					skin: "cirkuit",
 					//language : "'.$this->language.'",
 					plugins : "table,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen,wordcount,eqdkp_uploader,eqdkp_lightbox,pages'.$autoresize.'",
 			

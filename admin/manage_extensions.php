@@ -139,6 +139,7 @@ class Manage_Extensions extends page_generic {
 							case 'game':			$target = $this->root_path.'games';		$cat=7;		break;
 							case 'template':		$target = $this->root_path.'templates';	$cat=2;		break;
 							case 'portal':			$target = $this->root_path.'portal';	$cat=3;		break;
+							case 'language':		$target = $this->root_path;				$cat=11;	break;			
 							default: $target = false;
 						}
 	
@@ -249,14 +250,15 @@ class Manage_Extensions extends page_generic {
 			}
 
 			switch ((int)$this->in->get('cat', 0)){
-				case 1:			$target = $this->root_path.'plugins/';	break;
-				case 2:			$target = $this->root_path.'templates/';	break;
-				case 3:			$target = $this->root_path.'portal/';	break;
-				case 7:			$target = $this->root_path.'games/';	break;
+				case 1:			$target = $this->root_path.'plugins/'.strtolower($this->code);	break;
+				case 2:			$target = $this->root_path.'templates/'.strtolower($this->code);	break;
+				case 3:			$target = $this->root_path.'portal/'.strtolower($this->code);	break;
+				case 7:			$target = $this->root_path.'games/'.strtolower($this->code);	break;
+				case 11:		$target = $this->root_path; break;
 			}
 
 			if($target){
-				$result = $this->repo->full_copy($srcFolder, $target.strtolower($this->code));
+				$result = $this->repo->full_copy($srcFolder, $target);
 				if ($result){
 					echo "true";
 				} else {
@@ -751,6 +753,73 @@ class Manage_Extensions extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'BADGE_7'	=> $badge,
+		));
+		
+		//=================================================================
+		//Languages
+		
+		$arrLanguages = $arrLanguageVersions = array();
+		// Build language array
+		if($dir = @opendir($this->core->root_path . 'language/')){
+			while ( $file = @readdir($dir) ){
+				if ((!is_file($this->root_path . 'language/' . $file)) && (!is_link($this->root_path . 'language/' . $file)) && valid_folder($file)){
+					include($this->root_path.'language/'.$file.'/lang_main.php');
+					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
+					$arrLanguages[$file]		= $lang_name_tp;
+					$arrLanguageVersions[$file] = $lang['LANG_VERSION'];
+				}
+			}
+		}
+
+		if (is_array($arrLanguages)){
+			foreach($arrLanguages as $id => $value){
+				$plugin_code = $id;
+				if (isset($urgendUpdates[$plugin_code])){
+						$row = 'red';
+						$link = '<a href="javascript:repo_update(11, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+						$arrUpdateCount[11]['red'] ++;
+				}elseif(isset($allUpdates[$plugin_code])){
+					$row = 'yellow';
+					$link = '<a href="javascript:repo_update(11, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+					$arrUpdateCount[11]['yellow'] ++;
+				} else {
+						$row = 'green';
+						$link = '';
+				}
+
+				$this->tpl->assign_block_vars('language_row_'.$row, array(
+					'NAME'				=> (isset($arrExtensionListNamed[11][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[11][$plugin_code].')">'.$value.'</a>' : $value,
+					'VERSION'			=> $arrLanguageVersions[$plugin_code],
+					'ACTION_LINK'		=> $link,
+				));
+			}
+		}
+
+		//Now bring the Extensions from the REPO to template
+		if (isset($arrExtensionList[11]) && is_array($arrExtensionList[11])){
+			foreach ($arrExtensionList[11] as $id => $extension){
+				if (isset($arrLanguages[$extension['plugin']])) continue;
+				$row = 'grey';
+
+				$link = '<a href="javascript:repo_install(11, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				$this->tpl->assign_block_vars('language_row_'.$row, array(
+					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
+					'VERSION'			=> sanitize($extension['version']),
+					'ACTION_LINK'		=> $link,
+				));
+
+			}
+		}
+
+		$badge = '';
+		if ($arrUpdateCount[11]['red']){
+			$badge = '<span class="update_available">'.$arrUpdateCount[11]['red'].'</span>';
+		} elseif ($arrUpdateCount[11]['yellow']){
+			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[11]['yellow'].'</span>';
+		}
+
+		$this->tpl->assign_vars(array(
+			'BADGE_11'	=> $badge,
 		));
 
 		//=================================================================

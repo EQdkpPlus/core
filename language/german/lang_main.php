@@ -16,7 +16,8 @@ if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-$lang = array( 
+$lang = array(
+"LANG_VERSION"	=> VERSION_INT,
 "XML_LANG" => "de",
 "ISO_LANG_SHORT" => "de_DE",
 "ISO_LANG_NAME" => "Deutsch",

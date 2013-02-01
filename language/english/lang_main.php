@@ -22,7 +22,8 @@ if (!defined('EQDKP_INC')) {
 //Source-Language: german07
 //Note: if the filename starts with plugin_ or module_, rename the file to lang_main.php and put it into the proper language-folder of the plugin or module. 
 
-$lang = array( 
+$lang = array(
+"LANG_VERSION"	=> VERSION_INT,
 "XML_LANG" => "en",
 "ISO_LANG_SHORT" => "en_EN",
 "ISO_LANG_NAME" => "English",
