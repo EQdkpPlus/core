@@ -306,6 +306,24 @@ $english_array =  array(
 		'uc_tank_249'	=>	'SU-14',
 		'uc_tank_250'	=>	'Object 212',
 		'uc_tank_251'	=>	'Object 261',
+		'uc_tank_252' 	=>  'Renault NC-31',
+		'uc_tank_253' 	=>  'Vickers Mk. E Type B',
+		'uc_tank_254' 	=>  'Type 2597 Chi-Ha',
+		'uc_tank_255' 	=>  'M5A1 Stuart',
+		'uc_tank_256' 	=>  '59-16',
+		'uc_tank_257' 	=>  'WZ-131',
+		'uc_tank_258' 	=>  'WZ-132',
+		'uc_tank_259' 	=>  'Type T-34',
+		'uc_tank_260' 	=>  'Type 58',
+		'uc_tank_261' 	=>  'T-34-1',
+		'uc_tank_262' 	=>  'T-34-2',
+		'uc_tank_263' 	=>  'WZ-120',
+		'uc_tank_264' 	=>  '121',
+		'uc_tank_265' 	=>  'IS-2',
+		'uc_tank_266' 	=>  '110',
+		'uc_tank_267' 	=>  'WZ-111 model 1-4',
+		'uc_tank_268' 	=>  '113',
+		
 		
 		// Gun
 		
@@ -591,6 +609,12 @@ $english_array =  array(
 		'uc_gun_279'	=>	'130 mm S-70',
 		'uc_gun_280'	=>	'Type 62-85TS',
 		'uc_gun_281'	=>	'100 mm Type 59',
+		'uc_gun_282'	=>	'37 mm Gun APX SA18',
+		'uc_gun_283'	=>	'13,2 mm Hotchkiss mle. 1930',
+		'uc_gun_284'	=>	'37 mm Gun KwK 36 L/46.5',
+		'uc_gun_285'	=>	'76mm F-34',
+		'uc_gun_286'	=>	'100 mm 44-100JT',
+
 
 		// Turret
 		
@@ -863,7 +887,7 @@ $english_array =  array(
 		'uc_turret_266'	=>	'Mod.701 No 5',
 		'uc_turret_267'	=>	'Type 62 B',
 		'uc_turret_268'	=>	'Type59 B',
-		'uc_turret_269'	=>	'Type59 B',
+		'uc_turret_269'	=>	'FT-17',
 
 		// Engine
 		
@@ -1102,6 +1126,7 @@ $english_array =  array(
 		'uc_engine_232'	=>	'V-55',
 		'uc_engine_233'	=>	'12150L-3',
 		'uc_engine_234'	=>	'NORINCO 12150L7',
+		'uc_engine_235' =>  'Type 102',
 		
 		// Supension
 		
