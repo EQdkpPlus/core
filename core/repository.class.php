@@ -61,7 +61,7 @@ HTP69g==
 
 		
 		public $cachetime		= 86400; //1 day
-		public $categories		= array(1,2,3,7,8);
+		public $categories		= array(1,2,3,7,8,11);
 		public $update_count	= 0;
 		private $extensions 	= array();
 		public $updates = array();
@@ -112,6 +112,7 @@ HTP69g==
 				2	=> $this->user->lang('pi_category_2'),
 				3	=> $this->user->lang('pi_category_3'),
 				7	=> $this->user->lang('pi_category_7'),
+				11	=> $this->user->lang('pi_category_11'),
 			);
 		}
 
@@ -155,7 +156,9 @@ HTP69g==
 					$extensions = $arrJson->extensions;
 					if(is_object($extensions)){
 						foreach ($extensions as $ext){
-							if (!in_array((int)$ext->category, $this->categories)) continue;
+							if (!in_array((int)$ext->category, $this->categories)) {
+								continue;
+							}
 							
 							$this->pdh->put('repository', 'insert', array(array(
 								'plugin'			=> $ext->plugin,
@@ -167,11 +170,11 @@ HTP69g==
 								'category'			=> $ext->category,
 								'level'				=> $ext->level,
 								'changelog'			=> $ext->changelog,
-								'build'				=> $ext->build,
 								'updated'			=> $this->time->time,
 								'rating'			=> (int)round((float)$ext->rating),
 								'dep_coreversion'	=> $ext->dep_coreversion,
 								'version_ext'		=> ($ext->version_ext) ? $ext->version_ext : $ext->version,
+								'dep_php'			=> ($ext->dep_php) ? $ext->dep_php : '',
 							)));
 						}
 					}
@@ -511,6 +514,27 @@ HTP69g==
 												if ($blnUpdateAvailable) $recent_version = $arrGames[$value['plugin']];
 											}
 										}
+								break;
+								
+								//Languages
+								case 11: 	$arrLanguages = $arrLanguageVersions = array();
+											// Build language array
+											if($dir = @opendir($this->root_path . 'language/')){
+												while ( $file = @readdir($dir) ){
+													if ((!is_file($this->root_path . 'language/' . $file)) && (!is_link($this->root_path . 'language/' . $file)) && valid_folder($file)){
+														include($this->root_path.'language/'.$file.'/lang_main.php');
+														$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
+														$arrLanguages[$file]		= $lang_name_tp;
+														$arrLanguageVersions[$file] = $lang['LANG_VERSION'];
+													}
+												}
+											}
+								
+			
+											if(isset($arrLanguages[$value['plugin']])){
+												$blnUpdateAvailable = (compareVersion(trim($value['version']),$arrLanguageVersions[$value['plugin']])==1);
+												if ($blnUpdateAvailable) $recent_version = $arrLanguageVersions[$value['plugin']];
+											}
 								break;
 							}
 

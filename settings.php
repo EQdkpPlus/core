@@ -145,9 +145,10 @@ class user_settings extends page_generic {
 		}
 
 		// Errors have been checked at this point, build the query
-		$this->pdh->put('user', 'update_user_settings', array($this->user->data['user_id'], $this->get_settingsdata()));
+		$blnResult = $this->pdh->put('user', 'update_user_settings', array($this->user->data['user_id'], $this->get_settingsdata()));
 		$this->pdh->process_hook_queue();
-		redirect('settings.php'.$this->SID.'&amp;save=true');
+		//Only redirect if saving was successfull so we can grad an error message
+		if ($blnResult) redirect('settings.php'.$this->SID.'&amp;save=true');
 		return;
 	}
 

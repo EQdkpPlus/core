@@ -134,6 +134,7 @@ class EQDKPBackup extends page_generic{
 			'NO_BACKUPS'				=> (!isset($backups) || count($backups) == 0) ? true : false,
 			'TABLE_PREFIX_WARNING'		=> $tp_warning,
 			'TABLE_SELECT'				=> $this->jquery->MultiSelect('tables', $tables, $tables, array('width' => 300, 'height' => 300)),
+			'BACKUP_UPLOAD_INFO'		=> sprintf($this->user->lang('backup_upload_path'), $this->pfh->FolderPath('backup/', 'eqdkp')),
 		));
 
 		$this->tpl->add_js("
