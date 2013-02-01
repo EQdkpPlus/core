@@ -35,7 +35,7 @@ if(!class_exists('eq_zam')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'eq' => array('icon_loc' => 'http://http://everquest.allakhazam.com/pgfx/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
+				'eq' => array('icon_loc' => 'http://everquest.allakhazam.com/pgfx/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
