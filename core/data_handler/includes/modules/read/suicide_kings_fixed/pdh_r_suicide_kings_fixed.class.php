@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 	class pdh_r_suicide_kings_fixed extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'pdh', 'user', 'html');
+			$shortcuts = array('pdc', 'pdh', 'user', 'html', 'config');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -88,11 +88,13 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 					if(!in_array($raid['event'], $events)) continue;
 					$temp_list = array();
 					$redistribute = array();
+					asort($this->sk_list['single'][$mdkp_id]);
 					foreach($this->sk_list['single'][$mdkp_id] as $member_id => $posi) {
 						if(!in_array($member_id, $raid['raid_attendees'])) continue;
 						$temp_list['single'][] = $member_id;
 						$redistribute['single'][] = $posi;
 					}
+					asort($this->sk_list['multi'][$mdkp_id]);
 					foreach($this->sk_list['multi'][$mdkp_id] as $main_id => $posi) {
 						if(!in_array($main_id, $raid['raid_attendees'])) {
 							$cont = true;
@@ -138,7 +140,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			if ($with_twink == 'multi'){
 				$member_id = ($this->pdh->get('member', 'is_main', array($member_id))) ? $member_id : $this->pdh->get('member', 'mainid', array($member_id));
 			}
-			return $this->sk_list[$with_twink][$multidkp_id][$member_id];
+			return (isset( $this->sk_list[$with_twink][$multidkp_id][$member_id] )) ? $this->sk_list[$with_twink][$multidkp_id][$member_id] : 0;
 		}
 		
 		public function get_html_position($member_id, $multidkp_id, $with_twink=true) {
