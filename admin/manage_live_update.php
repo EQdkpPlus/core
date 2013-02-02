@@ -502,6 +502,7 @@ class Manage_Live_Update extends page_generic {
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
+			'S_REQUIREMENTS'	=> ($updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true,
 		));
 
 		$this->core->set_vars(array(

@@ -63,7 +63,8 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					'build'			=> $row['build'],
 					'level'			=> $row['level'],
 					'rating'		=> $row['rating'],
-					'dep_coreversion'	=> $row['dep_coreversion'],
+					'dep_coreversion'=> $row['dep_coreversion'],
+					'dep_php'		=> $row['dep_php'],
 				);
 			}
 				$this->db->free_result($pff_result);

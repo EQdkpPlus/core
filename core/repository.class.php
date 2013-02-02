@@ -547,6 +547,7 @@ HTP69g==
 											'changelog'			=> $value['changelog'],
 											'level'				=> $value['level'],
 											'release'			=> $this->time->user_date($value['date']),
+											'dep_php'			=> $value['dep_php'],
 								);
 								$this->update_count++;
 							}

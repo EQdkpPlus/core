@@ -1482,7 +1482,7 @@ $lang = array(
 "liveupdate_diff_added" => "Added",
 "liveupdate_diff_removed" => "Removed",
 "liveupdate_diff_line" => "Line",
-
+"liveupdate_update_requirements_failed" => "The Live-Update cannot be used, because some requirements are not fulfilled. Please download the Update from our <a href=\"".EQDKP_REPO_URL."\">Repository</a>.", 
 "pi_rating" => "Rating",
 "pi_category_1" => "Plugins",
 "pi_category_2" => "Templates",
