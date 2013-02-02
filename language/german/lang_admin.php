@@ -1486,6 +1486,7 @@ $lang = array(
 "liveupdate_diff_added" => "Hinzugefügt",
 "liveupdate_diff_removed" => "Entfernt",
 "liveupdate_diff_line" => "Zeile",
+"liveupdate_update_requirements_failed" => "Das Live-Update kann nicht durchgeführt werden, da bestimmte Voraussetzungen nicht erfüllt sind. Lade dir das Update aus unserem <a href=\"".EQDKP_REPO_URL."\">Repository</a> herunter.", 
 
 "pi_rating" => "Bewertung",
 "pi_category_1" => "Plugins",
