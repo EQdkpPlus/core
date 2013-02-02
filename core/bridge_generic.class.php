@@ -184,7 +184,7 @@ class bridge_generic extends gen_class {
 		}
 		if ($save){
 			$save_array['custom_fields'] = serialize($eqdkp_custom_fields);
-			$this->pdh->put('user', 'update_user', array($user_id, $save_array, false));
+			$this->pdh->put('user', 'update_user', array($user_id, $save_array, false, false));
 		}
 		return;
 	}
