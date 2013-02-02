@@ -222,14 +222,18 @@ class admin_index extends gen_class {
 			$rsstwitter_out = $this->xmltools->prepareLoad($data);		
 		} else {
 		//expired or not available, update from Server
-			$fetchedData = $this->puf->fetch(EQDKP_TWITTER_URL);
+			include_once($this->root_path.'libraries/twitter/codebird.class.php');
+			Codebird::setConsumerKey(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET); // static, see 'Using multiple Codebird instances'
+
+			$cb = Codebird::getInstance();
+			$cb->setToken(TWITTER_OAUTH_TOKEN, TWITTER_OAUTH_SECRET);
+			$params = array(
+				'screen_name' => EQDKP_TWITTER_SCREENNAME,
+			);
+			$objJSON = $cb->statuses_userTimeline($params);			
 			
-			
-			
-			if ($fetchedData) {
-				
-				$objJSON = json_decode($fetchedData);
-				
+			if ($objJSON) {
+								
 				require_once($this->root_path.'core/feed.class.php');
 				$feed				= registry::register('feed');
 				$feed->title		= "EQdkp Plus Twitter";

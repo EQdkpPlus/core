@@ -56,7 +56,7 @@ define('EQDKP_ABOUT_URL', "http://eqdkp-plus.eu/about");
 define('EQDKP_DOWNLOADS_URL', "https://sourceforge.net/projects/eqdkp-plus/files/");
 define('EQDKP_REPO_URL', "http://eqdkp-plus.eu/repository/");
 define('EQDKP_NOTIFICATIONS_URL', "http://eqdkp-plus.eu/rss/notifications.xml");
-define('EQDKP_TWITTER_URL', "https://api.twitter.com/1/statuses/user_timeline/EQdkpPlus.json");
+define('EQDKP_TWITTER_SCREENNAME', "EQdkpPlus");
 define('EQDKP_BOARD_URL', "http://eqdkp-plus.eu/forum");
 define('EQDKP_CRL_URL', "https://eqdkp-plus.googlecode.com/files/crl.txt");
 define('EQDKP_WIKI_URL', "http://eqdkp-plus.eu/wiki/");
