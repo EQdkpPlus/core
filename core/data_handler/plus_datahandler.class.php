@@ -59,12 +59,11 @@ if( !class_exists( "plus_datahandler")){
 		private $session_hooks				= array( );
 		private $hook_callbacks				= array( );
 
-		private $sort_cache = array( );
+		private $sort_cache = array(0 => 1); //important: sortcache index
 
 		//Constructor
 		public function __construct(){
 			if(!$this->pdl->type_known('pdh_error')) $this->pdl->register_type('pdh_error', null, array($this, 'html_format_errors'), array(3, 4));
-			if(!$this->pdl->type_known('pdh_page_error')) $this->pdl->register_type('pdh_page_error', null, array($this, 'html_format_page_errors'), array(3, 4));
 
 			$this->init_module_path();
 
@@ -82,26 +81,18 @@ if( !class_exists( "plus_datahandler")){
 
 		//pdl format function (has to be public!)
 		public function html_format_errors( $log_entry ) {
-			$text = '<span class="negative">'.$log_entry['args'][0]."</span>
-						module <b>".$log_entry['args'][1]."</b>,
-						tag <b>".$log_entry['args'][2]."</b>";
-
-			$text .= ( $log_entry['args'][3] != '' ) ? ", params: <b>".$log_entry['args'][3]."</b>" : "";
-			$text .= "<br />File: ".$log_entry['args'][5];
-			$text .= "<br />Line: ".$log_entry['args'][6];
-
-			return $text;
-		}
-		
-		//pdl format function (has to be public!)
-		public function html_format_page_errors( $log_entry ) {
-			$text = '<span class="negative">'.$log_entry['args'][0]."</span>
-			Page <b>".$log_entry['args'][1]."</b>,
-			Object <b>".$log_entry['args'][2]."</b>,
-			Layout <b>".$log_entry['args'][3]."</b>,
-			";
-			$text .= "<br />File: ".$log_entry['args'][4];
-			$text .= "<br />Line: ".$log_entry['args'][5];
+			$text = '<span class="negative">'.$log_entry['args'][2]."</span>";
+			if(!empty($log_entry['args'][3])) {
+				if(is_array($log_entry['args'][3])) {
+					foreach($log_entry['args'][3] as $line) {
+						$text .= '<br />'.$line;
+					}
+				} else {
+					$text .= '<br />'.$log_entry['args'][3];
+				}
+			}
+			$text .= "<br />File: ".$log_entry['args'][0];
+			$text .= "<br />Line: ".$log_entry['args'][1];
 
 			return $text;
 		}
@@ -291,12 +282,41 @@ if( !class_exists( "plus_datahandler")){
 		public function unregister_write_module( $module_name ) {
 			unset( $this->write_modules[$module_name] );
 		}
+		
+		/*********************************************************************************************************************************
+		*
+		* Check Methods
+		*/
+		public function check_read_module( $module_name, $error=false ) {
+			if($error && !isset($this->read_modules[$module_name])) {
+				$data = debug_backtrace();
+				$this->pdl->log('pdh_error', $data[2]['file'], $data[2]['line'], 'Invalid read module', array('module: '.$module_name, 'function: '.$data[1]['function']));
+				return false;
+			}
+			return isset($this->read_modules[$module_name]);
+		}
+		
+		public function check_write_module( $module_name, $error=false ) {
+			//try registering first
+			try {
+				$this->register_write_module($module_name);
+			} catch(Exception $e) {
+			}
+			if($error && !isset($this->write_modules[$module_name])) {
+				$data = debug_backtrace();
+				$this->pdl->log('pdh_error', $data[2]['file'], $data[2]['line'], 'Invalid write module', array('module: '.$module_name, 'function: '.$data[1]['function']));
+				return false;
+			}
+			return isset($this->write_modules[$module_name]);
+		}
+		
 
 		/*********************************************************************************************************************************
 		*
 		* GET Methods
 		*/
 		public function get( $module, $tag, $params = array( ), $sub_arr = array( ) ) {
+			if(!$this->check_read_module($module, true)) return null;
 			if( !is_array( $params ) ) {
 				$params = array(
 					$params,
@@ -311,12 +331,14 @@ if( !class_exists( "plus_datahandler")){
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
 				$data = debug_backtrace();
-				$this->pdl->log( 'pdh_error', 'Invalid *get* call', $module, $tag, implode( ", ", $params ), implode( ", ", $sub_arr ), $data[0]['file'], $data[0]['line'] );
+				$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ), 'sub_array: '.implode( ", ", $sub_arr ));
+				$this->pdl->log( 'pdh_error', $data[1]['file'], $data[1]['line'], 'Invalid *get* call', $extra);
 				return null;
 			}
 		}
 
 		public function aget( $module, $tag, $expand_key, $params = array( ), $assoc = false, $sub_arr = null, $ret_arr = array() ) {
+			if(!$this->check_read_module($module, true)) return null;
 			$params_copy = $params;
 			if(isset($params[$expand_key]) && is_array($params[$expand_key])){
 				foreach( $params[$expand_key] as $expandme ) {
@@ -344,6 +366,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function geth( $module, $tag, $params, $sub_arr = null ) {
+			if(!$this->check_read_module($module, true)) return null;
 			if( !is_array( $params ) ) {
 				$params = array(
 					$params,
@@ -362,6 +385,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function ageth( $module, $tag, $expand_key, $params = array( ), $assoc = false, $sub_arr = null, $ret_arr = array() ) {
+			if(!$this->check_read_module($module, true)) return null;
 			$params_copy = $params;
 			foreach( $params[$expand_key] as $expandme ) {
 				$params_copy[$expand_key] = $expandme;
@@ -375,6 +399,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_caption( $module, $tag, $params ) {
+			if(!$this->check_read_module($module, true)) return null;
 			if( !is_array( $params ) ) {
 				$params = array(
 					$params,
@@ -394,6 +419,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_html_caption( $module, $tag, $params, $preset='' ) {
+			if(!$this->check_read_module($module, true)) return null;
 			if($preset) $this->init_preset_list();
 			if( !is_array( $params ) ) {
 				$params = array(
@@ -422,6 +448,7 @@ if( !class_exists( "plus_datahandler")){
 		* Compare
 		*/
 		public function comp( $module, $tag, $direction, $params1, $params2 ) {
+			if(!$this->check_read_module($module, true)) return null;
 			if( !is_array( $params1 ) ) {
 				$params1 = array(
 					$params1,
@@ -451,38 +478,39 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function sort( $id_list, $module, $tag, $direction = 'asc', $params = array( ), $id_position = 0 ) {
-			if(empty($id_list) || !is_array($id_list)) return $id_list;
+			if(empty($id_list) || !is_array($id_list) || !$this->check_read_module($module, true)) return $id_list;
 
 			//check for a sort function in read-module
 			if(method_exists($this->rm($module), 'sort')) {
 				$this->init_read_module( $module );
 				return $this->rm($module)->sort($id_list, $tag, $direction, $params, $id_position);
 			}
-			//cleanup cache if necessary
-			if( !empty( $this->sort_cache ) ) $this->sort_cache = array();
+			// select a clean cache instance
+			if( !empty( $this->sort_cache[$this->sort_cache[0]] ) ) $this->sort_cache[0]++;
 
 			//setup sort infos
-			$this->sort_cache['module']			= $module;
-			$this->sort_cache['tag']			= $tag;
-			$this->sort_cache['direction']		= ( $direction == 'desc' ) ? - 1 : 1;
-			$this->sort_cache['params']			= $params;
-			$this->sort_cache['id_position']	= $id_position;
+			$this->sort_cache[$this->sort_cache[0]]['module']			= $module;
+			$this->sort_cache[$this->sort_cache[0]]['tag']			= $tag;
+			$this->sort_cache[$this->sort_cache[0]]['direction']		= ( $direction == 'desc' ) ? - 1 : 1;
+			$this->sort_cache[$this->sort_cache[0]]['params']			= $params;
+			$this->sort_cache[$this->sort_cache[0]]['id_position']	= $id_position;
 
 			//sort
 			uasort( $id_list, array( &$this, "sort_by_tag" ) );
 
 			//cleanup cache
-			$this->sort_cache = array();
+			$this->sort_cache[$this->sort_cache[0]] = array();
+			if($this->sort_cache[0] > 1) $this->sort_cache[0]--; //reduce one level if in nested sort
 			return $id_list;
 		}
 
 		private function sort_by_tag( $id1, $id2 ) {
-			$module				= $this->sort_cache['module'];
-			$tag				= $this->sort_cache['tag'];
-			$direction			= $this->sort_cache['direction'];
-			$id_pos				= $this->sort_cache['id_position'];
-			$params1			= $this->sort_cache['params'];
-			$params2			= $this->sort_cache['params'];
+			$module				= $this->sort_cache[$this->sort_cache[0]]['module'];
+			$tag				= $this->sort_cache[$this->sort_cache[0]]['tag'];
+			$direction			= $this->sort_cache[$this->sort_cache[0]]['direction'];
+			$id_pos				= $this->sort_cache[$this->sort_cache[0]]['id_position'];
+			$params1			= $this->sort_cache[$this->sort_cache[0]]['params'];
+			$params2			= $this->sort_cache[$this->sort_cache[0]]['params'];
 			$params1[$id_pos]	= $id1;
 			$params2[$id_pos]	= $id2;
 
@@ -498,6 +526,7 @@ if( !class_exists( "plus_datahandler")){
 		* Write
 		*/
 		public function put( $module, $function, $params = array( ) ) {
+			#if(!$this->check_write_module($module, true)) return null;
 			if( !is_array( $params ) ) {
 				$params = array(
 					$params,
@@ -507,7 +536,8 @@ if( !class_exists( "plus_datahandler")){
 				return call_user_func_array( array( $this->wm($module), $function ), $params );
 			} else {
 				$data = debug_backtrace();
-				$this->pdl->log( "pdh_error", "Invalid put call", $module, $function, implode( ", ", $params ), false, $data[0]['file'], $data[0]['line'] );
+				$extra = array('module: '.$module, 'function: '.$function, 'params: '.implode( ", ", $params ));
+				$this->pdl->log( "pdh_error", $data[1]['file'], $data[1]['line'], "Invalid put call", $extra );
 				return false;
 			}
 		}
@@ -620,7 +650,7 @@ if( !class_exists( "plus_datahandler")){
 			$preset = $this->get_preset( $preset_name );
 			if( $preset == "" ) {
 				$data = debug_backtrace();
-				$this->pdl->log( "pdh_error", "Invalid preset", $preset_name, false, false, false, $data[0]['file'], $data[0]['line'] );
+				$this->pdl->log( "pdh_error", $data[1]['file'], $data[1]['line'], "Invalid preset", 'preset: '.$preset_name );
 				return null;
 			}
 			$return_array = array( );
@@ -825,7 +855,8 @@ if( !class_exists( "plus_datahandler")){
 							return $settings;
 						} else {
 							$data = debug_backtrace();
-							$this->pdl->log( "pdh_page_error", "Page not found", $page, $object, $layoutname, $data[0]['file'], $data[0]['line'] );
+							$extra = array('page: '.$page, 'object: '.$object, 'layout: '.$layoutname);
+							$this->pdl->log( "pdh_error", $data[1]['file'], $data[1]['line'], "Page not found", $extra);
 						}
 						return null;
 					}
