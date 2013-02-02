@@ -504,7 +504,7 @@ CREATE TABLE `__repository` (
 	`category` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`level` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`changelog` text COLLATE utf8_bin,
-	`build` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`dep_php` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`dep_coreversion` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`rating` int(10) unsigned NOT NULL DEFAULT '0',
 	`updated` varchar(255) COLLATE utf8_bin DEFAULT NULL,
