@@ -125,7 +125,7 @@ if(!class_exists('pdh_r_item')){
 					$val = $this->apa->get_decay_val('item', $dkp_id, $date, $data);
 				}
 			}
-			return (isset($val)) ? (int)$val : (int)$this->items[$id]['value'];
+			return (isset($val)) ? (float)$val : (float)$this->items[$id]['value'];
 		}
 
 		public function get_caption_value($dkp_id=0) {
