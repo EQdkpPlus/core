@@ -150,8 +150,13 @@ class Manage_Massmail extends page_generic {
 
 			//Set E-Mail-Options
 			$this->email->SetOptions($options);
+			
+			$strEmail = $this->pdh->get('user', 'email', array($userid));
+			$status = true;
+			if (preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$strEmail)){
+				$status = $this->email->SendMailFromAdmin($strEmail, $subject, $body, '');
+			}
 
-			$status = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($userid)), $subject, $body, '');
 			if (!$status){
 				echo "error";
 			}
