@@ -99,11 +99,20 @@ class Manage_Users extends page_generic {
 		$user_id = current($user_id);
 		$new_user = ($user_id) ? false : true;
 		$password = false;
+		
+		//The Group-Memberships of the admin who has submitted this form
+		$adm_memberships   = $this->acl->get_user_group_memberships($this->user->id);
 
 		if($user_id) {
+			//Prevent edit of Superadmin
+			if (!isset($adm_memberships[2]) && $this->user->check_group(2, false, $user_id)){
+				$this->display();
+				return;
+			}
+			
 			$this->pdh->put('user', 'update_user_settings', array($user_id, $this->get_settingsdata()));
 		} else {
-			$password = ($this->in->get('new_password') == "") ? random_string() : $this->in->get('new_password');
+			$password = ($this->in->get('password') == "") ? random_string() : $this->in->get('password');
 			$new_salt = $this->user->generate_salt();
 			$new_password = $this->user->encrypt_password($password, $new_salt).':'.$new_salt;
 			
@@ -151,8 +160,6 @@ class Manage_Users extends page_generic {
 		// Permissions
 		$auth_defaults = $this->acl->get_auth_defaults();
 		$superadm_only = $this->acl->get_superadmin_only_permissions();
-		//The Group-Memberships of the admin who has submitted this form
-		$adm_memberships   = $this->acl->get_user_group_memberships($this->user->data['user_id']);
 		//If the admin is not Superadmin, unset the superadmin-permissions
 		if (!isset($adm_memberships[2])){
 			foreach ($superadm_only as $superperm){
@@ -346,6 +353,7 @@ class Manage_Users extends page_generic {
 	public function edit(){
 		$user_id = $this->in->get('u', 0);
 		if($user_id != 0 AND !in_array($user_id, $this->pdh->get('user', 'id_list'))) $this->display();
+		if ($user_id != 0 && $this->user->check_group(2, false, $user_id) && !$this->user->check_group(2, false)) message_die($this->user->lang('noauth'), '', 'access_denied');
 
 		if ($user_id && $this->in->get('mode') == 'deleteavatar'){
 			$this->pdh->put('user', 'delete_avatar', array($user_id));
