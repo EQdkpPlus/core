@@ -164,8 +164,8 @@ class listusers extends page_generic {
 				$member_array = array(
 					'NAME'			=> '<a href="'.$this->root_path.'viewcharacter.php'.$this->SID.'&amp;member_id='.$mid.'">'.sanitize($member['name'])."</a>",
 					'LEVEL'			=> sanitize($member['level']),
-					'CLASS'			=> $this->game->decorate('classes', array($member['classid'])).' '.$this->game->get_name('classes', $member['classid']),
-					'RACE'			=> $this->game->decorate('races', array($member['raceid'])).' '.$this->game->get_name('races', $member['raceid']),
+					'CLASS'			=> $this->game->decorate('classes', array($member['classid'],false,$mid)).' '.$this->game->get_name('classes', $member['classid']),
+					'RACE'			=> $this->game->decorate('races', array($member['raceid'],false,$mid)).' '.$this->game->get_name('races', $member['raceid']),
 					'RANK'			=> sanitize($member['rankname']),
 					'TYPE'			=> sanitize($member['twink']),
 				);

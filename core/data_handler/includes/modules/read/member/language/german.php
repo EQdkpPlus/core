@@ -67,6 +67,16 @@ $preset_lang = array(
 	'mcname_dt' => 'Charakter-Klasse',
 	'mlink_decorated' => 'Charakter-Link (dekoriert)',
 	'last_update' => 'Letzte Character-Aktualisierung',
+	'medit' => 'Charakter Bearbeiten-Link',
+	'cdefrole'	=> 'Charakter Standardrollen-Auswahl',
+	'mrank_sortid' => 'Charakter-Rang Sortierungs-ID',
+	'charname' => 'Charakter-Name (dekoriert)',
+	'mmainname' => 'Hauptcharakter-Name',
+	'picture'	=> 'Charakter-Bild',
+	'note'		=> 'Charakter-Notiz',
+	'muser'		=> 'Benutzer des Charakters',
+	'charmenu'	=> 'Charakter-Menü',
+	'cmainchar'	=> 'Radiobox Hauptcharakter',
 );
 
 ?>

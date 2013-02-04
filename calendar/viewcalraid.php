@@ -477,7 +477,7 @@ class viewcalraid extends page_generic {
 						'id'			=> $us_classdata['memberid'],
 						'name'			=> $us_classdata['name'],
 						'class_id'		=> $us_classdata['classid'],
-						'class_icon'	=> $this->game->decorate('classes', array($us_classdata['classid'])),
+						'class_icon'	=> $this->game->decorate('classes', array($us_classdata['classid'], false, $us_classdata['memberid'])),
 						'userid'		=> $us_classdata['userid'],
 						'roles'			=> (($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $myrolesrry : '',
 						'defaultrole'	=> strlen($this->pdh->get('member', 'defaultrole', array($us_classdata['memberid']))) ? $this->pdh->get('member', 'defaultrole', array($us_classdata['memberid'])) : '',
@@ -543,7 +543,7 @@ class viewcalraid extends page_generic {
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
-							$membertooltip[]	= $this->game->decorate('classes', array($real_classid)).'&nbsp;'.$this->game->get_name('classes', $real_classid);
+							$membertooltip[]	= $this->game->decorate('classes', array($real_classid, false, $memberid)).'&nbsp;'.$this->game->get_name('classes', $real_classid);
 						}
 						if($memberrank){
 							$membertooltip[]	= $this->user->lang('rank').": ".$memberrank;

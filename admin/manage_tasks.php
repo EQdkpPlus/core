@@ -123,8 +123,8 @@ class ManageTasks extends page_generic {
 					'ID'			=> $member,
 					'NAME'			=> $this->pdh->get('member', 'html_memberlink', array($member, $this->root_path.'viewcharacter.php', '')),
 					'LEVEL'			=> $this->pdh->get('member', 'level', array($member)),
-					'CLASS_ICON'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($member)))),
-					'RACE_ICON'		=> $this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($member)), $this->pdh->get('member', 'gender', array($member)))),
+					'CLASS_ICON'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($member)), false, $member)),
+					'RACE_ICON'		=> $this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($member)), $this->pdh->get('member', 'gender', array($member)), $member)),
 				));
 			}
 		}
@@ -138,8 +138,8 @@ class ManageTasks extends page_generic {
 					'ID'			=> $member,
 					'NAME'			=> $this->pdh->get('member', 'html_memberlink', array($member, $this->root_path.'viewcharacter.php', '')),
 					'LEVEL'			=> $this->pdh->get('member', 'level', array($member)),
-					'CLASS_ICON'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($member)))),
-					'RACE_ICON'		=> $this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($member)), $this->pdh->get('member', 'gender', array($member)))),
+					'CLASS_ICON'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($member)), false, $member)),
+					'RACE_ICON'		=> $this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($member)), $this->pdh->get('member', 'gender', array($member)), $member)),
 				));
 			}
 		}

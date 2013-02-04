@@ -124,7 +124,7 @@ class viewcharacters extends page_generic {
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
 
 			// images
-			'IMG_CLASSICON'			=> $this->game->decorate('classes', array($member['class_id'], true)),
+			'IMG_CLASSICON'			=> $this->game->decorate('classes', array($member['class_id'], true, $this->url_id)),
 		);
 
 		// Add the game-specific Fields...
