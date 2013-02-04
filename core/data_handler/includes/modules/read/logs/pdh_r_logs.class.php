@@ -37,6 +37,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 		public $presets = array(
 			'logdate'		=> array('date',		array('%log_id%'), array()),
+			'logdatetime'	=> array('date',		array('%log_id%', true), array()),
 			'logtype'		=> array('tag',			array('%log_id%', '%link_url%', '%link_url_suffix%'), array()),
 			'logplugin'		=> array('plugin',		array('%log_id%'), array()),
 			'loguser'		=> array('user',		array('%log_id%'), array()),
