@@ -83,8 +83,8 @@ class Manage_Menus extends page_generic {
 				} else {
 					$url = $value;
 				}
-
-				$sort[md5($url)] = array('sort'=> $i, 'hide' => $hide_ary[$value]);
+				$hidekey = (strpos($value, 'pluslink_') === 0) ? $value : md5($value);
+				$sort[md5($url)] = array('sort'=> $i, 'hide' => $hide_ary[$hidekey]);
 				$i++;
 			}
 			$this->config->set('sort_menu'.$menuid, serialize($sort));
@@ -314,6 +314,7 @@ class Manage_Menus extends page_generic {
 						$vars = array(
 							'NAME'				=> $row[1],
 							'LINK'				=> $link,
+							'LINK_HASH'			=> md5($link),
 							'ID'				=> 'm'.md5('menu'.$menuid.$linkhash),
 							'SORT'				=> (isset($sort_ary[$linkhash]['sort'])) ? $sort_ary[$linkhash]['sort'] : '',
 							'HIDE'				=> (isset($sort_ary[$linkhash]['hide']) && $sort_ary[$linkhash]['hide'] == 1) ? 'checked="checked"' : '',
