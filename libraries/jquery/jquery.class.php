@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("jquery")) {
 	class jquery extends gen_class {
-		public static $shortcuts = array('tpl', 'user', 'core', 'time', 'pfh', 'html', 'config', 'puf'=> 'urlfetcher','encrypt'	=> 'encrypt');
+		public static $shortcuts = array('tpl', 'user', 'core', 'time', 'pfh', 'html', 'config', 'puf'=> 'urlfetcher','encrypt'	=> 'encrypt', 'env' => 'environment');
 
 		private $tt_init				= '';
 		private $ce_loaded				= false;
@@ -42,6 +42,7 @@ if (!class_exists("jquery")) {
 
 			// add the root_path to javascript
 			$this->tpl->add_js("var mmocms_root_path = '".$this->root_path."';");
+			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';");
 
 			// jquery language file
 			$langfile = '';
