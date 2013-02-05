@@ -567,12 +567,12 @@ td.spacerow{
 	height: 9px;
 }
 th a, th a:visited, th a:active {
-	color: #T_HEADER_LINK; /* Dynamic */
+	color: T_HEADER_LINK; /* Dynamic */
 	text-decoration: T_HEADER_LINK_STYLE; /* Dynamic */
 	font-weight: bold;
 }
 th a:hover {
-	color: #T_HEADER_HLINK; /* Dynamic */
+	color: T_HEADER_HLINK; /* Dynamic */
 	text-decoration: T_HEADER_HLINK_STYLE; /* Dynamic */
 	font-weight: bold;
 }
@@ -1313,7 +1313,7 @@ fieldset.invisible dt label {
 .raidcal_name{
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 28px;
-	color: #{T_FONTCOLOR2};
+	color: T_FONTCOLOR2;
 }
 .raidcal_infos, .moderation_panel{
 	font-size: 12px;

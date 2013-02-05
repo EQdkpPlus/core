@@ -109,7 +109,7 @@ if (!class_exists('exchange_calevents_list')){
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 							'raidstatus'	=> ($raidmode) ? $rstatusdata : '',
 							'user_status'	=> ($raidmode) ? $memberstatus : '',
-							'color'			=> '#'.$eventcolor,
+							'color'			=> $eventcolor,
 							'calendar'		=> $this->pdh->get('calendar_events', 'calendar_id', array($intRaidID)),
 							'calendar_name'	=> $this->pdh->get('calendar_events', 'calendar', array($intRaidID)),
 							'icalfeed'		=> ($this->user->is_signedin()) ? $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'] : '',

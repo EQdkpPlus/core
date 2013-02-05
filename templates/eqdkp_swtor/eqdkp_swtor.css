@@ -197,7 +197,7 @@ h2 {
 	padding: 2px;
 }
 .colorswitch .td{
-	border:1px solid #T_TR_COLOR1;
+	border:1px solid T_TR_COLOR1;
 }
 
 /***************************************************
@@ -302,18 +302,18 @@ img {
 }
 
 a:link,a:active,a:visited,a.postlink{
-	color: #T_BODY_LINK; /* Dynamic */
+	color: T_BODY_LINK; /* Dynamic */
 	text-decoration: T_BODY_LINK_STYLE; /* Dynamic */
 }
 a:hover{
-	color: #T_BODY_HLINK; /* Dynamic */
+	color: T_BODY_HLINK; /* Dynamic */
 	text-decoration: T_BODY_HLINK_STYLE; /* Dynamic */
 }
 a.link2{
-	color: #T_BODY_HLINK; /* Dynamic */
+	color: T_BODY_HLINK; /* Dynamic */
 }
 a.link2:visited{
-	color: #T_BODY_HLINK; /* Dynamic */
+	color: T_BODY_HLINK; /* Dynamic */
 }
 .forumline{
 	background:#14293b url(images/table.jpg) repeat-x top;
@@ -334,7 +334,7 @@ a.link2:visited{
 
 .contentHead, .contentFooter {
 	background: #2b577c url(images/head.jpg) repeat-x;
-	color:#T_HEADER_LINK; /* Dynamic */
+	color:T_HEADER_LINK; /* Dynamic */
 	font-size: T_FONTSIZE2px; /* Dynamic */
 	font-weight:bold;
 	min-height:25px;
@@ -662,7 +662,7 @@ td.cat{
 }
 th {
 	background: #000000 url(images/head.jpg) repeat-x;
-	color:#T_HEADER_LINK; /* Dynamic */
+	color:T_HEADER_LINK; /* Dynamic */
 	font-size: T_FONTSIZE2px; /* Dynamic */
 	font-weight:bold;
 	height:25px;
@@ -676,12 +676,12 @@ td.spacerow{
 	height: 9px;
 }
 th a, th a:visited, th a:active {
-	color: #T_HEADER_LINK; /* Dynamic */
+	color: T_HEADER_LINK; /* Dynamic */
 	text-decoration: T_HEADER_LINK_STYLE; /* Dynamic */
 	font-weight: bold;
 }
 th a:hover {
-	color: #T_HEADER_HLINK; /* Dynamic */
+	color: T_HEADER_HLINK; /* Dynamic */
 	text-decoration: T_HEADER_HLINK_STYLE; /* Dynamic */
 	font-weight: bold;
 }
@@ -1035,12 +1035,12 @@ div.contentBox {
 }
 
 .mainmenu li:nth-child(even) a, .mainmenu1 li:nth-child(even) a,.mainmenu2 li:nth-child(even) a, .mainmenu3 li:nth-child(even) a{
-	background:#T_TR_COLOR1 url('images/menuarrow.png') no-repeat 3px center; /* Dynamic */
-	color: #T_FONTCOLOR1; /* Dynamic */
+	background:T_TR_COLOR1 url('images/menuarrow.png') no-repeat 3px center; /* Dynamic */
+	color: T_FONTCOLOR1; /* Dynamic */
 }
 .mainmenu li:nth-child(odd) a, .mainmenu1 li:nth-child(odd) a,.mainmenu2 li:nth-child(odd) a, .mainmenu3 li:nth-child(odd) a{
-	background:#T_TR_COLOR2 url('images/menuarrow.png') no-repeat 3px center; /* Dynamic */
-	color: #T_FONTCOLOR1; /* Dynamic */
+	background:T_TR_COLOR2 url('images/menuarrow.png') no-repeat 3px center; /* Dynamic */
+	color: T_FONTCOLOR1; /* Dynamic */
 }
 
 /***************************************************
@@ -1405,7 +1405,7 @@ fieldset.invisible dt label {
 .raidcal_name {
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 28px;
-	color: #{T_FONTCOLOR2};
+	color: T_FONTCOLOR2;
 }
 .raidcal_infos, .moderation_panel{
 	font-size: 12px;

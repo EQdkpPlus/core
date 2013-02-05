@@ -82,7 +82,7 @@ if (!class_exists("jquery")) {
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"90%", height:"90%"});', 'docready');
-				
+				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true});', 'docready');
 		}
 
 		/**
@@ -713,14 +713,7 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function colorpicker($id, $value, $name='', $size='14', $jscode=''){
-			//$this->tpl->add_js("$('#".$id."').gccolor();", 'docready');
-			$this->tpl->add_js("$('#".$id."').ColorPicker({
-				color: '#".$value."',
-				onShow: function (colpkr) { $(colpkr).fadeIn(500);return false;},
-				onHide: function (colpkr) { $(colpkr).fadeOut(500);return false;},
-				onChange: function (hsb, hex, rgb) { $('#".$id." div').css('backgroundColor', '#' + hex);$('#".$id."_input').val(hex);}
-			});", 'docready');
-			return '<div id="'.$id.'" class="colorSelector"><div style="background-color: #'.$value.'"></div></div><input type="hidden" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
+			return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 		}
 
 		/**
@@ -882,7 +875,7 @@ if (!class_exists("jquery")) {
 		* @return TimePicker JS Code
 		*/
 		public function rssFeeder($name, $url, $items='4', $length='80', $backgr=false){
-			$backgr = ($backgr) ? $backgr : '#'.$this->user->style['tr_color1'];
+			$backgr = ($backgr) ? $backgr : $this->user->style['tr_color1'];
 			$tmpopt		= array();
 			$tmpopt[] = 'targeturl: "'.$url.'"';
 			$tmpopt[] = 'items: '.$items;
