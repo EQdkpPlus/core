@@ -77,7 +77,7 @@ if (!class_exists('pdh_r_roles')){
 			while ($row = $this->db->fetch_record($roleresult)){
 				$this->roles[$row['role_id']]['id']			= $row['role_id'];
 				$this->roles[$row['role_id']]['name']		= $row['role_name'];
-				$this->roles[$row['role_id']]['classes']	= (substr_count($row['role_classes'], "|") > 0) ? explode("|", $row['role_classes']) : ((count($row['role_classes']) > 0) ? $row['role_classes'] : array());
+				$this->roles[$row['role_id']]['classes']	= (substr_count($row['role_classes'], "|") > 0) ? explode("|", $row['role_classes']) : ((count($row['role_classes']) > 0) ? array($row['role_classes']) : array());
 				$this->roles[$row['role_id']]['classes_r']	= $row['role_classes'];
 				$this->roles_id[$row['role_id']]			= $row['role_name'];
 			}
