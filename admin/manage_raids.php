@@ -119,7 +119,7 @@ class ManageRaids extends page_generic {
 		}
 
 		//fetch members
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(true,false,false))));
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,true,false))));
 		asort($members);
 
 		//fetch events
