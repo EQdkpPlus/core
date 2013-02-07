@@ -21,22 +21,23 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'name' => 'Ereignis',
+	'name'		=> 'Ereignis',
 	'multidkppools' => 'MultiDKP-Pool(s)',
 	'itempools' => 'Item-Pool(s)',
-	'value' => 'Wert',
+	'value'		=> 'Wert',
 	'eventlink' => 'Ereignis',
-	'icon'	=> 'Icon',
+	'icon'		=> 'Icon',
 	'editicon'	=> '',
 );
 
 $preset_lang = array(
-	'ename'	=> 'Ereignis-Name',
-	'eicon' => 'Ereignis-Icon',
-	'elink' => 'Ereignis-Link',
-	'evalue' => 'Ereignis-Wert',
-	'emdkps' => 'Ereignis-MultiDKP-Pools',
-	'eipools' => 'Ereignis-Itempools',
+	'ename'		=> 'Ereignis-Name',
+	'eicon'		=> 'Ereignis-Icon',
+	'elink'		=> 'Ereignis-Link',
+	'evalue'	=> 'Ereignis-Wert',
+	'emdkps'	=> 'Ereignis-MultiDKP-Pools',
+	'eipools'	=> 'Ereignis-Itempools',
+	'eventedit'	=> 'Ereignis-Bearbeiten-Icon',
 );
 
 ?>

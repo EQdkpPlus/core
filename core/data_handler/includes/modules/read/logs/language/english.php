@@ -31,5 +31,12 @@ $module_lang = array(
 );
 
 $preset_lang = array(
+	'logdate'		=> 'Log-Date',
+	'logtype'		=> 'Log-Type',
+	'logplugin'		=> 'Log-Plugin',
+	'loguser'		=> 'Log-User',
+	'logipaddress'	=> 'Log-IP-Adress',
+	'logresult'		=> 'Log-Result',
+	'viewlog'		=> 'Log-View Button'
 );
 ?>

@@ -21,24 +21,20 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'edit'			=> '',
-	'ncheckbox'		=> '',
-	'headline'		=> 'Überschrift',
-	'date'			=> 'Datum',
-	'username'		=> 'Benutzername',
-	'category'		=> 'Kategorie',
-	'newsstart'		=> 'Angezeigt von',
-	'newsstop'		=> 'Angezeigt bis',	
+	'zerosum'			=> 'Current',
+	'earned'			=> 'Earned',
+	'spent'				=> 'Spent',
+	'raidval'			=> 'Value',
 );
 
 $preset_lang = array(
-	'ncheckbox'		=> 'Checkbox',
-	'nedit'			=> 'Bearbeiten-Icon',
-	'nheadline'		=> 'Überschrift',
-	'ndate'			=> 'Datum',
-	'nusername'		=> 'Benutzername',
-	'ncategory'		=> 'Kategorie',
-	'nstart'		=> 'Angezeigt von',
-	'nstop'			=> 'Angezeigt bis',	
+	'zs_current_all'	=> 'Zero-Summ current (all)',
+	'current_all'		=> 'Zero-Summ current (all)',
+	'zs_current'		=> 'Zero-Summ current',
+	'zs_earned'			=> 'Zero-Summ earned',
+	'zs_spent'			=> 'Zero-Summ spent',
+	'zs_rvalue'			=> 'Zero-Summ value',
+	'zs_rvalue_all'		=> 'Zero-Summ value (all)',
 );
+
 ?>

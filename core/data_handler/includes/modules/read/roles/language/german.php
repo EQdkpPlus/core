@@ -29,6 +29,10 @@ $module_lang = array(
 );
 
 $preset_lang = array(
-
+	'roleid'		=> 'Role ID',
+	'rolename'		=> 'Role Name',
+	'roleclasses'	=> 'Role Klassen',
+	'roleedit'		=> 'Role bearbeiten-Button',
+	'roledelete'	=> 'Role löschen-Button',
 );
 ?>

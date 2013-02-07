@@ -22,22 +22,23 @@ if ( !defined('EQDKP_INC') ){
 
 $module_lang = array(
 	'edit'			=> '',
+	'ncheckbox'		=> '',
 	'headline'		=> 'Headline',
 	'date'			=> 'Date',
 	'username'		=> 'Username',
 	'category'		=> 'Category',
 	'newsstart'		=> 'Show from',
-	'newsstop'			=> 'Show until'
+	'newsstop'		=> 'Show until'
 );
 
 $preset_lang = array(
-  'ncheckbox' => 'Checkbox',
+	'ncheckbox'		=> 'Checkbox',
 	'nedit'			=> 'Edit-Icon',
 	'nheadline'		=> 'Headline',
 	'ndate'			=> 'Date',
 	'nusername'		=> 'Username',
 	'ncategory'		=> 'Category',
 	'nstart'		=> 'Show from',
-	'nstop'		=> 'Show until',	
+	'nstop'			=> 'Show until',	
 );
 ?>

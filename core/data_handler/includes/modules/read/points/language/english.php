@@ -21,9 +21,21 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'earned' => 'Earned',
-  'spent' => 'Spent',
-  'adjustment' => 'Adjustment',
-  'current' => 'Current',
+	'earned'				=> 'Earned',
+	'earned_detail_twink'	=> 'Erhalten',
+	'spent'					=> 'Spent',
+	'spent_detail_twink'	=> 'Spent',
+	'adjustment'			=> 'Adjustment',
+	'adjustment_detail_twink' => 'Adjustment',
+	'current'				=> 'Current',
+	'current_detail_twink'	=> 'Current',
+);
+
+$preset_lang = array(
+	'earned'				=> 'Earned',
+	'spent'					=> 'Spent',
+	'adjustment'			=> 'Adjustment',
+	'current'				=> 'Current',
+	'all_current'			=> 'Current (all)'
 );
 ?>

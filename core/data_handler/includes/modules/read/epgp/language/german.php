@@ -21,24 +21,18 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'edit'			=> '',
-	'ncheckbox'		=> '',
-	'headline'		=> 'Überschrift',
-	'date'			=> 'Datum',
-	'username'		=> 'Benutzername',
-	'category'		=> 'Kategorie',
-	'newsstart'		=> 'Angezeigt von',
-	'newsstop'		=> 'Angezeigt bis',	
+	'ep'		=> 'EP',
+	'gp'		=> 'GP',
+	'epgp'		=> 'PR'
 );
 
 $preset_lang = array(
-	'ncheckbox'		=> 'Checkbox',
-	'nedit'			=> 'Bearbeiten-Icon',
-	'nheadline'		=> 'Überschrift',
-	'ndate'			=> 'Datum',
-	'nusername'		=> 'Benutzername',
-	'ncategory'		=> 'Kategorie',
-	'nstart'		=> 'Angezeigt von',
-	'nstop'			=> 'Angezeigt bis',	
+	'epgp_all'		=> 'EPGP - PR (alle)',
+	'ep'			=> 'EPGP - EP',
+	'gp'			=> 'EPGP - GP',
+	'epgp'			=> 'EPGP - PR',
+	'current'		=> 'EPGP - PR',
+	'earned'		=> 'EPGP - EP',
+	'spent'			=> 'EPGP - GP'
 );
 ?>

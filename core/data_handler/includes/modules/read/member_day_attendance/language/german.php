@@ -21,14 +21,14 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'dattendance' => 'Tage (%d Tage)',
-	'dlifetime' => 'Tage (Lebenszeit)',
+	'dattendance'		=> 'Tage (%d Tage)',
+	'dlifetime'			=> 'Tage (Lebenszeit)',
 );
 
 $preset_lang = array(
-	'dattendance_30' => 'Tagesteilnahme (30 Tage)',
-	'dattendance_60' => 'Tagesteilnahme (60 Tage)',
-	'dattendance_90' => 'Tagesteilnahme (90 Tage)',
-	'dattendance_lt' => 'Tagesteilnahme (Lebenszeit)',
+	'dattendance_30'	=> 'Tagesteilnahme (30 Tage)',
+	'dattendance_60'	=> 'Tagesteilnahme (60 Tage)',
+	'dattendance_90'	=> 'Tagesteilnahme (90 Tage)',
+	'dattendance_lt'	=> 'Tagesteilnahme (Lebenszeit)',
 );
 ?>

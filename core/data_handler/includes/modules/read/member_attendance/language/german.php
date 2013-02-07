@@ -21,14 +21,14 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'attendance' => 'Raids (%d Tage)',
-	'lifetime' => 'Raids (Lebenszeit)',
+	'attendance'	=> 'Raids (%d Tage)',
+	'lifetime'		=> 'Raids (Lebenszeit)',
 );
 
 $preset_lang = array(
-	'attendance_30' => 'Raidteilnahme (30 Tage)',
-	'attendance_60' => 'Raidteilnahme (60 Tage)',
-	'attendance_90' => 'Raidteilnahme (90 Tage)',
-	'attendance_lt' => 'Raidteilnahme (Lebenszeit)',
+	'attendance_30'	=> 'Raidteilnahme (30 Tage)',
+	'attendance_60'	=> 'Raidteilnahme (60 Tage)',
+	'attendance_90'	=> 'Raidteilnahme (90 Tage)',
+	'attendance_lt'	=> 'Raidteilnahme (Lebenszeit)',
 );
 ?>
