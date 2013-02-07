@@ -38,6 +38,7 @@ class roster extends page_generic {
 		$rosterfolder = $this->root_path.'games/'.$this->game->get_game().'/roster/';
 		$skip_inactive = ((int)$this->config->get('hide_inactive') == 1) ? true : false;
 		$skip_twinks = ((int)$this->config->get('pk_show_twinks') == 1) ? false : !(int)$this->config->get('roster_show_twinks');
+		$skip_hidden = !((int)$this->config->get('roster_show_hidden'));
 		
 		//Init chartooltip
 		chartooltip_js();
@@ -49,7 +50,7 @@ class roster extends page_generic {
 			$hptt_page_settings = $this->pdh->get_page_settings('roster', 'hptt_roster');
 			
 			if ($this->config->get('roster_classorrole') == 'role'){
-					$members = $this->pdh->aget('member', 'defaultrole', 0, array($this->pdh->get('member', 'id_list', array($skip_inactive, true, true, $skip_twinks))));
+					$members = $this->pdh->aget('member', 'defaultrole', 0, array($this->pdh->get('member', 'id_list', array($skip_inactive, $skip_hidden, true, $skip_twinks))));
 					$arrRoleMembers = array();
 					foreach ($members as $memberid => $defaultroleid){
 						if ((int)$defaultroleid == 0){

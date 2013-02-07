@@ -296,7 +296,7 @@ if( !class_exists( "plus_datahandler")){
 			return isset($this->read_modules[$module_name]);
 		}
 		
-		public function check_write_module( $module_name, $error=false ) {
+/*		public function check_write_module( $module_name, $error=false ) {
 			//try registering first
 			try {
 				$this->register_write_module($module_name);
@@ -308,7 +308,7 @@ if( !class_exists( "plus_datahandler")){
 				return false;
 			}
 			return isset($this->write_modules[$module_name]);
-		}
+		} */
 		
 
 		/*********************************************************************************************************************************

@@ -346,7 +346,7 @@ if (!class_exists("timehandler")){
 						$k = 0;
 						for($j=$this->possible_formats[$c][0]; $j<=$this->possible_formats[$c][1]; $j++) {
 							$psc = substr($partial_string, $j, 1);
-							if(!is_number($psc)) {
+							if(!is_numeric($psc)) {
 								$k = $j;
 								break;
 							}
