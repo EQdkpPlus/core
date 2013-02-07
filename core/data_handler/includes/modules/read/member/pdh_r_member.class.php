@@ -30,6 +30,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public $default_lang	= 'english';
 		public $data			= array();
 		public $cmfields		= array();
+		public $preset_lang		= array();
 
 		public $hooks = array(
 			'adjustment_update',
@@ -82,6 +83,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			if(is_array($this->cmfields)) {
 				foreach($this->cmfields as $mmdata){
 					$this->presets['profile_'.$mmdata] = array('profile_field', array('%member_id%', $mmdata), array($mmdata));
+					$this->preset_lang['profile_'.$mmdata] = 'Profil-'.$this->pdh->get('profile_fields', 'fields', array($mmdata));;
 				}
 			}
 		}
