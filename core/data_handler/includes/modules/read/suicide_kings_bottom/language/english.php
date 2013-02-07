@@ -21,24 +21,13 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'edit'			=> '',
-	'ncheckbox'		=> '',
-	'headline'		=> 'Überschrift',
-	'date'			=> 'Datum',
-	'username'		=> 'Benutzername',
-	'category'		=> 'Kategorie',
-	'newsstart'		=> 'Angezeigt von',
-	'newsstop'		=> 'Angezeigt bis',	
+	'position'					=> 'Position',
 );
 
 $preset_lang = array(
-	'ncheckbox'		=> 'Checkbox',
-	'nedit'			=> 'Bearbeiten-Icon',
-	'nheadline'		=> 'Überschrift',
-	'ndate'			=> 'Datum',
-	'nusername'		=> 'Benutzername',
-	'ncategory'		=> 'Kategorie',
-	'nstart'		=> 'Angezeigt von',
-	'nstop'			=> 'Angezeigt bis',	
+	'sk_bottom_position_all'	=> 'Suicide-Kings-Bottom position (all)',
+	'sk_bottom_position'		=> 'Suicide-Kings-Bottom position',
 );
+
+
 ?>

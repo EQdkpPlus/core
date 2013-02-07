@@ -21,29 +21,31 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'date' => 'Datum',
-  'buyer_name' => 'Käufer',
-  'value' => 'Wert',
-  'name' => 'Name',
-  'itempool_name' => 'Itempool',
-  'link' => 'Name',
-  'raidlink' => 'Raid',
-  'm4igk4i' => 'Käufer',
-  'raididlink' => 'Raid',
-  'link_itt' => 'Name',
-  'editicon'	=> '',
+	'date'			=> 'Datum',
+	'buyer_name'	=> 'Käufer',
+	'value'			=> 'Wert',
+	'name'			=> 'Name',
+	'itempool_name'	=> 'Itempool',
+	'link'			=> 'Name',
+	'raidlink'		=> 'Raid',
+	'm4igk4i'		=> 'Käufer',
+	'raididlink'	=> 'Raid',
+	'link_itt'		=> 'Name',
+	'editicon'		=> '',
 );
 
 $preset_lang = array(
-  'idate' => 'Item-Datum',
-	'ilink' => 'Item-Link',
-	'ibuyers' => 'Item-Käufer',
-	'iraididlink' => 'Item-Raid (ausführlich)',
-	'ivalue' => 'Item-Wert',
-	'ipoolname' => 'Itempool-Name',
-	'iraidlink' => 'Item-Raid',
-	'iname' => 'Item-Name',
-	'ibuyername' => 'Item-Käufer',
+	'idate'			=> 'Item-Datum',
+	'ilink'			=> 'Item-Link',
+	'ibuyers'		=> 'Item-Käufer',
+	'iraididlink'	=> 'Item-Raid (ausführlich)',
+	'ivalue'		=> 'Item-Wert',
+	'ipoolname'		=> 'Itempool-Name',
+	'iraidlink'		=> 'Item-Raid',
+	'iname'			=> 'Item-Name',
+	'ibuyername'	=> 'Item-Käufer',
+	'ilink_itt'		=> 'Item-Link-ITT',
+	'itemsedit'		=> 'Item-Bearbeiten-Button'
 );
 
 ?>

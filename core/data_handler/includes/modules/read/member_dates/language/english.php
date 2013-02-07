@@ -21,18 +21,26 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'first_item_date' => 'First Item',
-  'first_item_name' => 'First Item',
-  'last_item_date' => 'Last Item',
-  'last_item_name' => 'Last Item',
-  'first_raid' => 'First Raid',
-  'last_raid' => 'Last Raid',
-  'first_item_date_detail_twink' => 'First Item',
-  'first_item_name_detail_twink' => 'First Item',
-  'last_item_date_detail_twink' => 'Last Item',
-  'last_item_name_detail_twink' => 'Last Item',
-  'first_raid_detail_twink' => 'First Raid',
-  'last_raid_detail_twink' => 'Last Raid',
+	'first_item_date'				=> 'First Item',
+	'first_item_name'				=> 'First Item',
+	'last_item_date'				=> 'Last Item',
+	'last_item_name'				=> 'Last Item',
+	'first_raid'					=> 'First Raid',
+	'last_raid'						=> 'Last Raid',
+	'first_item_date_detail_twink'	=> 'First Item',
+	'first_item_name_detail_twink'	=> 'First Item',
+	'last_item_date_detail_twink'	=> 'Last Item',
+	'last_item_name_detail_twink'	=> 'Last Item',
+	'first_raid_detail_twink'		=> 'First Raid',
+	'last_raid_detail_twink'		=> 'Last Raid',
 );
 
+$preset_lang = array(
+	'mfirst_item_date'				=> 'First Item - Date',
+	'mfirst_item_name'				=> 'First Itemm - Name',
+	'mlast_item_date'				=> 'Last Item - Date',
+	'mlast_item_name'				=> 'Last Item - Name',
+	'first_raid'					=> 'First Raid',
+	'last_raid'						=> 'Last Raid',
+);
 ?>

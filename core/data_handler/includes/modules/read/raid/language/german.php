@@ -21,23 +21,24 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'date' => 'Datum',
-  'event_name' => 'Name',
-  'raidlink' => 'Name',
-  'note' => 'Notiz',
-  'value' => 'Wert',
-  'item_count' => 'Items',
-  'attendee_count' => 'Teilnehmer',
-  'editicon'	=> '',
+	'date'			=> 'Datum',
+	'event_name'	=> 'Name',
+	'raidlink'		=> 'Name',
+	'note'			=> 'Notiz',
+	'value'			=> 'Wert',
+	'item_count'	=> 'Items',
+	'attendee_count'=> 'Teilnehmer',
+	'editicon'		=> '',
 );
 
 $preset_lang = array(
-  'rdate' => 'Raid-Datum',
-	'rlink' => 'Raid-Link',
-	'rattcount' => 'Raid-Teilnehmerzahl',
-	'ritemcount' => 'Raid-Itemanzahl',
-	'rvalue' => 'Raid-Wert',
-	'revent' => 'Raid-Event',
-	'rnote' => 'Raid-Notiz',
+	'rdate'			=> 'Raid-Datum',
+	'rlink'			=> 'Raid-Link',
+	'rattcount'		=> 'Raid-Teilnehmerzahl',
+	'ritemcount'	=> 'Raid-Itemanzahl',
+	'rvalue'		=> 'Raid-Wert',
+	'revent'		=> 'Raid-Event',
+	'rnote'			=> 'Raid-Notiz',
+	'raidedit'		=> 'Raid-Bearbeiten-Button'
 );
 ?>

@@ -21,18 +21,18 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'ep' => 'EP',
-  'gp' => 'GP',
-  'epgp' => 'PR'
+	'ep'		=> 'EP',
+	'gp'		=> 'GP',
+	'epgp'		=> 'PR'
 );
 
 $preset_lang = array(
-  'ep' => 'EP',
-  'gp' => 'GP',
-  'epgp' => 'PR',
-  'current' => 'PR',
-  'earned' => 'EP',
-  'spent' => 'GP'
+	'epgp_all'		=> 'EPGP - PR (all)',
+	'ep'			=> 'EPGP - EP',
+	'gp'			=> 'EPGP - GP',
+	'epgp'			=> 'EPGP - PR',
+	'current'		=> 'EPGP - PR',
+	'earned'		=> 'EPGP - EP',
+	'spent'			=> 'EPGP - GP'
 );
-
 ?>

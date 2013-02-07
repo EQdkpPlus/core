@@ -21,12 +21,24 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'name' => 'Event',
+	'name'		=> 'Event',
 	'multidkppools' => 'MultiDKP-Pool(s)',
-	'itempools' => 'Item-Pool(s)',
-	'value' => 'Value',
+	'itempools'	=> 'Item-Pool(s)',
+	'value'		=> 'Value',
 	'eventlink' => 'Event',
-	'icon'	=> 'Icon',
+	'icon'		=> 'Icon',
 	'editicon'	=> '',
 );
+
+
+$preset_lang = array(
+	'ename'		=> 'Event name',
+	'eicon'		=> 'Event icon',
+	'elink'		=> 'Event link',
+	'evalue'	=> 'Event value',
+	'emdkps'	=> 'Event MultiDKP-Pools',
+	'eipools'	=> 'Event Itempools',
+	'eventedit'	=> 'Event edit icon',
+);
+
 ?>

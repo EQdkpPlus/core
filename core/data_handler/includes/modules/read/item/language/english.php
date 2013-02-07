@@ -21,17 +21,30 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'date' => 'Date',
-  'buyer_name' => 'Buyer',
-  'value' => 'Value',
-  'name' => 'Name',
-  'itempool_name' => 'Itempool',
-  'link' => 'Name',
-  'raidlink' => 'Raid',
-  'm4igk4i' => 'Buyers',
-  'raididlink' => 'Raid',
-  'link_itt' => 'Name',
-  'editicon'	=> '',
+	'date'			=> 'Date',
+	'buyer_name'	=> 'Buyer',
+	'value'			=> 'Value',
+	'name'			=> 'Name',
+	'itempool_name'	=> 'Itempool',
+	'link'			=> 'Name',
+	'raidlink'		=> 'Raid',
+	'm4igk4i'		=> 'Buyers',
+	'raididlink'	=> 'Raid',
+	'link_itt'		=> 'Name',
+	'editicon'		=> '',
 );
 
+$preset_lang = array(
+	'idate'			=> 'Item-Date',
+	'ilink'			=> 'Item-Link',
+	'ibuyers'		=> 'Item-Buyer',
+	'iraididlink'	=> 'Item-Raid (detailed)',
+	'ivalue'		=> 'Item-Value',
+	'ipoolname'		=> 'Itempool-Name',
+	'iraidlink'		=> 'Item-Raid',
+	'iname'			=> 'Item-Name',
+	'ibuyername'	=> 'Item-Buyer',
+	'ilink_itt'		=> 'Item-Link-ITT',
+	'itemsedit'		=> 'Item-Edit-Button'
+);
 ?>

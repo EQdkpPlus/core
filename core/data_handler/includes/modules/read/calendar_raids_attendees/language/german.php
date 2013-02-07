@@ -25,5 +25,6 @@ $module_lang = array(
 );
 
 $preset_lang = array(
+	'raidattendees_status'		=> 'Kalender-Raidteilnehmer Status'
 );
 ?>

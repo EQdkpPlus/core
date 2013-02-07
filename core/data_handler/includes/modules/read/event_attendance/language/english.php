@@ -21,12 +21,12 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'attendance' => 'Raids (%d days)',
-  'lifetime' => 'Raids (lifetime)',
+	'attendance'		=> 'Raids (%d days)',
+	'lifetime'			=> 'Raids (lifetime)',
 );
 
 $preset_lang = array(
-	'event_attendance' => 'Eventattendance',
+	'event_attendance'	=> 'Eventattendance',
 );
 
 ?>

@@ -21,24 +21,25 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'date' => 'Date',
-	'link' => 'Reason',
-	'event_name' => 'Event',
-	'm4agk4a' => 'Chars',
-	'value' => 'Value',
-	'raid_id' => 'Raid',
-	'editicon'	=> '',
-	'reason' => 'Reason',
+	'date'				=> 'Date',
+	'link'				=> 'Reason',
+	'event_name'		=> 'Event',
+	'm4agk4a'			=> 'Chars',
+	'value'				=> 'Value',
+	'raid_id'			=> 'Raid',
+	'editicon'			=> '',
+	'reason'			=> 'Reason',
 );
 
 $preset_lang = array(
-  'adj_date' => 'Adjustment-Date',
-	'adj_reason_link' => 'Adjustment-Reason (linked)', 
-  'adj_event' => 'Adjustment-Event',
-  'adj_members' => 'Adjustment-Chars',
-  'adj_value' => 'Adjustment-Value',
-  'adj_raid' => 'Adjustment-Raid',
-	'adj_reason' => 'Adjustment-Reason', 
+	'adj_date'			=> 'Adjustment-Date',
+	'adj_reason_link'	=> 'Adjustment-Reason (linked)', 
+	'adj_event'			=> 'Adjustment-Event',
+	'adj_members'		=> 'Adjustment-Chars',
+	'adj_value'			=> 'Adjustment-Value',
+	'adj_raid'			=> 'Adjustment-Raid',
+	'adj_reason'		=> 'Adjustment-Reason',
+	'adjedit'			=> 'Adjustment-Edit Button',
 );
 
 ?>

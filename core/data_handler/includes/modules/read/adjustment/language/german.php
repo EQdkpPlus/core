@@ -21,24 +21,25 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'date' => 'Datum',
-	'link' => 'Grund',
-	'event_name' => 'Ereignis',
-	'm4agk4a' => 'Charaktere',
-	'value' => 'Wert',
-	'raid_id' => 'Raid',
-	'editicon'	=> '',
-	'reason' => 'Grund',
+	'date'				=> 'Datum',
+	'link'				=> 'Grund',
+	'event_name'		=> 'Ereignis',
+	'm4agk4a'			=> 'Charaktere',
+	'value'				=> 'Wert',
+	'raid_id'			=> 'Raid',
+	'editicon'			=> '',
+	'reason'			=> 'Grund',
 );
 
 $preset_lang = array(
-  'adj_date' => 'Korrektur-Datum',
-	'adj_reason_link' => 'Korrektur-Grund (verlinkt)', 
-  'adj_event' => 'Korrektur-Ereignis',
-  'adj_members' => 'Korrektur-Charaktere',
-  'adj_value' => 'Korrektur-Wert',
-  'adj_raid' => 'Korrektur-Raid',
-	'adj_reason' => 'Korrektur-Grund', 
+	'adj_date'			=> 'Korrektur-Datum',
+	'adj_reason_link'	=> 'Korrektur-Grund (verlinkt)', 
+	'adj_event'			=> 'Korrektur-Ereignis',
+	'adj_members'		=> 'Korrektur-Charaktere',
+	'adj_value'			=> 'Korrektur-Wert',
+	'adj_raid'			=> 'Korrektur-Raid',
+	'adj_reason'		=> 'Korrektur-Grund',
+	'adjedit'			=> 'Korrektur-Bearbeiten Button',
 );
 
 ?>

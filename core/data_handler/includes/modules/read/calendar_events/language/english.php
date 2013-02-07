@@ -21,17 +21,33 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'duration'			=> 'Duration',
-	'date'				=> 'Date',
-	'name'				=> 'Name',
-	'creator'			=> 'Creator',
-	'calendar'			=> 'Calendar',
-	'html_time_start'	=> 'Start',
-	'html_time_end'		=> 'End',
-	'raid_event'		=> 'Event',
-	'notes'				=> 'Note',
-	'edit'				=> '',
-	'detailslink'		=> '',
-	'html_weekday'		=> 'Weekday',
+	'duration'				=> 'Duration',
+	'date'					=> 'Date',
+	'name'					=> 'Name',
+	'creator'				=> 'Creator',
+	'calendar'				=> 'Calendar',
+	'html_time_start'		=> 'Start',
+	'html_time_end'			=> 'End',
+	'raid_event'			=> 'Event',
+	'notes'					=> 'Note',
+	'edit'					=> '',
+	'detailslink'			=> '',
+	'html_weekday'			=> 'Weekday',
+);
+
+$preset_lang = array(
+	'calevents_id'			=> 'Calendar events ID',
+	'calevents_date'		=> 'Calendar events date',
+	'calevents_weekday'		=> 'Calendar events weekday',
+	'calevents_duration'	=> 'Calendar events duration',
+	'calevents_name'		=> 'Calendar events name',
+	'calevents_creator'		=> 'Calendar events creator',
+	'calevents_calendar'	=> 'Calendar events calendar',
+	'calevents_edit'		=> 'Calendar events edit',
+	'calevents_start_time'	=> 'Calendar events start time',
+	'calevents_end_time'	=> 'Calendar events end time',
+	'calevents_raid_event'	=> 'Calendar events raid event',
+	'calevents_note'		=> 'Calendar events note',
+	'calevents_detailslink'	=> 'Calendar events detail link',
 );
 ?>

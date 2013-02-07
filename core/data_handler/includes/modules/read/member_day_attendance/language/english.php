@@ -21,8 +21,14 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-  'dattendance' => 'Days (%d days)',
-  'dlifetime' => 'Days (lifetime)',
+	'dattendance'		=> 'Days (%d days)',
+	'dlifetime'			=> 'Days (lifetime)',
 );
 
+$preset_lang = array(
+	'dattendance_30'	=> 'Daily attendance (30 days)',
+	'dattendance_60'	=> 'Daily attendance (60 days)',
+	'dattendance_90'	=> 'Daily attendance (90 days)',
+	'dattendance_lt'	=> 'Daily attendance (livetime)',
+);
 ?>

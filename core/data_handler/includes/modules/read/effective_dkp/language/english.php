@@ -24,4 +24,10 @@ $module_lang = array(
   'effective_dkp' => 'eDKP(%dd)',
 );
 
+$preset_lang = array(
+  'effective_dkp_30'	=> 'Effective-DKP (30)',
+  'effective_dkp_all'	=> 'Effective-DKP (all)',
+  'effective_dkp'		=> 'Effective-DKP',
+);
+
 ?>
