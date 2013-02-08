@@ -519,7 +519,7 @@ class viewcalraid extends page_generic {
 							$membertooltip[]	= $this->user->lang('raidevent_raid_changed').": ".$this->time->user_date($memberdata['timestamp_change'], true, false, true);
 						}
 
-						if($memberdata['random_value'] > 0){
+						if($this->config->get('calendar_raid_random') == 1 && $memberdata['random_value'] > 0){
 							$membertooltip[]	=  $this->user->lang('raidevent_raid_memtt_roll').': '.$memberdata['random_value'];
 						}
 
@@ -701,7 +701,7 @@ class viewcalraid extends page_generic {
 			'IS_CREATOR'			=> ($this->user->check_auth('u_cal_event_add', false) || $this->check_permission('creator')),
 			'IS_OPERATOR'			=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')),
 			'SHOW_GUESTS'			=> ($this->config->get('calendar_raid_guests') && ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader') || count($this->guests) > 0)) ? true : false,
-			'SHOW_RANDOMVALUE'		=> ($this->config->get('calendar_raid_random')) ? true : false,
+			'SHOW_RANDOMVALUE'		=> ($this->config->get('calendar_raid_random') == 1) ? true : false,
 			'IS_SIGNEDIN'			=> ($this->mystatus['member_id'] > 0 && $mysignedstatus != 4) ? true : false,
 			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
