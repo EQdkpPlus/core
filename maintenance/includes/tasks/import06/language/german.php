@@ -30,6 +30,7 @@ $lang['raids'] = 'Raids';
 $lang['items'] = 'Items';
 $lang['adjustments'] = 'Korrekturen';
 $lang['dkp_check'] = 'DKP Überprüfen';
+$lang['infopages'] = 'Infopages';
 $lang['plugins_portal'] = 'Plugins, Portalmodule';
 $lang['item_cache'] = 'item_cache';
 
@@ -96,6 +97,8 @@ $lang['member_with_diff'] = 'Einige Mitglieder haben abweichende DKP-Punkte, da 
 $lang['mem_diff_create_adj'] = 'Erstelle eine Korrektur, damit der Punktestand dem Alten entspricht.';
 $lang['mem_diff_ignore'] = 'Ignoriere die Punktedifferenz';
 $lang['mem_diff_adj_reason'] = 'Punktedifferenz aufgrund MultiDKP';
+
+$lang['which_infopages'] = 'Welche Info-Seiten sollen importiert werden? Bitte überprüfe die Sichtbarkeit nach Abschluss des Imports.';
 
 $lang['which_plugins'] = 'Welche Plugins sollen importiert werden? Plugins, die importiert werden sollen, müssen in diesem EQdkp Plus-System installiert sein/werden. Für alle installierten Plugins werden Daten importiert.';
 $lang['which_portals'] = 'Welche Portal-Module sollen importiert werden?';

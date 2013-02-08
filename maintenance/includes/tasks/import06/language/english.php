@@ -30,6 +30,7 @@ $lang['raids'] = 'Raids';
 $lang['items'] = 'Items';
 $lang['adjustments'] = 'Adjustments';
 $lang['dkp_check'] = 'Check DKP';
+$lang['infopages'] = 'Infopages';
 $lang['plugins_portal'] = 'Plugins, Portalmodules';
 $lang['item_cache'] = 'item_cache';
 
@@ -95,6 +96,8 @@ $lang['member_with_diff'] = 'Some members have a different amount of dkp, becaus
 $lang['mem_diff_create_adj'] = 'Create an adjustment, so the dkp will be the same as in 0.6';
 $lang['mem_diff_ignore'] = 'Ignore this difference';
 $lang['mem_diff_adj_reason'] = 'Difference because of Multidkp';
+
+$lang['which_infopages'] = 'Welche Info-Seiten sollen importiert werden? Please check the visibility after finishing the import.';
 
 $lang['which_plugins'] = 'Which of your old plugins shall be imported? You must install them to import the data.';
 $lang['which_portals'] = 'Which of your old portal-moduls shall be imported?';
