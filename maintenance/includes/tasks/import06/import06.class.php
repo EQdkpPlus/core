@@ -27,7 +27,7 @@ class import06 extends task {
 	}
 
 	public $author = 'Hoofy';
-	public $version = '1.0.0';
+	public $version = '1.0.1';
 	public $form_method = 'post';
 	public $name = 'Import 0.6';
 	public $type = 'import';
@@ -41,7 +41,7 @@ class import06 extends task {
 	public function __construct() {
 		parent::__construct();
 		//set step order
-		$this->step_order = array('first', 'users_auths', 'config_news_log', 'events', 'multidkp', 'members', 'raids', 'items', 'adjustments', 'dkp_check', 'plugins_portal');
+		$this->step_order = array('first', 'users_auths', 'config_news_log', 'events', 'multidkp', 'members', 'raids', 'items', 'adjustments', 'dkp_check', 'infopages', 'plugins_portal');
 		$this->use_steps = true;
 		$this->parse_only = false;
 	}
@@ -566,7 +566,7 @@ class import06 extends task {
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT event_name, event_id FROM ".$this->old[1]."events ORDER BY event_name ASC;");
 		$c = 0;
-		while ( $row = $this->old[0]->fetch_Record($result) ) {
+		while ( $row = $this->old[0]->fetch_record($result) ) {
 			$events[$c]['id'] = $row['event_id'];
 			$events[$c]['name'] = $row['event_name'];
 			$c++;
@@ -1391,6 +1391,75 @@ class import06 extends task {
 			if($insert) {
 				$this->new[0]->query($sql.implode(', ', $sqls).';');
 			}
+		}
+		return true;
+	}
+	
+	protected function infopages() {		
+		$this->current_step = 'infopages';
+		$output = '<table width="60%" cellpadding="1" cellspacing="1" align="center" class="task_table colorswitch">';
+		$output .= '<tr><td colspan="2" class="th_sub">'.$this->lang['which_infopages'].' '.$this->js_mark_boxes('{NUM}', 'ip_').'</td></tr>';
+		//build eventlist
+		$pages = array();
+		$this->connect2olddb();
+		$result = $this->old[0]->query("SELECT page_id, page_title FROM ".$this->old[1]."info_pages ORDER BY page_title ASC;");
+		$c = 0;
+		while ( $row = $this->old[0]->fetch_record($result) ) {
+			$pages[$c]['id'] = $row['page_id'];
+			$pages[$c]['title'] = $row['page_title'];
+			$c++;
+		}
+		foreach($pages as $page) {
+			$output .= "<tr><td><input type='checkbox' ame='page_id[]' value='".$page['id']."' /></td><td>".$page['title']."</td></tr>";
+		}
+
+		$output .= "<tr><th colspan='3' class='th_sub'><input type='submit' name='infopages' value='".$this->lang['submit']."' class='mainoption'/></th></tr></table>";
+		return $output;
+	}
+	
+	protected function parse_infopages() {
+		if(!$this->get('infopages')) return false;
+		$pages = array();
+		$page_ids = $this->get('page_id', 'int', true);
+		if(!empty($page_ids)) {
+			$this->connect2olddb();
+			$page_ids = implode(', ', $page_ids);
+			$sql = "SELECT page_id, page_title, page_content, page_menu_link, page_edit_user, page_edit_date FROM ".$this->old[1]."info_pages WHERE page_id IN (".$page_ids.");";
+			$result = $this->old[0]->query($sql);
+			$i = 0;
+			while ( $row = $this->old[0]->fetch_record($result) ) {
+				$pages[$i]['page_id'] = $row['page_id'];
+				$pages[$i]['page_title'] = $row['page_title'];
+				$pages[$i]['page_content'] = htmlentities($row['page_content'], ENT_QUOTES, "UTF-8");
+				$pages[$i]['page_visibility'] = serialize(array());
+				$pages[$i]['page_menu_link'] = $row['page_menu_link'];
+				
+				if(isset($this->step_data['replace_users'][$row['page_edit_user']])) {
+					$pages[$i]['page_edit_user'] = $this->step_data['replace_users'][$row['page_edit_user']];
+				} else {
+					$pages[$i]['page_edit_user'] = $this->user->data['user_id'];
+				}
+				$pages[$i]['page_edit_date'] = $row['page_edit_date'];
+				$pages[$i]['page_alias'] = '';
+				$pages[$i]['page_comments'] = 0;
+				$pages[$i]['page_voting'] = 0;
+				$pages[$i]['page_votes'] = 0;
+				$pages[$i]['page_ratingpoints'] = 0;
+				$pages[$i]['page_voters'] = '';
+				$pages[$i]['page_rating'] = 0;
+				$i++;
+			}
+			$this->old[0]->free_result();
+			
+			$this->new[0]->query("TRUNCATE ".$this->new[1]."pages;");
+			$fields = "`".implode('`, `', array_keys(current($pages)))."`";
+			$sql = "INSERT INTO ".$this->new[1]."pages (".$fields.") VALUES ";
+			$sqls = array();
+			foreach($pages as $page) {
+				$sqls[] = "('".implode("', '", $page)."')";
+			}
+			$this->new[0]->query($sql.implode(', ', $sqls).';');
+			unset($pages);
 		}
 		return true;
 	}
