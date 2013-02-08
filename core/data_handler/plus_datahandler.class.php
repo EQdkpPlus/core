@@ -216,8 +216,6 @@ if( !class_exists( "plus_datahandler")){
 
 			//init language
 			$this->rm($module_name)->init_lang( $module_path );
-			if( is_array( $this->rm($module_name)->preset_lang ) )
-				$this->preset_lang = array_merge( $this->preset_lang, $this->rm($module_name)->preset_lang );
 
 			unset( $hooks );
 			return true;
@@ -332,7 +330,10 @@ if( !class_exists( "plus_datahandler")){
 			} else {
 				$data = debug_backtrace();
 				$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ), 'sub_array: '.implode( ", ", $sub_arr ));
-				$this->pdl->log( 'pdh_error', $data[1]['file'], $data[1]['line'], 'Invalid *get* call', $extra);
+				for($i=0;$i>0;$i++) {
+					if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
+				}
+				$this->pdl->log( 'pdh_error', $data[$i]['file'], $data[$i]['line'], 'Invalid *get* call', $extra);
 				return null;
 			}
 		}
@@ -608,28 +609,24 @@ if( !class_exists( "plus_datahandler")){
 		);
 
 		private function init_preset_list( ) {
-			if($this->presets_loaded) return true;
 			//init module presets
-			foreach( $this->read_modules as $module_name => $initiliazed ) {
-				if( method_exists( $this->rm($module_name), 'gen_presets' ) ) {
-					$this->rm($module_name)->gen_presets( );
+			foreach($this->read_modules as $module_name => $init) {
+				
+				if( method_exists( $this->rm($module_name), 'init_presets' ) ) {
+					$this->rm($module_name)->init_presets( );
 				}
-
-				if( is_array( $this->rm($module_name)->presets ) ) {
-					//this is ugly as hell and will be rewritten.
+				if( !empty( $this->rm($module_name)->presets ) ) {
 					foreach( $this->rm($module_name)->presets as $presetname => $params ) {
-						$temp_arr[$presetname] = array(
-							$module_name,
-							$params[0],
-							$params[1],
-							$params[2],
-						);
+						$temp_arr[$presetname] = array($module_name, $params[0], $params[1], $params[2]);
 					}
 					if(isset($temp_arr) && is_array($temp_arr)) $this->preset_list = array_merge( $this->preset_list, $temp_arr );
 				}
+				if(!empty( $this->rm($module_name)->preset_lang ) )
+					$this->preset_lang = array_merge( $this->preset_lang, $this->rm($module_name)->preset_lang );
 			}
 
 			//get users custom presets
+			if($this->presets_loaded) return true;
 			$this->preset_list = array_merge( $this->preset_list, $this->get_user_presets( ));
 			$this->preset_lang = array_merge( $this->preset_lang, $this->get_user_preset_lang( ));
 			$this->presets_loaded = true;

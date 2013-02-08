@@ -97,6 +97,7 @@ if(!class_exists('pdh_r_event')){
 		}
 
 		public function get_icon($event_id, $withpath=false, $fallback=false, $no_root=false){
+			if(!isset($this->events[$event_id])) return '';
 			$root_path = ($no_root) ? '{ROOT_PATH}' : $this->root_path;
 			$filepath = "games/".$this->config->get('default_game')."/events/".$this->events[$event_id]['icon'];
 			if(is_file($this->root_path.$filepath)){
