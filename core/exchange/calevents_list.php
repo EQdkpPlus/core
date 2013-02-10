@@ -58,7 +58,7 @@ if (!class_exists('exchange_calevents_list')){
 						// Build the guest array
 						$guests	= array();
 						if(registry::register('config')->get('calendar_raid_guests') == 1){
-							$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
+							$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($intRaidID));
 							if(is_array($guestarray)){
 								foreach($guestarray as $guest_row){
 									$guests[] = $guest_row['name'];
