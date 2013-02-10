@@ -111,6 +111,8 @@ class Manage_Users extends page_generic {
 			}
 			
 			$this->pdh->put('user', 'update_user_settings', array($user_id, $this->get_settingsdata()));
+			
+			$this->pdh->put('user', 'activate', array($user_id, $this->in->get('user_active', 0)));
 		} else {
 			$password = ($this->in->get('password') == "") ? random_string() : $this->in->get('password');
 			$new_salt = $this->user->generate_salt();
@@ -155,6 +157,7 @@ class Manage_Users extends page_generic {
 			$query_ar['plugin_settings']	= serialize($plugin_settings);
 
 			$user_id = $this->pdh->put('user', 'insert_user', array($query_ar, true, false));
+			
 		}
 
 		// Permissions

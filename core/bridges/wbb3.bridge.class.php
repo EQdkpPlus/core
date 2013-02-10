@@ -170,6 +170,17 @@ class wbb3_bridge extends bridge_generic {
 				$config[$value['optionName']] = $value['optionValue'];
 			}
 		}
+		
+		if($arrConfig['cookie_domain'] == '') {
+			$arrDomains = explode('.', $this->env->server_name);
+			$arrDomainsReversed = array_reverse($arrDomains);
+			if (count($arrDomainsReversed) > 1){
+				$arrConfig['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+			} else {
+				$arrConfig['cookie_domain'] = $this->env->server_name;
+			}
+		}
+		
 		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $arrConfig['cookie_domain'], $this->env->ssl);
 	}
 	
