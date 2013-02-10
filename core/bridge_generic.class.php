@@ -121,10 +121,12 @@ class bridge_generic extends gen_class {
 
 		//Geb jetzt das Ergebnis zurück
 		if ($boolLoginResult){
-			//User-Sync
+			//Userdata-Sync
 			if ($this->functions['sync'] != '' && method_exists($this, $this->functions['sync']) && $this->config->get('cmsbridge_disable_sync') != 1){
 				$this->sync($user_id, $arrUserdata);
 			}
+			//Usergroup-Sync
+			$this->sync_usergroups((int)$arrUserdata['id'], $user_id);
 			
 			return array('status'	=> 1,
 						'user_id'	=> $user_id,
@@ -255,15 +257,61 @@ class bridge_generic extends gen_class {
 		return $arrResult;
 	}
 	
-	//Checks if the User is in the groups
-	public function check_user_group($intUserID){
-		if (!$this->db) return false;
+	public function sync_usergroups($intCMSUserID, $intUserID){
+		$arrGroupsToSync = explode(',', $this->config->get('cmsbridge_sync_groups'));
+		if (!array($arrGroupsToSync) || count($arrGroupsToSync) < 1) return false;
 		
-		$groups = explode(',', $this->config->get('cmsbridge_groups'));
+		$arrCMSToEQdkpID = array();
+		
+		//Get GroupIDs of CMS User
+		$arrUserGroups = $this->get_usergroups_for_user($intCMSUserID);
+		
+		//Get all EQdkp Groups
+		$arrEQdkpGroups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
+		
+		//Get all CMS Groups
+		$arrCMSGroups = $this->get_user_groups();
+		foreach($arrCMSGroups as $groupID => $groupName){
+			//If group should be synced, and it does not exist, create it
+			if (in_array($groupID, $arrGroupsToSync)){
+				if (!in_array($groupName, $arrEQdkpGroups)){
+					//Create the Group
+					$intEQdkpGroupID = max($this->pdh->get('user_groups', 'id_list'))+1;
+					$this->pdh->put('user_groups', 'add_grp', array($intEQdkpGroupID, $groupName, 'Synced by CMS-Bridge', 0, 1));
+					$arrCMSToEQdkpID[$groupID] = $intEQdkpGroupID;
+					$this->pdh->process_hook_queue();
+				} else {
+					//Search for the name
+					$key = array_search($groupName, $arrEQdkpGroups);
+					if ($key !== false) $arrCMSToEQdkpID[$groupID] = $key;
+				}
+			}
+		}	
+		
+		//Get EQdkp Group Memberships
+		$arrEQdkpMemberships = $this->pdh->get('user_groups_users', 'memberships', array($intUserID));
+		
+		foreach($arrGroupsToSync as $groupID){
+			$intEQdkpGroupID = $arrCMSToEQdkpID[$groupID];
+			if (in_array($groupID, $arrUserGroups) && !isset($arrEQdkpMemberships[$intEQdkpGroupID])){
+				//add to group
+				$this->pdh->put('user_groups_users', 'add_user_to_group', array($intUserID, $intEQdkpGroupID));
+			} elseif (!in_array($groupID, $arrUserGroups) && isset($arrEQdkpMemberships[$intEQdkpGroupID])){
+				//remove from group
+				$this->pdh->put('user_groups_users', 'delete_user_from_group', array($intUserID, $intEQdkpGroupID));
+			}
+		}
+		
+	}
+	
+	//Returns array with the Usergroup-IDs the CMS-User is member of
+	public function get_usergroups_for_user($intUserID){
+		if (!$this->db) return false;
+		$arrReturn = array();
 		
 		if ($this->check_function('user_group')){
 			$method_name = $this->data['user_group']['FUNCTION'];
-			return $this->$method_name($intUserID, $groups);
+			return $this->$method_name($intUserID);
 		} else {
 
 			if ($this->check_query('user_group')){
@@ -276,11 +324,36 @@ class bridge_generic extends gen_class {
 			$result = $this->db->fetch_array($strQuery);
 			if ($result && is_array($result)){
 				foreach ($result as $row){
-					if (is_array($groups) && in_array($row['group_id'], $groups)){
+					$arrReturn[] = $row['group_id'];
+				}
+			}
+		}
+		
+		return $arrReturn;
+	}
+	
+	
+	
+	//Checks if the User is in the groups
+	public function check_user_group($intUserID){
+		if (!$this->db) return false;
+		
+		$arrAllowedGroups = explode(',', $this->config->get('cmsbridge_groups'));
+		
+		if ($this->check_function('check_user_group')){
+			$method_name = $this->data['check_user_group']['FUNCTION'];
+			return $this->$method_name($intUserID, $arrAllowedGroups);
+		} else {
+
+			$arrGroups = $this->get_usergroups_for_user($intUserID);
+			if (is_array($arrGroups)){
+				foreach($arrGroups as $groupID){
+					if (is_array($arrAllowedGroups) && in_array($groupID, $arrAllowedGroups)){
 						return true;
 					}
 				}
 			}
+		
 		}
 		
 		return false;

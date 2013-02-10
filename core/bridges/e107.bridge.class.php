@@ -77,18 +77,16 @@ class e107_bridge extends bridge_generic {
 		return true;
 	}
 	
-	public function e107_get_user_groups($intUserID, $arrGroups){
+	public function e107_get_user_groups($intUserID){
 		$query = $this->db->query("SELECT user_class,user_admin FROM ".$this->prefix."user WHERE user_id='".$this->db->escape($intUserID)."'");
 		$result = $this->db->fetch_row($query);
-		if ((int)$result['user_admin'] == 1) return true;
+
 		$arrAditionalGroups = explode(',', $result['user_class']);
 		if (is_array($arrAditionalGroups)){
-			foreach ($arrAditionalGroups as $group){
-				if (in_array((int)$group, $arrGroups)) return true;
-			}
+			return $arrAditionalGroups;
 		}
 		
-		return false;
+		return array();
 	}
 	
 }

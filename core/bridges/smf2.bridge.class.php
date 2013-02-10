@@ -89,18 +89,20 @@ class smf2_bridge extends bridge_generic {
 		return false;
 	}
 	
-	public function smf2_get_user_groups($intUserID, $arrGroups){
+	public function smf2_get_user_groups($intUserID){
 		$query = $this->db->query("SELECT id_group, additional_groups FROM ".$this->prefix."members WHERE id_member='".$this->db->escape($intUserID)."'");
 		$result = $this->db->fetch_row($query);
-		if (in_array((int)$result['id_group'], $arrGroups)) return true;
+		
+		$arrReturn[] = (int)$result['id_group'];
+		
 		$arrAditionalGroups = explode(',', $result['additional_groups']);
 		if (is_array($arrAditionalGroups)){
 			foreach ($arrAditionalGroups as $group){
-				if (in_array((int)$group, $arrGroups)) return true;
+				$arrReturn[] = (int)$group;
 			}
 		}
 		
-		return false;
+		return $arrReturn;
 	}
 	
 	public function smf2_sync($arrUserdata){

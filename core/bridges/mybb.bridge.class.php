@@ -36,10 +36,7 @@ class mybb_bridge extends bridge_generic {
 			'name'	=> 'title',
 			'QUERY'	=> '',
 		),
-		'user_group' => array( //Zuordnung User zu Gruppe
-			'table'	=> 'user_to_groups',
-			'group'	=> 'groupID',
-			'user'	=> 'userID',
+		'user_group' => array( //Zuordnung User zu Gruppe,
 			'QUERY'	=> '',
 			'FUNCTION'	=> 'mybb_get_user_groups',
 		),
@@ -95,19 +92,20 @@ class mybb_bridge extends bridge_generic {
 		return false;
 	}
 
-	public function mybb_get_user_groups($intUserID, $arrGroups){
+	public function mybb_get_user_groups($intUserID){
 		$query = $this->db->query("SELECT usergroup, additionalgroups FROM ".$this->prefix."users WHERE uid='".$this->db->escape($intUserID)."'");
 		$result = $this->db->fetch_row($query);
+		
+		$arrReturn[] = (int)$result['usergroup'];
 
-		if (in_array((int)$result['usergroup'], $arrGroups)) return true;
 		$arrAditionalGroups = explode(',', $result['additionalgroups']);
 		if (is_array($arrAditionalGroups)){
 			foreach ($arrAditionalGroups as $group){
-				if (in_array((int)$group, $arrGroups)) return true;
+				$arrReturn[] = (int)$group;
 			}
 		}
 
-		return false;
+		return $arrReturn;
 	}
 
 	private function salt_password($password, $salt) {

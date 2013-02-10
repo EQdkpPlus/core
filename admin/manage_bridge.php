@@ -169,6 +169,10 @@ class Manage_Bridge extends page_generic {
 		if (is_array($this->in->getArray('usergroups', 'int')) && count($this->in->getArray('usergroups', 'int')) > 0){
 			$groups = implode(',', $this->in->getArray('usergroups', 'int'));
 			$this->config->set('cmsbridge_groups', $groups);
+			
+			//Sync Usergroups
+			$groups = implode(',', $this->in->getArray('sync_usergroups', 'int'));
+			$this->config->set('cmsbridge_sync_groups', $groups);
 
 			//Forum Integration
 			$this->config->set('cmsbridge_url', $this->in->get('cms_url'));
@@ -284,7 +288,7 @@ class Manage_Bridge extends page_generic {
 		ksort($arrBridges);
 
 		$this->tpl->assign_vars(array(
-			'MS_USERGROUPS'		=> $this->jquery->MultiSelect('usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_groups')), array('height' => 150, 'width' => 300)),
+			'MS_USERGROUPS'		=> $this->jquery->MultiSelect('usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_groups')), array('height' => 170, 'width' => 300)),
 			'S_BRIDGE_ACTIVE'	=> ($this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_BRIDGE_SETTINGS'	=> (is_array($settings) && count($settings) > 0) ? true : false,
 			'DD_SYSTEMS'		=> $this->html->DropDown('cms_type',$arrBridges, $this->config->get('cmsbridge_type'), '', 'onchange="onchange_type()"'),
@@ -305,6 +309,7 @@ class Manage_Bridge extends page_generic {
 			'CMS_REG_URL'		=> $this->config->get('cmsbridge_reg_url'),
 			'DD_REG_EMBEDDED_OPTIONS' => $this->html->DropDown('cms_reg_embedded', $a_linkMode , $this->config->get('cmsbridge_reg_embedded')),
 			'S_ONLYCMSUSERLOGIN'=> ((int)$this->config->get('cmsbridge_onlycmsuserlogin')) ? true : false,
+			'MS_SYNC_USERGROUPS'=> $this->jquery->MultiSelect('sync_usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_sync_groups')), array('height' => 170, 'width' => 300)),
 		));
 
 		$this->core->set_vars(array(

@@ -67,18 +67,20 @@ class vbulletin_bridge extends bridge_generic {
 		return false;
 	}
 	
-	public function vb_get_user_groups($intUserID, $arrGroups){
+	public function vb_get_user_groups($intUserID){
 		$query = $this->db->query("SELECT usergroupid, membergroupids FROM ".$this->prefix."user WHERE userid='".$this->db->escape($intUserID)."'");
 		$result = $this->db->fetch_row($query);
-		if (in_array((int)$result['usergroupid'], $arrGroups)) return true;
+		
+		$arrReturn[] = (int)$result['usergroupid'];
+		
 		$arrAditionalGroups = explode(',', $result['membergroupids']);
 		if (is_array($arrAditionalGroups)){
 			foreach ($arrAditionalGroups as $group){
-				if (in_array((int)$group, $arrGroups)) return true;
+				$arrReturn[] = (int)$group;
 			}
 		}
 		
-		return false;
+		return $arrReturn;
 	}
 }
 ?>

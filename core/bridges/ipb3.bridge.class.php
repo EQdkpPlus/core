@@ -67,18 +67,18 @@ class ipb3_bridge extends bridge_generic {
 		return ($password === $hash) ? true : false;
 	}
 	
-	public function ipb3_get_user_groups($intUserID, $arrGroups){
+	public function ipb3_get_user_groups($intUserID){
 		$query = $this->db->query("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id='".$this->db->escape($intUserID)."'");
 		$result = $this->db->fetch_row($query);
-		if (in_array((int)$result['member_group_id'], $arrGroups)) return true;
+		$arrReturn[] = (int)$result['member_group_id'];
 		$arrAditionalGroups = explode(',', $result['mgroup_others']);
 		if (is_array($arrAditionalGroups)){
 			foreach ($arrAditionalGroups as $group){
-				if (($group != '') && in_array((int)$group, $arrGroups)) return true;
+				if ($group != '') $arrReturn[] = (int)$group;
 			}
 		}
 		
-		return false;
+		return $arrReturn;
 	}
 	
 	public function ipb3_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
