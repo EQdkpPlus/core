@@ -82,6 +82,14 @@ if(!class_exists('pdh_w_rank')) {
 			}
 			return false;
 		}
+		
+		public function truncate(){
+			if($this->db->query("TRUNCATE __member_ranks;")) {
+				$this->pdh->enqueue_hook('rank_update');
+				return true;
+			}
+			return false;
+		}
 	}
 }
 ?>
