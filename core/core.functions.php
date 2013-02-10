@@ -691,7 +691,7 @@ function infotooltip_js() {
 							} else {
 								var bla = $.get('".registry::get_const('root_path')."infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
 								bla.success(function(data) {
-									cached_itts['t_'+mytitle] = data;
+									cached_itts['t_'+mytitle] = $.trim(data);
 								});
 								return '<img src=\"".registry::get_const('root_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
 							}
@@ -760,7 +760,7 @@ function chartooltip_js() {
 							} else {
 								var bla = $.get('".registry::get_const('root_path')."exchange.php?out=chartooltip&charid='+$(this).attr('title'), response);
 								bla.success(function(data) {
-									cached_charTT['t_'+mytitle] = data;
+									cached_charTT['t_'+mytitle] = $.trim(data);
 								});
 								return '<img src=\"".registry::get_const('root_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
 							}
