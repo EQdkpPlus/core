@@ -237,7 +237,7 @@
 
 	function deleteEvent(deleteid){
 		$.get("calendar.php{SID}&checkrepeatable="+deleteid, function(data){
-			if(data == 'true'){
+			if($.trim(data) == 'true'){
 				var delclones_checked = '';
 				$("#confirm_caleventdelete_all").dialog({
 					resizable: false,

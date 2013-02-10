@@ -93,7 +93,7 @@ class Manage_Live_Update extends page_generic {
 					set_progress_bar_value(".((($id-1) < 0) ? 0 : $id-1).", '".$value['label']."...');
 
 					$.get('manage_live_update.php".$this->SID."&step=".$id."&link_hash=".$this->CSRFGetToken('step')."', function(data) {
-					  if (data == 'true'){
+					  if ($.trim(data) == 'true'){
 						//alert('Step".$id.' '.$value['label']." beendet');
 						".(($id == $last_step) ? "set_progress_bar_value(".$last_step.", '".$this->user->lang('liveupdate_step_end')."'); window.location='manage_live_update.php".$this->SID."';" : ((isset($this->steps[$id+1]['show']) && $this->steps[$id+1]['show'] == true) ? 'window.location.href="manage_live_update.php'.$this->SID.'&show='.($id+1).'"' : 'lu_step'.($id+1).'();'))."
 					  }else {
