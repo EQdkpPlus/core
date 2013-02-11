@@ -1,13 +1,12 @@
 <script type="text/javascript">
 //<![CDATA[
 var totalSteps = 4;
+
 $(function() {
 	$("#nl_progressbar").progressbar({
 		value: 0
 	});
 });
-
-
 
 function set_progress_bar_value(recentNumber, labeltext){
 	percent = Math.round((recentNumber / totalSteps) * 100);
@@ -128,7 +127,6 @@ function hide_update_warning(status){
 		<li><a href='#fragment-3'><span>{L_CATEGORY_3}</span></a>{BADGE_3}</li>
 		<li><a href='#fragment-7'><span>{L_CATEGORY_7}</span></a>{BADGE_7}</li>
 		<li><a href='#fragment-11'><span>{L_CATEGORY_11}</span></a>{BADGE_11}</li>
-		<li><a href='#fragment-upload'><span>{L_pi_manualupload}</span></a></li>
 	</ul>
 
 	<div id="fragment-1">
@@ -557,21 +555,4 @@ function hide_update_warning(status){
 		  </table>
 	</div>
 	
-	<div id="fragment-upload">
-		<div class="roundbox bluebox">
-			<div class="icon_info">{L_pi_manualupload_info}</div>
-		</div>
-		<br />
-		<form enctype="multipart/form-data" action="{ACTION}" method="post">
-			<fieldset class="settings">
-				<legend>{L_pi_manualupload}</legend>
-				<dl>
-					<dt><label>{L_pi_choose_file}</label><br /><span></span></dt>
-					<dd><input type="file" name="extension" class="input" style="width:90%" /></dd>
-				</dl>
-			</fieldset>
-			<input type="submit" value="{L_pi_upload_button}" name="upload" class="mainoption bi_ok" />
-			{CSRF_TOKEN}
-		  </form>
-	</div>
 </div>
