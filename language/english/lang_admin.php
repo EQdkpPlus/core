@@ -1320,6 +1320,7 @@ $lang = array(
 "cmsbridge_disable_sso_help" => "The user is not automatically logged in in the CMS/Forum, when he logs into EQdkp Plus.",
 "cmsbridge_disable_sync" => "Deactivate synchronisation of userdata",
 "cmsbridge_disable_sync_help" => "Prohibits the synchronisation of profile fields from CMS/Forum to EQdkp Plus.",
+"cmsbridge_sso_cookiename"	=> "Cookie-name of the CMS/Forum",
 "lm_title" => "Layout Management",
 "lm_select_layout" => "Layout selection:",
 "lm_column_preset" => "Column",

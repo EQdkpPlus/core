@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 class smf2_bridge extends bridge_generic {
 	
 	public static function __shortcuts() {
-		$shortcuts = array('time');
+		$shortcuts = array('time', 'config');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 	
@@ -57,9 +57,9 @@ class smf2_bridge extends bridge_generic {
 		'login'	=> array(
 			'callbefore'	=> '',
 			'function' 		=> '',
-			'callafter'		=> '',
+			'callafter'		=> 'smf2_callafter',
 		),
-		'logout' 	=> '',
+		'logout' 	=> 'smf2_logout',
 		'autologin' => '',	
 		'sync'		=> 'smf2_sync',
 	);
@@ -75,9 +75,17 @@ class smf2_bridge extends bridge_generic {
 	);
 	
 	public $settings = array(
+		'cmsbridge_disable_sso'	=> array(
+			'fieldtype'	=> 'checkbox',
+			'name'		=> 'cmsbridge_disable_sso',
+		),
 		'cmsbridge_disable_sync' => array(
 			'fieldtype'	=> 'checkbox',
 			'name'			=> 'cmsbridge_disable_sync',
+		),
+		'cmsbridge_sso_cookiename'	=> array(
+			'fieldtype'	=> 'text',
+			'name'		=> 'cmsbridge_sso_cookiename',
 		),
 	);
 	
@@ -101,6 +109,55 @@ class smf2_bridge extends bridge_generic {
 		}
 		
 		return false;
+	}
+	
+	public function smf2_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+		//Is user active?
+		if ($boolLoginResult){
+			//Single Sign On
+			if ($this->config->get('cmsbridge_disable_sso') != '1'){
+				$this->smf2_sso($arrUserdata, $strPassword, $boolAutoLogin);
+			}
+		}
+		return true;
+	}
+	
+	public function smf2_sso($arrUserdata, $strPassword, $boolAutoLogin = false){
+		if (!strlen($this->config->get('cmsbridge_sso_cookiename')) || !strlen($this->config->get('cmsbridge_url'))) return false;
+		
+		$cookie_length = 31536000;
+		$cookie_state = 2;
+		$password = sha1($arrUserdata['passwd'].$arrUserdata['password_salt']);
+		$data = serialize(array($arrUserdata['id'], $password, time() + $cookie_length, $cookie_state));
+		
+		$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
+		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
+		
+		$arrDomains = explode('.', $strBoardURL);
+		$arrDomainsReversed = array_reverse($arrDomains);
+		if (count($arrDomainsReversed) > 1){
+			$cookieDomain = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+		} else {
+			$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
+		}
+		
+		$res = setcookie($this->config->get('cmsbridge_sso_cookiename'), $data, time() + $cookie_length, $strBoardPath, $cookieDomain, $this->env->ssl);
+	
+		return true;
+	}
+	
+	public function smf2_logout() {
+		$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
+		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
+		$arrDomains = explode('.', $strBoardURL);
+		$arrDomainsReversed = array_reverse($arrDomains);
+		if (count($arrDomainsReversed) > 1){
+			$cookieDomain = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+		} else {
+			$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
+		}
+		
+		setcookie($this->config->get('cmsbridge_sso_cookiename'), '', 0, $strBoardPath, $cookieDomain, $this->env->ssl);
 	}
 	
 	public function smf2_sync($arrUserdata){
