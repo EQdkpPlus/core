@@ -120,7 +120,7 @@ class wbb3_bridge extends bridge_generic {
 			//PW is true, logg the user into our Forum
 			$arrSet = array(
 				'sessionID'					=> $strSessionID,
-				'packageID'					=> $packageId,
+				'packageID'					=> $packageId['packageID'],
 				'userID'					=> (int) $user_id,
 				'ipAddress'					=> $this->env->ip,
 				'userAgent'					=> $this->env->useragent,
@@ -136,6 +136,7 @@ class wbb3_bridge extends bridge_generic {
 			$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
 			if (is_array($result)){
 				foreach ($result as $value){
+					if (isset($config[$value['optionName']]) && intval($packageId['packageID']) != intval($value['packageID'])) continue;
 					$config[$value['optionName']] = $value['optionValue'];
 				}
 			}
@@ -167,6 +168,7 @@ class wbb3_bridge extends bridge_generic {
 		$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
 		if (is_array($result)){
 			foreach ($result as $value){
+				if (isset($config[$value['optionName']]) && intval($packageId['packageID']) != intval($value['packageID'])) continue;
 				$config[$value['optionName']] = $value['optionValue'];
 			}
 		}
