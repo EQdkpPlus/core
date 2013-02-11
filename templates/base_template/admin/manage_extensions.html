@@ -1,6 +1,14 @@
 <script type="text/javascript">
 //<![CDATA[
 var totalSteps = 4;
+$(function() {
+	$("#nl_progressbar").progressbar({
+		value: 0
+	});
+});
+
+
+
 function set_progress_bar_value(recentNumber, labeltext){
 	percent = Math.round((recentNumber / totalSteps) * 100);
 	$("#nl_progressbar").progressbar("destroy");
@@ -100,6 +108,7 @@ function hide_update_warning(status){
 	var hide = (status) ? 1 : 0;
 	$.get('manage_extensions.php{SID}&hide_update_warning=true&hide='+hide+'&link_hash={CSRF_UPDATEWARNING_TOKEN}');
 }
+
 //]]>
 </script>
 
@@ -107,7 +116,7 @@ function hide_update_warning(status){
 		<div class="icon_false"><span id="lu_error_label"></span></div>
 </div>
 
-<div id="nl_progressbar" style="display:none;">
+<div id="nl_progressbar" style="display:none; margin-bottom: 20px;">
 	<span class="nl_progressbar_label"><img src="{EQDKP_IMAGE_PATH}global/loading.gif" id="lu_loading_img" alt="Loading..." /> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 
