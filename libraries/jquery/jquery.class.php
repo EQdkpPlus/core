@@ -346,8 +346,8 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js('$("#'.$id.'").click(function(){
 					var checked_status = this.checked;
 					$("input[name=\''.$name.'\']").each(function(){
-						if($(this).val() != \''.$exid.'\'){
-							this.checked = checked_status;
+						if($(this).val() != \''.$exid.'\'){				
+							$(this).prop(\'checked\', checked_status).trigger(\'change\');
 						}
 					});
 				});', 'docready');
@@ -355,7 +355,7 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js('$("#'.$id.'").click(function(){
 					var checked_status = this.checked;
 					$("input[name=\''.$name.'\']").each(function(){
-						this.checked = checked_status;
+						$(this).prop(\'checked\', checked_status).trigger(\'change\');
 					});
 				});', 'docready');
 			}
@@ -478,10 +478,10 @@ if (!class_exists("jquery")) {
 				if($value['perm']){
 					$dmimg = ($value['img']) ? '<img src="'.$this->root_path.$imagepath.'/'.$value['img'].'" alt="" />' : '';
 					switch($value['type']){
-						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a></li>';
+						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 						break;
 						
-						default: $dmmenu .= '<li><a href="'.$value['link'].'">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a></li>';
+						default: $dmmenu .= '<li><a href="'.$value['link'].'">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 					}
 					
 				}

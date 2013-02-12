@@ -150,14 +150,39 @@ class Manage_Members extends page_generic {
 			});
 		", 'docready');
 		
+		$arrMenuItems = array(
+			0 => array(
+				'name'	=> $this->user->lang('delete'),
+				'type'	=> 'button', //link, button, javascript
+				'img'	=> 'images/admin/manage_reset.png',
+				'perm'	=> true,
+				'link'	=> '#del_members',
+			),
+			1 => array(
+				'name'	=> $this->user->lang('mass_stat_change'),
+				'type'	=> 'button', //link, button, javascript
+				'img'	=> 'images/global/update.png',
+				'perm'	=> true,
+				'link'	=> '#member_statchange',
+			),
+			2 => array(
+				'name'	=> $this->user->lang('mass_rank_change'),
+				'type'	=> 'button', //link, button, javascript
+				'img'	=> 'images/global/update.png',
+				'perm'	=> true,
+				'link'	=> '#remove_grpleader',
+				'append' => $this->html->DropDown('rank', $ranks, ''),
+			),
+		
+		);
 		
 		$this->tpl->assign_vars(array(
 			'SID'				=> $this->SID,
 			'S_RACE'			=> $this->game->type_exists('races'),
 			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
-			'RANK_SEL'			=> $this->html->DropDown('rank', $ranks, ''),
 			'PAGINATION'		=> generate_pagination('manage_members.php'.$sort_suffix, $character_count, $this->user->data['user_climit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), '', $this->user->lang('selected_chars').'...', ''),
 		));
 
 		$this->core->set_vars(array(

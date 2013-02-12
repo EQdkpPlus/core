@@ -1712,13 +1712,9 @@ a.attendee_Link:hover{
 	background: none !important;
 }
 
-.sf-btn-ddm li {
-	padding: 0;
-	margin: 0;
-}
-
-.sf-btn-ddm {
-	padding: 4px 5px 4px 5px !important;
+.sf-btn-ddm li, .sf-btn-ddm li ul {
+	padding: 0 !important;
+	margin: 0 !important;
 }
 
 .sf-menu.sf-btn-ddm, .sf-menu.sf-btn-ddm ul
@@ -1737,10 +1733,13 @@ a.attendee_Link:hover{
 	color: #606060;
 	border: solid 1px #b7b7b7;
 	background-color: #efefef !important;
-	padding:0;
 	text-align:left;
+	padding: 4px 5px 4px 5px;
 }
 
+.sf-menu.sf-btn-ddm li,.sf-menu.sf-btn-ddm li:hover  {
+	padding: 4px 0px 4px 0px !important;
+}
 .sf-menu.sf-btn-ddm:hover, .sf-menu.sf-btn-ddm ul > li:hover
 {
 	background-color: #ffce81 !important;
@@ -1754,6 +1753,7 @@ a.attendee_Link:hover{
 	margin: 0;
 	padding: 4px 25px 4px 5px !important;
 	color: #606060;
+	display: inline;
 }
 
 .sf-menu.sf-btn-ddm ul > li a {
@@ -1763,6 +1763,11 @@ a.attendee_Link:hover{
 .sf-menu.sf-btn-ddm li.sfHover ul{
 	top: 24px;
 	left: -4px;
+}
+
+.sf-btn-ddm .sf-sub-indicator {
+	top: 5px;
+	background: url(images/arrows_dark.png) no-repeat scroll -10px -100px transparent;
 }
 
 /* general: game specific */

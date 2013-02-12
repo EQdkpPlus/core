@@ -1716,6 +1716,32 @@ a.attendee_Link:hover{
 	top: 5px;
 }
 
+.sf-menu.sf-btn-ddm a, .sf-menu.sf-btn-ddm a:hover {
+	margin: 0;
+	padding: 3px 25px 3px 5px !important;
+	color: #fff !important;
+}
+
+.sf-menu.sf-btn-ddm ul > li a {
+	line-height: 20px;
+}
+
+.sf-menu.sf-btn-ddm li.sfHover ul{
+	top: 20px;
+	left: -5px;
+}
+
+/* Button Drodown-Menu */
+.sf-btn-ddm li, .sf-btn-ddm li:hover, .sf-btn-ddm li:active, .sf-menu.sf-btn-ddm  li.sfHover,
+.sf-btn-ddm a:focus, .sf-menu.sf-btn-ddm  a:hover, .sf-menu.sf-btn-ddm  a:active {
+	background: none !important;
+}
+
+.sf-btn-ddm li, .sf-btn-ddm li ul {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
 .sf-menu.sf-btn-ddm, .sf-menu.sf-btn-ddm ul
 {
 	outline: none;
@@ -1738,6 +1764,9 @@ a.attendee_Link:hover{
 	margin-right: auto;
 }
 
+.sf-menu.sf-btn-ddm li,.sf-menu.sf-btn-ddm li:hover  {
+	padding: 4px 0px 4px 0px !important;
+}
 .sf-menu.sf-btn-ddm:hover, .sf-menu.sf-btn-ddm ul > li:hover
 {
 	text-decoration: none;
@@ -1746,10 +1775,12 @@ a.attendee_Link:hover{
 	background-color: #ffce81 !important; /* Old browsers */
 }
 
-.sf-menu.sf-btn-ddm a, .sf-menu.sf-btn-ddm a:hover {
+
+.sf-menu.sf-btn-ddm a {
 	margin: 0;
-	padding: 3px 25px 3px 5px !important;
-	color: #fff !important;
+	padding: 4px 25px 4px 5px !important;
+	color: #fff;
+	display: inline;
 }
 
 .sf-menu.sf-btn-ddm ul > li a {
@@ -1757,9 +1788,15 @@ a.attendee_Link:hover{
 }
 
 .sf-menu.sf-btn-ddm li.sfHover ul{
-	top: 20px;
-	left: -5px;
+	top: 24px;
+	left: -4px;
 }
+
+.sf-btn-ddm .sf-sub-indicator {
+	top: 5px;
+	background: url(images/arrows_dark.png) no-repeat scroll -10px -100px transparent;
+}
+
 /* general: game specific */
 .resists {
 	width: 27px;

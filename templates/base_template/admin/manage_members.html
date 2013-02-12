@@ -6,11 +6,11 @@
 	{MEMBER_LIST}
 	<tr>
 		<th colspan="{HPTT_COLUMN_COUNT}">
-			<input type="button" name="mdel" value="{L_delete_selected_members}" class="mainoption bi_delete" onclick="delete_warning();" />
+			{BUTTON_MENU}
+			<input type="button" name="mdel" value="{L_delete_selected_members}" class="mainoption bi_delete" onclick="delete_warning();" id="del_members" style="display:none;"/>
 			<input type="hidden" name="mdel" value="1" disabled="disabled" id="mass_del_submit" />
-			<input type="submit" name="mstatus" value="{L_mass_stat_change}" class="mainoption" />
-			<input type="submit" name="rankc" value="{L_mass_rank_change}" class="mainoption" />
-			{RANK_SEL}
+			<input type="submit" name="mstatus" value="{L_mass_stat_change}" class="mainoption" id="member_statchange" style="display:none;"/>
+			<input type="submit" name="rankc" value="{L_mass_rank_change}" class="mainoption" style="display:none;" />
 		</th>
 	</tr>
 	<tr class="pagination_row">
