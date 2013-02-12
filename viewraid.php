@@ -163,14 +163,18 @@ class viewraid extends page_generic {
 				));
 			}
 
-			$chartoptions['border'] = '0.0';
-			$chartoptions['background'] = 'transparent';
+			$chartoptions	= array(
+				'border'		=> '0.0',
+				'piemargin'		=> 2,
+				'datalabels'	=> true,
+				'legend'		=> true,
+				'background'	=> 'transparent'
+			);
 			$chartoptionsLootDistri = $chartoptions;		
 			if ($this->game->get_class_color(1) != ''){
-				$chartoptions['color_array'] = $chartcolors;
-				$chartoptionsLootDistri['color_array'] = $chartcolorsLootdisti;
+				$chartoptions['color_array']			= $chartcolors;
+				$chartoptionsLootDistri['color_array']	= $chartcolorsLootdisti;
 			}
-			
 			unset($eq_classes);
 
 			// Comment System
@@ -212,8 +216,8 @@ class viewraid extends page_generic {
 				'RAID_VALUE'			=> $this->pdh->geth($vpre[0], $vpre[1], $vpre[2]),//runden($this->pdh->get('raid', 'value', array($raid_id))),
 				'ATTENDEES_FOOTCOUNT'	=> sprintf($this->user->lang('viewraid_attendees_footcount'), sizeof($attendees)),
 				'ITEM_FOOTCOUNT'		=> sprintf($this->user->lang('viewraid_drops_footcount'), sizeof($items)),
-				'CLASS_PERCENT_CHART'	=> $this->jquery->PieChart('class_dist', $chartarray, '', $chartoptions, 2, true, true),
-				'LOOT_PERCENT_CHART'	=> (count($loot_dist) > 0) ? $this->jquery->PieChart('loot_dist', $loot_dist, '', $chartoptionsLootDistri, 2) : '',
+				'CLASS_PERCENT_CHART'	=> $this->jquery->charts('pie', 'class_dist', $chartarray, $chartoptions),
+				'LOOT_PERCENT_CHART'	=> (count($loot_dist) > 0) ? $this->jquery->charts('pie', 'loot_dist', $loot_dist, $chartoptionsLootDistri) : '',
 			));
 
 			$this->core->set_vars(array(

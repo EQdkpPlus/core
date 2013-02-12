@@ -86,7 +86,7 @@ class viewitem extends page_generic {
 		}
 		$this->tpl->assign_vars(array(
 			'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
-			'ITEM_CHART'				=> ($this->config->get('pk_itemhistory_dia') && count($a_items) > 1) ? $this->jquery->LineChart('item_chart', $a_items, '', 200, 500, '', false, true, 'date') : '',
+			'ITEM_CHART'				=> ($this->config->get('pk_itemhistory_dia') && count($a_items) > 1) ? $this->jquery->charts('line', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500)) : '',
 			'ITEM_MODEL'				=> (isset($model3d)) ? $model3d : false,
 			'COMMENT'					=> $COMMENT,
 

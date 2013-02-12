@@ -906,7 +906,7 @@ if (!class_exists("jquery")) {
 		public function timePicker($name, $value='', $hour=0, $min=0, $sec=0, $enablesecs=false, $hourf=24){
 			$tmpopt		= array();
 			$tmpopt[] = 'hour: "'.$min.'"';
-			$tmpopt[] = 'minute: "'.$hour.'"';;
+			$tmpopt[] = 'minute: "'.$hour.'"';
 			$tmpopt[] = 'second: "'.$sec.'"';
 			$tmpopt[] = 'showSecond: '.(($enablesecs) ? 'true' : 'false');
 			$tmpopt[] = 'ampm: '.(($hourf == 12) ? 'true' : 'false');
@@ -917,70 +917,85 @@ if (!class_exists("jquery")) {
 		}
 
 		/**
+		* jqPlot: charts
+		*
+		* @param $type					The type of the chart (line, pie)
+		* @param $id					ID of the css class (must be unique)
+		* @param $data					Array with data
+		* @param $options				The options array
+		* @return HTML Code
+		*/
+		public function charts($type, $id, $data, $options=''){
+			switch($type){
+				case 'line':	return $this->charts_line($id, $data, $options);break;
+				case 'pie':		return $this->charts_pie($id, $data, $options);break;
+			}
+		}
+
+		/**
 		* jqPlot: PieChart
 		*
 		* @param $id				ID of the css class (must be unique)
 		* @param $data				Array with data
-		* @param $title				Title of the chart
 		* @param $options			The options array
-		* @param $piemargin			With of the margin
-		* @param $showlegend		true or false
 		* @return TimePicker JS Code
 		*/
-		public function PieChart($id, $data, $title='', $options='', $piemargin=6, $showlegend=true, $showLabels = false){
-			$js_array = $this->Array2jsArray($data);
-			$own_colors = (isset($options['color_array']) && is_array($options['color_array']) && count($options['color_array']) > 0) ? 'seriesColors: [ '.$this->implode_wrapped('"','"', ',', $options['color_array']).' ],' : '';
-			$show_legend = ($showlegend) ? 'true' : 'false';
-			$mytitle = ($title) ? "title: '".$title."'," : '';
-			$labels = ($showLabels) ? ", showDataLabels: true, dataLabelNudge: 80, dataLabels: 'label'" : '';
+		private function charts_pie($id, $data, $options=''){
+			$js_array		= $this->Array2jsArray($data);
+
+			$tmpopt		= array();
+			$tmpopt[]	= "grid: {background: '".((isset($options['background'])) ? $options['background'] : '#f5f5f5')."', 
+				borderColor: '".((isset($options['bordercolor'])) ? $options['bordercolor'] : '#999999')."', 
+				borderWidth: ".((isset($options['border'])) ? $options['border'] : '2.0').", 
+				shadow: ".((isset($options['shadow'])) ? 'true' : 'false'). "}";
+			$tmpopt[]	= "seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{ 
+				sliceMargin: ".((isset($options['piemargin']) && $options['piemargin'] > 0) ? $options['piemargin'] : 6).
+				((isset($options['datalabels'])) ? ", showDataLabels: true, dataLabelNudge: 80, dataLabels: 'label'" : '')."}}";
+			$tmpopt[]	= "legend:{show:".((isset($options['legend'])) ? 'true' : 'false').", escapeHtml:true}";
+			if(isset($options['title'])){
+				$tmpopt[]	= "title: '".$options['title']."'";
+			}
+			if(isset($options['color_array']) && is_array($options['color_array']) && count($options['color_array']) > 0){
+				$tmpopt[]	= 'seriesColors: [ '.$this->implode_wrapped('"','"', ',', $options['color_array']).' ]';
+			}
 			$this->tpl->add_js("
 				jqplotdata_".$id." = ".$js_array.";
-				
-				plot_".$id." = $.jqplot('".$id."', [jqplotdata_".$id."], {
-								  ".$mytitle."
-								  ".$own_colors."
-								  grid: {background: '".((isset($options['background'])) ? $options['background'] : '#f5f5f5')."',borderColor: '".((isset($options['bordercolor'])) ? $options['bordercolor'] : '#999999')."', borderWidth: ".((isset($options['border'])) ? $options['border'] : '2.0').", shadow: ".((isset($options['shadow'])) ? 'true' : 'false')."},
-								  seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{sliceMargin:".$piemargin.$labels."}}, 
-								  legend:{show:".$show_legend.", escapeHtml:true}
-								});", 'docready');
+				plot_".$id." = $.jqplot('".$id."', [jqplotdata_".$id."], ".$this->gen_options($tmpopt).");", 'docready');
 			
 			return '<div id="'.$id.'"></div>';
 		}
-		
+
 		/**
 		* jqPlot: LineChart
 		*
 		* @param $id					ID of the css class (must be unique)
 		* @param $data					Array with data
-		* @param $title					Title of the chart
-		* @param $height				The height of the Chart-div
-		* @param $width					The widtj of the Chart-div
 		* @param $options				The options array
-		* @param $autoscale_xaxis		Turn on/off autoscaling for the xaxis (true/false)
-		* @param $autoscale_yaxis		Turn on/off autoscaling for the yaxis (true/false)
 		* @return HTML Code
-		*/		
-		public function LineChart($id, $data, $title='', $height='', $width='', $options='', $autoscale_xaxis=true, $autoscale_yaxis=true, $xrenderer=false){
-			$js_array = $this->Array2jsArray($data, false);
-			$mytitle = ($title) ? "title: '".$title."'," : '';
+		*/
+		private function charts_line($id, $data, $options=''){
+			$js_array		= $this->Array2jsArray($data, false);
 
-			switch ($xrenderer){
+			// switch the renderers
+			switch ($options['xrenderer']){
 				case 'date':	$renderer = 'renderer:$.jqplot.DateAxisRenderer';break;
 				default:		$renderer = 'renderer:$.jqplot.CategoryAxisRenderer';
 			}
 
-			$autoscale_xaxis = ($autoscale_xaxis) ? 'autoscale:true' : $renderer;
-			$autoscale_yaxis = ($autoscale_yaxis) ? 'autoscale:true' : '';
-
+			$tmpopt		= array();
+			if(isset($options['highlighter']) && $options['highlighter']){
+				$tmpopt[]	= 'highlighter: { show: true }';
+			}
+			if(isset($options['title']) && $options['title']){
+				$tmpopt[]	= "title: '".$options['title']."'";
+			}
+			$tmpopt[]		= "axes:{xaxis:{".(($options['autoscale_x']) ? 'autoscale:true' : $renderer)."},yaxis:{".(($options['autoscale_y']) ? 'autoscale:true' : '')."}}";
+			$tmpopt[]		= "series:[{lineWidth:".((isset($options['lineWidth'])) ? $options['lineWidth'] : 4).", markerOptions:{style:'".((isset($options['markerStyle'])) ? $options['markerStyle'] : 'square')."'}}]";
 			$this->tpl->add_js(" 
 					line1 = ".$js_array.";
-					plot_".$id." = $.jqplot('".$id."', [line1], {
-					".$mytitle."
-					axes:{xaxis:{".$autoscale_xaxis."},yaxis:{".$autoscale_yaxis."}},
-					series:[{lineWidth:".((isset($options['lineWidth'])) ? $options['lineWidth'] : '4').", markerOptions:{style:'".((isset($options['markerStyle'])) ? $options['markerStyle'] : 'square')."'}}]
-					});", 'docready');
+					plot_".$id." = $.jqplot('".$id."', [line1], ".$this->gen_options($tmpopt).");", 'docready');
 
-			return '<div id="'.$id.'" style="'.(($height) ? 'height:'.$height.'px;' : '').' '.(($width) ? 'width:'.$width.'px;' : '').'"></div>';
+			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
 		}
 
 		/**
