@@ -194,9 +194,16 @@ class core extends gen_class {
 			// Load a template specific template css out of template folder
 			$css_theme		= $this->root_path.'templates/'.$this->user->style['template_path'].'/'.$this->user->style['template_path'].'.css';
 			$global_css		= $this->root_path.'templates/eqdkpplus.css';
-			$user_additions = $this->root_path.'templates/'.$this->user->style['template_path'].'/user_additions.css';
+			$customcss		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.css';
+			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
 
 			$storage_folder = $this->pfh->FolderPath('templates/'.$this->user->style['template_path'], 'eqdkp');
+
+			// add the custom JS file
+			if(is_file($customjs)){
+				$this->tpl->js_file($customjs);
+			}
+			
 
 			if (!is_file($storage_folder.'main.css')){
 				$this->tpl->parse_cssfile();
@@ -204,7 +211,7 @@ class core extends gen_class {
 			} elseif (is_file($storage_folder.'main.css')){
 				//Renew file?
 				if ($this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($css_theme) ||
-					$this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($global_css) || (is_file($user_additions) && $this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($user_additions))){
+					$this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($global_css) || (is_file($customcss) && $this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($customcss))){
 					$this->tpl->parse_cssfile();
 				}
 				$this->tpl->css_file($storage_folder.'main.css');

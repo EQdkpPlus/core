@@ -47,16 +47,17 @@ if (!class_exists("jquery")) {
 			// jquery language file
 			$langfile = '';
 			if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
-				$langfile = $this->root_path.'language/'.$this->user->data['user_lang'].'/jquery.ui.l18n.js';
+				$langfile = $this->root_path.'language/'.$this->user->data['user_lang'].'/lang_jquery.js';
 			}elseif(is_object($this->core)){
-				$langfile = $this->root_path.'language/'.$this->config->get('default_lang').'/jquery.ui.l18n.js';
+				$langfile = $this->root_path.'language/'.$this->config->get('default_lang').'/lang_jquery.js';
 			}
 			if(is_file($langfile)){
 				$this->tpl->js_file($langfile);
 			}
+
 			// set the custom UI for jquery.ui
 			$this->CustomUI($this->user->style['template_path']);
-			
+
 			// set the static html for notification
 			$this->tpl->staticHTML('
 				<div id="notify_container">
