@@ -1187,7 +1187,7 @@ class import06 extends task {
 		$i = $n = 0;
 		$sqls = array();
 		foreach($items as $item) {
-			$item['itempool_id'] = $raid2itempool[$item['raid_id']];
+			$item['itempool_id'] = (empty($raid2itempool[$item['raid_id']])) ? 1 : $raid2itempool[$item['raid_id']];
 			$sqls[$n][] = $item;
 			if (($i % 100) == 0 && $i > 0) $n++;
 			$i++;
