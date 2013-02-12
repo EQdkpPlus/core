@@ -44037,9 +44037,10 @@ function log() {
 
     _create: function() {
       var opts = this.options;
+      var elem = $(this.element);
 
       // get the multiselect instance
-      var instance = (this.instance = $(this.element).data('multiselect'));
+      var instance = (this.instance = (elem.data('echMultiselect') || elem.data("multiselect")));
 
       // store header; add filter class so the close/check all/uncheck all links can be positioned correctly
       var header = (this.header = instance.menu.find('.ui-multiselect-header').addClass('ui-multiselect-hasfilter'));
@@ -44069,13 +44070,14 @@ function log() {
       // only the currently filtered elements are checked
       instance._toggleChecked = function(flag, group) {
         var $inputs = (group && group.length) ?  group : this.labels.find('input');
+        var _self = this;
 
         // do not include hidden elems if the menu isn't open.
         var selector = instance._isOpen ?  ':disabled, :hidden' : ':disabled';
 
         $inputs = $inputs
-        .not(selector)
-        .each(this._toggleState('checked', flag));
+          .not(selector)
+          .each(this._toggleState('checked', flag));
 
         // update text
         this.update();
@@ -44238,7 +44240,7 @@ function log() {
       // jQuery UI 1.9+, and otherwise fallback to a custom string.
       this._namespaceID = this.eventNamespace || ('multiselect' + multiselectID);
 
-      var button = (this.button = $('<button type="button"><span class="ui-icon ui-icon-triangle-2-n-s"></span></button>'))
+      var button = (this.button = $('<button type="button"><span class="ui-icon ui-icon-triangle-1-s"></span></button>'))
         .addClass('ui-multiselect ui-widget ui-state-default ui-corner-all')
         .addClass(o.classes)
         .attr({ 'title':el.attr('title'), 'aria-haspopup':true, 'tabIndex':el.attr('tabIndex') })
@@ -44582,8 +44584,15 @@ function log() {
       });
 
       // close each widget when clicking on any other element/anywhere else on the page
-      $doc.bind('mousedown.' + this._namespaceID, function(e) {
-        if(self._isOpen && !$.contains(self.menu[0], e.target) && !$.contains(self.button[0], e.target) && e.target !== self.button[0]) {
+      $doc.bind('mousedown.' + this._namespaceID, function(event) {
+        var target = event.target;
+
+        if(self._isOpen
+            && !$.contains(self.menu[0], target)
+            && !$.contains(self.button[0], target)
+            && target !== self.button[0]
+            && target !== self.menu[0])
+        {
           self.close();
         }
       });
@@ -44754,10 +44763,10 @@ function log() {
       // show the menu, maybe with a speed/effect combo
       $.fn.show.apply(menu, args);
 
-      // select the first option
+      // select the first not disabled option
       // triggering both mouseover and mouseover because 1.4.2+ has a bug where triggering mouseover
       // will actually trigger mouseenter.  the mouseenter trigger is there for when it's eventually fixed
-      this.labels.eq(0).trigger('mouseover').trigger('mouseenter').find('input').trigger('focus');
+      this.labels.filter(':not(.ui-state-disabled)').eq(0).trigger('mouseover').trigger('mouseenter').find('input').trigger('focus');
 
       button.addClass('ui-state-active');
       this._isOpen = true;
@@ -44844,7 +44853,7 @@ function log() {
 
       // use the position utility if it exists and options are specifified
       if($.ui.position && !$.isEmptyObject(o.position)) {
-        o.position.of = o.position.of || button;
+        o.position.of = o.position.of || this.button;
 
         this.menu
           .show()
