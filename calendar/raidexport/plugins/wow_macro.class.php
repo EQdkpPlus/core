@@ -52,9 +52,7 @@ if(!function_exists('WoWMacroexport')){
 		registry::register('template')->add_js('
 			genOutput()
 			$("input[type=\'checkbox\']").change(function (){
-				if ($(this).is(":checked")){
-					genOutput()
-				}
+				genOutput()
 			});
 		', "docready");
 
@@ -63,10 +61,10 @@ if(!function_exists('WoWMacroexport')){
 			var attendee_data = '.$json.';
 			output = "";
 
-			cb_guests		= ($("#cb_guests").attr("checked")) ? true : false;
-			cb_confirmed	= ($("#cb_confirmed").attr("checked")) ? true : false;
-			cb_signedin		= ($("#cb_signedin").attr("checked")) ? true : false;
-			cb_backup		= ($("#cb_backup").attr("checked")) ? true : false;
+			cb_guests		= ($("#cb_guests").prop("checked")) ? true : false;
+			cb_confirmed	= ($("#cb_confirmed").prop("checked")) ? true : false;
+			cb_signedin		= ($("#cb_signedin").prop("checked")) ? true : false;
+			cb_backup		= ($("#cb_backup").prop("checked")) ? true : false;
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){

@@ -150,9 +150,9 @@ class Manage_Menus extends page_generic {
 					item = $(ui.item).attr("id");
 					cb = "cb_" + item;
 					if (sender == "show") {
-						$("#"+cb).attr("checked", "checked");
+						$("#"+cb).prop("checked", true);
 					}else {
-						$("#"+cb).removeAttr("checked");
+						$("#"+cb).prop("checked", false);
 					}
 				}
 			});
@@ -167,9 +167,9 @@ class Manage_Menus extends page_generic {
 					item = $(ui.item).attr("id");
 					cb = "cb2_" + item;
 					if (sender == "show2") {
-						$("#"+cb).attr("checked", "checked");
+						$("#"+cb).prop("checked", true);
 					}else {
-						$("#"+cb).removeAttr("checked");
+						$("#"+cb).prop("checked", false);
 					}
 				}
 			});
@@ -184,9 +184,9 @@ class Manage_Menus extends page_generic {
 					item = $(ui.item).attr("id");
 					cb = "cb3_" + item;
 					if (sender == "show3") {
-						$("#"+cb).attr("checked", "checked");
+						$("#"+cb).prop("checked", true);
 					}else {
-						$("#"+cb).removeAttr("checked");
+						$("#"+cb).prop("checked", false);
 					}
 				}
 			});
@@ -201,9 +201,9 @@ class Manage_Menus extends page_generic {
 					item = $(ui.item).attr("id");
 					cb = "cb4_" + item;
 					if (sender == "show4") {
-						$("#"+cb).attr("checked", "checked");
+						$("#"+cb).prop("checked", true);
 					}else {
-						$("#"+cb).removeAttr("checked");
+						$("#"+cb).prop("checked", false);
 					}
 				}
 			});

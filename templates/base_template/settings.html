@@ -145,8 +145,8 @@ $(document).ready(function(){
 		.triggerHandler("multiselectclick"); // trigger above logic when page first loads
 
 	function reset_permissions(){
-		$('.changepermcolor').removeAttr("checked");
-		$('.changepermcolor').removeAttr("disabled");
+		$('.changepermcolor').prop("checked", false);
+		$('.changepermcolor').prop("disabled", false);
 		$('.perm_text').removeClass("positive");
 		$('.perm_text').addClass("negative");
 	}
@@ -156,7 +156,7 @@ $(document).ready(function(){
 			if (value != ""){
 				$('#span_cb_'+value).removeClass('negative');
 				$('#span_cb_'+value).addClass('positive');
-				$('#cb_'+value).attr('checked', "checked");
+				$('#cb_'+value).prop('checked', true);
 			}
 		});
 	}
@@ -166,8 +166,8 @@ $(document).ready(function(){
 			if (value != ""){
 				$('#span_cb_'+value).removeClass('negative');
 				$('#span_cb_'+value).addClass('positive');
-				$('#cb_'+value).attr('checked', "checked");
-				$('#cb_'+value).attr('disabled', "disabled");
+				$('#cb_'+value).prop('checked', true);
+				$('#cb_'+value).prop('disabled', true);
 			}
 		});
 	}
