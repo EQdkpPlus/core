@@ -84,11 +84,6 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"90%", height:"90%"});', 'docready');
 				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true});', 'docready');
-				$this->tpl->add_js('if(screen.width < 500 || navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
-					if(confirm("Zur mobilen Version wechseln?") == true) {
-						window.location.href = "m/";
-					}
-				}', 'docready');
 		}
 
 		/**
@@ -854,6 +849,16 @@ if (!class_exists("jquery")) {
 			}
 			$dropdown .= "</select>";
 			return $dropdown;
+		}
+
+		public function rssfeed($name, $url, $options=''){
+			$backgr = ($backgr) ? $backgr : $this->user->style['tr_color1'];
+			$tmpopt		= array();
+			$tmpopt[] = 'FeedUrl: "'.$url.'"';
+			$tmpopt[] = 'MaxCount: '.(($options['items']) ? $options['items'] : 4);
+			$tmpopt[] = 'ShowDesc: '.(($options['description']) ? 'true' : 'false');
+			$tmpopt[] = 'ShowPubDate: "'.(($options['pubdate']) ? 'true' : 'false');
+			$this->tpl->add_js('$("#'.$name.'").FeedEk('.$this->gen_options($tmpopt).');', 'docready');
 		}
 
 		/**

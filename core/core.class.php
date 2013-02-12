@@ -278,7 +278,7 @@ class core extends gen_class {
 			if ((int)$this->config->get('eqdkpm_shownote')){
 			$this->tpl->add_js("function detectMobileBrowser() {
 				if (document.cookie.indexOf(\"eqdkpm_redirect=false\") < 0) {
-					if (jQuery.browser.mobile){
+					if(screen.width < 500 || navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
 						setEQdkpmCookies();
 						if (confirm(\"".$this->user->lang('eqdkpm_redirectnote').".\"))
 							window.location = mmocms_root_path + \"m/\";
