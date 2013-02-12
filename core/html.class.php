@@ -44,26 +44,24 @@ if (!class_exists("html")) {
 			if (isset($options['dependency'])){
 				if (!$this->blnDepJS){
 					
-					$this->tpl->add_js(
-						'function dep_check_value(name, target, value){
+					$this->tpl->add_js('
+						function dep_check_value(name, target, value){
 							if ($("#"+target).val() == value){
-								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").removeAttr("disabled");
+								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", false);
 							} else {
-								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").attr("disabled", "disabled");
+								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", true);
 							}
 						}
-						
+
 						function dep_check_cb(name, target){
-							if ($("#"+target).attr("checked") == "checked"){
-								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").removeAttr("disabled");
+							if ($("#"+target).is(":checked")){
+								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", false);
 							} else {
-								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").attr("disabled", "disabled");
+								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", true);
 							}
 						}
 						
-						'	
-					, 'docready');
-										
+					', 'docready');
 					$this->blnDepJS = true;
 				}
 			
