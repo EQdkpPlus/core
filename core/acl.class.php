@@ -223,6 +223,7 @@ class acl_manager extends gen_class {
 			//User
 			$this->user->lang('user') => array(
 				array('CBNAME' => 'a_users_man',   'TEXT' => $this->user->lang('manage')),
+				array('CBNAME' => 'a_usergroups_man',   'TEXT' => $this->user->lang('manage_user_groups')),
 				array('CBNAME' => 'a_users_massmail',   'TEXT' => $this->user->lang('massmail_send')),
 				array('CBNAME' => 'u_userlist',   'TEXT' => $this->user->lang('view')),
 				array('CBNAME' => 'u_usermailer',   'TEXT' => $this->user->lang('adduser_send_mail')),
@@ -269,8 +270,9 @@ class acl extends acl_manager {
 			if ( $user_id != ANONYMOUS ){
 
 				//First Step: get Group memberships
-				$result =  $this->db->query("SELECT group_id FROM __groups_users WHERE user_id='".$user_id."'");
+				$result =  $this->db->query("SELECT group_id, grpleader FROM __groups_users WHERE user_id='".$user_id."'");
 				while ( $row = $this->db->fetch_record($result) ){
+					if (intval($row['grpleader']) && !isset($this->user_group_permissions[$user_id]['a_usergroups_grpleader'])) $this->user_group_permissions[$user_id]['a_usergroups_grpleader'] = "Y";
 					$this->user_group_memberships[$user_id][$row['group_id']] = 1;
 				}
 				$this->db->free_result($result);

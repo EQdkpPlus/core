@@ -28,12 +28,15 @@ class Manage_User_Groups extends page_generic {
 	}
 
 	public function __construct(){
-		$this->user->check_auth('a_users_man');
+		$this->user->check_auths(array('a_usergroups_man', 'a_usergroups_grpleader'), 'or');
+		
 		$handler = array(
 			'save' => array('process' => 'user_group_save', 'csrf'=>true),
 			'del_group_users' => array('process' => 'user_group_users_del', 'csrf'=>true),
 			'add_group_users' => array('process' => 'user_group_users_save', 'csrf'=>true),
 			'save_group_perms' => array('process' => 'save_group_permissions', 'csrf'=>true),
+			'add_grpleader' => array('process' => 'process_add_grpleader', 'csrf'=>true),
+			'remove_grpleader' => array('process' => 'process_remove_grpleader', 'csrf'=>true),
 			'user_group_perms' => array('process' => 'display_grouppermlist'),
 			'grp_perms' => array('process' => 'display_grouppermlist'),
 			'g' => array('process' => 'edit'),
@@ -44,23 +47,30 @@ class Manage_User_Groups extends page_generic {
 	
 	//Delete User of a Group
 	public function user_group_users_del(){
+		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('user_groups_users', 'is_grpleader', array($this->user->id, $this->in->get('g', 0)))){
+			$this->user->check_auth('a_usergroups_man');
+		}
+	
 		$members = $this->in->getArray('group_user', 'int');
 		if (count($members) > 0){
-			$this->pdh->put('user_groups_users', 'delete_users_from_group', array($members, $this->in->get('g')));
+			$this->pdh->put('user_groups_users', 'delete_users_from_group', array($members, $this->in->get('g', 0)));
 		}
 		$message = array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('del_user_from_group_success'), 'color' => 'green');
 		$this->edit($message);
-		
 	}
 	
 	//Add User to a Group
 	public function user_group_users_save(){
+		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('user_groups_users', 'is_grpleader', array($this->user->id, $this->in->get('g', 0)))){
+			$this->user->check_auth('a_usergroups_man');
+		}
+		
 		$members = $this->in->getArray('add_user', 'int');
 		if ($members[0] == 0){unset($members[0]);};
-		if ($this->in->get('g') == 2){unset($members[$this->user->data['user_id']]);}
+		if ($this->in->get('g', 0) == 2){unset($members[$this->user->data['user_id']]);}
 		
 		if (count($members) > 0){
-			$this->pdh->put('user_groups_users', 'add_users_to_group', array($members, $this->in->get('g')));
+			$this->pdh->put('user_groups_users', 'add_users_to_group', array($members, $this->in->get('g', 0)));
 
 		}
 		$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('add_user_to_group_success'), 'color' => 'green');
@@ -68,8 +78,31 @@ class Manage_User_Groups extends page_generic {
 		
 	}
 	
+	public function process_add_grpleader (){
+		$this->user->check_auth('a_usergroups_man');
+		
+		$members = $this->in->getArray('group_user', 'int');
+		if (count($members) > 0){
+			$this->pdh->put('user_groups_users', 'add_grpleader', array($members, $this->in->get('g')));
+		}
+		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
+		$this->edit($message);
+	}
+	
+	public function process_remove_grpleader (){
+		$this->user->check_auth('a_usergroups_man');
+		
+		$members = $this->in->getArray('group_user', 'int');
+		if (count($members) > 0){
+			$this->pdh->put('user_groups_users', 'remove_grpleader', array($members, $this->in->get('g')));
+		}
+		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
+		$this->edit($message);
+	}
+	
 	//Save the user-Groups
 	public function user_group_save() {
+		$this->user->check_auth('a_usergroups_man');
 		$retu = array();
 		$group_post = $this->get_post();
 			
@@ -102,6 +135,8 @@ class Manage_User_Groups extends page_generic {
 	
 	//Delete user-groups
 	public function delete() {
+		$this->user->check_auth('a_usergroups_man');
+		
 		$grpids = array();
 		if(count($this->in->getArray('user_group_ids', 'int')) > 0) {
 			$grpids = $this->in->getArray('user_group_ids', 'int');
@@ -161,6 +196,7 @@ class Manage_User_Groups extends page_generic {
 				'S_NO_STANDARD' => ($id == 2 || $id == 3) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('user_groups', 'standard', array($id))) ? 'checked="checked"' : '',
 				'HIDE'	=> ($this->pdh->get('user_groups', 'hide', array($id))) ? 'checked="checked"' : '',
+				'S_IS_GRPLEADER' => $this->pdh->get('user_groups_users', 'is_grpleader', array($this->user->id, $id)),
 			));
 			$key++;
 			$new_id = ($id >= $new_id) ? $id+1 : $new_id;
@@ -174,6 +210,7 @@ class Manage_User_Groups extends page_generic {
 			'SID'		=> $this->SID,
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
+			'S_USERGROUP_ADMIN' => $this->user->check_auth('a_usergroups_man', false),
 		));
 
 		$this->core->set_vars(array(
@@ -187,6 +224,8 @@ class Manage_User_Groups extends page_generic {
 	
 	//Process: Save permissions of a group
 	public function save_group_permissions(){
+		$this->user->check_auth('a_usergroups_man');
+		
 		if ($this->in->get('g') != 2){
 			$auth_defaults = $this->acl->get_auth_defaults(false);
 			$group_permissions = $this->acl->get_group_permissions($this->in->get('g', 0), true);
@@ -223,12 +262,18 @@ class Manage_User_Groups extends page_generic {
 	// Displays a single Group
 	// ---------------------------------------------------------
 	public function edit($messages=false, $group = false){
+		$groupID  = ($group) ? $group : $this->in->get('g', 0);
+		
+		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('user_groups_users', 'is_grpleader', array($this->user->id, $groupID))){
+			$this->user->check_auth('a_usergroups_man');
+		}
+	
 		if($messages) {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
 		
-		$groupID  = ($group) ? $group : $this->in->get('g', 0);
+		
 		
 		//Only a Super-Admin is allowed to manage the super-admin group
 		$memberships = $this->pdh->get('user_groups_users', 'memberships_status', array($this->user->data['user_id']));
@@ -264,7 +309,9 @@ class Manage_User_Groups extends page_generic {
 			$user_online = ( !empty($elem['session_id']) ) ? "<img src='../images/glyphs/status_green.gif' alt='' />" : "<img src='../images/glyphs/status_red.gif' alt='' />";
 			$user_active = ( $elem['user_active'] == '1' ) ? "<img src='../images/glyphs/status_green.gif' alt='' />" : "<img src='../images/glyphs/status_red.gif' alt='' />";
 			
-			$this->tpl->assign_block_vars('user_row', array(
+			$row = ($this->pdh->get('user_groups_users', 'is_grpleader', array($elem['user_id'], $groupID))) ? '_grpleader' : '';
+			
+			$this->tpl->assign_block_vars('user_row'.$row, array(
 				'ID'			=> $elem['user_id'],
 				'NAME'			=> sanitize($elem['username']),
 				'EMAIL'			=> ( !empty($elem['user_email']) ) ? '<a href="javascript:usermailer('.$elem['user_id'].');">'.$this->crypt->decrypt($elem['user_email']).'</a>' : '',
@@ -333,6 +380,31 @@ class Manage_User_Groups extends page_generic {
 		
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
 		
+		$arrMenuItems = array(
+			0 => array(
+				'name'	=> $this->user->lang('delete_selected_from_group'),
+				'type'	=> 'button', //link, button, javascript
+				'img'	=> 'images/admin/manage_reset.png',
+				'perm'	=> true,
+				'link'	=> '#del_group_users',
+			),
+			1 => array(
+				'name'	=> $this->user->lang('add_grpleader'),
+				'type'	=> 'button', //link, button, javascript
+				'img'	=> 'images/glyphs/add_grpleader.png',
+				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
+				'link'	=> '#add_grpleader',
+			),
+			2 => array(
+				'name'	=> $this->user->lang('remove_grpleader'),
+				'type'	=> 'button', //link, button, javascript
+				'img'	=> 'images/glyphs/remove_grpleader.png',
+				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
+				'link'	=> '#remove_grpleader',
+			),
+		
+		);
+		
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
 			$red 					=> '_red',
@@ -341,6 +413,8 @@ class Manage_User_Groups extends page_generic {
 			'KEY'					=> $key,
 			'ADD_USER_DROPDOWN'		=> $this->jquery->MultiSelect('add_user', $not_in, '', array('width' => 350, 'filter' => true)),
 			'GRP_ID'				=> $groupID,
+			'BUTTON_MENU'			=> $this->jquery->ButtonDropDownMenu('user_groups_user_menu', $arrMenuItems, array(".usercheckbox"), '', $this->user->lang('selected_user').'...', ''),
+			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_usergroups_man', false),
 		));
 
 		$this->core->set_vars(array(
@@ -351,6 +425,7 @@ class Manage_User_Groups extends page_generic {
 	}
 	
 	public function display_grouppermlist(){
+		$this->user->check_auth('a_usergroups_man');
 		//Permissions
 		$permission_boxes = $this->acl->get_permission_boxes();
 		$this->pm->generate_permission_boxes($permission_boxes);
@@ -396,7 +471,7 @@ class Manage_User_Groups extends page_generic {
 	// ---------------------------------------------------------
 	// Process helper methods
 	// ---------------------------------------------------------
-	public function update_auth_groups($auth_id,  $auth_setting = 'N', $group_id=0,$check_query_type = true){
+	private function update_auth_groups($auth_id,  $auth_setting = 'N', $group_id=0,$check_query_type = true){
 		$upd_ins = ( $check_query_type ) ? $this->switch_upd_ins($auth_id, $group_id) : 'upd';
 
 		if ( (empty($auth_id)) || (empty($group_id)) ){

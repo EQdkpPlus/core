@@ -1,15 +1,20 @@
 <form method="post" action="{ACTION}" name="post">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
+	<tr>
+		<th align="center"><a href="manage_user_groups.php{SID}">{L_manage_user_groups}</a> &raquo; {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></th>
+	</tr>
+	</table>
+	
 	<div id="groups_tabs">
 		<ul>
 			<li><a href='#members'><span>{L_group_members}</span></a></li>
+			<!-- IF S_USERGROUP_ADMIN-->
 			<li><a href='#permissions'><span>{L_permissions}</span></a></li>
+			<!-- ENDIF -->
 		</ul>
 
 		<div id="members">
 			<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
-				<tr>
-					<th align="center" colspan="6"><a href="manage_user_groups.php{SID}">{L_manage_user_groups}</a> &raquo; {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></th>
-				</tr>
 				<tr>
 					<th width="20"><input type="checkbox" id="selall_usergr" /></th>
 					<th>
@@ -26,6 +31,31 @@
 					<th>{L_active}</th>
 					<th>{L_online}</th>
 				</tr>
+				<tr>
+					<th align="center" colspan="6">{L_grpleaders}</th>
+				</tr>
+				<!-- BEGIN user_row_grpleader -->
+				<tr>
+					<td>
+					<!-- IF S_USERGROUP_ADMIN -->
+						<!-- IF not user_row_grpleader.S_UNDELETABLE --><input type="checkbox" name="group_user[{user_row_grpleader.ID}]" value="{user_row_grpleader.ID}" class="usercheckbox" />
+						<!-- ENDIF -->
+					<!-- ENDIF -->
+					</td>
+					<td>
+						<a href="manage_users.php{SID}&amp;u={user_row_grpleader.ID}">{user_row_grpleader.NAME}</a>
+					</td>
+					<td>{user_row_grpleader.EMAIL}</td>
+					<td>{user_row_grpleader.LAST_VISIT}</td>
+					<td>{user_row_grpleader.ACTIVE}</td>
+					<td>{user_row_grpleader.ONLINE}</td>
+				</tr>
+				<!-- END user_row_grpleader -->
+				
+				
+				<tr>
+					<th colspan="6" />{L_group_members}</th>
+				</tr>
 				<!-- BEGIN user_row -->
 				<tr>
 					<td><!-- IF not user_row.S_UNDELETABLE --><input type="checkbox" name="group_user[{user_row.ID}]" value="{user_row.ID}" class="usercheckbox" /><!-- ENDIF --></td>
@@ -39,18 +69,23 @@
 				</tr>
 				<!-- END user_row -->
 				<tr>
-					<th colspan="6">{L_add_user_to_group}</th>
+					<th colspan="6">
+						{BUTTON_MENU} 
+					<input type="submit" name="del_group_users" value="{L_delete_selected_from_group}" class="mainoption bi_delete" id="del_group_users" style="display:none;" /> 
+					<input type="submit" name="add_grpleader" value="{L_add_grpleader}" class="mainoption bi_new" id="add_grpleader"  style="display:none;"/>
+					<input type="submit" name="remove_grpleader" value="{L_remove_grpleader}" class="mainoption bi_new" id="remove_grpleader"  style="display:none;"/>
+					</th>
 				</tr>
-				<tr>
-					<td colspan="6">{ADD_USER_DROPDOWN}</td>
-				</tr>
-				<tr>
-					<th colspan="6"><input type="submit" name="add_group_users" value="{L_add_selected_to_group}" class="mainoption bi_new" id="add_group_users" /> <input type="submit" name="del_group_users" value="{L_delete_selected_from_group}" class="mainoption bi_delete" id="del_group_users" /> <input type="button" name="back" value="{L_back}" class="liteoption bi_back" onclick="window.location='manage_user_groups.php{SID}'"/> </th>
-				</tr>
-			</table>
-
+				
+				</table>
+				<br />
+				<fieldset class="settings mediumsettings" class="settings">
+						<legend>{L_add_user_to_group}</legend>
+						{ADD_USER_DROPDOWN}
+						<br /><br /><input type="submit" name="add_group_users" value="{L_add_selected_to_group}" class="mainoption bi_new" id="add_group_users" />
+				</fieldset>
 		</div>
-
+		<!-- IF S_USERGROUP_ADMIN -->
 		<div id="permissions">	
 			<div id="permission_tabs">
 				<ul>
@@ -102,6 +137,8 @@
 			</div>
 		</div>
 	</div>
+	<!-- ENDIF -->
+	<input type="button" name="back" value="{L_back}" class="liteoption bi_back" onclick="window.location='manage_user_groups.php{SID}'"/>
 {CSRF_TOKEN}
 </form>
 <script type="text/javascript">
@@ -118,7 +155,7 @@ $(document).ready(function(){
 	$("#selall_usergr").click(function(){
 		var checked_status = this.checked;
 		$(".usercheckbox").each(function(){
-			this.checked = checked_status;
+			$(this).prop("checked", checked_status).trigger('change');
 		});
 	});
 });

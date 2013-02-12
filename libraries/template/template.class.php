@@ -1073,7 +1073,7 @@ class template extends gen_class {
 			}
 			
 			//User additions
-			$strUserFile = $this->root_path . 'templates/'.$stylepath.'/user_additions.css';
+			$strUserFile = $this->root_path . 'templates/'.$stylepath.'/custom.css';
 			if (file_exists($strUserFile)){
 				$content = file_get_contents($strUserFile);
 				$data .= preg_replace($in, $out, $content);

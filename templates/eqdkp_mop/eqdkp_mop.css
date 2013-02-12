@@ -1607,7 +1607,66 @@ a.attendee_Link:hover{
 .sf-ddm a:focus, .sf-menu a:hover, .sf-menu a:active {
 	background: #222222;
 }
+/* Button Drodown-Menu */
+.sf-btn-ddm li, .sf-btn-ddm li:hover, .sf-btn-ddm li:active, .sf-menu.sf-btn-ddm  li.sfHover,
+.sf-btn-ddm a:focus, .sf-menu.sf-btn-ddm  a:hover, .sf-menu.sf-btn-ddm  a:active {
+	background: none !important;
+}
 
+.sf-btn-ddm li, .sf-btn-ddm li ul  {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.sf-btn-ddm {
+	padding: 4px 5px 4px 5px !important;
+}
+
+.sf-menu.sf-btn-ddm, .sf-menu.sf-btn-ddm ul
+{
+	outline: none;
+	cursor: pointer;
+	text-align: left;
+	text-decoration: none;
+	font-size: 11px;
+	padding: 4px 5px 4px 5px;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: 4px; 
+	border-radius:  4px;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	color: #fff !important;
+	border: solid 1px #892c04;
+	background-color: #581a05; /* Old browsers */
+}
+
+.sf-menu.sf-btn-ddm:hover, .sf-menu.sf-btn-ddm ul > li:hover
+{
+	text-decoration: none;
+	border-top: 1px solid #c34506;
+	border-bottom: 1px solid #c34506;
+	background-color: #852c05 !important; /* Old browsers */
+}
+
+
+.sf-menu.sf-btn-ddm a {
+	margin: 0;
+	padding: 4px 25px 4px 5px !important;
+	color: #fff;
+}
+
+.sf-btn-ddm .sf-sub-indicator {
+	top: 5px;
+}
+.sf-menu.sf-btn-ddm ul > li a {
+	line-height: 20px;
+}
+
+.sf-menu.sf-btn-ddm li.sfHover ul{
+	top: 24px;
+	left: -4px;
+}
 /* general: game specific */
 .resists {
 	width: 27px;

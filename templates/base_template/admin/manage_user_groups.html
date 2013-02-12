@@ -1,4 +1,5 @@
 <!-- IF not S_GROUP_PERM_LIST -->
+<!-- IF S_USERGROUP_ADMIN -->
 <form method="post" action="{ACTION}" name="post">
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
 		<tr>
@@ -56,6 +57,36 @@
 	<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
 {CSRF_TOKEN}
 </form>
+<!-- ELSE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
+		<tr>
+			<th align="center" colspan="4"><span style="float:left;">{L_manage_user_groups}</span></th>
+		</tr>
+		<tr>
+			<th width="20" class="nowrap">{L_action}</th>
+			<th>
+				<a href="{ACTION}&amp;order=0.1"><span class="down_arrow{RED01}"></span></a>
+				<a href="{ACTION}&amp;order=0.0"><span class="up_arrow{RED00}"></span></a>
+				{L_name}
+			</th>
+			<th>{L_description}</th>
+			<th width="50" class="nowrap">{L_group_members}</th>
+		</tr>
+		<!-- BEGIN user_groups -->
+		<!-- IF user_groups.S_IS_GRPLEADER -->
+		<tr>
+			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><img src="{EQDKP_IMAGE_PATH}glyphs/groups.png" border="0" alt="" /></a></td>
+			<td>{user_groups.NAME}</td>    
+			<td>{user_groups.DESC}</td>
+			<td>{user_groups.USER_COUNT}</td>
+		</tr>
+		<!-- ENDIF -->
+		<!-- END user_groups -->
+		<tr>
+			<th colspan="4"></th>
+		</tr>
+	</table>
+<!-- ENDIF -->
 <!-- ELSE -->
 <form method="post" action="{ACTION}" name="post">
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table">

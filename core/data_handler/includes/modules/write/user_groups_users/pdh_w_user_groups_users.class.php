@@ -62,6 +62,44 @@ if(!class_exists('pdh_w_user_groups_users')) {
 				return false;
 			}
 		}
+		
+		public function add_grpleader($arrUserIDs, $group_id){
+			if (!is_array($arrUserIDs)){
+				$arrUserIDs = array($arrUserIDs);
+			}
+			
+			$arrSet = array(
+				'grpleader' => 1,
+			);
+			
+			foreach($arrUserIDs as $user_id){
+				if(!$this->db->query("UPDATE __groups_users SET :params WHERE group_id='".$this->db->escape($group_id)."' AND user_id='".$this->db->escape($user_id)."'", $arrSet)) {
+					return false;
+				}
+			}
+			
+			$this->pdh->enqueue_hook('user_groups_update');
+			return true;
+		}
+		
+		public function remove_grpleader($arrUserIDs, $group_id){
+			if (!is_array($arrUserIDs)){
+				$arrUserIDs = array($arrUserIDs);
+			}
+			
+			$arrSet = array(
+				'grpleader' => 0,
+			);
+			
+			foreach($arrUserIDs as $user_id){
+				if(!$this->db->query("UPDATE __groups_users SET :params WHERE group_id='".$this->db->escape($group_id)."' AND user_id='".$this->db->escape($user_id)."'", $arrSet)) {
+					return false;
+				}
+			}
+			
+			$this->pdh->enqueue_hook('user_groups_update');
+			return true;
+		}
 
 		public function add_users_to_group($user_array, $group_id) {
 			if (is_array($user_array)) {

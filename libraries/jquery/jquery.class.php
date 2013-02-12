@@ -436,6 +436,66 @@ if (!class_exists("jquery")) {
 		}
 		
 		/**
+		* DropDown Menu
+		*
+		* @param $id			ID of the css class (must be unique)
+		* @param $menuitems		Array with menu information
+		* @param $imagepath		Where are the images?
+		* @param $button		Show a button with name?
+		* @return CHAR
+		*/
+		public function ButtonDropDownMenu($id, $menuitems, $checkbox_listener=array(), $imagepath='', $button='', $buttonIcon=''){
+			if (count($checkbox_listener)){
+				foreach($checkbox_listener as $listener_id) {
+					$this->tpl->add_js("
+					$('".$listener_id."').on('change', function() {
+						var count = 0;
+						if ($('".$listener_id."').prop(\"multiple\")){
+							$('".$listener_id." :selected').each(function(i, selected){ 
+								count += 1;
+							});
+						} else {
+							$('".$listener_id."').each(function(){
+								if (this.checked){
+									count += 1;
+								}
+							});
+						}
+						var menubutton = \"".$button."\";
+						if (count > 0){
+							menubutton = count + ' ' + menubutton;
+						}
+						$('#".$id." .sf-btn-name').html(menubutton);
+					});
+					", 'docready');
+				}
+			}
+		
+			$dmmenu  = '<ul id="'.$id.'" class="sf-menu sf-btn-ddm">
+							<li>'.(($buttonIcon != '') ? '<img src="'.$this->root_path.$buttonIcon.'" alt="" style="float:left; margin-right:2px;"/> ' : '').'<a href="javascript:void(0);" class="sf-btn-name">'.$button.'</a>
+						<ul><div class="clear"></div>';
+			foreach($menuitems as $key=>$value){
+				if($value['perm']){
+					$dmimg = ($value['img']) ? '<img src="'.$this->root_path.$imagepath.'/'.$value['img'].'" alt="" />' : '';
+					switch($value['type']){
+						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a></li>';
+						break;
+						
+						default: $dmmenu .= '<li><a href="'.$value['link'].'">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a></li>';
+					}
+					
+				}
+			}
+			$dmmenu .= '</ul>
+					</li>
+				</ul>';
+			$this->tpl->add_js("$('#".$id."').superfish(); ", 'docready');
+			return $dmmenu;
+		}
+		
+		
+		
+		/**
 		* SuckerFish horizontal Menu
 		*
 		* @param $array			Menu items array

@@ -302,7 +302,7 @@ div.icon_repeating {
 	text-indent:20px;
 }
 .bi_back{
-	background:url(../images/arrows/left_arrow.png) no-repeat 5px 5px;
+	background:url(../images/arrows/left_arrow.png) no-repeat 5px center;
 	text-indent:16px;
 }
 .bi_next{

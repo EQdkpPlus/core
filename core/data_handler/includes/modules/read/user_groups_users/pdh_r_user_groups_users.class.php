@@ -47,7 +47,8 @@ if ( !class_exists( "pdh_r_user_groups_users" ) ){
 
 			while( $row = $this->db->fetch_record($r_result) ){
 				$this->user_groups_users[$row['group_id']][$row['user_id']] = $row['user_id'];
-				$this->user_memberships[$row['user_id']][$row['group_id']] = 1;
+				//0 = regular member, 1 = group leader
+				$this->user_memberships[$row['user_id']][$row['group_id']] = (intval($row['grpleader'])) ? 1 : 0;
 			}
 			$this->db->free_result($r_result);
 		}
@@ -65,12 +66,17 @@ if ( !class_exists( "pdh_r_user_groups_users" ) ){
 				return (isset($this->user_groups_users[$group_id]) && is_array($this->user_groups_users[$group_id])) ? array_keys($this->user_groups_users[$group_id]) : array();
 			}
 		}
+		
+		public function get_is_grpleader($user_id, $group_id){
+			if (isset($this->user_memberships[$user_id][$group_id]) && $this->user_memberships[$user_id][$group_id] == 1) return true;
+			return false;
+		}
 
 		public function get_memberships($user_id){
 			if (isset($this->user_memberships[$user_id]) && is_array($this->user_memberships[$user_id])){
 				return array_keys($this->user_memberships[$user_id]);
 			} elseif ($user_id == ANONYMOUS) {
-				return array(0 => 1);
+				return array(0 => 0);
 			} else {
 				return array();
 			}
