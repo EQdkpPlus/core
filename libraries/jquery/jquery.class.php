@@ -26,7 +26,7 @@ if (!class_exists("jquery")) {
 
 		private $tt_init				= '';
 		private $ce_loaded				= false;
-		private $datepicker_defaults	= false;
+		private $language_set			= array();
 		private $dyndd_counter			= 0;
 		
 		/**
@@ -83,6 +83,11 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"90%", height:"90%"});', 'docready');
 				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true});', 'docready');
+				$this->tpl->add_js('if(screen.width < 500 || navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
+					if(confirm("Zur mobilen Version wechseln?") == true) {
+						window.location.href = "m/";
+					}
+				}', 'docready');
 		}
 
 		/**
@@ -649,12 +654,6 @@ if (!class_exists("jquery")) {
 			// JS Code Output
 			if(isset($options['timepicker'])){
 				$addisettings = array(
-					"timeOnlyTitle: '".$this->sanitize($this->user->lang('timepicker_title'))."'",
-					"timeText: '".$this->sanitize($this->user->lang('timepicker_time'))."'",
-					"hourText: '".$this->sanitize($this->user->lang('timepicker_hour'))."'",
-					"minuteText: '".$this->sanitize($this->user->lang('timepicker_minute'))."'",
-					"secondText: '".$this->sanitize($this->user->lang('timepicker_second'))."'",
-					"currentText: '".$this->sanitize($this->user->lang('timepicker_nowbutton'))."'",
 					"timeFormat:'".$options['timeformat']."'"
 				);
 				$functioncall = "datetimepicker({".$MySettings.",".implode(", ", $addisettings)."})";
@@ -669,12 +668,8 @@ if (!class_exists("jquery")) {
 						$('#".$itemid."').".$functioncall.";", 'docready');
 				}
 			}
-			if(!$this->datepicker_defaults) {
-				$MyLanguage	= ($this->user->lang('XML_LANG') && count($this->user->lang('XML_LANG')) < 3) ? $this->user->lang('XML_LANG') : '';
-				$this->tpl->add_js("
-					$.datepicker.setDefaults($.datepicker.regional['".$MyLanguage."']);", 'docready');
-				$this->datepicker_defaults = true;
-			}
+			$this->setLanguage('datepicker', "$.datepicker.setDefaults($.datepicker.regional['{!language!}']);");
+			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return (isset($options['return_function'])) ? $functioncall : $html;
 		}
 
@@ -834,11 +829,7 @@ if (!class_exists("jquery")) {
 			$tmpopt		= array();
 			$tmpopt[] = 'height: '.$options['height'];
 			$tmpopt[] = 'minWidth: '.$options['width'];
-			$tmpopt[] = 'checkAllText: "'.$this->sanitize($this->user->lang('cl_ms_checkall')).'"';
-			$tmpopt[] = 'uncheckAllText: "'.$this->sanitize($this->user->lang('cl_ms_uncheckall')).'"';
-			$tmpopt[] = 'noneSelectedText: "'.$this->sanitize($this->user->lang('cl_ms_noneselected')).'"';
 			$tmpopt[] = 'selectedList: '.((isset($options['selections']) && $options['selections'] > 0) ? $options['selections'] : '5');
-			$tmpopt[] = 'selectedText: "'.((isset($options['sel_text'])) ? $options['sel_text'] : $this->sanitize($this->user->lang('cl_ms_selection'))).'"';
 			$tmpopt[] = 'multiple: '.((isset($options['single_select'])) ? 'false' : 'true');
 			if(isset($options['selections'])){		$tmpopt[] = 'selectedList: '.$options['selections'];}
 			if(isset($options['no_animation'])){	$tmpopt[] = 'show: "blind",hide: "blind"';}
@@ -921,6 +912,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'ampm: '.(($hourf == 12) ? 'true' : 'false');
 			
 			$this->tpl->add_js("$('#id_".$name."').timepicker(".$this->gen_options($tmpopt).");", 'docready');
+			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return '<input name="'.$name.'" id="id_'.$name.'" value="'.$value.'" type="text" />';
 		}
 
@@ -1331,6 +1323,7 @@ if (!class_exists("jquery")) {
 		* @param $formid		Id of the Form to validate
 		* @return Tooltip
 		*/
+		// DEPRECATED - use json_encode instead?
 		private function Array2jsArray($array, $jq_array=false, $trenner='"'){
 			$last_item = max(array_keys($array));
 			if($jq_array){
@@ -1386,6 +1379,21 @@ if (!class_exists("jquery")) {
 				$output .= $before . $item . $after . $glue;
 			}
 			return substr($output, 0, -strlen($glue));
+		}
+
+		/**
+		* Set Language loader if requiredr
+		*
+		* @param $name			Name of the lamng handler to be loaded
+		* @param $initname		the code to be initialized..
+		* @return CHAR
+		*/
+		private function setLanguage($name, $initname){
+			if(!isset($this->language_set[$name]) && isset($name)){
+				$MyLanguage	= ($this->user->lang('XML_LANG') && count($this->user->lang('XML_LANG')) < 3) ? $this->user->lang('XML_LANG') : '';
+				$this->tpl->add_js(str_replace('{!language!}', $MyLanguage, $initname), 'docready');
+				$this->language_set[$name] = true;
+			}
 		}
 
 		/**
