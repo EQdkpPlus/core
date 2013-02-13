@@ -212,6 +212,7 @@ $english_array = array(
 		'uc_imp_succ'					=> 'The data has been imported successfully',
 		'uc_upd_succ'					=> 'The data has been updated successfully',
 		'uc_imp_failed'					=> 'An error occured while updating the data. Please try again.',
+		'uc_sync_ranks'					=> 'Sync ranks',
 
 		'base'							=> 'Attributes',
 		'strength'						=> 'Strength',

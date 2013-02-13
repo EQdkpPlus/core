@@ -60,6 +60,10 @@ class guildImporter extends page_generic {
 				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
 				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'delete_old_chars')).'</dd>
 			</dl>
+			<dl>
+				<dt><label>'.$this->game->glang('uc_sync_ranks').'</label></dt>
+				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'sync_ranks')).'</dd>
+			</dl>
 			</fieldset>
 			<fieldset class="settings mediumsettings">
 				<legend>'.$this->game->glang('uc_filter_name').'</legend>
@@ -151,7 +155,7 @@ class guildImporter extends page_generic {
 					i=0;
 	
 				if (guilddataArry.length >= i){
-					$.post("guildimporter.php'.$this->SID.'&del='.(($this->in->get('delete_old_chars',0)) ? 'true' : 'false').'&step=2&totalcount="+guilddataArry.length+"&actcount="+i, guilddataArry[i], function(data){
+					$.post("guildimporter.php'.$this->SID.'&del='.(($this->in->get('delete_old_chars',0)) ? 'true' : 'false').'&sync_rank='.(($this->in->get('sync_ranks',0)) ? 'true' : 'false').'&step=2&totalcount="+guilddataArry.length+"&actcount="+i, guilddataArry[i], function(data){
 						guilddata = $.parseJSON(data);
 						if(guilddata.success == "available"){
 							successdata = "<span style=\"color:orange;\">'.$this->game->glang('uc_armory_impduplex').'</span>";
@@ -178,6 +182,14 @@ class guildImporter extends page_generic {
 	}
 
 	public function perform_step2(){
+		//Build Rank ID
+		$intRankID = $this->pdh->get('rank', 'default', array());
+		if ($this->in->get('sync_rank') == 'true'){
+			$arrRanks = $this->pdh->get('rank', 'id_list');
+			$inRankID = $this->in->get('rank', 0);
+			if (isset($arrRanks[$inRankID])) $intRankID = $arrRanks[$inRankID];
+		}
+
 		if(in_array($this->in->get('name', ''), $this->pdh->get('member', 'names', array()))){
 			$successmsg = 'available';
 			
@@ -189,13 +201,27 @@ class guildImporter extends page_generic {
 					$this->pdh->process_hook_queue();
 				}
 			}
+			
+			//Sync Rank
+			if ($this->in->get('sync_rank') == 'true'){
+				$member_id = $this->pdh->get('member', 'id', array($this->in->get('name', '')));
+				if ($member_id) {
+					$dataarry = array(
+						'rankid'	=> $intRankID,
+					);
+					$myStatus = $this->pdh->put('member', 'addorupdate_member', array($member_id, $dataarry));
+				}
+			}
+			
 		}else{
+
 			//Create new char
 			$dataarry = array(
 				'name'		=> $this->in->get('name',''),
 				'lvl'		=> $this->in->get('level', 0),
 				'classid'	=> $this->game->obj['armory']->ConvertID($this->in->get('class', 0), 'int', 'classes'),
 				'raceid'	=> $this->game->obj['armory']->ConvertID($this->in->get('race', 0), 'int', 'races'),
+				'rankid'	=> $intRankID,
 			);
 			$myStatus = $this->pdh->put('member', 'addorupdate_member', array(0, $dataarry));
 			
@@ -224,7 +250,7 @@ class guildImporter extends page_generic {
 		));
 
 		$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('raidevent_raid_guests'),
+			'page_title'		=> $this->user->lang('uc_bttn_import'),
 			'header_format'		=> 'simple',
 			'template_file'		=> 'importer.html',
 			'display'			=> true

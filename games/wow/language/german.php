@@ -211,6 +211,7 @@ $german_array = array(
 		'uc_imp_succ'					=> 'Die Daten wurden erfolgreich importiert',
 		'uc_upd_succ'					=> 'Die Daten wurden erfolgreich aktualisiert',
 		'uc_imp_failed'					=> 'Beim Import der Daten trat ein Fehler auf. Bitte versuche es erneut.',
+		'uc_sync_ranks'					=> 'Ränge synchronisieren',
 
 		'base'							=> 'Attribute',
 		'strength'						=> 'Stärke',
