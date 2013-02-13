@@ -738,7 +738,7 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function Tab_header($name, $cookie=false, $taboptions=false){
-			$mycookie		= ($cookie) ? ', selected: ($.cookie("cookie'.$name.'") || 0), select: function(e, ui) { $.cookie("cookie'.$name.'", ui.index, { expires: 30 }) } ' : '';
+			$mycookie		= ($cookie) ? ', active: ($.cookie("cookie'.$name.'") || 0), beforeActivate: function(e, ui) { $.cookie("cookie'.$name.'",  ui.newTab.index(), { expires: 30 }) } ' : '';
 			$taboptions		= ($taboptions) ? $taboptions : '{ show: { effect: "fade", duration: \'normal\' } '.$mycookie.'}';
 			$this->tpl->add_js('$("#'.$name.'").tabs('.$taboptions.');', 'docready');
 		}
