@@ -380,6 +380,12 @@ abstract class portal_generic extends gen_class {
 		return registry::register('config')->get($value.'_'.$this->id);
 	}
 	
+	public function set_config($key, $value){
+		$child = registry::register('plus_datahandler')->get('portal', 'child', array($this->id));
+		if (!$child) return registry::register('config')->set($key, $value);
+		return registry::register('config')->set($key.'_'.$this->id, $value);
+	}
+	
 	public function set_id($id){
 		$this->id = $id;
 	}
