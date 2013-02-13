@@ -46,7 +46,7 @@ class tinyMCE extends gen_class {
 					script_url : "'.$this->root_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
 
 					// General options
-					plugins : "bbcode",
+					plugins : "bbcode,paste",
 					//language : "'.$this->language.'",
 					theme : "advanced",
 					skin: "cirkuit",
@@ -62,7 +62,15 @@ class tinyMCE extends gen_class {
 					add_unload_trigger : false,
 					remove_linebreaks : false,
 					inline_styles : false,
-					convert_fonts_to_spans : false
+					convert_fonts_to_spans : false,
+					//Keeps Paste Text feature active until user deselects the Paste as Text button
+					paste_text_sticky : true,
+					//select pasteAsPlainText on startup
+					setup : function(ed) {
+						ed.onInit.add(function(ed) {
+							ed.pasteAsPlainText = true;
+						});
+					}
 				});
 			', 'docready');
 			$this->trigger['bbcode'] = true;
