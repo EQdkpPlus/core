@@ -270,7 +270,7 @@ class acl extends acl_manager {
 			if ( $user_id != ANONYMOUS ){
 
 				//First Step: get Group memberships
-				$result =  $this->db->query("SELECT group_id, grpleader FROM __groups_users WHERE user_id='".$user_id."'");
+				$result =  $this->db->query("SELECT * FROM __groups_users WHERE user_id='".$user_id."'");
 				while ( $row = $this->db->fetch_record($result) ){
 					if (intval($row['grpleader']) && !isset($this->user_group_permissions[$user_id]['a_usergroups_grpleader'])) $this->user_group_permissions[$user_id]['a_usergroups_grpleader'] = "Y";
 					$this->user_group_memberships[$user_id][$row['group_id']] = 1;
