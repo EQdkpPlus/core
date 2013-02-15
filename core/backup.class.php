@@ -201,30 +201,32 @@ class backup extends gen_class {
 
 	public function prune_backups($days = false, $count = false){
 		//Read out all of our backups
-		$path = $this->pfh->FolderPath('eqdkp/backup');
-			if($dir=opendir($path)){
-				while($file=readdir($dir)){
-					if (!is_dir($file) && $file != "." && $file != ".." && $file != "index.html" && $file != ".htaccess"){
-						$files[$file]	=$file;
-					}
+		$path = $this->pfh->FolderPath('backup', 'eqdkp');
+		if($dir=opendir($path)){
+			while($file=readdir($dir)){
+				if (!is_dir($file) && $file != "." && $file != ".." && $file != "index.html" && $file != ".htaccess" && $file != 'meta' && $file != 'tmp'){
+					$files[$file]	= $file;
 				}
-				closedir($dir);
 			}
+			closedir($dir);
+		}
 
 		//Generate backup-array, only list eqdkp-backups
 		if (is_array($files)){
+
 			foreach ($files as $elem){
-				if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9]{1,10})\.(sql(?:\.(?:gz|bz2))?)$#', $elem, $matches)){
+			
+				if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $elem, $matches)){
 					$backups[$elem]		= $matches[1];
 				}
-				if (preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9]{1,10})\.(sql(?:\.(?:gz|bz2))?)$#', $elem, $matches)){
+				if (preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $elem, $matches)){
 					$backups[$elem]		= $matches[1];
 					$full[]				= $elem;
 				}
 			}
 			//Sort the arrays the get the newest ones on top
 			array_multisort($backups, SORT_DESC);
-
+				
 			//Delete all backups except the x newest ones
 			if ($count > 0){
 				$tmp_backups = array_slice($backups, $count);
@@ -241,9 +243,11 @@ class backup extends gen_class {
 			} //close delete all backups except the x newest ones
 
 			//Delete backups older than x days
-			if ($days > 0){
+			if ($days && intval($days) > 0){
+
 				foreach ($backups as $key => $value){
-					if (($value + $days*86400) < time()){
+					
+					if (($value + intval($days)*86400) < time()){
 						$file		= $this->pfh->FolderPath('backup', 'eqdkp').$key;
 						$metafile	= $this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($key, strpos($key, '.')), "", $key).'.meta.php';
 						if (file_exists($file)) {
