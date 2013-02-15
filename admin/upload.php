@@ -28,7 +28,7 @@ class upload extends page_generic {
 	}
 
 	public function __construct(){
-		$this->user->check_auth('a_users_man');
+		$this->user->check_auth('a_files_man');
 		$handler = array(
 			'upload' => array('process' => 'upload'),
 			'create_folder' => array('process' => 'folder'),
