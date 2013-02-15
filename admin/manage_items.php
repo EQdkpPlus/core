@@ -84,8 +84,7 @@ class ManageItems extends page_generic {
 
 	public function update($message=false) {
 		//fetch members for select
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false, false, false))));
-		asort($members);
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
 
 		//fetch raids for select
 		$raids = array();
