@@ -87,10 +87,12 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		public function update_startdkp($apa_id, $last_date) {
 			$members = $this->pdh->get('member', 'id_list', array(true, false, true, !$this->apa->get_data('twinks', $apa_id)));
 			if(!$last_date) $last_date = $this->apa->get_data('start_date', $apa_id);
-			if($this->apa->get_data('before', $apa_id) && !$this->config->get('cron_startdkp_before_done')) {
-				$last_date = 0;
-				$this->config->set('cron_startdkp_before_done', 1);
-			} elseif(!$this->apa->get_data('before', $apa_id)) $this->config->set('cron_startdkp_before_done', 0);
+			$startdkp_before = ($this->config->get('cron_startdkp_before')) ? unserialize($this->config->get('cron_startdkp_before')) : array();
+			if($this->apa->get_data('before', $apa_id) && !in_array($apa_id, $startdkp_before)) {
+				$last_date = -1;
+				$startdkp_before[] = $apa_id;
+				$this->config->set('cron_startdkp_before', serialize($startdkp_before));
+			}
 			if($this->apa->get_data('creation', $apa_id)) {
 				$dates = $this->pdh->aget('member', 'creation_date', 0, array($members));
 			} else {
