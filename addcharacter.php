@@ -124,10 +124,13 @@ class addcharacter extends page_generic {
 		// Static fields
 		$static_fields = array();
 		if($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)){
-			$maincharsel	= $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
+			$maincharsel	= $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,false,true,true))));
 			asort($maincharsel);
 			if (!$this->url_id){
 				$maincharsel[0] = $this->user->lang('mainchar');
+			} else {
+				$maincharsel[$this->url_id] = $member_data['name'];
+				asort($maincharsel);
 			}
 			$static_fields['main_id']	= array(
 				'fieldtype'		=> 'dropdown',

@@ -355,11 +355,6 @@ class mmocms_settings extends page_generic {
 						'not4hmode'		=> true,
 						'default'		=> 0
 					),
-					'upload_allowed_extensions'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'upload_allowed_extensions',
-						'size'			=> 50
-					)
 				),
 				'auth'				=> array(
 					'auth_method'	=> array(
@@ -796,9 +791,10 @@ class mmocms_settings extends page_generic {
 					'custom_logo'	=> array(
 						'fieldtype'	=> 'imageuploader',
 						'name'		=> 'custom_logo',
-						'imgpath'	=> $this->pfh->FolderPath('logo','eqdkp'),
+						'imgpath'	=> $this->pfh->FolderPath('','files'),
 						'options'	=> array(
-							'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png"
+							'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
+							'returnFormat' => 'in_data',
 						),
 					),
 					'pk_itemhistory_dia'	=> array(

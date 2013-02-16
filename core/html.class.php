@@ -248,20 +248,21 @@ if (!class_exists("html")) {
 					$ccfield = $options['direct'];
 				break;
 				
+				case 'filemanager':
+				break;
+				
 				case 'imageuploader':
 					$fileuploadid	= 'file_imageupl_'.$this->cleanid($options['name']);
 					$imgvalue		= (isset($options['value'])) ? $options['value'] : '';
-					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('imageupl_'.$this->cleanid($options['name']), $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
+					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('admin', $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
 				break;
 				
-				case 'filetree':
-					$ccfield = '<div class="filetree"'.((isset($options['style'])) ? $options['style'] : '').'>'.register('uploader')->file_tree($options['dir'], '', $options['extensions'], true, ((isset($options['onlydir'])) ? $options['onlydir'] : false), false, ((isset($options['checkboxes'])) ? $options['checkboxes'] : false), ((isset($options['radio'])) ? $options['name'] : false), $options['selected']).'</div>';
+				case 'userimageuploader':
+					$fileuploadid	= 'file_imageupl_'.$this->cleanid($options['name']);
+					$imgvalue		= (isset($options['value'])) ? $options['value'] : '';
+					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('user', $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
 				break;
-				
-				case 'fileupload':
-					$ccfield = '<input type="file" name="'.$options['name'].'" id="'.$options['name'].'" class="input"/>';
-				break;
-
+								
 				default: $ccfield = '';
 			}
 			return $ccfield;
@@ -324,7 +325,25 @@ if (!class_exists("html")) {
 					}
 				
 				case 'imageuploader':
-					return $this->jquery->MoveUploadedImage($this->in->get($options['name'], ''), $options['imgpath']);
+				case 'userimageuploader':
+				case 'filemanager':
+					if (!isset($options['options'])){
+						return $this->in->get($options['name'], '');
+					} else {
+						switch($options['options']['returnFormat']){
+							case 'relative': return str_replace(register('environment')->link, $this->root_path, $this->in->get($options['name'], ''));
+							break;
+							
+							case 'in_data': return str_replace(register('pfh')->FileLink('', 'files', 'absolute'), '', $this->in->get($options['name'], ''));
+							break;
+							
+							case 'filename': return  pathinfo($this->in->get($options['name'], ''), PATHINFO_BASENAME);
+							
+							case 'absolute':
+							default: return $this->in->get($options['name'], '');
+						}
+					}
+					
 				case 'filetree':
 					if (isset($options['checkbox']) && $options['checkbox']){
 						$in_array = $this->in->getArray('files', 'string');

@@ -312,7 +312,7 @@ class core extends gen_class {
 				'META_DESCRIPTION'			=> ($this->config->get('pk_meta_description') && strlen($this->config->get('pk_meta_description'))) ? $this->config->get('pk_meta_description') : $this->config->get('guildtag'),
 				'EQDKP_ROOT_PATH'			=> $this->root_path,
 				'EQDKP_IMAGE_PATH'			=> $this->root_path.'images/',
-				'HEADER_LOGO'				=> (is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo') : $this->root_path."templates/".$this->user->style['template_path']."/images/logo.png",
+				'HEADER_LOGO'				=> (is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))) ? $this->pfh->FolderPath('','files').$this->config->get('custom_logo') : $this->root_path."templates/".$this->user->style['template_path']."/images/logo.png",
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 				'TEMPLATE_PATH'				=> $this->root_path . 'templates/' . $this->user->style['template_path'],
 				'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),

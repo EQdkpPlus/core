@@ -28,6 +28,7 @@ if (!class_exists("jquery")) {
 		private $ce_loaded				= false;
 		private $language_set			= array();
 		private $dyndd_counter			= 0;
+		private $file_browser			= array();
 		
 		/**
 		* Construct of the jquery class
@@ -463,7 +464,7 @@ if (!class_exists("jquery")) {
 						}
 						var menubutton = \"".$button."\";
 						if (count > 0){
-							menubutton = count + ' ' + menubutton;
+							menubutton = count + ' ' + menubutton+' <span class=\"sf-sub-indicator\"> »</span>';
 						}
 						$('#".$id." .sf-btn-name').html(menubutton);
 					});
@@ -1303,98 +1304,57 @@ if (!class_exists("jquery")) {
 			");
 		}
 
-		public function imageUploader($id, $inputid, $imgname, $imgpath, $options=''){
+		public function imageUploader($type, $inputid, $imgname, $imgpath, $options=''){
+			$this->fileBrowser($type, 'image');
+				
 			$img2beremoved = (isset($imgname) && is_file($imgpath.$imgname)) ? $this->encrypt->encrypt($imgpath.$imgname) : false;
-			$this->tpl->add_js("
-				$('#iuForm_".$id."').ajaxForm({
-					beforeSubmit: function(a,f,o) {
-						$('#image_".$id."').fadeOut();
-					},
-					success: function(data) {
-						//console.log(data);
-						var jsondata = $.parseJSON(data);
-						if(!jsondata.error){
-							// show the new image
-							$('#image_".$id." img').load(function() {
-								$('#image_".$id."').fadeIn('slow');
-							}).attr('src', '".$this->pfh->FolderPath('imageupload', 'eqdkp')."'+jsondata.file+'?' + new Date().getTime());
-							
-							// remove the old image
-							if($('#".$inputid."').val() != ''){
-								$.post('".$this->root_path."exchange.php?out=imageupload_del', { 
-									data: '".$img2beremoved."'
-								});
-
-							}
-							
-							// set the new image name to the inout field & close dialog
-							$('#".$inputid."').val(jsondata.file)
-							$('#iud_".$id."').dialog('close');
-						}else{
-							alert(jsondata.error);
-						}
-					}
-				});
-				$('#iubutton_".$id."_edit').click( function(){
-					$('#iud_".$id."').dialog('open');
-				});
-				$('#ful_".$id."').fileinput();
-				$('#iud_".$id."').dialog({
-					height: 140,
-					autoOpen: false,
-					width: 400,
-					modal: true,
-					resizable: false,
-					draggable: false,
-					buttons: {
-						'".$this->sanitize($this->user->lang('cancel'))."': function() {
-							$( this ).dialog('close');
-						},
-						'".$this->sanitize($this->user->lang('imageuploader_buttondo'))."': function() {
-							 $('#iuForm_".$id."').submit();
-						}
-					}
-				});", 'docready');
 			
-			// The static Output directly after page body
-			$imgwidth		= (isset($options['width'])) ? $options['width'] : 3000;
-			$imgheight		= (isset($options['height'])) ? $options['height'] : 3000;
-			$imgfilesize	= (isset($options['filesize'])) ? $options['filesize'] : 500000;
 			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/no_pic.png');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
 			
 			$imgprevheight	= (isset($options['prevheight'])) ? $options['prevheight'] : '120';
-
-			$this->tpl->staticHTML('<div style="display:none;" id="iud_'.$id.'" title="'.$this->user->lang('imageuploader_wintitle').'">
-					<form id="iuForm_'.$id.'" action="'.$this->root_path.'exchange.php?out=imageupload&amp;imgheight='.$imgheight.'&amp;imgwidth='.$imgwidth.'&amp;filesize='.$imgfilesize.'" method="post" enctype="multipart/form-data">
-						'.$this->user->lang('imageuploader_file').': <input name="uploadfile" type="file" id="ful_'.$id.'" />
-					</form>
-				</div>');
 			
 			// the output
-			$out	= '<div id="image_'.$id.'" class="imageuploader_image">';
+			$out	= '<div id="image_'.$inputid.'" class="imageuploader_image">';
 			if ($previmgheight > $imgprevheight){
-				$out .= '<a href="'.$imgpreview.'" class="lightbox"><img src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" height="'.$imgprevheight.'"/></a>';
+				$out .= '<a href="'.$imgpreview.'" class="lightbox previewurl"><img class="previewimage" src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" style="max-height:'.$imgprevheight.'px"/></a>';
 			} else {
-				$out .= '<img src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" height="'.$imgprevheight.'"/>';
+				$out .= '<img src="'.$imgpreview.'" class="previewimage" alt="'.$this->user->lang('imageuploader_preview').'" style="max-height:'.$imgprevheight.'px"/>';
 			}	
 			$out .=	'</div>
-					<input value="'.$this->user->lang('imageuploader_editbutton').'" type="button" id="iubutton_'.$id.'_edit" class="mainoption bi_edit" />';
+					<input value="'.$this->user->lang('imageuploader_editbutton').'" type="button" id="iubutton_'.$inputid.'_edit" class="mainoption bi_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"/>';
 			if(isset($options['deletelink']) && (isset($imgname) && is_file($imgpath.$imgname))){
-				$out .= '<input value="" type="button" id="iubutton_'.$id.'_delete" class="mainoption bi_delete novalue" />';
-				$this->tpl->add_js("$('#iubutton_".$id."_delete').click(function(){ location.href='".$options['deletelink']."' });", 'docready');
+				$out .= '<input value="" type="button" id="iubutton_'.$inputid.'_delete" class="mainoption bi_delete novalue" />';
+				$this->tpl->add_js("$('#iubutton_".$inputid."_delete').click(function(){ location.href='".$options['deletelink']."' });", 'docready');
 			}
 			return $out;
 		}
-
-		public function MoveUploadedImage($tmpfile, $folderpath){
-			$newfile	= explode('__', $tmpfile);
-			if(isset($newfile[1]) && $newfile[1] != ''){
-				$filename	= md5(rand().'_'.$newfile[1]).'.'.end(explode(".", $tmpfile));
-				$this->pfh->FileMove($this->pfh->FolderPath('imageupload', 'eqdkp').$tmpfile, $folderpath.$filename);
-				return $filename;
-			}else{
-				return $tmpfile;
+		
+		/**
+		* FileBrowser
+		* 
+		* @param $type		user / admin
+		* @param $filter	none / image
+		* @return void
+		*/
+		public function fileBrowser($type = 'user', $filter = 'none'){
+			$type = ($type == 'user') ? 'user' : 'admin';
+			
+			if (!isset($this->file_browser[$type])){
+				$this->tpl->add_js("function elfinder_".$type."(fieldid){
+					jQuery.FrameDialog.create({
+						url: '".$this->root_path."libraries/elfinder/elfinder.".$type.".php".$this->SID."&type=".$filter."&field='+fieldid,
+						title: '".$this->user->lang('imageuploader_wintitle')."',
+						height: 500,
+						width: 840,
+						modal: false,
+						resizable: true,
+						draggable: true,
+						buttons: false,
+					})
+				}");
+				
+				$this->file_browser[$type] = true;
 			}
 		}
 

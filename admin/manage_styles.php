@@ -343,6 +343,8 @@ class Manage_Styles extends page_generic{
 		$this->confirm_delete($this->user->lang('confirm_delete_style'));
 		$this->jquery->Tab_header('style_tabs');
 		if(isset($select_tab) && $select_tab > 0){ $this->jquery->Tab_Select('style_tabs', $select_tab); }
+		
+		$this->jquery->fileBrowser('admin', 'image');
 
 		$this->tpl->assign_vars(array(
 			// Form vars

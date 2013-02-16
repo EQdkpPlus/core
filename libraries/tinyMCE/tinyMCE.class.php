@@ -100,6 +100,7 @@ class tinyMCE extends gen_class {
 					//invalid_elements : "strong,b,em,i",
 	
 					entity_encoding : "raw",
+					file_browser_callback : "elFinderBrowser",
 					
 					// Theme options
 					theme_advanced_buttons1_add : "fontselect,fontsizeselect,eqdkp_uploader,pages,eqdkp_item_code,eqdkp_embed_code,eqdkp_lightbox",
@@ -125,6 +126,35 @@ class tinyMCE extends gen_class {
 					}
 				});
 			', 'docready');
+			$this->tpl->add_js(
+			'function elFinderBrowser (field_name, url, type, win) {
+            var elfinder_url = "'.$this->root_path.'libraries/elfinder/elfinder.admin.php'.$this->SID.'";    // use an absolute path!
+            var cmsURL = elfinder_url;    // script URL - use an absolute path!
+            if (cmsURL.indexOf("?") < 0) {
+                //add the type as the only query parameter
+                cmsURL = cmsURL + "?editor=tiny&type=" + type;
+            }
+            else {
+                //add the type as an additional query parameter
+                // (PHP session ID is now included if there is one at all)
+                cmsURL = cmsURL + "&editor=tiny&type=" + type;
+            }
+            tinyMCE.activeEditor.windowManager.open({
+                file : cmsURL,
+                title : "File Browser",
+                width : 900,
+                height : 450,
+                resizable : "yes",
+                inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
+                popup_css : false, // Disable TinyMCEs default popup CSS
+                close_previous : "no"
+            }, {
+                window : win,
+                input : field_name
+            });
+            return false;
+        }'
+			);
 			$this->trigger['normal'] = true;
 		}
 	}

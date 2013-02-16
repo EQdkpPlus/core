@@ -345,10 +345,10 @@ class user_settings extends page_generic {
 						),
 					),
 					'user_avatar'	=> array(
-						'fieldtype'	=> 'imageuploader',
+						'fieldtype'	=> 'userimageuploader',
 						'name'		=> 'user_image',
-						'imgpath'	=> $this->pfh->FolderPath('user_avatars','eqdkp'),
-						'options'	=> array('deletelink'	=> 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode')),
+						'imgpath'	=> $this->pfh->FolderPath('users/'.$this->user->id,'files'),
+						'options'	=> array('deletelink'	=> 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode'), 'returnFormat' => 'filename'),
 					),
 					'work'	=> array(
 						'fieldtype'	=> 'text',

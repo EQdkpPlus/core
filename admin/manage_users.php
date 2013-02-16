@@ -802,8 +802,8 @@ class Manage_Users extends page_generic {
 					'user_avatar'	=> array(
 						'fieldtype'	=> 'imageuploader',
 						'name'		=> 'user_image',
-						'imgpath'	=> $this->pfh->FolderPath('user_avatars','eqdkp'),
-						'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar'),
+						'imgpath'	=> $this->pfh->FolderPath('users/'.$user_id,'files'),
+						'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar', 'returnFormat' => 'filename'),
 					),
 					'work'	=> array(
 						'fieldtype'	=> 'text',
