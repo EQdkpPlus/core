@@ -55,7 +55,7 @@ $opts = array(
 			'uploadDeny'	=> array('all'),
 			//'uploadOrder'	=> array('allow', 'deny'),
 			'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download'),
-			'maxFilesInDir' => 5,
+			'maxFilesInDir' => 10,
 		)
 	)
 );

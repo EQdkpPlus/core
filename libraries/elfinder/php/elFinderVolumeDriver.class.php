@@ -973,6 +973,10 @@ abstract class elFinderVolumeDriver {
 	public function file($hash) {
 		$path = $this->decode($hash);
 		
+		//Security
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root)) && ($path !== $this->root)) return $this->setError(elFinder::ERROR_FILE_NOT_FOUND);
+		
+		
 		return ($file = $this->stat($path)) ? $file : $this->setError(elFinder::ERROR_FILE_NOT_FOUND);
 		
 		if (($file = $this->stat($path)) != false) {
