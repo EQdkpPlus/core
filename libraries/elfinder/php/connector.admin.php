@@ -55,7 +55,7 @@ $opts = array(
 			'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
 			'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
 			'uploadDeny'	=> array('application/x-php','application/x-perl','application/x-python-bytecode','application/x-ruby'),
-			//'uploadOrder'	=> array('allow', 'deny'),
+			'uploadOrder'	=> array('allow', 'deny'),
 			'disabled'		=> array('extract', 'archive','mkfile','help'),
 		)
 	)
