@@ -27,7 +27,7 @@ class import06 extends task {
 	}
 
 	public $author = 'Hoofy';
-	public $version = '1.0.1';
+	public $version = '1.1.0';
 	public $form_method = 'post';
 	public $name = 'Import 0.6';
 	public $type = 'import';
@@ -1077,6 +1077,25 @@ class import06 extends task {
 				$no_raid_items[$item_id] = $item;
 			}
 		}
+		
+		//paging
+		$max_vars = 100;
+		$suho = ini_get('suhosin.post.max_vars')-10;
+		$max_vars = (ini_get('suhosin.post.max_vars') && $suho < $max_vars) ? $suho : $max_vars;
+		if($this->step_data['import_data']['items']['paging']) {
+			$this->step_data['import_data']['items']['current_page']++;	
+			$page = $this->step_data['import_data']['items']['current_page'];
+		} else {
+			if($max_vars < (count($no_raid_items) + count($no_member_items))) {
+				$this->step_data['import_data']['items']['paging'] = true;
+				$this->step_data['import_data']['items']['current_page'] = 1;
+				$this->step_data['import_data']['items']['last_page'] = false;
+				$page = 1;
+			}
+		}
+		$start = 1+($page-1)*$max_vars;
+		$end = $page*$max_vars;
+		
 		$output = "<script type='text/javascript'>
 					function Updatefollowing(elem) {
 						var value = elem.value;
@@ -1093,12 +1112,18 @@ class import06 extends task {
 		if(count($no_raid_items) == 0 AND count($no_member_items) == 0) {
 			$output .= "<tr><td width='100%' class='th_sub'>".$this->lang['no_problems']."</td></tr>";
 		} else {
+			$cur_var = 0;
 			if(count($no_raid_items) > 0) {
-				$output .= "<tr><td colspan='2' class='th_sub'>".$this->lang['items_without_raid']."</td></tr>";
+				$raid_out = "<tr><td colspan='2' class='th_sub'>".$this->lang['items_without_raid']."</td></tr>";
+				$apply_raid = false;
 				foreach($no_raid_items as $item_id => $item) {
-					$output .= "<tr><td width='50%'>".date($this->lang['date_format'], $item['date']).' '.$item['name'].' -> '.$item['buyer']."</td>";
-					$output .= "<td>".$this->select_field('item_raid['.$item_id.']', $raids)."</td></tr>";
+					$cur_var++;
+					if($cur_var < $start || $cur_var > $end) continue;
+					$apply_raid = true;
+					$raid_out .= "<tr><td width='50%'>".date($this->lang['date_format'], $item['date']).' '.$item['name'].' -> '.$item['buyer']."</td>";
+					$raid_out .= "<td>".$this->select_field('item_raid['.$item_id.']', $raids)."</td></tr>";
 				}
+				if($apply_raid) $output .= $raid_out;
 			}
 			if(count($no_member_items) > 0) {
 				$new_data = array();
@@ -1106,7 +1131,8 @@ class import06 extends task {
 					$new_data[$item['buyer']][$item_id] = $item;
 				}
 				ksort($new_data);
-				$output .= "<tr><td colspan='2' class='th_sub'>".$this->lang['items_without_member']."</td></tr>";
+				$mem_out1 = "<tr><td colspan='2' class='th_sub'>".$this->lang['items_without_member']."</td></tr>";
+				$apply_mem1 = false;
 				$k = 0;
 				$less2items = false;
 				foreach($new_data as $buyer => $items) {
@@ -1114,24 +1140,40 @@ class import06 extends task {
 						$less2items = true;
 						continue;
 					}
-					$output .= "<tr id='items_".$k."'><td class='th_sub'>".$this->lang['item_buyer'].': '.$buyer."</td><td class='th_sub'>".$this->lang['change_item_to'].': '.$this->select_field('item_glob[]', $members, " onchange='Updatefollowing(this);' class='items_".$k."'").'</td>';
+					$mem_out2 = "<tr id='items_".$k."'><td class='th_sub'>".$this->lang['item_buyer'].': '.$buyer."</td><td class='th_sub'>".$this->lang['change_item_to'].': '.$this->select_field('item_glob[]', $members, " onchange='javascript:Updatefollowing(this);' class='items_".$k."'").'</td>';
+					$apply_mem2 = false;
+					$cur_var++;
 					foreach($items as $item_id => $item) {
-						$output .= "<tr><td width='50%'>".date($this->lang['date_format'], $item['date']).' '.$item['name']."</td>";
-						$output .= "<td>".$this->select_field('item_member['.$item_id.']', $members, " class='items_".$k."'")."</td></tr>";
+						$cur_var++;
+						if($cur_var < $start || $cur_var > $end) continue;
+						$apply_mem2 = true;
+						$apply_mem1 = true;
+						$mem_out2 .= "<tr><td width='50%'>".date($this->lang['date_format'], $item['date']).' '.$item['name']."</td>";
+						$mem_out2 .= "<td>".$this->select_field('item_member['.$item_id.']', $members, " class='items_".$k."'")."</td></tr>";
 					}
 					$k++;
+					if($apply_mem2) $mem_out1 .= $mem_out2;
 				}
 				if($less2items) {
-					$output .= "<tr><td class='th_sub' colspan='2'>".$this->lang['item_buyer_2']."</td></tr>";
+					$mem_out3 = "<tr><td class='th_sub' colspan='2'>".$this->lang['item_buyer_2']."</td></tr>";
+					$apply_mem3 = false;
 					foreach($new_data as $buyer => $items) {
 						if(count($items) > 2) continue;
-						$output .= "<tr><td width='50%'>".date($this->lang['date_format'], $item['date']).' '.$item['name']." -> ".$buyer."</td>";
-						$output .= "<td>".$this->select_field('item_member['.$item_id.']', $members)."</td></tr>";
+						$cur_var++;
+						if($cur_var < $start || $cur_var > $end) continue;
+						$apply_mem3 = true;
+						$apply_mem1 = true;
+						$mem_out3 .= "<tr><td width='50%'>".date($this->lang['date_format'], $item['date']).' '.$item['name']." -> ".$buyer."</td>";
+						$mem_out3 .= "<td>".$this->select_field('item_member['.$item_id.']', $members)."</td></tr>";
 					}
+					if($apply_mem3) $mem_out1 .= $mem_out3;
 				}
+				if($apply_mem1) $output .= $mem_out1;
 			}
+			if($cur_var < $end) $this->step_data['import_data']['items']['last_page'] = true;
 		}
-		$output .= "<tr><th colspan='2' class='th_sub'><input type='submit' name='items' value='".$this->lang['submit']."' class='mainoption' /></th></tr></table>";
+		$max_pages = ceil($cur_var/$max_vars);
+		$output .= "<tr><th colspan='2' class='th_sub'><input type='submit' name='items' value='".$this->lang['submit']." ".$this->lang['page']." (".$page."/".$max_pages.")' class='mainoption' /></th></tr></table>";
 		return $output;
 
 	}
@@ -1149,6 +1191,19 @@ class import06 extends task {
 		if(!$this->get('items')) {
 			return false;
 		}
+		if(empty($this->step_data['import_data']['items']['item_raid'])) $this->step_data['import_data']['items']['item_raid'] = array();
+		$item_raid = $this->get('item_raid', 'int', true);
+		if(is_array($item_raid)) {
+			$this->step_data['import_data']['items']['item_raid'] = $this->step_data['import_data']['items']['item_raid'] + $item_raid;
+		}
+		if(empty($this->step_data['import_data']['items']['item_member'])) $this->step_data['import_data']['items']['item_member'] = array();
+		$item_member = $this->get('item_member', 'int', true);
+		if(is_array($item_member)) {
+			$this->step_data['import_data']['items']['item_member'] = $this->step_data['import_data']['items']['item_member'] + $item_member;
+		}
+		if($this->step_data['import_data']['items']['paging']) {
+			if(!$this->step_data['import_data']['items']['last_page']) return false;
+		}
 		$items = array();
 		$raid2itempool = array();
 		$sql = "SELECT mi.multidkp2itempool_itempool_id, r.raid_id FROM ".$this->new[1]."raids r LEFT JOIN (".$this->new[1]."multidkp2itempool mi LEFT JOIN ".$this->new[1]."multidkp2event me ON mi.multidkp2itempool_multi_id = me.multidkp2event_multi_id) ON me.multidkp2event_event_id = r.event_id;";
@@ -1165,15 +1220,18 @@ class import06 extends task {
 		}
 		$this->old[0]->free_result($result);
 		$result = $this->old[0]->query("SELECT * FROM ".$this->old[1]."items;");
+		$item_member = $this->step_data['import_data']['items']['item_member'];
+		$item_raid = $this->step_data['import_data']['items']['item_raid'];
 		while ( $row = $this->old[0]->fetch_record($result) ) {
-			if(is_array($this->get('item_raid', 'int', true)) AND in_array($row['item_id'], $this->get('item_raid', 'int', true))) {
-				$row['raid_id'] = $this->get('item_raid:'.$row['item_id'], 0);
+			if(is_array($item_raid) AND isset($item_raid[$row['item_id']])) {
+				$row['raid_id'] = $item_raid[$row['item_id']];
 			}
-			if(is_array($this->get('item_member', 'int', true)) AND in_array($row['item_id'], array_keys($this->get('item_member', 'int', true)))) {
-				$row['member_id'] = $this->get('item_member:'.$row['item_id'], 0);
+			if(is_array($item_member) AND isset($item_member[$row['item_id']])) {
+				$row['member_id'] = $item_member[$row['item_id']];
+			} else {
+				$row['member_id'] = $this->array_isearch($row['item_buyer'], $members);
 			}
-			$row['member_id'] = $this->array_isearch($row['item_buyer'], $members);
-			if(!$row['member_id']) continue;
+			if(!$row['member_id'] || !$row['raid_id']) continue;
 			unset($row['item_buyer']);
 			unset($row['item_ctrt_wowitemid']);
 			foreach($row as $field => $value) {
@@ -1230,58 +1288,104 @@ class import06 extends task {
 			if(!$key) {
 				$wrong_member_adj[$adj_id] = $adj;
 			} else {
-				$this->step_data['import_data']['adjustments'][$adj_id]['member_id'] = $key;
+				$this->step_data['import_data']['adjustments']['adjustments'][$adj_id]['member_id'] = $key;
 			}
 			$key = array_search($adj['event'], $events);
 			if(!$key) {
 				$wrong_event_adj[$adj_id] = $adj;
 			} else {
-				$this->step_data['import_data']['adjustments'][$adj_id]['event_id'] = $key;
+				$this->step_data['import_data']['adjustments']['adjustments'][$adj_id]['event_id'] = $key;
 			}
 		}
+		
+		//paging
+		$max_vars = 100;
+		$suho = ini_get('suhosin.post.max_vars')-20;
+		$max_vars = (ini_get('suhosin.post.max_vars') && $suho < $max_vars) ? $suho : $max_vars;
+		if($this->step_data['import_data']['adjustments']['paging']) {
+			$this->step_data['import_data']['adjustments']['current_page']++;	
+			$page = $this->step_data['import_data']['adjustments']['current_page'];
+		} else {
+			if($max_vars < (count($wrong_member_adj) + count($wrong_event_adj))) {
+				$this->step_data['import_data']['adjustments']['paging'] = true;
+				$this->step_data['import_data']['adjustments']['current_page'] = 1;
+				$this->step_data['import_data']['adjustments']['last_page'] = false;
+				$page = 1;
+			}
+		}
+		$start = 1+($page-1)*$max_vars;
+		$end = $page*$max_vars;
+		
 		$output = '<table width="60%" cellpadding="1" cellspacing="1" align="center" class="task_table colorswitch">';
 		if(count($wrong_member_adj) == 0 AND count($wrong_event_adj) == 0) {
 			$output .= "<tr><td width='100%' class='th_sub'>".$this->lang['no_problems']."</td></tr>";
 		} else {
+			$cur_var = 0;
 			if(count($wrong_event_adj) > 0) {
-				$output .= "<tr><td colspan='2' class='th_sub'>".$this->lang['adjs_without_event']."</td></tr>";
+				$event_out = "<tr><td colspan='2' class='th_sub'>".$this->lang['adjs_without_event']."</td></tr>";
+				$apply_event = false;
 				foreach($wrong_event_adj as $adj_id => $adj) {
-					$output .= "<tr><td width='50%'>".date($this->lang['date_format'], $adj['date']).' '.$adj['event'].': '.$adj['member']." (".$adj['reason'].")</td>";
-					$output .= "<td>".$this->select_field('adj_event['.$adj_id.']', $events)."</td></tr>";
+					$cur_var++;
+					if($cur_var < $start || $cur_var > $end) continue;
+					$apply_event = true;
+					$event_out .= "<tr><td width='50%'>".date($this->lang['date_format'], $adj['date']).' '.$adj['event'].': '.$adj['member']." (".$adj['reason'].")</td>";
+					$event_out .= "<td>".$this->select_field('adj_event['.$adj_id.']', $events)."</td></tr>";
 				}
+				if($apply_event) $output .= $event_out;
 			}
 			if(count($wrong_member_adj) > 0) {
-				$output .= "<tr><td colspan='2' class='th_sub'>".$this->lang['adjs_without_member']."</td></tr>";
+				$member_out = "<tr><td colspan='2' class='th_sub'>".$this->lang['adjs_without_member']."</td></tr>";
+				$apply_member = false;
 				foreach($wrong_member_adj as $adj_id => $adj) {
-					$output .= "<tr><td width='50%'>".date($this->lang['date_format'], $adj['date']).' '.$adj['event'].': '.$adj['member']." (".$adj['reason'].")</td>";
-					$output .= "<td>".$this->select_field('adj_member['.$adj_id.']', $members)."</td></tr>";
+					$cur_var++;
+					if($cur_var < $start || $cur_var > $end) continue;
+					$apply_member = true;
+					$member_out .= "<tr><td width='50%'>".date($this->lang['date_format'], $adj['date']).' '.$adj['event'].': '.$adj['member']." (".$adj['reason'].")</td>";
+					$member_out .= "<td>".$this->select_field('adj_member['.$adj_id.']', $members)."</td></tr>";
 				}
+				if($apply_member) $output .= $member_out;
 			}
+			if($cur_var < $end) $this->step_data['import_data']['adjustments']['last_page'] = true;
 		}
-		$output .= "<tr><th colspan='2' class='th_sub'><input type='submit' name='adjustments' value='".$this->lang['submit']."' class='mainoption' /></th></tr></table>";
+		$max_pages = ceil($cur_var/$max_vars);
+		$output .= "<tr><th colspan='2' class='th_sub'><input type='submit' name='adjustments' value='".$this->lang['submit']." ".$this->lang['page']." (".$page."/".$max_pages.")' class='mainoption' /></th></tr></table>";
 		return $output;
 	}
 
 	protected function parse_adjustments() {
 		if(!$this->get('adjustments')) {
 			return false;
+		}		
+		if(empty($this->step_data['import_data']['adjustments']['wrong_events'])) $this->step_data['import_data']['adjustments']['wrong_events'] = array();
+		$wrong_events = $this->get('adj_event', 'int', true);
+		if(is_array($wrong_events)) {
+			$this->step_data['import_data']['adjustments']['wrong_events'] = $this->step_data['import_data']['adjustments']['wrong_events'] + $wrong_events;
 		}
+		if(empty($this->step_data['import_data']['adjustments']['wrong_member'])) $this->step_data['import_data']['adjustments']['wrong_member'] = array();
+		$wrong_member = $this->get('adj_member', 'int', true);
+		if(is_array($wrong_member)) {
+			$this->step_data['import_data']['adjustments']['wrong_member'] = $this->step_data['import_data']['adjustments']['wrong_member'] + $wrong_member;
+		}
+		if($this->step_data['import_data']['adjustments']['paging']) {
+			if(!$this->step_data['import_data']['adjustments']['last_page']) return false;
+		}
+		$wrong_events = $this->step_data['import_data']['adjustments']['wrong_events'];
+		$wrong_member = $this->step_data['import_data']['adjustments']['wrong_member'];
 		$adjs = array();
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT * FROM ".$this->old[1]."adjustments;");
 		while ( $row = $this->old[0]->fetch_record($result) ) {
-			if(is_array($this->get('adj_event', 'int', true)) AND in_array($row['adjustment_id'], $this->get('adj_event', 'int', true))) {
-				if(!$this->get('adj_event:'.$row['adjustment_id'], 0)) continue;
-				$row['event_id'] = $this->get('adj_event:'.$row['adjustment_id'], 0);
+			if(isset($wrong_events[$row['adjustment_id']])) {
+				$row['event_id'] = $wrong_events[$row['adjustment_id']];
 			} else {
-				$row['event_id'] = $this->step_data['import_data']['adjustments'][$row['adjustment_id']]['event_id'];
+				$row['event_id'] = $this->step_data['import_data']['adjustments']['adjustments'][$row['adjustment_id']]['event_id'];
 			}
-			if(is_array($this->get('adj_member', 'int', true)) AND in_array($row['adjustment_id'], $this->get('adj_member', 'int', true))) {
-				if(!$this->get('adj_member:'.$row['adjustment_id'], 0)) continue;
-				$row['member_id'] = $this->get('adj_member:'.$row['adjustment_id'], 0);
+			if(isset($wrong_member[$row['adjustment_id']])) {
+				$row['member_id'] = $wrong_member[$row['adjustment_id']];
 			} else {
-				$row['member_id'] = $this->step_data['import_data']['adjustments'][$row['adjustment_id']]['member_id'];
+				$row['member_id'] = $this->step_data['import_data']['adjustments']['adjustments'][$row['adjustment_id']]['member_id'];
 			}
+			if(!$row['event_id'] || !$row['member_id']) continue;
 			unset($row['member_name']);
 			unset($row['raid_name']);
 			foreach($row as $field => $value) {

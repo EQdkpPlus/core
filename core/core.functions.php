@@ -1145,6 +1145,10 @@ function pr($info='', $ret1=false, $ret2=false) {
 	if(!is_object(registry::register('plus_debug_logger'))) return false;
 	return registry::register('plus_debug_logger')->runtime($info, $ret1, $ret2);
 }
+function pf($var) {
+	if(!is_object(registry::register('plus_debug_logger'))) return false;
+	return registry::register('plus_debug_logger')->format_var($var);
+}
 /**
  * var_dump array
  *

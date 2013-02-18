@@ -42,6 +42,7 @@ $lang['date_format'] = 'm/d/Y';
 $lang['no_import'] = 'nicht importieren';
 $lang['dont_import'] = 'Abbrechen';
 $lang['nothing_imported'] = 'Import wurde abgebrochen.';
+$lang['page'] = 'Seite';
 
 //first step
 $lang['database_info'] = 'Informationen über das zu importierende EQdkp Plus';

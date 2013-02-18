@@ -42,6 +42,7 @@ $lang['date_format'] = 'm/d/Y';
 $lang['no_import'] = 'Don\'t import this';
 $lang['dont_import'] = 'Don\'t import anything';
 $lang['nothing_imported'] = 'Import canceled';
+$lang['page'] = 'Page';
 
 //first step
 $lang['database_info'] = 'Information about the database from which shall be imported';
