@@ -259,7 +259,7 @@ class phpbb3_bridge extends bridge_generic {
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
 			return $this->time->mktime(0,0,0,$m,$d,$y);
 		}
-		return '';
+		return 0;
 	}
 	
 	//---------------------------------------------------------

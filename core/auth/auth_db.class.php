@@ -48,7 +48,7 @@ class auth_db extends auth {
 		$arrStatus = false;
 		$this->error = false;
 		
-		//Bridge-Login
+		//Bridge-Login, only if using not a hash
 		if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1 && $boolUseHash == false){
 			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin, false);
 		}
@@ -75,7 +75,7 @@ class auth_db extends auth {
 					$blnNeedsUpdate = $this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt;
 					if($blnNeedsUpdate || $row['api_key'] == ''){
 					if (((int)$row['user_active'])){
-						if($this->checkPassword($strPassword, $row['user_password'])){
+						if($this->checkPassword($strPassword, $row['user_password'], $boolUseHash)){
 							
 								$strNewSalt		= $this->generate_salt();
 								$strNewPassword	= $this->encrypt_password($strPassword, $strNewSalt);

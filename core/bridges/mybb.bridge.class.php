@@ -145,7 +145,7 @@ class mybb_bridge extends bridge_generic {
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
 			return $this->time->mktime(0,0,0,$m,$d,$y);
 		}
-		return '';
+		return 0;
 	}
 
 	public function mybb_sso($arrUserdata, $boolAutoLogin = false){
