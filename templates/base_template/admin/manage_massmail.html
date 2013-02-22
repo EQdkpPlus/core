@@ -132,7 +132,7 @@ $(document).ready(function(){
 	var recipients = [{RECIPIENTS}];
 	$.post("manage_massmail.php{SID}&send=true&link_hash={CSRF_SEND_TOKEN}", { userid: recipients[recentNumber], subject: "{ENCR_SUBJECT}", message: "{ENCR_MESSAGE}", event_id: "{EVENT_ID}"})
 	.success(function(data) {
-		if (data == 'true'){
+		if ($.trim(data) == 'true'){
 			if (recentNumber < totalMails){
 				set_progress_bar_value(recentNumber+1);
 				send_mail(recentNumber+1);

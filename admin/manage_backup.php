@@ -23,7 +23,7 @@ require_once($eqdkp_root_path . 'common.php');
 
 class EQDKPBackup extends page_generic{
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup');
+		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup', 'pdc');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -226,6 +226,8 @@ class EQDKPBackup extends page_generic{
 				}
 			}
 			$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $matches[1])),$this->user->lang('backup'),'green');
+			//Flush cache
+			$this->pdc->flush();
 		}
 		if (strlen($backup_file)){
 			$this->pfh->Delete($backup_file);
