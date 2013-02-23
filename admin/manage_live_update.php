@@ -310,6 +310,7 @@ class Manage_Live_Update extends page_generic {
 			foreach($arrRemovedFiles as $file){
 				$this->tpl->assign_block_vars('removed_row', array(
 					'FILENAME'	=> $file['name'],
+					'ENCODED_FILENAME' => base64_encode($file['name']),
 				));
 			}
 		}
