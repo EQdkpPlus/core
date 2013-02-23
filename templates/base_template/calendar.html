@@ -19,9 +19,9 @@
 			// define the time formats
 			axisFormat: 'H(:mm)',
 			columnFormat: {
-				month: 'ddd',		// Mo
-				week: 'ddd d.M',	// Do 16.12.
-				day: 'dddd d.M'		//Samstag, 13.12.
+				month: 'ddd',					// Mo
+				week: 'ddd {JS_DATEFORMAT2}',	// Mo 16.12.
+				day: 'dddd {JS_DATEFORMAT2}'	// Monday, 13.12.
 			},
 
 			// The rest
@@ -65,14 +65,14 @@
 				// onclick Event Tooltip
 				if(!event.url){
 					if(event.allDay){
-						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, 'dd.MM.yyyy')+"</div>";
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}')+"</div>";
 						if(($.fullCalendar.formatDate(event.end, 'dd') != $.fullCalendar.formatDate(event.start, 'dd')) || ($.fullCalendar.formatDate(event.end, 'MM') != $.fullCalendar.formatDate(event.start, 'MM'))){
-							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, 'dd.MM.yyyy')+"</div>";
+							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, '{JS_DATEFORMAT}')+"</div>";
 						}
 						tmpttcontent += "<div class='calendartt_allday'>{L_calendar_allday}</div>";
 					}else{
-						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, 'dd.MM.yyyy, H:mm')+"</div>";
-						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, 'dd.MM.yyyy, H:mm')+"</div>";
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
 					}
 					if(event.note){
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
@@ -95,8 +95,8 @@
 				}else{
 					tmpttcontent = '';
 					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
-					tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, 'dd.MM.yyyy, H:mm')+"</div>";
-					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, 'dd.MM.yyyy, H:mm')+"</div>";
+					tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
 
 					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
 

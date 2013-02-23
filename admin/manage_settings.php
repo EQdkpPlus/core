@@ -509,6 +509,24 @@ class mmocms_settings extends page_generic {
 						'name'			=> 'default_date_long',
 						'size'			=> 20,
 						'default'		=> $this->user->lang('style_date_long')
+					),
+					'default_jsdate_time'	=> array(
+						'fieldtype'		=> 'text',
+						'name'			=> 'default_jsdate_time',
+						'size'			=> 20,
+						'default'		=> $this->user->lang('style_jstime')
+					),
+					'default_jsdate_nrml'	=> array(
+						'fieldtype'		=> 'text',
+						'name'			=> 'default_jsdate_nrml',
+						'size'			=> 20,
+						'default'		=> $this->user->lang('style_jsdate_nrml')
+					),
+					'default_jsdate_short'	=> array(
+						'fieldtype'		=> 'text',
+						'name'			=> 'default_jsdate_short',
+						'size'			=> 20,
+						'default'		=> $this->user->lang('style_jsdate_short')
 					)
 				)
 			),
