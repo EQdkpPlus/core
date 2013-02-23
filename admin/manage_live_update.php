@@ -480,7 +480,7 @@ class Manage_Live_Update extends page_generic {
 		$updates = $this->repo->UpdatesAvailable(true);
 		if ($updates){
 			if ($returnData) return $this->repo->updates['pluskernel'];
-			return $this->repo->updates['pluskernel']['version'];
+			return $this->repo->updates['pluskernel']['version_int'];
 		}
 
 		return false;

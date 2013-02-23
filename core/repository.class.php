@@ -543,6 +543,7 @@ HTP69g==
 											'plugin'			=> $value['plugin'],
 											'name'				=> $value['name'],
 											'version'			=> $value['version_ext'],
+											'version_int'		=> $value['version'],
 											'recent_version'	=> $recent_version,
 											'changelog'			=> $value['changelog'],
 											'level'				=> $value['level'],
