@@ -60,7 +60,6 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					'lastupdate'	=> $row['updated'],
 					'shortdesc'		=> $row['shortdesc'],
 					'category'		=> $row['category'],
-					'build'			=> $row['build'],
 					'level'			=> $row['level'],
 					'rating'		=> $row['rating'],
 					'dep_coreversion'=> $row['dep_coreversion'],
