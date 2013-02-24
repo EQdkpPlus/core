@@ -173,7 +173,7 @@ HTP69g==
 								'updated'			=> $this->time->time,
 								'rating'			=> (int)round((float)$ext->rating),
 								'dep_coreversion'	=> $ext->dep_coreversion,
-								'version_ext'		=> ($ext->version_ext) ? $ext->version_ext : $ext->version,
+								'version_ext'		=> (isset($ext->version_ext)) ? $ext->version_ext : $ext->version,
 								'dep_php'			=> ($ext->dep_php) ? $ext->dep_php : '',
 							)));
 						}
