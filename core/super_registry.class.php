@@ -171,7 +171,7 @@ abstract class super_registry {
 				}
 				
 				//check if version in config needs update (no db update existing, since no task necessary at this point)
-				if(!defined('NO_MMODE_REDIRECT')){
+				if(!defined('NO_MMODE_REDIRECT') && !registry::register('config')->get('pk_maintenance_mode')){
 					if(version_compare(registry::register('config')->get('plus_version'), VERSION_INT, '<')) {
 						registry::register('config')->set('plus_version', VERSION_INT);
 					}
