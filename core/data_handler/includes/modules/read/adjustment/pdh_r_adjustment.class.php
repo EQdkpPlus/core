@@ -202,6 +202,12 @@ if(!class_exists('pdh_r_adjustment')){
 			$type = (in_array($type, $allowed_types)) ? $type : 'reason';
 			return "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>".call_user_func_array(array($this, 'get_'.$type), array($adj_id))."</a>";
 		}
+		
+		public function comp_link($params1, $params2){
+			$method = (isset($params1[3]) && $params1[3] == 'member') ? 'get_member' : 'get_reason';
+			return ($this->$method($params1[0]) < $this->$method($params2[0])) ? -1  : 1 ;
+			
+		}
 
 		public function get_editicon($adj_id, $baseurl, $url_suffix='') {
 			return "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>
@@ -215,6 +221,12 @@ if(!class_exists('pdh_r_adjustment')){
 
 		public function get_html_m4agk4a($adj_id) {
 			return implode(', ', $this->pdh->aget('adjustment', 'html_member_name', 0, array($this->get_ids_of_group_key($this->get_group_key($adj_id)))));
+		}
+		
+		public function comp_m4agk4a($params1, $params2){
+			$members1 = implode(', ', $this->pdh->aget('adjustment', 'member_name', 0, array($this->get_ids_of_group_key($this->get_group_key($params1[0])))));
+			$members2 = implode(', ', $this->pdh->aget('adjustment', 'member_name', 0, array($this->get_ids_of_group_key($this->get_group_key($params2[0])))));
+			return ($members1 < $members2) ? -1  : 1 ;
 		}
 	}
 }
