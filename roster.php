@@ -74,7 +74,7 @@ class roster extends page_generic {
 					}
 				
 			} else {
-				$members = $this->pdh->aget('member', 'classid', 0, array($this->pdh->get('member', 'id_list', array($skip_inactive, true, true, $skip_twinks))));
+				$members = $this->pdh->aget('member', 'classid', 0, array($this->pdh->get('member', 'id_list', array($skip_inactive, $skip_hidden, true, $skip_twinks))));
 				$arrClassMembers = array();
 				foreach ($members as $memberid => $classid){
 					$arrClassMembers[$classid][] = $memberid;
