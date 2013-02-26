@@ -115,6 +115,19 @@ class ManageAdjs extends page_generic {
 			$adj['date'] = $this->pdh->get('adjustment', 'date', array($id));
 			$adj['raid_id'] = $this->pdh->get('adjustment', 'raid_id', array($id));
 			$adj['event'] = $this->pdh->get('adjustment', 'event', array($id));
+			
+			//Add additional members
+			if (count($adj['members']) > 0){
+				$arrIDList = array_keys($members);
+				$blnResort = false;
+				foreach($adj['members'] as $member_id){
+					if (!isset($members[$member_id])) {
+						$arrIDList[] = $member_id;
+						$blnResort = true;
+					}
+				}
+				if ($blnResort) $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($arrIDList, 'member', 'name', 'asc')));
+			}
 		}
 
 		//fetch adjustment-reasons
