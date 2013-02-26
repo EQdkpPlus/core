@@ -114,6 +114,19 @@ class ManageItems extends page_generic {
 			$item['raid_id'] = $this->pdh->get('item', 'raid_id', array($id));
 			$item['item_id'] = $this->pdh->get('item', 'game_itemid', array($id));
 			$item['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($id));
+			
+			//Add additional members
+			if (count($item['buyers']) > 0){
+				$arrIDList = array_keys($members);
+				$blnResort = false;
+				foreach($item['buyers'] as $member_id){
+					if (!isset($members[$member_id])) {
+						$arrIDList[] = $member_id;
+						$blnResort = true;
+					}
+				}
+				if ($blnResort) $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($arrIDList, 'member', 'name', 'asc')));
+			}
 		} else {
 			$item['date'] = $this->time->time;
 		}

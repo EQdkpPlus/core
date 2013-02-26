@@ -151,6 +151,20 @@ class ManageRaids extends page_generic {
 			$adjs = $this->get_adjsofraid($raid['id']);
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
+			
+			//Add additional members
+			if (count($raid['attendees']) > 0){
+				$arrIDList = array_keys($members);
+				$blnResort = false;
+				foreach($raid['attendees'] as $member_id){
+					if (!isset($members[$member_id])) {
+						$arrIDList[] = $member_id;
+						$blnResort = true;
+					}
+				}
+				if ($blnResort) $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($arrIDList, 'member', 'name', 'asc')));
+			}
+			
 		}
 		//If we get a draft
 		if ($this->in->get('draft', 0) > 0) {
