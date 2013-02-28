@@ -31,7 +31,8 @@ class template extends gen_class {
 		'encrypt' 		=> 'encrypt',
 		'timekeeper' 	=> 'timekeeper',
 	);
-
+	
+	private $handle					= '';
 	protected $_data				= array();
 	protected $caching				= false;
 	protected $root					= '';
@@ -403,6 +404,7 @@ class template extends gen_class {
 				$this->generate_error('templates_error2', $handle, $this->filename[$handle], 'display()');
 			}else{
 				$this->compile_write($handle, $this->compiled_code[$handle]);
+				$this->handle = $handle;
 				@eval($this->compiled_code[$handle]);
 			}
 		}
@@ -1088,7 +1090,9 @@ class template extends gen_class {
 
 	}
 
-	private function generate_error($content, $handle, $sprintf = '', $function = ''){
+	public function generate_error($content, $handle = false, $sprintf = '', $function = ''){
+		if ($handle === false) $handle = $this->handle;
+
 		if(!$this->error_message){
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
@@ -1101,15 +1105,16 @@ class template extends gen_class {
 			$message		.= $content;
 			$message		.= '<br /><h2>'.$this->lang('templates_error_more').'</h2>';
 			$message		.= '<b>File:</b> '.$this->filename[$handle].'<br />';
+			if($handle != 'body') $message		.= '<b>Body-File:</b> '.$this->files['body'].'<br />';
 			$message		.= '<b>Path:</b> '.$this->files[$handle].'<br />';
 			$message		.= ($function != "") ? '<b>Function:</b> '.$function.'<br />' : '';
 			$message		.= '<b>Style-Code:</b> '.$this->style_code.'<br />';
 			$message		.= '<b>Template:</b> '.$this->template.'<br />';
 			$message		.= '<b>Handler:</b> '.$handle.'<br />';
-
 			$this->display_error($title, $message);
 			$this->error_message	= true;
 		}
+		
 	}
 
 	private function display_error($title, $message) {
