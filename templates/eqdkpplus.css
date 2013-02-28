@@ -490,7 +490,7 @@ div.icon_repeating {
 
 /*Image Button without value*/
 .novalue {
-	text-indent: 3px !important;
+	width: 24px;
 }
 
 
