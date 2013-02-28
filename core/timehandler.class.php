@@ -85,11 +85,17 @@ if (!class_exists("timehandler")){
 			'U'		=> 'return',
 		);
 		private $backslash_sequence = array('t', 'r', 'n');
+		
+		private $timestamp = 0;
+		public $summertime = 0;
+		private $userTimeZone = 0;
+		private $serverTimeZone = 0;
 
 		public function __construct() {
 			$tmp_timezone			= $this->get_serverTimezone();
 			date_default_timezone_set($tmp_timezone);
 			$this->timestamp		= time();
+			$this->summertime		= (date('I',$this->timestamp)) ? true : false;
 			$this->userTimeZone		= new DateTimeZone('GMT');
 			$this->serverTimeZone	= new DateTimeZone($tmp_timezone);
 			$this->pdl->register_type('time_error', null, null, array(2,3,4));
@@ -193,8 +199,11 @@ if (!class_exists("timehandler")){
 		*/
 		public function date($format="Y-m-d H:i:s", $dtime='', $chk_summer=true){
 			//check for summer time
-			if($chk_summer && $this->date('I', $dtime, false) == '1') {
-				$dtime += 3600;
+			if($this->summertime && $chk_summer) {
+				$summertime = ($this->date('I', $dtime, false)) ? true : false;
+				if($summertime !== $this->summertime) {
+					$dtime += 3600;
+				}
 			}
 			
 			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
@@ -401,7 +410,10 @@ if (!class_exists("timehandler")){
 			// hack to allow negative timestamps
 			if(!$stamp) $stamp = $dateTime->format('U');
 			//check for summer time
-			if($this->date('I', $stamp, false) == 1) $stamp -= 3600;
+			if($this->summertime) {
+				$summertime = ($this->date('I', $stamp, false)) ? true : false;
+				if($summertime !== $this->summertime) $stamp -= 3600;
+			}
 			return $stamp;
 		}
 		

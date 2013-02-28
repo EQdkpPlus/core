@@ -63,6 +63,8 @@ if(!class_exists("calevents_repeatable_crontask")){
 						$max_childid	= max($a_childid);
 						$date_max_child	= $this->pdh->get('calendar_events', 'time_start', array($max_childid));
 						$date_event_add	= $date_max_child+$rptbl_period;
+						// summertime handling
+						$date_event_add = $this->handle_summertime($date_event_add, $date_max_child);
 
 						// add an event if needed
 						while($date_event_add < $end_cronjob){
@@ -98,13 +100,22 @@ if(!class_exists("calevents_repeatable_crontask")){
 							$clonedraidid = $this->pdh->put('calendar_events', 'add_cevent', $a_data);
 							$this->pdh->put('calendar_events', 'auto_addchars', array($eventsdata['extension']['raidmode'], $clonedraidid));
 
-							// set the date for the next event
-							$date_event_add	= $date_event_add+$rptbl_period;
+							// set the date for the next event and handle summertime stuff
+							$date_event_add = $this->handle_summertime($date_event_add+$rptbl_period, $date_event_add);
 						}
 					}
 				} // end of foreach
 			}
 			$this->pdh->process_hook_queue();
+		}
+		
+		// handle sumertime
+		private function handle_summertime($toadd, $before) {
+			// first raid from winter to summer needs -3600;
+			if($this->time->date('I', $toadd, false) == '1' && $this->time->date('I', $before, false) == '0') $toadd -= 3600;
+			//  first raid from summer to winter needs +3600
+			elseif($this->time->date('I', $toadd, false) == '0' && $this->time->date('I', $before, false) == '1') $toadd += 3600;
+			return $toadd;
 		}
 	}
 }
