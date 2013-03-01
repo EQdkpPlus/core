@@ -33,6 +33,8 @@ if(!class_exists('pdh_w_user')) {
 
 		public function insert_user($arrData, $logging = true, $toDefaultGroup = true){
 			$arrData = $this->set_defaults($arrData);
+			$arrData['user_registered'] = $this->time->time;
+			
 			$result = $this->db->query("INSERT INTO __users :params", $arrData);
 
 			if ( !($result) ) {
@@ -76,7 +78,6 @@ if(!class_exists('pdh_w_user')) {
 				'user_key'				=> $user_key,
 				'user_active'			=> $user_active,
 				'rules'					=> ($rules) ? 1 : 0,
-				'user_registered'		=> $this->time->time,
 				'api_key'				=> $strApiKey,
 			);
 			if ($strLoginMethod && $this->user->handle_login_functions('after_register', $strLoginMethod )){
@@ -112,7 +113,6 @@ if(!class_exists('pdh_w_user')) {
 				'user_style'		=> $this->config->get('default_style'),
 				'user_lang'			=> $this->config->get('default_lang'),
 				'user_timezone'		=> $this->config->get('timezone'),
-				'user_registered'	=> $this->time->time,
 				'user_date_long'	=> ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->user->lang('style_date_long'),
 				'user_date_short'	=> ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->user->lang('style_date_short'),
 				'user_date_time'	=> ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->user->lang('style_date_time'),
@@ -183,7 +183,9 @@ if(!class_exists('pdh_w_user')) {
 			$plugin_settings = array();
 			if (is_array($this->pm->get_menus('settings'))){
 				foreach ($this->pm->get_menus('settings') as $plugin => $values){
+					
 					foreach ($values as $key=>$setting){
+					if ($key == 'icon' || $key == 'name') continue;
 						$name = $setting['name'];
 						$setting['name'] = $plugin.':'.$setting['name'];
 						$setting['plugin'] = $plugin;
