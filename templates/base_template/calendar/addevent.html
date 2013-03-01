@@ -91,7 +91,7 @@ $(document).ready(function() {
 
 	// the manual form validation
 	$('#submittheform').click(function(){
-		console.log('test');
+
 		if($('#selectmode').val() == 'raid'){
 			if(($('input[name="raid_attendees_count"]').val() < 1) || ($('input[name="raid_attendees_count"]').val() == '0')){
 				ModalAlert('{L_raidevent_event_val_attnd}');
@@ -116,7 +116,9 @@ $(document).ready(function() {
 	});
 
 	//Onload: Count attendees, e.g. required when editing an raid
-	attendeeCount();
+	if($('#cal_raidmodeselect').val() != 'none'){
+		attendeeCount();
+	}
 });
 
 function changeCalendars(cal_mode){
@@ -245,7 +247,7 @@ function attendeeCount(){
 		</dl>
 		<dl>
 			<dt><label><img src="../images/calendar/summ.png" alt=""/> {L_raidevent_attendees}:</label></dt>
-			<dd><input type="text" size="3" maxlength="2" name="raid_attendees_count" value="{ATTENDEES_COUNT}" readonly="readonly" id="attendees_summ" /></dd>
+			<dd><input type="text" size="3" maxlength="2" name="raid_attendees_count" value="{ATTENDEE_COUNT}" readonly="readonly" id="attendees_summ" /></dd>
 		</dl>
 		<div id="raidmode_class">
 			<hr />
