@@ -183,7 +183,9 @@ if(!class_exists('pdh_w_user')) {
 			$plugin_settings = array();
 			if (is_array($this->pm->get_menus('settings'))){
 				foreach ($this->pm->get_menus('settings') as $plugin => $values){
+					
 					foreach ($values as $key=>$setting){
+					if ($key == 'icon' || $key == 'name') continue;
 						$name = $setting['name'];
 						$setting['name'] = $plugin.':'.$setting['name'];
 						$setting['plugin'] = $plugin;
