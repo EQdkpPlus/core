@@ -127,10 +127,11 @@ class bridge_generic extends gen_class {
 				$this->sync($user_id, $arrUserdata);
 			}
 			
-			$arrUserData = $this->pdh->get('user', 'data', array($user_id));			
+			$arrUserData = $this->pdh->get('user', 'data', array($user_id));
+
 			return array('status'		=> 1,
 						'user_id'		=> $user_id,
-						'password_hash'	=> $this->user->encrypt_password($strPassword, $arrUserData['salt']),
+						'password_hash'	=> $arrUserData['password'],
 						'user_login_key' => $arrUserData['user_login_key'],
 						);
 		}

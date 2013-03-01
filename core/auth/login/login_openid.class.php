@@ -165,6 +165,7 @@ class login_openid extends gen_class {
 								'user_id'		=> $userdata['user_id'],
 								'password_hash'	=> $strPwdHash,
 								'autologin'		=> true,
+								'user_login_key' => $userdata['user_login_key'],
 							);
 						}
 					}				
