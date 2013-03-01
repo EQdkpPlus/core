@@ -1,130 +1,3 @@
-/*
- * This file is part of fileinput.
- * 
- * fileinput is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * fileinput is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
- * DO NOT MODIFY
- */
-.fileinput-wrapper {position:relative;display:inline-block;zoom:1;*display:inline;overflow:hidden;padding:0;}
-.fileinput-input {float:left;height:20px;padding:3px;overflow:hidden;width:150px;white-space:nowrap;}
-.fileinput-button {float:left;height:20px;padding:3px;overflow:hidden;white-space:nowrap;}
-.fileinput-button-text {padding:5px;}
-.fileinput-file {position:absolute;left:-9999px;-moz-opacity:0;filter:alpha(opacity=0);opacity:0;}
-
-/*
-
-*/
-
-/*
- * You may modify the source below...
- */
-
-/*
- * The following is an example of styling the visible elements.
- *
- * Please Note: Using POSITION, DISPLAY, or FLOAT css attributes
- * may BREAK THE SCRIPT!
- *
- * Additional Notes: Setting width on .fileinput-button may
- * clip the buttonText. It is recommended not to set width
- * unless you will be using an image background with
- * buttonText set to "" or you know buttonText fits in the
- * allotted space.
- */
-
- /*
-.fileinput-input {
-	height:20px;
-	width:300px;
-	background: url('gradient-input.gif') repeat-x;
-	border:0;
-}
-.fileinput-button {
-	height:20px;
-	background: #617798;
-	border: 0;
-	color: #FFFFFF;
-}
-.fileinput-button-text {
-	padding: 10px;
-}
-*/
-
-/*
- * FullCalendar v1.5.2 Print Stylesheet
- *
- * Include this stylesheet on your page to get a more printer-friendly calendar.
- * When including this stylesheet, use the media='print' attribute of the <link> tag.
- * Make sure to include this stylesheet IN ADDITION to the regular fullcalendar.css.
- *
- * Copyright (c) 2011 Adam Shaw
- * Dual licensed under the MIT and GPL licenses, located in
- * MIT-LICENSE.txt and GPL-LICENSE.txt respectively.
- *
- * Date: Sun Aug 21 22:06:09 2011 -0700
- *
- */
- 
- 
- /* Events
------------------------------------------------------*/
- 
-.fc-event-skin {
-	background: none !important;
-	color: #000 !important;
-	}
-	
-/* horizontal events */
-	
-.fc-event-hori {
-	border-width: 0 0 1px 0 !important;
-	border-bottom-style: dotted !important;
-	border-bottom-color: #000 !important;
-	padding: 1px 0 0 0 !important;
-	}
-	
-.fc-event-hori .fc-event-inner {
-	border-width: 0 !important;
-	padding: 0 1px !important;
-	}
-	
-/* vertical events */
-	
-.fc-event-vert {
-	border-width: 0 0 0 1px !important;
-	border-left-style: dotted !important;
-	border-left-color: #000 !important;
-	padding: 0 1px 0 0 !important;
-	}
-	
-.fc-event-vert .fc-event-inner {
-	border-width: 0 !important;
-	padding: 1px 0 !important;
-	}
-	
-.fc-event-bg {
-	display: none !important;
-	}
-	
-.fc-event .ui-resizable-handle {
-	display: none !important;
-	}
-	
-	
-
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
 .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
@@ -135,7 +8,7 @@
 .ui-timepicker-rtl{ direction: rtl; }
 .ui-timepicker-rtl dl { text-align: right; }
 .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
-/*! jQuery UI - v1.10.0 - 2013-01-17
+/*! jQuery UI - v1.10.1 - 2013-02-15
 * http://jqueryui.com
 * Includes: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css, jquery.ui.theme.css
 * Copyright 2013 jQuery Foundation and other contributors; Licensed MIT */
@@ -169,6 +42,7 @@
 .ui-helper-clearfix:after {
 	content: "";
 	display: table;
+	border-collapse: collapse;
 }
 .ui-helper-clearfix:after {
 	clear: both;
@@ -1344,22 +1218,29 @@ body .ui-tooltip {
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay{background:#000;}
-#colorbox{}
-    #cboxContent{margin-top:20px;}
+#colorbox{outline:0;}
+    #cboxContent{margin-top:20px;background:#000;}
         .cboxIframe{background:#fff;}
         #cboxError{padding:50px; border:1px solid #ccc;}
         #cboxLoadedContent{border:5px solid #000; background:#fff;}
         #cboxTitle{position:absolute; top:-20px; left:0; color:#ccc;}
         #cboxCurrent{position:absolute; top:-20px; right:0px; color:#ccc;}
+        #cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+
+        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+        #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
+        
+        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
+        #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+        
         #cboxSlideshow{position:absolute; top:-20px; right:90px; color:#fff;}
         #cboxPrevious{position:absolute; top:50%; left:5px; margin-top:-32px; background:url(images/controls.png) no-repeat top left; width:28px; height:65px; text-indent:-9999px;}
         #cboxPrevious:hover{background-position:bottom left;}
         #cboxNext{position:absolute; top:50%; right:5px; margin-top:-32px; background:url(images/controls.png) no-repeat top right; width:28px; height:65px; text-indent:-9999px;}
         #cboxNext:hover{background-position:bottom right;}
-        #cboxLoadingOverlay{background:#000;}
-        #cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
         #cboxClose{position:absolute; top:5px; right:5px; display:block; background:url(images/controls.png) no-repeat top center; width:38px; height:19px; text-indent:-9999px;}
         #cboxClose:hover{background-position:bottom center;}
+
 /*rules for the plot target div.  These will be cascaded down to all plot elements according to css rules*/
 .jqplot-target {
     position: relative;
@@ -1649,14 +1530,14 @@ div.jqplot-noData-container {
 .ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
 
 /*!
- * qTip2 - Pretty powerful tooltips - v2.0.1-11-
+ * qTip2 - Pretty powerful tooltips - v2.0.1-27-
  * http://qtip2.com
  *
  * Copyright (c) 2013 Craig Michael Thompson
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Sat Feb 9 2013 08:05 GMT+0000
+ * Date: Tue Feb 26 2013 11:17 GMT+0000
  * Plugins: svg ajax tips modal viewport imagemap ie6
  * Styles: basic css3
  */
@@ -2216,10 +2097,18 @@ div.jqplot-noData-container {
 	margin: 0 auto;
 	overflow: hidden;
 	z-index: 10;
+	
 }
 
+	/* Opera bug #357 - Incorrect tip position
+	https://github.com/Craga89/qTip2/issues/367 */
+	x:-o-prefocus, .qtip .qtip-tip{
+		visibility: hidden;
+	}
+
 	.qtip .qtip-tip,
-	.qtip .qtip-tip .qtip-vml{
+	.qtip .qtip-tip .qtip-vml,
+	.qtip .qtip-tip canvas{
 		position: absolute;
 
 		color: #123456;
@@ -2738,6 +2627,139 @@ License: MIT
 .sp-palette .sp-thumb-dark.sp-thumb-active .sp-thumb-inner
 {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAMdJREFUOE+tkgsNwzAMRMugEAahEAahEAZhEAqlEAZhEAohEAYh81X2dIm8fKpEspLGvudPOsUYpxE2BIJCroJmEW9qJ+MKaBFhEMNabSy9oIcIPwrB+afvAUFoK4H0tMaQ3XtlrggDhOVVMuT4E5MMG0FBbCEYzjYT7OxLEvIHQLY2zWwQ3D+9luyOQTfKDiFD3iUIfPk8VqrKjgAiSfGFPecrg6HN6m/iBcwiDAo7WiBeawa+Kwh7tZoSCGLMqwlSAzVDhoK+6vH4G0P5wdkAAAAASUVORK5CYII=);
+}
+
+.tool-container {
+	background-color: #d0cbcb;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(14%, #d0cbcb), color-stop(100%, #e9e5e5));
+	background: -moz-linear-gradient(top, #d0cbcb 14%, #e9e5e5 100%);
+	background: -ms-linear-gradient(top, #d0cbcb 14%,#e9e5e5 100%);
+	background: linear-gradient(to bottom, #d0cbcb 14%,#e9e5e5 100%);
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIxNCUiIHN0b3AtY29sb3I9IiNkMGNiY2IiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZTllNWU1IiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d0cbcb', endColorstr='#e9e5e5',GradientType=0 );
+	border-radius: 3px;
+	box-shadow: 0px 0px 15px #000;
+	position: absolute;				
+}
+
+.tool-container.tool-top, .tool-container.tool-bottom {
+	height: 34px;
+	border-bottom: 1px solid #beb8b8 ; /* #B1A9A9 */
+}
+
+.tool-items {
+	height: 100%;	
+}
+
+.tool-top .tool-item, .tool-bottom .tool-item {
+	float: left;
+	border-right: 1px solid #e2dfdf;
+	border-left: 1px solid #9f9898;
+}
+
+.tool-left .tool-item, .tool-right .tool-item {
+	height: 34px;
+	border-top: 1px solid #e2dfdf;
+	border-bottom: 1px solid #9f9898;
+}
+
+
+.tool-item {
+	height: 100%;
+	display: block;				
+	width: 44px;
+	text-align: center;
+}
+
+.tool-item:first-child {
+	border-left: none;
+}
+
+.tool-left .tool-item:first-child, .tool-right .tool-item:first-child {
+	border-top: 1px solid transparent;
+}
+
+.tool-item:last-child {
+	border-right: none;
+	border-bottom: none;
+}
+
+.tool-item.selected, .tool-item:hover  {
+	background: #a79f9f;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #a79f9f), color-stop(93%, #e2dfdf));
+	background: -moz-linear-gradient(top, #a79f9f 0%, #e2dfdf 93%);
+	background: -ms-linear-gradient(top, #a79f9f 0%, #e2dfdf 93%);
+	background: linear-gradient(to bottom, #a79f9f 0%, #e2dfdf 93%);
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E3OWY5ZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjkzJSIgc3RvcC1jb2xvcj0iI2UyZGZkZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a79f9f', endColorstr='#e2dfdf',GradientType=0 );
+}
+
+.tool-top .tool-item:last-child:hover, .tool-bottom .tool-item:last-child:hover {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.tool-top  .tool-item:first-child:hover, .tool-bottom  .tool-item:first-child:hover {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.tool-left .tool-item:last-child:hover, .tool-right .tool-item:last-child:hover {
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.tool-left .tool-item:first-child:hover, .tool-right .tool-item:first-child:hover {
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+}
+
+.tool-container .arrow {
+	width:0;
+	height:0;
+	position: absolute;	
+	border-width:7px;
+	border-style:solid;
+}
+
+.tool-container.tool-top .arrow {
+	border-color: #e9e5e5 transparent transparent; 
+	left: 50%;  
+	bottom: -14px;
+	margin-left: -7px;
+}
+
+.tool-container.tool-bottom .arrow {
+	border-color: transparent transparent #e9e5e5; 
+	left: 50%;  
+	top: -14px;
+	margin-left: -7px;
+}
+
+.tool-container.tool-left .arrow {
+	border-color: transparent transparent transparent #E9E5E5;
+	top: 50%;
+	right: -14px;
+	margin-top: -7px;
+}
+
+.tool-container.tool-right .arrow {
+	border-color: transparent #E9E5E5 transparent transparent;
+	top: 50%;
+	left: -14px;
+	margin-top: -7px;
+}
+
+.demo-link {
+	color: #89CDE4;
+	text-decoration: underline;
+	cursor: pointer;
+	margin-left: 30px;
+}
+
+.demo-link:hover {
+	text-decoration: none;
+	cursor: pointer;
 }
 /*!
  * jQuery UI Stars v3.0.1
