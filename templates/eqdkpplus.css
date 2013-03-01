@@ -417,3 +417,8 @@ div.icon_repeating {
 .center {
 	text-align:center;
 }
+
+/* Set qtip max width to a higher value */
+.tooltip_maxwidth{
+	max-width: none; /* OR alternatively the width of the image (if you know it in advance) */
+}
