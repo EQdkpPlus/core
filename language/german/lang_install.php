@@ -68,6 +68,7 @@ $lang = array(
 	'module_soap'			=> 'SOAP PHP-Modul',
 	'module_autoload'		=> 'spl_autoload_register PHP-Funktion',
 	'module_hash'			=> 'hash PHP-Funktion',
+	'module_memory'			=> 'PHP Speicherlimit',
 	'safemode_warning'		=> '<strong>ACHTUNG</strong><br/>Der PHP Safe Mode ist aktiv, es muss den FTP Modus verwenden, an Sonsten funktioniert EQDKP-PLUS nicht!',
 	'phpcheck_success'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden erfüllt. Die Installation kann fortgesetzt werden.',
 	'phpcheck_failed'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden leider nicht erfüllt.<br />Eine Auswahl von geeigneten Hostern findest Du auf unserer <a href="'.EQDKP_PROJECT_URL.'" target="_blank">Website</a>',
