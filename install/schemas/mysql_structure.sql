@@ -52,7 +52,6 @@ CREATE TABLE `__users` (
 	`phone` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`cellphone` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`address` text COLLATE utf8_bin,
-	`allvatar_nick` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`icq` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`skype` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`msn` varchar(255) COLLATE utf8_bin DEFAULT NULL,
