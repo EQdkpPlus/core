@@ -399,7 +399,8 @@ class addevent extends page_generic {
 			'EVENTNAME'			=> (isset($eventdata['name'])) ? $eventdata['name'] : '',
 			'RAID_VALUE'		=> (isset($eventdata['extension'])) ? $eventdata['extension']['raid_value'] : '',
 			'ATTENDEE_COUNT'	=> (isset($eventdata['extension'])) ? $eventdata['extension']['attendee_count'] : 0,
-			'RAIDMODE_NONE'		=> (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'none') ? true : false
+			'RAIDMODE_NONE'		=> (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'none') ? true : false,
+			'CSRF_DELETETEMPLATE' => $this->CSRFGetToken('deletetemplate'),
 		));
 
 		$this->core->set_vars(array(

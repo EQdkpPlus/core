@@ -51,6 +51,11 @@ class php_check extends install_generic {
 				'adviced_fail'	=> (ini_get('safe_mode') == '1') ? true : false,
 				'ignore'		=> true
 			),
+			'memory'	=> array(
+				'required'		=> '60M',
+				'installed'		=> ini_get('memory_limit'),
+				'passfail'		=> (intval(ini_get('memory_limit')) >= 60) ? true : false,
+			),
 			'curl'		=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (function_exists('curl_version')) ? $this->lang['yes'] : $this->lang['no'],
