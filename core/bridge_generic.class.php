@@ -60,6 +60,7 @@ class bridge_generic extends gen_class {
 			$this->$method($strUsername, $strPassword, $boolSetAutoLogin, $boolUseHash);
 		}
 		$boolLoginResult = false;
+		$strPwdHash = '';
 		
 		//Login
 		if ($this->functions['login']['function'] != '' && method_exists($this, $this->functions['login']['function'])){
@@ -126,9 +127,12 @@ class bridge_generic extends gen_class {
 				$this->sync($user_id, $arrUserdata);
 			}
 			
-			return array('status'	=> 1,
-						'user_id'	=> $user_id,
-						'password_hash'	=> $strPwdHash,);
+			$arrUserData = $this->pdh->get('user', 'data', array($user_id));			
+			return array('status'		=> 1,
+						'user_id'		=> $user_id,
+						'password_hash'	=> $this->user->encrypt_password($strPassword, $arrUserData['salt']),
+						'user_login_key' => $arrUserData['user_login_key'],
+						);
 		}
 		
 		return false;		

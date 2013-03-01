@@ -467,7 +467,7 @@ class user_core extends gen_class {
 	public function updateAutologinKey($intUserID, $strAutologinKey){
 		$query = $this->db->query('UPDATE __users SET :params WHERE user_id=?', array(
 				'user_login_key' => $strAutologinKey,
-			), $intUserID);
+			), (int)$intUserID);
 		return $query;
 	}
 
