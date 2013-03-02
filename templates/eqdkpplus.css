@@ -418,6 +418,12 @@ div.icon_repeating {
 	text-align:center;
 }
 
+/* Remove ui-tooltip padding and box-shadow by default */
+.qtip{
+	box-shadow: none;
+	padding: 0;
+}
+
 /* Set qtip max width to a higher value */
 .tooltip_maxwidth{
 	max-width: none; /* OR alternatively the width of the image (if you know it in advance) */
