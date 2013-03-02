@@ -1530,20 +1530,20 @@ div.jqplot-noData-container {
 .ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
 
 /*!
- * qTip2 - Pretty powerful tooltips - v2.0.1-27-
+ * qTip2 - Pretty powerful tooltips - v2.0.1-28-
  * http://qtip2.com
  *
  * Copyright (c) 2013 Craig Michael Thompson
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Tue Feb 26 2013 11:17 GMT+0000
+ * Date: Fri Mar 1 2013 10:50 GMT+0000
  * Plugins: svg ajax tips modal viewport imagemap ie6
  * Styles: basic css3
  */
 
 /* Core qTip styles */
-.qtip, .qtip{
+.qtip{
 	position: absolute;
 	left: -28000px;
 	top: -28000px;
@@ -1556,6 +1556,9 @@ div.jqplot-noData-container {
 	line-height: 12px;
 
 	direction: ltr;
+
+	box-shadow: none;
+	padding: 0;
 }
 
 	.qtip-content{
