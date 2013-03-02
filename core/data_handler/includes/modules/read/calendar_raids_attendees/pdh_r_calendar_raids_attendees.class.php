@@ -23,12 +23,25 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_calendar_raids_attendees')){
 	class pdh_r_calendar_raids_attendees extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
+			return array_merge(parent::$shortcuts, $shortcuts);
+		}
 
 		public $presets = array(
-			'raidattendees_status'	=> array('html_status', array('%calevent_id%', '%user_id%'), array()),
+			'raidattendees_status'				=> array('html_status', array('%calevent_id%', '%user_id%'), array()),
+			'raidcalstats_lastraid'				=> array('html_calstat_lastraid', array('%member_id%'), array()),
+			'raidcalstats_raids_confirmed_90'	=> array('html_calstat_raids_confirmed', array('%member_id%', '90'), array()),
+			'raidcalstats_raids_signedin_90'	=> array('html_calstat_raids_signedin', array('%member_id%', '90'), array()),
+			'raidcalstats_raids_signedoff_90'	=> array('html_calstat_raids_signedoff', array('%member_id%', '90'), array()),
+			'raidcalstats_raids_backup_90'		=> array('html_calstat_raids_backup', array('%member_id%', '90'), array()),
+			'raidcalstats_raids_confirmed_60'	=> array('html_calstat_raids_confirmed', array('%member_id%', '60'), array()),
+			'raidcalstats_raids_signedin_60'	=> array('html_calstat_raids_signedin', array('%member_id%', '60'), array()),
+			'raidcalstats_raids_signedoff_60'	=> array('html_calstat_raids_signedoff', array('%member_id%', '60'), array()),
+			'raidcalstats_raids_backup_60'		=> array('html_calstat_raids_backup', array('%member_id%', '60'), array()),
+			'raidcalstats_raids_confirmed_30'	=> array('html_calstat_raids_confirmed', array('%member_id%', '30'), array()),
+			'raidcalstats_raids_signedin_30'	=> array('html_calstat_raids_signedin', array('%member_id%', '30'), array()),
+			'raidcalstats_raids_signedoff_30'	=> array('html_calstat_raids_signedoff', array('%member_id%', '30'), array()),
+			'raidcalstats_raids_backup_30'		=> array('html_calstat_raids_backup', array('%member_id%', '30'), array()),
 		);
 
 		private $attendees;
@@ -47,7 +60,11 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		*/
 		public function reset(){
 			$this->pdc->del('pdh_calendar_raids_table.attendees');
-			$this->attendees = NULL;
+			$this->pdc->del('pdh_calendar_raids_table.lastraid');
+			$this->pdc->del('pdh_calendar_raids_table.attendee_status');
+			$this->attendees		= NULL;
+			$this->lastraid			= NULL;
+			$this->attendee_status	= NULL;
 		}
 
 		/**
@@ -58,14 +75,47 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		public function init(){
 			// try to get from cache first
 			$this->attendees		= $this->pdc->get('pdh_calendar_raids_table.attendees');
-			if($this->attendees !== NULL){
+			$this->lastraid			= $this->pdc->get('pdh_calendar_raids_table.lastraid');
+			$this->lastraid			= $this->pdc->get('pdh_calendar_raids_table.attendee_status');
+			if($this->attendees !== NULL && $this->lastraid !== NULL && $this->attendee_status !== NULL){
 				return true;
 			}
 
 			// empty array as default
-			$this->attendees	= array();
-			$myresult		= $this->db->query('SELECT * FROM __calendar_raid_attendees');
+			$this->attendees		= array();
+			$this->lastraid			= array();
+			$this->attendee_status	= array();
+			$myresult				= $this->db->query('SELECT * FROM __calendar_raid_attendees');
+			$raids_90d				= $this->pdh->get('calendar_events', 'amount_raids', array(90, false));
+			$raids_60d				= $this->pdh->get('calendar_events', 'amount_raids', array(60, false));
+			$raids_30d				= $this->pdh->get('calendar_events', 'amount_raids', array(30, false));
 			while ($row = $this->db->fetch_record($myresult)){
+				// fill the last attendee raid array
+				$newdate	= $this->pdh->get('calendar_events', 'time_start', array($row['calendar_events_id']));
+				$actdate	= (isset($this->lastraid[$row['member_id']])) ? $this->lastraid[$row['member_id']] : false;
+				
+				if((!$actdate || ($actdate && $newdate > $actdate) && $newdate < time())){
+					$this->lastraid[$row['member_id']] = $newdate;
+				}
+
+				// attendee status array
+				
+				if(in_array($row['calendar_events_id'], array_keys($raids_90d))){
+					if(in_array($row['calendar_events_id'], array_keys($raids_30d))){
+						$days	= '30';
+					}elseif(in_array($row['calendar_events_id'], array_keys($raids_60d))){
+						$days	= '60';
+					}else{
+						$days	= '90';
+					}
+					if(isset($this->attendee_status[$row['member_id']][$row['signup_status']][$days])){
+						$this->attendee_status[$row['member_id']][$row['signup_status']][$days]++;
+					}else{
+						$this->attendee_status[$row['member_id']][$row['signup_status']][$days] = 1;
+					}
+				}
+
+				// fill the attendee array
 				$this->attendees[$row['calendar_events_id']][$row['member_id']] = array(
 					'member_role'				=> $row['member_role'],
 					'signup_status'				=> $row['signup_status'],
@@ -79,6 +129,8 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				);
 			}
 			$this->pdc->put('pdh_calendar_raids_table.attendees', $this->attendees, NULL);
+			$this->pdc->put('pdh_calendar_raids_table.lastraid', $this->lastraid, NULL);
+			$this->pdc->put('pdh_calendar_raids_table.attendee_status', $this->attendee_status, NULL);
 			return true;
 		}
 
@@ -176,6 +228,70 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 			return $count_status;
 		}
+
+	    /* -----------------------------------------------------------------------
+	    * Statistic stuff
+		* - last raid members have attended to
+		- Amount of raids attended in the last x days.
+		- Amount of raids signed-up, but not attended.
+		- Amount of raids signed-off
+	    * -----------------------------------------------------------------------*/
+
+		public function get_calstat_lastraid($memberid){
+			return (isset($this->lastraid[$memberid])) ? $this->lastraid[$memberid] : 0;
+		}
+
+		public function get_html_calstat_lastraid($memberid){
+			$timestamp	= $this->get_calstat_lastraid($memberid);
+			return ($timestamp > 0) ? $this->time->user_date($timestamp) : '--';
+		}
+
+		public function get_calstat_raids_status($memberid, $status=false, $days='90'){
+			switch($days){
+				case '30':
+					$statsperdays	= $this->attendee_status[$memberid][$status]['30'];
+				break;
+				case '30':
+					$statsperdays	= array_merge($this->attendee_status[$memberid][$status]['30'],$this->attendee_status[$memberid][$status]['60']);
+				break;
+				case '90':
+					$statsperdays	= array_merge($this->attendee_status[$memberid][$status]['30'],$this->attendee_status[$memberid][$status]['60'],$this->attendee_status[$memberid][$status]['90']);
+				break;
+			}
+			return ($status) ? $statsperdays : $this->attendee_status[$memberid];
+		}
+
+		public function get_html_calstat_raids_confirmed($memberid, $days){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 0, $days);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
+		}
+
+		public function get_html_calstat_raids_signedin($memberid, $days){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 1, $days);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
+			
+		}
+
+		public function get_html_calstat_raids_signedoff($memberid, $days){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 2, $days);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
+		}
+		
+		public function get_html_calstat_raids_backup($memberid, $days){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 2, $days);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
+		}
+	    /* -----------------------------------------------------------------------
+	    * Tools
+	    * -----------------------------------------------------------------------*/
 
 		public function get_count($id){
 			if(is_array($this->attendees[$id])){

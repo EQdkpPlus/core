@@ -271,6 +271,19 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			}
 			return $arrSearchResults;
 		}
+
+	    /* -----------------------------------------------------------------------
+	    * Statistic stuff
+		* - amount of raids in the x days
+	    * -----------------------------------------------------------------------*/
+
+		public function get_amount_raids($days, $retcount=true){
+			$raids = array_filter($this->events, function ($element) use (&$days) {
+				return ($element['timestamp_start'] > (time()-($days*86400))); 
+			});
+			return ($retcount) ? count($raids) : $raids;
+		}
+
 	}//end class
 }//end if
 ?>
