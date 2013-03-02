@@ -42,6 +42,16 @@ class viewcalendar extends page_generic {
 		$this->process();
 	}
 
+	// check calendar specific rights such as if the user is a raidleader or the creator
+	private function check_permission($raidid, $userid=0){
+		$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
+		$creator			= $eventdata = $this->pdh->get('calendar_events', 'creatorid', array($raidid));
+		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($raidid));
+		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
+		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
+	}
+
 	// sign into multiple raids in the raid list
 	public function mass_signin(){
 		$eventids = $this->in->getArray('selected_ids', 'int');
@@ -93,7 +103,7 @@ class viewcalendar extends page_generic {
 
 	// Operator/Admin: Move the event in the calendar
 	public function move_event(){
-		if($this->user->check_auth('u_cal_event_add', false)){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($this->in->get('eventid', 0))){
 			$status = $this->pdh->put('calendar_events', 'move_event', array($this->in->get('eventid', 0), $this->in->get('daydelta', 0), $this->in->get('minutedelta', 0), $this->in->get('allday')));
 			$this->pdh->process_hook_queue();
 			echo((($status) ? $this->user->lang('raidevent_raid_move_succ') : $this->user->lang('raidevent_raid_move_fail')));
@@ -107,7 +117,7 @@ class viewcalendar extends page_generic {
 
 	// Operator/Admin: Resize the event in the calendar
 	public function resize_event(){
-		if($this->user->check_auth('u_cal_event_add', false)){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($this->in->get('eventid', 0))){
 			$status = $this->pdh->put('calendar_events', 'resize_event', array($this->in->get('eventid', 0), $this->in->get('daydelta', 0), $this->in->get('minutedelta', 0)));
 			$this->pdh->process_hook_queue();
 			echo((($status) ? $this->user->lang('raidevent_raid_move_succ') : $this->user->lang('raidevent_raid_move_fail')));
@@ -120,7 +130,7 @@ class viewcalendar extends page_generic {
 
 	// Operator/Admin: Delete an event in the calendar
 	public function delete_event(){
-		if($this->user->check_auth('u_cal_event_add', false)){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($this->in->get('eventid', 0))){
 			$delete_clones = ($this->in->get('delete_clones', 'false') != 'false') ? true : false;
 			$status = $this->pdh->put('calendar_events', 'delete_cevent', array($this->in->get('deleteid', 0), $delete_clones));
 			$this->pdh->process_hook_queue();
@@ -281,7 +291,8 @@ class viewcalendar extends page_generic {
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 							'rstatusdata'	=> $rstatusdata,
 							'color'			=> $eventcolor.' !important',
-							'textColor'		=> $eventcolor_txt.' !important'
+							'textColor'		=> $eventcolor_txt.' !important',
+							'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
 						);
 					}else{
 						$event_json[] = array(

@@ -48,36 +48,13 @@ class viewcalraid extends page_generic {
 	}
 
 	// check calendar specific rights such as if the user is a raidleader or the creator
-	private function check_permission($mode='raidleader', $userid=0){
+	private function check_permission($userid=0){
 		$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
-
-		// seelct the mode
-		switch($mode){
-			
-			// raidleaders
-			case 'raidleader':
-				$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-				$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
-				$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-				return (in_array($userid, $raidleaders_users)) ? true : false;
-			break;
-
-			// raidleaders & creators
-			case 'raidleader_creator':
-				$creator			= $eventdata = $this->pdh->get('calendar_events', 'creator', array($this->url_id));
-				$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-				$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
-				$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-				return ($creator === $userid || in_array($userid, $raidleaders_users))  ? true : false;
-			break;
-
-			// creators
-			case 'creator':
-				$creator	= $eventdata = $this->pdh->get('calendar_events', 'creator', array($this->url_id));
-				return ($creator === $userid) ? true : false;
-			break;
-		}
-		return false;
+		$creator			= $eventdata = $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
+		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
+		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
+		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
 	}
 
 	// the role dropdown, attached to the character selection
@@ -133,7 +110,7 @@ class viewcalraid extends page_generic {
 
 	// moderator/operator changes a status for an already signed in char
 	public function moderate_status(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_raids_attendees', 'moderate_status', array(
 				$this->url_id,
 				$this->in->get('moderation_raidstatus'),
@@ -148,7 +125,7 @@ class viewcalraid extends page_generic {
 
 	// delete a guest
 	public function delete_guest(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			if($this->in->get('guestid', 0) > 0){
 				$this->pdh->put('calendar_raids_guests', 'delete_guest', array($this->in->get('guestid', 0)));
 			}
@@ -158,7 +135,7 @@ class viewcalraid extends page_generic {
 
 	// moderator/operator add an unsigned char to the raid
 	public function add_notsigned_chars(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_raids_attendees', 'add_notsigned', array(
 				$this->url_id,
 				$this->in->getArray('memberid', 'int'),
@@ -174,7 +151,7 @@ class viewcalraid extends page_generic {
 
 	// moderator/operator changes a char for an already signed in char
 	public function change_char(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 				$this->url_id,
 				$this->in->get('charchange_char', 0),
@@ -190,7 +167,7 @@ class viewcalraid extends page_generic {
 
 	// moderator/operator changes the note for an already signed in char
 	public function change_note(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_raids_attendees', 'update_note', array(
 				$this->url_id,
 				$this->in->get('subscribed_member_id', 0),
@@ -202,7 +179,7 @@ class viewcalraid extends page_generic {
 
 	// close an open raid
 	public function close_raid(){
-		if($this->user->check_auth('u_cal_event_add', false) || $this->check_permission('raidleader_creator')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_events', 'change_closeraidstatus', array($this->url_id));
 			$this->pdh->process_hook_queue();
 		}
@@ -212,7 +189,7 @@ class viewcalraid extends page_generic {
 
 	// open a closed raid
 	public function open_raid(){
-		if($this->user->check_auth('u_cal_event_add', false) || $this->check_permission('raidleader_creator')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_events', 'change_closeraidstatus', array($this->url_id, false));
 			$this->pdh->process_hook_queue();
 		}
@@ -278,7 +255,7 @@ class viewcalraid extends page_generic {
 	}
 
 	public function confirm_all(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 
 			//fetch the attendees
 			$a_attendees	= array();
@@ -479,7 +456,7 @@ class viewcalraid extends page_generic {
 						'class_id'		=> $us_classdata['classid'],
 						'class_icon'	=> $this->game->decorate('classes', array($us_classdata['classid'], false, $us_classdata['memberid'])),
 						'userid'		=> $us_classdata['userid'],
-						'roles'			=> (($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $myrolesrry : '',
+						'roles'			=> (($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $myrolesrry : '',
 						'defaultrole'	=> strlen($this->pdh->get('member', 'defaultrole', array($us_classdata['memberid']))) ? $this->pdh->get('member', 'defaultrole', array($us_classdata['memberid'])) : '',
 					);
 				}
@@ -635,19 +612,19 @@ class viewcalraid extends page_generic {
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
 				'link'	=> 'javascript:EditRaid()',
 				'img'	=> 'global/edit.png',
-				'perm'	=> ($this->user->check_auth('u_cal_event_add', false) || $this->check_permission('creator')),
+				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			1 => array(
 				'name'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
 				'link'	=> ($eventdata['closed'] == '1') ? $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') :  $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
 				'img'	=> ($eventdata['closed'] == '1') ? 'calendar/open.png' : 'calendar/closed_s.png',
-				'perm'	=> ($this->user->check_auth('u_cal_event_add', false) || $this->check_permission('raidleader_creator')),
+				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			2 => array(
 				'name'	=> $this->user->lang('raidevent_raid_transform'),
 				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
 				'img'	=> 'calendar/transform.png',
-				'perm'	=> $this->user->check_auth('u_cal_event_add', false),
+				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			3 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
@@ -733,10 +710,9 @@ class viewcalraid extends page_generic {
 			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
 
 			// settings endabled?
-			'S_NOTSIGNED_VISIBLE'	=> (in_array(4, $raidcal_status) && ($this->user->check_auth('a_cal_revent_conf', false) || $this->config->get('calendar_raid_shownotsigned') || $this->check_permission('raidleader'))) ? true : false,
-			'IS_CREATOR'			=> ($this->user->check_auth('u_cal_event_add', false) || $this->check_permission('creator')),
-			'IS_OPERATOR'			=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader')),
-			'SHOW_GUESTS'			=> ($this->config->get('calendar_raid_guests') && ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission('raidleader') || count($this->guests) > 0)) ? true : false,
+			'S_NOTSIGNED_VISIBLE'	=> (in_array(4, $raidcal_status) && ($this->user->check_auth('a_cal_revent_conf', false) || $this->config->get('calendar_raid_shownotsigned') || $this->check_permission())) ? true : false,
+			'IS_OPERATOR'			=> ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false)),
+			'SHOW_GUESTS'			=> ($this->config->get('calendar_raid_guests') && ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission() || count($this->guests) > 0)) ? true : false,
 			'SHOW_RANDOMVALUE'		=> ($this->config->get('calendar_raid_random') == 1) ? true : false,
 			'IS_SIGNEDIN'			=> ($this->mystatus['member_id'] > 0 && $mysignedstatus != 4) ? true : false,
 			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,

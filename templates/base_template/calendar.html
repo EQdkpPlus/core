@@ -84,7 +84,7 @@
 							my: "top center"
 						},
 						style: {
-							classes: 'ui-tooltip-shadow',
+							classes: 'qtip-shadow',
 							tip: {
 								corner: true,
 								width: 20
@@ -108,7 +108,7 @@
 							my: "top center"
 						},
 						style: {
-							classes: 'ui-tooltip-shadow',
+							classes: 'qtip-shadow',
 							tip: {
 								corner: true,
 								width: 20
@@ -152,7 +152,9 @@
 			},<!-- IF IS_OPERATOR -->
 			eventMouseover: function(event, jsEvent, view) {
 				var layer =	"<div id='events-layer'><img class='hand' height='16' width='16' src='images/global/edit.png' alt='edit' onClick='editEvent("+event.eventid+");'>  <img class='hand' height='16' width='16' src='images/global/delete.png' alt='delete' onClick='deleteEvent("+event.eventid+");'></div>";
-				$(this).append(layer);
+				if(event.operator){
+					$(this).append(layer);
+				}
 			},
 			eventMouseout: function(calEvent, domEvent) {
 				$("#events-layer").remove();

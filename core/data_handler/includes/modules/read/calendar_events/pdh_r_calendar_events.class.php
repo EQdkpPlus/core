@@ -165,6 +165,10 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return ($this->events[$id]['creator']) ? $this->pdh->get('user', 'name', array($this->events[$id]['creator'])) : '';
 		}
 
+		public function get_creatorid($id){
+			return ($this->events[$id]['creator']) ? $this->events[$id]['creator'] : 0;
+		}
+
 		public function get_date($id) {
 			return $this->events[$id]['timestamp_start'];
 		}
