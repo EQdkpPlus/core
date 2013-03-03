@@ -96,8 +96,13 @@ class bridge_generic extends gen_class {
 			if ($this->pdh->get('user', 'check_username', array($arrUserdata['name'])) == 'false'){
 				$user_id = $this->pdh->get('user', 'userid', array($arrUserdata['name']));
 				$arrEQdkpUserdata = $this->pdh->get('user', 'data', array($user_id));
-				//Update Email und Password - den Rest soll die Sync-Funktion machen
-				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($arrUserdata['email'] != $arrEQdkpUserdata['user_email'])){
+				
+				list($strEQdkpUserPassword, $strEQdkpUserSalt) = explode(':', $arrEQdkpUserdata['user_password']);
+				//If it's an old password without salt or there is a better algorythm
+				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword) || !$strEQdkpUserSalt;
+				
+				//Update Email und Password - den Rest soll die Sync-Funktion machen	
+				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($arrUserdata['email'] != $arrEQdkpUserdata['user_email']) || $blnHashNeedsUpdate){
 					$strSalt = $this->user->generate_salt();
 					$strApiKey = $this->user->generate_apikey($strPassword, $strSalt);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
