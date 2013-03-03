@@ -43,6 +43,7 @@ $eqdkp_path = httpHost().$strPath;
 
 ?>
 
+
 //Init Vars
 var mmocms_root_path = '<?php echo $eqdkp_path; ?>';
 var head = document.getElementsByTagName("head")[0];
@@ -78,7 +79,6 @@ function scriptLoaded(){
 
 window.onload = function(){
 	jQuery(document).ready(function($){
-		
 		(function($){
 			$.fn.extend({
 
@@ -89,8 +89,11 @@ window.onload = function(){
 						var mid = $(this).attr('id');
 
 						//code to be inserted here
-						var url = mmocms_root_path + 'infotooltip/infotooltip_feed.php?data='+$('#'+mid).attr('title')+'&divid='+mid;
-						$.get(url, function(data) {
+						gameid = ($('#'+mid).attr('data-game_id')) ? $('#'+mid).attr('data-game_id') : 0;
+						jsondata = {"name": $('#'+mid).attr('data-name'), "game_id": gameid}
+						
+						var url = mmocms_root_path + 'infotooltip/infotooltip_feed.php?jsondata='+$('#'+mid).attr('title')+'&divid='+mid;
+						$.get(url, jsondata, function(data) {
 							$('#'+mid).empty();
 							$('#'+mid).prepend(data);
 						});
@@ -101,7 +104,7 @@ window.onload = function(){
 			});
 		})(jQuery);
 		
-		$('body').append('<style type="text/css">.ui-infotooltip, .ui-tooltip, .ui-tooltip-content { border: 0px;}</style>');
+		$('body').append('<style type="text/css">.ui-infotooltip, .ui-tooltip, .ui-tooltip-content { border: 0px;} .ui-infotooltip { box-shadow:0 0 0 0 !important; max-width: 450px !important; padding: 0px; position: absolute;z-index: 9999;border-radius: 0px !important; background:none !important;}</style>');
 
 	
 		var my_html = $('body').html();
@@ -113,11 +116,12 @@ window.onload = function(){
 				var item_data = new Array();
 				item_data['name'] = p2.toString();
 				var is_numeric = /^[0-9]+$/.test(p2);
+				var itemdatatag = ""
 				if (is_numeric){
 					item_data['game_id'] = parseInt(p2);
+					itemdatatag = 'data-game_id=""';
 				}
-				
-				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+p2+'</span>';
+				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" data-name="'+p2.toString()+'" '+itemdatatag+' title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+p2+'</span>';
 				return out;
 			}
 			return '';					
@@ -138,21 +142,19 @@ window.onload = function(){
 			$('.infotooltip').infotooltips();
 
 			$('.infotooltip').tooltip({
-				track: true,
 				content: function(response) {
 					var direct = $(this).attr('title').substr(0,1);
 					if(direct == 1) {
 						$(this).attr('title', '');
 						return '';
 					}
-					$.get( mmocms_root_path + 'infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
+					gameid = ($(this).attr('data-game_id')) ? $(this).attr('data-game_id') : 0;
+					jsondata = {"name": $(this).attr('data-name'), "game_id": gameid}
+					$.get( mmocms_root_path + 'infotooltip/infotooltip_feed.php?direct=1&jsondata='+$(this).attr('title'), jsondata, response);
 					return 'Laden...';
 				},
-				open: function() {
-					var tooltip = $(this).tooltip('widget');
-					tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
-					tooltip.addClass('ui-infotooltip');
-				}
+				track: true,
+				tooltipClass: "ui-infotooltip",
 			});
 		
 		 });
@@ -161,18 +163,59 @@ window.onload = function(){
 
 }
 				
+function base64_encode (data) {
+  // http://kevin.vanzonneveld.net
+  // +   original by: Tyler Akins (http://rumkin.com)
+  // +   improved by: Bayron Guevara
+  // +   improved by: Thunder.m
+  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+  // +   bugfixed by: Pellentesque Malesuada
+  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+  // +   improved by: Rafał Kukawski (http://kukawski.pl)
+  // *     example 1: base64_encode('Kevin van Zonneveld');
+  // *     returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
+  // mozilla has this native
+  // - but breaks in 2.0.0.12!
+  //if (typeof this.window['btoa'] == 'function') {
+  //    return btoa(data);
+  //}
+  var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+    ac = 0,
+    enc = "",
+    tmp_arr = [];
+
+  if (!data) {
+    return data;
+  }
+
+  do { // pack three octets into four hexets
+    o1 = data.charCodeAt(i++);
+    o2 = data.charCodeAt(i++);
+    o3 = data.charCodeAt(i++);
+
+    bits = o1 << 16 | o2 << 8 | o3;
+
+    h1 = bits >> 18 & 0x3f;
+    h2 = bits >> 12 & 0x3f;
+    h3 = bits >> 6 & 0x3f;
+    h4 = bits & 0x3f;
+
+    // use hexets to index into b64, and append result to encoded string
+    tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+  } while (i < data.length);
+
+  enc = tmp_arr.join('');
+
+  var r = data.length % 3;
+
+  return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+
+}
+
+
 function mmo_encode64(inp){
-	var key="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	var chr1,chr2,chr3,enc3,enc4,i=0,out="";
-	while(i<inp.length){
-		chr1=inp.charCodeAt(i++);if(chr1>127) chr1=88;
-		chr2=inp.charCodeAt(i++);if(chr2>127) chr2=88;
-		chr3=inp.charCodeAt(i++);if(chr3>127) chr3=88;
-		if(isNaN(chr3)) {enc4=64;chr3=0;} else enc4=chr3&63
-		if(isNaN(chr2)) {enc3=64;chr2=0;} else enc3=((chr2<<2)|(chr3>>6))&63
-		out+=key.charAt((chr1>>2)&63)+key.charAt(((chr1<<4)|(chr2>>4))&63)+key.charAt(enc3)+key.charAt(enc4);
-	}
-	return encodeURIComponent(out);
+	return base64_encode(inp);
 }
 
 function js_array_to_php_array (a){

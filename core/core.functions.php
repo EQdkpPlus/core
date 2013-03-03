@@ -697,11 +697,7 @@ function infotooltip_js() {
 								return '<img src=\"".registry::get_const('root_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
 							}
 						},
-						open: function() {
-							var tooltip = $(this).tooltip('widget');
-							tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
-							tooltip.addClass('ui-infotooltip');
-						}
+						tooltipClass: \"ui-infotooltip\",
 					});";
 		registry::register('template')->add_js($js, 'docready');
 		registry::register('template')->css_file(registry::get_const('root_path').'infotooltip/includes/'.registry::register('config')->get('default_game').'.css');
@@ -754,11 +750,7 @@ function chartooltip_js() {
 								return '<img src=\"".registry::get_const('root_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
 							}
 						},
-						open: function() {
-							var tooltip = $(this).tooltip('widget');
-							tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
-							tooltip.addClass('ui-infotooltip');
-						}
+						tooltipClass: \"ui-infotooltip\",
 					});";
 		registry::register('template')->add_js($js, 'docready');
 		registry::register('template')->css_file(registry::get_const('root_path').'games/'.registry::register('config')->get('default_game').'/chartooltip/chartooltip.css');
