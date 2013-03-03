@@ -56,6 +56,7 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 					'feed'						=> $row['feed'],
 					'system'					=> $row['system'],
 					'type'						=> $row['type'],
+					'restricted'				=> $row['restricted'],
 				);
 			}
 			$this->db->free_result($query);
@@ -112,6 +113,10 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 
 		public function get_feed($id){
 			return 	$this->calendars[$id]['feed'];
+		}
+
+		public function get_restricted($id){
+			return 	(isset($this->calendars[$id]['restricted'])) ? true : false;
 		}
 
 		public function get_type($id){
