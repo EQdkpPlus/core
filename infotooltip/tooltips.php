@@ -43,6 +43,7 @@ $eqdkp_path = httpHost().$strPath;
 
 ?>
 
+
 //Init Vars
 var mmocms_root_path = '<?php echo $eqdkp_path; ?>';
 var head = document.getElementsByTagName("head")[0];
@@ -78,7 +79,6 @@ function scriptLoaded(){
 
 window.onload = function(){
 	jQuery(document).ready(function($){
-		
 		(function($){
 			$.fn.extend({
 
@@ -89,8 +89,11 @@ window.onload = function(){
 						var mid = $(this).attr('id');
 
 						//code to be inserted here
-						var url = mmocms_root_path + 'infotooltip/infotooltip_feed.php?data='+$('#'+mid).attr('title')+'&divid='+mid;
-						$.get(url, function(data) {
+						gameid = ($('#'+mid).attr('data-game_id')) ? $('#'+mid).attr('data-game_id') : 0;
+						jsondata = {"name": $('#'+mid).attr('data-name'), "game_id": gameid}
+						
+						var url = mmocms_root_path + 'infotooltip/infotooltip_feed.php?jsondata='+$('#'+mid).attr('title')+'&divid='+mid;
+						$.get(url, jsondata, function(data) {
 							$('#'+mid).empty();
 							$('#'+mid).prepend(data);
 						});
@@ -113,11 +116,12 @@ window.onload = function(){
 				var item_data = new Array();
 				item_data['name'] = p2.toString();
 				var is_numeric = /^[0-9]+$/.test(p2);
+				var itemdatatag = ""
 				if (is_numeric){
 					item_data['game_id'] = parseInt(p2);
+					itemdatatag = 'data-game_id=""';
 				}
-				
-				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+p2+'</span>';
+				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" data-name="'+p2.toString()+'" '+itemdatatag+' title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+p2+'</span>';
 				return out;
 			}
 			return '';					
@@ -144,7 +148,9 @@ window.onload = function(){
 						$(this).attr('title', '');
 						return '';
 					}
-					$.get( mmocms_root_path + 'infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
+					gameid = ($(this).attr('data-game_id')) ? $(this).attr('data-game_id') : 0;
+					jsondata = {"name": $(this).attr('data-name'), "game_id": gameid}
+					$.get( mmocms_root_path + 'infotooltip/infotooltip_feed.php?direct=1&jsondata='+$(this).attr('title'), jsondata, response);
 					return 'Laden...';
 				},
 				open: function() {
@@ -158,9 +164,7 @@ window.onload = function(){
 							offset: '50 25',
 							of: event
 						});
-					})
-					// trigger once to override element-relative positioning
-					.mousemove();
+					});
 				},
 				close: function() {
 					$(document).unbind('mousemove');

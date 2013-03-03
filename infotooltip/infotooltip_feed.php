@@ -41,7 +41,13 @@ registry::$aliases['bridge'] = 'bridge_generic';
  *	- game_id => see name
  */
 
-if($in->exists('data')) {
+if($in->exists('jsondata')) {
+	$data				= array();
+	$data['name']		= $in->get('name');
+	$data['game_id']	= $in->get('game_id');
+	#var_dump($data);die();
+	$direct = ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
+}elseif($in->exists('data')) {
 	$direct = ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
 	$data = unserialize(base64_decode(substr($in->get('data'), 1)));
 } else {
