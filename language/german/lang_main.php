@@ -596,7 +596,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "user_hardware" => "Hardware",
 "user_interests" => "Interessen",
 "user_more_information" => "Weitere Informationen über %s",
-"user_group_footcount" => "%d Benutzer in diseser Gruppe",
+"user_group_footcount" => "%d Benutzer in dieser Gruppe",
 "sms_perm" => "SMS Service",
 "sms_perm2" => "SMS senden",
 "sms_header" => "SMS Versenden",
