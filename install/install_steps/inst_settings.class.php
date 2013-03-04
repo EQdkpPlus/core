@@ -48,7 +48,7 @@ class inst_settings extends install_generic {
 		'guildtag'						=> 'My Guild',
 		'dkp_name'						=> 'DKP',
 		'hide_inactive'					=> '0',
-		'inactive_period'				=> '99',
+		'inactive_period'				=> '0',
 		'active_point_adj'				=> '0.00',
 		'inactive_point_adj'			=> '0.00',
 		'start_page'					=> 'viewnews.php',
