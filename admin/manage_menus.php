@@ -147,8 +147,8 @@ class Manage_Menus extends page_generic {
 				cursor: \'pointer\',
 				receive: function(event, ui){
 					sender = $(ui.sender).attr("id");
-					item = $(ui.item).attr("id");
-					cb = "cb_" + item;
+					itemi = $(ui.item).attr("id");
+					cb = "cb_" + itemi;
 					if (sender == "show") {
 						$("#"+cb).attr("checked", "checked");
 					}else {
@@ -164,8 +164,8 @@ class Manage_Menus extends page_generic {
 				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
 				receive: function(event, ui){
 					sender = $(ui.sender).attr("id");
-					item = $(ui.item).attr("id");
-					cb = "cb2_" + item;
+					itemi = $(ui.item).attr("id");
+					cb = "cb2_" + itemi;
 					if (sender == "show2") {
 						$("#"+cb).attr("checked", "checked");
 					}else {
@@ -181,8 +181,8 @@ class Manage_Menus extends page_generic {
 				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
 				receive: function(event, ui){
 					sender = $(ui.sender).attr("id");
-					item = $(ui.item).attr("id");
-					cb = "cb3_" + item;
+					itemi = $(ui.item).attr("id");
+					cb = "cb3_" + itemi;
 					if (sender == "show3") {
 						$("#"+cb).attr("checked", "checked");
 					}else {
