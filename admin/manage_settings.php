@@ -623,6 +623,10 @@ class mmocms_settings extends page_generic {
 						'fieldtype'		=> 'dropdown',
 						'name'			=> 'calendar_addevent_mode',
 						'options'		=> $a_calendar_addevmode,
+					),
+					'calendar_show_birthday'	=> array(
+						'fieldtype'		=> 'checkbox',
+						'name'			=> 'calendar_show_birthday'
 					)
 				),
 				'raids'		=> array(

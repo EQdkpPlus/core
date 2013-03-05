@@ -193,6 +193,20 @@ if (!class_exists("pdh_r_user")){
 			return $this->users[$user_id]['user_registered'];
 		}
 
+		public function get_birthday($user_id){
+			return ($this->users[$user_id]['birthday'] > 0) ? $this->users[$user_id]['birthday'] : 0;
+		}
+
+		public function get_birthday_list(){
+			$useroutput	= array();
+			foreach($this->users as $user_id=>$uderdata){
+				if($uderdata['birthday'] > 0){
+					$useroutput[$user_id]	= $uderdata['birthday'];
+				}
+			}
+			return $useroutput;
+		}
+
 		public function get_custom_fields($user_id, $field = false){
 			$fields = unserialize($this->users[$user_id]['custom_fields']);
 			if ($fields){

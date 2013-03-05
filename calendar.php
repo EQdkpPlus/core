@@ -208,6 +208,7 @@ class viewcalendar extends page_generic {
 							$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
 
 							$event_json[] = array(
+								'etype'			=> 'feed',
 								'eventid'		=> $calid,
 								'title'			=> $comp->getProperty( 'summary', 1),
 								'start'			=> $startdate_out,
@@ -222,6 +223,8 @@ class viewcalendar extends page_generic {
 				}
 			}
 		}
+
+		//
 
 		// add the calendar events to the json feed
 		$calendars	= $this->pdh->get('calendars', 'idlist', array('nofeed', $filters));
@@ -310,6 +313,28 @@ class viewcalendar extends page_generic {
 			}
 		}
 
+		// birthday calendar
+		if($this->config->get('calendar_show_birthday') && $this->user->check_auth('u_userlist', false)){
+			$birthday_y	= $this->time->date('Y', $this->in->get('end', 0));
+			$birthdays	= $this->pdh->get('user', 'birthday_list');
+			if(is_array($birthdays)){
+				foreach($birthdays as $birthday_uid=>$birthday_ts){
+					if($birthday_ts > $this->in->get('start', 0) && $birthday_ts < $this->in->get('end', 0)){
+						$event_json[] = array(
+							'className'				=> 'cal_birthday',
+							'title'					=> $this->pdh->get('user', 'name', array($birthday_uid)),
+							'start'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
+							'end'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
+							'allDay'				=> true,
+							'textColor'				=> '#000000',
+							'backgroundColor'	=> '#E8E8E8',
+							'borderColor'		=> '#7F7F7F'
+						);
+					}
+				}
+			}
+		}
+
 		// Output the array as JSON
 		echo json_encode($event_json);exit;
 	}
@@ -330,8 +355,8 @@ class viewcalendar extends page_generic {
 
 		// set the multidimensional lang arrays to template
 		$this->tpl->assign_array('daynames',			$this->user->lang('time_daynames'));
-		$this->tpl->assign_array('daynames_short',	$this->user->lang('time_daynames_short'));
-		$this->tpl->assign_array('monthnames',		$this->user->lang('time_monthnames'));
+		$this->tpl->assign_array('daynames_short',		$this->user->lang('time_daynames_short'));
+		$this->tpl->assign_array('monthnames',			$this->user->lang('time_monthnames'));
 		$this->tpl->assign_array('monthnames_short',	$this->user->lang('time_monthnames_short'));
 
 		//raid-list
