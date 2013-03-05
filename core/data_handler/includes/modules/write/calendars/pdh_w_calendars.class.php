@@ -59,7 +59,7 @@ if(!class_exists('pdh_w_calendars')) {
 					'private'		=> ($private) ? 1 : 0,
 					'color'			=> $color,
 					'type'			=> $type,
-					'restricted'	=> $restricted
+					'restricted'	=> ($restricted) ? 1 : 0,
 				), $id);
 				if(!$statt) {
 					return false;

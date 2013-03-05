@@ -957,6 +957,7 @@ $lang = array(
 "view_calendar" => "Show calendar",
 "calendars_color" => "Colour",
 "calendars_type" => "Event type",
+"calendars_restricted" => "Operators only",
 "calendars_types" => array(
 	"1" => "raid",
 "2" => "event",

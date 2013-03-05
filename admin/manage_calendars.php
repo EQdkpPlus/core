@@ -44,7 +44,7 @@ class Manage_Calendars extends page_generic {
 			$id_list = $this->pdh->get('calendars', 'idlist');
 			foreach($calendars as $calendar) {
 				$func = (in_array($calendar['id'], $id_list)) ? 'update_calendar' : 'add_calendar';
-				$retu[] = $this->pdh->put('calendars', $func, array($calendar['id'], $calendar['name'], $calendar['color'], $calendar['feed'], $calendar['private'], $calendar['type']));
+				$retu[] = $this->pdh->put('calendars', $func, array($calendar['id'], $calendar['name'], $calendar['color'], $calendar['feed'], $calendar['private'], $calendar['type'], $calendar['restricted']));
 				$names[] = $calendar['name'];
 			}
 			if(in_array(false, $retu)) {
@@ -103,14 +103,15 @@ class Manage_Calendars extends page_generic {
 		ksort($ranks);
 		foreach($ranks as $id => $name) {
 			$this->tpl->assign_block_vars('calendars', array(
-				'KEY'		=> $key,
-				'DELETABLE'	=> $this->pdh->get('calendars', 'is_deletable', array($id)),
-				'ID'		=> $id,
-				'NAME'		=> $name,
-				'TYPE'		=> $this->html->DropDown('calendars['.$key.'][type]', $types, $this->pdh->get('calendars', 'type', array($id)), '', '', 'input', 'calendars'.$key),
-				'COLOR'		=> $this->jquery->colorpicker('cal_'.$key, $this->pdh->get('calendars', 'color', array($id)), 'calendars['.$key.'][color]'),
-				'PRIVATE'	=> $this->pdh->get('calendars', 'private', array($id)),
-				'FEED'		=> $this->pdh->get('calendars', 'feed', array($id)),
+				'KEY'			=> $key,
+				'DELETABLE'		=> $this->pdh->get('calendars', 'is_deletable', array($id)),
+				'ID'			=> $id,
+				'NAME'			=> $name,
+				'TYPE'			=> $this->html->DropDown('calendars['.$key.'][type]', $types, $this->pdh->get('calendars', 'type', array($id)), '', '', 'input', 'calendars'.$key),
+				'COLOR'			=> $this->jquery->colorpicker('cal_'.$key, $this->pdh->get('calendars', 'color', array($id)), 'calendars['.$key.'][color]'),
+				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
+				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
+				'RESTRICTED'	=> $this->html->CheckBox('calendars['.$key.'][restricted]', '', $this->pdh->get('calendars', 'restricted', array($id))),
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
@@ -139,13 +140,14 @@ class Manage_Calendars extends page_generic {
 			foreach($this->in->getArray('calendars', 'string') as $key => $calendar) {
 				if(isset($calendar['id']) && $calendar['id'] && !empty($calendar['name'])) {
 					$calendars[] = array(
-						'selected'	=> (in_array($calendar['id'], $selected)) ? $calendar['id'] : false,
-						'id'		=> $this->in->get('calendars:'.$key.':id',0),
-						'name'		=> $this->in->get('calendars:'.$key.':name',''),
-						'feed'		=> $this->in->get('calendars:'.$key.':feed','', 'raw'),
-						'color'		=> $this->in->get('calendars:'.$key.':color',''),
-						'private'	=> $this->in->get('calendars:'.$key.':suffix',0),
-						'type'		=> $this->in->get('calendars:'.$key.':type',0)
+						'selected'		=> (in_array($calendar['id'], $selected)) ? $calendar['id'] : false,
+						'id'			=> $this->in->get('calendars:'.$key.':id',0),
+						'name'			=> $this->in->get('calendars:'.$key.':name',''),
+						'feed'			=> $this->in->get('calendars:'.$key.':feed','', 'raw'),
+						'color'			=> $this->in->get('calendars:'.$key.':color',''),
+						'private'		=> $this->in->get('calendars:'.$key.':suffix',0),
+						'type'			=> $this->in->get('calendars:'.$key.':type',0),
+						'restricted'	=> $this->in->get('calendars:'.$key.':restricted',0)
 					);
 				}
 			}

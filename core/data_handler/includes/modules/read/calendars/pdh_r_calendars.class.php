@@ -116,7 +116,7 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 		}
 
 		public function get_restricted($id){
-			return 	(isset($this->calendars[$id]['restricted'])) ? true : false;
+			return 	(isset($this->calendars[$id]['restricted'])) ? $this->calendars[$id]['restricted'] : 0;
 		}
 
 		public function get_type($id){

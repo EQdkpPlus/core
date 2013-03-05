@@ -1,7 +1,7 @@
 <form method="post" action="{ACTION}" name="post">
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="calendars_table" class="colorswitch">
 		<tr>
-			<th align="center" colspan="5">{L_manage_calendars}</th>
+			<th align="center" colspan="6">{L_manage_calendars}</th>
 		</tr>
 		<tr>
 			<th width="20"></th>
@@ -9,6 +9,7 @@
 			<th>{L_calendars_name}</th>
 			<th>{L_calendars_feed}</th>
 			<th>{L_calendars_type}</th>
+			<th>{L_calendars_restricted}</th>
 		</tr>
 		<!-- BEGIN calendars -->
 		<tr>
@@ -22,6 +23,7 @@
 			<td><input type="text" name="calendars[{calendars.KEY}][name]" size="30" maxlength="50" value="{calendars.NAME}" class="maininput" /></td>
 			<td><input type="text" name="calendars[{calendars.KEY}][feed]" size="50" maxlength="250" value="{calendars.FEED}" class="maininput" /></td>
 			<td>{calendars.TYPE}</td>
+			<td>{calendars.RESTRICTED}</td>
 		</tr>
 		<!-- END calendars -->
 		<tr>
@@ -30,9 +32,10 @@
 			<td><input type="text" name="calendars[{KEY}][name]" size="30" maxlength="50" value="" class="maininput" /></td>
 			<td><input type="text" name="calendars[{KEY}][feed]" size="50" maxlength="250" value="" class="maininput" /></td>
 			<td>{TYPE}</td>
+			<td>{RESTRICTED}</td>
 		</tr>
 		<tr>
-			<th colspan="5">
+			<th colspan="6">
 				<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
 				<input type="button" name="del" value="{L_delete}" class="liteoption bi_delete" onclick="delete_warning();" />
 				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />

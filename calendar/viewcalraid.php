@@ -738,6 +738,7 @@ class viewcalraid extends page_generic {
 			'RAIDTIME_START'		=> $this->time->user_date($eventdata['timestamp_start'], false, true),
 			'RAIDTIME_END'			=> $this->time->user_date($eventdata['timestamp_end'], false, true),
 			'RAIDTIME_DEADLINE'		=> $deadlinetime,
+			'CALENDAR'				=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
 			'RAIDDATE_ADDED'		=> (isset($eventdata['extension']['created_on']) && $eventdata['extension']['created_on'] > 0) ? $this->time->user_date($eventdata['extension']['created_on'], true, false, true) : false,
 			'PLAYER_NOTE'			=> $this->mystatus['note'],
 			'COLUMN_WIDTH'			=> (isset($user_brakclm) && count($this->raidcategories) > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/count($this->raidcategories)),

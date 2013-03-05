@@ -958,6 +958,7 @@ $lang = array(
 "view_calendar" => "Kalender anzeigen",
 "calendars_color" => "Farbe",
 "calendars_type" => "Kalenderart",
+"calendars_restricted" => "Eingeschränkt",
 'calendars_types' => array(
 	1	=> 'Raid',
 	2	=> 'Ereignis',
