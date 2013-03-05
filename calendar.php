@@ -208,7 +208,6 @@ class viewcalendar extends page_generic {
 							$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
 
 							$event_json[] = array(
-								'etype'			=> 'feed',
 								'eventid'		=> $calid,
 								'title'			=> $comp->getProperty( 'summary', 1),
 								'start'			=> $startdate_out,
@@ -223,8 +222,6 @@ class viewcalendar extends page_generic {
 				}
 			}
 		}
-
-		//
 
 		// add the calendar events to the json feed
 		$calendars	= $this->pdh->get('calendars', 'idlist', array('nofeed', $filters));
