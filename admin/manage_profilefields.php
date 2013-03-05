@@ -98,9 +98,10 @@ class ManageProfileFields extends page_generic {
 	public function edit(){
 		$field_data = $this->pdh->get('profile_fields', 'fields', array($this->in->get('edit')));
 		$types = array(
-			'text'	=> 'Text',
+			'text'		=> 'Text',
 			'int'		=> 'Integer',
-			'dropdown' => 'Dropdown',
+			'dropdown'	=> 'Dropdown',
+			'link'		=> 'Link'
 		);
 
 		$categories = array(

@@ -273,8 +273,18 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 				}
 				break;
-				
-				case 'dropdown':				
+
+				case 'link':
+					$out = '<a href="'.$strMemberValue.'">';
+					if ($arrField['image'] != "" && is_file($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'])){
+						$out .= '<img src="'.$this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'" alt="'.$arrField['language'].'" />';
+					}else{
+						$out .= ($arrField['language']) ? $arrField['language'] : 'Link';
+					}
+					$out .= '</a>';
+				break;
+
+				case 'dropdown':
 					if ($arrField['image'] != "" && is_dir($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image']) && is_file($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'/'.$out.'.png')){
 						$out = '<img src="'.$this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'/'.$out.'.png" alt="'.$out.'" />';
 					}

@@ -121,6 +121,7 @@ if (!class_exists("html")) {
 
 				// Text
 				case 'text':
+				case 'link':
 				case 'int':
 					$readonly = (isset($options['readonly'])) ? $options['readonly'] : false;
 					$encrypt = (isset($options['encrypt'])) ? true : false;
