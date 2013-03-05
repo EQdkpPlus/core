@@ -100,10 +100,14 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$this->pdc->put('pdh_calendar_repeatable_events_table', $this->repeatable_events, null);
 		}
 
-		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999){
+		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999, $calfilter=false){
 			$ids = array();
 			if(($start_date != 0) || ($end_date != 9999999999)){
-				$query = $this->db->query("SELECT id FROM __calendar_events WHERE timestamp_start BETWEEN '".$this->db->escape($start_date)."' AND '".$this->db->escape($end_date)."' OR timestamp_end BETWEEN '".$this->db->escape($start_date)."' AND '".$this->db->escape($end_date)."'");
+				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
+				$sqlstring	.= (is_array($calfilter)) ? ' (calendar_id IN ('.implode(",", $calfilter).')) AND' : '';
+				$sqlstring	.= " ((timestamp_start BETWEEN '".$this->db->escape($start_date)."' AND '".$this->db->escape($end_date)."') OR (timestamp_end BETWEEN '".$this->db->escape($start_date)."' AND '".$this->db->escape($end_date)."'))";
+
+				$query = $this->db->query($sqlstring);
 				if($raids_only) {
 					while ( $row = $this->db->fetch_record($query) ){
 						if($this->get_calendartype($row['id']) == '1'){
@@ -120,6 +124,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				if($raids_only) {
 					foreach($ids as $key => $id) {
 						if($this->get_calendartype($id) != '1' || $this->events[$id]['timestamp_end'] < $this->time->time) unset($ids[$key]);
+
+						// us the claendarfilter
+						if(is_array($calfilter) && !in_array($this->get_calendar_id($id), $calfilter)) unset($ids[$key]);
 					}
 				}
 			}
