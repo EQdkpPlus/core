@@ -56,17 +56,20 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		);
 
 		public function reset(){
-			$this->pdc->del('pdh_calendar_events_table');
-			$this->pdc->del('pdh_calendar_repeatable_events_table');
-			$this->events = NULL;
-			$this->repeatable_events = NULL;
+			$this->pdc->del('pdh_calendar_events_table.events');
+			$this->pdc->del('pdh_calendar_events_table.repeatable');
+			$this->pdc->del('pdh_calendar_events_table.timestamps');
+			$this->events				= NULL;
+			$this->repeatable_events	= NULL;
+			$this->event_timestamps		= NULL;
 		}
 
 		public function init(){
 			//cached data not outdated?
-			$this->events				= $this->pdc->get('pdh_calendar_events_table');
-			$this->repeatable_events	= $this->pdc->get('pdh_calendar_repeatable_events_table');
-			if($this->events !== NULL && $this->repeatable_events !== NULL){
+			$this->events				= $this->pdc->get('pdh_calendar_events_table.events');
+			$this->repeatable_events	= $this->pdc->get('pdh_calendar_events_table.repeatable');
+			$this->event_timestamps		= $this->pdc->get('pdh_calendar_events_table.timestamps');
+			if($this->events !== NULL && $this->repeatable_events !== NULL && $this->event_timestamps !== NULL){
 				return true;
 			}
 
@@ -87,7 +90,8 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 					'repeating'				=> $row['repeating'],
 					'cloneid'				=> $row['cloneid'],
 				);
-				$this->events[$row['id']]['extension'] = unserialize($row['extension']);
+				$this->events[$row['id']]['extension']	= unserialize($row['extension']);
+				$this->event_timestamps[$row['id']]		= $row['timestamp_start'];
 
 				// set the repeatable array
 				if($row['repeating'] != 'none'){
@@ -96,8 +100,14 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				}
 			}
 			$this->db->free_result($query);
-			$this->pdc->put('pdh_calendar_events_table', $this->events, null);
-			$this->pdc->put('pdh_calendar_repeatable_events_table', $this->repeatable_events, null);
+
+			// sort the timestamps
+			asort($this->event_timestamps);
+
+			// set the cache
+			$this->pdc->put('pdh_calendar_events_table.events', $this->events, null);
+			$this->pdc->put('pdh_calendar_events_table.repeatable', $this->repeatable_events, null);
+			$this->pdc->put('pdh_calendar_events_table.timestamps', $this->event_timestamps, null);
 		}
 
 		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999, $calfilter=false){
@@ -260,6 +270,21 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$raideventname	= $this->pdh->get('event', 'name', array($this->events[$id]['extension']['raid_eventid']));
 			$raideventname	= ($this->get_raidstatus($id) == '1') ? '<span class="linethrough">'.$raideventname.'</span>' : $raideventname;
 			return $this->pdh->geth('event', 'icon', array($this->events[$id]['extension']['raid_eventid'])).' '.$raideventname;
+		}
+
+		public function get_next_event($id){
+			$this->helper_set_pointer($this->event_timestamps, $id);
+			next($this->event_timestamps);
+			$next_eventid	= key($this->event_timestamps);
+			reset($this->event_timestamps);
+			return ($next_eventid > 0) ? $next_eventid : false;
+		}
+		
+		private function helper_set_pointer(&$array,$key){
+			reset ($array);
+			while (key($array) !== $key) {
+				if (next($array) === false) throw new Exception('Invalid key');
+			}
 		}
 
 		public function get_search($search_value) {

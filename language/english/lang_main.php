@@ -740,6 +740,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 "raidevent_raid_adminnote" => "Signed up by a raid leader",
 "raidevent_raid_export" => "Export raid data",
 "raidevent_raid_edit" => "Edit raid",
+"raidevent_raid_next" => "View next raid",
 "raidevent_raid_confirmall" => "Confirm all signed up characters",
 "raidevent_raid_settbutton" => "Settings",
 "raidevent_raid_open" => "Reopen raid",

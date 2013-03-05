@@ -607,45 +607,51 @@ class viewcalraid extends page_generic {
 		}
 
 		// Dropdown Menu Array
+		$nextraidevent	= $this->pdh->get('calendar_events', 'next_event', array($this->url_id));
 		$optionsmenu = array(
 			0 => array(
+				'name'	=> $this->user->lang('raidevent_raid_next'),
+				'link'	=> $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.(($nextraidevent > 0) ? $nextraidevent : $this->url_id),
+				'img'	=> 'global/next.png',
+				'perm'	=> true,
+			),
+			1 => array(
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
 				'link'	=> 'javascript:EditRaid()',
 				'img'	=> 'global/edit.png',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
-			1 => array(
+			2 => array(
 				'name'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
 				'link'	=> ($eventdata['closed'] == '1') ? $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') :  $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
 				'img'	=> ($eventdata['closed'] == '1') ? 'calendar/open.png' : 'calendar/closed_s.png',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
-			2 => array(
+			3 => array(
 				'name'	=> $this->user->lang('raidevent_raid_transform'),
 				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
 				'img'	=> 'calendar/transform.png',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
-			3 => array(
+			4 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
 				'link'	=> $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;ical=true',
 				'img'	=> 'calendar/vcalendar_s.png',
 				'perm'	=> true,
 			),
-			4 => array(
+			5 => array(
 				'name'	=> $this->user->lang('raidevent_raid_export'),
 				'link'	=> 'javascript:ExportDialog()',
 				'img'	=> 'calendar/export.png',
 				'perm'	=> true,
 			),
-
-			5 => array(
+			6 => array(
 				'name'	=> $this->user->lang('calendars_add_title'),
 				'link'	=> 'javascript:AddRaid()',
 				'img'	=> 'glyphs/add.png',
 				'perm'	=> $this->user->check_auth('u_cal_event_add', false),
 			),
-			6 => array(
+			7 => array(
 				'name'	=> $this->user->lang('massmail_send'),
 				'link'	=> $this->root_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
 				'img'	=> 'admin/manage_massmail.png',
@@ -719,7 +725,7 @@ class viewcalraid extends page_generic {
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
 
 			//Data
-			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, 'images', $this->user->lang('raidevent_raid_settbutton')),
+			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, 'images', '<img src="../images/global/settings.png" alt="" /> '.$this->user->lang('raidevent_raid_settbutton')),
 			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : $this->html->DropDown('member_id', $drpdwn_members, $presel_charid),
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
 			'DD_SIGNUPSTATUS'		=> $this->html->DropDown('signup_status', $status_dropdown, $this->mystatus['signup_status']),

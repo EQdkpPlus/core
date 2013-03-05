@@ -687,6 +687,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "raidevent_raid_adminnote" => "Angemeldet von einem Raidleiter",
 "raidevent_raid_export" => "Raiddaten exportieren",
 "raidevent_raid_edit" => "Raid bearbeiten",
+"raidevent_raid_next" => "Nächsten Raid ansehen",
 "raidevent_raid_confirmall" => "Alle Angemeldeten bestätigen",
 "raidevent_raid_settbutton" => "Einstellungen",
 "raidevent_raid_open" => "Raid öffnen",
