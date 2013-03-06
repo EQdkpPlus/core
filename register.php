@@ -72,12 +72,8 @@ class Register extends page_generic {
 			if((int)$this->config->get('disable_registration') == 1){
 				redirect('index.php');
 			}
-			if((int)$this->config->get('cmsbridge_reg_redirect') == 1 && (int)$this->config->get('cmsbridge_active') == 1) {
-				if(strlen($this->config->get('cmsbridge_reg_url')) > 1){
-					redirect($this->config->get('cmsbridge_reg_url'),false,true);
-				} else {
-					redirect('index.php');
-				}
+			if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+				redirect($this->config->get('cmsbridge_reg_url'),false,true);
 			}
 		}
 		// Data to be put into the form
@@ -108,12 +104,8 @@ class Register extends page_generic {
 	// Process Submit
 	// ---------------------------------------------------------
 	public function submit() {
-		if((int)$this->config->get('cmsbridge_reg_redirect') == 1 && (int)$this->config->get('cmsbridge_active') == 1) {
-			if(strlen($this->config->get('cmsbridge_reg_url')) > 1){
-				redirect($this->config->get('cmsbridge_reg_url'),false,true);
-			}else{
-				redirect('index.php');
-			}
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
 
 		//Check CAPTCHA
@@ -256,12 +248,8 @@ class Register extends page_generic {
 	// Process Resend Validation E-Mail
 	// ---------------------------------------------------------
 	public function process_resend_activation() {
-		if((int)$this->config->get('cmsbridge_reg_redirect') == 1 && (int)$this->config->get('cmsbridge_active') == 1) {
-			if(strlen($this->config->get('cmsbridge_reg_url')) > 1){
-				redirect($this->config->get('cmsbridge_reg_url'),false,true);
-			}else{
-				redirect('index.php');
-			}
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
 
 		$username   = ( $this->in->exists('username') )   ? trim(strip_tags($this->in->get('username'))) : '';
@@ -406,12 +394,8 @@ class Register extends page_generic {
 	// Display form
 	// ---------------------------------------------------------
 	public function display_form() {
-		if((int)$this->config->get('cmsbridge_reg_redirect') == 1 && (int)$this->config->get('cmsbridge_active') == 1) {
-			if(strlen($this->config->get('cmsbridge_reg_url')) > 1){
-				redirect($this->config->get('cmsbridge_reg_url'),false,true);
-			}else{
-				redirect('index.php');
-			}
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
 
 		//Captcha

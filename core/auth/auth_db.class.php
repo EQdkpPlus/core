@@ -157,6 +157,9 @@ class auth_db extends auth {
 		}
 		
 		if (!$arrStatus){
+			$this->db->query("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?", false, $this->sid);
+			$this->data['session_failed_logins']++;
+			
 			//Failed Login
 			if ($this->config->get('pk_maintenance_mode') != 1){ //Only do this if not in MMode
 				$userid = $this->pdh->get('user', 'userid', array($strUsername));

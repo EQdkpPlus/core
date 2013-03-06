@@ -177,20 +177,11 @@ class Manage_Bridge extends page_generic {
 			//Forum Integration
 			$this->config->set('cmsbridge_url', $this->in->get('cms_url'));
 			$this->config->set('cmsbridge_embedded', $this->in->get('cms_embedded'));
-			if ($this->in->get('cms_show_link', 0) && strlen($this->in->get('cms_url'))){
-				$this->config->set('cmsbridge_showlink', 1);
-			} else {
-				$this->config->set('cmsbridge_showlink', 0);
-			}
 
 			//Registration
 			$this->config->set('cmsbridge_reg_url', $this->in->get('cms_reg_url'));
-			$this->config->set('cmsbridge_reg_embedded', $this->in->get('cms_reg_embedded'));
-			if ($this->in->get('cms_reg_redirect', 0) && strlen($this->in->get('cms_reg_url'))){
-				$this->config->set('cmsbridge_reg_redirect', 1);
-			} else {
-				$this->config->set('cmsbridge_reg_redirect', 0);
-			}
+			//Passwort Reset Page
+			$this->config->set('cmsbridge_pwreset_url', $this->in->get('cms_pwreset_url'));
 			
 			$this->config->set('cmsbridge_onlycmsuserlogin', $this->in->get('cms_onlycmsuserlogin', 0));
 
@@ -223,13 +214,10 @@ class Manage_Bridge extends page_generic {
 			$this->config->del('cmsbridge_type');
 			$this->config->del('cmsbridge_groups');
 
-			$this->config->del('cmsbridge_showlink');
 			$this->config->del('cmsbridge_url');
-			$this->config->del('cmsbridge_embedded');
-
-			$this->config->del('cmsbridge_reg_redirect');
 			$this->config->del('cmsbridge_reg_url');
-			$this->config->del('cmsbridge_reg_embedded');
+			$this->config->del('cmsbridge_pwreset_url');
+			$this->config->del('cmsbridge_embedded');
 	}
 
 	public function deactivate_bridge(){
@@ -304,10 +292,8 @@ class Manage_Bridge extends page_generic {
 			'S_ACTIVATE_MESSAGE'=> ($this->in->get('activate') == 'true') ? true : false,
 			'DD_EMBEDD_OPTIONS'	=> $this->html->DropDown('cms_embedded', $a_linkMode , $this->config->get('cmsbridge_embedded')),
 			'CMS_URL'			=> $this->config->get('cmsbridge_url'),
-			'S_CMS_LINK'		=> ($this->config->get('cmsbridge_showlink')) ? true : false,
-			'S_CMS_REG_REDIRECT'=> ($this->config->get('cmsbridge_reg_redirect')) ? true : false,
+			'CMS_PWRESET_URL'	=> $this->config->get('cmsbridge_pwreset_url'),
 			'CMS_REG_URL'		=> $this->config->get('cmsbridge_reg_url'),
-			'DD_REG_EMBEDDED_OPTIONS' => $this->html->DropDown('cms_reg_embedded', $a_linkMode , $this->config->get('cmsbridge_reg_embedded')),
 			'S_ONLYCMSUSERLOGIN'=> ((int)$this->config->get('cmsbridge_onlycmsuserlogin')) ? true : false,
 			'MS_SYNC_USERGROUPS'=> $this->jquery->MultiSelect('sync_usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_sync_groups')), array('height' => 170, 'width' => 300)),
 		));

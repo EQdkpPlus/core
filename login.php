@@ -47,6 +47,31 @@ class login extends page_generic {
 
 	public function process_login(){
 		if (!$this->user->is_signedin()){
+			//Check Captcha
+			if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
+				if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+					$blnShowCaptcha = true;
+				}
+				if (!$blnShowCaptcha){
+					$resQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip = '".$this->env->ip."'");
+					$arrResult = $this->db->fetch_row($resQuery);
+					if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+						$blnShowCaptcha = true;
+					}
+				}
+			}
+		
+			if ($blnShowCaptcha){
+				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
+				$captcha = new recaptcha;
+				$response = $captcha->recaptcha_check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('recaptcha_challenge_field'), $this->in->get('recaptcha_response_field'));
+				if (!$response->is_valid) {
+					$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
+					$this->display();
+					return;
+				}
+			}
+		
 			$blnAutoLogin = ( $this->in->exists('auto_login') ) ? true : false;
 			//Login
 			if ( !$this->user->login($this->in->get('username'), $this->in->get('password'), $blnAutoLogin) ){
@@ -102,12 +127,8 @@ class login extends page_generic {
 
 	//Save new password
 	public function process_new_password(){
-		if((int)$this->config->get('cmsbridge_reg_redirect') == 1 && (int)$this->config->get('cmsbridge_active') == 1) {
-			if(strlen($this->config->get('cmsbridge_reg_url')) > 1){
-				redirect($this->config->get('cmsbridge_reg_url'),false,true);
-			}else{
-				redirect('index.php'.$this->SID);
-			}
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
 
 		//Check if passwords are the same
@@ -154,12 +175,8 @@ class login extends page_generic {
 
 	//Send email with Key for changing password
 	public function process_lost_password(){
-		if((int)$this->config->get('cmsbridge_reg_redirect') == 1 && (int)$this->config->get('cmsbridge_active') == 1) {
-			if(strlen($this->config->get('cmsbridge_reg_url')) > 1){
-				redirect($this->config->get('cmsbridge_reg_url'),false,true);
-			}else{
-				redirect('index.php'.$this->SID);
-			}
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
 
 		$username	= ( $this->in->exists('username') )	? trim(strip_tags($this->in->get('username'))) : '';
@@ -257,17 +274,45 @@ class login extends page_generic {
 			redirect('settings.php'.$this->SID);
 		}
 
+		if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
+			if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+				$blnShowCaptcha = true;
+			}
+			if (!$blnShowCaptcha){
+				$resQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip = '".$this->env->ip."'");
+				$arrResult = $this->db->fetch_row($resQuery);
+				if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+					$blnShowCaptcha = true;
+				}
+			}
+		}
+		
+		
+		//Captcha
+		if ($blnShowCaptcha){
+			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
+			$captcha = new recaptcha;
+			$this->tpl->assign_vars(array(
+				'CAPTCHA'				=> $captcha->recaptcha_get_html($this->config->get('lib_recaptcha_okey')),
+				'S_DISPLAY_CATPCHA'		=> true,
+			));
+		}
+
 
 		$this->jquery->Validate('login', array(
 			array('name' => 'username', 'value'=> $this->user->lang('fv_required_user')),
 			array('name'=>'password', 'value'=>$this->user->lang('fv_required_password'))
 		));
+		
+		$arrPWresetLink = $this->core->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
 
 		$this->tpl->add_js('document.login.username.focus();', 'docready');
 		$this->tpl->assign_vars(array(
 			'S_BRIDGE_INFO'			=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
 			'S_USER_ACTIVATION'		=> ($this->config->get('account_activation') == 1) ? true : false,
 			'REDIRECT'				=> ( isset($redirect) ) ? '<input type="hidden" name="redirect" value="'.base64_decode($redirect).'" />' : '',
+			'S_SHOW_PWRESET_LINK'	=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
+			'U_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->core->createLink($arrPWresetLink) : '<a href="'.$this->root_path."login.php".$this->SID."&amp;mode=lostpassword\">".$this->user->lang('lost_password').'</a>',
 		));
 
 		$this->core->set_vars(array(

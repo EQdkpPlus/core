@@ -229,8 +229,8 @@ class core extends gen_class {
 			}
 
 			//Registration Link
-			if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('cmsbridge_reg_redirect') == 1){
-				$arrLinkData = $this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_reg_embedded'),'register');
+			if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
+				$arrLinkData = $this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register');
 				$register_link = (isset($arrLinkData['plus_link'])) ? $arrLinkData['link'] : $this->root_path.$arrLinkData['link'];
 			} else {
 				$register_link = $this->root_path.'register.php'.$this->SID;
@@ -384,14 +384,8 @@ class core extends gen_class {
 					foreach ( $array as $menu ){
 						// Don't display the link if they don't have permission to view it
 						if ( (empty($menu['check'])) || ($this->user->check_auth($menu['check'], false)) ){
-							$target = '';
-							if (isset($menu['target'])){
-								if (strlen($menu['target'])){
-									$target = ' target="'.$menu['target'].'"';
-								}
-							}
-							$arrOutput[$number] .= '<li><a href="' . ((isset($menu['plus_link']) && $menu['plus_link']==true) ? $menu['link'] : $this->root_path . $menu['link']) . '"'.$target.' class="'.$number.'_link_'.strtolower($menu['text']).'">' . $menu['text'] . '</a></li>';
-
+							$arrOutput[$number] .= '<li>'.$this->createLink($menu, $number.'_link_'.strtolower($menu['text'])).'</li>';
+						
 							$this->tpl->assign_block_vars( 'main_'.$number, array(
 									'LINK' 		=> ((isset($menu['plus_link']) && $menu['plus_link'] == true) ? $menu['link'] : $this->root_path . $menu['link']),
 									'TEXT'		=> $menu['text'],
@@ -431,6 +425,16 @@ class core extends gen_class {
 			//Do portal hook
 			register('hooks')->process('portal', array($this->env->eqdkp_page));
 		}
+		
+		public function createLink($arrLinkData, $strCssClass = ''){
+			$target = '';
+			if (isset($arrLinkData['target'])){
+				if (strlen($arrLinkData['target'])){
+					$target = ' target="'.$arrLinkData['target'].'"';
+				}
+			}
+			return '<a href="' . ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->root_path . $arrLinkData['link']) . '"'.$target.' class="'.$strCssClass.'">' . $arrLinkData['text'] . '</a>';
+		}
 
 		public function gen_menus(){
 			// Menu 1
@@ -462,8 +466,8 @@ class core extends gen_class {
 				$main_menu2[] = array('link' => 'characters.php' . $this->SID, 'text' => $this->user->lang('menu_members'));
 			} elseif ($this->config->get('disable_registration') != 1) {
 				//CMS register?
-				if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('cmsbridge_reg_redirect') == 1){
-					$main_menu2[] = $this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_reg_embedded'),'register');
+				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
+					$main_menu2[] = $this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register');
 				} else {
 					$main_menu2[] = array('link' => 'register.php' . $this->SID, 'text' => $this->user->lang('menu_register'));
 				}
@@ -485,7 +489,7 @@ class core extends gen_class {
 			}
 
 			//Menu4 - Top Menu
-			if (($this->config->get('cmsbridge_showlink') == 1) && strlen($this->config->get('cmsbridge_url')) > 0 && $this->config->get('cmsbridge_active') == 1){
+			if (strlen($this->config->get('cmsbridge_url')) > 0 && $this->config->get('cmsbridge_active') == 1){
 				$inlineforum	= $this->handle_link($this->config->get('cmsbridge_url'), $this->user->lang('forum'), $this->config->get('cmsbridge_embedded'), 'board');
 				$main_menu1[]	= $inlineforum;
 				$main_menu4[]	= $inlineforum;

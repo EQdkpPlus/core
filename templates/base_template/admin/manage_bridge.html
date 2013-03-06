@@ -354,40 +354,27 @@
 	<fieldset id="integration" class="settings">
 		<legend>{L_bridge_integration}</legend>
 			<dl>
-				<dt><label>{L_bridge_show_link}</label><br /><span>{L_bridge_show_link_help}</span></dt>
+				<dt><label>{L_bridge_url}</label><br /><span>{L_bridge_url_help}</span></dt>
 				<dd><label>
-					<input type="checkbox" name="cms_show_link" value="1" <!-- IF S_CMS_LINK -->checked="checked"<!-- ENDIF --> />
+					<input type="text" name="cms_url" class="input" value="{CMS_URL}" style="width:80%;"/>
 				</label></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_bridge_url}</label><br /><span>{L_bridge_url_help}</span></dt>
+				<dt><label>{L_bridge_pwreset_url}</label><br /><span>{L_bridge_pwreset_url_help}</span></dt>
 				<dd><label>
-					<input type="text" name="cms_url" class="input" value="{CMS_URL}" />
+					<input type="text" name="cms_pwreset_url" class="input" value="{CMS_PWRESET_URL}"  style="width:80%;" />
+				</label></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_bridge_reg_redirect_url}</label><br /><span>{L_bridge_reg_redirect_url_help}</span></dt>
+				<dd><label>
+					<input type="text" name="cms_reg_url" class="input" value="{CMS_REG_URL}"  style="width:80%;"/>
 				</label></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_bridge_url_open}</label><br /><span>{L_bridge_url_open_help}</span></dt>
 				<dd><label>
 					{DD_EMBEDD_OPTIONS}
-				</label></dd>
-			</dl>
-
-			<dl>
-				<dt><label>{L_bridge_reg_redirect}</label><br /><span>{L_bridge_reg_redirect_help}</span></dt>
-				<dd><label>
-					<input type="checkbox" name="cms_reg_redirect" value="1" <!-- IF S_CMS_REG_REDIRECT -->checked="checked"<!-- ENDIF --> />
-				</label></dd>
-			</dl>
-			<dl>
-				<dt><label>{L_bridge_reg_redirect_url}</label><br /><span>{L_bridge_reg_redirect_url_help}</span></dt>
-				<dd><label>
-					<input type="text" name="cms_reg_url" class="input" value="{CMS_REG_URL}" />
-				</label></dd>
-			</dl>
-			<dl>
-				<dt><label>{L_bridge_reg_redirect_open}</label><br /><span>{L_bridge_reg_redirect_open_help}</span></dt>
-				<dd><label>
-					{DD_REG_EMBEDDED_OPTIONS}
 				</label></dd>
 			</dl>
 			<dl>
