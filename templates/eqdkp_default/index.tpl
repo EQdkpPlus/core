@@ -103,7 +103,7 @@
 						{PORTAL_LEFT1}
 						<div id="main_menu1" class="portalbox">
 							<div class="portalbox_head">
-								<span class="toggle_button active">&nbsp;</span>
+								<span class="toggle_button">&nbsp;</span>
 								<span class="center">{L_menu_eqdkp}</span>
 							</div>
 							<div class="portalbox_content">
@@ -115,7 +115,7 @@
 						
 						<div id="main_menu2" class="portalbox">
 							<div class="portalbox_head">
-								<span class="toggle_button active">&nbsp;</span>
+								<span class="toggle_button">&nbsp;</span>
 								<span class="center">{L_menu_user}</span>
 							</div>
 							<div class="portalbox_content">
@@ -127,7 +127,7 @@
 						<!-- IF S_MAIN_MENU3 -->
 						<div id="main_menu3" class="portalbox">
 							<div class="portalbox_head">
-								<span class="toggle_button active">&nbsp;</span>
+								<span class="toggle_button">&nbsp;</span>
 								<span class="center">{L_menu_links_short}</span>
 							</div>
 							<div class="portalbox_content">
