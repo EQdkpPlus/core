@@ -47,6 +47,31 @@ class login extends page_generic {
 
 	public function process_login(){
 		if (!$this->user->is_signedin()){
+			//Check Captcha
+			if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
+				if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+					$blnShowCaptcha = true;
+				}
+				if (!$blnShowCaptcha){
+					$resQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip = '".$this->env->ip."'");
+					$arrResult = $this->db->fetch_row($resQuery);
+					if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+						$blnShowCaptcha = true;
+					}
+				}
+			}
+		
+			if ($blnShowCaptcha){
+				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
+				$captcha = new recaptcha;
+				$response = $captcha->recaptcha_check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('recaptcha_challenge_field'), $this->in->get('recaptcha_response_field'));
+				if (!$response->is_valid) {
+					$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
+					$this->display();
+					return;
+				}
+			}
+		
 			$blnAutoLogin = ( $this->in->exists('auto_login') ) ? true : false;
 			//Login
 			if ( !$this->user->login($this->in->get('username'), $this->in->get('password'), $blnAutoLogin) ){
@@ -255,6 +280,30 @@ class login extends page_generic {
 	public function display(){
 		if ($this->user->is_signedin()){
 			redirect('settings.php'.$this->SID);
+		}
+
+		if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
+			if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+				$blnShowCaptcha = true;
+			}
+			if (!$blnShowCaptcha){
+				$resQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip = '".$this->env->ip."'");
+				$arrResult = $this->db->fetch_row($resQuery);
+				if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+					$blnShowCaptcha = true;
+				}
+			}
+		}
+		
+		
+		//Captcha
+		if ($blnShowCaptcha){
+			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
+			$captcha = new recaptcha;
+			$this->tpl->assign_vars(array(
+				'CAPTCHA'				=> $captcha->recaptcha_get_html($this->config->get('lib_recaptcha_okey')),
+				'S_DISPLAY_CATPCHA'		=> true,
+			));
 		}
 
 

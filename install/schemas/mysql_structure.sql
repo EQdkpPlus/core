@@ -127,6 +127,7 @@ CREATE TABLE `__sessions` (
 	`session_key` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_type` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_perm_id` smallint(5) NULL DEFAULT '-1',
+	`session_failed_logins` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`session_id`),
 	KEY `session_current` (`session_current`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

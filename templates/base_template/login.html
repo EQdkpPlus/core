@@ -27,6 +27,19 @@
 						<br /><br /><label><input type="checkbox" name="auto_login" />{L_remember_password}</label>
 					</dd>
 				</dl>
+				
+				<!-- IF S_DISPLAY_CATPCHA -->
+				<dl>
+					<dt>
+						<label>{L_lib_captcha_head}</label><br /><span>{L_lib_captcha_insertword}</span>
+					</dt>
+					<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><img src="{EQDKP_ROOT_PATH}images/global/update.png" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" alt="{L_lib_captcha_reload}" style="cursor:pointer; padding-top:20px;" /><div style="clear:both;"></div>
+					<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input"/>
+					{FV_CAPTCHA}
+					{CAPTCHA}</dd>
+				</dl>
+				<!-- ENDIF -->
+				
 			</div>
 			</fieldset>
 		</div>
