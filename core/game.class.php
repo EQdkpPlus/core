@@ -746,7 +746,7 @@ if(!class_exists('game_generic')) {
 		protected function scan_languages() {
 			$languages = sdir($this->path.'language/', '*.php', '.php');
 			foreach($languages as $language) {
-				if(!in_array($language, $this->langs)
+				if(!in_array($language, $this->langs)) {
 					$this->langs[] = $language;
 				}
 			}
