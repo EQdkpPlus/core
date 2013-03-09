@@ -301,7 +301,7 @@ class user_core extends gen_class {
 
 	public function add_lang($lang_name, $langtoadd) {
 		if(!is_array($langtoadd)) return false;
-		$this->lang[$lang_name] = (is_array($this->lang[$lang_name])) ? array_merge($this->lang[$lang_name], $langtoadd) : $langtoadd;
+		$this->lang[$lang_name] = (isset($this->lang[$lang_name]) && is_array($this->lang[$lang_name])) ? array_merge($this->lang[$lang_name], $langtoadd) : $langtoadd;
 	}
 
 	private function lang_error($key, $return_key, $warning=false, $error=true) {

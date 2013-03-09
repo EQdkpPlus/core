@@ -57,6 +57,7 @@ function valid_folder($path){
  */
 function sdir( $path='.', $mask='*', $strip='', $nocache=0 ){
 	static $dir	= array(); // cache result in memory
+	$sdir = array();
 	$ignore		= array('.', '..', '.svn', 'CVS', 'index.html', '.htaccess');
 	if ( !isset($dir[$path]) || $nocache) {
 		$dir[$path] = scandir($path);

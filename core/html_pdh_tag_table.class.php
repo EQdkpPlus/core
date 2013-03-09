@@ -83,7 +83,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			if($this->settings['show_select_boxes']){
 				$this->column_count++;
 			}
-			if($this->settings['show_numbers']){
+			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
 				$this->column_count++;
 			}
 
@@ -234,7 +234,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$prefix .= "\t<th width='13'>&nbsp;</th>\n";
 				}
 			}
-			if($this->settings['show_numbers']){
+			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
 				$prefix .= "\t<th>#</th>\n";
 			}
 			return "<tr>\n{$prefix}{$header}</tr>\n";
@@ -246,7 +246,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			if($this->settings['show_select_boxes']){
 				$prefix  .= "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n";
 			}
-			if($this->settings['show_numbers']){
+			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
 				$prefix .= "\t".'<td><div style="float:right;">'.$this->counter.'</div></td>'."\n";
 			}
 
