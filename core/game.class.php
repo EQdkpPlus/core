@@ -733,6 +733,7 @@ if(!class_exists('game_generic')) {
 
 		public function __construct(){
 			$this->path = $this->root_path.'games/'.$this->this_game.'/';
+			$this->scan_languages();
 		}
 		
 		public function __get($name) {
@@ -740,6 +741,15 @@ if(!class_exists('game_generic')) {
 				$this->$name = array();
 			}
 			return parent::__get($name);
+		}
+		
+		protected function scan_languages() {
+			$languages = sdir($this->path.'language/', '*.php', '.php');
+			foreach($languages as $language) {
+				if(!in_array($language, $this->langs)
+					$this->langs[] = $language;
+				}
+			}
 		}
 
 		/**
