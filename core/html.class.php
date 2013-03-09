@@ -168,7 +168,7 @@ if (!class_exists("html")) {
 				case 'timepicker':
 					if(!isset($options['sec'])) $options['sec'] = 0;
 					if(!isset($options['enable_sec'])) $options['enable_sec'] = false;
-					$ccfield = $this->jquery->timePicker($options['name'], $options['value'], $options['hour'], $options['min'], $options['sec'], $options['enable_sec'], (isset($options['hour_format'])) ? $options['hour_format'] : '24');
+					$ccfield = $this->jquery->timePicker($options['name'], $options['value'], (isset($options['hour']) ? $options['hour'] : 0), (isset($options['min']) ? $options['min'] : 0), (isset($options['sec']) ? $options['sec'] : 0), $options['enable_sec'], (isset($options['hour_format'])) ? $options['hour_format'] : '24');
 				break;
 				
 				case 'colorpicker':

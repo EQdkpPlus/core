@@ -21,7 +21,7 @@ if (!defined('EQDKP_INC')) {
 //File: lang_mmode
 //Source-Language: german07
 
-$alang = array( 
+$lang = array( 
 "click2show" => "(click to show)",
 "maintenance_mode" => "Maintenance Mode",
 "task_manager" => "Task-Manager",
@@ -84,6 +84,5 @@ $alang = array(
 "guild_import" => "Import a guild from external Database",
 "guild_import_info" => "when supported by your game",
  );
-$lang = (is_array($lang))? $lang : array();
-$lang = array_merge($lang, $alang);
+
 ?>

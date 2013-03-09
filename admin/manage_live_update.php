@@ -488,6 +488,7 @@ class Manage_Live_Update extends page_generic {
 	}
 
 	public function display(){
+		$updates = NULL;
 		if ($this->getNewVersion()){
 			$updates = $this->getNewVersion(true);
 			$this->tpl->assign_vars(array(
@@ -497,13 +498,12 @@ class Manage_Live_Update extends page_generic {
 				'RELEASE_DATE'	=> $updates['release'],
 			));
 		}
-
 		$this->tpl->assign_vars(array(
 			'S_START'			=> true,
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
-			'S_REQUIREMENTS'	=> ($updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true,
+			'S_REQUIREMENTS'	=> ($updates != NULL && $updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true,
 		));
 
 		$this->core->set_vars(array(

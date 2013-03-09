@@ -346,7 +346,7 @@ class Manage_Extensions extends page_generic {
 		//Get Updates
 		$urgendUpdates = $this->repo->BuildUpdateArray();
 		$allUpdates = $this->repo->BuildUpdateArray(false);
-		$arrUpdateCount = array(1=>array('red' => 0, 'yellow' => 0), 2=>array('red' => 0, 'yellow' => 0),3=>array('red' => 0, 'yellow' => 0),4=>array('red' => 0, 'yellow' => 0),7=>array('red' => 0, 'yellow' => 0));
+		$arrUpdateCount = array(1=>array('red' => 0, 'yellow' => 0), 2=>array('red' => 0, 'yellow' => 0),3=>array('red' => 0, 'yellow' => 0),4=>array('red' => 0, 'yellow' => 0),7=>array('red' => 0, 'yellow' => 0),11=>array('red' => 0, 'yellow' => 0));
 
 		//=================================================================
 		//Plugins
