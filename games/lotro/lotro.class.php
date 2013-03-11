@@ -49,7 +49,7 @@ if(!class_exists('lotro')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public  $lang			= false;
-		public $version	= '2.1';
+		public $version	= '2.1.1';
 
 		/**
 		* Initialises filters
@@ -68,9 +68,9 @@ if(!class_exists('lotro')) {
 				}
 				$this->filters[$lang] = array_merge($this->filters[$lang], array(
 					array('name' => '-----------', 'value' => false),
-					array('name' => $this->glang('heavy', true, $lang), 'value' => array(2 => 'class', 6 => 'class', 7 => 'class')),
-					array('name' => $this->glang('medium', true, $lang), 'value' => array(1 => 'class', 3 => 'class', 5 => 'class', 9 => 'class')),
-					array('name' => $this->glang('light', true, $lang), 'value' => array(4 => 'class', 9 => 'class')),
+                    array('name' => $this->glang('heavy', true, $lang), 'value' => array(2 => 'class', 6 => 'class', 7 => 'class')),
+                    array('name' => $this->glang('medium', true, $lang), 'value' => array(3 => 'class', 5 => 'class', 9 => 'class')),
+                    array('name' => $this->glang('light', true, $lang), 'value' => array(1 => 'class', 4 => 'class', 8 => 'class')),
 				));
 			}
 		}
