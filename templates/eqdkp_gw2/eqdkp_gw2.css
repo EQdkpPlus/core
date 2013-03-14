@@ -897,10 +897,13 @@ div.contentBox {
 	
 }
 
+.copyrightWrapper {
+	padding-top: 100px;
+}
+
 .copyright {
 	font-size: 12px;
 	color: #000000;
-	padding-top: 100px;
 }
 
 #gw2copy{
@@ -941,6 +944,7 @@ div.contentBox {
 }
 #impressum{
 	margin: 0px 0px 10px 0px;
+	font-weight: bold;
 }
 
 /***************************************************
