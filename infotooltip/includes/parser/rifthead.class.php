@@ -19,7 +19,7 @@
 include_once('itt_parser.aclass.php');
 
 if(!class_exists('rift_zam')) {
-	class rift_zam extends itt_parser {
+	class rifthead extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
 		public $supported_games = array('rift');
@@ -35,7 +35,7 @@ if(!class_exists('rift_zam')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'rift' => array('icon_loc' => 'http://zam.zamimg.com/rift/i/icons/', 'icon_ext' => '.jpg', 'default_icon' => 'unknown'),
+				'rift' => array('icon_loc' => 'http://static.rifthead.com/rifthead/images/icons/backgrounds/rift/medium/', 'icon_ext' => '.jpg', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -76,14 +76,12 @@ if(!class_exists('rift_zam')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$encoded_name = urlencode($itemname);
-			$link = 'http://rift.zam.com/'.$lang.'/search.html?q='.$encoded_name;
-			
-			$data = $this->puf->fetch($link);
 
+			$data = $this->puf->fetch('http://www.rifthead.com/search/'. $itemname);
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#\<a href=\"\/'.$lang.'\/item\/(.*?)\/(.*?)\"><span class=\"(.*?)\">(.*?)<\/span>\<\/a\>#', $data, $matches))
+			if (preg_match_all('#href=\"\/item\/(.[0-9a-zA-Z]*?)\/(.*?)\" class="(.*?)">(.*?)<\/a>#', $data, $matches))
 			{
+			
 				foreach ($matches[0] as $key => $match)
 				{
 					// Extract the item's ID from the match.
@@ -107,14 +105,13 @@ if(!class_exists('rift_zam')) {
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
 
-			$url = 'http://rift.zam.com/'.$lang.'/tooltip.html?item='.$item['id'];
+			$url = 'http://www.rifthead.com/item/'.$item['id'].'/tooltips';
 			$item['link'] = $url;
 			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
-
-			if (preg_match('#zamTooltip\.store\({\"icon\":\"(.*?)\",\"linkColor\":\"(.*?)\",\"site\":\"(.*?)\",\"html\":\"(.*?)\",\"dataType\":\"(.*?)\",\"name\":\"(.*?)\",\"id\":\"(.*?)\"#', $itemdata, $matches)){
-				$quality = $matches[2];
-				$content = stripslashes(str_replace('\n', '', $matches[4]));
-				if (preg_match('#icons\/(.*?).jpg#',stripslashes($matches[1]), $icon_matches)){
+			if (preg_match('#fhTooltip\.store\(\"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\"#', $itemdata, $matches)){
+				$quality = $matches[4];
+				$content = stripslashes(str_replace('\n', '', $matches[3]));
+				if (preg_match('#\|small\|(.*?).jpg\)#',str_replace('\\/', '|', $matches[5]), $icon_matches)){
 					$icon = $icon_matches[1];
 				}
 

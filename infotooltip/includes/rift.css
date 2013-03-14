@@ -1,155 +1,212 @@
-/* Rift Zam */
-.rtt-gen {float:right !important;}
-.rtt-gen td {color:#fbfbfb !important}
-.rtt-gen .clear {clear:both}
-.rtt-gen .icon-link {line-height:38px}
-.rtt-gen .icon-link.block {display:block;height:38px;padding:0 0 0 43px;position:relative}
-.rtt-gen .icon-link-sml {font-size:12px;line-height:18px}
-.rtt-gen a.icon-link *, .rtt-gen a.icon-link-sml * {cursor:pointer}
-.rifticon {cursor:default;display:inline-block;height:38px;margin:0 4px 0 0;overflow:hidden;position:relative;text-decoration:none !important;vertical-align:middle;width:39px}
-.rifticon-sml {height:19px;margin:0 2px 0 0;vertical-align:top;width:20px}
-a .rifticon {cursor:pointer}
-.rtt-gen .icon-link.block .rifticon {left:0;position:absolute;top:0}
-.rifticon b {background:url(http://zam.zamimg.com/rift/i/icon-borders-32.png) no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/icon-borders-32.gif);display:block;height:38px;left:0;position:absolute;top:0;width:43px;z-index:1}
-.rifticon-sml b {background-image:url(http://zam.zamimg.com/rift/i/icon-borders-16.png);_background-image:url(http://zam.zamimg.com/rift/i/icon-borders-16.gif);height:19px;width:20px}
-a:hover .rifticon b {background-position:bottom left}
-.rifticon img {height:32px;left:3px;position:absolute;top:3px;width:32px}
-a:active .rifticon img {height:30px;left:4px;top:4px;width:30px}
-.rifticon-sml img {height:16px;left:2px;top:2px;width:16px}
-a:active .rifticon-sml img {height:14px;left:3px;top:3px;width:14px}
-a:hover .rifticon, .rtt-gen a:hover .rifticon * {text-decoration:none !important}
-.rifticon .icon-count {bottom:0;color:#000;font:bold 13px Arial,Helvetica,sans-serif;position:absolute;right:0}
-.rifticon .icon-count, .rtt-gen .icon-count span {text-decoration:none !important}
-.rifticon .icon-count span {left:2px;position:absolute;top:0}
-.rifticon .icon-count span span span {left:-2px;top:0}
-.rifticon .icon-count span span {left:0;top:2px}
-.rifticon .icon-count span span span span {color:#fff;left:1px;top:-1px}
-.rifticon-sml .icon-count {font:bold 10px Verdana,Arial,Helvetica,sans-serif;margin:2px 3px !important}
-.rifticon .icon-count {margin:2px 4px}
-.rifticon .icon-text {color:#000;font:bold 8px Verdana,Arial,Helvetica,sans-serif;left:0;position:absolute;right:0;top:-1px;width:32px}
-.rifticon .icon-text span {position:relative}
-.rifticon .icon-text, .rtt-gen .icon-text span {text-decoration:none !important}
-.rifticon .icon-text span span {left:2px;position:absolute;top:0}
-.rifticon .icon-text span span span {left:0;top:2px}
-.rifticon .icon-text span span span span {left:-2px;top:0}
-.rifticon .icon-text span span span span span {color:#f0d080;left:1px;top:-1px}
-.rifticon-sml .icon-text {display:none}
-.rtt-gen .icon-link.has-desc {line-height:normal;text-decoration:none !important}
-.rtt-gen .icon-link.has-desc .text {position:relative;top:3px}
-.rtt-gen .icon-link.has-desc .desc {color:#d3d3d3;font-size:11px;opacity:1;filter:alpha(opacity=100);position:relative;text-decoration:none !important;top:3px}
-.rtt {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;max-width:256px;position:relative;_width:256px}
-.rtt table {border-collapse:collapse;color:#fbfbfb;font:13px Arial,Helvetica,sans-serif;*table-layout:fixed}
-.rtt td {overflow:hidden;padding:0}
-.rtt th {background:url(http://zam.zamimg.com/rift/i/tooltip.png) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);font-size:1px;height:14px;padding:0;width:50%}
-.rtt th.r {background-position:bottom right}
-.rtt .rtt-cont {background:url(http://zam.zamimg.com/rift/i/tooltip.png) 0 -8px;_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);margin:0 15px 0 0;padding:10px 0 0 15px;position:relative}
-.rtt .rtt-cont-cap {background:url(http://zam.zamimg.com/rift/i/tooltip.png) right -8px;_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);bottom:0;_font-size:expression((this.parentNode.offsetHeight*.91)+'px');position:absolute;right:-15px;_right:0;top:0;width:15px}
-.rtt .rtt-name {color:#fc3;font-size:15px !important;width:228px;word-wrap:break-word}
-.rtt .rtt-name.auto-width {width:auto}
-.rtt .rtt-indent {margin-left:10px}
-.rtt .rtt-r {float:right}
-.rtt .rtt-div {background:url(http://zam.zamimg.com/rift/i/tooltip.png);_background-image:url(http://zam.zamimg.com/rift/i/tooltip.gif);font-size:1px;height:8px;margin:2px -7px;width:242px}
-.rtt .rtt-vendor {margin:3px 0 0;text-align:right}
-.rtt-s, .rtt-g, .rtt-p, .rift-s, .rift-g, .rift-p {background:url(http://zam.zamimg.com/rift/i/coins.png?1) top right no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/coins.gif?1);padding:0 17px 0 0}
-.rtt-g, .rift-g {background-position:right}
-.rtt-p, .rift-p {background-position:bottom right}
-.rtt .rtt-invalid {color:#f00;margin:5px 0 0}
-.rtt-recipe {margin:0 -5px 20px 0}
-.rtt-ingredients {line-height:18px}
-.rtt-ingredients div {margin-left:10px}
-.tooltip-icon.rift {left:-38px}
-.rift-q0 a, .rift-q1 a, .rift-q2 a, .rift-q3 a, .rift-q4 a, .rift-q5 a, .rift-q6 a, .rift-quest a, .rift-quest-item a, .rift-questitem a {text-decoration:underline !important}
-.rift-quest, .rift-quest-item, .rift-questitem {color:#fbf200 !important}
-.rift-q0, .rift-trash {color:#888 !important}
-.rift-q1, .rift-common {color:#fbfbfb !important}
-.rift-q2, .rift-uncommon {color:#0c0 !important}
-.rift-q3, .rift-rare {color:#267ffa !important}
-.rift-q4, .rift-epic {color:#ad48fb !important}
-.rift-q5, .rift-relic {color:#ff8000 !important}
-.rift-q6 {color:red !important}
-.rift-flavortext {color:#fbc864}
-.riftitem-q0 {color:#888 !important}
-.riftitem-q1 {color:#fbfbfb !important}
-.riftitem-q2 {color:#0c0 !important}
-.riftitem-q3 {color:#fbf200 !important}
-.riftitem-q4 {color:#267ffa !important}
-.riftitem-q5 {color:#ad48fb !important}
-.riftitem-q6 {color:#ff8000 !important}
-.riftitem-q7 {color:red !important}
-.rift-diff-0 {color:#888 !important}
-.rift-diff-1 {color:#0c0 !important}
-.rift-diff-2 {color:#ff0 !important}
-.rift-diff-3 {color:#ff8040 !important}
-.rift-diff-4 {color:#d22 !important}
-.rach {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;position:relative;text-shadow:1px 1px 1px #000;width:412px}
-.rach table {border-collapse:collapse;*table-layout:fixed;width:412px}
-.rach td {padding:0}
-.rach th {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);font-size:1px;height:58px;padding:0;width:50%}
-.rach th.r {background-position:bottom right}
-.rach .rach-icon {position:absolute;left:1px;top:6px;z-index:1}
-.rach .rach-icon img {background:#000;height:48px;left:14px;max-width:none !important;position:absolute;top:15px;width:48px}
-.rach .rach-icon div {background:url(http://zam.zamimg.com/rift/i/achievement.png?2);_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);height:78px;left:0;position:absolute;top:0;width:77px}
-.rach .rach-cont {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) 0 -142px;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);padding:17px 0 0 18px;position:relative;_zoom:100%}
-.rach .rach-name {color:#d8cb99;font-size:18px;left:78px;margin:0 0 0 60px;text-transform:uppercase;width:285px;word-wrap:break-word;z-index:1}
-.rach .rach-time {color:#d8cb99;position:absolute;right:56px;top:21px;z-index:1}
-.rach .rach-desc {margin:-1px 0 14px 60px;padding:0 55px 0 0;z-index:1}
-.rach .rach-points {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) -77px 0;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);color:#fb8b48;font-size:24px;height:69px;line-height:70px;padding:0 1px 0 0;position:absolute;right:-14px;text-align:center;top:6px;width:68px;_width:69px;z-index:1}
-.rach ul {list-style:none;margin:30px 0 0 -2px;overflow:visible;padding:0;_padding-top:17px;*zoom:100%}
-.rach ul li {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) -146px 4px no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);line-height:19px;margin:0;padding:0 0 0 20px;float:left;position:relative;top:0;width:172px;_width:182px;z-index:1}
-.rach ul li.check {background-position:-358px 2px}
-.rach ul .clear {clear:left;float:none;font-size:0;height:0}
-.rach ul .rach-cont-cap {background:url(http://zam.zamimg.com/rift/i/achievement.png?2) right -142px;_background-image:url(http://zam.zamimg.com/rift/i/achievement.gif);bottom:0;_font-size:expression((this.parentNode.offsetHeight-15)+'px');position:absolute;right:0;top:0;width:15px;z-index:0;*z-index:-1}
-.rquest {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;position:relative;width:320px}
-.rquest table {border-collapse:collapse;color:#fbfbfb;font:13px Arial,Helvetica,sans-serif;*table-layout:fixed;width:320px}
-.rquest td {padding:0}
-.rquest th {background:url(http://zam.zamimg.com/rift/i/quest.png) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);font-size:1px;height:29px;padding:0;width:50%}
-.rquest th.r {background-position:bottom right}
-.rquest .rquest-cont-wrap {position:relative}
-.rquest .rquest-cont {line-height:20px !important;margin:0 0 -14px 0;overflow:hidden;padding:14px 32px 0;position:relative}
-.rquest .rquest-bg {background:url(http://zam.zamimg.com/rift/i/quest.png) 0 -234px;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);bottom:14px;_font-size:expression(((this.parentNode.offsetHeight-14)*.91)+'px');left:0;position:absolute;right:0;top:0;_width:320px}
-.rquest .rquest-name {color:#f8f3c8;font-size:17px !important;line-height:normal !important;width:256px;word-wrap:break-word}
-.rquest .rquest-name div {background:url(http://zam.zamimg.com/rift/i/quest.png) no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);height:29px;margin:-17px 0 0 -15px;*position:relative;*z-index:-1}
-.rquest .rquest-header, .rquest .rquest-subhead {color:#f8f3c8;line-height:normal !important;text-transform:uppercase}
-.rquest .rquest-subhead {font-size:11px !important;line-height:20px !important}
-.rquest .rquest-indent {margin-left:10px}
-.rquest .rquest-header div {background:url(http://zam.zamimg.com/rift/i/quest.png) 0 -29px no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);_font-size:4px;height:5px;margin:0 0 0 -8px}
-.rquest .rquest-topmargin {margin-top:15px}
-.rquest .rquest-objectives {line-height:normal !important;list-style:none;margin:2px 0 10px;padding:0}
-.rquest .rquest-objectives li {background:url(http://zam.zamimg.com/rift/i/quest.png) 2px -37px no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);background-position:2px -38px\9;padding:0 0 0 18px}
-.rquest .rquest-objectives li.check {background-position:0 -140px;background-position:0 -142px\9}
-.pre-ie9 .rquest .rquest-objectives li {background-position:2px -37px;*background-position:2px -35px;_background-position:2px -37px}
-.pre-ie9 .rquest .rquest-objectives li.check {background-position:0 -140px;*background-position:0 -138px;_background-position:0 -140px}
-.rquest .rquest-rewards {line-height:normal !important;margin:2px 0 10px}
-.rquest .rquest-rewards:last-child {margin-bottom:0}
-.rquest .rquest-reward {float:left;height:auto;margin:0 0 4px;overflow:hidden;position:relative;width:128px}
-.rquest .rquest-reward .text {float:left;height:auto;left:39px;line-height:normal;min-height:38px;padding:0;position:static;word-wrap:break-word;width:85px}
-.rquest .rquest-reward .rifticon, .rquest .rquest-rewards .rifticon {float:left}
-.rquest .rquest-xp span {color:#199ba5}
-.rquest .rquest-r {float:right}
-.rquest .rquest-div {background:url(http://zam.zamimg.com/rift/i/quest.png);_background-image:url(http://zam.zamimg.com/rift/i/quest.gif);font-size:1px;height:8px;margin:2px -7px;width:242px}
-.rquest .rquest-vendor {text-align:right}
-.rquest .rquest-invalid {color:#f00;margin:5px 0 0}
-.rcol {color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;position:relative;width:290px}
-.rcol table {border-collapse:collapse;color:#fbfbfb;font:13px Arial,Helvetica,sans-serif;*table-layout:fixed}
-.rcol td {overflow:hidden;padding:0}
-.rcol th {background:url(http://zam.zamimg.com/rift/i/collection.png) bottom left;_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);font-size:1px;height:14px;padding:0;width:50%}
-.rcol th.r {background-position:bottom right}
-.rcol .rcol-cont {background:url(http://zam.zamimg.com/rift/i/collection.png) 0 -234px;_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);padding:12px 15px 0;position:relative}
-.rcol .rcol-name {color:#fc3;color:#f8f3c8;font-size:17px !important;line-height:normal !important;width:260px;word-wrap:break-word}
-.rcol .rcol-name div {background:url(http://zam.zamimg.com/rift/i/collection.png) no-repeat;_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);height:29px;margin:-17px 0 0 -3px;*position:relative;*z-index:-1}
-.rcol .rcol-desc {margin:0 0 10px}
-.rcol .rcol-items {margin:0 0 0 1px;padding:0 0 4px}
-.rcol .rcol-items .rifticon {margin:0 2px}
-.rcol .rcol-indent {margin-left:10px}
-.rcol .rcol-r {float:right}
-.rcol .rcol-div {background:url(http://zam.zamimg.com/rift/i/collection.png);_background-image:url(http://zam.zamimg.com/rift/i/collection.gif);font-size:1px;height:8px;margin:2px -7px;width:242px}
-.rcol .clear {*font-size:0;*height:0}
-.rcol .zam-icon {float:left}
+/* Rifthead */
+.fhtt-clear{clear:both;}
+.fhtt-wrapper>.fhtt-icon{float:left;}
+#headtt.hide-icon>.fhtt-icon{display:none !important;}
+.fhtt{color:#fff;font:13px/normal Arial,"Helvetica Neue",Helvetica,sans-serif;float:left;max-width:500px;position:relative;}.fhtt a{color:inherit;text-decoration:none;}.fhtt a:hover{text-decoration:underline;}
+.fhtt table{background:none;border:0;border-collapse:collapse;border-spacing:0;line-height:17px;margin:0;padding:0;}
+.fhtt thead,.fhtt tbody,.fhtt tr,.fhtt td,.fhtt th{background:none;border:0;height:auto;line-height:17px;margin:0;padding:0;text-align:left;}
+.fhtt th{line-height:0;}
+.text-icon{background-position:left !important;background-repeat:no-repeat !important;padding-left:20px;}.text-icon.left{float:none;}
+.text-icon.right{background-position:right !important;float:none;padding-left:0 !important;padding-right:20px;}
+.text-icon.email-icon{background:url(/generic/images/icons/misc/fam3/email.png);padding-left:20px;}
+.text-icon.star-icon{background:url(/generic/images/icons/misc/fam3/star.png);padding-left:21px;}
+.text-icon.post-icon{background:url(/generic/images/icons/misc/fam3/add.png);padding-left:20px;}
+.text-icon.sticky-icon{background:url(/generic/images/icons/misc/fam3/note.png);padding-left:19px;}
+.text-icon.lock-icon,.text-icon.locked-icon{background:url(/generic/images/icons/misc/fam3/lock.png);padding-left:21px;}
+.text-icon.unlocked-icon{background:url(/generic/images/icons/misc/fam3/lock_open.png);padding-left:21px;}
+.text-icon.checked-icon{background:url(/generic/images/icons/misc/fam3/tick.png);padding-left:19px;}
+.text-icon.help-icon{background:url(/generic/images/icons/misc/fam3/help.png);padding-left:19px;}
+.text-icon.announcement-icon{background:url(/generic/images/icons/misc/fam3/bell.png);padding-left:21px;}
+.text-icon.delete-icon{background:url(/generic/images/icons/misc/fam3/delete.png);padding-left:20px;}
+.text-icon.deleted-icon{background:url(/generic/images/icons/misc/fam3/cross.png);padding-left:19px;}
+.text-icon.reset-icon{background:url(/generic/images/icons/misc/fam3/arrow_rotate_clockwise.png);}
+.text-icon.restore-icon{background:url(/generic/images/icons/misc/fam3/arrow_rotate_clockwise.png);}
+.text-icon.return-icon{background:url(/generic/images/icons/misc/fam3/custom/control_play_blue_reversed.png);padding-left:21px;}
+.text-icon.edit-icon{background:url(/generic/images/icons/misc/fam3/page_edit.png);padding-left:21px;}
+.text-icon.arrow-icon{background:url(/generic/images/icons/misc/fam3/bullet_go.png);padding-left:18px;}
+.text-icon.link-icon{background:url(//static.wowhead.com/images/icons/link.gif);padding-left:19px;}
+.text-icon.goto-icon{background:url(/generic/images/icons/misc/fam3/link_go.png);padding-left:20px;}
+.text-icon.embed-icon{background:url(/generic/images/icons/misc/fam3/tag.png);padding-left:18px;}
+.text-icon.male-icon{background:url(/generic/images/icons/misc/fam3/male.png);padding-left:18px;}
+.text-icon.female-icon{background:url(/generic/images/icons/misc/fam3/female.png);padding-left:18px;}
+h1.text-icon{background-position:0 3px !important;}
+.fh-icon{background:none;position:relative;z-index:0;display:inline-block;text-decoration:none !important;vertical-align:middle;}.fh-icon ins{background-repeat:no-repeat;background-position:center !important;background-size:contain;display:block;position:absolute;z-index:5;}
+.fh-icon del{background-repeat:no-repeat;display:block;height:100%;position:absolute;width:100%;z-index:10;}
+.fh-icon a{display:block;height:100%;position:absolute;left:0;text-decoration:none !important;top:0;width:100%;z-index:20;}.fh-icon a:hover{text-decoration:none !important;}
+.fh-icon i{box-shadow:0 0 5px #000000;-moz-box-shadow:0 0 5px #000000;-webkit-box-shadow:0 0 5px #000000;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;bottom:0;display:block;left:0;position:absolute;right:0;top:0;}
+.fh-icon b{color:#fff;line-height:normal;position:absolute;text-shadow:1px 1px 0 #000000,1px -1px 0 #000000,-1px 1px 0 #000000,-1px -1px 0 #000000;text-shadow:0 0 0 1px #000000;filter:glow(color=black,strength=1);z-index:5;}.fh-icon b b{display:none;}
+.fh-icon.tiny{height:14px;width:14px;}.fh-icon.tiny ins{box-shadow:inset 0 0 1px #000000;-moz-box-shadow:inset 0 0 1px #000000;-webkit-box-shadow:inset 0 0 1px #000000;height:12px;left:1px;top:1px;width:12px;}
+.fh-icon.tiny i{box-shadow:0 0 3px #000000;-moz-box-shadow:0 0 3px #000000;-webkit-box-shadow:0 0 3px #000000;}
+.fh-icon.tiny>b,.fh-icon.tiny>a>b{bottom:0;font-size:9px;right:2px;}
+.fh-icon.small{height:20px;width:20px;}.fh-icon.small ins{border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;box-shadow:inset 0 0 2px #000000;-moz-box-shadow:inset 0 0 2px #000000;-webkit-box-shadow:inset 0 0 2px #000000;height:18px;left:1px;top:1px;width:18px;}
+.fh-icon.small i{box-shadow:0 0 3px #000000;-moz-box-shadow:0 0 3px #000000;-webkit-box-shadow:0 0 3px #000000;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;}
+.fh-icon.small>b,.fh-icon.small>a>b{bottom:0;font-size:11px;right:3px;}
+.fh-icon.medium{height:44px;width:44px;}.fh-icon.medium ins{border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;height:36px;left:4px;top:4px;width:36px;}
+.fh-icon.medium i{box-shadow:0 0 4px #000000;-moz-box-shadow:0 0 4px #000000;-webkit-box-shadow:0 0 4px #000000;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;bottom:2px;left:2px;right:2px;top:2px;}
+.fh-icon.medium>b,.fh-icon.medium>a>b{bottom:4px;font-size:13px;right:6px;}
+.fh-icon.large{height:60px;width:60px;}.fh-icon.large ins{border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;height:56px;left:6px;top:6px;width:56px;}
+.fh-icon.large i{box-shadow:0 0 5px #000000;-moz-box-shadow:0 0 5px #000000;-webkit-box-shadow:0 0 5px #000000;border-radius:6px;-moz-border-radius:6px;-webkit-border-radius:6px;bottom:3px;left:3px;right:3px;top:3px;}
+.fh-icon.large>b,.fh-icon.large>a>b{bottom:4px;font-size:18px;right:8px;}
+.fh-icon.no-border ins{background-color:transparent !important;}
+.fh-icon.no-border a{background:none !important;}
+.fh-icon.icon-inline{margin-right:3px;}
+.rh-icon i,.rh-icon ins{border-radius:0 !important;-moz-border-radius:0 !important;-webkit-border-radius:0 !important;box-shadow:none !important;-moz-box-shadow:none !important;-webkit-box-shadow:none !important;}
+.rh-icon i{bottom:0 !important;height:auto !important;left:0 !important;right:0 !important;top:0 !important;width:auto !important;z-index:6;}
+.rh-icon del{display:none;}
+.rh-icon.tiny{height:14px;top:-1px;width:14px;}.rh-icon.tiny ins{height:10px;left:2px;top:2px;width:10px;}
+.rh-icon.tiny i{background:url(http://static.rifthead.com/rifthead/images/icons/borders/tiny.png);}
+.rh-icon.tiny a[href]:hover i{background-position:0 -14px;}
+.rh-icon.tiny a[href]:active i{background-position:0 -28px;}
+.rh-icon.small{height:20px;top:-1px;width:20px;}.rh-icon.small ins{height:16px;left:2px;top:2px;width:16px;}
+.rh-icon.small i{background:url(http://static.rifthead.com/rifthead/images/icons/borders/small.png);}
+.rh-icon.small a[href]:hover i{background-position:0 -20px;}
+.rh-icon.small a[href]:active i{background-position:0 -40px;}
+.rh-icon.medium{height:43px;width:44px;float:left;}.rh-icon.medium ins{height:35px;width:35px;}
+.rh-icon.medium i{background:url(http://static.rifthead.com/rifthead/images/icons/borders/medium.png);}
+.rh-icon.medium a[href]:hover i{background-position:0 -43px;}
+.rh-icon.medium a[href]:active i{background-position:-1px -86px;}
+.rh-icon.medium a[href]:active ins{height:31px;left:6px;top:6px;width:31px;}
+.rh-icon.large{height:58px;width:59px;}.rh-icon.large ins{height:48px;left:5px;top:5px;width:48px;}
+.rh-icon.large i{background:url(http://static.rifthead.com/rifthead/images/icons/borders/large.png);}
+.rh-icon.large a[href]:hover i{background-position:0 -58px;}
+.rh-icon.large a[href]:active i{background-position:0 -116px;}
+.rh-icon.large a[href]:active ins{height:42px;left:8px;top:8px;width:42px;}
+.rh-buildlink{display:inline-block;height:43px;position:relative;text-decoration:none !important;width:142px;}.rh-buildlink .cover{background:url(http://static.rifthead.com/rifthead/images/tools/soul-tree-calc/buildlink.png) 0 47px no-repeat;bottom:0;left:4px;position:absolute;right:0;top:2px;z-index:1;}
+.rh-buildlink span{text-decoration:none !important;}
+.rh-buildlink:hover .cover{background-position:right;}
+.rh-buildlink:hover i{background-position:0 -43px;}
+.rh-buildlink:hover:active i{background-position:-1px -86px;}
+.rh-buildlink:hover:active ins{height:31px;left:6px;top:6px;width:31px;}
+.text-icon.both-icon{background:url(http://static.rifthead.com/rifthead/images/icons/misc/faction-both.png);}
+.text-icon.defiant-icon{background:url(http://static.rifthead.com/rifthead/images/icons/misc/faction-defiant.png);}
+.text-icon.guardian-icon{background:url(http://static.rifthead.com/rifthead/images/icons/misc/faction-guardian.png);}
+.rh-faction{background:url(http://static.rifthead.com/rifthead/images/icons/misc/faction-large-both.png);display:inline-block;height:32px;vertical-align:middle;width:32px;}.rh-faction.defiant{background:url(http://static.rifthead.com/rifthead/images/icons/misc/faction-large-defiant.png);}
+.rh-faction.guardian{background:url(http://static.rifthead.com/rifthead/images/icons/misc/faction-large-guardian.png);}
+.rh-endurance{background:url(http://static.rifthead.com/rifthead/images/icons/misc/endurance.png) left no-repeat;padding-left:19px;}
+.rh-initiative{background:url(http://static.rifthead.com/rifthead/images/icons/misc/initiative.png) left no-repeat;padding-left:19px;}
+.rh-cooldown{background:url(http://static.rifthead.com/rifthead/images/icons/misc/cooldown.png) left no-repeat;padding-left:19px;}
+.rh-money{background:no-repeat right center;color:#ffffff;padding-right:18px;}
+.rh-money.silver{background-image:url(http://static.rifthead.com/rifthead/images/icons/misc/money-silver.png);}
+.rh-money.gold{background-image:url(http://static.rifthead.com/rifthead/images/icons/misc/money-gold.png);}
+.rh-money.platinum{background-image:url(http://static.rifthead.com/rifthead/images/icons/misc/money-platinum.png);}
+.rh-money.influence{background-image:url(http://static.rifthead.com/rifthead/images/icons/misc/influence.png);}
+.rh-q0,.rh-q0 a{color:#888888 !important;}
+.rh-q1,.rh-q1 a{color:#fbfbfb !important;}
+.rh-q2,.rh-q2 a{color:#00cc00 !important;}
+.rh-q3,.rh-q3 a{color:#267ffa !important;}
+.rh-q4,.rh-q4 a{color:#ad48fb !important;}
+.rh-q5,.rh-q5 a{color:#ff8000 !important;}
+.rh-q6,.rh-q6 a{color:#ff0000 !important;}
+.rh-q7,.rh-q7 a,.rh-qq,.rh-qq a{color:#fbf200 !important;}
+.rh-d0{color:#888888 !important;}
+.rh-d1{color:#00cc00 !important;}
+.rh-d2{color:#ffff00 !important;}
+.rh-d3{color:#ff8040 !important;}
+.rh-d4{color:#dd2222 !important;}
+.fhtt.rh{color:#fff;font-size:13px;max-width:258px;}.fhtt.rh .rhtt-bottom,.fhtt.rh .rhtt-right,.fhtt.rh .rhtt-bottomright{background:url(http://static.rifthead.com/rifthead/images/tooltips/background.png) bottom left;bottom:-13px;font-size:1px;height:14px;left:-14px;position:absolute;right:0;z-index:-1;}
+.fhtt.rh .rhtt-right{background-position:right -8px;bottom:1px;height:auto;left:auto;right:-17px;top:-11px;width:17px;}
+.fhtt.rh .rhtt-bottomright{background-position:bottom right;left:auto;right:-17px;width:17px;}
+.fhtt.rh .rhtt-cont{background:url(http://static.rifthead.com/rifthead/images/tooltips/background.png) 0 -8px;zoom:1;margin:0 17px 19px 0;padding:6px 0 0 14px;position:relative;}.fhtt.rh .rhtt-cont:before,.fhtt.rh .rhtt-cont:after{display:table;content:'';}
+.fhtt.rh .rhtt-cont:after{clear:both;}
+.fhtt.rh .rhtt-innercont{margin-bottom:-6px;position:relative;}.fhtt.rh .rhtt-innercont>.rhtt-top-margin:first-child{margin-top:0;}
+.fhtt.rh .rhtt-divider{background:url(http://static.rifthead.com/rifthead/images/tooltips/background.png);height:8px;margin:5px -7px;width:242px;}
+.fhtt.rh .rhtt-spacer{height:5px;}
+.fhtt.rh .rhtt-top-margin{margin-top:5px;}
+.fhtt.rh .rhtt-bottom-margin{margin-bottom:5px;}
+.fhtt.rh .rhtt-no-margin{margin:0 !important;}
+.fhtt.rh .rhtt-float-right,.fhtt.rh .rhtt-float{float:right;}
+.fhtt.rh .rhtt-float-left{float:left;}
+.fhtt.rh .rhtt-name{color:#ffcc33;font-size:16px;margin:5px 0;}.fhtt.rh .rhtt-name .tiny.icon-inline{top:-2px;}
+.fhtt.rh .rhtt-name-float{float:right;line-height:16px;margin-top:1px;}
+.fhtt.rh .rhtt-name-table{margin:5px 0;}.fhtt.rh .rhtt-name-table td:first-child{color:#ffcc33;font-size:16px;}.fhtt.rh .rhtt-name-table td:first-child .tiny.icon-inline{top:-2px;}
+.fhtt.rh .rhtt-name-table .rhtt-name-info{padding-left:10px;text-align:right;}.fhtt.rh .rhtt-name-table .rhtt-name-info span{margin:0 0 0 5px;}
+.fhtt.rh .rhtt-name-table .rhtt-name-info .rh-not-aquatic{background:url(http://static.rifthead.com/rifthead/images/icons/misc/tiny/not-aquatic.png);display:inline-block;height:16px;position:relative;top:-1px;vertical-align:bottom;width:16px;}
+.fhtt.rh .rhtt-desc{margin:5px 0;}
+.fhtt.rh .rhtt-ingredients>div{padding-left:10px;}
+.fhtt.rh .rhtt-stat span{color:#00ff00;}.fhtt.rh .rhtt-stat span.negative{color:#ff4040;}
+.fhtt.rh .rhtt-upgrades{margin-top:20px;}
+.fhtt.rh .rhtt-is-socketable .rhtt-desc,.fhtt.rh .rhtt-is-socketable .rhtt-bottominfo{margin-top:5px;}
+.fhtt.rh .rhtt-is-socketable .rhtt-stat span{color:#00cc00;}
+.fhtt.rh .rhtt-crests{line-height:normal;list-style:none;margin:5px 0;}.fhtt.rh .rhtt-crests li{background:none;color:#888888;line-height:normal;list-style:none;padding:0;}.fhtt.rh .rhtt-crests li.active{color:#00cc00;}
+.fhtt.rh .rhtt-buff{color:#00cc00;margin:5px 0;}.fhtt.rh .rhtt-buff .item-crest-tier-reminder{color:#888888;}
+.fhtt.rh .rhtt-bottominfo{margin-top:20px;}.fhtt.rh .rhtt-bottominfo:empty{display:none;}
+.fhtt.rh .rhtt-requires{color:#ff4040;}
+.fhtt.rh .rhtt-sources{margin:5px 0;}.fhtt.rh .rhtt-sources .rhtt-sources-header{color:#888888;}
+.fhtt.rh .rhtt-sources ul{margin:3px 0 0;}.fhtt.rh .rhtt-sources ul li{background:none !important;line-height:normal;padding:0;}.fhtt.rh .rhtt-sources ul li .rh-icon{margin-right:3px;}
+.fhtt.rh .rhtt-actions{margin:5px 0;margin-bottom:0;}
+.fhtt.rh .rhtt-value{margin-top:3px;text-align:right;}
+.fhtt.rh .rhtt-second-name{font-size:12px;}
+.fhtt.rh .rhtt-set-name{font-size:12px;color:#69dad0;}
+.fhtt.rh .rhtt-set-list-req{padding:0;color:#ffffff;}
+.fhtt.rh .rhtt-set-list{font-size:11px;color:#848484;}.fhtt.rh .rhtt-set-list ul li{background:none !important;line-height:normal;padding:0 0 0 3px;}
+.fhtt-wrapper>.fhtt-icon{margin:0 5px 0 0;}.fhtt-wrapper>.fhtt-icon.rh-icon-item,.fhtt-wrapper>.fhtt-icon.rh-icon-recipe{margin:0;}
+#headtt>.fhtt-icon{left:-44px;position:absolute;top:0;}#headtt>.fhtt-icon.tiny{left:-14px;}
+#headtt>.fhtt-icon.small{left:-26px;}
+#headtt>.fhtt-icon.large{left:-60px;}
+.fhtt.rh-achievement{color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;max-width:none;position:relative;text-shadow:1px 1px 1px #000;width:412px;}.fhtt.rh-achievement .rhtt-cont{margin-bottom:55px;}
+.fhtt.rh-achievement .rhtt-innercont{margin-bottom:-6px;}
+.fhtt.rh-achievement .rhtt-bottom,.fhtt.rh-achievement .rhtt-right,.fhtt.rh-achievement .rhtt-bottomright,.fhtt.rh-achievement .rhtt-cont{background-image:url(http://static.rifthead.com/rifthead/images/tooltips/achievement-background.png);}
+.fhtt.rh-achievement .rhtt-right{background-position:right -148px;}
+.fhtt.rh-achievement .rhtt-bottom,.fhtt.rh-achievement .rhtt-bottomright{bottom:-57px;height:58px;}
+.fhtt.rh-achievement .rhtt-bottom{left:-18px;}
+.fhtt.rh-achievement .rhtt-achievement-icon{position:absolute;left:-17px;top:-11px;z-index:1;}.fhtt.rh-achievement .rhtt-achievement-icon ins{background:#000;height:48px;left:14px;max-width:none !important;position:absolute;top:15px;width:48px;}
+.fhtt.rh-achievement .rhtt-achievement-icon i{background:url(http://static.rifthead.com/rifthead/images/tooltips/achievement-background.png);bottom:auto !important;height:78px !important;right:auto !important;width:77px !important;}
+.fhtt.rh-achievement .rhtt-cont{background:url(http://static.rifthead.com/rifthead/images/tooltips/achievement-background.png) 0 -142px;padding:17px 0 0 18px;position:relative;}
+.fhtt.rh-achievement .rhtt-name{color:#d8cb99;font-size:18px;left:78px;margin:0 0 0 60px;text-transform:uppercase;width:285px;word-wrap:break-word;z-index:1;}
+.fhtt.rh-achievement .rhtt-time{color:#d8cb99;position:absolute;right:56px;top:21px;z-index:1;}
+.fhtt.rh-achievement .rhtt-desc{margin:-1px 0 14px 60px;padding:0 55px 0 0;z-index:1;}
+.fhtt.rh-achievement .rhtt-points{background:url(http://static.rifthead.com/rifthead/images/tooltips/achievement-background.png) -77px 0;color:#fb8b48;font-size:24px;height:69px;line-height:70px;padding:0 1px 0 0;position:absolute;right:-14px;right:-31px;text-align:center;top:6px;top:-11px;width:68px;z-index:1;}
+.fhtt.rh-achievement ul{zoom:1;list-style:none;margin:30px 0 0 -2px;overflow:visible;padding:0;}.fhtt.rh-achievement ul:before,.fhtt.rh-achievement ul:after{display:table;content:'';}
+.fhtt.rh-achievement ul:after{clear:both;}
+.fhtt.rh-achievement ul li{background:url(http://static.rifthead.com/rifthead/images/tooltips/achievement-background.png) -146px 4px no-repeat;line-height:19px;margin:0;padding:0 0 0 20px;float:left;position:relative;top:0;width:169px;z-index:1;}.fhtt.rh-achievement ul li.check{background-position:-358px 2px;}
+.fhtt.rh-achievement ul .rhtt-list-cont-cap{background:url(http://static.rifthead.com/rifthead/images/tooltips/achievement-background.png) right -142px;bottom:0;position:absolute;right:0;top:0;width:15px;z-index:0;}
+.fhtt.rh-ability .rhtt-name.has-rank,.fhtt.rh-trait .rhtt-name.has-rank,.fhtt.rh-ability .rhtt-name.has-ranks,.fhtt.rh-trait .rhtt-name.has-ranks{padding-right:50px;}
+.fhtt.rh-ability .rhtt-range,.fhtt.rh-trait .rhtt-range{float:right;}
+.fhtt.rh-pac-ability .rhtt-ranks,.fhtt.rh-pac-ability .rhtt-nextrank,.fhtt.rh-pac-ability .rhtt-learn{margin:5px 0;}
+.fhtt.rh-pac-ability .rhtt-nextrank,.fhtt.rh-pac-ability .rhtt-learn{color:#00ff00;}
+.fhtt.rh-item .rhtt-type,.fhtt.rh-recipe .rhtt-type{float:right;}
+.fhtt.rh-item .rhtt-desc,.fhtt.rh-recipe .rhtt-desc{margin:20px 0 0;}
+.fhtt.rh-item .rhtt-requires,.fhtt.rh-recipe .rhtt-requires{color:inherit;}
+.fhtt.rh-item .rhtt-flavortext,.fhtt.rh-recipe .rhtt-flavortext{color:#fbc864;}
+.fhtt.rh-soul .rhtt-name{margin-bottom:3px;padding-right:70px;}
+.fhtt.rh-soul .rhtt-points .rhtt-header{font-weight:bold;margin-bottom:3px;}
+.fhtt.rh-quest{color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;max-width:none;padding:0 0 23px;position:relative;width:320px;}.fhtt.rh-quest .rhtt-right,.fhtt.rh-quest .rhtt-bottomright{display:none;}
+.fhtt.rh-quest .rhtt-bottom,.fhtt.rh-quest .rhtt-cont{background-image:url(http://static.rifthead.com/rifthead/images/tooltips/quest.png);}
+.fhtt.rh-quest .rhtt-bottom{bottom:-22px;height:23px;left:-32px;right:-32px;}
+.fhtt.rh-quest .rhtt-cont{background-position:0 -230px;line-height:20px;margin:0;padding:14px 32px 0;}
+.fhtt.rh-quest .rhtt-quest-cont{overflow:hidden;}
+.fhtt.rh-quest .rhtt-name{color:#f8f3c8;font-size:17px !important;line-height:normal !important;width:256px;word-wrap:break-word;}
+.fhtt.rh-quest .rhtt-name div{background:url(http://static.rifthead.com/rifthead/images/tooltips/quest.png) no-repeat;height:29px;margin:-17px 0 0 -15px;*position:relative;*z-index:-1;}
+.fhtt.rh-quest .rhtt-header,.fhtt.rh-quest .rhtt-subhead{color:#f8f3c8;line-height:normal !important;text-transform:uppercase;}
+.fhtt.rh-quest .rhtt-subhead{font-size:11px !important;line-height:20px !important;}
+.fhtt.rh-quest .rhtt-indent{margin-left:10px;}
+.fhtt.rh-quest .rhtt-header div{background:url(http://static.rifthead.com/rifthead/images/tooltips/quest.png) 0 -29px no-repeat;height:5px;margin:0 0 0 -8px;}
+.fhtt.rh-quest .rhtt-topmargin{margin-top:15px;}
+.fhtt.rh-quest .rhtt-objectives{line-height:normal !important;list-style:none;margin:2px 0 10px;padding:0;}
+.fhtt.rh-quest .rhtt-objectives li{background:url(http://static.rifthead.com/rifthead/images/tooltips/quest.png) 2px -37px no-repeat;padding:0 0 0 18px;}
+.fhtt.rh-quest .rhtt-objectives li.check{background-position:0 -140px;}
+.fhtt.rh-quest .rhtt-rewards{line-height:normal !important;margin:2px 0 10px;}.fhtt.rh-quest .rhtt-rewards:last-child{margin-bottom:0;}
+.fhtt.rh-quest .rhtt-rewards .rhtt-reward{float:left;height:auto;margin:0 0 4px;overflow:hidden;position:relative;width:128px;}.fhtt.rh-quest .rhtt-rewards .rhtt-reward .text{float:left;font-size:11px;height:auto;line-height:normal;min-height:38px;padding:0;word-wrap:break-word;width:81px;}
+.fhtt.rh-quest .rhtt-rewards .rhtt-reward a:hover .text{text-decoration:underline;}
+.fhtt.rh-quest .rhtt-rewards .rhtt-reward .fh-icon{float:left;margin-right:2px;}
+.fhtt.rh-quest .rhtt-xp span{color:#199ba5;}
+.fhtt.rh-quest .rhtt-r{float:right;}
+.fhtt.rh-quest .rhtt-div{background:url(http://static.rifthead.com/rifthead/images/tooltips/quest.png);font-size:1px;height:8px;margin:2px -7px;width:242px;}
+.fhtt.rh-quest .rhtt-vendor{text-align:right;}
+.fhtt.rh-quest .rhtt-invalid{color:#f00;margin:5px 0 0;}
+.fhtt.rh-artifact-collection{color:#fbfbfb !important;font:13px Arial,Helvetica,sans-serif !important;max-width:none;position:relative;width:290px;}.fhtt.rh-artifact-collection .rhtt-bottom,.fhtt.rh-artifact-collection .rhtt-right,.fhtt.rh-artifact-collection .rhtt-bottomright,.fhtt.rh-artifact-collection .rhtt-cont{background-image:url(http://static.rifthead.com/rifthead/images/tooltips/collection.png);}
+.fhtt.rh-artifact-collection .rhtt-right{background-position:right -235px;}
+.fhtt.rh-artifact-collection .rhtt-cont{background-position:0 -235px;}
+.fhtt.rh-artifact-collection .rhtt-name{color:#fc3;color:#f8f3c8;font-size:17px !important;line-height:normal !important;width:260px;word-wrap:break-word;}
+.fhtt.rh-artifact-collection .rhtt-name div{background:url(http://static.rifthead.com/rifthead/images/tooltips/collection.png) no-repeat;height:29px;margin:-17px 0 0 -3px;*position:relative;*z-index:-1;}
+.fhtt.rh-artifact-collection .rhtt-desc{margin:0 0 10px;}
+.fhtt.rh-artifact-collection .rhtt-items{margin:0 -4px 0 -1px;}
+.fhtt.rh-artifact-collection .rhtt-indent{margin-left:10px;}
+.fhtt.rh-artifact-collection .rhtt-r{float:right;}
+.fhtt.rh-artifact-collection .rhtt-div{background:url(http://static.rifthead.com/rifthead/images/tooltips/collection.png);font-size:1px;height:8px;margin:2px -7px;width:242px;}
+.fhtt.rh-artifact-collection .clear{*font-size:0;*height:0;}
 
-.zr-addicon {padding:0 0 0 22px}
-.zamrift-icon {position:relative}
-.zamrift-icon img {border:0;height:16px;left:-19px;position:absolute;top:-1px;width:16px}
-.zamrift-icon b {background:url(http://zam.zamimg.com/rift/i/icon-borders-16.png);_background:url(http://zam.zamimg.com/rift/i/icon-borders-16.gif);display:block;height:19px;left:-21px;position:absolute;top:-2px;width:20px}
+
 
 
 
