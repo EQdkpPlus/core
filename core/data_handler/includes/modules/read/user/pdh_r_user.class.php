@@ -221,7 +221,7 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_avatarimglink($user_id){
 			if($avatarimg = $this->get_custom_fields($user_id, 'user_avatar')){
-				return $this->pfh->FolderPath('user_avatars','eqdkp').$avatarimg;
+				return $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
 			}
 			return '';
 		}

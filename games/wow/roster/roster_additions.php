@@ -41,7 +41,7 @@
 		}		
 		#guild_name {
 			font-size: 30px; 
-			color: #white ;
+			color: #fff;
 			position:relative; 
 			top:10px; 
 			left:15px;

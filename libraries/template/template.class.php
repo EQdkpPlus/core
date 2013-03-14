@@ -991,6 +991,9 @@ class template extends gen_class {
 
 				"/\.\.\/\.\.\//",
 				"/\.\.\//",
+				"/\(assets/",
+				"/\('assets/",
+				"/\(\"assets/",
 				"/\(images/",
 				"/\('images/",
 				"/\(\"images/",
@@ -1040,6 +1043,9 @@ class template extends gen_class {
 
 				$root_path,
 				$root_path,
+				'('.$root_path.'templates/'.$stylepath.'/assets',
+				'(\''.$root_path.'templates/'.$stylepath.'/assets',
+				'("'.$root_path.'templates/'.$stylepath.'/assets',
 				'('.$root_path.'templates/'.$stylepath.'/images',
 				'(\''.$root_path.'templates/'.$stylepath.'/images',
 				'("'.$root_path.'templates/'.$stylepath.'/images',

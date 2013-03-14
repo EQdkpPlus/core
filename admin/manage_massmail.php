@@ -48,7 +48,7 @@ class Manage_Massmail extends page_generic {
 				$arrNewsList[] = array(
 					'date'		=> $this->pdh->get('news', 'html_date', array($newsid)),
 					'headline'	=> sanitize($value['news_headline']),
-					'content'	=> '<b><u><a href="'.$this->env->link.'viewnews.php?id='.$newsid.'">'.sanitize($value['news_headline']).'</a></u></b><br /> '.sanitize($value['news_message']),
+					'content'	=> '<b><u><a href="'.$this->env->link.'viewnews.php?id='.$newsid.'">'.$value['news_headline'].'</a></u></b><br /> '.xhtml_entity_decode($value['news_message']),
 				);
 			}
 		}
