@@ -648,7 +648,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 "user_hardware" => "Hardware",
 "user_interests" => "Interests",
 "user_more_information" => "More information about %s",
-"user_group_footcount" => "%d user(s) in this group",
+"listusers_footcount" => "... found %1\$d user(s) / %2\$d per page",
 "sms_perm" => "Text service",
 "sms_perm2" => "Send text message",
 "sms_header" => "Sending text messages",
@@ -861,5 +861,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 "eqdkpm_shownote_help" => "Displays users who are using mobile webbrowsers an hint for the mobile version of EQdkp Plus.",
 "icalfeed_name"=>"My calendar at '%s'",
 "icalfeed_description"=>"An ical feed exported by EQDKP-PLUS",
+"grpleaders" => "Groupleaders",
+"group_members" => "Group members",
  );
 ?>

@@ -131,7 +131,7 @@ if (!class_exists("comments")){
 					// output
 					$out[] .= '<div class="'.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
 								<div class="comment_avatar_container">
-									<div class="comment_avatar"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" /></a></div>
+									<div class="comment_avatar"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 								</div>
 								<div class="comment_container">
 									<div class="comment_author"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'">'.htmlspecialchars($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';

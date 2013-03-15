@@ -177,8 +177,16 @@ if(!class_exists('pdh_w_user')) {
 				}
 			}
 			
+			//TODO: Create Thumbnail for User Avatar
+			if ($custom_fields['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $custom_fields['user_avatar']){
+
+			}
+			
 			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
+			
+			
+			
 
 			$plugin_settings = array();
 			if (is_array($this->pm->get_menus('settings'))){

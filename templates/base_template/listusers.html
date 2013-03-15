@@ -1,39 +1,22 @@
+<h2><!-- IF S_DISPLAY_GROUP --><a href="{EQDKP_ROOT_PATH}listusers.php{SID}">{L_user_list}</a> &raquo; {GROUPNAME}<!-- ELSE -->{L_user_list}<!-- ENDIF --></h2>
 <form method="post" action="{ACTION}&amp;send=sms" name="post">
-<!-- BEGIN group_row -->
+<!-- IF S_DISPLAY_GROUP -->
+<h3>{L_grpleaders}</h3>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-	<tr >
-		<th colspan="<!-- IF F_SMS -->8<!-- ELSE -->7<!-- ENDIF -->" align="left" class="nowrap">{group_row.NAME}</th>
-	</tr>
-	<tr >
-		<!-- IF F_SMS --><th align="left" width="10" class="nowrap"><input type="checkbox" name="" id="selall_usergr_{group_row.ID}" /></th><!-- ENDIF -->
-		<th align="left" class="nowrap">{L_username}</th>
-		<th align="left" class="nowrap">{L_name}</th>
-		<th align="left" class="nowrap">{L_adduser_country}</th>
-		<th align="left" class="nowrap">{L_email}</th>
-		<th align="left" class="nowrap">{L_user_contact}</th>
-		<th align="left" class="nowrap">{L_menu_members}</th>
-		<th align="left" class="nowrap">{L_registered_at}</th> 
-	</tr>
-	<!-- BEGIN row_users -->
-	<tr>
-		<!-- IF F_SMS --><td align="left" width="10">{group_row.row_users.cellphone_checkbox}</td><!-- ENDIF -->
-		<td align="left" class="nowrap"><a href="{EQDKP_ROOT_PATH}listusers.php{SID}&amp;u={group_row.row_users.userid}">{group_row.row_users.username}</a></td>
-		<td align="left" class="nowrap">{group_row.row_users.firstandlastname}</td>
-		<td align="left" class="nowrap">{group_row.row_users.country_flag}</td>
-		<td align="left" class="nowrap">{group_row.row_users.email}</td>
-		<td align="left" class="nowrap">{group_row.row_users.icq} {group_row.row_users.skype} {group_row.row_users.msn} {group_row.row_users.irq} {group_row.row_users.twitter} {group_row.row_users.facebook} {group_row.row_users.cellphone} {group_row.row_users.phone}</td>
-		<td align="left" class="nowrap">{group_row.row_users.charakter_count}</td>
-		<td align="left" class="nowrap">{group_row.row_users.registered}</td>
-	</tr>
-	<!-- END row_users -->
-	<tr>
-		<th colspan="<!-- IF F_SMS -->8<!-- ELSE -->7<!-- ENDIF -->" class="footer">
-		{group_row.FOOTCOUNT}
-		</th>
-	</tr>
+	{PAGE_OUT_GRPLEADER}
 </table>
-<br />
-<!-- END group_row -->
+<h3>{L_group_members}</h3>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	{PAGE_OUT}
+</table>
+<div>{USER_PAGINATION}</div>
+<!-- ELSE -->
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+	{PAGE_OUT}
+</table>
+<div>{USER_PAGINATION}</div>
+<!-- ENDIF -->
+
 <!-- IF F_SMS -->
 <fieldset class="settings">
 	<legend>{L_sms_header}</legend>

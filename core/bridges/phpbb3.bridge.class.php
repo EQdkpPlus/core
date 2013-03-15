@@ -99,7 +99,8 @@ class phpbb3_bridge extends bridge_generic {
 	public function phpbb3_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
 		//Is user active?
 		if ($boolLoginResult){
-			if ($arrUserdata['user_inactive_reason'] != '0') {
+		
+			if ($arrUserdata['user_type'] == '1') {
 				return false;
 			}
 			//Single Sign On

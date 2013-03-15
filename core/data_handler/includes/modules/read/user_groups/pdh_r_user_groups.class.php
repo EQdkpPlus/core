@@ -42,7 +42,7 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 
 		public function init(){
 			$this->user_groups = array();
-			$sql = "SELECT * FROM __groups_user;";
+			$sql = "SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;";
 			$result = $this->db->query($sql);
 			while( $row = $this->db->fetch_record($result) ){
 				$this->user_groups[$row['groups_user_id']]['id']		= $row['groups_user_id'];
@@ -51,6 +51,7 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 				$this->user_groups[$row['groups_user_id']]['deletable']	= $row['groups_user_deletable'];
 				$this->user_groups[$row['groups_user_id']]['default']	= $row['groups_user_default'];
 				$this->user_groups[$row['groups_user_id']]['hide']		= $row['groups_user_hide'];
+				$this->user_groups[$row['groups_user_id']]['sortid']	= $row['groups_user_sortid'];
 				if ($row['groups_user_default'] == 1){
 					$this->user_standard_group = $row['groups_user_id'];
 				}
@@ -93,6 +94,10 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 
 		public function get_hide($groups_user_id){
 			return $this->user_groups[$groups_user_id]['hide'];
+		}
+		
+		public function get_sortid($groups_user_id){
+			return $this->user_groups[$groups_user_id]['sortid'];
 		}
 
 		public function get_standard_group(){

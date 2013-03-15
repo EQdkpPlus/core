@@ -297,6 +297,32 @@ $system_def = array(
 				),
 			),
 		),//end viewevent
+		
+		'listusers' => array(
+			'hptt_listusers_userlist' => array(
+				'name' => 'hptt_listraids_raidlist',
+				'table_main_sub' => '%user_id%',
+				'table_subs' => array('%user_id%', '%member_id%','%link_url%', '%link_url_suffix%'),
+				'page_ref' => 'listusers.php',
+				'show_numbers' => false,
+				'show_select_boxes' => false,
+				'show_detail_twink' => false,
+				'table_sort_col' => 2,
+				'table_sort_dir' => 'asc',
+				'table_presets' => array(
+					array('name' => 'usersmscheckbox', 'sort' => false, 'th_add' => 'width="10"', 'td_add' => 'nowrap="nowrap"'),
+					array('name' => 'useronlinestatus', 'sort' => false, 'th_add' => '', 'td_add' => 'width="10" nowrap="nowrap"'),
+					array('name' => 'username', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
+					array('name' => 'useravatar', 'sort' => false, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
+					array('name' => 'userfullname', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
+					array('name' => 'useremail', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
+					array('name' => 'usercountry', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'usergroups', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'userregdate', 'sort' => true, 'th_add' => '', 'td_add' =>  'nowrap="nowrap"'),
+					array('name' => 'usercharnumber', 'sort' => true, 'th_add' => '', 'td_add' => ''),				
+				),
+			),
+		),
 	
 	
 		'listmembers' => array(

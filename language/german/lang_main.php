@@ -445,7 +445,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "deny" => "Ablehnen",
 "accept" => "Akzeptieren",
 "guildrules" => "Gildenregeln",
-"sticky_news_prefix" => "<img src=\"".registry::get_const('root_path')."images/glyphs/sticky.png\" alt=\"Sticky\" class=\"absmiddle\" /> Sticky:",
+"sticky_news_prefix" => "<i class=\"icon-info-sign\"></i> Sticky:",
 "news_sticky" => "News immer oben anzeigen?",
 "menu_main" => "Hauptmenü",
 "menu_eqdkp" => "Menü",
@@ -595,7 +595,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "user_hardware" => "Hardware",
 "user_interests" => "Interessen",
 "user_more_information" => "Weitere Informationen über %s",
-"user_group_footcount" => "%d Benutzer in dieser Gruppe",
+"listusers_footcount" => "... %1\$d Benutzer / %2\$d pro Seite gefunden",
 "sms_perm" => "SMS Service",
 "sms_perm2" => "SMS senden",
 "sms_header" => "SMS Versenden",
@@ -808,6 +808,8 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "eqdkpm_shownote_help" => "Zeigt Benutzern, die mit einem mobilen Browser surfen, einen Hinweis auf die mobile Version von EQdkp Plus an",
 "icalfeed_name"=>"Mein Kalender bei '%s'",
 "icalfeed_description"=>"Der iCal-Feed wurde automatsich erstellt von EQDKP-PLUS",
+"grpleaders" => "Gruppenleiter",
+"group_members" => "Gruppenmitglieder",
  );
 
 ?>

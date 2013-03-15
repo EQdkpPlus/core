@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_user_groups')) {
 			parent::__construct();
 		}
 
-		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $deletable=1) {
+		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $deletable=1, $sortid=0) {
 			
 			$arrSet = array(
 				'groups_user_id' 	=> $id,
@@ -40,6 +40,7 @@ if(!class_exists('pdh_w_user_groups')) {
 				'groups_user_deletable' => $deletable,
 				'groups_user_default' => $standard,
 				'groups_user_hide' => $hide,
+				'groups_user_sortid' => $sortid,
 			);
 			
 			if(!$this->db->query("INSERT INTO __groups_user :params", $arrSet)) {
@@ -49,12 +50,13 @@ if(!class_exists('pdh_w_user_groups')) {
 			return true;
 		}
 
-		public function update_grp($id, $name='', $desc='', $standard=0, $hide=0) {
+		public function update_grp($id, $name='', $desc='', $standard=0, $hide=0, $sortid=0) {
 			$old = array();
 			$old['name']		= $this->pdh->get('user_groups', 'name', array($id));
 			$old['desc']		= $this->pdh->get('user_groups', 'desc', array($id));
 			$old['standard']	= (int)$this->pdh->get('user_groups', 'standard', array($id));
 			$old['hide']		= (int)$this->pdh->get('user_groups', 'hide', array($id));
+			$old['sortid']		= (int)$this->pdh->get('user_groups', 'sortid', array($id));
 			$changes = false;
 			
 			foreach($old as $varname => $value) {
@@ -73,6 +75,7 @@ if(!class_exists('pdh_w_user_groups')) {
 					'groups_user_desc' => $desc,
 					'groups_user_default' => $standard,
 					'groups_user_hide' => $hide,
+					'groups_user_sortid' => $sortid,
 				);
 
 				if(!$this->db->query("UPDATE __groups_user SET :params WHERE groups_user_id=?", $arrSet, $id)) {

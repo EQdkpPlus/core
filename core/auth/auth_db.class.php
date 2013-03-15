@@ -35,6 +35,10 @@ class auth_db extends auth {
 	
 	public $error = false;
 	
+	public function pdl_html_format_login($log_entry) {
+		return $log_entry['args'][0];
+	}
+	
 	/**
 	* Attempt to log in a user
 	*
@@ -45,24 +49,31 @@ class auth_db extends auth {
 	* @return bool
 	*/
 	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $boolUseHash = false){
+		if(!$this->pdl->type_known("login")) $this->pdl->register_type("login", false, array($this, 'pdl_html_format_login'), array(3,4));
+		
 		$arrStatus = false;
 		$this->error = false;
 		
 		//Bridge-Login, only if using not a hash
 		if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1 && $boolUseHash == false){
+			$this->pdl->log('login', 'Try Bridge Login');
 			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin, false);
 		}
 		
 		//Bridge Login failed, Auth-Method Login
 		if (!$arrStatus){
+			$this->pdl->log('login', 'Bridge Login failed or Bridge not activated');
 			//Login-Method Login like OpenID, Facebook, ...
 			if ($this->in->get('lmethod') != ""){
+				$this->pdl->log('login', 'Try Auth-Method Login '.$this->in->get('lmethod'));
 				$arrAuthObject = $this->get_login_objects($this->in->get('lmethod'));
 				if ($arrAuthObject) $arrStatus = $arrAuthObject->login($strUsername, $strPassword, $boolUseHash);
+				if ($arrStatus) $this->pdl->log('login', 'Auth-Method Login '.$this->in->get('lmethod').' successful');
 			}
 			
 			//Auth Login, because all other failed
 			if (!$arrStatus){
+				$this->pdl->log('login', 'Try EQdkp Plus Login');
 				$result	= $this->db->query("SELECT user_id, username, user_password, user_email, user_active, api_key, failed_login_attempts, user_login_key
 								FROM __users 
 								WHERE LOWER(username) = '".$this->db->escape(clean_username($strUsername))."'");
@@ -75,6 +86,7 @@ class auth_db extends auth {
 					$blnNeedsUpdate = $this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt;
 					if($blnNeedsUpdate || $row['api_key'] == ''){
 					if (((int)$row['user_active'])){
+						$this->pdl->log('login', 'EQDKP User needs update');
 						if($this->checkPassword($strPassword, $row['user_password'], $boolUseHash)){
 							
 								$strNewSalt		= $this->generate_salt();
@@ -93,6 +105,7 @@ class auth_db extends auth {
 									'user_login_key' => $row['user_login_key'],
 								);
 							} else {
+								$this->pdl->log('login', 'EQDKP Login failed: wrong password');
 								$this->error = 'wrong_password';
 							}
 						} else {
@@ -100,6 +113,7 @@ class auth_db extends auth {
 							if ($row['failed_login_attempts'] >= (int)$this->config->get('failed_logins_inactivity') ){
 								$this->error = 'user_inactive_failed_logins';
 							}
+							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
 						
 					}else{
@@ -114,30 +128,36 @@ class auth_db extends auth {
 								);
 							} else {
 								$this->error = 'wrong_password';
+								$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 							}	
 						} else {
 							$this->error = 'user_inactive';
 							if ($row['failed_login_attempts'] >= (int)$this->config->get('failed_logins_inactivity') ){
 								$this->error = 'user_inactive_failed_logins';
 							}
+							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
 						
 					}
 				} else {
 					$this->error = 'wrong_username';
+					$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 				}
 			}
 
 			//If Bridge is active, check if EQdkp User is allowed to login
 			if ($arrStatus && $this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('pk_maintenance_mode') != 1){
 				
+				$this->pdl->log('login', 'Check EQdkp Plus User against Bridge Groups');
 				//Only CMS User are allowed to login
-				if ((int)$this->config->get('cmsbridge_onlycmsuserlogin')){					
+				if ((int)$this->config->get('cmsbridge_onlycmsuserlogin')){
+					$this->pdl->log('login', 'Only CMS User are allowed to login');
 					//check if user is Superadmin, if yes, login
 					$blnIsSuperadmin = $this->check_group(2, false, (int)$arrStatus['user_id']);
 					
 					//try Bridge-Login without passwort
 					if (!$blnIsSuperadmin){
+						$this->pdl->log('login', 'User ist not Superadmin, check against Bridge Groups');
 						$arrStatus = $this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, $boolUseHash, false, false);
 					}
 
@@ -147,7 +167,7 @@ class auth_db extends auth {
 					}
 				} else {
 					//Everyone is allowed to login
-					
+					$this->pdl->log('login', 'Checks complete, call Bridge SSO if needed');
 					//Bridge-Login without password, for settings Single Sign On
 					$this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, $boolUseHash, false, false);
 				}
@@ -157,6 +177,8 @@ class auth_db extends auth {
 		}
 		
 		if (!$arrStatus){
+			$this->pdl->log('login', 'User login failed');
+			
 			$this->db->query("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?", false, $this->sid);
 			$this->data['session_failed_logins']++;
 			
@@ -191,6 +213,7 @@ class auth_db extends auth {
 			}
 			
 		} else {
+			$this->pdl->log('login', 'User successfull authenticated');
 			//User successfull authenticated - destroy old session and create a new one
 			$this->db->query("UPDATE __users SET :params WHERE user_id=?", array('failed_login_attempts' => 0), $arrStatus['user_id']);
 			$this->destroy();

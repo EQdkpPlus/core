@@ -105,13 +105,13 @@ class Manage_User_Groups extends page_generic {
 		$this->user->check_auth('a_usergroups_man');
 		$retu = array();
 		$group_post = $this->get_post();
-			
+
 		if($group_post) {
 			$id_list = $this->pdh->get('user_groups', 'id_list');
-			foreach($group_post as $group) {
+			foreach($group_post as $key=>$group) {
 				$standard = ($this->in->get('user_groups_standard') == $group['id']) ? 1 : 0;
 				$func = (in_array($group['id'], $id_list)) ? 'update_grp' : 'add_grp';
-				$retu[] = $this->pdh->put('user_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $group['hide']));
+				$retu[] = $this->pdh->put('user_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $group['hide'], $key));
 				$names[] = $group['name'];
 				$add_name = (in_array($group['id'], $id_list)) ? '' : $group['name'];
 			}
@@ -166,25 +166,19 @@ class Manage_User_Groups extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-
-		$new_id = 0;
-		$order = $this->in->get('order','0.1');
-		$red = 'RED'.str_replace('.', '', $order);
-
+		
 		$grps = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 
-		if($order == '0.0')
-		{
-			arsort($grps, SORT_STRING);
-		}
-		else
-		{
-			asort($grps, SORT_STRING);
-		}
 		$key = 0;
 		$new_id = 1;
 		
-		//ksort($grps); //otherwise our new_id is wrong!
+		$this->tpl->add_js("
+			$(\"#user_groups_table tbody\").sortable({
+				cancel: '.not-sortable, input',
+				cursor: 'pointer',
+			});
+		", "docready");
+		
 		foreach($grps as $id => $name){
 			$this->tpl->assign_block_vars('user_groups', array(
 				'KEY'	=> $key,
@@ -206,7 +200,6 @@ class Manage_User_Groups extends page_generic {
 		$this->confirm_delete($this->user->lang('confirm_delete_groups'), '', true, array('function' => 'delete_single_warning', 'force_ajax' => true));
 		$this->jquery->selectall_checkbox('selall_groups', 'user_group_ids[]');
 		$this->tpl->assign_vars(array(
-			$red 		=> '_red',
 			'SID'		=> $this->SID,
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
