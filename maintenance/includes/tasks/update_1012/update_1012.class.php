@@ -25,7 +25,7 @@ include_once(registry::get_const('root_path').'maintenance/includes/sql_update_t
 class update_1012 extends sql_update_task {
 	public $author		= 'GodMod';
 	public $version		= '1.0.12'; //new plus-version
-	public $name		= '1.0 RC4';
+	public $name		= '1.0 RC5';
 	
 	public static function __shortcuts() {
 		$shortcuts = array('time');
