@@ -48,6 +48,7 @@ class login extends page_generic {
 	public function process_login(){
 		if (!$this->user->is_signedin()){
 			//Check Captcha
+			$blnShowCaptcha = false;
 			if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
 				if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
 					$blnShowCaptcha = true;
@@ -281,7 +282,7 @@ class login extends page_generic {
 		if ($this->user->is_signedin()){
 			redirect('settings.php'.$this->SID);
 		}
-
+		$blnShowCaptcha = false;
 		if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
 			if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
 				$blnShowCaptcha = true;

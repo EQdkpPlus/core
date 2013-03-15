@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class bridge_generic extends gen_class {
-	public static $shortcuts = array('config', 'pdh', 'user',
+	public static $shortcuts = array('config', 'pdh', 'user', 'pdl',
 		'crypt'	=> 'encrypt',
 	);
 
@@ -68,18 +68,22 @@ class bridge_generic extends gen_class {
 			$arrResult = $this->$method($strUsername, $strPassword, $boolSetAutoLogin, $boolUseHash);
 			$boolLoginResult = $arrResult['status'];
 			$arrUserdata 	 = $arrResult;
+			$this->pdl->log('login', 'Call Bridge Login method, Result: '.var_dump($boolLoginResult));
 		} else {
 			//Hole User aus der Datenbank		
 			$arrUserdata = $this->get_userdata($strUsername);
 			if ($arrUserdata){
 				if ($boolUsePassword){
 					$boolLoginResult = $this->check_password($strPassword, $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, $strUsername);
+					$this->pdl->log('login', 'Check Bridge Password, Result: '.var_dump($boolLoginResult));
 					//Passwort stimmt, jetzt müssen wir schaun, ob er auch in der richtigen Gruppe ist
 					if ($boolLoginResult){
 						$boolLoginResult = $this->check_user_group((int)$arrUserdata['id']);
+						$this->pdl->log('login', 'Check Bridge Groups, Result: '.var_dump($boolLoginResult));
 					}
 				} else {
 					$boolLoginResult = $this->check_user_group((int)$arrUserdata['id']);
+					$this->pdl->log('login', 'Check Bridge Groups, without password: '.var_dump($boolLoginResult));
 				}			
 			}
 		}
@@ -88,6 +92,7 @@ class bridge_generic extends gen_class {
 		if ($boolLoginResult && $this->functions['login']['callafter'] != '' && method_exists($this, $this->functions['login']['callafter'])){
 			$method = $this->functions['login']['callafter'];
 			$boolLoginResult = $this->$method($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash);
+			$this->pdl->log('login', 'Bridge callafter, Result: '.var_dump($boolLoginResult));
 		}
 		
 		//Existiert der User im EQdkp? Wenn nicht, lege ihn an
