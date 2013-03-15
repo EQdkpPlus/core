@@ -624,11 +624,11 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 
 		$base_url = $url . $uri_symbol . $start_variable;
 		//First Page
-		$pagination = '<div class="pagination">';
+		$pagination = '<div class="pagination"><ul>';
 		if ($recent_page == 1){
-			$pagination .= '<span class="pagination_activ">1</span>';
+			$pagination .= '<li class="active"><a href="#">1</a></li>';
 		} else {
-			$pagination .= '<a href="'.$base_url.'='.( ($recent_page - 2) * $per_page).'" title="'.registry::fetch('user')->lang('previous_page').'"><img src="'.registry::get_const('root_path').'images/arrows/left_arrow.png" border="0" alt="left"/></a>&nbsp;&nbsp;<a href="'.$url.'" class="pagination">1</a>';
+			$pagination .= '<li class="arrow-left"><a href="'.$base_url.'='.( ($recent_page - 2) * $per_page).'" title="'.registry::fetch('user')->lang('previous_page').'"><img src="'.registry::get_const('root_path').'images/arrows/left_arrow.png" border="0" alt="left"/></a></li><li><a href="'.$url.'" class="pagination">1</a></li>';
 		}
 
 		//If total-pages <= 4 show all page-links
@@ -636,38 +636,38 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 				$pagination .= ' ';
 				for ( $i = 2; $i < $total_pages; $i++ ){
 					if ($i == $recent_page){
-						$pagination .= '<span class="pagination_activ">'.$i.'</span> ';
+						$pagination .= '<li class="active"><a href="#">'.$i.'</a></li> ';
 					} else {
-						$pagination .= '<a href="'.$base_url.'='.( ($i - 1) * $per_page).'" title="'.registry::fetch('user')->lang('page').' '.$i.'" class="pagination">'.$i.'</a> ';
+						$pagination .= '<li><a href="'.$base_url.'='.( ($i - 1) * $per_page).'" title="'.registry::fetch('user')->lang('page').' '.$i.'" class="pagination">'.$i.'</a></li>';
 					}
-					$pagination .= ' ';
+					$pagination .= '';
 				}
 		//Don't show all page-links
 		} else {
 			$start_count = min(max(1, $recent_page - 5), $total_pages - 4);
 			$end_count = max(min($total_pages, $recent_page + 5), 4);
 
-			$pagination .= ( $start_count > 1 ) ? ' ... ' : ' ';
+			$pagination .= ( $start_count > 1 ) ? '<li><a href="#">...</a></li>' : '';
 
 			for ( $i = $start_count + 1; $i < $end_count; $i++ ){
 				if ($i == $recent_page){
-					$pagination .= '<span class="pagination_activ">'.$i.'</span> ';
+					$pagination .= '<li class="active"><a href="#">'.$i.'</a></li> ';
 				} else {
-					$pagination .= '<a href="'.$base_url.'='.( ($i - 1) * $per_page).'" title="'.registry::fetch('user')->lang('page').' '.$i.'" class="pagination">'.$i.'</a> ';
+					$pagination .= '<li><a href="'.$base_url.'='.( ($i - 1) * $per_page).'" title="'.registry::fetch('user')->lang('page').' '.$i.'" class="pagination">'.$i.'</a></li>';
 				}
 			}
-			$pagination .= ($end_count < $total_pages ) ? '  ...  ' : ' ';
+			$pagination .= ($end_count < $total_pages ) ? '<li><a href="#">...</a></li>' : '';
 		} //close else
 
 
 		//Last Page
 		if ($recent_page == $total_pages){
-			$pagination .= '<span class="pagination_activ">'.$recent_page.'</span>';
+			$pagination .= '<li class="active"><a href="#">'.$recent_page.'</a></li>';
 		} else {
-			$pagination .= '<a href="'.$base_url.'='.(($total_pages - 1) * $per_page) . '" class="pagination" title="'.registry::fetch('user')->lang('page').' '.$total_pages.'">'.$total_pages.'</a>&nbsp;&nbsp;<a href="'.$base_url.'='.($recent_page * $per_page).'" title="'.registry::fetch('user')->lang('next_page').'"><img src="'.registry::get_const('root_path').'images/arrows/right_arrow.png" border="0" alt="right"/></a>';
+			$pagination .= '<li><a href="'.$base_url.'='.(($total_pages - 1) * $per_page) . '" class="pagination" title="'.registry::fetch('user')->lang('page').' '.$total_pages.'">'.$total_pages.'</a></li><li class="arrow-right"><a href="'.$base_url.'='.($recent_page * $per_page).'" title="'.registry::fetch('user')->lang('next_page').'"><img src="'.registry::get_const('root_path').'images/arrows/right_arrow.png" border="0" alt="right"/></a></li>';
 		}
 
-	$pagination .= '</div>';
+	$pagination .= '</ul><div class="clear"></div></div>';
 	return $pagination;
 }
 /*
@@ -1084,6 +1084,27 @@ function cut_text($strText, $max = 200, $blnAddPoints = true){
 	}
 	return $v;
 }
+
+function get_first_image($strHTML, $blnGetFullImage = false){
+			$dom = new DOMDocument();
+			$dom->loadHTML('<html><body>'.$strHTML.'</body></html>');
+			$images = $dom->getElementsByTagName('img');
+			 foreach ($images as $image) {
+				$src = $image->getAttribute('src');
+				if ($src && strlen($src)){
+					if ($blnGetFullImage && strpos($src, 'eqdkp/news/thumb/')){
+						$src = str_replace('eqdkp/news/thumb/', 'eqdkp/news/', $src);
+					}
+				
+					if (strpos($src, '/') === 0){
+						return register('env')->httpHost.$src;
+					} else {
+						return $src;
+					}
+				}
+			}
+			return '';
+		}
 
 //Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){

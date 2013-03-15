@@ -130,11 +130,11 @@ if (!class_exists("comments")){
 
 					// output
 					$out[] .= '<div class="'.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
-								<div class="floatLeft" style="overflow: hidden; width: 15%;">
-									<div class="comment_avatar"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" /></div>
+								<div class="comment_avatar_container">
+									<div class="comment_avatar"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" /></a></div>
 								</div>
-								<div class="floatLeft" style="overflow: hidden; width: 85%;">
-									<span class="small bold">'.htmlspecialchars($row['username']).' am '.$this->time->user_date($row['date'], true).'</span>';
+								<div class="comment_container">
+									<div class="comment_author"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'">'.htmlspecialchars($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';
 					if($this->isAdmin OR $row['userid'] == $this->UserID){
 						$out[] .= '<div class="comments_delete small bold floatRight hand" ><img src="'.$myrootpath.'images/global/delete.png" alt="" />';
 						$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
@@ -143,7 +143,7 @@ if (!class_exists("comments")){
 						$out[] .= '<div style="display:none" class="comments_myrootpath">'.$myrootpath.'</div>';
 						$out[] .= '</div>';
 					}
-					$out[] .= '<br class="clear"/><span class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->toHTML($row['text'])).'</span><br/>
+					$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->toHTML($row['text'])).'</div><br/>
 									</div>
 								</div><br/>';
 					$i++;
@@ -174,7 +174,7 @@ if (!class_exists("comments")){
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
 						<input type="hidden" name="page" value="'.$page.'"/>
 						<input type="hidden" name="rpath" value="'.$this->root_path.'"/>
-						<textarea name="comment" rows="10" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea><br/><br/>
+						<textarea name="comment" rows="8" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea><br/><br/>
 						<span id="comment_button"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
 					</form>';
 			$html .= '</div></div>';

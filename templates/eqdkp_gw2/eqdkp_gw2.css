@@ -704,6 +704,16 @@ div.pagination {
 	padding:4px;
 }
 
+.pagination ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pagination ul li {
+	display: inline;
+}
+
 a.pagination {
 	background: #3f3f3f url(images/head.jpg) repeat-x;
 	color: #ffffff;
@@ -718,13 +728,21 @@ a.pagination:hover {
 	padding: 3px; border: 1px solid white;
 }
 
-.pagination_activ {
+.pagination ul li.active a {
 	background: #a90000 !important;
 	color: #ffffff;
 	font-weight:bold;
 	padding: 3px;
 	border: 1px solid white;
 	margin-top:4px;
+}
+
+.pagination .arrow-right {
+	margin-left: 5px;
+}
+
+.pagination .arrow-left {
+	margin-left: 5px;
 }
 
 a.arrowright{ 
@@ -827,6 +845,17 @@ div.contentBox {
 	max-height: 48px;
 }
 
+.comment_avatar_container {
+	float: left;
+	width: 120px;
+	margin-right: 20px;
+}
+
+.comment_container {
+	float: left;
+	width: 75%;
+}
+
 /***************************************************
  * MENUS
  **************************************************/
@@ -893,7 +922,7 @@ div.contentBox {
 	color: #000000;
 	background: url(images/Skin_footer.png) no-repeat;
 	background-position: center bottom;
-	height: 200px;
+	height: 230px;
 	
 }
 
@@ -1853,6 +1882,17 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 .social  iframe {
 	vertical-align: middle;
 	margin-bottom: .25em;
+}
+
+.social-bookmarks {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.social-bookmarks li {
+	float: right;
+	margin-right: 5px;
 }
 
 .ui-accordion-content {

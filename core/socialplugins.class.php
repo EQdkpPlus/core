@@ -74,11 +74,16 @@ if (!class_exists("socialplugins")) {
 		
 		
 		public function createSocialButtons($urlToShare, $text, $height = 20){
-			$html = '';
-			foreach ($this->getSocialButtons(true) as $key => $name){
-				$html .= ' '.$this->$key($urlToShare, $text, $height);
+			$arrButtons = $this->getSocialButtons(true);
+			if (count($arrButtons)){
+				$html = '<ul class="social-bookmarks">';
+				foreach ($arrButtons as $key => $name){
+					$html .= '<li class="'.$key.'">'.$this->$key($urlToShare, $text, $height).'</li>';
+				}
+				$html .= '</ul>';
+				return $html;
 			}
-			return $html;
+			return '';
 		}
 		
 		public function callSocialPlugins($title, $description, $image){
@@ -98,20 +103,7 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		public function getFirstImage($strHTML){
-			$dom = new DOMDocument();
-			$dom->loadHTML('<html><body>'.$strHTML.'</body></html>');
-			$images = $dom->getElementsByTagName('img');
-			 foreach ($images as $image) {
-				$src = $image->getAttribute('src');
-				if ($src && strlen($src)){
-					if (strpos($src, '/') === 0){
-						return register('env')->httpHost.$src;
-					} else {
-						return $src;
-					}
-				}
-			}
-			return '';
+			return get_first_image($strHTML);
 		}
 		
 		private function facebook_share($urlToShare, $text, $height){

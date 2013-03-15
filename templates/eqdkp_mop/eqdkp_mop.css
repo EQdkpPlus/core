@@ -686,7 +686,18 @@ table tr.marked ,
 div.pagination {
 	padding:4px;
 }
-.pagination_activ {
+
+.pagination ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.pagination ul li {
+	display: inline;
+}
+
+.pagination ul li.active a {
 	color: #B39265;
 	font-weight:bold;
 	padding: 3px;
@@ -708,6 +719,14 @@ a.pagination:hover {
 	padding: 3px;
 	border: 1px solid #B39265;
 	background-color:#27130a;
+}
+
+.pagination .arrow-right {
+	margin-left: 5px;
+}
+
+.pagination .arrow-left {
+	margin-left: 5px;
 }
 
 a.arrowright{ 
@@ -810,6 +829,17 @@ div.contentBox {
 .comment_avatar img{
 	max-width: 48px;
 	max-height: 48px;
+}
+
+.comment_avatar_container {
+	float: left;
+	width: 120px;
+	margin-right: 20px;
+}
+
+.comment_container {
+	float: left;
+	width: 75%;
 }
 
 /***************************************************
@@ -1804,4 +1834,15 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 .social  iframe {
 	vertical-align: middle;
 	margin-bottom: .25em;
+}
+
+.social-bookmarks {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.social-bookmarks li {
+	float: right;
+	margin-right: 5px;
 }
