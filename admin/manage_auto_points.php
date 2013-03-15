@@ -68,12 +68,9 @@ class ManageAutoPoints extends page_generic {
 		if (is_array($options) && $this->in->get('name') != ''){
 			foreach ($options as $option){
 				$options_array[$option['name']] = $this->in->get($option['name']);
-				if($option['name'] == 'start_date') $options_array[$option['name']] = $this->time->fromformat($options_array[$option['name']], 1);
-				if($option['name'] == 'pools') $options_array[$option['name']] = $this->in->getArray('pools', 'int');
-				if($option['name'] == 'exectime') {
-					list($hour, $min) = explode(':', $options_array['exectime']);
-					$options_array['exectime'] = intval($hour)*3600+intval($min)*60;
-				}
+				if($option['name'] == 'start_date') $options_array['start_date'] = $this->time->fromformat($options_array['start_date'], 1);
+				if($option['name'] == 'pools') $options_array['pools'] = $this->in->getArray('pools', 'int');
+				if($option['name'] == 'exectime') $options_array['exectime'] = $this->time->fromformat('01.01.70 '.$options_array['exectime'], 'd.m.y H:i');
 			}
 			if($this->in->exists('id')) {
 				$result = $this->apa->update_apa($this->in->get('id'), $options_array);
@@ -322,6 +319,7 @@ class ManageAutoPoints extends page_generic {
 		$used_funcs = array();
 		if(is_array($job_list)){
 			foreach($job_list as $key => $details){
+				pd($details['exectime']);
 				$this->tpl->assign_block_vars('apa_row', array(
 					'ID'			=> $key,
 					'TYPE'			=> $this->user->lang('apa_type_'.$details['type']),
