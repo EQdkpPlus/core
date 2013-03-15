@@ -39,6 +39,7 @@ class admin_index extends gen_class {
 	}
 
 	private function resolve_ip(){
+		header('content-type: text/html; charset=UTF-8');
 		$out = "Could not resolve IP";
 		if ($this->in->get('ip_resolve') != ""){
 			$return = $this->puf->fetch("http://www.geoplugin.net/php.gp?ip=".$this->in->get('ip_resolve'));
@@ -492,7 +493,7 @@ class admin_index extends gen_class {
 				$rsstwitter_out = ($expiredData != null) ? $this->xmltools->prepareLoad($expiredData) : "";
 			}
 		}
-	
+		header('content-type: text/html; charset=UTF-8');
 		print $rsstwitter_out;
 		exit;
 	}
@@ -515,7 +516,7 @@ class admin_index extends gen_class {
 				$rss_out = ($expiredData != null) ? $this->xmltools->prepareLoad($expiredData) : "";
 			}
 		}
-
+		header('content-type: text/html; charset=UTF-8');
 		print $rss_out;
 		exit;
 	}
