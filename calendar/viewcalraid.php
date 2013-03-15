@@ -85,6 +85,7 @@ class viewcalraid extends page_generic {
 		$tmp_classID	= $this->pdh->get('member', 'classid', array($this->in->get('requestid')));
 		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$myrole			= ($mystatus['member_role'] > 0) ? $mystatus['member_role'] : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
+		header('content-type: text/html; charset=UTF-8');
 		echo $this->jquery->dd_create_ajax($this->pdh->get('roles', 'memberroles', array($tmp_classID)), array('selected'=>$myrole));exit;
 	}
 

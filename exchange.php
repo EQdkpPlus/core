@@ -333,6 +333,7 @@ if(registry::register('input')->get('out') != ''){
 		break;
 
 		case 'chartooltip':
+			header('content-type: text/html; charset=UTF-8');
 			echo registry::register('game')->chartooltip(registry::register('input')->get('charid', 0));
 			exit;
 		break;
