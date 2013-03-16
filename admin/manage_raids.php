@@ -400,7 +400,7 @@ class ManageRaids extends page_generic {
 					}
 					$data['items'][$key]['group_key'] = $this->in->get('items:'.$key.':group_key','','hash');
 					$data['items'][$key]['name'] = $this->in->get('items:'.$key.':name','');
-					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid',0);
+					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid','');
 					$data['items'][$key]['members'] = $this->in->getArray('items:'.$key.':members','int');
 					$data['items'][$key]['value'] = $this->in->get('items:'.$key.':value',0.0);
 					$data['items'][$key]['itempool_id'] = $this->in->get('items:'.$key.':itempool_id',0);

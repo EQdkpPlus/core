@@ -160,27 +160,15 @@ if(!class_exists('eq2_sony')) {
 		$content .= "<div class='ui-helper-clearfix'></div>";
 		$content .= "<br>";
 		$growth = $item->{'growth_table'};
-		$l1 = $growth->{'level1'};
-		$l2 = $growth->{'level2'};
-		$l3 = $growth->{'level3'};
-		$l4 = $growth->{'level4'};
-		$l5 = $growth->{'level5'};
-		$l6 = $growth->{'level6'};
-		$l7 = $growth->{'level7'};
-		$l8 = $growth->{'level8'};
-		$l9 = $growth->{'level9'};
-		$l10 = $growth->{'level10'};
-		$agi = (($l1->{'agi'}) + ($l2->{'agi'}) + ($l3->{'agi'}) + ($l4->{'agi'}) + ($l5->{'agi'}) + 
-		($l6->{'agi'}) + ($l7->{'agi'}) + ($l8->{'agi'}) + ($l9->{'agi'}) + ($l10->{'agi'}));
-		$intel = (($l1->{'int'}) + ($l2->{'int'}) + ($l3->{'int'}) + ($l4->{'int'}) + ($l5->{'int'}) + 
-		($l6->{'int'}) + ($l7->{'int'}) + ($l8->{'int'}) + ($l9->{'int'}) + ($l10->{'int'}));
-		$sta = (($l1->{'sta'}) + ($l2->{'sta'}) + ($l3->{'sta'}) + ($l4->{'sta'}) + ($l5->{'sta'}) + 
-		($l6->{'sta'}) + ($l7->{'sta'}) + ($l8->{'sta'}) + ($l9->{'sta'}) + ($l10->{'sta'}));
-		$str = (($l1->{'str'}) + ($l2->{'str'}) + ($l3->{'str'}) + ($l4->{'str'}) + ($l5->{'str'}) + 
-		($l6->{'str'}) + ($l7->{'str'}) + ($l8->{'str'}) + ($l9->{'str'}) + ($l10->{'str'}));
-		$wis = (($l1->{'wis'}) + ($l2->{'wis'}) + ($l3->{'wis'}) + ($l4->{'wis'}) + ($l5->{'wis'}) + 
-		($l6->{'wis'}) + ($l7->{'wis'}) + ($l8->{'wis'}) + ($l9->{'wis'}) + ($l10->{'wis'}));
-		"<div class='itemd_name'>" . $item->{'displayname'} . "</div>\n";
+		$agi = 0; $intel = 0; $sta = 0; $str = 0; $wis = 0;
+		for ($i = 1; $i <= 50; $i++) {
+		(${"l{$i}"} = $growth->{'level'.$i});
+		$agi = $agi + (${"l{$i}"}->{'agi'});
+		$intel = $intel + (${"l{$i}"}->{'int'});
+		$sta = $sta + (${"l{$i}"}->{'sta'});
+		$str = $str + (${"l{$i}"}->{'str'});
+		$wis = $wis + (${"l{$i}"}->{'wis'});
+		}
 		$content .= "<div class='itemd_name'>Spirit Stone at Max Level</div>\n";
 		$content .= "<div class='ui-helper-clearfix'></div>";
 		$content .= "<div class='itemd_green'>";
@@ -191,36 +179,63 @@ if(!class_exists('eq2_sony')) {
 		if ($sta != 0) { $content .= "  +" . $sta . " sta"; }
 		$content .= "</div>\n";
 		$content .= "<div class='itemd_blue'>";
-		$attackspeed = (($l1->{'attackspeed'}) + ($l2->{'attackspeed'}) + ($l3->{'attackspeed'}) + ($l4->{'attackspeed'}) + ($l5->{'attackspeed'}) + 
-		($l6->{'attackspeed'}) + ($l7->{'attackspeed'}) + ($l8->{'attackspeed'}) + ($l9->{'attackspeed'}) + ($l10->{'attackspeed'}));
-		$dps = (($l1->{'dps'}) + ($l2->{'dps'}) + ($l3->{'dps'}) + ($l4->{'dps'}) + ($l5->{'dps'}) + 
-		($l6->{'dps'}) + ($l7->{'dps'}) + ($l8->{'dps'}) + ($l9->{'dps'}) + ($l10->{'dps'}));
-		$doubleattackchance = (($l1->{'doubleattackchance'}) + ($l2->{'doubleattackchance'}) + ($l3->{'doubleattackchance'}) + ($l4->{'doubleattackchance'}) + ($l5->{'doubleattackchance'}) + 
-		($l6->{'doubleattackchance'}) + ($l7->{'doubleattackchance'}) + ($l8->{'doubleattackchance'}) + ($l9->{'doubleattackchance'}) + ($l10->{'doubleattackchance'}));
-		$critbonus = (($l1->{'critbonus'}) + ($l2->{'critbonus'}) + ($l3->{'critbonus'}) + ($l4->{'critbonus'}) + ($l5->{'critbonus'}) + 
-		($l6->{'critbonus'}) + ($l7->{'critbonus'}) + ($l8->{'critbonus'}) + ($l9->{'critbonus'}) + ($l10->{'critbonus'}));
-		$spellweaponattackspeed = (($l1->{'spellweaponattackspeed'}) + ($l2->{'spellweaponattackspeed'}) + ($l3->{'spellweaponattackspeed'}) + ($l4->{'spellweaponattackspeed'}) + ($l5->{'spellweaponattackspeed'}) + 
-		($l6->{'spellweaponattackspeed'}) + ($l7->{'spellweaponattackspeed'}) + ($l8->{'spellweaponattackspeed'}) + ($l9->{'spellweaponattackspeed'}) + ($l10->{'spellweaponattackspeed'}));
-		$spellweapondps = (($l1->{'spellweapondps'}) + ($l2->{'spellweapondps'}) + ($l3->{'spellweapondps'}) + ($l4->{'spellweapondps'}) + ($l5->{'spellweapondps'}) + 
-		($l6->{'spellweapondps'}) + ($l7->{'spellweapondps'}) + ($l8->{'spellweapondps'}) + ($l9->{'spellweapondps'}) + ($l10->{'spellweapondps'}));
-		$spellweapondoubleattackchance = (($l1->{'spellweapondoubleattackchance'}) + ($l2->{'spellweapondoubleattackchance'}) + ($l3->{'spellweapondoubleattackchance'}) + ($l4->{'spellweapondoubleattackchance'}) + ($l5->{'spellweapondoubleattackchance'}) + 
-		($l6->{'spellweapondoubleattackchance'}) + ($l7->{'spellweapondoubleattackchance'}) + ($l8->{'spellweapondoubleattackchance'}) + ($l9->{'spellweapondoubleattackchance'}) + ($l10->{'spellweapondoubleattackchance'}));
-		$weapondamagebonus = (($l1->{'weapondamagebonus'}) + ($l2->{'weapondamagebonus'}) + ($l3->{'weapondamagebonus'}) + ($l4->{'weapondamagebonus'}) + ($l5->{'weapondamagebonus'}) + 
-		($l6->{'weapondamagebonus'}) + ($l7->{'weapondamagebonus'}) + ($l8->{'weapondamagebonus'}) + ($l9->{'weapondamagebonus'}) + ($l10->{'weapondamagebonus'}));
-		$basemodifier = (($l1->{'basemodifier'}) + ($l2->{'basemodifier'}) + ($l3->{'basemodifier'}) + ($l4->{'basemodifier'}) + ($l5->{'basemodifier'}) + 
-		($l6->{'basemodifier'}) + ($l7->{'basemodifier'}) + ($l8->{'basemodifier'}) + ($l9->{'basemodifier'}) + ($l10->{'basemodifier'}));
-		$maxhpperc = (($l1->{'maxhpperc'}) + ($l2->{'maxhpperc'}) + ($l3->{'maxhpperc'}) + ($l4->{'maxhpperc'}) + ($l5->{'maxhpperc'}) + 
-		($l6->{'maxhpperc'}) + ($l7->{'maxhpperc'}) + ($l8->{'maxhpperc'}) + ($l9->{'maxhpperc'}) + ($l10->{'maxhpperc'}));
-		$armormitigationincrease = (($l1->{'armormitigationincrease'}) + ($l2->{'armormitigationincrease'}) + ($l3->{'armormitigationincrease'}) + ($l4->{'armormitigationincrease'}) + ($l5->{'armormitigationincrease'}) + 
-		($l6->{'armormitigationincrease'}) + ($l7->{'armormitigationincrease'}) + ($l8->{'armormitigationincrease'}) + ($l9->{'armormitigationincrease'}) + ($l10->{'armormitigationincrease'}));
-		$strikethrough = (($l1->{'strikethrough'}) + ($l2->{'strikethrough'}) + ($l3->{'strikethrough'}) + ($l4->{'strikethrough'}) + ($l5->{'strikethrough'}) + 
-		($l6->{'strikethrough'}) + ($l7->{'strikethrough'}) + ($l8->{'strikethrough'}) + ($l9->{'strikethrough'}) + ($l10->{'strikethrough'}));
-		$spellcastpct = (($l1->{'spellcastpct'}) + ($l2->{'spellcastpct'}) + ($l3->{'spellcastpct'}) + ($l4->{'spellcastpct'}) + ($l5->{'spellcastpct'}) + 
-		($l6->{'spellcastpct'}) + ($l7->{'spellcastpct'}) + ($l8->{'spellcastpct'}) + ($l9->{'spellcastpct'}) + ($l10->{'spellcastpct'}));
-		$spelltimereusespellonly = (($l1->{'spelltimereusespellonly'}) + ($l2->{'spelltimereusespellonly'}) + ($l3->{'spelltimereusespellonly'}) + ($l4->{'spelltimereusespellonly'}) + ($l5->{'spelltimereusespellonly'}) + 
-		($l6->{'spelltimereusespellonly'}) + ($l7->{'spelltimereusespellonly'}) + ($l8->{'spelltimereusespellonly'}) + ($l9->{'spelltimereusespellonly'}) + ($l10->{'spelltimereusespellonly'}));
-		$all = (($l1->{'all'}) + ($l2->{'all'}) + ($l3->{'all'}) + ($l4->{'all'}) + ($l5->{'all'}) + 
-		($l6->{'all'}) + ($l7->{'all'}) + ($l8->{'all'}) + ($l9->{'all'}) + ($l10->{'all'}));
+		$attackspeed = 0; $dps = 0; $doubleattackchance = 0; $critbonus = 0; $spellweaponattackspeed = 0;
+		$spellweapondps = 0; $spellweapondoubleattackchance = 0; $weapondamagebonus = 0; $basemodifier = 0; $maxhpperc = 0;
+		$armormitigationincrease = 0; $strikethrough = 0; $spellcastpct = 0; $spelltimereusespellonly = 0; $hategainmod = 0; $all = 0;
+		for ($j = 1; $j <= 50; $j++) {
+		(${"m{$j}"} = $growth->{'level'.$j});
+		if (!empty(${"m{$j}"}->{'attackspeed'})) {
+		$attackspeed = $attackspeed + (${"m{$j}"}->{'attackspeed'});
+		}
+		if (!empty(${"m{$j}"}->{'dps'})) {
+		$dps = $dps + (${"m{$j}"}->{'dps'});
+		}
+		if (!empty(${"m{$j}"}->{'doubleattackchance'})) {
+		$doubleattackchance = $doubleattackchance + (${"m{$j}"}->{'doubleattackchance'});
+		}
+		if (!empty(${"m{$j}"}->{'critbonus'})) {
+		$critbonus = $critbonus + (${"m{$j}"}->{'critbonus'});
+		}
+		if (!empty(${"m{$j}"}->{'spellweaponattackspeed'})) {
+		$spellweaponattackspeed = $spellweaponattackspeed + (${"m{$j}"}->{'spellweaponattackspeed'});
+		}
+		if (!empty(${"m{$j}"}->{'spellweapondps'})) {
+		$spellweapondps = $spellweapondps + (${"m{$j}"}->{'spellweapondps'});
+		}
+		if (!empty(${"m{$j}"}->{'spellweapondoubleattackchance'})) {
+		$spellweapondoubleattackchance = $spellweapondoubleattackchance + (${"m{$j}"}->{'spellweapondoubleattackchance'});
+		}
+		if (!empty(${"m{$j}"}->{'spellweapondoubleattackchance'})) {
+		$spellweapondoubleattackchance = $spellweapondoubleattackchance + (${"m{$j}"}->{'spellweapondoubleattackchance'});
+		}
+		if (!empty(${"m{$j}"}->{'weapondamagebonus'})) {
+		$weapondamagebonus = $weapondamagebonus + (${"m{$j}"}->{'weapondamagebonus'});
+		}
+		if (!empty(${"m{$j}"}->{'basemodifier'})) {
+		$basemodifier = $basemodifier + (${"m{$j}"}->{'basemodifier'});
+		}
+		if (!empty(${"m{$j}"}->{'maxhpperc'})) {
+		$maxhpperc = $maxhpperc + (${"m{$j}"}->{'maxhpperc'});
+		}
+		if (!empty(${"m{$j}"}->{'armormitigationincrease'})) {
+		$armormitigationincrease = $armormitigationincrease + (${"m{$j}"}->{'armormitigationincrease'});
+		}
+		if (!empty(${"m{$j}"}->{'strikethrough'})) {
+		$strikethrough = $strikethrough + (${"m{$j}"}->{'strikethrough'});
+		}
+		if (!empty(${"m{$j}"}->{'spellcastpct'})) {
+		$spellcastpct = $spellcastpct + (${"m{$j}"}->{'spellcastpct'});
+		}
+		if (!empty(${"m{$j}"}->{'spelltimereusespellonly'})) {
+		$spelltimereusespellonly = $spelltimereusespellonly + (${"m{$j}"}->{'spelltimereusespellonly'});
+		}
+		if (!empty(${"m{$j}"}->{'hategainmod'})) {
+		$hategainmod = $hategainmod + (${"m{$j}"}->{'hategainmod'});
+		}
+		if (!empty(${"m{$j}"}->{'all'})) {
+		$all = $all + (${"m{$j}"}->{'all'});
+		}
+		}
 		if ($attackspeed != 0) { $content .= "  +" . $attackspeed . "% Attack Speed<br>"; }
 		if ($dps != 0) { $content .= "  +" . $dps . " Damage Per Second<br>"; }
 		if ($doubleattackchance != 0) { $content .= "  +" . $doubleattackchance . "% Multi Attack Chance<br>"; }
@@ -236,6 +251,7 @@ if(!class_exists('eq2_sony')) {
 		if ($spellcastpct != 0) { $content .= "  +" . $spellcastpct . "% Ability Casting Speed<br>"; }
 		if ($spelltimereusespellonly != 0) { $content .= "  +" . $spelltimereusespellonly . "% Spell Reuse Speed<br>"; }
 		if ($all !=0) { $content .= "  +" . $all . " Ability Modifier<br>"; }
+		if ($hategainmod !=0) { $content .= "  +" . $hategainmod . "% Hate Gain<br>"; }
 		return $content;
 		}
 		else { return ""; }

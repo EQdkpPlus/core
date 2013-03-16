@@ -208,7 +208,7 @@ class ManageItems extends page_generic {
 		$item['value'] = $this->in->get('value',0.0);
 		$item['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
 		$item['raid_id'] = $this->in->get('raid_id',0);
-		$item['item_id'] = $this->in->get('item_id',0);
+		$item['item_id'] = $this->in->get('item_id','');
 		return $item;
 	}
 }

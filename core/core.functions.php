@@ -734,7 +734,7 @@ function infotooltip_js() {
  * @string $in_span: if you like to display something else, except itemname before loading tooltip
  * return @string
  */
-function infotooltip($name='', $game_id=0, $lang=false, $direct=0, $onlyicon=0, $noicon=false, $char_name='', $server=false, $in_span=false, $class_add='', $slot=''){
+function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $char_name='', $server=false, $in_span=false, $class_add='', $slot=''){
 	$server = ($server) ? $server : registry::register('config')->get("uc_servername");
 	$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
 	$id = uniqid();

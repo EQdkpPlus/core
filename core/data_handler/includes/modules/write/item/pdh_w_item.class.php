@@ -49,7 +49,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'item_date'			=> $time,
 					'item_group_key'	=> $group_key,
 					'item_added_by'		=> $this->admin_user,
-					'game_itemid'		=> ($game_item_id) ? $game_item_id : 0,
+					'game_itemid'		=> $game_item_id,
 					'itempool_id'		=> $itempool_id
 				));
 			}
@@ -105,7 +105,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'raid_id'			=> $raid_id,
 					'item_date'			=> $time,
 					'item_group_key'	=> $new_group_key,
-					'game_itemid'		=> ($game_item_id) ? $game_item_id : 0,
+					'game_itemid'		=> $game_item_id,
 					'itempool_id'		=> $itempool_id
 				), $item_id);
 				
@@ -128,7 +128,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 							'raid_id'			=> $raid_id,
 							'item_date'			=> $time,
 							'item_group_key'	=> $new_group_key,
-							'game_itemid'		=> ($game_item_id) ? $game_item_id : 0,
+							'game_itemid'		=> $game_item_id,
 							'itempool_id'		=> $itempool_id,
 							'item_updated_by'	=> $this->admin_user
 						), $group_key);
