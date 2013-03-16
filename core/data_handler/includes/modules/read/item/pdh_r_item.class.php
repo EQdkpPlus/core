@@ -303,7 +303,7 @@ if(!class_exists('pdh_r_item')){
 						'width' => '400',
 						'onclose' => $_SERVER['REQUEST_URI']
 					);
-					if($this->get_game_itemid($item_id) >= 1) {
+					if($this->get_game_itemid($item_id) != '') {
 						$options['url'] .= "&game_id=".$this->get_game_itemid($item_id);
 					}
 					$this->jquery->Dialog("infotooltip_update", "Item-Update", $options);

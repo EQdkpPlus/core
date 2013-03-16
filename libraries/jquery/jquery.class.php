@@ -1357,6 +1357,38 @@ if (!class_exists("jquery")) {
 				$this->file_browser[$type] = true;
 			}
 		}
+		
+		public function toolbar($id, $arrItems, $options=array()){
+			$position = (!isset($options['position'])) ? 'top' : $options['position'];
+			$hideOnClick = (!isset($options['hideOnClick'])) ? true : $options['hideOnClick'];
+			$toolbar_id = $id.'-toolbar';
+			
+			$this->tpl->add_js(
+				"$('.".$toolbar_id."').toolbar({
+					content: '#".$toolbar_id."-options', 
+					position: '".$position."',
+					hideOnClick: ".(($hideOnClick) ? 'true' :  'false')."
+				});",
+			'docready');
+			
+			$strItems = '';
+			$intItems = 0;
+			foreach($arrItems as $key => $value){
+				if (isset($value['check'])){
+					if (!$this->user->check_auth($value['check'], false)) continue;
+				}
+				$strItems .= '<a href="'.((isset($value['href'])) ? $value['href'] : '#').'" '.((isset($value['js'])) ? $value['js'] : '').'><i class="'.$value['icon'].'"></i></a>';
+				$intItems++;
+			}
+			
+			$this->tpl->staticHTML(
+				'<div id="'.$toolbar_id.'-options" style="display: none;">'.$strItems.'
+				</div>
+				'
+			);
+			
+			return array('id' => $toolbar_id, 'items' => $intItems);
+		}
 
 		/**
 		* Convert a PHP Array to JS Array

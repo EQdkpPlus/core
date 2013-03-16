@@ -1997,3 +1997,7 @@ img { behavior: url(images/iepngfix.htc) }
 	right: 0; top: 0;
 	background: url(images/subscribe.png) no-repeat right top;
 }
+
+.user-avatar {
+	max-height: 48px;
+}

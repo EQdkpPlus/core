@@ -180,7 +180,7 @@ CREATE TABLE `__items` (
 	`item_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`item_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
 	`item_group_key` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-	`game_itemid` int(10) unsigned DEFAULT NULL,
+	`game_itemid` varchar(50) COLLATE utf8_bin DEFAULT NULL,
 	`itempool_id` int(11) unsigned NOT NULL,
 	`item_color` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
 	PRIMARY KEY (`item_id`)

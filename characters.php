@@ -35,7 +35,7 @@ class characters extends page_generic {
 			'defrolechange'		=> array('process' => 'ajax_defaultrole', 'check' => 'u_member_man', 'csrf'=>true),
 			'hide_info'			=> array('process' => 'hide_nochar_info', 'check' => 'u_member_'),
 		);
-		$this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn'), 'OR');
+		$this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR');
 	
 		parent::__construct('u_member_', $handler, array());
 		$this->process();

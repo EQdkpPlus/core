@@ -40,6 +40,7 @@ abstract class super_registry {
 		'env'		=> 'environment',
 		'pw'		=> 'password',
 		'pgh'		=> 'hooks', //Plus global hook
+		'ntfy'		=> 'notifications',
 	);
 	//all classes in here must have their file named after its name, e.g. admin_index.class.php (keep them in alphabetical order, results in easy searching)
 	protected static $locs = array(
@@ -63,6 +64,7 @@ abstract class super_registry {
 		'html_pdh_tag_table'	=> 'core/',
 		'input'					=> 'core/',
 		'logs'					=> 'core/',
+		'notifications'			=> 'core/',
 		'password'				=> 'core/',
 		'plugin_manager'		=> 'core/',
 		'plus_debug_logger'		=> 'core/',

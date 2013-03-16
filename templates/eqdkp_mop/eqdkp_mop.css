@@ -1846,3 +1846,7 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 	float: right;
 	margin-right: 5px;
 }
+
+.user-avatar {
+	max-height: 48px;
+}

@@ -810,6 +810,13 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "icalfeed_description"=>"Der iCal-Feed wurde automatsich erstellt von EQDKP-PLUS",
 "grpleaders" => "Gruppenleiter",
 "group_members" => "Gruppenmitglieder",
+"notification_red_prio" => "Hohe Priorität",
+"notification_yellow_prio" => "Mittlere Priorität",
+"notification_green_prio" => "Niedrige Priorität",
+"notification_char_confirm_required" => "%s Charaktere zu bestätigen",
+"notification_char_delete_requested" => "%s Charaktere zu löschen",
+"notification_user_enable" => "%s Benutzer zu aktivieren",
+"notification_none" => "Keine Benachrichtigungen vorhanden",
  );
 
 ?>

@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class core extends gen_class {
-	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db', 'config', 'timekeeper', 'env', 'in', 'portal');
+	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db', 'config', 'timekeeper', 'env', 'in', 'portal', 'ntfy');
 
 		// General vars
 		public $header_format	= 'full';			// Use a simple header?		@var
@@ -408,7 +408,7 @@ class core extends gen_class {
 				// System Message if user has no assigned members
 				if($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])) < 1 && ($this->user->is_signedin()) && ($this->user->data['hide_nochar_info'] != '1')){
 					$message = '<a href="'.$this->root_path.'characters.php'.$this->SID.'">'.$this->user->lang('no_connected_char').'</a>';
-					if ($this->user->check_auth('a_', false)) $message .= '<br /><a href="'.$this->root_path.'characters.php'.$this->SID.'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
+					$message .= '<br /><a href="'.$this->root_path.'characters.php'.$this->SID.'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);
 				}
 
@@ -557,6 +557,20 @@ class core extends gen_class {
 			$description = ($this->description != '') ? $this->description : (($this->config->get('pk_meta_description') && strlen($this->config->get('pk_meta_description'))) ? $this->config->get('pk_meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
 			$this->checkAdminTasks();
+			
+			//Notifications
+			$arrNotificationGreen	= register('ntfy')->get('green');
+			$arrNotificationRed		= register('ntfy')->get('red');
+			$arrNotificationYellow	= register('ntfy')->get('yellow');
+			$this->tpl->assign_vars(array(
+				'NOTIFICATION_COUNT_RED'	=> $arrNotificationRed['count'],
+				'NOTIFICATION_COUNT_YELLOW' => $arrNotificationYellow['count'],
+				'NOTIFICATION_COUNT_GREEN' 	=> $arrNotificationGreen['count'],
+				'NOTIFICATION_RED'			=> $arrNotificationRed['html'],
+				'NOTIFICATION_YELLOW'		=> $arrNotificationYellow['html'],
+				'NOTIFICATION_GREEN'		=> $arrNotificationGreen['html'],
+				'NOTIFICATION_COUNT_TOTAL'	=> $arrNotificationRed['count'] + $arrNotificationYellow['count'] + $arrNotificationGreen['count'],
+			));
 
 			if(DEBUG) {
 				$this->user->output_unused();
@@ -700,14 +714,20 @@ class core extends gen_class {
 			$iTaskCount = 0;
 			if ($this->user->check_auth('a_members_man', false)){
 				$arrConfirmMembers = $this->pdh->get('member', 'confirm_required');
-				$iTaskCount += count($arrConfirmMembers);
+				$arrConfirmMemberCount = count($arrConfirmMembers);
+				$iTaskCount += $arrConfirmMemberCount;
+				if ($arrConfirmMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_confirm_required'), $arrConfirmMemberCount), $this->root_path.'admin/manage_tasks.php'.$this->SID, $arrConfirmMemberCount);
 
 				$arrDeleteMembers = $this->pdh->get('member', 'delete_requested');
-				$iTaskCount += count($arrDeleteMembers);
+				$intDeleteMemberCount = count($arrDeleteMembers);
+				$iTaskCount += $intDeleteMemberCount;
+				if ($intDeleteMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_delete_requested'), $intDeleteMemberCount),  $this->root_path.'admin/manage_tasks.php'.$this->SID, $intDeleteMemberCount);
 			}
 			if ($this->user->check_auth('a_users_man', false) && $this->config->get('account_activation') == 2){
 				$arrInactiveUser = $this->pdh->get('user', 'inactive');
-				$iTaskCount += count($arrInactiveUser);
+				$intInactiveUserCount = count($arrInactiveUser);
+				$iTaskCount += $intInactiveUserCount;
+				if ($intInactiveUserCount) $this->ntfy->add('yellow', $this->user->lang('manage_users'), sprintf($this->user->lang('notification_user_enable'), $intInactiveUserCount),  $this->root_path.'admin/manage_tasks.php'.$this->SID, $intInactiveUserCount);
 			}
 
 			if ($iTaskCount > 0){

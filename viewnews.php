@@ -83,7 +83,7 @@ class viewnews extends page_generic {
 		$sticky_news = 0;
 		$first_news = false;
 		$no_news = true;
-
+		
 		if (is_array($news_array)){
 			foreach($news_array as $news_id => $news) {
 				if(!$this->pdh->get('news', 'has_permission', array($news_id))){
@@ -145,6 +145,27 @@ class viewnews extends page_generic {
 					$headline = stripslashes($news['news_headline']);
 				}
 				$userlink = '<a href="'.$this->root_path.'listusers.php'.$this->SID.'&amp;u='.$news['user_id'].'">'.sanitize($news['username']).'</a>';
+				$arrToolbarItems = array(
+					
+					array(
+						'icon'	=> 'icon-plus',
+						'js'	=> 'onclick="addNews();"',
+						'check' => 'a_news_add'
+					),
+					array(
+						'icon'	=> 'icon-edit',
+						'js'	=> 'onclick="editNews('.$news_id.');"',
+						'check' => 'a_news_upd'
+					),
+					array(
+						'icon'	=> 'icon-list',
+						'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_news.php".$this->SID.'\';"',
+						'check' => 'a_news_'
+					),
+				);
+				
+				
+				$jqToolbar = $this->jquery->toolbar('news_'.$news_id, $arrToolbarItems, array('position' => 'bottom'));
 				$this->tpl->assign_block_vars('date_row.news_row', array(
 					'HEADLINE'			=> $headline,
 					'SOCIAL_BUTTONS'	=> $this->social->createSocialButtons($this->env->link.'viewnews.php?id='.$news_id, strip_tags($headline)),
@@ -160,7 +181,9 @@ class viewnews extends page_generic {
 					'CATEGORY_ID'		=> $news['news_category_id'],
 					'CATEGORY_NAME'		=> $news['news_category'],
 					'MESSAGE'			=> $message,
-				));
+					'TOOLBAR_ID'		=> $jqToolbar['id'],
+				));				
+				
 				$no_news = false;
 			}
 		}

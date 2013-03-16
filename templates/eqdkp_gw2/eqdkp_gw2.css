@@ -1919,3 +1919,7 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 .ui-widget {
 	font-size:12px;
 }
+
+.user-avatar {
+	max-height: 48px;
+}
