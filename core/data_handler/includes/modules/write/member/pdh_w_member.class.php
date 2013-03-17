@@ -184,8 +184,9 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 				//delete adjustments of member
 				$adjs = $this->pdh->get('adjustment', 'adjsofmember', array($member_id));
-				foreach($adjs as $id => $det) {
-					$this->pdh->put('adjustment', 'delete_adjustment', array($id));
+
+				foreach($adjs as $key => $adjid) {
+					$this->pdh->put('adjustment', 'delete_adjustment', array($adjid));
 				}
 				// delete calendar raid attendees
 				$this->pdh->put('calendar_raids_attendees', 'delete_attendees', array($member_id));
