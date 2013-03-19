@@ -299,7 +299,7 @@ class viewcalraid extends page_generic {
 		iCalUtilityFunctions::createTimezone( $v, $timezone, array( "X-LIC-LOCATION" => $timezone));
 
 		// Generate the vevents...
-		$e = registry::register('vevent');
+		$e = new vevent;
 		$e->setProperty('dtstart',		array("timestamp" => $eventdata['timestamp_start'], "tz" => registry::register('config')->get('timezone')));
 		$e->setProperty('dtend',		array("timestamp" => $eventdata['timestamp_end'], "tz" => registry::register('config')->get('timezone')));
 		$e->setProperty('dtstamp',		array("timestamp" => $this->time->time));
