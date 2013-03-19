@@ -301,6 +301,17 @@ class core extends gen_class {
 
 			//Portal Output
 			$this->portal->module_output();
+			
+			//Registration Link
+			$registerLink = '';
+			if ( ! $this->user->is_signedin() && intval($this->config->get('disable_registration')) != 1){
+				//CMS register?
+				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
+					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register', '', '', 'icon-check'));
+				} else {
+					$registerLink = $this->createLink(array('link' => 'register.php' . $this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
+				}
+			}
 
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
@@ -336,72 +347,18 @@ class core extends gen_class {
 				'REGISTER_LINK'				=> $register_link,
 				'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 				'CSRF_LOGOUT_TOKEN'			=> $this->user->csrfGetToken("loginlogout"),
+				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->root_path.'characters.php' . $this->SID : '',
+				'U_REGISTER'				=> $registerLink,
+				'MAIN_MENU'					=> $this->build_menu_ul(),
+				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->current_page),
 			));
-
+						
 			if (isset($this->page_body) && $this->page_body == 'full'){
 				$this->tpl->assign_vars(array(
 					'FIRST_C'	=> false,
 					'THIRD_C'	=> false,
 				));
 			}
-
-			// Menus
-			$menus = $this->gen_menus();
-
-			//Sorting Menu1, Menu2, Menu4
-			foreach(array(1,2,3,4) as $mk) {
-				$menus['menu'.$mk] = array_merge($menus['menu'.$mk], $this->pdh->get('links', 'menu', array($mk)));
-				if ($this->config->get('sort_menu'.$mk)){
-					//Sorting-Data
-					${'sort_ary'.$mk} = unserialize(stripslashes($this->config->get('sort_menu'.$mk)));
-					${'tmp_menu'.$mk} = array();
-
-					foreach ($menus['menu'.$mk] as $key=>$menu){
-						//Remove Session
-						$link = $this->user->removeSIDfromString($menu['link']);
-						$link = str_replace($this->root_path, '', $link);
-						$linkhash = md5($link.((isset($menu['id'])) ? $menu['id'] : ''));
-						
-						if (isset(${'sort_ary'.$mk}[$linkhash]['sort'])){
-							${'tmp_menu'.$mk}[$key] = ${'sort_ary'.$mk}[$linkhash]['sort'];
-						} else {
-							${'tmp_menu'.$mk}[$key] = 999999;
-						}
-						if (isset(${'sort_ary'.$mk}[$linkhash]['hide']) && ${'sort_ary'.$mk}[$linkhash]['hide']){
-							unset(${'tmp_menu'.$mk}[$key]);
-							unset($menus['menu'.$mk][$key]);
-						}
-					}
-					array_multisort(${'tmp_menu'.$mk}, SORT_ASC, SORT_NUMERIC, $menus['menu'.$mk]);
-				}
-			}
-			$bi = 0;
-
-			$arrOutput = array();
-			foreach ( $menus as $number => $array ){
-				$arrOutput[$number] = '';
-				if (is_array($array)){
-					foreach ( $array as $menu ){
-						// Don't display the link if they don't have permission to view it
-						if ( (empty($menu['check'])) || ($this->user->check_auth($menu['check'], false)) ){
-							$arrOutput[$number] .= '<li>'.$this->createLink($menu, $number.'_link_'.strtolower($menu['text'])).'</li>';
-						
-							$this->tpl->assign_block_vars( 'main_'.$number, array(
-									'LINK' 		=> ((isset($menu['plus_link']) && $menu['plus_link'] == true) ? $menu['link'] : $this->root_path . $menu['link']),
-									'TEXT'		=> $menu['text'],
-									'TARGET'	=> ((isset($menu['target']) && strlen($menu['target'])) ? $menu['target'] : ''),
-									'CLASS'		=> $number.'_link_'.strtolower($menu['text']),
-							));
-						}
-					}
-				}
-			}
-
-			//collapsable
-			$this->jquery->Collapse('#main_menu1');
-			$this->jquery->Collapse('#main_menu2');
-			$this->jquery->Collapse('#main_menu3');
-			$this->jquery->Collapse('#main_menu4');
 
 			// show the full head
 			if ($this->header_format != 'simple'){
@@ -411,15 +368,6 @@ class core extends gen_class {
 					$message .= '<br /><a href="'.$this->root_path.'characters.php'.$this->SID.'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);
 				}
-
-				$this->tpl->assign_vars(array(
-					'MAIN_MENU1'			=> (isset($arrOutput['menu1'])) ?'<ul class="mainmenu1">'.$arrOutput['menu1'].'</ul>' : '',
-					'MAIN_MENU2'			=> (isset($arrOutput['menu2'])) ?'<ul class="mainmenu2">'.$arrOutput['menu2'].'</ul>' : '',
-					'MAIN_MENU3'			=> (isset($arrOutput['menu3'])) ? '<ul class="mainmenu3">'.$arrOutput['menu3'].'</ul>' : '',
-					'MAIN_MENU4'			=> (isset($arrOutput['menu4'])) ?'<ul class="mainmenu4">'.$arrOutput['menu4'].'</ul>' : '',
-					'S_MAIN_MENU3'			=> (isset($arrOutput['menu3']) && strlen($arrOutput['menu3'])) ? true : false,
-					)
-				);
 			}
 			
 			//Do portal hook
@@ -428,112 +376,235 @@ class core extends gen_class {
 		
 		public function createLink($arrLinkData, $strCssClass = ''){
 			$target = '';
-			if (isset($arrLinkData['target'])){
-				if (strlen($arrLinkData['target'])){
-					$target = ' target="'.$arrLinkData['target'].'"';
-				}
+			if (isset($arrLinkData['target']) && strlen($arrLinkData['target'])){
+				$target = ' target="'.$arrLinkData['target'].'"';
 			}
-			return '<a href="' . ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->root_path . $arrLinkData['link']) . '"'.$target.' class="'.$strCssClass.'">' . $arrLinkData['text'] . '</a>';
+			$icon = '';
+			if (isset($arrLinkData['icon']) && strlen($arrLinkData['icon'])){
+				$icon = '<i class="'.$arrLinkData['icon'].'"></i>';
+			}
+			return '<a href="' . ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->root_path . $arrLinkData['link']) . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
 		}
-
-		public function gen_menus(){
-			// Menu 1
-			$main_menu1 = array(
+		
+		public function menu_items(){
+			$arrItems = array(
+				array('link' => 'index.php'.$this->SID,				'text' => $this->user->lang('home')),
 				array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
 				array('link' => 'roster.php'.$this->SID,			'text' => $this->user->lang('menu_roster'),		'check' => 'u_roster_list'),
-				array('link' => 'listraids.php'.$this->SID,		'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
+				array('link' => 'listraids.php'.$this->SID,			'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
 				array('link' => 'listevents.php'.$this->SID,		'text' => $this->user->lang('menu_events'),		'check' => 'u_event_view'),
-				array('link' => 'listitems.php'.$this->SID,		'text' => $this->user->lang('menu_itemhist'),		'check' => 'u_item_view'),
-				array('link' => 'viewnews.php'.$this->SID,		'text' => $this->user->lang('menu_news'),			'check' => 'u_news_view'),
-				array('link' => 'calendar.php'.$this->SID,		'text' => $this->user->lang('menu_calendar'),		'check' => 'u_calendar_view'),
-				array('link' => 'listusers.php'.$this->SID,		'text' => $this->user->lang('user_list'),			'check' => 'u_userlist')
+				array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
+				array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
+				array('link' => 'calendar.php'.$this->SID,			'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
+				array('link' => 'listusers.php'.$this->SID,			'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
 			);
-
+			
 			//Pages
 			if (is_array($this->pdh->get('pages', 'mainmenu_pages', array()))){
-				$main_menu1 = array_merge($main_menu1,$this->pdh->get('pages', 'mainmenu_pages', array()));
+				$arrItems = array_merge($arrItems,$this->pdh->get('pages', 'mainmenu_pages', array()));
 			}
-
+			
+			//Plugins
 			if (is_object($this->pm)){
 				$plugin_menu = $this->pm->get_menus('main_menu1');
-				$main_menu1 = (is_array($plugin_menu)) ? array_merge($main_menu1, $plugin_menu) : $main_menu1;
+				$arrItems = (is_array($plugin_menu)) ? array_merge($arrItems, $plugin_menu) : $arrItems;
 			}
+			
+			//Forum
+			if (strlen($this->config->get('cmsbridge_url')) > 0 && $this->config->get('cmsbridge_active') == 1){
+				$inlineforum = $this->handle_link($this->config->get('cmsbridge_url'), $this->user->lang('forum'), $this->config->get('cmsbridge_embedded'), 'board');
+				$arrItems[]	= $inlineforum;
+			}
+			
+			//Plus Links
+			$arrItems = array_merge($arrItems, $this->pdh->get('links', 'menu', array()));
+			
+			return $arrItems;
+		}
+		
+		public function build_link_hash($arrLinkData){
+			return md5($this->user->removeSIDfromString($arrLinkData['link']).((isset($arrLinkData['id'])) ? $arrLinkData['id'] : ''));
+		}
+		
+		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
+			$arrItems = $this->menu_items();
+			$arrSortation = unserialize($this->config->get('mainmenu'));
 
-			// Menu 2
-			$main_menu2 = array();
-			if ( $this->user->is_signedin() ){
-				$main_menu2[] = array('link' => 'settings.php' . $this->SID, 'text' => $this->user->lang('menu_settings'));
-				$main_menu2[] = array('link' => 'characters.php' . $this->SID, 'text' => $this->user->lang('menu_members'));
-			} elseif ($this->config->get('disable_registration') != 1) {
-				//CMS register?
-				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-					$main_menu2[] = $this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register');
-				} else {
-					$main_menu2[] = array('link' => 'register.php' . $this->SID, 'text' => $this->user->lang('menu_register'));
+			foreach ($arrItems as $key => $item){
+				$strHash = $this->build_link_hash($item);
+				$arrItems[$key]['_hash'] = $this->build_link_hash($item);
+				$arrItems[$key]['hidden'] = 0;
+				$arrHashArray[$strHash] = $arrItems[$key];
+			}
+			$arrOut = array();
+			$arrOutOneLevel = array();
+			$arrToDo = $arrHashArray;
+
+			foreach($arrSortation as $key => $item){
+				$show = true;
+				$hidden = $item['item']['hidden'];
+				if ($hidden && !$show_hidden) $show = false;
+				$hash = $item['item']['hash'];
+				if (!isset($arrHashArray[$hash])) $show = false;
+				unset($arrToDo[$hash]);
+				if ($show) {
+					if ($hidden) $arrHashArray[$hash]['hidden'] = 1;
+					$arrHashArray[$hash]['depth'] = 0;
+					$arrOut[$key] = $arrHashArray[$hash];
+					$arrOutOneLevel[] = $arrHashArray[$hash];
+				}
+				//Second Level
+				if (isset($item['_childs']) && is_array($item['_childs'])){
+					foreach($item['_childs'] as $key2 => $item2){
+						$hidden = $item2['item']['hidden'];
+						if ($hidden && !$show_hidden) $show = false;
+						$hash = $item2['item']['hash'];
+						if (!isset($arrHashArray[$hash])) $show = false;
+						unset($arrToDo[$hash]);
+						if ($show) {
+							if ($hidden) $arrHashArray[$hash]['hidden'] = 1;
+							$arrHashArray[$hash]['depth'] = 1;
+							$arrOut[$key]['childs'][$key2] = $arrHashArray[$hash];
+							$arrOutOneLevel[] = $arrHashArray[$hash];
+						}
+						//Third Level
+						if (isset($item2['_childs']) && is_array($item2['_childs'])){
+							foreach($item2['_childs'] as $key3 => $item3){
+								$hidden = $item3['hidden'];
+								if ($hidden && !$show_hidden) $show = false;
+								$hash = $item3['hash'];
+								if (!isset($arrHashArray[$hash])) $show = false;
+								unset($arrToDo[$hash]);
+								if ($show) {
+									if ($hidden) $arrHashArray[$hash]['hidden'] = 1;
+									$arrHashArray[$hash]['depth'] = 2;
+									$arrOut[$key]['childs'][$key2]['childs'][$key3] = $arrHashArray[$hash];
+									$arrOutOneLevel[] = $arrHashArray[$hash];
+								}	
+							}
+						}
+					}
 				}
 			}
-
-			// Switch login/logout link
-			$main_menu2[] = ($this->user->is_signedin()) ? array('link' => 'login.php' . $this->SID . '&amp;logout=true&amp;link_hash='.$this->user->csrfGetToken('loginlogout'), 'text' => $this->user->lang('logout') . ' [ ' . $this->user->data['username'] . ' ]') : array('link' => 'login.php' . $this->SID, 'text' => $this->user->lang('login'));
-			if ($this->user->is_signedin() && $this->user->check_auth('a_', false)){
-				$main_menu2[] = array('link' => 'admin/index.php' . $this->SID, 'text' => $this->user->lang('menu_admin_panel'));
+			
+			foreach($arrToDo as $hash => $item){
+				$item['hidden'] = 0;
+				$arrOut[] = $item;
+				$arrOutOneLevel[] = $item;
 			}
 
-			//Pages
-			if (is_array($this->pdh->get('pages', 'usermenu_pages', array()))){
-				$main_menu2 = array_merge($main_menu2,$this->pdh->get('pages', 'usermenu_pages', array()));
+			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
+		}
+		
+		public function build_menu_select($show_hidden = true){
+			
+		}
+		
+		public function build_menu_ul(){
+			$arrItems = $this->build_menu_array(false);
+			
+			$html  = '<ul class="mainmenu">';
+			
+			foreach($arrItems as $k => $v){
+				if ( !is_array($v) )continue;
+				
+				if (!isset($v['childs'])){
+					if ( $this->check_url_for_permission($v)) {
+						$class = $this->clean_url($v['link']);
+						$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'</li>';
+					} else {
+						continue;
+					}
+					
+				} else {
+					if ( $this->check_url_for_permission($v)) {
+						$class = $this->clean_url($v['link']);
+						$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'<ul>';
+					} else {
+						continue;
+					}
+					
+					foreach($v['childs'] as $k2 => $v2){
+						if (!isset($v2['childs'])){
+							if ( $this->check_url_for_permission($v2)) {
+								$class = $this->clean_url($v2['link']);
+								$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'</li>';
+							} else {
+								continue;
+							}
+						} else {
+							if ( $this->check_url_for_permission($v2)) {							
+								$class = $this->clean_url($v2['link']);
+								$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'<ul>';
+							} else {
+								continue;
+							}
+							
+							foreach($v2['childs'] as $k3 => $v3){
+								if ( $this->check_url_for_permission($v3)) {	
+									$class = $this->clean_url($v3['link']);
+									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v3, 'link_'.$class).'</li>';
+								} else {
+									continue;
+								}
+							}
+							
+							$html .= '</ul></li>';
+						}
+					
+					}
+					
+					$html .= '</ul></li>';
+				}
+				
 			}
-
-			if (is_object($this->pm)){
-				$main_menu2 = (is_array($this->pm->get_menus('main_menu2'))) ? array_merge($main_menu2, $this->pm->get_menus('main_menu2')) : $main_menu2;
+			
+			$html .= '</ul>';
+			return $html;
+		}
+		
+		public function clean_url($strUrl){
+			return preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower($this->user->removeSIDfromString($strUrl)));
+		}
+		
+		public function check_url_for_permission($arrLinkData){
+			if ( (empty($arrLinkData['check'])) || ($this->user->check_auth($arrLinkData['check'], false))) {
+				if (isset($arrLinkData['signedin'])){
+					$perm = true;
+					switch ($arrLinkData['signedin']){
+						case 0: if ($this->user->is_signedin()) $perm = false;
+						break;
+						case 1: if (!$this->user->is_signedin()) $perm = false;
+						break;
+					}
+					if (!$perm) return false;
+				}
+				
+				return true;
 			}
-
-			//Menu4 - Top Menu
-			if (strlen($this->config->get('cmsbridge_url')) > 0 && $this->config->get('cmsbridge_active') == 1){
-				$inlineforum	= $this->handle_link($this->config->get('cmsbridge_url'), $this->user->lang('forum'), $this->config->get('cmsbridge_embedded'), 'board');
-				$main_menu1[]	= $inlineforum;
-				$main_menu4[]	= $inlineforum;
-			}
-
-			$main_menu4[] = array('link' => ((strlen($this->config->get('pk_portal_website')) > 1 ) ? $this->config->get('pk_portal_website') : 'index.php'.$this->SID), 'text' => $this->user->lang('portal'), 'check' => '', 'plus_link' => ((strlen($this->config->get('pk_portal_website')) > 1 ) ? true : false));
-			if(!$this->user->check_auth('u_member_view', false) && $this->user->check_auth('u_roster_list', false)){
-				$main_menu4[] = array('link' => 'roster.php'.$this->SID, 'text' => $this->user->lang('menu_roster'), 'check' => 'u_roster_list');
-			}else{
-				$main_menu4[] = array('link' => 'listcharacters.php'.$this->SID, 'text' => sprintf($this->user->lang('dkp_system'), $this->config->get('dkp_name')), 'check' => 'u_member_view');
-			}
-			$main_menu4[] = array('link' => 'calendar.php'.$this->SID, 'text' => $this->user->lang('calendars'), 'check' => 'u_calendar_view');
-			// Pages for Menu 4
-			if(is_array($this->pdh->get('pages', 'tab_pages', array()))){
-				$main_menu4 = array_merge($main_menu4,$this->pdh->get('pages', 'tab_pages', array()));
-			}
-
-			$menus = array(
-				'menu1'	=> $main_menu1,
-				'menu2'	=> $main_menu2,
-				'menu3'	=> array(),
-				'menu4'	=> $main_menu4
-			);
-			return $menus;
+			return false;
 		}
 
-		public function handle_link($url, $text,$window,$wrapper_id = '', $check = '', $editable = true){
+		public function handle_link($url, $text,$window,$wrapper_id = '', $check = '', $editable = true, $icon = ''){
 			$arrData = array();
 			switch ($window){
-							case '0':  $arrData['plus_link'] = true;
-								break ;
-							case '1':  $arrData['target'] = '_blank';
-										$arrData['plus_link'] = true;
-								break ;
-							case '2':
-							case '3':
-							case '4':  $url = 'wrapper.php'.$this->SID.'&amp;id='.$wrapper_id;
-								break ;
-						}
-						$arrData['link'] = $url;
-						$arrData['check'] = $check;
-						$arrData['text'] = $text;
-						if (!$editable) $arrData['editable'] = false;
-						return $arrData;
+				case '0':  $arrData['plus_link'] = true;
+					break ;
+				case '1':  $arrData['target'] = '_blank';
+							$arrData['plus_link'] = true;
+					break ;
+				case '2':
+				case '3':
+				case '4':  $url = 'wrapper.php'.$this->SID.'&amp;id='.$wrapper_id;
+					break ;
+			}
+			$arrData['link'] = $url;
+			$arrData['check'] = $check;
+			$arrData['text'] = $text;
+			$arrData['icon'] = $icon;
+			$arrData['id'] = $wrapper_id;
+			if (!$editable) $arrData['editable'] = false;
+			return $arrData;
 		}
 
 		public function page_tail(){

@@ -90,7 +90,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 			return $this->links[$id]['height'];
 		}
 
-		public function get_menu($menu_id){
+		public function get_menu(){
 			$menu = array();
 
 			if (is_array($this->links)){
@@ -121,10 +121,10 @@ if ( !class_exists( "pdh_r_links" ) ){
 						}
 
 
-						$menu[$link['menu']][] = array('link' => $url, 'target' => $target, 'text' =>  $link['name'], 'check' => '', 'plus_link' => $extern, 'id'=>'pluslink'.$link['id']);
+						$menu[] = array('link' => $url, 'target' => $target, 'text' =>  $link['name'], 'check' => '', 'plus_link' => $extern, 'id'=>'pluslink'.$link['id']);
 					}
 				}
-				return (isset($menu[$menu_id]) && is_array($menu[$menu_id]) ? $menu[$menu_id] : array());
+				return $menu;
 			} else {
 				return array();
 			}

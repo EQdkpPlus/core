@@ -42,10 +42,10 @@ class Manage_Portal extends page_generic {
 		$this->process();
 	}
 
-	private function get_settings($id, $save=false) {
+	private function get_settings($id, $save=false, $state='fetch_new') {
 		$module = $this->portal->get_module($this->pdh->get('portal', 'path', array($id)), $this->pdh->get('portal', 'plugin', array($id)));
 		$module->set_id($id);
-		$data = $module->get_settings();
+		$data = $module->get_settings($state);
 		if(!$data) return array();
 		$save_array = array();
 		$child = $this->pdh->get('portal', 'child', array($id));
@@ -94,11 +94,11 @@ class Manage_Portal extends page_generic {
 	public function ajax_load_settings(){
 		$id = $this->in->get('id', 0);
 		//get old settings
-		$old_settings = $this->get_settings($id);
+		$old_settings = $this->get_settings($id, false, 'fetch_old');
 		//save settings
 		$this->save_settings(false);
 		//get new settings
-		$new_settings = $this->get_settings($id);
+		$new_settings = $this->get_settings($id, false, 'fetch_new');
 		$out = array();
 		$out['new'] = array_diff_key($new_settings, $old_settings);
 		//get removed settings
@@ -123,7 +123,7 @@ class Manage_Portal extends page_generic {
 	public function save_settings($displayPage = true) {
 		if($id = $this->in->get('id')){
 			$this->pdh->put('portal', 'update', array($id, array('collapsable' => $this->in->get('collapsable', 0), 'visibility' => serialize($this->in->getArray('visibility', 'int')))));
-			$save_array = $this->get_settings($id, true);
+			$save_array = $this->get_settings($id, true, 'save');
 			if(count($save_array) > 0){
 				$this->config->set($save_array);
 			}
@@ -255,6 +255,7 @@ class Manage_Portal extends page_generic {
 			}
 			$data['child'] = $pdata['child'];
 			if($pdata['enabled']) {
+				if (strpos($data['tpl_posi'], "left") === 0) $data['tpl_posi'] = "left";
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', array(
 					'NAME'			=> $data['name'].$data['header'],
 					'CLASS'			=> $data['class'],
@@ -277,6 +278,7 @@ class Manage_Portal extends page_generic {
 		}
 		uasort($modules, 'my_sort');
 		foreach($modules as $id => $data) {
+			if (strpos($data['tpl_posi'], "left") === 0) $data['tpl_posi'] = "left";
 			$this->tpl->assign_block_vars($data['tpl_posi'].'_row', array(
 				'NAME'			=> $data['name'].$data['header'],
 				'CLASS'			=> $data['class'],
@@ -307,23 +309,27 @@ class Manage_Portal extends page_generic {
 
 	private function add_js() {
 		$this->tpl->add_js(
-'				$("#left1, #left2, #middle, #right, #bottom, #disabled").sortable({
+'				$("#left, #middle, #right, #bottom, #disabled").sortable({
 					connectWith: \'.connectedSortable\',
-					cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
+					cancel: ".ui-state-disabled",
 					cursor: \'pointer\',
 				 	start: function(event, ui){
 						var classI = $(ui.item).attr("class");
 						classI = classI.toString();
-
-						if (classI.indexOf("Pleft1") == -1){
-							$("#left1").addClass("red");
+						if (classI.indexOf("Pleft") == -1){
+							$("#left").addClass("red");
 						} else {
-							$("#left1").addClass("green");
+							$("#left").addClass("green");
+						};
+						if (classI.indexOf("Pleft1") == -1){
+							$("#left").addClass("red");
+						} else {
+							$("#left").addClass("green");
 						};
 						if (classI.indexOf("Pleft2") == -1){
-							$("#left2").addClass("red");
+							$("#left").addClass("red");
 						} else {
-							$("#left2").addClass("green");
+							$("#left").addClass("green");
 						};
 						if (classI.indexOf("Pmiddle") == -1){
 							$("#middle").addClass("red");
@@ -343,8 +349,8 @@ class Manage_Portal extends page_generic {
 						$("#disabled").addClass("green");
 					},
 					stop: function(event, ui){
-						$("#left1, #left2, #middle, #right, #bottom").removeClass("red");
-						$("#left1, #left2, #middle, #right, #bottom, #disabled").removeClass("green");
+						$("#left, #middle, #right, #bottom").removeClass("red");
+						$("#left, #middle, #right, #bottom, #disabled").removeClass("green");
 					},
 
 					receive: function(event, ui){
@@ -355,7 +361,8 @@ class Manage_Portal extends page_generic {
 
 						var id = $(ui.item).attr("id");
 						$("#block_"+id).val(pos);
-					}
+					},
+					placeholder: "ui-state-highlight"
 				}).disableSelection();', 'docready');
 	}
 }

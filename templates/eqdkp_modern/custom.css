@@ -1,0 +1,50 @@
+/* Game Background
+*	
+* If you want to have the game specific background image, please uncomment the following block
+*/
+/*
+body {
+	background:#000000 url('TEMPLATE_BACKGROUND') no-repeat center top;
+}
+*/
+
+/*============================================================================================*/
+
+/* Fixed personal area 
+*	
+* If you want the personal area to have a fixed position, please uncomment the following block
+*/
+
+
+#header {
+	margin-top: 60px;
+}
+
+#personalArea {
+	position:fixed;
+	padding-left: 0px;
+	padding-right: 0px;
+	width:100%;
+	z-index: 999;
+}
+#personalArea #personalAreaUser {
+	padding-left: 40px;
+}
+#personalArea #personalAreaTime {
+	padding-right: 40px;
+}
+
+
+/*============================================================================================*/
+
+/* Hide Portal Modules on Smartphones
+*
+* If you want to hide portal modules on Smartphone, get the CSS-Class for the module from the source text in your browser, uncomment the following block and add the CSS Class
+*/
+/*
+@media all and (max-width: 480px) {
+	.offi_conf_portal, .birthday_portal {
+		display: none;
+	}
+}
+*/

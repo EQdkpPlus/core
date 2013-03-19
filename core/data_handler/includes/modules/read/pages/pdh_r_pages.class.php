@@ -170,21 +170,11 @@ if(!class_exists( "pdh_r_pages")) {
 			return $startpages;
 		}
 
-		public function get_usermenu_pages(){
-			$pages = array();
-			foreach ($this->pagelist as $key=>$value){
-				if ($value['menu_link'] == 2 && $this->handle_permission($value['visibility'])){
-					$id = ($value['alias'] != "") ? $value['alias'] : $key;
-					$pages[] = array('link' => 'pages.php'.$this->SID.'&amp;page='.$id, 'text' => $value['title'], 'check' => '');
-				}
-			}
-			return $pages;
-		}
-
 		public function get_mainmenu_pages(){
 			$pages = array();
 			foreach ($this->pagelist as $key=>$value){
-				if ($value['menu_link'] == 1 && $this->handle_permission($value['visibility'])){
+				//TODO: Remove Legacy Code, 2 and 3 and 99 have beem removed
+				if (($value['menu_link'] == 1 || $value['menu_link'] == 2 || $value['menu_link'] == 3 || $value['menu_link'] == 99) && $this->handle_permission($value['visibility'])){
 					$id = ($value['alias'] != "") ? $value['alias'] : $key;
 					$pages[] = array('link' => 'pages.php'.$this->SID.'&amp;page='.$id, 'text' => $value['title'], 'check' => '');
 				}
@@ -192,33 +182,16 @@ if(!class_exists( "pdh_r_pages")) {
 			return $pages;
 		}
 
-		public function get_tab_pages(){
-			$pages = array();
-			foreach ($this->pagelist as $key=>$value){
-				if ($value['menu_link'] == 3 && $this->handle_permission($value['visibility'])){
-					$id = ($value['alias'] != "") ? $value['alias'] : $key;
-					$pages[] = array('link' => 'pages.php'.$this->SID.'&amp;page='.$id, 'text' => $value['title'], 'check' => '');
-				}
-			}
-			return $pages;
-		}
-
-		public function get_portalmodule_pages(){
-			$pages = array();
-			foreach ($this->pagelist as $key=>$value){
-				if ($value['menu_link'] == 99 && $this->handle_permission($value['visibility'])){
-					$id = ($value['alias'] != "") ? $value['alias'] : $key;
-					$pages[$id] = $value['title'];
-				}
-			}
-			return $pages;
-		}
-
-		public function get_guildrule_page(){
+		public function get_guildrule_page($link_format = false){
 			$pages = array();
 			foreach ($this->pagelist as $key=>$value){
 				if ($value['menu_link'] == 4){
-					$pages[] = $key;
+					if ($link_format){
+						$id = ($value['alias'] != "") ? $value['alias'] : $key;
+						$pages[] = array('link' => 'pages.php'.$this->SID.'&amp;page='.$id, 'text' => $value['title']);
+					} else {
+						$pages[] = $key;
+					}
 				}
 			}
 			return $pages;

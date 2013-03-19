@@ -128,24 +128,18 @@ class mmocms_settings extends page_generic {
 		$a_groups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 
 		// Startpage
-		$menus		= $this->core->gen_menus();
-		$pages		= array_merge($menus['menu1'], $menus['menu2']);
-
-		unset($menus);
+		$arrMenuItems = $this->core->build_menu_array(true, true);
+		
 		if(is_array($this->pdh->get('pages', 'startpage_list', array()))){
 			// Add Pages to startpage array
-			$pages = array_merge_recursive( $pages, $this->pdh->get('pages', 'startpage_list', array()));
+			$arrMenuItems = array_merge_recursive( $arrMenuItems, $this->pdh->get('pages', 'startpage_list', array()));
 		}
-		foreach($pages as $page){
-			$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $page['link']);
-			$link = preg_replace('#\.php&amp;#', '.php?', $link);
-			$link = preg_replace('#\.php&#', '.php?', $link);
-			$text = ( isset($this->user->data['username']) ) ? str_replace($this->user->data['username'], $this->user->lang('username'), $page['text']) : $page['text'];
-
-			if($link != 'login.php?logout=true'){
-				$startpage_array[$link] = $text;
+		
+		foreach($arrMenuItems as $page){
+			$link = $this->user->removeSIDfromString($page['link']);
+			if ($link != "" && $link != "#" && $link != "index.php"){
+				$startpage_array[$link] = $page['text'].' ('.$link.')';
 			}
-			unset($link, $text);
 		}
 
 		// Build language array
@@ -778,11 +772,6 @@ class mmocms_settings extends page_generic {
 						'selected'		=> $selected_portal_pos,
 						'serialized'	=> true,
 						'datatype'		=> 'string'
-					),
-					'pk_portal_website'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_portal_website',
-						'size'			=> 40
 					),
 					'eqdkpm_shownote'	=> array(
 						'fieldtype'		=> 'checkbox',

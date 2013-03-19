@@ -1,0 +1,81 @@
+<div class="page-viewnews">
+	<h1 class="contentTitle">{L_news}	
+	</h1>
+	
+	<div>
+	<!-- BEGIN date_row -->
+	<!-- BEGIN news_row -->
+		<div class="news">
+			<div class="news_header">
+				<div class="news_category_icon floatRight">
+					<!-- IF S_CATS_ENABLED -->
+					<a href="{date_row.news_row.CATEGORY_LINK}">
+					{date_row.news_row.ICON}
+					</a>
+					<!-- ENDIF -->
+				</div>
+				<div>
+					<div class="news_headline">
+						<h1>{date_row.news_row.HEADLINE}<!-- IF S_NEWSADM_UPD -->
+							<div class="floatRight">
+								<div class="toolbar-button">
+									<span class="{date_row.news_row.TOOLBAR_ID} toolbar"><i class="icon-cog"></i></span>
+								</div>
+							</div>
+						<!-- ENDIF --></h1>
+						
+						<div class="clear"></div>
+					</div>
+
+					<div>
+						<div class="news_author">
+							<div class="floatLeft">
+								{date_row.DATE} - {date_row.news_row.SUBMITTED} <!-- IF S_CATS_ENABLED --> &bull; <a href="{date_row.news_row.CATEGORY_LINK}">{date_row.news_row.CATEGORY_NAME}</a><!-- ENDIF -->
+							</div>
+							<div class="news_social floatRight">
+								{date_row.news_row.SOCIAL_BUTTONS}
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<div class="news_content">
+				{date_row.news_row.MESSAGE}
+			</div>			
+			<div class="clear"></div>
+			
+			<div class="news_comments floatRight">
+				<!-- IF date_row.news_row.SHOWCOMMENT -->
+				<a href="{EQDKP_ROOT_PATH}viewnews.php{SID}&amp;id={date_row.news_row.ID}#comments" class="button medium blue"><i class="icon-comments"></i> {date_row.news_row.COMMENTS_COUNTER}</a>
+				<!-- ENDIF -->
+				<a href="#top" class="top"><i class="icon-angle-up"></i></a>
+			</div>
+			<div class="clear"></div>
+			<!-- IF S_NEWSDETAILS and date_row.news_row.SHOWCOMMENT -->
+
+			<a name="comments" id="comments"></a>
+			{date_row.news_row.COMMENT}
+			<!-- ENDIF -->
+
+		</div>
+		<!-- END news_row -->
+		<!-- END date_row -->
+		
+		<!-- IF S_NO_NEWS -->
+		<div class="news">
+			{L_no_news}
+		</div>
+		<!-- ENDIF -->
+		
+	</div>
+	<!-- IF not S_NEWSDETAILS and not S_NO_NEWS -->
+	<div class="center pagination_wrapper">
+		{NEWS_PAGINATION}
+	</div>
+	<!-- ENDIF -->
+</div>
+

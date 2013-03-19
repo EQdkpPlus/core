@@ -97,7 +97,26 @@ class pages extends page_generic {
 			'9'		=> '9',
 			'10'	=> '10',
 		);
-
+		
+		$arrToolbarItems = array(
+					
+			array(
+				'icon'	=> 'icon-plus',
+				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_pages.php".$this->SID.'&page_id=0\';"',
+				'check' => 'a_news_add'
+			),
+			array(
+				'icon'	=> 'icon-edit',
+				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_pages.php".$this->SID.'&page_id='.$id.'\';"',
+				'check' => 'a_news_upd'
+			),
+			array(
+				'icon'	=> 'icon-list',
+				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_pages.php".$this->SID.'\';"',
+				'check' => 'a_news_'
+			),
+		);
+		$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
 		$users_voted = $this->pdh->get('pages', 'voters', array($id));
 		$u_has_voted = (!$users_voted[$this->user->data['user_id']]) ? false : true;
 		$this->tpl->assign_vars(array(
@@ -105,7 +124,8 @@ class pages extends page_generic {
 			'INFO_PAGE_CONTENT'		=> $this->bbcode->parse_shorttags(xhtml_entity_decode($content)),
 			'INFO_PAGE_TITLE'		=> sanitize($this->pdh->get('pages', 'title', array($id))),
 			'EDITED' 				=> ($this->pdh->get('pages', 'edit_date', array($id))) ? $this->user->lang('info_edit_user').$this->pdh->get('user', 'name', array($this->pdh->get('pages', 'edit_user', array($id)))).$this->user->lang('info_edit_date').$this->time->user_date($this->pdh->get('pages', 'edit_date', array($id)), false, false, true) : '',
-			'S_IS_ADMIN'			=>	$this->user->check_auth('a_pages_man', false),
+			'S_IS_PAGESADMIN'		=>	$this->user->check_auth('a_pages_man', false),
+			'PAGES_TOOLBAR'			=> $jqToolbar['id'],
 			'STAR_RATING'			=> ($this->pdh->get('pages', 'voting', array($id)) == '1') ? $this->jquery->StarRating('info_vote', $myRatings,'pages.php'.$this->SID.'&page='.sanitize($id).'&mode=vote',$this->pdh->get('pages', 'rating', array($id)), $u_has_voted) : '',
 		));
 
@@ -120,7 +140,8 @@ class pages extends page_generic {
 				'COMMENTS'			=> $this->comments->Show(),
 			));
 		};
-
+		
+		
 		$this->core->set_vars(array(
 			'page_title'		=> sanitize($this->pdh->get('pages', 'title', array($id))),
 			'template_file'		=> 'pages.html',

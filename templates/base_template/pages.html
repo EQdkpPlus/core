@@ -1,9 +1,16 @@
-<table width="100%" align="center" border="0" cellspacing="0" cellpadding="2">
-	<tr><th><span style="float:left;">{INFO_PAGE_TITLE}</span><span style="float:right"><!-- IF S_IS_ADMIN --> 
-		<a href="admin/manage_pages.php{SID}&amp;page_id={PAGE_ID}" title="{L_info_edit_page}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" border="0" alt="edit" /></a>
-	<!-- ENDIF --></span></th>
-	</tr>
-	<tr><td class="row1">{INFO_PAGE_CONTENT}</td></tr>
-	<tr><th><div style="float:left;">{STAR_RATING}</div><div style="float:right;">{EDITED}</div></th></tr>
-</table>
+<div class="contentHeader">
+	<h1 class="contentTitle">{INFO_PAGE_TITLE}<!-- IF S_IS_PAGESADMIN --> 
+		<div class="floatRight">
+			<div class="toolbar-button">
+				<span class="{PAGES_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+			</div>
+		</div>
+	<!-- ENDIF --></h1>
+	<div class="contentSubheader">{EDITED}</div>
+</div>
+
+{INFO_PAGE_CONTENT}
+
+<div class="contentDivider"></div>
+{STAR_RATING}
 {COMMENTS}

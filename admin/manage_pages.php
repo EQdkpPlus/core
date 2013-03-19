@@ -135,9 +135,6 @@ class Info_Pages extends page_generic {
 		//Menu-Link-Dropdown
 		$mlvals[0] = $this->user->lang('info_opt_ml_0');
 		$mlvals[1] = $this->user->lang('info_opt_ml_1');
-		$mlvals[2] = $this->user->lang('info_opt_ml_2');
-		$mlvals[3] = $this->user->lang('info_opt_ml_3');
-		$mlvals[99] = $this->user->lang('info_opt_ml_99');
 
 		if ($this->page_data['menu_link'] == 4 || count($this->pdh->get('pages', 'guildrule_page')) == 0){
 			$mlvals[4] = $this->user->lang('guildrules');

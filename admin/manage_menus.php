@@ -43,6 +43,58 @@ class Manage_Menus extends page_generic {
 	// Process Save
 	// ---------------------------------------------------------
 	public function save() {
+	
+		$json = $this->in->get('serialized');
+		$arrItems = $this->in->getArray('mainmenu', 'string');
+		
+		$decoded = json_decode($json, true);
+		$arrSorted = array();
+		if ($decoded){
+			$intFirstLevel = -1;
+			$intSecondLevel = -1;
+			foreach($decoded as $item){
+				if ((int)$item['item_id']){
+					$hash = $arrItems[$item['item_id']]['id'];
+					if ($arrItems[$item['item_id']]['type'] == 'pluslink'){
+						//New plus links
+						if ($hash == 'new'){
+							$data = $arrItems[$item['item_id']];
+							$pid = $this->pdh->put('links', 'add', array($data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize']));
+							if (!$pid) continue;
+							$link = $this->core->handle_link($data['url'],$data['name'], $data['window'], 'pluslink'.$pid);
+							$hash = $this->core->build_link_hash($link);
+						} else {
+							//Update existing plus link
+							$data = $arrItems[$item['item_id']];
+							$pid = $this->pdh->put('links', 'update', array($data['specialid'], $data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize']));
+							if (!$pid) continue;
+							$link = $this->core->handle_link($data['url'],$data['name'], $data['window'], 'pluslink'.$data['specialid']);
+							$hash = $this->core->build_link_hash($link);
+						}
+					}
+					
+					$hidden = $arrItems[$item['item_id']]['hidden'];
+					switch((int)$item['depth']){
+						case 1: 	$intFirstLevel++;									
+									$arrSorted[$intFirstLevel]['item'] = array('hash' => $hash, 'hidden' => $hidden);
+						break;
+						case 2:		$intSecondLevel++;
+									$arrSorted[$intFirstLevel]['_childs'][$intSecondLevel]['item'] = array('hash' => $hash, 'hidden' => $hidden);
+						break;
+						case 3:		$arrSorted[$intFirstLevel]['_childs'][$intSecondLevel]['_childs'][] = array('hash' => $hash, 'hidden' => $hidden);
+						break;
+					}
+					
+				}
+			}
+
+			$this->config->set('mainmenu', serialize($arrSorted));
+			$this->pdh->process_hook_queue();			
+		}
+		
+		/*
+	
+	
 		//Save Plus-Links
 		$arrNewLinks = $this->pdh->put('links', 'save_links', array($arrLinknames = $this->in->getArray('linkname', 'string'), $arrLinksurl = $this->in->getArray('linkurl', 'string'), $arrLinkwindows = $this->in->getArray('linkwindow', 'int'), $arrVis = $this->in->getArray('link_visibility', 'int'), $arrHeight = $this->in->getArray('link_height', 'int')));
 		$this->pdh->process_hook_queue();
@@ -89,15 +141,13 @@ class Manage_Menus extends page_generic {
 			}
 			$this->config->set('sort_menu'.$menuid, serialize($sort));
 		}
+		*/
 		
 		//Admin Favs
 		$favs = ($this->in->getArray('fav', 'string'));
 		$this->config->set('admin_favs', serialize($favs));
-
-		$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('pk_succ_saved'), 'color' => 'green');
-		$this->core->message( $this->user->lang('pk_succ_saved'), $this->user->lang('save_suc'), 'green');
-
-		redirect('admin/manage_menus.php'.$this->SID);
+		
+		//redirect('admin/manage_menus.php'.$this->SID.'&status=saved');
 	}
 
 	public function delete_plink() {
@@ -116,19 +166,15 @@ class Manage_Menus extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
+		
+		if ($this->in->get('status') == 'saved'){
+			$this->core->message( $this->user->lang('pk_succ_saved'), $this->user->lang('save_suc'), 'green');
+		}
 
 		// Menus
-		$gen_menus = $this->core->gen_menus();
-
-		$menus = array();
-
-		foreach ( $gen_menus as $number => $array ){
-			foreach ( $array as $menu ){
-				if (!isset($menu['editable'])){
-					$menus[$number][] = array($menu['link'], $menu['text']);
-				}
-			}
-		}
+		$arrOl = $this->build_menu_ol();
+		$strMenuOl = $arrOl[0];
+		$intMaxID = $arrOl[1];
 
 		// The JavaScript Magic...
 		$this->tpl->add_js('
@@ -139,74 +185,6 @@ class Manage_Menus extends page_generic {
 				});
 				return ui;
 			};
-		
-			$("#sortable1 tbody, #sortable2 tbody").sortable({
-				connectWith: \'.connectedSortable tbody\',
-				helper: fixHelper,
-				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
-				cursor: \'pointer\',
-				receive: function(event, ui){
-					sender = $(ui.sender).attr("id");
-					itemi = $(ui.item).attr("id");
-					cb = "cb_" + itemi;
-					if (sender == "show") {
-						$("#"+cb).prop("checked", true);
-					}else {
-						$("#"+cb).prop("checked", false);
-					}
-				}
-			});
-
-			$("#sortable3 tbody, #sortable4 tbody").sortable({
-				connectWith: \'.connectedSortable2 tbody\',
-				helper: fixHelper,
-				cursor: \'pointer\',
-				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
-				receive: function(event, ui){
-					sender = $(ui.sender).attr("id");
-					itemi = $(ui.item).attr("id");
-					cb = "cb2_" + itemi;
-					if (sender == "show2") {
-						$("#"+cb).prop("checked", true);
-					}else {
-						$("#"+cb).prop("checked", false);
-					}
-				}
-			});
-			
-			$("#sortable5 tbody, #sortable6 tbody").sortable({
-				connectWith: \'.connectedSortable3 tbody\',
-				helper: fixHelper,
-				cursor: \'pointer\',
-				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
-				receive: function(event, ui){
-					sender = $(ui.sender).attr("id");
-					itemi = $(ui.item).attr("id");
-					cb = "cb3_" + itemi;
-					if (sender == "show3") {
-						$("#"+cb).prop("checked", true);
-					}else {
-						$("#"+cb).prop("checked", false);
-					}
-				}
-			});
-
-			$("#sortable7 tbody, #sortable8 tbody").sortable({
-				connectWith: \'.connectedSortable4 tbody\',
-				helper: fixHelper,
-				cursor: \'pointer\',
-				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
-				receive: function(event, ui){
-					sender = $(ui.sender).attr("id");
-					item = $(ui.item).attr("id");
-					cb = "cb4_" + item;
-					if (sender == "show4") {
-						$("#"+cb).prop("checked", true);
-					}else {
-						$("#"+cb).prop("checked", false);
-					}
-				}
-			});
 
 			$("#sortable9, #sortable10 div div ul").sortable({
 				connectWith: \'.connectedSortable5\',
@@ -250,21 +228,6 @@ class Manage_Menus extends page_generic {
 				document.getElementById("cb_"+test).checked = false;
 			}
 		');
-		//add additional links to the normal menus
-		$links = $this->pdh->get('links', 'id_list');
-		foreach ($links as $link){
-			$link = $this->pdh->get('links', 'data', array($link));
-			switch ($link['window'])
-			{
-				case '2':
-				case '3':
-				case '4':  $url = 'wrapper.php?id='.$link['id']; 
-				break ;
-				default: $url = $link['url'];
-			}
-			
-			$menus['menu'.$link['menu']][] = array($url, $link['name'], 'plus_link_id'	=> $link['id'], 'id'=>"pluslink".$link['id']);
-		}
 		
 		$a_linkMode= array(
 			'0'				=> $this->user->lang('pk_set_link_type_self'),
@@ -279,63 +242,6 @@ class Manage_Menus extends page_generic {
 			'2'				=> $this->user->lang('info_opt_vis_2'),
 			'3'				=> $this->user->lang('info_opt_vis_3'),
 		);
-
-		foreach (array(1,2,3,4) as $menuid){
-				//Sorting-Data
-				$tmp_menu = array();
-				$sort_ary = array();
-				if ($this->config->get('sort_menu'.$menuid)){
-					$sort_ary = unserialize(stripslashes($this->config->get('sort_menu'.$menuid)));
-					if(isset($menus['menu'.$menuid]) && is_array($menus['menu'.$menuid])){
-
-						foreach ($menus['menu'.$menuid] as $key=>$menu){
-							//Remove Session
-							$link = $this->user->removeSIDfromString($menu[0]);
-							$linkhash = md5($link.((isset($menu['id'])) ? $menu['id'] : ''));
-							if (isset($sort_ary[$linkhash]['sort'])){
-								$tmp_menu[$key] = $sort_ary[$linkhash]['sort'];
-							} else {
-								$tmp_menu[$key] = 999999;
-							}
-						}
-						array_multisort($tmp_menu, SORT_ASC, SORT_NUMERIC, $menus['menu'.$menuid]);
-					}
-				}
-				$this->tpl->assign_vars(array(
-					'DD_LINK_WINDOW'.$menuid	=> $this->html->DropDown('linkwindow[new'.$menuid.']', $a_linkMode , '', '', '', 'input th_add'),
-					'DD_LINK_VIS'.$menuid		=> $this->html->DropDown('link_visibility[new'.$menuid.']', $a_linkVis , '', '', '', 'input th_add'),
-				));
-				
-				if(isset($menus['menu'.$menuid]) && is_array($menus['menu'.$menuid])){
-					foreach ($menus['menu'.$menuid] as $row){
-						$link = $this->user->removeSIDfromString($row[0]);
-						$linkhash = md5($link.((isset($row['id'])) ? $row['id'] : ''));
-						$block = (isset($sort_ary[$linkhash]['hide']) && $sort_ary[$linkhash]['hide'] == 1) ? 'menu'.$menuid.'hide_row' : 'menu'.$menuid.'_row';
-						$vars = array(
-							'NAME'				=> $row[1],
-							'LINK'				=> $link,
-							'LINK_HASH'			=> md5($link),
-							'ID'				=> 'm'.md5('menu'.$menuid.$linkhash),
-							'SORT'				=> (isset($sort_ary[$linkhash]['sort'])) ? $sort_ary[$linkhash]['sort'] : '',
-							'HIDE'				=> (isset($sort_ary[$linkhash]['hide']) && $sort_ary[$linkhash]['hide'] == 1) ? 'checked="checked"' : '',
-						);
-						if (isset($row['plus_link_id'])){
-							
-							$arrLink = $this->pdh->get('links', 'data', array((int)$row['plus_link_id']));
-							$vars['S_PLUSLINK'] = true;
-							$vars['PLUSLINK_ID'] = $arrLink['id'];
-							$vars['PLUSLINK_NAME'] = $arrLink['name'];
-							$vars['PLUSLINK_URL'] = $arrLink['url'];
-							$vars['PLUSLINK_HEIGHT'] = $arrLink['height'];
-							$vars['PLUSLINK_WINDOW'] = $this->html->DropDown('linkwindow['.$arrLink['id'].']', $a_linkMode , $arrLink['window'], '', '', 'input th_add', 'linkwindow'.$arrLink['id']);
-							$vars['PLUSLINK_VIS'] = $this->html->DropDown('link_visibility['.$arrLink['id'].']', $a_linkVis , $arrLink['visibility'], '', '', 'input th_add', 'link_visibility'.$arrLink['id']);
-						}
-						
-						$this->tpl->assign_block_vars($block, $vars);
-					}
-				}
-		
-		}
 	
 
 			$image_path = '../images/admin/';
@@ -451,21 +357,99 @@ class Manage_Menus extends page_generic {
 					}
 				}
 		}
-				$this->jquery->Tab_header('menu_tabs', true);
-				if ($this->in->exists('tab')){
-					$this->jquery->Tab_Select('menu_tabs', $this->in->get('tab',0));
-				}
-				$this->tpl->assign_vars(array(				
-					'LINK_CB_HELP'			=> $this->html->ToolTip($this->user->lang('pk_help_links'), '<img src="'.$this->root_path.'images/global/info.png" alt="" />'),
-					'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
-					'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,  
-				));
+		
+
+		$this->jquery->Tab_header('menu_tabs', true);
+		if ($this->in->exists('tab')){
+			$this->jquery->Tab_Select('menu_tabs', $this->in->get('tab',0));
+		}
+		$this->tpl->assign_vars(array(				
+			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
+			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
+			'DD_LINK_WINDOW'		=> $this->html->DropDown('editlink-window', $a_linkMode , '', '', '', 'editlink-window'),
+			'DD_LINK_VISIBILITY'	=> $this->html->DropDown('editlink-visibility', $a_linkVis , '', '', '', 'editlink-visibility'),
+			'MENU_OL'				=> $strMenuOl,
+			'NEW_ID'				=> ++$intMaxID,
+		));
 				
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_menus'),
 			'template_file'		=> 'admin/manage_menus.html',
 			'display'			=> true)
 		);
+	}
+	
+	private function build_menu_ol(){
+		$arrItems = $this->core->build_menu_array(true);
+			
+		$html  = '<ol class="sortable">';
+		$id = 0;
+		foreach($arrItems as $k => $v){
+			if ( !is_array($v) )continue;
+			$id++;
+			
+			if (!isset($v['childs'])){
+				$html .= '<li id="list_'.$id.'">'.$this->create_li($v, $id).'</li>';
+				
+			} else {
+				$html .= '<li id="list_'.$id.'">'.$this->create_li($v, $id).'<ol>';
+				
+				foreach($v['childs'] as $k2 => $v2){
+					$id++;
+					if (!isset($v2['childs'])){
+						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'</li>';
+					} else {
+						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'<ol>';
+						
+						foreach($v2['childs'] as $k3 => $v3){
+							$id++;
+							$html .= '<li id="list_'.$id.'">'.$this->create_li($v3, $id).'</li>';
+							
+						}
+						
+						$html .= '</ol></li>';
+					}
+					
+				}
+				
+				$html .= '</ol></li>';
+			}
+		}
+
+		$html .= '</ol>';
+		return array($html, $id);
+	}
+	
+	private function create_li($arrLink, $id){
+		$hash = $arrLink['_hash'];
+		$blnPluslink = (strpos($arrLink['id'], "pluslink") === 0);
+
+		$html = '
+			<div data-linkid="'.$id.'">
+			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>
+			<span class="link-hide '.(((int)$arrLink['hidden']) ? 'eye-gray' : 'eye').'"></span>';
+			if ($blnPluslink){
+				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
+				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));
+				$html .= '<i class="icon-cog"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
+					<img src="'.$this->root_path.'images/global/delete.png" onclick="window.location.href=\'manage_menus.php'.$this->SID.'&amp;mode=del_plink&amp;id='.$plinkid.'&amp;link_hash='.$this->CSRFGetToken('mode').'\'" alt="" title="'.$this->user->lang("delete").'" style="cursor:pointer;"/>
+					<input type="hidden" value="'.$arrPluslinkData['url'].'"  name="mainmenu['.$id.'][url]" class="link-url">
+					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">
+					<input type="hidden" value="'.$arrPluslinkData['window'].'"  name="mainmenu['.$id.'][window]" class="link-window">
+					<input type="hidden" value="'.$arrPluslinkData['height'].'"  name="mainmenu['.$id.'][windowsize]" class="link-windowsize">
+					<input type="hidden" value="'.$arrPluslinkData['visibility'].'"  name="mainmenu['.$id.'][visibility]" class="link-visibility">
+					<input type="hidden" value="'.$plinkid.'"  name="mainmenu['.$id.'][specialid]" class="link-specialid">
+				';
+			} else {
+				$html .= ''.$arrLink['text'].' ('.$arrLink['link'].')';
+			}	
+			$html .= '
+			<input type="hidden" value="'.((strpos($arrLink['id'], "pluslink") === 0) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			
+			<input type="hidden" value="'.(((int)$arrLink['hidden']) ? 1 : 0).'"  name="mainmenu['.$id.'][hidden]" class="link-hidden">
+			<input type="hidden" value="'.$hash.'"  name="mainmenu['.$id.'][id]" class="link-id">
+			</div>
+		';
+		return $html;
 	}
 }
 registry::register('Manage_Menus');

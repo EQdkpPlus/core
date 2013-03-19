@@ -22,9 +22,9 @@ if ( !defined('EQDKP_INC') ){
 class portal extends gen_class {
 	public static $shortcuts = array('jquery', 'db', 'in', 'tpl', 'user', 'config', 'game', 'pdh', 'pm', 'env', 'acl', 'pgh');
 
-	public $positions	= array('left1', 'left2', 'right', 'middle', 'bottom');
+	public $positions	= array('left', 'right', 'middle', 'bottom');
 	
-	private $output		= array('left1' => '', 'left2' => '', 'right' => '', 'middle' => '', 'bottom' => '');
+	private $output		= array('left' => '', 'right' => '', 'middle' => '', 'bottom' => '');
 	private $lang_inits	= array();
 	private $objs		= array();
 	private $enabled_modules = array();
@@ -44,14 +44,15 @@ class portal extends gen_class {
 	}
 	
 	public function module_output() {
-		$this->output = array('left1' => '', 'left2' => '', 'right' => '', 'middle' => '', 'bottom' => '');
+		$this->output = array('left' => '', 'right' => '', 'middle' => '', 'bottom' => '');
 		$selected_portal_pos = (unserialize(stripslashes($this->config->get('pk_permanent_portal')))) ? unserialize(stripslashes($this->config->get('pk_permanent_portal'))) : array();
 		$scriptname = explode('?', $this->config->get('start_page'));
 		$is_start_page = (basename($_SERVER['PHP_SELF']) == basename($scriptname[0])) ? true : false;
 		if(is_array($this->enabled_modules)){
 			foreach($this->enabled_modules as $module_id => $data) {
-				if($data['position'] == 'left1' || $data['position'] == 'left2' || $is_start_page || (in_array($data['position'], $selected_portal_pos) && !defined('IN_ADMIN'))) {
+				if($data['position'] == 'left' || $data['position'] == 'left1' || $data['position'] == 'left2' || $is_start_page || (in_array($data['position'], $selected_portal_pos) && !defined('IN_ADMIN'))) {
 					$this->load_lang($data['path'], $data['plugin']);
+					if (strpos($data['position'], "left") === 0) $data['position'] = "left";
 					$this->output[$data['position']] .= $this->get_module_content($data['path'], $data['plugin'], $module_id, $data['position']);
 				}
 			}
@@ -73,7 +74,7 @@ class portal extends gen_class {
 	
 	// To avoid reloading after saving on manage_portal
 	public function reset() {
-		$this->output = array('left1' => '', 'left2' => '', 'right' => '', 'middle' => '', 'bottom' => '');
+		$this->output = array('left' => '', 'right' => '', 'middle' => '', 'bottom' => '');
 		$this->assign_to_tpl();
 		$this->module_output();
 	}
@@ -153,7 +154,7 @@ class portal extends gen_class {
 	public function install($path, $plugin='', $child = false) {
 		$obj = $this->get_module($path, $plugin);
 		if(!$obj) return false;
-		$settings = ($obj->get_settings()) ? true : false;
+		$settings = ($obj->get_settings('fetch_new')) ? true : false;
 		$this->pdh->put('portal', 'install', array($path, $plugin, $obj->get_data('name'), $settings, $obj->install(), $child));
 	}
 	
@@ -206,7 +207,7 @@ class portal extends gen_class {
 		if(version_compare($this->objs[$path]->get_data('version'), $this->pdh->get('portal', 'version', array($id))) <= 0) return true;
 		//update settings, contact, autor, version
 		$this->pdh->put('portal', 'update', array($id, array(
-			'settings' 	=> ($this->objs[$path]->get_settings()) ? 1 : 0,
+			'settings' 	=> ($this->objs[$path]->get_settings('fetch_new')) ? 1 : 0,
 			'contact'	=> $this->objs[$path]->get_data('contact'),
 			'autor'		=> $this->objs[$path]->get_data('author'),
 			'version'	=> $this->objs[$path]->get_data('version'))
@@ -285,11 +286,11 @@ abstract class portal_generic extends gen_class {
 			'contact'		=> '',
 			'description'	=> ''
 		);
-	protected $positions= array('left1', 'left2', 'right');
+	protected $positions= array('left', 'middle', 'bottom', 'right');
 	protected $settings	= array();
 	protected $install	= array(
 			'autoenable'		=> '0',
-			'defaultposition'	=> 'left1',
+			'defaultposition'	=> 'left',
 			'defaultnumber'		=> '0',
 			'visibility'		=> array(0),
 			'collapsable'		=> '1'
@@ -326,7 +327,7 @@ abstract class portal_generic extends gen_class {
 		return $this->positions;
 	}
 
-	public function get_settings() {
+	public function get_settings($state) {
 		return (empty($this->settings)) ? false : $this->settings;
 	}
 	
@@ -349,7 +350,7 @@ abstract class portal_generic extends gen_class {
 			}
 		}
 		//set default settings
-		if($settings = $this->get_settings()) {
+		if($settings = $this->get_settings('fetch_new')) {
 			foreach($settings as $sett) {
 				if(!empty($sett['default'])) $this->config->set($sett['name'], $sett['default']);
 			}
@@ -384,6 +385,12 @@ abstract class portal_generic extends gen_class {
 		$child = registry::register('plus_datahandler')->get('portal', 'child', array($this->id));
 		if (!$child) return registry::register('config')->set($key, $value);
 		return registry::register('config')->set($key.'_'.$this->id, $value);
+	}
+	
+	public function del_config($key){
+		$child = registry::register('plus_datahandler')->get('portal', 'child', array($this->id));
+		if (!$child) return registry::register('config')->del($key);
+		return registry::register('config')->del($key.'_'.$this->id);
 	}
 	
 	public function set_id($id){

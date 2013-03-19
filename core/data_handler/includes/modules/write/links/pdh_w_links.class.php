@@ -30,50 +30,37 @@ if(!class_exists('pdh_w_links')) {
 		public function __construct() {
 			parent::__construct();
 		}
-
-		public function save_links($p_linkname, $p_linkurl, $p_linkwindow, $p_link_visibility, $p_link_height){
-			$arrReturn = array();
-			foreach ( $p_linkname as $link_id => $link_name ){
-
-				//Insert a new link
-				if (strpos($link_id, 'new') === 0){
-					if (strlen($p_linkurl[$link_id]) && strlen($link_name)){
-						//get menu
-						$menuid = substr($link_id,-1);
-						$this->db->query("INSERT INTO __links :params", array(
-							'link_name'			=> $link_name,
-							'link_url'			=> $p_linkurl[$link_id],
-							'link_window'		=> ( isset($p_linkwindow[$link_id]) ) ? $p_linkwindow[$link_id] : 0,
-							'link_menu'			=> $menuid,
-							'link_visibility'	=> ( isset($p_link_visibility[$link_id]) ) ? $p_link_visibility[$link_id] : 0,
-							'link_height'		=> ( isset($p_link_height[$link_id]) && strlen($p_link_height[$link_id])) ? $p_link_height[$link_id] : 4024,
-						));
-						$arrReturn[$link_id] = $this->db->insert_id();
-					}				
-				} elseif (strlen($p_linkurl[$link_id]) && strlen($link_name)) {
-					//Update an existing link
-					$link_name			= ( isset($p_linkname[$link_id]) ) ? $p_linkname[$link_id] : '';
-					$link_url			= ( isset($p_linkurl[$link_id]) ) ? $p_linkurl[$link_id] : '';
-					$link_window		= ( isset($p_linkwindow[$link_id]) ) ? $p_linkwindow[$link_id] : 0;
-					$link_visibility	= ( isset($p_link_visibility[$link_id]) ) ? $p_link_visibility[$link_id] : 0;
-					$link_height		= ( isset($p_link_height[$link_id]) ) ? $p_link_height[$link_id] : 4024;
-					
-					$arrLink = $this->pdh->get('links', 'data', array($link_id));
-					if ($arrLink['name'] != $link_name OR $arrLink['url'] != $link_url OR (int)$arrLink['window'] != (int)$link_window OR (int)$arrLink['visibility'] != (int)$link_visibility OR (int)$arrLink['height'] != (int)$link_height){
-						$this->db->query("UPDATE __links SET :params WHERE link_id=?", array(
-							'link_name'			=> $link_name,
-							'link_url'			=> $link_url,
-							'link_window'		=> $link_window,
-							'link_visibility'	=> $link_visibility,
-							'link_height'		=> $link_height,
-						), $link_id);
-					}
-				} else {
-					$this->delete_link($link_id);
-				}	
+		
+		public function add($name, $url, $window=0, $visibility=0, $height=4024){
+			if (strlen($name)){
+				$this->db->query("INSERT INTO __links :params", array(
+					'link_name'			=> $name,
+					'link_url'			=> $url,
+					'link_window'		=> $window,
+					'link_visibility'	=> $visibility,
+					'link_height'		=> $height,
+				));
+				$this->pdh->enqueue_hook('links');
+				return $this->db->insert_id();
 			}
-			$this->pdh->enqueue_hook('links');
-			return $arrReturn;
+			return false;
+		}
+		
+		public function update($id, $name, $url, $window, $visibility, $height, $force = false){
+			$data = $this->pdh->get('links', 'data', array($id));
+		
+			if ($force OR $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR (int)$data['visibility'] != (int)$visibility OR (int)$data['height'] != (int)$height){
+				$blnResult = $this->db->query("UPDATE __links SET :params WHERE link_id=?", array(
+					'link_name'			=> $name,
+					'link_url'			=> $url,
+					'link_window'		=> $window,
+					'link_visibility'	=> $visibility,
+					'link_height'		=> $height,
+				), $id);
+				$this->pdh->enqueue_hook('links');
+				if (!$blnResult) return false;
+			}
+			return true;
 		}
 
 		public function delete_link($id){
