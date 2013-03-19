@@ -919,7 +919,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 fieldset.settings legend {
 	border-bottom: 1px solid #CCCCCC;
     font-family: 'Trebuchet MS',​Arial,​sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 	padding-top: 5px;
     margin-bottom: 10px;
@@ -2239,8 +2239,21 @@ a.tool-item {
     white-space: nowrap;
 }
 
+blockquote {
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
+	margin-left: 0.1em;
+	padding: 0;
+	color: #CFCFCF;
+	padding-left: 0.6em;
+	border-left: solid 4px #336796;
+	background-image: none;
+}
+.selected {
+	display: block;
+}
 
-
+/*
 @media all and (max-width: 480px) {
 	body{
 		font-size: 14px;
@@ -2310,3 +2323,4 @@ a.tool-item {
 	}
 	
 }
+*/
