@@ -37,7 +37,7 @@
 								<!-- BEGIN status -->
 								<div class="ui-state-hover charchange_menucontainer" id="item_{raidstatus.classes.status.MEMBERID}" style="padding: 5px; margin-top: 4px;">
 									<!-- IF IS_OPERATOR --><input id="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
-									<span class="membertooltip" title="{raidstatus.classes.status.TOOLTIP}">
+									<span class="membertooltip" data-membertt="{raidstatus.classes.status.TOOLTIP}">
 										<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}"<!-- ENDIF --> href="../viewcharacter.php{SID}&amp;member_id={raidstatus.classes.status.MEMBERID}" target="_blank">{raidstatus.classes.status.NAME}</a>
 										<!-- IF SHOW_RANDOMVALUE -->
 										<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
