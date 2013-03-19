@@ -312,8 +312,6 @@ class login extends page_generic {
 			'S_BRIDGE_INFO'			=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
 			'S_USER_ACTIVATION'		=> ($this->config->get('account_activation') == 1) ? true : false,
 			'REDIRECT'				=> ( isset($redirect) ) ? '<input type="hidden" name="redirect" value="'.base64_decode($redirect).'" />' : '',
-			'S_SHOW_PWRESET_LINK'	=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
-			'U_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->core->createLink($arrPWresetLink) : '<a href="'.$this->root_path."login.php".$this->SID."&amp;mode=lostpassword\">".$this->user->lang('lost_password').'</a>',
 		));
 
 		$this->core->set_vars(array(

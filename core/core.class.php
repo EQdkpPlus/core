@@ -312,6 +312,8 @@ class core extends gen_class {
 					$registerLink = $this->createLink(array('link' => 'register.php' . $this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
 				}
 			}
+			
+			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
 
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
@@ -351,6 +353,8 @@ class core extends gen_class {
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul(),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->current_page),
+				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
+				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->root_path."login.php".$this->SID."&amp;mode=lostpassword\">".$this->user->lang('lost_password').'</a>',	
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){

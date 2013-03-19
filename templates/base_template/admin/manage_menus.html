@@ -124,6 +124,16 @@
 		}
 	}
 	
+	function delete_plink(pid, obj){
+		var container = $(obj).closest('div');
+		var siblings = container.siblings('ol');
+		if (siblings.length){
+			alert("Du kannst diesen Link nicht löschen, solange er weitere Links enthält.");
+		} else {
+			window.location.href='manage_menus.php{SID}&mode=del_plink&id='+pid+'&link_hash={CSRF_MODE_TOKEN}';
+		}
+	}
+	
 	function serialize_menuitems(){
 		arraied = $('ol.sortable').nestedSortable('toArray');
 		$('#menuitems-serialized').val(JSON.stringify(arraied));

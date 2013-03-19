@@ -134,7 +134,7 @@
 				</div>
 				<div id="personalAreaTime" class="hiddenSmartphone">
 					<ul>
-						<li class="personalAreaTime"><i class="icon-time"></i> {USER_TIME}</li>
+						<li class="personalAreaTime"><i class="icon-time"></i>{USER_TIME}</li>
 						<li><!-- IF S_SEARCH -->
 						<form method="post" action="{EQDKP_ROOT_PATH}search.php{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>

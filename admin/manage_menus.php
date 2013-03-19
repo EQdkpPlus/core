@@ -91,63 +91,12 @@ class Manage_Menus extends page_generic {
 			$this->config->set('mainmenu', serialize($arrSorted));
 			$this->pdh->process_hook_queue();			
 		}
-		
-		/*
-	
-	
-		//Save Plus-Links
-		$arrNewLinks = $this->pdh->put('links', 'save_links', array($arrLinknames = $this->in->getArray('linkname', 'string'), $arrLinksurl = $this->in->getArray('linkurl', 'string'), $arrLinkwindows = $this->in->getArray('linkwindow', 'int'), $arrVis = $this->in->getArray('link_visibility', 'int'), $arrHeight = $this->in->getArray('link_height', 'int')));
-		$this->pdh->process_hook_queue();
-
-		//Menus
-		foreach(array(1,2,3,4) as $menuid){
-			$sort_ary = $this->in->getArray('sort'.$menuid, 'string');
-			$hide_ary = $this->in->getArray('hide'.$menuid, 'int');
-			$i = 0;
-			$sort = array();
-			foreach ($sort_ary as $key=>$value){
-				if ($value === 'new'){
-					if (isset($arrNewLinks['new'.$menuid])){
-						$linkdata = $this->pdh->get('links', 'data', array($arrNewLinks['new'.$menuid]));
-						switch ($linkdata['window'])
-						{
-							case '2':
-							case '3':
-							case '4':  $url = 'wrapper.php?id='.$linkdata['id']; 
-							break ;
-							default: $url = $linkdata['url'];
-						}
-						$url = $this->user->removeSIDfromString($url).'pluslink'.$linkdata['id'];
-					}
-				} elseif (strpos($value, 'pluslink_') === 0){
-					$linkid = (int)substr($value, 9);
-					$linkdata = $this->pdh->get('links', 'data', array($linkid));
-					switch ($linkdata['window'])
-					{
-						case '2':
-						case '3':
-						case '4':  $url = 'wrapper.php?id='.$linkdata['id']; 
-						break ;
-						default: $url = $linkdata['url'];
-					}
-					$url = $this->user->removeSIDfromString($url).'pluslink'.$linkdata['id'];
-
-				} else {
-					$url = $value;
-				}
-				$hidekey = (strpos($value, 'pluslink_') === 0) ? $value : md5($value);
-				$sort[md5($url)] = array('sort'=> $i, 'hide' => $hide_ary[$hidekey]);
-				$i++;
-			}
-			$this->config->set('sort_menu'.$menuid, serialize($sort));
-		}
-		*/
-		
+				
 		//Admin Favs
 		$favs = ($this->in->getArray('fav', 'string'));
 		$this->config->set('admin_favs', serialize($favs));
 		
-		//redirect('admin/manage_menus.php'.$this->SID.'&status=saved');
+		redirect('admin/manage_menus.php'.$this->SID.'&status=saved');
 	}
 
 	public function delete_plink() {
@@ -432,7 +381,7 @@ class Manage_Menus extends page_generic {
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
 				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));
 				$html .= '<i class="icon-cog"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
-					<img src="'.$this->root_path.'images/global/delete.png" onclick="window.location.href=\'manage_menus.php'.$this->SID.'&amp;mode=del_plink&amp;id='.$plinkid.'&amp;link_hash='.$this->CSRFGetToken('mode').'\'" alt="" title="'.$this->user->lang("delete").'" style="cursor:pointer;"/>
+					<img src="'.$this->root_path.'images/global/delete.png" onclick="delete_plink('.$plinkid.', this)" alt="" title="'.$this->user->lang("delete").'" style="cursor:pointer;"/>
 					<input type="hidden" value="'.$arrPluslinkData['url'].'"  name="mainmenu['.$id.'][url]" class="link-url">
 					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">
 					<input type="hidden" value="'.$arrPluslinkData['window'].'"  name="mainmenu['.$id.'][window]" class="link-window">

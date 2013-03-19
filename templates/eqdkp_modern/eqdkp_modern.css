@@ -125,7 +125,7 @@ h3 {
 
 	min-height: 39px;
 	color: #d9d7d7;
-	font: 14px 'Trebuchet MS',​Arial,​sans-serif;
+	font: 13px 'Trebuchet MS',​Arial,​sans-serif;
 	padding-left: 40px;
 	padding-right: 40px;
 	-moz-box-shadow: 10px 10px 5px #888;
@@ -466,7 +466,7 @@ h3 {
 }
 
 .mainmenu {
-	font-size: 15px;
+	font-size: 14px;
 }
 
 ul.mainmenu li a.link_indexphp:before {
@@ -2230,7 +2230,7 @@ a.tool-item {
 }
 
 #notification-tooltip-all {
-	padding: 3px;
+	padding: 6px;
 }
 
 #notification-tooltip-all h2 {
