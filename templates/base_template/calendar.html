@@ -63,7 +63,7 @@
 				}
 				// onclick Event Tooltip
 				if(event.className == 'cal_birthday'){
-					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<img src='images/global/birthday.png' height='12px' width='12px' alt='' class='absmiddle' /> "));
+					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<img src='../images/global/birthday.png' height='12px' width='12px' alt='' class='absmiddle' /> "));
 				}else if(!event.url){
 					if(event.allDay){
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}')+"</div>";
@@ -123,7 +123,7 @@
 				// Save after event-drop is finished, use ajax() cause of error callback
 				$.ajax({
 					type: "POST",
-					url: 'calendar.php{SID}&link_hash={CSRF_RESIZE_TOKEN}',
+					url: 'index.php{SID}&link_hash={CSRF_RESIZE_TOKEN}',
 					data: { "resize": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "eventid": event.eventid },
 					error: function(){
 						revertFunc();
@@ -137,7 +137,7 @@
 				// Save after event-drop is finished, use ajax() cause of error callback
 				$.ajax({
 					type: "POST",
-					url: 'calendar.php{SID}&link_hash={CSRF_MOVE_TOKEN}',
+					url: 'index.php{SID}&link_hash={CSRF_MOVE_TOKEN}',
 					data: { "move": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "allday": allDay, "eventid": event.eventid },
 					error: function(){
 						revertFunc();
@@ -152,7 +152,7 @@
 				else $('#calendar_loading').hide();
 			},<!-- IF IS_OPERATOR -->
 			eventMouseover: function(event, jsEvent, view) {
-				var layer =	"<div id='events-layer'><img class='hand' height='16' width='16' src='images/global/edit.png' alt='edit' onClick='editEvent("+event.eventid+");'>  <img class='hand' height='16' width='16' src='images/global/delete.png' alt='delete' onClick='deleteEvent("+event.eventid+");'></div>";
+				var layer =	"<div id='events-layer'><img class='hand' height='16' width='16' src='../images/global/edit.png' alt='edit' onClick='editEvent("+event.eventid+");'>  <img class='hand' height='16' width='16' src='../images/global/delete.png' alt='delete' onClick='deleteEvent("+event.eventid+");'></div>";
 				if(event.operator){
 					$(this).append(layer);
 				}
@@ -160,7 +160,7 @@
 			eventMouseout: function(calEvent, domEvent) {
 				$("#events-layer").remove();
 			},<!-- ENDIF -->
-			events: "calendar.php{SID}&json=true"
+			events: "index.php{SID}&json=true"
 		});
 
 		// add a new button to the calendar for the export
@@ -168,9 +168,9 @@
 
 		$("#export_calendar,#export_callist").qtip({
 			content: {
-				text: '<img class="throbber" src="images/global/loading.gif" alt="Loading..." />',
+				text: '<img class="throbber" src="../images/global/loading.gif" alt="Loading..." />',
 				ajax: {
-					url: 'calendar.php{SID}&export_tooltip=true'
+					url: 'index.php{SID}&export_tooltip=true'
 				},
 				title: {
 					text: "{L_calendar_export_head}",
@@ -240,7 +240,7 @@
 	}
 
 	function deleteEvent(deleteid){
-		$.get("calendar.php{SID}&checkrepeatable="+deleteid, function(data){
+		$.get("index.php{SID}&checkrepeatable="+deleteid, function(data){
 			if($.trim(data) == 'true'){
 				var delclones_checked = '';
 				$("#confirm_caleventdelete_all").dialog({
@@ -253,7 +253,7 @@
 							if($('#delete_all_clones').prop('checked')){
 								delclones_checked = '&delete_clones=true';
 							}
-							$.post('calendar.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid+delclones_checked);
+							$.post('index.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid+delclones_checked);
 							$( this ).dialog( "close" );
 							$('#calendar').fullCalendar('refetchEvents');
 						},
@@ -269,7 +269,7 @@
 					modal: true,
 					buttons: {
 						"{L_delete}": function() {
-							$.post('calendar.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid);
+							$.post('index.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid);
 							$( this ).dialog( "close" );
 							$('#calendar').fullCalendar('refetchEvents');
 						},
@@ -315,7 +315,7 @@
 			<tr>
 				<th>
 					<div class="calendar_export">
-						<span id="export_callist"><img src="images/calendar/vcalendar_s.png" alt="iCal"/> {L_raideventlist_export_ical}</span>
+						<span id="export_callist"><img src="../images/calendar/vcalendar_s.png" alt="iCal"/> {L_raideventlist_export_ical}</span>
 					</div>
 				</th>
 			</tr>

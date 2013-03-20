@@ -435,7 +435,7 @@ function resolve_eqdkp_page($strPage){
 
 			/***************** Root Folder *****************/
 			case 'calendar':
-				$page = '<a href="'.registry::get_const('root_path').'calendar.php'.registry::get_const('SID').'">'.registry::fetch('user')->lang('calendars').'</a>';
+				$page = '<a href="'.registry::get_const('root_path').'calendar/index.php'.registry::get_const('SID').'">'.registry::fetch('user')->lang('calendars').'</a>';
 			break;
 
 			case 'search':

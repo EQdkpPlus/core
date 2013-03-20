@@ -17,7 +17,7 @@
  */
 
 define('EQDKP_INC', true);
-$eqdkp_root_path = './';
+$eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 
@@ -285,7 +285,7 @@ class viewcalendar extends page_generic {
 							'editable'		=> true,
 							'eventid'		=> $calid,
 							'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
-							'url'			=> 'calendar/viewcalraid.php'.$this->SID.'&eventid='.$calid,
+							'url'			=> 'viewcalraid.php'.$this->SID.'&eventid='.$calid,
 							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true, true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
@@ -365,7 +365,7 @@ class viewcalendar extends page_generic {
 		// Raid List
 		$presel_charid = $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']));
 		$drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
-		$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, 'calendar/viewcalraid.php'.$this->SID.'&ajax=role');
+		$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, 'viewcalraid.php'.$this->SID.'&ajax=role');
 		$raidcal_status = unserialize($this->config->get('calendar_raid_status'));
 		$raidstatus = array();
 		if(is_array($raidcal_status)){
