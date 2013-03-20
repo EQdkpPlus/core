@@ -243,14 +243,13 @@
 	</fieldset>
 </div>
 
-<div id="templates">
-		
-	<div class="errorbox roundbox">
-		<div class="icon_false">{L_TEMPLATE_WARNING}</div>
-	</div>
-	
+<div id="templates">			
 	<fieldset class="settings smallsettings">
 		<legend>{L_edit_templates}</legend>
+		<div class="errorbox roundbox">
+			<div class="icon_false">{L_TEMPLATE_WARNING}</div>
+		</div>
+		<br />
 		<dl>
 			<dt><label>{L_select_template}:</label></dt>
 			<dd>{DD_EDIT_TEMPLTES}</dd>
@@ -258,20 +257,17 @@
 
 		<input type="hidden" name="template" />{TEMPLATE_CONTENT}
 	</fieldset>
-	<input name="template_edit_button" type="submit" class="mainoption bi_ok" id="template_edit_button" value="{L_save}" /> <input name="template_reset_button" type="submit" class="mainoption bi_delete" id="template_reset_button" value="{L_reset}" />
-
+	<button name="template_edit_button" type="submit" class="mainoption" id="template_edit_button"><i class="icon-ok"></i>{L_save}</button>
+	<button name="template_reset_button" type="submit" class="mainoption" id="template_reset_buttonn"><i class="icon-trash"></i>{L_reset}</button>
 </div>
 
 </div>
-<table width="100%" border="0" cellpadding="2" cellspacing="1">
-  <tr>
-    <th align="center" colspan="2"> 
-      <input type="submit" name="update" value="{L_update_style}" class="mainoption bi_ok" />
-      <input type="submit" name="" value="{L_cancel}" class="liteoption bi_back" />
-      <input type="button"  name="del" value="{L_delete_style}" class="liteoption bi_delete" onclick="delete_warning();" />
-    </th>
-  </tr>
-</table>
+
+<div class="contentFooter">
+	<button type="submit" name="update" class="mainoption"><i class="icon-ok"></i>{L_update_style}</button>
+	<button type="submit" name="" class="liteoption"><i class="icon-chevron-left"></i>{L_cancel}</button>
+	<button type="button" name="del" class="liteoption" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_style}</button>
+</div>
 {CSRF_TOKEN}
 </form>
 <!-- ENDIF -->

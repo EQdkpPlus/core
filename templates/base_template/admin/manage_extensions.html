@@ -130,6 +130,10 @@ function hide_update_warning(status){
 	</ul>
 
 	<div id="fragment-1">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_CATEGORY_1}</h1>
+		</div>
+	
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		<tr>
 			<th align="left" width="16">&nbsp;</th>
@@ -222,6 +226,9 @@ function hide_update_warning(status){
 	</div>
 
 	<div id="fragment-2">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_CATEGORY_2}</h1>
+		</div>
 		<script type="text/javascript" language="javascript">
 
 		var override = 0;
@@ -387,15 +394,19 @@ function hide_update_warning(status){
 			<td class="nowrap"></td>
 			</tr>
 		   <!-- END styles_row_grey_repo -->
-		  <tr>
-			<th colspan="14" align="center"><input name="standard" type="button" id="standard" value="{L_make_default_style}" class="mainoption bi_ok" onclick="style_default_info();" /> <input name="cache_reset" type="button" value="{L_delete_template_cache}" class="liteoption bi_delete" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'" /></th>
-		  </tr>
 		</table>
+		<div class="contentFooter">
+			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="icon-ok"></i>{L_make_default_style}</button>
+			<button name="cache_reset" type="button" class="liteoption" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'"><i class="icon-trash"></i>{L_delete_template_cache}</button>
+		</div>
 		{CSRF_TOKEN}
 		</form>
 	</div>
 
 	<div id="fragment-3">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_CATEGORY_3}</h1>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
 			<th align="left" width="16">&nbsp;</th>
@@ -454,6 +465,9 @@ function hide_update_warning(status){
 	</div>
 
 	<div id="fragment-7">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_CATEGORY_7}</h1>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
 			<th align="left" width="16">&nbsp;</th>
@@ -512,7 +526,10 @@ function hide_update_warning(status){
 	</div>
 
 	
-		<div id="fragment-11">
+	<div id="fragment-11">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_CATEGORY_11}</h1>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
 			<th align="left" width="16">&nbsp;</th>

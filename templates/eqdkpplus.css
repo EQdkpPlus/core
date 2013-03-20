@@ -253,6 +253,7 @@ div.icon_repeating {
 }
 
 /* Buttons with images */
+/*
 .e_mail{
 	background:url(../images/glyphs/email.png) no-repeat;
 	padding-left:20px;
@@ -325,15 +326,7 @@ div.icon_repeating {
 	background:url(../images/glyphs/view.png) no-repeat 2px center;
 	text-indent:20px;
 }
-
-.bi_openid{
-	background:url(../images/glyphs/openid.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_facebook{
-	background:url(../images/glyphs/facebook.png) no-repeat 2px center;
-	text-indent:20px;
-}
+*/
 
 /* Everything button image below this line has been ported to 1.1 */
 .bi_openid{

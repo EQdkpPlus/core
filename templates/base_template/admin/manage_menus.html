@@ -176,6 +176,10 @@
 		<li><a href="#admin">{L_favorits_admin_menu}</a></li>
 	</ul>
 <div id="menu">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_info_opt_ml_1}</h1>
+	</div>
+	
 	<div class="bluebox roundbox">
 		<div class="icon_info">{L_menus_info}</div>
 	</div>
@@ -207,6 +211,10 @@
 
 
 <div id="admin">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_favorits_admin_menu}</h1>
+	</div>
+
 	<div class="bluebox roundbox">
 		<div class="icon_info">{L_favorits_info}</div>
 	</div>
@@ -254,8 +262,8 @@
 </div> <!-- close admin-div -->
 </div>
 <div class="contentFooter">
-	<input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_save}" />
-	<input name="save" type="button" class="mainoption bi_reset" id="reset" value="{L_reset}" onclick="window.location='manage_menus.php{SID}'"/>
+	<button type="submit"  name="save" class="mainoption" id="save"><i class="icon-ok"></i>{L_save}</button>
+	<button type="button"  name="save" class="mainoption" onclick="window.location='manage_menus.php{SID}'"><i class="icon-trash"></i>{L_reset}</button>
 </div>
 {CSRF_TOKEN}
 </form>

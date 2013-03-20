@@ -443,7 +443,7 @@ HTP69g==
 		// Build the update badge
 		public function UpdateBadge($id, $pcore=false){
 			if(!$this->UpdatesAvailable($pcore)){ return ''; }
-			$this->jquery->qtip('#'.$id, (($pcore) ? '<div class=\"updchk_tt_info\">'.((defined('USE_REPO')) ? $this->user->lang('lib_pupd_core_intro') : $this->user->lang('lib_pupd_core_intro2')).'</div>' : $this->TooltipContent()));
+			$this->jquery->qtip('#'.$id, (($pcore) ? '<div class=\"updchk_tt_info\">'.$this->user->lang('lib_pupd_core_intro').'</div>' : $this->TooltipContent()));
 			$this->tpl->add_js('$("#'.$id.'").click(function(){ window.location = "'.($this->root_path.'admin/'.(($pcore) ? 'manage_live_update.php' : 'manage_extensions.php')).'"; });', 'docready');
 			return '<span class="update_available" id="'.$id.'">'.(($pcore) ? '!' : $this->UpdateCount()).'</span>';
 		}

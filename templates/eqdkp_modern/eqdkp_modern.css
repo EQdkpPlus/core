@@ -101,8 +101,12 @@ h1, h2, h3 {
 	margin-top: 5px;
 }
 
-h1, h2 {
+h1 {
     font-size: 20px;
+}
+
+h2 {
+	font-size: 18px;
 }
 
 h3 {
@@ -844,6 +848,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 
 #contentBody th, #contentBody td {
     border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
     line-height: 20px;
     padding: 6px;
     text-align: left;
@@ -1095,6 +1100,7 @@ div[aria-describedby="dialog-login"]  .password-forgot{
 
 .confirmdialog li{
     margin-left: 30px;
+	list-style: square inside none;
 }
 
 

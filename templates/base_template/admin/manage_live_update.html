@@ -40,10 +40,10 @@
 		<!-- ENDIF -->
 	</fieldset>
 	<!-- IF S_NEW_VERSION && S_REQUIREMENTS -->
-	<input type="submit" name="show" value="{L_liveupdate_start}" class="mainoption bi_ok" />
+	<button class="mainoptio" type="submit" name="show"><i class="icon-ok"></i>{L_liveupdate_start}</button>
 	<!-- ENDIF -->
 	<!-- IF S_RELEASE_CHANNEL && S_REQUIREMENTS && not S_NEW_VERSION -->
-	<input type="submit" name="refresh" value="{L_liveupdate_check_for_updates}" class="mainoption bi_reload" />
+	<button  type="submit" name="refresh" class="mainoption"><i class="icon-refresh"></i>{L_liveupdate_check_for_updates}</button>
 	<!-- ENDIF -->
 	
 	</form>
@@ -88,7 +88,7 @@
 				<dd><a href="javascript:liveupdate_diff('{conflicted_row.ENCODED_FILENAME}');">{L_liveupdate_show_differences}</a></dd>
 			</dl>
 			<!-- END conflicted_row -->
-			<input type="submit" value="{L_liveupdate_downloadfiles}" name="download" class="mainoption bi_save"/>
+			<button type="submit" class="mainoption" name="download"><i class="icon-download-alt"></i>{L_liveupdate_downloadfiles}</button>
 		</fieldset>		
 		<br />
 		<!-- ENDIF -->
@@ -105,9 +105,9 @@
 		</fieldset>
 		<br />
 		<!-- ENDIF -->
-	<input type="submit" value="{L_bridge_continue}" name="submit" class="mainoption bi_ok" <!-- IF S_CONFLICTED_FILES -->onclick="confirm_conflicted(); return false;"<!-- ENDIF --> />
-	<input type="button" value="{L_cancel}" name="cancel" class="mainoption bi_cancel" onclick="window.location.href='manage_live_update.php{SID}'"/>
-	<input type="hidden" name="show" value="5" >
+		<button type="submit" class="mainoption" name="submit" <!-- IF S_CONFLICTED_FILES -->onclick="confirm_conflicted(); return false;"<!-- ENDIF -->><i class=""></i>{L_bridge_continue}</button>
+		<button type="button" name="cancel" class="mainoption" onclick="window.location.href='manage_live_update.php{SID}'"><i class="icon-chevron-left"></i>{L_cancel}</button>
+		<input type="hidden" name="show" value="5" >
 	</form>
 	<!-- ENDIF -->
 
@@ -127,12 +127,12 @@
 		  </tr>
 		  <!-- END missing_row -->
 		  <tr>
-			<th><input type="button" value="{L_liveupdate_checkagain}" name="submit" class="mainoption bi_ok" onclick="lu_step8()" /> <input type="submit" value="{L_liveupdate_downloadfiles}" name="download" class="mainoption bi_save"/></th>
+			<th><input  value=""  /> <input  class=" bi_save"/></th>
 			</tr> 
 		</table>
-
-	
-	<input type="hidden" name="show" value="9" >
+		<button type="button" name="submit" class="mainoption" onclick="lu_step8();"><i class="icon-refresh"></i>{L_liveupdate_checkagain}</button>
+		<button class="mainoption" type="submit" value="" name="download"><i class="icon-download-alt"></i>{L_liveupdate_downloadfiles}</button>
+		<input type="hidden" name="show" value="9" >
 	</form>
 	<!-- ENDIF -->
 
