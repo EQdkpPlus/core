@@ -1,8 +1,8 @@
 <!-- IF not S_EDIT -->
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_manage_cronjobs}</h1>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
-	<tr>
-		<th colspan="7" align="left" class="nowrap">{L_manage_cronjobs}</th>
-	</tr>
 	<tr>
 		<th align="left" class="nowrap">&nbsp;</th>
 		<th align="left" class="nowrap">{L_action}</th>
@@ -67,8 +67,8 @@
 		<!-- END param_row -->
 	</fieldset>
 	<!-- ENDIF -->
-	<input name="upd" type="submit" class="mainoption bi_ok" id="update" value="{L_save}" />
-    <input name="cancel" type="submit" class="liteoption bi_back" id="cancel" value="{L_cancel}" />
+	<button name="upd" type="submit" class="mainoption" id="update" ><i class="icon-ok"></i>{L_save}</button>
+	<button name="cancel" type="submit" class="liteoption" id="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
 {CSRF_TOKEN}
 </form>
 <!-- ENDIF -->

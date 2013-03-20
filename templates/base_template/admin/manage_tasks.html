@@ -1,3 +1,6 @@
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_uc_delete_manager}</h1>
+</div>	
 <div class="bluebox roundbox">
 	<div class="icon_info">{L_uc_tasks_info}</div>
 </div>
@@ -9,12 +12,10 @@
 <!-- ENDIF -->
 <form method="post" action="{F_ACTION}" name="manage_tasks">
 	<!-- IF S_CONFIRM -->
+	<div class="tableHeader">
+		<h2>{L_uc_confirm_list}</h2>
+	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr>
-			<th colspan="5">
-				{L_uc_confirm_list}
-			</th>
-		</tr>
 		<tr>
 			<th colspan="2" align="left">{L_action}</th>
 			<th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_name}</a></th>
@@ -29,17 +30,18 @@
 		</tr>
 		<!-- END confirm_row -->
 		<tr>
-			<th colspan="5"><span style="float:left;"><input type="button" name="confirm_all" value="{L_uc_confirm_all}" class="mainoption" onclick="ConfirmAllChars();"/></span><span style="float:right;">{FC_CONFIRM}</span></th>
+			<th colspan="5" class="footer">
+				<span style="float:left;"><button class="mainoption" type="button" name="confirm_all" onclick="ConfirmAllChars();"><i class=""></i>{L_uc_confirm_all}</button></span><span style="float:right;">{FC_CONFIRM}</span>
+			</th>
 		</tr>
 	</table>
 	<br/>
 	<!-- ENDIF -->
 	<!-- IF S_DELETE -->
+	<div class="tableHeader">
+		<h2>{L_uc_delete_list}</h2>
+	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr>
-			<th colspan="5">
-			{L_uc_delete_list}</th>
-		</tr>
 		<tr>
 			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
 			<th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_name}</a></th>
@@ -54,16 +56,19 @@
 		</tr>
 		<!-- END delete_row -->
 		<tr>
-			<th colspan="5"><span style="float:left;"><input type="button" name="delete_all" value="{L_uc_delete_allchar}" class="mainoption" onclick="DeleteAllChars()"/></span><span style="float:right;">{FC_DELETE}</span></th>
+			<th colspan="5" class="footer"><span style="float:left;">
+				<button class="mainoption" type="button" name="delete_all" onclick="DeleteAllChars()"><i class="icon-remove"></i>{L_uc_delete_allchar}</button></span><span style="float:right;">{FC_DELETE}</span>
+			</th>
 		</tr>
 	</table>
+
 	<br />
 	<!-- ENDIF -->
 	<!-- IF S_INACTIVE -->
+	<div class="tableHeader">
+		<h2>{L_activate_list}</h2>
+	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr>
-			<th colspan="6"> {L_activate_list}</th>
-		</tr>
 		<tr>
 			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
 			<th align="left" width="50%">{L_name}</th>
@@ -80,7 +85,9 @@
 		</tr>
 		<!-- END activate_row -->
 		<tr>
-			<th colspan="6"><input type="button" name="activateall" value="{L_activate_all}" class="mainoption" onclick="ActivateAllUsers()"/></th>
+			<th colspan="6">
+				<button  type="button" name="activateall" class="mainoption" onclick="ActivateAllUsers()"><i class="icon-ok"></i>{L_activate_all}</button>
+			</th>
 		</tr>
 	</table>
 	<!-- ENDIF -->

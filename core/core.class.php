@@ -806,7 +806,7 @@ class core extends gen_class {
 			}
 
 			if ($iTaskCount > 0){
-				$this->message('<a href="'.$this->root_path.'admin/manage_tasks.php'.$this->SID.'">'.sprintf($this->user->lang('cm_todo_txt'),$iTaskCount).'</a>', $this->user->lang('cm_todo_head'), 'default', false);
+				//$this->message('<a href="'.$this->root_path.'admin/manage_tasks.php'.$this->SID.'">'.sprintf($this->user->lang('cm_todo_txt'),$iTaskCount).'</a>', $this->user->lang('cm_todo_head'), 'default', false);
 			}
 
 			return $iTaskCount;

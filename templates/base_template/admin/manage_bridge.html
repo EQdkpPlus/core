@@ -405,12 +405,14 @@
 	<!-- ENDIF -->
 
 	<div align="center">
-	<input type="button" class="mainoption bi_ok" id="button_check_database" onclick="check_database()" value="{L_bridge_continue}" style="display:none;" />
-	<input type="button" class="mainoption bi_ok" id="button_check_usertable" onclick="check_usertable()" value="{L_bridge_continue}" style="display:none;" />
-	<input type="button" class="mainoption bi_ok" id="button_check_useraccount" onclick="check_useraccount()" value="{L_bridge_continue}" style="display:none;" />
-	<input type="submit" class="mainoption bi_ok" id="submit_button" value="{L_save}" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF --> />
+		<button class="mainoption" type="button" id="button_check_database" onclick="check_database()" style="display:none;"><i class="icon-ok"></i>{L_bridge_continue}</button>
+		<button class="mainoption" type="button" id="button_check_usertable" onclick="check_usertable()" style="display:none;"><i class="icon-ok"></i>{L_bridge_continue}</button>
+		<button class="mainoption" type="button" id="button_check_useraccount" onclick="check_useraccount()" style="display:none;"><i class="icon-ok"></i>{L_bridge_continue}</button>
+		<button class="mainoption" type="submit" id="submit_button" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->><i class="icon-ok"></i>{L_save}</button>
 	</div>
-	<div id="loading_area" style="display:none;" align="center"><img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="{L_bridge_loading}" />{L_bridge_loading}</div>
+	<div id="loading_area" style="display:none;"  align="center">
+		<img src="{EQDKP_IMAGE_PATH}global/loading.gif" alt="{L_bridge_loading}" />{L_bridge_loading}
+	</div>
 
 	</div>
 {CSRF_TOKEN}

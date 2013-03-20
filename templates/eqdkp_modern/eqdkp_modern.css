@@ -867,6 +867,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	font-weight: normal;
 	text-align: right;
 	background-color: #F5F5F5 !important;
+	border-bottom: none;
 }
 
 #contentBody th a {

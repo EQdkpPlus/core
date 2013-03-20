@@ -26,8 +26,8 @@
 		<!-- END tabs -->
 
 		<div align='center'>
-			<input name="save_plus" type="submit" class="mainoption bi_ok" id="save" value="{L_save}" />
-			<input type="button" name="reset" value="{L_reset}" class="liteoption bi_reset" onclick="window.location='manage_settings.php{SID}'"/>
+			<button  name="save_plus" type="submit" class="mainoption" id="save"><i class="icon-ok"></i>{L_save}</button>
+			<button type="button" name="reset" class="liteoption" onclick="window.location='manage_settings.php{SID}'"><i class="icon-trash"></i>{L_reset}</button>
 		</div>
 	</div>
 {CSRF_TOKEN}
