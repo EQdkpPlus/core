@@ -325,22 +325,7 @@ div.icon_repeating {
 	background:url(../images/glyphs/view.png) no-repeat 2px center;
 	text-indent:20px;
 }
-.bi_compare{
-	background:url(../images/glyphs/compare.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_addchar{
-	background:url(../images/glyphs/msn.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_changechar{
-	background:url(../images/calendar/changechar.png) center no-repeat;
-	text-indent:22px;
-}
-.bi_changenote{
-	background:url(../images/calendar/comment.png) center no-repeat;
-	text-indent:22px;
-}
+
 .bi_openid{
 	background:url(../images/glyphs/openid.png) no-repeat 2px center;
 	text-indent:20px;
@@ -350,19 +335,70 @@ div.icon_repeating {
 	text-indent:20px;
 }
 
+/* Everything button image below this line has been ported to 1.1 */
+.bi_openid{
+	background:url(../images/glyphs/openid.png) no-repeat 2px center;
+	height: 16px;
+    width: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+}
+.bi_facebook{
+	background:url(../images/glyphs/facebook.png) no-repeat 2px center;
+	height: 16px;
+    width: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+}
+
 .bi_persona{
 	background:url(../images/glyphs/persona.png) no-repeat 2px center;
-	text-indent:20px;
+	height: 16px;
+    width: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+}
+.bi_compare{
+	background:url(../images/glyphs/compare.png) no-repeat 2px center;
+	height: 16px;
+    width: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
 }
 
 .bi_plus{
 	background:url(../images/global/plus.png) 6% 55% no-repeat;
-	text-indent:23px;
+	height: 16px;
+    width: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
 }
 
 .bi_minus{
 	background:url(../images/global/minus.png) 6% 55% no-repeat;
-	text-indent:23px;
+	height: 16px;
+    width: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+}
+
+.bi_changechar{
+	background:url(../images/calendar/changechar.png) center no-repeat;
+	display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+.bi_changenote{
+	background:url(../images/calendar/comment.png) center no-repeat;
+	display: inline-block;
+    height: 16px;
+    width: 16px;
 }
 
 /*Image Button without value*/

@@ -271,7 +271,7 @@
 				</dl>
 
 			</fieldset>
-			<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i> {L_login}</button>
+			<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i> {L_login}</button>{AUTH_LOGIN_BUTTON}
 		</form>
 	</div>
 	

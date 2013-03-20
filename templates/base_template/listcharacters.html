@@ -20,7 +20,9 @@
 			</th>
 			<th align="right" width="20" class="nowrap">
 				{COMPARE_LINK}
-				{MANAGE_LINK}
+				<!-- IF S_MANAGE_LINK -->
+				<span class="{LISTCHARS_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+				<!-- ENDIF -->
 			</th>
 		</tr>
 	</table>
@@ -32,6 +34,6 @@
 	</table>
 
 	<br />
-	<img src="{EQDKP_IMAGE_PATH}arrows/turn_left_arrow.png" alt="arrow" /> <input type="submit" name="{BUTTON_NAME}" value="{L_compare_members}" class="mainoption bi_compare" onclick="$('#form_listcharacters').attr('method', 'post');" />
+	<img src="{EQDKP_IMAGE_PATH}arrows/turn_left_arrow.png" alt="arrow" /> <button type="submit" name="{BUTTON_NAME}" onclick="$('#form_listcharacters').attr('method', 'post');"><i class="bi_compare"></i>{L_compare_members}</button>
 </form>
 <br />

@@ -142,7 +142,7 @@ class login_facebook extends gen_class {
 			}
 		");
 		
-		return '<input type="button" class="mainoption bi_facebook" onclick="facebook_login()" value="'.$this->user->lang('login_title').'" />';	
+		return '<button type="button" class="mainoption" onclick="facebook_login()"><i class="bi_facebook"></i>'.$this->user->lang('login_title').'</button>';	
 	}
 	
 	public function register_button(){
@@ -160,7 +160,7 @@ class login_facebook extends gen_class {
 			}	  
 	  ");
 	  		
-		return '<input type="button" class="mainoption bi_facebook" onclick="facebook_register()" value="'.$this->user->lang('register_title').'" />';
+		return '<button type="button" class="mainoption" onclick="facebook_register()"><i class="bi_facebook"></i>'.$this->user->lang('register_title').'</button>';
 	}
 	
 	public function account_button(){
@@ -171,7 +171,7 @@ class login_facebook extends gen_class {
 			$me = $this->get_me();
 			$uid = $me['uid'];
 			$me = $me['me'];
-			return $me['name'].' <input type="button" class="mainoption bi_facebook" value="'.$this->user->lang('auth_connect_account').'" onclick="window.location.href = \'settings.php'.$this->SID.'&mode=addauthacc&lmethod=facebook\';" />'.$this->html->TextField('auth_account', '', $uid, 'hidden');
+			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \'settings.php'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>'.$this->html->TextField('auth_account', '', $uid, 'hidden');
 		} else {
 			$this->init_js();
 			
@@ -187,7 +187,7 @@ class login_facebook extends gen_class {
 				 });
 			}	  
 			");
-			return '<input type="button" class="mainoption bi_facebook" onclick="facebook_connect_acc()" value="'.$this->user->lang('auth_connect_account').'" />';		
+			return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>';		
 		}
 	}
 	

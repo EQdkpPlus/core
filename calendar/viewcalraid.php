@@ -701,7 +701,11 @@ class viewcalraid extends page_generic {
 		}else{
 			$deadlinetime	= $this->time->user_date($deadlinedate, true);
 		}
-
+		
+		$this->jquery->Collapse('#toogleRaidcalInfos');
+		$this->jquery->Collapse('#toogleRaidcalModeration');
+		$this->jquery->Collapse('#toogleRaidcalSignin');
+		
 		$mysignedstatus		= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->mystatus['member_id']));
 		$this->tpl->assign_vars(array(
 			// error messages

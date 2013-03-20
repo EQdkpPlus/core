@@ -1,28 +1,28 @@
-<form method="post" action="{EQDKP_ROOT_PATH}login.php{SID}" name="login" id="login">
-<div class="content row1">
-	<div class="contentHead">
-		{L_login}
+<div class="page-login">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_login}</h1>
+	</div>	
+	
+	<!-- IF S_BRIDGE_INFO -->
+	<div class="bluebox roundbox">
+		<div class="icon_info">{L_login_bridge_notice}</div>
 	</div>
-	<div class="contentInner center ">
-		<!-- IF S_BRIDGE_INFO -->
-			<div class="bluebox roundbox">
-				<div class="icon_info">{L_login_bridge_notice}</div>
-			</div>
-		<!-- ENDIF -->
+	<!-- ENDIF -->
+	<form method="post" action="{EQDKP_ROOT_PATH}login.php{SID}" name="login" id="login">
+	
+	<fieldset class="settings mediumsettings">
+		<legend>{L_login}</legend>
 		
-		<div class="contentSideLeft <!-- IF not S_LOGGED_IN -->contentWidth60<!-- ENDIF -->">
-			
-			<fieldset class="invisible smallsettings">
-			<div class="loginform">
+			<div class="contentSideLeft floatLeft contentWidth60">
 				<dl>
 					<dt><label>{L_username}:</label></dt>
-					<dd><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></dd>
+					<dd><div class="input-icon"><i class="icon-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></div></dd>
 				</dl>
 				<dl>
 					<dt><label>{L_password}:</label></dt>
-					<dd><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password"/>
+					<dd><div class="input-icon"><i class="icon-key"></i><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password"/></div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
-						<br /><img src="{EQDKP_IMAGE_PATH}glyphs/key_lost.png" class="absmiddle" alt=""/>{U_PWRESET_LINK}
+						<br />{U_PWRESET_LINK}
 						<!-- ENDIF -->
 						<br /><br /><label><input type="checkbox" name="auto_login" />{L_remember_password}</label>
 					</dd>
@@ -39,27 +39,33 @@
 					{CAPTCHA}</dd>
 				</dl>
 				<!-- ENDIF -->
-				
 			</div>
-			</fieldset>
-		</div>
-		
-		<!-- IF not S_LOGGED_IN -->
-		<div class="contentSideRight contentWidth30">
-			<!-- IF S_REGISTER -->
-			<h3>{L_no_account}</h3>
-			<a href="{REGISTER_LINK}">{L_menu_register}</a>
+			
+			<!-- IF not S_LOGGED_IN -->
+			<div class="contentSideRight contentWidth30 floatRight">
+				<!-- IF S_REGISTER -->
+				<h3>{L_no_account}</h3>
+				<a href="{REGISTER_LINK}">{L_menu_register}</a>
+				<!-- ENDIF -->
+				<!-- IF S_USER_ACTIVATION and not S_BRIDGE_INFO -->
+				<h3>{L_no_activation_mail}</h3>
+				<a href="{EQDKP_ROOT_PATH}register.php{SID}&amp;mode=resend_activation">{L_get_new_activation_mail}</a>
+				<!-- ENDIF -->
+			</div>
 			<!-- ENDIF -->
-			<!-- IF S_USER_ACTIVATION and not S_BRIDGE_INFO -->
-			<h3>{L_no_activation_mail}</h3>
-			<a href="{EQDKP_ROOT_PATH}register.php{SID}&amp;mode=resend_activation">{L_get_new_activation_mail}</a>
-			<!-- ENDIF -->
-		</div>
-		<!-- ENDIF -->
-	</div>
+	</fieldset>
+	
+	
+	<div class="clear"></div>
+	
+	
+	
 	<div class="contentFooter">
-		{REDIRECT}<input type="submit" name="login" value="{L_login}" class="mainoption bi_key" /> {AUTH_LOGIN_BUTTON}
+		{REDIRECT}
+		<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i>{L_login}</button>
+		{AUTH_LOGIN_BUTTON}
 	</div>
+	
+	{CSRF_TOKEN}</form>
 </div>
-{CSRF_TOKEN}
-</form>
+

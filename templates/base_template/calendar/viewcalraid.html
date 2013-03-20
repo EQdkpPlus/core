@@ -88,15 +88,15 @@ $(function(){
 
 	$(".notsigned_button").click(function(){
 		$(".notsignedpanel").toggle("fast");
-		$(this).toggleClass("bi_plus");
-		$(this).toggleClass("bi_minus");
+		$(".notsigned_button i").toggleClass("bi_plus");
+		$(".notsigned_button i").toggleClass("bi_minus");
 		return false;
 	});
 	
 	$(".notsignedpanel_close").click(function(){
 		$(".notsignedpanel").hide("fast");
-		$(".notsigned_button").toggleClass("bi_minus");
-		$(".notsigned_button").toggleClass("bi_plus");
+		$(".notsigned_button i").toggleClass("bi_minus");
+		$(".notsigned_button i").toggleClass("bi_plus");
 	});
 
 	// the search filed
@@ -224,12 +224,13 @@ function populate_unsigned(arrAttendees, arrCheckboxes){
 	<input type="hidden" name="event_id" value="{EVENT_ID}" />
 	<input type="hidden" name="subscribed_member_id" value="{SUBSCRIBED_MEMBER_ID}" />
 	
+	<div id="toogleRaidcalInfos">
 	<div>
-		<div class="raidcal_name floatLeft">{RAIDICON} {RAIDNAME}</div>
+		<div class="raidcal_name floatLeft">{RAIDICON} {RAIDNAME} <span class="toggle_button">&nbsp;</span></div>
 		<div class="floatRight">{MENU_OPTIONS}</div>
 	</div>
 	<div class="clear"></div>
-	<fieldset class="settings smallsettings raidcal_infos">
+	<fieldset class="settings smallsettings raidcal_infos toggle_container">
 		<dl class="raidcal_date">
 			<dt><label>{L_date}</label></dt>
 			<dd>{RAIDDATE}, {L_raidevent_raid_time_from} {RAIDTIME_START} {L_raidevent_raid_time_till} {RAIDTIME_END}
@@ -261,24 +262,29 @@ function populate_unsigned(arrAttendees, arrCheckboxes){
 			<dd><!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF --></dd>
 		</dl>
 	</fieldset>
+	</div>
 		
 	<!-- IF not RAID_CLOSED and not RAID_DEADLINE and not NO_CHAR_ASSIGNED -->
-	<fieldset class="settings smallsettings" id="raidcal_signin_form" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
-		<legend>{L_raidevent_raid_signin}</legend>
-		<dl>
-			<dt><label>{L_raidevent_raid_char_role}</label></dt>
-			<dd>{DD_MYCHARS} {DD_MYROLE}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_note}</label></dt>
-			<dd><input type="text" name="signupnote" size="45" class="input" value="{PLAYER_NOTE}" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_status}</label></dt>
-			<dd>{DD_SIGNUPSTATUS} </dd>
-		</dl>
-		<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
-	</fieldset>
+	<div id="toogleRaidcalSignin">
+		<fieldset class="settings smallsettings" id="raidcal_signin_form" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
+			<legend>{L_raidevent_raid_signin}<span class="toggle_button">&nbsp;</span></legend>
+			<span class="toggle_container">
+				<dl>
+					<dt><label>{L_raidevent_raid_char_role}</label></dt>
+					<dd>{DD_MYCHARS} {DD_MYROLE}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_note}</label></dt>
+					<dd><input type="text" name="signupnote" size="45" class="input" value="{PLAYER_NOTE}" /></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_status}</label></dt>
+					<dd>{DD_SIGNUPSTATUS} </dd>
+				</dl>
+				<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
+			</span>
+		</fieldset>
+	</div>
 	
 	<div class="greenbox" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
 		<div class="icon_info">
@@ -314,20 +320,23 @@ function populate_unsigned(arrAttendees, arrCheckboxes){
 	</div>
 	<!-- ENDIF -->
 	<!-- IF IS_OPERATOR -->
-	<fieldset class="settings smallsettings moderation_panel">
-		<legend>{L_raidevent_raid_moderation}</legend>
-		
-		<dl>
-			<dt><label>{L_raidevent_raid_mod_select}</label></dt>
-			<dd>{DD_MODSIGNUPSTATUS} 
-				<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_raidevent_raid_confirmall}</label></dt>
-			<dd><input type="submit" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" /></dd>
-		</dl>
-	</fieldset>
+	<div id="toogleRaidcalModeration">
+		<fieldset class="settings smallsettings moderation_panel">
+			<legend>{L_raidevent_raid_moderation}<span class="toggle_button">&nbsp;</span></legend>
+			<span class="toggle_container">
+				<dl>
+					<dt><label>{L_raidevent_raid_mod_select}</label></dt>
+					<dd>{DD_MODSIGNUPSTATUS} 
+						<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
+					</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_raidevent_raid_confirmall}</label></dt>
+					<dd><input type="submit" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" /></dd>
+				</dl>
+			</span>
+		</fieldset>
+	</div>
 	<!-- ENDIF -->
 	
 	<div class="row1">

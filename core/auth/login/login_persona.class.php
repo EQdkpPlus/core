@@ -70,7 +70,7 @@ initLogin();
 		
 	public function login_button(){
 		$this->init_js();		
-		return '<input type="button" class="mainoption bi_persona persona_login_button" value="Persona Login" />';
+		return '<button type="button" class="mainoption persona_login_button"><i class="bi_persona"></i>Persona Login</button>';
 	}
 	
 	public function account_button(){
@@ -100,7 +100,7 @@ initLogin();
 		", "docready");
 		
 		
-		return '<input type="button" class="mainoption bi_persona persona_account_button" value="Persona '.$this->user->lang('auth_connect_account').'" />';
+		return '<button type="button" class="mainoption persona_account_button"><i class="bi_persona"></i>Persona '.$this->user->lang('auth_connect_account').'</button>';
 	}
 	
 	public function get_account(){

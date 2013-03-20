@@ -1329,6 +1329,10 @@ div.pagination {
 	background: #2f3033;
 	border-top: 1px solid #000;
 }
+.mainmenu  li li,.mainmenu li li li {
+	font-size: 13px;
+}
+
 .sf-admin li li li , .mainmenu li li li{
 	background: #2f3033;
 	border-top: 1px solid #000;
@@ -1717,6 +1721,21 @@ ul.portal_block {
 	border-bottom: 1px solid #CCCCCC;
 	margin-top: 5px;
 }
+
+.raidcal_name .toggle_button {
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 35px;
+}
+
+#raidcal_signin_form.settings legend span.toggle_button:before,  .moderation_panel.settings legend span.toggle_button:before {
+    float: none !important;
+    font-size: 13px;
+    line-height: 18px;
+    margin-left: 6px;
+	font-weight: normal;
+}
+
 .raidcal_infos, .moderation_panel{
 	font-size: 12px;
 	line-height: 1.3;
@@ -1730,10 +1749,15 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	padding-top: 0px;
 }
 
+.guesttable b {
+	font-family: 'Trebuchet MS',​Arial,​sans-serif;
+	font-weight: bold;
+}
+
 table.guesttable { 
 	padding: 5px;
-	border: 1px solid green;
-	background: #EEFFDF;
+	border: 1px solid #ccc;
+	background: #E8E8E8;
 }
 table.guesttable td{
 	color:black;
@@ -1764,6 +1788,7 @@ a.attendee_Link:hover{
 	filter: alpha(opacity=85);
 	opacity: .85;
 	z-index: 9999;
+	color: #fff;
 }
 .notsigned_button {
 	outline: none;
@@ -1794,23 +1819,7 @@ a.attendee_Link:hover{
 	font-size: 13pt;
 	font-weight: bold;
 }
-#addguest{
-	background:#EEFFDF;
-	display: inline-block;
-	padding: 10px;
-	color:#555555;
-	height:24px;
-	line-height:24px;
-	-webkit-border-radius: 5px; 
-    -khtml-border-radius: 5px; 
-    -moz-border-radius: 5px; 
-    border-radius: 5px;
-	cursor: pointer;
-	border: 1px solid #C0E0A4;
-}
-#addguest:hover{
-	background:#D9EBCA;
-}
+
 .raidcal_actionbar{
 	margin: 5px;
 	cursor: pointer;

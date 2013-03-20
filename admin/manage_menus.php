@@ -371,7 +371,7 @@ class Manage_Menus extends page_generic {
 	
 	private function create_li($arrLink, $id){
 		$hash = $arrLink['_hash'];
-		$blnPluslink = (strpos($arrLink['id'], "pluslink") === 0);
+		$blnPluslink = (isset($arrLink['id']) && strpos($arrLink['id'], "pluslink") === 0);
 
 		$html = '
 			<div data-linkid="'.$id.'">
@@ -393,7 +393,7 @@ class Manage_Menus extends page_generic {
 				$html .= ''.$arrLink['text'].' ('.$arrLink['link'].')';
 			}	
 			$html .= '
-			<input type="hidden" value="'.((strpos($arrLink['id'], "pluslink") === 0) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			
+			<input type="hidden" value="'.(($blnPluslink) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			
 			<input type="hidden" value="'.(((int)$arrLink['hidden']) ? 1 : 0).'"  name="mainmenu['.$id.'][hidden]" class="link-hidden">
 			<input type="hidden" value="'.$hash.'"  name="mainmenu['.$id.'][id]" class="link-id">
 			</div>

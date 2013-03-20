@@ -139,6 +139,24 @@ class listcharacters extends page_generic {
 		$suffix		.= ($show_inactive)		? '&amp;show_inactive=1'	: '';
 		$suffix		.= ($show_hidden)		? '&amp;show_hidden=1'		: '';
 		$suffix		.= ($show_twinks)		? '&amp;show_twinks=1'		: '';
+		
+		$arrToolbarItems = array(				
+			array(
+				'icon'	=> 'icon-plus',
+				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_raids.php".$this->SID.'&upd=true\';"',
+				'check' => 'a_raid_add'
+			),
+			array(
+				'icon'	=> 'icon-edit',
+				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_members.php".$this->SID.'\';"',
+				'check' => 'a_members_man'
+			),
+			array(
+				'icon'	=> 'icon-list',
+				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/mmanage_raids.php".$this->SID.'\';"',
+				'check' => 'a_raid_'
+			),
+		);
 
 		//footer stuff
 		if($is_compare){
@@ -149,15 +167,17 @@ class listcharacters extends page_generic {
 		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => $mdkpid, '%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks'))), $mdkp_suffix);
 		$myleaderboard			= registry::register('html_leaderboard');
 		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
+		$jqToolbar = $this->jquery->toolbar('listcharacters', $arrToolbarItems, array('position' => 'bottom'));
 		$this->tpl->assign_vars(array (
 			'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']), $view_list, $leaderboard_settings),
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
 			'BUTTON_NAME'				=> 'compare_b',
-			'MANAGE_LINK'				=> ($this->user->check_auth('a_members_man', false)) ? '<input type="submit" name="manage_b" value="" alt="'.$this->user->lang('manage_members').'" title="'.$this->user->lang('manage_members').'" class="bi_manage novalue" />' : '',
+			'S_MANAGE_LINK'				=> ($this->user->check_auth('a_members_man', false)),
 			'SHOW_INACTIVE_CHECKED'		=> ($show_inactive)?'checked="checked"':'',
 			'SHOW_HIDDEN_RANKS_CHECKED'	=> ($show_hidden)?'checked="checked"':'',
 			'SHOW_TWINKS_CHECKED'		=> ($show_twinks)?'checked="checked"':'',
 			'S_SHOW_TWINKS'				=> !$this->config->get('pk_show_twinks'),
+			'LISTCHARS_TOOLBAR'				=> $jqToolbar['id'],
 		));
 
 		$this->core->set_vars(array(

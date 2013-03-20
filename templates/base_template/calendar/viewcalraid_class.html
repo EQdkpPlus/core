@@ -14,7 +14,7 @@
 						</th>
 						<!-- IF S_NOTSIGNED_VISIBLE && raidstatus.FIRSTROW -->
 						<th align="right">
-							<input type="button" value="{L_raidevent_raid_unsigned_button}" class="bi_plus notsigned_button" />
+							<button type="button" class="notsigned_button"><i class="bi_plus"></i>{L_raidevent_raid_unsigned_button}</button>
 						</th>
 						<!-- ENDIF -->
 					</tr>
@@ -67,7 +67,7 @@
 											<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 											<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
 											{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-											<input type="button" name="submit_charchange" value="" class="imagebutton bi_changechar" />
+											<button type="button" name="submit_charchange" value=""><i class="bi_changechar"></i></button>
 										</fieldset>
 									</div>
 									<div class="notechange_menu" style="width:100%;">
@@ -76,7 +76,7 @@
 											<legend>{L_raidevent_raid_changenotemenu}</legend>
 											<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 											<textarea name="notechange_note" cols="18" rows="3">{raidstatus.classes.status.NOTE}</textarea>
-											<input type="button" name="submit_notechange" value="" class="imagebutton bi_changenote" />
+											<button type="button" name="submit_notechange" value=""><i class="bi_changenote"></i></button>
 										</fieldset>
 									</div>
 									<!-- ENDIF -->

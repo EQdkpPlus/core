@@ -204,8 +204,8 @@ class listusers extends page_generic {
 		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
 
 		$this->tpl->assign_vars(array (
-			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix.$date_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
-			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix.$date_suffix, $user_count, $this->user->data['user_rlimit'], $start),
+			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
+			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
 		));
 
 		if (((int)$this->config->get('pk_sms_enable') == 1) && $this->user->check_auth('a_sms_send', false)){
@@ -259,8 +259,8 @@ class listusers extends page_generic {
 		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
 
 		$this->tpl->assign_vars(array (
-			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix.$date_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
-			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix.$date_suffix, $user_count, $this->user->data['user_rlimit'], $start),
+			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
+			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
 			'GROUPNAME'			=> $this->pdh->get('user_groups', 'name', array($groupID)),
 			'S_DISPLAY_GROUP'	=> true,
 		));
@@ -273,7 +273,7 @@ class listusers extends page_generic {
 		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
 
 		$this->tpl->assign_vars(array (
-			'PAGE_OUT_GRPLEADER'=> $hptt_grpleader->get_html_table($sort, $pagination_suffix.$date_suffix),
+			'PAGE_OUT_GRPLEADER'=> $hptt_grpleader->get_html_table($sort, $pagination_suffix),
 		));	
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
