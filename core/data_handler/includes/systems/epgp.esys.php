@@ -610,7 +610,7 @@ $system_def = array(
 				'table_sort_dir'	=> 'desc',
 				'table_sort_col'	=> 0,
 				'table_presets'		=> array(
-					array('name' => 'logdate',		'sort' => true, 'th_add' => 'width="150"', 'td_add' => ''),
+					array('name' => 'logdatetime',	'sort' => true, 'th_add' => 'width="150"', 'td_add' => 'nowrap="nowrap"'),
 					array('name' => 'logtype',		'sort' => true, 'th_add' => 'width="100%"', 'td_add' => 'style="height:22px;"'),
 					array('name' => 'logplugin',	'sort' => true, 'th_add' => 'width="100"', 'td_add' => ''),
 					array('name' => 'loguser',		'sort' => true, 'th_add' => 'width="100"', 'td_add' => ''),

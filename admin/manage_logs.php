@@ -94,10 +94,7 @@ class Manage_Logs extends page_generic {
 	}
 
 	public function display(){
-		if ($this->in->get('plugin') != ""){
-			$this->logs->ChangePlugin($this->in->get('plugin'));
-			$show_plugin = true;
-		}
+	
 		$plugin_list['']	= '';
 		if (is_array($this->pdh->get('logs', 'plugins'))){
 			foreach($this->pdh->get('logs', 'plugins') as $pluginname){
@@ -107,6 +104,95 @@ class Manage_Logs extends page_generic {
 				}
 			}
 		}
+		
+		$user_list[-1]	= '';
+		$arrUsers = $this->pdh->get('logs', 'grouped_users', array());
+		foreach($arrUsers as $user_id){
+			$user_list[$user_id] = $this->pdh->get('user', 'name', array($user_id));
+		}
+		
+		$type_list['']	= '';
+		$arrTags = $this->pdh->get('logs', 'grouped_tags', array());
+		foreach($arrTags as $tag){
+			$type_list[$tag] = $this->user->lang($tag, true, false);
+		}
+		
+		$result_list = array(
+			'-1' => '',
+			'0' => $this->user->lang('error'),
+			'1' => $this->user->lang('success'),
+		);
+	
+		
+		//Prepare Filter
+		$blnFilter = false;
+		$strFilterSuffix = "";
+		if ($this->in->exists('filter')){
+			//Change Filter options here
+			$plugin = ($this->in->get('filter_plugin') != "") ? $this->in->get('filter_plugin') : false;
+			$result = ($this->in->exists('filter_result') && $this->in->get('filter_result', 0) >= 0) ? $this->in->get('filter_result', 0) : false;
+			$ip		= ($this->in->get('filter_ip') != "") ? $this->in->get('filter_ip') : false;
+			$sid	= ($this->in->get('filter_sid') != "") ? $this->in->get('filter_sid') : false;
+			$tag	= ($this->in->get('filter_type') != "") ? $this->in->get('filter_type') : false;
+			$user_id= ($this->in->exists('filter_user') && $this->in->get('filter_user', 0) >= 0) ? $this->in->get('filter_user', 0) : false;
+			$value	= ($this->in->get('filter_value') != "") ? $this->in->get('filter_value') : false;
+			$date_from = ($this->in->get('filter_date_from') != "") ? $this->time->fromformat($this->in->get('filter_date_from','1.1.1970').' 00:00', 1) : false;
+			$date_to = ($this->in->get('filter_date_to') != "") ? $this->time->fromformat($this->in->get('filter_date_to','1.1.1970').' 00:00', 1) : false;
+			if (!$date_from) {$date_from = ($this->in->get('f_date_from', 0)) ? $this->in->get('f_date_from', 0) : false;}
+			if (!$date_to) {$date_to = ($this->in->get('f_date_to', 0)) ? $this->in->get('f_date_to', 0) : false;}
+
+			//Do we have filters?
+			if ($plugin !== false || $result !== false || $ip !== false || $sid !== false || $tag !== false || $user_id !== false || $value !== false || $date_from !== false || $date_to !== false){
+				$blnFilter = true;
+				//Get filtered ID list
+				$view_list = $this->pdh->get('logs', 'filtered_id_list', array($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to));
+				
+				//Build GET-Params for Sorting and Pagination
+				$strFilterSuffix .= "&amp;filter=1";
+				if ($plugin !== false) $strFilterSuffix .= "&amp;filter_plugin=".$plugin;
+				if ($result !== false) $strFilterSuffix .= "&amp;filter_result=".$result;
+				if ($ip !== false) $strFilterSuffix .= "&amp;filter_ip=".$ip;
+				if ($sid !== false) $strFilterSuffix .= "&amp;filter_sid=".$sid;
+				if ($tag !== false) $strFilterSuffix .= "&amp;filter_type=".$tag;
+				if ($user_id !== false) $strFilterSuffix .= "&amp;filter_user=".$user_id;
+				if ($value !== false) $strFilterSuffix .= "&amp;filter_value=".$value;
+				if ($date_from !== false) $strFilterSuffix .= "&amp;f_date_from=".$date_from;
+				if ($date_to !== false) $strFilterSuffix .= "&amp;f_date_to=".$date_to;
+				
+
+				$_date_from = ($date_from !== false) ? $this->time->user_date($date_from , false, false, false, function_exists('date_create_from_format')) : '';
+				$_date_to	= ($date_to !== false) ? $this->time->user_date($date_to , false, false, false, function_exists('date_create_from_format')) : '';
+				//Template Vars
+				$this->tpl->assign_vars(array(
+					'FILTER_PLUGINS' => $this->html->DropDown('filter_plugin', $plugin_list, (($plugin !== false) ? $plugin : '')),
+					'FILTER_USER'	 => $this->html->DropDown('filter_user', $user_list, (($user_id !== false) ? $user_id : '')),
+					'FILTER_TYPE'	 => $this->html->DropDown('filter_type', $type_list, (($tag !== false) ? $tag : '')),
+					'FILTER_RESULT'  => $this->html->DropDown('filter_result', $result_list, (($result !== false) ? $result : -1)),
+					'FILTER_IP'		=> $ip,
+					'FILTER_SID'	=> $sid,
+					'FILTER_VALUE'	=> $value,
+					'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', $_date_from),
+					'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', $_date_to),
+				));
+			}
+			
+		}
+		
+		if (!$blnFilter){
+			//Common Filter Output
+			$this->tpl->assign_vars(array(
+				'FILTER_PLUGINS' => $this->html->DropDown('filter_plugin', $plugin_list, ''),
+				'FILTER_USER'	 => $this->html->DropDown('filter_user', $user_list, ''),
+				'FILTER_TYPE'	 => $this->html->DropDown('filter_type', $type_list, ''),
+				'FILTER_RESULT'  => $this->html->DropDown('filter_result', $result_list,-1),
+				'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', ''),
+				'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', ''),
+			));
+			$view_list			= $this->pdh->get('logs', 'id_list', array());
+		}
+	
+	
+
 		$start = $this->in->get('start', 0);
 		$this->jquery->Dialog('delete_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
 		$this->jquery->Tab_header('log_tabs', true);
@@ -168,24 +254,24 @@ class Manage_Logs extends page_generic {
 			'parse'		=> 'Parse Error',
 			'compile'	=> 'Compile Error',
 		);
-		$view_list			= $this->pdh->get('logs', 'id_list', array($this->in->get('plugin', '')));
+
 		$actionlog_count	= count($view_list);
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_logs', 'hptt_managelogs_actions');
-		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => ''));
+		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => '', md5($strFilterSuffix)));
 		$footer_text		= sprintf($this->user->lang('viewlogs_footcount'), $actionlog_count, 100);
-		$plugin_suffix		= strlen($this->in->get('plugin', '')) ? '&amp;plugin='.$this->in->get('plugin', '') : '';
-		$page_suffix		= '&amp;start='.$this->in->get('start', 0).$plugin_suffix;
-		$sort_suffix		= '?sort='.$this->in->get('sort').$plugin_suffix;
+		$page_suffix		= '&amp;start='.$this->in->get('start', 0).$strFilterSuffix;
+		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort').$strFilterSuffix;
 		$logs_list = $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 100, $footer_text);
+		
+		$this->jquery->Collapse('#toggleFilter', true);
 		$this->tpl->assign_vars(array(
 			'LOGS_LIST'				=> $logs_list,
-			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix, $actionlog_count, 100, $this->in->get('start', 0)),
+			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-			'FILTER_SELECT'			=> $this->html->DropDown('plugin', $plugin_list, $this->in->get('plugin'), '', 'onchange="window.location=\'manage_logs.php'.$this->SID.'&plugin=\'+document.post.plugin.value"'),
 			'ERROR_FILTER_SELECT'	=> $this->html->DropDown('error_dd', $error_list, $this->in->get('error'), '', 'onchange="window.location=\'manage_logs.php'.$this->SID.'&error=\'+document.post2.error_dd.value"'),
 			'ERROR_TYPE_SELECT'		=> $this->html->DropDown('error_type_dd', $type_list, $this->in->get('type'), '', 'onchange="window.location=\'manage_logs.php'.$this->SID.'&type=\'+document.post2.error_type_dd.value"'),
 			'EL_FOOTCOUNT'			=> sprintf($this->user->lang('viewlogs_footcount'), $total_errors, 50),
-			'EL_PAGINATION'			=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $max_page, 50, $start)
+			'EL_PAGINATION'			=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $max_page, 50, $start),
 		));
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('viewlogs_title'),

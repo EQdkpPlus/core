@@ -390,7 +390,7 @@ class Manage_Menus extends page_generic {
 					<input type="hidden" value="'.$plinkid.'"  name="mainmenu['.$id.'][specialid]" class="link-specialid">
 				';
 			} else {
-				$html .= ''.$arrLink['text'].' ('.$arrLink['link'].')';
+				$html .= ''.$arrLink['text'].' ('.$this->user->removeSIDfromString($arrLink['link']).')';
 			}	
 			$html .= '
 			<input type="hidden" value="'.(($blnPluslink) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			

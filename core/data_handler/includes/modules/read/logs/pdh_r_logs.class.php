@@ -113,6 +113,47 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_plugins() {
 			return $this->logs['plugins'];
 		}
+		
+		public function get_grouped_users(){
+			$id_res = $this->db->query("SELECT DISTINCT user_id FROM __logs;");
+			$arrUsers = array();
+			while ( $row = $this->db->fetch_row($id_res) ) {
+				$arrUsers[] = $row['user_id'];
+			}
+			$this->db->free_result($id_res);
+			return $arrUsers;
+		}
+		
+		public function get_grouped_tags(){
+			$id_res = $this->db->query("SELECT DISTINCT log_tag FROM __logs;");
+			$arrTags = array();
+			while ( $row = $this->db->fetch_row($id_res) ) {
+				$arrTags[] = $row['log_tag'];
+			}
+			$this->db->free_result($id_res);
+			return $arrTags;
+		}
+		
+		public function get_filtered_id_list($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to){
+			$strQuery = "SELECT log_id FROM __logs WHERE ";
+			if ($plugin !== false) $strQuery .= " log_plugin= '".$this->db->escape($plugin). "' AND";
+			if ($result !== false) $strQuery .= " log_result= ".$this->db->escape($result). " AND";
+			if ($ip !== false) $strQuery .= " log_ipaddress LIKE '%".$this->db->escape($ip). "%' AND";
+			if ($sid !== false) $strQuery .= " log_sid LIKE '%".$this->db->escape($sid). "%' AND";
+			if ($tag !== false) $strQuery .= " log_tag = '".$this->db->escape($tag). "' AND";
+			if ($user_id !== false) $strQuery .= " user_id =".$this->db->escape($user_id). " AND";
+			if ($value !== false) $strQuery .= " log_value LIKE '%".$this->db->escape($value). "%' AND";
+			if ($date_from !== false) $strQuery .= " log_date > ".$this->db->escape($date_from). " AND";
+			if ($date_to !== false) $strQuery .= " log_date < ".$this->db->escape($date_to)." AND";
+			$strQuery .= " log_id > 0";
+			
+			$id_res = $this->db->query($strQuery);
+			$arrIDs = array();
+			while ( $row = $this->db->fetch_row($id_res) ) {
+				$arrIDs[] = $row['log_id'];
+			}
+			return $arrIDs;
+		}
 
 		public function sort($id_list, $tag, $direction = 'asc', $params = array( ), $id_position = 0) {
 			if(empty($id_list)) return array();
@@ -170,7 +211,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 		public function get_html_date($id, $withtime=false){
 			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->time->user_date($this->data[$id]['log_date']);
+			return $this->time->user_date($this->data[$id]['log_date'], $withtime);
 		}
 
 		public function get_user($id){

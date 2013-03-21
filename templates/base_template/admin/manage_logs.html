@@ -8,18 +8,61 @@
 	</ul>
 	<div id="logs">
 		<form method="post" action="{ACTION}" name="post">   
-		<div class="tableHeader">
-			<h2>{L_actions}</h2>
-			<div>{L_filter_plugins}: {FILTER_SELECT}
-			</div>
-		</div>
 		
+		<fieldset id="toggleFilter" class="settings mediumsettings">
+			<legend>{L_filter}<span class="toggle_button"></span></legend>
+			<div class="toggle_container">
+				<dl>
+					<dt><label>{L_plugins}</label></dt>
+					<dd>{FILTER_PLUGINS}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_user}</label></dt>
+					<dd>{FILTER_USER}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_ip_address}</label></dt>
+					<dd><input type="text" name="filter_ip" size="40" value="{FILTER_IP}"/></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_session_id}</label></dt>
+					<dd><input type="text" name="filter_sid" size="40" value="{FILTER_SID}"/></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_type}</label></dt>
+					<dd>{FILTER_TYPE}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_templates_error_more}</label></dt>
+					<dd><input type="text" name="filter_value" size="40" value="{FILTER_VALUE}"/></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_calendar_startdate}</label></dt>
+					<dd>{FILTER_DATE_FROM}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_calendar_enddate}</label></dt>
+					<dd>{FILTER_DATE_TO}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_result}</label></dt>
+					<dd>{FILTER_RESULT}</dd>
+				</dl>
+				
+				<button class="mainoption" type="submit" name="filter"><i class="icon-ok"></i>{L_portalplugin_filter}</button>
+				<button class="mainoption" type="submit" name="resetfilter"><i class="icon-trash"></i>{L_filter_reset}</button>
+			</div>
+		</fieldset>
+		
+		</form>
+		<br />
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 			{LOGS_LIST}
 		</table>
 		<div class="center pagination_wrapper">
 			{LOGS_PAGINATION}
 		</div>
+		<form method="post" action="{ACTION}" name="post">
 		<div class="contentFooter">
 			{L_clear_last_logs} <input type="text" name="dellogdays" size="5" value="{RPDELLOGDAYS}" class="input" />
 			{L_days} <button type="submit" name="deletedays" class="mainoption"><i class="icon-remove"></i>{L_delete}</button>
