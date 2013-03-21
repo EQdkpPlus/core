@@ -22,12 +22,11 @@
 			<dd><input type="text" name="desc" size="55" maxlength="250" value="{DESC}" class="input" /></dd>
 		</dl>
 	</fieldset>
-
-	<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
+	<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
 	<!-- IF MDKP_ID -->
 	<input type="hidden" name="mdkp_id" value="{MDKP_ID}" />
-	<input type="button" name="del" value="{L_delete}" class="mainoption bi_delete" onclick="delete_warning();" />
+	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete}</button>
 	<!-- ENDIF -->
-	<input type="submit" name="cancel" value="{L_cancel}" class="liteoption bi_back" />
+	<button class="mainoption" type="submit" name="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
 {CSRF_TOKEN}
 </form>

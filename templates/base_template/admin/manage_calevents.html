@@ -1,17 +1,20 @@
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_manage_calevents}</h1>
+</div>
+
+<div class="tableHeader floatRight">
+		<button type="button" name="newRoleManager" class="mainoption" onclick="newCalevent()" ><i class="icon-plus"></i>{L_calendar_addevent}</button>
+</div>
+
+<div class="clear"></div>
 <form method="post" action="{ACTION}" name="managerole">
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr >
-			<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_manage_calevents}</span><span style="float:right;"><input type="button" name="newRoleManager" value="{L_calendar_addevent}" onclick="newCalevent()" class="mainoption bi_new" /></span></th>
-		</tr>
 			{CALEVENTS}
-		<tr>
-			<th colspan="{HPTT_COLUMN_COUNT}">
-				<span style="float:left;">
-					<input type="button" name="del" value="{L_delete_selected}" class="mainoption bi_delete" onclick="delete_warning();"/>
-					<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-				</span>
-			</th>
-		</tr>
 	</table>
+	
+<div class="contentFooter">
+	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
+	<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+</div>
 {CSRF_TOKEN}
 </form>

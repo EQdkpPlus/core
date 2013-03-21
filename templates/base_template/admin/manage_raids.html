@@ -1,15 +1,16 @@
 <form action='' method='post'>
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_manraid_title}</h1>
+</div>
+<div class="tableHeader floatRight">
+		{IMPORT_DKP} <button type="button" name="add" class="mainoption" onclick="window.location='manage_raids.php{SID}&amp;upd=true'" ><i class="icon-plus"></i>{L_add_raid}</button>
+</div>
+
 <table width="100%" cellpadding="2" cellspacing="1" border="0" class="colorswitch">
-	<tr>
-		<th colspan="{HPTT_COLUMN_COUNT}"><span style="float:left;">{L_manraid_title}</span><span style="float:right;"><input type="button" name="addraid" value="{L_add_raid}" class="mainoption bi_new" onclick="window.location='manage_raids.php{SID}&amp;upd=true'"/></span></th>
-	</tr>
 	{RAID_LIST}
-	<tr>
-		<th colspan="{HPTT_COLUMN_COUNT}">{IMPORT_DKP}</th>
-	</tr>
-	<tr class="pagination_row">
-		<td colspan="{HPTT_COLUMN_COUNT}" align="center">{PAGINATION}</td>
-	</tr>
 </table>
+<div class="center pagination_wrapper">
+	{PAGINATION}
+</div>
 {CSRF_TOKEN}
 </form>

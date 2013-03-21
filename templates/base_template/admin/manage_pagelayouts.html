@@ -1,3 +1,18 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	$( "#dialog-new-layout" ).dialog({
+		height: 310,
+		width: 500,
+		modal: true,
+		autoOpen: false,
+	});
+	
+	$("#newLayoutTrigger").on('click', function(){
+		$( "#dialog-new-layout" ).dialog('open');
+	});
+});
+</script>
+
 <form method="post" action="{ACTION}" name="post">
 <div id="lm_tabs">
 	<ul>
@@ -5,10 +20,13 @@
 		<li><a href="#advanced">{L_lm_manage_advanced}</a></li>
 	</ul>
 	<div id="normal">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_lm_manage_layouts}</h1>
+		</div>
 		<div class="bluebox roundbox">
 			<div class="icon_info"><strong>{L_lm_info}</strong></div>
 		</div>
-		<br/><br/>	
+		<br/><br/>
 		<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch hoverrows">
 			<tr>
 				<th colspan="4">{L_lm_default_layouts}</th>
@@ -44,39 +62,21 @@
 				<td width="84%">{user_layouts_row.DESC}</td>
 			</tr>
 			<!-- END user_layouts_row -->
-			<tr>
-				<th colspan="4"><input type="submit" name="set_current_layout" value="{L_lm_make_current}" class="mainoption bi_ok" /></th>
-			</tr>
 		</table>
 		<br />
-		<fieldset class="settings">
-		<legend>{L_lm_new_layout}</legend>
-		<dl>
-			<dt><label>{L_name}: *</label></dt>
-			<dd><input name="new_layout_name" type="text" size="80" maxlength="30" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_description}: *</label></dt>
-			<dd><input name="new_layout_desc" type="text" size="80" maxlength="80" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_lm_source_layout}:</label></dt>
-			<dd>{LAYOUT_DROPDOWN}</dd>
-		</dl>
-		</fieldset>
-		<input type="submit" name="add_layout" value="{L_lm_new_layout}" class="mainoption bi_new" />
-		
-		
+		<button type="submit" name="set_current_layout" class="mainoption"><i class="icon-ok"></i>{L_lm_make_current}</button>
+		<button type="button" name="add_layout" class="mainoption" id="newLayoutTrigger"><i class="icon-plus"></i>{L_lm_new_layout}</button>
+				
 	</div>
 	<div id="advanced">
 		<div class="errorbox roundbox">
 			<div class="icon_false">{L_lm_warning}</div>
 		</div>
 		<br />
+		<div class="tableHeader">
+			<h2>{L_lm_user_presets}</h2>
+		</div>
 		<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch">
-			<tr>
-				<th colspan="6">{L_lm_user_presets}</th>
-			</tr>
 			<tr>
 				<th>{L_action}</th>
 				<th>{L_name}</th>
@@ -98,15 +98,37 @@
 			<!-- END preset_row -->
 		</table>
 		<br />
-		<fieldset class="settings">
+		<fieldset class="settings smallsettings">
 		<legend>{L_lm_add_preset}</legend>
 		<dl>
 			<dt><label>{L_lm_up_xml}: *</label></dt>
-			<dd><textarea name="new_preset_xml" cols="80" rows="30" class="input">{NEW_PRESET_XML}</textarea></dd>
+			<dd><textarea name="new_preset_xml" rows="20" class="input" style="width: 90%">{NEW_PRESET_XML}</textarea></dd>
 		</dl>
 		</fieldset>
-		<input name="add_preset" type="submit" class="mainoption bi_new" id="add_preset" value="{L_lm_add_preset}" />
+		<button name="add_preset" type="submit" class="mainoption" id="add_preset"><i class="icon-ok"></i>{L_lm_add_preset}</button>
 	</div>
 </div>
 {CSRF_TOKEN}
 </form>
+
+<div id="dialog-new-layout" title="{L_lm_new_layout}">
+	<form method="post" action="{ACTION}" name="post">
+		<fieldset class="settings mediumsettings">
+		<legend>{L_lm_new_layout}</legend>
+		<dl>
+			<dt><label>{L_name}: *</label></dt>
+			<dd><input name="new_layout_name" type="text" maxlength="30" style="width:90%"/></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}: *</label></dt>
+			<dd><input name="new_layout_desc" type="text" maxlength="80" style="width:90%"/></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_lm_source_layout}:</label></dt>
+			<dd>{LAYOUT_DROPDOWN}</dd>
+		</dl>
+		</fieldset>
+		<button class="mainoption" type="submit" name="add_layout"><i class="icon-ok"></i>{L_lm_new_layout}</button>
+	{CSRF_TOKEN}
+	</form>
+</div>

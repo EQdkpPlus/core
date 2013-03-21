@@ -245,7 +245,10 @@ class ManageRaids extends page_generic {
 	});", 'docready');
 		$this->jquery->dialog('r_add_mem_durl', $this->user->lang('add_member'), array('url' => $this->root_path.'addcharacter.php'.$this->SID.'&adminmode=1', 'width' =>'640', 'height' => '520', 'onclosejs' => 'document.getElementById("save_button").click();'));
 		$this->jquery->dialog('r_add_event_durl', $this->user->lang('add_event'), array('url' => 'manage_events.php'.$this->SID.'&upd=true&simple_head=true', 'width' =>'700', 'height' =>'550', 'onclosejs' => 'document.getElementById("save_button").click();'));
-
+		$this->jquery->Collapse('#toggleAdjustments');
+		$this->jquery->Collapse('#toggleItems');
+		$this->jquery->Collapse('#toggleRaidInfos');
+		
 		$this->core->set_vars(array(
 			'page_title'    => $this->user->lang('manraid_title'),
 			'template_file' => 'admin/manage_raids_edit.html',
@@ -274,7 +277,7 @@ class ManageRaids extends page_generic {
 		$this->tpl->assign_vars(array(
 			'RAID_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], $footer_text),
 			'PAGINATION' => generate_pagination('manage_raids.php'.$sort_suffix, $raid_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
-			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<a href="'.$this->root_path.'plugins/raidlogimport/admin/dkp.php"><input type="button" class="mainoption" value="'.$this->user->lang('raidlogimport_dkp').'" /></a>' : '',
+			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<button onclick="window.location=\''.$this->root_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'\'" type="button" class="mainoption"><i class="icon-upload-alt"></i>'.$this->user->lang('raidlogimport_dkp').'</button>' : '',
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 

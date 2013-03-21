@@ -734,6 +734,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
 }
 .blue:hover, .button:hover, input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover, button:not(.ui-widget):hover {
+	color: #d9eef7;
 	background: #007ead;
 	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
 	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
@@ -867,7 +868,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	font-weight: normal;
 	text-align: right;
 	background-color: #F5F5F5 !important;
-	border-bottom: none;
+	border-bottom: none; 
 }
 
 #contentBody th a {
@@ -2269,7 +2270,34 @@ blockquote {
 	display: block;
 }
 
-/*
+.tableHeader.floatRight {
+	margin-bottom: 5px;
+}
+
+/* Colorpicker */
+.sp-replacer {
+	border-radius: 4px 4px 4px 4px;
+	background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+	padding: 4px 6px;
+	color: #555555;
+}
+
+.sp-replacer:hover, .sp-replacer.sp-active {
+     border-color: rgba(82, 168, 236, 0.8);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+    outline: 0 none;
+}
+
+.sp-container {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px 4px 4px 4px;
+}
+
+
 @media all and (max-width: 480px) {
 	body{
 		font-size: 14px;
@@ -2339,4 +2367,3 @@ blockquote {
 	}
 	
 }
-*/

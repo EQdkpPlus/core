@@ -1,18 +1,27 @@
 <form method="post" action="{ACTION}" name="post">
 <input type="hidden" name="calendar" value="{CALENDAR}" />
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-		<th colspan="6" >{L_addevent_title}</th>
-	</tr>
-	<tr>
-		<td colspan="2" align="center" class="row1">{L_name}: <input type="text" name="name" size="35" maxlength="255" value="{NAME}" class="input" /></td>
-		<td colspan="2" align="center" class="row2">{L_value}: <input type="text" name="value" size="8" maxlength="7" value="{VALUE}" class="input" /></td>
-		<td colspan="2" align="center" class="row1">{L_multidkp_to_event}: {MDKP2EVENT}</td>
-	</tr>
+
+<fieldset class="settings">
+	<legend>{L_addevent_title}</legend>
+	<dl>
+		<dt><label>{L_name}:</label></dt>
+		<dd><input type="text" name="name" size="35" maxlength="255" value="{NAME}" class="input" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_value}:</label></dt>
+		<dd><input type="text" name="value" size="8" maxlength="7" value="{VALUE}" class="input" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_multidkp_to_event}:</label></dt>
+		<dd>{MDKP2EVENT}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_event_icon_header}:</label></dt>
+		<dd></dd>
+	</dl>
+	
+	<table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<!-- IF ICONS -->
-	<tr>
-		<th colspan="6">{L_event_icon_header}</th>
-	</tr>
 	<!-- BEGIN files_row -->
 	<tr class="colorswitch">
 		<!-- BEGIN fields -->
@@ -25,20 +34,16 @@
 		<!-- END fields -->
 	</tr>
 	<!-- END files_row -->
-	<tr>
-		<th colspan="6"></th>
-	</tr>
 	<!-- ENDIF -->
-	<tr>
-		<th align="center" colspan="6">
-			<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
-			<!-- IF S_UPD -->
-			<input type="hidden" name="event_id" value="{EVENT_ID}" />
-			<input type="button" name="del" value="{L_delete}" class="mainoption bi_delete" onclick="delete_warning();" />
-			<!-- ENDIF -->
-			<input type="submit" name="cancel" value="{L_cancel}" class="liteoption bi_back" />
-		</th>
-	</tr>
 </table>
+</fieldset>
+
+<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+<!-- IF S_UPD -->
+<input type="hidden" name="event_id" value="{EVENT_ID}" />
+<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete}</button>
+<!-- ENDIF -->
+<button class="mainoption" type="submit" name="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
+
 {CSRF_TOKEN}
 </form>
