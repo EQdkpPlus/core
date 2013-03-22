@@ -396,7 +396,7 @@ class viewcalendar extends page_generic {
 		// template things
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('calendars'),
-			'template_file'		=> 'calendar.html',
+			'template_file'		=> 'calendar/calendar.html',
 			'display'			=> true
 		));
 	}
