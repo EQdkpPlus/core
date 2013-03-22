@@ -243,8 +243,8 @@ class ManageRaids extends page_generic {
 	$('#r_add_event').click(function() {
 		r_add_event_durl();
 	});", 'docready');
-		$this->jquery->dialog('r_add_mem_durl', $this->user->lang('add_member'), array('url' => $this->root_path.'addcharacter.php'.$this->SID.'&adminmode=1', 'width' =>'640', 'height' => '520', 'onclosejs' => 'document.getElementById("save_button").click();'));
-		$this->jquery->dialog('r_add_event_durl', $this->user->lang('add_event'), array('url' => 'manage_events.php'.$this->SID.'&upd=true&simple_head=true', 'width' =>'700', 'height' =>'550', 'onclosejs' => 'document.getElementById("save_button").click();'));
+		$this->jquery->dialog('r_add_mem_durl', $this->user->lang('add_member'), array('url' => $this->root_path.'addcharacter.php'.$this->SID.'&adminmode=1', 'width' =>'640', 'height' => '520', 'onclosejs' => 'document.getElementById("refresh_button").click();'));
+		$this->jquery->dialog('r_add_event_durl', $this->user->lang('add_event'), array('url' => 'manage_events.php'.$this->SID.'&upd=true&simple_head=true', 'width' =>'700', 'height' =>'550', 'onclosejs' => 'document.getElementById("refresh_button").click();'));
 
 		$this->core->set_vars(array(
 			'page_title'    => $this->user->lang('manraid_title'),
