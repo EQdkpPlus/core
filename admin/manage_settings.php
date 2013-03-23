@@ -1016,7 +1016,7 @@ class mmocms_settings extends page_generic {
 		// PLACEHOLDER.. maybe we will do that one day...
 
 		// save the setting
-		if ($this->in->get('save_plus') && $this->checkCSRF('display')){
+		if ($this->in->exists('save_plus') && $this->checkCSRF('display')){
 
 			foreach($settingsdata as $tabname=>$fieldsetdata){
 				foreach($fieldsetdata as $fieldsetname=>$fielddata){

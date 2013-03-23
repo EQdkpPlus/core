@@ -486,8 +486,10 @@ class core extends gen_class {
 									$arrOutOneLevel[] = $arrHashArray[$hash];
 								}	
 							}
+							$show = true;
 						}
 					}
+					$show = true;
 				}
 			}
 			

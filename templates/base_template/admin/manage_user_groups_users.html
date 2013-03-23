@@ -1,9 +1,7 @@
 <form method="post" action="{ACTION}" name="post">
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
-	<tr>
-		<th align="center"><a href="manage_user_groups.php{SID}">{L_manage_user_groups}</a> &raquo; {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></th>
-	</tr>
-	</table>
+	<div class="contentHeader">
+		<h1 class="contentTitle"><a href="manage_user_groups.php{SID}">{L_manage_user_groups}</a> &raquo; {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></h1>
+	</div>
 	
 	<div id="groups_tabs">
 		<ul>
@@ -82,7 +80,8 @@
 				<fieldset class="settings mediumsettings" class="settings">
 						<legend>{L_add_user_to_group}</legend>
 						{ADD_USER_DROPDOWN}
-						<br /><br /><input type="submit" name="add_group_users" value="{L_add_selected_to_group}" class="mainoption bi_new" id="add_group_users" />
+						<br /><br />
+						<button class="mainoption" type="submit" name="add_group_users" id="add_group_users"><i class="icon-plus"></i>{L_add_selected_to_group}</button>
 				</fieldset>
 		</div>
 		<!-- IF S_USERGROUP_ADMIN -->
@@ -133,12 +132,15 @@
 				
 			</div>
 			<div class="contentFooter">
-				<input type="submit" class="bi_ok mainoption" name="save_group_perms" value="{L_save}" />
+				<button class="mainoption" type="submit" name="save_group_perms"><i class="icon-ok"></i>{L_save}</button>
 			</div>
 		</div>
 	</div>
 	<!-- ENDIF -->
-	<input type="button" name="back" value="{L_back}" class="liteoption bi_back" onclick="window.location='manage_user_groups.php{SID}'"/>
+	<div class="contentFooter">
+		<button class="mainoption" type="button" name="back" onclick="window.location='manage_user_groups.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+	</div>
+
 {CSRF_TOKEN}
 </form>
 <script type="text/javascript">

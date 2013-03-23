@@ -1,25 +1,27 @@
 <form method="post" action="{ACTION}" name="post">
-<table width="100%">
-	<tr>
-		<th colspan="2"><a href="manage_pagelayouts.php{SID}">{L_lm_title}</a> &raquo; {FILENAME}</th>
-	</tr>
-	<tr class="row1">
-		<td width="20">{L_description}:</td>
-		<td><input type="text" name="description" value="{DESCRIPTION}" class="input" style="width:99%" /></td>
-	</tr>
+<fieldset class="settings  mediumsettings">
+	<legend><a href="manage_pagelayouts.php{SID}">{L_lm_title}</a> &raquo; {FILENAME}</legend>
+	<dl>
+		<dt><label>{L_description}:</label></dt>
+		<dd><input type="text" name="description" value="{DESCRIPTION}" class="input" style="width:90%" /></dd>
+	</dl>
 	<!-- BEGIN param_row -->
-	<tr>
-		<td class="row1 nowrap">{param_row.NAME}</td>
-		<td class="row2 nowrap">{param_row.FIELD}</td>
-	</tr>
+	<dl>
+		<dt><label>">{param_row.NAME}:</label></dt>
+		<dd>{param_row.FIELD}</dd>
+	</dl>
 	<!-- END param_row -->
+	
 	<!-- BEGIN subs_row -->
-	<tr>
-		<td class="row1 nowrap">{subs_row.NAME}</td>
-		<td class="row2 nowrap">{subs_row.FIELD}</td>
-	</tr>
+	<dl>
+		<dt><label>">{subs_row.NAME}</label></dt>
+		<dd>{subs_row.FIELD}</dd>
+	</dl>
 	<!-- END subs_row -->
-</table>
+</fieldset>
+
+
+
 <div id="plus_pm_pages_tabs">
 	<ul>
 	<!-- BEGIN page_list -->
@@ -29,10 +31,10 @@
 	<!-- BEGIN page_row -->
 	<div id="page-{page_row.ID}">
 		<!-- IF page_row.S_ROSTER -->
+		<div class="tableHeader">
+			<h2>{L_lm_roster_settings}</h2>
+		</div>
 		<table width="100%" id="table_roster" class="colorswitch">
-			<tr>
-				<th colspan="2">{L_lm_roster_settings}</th>
-			</tr>
 			<tr>
 				<td class="nowrap" width="50">{L_lm_roster_classorrole}</td>
 				<td>{ROSTER_DD}</td>
@@ -44,16 +46,15 @@
 			<tr>
 				<td class="nowrap">{L_show_hidden_ranks}</td>
 				<td><input type="checkbox" value="1" name="roster_show_hidden" {ROSTER_SHOW_HIDDEN}/></td>
-			</tr>
-			
+			</tr>	
 		</table>
 		<!-- ENDIF -->
 		
 		<!-- IF page_row.S_LEADERBORD -->
+		<div class="tableHeader">
+			<h2>{L_lm_leaderbord_settings}</h2>
+		</div>
 		<table width="100%" id="table_leaderbord" class="colorswitch">
-			<tr>
-				<th colspan="2">{L_lm_leaderbord_settings}</th>
-			</tr>
 			<tr>
 				<td class="nowrap">{L_lm_lb_maxpercolumn}</td>
 				<td><input type="text" size="4" name="lb_maxpercolumn" value="{LB_MAXPERCOLUMN}" class="input" /></td>
@@ -75,10 +76,10 @@
 				<td>{LB_POOL_DD}</td>
 			</tr>
 		</table>
+		<div class="tableHeader">
+			<h2>{L_lm_lb_class_sort}</h2>
+		</div>
 		<table width="100%" id="leaderboard_classid" class="sortingtable" {CLASSDISPLAY}>
-			<tr>
-				<th colspan="2">{L_lm_lb_class_sort}</th>
-			</tr>
 			<!-- BEGIN class_row -->
 			<tr>
 				<td width="50" align="center">
@@ -90,10 +91,11 @@
 			</tr>
 			<!-- END class_row -->
 		</table>
+
+		<div class="tableHeader" {ROLEDISPLAY}>
+			<h2>{L_lm_lb_role_sort}</h2>
+		</div>
 		<table width="100%" id="leaderboard_defaultrole" class="sortingtable" {ROLEDISPLAY}>
-			<tr>
-				<th colspan="2">{L_lm_lb_role_sort}</th>
-			</tr>
 			<!-- BEGIN role_row -->
 			<tr>
 				<td width="50" align="center">
@@ -108,11 +110,11 @@
 		<br />
 		<!-- ENDIF -->
 		<!-- BEGIN page_object_row -->
+		<div class="tableHeader">
+			<h2>{page_row.page_object_row.TABLE_TITLE}</h2>
+		</div>
 		<table width="100%" id="table_{page_row.page_object_row.ID}" class="colorswitch sortingtable">
 			<thead>
-				<tr class="not-sortable">
-					<th colspan="8">{page_row.page_object_row.TABLE_TITLE}</th>
-				</tr>
 				<tr class="not-sortable">
 					<th colspan="8">{L_lm_table_settings}</th>
 				</tr>
@@ -149,7 +151,7 @@
 				<tr class="not-sortable">
 					<th colspan="99">
 						{page_row.page_object_row.DROPDOWN}
-						<input type="button" value="{L_lm_add_row}" class="add_row_button mainoption bi_new" id="button_{page_row.page_object_row.ID}" {page_row.page_object_row.DISABLED} />
+						<button class="add_row_button mainoption" type="button" id="button_{page_row.page_object_row.ID}" {page_row.page_object_row.DISABLED}><i class="icon-plus"></i>{L_lm_add_row}</button>
 					</th>
 				</tr>
 			</tfoot>
@@ -188,14 +190,11 @@
 	</div>
 	<!-- END page_row -->
 </div>
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-		<th colspan="3">
-			<input type="hidden" name="filename" value="{FILENAME}" />
-			<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
-			<input type="submit" name="" value="{L_cancel}" class="liteoption bi_back" />
-		</th>
-	</tr>
-</table>
+
+<div class="contentFooter">
+	<input type="hidden" name="filename" value="{FILENAME}" />
+	<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+	<button class="liteoption" type="submit" name=""><i class="icon-chevron-left"></i>{L_cancel}</button>
+</div>
 {CSRF_TOKEN}
 </form>

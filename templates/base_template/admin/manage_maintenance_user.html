@@ -20,7 +20,7 @@
 	</dd>
 </dl>
 </fieldset>
-<input name="create" type="submit" id="create" value="{L_maintenanceuser_create}" class="mainoption bi_ok" />
+<button class="mainoption" name="create" type="submit" id="create"><i class=""></i>{L_maintenanceuser_create}</button>
 <!-- ELSE -->
 <fieldset class="settings smallsettings">
 <legend>{L_maintenanceuser_user}</legend>
@@ -29,12 +29,13 @@
 		<label>{L_infos}:</label><br />
 	</dt>
 	<dd>
-		<textarea cols="50" rows="3" onclick="this.form.data.select()" name="data" readonly="readonly">{USER_DATA}</textarea>
+		<textarea cols="50" rows="4" onclick="this.form.data.select()" name="data" readonly="readonly">{USER_DATA}</textarea>
 	</dd>
 </dl>
 </fieldset>
-<input name="del" type="submit" id="create" value="{L_maintenanceuser_delete}" class="mainoption bi_delete" /> <input name="renew" type="submit" id="renew" value="{L_maintenanceuser_renew}" class="mainoption bi_reload" />
-
+<button class="mainoption" name="del" type="submit"><i class="icon-remove"></i>{L_maintenanceuser_delete}</button>
+<button class="mainoption" name="renew" type="submit" id="renew"><i class="icon-repeat"></i>{L_maintenanceuser_renew}</button>
+<br /><br />
 <fieldset class="settings smallsettings">
 <legend>{L_maintenanceuser_send}</legend>
 <dl>
@@ -54,7 +55,8 @@
 	</dd>
 </dl>
 </fieldset>
-<input type="submit" name="email_submit" class="mainoption bi_mail" value="{L_maintenanceuser_send_mail}" />
+<button class="mainoption" type="submit" name="email_submit"><i class="icon-envelope"></i>{L_maintenanceuser_send_mail}</button>
+
 <!-- ENDIF -->
 {CSRF_TOKEN}
 </form>

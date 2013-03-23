@@ -289,7 +289,9 @@ class Manage_Users extends page_generic {
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><img src="'.$this->root_path.'images/glyphs/enable.png" alt="" /></a>';
 			}
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
-
+$a_members = $this->pdh->get('member', 'connection_id', array($user_id));
+			$a_members = (is_array($a_members)) ? $this->pdh->maget('member', array('classid', 'name', 'rankname'), 0, array($a_members), null, false, true) : array();
+			
 			$this->tpl->assign_block_vars('users_row', array(
 				'U_MANAGE_USER'		=> 'manage_users.php'.$this->SID.'&amp;' . 'u' . '='.$user_id,
 				'U_OVERTAKE_PERMS'	=> 'manage_users.php'.$this->SID.'&amp;mode=ovperms&amp;' . 'u' . '='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode'),
@@ -304,10 +306,11 @@ class Manage_Users extends page_generic {
 				'PROTECT_SUPERADMIN'=> ((is_array($user_memberships) && in_array(2, $user_memberships) && !isset($adm_memberships[2])) || ($user_id == $this->user->data['user_id'])) ? true : false,
 				'ACTIVE'			=> $user_active,
 				'ACTIVATE_ICON'		=> $activate_icon,
-				'ONLINE'			=> $user_online)
+				'ONLINE'			=> $user_online,
+				'MEMBER_COUNT'		=> count($a_members),
+				)
 			);
-			$a_members = $this->pdh->get('member', 'connection_id', array($user_id));
-			$a_members = (is_array($a_members)) ? $this->pdh->maget('member', array('classid', 'name', 'rankname'), 0, array($a_members), null, false, true) : array();
+			
 			if (is_array($a_members)){
 				foreach ($a_members as $member_id => $member) {
 					$this->tpl->assign_block_vars('users_row.members_row', array(

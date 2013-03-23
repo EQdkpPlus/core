@@ -1,8 +1,9 @@
 <form method="post" action="{ACTION}" name="post">
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_manage_newscategories}</h1>
+</div>
+
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr>
-			<th align="center" colspan="4"><span style="float:left">{L_manage_newscategories}</span><span style="float:right"><input type="button" onclick="window.location='manage_news.php{SID}'" value="{L_manage_news}" class="mainoption bi_manage" /></span></th>
-		</tr>
 		<tr>
 			<th></th>
 			<th>
@@ -18,7 +19,7 @@
 		<!-- BEGIN news_categories -->
 		<tr>
 			<td width="32" style="text-align: center;">
-				<img src="../images/global/delete.png" alt="{L_delete}" onclick="delete_warning({news_categories.ID});" class="hand" />
+				<!-- IF news_categories.ID != 1 --><img src="../images/global/delete.png" alt="{L_delete}" onclick="delete_warning({news_categories.ID});" class="hand" /><!-- ENDIF -->
 			</td>
 			<td width="33%">
 				<input type="text" name="news_categories[{news_categories.ID}][name]" size="50" maxlength="50" value="{news_categories.NAME}" class="maininput" />
@@ -40,9 +41,10 @@
 			<td>{ICON_UPLOADER}</td>
 			<td width="22%">{NEW_COLORPICKER}</td>
 		</tr>
-		<tr>
-			<th colspan="4"><input type="submit" name="add" value="{L_save}" class="mainoption bi_ok" /></th>
-		</tr>
 	</table>
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="add"><i class="icon-ok"></i>{L_save}</button>
+		<button class="mainoption" type="button" onclick="window.location='manage_news.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+	</div>
 {CSRF_TOKEN}
 </form>

@@ -185,7 +185,12 @@
 				
 				<!-- IF S_IN_ADMIN -->
 				<div id="adminmenu">
-					{ADMIN_MENU}
+					<div class="hiddenSmartphone">
+						{ADMIN_MENU}
+					</div>
+					<div class="hiddenDesktop">
+						<select><option>Admin Navigation</option></select>
+					</div>
 				</div>
 				<!-- ENDIF -->
 			</nav>

@@ -137,7 +137,7 @@ class viewnews extends page_generic {
 				$news_icon = '';
 				$headline = '';
 				if ($this->config->get('enable_newscategories') == 1 && $icon = $this->pdh->get('news_categories', 'icon', $news['news_category_id'])){
-					$news_icon = '<img src="'.$this->pfh->FilePath('newscat_icons/'.sanitize($icon), 'eqdkp').'" class="absmiddle" alt="Category Icon" />&nbsp;';
+					$news_icon = '<img src="'.$this->pfh->FilePath(sanitize($icon), 'files').'" class="absmiddle" alt="Category Icon" />&nbsp;';
 				};
 				if ($this->config->get('enable_newscategories') == 1 && $color = $this->pdh->get('news_categories', 'color', $news['news_category_id'])){
 					$headline = '<span style="color:'.$color.'">'.stripslashes($news['news_headline']).'</span>';

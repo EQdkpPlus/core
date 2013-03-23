@@ -414,7 +414,7 @@ h3 {
 
 /* Toggle Buttons for portalbox */
 .toggle_button:before{
-	content:"\f077";
+	content:"\f078";
 	font-family: FontAwesome;
 	cursor: pointer;
 	float: right;
@@ -422,7 +422,7 @@ h3 {
 }
 
 .toggle_button.active:before {
-	content:"\f078";
+	content:"\f077";
 	font-family: FontAwesome;
 }
 
@@ -1943,6 +1943,10 @@ div.icon_loading{
 	margin-bottom: 10px;
 }
 
+.news_header {
+	position:relative;
+}
+
 .contentSideRight{
 	text-align: left;
 	border-left: 1px solid #ccc;
@@ -2299,9 +2303,12 @@ blockquote {
 
 
 @media all and (max-width: 480px) {
-	body{
+	body, html , #personalArea{
 		font-size: 14px;
 		line-height: 15px;
+	}
+	#personalArea {
+		line-height: 20px;
 	}
 	.hiddenSmartphone, .debug {
 		display:none;

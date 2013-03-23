@@ -59,7 +59,15 @@ class Manage_News_Categories extends page_generic {
 	public function add() {
 		// Insert the new Category
 		if ($this->in->get('new_cat_name') != ""){
-			$this_news_id = $this->pdh->put('news_categories', 'add_category', array($this->in->get('new_cat_name'), $this->jquery->MoveUploadedImage($this->in->get('new_cat'), $this->pfh->FolderPath('newscat_icons','eqdkp')), $this->in->get('new_color')));
+			$icon = $this->html->widget_return(array('type'	=> 'imageuploader',
+						'name'		=> 'new_cat',
+						'imgpath'	=> $this->pfh->FolderPath('','files'),
+						'options'	=> array(
+							//'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
+							'returnFormat' => 'in_data',
+						)));
+
+			$this_news_id = $this->pdh->put('news_categories', 'add_category', array($this->in->get('new_cat_name'), $icon, $this->in->get('new_color')));
 		}
 
 		//Update the whole others...
@@ -68,8 +76,15 @@ class Manage_News_Categories extends page_generic {
 			if ($elem['name'] == "" && $key != 1){
 				$this->pdh->put('news_categories', 'delete_category', array($key));		//Delete
 			}else{
+				$icon = $this->html->widget_return(array('type'	=> 'imageuploader',
+						'name'		=> 'news_categorie_icon_'.$key,
+						'imgpath'	=> $this->pfh->FolderPath('','files'),
+						'options'	=> array(
+							//'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
+							'returnFormat' => 'in_data',
+						)));
 				$this->pdh->put('news_categories', 'update_category', array(
-					$key, $elem['name'], $this->jquery->MoveUploadedImage($elem['icon'], $this->pfh->FolderPath('newscat_icons','eqdkp')), $this->in->get('user_color_'.$key)
+					$key, $elem['name'], $icon, $this->in->get('user_color_'.$key)
 				));		//Update
 			}
 		}
@@ -95,17 +110,35 @@ class Manage_News_Categories extends page_generic {
 		);
 		$ncategories	= $this->pdh->sort($this->pdh->get('news_categories', 'id_list'), 'news_categories', $sort_order[$tag][0], $sort_order[$tag][1][$direction]);
 		foreach($ncategories as $id){
+			$icon = $this->html->widget(array('type'	=> 'imageuploader',
+			'name'		=> 'news_categorie_icon_'.$id,
+			'imgpath'	=> $this->pfh->FolderPath('','files'),
+			'value'		=> $this->pdh->get('news_categories', 'icon', array($id)),
+			'options'	=> array(
+				//'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
+				'returnFormat' => 'in_data',
+				'deletelink'=>'manage_news_categories.php'.$this->SID.'&mode=delicon&id='.$id.'&link_hash='.$this->CSRFGetToken('mode'),
+				'prevheight' => 48
+			)));
+		
 			$this->tpl->assign_block_vars('news_categories', array(
 				'ID'			=> $id,
 				'NAME'			=> $this->pdh->get('news_categories', 'name', array($id)),
 				'COLORPICKER'	=> $this->jquery->colorpicker('user_color_'.$id, $this->pdh->get('news_categories', 'color', array($id))),
-				'ICON'			=> $this->html->widget(array('type' => 'imageuploader', 'name' => 'news_categories['.$id.'][icon]', 'imgpath'	=> $this->pfh->FolderPath('newscat_icons','eqdkp'), 'value' => $this->pdh->get('news_categories', 'icon', array($id)), 'options' => array('prevheight'=>'48', 'resize'=>true, 'deletelink'=>'manage_news_categories.php'.$this->SID.'&mode=delicon&id='.$id.'&link_hash='.$this->CSRFGetToken('mode')))),
+				'ICON'			=> $icon,
 			));
 		}
 
 		$this->confirm_delete($this->user->lang('confirm_delete_newscat'), '', true, array('custom_js' => "window.location = 'manage_news_categories.php".$this->SID."&link_hash=".$this->CSRFGetToken('deleteid')."&deleteid='+selectedID"));
 		$this->tpl->assign_vars(array(
-			'ICON_UPLOADER'		=> $this->html->widget(array('type' => 'imageuploader', 'name' => 'new_cat', 'imgpath'	=> $this->pfh->FolderPath('newscat_icons','eqdkp'), 'options' => array('prevheight'=>'48'))),
+			'ICON_UPLOADER'		=>$icon = $this->html->widget(array('type'	=> 'imageuploader',
+				'name'		=> 'new_cat',
+				'imgpath'	=> $this->pfh->FolderPath('','files'),
+				'options'	=> array(
+					//'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
+					'returnFormat' => 'in_data',
+					'prevheight' => 48
+				))),
 			'NEW_COLORPICKER'	=> $this->jquery->colorpicker('new_color', ''),
 			$red				=> '_red',
 		));

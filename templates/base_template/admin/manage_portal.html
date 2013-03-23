@@ -1,13 +1,15 @@
 <form method="post" action="{ACTION}" name="post">
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-		<th align="left" width="100%">{L_portalplugin_management} &nbsp; {L_portalplugin_filter}: {PERM_FILTER}</th>
-	</tr>
-</table>
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_portalplugin_management}</h1>
+</div>
+<div class="bluebox roundbox">
+	<div class="icon_info">{L_portal_dragndrop_info}</div>
+</div>
+<div>
+{L_portalplugin_filter}: {PERM_FILTER}
+</div>
 <div id="positions">
-	<div class="bluebox roundbox">
-		<div class="icon_info">{L_portal_dragndrop_info}</div>
-	</div>
+	
 	<br />
 	<div style="float:left; width:25%; min-width:200px;">
 		<div class="portal_block_border">
@@ -129,8 +131,8 @@
 	
 </div>
 <div class="contentFooter">
-	<input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_save}" />
-	<input type="button" name="reset" value="{L_reset}" class="liteoption bi_reset" onclick="window.location='manage_portal.php{SID}'"/>
+	<button class="mainoption" name="save" type="submit" id="save"><i class="icon-ok"></i>{L_save}</button>
+	<button class="liteoption" type="button" name="reset" onclick="window.location='manage_portal.php{SID}'"><i class="icon-trash"></i>{L_reset}</button>
 </div>
 {CSRF_TOKEN}
 </form>

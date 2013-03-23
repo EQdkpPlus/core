@@ -84,7 +84,7 @@ if (!class_exists("jquery")) {
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", width:"90%", height:"90%"});', 'docready');
-				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true});', 'docready');
+				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
 		}
 
 		/**
@@ -1306,8 +1306,6 @@ if (!class_exists("jquery")) {
 
 		public function imageUploader($type, $inputid, $imgname, $imgpath, $options=''){
 			$this->fileBrowser($type, 'image');
-				
-			$img2beremoved = (isset($imgname) && is_file($imgpath.$imgname)) ? $this->encrypt->encrypt($imgpath.$imgname) : false;
 			
 			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/no_pic.png');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);

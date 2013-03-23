@@ -113,7 +113,7 @@ class game extends gen_class {
 
 		$icon_path = $this->root_path.'games/'.$this->game.'/classes/'.$class_id.(($big) ? '_b.png' : '.png');
 		if(is_file($icon_path)){
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='class ".$class_id."' class='".(($big) ? $this->game."_classicon_big" : $this->game."_classicon")."' />";;
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.(($big) ? $this->game.'_classicon_big' : $this->game.'_classicon').'" />';
 		}
 		return false;
 	}

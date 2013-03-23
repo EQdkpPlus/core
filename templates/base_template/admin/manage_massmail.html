@@ -10,10 +10,10 @@
 	
 	<!-- BEGIN type_row -->
 	<div id="{type_row.KEY}">
+		<div class="tableHeader">
+			<h2>{type_row.NAME}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		  <tr>
-			<th colspan="3">{type_row.NAME}</th>
-			</tr>
 			<tr>
 			  <th><input type="checkbox" id="selall_{type_row.KEY}" name="all_nr" value="all_nr" /></th>
 			  <th>{L_date}</th>
@@ -26,10 +26,10 @@
 			<td>{type_row.content_row.HEADLINE}</td>
 		  </tr>
 		  <!-- END content_row -->
-		  <tr>
-			<th colspan="3" nowrap="nowrap"><input type="button" value="{L_massmail_add_content}" onclick="insert('{type_row.KEY}');" class="mainoption bi_ok"></th>
-			</tr> 
 		</table>
+		<div class="contentFooter">
+			<button class="mainoption" type="button" onclick="insert('{type_row.KEY}');"><i class="icon-ok"></i>{L_massmail_add_content}</button>
+		</div>
 	</div>
 	<!-- END type_row -->
 </div>				  
@@ -97,11 +97,14 @@ function insert(text){
 			<!-- ENDIF -->
 			</span></dt>
 			<dd><textarea name="body" class="mceEditor" cols="70" rows="15" style="width:100%;" id="mm_body">{BODY}</textarea>
-				<br /><input type="button" onclick="massmailContentDialog();" value="{L_massmail_add_content}" class="mainoption bi_new" />
+				<br /><button class="mainoption" type="button" onclick="massmailContentDialog();"><i class="icon-plus"></i>{L_massmail_add_content}</button>
 			</dd>
 		</dl>
 	</fieldset>
-	<input type="submit" name="submit" value="{L_maintenanceuser_send}" class="mainoption bi_mail" /> <input type="reset" name="reset" value="{L_reset}" class="mainoption bi_reset" />
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="submit"><i class="icon-ok"></i>{L_maintenanceuser_send}</button>
+		<button class="mainoption" type="reset" name="reset"><i class="icon-trash"></i>{L_reset}</button>
+	</div>
 {CSRF_TOKEN}
 </form>
 <!-- ELSE -->

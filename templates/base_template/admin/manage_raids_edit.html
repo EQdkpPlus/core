@@ -90,11 +90,13 @@
 <div class="contentFooter">
 	<input type="hidden" name="raid_id" value="{RAID_ID}" />
 	<button class="liteoption" type="submit" name="itemadj_del"><i class="icon-remove"></i>{L_adjitem_del}</button>
+	<button class="mainoption" type="submit" name="save" id="save_button"><i class="icon-ok"></i>{L_RAID_SAVE}</button>
 	<!-- IF S_RAID_UPD -->
 	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_raid}</button>
-	<button class="mainoption" type="reset" name="reset"><i class="icon-trash"></i>{L_reset}</button>
 	<!-- ENDIF -->
-	<button class="mainoption" type="submit" name="save" id="save_button"><i class="icon-ok"></i>{L_RAID_SAVE}</button>
+	<button class="mainoption" type="submit" name="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
+	<input type="submit" name="refresh" class="mainoption bi_ok" id="refresh_button" style="display:none;"/>
+	
 </div>
 {CSRF_TOKEN}
 </form>

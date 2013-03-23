@@ -1,3 +1,6 @@
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_edit_news}</h1>
+</div>
 <form method="post" action="{ACTION}" name="addnews" id="addnews">
 <div id="manage_news_tabs">
 	<ul>
@@ -8,12 +11,12 @@
 	<div id="newstab-1">
 		<fieldset class="settings">
 			<legend>{L_headline}</legend>
-			<input type="text" name="news_headline" style="width:100%;" maxlength="255" value="{HEADLINE}" class="input required" />
+			<input type="text" name="news_headline" style="width:90%;" maxlength="255" value="{HEADLINE}" class="input required" />
 		</fieldset>
 		<fieldset class="settings">
 			<legend>{L_message_body}</legend>
 			<textarea name="news_message" id="news_message" class="mceEditor" rows="3" cols="60" class="required" style="width:100%;height:500px;">{MESSAGE}</textarea>
-			<input type="button" id="readmorebutton" value="{L_news_readmore_button}" class="mainoption" {EXTENDNEWSBUTTON_ENABLED}/>
+			<button class="mainoption" type="button" id="readmorebutton" {EXTENDNEWSBUTTON_ENABLED}><i class="icon-plus"></i>{L_news_readmore_button}</button>
 		</fieldset>
 	</div>
 
@@ -73,10 +76,13 @@
 <div class="contentFooter">
 	<input type="hidden" name="ref" value="{REF}" />
 	<!-- IF S_ADD -->
-	<input type="submit" name="upd" value="{L_ADD_NEWS}" class="mainoption bi_ok" />
+	<button class="mainoption" type="submit" name="upd"><i class="icon-ok"></i>{L_ADD_NEWS}</button>
 	<!-- ELSE -->
-	<input type="submit" name="upd" value="{L_update_news}" class="mainoption bi_ok" /> <input type="button"  name="del" value="{L_delete_news}" class="liteoption bi_delete" onclick="delete_warning();"/> <input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" />
+	<button class="mainoption" type="submit" name="upd"><i class="icon-ok"></i>{L_update_news}</button>
+	<button class="liteoption" type="button"  name="del" onclick="delete_warning();"/><i class="icon-remove"></i>{L_delete_news}</button>
+	<button class="liteoption" type="reset" name="reset" ><i class="icon-trash"></i>{L_reset}</button>
 	<!-- ENDIF -->
+	<button class="liteoption" type="button" name="" onclick="window.location='manage_news.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
 	<input type="hidden" name="show">
 </div>
 

@@ -1,11 +1,16 @@
 <!-- IF not S_GROUP_PERM_LIST -->
 <!-- IF S_USERGROUP_ADMIN -->
 <form method="post" action="{ACTION}" name="post">
+
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_user_groups}</h1>
+	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" name="user_group_perms" type="submit" id="user_group_perms"><i class="icon-list"></i>{L_user_group_permissions}</button>
+	</div>
+	
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
 		<thead>
-		<tr class="not-sortable">
-			<th align="center" colspan="9"><span style="float:left;">{L_manage_user_groups}</span><span style="float:right;"><input name="user_group_perms" type="submit" class="mainoption bi_next" id="user_group_perms" value="{L_user_group_permissions}" /></span></th>
-		</tr>
 		<tr class="not-sortable">
 			<th width="10px"></th>
 			<th width="20"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
@@ -47,12 +52,12 @@
 			<td><input type="checkbox" value="1" name="user_groups[{KEY}][hide]" {user_groups.HIDE} /></td>
 		</tr>
 		</tbody>
-		<tfoot>
-		<tr>
-			<th colspan="9"> <input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" /><input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" /><input type="button" name="del" value="{L_delete_selected_group}" class="mainoption bi_delete" onclick="delete_warning();" /></th>
-		</tr>
-		</tfoot>
 	</table>
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+		<button class="mainoption" type="button" name="del"><i class="icon-remove" onclick="delete_warning();"></i>{L_delete_selected_group}</button>
+		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+	</div>
 	
 {CSRF_TOKEN}
 </form>
@@ -88,43 +93,40 @@
 <!-- ENDIF -->
 <!-- ELSE -->
 <form method="post" action="{ACTION}" name="post">
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_user_group_permissions}</h1>
+	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="submit" id="user_group_perms"><i class="icon-chevron-left"></i>{L_back}</button>
+	</div>
+	<div class="clear"></div>
+
+	<table border="0" cellspacing="1" cellpadding="2" id="user_groups_table2" class="colorswitch hoverrows">
+		<!-- BEGIN permissions_row -->
 		<tr>
-			<th width="120" align="center">
-				<span style="float:left;">{L_user_group_permissions}</span>
-				<span style="float:right;"><input type="submit" class="mainoption bi_back" value="{L_manage_user_groups}" /></span>
-			</th>
+			<th width="120">{permissions_row.GROUP}</th>
+			<!-- BEGIN headline_row -->
+			<th>{permissions_row.headline_row.GROUP}</th>
+			<!-- END headline_row -->
 		</tr>
+		<!-- BEGIN check_group -->
 		<tr>
-			<td>
-				<table border="0" cellspacing="1" cellpadding="2" id="user_groups_table2" class="colorswitch hoverrows">
-					<!-- BEGIN permissions_row -->
-					<tr>
-						<th width="120">{permissions_row.GROUP}</th>
-						<!-- BEGIN headline_row -->
-						<th>{permissions_row.headline_row.GROUP}</th>
-						<!-- END headline_row -->
-					</tr>
-					<!-- BEGIN check_group -->
-					<tr>
-						<td class="nowrap">
-							<!-- IF permissions_row.check_group.S_ADMIN -->
-							<span class="admin_icon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
-							<b>{permissions_row.check_group.CBNAME}</b>
-							<!-- ELSE -->
-							{permissions_row.check_group.CBNAME}
-							<!-- ENDIF -->
-						</td>
-						<!-- BEGIN group_row -->
-						<td><center>{permissions_row.check_group.group_row.STATUS}</center></td>
-						<!-- END group_row -->
-					</tr>
-					<!-- END check_group -->
-					<!-- END permissions_row -->
-				</table>
+			<td class="nowrap">
+				<!-- IF permissions_row.check_group.S_ADMIN -->
+				<span class="admin_icon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
+				<b>{permissions_row.check_group.CBNAME}</b>
+				<!-- ELSE -->
+				{permissions_row.check_group.CBNAME}
+				<!-- ENDIF -->
 			</td>
+			<!-- BEGIN group_row -->
+			<td><center>{permissions_row.check_group.group_row.STATUS}</center></td>
+			<!-- END group_row -->
 		</tr>
+		<!-- END check_group -->
+		<!-- END permissions_row -->
 	</table>
+
 {CSRF_TOKEN}
 </form>
 <!-- ENDIF -->

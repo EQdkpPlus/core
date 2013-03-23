@@ -29,12 +29,9 @@ function check_alias() {
 //]]>
 </script>
 <form method="post" action="{F_ACTION}" name="post" onsubmit="return info_check_form()" id="manage_pages">
+
 <input name="changed" value="" type="hidden" />
-<table width="100%" border="0" cellspacing="0" cellpadding="2">
-	<tr>
-	    <th colspan="3"><a href="manage_pages.php{SID}">{L_info_manage_pages}</a> &raquo; {PAGE_HEADER}:</th>
-    </tr>
-</table>	
+
 <fieldset class="settings">
 				<legend>{L_info_pageopt}</legend>
 				
@@ -82,10 +79,12 @@ function check_alias() {
 				<textarea class="mceEditor required" name="page_content" style="width:100%" id="page_content" rows="20" cols="3">{INFO_PAGE_CONTENT}</textarea>
 				
 	</fieldset>
+<div class="contentFooter">
+	<button class="mainoption" name="save" type="submit" id="save" ><i class="icon-ok"></i>{L_save}</button>
+	<button class="liteoption" name="reset" type="reset" id="reset" ><i class="icon-trash"></i>{L_reset}</button>
+	<button class="mainoption" name="cancel" type="button" id="infocancelbu" onclick="window.location.href='manage_pages.php{SID}'"><i class="icon-chevron-left"></i>{L_cancel}</button>
+</div>
 
-<input name="save" type="submit" class="mainoption bi_ok" id="save" value="{L_save}"/>
-		<input name="reset" type="reset" class="liteoption bi_reset" id="reset" value="{L_reset}"/>
-		<input name="cancel" type="button" class="mainoption bi_back" id="infocancelbu" value="{L_cancel}" onclick="window.location.href='manage_pages.php{SID}'" />
 {CSRF_TOKEN}
 </form>
 {JS_GUILDRULES_INFO}

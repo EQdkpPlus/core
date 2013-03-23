@@ -338,13 +338,15 @@ $(document).ready(function(){
 		<!-- ENDIF -->
 	</div>
 		<div class="contentFooter">
-			<input type="submit" name="submit" value="{L_uc_connectme}" class="mainoption bi_ok" />
-			<input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" />
-			<!-- IF S_SETTING_ADMIN -->
-			<input type="submit" name="" value="{L_back}" class="mainoption bi_back" />
+			<button class="mainoption" type="submit" name="submit" ><i class="icon-ok"></i>{L_uc_connectme}</button>			
+			<button class="liteoption" type="reset" name="reset"><i class="icon-trash"></i>{L_reset}</button>
+			<!-- IF S_SETTING_ADMIN -->	
 			<!-- IF not S_PROTECT_USER -->
-			<input type="button" name="del" value="{L_delete}" class="liteoption bi_delete ignore_validation" onclick="delete_warning({USER_ID});" id="delete123_button" />
-			<!-- ENDIF --><!-- ENDIF -->
+			<button class="liteoption ignore_validation" type="button" name="del" onclick="delete_warning({USER_ID});" id="delete_button"><i class=""></i>{L_delete}</button>
+			<!-- ENDIF -->
+			<button class="mainoption ignore_validation" type="submit" name=""><i class=""></i>{L_back}</button>
+			<!-- ENDIF -->
+			
 		</div>
 	</div>
 
