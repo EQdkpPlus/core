@@ -28,32 +28,20 @@
   </ul>
 
   <div id="fragment-1">
-    <table width="100%" align="center"  border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td width="50%">
-          <table width="100%">
-            <tr>
-              <th>{L_rssadmin_head1}</th>
-            </tr>
-            <tr>
-              <td style="width:100%;"><div id="rss"><div id="notifications"></div></div></td>
-            </tr>
-          </table>
-        </td>
-        <td width="20"> </td>
-        <td width="50%">
-          <table width="100%">
-            <tr>
-              <th>{L_rssadmin_head2} <a href="http://twitter.com/EQdkpPlus" target="new" ><img src='../images/logos/twitter_icon_16.png' alt='twitter' /></a>
-				<a href="http://www.facebook.com/pages/EQdkp-Plus/164694353225" target="new" ><img src='../images/logos/facebook_icon_16.png' alt='facebook' /></a></th>
-            </tr>
-            <tr>
-              <td><div id="twitterfeed"></div></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+	<div style="width:50%" class="floatLeft">
+		<div class="notifications-container">
+		<h2>{L_rssadmin_head1}</h2>
+		<div id="rss"><div id="notifications"></div></div>
+		</div>
+	</div>
+	<div style="width:50%" class="floatRight">
+		<div class="notifications-container">
+		<h2>{L_rssadmin_head2} <a href="http://twitter.com/EQdkpPlus" target="new" ><img src='../images/logos/twitter_icon_16.png' alt='twitter' /></a>
+				<a href="http://www.facebook.com/pages/EQdkp-Plus/164694353225" target="new" ><img src='../images/logos/facebook_icon_16.png' alt='facebook' /></a></h2>
+				<div id="twitterfeed"></div>
+		</div>
+	</div>
+	<div class="clear"></div>
   </div>
 
   <div id="fragment-2">
@@ -97,9 +85,6 @@
         <td class="row2" width="25%">{L_number_of_logs}:</td>
         <td class="row1" width="25%">{NUMBER_OF_LOGS}</td>
       </tr>
-      <tr>
-        <th align="center" colspan="4">&nbsp;</th>
-      </tr>
     </table>
   </div>
 
@@ -133,10 +118,7 @@
           <td>Mysql Version</td>
           <td>{SERVERINFO_MYSQL}</td>
         </tr>
-        <tr>
-        <td></td><td></td>
-        </tr>
-			</table>
+		</table>
   </div>
 
   <div id="fragment-4">

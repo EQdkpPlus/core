@@ -1,9 +1,9 @@
 <form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_edit_ranks}</h1>
+	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="rank_table" class="colorswitch">
 		<thead>
-		<tr class="not-sortable">
-			<th align="center" colspan="6">{L_edit_ranks}</th>
-		</tr>
 		<tr class="not-sortable">
 			<th width="10px"></th>
 			<th width="20px;"><input type="checkbox" name="" id="selall_ranks" /></th>
@@ -33,15 +33,11 @@
 			<td><input type="text" name="ranks[{KEY}][suffix]" size="35" maxlength="75" value="" class="maininput" /></td>
 		</tr>
 		</tbody>
-		<tfoot>
-		<tr>
-			<th colspan="6">
-				<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
-				<input type="button" name="del" value="{L_del_selected_ranks}" class="liteoption bi_delete" onclick="delete_warning();" />
-				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-			</th>
-		</tr>
-		</tfoot>
 	</table>
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+		<button class="liteoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_del_selected_ranks}</button>
+		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+	</div>
 {CSRF_TOKEN}
 </form>

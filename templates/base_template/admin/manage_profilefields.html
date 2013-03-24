@@ -1,10 +1,12 @@
 <!-- IF not S_EDIT -->
-<form method="post" action="{ACTION}" name="post" class="colorswitch">
-  
-  <table width="100%" cellpadding="2" cellspacing="1">
-    <tr>
-      <th colspan="8"><span style="float:left;">{L_manage_profilefields}</span><span style="float:right"><input name="new" type="submit" class="mainoption bi_new" id="new" value="{L_new_profilefield}" /></span></th>
-    </tr>    
+<form method="post" action="{ACTION}" name="post" >
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_profilefields}</h1>
+	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" name="new" type="submit" id="new"><i class="icon-plus"></i>{L_new_profilefield}</button>
+	</div>
+  <table width="100%" cellpadding="2" cellspacing="1" class="colorswitch">
     <tr>
       <th class="nowrap">&nbsp;</th>
       <th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
@@ -28,14 +30,14 @@
     <!-- END profile_row -->
     <tr >
       <th colspan="8" class="footer">
-		<span style="float:left;">
-			<input name="del" type="button" class="mainoption bi_delete" id="delete" value="{L_delete_selected}" onclick="delete_warning();" />
-			<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-		</span>
-		<span style="float:right;">{FC_PROFILEFIELDS}</span>
+		{FC_PROFILEFIELDS}
 		</th>
 	</tr>
 </table>
+<div class="contentFooter">
+	<button class="mainoption" name="del" type="button" id="delete" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
+	<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+</div>
 {CSRF_TOKEN}
 </form>
 <!-- ELSE -->
@@ -89,9 +91,10 @@ function add_option(value){
 			<img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display='none'" alt="add" /><span id="new_options"></span></dd>
 		</dl>
 	</fieldset>
-
-	<input name="add" type="submit" class="mainoption bi_ok" id="add" value="{L_save}" />
-	<input name="cancel" type="submit" class="liteoption bi_back" id="cancel" value="{L_cancel}" />
+	<div class="contentFooter">
+		<button class="mainoption" name="add" type="submit" id="add"><i class="icon-ok"></i>{L_save}</button>
+		<button class="liteoption" name="cancel" type="submit" id="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
+	</div>
 {CSRF_TOKEN}
 </form>
 <!-- ENDIF -->

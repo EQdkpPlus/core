@@ -1575,6 +1575,10 @@ div.pagination {
 	font-size:12px;
 }
 
+.notifications-container {
+	padding: 10px;
+}
+
 .loading{
 	margin:20% 0% 0% 40%;
 	float:left;

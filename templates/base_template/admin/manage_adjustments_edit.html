@@ -27,8 +27,10 @@
 	</dl>
 
 </fieldset>
-<input type="submit" name="save" value="{L_save}" class="mainoption bi_ok" />
-<input type="button" name="del" value="{L_delete}" class="liteoption bi_delete" onclick="delete_warning('{GRP_KEY}');" />
-<input type="button" name="" value="{L_cancel}" class="mainoption bi_back" onclick="window.location.href='manage_adjustments.php{SID}'"/>
+<div class="contentFooter">
+	<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+	<button class="liteoption" type="button" name="del" onclick="delete_warning('{GRP_KEY}');"><i class="icon-remove"></i>{L_delete}</button>
+	<button class="mainoption" type="button" name="" onclick="window.location.href='manage_adjustments.php{SID}'"><i class="icon-chevron-left"></i>{L_cancel}</button>
+</div>
 {CSRF_TOKEN}
 </form>
