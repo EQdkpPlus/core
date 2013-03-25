@@ -272,6 +272,26 @@ class bridge_generic extends gen_class {
 		return $arrResult;
 	}
 	
+	public function get_users(){
+		if (!$this->db) return false;
+		
+		if ($this->check_query('user')) return false;
+		
+		//Check if there's a user table
+		if ( !$this->db->num_rows($this->db->query("SHOW TABLES LIKE '".$this->prefix.$this->data['user']['table']."'"))){
+			$this->deactivate_bridge();
+			return false;
+		}
+		
+		$salt = ($this->data['user']['salt'] != '') ? ', '.$this->data['user']['salt'].' as salt ': '';
+		
+		$strQuery = "SELECT ".$this->data['user']['id'].' as id, '.$this->data['user']['name'].' as name, '.$this->data['user']['password'].' as password, '.$this->data['user']['email'].' as email'.$salt.', LOWER('.$this->data['user']['where'].') AS username_clean
+						FROM '.$this->prefix.$this->data['user']['table'];
+		$arrResult = $this->db->fetch_array($strQuery);
+		
+		return $arrResult;
+	}
+	
 	public function sync_usergroups($intCMSUserID, $intUserID){
 		$arrGroupsToSync = explode(',', $this->config->get('cmsbridge_sync_groups'));
 		if (!array($arrGroupsToSync) || count($arrGroupsToSync) < 1) return false;

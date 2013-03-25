@@ -90,7 +90,7 @@ class ManageCrons extends page_generic {
 	// ---------------------------------------------------------
 	// Display
 	// ---------------------------------------------------------
-	public function display(){
+	public function display(){	
 		if ($this->in->exists('mode')){
 			$this->crons = $this->timekeeper->list_crons();
 		}

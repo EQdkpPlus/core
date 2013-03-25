@@ -1,25 +1,21 @@
+<div class="contentHeader">
+	<h1 class="contentTitle"><a href="listusers.php{SID}">{L_user_list}</a> &raquo; {L_user}: {USERNAME}</h1>
+</div>
+
 <table width="100%" cellpadding="4" cellspacing="0">
-	<tr>
-		<th colspan="2">
-			<span style="float:left;"><a href="listusers.php{SID}">{L_user_list}</a> &raquo; {L_user}: {USERNAME}</span><span style="float:right;">{ADMIN_EDIT}</span>
-		</th>
-	</tr>
 	<tr>
 		<td height="100%" valign="top">
 			<table width="100%" height="100%" cellpadding="1" cellspacing="1">
-				<tr>
-					<th>{L_user_image}</th>
-				</tr>
 				<tr class="row2" align="center">
 					<td height="100%"><a href="{USER_IMAGE}" class="lightbox"><img src="{USER_IMAGE}" alt="userimg" /></a></td>
 				</tr>
 			</table>
 		</td>
 		<td width="50%" valign="top">
+			<div class="tableHeader">
+				<h2>{L_adduser_tab_profile}</h2>
+			</div>
 			<table width="100%" align="center" cellpadding="1" cellspacing="1">
-				<tr>
-					<th colspan="4">{L_adduser_tab_profile}</th>
-				</tr>
 				<tr class="row1">
 					<td width="20%" class="nowrap"><strong>{L_name}:</strong></td>
 					<td width="90%" colspan="3">{firstandlastname}</td>
@@ -53,10 +49,11 @@
 					<td colspan="3">{USER_HARDWARE}</td>
 				</tr>
 			</table>
+			<br />
+			<div class="tableHeader">
+				<h2>{L_user_contact}</h2>
+			</div>
 			<table width="100%" align="center" cellpadding="1" cellspacing="1">
-				<tr class="row1">
-					<th colspan="4">{L_user_contact}</th>
-				</tr>
 				<tr>
 					<td width="10%" class="row1 nowrap"><strong>{L_email}:</strong></td>
 					<td width="40%" class="row2">{USER_MAIL}</td>
@@ -92,10 +89,10 @@
 	</tr>
 	<tr>
 		<td colspan="2">
+			<div class="tableHeader">
+				<h2>{L_chars}</h2>
+			</div>
 			<table width="100%" align="center" cellpadding="1" cellspacing="1" class="colorswitch">
-				<tr>
-					<th colspan="6">{L_chars}</th>
-				</tr>
 				<tr>
 					<th>{L_name}</th>
 					<th>{L_level}</th>
@@ -121,3 +118,5 @@
 		</td>
 	</tr>
 </table>
+
+

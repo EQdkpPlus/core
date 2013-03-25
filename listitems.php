@@ -38,12 +38,6 @@ class listitems extends page_generic {
 		$sort			= $this->in->get('sort');
 		$sort_suffix	= '&amp;sort='.$sort;
 
-		//redirect on member management
-		if($this->in->exists('manage_b') && $this->in->get('manage_b') == $this->user->lang('manage_items')){
-			$manage_link = './admin/listitems.php';
-			redirect($manage_link);
-		}
-
 		$start				= $this->in->get('start', 0);
 		$pagination_suffix	= ($start) ? '&amp;start='.$start : '';
 

@@ -132,7 +132,8 @@ class listusers extends page_generic {
 			$data['irq'] = '';
 		}
 
-		$user_avatar = $this->pfh->FolderPath('user_avatars','eqdkp').$custom['user_avatar'];
+		$user_avatar = $this->pdh->get('user', 'avatarimglink', array($row['user_id']));
+		
 		$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
 		$user_data = array(
 			'userid'			=> sanitize($row['user_id']),
@@ -177,7 +178,7 @@ class listusers extends page_generic {
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user=".$row['user_id'], 'width'=>'660', 'height'=>'450'));
 
 		$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('user_list'),
+			'page_title'		=> $this->user->lang('user').': '.sanitize($row['username']),
 			'template_file'		=> 'userprofile.html',
 			'display'			=> true)
 		);

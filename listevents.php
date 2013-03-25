@@ -39,12 +39,6 @@ class listevents extends page_generic {
 		$sort			= $this->in->get('sort');
 		$sort_suffix	= '&amp;sort='.$sort;
 
-		//redirect on event management
-		if ( $this->in->exists('manage_b') && $this->in->get('manage_b') == $this->user->lang('manage_events') ){
-			$manage_link	= './admin/listevents.php';
-			redirect($manage_link);
-		}
-
 		$start = 0;
 		$pagination_suffix = '';
 		if($this->in->exists('start')){
