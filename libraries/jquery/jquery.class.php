@@ -655,7 +655,8 @@ if (!class_exists("jquery")) {
 					"minuteText: '".$this->sanitize($this->user->lang('timepicker_minute'))."'",
 					"secondText: '".$this->sanitize($this->user->lang('timepicker_second'))."'",
 					"currentText: '".$this->sanitize($this->user->lang('timepicker_nowbutton'))."'",
-					"timeFormat:'".$options['timeformat']."'"
+					"timeFormat:'".$options['timeformat']."'",
+					"timezoneList: ".json_encode($this->time->js_timezones), #str_replace(array('"value"', '"label"'), array('value', 'label'), 
 				);
 				$functioncall = "datetimepicker({".$MySettings.",".implode(", ", $addisettings)."})";
 				if(!isset($options['return_function'])) {

@@ -25,6 +25,7 @@ if (!class_exists("timehandler")){
 		public static $shortcuts = array('pdl', 'user', 'config');
 
 		private static $ArrTimezones = array();
+		private static $js_timezones = array();
 		
 		private $formtrans = array(
 			//php		//js
@@ -36,6 +37,7 @@ if (!class_exists("timehandler")){
 			'n'		=> 'm',
 			'F'		=> 'MM',
 			'Y'		=> 'yy',
+			'T'		=> 'z',
 			'a'		=> 'T',
 			'A'		=> 'TT',
 			'h'		=> 'hh',
@@ -119,6 +121,10 @@ if (!class_exists("timehandler")){
 				break;
 				case 'timezones':
 					return $this->fetch_timezones();
+				break;
+				case 'js_timezones':
+					$this->fetch_timezones();
+					return self::$js_timezones;
 				break;
 				case 'time':
 					return $this->gen_time();
@@ -367,8 +373,6 @@ if (!class_exists("timehandler")){
 						}
 					} elseif($this->possible_formats[$c] > 0) $stroff += $this->possible_formats[$c]-1;
 				} elseif($c != substr($string, $stroff, 1)) {
-					pd($c);
-					pd(substr($string, $stroff, 1));
 					$this->pdl->log('time_error', 'Format mismatch at position ('.($stroff+1).') in '.$string.' compared to format '.$format.'.');
 					return false;
 				}
@@ -464,7 +468,7 @@ if (!class_exists("timehandler")){
 				$london = new DateTimeZone('Europe/London');
 				$london_dt = new DateTime('now', $london);
 				foreach($timezone_ab as $key => $more_data) {
-					foreach($more_data as $tz) {
+					foreach($more_data as $ikey => $tz) {
 						$value = $tz['timezone_id'];
 						if(!in_array($value, $timezone_data) || $tz['dst']) continue;
 						$slash = strpos($value, '/');
@@ -474,6 +478,7 @@ if (!class_exists("timehandler")){
 						$current_tz = new DateTimeZone($value);
 						$offset = $current_tz->getOffset($london_dt);
 						$tzdata[$value] = 'GMT '.trim(self::formatOffset($offset));
+						if($ikey === 0) self::$js_timezones[] = array('label' => $key, 'value' => mb_convert_case($key, MB_CASE_UPPER));
 					}
 				}
 				ksort($tzlist);
@@ -486,6 +491,16 @@ if (!class_exists("timehandler")){
 				}
 			}
 			return self::$ArrTimezones;
+		}
+		
+		private static function jsoffset($offset) {
+			$sign = ($offset > 0) ? '+' : '-';
+			if($offset < 0) $offset = -$offset;
+			$minutes = $offset%3600;
+			$hours = ($offset-$minutes)/3600;
+			$minutes = $minutes/60;
+			$val = $sign.sprintf('%1$02d', $hours).sprintf('%1$02d', $minutes);
+			return $val;
 		}
 
 		/**
