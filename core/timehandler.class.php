@@ -25,7 +25,6 @@ if (!class_exists("timehandler")){
 		public static $shortcuts = array('pdl', 'user', 'config');
 
 		private static $ArrTimezones = array();
-		private static $js_timezones = array();
 		
 		private $formtrans = array(
 			//php		//js
@@ -37,7 +36,7 @@ if (!class_exists("timehandler")){
 			'n'		=> 'm',
 			'F'		=> 'MM',
 			'Y'		=> 'yy',
-			'T'		=> 'z',
+			'T'		=> '', // dont display timezones
 			'a'		=> 'T',
 			'A'		=> 'TT',
 			'h'		=> 'hh',
@@ -121,10 +120,6 @@ if (!class_exists("timehandler")){
 				break;
 				case 'timezones':
 					return $this->fetch_timezones();
-				break;
-				case 'js_timezones':
-					$this->fetch_timezones();
-					return self::$js_timezones;
 				break;
 				case 'time':
 					return $this->gen_time();
@@ -478,7 +473,6 @@ if (!class_exists("timehandler")){
 						$current_tz = new DateTimeZone($value);
 						$offset = $current_tz->getOffset($london_dt);
 						$tzdata[$value] = 'GMT '.trim(self::formatOffset($offset));
-						if($ikey === 0) self::$js_timezones[] = array('label' => $key, 'value' => mb_convert_case($key, MB_CASE_UPPER));
 					}
 				}
 				ksort($tzlist);
