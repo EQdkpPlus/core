@@ -820,6 +820,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "home"	=> "Home",
 "select_mdkppool" => "MultiDKP Konto auswählen",
 "select_leaderboard" => "Leaderboard auswählen",
+"mainchar_change_associated" => "Es existieren weitere Charaktere, die den selben vorherigen Maincharakter haben. Wenn du für diese Charaktere ebenfalls den neuen Maincharakter setzen willst, aktiviere die folgende Checkbox: ",
  );
 
 ?>

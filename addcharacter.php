@@ -97,6 +97,15 @@ class addcharacter extends page_generic {
 			$data['rankid']	= $this->in->get('rank_id', $this->pdh->get('rank', 'default', array()));
 			$data['status'] = $this->in->get('status', 0);
 			$data['mainid'] = $this->in->get('main_id', 0);
+			
+			
+			//Change Mainchar of associated members
+			if ($this->in->get('assoc_members', 0)){
+				$arrOtherMembers = $this->pdh->get('member', 'other_members', array($this->url_id));
+				$intMainID = $this->pdh->get('member', 'mainid', array($this->url_id));
+				$arrOtherMembers[] = $intMainID;
+				$this->pdh->put('member', 'change_mainid', array($arrOtherMembers, $data['mainid']));
+			}
 		}
 
 		$data = array_merge($this->in->getArray('profilefields', 'string'), $data);
@@ -224,6 +233,18 @@ class addcharacter extends page_generic {
 			array('name' => 'member_name', 'value' => '<br/>'.$this->user->lang('fv_required_name'))
 		));
 		$this->jquery->ResetValidate('addchar');
+		
+		$arrOtherMembers = $this->pdh->get('member', 'other_members', array($this->url_id));
+		$intMainID = $this->pdh->get('member', 'mainid', array($this->url_id));
+		$intCountOtherMembers = count($arrOtherMembers);
+		if (in_array($intMainID, $arrOtherMembers)) $intCountOtherMembers--;
+		$this->jquery->Dialog('mainchar_change', '', array('custom_js' => '
+			$("#addchar_form").attr("onsubmit", "");
+			$("#editButton").click();
+		
+		', 'message' => $this->user->lang('mainchar_change_associated').'<input type="checkbox" name="associated_members" value="1" onchange="handle_assoc_members()" id="associated_members" />','height' => 240,), 'confirm');
+		
+		
 		$this->tpl->assign_vars(array(
 			// Permissions
 			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
@@ -237,6 +258,8 @@ class addcharacter extends page_generic {
 			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
 			'DD_HISTORY_RECEIVER'	=> $this->html->DropDown('history_receiver', $arrHistoryReceivers, $this->url_id),
 			'MEMBER_PICTURE'		=> '<input type="hidden" value="'.$member_data['picture'].'" name="picture"/>',
+			'MAIN_ID'				=> $intMainID,
+			'COUNT_OTHER_MEMBERS'	=> $intCountOtherMembers,
 		));
 
 		$this->core->set_vars(array(

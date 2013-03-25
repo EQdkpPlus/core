@@ -272,13 +272,13 @@ function attendeeCount(){
 	<div class="clear"></div>
 
 	<!-- IF IS_EDIT -->
-		<input type="submit" name="upd" value="{L_calendars_upd_button}" class="mainoption" />
-		<input type="submit" name="addtemplate" value="{L_raidevent_savetemplate}" class="liteoption bi_archive raid" />
+		<button type="submit" name="upd" class="mainoption"><i class="icon-ok"></i>{L_calendars_upd_button}</button>
+		<button type="submit" name="addtemplate" class="liteoption raid"><i class="icon-paste"></i>{L_raidevent_savetemplate}</button>
 	<!-- ELSE -->
 		<input type="hidden" name="addevent"/>
-		<input type="submit" name="addevent" value="{L_calendars_add_button}" class="mainoption bi_ok" id="submittheform"/>
-		<input type="reset"  name="reset" value="{L_reset}" class="liteoption bi_reset" />
-		<input type="submit" name="addtemplate" value="{L_raidevent_savetemplate}" class="liteoption bi_archive raid" id="save_template" />
+		<button type="submit" name="addevent" id="submittheform" class="mainoption"><i class="icon-ok"></i>{L_calendars_add_button}</button>
+		<button type="submit" name="addtemplate" class="liteoption raid" id="save_template"><i class="icon-paste"></i>{L_raidevent_savetemplate}</button>
+		<button type="reset"  name="reset" class="liteoption"><i class="icon-trash"></i>{L_reset}</button>
 	<!-- ENDIF -->
 {CSRF_TOKEN}
 </form>

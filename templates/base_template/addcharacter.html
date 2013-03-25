@@ -1,5 +1,28 @@
-<form method="post" action="{ACTION}" name="post">
+<script type="text/javascript">
+ var mainid = {MAIN_ID};
+ var others = {COUNT_OTHER_MEMBERS};
+ 
+ function check_form(){
+	var selected_main = $('#main_id').val();
+	if (selected_main == mainid && others > 0) return true;
+	
+	mainchar_change();
+	return false;
+ }
+ 
+ function handle_assoc_members() {
+	if ($('#associated_members').prop("checked")){
+		cbvalue = 1;
+	} else {
+		cbvalue = 0;
+	}
+	$('#assoc_members').val(cbvalue);
+ }
+ 
+</script>
+<form method="post" action="{ACTION}" name="post" id="addchar_form" <!-- IF ADMINMODE -->onsubmit="return check_form();"<!-- ENDIF -->>
 <input type="hidden" name="adminmode" size="2" value="{ADMINMODE}"/>
+
 <div id='addchar_tab'>
 	<ul>
 		<li><a href='#fragment-chars'><span>{L_uc_tab_Character}</span></a></li>
@@ -90,10 +113,11 @@
 <br />
 
 	<!-- IF U_IS_EDIT -->
-	<button class="mainoption" type="submit" name="edit"><i class="icon-ok"></i>{L_uc_save_char}</button>
+	<button class="mainoption" type="submit" name="edit" id="editButton"><i class="icon-ok"></i>{L_uc_save_char}</button>
 	<!-- ELSE -->
 	<button class="mainoption" type="submit" name="add"><i class="icon-ok"></i>{L_uc_add_char}</button>
 	<!-- ENDIF -->
+	<input type="hidden" name="assoc_members" id="assoc_members" value="0" />
 {CSRF_TOKEN}
 {MEMBER_PICTURE}
 </form>

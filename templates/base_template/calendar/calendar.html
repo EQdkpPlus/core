@@ -311,36 +311,25 @@
 
 	<div id="fragment-list">
 		<form name="masssignin" method="post" action="{ACTION}">
-		<table width="100%" cellpadding="1" cellspacing="1" border="0">
-			<tr>
-				<th>
-					<div class="calendar_export">
-						<span id="export_callist"><img src="../images/calendar/vcalendar_s.png" alt="iCal"/> {L_raideventlist_export_ical}</span>
-					</div>
-				</th>
-			</tr>
-			<tr id="raid_masssignin_panel" style="display:none;">
-				<td class="row1" colspan="10">
-					<table cellpadding="1" cellspacing="2" border="0" width="100%">
-						<tr>
-							<td width="35%">{L_raideventlist_masssignin}</td>
-							<td width="10%">{DD_CHARS}</td>
-							<td width="10%">{DD_ROLES}</td>
-							<td width="25%" align="right"><div class="rcal_comment_add">&nbsp;</div> {TXT_NOTE}</td>
-							<td width="10%">{DD_STATUS}</td>
-							<td width="10%"><input type="submit" name="mass_signin" value="{L_raideventlist_masssignbttn}" class="mainoption bi_ok" /></td>
-						</tr>
-					</table>
-
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-						{RAID_LIST}
-					</table>
-				</td>
-			</tr>
+		<div class="tableHeader">
+			<span id="export_callist"><button type="button" class="mainoption"><img src="../images/calendar/vcalendar_s.png" alt="iCal"/> {L_raideventlist_export_ical}</button></span>
+		</div>
+		<div class="clear"></div>
+		<br />
+		<div id="raid_masssignin_panel" style="display:none;">
+			<table cellpadding="1" cellspacing="2" border="0" width="100%">
+				<tr>
+					<td width="35%">{L_raideventlist_masssignin}</td>
+					<td width="10%">{DD_CHARS}</td>
+					<td width="10%">{DD_ROLES}</td>
+					<td width="25%" align="right"><div class="rcal_comment_add">&nbsp;</div> {TXT_NOTE}</td>
+					<td width="10%">{DD_STATUS}</td>
+					<td width="10%"><button type="submit" name="mass_signin" class="mainoption"><i class="icon-ok"></i>{L_raideventlist_masssignbttn}</button>
+				</tr>
+			</table>
+		</div>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+			{RAID_LIST}
 		</table>
 		{CSRF_TOKEN}
 		</form>
