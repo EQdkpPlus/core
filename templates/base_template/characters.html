@@ -2,6 +2,9 @@
 <input type='hidden' name='delete_id' id='delete_id' value='' />
 {CSRF_TOKEN}
 </form>
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_manage_members_titl}</h1>
+</div>
 <!-- IF S_SHOW_NO_CONN_INFO -->
 <div class="bluebox roundbox">
 	<div class="icon_info">{L_no_connected_char_info}</div>
@@ -9,25 +12,17 @@
 <br >
 <!-- ENDIF -->
 <!-- IF CONNECT_CHARS -->
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-		<th width="75%">
-			<form method="post" action="{ACTION}">
-				{L_associated_members}: {JS_CONNECTIONS} <input type="submit" name="connection_submit" value="{L_uc_connectme}" class="mainoption bi_ok" />
-				{CSRF_TOKEN}
-			</form>
-		</th>
-		<th width="25%">
-			{ADD_MENU}
-		</th>
-	</tr>
-</table>
+<form method="post" action="{ACTION}">
+	{L_associated_members}: {JS_CONNECTIONS} <input type="submit" name="connection_submit" value="{L_uc_connectme}" class="mainoption bi_ok" />
+	{CSRF_TOKEN}
+</form>
+
+{ADD_MENU}
 <!-- ENDIF --> 
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 	{CHAR_LIST}
 </table>
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-	<tr>
-		<td align="center" class="menu">{CHAR_PAGINATION}</td>
-	</tr>
-</table>
+
+<div class="center pagination_wrapper">
+	{CHAR_PAGINATION}
+</div>

@@ -65,12 +65,6 @@ class listcharacters extends page_generic {
 			}
 		}
 
-		//redirect on member compare
-		if ( $this->in->exists('manage_b')){
-			$manage_link = './admin/manage_members.php'.$this->SID;
-			redirect($manage_link);
-		}
-
 		//DKP Id
 		$mdkp_suffix = '';
 		$detail_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
@@ -168,8 +162,11 @@ class listcharacters extends page_generic {
 		$myleaderboard			= registry::register('html_leaderboard');
 		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
 		$jqToolbar = $this->jquery->toolbar('listcharacters', $arrToolbarItems, array('position' => 'bottom'));
+		$lb_id = $this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']);
+		$lb_id = ($this->in->get('lbc', 0)) ? $lb_id : $mdkpid;
+		
 		$this->tpl->assign_vars(array (
-			'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']), $view_list, $leaderboard_settings),
+			'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings),
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
 			'BUTTON_NAME'				=> 'compare_b',
 			'S_MANAGE_LINK'				=> ($this->user->check_auth('a_members_man', false)),
@@ -177,7 +174,9 @@ class listcharacters extends page_generic {
 			'SHOW_HIDDEN_RANKS_CHECKED'	=> ($show_hidden)?'checked="checked"':'',
 			'SHOW_TWINKS_CHECKED'		=> ($show_twinks)?'checked="checked"':'',
 			'S_SHOW_TWINKS'				=> !$this->config->get('pk_show_twinks'),
-			'LISTCHARS_TOOLBAR'				=> $jqToolbar['id'],
+			'LISTCHARS_TOOLBAR'			=> $jqToolbar['id'],
+			'MDKP_POOLNAME'				=> ($mdkpid > 0) ? $this->pdh->get('multidkp', 'name', array($mdkpid)) : '',
+			'LBC_VALUE'					=> ($this->in->get('lbc', 0)),
 		));
 
 		$this->core->set_vars(array(

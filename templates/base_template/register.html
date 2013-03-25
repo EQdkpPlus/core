@@ -7,8 +7,10 @@
 		<div class="contentInner row1">
 			{TEXT}
 		</div>
+		<br />
 		<div class="contentFooter">
-			<input type="submit" name="{SUBMIT_BUTTON}" value="{L_accept}" class="mainoption bi_ok" /> <input type="submit" name="deny" value="{L_deny}" class="liteoption bi_delete" />
+			<button class="mainoption" type="submit" name="{SUBMIT_BUTTON}"><i class="icon-ok"></i>{L_accept}</button>
+			<button class="liteoption" type="submit" name="deny"><i class="icon-remove"></i>{L_deny}</button>
 		</div>
 	</div>
 {CSRF_TOKEN}
@@ -178,8 +180,9 @@ $(document).ready(function(){
 	</div>
 	<!-- ENDIF -->
 		<div class="contentFooter">
-					<input type="submit" name="submit" value="{L_submit}" class="mainoption bi_ok" /> {AUTH_REGISTER_BUTTON}
-					<input type="reset" name="reset" value="{L_reset}" class="liteoption bi_reset" onclick="reset_validator_register();"/>
+			<button class="" type="submit" name="submit"><i class="icon-ok"></i>{L_submit}</button>
+			{AUTH_REGISTER_BUTTON}
+			<button class="" type="reset" name="reset"><i class="icon-trash" onclick="reset_validator_register();"></i>{L_reset}</button>
 		</div>
 	</div>
 	{HIDDEN_FIELDS}

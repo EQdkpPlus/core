@@ -1,30 +1,29 @@
 <form method="post" action="{ACTION}" name="post">
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<td align="center" class="menu">{RAID_PAGINATION}</td>
-		</tr>
-	</table>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2">
-		<tr align="right">
-			<th align="center" colspan="2">{L_create_raid_summary}:</th>
-			<th width="50%" align="center">
-				<b>{L_starting_date}:</b> {DATEPICK_DATE_FROM}
-			</th>
-			<th width="50%" align="center">
-				<b>{L_ending_date}:</b> {DATEPICK_DATE_TO}
-			</th>
-			<th align="center" colspan="2"><input type="submit" name="submit" value="{L_viewraid_create_summ}" class="mainoption" />
-				<a href="listraids.php{SID}" title="{L_cl_ms_uncheckall}"><img src="{EQDKP_IMAGE_PATH}glyphs/reset.png" alt="reset" /></a></th>
-			<th>{MANAGE_LINK}</th>
-		</tr>
-	</table>
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_listraids_title}</h1>
+	</div>
+	<fieldset class="settings mediumsettings" id="toggleRaidsummary">
+		<legend>{L_create_raid_summary}<span class="toggle_button"></span></legend>
+		<div class="toggle_container">
+			<dl>
+				<dt><label>{L_starting_date}</label></dt>
+				<dd>{DATEPICK_DATE_FROM}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ending_date}</label></dt>
+				<dd>{DATEPICK_DATE_TO}</dd>
+			</dl>
+			
+			<button class="mainoption" type="submit" name="submit"><i class="icon-ok"></i>{L_viewraid_create_summ}</button>
+			<button type="button" class="" onclick="window.location='listraids.php{SID}'"><i class="icon-trash"></i>{L_reset}</button>
+		</div>
+	</fieldset>
+	<br />
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		{PAGE_OUT}
 	</table>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<td align="center" class="menu">{RAID_PAGINATION}</td>
-		</tr>
-	</table>
+	<div class="center pagination_wrapper">
+			{RAID_PAGINATION}
+	</div>
 {CSRF_TOKEN}
 </form>

@@ -397,7 +397,7 @@ class user_settings extends page_generic {
 					),
 					'exchange_key' => array(
 						'fieldtype' => 'plaintext',
-						'text'		=> $this->user->data['exchange_key'].'<br /><input type="submit" value="'.$this->user->lang('user_create_new appkey').'" name="newexchangekey" class="bi_reload" />',
+						'text'		=> $this->user->data['exchange_key'].'<br /><button class="" type="submit" name="newexchangekey"><i class="icon-refresh"></i>'.$this->user->lang('user_create_new appkey').'</button>',
 						'name'		=> 'user_app_key'
 					),
 

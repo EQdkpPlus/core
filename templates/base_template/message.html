@@ -5,17 +5,12 @@
 	</div>
 
 <!-- ELSE -->
-
-	<div class="content">
-		<div class="contentHead">
-			{MSG_TITLE}
-		</div>
-		<div class="contentInner row1">
-			{MSG_TEXT}
-		</div>
-		<div class="contentFooter">
-			<!-- IF S_BUTTON -->{BU_FORM}<input type="submit" class="mainoption" {BU_ONCLICK} value="{BU_VALUE}">{BU_FORM_END}<!-- ENDIF -->
-		</div>
+	<div class="contentHeader">
+		<h1 class="contentTitle"><!-- IF MSG_TITLE == "" -->{L_error}<!-- ELSE -->{MSG_TITLE}<!-- ENDIF --></h1>
+	</div>
+	{MSG_TEXT}
+	<div class="contentFooter">
+		<!-- IF S_BUTTON -->{BU_FORM}<button type="submit" class="mainoption" {BU_ONCLICK}><i class=""></i>{BU_VALUE}</button>{BU_FORM_END}<!-- ENDIF -->
 	</div>
 
 <!-- ENDIF -->

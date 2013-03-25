@@ -82,6 +82,8 @@ class listraids extends page_generic {
 			'DATEPICK_DATE_FROM'		=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
 			'DATEPICK_DATE_TO'			=> $this->jquery->Calendar('to', $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format')))
 		));
+		
+		$this->jquery->Collapse('#toggleRaidsummary', true);
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('listraids_title'),

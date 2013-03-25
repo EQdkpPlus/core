@@ -684,9 +684,12 @@ function infotooltip_js() {
 						content: function(response) {
 							var direct = $(this).attr('title').substr(0,1);
 							var mytitle = $(this).attr('title');
-							if(direct == 1) {
+							if(direct == '1') {
 								$(this).attr('title', '');
 								return '';
+							}
+							if (mytitle == ''){
+								return;
 							}
 							if (cached_itts['t_'+$(this).attr('title')] != undefined){
 								return cached_itts['t_'+$(this).attr('title')];
@@ -780,8 +783,8 @@ function message_die($text = '', $title = '', $type = 'normal', $login_form = fa
 	}
 
 	register('template')->assign_vars(array(
-		'MSG_TITLE'		=> (strlen($title)) ? $title : '&nbsp;',
-		'MSG_TEXT'		=> (strlen($text)) ? $text  : '&nbsp;',
+		'MSG_TITLE'		=> (strlen($title)) ? $title : '',
+		'MSG_TEXT'		=> (strlen($text)) ? $text  : '',
 	));
 
 	//Buttons

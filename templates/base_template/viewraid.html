@@ -1,30 +1,35 @@
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-  <tr>
-    <th align="center">{L_MEMBERS_PRESENT_AT}</th>
-  </tr>
-  <tr>
-    <td align="left" width="100%">
-  	  <table width="100%" border="0" cellspacing="1" cellpadding="2">
-  		  <tr>
-  		    <td align="left" width="100%" colspan="2"><h2>{EVENT_ICON} {EVENT_NAME}</h2></td>
-  		  </tr>
-  		  <tr>
-  		    <td class="row2" width="50%"><b>{L_added_by}:</b> {RAID_ADDED_BY}</td>
-  		    <td class="row1" width="50%"><b>{L_updated_by}:</b> {RAID_UPDATED_BY}</td>
-  		  </tr>
-  		  <tr>
-  		    <td class="row2" width="50%"><b>{L_note}:</b> {RAID_NOTE}</td>
-  		    <td class="row1" width="50%"><b>{DKP_NAME} {L_value}:</b> <span class="positive">{RAID_VALUE}</span></td>
-  		  </tr>
-  		</table>
-    </td>
-  </tr>
-</table>
+<div class="contentHeader">
+	<h1 class="contentTitle">{EVENT_ICON} {EVENT_NAME}, {RAID_DATE}</h1>
+</div>
+
+	<fieldset class="settings smallsettings raidcal_infos toggle_container">
+		<dl>
+			<dt><label>{L_added_by}</label></dt>
+			<dd>{RAID_ADDED_BY}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_updated_by}</label></dt>
+			<dd>{RAID_UPDATED_BY}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_note}</label></dt>
+			<dd>{RAID_NOTE}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{DKP_NAME} {L_value}</label></dt>
+			<dd><span class="positive">{RAID_VALUE}</span>
+			</dd>
+		</dl>
+	</fieldset>
+
 <br />
+<div class="tableHeader">
+	<h2>{L_attendees}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
-  <tr>
-    <th align="center" colspan="{COLSPAN}">{L_attendees}</th>
-  </tr>
   <!-- BEGIN attendees_row -->
   <tr>
     <!-- IF S_COLUMN0 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
@@ -44,10 +49,10 @@
   </tr>
 </table>
 <br />
+<div class="tableHeader">
+	<h2>{L_drops}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-  <tr>
-    <th align="center" colspan="3">{L_drops}</th>
-  </tr>
   <tr>
     <th align="left" width="100" class="nowrap">{L_buyer}</th>
     <th align="left" width="100%">{L_item}</th>
@@ -65,6 +70,7 @@
   </tr>
 </table>
 <br />
+
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
     <th align="center">{L_class_distribution}</th>
@@ -80,10 +86,10 @@
  </tr>
 </table>
 <br />
+<div class="tableHeader">
+	<h2>{L_class_distribution}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
-  <tr>
-    <th align="center" colspan="3">{L_class_distribution}</th>
-  </tr>
   <tr>
     <th align="left" width="100">{L_class}</th>
     <th align="left" width="50%">{L_percent}</th>
@@ -99,3 +105,7 @@
 </table>
 <br/>
 {COMMENT}
+<br />
+<div class="contentFooter">
+	<button class="mainoption" type="button" onclick="window.location='listraids.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+</div>

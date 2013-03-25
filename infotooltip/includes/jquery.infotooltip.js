@@ -25,11 +25,14 @@
 				var mid = $(this).attr('id');
 
 				//code to be inserted here
-				var url = mmocms_root_path + 'infotooltip/infotooltip_feed.php?data='+$('#'+mid).attr('title')+'&divid='+mid;
-				$.get(url, function(data) {
-					$('#'+mid).empty();
-					$('#'+mid).prepend(data);
-				});
+				var title = $('#'+mid).attr('title');
+				if (title != '') {
+					var url = mmocms_root_path + 'infotooltip/infotooltip_feed.php?data='+title+'&divid='+mid;
+					$.get(url, function(data) {
+						$('#'+mid).empty();
+						$('#'+mid).prepend(data);
+					});
+				}
 				// end of custom code...
 
 			});

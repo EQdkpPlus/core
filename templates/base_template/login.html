@@ -10,9 +10,7 @@
 	<!-- ENDIF -->
 	<form method="post" action="{EQDKP_ROOT_PATH}login.php{SID}" name="login" id="login">
 	
-	<fieldset class="settings mediumsettings">
-		<legend>{L_login}</legend>
-		
+	<fieldset class="settings mediumsettings">		
 			<div class="contentSideLeft floatLeft contentWidth60">
 				<dl>
 					<dt><label>{L_username}:</label></dt>
@@ -46,6 +44,7 @@
 				<!-- IF S_REGISTER -->
 				<h3>{L_no_account}</h3>
 				<a href="{REGISTER_LINK}">{L_menu_register}</a>
+				<br /><br />
 				<!-- ENDIF -->
 				<!-- IF S_USER_ACTIVATION and not S_BRIDGE_INFO -->
 				<h3>{L_no_activation_mail}</h3>

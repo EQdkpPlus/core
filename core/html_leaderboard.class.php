@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "html_leaderboard" ) ) {
 	class html_leaderboard extends gen_class {
-		public static $shortcuts = array('pdh', 'config', 'game', 'html', 'user');
+		public static $shortcuts = array('pdh', 'config', 'game', 'html', 'user', 'jquery');
 		private $mdkpid;
 		private $vpre;
 
@@ -52,13 +52,13 @@ if ( !class_exists( "html_leaderboard" ) ) {
 			}
 			if(count($column_list) < 1 || count(current($column_list)) < 1) return '';
 
-			$mdkp_sel = $this->html->DropDown('lb_mdkpid', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->mdkpid, '', ' onchange="form.submit();"');
-			$leaderboard = '<table width="100%" border="0" cellpadding="1" cellspacing="1" class="colorswitch"><tr><th colspan="'.$break.'">'.$this->user->lang('leaderboard').': '.$mdkp_sel.'</th></tr><tr>';
+			$mdkp_sel = $this->html->DropDown('lb_mdkpid', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->mdkpid, '', ' onchange="$(\'#lbc\').val(1); form.submit();"');
+			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<table width="100%" border="0" cellpadding="1" cellspacing="1" class="leaderboard">';
 			$colnr = 0;
 			foreach($columns as $col) {
 				if(!isset($column_list[$col])) continue;
 				$member_ids = $column_list[$col];
-				$leaderboard .= '<td align="center" valign="top" width="200"><table class="borderless nowrap" border="0" cellpadding="2" cellspacing="0" width="100%"><tr><th colspan="2">';
+				$leaderboard .= '<td align="center" valign="top" width="200"><table class="borderless nowrap colorswitch" border="0" cellpadding="2" cellspacing="0" width="100%"><tr><th colspan="2">';
 				$leaderboard .= ($column == 'classid') ? $this->game->decorate('classes', $col).' <span class="class_'.$col.'">'.$this->game->get_name('classes', $col).'</span>' : $this->game->decorate('roles', $col).' '.$this->pdh->get('roles', 'name', array($col));
 				$leaderboard .= '</th></tr>';
 				usort($member_ids, array(&$this, "sort_by_points"));
@@ -73,8 +73,8 @@ if ( !class_exists( "html_leaderboard" ) ) {
 					$leaderboard .= '</tr><tr>';
 				}
 			}
-
-			$leaderboard .= '</tr></table>';
+			$this->jquery->Collapse('#toggleLeaderboard');
+			$leaderboard .= '</tr></table></div></div>';
 			return $leaderboard;
 		}
 

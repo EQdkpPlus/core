@@ -818,6 +818,8 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "notification_user_enable" => "%s Benutzer zu aktivieren",
 "notification_none" => "Keine Benachrichtigungen vorhanden",
 "home"	=> "Home",
+"select_mdkppool" => "MultiDKP Konto auswählen",
+"select_leaderboard" => "Leaderboard auswählen",
  );
 
 ?>

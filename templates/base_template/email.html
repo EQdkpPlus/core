@@ -12,11 +12,12 @@
 		</dl>
 		<dl>
 			<dt><label>{L_adduser_send_mail_body}</label></dt>
-			<dd><textarea name="body" cols="70" rows="15" style="width:100%;">{BODY}</textarea>
+			<dd><textarea name="body" cols="70" rows="10" style="width:90%;">{BODY}</textarea>
 			</dd>
 		</dl>
 	</fieldset>
-	<input type="submit" name="send" value="{L_adduser_send_mail}" class="mainoption bi_ok" /> <input type="reset" name="reset" value="{L_reset}" class="mainoption bi_reset" />
+	<button class="mainoption" type="submit" name="send"><i class="icon-ok"></i>{L_adduser_send_mail}</button>
+	<button class="mainoption" type="reset" name="reset"><i class="icon-trash"></i>{L_reset}</button>
 {CSRF_TOKEN}
 </form>
 <!-- ENDIF -->

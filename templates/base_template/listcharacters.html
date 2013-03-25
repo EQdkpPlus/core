@@ -1,13 +1,23 @@
 <form method="get" action="{ACTION}" id="form_listcharacters">
-	<table width="100%" border="0" cellspacing="1" cellpadding="2">
-		<tr>
-			<th align="left">
-				<select name="mdkpid" class="input" onchange="form.submit();" >
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_menu_standings} <!-- IF MDKP_POOLNAME != "" -->&raquo; {MDKP_POOLNAME}<!-- ENDIF -->
+	<div class="floatRight">
+	{COMPARE_LINK}
+		<!-- IF S_MANAGE_LINK -->
+		<span class="{LISTCHARS_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+		<!-- ENDIF -->
+	</div>
+	</h1>
+</div>
+
+<div class="tableHeader">
+{L_select_mdkppool}: <select name="mdkpid" class="input" onchange="form.submit();" >
 					<!-- BEGIN mdkpid_row -->
 					<option value="{mdkpid_row.VALUE}"{mdkpid_row.SELECTED}>{mdkpid_row.OPTION}</option>
 					<!-- END mdkpid_row -->
 				</select>
-				<select name="filter" class="input" onchange="form.submit();" >
+<br />
+{L_filter}: <select name="filter" class="input" onchange="form.submit();" >
 					<!-- BEGIN filter_row -->
 					<option value="{filter_row.VALUE}"{filter_row.SELECTED}>{filter_row.OPTION}</option>
 					<!-- END filter_row -->
@@ -16,24 +26,22 @@
 				<label><input type="checkbox" name="show_hidden" value="1" onchange="form.submit();" {SHOW_HIDDEN_RANKS_CHECKED} /> {L_show_hidden_ranks}</label>
 				<!-- IF S_SHOW_TWINKS -->
 				<label><input type="checkbox" name="show_twinks" value="1" onchange="form.submit();" {SHOW_TWINKS_CHECKED} /> {L_show_twinks}</label>
-				<!-- ENDIF -->
-			</th>
-			<th align="right" width="20" class="nowrap">
-				{COMPARE_LINK}
-				<!-- IF S_MANAGE_LINK -->
-				<span class="{LISTCHARS_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
-				<!-- ENDIF -->
-			</th>
-		</tr>
-	</table>
+				<!-- ENDIF -->				
+</div>
+
+<fieldset>
+</legend>
+
+
 
 	{LEADERBOARD}
-
+	
+	<br />
+	<!-- IF MDKP_POOLNAME != "" --><h2>{MDKP_POOLNAME}</h2><!-- ELSE --><h2>{L_overview}</h2><!-- ENDIF -->
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="trcheckboxclick colorswitch">
 		{POINTOUT}
 	</table>
 
-	<br />
-	<img src="{EQDKP_IMAGE_PATH}arrows/turn_left_arrow.png" alt="arrow" /> <button type="submit" name="{BUTTON_NAME}" onclick="$('#form_listcharacters').attr('method', 'post');"><i class="bi_compare"></i>{L_compare_members}</button>
+	<button type="submit" name="{BUTTON_NAME}" onclick="$('#form_listcharacters').attr('method', 'post');"><i class="bi_compare"></i>{L_compare_members}</button>
+	<input type="hidden" name="lbc" value="{LBC_VALUE}" id="lbc" />
 </form>
-<br />

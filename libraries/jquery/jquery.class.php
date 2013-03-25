@@ -1319,10 +1319,9 @@ if (!class_exists("jquery")) {
 			} else {
 				$out .= '<img src="'.$imgpreview.'" class="previewimage" alt="'.$this->user->lang('imageuploader_preview').'" style="max-height:'.$imgprevheight.'px"/>';
 			}	
-			$out .=	'</div>
-					<input value="'.$this->user->lang('imageuploader_editbutton').'" type="button" id="iubutton_'.$inputid.'_edit" class="mainoption bi_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"/>';
+			$out .=	'</div><button class="mainoption" type="button" id="iubutton_'.$inputid.'_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"><i class="icon-edit"></i>'.$this->user->lang('imageuploader_editbutton').'</button>';
 			if(isset($options['deletelink']) && (isset($imgname) && is_file($imgpath.$imgname))){
-				$out .= '<input value="" type="button" id="iubutton_'.$inputid.'_delete" class="mainoption bi_delete novalue" />';
+				$out .= '<button class="mainoption" value="" type="button" id="iubutton_'.$inputid.'_delete"><i class="icon-remove"></i></button>';
 				$this->tpl->add_js("$('#iubutton_".$inputid."_delete').click(function(){ location.href='".$options['deletelink']."' });", 'docready');
 			}
 			return $out;

@@ -62,13 +62,15 @@ class listitems extends page_generic {
 		infotooltip_js();
 
 		$hptt_page_settings		= $this->pdh->get_page_settings('listitems', 'hptt_listitems_itemlist');
-		$hptt					= $this->get_hptt($hptt_page_settings, $view_list, $filtered_list, array('%link_url%' => 'viewitem.php', '%link_url_suffix%' => '', '%raid_link_url%' => 'viewraid.php', '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0));
+		$hptt					= $this->get_hptt($hptt_page_settings, $view_list, $filtered_list, array('%link_url%' => 'viewitem.php', '%link_url_suffix%' => '', '%raid_link_url%' => 'viewraid.php', '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0), md5($searchType.$mySearch));
 		$this->tpl->assign_vars(array(
 			'SEARCH_LINK'		=> '<input type="image" src="'.$this->root_path.'images/glyphs/view.png" name="search_b" value="1" alt="'.$this->user->lang('Itemsearch_searchby').'" title="'.$this->user->lang('Itemsearch_searchby').'" class="absmiddle" />',
 			'MANAGE_LINK'		=> ($this->user->check_auth('a_item_', false)) ? '<a href="admin/manage_items.php'.$this->SID.'" title="'.$this->user->lang('manage_items').'"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="'.$this->user->lang('manage_items').'" /></a>' : '',
 			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_ilimit'], $footer_text),
 			'ITEM_PAGINATION'	=> generate_pagination('listitems.php'.$this->SID.$sort_suffix, $item_count, $this->user->data['user_ilimit'], $start),
 		));
+		
+		$this->jquery->Collapse('#toggleItemsearch', true);
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('listitems_title'),
@@ -78,7 +80,7 @@ class listitems extends page_generic {
 	}
 
 	// Search Helper
-	function filter($view_list, $searchType, $mySearch ){
+	function filter($view_list, $searchType, $mySearch ){		
 		if(!$mySearch){
 			return $view_list;
 		}
@@ -99,6 +101,7 @@ class listitems extends page_generic {
 				}
 			}
 		}
+
 		return $filtered_list;
 	}
 }

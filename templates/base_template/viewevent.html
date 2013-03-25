@@ -1,28 +1,33 @@
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-	<tr>
-		<th colspan="3">{L_event_name}: {EVENT_NAME}</th>
-	</tr>
-	<tr>
-		<td rowspan="2" style="height:65px;width:65px;" class="row1">{EVENT_ICON}</td>
-		<td class="row2" style="width:200px;">{L_belonging_mdkppools}:</td>
-		<td class="row1">{MDKPPOOLS}</td>
-	</tr>
-	<tr>
-		<td class="row2">{L_belonging_itempools}:</td>
-		<td class="row1">{ITEMPOOLS}</td>
-	</tr>
-</table>
+<div class="contentHeader">
+	<h1 class="contentTitle">{EVENT_ICON} {EVENT_NAME}</h1>
+</div>
+<fieldset class="settings smallsettings raidcal_infos">
+		<dl>
+			<dt><label>{L_belonging_mdkppools}</label></dt>
+			<dd>{MDKPPOOLS}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_belonging_itempools}</label></dt>
+			<dd>{ITEMPOOLS}
+			</dd>
+		</dl>
+	</fieldset>
+
 <br />
+<div class="tableHeader">
+	<h2>{L_raids}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
-	<tr>
-		<th colspan="10">{L_raids}</th>
-	</tr>
 	{RAID_LIST}
 </table>
 <br />
+<div class="tableHeader">
+	<h2>{L_items}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
-	<tr>
-		<th colspan="10">{L_items}</th>
-	</tr>
 	{ITEM_LIST}
 </table>
+<div class="contentFooter">
+	<button class="mainoption" type="button" onclick="window.location='listevents.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+</div>

@@ -76,7 +76,7 @@ class viewraid extends page_generic {
 
 						if($attendee != ''){
 							$block_vars += array(
-								'COLUMN'.$j.'_NAME' => $this->pdh->get('member', 'html_memberlink', array($attendee, 'viewcharacter.php'))
+								'COLUMN'.$j.'_NAME' => $this->pdh->get('member', 'html_memberlink', array($attendee, 'viewcharacter.php', '', false, false, true))
 							);
 
 						}else{
@@ -114,7 +114,7 @@ class viewraid extends page_generic {
 				}
 
 				$this->tpl->assign_block_vars('items_row', array(
-					'BUYER'			=> $this->pdh->get('member', 'html_memberlink', array($buyer_id, 'viewcharacter.php')),
+					'BUYER'			=> $this->pdh->get('member', 'html_memberlink', array($buyer_id, 'viewcharacter.php', '', false, false, true)),
 					'ITEM'			=> $this->pdh->get('item', 'link_itt', array($item_id, 'viewitem.php')),
 					'VALUE'			=> runden($this->pdh->get('item', 'value', array($item_id))))
 				);
@@ -218,7 +218,10 @@ class viewraid extends page_generic {
 				'ITEM_FOOTCOUNT'		=> sprintf($this->user->lang('viewraid_drops_footcount'), sizeof($items)),
 				'CLASS_PERCENT_CHART'	=> $this->jquery->charts('pie', 'class_dist', $chartarray, $chartoptions),
 				'LOOT_PERCENT_CHART'	=> (count($loot_dist) > 0) ? $this->jquery->charts('pie', 'loot_dist', $loot_dist, $chartoptionsLootDistri) : '',
+				'RAID_DATE'				=> $this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), true, false, true),
 			));
+			
+			chartooltip_js();
 
 			$this->core->set_vars(array(
 				'page_title'		=> $this->user->lang('viewraid_title'),

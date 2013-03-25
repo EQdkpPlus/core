@@ -307,7 +307,7 @@ class login extends page_generic {
 		
 		$arrPWresetLink = $this->core->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
 
-		$this->tpl->add_js('document.login.username.focus();', 'docready');
+		$this->tpl->add_js('$("#username").focus();', 'docready');
 		$this->tpl->assign_vars(array(
 			'S_BRIDGE_INFO'			=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
 			'S_USER_ACTIVATION'		=> ($this->config->get('account_activation') == 1) ? true : false,
