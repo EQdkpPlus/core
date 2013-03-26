@@ -447,3 +447,1022 @@ a.sq1 {
 a.sq2 {
 	color:#2E8B62 !important;
 }
+
+/* Magelo */
+m-tooltip {
+    font-family: Arial;
+    font-size: 12px;
+    line-height: normal;
+    text-align: left;
+}
+
+.m-tooltip.css2 {
+    position: relative;
+    background: none;
+    padding: 0px 11px 11px 0px;
+}
+
+.m-tooltip.css2 .border-1 {
+    position: absolute;
+    display: block;
+    left: 0px;
+    right: 11px;
+    bottom: 0px;
+    height: 11px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_css2.png?v=13671') no-repeat bottom left;
+}
+
+.m-tooltip.css2 .border-2 {
+    position: absolute;
+    display: block;
+    top: 0px;
+    right: 0px;
+    bottom: 11px;
+    width: 11px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_css2.png?v=13671') no-repeat top right;
+}
+
+.m-tooltip.css2 .corner {
+    position: absolute;
+    display: block;
+    right: 0px;
+    bottom: 0px;
+    width: 11px;
+    height: 11px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_css2.png?v=13671') no-repeat bottom right;
+}
+
+.m-tooltip.css2 .body {
+    padding: 11px 0px 0px 11px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_css2.png?v=13671') no-repeat top left;
+    position: relative;
+    display: block;
+    max-width: 335px;
+}
+
+.m-tooltip.css3 {
+    position: relative;
+    background: none;
+    padding: 0px;
+    border-width: 11px;
+    -moz-border-image: url(http://www.magelocdn.com/images/tooltip/tooltip_css3.png?v=13671) 11 11 11 11 stretch stretch;
+    -webkit-border-image: url(http://www.magelocdn.com/images/tooltip/tooltip_css3.png?v=13671) 11 11 11 11 stretch stretch;
+    border-image: url(http://www.magelocdn.com/images/tooltip/tooltip_css3.png?v=13671) 11 11 11 11 stretch stretch;
+}
+
+.m-tooltip.css3.body {
+    position: relative;
+    background: none;
+    padding: 0px;
+}
+
+.m-tooltip.css2.black {
+    position: relative;
+    background: none;
+    padding: 0px 8px 8px 0px;
+}
+
+.m-tooltip.css2.black .border-1 {
+    position: absolute;
+    display: block;
+    left: 0px;
+    right: 8px;
+    bottom: 0px;
+    height: 8px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_wow_b200_css2.png?v=13671') no-repeat bottom left;
+}
+
+.m-tooltip.css2.black .border-2 {
+    position: absolute;
+    display: block;
+    top: 0px;
+    right: 0px;
+    bottom: 8px;
+    width: 8px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_wow_b200_css2.png?v=13671') no-repeat top right;
+}
+
+.m-tooltip.css2.black .corner {
+    position: absolute;
+    display: block;
+    right: 0px;
+    bottom: 0px;
+    width: 8px;
+    height: 8px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_wow_b200_css2.png?v=13671') no-repeat bottom right;
+}
+
+.m-tooltip.css2.black .body {
+    padding: 8px 0px 0px 8px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_wow_b200_css2.png?v=13671') no-repeat top left;
+    position: relative;
+    display: block;
+    max-width: 335px;
+}
+
+.m-tooltip.black .arrow {
+    display: none;
+}
+
+.m-tooltip.css2.eq.black {
+    position: relative;
+    background: none;
+    padding: 0px 10px 10px 0px;
+}
+
+.m-tooltip.css2.eq.black .border-1 {
+    position: absolute;
+    display: block;
+    left: 0px;
+    right: 10px;
+    bottom: 0px;
+    height: 10px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_eq_css2.png?v=13671') no-repeat bottom left;
+}
+
+.m-tooltip.css2.eq.black .border-2 {
+    position: absolute;
+    display: block;
+    top: 0px;
+    right: 0px;
+    bottom: 10px;
+    width: 10px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_eq_css2.png?v=13671') no-repeat top right;
+}
+
+.m-tooltip.css2.eq.black .corner {
+    position: absolute;
+    display: block;
+    right: 0px;
+    bottom: 0px;
+    width: 10px;
+    height: 10px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_eq_css2.png?v=13671') no-repeat bottom right;
+}
+
+.m-tooltip.css2.eq.black .body {
+    padding: 10px 0px 0px 10px;
+    background: url('http://www.magelocdn.com/images/tooltip/tooltip_eq_css2.png?v=13671') no-repeat top left;
+    position: relative;
+    display: block;
+    max-width: 335px;
+}
+
+.m-tooltip.eq.black .arrow {
+    display: none;
+}
+
+.m-tooltip.wow .arrow {
+    position: absolute;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    background: url('http://www.magelocdn.com/images/tooltip/corner_wow.png?v=13671') no-repeat;
+}
+
+.m-tooltip.eq .arrow {
+    position: absolute;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    background: url('http://www.magelocdn.com/images/tooltip/corner_eq.png?v=13671') no-repeat;
+}
+
+.bottom-right .m-tooltip .arrow {
+    left: 0px;
+    top: 0px;
+    background-position: left top;
+}
+
+.bottom-left .m-tooltip .arrow {
+    right: 0px;
+    top: 0px;
+    background-position: right top;
+}
+
+.top-right .m-tooltip .arrow {
+    left: 0px;
+    bottom: 0px;
+    background-position: left bottom;
+}
+
+.top-left .m-tooltip .arrow {
+    right: 0px;
+    bottom: 0px;
+    background-position: right bottom;
+}
+
+.m-tooltip h1 {
+    margin: 0px;
+    padding: 0px 0px 10px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.m-tooltip .body {
+    padding: 11px 0px 0px 11px;
+    max-width: 335px;
+}
+
+.m-tooltip table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 0;
+}
+
+.m-tooltip th,.m-tooltip td {
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.m-tooltip.rift * {
+    color: white;
+    font-size: 12px;
+    font-family: Arial;
+    font-weight: normal;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    letter-spacing: normal;
+    line-height: normal;
+    max-width: none;
+    min-width: 0;
+    width: auto;
+    text-align: left;
+}
+
+.m-tooltip.rift li {
+    margin-left: 25px;
+}
+
+.m-tooltip.rift {
+    font-family: Arial;
+    font-size: 12px;
+    color: black;
+}
+
+.m-tooltip.rift a {
+    outline: none;
+    text-decoration: none;
+}
+
+.m-tooltip.rift ul {
+    margin: 10px 0 0 0;
+}
+
+.rift-ability-icon, .rift-item-icon {
+    position: relative;
+    display: block;
+    width: 56px;
+    height: 56px;
+}
+
+.rift-ability-icon-mask, .rift-item-icon-mask {
+    position: absolute;
+    display: block;
+    width: 56px;
+    height: 56px;
+    background: url(http://www.magelocdn.com/images/rift/tooltip/icon_border_48.png?v=13671);
+    z-index: 3;
+}
+
+.rift-ability-icon-icon, .rift-item-icon-icon {
+    position: absolute;
+    display: block;
+    top: 4px;
+    left: 4px;
+    width: 48px;
+    height: 48px;
+    z-index: 2;
+}
+
+.m-tooltip.rift .rarity10 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity20 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity30 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/uncommon_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity60 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/rare_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity100 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/epic_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity170 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity240 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.rift .rarity10000 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/questItem_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity10 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity20 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity30 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/uncommon_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity60 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/rare_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity100 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/epic_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity170 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity240 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_48_shadow.png?v=13671);
+}
+
+.rarity10000 .rift-item-icon-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/questItem_icon_border_48_shadow.png?v=13671);
+}
+
+.m-tooltip.css2.rift, .m-tooltip.rift a {
+    color: white;
+}
+
+.m-tooltip.rift a:hover {
+    text-decoration: underline;
+}
+
+.m-tooltip.rift h1 {
+    margin: 0;
+    padding: 0;
+    color: #D3C890;
+}
+
+.m-tooltip.rift hr {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: url(http://www.magelocdn.com/images/rift/tooltip/divider.png?v=13671) center center no-repeat;
+    height: 8px;
+    width: auto;
+    display: block;
+}
+
+.m-tooltip.rift h1 .rank {
+    float: right;
+    color: white;
+}
+
+.m-tooltip.rift .rank {
+    display: block;
+}
+
+.m-tooltip.rift .description {
+    display: block;
+}
+
+.m-tooltip.rift .rift-artifact .items {
+    display: block;
+    margin-top: 8px;
+}
+
+.m-tooltip.rift .requirement {
+    display: block;
+}
+
+.m-tooltip.rift .requirement.unmet {
+    color: #FF0000;
+}
+
+.m-tooltip.rift .actions {
+    display: block;
+    clear: both;
+    overflow: auto;
+}
+
+.m-tooltip.rift .actions .increase {
+    float: left;
+    color: #008000;
+    padding-right: 4px;
+}
+
+.m-tooltip.rift .actions .decrease {
+    float: right;
+    color: #FF0000;
+    padding-left: 4px;
+}
+
+.m-tooltip.rift .cost {
+}
+
+.m-tooltip.rift .rift-ability .range {
+    float: right;
+    padding-left: 16px;
+}
+
+.m-tooltip.rift .cooldown {
+    display: block;
+}
+
+.m-tooltip.rift .casttime {
+    display: block;
+}
+
+.m-tooltip.rift .debug {
+    font-size: 10px !important;
+    color: gray;
+}
+
+.m-tooltip.rift .row {
+    display: block;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.m-tooltip .rift-item {
+    display: inline-block;
+    min-width: 200px;
+    max-width: 335px;
+}
+
+.m-tooltip.rift .weapon-type {
+    float: right;
+    padding-left: 16px;
+}
+
+.m-tooltip.rift .weapon-dps {
+    display: block;
+}
+
+.m-tooltip.rift .weapon-damage {
+    display: block;
+}
+
+.m-tooltip.rift .rune, .m-tooltip.rift .rune * {
+    color: #00D000;
+}
+
+.m-tooltip.rift .mods {
+    display: block;
+}
+
+.m-tooltip.rift .mods .mod {
+    display: block;
+}
+
+.m-tooltip.rift .effect {
+    display: block;
+    color: #00D000;
+}
+
+.m-tooltip.rift .item-set-family {
+    display: block;
+    color: #6BD9CF;
+    padding-bottom: 10px;
+}
+
+.m-tooltip.rift .item-set-no-crystal {
+    display: block;
+    color: #808080;
+}
+
+.m-tooltip.rift .item-set-crystal {
+    display: block;
+    color: #FFFFFF;
+    padding-bottom: 10px;
+}
+
+.m-tooltip.rift .item-set-bonus {
+    display: block;
+    color: #808080;
+}
+
+.m-tooltip.rift .item-set-bonus.available {
+    color: #FFFFFF;
+}
+
+.m-tooltip.rift .artifact-set {
+    display: block;
+    padding-left: 8px;
+    color: #00D000;
+}
+
+.m-tooltip.rift .flavor-text {
+    display: block;
+    color: #C2AC7D;
+}
+
+.m-tooltip.rift .required-level {
+    display: block;
+}
+
+.m-tooltip.rift .price {
+    float: right;
+    display: inline-block;
+    padding: 4px 0 0;
+    font-size: 11px;
+}
+
+.m-tooltip.rift .sources .price {
+    float: none;
+    display: inline-block;
+    padding: 0 0 0 0;
+    font-size: 11px;
+}
+
+.m-tooltip.rift .price .platinum {
+    display: inline-block;
+    padding-right: 16px;
+    background: url(http://www.magelocdn.com/images/rift/currencies/coins_platinum.png?v=13671) right 4px no-repeat;
+}
+
+.m-tooltip.rift .price .gold {
+    display: inline-block;
+    padding-right: 16px;
+    background: url(http://www.magelocdn.com/images/rift/currencies/coins_gold.png?v=13671) right 4px no-repeat;
+}
+
+.m-tooltip.rift .price .silver {
+    display: inline-block;
+    padding-right: 16px;
+    background: url(http://www.magelocdn.com/images/rift/currencies/coins_silver.png?v=13671) right 4px no-repeat;
+}
+
+.m-tooltip.rift .callings {
+    display: block;
+}
+
+.m-tooltip.rift .sources {
+    color: #C2AC7D;
+    font-size: 11px;
+}
+
+.m-tooltip.rift .sources a, .m-tooltip.rift .sources span {
+    color: #CCCCCC;
+}
+
+.m-tooltip.rift .soul-pairing {
+    position: relative;
+    height: 32px;
+    display: block;
+    padding-left: 36px;
+    vertical-align: center;
+}
+
+.m-tooltip .body .soul-pairing a {
+    color: #ffff00;
+    line-height: 32px;
+}
+
+.m-tooltip.rift .soul-pairing-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    display: block;
+    width: 32px;
+    height: 32px;
+    background: url(http://www.magelocdn.com/images/rift/character/soultree/soul_list_icon_border.png?v=13671) no-repeat;
+}
+
+.m-tooltip.rift .soul-pairing-icon {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 1;
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.m-tooltip.rift .rift-zone .minimap {
+    display: inline-block;
+    padding: 1px;
+    background-color: #D3C890;
+}
+
+.m-tooltip.css2.rift {
+    position: relative;
+    background: none;
+    padding: 0px 15px 15px 0px;
+	top: -58px;
+	left: 64px;
+	display: inline-block;
+}
+
+.m-tooltip.css2.rift .border-1 {
+    position: absolute;
+    display: block;
+    left: 0px;
+    right: 15px;
+    bottom: 0px;
+    height: 15px;
+    background: url('http://www.magelocdn.com/images/rift/tooltip/tooltip_bg.png?v=13671') no-repeat bottom left;
+}
+
+.m-tooltip.css2.rift .border-2 {
+    position: absolute;
+    display: block;
+    top: 0px;
+    right: 0px;
+    bottom: 15px;
+    width: 15px;
+    background: url('http://www.magelocdn.com/images/rift/tooltip/tooltip_bg.png?v=13671') no-repeat top right;
+}
+
+.m-tooltip.css2.rift .corner {
+    position: absolute;
+    display: block;
+    right: 0px;
+    bottom: 0px;
+    width: 15px;
+    height: 15px;
+    background: url('http://www.magelocdn.com/images/rift/tooltip/tooltip_bg.png?v=13671') no-repeat bottom right;
+}
+
+.m-tooltip.css2.rift .body {
+    padding: 15px 0px 0px 15px;
+    background: url('http://www.magelocdn.com/images/rift/tooltip/tooltip_bg.png?v=13671') no-repeat top left;
+    position: relative;
+    display: block;
+    max-width: 410px;
+}
+
+.m-tooltip .body a.rarity10, .m-tooltip .body .rarity10 {
+    color: #888888;
+}
+
+.m-tooltip .body a.rarity20, .m-tooltip .body .rarity20 {
+    color: #FFFFFF;
+}
+
+.m-tooltip .body a.rarity30, .m-tooltip .body .rarity30 {
+    color: #60FF00;
+}
+
+.m-tooltip .body a.rarity60, .m-tooltip .body .rarity60 {
+    color: #2681FE;
+}
+
+.m-tooltip .body a.rarity100, .m-tooltip .body .rarity100 {
+    color: #B049FF;
+}
+
+.m-tooltip .body a.rarity170, .m-tooltip .body .rarity170, .m-tooltip .body a.rarity240, .m-tooltip .body .rarity240 {
+    color: #FF9900;
+}
+
+.m-tooltip .body a.rarity10000, .m-tooltip .body .rarity10000 {
+    color: #FFF600;
+}
+
+.m-tooltip .body a.rarity-default, .m-tooltip .body .rarity-default {
+    color: #FC00FF;
+}
+
+.m-tooltip .rift-small-icon-slot {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    vertical-align: middle;
+    margin: 2px 0;
+}
+
+.m-tooltip .rift-small-icon-slot .rift-icon-slot-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    display: block;
+    width: 36px;
+    height: 36px;
+    background: url(http://www.magelocdn.com/images/rift/icons/icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot .rift-icon-slot-frame {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 3;
+    display: block;
+    width: 36px;
+    height: 36px;
+}
+
+.m-tooltip .rift-small-icon-slot .rift-icon-slot-icon {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 1;
+    display: block;
+    width: 32px;
+    height: 32px;
+}
+
+.m-tooltip .rift-tiny-icon-slot {
+    position: relative;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    margin: 2px 0;
+}
+
+.m-tooltip .rift-tiny-icon-slot .rift-icon-slot-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    display: block;
+    width: 28px;
+    height: 28px;
+    background: url(http://www.magelocdn.com/images/rift/icons/icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot .rift-icon-slot-icon {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 1;
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.m-tooltip .rift-currency-icon-slot {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin: 1px 0;
+}
+
+.m-tooltip .rift-currency-icon-slot .rift-icon-slot-mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    background: url(http://www.magelocdn.com/images/rift/icons/icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot .rift-icon-slot-icon {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 1;
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
+.m-tooltip .rift-small-icon-slot.rarity10 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity20 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity30 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/uncommon_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity60 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/rare_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity100 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/epic_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity170 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity240 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-small-icon-slot.rarity10000 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/questItem_icon_border_32.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity10 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity20 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity30 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/uncommon_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity60 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/rare_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity100 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/epic_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity170 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity240 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-tiny-icon-slot.rarity10000 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/questItem_icon_border_24.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity10 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity20 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/common_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity30 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/uncommon_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity60 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/rare_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity100 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/epic_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity170 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity240 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/relic_icon_border_16.png?v=13671);
+}
+
+.m-tooltip .rift-currency-icon-slot.rarity10000 .rift-icon-slot-mask {
+    background: url(http://www.magelocdn.com/images/rift/icons/questItem_icon_border_16.png?v=13671);
+}
+
+.m-tooltip.rift .dual-tooltip-current-item {
+    color: #888888;
+}
+
+.m-tooltip.rift .dual-tooltip-deltas .bonus {
+    color: #60FF00;
+}
+
+.m-tooltip.rift .dual-tooltip-deltas .malus {
+    color: #FF0000;
+}
+
+.m-tooltip .rift-character .achievementScore {
+    position: relative;
+    left: -2px;
+    padding-left: 18px;
+    line-height: 18px;
+    height: 18px;
+    background: url(http://www.magelocdn.com/images/rift/character/achievement_icon.png?v=13671) no-repeat;
+}
+
+.rift-character-bg {
+    position: relative;
+    top: 3px;
+    width: 45px;
+    height: 45px;
+    background: url(http://www.magelocdn.com/images/rift/character/bg_portrait.png?v=13671);
+}
+
+.rift-character-icon {
+    width: 45px;
+    height: 45px;
+}
+
+.rift-npc .minimap-caption, .rift-gob .minimap-caption {
+    display: block;
+    font-size: 11px;
+    color: white;
+}
+
+.rift-npc .minimap, .rift-gob .minimap {
+    padding: 1px;
+    background-color: #D3C890;
+    display: inline-block;
+    font-size: 0px;
+}
+
+.rift-npc .minimap-notice, .rift-gob .minimap-notice {
+    font-size: 11px;
+    text-align: right;
+}
+
+.rift-guild .name {
+    position: relative;
+    left: -2px;
+}
+
+.rift-guild .name span {
+    position: relative;
+    top: 2px;
+    color: #D3C890;
+}
+
+.rift-guild .side {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    padding-right: 2px;
+}
+
+.m-tooltip.rift .src-icon {
+    display: inline-block;
+    padding-right: 5px;
+    line-height: 24px;
+}
+
+.m-tooltip.rift .src-icon.drop {
+    padding-left: 22px;
+    background: url(http://www.magelocdn.com/images/rift/picto/npc_kill.png?v=13671) 0 1px no-repeat;
+}
+
+.m-tooltip.rift .src-icon.merchant {
+    padding-left: 23px;
+    background: url(http://www.magelocdn.com/images/rift/picto/merchant.png?v=13671) 0 2px no-repeat;
+}
+
+.m-tooltip.rift .src-icon.quest {
+    padding-left: 25px;
+    background: url(http://www.magelocdn.com/images/rift/picto/quest_giver.png?v=13671) no-repeat;
+}
+
+.m-tooltip.rift .src-icon.recipe {
+    padding-left: 23px;
+    background: url(http://www.magelocdn.com/images/rift/picto/book.png?v=13671) no-repeat;
+}
+
+.m-tooltip.rift .src-icon.artifact {
+    padding-left: 18px;
+    background: url(http://www.magelocdn.com/images/rift/picto/npc_generic.png?v=13671) 0 5px no-repeat;
+}
+
+.m-tooltip.rift .src-icon.trainer {
+    padding-left: 21px;
+    background: url(http://www.magelocdn.com/images/rift/picto/trainer.png?v=13671) 0 3px no-repeat;
+}
+
+a.rarity10, .rarity10 {
+    color: #888888;
+}
+a.rarity20, .rarity20 {
+    color: #000000;
+}
+a.rarity30, .rarity30 {
+    color: #00A000;
+}
+a.rarity60, .rarity60 {
+    color: #2681FE;
+}
+a.rarity100, .rarity100 {
+    color: #B049FF;
+}
+a.rarity170, .rarity170, a.rarity240, .rarity240 {
+    color: #FF9900;
+}
+a.rarity10000, .rarity10000 {
+    color: #C8A339;
+}
+a.rarity-default, .rarity-default {
+    color: #FC00FF;
+}
