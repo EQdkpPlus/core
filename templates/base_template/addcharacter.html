@@ -4,7 +4,9 @@
  
  function check_form(){
 	var selected_main = $('#main_id').val();
-	if (selected_main == mainid && others > 0) return true;
+	if (selected_main == mainid || others < 1) {
+		return true;
+	}
 	
 	mainchar_change();
 	return false;

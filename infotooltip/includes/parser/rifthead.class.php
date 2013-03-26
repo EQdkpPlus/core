@@ -18,7 +18,7 @@
 
 include_once('itt_parser.aclass.php');
 
-if(!class_exists('rift_zam')) {
+if(!class_exists('rifthead')) {
 	class rifthead extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
@@ -129,5 +129,5 @@ if(!class_exists('rift_zam')) {
 		}
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_rift_zam', rift_zam::$shortcuts);
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_rifthead', rifthead::$shortcuts);
 ?>
