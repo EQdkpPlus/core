@@ -127,6 +127,10 @@ function set_progress_bar_value(recentNumber){
 }
 
 $(document).ready(function(){
+	$("#nl_progressbar").progressbar({
+		value: 100
+	});
+	
 	set_progress_bar_value(0);
 	send_mail(0);
 });

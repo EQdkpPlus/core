@@ -860,17 +860,17 @@ div.contentBox {
  * MENUS
  **************************************************/
 
-.mainmenu4 {
+.mainmenu {
 	list-style-type: none;
 	height:19px;
 }
 
-.mainmenu4 li{
+.mainmenu li{
 	float: left;
 	display: block;
 }
 
-.mainmenu4 li a {
+.mainmenu  li a {
 	background: #fff;
 	margin-left: 5px;
 	display: block;
@@ -897,7 +897,7 @@ div.contentBox {
 	box-shadow: 0 0 5px #888;
 }
 
-.mainmenu4 li a:hover{
+.mainmenu  li a:hover{
 	background: #e8e8e8;
 	text-decoration: underline;
 	border-top: 1px solid #BBBBBB;
@@ -905,7 +905,7 @@ div.contentBox {
 	border-right: 1px solid #BBBBBB;
 }
 
-.mainmenu4 li a:active{
+.mainmenu  li a:active{
 	background: #e8e8e8;
 	text-decoration: underline;
 	border-top: 1px solid #BBBBBB;
@@ -980,36 +980,36 @@ div.contentBox {
  * MENUS
  **************************************************/
 
-.mainmenu, .mainmenu1, .mainmenu2, .mainmenu3 {
+.menu {
 	list-style:none;
 	display:block;
 	margin:0;
 	padding:0;
 }
 
-.mainmenu li a, .mainmenu1 li a, .mainmenu2 li a, .mainmenu3 li a {
+.menu li a {
 	display:block;
 	margin:1px;
 	padding:2px;
 	padding-left:14px;
 }
 
-.mainmenu a, .mainmenu1 a, .mainmenu2 a, .mainmenu3 a   {
+.menu a   {
 	color:#eeeeee;
 	text-decoration: none;
 }
 
-.mainmenu li:nth-child(even) a:hover, .mainmenu1 li:nth-child(even) a:hover,.mainmenu2 li:nth-child(even) a:hover, .mainmenu3 li:nth-child(even) a:hover, .mainmenu li:nth-child(odd) a:hover, .mainmenu1 li:nth-child(odd) a:hover,.mainmenu2 li:nth-child(odd) a:hover, .mainmenu3 li:nth-child(odd) a:hover {
+.menu li:nth-child(even) a:hover, .menu li:nth-child(odd) a:hover {
 	color:#fff;
 	text-decoration: none;
 	background: #aeaeae url('EQDKP_IMAGE_PATHarrows/menuarrow.png') no-repeat 3px center;
 }
 
-.mainmenu li:nth-child(even) a, .mainmenu1 li:nth-child(even) a,.mainmenu2 li:nth-child(even) a, .mainmenu3 li:nth-child(even) a{
+.menu li:nth-child(even) a {
 	background:#c9c9c9 url('EQDKP_IMAGE_PATHarrows/menuarrow.png') no-repeat 3px center; /* Dynamic */
 	color: #000; /* Dynamic */
-}
-.mainmenu li:nth-child(odd) a, .mainmenu1 li:nth-child(odd) a,.mainmenu2 li:nth-child(odd) a, .mainmenu3 li:nth-child(odd) a{
+} 
+.menu li:nth-child(odd) a {
 	background:#ededed url('EQDKP_IMAGE_PATHarrows/menuarrow.png') no-repeat 3px center; /* Dynamic */
 	color: #000; /* Dynamic */
 }

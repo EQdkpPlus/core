@@ -21,6 +21,32 @@
 		<script type="text/javascript">
 			//<![CDATA[
 			{JS_CODE}
+			$(document).ready(function() {
+				
+				$('.notification-tooltip-trigger').on('click', function(event){
+					var dest = $(this).attr('data-type');
+					$(".notification-tooltip").hide('fast');
+					$("#notification-tooltip-"+dest).show('fast');
+					$(document).on('click', function(event) {
+						var count = $(event.target).parents('.notification-tooltip-container').length;									
+						if (count == 0){
+							$(".notification-tooltip").hide('fast');
+						}
+					});
+					
+				});
+				/* $('ul.mainmenu li.link_li_indexphp a.link_indexphp').html(''); */
+				$('ul.mainmenu').addClass('sf-menu');
+				jQuery('ul.mainmenu').supersubs({
+						minWidth:	14,
+						maxWidth:	40,
+						extraWidth:	2
+					}).superfish({
+						delay:		400,
+						animation:	{opacity:'show',height:'show'},
+						speed:		'fast'
+					});
+			});
 			//]]>
 		</script>
 	</head>
@@ -41,14 +67,58 @@
 						<input type="submit" class="mainoption bi_key" value="{L_login}" name="login" /> {AUTH_LOGIN_BUTTON}
 						{CSRF_TOKEN}
 					</form>
-					
+					<!-- IF U_REGISTER != "" -->&nbsp;&bull;&nbsp;{U_REGISTER}<!-- ENDIF -->
 					<!-- ELSE -->
 					<a href="{EQDKP_ROOT_PATH}settings.php{SID}"><img src="{EQDKP_IMAGE_PATH}admin/manage_users.png" alt="user" class="absmiddle" /> {USER_NAME}</a> 
-					<!-- BEGIN user_notfications -->
-					&nbsp;&bull;&nbsp; {user_notifications.MESSAGE}
-					<!-- END user_notifications -->
 					<!-- IF S_ADMIN -->&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}admin/index.php{SID}"><img src="{EQDKP_IMAGE_PATH}admin/task_manager.png" class="absmiddle" alt="Admin" /> {L_menu_admin_panel}</a> <!-- ENDIF -->
 					&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}login.php{SID}&amp;logout=true&amp;link_hash={CSRF_LOGOUT_TOKEN}"><img src="{EQDKP_IMAGE_PATH}glyphs/logout.png" alt="user" class="absmiddle" /> {L_logout}</a>
+					
+					
+					<!-- IF U_CHARACTERS != "" -->&nbsp;&bull;&nbsp; <a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a><!-- ENDIF -->
+					
+					<div class="notification-tooltip-container">
+						&nbsp;&bull;&nbsp; <a class="notification-tooltip-trigger" data-type="all"><i class="icon-bolt"></i>Benachrichtigungen</a>
+						<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
+							<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
+								<!-- IF NOTIFICATION_COUNT_RED > 0 -->
+								<h2><span class="notification-bubble-red">{NOTIFICATION_COUNT_RED}</span>{L_notification_red_prio}</h2>
+								<ul>{NOTIFICATION_RED}</ul>
+								<!-- ENDIF -->
+								<!-- IF NOTIFICATION_COUNT_YELLOW > 0 -->
+								<h2><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span>{L_notification_yellow_prio}</h1>
+								<ul>{NOTIFICATION_YELLOW}</ul>
+								<!-- ENDIF -->
+								<!-- IF NOTIFICATION_COUNT_GREEN > 0 -->
+								<h2><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span>{L_notification_green_prio}</h1>
+								<ul>{NOTIFICATION_GREEN}</ul>
+								<!-- ENDIF -->
+							</li>
+						</ul>
+					</div>
+					<!-- IF NOTIFICATION_COUNT_RED > 0 -->
+					<div class="notification-tooltip-container">
+					<a class="notification-tooltip-trigger" data-type="red"><span class="notification-bubble-red">{NOTIFICATION_COUNT_RED}</span></a>
+						<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-red">
+							{NOTIFICATION_RED}
+						</ul>
+					</div>
+					<!-- ENDIF -->
+					<!-- IF NOTIFICATION_COUNT_YELLOW > 0 -->
+					<div class="notification-tooltip-container">
+					<a class="notification-tooltip-trigger" data-type="yellow"><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span></a>
+						<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-yellow">
+							{NOTIFICATION_YELLOW}
+						</ul>
+					</div>
+					<!-- ENDIF -->
+					<!-- IF NOTIFICATION_COUNT_GREEN > 0 -->
+					<div class="notification-tooltip-container">
+					<a class="notification-tooltip-trigger" data-type="green"><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span></a>
+						<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-green">
+							{NOTIFICATION_GREEN}
+						</ul>
+					</div>
+					<!-- ENDIF -->
 					<!-- ENDIF -->
 					
 					<!-- BEGIN personal_area_addition -->
@@ -85,7 +155,7 @@
 		<div id="wrapper" <!-- IF T_PORTAL_WIDTH -->class="fixed_width"<!-- ENDIF -->>
 		
 			<div id="mainmenu4">
-				{MAIN_MENU4}
+				{MAIN_MENU}
 				<div class="clear noheight">&nbsp;</div>
 			</div><!-- close mainmenu4 -->
 			
@@ -103,45 +173,7 @@
 					<div class="columnContainer">
 						<!-- IF FIRST_C -->
 						<div class="first column" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 180px;<!-- ENDIF -->">
-							{PORTAL_LEFT1}
-							<div id="main_menu1" class="portalbox">
-								<div class="portalbox_head">
-									<span class="toggle_button">&nbsp;</span>
-									<span class="center">{L_menu_eqdkp}</span>
-								</div>
-								<div class="portalbox_content">
-								<div class="toggle_container">
-									{MAIN_MENU1}
-								</div>
-								</div>
-							</div>
-							
-							<div id="main_menu2" class="portalbox">
-								<div class="portalbox_head">
-									<span class="toggle_button">&nbsp;</span>
-									<span class="center">{L_menu_user}</span>
-								</div>
-								<div class="portalbox_content">
-								<div class="toggle_container">
-									{MAIN_MENU2}
-								</div>
-								</div>
-							</div>
-							<!-- IF S_MAIN_MENU3 -->
-							<div id="main_menu3" class="portalbox">
-								<div class="portalbox_head">
-									<span class="toggle_button">&nbsp;</span>
-									<span class="center">{L_menu_links_short}</span>
-								</div>
-								<div class="portalbox_content">
-								<div class="toggle_container">
-									{MAIN_MENU3}
-								</div>
-								</div>
-							</div>
-							<!-- ENDIF -->
-							{PORTAL_LEFT2}
-							
+							{PORTAL_LEFT}				
 						</div> <!-- close first column -->
 						<!-- ENDIF -->
 						

@@ -129,6 +129,9 @@
 							<!-- IF S_SEARCH -->
 							<li class="hiddenDesktop"><a href="{EQDKP_ROOT_PATH}search.php{SID}"><i class="icon-search"></i>{L_search}</a></li>
 							<!-- ENDIF -->
+							<!-- BEGIN personal_area_addition -->
+							<li>{personal_area_addition.TEXT}</li>
+							<!-- END personal_area_addition -->
 						</ul>				
 					<!-- ENDIF -->
 				</div>
