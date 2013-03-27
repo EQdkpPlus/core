@@ -677,7 +677,7 @@ $lang = array(
 "lib_pupd_core_intro" => "Es wurde eine neue Version von EQdkp Plus gefunden. Bitte aktualisiere dein EQdkp Plus über die Live-Update-Funktion.",
 "lib_pupd_core_intro2" => "Es wurde eine neue Version von EQdkp Plus gefunden. Bitte lade die neue Version auf <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a> herunter.",
 "rssadmin_head1" => "Benachrichtigungen",
-"rssadmin_head2" => "Eqdkp-Plus Twitter Feed",
+"rssadmin_head2" => "EQdkp-Plus Twitter Feed",
 "adminc_news" => "News",
 "adminc_statistics" => "Statistiken",
 "adminc_server" => "PHP Infos",
