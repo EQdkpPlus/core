@@ -396,6 +396,7 @@ input[type=button], input[type=reset], input[type=submit], input.button, a.butto
 	color: #fff;
 	border: solid 1px #892c04;
 	background-color: #581a05; /* Old browsers */
+	text-transform: none;
 }
 input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, input.button :hover, a.button:hover, button:hover {
 	text-decoration: none;
@@ -782,7 +783,7 @@ div.contentBox {
 	line-height: 28px;
 	text-align: left;
 	padding: 0px 8px 0px 8px;
-	background: url("../../../../../templates/eqdkp_mop/images/head.jpg") repeat-x scroll 0 0 #4B1F14;
+	background: url("images/head.jpg") repeat-x scroll 0 0 #4B1F14;
 }
 .contentBox .boxHeader h1	{
 	
@@ -1060,6 +1061,21 @@ div.contentBox {
 	text-transform: uppercase;
 }
 
+h1.contentTitle {
+	white-space: nowrap;
+	overflow: hidden;
+	color: #E9BD7F;
+	background: #4B1F14 url(images/head.jpg) repeat-x;
+	height: 28px;
+	line-height: 28px;
+	font-weight: bold;
+	font-size: 11px;
+	text-align: left;
+	padding: 0px 8px 0px 8px;
+	text-transform: uppercase;
+	margin: -10px;
+}
+
 #personalAreaLogin {
 	float:left;
 	padding: 3px;
@@ -1070,6 +1086,114 @@ div.contentBox {
 	float:right;
 	padding: 3px;
 	padding-right: 10px;
+}
+
+.icon-remove {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/global/delete.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-ok {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/ok.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-trash {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/reset.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-chevron-left {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/arrows/left_arrow.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-plus {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/global/add.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-refresh {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/global/update.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-comments {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/comments.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-edit {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/edit.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.toolbar-button .icon-cog {
+	width: 19px;
+	height: 19px;
+	background: url(EQDKP_IMAGE_PATH/global/settings.png);
+    display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.tool-items .icon-plus {
+	height: 36px;
+    width: 44px;
+	background: url(EQDKP_IMAGE_PATH/global/add.png);
+    display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.tool-items .icon-edit {
+	height: 36px;
+    width: 44px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/edit.png);
+    display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.tool-items .icon-list {
+	height: 36px;
+    width: 44px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/list.png);
+    display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
 /***************************************************
