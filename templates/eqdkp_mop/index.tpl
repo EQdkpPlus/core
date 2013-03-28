@@ -206,7 +206,7 @@
 							{NEWS_TICKER_H}
 							{PORTAL_MIDDLE}
 							<!-- ENDIF -->
-							<div id="contentBody" class="<!-- IF not S_NORMAL_HEADER -->simpleHeader <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER -->simpleFooter <!-- ENDIF -->">
+							<div id="contentBody" class="{PAGE_CLASS} <!-- IF not S_NORMAL_HEADER -->simpleHeader <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER -->simpleFooter <!-- ENDIF -->">
 								{GBL_CONTENT_BODY}
 							</div><!-- close contentBody -->
 							<!-- IF S_NORMAL_FOOTER -->

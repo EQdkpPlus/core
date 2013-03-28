@@ -384,7 +384,7 @@ a.link2:visited{
 	display:inline-block;
 }
 
-input[type=button], input[type=reset], input[type=submit], input.button, a.button {
+input[type=button], input[type=reset], input[type=submit], input.button, a.button , button{
 	outline: none;
 	cursor: pointer;
 	text-align: center;
@@ -402,14 +402,15 @@ input[type=button], input[type=reset], input[type=submit], input.button, a.butto
 	color: #fff;
 	border: solid 1px #640000;
 	background-color: #a90000; /* Old browsers */
+	margin: 2px;
 }
-input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, input.button :hover, a.button:hover {
+input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, input.button :hover, a.button:hover, button:hover {
 	text-decoration: none;
 	border: 1px solid #000;
 	background-color: #353535 !important; /* Old browsers */
 }
 
-input[type=button]:active, input[type=reset]:active, input[type=submit]:active, input.button :active ,input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, input.button :focus{
+input[type=button]:active, input[type=reset]:active, input[type=submit]:active, input.button :active ,input[type=button]:focus, input[type=reset]:focus, input[type=submit]:focus, input.button :focus, button:focus{
 	position: relative;
 	top: 1px;
 	border: 1px solid #000;
@@ -860,17 +861,28 @@ div.contentBox {
  * MENUS
  **************************************************/
 
-.mainmenu {
+.mainmenu.sf-menu {
 	list-style-type: none;
 	height:19px;
+	float: none;
+	background: none;
 }
 
-.mainmenu li{
+.mainmenu.sf-menu li{
 	float: left;
 	display: block;
+	background: none;
 }
 
-.mainmenu  li a {
+.mainmenu li {
+	background: none !important;
+}
+
+.mainmenu .sf-sub-indicator {
+    background: url("images/arrows_dark.png") no-repeat scroll -10px -100px transparent;
+}
+
+.mainmenu  li a, .mainmenu  li a:visited {
 	background: #fff;
 	margin-left: 5px;
 	display: block;
@@ -892,9 +904,8 @@ div.contentBox {
     text-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
 	font-variant:small-caps;
 	
-	-moz-box-shadow: 0 0 5px #888;
-	-webkit-box-shadow: 0 0 5px#888;
-	box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0px -2px 5px 0px #888;
+	box-shadow: 0px -2px 5px 0px #888; 
 }
 
 .mainmenu  li a:hover{
@@ -911,6 +922,23 @@ div.contentBox {
 	border-top: 1px solid #BBBBBB;
 	border-left: 1px solid #BBBBBB;
 	border-right: 1px solid #BBBBBB;
+}
+
+.mainmenu li li, .mainmenu li li li {
+	box-shadow: none;
+}
+
+.mainmenu  li li a, .mainmenu  li li li a{
+	box-shadow:none;
+	font-size: 15px;
+	border: 1px solid #BBBBBB;
+}
+.mainmenu li ul {
+	top: 3.1em;
+}
+
+.mainmenu li li ul li a{
+	margin-left: 0px;
 }
 
 /***************************************************
@@ -1922,4 +1950,304 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 
 .user-avatar {
 	max-height: 48px;
+}
+
+/* Notifications */
+.notification-bubble-red {
+	background-color: #B94A48;
+	margin-right: 4px;
+	padding-right: 9px;
+	padding-left: 9px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	color: #FFFFFF;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 20px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+.notification-bubble-yellow {
+	background-color: #F89406;
+	margin-right: 4px;
+	padding-right: 9px;
+	padding-left: 9px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	color: #FFFFFF;
+    display: inline-block;
+    font-size: 11px;
+    line-height: 20px;
+    font-weight: bold;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
+.notification-bubble-green{
+	background-color: #468847;
+	margin-right: 4px;
+	padding-right: 9px;
+	padding-left: 9px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	color: #FFFFFF;
+    display: inline-block;
+    font-size: 11px;
+    line-height: 20px;
+    font-weight: bold;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+ .dropdown-menu:after {
+    border-bottom: 6px solid #FFFFFF;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    content: "";
+    display: inline-block;
+    left: 10px;
+    position: absolute;
+    top: -6px;
+}
+ .dropdown-menu:before {
+    border-bottom: 7px solid rgba(0, 0, 0, 0.2);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    content: "";
+    display: inline-block;
+    left: 9px;
+    position: absolute;
+    top: -7px;
+}
+.open > .dropdown-menu {
+    display: block;
+}
+.dropdown-menu {
+    background-clip: padding-box;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    float: left;
+    left: -5px;
+    list-style: none outside none;
+    margin: 2px 0 0;
+    min-width: 160px;
+    padding: 5px 0;
+    position: absolute;
+    top: 30px;
+    z-index: 1000;
+}
+
+.dropdown .dropdown-menu .nav-header {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.nav-header {
+    color: #999999;
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 20px;
+    padding: 3px 15px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.dropdown-menu .divider {
+    background-color: #E5E5E5;
+    border-bottom: 1px solid #FFFFFF;
+    height: 1px;
+    margin: 9px 1px;
+    overflow: hidden;
+}
+#personalAreaUser ul.dropdown-menu li {
+    line-height: 14px;
+	float: none;
+	margin-right:0px;
+	color: #666;
+}
+
+
+#personalArea .dropdown-menu li > a {
+    clear: both;
+    color: #333333;
+    display: block;
+    font-weight: normal;
+    line-height: 20px;
+    padding: 3px 20px;
+    white-space: nowrap;
+}
+
+.notification-tooltip-container {
+	display: inline;
+	position: relative;
+}
+
+.notification-tooltip-container a {
+	cursor: pointer;
+}
+
+.notification-tooltip {
+	display: none;
+}
+
+#notification-tooltip-all {
+	padding: 6px;
+}
+
+#notification-tooltip-all h2 {
+	color: #666666;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.dropdown-menu ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.page-viewnews h1.contentTitle {
+	border:1px solid #ccc;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px#888;
+	box-shadow: 0 0 5px #888;
+	background:#3f3f3f url(images/head.jpg) repeat-x;
+	height: 28px;
+	line-height: 28px;
+	text-align: left;
+	padding: 0px 8px 0px 8px;
+
+	color: #FFFFFF;
+	font-family: EasonPro,"Times New Roman",serif;
+	font-size: 1.3em;
+	font-size-adjust: 0.43;
+	font-weight: 400;
+	text-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
+	font-variant:small-caps;
+	margin: 0;
+}
+
+#contentBody {
+	border:1px solid #ccc;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px#888;
+	box-shadow: 0 0 5px #888;
+	background-color:#fff;
+	padding:  5px;
+}
+
+.icon-remove {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/global/delete.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-ok {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/ok.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-trash {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/reset.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-chevron-left {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/arrows/left_arrow.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-plus {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/global/add.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-refresh {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/global/update.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-comments {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/comments.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.icon-edit {
+	width: 16px;
+	height: 16px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/edit.png);
+    display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+}
+
+.toolbar-button .icon-cog {
+	width: 19px;
+	height: 19px;
+	background: url(EQDKP_IMAGE_PATH/global/settings.png);
+    display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.tool-items .icon-plus {
+	height: 36px;
+    width: 44px;
+	background: url(EQDKP_IMAGE_PATH/global/add.png);
+    display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.tool-items .icon-edit {
+	height: 36px;
+    width: 44px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/edit.png);
+    display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.tool-items .icon-list {
+	height: 36px;
+    width: 44px;
+	background: url(EQDKP_IMAGE_PATH/glyphs/list.png);
+    display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
 }

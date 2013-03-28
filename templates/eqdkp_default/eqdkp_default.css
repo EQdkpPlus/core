@@ -1043,8 +1043,6 @@ div.contentBox {
 	border-right: 1px solid #999999;
 }
 
-.mainmenu li.link_li_indexphp
-
 /***************************************************
  * FOOTER
  **************************************************/
@@ -2094,7 +2092,7 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 	background-repeat: no-repeat;
 }
 
-* Notifications */
+/* Notifications */
 .notification-bubble-red {
 	background-color: #B94A48;
 	margin-right: 4px;

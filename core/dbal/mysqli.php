@@ -157,7 +157,7 @@ class dbal_mysqli extends dbal_common {
 		}
 
 		$num = $num ? $num : 0;
-		$msg = $msg ? $msg : "no error";
+		$msg = $msg ? $msg : "no errormessage";
 		return array(
 			'code'		=> $num,
 			'message'	=> $msg

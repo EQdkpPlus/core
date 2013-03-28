@@ -358,10 +358,20 @@ class Manage_Live_Update extends page_generic {
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
-
+		
+		$strLog = '';
 		foreach($arrFiles as $file){
+			
+			if (file_exists($this->root_path.$file['name'])){
+				$strLog .= 'Replaced File '.$file['name'].'\r\n';
+			} else {
+				$strLog .= 'Added File '.$file['name'].'\r\n';
+			}
+			
 			$this->pfh->copy($tmp_folder.$file['name'],$this->root_path.$file['name']);
 		}
+		
+		if ($strLog != "") register('logs')->add('liveupdate_copied_files', $strLog);
 
 		echo "true";
 
@@ -448,9 +458,15 @@ class Manage_Live_Update extends page_generic {
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile, 'removed');
 		if (is_array($arrFiles)){
+			$strLog = '';
 			foreach ($arrFiles as $file){
-				$this->pfh->Delete($this->root_path.$file['name']);
+				if (file_exists($this->root_path.$file['name'])){
+					$this->pfh->Delete($this->root_path.$file['name']);
+					$strLog .= 'Deleted File '.$file['name'].'\r\n';
+				}
 			}
+			
+			if ($strLog != "") register('logs')->add('liveupdate_deleted_files', $strLog);
 		}
 
 		echo "true";

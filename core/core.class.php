@@ -352,7 +352,7 @@ class core extends gen_class {
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->root_path.'characters.php' . $this->SID : '',
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul(),
-				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->current_page),
+				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->root_path."login.php".$this->SID."&amp;mode=lostpassword\">".$this->user->lang('lost_password').'</a>',	
 			));

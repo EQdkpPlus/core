@@ -74,10 +74,10 @@
 					&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}login.php{SID}&amp;logout=true&amp;link_hash={CSRF_LOGOUT_TOKEN}"><img src="{EQDKP_IMAGE_PATH}glyphs/logout.png" alt="user" class="absmiddle" /> {L_logout}</a>
 					
 					
-					<!-- IF U_CHARACTERS != "" -->&nbsp;&bull;&nbsp; <a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a><!-- ENDIF -->
+					<!-- IF U_CHARACTERS != "" -->&nbsp;&bull;&nbsp; <a href="{U_CHARACTERS}"><img src="{TEMPLATE_PATH}/images/group.png" alt="Characters"/><i class="icon-group"></i>{L_menu_members}</a><!-- ENDIF -->
 					
 					<div class="notification-tooltip-container">
-						&nbsp;&bull;&nbsp; <a class="notification-tooltip-trigger" data-type="all"><i class="icon-bolt"></i>Benachrichtigungen</a>
+						&nbsp;&bull;&nbsp; <a class="notification-tooltip-trigger" data-type="all"><img src="{TEMPLATE_PATH}/images/lightning.png" alt="Notifications"/><i class="icon-bolt"></i>Benachrichtigungen</a>
 						<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 							<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 								<!-- IF NOTIFICATION_COUNT_RED > 0 -->
@@ -189,7 +189,7 @@
 								{NEWS_TICKER_H}
 								{PORTAL_MIDDLE}
 								<!-- ENDIF -->
-								<div id="contentBody" class="<!-- IF not S_NORMAL_HEADER -->simpleHeader <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER -->simpleFooter <!-- ENDIF -->">
+								<div id="contentBody" class="{PAGE_CLASS} <!-- IF not S_NORMAL_HEADER -->simpleHeader <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER -->simpleFooter <!-- ENDIF -->">
 									{GBL_CONTENT_BODY}
 								</div><!-- close contentBody -->
 								<!-- IF S_NORMAL_FOOTER -->
