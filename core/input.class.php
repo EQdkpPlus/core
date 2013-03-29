@@ -69,10 +69,10 @@ class input extends gen_class {
 			case 'integer':				$out = FILTER_SANITIZE_NUMBER_INT;		break;
 			case 'htmlescape':			$out = FILTER_SANITIZE_SPECIAL_CHARS;	break;
 			case 'raw':					$out = FILTER_UNSAFE_RAW;				break;
-			case 'string':
 			//float and double need a special handling, so "0,5" can be correctly interpreted as 0.5 (function floatvalue() )
 			case 'float':
 			case 'double':				$out = FILTER_SANITIZE_NUMBER_FLOAT; 	break;
+			case 'string':
 			default:					$out = FILTER_SANITIZE_STRING;
 		}
 		return $out;
