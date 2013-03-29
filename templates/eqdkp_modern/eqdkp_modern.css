@@ -802,6 +802,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	border-top: none;
     line-height: 14px;
     padding: 0px !important;
+	border: none !important;
 }
 
 .mceLayout {

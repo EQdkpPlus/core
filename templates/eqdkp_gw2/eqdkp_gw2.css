@@ -322,6 +322,12 @@ a.link2:visited{
 #contentBody {
 	text-align:left;
 	margin-bottom: 14px;
+	background-color:#fff;
+	padding:  5px;
+	border:1px solid #ccc;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px#888;
+	box-shadow: 0 0 5px #888;
 }
 
 .content {
@@ -2089,6 +2095,7 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 .notification-tooltip-container {
 	display: inline;
 	position: relative;
+	text-align: left;
 }
 
 .notification-tooltip-container a {
@@ -2107,6 +2114,7 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 	color: #666666;
     font-size: 14px;
     white-space: nowrap;
+	margin:0;
 }
 
 .dropdown-menu ul {
@@ -2133,15 +2141,6 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 	text-shadow: 0 0 0.25em rgba(0, 0, 0, 0.75);
 	font-variant:small-caps;
 	margin: 0;
-}
-
-#contentBody {
-	border:1px solid #ccc;
-	-moz-box-shadow: 0 0 5px #888;
-	-webkit-box-shadow: 0 0 5px#888;
-	box-shadow: 0 0 5px #888;
-	background-color:#fff;
-	padding:  5px;
 }
 
 .icon-remove {

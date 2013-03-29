@@ -30,7 +30,7 @@ if (!class_exists("socialplugins")) {
 		
 		public function __construct(){
 			$this->plugins = array(						
-				'opengraph_tags' => $this->user->lang('sp_opengraph_tags'),
+				'opengraph_tags' => $this->user->lang('sp_opengraph_tags'),			
 			);
 			
 			$this->buttons = array(						
@@ -39,6 +39,7 @@ if (!class_exists("socialplugins")) {
 				'facebook_like'	=> $this->user->lang('sp_facebook_like'),
 				'facebook_share'=> $this->user->lang('sp_facebook_share'),
 				'twitter_share' => $this->user->lang('sp_twitter_share'),
+				'socialshareprivacy' => '2Click Solution',
 			);
 			
 		}
@@ -77,8 +78,12 @@ if (!class_exists("socialplugins")) {
 			$arrButtons = $this->getSocialButtons(true);
 			if (count($arrButtons)){
 				$html = '<ul class="social-bookmarks">';
-				foreach ($arrButtons as $key => $name){
-					$html .= '<li class="'.$key.'">'.$this->$key($urlToShare, $text, $height).'</li>';
+				if ((int)$this->config->get('sp_socialshareprivacy') == 1){
+					$html .= '<li class="'.$key.'">'.$this->socialshareprivacy($urlToShare, $text, $height).'</li>';
+				} else {				
+					foreach ($arrButtons as $key => $name){
+						$html .= '<li class="'.$key.'">'.$this->$key($urlToShare, $text, $height).'</li>';
+					}
 				}
 				$html .= '</ul>';
 				return $html;
@@ -136,6 +141,35 @@ if (!class_exists("socialplugins")) {
   })();");
 			$html = '<g:plusone size="medium" annotation="inline" width="120" href="'.$urlToShare.'" class="absmiddle"></g:plusone>';
 			return $html;
+		}
+		
+		private function socialshareprivacy($urlToShare, $text, $height){
+			$this->tpl->css_file($this->root_path . 'libraries/jquery/js/socialshareprivacy/socialshareprivacy.css');
+			$this->tpl->js_file($this->root_path . 'libraries/jquery/js/socialshareprivacy/jquery.socialshareprivacy.min.js');
+			
+			$strID = md5($urlToShare.$text);
+			$this->tpl->add_js('
+				$("#ssp_'.$strID.'").socialSharePrivacy({
+					uri : "'.$urlToShare.'",
+					services : {
+					facebook : {
+						"dummy_img"  : "'.$this->root_path.'libraries/jquery/js/socialshareprivacy/images/dummy_facebook'.(($this->user->data['user_lang']!= 'german') ? '_en' : '').'.png",
+						'.(((int)$this->config->get('sp_facebook_like') != 1) ? '"status" : "off"': '').'
+					}, 
+					twitter : {
+						"dummy_img"  : "'.$this->root_path.'libraries/jquery/js/socialshareprivacy/images/dummy_twitter.png",
+						'.(((int)$this->config->get('sp_twitter_tweet') != 1) ? '"status" : "off"': '').'
+					},
+					gplus : {
+						"dummy_img"  : "'.$this->root_path.'libraries/jquery/js/socialshareprivacy/images/dummy_gplus.png",
+						'.(((int)$this->config->get('sp_google_plusone') != 1) ? '"status" : "off"': '').'
+					}
+				}
+				});
+			', 'docready'
+			
+			);
+			return '<div id="ssp_'.$strID.'"></div>';
 		}
 		
 	}
