@@ -157,7 +157,7 @@
     position: absolute;
     top: 0;
     width: 135px;
-    z-index: 1000;
+    z-index: 30;
     margin: 0;
     padding: 0;
 }

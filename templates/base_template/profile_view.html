@@ -18,10 +18,10 @@
 <!-- ENDIF -->
 
 <!-- IF MEMBER_POINTS -->
+<div class="tableHeader">
+	<h2>{L_DKP_NAME}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
-	<tr>
-		<th align="center" colspan="9">{L_DKP_NAME}</th>
-	</tr>
 	{MEMBER_POINTS}
 </table>
 <br />
@@ -38,57 +38,41 @@
 
 	<!-- RAIDS TABLE -->
 	<div id="fragment-2">
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<th align="center" colspan="5">{L_raid_attendance_history}</th>
-		</tr>
-		<tr>
-			<td align="center" class="menu">{RAID_PAGINATION}</td>
-		</tr>
-		</table>
+		<div class="tableHeader">
+			<h2>{L_raid_attendance_history}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-			{RAID_OUT}
+		{RAID_OUT}
 		</table>
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-			<tr>
-				<td align="center" class="menu">{RAID_PAGINATION}</td>
-			</tr>
-		</table>
+		<div class="center pagination_wrapper">
+			{RAID_PAGINATION}
+		</div>
 	</div>
 
 	<!-- ITEMS TABLE -->
 	<div id="fragment-3">
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-			<tr>
-				<th align="center" colspan="5">{L_item_purchase_history}</th>
-			</tr>
-			<tr>
-				<td align="center" class="menu">{ITEM_PAGINATION}</td>
-			</tr>
-		</table>
+		<div class="tableHeader">
+			<h2>{L_item_purchase_history}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-			{ITEM_OUT}
+		{ITEM_OUT}
 		</table>
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-			<tr>
-				<td align="center" class="menu">{ITEM_PAGINATION}</td>
-			</tr>
-		</table>
+		<div class="center pagination_wrapper">
+			{ITEM_PAGINATION}
+		</div>
 	</div>
 
 	<!-- ADJUSTMENTS TABLE-->
 	<div id="fragment-4">
-		<table width="100%" border="0" cellspacing="1" cellpadding="2">
-			<tr>
-				<th align="center" colspan="4">{L_individual_adjustment_history}</th>
-			</tr>
-			<tr>
-				<td align="center" class="menu">{ADJUSTMENT_PAGINATION}</td>
-			</tr>
-		</table>
+		<div class="tableHeader">
+			<h2>{L_individual_adjustment_history}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-			{ADJUSTMENT_OUT}
+		{ADJUSTMENT_OUT}
 		</table>
+		<div class="center pagination_wrapper">
+			{ADJUSTMENT_PAGINATION}
+		</div>
 	</div>
 
 	<!-- ATTENDANCE -->

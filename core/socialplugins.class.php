@@ -27,6 +27,7 @@ if (!class_exists("socialplugins")) {
 		
 		private $plugins = array();
 		private $buttons = array();
+		private $ssp_included = false;
 		
 		public function __construct(){
 			$this->plugins = array(						
@@ -144,8 +145,11 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		private function socialshareprivacy($urlToShare, $text, $height){
-			$this->tpl->css_file($this->root_path . 'libraries/jquery/js/socialshareprivacy/socialshareprivacy.css');
-			$this->tpl->js_file($this->root_path . 'libraries/jquery/js/socialshareprivacy/jquery.socialshareprivacy.min.js');
+			if (!$this->ssp_included){
+				$this->tpl->css_file($this->root_path . 'libraries/jquery/js/socialshareprivacy/socialshareprivacy.css');
+				$this->tpl->js_file($this->root_path . 'libraries/jquery/js/socialshareprivacy/jquery.socialshareprivacy.min.js');
+				$this->ssp_included = true;
+			}
 			
 			$strID = md5($urlToShare.$text);
 			$this->tpl->add_js('

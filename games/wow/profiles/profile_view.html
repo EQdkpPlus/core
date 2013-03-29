@@ -1,78 +1,60 @@
 <!-- IF ARMORY == 1 -->
-	<div class="row1">
+	<div>
 		<div style="max-width:1140px;">
-			<table width="100%" cellspacing="0" cellpadding="1" border="0">
-				<tr>
-					<td><div id="profile">
-							<div id="profile_charicon">
-								<img border='0' src="{CHARDATA_ICON}" alt="" />
-							</div>
-							<div class="floatLeft">
-								<div id="profile_charname">
-									<a target="_blank" href="{bnetlinks:profil}">{CHARDATA_NAME}</a>
-								</div>
-								<div id="profile_titel_guild">
-									{CHARDATA_TITLE}
-									<br />
-									<span class="profile_guild"><a target="_blank" href="{bnetlinks:guild}">{CHARDATA_GUILDNAME}</a> @ {CHARDATA_GUILDREALM}</span>
-								</div>
-								<div class="clear"></div>
-								<div id="profile_charinfos">
-									{L_level} {DATA_LEVEL}, {DATA_RACENAME}, {DATA_CLASSNAME}, {CHARDATA_POINTS} <img src="{EQDKP_ROOT_PATH}games/wow/profiles/achievements.png" alt="" />
-								</div>
-							</div>
-							<div>
-								<div class="profile_itemlevel">
-									<div class="profile_itemlevel_avg">{itemlevel:averageItemLevel}</div>
-									<div class="profile_itemlevel_txt">
-										<div class="profile_itemlevel_avgtxt">{GL_avg_itemlevel}</div>
-										<div class="profile_itemlevel_eq">({itemlevel:averageItemLevelEquipped} {GL_avg_itemlevel_equiped})</div>
-									</div>
-								</div>
-							</div>
-							<div class="clear"></div>
-						</div>
-					</td>
-				</tr>
-				<tr class="row1" >
-					<td valign="top" align="center">
-						<table border="0" align="left" width="100%">
-							<tr valign="top">
-								<td  width="27"> &nbsp;</td>
-								<td style="background: #1e130d url({CHARACTER_IMG}) center top no-repeat;">
-									<table border="0" style="min-width: 450px;" width="100%">
-										<tr style="height:479px;">
-											<td valign="top" width="50" >
-												<ul id="wow_icons_left">
+		<div id="profile">
+			<div id="profile_charicon">
+				<img border='0' src="{CHARDATA_ICON}" alt="" />
+			</div>
+			<div class="floatLeft">
+				<div id="profile_charname">
+					<a target="_blank" href="{bnetlinks:profil}">{CHARDATA_NAME}</a>
+				</div>
+				<div id="profile_titel_guild">
+					{CHARDATA_TITLE}
+					<br />
+					<span class="profile_guild"><a target="_blank" href="{bnetlinks:guild}">{CHARDATA_GUILDNAME}</a> @ {CHARDATA_GUILDREALM}</span>
+				</div>
+				<div class="clear"></div>
+				<div id="profile_charinfos">
+					{L_level} {DATA_LEVEL}, {DATA_RACENAME}, {DATA_CLASSNAME}, {CHARDATA_POINTS} <img src="{EQDKP_ROOT_PATH}games/wow/profiles/achievements.png" alt="" />
+				</div>
+			</div>
+			<div>
+				<div class="profile_itemlevel">
+					<div class="profile_itemlevel_avg">{itemlevel:averageItemLevel}</div>
+					<div class="profile_itemlevel_txt">
+						<div class="profile_itemlevel_avgtxt">{GL_avg_itemlevel}</div>
+						<div class="profile_itemlevel_eq">({itemlevel:averageItemLevelEquipped} {GL_avg_itemlevel_equiped})</div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		
+		<div>
+			<div class="floatLeft" style="background: #1e130d url({CHARACTER_IMG}) center top no-repeat; height:550px; width:740px;">
+				<div>
+					<div class="floatLeft"><ul id="wow_icons_left">
 													<!-- BEGIN itemicons_left -->
 													<li>{itemicons_left.SLOTS}</li>
 													<!-- END itemicons_left -->
-												</ul>
-											</td>
-											<td width="100%" valign="top" align="center" class="nowrap">
-												<br />
-											</td>
-											<td valign="top" width="50" >
-												<ul id="wow_icons_right">
+												</ul></div>
+					<div class="floatRight"><ul id="wow_icons_right">
 													<!-- BEGIN itemicons_right -->
 													<li>{itemicons_right.SLOTS}</li>
 													<!-- END itemicons_right -->
-												</ul>
-											</td>
-										</tr>
-										<tr>
-											<td colspan="3" align="center" >
-												<ul id='wow_icons_bottom'>
+												</ul></div>
+					<div class="clear center"><ul id='wow_icons_bottom'>
 													<!-- BEGIN itemicons_bottom -->
 													<li>{itemicons_bottom.SLOTS}</li>
 													<!-- END itemicons_bottom -->
 												</ul>
-												{itemicons:bottom}
-											</td>
-										</tr>
-									</table>
-								</td>
-								<td width="400">
+												{itemicons:bottom}</div>
+				</div>
+			</div>
+		
+			<div class="floatRight" style="width:395px;">
 									<div class="healthpowerbar">
 										<ul>
 											<li class="health"><span class="name">{GL_health}</span><span class="value">{HEALTH_VALUE}</span></li>
@@ -227,12 +209,11 @@
 											</td>
 										</tr>
 									</table>
-								</td>
-							</tr>
-					 	</table>
-					</td>
-				</tr>
-			</table>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+
 		</div>
 	</div>
 	<br />
@@ -440,10 +421,10 @@
 	</div>
 <!-- ENDIF -->
 
+<div class="tableHeader">
+	<h2>{L_DKP_NAME}</h2>
+</div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
-	<tr>
-		<th align="center" colspan="9">{L_DKP_NAME}</th>
-	</tr>
 	{MEMBER_POINTS}
 </table>
 <br />
@@ -473,57 +454,41 @@
 
 	<!-- RAIDS TABLE -->
 	<div id="fragment-2-1">
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<th align="center" colspan="5">{L_raid_attendance_history}</th>
-		</tr>
-		<tr>
-			<td align="center" class="menu">{RAID_PAGINATION}</td>
-		</tr>
-		</table>
+		<div class="tableHeader">
+			<h2>{L_raid_attendance_history}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		{RAID_OUT}
 		</table>
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<td align="center" class="menu">{RAID_PAGINATION}</td>
-		</tr>
-		</table>
+		<div class="center pagination_wrapper">
+			{RAID_PAGINATION}
+		</div>
 	</div>
 
 	<!-- ITEMS TABLE -->
 	<div id="fragment-2-2">
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<th align="center" colspan="5">{L_item_purchase_history}</th>
-		</tr>
-		<tr>
-			<td align="center" class="menu">{ITEM_PAGINATION}</td>
-		</tr>
-		</table>
+		<div class="tableHeader">
+			<h2>{L_item_purchase_history}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		{ITEM_OUT}
 		</table>
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
-		<tr>
-			<td align="center" class="menu">{ITEM_PAGINATION}</td>
-			</tr>
-		</table>
+		<div class="center pagination_wrapper">
+			{ITEM_PAGINATION}
+		</div>
 	</div>
 
 	<!-- ADJUSTMENTS TABLE-->
 	<div id="fragment-2-3">
-		<table width="100%" border="0" cellspacing="1" cellpadding="2">
-			<tr>
-				<th align="center" colspan="4">{L_individual_adjustment_history}</th>
-			</tr>
-			<tr>
-				<td align="center" class="menu">{ADJUSTMENT_PAGINATION}</td>
-			</tr>
-		</table>
+		<div class="tableHeader">
+			<h2>{L_individual_adjustment_history}</h2>
+		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		{ADJUSTMENT_OUT}
 		</table>
+		<div class="center pagination_wrapper">
+			{ADJUSTMENT_PAGINATION}
+		</div>
 	</div>
 
 	<!-- ATTENDANCE -->

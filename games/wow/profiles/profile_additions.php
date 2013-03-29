@@ -58,14 +58,14 @@
 			border-bottom: 1px solid white;
 		}
 		ul#wow_icons_left {
-			margin: 0; padding: 0;
+			margin: 5px; padding: 0;
 		}
 		ul#wow_icons_left li {
 			list-style: none;
 			padding: 1; margin-bottom: 3px;
 		}
 		ul#wow_icons_right {
-			margin: 0; padding: 0;
+			margin: 5px; padding: 0;
 		}
 		ul#wow_icons_right li {
 			list-style: none;
@@ -173,7 +173,7 @@
 		.profile_itemlevel_avgtxt, .profile_itemlevel_eq{
 			margin-left: 6px;
 		}
-		.raideventicon { background: url('games/wow/profiles/events/raid-icons.jpg') no-repeat; width: 59px; height: 59px;}
+		.raideventicon { background: url('games/wow/profiles/events/raid-icons.jpg') no-repeat; width: 59px; height: 59px; padding: 0 !important;}
 		.raideventicon.id2717 { background-position:        0 0; }
 		.raideventicon.id2677 { background-position:    -61px 0; }
 		.raideventicon.id3429 { background-position:   -122px 0; }
@@ -258,6 +258,7 @@
 			-webkit-border-radius:4px; /* Safari, Chrome */
 			-khtml-border-radius:4px; /* Konqueror */
 			border-radius:4px; /* CSS3 */
+			display: inline-block !important;
 		}
 		.icon-frame.frame-14 { height: 14px; width: 14px; }
 		.icon-frame.frame-18 { height: 18px; width: 18px; }
@@ -272,6 +273,7 @@
 			line-height: 18px;
 			text-align: center;
 			vertical-align: top;
+			display: inline-block !important;
 		}
 
 		.talenttab_select{ margin-left: 8px; }
