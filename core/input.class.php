@@ -72,7 +72,7 @@ class input extends gen_class {
 			case 'string':
 			//float and double need a special handling, so "0,5" can be correctly interpreted as 0.5 (function floatvalue() )
 			case 'float':
-			case 'double':
+			case 'double':				$out = FILTER_SANITIZE_NUMBER_FLOAT; 	break;
 			default:					$out = FILTER_SANITIZE_STRING;
 		}
 		return $out;
