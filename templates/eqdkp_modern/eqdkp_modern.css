@@ -588,7 +588,7 @@ input[type=radio], input[type=checkbox]{
 	padding: .2em 1em .275em;
 }
 
-button, input[type=submit][disabled], input[type=button][disabled], input[type=reset][disabled],input[type=submit][disabled]:hover, input[type=button][disabled]:hover, input[type=reset][disabled]:hover {
+button[disabled], button[disabled]:hover, input[type=submit][disabled], input[type=button][disabled], input[type=reset][disabled],input[type=submit][disabled]:hover, input[type=button][disabled]:hover, input[type=reset][disabled]:hover {
 	color: #999;
 	border: solid 1px #b7b7b7;
 	background: #fff;
@@ -1349,6 +1349,15 @@ div.pagination {
 .sf-admin li:hover, .sf-menu.sf-admin li.sfHover,
 .sf-admin a:focus, .sf-menu.sf-admin a:hover, .sf-menu.sf-admin a:active, .mainmenu li:hover, .mainmenu  a:focus , .sf-menu.mainmenu li.sfHover, .sf-menu.mainmenu a:hover{
 	background: #000000 !important;
+}
+
+.mainmenu li li ul {
+	margin-left: 14px;
+}
+
+.sf-admin.sf-menu li li a {
+	padding: .60em 1em;
+	text-decoration: none;
 }
 
 /* general: superfish - single dropdown menu */
@@ -2325,6 +2334,9 @@ table.leaderboard tbody tr td table.borderless tbody tr td {
 	padding: 0 !important;
 }
 
+.elfinder {
+	font-size: 1.3em !important;
+}
 
 @media all and (max-width: 480px) {
 	body, html , #personalArea{

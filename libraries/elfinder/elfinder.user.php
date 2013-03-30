@@ -32,7 +32,7 @@ if(!registry::fetch('user')->is_signedin()){
 		<script type="text/javascript" charset="utf-8">
 			var target = '<?php echo register('input')->get('field'); ?>';
 			var myCommands = elFinder.prototype._options.commands;
-			var disabled = ['extract', 'archive','mkdir', 'mkfile','help','rename','download'];
+			var disabled = ['extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'];
 			$.each(disabled, function(i, cmd) {
 				(idx = $.inArray(cmd, myCommands)) !== -1 && myCommands.splice(idx,1);
 			});
@@ -45,9 +45,9 @@ if(!registry::fetch('user')->is_signedin()){
 					commands : myCommands,
 					getFileCallback: function(url) { // editor callback
 						//alert(url); // pass selected file path to TinyMCE
-						parent.$('#'+target).val(url);
-						parent.$('#image_'+target+' .previewimage').attr("src", url);
-						parent.$('#image_'+target+' .previewurl').attr("href", url);
+						parent.$('#'+target).val(url.url);
+						parent.$('#image_'+target+' .previewimage').attr("src", url.url);
+						parent.$('#image_'+target+' .previewurl').attr("href", url.url);
 						parent.$(".ui-dialog-content").dialog("close");
 						jQuery.FrameDialog.closeDialog();
 					  }

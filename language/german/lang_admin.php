@@ -1512,6 +1512,7 @@ $lang = array(
 
 "thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',
 "thumbnail_defaultsize_help" => 'Trage hier die Breite (in Pixeln) der Vorschaubilder für große Bilder ein',
+"manage_media" => "Medien verwalten",
  );
 
 ?>

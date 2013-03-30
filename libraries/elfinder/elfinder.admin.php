@@ -39,12 +39,12 @@ register('user')->check_auth('a_files_man');
 			mySubmit: function (URL) {
 			  var win = tinyMCEPopup.getWindowArg('window');
 			  if (typeof(win) == 'undefined'){
-				insertFile(URL);
+				insertFile(URL.url);
 				return;
 			  }
 
 			  // pass selected file path to TinyMCE
-			  win.document.getElementById(tinyMCEPopup.getWindowArg('input')).value = URL;
+			  win.document.getElementById(tinyMCEPopup.getWindowArg('input')).value = URL.url;
 
 			  // are we an image browser?
 			  if (typeof(win.ImageDialog) != 'undefined') {
@@ -54,18 +54,19 @@ register('user')->check_auth('a_files_man');
 				}
 				// update preview if necessary
 				if (win.ImageDialog.showPreviewImage) {
-				  win.ImageDialog.showPreviewImage(URL);
+				  win.ImageDialog.showPreviewImage(URL.url);
 				}
 			  }
 
 			  // close popup window
-			  tinyMCEPopup.close();
+			 tinyMCEPopup.close();
 			}
 		  }
 
 		  tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		  
 	function insertFile(name)	{
+		var image = false;
 		try {
 			if (is_image(name)){			
 				image = true;
@@ -112,7 +113,7 @@ register('user')->check_auth('a_files_man');
 		<script type="text/javascript" charset="utf-8">
 			var target = '<?php echo register('input')->get('field'); ?>';
 			var myCommands = elFinder.prototype._options.commands;
-			var disabled = ['extract', 'archive','mkfile','help'];
+			var disabled = ['extract', 'archive','mkfile','help','edit'];
 			$.each(disabled, function(i, cmd) {
 				(idx = $.inArray(cmd, myCommands)) !== -1 && myCommands.splice(idx,1);
 			});

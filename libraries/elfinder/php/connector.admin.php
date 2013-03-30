@@ -57,7 +57,7 @@ $opts = array(
 			'uploadAllow'	=> array('all'),
 			'uploadDeny'	=> array('application/x-php','application/x-perl','application/x-python-bytecode','application/x-ruby', 'text/x-php', 'text/x-perl', 'text/x-python-bytecode', 'text/x-ruby', 'text/x-c++'),
 			'uploadOrder'	=> array('allow', 'deny'),
-			'disabled'		=> array('extract', 'archive','mkfile','help'),
+			'disabled'		=> array('extract', 'archive','mkfile','help','edit'),
 		)
 	)
 );
