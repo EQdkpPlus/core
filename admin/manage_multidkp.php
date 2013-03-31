@@ -83,10 +83,10 @@ class Manage_Multidkp extends page_generic {
 		}
 
 		//events
-		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
+		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));
 
 		//itempools
-		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('itempool', 'id_list')));
+		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->sort($this->pdh->get('itempool', 'id_list'), 'itempool', 'name')));
 
 		$this->confirm_delete($this->user->lang('confirm_delete_multi').'<br />'.$mdkp['name']);
 		$this->tpl->assign_vars(array(
