@@ -60,6 +60,27 @@ $german_array = array(
 		'role3' => 'Crowd Control',
 		'role4' => 'Damage Dealer',
 		'role5' => 'Supporter',
+		
+		// Berufe
+		
+		'Farmer'	=> 'Bauer',
+		'Forester'	=> 'Förster',
+		'Prospector'	=>	'Schürfer',
+		'Cook'	=>	'Koch',
+		'Jeweller' => 'Goldschmied',
+		'Metalsmith'	=> 'Metallschmied',
+		'Scholar'	=>	'Gelehrter',
+		'Tailor'	=>	'Schneider',
+		'Weaponsmith'	=>	'Waffenschmied',
+		'Woodworker'	=>	'Drechsler',
+		
+		'Armourer'	=>	'Rüstungsschmied',
+		'Armsman'	=>	'Waffenbauer',
+		'Explorer'	=>	'Entdecker',
+		'Historian'	=>	'Historiker',
+		'Tinker'	=>	'Kesselflicker',
+		'Woodsman'	=>	'Waldhüter',
+		'Yeoman'	=>	'Freibauer',		
 
 		// Profile Admin area
 		'pk_tab_fs_lotrosettings'		=> 'LOTRO Einstellungen',
