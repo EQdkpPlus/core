@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="game" version="1.0.7">
+	<folder>lotro</folder>
+	<name>Lord of the Rings Online</name>
+	<author>Sionaa</author>
+	<authorEmail>sionaa@mmo-stammtisch.de</authorEmail>
+	<creationDate>1362661820</creationDate>
+	<copyright>(C)2013 Sionaa</copyright>
+	<version>2.1.1</version>
+	<level>stable</level>
+	<description></description>
+</install>
