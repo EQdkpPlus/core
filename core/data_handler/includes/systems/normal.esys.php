@@ -50,6 +50,10 @@ $system_def = array(
 	),
 	
 	'pages' => array(
+	
+	
+	
+	
 		'listraids' => array(
 			'hptt_listraids_raidlist' => array(
 				'name' => 'hptt_listraids_raidlist',
@@ -676,6 +680,57 @@ $system_def = array(
 				),
 			),
 		),//end manage calendar events
+		
+		'admin_manage_article_categories' => array(
+			'hptt_admin_manage_article_categories_categorylist' => array(
+				'name'				=> 'hptt_admin_manage_article_categories_categorylist',
+				'table_main_sub'	=> '%category_id%',
+				'table_subs'		=> array('%category_id%', '%article_id%'),
+				'page_ref'			=> 'manage_article_categories.php',
+				'show_numbers'		=> false,
+				'show_select_boxes'	=> true,
+				'selectboxes_checkall'=>true,
+				'show_detail_twink'	=> false,
+				'table_sort_dir'	=> 'asc',
+				'table_sort_col'	=> 0,
+				'table_presets'		=> array(
+					array('name' => 'category_sortable',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'category_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'category_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),				
+					array('name' => 'category_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'category_alias',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'category_portallayout','sort' => true, 'th_add' => '', 'td_add' => ''),
+				),
+			),
+			
+		),
+
+		'admin_manage_articles' => array(
+			'hptt_admin_manage_articles_list' => array(
+				'name'				=> 'hptt_admin_manage_articles_list',
+				'table_main_sub'	=> '%article_id%',
+				'table_subs'		=> array('%article_id%', '%category_id%'),
+				'page_ref'			=> 'manage_articles.php',
+				'show_numbers'		=> false,
+				'show_select_boxes'	=> true,
+				'selectboxes_checkall'=>true,
+				'show_detail_twink'	=> false,
+				'table_sort_dir'	=> 'asc',
+				'table_sort_col'	=> 6,
+				'table_presets'		=> array(
+					//array('name' => 'article_sortable',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_featured', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_title','sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'article_alias','sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'article_user',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'article_date',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+				),
+			),
+			
+		),
 
 	),//pages end
 );

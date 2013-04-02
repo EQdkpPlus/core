@@ -1640,6 +1640,25 @@ div.pagination {
 	margin-right: 5px;
 }
 
+.featured {
+	display: inline-block;
+	background: url('../images/admin/favorites.png');
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	margin-right: 5px;
+}
+
+.not-featured {
+	display: inline-block;
+	background: url('../images/glyphs/favorites-gray.png');
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	margin-right: 5px;
+}
+
+
 /*  ACP: portal module management */
 .portal_block_border {
 	padding: 5px;

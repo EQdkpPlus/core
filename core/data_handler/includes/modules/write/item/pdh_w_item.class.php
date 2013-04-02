@@ -121,7 +121,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					if($item_id !== false) {
 						$updated_mems[] = $member_id;
 						unset($items2del[$item_id]);
-						$succ_data = $this->db->query("UPDATE __items SET :params WHERE item_group_key = ?;", array(
+						$succ_data = $this->db->query("UPDATE __items SET :params WHERE item_id = ?;", array(
 							'item_name'			=> $item_name,
 							'item_value'		=> $item_value,
 							'member_id'			=> $member_id,
@@ -131,7 +131,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 							'game_itemid'		=> $game_item_id,
 							'itempool_id'		=> $itempool_id,
 							'item_updated_by'	=> $this->admin_user
-						), $group_key);
+						), $item_id);
 
 						if(!$succ_data) {
 							$retu[] = false;

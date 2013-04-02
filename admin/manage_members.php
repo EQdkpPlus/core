@@ -170,7 +170,7 @@ class Manage_Members extends page_generic {
 				'type'	=> 'button', //link, button, javascript
 				'img'	=> 'images/global/update.png',
 				'perm'	=> true,
-				'link'	=> '#remove_grpleader',
+				'link'	=> '#member_rankchange',
 				'append' => $this->html->DropDown('rank', $ranks, ''),
 			),
 		
