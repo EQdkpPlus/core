@@ -344,7 +344,8 @@ if(!class_exists('eq2_sony')) {
 				if ($enabled == 1) {
 					if ($count == 0) {
 						$content = "<div class='itemd_flags'>\n";
-					} 
+					}
+				if ($key == 'notrasmute') {($key = 'no-transmute');}					
 					$content .= strtoupper($key)." &nbsp;\n";
 					$count++;
 				}
@@ -530,7 +531,7 @@ if(!class_exists('eq2_sony')) {
 				$classList .= "All Mages ";
 			}
 			else {
-				$classList .= $mageListList;
+				$classList .= $mageList;
 			}
 			return $classList;
 		}
@@ -651,6 +652,21 @@ if(!class_exists('eq2_sony')) {
 			return $content;
 		}
 		
+		protected function ItemTypeSpell($item)
+		{
+			$typeInfo = $item->{'typeinfo'};
+			$content .= "<br>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
+			$itemLevel = $item->{'leveltouse'};
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br>";
+			$content .= "<br><div class='itemd_green'>";
+			$usableByClasses = $this->GetUsableByClasses($typeInfo);
+			$content .= $usableByClasses;
+			$content .= "</div>";
+			return $content;
+		}		
+				
 		protected function ItemType($item)
 		{
 			$typeInfo = $item->{'typeinfo'};
@@ -662,6 +678,9 @@ if(!class_exists('eq2_sony')) {
 			}
 			if ($typeInfo->{'name'} == "expendable") {
 			    return $this->ItemTypeMount($item);
+			}
+			if ($typeInfo->{'name'} == "spellscroll") {
+			    return $this->ItemTypeSpell($item);
 			}
 		}
 		
