@@ -282,6 +282,8 @@ $german_array = array(
 		'mop_heartoffear_25'			=> 'Das Herz der Angst (25)',
 		'mop_endlessspring_10'			=> 'Terrasse des Endlosen Frühlings (10)',
 		'mop_endlessspring_25'			=> 'Terrasse des Endlosen Frühlings (25)',
+		'mop_throneofthunder_10'		=> 'Thron des Donners (10)',
+		'mop_throneofthunder_25'		=> 'Thron des Donners (25)', 
 
 		'char_news'						=> 'Char News',
 		'no_armory'						=> 'Es konnten keine gültigen Daten für diesen Charakter geladen werden. Die battle.net API meldet folgenden Fehler: "%s".',

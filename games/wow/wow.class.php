@@ -51,14 +51,14 @@ if(!class_exists('wow')) {
 			'bc'		=> array(3457, 3836, 3923, 3607, 3845, 3606, 3959, 4075),
 			'wotlk'		=> array(4603, 3456, 4493, 4500, 4273, 2159, 4722, 4812, 4987),
 			'cataclysm'	=> array(5600, 5094, 5334, 5638, 5723, 5892),
-			'mop'		=> array(6125, 6297, 6067)
+			'mop'		=> array(6125, 6297, 6067, 6622)
 		);
 
 		protected $glang		= array();
 		protected $lang_file	= array();
 		protected $path			= '';
 		public $lang			= false;
-		public $version			= '5.0';
+		public $version			= '5.1';
 
 		public function __construct() {
 			parent::__construct();
@@ -126,16 +126,18 @@ if(!class_exists('wow')) {
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (4, "'.$this->glang('mop_heartoffear_25').'", 0.00, "default", NULL, "hf.png"); ');
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (5, "'.$this->glang('mop_endlessspring_10').'", 0.00, "default", NULL, "tes.png"); ');
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (6, "'.$this->glang('mop_endlessspring_25').'", 0.00, "default", NULL, "tes.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (7, "'.$this->glang('mop_throneofthunder_10').'", 0.00, "default", NULL, "tot.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (8, "'.$this->glang('mop_throneofthunder_25').'", 0.00, "default", NULL, "tot.png"); ');
 
 				//Default Events
-				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(7, "'.$this->glang('wotlk').'", 0.00, "default", NULL, "wotlk.png"); ');
-				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(8, "'.$this->glang('cataclysm').'", 0.00, "default", NULL, "cata.png"); ');
-				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(9, "'.$this->glang('burning_crusade').'", 0.00, "default", NULL, "bc.png"); ');
-				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(10, "'.$this->glang('classic').'", 0.00, "default", NULL, "classic.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(9, "'.$this->glang('wotlk').'", 0.00, "default", NULL, "wotlk.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(10, "'.$this->glang('cataclysm').'", 0.00, "default", NULL, "cata.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(11, "'.$this->glang('burning_crusade').'", 0.00, "default", NULL, "bc.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(12, "'.$this->glang('classic').'", 0.00, "default", NULL, "classic.png"); ');
 
 				//Connect them to the Default-Multidkp-Pool
 				array_push($info['aq'], 'INSERT INTO __multidkp (multidkp_id, multidkp_name, multidkp_desc) VALUES (2, "classic", "Classic-Pool");');
-				array_push($info['aq'], 'INSERT INTO __multidkp2event (multidkp2event_multi_id, multidkp2event_event_id) VALUES (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (2, 7), (2, 8), (2, 9), (2, 10);');
+				array_push($info['aq'], 'INSERT INTO __multidkp2event (multidkp2event_multi_id, multidkp2event_event_id) VALUES (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (2, 9), (2, 10), (2, 11), (2, 12);');
 				array_push($info['aq'], 'INSERT INTO __itempool (itempool_id, itempool_name, itempool_desc) VALUES (2, "classic", "Classic itempool");');
 				array_push($info['aq'], 'INSERT INTO __multidkp2itempool (multidkp2itempool_itempool_id, multidkp2itempool_multi_id) VALUES (2, 2);');
 

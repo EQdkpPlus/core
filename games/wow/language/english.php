@@ -283,6 +283,8 @@ $english_array = array(
 		'mop_heartoffear_25'			=> 'Heart of Fear (25)',
 		'mop_endlessspring_10'			=> 'Terrace of Endless Spring (10)',
 		'mop_endlessspring_25'			=> 'Terrace of Endless Spring (25)',
+		'mop_throneofthunder_10'		=> 'Throne of Thunder (10)',
+		'mop_throneofthunder_25'		=> 'Throne of Thunder (25)',
 
 		'char_news'						=> 'Char News',
 		'no_armory'						=> 'The data for this char could not be loaded. The battle.net API returned an error: "%s".',
