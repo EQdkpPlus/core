@@ -49,7 +49,7 @@ if(!class_exists('lotro')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public  $lang			= false;
-		public $version	= '2.2';
+		public $version	= '2.2.1';
 
 		/**
 		* Initialises filters

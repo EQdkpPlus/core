@@ -10,7 +10,7 @@
       <tbody><tr>
         <td class="equip_cell" colspan="3">
           <div class="char_equip">
-            <div class="char_name header_color">{DATA_NAME} of {CHARDATA:world}</div>
+            <div class="char_name header_color">{DATA_NAME} {GL_uc_of} {CHARDATA:world}</div>
             <div class="char_core">
               <div class="char_class header_color">{DATA_CLASSNAME}</div>
                             <img src="./games/lotro/profiles/backgrounds/{DATA_CLASSID}.png" class="class_banner" alt="{DATA_CLASSNAME}" />
@@ -22,7 +22,7 @@
 					<span class="slot_{equipment.SLOT_ID}">{equipment.ICON}</span>
 					
 				<!-- END equipment -->                                              
-            <div class="core_stats header_color">
+            <div class="core_stats_{GL_uc_stat_image} header_color">
               <div class="morale">{CHARSTATS:morale}</div>
               <div class="power">{CHARSTATS:power}</div>
               <div class="armour">{CHARSTATS:armour}</div>
@@ -36,23 +36,23 @@
           <td class="stats col1">
             <table class="stat_list">
               <tbody><tr>
-                <th>Might</th>
+                <th>{GL_uc_might}</th>
                 <td>{CHARSTATS:might}</td>
               </tr>
               <tr>
-                <th>Agility</th>
+                <th>{GL_uc_agility}</th>
                 <td>{CHARSTATS:agility}</td>
               </tr>
               <tr>
-                <th>Vitality</th>
+                <th>{GL_uc_vitality}</th>
                 <td>{CHARSTATS:vitality}</td>
               </tr>
               <tr>
-                <th>Will</th>
+                <th>{GL_uc_will}</th>
                 <td>{CHARSTATS:will}</td>
               </tr>
               <tr>
-                <th>Fate</th>
+                <th>{GL_uc_fate}</th>
                 <td>{CHARSTATS:fate}</td>
               </tr>
             </tbody></table>
@@ -60,11 +60,11 @@
           <td class="stats col2">
             <table class="stat_list">
               <tbody><tr>
-                <th>Critical Hit</th>
+                <th>{GL_uc_critical_hit}</th>
                 <td>{CHARSTATS:criticalPoints}</td>
               </tr>
               <tr>
-                <th>Finesse</th>
+                <th>{GL_uc_finesse}</th>
                 <td>{CHARSTATS:finessePoints}</td>
               </tr>
               <tr>
@@ -72,15 +72,15 @@
                 <td></td>
               </tr>
               <tr>
-                <th>Block</th>
+                <th>{GL_uc_block}</th>
                 <td>{CHARSTATS:block}</td>
               </tr>
               <tr>
-                <th>Parry</th>
+                <th>{GL_uc_parry}</th>
                 <td>{CHARSTATS:parry}</td>
               </tr>
               <tr>
-                <th>Evade</th>
+                <th>{GL_uc_evade}</th>
                 <td>{CHARSTATS:evade}</td>
               </tr>
             </tbody></table>
@@ -88,11 +88,11 @@
           <td class="stats col3">
             <table class="stat_list">
               <tbody><tr>
-                <th>Resistance</th>
+                <th>{GL_uc_resistance}</th>
                 <td>{CHARSTATS:theOneResistance}</td>
               </tr>
               <tr>
-                <th>Crit Avoid</th>
+                <th>{GL_uc_crit_avoid}</th>
                 <td>{CHARSTATS:criticalDefense}</td>
               </tr>
               <tr>
@@ -100,11 +100,11 @@
                 <td></td>
               </tr>
               <tr>
-                <th>Physical Mit.</th>
+                <th>{GL_uc_physical_mit}</th>
                 <td>{CHARSTATS:physicalMitigation}</td>
               </tr>
               <tr>
-                <th>Tactical Mit.</th>
+                <th>{GL_uc_tactical_mit}</th>
                 <td>{CHARSTATS:tacticalMitigation}</td>
               </tr>
             </tbody></table>
@@ -117,7 +117,7 @@
             <div class="char_name header_color">{DATA_VOCATION}</div>
 			<table width="100%" cellspacing="0" cellpadding="1" border="0" class="stat_list">
 				<tbody>
-					<tr><th width="20">Proficiency<br/>Mastery</th><td class="td_small"><img src="{DATA_PROF1:icon_profession}" alt="{DATA_PROF1:name}" title="{DATA_PROF1:name}" /></td><td class="td_med">{DATA_PROF1:proficiency}<br />{DATA_PROF1:mastery}</td><td  class="td_small"><img src="{DATA_PROF2:icon_profession}" alt="{DATA_PROF2:name}" title="{DATA_PROF2:name}" /></td><td class="td_med">{DATA_PROF2:proficiency}<br />{DATA_PROF2:mastery}</td><td class="td_small"><img src="{DATA_PROF3:icon_profession}" alt="{DATA_PROF3:name}" title="{DATA_PROF3:name}" /></td><td class="td_med">{DATA_PROF3:proficiency}<br />{DATA_PROF3:mastery}</td></tr>
+					<tr><th width="20">{GL_uc_proficiency}<br/>{GL_uc_mastery}</th><td class="td_small"><img src="{DATA_PROF1:icon_profession}" alt="{DATA_PROF1:name}" title="{DATA_PROF1:name}" /></td><td class="td_med">{DATA_PROF1:proficiency}<br />{DATA_PROF1:mastery}</td><td  class="td_small"><img src="{DATA_PROF2:icon_profession}" alt="{DATA_PROF2:name}" title="{DATA_PROF2:name}" /></td><td class="td_med">{DATA_PROF2:proficiency}<br />{DATA_PROF2:mastery}</td><td class="td_small"><img src="{DATA_PROF3:icon_profession}" alt="{DATA_PROF3:name}" title="{DATA_PROF3:name}" /></td><td class="td_med">{DATA_PROF3:proficiency}<br />{DATA_PROF3:mastery}</td></tr>
 				</tbody>
 			</table>
 			</div>

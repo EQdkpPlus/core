@@ -154,6 +154,28 @@ $german_array = array(
 		'profession2_mastery'			=> 'Meister-Stufe zweiter Beruf',
 		'profession3_mastery'			=> 'Meister-Stufe dritter Beruf',
 		
+		// Profile Translation
+		
+		'uc_of'				=>	'von',
+		'uc_stat_image'			=>	'de',
+		'uc_might'			=>	'Macht',
+		'uc_agility'		=>  'Bewegl.',	
+		'uc_vitality'		=>	'Vitalität',
+		'uc_will'			=>	'Wille',
+		'uc_fate'			=>	'Schicksal',
+		'uc_critical_hit'	=>	'Kritisch',
+		'uc_finesse'		=>	'Finesse',
+		'uc_block'			=>	'Blocken',
+		'uc_parry'			=>	'Parieren',
+		'uc_evade'			=>	'Ausw.',		
+		'uc_resistance'		=>	'Widerstand',
+		'uc_crit_avoid'		=>	'Krit. Verm.',
+		'uc_physical_mit'	=>	'Körperl. Ab.',
+		'uc_tactical_mit'	=>	'Takt. Ab.',
+		'uc_proficiency'	=>	'Fertigkeit',
+		'uc_mastery'		=>	'Meisterschaft',
+		
+		
 		//Events
 		'event1' => 'Annùminas: Glinghant',
 		'event2' => 'Annùminas: Feste Elendil',

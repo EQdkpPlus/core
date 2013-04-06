@@ -131,6 +131,27 @@ $english_array = array(
 		'profession2_mastery'			=> 'Mastery-level second profession',
 		'profession3_mastery'			=> 'Mastery-level third profession',
 		
+		// Profile Translation
+		
+		'uc_of'				=>	'of',
+		'uc_stat_image'		=>	'en'
+		'uc_might'			=>	'Might',
+		'uc_agility'		=>  'Agility',	
+		'uc_vitality'		=>	'Vitality',
+		'uc_will'			=>	'Will',
+		'uc_fate'			=>	'Fate',
+		'uc_critical_hit'	=>	'Critical Hit',
+		'uc_finesse'		=>	'Finesse',
+		'uc_block'			=>	'Block',
+		'uc_parry'			=>	'Parry',
+		'uc_evade'			=>	'Evade',		
+		'uc_resistance'		=>	'Resistance',
+		'uc_crit_avoid'		=>	'Crit Avoid',
+		'uc_physical_mit'	=>	'Physical Mit.',
+		'uc_tactical_mit'	=>	'Tactical Mit.',
+		'uc_proficiency'	=>	'Proficiency',
+		'uc_mastery'		=>	'Mastery',		
+		
 		//Events
 		'event1' => 'Annùminas: Glinghant',
 		'event2' => 'Annùminas: Ost Elendil',
