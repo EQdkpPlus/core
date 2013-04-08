@@ -134,7 +134,7 @@ $english_array = array(
 		// Profile Translation
 		
 		'uc_of'				=>	'of',
-		'uc_stat_image'		=>	'en'
+		'uc_stat_image'		=>	'en',
 		'uc_might'			=>	'Might',
 		'uc_agility'		=>  'Agility',	
 		'uc_vitality'		=>	'Vitality',
