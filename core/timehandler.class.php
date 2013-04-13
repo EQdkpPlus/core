@@ -461,7 +461,7 @@ if (!class_exists("timehandler")){
 				$timezone_ab = DateTimeZone::listAbbreviations();
 				
 				$london = new DateTimeZone('Europe/London');
-				$london_dt = new DateTime('now', $london);
+				$london_dt = new DateTime('31-12-2012', $london);
 				foreach($timezone_ab as $key => $more_data) {
 					foreach($more_data as $ikey => $tz) {
 						$value = $tz['timezone_id'];
