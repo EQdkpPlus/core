@@ -25,7 +25,7 @@ function get_const($value){
 	return registry::get_const($value);
 }
 
-//Shortcut function for registry::register
+//Shortcut function for registry::fetch
 function register($value, $params=array()){
 	return registry::fetch($value, $params);
 }
