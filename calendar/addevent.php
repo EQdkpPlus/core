@@ -248,9 +248,14 @@ class addevent extends page_generic {
 				$this->in->get('allday'),
 			));
 		}
+		
+		//Flush Cache so the Cronjob can access the new data
+		$this->pdh->process_hook_queue();
+		
 		if($this->in->get('repeating') != 'none'){
 			$this->timekeeper->run_cron('calevents_repeatable', true);
 		}
+		
 		$this->pdh->process_hook_queue();
 
 		// close the dialog
