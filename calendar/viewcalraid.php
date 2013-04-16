@@ -566,6 +566,7 @@ class viewcalraid extends page_generic {
 						}
 
 						// put the data to the template engine
+						$sanitized_note = str_replace('"', "'", $memberdata['note']);
 						$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 							'MEMBERID'			=> $memberid,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
@@ -574,6 +575,7 @@ class viewcalraid extends page_generic {
 							'TOOLTIP'			=> implode('<br />', $membertooltip),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : false),
+							'NOTE_TT'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $sanitized_note : false),
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
 						));
