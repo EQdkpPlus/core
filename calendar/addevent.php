@@ -216,7 +216,7 @@ class addevent extends page_generic {
 			$this->pdh->put('calendar_events', 'update_cevents', array(
 				$this->url_id,
 				$this->in->get('calendar_id', 1),
-				'',
+				false,
 				$this->time->fromformat($this->in->get('startdate'), 1),
 				$this->time->fromformat($this->in->get('enddate'), 1),
 				$this->in->get('repeating'),

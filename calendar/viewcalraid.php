@@ -68,6 +68,12 @@ class viewcalraid extends page_generic {
 
 	// user changes his status for that raid
 	public function update_status(){
+		
+		// check if the user is already in the database for that event and skip if already existing (avoid reload-cheating)
+		if($this->pdh->get('calendar_raids_attendees', 'in_db', array($this->url_id, $this->in->get('member_id', 0)))){
+			return false;
+		}
+
 		// auto confirm if enabled
 		$usergroups		= unserialize($this->config->get('calendar_raid_autoconfirm'));
 		$signupstatus	= $this->in->get('signup_status', 4);
@@ -90,8 +96,8 @@ class viewcalraid extends page_generic {
 		}else{
 			$deadlinetime	= $this->time->user_date($deadlinedate, true);
 		}
-		$mystatus = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $this->user->id));
-		$mysignedstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($eventid, $mystatus['member_id']));
+		$mystatus = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->id));
+		$mysignedstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $mystatus['member_id']));
 		
 		if (((int)$eventdata['closed'] == 1) || !($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $mystatus['member_id'] > 0 && $mysignedstatus != 4 && $eventdata['timestamp_end'] > $this->time->time))){
 			return false;
@@ -571,6 +577,7 @@ class viewcalraid extends page_generic {
 						}
 
 						// put the data to the template engine
+						$sanitized_note = str_replace('"', "'", $memberdata['note']);
 						$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 							'MEMBERID'			=> $memberid,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
@@ -579,6 +586,7 @@ class viewcalraid extends page_generic {
 							'TOOLTIP'			=> implode('<br />', $membertooltip),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : false),
+							'NOTE_TT'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $sanitized_note : false),
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
 						));
