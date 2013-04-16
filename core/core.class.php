@@ -383,13 +383,13 @@ class core extends gen_class {
 									$target = ' target="'.$menu['target'].'"';
 								}
 							}
-							$arrOutput[$number] .= '<li><a href="' . ((isset($menu['plus_link']) && $menu['plus_link']==true) ? $menu['link'] : $this->root_path . $menu['link']) . '"'.$target.' class="'.$number.'_link_'.strtolower($menu['text']).'">' . $menu['text'] . '</a></li>';
+							$arrOutput[$number] .= '<li><a href="' . ((isset($menu['plus_link']) && $menu['plus_link']==true) ? $menu['link'] : $this->root_path . $menu['link']) . '"'.$target.' class="'.$number.'_link_'.utf8_strtolower($menu['text']).'">' . $menu['text'] . '</a></li>';
 
 							$this->tpl->assign_block_vars( 'main_'.$number, array(
 									'LINK' 		=> ((isset($menu['plus_link']) && $menu['plus_link'] == true) ? $menu['link'] : $this->root_path . $menu['link']),
 									'TEXT'		=> $menu['text'],
 									'TARGET'	=> ((isset($menu['target']) && strlen($menu['target'])) ? $menu['target'] : ''),
-									'CLASS'		=> $number.'_link_'.strtolower($menu['text']),
+									'CLASS'		=> $number.'_link_'.utf8_strtolower($menu['text']),
 							));
 						}
 					}
