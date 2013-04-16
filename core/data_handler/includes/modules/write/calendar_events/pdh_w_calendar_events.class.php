@@ -38,7 +38,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 
 		public function update_cevents($id, $cal_id, $name, $startdate, $enddate, $repeat, $editclones, $notes, $allday, $extension=false){
 			$old['cal_id']			= $this->pdh->get('calendar_events', 'calendar', array($id));
-			$old['name']			= $this->pdh->get('calendar_events', 'name', array($id));
+			$old['name']			= ($name != false) ? $this->pdh->get('calendar_events', 'name', array($id)) : '';
 			$old['startdate']		= $this->pdh->get('calendar_events', 'time_start', array($id));
 			$old['enddate']			= $this->pdh->get('calendar_events', 'time_end', array($id));
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
