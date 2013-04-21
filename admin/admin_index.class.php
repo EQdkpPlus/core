@@ -64,7 +64,9 @@ class admin_index extends gen_class {
 
 		//new plugin-update-check (only minor, without db-updates)
 		$this->pm->plugin_update_check();
-
+		
+		/* DISABLED - It doesnt make sense to reinstall the game if an update occured, since it is impossible for the system to know wether it overwrites data changed by the user
+						Use maintenance Updates for adding new things to the database (placed in e.g. games/wow/updates)
 		//game-update-check
 		if(compareVersion($this->game->gameVersion(), $this->config->get('game_version')) == 1) {
 			//check for game-task
@@ -83,6 +85,7 @@ class admin_index extends gen_class {
 				$this->game->ChangeGame($this->config->get('default_game'), $this->config->get('game_language'));
 			}
 		}
+		*/
 	}
 
 	public function adminmenu($blnShowBadges = true){
