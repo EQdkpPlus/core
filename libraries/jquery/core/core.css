@@ -1196,7 +1196,7 @@ body .ui-tooltip {
 }
 
 /*
-    ColorBox Core Style:
+    Colorbox Core Style:
     The following CSS is consistent between example themes and should not be altered.
 */
 #colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
@@ -1207,13 +1207,13 @@ body .ui-tooltip {
 #cboxTitle{margin:0;}
 #cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
 #cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
-.cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
 .cboxIframe{width:100%; height:100%; display:block; border:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
 
 /* 
     User Style:
-    Change the following styles to modify the appearance of ColorBox.  They are
+    Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay{background:#000;}
@@ -1304,12 +1304,12 @@ body .ui-tooltip {
 }
 
 .jqplot-yaxis-tick.jqplot-breakTick {
-	right: -20px;
-	margin-right: 0px;
-	padding:1px 5px 1px 5px;
-/*	background-color: white;*/
-	z-index: 2;
-	font-size: 1.5em;
+    right: -20px;
+    margin-right: 0px;
+    padding:1px 5px 1px 5px;
+    /*background-color: white;*/
+    z-index: 2;
+    font-size: 1.5em;
 }
 
 .jqplot-y2axis-tick, .jqplot-y3axis-tick, .jqplot-y4axis-tick, .jqplot-y5axis-tick, .jqplot-y6axis-tick, .jqplot-y7axis-tick, .jqplot-y8axis-tick, .jqplot-y9axis-tick {
@@ -1496,8 +1496,8 @@ div.jqplot-bubble-label.jqplot-bubble-label-highlight {
 }
 
 div.jqplot-noData-container {
-	text-align: center;
-	background-color: rgba(96%, 96%, 96%, 0.3);
+    text-align: center;
+    background-color: rgba(96%, 96%, 96%, 0.3);
 }
 
 .ui-multiselect { padding:2px 0 2px 4px; text-align:left }
@@ -1528,20 +1528,18 @@ div.jqplot-noData-container {
 .ui-multiselect-filter { float:left; margin-right:10px; font-size:11px }
 .ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
 
-/*!
- * qTip2 - Pretty powerful tooltips - v2.0.1-36-
+/*
+ * qTip2 - Pretty powerful tooltips - v2.0.1-83-
  * http://qtip2.com
  *
  * Copyright (c) 2013 Craig Michael Thompson
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Tue Mar 19 2013 05:47 UTC+0000
- * Plugins: svg ajax tips modal viewport imagemap ie6
+ * Date: Thu Apr 18 2013 05:30 UTC+0000
+ * Plugins: tips modal viewport svg imagemap ie6
  * Styles: basic css3
  */
-
-/* Core qTip styles */
 .qtip{
 	position: absolute;
 	left: -28000px;
@@ -1605,7 +1603,6 @@ div.jqplot-noData-container {
 			display: block;
 			text-indent: -1000em;
 			direction: ltr;
-			vertical-align: middle;
 		}
 
 		.qtip-icon, .qtip-icon .ui-icon{
@@ -1619,6 +1616,7 @@ div.jqplot-noData-container {
 				width: 18px;
 				height: 14px;
 
+				line-height: 14px;
 				text-align: center;
 				text-indent: 0;
 				font: normal bold 10px/13px Tahoma,sans-serif;
@@ -1626,7 +1624,6 @@ div.jqplot-noData-container {
 				color: inherit;
 				background: transparent none no-repeat -100em -100em;
 			}
-
 
 /* Applied to 'focused' tooltips e.g. most recently displayed/interacted with */
 .qtip-focus{}
@@ -1658,6 +1655,7 @@ div.jqplot-noData-container {
 		border-color: #AAA;
 		color: #111;
 	}
+
 
 
 /*! Light tooltip style */
@@ -1764,7 +1762,7 @@ div.jqplot-noData-container {
 	}
 
 
-/* Add shadows to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE9+, Safari 2+ */
+
 .qtip-shadow{
 	-webkit-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
 	-moz-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
@@ -1781,9 +1779,9 @@ div.jqplot-noData-container {
 }
 
 .qtip-rounded .qtip-titlebar{
-	-moz-border-radius: 5px 5px 0 0;
-	-webkit-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
+	-moz-border-radius: 4px 4px 0 0;
+	-webkit-border-radius: 4px 4px 0 0;
+	border-radius: 4px 4px 0 0;
 }
 
 /* Youtube tooltip style */
@@ -2094,7 +2092,7 @@ div.jqplot-noData-container {
 }
 
 
-/* Tips plugin */
+
 .qtip .qtip-tip{
 	margin: 0 auto;
 	overflow: hidden;
@@ -2125,7 +2123,7 @@ div.jqplot-noData-container {
 		display: inline-block;
 		visibility: visible;
 	}
-/* Modal plugin */
+
 #qtip-overlay{
 	position: fixed;
 	left: -10000em;
@@ -2149,12 +2147,12 @@ div.jqplot-noData-container {
 	}
 
 
-/* IE6 Modal plugin fix */
+
 .qtipmodal-ie6fix{
 	position: absolute !important;
 }
 /***
-Spectrum Colorpicker v1.0.9
+Spectrum Colorpicker v1.1.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
@@ -2332,6 +2330,10 @@ License: MIT
 .sp-6 {
     height:17%;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00ff', endColorstr='#ff0000');
+}
+
+.sp-hidden {
+    display: none !important;
 }
 
 /* Clearfix hack */
