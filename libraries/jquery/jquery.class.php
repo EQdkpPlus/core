@@ -64,22 +64,22 @@ if (!class_exists("jquery")) {
 				<div id="notify_container">
 					<div id="default">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<h1>#{title}</h1>
-						<p>#{text}</p>
+						<h1>T{title}</h1>
+						<p>T{text}</p>
 					</div>
 
 					<div id="error" class="notify_error">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
 						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->root_path.'images/global/false.png" alt="error"/></div>
-						<h1>#{title}</h1>
-						<p>#{text}</p>
+						<h1>T{title}</h1>
+						<p>T{text}</p>
 					</div>
 
 					<div id="success" class="notify_success">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
 						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->root_path.'images/global/ok.png" alt="success"/></div>
-						<h1>#{title}</h1>
-						<p>#{text}</p>
+						<h1>T{title}</h1>
+						<p>T{text}</p>
 					</div>
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
