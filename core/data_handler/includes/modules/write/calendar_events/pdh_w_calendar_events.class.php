@@ -230,8 +230,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 				}
 
 				$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
-					'timestamp_start'	=> ($general_delta_sec > 0) ? $eventdata['timestamp_start'] + $general_delta_sec : $eventdata['timestamp_start'],
-					'timestamp_end'		=> ($general_delta_sec > 0) ? $eventdata['timestamp_end'] + $general_delta_sec : $eventdata['timestamp_end'],
+					'timestamp_start'	=> $eventdata['timestamp_start'] + (int)$general_delta_sec,
+					'timestamp_end'		=> $eventdata['timestamp_end'] + (int)$general_delta_sec,
 					'allday'			=> (($move) ? (($allday == 'true') ? 1 : 0) : $eventdata['allday']),
 					'extension'			=> serialize($a_extension)
 				), $eventid);
@@ -245,7 +245,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$general_delta_sec	= (($daydelta * 86400) + ($minutedelta * 60));
 				$old_timestamp		= $this->pdh->get('calendar_events', 'time_end', array($eventid));
 				$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
-					'timestamp_end'		=> ($general_delta_sec > 0) ? $old_timestamp + $general_delta_sec : $old_timestamp,
+					'timestamp_end'		=> $old_timestamp + (int)$general_delta_sec,
 				), $eventid);
 				$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
 				return $result;

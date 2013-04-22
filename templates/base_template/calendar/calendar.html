@@ -129,7 +129,7 @@
 						revertFunc();
 					},
 					success: function(msg){
-						$("#notify_container").notify("create", "success", msg);
+						$("#notify_container").notify("create", "success", {text: msg });
 					}
 				});
 			},
@@ -143,7 +143,7 @@
 						revertFunc();
 					},
 					success: function(msg){
-						$("#notify_container").notify("create", "success", msg);
+						$("#notify_container").notify("create", "success", {text: msg });
 					}
 				});
 			},
