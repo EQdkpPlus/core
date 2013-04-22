@@ -81,6 +81,7 @@ $(document).ready(function() {
 
 	// Delete templates
 	$("#template_delbutton").bind("click", function(){
+		console.log('test');
 		if($("#cal_raidtemplate").val() > 0){
 			$.get('addevent.php{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
 				$('#cal_raidtemplate').find('option').remove();
@@ -181,7 +182,9 @@ function attendeeCount(){
 		</dl>
 		<dl class="raid">
 			<dt><label>{L_raidevent_template}</label></dt>
-			<dd>{DR_TEMPLATE} <img src="../images/global/delete.png" alt="{L_delete}" id="template_delbutton" /></dd>
+			<dd>{DR_TEMPLATE} 
+				<button type="button" name="delete_template" id="template_delbutton"><i class="icon-remove"></i></button>
+			</dd>
 		</dl>
 		<hr />
 		<dl>
@@ -198,7 +201,10 @@ function attendeeCount(){
 		</dl>
 		<dl class="raid">
 			<dt><label>{L_raidevent_raidevent}:</label></dt>
-			<dd><span id="raidevent_dropdown">{DR_EVENT}</span> <img src="../images/glyphs/add.png" alt="{L_raidevent_raidevent_add}" title="{L_raidevent_raidevent_add}" class="hand" onclick="AddEventDialog()" /></dd>
+			<dd>
+				<span id="raidevent_dropdown">{DR_EVENT}</span> 
+				<button type="button" name="add_event" onclick="AddEventDialog()"><i class="icon-plus"></i></button>
+			</dd>
 		</dl>
 		<dl class="raid">
 			<dt><label>{L_raidevent_templatename}:</label></dt>
