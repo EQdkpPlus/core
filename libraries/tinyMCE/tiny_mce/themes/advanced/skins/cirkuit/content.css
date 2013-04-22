@@ -58,7 +58,7 @@ hr.system-pagebreak {
 
 .system-article {
     border: 1px dashed gray;
-    color: gray;
+    color: #fff;
 	height: 40px;
 	background-color: gray;
 }

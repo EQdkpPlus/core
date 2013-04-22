@@ -1426,9 +1426,6 @@ hr#system-readmore {
 	outline: 0;
 }
 
-.sf-sub-indicator {
-	background:url('images/arrows.png') no-repeat -10px -100px;
-}
 
 /* general: superfish - admin menu style */
 .sf-admin, .mainmenu {
@@ -1498,10 +1495,6 @@ hr#system-readmore {
 	right: -2px;
 }
 
-.sf-ddm a > .sf-sub-indicator {
-    background-position: 0 -100px;
-    top: 0.4em;
-}
 .sf-ddm > li {
 	font: 14px/100% Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -1592,10 +1585,6 @@ hr#system-readmore {
 	left:0px;
 }
 
-.sf-btn-ddm a > .sf-sub-indicator {
-    background-position: 0 -100px;
-    top: 0.4em;
-}
 .sf-btn-ddm > li {
 	font: 14px/100% Arial, Helvetica, sans-serif;
 	font-size: 12px;
