@@ -63,7 +63,7 @@
 				}
 				// onclick Event Tooltip
 				if(event.className == 'cal_birthday'){
-					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<img src='../images/global/birthday.png' height='12px' width='12px' alt='' class='absmiddle' /> "));
+					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<i class='absmiddle icon-gift'></i> "));
 				}else if(!event.url){
 					if(event.allDay){
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}')+"</div>";

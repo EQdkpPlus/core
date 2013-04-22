@@ -376,7 +376,7 @@ class Manage_User_Groups extends page_generic {
 			0 => array(
 				'name'	=> $this->user->lang('delete_selected_from_group'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/admin/manage_reset.png',
+				'img'	=> 'images/global/delete.pngglobal/delete.png',
 				'perm'	=> true,
 				'link'	=> '#del_group_users',
 			),

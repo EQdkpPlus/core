@@ -306,7 +306,7 @@ class Manage_Articles extends page_generic {
 			0 => array(
 				'name'	=> $this->user->lang('delete'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/admin/manage_reset.png',
+				'img'	=> 'images/global/delete.png',
 				'perm'	=> true,
 				'link'	=> '#del_articles',
 			),

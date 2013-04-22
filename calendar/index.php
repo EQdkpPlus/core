@@ -274,7 +274,7 @@ class viewcalendar extends page_generic {
 
 						$deadlinedate	= $this->pdh->get('calendar_events', 'time_start', array($calid)) - ($eventextension['deadlinedate'] * 3600);
 						$deadline = ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) > 0 && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) != 4 && $this->pdh->get('calendar_events', 'time_end', array($calid)) > $this->time->time)) ? false : true;
-						$deadlineflag = ($deadline) ? '<img src="'.$this->root_path.'images/calendar/clock_s.png" alt="Deadline" title="'.$this->user->lang('raidevent_raid_deadl_reach').'" />' : '';
+						$deadlineflag = ($deadline) ? '<i class="icon-lock icon-large" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
 
 						// Build the JSON
 						$event_json[] = array(
