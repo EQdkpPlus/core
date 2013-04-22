@@ -500,23 +500,23 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				0 => array(
 					'name'		=> $this->user->lang('uc_edit_char'),
 					'link'		=> "javascript:EditChar('".$memberid."')",
-					'img'		=> 'edit.png',
+					'icon'		=> 'icon-edit icon-large',
 					'perm'		=> $this->user->check_auth('u_member_view', false),
 				),
 				1 => array(
 					'name'		=> $this->user->lang('uc_delete_char'),
 					'link'		=> "javascript:DeleteChar('".$memberid."')",
-					'img'		=> 'delete.png',
+					'icon'		=> 'icon-remove icon-large',
 					'perm'		=> $this->user->check_auth('u_member_del', false),
 				),
 				2 => array(
 					'name'		=> $this->game->glang('uc_updat_armory'),
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
-					'img'		=> 'update.png',
+					'icon'		=> 'icon-refresh icon-large',
 					'perm'		=> $this->game->get_importAuth('u_member_view', 'char_update'),
 				),
 			);
-			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, 'images/global','<img src="images/global/edit.png" alt="edit"/>');
+			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, 'images/global','<i class="icon-wrench icon-large"></i>');
 		}
 
 		public function get_other_members($member_id){

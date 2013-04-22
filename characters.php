@@ -89,19 +89,19 @@ class characters extends page_generic {
 			0 => array(
 				'name'		=> $this->user->lang('uc_add_char_plain'),
 				'link'		=> "javascript:AddChar()",
-				'img'		=> 'add.png',
+				'icon'		=> 'icon-plus icon large',
 				'perm'		=> $this->user->check_auth('u_member_add', false),
 			),
 			1 => array(
 				'name'		=> $this->user->lang('uc_add_char_armory'),
 				'link'		=> "javascript:AddCharArmory()",
-				'img'		=> 'armory.png',
+				'icon'		=> 'icon-download-alt icon-large',
 				'perm'		=> $this->game->get_importAuth('u_member_add', 'char_import'),
 			),
 			2 => array(
 				'name'		=> $this->user->lang('uc_add_massupdate'),
 				'link'		=> "javascript:MassUpdateChars()",
-				'img'		=> 'update.png',
+				'icon'		=> 'icon-refresh icon-large',
 				'perm'		=> $this->game->get_importAuth('a_members_man', 'char_mupdate'),
 			),
 		);
@@ -159,7 +159,7 @@ class characters extends page_generic {
 
 			// JS Code
 			'JS_CONNECTIONS'		=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 350, 'height' => 180, 'filter'=>true)),
-			'ADD_MENU'				=> $this->jquery->DropDownMenu('colortab', $cm_addmenu, 'images/global','<img border="0" src="images/global/add.png" alt="" /> '.$this->user->lang('uc_add_char')),
+			'ADD_MENU'				=> $this->jquery->DropDownMenu('colortab', $cm_addmenu, 'images/global','<i class="icon-plus icon-large"> </i>'.$this->user->lang('uc_add_char')),
 
 			'S_SHOW_NO_CONN_INFO'	=> $show_no_conn_info,
 		));
