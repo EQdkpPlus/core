@@ -419,14 +419,13 @@ if (!class_exists("jquery")) {
 		* @param $button		Show a button with name?
 		* @return CHAR
 		*/
-		public function DropDownMenu($id, $menuitems, $imagepath ,$button=''){
+		public function DropDownMenu($id, $menuitems ,$button=''){
 			$dmmenu  = '<ul id="'.$id.'" class="sf-menu sf-ddm">
 							<li><a href="#">'.$button.'</a>
 						<ul>';
 			foreach($menuitems as $key=>$value){
 				if($value['perm']){
-					$dmimg = (isset($value['img']) && $value['img']) ? '<img src="'.$this->root_path.$imagepath.'/'.$value['img'].'" alt="" />' : '';
-					$dmimg = (isset($value['icon']) && $value['icon']) ? '<i class="'.$value['icon'].'"></i>' : $dmimg;
+					$dmimg = (isset($value['icon']) && $value['icon']) ? '<i class="'.$value['icon'].'"></i>' : '';
 					$dmmenu .= '<li><a href="'.$value['link'].'">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a></li>';
 				}
 			}
@@ -446,6 +445,7 @@ if (!class_exists("jquery")) {
 		* @param $button		Show a button with name?
 		* @return CHAR
 		*/
+		// TODO: use icon instead of image
 		public function ButtonDropDownMenu($id, $menuitems, $checkbox_listener=array(), $imagepath='', $button='', $buttonIcon=''){
 			if (count($checkbox_listener)){
 				foreach($checkbox_listener as $listener_id) {
@@ -529,7 +529,9 @@ if (!class_exists("jquery")) {
 				foreach($array as $k => $v){
 					// Restart next loop if the element isn't an array we can use
 					if ( !is_array($v) ){continue;}
-					$header_row = '<li><a href="#"><img src="'.((!isset($v['icon'])) ? (($nodefimage) ? '' : $mnuimagepth.'plugin.png') : $mnuimagepth.$v['icon']).'" alt="img" /> '.$v['name'].'</a>
+					$caticon	= '<img src="'.((!isset($v['img'])) ? (($nodefimage) ? '' : $mnuimagepth.'plugin.png') : $mnuimagepth.$v['img']).'" alt="img" />';
+					$caticon	= (isset($v['icon'])) ? '<i class="'.$v['icon'].'"></i>' : $caticon;
+					$header_row = '<li><a href="#">'.$caticon.' '.$v['name'].'</a>
 										<ul>';
 
 					// Generate the Menues
@@ -541,8 +543,18 @@ if (!class_exists("jquery")) {
 							if ( ($k2 == 'name' || $k2 == 'icon') &&  !$admnsubmenu){
 								continue;
 							}
+							
+							// the extension submenues
 							if($admnsubmenu) {
-								$plugin_header_row = '<li><a href="#"><img src="'.((!isset($row['icon'])) ? (($nodefimage) ? '' : $mnuimagepth.'plugin.png') : $mnuimagepth.$row['icon']).'" alt="img" /> '.((isset($row['name'])) ? $row['name'] : 'UNKNOWN').'</a>
+								// build the icons
+								$icon	= '<i class="icon-asterisk icon-large"></i>';
+								if(isset($row['icon']) && end(explode(".", $row['icon'])) == 'png'){
+									$icon	= '<img src="'.$mnuimagepth.$row['icon'].'" alt="img" />';
+								}elseif(isset($row['icon'])){
+									$icon	= '<i class="'.$row['icon'].'"></i>';
+								}
+
+								$plugin_header_row = '<li><a href="#">'.$icon.' '.$test.((isset($row['name'])) ? $row['name'] : 'UNKNOWN').'</a>
 													<ul>';
 								// Submenu
 								$plugin_sub_row = '';
@@ -554,9 +566,14 @@ if (!class_exists("jquery")) {
 											}
 
 											if ($row2['check'] == '' || ((is_array($row2['check'])) ? $this->user->check_auths($row2['check'][1], $row2['check'][0], false) : $this->user->check_auth($row2['check'], false))){
+												$subsub_icon	= '';
+												if(isset($row2['icon']) && end(explode(".", $row2['icon'])) == 'png'){
+													$subsub_icon	= '<img src="'.$mnuimagepth.$row2['icon'].'" alt="img" />';
+												}elseif(isset($row['icon'])){
+													$subsub_icon	= '<i class="'.$row2['icon'].'"></i>';
+												}
 												$plugin_sub_row .= '<li><a href="'.$this->root_path.$row2['link'].'">';
-												$plugin_sub_row .= (isset($row2['icon'])) ? '<img src="'.$mnuimagepth.$row2['icon'].'" alt="img" /> ' : '';
-												$plugin_sub_row .= $row2['text'].'</a></li>';
+												$plugin_sub_row .= $subsub_icon.' '.$row2['text'].'</a></li>';
 											}
 										}
 									}
@@ -564,9 +581,10 @@ if (!class_exists("jquery")) {
 								if(strlen($plugin_sub_row) > 0) $sub_rows .= $plugin_header_row.$plugin_sub_row.'</ul></li>';
 							}else{
 								if (($row['check'] == '' || ((is_array($row['check'])) ? $this->user->check_auths($row['check'][1], $row['check'][0], false) : $this->user->check_auth($row['check'], false))) && (!isset($row['check2']) || $row['check2'] == true)){
+									$subicon	= ($row['img']) ? '<img src="'.$mnuimagepth.$row['img'].'" alt="img" />' : '';
+									$subicon	= ($row['icon']) ? '<i class="'.$row['icon'].'"></i>' : $subicon;
 									$sub_rows .= '<li><a href="'.$this->root_path.$row['link'].'">';
-									$sub_rows .= ($row['icon']) ? '<img src="'.$mnuimagepth.$row['icon'].'" alt="img" /> ' : '';
-									$sub_rows .= $row['text'].'</a></li>';
+									$sub_rows .= $subicon.''.$row['text'].'</a></li>';
 								}
 							}
 						}

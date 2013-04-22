@@ -516,7 +516,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'perm'		=> $this->game->get_importAuth('u_member_view', 'char_update'),
 				),
 			);
-			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, 'images/global','<i class="icon-wrench icon-large"></i>');
+			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, '<i class="icon-wrench icon-large"></i>');
 		}
 
 		public function get_other_members($member_id){

@@ -738,7 +738,7 @@ class viewcalraid extends page_generic {
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
 
 			//Data
-			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, 'images', '<i class="icon-cog icon-large"></i> '.$this->user->lang('raidevent_raid_settbutton')),
+			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="icon-cog icon-large"></i> '.$this->user->lang('raidevent_raid_settbutton')),
 			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : $this->html->DropDown('member_id', $drpdwn_members, $presel_charid),
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
 			'DD_SIGNUPSTATUS'		=> $this->html->DropDown('signup_status', $status_dropdown, $this->mystatus['signup_status']),
