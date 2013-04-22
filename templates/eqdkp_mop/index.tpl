@@ -38,11 +38,7 @@
 				});
 
 				$('ul.mainmenu').addClass('sf-menu');
-				jQuery('ul.mainmenu').supersubs({
-						minWidth:	14,
-						maxWidth:	40,
-						extraWidth:	2
-					}).superfish({
+				jQuery('ul.mainmenu').superfish({
 						delay:		400,
 						animation:	{opacity:'show',height:'show'},
 						speed:		'fast'

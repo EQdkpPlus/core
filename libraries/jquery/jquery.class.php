@@ -587,11 +587,7 @@ if (!class_exists("jquery")) {
 		*/
 		private function MenuConstruct_js($name){
 			$this->tpl->add_js("
-					jQuery('ul.".$name."').supersubs({
-						minWidth:	14,
-						maxWidth:	40,
-						extraWidth:	2
-					}).superfish({
+					jQuery('ul.".$name."').superfish({
 						delay:		400,
 						animation:	{opacity:'show',height:'show'},
 						speed:		'fast'
