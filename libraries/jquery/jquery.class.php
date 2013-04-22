@@ -425,7 +425,8 @@ if (!class_exists("jquery")) {
 						<ul>';
 			foreach($menuitems as $key=>$value){
 				if($value['perm']){
-					$dmimg = ($value['img']) ? '<img src="'.$this->root_path.$imagepath.'/'.$value['img'].'" alt="" />' : '';
+					$dmimg = (isset($value['img']) && $value['img']) ? '<img src="'.$this->root_path.$imagepath.'/'.$value['img'].'" alt="" />' : '';
+					$dmimg = (isset($value['icon']) && $value['icon']) ? '<i class="'.$value['icon'].'"></i>' : $dmimg;
 					$dmmenu .= '<li><a href="'.$value['link'].'">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a></li>';
 				}
 			}
