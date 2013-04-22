@@ -465,7 +465,7 @@ if (!class_exists("jquery")) {
 						}
 						var menubutton = \"".$button."\";
 						if (count > 0){
-							menubutton = count + ' ' + menubutton+' <span class=\"sf-sub-indicator\"> »</span>';
+							menubutton = count + ' ' + menubutton;
 						}
 						$('#".$id." .sf-btn-name').html(menubutton);
 					});
