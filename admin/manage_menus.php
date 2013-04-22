@@ -319,13 +319,37 @@ class Manage_Menus extends page_generic {
 			'DD_LINK_VISIBILITY'	=> $this->html->DropDown('editlink-visibility', $a_linkVis , '', '', '', 'editlink-visibility'),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
+			'DD_ARTICLES'			=> $this->html->DropDown('editlink-article', $this->build_article_dropdown(), '', '', '', 'editlink-article'),
 		));
+		
+		
 				
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_menus'),
 			'template_file'		=> 'admin/manage_menus.html',
 			'display'			=> true)
 		);
+	}
+	
+	private function build_article_dropdown(){
+		$arrItems = $this->core->build_menu_array(true);
+		$arrOut[''] = "";
+		foreach($arrItems as $k => $v){
+			if ( !is_array($v) )continue;
+			$id++;
+			
+			if (!isset($v['childs'])){
+				if (!$this->check_for_hidden_article($v, $id)) {
+					if (isset($v['category'])){
+						$arrOut[$v['_hash']] = $this->pdh->get('article_categories', 'name_prefix', array($v['id'])).$this->pdh->get('article_categories', 'name', array($v['id']));
+					} else {
+						$catid = $this->pdh->get('articles', 'category', array($v['id']));
+						$arrOut[$v['_hash']] = $this->pdh->get('article_categories', 'name_prefix', array($catid)).' -> '.$this->pdh->get('articles', 'title', array($v['id']));
+					}
+				}
+			}
+		}
+		return $arrOut;
 	}
 	
 	private function build_menu_ol(){
@@ -338,6 +362,7 @@ class Manage_Menus extends page_generic {
 			$id++;
 			
 			if (!isset($v['childs'])){
+				if (!$this->check_for_hidden_article($v, $id)) continue;
 				$html .= '<li id="list_'.$id.'">'.$this->create_li($v, $id).'</li>';
 				
 			} else {
@@ -366,7 +391,13 @@ class Manage_Menus extends page_generic {
 		}
 
 		$html .= '</ol>';
+		
 		return array($html, $id);
+	}
+	
+	private function check_for_hidden_article($arrLink){
+		if ((int)$arrLink['hidden'] && (isset($arrLink['article']) || isset($arrLink['category']))) return false;
+		return true;
 	}
 	
 	private function create_li($arrLink, $id){

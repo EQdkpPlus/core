@@ -1,0 +1,38 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+	$('.eyeToggleTrigger').on('click', function(event){
+				if ($(this).hasClass('eye')){
+					//Hide
+					$(this).siblings('.published_cb').val(0);
+					$(this).removeClass('eye');
+					$(this).addClass('eye-gray');
+				} else {
+					$(this).siblings('.published_cb').val(1);
+					$(this).removeClass('eye-gray');
+					$(this).addClass('eye');
+				}
+			});
+		});
+</script>
+
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_article_categories}</h1>
+	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_article_categories.php{SID}&amp;c=0'"><i class="icon-plus"></i>{L_add_article_category}</button>
+	</div>
+	<div class="clear"></div>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch" id="article_categories-table">
+		{CATEGORY_LIST}
+	</table>
+	<div class="center pagination_wrapper">
+		{PAGINATION}
+	</div>
+	<div class="contentFooter">
+		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected_entries}</button>
+		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+	</div>
+{CSRF_TOKEN}	
+</form>

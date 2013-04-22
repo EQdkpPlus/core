@@ -129,9 +129,9 @@ register('user')->check_auth('a_files_man');
 						FileBrowserDialogue.mySubmit(url); // pass selected file path to TinyMCE 
 						<?php } else {?>
 						//alert(url); // pass selected file path to TinyMCE
-						parent.$('#'+target).val(url);
-						parent.$('#image_'+target+' .previewimage').attr("src", url);
-						parent.$('#image_'+target+' .previewurl').attr("href", url);
+						parent.$('#'+target).val(url.url);
+						parent.$('#image_'+target+' .previewimage').attr("src", url.url);
+						parent.$('#image_'+target+' .previewurl').attr("href", url.url);
 						parent.$(".ui-dialog-content").dialog("close");
 						<?php } ?>
 					  }

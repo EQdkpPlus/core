@@ -1,0 +1,181 @@
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$('#alias').change(check_alias);
+	
+	$('#readmorebutton').click(function(){
+		var content = $('#text').html();
+		if (content.match(/<hr\s+id=("|')system-readmore("|')\s*\/*>/i)) {
+			alert('There is already a Read more... link that has been inserted. Only one such link is permitted. Use {pagebreak} to split the page up further.');
+			return false;
+		} else {
+			$('#text').tinymce().execCommand('mceInsertContent',false,'<hr id="system-readmore" /><p></p>'); 
+		}
+	});
+	
+	$('#systemarticlebutton').click(function(){
+		var content = $('#text').html();
+		$('#text').tinymce().execCommand('mceInsertContent',false,'<p class="system-article" /></p>'); 
+	});
+	
+	$( "#pagebreak-dialog" ).dialog({
+		height: 310,
+		width: 500,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Ok: function() {
+				insert_pagebreak();
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+		
+	$('#pagebreakbutton').click(function(){
+		$("#pagebreak_title").val('');
+		$( "#pagebreak-dialog" ).dialog('open');
+	});
+});
+
+function insert_pagebreak(){
+	var pagename = $("#pagebreak_title").val();
+	$('#text').tinymce().execCommand('mceInsertContent',false,'<hr class="system-pagebreak" title="'+pagename+'" /><p></p>'); 
+	$( "#pagebreak-dialog" ).dialog('close');
+}
+
+function check_alias() {
+	var alias = $('#alias').val();
+	if(alias != "") {
+		jQuery.ajax({
+			type: "POST",
+			url: "manage_articles.php{SID}&checkalias=1&a={AID}",
+			data: 'alias='+ alias, 
+			cache: false,
+			success: function(response){
+				if($.trim(response) == 'false'){
+					$('#alias').css('border', '1px #C33 solid');
+					$('#tick_alias').hide();
+					$('#cross_alias').fadeIn();
+				}else{
+					$('#alias').css('border', '1px #090 solid');
+					$('#cross_alias').hide();
+					$('#tick_alias').fadeIn();
+				}
+			}
+		});
+	}
+}
+
+//]]>
+</script>
+
+<div id="pagebreak-dialog" title="{L_add_pagebreak}">
+	<fieldset class="settings smallsettings">
+		<dl>
+			<dt><label>{L_page_title}</label></dt>
+			<dd><input type="text" id="pagebreak_title" style="width:95%;" maxlength="255" class="input required" /></dd>
+		</dl>
+	</fieldset>
+</div>
+
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{CATEGORY_NAME} &raquo; <!-- IF ARTICLE_NAME != "" -->{ARTICLE_NAME}<!-- ELSE -->{L_add_new_article}<!-- ENDIF --></h1>
+	</div>
+	<div class="clear"></div>
+	<div id="article_category-tabs">
+		<ul>
+			<li><a href='#general'>{L_pk_tab_fs_globalsettings}</a></li>
+			<li><a href='#settings'>{L_settings}</a></li>
+		</ul>
+	
+		<div id="general">
+			<fieldset class="settings smallsettings">
+			<legend>{L_pk_tab_fs_globalsettings}</legend>
+			<dl>
+				<dt><label>{L_headline}</label></dt>
+				<dd><input type="text" name="title" style="width:95%;" maxlength="255" value="{TITLE}" class="input required" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_description}</label></dt>
+				<dd><textarea name="text" id="text" class="mceEditor" rows="3" cols="60" style="width:95%;height:300px;">{TEXT}</textarea>
+					<button class="mainoption" type="button" id="readmorebutton" {READMORE_BUTTON_ENABLED}><i class="icon-chevron-down"></i>{L_readmore_button}</button>
+					<button class="mainoption" type="button" id="pagebreakbutton"><i class="icon-copy"></i>{L_add_pagebreak}</button>
+					<!-- IF S_SYSTEM_ARTICLE -->
+						<button class="mainoption" type="button" id="systemarticlebutton"><i class="icon-plus"></i>{L_add_system_article}</button>
+					<!-- ENDIF -->
+				</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_tags}</label></dt>
+				<dd><input type="text" name="tags" style="width:95%;" maxlength="255" value="{TAGS}" class="input" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_preview_image}</label></dt>
+				<dd>{PREVIEW_IMAGE}</dd>
+			</dl>
+			</fieldset>
+		</div>
+		<div id="settings">
+			<fieldset class="settings mediumsettings">
+			<legend>{L_settings}</legend>
+			<dl>
+				<dt><label>{L_alias}</label></dt>
+				<dd><input name="alias" type="text" class="input" id="alias" value="{ALIAS}" size="50" />
+						<img id="tick_alias" src="{EQDKP_ROOT_PATH}images/register/tick.png" width="16" height="16" alt="" style="display:none;" />
+						<div id="cross_alias" style="display:none;"><img src="{EQDKP_ROOT_PATH}images/register/cross.png" width="16" height="16" alt="" />{L_info_error_alias}</div></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_published}</label></dt>
+				<dd><input type="checkbox" name="published" id="published" value="1" {PUBLISHED_CHECKED} /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_featured}</label></dt>
+				<dd><input type="checkbox" name="featured" id="featured" value="1" {FEATURED_CHECKED} /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_category}</label></dt>
+				<dd>{DD_CATEGORY}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_user}</label></dt>
+				<dd>{DD_USER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_date}</label></dt>
+				<dd>{DATE_PICKER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_show_from}</label></dt>
+				<dd>{DATE_FROM_PICKER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_show_to}</label></dt>
+				<dd>{DATE_TO_PICKER}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_info_comments}</label></dt>
+				<dd><input type="checkbox" name="comments" id="comments" value="1" {COMMENTS_CHECKED} /> <button class="mainoption" type="submit" name="del_comments"><i class="icon-remove"></i>{L_info_delete_comments}</button></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_info_voting}</label></dt>
+				<dd><input type="checkbox" name="votes" id="votes" value="1" {VOTES_CHECKED} /> <button class="mainoption" type="submit" name="del_votes"><i class="icon-remove"></i>{L_info_reset_votings}</button></dd>
+			</dl>
+			
+			</fieldset>
+		
+		</div>
+		
+		</div>
+	</div>
+	<div class="contentFooter">
+		<input type="hidden" name="c" value="{CID}" />
+		<input type="hidden" name="a" value="{AID}" />
+		<button type="submit" name="update" class="mainoption"><i class="icon-ok"></i>{L_save}</button>
+		<button type="reset" name="reset" class="liteoption"><i class="icon-trash"></i>{L_reset}</button>
+		<button type="button" class="liteoption" onclick="window.location='manage_articles.php{SID}&c={CID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+	</div>
+{CSRF_TOKEN}	
+</form>

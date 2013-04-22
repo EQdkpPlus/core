@@ -73,6 +73,13 @@ if(!class_exists('pdh_w_comment')) {
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
+
+		public function delete_attach_id($page, $attach_id){
+			if(!$attach_id) return false;
+			$this->db->query("DELETE FROM __comments WHERE page='".$this->db->escape($page)."' AND attach_id='".$this->db->escape($attach_id)."';");
+			$this->pdh->enqueue_hook('comment_update');
+			return true;
+		}
 	}
 }
 ?>

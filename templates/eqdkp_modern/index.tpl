@@ -9,6 +9,7 @@
 		<meta name="description" content="{META_DESCRIPTION}" />
 		<meta name="author" content="{GUILD_TAG}" />
 		{META}
+		{LINK}
 		<title>{PAGE_TITLE}</title>
 		{CSS_FILES}
 		{JS_FILES}
@@ -91,11 +92,11 @@
 											<ul>{NOTIFICATION_RED}</ul>
 											<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_YELLOW > 0 -->
-											<h2><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span>{L_notification_yellow_prio}</h1>
+											<h2><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span>{L_notification_yellow_prio}</h2>
 											<ul>{NOTIFICATION_YELLOW}</ul>
 											<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_GREEN > 0 -->
-											<h2><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span>{L_notification_green_prio}</h1>
+											<h2><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span>{L_notification_green_prio}</h2>
 											<ul>{NOTIFICATION_GREEN}</ul>
 											<!-- ENDIF -->
 										</li>
@@ -200,13 +201,13 @@
 		
 			<div class="portal">
 				<div class="columnContainer">
-					<!-- IF FIRST_C -->
+					<!-- IF S_PORTAL_LEFT -->
 					<div class="first column" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						{PORTAL_LEFT}						
 					</div> <!-- close first column -->
 					<!-- ENDIF -->
 					
-					<div class="second column <!-- IF not THIRD_C -->no_third_column<!-- ENDIF -->">
+					<div class="second column <!-- IF not S_PORTAL_RIGHT -->no_third_column<!-- ENDIF -->">
 						<div class="columnInner">
 							<!-- BEGIN global_warnings -->
 								<div class="{global_warnings.CLASS} roundbox">
@@ -217,7 +218,7 @@
 
 							{PORTAL_MIDDLE}
 							<!-- ENDIF -->
-							<div id="contentBody" class="{PAGE_CLASS} <!-- IF not S_NORMAL_HEADER -->simple-header <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER -->simple-footer <!-- ENDIF -->">
+							<div id="contentBody" class="{PAGE_CLASS}<!-- IF not S_NORMAL_HEADER --> simple-header <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER --> simple-footer <!-- ENDIF -->">
 								<div id="contentBody2">
 									{GBL_CONTENT_BODY}
 								</div>	
@@ -237,7 +238,7 @@
 						</div>
 					</div><!-- close second column -->
 					
-					<!-- IF THIRD_C -->
+					<!-- IF S_PORTAL_RIGHT -->
 					<div class="third column" style="<!-- IF T_COLUMN_RIGHT_WIDTH -->min-width:{T_COLUMN_RIGHT_WIDTH};max-width:{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						<div class="columnInner">
 							{PORTAL_RIGHT}						

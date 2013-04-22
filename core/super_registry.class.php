@@ -51,6 +51,7 @@ abstract class super_registry {
 		'file_handler'			=> 'core/file_handler/',
 		'acl'					=> 'core/',
 		'auto_point_adjustments'=> 'core/',
+		'article'				=> 'core/',
 		'backup'				=> 'core/',
 		'comments'				=> 'core/',
 		'config'				=> 'core/',
@@ -61,6 +62,7 @@ abstract class super_registry {
 		'game'					=> 'core/',
 		'hooks'					=> 'core/',
 		'html'					=> 'core/',
+		'html_leaderboard'		=> 'core/',
 		'html_pdh_tag_table'	=> 'core/',
 		'input'					=> 'core/',
 		'logs'					=> 'core/',
@@ -123,7 +125,7 @@ abstract class super_registry {
 			#RunGlobalsFix(); --> is this still necessary?
 			registry::register('environment');
 			if(!registry::register('config')->get('server_path')) self::fix_server_path();
-			
+			self::$const['server_path'] = registry::register('config')->get('server_path');
 			//Bridge
 			include_once($root_path . 'core/bridge_generic.class.php');
 			if (registry::register('config')->get('cmsbridge_type') != ''){

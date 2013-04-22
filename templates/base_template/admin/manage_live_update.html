@@ -95,11 +95,11 @@
 		
 		<!-- IF S_REMOVED_FILES -->
 		<fieldset class="settings">
-			<legend>{L_liveupdate_conflictedfiles}</legend>
+			<legend>{L_liveupdate_filestoremove}</legend>
 			<!-- BEGIN removed_row -->
 			<dl>
 				<dt><label>{removed_row.FILENAME}</label></dt>
-				<dd><a href="javascript:liveupdate_diff('{conflicted_row.ENCODED_FILENAME}&type=showfile');">{L_liveupdate_show_file}</a></dd>
+				<dd><a href="javascript:liveupdate_diff('{removed_row.ENCODED_FILENAME}&type=showfile');">{L_liveupdate_show_file}</a></dd>
 			</dl>
 			<!-- END removed_row -->
 		</fieldset>

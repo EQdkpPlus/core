@@ -130,8 +130,17 @@
 .copper {
     right: 120px;
 }
-.core_stats {
-    background-image: url("./games/lotro/profiles/images/character_bar_mpa.png");
+.core_stats_en {
+    background-image: url("./games/lotro/profiles/images/character_bar_mpa_en.png");
+    height: 21px;
+    left: 4px;
+    padding-top: 3px;
+    position: absolute;
+    top: 317px;
+    width: 436px;
+}
+.core_stats_de {
+    background-image: url("./games/lotro/profiles/images/character_bar_mpa_de.png");
     height: 21px;
     left: 4px;
     padding-top: 3px;
@@ -308,8 +317,19 @@
 .layout-two-col #field_1 .char_panel .armour {
     padding-top: 10px;
 }
-.layout-two-col #field_1 .core_stats {
-    background-image: url("./games/lotro/profiles/images/stat_core_bg.png");
+.layout-two-col_en #field_1_en .core_stats_en {
+    background-image: url("./games/lotro/profiles/images/stat_core_bg_en.png");
+    height: 72px;
+    left: 0;
+    margin: auto;
+    padding: 0;
+    position: relative;
+    top: 0;
+    width: 145px;
+}
+
+.layout-two-col_de #field_1_de .core_stats_de {
+    background-image: url("./games/lotro/profiles/images/stat_core_bg_en.png");
     height: 72px;
     left: 0;
     margin: auto;

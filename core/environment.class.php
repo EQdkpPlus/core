@@ -40,6 +40,7 @@ if (!class_exists("environment")) {
 			$this->httpHost			= $this->httpHost();
 			$this->phpself			= $this->get_phpself();
 			$this->link				= $this->buildlink();
+			$this->path				= $this->path();
 		}
 
 		private function get_ipaddress(){
@@ -142,6 +143,11 @@ if (!class_exists("environment")) {
 			$script_name = preg_replace('/^\/?(.*?)\/?$/', '\1', trim($this->config->get('server_path')));
 			$script_name = ( $script_name != '' ) ? $script_name . '/' : '';
 			return $this->httpHost.'/'.$script_name;
+		}
+		
+		public function path(){
+			if (!isset($_SERVER['PATH_INFO'])) return '';
+			return filter_var($_SERVER['PATH_INFO'], FILTER_SANITIZE_STRING);
 		}
 	}
 }

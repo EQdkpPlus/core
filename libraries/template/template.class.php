@@ -379,7 +379,8 @@ class template extends gen_class {
 			$filetime	= (substr($item['file'],0,4) == "http") ? rand(1,100000000) : @filemtime($item['file']);
 			$type		= (is_array($item) && isset($item['type'])) ? "' type='".$item['type']."'" : '';
 			$media		= (is_array($item) && isset($item['media'])) ? " media='".$item['media']."'" : '';
-			$output .= $before . ((is_array($item)) ? $item['file'] : $item) . "?timestamp=".$filetime.$type.$media.$after.$glue;
+			$file 		= ((is_array($item)) ? $item['file'] : $item);
+			$output .= $before . str_replace($this->root_path, $this->server_path, $file) . "?timestamp=".$filetime.$type.$media.$after.$glue;
 		}
 		return substr($output, 0, -strlen($glue));
 	}
@@ -591,6 +592,10 @@ class template extends gen_class {
 					case 'INCLUDE':
 						$compile_blocks[] = '// INCLUDE ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_include($blocks[2][$curr_tb]);
 						break;
+					case 'PRE':
+						$precompiled = $this->pre_compile($blocks[2][$curr_tb]);
+						$compile_blocks[] = $precompiled;
+						break;
 					default:
 						$this->compile_var_tags($blocks[0][$curr_tb]);
 						$trim_check = trim($blocks[0][$curr_tb]);
@@ -631,6 +636,12 @@ class template extends gen_class {
 		if(strpos($text_blocks, '{GL_') !== false) $text_blocks = preg_replace('#\{GL_([a-z0-9\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['L_\\1'])) ? \$this->_data['.'][0]['L_\\1'] : ((\$this->glang('\\1', false, true)) ? \$this->glang('\\1') : '{ ' . ucfirst(strtolower(str_replace('_', ' ', '\\1'))) . '         }')) . '", $text_blocks);
 		$text_blocks	= preg_replace('#\{([a-z0-9\:\@\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['\\1'])) ? \$this->_data['.'][0]['\\1'] : '') . '", $text_blocks);
 		return;
+	}
+	
+	private function pre_compile($tag_args){
+		$var = $this->_data['.'][0][$tag_args];
+		if ($var) return $this->compile($var);
+		return '';
 	}
 
 	private function compile_tag_block($tag_args){

@@ -144,20 +144,20 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			if(!empty($this->view_list)) $this->view_list = array_slice($this->view_list, $pagination_start, $pagination_length);
 		}
 
-		public function get_html_table($sort_string = '', $url_suffix = '', $pagination_start = null, $pagination_length = 1, $footer_text = null, $no_footer=false){
+		public function get_html_table($sort_string = '', $url_suffix = '', $pagination_start = null, $pagination_length = 1, $footer_text = null, $no_footer=false, $arrCheckboxCheck=false){
 			$this->sort_view_list($sort_string);
 
 			if(isset($pagination_start))
 				$this->paginate($pagination_start, $pagination_length);
 			$table	 = $this->get_html_super_header_row();
 			$table	 .= $this->get_html_header_row($url_suffix, $this->settings['show_select_boxes'], $this->settings['show_numbers']);
-			$table	 .= $this->get_html_table_body();
+			$table	 .= $this->get_html_table_body($arrCheckboxCheck);
 			if(!$no_footer) $table	 .= $this->get_html_footer_row($footer_text);
 			if($this->sub_array['%no_root%']) $table = str_replace('{ROOT_PATH}', $this->root_path, $table);
 			return $table;
 		}
 
-		public function get_html_table_body(){
+		public function get_html_table_body($arrCheckboxCheck=false){
 			$table = '';
 
 			$this->cached_table_rows = $this->pdc->get($this->page.$this->cache_suffix);
@@ -167,7 +167,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 
 			if(!empty($this->view_list)) {
 				foreach($this->view_list as $view_id){
-					$table .= $this->get_html_row($view_id);
+					$table .= $this->get_html_row($view_id,$arrCheckboxCheck);
 				}
 			}
 
@@ -240,11 +240,15 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			return "<tr>\n{$prefix}{$header}</tr>\n";
 		}
 
-		public function get_html_row($view_id){
+		public function get_html_row($view_id,$arrCheckboxCheck=false){
 			$prefix = '';
 			$hptt_checkboxname	= (isset($this->settings['selectbox_name'])) ? $this->settings['selectbox_name'] : 'selected_ids';
 			if($this->settings['show_select_boxes']){
-				$prefix  .= "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n";
+				$blnShowCheckbox = true;				
+				if ($arrCheckboxCheck !== false) {
+					$blnShowCheckbox = $this->pdh->get($arrCheckboxCheck[0],$arrCheckboxCheck[1],array($view_id));
+				}
+				$prefix  .= ($blnShowCheckbox) ? "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n" : '<td></td>';
 			}
 			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
 				$prefix .= "\t".'<td><div style="float:right;">'.$this->counter.'</div></td>'."\n";

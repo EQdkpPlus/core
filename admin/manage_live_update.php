@@ -315,6 +315,7 @@ class Manage_Live_Update extends page_generic {
 			foreach($arrRemovedFiles as $file){
 				$this->tpl->assign_block_vars('removed_row', array(
 					'FILENAME'	=> $file['name'],
+					'ENCODED_FILENAME' => base64_encode($file['name']),
 				));
 			}
 		}
@@ -501,7 +502,7 @@ class Manage_Live_Update extends page_generic {
 		$updates = $this->repo->UpdatesAvailable(true);
 		if ($updates){
 			if ($returnData) return $this->repo->updates['pluskernel'];
-			return $this->repo->updates['pluskernel']['version'];
+			return $this->repo->updates['pluskernel']['version_int'];
 		}
 
 		return false;

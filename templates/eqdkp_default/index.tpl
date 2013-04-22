@@ -81,11 +81,11 @@
 								<ul>{NOTIFICATION_RED}</ul>
 								<!-- ENDIF -->
 								<!-- IF NOTIFICATION_COUNT_YELLOW > 0 -->
-								<h2><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span>{L_notification_yellow_prio}</h1>
+								<h2><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span>{L_notification_yellow_prio}</h2>
 								<ul>{NOTIFICATION_YELLOW}</ul>
 								<!-- ENDIF -->
 								<!-- IF NOTIFICATION_COUNT_GREEN > 0 -->
-								<h2><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span>{L_notification_green_prio}</h1>
+								<h2><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span>{L_notification_green_prio}</h2>
 								<ul>{NOTIFICATION_GREEN}</ul>
 								<!-- ENDIF -->
 							</li>

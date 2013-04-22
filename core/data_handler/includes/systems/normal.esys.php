@@ -716,8 +716,8 @@ $system_def = array(
 				'show_select_boxes'	=> true,
 				'selectboxes_checkall'=>true,
 				'show_detail_twink'	=> false,
-				'table_sort_dir'	=> 'asc',
-				'table_sort_col'	=> 6,
+				'table_sort_dir'	=> 'desc',
+				'table_sort_col'	=> 7,
 				'table_presets'		=> array(
 					//array('name' => 'article_sortable',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
@@ -727,6 +727,7 @@ $system_def = array(
 					array('name' => 'article_alias','sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'article_user',		'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'article_date',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'article_last_edited',		'sort' => true, 'th_add' => '', 'td_add' => ''),
 				),
 			),
 			

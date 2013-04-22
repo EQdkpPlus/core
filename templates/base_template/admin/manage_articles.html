@@ -1,0 +1,58 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.eyeToggleTrigger').on('click', function(event){
+			if ($(this).hasClass('eye')){
+				//Hide
+				$(this).siblings('.published_cb').val(0);
+				$(this).removeClass('eye');
+				$(this).addClass('eye-gray');
+			} else {
+				$(this).siblings('.published_cb').val(1);
+				$(this).removeClass('eye-gray');
+				$(this).addClass('eye');
+			}
+		});
+		
+		$('.featuredToggleTrigger').on('click', function(event){
+			if ($(this).hasClass('featured')){
+				//Hide
+				$(this).siblings('.featured_cb').val(0);
+				$(this).removeClass('featured');
+				$(this).addClass('not-featured');
+			} else {
+				$(this).siblings('.featured_cb').val(1);
+				$(this).removeClass('not-featured');
+				$(this).addClass('featured');
+			}
+		});
+	});
+</script>
+
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{CATEGORY_NAME} &raquo; {L_manage_articles}</h1>
+	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_articles.php{SID}&amp;a=0&amp;c={CID}'"><i class="icon-plus"></i>{L_add_new_article}</button>
+	</div>
+	<div class="clear"></div>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch" id="article_categories-table">
+		{ARTICLE_LIST}
+	</table>
+	<div class="center pagination_wrapper">
+		{PAGINATION}
+	</div>
+	<div class="contentFooter">
+		{BUTTON_MENU}
+		<button class="mainoption" type="button" name="del" onclick="delete_warning();" id="del_articles" style="display:none;"><i class="icon-remove"></i>{L_delete_selected_entries}</button>
+		<button class="mainoption" type="submit" name="set_published" id="set_published" style="display:none;"></button>
+		<button class="mainoption" type="submit" name="set_unpublished" id="set_unpublished" style="display:none;"></button>
+		<button class="mainoption" type="submit" name="change_category" id="change_category" style="display:none;"></button>
+		
+		<input type="hidden" name="c" value="{CID}" />
+		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+		<button class="mainoption" type="button" onclick="window.location='manage_article_categories.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+	</div>
+{CSRF_TOKEN}	
+</form>

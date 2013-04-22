@@ -24,6 +24,7 @@ class input extends gen_class {
 
 	public $_cache		= array();
 	public $_caching	= true;
+	public $_own		= array();
 
 	/**
 	* Get the Superglobal we're using
@@ -51,9 +52,20 @@ class input extends gen_class {
 		if (filter_has_var(INPUT_ENV, $key)){
 			return INPUT_ENV;
 		}
-
+		
 		// the fallback
 		return false;
+	}
+	
+	/**
+	* Injects an own input parameter with value
+	*
+	* @var string
+	* @var string
+	* @access public
+	*/
+	public function inject($strKey, $strValue){
+		$this->_own[$strKey] = $strValue;
 	}
 
 	/**
@@ -151,6 +163,13 @@ class input extends gen_class {
 				$out		= filter_var($this->_get_deep(explode(':', $key),$default), $filter, $this->_options($filter));
 			} else {
 				$out		= filter_input($this->_superglobal($key), $key, $filter, $this->_options($filter));
+				//Could be in own array
+				if ($out === false || $out === NULL){
+					if (isset($this->_own[$key])){
+						$out = filter_var($this->_own[$key], $filter, $this->_options($filter));
+					}
+				}
+				
 			}
 			$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
 			$this->_cache[$filter][$key] = $out;
@@ -190,10 +209,10 @@ class input extends gen_class {
 			if(is_array($this->getArray($key, $type))){
 				$retval = true;
 			}
-		}else{
-			if($this->_superglobal($key) !== false){
+		}elseif($this->_superglobal($key) !== false){
 				$retval = true;
-			}
+		}elseif(isset($this->_own[$key])){
+				$retval = true;
 		}
 		return $retval;
 	}

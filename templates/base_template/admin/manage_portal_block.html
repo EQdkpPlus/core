@@ -1,0 +1,19 @@
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings">
+		<legend>{L_edit_portal_block}</legend>
+		<dl>
+			<dt><label>{L_name}:</label></dt>
+			<dd><input type="text" name="name" value="{NAME}" class="input" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_wide_content}:</label></dt>
+			<dd><input type="checkbox" name="wide_content" value="1" {WIDE_CONTENT_CHECKED} /></dd>
+		</dl>
+	</fieldset>
+	<button class="mainoption" type="submit" name="save_block"><i class="icon-ok"></i>{L_save}</button>
+	<!-- IF BLOCKID -->
+	<input type="hidden" name="b" value="{BLOCKID}" />
+	<!-- ENDIF -->
+	<button class="mainoption" type="submit" name="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
+{CSRF_TOKEN}
+</form>

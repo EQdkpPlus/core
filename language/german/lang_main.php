@@ -364,7 +364,7 @@ $lang = array(
 "news_permissions_all" => "Für alle sichtbar",
 "news_readmore" => "Weiterlesen...",
 "login_bridge_notice" => "Da eine CMS-Bridge aktiv ist, musst Du dich mit den Login-Daten eures Forums/CMS anmelden.",
-"portalmanager" => "Portalmodule verwalten",
+"portalmanager" => "Portallayout verwalten",
 "more_plugins" => "Weitere Plugins findet ihr auf der Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
 "more_moduls" => "Weitere Module findet ihr auf der  Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
 "more_template" => "Weitere Templates findet ihr auf der Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>",
@@ -823,6 +823,9 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "select_mdkppool" => "MultiDKP Konto auswählen",
 "select_leaderboard" => "Leaderboard auswählen",
 "mainchar_change_associated" => "Es existieren weitere Charaktere, die den selben vorherigen Maincharakter haben. Wenn du für diese Charaktere ebenfalls den neuen Maincharakter setzen willst, aktiviere die folgende Checkbox: ",
+"permalink" => "Permalink",
+"article" => "Artikel",
+"notify_unpublished_articles" => "%1\$s unveröffentlichte Artikel in %2\$s",
  );
 
 ?>

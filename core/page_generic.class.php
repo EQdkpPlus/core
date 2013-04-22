@@ -73,6 +73,11 @@ if(!class_exists('page_generic')){
 			);
 		}
 		
+		public function set_url_id($param){
+			$this->url_id = $param;
+			$this->url_id_ext = '&amp;'.$param.'='.$param;
+		}
+		
 		public function get_hptt($hptt_settings, $full_list, $filtered_list, $sub_array, $cache_suffix = '', $sort_suffix = 'sort') {
 			return registry::register('html_pdh_tag_table', array($hptt_settings, $full_list, $filtered_list, $sub_array, $cache_suffix, $sort_suffix));
 		}

@@ -491,10 +491,6 @@ HTP69g==
 											//Module belongs to an plugin
 											$moduleid = array_search($value['plugin'], $arrPortalList);
 											if (strlen($this->pdh->get('portal', 'plugin', array($moduleid)))) break;
-											if ($only_installed){
-												$status = (int)$this->pdh->get('portal', 'enabled', array($moduleid));
-												if ($status != 1) break;
-											}
 
 											if ($blnUpdateAvailable) $recent_version = $this->pdh->get('portal', 'version', array($moduleid));
 										}
@@ -543,6 +539,7 @@ HTP69g==
 											'plugin'			=> $value['plugin'],
 											'name'				=> $value['name'],
 											'version'			=> $value['version_ext'],
+											'version_int'		=> $value['version'],
 											'recent_version'	=> $recent_version,
 											'changelog'			=> $value['changelog'],
 											'level'				=> $value['level'],

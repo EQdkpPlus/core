@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( "#dialog-edit-menuitem" ).dialog({
-			height: 310,
+			height: 380,
 			width: 500,
 			modal: true,
 			autoOpen: false,
@@ -32,27 +32,39 @@
 		editMenuLink();
 		
 		$('#editlink-button').on('click', function(event){
+			var article = $('#editlink-article').val();			
 			var linkid  = $('#editlink-button').val();
 			var container = $('div[data-linkid='+linkid+']');
 			
-			var name = $('.editlink-name').val();
-			var url = $('.editlink-url').val();
-			var window = $('.editlink-window').val();
-			var windowsize = $('.editlink-windowsize').val();
-			var visibility = $('.editlink-visibility').val();
-			
-			container.find('.link-url').val(url);
-			container.find('.link-name').val(name);
-			container.find('.link-window').val(window);
-			container.find('.link-windowsize').val(windowsize);
-			container.find('.link-visibility').val(visibility);
-			
-			container.find('.edit-menulink-trigger').html(name + ' ('+url+')');
+			if (article == "") {
+				var name = $('.editlink-name').val();
+				var url = $('.editlink-url').val();
+				var window = $('.editlink-window').val();
+				var windowsize = $('.editlink-windowsize').val();
+				var visibility = $('.editlink-visibility').val();
+				
+				container.find('.link-url').val(url);
+				container.find('.link-name').val(name);
+				container.find('.link-window').val(window);
+				container.find('.link-windowsize').val(windowsize);
+				container.find('.link-visibility').val(visibility);
+				
+				container.find('.edit-menulink-trigger').html(name + ' ('+url+')');
+			} else {
+				var selected_text = $("#editlink-article option:selected").text();
+				$('#list_'+linkid).remove();
+				var new_row = $('#addArticleItemTemplate').html()+"";
+				new_row = new_row.replace(/KEY/g, linkid);
+				new_row = new_row.replace(/HASH/g, article);
+				new_row = new_row.replace(/TEXT/g, selected_text);
+				$(".sortable").append('<li id="list_'+linkid+'" class="mjs-nestedSortable-leaf">'+new_row+'</li>');
+			}
 			
 			$( "#dialog-edit-menuitem" ).dialog( "close" );
 		});
 		
 		function hide(){
+			$('.link-hide').unbind('click');
 			$('.link-hide').on('click', function(event){
 				if ($(this).hasClass('eye')){
 					//Hide
@@ -97,7 +109,7 @@
 			
 			editMenuLink();
 			hide();
-			
+			$('.editlink-article').val('');
 			$('#editlink-button').val(newitemid);
 			$('.editlink-name').val('');
 			$('.editlink-url').val('');
@@ -141,7 +153,13 @@
 	}
 </script>
 <div id="dialog-edit-menuitem" title="Link bearbeiten" style="display:none;">
-			<fieldset class="settings mediumsettings">				
+			<fieldset class="settings mediumsettings">
+				<dl>
+					<dt><label>{L_category}/{L_article}:</label></dt>
+					<dd>
+						{DD_ARTICLES}
+					</dd>
+				</dl>		
 				<dl>
 					<dt><label>{L_menu_entry}:</label></dt>
 					<dd>
@@ -205,7 +223,17 @@
 			<input type="hidden" value="new"  name="mainmenu[KEY][id]" class="link-id">
 		</div>
 	</div>
-
+	
+	<div id="addArticleItemTemplate" style="display:none;">
+		<div data-linkid="KEY">
+			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>
+			<span class="link-hide eye"></span>
+			TEXT
+			<input type="hidden" value="normal"  name="mainmenu[KEY][type]" class="link-type">			
+			<input type="hidden" value="0"  name="mainmenu[KEY][hidden]" class="link-hidden">
+			<input type="hidden" value="HASH"  name="mainmenu[KEY][id]" class="link-id">
+		</div>
+	</div>
 
 </div>
 

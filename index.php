@@ -20,13 +20,446 @@ define('EQDKP_INC', true);
 $eqdkp_root_path = './';
 include_once($eqdkp_root_path . 'common.php');
 
-// Redirect to the start page..
-if(registry::register('config')->get('start_page') ){
-	$redirect_url = registry::register('config')->get('start_page');
-	$redirect_url .= (strpos($redirect_url, '?') !== false) ? str_replace('?', '&', registry::get_const('SID')) : registry::get_const('SID');
-	redirect($redirect_url);
-}else{
-	redirect('viewnews.php' . registry::get_const('SID'));
-}
+class controller extends page_generic {
+	public static function __shortcuts() {
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env', 'acl', 'comments','social' => 'socialplugins', 'bbcode', 'pfh');
+		return array_merge(parent::$shortcuts, $shortcuts);
+	}
 
+	public function __construct() {	
+		parent::__construct('');
+		$this->display();
+	}
+	
+	public function display(){
+		$strPath = $this->env->path;
+		$arrPath = array_filter(explode('/', $strPath));
+		$arrPath = array_reverse($arrPath);
+		if (count($arrPath) == 0){
+			//Get Start Page
+			if ($this->config->get('start_page') != ""){
+				$strPath = $this->config->get('start_page');
+			} else {
+				$strPath = "news";
+			}
+			$arrPath = array_filter(explode('/', $strPath));
+			$arrPath = array_reverse($arrPath);
+		}
+		$intArticleID = $intCategoryID = 0;
+				
+		//Suche Alias in Artikeln
+		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", $arrPath[0])));
+		
+		if (!$intArticleID){
+			//Suche Alias in Kategorien
+			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(".html", "", $arrPath[0])));
+			
+			//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
+			if (!$intCategoryID) {
+				
+				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", $arrPath[1])));
+				if ($intArticleID){
+					//Zerlege .html
+					$strID = str_replace("-", "", strrchr(str_replace(".html", "", $arrPath[0]), "-"));
+					
+					$arrMatches = array();
+					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
+					if (isset($arrMatches[0]) && count($arrMatches[0])){
+						if (count($arrMatches[0]) == 2){
+							$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
+						}
+					}
+					
+					if ($strID) registry::add_const('url_id', $strID);
+				}
+			}
+		}
+		
+		//Display Artikel
+		if ($intArticleID){
+			$arrArticle = $this->pdh->get('articles', 'data', array($intArticleID));
+			
+			//Perform Vote
+			if ($this->in->exists('article_vote')){
+				$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
+				$blnUserHasVoted = (is_array($arrVotedUsers) && in_array($this->user->id, $arrVotedUsers) && $this->user->id) ? true : false;
+				if (!$blnUserHasVoted){
+					$this->pdh->put('articles', 'vote', array($intArticleID, $this->in->get('article_vote', 0)));
+					$this->pdh->process_hook_queue();
+				}
+				
+				$intSum = $this->pdh->get('articles', 'votes_sum', array($intArticleID));
+				$intCount = $this->pdh->get('articles', 'votes_count', array($intArticleID));
+				$intRating = ($intCount) ? round($intSum/$intCount) : 0;
+
+				die();
+			}
+			
+			//Check if Published
+			$intPublished = $arrArticle['published'];
+			
+			//Check Start to/start from
+			if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] < $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] > $this->time->time)) $intPublished = false;
+			
+			//Check Category Permission
+			$arrCategory = $this->pdh->get('article_categories', 'data', array($arrArticle['category']));
+			
+			//Check Start to/start from
+			if (!$intPublished || !$arrCategory['published']) message_die('Dieser Artikel ist nicht veröffentlicht.');
+			
+			$strPath = $this->pdh->get('articles', 'path', array($intArticleID));
+			
+			//User Memberships
+			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
+			
+			//Category Permissions
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));		
+			if (!$arrPermissions['read']) message_die('Keine Berechtigung, diesen Artikel anzusehen.', $this->user->lang('noauth_default_title'), 'access_denied', true);
+			
+			//Page divisions
+			$strText = xhtml_entity_decode($arrArticle['text']);
+			$arrPagebreaks = array();
+			preg_match_all('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText, $arrPagebreaks, PREG_PATTERN_ORDER);
+
+			if (count($arrPagebreaks[0])){
+				$arrTitles[1] = $arrArticle['title'];
+				foreach($arrPagebreaks[2] as $key=>$val){
+					$titleMatches = array();
+					$intMatches = preg_match('#title="(.*)"#iU', $val, $titleMatches);
+					$arrTitles[$key+2] = ($intMatches && $titleMatches[1] != '' ) ? $titleMatches[1] : 'Page '.$key+2;
+				}
+				$arrContent = preg_split('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText);
+
+				array_unshift($arrContent, "");
+				
+			} else {
+				$arrContent[0] = "";
+				$arrContent[1] = $strText;
+				$arrTitles[1] = $arrArticle['title'];
+			}
+			
+			//Page
+			$pageCount = count($arrContent) - 1;
+			$intPageID = ($this->in->get('page', 0) && isset($arrContent[$this->in->get('page', 0)])) ? $this->in->get('page', 0) : 1;
+			
+			//Bring Page Sitemap to Template
+			if ($pageCount > 1) {
+				foreach($arrTitles as $key => $val){
+					$this->tpl->assign_block_vars('articlesitemap_row', array(
+						'LINK' => '<a href="'.$this->server_path.$strPath.'&amp;page='.$key.'">'.$val.'</a>',
+						'ACTIVE' => ($key == $intPageID),
+					));
+				}
+			}
+			
+			if ($arrArticle['system'] == ""){
+
+				//Next and Previous Article
+				$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($arrArticle['category']));
+				$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
+				$arrFlippedArticles = array_flip($arrSortedArticleIDs);
+				$intRecentArticlePosition = $arrFlippedArticles[$intArticleID];
+
+				$prevID = (isset($arrSortedArticleIDs[$intRecentArticlePosition-1])) ? $arrSortedArticleIDs[$intRecentArticlePosition-1] : false;
+				$nextID = (isset($arrSortedArticleIDs[$intRecentArticlePosition+1])) ? $arrSortedArticleIDs[$intRecentArticlePosition+1] : false;
+				$this->tpl->assign_vars(array(
+					'S_NEXT_ARTICLE'	=> ($nextID !== false) ? true : false,
+					'S_PREV_ARTICLE'	=> ($prevID !== false) ? true : false,
+					'U_NEXT_ARTICLE'	=> ($nextID) ? $this->server_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
+					'U_PREV_ARTICLE'	=> ($prevID) ? $this->server_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
+					'NEXT_TITLE'		=> ($nextID) ? $this->pdh->get('articles', 'title', array($nextID)) : '',
+					'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
+				));
+
+			}			
+			
+			$userlink = $this->pdh->geth('articles',  'user_id', array($intArticleID));
+			
+			$myRatings = array(
+				'1'		=> '1',
+				'2'		=> '2',
+				'3'		=> '3',
+				'4'		=> '4',
+				'5'		=> '5',
+				'6'		=> '6',
+				'7'		=> '7',
+				'8'		=> '8',
+				'9'		=> '9',
+				'10'	=> '10',
+			);
+		
+		$arrToolbarItems = array(
+					
+			array(
+				'icon'	=> 'icon-plus',
+				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a=0&c='.$arrArticle['category'].'\';"',
+			),
+			array(
+				'icon'	=> 'icon-edit',
+				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a='.$intArticleID.'&c='.$arrArticle['category'].'\';"',
+			),
+			array(
+				'icon'	=> 'icon-list',
+				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$arrArticle['category'].'\';"',
+			),
+		);
+		$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
+		
+		$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
+		$blnUserHasVoted = (is_array($arrVotedUsers) && in_array($this->user->id, $arrVotedUsers) && $this->user->id) ? true : false;
+				
+		//Tags
+		$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
+
+		if (count($arrTags) && $arrTags[0] != ""){
+			foreach($arrTags as $tag){
+				$this->tpl->assign_block_vars('tag_row', array(
+					'TAG'	=> $tag,
+				));
+			}
+		}
+		
+		$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
+		$intCommentsCount = $this->comments->Count();
+		
+			$this->tpl->assign_vars(array(
+				'PAGINATION' 	  => generate_pagination($this->server_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
+				'ARTICLE_CONTENT' => $this->bbcode->parse_shorttags($arrContent[$intPageID]),
+				'ARTICLE_TITLE'	  => $arrTitles[$intPageID],
+				'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($arrArticle['date'], false, true)),
+				'ARTICLE_DATE'	  => $this->time->user_date($arrArticle['date'], false, false, true),
+				'S_PAGINATION'	  => ($pageCount > 1) ? true : false,
+				'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$strPath, strip_tags($arrArticle['title'])) : '',
+				'PERMALINK'		  => $this->pdh->get('articles', 'permalink', array($intArticleID)),
+				'BREADCRUMB'	  => $this->pdh->get('articles', 'breadcrumb', array($intArticleID)),
+				'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
+				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
+				'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
+				'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
+				'COMMENTS_COUNTER'	=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
+				'S_COMMENTS'	=> ($arrArticle['comments']) ? true : false,
+				'S_SHOW_ARTICLE_HEADER' => true,
+				'S_SHOW_ARTICLE_SUBHEADER' => true,
+			));
+
+			//Comments
+			if ($arrArticle['comments'] && $this->config->get('pk_enable_comments') == 1){
+				$this->comments->SetVars(array(
+					'attach_id'	=> $intArticleID,
+					'page'		=> 'articles',
+					'auth'		=> 'a_articles_man',
+				));
+				$this->tpl->assign_vars(array(
+					'COMMENTS'			=> $this->comments->Show(),
+				));
+			};
+			
+			if ($arrArticle['system'] == ""){
+				$this->core->set_vars(array(
+					'page_title'		=> $arrArticle['title'],
+					'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+					'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
+					'template_file'		=> 'article.html',
+					'portal_layout'		=> $arrCategory['portal_layout'],
+					'display'			=> true)
+				);
+			
+			} else {
+				include_once($this->root_path.'core/article.class.php');
+				include_once($this->root_path.'core/articles/'.$arrArticle['system'].'.article.class.php');
+				$objArticle = registry::register($arrArticle['system'].'_article', array($strPath, $intPageID));
+				
+				$arrCoreVars = $objArticle->get_vars();
+				
+				
+				$this->tpl->assign_vars(array(
+					'ARTICLE_TITLE'	  		=> $arrCoreVars['page_title'],
+					'S_SHOW_ARTICLE_HEADER' => (isset($arrCoreVars['show_article_header'])) ? $arrCoreVars['show_article_header'] : true,
+					'S_SHOW_ARTICLE_SUBHEADER' => (isset($arrCoreVars['show_article_subheader'])) ? $arrCoreVars['show_article_subheader'] : true,
+				));
+				
+				if ($arrCoreVars['template_file']){
+					$this->tpl->assign_vars(array(
+						'FILE_INCLUDE'		=> $arrCoreVars['template_file'],
+						'S_FILE_INCLUDE'	=> (preg_match('#<p(.*)class="system-article"(.*)\>#iU', $arrContent[$intPageID]) || $arrContent[$intPageID] == ""),
+					));
+				}
+				
+				$this->core->set_vars(array(
+					'page_title'		=> $arrCoreVars['page_title'],
+					'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+					'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
+					'template_file'		=> 'article.html',
+					'portal_layout'		=> $arrCategory['portal_layout'],
+					'display'			=> true)
+				);
+			
+			}
+
+			
+		} elseif ($intCategoryID){		
+			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
+			//Check if Published
+			$intPublished = $arrCategory['published'];
+							
+			if (!$intPublished) message_die('Dieser Artikel ist nicht veröffentlicht.');
+						
+			//User Memberships
+			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+						
+			if (!$arrPermissions['read']) message_die('Keine Berechtigung, diese Kategorie anzusehen.', $this->user->lang('noauth_default_title'), 'access_denied', true);
+			
+			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID));
+			switch($arrCategory['sortation_type']){
+				case 2: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
+				break;
+				case 3: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'desc');
+				break;
+				case 4: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'asc');
+				break;
+				case 1:
+				default: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
+			}
+			
+			if ($arrCategory['featured_ontop']){
+				$arrSortedArticleIDs = $this->pdh->get('articles', 'id_list_featured_ontop', array($arrSortedArticleIDs));
+			}
+			
+			
+			
+			$intStart = $this->in->get('start', 0);
+			$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
+			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
+			
+			//Articles to template
+			foreach($arrLimitedIDs as $intArticleID){
+				$userlink = $this->pdh->geth('articles',  'user_id', array($intArticleID));
+				
+				//Content dependet from list_type
+				//1 = until readmore
+				//2 = Headlines only
+				//3 = only first 600 characters
+				$strText = $this->pdh->get('articles',  'text', array($intArticleID));
+				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));				
+				
+				$strText = $this->bbcode->parse_shorttags($arrContent[0]);
+				
+					$arrToolbarItems = array(
+						array(
+							'icon'	=> 'icon-plus',
+							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a=0&c='.$intCategoryID.'\';"',
+						),
+						array(
+							'icon'	=> 'icon-edit',
+							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a='.$intArticleID.'&c='.$intCategoryID.'\';"',
+						),
+						array(
+							'icon'	=> 'icon-list',
+							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$intCategoryID.'\';"',
+						),
+					);
+					$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
+				
+				$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
+				$intCommentsCount = $this->comments->Count();
+				//Tags
+				$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
+
+				
+				$this->tpl->assign_block_vars('article_row', array(
+					'ARTICLE_CONTENT' => $strText,
+					'ARTICLE_TITLE'	  => $this->pdh->get('articles',  'title', array($intArticleID)),
+					'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
+					'ARTICLE_DATE'	  => $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true),
+					'ARTICLE_PATH'		=> $this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)),
+					'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
+					'ARTICLE_TOOLBAR' => $jqToolbar['id'],
+					'PERMALINK'		=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
+					'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
+					'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
+					'ARTICLE_CUTTED_CONTENT' => truncate($strText, 600, '...', false, true),
+					'S_READMORE'	=> (isset($arrContent[1])) ? true : false,
+					'COMMENTS_COUNTER'	=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
+					'S_COMMENTS'	=> ($this->pdh->get('articles',  'comments', array($intArticleID))) ? true : false,
+					'S_FEATURED'	=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
+				));
+				
+				
+
+				if (count($arrTags) && $arrTags[0] != ""){
+					foreach($arrTags as $tag){
+						$this->tpl->assign_block_vars('article_row.tag_row', array(
+							'TAG'	=> $tag,
+						));
+					}
+				}
+			}
+			
+			
+			//Childs
+			if ($arrCategory['show_childs']){
+				$arrChilds = $this->pdh->get('article_categories', 'childs', array($intCategoryID));
+				if (count($arrChilds)){
+					$this->tpl->assign_vars(array(
+						'S_CHILDS' 	  => true,
+					));
+					foreach($arrChilds as $intChildID){
+						$this->tpl->assign_block_vars('child_row', array(
+							'NAME' 	=> $this->pdh->get('article_categories', 'name', array($intChildID)),
+							'U_PATH'=> $this->server_path.$this->pdh->get('article_categories', 'path', array($intChildID)),
+							'COUNT' => count($this->pdh->get('article_categories', 'published_id_list', array($intChildID))),
+							'DESC'  => strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($this->pdh->get('article_categories', 'description', array($intChildID)))))),
+						));
+					}
+				}
+			}
+			
+			
+			$arrToolbarItems = array(
+						
+				array(
+					'icon'	=> 'icon-plus',
+					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a=0&c='.$intCategoryID.'\';"',
+				),
+				array(
+					'icon'	=> 'icon-edit',
+					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_article_categories.php".$this->SID.'&c='.$intCategoryID.'\';"',
+				),
+				array(
+					'icon'	=> 'icon-list',
+					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$intCategoryID.'\';"',
+				),
+			);
+			$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
+			
+			$this->tpl->assign_vars(array(
+				'PAGINATION' 	  => generate_pagination($this->server_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
+				'CATEGORY_DESCRIPTION' => $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
+				'CATEGORY_NAME'		   => $arrCategory['name'],
+				'PERMALINK'		  => $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
+				'BREADCRUMB'	  => ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : '',
+				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
+				'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
+				'LIST_TYPE'		  => $arrCategory['list_type'],
+				'S_HIDE_HEADER'		=> $arrCategory['hide_header'],
+			));
+			
+			$this->core->set_vars(array(
+				'page_title'		=> $arrCategory['name'],
+				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
+				'image'				=> '',
+				'template_file'		=> 'category.html',
+				'portal_layout'		=> $arrCategory['portal_layout'],
+				'display'			=> true)
+			);
+		} else {
+			 message_die('Konnte Artikel bzw. Kategorie nicht finden.');
+		}
+		
+
+
+	}
+}
+registry::register('controller');
 ?>

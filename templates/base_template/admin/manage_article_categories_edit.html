@@ -1,0 +1,207 @@
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$('#alias').change(check_alias);
+});
+
+function check_alias() {
+	var alias = $('#alias').val();
+	if(alias != "") {
+		jQuery.ajax({
+			type: "POST",
+			url: "manage_article_categories.php{SID}&checkalias=1&c={CID}",
+			data: 'alias='+ alias, 
+			cache: false,
+			success: function(response){
+				if($.trim(response) == 'false'){
+					$('#alias').css('border', '1px #C33 solid');
+					$('#tick_alias').hide();
+					$('#cross_alias').fadeIn();
+				}else{
+					$('#alias').css('border', '1px #090 solid');
+					$('#cross_alias').hide();
+					$('#tick_alias').fadeIn();
+				}
+			}
+		});
+	}
+}
+
+function calculate_permission(perm, gid, obj){
+	jQuery.ajax({
+			type: "POST",
+			url: "manage_article_categories.php{SID}&calcperm=1&c={CID}",
+			data: 'perm='+ perm+'&gid='+gid+'&value='+$(obj).val()+'&parent='+$('#parent').val(), 
+			cache: false,
+			success: function(response){
+				tr = $(obj).closest('tr');
+				tr.find('.calc-perm').html(response);
+			}
+		});
+}
+//]]>
+</script>
+
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_article_categories} &raquo; <!-- IF NAME != "" -->{NAME}<!-- ELSE -->{L_add_article_category}<!-- ENDIF --></h1>
+	</div>
+	<div class="clear"></div>
+	<div id="article_category-tabs">
+		<ul>
+			<li><a href='#general'>{L_pk_tab_fs_globalsettings}</a></li>
+			<li><a href='#settings'>{L_settings}</a></li>
+			<li><a href='#permissions'>{L_permissions}</a></li>
+		</ul>
+	
+		<div id="general">
+			<fieldset class="settings mediumsettings">
+			<legend>{L_pk_tab_fs_globalsettings}</legend>
+			<dl>
+				<dt><label>{L_headline}</label></dt>
+				<dd><input type="text" name="name" style="width:95%;" maxlength="255" value="{NAME}" class="input required" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_description}</label></dt>
+				<dd><textarea name="description" id="description" class="mceEditor" rows="3" cols="60" style="width:95%;height:220px;">{DESCRIPTION}</textarea></dd>
+			</dl>
+			</fieldset>
+		</div>
+		<div id="settings">
+			<fieldset class="settings mediumsettings">
+			<legend>{L_settings}</legend>
+			<dl>
+				<dt><label>{L_alias}</label></dt>
+				<dd><input name="alias" type="text" class="input" id="alias" value="{ALIAS}" size="50" />
+						<img id="tick_alias" src="{EQDKP_ROOT_PATH}images/register/tick.png" width="16" height="16" alt="" style="display:none;" />
+						<div id="cross_alias" style="display:none;"><img src="{EQDKP_ROOT_PATH}images/register/cross.png" width="16" height="16" alt="" />{L_info_error_alias}</div></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_published}</label></dt>
+				<dd><input type="checkbox" name="published" id="published" value="1" {PUBLISHED_CHECKED} /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_portal_layout}</label></dt>
+				<dd>{DD_PORTAL_LAYOUT}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_article_per_page}</label></dt>
+				<dd><input type="text" name="per_page" value="{PER_PAGE}" class="input required" size="3" id="article_per_page" /></dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_parent_category}</label></dt>
+				<dd>{DD_PARENT}</dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_list_type}</label></dt>
+				<dd>{DD_LIST_TYPE}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_show_child_categories}</label></dt>
+				<dd><input type="checkbox" name="show_childs" id="show_childs" value="1" {SHOW_CHILDS_CHECKED} /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_aggregation}</label></dt>
+				<dd>{MS_AGGREGATION}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_featured_only}</label></dt>
+				<dd><input type="checkbox" name="featured_only" id="featured_only" value="1" {FEATURED_ONLY_CHECKED} /></dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_featured_ontop}</label></dt>
+				<dd><input type="checkbox" name="featured_ontop" id="featured_ontop" value="1" {FEATURED_ONTOP_CHECKED} /></dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_social_share_buttons}</label></dt>
+				<dd><input type="checkbox" name="show_ssb" id="show_ssb" value="1" {SHOW_SSB_CHECKED} /></dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_article_published_state}</label></dt>
+				<dd>{DD_PUBLISHED_STATE}</dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_notify_on_unpublished_articles}</label></dt>
+				<dd><input type="checkbox" name="notify_unpublished" id="notify_unpublished" value="1" {NOTIFY_UNPUBLISHED_CHECKED} /></dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_hide_header}</label></dt>
+				<dd><input type="checkbox" name="hide_header" id="hide_header" value="1" {HIDE_HEADER_CHECKED} /></dd>
+			</dl>
+			
+			<dl>
+				<dt><label>{L_sortation_type}</label></dt>
+				<dd>{DD_SORTATION_TYPE}</dd>
+			</dl>
+			
+			</fieldset>
+		
+		</div>
+		<div id="permissions">
+			 <script>
+			$(function() {
+				$( "#category-permission-tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+				$( "#category-permission-tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+			});
+			</script>
+			<style>
+			.ui-tabs-vertical { width: 55em; border: none !important;}
+			.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; border: none !important;}
+			.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 1 !important; margin: 0px; }
+			.ui-tabs-vertical .ui-tabs-nav li a { width: 12em; display:block; }
+			.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 0px; margin-bottom:0px;}
+			.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
+			
+			
+			</style>
+			<div id="category-permission-tabs">
+				<ul><!-- BEGIN group_row -->
+					<li><a href="#group-{group_row.ID}">{group_row.NAME}</a></li>
+					<!-- END group_row -->
+				</ul>
+				<!-- BEGIN group_row -->
+				<div id="group-{group_row.ID}">
+					<div class="tableHeader">
+						<h2>{group_row.NAME}</h2>
+					</div>
+					<table class="colorswitch" width="100%">
+						<tr>
+							<th>{L_action}</th><th>{L_portalplugin_rights}</th><th>{L_calculated_permission}</th>
+						</tr>
+						<tr>
+							<td>{L_perm_rea}</td><td>{group_row.DD_READ}</td><td><div class="calc-perm">{group_row.CALC_READ}</div></td>
+						</tr>
+						<tr>
+							<td>{L_perm_cre}</td><td>{group_row.DD_CREATE}</td><td><div class="calc-perm">{group_row.CALC_CREATE}</div></td>
+						</tr>
+						<tr>
+							<td>{L_perm_upd}</td><td>{group_row.DD_UPDATE}</td><td><div class="calc-perm">{group_row.CALC_UPDATE}</div></td>
+						</tr>
+						<tr>
+							<td>{L_perm_del}</td><td>{group_row.DD_DELETE}</td><td><div class="calc-perm">{group_row.CALC_DELETE}</div></td>
+						</tr>
+						<tr>
+							<td>{L_perm_chs}</td><td>{group_row.DD_CHANGE_STATE}</td><td><div class="calc-perm">{group_row.CALC_CHANGE_STATE}</div></td>
+						</tr>
+					</table>
+				</div>
+				<!-- END group_row -->
+			</div>
+			
+		</div>
+	</div>
+	<div class="contentFooter">
+		<input type="hidden" name="c" value="{CID}" />
+		<button type="submit" name="update" class="mainoption"><i class="icon-ok"></i>{L_save}</button>
+		<button type="reset" name="reset" class="liteoption"><i class="icon-trash"></i>{L_reset}</button>
+		<button type="button" class="liteoption" onclick="window.location='manage_article_categories.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+	</div>
+{CSRF_TOKEN}	
+</form>

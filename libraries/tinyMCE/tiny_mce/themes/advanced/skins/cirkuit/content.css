@@ -55,3 +55,10 @@ hr.system-pagebreak {
     border: 1px dashed gray;
     color: gray;
 }
+
+.system-article {
+    border: 1px dashed gray;
+    color: gray;
+	height: 40px;
+	background-color: gray;
+}

@@ -306,36 +306,6 @@ CREATE TABLE `__multidkp2itempool` (
 	PRIMARY KEY (`multidkp2itempool_itempool_id`, `multidkp2itempool_multi_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-# --------------------------------------------------------
-### News
-
-DROP TABLE IF EXISTS __news;
-CREATE TABLE `__news` (
-	`news_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	`news_headline` varchar(255) COLLATE utf8_bin NOT NULL,
-	`news_message` text COLLATE utf8_bin NOT NULL,
-	`news_date` int(11) NOT NULL,
-	`user_id` smallint(5) unsigned NOT NULL,
-	`showRaids_id` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`extended_message` text COLLATE utf8_bin NOT NULL,
-	`nocomments` tinyint(4) NOT NULL,
-	`news_permissions` tinyint(4) NOT NULL,
-	`news_flags` tinyint(4) NOT NULL DEFAULT '0',
-	`news_category` int(10) unsigned DEFAULT '1',
-	`news_start` varchar(11) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`news_stop` varchar(11) COLLATE utf8_bin NOT NULL DEFAULT '',
-	PRIMARY KEY (`news_id`),
-	KEY `user_id` (`user_id`)
-)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-DROP TABLE IF EXISTS __news_categories;
-CREATE TABLE `__news_categories` (
-	`category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-	`category_name` text COLLATE utf8_bin,
-	`category_icon` text COLLATE utf8_bin,
-	`category_color` varchar(10) COLLATE utf8_bin DEFAULT NULL,
-	PRIMARY KEY (`category_id`)
-)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 # --------------------------------------------------------
 ### Logging
@@ -454,15 +424,12 @@ DROP TABLE IF EXISTS __portal;
 CREATE TABLE IF NOT EXISTS `__portal` (
 	`id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`enabled` tinyint(1) NOT NULL DEFAULT 0,
 	`settings` tinyint(1) NOT NULL DEFAULT 0,
 	`path` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`contact` varchar(100) COLLATE utf8_bin DEFAULT NULL,
 	`url` varchar(100) COLLATE utf8_bin DEFAULT NULL,
 	`autor` varchar(100) COLLATE utf8_bin DEFAULT NULL,
 	`version` varchar(7) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`position` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '0',
-	`number` mediumint(8) DEFAULT NULL,
 	`plugin` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`visibility` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'a:1:{i:0;i:0;}',
 	`collapsable` tinyint(1) NOT NULL DEFAULT 1,
@@ -470,24 +437,79 @@ CREATE TABLE IF NOT EXISTS `__portal` (
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DROP TABLE IF EXISTS __pages;
-CREATE TABLE IF NOT EXISTS `__pages` (
-	`page_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-	`page_title` varchar(255) COLLATE utf8_bin NOT NULL,
-	`page_content` text COLLATE utf8_bin,
-	`page_visibility` text COLLATE utf8_bin NOT NULL,
-	`page_menu_link` varchar(255) COLLATE utf8_bin NOT NULL,
-	`page_edit_user` smallint(5) NOT NULL,
-	`page_edit_date` int(11) NOT NULL,
-	`page_alias` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`page_comments` tinyint(4) DEFAULT '0',
-	`page_voting` tinyint(4) DEFAULT '0',
-	`page_votes` int(10) DEFAULT '0',
-	`page_ratingpoints` int(10) DEFAULT '0',
-	`page_voters` text COLLATE utf8_bin,
-	`page_rating` int(10) DEFAULT '0',
-	PRIMARY KEY (`page_id`)
-)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+DROP TABLE IF EXISTS __portal_blocks;
+CREATE TABLE `__portal_blocks` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`wide_content` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS __portal_layouts;
+CREATE TABLE `__portal_layouts` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`blocks` TEXT NOT NULL,
+	`modules` TEXT NOT NULL,
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+# --------------------------------------------------------
+### Articles
+DROP TABLE IF EXISTS __articles;
+CREATE TABLE `__articles` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`title` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`text` TEXT NOT NULL,
+	`category` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`featured` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
+	`comments` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
+	`votes` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
+	`published` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
+	`show_from` VARCHAR(11) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`show_to` VARCHAR(11) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`user_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`date` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`previewimage` TEXT NOT NULL,
+	`alias` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`hits` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`sort_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`tags` TEXT NOT NULL,
+	`votes_count` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`votes_sum` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`votes_users` TEXT NOT NULL,
+	`last_edited` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`last_edited_user` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`system` VARCHAR(255) COLLATE utf8_bin NULL DEFAULT '',
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS __article_categories;
+CREATE TABLE `__article_categories` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`alias` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`portal_layout` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`description` TEXT COLLATE utf8_bin NOT NULL,
+	`per_page` INT(3) UNSIGNED NOT NULL DEFAULT '25',
+	`permissions` TEXT COLLATE utf8_bin NOT NULL,
+	`published` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0',
+	`parent` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`sort_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`list_type` INT(3) UNSIGNED NOT NULL DEFAULT '1',
+	`aggregation` TEXT COLLATE utf8_bin NOT NULL,
+	`featured_only` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`notify_on_onpublished_articles` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`social_share_buttons` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`show_childs` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
+	`article_published_state` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
+	`hide_header` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`sortation_type` INT(3) UNSIGNED NOT NULL DEFAULT '1',
+	`featured_ontop` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 
 # --------------------------------------------------------
 ### Repository

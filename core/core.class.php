@@ -300,7 +300,8 @@ class core extends gen_class {
 			$this->jquery->qtip(".coretip", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200));
 
 			//Portal Output
-			$this->portal->module_output();
+			$intPortalLayout = ($this->portal_layout != NULL) ? $this->portal_layout : 1;
+			$this->portal->module_output($intPortalLayout);
 			
 			//Registration Link
 			$registerLink = '';
@@ -387,25 +388,34 @@ class core extends gen_class {
 			if (isset($arrLinkData['icon']) && strlen($arrLinkData['icon'])){
 				$icon = '<i class="'.$arrLinkData['icon'].'"></i>';
 			}
-			return '<a href="' . ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->root_path . $arrLinkData['link']) . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
+			return '<a href="' . ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']) . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
 		}
 		
+		//Returns all possible Menu Items
 		public function menu_items(){
 			$arrItems = array(
 				array('link' => 'index.php'.$this->SID,				'text' => $this->user->lang('home')),
-				array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
-				array('link' => 'roster.php'.$this->SID,			'text' => $this->user->lang('menu_roster'),		'check' => 'u_roster_list'),
-				array('link' => 'listraids.php'.$this->SID,			'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
-				array('link' => 'listevents.php'.$this->SID,		'text' => $this->user->lang('menu_events'),		'check' => 'u_event_view'),
-				array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
-				array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
+				//array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
+				//array('link' => 'roster.php'.$this->SID,			'text' => $this->user->lang('menu_roster'),		'check' => 'u_roster_list'),
+				//array('link' => 'listraids.php'.$this->SID,			'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
+				//array('link' => 'listevents.php'.$this->SID,		'text' => $this->user->lang('menu_events'),		'check' => 'u_event_view'),
+				//array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
+				//array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
 				array('link' => 'calendar/index.php'.$this->SID,	'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
-				array('link' => 'listusers.php'.$this->SID,			'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
+				//array('link' => 'listusers.php'.$this->SID,			'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
 			);
 			
-			//Pages
-			if (is_array($this->pdh->get('pages', 'mainmenu_pages', array()))){
-				$arrItems = array_merge($arrItems,$this->pdh->get('pages', 'mainmenu_pages', array()));
+			//Articles & Categories
+			$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
+			foreach($arrCategoryIDs as $cid){
+				if (!$this->pdh->get('article_categories', 'published', array($cid))) continue;
+				
+				if ($cid != 1) $arrItems[] = array('link' => $this->pdh->get('article_categories', 'path', array($cid)), 'text' => $this->pdh->get('article_categories', 'name', array($cid)), 'category' => true, 'id' => $cid);
+				$arrArticles = $this->pdh->get('articles', 'id_list', array($cid));
+				foreach($arrArticles as $articleID){
+					if (!$this->pdh->get('articles', 'published', array($articleID))) continue;
+					$arrItems[] = array('link' => $this->pdh->get('articles', 'path', array($articleID)), 'text' => $this->pdh->get('articles', 'title', array( $articleID)), 'article' => true, 'id' => $articleID);
+				}
 			}
 			
 			//Plugins
@@ -427,7 +437,14 @@ class core extends gen_class {
 		}
 		
 		public function build_link_hash($arrLinkData){
-			return md5($this->user->removeSIDfromString($arrLinkData['link']).((isset($arrLinkData['id'])) ? $arrLinkData['id'] : ''));
+			if (isset( $arrLinkData['category'])) {
+				return md5('category'.$arrLinkData['id']);
+			} elseif (isset( $arrLinkData['category']) ) {
+				return md5('article'.$arrLinkData['id']);
+			} elseif (isset($arrLinkData['id'])) {
+				return md5('pluslink'.$arrLinkData['id']);
+			}	
+			return md5($this->user->removeSIDfromString($arrLinkData['link']));
 		}
 		
 		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
@@ -494,7 +511,8 @@ class core extends gen_class {
 			}
 			
 			foreach($arrToDo as $hash => $item){
-				$item['hidden'] = 0;
+				$item['hidden'] = (isset($item['article']) || isset($item['category'])) ? 1 : 0;
+				if (!$show_hidden && $item['hidden']) continue;
 				$arrOut[] = $item;
 				$arrOutOneLevel[] = $item;
 			}
@@ -634,6 +652,19 @@ class core extends gen_class {
 			$description = ($this->description != '') ? $this->description : (($this->config->get('pk_meta_description') && strlen($this->config->get('pk_meta_description'))) ? $this->config->get('pk_meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
 			$this->checkAdminTasks();
+			
+			//Check for unpublished articles
+			$arrCategories = $this->pdh->get('article_categories', 'unpublished_articles_notify', array());
+			if (count($arrCategories) > 0 && $this->user->check_auth('a_articles_man',false)){
+				foreach($arrCategories as $intCategoryID => $intUnpublishedCount){
+					register('ntfy')->add('green', 
+						$this->user->lang('article'),
+						sprintf($this->user->lang('notify_unpublished_articles'), $intUnpublishedCount, $this->pdh->get('article_categories', 'name', array($intCategoryID))),
+						$this->server_path.'admin/manage_articles.php'.$this->SID.'&amp;c='.$intCategoryID,
+						$intUnpublishedCount
+					);
+				}
+			}
 			
 			//Notifications
 			$arrNotificationGreen	= register('ntfy')->get('green');

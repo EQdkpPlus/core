@@ -129,16 +129,18 @@ class mmocms_settings extends page_generic {
 
 		// Startpage
 		$arrMenuItems = $this->core->build_menu_array(true, true);
-		
-		if(is_array($this->pdh->get('pages', 'startpage_list', array()))){
-			// Add Pages to startpage array
-			$arrMenuItems = array_merge_recursive( $arrMenuItems, $this->pdh->get('pages', 'startpage_list', array()));
-		}
-		
+
 		foreach($arrMenuItems as $page){
 			$link = $this->user->removeSIDfromString($page['link']);
 			if ($link != "" && $link != "#" && $link != "index.php"){
-				$startpage_array[$link] = $page['text'].' ('.$link.')';
+				if (isset($page['category'])){
+					$startpage_array[$this->pdh->get('article_categories', 'alias', array($page['id']))] = $this->pdh->get('article_categories', 'name_prefix', array($page['id'])).$this->pdh->get('article_categories', 'name', array($page['id']));
+				} elseif(isset($page['article'])){
+					$catid = $this->pdh->get('articles', 'category', array($page['id']));
+					$startpage_array[$this->pdh->get('articles', 'alias', array($page['id']))] = $this->pdh->get('article_categories', 'name_prefix', array($catid)).' -> '.$this->pdh->get('articles', 'title', array($page['id']));
+				} elseif(!isset($page['pluslink'])) {
+					$startpage_array[$link] = $page['text'].' ('.$link.')';
+				}
 			}
 		}
 
@@ -177,10 +179,6 @@ class mmocms_settings extends page_generic {
 		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false, false, false))));
 		asort($members);
 
-		// ---------------------------------------------------------
-		// Portal position
-		// ---------------------------------------------------------
-		$selected_portal_pos = unserialize(stripslashes($this->config->get('pk_permanent_portal')));
 
 		// ---------------------------------------------------------
 		// Default email signature
@@ -765,24 +763,12 @@ class mmocms_settings extends page_generic {
 						'name'			=> 'start_page',
 						'options'		=> $startpage_array,
 					),
-					'pk_permanent_portal'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'pk_permanent_portal',
-						'options'		=> $portal_positions,
-						'selected'		=> $selected_portal_pos,
-						'serialized'	=> true,
-						'datatype'		=> 'string'
-					),
 					'eqdkpm_shownote'	=> array(
 						'fieldtype'		=> 'checkbox',
 						'name'			=> 'eqdkpm_shownote',
 					),
 				),
 				'news'		=> array(
-					'enable_newscategories'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'enable_newscategories',
-					),
 					'disable_embedly'	=> array(
 						'fieldtype'		=> 'checkbox',
 						'name'			=> 'disable_embedly',
@@ -792,6 +778,16 @@ class mmocms_settings extends page_generic {
 						'name'			=> 'thumbnail_defaultsize',
 						'size'			=> 3,
 						'default'		=> 500,
+					),
+				),
+				'seo'	=> array(
+					'enable_seo'	=> array(
+						'fieldtype'		=> 'checkbox',
+						'name'			=> 'enable_seo',
+					),
+					'seo_remove_index'	=> array(
+						'fieldtype'		=> 'checkbox',
+						'name'			=> 'seo_remove_index',
 					),
 				),
 

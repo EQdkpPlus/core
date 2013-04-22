@@ -1,0 +1,74 @@
+<!-- IF S_SHOW_ARTICLE_HEADER -->
+<div class="contentHeader">
+	<h1 class="contentTitle">{ARTICLE_TITLE}
+		<!-- IF S_TOOLBAR --> 
+		<div class="floatRight">
+			<div class="toolbar-button">
+				<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+			</div>
+		</div>
+		<!-- ENDIF -->
+		<div class="floatRight">
+			<a href="{PERMALINK}" title="{L_permalink}"><i class="icon-link"></i></a>
+		</div>
+	</h1>
+</div>
+<!-- IF S_SHOW_ARTICLE_SUBHEADER -->
+<div>
+	<div class="breadcrumb-container">
+		
+		<!-- IF S_PREV_ARTICLE -->
+		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="icon-chevron-left"></i></a>
+		<!-- ENDIF -->
+		<span class="breadcrumb">{BREADCRUMB}</span>
+		<!-- IF S_NEXT_ARTICLE -->
+		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}"><i class="icon-chevron-right floatRight"></i></a>
+		<!-- ENDIF -->		
+	</div>
+	<div class="news_author">
+		<div class="floatLeft">
+			{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
+		</div>
+		<div class="news_social floatRight">
+			{ARTICLE_SOCIAL_BUTTONS}
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<!-- ENDIF -->
+<!-- ENDIF -->
+
+<!-- IF S_PAGINATION -->
+<div class="articleSitemap">
+	<ul>
+	<!-- BEGIN articlesitemap_row -->
+	<li <!-- IF articlesitemap_row.ACTIVE-->class="active"<!-- ENDIF -->>{articlesitemap_row.LINK}</li>
+	<!-- END articlesitemap_row -->
+	</ul>
+</div>
+<!-- ENDIF -->
+<div class="news_content">
+	{ARTICLE_CONTENT}
+	<!-- IF S_FILE_INCLUDE -->
+		<!-- INCLUDE {FILE_INCLUDE} -->
+	<!-- ENDIF -->
+</div>
+<div class="clear"></div>
+{PAGINATION}
+
+<div class="tags-container">
+	<!-- IF S_TAGS -->
+	 <ul class="tags">
+		<!-- BEGIN tag_row -->
+		<li><a href="#">{tag_row.TAG}</a></li>
+		<!-- END tag_row -->
+	</ul>
+	<!-- ENDIF -->
+	<div class="<!-- IF S_TAGS -->floatRight<!-- ENDIF -->">{ARTICLE_RATING}</div>
+	<div class="clear"></div>
+</div>
+<div class="contentDivider"></div>
+
+<span id="comments"></span>
+{COMMENTS}
+

@@ -332,10 +332,10 @@ class admin_index extends gen_class {
 				'icon'	=> 'manage_portal.png',
 				'name'	=> $this->user->lang('portal'),
 				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_config_man',	'icon' => 'manage_portal.png'),
-				2		=> array('link' => 'admin/manage_news.php'.$this->SID,			'text' => $this->user->lang('manage_news'),		'check' => 'a_news_',		'icon' => 'manage_news.png'),
-				3		=> array('link' => 'admin/manage_pages.php'.$this->SID,		'text' => $this->user->lang('info_manage_pages'),	'check' => 'a_pages_man','icon' => 'manage_pages.png'),
-				4		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'manage_pagelayouts.png'),
-				5		=> array('link' => 'admin/manage_menus.php'.$this->SID,			'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'manage_menus.png'),
+				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'manage_pages.png'),
+				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'manage_pagelayouts.png'),
+				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'manage_menus.png'),
+				
 			),
 			'raids'	=> array(
 				'icon'	=> 'manage_raids.png',

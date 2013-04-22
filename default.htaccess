@@ -15,6 +15,20 @@
 # $Id$
 ##
 
+# EQDKP-SEO-START
+# Please adjust your Rewrite Base and set it to the server-path your EQdkp Plus is installed, e.g. /eqdkp
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule (.*)$ index.php/$1 [L]
+</IfModule>
+# EQDKP-SEO-END
+
+
+
 ##
 # By removing the ETag header, you disable caches and browsers from being able to validate files, so
 # they are forced to rely on your Cache-Control and Expires header.

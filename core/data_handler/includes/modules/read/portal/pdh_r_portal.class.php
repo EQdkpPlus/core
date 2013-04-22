@@ -45,19 +45,16 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 				return true;
 			}
 
-			$pff_result = $this->db->query("SELECT * FROM __portal ORDER BY number ASC;");
+			$pff_result = $this->db->query("SELECT * FROM __portal;");
 			while($drow = $this->db->fetch_record($pff_result)){
 				$this->portal[$drow['id']] = array(
 					'name'			=> $drow['name'],
-					'enabled'		=> $drow['enabled'],
 					'settings'		=> $drow['settings'],
 					'path'			=> $drow['path'],
 					'contact'		=> $drow['contact'],
 					'url'			=> $drow['url'],
 					'autor'			=> $drow['autor'],
 					'version'		=> $drow['version'],
-					'position'		=> $drow['position'],
-					'number'		=> (int)$drow['number'],
 					'plugin'		=> $drow['plugin'],
 					'visibility'	=> unserialize($drow['visibility']),
 					'collapsable'	=> $drow['collapsable'],
@@ -100,10 +97,6 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			return $ids;
 		}
 
-		public function get_position($id) {
-			return (isset($this->portal[$id])) ? $this->portal[$id]['position'] : false;
-		}
-
 		public function get_path($id) {
 			return (isset($this->portal[$id])) ? $this->portal[$id]['path'] : false;
 		}
@@ -124,16 +117,8 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			return (isset($this->portal[$id])) ? $this->portal[$id]['name'] : false;
 		}
 
-		public function get_enabled($id) {
-			return (isset($this->portal[$id])) ? $this->portal[$id]['enabled'] : false;
-		}
-
 		public function get_visibility($id) {
 			return (isset($this->portal[$id])) ? $this->portal[$id]['visibility'] : false;
-		}
-
-		public function get_number($id) {
-			return (isset($this->portal[$id])) ? $this->portal[$id]['number'] : false;
 		}
 
 		public function get_version($id) {
