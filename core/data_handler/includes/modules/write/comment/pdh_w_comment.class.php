@@ -66,6 +66,13 @@ if(!class_exists('pdh_w_comment')) {
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
+		
+		public function delete_page($page) {
+			if(!$page) return false;
+			$this->db->query("DELETE FROM __comments WHERE page='".$this->db->escape($page)."';");
+			$this->pdh->enqueue_hook('comment_update');
+			return true;
+		}
 	}
 }
 ?>
