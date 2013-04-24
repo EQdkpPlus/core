@@ -7,7 +7,7 @@
 		<div class="icon_info">{L_login_bridge_notice}</div>
 	</div>
 	<!-- ENDIF -->
-	<form method="post" action="{EQDKP_ROOT_PATH}login.php{SID}" name="login" id="login">
+	<form method="post" action="{ACTION}" name="login" id="login">
 	
 	<fieldset class="settings mediumsettings">		
 			<div class="contentSideLeft floatLeft contentWidth60">
@@ -42,12 +42,12 @@
 			<div class="contentSideRight contentWidth30 floatRight">
 				<!-- IF S_REGISTER -->
 				<h3>{L_no_account}</h3>
-				<a href="{REGISTER_LINK}">{L_menu_register}</a>
+				{U_REGISTER}
 				<br /><br />
 				<!-- ENDIF -->
 				<!-- IF S_USER_ACTIVATION and not S_BRIDGE_INFO -->
 				<h3>{L_no_activation_mail}</h3>
-				<a href="{EQDKP_ROOT_PATH}register.php{SID}&amp;mode=resend_activation">{L_get_new_activation_mail}</a>
+				<a href="{EQDKP_CONTROLLER_PATH}Register/ResendActivation/{SID}">{L_get_new_activation_mail}</a>
 				<!-- ENDIF -->
 			</div>
 			<!-- ENDIF -->
@@ -56,13 +56,18 @@
 	
 	<div class="clear"></div>
 	
-	
-	
 	<div class="contentFooter">
 		{REDIRECT}
 		<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i>{L_login}</button>
-		{AUTH_LOGIN_BUTTON}
 	</div>
+	
+	<!-- IF AUTH_LOGIN_BUTTON != "" -->
+	<br />
+	<fieldset class="settings mediumsettings">
+		<legend>{L_login_use_authmethods}</legend>
+		{AUTH_LOGIN_BUTTON}
+	</fieldset>
+	<!-- ENDIF -->
 	
 	{CSRF_TOKEN}
 	</form>

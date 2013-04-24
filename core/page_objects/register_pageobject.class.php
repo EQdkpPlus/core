@@ -5,20 +5,17 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2002
-* Date:			$Date$
+* Date:			$Date: 2013-03-06 21:57:56 +0100 (Mi, 06 Mrz 2013) $
 * -----------------------------------------------------------------------
-* @author		$Author$
+* @author		$Author: godmod $
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkp-plus
-* @version		$Rev$
+* @version		$Rev: 13174 $
 *
-* $Id$
+* $Id: register.php 13174 2013-03-06 20:57:56Z godmod $
 */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once($eqdkp_root_path . 'common.php');
 
 // the member & email check functionality. POST == security. Not use in-get!!!
 if(registry::register('input')->get('ajax', 0) == '1'){
@@ -42,7 +39,7 @@ if(registry::register('input')->get('ajax', 0) == '1'){
 	exit;
 }
 
-class Register extends page_generic {
+class register_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'html', 'jquery', 'db', 'time', 'env', 'email'=>'MyMailer','crypt' => 'encrypt');
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -58,9 +55,8 @@ class Register extends page_generic {
 			'guildrules' => array('process' => 'display_guildrules'),
 			'deny' => array('process' => 'process_deny'),
 			'confirmed' => array('process' => 'process_confirmed'),
-			'mode' => array(
-				array('process' => 'display_resend_activation_mail', 'value' => 'resend_activation'),
-				array('process' => 'process_activate', 'value' => 'activate')),
+			'activate'	=> array('process' => 'process_activate'),
+			'resendactivation' => array('process' => 'display_resend_activation_mail'),
 			'resend_activation'=> array('process' => 'process_resend_activation'),
 		);
 		parent::__construct(false, $handler);
@@ -96,7 +92,7 @@ class Register extends page_generic {
 
 		// Build the server URL
 		// ---------------------------------------------------------
-		$this->server_url  = $this->env->link.'register.php';
+		$this->server_url  = $this->env->link.$this->controller_path_plain.'Register/';
 		$this->process();
 	}
 
@@ -202,7 +198,7 @@ class Register extends page_generic {
 		$bodyvars = array(
 			'USERNAME'		=> stripslashes($this->in->get('username')),
 			'PASSWORD'		=> stripslashes($this->in->get('user_password1')),
-			'U_ACTIVATE' 	=> $this->server_url . '?mode=activate&key=' . $user_key,
+			'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
 			'GUILDTAG'		=> $this->config->get('guildtag'),
 		);
 		if(!$this->email->SendMailFromAdmin($this->in->get('user_email'), $email_subject, $email_template.'.html', $bodyvars)){
@@ -214,7 +210,7 @@ class Register extends page_generic {
 			$this->email->Set_Language($this->config->get('default_lang'));
 			$bodyvars = array(
 				'USERNAME'   => $this->in->get('username'),
-				'U_ACTIVATE' => $this->server_url . '?mode=activate&key=' . $user_key
+				'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
 			);
 			if(!$this->email->SendMailFromAdmin(register('encrypt')->decrypt($this->config->get('admin_email')), $this->user->lang('email_subject_activation_admin_act'), 'register_activation_admin_activate.html', $bodyvars)){
 				$success_message = $this->user->lang('email_subject_send_error');
@@ -275,7 +271,7 @@ class Register extends page_generic {
 				$bodyvars = array(
 					'USERNAME'		=> $row['username'],
 					'DATETIME'		=> $this->time->user_date(false, true),
-					'U_ACTIVATE'	=> $this->server_url . '?mode=activate&key=' . $user_key,
+					'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
 				);
 
 				if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_self'), 'register_activation_self.html', $bodyvars)) {
@@ -321,8 +317,8 @@ class Register extends page_generic {
 						$success_message = $this->user->lang('email_subject_send_error');
 					}
 				} else {
-					$this->tpl->add_meta('<meta http-equiv="refresh" content="3;login.php' . $this->SID . '">');
-					$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="login.php' . $this->SID . '">', '</a>');
+					$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
+					$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
 				}
 				message_die($success_message);
 			}
@@ -342,7 +338,6 @@ class Register extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'SUBMIT_BUTTON'	=> ($count > 0) ? 'guildrules' : $button,
-			'FORM_ACTION'	=> 'register.php'.$this->SID,
 			'HEADER'		=> $this->user->lang('register_title').' - '.$this->user->lang('licence_agreement'),
 			'TEXT'			=> $this->user->lang('register_licence').(($intSocialPlugins) ? $this->user->lang('social_privacy_statement') : ''),
 			'S_LICENCE'		=> true,
@@ -362,7 +357,6 @@ class Register extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'SUBMIT_BUTTON'	=> $button,
-			'FORM_ACTION'	=> 'register.php'.$this->SID,
 			'HEADER'		=> $this->user->lang('guildrules'),
 			'TEXT'			=> html_entity_decode($data),
 			'S_LICENCE'		=> true,
@@ -377,9 +371,9 @@ class Register extends page_generic {
 
 	public function process_deny() {
 		if ($this->user->is_signedin()){
-			redirect('login.php'.$this->SID.'&logout=true');
+			redirect($this->controller_path_plain.'Login/Logout/'.$this->SID.'&link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"));
 		} else {
-			redirect('index.php');
+			redirect();
 		}
 	}
 
@@ -387,7 +381,7 @@ class Register extends page_generic {
 		if ($this->user->is_signedin()){
 			$this->db->query("UPDATE __users SET rules = 1 WHERE user_id=?", false, $this->user->id);
 		}
-		redirect('index.php');
+		redirect();
 	}
 
 	// ---------------------------------------------------------
@@ -444,5 +438,5 @@ class Register extends page_generic {
 		);
 	}
 }
-registry::register('Register');
+
 ?>

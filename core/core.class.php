@@ -310,12 +310,12 @@ class core extends gen_class {
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
 					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register', '', '', 'icon-check'));
 				} else {
-					$registerLink = $this->createLink(array('link' => 'register.php' . $this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
+					$registerLink = $this->createLink(array('link' => 'Register/' . $this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
 				}
 			}
 			
 			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
-
+			
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
@@ -324,9 +324,10 @@ class core extends gen_class {
 				'GUILD_TAG'					=> $this->config->get('guildtag'),
 				'META_KEYWORDS'				=> ($this->config->get('pk_meta_keywords') && strlen($this->config->get('pk_meta_keywords'))) ? $this->config->get('pk_meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('uc_servername'))) ? ', '.$this->config->get('uc_servername') : ''),
 				'META_DESCRIPTION'			=> ($this->config->get('pk_meta_description') && strlen($this->config->get('pk_meta_description'))) ? $this->config->get('pk_meta_description') : $this->config->get('guildtag'),
-				'EQDKP_ROOT_PATH'			=> $this->root_path,
-				'EQDKP_IMAGE_PATH'			=> $this->root_path.'images/',
-				'HEADER_LOGO'				=> (is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))) ? $this->pfh->FolderPath('','files').$this->config->get('custom_logo') : $this->root_path."templates/".$this->user->style['template_path']."/images/logo.png",
+				'EQDKP_ROOT_PATH'			=> $this->server_path,
+				'EQDKP_IMAGE_PATH'			=> $this->server_path.'images/',
+				'EQDKP_CONTROLLER_PATH'		=> $this->controller_path,
+				'HEADER_LOGO'				=> (is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))) ? $this->pfh->FolderPath('','files').$this->config->get('custom_logo') : $this->server_path."templates/".$this->user->style['template_path']."/images/logo.png",
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 				'TEMPLATE_PATH'				=> $this->root_path . 'templates/' . $this->user->style['template_path'],
 				'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
@@ -349,13 +350,13 @@ class core extends gen_class {
 				'S_REGISTER'				=> !(int)$this->config->get('disable_registration'),
 				'REGISTER_LINK'				=> $register_link,
 				'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
-				'CSRF_LOGOUT_TOKEN'			=> $this->user->csrfGetToken("loginlogout"),
-				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->root_path.'characters.php' . $this->SID : '',
+				'U_LOGOUT'					=> $this->controller_path.'Login/Logout/'.$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
+				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters/' . $this->SID : '',
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul(),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
-				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->root_path."login.php".$this->SID."&amp;mode=lostpassword\">".$this->user->lang('lost_password').'</a>',	
+				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){

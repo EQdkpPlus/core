@@ -481,7 +481,7 @@ CREATE TABLE `__articles` (
 	`votes_users` TEXT NOT NULL,
 	`last_edited` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`last_edited_user` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-	`system` VARCHAR(255) COLLATE utf8_bin NULL DEFAULT '',
+	`page_objects` TEXT NULL,
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

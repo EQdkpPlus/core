@@ -522,6 +522,7 @@ class Manage_Portal extends page_generic {
 						array('name' => 'portal_block_editicon','sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 						array('name' => 'portal_block_name','sort' => true, 'th_add' => '', 'td_add' => ''),
 						array('name' => 'portal_block_wide_content','sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'portal_block_templatevar','sort' => true, 'th_add' => '', 'td_add' => ''),
 						array('name' => 'portal_block_usedby','sort' => true, 'th_add' => '', 'td_add' => ''),
 				),
 		);

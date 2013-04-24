@@ -88,7 +88,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 					'votes_users'	=> $drow['votes_users'],
 					'last_edited'	=> (int)$drow['last_edited'],
 					'last_edited_user'	=> (int)$drow['last_edited_user'],
-					'system'		=> $drow['system'],
+					'page_objects'		=> $drow['page_objects'],
 				);
 				
 				if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
@@ -320,9 +320,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
-		public function get_system($intArticleID){
+		public function get_page_objects($intArticleID){
 			if (isset($this->articles[$intArticleID])){
-				return $this->articles[$intArticleID]['system'];
+				return unserialize($this->articles[$intArticleID]['page_objects']);
 			}
 			return false;
 		}

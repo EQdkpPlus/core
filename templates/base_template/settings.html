@@ -8,7 +8,7 @@ $(document).ready(function(){
 				minlength: 2,
 				remote: {
 					type: "POST",
-					url: "{VALIDTAELNK_PREFIX}settings.php{SID}&ajax=1{AJAXEXTENSION_USER}"
+					url: "{EQDKP_CONTROLLER_PATH}Settings/{SID}&ajax=1{AJAXEXTENSION_USER}"
 				}
 			},
 			email_address: {
@@ -17,7 +17,7 @@ $(document).ready(function(){
 				minlength: 2,
 				remote: {
 					type: "POST",
-					url: "{VALIDTAELNK_PREFIX}settings.php{SID}&ajax=1{AJAXEXTENSION_MAIL}"
+					url: "{EQDKP_CONTROLLER_PATH}Settings/{SID}&ajax=1{AJAXEXTENSION_MAIL}"
 				}
 			},
 			confirm_password: {

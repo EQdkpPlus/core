@@ -333,7 +333,7 @@ class admin_index extends gen_class {
 				'icon'	=> 'icon-home icon-large',
 				'name'	=> $this->user->lang('portal'),
 				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_config_man',	'icon' => 'icon-home icon-large'),
-				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'icon-bookmark icon-large'),
+				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'icon-file-alt icon-large'),
 				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'icon-table icon-large'),
 				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'icon-reorder icon-large'),
 				
@@ -360,7 +360,7 @@ class admin_index extends gen_class {
 				3		=> array('link' => 'admin/manage_tasks.php'.$this->SID,			'text' => $this->user->lang('mantasks_title'),		'check' => array('OR', array('a_users_man', 'a_members_man')),	'icon' => 'icon-tasks icon-large'),
 				4		=> array('link' => 'admin/manage_bridge.php'.$this->SID,		'text' => $this->user->lang('manage_bridge'),	'check' => 'a_config_man',	'icon' => 'icon-link icon-large'),
 				5		=> array('link' => 'admin/manage_crons.php'.$this->SID,			'text' => $this->user->lang('manage_cronjobs'),		'check' => 'a_config_man',	'icon' => 'icon-time icon-large'),
-				6		=> array('link' => 'admin/manage_media.php'.$this->SID,			'text' => $this->user->lang('manage_media'),		'check' => 'a_files_man',	'icon' => 'icon-camera icon-large'),
+				6		=> array('link' => 'admin/manage_media.php'.$this->SID,			'text' => $this->user->lang('manage_media'),		'check' => 'a_files_man',	'icon' => 'icon-picture icon-large'),
 			),
 			'maintenance' => array(
 				'icon'	=> 'icon-cog icon-large',
@@ -382,7 +382,7 @@ class admin_index extends gen_class {
 		if($this->config->get('admin_favs')) {
 			$favs_array = @unserialize(stripslashes($this->config->get('admin_favs')));
 		}
-		$admin_menu['favorits']['icon'] = 'icon-heart icon-large';
+		$admin_menu['favorits']['icon'] = 'icon-star icon-large';
 		$admin_menu['favorits']['name'] = $this->user->lang('favorits');
 		//Style Management
 		$admin_menu['favorits'][1] = array(

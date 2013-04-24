@@ -27,7 +27,7 @@ class controller extends page_generic {
 	}
 
 	public function __construct() {	
-		parent::__construct('');
+		parent::__construct(false);
 		$this->display();
 	}
 	
@@ -35,6 +35,7 @@ class controller extends page_generic {
 		$strPath = $this->env->path;
 		$arrPath = array_filter(explode('/', $strPath));
 		$arrPath = array_reverse($arrPath);
+		
 		if (count($arrPath) == 0){
 			//Get Start Page
 			if ($this->config->get('start_page') != ""){
@@ -46,7 +47,7 @@ class controller extends page_generic {
 			$arrPath = array_reverse($arrPath);
 		}
 		$intArticleID = $intCategoryID = 0;
-				
+		
 		//Suche Alias in Artikeln
 		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", $arrPath[0])));
 		
@@ -55,13 +56,12 @@ class controller extends page_generic {
 			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(".html", "", $arrPath[0])));
 			
 			//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
-			if (!$intCategoryID) {
+			if (!$intCategoryID && isset($arrPath[1])) {
 				
 				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", $arrPath[1])));
 				if ($intArticleID){
 					//Zerlege .html
 					$strID = str_replace("-", "", strrchr(str_replace(".html", "", $arrPath[0]), "-"));
-					
 					$arrMatches = array();
 					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 					if (isset($arrMatches[0]) && count($arrMatches[0])){
@@ -69,8 +69,11 @@ class controller extends page_generic {
 							$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
 						}
 					}
-					
-					if ($strID) registry::add_const('url_id', $strID);
+					if (strlen($strID)) {
+						registry::add_const('url_id', $strID);
+					} elseif (strlen($arrPath[0])){
+						$this->in->inject($arrPath[0], 'injected');
+					}
 				}
 			}
 		}
@@ -108,6 +111,7 @@ class controller extends page_generic {
 			if (!$intPublished || !$arrCategory['published']) message_die('Dieser Artikel ist nicht veröffentlicht.');
 			
 			$strPath = $this->pdh->get('articles', 'path', array($intArticleID));
+			registry::add_const('page_path', $strPath);
 			
 			//User Memberships
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
@@ -152,26 +156,24 @@ class controller extends page_generic {
 				}
 			}
 			
-			if ($arrArticle['system'] == ""){
 
-				//Next and Previous Article
-				$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($arrArticle['category']));
-				$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
-				$arrFlippedArticles = array_flip($arrSortedArticleIDs);
-				$intRecentArticlePosition = $arrFlippedArticles[$intArticleID];
+			//Next and Previous Article
+			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($arrArticle['category']));
+			$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
+			$arrFlippedArticles = array_flip($arrSortedArticleIDs);
+			$intRecentArticlePosition = $arrFlippedArticles[$intArticleID];
 
-				$prevID = (isset($arrSortedArticleIDs[$intRecentArticlePosition-1])) ? $arrSortedArticleIDs[$intRecentArticlePosition-1] : false;
-				$nextID = (isset($arrSortedArticleIDs[$intRecentArticlePosition+1])) ? $arrSortedArticleIDs[$intRecentArticlePosition+1] : false;
-				$this->tpl->assign_vars(array(
-					'S_NEXT_ARTICLE'	=> ($nextID !== false) ? true : false,
-					'S_PREV_ARTICLE'	=> ($prevID !== false) ? true : false,
-					'U_NEXT_ARTICLE'	=> ($nextID) ? $this->server_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
-					'U_PREV_ARTICLE'	=> ($prevID) ? $this->server_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
-					'NEXT_TITLE'		=> ($nextID) ? $this->pdh->get('articles', 'title', array($nextID)) : '',
-					'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
-				));
-
-			}			
+			$prevID = (isset($arrSortedArticleIDs[$intRecentArticlePosition-1])) ? $arrSortedArticleIDs[$intRecentArticlePosition-1] : false;
+			$nextID = (isset($arrSortedArticleIDs[$intRecentArticlePosition+1])) ? $arrSortedArticleIDs[$intRecentArticlePosition+1] : false;
+			$this->tpl->assign_vars(array(
+				'S_NEXT_ARTICLE'	=> ($nextID !== false) ? true : false,
+				'S_PREV_ARTICLE'	=> ($prevID !== false) ? true : false,
+				'U_NEXT_ARTICLE'	=> ($nextID) ? $this->server_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
+				'U_PREV_ARTICLE'	=> ($prevID) ? $this->server_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
+				'NEXT_TITLE'		=> ($nextID) ? $this->pdh->get('articles', 'title', array($nextID)) : '',
+				'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
+			));
+		
 			
 			$userlink = $this->pdh->geth('articles',  'user_id', array($intArticleID));
 			
@@ -222,9 +224,30 @@ class controller extends page_generic {
 		$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
 		$intCommentsCount = $this->comments->Count();
 		
+		//Replace page objects from Content
+		$strContent = $this->bbcode->parse_shorttags($arrContent[$intPageID]);
+		preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strContent, $arrPageObjects, PREG_PATTERN_ORDER);
+		if (count($arrPageObjects[0])){
+			include_once($this->root_path.'core/pageobject.class.php');
+			foreach($arrPageObjects[3] as $key=>$val){
+				$strPageObject = $val;
+				$strHaystack = $arrPageObjects[0][$key];
+				if (!is_file($this->root_path.'core/page_objects/'.$val.'_pageobject.class.php')) continue;
+				include_once($this->root_path.'core/page_objects/'.$val.'_pageobject.class.php');
+				$objPage = registry::register($val.'_pageobject');
+				$arrCoreVars = $objPage->get_vars();
+				if ($arrCoreVars['template_file'] != '' ) {
+					$strContent = str_replace($strHaystack, '<!-- INCLUDE '.$arrCoreVars['template_file'].' --><br />', $strContent);
+				} else {
+					$strContent = str_replace($strHaystack, '', $strContent);
+				}
+				
+			}
+		}
+
 			$this->tpl->assign_vars(array(
 				'PAGINATION' 	  => generate_pagination($this->server_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
-				'ARTICLE_CONTENT' => $this->bbcode->parse_shorttags($arrContent[$intPageID]),
+				'ARTICLE_CONTENT' => $strContent,
 				'ARTICLE_TITLE'	  => $arrTitles[$intPageID],
 				'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($arrArticle['date'], false, true)),
 				'ARTICLE_DATE'	  => $this->time->user_date($arrArticle['date'], false, false, true),
@@ -254,48 +277,14 @@ class controller extends page_generic {
 				));
 			};
 			
-			if ($arrArticle['system'] == ""){
-				$this->core->set_vars(array(
-					'page_title'		=> $arrArticle['title'],
-					'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
-					'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
-					'template_file'		=> 'article.html',
-					'portal_layout'		=> $arrCategory['portal_layout'],
-					'display'			=> true)
-				);
-			
-			} else {
-				include_once($this->root_path.'core/article.class.php');
-				include_once($this->root_path.'core/articles/'.$arrArticle['system'].'.article.class.php');
-				$objArticle = registry::register($arrArticle['system'].'_article', array($strPath, $intPageID));
-				
-				$arrCoreVars = $objArticle->get_vars();
-				
-				
-				$this->tpl->assign_vars(array(
-					'ARTICLE_TITLE'	  		=> $arrCoreVars['page_title'],
-					'S_SHOW_ARTICLE_HEADER' => (isset($arrCoreVars['show_article_header'])) ? $arrCoreVars['show_article_header'] : true,
-					'S_SHOW_ARTICLE_SUBHEADER' => (isset($arrCoreVars['show_article_subheader'])) ? $arrCoreVars['show_article_subheader'] : true,
-				));
-				
-				if ($arrCoreVars['template_file']){
-					$this->tpl->assign_vars(array(
-						'FILE_INCLUDE'		=> $arrCoreVars['template_file'],
-						'S_FILE_INCLUDE'	=> (preg_match('#<p(.*)class="system-article"(.*)\>#iU', $arrContent[$intPageID]) || $arrContent[$intPageID] == ""),
-					));
-				}
-				
-				$this->core->set_vars(array(
-					'page_title'		=> $arrCoreVars['page_title'],
-					'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
-					'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
-					'template_file'		=> 'article.html',
-					'portal_layout'		=> $arrCategory['portal_layout'],
-					'display'			=> true)
-				);
-			
-			}
-
+			$this->core->set_vars(array(
+				'page_title'		=> $arrArticle['title'],
+				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+				'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
+				'template_file'		=> 'article.html',
+				'portal_layout'		=> $arrCategory['portal_layout'],
+				'display'			=> true)
+			);
 			
 		} elseif ($intCategoryID){		
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
@@ -331,6 +320,7 @@ class controller extends page_generic {
 			$intStart = $this->in->get('start', 0);
 			$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
 			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
+			registry::add_const('page_path', $strPath);
 			
 			//Articles to template
 			foreach($arrLimitedIDs as $intArticleID){
@@ -453,12 +443,49 @@ class controller extends page_generic {
 				'portal_layout'		=> $arrCategory['portal_layout'],
 				'display'			=> true)
 			);
+		} elseif (register('routing')->staticRoute($arrPath[0]) || register('routing')->staticRoute($arrPath[1])){
+			//Static Page Object
+			$strPageObject = register('routing')->staticRoute($arrPath[0]);
+			if (!$strPageObject) {			
+				$strPageObject = register('routing')->staticRoute($arrPath[1]);
+				if ($strPageObject){
+					//Zerlege .html
+					$strID = str_replace("-", "", strrchr(str_replace(".html", "", $arrPath[0]), "-"));
+					$arrMatches = array();
+					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
+					if (isset($arrMatches[0]) && count($arrMatches[0])){
+						if (count($arrMatches[0]) == 2){
+							$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
+						}
+					}
+					if (strlen($strID)) {
+						registry::add_const('url_id', $strID);
+					} elseif (strlen($arrPath[0])){
+						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
+
+						$strPath = str_replace('/'.$arrPath[0], '', $strPath);
+						registry::add_const('page_path', $strPath);
+					}
+				}
+			}
+			if ($strPageObject){
+				include_once($this->root_path.'core/pageobject.class.php');
+				if (is_file($this->root_path.'core/page_objects/'.$strPageObject.'_pageobject.class.php')){
+					include_once($this->root_path.'core/page_objects/'.$strPageObject.'_pageobject.class.php');
+					$objPage = registry::register($strPageObject.'_pageobject');
+					$arrVars = $objPage->get_vars();
+					$this->core->set_vars(array(
+						'page_title'		=> $arrVars['page_title'],
+						'template_file'		=> $arrVars['template_file'],
+						'display'			=> true)
+					);
+				} else {
+					redirect();
+				}									
+			}		 
 		} else {
-			 message_die('Konnte Artikel bzw. Kategorie nicht finden.');
+			message_die('Konnte Artikel bzw. Kategorie nicht finden.');
 		}
-		
-
-
 	}
 }
 registry::register('controller');

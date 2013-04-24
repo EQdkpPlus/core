@@ -50,7 +50,7 @@ var initLogin = function () {
 	
 	login = function (assertion) {
 		if (assertion) {
-			window.location.href='".$this->root_path."login.php".$this->SID."&login=true&lmethod=persona&assertion='+assertion;
+			window.location.href='".$this->controller_path."Login/".$this->SID."&login&lmethod=persona&assertion='+assertion;
 		}
 	};
 	
@@ -83,7 +83,7 @@ initLogin();
 			
 			login = function (assertion) {
 				if (assertion) {
-					window.location.href='".$this->root_path."settings.php".$this->SID."&mode=addauthacc&lmethod=persona&assertion='+assertion;
+					window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=persona&assertion='+assertion;
 				}
 			};
 			

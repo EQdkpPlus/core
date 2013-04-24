@@ -25,7 +25,7 @@
 			
 			$(document).ready(function() {
 				$( "#dialog-login" ).dialog({
-					height: 310,
+					height: 340,
 					width: 500,
 					modal: true,
 					autoOpen: false,
@@ -65,7 +65,7 @@
 				<div id="personalAreaUser">
 					<!-- IF not S_LOGGED_IN -->
 					<ul>
-						<li><a href="#" class="openLoginModal"><i class="icon-signin"></i>{L_login}</a></li>
+						<li><a href="{EQDKP_CONTROLLER_PATH}Login/{SID}" class="openLoginModal" onclick="return false;"><i class="icon-signin"></i>{L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
@@ -74,9 +74,9 @@
 					
 					<!-- ELSE -->					
 						<ul>
-							<li><a href="{EQDKP_ROOT_PATH}settings.php{SID}"><i class="icon-user"></i>{USER_NAME}</a></li>
-							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/index.php{SID}"><i class="icon-cog"></i>{L_menu_admin_panel}</a></li><!-- ENDIF -->
-							<li><a href="{EQDKP_ROOT_PATH}login.php{SID}&amp;logout=true&amp;link_hash={CSRF_LOGOUT_TOKEN}"><i class="icon-signout"></i>{L_logout}</a></li>
+							<li><a href="{EQDKP_CONTROLLER_PATH}Settings/{SID}"><i class="icon-user"></i>{USER_NAME}</a></li>
+							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="icon-cog"></i>{L_menu_admin_panel}</a></li><!-- ENDIF -->
+							<li><a href="{U_LOGOUT}"><i class="icon-signout"></i>{L_logout}</a></li>
 							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a></li><!-- ENDIF -->
 							<li>
 								<div class="notification-tooltip-container">
@@ -259,7 +259,7 @@
 	<!-- ENDIF -->
 
 	<div id="dialog-login" title="{L_login}">
-		<form method="post" action="{EQDKP_ROOT_PATH}login.php{SID}" name="login" id="login">
+		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login/{SID}" name="login" id="login">
 			<fieldset class="settings mediumsettings">				
 				<dl>
 					<dt><label>{L_username}:</label></dt>
@@ -274,9 +274,15 @@
 						<br /><label><input type="checkbox" name="auto_login" />{L_remember_password}</label>
 					</dd>
 				</dl>
-
 			</fieldset>
-			<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i> {L_login}</button>{AUTH_LOGIN_BUTTON}
+			<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i> {L_login}</button>
+			<!-- IF AUTH_LOGIN_BUTTON != "" -->
+			<br /><br />
+			<fieldset class="settings mediumsettings">
+				<legend>{L_login_use_authmethods}</legend>
+				{AUTH_LOGIN_BUTTON}
+			</fieldset>
+			<!-- ENDIF -->
 		</form>
 	</div>
 	

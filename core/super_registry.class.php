@@ -73,6 +73,7 @@ abstract class super_registry {
 		'plus_exchange'			=> 'core/',
 		'portal'				=> 'core/',
 		'repository'			=> 'core/',
+		'routing'				=> 'core/',
 		'sms'					=> 'core/',
 		'socialplugins'			=> 'core/',
 		'styles'				=> 'core/',
@@ -126,6 +127,9 @@ abstract class super_registry {
 			registry::register('environment');
 			if(!registry::register('config')->get('server_path')) self::fix_server_path();
 			self::$const['server_path'] = registry::register('config')->get('server_path');
+			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
+			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
+			
 			//Bridge
 			include_once($root_path . 'core/bridge_generic.class.php');
 			if (registry::register('config')->get('cmsbridge_type') != ''){

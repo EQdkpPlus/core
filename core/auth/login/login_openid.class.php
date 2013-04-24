@@ -51,19 +51,19 @@ class login_openid extends gen_class {
 	}
 	
 	public function login_button(){
-		$this->jquery->dialog('openid_login_selector', 'OpenID', array('url' => $this->root_path.'libraries/openid/selector/selector.html', 'height'	=> 350));
+		$this->jquery->dialog('openid_login_selector', 'OpenID', array('url' => $this->server_path.'libraries/openid/selector/selector.html', 'height'	=> 400));
 		
 		return '<button type="button" class="mainoption" onclick="openid_login_selector()"><i class="bi_openid"></i>OpenID Login</button>';
 	}
 	
 	public function register_button(){
-		$this->jquery->dialog('openid_reg_selector', 'OpenID', array('url' => $this->root_path.'libraries/openid/selector/reg_selector.html', 'height'	=> 350));
+		$this->jquery->dialog('openid_reg_selector', 'OpenID', array('url' => $this->server_path.'libraries/openid/selector/reg_selector.html', 'height'	=> 400));
 		
 		return '<button type="button" class="mainoption" onclick="openid_reg_selector()"><i class="bi_openid"></i>OpenID '.$this->user->lang('register_title').'</button>';		
 	}
 	
 	public function account_button(){
-		$this->jquery->dialog('openid_acc_selector', 'OpenID', array('url' => $this->root_path.'libraries/openid/selector/acc_selector.html', 'height'	=> 350));
+		$this->jquery->dialog('openid_acc_selector', 'OpenID', array('url' => $this->server_path.'libraries/openid/selector/acc_selector.html', 'height'	=> 400));
 		
 		return '<button type="button" class="mainoption" onclick="openid_acc_selector()"><i class="bi_openid"></i>OpenID '.$this->user->lang('auth_connect_account').'</button>';
 	}

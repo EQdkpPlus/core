@@ -54,6 +54,14 @@ if(!class_exists('pdh_w_articles')) {
 			$strText = $this->bbcode->replace_shorttags($strText);
 			$strText = $this->embedly->parseString($strText);
 			
+			$arrPageObjects = array();
+			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', xhtml_entity_decode($strText), $arrTmpPageObjects, PREG_PATTERN_ORDER);
+			if (count($arrTmpPageObjects[0])){
+				foreach($arrTmpPageObjects[3] as $key=>$val){
+					$arrPageObjects[] = $val;
+				}
+			}
+			
 			$blnResult = $this->db->query("INSERT INTO __articles :params", array(
 				'title' 			=> $strTitle,
 				'text'				=> $strText,
@@ -75,6 +83,7 @@ if(!class_exists('pdh_w_articles')) {
 				'votes_sum'			=> 0,
 				'last_edited'		=> $this->time->time,
 				'last_edited_user'	=> $this->user->id,
+				'page_objects'		=> serialize($arrPageObjects),
 			));
 			
 			$id = $this->db->insert_id();
@@ -113,6 +122,14 @@ if(!class_exists('pdh_w_articles')) {
 			$strText = $this->bbcode->replace_shorttags($strText);
 			$strText = $this->embedly->parseString($strText);
 			
+			$arrPageObjects = array();
+			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', xhtml_entity_decode($strText), $arrTmpPageObjects, PREG_PATTERN_ORDER);
+			if (count($arrTmpPageObjects[0])){
+				foreach($arrTmpPageObjects[3] as $key=>$val){
+					$arrPageObjects[] = $val;
+				}
+			}
+			
 			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
 				'title' 			=> $strTitle,
 				'text'				=> $strText,
@@ -130,6 +147,7 @@ if(!class_exists('pdh_w_articles')) {
 				'tags'				=> serialize($arrTags),
 				'last_edited'		=> $this->time->time,
 				'last_edited_user'	=> $this->user->id,
+				'page_objects'		=> serialize($arrPageObjects),
 			), $id);
 						
 			if ($blnResult){

@@ -826,6 +826,8 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "permalink" => "Permalink",
 "article" => "Artikel",
 "notify_unpublished_articles" => "%1\$s unveröffentlichte Artikel in %2\$s",
+"login_use_authmethods" => "Anmelden über Drittanbieter",
+"register_use_authmethods" => "Registrieren über Drittanbieter",
  );
 
 ?>

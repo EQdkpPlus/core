@@ -5,23 +5,18 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date$
+ * Date:		$Date: 2013-04-22 23:19:36 +0200 (Mo, 22 Apr 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13335 $
  * 
- * $Id$
+ * $Id: characters.php 13335 2013-04-22 21:19:36Z wallenium $
  */
 
-// EQdkp required files/vars
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once ($eqdkp_root_path . 'common.php');
-
-class characters extends page_generic {
+class mycharacters_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env');
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -114,13 +109,13 @@ class characters extends page_generic {
 		// The javascript for the mainchar change
 		$this->tpl->add_js("
 			$('.cmainradio').change( function(){
-				$.post('characters.php".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $(this).val() },
+				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $(this).val() },
 					function(data){
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: true, speed: 1000});
 					});
 				});
 			$('.cdefroledd').change( function(){
-				$.post('characters.php".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
+				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: true, speed: 1000});
 					});
@@ -149,10 +144,10 @@ class characters extends page_generic {
 		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), ((is_array($view_list)) ? count($view_list) : 0));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '&amp;sort='.$this->in->get('sort');
-
+		
 		$this->tpl->assign_vars(array(
 			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
-			'CHAR_PAGINATION'		=> generate_pagination('characters.php'.$this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_climit'], $this->in->get('start', 0)),
+			'CHAR_PAGINATION'		=> generate_pagination($this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_climit'], $this->in->get('start', 0)),
 			'NEW_CHARS'				=> $this->user->check_auth('u_member_add', false),
 			'CONNECT_CHARS'			=> $this->user->check_auth('u_member_conn', false),
 			'DELETE_CHARS'			=> $this->user->check_auth('u_member_del', false),
@@ -166,10 +161,9 @@ class characters extends page_generic {
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_members_titl'),
-			'template_file'		=> 'characters.html',
+			'template_file'		=> 'mycharacters.html',
 			'display'			=> true)
 		);	
 	}
 }
-registry::register('characters');
 ?>

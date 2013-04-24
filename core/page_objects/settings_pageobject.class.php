@@ -5,21 +5,18 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date$
+ * Date:		$Date: 2013-03-25 12:12:44 +0100 (Mo, 25 Mrz 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13246 $
  *
- * $Id$
+ * $Id: settings.php 13246 2013-03-25 11:12:44Z godmod $
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once($eqdkp_root_path . 'common.php');
-
+ 
 //AJAX
 if(registry::fetch('in')->get('ajax', 0) === 1){
 	if($_POST['username']){
@@ -40,7 +37,7 @@ if(registry::fetch('in')->get('ajax', 0) === 1){
 }
 
 
-class user_settings extends page_generic {
+class settings_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'html', 'pm', 'time', 'pfh', 'bridge');
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -48,8 +45,9 @@ class user_settings extends page_generic {
 	private $logo_upload = false;
 
 	public function __construct() {
+	
 		if (!$this->user->is_signedin()){
-			redirect('login.php'.$this->SID);
+			redirect($this->controller_path_plain.'Login/'.$this->SID);
 		}
 
 		$handler = array(
@@ -148,7 +146,7 @@ class user_settings extends page_generic {
 		$blnResult = $this->pdh->put('user', 'update_user_settings', array($this->user->data['user_id'], $this->get_settingsdata()));
 		$this->pdh->process_hook_queue();
 		//Only redirect if saving was successfull so we can grad an error message
-		if ($blnResult) redirect('settings.php'.$this->SID.'&amp;save=true');
+		if ($blnResult) redirect($this->controller_path_plain.'Settings/'.$this->SID.'&amp;save');
 		return;
 	}
 
@@ -584,7 +582,7 @@ class user_settings extends page_generic {
 		if (is_array($this->pm->get_menus('settings'))){
 			foreach ($this->pm->get_menus('settings') as $plugin => $values){
 				$name = ($values['name']) ? $values['name'] : $this->user->lang($plugin);
-				$icon = ($values['icon']) ? $values['icon'] : $this->root_path.'images/admin/plugin.png';
+				$icon = ($values['icon']) ? $values['icon'] : $this->server_path.'images/admin/plugin.png';
 				unset($values['name'], $values['icon']);
 				$this->tpl->assign_block_vars('plugin_settings_row', array(
 					'KEY'		=> $plugin,
@@ -612,12 +610,12 @@ class user_settings extends page_generic {
 			}
 		}
 
-		$this->core->set_vars(array(
+		$this->set_vars(array(
 			'page_title'	=> $this->user->lang('settings_title'),
 			'template_file'	=> 'settings.html',
 			'display'		=> true)
 		);
 	}
 }
-registry::register('user_settings');
+
 ?>

@@ -5,22 +5,18 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date$
+ * Date:		$Date: 2013-03-25 12:12:44 +0100 (Mo, 25 Mrz 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13246 $
  *
- * $Id$
+ * $Id: login.php 13246 2013-03-25 11:12:44Z godmod $
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once($eqdkp_root_path . 'common.php');
-
-class login extends page_generic {
+class login_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'db', 'time', 'env', 'email'=>'MyMailer', 'crypt' => 'encrypt');
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -31,14 +27,11 @@ class login extends page_generic {
 			//Process
 			'login' 				=> array('process' => 'process_login'),
 			'logout' 				=> array('process' => 'process_logout','csrf' => true),
-			'mode' => array(
-				array('process' => 'display_lost_password', 'value' => 'lostpassword'),
-				array('process' => 'display_new_password', 'value' => 'newpassword'),
-			),
+			'lostpassword'			=> array('process' => 'display_lost_password'),
+			'newpassword'			=> array('process' => 'display_new_password'),
 			'new_password' 			=> array('process' => 'process_new_password', 'csrf' => true),
 			'lost_password' 		=> array('process' => 'process_lost_password', 'csrf' => true),
-			'resend_activation_mail' => array('process' => 'redirect_resend_activation'),
-
+			'resendactivation'		=> array('process' => 'redirect_resend_activation'),
 		);
 		parent::__construct(false, $handler);
 
@@ -104,13 +97,13 @@ class login extends page_generic {
 					}
 					
 				} else {
-					$redirect_url = 'index.php'.$this->SID;
+					$redirect_url = $this->controller_path_plain;
 				}
 				
 				redirect($redirect_url);
 			}
 		} else {
-			redirect('index.php'.$this->SID);
+			redirect($this->controller_path_plain.$this->SID);
 		}
 
 	}
@@ -119,11 +112,11 @@ class login extends page_generic {
 		if ($this->user->is_signedin()){
 			$this->user->logout();
 		}
-		redirect('index.php'.$this->SID);
+		redirect($this->controller_path_plain.$this->SID);
 	}
 
 	public function redirect_resend_activation(){
-		redirect('register.php'.$this->SID.'&mode=resend_activation');
+		redirect($this->controller_path_plain.'Register/ResendActivation/'.$this->SID);
 	}
 
 	//Save new password
@@ -216,7 +209,7 @@ class login extends page_generic {
 			$bodyvars = array(
 				'USERNAME'		=> $row['username'],
 				'DATETIME'		=> $this->time->user_date(false, true),
-				'U_ACTIVATE'	=> $this->env->link . 'login.php?mode=newpassword&key=' . $user_key,
+				'U_ACTIVATE'	=> $this->env->link . $this->controller_path_plain. '/Login/NewPassword/?key=' . $user_key,
 			);
 
 			if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
@@ -253,13 +246,11 @@ class login extends page_generic {
 	public function display_lost_password(){
 		$this->jquery->Validate('lost_password', array(
 			array('name' => 'username', 'value' => $this->user->lang('fv_required_user')),
-			array('name' => 'user_email', 'value' => $this->user->lang('fv_required_email'))
 		));
 		$this->jquery->ResetValidate('lost_password');
 
 		$this->tpl->add_js('document.lost_password.username.focus();', 'docready');
 		$this->tpl->assign_vars(array(
-			'F_ACTION'				=> $this->root_path.'login.php'.$this->SID.'&amp;lost_password=true',
 			'BUTTON_NAME'			=> 'lost_password',
 		));
 
@@ -323,5 +314,5 @@ class login extends page_generic {
 	}
 
 }
-registry::register('login');
+
 ?>

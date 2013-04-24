@@ -181,7 +181,6 @@ class Manage_Articles extends page_generic {
 
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
-				if ($this->pdh->get('articles', 'system', array($id)) != "") continue;
 				
 				$pos[] = stripslashes($this->pdh->get('articles', 'name', array($id)));
 				$retu[$id] = $this->pdh->put('articles', 'delete', array($id));
@@ -218,7 +217,7 @@ class Manage_Articles extends page_generic {
 		if ($id){
 			$this->tpl->assign_vars(array(
 				'TITLE'	=> $this->pdh->get('articles', 'title', array($id)),
-				'TEXT'	=> ($this->pdh->get('articles', 'system', array($id)) != "" && $this->pdh->get('articles', 'text', array($id)) == "") ? '<p class="system-article"></p><p></p>': $this->pdh->get('articles', 'text', array($id)),
+				'TEXT'	=> $this->pdh->get('articles', 'text', array($id)),
 				'ALIAS'	=> $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'	=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
 				'DD_CATEGORY' => $this->html->Dropdown('category', $arrCategories, $this->pdh->get('articles', 'category', array($id))),
@@ -230,7 +229,6 @@ class Manage_Articles extends page_generic {
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'S_SYSTEM_ARTICLE'	=> ($this->pdh->get('articles', 'system', array($id)) != "") ? true : false,
 				'PREVIEW_IMAGE'		=> $this->html->widget(array(
 						'fieldtype'	=> 'imageuploader',
 						'name'		=> 'previewimage',
@@ -263,12 +261,16 @@ class Manage_Articles extends page_generic {
 					)),
 			));
 		}
+		
+		$routing = register('routing');
+		$arrPageObjects = $routing->getPageObjects();
 
 		$this->tpl->assign_vars(array(
 			'CID' => $cid,
 			'AID' => $id,
 			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
 			'ARTICLE_NAME' => $this->pdh->get('articles', 'title', array($id)),
+			'DD_PAGE_OBJECTS'	=> $this->html->Dropdown('page_objects',  $arrPageObjects),
 		));
 		$this->core->set_vars(array(
 			'page_title'		=> (($id) ? $this->user->lang('manage_articles').': '.$this->pdh->get('articles', 'title', array($id)) : $this->user->lang('add_new_article')),

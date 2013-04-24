@@ -14,8 +14,7 @@ $(document).ready(function(){
 	});
 	
 	$('#systemarticlebutton').click(function(){
-		var content = $('#text').html();
-		$('#text').tinymce().execCommand('mceInsertContent',false,'<p class="system-article" /></p>'); 
+		$( "#pageobject-dialog" ).dialog('open');
 	});
 	
 	$( "#pagebreak-dialog" ).dialog({
@@ -37,12 +36,34 @@ $(document).ready(function(){
 		$("#pagebreak_title").val('');
 		$( "#pagebreak-dialog" ).dialog('open');
 	});
+	
+	$( "#pageobject-dialog" ).dialog({
+		height: 310,
+		width: 500,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			Ok: function() {
+				insert_pageobject();
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
 });
 
 function insert_pagebreak(){
 	var pagename = $("#pagebreak_title").val();
 	$('#text').tinymce().execCommand('mceInsertContent',false,'<hr class="system-pagebreak" title="'+pagename+'" /><p></p>'); 
 	$( "#pagebreak-dialog" ).dialog('close');
+}
+
+function insert_pageobject(){
+	var pageobject = $("#page_objects").val();
+	var pagename = $("#page_objects option:selected").text();
+	$('#text').tinymce().execCommand('mceInsertContent',false,'<p class="system-article" title="'+pageobject+'">'+pagename+'</p><p></p>'); 
+	$( "#pageobject-dialog" ).dialog('close');
 }
 
 function check_alias() {
@@ -80,6 +101,15 @@ function check_alias() {
 	</fieldset>
 </div>
 
+<div id="pageobject-dialog" title="{L_add_page_object}">
+	<fieldset class="settings mediumsettings">
+		<dl>
+			<dt><label>{L_page_object}</label></dt>
+			<dd>{DD_PAGE_OBJECTS}</dd>
+		</dl>
+	</fieldset>
+</div>
+
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{CATEGORY_NAME} &raquo; <!-- IF ARTICLE_NAME != "" -->{ARTICLE_NAME}<!-- ELSE -->{L_add_new_article}<!-- ENDIF --></h1>
@@ -103,9 +133,7 @@ function check_alias() {
 				<dd><textarea name="text" id="text" class="mceEditor" rows="3" cols="60" style="width:95%;height:300px;">{TEXT}</textarea>
 					<button class="mainoption" type="button" id="readmorebutton" {READMORE_BUTTON_ENABLED}><i class="icon-chevron-down"></i>{L_readmore_button}</button>
 					<button class="mainoption" type="button" id="pagebreakbutton"><i class="icon-copy"></i>{L_add_pagebreak}</button>
-					<!-- IF S_SYSTEM_ARTICLE -->
-						<button class="mainoption" type="button" id="systemarticlebutton"><i class="icon-plus"></i>{L_add_system_article}</button>
-					<!-- ENDIF -->
+					<button class="mainoption" type="button" id="systemarticlebutton"><i class="icon-plus"></i>{L_add_page_object}</button>
 				</dd>
 			</dl>
 			<dl>

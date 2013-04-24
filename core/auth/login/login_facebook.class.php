@@ -134,7 +134,7 @@ class login_facebook extends gen_class {
 				FB.login(function(response) {
 				   if (response.authResponse) {
 					 console.log('Welcome!  Fetching your information.... ');
-					 window.location.href='".$this->root_path."login.php".$this->SID."&login=true&lmethod=facebook';
+					 window.location.href='".$this->controller_path."Login/".$this->SID."&login&lmethod=facebook';
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
@@ -152,7 +152,7 @@ class login_facebook extends gen_class {
 				FB.login(function(response) {
 				   if (response.authResponse) {
 					 console.log('Welcome!  Fetching your information.... ');
-					 window.location.href='".$this->root_path."register.php".$this->SID."&register=true&lmethod=facebook';
+					 window.location.href='".$this->controller_path."Register/".$this->SID."&register&lmethod=facebook';
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
@@ -171,7 +171,7 @@ class login_facebook extends gen_class {
 			$me = $this->get_me();
 			$uid = $me['uid'];
 			$me = $me['me'];
-			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \'settings.php'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>'.$this->html->TextField('auth_account', '', $uid, 'hidden');
+			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>'.$this->html->TextField('auth_account', '', $uid, 'hidden');
 		} else {
 			$this->init_js();
 			
@@ -180,7 +180,7 @@ class login_facebook extends gen_class {
 				FB.login(function(response) {
 				   if (response.authResponse) {
 					 console.log('Welcome!  Fetching your information.... ');
-					 window.location.href='".$this->root_path."settings.php".$this->SID."&mode=addauthacc&lmethod=facebook';
+					 window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=facebook';
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }

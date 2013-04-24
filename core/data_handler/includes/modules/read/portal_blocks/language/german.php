@@ -25,6 +25,7 @@ $module_lang = array(
 	'name'					=> 'Name',
 	'usedby'				=> 'Verwendet von Layouts',
 	'wide_content'			=> 'Breiter Inhalt verwenden',
+	'templatevar'			=> 'Template-Variable',
 );
 
 ?>

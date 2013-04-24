@@ -44,6 +44,7 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 				'portal_block_wide_content'	=> array('wide_content', array('%block_id%'), array()),
 				'portal_block_usedby'		=>  array('usedby', array('%block_id%'), array()),
 				'portal_block_editicon' 	=> array('editicon', array('%block_id%'), array()),
+				'portal_block_templatevar' 	=> array('templatevar', array('%block_id%'), array()),
 		);
 
 		public function init(){
@@ -102,6 +103,10 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 		
 		public function get_editicon($intBlockID){
 			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;b='.$intBlockID.'"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="edit"/></a>';
+		}
+		
+		public function get_templatevar($intBlockID){
+			return '{PORTAL_BLOCK'.$intBlockID.'}';
 		}
 		
 	}//end class

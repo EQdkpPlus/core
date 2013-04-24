@@ -1354,48 +1354,56 @@ hr#system-readmore {
 
 /* ACP: admin menu - update available badge */
 .update_available {
-	background-color: #B94A48;
+	min-width:.5em;
+    height:1.3em;
+    padding:0 .375em;
+	font:bold 14px Arial;
+    line-height:16px;
+	color: white;
+	border-radius: 1em;
+	border: 2px solid white;
+	box-shadow: 0 .25em .4em rgba(0,0,0,.33);
+    background-clip:padding-box;
 	top: -8px;
 	left: 4px;
 	margin-right: 4px;
 	position: relative;
-	padding-right: 9px;
-	padding-left: 9px;
-	-webkit-border-radius: 9px;
-	-moz-border-radius: 9px;
-	border-radius: 9px;
-	color: #FFFFFF;
-    display: inline-block;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 20px;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    vertical-align: baseline;
-    white-space: nowrap;
-	box-shadow: 1px 1px 2px #000000;
+
+    background-color:#e91823;
+    background-image: linear-gradient(top, #F9BABD 0%, #ED3F48 50%, #E91822 50%, #C50104 100%);
+    background-image: -o-linear-gradient(top, #F9BABD 0%, #ED3F48 50%, #E91822 50%, #C50104 100%);
+    background-image: -ms-linear-gradient(top, #F9BABD 0%, #ED3F48 50%, #E91822 50%, #C50104 100%);
+    background-image: -moz-linear-gradient(top, #F9BABD 0%, #ED3F48 50%, #E91822 50%, #C50104 100%);
+    background-image: -webkit-linear-gradient(top, #F9BABD 0%, #ED3F48 50%, #E91822 50%, #C50104 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F9BABD), color-stop(0.5, #ED3F48), color-stop(0.5, #E91822), color-stop(1, #C50104));
 }
 
 /* ACP: admin menu - update available badge */
 .update_available_yellow {
-	background-color: #F89406;
+	min-width:.5em;
+    height:1.3em;
+    padding:0 .375em;
+	font:bold 14px Arial;
+    line-height:16px;
+	color: white;
+	border-radius: 1em;
+	border: 2px solid white;
+	box-shadow: 0 .25em .4em rgba(0,0,0,.33);
+    background-clip:padding-box;
 	top: -8px;
 	left: 4px;
 	margin-right: 4px;
 	position: relative;
-	padding-right: 9px;
-	padding-left: 9px;
-	-webkit-border-radius: 9px;
-	-moz-border-radius: 9px;
-	border-radius: 9px;
-	color: #FFFFFF;
-    display: inline-block;
-    font-size: 11px;
-    line-height: 20px;
-    font-weight: bold;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    vertical-align: baseline;
-    white-space: nowrap;
-	box-shadow: 1px 1px 2px #000000;
+	
+	background: #fff0bf; /* Old browsers */
+	background: -moz-linear-gradient(top,  #fff0bf 0%, #ffd651 50%, #ffcd1c 50%, #fcad1b 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff0bf), color-stop(50%,#ffd651), color-stop(50%,#ffcd1c), color-stop(100%,#fcad1b)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #fff0bf 0%,#ffd651 50%,#ffcd1c 50%,#fcad1b 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #fff0bf 0%,#ffd651 50%,#ffcd1c 50%,#fcad1b 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #fff0bf 0%,#ffd651 50%,#ffcd1c 50%,#fcad1b 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #fff0bf 0%,#ffd651 50%,#ffcd1c 50%,#fcad1b 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff0bf', endColorstr='#fcad1b',GradientType=0 ); /* IE6-9 */
+
 }
 
 /* general: superfish - global settings  */

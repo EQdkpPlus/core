@@ -1,5 +1,5 @@
 <!-- IF S_LICENCE -->
-<form action="{FORM_ACTION}" method="post">
+<form action="{ACTION}" method="post">
 	<div class="content">
 		<div class="contentHead">
 			<h2 class="pageTitle">{HEADER}</h2>
@@ -26,7 +26,7 @@ $(document).ready(function(){
 				minlength: 2,
 				remote: {
 					type: "POST",
-					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_USER}"
+					url: "{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}"
 				}
 			},
 			user_email: {
@@ -35,7 +35,7 @@ $(document).ready(function(){
 				minlength: 2,
 				remote: {
 					type: "POST",
-					url: "{VALIDTAELNK_PREFIX}register.php{SID}&ajax=1{AJAXEXTENSION_MAIL}"
+					url: "{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_MAIL}"
 				}
 			},<!-- IF S_DISPLAY_CATPCHA -->recaptcha_response_field: { required: true},<!-- ENDIF -->
 			new_user_password1: {
@@ -94,6 +94,14 @@ $(document).ready(function(){
 		<input type="hidden" name="user_id[]" value="{USER_ID}" />
 
 		<div id="account">
+			<!-- IF AUTH_REGISTER_BUTTON != "" -->
+			<fieldset class="settings">
+				<legend>{L_register_use_authmethods}</legend>
+				{AUTH_REGISTER_BUTTON}
+			</fieldset>
+			<br />
+			<!-- ENDIF -->
+		
 			<fieldset class="settings">
 				<legend>{L_adduser_tab_registration_information}</legend>
 				<img src="{EQDKP_ROOT_PATH}images/global/info.png" class="absmiddle" alt="Info" /> {L_required_field_note}
@@ -181,7 +189,6 @@ $(document).ready(function(){
 	<!-- ENDIF -->
 		<div class="contentFooter">
 			<button class="" type="submit" name="submit"><i class="icon-ok"></i>{L_submit}</button>
-			{AUTH_REGISTER_BUTTON}
 			<button class="" type="reset" name="reset"><i class="icon-trash" onclick="reset_validator_register();"></i>{L_reset}</button>
 		</div>
 	</div>
