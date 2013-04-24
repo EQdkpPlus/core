@@ -133,7 +133,7 @@ class portal extends gen_class {
 		
 		$editbutton = '';
 		if($this->isAdmin && $this->pdh->get('portal', 'settings', array($module_id))) {
-			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><img src="'.$this->root_path.'images/global/edit.png" alt="'.$this->user->lang('portalplugin_settings').'" /></span>';
+			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><img src="'.$this->server_path.'images/global/edit.png" alt="'.$this->user->lang('portalplugin_settings').'" /></span>';
 			$this->init_portalsettings();
 		}
 		$obj->set_id($module_id);
@@ -154,7 +154,7 @@ class portal extends gen_class {
 	public function init_portalsettings() {
 		if(!isset($this->portal_settings)) {
 			$this->portal_settings = true;
-			$this->jquery->Dialog('fe_portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs'=> 'location.reload(true);'));
+			$this->jquery->Dialog('fe_portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->server_path."admin/manage_portal.php".$this->SID."&simple_head=true&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs'=> 'location.reload(true);'));
 		}
 	}
 
