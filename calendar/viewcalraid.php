@@ -94,7 +94,11 @@ class viewcalraid extends page_generic {
 		
 		// check if the user is already in the database for that event and skip if already existing (avoid reload-cheating)
 		if($this->pdh->get('calendar_raids_attendees', 'in_db', array($this->url_id, $this->in->get('member_id', 0)))){
-			return false;
+
+			// the char is in the db, now, check if the status is unchanged
+			if($this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->in->get('member_id', 0))) == $this->in->get('signup_status', 4)){
+				return false;
+			}
 		}
 
 		// auto confirm if enabled
