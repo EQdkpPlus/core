@@ -94,6 +94,7 @@ class Manage_Article_Categories extends page_generic {
 		$intHideHeader = $this->in->get('hide_header', 0);
 		$intSortationType = $this->in->get('sortation_type', 0);
 		$intFeaturedOntop = $this->in->get('featured_ontop', 0);
+		$intHideOnRSS = $this->in->get('hide_on_rss', 0);
 		
 		if ($strName == "" ) {
 			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
@@ -102,9 +103,9 @@ class Manage_Article_Categories extends page_generic {
 		}
 		
 		if ($id){
-			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop));
+			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS));
 		} else {
-			$blnResult = $this->pdh->put('article_categories', 'add', array($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop));
+			$blnResult = $this->pdh->put('article_categories', 'add', array($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS));
 		}
 		
 		if ($blnResult){
@@ -209,6 +210,7 @@ class Manage_Article_Categories extends page_generic {
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, $this->pdh->get('article_categories', 'aggregation', array($id))),
 				'FEATURED_ONLY_CHECKED' => ($this->pdh->get('article_categories', 'featured_only', array($id))) ? 'checked="checked"' : '',
 				'SHOW_SSB_CHECKED' => ($this->pdh->get('article_categories', 'social_share_buttons', array($id))) ? 'checked="checked"' : '',
+				'HIDE_ON_RSS_CHECKED' => ($this->pdh->get('article_categories', 'hide_on_rss', array($id))) ? 'checked="checked"' : '',
 				'DD_PUBLISHED_STATE' => $this->html->Dropdown('article_published_state', array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), $this->pdh->get('article_categories', 'article_published_state', array($id))),
 				'NOTIFY_UNPUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'notify_on_onpublished_articles', array($id))) ? 'checked="checked"' : '',
 				'FEATURED_ONTOP_CHECKED' => ($this->pdh->get('article_categories', 'featured_ontop', array($id))) ? 'checked="checked"' : '',

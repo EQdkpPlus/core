@@ -781,10 +781,6 @@ class mmocms_settings extends page_generic {
 					),
 				),
 				'seo'	=> array(
-					'enable_seo'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'enable_seo',
-					),
 					'seo_remove_index'	=> array(
 						'fieldtype'		=> 'checkbox',
 						'name'			=> 'seo_remove_index',

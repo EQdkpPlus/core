@@ -53,7 +53,7 @@ if(!class_exists('pdh_w_article_categories')) {
 		
 		
 		
-		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop){
+		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strName);
 			} else {
@@ -87,6 +87,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				'hide_header'	=> $intHideHeader,
 				'sortation_type' => $intSortationType,
 				'featured_ontop' => $intFeaturedOntop,
+				'hide_on_rss'	=> $intHideOnRSS,
 			));
 			
 			$id = $this->db->insert_id();
@@ -104,7 +105,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			return false;
 		}
 		
-		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop){
+		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == "" || $strAlias != $this->pdh->get('article_categories', 'alias', array($id))){
 				$strAlias = $this->create_alias($strName);
 			} else {
@@ -137,6 +138,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				'hide_header'	=> $intHideHeader,
 				'sortation_type' => $intSortationType,
 				'featured_ontop' => $intFeaturedOntop,
+				'hide_on_rss'	=> $intHideOnRSS,
 			), $id);
 						
 			if ($blnResult){

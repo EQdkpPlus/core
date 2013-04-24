@@ -1530,7 +1530,6 @@ $lang = array(
 "inherited" => "Vererbt",
 "notify_on_unpublished_articles" => "Benachrichtigen, wenn nichtveröffentlichte Artikel vorhanden sind",
 "manage_articles" => "Artikel verwalten",
-"add_new_article" => "Artikel hinzufügen",
 "article_footcount" => "... %1\$s Artikel gefunden / %2\$s pro Seite",
 "selected_articles" => "Ausgewählte Artikel",
 "not_published" => "Unveröffentlicht",
@@ -1554,9 +1553,8 @@ $lang = array(
 "perm_upd" => "Bearbeiten",
 "perm_chs" => "Veröffentlichungsstatus ändern",
 "pk_tab_fs_seo" => "Suchmaschinenoptimierung",
-"enable_seo" => "Schöne URLs verwenden",
-"seo_remove_index" => "index.php aus schönen URLs entfernen",
-"seo_remove_index_help" => "Um diese Funktion verwenden zu können, musst Du in der .htaccess die SEO-Optionen einkommentieren. Siehe dazu unsere Wiki.",
+"seo_remove_index" => "index.php aus URLs entfernen",
+"seo_remove_index_help" => "Um diese Funktion verwenden zu können, musst Du in der .htaccess die SEO-Optionen einkommentieren und den Server-Pfad anpassen. Siehe dazu unsere Wiki.",
 "add_page_object" => "Seiten-Objekt einfügen",
 "page_object"	=> "Seiten-Objekt",
 "hide_header" => "Header ausblenden",
@@ -1568,6 +1566,7 @@ $lang = array(
 		"add_portal_block" => "Portal-Block hinzufügen",
 		"edit_portal_block"	=> "Portal-Block bearbeiten",
 		"wide_content"	=> "Breiten Inhalt bevorzugen",
+		"hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
  );
 
 ?>

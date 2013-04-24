@@ -84,7 +84,8 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					'notify_on_onpublished_articles' => intval($drow['notify_on_onpublished_articles']),
 					'hide_header'		=> intval($drow['hide_header']),
 					'sortation_type'	=> intval($drow['sortation_type']),
-					'featured_ontop'	=> intval($drow['featured_ontop']),				
+					'featured_ontop'	=> intval($drow['featured_ontop']),
+					'hide_on_rss'		=> intval($drow['hide_on_rss']),
 				);
 				$this->alias[$drow['alias']] = intval($drow['id']);
 			}
@@ -263,6 +264,13 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public function get_hide_header($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['hide_header'];
+			}
+			return false;
+		}
+		
+		public function get_hide_on_rss($intCategoryID){
+			if (isset($this->categories[$intCategoryID])){
+				return $this->categories[$intCategoryID]['hide_on_rss'];
 			}
 			return false;
 		}

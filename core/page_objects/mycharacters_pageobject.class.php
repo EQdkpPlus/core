@@ -103,8 +103,8 @@ class mycharacters_pageobject extends pageobject {
 
 		// Jquery stuff
 		$this->jquery->Dialog('DeleteChar', '', array('message'=> $this->user->lang('uc_del_warning'), 'custom_js'=> "$('#delete_id').val(editid);$('#charactersform').submit();", 'withid'=>"editid"), 'confirm');
-		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=>'addcharacter.php'.$this->SID.'&simple_head=true', 'width'=>'640', 'height'=>'600', 'onclose'=>$this->env->link.'characters.php'));
-		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=>"addcharacter.php".$this->SID."&simple_head=true&editid='+editid+'", 'width'=>'640', 'height'=>'600', 'onclose'=>$this->env->link.'characters.php'));
+		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID.'&simple_head=true', 'width'=>'640', 'height'=>'600', 'onclose'=> $this->controller_path.'MyCharacters/'.$this->SID));
+		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=>$this->controller_path.'AddCharacter/'.$this->SID."&simple_head=true&editid='+editid+'", 'width'=>'640', 'height'=>'600', 'onclose'=>$this->controller_path.'AddCharacter/'.$this->SID));
 
 		// The javascript for the mainchar change
 		$this->tpl->add_js("
@@ -124,13 +124,13 @@ class mycharacters_pageobject extends pageobject {
 
 		// The Importer things..
 		if($this->game->get_importAuth('u_member_add', 'char_import')){
-			$this->jquery->Dialog('AddCharArmory', $this->user->lang('uc_ext_import_sh'), array('url'=>$this->game->get_importers('char_import', true).$this->SID, 'width'=>'600', 'height'=>'300', 'onclose'=>$this->env->link.'characters.php'.$this->SID));
+			$this->jquery->Dialog('AddCharArmory', $this->user->lang('uc_ext_import_sh'), array('url'=>$this->game->get_importers('char_import', true).$this->SID, 'width'=>'600', 'height'=>'300', 'onclose'=>$this->controller_path.'AddCharacter/'.$this->SID));
 		}
 		if($this->game->get_importAuth('u_member_view', 'char_update')){
-			$this->jquery->Dialog('UpdateChar', $this->user->lang('uc_ext_import_sh'), array('url'=>$this->game->get_importers('char_update', true).$this->SID."&member_id='+memberid+'", 'width'=>'600', 'height'=>'300', 'onclose'=>$this->env->link.'characters.php'.$this->SID, 'withid'=>'memberid'));
+			$this->jquery->Dialog('UpdateChar', $this->user->lang('uc_ext_import_sh'), array('url'=>$this->game->get_importers('char_update', true).$this->SID."&member_id='+memberid+'", 'width'=>'600', 'height'=>'300', 'onclose'=>$this->controller_path.'AddCharacter/'.$this->SID, 'withid'=>'memberid'));
 		}
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			$this->jquery->Dialog('MassUpdateChars', $this->user->lang('uc_cache_update'), array('url'=>$this->game->get_importers('char_mupdate', true).$this->SID, 'width'=>'600', 'height'=>'450', 'onclose'=>$this->env->link.'characters.php'.$this->SID));
+			$this->jquery->Dialog('MassUpdateChars', $this->user->lang('uc_cache_update'), array('url'=>$this->game->get_importers('char_mupdate', true).$this->SID, 'width'=>'600', 'height'=>'450', 'onclose'=>$this->controller_path.'AddCharacter/'.$this->SID));
 		}
 
 		$show_no_conn_info = false;

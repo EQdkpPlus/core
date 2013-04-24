@@ -261,8 +261,7 @@ class controller extends page_generic {
 				'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
 				'COMMENTS_COUNTER'	=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 				'S_COMMENTS'	=> ($arrArticle['comments']) ? true : false,
-				'S_SHOW_ARTICLE_HEADER' => true,
-				'S_SHOW_ARTICLE_SUBHEADER' => true,
+				'S_HIDE_HEADER' => ($arrArticle['hide_header']),
 			));
 
 			//Comments
@@ -335,21 +334,35 @@ class controller extends page_generic {
 				
 				$strText = $this->bbcode->parse_shorttags($arrContent[0]);
 				
-					$arrToolbarItems = array(
-						array(
-							'icon'	=> 'icon-plus',
-							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a=0&c='.$intCategoryID.'\';"',
-						),
-						array(
-							'icon'	=> 'icon-edit',
-							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a='.$intArticleID.'&c='.$intCategoryID.'\';"',
-						),
-						array(
-							'icon'	=> 'icon-list',
-							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$intCategoryID.'\';"',
-						),
+				$arrToolbarItems = array();
+				if ($arrPermissions['create']) {
+					$arrToolbarItems[] = array(
+						'icon'	=> 'icon-plus',
+						'js'	=> 'onclick="editArticle(0)"',
+						'title'	=> $this->user->lang('add_new_article'),
+					); 
+				}
+				if ($arrPermissions['update']) {
+					$arrToolbarItems[] = array(
+						'icon'	=> 'icon-edit',
+						'js'	=> 'onclick="editArticle('.$intArticleID.')"',
+						'title'	=> $this->user->lang('edit_article'),
+					); 
+				}				
+				if ($arrPermissions['delete']) {
+					$arrToolbarItems[] = array(
+						'icon'	=> 'icon-trash',
+						'js'	=> 'onclick="deleteArticle('.$intArticleID.')"',
 					);
-					$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
+				}
+				if ($arrPermissions['change_state']) {
+					$arrToolbarItems[] = array(
+						'icon'	=> 'icon-eye-close',
+						'js'	=> 'onclick="window.location=\''.$this->controller_path.$strPath.'&mode=unpublish&a='.$intArticleID.'\'"',
+					);
+				}
+
+				$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
 				
 				$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
 				$intCommentsCount = $this->comments->Count();

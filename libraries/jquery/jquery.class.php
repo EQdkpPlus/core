@@ -548,13 +548,13 @@ if (!class_exists("jquery")) {
 							if($admnsubmenu) {
 								// build the icons
 								$icon	= '<i class="icon-asterisk icon-large"></i>';
-								if(isset($row['icon']) && end(explode(".", $row['icon'])) == 'png'){
+								if(isset($row['icon']) && pathinfo($row['icon'], PATHINFO_EXTENSION) == 'png'){
 									$icon	= '<img src="'.$mnuimagepth.$row['icon'].'" alt="img" />';
 								}elseif(isset($row['icon'])){
 									$icon	= '<i class="'.$row['icon'].'"></i>';
 								}
 
-								$plugin_header_row = '<li><a href="#">'.$icon.' '.$test.((isset($row['name'])) ? $row['name'] : 'UNKNOWN').'</a>
+								$plugin_header_row = '<li><a href="#">'.$icon.' '.((isset($row['name'])) ? $row['name'] : 'UNKNOWN').'</a>
 													<ul>';
 								// Submenu
 								$plugin_sub_row = '';
@@ -567,7 +567,7 @@ if (!class_exists("jquery")) {
 
 											if ($row2['check'] == '' || ((is_array($row2['check'])) ? $this->user->check_auths($row2['check'][1], $row2['check'][0], false) : $this->user->check_auth($row2['check'], false))){
 												$subsub_icon	= '';
-												if(isset($row2['icon']) && end(explode(".", $row2['icon'])) == 'png'){
+												if(isset($row2['icon']) && pathinfo($row2['icon'], PATHINFO_EXTENSION) == 'png'){
 													$subsub_icon	= '<img src="'.$mnuimagepth.$row2['icon'].'" alt="img" />';
 												}elseif(isset($row['icon'])){
 													$subsub_icon	= '<i class="'.$row2['icon'].'"></i>';
@@ -581,8 +581,8 @@ if (!class_exists("jquery")) {
 								if(strlen($plugin_sub_row) > 0) $sub_rows .= $plugin_header_row.$plugin_sub_row.'</ul></li>';
 							}else{
 								if (($row['check'] == '' || ((is_array($row['check'])) ? $this->user->check_auths($row['check'][1], $row['check'][0], false) : $this->user->check_auth($row['check'], false))) && (!isset($row['check2']) || $row['check2'] == true)){
-									$subicon	= ($row['img']) ? '<img src="'.$mnuimagepth.$row['img'].'" alt="img" />' : '';
-									$subicon	= ($row['icon']) ? '<i class="'.$row['icon'].'"></i>' : $subicon;
+									$subicon	= (isset($row['img']) && strlen($row['img'])) ? '<img src="'.$mnuimagepth.$row['img'].'" alt="img" />' : '';
+									$subicon	= (isset($row['icon']) && strlen($row['icon'])) ? '<i class="'.$row['icon'].'"></i>' : $subicon;
 									$sub_rows .= '<li><a href="'.$this->root_path.$row['link'].'">';
 									$sub_rows .= $subicon.''.$row['text'].'</a></li>';
 								}
@@ -1389,7 +1389,7 @@ if (!class_exists("jquery")) {
 				if (isset($value['check'])){
 					if (!$this->user->check_auth($value['check'], false)) continue;
 				}
-				$strItems .= '<a href="'.((isset($value['href'])) ? $value['href'] : '#').'" '.((isset($value['js'])) ? $value['js'] : '').'><i class="'.$value['icon'].'"></i></a>';
+				$strItems .= '<a href="'.((isset($value['href'])) ? $value['href'] : '#').'" '.((isset($value['js'])) ? $value['js'] : '').' title="'.((isset($value['title'])) ? $value['title'] : '').'"><i class="'.$value['icon'].'"></i></a>';
 				$intItems++;
 			}
 			

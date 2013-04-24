@@ -41,7 +41,7 @@ if(!class_exists('pdh_w_articles')) {
 			$this->pdh->enqueue_hook('articles_update');
 		}
 		
-		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo){
+		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strTitle);
 			} else {
@@ -84,6 +84,7 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited'		=> $this->time->time,
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
+				'hide_header'		=> $intHideHeader,
 			));
 			
 			$id = $this->db->insert_id();
@@ -108,7 +109,7 @@ if(!class_exists('pdh_w_articles')) {
 			return false;
 		}
 		
-		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo){
+		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == "" || $strAlias != $this->pdh->get('articles', 'alias', array($id))){
 				$strAlias = $this->create_alias($strTitle);
 			} else {
@@ -148,6 +149,7 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited'		=> $this->time->time,
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
+				'hide_header'		=> $intHideHeader,
 			), $id);
 						
 			if ($blnResult){

@@ -89,6 +89,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 					'last_edited'	=> (int)$drow['last_edited'],
 					'last_edited_user'	=> (int)$drow['last_edited_user'],
 					'page_objects'		=> $drow['page_objects'],
+					'hide_header'	=> (int)$drow['hide_header'],
 				);
 				
 				if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
@@ -323,6 +324,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public function get_page_objects($intArticleID){
 			if (isset($this->articles[$intArticleID])){
 				return unserialize($this->articles[$intArticleID]['page_objects']);
+			}
+			return false;
+		}
+		
+		public function get_hide_header($intArticleID){
+			if (isset($this->articles[$intArticleID])){
+				return $this->articles[$intArticleID]['hide_header'];
 			}
 			return false;
 		}

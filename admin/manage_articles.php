@@ -131,6 +131,7 @@ class Manage_Articles extends page_generic {
 		$intUserID = $this->in->get('user_id', 0);
 		$intComments = $this->in->get('comments', 0);
 		$intVotes = $this->in->get('votes', 0);
+		$intHideHeader = $this->in->get('hide_header', 0);
 		
 		$schluesselwoerter = preg_split("/[\s,]+/", $strTags);
 		$arrTags = array();
@@ -151,9 +152,9 @@ class Manage_Articles extends page_generic {
 		}
 		
 		if ($id){
-			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo));
+			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		} else {
-			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo));
+			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		}
 		
 		if ($blnResult){
@@ -225,6 +226,7 @@ class Manage_Articles extends page_generic {
 				'FEATURED_CHECKED' => ($this->pdh->get('articles', 'featured', array($id))) ? 'checked="checked"' : '',
 				'COMMENTS_CHECKED' => ($this->pdh->get('articles', 'comments', array($id))) ? 'checked="checked"' : '',
 				'VOTES_CHECKED' 	=> ($this->pdh->get('articles', 'votes', array($id))) ? 'checked="checked"' : '',
+				'HIDE_HEADER_CHECKED' => ($this->pdh->get('articles', 'hide_header', array($id))) ? 'checked="checked"' : '',
 				'DD_USER' 			=> $this->html->Dropdown('user_id',  $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->pdh->get('articles', 'user_id', array($id))),
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),

@@ -482,6 +482,7 @@ CREATE TABLE `__articles` (
 	`last_edited` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`last_edited_user` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`page_objects` TEXT NULL,
+	`hide_header` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -507,6 +508,7 @@ CREATE TABLE `__article_categories` (
 	`hide_header` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`sortation_type` INT(3) UNSIGNED NOT NULL DEFAULT '1',
 	`featured_ontop` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`hide_on_rss` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

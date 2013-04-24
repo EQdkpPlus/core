@@ -33,6 +33,7 @@ if(!class_exists('routing')){
 			'search'		=> 'search',
 			'register'		=> 'register',
 			'wrapper'		=> 'wrapper',
+			'addcharacter'	=> 'addcharacter',
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
@@ -50,7 +51,7 @@ if(!class_exists('routing')){
 			}
 			return false;
 		}
-		
+		//ToDo: Finish
 		public function buildRoute($strPath, $strPageObject, $intID=false, $strIDParam=false, $strText=false){
 			$strRoute = $this->server_path;
 			if (!intval($this->config->get('seo_remove_index'))) $strRoute .= 'index.php/';
@@ -58,6 +59,7 @@ if(!class_exists('routing')){
 			
 		}
 		
+		//ToDo: Finish
 		public function buildRoutePrefix($intID, $strText, $intIDParam=false){
 			
 		}
