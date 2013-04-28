@@ -34,6 +34,7 @@ if(!class_exists('routing')){
 			'register'		=> 'register',
 			'wrapper'		=> 'wrapper',
 			'addcharacter'	=> 'addcharacter',
+			'editarticle'	=> 'editarticle',
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){

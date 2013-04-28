@@ -47,12 +47,16 @@ class Manage_Articles extends page_generic {
 	
 	public function delete_previewimage(){
 		$id = $this->in->get('a', 0);
-		if ($id) $this->pdh->put('articles', 'delete_previewimage', array($id));
+		if ($id) {
+			$this->pdh->put('articles', 'delete_previewimage', array($id));
+			$this->pdh->process_hook_queue();
+		}
 	}
 	
 	public function set_unpublished(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$this->pdh->put('articles', 'set_unpublished', array($this->in->getArray('selected_ids', 'int')));
+			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		}
 		
@@ -61,6 +65,7 @@ class Manage_Articles extends page_generic {
 	public function set_published(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$this->pdh->put('articles', 'set_published', array($this->in->getArray('selected_ids', 'int')));
+			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		}
 		
@@ -70,6 +75,7 @@ class Manage_Articles extends page_generic {
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$intCategory = $this->in->get('new_category',0);
 			$this->pdh->put('articles', 'change_category', array($this->in->getArray('selected_ids', 'int'), $intCategory));
+			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		}
 	}

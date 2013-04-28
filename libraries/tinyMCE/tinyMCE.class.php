@@ -43,7 +43,7 @@ class tinyMCE extends gen_class {
 			$this->tpl->add_js('
 				$(".mceEditor_bbcode").tinymce({
 					// Location of TinyMCE script
-					script_url : "'.$this->root_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
+					script_url : "'.$this->server_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
 
 					// General options
 					plugins : "bbcode,paste",
@@ -88,7 +88,7 @@ class tinyMCE extends gen_class {
 			$this->tpl->add_js('
 				$(".mceEditor").tinymce({
 					// Location of TinyMCE script
-					script_url : "'.$this->root_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
+					script_url : "'.$this->server_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					theme : "advanced",
@@ -128,7 +128,7 @@ class tinyMCE extends gen_class {
 			', 'docready');
 			$this->tpl->add_js(
 			'function elFinderBrowser (field_name, url, type, win) {
-            var elfinder_url = "'.$this->root_path.'libraries/elfinder/elfinder.admin.php'.$this->SID.'";    // use an absolute path!
+            var elfinder_url = "'.$this->server_path.'libraries/elfinder/elfinder.admin.php'.$this->SID.'";    // use an absolute path!
             var cmsURL = elfinder_url;    // script URL - use an absolute path!
             if (cmsURL.indexOf("?") < 0) {
                 //add the type as the only query parameter

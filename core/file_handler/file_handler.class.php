@@ -62,12 +62,38 @@ if (!class_exists("file_handler")) {
 			return $this->fhandler->FileDate($filename, $plugin);
 		}
 
-		public function FilePath($path, $plugin=false, $blnCreateFile=true){
-			return $this->fhandler->FilePath($path, $plugin, $blnCreateFile);
+		public function FilePath($path, $plugin=false, $blnCreateFile=true, $linkType = 'relative'){
+			$strFilePath = $this->fhandler->FilePath($path, $plugin, $blnCreateFile);
+			
+			switch ($linkType){
+				case 'relative': return $strFilePath;
+				break;
+				
+				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($strFilePath);
+				break;
+				
+				case 'serverpath' : return $this->server-path.$this->remove_rootpath($strFilePath);
+				break;
+				
+				default: return $this->remove_rootpath($strFilePath);
+			}
 		}
 
-		public function FolderPath($foldername, $plugin=false, $blnPlain = false){
-			return $this->fhandler->FolderPath($foldername, $plugin, $blnPlain);
+		public function FolderPath($foldername, $plugin=false, $linkType = 'relative'){
+			$strFilePath = $this->fhandler->FolderPath($foldername, $plugin, false);
+			
+			switch ($linkType){
+				case 'relative': return $strFilePath;
+				break;
+				
+				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($strFilePath);
+				break;
+				
+				case 'serverpath' : return $this->server-path.$this->remove_rootpath($strFilePath);
+				break;
+				
+				default: return $this->remove_rootpath($strFilePath);
+			}
 		}
 
 		public function FileSize($file, $plugin=false){
@@ -93,10 +119,13 @@ if (!class_exists("file_handler")) {
 			}
 			
 			switch ($linkType){
-				case 'relative': return $this->root_path.$this->remove_rootpath($link);
+				case 'relative': return $link;
 				break;
 				
 				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($link);
+				break;
+				
+				case 'serverpath': return $this->server_path.$this->remove_rootpath($link);
 				break;
 				
 				default: return $this->remove_rootpath($link);

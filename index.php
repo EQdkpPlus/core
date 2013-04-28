@@ -26,9 +26,45 @@ class controller extends page_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
-	public function __construct() {	
-		parent::__construct(false);
-		$this->display();
+	public function __construct() {
+		$handler = array(
+			'delete' 	=> array('process' => 'delete', 'csrf' => true),
+			'unpublish'	=> array('process' => 'unpublish', 'csrf' => true),
+		);
+		parent::__construct(false, $handler, array());
+
+		$this->process();
+	}
+	
+	public function delete(){
+		$intArticleID = $this->in->get('aid', 0);
+		$intCategoryID = $this->pdh->get('articles','category', array($intArticleID));
+		if ($intCategoryID){
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+			if ($arrPermissions && $arrPermissions['delete']){
+				$strArticleTitle = $this->pdh->get('articles', 'title', array($intArticleID));
+				$this->pdh->put('articles', 'delete', array($intArticleID));
+				$this->core->message($strArticleTitle, $this->user->lang('del_suc'), 'green');
+				
+				$this->pdh->process_hook_queue();
+			}			
+		}
+	}
+	
+	public function unpublish(){
+		$intArticleID = $this->in->get('aid', 0);
+		$intCategoryID = $this->pdh->get('articles','category', array($intArticleID));
+		if ($intCategoryID){
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+			if ($arrPermissions && $arrPermissions['change_state']){
+				$strArticleTitle = $this->pdh->get('articles', 'title', array($intArticleID));
+				$this->pdh->put('articles', 'set_unpublished', array(array($intArticleID)));
+
+				$this->core->message($strArticleTitle, $this->user->lang('article_unpublish_success'), 'green');
+				
+				$this->pdh->process_hook_queue();
+			}			
+		}
 	}
 	
 	public function display(){
@@ -105,19 +141,20 @@ class controller extends page_generic {
 			if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] < $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] > $this->time->time)) $intPublished = false;
 			
 			//Check Category Permission
-			$arrCategory = $this->pdh->get('article_categories', 'data', array($arrArticle['category']));
+			$intCategoryID = $arrArticle['category'];
+			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			
 			//Check Start to/start from
 			if (!$intPublished || !$arrCategory['published']) message_die('Dieser Artikel ist nicht veröffentlicht.');
 			
 			$strPath = $this->pdh->get('articles', 'path', array($intArticleID));
-			registry::add_const('page_path', $strPath);
+			registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
 			
 			//User Memberships
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
 			
 			//Category Permissions
-			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));		
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
 			if (!$arrPermissions['read']) message_die('Keine Berechtigung, diesen Artikel anzusehen.', $this->user->lang('noauth_default_title'), 'access_denied', true);
 			
 			//Page divisions
@@ -159,20 +196,22 @@ class controller extends page_generic {
 
 			//Next and Previous Article
 			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($arrArticle['category']));
-			$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
-			$arrFlippedArticles = array_flip($arrSortedArticleIDs);
-			$intRecentArticlePosition = $arrFlippedArticles[$intArticleID];
+			if (count($arrArticleIDs)){
+				$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
+				$arrFlippedArticles = array_flip($arrSortedArticleIDs);
+				$intRecentArticlePosition = $arrFlippedArticles[$intArticleID];
 
-			$prevID = (isset($arrSortedArticleIDs[$intRecentArticlePosition-1])) ? $arrSortedArticleIDs[$intRecentArticlePosition-1] : false;
-			$nextID = (isset($arrSortedArticleIDs[$intRecentArticlePosition+1])) ? $arrSortedArticleIDs[$intRecentArticlePosition+1] : false;
-			$this->tpl->assign_vars(array(
-				'S_NEXT_ARTICLE'	=> ($nextID !== false) ? true : false,
-				'S_PREV_ARTICLE'	=> ($prevID !== false) ? true : false,
-				'U_NEXT_ARTICLE'	=> ($nextID) ? $this->server_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
-				'U_PREV_ARTICLE'	=> ($prevID) ? $this->server_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
-				'NEXT_TITLE'		=> ($nextID) ? $this->pdh->get('articles', 'title', array($nextID)) : '',
-				'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
-			));
+				$prevID = (isset($arrSortedArticleIDs[$intRecentArticlePosition-1])) ? $arrSortedArticleIDs[$intRecentArticlePosition-1] : false;
+				$nextID = (isset($arrSortedArticleIDs[$intRecentArticlePosition+1])) ? $arrSortedArticleIDs[$intRecentArticlePosition+1] : false;
+				$this->tpl->assign_vars(array(
+					'S_NEXT_ARTICLE'	=> ($nextID !== false) ? true : false,
+					'S_PREV_ARTICLE'	=> ($prevID !== false) ? true : false,
+					'U_NEXT_ARTICLE'	=> ($nextID) ? $this->server_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
+					'U_PREV_ARTICLE'	=> ($prevID) ? $this->server_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
+					'NEXT_TITLE'		=> ($nextID) ? $this->pdh->get('articles', 'title', array($nextID)) : '',
+					'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
+				));
+			}
 		
 			
 			$userlink = $this->pdh->geth('articles',  'user_id', array($intArticleID));
@@ -190,21 +229,36 @@ class controller extends page_generic {
 				'10'	=> '10',
 			);
 		
-		$arrToolbarItems = array(
-					
-			array(
+		$arrToolbarItems = array();
+		if ($arrPermissions['create']) {
+			$arrToolbarItems[] = array(
 				'icon'	=> 'icon-plus',
-				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a=0&c='.$arrArticle['category'].'\';"',
-			),
-			array(
+				'js'	=> 'onclick="editArticle(0)"',
+				'title'	=> $this->user->lang('add_new_article'),
+			); 
+		}
+		if ($arrPermissions['update']) {
+			$arrToolbarItems[] = array(
 				'icon'	=> 'icon-edit',
-				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a='.$intArticleID.'&c='.$arrArticle['category'].'\';"',
-			),
-			array(
-				'icon'	=> 'icon-list',
-				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$arrArticle['category'].'\';"',
-			),
-		);
+				'js'	=> 'onclick="editArticle('.$intArticleID.')"',
+				'title'	=> $this->user->lang('edit_article'),
+			); 
+		}				
+		if ($arrPermissions['delete']) {
+			$arrToolbarItems[] = array(
+				'icon'	=> 'icon-trash',
+				'js'	=> 'onclick="deleteArticle('.$intArticleID.')"',
+				'title'	=> $this->user->lang('delete_article'),
+			);
+		}
+		if ($arrPermissions['change_state']) {
+			$arrToolbarItems[] = array(
+				'icon'	=> 'icon-eye-close',
+				'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
+				'title'	=> $this->user->lang('article_unpublish'),
+			);
+		}
+				
 		$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
 		
 		$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
@@ -243,6 +297,20 @@ class controller extends page_generic {
 				}
 				
 			}
+		}
+		
+		if ($arrPermissions['create'] || $arrPermissions['update']) {
+			$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path));
+		}
+		
+		if ($arrPermissions['delete'] || $arrPermissions['change_state']){
+			$this->jquery->dialog('deleteArticle', $this->user->lang('delete_article'), array('custom_js' => 'deleteArticleSubmit(aid);', 'confirm', 'withid' => 'aid', 'message' => $this->user->lang('delete_article_confirm')), 'confirm');
+			$this->tpl->add_js(
+				"function deleteArticleSubmit(aid){
+					window.location='".$this->controller_path.$this->page_path.$this->SID.'&delete&link_hash='.$this->CSRFGetToken('delete')."&aid='+aid;
+				}"
+			);
+
 		}
 
 			$this->tpl->assign_vars(array(
@@ -319,7 +387,7 @@ class controller extends page_generic {
 			$intStart = $this->in->get('start', 0);
 			$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
 			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
-			registry::add_const('page_path', $strPath);
+			registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
 			
 			//Articles to template
 			foreach($arrLimitedIDs as $intArticleID){
@@ -353,17 +421,21 @@ class controller extends page_generic {
 					$arrToolbarItems[] = array(
 						'icon'	=> 'icon-trash',
 						'js'	=> 'onclick="deleteArticle('.$intArticleID.')"',
+						'title'	=> $this->user->lang('delete_article'),
 					);
 				}
 				if ($arrPermissions['change_state']) {
 					$arrToolbarItems[] = array(
 						'icon'	=> 'icon-eye-close',
-						'js'	=> 'onclick="window.location=\''.$this->controller_path.$strPath.'&mode=unpublish&a='.$intArticleID.'\'"',
+						'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
+						'title'	=> $this->user->lang('article_unpublish'),
 					);
 				}
-
-				$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
 				
+				if ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']){
+					$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
+				}
+					
 				$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
 				$intCommentsCount = $this->comments->Count();
 				//Tags
@@ -419,32 +491,51 @@ class controller extends page_generic {
 			}
 			
 			
-			$arrToolbarItems = array(
-						
-				array(
+			$arrToolbarItems = array();
+			if ($arrPermissions['create']) {
+				$arrToolbarItems[] = array(
 					'icon'	=> 'icon-plus',
-					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&a=0&c='.$intCategoryID.'\';"',
-				),
-				array(
+					'js'	=> 'onclick="editArticle(0)"',
+					'title'	=> $this->user->lang('add_new_article'),
+				); 
+			}
+			if ($this->user->check_auth('a_articles_man', false)) {
+				$arrToolbarItems[] = array(
 					'icon'	=> 'icon-edit',
 					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_article_categories.php".$this->SID.'&c='.$intCategoryID.'\';"',
-				),
-				array(
+					'title'	=> $this->user->lang('edit_article_category'),
+				);
+				$arrToolbarItems[] = array(
 					'icon'	=> 'icon-list',
 					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$intCategoryID.'\';"',
-				),
-			);
+					'title'	=> $this->user->lang('list_articles'),
+				);
+				
+			}
+
 			$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
 			
+			if ($arrPermissions['create'] || $arrPermissions['update']) {
+				$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path));
+			}
+			if ($arrPermissions['delete'] || $arrPermissions['change_state']){
+				$this->jquery->dialog('deleteArticle', $this->user->lang('delete_article'), array('custom_js' => 'deleteArticleSubmit(aid);', 'confirm', 'withid' => 'aid', 'message' => $this->user->lang('delete_article_confirm')), 'confirm');
+				$this->tpl->add_js(
+					"function deleteArticleSubmit(aid){
+						window.location='".$this->controller_path.$this->page_path.$this->SID.'&delete&link_hash='.$this->CSRFGetToken('delete')."&aid='+aid;
+					}"
+				);
+			}
+			
 			$this->tpl->assign_vars(array(
-				'PAGINATION' 	  => generate_pagination($this->server_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
+				'PAGINATION' 	  		=> generate_pagination($this->server_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
 				'CATEGORY_DESCRIPTION' => $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
 				'CATEGORY_NAME'		   => $arrCategory['name'],
-				'PERMALINK'		  => $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
-				'BREADCRUMB'	  => ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : '',
-				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
+				'PERMALINK'		  	=> $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
+				'BREADCRUMB'	  	=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : '',
+				'ARTICLE_TOOLBAR' 	=> $jqToolbar['id'],
 				'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
-				'LIST_TYPE'		  => $arrCategory['list_type'],
+				'LIST_TYPE'		  	=> $arrCategory['list_type'],
 				'S_HIDE_HEADER'		=> $arrCategory['hide_header'],
 			));
 			

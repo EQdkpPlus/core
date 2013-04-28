@@ -34,7 +34,7 @@ if (!class_exists("jquery")) {
 		* Construct of the jquery class
 		*/
 		public function __construct(){
-			$this->path			= $this->root_path."libraries/jquery/";
+			$this->path			= $this->server_path."libraries/jquery/";
 			
 			// Load the core css & js files
 			$minified_or_not	= (DEBUG) ? '' : '.min';
@@ -42,7 +42,7 @@ if (!class_exists("jquery")) {
 			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js');
 
 			// add the root_path to javascript
-			$this->tpl->add_js("var mmocms_root_path = '".$this->root_path."';");
+			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';");
 			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';");
 
 			// jquery language file
@@ -70,14 +70,14 @@ if (!class_exists("jquery")) {
 
 					<div id="error" class="notify_error">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->root_path.'images/global/false.png" alt="error"/></div>
+						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->server_path.'images/global/false.png" alt="error"/></div>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>
 
 					<div id="success" class="notify_success">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->root_path.'images/global/ok.png" alt="success"/></div>
+						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->server_path.'images/global/ok.png" alt="success"/></div>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>
@@ -1326,6 +1326,7 @@ if (!class_exists("jquery")) {
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
 			
 			$imgprevheight	= (isset($options['prevheight'])) ? $options['prevheight'] : '120';
+			$imgpreview = str_replace($this->root_path, $this->server_path, $imgpreview);
 			
 			// the output
 			$out	= '<div id="image_'.$inputid.'" class="imageuploader_image">';
@@ -1355,7 +1356,7 @@ if (!class_exists("jquery")) {
 			if (!isset($this->file_browser[$type])){
 				$this->tpl->add_js("function elfinder_".$type."(fieldid){
 					jQuery.FrameDialog.create({
-						url: '".$this->root_path."libraries/elfinder/elfinder.".$type.".php".$this->SID."&type=".$filter."&field='+fieldid,
+						url: '".$this->server_path."libraries/elfinder/elfinder.".$type.".php".$this->SID."&type=".$filter."&field='+fieldid,
 						title: '".$this->user->lang('imageuploader_wintitle')."',
 						height: 500,
 						width: 840,

@@ -32,12 +32,12 @@ if(!class_exists('pdh_w_articles')) {
 		}
 
 		public function delete($id) {
-			$this->db->query("DELETE FROM __articles WHERE id = '".$this->db->escape($id)."' AND system = ''");
+			$this->db->query("DELETE FROM __articles WHERE id = '".$this->db->escape($id)."'");
 			$this->pdh->enqueue_hook('articles_update');
 		}
 		
 		public function delete_category($intCategoryID){
-			$this->db->query("DELETE FROM __articles WHERE category = '".$this->db->escape($intCategoryID)."' AND system = '' ");
+			$this->db->query("DELETE FROM __articles WHERE category = '".$this->db->escape($intCategoryID)."'");
 			$this->pdh->enqueue_hook('articles_update');
 		}
 		
