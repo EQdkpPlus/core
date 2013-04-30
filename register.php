@@ -240,7 +240,7 @@ class Register extends page_generic {
 
 		$this->tpl->add_js('document.lost_password.username.focus();', 'docready');
 		$this->tpl->assign_vars(array(
-			'BUTTON_NAME'			=> 'resend_validation',
+			'BUTTON_NAME'			=> 'resend_activation',
 			'S_RESEND_ACTIVATION'	=> true,
 		));
 
