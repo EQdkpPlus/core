@@ -568,3 +568,23 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
 .sortable li.mjs-nestedSortable-expanded > div > .disclose > span:before {
 	content: '- ';
 }
+
+.mce-btn button {
+	border-radius: 0px !important;
+	box-shadow: none !important;
+	background: none !important;	
+}
+
+.mce-btn button:hover {
+	color: #333333 !important;
+}
+
+i.mce-i-gift:before{
+	content:"\f06b";
+	font-family:'FontAwesome';
+}
+
+i.mce-i-zoom-in:before{
+	content:"\f00e";
+	font-family:'FontAwesome';
+}

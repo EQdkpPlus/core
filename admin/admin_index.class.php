@@ -413,7 +413,7 @@ class admin_index extends gen_class {
 			}
 		} else { //If there are no links, point to the favorits-management
 			$admin_menu['favorits'][2] = array(
-				'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=4',
+				'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
 				'text'	=> $this->user->lang('manage_menus'),
 				'check'	=> 'a_config_man',
 				'icon'	=> 'icon-reorder icon-large',

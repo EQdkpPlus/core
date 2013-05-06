@@ -32,7 +32,7 @@ class tinyMCE extends gen_class {
 	
 	public function __construct($rootpath=false, $nojsinclude=false){
 		if($rootpath) $this->root_path = $rootpath;
-		if(!$nojsinclude) $this->tpl->js_file($this->root_path.'libraries/tinyMCE/tiny_mce/jquery.tinymce.js');
+		if(!$nojsinclude) $this->tpl->js_file($this->root_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
 		$this->language	= $this->user->lang('XML_LANG');
 	}
 
@@ -43,34 +43,28 @@ class tinyMCE extends gen_class {
 			$this->tpl->add_js('
 				$(".mceEditor_bbcode").tinymce({
 					// Location of TinyMCE script
-					script_url : "'.$this->server_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
+					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
 
 					// General options
-					plugins : "bbcode,paste",
+					plugins: [
+        "bbcode autolink link image charmap",
+        "searchreplace visualblocks code fullscreen",
+        "media table contextmenu paste textcolor paste"
+    ],
 					//language : "'.$this->language.'",
-					theme : "advanced",
-					skin: "cirkuit",
+					theme : "modern",
 
 					// Theme options
-					theme_advanced_buttons1 : "bold,italic,underline,undo,redo,link,unlink,image,forecolor,styleselect,removeformat,cleanup,code",
-					theme_advanced_buttons2 : "",
-					theme_advanced_buttons3 : "",
-					theme_advanced_toolbar_location : "top",
-					theme_advanced_toolbar_align : "left",
-					theme_advanced_styles : "Code=codeStyle;Quote=quoteStyle",
+					
 					entity_encoding : "raw",
 					add_unload_trigger : false,
 					remove_linebreaks : false,
 					inline_styles : false,
 					convert_fonts_to_spans : false,
-					//Keeps Paste Text feature active until user deselects the Paste as Text button
-					paste_text_sticky : true,
-					//select pasteAsPlainText on startup
-					setup : function(ed) {
-						ed.onInit.add(function(ed) {
-							ed.pasteAsPlainText = true;
-						});
-					}
+					force_p_newlines : false,
+					menubar: false,
+					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor | quote image link",
+					statusbar : false,
 				});
 			', 'docready');
 			$this->trigger['bbcode'] = true;
@@ -80,81 +74,71 @@ class tinyMCE extends gen_class {
 	public function editor_normal($settings=false){
 		if(!$this->trigger['normal']){
 			$this->language	= (isset($settings['language'])) ? $settings['language'] : $this->language;
-			$autoresize		= (isset($settings['autoresize'])) ? ',autoresize' : '';
+			$autoresize		= (isset($settings['autoresize'])) ? ' autoresize' : '';
 			$resizing		= (isset($settings['autoresize'])) ? 'theme_advanced_resizing : true,' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			
+			$link_list = '';
+			if (isset($settings['link_list'])){
+				$link_list = '
+				link_list : [{text: "'.$this->user->lang('article_categories').'", value: "", menu: [
+					
+				]}, {text: "'.$this->user->lang('articles').'", value: "", menu: [
+				]}],';
+			}
+			
 			$this->tpl->add_js('
 				$(".mceEditor").tinymce({
 					// Location of TinyMCE script
-					script_url : "'.$this->server_path.'libraries/tinyMCE/tiny_mce/tiny_mce.js",
+					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
 					document_base_url : "'.$this->env->link.'",
 					// General options
-					theme : "advanced",
-					skin: "cirkuit",
+					theme: "modern",
+					toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eqdkp_lightbox | preview media fullpage | forecolor emoticons | eqdkp_item",
 					//language : "'.$this->language.'",
-					plugins : "table,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen,wordcount,eqdkp_uploader,eqdkp_lightbox,pages'.$autoresize.'",
-			
-					//extended_valid_elements : "img[class|!src|border:0|alt|title|width|height|style]",
-					//invalid_elements : "strong,b,em,i",
-	
+					 plugins: [
+        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox",
+        "searchreplace visualblocks code fullscreen",
+        "media table contextmenu paste textcolor emoticons'.$autoresize.'"
+    ],
+
 					entity_encoding : "raw",
-					file_browser_callback : "elFinderBrowser",
+					rel_list: [{value:"lightbox", text: "Lightbox" }],
+					'.$link_list.'
+					file_browser_callback : function(field_name, url, type, win){
+						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.admin.php'.$this->SID.'";    // use an absolute path!
+						var cmsURL = elfinder_url;    // script URL - use an absolute path!
+						if (cmsURL.indexOf("?") < 0) {
+							//add the type as the only query parameter
+							cmsURL = cmsURL + "?editor=tiny&type=" + type;
+						}
+						else {
+							//add the type as an additional query parameter
+							// (PHP session ID is now included if there is one at all)
+							cmsURL = cmsURL + "&editor=tiny&type=" + type;
+						}
+						tinyMCE.activeEditor.windowManager.open({
+							file : cmsURL,
+							title : "File Browser",
+							width : 900,
+							height : 450,
+							resizable : "yes",
+							inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
+							popup_css : false, // Disable TinyMCEs default popup CSS
+							close_previous : "no"
+						}, {
+							window : win,
+							input : field_name
+						});
+						return false;
+					},
 					
-					// Theme options
-					theme_advanced_buttons1_add : "fontselect,fontsizeselect,eqdkp_uploader,pages,eqdkp_item_code,eqdkp_embed_code,eqdkp_lightbox",
-					theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor",
-					theme_advanced_buttons2_add_before: "cut,copy,paste,separator,search,replace,separator",
-					theme_advanced_buttons3_add_before : "tablecontrols,separator",
-					theme_advanced_buttons3_add : "emotions,iespell,flash,advhr,separator,media",
-					theme_advanced_toolbar_location : "top",
-					theme_advanced_toolbar_align : "left",
-					theme_advanced_statusbar_location : "bottom",
 					'.$resizing.$relative_url.$removeHost.'
 										
-					// Drop lists for link/image/media/template dialogs
-					template_external_list_url : "lists/template_list.js",
-					external_link_list_url : "lists/link_list.js",
-					external_image_list_url : "lists/image_list.js",
-					media_external_list_url : "lists/media_list.js",
-			
-					// Replace values for the template plugin
-					template_replace_values : {
-						username : "Some User",
-						staffid : "991234"
-					}
 				});
 			', 'docready');
-			$this->tpl->add_js(
-			'function elFinderBrowser (field_name, url, type, win) {
-            var elfinder_url = "'.$this->server_path.'libraries/elfinder/elfinder.admin.php'.$this->SID.'";    // use an absolute path!
-            var cmsURL = elfinder_url;    // script URL - use an absolute path!
-            if (cmsURL.indexOf("?") < 0) {
-                //add the type as the only query parameter
-                cmsURL = cmsURL + "?editor=tiny&type=" + type;
-            }
-            else {
-                //add the type as an additional query parameter
-                // (PHP session ID is now included if there is one at all)
-                cmsURL = cmsURL + "&editor=tiny&type=" + type;
-            }
-            tinyMCE.activeEditor.windowManager.open({
-                file : cmsURL,
-                title : "File Browser",
-                width : 900,
-                height : 450,
-                resizable : "yes",
-                inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
-                popup_css : false, // Disable TinyMCEs default popup CSS
-                close_previous : "no"
-            }, {
-                window : win,
-                input : field_name
-            });
-            return false;
-        }'
-			);
+
 			$this->trigger['normal'] = true;
 		}
 	}

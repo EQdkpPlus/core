@@ -37,7 +37,10 @@ register('user')->check_auth('a_files_man');
 			  // Here goes your code for setting your custom things onLoad.
 			},
 			mySubmit: function (URL) {
+				console.log(URL.url);
+				console.log(tinyMCEPopup);
 			  var win = tinyMCEPopup.getWindowArg('window');
+			  console.log(win);
 			  if (typeof(win) == 'undefined'){
 				insertFile(URL.url);
 				return;
@@ -120,7 +123,7 @@ register('user')->check_auth('a_files_man');
 		
 			$().ready(function() {
 				var elf = $('#elfinder').elfinder({
-					url : 'php/connector.admin.php',  // connector URL (REQUIRED)
+					url : 'php/connector.admin.php<?php echo registry::get_const('SID'); ?>',  // connector URL (REQUIRED)
 					// lang: 'ru',             // language (OPTIONAL)
 					<?php if (register('in')->get('type') == 'image') echo 'onlyMimes: ["image/jpeg","image/png","image/gif"],';?>
 					commands : myCommands,
@@ -140,7 +143,6 @@ register('user')->check_auth('a_files_man');
 		</script>
 	</head>
 	<body>
-
 		<!-- Element where elFinder will be created (REQUIRED) -->
 		<div id="elfinder"></div>
 

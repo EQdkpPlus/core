@@ -136,9 +136,9 @@ if (!class_exists("bbcode")) {
 					'<span style="color:\1">\2</span>',
 					'<style type="text/css">.bluepost strong {color:#ffffff;}</style><div class="ui-corner-top ui-corner-bottom ui-corner-right ui-corner-left" style="background-color:#333333; color:#1499ff"><div style="padding:5px;"><div style="border-bottom:1px solid #1d1d1e; padding-bottom:3px;"><img src="'.$this->root_path.'images/logos/blizz.gif"> <b>'.$this->user->lang('quote_of').' \1:</b></div><div style="padding-top:3px;" class="bluepost">\2</div></div></div>',
 					'<blockquote>\1</blockquote>',
-					'<div align="center">\1</div>',
-					'<div align="left">\1</div>',
-					'<div align="right">\1</div>',
+					'<div style="text-align:center;">\1</div>',
+					'<div style="text-align:left;">\1</div>',
+					'<div style="text-align:right;">\1</div>',
 					'<ol start="\1">\2</ol>',
 					'<ul>\1</ul>',
 					'<li>\1</li>',
@@ -216,7 +216,7 @@ if (!class_exists("bbcode")) {
 				if (strpos($strImage, $strDataFolderAbsolute) === 0){
 					$strImageURL = $strImage;
 				} elseif(strpos($strImage, $strDataFolderRelative) === 0){
-					$strImageURL = $this->root_path.$strImage;
+					$strImageURL = $this->server_path.$strImage;
 				}
 
 				//Its not an EQdkp Image, its an external image
@@ -250,11 +250,11 @@ if (!class_exists("bbcode")) {
 							$strThumbImage = $this->strImageThumbFolder.$strThumbFilename;
 						}
 
-						return '<a href="'.$strImageURL.'" class="lightbox"><img src="'.$strThumbImage.'" alt="image" /></a>';
+						return '<a href="'.str_replace($this->root_path, $this->server_path, $strImageURL).'" class="lightbox"><img src="'.str_replace($this->root_path, $this->server_path, $strThumbURL).'" alt="image" /></a>';
 
 					} else {
 						//No Thumbnail required, return image
-						return '<img src="'.$strImageURL.'" alt="image" />';
+						return '<img src="'.str_replace($this->root_path, $this->server_path, $strImageURL).'" alt="image" />';
 					}
 				}
 

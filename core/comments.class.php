@@ -110,11 +110,11 @@ if (!class_exists("comments")){
 		public function Content($attachid, $page, $rpath='', $issave = false){
 			$i				= 0;
 			$comments		= $this->pdh->get('comment', 'filtered_list', array($page, $attachid));
-			$myrootpath		= ($issave) ? clean_rootpath($rpath) : $this->root_path;
+			$myrootpath		= $this->server_path;
 			$this->bbcode->SetSmiliePath($myrootpath.'images/smilies');
 
 			// The delete form
-			$html	= '<form id="comment_delete" name="comment_delete" action="'.$this->root_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">';
+			$html	= '<form id="comment_delete" name="comment_delete" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">';
 			$html	.= '</form>';
 
 			// the content Box
@@ -131,10 +131,10 @@ if (!class_exists("comments")){
 					// output
 					$out[] .= '<div class="'.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
 								<div class="comment_avatar_container">
-									<div class="comment_avatar"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+									<div class="comment_avatar"><a href="'.$myrootpath.'listusers.php'.$this->SID.'&amp;u='.$row['userid'].'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 								</div>
 								<div class="comment_container">
-									<div class="comment_author"><a href="listusers.php'.$this->SID.'&amp;u='.$row['userid'].'">'.htmlspecialchars($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';
+									<div class="comment_author"><a href="'.$myrootpath.'listusers.php'.$this->SID.'&amp;u='.$row['userid'].'">'.htmlspecialchars($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';
 					if($this->isAdmin OR $row['userid'] == $this->UserID){
 						$out[] .= '<div class="comments_delete small bold floatRight hand" ><img src="'.$myrootpath.'images/global/delete.png" alt="" />';
 						$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
@@ -167,14 +167,21 @@ if (!class_exists("comments")){
 		private function Form($attachid, $page){
 			$editor = registry::register('tinyMCE');
 			$editor->editor_bbcode();
-			$html = '<div class="contentBox">';
+			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
+			$html = '<div class="contentBox writeComments">';
 			$html .= '<div class="boxHeader"><h1>'.$this->user->lang('comments_write').'</h1></div>';
 			$html .= '<div class="boxContent"><br/>';
-			$html .= '<form id="comment_data" name="comment_data" action="'.$this->root_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">
+			$html .= '<form id="comment_data" name="comment_data" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
 						<input type="hidden" name="page" value="'.$page.'"/>
-						<input type="hidden" name="rpath" value="'.$this->root_path.'"/>
-						<textarea name="comment" rows="8" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea><br/><br/>
+						<div class="clearfix">
+							<div class="comment_avatar_container">
+								<div class="comment_avatar"><a href="'.$this->server_path.'listusers.php'.$this->SID.'&amp;u='.$this->user->id.'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+							</div>
+							<div class="comment_write_container">
+								<textarea name="comment" rows="8" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
+							</div>
+						</div>
 						<span id="comment_button"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
 					</form>';
 			$html .= '</div></div>';
@@ -191,11 +198,10 @@ if (!class_exists("comments")){
 							var page			= $('.comments_page',		this).text();
 							var deleteid		= $('.comments_deleteid',	this).text();
 							var attachid		= $('.comments_attachid',	this).text();
-							var myrootpath		= $('.comments_myrootpath',	this).text();
 
 							$('#comment_delete').ajaxSubmit({
 								target: '#htmlCommentTable',
-								url:		myrootpath+'exchange.php".$this->SID."&out=comments&deleteid='+deleteid+'&page='+page+'&attach_id='+attachid+'&rpath='+myrootpath,
+								url:	'".$this->server_path."exchange.php".$this->SID."&out=comments&deleteid='+deleteid+'&page='+page+'&attach_id='+attachid,
 								success: function() {
 									$('#htmlCommentTable').fadeIn('slow');
 								}
@@ -206,13 +212,13 @@ if (!class_exists("comments")){
 						$('#comment_data').ajaxForm({
 							target: '#htmlCommentTable',
 							beforeSubmit:  function(){
-								document.getElementById('comment_button').innerHTML='<img src=\"".$this->root_path."images/global/loading.gif\" alt=\"Save\"/> ".$this->user->lang('comments_savewait')."';
+								$('#comment_button').html('<img src=\"".$this->server_path."images/global/loading.gif\" alt=\"Save\"/> ".$this->user->lang('comments_savewait')."');
 							},
 							success: function() {
 								$('#htmlCommentTable').fadeIn('slow');
 								// clear the input field:
 								$(\".mceEditor_bbcode\").tinymce().setContent('');
-								document.getElementById('comment_button').innerHTML='<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>';
+								$('#comment_button').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
 							}
 						});";
 			$this->tpl->add_js($jscode, 'docready');

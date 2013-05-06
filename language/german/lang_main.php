@@ -854,6 +854,8 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "del_suc" => "Löschen erfolgreich",
 "article_unpublish_success" => "Artikel wurde unveröffentlicht",
 "article_unpublish" => "Artikel unveröffentlichen",
+"articles" => "Artikel",
+"article_categories" => "Kategorien",
  );
 
 ?>

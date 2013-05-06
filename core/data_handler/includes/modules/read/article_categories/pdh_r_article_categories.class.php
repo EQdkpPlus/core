@@ -320,6 +320,11 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			foreach ($this->categories as $key => $val){
 				if ($this->get_alias($key) == $strAlias) return false;
 			}
+			
+			//Check static routes
+			$arrRoutes = register('routing')->getRoutes();
+			if (isset($arrRoutes[$strAlias])) return false;
+			
 			//No Category uses this alias, check articles
 			if ($blnCheckArticles){
 				$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias, false));
