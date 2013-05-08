@@ -212,6 +212,7 @@ class Manage_Articles extends page_generic {
 		$editor->editor_normal(array(
 			'autoresize'	=> true,
 			'relative_urls'	=> false,
+			'link_list'		=> true,
 		));
 		
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');

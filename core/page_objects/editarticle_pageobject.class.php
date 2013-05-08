@@ -147,6 +147,7 @@ class editarticle_pageobject extends pageobject {
 		$editor->editor_normal(array(
 			'autoresize'	=> true,
 			'relative_urls'	=> false,
+			'link_list'		=> true,
 		));
 
 		if ($id){

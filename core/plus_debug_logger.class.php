@@ -376,7 +376,7 @@ if ( !defined('EQDKP_INC') ){
 						<body style="background-color:#efefef">
 						<div style="width:100%" align="center">
 						<div class="error_table">
-							<table width="400" border="0" cellspacing="1" cellpadding="2" style="background:#336c99 url(\''.$this->root_path.'templates/maintenance/images/header_back.png\') left no-repeat; font-size: 24px;
+							<table width="400" border="0" cellspacing="1" cellpadding="2" style="background:#336c99 url(\''.$this->server_path.'templates/maintenance/images/header_back.png\') left no-repeat; font-size: 24px;
 							font-weight:bold;
 								height:110px;
 								width: 100%;
@@ -386,7 +386,7 @@ if ( !defined('EQDKP_INC') ){
 									<tr>
 										<td width="100%">
 											<center>
-												<img src="'.$this->root_path.'templates/maintenance/images/logo.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
+												<img src="'.$this->server_path.'templates/maintenance/images/logo.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
 											</center>
 										</td>
 									</tr>

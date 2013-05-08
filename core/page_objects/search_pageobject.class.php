@@ -5,22 +5,18 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-01-29 17:35:08 +0100 (Di, 29 Jan 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12937 $
  *
- * $Id$
+ * $Id: search.php 12937 2013-01-29 16:35:08Z wallenium $
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once($eqdkp_root_path . 'common.php');
-
-class search extends page_generic {
+class search_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'pm', 'hooks');
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -34,11 +30,15 @@ class search extends page_generic {
 
 	public function display(){
 		$this->search_array = array(
-			'news'	=> array(
-				'category'	=> $this->user->lang('menu_news'),
-				'module'	=> 'news',
+			'article'	=> array(
+				'category'	=> $this->user->lang('articles'),
+				'module'	=> 'articles',
 				'method'	=> 'search',
-				'permissions'	=> array('u_news_view'),
+			),
+			'article_categories' => array(
+				'category'	=> $this->user->lang('article_categories'),
+				'module'	=> 'article_categories',
+				'method'	=> 'search',
 			),
 			'calendar'	=> array(
 				'category'	=> $this->user->lang('calendar'),
@@ -151,5 +151,5 @@ class search extends page_generic {
 	}
 
 }
-registry::register('search');
+
 ?>

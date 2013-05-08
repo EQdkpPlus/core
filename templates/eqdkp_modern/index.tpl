@@ -136,7 +136,7 @@
 					<ul>
 						<li class="personalAreaTime"><i class="icon-time"></i>{USER_TIME}</li>
 						<li><!-- IF S_SEARCH -->
-						<form method="post" action="{EQDKP_ROOT_PATH}search.php{SID}" id="search_form">
+						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search/{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>
 							<button type="submit" class="search_button" value="" title="{L_search_do}">
 								<i class="icon-search"></i>

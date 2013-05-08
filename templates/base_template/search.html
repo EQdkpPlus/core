@@ -18,7 +18,7 @@
 			<dd><input type="text" class="input" size="30" name="svalue" value="{SEARCH_VALUE}" /></dd>
 		</dl>
 	</fieldset>
-	<input type="submit" value="{L_search_do}" name="search" class="mainoption bi_search" />
+	<button type="submit" name="search" class="mainoption"><i class="icon-search"></i>{L_search_do}</button>
 	{CSRF_TOKEN}
 </form>
 
@@ -32,7 +32,7 @@
 		<!-- BEGIN tabs -->
 		<div id="fragment-{tabs.ID}">
 			<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
-			<tr><th colspan="2">{L_search_results_category} {tabs.NAME} ({tabs.COUNT}) </th></tr>
+			<tr><th colspan="2">{L_search_results_category} "{tabs.NAME}" ({tabs.COUNT}) </th></tr>
 			<!-- BEGIN results -->
 				<tr><td width="20" class="nowrap"><a href="{tabs.results.LINK}">{tabs.results.ID}</a></td><td><a href="{tabs.results.LINK}">{tabs.results.NAME}</a></td></tr>
 			<!-- END results -->

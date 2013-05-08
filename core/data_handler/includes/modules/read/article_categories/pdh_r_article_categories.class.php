@@ -538,6 +538,27 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if ($intCategoryID == 1) return false;
 			return true;
 		}
+		
+		public function get_search($search_value) {
+			$arrSearchResults = array();
+			if (is_array($this->categories)){
+				foreach($this->categories as $id => $value) {
+					if (!$this->get_published($id)) continue;			
+					$arrPermissions = $this->get_user_permissions($id, $this->user->id);
+					if(!$arrPermissions['read']) continue;
+				
+					if(stripos($this->get_name($id), $search_value) !== false OR stripos($this->get_description($id), $search_value) !== false ) {
+
+						$arrSearchResults[] = array(
+							'id'	=> $this->get_article_count($id),
+							'name'	=> $this->get_name($id),
+							'link'	=> $this->server_path.$this->get_path($id),
+						);
+					}
+				}
+			}
+			return $arrSearchResults;
+		}
 
 	}//end class
 }//end if

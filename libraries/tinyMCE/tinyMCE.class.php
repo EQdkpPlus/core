@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 } 
 
 class tinyMCE extends gen_class {
-	public static $shortcuts = array('tpl', 'user', 'env' => 'environment');
+	public static $shortcuts = array('tpl', 'user', 'env' => 'environment', 'pdh');
 
 	protected $tinymce_version = '3.5.6';
 	protected $language	= 'en';
@@ -63,7 +63,7 @@ class tinyMCE extends gen_class {
 					convert_fonts_to_spans : false,
 					force_p_newlines : false,
 					menubar: false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor | quote image link",
+					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | forecolor | quote image link",
 					statusbar : false,
 				});
 			', 'docready');
@@ -81,10 +81,33 @@ class tinyMCE extends gen_class {
 			
 			$link_list = '';
 			if (isset($settings['link_list'])){
-				$link_list = '
-				link_list : [{text: "'.$this->user->lang('article_categories').'", value: "", menu: [
+				//Articles & Categories
+				$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
+				foreach($arrCategoryIDs as $cid){
+					if (!$this->pdh->get('article_categories', 'published', array($cid))) continue;
 					
-				]}, {text: "'.$this->user->lang('articles').'", value: "", menu: [
+					if ($cid != 1) $arrCategories[] = array('text' => $this->pdh->get('article_categories', 'name', array($cid)), 'id' => $cid);
+					$arrArticles = $this->pdh->get('articles', 'id_list', array($cid));
+					foreach($arrArticles as $articleID){
+						if (!$this->pdh->get('articles', 'published', array($articleID))) continue;
+						$arrItems[$cid][] = array('text' => $this->pdh->get('articles', 'title', array( $articleID)), 'id' => $articleID);
+					}
+				}
+
+				$link_list = '
+				link_list : [{text: "'.$this->user->lang('articles').'", value: "", menu: [';
+					foreach($arrCategories as $val){
+						$link_list .= '{text: "'.$val['text'].'", value: "{{category_url::'.$val['id'].'}}", menu: [';
+							if(!isset($arrItems[$val['id']])) $arrItems[$val['id']] = array();
+							$link_list .= '{text: "'.$val['text'].'", value: "{{category_url::'.$val['id'].'}}"},';
+							foreach($arrItems[$val['id']] as $value){
+								$link_list .= '{text: "'.$value['text'].'", value: "{{article_url::'.$value['id'].'}}"},';
+							}
+							
+						$link_list .= ']},';					
+					}
+					//$link_list .= '{}';
+				$link_list .= '
 				]}],';
 			}
 			

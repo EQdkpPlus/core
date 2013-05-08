@@ -306,13 +306,15 @@ if (!class_exists("bbcode")) {
 
 				// Replace tag
 				switch (strtolower($elements[0])) {
-					// Date
-					case 'page':
-						$arrCache[$strTag] = ($this->pdh->get('pages', 'page_exists', array($elements[1]))) ? '<a href="'.$this->pdh->get('pages', 'url', array($elements[1])).'">'.$this->pdh->get('pages', 'title', array($elements[1])).'</a>': '';
+				
+					case 'article_url':
+						$strPath = $this->pdh->get('articles', 'path', array($elements[1]));
+						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
-
-					case 'page_url':
-						$arrCache[$strTag] = ($this->pdh->get('pages', 'page_exists', array($elements[1]))) ? $this->pdh->get('pages', 'url', array($elements[1])) : '';
+						
+					case 'category_url':
+						$strPath = $this->pdh->get('article_categories', 'path', array($elements[1]));
+						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 
 					case 'server':

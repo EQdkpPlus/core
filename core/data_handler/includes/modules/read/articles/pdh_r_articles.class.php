@@ -411,6 +411,28 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			
 			return $strBreadcrumb;
 		}
+		
+		public function get_search($search_value) {
+			$arrSearchResults = array();
+			if (is_array($this->articles)){
+				foreach($this->articles as $id => $value) {
+					if (!$this->get_published($id)) continue;			
+					$intCategoryID = $this->get_category($id);
+					$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+					if(!$arrPermissions['read']) continue;
+				
+					if(stripos($this->get_title($id), $search_value) !== false OR stripos($this->get_text($id), $search_value) !== false ) {
+
+						$arrSearchResults[] = array(
+							'id'	=> $this->get_html_date($id),
+							'name'	=> $this->get_title($id),
+							'link'	=> $this->server_path.$this->get_path($id),
+						);
+					}
+				}
+			}
+			return $arrSearchResults;
+		}
 
 	}//end class
 }//end if
