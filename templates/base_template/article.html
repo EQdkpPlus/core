@@ -1,18 +1,12 @@
+<!-- IF not S_HIDE_HEADER -->
 <div class="contentHeader">
 	<h1 class="contentTitle">{ARTICLE_TITLE}
-		<!-- IF S_TOOLBAR --> 
-		<div class="floatRight">
-			<div class="toolbar-button">
-				<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
-			</div>
-		</div>
-		<!-- ENDIF -->
+		
 		<div class="floatRight">
 			<a href="{PERMALINK}" title="{L_permalink}"><i class="icon-link"></i></a>
 		</div>
 	</h1>
 </div>
-<!-- IF not S_HIDE_HEADER -->
 <div>
 	<div class="breadcrumb-container">
 		
@@ -26,7 +20,7 @@
 	</div>
 	<div class="news_author">
 		<div class="floatLeft">
-			{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
+			<i class="icon-time"></i>{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
 		</div>
 		<div class="news_social floatRight">
 			{ARTICLE_SOCIAL_BUTTONS}
@@ -34,6 +28,14 @@
 		<div class="clear"></div>
 	</div>
 </div>
+<!-- ELSEIF S_TOOLBAR -->
+	<div class="contentHeader">
+		<div class="floatRight">
+			<div class="toolbar-button">
+				<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+			</div>
+		</div>
+	</div>
 <!-- ENDIF -->
 
 <!-- IF S_PAGINATION -->

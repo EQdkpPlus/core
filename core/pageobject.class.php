@@ -49,7 +49,11 @@ if(!class_exists('pageobject')){
 			//Build Path
 			$strPath = $this->server_path;
 			if (!intval($this->config->get('seo_remove_index'))) $strPath .= 'index.php/';
-			$strPath .= substr(((strlen($this->page_path))  ? $this->page_path : $this->env->path), 1);
+			$strPagePath = (strlen($this->page_path))  ? $this->page_path : $this->env->path;
+			if (strpos($strPagePath, "/") === 0) $strPagePath = substr($strPagePath, 1);
+			
+			$strPath .= $strPagePath;
+
 			$this->strPath = $strPath;
 			
 			$this->tpl->assign_vars(array(

@@ -24,7 +24,9 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('routing')){
 	class routing extends gen_class {		
-		public static $shortcuts = array('core', 'config');
+		public static $shortcuts = array('core', 'config', 'pdh', 'user');
+		
+		private $_cache = array();
 		
 		private $arrStaticRoutes = array(
 			'settings'		=> 'settings',
@@ -35,7 +37,6 @@ if(!class_exists('routing')){
 			'wrapper'		=> 'wrapper',
 			'addcharacter'	=> 'addcharacter',
 			'editarticle'	=> 'editarticle',
-			'search'		=> 'search',
 			'user'			=> 'user',
 		);
 		
@@ -54,19 +55,38 @@ if(!class_exists('routing')){
 			}
 			return false;
 		}
-		//ToDo: Finish
-		public function buildRoute($strPath, $strPageObject, $intID=false, $strIDParam=false, $strText=false){
-			$strRoute = $this->server_path;
-			if (!intval($this->config->get('seo_remove_index'))) $strRoute .= 'index.php/';
-			$strRoute .= $strPath;
-			
-		}
 		
-		//ToDo: Finish
-		public function buildRoutePrefix($intID, $strText, $intIDParam=false){
+		public function get($strPageObject){
+			$strPageObject = utf8_strtolower($strPageObject);
+			if (isset($this->_cache[$strPageObject])) return $this->_cache[$strPageObject];
 			
+			//Check static route
+			if ($this->staticRoute($strPageObject)){
+				$this->_cache[$strPageObject] = $this->staticRoute($strPageObject);
+				return $this->_cache[$strPageObject];
+			}
+			
+			$arrArticleIDs = $this->pdh->get('articles', 'articles_for_pageobject', array($strPageObject));
+			if ($arrArticleIDs && is_array($arrArticleIDs) && count($arrArticleIDs)){
+				foreach($arrArticleIDs as $intArticleID){
+					$intCategoryID = $this->pdh->get('articles', 'category', array($intArticleID));
+					$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+					if($arrPermissions && $arrPermissions['read']) {
+						$this->_cache[$strPageObject] = $this->pdh->get('articles', 'plain_path', array($intArticleID));
+						return $this->_cache[$strPageObject];
+					}
+				}
+				
+				//No Permission, get first one
+				$intArticleID = $arrArticleIDs[0];
+				$intCategoryID = $this->pdh->get('articles', 'category', array($intArticleID));
+				$this->_cache[$strPageObject] = $this->pdh->get('articles', 'plain_path', array($intArticleID));
+				return $this->_cache[$strPageObject];
+			}
+			$this->_cache[$strPageObject] = 'NotFound';
+			return 'NotFound';
 		}
-		
+				
 		public function getPageObjects($blnIncludeStatic = false){
 			$arrFiles = sdir( $this->root_path.'core/page_objects/', '*_pageobject.class.php');
 			if (is_array($arrFiles) && count($arrFiles)){
@@ -79,6 +99,20 @@ if(!class_exists('routing')){
 				return $arrOut;
 			}
 			return array();
+		}
+		
+		public function build($strPageObject, $strParamText, $strParam){
+			$strPath = $this->controller_path;
+			$strPath .= $this->get($strPageObject);
+			$strPath .= '/'.$this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/').$this->SID;
+			return $strPath;
+		}
+		
+		public function clean($strText){
+			$strText = utf8_strtolower($strText);
+			$strText = str_replace(' ', '-', $strText);
+			$strText = preg_replace("/[^a-zA-Z0-9_-]/","",$strText);
+			return $strText;
 		}
 		
 	}

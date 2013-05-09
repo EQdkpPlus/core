@@ -31,6 +31,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public $articles = NULL;
 		public $categories = NULL;
 		public $alias = NULL;
+		public $pageobjects = NULL;
 
 		public $hooks = array(
 			'articles_update'
@@ -53,12 +54,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->articles = NULL;
 			$this->categories = NULL;
 			$this->alias = NULL;
+			$this->pageobjects = NULL;
 		}
 
 		public function init(){
 			$this->articles	= $this->pdc->get('pdh_articles_table');
 			$this->categories = $this->pdc->get('pdh_articles_categories');
 			$this->alias = $this->pdc->get('pdh_articles_alias');
+			$this->pageobjects = $this->pdc->get('pdh_articles_pageobjects');
 			if($this->articles !== NULL){
 				return true;
 			}
@@ -96,12 +99,20 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				$this->categories[(int)$drow['category']][] = (int)$drow['id'];
 				
 				$this->alias[$drow['alias']] = intval($drow['id']);
+				
+				if ($drow['page_objects'] != ''){
+					$arrObjects = unserialize($drow['page_objects']);
+					foreach($arrObjects as $elem){
+						$this->pageobjects[$elem][] = (int)$drow['id'];
+					}
+				}
 			}
 			$this->db->free_result($pff_result);
 			
 			$this->pdc->put('pdh_articles_table', $this->articles, null);
 			$this->pdc->put('pdh_articles_categories', $this->categories, null);
 			$this->pdc->put('pdh_articles_alias', $this->alias, null);
+			$this->pdc->put('pdh_articles_pageobjects', $this->pageobjects, null);
 		}
 		
 		public function get_id_list($intCategoryID = false){
@@ -366,18 +377,23 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
-		public function get_path($intArticleID){
-			if (!intval($this->config->get('enable_seo'))) return 'index.php'.$this->SID.'&a='.(int)$intArticleID;
-		
-			$strPath = "";
-			$strPath = $this->add_path($this->get_category($intArticleID));
-			if (!intval($this->config->get('seo_remove_index'))) $strPath .= 'index.php/';
-			$strPath = $strPath . $this->get_alias($intArticleID).'.html';
-			return $strPath.$this->SID;
-		}
-		
 		public function get_permalink($intArticleID){
 			return $this->env->link.'index.php?a='.(int)$intArticleID;
+		}
+		
+		public function get_plain_path($intArticleID){
+			$strPath = "";
+			$strPath = $this->add_path($this->get_category($intArticleID));
+			$strPath .= $this->get_alias($intArticleID);
+			return $strPath;
+		}
+		
+		public function get_path($intArticleID){		
+			$strPath = "";
+			$strPath = $this->add_path($this->get_category($intArticleID));
+			if (!intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
+			$strPath .= $this->get_alias($intArticleID).((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
+			return $strPath.$this->SID;
 		}
 		
 		private function add_path($intCategoryID, $strPath=''){
@@ -432,6 +448,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				}
 			}
 			return $arrSearchResults;
+		}
+		
+		public function get_articles_for_pageobject($strPageObject){
+			if (isset($this->pageobjects[$strPageObject])){
+				return $this->pageobjects[$strPageObject];
+			}
+			return false;
 		}
 
 	}//end class

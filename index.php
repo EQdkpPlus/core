@@ -22,7 +22,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class controller extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env', 'acl', 'comments','social' => 'socialplugins', 'bbcode', 'pfh');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env', 'acl', 'comments','social' => 'socialplugins', 'bbcode', 'pfh', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -214,8 +214,7 @@ class controller extends page_generic {
 			}
 		
 			
-			$userlink = $this->pdh->geth('articles',  'user_id', array($intArticleID));
-			
+			$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
 			$myRatings = array(
 				'1'		=> '1',
 				'2'		=> '2',
@@ -391,7 +390,7 @@ class controller extends page_generic {
 			
 			//Articles to template
 			foreach($arrLimitedIDs as $intArticleID){
-				$userlink = $this->pdh->geth('articles',  'user_id', array($intArticleID));
+				$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
 				
 				//Content dependet from list_type
 				//1 = until readmore
