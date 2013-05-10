@@ -20,7 +20,10 @@ $eqdkp_root_path = './../../../';
 
 include_once ($eqdkp_root_path . 'common.php');
 
-register('user')->check_auth('a_files_man');
+$blnIsAdmin = register('user')->check_auth('a_files_man', false);
+$blnIsUser = register('user')->is_signedin();
+
+if (!$blnIsUser) die('Access denied.');
 
 include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderConnector.class.php';
 include_once $eqdkp_root_path.'libraries/elfinder/php/elFinder.class.php';
@@ -46,21 +49,41 @@ function access($attr, $path, $data, $volume) {
 		:  null;                                    // else elFinder decide it itself
 }
 
-$opts = array(
-	'roots' => array(
-		array(
-			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => register('pfh')->FolderPath('', 'files'),         // path to files (REQUIRED)
-			'startPath'		=> register('pfh')->FolderPath('system', 'files'), 
-			'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
-			'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
-			'uploadAllow'	=> array('all'),
-			'uploadDeny'	=> array('application/x-php','application/x-perl','application/x-python-bytecode','application/x-ruby', 'text/x-php', 'text/x-perl', 'text/x-python-bytecode', 'text/x-ruby', 'text/x-c++'),
-			'uploadOrder'	=> array('allow', 'deny'),
-			'disabled'		=> array('extract', 'archive','mkfile','help','edit'),
+if ($blnIsAdmin){
+
+	$opts = array(
+		'roots' => array(
+			array(
+				'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
+				'path'          => register('pfh')->FolderPath('', 'files'),         // path to files (REQUIRED)
+				'startPath'		=> register('pfh')->FolderPath('system', 'files'), 
+				'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
+				'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
+				'uploadAllow'	=> array('all'),
+				'uploadDeny'	=> array('application/x-php','application/x-perl','application/x-python-bytecode','application/x-ruby', 'text/x-php', 'text/x-perl', 'text/x-python-bytecode', 'text/x-ruby', 'text/x-c++'),
+				'uploadOrder'	=> array('allow', 'deny'),
+				'disabled'		=> array('extract', 'archive','mkfile','help','edit'),
+			)
 		)
-	)
-);
+	);
+	
+} elseif($blnIsUser){
+	$opts = array(
+		'roots' => array(
+			array(
+				'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
+				'path'          => register('pfh')->FolderPath('', 'files'),         // path to files (REQUIRED)
+				'startPath'		=> register('pfh')->FolderPath('system', 'files'), 
+				'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
+				'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)				
+				'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif'),
+				'uploadDeny'	=> array('all'),
+				//'uploadOrder'	=> array('allow', 'deny'),
+				'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),
+			)
+		)
+	);
+}
 
 //Create system folder
 register('pfh')->FolderPath('system', 'files');

@@ -44,6 +44,7 @@ if (!class_exists("jquery")) {
 			// add the root_path to javascript
 			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';");
 			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';");
+			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';");
 
 			// jquery language file
 			$langfile = '';
@@ -1351,12 +1352,12 @@ if (!class_exists("jquery")) {
 		* @return void
 		*/
 		public function fileBrowser($type = 'user', $filter = 'none'){
-			$type = ($type == 'user') ? 'user' : 'admin';
+			$type = ($type == 'user') ? 'user' : 'all';
 			
 			if (!isset($this->file_browser[$type])){
 				$this->tpl->add_js("function elfinder_".$type."(fieldid){
 					jQuery.FrameDialog.create({
-						url: '".$this->server_path."libraries/elfinder/elfinder.".$type.".php".$this->SID."&type=".$filter."&field='+fieldid,
+						url: '".$this->server_path."libraries/elfinder/elfinder".(($type == 'user') ? '.useravatars' : '').".php".$this->SID."&type=".$filter."&field='+fieldid,
 						title: '".$this->user->lang('imageuploader_wintitle')."',
 						height: 500,
 						width: 840,

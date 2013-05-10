@@ -39,7 +39,7 @@ if(!registry::fetch('user')->is_signedin()){
 		
 			$().ready(function() {
 				var elf = $('#elfinder').elfinder({
-					url : 'php/connector.userimages.php<?php echo registry::get_const('SID');?>',  // connector URL (REQUIRED)
+					url : 'php/connector.useravatars.php<?php echo registry::get_const('SID');?>',  // connector URL (REQUIRED)
 					// lang: 'ru',             // language (OPTIONAL)
 					onlyMimes: ["image/jpeg","image/png","image/gif"],
 					commands : myCommands,

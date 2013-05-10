@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 } 
 
 class tinyMCE extends gen_class {
-	public static $shortcuts = array('tpl', 'user', 'env' => 'environment', 'pdh');
+	public static $shortcuts = array('tpl', 'user', 'env' => 'environment', 'pdh', 'config');
 
 	protected $tinymce_version = '3.5.6';
 	protected $language	= 'en';
@@ -30,10 +30,10 @@ class tinyMCE extends gen_class {
 		'normal'	=> false
 	);
 	
-	public function __construct($rootpath=false, $nojsinclude=false){
-		if($rootpath) $this->root_path = $rootpath;
-		if(!$nojsinclude) $this->tpl->js_file($this->root_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
+	public function __construct($nojsinclude=false){
+		if(!$nojsinclude) $this->tpl->js_file($this->server_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
 		$this->language	= $this->user->lang('XML_LANG');
+		$this->tpl->add_js('tinymce_eqdkp_lightbox_thumbnailsize = '.(($this->config->get('thumbnail_defaultsize')) ? $this->config->get('thumbnail_defaultsize') : 400)).';';
 	}
 
 	public function editor_bbcode($settings=false){
@@ -118,10 +118,10 @@ class tinyMCE extends gen_class {
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					theme: "modern",
-					toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eqdkp_lightbox | preview media fullpage | forecolor emoticons | eqdkp_item",
+					toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eqdkp_lightbox eqdkp_filebrowser | preview media fullpage | forecolor emoticons | eqdkp_item",
 					//language : "'.$this->language.'",
 					 plugins: [
-        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox",
+        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
         "searchreplace visualblocks code fullscreen",
         "media table contextmenu paste textcolor emoticons'.$autoresize.'"
     ],
@@ -130,17 +130,18 @@ class tinyMCE extends gen_class {
 					rel_list: [{value:"lightbox", text: "Lightbox" }],
 					'.$link_list.'
 					file_browser_callback : function(field_name, url, type, win){
-						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.admin.php'.$this->SID.'";    // use an absolute path!
+						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.php'.$this->SID.'";    // use an absolute path!
 						var cmsURL = elfinder_url;    // script URL - use an absolute path!
 						if (cmsURL.indexOf("?") < 0) {
 							//add the type as the only query parameter
-							cmsURL = cmsURL + "?editor=tiny&type=" + type;
+							cmsURL = cmsURL + "?editor=tiny&type=" + type + "&field=" + field_name;
 						}
 						else {
 							//add the type as an additional query parameter
 							// (PHP session ID is now included if there is one at all)
-							cmsURL = cmsURL + "&editor=tiny&type=" + type;
+							cmsURL = cmsURL + "&editor=tiny&type=" + type + "&field=" + field_name;
 						}
+
 						tinyMCE.activeEditor.windowManager.open({
 							file : cmsURL,
 							title : "File Browser",

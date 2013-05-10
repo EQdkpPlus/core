@@ -4,7 +4,14 @@ $eqdkp_root_path = './../../';
 
 include_once ($eqdkp_root_path . 'common.php');
 
-register('user')->check_auth('a_files_man');
+$blnIsAdmin = register('user')->check_auth('a_files_man', false);
+$blnIsUser = register('user')->is_signedin();
+
+$strType = register('in')->get('type', '');
+
+if (!$blnIsUser) die('Access denied.');
+
+if (!$blnIsAdmin) $strType = 'image';
 
 ?>
 
@@ -29,52 +36,43 @@ register('user')->check_auth('a_files_man');
 		<?php 
 			if (register('in')->get('editor') == 'tiny') {
 		?>
-		<script type="text/javascript" src="<?php echo $eqdkp_root_path; ?>libraries/tinyMCE/tiny_mce/tiny_mce_popup.js"></script>
 
 		<script type="text/javascript">
+			var editor, tinymce, tinyMCE, parentWindow;
+			var type = '<?php echo register('in')->get('type'); ?>';
+			var field_name = '<?php echo register('in')->get('field'); ?>';
+			
 		  var FileBrowserDialogue = {
 			init: function() {
-			  // Here goes your code for setting your custom things onLoad.
+				parentWindow = (!window.frameElement && window.dialogArguments) || opener || parent || top;
+			  	tinymce = parentWindow.tinymce;
+				tinyMCE = parentWindow.tinyMCE;
+				editor = tinymce.EditorManager.activeEditor;
+				console.log(editor);
 			},
 			mySubmit: function (URL) {
-				console.log(URL.url);
-				console.log(tinyMCEPopup);
-			  var win = tinyMCEPopup.getWindowArg('window');
-			  console.log(win);
-			  if (typeof(win) == 'undefined'){
-				insertFile(URL.url);
-				return;
-			  }
-
-			  // pass selected file path to TinyMCE
-			  win.document.getElementById(tinyMCEPopup.getWindowArg('input')).value = URL.url;
-
-			  // are we an image browser?
-			  if (typeof(win.ImageDialog) != 'undefined') {
-				// update image dimensions
-				if (win.ImageDialog.getImageData) {
-				  win.ImageDialog.getImageData();
+				
+				//Comes from an popup
+				if (field_name != ''){
+					parentWindow.$('#'+field_name).val(URL.url);
+				} else {
+					//Insert into Editor Field
+					insertFile(URL.url);
 				}
-				// update preview if necessary
-				if (win.ImageDialog.showPreviewImage) {
-				  win.ImageDialog.showPreviewImage(URL.url);
-				}
-			  }
 
-			  // close popup window
-			 tinyMCEPopup.close();
+				var window_count = editor.windowManager.windows.length;
+				editor.windowManager.windows[window_count-1].close();
 			}
 		  }
 
-		  tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
+		 FileBrowserDialogue.init();
 		  
 	function insertFile(name)	{
 		var image = false;
 		try {
 			if (is_image(name)){			
 				image = true;
-			} else {
-				
+			} else {			
 				image = false;
 			}
 
@@ -85,13 +83,14 @@ register('user')->check_auth('a_files_man');
 		if (image){
 			output = '<img src="'+name+'" alt="Image" />';
 		} else {
-			output = '<a href="'+name+'">'+name+'</a>';
+			var index = name.lastIndexOf("/") + 1;
+			var filename = name.substr(index);
+			output = '<a href="'+name+'">'+filename+'</a>';
 		}
 		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, output);
-		tinyMCEPopup.editor.execCommand('mceRepaint');
-		tinyMCEPopup.resizeToInnerSize();
-		tinyMCEPopup.close();
+		editor.insertContent(output);
+		
+		editor.execCommand('mceRepaint');
 	}
 	
 	function is_image(file_name) {
@@ -123,9 +122,9 @@ register('user')->check_auth('a_files_man');
 		
 			$().ready(function() {
 				var elf = $('#elfinder').elfinder({
-					url : 'php/connector.admin.php<?php echo registry::get_const('SID'); ?>',  // connector URL (REQUIRED)
+					url : 'php/connector.php<?php echo registry::get_const('SID'); ?>',  // connector URL (REQUIRED)
 					// lang: 'ru',             // language (OPTIONAL)
-					<?php if (register('in')->get('type') == 'image') echo 'onlyMimes: ["image/jpeg","image/png","image/gif"],';?>
+					<?php if ($strType == 'image') echo 'onlyMimes: ["image/jpeg","image/png","image/gif"],';?>
 					commands : myCommands,
 					getFileCallback: function(url) { // editor callback
 						<?php if (register('in')->get('editor') == 'tiny') {?>
