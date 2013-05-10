@@ -159,8 +159,8 @@ class core extends gen_class {
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
 			
 			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1){
-				if ($this->env->request_page != 'register.php'){
-					redirect('register.php');
+				if(stripos($this->env->path, 'register') === false){
+					redirect($this->controller_path.'Register/');
 				}
 			}
 			
