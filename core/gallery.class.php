@@ -57,16 +57,16 @@ if(!class_exists('gallery')){
 					}
 				}
 			}
-			
+
 			switch($intSortation){
 				case 1: natcasesort($arrImages);
 						$arrImages = array_reverse($arrImages);
 				
 				break;
-				case 2: asort($arrImages);
+				case 2: asort($arrImagesDate); $arrImages = $arrImagesDate;
 				break;
 				
-				case 3: arsort($arrImages);
+				case 3: arsort($arrImagesDate); $arrImages = $arrImagesDate;
 				break;
 				
 				default: natcasesort($arrImages);
@@ -97,7 +97,7 @@ if(!class_exists('gallery')){
 			
 			foreach($arrImages as $key => $val){
 				//Check for thumbnail
-				$strThumbname = "thumb_".$val."-150x150.".pathinfo($key, PATHINFO_EXTENSION);
+				$strThumbname = "thumb_".pathinfo($key, PATHINFO_FILENAME)."-150x150.".pathinfo($key, PATHINFO_EXTENSION);
 				$strThumbnail = "";
 				if (is_file($strThumbFolder.$strThumbname)){
 					$strThumbnail = $strThumbFolderSP.$strThumbname;

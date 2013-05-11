@@ -305,7 +305,7 @@ class controller extends page_generic {
 			include_once($this->root_path.'core/gallery.class.php');
 			foreach($arrGalleryObjects[4] as $key=>$val){
 				$objGallery = registry::register('gallery');
-				$strGalleryContent = $objGallery->create($val, (int)$arrPageObjects[3][$key], $this->server_path.$strPath, $intPageID);
+				$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->server_path.$strPath, $intPageID);
 				$strContent = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strContent);
 			}
 		}
