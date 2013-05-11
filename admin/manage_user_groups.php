@@ -203,14 +203,14 @@ class Manage_User_Groups extends page_generic {
 			foreach ( $auth_defaults as $auth_value => $auth_setting ) {
 				$r_auth_id    = $this->acl->get_auth_id($auth_value);
 				$r_auth_value = $auth_value;
-				$chk_auth_value = ( $group_permissions[$auth_value] == "Y") ? 'Y' : 'N';
+				$chk_auth_value = ( isset($group_permissions[$auth_value]) && $group_permissions[$auth_value] == "Y") ? 'Y' : 'N';
 				$db_auth_value  = ( $this->in->get($r_auth_value) == "Y" )                      ? 'Y' : 'N';
 
 				if ( $chk_auth_value != $db_auth_value ) {
 					$this->update_auth_groups($r_auth_id, $db_auth_value, $this->in->get('g', 0));
 				}
 			}
-			$this->db->free_result($result);
+
 		}
 		$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('admin_set_perms_success'), 'color' => 'green');
 		$this->edit($message);
