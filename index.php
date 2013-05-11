@@ -257,7 +257,7 @@ class controller extends page_generic {
 				'title'	=> $this->user->lang('article_unpublish'),
 			);
 		}
-				
+						
 		$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
 		
 		$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
@@ -298,8 +298,20 @@ class controller extends page_generic {
 			}
 		}
 		
+		//Replace Image Gallery
+		$arrGalleryObjects = array();
+		preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strContent, $arrGalleryObjects, PREG_PATTERN_ORDER);
+		if (count($arrGalleryObjects[0])){
+			include_once($this->root_path.'core/gallery.class.php');
+			foreach($arrGalleryObjects[4] as $key=>$val){
+				$objGallery = registry::register('gallery');
+				$strGalleryContent = $objGallery->create($val, (int)$arrPageObjects[3][$key], $this->server_path.$strPath, $intPageID);
+				$strContent = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strContent);
+			}
+		}
+		
 		if ($arrPermissions['create'] || $arrPermissions['update']) {
-			$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path));
+			$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path.$this->SID));
 		}
 		
 		if ($arrPermissions['delete'] || $arrPermissions['change_state']){
@@ -309,7 +321,6 @@ class controller extends page_generic {
 					window.location='".$this->controller_path.$this->page_path.$this->SID.'&delete&link_hash='.$this->CSRFGetToken('delete')."&aid='+aid;
 				}"
 			);
-
 		}
 
 			$this->tpl->assign_vars(array(
@@ -324,7 +335,7 @@ class controller extends page_generic {
 				'BREADCRUMB'	  => $this->pdh->get('articles', 'breadcrumb', array($intArticleID)),
 				'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
-				'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
+				'S_TOOLBAR'		=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 				'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
 				'COMMENTS_COUNTER'	=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 				'S_COMMENTS'	=> ($arrArticle['comments']) ? true : false,

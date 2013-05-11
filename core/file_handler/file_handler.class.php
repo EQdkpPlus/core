@@ -72,7 +72,7 @@ if (!class_exists("file_handler")) {
 				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($strFilePath);
 				break;
 				
-				case 'serverpath' : return $this->server-path.$this->remove_rootpath($strFilePath);
+				case 'serverpath' : return $this->server_path.$this->remove_rootpath($strFilePath);
 				break;
 				
 				default: return $this->remove_rootpath($strFilePath);
@@ -81,7 +81,6 @@ if (!class_exists("file_handler")) {
 
 		public function FolderPath($foldername, $plugin=false, $linkType = 'relative'){
 			$strFilePath = $this->fhandler->FolderPath($foldername, $plugin, false);
-			
 			switch ($linkType){
 				case 'relative': return $strFilePath;
 				break;
@@ -89,11 +88,12 @@ if (!class_exists("file_handler")) {
 				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($strFilePath);
 				break;
 				
-				case 'serverpath' : return $this->server-path.$this->remove_rootpath($strFilePath);
+				case 'serverpath' : return $this->server_path.$this->remove_rootpath($strFilePath);
 				break;
 				
 				default: return $this->remove_rootpath($strFilePath);
 			}
+			
 		}
 
 		public function FileSize($file, $plugin=false){

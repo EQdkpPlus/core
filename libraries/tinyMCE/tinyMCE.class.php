@@ -118,16 +118,17 @@ class tinyMCE extends gen_class {
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					theme: "modern",
-					toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eqdkp_lightbox eqdkp_filebrowser | preview media fullpage | forecolor emoticons | eqdkp_item",
+					toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eqdkp_lightbox eqdkp_filebrowser | preview media fullpage | forecolor emoticons | eqdkp_item eqdkp_gallery",
 					//language : "'.$this->language.'",
 					 plugins: [
-        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
+        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_gallery",
         "searchreplace visualblocks code fullscreen",
         "media table contextmenu paste textcolor emoticons'.$autoresize.'"
     ],
 
 					entity_encoding : "raw",
 					rel_list: [{value:"lightbox", text: "Lightbox" }],
+					extended_valid_elements : "p[class|id|style|data-sort|data-folder|title]",
 					'.$link_list.'
 					file_browser_callback : function(field_name, url, type, win){
 						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.php'.$this->SID.'";    // use an absolute path!

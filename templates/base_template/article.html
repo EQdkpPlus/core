@@ -1,7 +1,13 @@
 <!-- IF not S_HIDE_HEADER -->
 <div class="contentHeader">
 	<h1 class="contentTitle">{ARTICLE_TITLE}
-		
+		<!-- IF S_TOOLBAR --> 
+		<div class="floatRight">
+			<div class="toolbar-button">
+				<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+			</div>
+		</div>
+		<!-- ENDIF -->
 		<div class="floatRight">
 			<a href="{PERMALINK}" title="{L_permalink}"><i class="icon-link"></i></a>
 		</div>
@@ -28,14 +34,7 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<!-- ELSEIF S_TOOLBAR -->
-	<div class="contentHeader">
-		<div class="floatRight">
-			<div class="toolbar-button">
-				<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
-			</div>
-		</div>
-	</div>
+
 <!-- ENDIF -->
 
 <!-- IF S_PAGINATION -->
