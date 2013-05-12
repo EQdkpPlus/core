@@ -178,7 +178,7 @@ if (!class_exists("bbcode")) {
 			return '<ol start="'.intval($arrMatches[1]).'">'.$arrMatches[2].'</ol>';
 		}
 		
-		function sanatizeURLs($arrURL){d($arrURL);
+		function sanatizeURLs($arrURL){
 			$text = str_replace(array('"', "'"), array("",""), $arrURL[1]);
 			if (!filter_var($text, FILTER_VALIDATE_URL)) return '';
 			
