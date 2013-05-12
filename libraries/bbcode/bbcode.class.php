@@ -86,16 +86,10 @@ if (!class_exists("bbcode")) {
 				'/\[b\](.*?)\[\/b\]/msi',
 				'/\[i\](.*?)\[\/i\]/msi',
 				'/\[u\](.*?)\[\/u\]/msi',
-				'/\[email\](.*?)\[\/email\]/msi',
-				'/\[url\="?(.*?)"?\](.*?)\[\/url\]/msi',
-				'/\[size\="?(.*?)"?\](.*?)\[\/size\]/msi',
-				'/\[color\="?(.*?)"?\](.*?)\[\/color\]/msi',
-				'/\[bluepost\="?(.*?)"?\](.*?)\[\/bluepost\]/msi',
 				'/\[quote](.*?)\[\/quote\]/msi',
 				'/\[center](.*?)\[\/center\]/msi',
 				'/\[left](.*?)\[\/left\]/msi',
 				'/\[right](.*?)\[\/right\]/msi',
-				'/\[list\=(.*?)\](.*?)\[\/list\]/msi',
 				'/\[list\](.*?)\[\/list\]/msi',
 				'/\[\*\]\s?(.*?)\n/msi',
 				'/\[br\]/msi',
@@ -109,16 +103,10 @@ if (!class_exists("bbcode")) {
 					'<strong>\1</strong>',
 					'<em>\1</em>',
 					'<u>\1</u>',
-					'<a href="mailto:\1">\1</a>',
-					'<a href="\1">\2</a>',
-					'\2',
-					'\2',
-					'\2',
 					'\1',
 					'\1',
 					'\1',
 					'\1',
-					'<ol start="\1">\2</ol>',
 					'<ul>\1</ul>',
 					'<li>\1</li>',
 					'<br/>',
@@ -130,16 +118,10 @@ if (!class_exists("bbcode")) {
 					'<strong>\1</strong>',
 					'<em>\1</em>',
 					'<u>\1</u>',
-					'<a href="mailto:\1">\1</a>',
-					'<a href="\1">\2</a>',
-					'<span style="font-size:\1%">\2</span>',
-					'<span style="color:\1">\2</span>',
-					'<style type="text/css">.bluepost strong {color:#ffffff;}</style><div class="ui-corner-top ui-corner-bottom ui-corner-right ui-corner-left" style="background-color:#333333; color:#1499ff"><div style="padding:5px;"><div style="border-bottom:1px solid #1d1d1e; padding-bottom:3px;"><img src="'.$this->root_path.'images/logos/blizz.gif"> <b>'.$this->user->lang('quote_of').' \1:</b></div><div style="padding-top:3px;" class="bluepost">\2</div></div></div>',
 					'<blockquote>\1</blockquote>',
-					'<div align="center">\1</div>',
-					'<div align="left">\1</div>',
-					'<div align="right">\1</div>',
-					'<ol start="\1">\2</ol>',
+					'<div style="text-align:center;">\1</div>',
+					'<div style="text-align:left;">\1</div>',
+					'<div style="text-align:right;">\1</div>',
 					'<ul>\1</ul>',
 					'<li>\1</li>',
 					'<br/>',
@@ -153,6 +135,14 @@ if (!class_exists("bbcode")) {
 			}else{
 				$text = preg_replace_callback('/\[img\](.*?)\[\/img\]/msi', array($this,"sanatizeIMG"), $text);
 			}
+			//Replace urls
+			$text = preg_replace_callback('/\[url\="?(.*?)"?\](.*?)\[\/url\]/msi', array($this,"sanatizeURLs"), $text);
+			//Replace font color
+			$text = preg_replace_callback('/\[color\="?(.*?)"?\](.*?)\[\/color\]/msi', array($this,"sanatizeFontcolor"), $text);
+			//Replace font size
+			$text = preg_replace_callback('/\[size\="?(.*?)"?\](.*?)\[\/size\]/msi', array($this,"sanatizeFontsize"), $text);
+			//Replace ordered list
+			$text = preg_replace_callback('/\[list\=(.*?)\](.*?)\[\/list\]/msi', array($this,"sanatizeOrderedList"), $text);
 
 			// paragraphs
 			$text = str_replace("\r", "", $text);
@@ -171,6 +161,28 @@ if (!class_exists("bbcode")) {
 			}
 
 			return $text;
+		}
+
+		function sanatizeFontcolor($arrMatches){
+			if (preg_match('/#[a-zA-Z0-9]{3,6}/', $arrMatches[1])){
+				return '<div style="color: '.$arrMatches[1].';">'.$arrMatches[2].'</div>';
+			}
+			return '';
+		}
+		
+		function sanatizeFontsize($arrMatches){
+			return '<div style="font-size: '.intval($arrMatches[1]).'px">'.$arrMatches[2].'</div>';
+		}
+		
+		function sanatizeOrderedList($arrMatches){
+			return '<ol start="'.intval($arrMatches[1]).'">'.$arrMatches[2].'</ol>';
+		}
+		
+		function sanatizeURLs($arrURL){d($arrURL);
+			$text = str_replace(array('"', "'"), array("",""), $arrURL[1]);
+			if (!filter_var($text, FILTER_VALIDATE_URL)) return '';
+			
+			return '<a href="'.filter_var($text, FILTER_SANITIZE_URL).'">'.$arrURL[2].'</a>';
 		}
 
 		// Download the Image to eqdkp
