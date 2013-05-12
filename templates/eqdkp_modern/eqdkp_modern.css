@@ -2612,13 +2612,24 @@ ul.image-gallery li.folder {
 }
 
 ul.image-gallery li.folderup {
-	font-size: 120px;
 	text-align: center;
-	line-height: 150px;
+}
+
+ul.image-gallery li.folderup a {
+	line-height: 20px;
+}
+
+ul.image-gallery li.folderup i {
+	font-size: 120px;
+    line-height: 120px;
 }
 
 ul.image-gallery li.folder a{
 	line-height: 260px;
+}
+
+button#cboxPrevious, button#cboxNext, button#cboxClose {
+	box-shadow: none;
 }
 	
 @media all and (max-width: 480px) {

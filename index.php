@@ -310,6 +310,18 @@ class controller extends page_generic {
 			}
 		}
 		
+		//Replace Raidloot
+		$arrRaidlootObjects = array();
+		preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)">(.*)</p>#iU', $strContent, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+		if (count($arrRaidlootObjects[0])){
+			include_once($this->root_path.'core/gallery.class.php');
+			foreach($arrRaidlootObjects[3] as $key=>$val){
+				$objGallery = registry::register('gallery');
+				$strRaidlootContent = $objGallery->raidloot((int)$val);
+				$strContent = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strContent);
+			}
+		}
+		
 		if ($arrPermissions['create'] || $arrPermissions['update']) {
 			$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path.$this->SID));
 		}
@@ -408,9 +420,33 @@ class controller extends page_generic {
 				//2 = Headlines only
 				//3 = only first 600 characters
 				$strText = $this->pdh->get('articles',  'text', array($intArticleID));
-				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));				
+				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
 				
 				$strText = $this->bbcode->parse_shorttags($arrContent[0]);
+				
+				//Replace Image Gallery
+				$arrGalleryObjects = array();
+				preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
+				if (count($arrGalleryObjects[0])){
+					include_once($this->root_path.'core/gallery.class.php');
+					foreach($arrGalleryObjects[4] as $key=>$val){
+						$objGallery = registry::register('gallery');
+						$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->server_path.$strPath, $intPageID);
+						$strText = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strText);
+					}
+				}
+				
+				//Replace Raidloot
+				$arrRaidlootObjects = array();
+				preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+				if (count($arrRaidlootObjects[0])){
+					include_once($this->root_path.'core/gallery.class.php');
+					foreach($arrRaidlootObjects[3] as $key=>$val){
+						$objGallery = registry::register('gallery');
+						$strRaidlootContent = $objGallery->raidloot((int)$val);
+						$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
+					}
+				}
 				
 				$arrToolbarItems = array();
 				if ($arrPermissions['create']) {

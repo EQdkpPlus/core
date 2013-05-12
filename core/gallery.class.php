@@ -53,6 +53,7 @@ if(!class_exists('gallery')){
 					$extension = strtolower(pathinfo($val, PATHINFO_EXTENSION));
 					if (in_array($extension, array('jpg', 'png', 'gif', 'jpeg'))){
 						$arrImages[$val] = pathinfo($val, PATHINFO_FILENAME);
+						$arrImageDimensions[$val] = getimagesize($contentFolder.$val);
 						if ($intSortation == 2 || $intSortation == 3) $arrImagesDate[$val] = filemtime($contentFolder.$val);
 					}
 				}
@@ -84,7 +85,7 @@ if(!class_exists('gallery')){
 				} else {
 					$strFolderUp = base64_encode($strFolderUp);
 				}
-				$strOut .='<li class="folderup"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.$strFolderUp.'"><i class="icon-level-up icon-flip-horizontal"></i></a></li>';
+				$strOut .='<li class="folderup"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.$strFolderUp.'"><i class="icon-level-up icon-flip-horizontal"></i><br>'.$this->user->lang('back').'</a></li>';
 			}
 			
 			natcasesort($arrDirs);
@@ -108,9 +109,9 @@ if(!class_exists('gallery')){
 						$strThumbnail = $strThumbFolderSP.$strThumbname;
 					}
 				}
-				
+								
 				if($strThumbnail != ""){
-					$strOut .= '<li class="image"><a href="'.$contentFolderSP.$key.'" class="lightbox_'.md5($strFolder).'" rel="'.md5($strFolder).'"><img src="'.$strThumbnail.'" alt="Image" /></a></li>';
+					$strOut .= '<li class="image"><a href="'.$contentFolderSP.$key.'" class="lightbox_'.md5($strFolder).'" rel="'.md5($strFolder).'" title="'.sanitize($key).'; '.$arrImageDimensions[$key][0].'x'.$arrImageDimensions[$key][1].' px"><img src="'.$strThumbnail.'" alt="Image" /></a></li>';
 				}
 				
 			}
@@ -118,11 +119,43 @@ if(!class_exists('gallery')){
 			$strOut .= "</ul><div class=\"clear\"></div>";
 			
 			$this->tpl->add_js(
-				'$(".lightbox_'.md5($strFolder).'").colorbox({rel:"'.md5($strFolder).'", transition:"none", width:"90%", height:"90%"});', 'docready'
+				'$(".lightbox_'.md5($strFolder).'").colorbox({rel:"'.md5($strFolder).'", width:"90%", height:"90%", slideshow: true, slideshowAuto:false, transition:"fade", slideshowSpeed:4500});', 'docready'
 			);
 			
 			return $strOut;
 		}
+		
+		public function raidloot($intRaidID){
+			//Get Raid-Infos:
+			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
+			if ($intEventID){
+				$strOut = '<div class="raidloot"><h3>'.$this->user->lang('loot').' '.$this->pdh->get('event', 'html_icon', array($intEventID)).$this->pdh->get('raid', 'html_raidlink', array($intRaidID, 'viewraid.php', ''));
+				$strRaidNote = $this->pdh->get('raid', 'html_note', array($intRaidID));
+				if ($strRaidNote != "") $strOut .= ' ('.$strRaidNote.')';
+				$strOut .= ', '.$this->pdh->get('raid', 'html_date', array($intRaidID)).'</h3>';
+				
+				//Get Items from the Raid
+				$arrItemlist = $this->pdh->get('item', 'itemsofraid', array($intRaidID));
+				infotooltip_js();
+				
+				if (count($arrItemlist)){
+					foreach($arrItemlist as $item){
+						$buyer = $this->pdh->get('item', 'buyer', array($item));
+						$strOut .=  $this->pdh->get('item', 'link_itt', array($item, 'viewitem.php')). ' - 
+						<a href="'.$this->root_path.'viewcharacter.php'.$this->SID.'&amp;member_id='.$buyer.'">'.$this->pdh->get('member', 'html_name', array($buyer)).'</a>,
+						'.round($this->pdh->get('item', 'value', array($item))).' '.$this->config->get('dkp_name').'<br />';
+					}
+					
+				} else {
+					return '';
+				}
+				
+				
+				return $strOut.'</div>';
+			}
+			return '';
+		}
+
 	}
 }
 ?>

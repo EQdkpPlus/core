@@ -64,7 +64,7 @@ $alang = array(
 "module_soap" => "SOAP PHP module",
 "module_autoload" => "spl_autoload_register PHP function",
 "module_hash" => "hash PHP function",
-'module_memory'		=> 'PHP memeroy limit',
+'module_memory'		=> 'PHP memory limit',
 "safemode_warning" => "<strong>WARNING</strong><br/>The PHP Safe mode is active, you have to use the FTP mode of EQDKP-Plus!",
 "phpcheck_success" => "The minimum requirements for the installation of EQDKP-Plus are met. The installation can proceed.",
 "phpcheck_failed" => "The minimum requirements for the installation of EQDKP-Plus are not met.<br />A selection of suitable hosting companies can be found on our <a href=\"".EQDKP_PROJECT_URL."\" target=\"_blank\">website</a>",

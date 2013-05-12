@@ -588,3 +588,8 @@ i.mce-i-zoom-in:before{
 	content:"\f00e";
 	font-family:'FontAwesome';
 }
+
+i.mce-i-trophy:before{
+	content:"\f091";
+	font-family:'FontAwesome';
+}

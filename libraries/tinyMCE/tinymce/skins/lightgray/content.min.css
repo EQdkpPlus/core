@@ -25,3 +25,12 @@ hr.system-pagebreak {
 	border-radius: 3px 3px 3px 3px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
+
+.system-raidloot {
+	background: url("img/trophy.png") no-repeat scroll center center #F2F8FF;
+	border: 1px dashed #888888;
+	height: 50px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
