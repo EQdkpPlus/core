@@ -2060,10 +2060,6 @@ label.error, label.error {
 }
 div.error { display: none; }
 
-div.icon_loading{
-	background:transparent url(images/bluebox_loading.gif) center left no-repeat;
-}
-
 /* character view */
 .profile_header{
 	margin: 7px 0 20px 7px;

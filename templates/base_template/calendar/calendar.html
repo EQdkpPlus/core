@@ -168,7 +168,7 @@
 
 		$("#export_calendar,#export_callist").qtip({
 			content: {
-				text: '<img class="throbber" src="../images/global/loading.gif" alt="Loading..." />',
+				text: '<i class="icon-refresh icon-spin icon-large"></i>',
 				ajax: {
 					url: 'index.php{SID}&export_tooltip=true'
 				},
@@ -305,7 +305,7 @@
 
 	<div id="fragment-calendar">
 		<div id="calDialog"></div>
-		<div id='calendar_loading'><img src="{TEMPLATE_PATH}/images/calendar_loading.gif" alt="loading" /> {L_lib_loading}</div>
+		<div id='calendar_loading'><i class="icon-spinner icon-spin icon-large"></i> {L_lib_loading}</div>
 		<div id='calendar'></div>
 	</div>
 

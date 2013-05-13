@@ -212,7 +212,7 @@ if (!class_exists("comments")){
 						$('#comment_data').ajaxForm({
 							target: '#htmlCommentTable',
 							beforeSubmit:  function(){
-								$('#comment_button').html('<img src=\"".$this->server_path."images/global/loading.gif\" alt=\"Save\"/> ".$this->user->lang('comments_savewait')."');
+								$('#comment_button').html('<i class=\"icon-refresh icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
 							},
 							success: function() {
 								$('#htmlCommentTable').fadeIn('slow');

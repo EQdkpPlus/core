@@ -698,7 +698,7 @@ function infotooltip_js() {
 								bla.success(function(data) {
 									cached_itts['t_'+mytitle] = $.trim(data);
 								});
-								return '<img src=\"".registry::get_const('server_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
+								return '<i class=\"icon-spinner icon-spin icon-large\"></i> ".registry::fetch('user')->lang('lib_loading')."';
 							}
 						},
 						tooltipClass: \"ui-infotooltip\",
@@ -751,7 +751,7 @@ function chartooltip_js() {
 								bla.success(function(data) {
 									cached_charTT['t_'+mytitle] = $.trim(data);
 								});
-								return '<img src=\"".registry::get_const('server_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
+								return '<i class=\"icon-spinner icon-spin icon-large\"></i> ".registry::fetch('user')->lang('lib_loading')."';
 							}
 						},
 						tooltipClass: \"ui-infotooltip\",

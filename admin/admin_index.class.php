@@ -565,7 +565,7 @@ class admin_index extends gen_class {
 			$(".ip_resolver").each(function() {
 				$(this).qtip({
 					content: {
-						text: \'<img class="throbber" src="images/global/loading.gif" alt="Loading..." />\',
+						text: \'<i class="icon-refresh icon-spin icon-large"></i>\',
 						ajax: {
 							url: \'index.php'.$this->SID.'\',
 							data: { ip_resolve: $(this).html() }

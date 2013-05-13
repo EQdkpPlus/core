@@ -1302,7 +1302,7 @@ fieldset.invisible dt label {
 
 /* ACP: admin menu - update available badge */
 .update_available {
-	background-image: url(../images/extensions/updatebadge.png);
+	background-image: url(images/updatebadge.png);
 	top: -10px;
 	left: 4px;
 	margin-right: 4px;
@@ -1321,7 +1321,7 @@ fieldset.invisible dt label {
 
 /* ACP: admin menu - update available badge */
 .update_available_yellow {
-	background-image: url(../images/extensions/updatebadge_yellow.png);
+	background-image: url(images/updatebadge_yellow.png);
 	top: -10px;
 	left: 4px;
 	margin-right: 4px;
@@ -1847,23 +1847,9 @@ span.toggle_button {
 .confirmdialog{
 	text-align:left;
 }
-.imageuploader_buttons{
-	width:38px;
-	text-align:right;
-	z-index:100;
-	position: relative;
-	left: 3px;
-	bottom: 3px;
-	background-color: rgba(0,0,0,0.6);
-	border:1px solid #333;
-	padding: 3px;
-}
 .imageuploader_image{
 }
 
-div.icon_loading{
-	background:transparent url(images/bluebox_loading.gif) center left no-repeat;
-}
 
 /* character view */
 .profile_header{
