@@ -210,9 +210,11 @@ class Manage_Articles extends page_generic {
 
 		$editor = register('tinyMCE');
 		$editor->editor_normal(array(
-			'autoresize'	=> true,
 			'relative_urls'	=> false,
 			'link_list'		=> true,
+			'pageobjects'	=> true,
+			'gallery'		=> true,
+			'raidloot'		=> true,
 		));
 		
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');
@@ -273,13 +275,16 @@ class Manage_Articles extends page_generic {
 		
 		$routing = register('routing');
 		$arrPageObjects = $routing->getPageObjects();
+		
+		$this->tpl->add_js(
+			'var pageobjects = '.json_encode($arrPageObjects).';'
+		);
 
 		$this->tpl->assign_vars(array(
 			'CID' => $cid,
 			'AID' => $id,
 			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
 			'ARTICLE_NAME' => $this->pdh->get('articles', 'title', array($id)),
-			'DD_PAGE_OBJECTS'	=> $this->html->Dropdown('page_objects',  $arrPageObjects),
 		));
 		$this->core->set_vars(array(
 			'page_title'		=> (($id) ? $this->user->lang('manage_articles').': '.$this->pdh->get('articles', 'title', array($id)) : $this->user->lang('add_new_article')),

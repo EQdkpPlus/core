@@ -628,7 +628,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 		if ($recent_page == 1){
 			$pagination .= '<li class="active"><a href="#">1</a></li>';
 		} else {
-			$pagination .= '<li class="arrow-left"><a href="'.$base_url.'='.(( ($recent_page - 2) * $per_page) + $offset).'" title="'.registry::fetch('user')->lang('previous_page').'"><img src="'.registry::get_const('root_path').'images/arrows/left_arrow.png" border="0" alt="left"/></a></li><li><a href="'.$url.'" class="pagination">1</a></li>';
+			$pagination .= '<li class="arrow-left"><a href="'.$base_url.'='.(( ($recent_page - 2) * $per_page) + $offset).'" title="'.registry::fetch('user')->lang('previous_page').'"><img src="'.registry::get_const('server_path').'images/arrows/left_arrow.png" border="0" alt="left"/></a></li><li><a href="'.$url.'" class="pagination">1</a></li>';
 		}
 
 		//If total-pages <= 4 show all page-links
@@ -664,7 +664,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 		if ($recent_page == $total_pages){
 			$pagination .= '<li class="active"><a href="#">'.$recent_page.'</a></li>';
 		} else {
-			$pagination .= '<li><a href="'.$base_url.'='.((($total_pages - 1) * $per_page)+$offset) . '" class="pagination" title="'.registry::fetch('user')->lang('page').' '.$total_pages.'">'.$total_pages.'</a></li><li class="arrow-right"><a href="'.$base_url.'='.(($recent_page * $per_page)+$offset).'" title="'.registry::fetch('user')->lang('next_page').'"><img src="'.registry::get_const('root_path').'images/arrows/right_arrow.png" border="0" alt="right"/></a></li>';
+			$pagination .= '<li><a href="'.$base_url.'='.((($total_pages - 1) * $per_page)+$offset) . '" class="pagination" title="'.registry::fetch('user')->lang('page').' '.$total_pages.'">'.$total_pages.'</a></li><li class="arrow-right"><a href="'.$base_url.'='.(($recent_page * $per_page)+$offset).'" title="'.registry::fetch('user')->lang('next_page').'"><img src="'.registry::get_const('server_path').'images/arrows/right_arrow.png" border="0" alt="right"/></a></li>';
 		}
 
 	$pagination .= '</ul><div class="clear"></div></div>';
@@ -677,7 +677,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 function infotooltip_js() {
 	static $added = 0;
 	if(!$added AND registry::register('config')->get('infotooltip_use')) {
-		registry::register('template')->js_file(registry::get_const('root_path').'infotooltip/includes/jquery.infotooltip.js');
+		registry::register('template')->js_file(registry::get_const('server_path').'infotooltip/includes/jquery.infotooltip.js');
 		$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
 			$js .= "$('.infotooltip').tooltip({
 						track: true,
@@ -694,17 +694,17 @@ function infotooltip_js() {
 							if (cached_itts['t_'+$(this).attr('title')] != undefined){
 								return cached_itts['t_'+$(this).attr('title')];
 							} else {
-								var bla = $.get('".registry::get_const('root_path')."infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
+								var bla = $.get('".registry::get_const('server_path')."infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
 								bla.success(function(data) {
 									cached_itts['t_'+mytitle] = $.trim(data);
 								});
-								return '<img src=\"".registry::get_const('root_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
+								return '<img src=\"".registry::get_const('server_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
 							}
 						},
 						tooltipClass: \"ui-infotooltip\",
 					});";
 		registry::register('template')->add_js($js, 'docready');
-		registry::register('template')->css_file(registry::get_const('root_path').'infotooltip/includes/'.registry::register('config')->get('default_game').'.css');
+		registry::register('template')->css_file(registry::get_const('server_path').'infotooltip/includes/'.registry::register('config')->get('default_game').'.css');
 	}
 	$added = 1;
 	return true;
@@ -747,17 +747,17 @@ function chartooltip_js() {
 							if (cached_charTT['t_'+$(this).attr('title')] != undefined){
 								return cached_charTT['t_'+$(this).attr('title')];
 							} else {
-								var bla = $.get('".registry::get_const('root_path')."exchange.php?out=chartooltip&charid='+$(this).attr('title'), response);
+								var bla = $.get('".registry::get_const('server_path')."exchange.php?out=chartooltip&charid='+$(this).attr('title'), response);
 								bla.success(function(data) {
 									cached_charTT['t_'+mytitle] = $.trim(data);
 								});
-								return '<img src=\"".registry::get_const('root_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
+								return '<img src=\"".registry::get_const('server_path')."images/global/tooltip_loading.gif\" alt=\"".registry::fetch('user')->lang('lib_loading')."\" />';
 							}
 						},
 						tooltipClass: \"ui-infotooltip\",
 					});";
 		registry::register('template')->add_js($js, 'docready');
-		registry::register('template')->css_file(registry::get_const('root_path').'games/'.registry::register('config')->get('default_game').'/chartooltip/chartooltip.css');
+		registry::register('template')->css_file(registry::get_const('server_path').'games/'.registry::register('config')->get('default_game').'/chartooltip/chartooltip.css');
 	}
 	$charTTadded = 1;
 	return true;

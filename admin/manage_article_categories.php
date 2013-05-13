@@ -185,8 +185,9 @@ class Manage_Article_Categories extends page_generic {
 		$this->jquery->Tab_header('category-permission-tabs');
 		$editor = register('tinyMCE');
 		$editor->editor_normal(array(
-			'autoresize'	=> true,
 			'relative_urls'	=> false,
+			'link_list'		=> true,
+			'readmore'		=> false,
 		));
 		
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');

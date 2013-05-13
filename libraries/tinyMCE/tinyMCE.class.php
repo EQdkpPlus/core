@@ -63,7 +63,7 @@ class tinyMCE extends gen_class {
 					convert_fonts_to_spans : false,
 					force_p_newlines : false,
 					menubar: false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | forecolor | quote image link",
+					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | forecolor | blockquote image link",
 					statusbar : false,
 				});
 			', 'docready');
@@ -74,8 +74,11 @@ class tinyMCE extends gen_class {
 	public function editor_normal($settings=false){
 		if(!$this->trigger['normal']){
 			$this->language	= (isset($settings['language'])) ? $settings['language'] : $this->language;
-			$autoresize		= (isset($settings['autoresize'])) ? ' autoresize' : '';
-			$resizing		= (isset($settings['autoresize'])) ? 'theme_advanced_resizing : true,' : '';
+			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
+			$pageobjects	= (isset($settings['pageobjects']) && $settings['pageobjects']) ? ' eqdkp_pageobject' : '';
+			$readmore		= (isset($settings['readmore']) && !$settings['readmore']) ? '' : ' eqdkp_pagebreak_readmore';
+			$gallery 		= (isset($settings['gallery']) && $settings['gallery']) ? ' eqdkp_gallery' : '';
+			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot']) ? ' eqdkp_raidloot' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			
@@ -118,12 +121,12 @@ class tinyMCE extends gen_class {
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					theme: "modern",
-					toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eqdkp_lightbox eqdkp_filebrowser | preview media fullpage | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot",
+					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot",
 					//language : "'.$this->language.'",
 					 plugins: [
-        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_gallery eqdkp_raidloot",
+        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
         "searchreplace visualblocks code fullscreen",
-        "media table contextmenu paste textcolor emoticons'.$autoresize.'"
+        "media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
     ],
 
 					entity_encoding : "raw",

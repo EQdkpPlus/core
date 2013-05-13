@@ -3,24 +3,15 @@ body.mce-content-body{background-color:#fff;font-family:Verdana,Arial,Helvetica,
 hr#system-readmore {
     border: 1px dashed red;
     color: red;
-}
-
-hr.system-pagebreak {
-    border: 1px dashed gray;
-    color: gray;
-}
-
-.system-article {
-    border: 1px dashed gray;
-    color: #fff;
-	height: 40px;
-	background-color: gray;
+	height: 30px;
+	background: url("img/readmore.png") no-repeat scroll center center #efefef;
+	border-radius: 3px 3px 3px 3px;
 }
 
 .system-gallery {
 	background: url("img/gallery.png") no-repeat scroll center center #F2F8FF;
 	border: 1px dashed #888888;
-	height: 250px;
+	height: 200px;
 	width: 99%;
 	border-radius: 3px 3px 3px 3px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
@@ -33,4 +24,23 @@ hr.system-pagebreak {
 	width: 99%;
 	border-radius: 3px 3px 3px 3px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+hr.system-pagebreak {
+    border: 1px dashed gray;
+	height: 30px;
+	background: url("img/pagebreak.png") no-repeat scroll center center #efefef;
+	border-radius: 3px 3px 3px 3px;
+}
+
+.system-article {
+    background: url("img/pageobject.png") no-repeat scroll center center #F2F8FF;
+	border: 1px dashed #888888;
+	height: 200px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	font-weight: bold;
+	text-align: center;
+	line-height: 130px;
 }

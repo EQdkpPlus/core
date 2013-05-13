@@ -593,3 +593,13 @@ i.mce-i-trophy:before{
 	content:"\f091";
 	font-family:'FontAwesome';
 }
+
+i.mce-i-pageobject:before{
+	content:"\f0f6";
+	font-family:'FontAwesome';
+}
+
+i.mce-i-readmore:before{
+	content:"\f078";
+	font-family:'FontAwesome';
+}
