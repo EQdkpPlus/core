@@ -550,8 +550,12 @@ if (!class_exists("timehandler")){
 			if(!$date) return 0;
 			$bday = $this->getdate($date);
 			$today = $this->getdate();
-			$yeardiff = ($today['mon'] > $bday['mon']) ? $today['year'] - $bday['year'] : $today['year'] - $bday['year']-1;
-			return($yeardiff);
+			
+			$yeardiff = ($today['year'] - $bday['year']);
+			if (($today['mon'] < $bday['mon']) || (($today['mon'] == $bday['mon']) && ($today['mday'] < $bday['mday']))) {
+				$yeardiff = $yeardiff - 1;
+			}
+			return $yeardiff;
 		}
 
 		// Count Entries in an array between two dates

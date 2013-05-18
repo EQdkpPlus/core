@@ -49,7 +49,7 @@ class maintenance_user extends page_generic {
 			'user_password' => $encr_password,
 			'user_active'	=> 1,
 			'rules'			=> 1,
-			'user_email'	=> 'maintenance@local',
+			'user_email'	=> $this->crypt->encrypt('maintenance@local.com'),
 		);
 		
 		$user_id = $this->pdh->put('user', 'insert_user', array($arrUser));
