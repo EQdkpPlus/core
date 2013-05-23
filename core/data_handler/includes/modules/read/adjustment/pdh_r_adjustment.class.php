@@ -46,7 +46,7 @@ if(!class_exists('pdh_r_adjustment')){
 			'adj_reason_link'	=> array('link', array('%adjustment_id%', '%link_url%', '%link_url_suffix%'), array()),
 			'adj_event'			=> array('event_name', array('%adjustment_id%'), array()),
 			'adj_members'		=> array('m4agk4a', array('%adjustment_id%'), array()),
-			'adj_raid'			=> array('raid_id', array('%adjustment_id%'), array()),
+			'adj_raid'			=> array('raid_id', array('%adjustment_id%', '%raid_link_url%', '%raid_link_url_suffix%'), array()),
 			'adjedit'			=> array('editicon', array('%adjustment_id%', '%link_url%', '%link_url_suffix%'), array()),
 		);
 
@@ -141,9 +141,14 @@ if(!class_exists('pdh_r_adjustment')){
 			return isset($this->adjustments[$adj_id]) ? $this->adjustments[$adj_id]['reason'] : '';
 		}
 
-		public function get_raid_id($adj_id){
+		public function get_raid_id($adj_id,$base_url, $url_suffix = ''){
 			return $this->adjustments[$adj_id]['raid_id'];
 		}
+		
+		public function get_html_raid_id($adj_id, $base_url, $url_suffix = ''){
+			return '<a href="'.$this->pdh->get('raid', 'raidlink', array($this->get_raid_id($adj_id), $base_url, $url_suffix)).'">'.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($adj_id))).'</a>';
+		}
+		
 
 		public function get_adjsofmember($member_id){
 			$adjustment_ids = array();
