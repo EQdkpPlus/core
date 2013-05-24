@@ -2,65 +2,7 @@
 //<![CDATA[
 $(document).ready(function(){
 	$('#alias').change(check_alias);
-	
-	$('#readmorebutton').click(function(){
-		var content = $('#text').html();
-		if (content.match(/<hr\s+id=("|')system-readmore("|')\s*\/*>/i)) {
-			alert('There is already a Read more... link that has been inserted. Only one such link is permitted. Use {pagebreak} to split the page up further.');
-			return false;
-		} else {
-			$('#text').tinymce().execCommand('mceInsertContent',false,'<hr id="system-readmore" /><p></p>'); 
-		}
-	});
-		
-	$( "#pagebreak-dialog" ).dialog({
-		height: 310,
-		width: 500,
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			Ok: function() {
-				insert_pagebreak();
-			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
-		
-	$('#pagebreakbutton').click(function(){
-		$("#pagebreak_title").val('');
-		$( "#pagebreak-dialog" ).dialog('open');
-	});
-	
-	$( "#pageobject-dialog" ).dialog({
-		height: 310,
-		width: 500,
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			Ok: function() {
-				insert_pageobject();
-			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
 });
-
-function insert_pagebreak(){
-	var pagename = $("#pagebreak_title").val();
-	$('#text').tinymce().execCommand('mceInsertContent',false,'<hr class="system-pagebreak" title="'+pagename+'" /><p></p>'); 
-	$( "#pagebreak-dialog" ).dialog('close');
-}
-
-function insert_pageobject(){
-	var pageobject = $("#page_objects").val();
-	var pagename = $("#page_objects option:selected").text();
-	$('#text').tinymce().execCommand('mceInsertContent',false,'<p class="system-article" title="'+pageobject+'">'+pagename+'</p><p></p>'); 
-	$( "#pageobject-dialog" ).dialog('close');
-}
 
 function check_alias() {
 	var alias = $('#alias').val();
@@ -88,24 +30,6 @@ function check_alias() {
 //]]>
 </script>
 
-<div id="pagebreak-dialog" title="{L_add_pagebreak}">
-	<fieldset class="settings smallsettings">
-		<dl>
-			<dt><label>{L_page_title}</label></dt>
-			<dd><input type="text" id="pagebreak_title" style="width:95%;" maxlength="255" class="input required" /></dd>
-		</dl>
-	</fieldset>
-</div>
-
-<div id="pageobject-dialog" title="{L_add_page_object}">
-	<fieldset class="settings mediumsettings">
-		<dl>
-			<dt><label>{L_page_object}</label></dt>
-			<dd>{DD_PAGE_OBJECTS}</dd>
-		</dl>
-	</fieldset>
-</div>
-
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{CATEGORY_NAME} &raquo; <!-- IF ARTICLE_NAME != "" -->{ARTICLE_NAME}<!-- ELSE -->{L_add_new_article}<!-- ENDIF --></h1>
@@ -127,8 +51,6 @@ function check_alias() {
 			<dl>
 				<dt><label>{L_description}</label></dt>
 				<dd><textarea name="text" id="text" class="mceEditor" rows="3" cols="60" style="width:95%;height:300px;">{TEXT}</textarea>
-					<button class="mainoption" type="button" id="readmorebutton" {READMORE_BUTTON_ENABLED}><i class="icon-chevron-down"></i>{L_readmore_button}</button>
-					<button class="mainoption" type="button" id="pagebreakbutton"><i class="icon-copy"></i>{L_add_pagebreak}</button>
 				</dd>
 			</dl>
 			<dl>

@@ -66,7 +66,7 @@ class viewcharacters extends page_generic {
 		// Individual Adjustment History
 		$view_list = $this->pdh->get('adjustment', 'adjsofmember', array($this->url_id));
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_adjlist');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array(), $this->url_id, 'asort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%raid_link_url%' => 'viewraid.php', '%raid_link_url_suffix%' => ''), $this->url_id, 'asort');
 		$this->tpl->assign_vars(array (
 			'ADJUSTMENT_OUT' => $hptt->get_html_table($this->in->get('asort', ''), $this->vc_build_url('asort'), $this->in->get('astart', 0), $this->user->data['user_alimit']),
 			'ADJUSTMENT_PAGINATION'	=> generate_pagination($this->vc_build_url('astart', true), count($view_list), $this->user->data['user_alimit'], $this->in->get('astart', 0), 'astart')

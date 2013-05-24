@@ -210,7 +210,7 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'username',
 						'help'	=> ($this->config->get('pk_disable_username_change') == 1) ? $this->user->lang('register_help_disabled_username') : '',
 						'readonly'	=> ($this->config->get('pk_disable_username_change') == 1) ? true : false,
-						'text'	=> '<img id="tick_username" src="'.$this->root_path.'images/register/tick.png" style="display:none;" width="16" height="16" alt="" />',
+						'text'	=> '<img id="tick_username" src="'.$this->server_path.'images/register/tick.png" style="display:none;" width="16" height="16" alt="" />',
 						'size'		=> 40,
 						'required'	=> true,
 						'id'	=> 'username',
@@ -565,7 +565,7 @@ class settings_pageobject extends pageobject {
 		$this->jquery->Tab_header('usersettings_tabs', true);
 		$this->jquery->spinner('#user_alimit, #user_climit, #user_ilimit, #user_rlimit, #user_elimit', array('step'=>10, 'multiselector'=>true));
 		$this->jquery->spinner('user_nlimit');
-		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
+		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->controller_path.$this->SID."&style='+ $(\"select[name='style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
 		$this->tpl->assign_vars(array(
 			'S_CURRENT_PASSWORD'			=> true,
 			'S_NEW_PASSWORD'				=> true,

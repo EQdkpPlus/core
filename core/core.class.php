@@ -825,18 +825,18 @@ class core extends gen_class {
 				$arrConfirmMembers = $this->pdh->get('member', 'confirm_required');
 				$arrConfirmMemberCount = count($arrConfirmMembers);
 				$iTaskCount += $arrConfirmMemberCount;
-				if ($arrConfirmMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_confirm_required'), $arrConfirmMemberCount), $this->root_path.'admin/manage_tasks.php'.$this->SID, $arrConfirmMemberCount);
+				if ($arrConfirmMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_confirm_required'), $arrConfirmMemberCount), $this->server_path.'admin/manage_tasks.php'.$this->SID, $arrConfirmMemberCount);
 
 				$arrDeleteMembers = $this->pdh->get('member', 'delete_requested');
 				$intDeleteMemberCount = count($arrDeleteMembers);
 				$iTaskCount += $intDeleteMemberCount;
-				if ($intDeleteMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_delete_requested'), $intDeleteMemberCount),  $this->root_path.'admin/manage_tasks.php'.$this->SID, $intDeleteMemberCount);
+				if ($intDeleteMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_delete_requested'), $intDeleteMemberCount),  $this->server_path.'admin/manage_tasks.php'.$this->SID, $intDeleteMemberCount);
 			}
 			if ($this->user->check_auth('a_users_man', false) && $this->config->get('account_activation') == 2){
 				$arrInactiveUser = $this->pdh->get('user', 'inactive');
 				$intInactiveUserCount = count($arrInactiveUser);
 				$iTaskCount += $intInactiveUserCount;
-				if ($intInactiveUserCount) $this->ntfy->add('yellow', $this->user->lang('manage_users'), sprintf($this->user->lang('notification_user_enable'), $intInactiveUserCount),  $this->root_path.'admin/manage_tasks.php'.$this->SID, $intInactiveUserCount);
+				if ($intInactiveUserCount) $this->ntfy->add('yellow', $this->user->lang('manage_users'), sprintf($this->user->lang('notification_user_enable'), $intInactiveUserCount),  $this->server_path.'admin/manage_tasks.php'.$this->SID, $intInactiveUserCount);
 			}
 
 			if ($iTaskCount > 0){

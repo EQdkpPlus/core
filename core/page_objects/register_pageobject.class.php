@@ -332,12 +332,14 @@ class register_pageobject extends pageobject {
 	// ---------------------------------------------------------
 
 	public function display() {
-		$count = count($this->pdh->get('pages', 'guildrule_page'));
+		$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
+		$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
+	
 		$button = ($this->user->is_signedin()) ? 'confirmed' : 'register';
 		$intSocialPlugins = count(register('socialplugins')->getSocialPlugins(true));
 
 		$this->tpl->assign_vars(array(
-			'SUBMIT_BUTTON'	=> ($count > 0) ? 'guildrules' : $button,
+			'SUBMIT_BUTTON'	=> ($blnGuildrules) ? 'guildrules' : $button,
 			'HEADER'		=> $this->user->lang('register_title').' - '.$this->user->lang('licence_agreement'),
 			'TEXT'			=> $this->user->lang('register_licence').(($intSocialPlugins) ? $this->user->lang('social_privacy_statement') : ''),
 			'S_LICENCE'		=> true,
@@ -352,13 +354,14 @@ class register_pageobject extends pageobject {
 
 	public function display_guildrules() {
 		$button = ($this->user->is_signedin()) ? 'confirmed' : 'register';
-		$page = $this->pdh->get('pages', 'guildrule_page');
-		$data = $this->pdh->get('pages', 'content', array($page[0]));
+		$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
+		$arrArticle = $this->pdh->get('articles', 'data', array($intGuildrulesArticleID));
+		$strText = xhtml_entity_decode($arrArticle['text']);
 
 		$this->tpl->assign_vars(array(
 			'SUBMIT_BUTTON'	=> $button,
 			'HEADER'		=> $this->user->lang('guildrules'),
-			'TEXT'			=> html_entity_decode($data),
+			'TEXT'			=> $strText,
 			'S_LICENCE'		=> true,
 		));
 

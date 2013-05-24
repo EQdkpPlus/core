@@ -145,9 +145,10 @@ class editarticle_pageobject extends pageobject {
 
 		$editor = register('tinyMCE');
 		$editor->editor_normal(array(
-			'autoresize'	=> true,
 			'relative_urls'	=> false,
 			'link_list'		=> true,
+			'gallery'		=> true,
+			'raidloot'		=> true,
 		));
 
 		if ($id){
