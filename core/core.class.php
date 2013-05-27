@@ -407,7 +407,7 @@ class core extends gen_class {
 				// System Message if user has no assigned members
 				if($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])) < 1 && ($this->user->is_signedin()) && ($this->user->data['hide_nochar_info'] != '1')){
 					$message = '<a href="'.$this->root_path.'characters.php'.$this->SID.'">'.$this->user->lang('no_connected_char').'</a>';
-					if ($this->user->check_auth('a_', false)) $message .= '<br /><a href="'.$this->root_path.'characters.php'.$this->SID.'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
+					$message .= '<br /><a href="'.$this->root_path.'characters.php'.$this->SID.'&amp;hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);
 				}
 

@@ -198,8 +198,8 @@ class Manage_Menus extends page_generic {
 				cancel: \'.not-sortable, tbody .not-sortable,.not-sortable tbody, .th_add, .td_add\',
 				receive: function(event, ui){
 					sender = $(ui.sender).attr("id");
-					item = $(ui.item).attr("id");
-					cb = "cb4_" + item;
+					itemi = $(ui.item).attr("id");
+					cb = "cb4_" + itemi;
 					if (sender == "show4") {
 						$("#"+cb).attr("checked", "checked");
 					}else {
