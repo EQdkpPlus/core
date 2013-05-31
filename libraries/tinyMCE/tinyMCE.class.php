@@ -121,6 +121,7 @@ class tinyMCE extends gen_class {
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					theme: "modern",
+					image_advtab: true,
 					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot",
 					//language : "'.$this->language.'",
 					 plugins: [

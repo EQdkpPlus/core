@@ -364,13 +364,13 @@ if(!class_exists('eq2_sony')) {
 			foreach($modifiers as $key => $value) {
 				$type = $value->{'type'};
 				if ($type == "attribute") {
-					if ($count % 3 == 0) {
+					if ($count % 5 == 0) {
 						$content .= "<br><div class='itemd_green'>";
 					}
 					$content .= "+" . strtoupper($value->{'value'}) . " ";
 					$content .= $value->{'displayname'} . " &nbsp;";
 					$count++;
-					if ($count % 3 == 0) {
+					if ($count % 5 == 0) {
 						$content .= "</div>\n";
 					}
 				}
