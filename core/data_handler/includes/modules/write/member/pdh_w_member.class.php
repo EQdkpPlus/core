@@ -329,17 +329,15 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				if($this->db->query($sql)) {
 					$sql = "UPDATE __items SET member_id = '".$this->db->escape($toid)."' WHERE member_id = '".$this->db->escape($fromid)."';";
 					if($this->db->query($sql)) {
-						if($this->delete_member($fromid, true)) {
-							$log_action = array(
-								'{L_FROM}'	=> $this->pdh->get('member', 'name', array($fromid)),
-								'{L_TO}'	=> $this->pdh->get('member', 'name', array($toid)),
-							);
-							$this->log_insert('action_history_transfer', $log_action);
-							$this->db->query("COMMIT;");
-							$this->pdh->enqueue_hook('item_udpate');
-							$this->pdh->enqueue_hook('adjustment_update');
-							return true;
-						}
+						$log_action = array(
+							'{L_FROM}'	=> $this->pdh->get('member', 'name', array($fromid)),
+							'{L_TO}'	=> $this->pdh->get('member', 'name', array($toid)),
+						);
+						$this->log_insert('action_history_transfer', $log_action);
+						$this->db->query("COMMIT;");
+						$this->pdh->enqueue_hook('item_udpate');
+						$this->pdh->enqueue_hook('adjustment_update');
+						return true;
 					}
 				}
 			}
