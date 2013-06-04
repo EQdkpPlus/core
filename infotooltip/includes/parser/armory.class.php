@@ -267,7 +267,7 @@ if(!class_exists('armory')) {
 			}
 			$html .= "<table><tr><td><b class=\"".$item['color']."\">".$item['name']."</b><br/>";
 			// heroic missing
-			// $html .= (isset($data['heroic'])) ? "<span class=\"q2\">".$this->armory_lang[$lang]['info']['heroic']."</span><br />" : "";
+			$html .= (isset($data['nameDescription']) && $data['nameDescription'] != "") ? "<span class=\"q2\">".$data['nameDescription']."</span><br />" : "";
 			$html .= (!empty($data['itemBind'])) ? $this->armory_lang[$lang]['itemBind'][$data['itemBind']]."<br />" : "";
 			//if(!empty($data['maxCount'])) $html .= 'max-count?'; //($data['maxCount']) ? $this->armory_lang[$lang]['tooltip']['unique-equipped'] : 
 			
