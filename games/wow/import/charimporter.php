@@ -42,7 +42,7 @@ class charImporter extends page_generic {
 
 	public function perform_resetcache(){
 		// delete the cache folder
-		$this->game->obj['armory']-> DeleteCache();
+		$this->game->obj['armory']->DeleteCache();
 
 		// Output the success message
 		$hmtlout = '<div id="guildimport_dataset">
@@ -183,7 +183,7 @@ class charImporter extends page_generic {
 				'health_bar'		=> $chardata['stats']['health'],
 				'second_bar'		=> $chardata['stats']['power'],
 				'second_name'		=> $chardata['stats']['powerType'],
-			), $this->in->get('overtakeuser')));
+			), $this->in->get('overtakeuser', 0)));
 
 			$this->pdh->process_hook_queue();
 			$successmsg	= ($info) ? 'imported' : 'error';
@@ -358,8 +358,6 @@ class charImporter extends page_generic {
 			'second_bar'		=> $this->in->get('second_bar', 0),
 			'second_name'		=> $this->in->get('second_name', ''),
 		);
-		var_dump($this->in->get('member_id', 0));
-		var_dump($this->in->get('overtakeuser', 0));
 
 		$info		= $this->pdh->put('member', 'addorupdate_member', array($this->in->get('member_id', 0), $data, $this->in->get('overtakeuser', 0)));
 		$this->pdh->process_hook_queue();
