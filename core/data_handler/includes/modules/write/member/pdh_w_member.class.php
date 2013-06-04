@@ -179,8 +179,8 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 				//delete items of member
 				$items = $this->pdh->get('item', 'itemids4memberid', array($member_id));
-				foreach($items as $id => $det) {
-					$this->pdh->put('item', 'delete_item', array($id));
+				foreach($items as $itemid) {
+					$this->pdh->put('item', 'delete_item', array($itemid));
 				}
 				//delete adjustments of member
 				$adjs = $this->pdh->get('adjustment', 'adjsofmember', array($member_id));
