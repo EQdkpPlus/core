@@ -1,10 +1,10 @@
 <?php
 $lang = array(
-	'itemBind'	=> array(
-		1	=> 'Wird beim aufheben gebunden',
-		2	=> 'Wird beim anlegen gebunden',
-		3	=> 'Wird beim benutzen gebunden',
-		4	=> 'Battle.net-Accountgebunden'
+	'itemBind' => array(
+		1 => 'Wird beim Aufheben gebunden',
+		2 => 'Wird beim Anlegen gebunden',
+		3 => 'Wird beim Benutzen gebunden',
+		4 => 'Battle.net-Accountgebunden'
 	),
 	'itemClass'	=> array(
 		0	=> array('Verbrauchbar', 'Trank', 'Elixier', 'Fläschchen', 'Rolle', 'Essen & Trinken', 'Gegenstandsverzauberung', 'Verband', 'Anderes'),
