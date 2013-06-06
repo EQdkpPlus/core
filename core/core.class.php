@@ -318,7 +318,7 @@ class core extends gen_class {
 				'S_ADMIN'					=> $this->user->check_auth('a_', false),
 				'S_IN_ADMIN'				=> $s_in_admin,
 				'S_SEARCH'					=> $this->user->check_auth('u_search', false),
-				'SID'						=> ((isset($SID)) ? $SID : '?' . 's='),
+				'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
 				'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 				'FIRST_C'					=> true,
 				'T_PORTAL_WIDTH'			=> $this->user->style['portal_width'],

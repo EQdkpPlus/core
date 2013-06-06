@@ -69,8 +69,7 @@ if(!class_exists('page_generic')){
 			
 			$this->tpl->assign_vars(array(
 				'ACTION'	=> $this->env->phpself.$this->SID.$this->simple_head_url.$this->url_id_ext,
-				'SID'		=> $this->SID)
-			);
+			));
 		}
 		
 		public function get_hptt($hptt_settings, $full_list, $filtered_list, $sub_array, $cache_suffix = '', $sort_suffix = 'sort') {
