@@ -145,6 +145,10 @@ if (!class_exists("pdh_r_user")){
 		public function get_cellphone($user_id){
 			return $this->users[$user_id]['cellphone'];
 		}
+		
+		public function get_exchange_key($user_id){
+			return $this->users[$user_id]['exchange_key'];
+		}
 
 		public function get_data($user_id=''){
 			if ($user_id == ''){
