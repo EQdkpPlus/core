@@ -226,7 +226,7 @@ if (!class_exists("jquery")) {
 								$('<div><\/div>')
 								.html('<div class=\"confirmdialog\"><span class=\"ui-icon ui-icon-alert\" style=\"float:left; margin:0 7px 200px 0;\"><\/span>".$this->sanitize($options['message'], false, true)."<\/div>')
 								.dialog({
-									title: '".$title."',
+									title: '".$this->sanitize($title)."',
 									resizable: false,
 									height:".((isset($options['height'])) ? $options['height'] : '200').",
 									modal: true,
@@ -254,7 +254,7 @@ if (!class_exists("jquery")) {
 						function ".$name."(".((isset($options['withid'])) ? $options['withid'] : '')."){
 							jQuery.FrameDialog.create({
 								url: '".$options['url']."',
-								title: '".$title."',
+								title: '".$this->sanitize($title)."',
 								buttons: ".((isset($options['buttons'])) ? $options['buttons'] : 'false').",
 								height: ".((isset($options['height'])) ? $options['height'] : '300').",
 								width: ".((isset($options['width'])) ? $options['width'] : '600').",
@@ -275,7 +275,7 @@ if (!class_exists("jquery")) {
 								modal: true,
 								height: ".((isset($options['height'])) ? $options['height'] : 	'150').",
 								width: ".((isset($options['width'])) 	? $options['width'] : 	'300').",
-								title: '".$title."',
+								title: '".$this->sanitize($title)."',
 								buttons: {
 									Ok: function() {
 										$(this).dialog('close');
@@ -1358,7 +1358,7 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js("function elfinder_".$type."(fieldid){
 					jQuery.FrameDialog.create({
 						url: '".$this->server_path."libraries/elfinder/elfinder".(($type == 'user') ? '.useravatars' : '').".php".$this->SID."&type=".$filter."&field='+fieldid,
-						title: '".$this->user->lang('imageuploader_wintitle')."',
+						title: '".$this->sanitize($this->user->lang('imageuploader_wintitle'))."',
 						height: 500,
 						width: 840,
 						modal: false,
