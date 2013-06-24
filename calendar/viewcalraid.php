@@ -97,6 +97,15 @@ class viewcalraid extends page_generic {
 
 			// the char is in the db, now, check if the status is unchanged
 			if($this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->in->get('member_id', 0))) == $this->in->get('signup_status', 4)){
+				// check if the note changed
+				if($this->pdh->get('calendar_raids_attendees', 'note', array($this->url_id, $this->in->get('member_id', 0))) != $this->in->get('signupnote')){
+					$this->pdh->put('calendar_raids_attendees', 'update_note', array(
+						$this->url_id,
+						$this->in->get('member_id', 0),
+						$this->in->get('signupnote', '')
+					));
+					$this->pdh->process_hook_queue();
+				}
 				return false;
 			}
 		}
