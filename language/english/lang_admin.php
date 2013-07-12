@@ -1321,6 +1321,7 @@ $lang = array(
 "cmsbridge_disable_sync" => "Deactivate synchronisation of userdata",
 "cmsbridge_disable_sync_help" => "Prohibits the synchronisation of profile fields from CMS/Forum to EQdkp Plus.",
 "cmsbridge_sso_cookiename"	=> "Cookie-name of the CMS/Forum",
+"cmsbridge_sso_cookiedomain"	=> "Cookie-domain of the CMS/Forum",
 "lm_title" => "Layout Management",
 "lm_select_layout" => "Layout selection:",
 "lm_column_preset" => "Column",

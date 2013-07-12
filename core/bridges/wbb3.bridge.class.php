@@ -142,17 +142,17 @@ class wbb3_bridge extends bridge_generic {
 			}
 			
 			$expire = $this->time->time + 31536000;
-			if($arrConfig['cookie_domain'] == '') {
+			if($config['cookie_domain'] == '') {
 				$arrDomains = explode('.', $this->env->server_name);
 				$arrDomainsReversed = array_reverse($arrDomains);
 				if (count($arrDomainsReversed) > 1){
-					$arrConfig['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+					$config['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
 				} else {
-					$arrConfig['cookie_domain'] = $this->env->server_name;
+					$config['cookie_domain'] = $this->env->server_name;
 				}
 			}
 			//SID Cookie
-			setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $arrConfig['cookie_domain'], $this->env->ssl);
+			setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 			return true;
 		}
 		
@@ -173,17 +173,17 @@ class wbb3_bridge extends bridge_generic {
 			}
 		}
 		
-		if($arrConfig['cookie_domain'] == '') {
+		if($config['cookie_domain'] == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
 			if (count($arrDomainsReversed) > 1){
-				$arrConfig['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+				$config['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
 			} else {
-				$arrConfig['cookie_domain'] = $this->env->server_name;
+				$config['cookie_domain'] = $this->env->server_name;
 			}
 		}
 		
-		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $arrConfig['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
 	
 	/**
