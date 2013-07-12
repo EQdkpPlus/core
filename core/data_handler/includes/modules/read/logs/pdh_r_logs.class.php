@@ -116,9 +116,13 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function sort($id_list, $tag, $direction = 'asc', $params = array( ), $id_position = 0) {
 			if(empty($id_list)) return array();
 			if(!method_exists($this, 'get_'.$tag) || $tag == 'viewicon' || $tag == 'value' || $tag == 'id_list' || $tag == 'lastxlogs') return $id_list;
-			if($tag == 'user') { return $id_list; }
+
 			$direction = ($direction == 'asc') ? 'ASC' : 'DESC';
-			$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY log_".$tag." ".$direction.";");
+						if($tag == 'user') { 
+				$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY username ".$direction.";");
+			} else {
+				$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY log_".$tag." ".$direction.";");
+			}
 			$id_list = array();
 			while ( $row = $this->db->fetch_row($result) ) {
 				$id_list[] = $row['log_id'];
