@@ -69,8 +69,7 @@ if(!class_exists('page_generic')){
 			
 			$this->tpl->assign_vars(array(
 				'ACTION'	=> $this->env->phpself.$this->SID.$this->simple_head_url.$this->url_id_ext,
-				'SID'		=> $this->SID)
-			);
+			));
 		}
 		
 		public function set_url_id($param){

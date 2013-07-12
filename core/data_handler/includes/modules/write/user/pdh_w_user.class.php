@@ -159,6 +159,7 @@ if(!class_exists('pdh_w_user')) {
 			}
 
 			$query_ary['user_email']			= $this->crypt->encrypt($this->in->get('email_address'));
+			$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($user_id));
 			
 			$privArray = array();
 			$customArray = array();

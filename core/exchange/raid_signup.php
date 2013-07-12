@@ -72,7 +72,7 @@ if (!class_exists('exchange_raid_signup')){
 								$signupstatus,
 								($xml->raidgroup) ? intval($xml->raidgroup) : 0,
 								$mystatus['member_id'],
-								($xml->note) ? (string)$xml->note : '',
+								($xml->note) ? filter_var((string)$xml->note, FILTER_SANITIZE_STRING) : '',
 							));
 							$this->pdh->process_hook_queue();
 							

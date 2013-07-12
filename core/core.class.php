@@ -340,7 +340,7 @@ class core extends gen_class {
 				'S_ADMIN'					=> $this->user->check_auth('a_', false),
 				'S_IN_ADMIN'				=> $s_in_admin,
 				'S_SEARCH'					=> $this->user->check_auth('u_search', false),
-				'SID'						=> ((isset($SID)) ? $SID : '?' . 's='),
+				'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
 				'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 				'FIRST_C'					=> true,
 				'T_PORTAL_WIDTH'			=> $this->user->style['portal_width'],
@@ -536,6 +536,7 @@ class core extends gen_class {
 				if (!isset($v['childs'])){
 					if ( $this->check_url_for_permission($v)) {
 						$class = $this->clean_url($v['link']);
+						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
 						$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'</li>';
 					} else {
 						continue;
@@ -544,6 +545,7 @@ class core extends gen_class {
 				} else {
 					if ( $this->check_url_for_permission($v)) {
 						$class = $this->clean_url($v['link']);
+						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
 						$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'<ul>';
 					} else {
 						continue;
@@ -553,6 +555,7 @@ class core extends gen_class {
 						if (!isset($v2['childs'])){
 							if ( $this->check_url_for_permission($v2)) {
 								$class = $this->clean_url($v2['link']);
+								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
 								$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'</li>';
 							} else {
 								continue;
@@ -560,6 +563,7 @@ class core extends gen_class {
 						} else {
 							if ( $this->check_url_for_permission($v2)) {							
 								$class = $this->clean_url($v2['link']);
+								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
 								$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'<ul>';
 							} else {
 								continue;
@@ -568,6 +572,7 @@ class core extends gen_class {
 							foreach($v2['childs'] as $k3 => $v3){
 								if ( $this->check_url_for_permission($v3)) {	
 									$class = $this->clean_url($v3['link']);
+									if (!strlen($class)) $class = "entry_".$this->clean_url($v3['text']);
 									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v3, 'link_'.$class).'</li>';
 								} else {
 									continue;

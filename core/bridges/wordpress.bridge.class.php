@@ -71,7 +71,7 @@ class wordpress_bridge extends bridge_generic {
 	}
 	
 	public function wordpress_get_groups($blnWithID){
-		$query = $this->db->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='wp_user_roles' AND blog_id=0");
+		$query = $this->db->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
 		$result = $this->db->fetch_row($query);
 		$arrGroups = array();
 		if ($arrDBGroups = unserialize($result['option_value'])){
