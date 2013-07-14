@@ -2822,17 +2822,43 @@ a.tool-item i {
     white-space: nowrap;
 }
 
-.notification-tooltip-container {
+.notification-tooltip-container, .user-tooltip-container {
 	display: inline;
 	position: relative;
 }
 
-.notification-tooltip-container a {
+.notification-tooltip-container a, .user-tooltip-container a {
 	cursor: pointer;
 }
 
-.notification-tooltip {
+.user-tooltip {
+	min-width: 160px;
+}
+
+.notification-tooltip, .user-tooltip {
 	display: none;
+}
+
+.user-tooltip-avatar {
+	float:left;
+	margin-right: 4px;
+}
+.user-tooltip-avatar img {
+	height: 40px;
+	border: 1px solid #CCCCCC;
+    border-radius: 4px 4px 4px 4px;
+	background-color: #FFFFFF;
+}
+.user-tooltip-name {
+	padding-right: 40px;
+}
+
+.tooltip-divider {
+	display: block;
+	border-bottom: 1px solid #CCCCCC;
+	width: 100%;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 #notification-tooltip-all {

@@ -28,6 +28,9 @@ function check_alias() {
 }
 
 function calculate_permission(perm, gid, obj){
+	tr = $(obj).closest('tr');
+	tr.find('.calc-perm').html('<i class="icon-spinner icon-spin icon-large"></i>');
+				
 	jQuery.ajax({
 			type: "POST",
 			url: "manage_article_categories.php{SID}&calcperm=1&c={CID}",

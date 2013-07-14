@@ -26,7 +26,6 @@ class user_pageobject extends pageobject {
 		$handler = array(
 			'send'				=> array('process' => 'process_sendSMS'),
 			'u'					=> array('process' => 'viewuser'),
-			'g'					=> array('process' => 'display_group'),
 		);
 		$this->user->check_auth('u_userlist');
 		parent::__construct(false, $handler, array());
@@ -193,7 +192,7 @@ class user_pageobject extends pageobject {
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
 			
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => ''));
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => '', '%use_controller%' => true));
 
 		//footer
 		$user_count			= count($view_list);
@@ -216,7 +215,7 @@ class user_pageobject extends pageobject {
 				));
 		}
 
-		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
+		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('user_list'),
@@ -224,61 +223,6 @@ class user_pageobject extends pageobject {
 			'display'			=> true)
 		);
 	}
-	
-	public function display_group(){
-		$groupID = $this->in->get('g', 0);
-		
-		//Sort
-		$sort			= $this->in->get('sort');
-		$sort_suffix	= '&amp;sort='.$sort.'&amp;g='.$groupID;
 
-		$start				= $this->in->get('start', 0);
-		$pagination_suffix	= ($start) ? '&amp;start='.$start.'&amp;g='.$groupID : '';
-		
-		$arrUsers = $this->pdh->get('user_groups_users', 'user_list', array($groupID));
-		$view_list = $view_list_grpleader = array();
-		foreach($arrUsers as $user_id){
-			if ($this->pdh->get('user_groups_users', 'is_grpleader', array($user_id, $groupID))){
-				$view_list_grpleader[] = $user_id;
-			} else {
-				$view_list[] = $user_id;
-			}
-		}
-		
-		//Output
-		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
-			
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => ''), $groupID);
-
-		//footer
-		$user_count			= count($view_list);
-		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
-
-		$this->tpl->assign_vars(array (
-			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
-			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
-			'GROUPNAME'			=> $this->pdh->get('user_groups', 'name', array($groupID)),
-			'S_DISPLAY_GROUP'	=> true,
-		));
-		
-		
-		
-		$hptt_grpleader		= $this->get_hptt($hptt_page_settings, $view_list_grpleader, $view_list_grpleader, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => ''), $groupID.'_grpleader');
-		//footer
-		$user_count			= count($view_list_grpleader);
-		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
-
-		$this->tpl->assign_vars(array (
-			'PAGE_OUT_GRPLEADER'=> $hptt_grpleader->get_html_table($sort, $pagination_suffix),
-		));	
-
-		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
-
-		$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('user_list'),
-			'template_file'		=> 'listusers.html',
-			'display'			=> true)
-		);
-	}
 }
 ?>

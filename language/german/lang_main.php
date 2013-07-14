@@ -856,6 +856,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "article_unpublish" => "Artikel unveröffentlichen",
 "articles" => "Artikel",
 "article_categories" => "Kategorien",
+"my_profile" => "Mein Profil",
  );
 
 ?>

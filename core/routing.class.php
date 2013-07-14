@@ -38,6 +38,7 @@ if(!class_exists('routing')){
 			'addcharacter'	=> 'addcharacter',
 			'editarticle'	=> 'editarticle',
 			'user'			=> 'user',
+			'usergroup'		=> 'usergroup'
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
@@ -103,7 +104,7 @@ if(!class_exists('routing')){
 		
 		public function build($strPageObject, $strParamText, $strParam){
 			$strPath = $this->controller_path;
-			$strPath .= $this->get($strPageObject);
+			$strPath .= ucfirst($this->get($strPageObject));
 			$strPath .= '/'.$this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/').$this->SID;
 			return $strPath;
 		}
@@ -112,7 +113,7 @@ if(!class_exists('routing')){
 			$strText = utf8_strtolower($strText);
 			$strText = str_replace(' ', '-', $strText);
 			$strText = preg_replace("/[^a-zA-Z0-9_-]/","",$strText);
-			return $strText;
+			return ucfirst($strText);
 		}
 		
 	}

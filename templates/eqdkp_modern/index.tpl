@@ -25,7 +25,7 @@
 			
 			$(document).ready(function() {
 				$( "#dialog-login" ).dialog({
-					height: 340,
+					height: <!-- IF S_BRIDGE_INFO -->380<!-- ELSE -->340<!-- ENDIF -->,
 					width: 500,
 					modal: true,
 					autoOpen: false,
@@ -46,6 +46,23 @@
 					});
 					
 				});
+				
+				$('.user-tooltip-trigger').on('click', function(event){
+					event.preventDefault();
+					$("#user-tooltip").show('fast');
+					$(document).on('click', function(event) {
+						var count = $(event.target).parents('.user-tooltip-container').length;									
+						if (count == 0){
+							$("#user-tooltip").hide('fast');
+						}
+					});					
+				});
+				
+				$('.user-tooltip-trigger').on('dblclick', function(event){
+					$("#user-tooltip").hide('fast');
+					window.location="{EQDKP_CONTROLLER_PATH}Settings/{SID}";		
+				});
+				
 				$('ul.mainmenu li.link_li_indexphp a.link_indexphp').html('');
 				$('ul.mainmenu').addClass('sf-menu');
 				jQuery('ul.mainmenu').superfish({
@@ -74,9 +91,28 @@
 					
 					<!-- ELSE -->					
 						<ul>
-							<li><a href="{EQDKP_CONTROLLER_PATH}Settings/{SID}"><i class="icon-user"></i>{USER_NAME}</a></li>
+							<li>
+								<div class="user-tooltip-container">
+									<a href="{EQDKP_CONTROLLER_PATH}Settings/{SID}" class="user-tooltip-trigger"><i class="icon-user"></i>{USER_NAME}</a>
+									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
+										<li><a href="{U_USER_PROFILE}">
+												<div class="user-tooltip-avatar">
+													<img src="{USER_AVATAR}" alt="{USER_NAME}"/>
+												</div>
+												<div class="user-tooltip-name">
+													<span class="bold">{USER_NAME}</span><br />
+													{L_my_profile}
+												</div>
+											</a>
+										</li>
+										<li class="tooltip-divider"></li>
+										<li><a href="{EQDKP_CONTROLLER_PATH}Settings/{SID}"><i class="icon-cog"></i>{L_settings}</a></li>
+										<li><a href="{U_LOGOUT}"><i class="icon-signout"></i>{L_logout}</a></li>
+									</ul>
+								</div>
+							</li>
 							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="icon-cog"></i>{L_menu_admin_panel}</a></li><!-- ENDIF -->
-							<li><a href="{U_LOGOUT}"><i class="icon-signout"></i>{L_logout}</a></li>
+							
 							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a></li><!-- ENDIF -->
 							<li>
 								<div class="notification-tooltip-container">
@@ -260,7 +296,12 @@
 
 	<div id="dialog-login" title="{L_login}">
 		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login/{SID}" name="login" id="login">
-			<fieldset class="settings mediumsettings">				
+			<!-- IF S_BRIDGE_INFO -->
+			<div class="bluebox roundbox">
+				<div class="icon_info">{L_login_bridge_notice}</div>
+			</div>
+			<!-- ENDIF -->
+			<fieldset class="settings mediumsettings">	
 				<dl>
 					<dt><label>{L_username}:</label></dt>
 					<dd><div class="input-icon"><i class="icon-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></div></dd>

@@ -343,8 +343,12 @@
 			<dl id="useraccount" <!-- IF S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->>
 				<dt><label>{L_bridge_userlogin}</label><br /><span>{L_bridge_userlogin_help}</span></dt>
 				<dd>
-					<input type="text" name="acc_username" id="acc_username" class="input username" />
+					<div class="input-icon"><i class="icon-user"></i>
+						<input type="text" name="acc_username" id="acc_username" class="input username" />
+					</div>
+					<div class="input-icon"><i class="icon-key"></i>
 					<input type="password" name="acc_password" id="acc_password" class="input password" />
+					</div>
 				</dd>
 			</dl>
 
@@ -411,7 +415,7 @@
 		<button class="mainoption" type="submit" id="submit_button" <!-- IF not S_BRIDGE_ACTIVE -->style="display:none;"<!-- ENDIF -->><i class="icon-ok"></i>{L_save}</button>
 	</div>
 	<div id="loading_area" style="display:none;"  align="center">
-		<i class="icon-refresh icon-spin icon-large"></i> {L_bridge_loading}
+		<i class="icon-spinner icon-spin icon-large"></i> {L_bridge_loading}
 	</div>
 
 	</div>

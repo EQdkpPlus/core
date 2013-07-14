@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class core extends gen_class {
-	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db', 'config', 'timekeeper', 'env', 'in', 'portal', 'ntfy');
+	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db', 'config', 'timekeeper', 'env', 'in', 'portal', 'ntfy', 'routing');
 
 		// General vars
 		public $header_format	= 'full';			// Use a simple header?		@var
@@ -315,6 +315,7 @@ class core extends gen_class {
 			}
 			
 			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
+			$strAvatarImg = ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($this->user->id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($this->user->id)), false, 'absolute') : $this->server_path.'images/no_pic.png';
 			
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
@@ -332,6 +333,7 @@ class core extends gen_class {
 				'TEMPLATE_PATH'				=> $this->server_path . 'templates/' . $this->user->style['template_path'],
 				'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
 				'USER_NAME'					=> isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous'),
+				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
 
 				'S_NORMAL_HEADER'			=> ($this->header_format != 'simple') ? true : false,
@@ -357,6 +359,8 @@ class core extends gen_class {
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
+				'S_BRIDGE_INFO'				=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
+				'U_USER_PROFILE'			=> $this->routing->build('user', (isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous')), 'u'.$this->user->id)
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
@@ -395,7 +399,7 @@ class core extends gen_class {
 		//Returns all possible Menu Items
 		public function menu_items(){
 			$arrItems = array(
-				array('link' => 'index.php'.$this->SID,				'text' => $this->user->lang('home')),
+				array('link' => 'index.php'.$this->SID,				'text' => $this->user->lang('home')),				
 				//array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
 				//array('link' => 'roster.php'.$this->SID,			'text' => $this->user->lang('menu_roster'),		'check' => 'u_roster_list'),
 				//array('link' => 'listraids.php'.$this->SID,			'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
@@ -403,7 +407,7 @@ class core extends gen_class {
 				//array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
 				//array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
 				array('link' => 'calendar/index.php'.$this->SID,	'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
-				//array('link' => 'listusers.php'.$this->SID,			'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
+				array('link' => $this->controller_path_plain.'User/'.$this->SID, 'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
 			);
 			
 			//Articles & Categories

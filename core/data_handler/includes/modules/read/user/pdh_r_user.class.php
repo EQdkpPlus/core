@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("pdh_r_user")){
 	class pdh_r_user extends pdh_r_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('db', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time');
+		$shortcuts = array('db', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -37,13 +37,13 @@ if (!class_exists("pdh_r_user")){
 		
 		public $presets = array(
 			'usersmscheckbox'  => array('sms_checkbox', array('%user_id%'), array()),
-			'username' => array('name', array('%user_id%', '%link_url%', '%link_url_suffix%'), array()),
-			'userfullname' => array('fullname', array('%user_id%', '%link_url%', '%link_url_suffix%'), array()),
+			'username' => array('name', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
+			'userfullname' => array('fullname', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 			'useravatar'  => array('avatarimglink', array('%user_id%'), array()),
 			'useremail'  => array('email', array('%user_id%', true), array()),
 			'usercountry'  => array('country', array('%user_id%'), array()),
 			'userregdate'  => array('regdate', array('%user_id%'), array()),
-			'usergroups'  => array('groups', array('%user_id%'), array()),
+			'usergroups'  => array('groups', array('%user_id%', '%use_controller%'), array()),
 			'usercharnumber'  => array('charnumber', array('%user_id%'), array()),
 			'useronlinestatus' => array('is_online', array('%user_id%'), array()),
 			"usericq" => array('icq', array('%user_id%'), array()),
@@ -92,7 +92,7 @@ if (!class_exists("pdh_r_user")){
 			return array_keys($this->users);
 		}
 
-		public function get_name($user_id, $link_url = '', $link_url_suffix = ''){
+		public function get_name($user_id, $link_url = '', $link_url_suffix = '', $blnUseController=false){
 			if (isset($this->users[$user_id]) AND isset($this->users[$user_id]['username'])){
 				return $this->users[$user_id]['username'];
 			} elseif ($user_id == ANONYMOUS) {
@@ -102,7 +102,8 @@ if (!class_exists("pdh_r_user")){
 			}
 		}
 		
-		public function get_html_name($user_id, $link_url = '', $link_url_suffix = ''){
+		public function get_html_name($user_id, $link_url = '', $link_url_suffix = '', $blnUseController=false){
+			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'">'.$this->get_name($user_id).'</a>';
 			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'">'.$this->get_name($user_id).'</a>';
 		}
 		
@@ -138,7 +139,7 @@ if (!class_exists("pdh_r_user")){
 		}
 		
 		public function get_html_is_online($user_id){
-			return ($this->get_is_online($user_id)) ? '<img src="'.$this->root_path.'/images/glyphs/status_green.gif" alt="" />' : '<img src="'.$this->root_path.'/images/glyphs/status_red.gif" alt="" />';
+			return ($this->get_is_online($user_id)) ? '<img src="'.$this->server_path.'/images/glyphs/status_green.gif" alt="" />' : '<img src="'.$this->server_path.'/images/glyphs/status_red.gif" alt="" />';
 		}
 
 		public function get_userid_for_authaccount($strAuthAccount){
@@ -192,7 +193,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($this->check_privacy($user_id) && $this->user->is_signedin() && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
-				return '<img src="'.$this->root_path.'images/glyphs/email.png" alt="email" /><a href="javascript:usermailer('.$user_id.');">'.$this->user->lang('adduser_send_mail').'</a>';
+				return '<a href="javascript:usermailer('.$user_id.');"><i class="icon-envelope"></i>'.$this->user->lang('adduser_send_mail').'</a>';
 			}
 		
 			return '';
@@ -210,7 +211,7 @@ if (!class_exists("pdh_r_user")){
 			$country = $this->get_country($user_id);
 			if (strlen($country)){
 				$this->init_countries();
-				$html = $this->html->Tooltip(ucfirst(strtolower($this->countries[$country])), '<img src="'.$this->root_path.'images/flags/'.strtolower($country).'.png" alt="'.$country.'" />');
+				$html = $this->html->Tooltip(ucfirst(strtolower($this->countries[$country])), '<img src="'.$this->server_path.'images/flags/'.strtolower($country).'.png" alt="'.$country.'" />');
 				return $html;
 			}
 			return '';
@@ -221,9 +222,7 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_failed_logins($user_id) {
-			return $this->users[$user_id]['failed_login_attempts'];
-			
-			
+			return $this->users[$user_id]['failed_login_attempts'];	
 		}
 		
 		public function get_town($user_id){
@@ -273,7 +272,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_skype($user_id){
 			if ($this->check_privacy($user_id) && strlen($this->get_skype($user_id))){
-				return '<a href="skype:'.$this->get_skype($user_id).'?add"><img src="'.$this->root_path.'images/glyphs/skype.png" alt="Skype" /> '.sanitize($this->get_skype($user_id)).'</a>';
+				return '<a href="skype:'.$this->get_skype($user_id).'?add"><i class="icon-skype icon-large"></i>'.sanitize($this->get_skype($user_id)).'</a>';
 			}
 			return '';
 		}
@@ -286,7 +285,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_twitter($user_id){
 			if ($this->check_privacy($user_id) && strlen($this->get_twitter($user_id))){
-				return '<a href="http://twitter.com/'.$this->get_twitter($user_id).'" target="_blank"><img src="'.$this->root_path.'images/logos/twitter_icon_16.png" alt="Twitter" /> '.$this->get_twitter($user_id).'</a>';
+				return '<a href="http://twitter.com/'.$this->get_twitter($user_id).'" target="_blank"><i class="icon-twitter icon-large"></i>'.$this->get_twitter($user_id).'</a>';
 			}
 			return '';	
 		}
@@ -299,7 +298,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_facebook($user_id){
 			if ($this->check_privacy($user_id) && strlen($this->get_facebook($user_id))){
-				return '<a href="http://facebook.com/'.((is_numeric($this->get_facebook($user_id))) ? 'profile.php?id='.$this->get_facebook($user_id) : $this->get_facebook($user_id)).'" target="_blank"><img src="'.$this->root_path.'images/logos/facebook_icon_16.png" alt="Facebook" /> '.sanitize($this->get_facebook($user_id)).'</a>';
+				return '<a href="http://facebook.com/'.((is_numeric($this->get_facebook($user_id))) ? 'profile.php?id='.$this->get_facebook($user_id) : $this->get_facebook($user_id)).'" target="_blank"><i class="icon-facebook icon-large"></i>'.sanitize($this->get_facebook($user_id)).'</a>';
 			}
 			return '';	
 		}
@@ -337,12 +336,16 @@ if (!class_exists("pdh_r_user")){
 			return $arrMemberships;
 		}
 		
-		public function get_html_groups($user_id){
+		public function get_html_groups($user_id, $blnUseController=false){
 			$arrMemberships = $this->get_groups($user_id);
 			
 			$arrOut = array();
 			foreach($arrMemberships as $groupid){
-				$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+				if ($blnUseController) {
+					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+				} else {
+					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+				}			
 			}
 			return implode(', ', $arrOut);
 		}
@@ -429,8 +432,11 @@ if (!class_exists("pdh_r_user")){
 		public function get_html_avatarimglink($user_id){
 			$strImg = $this->get_avatarimglink($user_id);
 			if (!strlen($strImg)){
-				$strImg = $this->root_path.'images/no_pic.png';
+				$strImg = $this->server_path.'images/no_pic.png';
+			} else {
+				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
+			
 			return '<img src="'.$strImg.'" class="user-avatar" alt="" />';
 		}
 

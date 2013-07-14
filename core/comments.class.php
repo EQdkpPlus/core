@@ -179,7 +179,7 @@ if (!class_exists("comments")){
 								<div class="comment_avatar"><a href="'.$this->server_path.'listusers.php'.$this->SID.'&amp;u='.$this->user->id.'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 							</div>
 							<div class="comment_write_container">
-								<textarea name="comment" rows="8" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
+								<textarea name="comment" rows="5" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
 							</div>
 						</div>
 						<span id="comment_button"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
