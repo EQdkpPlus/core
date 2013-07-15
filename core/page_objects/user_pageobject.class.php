@@ -166,8 +166,8 @@ class user_pageobject extends pageobject {
 		$this->comments->SetVars(array(
 			'attach_id'	=> $user_id,
 			'page'		=> 'userwall',
-			'auth'		=> 'a_user_man',
-			'user_auth' => (($blnWallWrite) ? 'u_userlist' : 'a_something'),
+			'auth'		=> 'a_users_man',
+			'userauth' 	=> (($blnWallWrite) ? 'u_userlist' : 'a_something'),
 			'replies'	=> true,
 		));
 		$this->tpl->assign_vars(array(
@@ -179,7 +179,7 @@ class user_pageobject extends pageobject {
 		$arrProfile = array();
 		if ($row['first_name'] != "" || $row['last_name'] != "") $arrProfile['name'] = (($row['first_name'] != '') ? sanitize($row['first_name']).' ' : '').(($row['last_name'] != '') ? sanitize($row['last_name']) : '');
 		$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
-		$arrProfile['age'] = ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
+		if (strlen($age)) $arrProfile['age'] = ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
 		if ($row['town'] != "") $arrProfile['adduser_town'] = (($row['ZIP_code'] != "") ? sanitize($row['ZIP_code']).' ': '').sanitize($row['town']);
 		if ($row['state'] != "") $arrProfile['adduser_state'] = sanitize($row['state']);
 		if ($row['country'] != "") $arrProfile['adduser_country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.png" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));

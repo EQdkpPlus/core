@@ -100,6 +100,7 @@ if (!class_exists("comments")){
 			$html	= '<div id="htmlCommentTable">';
 			$html	.= $this->Content($this->attach_id, $this->page);
 			$html	.= '</div>';
+			$html .= $this->ReplyForm($this->attach_id, $this->page);
 
 			// the line for the comment to be posted
 			if($this->user->is_signedin() && $this->userPerm){
@@ -133,6 +134,7 @@ if (!class_exists("comments")){
 
 					// output
 					$out[] .= '<div class="comment '.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
+								<div class="comment_id" style="display:none;">'.$row['id'].'</div>
 								<div class="comment_avatar_container">
 									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 								</div>
@@ -161,6 +163,7 @@ if (!class_exists("comments")){
 
 							// output
 							$out[] .= '<div class="clear"></div><br/><div class="comment-reply '.(($j%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
+										<div class="comment_id" style="display:none;">'.$com['id'].'</div>
 										<div class="comment_avatar_container">
 											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 										</div>
@@ -182,7 +185,7 @@ if (!class_exists("comments")){
 							$j++;
 						}
 					}
-					if (($this->showReplies || $blnShowReplies) && $this->user->is_signedin() && $this->userPerm){
+					if (($this->showReplies || $blnShowReplies) && $this->user->is_signedin()){
 						$out[] .= '<div class="comment_reply_container">
 										<button class="reply-trigger"><i class="icon-reply"></i>'.$this->user->lang('reply').'</button>
 										<div class="reply-form-container">
@@ -232,23 +235,32 @@ if (!class_exists("comments")){
 					</form>';
 			$html .= '</div></div>';
 			
-			$html .= '<div class="commentReplyForm" style="display:none;">
-				<form class="comment_reply" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">
-					<input type="hidden" name="attach_id" value="'.$attachid.'"/>
-					<input type="hidden" name="page" value="'.$page.'"/>
-					<input type="hidden" name="reply_to" value="0"/>
-					<div class="clearfix">
-						<div class="comment_avatar_container">
-							<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
-						</div>
-						<div class="comment_write_container">
-							<textarea name="comment" rows="2" cols="80" class="" style="width:100%;"></textarea>
-						</div>
-						<span class="reply_button"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
-					</div>
-				</form>
-			</div>';
 			
+			
+			return $html;
+		}
+		
+		private function ReplyForm($attachid, $page){
+			$editor = registry::register('tinyMCE');
+			$editor->editor_bbcode();
+			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
+			
+			$html .= '<div class="commentReplyForm" style="display:none;">
+					<form class="comment_reply" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">
+						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
+						<input type="hidden" name="page" value="'.$page.'"/>
+						<input type="hidden" name="reply_to" value="0"/>
+						<div class="clearfix">
+							<div class="comment_avatar_container">
+								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+							</div>
+							<div class="comment_write_container">
+								<textarea name="comment" rows="2" cols="80" class="" style="width:100%;"></textarea>
+							</div>
+							<span class="reply_button"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
+						</div>
+					</form>
+				</div>';
 			return $html;
 		}
 
@@ -274,7 +286,8 @@ if (!class_exists("comments")){
 						
 						//Show Reply Form
 						$(document).on('click', '.reply-trigger', function(){
-							var reply_to = $(this).parent().parent().find('.comments_deleteid:first').text();
+							var reply_to = $(this).parent().parent().find('.comment_id:first').text();
+							console.log(reply_to);
 							var newform = $('.commentReplyForm').html();
 							$('.reply-trigger').show();
 							$('.form-active').remove();

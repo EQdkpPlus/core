@@ -359,10 +359,10 @@ if (!class_exists("pdh_r_user")){
 		public function comp_groups($params1, $params2) {
 			$arrMemberships1 = $this->get_groups($params1[0]);
 			$arrMemberships2 = $this->get_groups($params2[0]);
-			$intGroup1 = $arrMemberships1[0];
-			$intGroup2 = $arrMemberships2[0];
+			$intGroup1 = array_shift($arrMemberships1);
+			$intGroup2 = array_shift($arrMemberships2);
 			
-			return ($intGroup1 > $intGroup2);
+			return ($intGroup1 > $intGroup2) ? 1 : -1;
 		}
 
 		public function get_stylecount($styleid){
