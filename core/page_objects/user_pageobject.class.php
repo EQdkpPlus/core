@@ -134,7 +134,7 @@ class user_pageobject extends pageobject {
 		$this->tpl->assign_vars(array(
 			'USER_PROFILE_ID' => $user_id,
 			'USER_PROFILE_AVATAR' => ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($user_id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($user_id)), false, 'absolute') : $this->server_path.'images/no_pic.png',
-			'USER_PROFILE_NAME'	  => sanitize($row['username']),
+			'USER_PROFILE_USERNAME'	=> sanitize($row['username']),
 			'USER_PROFILE_GENDER' => $strGender,
 			'USER_PROFILE_REGISTERED'	=> $this->pdh->geth('user', 'regdate', array($user_id)),
 			'USER_PROFILE_LAST_ACTIVITY' => $this->pdh->geth('user', 'last_visit', array($user_id)),

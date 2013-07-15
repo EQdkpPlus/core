@@ -318,10 +318,19 @@ if(!class_exists('eq2_sony')) {
 			if ($tierName == "FABLED") {
 				$tierColor = "#ff939d";
 			}
+			if ($tierName == "MASTERCRAFTED FABLED") {
+				$tierColor = "#ff939d";
+			}
 			if ($tierName == "LEGENDARY") {
 				$tierColor = "#ffc993";
 			}
+			if ($tierName == "MASTERCRAFTED LEGENDARY") {
+				$tierColor = "#ffc993";
+			}
 			if ($tierName == "TREASURED") {
+				$tierColor = "#8accf0";
+			}
+			if ($tierName == "MASTERCRAFTED TREASURED") {
 				$tierColor = "#8accf0";
 			}
 			if ($tierName == "ETHEREAL") {
@@ -386,13 +395,13 @@ if(!class_exists('eq2_sony')) {
 			foreach($modifiers as $key => $value) {
 				$type = $value->{'type'};
 				if ($type == "ac") {
-					if ($count % 3 == 0) {
+					if ($count % 5 == 0) {
 						$content .= "<div class='itemd_green'>";
 					}
 					$content .= "+" . strtoupper($value->{'value'}) . " ";
 					$content .= $value->{'displayname'} . " &nbsp;";
 					$count++;
-					if ($count % 3 == 0) {
+					if ($count % 5 == 0) {
 						$content .= "</div>\n";
 					}
 				}
@@ -666,7 +675,28 @@ if(!class_exists('eq2_sony')) {
 			$content .= "</div>";
 			return $content;
 		}		
-				
+		
+		protected function ItemTypeFood($item)
+		{
+			$typeInfo = $item->{'typeinfo'};
+			$content .= "<br>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Slots</div>";
+			$slotList = $item->{'slot_list'};
+				foreach ($slotList as $slot) {
+					$content .= "<div style='color: white;'> " . $slot->{'name'};
+				}
+			$content .= "<br><div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
+			$itemLevel = $item->{'itemlevel'};
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br>";
+			$content .= "<div style='width: 80px; float: left; color: white;'>Duration</div>";
+			$duration = $typeInfo->{'duration'};
+			$content .= "<div style='width: 150px; float: left; color: white;'>$duration</div><br>";
+			$content .= "<div class='ui-helper-clearfix'</div>";
+			return $content;
+		}	
+		
 		protected function ItemType($item)
 		{
 			$typeInfo = $item->{'typeinfo'};
@@ -681,6 +711,9 @@ if(!class_exists('eq2_sony')) {
 			}
 			if ($typeInfo->{'name'} == "spellscroll") {
 			    return $this->ItemTypeSpell($item);
+			}
+			if ($typeInfo->{'name'} == "food") {
+			    return $this->ItemTypeFood($item);
 			}
 		}
 		
