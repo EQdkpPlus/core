@@ -41,6 +41,7 @@ class tinyMCE extends gen_class {
 			$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
 
 			$this->tpl->add_js('
+				function initialize_bbcode_editor(){
 				$(".mceEditor_bbcode").tinymce({
 					// Location of TinyMCE script
 					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
@@ -66,6 +67,8 @@ class tinyMCE extends gen_class {
 					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | forecolor | blockquote image link",
 					statusbar : false,
 				});
+			}
+			initialize_bbcode_editor();
 			', 'docready');
 			$this->trigger['bbcode'] = true;
 		}

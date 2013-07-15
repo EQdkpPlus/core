@@ -1,122 +1,84 @@
 <div class="contentHeader">
-	<h1 class="contentTitle"><a href="{EQDKP_CONTROLLER_PATH}User/{SID}">{L_user_list}</a> &raquo; {L_user}: {USERNAME}</h1>
+	<h1 class="contentTitle"><a href="{EQDKP_CONTROLLER_PATH}User/{SID}">{L_user_list}</a> &raquo; {L_user}: {USER_PROFILE_NAME}</h1>
 </div>
 
-<table width="100%" cellpadding="4" cellspacing="0">
-	<tr>
-		<td height="100%" valign="top">
-			<table width="100%" height="100%" cellpadding="1" cellspacing="1">
-				<tr class="row2" align="center">
-					<td height="100%"><a href="{USER_IMAGE}" class="lightbox"><img src="{USER_IMAGE}" alt="userimg" /></a></td>
-				</tr>
-			</table>
-		</td>
-		<td width="50%" valign="top">
-			<div class="tableHeader">
-				<h2>{L_adduser_tab_profile}</h2>
-			</div>
-			<table width="100%" align="center" cellpadding="1" cellspacing="1">
-				<tr class="row1">
-					<td width="20%" class="nowrap"><strong>{L_name}:</strong></td>
-					<td width="90%" colspan="3">{firstandlastname}</td>
-				</tr>
-				<tr class="row2">
-					<td class="nowrap"><strong>{L_age}:</strong></td>
-					<td colspan="3">{USER_BIRTHDAY}</td>
-				</tr>
-				<tr class="row1">
-					<td class="nowrap"><strong>{L_adduser_town}:</strong></td>
-					<td colspan="3">{USER_TOWN}</td>
-				</tr>
-				<tr class="row2">
-					<td class="nowrap"><strong>{L_adduser_country}:</strong></td>
-					<td colspan="3">{USER_COUNTRYFLAG} {USER_COUNTRY}</td>
-				</tr>
-				<tr class="row1">
-					<td class="nowrap"><strong>{L_registered_at}:</strong></td>
-					<td colspan="3">{USER_REGISTERED}</td>
-				</tr>
-				<tr class="row2">
-					<td class="nowrap"><strong>{L_user_work}:</strong></td>
-					<td colspan="3">{USER_WORK}</td>
-				</tr>
-				<tr class="row1">
-					<td class="nowrap"><strong>{L_user_interests}:</strong></td>
-					<td colspan="3">{USER_INTERESTS}</td>
-				</tr>
-				<tr class="row2">
-					<td class="nowrap"><strong>{L_user_hardware}:</strong></td>
-					<td colspan="3">{USER_HARDWARE}</td>
-				</tr>
-			</table>
+<div class="user-profile">
+	<div class="user-avatar">
+		<img src="{USER_PROFILE_AVATAR}" alt="userimg" />
+	</div>
+	<div class="user-name-container">
+		<div class="user-name">
+			<h2>{USER_PROFILE_NAME}</h2><div class="user-groups">{USER_PROFILE_USERGROUPS}</div><div class="clear"></div>
+			{USER_PROFILE_GENDER}{L_registered_at} {USER_PROFILE_REGISTERED}<br />
+			{L_user_last_activity} {USER_PROFILE_LAST_ACTIVITY}
+		</div>
+	</div>
+
+	<div class="clear"></div>
+	<br /><br />
+	<div id="userprofile_tabs">
+		<ul>
+			<li><a href="#wall">{L_user_wall}</a></li>
+			<li><a href="#about">{L_about_me}</a></li>
+			<li><a href="#characters">{L_chars}</a></li>
+		</ul>
+		
+		<div id="wall">
+			<h1>{L_user_wall}</h1>
+			<!-- IF S_SHOW_WALL -->
+			{USER_WALL}
+			<!-- ELSE -->
+			{L_userwall_no_permission}
+			<!-- ENDIF -->
+		</div>
+		<div id="about">
+			<!-- IF S_PROFILE_PERSONAL_ROW -->
+			<fieldset class="settings">
+				<legend>{L_about_me}</legend>
+
+				<!-- BEGIN profile_personal_row -->
+				<dl>
+					<dt><label>{profile_personal_row.NAME}</label></dt>
+					<dd>{profile_personal_row.TEXT}</dd>
+				</dl>
+				<!-- END profile_personal_row -->
+			</fieldset>
 			<br />
-			<div class="tableHeader">
-				<h2>{L_user_contact}</h2>
-			</div>
-			<table width="100%" align="center" cellpadding="1" cellspacing="1">
-				<tr>
-					<td width="10%" class="row1 nowrap"><strong>{L_email}:</strong></td>
-					<td width="40%" class="row2">{USER_MAIL}</td>
-					<td width="10%" class="row1 nowrap"><strong>{L_adduser_phone}:</strong></td>
-					<td width="40%" class="row2">{USER_PHONE}</td>
-				</tr>
-				<tr>
-					<td class="row1 nowrap"><strong>ICQ:</strong></td>
-					<td class="row2">{USER_ICQ}</td>
-					<td class="row1 nowrap"><strong>{L_adduser_cellphone}:</strong></td>
-					<td class="row2">{USER_CELLPHONE}</td>
-				</tr>
-				<tr>
-					<td class="row1 nowrap"><strong>Skype:</strong></td>
-					<td class="row2">{USER_SKYPE}</td>
-					<td class="row1 nowrap"><strong>Facebook:</strong></td>
-					<td class="row2">{USER_FACEBOOK}</td>
-				</tr>
-				<tr>
-					<td class="row1 nowrap"><strong>MSN: </strong></td>
-					<td class="row2">{USER_MSN}</td>
-					<td class="row1 nowrap"><strong>Twitter:</strong></td>
-					<td class="row2">{USER_TWITTER}</td>
-				</tr>
-				<tr>
-					<td class="row1 nowrap"><strong>IRC:</strong></td>
-					<td class="row2">{USER_IRC}</td>
-					<td class="row1 nowrap">&nbsp;</td>
-					<td class="row2">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<div class="tableHeader">
-				<h2>{L_chars}</h2>
-			</div>
-			<table width="100%" align="center" cellpadding="1" cellspacing="1" class="colorswitch">
-				<tr>
-					<th>{L_name}</th>
-					<th>{L_level}</th>
-					<th>{L_class}</th>
-					<th>{L_race}</th>
-					<th>{L_rank}</th>
-					<th>{L_type}</th>
-				</tr>
-				<!-- BEGIN char_row -->
-				<tr>
-					<td>{char_row.NAME}</td>
-					<td>{char_row.LEVEL}</td>
-					<td>{char_row.CLASS}</td>
-					<td>{char_row.RACE}</td>
-					<td>{char_row.RANK}</td>
-					<td>{char_row.TYPE}</td>
-				</tr>
-				<!-- END char_row -->
-				<tr >
-					<th colspan="6" class="footer">{USER_CHAR_FC}</th>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+			<!-- ENDIF -->
+			
+			<!-- IF S_PROFILE_CONTACT_ROW -->
+			<fieldset class="settings">
+				<legend>{L_user_contact}</legend>
+
+				<!-- BEGIN profile_contact_row -->
+				<dl>
+					<dt><label>{profile_contact_row.NAME}</label></dt>
+					<dd>{profile_contact_row.TEXT}</dd>
+				</dl>
+				<!-- END profile_contact_row -->
+			</fieldset>
+			<br />
+			<!-- ENDIF -->
+			
+			<!-- IF S_PROFILE_MISC_ROW -->
+			<fieldset class="settings">
+				<legend>{L_adduser_misc}</legend>
+
+				<!-- BEGIN profile_misc_row -->
+				<dl>
+					<dt><label>{profile_misc_row.NAME}</label></dt>
+					<dd>{profile_misc_row.TEXT}</dd>
+				</dl>
+				<!-- END profile_misc_row -->
+			</fieldset>
+			<br />
+			<!-- ENDIF -->
+		</div>
+		<div id="characters">
+			<h1>{L_chars}</h1>
+		</div>
+	</div>
+
+</div>
 
 

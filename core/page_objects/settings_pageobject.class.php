@@ -160,6 +160,17 @@ class settings_pageobject extends pageobject {
 			'2'=>'user_priv_admin',
 			'3'=>'user_priv_no'
 		);
+		
+		$priv_wall_posts_read_array = array(
+			'0'=>'user_priv_all',
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_onlyme'
+		);
+		
+		$priv_wall_posts_write_array = array(
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_onlyme'
+		);
 
 		$priv_set_array = array(
 			'0'=>'user_priv_all',
@@ -244,7 +255,13 @@ class settings_pageobject extends pageobject {
 						'help'		=> 'confirm_password_note',
 						'id'		=> 'password2',
 					),
-
+				),
+				'user_app_key' => array(
+					'exchange_key' => array(
+						'fieldtype' => 'plaintext',
+						'text'		=> $this->user->data['exchange_key'].'<br /><button class="" type="submit" name="newexchangekey"><i class="icon-refresh"></i>'.$this->user->lang('user_create_new appkey').'</button>',
+						'name'		=> 'user_app_key'
+					),
 				),
 			),
 			'profile'	=> array(
@@ -289,6 +306,24 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'adduser_town',
 						'size'	=> 40,
 					),
+					'birthday'	=> array(
+						'fieldtype'	=> 'datepicker',
+						'name'	=> 'adduser_birthday',
+						'allow_empty' => true,
+						'options' => array(
+							'year_range' => '-80:+0',
+							'change_fields' => true,
+							'format' => $birthday_format
+						),
+					),
+					'user_avatar'	=> array(
+						'fieldtype'	=> 'userimageuploader',
+						'name'		=> 'user_image',
+						'imgpath'	=> $this->pfh->FolderPath('users/'.$this->user->id,'files'),
+						'options'	=> array('deletelink'	=> 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode'), 'returnFormat' => 'filename'),
+					),
+				),
+				'user_contact' => array(
 					'phone'	=> array(
 						'fieldtype'	=> 'text',
 						'name'	=> 'adduser_phone',
@@ -311,9 +346,9 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'adduser_skype',
 						'size'	=> 40,
 					),
-					'msn'=> array(
+					'youtube'=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_msn',
+						'name'	=> 'adduser_youtube',
 						'size'	=> 40,
 					),
 					'irq'	=> array(
@@ -332,40 +367,28 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'adduser_facebook',
 						'size'	=> 40,
 					),
-					'birthday'	=> array(
-						'fieldtype'	=> 'datepicker',
-						'name'	=> 'adduser_birthday',
-						'allow_empty' => true,
-						'options' => array(
-							'year_range' => '-80:+0',
-							'change_fields' => true,
-							'format' => $birthday_format
-						),
-					),
-					'user_avatar'	=> array(
-						'fieldtype'	=> 'userimageuploader',
-						'name'		=> 'user_image',
-						'imgpath'	=> $this->pfh->FolderPath('users/'.$this->user->id,'files'),
-						'options'	=> array('deletelink'	=> 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode'), 'returnFormat' => 'filename'),
-					),
+				),
+				'adduser_misc' => array(
 					'work'	=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'user_work',
+						'name'	=> 'adduser_work',
 						'size'	=> 40,
 					),
 					'interests'	=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'user_interests',
+						'name'	=> 'adduser_interests',
 						'size'	=> 40,
 					),
 					'hardware'	=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'user_hardware',
+						'name'	=> 'adduser_hardware',
 						'size'	=> 40,
 					),
 
 				),
-				'user_priv'	=> array(
+			),
+			'privacy_options' => array(
+				'user_priv' => array(
 					'priv_no_boardemails'	=> array(
 						'fieldtype'	=> 'checkbox',
 						'default'	=> 0,
@@ -393,16 +416,42 @@ class settings_pageobject extends pageobject {
 						'default'	=> 0,
 						'name'		=> 'user_priv_bday',
 					),
-					'exchange_key' => array(
-						'fieldtype' => 'plaintext',
-						'text'		=> $this->user->data['exchange_key'].'<br /><button class="" type="submit" name="newexchangekey"><i class="icon-refresh"></i>'.$this->user->lang('user_create_new appkey').'</button>',
-						'name'		=> 'user_app_key'
+				),
+				'user_wall' => array(
+					'priv_wall_posts_read'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'options'	=> $priv_wall_posts_read_array,
+						'name'		=> 'user_priv_wall_posts_read',
 					),
-
+					'priv_wall_posts_write'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'options'	=> $priv_wall_posts_write_array,
+						'name'		=> 'user_priv_wall_posts_write',
+					),
 				),
 			),
+			
 			'view_options'		=> array(
 				'adduser_tab_view_options'	=> array(
+					'user_lang'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'name'	=> 'language',
+						'options'	=> $language_array,
+						'no_lang' => true
+					),
+					'user_timezone'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'name'		=> 'user_timezones',
+						'options'	=> $this->time->timezones,
+						'value'		=> $this->config->get('timezone'),
+					),
+					'user_style'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'name'		=> 'style',
+						'options'	=> $style_array,
+						'text'		=> ' (<a href="javascript:template_preview()">'.$this->user->lang('preview').'</a>)',
+						'no_lang'	=> true,
+					),
 					'user_alimit'	=> array(
 						'fieldtype'	=> 'spinner',
 						'name'	=> 'adjustments_per_page',
@@ -443,26 +492,6 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'news_per_page',
 						'size'	=> 5,
 						'id'	=> 'user_nlimit'
-					),
-					'user_lang'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'	=> 'language',
-						'options'	=> $language_array,
-						'no_lang' => true
-					),
-					'user_timezone'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'user_timezones',
-						'options'	=> $this->time->timezones,
-						'value'		=> $this->config->get('timezone'),
-					),
-
-					'user_style'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'style',
-						'options'	=> $style_array,
-						'text'		=> ' (<a href="javascript:template_preview()">'.$this->user->lang('preview').'</a>)',
-						'no_lang'	=> true,
 					),
 					'user_date_time'	=> array(
 						'fieldtype'	=> 'text',

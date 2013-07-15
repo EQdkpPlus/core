@@ -79,10 +79,22 @@ if(!class_exists('pdh_r_comment')){
 
 		public function get_filtered_list($page, $attach_id=false) {
 			$comments = array();
+			$replies = array();
 			foreach($this->comments as $id => $comment) {
 				if($comment['page'] != $page) continue;
 				if($attach_id > 0 AND $comment['attach_id'] != $attach_id) continue;
-				$comments[$id] = $comment;
+				if ((int)$comment['reply_to'] > 0){
+					if (isset($replies[(int)$comment['reply_to']])){
+						$replies[(int)$comment['reply_to']][] = $comment;
+					} else {
+						$replies[(int)$comment['reply_to']] = array();
+						$replies[(int)$comment['reply_to']][] = $comment;
+					}
+				} else {
+					$arrReplies = isset($replies[(int)$id]) ? $replies[(int)$id] : array();
+					$comment['replies'] = array_reverse($arrReplies);
+					$comments[(int)$id] = $comment;
+				}		
 			}
 			return $comments;
 		}

@@ -31,13 +31,15 @@ if(!class_exists('pdh_w_comment')) {
 			parent::__construct();
 		}
 
-		public function insert($attach_id, $user_id, $comment, $page) {
+		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
 			if($this->db->query("INSERT INTO __comments :params", array(
 					'attach_id'		=> $attach_id,
 					'date'			=> $this->time->time,
 					'userid'		=> $user_id,
 					'text'			=> str_replace("\n", "[br]", $comment),
-					'page'			=> $page)
+					'page'			=> $page,
+					'reply_to'		=> $reply_to,
+					)
 				)) {
 				$id = $this->db->insert_id();
 				$this->pdh->enqueue_hook('comment_update', $id);
@@ -48,7 +50,7 @@ if(!class_exists('pdh_w_comment')) {
 
 		public function delete($id) {
 			if(!$id) return false;
-			$this->db->query("DELETE FROM __comments WHERE id='".$this->db->escape($id)."';");
+			$this->db->query("DELETE FROM __comments WHERE id='".$this->db->escape($id)."' OR reply_to='".$this->db->escape($id)."';");
 			$this->pdh->enqueue_hook('comment_update', array($id));
 			return true;
 		}

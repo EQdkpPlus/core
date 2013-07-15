@@ -122,6 +122,12 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 			} else {
 				$querystr['member_creation_date'] = $this->current_time;
+				
+				//Add defaultrole if there is only one role for the class
+				$arrRoles = $this->pdh->get('roles', 'memberroles', array($data['classid']));
+				$arrRoleIDs = array_keys($arrRoles);
+				if (count($arrRoleIDs) == 1) $querystr['defaultrole'] = $arrRoleIDs[0];
+				
 				if(!$this->db->query("INSERT INTO __members :params", $querystr)) {
 					return false;
 				}else{

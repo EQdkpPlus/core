@@ -2564,11 +2564,6 @@ div.error { display: none; }
 	margin-right: 20px;
 }
 
-.comment_container, .comment_write_container {
-	float: left;
-	width: 75%;
-}
-
 .comment_container, .comment_write_container
 {
 	position: relative;
@@ -2579,6 +2574,7 @@ div.error { display: none; }
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
+	margin-left: 130px;
 }
 
 .comment_container:after, .comment_write_container:after
@@ -2615,13 +2611,34 @@ div.error { display: none; }
 	font-size: 11px;
 }
 
-#comment_button {
-	margin-left: 140px;
+#comment_button, .reply-trigger,.reply_button {
+	margin-left: 130px;
+}
+
+.comment-reply,.reply-form-container {
+	margin-left: 110px;
+}
+
+.reply-form-container {
+	margin-top: 10px;
 }
 
 .writeComments .boxHeader{
 	display: none;
 }
+
+.comment_reply_container{
+	clear:both; 
+}
+
+.comment-reply .comment_container, .comment-reply .comment_write_container {
+	background-color: #efefef;
+}
+
+.comment-reply .comment_container:after {
+	border-color: transparent #efefef;
+}
+
 
 strong {
 	font-weight: bold;
@@ -3064,6 +3081,53 @@ button#cboxPrevious, button#cboxNext, button#cboxClose {
 	display:inline;
 }
 
+/* Userprofile */
+.user-profile > .user-avatar{
+	max-height: 68px;
+	float: left;
+}
+.user-profile > .user-avatar img{
+	border: 1px solid #CCCCCC;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 1px 1px 2px #000000;
+    max-height: 68px;
+}
+
+.user-name h2 {
+	border: none;
+	float: left;
+}
+.user-name-container {
+	float:left;
+	margin-left: 10px;
+	min-height: 68px;
+}
+
+.user-profile .user-groups {
+	float: left;
+	margin-left: 40px;
+	margin-top: 6px;
+}
+
+.user-groups a {
+    background: none repeat scroll 0 0 #4E7FA8;
+    border-radius: 8px 8px 8px 8px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    margin-right: 10px;
+    padding: 4px 7px;
+    position: relative;
+    text-shadow: none !important;
+    vertical-align: middle;
+    white-space: nowrap;
+	line-height: 11px;
+}
+
+.user-profile .boxHeader {
+	display: none;
+}
 	
 @media all and (max-width: 480px) {
 	body, html , #personalArea{

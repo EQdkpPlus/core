@@ -203,6 +203,10 @@ if (!class_exists("pdh_r_user")){
 			return $this->users[$user_id]['user_lastvisit'];
 		}
 		
+		public function get_html_last_visit($user_id) {
+			return $this->time->user_date($this->get_last_visit($user_id), true);
+		}
+		
 		public function get_country($user_id) {
 			return $this->users[$user_id]['country'];
 		}
@@ -340,6 +344,7 @@ if (!class_exists("pdh_r_user")){
 			$arrMemberships = $this->get_groups($user_id);
 			
 			$arrOut = array();
+			$arrOut[] = '<div class="user-groups">';
 			foreach($arrMemberships as $groupid){
 				if ($blnUseController) {
 					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
@@ -347,7 +352,8 @@ if (!class_exists("pdh_r_user")){
 					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				}			
 			}
-			return implode(', ', $arrOut);
+			$arrOut[] = '</div>';
+			return implode('', $arrOut);
 		}
 		
 		public function comp_groups($params1, $params2) {

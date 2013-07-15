@@ -637,6 +637,17 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			'1'=>$this->user->lang('user_priv_user'),
 			'2'=>$this->user->lang('user_priv_admin')
 		);
+		
+		$priv_wall_posts_read_array = array(
+			'0'=>'user_priv_all',
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_onlyme'
+		);
+		
+		$priv_wall_posts_write_array = array(
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_onlyme'
+		);
 
 		$gender_array = array(
 			'0'=> "---",
@@ -749,6 +760,24 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'name'	=> 'adduser_town',
 						'size'	=> 40,
 					),
+					'birthday'	=> array(
+						'fieldtype'	=> 'datepicker',
+						'name'	=> 'adduser_birthday',
+						'allow_empty' => true,
+						'options' => array(
+							'year_range' => '-80:+0',
+							'change_fields' => true,
+							'format' => $birthday_format
+						),
+					),
+					'user_avatar'	=> array(
+						'fieldtype'	=> 'imageuploader',
+						'name'		=> 'user_image',
+						'imgpath'	=> $this->pfh->FolderPath('users/'.$user_id,'files'),
+						'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar', 'returnFormat' => 'filename'),
+					),
+				),
+				'user_contact' => array(
 					'phone'	=> array(
 						'fieldtype'	=> 'text',
 						'name'	=> 'adduser_phone',
@@ -771,9 +800,9 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'name'	=> 'adduser_skype',
 						'size'	=> 40,
 					),
-					'msn'=> array(
+					'youtube'=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_msn',
+						'name'	=> 'adduser_youtube',
 						'size'	=> 40,
 					),
 					'irq'	=> array(
@@ -792,40 +821,27 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'name'	=> 'adduser_facebook',
 						'size'	=> 40,
 					),
-					'birthday'	=> array(
-						'fieldtype'	=> 'datepicker',
-						'name'	=> 'adduser_birthday',
-						'allow_empty' => true,
-						'options' => array(
-							'year_range' => '-80:+0',
-							'change_fields' => true,
-							'format' => $birthday_format
-						),
-					),
-					'user_avatar'	=> array(
-						'fieldtype'	=> 'imageuploader',
-						'name'		=> 'user_image',
-						'imgpath'	=> $this->pfh->FolderPath('users/'.$user_id,'files'),
-						'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar', 'returnFormat' => 'filename'),
-					),
+				),
+				'adduser_misc' => array(
 					'work'	=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'user_work',
+						'name'	=> 'adduser_work',
 						'size'	=> 40,
 					),
 					'interests'	=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'user_interests',
+						'name'	=> 'adduser_interests',
 						'size'	=> 40,
 					),
 					'hardware'	=> array(
 						'fieldtype'	=> 'text',
-						'name'	=> 'user_hardware',
+						'name'	=> 'adduser_hardware',
 						'size'	=> 40,
 					),
-
 				),
-				'user_priv'	=> array(
+			),
+			'privacy_options' => array(
+				'user_priv' => array(
 					'priv_no_boardemails'	=> array(
 						'fieldtype'	=> 'checkbox',
 						'default'	=> 0,
@@ -835,11 +851,13 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'fieldtype'	=> 'dropdown',
 						'name'	=> 'user_priv_set_global',
 						'options'	=> $priv_set_array,
+						'value'	=> '1',
 					),
 					'priv_phone'	=> array(
 						'fieldtype'	=> 'dropdown',
 						'name'	=> 'user_priv_tel_all',
 						'options'	=> $priv_phone_array,
+						'value'	=> '1',
 					),
 					'priv_nosms'	=> array(
 						'fieldtype'	=> 'checkbox',
@@ -851,11 +869,41 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'default'	=> 0,
 						'name'		=> 'user_priv_bday',
 					),
-
+				),
+				'user_wall' => array(
+					'priv_wall_posts_read'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'options'	=> $priv_wall_posts_read_array,
+						'name'		=> 'user_priv_wall_posts_read',
+					),
+					'priv_wall_posts_write'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'options'	=> $priv_wall_posts_write_array,
+						'name'		=> 'user_priv_wall_posts_write',
+					),
 				),
 			),
 			'view_options'		=> array(
 				'adduser_tab_view_options'	=> array(
+					'user_lang'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'name'	=> 'language',
+						'options'	=> $language_array,
+						'no_lang' => true
+					),
+					'user_timezone'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'name'		=> 'user_timezones',
+						'options'	=> $this->time->timezones,
+						'value'		=> $this->config->get('timezone'),
+					),
+					'user_style'	=> array(
+						'fieldtype'	=> 'dropdown',
+						'name'		=> 'style',
+						'options'	=> $style_array,
+						'text'		=> ' (<a href="javascript:template_preview()">'.$this->user->lang('preview').'</a>)',
+						'no_lang'	=> true,
+					),
 					'user_alimit'	=> array(
 						'fieldtype'	=> 'spinner',
 						'name'	=> 'adjustments_per_page',
@@ -896,24 +944,6 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'name'	=> 'news_per_page',
 						'size'	=> 5,
 						'id'	=> 'user_nlimit'
-					),
-					'user_lang'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'	=> 'language',
-						'options'	=> $language_array,
-					),
-					'user_timezone'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'user_timezones',
-						'options'	=> $this->time->timezones,
-					),
-
-					'user_style'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'style',
-						'options'	=> $style_array,
-						'text'		=> ' (<a href="javascript:template_preview()">'.$this->user->lang('preview').'</a>)',
-						'no_lang'	=> true,
 					),
 					'user_date_time'	=> array(
 						'fieldtype'	=> 'text',

@@ -163,12 +163,12 @@ if(!class_exists('pdh_w_user')) {
 			
 			$privArray = array();
 			$customArray = array();
-			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter');
+			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube');
 			foreach($settingsdata as $group => $fieldsets) {
 				if($group == 'registration_information') continue;
 				foreach($fieldsets as $tab => $fields) {
 					foreach($fields as $name => $field) {
-						if($tab == 'user_priv') 
+						if($tab == 'user_priv' || $tab == 'user_wall') 
 							$privArray[$name] = $this->html->widget_return($field);
 						elseif(in_array($name, $custom_fields)) 
 							$customArray[$name] = $this->html->widget_return($field);

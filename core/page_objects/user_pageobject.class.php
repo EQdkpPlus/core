@@ -18,7 +18,7 @@
 
 class user_pageobject extends pageobject {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl','in', 'pdh', 'game', 'config', 'core', 'html', 'time', 'pfh', 'crypt'=>'encrypt', 'jquery');
+		$shortcuts = array('user', 'tpl','in', 'pdh', 'game', 'config', 'core', 'html', 'time', 'pfh', 'crypt'=>'encrypt', 'jquery', 'comments');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -120,41 +120,126 @@ class user_pageobject extends pageobject {
 					$phone_perm = true;
 				}
 		}
+		
+		//Gender
+		switch($row['gender']){
+			case '1' : $strGender = $this->user->lang('adduser_gender_m').', ';
+			break;
+			case '1' : $strGender = $this->user->lang('adduser_gender_m').', ';
+			break;
+			default: $strGender = "";
+		}
+		
+		$this->jquery->Tab_header('userprofile_tabs', true);
+		$this->tpl->assign_vars(array(
+			'USER_PROFILE_ID' => $user_id,
+			'USER_PROFILE_AVATAR' => ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($user_id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($user_id)), false, 'absolute') : $this->server_path.'images/no_pic.png',
+			'USER_PROFILE_NAME'	  => sanitize($row['username']),
+			'USER_PROFILE_GENDER' => $strGender,
+			'USER_PROFILE_REGISTERED'	=> $this->pdh->geth('user', 'regdate', array($user_id)),
+			'USER_PROFILE_LAST_ACTIVITY' => $this->pdh->geth('user', 'last_visit', array($user_id)),
+			'USER_PROFILE_USERGROUPS' => str_replace(', ', '', $this->pdh->geth('user', 'groups', array($user_id, true))),
+		));
+		
+		//Wall Permissions
+		$blnWallRead = false;
+		switch($privacy['priv_wall_posts_read']){
+			case '0' : $blnWallRead = true;
+			break;
+			case '1' : if ($is_user)  $blnWallRead = true;
+			break;
+			case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallRead = true;
+			break;
+			default: if ($is_admin)  $blnWallRead = true;
+		}
+		
+		$blnWallWrite = false;
+		switch($privacy['priv_wall_posts_write']){
+			case '1' : if ($is_user)  $blnWallWrite = true;
+			break;
+			case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallWrite = true;
+			break;
+			default: if ($is_admin)  $blnWallWrite = true;
+		}
+		
+		//Wall
+		$this->comments->SetVars(array(
+			'attach_id'	=> $user_id,
+			'page'		=> 'userwall',
+			'auth'		=> 'a_user_man',
+			'user_auth' => (($blnWallWrite) ? 'u_userlist' : 'a_something'),
+			'replies'	=> true,
+		));
+		$this->tpl->assign_vars(array(
+			'USER_WALL'			=> $this->comments->Show(),
+			'S_SHOW_WALL'		=> $blnWallRead,
+		));
+		
+		//Personal Profile Information
+		$arrProfile = array();
+		if ($row['first_name'] != "" || $row['last_name'] != "") $arrProfile['name'] = (($row['first_name'] != '') ? sanitize($row['first_name']).' ' : '').(($row['last_name'] != '') ? sanitize($row['last_name']) : '');
+		$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
+		$arrProfile['age'] = ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
+		if ($row['town'] != "") $arrProfile['adduser_town'] = (($row['ZIP_code'] != "") ? sanitize($row['ZIP_code']).' ': '').sanitize($row['town']);
+		if ($row['state'] != "") $arrProfile['adduser_state'] = sanitize($row['state']);
+		if ($row['country'] != "") $arrProfile['adduser_country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.png" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+		
+		foreach($arrProfile as $key => $val){
+			$this->tpl->assign_block_vars('profile_personal_row', array(
+				'NAME' => $this->user->lang($key),
+				'TEXT' => $val,
+			));
+			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
+		}
+		
+		//Contact Information
+		$arrContact = array();
+		if ($perm && ($this->user->is_signedin()) && strlen($row['user_email'])) $arrContact['email_address'] = '<a href="javascript:usermailer();"><i class="icon-envelope icon-large"></i> '.$this->user->lang('adduser_send_mail').'</a>';
+		if ($phone_perm && strlen($row['cellphone'])) $arrContact['adduser_cellphone'] = '<i class="icon-mobile-phone icon-large"></i> '.sanitize($row['cellphone']);
+		if ($phone_perm && strlen($row['phone'])) $arrContact['adduser_phone'] = '<i class="icon-phone icon-large"></i> '.sanitize($row['phone']);
+		if ($perm && strlen($row['icq'])) $arrContact['adduser_icq'] = '<a href="http://www.icq.com/people/'.sanitize($row['icq']).'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.sanitize($row['icq']).'&amp;img=5" alt="icq" /> '.sanitize($row['icq']).'</a>';
+		if ($perm && strlen($row['skype'])) $arrContact['adduser_skype'] = '<a href="skype:'.sanitize($row['skype']).'?add"><i class="icon-skype icon-large"></i> '.sanitize($row['skype']).'</a>';
+		if ($perm && strlen($custom['twitter'])) $arrContact['adduser_twitter'] = '<a href="https://twitter.com/'.sanitize($custom['twitter']).'" target="_blank"><i class="icon-twitter icon-large"></i> '.sanitize($custom['twitter']).'</a>';
+		if ($perm && strlen($custom['facebook'])) $arrContact['adduser_facebook'] = '<a href="https://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.sanitize($custom['facebook']) : sanitize($custom['facebook'])).'" target="_blank"><i class="icon-facebook icon-large"></i> '.sanitize($custom['facebook']).'</a>';
+		if ($perm && strlen($custom['youtube'])) $arrContact['adduser_youtube'] = '<a href="https://www.youtube.com/user/'.sanitize($custom['youtube']).'" target="_blank"><i class="icon-youtube icon-large"></i> '.sanitize($custom['youtube']).'</a>';
+		
 		if($row['irq'] != ""){
 			$irc_parts			= explode('@',$row['irq']);
-			$data['irq']		= '<a href="irc://'.((isset($irc_parts[1])) ? $irc_parts[1] : 'irc.de.quakenet.org').'/'.str_replace('#', '', $irc_parts[0]).'" > <img alt="'.$row['irq'].'" title="'.$row['irq'].'" src="'.$this->root_path.'images/glyphs/irc.png" /> '.$row['irq'].'</a>';
+			$data['irq']		= '<a href="irc://'.((isset($irc_parts[1])) ? $irc_parts[1] : 'irc.de.quakenet.org').'/'.str_replace('#', '', $irc_parts[0]).'" >'.$row['irq'].'</a>';
 		} else {
 			$data['irq'] = '';
 		}
-
-		$user_avatar = $this->pdh->get('user', 'avatarimglink', array($row['user_id']));
+		if ($perm && strlen($data['irq'])) $arrContact['adduser_irq'] = $data['irq'];
 		
-		$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
-		$user_data = array(
-			'userid'			=> sanitize($row['user_id']),
-			'USERNAME'			=> sanitize($row['username']),
-			'firstandlastname'	=> (($row['first_name'] != '') ? sanitize($row['first_name']).' ' : '').(($row['last_name'] != '') ? sanitize($row['last_name']) : ''),
-			'USER_COUNTRY'		=> ucfirst(strtolower($country_array[$row['country']])),
-			'USER_COUNTRYFLAG'	=> ($row['country'] != '') ? '<img src="'.$this->root_path.'images/flags/'.strtolower($row['country']).'.png" alt="'.$row['country'].'" />' : '',
-			'USER_MAIL'			=> ($perm && ($this->user->is_signedin()) && strlen($row['user_email'])) ? '<img src="'.$this->root_path.'images/glyphs/email.png" alt="email" /><a href="javascript:usermailer();">'.$this->user->lang('adduser_send_mail').'</a>' : '',
-			'USER_REGISTERED'	=> ($row['user_registered'] > 0) ? $this->time->user_date($row['user_registered'], true) : '',
-			'USER_ICQ'			=> ($perm && strlen($row['icq'])) ? '<a href="http://www.icq.com/people/'.$row['icq'].'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.$row['icq'].'&amp;img=5" alt="icq" /> '.sanitize($row['icq']).'</a>' : '',
-			'USER_SKYPE'		=> ($perm && strlen($row['skype'])) ? '<a href="skype:'.$row['skype'].'?add"><img src="'.$this->root_path.'images/glyphs/skype.png" alt="Skype" /> '.sanitize($row['skype']).'</a>' : '',
-			'USER_MSN'			=> ($perm && strlen($row['msn'])) ? '<a href="http://members.msn.com/?mem='.$row['msn'].'" target="_blank"><img src="'.$this->root_path.'images/glyphs/msn.png" alt="msn" /> '.sanitize($row['msn']).'</a> ' : '',
-			'USER_IRC'			=> ($perm && strlen($data['irq'])) ? $data['irq'] : '',
-			'USER_TWITTER'		=> ($perm && strlen($custom['twitter'])) ? '<a href="http://twitter.com/'.$custom['twitter'].'" target="_blank"><img src="'.$this->root_path.'images/logos/twitter_icon_16.png" alt="Twitter" /> '.$custom['twitter'].'</a>' : '',
-			'USER_FACEBOOK'		=> ($perm && strlen($custom['facebook'])) ? '<a href="http://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.$custom['facebook'] : $custom['facebook']).'" target="_blank"><img src="'.$this->root_path.'images/logos/facebook_icon_16.png" alt="Facebook" />'.sanitize($custom['facebook']).'</a>' : '',
-			'USER_CELLPHONE'	=> ($phone_perm && strlen($row['cellphone'])) ? '<img src="'.$this->root_path.'images/glyphs/phone_cell.png" alt="Cell" /> '.sanitize($row['cellphone']) : '',
-			'USER_PHONE'		=> ($phone_perm && strlen($row['phone'])) ? '<img src="'.$this->root_path.'images/glyphs/phone.png" alt="Phone" /> '.sanitize($row['phone']) : '',
-			'USER_IMAGE'		=> (isset($custom['user_avatar']) && is_file($user_avatar)) ? $user_avatar : $this->root_path.'images/no_pic.png',
-			'USER_BIRTHDAY'		=> ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age,
-			'USER_TOWN'			=> sanitize($row['town']),
-			'USER_HARDWARE'		=> sanitize($custom['hardware']),
-			'USER_WORK'			=> sanitize($custom['work']),
-			'USER_INTERESTS'	=> sanitize($custom['interests']),
-		);
-		$this->tpl->assign_vars($user_data);
+		foreach($arrContact as $key => $val){
+			$this->tpl->assign_block_vars('profile_contact_row', array(
+				'NAME' => $this->user->lang($key),
+				'TEXT' => $val,
+			));
+			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
+		}
+		
+		//Misc Profile Information
+		$arrMisc = array();
+		if (strlen($custom['hardware'])) $arrMisc['adduser_hardware'] = sanitize($custom['hardware']);
+		if (strlen($custom['work'])) $arrMisc['adduser_work'] = sanitize($custom['work']);
+		if (strlen($custom['interests'])) $arrMisc['adduser_interests'] = sanitize($custom['interests']);
+		
+		foreach($arrMisc as $key => $val){
+			$this->tpl->assign_block_vars('profile_misc_row', array(
+				'NAME' => $this->user->lang($key),
+				'TEXT' => $val,
+			));
+			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
+		}
+		
+		$this->tpl->assign_vars(array(
+			'S_PROFILE_PERSONAL_ROW' => count($arrProfile),
+			'S_PROFILE_CONTACT_ROW' => count($arrContact),
+			'S_PROFILE_MISC_ROW' => count($arrMisc),
+		));
 
+		/*
 		$member_list = $this->pdh->maget('member', array('classid', 'raceid', 'rankname', 'twink', 'name', 'level'), 0, array($this->pdh->get('member', 'connection_id', array($user_id))));
 		if (is_array($member_list)){
 			foreach ($member_list as $mid => $member){
@@ -169,6 +254,7 @@ class user_pageobject extends pageobject {
 				$this->tpl->assign_block_vars('char_row', $member_array );
 			}
 		}
+		*/
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user=".$row['user_id'], 'width'=>'660', 'height'=>'450'));
 
