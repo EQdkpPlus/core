@@ -519,7 +519,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_mainchar_radio($member_id){
-			return $this->html->RadioBox('mainchar', array($member_id=>''), $this->get_is_main($member_id), 'input cmainradio');
+			return $this->html->RadioBox('mainchar', array($member_id=>''), (($this->get_is_main($member_id)) ? $member_id : 0), 'input cmainradio');
 		}
 
 		public function get_char_defrole($member_id){
