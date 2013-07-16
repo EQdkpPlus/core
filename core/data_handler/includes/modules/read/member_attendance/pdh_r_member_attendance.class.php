@@ -84,9 +84,9 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			$first_date = 0;
 			if($time_period != 'LT') {
 				$first_date = $this->time->time-($time_period*86400);
-				$first_date -= $first_date%86400;
+				$first_date -= 3600*$this->time->date('H')+60*$this->time->date('i')+$this->time->date('s');
 			}
-
+			
 			//get raids
 			$raid_ids = $this->pdh->get('raid', 'id_list');
 
