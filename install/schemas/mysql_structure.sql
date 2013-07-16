@@ -417,6 +417,7 @@ CREATE TABLE IF NOT EXISTS `__comments` (
 	`date` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`text` text COLLATE utf8_bin,
 	`page` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`reply_to` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
