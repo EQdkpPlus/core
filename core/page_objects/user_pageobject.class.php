@@ -143,23 +143,31 @@ class user_pageobject extends pageobject {
 		
 		//Wall Permissions
 		$blnWallRead = false;
-		switch($privacy['priv_wall_posts_read']){
-			case '0' : $blnWallRead = true;
-			break;
-			case '1' : if ($is_user)  $blnWallRead = true;
-			break;
-			case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallRead = true;
-			break;
-			default: if ($is_admin)  $blnWallRead = true;
+		if (!isset($privacy['priv_wall_posts_read'])) {
+			if ($is_user) $blnWallRead = true;
+		} else {		
+			switch($privacy['priv_wall_posts_read']){
+				case '0' : $blnWallRead = true;
+				break;
+				case '1' : if ($is_user)  $blnWallRead = true;
+				break;
+				case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallRead = true;
+				break;
+				default: if ($is_admin)  $blnWallRead = true;
+			}
 		}
 		
 		$blnWallWrite = false;
-		switch($privacy['priv_wall_posts_write']){
-			case '1' : if ($is_user)  $blnWallWrite = true;
-			break;
-			case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallWrite = true;
-			break;
-			default: if ($is_admin)  $blnWallWrite = true;
+		if (!isset($privacy['priv_wall_posts_write'])) {
+			if ($is_user)  $blnWallWrite = true;
+		} else {
+			switch($privacy['priv_wall_posts_write']){
+				case '1' : if ($is_user)  $blnWallWrite = true;
+				break;
+				case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallWrite = true;
+				break;
+				default: if ($is_admin)  $blnWallWrite = true;
+			}
 		}
 		
 		//Wall
