@@ -45,6 +45,10 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			'attendance_60' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%'), array(60)),
 			'attendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),
 			'attendance_lt' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%'), array('LT')),
+			'attendance_30_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 30, '%with_twink%'), array('%ALL_IDS%', 30)),
+			'attendance_60_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 60, '%with_twink%'), array('%ALL_IDS%', 60)),
+			'attendance_90_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 90, '%with_twink%'), array('%ALL_IDS%', 90)),
+			'attendance_lt_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 'LT', '%with_twink%'), array('%ALL_IDS%', 'LT')),
 		);
 
 		public $detail_twink = array(
@@ -84,9 +88,9 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			$first_date = 0;
 			if($time_period != 'LT') {
 				$first_date = $this->time->time-($time_period*86400);
-				$first_date -= $first_date%86400;
+				$first_date -= 3600*$this->time->date('H')+60*$this->time->date('i')+$this->time->date('s');
 			}
-
+			
 			//get raids
 			$raid_ids = $this->pdh->get('raid', 'id_list');
 
@@ -171,6 +175,14 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			return ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
 		}
+		
+		public function get_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false){
+			return $this->get_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count);
+		}
+		
+		public function get_html_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false){
+			return $this->get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count);
+		}
 
 		public function get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks=true){
 			if(!isset($this->member_attendance[$time_period][$multidkp_id])){
@@ -196,6 +208,14 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				return $this->pdh->get_lang('member_attendance', 'lifetime');
 			}else{
 				return sprintf($this->pdh->get_lang('member_attendance', 'attendance'), $period);
+			}
+		}
+		
+		public function get_caption_attendance_all($mdkpid, $period){
+			if($period == 'LT'){
+				return $this->pdh->get('multidkp', 'name', array($mdkpid)).' '.$this->pdh->get_lang('member_attendance', 'lifetime');
+			}else{
+				return $this->pdh->get('multidkp', 'name', array($mdkpid)).' '.sprintf($this->pdh->get_lang('member_attendance', 'attendance'), $period);
 			}
 		}
 	}//end class

@@ -105,7 +105,7 @@ class viewcharacters extends page_generic {
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_points');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => true), $this->url_id, 'msort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => !$this->config->get('pk_show_twinks')), $this->url_id, 'msort');
 
 		$profile_out = array(
 			'PROFILE_OUTPUT'		=> $profile_tplfile,

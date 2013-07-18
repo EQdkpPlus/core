@@ -48,7 +48,7 @@ class embedly extends gen_class {
 	}
 	
 	//Parse an String for Hyperlinks and replace Videos and Images
-	public function parseString($string){
+	public function parseString($string, $maxwidth=false){
 		if (strlen($string) == 0) return '';
 		
 		$string = html_entity_decode($string);
@@ -63,7 +63,9 @@ class embedly extends gen_class {
 		}
 
 		//Now let's get the information from embedly
-		$oembeds = $this->embedly->oembed(array('urls' => $embedlyUrls, 'wmode' => 'transparent')); //, 'maxwidth' => 200));
+		$config = array('urls' => $embedlyUrls, 'wmode' => 'transparent');
+		if ($maxwidth) $config['maxwidth'] = intval($maxwidth);
+		$oembeds = $this->embedly->oembed($config);
 		
 		//And now let's replace the Links with the Videos or pictures
 		foreach ($oembeds as $key => $oembed){

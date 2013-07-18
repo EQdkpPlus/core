@@ -33,7 +33,7 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_revent_conf
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_massmail','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_grpleader','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_articles_man ','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_articles_man','N');
 
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_event_view','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_item_view','Y');

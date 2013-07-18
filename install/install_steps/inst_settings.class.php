@@ -31,7 +31,7 @@ class inst_settings extends install_generic {
 		});";
 	
 	//default settings
-	private $def_game			= 'wow';
+	private $def_game			= 'dummy';
 	private $def_game_lang		= '';
 	private $def_lang			= '';
 	private $def_locale			= '';
@@ -51,7 +51,7 @@ class inst_settings extends install_generic {
 		'inactive_period'				=> '0',
 		'active_point_adj'				=> '0.00',
 		'inactive_point_adj'			=> '0.00',
-		'start_page'					=> 'viewnews.php',
+		'start_page'					=> 'news',
 		'cookie_path'					=> '/',
 		'session_length'				=> '3600',
 		'session_cleanup'				=> '0',
@@ -161,6 +161,15 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<th class="ui-state-default" colspan="2">'.$this->lang['game_config'].'</th>
+						</tr>
+						<tr>
+							<td colspan="2">
+										<div class="ui-widget" align="left">
+											<div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+												'.$this->lang['game_info'].'
+											</div>
+										</div>
+							</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_game'].':</strong></td>

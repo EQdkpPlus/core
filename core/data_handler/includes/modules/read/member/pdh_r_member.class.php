@@ -444,9 +444,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_html_active($member_id){
 			if($this->get_active($member_id) == 0){
-				return '<img src="'.$this->root_path.'images/glyphs/status_red.gif" alt="i" />';
+				return '<img src="'.$this->server_path.'images/glyphs/status_red.gif" alt="i" />';
 			}else{
-				return '<img src="'.$this->root_path.'images/glyphs/status_green.gif" alt="a" />';
+				return '<img src="'.$this->server_path.'images/glyphs/status_green.gif" alt="a" />';
 			}
 		}
 
@@ -476,7 +476,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_name_decorated($memberid){
-			$output =	' '.$this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($memberid)), false, $memberid)).
+			$output =	' '.$this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($memberid)), false, $memberid)).' '.
 						$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($memberid)),$this->pdh->get('member', 'gender', array($memberid)), $memberid)).
 						' '.$this->get_html_name($memberid);
 			return $output;

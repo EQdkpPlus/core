@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_comment')) {
 	class pdh_w_comment extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'time');
+		$shortcuts = array('pdh', 'db', 'time', 'embedly'=>'embedly');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -32,11 +32,12 @@ if(!class_exists('pdh_w_comment')) {
 		}
 
 		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
+			$strComment = xhtml_entity_decode($this->embedly->parseString($comment, 400));
 			if($this->db->query("INSERT INTO __comments :params", array(
 					'attach_id'		=> $attach_id,
 					'date'			=> $this->time->time,
 					'userid'		=> $user_id,
-					'text'			=> str_replace("\n", "[br]", $comment),
+					'text'			=> str_replace("\n", "[br]", $strComment),
 					'page'			=> $page,
 					'reply_to'		=> $reply_to,
 					)

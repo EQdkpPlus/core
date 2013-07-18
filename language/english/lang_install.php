@@ -124,6 +124,7 @@ $alang = array(
 "grp_officers_desc" => "Officers are able to manage raids",
 "grp_writers_desc" => "Editors are able to write and manage news",
 "grp_member_desc" => "member",
+"game_info"		=> "More supported games can be downloaded after the installation at the extension-management.",
 "timezone" => "Timezone of the server",
 "startday" => "First day of the week",
 "sunday" => "Sunday",

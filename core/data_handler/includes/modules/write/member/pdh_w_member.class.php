@@ -196,13 +196,19 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 				// delete calendar raid attendees
 				$this->pdh->put('calendar_raids_attendees', 'delete_attendees', array($member_id));
-				//delete raid_attendence
+				// delete raid_attendence
 				$this->db->query("DELETE FROM __raid_attendees WHERE member_id = ?", false, $member_id);
-				//delete member-user connection
+				// delete member-user connection
 				$this->db->query("DELETE FROM __member_user WHERE member_id = ?;",  false, $member_id);
 				$this->pdh->enqueue_hook('member_update', array($member_id));
 				$raids = $this->pdh->get('raid', 'raidids4memberid', array($member_id));
 				$this->pdh->enqueue_hook('raid_update', $raids);
+				// check for new mainchar
+				$twinks = $this->pdh->get('member', 'other_members', array($member_id));
+				if(!empty($twinks)) {
+					$new_main = $twinks[0];
+					$this->change_mainid($twinks,$new_main);
+				}
 				return true;
 			}
 			return false;

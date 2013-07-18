@@ -145,6 +145,7 @@ $lang = array(
 	'grp_officers_desc'		=> "Offiziere dürfen Raids verwalten",
 	'grp_writers_desc'		=> "Redakteure dürfen News schreiben und verwalten",
 	'grp_member_desc'		=> "Mitglieder",
+	"game_info"				=> "Weitere, nicht aufgeführte Spiele können nach der Installation über die Erweiterungsverwaltung heruntergeladen werden.",
 	//Date/Time Settings
 	'timezone'				=> "Zeitzone des Systems",
 	'startday'				=> "erster Tag der Woche",
