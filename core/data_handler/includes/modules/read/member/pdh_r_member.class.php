@@ -69,6 +69,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public $detail_twink = array(
 			'memberlink'	=> 'lang:summed_up',
+			'memberlink_decorated'	=> 'lang:summed_up',
 			'level'			=> false,
 			'racename'		=> false,
 			'rankname'		=> false,

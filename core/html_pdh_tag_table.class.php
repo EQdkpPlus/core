@@ -269,9 +269,11 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$this->sub_array[$this->id_tag] = $view_id;
 
 					$view_row .= "\t".'<td '.$td_add.'>';
-					if($this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink']) {
+					if(($this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink']) || $this->settings['force_detail_twink']) {
+						pd(1);
 						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} else {
+						pd(2);
 						$view_row .= $this->pdh->geth($module, $tag, $params, $this->sub_array);
 					}
 					$view_row .= "</td>\n";
@@ -320,8 +322,10 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			if (!$dt_tags) $dt_tags = array();
 			$member_id = $this->sub_array[$this->id_tag];
 			if(!array_key_exists($tag, $dt_tags) OR !$this->pdh->get('member', 'other_members', $member_id)) {
+				pd('no_dt');
 				return $this->pdh->geth($module, $tag, $params, $this->sub_array); //no detail-twink available for this tag
 			}
+			pd('dt');
 			$data = $this->detail_twink_data($view_id_key, $wt_key, $dt_tags[$tag], $module, $tag, $params, $this->sub_array);
 			uksort($data, array($this, 'dt_sort_by_name'));
 			$add = ($cid == 0) ? '<img src="'.$this->root_path.'images/arrows/right_arrow.png" alt="right" class="toggle_members" id="toggle_member_'.$member_id.'" /> ' : '';
@@ -342,7 +346,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		}
 
 		private function detail_twink_css_js() {
-			if(!$this->dt_cssjs AND $this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink']) {
+			if(!$this->dt_cssjs AND (($this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink']) || $this->settings['force_detail_twink'])) {
 				$this->tpl->add_css('.toggle_members { cursor: default; width: 10px; height: 10px; }');
 				$this->tpl->add_js("$('.toggle_members').toggle(function(){
 								$('.'+$(this).attr('id')).attr('style', 'display:block;');
