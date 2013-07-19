@@ -248,7 +248,7 @@ class user_pageobject extends pageobject {
 			'show_numbers' => false,
 			'show_select_boxes' => false,
 			'show_detail_twink' => false,
-			'force_detail_twink' => true,
+			'perm_detail_twink' => true,
 			'table_sort_col' => 0,
 			'table_sort_dir' => 'asc',
 			'table_presets' => array(
@@ -261,14 +261,14 @@ class user_pageobject extends pageobject {
 				array('name' => 'attendance_lt_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 		));
 
-		$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
+		$arrMemberList = array($this->pdh->get('member', 'mainchar', array($user_id)));
 		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => false), 'userprofile_'.$user_id);
 		
 		$this->tpl->assign_vars(array(
 			'S_PROFILE_PERSONAL_ROW' => count($arrProfile),
 			'S_PROFILE_CONTACT_ROW' => count($arrContact),
 			'S_PROFILE_MISC_ROW' => count($arrMisc),
-			'PROFILE_CHARS' => $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
+			'PROFILE_CHARS' => $hptt->get_html_table($this->in->get('sort')),
 		));
 
 

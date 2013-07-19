@@ -53,6 +53,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 		public $detail_twink = array(
 			'attendance' => 'summed_up',
+			'attendance_all' => 'summed_up',
 		);
 
 		private $twink2main = array();
