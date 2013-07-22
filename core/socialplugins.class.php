@@ -98,16 +98,18 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		public function getFirstImage($strHTML){
-			$dom = new DOMDocument();
-			$dom->loadHTML('<html><body>'.$strHTML.'</body></html>');
-			$images = $dom->getElementsByTagName('img');
-			 foreach ($images as $image) {
-				$src = $image->getAttribute('src');
-				if ($src && strlen($src)){
-					if (strpos($src, '/') === 0){
-						return register('env')->httpHost.$src;
-					} else {
-						return $src;
+			if (class_exists("DOMDocument")){
+				$dom = new DOMDocument();
+				$dom->loadHTML('<html><body>'.$strHTML.'</body></html>');
+				$images = $dom->getElementsByTagName('img');
+				 foreach ($images as $image) {
+					$src = $image->getAttribute('src');
+					if ($src && strlen($src)){
+						if (strpos($src, '/') === 0){
+							return register('env')->httpHost.$src;
+						} else {
+							return $src;
+						}
 					}
 				}
 			}
