@@ -39,7 +39,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 		);
 
 		public $presets = array(
-			'event_attendance'	=> array('attendance', array('%member_id%', '%event_id%', 'LT'), array('LT')),
+			'event_attendance'	=> array('attendance', array('%member_id%', '%event_id%', 'LT', '%with_twinks%'), array('LT')),
 		);
 
 		public $detail_twink = array(

@@ -1,5 +1,5 @@
 ### Permission Options
-### A = Admin / U = User
+### Admin Permissions
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_event_add','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_event_upd','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_event_del','N');
@@ -34,23 +34,17 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_massmail'
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_grpleader','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_articles_man','N');
-
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_event_view','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_item_view','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_view','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_raid_view','Y');
+### User Permissions
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_man','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_add','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_conn','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_del','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_userlist','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_userlist','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_cal_event_add','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_calendar_view','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_news_view','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_search','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_roster_list','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_usermailer','Y');
-
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_files_man','Y');
 
 ### Style presets
 

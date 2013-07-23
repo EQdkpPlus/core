@@ -38,14 +38,15 @@ if(!class_exists('pdh_r_item')){
 
 		public $presets = array(
 			'idate' => array('date', array('%item_id%'), array()),
-			'ilink' => array('link', array('%item_id%', '%link_url%', '%link_url_suffix%'),	array()),
-			'ilink_itt' => array('link_itt', array('%item_id%', '%link_url%', '%link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%'), array()),
-			'iraidlink' => array('raidlink', array('%item_id%', '%raid_link_url%', '%raid_link_url_suffix%'), array()),
-			'iraididlink' => array('raididlink', array('%item_id%', '%raid_link_url%', '%raid_link_url_suffix%'), array()),
+			'ilink' => array('link', array('%item_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'),	array()),
+			'ilink_itt' => array('link_itt', array('%item_id%', '%link_url%', '%link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%', false, '%use_controller%'), array()),
+			'iraidlink' => array('raidlink', array('%item_id%', '%raid_link_url%', '%raid_link_url_suffix%', '%use_controller%'), array()),
+			'iraididlink' => array('raididlink', array('%item_id%', '%raid_link_url%', '%raid_link_url_suffix%', '%use_controller%'), array()),
 			'iname' => array('name', array('%item_id%'), array()),
 			'ipoolname' => array('itempool_name', array('%item_id%'), array()),
 			'ivalue' => array('value', array('%item_id%'), array()),
 			'ibuyername' => array('buyer_name', array('%item_id%'), array()),
+			'ibuyerlink' => array('buyer_link', array('%item_id%', '%member_link_url%', '%member_link_url_suffix%', '%use_controller%'), array()),
 			'ibuyers' => array('m4igk4i', array('%item_id%'), array()),
 			'itemsedit'=>array('editicon', array('%item_id%', '%link_url%', '%link_url_suffix%'),	array()),
 		);
@@ -149,6 +150,15 @@ if(!class_exists('pdh_r_item')){
 		public function get_html_buyer_name($id) {
 			return $this->pdh->geth('member', 'name', array($this->get_buyer($id)));
 		}
+		
+		public function get_buyer_link($id){
+			return $this->get_buyer_name($id);
+		}
+		
+		public function get_html_buyer_link($id, $base_url, $url_suffix = '', $blnUseController=false){
+			$intBuyer = $this->get_buyer($id);
+			return $this->pdh->geth('member', 'memberlink', array($intBuyer, $base_url, $url_suffix, false, false, true, $blnUseController));
+		}
 
 		public function get_date($id){
 			return $this->items[$id]['date'];
@@ -166,16 +176,16 @@ if(!class_exists('pdh_r_item')){
 			return $this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id)));
 		}
 
-		public function get_raidlink($item_id, $base_url, $url_suffix = ''){
-			return $this->pdh->get('raid', 'raidlink', array($this->get_raid_id($item_id), $base_url, $url_suffix));
+		public function get_raidlink($item_id, $base_url, $url_suffix = '', $blnUseController=false){
+			return $this->pdh->get('raid', 'raidlink', array($this->get_raid_id($item_id), $base_url, $url_suffix, $blnUseController));
 		}
 
-		public function get_html_raididlink($item_id, $base_url, $url_suffix) {
-			return '<a href="'.$this->get_raidlink($item_id, $base_url, $url_suffix).'">#ID:'.$this->get_raid_id($item_id).' - '.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id))).' '.date(/*$this->user->style['date_notime_short']*/'d.m.y', $this->pdh->get('raid', 'date', array($this->get_raid_id($item_id)))).'</a>';
+		public function get_html_raididlink($item_id, $base_url, $url_suffix, $blnUseController=false) {
+			return '<a href="'.$this->get_raidlink($item_id, $base_url, $url_suffix, $blnUseController).'">#ID:'.$this->get_raid_id($item_id).' - '.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id))).' '.date(/*$this->user->style['date_notime_short']*/'d.m.y', $this->pdh->get('raid', 'date', array($this->get_raid_id($item_id)))).'</a>';
 		}
 
-		public function get_html_raidlink($item_id, $base_url, $url_suffix){
-			return '<a href="'.$this->get_raidlink($item_id, $base_url, $url_suffix).'">'.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id))).'</a>';
+		public function get_html_raidlink($item_id, $base_url, $url_suffix, $blnUseController=false){
+			return '<a href="'.$this->get_raidlink($item_id, $base_url, $url_suffix, $blnUseController).'">'.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id))).'</a>';
 		}
 
 		public function comp_raidlink($params1, $params2){
@@ -240,12 +250,13 @@ if(!class_exists('pdh_r_item')){
 			return $ids;
 		}
 
-		public function get_link($item_id, $baseurl, $url_suffix=''){
+		public function get_link($item_id, $baseurl, $url_suffix='', $blnUseController=false){
+			if ($blnUseController  && $blnUseController != '%use_controller%') return $baseurl.register('routing')->clean($this->get_name($item_id)).'-'.$item_id.'/'.$this->SID.$url_suffix;
 			return $baseurl.$this->SID.'&amp;i='.$item_id.$url_suffix;
 		}
 
-		public function get_html_link($item_id, $baseurl, $url_suffix=''){
-			return "<a href='".$this->get_link($item_id, $baseurl, $url_suffix)."'>".$this->get_name($item_id)."</a>";
+		public function get_html_link($item_id, $baseurl, $url_suffix='', $blnUseController=false){
+			return "<a href='".$this->get_link($item_id, $baseurl, $url_suffix, $blnUseController)."'>".$this->get_name($item_id)."</a>";
 		}
 
 		public function get_editicon($item_id, $baseurl, $url_suffix=''){
@@ -263,6 +274,19 @@ if(!class_exists('pdh_r_item')){
 			if (is_array($this->items)){
 				foreach($this->items as $item_id => $item_details){
 					if($item_details['buyer'] == $member_id){
+						$items4member[] = $item_id;
+					}
+				}
+			}
+			return $items4member;
+		}
+		
+		public function get_itemids4userid($user_id){
+			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
+			$items4member = array();
+			if (is_array($this->items)){
+				foreach($this->items as $item_id => $item_details){
+					if(in_array($item_details['buyer'], $arrMemberList)){
 						$items4member[] = $item_id;
 					}
 				}
@@ -314,8 +338,8 @@ if(!class_exists('pdh_r_item')){
 			return $this->get_name($item_id);
 		}
 
-		public function get_link_itt($item_id, $baseurl, $url_suffix='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $in_span=false) {
-			return "<a href=\"".$this->get_link($item_id, $baseurl, $url_suffix)."\">".$this->get_itt_itemname($item_id, $lang, $direct, $onlyicon, $noicon, $in_span)."</a>";
+		public function get_link_itt($item_id, $baseurl, $url_suffix='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $in_span=false, $blnUseController=false) {
+			return "<a href=\"".$this->get_link($item_id, $baseurl, $url_suffix, $blnUseController)."\">".$this->get_itt_itemname($item_id, $lang, $direct, $onlyicon, $noicon, $in_span)."</a>";
 		}
 
 		public function comp_link_itt($params1, $params2) {

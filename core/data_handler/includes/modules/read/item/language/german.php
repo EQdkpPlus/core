@@ -23,6 +23,7 @@ if ( !defined('EQDKP_INC') ){
 $module_lang = array(
 	'date'			=> 'Datum',
 	'buyer_name'	=> 'Käufer',
+	'buyer_link'	=> 'Käufer',
 	'value'			=> 'Wert',
 	'name'			=> 'Name',
 	'itempool_name'	=> 'Itempool',
@@ -38,6 +39,7 @@ $preset_lang = array(
 	'idate'			=> 'Item-Datum',
 	'ilink'			=> 'Item-Link',
 	'ibuyers'		=> 'Item-Käufer',
+	'ibuyerlink'	=> 'Item-Käufer (verlinkt)',
 	'iraididlink'	=> 'Item-Raid (ausführlich)',
 	'ivalue'		=> 'Item-Wert',
 	'ipoolname'		=> 'Itempool-Name',

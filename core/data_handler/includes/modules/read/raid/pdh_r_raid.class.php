@@ -41,7 +41,7 @@ if(!class_exists('pdh_r_raid')){
 
 		public $presets = array(
 			'rdate' => array('date', array('%raid_id%'), array()),
-			'rlink' => array('raidlink', array('%raid_id%', '%link_url%', '%link_url_suffix%'), array()),
+			'rlink' => array('raidlink', array('%raid_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 			'revent' => array('event_name', array('%raid_id%'), array()),
 			'rnote' => array('note', array('%raid_id%'), array()),
 			'rattcount' => array('attendee_count', array('%raid_id%'), array()),
@@ -195,6 +195,20 @@ if(!class_exists('pdh_r_raid')){
 			}
 			return $raids4member;
 		}
+		
+		public function get_raidids4userid($user_id){
+			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
+			
+			$raids4member = array();
+			foreach($this->raids as $raid_id => $raid_details){
+				if(is_array($raid_details['members'])){
+					foreach($raid_details['members'] as $memberid){
+						if (in_array($memberid, $arrMemberList)) $raids4member[] = $raid_id;
+					}	
+				}
+			}
+			return $raids4member;
+		}
 
 		public function get_raidids4eventid($event_id) {
 			$raids4event = array();
@@ -242,7 +256,8 @@ if(!class_exists('pdh_r_raid')){
 			return $raids;
 		}
 
-		public function get_raidlink($raid_id, $base_url, $url_suffix = ''){
+		public function get_raidlink($raid_id, $base_url, $url_suffix = '', $blnUseController=false){
+			if ($blnUseController && $blnUseController != '%use_controller%') return $base_url.register('routing')->clean($this->get_event_name($raid_id)).'-'.$raid_id.'/'.$this->SID.$url_suffix;
 			return $base_url.$this->SID . '&amp;r='.$raid_id.$url_suffix;
 		}
 
@@ -252,8 +267,8 @@ if(!class_exists('pdh_r_raid')){
 			</a>';
 		}
 
-		public function get_html_raidlink($raid_id, $base_url, $url_suffix=''){
-			return '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix).'">'.$this->get_event_name($raid_id).'</a>';
+		public function get_html_raidlink($raid_id, $base_url, $url_suffix='',$blnUseController=false){
+			return '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_event_name($raid_id).'</a>';
 		}
 
 		public function comp_raidlink($params1, $params2){

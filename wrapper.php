@@ -95,32 +95,7 @@ class wrapper extends page_generic {
 		}
 	}
 
-	public function display(){
-		$b = register('bridge');
-		$a = $b->get_users();
-		$arrUser = array();
-		foreach($a as $val){
-			$id = intval($val['id']);
-			if ($b->check_user_group($id)){
-				$arrUser[] = $val;
-			}
-		}
-		
-		foreach($arrUser as $arrUserdata){
-			if ($this->pdh->get('user', 'check_username', array($arrUserdata['name'])) != 'false'){
-				//Neu anlegen
-				$salt = $this->user->generate_salt();
-				$strPassword = random_string(false, 32);
-				$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
-				$strApiKey = $this->user->generate_apikey($strPassword, $salt);
-				
-				$user_id = $this->pdh->put('user', 'insert_user_bridge', array($arrUserdata['name'], $strPwdHash.':'.$salt, $arrUserdata['email'], false, $strApiKey));
-				$this->pdh->process_hook_queue();
-				
-				$b->sync_usergroups((int)$arrUserdata['id'], $user_id);
-			}
-		}
-	
+	public function display(){	
 		if (!$this->data || $this->data['url'] == ''){
 			message_die('URL not found');
 		} else {

@@ -161,6 +161,19 @@ if(!class_exists('pdh_r_adjustment')){
 			}
 			return $adjustment_ids;
 		}
+		
+		public function get_adjsofuser($user_id){
+			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
+			$adjustment_ids = array();
+			if (is_array($this->adjustments)){
+				foreach($this->adjustments as $id => $details){
+					if(in_array($details['member'],$arrMemberList)){
+						$adjustment_ids[] = $id;
+					}
+				}
+			}
+			return $adjustment_ids;
+		}
 
 		public function get_adjsofraid($raid_id){
 			$adjustment_ids = array();
@@ -216,7 +229,7 @@ if(!class_exists('pdh_r_adjustment')){
 
 		public function get_editicon($adj_id, $baseurl, $url_suffix='') {
 			return "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>
-			<img src='".$this->root_path."images/glyphs/edit.png' alt='".$this->user->lang('edit')."' title='".$this->user->lang('edit')."' />
+			<img src='".$this->server_path."images/glyphs/edit.png' alt='".$this->user->lang('edit')."' title='".$this->user->lang('edit')."' />
 			</a>";
 		}
 
