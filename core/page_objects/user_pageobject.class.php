@@ -18,7 +18,7 @@
 
 class user_pageobject extends pageobject {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl','in', 'pdh', 'game', 'config', 'core', 'html', 'time', 'pfh', 'crypt'=>'encrypt', 'jquery', 'comments');
+		$shortcuts = array('user', 'tpl','in', 'pdh', 'game', 'config', 'core', 'html', 'time', 'pfh', 'crypt'=>'encrypt', 'jquery', 'comments', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -262,13 +262,13 @@ class user_pageobject extends pageobject {
 		));
 
 		$arrMemberList = array($this->pdh->get('member', 'mainchar', array($user_id)));
-		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => false), 'userprofile_'.$user_id);
-		
+		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), 'userprofile_'.$user_id);
 		$this->tpl->assign_vars(array(
 			'S_PROFILE_PERSONAL_ROW' => count($arrProfile),
 			'S_PROFILE_CONTACT_ROW' => count($arrContact),
-			'S_PROFILE_MISC_ROW' => count($arrMisc),
-			'PROFILE_CHARS' => $hptt->get_html_table($this->in->get('sort')),
+			'S_PROFILE_MISC_ROW' 	=> count($arrMisc),
+			'PROFILE_CHARS' 		=> $hptt->get_html_table($this->in->get('sort'), '', null, 1, sprintf($this->user->lang('listmembers_footcount'), count( $this->pdh->get('member', 'connection_id', array($user_id))))),
+			'S_PROFILE_CHARACTERS'	=> count($arrMemberList),
 		));
 
 

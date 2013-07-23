@@ -102,10 +102,11 @@ if(!class_exists('routing')){
 			return array();
 		}
 		
-		public function build($strPageObject, $strParamText, $strParam){
+		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true){
 			$strPath = $this->controller_path;
-			$strPath .= ucfirst($this->get($strPageObject));
-			$strPath .= '/'.$this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/').$this->SID;
+			$strPath .= ucfirst($this->get($strPageObject)).'/';
+			if ($strParam) $strPath .= $this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
+			if ($blnAddSID) $strPath .= $this->SID;
 			return $strPath;
 		}
 		

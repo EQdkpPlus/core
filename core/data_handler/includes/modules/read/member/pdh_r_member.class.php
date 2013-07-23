@@ -46,7 +46,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public $presets = array(
 			'mname'			=> array('name', array('%member_id%'), array()),
 			'medit'			=> array('editbutton', array('%member_id%'), array()),
-			'mlink'			=> array('memberlink', array('%member_id%', '%link_url%', '%link_url_suffix%', true, true), array()),
+			'mlink'			=> array('memberlink', array('%member_id%', '%link_url%', '%link_url_suffix%', true, true, false, '%use_controller%'), array()),
 			'mlevel'		=> array('level', array('%member_id%'), array()),
 			'mrace'			=> array('racename', array('%member_id%'), array()),
 			'mrank'			=> array('rankname', array('%member_id%'), array()),
@@ -64,7 +64,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'charname'		=> array('name_decorated',	array('%member_id%'),	array()),
 			'cmainchar'		=> array('mainchar_radio',	array('%member_id%'),	array()),
 			'cdefrole'		=> array('char_defrole',	array('%member_id%'),	array()),
-			'mlink_decorated'=> array('memberlink_decorated', array('%member_id%', '%link_url%', '%link_url_suffix%'), array()),
+			'mlink_decorated'=> array('memberlink_decorated', array('%member_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 		);
 
 		public $detail_twink = array(
@@ -487,8 +487,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return ($this->pdh->get('member', 'name', array($params1[0])) < $this->pdh->get('member', 'name', array($params2[0]))) ? -1 : 1;
 		}
 
-		public function get_memberlink_decorated($member_id, $base_url, $url_suffix = ''){
-			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix).'">'.$this->get_name_decorated($member_id).'</a>';
+		public function get_memberlink_decorated($member_id, $base_url, $url_suffix = '', $blnUseController=false){
+			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_name_decorated($member_id).'</a>';
 		}
 		
 		public function comp_memberlink_decorated($params1, $params2){
@@ -572,17 +572,20 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return $this->get_is_main($params1[0]) ? -1 : 1;
 		}
 
-		public function get_memberlink($member_id, $base_url, $url_suffix = ''){
+		public function get_memberlink($member_id, $base_url, $url_suffix = '', $blnUseController=false){
+			if ($blnUseController){
+				return $strLink = $base_url.register('routing')->clean($this->get_name($member_id)).'-'.$member_id.'/'.$this->SID;
+			}
 			return $base_url.$this->SID . '&amp;member_id='.$member_id.$url_suffix;
 		}
 
-		public function get_html_memberlink($member_id, $base_url, $url_suffix = '', $rank_prefix = false, $rank_suffix = false, $chartooltip=false){
+		public function get_html_memberlink($member_id, $base_url, $url_suffix = '', $rank_prefix = false, $rank_suffix = false, $chartooltip=false,$blnUseController=false){
 			$ctt = '';
 			if ($chartooltip) {
 				chartooltip_js();
 				$ctt = ' class="chartooltip" title="'.$member_id.'"';
 			}
-			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix).'"'.$ctt.'>'.$this->get_html_name($member_id, $rank_prefix, $rank_suffix).'</a>';
+			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'"'.$ctt.'>'.$this->get_html_name($member_id, $rank_prefix, $rank_suffix).'</a>';
 		}
 
 		public function comp_memberlink($params1, $params2){

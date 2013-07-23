@@ -44,7 +44,7 @@ class character_pageobject extends pageobject {
 		// Raid Attendance
 		$view_list			= $this->pdh->get('raid', 'raidids4memberid', array($this->url_id));
 		$hptt_page_settings	= $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_raidlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'viewraid.php', '%link_url_suffix%' => '', '%with_twink%' => true), $this->url_id, 'rsort');
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'viewraid.php', '%link_url_suffix%' => '', '%with_twink%' => !$this->config->get('pk_show_twinks')), $this->url_id, 'rsort');
 		$this->tpl->assign_vars(array (
 			'RAID_OUT'			=> $hptt->get_html_table($this->in->get('rsort', ''), $this->vc_build_url('rsort'), $this->in->get('rstart', 0), $this->user->data['user_rlimit']),
 			'RAID_PAGINATION'	=> generate_pagination($this->vc_build_url('rstart', true), count($view_list), $this->user->data['user_rlimit'], $this->in->get('rstart', 0), 'rstart')

@@ -346,6 +346,7 @@ if (!class_exists("pdh_r_user")){
 			$arrOut = array();
 			$arrOut[] = '<div class="user-groups">';
 			foreach($arrMemberships as $groupid){
+				if ($this->pdh->get('user_groups', 'hide', array($groupid))) continue;
 				if ($blnUseController) {
 					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				} else {

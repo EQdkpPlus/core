@@ -1201,26 +1201,27 @@ function truncate($text, $length = 100, $ending = '…', $exact = true, $conside
 }
 
 function get_first_image($strHTML, $blnGetFullImage = false){
-			$dom = new DOMDocument();
-			$dom->loadHTML('<html><body>'.$strHTML.'</body></html>');
-			$images = $dom->getElementsByTagName('img');
-			 foreach ($images as $image) {
-				$src = $image->getAttribute('src');
-				if ($src && strlen($src)){
-					if ($blnGetFullImage && strpos($src, 'eqdkp/news/thumb/')){
-						$src = str_replace('eqdkp/news/thumb/', 'eqdkp/news/', $src);
-					}
-				
-					if (strpos($src, '/') === 0){
-						return register('env')->httpHost.$src;
-					} else {
-						return $src;
-					}
+	if (class_exists("DOMDocument")){
+		$dom = new DOMDocument();
+		$dom->loadHTML('<html><body>'.$strHTML.'</body></html>');
+		$images = $dom->getElementsByTagName('img');
+		 foreach ($images as $image) {
+			$src = $image->getAttribute('src');
+			if ($src && strlen($src)){
+				if ($blnGetFullImage && strpos($src, 'eqdkp/news/thumb/')){
+					$src = str_replace('eqdkp/news/thumb/', 'eqdkp/news/', $src);
+				}
+			
+				if (strpos($src, '/') === 0){
+					return register('env')->httpHost.$src;
+				} else {
+					return $src;
 				}
 			}
-			return '';
 		}
-
+	}
+	return '';
+}
 //Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	$strPath = pathinfo($strFilelink, PATHINFO_DIRNAME);

@@ -20,7 +20,9 @@
 		<ul>
 			<li><a href="#wall">{L_user_wall}</a></li>
 			<li><a href="#about">{L_about_me}</a></li>
+			<!-- IF S_PROFILE_CHARACTERS -->
 			<li><a href="#characters">{L_chars}</a></li>
+			<!-- ENDIF -->
 		</ul>
 		
 		<div id="wall">
@@ -74,13 +76,72 @@
 			<br />
 			<!-- ENDIF -->
 		</div>
+		<!-- IF S_PROFILE_CHARACTERS -->
 		<div id="characters">
 			<h1>{L_chars}</h1>
 			<table width="100%" border="0" cellspacing="1" cellpadding="2" class="trcheckboxclick colorswitch">
 				{PROFILE_CHARS}
 			</table>
+			<br />
+			<div id="userprofile_dkp_tabs">
+				<ul>
+					<li><a href='#items'><span>{L_tab_items}</span></a></li>
+					<li><a href='#adjustments'><span>{L_tab_adjustments}</span></a></li>
+					<li><a href='#raids'><span>{L_tab_raids}</span></a></li>
+					<li><a href='#attendance'><span>{L_tab_attendance}</span></a></li>
+				</ul>
+				
+				<!-- RAIDS TABLE -->
+				<div id="raids">
+					<div class="tableHeader">
+						<h2>{L_raid_attendance_history}</h2>
+					</div>
+					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+					{RAID_OUT}
+					</table>
+					<div class="center pagination_wrapper">
+						{RAID_PAGINATION}
+					</div>
+				</div>
+
+				<!-- ITEMS TABLE -->
+				<div id="items">
+					<div class="tableHeader">
+						<h2>{L_item_purchase_history}</h2>
+					</div>
+					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+					{ITEM_OUT}
+					</table>
+					<div class="center pagination_wrapper">
+						{ITEM_PAGINATION}
+					</div>
+				</div>
+
+				<!-- ADJUSTMENTS TABLE-->
+				<div id="adjustments">
+					<div class="tableHeader">
+						<h2>{L_individual_adjustment_history}</h2>
+					</div>
+					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+					{ADJUSTMENT_OUT}
+					</table>
+					<div class="center pagination_wrapper">
+						{ADJUSTMENT_PAGINATION}
+					</div>
+				</div>
+
+				<!-- ATTENDANCE -->
+				<div id="attendance">
+					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+					{EVENT_ATT_OUT}
+					</table>
+				</div>
+				
+			</div>
 		</div>
-	</div>
+		<!-- ENDIF -->
+		
+		</div>
 
 </div>
 

@@ -94,7 +94,7 @@ class controller extends page_generic {
 			//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
 			if (!$intCategoryID && isset($arrPath[1])) {
 				
-				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", $arrPath[1])));
+				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[1]))));
 				if ($intArticleID){
 					//Zerlege .html
 					$strID = str_replace("-", "", strrchr(str_replace(".html", "", $arrPath[0]), "-"));
@@ -108,7 +108,7 @@ class controller extends page_generic {
 					if (strlen($strID)) {
 						registry::add_const('url_id', $strID);
 					} elseif (strlen($arrPath[0])){
-						$this->in->inject($arrPath[0], 'injected');
+						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
 					}
 				}
 			}

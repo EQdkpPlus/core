@@ -34,6 +34,7 @@ class usergroup_pageobject extends pageobject {
 	
 	public function display(){
 		$groupID = $this->url_id;
+		$this->pdh->get('user_groups', 'hide', array($groupID)) redirect($this->controller_path_plain.'User/'.$this->SID);
 		
 		//Sort
 		$sort			= $this->in->get('sort');

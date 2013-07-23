@@ -109,6 +109,10 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		public function get_column_count(){
 			return $this->column_count;
 		}
+		
+		public function setPageRef($strPageRef){
+			$this->settings['page_ref'] = $strPageRef;
+		}
 
 		private function sort_view_list($sort_string){
 			if($sort_string != ''){
