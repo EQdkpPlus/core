@@ -19,7 +19,7 @@
 class editarticle_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'html', 'pfh');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	
 	private $arrPermissions = array('read' => false, 'create' => false, 'update' => false, 'delete' => false, 'change_state' => false);

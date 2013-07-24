@@ -19,12 +19,11 @@
 class roster_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
 	public function __construct() {
 		$handler = array();
-		$this->user->check_auth('u_roster_list');
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}

@@ -40,7 +40,7 @@ if(registry::fetch('in')->get('ajax', 0) === 1){
 class settings_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'html', 'pm', 'time', 'pfh', 'bridge');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	private $logo_upload = false;
 

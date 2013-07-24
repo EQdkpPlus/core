@@ -26,12 +26,13 @@ if(!class_exists('pageobject')){
 	class pageobject extends page_generic {
 		public static function __shortcuts() {
 			$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html', 'routing');
-			return array_merge(parent::$shortcuts, $shortcuts);
+			return array_merge(parent::__shortcuts(), $shortcuts);
 		}
 		
 		private $arrVars = array();
 		public $strPath = '';
 		public $strPathPlain = '';
+		public $strPage = '';
 		
 		protected function set_vars($arrVars){
 			if (!isset($this->arrVars['display']) || $this->arrVars['display'] = false) $this->arrVars = $arrVars;

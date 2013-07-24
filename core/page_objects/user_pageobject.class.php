@@ -19,7 +19,7 @@
 class user_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl','in', 'pdh', 'game', 'config', 'core', 'html', 'time', 'pfh', 'crypt'=>'encrypt', 'jquery', 'comments', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
 	public function __construct() {

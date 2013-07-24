@@ -83,7 +83,7 @@ class controller extends page_generic {
 			$arrPath = array_reverse($arrPath);
 		}
 		$intArticleID = $intCategoryID = 0;
-		
+
 		//Suche Alias in Artikeln
 		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
 		
@@ -147,8 +147,9 @@ class controller extends page_generic {
 			//Check Start to/start from
 			if (!$intPublished || !$arrCategory['published']) message_die('Dieser Artikel ist nicht veröffentlicht.');
 			
-			$strPath = $this->pdh->get('articles', 'path', array($intArticleID));
-			registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
+			registry::add_const('page_path', $strPath);
+			$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
+			registry::add_const('page', $this->user->removeSIDfromString($strPath));
 			
 			//User Memberships
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
@@ -621,11 +622,13 @@ class controller extends page_generic {
 						registry::add_const('url_id', $strID);
 					} elseif (strlen($arrPath[0])){
 						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
-
-						$strPath = str_replace('/'.$arrPath[0], '', $strPath);
-						registry::add_const('page_path', $strPath);
 					}
+					registry::add_const('page', str_replace('/'.$arrPath[0], '', $strPath));
+					registry::add_const('page_path', $strPath);
 				}
+			} else {
+				registry::add_const('page_path', $strPath);
+				registry::add_const('page', $strPath);
 			}
 			if ($strPageObject){
 				include_once($this->root_path.'core/pageobject.class.php');

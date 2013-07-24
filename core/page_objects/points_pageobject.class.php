@@ -19,12 +19,11 @@
 class points_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
 	public function __construct() {
 		$handler = array();
-		$this->user->check_auth('u_member_view');
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
