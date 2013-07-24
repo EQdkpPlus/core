@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.0.0
+ * jQuery JavaScript Library v2.0.3
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2013-04-18
+ * Date: 2013-07-03T13:30Z
  */
 (function( window, undefined ) {
 
@@ -46,7 +46,7 @@ var
 	// List of deleted data cache ids, so we can reuse them
 	core_deletedIds = [],
 
-	core_version = "2.0.0",
+	core_version = "2.0.3",
 
 	// Save a reference to some core methods
 	core_concat = core_deletedIds.concat,
@@ -72,7 +72,7 @@ var
 	// A simple way to check for HTML strings
 	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
 	// Strict HTML recognition (#11290: must start with <)
-	rquickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
+	rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 	// Match a standalone tag
 	rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>|)$/,
@@ -865,18 +865,19 @@ function isArraylike( obj ) {
 // All jQuery objects should point back to these
 rootjQuery = jQuery(document);
 /*!
- * Sizzle CSS Selector Engine v1.9.2-pre
+ * Sizzle CSS Selector Engine v1.9.4-pre
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2013-04-16
+ * Date: 2013-06-03
  */
 (function( window, undefined ) {
 
 var i,
+	support,
 	cachedruns,
 	Expr,
 	getText,
@@ -898,20 +899,26 @@ var i,
 	// Instance-specific data
 	expando = "sizzle" + -(new Date()),
 	preferredDoc = window.document,
-	support = {},
 	dirruns = 0,
 	done = 0,
 	classCache = createCache(),
 	tokenCache = createCache(),
 	compilerCache = createCache(),
 	hasDuplicate = false,
-	sortOrder = function() { return 0; },
+	sortOrder = function( a, b ) {
+		if ( a === b ) {
+			hasDuplicate = true;
+			return 0;
+		}
+		return 0;
+	},
 
 	// General-purpose constants
 	strundefined = typeof undefined,
 	MAX_NEGATIVE = 1 << 31,
 
-	// Array methods
+	// Instance methods
+	hasOwn = ({}).hasOwnProperty,
 	arr = [],
 	pop = arr.pop,
 	push_native = arr.push,
@@ -976,7 +983,7 @@ var i,
 		"CHILD": new RegExp( "^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\(" + whitespace +
 			"*(even|odd|(([+-]|)(\\d*)n|)" + whitespace + "*(?:([+-]|)" + whitespace +
 			"*(\\d+)|))" + whitespace + "*\\)|)", "i" ),
-		"boolean": new RegExp( "^(?:" + booleans + ")$", "i" ),
+		"bool": new RegExp( "^(?:" + booleans + ")$", "i" ),
 		// For use in libraries implementing .is()
 		// We use this for POS matching in `select`
 		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(" +
@@ -994,11 +1001,13 @@ var i,
 	rescape = /'|\\/g,
 
 	// CSS escapes http://www.w3.org/TR/CSS21/syndata.html#escaped-characters
-	runescape = /\\([\da-fA-F]{1,6}[\x20\t\r\n\f]?|.)/g,
-	funescape = function( _, escaped ) {
+	runescape = new RegExp( "\\\\([\\da-f]{1,6}" + whitespace + "?|(" + whitespace + ")|.)", "ig" ),
+	funescape = function( _, escaped, escapedWhitespace ) {
 		var high = "0x" + escaped - 0x10000;
 		// NaN means non-codepoint
-		return high !== high ?
+		// Support: Firefox
+		// Workaround erroneous numeric interpretation of +"0x"
+		return high !== high || escapedWhitespace ?
 			escaped :
 			// BMP codepoint
 			high < 0 ?
@@ -1034,63 +1043,6 @@ try {
 			target.length = j - 1;
 		}
 	};
-}
-
-/**
- * For feature detection
- * @param {Function} fn The function to test for native support
- */
-function isNative( fn ) {
-	return rnative.test( fn + "" );
-}
-
-/**
- * Create key-value caches of limited size
- * @returns {Function(string, Object)} Returns the Object data after storing it on itself with
- *	property name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
- *	deleting the oldest entry
- */
-function createCache() {
-	var cache,
-		keys = [];
-
-	return (cache = function( key, value ) {
-		// Use (key + " ") to avoid collision with native prototype properties (see Issue #157)
-		if ( keys.push( key += " " ) > Expr.cacheLength ) {
-			// Only keep the most recent entries
-			delete cache[ keys.shift() ];
-		}
-		return (cache[ key ] = value);
-	});
-}
-
-/**
- * Mark a function for special use by Sizzle
- * @param {Function} fn The function to mark
- */
-function markFunction( fn ) {
-	fn[ expando ] = true;
-	return fn;
-}
-
-/**
- * Support testing using an element
- * @param {Function} fn Passed the created div and expects a boolean result
- */
-function assert( fn ) {
-	var div = document.createElement("div");
-
-	try {
-		return !!fn( div );
-	} catch (e) {
-		return false;
-	} finally {
-		if ( div.parentNode ) {
-			div.parentNode.removeChild( div );
-		}
-		// release memory in IE
-		div = null;
-	}
 }
 
 function Sizzle( selector, context, results, seed ) {
@@ -1203,6 +1155,143 @@ function Sizzle( selector, context, results, seed ) {
 }
 
 /**
+ * Create key-value caches of limited size
+ * @returns {Function(string, Object)} Returns the Object data after storing it on itself with
+ *	property name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
+ *	deleting the oldest entry
+ */
+function createCache() {
+	var keys = [];
+
+	function cache( key, value ) {
+		// Use (key + " ") to avoid collision with native prototype properties (see Issue #157)
+		if ( keys.push( key += " " ) > Expr.cacheLength ) {
+			// Only keep the most recent entries
+			delete cache[ keys.shift() ];
+		}
+		return (cache[ key ] = value);
+	}
+	return cache;
+}
+
+/**
+ * Mark a function for special use by Sizzle
+ * @param {Function} fn The function to mark
+ */
+function markFunction( fn ) {
+	fn[ expando ] = true;
+	return fn;
+}
+
+/**
+ * Support testing using an element
+ * @param {Function} fn Passed the created div and expects a boolean result
+ */
+function assert( fn ) {
+	var div = document.createElement("div");
+
+	try {
+		return !!fn( div );
+	} catch (e) {
+		return false;
+	} finally {
+		// Remove from its parent by default
+		if ( div.parentNode ) {
+			div.parentNode.removeChild( div );
+		}
+		// release memory in IE
+		div = null;
+	}
+}
+
+/**
+ * Adds the same handler for all of the specified attrs
+ * @param {String} attrs Pipe-separated list of attributes
+ * @param {Function} handler The method that will be applied
+ */
+function addHandle( attrs, handler ) {
+	var arr = attrs.split("|"),
+		i = attrs.length;
+
+	while ( i-- ) {
+		Expr.attrHandle[ arr[i] ] = handler;
+	}
+}
+
+/**
+ * Checks document order of two siblings
+ * @param {Element} a
+ * @param {Element} b
+ * @returns {Number} Returns less than 0 if a precedes b, greater than 0 if a follows b
+ */
+function siblingCheck( a, b ) {
+	var cur = b && a,
+		diff = cur && a.nodeType === 1 && b.nodeType === 1 &&
+			( ~b.sourceIndex || MAX_NEGATIVE ) -
+			( ~a.sourceIndex || MAX_NEGATIVE );
+
+	// Use IE sourceIndex if available on both nodes
+	if ( diff ) {
+		return diff;
+	}
+
+	// Check if b follows a
+	if ( cur ) {
+		while ( (cur = cur.nextSibling) ) {
+			if ( cur === b ) {
+				return -1;
+			}
+		}
+	}
+
+	return a ? 1 : -1;
+}
+
+/**
+ * Returns a function to use in pseudos for input types
+ * @param {String} type
+ */
+function createInputPseudo( type ) {
+	return function( elem ) {
+		var name = elem.nodeName.toLowerCase();
+		return name === "input" && elem.type === type;
+	};
+}
+
+/**
+ * Returns a function to use in pseudos for buttons
+ * @param {String} type
+ */
+function createButtonPseudo( type ) {
+	return function( elem ) {
+		var name = elem.nodeName.toLowerCase();
+		return (name === "input" || name === "button") && elem.type === type;
+	};
+}
+
+/**
+ * Returns a function to use in pseudos for positionals
+ * @param {Function} fn
+ */
+function createPositionalPseudo( fn ) {
+	return markFunction(function( argument ) {
+		argument = +argument;
+		return markFunction(function( seed, matches ) {
+			var j,
+				matchIndexes = fn( [], seed.length, argument ),
+				i = matchIndexes.length;
+
+			// Match elements found at the specified indexes
+			while ( i-- ) {
+				if ( seed[ (j = matchIndexes[i]) ] ) {
+					seed[j] = !(matches[j] = seed[j]);
+				}
+			}
+		});
+	});
+}
+
+/**
  * Detect xml
  * @param {Element|Object} elem An element or a document
  */
@@ -1213,13 +1302,17 @@ isXML = Sizzle.isXML = function( elem ) {
 	return documentElement ? documentElement.nodeName !== "HTML" : false;
 };
 
+// Expose support vars for convenience
+support = Sizzle.support = {};
+
 /**
  * Sets document-related variables once based on the current document
  * @param {Element|Object} [doc] An element or document object to use to set the document
  * @returns {Object} Returns the current document
  */
 setDocument = Sizzle.setDocument = function( node ) {
-	var doc = node ? node.ownerDocument || node : preferredDoc;
+	var doc = node ? node.ownerDocument || node : preferredDoc,
+		parent = doc.defaultView;
 
 	// If no document and documentElement is available, return
 	if ( doc === document || doc.nodeType !== 9 || !doc.documentElement ) {
@@ -1233,17 +1326,33 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Support tests
 	documentIsHTML = !isXML( doc );
 
-	// Check if getElementsByTagName("*") returns only elements
-	support.getElementsByTagName = assert(function( div ) {
-		div.appendChild( doc.createComment("") );
-		return !div.getElementsByTagName("*").length;
-	});
+	// Support: IE>8
+	// If iframe document is assigned to "document" variable and if iframe has been reloaded,
+	// IE will throw "permission denied" error when accessing "document" variable, see jQuery #13936
+	// IE6-8 do not support the defaultView property so parent will be undefined
+	if ( parent && parent.attachEvent && parent !== parent.top ) {
+		parent.attachEvent( "onbeforeunload", function() {
+			setDocument();
+		});
+	}
+
+	/* Attributes
+	---------------------------------------------------------------------- */
 
 	// Support: IE<8
 	// Verify that getAttribute really returns attributes and not properties (excepting IE8 booleans)
 	support.attributes = assert(function( div ) {
 		div.className = "i";
 		return !div.getAttribute("className");
+	});
+
+	/* getElement(s)By*
+	---------------------------------------------------------------------- */
+
+	// Check if getElementsByTagName("*") returns only elements
+	support.getElementsByTagName = assert(function( div ) {
+		div.appendChild( doc.createComment("") );
+		return !div.getElementsByTagName("*").length;
 	});
 
 	// Check if getElementsByClassName can be trusted
@@ -1258,19 +1367,9 @@ setDocument = Sizzle.setDocument = function( node ) {
 		return div.getElementsByClassName("i").length === 2;
 	});
 
-	// Support: Webkit<537.32 - Safari 6.0.3/Chrome 25 (fixed in Chrome 27)
-	// Detached nodes confoundingly follow *each other*
-	support.sortDetached = assert(function( div1 ) {
-		// Should return 1, but returns 4 (following)
-		return div1.compareDocumentPosition( document.createElement("div") ) & 1;
-	});
-
 	// Support: IE<10
 	// Check if getElementById returns elements by name
-	// Support: Windows 8 Native Apps
-	// Assigning innerHTML with "name" attributes throws uncatchable exceptions
-	// (http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx)
-	// and the broken getElementById methods don't pick up programatically-set names,
+	// The broken getElementById methods don't pick up programatically-set names,
 	// so use a roundabout getElementsByName test
 	support.getById = assert(function( div ) {
 		docElem.appendChild( div ).id = expando;
@@ -1294,17 +1393,10 @@ setDocument = Sizzle.setDocument = function( node ) {
 			};
 		};
 	} else {
-		Expr.find["ID"] = function( id, context ) {
-			if ( typeof context.getElementById !== strundefined && documentIsHTML ) {
-				var m = context.getElementById( id );
+		// Support: IE6/7
+		// getElementById is not reliable as a find shortcut
+		delete Expr.find["ID"];
 
-				return m ?
-					m.id === id || typeof m.getAttributeNode !== strundefined && m.getAttributeNode("id").value === id ?
-						[m] :
-						undefined :
-					[];
-			}
-		};
 		Expr.filter["ID"] =  function( id ) {
 			var attrId = id.replace( runescape, funescape );
 			return function( elem ) {
@@ -1347,6 +1439,9 @@ setDocument = Sizzle.setDocument = function( node ) {
 		}
 	};
 
+	/* QSA/matchesSelector
+	---------------------------------------------------------------------- */
+
 	// QSA and matchesSelector support
 
 	// matchesSelector(:active) reports false when true (IE9/Opera 11.5)
@@ -1359,7 +1454,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// See http://bugs.jquery.com/ticket/13378
 	rbuggyQSA = [];
 
-	if ( (support.qsa = isNative(doc.querySelectorAll)) ) {
+	if ( (support.qsa = rnative.test( doc.querySelectorAll )) ) {
 		// Build QSA regex
 		// Regex strategy adopted from Diego Perini
 		assert(function( div ) {
@@ -1391,7 +1486,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// Should not select anything
 			// Support: Windows 8 Native Apps
 			// The type attribute is restricted during .innerHTML assignment
-			var input = document.createElement("input");
+			var input = doc.createElement("input");
 			input.setAttribute( "type", "hidden" );
 			div.appendChild( input ).setAttribute( "t", "" );
 
@@ -1411,7 +1506,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 
-	if ( (support.matchesSelector = isNative( (matches = docElem.webkitMatchesSelector ||
+	if ( (support.matchesSelector = rnative.test( (matches = docElem.webkitMatchesSelector ||
 		docElem.mozMatchesSelector ||
 		docElem.oMatchesSelector ||
 		docElem.msMatchesSelector) )) ) {
@@ -1431,10 +1526,13 @@ setDocument = Sizzle.setDocument = function( node ) {
 	rbuggyQSA = rbuggyQSA.length && new RegExp( rbuggyQSA.join("|") );
 	rbuggyMatches = rbuggyMatches.length && new RegExp( rbuggyMatches.join("|") );
 
+	/* Contains
+	---------------------------------------------------------------------- */
+
 	// Element contains another
 	// Purposefully does not implement inclusive descendent
 	// As in, an element does not contain itself
-	contains = isNative(docElem.contains) || docElem.compareDocumentPosition ?
+	contains = rnative.test( docElem.contains ) || docElem.compareDocumentPosition ?
 		function( a, b ) {
 			var adown = a.nodeType === 9 ? a.documentElement : a,
 				bup = b && b.parentNode;
@@ -1454,6 +1552,9 @@ setDocument = Sizzle.setDocument = function( node ) {
 			}
 			return false;
 		};
+
+	/* Sorting
+	---------------------------------------------------------------------- */
 
 	// Document order sorting
 	sortOrder = docElem.compareDocumentPosition ?
@@ -1545,7 +1646,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			0;
 	};
 
-	return document;
+	return doc;
 };
 
 Sizzle.matches = function( expr, elements ) {
@@ -1561,10 +1662,9 @@ Sizzle.matchesSelector = function( elem, expr ) {
 	// Make sure that attribute selectors are quoted
 	expr = expr.replace( rattributeQuotes, "='$1']" );
 
-	// rbuggyQSA always contains :focus, so no need for an existence check
 	if ( support.matchesSelector && documentIsHTML &&
-		(!rbuggyMatches || !rbuggyMatches.test(expr)) &&
-		(!rbuggyQSA     || !rbuggyQSA.test(expr)) ) {
+		( !rbuggyMatches || !rbuggyMatches.test( expr ) ) &&
+		( !rbuggyQSA     || !rbuggyQSA.test( expr ) ) ) {
 
 		try {
 			var ret = matches.call( elem, expr );
@@ -1597,7 +1697,10 @@ Sizzle.attr = function( elem, name ) {
 	}
 
 	var fn = Expr.attrHandle[ name.toLowerCase() ],
-		val = fn && fn( elem, name, !documentIsHTML );
+		// Don't get fooled by Object.prototype properties (jQuery #13807)
+		val = fn && hasOwn.call( Expr.attrHandle, name.toLowerCase() ) ?
+			fn( elem, name, !documentIsHTML ) :
+			undefined;
 
 	return val === undefined ?
 		support.attributes || !documentIsHTML ?
@@ -1612,7 +1715,10 @@ Sizzle.error = function( msg ) {
 	throw new Error( "Syntax error, unrecognized expression: " + msg );
 };
 
-// Document sorting and removing duplicates
+/**
+ * Document sorting and removing duplicates
+ * @param {ArrayLike} results
+ */
 Sizzle.uniqueSort = function( results ) {
 	var elem,
 		duplicates = [],
@@ -1637,87 +1743,6 @@ Sizzle.uniqueSort = function( results ) {
 
 	return results;
 };
-
-/**
- * Checks document order of two siblings
- * @param {Element} a
- * @param {Element} b
- * @returns Returns -1 if a precedes b, 1 if a follows b
- */
-function siblingCheck( a, b ) {
-	var cur = b && a,
-		diff = cur && ( ~b.sourceIndex || MAX_NEGATIVE ) - ( ~a.sourceIndex || MAX_NEGATIVE );
-
-	// Use IE sourceIndex if available on both nodes
-	if ( diff ) {
-		return diff;
-	}
-
-	// Check if b follows a
-	if ( cur ) {
-		while ( (cur = cur.nextSibling) ) {
-			if ( cur === b ) {
-				return -1;
-			}
-		}
-	}
-
-	return a ? 1 : -1;
-}
-
-// Fetches boolean attributes by node
-function boolHandler( elem, name, isXML ) {
-	var val;
-	return isXML ?
-		undefined :
-		(val = elem.getAttributeNode( name )) && val.specified ?
-			val.value :
-			elem[ name ] === true ? name.toLowerCase() : null;
-}
-
-// Fetches attributes without interpolation
-// http://msdn.microsoft.com/en-us/library/ms536429%28VS.85%29.aspx
-function interpolationHandler( elem, name, isXML ) {
-	var val;
-	return isXML ?
-		undefined :
-		(val = elem.getAttribute( name, name.toLowerCase() === "type" ? 1 : 2 ));
-}
-
-// Returns a function to use in pseudos for input types
-function createInputPseudo( type ) {
-	return function( elem ) {
-		var name = elem.nodeName.toLowerCase();
-		return name === "input" && elem.type === type;
-	};
-}
-
-// Returns a function to use in pseudos for buttons
-function createButtonPseudo( type ) {
-	return function( elem ) {
-		var name = elem.nodeName.toLowerCase();
-		return (name === "input" || name === "button") && elem.type === type;
-	};
-}
-
-// Returns a function to use in pseudos for positionals
-function createPositionalPseudo( fn ) {
-	return markFunction(function( argument ) {
-		argument = +argument;
-		return markFunction(function( seed, matches ) {
-			var j,
-				matchIndexes = fn( [], seed.length, argument ),
-				i = matchIndexes.length;
-
-			// Match elements found at the specified indexes
-			while ( i-- ) {
-				if ( seed[ (j = matchIndexes[i]) ] ) {
-					seed[j] = !(matches[j] = seed[j]);
-				}
-			}
-		});
-	});
-}
 
 /**
  * Utility function for retrieving the text value of an array of DOM nodes
@@ -1829,7 +1854,7 @@ Expr = Sizzle.selectors = {
 			}
 
 			// Accept quoted arguments as-is
-			if ( match[4] ) {
+			if ( match[3] && match[4] !== undefined ) {
 				match[2] = match[4];
 
 			// Strip excess characters from unquoted arguments
@@ -2220,6 +2245,8 @@ Expr = Sizzle.selectors = {
 	}
 };
 
+Expr.pseudos["nth"] = Expr.pseudos["eq"];
+
 // Add button/input type pseudos
 for ( i in { radio: true, checkbox: true, file: true, password: true, image: true } ) {
 	Expr.pseudos[ i ] = createInputPseudo( i );
@@ -2227,6 +2254,11 @@ for ( i in { radio: true, checkbox: true, file: true, password: true, image: tru
 for ( i in { submit: true, reset: true } ) {
 	Expr.pseudos[ i ] = createButtonPseudo( i );
 }
+
+// Easy API for creating new setFilters
+function setFilters() {}
+setFilters.prototype = Expr.filters = Expr.pseudos;
+Expr.setFilters = new setFilters();
 
 function tokenize( selector, parseOnly ) {
 	var matched, match, tokens, type,
@@ -2257,11 +2289,11 @@ function tokenize( selector, parseOnly ) {
 		// Combinators
 		if ( (match = rcombinators.exec( soFar )) ) {
 			matched = match.shift();
-			tokens.push( {
+			tokens.push({
 				value: matched,
 				// Cast descendant combinators to space
 				type: match[0].replace( rtrim, " " )
-			} );
+			});
 			soFar = soFar.slice( matched.length );
 		}
 
@@ -2270,11 +2302,11 @@ function tokenize( selector, parseOnly ) {
 			if ( (match = matchExpr[ type ].exec( soFar )) && (!preFilters[ type ] ||
 				(match = preFilters[ type ]( match ))) ) {
 				matched = match.shift();
-				tokens.push( {
+				tokens.push({
 					value: matched,
 					type: type,
 					matches: match
-				} );
+				});
 				soFar = soFar.slice( matched.length );
 			}
 		}
@@ -2521,7 +2553,10 @@ function matcherFromTokens( tokens ) {
 				}
 				return setMatcher(
 					i > 1 && elementMatcher( matchers ),
-					i > 1 && toSelector( tokens.slice( 0, i - 1 ) ).replace( rtrim, "$1" ),
+					i > 1 && toSelector(
+						// If the preceding token was a descendant combinator, insert an implicit any-element `*`
+						tokens.slice( 0, i - 1 ).concat({ value: tokens[ i - 2 ].type === " " ? "*" : "" })
+					).replace( rtrim, "$1" ),
 					matcher,
 					i < j && matcherFromTokens( tokens.slice( i, j ) ),
 					j < len && matcherFromTokens( (tokens = tokens.slice( j )) ),
@@ -2683,14 +2718,13 @@ function select( selector, context, results, seed ) {
 			// Take a shortcut and set the context if the root selector is an ID
 			tokens = match[0] = match[0].slice( 0 );
 			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-					context.nodeType === 9 && documentIsHTML &&
+					support.getById && context.nodeType === 9 && documentIsHTML &&
 					Expr.relative[ tokens[1].type ] ) {
 
 				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
 				if ( !context ) {
 					return results;
 				}
-
 				selector = selector.slice( tokens.shift().value.length );
 			}
 
@@ -2737,51 +2771,67 @@ function select( selector, context, results, seed ) {
 	return results;
 }
 
-// Deprecated
-Expr.pseudos["nth"] = Expr.pseudos["eq"];
-
-// Easy API for creating new setFilters
-function setFilters() {}
-setFilters.prototype = Expr.filters = Expr.pseudos;
-Expr.setFilters = new setFilters();
-
 // One-time assignments
 
 // Sort stability
 support.sortStable = expando.split("").sort( sortOrder ).join("") === expando;
 
+// Support: Chrome<14
+// Always assume duplicates if they aren't passed to the comparison function
+support.detectDuplicates = hasDuplicate;
+
 // Initialize against the default document
 setDocument();
 
-// Support: Chrome<<14
-// Always assume duplicates if they aren't passed to the comparison function
-[0, 0].sort( sortOrder );
-support.detectDuplicates = hasDuplicate;
+// Support: Webkit<537.32 - Safari 6.0.3/Chrome 25 (fixed in Chrome 27)
+// Detached nodes confoundingly follow *each other*
+support.sortDetached = assert(function( div1 ) {
+	// Should return 1, but returns 4 (following)
+	return div1.compareDocumentPosition( document.createElement("div") ) & 1;
+});
 
 // Support: IE<8
 // Prevent attribute/property "interpolation"
-assert(function( div ) {
+// http://msdn.microsoft.com/en-us/library/ms536429%28VS.85%29.aspx
+if ( !assert(function( div ) {
 	div.innerHTML = "<a href='#'></a>";
-	if ( div.firstChild.getAttribute("href") !== "#" ) {
-		var attrs = "type|href|height|width".split("|"),
-			i = attrs.length;
-		while ( i-- ) {
-			Expr.attrHandle[ attrs[i] ] = interpolationHandler;
+	return div.firstChild.getAttribute("href") === "#" ;
+}) ) {
+	addHandle( "type|href|height|width", function( elem, name, isXML ) {
+		if ( !isXML ) {
+			return elem.getAttribute( name, name.toLowerCase() === "type" ? 1 : 2 );
 		}
-	}
-});
+	});
+}
+
+// Support: IE<9
+// Use defaultValue in place of getAttribute("value")
+if ( !support.attributes || !assert(function( div ) {
+	div.innerHTML = "<input/>";
+	div.firstChild.setAttribute( "value", "" );
+	return div.firstChild.getAttribute( "value" ) === "";
+}) ) {
+	addHandle( "value", function( elem, name, isXML ) {
+		if ( !isXML && elem.nodeName.toLowerCase() === "input" ) {
+			return elem.defaultValue;
+		}
+	});
+}
 
 // Support: IE<9
 // Use getAttributeNode to fetch booleans when getAttribute lies
-assert(function( div ) {
-	if ( div.getAttribute("disabled") != null ) {
-		var attrs = booleans.split("|"),
-			i = attrs.length;
-		while ( i-- ) {
-			Expr.attrHandle[ attrs[i] ] = boolHandler;
+if ( !assert(function( div ) {
+	return div.getAttribute("disabled") == null;
+}) ) {
+	addHandle( booleans, function( elem, name, isXML ) {
+		var val;
+		if ( !isXML ) {
+			return (val = elem.getAttributeNode( name )) && val.specified ?
+				val.value :
+				elem[ name ] === true ? name.toLowerCase() : null;
 		}
-	}
-});
+	});
+}
 
 jQuery.find = Sizzle;
 jQuery.expr = Sizzle.selectors;
@@ -2966,9 +3016,9 @@ jQuery.Callbacks = function( options ) {
 			},
 			// Call all callbacks with the given context and arguments
 			fireWith: function( context, args ) {
-				args = args || [];
-				args = [ context, args.slice ? args.slice() : args ];
 				if ( list && ( !fired || stack ) ) {
+					args = args || [];
+					args = [ context, args.slice ? args.slice() : args ];
 					if ( firing ) {
 						stack.push( args );
 					} else {
@@ -3336,13 +3386,9 @@ Data.prototype = {
 
 		// Handle: [ owner, { properties } ] args
 		} else {
-			// Support an expectation from the old data system where plain
-			// objects used to initialize would be set to the cache by
-			// reference, instead of having properties and values copied.
-			// Note, this will kill the connection between
-			// "this.cache[ unlock ]" and "cache"
+			// Fresh assignments by object are shallow copied
 			if ( jQuery.isEmptyObject( cache ) ) {
-				this.cache[ unlock ] = data;
+				jQuery.extend( this.cache[ unlock ], data );
 			// Otherwise, copy the properties one-by-one to the cache object
 			} else {
 				for ( prop in data ) {
@@ -3350,6 +3396,7 @@ Data.prototype = {
 				}
 			}
 		}
+		return cache;
 	},
 	get: function( owner, key ) {
 		// Either a valid cache is found, or will be created.
@@ -3362,6 +3409,7 @@ Data.prototype = {
 			cache : cache[ key ];
 	},
 	access: function( owner, key, value ) {
+		var stored;
 		// In cases where either:
 		//
 		//   1. No key was specified
@@ -3375,7 +3423,11 @@ Data.prototype = {
 		//
 		if ( key === undefined ||
 				((key && typeof key === "string") && value === undefined) ) {
-			return this.get( owner, key );
+
+			stored = this.get( owner, key );
+
+			return stored !== undefined ?
+				stored : this.get( owner, jQuery.camelCase(key) );
 		}
 
 		// [*]When the key is not a string, or both a key and value
@@ -3391,7 +3443,7 @@ Data.prototype = {
 		return value !== undefined ? value : key;
 	},
 	remove: function( owner, key ) {
-		var i, name,
+		var i, name, camel,
 			unlock = this.key( owner ),
 			cache = this.cache[ unlock ];
 
@@ -3409,13 +3461,14 @@ Data.prototype = {
 				// This will only penalize the array argument path.
 				name = key.concat( key.map( jQuery.camelCase ) );
 			} else {
+				camel = jQuery.camelCase( key );
 				// Try the string as a key before any manipulation
 				if ( key in cache ) {
-					name = [ key ];
+					name = [ key, camel ];
 				} else {
 					// If a key with the spaces exists, use it.
 					// Otherwise, create an array by matching non-whitespace
-					name = jQuery.camelCase( key );
+					name = camel;
 					name = name in cache ?
 						[ name ] : ( name.match( core_rnotwhite ) || [] );
 				}
@@ -3433,7 +3486,9 @@ Data.prototype = {
 		);
 	},
 	discard: function( owner ) {
-		delete this.cache[ this.key( owner ) ];
+		if ( owner[ this.expando ] ) {
+			delete this.cache[ owner[ this.expando ] ];
+		}
 	}
 };
 
@@ -3486,7 +3541,7 @@ jQuery.fn.extend({
 						name = attrs[ i ].name;
 
 						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.substring(5) );
+							name = jQuery.camelCase( name.slice(5) );
 							dataAttr( elem, name, data[ name ] );
 						}
 					}
@@ -3632,7 +3687,6 @@ jQuery.extend({
 			startLength--;
 		}
 
-		hooks.cur = fn;
 		if ( fn ) {
 
 			// Add a progress sentinel to prevent the fx queue from being
@@ -3742,7 +3796,7 @@ jQuery.fn.extend({
 	}
 });
 var nodeHook, boolHook,
-	rclass = /[\t\r\n]/g,
+	rclass = /[\t\r\n\f]/g,
 	rreturn = /\r/g,
 	rfocusable = /^(?:input|select|textarea|button)$/i;
 
@@ -3845,8 +3899,11 @@ jQuery.fn.extend({
 	},
 
 	toggleClass: function( value, stateVal ) {
-		var type = typeof value,
-			isBool = typeof stateVal === "boolean";
+		var type = typeof value;
+
+		if ( typeof stateVal === "boolean" && type === "string" ) {
+			return stateVal ? this.addClass( value ) : this.removeClass( value );
+		}
 
 		if ( jQuery.isFunction( value ) ) {
 			return this.each(function( i ) {
@@ -3860,13 +3917,15 @@ jQuery.fn.extend({
 				var className,
 					i = 0,
 					self = jQuery( this ),
-					state = stateVal,
 					classNames = value.match( core_rnotwhite ) || [];
 
 				while ( (className = classNames[ i++ ]) ) {
 					// check each className given, space separated list
-					state = isBool ? state : !self.hasClass( className );
-					self[ state ? "addClass" : "removeClass" ]( className );
+					if ( self.hasClass( className ) ) {
+						self.removeClass( className );
+					} else {
+						self.addClass( className );
+					}
 				}
 
 			// Toggle whole class name
@@ -3925,15 +3984,14 @@ jQuery.fn.extend({
 		isFunction = jQuery.isFunction( value );
 
 		return this.each(function( i ) {
-			var val,
-				self = jQuery(this);
+			var val;
 
 			if ( this.nodeType !== 1 ) {
 				return;
 			}
 
 			if ( isFunction ) {
-				val = value.call( this, i, self.val() );
+				val = value.call( this, i, jQuery( this ).val() );
 			} else {
 				val = value;
 			}
@@ -4048,7 +4106,7 @@ jQuery.extend({
 		if ( nType !== 1 || !jQuery.isXMLDoc( elem ) ) {
 			name = name.toLowerCase();
 			hooks = jQuery.attrHooks[ name ] ||
-				( jQuery.expr.match.boolean.test( name ) ? boolHook : nodeHook );
+				( jQuery.expr.match.bool.test( name ) ? boolHook : nodeHook );
 		}
 
 		if ( value !== undefined ) {
@@ -4087,7 +4145,7 @@ jQuery.extend({
 				propName = jQuery.propFix[ name ] || name;
 
 				// Boolean attributes get special treatment (#10870)
-				if ( jQuery.expr.match.boolean.test( name ) ) {
+				if ( jQuery.expr.match.bool.test( name ) ) {
 					// Set corresponding property to false
 					elem[ propName ] = false;
 				}
@@ -4171,7 +4229,7 @@ boolHook = {
 		return name;
 	}
 };
-jQuery.each( jQuery.expr.match.boolean.source.match( /\w+/g ), function( i, name ) {
+jQuery.each( jQuery.expr.match.bool.source.match( /\w+/g ), function( i, name ) {
 	var getter = jQuery.expr.attrHandle[ name ] || jQuery.find.attr;
 
 	jQuery.expr.attrHandle[ name ] = function( elem, name, isXML ) {
@@ -4752,6 +4810,12 @@ jQuery.event = {
 			event[ prop ] = originalEvent[ prop ];
 		}
 
+		// Support: Cordova 2.5 (WebKit) (#13255)
+		// All events should have a target; Cordova deviceready doesn't
+		if ( !event.target ) {
+			event.target = document;
+		}
+
 		// Support: Safari 6.0+, Chrome < 28
 		// Target should not be a text node (#504, #13143)
 		if ( event.target.nodeType === 3 ) {
@@ -5063,6 +5127,7 @@ jQuery.fn.extend({
 	}
 });
 var isSimple = /^.[^:#\[\.,]*$/,
+	rparentsprev = /^(?:parents|prev(?:Until|All))/,
 	rneedsContext = jQuery.expr.match.needsContext,
 	// methods guaranteed to produce a unique set when starting from a unique set
 	guaranteedUnique = {
@@ -5074,13 +5139,14 @@ var isSimple = /^.[^:#\[\.,]*$/,
 
 jQuery.fn.extend({
 	find: function( selector ) {
-		var self, matched, i,
-			l = this.length;
+		var i,
+			ret = [],
+			self = this,
+			len = self.length;
 
 		if ( typeof selector !== "string" ) {
-			self = this;
 			return this.pushStack( jQuery( selector ).filter(function() {
-				for ( i = 0; i < l; i++ ) {
+				for ( i = 0; i < len; i++ ) {
 					if ( jQuery.contains( self[ i ], this ) ) {
 						return true;
 					}
@@ -5088,15 +5154,14 @@ jQuery.fn.extend({
 			}) );
 		}
 
-		matched = [];
-		for ( i = 0; i < l; i++ ) {
-			jQuery.find( selector, this[ i ], matched );
+		for ( i = 0; i < len; i++ ) {
+			jQuery.find( selector, self[ i ], ret );
 		}
 
 		// Needed because $( selector, context ) becomes $( context ).find( selector )
-		matched = this.pushStack( l > 1 ? jQuery.unique( matched ) : matched );
-		matched.selector = ( this.selector ? this.selector + " " : "" ) + selector;
-		return matched;
+		ret = this.pushStack( len > 1 ? jQuery.unique( ret ) : ret );
+		ret.selector = this.selector ? this.selector + " " + selector : selector;
+		return ret;
 	},
 
 	has: function( target ) {
@@ -5122,14 +5187,16 @@ jQuery.fn.extend({
 	},
 
 	is: function( selector ) {
-		return !!selector && (
-			typeof selector === "string" ?
-				// If this is a positional/relative selector, check membership in the returned set
-				// so $("p:first").is("p:last") won't return true for a doc with two "p".
-				rneedsContext.test( selector ) ?
-					jQuery( selector, this.context ).index( this[ 0 ] ) >= 0 :
-					jQuery.filter( selector, this ).length > 0 :
-				this.filter( selector ).length > 0 );
+		return !!winnow(
+			this,
+
+			// If this is a positional/relative selector, check membership in the returned set
+			// so $("p:first").is("p:last") won't return true for a doc with two "p".
+			typeof selector === "string" && rneedsContext.test( selector ) ?
+				jQuery( selector ) :
+				selector || [],
+			false
+		).length;
 	},
 
 	closest: function( selectors, context ) {
@@ -5240,9 +5307,7 @@ jQuery.each({
 		return jQuery.sibling( elem.firstChild );
 	},
 	contents: function( elem ) {
-		return jQuery.nodeName( elem, "iframe" ) ?
-			elem.contentDocument || elem.contentWindow.document :
-			jQuery.merge( [], elem.childNodes );
+		return elem.contentDocument || jQuery.merge( [], elem.childNodes );
 	}
 }, function( name, fn ) {
 	jQuery.fn[ name ] = function( until, selector ) {
@@ -5262,8 +5327,8 @@ jQuery.each({
 				jQuery.unique( matched );
 			}
 
-			// Reverse order for parents* and prev*
-			if ( name[ 0 ] === "p" ) {
+			// Reverse order for parents* and prev-derivatives
+			if ( rparentsprev.test( name ) ) {
 				matched.reverse();
 			}
 		}
@@ -5362,6 +5427,7 @@ var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>
 		option: [ 1, "<select multiple='multiple'>", "</select>" ],
 
 		thead: [ 1, "<table>", "</table>" ],
+		col: [ 2, "<table><colgroup>", "</colgroup></table>" ],
 		tr: [ 2, "<table><tbody>", "</tbody></table>" ],
 		td: [ 3, "<table><tbody><tr>", "</tr></tbody></table>" ],
 
@@ -5371,7 +5437,7 @@ var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>
 // Support: IE 9
 wrapMap.optgroup = wrapMap.option;
 
-wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.col = wrapMap.thead;
+wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
 wrapMap.th = wrapMap.td;
 
 jQuery.fn.extend({
@@ -5519,6 +5585,10 @@ jQuery.fn.extend({
 				parent = args[ i++ ];
 
 			if ( parent ) {
+				// Don't use the snapshot next if it has moved (#13810)
+				if ( next && next.parentNode !== parent ) {
+					next = this.nextSibling;
+				}
 				jQuery( this ).remove();
 				parent.insertBefore( elem, next );
 			}
@@ -5720,7 +5790,7 @@ jQuery.extend({
 					// Descend through wrappers to the right content
 					j = wrap[ 0 ];
 					while ( j-- ) {
-						tmp = tmp.firstChild;
+						tmp = tmp.lastChild;
 					}
 
 					// Support: QtWebKit
@@ -5774,35 +5844,35 @@ jQuery.extend({
 	},
 
 	cleanData: function( elems ) {
-		var data, elem, type,
-			l = elems.length,
-			i = 0,
-			special = jQuery.event.special;
+		var data, elem, events, type, key, j,
+			special = jQuery.event.special,
+			i = 0;
 
-		for ( ; i < l; i++ ) {
-			elem = elems[ i ];
+		for ( ; (elem = elems[ i ]) !== undefined; i++ ) {
+			if ( Data.accepts( elem ) ) {
+				key = elem[ data_priv.expando ];
 
-			if ( jQuery.acceptData( elem ) ) {
+				if ( key && (data = data_priv.cache[ key ]) ) {
+					events = Object.keys( data.events || {} );
+					if ( events.length ) {
+						for ( j = 0; (type = events[j]) !== undefined; j++ ) {
+							if ( special[ type ] ) {
+								jQuery.event.remove( elem, type );
 
-				data = data_priv.access( elem );
-
-				if ( data ) {
-					for ( type in data.events ) {
-						if ( special[ type ] ) {
-							jQuery.event.remove( elem, type );
-
-						// This is a shortcut to avoid jQuery.event.remove's overhead
-						} else {
-							jQuery.removeEvent( elem, type, data.handle );
+							// This is a shortcut to avoid jQuery.event.remove's overhead
+							} else {
+								jQuery.removeEvent( elem, type, data.handle );
+							}
 						}
+					}
+					if ( data_priv.cache[ key ] ) {
+						// Discard any remaining `private` data
+						delete data_priv.cache[ key ];
 					}
 				}
 			}
-			// Discard any remaining `private` and `user` data
-			// One day we'll replace the dual arrays with a WeakMap and this won't be an issue.
-			// (Splices the data objects out of the internal cache arrays)
-			data_user.discard( elem );
-			data_priv.discard( elem );
+			// Discard any remaining `user` data
+			delete data_user.cache[ elem[ data_user.expando ] ];
 		}
 	},
 
@@ -5810,10 +5880,10 @@ jQuery.extend({
 		return jQuery.ajax({
 			url: url,
 			type: "GET",
-			dataType: "text",
+			dataType: "script",
 			async: false,
 			global: false,
-			success: jQuery.globalEval
+			"throws": true
 		});
 	}
 });
@@ -5868,10 +5938,8 @@ function cloneCopyEvent( src, dest ) {
 	// 1. Copy private data: events, handlers, etc.
 	if ( data_priv.hasData( src ) ) {
 		pdataOld = data_priv.access( src );
-		pdataCur = jQuery.extend( {}, pdataOld );
+		pdataCur = data_priv.set( dest, pdataOld );
 		events = pdataOld.events;
-
-		data_priv.set( dest, pdataCur );
 
 		if ( events ) {
 			delete pdataCur.handle;
@@ -6126,10 +6194,12 @@ jQuery.fn.extend({
 		return showHide( this );
 	},
 	toggle: function( state ) {
-		var bool = typeof state === "boolean";
+		if ( typeof state === "boolean" ) {
+			return state ? this.show() : this.hide();
+		}
 
 		return this.each(function() {
-			if ( bool ? state : isHidden( this ) ) {
+			if ( isHidden( this ) ) {
 				jQuery( this ).show();
 			} else {
 				jQuery( this ).hide();
@@ -6153,13 +6223,14 @@ jQuery.extend({
 		}
 	},
 
-	// Exclude the following css properties to add px
+	// Don't automatically add "px" to these possibly-unitless properties
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
 		"fontWeight": true,
 		"lineHeight": true,
 		"opacity": true,
+		"order": true,
 		"orphans": true,
 		"widows": true,
 		"zIndex": true,
@@ -7294,7 +7365,7 @@ jQuery.extend({
 				}
 
 				// if no content
-				if ( status === 204 ) {
+				if ( status === 204 || s.type === "HEAD" ) {
 					statusText = "nocontent";
 
 				// if not modified
@@ -7788,44 +7859,51 @@ var fxNow, timerId,
 	animationPrefilters = [ defaultPrefilter ],
 	tweeners = {
 		"*": [function( prop, value ) {
-			var end, unit,
-				tween = this.createTween( prop, value ),
-				parts = rfxnum.exec( value ),
+			var tween = this.createTween( prop, value ),
 				target = tween.cur(),
-				start = +target || 0,
+				parts = rfxnum.exec( value ),
+				unit = parts && parts[ 3 ] || ( jQuery.cssNumber[ prop ] ? "" : "px" ),
+
+				// Starting value computation is required for potential unit mismatches
+				start = ( jQuery.cssNumber[ prop ] || unit !== "px" && +target ) &&
+					rfxnum.exec( jQuery.css( tween.elem, prop ) ),
 				scale = 1,
 				maxIterations = 20;
 
-			if ( parts ) {
-				end = +parts[2];
-				unit = parts[3] || ( jQuery.cssNumber[ prop ] ? "" : "px" );
+			if ( start && start[ 3 ] !== unit ) {
+				// Trust units reported by jQuery.css
+				unit = unit || start[ 3 ];
 
-				// We need to compute starting value
-				if ( unit !== "px" && start ) {
-					// Iteratively approximate from a nonzero starting point
-					// Prefer the current property, because this process will be trivial if it uses the same units
-					// Fallback to end or a simple constant
-					start = jQuery.css( tween.elem, prop, true ) || end || 1;
+				// Make sure we update the tween properties later on
+				parts = parts || [];
 
-					do {
-						// If previous iteration zeroed out, double until we get *something*
-						// Use a string for doubling factor so we don't accidentally see scale as unchanged below
-						scale = scale || ".5";
+				// Iteratively approximate from a nonzero starting point
+				start = +target || 1;
 
-						// Adjust and apply
-						start = start / scale;
-						jQuery.style( tween.elem, prop, start + unit );
+				do {
+					// If previous iteration zeroed out, double until we get *something*
+					// Use a string for doubling factor so we don't accidentally see scale as unchanged below
+					scale = scale || ".5";
 
-					// Update scale, tolerating zero or NaN from tween.cur()
-					// And breaking the loop if scale is unchanged or perfect, or if we've just had enough
-					} while ( scale !== (scale = tween.cur() / target) && scale !== 1 && --maxIterations );
-				}
+					// Adjust and apply
+					start = start / scale;
+					jQuery.style( tween.elem, prop, start + unit );
 
-				tween.unit = unit;
-				tween.start = start;
-				// If a +=/-= token was provided, we're doing a relative animation
-				tween.end = parts[1] ? start + ( parts[1] + 1 ) * end : end;
+				// Update scale, tolerating zero or NaN from tween.cur()
+				// And breaking the loop if scale is unchanged or perfect, or if we've just had enough
+				} while ( scale !== (scale = tween.cur() / target) && scale !== 1 && --maxIterations );
 			}
+
+			// Update tween properties
+			if ( parts ) {
+				start = tween.start = +start || +target || 0;
+				tween.unit = unit;
+				// If a +=/-= token was provided, we're doing a relative animation
+				tween.end = parts[ 1 ] ?
+					start + ( parts[ 1 ] + 1 ) * parts[ 2 ] :
+					+parts[ 2 ];
+			}
+
 			return tween;
 		}]
 	};
@@ -7838,19 +7916,18 @@ function createFxNow() {
 	return ( fxNow = jQuery.now() );
 }
 
-function createTweens( animation, props ) {
-	jQuery.each( props, function( prop, value ) {
-		var collection = ( tweeners[ prop ] || [] ).concat( tweeners[ "*" ] ),
-			index = 0,
-			length = collection.length;
-		for ( ; index < length; index++ ) {
-			if ( collection[ index ].call( animation, prop, value ) ) {
+function createTween( value, prop, animation ) {
+	var tween,
+		collection = ( tweeners[ prop ] || [] ).concat( tweeners[ "*" ] ),
+		index = 0,
+		length = collection.length;
+	for ( ; index < length; index++ ) {
+		if ( (tween = collection[ index ].call( animation, prop, value )) ) {
 
-				// we're done with this property
-				return;
-			}
+			// we're done with this property
+			return tween;
 		}
-	});
+	}
 }
 
 function Animation( elem, properties, options ) {
@@ -7936,7 +8013,7 @@ function Animation( elem, properties, options ) {
 		}
 	}
 
-	createTweens( animation, props );
+	jQuery.map( props, createTween, animation );
 
 	if ( jQuery.isFunction( animation.opts.start ) ) {
 		animation.opts.start.call( elem, animation );
@@ -8026,12 +8103,12 @@ jQuery.Animation = jQuery.extend( Animation, {
 
 function defaultPrefilter( elem, props, opts ) {
 	/* jshint validthis: true */
-	var index, prop, value, length, dataShow, toggle, tween, hooks, oldfire,
+	var prop, value, toggle, tween, hooks, oldfire,
 		anim = this,
-		style = elem.style,
 		orig = {},
-		handled = [],
-		hidden = elem.nodeType && isHidden( elem );
+		style = elem.style,
+		hidden = elem.nodeType && isHidden( elem ),
+		dataShow = data_priv.get( elem, "fxshow" );
 
 	// handle queue: false promises
 	if ( !opts.queue ) {
@@ -8087,30 +8164,31 @@ function defaultPrefilter( elem, props, opts ) {
 
 
 	// show/hide pass
-	dataShow = data_priv.get( elem, "fxshow" );
-	for ( index in props ) {
-		value = props[ index ];
+	for ( prop in props ) {
+		value = props[ prop ];
 		if ( rfxtypes.exec( value ) ) {
-			delete props[ index ];
+			delete props[ prop ];
 			toggle = toggle || value === "toggle";
 			if ( value === ( hidden ? "hide" : "show" ) ) {
 
 				// If there is dataShow left over from a stopped hide or show and we are going to proceed with show, we should pretend to be hidden
-				if( value === "show" && dataShow !== undefined && dataShow[ index ] !== undefined ) {
+				if ( value === "show" && dataShow && dataShow[ prop ] !== undefined ) {
 					hidden = true;
 				} else {
 					continue;
 				}
 			}
-			handled.push( index );
+			orig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );
 		}
 	}
 
-	length = handled.length;
-	if ( length ) {
-		dataShow = data_priv.get( elem, "fxshow" ) || data_priv.access( elem, "fxshow", {} );
-		if ( "hidden" in dataShow ) {
-			hidden = dataShow.hidden;
+	if ( !jQuery.isEmptyObject( orig ) ) {
+		if ( dataShow ) {
+			if ( "hidden" in dataShow ) {
+				hidden = dataShow.hidden;
+			}
+		} else {
+			dataShow = data_priv.access( elem, "fxshow", {} );
 		}
 
 		// store state if its toggle - enables .stop().toggle() to "reverse"
@@ -8132,10 +8210,8 @@ function defaultPrefilter( elem, props, opts ) {
 				jQuery.style( elem, prop, orig[ prop ] );
 			}
 		});
-		for ( index = 0 ; index < length ; index++ ) {
-			prop = handled[ index ];
-			tween = anim.createTween( prop, hidden ? dataShow[ prop ] : 0 );
-			orig[ prop ] = dataShow[ prop ] || jQuery.style( elem, prop );
+		for ( prop in orig ) {
+			tween = createTween( hidden ? dataShow[ prop ] : 0, prop, anim );
 
 			if ( !( prop in dataShow ) ) {
 				dataShow[ prop ] = tween.start;
@@ -8266,9 +8342,7 @@ jQuery.fn.extend({
 			doAnimation = function() {
 				// Operate on a copy of prop so per-property easing won't be lost
 				var anim = Animation( this, jQuery.extend( {}, prop ), optall );
-				doAnimation.finish = function() {
-					anim.stop( true );
-				};
+
 				// Empty animations, or finishing resolves immediately
 				if ( empty || data_priv.get( this, "finish" ) ) {
 					anim.stop( true );
@@ -8348,8 +8422,8 @@ jQuery.fn.extend({
 			// empty the queue first
 			jQuery.queue( this, type, [] );
 
-			if ( hooks && hooks.cur && hooks.cur.finish ) {
-				hooks.cur.finish.call( this );
+			if ( hooks && hooks.stop ) {
+				hooks.stop.call( this, true );
 			}
 
 			// look for any active animations, and finish them
@@ -8727,7 +8801,7 @@ jQuery.fn.size = function() {
 jQuery.fn.andSelf = jQuery.fn.addBack;
 
 // })();
-if ( typeof module === "object" && typeof module.exports === "object" ) {
+if ( typeof module === "object" && module && typeof module.exports === "object" ) {
 	// Expose jQuery as module.exports in loaders that implement the Node
 	// module pattern (including browserify). Do not create the global, since
 	// the user will be storing it themselves locally, and globals are frowned
@@ -8755,7 +8829,7 @@ if ( typeof window === "object" && typeof window.document === "object" ) {
 })( window );
 
 /*!
- * jQuery Migrate - v1.1.1 - 2013-02-16
+ * jQuery Migrate - v1.2.1 - 2013-05-08
  * https://github.com/jquery/jquery-migrate
  * Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors; Licensed MIT
  */
@@ -8773,8 +8847,8 @@ jQuery.migrateWarnings = [];
 // jQuery.migrateMute = false;
 
 // Show a message on the console so devs know we're active
-if ( !jQuery.migrateMute && window.console && console.log ) {
-	console.log("JQMIGRATE: Logging is active");
+if ( !jQuery.migrateMute && window.console && window.console.log ) {
+	window.console.log("JQMIGRATE: Logging is active");
 }
 
 // Set to false to disable traces that appear with warnings
@@ -8789,10 +8863,11 @@ jQuery.migrateReset = function() {
 };
 
 function migrateWarn( msg) {
+	var console = window.console;
 	if ( !warnedAbout[ msg ] ) {
 		warnedAbout[ msg ] = true;
 		jQuery.migrateWarnings.push( msg );
-		if ( window.console && console.warn && !jQuery.migrateMute ) {
+		if ( console && console.warn && !jQuery.migrateMute ) {
 			console.warn( "JQMIGRATE: " + msg );
 			if ( jQuery.migrateTrace && console.trace ) {
 				console.trace();
@@ -8945,18 +9020,27 @@ jQuery.attrHooks.value = {
 var matched, browser,
 	oldInit = jQuery.fn.init,
 	oldParseJSON = jQuery.parseJSON,
-	// Note this does NOT include the #9521 XSS fix from 1.7!
-	rquickExpr = /^(?:[^<]*(<[\w\W]+>)[^>]*|#([\w\-]*))$/;
+	// Note: XSS check is done below after string is trimmed
+	rquickExpr = /^([^<]*)(<[\w\W]+>)([^>]*)$/;
 
 // $(html) "looks like html" rule change
 jQuery.fn.init = function( selector, context, rootjQuery ) {
 	var match;
 
 	if ( selector && typeof selector === "string" && !jQuery.isPlainObject( context ) &&
-			(match = rquickExpr.exec( selector )) && match[1] ) {
+			(match = rquickExpr.exec( jQuery.trim( selector ) )) && match[ 0 ] ) {
 		// This is an HTML string according to the "old" rules; is it still?
 		if ( selector.charAt( 0 ) !== "<" ) {
 			migrateWarn("$(html) HTML strings must start with '<' character");
+		}
+		if ( match[ 3 ] ) {
+			migrateWarn("$(html) HTML text after last tag is ignored");
+		}
+		// Consistently reject any HTML-like string starting with a hash (#9521)
+		// Note that this may break jQuery 1.6.x code that otherwise would work.
+		if ( match[ 0 ].charAt( 0 ) === "#" ) {
+			migrateWarn("HTML string cannot start with a '#' character");
+			jQuery.error("JQMIGRATE: Invalid selector string (XSS)");
 		}
 		// Now process using loose rules; let pre-1.8 play too
 		if ( context && context.context ) {
@@ -8964,7 +9048,7 @@ jQuery.fn.init = function( selector, context, rootjQuery ) {
 			context = context.context;
 		}
 		if ( jQuery.parseHTML ) {
-			return oldInit.call( this, jQuery.parseHTML( jQuery.trim(selector), context, true ),
+			return oldInit.call( this, jQuery.parseHTML( match[ 2 ], context, true ),
 					context, rootjQuery );
 		}
 	}
@@ -9266,7 +9350,7 @@ jQuery.each( ajaxEvents.split("|"),
 
 })( jQuery, window );
 
-/*! jQuery UI - v1.10.2 - 2013-03-14
+/*! jQuery UI - v1.10.3 - 2013-05-03
 * http://jqueryui.com
 * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.ui.effect.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.effect-blind.js, jquery.ui.effect-bounce.js, jquery.ui.effect-clip.js, jquery.ui.effect-drop.js, jquery.ui.effect-explode.js, jquery.ui.effect-fade.js, jquery.ui.effect-fold.js, jquery.ui.effect-highlight.js, jquery.ui.effect-pulsate.js, jquery.ui.effect-scale.js, jquery.ui.effect-shake.js, jquery.ui.effect-slide.js, jquery.ui.effect-transfer.js, jquery.ui.menu.js, jquery.ui.position.js, jquery.ui.progressbar.js, jquery.ui.slider.js, jquery.ui.spinner.js, jquery.ui.tabs.js, jquery.ui.tooltip.js
 * Copyright 2013 jQuery Foundation and other contributors; Licensed MIT */
@@ -9279,7 +9363,7 @@ var uuid = 0,
 $.ui = $.ui || {};
 
 $.extend( $.ui, {
-	version: "1.10.2",
+	version: "1.10.3",
 
 	keyCode: {
 		BACKSPACE: 8,
@@ -9529,7 +9613,7 @@ $.fn.extend({
 });
 
 $.extend( $.ui, {
-	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
+	// $.ui.plugin is deprecated. Use $.widget() extensions instead.
 	plugin: {
 		add: function( module, option, set ) {
 			var i,
@@ -10101,7 +10185,7 @@ $( document ).mouseup( function() {
 });
 
 $.widget("ui.mouse", {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		cancel: "input,textarea,button,select,option",
 		distance: 1,
@@ -10253,7 +10337,7 @@ $.widget("ui.mouse", {
 (function( $, undefined ) {
 
 $.widget("ui.draggable", $.ui.mouse, {
-	version: "1.10.2",
+	version: "1.10.3",
 	widgetEventPrefix: "drag",
 	options: {
 		addClasses: true,
@@ -10362,8 +10446,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this._cacheMargins();
 
 		//Store the helper's css position
-		this.cssPosition = this.helper.css("position");
+		this.cssPosition = this.helper.css( "position" );
 		this.scrollParent = this.helper.scrollParent();
+		this.offsetParent = this.helper.offsetParent();
+		this.offsetParentCssPosition = this.offsetParent.css( "position" );
 
 		//The element's absolute position on the page minus margins
 		this.offset = this.positionAbs = this.element.offset();
@@ -10371,6 +10457,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
+
+		//Reset scroll cache
+		this.offset.scroll = false;
 
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
@@ -10390,9 +10479,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
 
 		//Set a containment if given in the options
-		if(o.containment) {
-			this._setContainment();
-		}
+		this._setContainment();
 
 		//Trigger event + callbacks
 		if(this._trigger("start", event) === false) {
@@ -10420,6 +10507,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event, noPropagation) {
+		// reset any necessary cached properties (see #5009)
+		if ( this.offsetParentCssPosition === "fixed" ) {
+			this.offset.parent = this._getParentOffset();
+		}
 
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
@@ -10451,9 +10542,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_mouseStop: function(event) {
 
 		//If we are using droppables, inform the manager about the drop
-		var element,
-			that = this,
-			elementInDom = false,
+		var that = this,
 			dropped = false;
 		if ($.ui.ddmanager && !this.options.dropBehaviour) {
 			dropped = $.ui.ddmanager.drop(this, event);
@@ -10466,13 +10555,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		//if the original element is no longer in the DOM don't bother to continue (see #8269)
-		element = this.element[0];
-		while ( element && (element = element.parentNode) ) {
-			if (element === document ) {
-				elementInDom = true;
-			}
-		}
-		if ( !elementInDom && this.options.helper === "original" ) {
+		if ( this.options.helper === "original" && !$.contains( this.element[ 0 ].ownerDocument, this.element[ 0 ] ) ) {
 			return false;
 		}
 
@@ -10564,7 +10647,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_getParentOffset: function() {
 
 		//Get the offsetParent and cache its position
-		this.offsetParent = this.helper.offsetParent();
 		var po = this.offsetParent.offset();
 
 		// This is a special case where we need to modify a offset calculated on start, since the following happened:
@@ -10625,40 +10707,56 @@ $.widget("ui.draggable", $.ui.mouse, {
 		var over, c, ce,
 			o = this.options;
 
-		if(o.containment === "parent") {
-			o.containment = this.helper[0].parentNode;
-		}
-		if(o.containment === "document" || o.containment === "window") {
-			this.containment = [
-				o.containment === "document" ? 0 : $(window).scrollLeft() - this.offset.relative.left - this.offset.parent.left,
-				o.containment === "document" ? 0 : $(window).scrollTop() - this.offset.relative.top - this.offset.parent.top,
-				(o.containment === "document" ? 0 : $(window).scrollLeft()) + $(o.containment === "document" ? document : window).width() - this.helperProportions.width - this.margins.left,
-				(o.containment === "document" ? 0 : $(window).scrollTop()) + ($(o.containment === "document" ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
-			];
+		if ( !o.containment ) {
+			this.containment = null;
+			return;
 		}
 
-		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor !== Array) {
-			c = $(o.containment);
-			ce = c[0];
-
-			if(!ce) {
-				return;
-			}
-
-			over = ($(ce).css("overflow") !== "hidden");
-
+		if ( o.containment === "window" ) {
 			this.containment = [
-				(parseInt($(ce).css("borderLeftWidth"),10) || 0) + (parseInt($(ce).css("paddingLeft"),10) || 0),
-				(parseInt($(ce).css("borderTopWidth"),10) || 0) + (parseInt($(ce).css("paddingTop"),10) || 0),
-				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderRightWidth"),10) || 0) - (parseInt($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
-				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderBottomWidth"),10) || 0) - (parseInt($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
+				$( window ).scrollLeft() - this.offset.relative.left - this.offset.parent.left,
+				$( window ).scrollTop() - this.offset.relative.top - this.offset.parent.top,
+				$( window ).scrollLeft() + $( window ).width() - this.helperProportions.width - this.margins.left,
+				$( window ).scrollTop() + ( $( window ).height() || document.body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
 			];
-			this.relative_container = c;
+			return;
+		}
 
-		} else if(o.containment.constructor === Array) {
+		if ( o.containment === "document") {
+			this.containment = [
+				0,
+				0,
+				$( document ).width() - this.helperProportions.width - this.margins.left,
+				( $( document ).height() || document.body.parentNode.scrollHeight ) - this.helperProportions.height - this.margins.top
+			];
+			return;
+		}
+
+		if ( o.containment.constructor === Array ) {
 			this.containment = o.containment;
+			return;
 		}
 
+		if ( o.containment === "parent" ) {
+			o.containment = this.helper[ 0 ].parentNode;
+		}
+
+		c = $( o.containment );
+		ce = c[ 0 ];
+
+		if( !ce ) {
+			return;
+		}
+
+		over = c.css( "overflow" ) !== "hidden";
+
+		this.containment = [
+			( parseInt( c.css( "borderLeftWidth" ), 10 ) || 0 ) + ( parseInt( c.css( "paddingLeft" ), 10 ) || 0 ),
+			( parseInt( c.css( "borderTopWidth" ), 10 ) || 0 ) + ( parseInt( c.css( "paddingTop" ), 10 ) || 0 ) ,
+			( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) - ( parseInt( c.css( "borderRightWidth" ), 10 ) || 0 ) - ( parseInt( c.css( "paddingRight" ), 10 ) || 0 ) - this.helperProportions.width - this.margins.left - this.margins.right,
+			( over ? Math.max( ce.scrollHeight, ce.offsetHeight ) : ce.offsetHeight ) - ( parseInt( c.css( "borderBottomWidth" ), 10 ) || 0 ) - ( parseInt( c.css( "paddingBottom" ), 10 ) || 0 ) - this.helperProportions.height - this.margins.top  - this.margins.bottom
+		];
+		this.relative_container = c;
 	},
 
 	_convertPositionTo: function(d, pos) {
@@ -10668,20 +10766,25 @@ $.widget("ui.draggable", $.ui.mouse, {
 		}
 
 		var mod = d === "absolute" ? 1 : -1,
-			scroll = this.cssPosition === "absolute" && !(this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent;
+
+		//Cache the scroll
+		if (!this.offset.scroll) {
+			this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
+		}
 
 		return {
 			top: (
 				pos.top	+																// The absolute mouse position
 				this.offset.relative.top * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.top * mod -										// The offsetParent's offset without borders (offset + border)
-				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod)
+				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : this.offset.scroll.top ) * mod )
 			),
 			left: (
 				pos.left +																// The absolute mouse position
 				this.offset.relative.left * mod +										// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.left * mod	-										// The offsetParent's offset without borders (offset + border)
-				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
+				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : this.offset.scroll.left ) * mod )
 			)
 		};
 
@@ -10691,28 +10794,35 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var containment, co, top, left,
 			o = this.options,
-			scroll = this.cssPosition === "absolute" && !(this.scrollParent[0] !== document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent,
-			scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName),
+			scroll = this.cssPosition === "absolute" && !( this.scrollParent[ 0 ] !== document && $.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ? this.offsetParent : this.scrollParent,
 			pageX = event.pageX,
 			pageY = event.pageY;
+
+		//Cache the scroll
+		if (!this.offset.scroll) {
+			this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
+		}
 
 		/*
 		 * - Position constraining -
 		 * Constrain the position to a mix of grid, containment.
 		 */
 
-		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
-			if(this.containment) {
-			if (this.relative_container){
-				co = this.relative_container.offset();
-				containment = [ this.containment[0] + co.left,
-					this.containment[1] + co.top,
-					this.containment[2] + co.left,
-					this.containment[3] + co.top ];
-			}
-			else {
-				containment = this.containment;
-			}
+		// If we are not dragging yet, we won't check for options
+		if ( this.originalPosition ) {
+			if ( this.containment ) {
+				if ( this.relative_container ){
+					co = this.relative_container.offset();
+					containment = [
+						this.containment[ 0 ] + co.left,
+						this.containment[ 1 ] + co.top,
+						this.containment[ 2 ] + co.left,
+						this.containment[ 3 ] + co.top
+					];
+				}
+				else {
+					containment = this.containment;
+				}
 
 				if(event.pageX - this.offset.click.left < containment[0]) {
 					pageX = containment[0] + this.offset.click.left;
@@ -10745,14 +10855,14 @@ $.widget("ui.draggable", $.ui.mouse, {
 				this.offset.click.top	-												// Click offset (relative to the element)
 				this.offset.relative.top -												// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.top +												// The offsetParent's offset without borders (offset + border)
-				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ))
+				( this.cssPosition === "fixed" ? -this.scrollParent.scrollTop() : this.offset.scroll.top )
 			),
 			left: (
 				pageX -																	// The absolute mouse position
 				this.offset.click.left -												// Click offset (relative to the element)
 				this.offset.relative.left -												// Only for relative positioned nodes: Relative offset from element to offset parent
 				this.offset.parent.left +												// The offsetParent's offset without borders (offset + border)
-				( ( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ))
+				( this.cssPosition === "fixed" ? -this.scrollParent.scrollLeft() : this.offset.scroll.left )
 			)
 		};
 
@@ -11074,8 +11184,7 @@ $.ui.plugin.add("draggable", "snap", {
 			t = inst.snapElements[i].top;
 			b = t + inst.snapElements[i].height;
 
-			//Yes, I know, this is insane ;)
-			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) {
+			if ( x2 < l - d || x1 > r + d || y2 < t - d || y1 > b + d || !$.contains( inst.snapElements[ i ].item.ownerDocument, inst.snapElements[ i ].item ) ) {
 				if(inst.snapElements[i].snapping) {
 					(inst.options.snap.release && inst.options.snap.release.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
 				}
@@ -11176,7 +11285,7 @@ function isOverAxis( x, reference, size ) {
 }
 
 $.widget("ui.droppable", {
-	version: "1.10.2",
+	version: "1.10.3",
 	widgetEventPrefix: "drop",
 	options: {
 		accept: "*",
@@ -11537,7 +11646,7 @@ function isNumber(value) {
 }
 
 $.widget("ui.resizable", $.ui.mouse, {
-	version: "1.10.2",
+	version: "1.10.3",
 	widgetEventPrefix: "resize",
 	options: {
 		alsoResize: false,
@@ -12483,7 +12592,7 @@ $.ui.plugin.add("resizable", "grid", {
 (function( $, undefined ) {
 
 $.widget("ui.selectable", $.ui.mouse, {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		appendTo: "body",
 		autoRefresh: true,
@@ -12756,7 +12865,7 @@ function isFloating(item) {
 }
 
 $.widget("ui.sortable", $.ui.mouse, {
-	version: "1.10.2",
+	version: "1.10.3",
 	widgetEventPrefix: "sort",
 	ready: false,
 	options: {
@@ -13276,7 +13385,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 			b = t + item.height,
 			dyClick = this.offset.click.top,
 			dxClick = this.offset.click.left,
-			isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
+			isOverElementHeight = ( this.options.axis === "x" ) || ( ( y1 + dyClick ) > t && ( y1 + dyClick ) < b ),
+			isOverElementWidth = ( this.options.axis === "y" ) || ( ( x1 + dxClick ) > l && ( x1 + dxClick ) < r ),
+			isOverElement = isOverElementHeight && isOverElementWidth;
 
 		if ( this.options.tolerance === "pointer" ||
 			this.options.forcePointerForContainers ||
@@ -13491,15 +13602,16 @@ $.widget("ui.sortable", $.ui.mouse, {
 				element: function() {
 
 					var nodeName = that.currentItem[0].nodeName.toLowerCase(),
-						element = $( that.document[0].createElement( nodeName ) )
+						element = $( "<" + nodeName + ">", that.document[0] )
 							.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
 							.removeClass("ui-sortable-helper");
 
 					if ( nodeName === "tr" ) {
-						// Use a high colspan to force the td to expand the full
-						// width of the table (browsers are smart enough to
-						// handle this properly)
-						element.append( "<td colspan='99'>&#160;</td>" );
+						that.currentItem.children().each(function() {
+							$( "<td>&#160;</td>", that.document[0] )
+								.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
+								.appendTo( element );
+						});
 					} else if ( nodeName === "img" ) {
 						element.attr( "src", that.currentItem.attr( "src" ) );
 					}
@@ -14896,7 +15008,7 @@ $.fn.extend({
 (function() {
 
 $.extend( $.effects, {
-	version: "1.10.2",
+	version: "1.10.3",
 
 	// Saves a set of properties in a data storage
 	save: function( element, set ) {
@@ -15303,7 +15415,7 @@ showProps.height = showProps.paddingTop = showProps.paddingBottom =
 	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
 
 $.widget( "ui.accordion", {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		active: 0,
 		animate: {},
@@ -15500,7 +15612,7 @@ $.widget( "ui.accordion", {
 			options.active = false;
 			this.active = $();
 		// active false only when collapsible is true
-		} if ( options.active === false ) {
+		} else if ( options.active === false ) {
 			this._activate( 0 );
 		// was active, but active panel is gone
 		} else if ( this.active.length && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
@@ -15856,7 +15968,7 @@ $.widget( "ui.accordion", {
 var requestIndex = 0;
 
 $.widget( "ui.autocomplete", {
-	version: "1.10.2",
+	version: "1.10.3",
 	defaultElement: "<input>",
 	options: {
 		appendTo: null,
@@ -15978,7 +16090,9 @@ $.widget( "ui.autocomplete", {
 			keypress: function( event ) {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
-					event.preventDefault();
+					if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
+						event.preventDefault();
+					}
 					return;
 				}
 				if ( suppressKeyPressRepeat ) {
@@ -16031,8 +16145,6 @@ $.widget( "ui.autocomplete", {
 			.addClass( "ui-autocomplete ui-front" )
 			.appendTo( this._appendTo() )
 			.menu({
-				// custom key handling for now
-				input: $(),
 				// disable ARIA support, the live region takes care of that
 				role: null
 			})
@@ -16134,7 +16246,7 @@ $.widget( "ui.autocomplete", {
 				"aria-live": "polite"
 			})
 			.addClass( "ui-helper-hidden-accessible" )
-			.insertAfter( this.element );
+			.insertBefore( this.element );
 
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
@@ -16452,9 +16564,9 @@ var lastActive, startXPos, startYPos, clickDragged,
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
 	formResetHandler = function() {
-		var buttons = $( this ).find( ":ui-button" );
+		var form = $( this );
 		setTimeout(function() {
-			buttons.button( "refresh" );
+			form.find( ":ui-button" ).button( "refresh" );
 		}, 1 );
 	},
 	radioGroup = function( radio ) {
@@ -16476,7 +16588,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 	};
 
 $.widget( "ui.button", {
-	version: "1.10.2",
+	version: "1.10.3",
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
@@ -16793,7 +16905,7 @@ $.widget( "ui.button", {
 });
 
 $.widget( "ui.buttonset", {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(ui-button)"
 	},
@@ -16853,10 +16965,9 @@ $.widget( "ui.buttonset", {
 
 (function( $, undefined ) {
 
-$.extend($.ui, { datepicker: { version: "1.10.2" } });
+$.extend($.ui, { datepicker: { version: "1.10.3" } });
 
 var PROP_NAME = "datepicker",
-	dpuuid = new Date().getTime(),
 	instActive;
 
 /* Date picker manager.
@@ -17593,9 +17704,10 @@ $.extend(Datepicker.prototype, {
 				inst.dpDiv[showAnim || "show"](showAnim ? duration : null);
 			}
 
-			if (inst.input.is(":visible") && !inst.input.is(":disabled")) {
+			if ( $.datepicker._shouldFocusInput( inst ) ) {
 				inst.input.focus();
 			}
+
 			$.datepicker._curInst = inst;
 		}
 	},
@@ -17622,10 +17734,7 @@ $.extend(Datepicker.prototype, {
 		inst.dpDiv[(this._get(inst, "isRTL") ? "add" : "remove") +
 			"Class"]("ui-datepicker-rtl");
 
-		// #6694 - don't focus the input if it's already focused
-		// this breaks the change event in IE
-		if (inst === $.datepicker._curInst && $.datepicker._datepickerShowing && inst.input &&
-			inst.input.is(":visible") && !inst.input.is(":disabled") && inst.input[0] !== document.activeElement) {
+		if (inst === $.datepicker._curInst && $.datepicker._datepickerShowing && $.datepicker._shouldFocusInput( inst ) ) {
 			inst.input.focus();
 		}
 
@@ -17642,16 +17751,11 @@ $.extend(Datepicker.prototype, {
 		}
 	},
 
-	/* Retrieve the size of left and top borders for an element.
-	 * @param  elem  (jQuery object) the element of interest
-	 * @return  (number[2]) the left and top borders
-	 */
-	_getBorders: function(elem) {
-		var convert = function(value) {
-			return {thin: 1, medium: 2, thick: 3}[value] || value;
-		};
-		return [parseFloat(convert(elem.css("border-left-width"))),
-			parseFloat(convert(elem.css("border-top-width")))];
+	// #6694 - don't focus the input if it's already focused
+	// this breaks the change event in IE
+	// Support: IE and jQuery <1.9
+	_shouldFocusInput: function( inst ) {
+		return inst.input && inst.input.is( ":visible" ) && !inst.input.is( ":disabled" ) && !inst.input.is( ":focus" );
 	},
 
 	/* Check positioning to remain on screen. */
@@ -18398,27 +18502,27 @@ $.extend(Datepicker.prototype, {
 		inst.dpDiv.find("[data-handler]").map(function () {
 			var handler = {
 				prev: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._adjustDate(id, -stepMonths, "M");
+					$.datepicker._adjustDate(id, -stepMonths, "M");
 				},
 				next: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._adjustDate(id, +stepMonths, "M");
+					$.datepicker._adjustDate(id, +stepMonths, "M");
 				},
 				hide: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._hideDatepicker();
+					$.datepicker._hideDatepicker();
 				},
 				today: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._gotoToday(id);
+					$.datepicker._gotoToday(id);
 				},
 				selectDay: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._selectDay(id, +this.getAttribute("data-month"), +this.getAttribute("data-year"), this);
+					$.datepicker._selectDay(id, +this.getAttribute("data-month"), +this.getAttribute("data-year"), this);
 					return false;
 				},
 				selectMonth: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._selectMonthYear(id, this, "M");
+					$.datepicker._selectMonthYear(id, this, "M");
 					return false;
 				},
 				selectYear: function () {
-					window["DP_jQuery_" + dpuuid].datepicker._selectMonthYear(id, this, "Y");
+					$.datepicker._selectMonthYear(id, this, "Y");
 					return false;
 				}
 			};
@@ -18881,11 +18985,7 @@ $.fn.datepicker = function(options){
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
-$.datepicker.version = "1.10.2";
-
-// Workaround for #4055
-// Add another global to avoid noConflict issues with inline event handlers
-window["DP_jQuery_" + dpuuid] = $;
+$.datepicker.version = "1.10.3";
 
 })(jQuery);
 
@@ -18908,7 +19008,7 @@ var sizeRelatedOptions = {
 	};
 
 $.widget( "ui.dialog", {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		appendTo: "body",
 		autoOpen: true,
@@ -20672,7 +20772,7 @@ $.effects.effect.transfer = function( o, done ) {
 (function( $, undefined ) {
 
 $.widget( "ui.menu", {
-	version: "1.10.2",
+	version: "1.10.3",
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {
@@ -21767,7 +21867,7 @@ $.ui.position = {
 (function( $, undefined ) {
 
 $.widget( "ui.progressbar", {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		max: 100,
 		value: 0,
@@ -21903,7 +22003,7 @@ $.widget( "ui.progressbar", {
 var numPages = 5;
 
 $.widget( "ui.slider", $.ui.mouse, {
-	version: "1.10.2",
+	version: "1.10.3",
 	widgetEventPrefix: "slide",
 
 	options: {
@@ -22568,7 +22668,7 @@ function modifier( fn ) {
 }
 
 $.widget( "ui.spinner", {
-	version: "1.10.2",
+	version: "1.10.3",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
@@ -23049,7 +23149,7 @@ function isLocal( anchor ) {
 }
 
 $.widget( "ui.tabs", {
-	version: "1.10.2",
+	version: "1.10.3",
 	delay: 300,
 	options: {
 		active: null,
@@ -23896,7 +23996,7 @@ function removeDescribedBy( elem ) {
 }
 
 $.widget( "ui.tooltip", {
-	version: "1.10.2",
+	version: "1.10.3",
 	options: {
 		content: function() {
 			// support: IE<9, Opera in jQuery <1.7
@@ -39162,8 +39262,8 @@ $.widget( "ui.tooltip", {
 /*
  * jQuery timepicker addon
  * By: Trent Richardson [http://trentrichardson.com]
- * Version 1.2.2
- * Last Modified: 04/13/2013
+ * Version 1.3.1
+ * Last Modified: 07/07/2013
  *
  * Copyright 2013 Trent Richardson
  * You may use this project under MIT or GPL licenses.
@@ -39188,7 +39288,7 @@ $.widget( "ui.tooltip", {
 	*/
 	$.extend($.ui, {
 		timepicker: {
-			version: "1.2.2"
+			version: "1.3.1"
 		}
 	});
 
@@ -39213,37 +39313,41 @@ $.widget( "ui.tooltip", {
 			minuteText: 'Minute',
 			secondText: 'Second',
 			millisecText: 'Millisecond',
+			microsecText: 'Microsecond',
 			timezoneText: 'Time Zone',
 			isRTL: false
 		};
 		this._defaults = { // Global defaults for all the datetime picker instances
 			showButtonPanel: true,
 			timeOnly: false,
-			showHour: true,
-			showMinute: true,
-			showSecond: false,
-			showMillisec: false,
-			showTimezone: false,
+			showHour: null,
+			showMinute: null,
+			showSecond: null,
+			showMillisec: null,
+			showMicrosec: null,
+			showTimezone: null,
 			showTime: true,
 			stepHour: 1,
 			stepMinute: 1,
 			stepSecond: 1,
 			stepMillisec: 1,
+			stepMicrosec: 1,
 			hour: 0,
 			minute: 0,
 			second: 0,
 			millisec: 0,
+			microsec: 0,
 			timezone: null,
-			useLocalTimezone: false,
-			defaultTimezone: "+0000",
 			hourMin: 0,
 			minuteMin: 0,
 			secondMin: 0,
 			millisecMin: 0,
+			microsecMin: 0,
 			hourMax: 23,
 			minuteMax: 59,
 			secondMax: 59,
 			millisecMax: 999,
+			microsecMax: 999,
 			minDateTime: null,
 			maxDateTime: null,
 			onSelect: null,
@@ -39251,6 +39355,7 @@ $.widget( "ui.tooltip", {
 			minuteGrid: 0,
 			secondGrid: 0,
 			millisecGrid: 0,
+			microsecGrid: 0,
 			alwaysSetTime: true,
 			separator: ' ',
 			altFieldTimeOnly: true,
@@ -39260,7 +39365,6 @@ $.widget( "ui.tooltip", {
 			pickerTimeFormat: null,
 			pickerTimeSuffix: null,
 			showTimepicker: true,
-			timezoneIso8601: false,
 			timezoneList: null,
 			addSliderAccess: false,
 			sliderAccessArgs: null,
@@ -39280,27 +39384,31 @@ $.widget( "ui.tooltip", {
 		minute_slider: null,
 		second_slider: null,
 		millisec_slider: null,
+		microsec_slider: null,
 		timezone_select: null,
 		hour: 0,
 		minute: 0,
 		second: 0,
 		millisec: 0,
+		microsec: 0,
 		timezone: null,
-		defaultTimezone: "+0000",
 		hourMinOriginal: null,
 		minuteMinOriginal: null,
 		secondMinOriginal: null,
 		millisecMinOriginal: null,
+		microsecMinOriginal: null,
 		hourMaxOriginal: null,
 		minuteMaxOriginal: null,
 		secondMaxOriginal: null,
 		millisecMaxOriginal: null,
+		microsecMaxOriginal: null,
 		ampm: '',
 		formattedDate: '',
 		formattedTime: '',
 		formattedDateTime: '',
 		timezoneList: null,
-		units: ['hour','minute','second','millisec'],
+		units: ['hour','minute','second','millisec', 'microsec'],
+		support: {},
 		control: null,
 
 		/* 
@@ -39316,11 +39424,11 @@ $.widget( "ui.tooltip", {
 		/*
 		* Create a new Timepicker instance
 		*/
-		_newInst: function($input, o) {
+		_newInst: function($input, opts) {
 			var tp_inst = new Timepicker(),
 				inlineSettings = {},
-                fns = {},
-		        overrides, i;
+            	fns = {},
+		    	overrides, i;
 
 			for (var attrName in this._defaults) {
 				if(this._defaults.hasOwnProperty(attrName)){
@@ -39334,6 +39442,7 @@ $.widget( "ui.tooltip", {
 					}
 				}
 			}
+
 		    overrides = {
 		        beforeShow: function (input, dp_inst) {
 		            if ($.isFunction(tp_inst._defaults.evnts.beforeShow)) {
@@ -39358,10 +39467,11 @@ $.widget( "ui.tooltip", {
 		    };
 		    for (i in overrides) {
 		        if (overrides.hasOwnProperty(i)) {
-		            fns[i] = o[i] || null;
+		            fns[i] = opts[i] || null;
 		        }
 		    }
-		    tp_inst._defaults = $.extend({}, this._defaults, inlineSettings, o, overrides, {
+
+		    tp_inst._defaults = $.extend({}, this._defaults, inlineSettings, opts, overrides, {
 		        evnts:fns,
 		        timepicker: tp_inst // add timepicker as a property of datepicker: $.datepicker._get(dp_inst, 'timepicker');
 		    });
@@ -39372,9 +39482,15 @@ $.widget( "ui.tooltip", {
 				return val.toUpperCase();
 			});
 
+			// detect which units are supported
+			tp_inst.support = detectSupport(
+					tp_inst._defaults.timeFormat + 
+					(tp_inst._defaults.pickerTimeFormat? tp_inst._defaults.pickerTimeFormat:'') + 
+					(tp_inst._defaults.altTimeFormat? tp_inst._defaults.altTimeFormat:''));
+
 			// controlType is string - key to our this._controls
 			if(typeof(tp_inst._defaults.controlType) === 'string'){
-				if($.fn[tp_inst._defaults.controlType] === undefined){
+				if(tp_inst._defaults.controlType == 'slider' && typeof(jQuery.ui.slider) === 'undefined'){
 					tp_inst._defaults.controlType = 'select';
 				}
 				tp_inst.control = tp_inst._controls[tp_inst._defaults.controlType];
@@ -39384,20 +39500,24 @@ $.widget( "ui.tooltip", {
 				tp_inst.control = tp_inst._defaults.controlType;
 			}
 
-			if (tp_inst._defaults.timezoneList === null) {
-				var timezoneList = ['-1200', '-1100', '-1000', '-0930', '-0900', '-0800', '-0700', '-0600', '-0500', '-0430', '-0400', '-0330', '-0300', '-0200', '-0100', '+0000', 
-									'+0100', '+0200', '+0300', '+0330', '+0400', '+0430', '+0500', '+0530', '+0545', '+0600', '+0630', '+0700', '+0800', '+0845', '+0900', '+0930', 
-									'+1000', '+1030', '+1100', '+1130', '+1200', '+1245', '+1300', '+1400'];
-
-				if (tp_inst._defaults.timezoneIso8601) {
-					timezoneList = $.map(timezoneList, function(val) {
-						return val == '+0000' ? 'Z' : (val.substring(0, 3) + ':' + val.substring(3));
-					});
-				}
-				tp_inst._defaults.timezoneList = timezoneList;
+			// prep the timezone options
+			var timezoneList = [-720,-660,-600,-570,-540,-480,-420,-360,-300,-270,-240,-210,-180,-120,-60,
+					0,60,120,180,210,240,270,300,330,345,360,390,420,480,525,540,570,600,630,660,690,720,765,780,840];
+			if (tp_inst._defaults.timezoneList !== null) {
+				timezoneList = tp_inst._defaults.timezoneList;
 			}
+			var tzl=timezoneList.length,tzi=0,tzv=null;
+			if (tzl > 0 && typeof timezoneList[0] !== 'object') {
+				for(; tzi<tzl; tzi++){
+					tzv = timezoneList[tzi];
+					timezoneList[tzi] = { value: tzv, label: $.timepicker.timezoneOffsetString(tzv, tp_inst.support.iso8601) };
+				}
+			}
+			tp_inst._defaults.timezoneList = timezoneList;
 
-			tp_inst.timezone = tp_inst._defaults.timezone;
+			// set the default units
+			tp_inst.timezone = tp_inst._defaults.timezone !== null? $.timepicker.timezoneOffsetNumber(tp_inst._defaults.timezone) : 
+							((new Date()).getTimezoneOffset()*-1);
 			tp_inst.hour = tp_inst._defaults.hour < tp_inst._defaults.hourMin? tp_inst._defaults.hourMin : 
 							tp_inst._defaults.hour > tp_inst._defaults.hourMax? tp_inst._defaults.hourMax : tp_inst._defaults.hour;
 			tp_inst.minute = tp_inst._defaults.minute < tp_inst._defaults.minuteMin? tp_inst._defaults.minuteMin : 
@@ -39406,11 +39526,13 @@ $.widget( "ui.tooltip", {
 							tp_inst._defaults.second > tp_inst._defaults.secondMax? tp_inst._defaults.secondMax : tp_inst._defaults.second;
 			tp_inst.millisec = tp_inst._defaults.millisec < tp_inst._defaults.millisecMin? tp_inst._defaults.millisecMin : 
 							tp_inst._defaults.millisec > tp_inst._defaults.millisecMax? tp_inst._defaults.millisecMax : tp_inst._defaults.millisec;
+			tp_inst.microsec = tp_inst._defaults.microsec < tp_inst._defaults.microsecMin? tp_inst._defaults.microsecMin : 
+							tp_inst._defaults.microsec > tp_inst._defaults.microsecMax? tp_inst._defaults.microsecMax : tp_inst._defaults.microsec;
 			tp_inst.ampm = '';
 			tp_inst.$input = $input;
 
-			if (o.altField) {
-				tp_inst.$altInput = $(o.altField).css({
+			if (tp_inst._defaults.altField) {
+				tp_inst.$altInput = $(tp_inst._defaults.altField).css({
 					cursor: 'pointer'
 				}).focus(function() {
 					$input.trigger("focus");
@@ -39498,6 +39620,7 @@ $.widget( "ui.tooltip", {
 				tp_inst = this,
 				litem = '',
 				uitem = '',
+				show = null,
 				max = {},
 				gridSize = {},
 				size = null,
@@ -39514,22 +39637,24 @@ $.widget( "ui.tooltip", {
 				for(i=0,l=this.units.length; i<l; i++){
 					litem = this.units[i];
 					uitem = litem.substr(0,1).toUpperCase() + litem.substr(1);
+					show = o['show'+uitem] !== null? o['show'+uitem] : this.support[litem];
+
 					// Added by Peter Medeiros:
 					// - Figure out what the hour/minute/second max should be based on the step values.
 					// - Example: if stepMinute is 15, then minMax is 45.
 					max[litem] = parseInt((o[litem+'Max'] - ((o[litem+'Max'] - o[litem+'Min']) % o['step'+uitem])), 10);
 					gridSize[litem] = 0;
 
-					html += '<dt class="ui_tpicker_'+ litem +'_label"' + ((o['show'+uitem]) ? '' : noDisplay) + '>' + o[litem +'Text'] + '</dt>' + 
-								'<dd class="ui_tpicker_'+ litem +'"><div class="ui_tpicker_'+ litem +'_slider"' + ((o['show'+uitem]) ? '' : noDisplay) + '></div>';
+					html += '<dt class="ui_tpicker_'+ litem +'_label"' + (show ? '' : noDisplay) + '>' + o[litem +'Text'] + '</dt>' + 
+								'<dd class="ui_tpicker_'+ litem +'"><div class="ui_tpicker_'+ litem +'_slider"' + (show ? '' : noDisplay) + '></div>';
 
-					if (o['show'+uitem] && o[litem+'Grid'] > 0) {
+					if (show && o[litem+'Grid'] > 0) {
 						html += '<div style="padding-left: 1px"><table class="ui-tpicker-grid-label"><tr>';
 
 						if(litem == 'hour'){
 							for (var h = o[litem+'Min']; h <= max[litem]; h += parseInt(o[litem+'Grid'], 10)) {
 								gridSize[litem]++;
-								var tmph = $.datepicker.formatTime(useAmpm(o.pickerTimeFormat || o.timeFormat)? 'hht':'HH', {hour:h}, o);									
+								var tmph = $.datepicker.formatTime(this.support.ampm? 'hht':'HH', {hour:h}, o);									
 								html += '<td data-for="'+litem+'">' + tmph + '</td>';
 							}
 						}
@@ -39546,8 +39671,9 @@ $.widget( "ui.tooltip", {
 				}
 				
 				// Timezone
-				html += '<dt class="ui_tpicker_timezone_label"' + ((o.showTimezone) ? '' : noDisplay) + '>' + o.timezoneText + '</dt>';
-				html += '<dd class="ui_tpicker_timezone" ' + ((o.showTimezone) ? '' : noDisplay) + '></dd>';
+				var showTz = o.showTimezone !== null? o.showTimezone : this.support.timezone;
+				html += '<dt class="ui_tpicker_timezone_label"' + (showTz ? '' : noDisplay) + '>' + o.timezoneText + '</dt>';
+				html += '<dd class="ui_tpicker_timezone" ' + (showTz ? '' : noDisplay) + '></dd>';
 
 				// Create the elements from string
 				html += '</dl></div>';
@@ -39563,12 +39689,13 @@ $.widget( "ui.tooltip", {
 				for(i=0,l=tp_inst.units.length; i<l; i++){
 					litem = tp_inst.units[i];
 					uitem = litem.substr(0,1).toUpperCase() + litem.substr(1);
+					show = o['show'+uitem] !== null? o['show'+uitem] : this.support[litem];
 
 					// add the slider
 					tp_inst[litem+'_slider'] = tp_inst.control.create(tp_inst, $tp.find('.ui_tpicker_'+litem+'_slider'), litem, tp_inst[litem], o[litem+'Min'], max[litem], o['step'+uitem]);
 
 					// adjust the grid and add click event
-					if (o['show'+uitem] && o[litem+'Grid'] > 0) {
+					if (show && o[litem+'Grid'] > 0) {
 						size = 100 * gridSize[litem] * o[litem+'Grid'] / (max[litem] - o[litem+'Min']);
 						$tp.find('.ui_tpicker_'+litem+' table').css({
 							width: size + "%",
@@ -39613,22 +39740,20 @@ $.widget( "ui.tooltip", {
 					return $("<option />").val(typeof val == "object" ? val.value : val).text(typeof val == "object" ? val.label : val);
 				}));
 				if (typeof(this.timezone) != "undefined" && this.timezone !== null && this.timezone !== "") {
-					var local_date = new Date(this.inst.selectedYear, this.inst.selectedMonth, this.inst.selectedDay, 12);
-					var local_timezone = $.timepicker.timeZoneOffsetString(local_date);
+					var local_timezone = (new Date(this.inst.selectedYear, this.inst.selectedMonth, this.inst.selectedDay, 12)).getTimezoneOffset()*-1;
 					if (local_timezone == this.timezone) {
-						selectLocalTimeZone(tp_inst);
+						selectLocalTimezone(tp_inst);
 					} else {
 						this.timezone_select.val(this.timezone);
 					}
 				} else {
 					if (typeof(this.hour) != "undefined" && this.hour !== null && this.hour !== "") {
-						this.timezone_select.val(o.defaultTimezone);
+						this.timezone_select.val(o.timezone);
 					} else {
-						selectLocalTimeZone(tp_inst);
+						selectLocalTimezone(tp_inst);
 					}
 				}
 				this.timezone_select.change(function() {
-					tp_inst._defaults.useLocalTimezone = false;
 					tp_inst._onTimeChange();
 					tp_inst._onSelectHandler();
 				});
@@ -39679,6 +39804,7 @@ $.widget( "ui.tooltip", {
 				}
 				// end slideAccess integration
 
+				tp_inst._limitMinMaxDateTime(this.inst, true);
 			}
 		},
 
@@ -39698,11 +39824,12 @@ $.widget( "ui.tooltip", {
 				var minDateTime = $.datepicker._get(dp_inst, 'minDateTime'),
 					minDateTimeDate = new Date(minDateTime.getFullYear(), minDateTime.getMonth(), minDateTime.getDate(), 0, 0, 0, 0);
 
-				if (this.hourMinOriginal === null || this.minuteMinOriginal === null || this.secondMinOriginal === null || this.millisecMinOriginal === null) {
+				if (this.hourMinOriginal === null || this.minuteMinOriginal === null || this.secondMinOriginal === null || this.millisecMinOriginal === null || this.microsecMinOriginal === null) {
 					this.hourMinOriginal = o.hourMin;
 					this.minuteMinOriginal = o.minuteMin;
 					this.secondMinOriginal = o.secondMin;
 					this.millisecMinOriginal = o.millisecMin;
+					this.microsecMinOriginal = o.microsecMin;
 				}
 
 				if (dp_inst.settings.timeOnly || minDateTimeDate.getTime() == dp_date.getTime()) {
@@ -39716,26 +39843,36 @@ $.widget( "ui.tooltip", {
 							if (this.second <= this._defaults.secondMin) {
 								this.second = this._defaults.secondMin;
 								this._defaults.millisecMin = minDateTime.getMilliseconds();
-							} else {
-								if (this.millisec < this._defaults.millisecMin) {
+								if(this.millisec <= this._defaults.millisecMin) {
 									this.millisec = this._defaults.millisecMin;
+									this._defaults.microsecMin = minDateTime.getMicroseconds();
+								} else {
+									if (this.microsec < this._defaults.microsecMin) {
+										this.microsec = this._defaults.microsecMin;
+									}
+									this._defaults.microsecMin = this.microsecMinOriginal;
 								}
+							} else {
 								this._defaults.millisecMin = this.millisecMinOriginal;
+								this._defaults.microsecMin = this.microsecMinOriginal;
 							}
 						} else {
 							this._defaults.secondMin = this.secondMinOriginal;
 							this._defaults.millisecMin = this.millisecMinOriginal;
+							this._defaults.microsecMin = this.microsecMinOriginal;
 						}
 					} else {
 						this._defaults.minuteMin = this.minuteMinOriginal;
 						this._defaults.secondMin = this.secondMinOriginal;
 						this._defaults.millisecMin = this.millisecMinOriginal;
+						this._defaults.microsecMin = this.microsecMinOriginal;
 					}
 				} else {
 					this._defaults.hourMin = this.hourMinOriginal;
 					this._defaults.minuteMin = this.minuteMinOriginal;
 					this._defaults.secondMin = this.secondMinOriginal;
 					this._defaults.millisecMin = this.millisecMinOriginal;
+					this._defaults.microsecMin = this.microsecMinOriginal;
 				}
 			}
 
@@ -39743,11 +39880,12 @@ $.widget( "ui.tooltip", {
 				var maxDateTime = $.datepicker._get(dp_inst, 'maxDateTime'),
 					maxDateTimeDate = new Date(maxDateTime.getFullYear(), maxDateTime.getMonth(), maxDateTime.getDate(), 0, 0, 0, 0);
 
-				if (this.hourMaxOriginal === null || this.minuteMaxOriginal === null || this.secondMaxOriginal === null) {
+				if (this.hourMaxOriginal === null || this.minuteMaxOriginal === null || this.secondMaxOriginal === null || this.millisecMaxOriginal === null) {
 					this.hourMaxOriginal = o.hourMax;
 					this.minuteMaxOriginal = o.minuteMax;
 					this.secondMaxOriginal = o.secondMax;
 					this.millisecMaxOriginal = o.millisecMax;
+					this.microsecMaxOriginal = o.microsecMax;
 				}
 
 				if (dp_inst.settings.timeOnly || maxDateTimeDate.getTime() == dp_date.getTime()) {
@@ -39761,26 +39899,36 @@ $.widget( "ui.tooltip", {
 							if (this.second >= this._defaults.secondMax) {
 								this.second = this._defaults.secondMax;
 								this._defaults.millisecMax = maxDateTime.getMilliseconds();
-							} else {
-								if (this.millisec > this._defaults.millisecMax) {
+								if (this.millisec >= this._defaults.millisecMax) {
 									this.millisec = this._defaults.millisecMax;
+									this._defaults.microsecMax = maxDateTime.getMicroseconds();
+								} else {
+									if (this.microsec > this._defaults.microsecMax) {
+										this.microsec = this._defaults.microsecMax;
+									}
+									this._defaults.microsecMax = this.microsecMaxOriginal;
 								}
+							} else {
 								this._defaults.millisecMax = this.millisecMaxOriginal;
+								this._defaults.microsecMax = this.microsecMaxOriginal;
 							}
 						} else {
 							this._defaults.secondMax = this.secondMaxOriginal;
 							this._defaults.millisecMax = this.millisecMaxOriginal;
+							this._defaults.microsecMax = this.microsecMaxOriginal;
 						}
 					} else {
 						this._defaults.minuteMax = this.minuteMaxOriginal;
 						this._defaults.secondMax = this.secondMaxOriginal;
 						this._defaults.millisecMax = this.millisecMaxOriginal;
+						this._defaults.microsecMax = this.microsecMaxOriginal;
 					}
 				} else {
 					this._defaults.hourMax = this.hourMaxOriginal;
 					this._defaults.minuteMax = this.minuteMaxOriginal;
 					this._defaults.secondMax = this.secondMaxOriginal;
 					this._defaults.millisecMax = this.millisecMaxOriginal;
+					this._defaults.microsecMax = this.microsecMaxOriginal;
 				}
 			}
 
@@ -39789,6 +39937,7 @@ $.widget( "ui.tooltip", {
 					minMax = parseInt((this._defaults.minuteMax - ((this._defaults.minuteMax - this._defaults.minuteMin) % this._defaults.stepMinute)), 10),
 					secMax = parseInt((this._defaults.secondMax - ((this._defaults.secondMax - this._defaults.secondMin) % this._defaults.stepSecond)), 10),
 					millisecMax = parseInt((this._defaults.millisecMax - ((this._defaults.millisecMax - this._defaults.millisecMin) % this._defaults.stepMillisec)), 10);
+					microsecMax = parseInt((this._defaults.microsecMax - ((this._defaults.microsecMax - this._defaults.microsecMin) % this._defaults.stepMicrosec)), 10);
 
 				if (this.hour_slider) {
 					this.control.options(this, this.hour_slider, 'hour', { min: this._defaults.hourMin, max: hourMax });
@@ -39806,6 +39955,10 @@ $.widget( "ui.tooltip", {
 					this.control.options(this, this.millisec_slider, 'millisec', { min: this._defaults.millisecMin, max: millisecMax });
 					this.control.value(this, this.millisec_slider, 'millisec', this.millisec - (this.millisec % this._defaults.stepMillisec));
 				}
+				if (this.microsec_slider) {
+					this.control.options(this, this.microsec_slider, 'microsec', { min: this._defaults.microsecMin, max: microsecMax });
+					this.control.value(this, this.microsec_slider, 'microsec', this.microsec - (this.microsec % this._defaults.stepMicrosec));
+				}
 			}
 
 		},
@@ -39819,6 +39972,7 @@ $.widget( "ui.tooltip", {
 				minute = (this.minute_slider) ? this.control.value(this, this.minute_slider, 'minute') : false,
 				second = (this.second_slider) ? this.control.value(this, this.second_slider, 'second') : false,
 				millisec = (this.millisec_slider) ? this.control.value(this, this.millisec_slider, 'millisec') : false,
+				microsec = (this.microsec_slider) ? this.control.value(this, this.microsec_slider, 'microsec') : false,
 				timezone = (this.timezone_select) ? this.timezone_select.val() : false,
 				o = this._defaults,
 				pickerTimeFormat = o.pickerTimeFormat || o.timeFormat,
@@ -39836,6 +39990,9 @@ $.widget( "ui.tooltip", {
 			if (typeof(millisec) == 'object') {
 				millisec = false;
 			}
+			if (typeof(microsec) == 'object') {
+				microsec = false;
+			}
 			if (typeof(timezone) == 'object') {
 				timezone = false;
 			}
@@ -39852,14 +40009,17 @@ $.widget( "ui.tooltip", {
 			if (millisec !== false) {
 				millisec = parseInt(millisec, 10);
 			}
+			if (microsec !== false) {
+				microsec = parseInt(microsec, 10);
+			}
 
 			var ampm = o[hour < 12 ? 'amNames' : 'pmNames'][0];
 
 			// If the update was done in the input field, the input field should not be updated.
 			// If the update was done using the sliders, update the input field.
-			var hasChanged = (hour != this.hour || minute != this.minute || second != this.second || millisec != this.millisec 
+			var hasChanged = (hour != this.hour || minute != this.minute || second != this.second || millisec != this.millisec || microsec != this.microsec 
 								|| (this.ampm.length > 0 && (hour < 12) != ($.inArray(this.ampm.toUpperCase(), this.amNames) !== -1)) 
-								|| ((this.timezone === null && timezone != this.defaultTimezone) || (this.timezone !== null && timezone != this.timezone)));
+								|| (this.timezone !== null && timezone != this.timezone));
 
 			if (hasChanged) {
 
@@ -39875,6 +40035,9 @@ $.widget( "ui.tooltip", {
 				if (millisec !== false) {
 					this.millisec = millisec;
 				}
+				if (microsec !== false) {
+					this.microsec = microsec;
+				}
 				if (timezone !== false) {
 					this.timezone = timezone;
 				}
@@ -39885,7 +40048,7 @@ $.widget( "ui.tooltip", {
 
 				this._limitMinMaxDateTime(this.inst, true);
 			}
-			if (useAmpm(o.timeFormat)) {
+			if (this.support.ampm) {
 				this.ampm = ampm;
 			}
 
@@ -39923,7 +40086,8 @@ $.widget( "ui.tooltip", {
 		*/
 		_updateDateTime: function(dp_inst) {
 			dp_inst = this.inst || dp_inst;
-			var dt = $.datepicker._daylightSavingAdjust(new Date(dp_inst.selectedYear, dp_inst.selectedMonth, dp_inst.selectedDay)),
+			//var dt = $.datepicker._daylightSavingAdjust(new Date(dp_inst.selectedYear, dp_inst.selectedMonth, dp_inst.selectedDay)),
+			var dt = $.datepicker._daylightSavingAdjust(new Date(dp_inst.currentYear, dp_inst.currentMonth, dp_inst.currentDay)),
 				dateFmt = $.datepicker._get(dp_inst, 'dateFormat'),
 				formatCfg = $.datepicker._getFormatConfig(dp_inst),
 				timeAvailable = dt !== null && this.timeDefined;
@@ -39956,7 +40120,7 @@ $.widget( "ui.tooltip", {
 
 			if (!this._defaults.showTimepicker) {
 				this.$input.val(this.formattedDate);
-			} else if (this.$altInput && this._defaults.altFieldTimeOnly === true) {
+			} else if (this.$altInput && this._defaults.timeOnly === false && this._defaults.altFieldTimeOnly === true) {
 				this.$altInput.val(this.formattedTime);
 				this.$input.val(this.formattedDate);
 			} else if (this.$altInput) {
@@ -39964,16 +40128,18 @@ $.widget( "ui.tooltip", {
 				var altFormattedDateTime = '',
 					altSeparator = this._defaults.altSeparator ? this._defaults.altSeparator : this._defaults.separator,
 					altTimeSuffix = this._defaults.altTimeSuffix ? this._defaults.altTimeSuffix : this._defaults.timeSuffix;
+				
+				if(!this._defaults.timeOnly){
+					if (this._defaults.altFormat){
+						altFormattedDateTime = $.datepicker.formatDate(this._defaults.altFormat, (dt === null ? new Date() : dt), formatCfg);
+					}
+					else{
+						altFormattedDateTime = this.formattedDate;
+					}
 
-				if (this._defaults.altFormat){
-					altFormattedDateTime = $.datepicker.formatDate(this._defaults.altFormat, (dt === null ? new Date() : dt), formatCfg);
-				}
-				else{
-					altFormattedDateTime = this.formattedDate;
-				}
-
-				if (altFormattedDateTime){
-					altFormattedDateTime += altSeparator;
+					if (altFormattedDateTime){
+						altFormattedDateTime += altSeparator;
+					}
 				}
 
 				if(this._defaults.altTimeFormat){
@@ -40082,7 +40248,7 @@ $.widget( "ui.tooltip", {
 						if(unit == 'hour'){
 							sel += $.datepicker.formatTime($.trim(format.replace(/[^ht ]/ig,'')), {hour:i}, tp_inst._defaults);
 						}
-						else if(unit == 'millisec' || i >= 10){ sel += i; }
+						else if(unit == 'millisec' || unit == 'microsec' || i >= 10){ sel += i; }
 						else {sel += '0'+ i.toString(); }
 						sel += '</option>';
 					}
@@ -40173,6 +40339,7 @@ $.widget( "ui.tooltip", {
 		if (parseRes.timeObj) {
 			var t = parseRes.timeObj;
 			parseRes.date.setHours(t.hour, t.minute, t.second, t.millisec);
+			parseRes.date.setMicroseconds(t.microsec);
 		}
 
 		return parseRes.date;
@@ -40182,7 +40349,8 @@ $.widget( "ui.tooltip", {
 	* Public utility to parse time
 	*/
 	$.datepicker.parseTime = function(timeFormat, timeString, options) {		
-		var o = extendRemove(extendRemove({}, $.timepicker._defaults), options || {});
+		var o = extendRemove(extendRemove({}, $.timepicker._defaults), options || {}),
+			iso8601 = (timeFormat.replace(/\'.*?\'/g,'').indexOf('Z') !== -1);
 
 		// Strict parse requires the timeString to match the timeFormat exactly
 		var strictParse = function(f, s, o){
@@ -40204,12 +40372,13 @@ $.widget( "ui.tooltip", {
 
 			// figure out position of time elements.. cause js cant do named captures
 			var getFormatPositions = function(timeFormat) {
-				var finds = timeFormat.toLowerCase().match(/(h{1,2}|m{1,2}|s{1,2}|l{1}|t{1,2}|z|'.*?')/g),
+				var finds = timeFormat.toLowerCase().match(/(h{1,2}|m{1,2}|s{1,2}|l{1}|c{1}|t{1,2}|z|'.*?')/g),
 					orders = {
 						h: -1,
 						m: -1,
 						s: -1,
 						l: -1,
+						c: -1,
 						t: -1,
 						z: -1
 					};
@@ -40225,13 +40394,14 @@ $.widget( "ui.tooltip", {
 			};
 
 			var regstr = '^' + f.toString()
-					.replace(/([hH]{1,2}|mm?|ss?|[tT]{1,2}|[lz]|'.*?')/g, function (match) {
+					.replace(/([hH]{1,2}|mm?|ss?|[tT]{1,2}|[zZ]|[lc]|'.*?')/g, function (match) {
 							var ml = match.length;
 							switch (match.charAt(0).toLowerCase()) {
 								case 'h': return ml === 1? '(\\d?\\d)':'(\\d{'+ml+'})';
 								case 'm': return ml === 1? '(\\d?\\d)':'(\\d{'+ml+'})';
 								case 's': return ml === 1? '(\\d?\\d)':'(\\d{'+ml+'})';
 								case 'l': return '(\\d?\\d?\\d)';
+								case 'c': return '(\\d?\\d?\\d)';
 								case 'z': return '(z|[-+]\\d\\d:?\\d\\d|\\S+)?';
 								case 't': return getPatternAmpm(o.amNames, o.pmNames);
 								default:    // literal escaped in quotes
@@ -40250,7 +40420,8 @@ $.widget( "ui.tooltip", {
 				hour: 0,
 				minute: 0,
 				second: 0,
-				millisec: 0
+				millisec: 0,
+				microsec: 0
 			};
 
 			if (treg) {
@@ -40285,31 +40456,11 @@ $.widget( "ui.tooltip", {
 				if (order.l !== -1) {
 					resTime.millisec = Number(treg[order.l]);
 				}
+				if (order.c !== -1) {
+					resTime.microsec = Number(treg[order.c]);
+				}
 				if (order.z !== -1 && treg[order.z] !== undefined) {
-					var tz = treg[order.z].toUpperCase();
-					switch (tz.length) {
-					case 1:
-						// Z
-						tz = o.timezoneIso8601 ? 'Z' : '+0000';
-						break;
-					case 5:
-						// +hhmm
-						if (o.timezoneIso8601) {
-							tz = tz.substring(1) == '0000' ? 'Z' : tz.substring(0, 3) + ':' + tz.substring(3);
-						}
-						break;
-					case 6:
-						// +hh:mm
-						if (!o.timezoneIso8601) {
-							tz = tz == 'Z' || tz.substring(1) == '00:00' ? '+0000' : tz.replace(/:/, '');
-						} else {
-							if (tz.substring(1) == '00:00') {
-								tz = 'Z';
-							}
-						}
-						break;
-					}
-					resTime.timezone = tz;
+					resTime.timezone = $.timepicker.timezoneOffsetNumber(treg[order.z]);
 				}
 
 
@@ -40337,7 +40488,8 @@ $.widget( "ui.tooltip", {
 					minute: d.getMinutes(),
 					second: d.getSeconds(),
 					millisec: d.getMilliseconds(),
-					timezone: $.timepicker.timeZoneOffsetString(d)
+					microsec: d.getMicroseconds(),
+					timezone: d.getTimezoneOffset()*-1
 				};
 			}
 			catch(err){
@@ -40374,7 +40526,7 @@ $.widget( "ui.tooltip", {
 			minute: 0,
 			second: 0,
 			millisec: 0,
-			timezone: '+0000'
+			timezone: 0
 		}, time);
 
 		var tmptime = format,
@@ -40385,7 +40537,7 @@ $.widget( "ui.tooltip", {
 			ampmName = options.pmNames[0];
 		}
 
-		tmptime = tmptime.replace(/(?:HH?|hh?|mm?|ss?|[tT]{1,2}|[lz]|('.*?'|".*?"))/g, function(match) {
+		tmptime = tmptime.replace(/(?:HH?|hh?|mm?|ss?|[tT]{1,2}|[zZ]|[lc]|('.*?'|".*?"))/g, function(match) {
 		switch (match) {
 			case 'HH':
 				return ('0' + hour).slice(-2);
@@ -40405,8 +40557,12 @@ $.widget( "ui.tooltip", {
 				return time.second;
 			case 'l':
 				return ('00' + time.millisec).slice(-3);
+			case 'c':
+				return ('00' + time.microsec).slice(-3);
 			case 'z':
-				return time.timezone === null? options.defaultTimezone : time.timezone;
+				return $.timepicker.timezoneOffsetString(time.timezone === null? options.timezone : time.timezone, false);
+			case 'Z':
+				return $.timepicker.timezoneOffsetString(time.timezone === null? options.timezone : time.timezone, true);
 			case 'T': 
 				return ampmName.charAt(0).toUpperCase();
 			case 'TT': 
@@ -40467,12 +40623,6 @@ $.widget( "ui.tooltip", {
 			var tp_inst = this._get(inst, 'timepicker');
 			if (tp_inst) {
 				tp_inst._addTimePicker(inst);
-
-//				if (tp_inst._defaults.useLocalTimezone) { //checks daylight saving with the new date.
-//					var date = new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay, 12);
-//					selectLocalTimeZone(tp_inst, date);
-//					tp_inst._onTimeChange();
-//				}
 			}
 		}
 	};
@@ -40487,7 +40637,8 @@ $.widget( "ui.tooltip", {
 
 		if (tp_inst) {
 			if ($.datepicker._get(inst, 'constrainInput')) {
-				var ampm = useAmpm(tp_inst._defaults.timeFormat),
+				var ampm = tp_inst.support.ampm,
+					tz = tp_inst._defaults.showTimezone !== null? tp_inst._defaults.showTimezone : tp_inst.support.timezone,					
 					dateChars = $.datepicker._possibleChars($.datepicker._get(inst, 'dateFormat')),
 					datetimeChars = tp_inst._defaults.timeFormat.toString()
 											.replace(/[hms]/g, '')
@@ -40499,7 +40650,7 @@ $.widget( "ui.tooltip", {
 											.replace(/t/g, ampm ? 'ap' : '') + 
 											" " + tp_inst._defaults.separator + 
 											tp_inst._defaults.timeSuffix + 
-											(tp_inst._defaults.showTimezone ? tp_inst._defaults.timezoneList.join('') : '') + 
+											(tz ? tp_inst._defaults.timezoneList.join('') : '') + 
 											(tp_inst._defaults.amNames.join('')) + (tp_inst._defaults.pmNames.join('')) + 
 											dateChars,
 					chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
@@ -40575,7 +40726,7 @@ $.widget( "ui.tooltip", {
 			$dp = inst.dpDiv;
 		this._base_gotoToday(id);
 		var tp_inst = this._get(inst, 'timepicker');
-		selectLocalTimeZone(tp_inst);
+		selectLocalTimezone(tp_inst);
 		var now = new Date();
 		this._setTime(inst, now);
 		$('.ui-datepicker-today', $dp).click();
@@ -40626,6 +40777,7 @@ $.widget( "ui.tooltip", {
 			tp_inst.minute = date ? date.getMinutes() : defaults.minute;
 			tp_inst.second = date ? date.getSeconds() : defaults.second;
 			tp_inst.millisec = date ? date.getMilliseconds() : defaults.millisec;
+			tp_inst.microsec = date ? date.getMicroseconds() : defaults.microsec;
 
 			//check if within min/max times.. 
 			tp_inst._limitMinMaxDateTime(inst, true);
@@ -40654,8 +40806,10 @@ $.widget( "ui.tooltip", {
 					tp_inst._parseTime(date, withDate);
 					tp_date = new Date();
 					tp_date.setHours(tp_inst.hour, tp_inst.minute, tp_inst.second, tp_inst.millisec);
+					tp_date.setMicroseconds(tp_inst.microsec);
 				} else {
 					tp_date = new Date(date.getTime());
+					tp_date.setMicroseconds(date.getMicroseconds());
 				}
 				if (tp_date.toString() == 'Invalid Date') {
 					tp_date = undefined;
@@ -40676,7 +40830,34 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		var tp_date = (date instanceof Date) ? new Date(date.getTime()) : date;
+		if(typeof(date) === 'string'){
+			date = new Date(date);
+			if(!date.getTime()){
+				$.timepicker.log("Error creating Date object from string.");
+			}
+		}
+
+		var tp_inst = this._get(inst, 'timepicker');
+		var tp_date;
+		if (date instanceof Date) {
+			tp_date = new Date(date.getTime());
+			tp_date.setMicroseconds(date.getMicroseconds());
+		} else {
+			tp_date = date;
+		}
+		
+		// This is important if you are using the timezone option, javascript's Date 
+		// object will only return the timezone offset for the current locale, so we 
+		// adjust it accordingly.  If not using timezone option this won't matter..
+		// If a timezone is different in tp, keep the timezone as is
+		if(tp_inst){
+			// look out for DST if tz wasn't specified
+			if(!tp_inst.support.timezone && tp_inst._defaults.timezone === null){
+				tp_inst.timezone = tp_date.getTimezoneOffset()*-1;
+			}
+			date = $.timepicker.timezoneAdjust(date, tp_inst.timezone);
+			tp_date = $.timepicker.timezoneAdjust(tp_date, tp_inst.timezone);
+		}
 
 		this._updateDatepicker(inst);
 		this._base_setDateDatepicker.apply(this, arguments);
@@ -40704,6 +40885,18 @@ $.widget( "ui.tooltip", {
 			var date = this._getDate(inst);
 			if (date && tp_inst._parseTime($(target).val(), tp_inst.timeOnly)) {
 				date.setHours(tp_inst.hour, tp_inst.minute, tp_inst.second, tp_inst.millisec);
+				date.setMicroseconds(tp_inst.microsec);
+
+				// This is important if you are using the timezone option, javascript's Date 
+				// object will only return the timezone offset for the current locale, so we 
+				// adjust it accordingly.  If not using timezone option this won't matter..
+				if(tp_inst.timezone != null){
+					// look out for DST if tz wasn't specified
+					if(!tp_inst.support.timezone && tp_inst._defaults.timezone === null){
+						tp_inst.timezone = date.getTimezoneOffset()*-1;
+					}
+					date = $.timepicker.timezoneAdjust(date, tp_inst.timezone);
+				}
 			}
 			return date;
 		}
@@ -40857,11 +41050,24 @@ $.widget( "ui.tooltip", {
 	};
 
 	/*
-	* Determine by the time format if should use ampm
-	* Returns true if should use ampm, false if not
+	* Determine by the time format which units are supported
+	* Returns an object of booleans for each unit
 	*/
-	var useAmpm = function(timeFormat){
-		return ((timeFormat.indexOf('t') !== -1 || timeFormat.indexOf('T') !== -1) && timeFormat.indexOf('h') !== -1);
+	var detectSupport = function(timeFormat){
+		var tf = timeFormat.replace(/\'.*?\'/g,'').toLowerCase(), // removes literals
+			isIn = function(f, t){ // does the format contain the token?
+					return f.indexOf(t) !== -1? true:false; 
+				};
+		return {
+				hour: isIn(tf,'h'),
+				minute: isIn(tf,'m'),
+				second: isIn(tf,'s'),
+				millisec: isIn(tf,'l'),
+				microsec: isIn(tf,'c'),
+				timezone: isIn(tf,'z'),
+				ampm: isIn(tf,'t') && isIn(timeFormat,'h'),
+				iso8601: isIn(timeFormat, 'Z')
+			};
 	};
 
 	/*
@@ -40931,7 +41137,7 @@ $.widget( "ui.tooltip", {
 	* Internal function to parse datetime interval
 	* Returns: {date: Date, timeObj: Object}, where
 	*   date - parsed date without time (type Date)
-	*   timeObj = {hour: , minute: , second: , millisec: } - parsed time. Optional
+	*   timeObj = {hour: , minute: , second: , millisec: , microsec: } - parsed time. Optional
 	*/
 	var parseDateTimeInternal = function(dateFormat, timeFormat, dateTimeString, dateSettings, timeSettings) {
 		var date;
@@ -40958,15 +41164,10 @@ $.widget( "ui.tooltip", {
 	/*
 	* Internal function to set timezone_select to the local timezone
 	*/
-	var selectLocalTimeZone = function(tp_inst, date) {
+	var selectLocalTimezone = function(tp_inst, date) {
 		if (tp_inst && tp_inst.timezone_select) {
-			tp_inst._defaults.useLocalTimezone = true;
 			var now = typeof date !== 'undefined' ? date : new Date();
-			var tzoffset = $.timepicker.timeZoneOffsetString(now);
-			if (tp_inst._defaults.timezoneIso8601) {
-				tzoffset = tzoffset.substring(0, 3) + ':' + tzoffset.substring(3);
-			}
-			tp_inst.timezone_select.val(tzoffset);
+			tp_inst.timezone_select.val(now.getTimezoneOffset()*-1);
 		}
 	};
 
@@ -40977,14 +41178,60 @@ $.widget( "ui.tooltip", {
 
 	/**
 	 * Get the timezone offset as string from a date object (eg '+0530' for UTC+5.5)
-	 * @param  date
+	 * @param  number if not a number this value is returned
+	 * @param boolean if true formats in accordance to iso8601 "+12:45"
 	 * @return string
 	 */
-	$.timepicker.timeZoneOffsetString = function(date) {
-		var off = date.getTimezoneOffset() * -1,
+	$.timepicker.timezoneOffsetString = function(tzMinutes, iso8601) {
+		if(isNaN(tzMinutes) || tzMinutes > 840){
+			return tzMinutes;
+		}
+
+		var off = tzMinutes,
 			minutes = off % 60,
-			hours = (off - minutes) / 60;
-		return (off >= 0 ? '+' : '-') + ('0' + (hours * 101).toString()).slice(-2) + ('0' + (minutes * 101).toString()).slice(-2);
+			hours = (off - minutes) / 60,
+			iso = iso8601? ':':'',
+			tz = (off >= 0 ? '+' : '-') + ('0' + (hours * 101).toString()).slice(-2) + iso + ('0' + (minutes * 101).toString()).slice(-2);
+		
+		if(tz == '+00:00'){
+			return 'Z';
+		}
+		return tz;
+	};
+
+	/**
+	 * Get the number in minutes that represents a timezone string
+	 * @param  string formated like "+0500", "-1245"
+	 * @return number
+	 */
+	$.timepicker.timezoneOffsetNumber = function(tzString) {
+		tzString = tzString.toString().replace(':',''); // excuse any iso8601, end up with "+1245"
+
+		if(tzString.toUpperCase() === 'Z'){ // if iso8601 with Z, its 0 minute offset
+			return 0;
+		}
+
+		if(!/^(\-|\+)\d{4}$/.test(tzString)){ // possibly a user defined tz, so just give it back
+			return tzString;
+		}
+
+		return ((tzString.substr(0,1) =='-'? -1 : 1) * // plus or minus
+					((parseInt(tzString.substr(1,2),10)*60) + // hours (converted to minutes)
+					parseInt(tzString.substr(3,2),10))); // minutes
+	};
+
+	/**
+	 * No way to set timezone in js Date, so we must adjust the minutes to compensate. (think setDate, getDate)
+	 * @param  date
+	 * @param  string formated like "+0500", "-1245"
+	 * @return date
+	 */
+	$.timepicker.timezoneAdjust = function(date, toTimezone) {
+		var toTz = $.timepicker.timezoneOffsetNumber(toTimezone);
+		if(!isNaN(toTz)){
+			date.setMinutes(date.getMinutes()*1 + (date.getTimezoneOffset()*-1 - toTz*1) );
+		}
+		return date;
 	};
 
 	/**
@@ -41010,8 +41257,8 @@ $.widget( "ui.tooltip", {
 	 * @param  string method Can be used to specify the type of picker to be added
 	 * @return jQuery
 	 */
-	$.timepicker.dateTimeRange = function(startTime, endTime, options) {
-		$.timepicker.dateRange(startTime, endTime, options, 'datetimepicker');
+	$.timepicker.datetimeRange = function(startTime, endTime, options) {
+		$.timepicker.handleRange('datetimepicker', startTime, endTime, options);
 	};
 
 	/**
@@ -41021,12 +41268,10 @@ $.widget( "ui.tooltip", {
 	 * @param  Element endTime
 	 * @param  obj options Options for the `timepicker()` call. Also supports `reformat`,
 	 *   a boolean value that can be used to reformat the input values to the `dateFormat`.
-	 * @param  string method Can be used to specify the type of picker to be added
 	 * @return jQuery
 	 */
-	$.timepicker.dateRange = function(startTime, endTime, options, method) {
-		method = method || 'datepicker';
-		$.timepicker.handleRange(method, startTime, endTime, options);
+	$.timepicker.dateRange = function(startTime, endTime, options) {
+		$.timepicker.handleRange('datepicker', startTime, endTime, options);
 	};
 
 	/**
@@ -41040,52 +41285,73 @@ $.widget( "ui.tooltip", {
 	 * @return jQuery
 	 */
 	$.timepicker.handleRange = function(method, startTime, endTime, options) {
+		options = $.extend({}, {
+			minInterval: 0, // min allowed interval in milliseconds
+			maxInterval: 0, // max allowed interval in milliseconds
+			start: {},      // options for start picker
+			end: {}         // options for end picker
+		}, options);
+
 		$.fn[method].call(startTime, $.extend({
 			onClose: function(dateText, inst) {
-				checkDates(this, endTime, dateText);
+				checkDates($(this), endTime);
 			},
 			onSelect: function(selectedDateTime) {
-				selected(this, endTime, 'minDate');
+				selected($(this), endTime, 'minDate');
 			}
 		}, options, options.start));
 		$.fn[method].call(endTime, $.extend({
 			onClose: function(dateText, inst) {
-				checkDates(this, startTime, dateText);
+				checkDates($(this), startTime);
 			},
 			onSelect: function(selectedDateTime) {
-				selected(this, startTime, 'maxDate');
+				selected($(this), startTime, 'maxDate');
 			}
 		}, options, options.end));
-		// timepicker doesn't provide access to its 'timeFormat' option, 
-		// nor could I get datepicker.formatTime() to behave with times, so I
-		// have disabled reformatting for timepicker
-		if (method != 'timepicker' && options.reformat) {
-			$([startTime, endTime]).each(function() {
-				var format = $(this)[method].call($(this), 'option', 'dateFormat'),
-					date = new Date($(this).val());
-				if ($(this).val() && date) {
-					$(this).val($.datepicker.formatDate(format, date));
-				}
-			});
-		}
-		checkDates(startTime, endTime, startTime.val());
 
-		function checkDates(changed, other, dateText) {
-			if (other.val() && (new Date(startTime.val()) > new Date(endTime.val()))) {
-				other.val(dateText);
-			}
-		}
+		checkDates(startTime, endTime);
 		selected(startTime, endTime, 'minDate');
 		selected(endTime, startTime, 'maxDate');
 
+		function checkDates(changed, other) {
+			var startdt = startTime[method]('getDate'),
+				enddt = endTime[method]('getDate'),
+				changeddt = changed[method]('getDate');
+
+			if(startdt !== null){
+				var minDate = new Date(startdt.getTime()),
+					maxDate = new Date(startdt.getTime());
+
+				minDate.setMilliseconds(minDate.getMilliseconds() + options.minInterval);
+				maxDate.setMilliseconds(maxDate.getMilliseconds() + options.maxInterval);
+
+				if(options.minInterval > 0 && minDate > enddt){ // minInterval check
+					endTime[method]('setDate',minDate);
+				}
+				else if(options.maxInterval > 0 && maxDate < enddt){ // max interval check
+					endTime[method]('setDate',maxDate);
+				}
+				else if (startdt > enddt) {
+					other[method]('setDate',changeddt);
+				}
+			}
+		}
+
 		function selected(changed, other, option) {
-			if (!$(changed).val()) {
+			if (!changed.val()) {
 				return;
 			}
-			var date = $(changed)[method].call($(changed), 'getDate');
-			// timepicker doesn't implement 'getDate' and returns a jQuery
+			var date = changed[method].call(changed, 'getDate');
+			if(date !== null && options.minInterval > 0){
+				if(option == 'minDate'){
+					date.setMilliseconds(date.getMilliseconds() + options.minInterval); 
+				}
+				if(option == 'maxDate'){
+					date.setMilliseconds(date.getMilliseconds() - options.minInterval);
+				}
+			}
 			if (date.getTime) {
-				$(other)[method].call($(other), 'option', option, date);
+				other[method].call(other, 'option', option, date);
 			}
 		}
 		return $([startTime.get(0), endTime.get(0)]);
@@ -41103,15 +41369,29 @@ $.widget( "ui.tooltip", {
 	};
 
 	/*
+	* Microsecond support
+	*/
+	if(!Date.prototype.getMicroseconds){
+		Date.prototype.microseconds = 0;
+		Date.prototype.getMicroseconds = function(){ return this.microseconds; };
+		Date.prototype.setMicroseconds = function(m){ 
+			this.setMilliseconds(this.getMilliseconds() + Math.floor(m/1000));
+			this.microseconds = m%1000;
+			return this;
+		};
+	}
+
+	/*
 	* Keep up with the version
 	*/
-	$.timepicker.version = "1.2.2";
+	$.timepicker.version = "1.3.1";
 
 })(jQuery);
 
 /*!
-	jQuery Colorbox v1.4.14 - 2013-04-16
-	(c) 2013 Jack Moore - jacklmoore.com/colorbox
+	Colorbox v1.4.27 - 2013-07-16
+	jQuery lightbox and modal window plugin
+	(c) 2013 Jack Moore - http://www.jacklmoore.com/colorbox
 	license: http://www.opensource.org/licenses/mit-license.php
 */
 (function ($, document, window) {
@@ -41143,7 +41423,7 @@ $.widget( "ui.tooltip", {
 		opacity: 0.9,
 		preloading: true,
 		className: false,
-		
+
 		// alternate image paths for high-res displays
 		retinaImage: false,
 		retinaUrl: false,
@@ -41159,6 +41439,7 @@ $.widget( "ui.tooltip", {
 
 		open: false,
 		returnFocus: true,
+		trapFocus: true,
 		reposition: true,
 		loop: true,
 		slideshow: false,
@@ -41166,13 +41447,14 @@ $.widget( "ui.tooltip", {
 		slideshowSpeed: 2500,
 		slideshowStart: "start slideshow",
 		slideshowStop: "stop slideshow",
-		photoRegex: /\.(gif|png|jp(e|g|eg)|bmp|ico)((#|\?).*)?$/i,
+		photoRegex: /\.(gif|png|jp(e|g|eg)|bmp|ico|webp)((#|\?).*)?$/i,
 
 		onOpen: false,
 		onLoad: false,
 		onComplete: false,
 		onCleanup: false,
 		onClosed: false,
+
 		overlayClose: true,
 		escKey: true,
 		arrowKey: true,
@@ -41181,7 +41463,8 @@ $.widget( "ui.tooltip", {
 		left: false,
 		right: false,
 		fixed: false,
-		data: undefined
+		data: undefined,
+		closeButton: true
 	},
 	
 	// Abstracting the HTML and event identifiers for easy rebranding
@@ -41237,13 +41520,14 @@ $.widget( "ui.tooltip", {
 	div = "div",
 	className,
 	requests = 0,
+	previousCSS = {},
 	init;
 
 	// ****************
 	// HELPER FUNCTIONS
 	// ****************
 	
-	// Convience function for creating new jQuery objects
+	// Convenience function for creating new jQuery objects
 	function $tag(tag, id, css) {
 		var element = document.createElement(tag);
 
@@ -41447,7 +41731,11 @@ $.widget( "ui.tooltip", {
 			}
 			className = settings.className;
 
-			$close.html(settings.close).show();
+			if (settings.closeButton) {
+				$close.html(settings.close).appendTo($content);
+			} else {
+				$close.appendTo('<div/>');
+			}
 
 			if (!open) {
 				open = active = true; // Prevents the page-change action from queuing up if the visitor holds down the left or right keys.
@@ -41455,14 +41743,14 @@ $.widget( "ui.tooltip", {
 				// Show colorbox so the sizes can be calculated in older versions of jQuery
 				$box.css({visibility:'hidden', display:'block'});
 				
-				$loaded = $tag(div, 'LoadedContent', 'width:0; height:0; overflow:hidden').appendTo($content);
+				$loaded = $tag(div, 'LoadedContent', 'width:0; height:0; overflow:hidden');
+				$content.css({width:'', height:''}).append($loaded);
 
 				// Cache values needed for size calculations
 				interfaceHeight = $topBorder.height() + $bottomBorder.height() + $content.outerHeight(true) - $content.height();
 				interfaceWidth = $leftBorder.width() + $rightBorder.width() + $content.outerWidth(true) - $content.width();
 				loadedHeight = $loaded.outerHeight(true);
 				loadedWidth = $loaded.outerWidth(true);
-				
 				
 				// Opens inital empty Colorbox prior to content being loaded.
 				settings.w = setSize(settings.initialWidth, 'x');
@@ -41477,15 +41765,18 @@ $.widget( "ui.tooltip", {
 
 				$box.focus();
 				
-				// Confine focus to the modal
-				// Uses event capturing that is not supported in IE8-
-				if (document.addEventListener) {
 
-					document.addEventListener('focus', trapFocus, true);
-					
-					$events.one(event_closed, function () {
-						document.removeEventListener('focus', trapFocus, true);
-					});
+				if (settings.trapFocus) {
+					// Confine focus to the modal
+					// Uses event capturing that is not supported in IE8-
+					if (document.addEventListener) {
+
+						document.addEventListener('focus', trapFocus, true);
+						
+						$events.one(event_closed, function () {
+							document.removeEventListener('focus', trapFocus, true);
+						});
+					}
 				}
 
 				// Return focus on closing
@@ -41513,7 +41804,7 @@ $.widget( "ui.tooltip", {
 				tabindex: '-1'
 			}).hide();
 			$overlay = $tag(div, "Overlay").hide();
-			$loadingOverlay = $tag(div, "LoadingOverlay").add($tag(div, "LoadingGraphic"));
+			$loadingOverlay = $([$tag(div, "LoadingOverlay")[0],$tag(div, "LoadingGraphic")[0]]);
 			$wrap = $tag(div, "Wrapper");
 			$content = $tag(div, "Content").append(
 				$title = $tag(div, "Title"),
@@ -41521,9 +41812,10 @@ $.widget( "ui.tooltip", {
 				$prev = $('<button type="button"/>').attr({id:prefix+'Previous'}),
 				$next = $('<button type="button"/>').attr({id:prefix+'Next'}),
 				$slideshow = $tag('button', "Slideshow"),
-				$loadingOverlay,
-				$close = $('<button type="button"/>').attr({id:prefix+'Close'})
+				$loadingOverlay
 			);
+
+			$close = $('<button type="button"/>').attr({id:prefix+'Close'});
 			
 			$wrap.append( // The 3x3 Grid that makes up Colorbox
 				$tag(div).append(
@@ -41556,7 +41848,7 @@ $.widget( "ui.tooltip", {
 		function clickHandler(e) {
 			// ignore non-left-mouse-clicks and clicks modified with ctrl / command, shift, or alt.
 			// See: http://jacklmoore.com/notes/click-events/
-			if (!(e.which > 1 || e.shiftKey || e.altKey || e.metaKey || e.control)) {
+			if (!(e.which > 1 || e.shiftKey || e.altKey || e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
 				launch(this);
 			}
@@ -41706,29 +41998,41 @@ $.widget( "ui.tooltip", {
 		}
 
 		$box.css({top: offset.top, left: offset.left, visibility:'visible'});
-
-		// setting the speed to 0 to reduce the delay between same-sized content.
-		speed = ($box.width() === settings.w + loadedWidth && $box.height() === settings.h + loadedHeight) ? 0 : speed || 0;
 		
 		// this gives the wrapper plenty of breathing room so it's floated contents can move around smoothly,
 		// but it has to be shrank down around the size of div#colorbox when it's done.  If not,
 		// it can invoke an obscure IE bug when using iframes.
 		$wrap[0].style.width = $wrap[0].style.height = "9999px";
 		
-		function modalDimensions(that) {
-			$topBorder[0].style.width = $bottomBorder[0].style.width = $content[0].style.width = (parseInt(that.style.width,10) - interfaceWidth)+'px';
-			$content[0].style.height = $leftBorder[0].style.height = $rightBorder[0].style.height = (parseInt(that.style.height,10) - interfaceHeight)+'px';
+		function modalDimensions() {
+			$topBorder[0].style.width = $bottomBorder[0].style.width = $content[0].style.width = (parseInt($box[0].style.width,10) - interfaceWidth)+'px';
+			$content[0].style.height = $leftBorder[0].style.height = $rightBorder[0].style.height = (parseInt($box[0].style.height,10) - interfaceHeight)+'px';
 		}
 
 		css = {width: settings.w + loadedWidth + interfaceWidth, height: settings.h + loadedHeight + interfaceHeight, top: top, left: left};
 
-		if(speed===0){ // temporary workaround to side-step jQuery-UI 1.8 bug (http://bugs.jquery.com/ticket/12273)
+		// setting the speed to 0 if the content hasn't changed size or position
+		if (speed) {
+			var tempSpeed = 0;
+			$.each(css, function(i){
+				if (css[i] !== previousCSS[i]) {
+					tempSpeed = speed;
+					return;
+				}
+			});
+			speed = tempSpeed;
+		}
+
+		previousCSS = css;
+
+		if (!speed) {
 			$box.css(css);
 		}
+
 		$box.dequeue().animate(css, {
-			duration: speed,
+			duration: speed || 0,
 			complete: function () {
-				modalDimensions(this);
+				modalDimensions();
 				
 				active = false;
 				
@@ -41746,35 +42050,45 @@ $.widget( "ui.tooltip", {
 					loadedCallback();
 				}
 			},
-			step: function () {
-				modalDimensions(this);
-			}
+			step: modalDimensions
 		});
 	};
 
 	publicMethod.resize = function (options) {
+		var scrolltop;
+		
 		if (open) {
 			options = options || {};
 			
 			if (options.width) {
 				settings.w = setSize(options.width, 'x') - loadedWidth - interfaceWidth;
 			}
+
 			if (options.innerWidth) {
 				settings.w = setSize(options.innerWidth, 'x');
 			}
+
 			$loaded.css({width: settings.w});
 			
 			if (options.height) {
 				settings.h = setSize(options.height, 'y') - loadedHeight - interfaceHeight;
 			}
+
 			if (options.innerHeight) {
 				settings.h = setSize(options.innerHeight, 'y');
 			}
+
 			if (!options.innerHeight && !options.height) {
+				scrolltop = $loaded.scrollTop();
 				$loaded.css({height: "auto"});
 				settings.h = $loaded.height();
 			}
+
 			$loaded.css({height: settings.h});
+
+			if(scrolltop) {
+				$loaded.scrollTop(scrolltop);
+			}
 			
 			publicMethod.position(settings.transition === "none" ? 0 : settings.speed);
 		}
@@ -41871,7 +42185,7 @@ $.widget( "ui.tooltip", {
 
 						if (src && isImage(data, src)) {
 							src = retinaUrl(data, src);
-							img = new Image();
+							img = document.createElement('img');
 							img.src = src;
 						}
 					});
@@ -41998,7 +42312,9 @@ $.widget( "ui.tooltip", {
 
 			href = retinaUrl(settings, href);
 
-			$(photo = new Image())
+			photo = document.createElement('img');
+
+			$(photo)
 			.addClass(prefix + 'Photo')
 			.bind('error',function () {
 				settings.title = false;
@@ -42262,7 +42578,7 @@ $.widget( "ui.tooltip", {
 })(jQuery);
 /*!
  * jQuery Form Plugin
- * version: 3.32.0-2013.04.09
+ * version: 3.37.0-2013.07.11
  * @requires jQuery v1.5 or later
  * Copyright (c) 2013 M. Alsup
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -42351,9 +42667,12 @@ $.fn.ajaxSubmit = function(options) {
     if (typeof options == 'function') {
         options = { success: options };
     }
+    else if ( options === undefined ) {
+        options = {};
+    }
 
-    method = this.attr2('method');
-    action = this.attr2('action');
+    method = options.type || this.attr2('method');
+    action = options.url  || this.attr2('action');
 
     url = (typeof action === 'string') ? $.trim(action) : '';
     url = url || window.location.href || '';
@@ -42448,6 +42767,22 @@ $.fn.ajaxSubmit = function(options) {
         }
     };
 
+    if (options.error) {
+        var oldError = options.error;
+        options.error = function(xhr, status, error) {
+            var context = options.context || this;
+            oldError.apply(context, [xhr, status, error, $form]);
+        };
+    }
+
+     if (options.complete) {
+        var oldComplete = options.complete;
+        options.complete = function(xhr, status) {
+            var context = options.context || this;
+            oldComplete.apply(context, [xhr, status, $form]);
+        };
+    }
+
     // are there files to upload?
 
     // [value] (issue #113), also see comment:
@@ -42497,7 +42832,7 @@ $.fn.ajaxSubmit = function(options) {
 
     // utility fn for deep serialization
     function deepSerialize(extraData){
-        var serialized = $.param(extraData).split('&');
+        var serialized = $.param(extraData, options.traditional).split('&');
         var len = serialized.length;
         var result = [];
         var i, part;
@@ -42538,7 +42873,7 @@ $.fn.ajaxSubmit = function(options) {
         if (options.uploadProgress) {
             // workaround because jqXHR does not expose upload property
             s.xhr = function() {
-                var xhr = jQuery.ajaxSettings.xhr();
+                var xhr = $.ajaxSettings.xhr();
                 if (xhr.upload) {
                     xhr.upload.addEventListener('progress', function(event) {
                         var percent = 0;
@@ -43434,7 +43769,6 @@ function log() {
 }
 
 })(jQuery);
-
 /*!
  * jQuery Collapser 1.0.0
  *
@@ -43545,7 +43879,9 @@ function log() {
 				throw new Error('nestedSortable: Please check that the listType option is set to your actual list type');
 
 			// mjs - force 'intersect' tolerance method if we have a tree with expanding/collapsing functionality
-			if (this.options.isTree) this.options.tolerance = 'intersect';
+			if (this.options.isTree && this.options.expandOnHover) {
+				this.options.tolerance = 'intersect';
+			}
 
 			$.ui.sortable.prototype._create.apply(this, arguments);
 
@@ -43975,15 +44311,18 @@ function log() {
 			var o = $.extend({}, this.options, options),
 				sDepth = o.startDepthCount || 0,
 			    ret = [],
-			    left = 2;
+			    left = 1;
 
-			ret.push({
-				"item_id": o.rootID,
-				"parent_id": 'none',
-				"depth": sDepth,
-				"left": '1',
-				"right": ($(o.items, this.element).length + 1) * 2
-			});
+			if (!o.excludeRoot) {
+				ret.push({
+					"item_id": o.rootID,
+					"parent_id": null,
+					"depth": sDepth,
+					"left": left,
+					"right": ($(o.items, this.element).length + 1) * 2
+				});
+				left++
+			}
 
 			$(this.element).children(o.items).each(function () {
 				left = _recursiveArray(this, sDepth + 1, left);
@@ -44102,6 +44441,7 @@ function log() {
 
 	$.mjs.nestedSortable.prototype.options = $.extend({}, $.ui.sortable.prototype.options, $.mjs.nestedSortable.prototype.options);
 })(jQuery);
+
 /* jshint forin:true, noarg:true, noempty:true, eqeqeq:true, boss:true, undef:true, curly:true, browser:true, jquery:true */
 /*
  * jQuery MultiSelect UI Widget Filtering Plugin 1.5pre
@@ -44134,7 +44474,7 @@ function log() {
       var elem = $(this.element);
 
       // get the multiselect instance
-      var instance = (this.instance = (elem.data('echMultiselect') || elem.data("multiselect")));
+      var instance = (this.instance = (elem.data('echMultiselect') || elem.data("multiselect") || elem.data("ech-multiselect")));
 
       // store header; add filter class so the close/check all/uncheck all links can be positioned correctly
       var header = (this.header = instance.menu.find('.ui-multiselect-header').addClass('ui-multiselect-hasfilter'));
@@ -44319,7 +44659,8 @@ function log() {
       hide: null,
       autoOpen: false,
       multiple: true,
-      position: {}
+      position: {},
+      appendTo: "body"
     },
 
     _create: function() {
@@ -44347,7 +44688,7 @@ function log() {
         menu = (this.menu = $('<div />'))
           .addClass('ui-multiselect-menu ui-widget ui-widget-content ui-corner-all')
           .addClass(o.classes)
-          .appendTo(document.body),
+          .appendTo($(o.appendTo)),
 
         header = (this.header = $('<div />'))
           .addClass('ui-widget-header ui-corner-all ui-multiselect-header ui-helper-clearfix')
@@ -44414,8 +44755,8 @@ function log() {
       el.find('option').each(function(i) {
         var $this = $(this);
         var parent = this.parentNode;
-        var title = this.innerHTML;
-        var description = this.title;
+        var description = this.innerHTML;
+        var title = this.title;
         var value = this.value;
         var inputID = 'ui-multiselect-' + (this.id || id + '-option-' + i);
         var isDisabled = this.disabled;
@@ -44448,7 +44789,7 @@ function log() {
         html += '<li class="' + liClasses + '">';
 
         // create the label
-        html += '<label for="' + inputID + '" title="' + description + '" class="' + labelClasses.join(' ') + '">';
+        html += '<label for="' + inputID + '" title="' + title + '" class="' + labelClasses.join(' ') + '">';
         html += '<input id="' + inputID + '" name="multiselect_' + id + '" type="' + (o.multiple ? "checkbox" : "radio") + '" value="' + value + '" title="' + title + '"';
 
         // pre-selected?
@@ -44464,7 +44805,7 @@ function log() {
         }
 
         // add the title and close everything off
-        html += ' /><span>' + title + '</span></label></li>';
+        html += ' /><span>' + description + '</span></label></li>';
       });
 
       // insert into the DOM
@@ -44682,11 +45023,11 @@ function log() {
         var target = event.target;
 
         if(self._isOpen
+            && target !== self.button[0]
+            && target !== self.menu[0]
             && !$.contains(self.menu[0], target)
             && !$.contains(self.button[0], target)
-            && target !== self.button[0]
-            && target !== self.menu[0])
-        {
+          ) {
           self.close();
         }
       });
@@ -44725,7 +45066,7 @@ function log() {
       var moveToLast = which === 38 || which === 37;
 
       // select the first li that isn't an optgroup label / disabled
-      $next = $start.parent()[moveToLast ? 'prevAll' : 'nextAll']('li:not(.ui-multiselect-disabled, .ui-multiselect-optgroup-label)')[ moveToLast ? 'last' : 'first']();
+      var $next = $start.parent()[moveToLast ? 'prevAll' : 'nextAll']('li:not(.ui-multiselect-disabled, .ui-multiselect-optgroup-label)').first();
 
       // if at the first/last element
       if(!$next.length) {
@@ -45170,15 +45511,15 @@ function log() {
 })(jQuery);
 
 /*
- * qTip2 - Pretty powerful tooltips - v2.0.1-83-
+ * qTip2 - Pretty powerful tooltips - v2.1.1
  * http://qtip2.com
  *
  * Copyright (c) 2013 Craig Michael Thompson
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Thu Apr 18 2013 05:30 UTC+0000
- * Plugins: tips modal viewport svg imagemap ie6
+ * Date: Wed Jul 17 2013 08:33 UTC+0000
+ * Plugins: tips viewport modal
  * Styles: basic css3
  */
 /*global window: false, jQuery: false, console: false, define: false */
@@ -45190,7 +45531,7 @@ function log() {
 (function( factory ) {
 	"use strict";
 	if(typeof define === 'function' && define.amd) {
-		define(['jquery'], factory);
+		define(['jquery', 'imagesloaded'], factory);
 	}
 	else if(jQuery && !jQuery.fn.qtip) {
 		factory(jQuery);
@@ -45226,14 +45567,18 @@ SHIFT = 'shift',
 QTIP, PROTOTYPE, CORNER, CHECKS,
 PLUGINS = {},
 NAMESPACE = 'qtip',
-HASATTR = 'data-hasqtip',
+ATTR_HAS = 'data-hasqtip',
+ATTR_ID = 'data-qtip-id',
 WIDGET = ['ui-widget', 'ui-tooltip'],
-usedIDs = {},
-selector = 'div.'+NAMESPACE,
-defaultClass = NAMESPACE + '-default',
-focusClass = NAMESPACE + '-focus',
-hoverClass = NAMESPACE + '-hover',
-disabledClass = 'qtip-disabled',
+SELECTOR = '.'+NAMESPACE,
+INACTIVE_EVENTS = 'click dblclick mousedown mouseup mousemove mouseleave mouseenter'.split(' '),
+
+CLASS_FIXED = NAMESPACE+'-fixed',
+CLASS_DEFAULT = NAMESPACE + '-default',
+CLASS_FOCUS = NAMESPACE + '-focus',
+CLASS_HOVER = NAMESPACE + '-hover',
+CLASS_DISABLED = NAMESPACE+'-disabled',
+
 replaceSuffix = '_replacedByqTip',
 oldtitle = 'oldtitle',
 trackingBound;
@@ -45282,7 +45627,7 @@ BROWSER = {
 		target: $(),
 		disabled: FALSE,
 		attr: attr,
-		onTarget: FALSE,
+		onTooltip: FALSE,
 		lastClass: ''
 	};
 
@@ -45312,7 +45657,7 @@ PROTOTYPE.render = function(show) {
 	// Create tooltip element
 	this.tooltip = elements.tooltip = tooltip = $('<div/>', {
 		'id': this._id,
-		'class': [ NAMESPACE, defaultClass, options.style.classes, NAMESPACE + '-pos-' + options.position.my.abbrev() ].join(' '),
+		'class': [ NAMESPACE, CLASS_DEFAULT, options.style.classes, NAMESPACE + '-pos-' + options.position.my.abbrev() ].join(' '),
 		'width': options.style.width || '',
 		'height': options.style.height || '',
 		'tracking': posOptions.target === 'mouse' && posOptions.adjust.mouse,
@@ -45324,7 +45669,8 @@ PROTOTYPE.render = function(show) {
 		'aria-describedby': this._id + '-content',
 		'aria-hidden': TRUE
 	})
-	.toggleClass(disabledClass, this.disabled)
+	.toggleClass(CLASS_DISABLED, this.disabled)
+	.attr(ATTR_ID, this.id)
 	.data(NAMESPACE, this)
 	.appendTo(posOptions.container)
 	.append(
@@ -45374,7 +45720,7 @@ PROTOTYPE.render = function(show) {
 	$.each(PLUGINS, function(name) {
 		var instance;
 		if(this.initialize === 'render' && (instance = this(self))) {
-			(self.plugins[name] = instance).qtip = self;
+			self.plugins[name] = instance;
 		}
 	});
 
@@ -45395,6 +45741,9 @@ PROTOTYPE.render = function(show) {
 		}
 		self.hiddenDuringWait = FALSE;
 	});
+
+	// Expose API
+	QTIP.api[this.id] = this;
 
 	return this;
 };
@@ -45427,7 +45776,7 @@ PROTOTYPE.destroy = function(immediate) {
 		this._unassignEvents();
 
 		// Remove api object and ARIA attributes
-		target.removeData(NAMESPACE).removeAttr(HASATTR)
+		target.removeData(NAMESPACE).removeAttr(ATTR_ID)
 			.removeAttr('aria-describedby');
 
 		// Reset old title attribute if removed
@@ -45436,12 +45785,15 @@ PROTOTYPE.destroy = function(immediate) {
 		}
 
 		// Remove qTip events associated with this API
-		target.unbind('.'+this._id);
+		this._unbind(target);
 
 		// Remove ID from used id objects, and delete object references
 		// for better garbage collection and leak protection
 		this.options = this.elements = this.cache = this.timers = 
-			this.plugins = this.mouse = usedIDs[this.id] = NULL;
+			this.plugins = this.mouse = NULL;
+
+		// Delete epoxsed API object
+		delete QTIP.api[this.id];
 	}
 
 	// If an immediate destory is needed
@@ -45492,7 +45844,9 @@ function sanitizeOptions(opts) {
 			delete content.ajax;
 
 			content.text = function(event, api) {
-				var deferred = $.ajax(
+				var loading = text || $(this).attr(api.options.content.attr) || 'Loading...',
+
+				deferred = $.ajax(
 					$.extend({}, ajax, { context: api })
 				)
 				.then(ajax.success, NULL, ajax.error)
@@ -45505,9 +45859,7 @@ function sanitizeOptions(opts) {
 					api.set('content.text', status + ': ' + error);
 				});
 
-				return !once ? deferred : (
-					text || $(this).attr(api.options.content.attr) || 'Loading...'
-				);
+				return !once ? (api.set('content.text', loading), deferred) : loading;
 			};
 		}
 
@@ -45609,10 +45961,8 @@ CHECKS = PROTOTYPE.checks = {
 		},
 
 		// Style checks
-		'^style.classes$': function(obj, o, v) {
-			this.tooltip.attr('class', 
-				[ NAMESPACE, defaultClass, v, NAMESPACE + '-pos-' + this.options.position.my.abbrev() ].join(' ')
-			);
+		'^style.classes$': function(obj, o, v, p) {
+			this.tooltip.removeClass(p).addClass(v);
 		},
 		'^style.width|height': function(obj, o, v) {
 			this.tooltip.css(o, v);
@@ -45621,7 +45971,7 @@ CHECKS = PROTOTYPE.checks = {
 			this._setWidget();
 		},
 		'^style.def': function(obj, o, v) {
-			this.tooltip.toggleClass(defaultClass, !!v);
+			this.tooltip.toggleClass(CLASS_DEFAULT, !!v);
 		},
 
 		// Events check
@@ -45757,9 +46107,9 @@ PROTOTYPE.set = function(option, value) {
 		cache.waiting = TRUE;
 		return content.then(function(c) {
 			cache.waiting = FALSE;
-			return self._updateContent(c, reposition);
-		}, NULL, function(c) {
-			return self._updateContent(c, reposition);
+			return self._update(c, element);
+		}, NULL, function(e) {
+			return self._update(e, element);
 		});
 	}
 
@@ -45768,21 +46118,22 @@ PROTOTYPE.set = function(option, value) {
 
 	// Append new content if its a DOM array and show it if hidden
 	if(content.jquery && content.length > 0) {
-		element.empty().append( content.css({ display: 'block' }) );
+		element.children().detach().end().append( content.css({ display: 'block' }) );
 	}
 
 	// Content is a regular string, insert the new content
 	else { element.html(content); }
 
-	// Ensure images have loaded...
+	// If imagesLoaded is included, ensure images have loaded and return promise
 	cache.waiting = TRUE;
-	return element.imagesLoaded()
-		.done(function() {
+
+	return ( $.fn.imagesLoaded ? element.imagesLoaded() : $.Deferred().resolve($([])) )
+		.done(function(images) {
 			cache.waiting = FALSE;
 
 			// Reposition if rendered
-			if(reposition !== FALSE && self.rendered && self.tooltip[0].offsetWidth > 0) {
-				self.reposition(cache.event);
+			if(images.length && self.rendered && self.tooltip[0].offsetWidth > 0) {
+				self.reposition(cache.event, !images.length);
 			}
 		})
 		.promise();
@@ -45844,36 +46195,7 @@ PROTOTYPE._removeTitle = function(reposition)
 	}
 };
 
-;// Corner class
-var C = (CORNER = function(corner, forceY) {
-	corner = ('' + corner).replace(/([A-Z])/, ' $1').replace(/middle/gi, CENTER).toLowerCase();
-	this.x = (corner.match(/left|right/i) || corner.match(/center/) || ['inherit'])[0].toLowerCase();
-	this.y = (corner.match(/top|bottom|center/i) || ['inherit'])[0].toLowerCase();
-	this.forceY = !!forceY;
-
-	var f = corner.charAt(0);
-	this.precedance = (f === 't' || f === 'b' ? Y : X);
-}).prototype;
-
-C.invert = function(z, center) {
-	this[z] = this[z] === LEFT ? RIGHT : this[z] === RIGHT ? LEFT : center || this[z];	
-};
-
-C.string = function() {
-	var x = this.x, y = this.y;
-	return x === y ? x : this.precedance === Y || (this.forceY && y !== 'center') ? y+' '+x : x+' '+y;
-};
-
-C.abbrev = function() {
-	var result = this.string().split(' ');
-	return result[0].charAt(0) + result[1].charAt(0);
-};
-
-C.clone = function() {
-	return new CORNER( this.string(), this.forceY );
-};
-
-(PROTOTYPE.reposition = function(event, effect) {
+;PROTOTYPE.reposition = function(event, effect) {
 	if(!this.rendered || this.positioning || this.destroyed) { return this; }
 
 	// Set positioning flag
@@ -45898,6 +46220,7 @@ C.clone = function() {
 		visible = tooltip[0].offsetWidth > 0,
 		isScroll = event && event.type === 'scroll',
 		win = $(window),
+		doc = container[0].ownerDocument,
 		mouse = this.mouse,
 		pluginCalculations, offset;
 
@@ -45914,15 +46237,21 @@ C.clone = function() {
 		at = { x: LEFT, y: TOP };
 
 		// Use cached event if one isn't available for positioning
-		event = mouse && mouse.pageX && (adjust.mouse || !event || !event.pageX) ? { pageX: mouse.pageX, pageY: mouse.pageY } :
+		event = mouse && mouse.pageX && (adjust.mouse || !event || !event.pageX) ? mouse :
 			(event && (event.type === 'resize' || event.type === 'scroll') ? cache.event :
 			event && event.pageX && event.type === 'mousemove' ? event :
 			(!adjust.mouse || this.options.show.distance) && cache.origin && cache.origin.pageX ? cache.origin :
 			event) || event || cache.event || mouse || {};
 
-		// Use event coordinates for position
+		// Calculate body and container offset and take them into account below
 		if(type !== 'static') { position = container.offset(); }
-		position = { left: event.pageX - position.left, top: event.pageY - position.top };
+		if(doc.body.offsetWidth !== (window.innerWidth || doc.documentElement.clientWidth)) { offset = $(doc.body).offset(); }
+
+		// Use event coordinates for position
+		position = {
+			left: event.pageX - position.left + (offset && offset.left || 0),
+			top: event.pageY - position.top + (offset && offset.top || 0)
+		};
 
 		// Scroll events are a pain, some browsers
 		if(adjust.mouse && isScroll) {
@@ -46046,10 +46375,10 @@ C.clone = function() {
 	this.positioning = FALSE;
 
 	return this;
-})
+};
 
 // Custom (more correct for qTip!) offset calculator
-.offset = function(elem, pos, container) {
+PROTOTYPE.reposition.offset = function(elem, pos, container) {
 	if(!container[0]) { return pos; }
 
 	var ownerDocument = $(elem[0].ownerDocument),
@@ -46079,19 +46408,47 @@ C.clone = function() {
 			pos.top -= parentOffset.top + (parseFloat($.css(parent, 'marginTop')) || 0);
 
 			// If this is the first parent element with an overflow of "scroll" or "auto", store it
-			if(!scrolled && (overflow = $.css(parent, 'overflow')) !== 'hidden' && overflow !== 'visible') { scrolled = parent; }
+			if(!scrolled && (overflow = $.css(parent, 'overflow')) !== 'hidden' && overflow !== 'visible') { scrolled = $(parent); }
 		}
 	}
 	while((parent = parent.offsetParent));
 
 	// Compensate for containers scroll if it also has an offsetParent (or in IE quirks mode)
-	if(scrolled && scrolled !== ownerDocument[0] || quirks) {
+	if(scrolled && (scrolled[0] !== ownerDocument[0] || quirks)) {
 		scroll(scrolled, 1);
 	}
 
 	return pos;
 };
-;
+
+// Corner class
+var C = (CORNER = PROTOTYPE.reposition.Corner = function(corner, forceY) {
+	corner = ('' + corner).replace(/([A-Z])/, ' $1').replace(/middle/gi, CENTER).toLowerCase();
+	this.x = (corner.match(/left|right/i) || corner.match(/center/) || ['inherit'])[0].toLowerCase();
+	this.y = (corner.match(/top|bottom|center/i) || ['inherit'])[0].toLowerCase();
+	this.forceY = !!forceY;
+
+	var f = corner.charAt(0);
+	this.precedance = (f === 't' || f === 'b' ? Y : X);
+}).prototype;
+
+C.invert = function(z, center) {
+	this[z] = this[z] === LEFT ? RIGHT : this[z] === RIGHT ? LEFT : center || this[z];	
+};
+
+C.string = function() {
+	var x = this.x, y = this.y;
+	return x === y ? x : this.precedance === Y || (this.forceY && y !== 'center') ? y+' '+x : x+' '+y;
+};
+
+C.abbrev = function() {
+	var result = this.string().split(' ');
+	return result[0].charAt(0) + (result[1] && result[1].charAt(0) || '');
+};
+
+C.clone = function() {
+	return new CORNER( this.string(), this.forceY );
+};;
 PROTOTYPE.toggle = function(state, event) {
 	var cache = this.cache,
 		options = this.options,
@@ -46114,7 +46471,7 @@ PROTOTYPE.toggle = function(state, event) {
 
 	// Render the tooltip if showing and it isn't already
 	if(!this.rendered) { return state ? this.render(1) : this; }
-	else if(this.destroyed) { return this; }
+	else if(this.destroyed || this.disabled) { return this; }
 
 	var type = state ? 'show' : 'hide',
 		opts = this.options[type],
@@ -46167,7 +46524,7 @@ PROTOTYPE.toggle = function(state, event) {
 
 		// Hide other tooltips if tooltip is solo
 		if(!!opts.solo) {
-			(typeof opts.solo === 'string' ? $(opts.solo) : $(selector, opts.solo))
+			(typeof opts.solo === 'string' ? $(opts.solo) : $(SELECTOR, opts.solo))
 				.not(tooltip).not(opts.target).qtip('hide', $.Event('tooltipsolo'));
 		}
 	}
@@ -46179,7 +46536,7 @@ PROTOTYPE.toggle = function(state, event) {
 		delete cache.origin;
 
 		// Remove mouse tracking event if not needed (all tracking qTips are hidden)
-		if(trackingBound && !$(selector+'[tracking="true"]:visible', opts.solo).not(tooltip).length) {
+		if(trackingBound && !$(SELECTOR+'[tracking="true"]:visible', opts.solo).not(tooltip).length) {
 			$(document).unbind('mousemove.'+NAMESPACE);
 			trackingBound = FALSE;
 		}
@@ -46251,14 +46608,14 @@ PROTOTYPE.hide = function(event) { return this.toggle(FALSE, event); };
 ;PROTOTYPE.focus = function(event) {
 	if(!this.rendered || this.destroyed) { return this; }
 
-	var qtips = $(selector),
+	var qtips = $(SELECTOR),
 		tooltip = this.tooltip,
 		curIndex = parseInt(tooltip[0].style.zIndex, 10),
 		newIndex = QTIP.zindex + qtips.length,
 		focusedElem;
 
 	// Only update the z-index if it has changed and tooltip is not already focused
-	if(!tooltip.hasClass(focusClass)) {
+	if(!tooltip.hasClass(CLASS_FOCUS)) {
 		// tooltipfocus event
 		if(this._trigger('focus', [newIndex], event)) {
 			// Only update z-index's if they've changed
@@ -46271,11 +46628,11 @@ PROTOTYPE.hide = function(event) { return this.toggle(FALSE, event); };
 				});
 
 				// Fire blur event for focused tooltip
-				qtips.filter('.' + focusClass).qtip('blur', event);
+				qtips.filter('.' + CLASS_FOCUS).qtip('blur', event);
 			}
 
 			// Set the new z-index
-			tooltip.addClass(focusClass)[0].style.zIndex = newIndex;
+			tooltip.addClass(CLASS_FOCUS)[0].style.zIndex = newIndex;
 		}
 	}
 
@@ -46286,7 +46643,7 @@ PROTOTYPE.blur = function(event) {
 	if(!this.rendered || this.destroyed) { return this; }
 
 	// Set focused status to FALSE
-	this.tooltip.removeClass(focusClass);
+	this.tooltip.removeClass(CLASS_FOCUS);
 
 	// tooltipblur event
 	this._trigger('blur', [ this.tooltip.css('zIndex') ], event);
@@ -46298,11 +46655,11 @@ PROTOTYPE.blur = function(event) {
 	if(this.destroyed) { return this; }
 
 	if('boolean' !== typeof state) {
-		state = !(this.tooltip.hasClass(disabledClass) || this.disabled);
+		state = !(this.tooltip.hasClass(CLASS_DISABLED) || this.disabled);
 	}
 
 	if(this.rendered) {
-		this.tooltip.toggleClass(disabledClass, state)
+		this.tooltip.toggleClass(CLASS_DISABLED, state)
 			.attr('aria-disabled', state);
 	}
 
@@ -46346,7 +46703,7 @@ PROTOTYPE.enable = function() { return this.disable(FALSE); };
 	elements.button.appendTo(elements.titlebar || tooltip)
 		.attr('role', 'button')
 		.click(function(event) {
-			if(!tooltip.hasClass(disabledClass)) { self.hide(event); }
+			if(!tooltip.hasClass(CLASS_DISABLED)) { self.hide(event); }
 			return FALSE;
 		});
 };
@@ -46372,13 +46729,13 @@ PROTOTYPE._setWidget = function()
 	var on = this.options.style.widget,
 		elements = this.elements,
 		tooltip = elements.tooltip,
-		disabled = tooltip.hasClass(disabledClass);
+		disabled = tooltip.hasClass(CLASS_DISABLED);
 
-	tooltip.removeClass(disabledClass);
-	disabledClass = on ? 'ui-state-disabled' : 'qtip-disabled';
-	tooltip.toggleClass(disabledClass, disabled);
+	tooltip.removeClass(CLASS_DISABLED);
+	CLASS_DISABLED = on ? 'ui-state-disabled' : 'qtip-disabled';
+	tooltip.toggleClass(CLASS_DISABLED, disabled);
 
-	tooltip.toggleClass('ui-helper-reset '+createWidgetClass(), on).toggleClass(defaultClass, this.options.style.def && !on);
+	tooltip.toggleClass('ui-helper-reset '+createWidgetClass(), on).toggleClass(CLASS_DEFAULT, this.options.style.def && !on);
 	
 	if(elements.content) {
 		elements.content.toggleClass( createWidgetClass('content'), on);
@@ -46390,7 +46747,7 @@ PROTOTYPE._setWidget = function()
 		elements.button.toggleClass(NAMESPACE+'-icon', !on);
 	}
 };;function showMethod(event) {
-	if(this.tooltip.hasClass(disabledClass)) { return FALSE; }
+	if(this.tooltip.hasClass(CLASS_DISABLED)) { return FALSE; }
 
 	// Clear hide timers
 	clearTimeout(this.timers.show);
@@ -46405,11 +46762,11 @@ PROTOTYPE._setWidget = function()
 }
 
 function hideMethod(event) {
-	if(this.tooltip.hasClass(disabledClass)) { return FALSE; }
+	if(this.tooltip.hasClass(CLASS_DISABLED)) { return FALSE; }
 
 	// Check if new target was actually the tooltip element
 	var relatedTarget = $(event.relatedTarget),
-		ontoTooltip = relatedTarget.closest(selector)[0] === this.tooltip[0],
+		ontoTooltip = relatedTarget.closest(SELECTOR)[0] === this.tooltip[0],
 		ontoTarget = relatedTarget[0] === this.options.show.target[0];
 
 	// Clear timers and stop animation queue
@@ -46441,7 +46798,7 @@ function hideMethod(event) {
 }
 
 function inactiveMethod(event) {
-	if(this.tooltip.hasClass(disabledClass)) { return FALSE; }
+	if(this.tooltip.hasClass(CLASS_DISABLED) || !this.options.hide.inactive) { return FALSE; }
 
 	// Clear timer
 	clearTimeout(this.timers.inactive);
@@ -46466,13 +46823,61 @@ PROTOTYPE._storeMouse = function(event) {
 };
 
 // Bind events
-PROTOTYPE._bind = function(target, events, method, suffix) {
-	var ns = '.' + this._id + (suffix || '');
-	events.length && target.bind(
+PROTOTYPE._bind = function(targets, events, method, suffix, context) {
+	var ns = '.' + this._id + (suffix ? '-'+suffix : '');
+	events.length && $(targets).bind(
 		(events.split ? events : events.join(ns + ' ')) + ns,
-		$.proxy(method, this)
+		$.proxy(method, context || this)
 	);
 };
+PROTOTYPE._unbind = function(targets, suffix) {
+	$(targets).unbind('.' + this._id + (suffix ? '-'+suffix : ''));
+};
+
+// Apply common event handlers using delegate (avoids excessive .bind calls!)
+var ns = '.'+NAMESPACE;
+function delegate(selector, events, method) {	
+	$(document.body).delegate(selector,
+		(events.split ? events : events.join(ns + ' ')) + ns,
+		function() {
+			var api = QTIP.api[ $.attr(this, ATTR_ID) ];
+			api && !api.disabled && method.apply(api, arguments);
+		}
+	);
+}
+
+$(function() {
+	delegate(SELECTOR, ['mouseenter', 'mouseleave'], function(event) {
+		var state = event.type === 'mouseenter',
+			tooltip = $(event.currentTarget),
+			target = $(event.relatedTarget || event.target),
+			options = this.options;
+
+		// On mouseenter...
+		if(state) {
+			// Focus the tooltip on mouseenter (z-index stacking)
+			this.focus(event);
+
+			// Clear hide timer on tooltip hover to prevent it from closing
+			tooltip.hasClass(CLASS_FIXED) && !tooltip.hasClass(CLASS_DISABLED) && clearTimeout(this.timers.hide);
+		}
+
+		// On mouseleave...
+		else {
+			// Hide when we leave the tooltip and not onto the show target (if a hide event is set)
+			if(options.position.target === 'mouse' && options.hide.event && 
+				options.show.target && !target.closest(options.show.target[0]).length) {
+				this.hide(event);
+			}
+		}
+
+		// Add hover class
+		tooltip.toggleClass(CLASS_HOVER, state);
+	});
+
+	// Define events which reset the 'inactive' event handler
+	delegate('['+ATTR_ID+']', INACTIVE_EVENTS, inactiveMethod);
+});
 
 // Event trigger
 PROTOTYPE._trigger = function(type, args, event) {
@@ -46504,17 +46909,6 @@ PROTOTYPE._assignEvents = function() {
 		hideEvents = options.hide.event ? $.trim('' + options.hide.event).split(' ') : [],
 		toggleEvents = [];
 
-	// Focus/blur
-	this._bind(tooltip, ['mouseenter', 'mouseleave'], function(event) {
-		var state = event.type === 'mouseenter';
-
-		// Focus the tooltip on mouseenter (z-index stacking)
-		if(state) { this.focus(event); }
-
-		// Add hover class
-		tooltip.toggleClass(hoverClass, state);
-	});
-
 	// Hide tooltips when leaving current window/frame (but not select/option elements)
 	if(/mouse(out|leave)/i.test(options.hide.event) && options.hide.leave === 'window') {
 		this._bind(documentTarget, ['mouseout', 'blur'], function(event) {
@@ -46524,15 +46918,9 @@ PROTOTYPE._assignEvents = function() {
 		});
 	}
 
-	// Enable hide.fixed
+	// Enable hide.fixed by adding appropriate class
 	if(options.hide.fixed) {
-		// Add tooltip as a hide target
-		hideTarget = hideTarget.add(tooltip);
-
-		// Clear hide timer on tooltip hover to prevent it from closing
-		this._bind(tooltip, 'mouseover', function() {
-			!this.tooltip.hasClass(disabledClass) && clearTimeout(this.timers.hide);
-		});
+		hideTarget = hideTarget.add( tooltip.addClass(CLASS_FIXED) );
 	}
 
 	/*
@@ -46549,8 +46937,8 @@ PROTOTYPE._assignEvents = function() {
 	if(('' + options.hide.event).indexOf('unfocus') > -1) {
 		this._bind(containerTarget.closest('html'), ['mousedown', 'touchstart'], function(event) {
 			var elem = $(event.target),
-				enabled = this.rendered && !this.tooltip.hasClass(disabledClass) && this.tooltip[0].offsetWidth > 0,
-				isAncestor = elem.parents(selector).filter(this.tooltip[0]).length > 0;
+				enabled = this.rendered && !this.tooltip.hasClass(CLASS_DISABLED) && this.tooltip[0].offsetWidth > 0,
+				isAncestor = elem.parents(SELECTOR).filter(this.tooltip[0]).length > 0;
 
 			if(elem[0] !== this.target[0] && elem[0] !== this.tooltip[0] && !isAncestor &&
 				!this.target.has(elem[0]).length && enabled
@@ -46563,7 +46951,7 @@ PROTOTYPE._assignEvents = function() {
 	// Check if the tooltip hides when inactive
 	if('number' === typeof options.hide.inactive) {
 		// Bind inactive method to show target(s) as a custom event
-		showTarget.bind('qtip-'+this.id+'-inactive', $.proxy(inactiveMethod, this));
+		this._bind(showTarget, 'qtip-'+this.id+'-inactive', inactiveMethod);
 
 		// Define events which reset the 'inactive' event handler
 		this._bind(hideTarget.add(tooltip), QTIP.inactiveEvents, inactiveMethod, '-inactive');
@@ -46588,9 +46976,11 @@ PROTOTYPE._assignEvents = function() {
 		(this.tooltip[0].offsetWidth > 0 ? hideMethod : showMethod).call(this, event);
 	});
 
-	// Check if the tooltip hides when mouse is moved a certain distance
-	if('number' === typeof options.hide.distance) {
-		this._bind(showTarget.add(tooltip), 'mousemove', function(event) {
+
+	// Mouse movement bindings
+	this._bind(showTarget.add(tooltip), 'mousemove', function(event) {
+		// Check if the tooltip hides when mouse is moved a certain distance
+		if('number' === typeof options.hide.distance) {
 			var origin = this.cache.origin || {},
 				limit = this.options.hide.distance,
 				abs = Math.abs;
@@ -46599,19 +46989,14 @@ PROTOTYPE._assignEvents = function() {
 			if(abs(event.pageX - origin.pageX) >= limit || abs(event.pageY - origin.pageY) >= limit) {
 				this.hide(event);
 			}
-		});
-	}
+		}
+
+		// Cache mousemove coords on show targets
+		this._storeMouse(event);
+	});
 
 	// Mouse positioning events
 	if(posOptions.target === 'mouse') {
-		// Cache mousemove coords on show targets
-		this._bind(showTarget.add(tooltip), 'mousemove', this._storeMouse);
-
-		// Hide when we leave the tooltip and not onto the show target
-		options.hide.event && this._bind(tooltip, 'mouseleave', function(event) {
-			!$(event.relatedTarget || event.target).closest(showTarget[0]).length && this.hide(event);
-		});
-
 		// If mouse adjustment is on...
 		if(posOptions.adjust.mouse) {
 			// Apply a mouseleave event so we don't get problems with overlapping
@@ -46625,8 +47010,8 @@ PROTOTYPE._assignEvents = function() {
 			// Update tooltip position on mousemove
 			this._bind(documentTarget, 'mousemove', function(event) {
 				// Update the tooltip position only if the tooltip is visible and adjustment is enabled
-				if(this.rendered && this.cache.onTarget && !this.tooltip.hasClass(disabledClass) && this.tooltip[0].offsetWidth > 0) {
-					this.reposition(event || this.mouse);
+				if(this.rendered && this.cache.onTarget && !this.tooltip.hasClass(CLASS_DISABLED) && this.tooltip[0].offsetWidth > 0) {
+					this.reposition(event);
 				}
 			});
 		}
@@ -46658,9 +47043,9 @@ PROTOTYPE._unassignEvents = function() {
 
 	// Check if tooltip is rendered
 	if(this.rendered) {
-		$([]).pushStack( $.grep(targets, function(i) {
+		this._unbind($([]).pushStack( $.grep(targets, function(i) {
 			return typeof i === 'object';
-		}) ).unbind('.'+this._id);
+		})));
 	}
 
 	// Tooltip isn't yet rendered, remove render event
@@ -46736,7 +47121,7 @@ function init(elem, id, opts)
 	}
 
 	// Add has-qtip attribute
-	elem.attr(HASATTR, true);
+	elem.attr(ATTR_HAS, id);
 
 	// Remove title attribute and store it if present
 	if(config.suppress && (title = elem.attr('title'))) {
@@ -46782,8 +47167,8 @@ QTIP = $.fn.qtip = function(options, notation, newValue)
 			if(event && event.timeStamp) { api.cache.event = event; }
 
 			// Check for specific API commands
-			if((command === 'option' || command === 'options') && notation) {
-				if($.isPlainObject(notation) || newValue !== undefined) {
+			if(notation && (command === 'option' || command === 'options')) {
+				if(newValue !== undefined || $.isPlainObject(notation)) {
 					api.set(notation, newValue);
 				}
 				else {
@@ -46819,7 +47204,7 @@ QTIP.bind = function(opts, event)
 
 		// Find next available ID, or use custom ID if provided
 		id = $.isArray(opts.id) ? opts.id[i] : opts.id;
-		id = !id || id === FALSE || id.length < 1 || usedIDs[id] ? QTIP.nextid++ : (usedIDs[id] = id);
+		id = !id || id === FALSE || id.length < 1 || QTIP.api[id] ? QTIP.nextid++ : id;
 
 		// Setup events namespace
 		namespace = '.qtip-'+id+'-create';
@@ -46827,6 +47212,7 @@ QTIP.bind = function(opts, event)
 		// Initialize the qTip and re-grab newly sanitized options
 		api = init($(this), id, opts);
 		if(api === FALSE) { return TRUE; }
+		else { QTIP.api[id] = api; }
 		options = api.options;
 
 		// Initialize plugins
@@ -46894,7 +47280,11 @@ QTIP.bind = function(opts, event)
 		// Prerendering is enabled, create tooltip now
 		if(options.show.ready || options.prerender) { hoverIntent(event); }
 	});
-};;$.each({
+};
+
+// Populated in render method
+QTIP.api = {};
+;$.each({
 	/* Allow other plugins to successfully retrieve the title of an element with a qTip applied */
 	attr: function(attr, val) {
 		if(this.length) {
@@ -46953,22 +47343,24 @@ QTIP.bind = function(opts, event)
 if(!$.ui) {
 	$['cleanData'+replaceSuffix] = $.cleanData;
 	$.cleanData = function( elems ) {
-		for(var i = 0, elem; (elem = $( elems[i] )).length && elem.attr(HASATTR); i++) {
-			try { elem.triggerHandler('removeqtip'); }
-			catch( e ) {}
+		for(var i = 0, elem; (elem = $( elems[i] )).length; i++) {
+			if(elem.attr(ATTR_HAS)) {
+				try { elem.triggerHandler('removeqtip'); } 
+				catch( e ) {}
+			}
 		}
-		$['cleanData'+replaceSuffix]( elems );
+		$['cleanData'+replaceSuffix].apply(this, arguments);
 	};
 }
 
 ;// qTip version
-QTIP.version = '2.0.1-83-';
+QTIP.version = '2.1.1';
 
 // Base ID for all qTips
 QTIP.nextid = 0;
 
 // Inactive events array
-QTIP.inactiveEvents = 'click dblclick mousedown mouseup mousemove mouseleave mouseenter'.split(' ');
+QTIP.inactiveEvents = INACTIVE_EVENTS;
 
 // Base z-index for all qTips
 QTIP.zindex = 15000;
@@ -47044,7 +47436,7 @@ QTIP.defaults = {
 	}
 };
 
-;var TIP, vendorCss,
+;var TIP,
 
 // .bind()/.on() namespace
 TIPNS = '.qtip-tip',
@@ -47068,32 +47460,23 @@ INVALID = /rgba?\(0, 0, 0(, 0)?\)|transparent|#123456/i;
 function camel(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 /*
- * This is only need for 1.7.x and below (check for 1.8 and
- * above using $.curCss, which was removed in 1.8)
- * 
  * Modified from Modernizr's testPropsAll()
  * http://modernizr.com/downloads/modernizr-latest.js
  */
-if(!$.curCSS) {
-	vendorCss = function(elem, prop) { return elem.css(prop); };
-}
-else {
-	var cssProps = {}, cssPrefixes = ["Webkit", "O", "Moz", "ms"];
-	vendorCss = function(elem, prop) {
-		var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
-			props = (prop + ' ' + cssPrefixes.join(ucProp + ' ') + ucProp).split(' '),
-			cur, val, i;
+var cssProps = {}, cssPrefixes = ["Webkit", "O", "Moz", "ms"];
+function vendorCss(elem, prop) {
+	var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
+		props = (prop + ' ' + cssPrefixes.join(ucProp + ' ') + ucProp).split(' '),
+		cur, val, i = 0;
 
-		// If the property has already been mapped...
-		if(cssProps[prop]) { return elem.css(cssProps[prop]); }
+	// If the property has already been mapped...
+	if(cssProps[prop]) { return elem.css(cssProps[prop]); }
 
-		for(i in props) {
-			cur = props[i];
-			if((val = elem.css(cur)) !== undefined) {
-				return cssProps[prop] = cur, val;
-			}
+	while((cur = props[i++])) {
+		if((val = elem.css(cur)) !== undefined) {
+			return cssProps[prop] = cur, val;
 		}
-	};
+	}
 }
 
 // Parse a given elements CSS property into an int
@@ -47101,170 +47484,427 @@ function intCss(elem, prop) {
 	return parseInt(vendorCss(elem, prop), 10);
 }
 
-function calculateSize(size, corner, border) {
-	var y = corner.precedance === Y,
-		width = size [ y ? 0 : 1 ],
-		height = size [ y ? 1 : 0 ],
-		isCenter = corner.string().indexOf(CENTER) > -1,
-		base = width * (isCenter ? 0.5 : 1),
-		pow = Math.pow,
-		round = Math.round,
-		bigHyp, ratio, result,
-
-	smallHyp = Math.sqrt( pow(base, 2) + pow(height, 2) ),
-	hyp = [ (border / base) * smallHyp, (border / height) * smallHyp ];
-	
-	hyp[2] = Math.sqrt( pow(hyp[0], 2) - pow(border, 2) );
-	hyp[3] = Math.sqrt( pow(hyp[1], 2) - pow(border, 2) );
-
-	bigHyp = smallHyp + hyp[2] + hyp[3] + (isCenter ? 0 : hyp[0]);
-	ratio = bigHyp / smallHyp;
-
-	result = [ round(ratio * width), round(ratio * height) ];
-	return y ? result : result.reverse();
-}
-
-// Tip coordinates calculator
-function calculateTip(corner, width, height)
-{	
-	var width2 = Math.ceil(width / 2), height2 = Math.ceil(height / 2),
-
-	// Define tip coordinates in terms of height and width values
-	tips = {
-		br:	[[0,0],			[width,height],		[width,0]],
-		bl:	[[0,0],			[width,0],			[0,height]],
-		tr:	[[0,height],	[width,0],			[width,height]],
-		tl:	[[0,0],			[0,height],			[width,height]],
-		tc:	[[0,height],	[width2,0],			[width,height]],
-		bc:	[[0,0],			[width,0],			[width2,height]],
-		rc:	[[0,0],			[width,height2],	[0,height]],
-		lc:	[[width,0],		[width,height],		[0,height2]]
-	};
-
-	// Set common side shapes
-	tips.lt = tips.br; tips.rt = tips.bl;
-	tips.lb = tips.tr; tips.rb = tips.tl;
-
-	return tips[ corner.abbrev() ];
-}
 
 // VML creation (for IE only)
 if(!HASCANVAS) {
 	createVML = function(tag, props, style) {
-		return '<qvml:'+tag+' xmlns="urn:schemas-microsoft.com:vml" class="qtip-vml" '+(props||'')+
+		return '<qtipvml:'+tag+' xmlns="urn:schemas-microsoft.com:vml" class="qtip-vml" '+(props||'')+
 			' style="behavior: url(#default#VML); '+(style||'')+ '" />';
 	};
 }
 
-function Tip(qTip, command)
-{
-	var self = this,
-		opts = qTip.options.style.tip,
-		elems = qTip.elements,
-		tooltip = elems.tooltip,
-		cache = { top: 0, left: 0 },
-		size = [ opts.width, opts.height ],
-		color = { },
-		border = opts.border || 0,
-		enabled = FALSE,
-		tiphtml;
 
-	self.corner = NULL;
-	self.mimic = NULL;
-	self.border = border;
-	self.offset = opts.offset;
-	self.size = size;
 
-	function swapDimensions() {
-		size[0] = opts.height;
-		size[1] = opts.width;
-	}
+function Tip(qtip, options) {
+	this._ns = 'tip';
+	this.options = options;
+	this.offset = options.offset;
+	this.size = [ options.width, options.height ];
 
-	function resetDimensions() {
-		size[0] = opts.width;
-		size[1] = opts.height;
-	}
+	// Initialize
+	this.init( (this.qtip = qtip) );
+}
 
-	function parseCorner() {
-		var corner = opts.corner,
-			posOptions = qTip.options.position,
-			at = posOptions.at,
-			my = posOptions.my.string ? posOptions.my.string() : posOptions.my;
+$.extend(Tip.prototype, {
+	init: function(qtip) {
+		var context, tip;
 
-		// Detect corner and mimic properties
-		if(corner === FALSE || (my === FALSE && at === FALSE)) {
-			return FALSE;
+		// Create tip element and prepend to the tooltip
+		tip = this.element = qtip.elements.tip = $('<div />', { 'class': NAMESPACE+'-tip' }).prependTo(qtip.tooltip);
+
+		// Create tip drawing element(s)
+		if(HASCANVAS) {
+			// save() as soon as we create the canvas element so FF2 doesn't bork on our first restore()!
+			context = $('<canvas />').appendTo(this.element)[0].getContext('2d');
+
+			// Setup constant parameters
+			context.lineJoin = 'miter';
+			context.miterLimit = 100;
+			context.save();
 		}
 		else {
-			if(corner === TRUE) {
-				self.corner = new CORNER(my);
-			}
-			else if(!corner.string) {
-				self.corner = new CORNER(corner);
-				self.corner.fixed = TRUE;
-			}
+			context = createVML('shape', 'coordorigin="0,0"', 'position:absolute;');
+			this.element.html(context + context);
+
+			// Prevent mousing down on the tip since it causes problems with .live() handling in IE due to VML
+			qtip._bind( $('*', tip).add(tip), ['click', 'mousedown'], function(event) { event.stopPropagation(); }, this._ns);
 		}
 
-		// Cache it
-		cache.corner = self.corner.clone();
+		// Bind update events
+		qtip._bind(qtip.tooltip, 'tooltipmove', this.reposition, this._ns, this);
 
-		return self.corner.abbrev() !== 'c';
-	}
+		// Create it
+		this.create();
+	},
 
-	function parseWidth(corner, side, use) {
-		var prop = BORDER + camel(!side ? corner[corner.precedance] : side) + 'Width';
+	_swapDimensions: function() {
+		this.size[0] = this.options.height;
+		this.size[1] = this.options.width;
+	},
+	_resetDimensions: function() {
+		this.size[0] = this.options.width;
+		this.size[1] = this.options.height;
+	},
+
+	_useTitle: function(corner) {
+		var titlebar = this.qtip.elements.titlebar;
+		return titlebar && (
+			corner.y === TOP || (corner.y === CENTER && this.element.position().top + (this.size[1] / 2) + this.options.offset < titlebar.outerHeight(TRUE))
+		);
+	},
+
+	_parseCorner: function(corner) {
+		var my = this.qtip.options.position.my;
+
+		// Detect corner and mimic properties
+		if(corner === FALSE || my === FALSE) {
+			corner = FALSE;
+		}
+		else if(corner === TRUE) {
+			corner = new CORNER( my.string() );
+		}
+		else if(!corner.string) {
+			corner = new CORNER(corner);
+			corner.fixed = TRUE;
+		}
+
+		return corner;
+	},
+
+	_parseWidth: function(corner, side, use) {
+		var elements = this.qtip.elements,
+			prop = BORDER + camel(side) + 'Width';
 
 		return (use ? intCss(use, prop) : (
-			intCss(elems.content, prop) ||
-			intCss(corner.y === TOP && elems.titlebar || elems.content, prop) ||
+			intCss(elements.content, prop) ||
+			intCss(this._useTitle(corner) && elements.titlebar || elements.content, prop) ||
 			intCss(tooltip, prop)
 		)) || 0;
-	}
+	},
 
-	function parseRadius(corner) {
-		var prop = BORDER + camel(corner.y) + camel(corner.x) + 'Radius';
+	_parseRadius: function(corner) {
+		var elements = this.qtip.elements,
+			prop = BORDER + camel(corner.y) + camel(corner.x) + 'Radius';
 
 		return BROWSER.ie < 9 ? 0 :
-			intCss(corner.y === TOP && elems.titlebar || elems.content, prop) || intCss(elems.tooltip, prop) || 0;
-	}
+			intCss(this._useTitle(corner) && elements.titlebar || elements.content, prop) || 
+			intCss(elements.tooltip, prop) || 0;
+	},
 
-	function parseColours(elems, corner) {
-		var tip = elems.tip.css('cssText', ''),
+	_invalidColour: function(elem, prop, compare) {
+		var val = elem.css(prop);
+		return !val || (compare && val === elem.css(compare)) || INVALID.test(val) ? FALSE : val;
+	},
+
+	_parseColours: function(corner) {
+		var elements = this.qtip.elements,
+			tip = this.element.css('cssText', ''),
 			borderSide = BORDER + camel(corner[ corner.precedance ]) + camel(COLOR),
-			titlebar = elems.titlebar,
-			useTitle = titlebar && (corner.y === TOP || (corner.y === CENTER && tip.position().top + (size[1] / 2) + opts.offset < titlebar.outerHeight(TRUE))),
-			colorElem = useTitle ? titlebar : elems.content;
-
-		function css(elem, prop, compare) {
-			var val = elem.css(prop);
-			return !val || (compare && val === elem.css(compare)) || INVALID.test(val) ? FALSE : val;
-		}
+			colorElem = this._useTitle(corner) && elements.titlebar || elements.content,
+			css = this._invalidColour, color = [];
 
 		// Attempt to detect the background colour from various elements, left-to-right precedance
-		color.fill = css(tip, BG_COLOR) || css(colorElem, BG_COLOR) || css(elems.content, BG_COLOR) || 
+		color[0] = css(tip, BG_COLOR) || css(colorElem, BG_COLOR) || css(elements.content, BG_COLOR) || 
 			css(tooltip, BG_COLOR) || tip.css(BG_COLOR);
 
 		// Attempt to detect the correct border side colour from various elements, left-to-right precedance
-		color.border = css(tip, borderSide, COLOR) || css(colorElem, borderSide, COLOR) || 
-			css(elems.content, borderSide, COLOR) || css(tooltip, borderSide, COLOR) || tooltip.css(borderSide);
+		color[1] = css(tip, borderSide, COLOR) || css(colorElem, borderSide, COLOR) || 
+			css(elements.content, borderSide, COLOR) || css(tooltip, borderSide, COLOR) || tooltip.css(borderSide);
 
 		// Reset background and border colours
 		$('*', tip).add(tip).css('cssText', BG_COLOR+':'+TRANSPARENT+IMPORTANT+';'+BORDER+':0'+IMPORTANT+';');
-	}
 
-	function reposition(event, api, pos, viewport) {
-		if(!elems.tip) { return; }
+		return color;
+	},
 
-		var newCorner = self.corner.clone(),
+	_calculateSize: function(corner) {
+		var y = corner.precedance === Y,
+			width = this.options[ y ? 'height' : 'width' ],
+			height = this.options[ y ? 'width' : 'height' ],
+			isCenter = corner.abbrev() === 'c',
+			base = width * (isCenter ? 0.5 : 1),
+			pow = Math.pow,
+			round = Math.round,
+			bigHyp, ratio, result,
+
+		smallHyp = Math.sqrt( pow(base, 2) + pow(height, 2) ),
+		hyp = [ (this.border / base) * smallHyp, (this.border / height) * smallHyp ];
+
+		hyp[2] = Math.sqrt( pow(hyp[0], 2) - pow(this.border, 2) );
+		hyp[3] = Math.sqrt( pow(hyp[1], 2) - pow(this.border, 2) );
+
+		bigHyp = smallHyp + hyp[2] + hyp[3] + (isCenter ? 0 : hyp[0]);
+		ratio = bigHyp / smallHyp;
+
+		result = [ round(ratio * width), round(ratio * height) ];
+
+		return y ? result : result.reverse();
+	},
+
+	// Tip coordinates calculator
+	_calculateTip: function(corner) {	
+		var width = this.size[0], height = this.size[1],
+			width2 = Math.ceil(width / 2), height2 = Math.ceil(height / 2),
+
+		// Define tip coordinates in terms of height and width values
+		tips = {
+			br:	[0,0,		width,height,	width,0],
+			bl:	[0,0,		width,0,		0,height],
+			tr:	[0,height,	width,0,		width,height],
+			tl:	[0,0,		0,height,		width,height],
+			tc:	[0,height,	width2,0,		width,height],
+			bc:	[0,0,		width,0,		width2,height],
+			rc:	[0,0,		width,height2,	0,height],
+			lc:	[width,0,	width,height,	0,height2]
+		};
+
+		// Set common side shapes
+		tips.lt = tips.br; tips.rt = tips.bl;
+		tips.lb = tips.tr; tips.rb = tips.tl;
+
+		return tips[ corner.abbrev() ];
+	},
+
+	create: function() {
+		// Determine tip corner
+		var c = this.corner = (HASCANVAS || BROWSER.ie) && this._parseCorner(this.options.corner);
+		
+		// If we have a tip corner...
+		if( (this.enabled = !!this.corner && this.corner.abbrev() !== 'c') ) {
+			// Cache it
+			this.qtip.cache.corner = c.clone();
+
+			// Create it
+			this.update();
+		}
+
+		// Toggle tip element
+		this.element.toggle(this.enabled);
+
+		return this.corner;
+	},
+
+	update: function(corner, position) {
+		if(!this.enabled) { return this; }
+
+		var elements = this.qtip.elements,
+			tip = this.element,
+			inner = tip.children(),
+			options = this.options,
+			size = this.size,
+			mimic = options.mimic,
+			round = Math.round,
+			color, precedance, context,
+			coords, translate, newSize, border;
+
+		// Re-determine tip if not already set
+		if(!corner) { corner = this.qtip.cache.corner || this.corner; }
+
+		// Use corner property if we detect an invalid mimic value
+		if(mimic === FALSE) { mimic = corner; }
+
+		// Otherwise inherit mimic properties from the corner object as necessary
+		else {
+			mimic = new CORNER(mimic);
+			mimic.precedance = corner.precedance;
+
+			if(mimic.x === 'inherit') { mimic.x = corner.x; }
+			else if(mimic.y === 'inherit') { mimic.y = corner.y; }
+			else if(mimic.x === mimic.y) {
+				mimic[ corner.precedance ] = corner[ corner.precedance ];
+			}
+		}
+		precedance = mimic.precedance;
+
+		// Ensure the tip width.height are relative to the tip position
+		if(corner.precedance === X) { this._swapDimensions(); }
+		else { this._resetDimensions(); }
+
+		// Update our colours
+		color = this.color = this._parseColours(corner);
+
+		// Detect border width, taking into account colours
+		if(color[1] !== TRANSPARENT) {
+			// Grab border width
+			border = this.border = this._parseWidth(corner, corner[corner.precedance]);
+
+			// If border width isn't zero, use border color as fill (1.0 style tips)
+			if(options.border && border < 1) { color[0] = color[1]; }
+
+			// Set border width (use detected border width if options.border is true)
+			this.border = border = options.border !== TRUE ? options.border : border;
+		}
+
+		// Border colour was invalid, set border to zero
+		else { this.border = border = 0; }
+
+		// Calculate coordinates
+		coords = this._calculateTip(mimic);
+
+		// Determine tip size
+		newSize = this.size = this._calculateSize(corner);
+		tip.css({
+			width: newSize[0],
+			height: newSize[1],
+			lineHeight: newSize[1]+'px'
+		});
+
+		// Calculate tip translation
+		if(corner.precedance === Y) {
+			translate = [
+				round(mimic.x === LEFT ? border : mimic.x === RIGHT ? newSize[0] - size[0] - border : (newSize[0] - size[0]) / 2),
+				round(mimic.y === TOP ? newSize[1] - size[1] : 0)
+			];
+		}
+		else {
+			translate = [
+				round(mimic.x === LEFT ? newSize[0] - size[0] : 0),
+				round(mimic.y === TOP ? border : mimic.y === BOTTOM ? newSize[1] - size[1] - border : (newSize[1] - size[1]) / 2)
+			];
+		}
+
+		// Canvas drawing implementation
+		if(HASCANVAS) {
+			// Set the canvas size using calculated size
+			inner.attr(WIDTH, newSize[0]).attr(HEIGHT, newSize[1]);
+
+			// Grab canvas context and clear/save it
+			context = inner[0].getContext('2d');
+			context.restore(); context.save();
+			context.clearRect(0,0,3000,3000);
+
+			// Set properties
+			context.fillStyle = color[0];
+			context.strokeStyle = color[1];
+			context.lineWidth = border * 2;
+
+			// Draw the tip
+			context.translate(translate[0], translate[1]);
+			context.beginPath();
+			context.moveTo(coords[0], coords[1]);
+			context.lineTo(coords[2], coords[3]);
+			context.lineTo(coords[4], coords[5]);
+			context.closePath();
+
+			// Apply fill and border
+			if(border) {
+				// Make sure transparent borders are supported by doing a stroke
+				// of the background colour before the stroke colour
+				if(tooltip.css('background-clip') === 'border-box') {
+					context.strokeStyle = color[0];
+					context.stroke();
+				}
+				context.strokeStyle = color[1];
+				context.stroke();
+			}
+			context.fill();
+		}
+
+		// VML (IE Proprietary implementation)
+		else {
+			// Setup coordinates string
+			coords = 'm' + coords[0] + ',' + coords[1] + ' l' + coords[2] +
+				',' + coords[3] + ' ' + coords[4] + ',' + coords[5] + ' xe';
+
+			// Setup VML-specific offset for pixel-perfection
+			translate[2] = border && /^(r|b)/i.test(corner.string()) ? 
+				BROWSER.ie === 8 ? 2 : 1 : 0;
+
+			// Set initial CSS
+			inner.css({
+				coordsize: (size[0]+border) + ' ' + (size[1]+border),
+				antialias: ''+(mimic.string().indexOf(CENTER) > -1),
+				left: translate[0] - (translate[2] * Number(precedance === X)),
+				top: translate[1] - (translate[2] * Number(precedance === Y)),
+				width: size[0] + border,
+				height: size[1] + border
+			})
+			.each(function(i) {
+				var $this = $(this);
+
+				// Set shape specific attributes
+				$this[ $this.prop ? 'prop' : 'attr' ]({
+					coordsize: (size[0]+border) + ' ' + (size[1]+border),
+					path: coords,
+					fillcolor: color[0],
+					filled: !!i,
+					stroked: !i
+				})
+				.toggle(!!(border || i));
+
+				// Check if border is enabled and add stroke element
+				!i && $this.html( createVML(
+					'stroke', 'weight="'+(border*2)+'px" color="'+color[1]+'" miterlimit="1000" joinstyle="miter"'
+				) );
+			});
+		}
+
+		// Position if needed
+		if(position !== FALSE) { this.calculate(corner); }
+	},
+
+	calculate: function(corner) {
+		if(!this.enabled) { return FALSE; }
+
+		var self = this,
+			elements = this.qtip.elements,
+			tip = this.element,
+			userOffset = this.options.offset,
+			isWidget = this.qtip.tooltip.hasClass('ui-widget'),
+			position = {  },
+			precedance, size, corners;
+
+		// Inherit corner if not provided
+		corner = corner || this.corner;
+		precedance = corner.precedance;
+
+		// Determine which tip dimension to use for adjustment
+		size = this._calculateSize(corner);
+
+		// Setup corners and offset array
+		corners = [ corner.x, corner.y ];
+		if(precedance === X) { corners.reverse(); }
+
+		// Calculate tip position
+		$.each(corners, function(i, side) {
+			var b, bc, br;
+
+			if(side === CENTER) {
+				b = precedance === Y ? LEFT : TOP;
+				position[ b ] = '50%';
+				position[MARGIN+'-' + b] = -Math.round(size[ precedance === Y ? 0 : 1 ] / 2) + userOffset;
+			}
+			else {
+				b = self._parseWidth(corner, side, elements.tooltip);
+				bc = self._parseWidth(corner, side, elements.content);
+				br = self._parseRadius(corner);
+
+				position[ side ] = Math.max(-self.border, i ? bc : (userOffset + (br > b ? br : -b)));
+			}
+		});
+
+		// Adjust for tip size
+		position[ corner[precedance] ] -= size[ precedance === X ? 0 : 1 ];
+
+		// Set and return new position
+		tip.css({ margin: '', top: '', bottom: '', left: '', right: '' }).css(position);
+		return position;
+	},
+
+	reposition: function(event, api, pos, viewport) {
+		if(!this.enabled) { return; }
+
+		var cache = api.cache,
+			newCorner = this.corner.clone(),
 			adjust = pos.adjusted,
-			method = qTip.options.position.adjust.method.split(' '),
+			method = api.options.position.adjust.method.split(' '),
 			horizontal = method[0],
 			vertical = method[1] || method[0],
 			shift = { left: FALSE, top: FALSE, x: 0, y: 0 },
 			offset, css = {}, props;
 
 		// If our tip position isn't fixed e.g. doesn't adjust with viewport...
-		if(self.corner.fixed !== TRUE) {
+		if(this.corner.fixed !== TRUE) {
 			// Horizontal - Shift or flip method
 			if(horizontal === SHIFT && newCorner.precedance === X && adjust.left && newCorner.y !== CENTER) {
 				newCorner.precedance = newCorner.precedance === X ? Y : X;
@@ -47282,20 +47922,18 @@ function Tip(qTip, command)
 			}
 
 			// Update and redraw the tip if needed (check cached details of last drawn tip)
-			if(newCorner.string() !== cache.corner.string() && (cache.top !== adjust.top || cache.left !== adjust.left)) {
-				self.update(newCorner, FALSE);
+			if(newCorner.string() !== cache.corner.string() && (cache.cornerTop !== adjust.top || cache.cornerLeft !== adjust.left)) {
+				this.update(newCorner, FALSE);
 			}
 		}
 
 		// Setup tip offset properties
-		offset = self.position(newCorner, adjust);
-		offset[ newCorner.x ] += parseWidth(newCorner, newCorner.x);
-		offset[ newCorner.y ] += parseWidth(newCorner, newCorner.y);
+		offset = this.calculate(newCorner, adjust);
 
 		// Readjust offset object to make it left/top
 		if(offset.right !== undefined) { offset.left = -offset.right; }
 		if(offset.bottom !== undefined) { offset.top = -offset.bottom; }
-		offset.user = Math.max(0, opts.offset);
+		offset.user = this.offset;
 
 		// Viewport "shift" specific adjustments
 		if(shift.left = (horizontal === SHIFT && !!adjust.left)) {
@@ -47336,7 +47974,7 @@ function Tip(qTip, command)
 		* direction that would cause it to be anywhere but the
 		* outer border, hide it!
 		*/
-		elems.tip.css(css).toggle(
+		this.element.css(css).toggle(
 			!((shift.x && shift.y) || (newCorner.x === CENTER && shift.y) || (newCorner.y === CENTER && shift.x))
 		);
 
@@ -47345,319 +47983,35 @@ function Tip(qTip, command)
 		pos.top -= offset.top.charAt ? offset.user : vertical !== SHIFT || shift.left || !shift.left && !shift.top ? offset.top : 0;
 
 		// Cache details
-		cache.left = adjust.left; cache.top = adjust.top;
+		cache.cornerLeft = adjust.left; cache.cornerTop = adjust.top;
 		cache.corner = newCorner.clone();
-	}
+	},
 
-	$.extend(self, {
-		init: function()
-		{
-			enabled = parseCorner() && (HASCANVAS || BROWSER.ie);
+	destroy: function() {
+		// Unbind events
+		this.qtip._unbind(this.qtip.tooltip, this._ns);
 
-			// Determine tip corner and type
-			if(enabled) {
-				// Create a new tip and draw it
-				self.create();
-				self.update();
-
-				// Bind update events
-				tooltip.unbind(TIPNS).bind('tooltipmove'+TIPNS, reposition);
-			}
-			
-			return enabled;
-		},
-
-		create: function()
-		{
-			if(!enabled) { return; }
-
-			var width = size[0],
-				height = size[1],
-				vml;
-
-			// Remove previous tip element if present
-			if(elems.tip) { elems.tip.remove(); }
-
-			// Create tip element and prepend to the tooltip
-			elems.tip = $('<div />', { 'class': 'qtip-tip' }).css({ width: width, height: height }).prependTo(tooltip);
-
-			// Create tip drawing element(s)
-			if(HASCANVAS) {
-				// save() as soon as we create the canvas element so FF2 doesn't bork on our first restore()!
-				$('<canvas />').appendTo(elems.tip)[0].getContext('2d').save();
-			}
-			else {
-				vml = createVML('shape', 'coordorigin="0,0"', 'position:absolute;');
-				elems.tip.html(vml + vml);
-
-				// Prevent mousing down on the tip since it causes problems with .live() handling in IE due to VML
-				$('*', elems.tip).bind('click'+TIPNS+' mousedown'+TIPNS, function(event) { event.stopPropagation(); });
-			}
-		},
-
-		update: function(corner, position) {
-			if(!enabled) { return; }
-
-			var tip = elems.tip,
-				inner = tip.children(),
-				width = size[0],
-				height = size[1],
-				mimic = opts.mimic,
-				round = Math.round,
-				precedance, context, coords, translate, newSize;
-
-			// Re-determine tip if not already set
-			if(!corner) { corner = cache.corner || self.corner; }
-
-			// Use corner property if we detect an invalid mimic value
-			if(mimic === FALSE) { mimic = corner; }
-
-			// Otherwise inherit mimic properties from the corner object as necessary
-			else {
-				mimic = new CORNER(mimic);
-				mimic.precedance = corner.precedance;
-
-				if(mimic.x === 'inherit') { mimic.x = corner.x; }
-				else if(mimic.y === 'inherit') { mimic.y = corner.y; }
-				else if(mimic.x === mimic.y) {
-					mimic[ corner.precedance ] = corner[ corner.precedance ];
-				}
-			}
-			precedance = mimic.precedance;
-
-			// Ensure the tip width.height are relative to the tip position
-			if(corner.precedance === X) { swapDimensions(); }
-			else { resetDimensions(); }
-
-			// Set the tip dimensions
-			elems.tip.css({
-				width: (width = size[0]),
-				height: (height = size[1])
-			});
-
-			// Update our colours
-			parseColours(elems, corner);
-
-			// Detect border width, taking into account colours
-			if(color.border !== TRANSPARENT) {
-				// Grab border width
-				border = parseWidth(corner);
-
-				// If border width isn't zero, use border color as fill (1.0 style tips)
-				if(opts.border === 0 && border > 0) { color.fill = color.border; }
-
-				// Set border width (use detected border width if opts.border is true)
-				self.border = border = opts.border !== TRUE ? opts.border : border;
-			}
-
-			// Border colour was invalid, set border to zero
-			else { self.border = border = 0; }
-
-			// Calculate coordinates
-			coords = calculateTip(mimic, width , height);
-
-			// Determine tip size
-			self.size = newSize = calculateSize(size, corner, border);
-			tip.css({
-				width: newSize[0],
-				height: newSize[1],
-				lineHeight: newSize[1]+'px'
-			});
-
-			// Calculate tip translation
-			if(corner.precedance === Y) {
-				translate = [
-					round(mimic.x === LEFT ? border : mimic.x === RIGHT ? newSize[0] - width - border : (newSize[0] - width) / 2),
-					round(mimic.y === TOP ? newSize[1] - height : 0)
-				];
-			}
-			else {
-				translate = [
-					round(mimic.x === LEFT ? newSize[0] - width : 0),
-					round(mimic.y === TOP ? border : mimic.y === BOTTOM ? newSize[1] - height - border : (newSize[1] - height) / 2)
-				];
-			}
-
-			// Canvas drawing implementation
-			if(HASCANVAS) {
-				// Set the canvas size using calculated size
-				inner.attr({ width: newSize[0], height: newSize[1] });
-
-				// Grab canvas context and clear/save it
-				context = inner[0].getContext('2d');
-				context.restore(); context.save();
-				context.clearRect(0,0,3000,3000);
-
-				// Set properties
-				context.fillStyle = color.fill;
-				context.strokeStyle = color.border;
-				context.lineWidth = border * 2;
-				context.lineJoin = 'miter';
-				context.miterLimit = 100;
-
-				// Translate origin
-				context.translate(translate[0], translate[1]);
-
-				// Draw the tip
-				context.beginPath();
-				context.moveTo(coords[0][0], coords[0][1]);
-				context.lineTo(coords[1][0], coords[1][1]);
-				context.lineTo(coords[2][0], coords[2][1]);
-				context.closePath();
-
-				// Apply fill and border
-				if(border) {
-					// Make sure transparent borders are supported by doing a stroke
-					// of the background colour before the stroke colour
-					if(tooltip.css('background-clip') === 'border-box') {
-						context.strokeStyle = color.fill;
-						context.stroke();
-					}
-					context.strokeStyle = color.border;
-					context.stroke();
-				}
-				context.fill();
-			}
-
-			// VML (IE Proprietary implementation)
-			else {
-				// Setup coordinates string
-				coords = 'm' + coords[0][0] + ',' + coords[0][1] + ' l' + coords[1][0] +
-					',' + coords[1][1] + ' ' + coords[2][0] + ',' + coords[2][1] + ' xe';
-
-				// Setup VML-specific offset for pixel-perfection
-				translate[2] = border && /^(r|b)/i.test(corner.string()) ? 
-					BROWSER.ie === 8 ? 2 : 1 : 0;
-
-				// Set initial CSS
-				inner.css({
-					coordsize: (width+border) + ' ' + (height+border),
-					antialias: ''+(mimic.string().indexOf(CENTER) > -1),
-					left: translate[0],
-					top: translate[1],
-					width: width + border,
-					height: height + border
-				})
-				.each(function(i) {
-					var $this = $(this);
-
-					// Set shape specific attributes
-					$this[ $this.prop ? 'prop' : 'attr' ]({
-						coordsize: (width+border) + ' ' + (height+border),
-						path: coords,
-						fillcolor: color.fill,
-						filled: !!i,
-						stroked: !i
-					})
-					.toggle(!!(border || i));
-
-					// Check if border is enabled and add stroke element
-					!i && $this.html( createVML(
-						'stroke', 'weight="'+(border*2)+'px" color="'+color.border+'" miterlimit="1000" joinstyle="miter"'
-					) );
-				});
-			}
-
-			// Opera bug #357 - Incorrect tip position
-			// https://github.com/Craga89/qTip2/issues/367
-			setTimeout(function() {
-				elems.tip.css({
-					display: 'inline-block',
-					visibility: 'visible'
-				});
-			}, 1);
-
-			// Position if needed
-			if(position !== FALSE) { self.position(corner); }
-
-		},
-
-		// Tip positioning method
-		position: function(corner)
-		{
-			var tip = elems.tip,
-				position = {},
-				userOffset = Math.max(0, opts.offset),
-				isWidget = tooltip.hasClass('ui-widget'),
-				precedance, dimensions, corners;
-
-			// Return if tips are disabled or tip is not yet rendered
-			if(opts.corner === FALSE || !tip) { return FALSE; }
-
-			// Inherit corner if not provided
-			corner = corner || self.corner;
-			precedance = corner.precedance;
-
-			// Determine which tip dimension to use for adjustment
-			dimensions = calculateSize(size, corner, border);
-
-			// Setup corners and offset array
-			corners = [ corner.x, corner.y ];
-			if(precedance === X) { corners.reverse(); }
-
-			// Calculate tip position
-			$.each(corners, function(i, side) {
-				var b, bc, br;
-
-				if(side === CENTER) {
-					b = precedance === Y ? LEFT : TOP;
-					position[ b ] = '50%';
-					position[MARGIN+'-' + b] = -Math.round(dimensions[ precedance === Y ? 0 : 1 ] / 2) + userOffset;
-				}
-				else {
-					b = parseWidth(corner, side, isWidget ? tooltip : NULL);
-					bc = parseWidth(corner, side, isWidget ? NULL : elems.content);
-					br = parseRadius(corner);
-
-					position[ side ] = Math.max(-border, i ? bc : (userOffset + (br > b ? br : -b)));
-				}
-			});
-
-			// Adjust for tip dimensions
-			position[ corner[precedance] ] -= dimensions[ precedance === X ? 0 : 1 ];
-
-			// Set and return new position
-			tip.css({ top: '', bottom: '', left: '', right: '', margin: '' }).css(position);
-			return position;
-		},
-		
-		destroy: function()
-		{
-			// Unbind events
-			tooltip.unbind(TIPNS);
-
-			// Remove the tip element(s)
-			if(elems.tip) {
-				elems.tip.find('*').remove().end().remove();
-			}
-
-			// Delete references
-			self.corner = self.mimic = self.size = NULL;
+		// Remove the tip element(s)
+		if(this.qtip.elements.tip) {
+			this.qtip.elements.tip.find('*')
+				.remove().end().remove();
 		}
-	});
-
-	self.init();
-}
+	}
+});
 
 TIP = PLUGINS.tip = function(api) {
-	return new Tip(api);
+	return new Tip(api, api.options.style.tip);
 };
 
 // Initialize tip on render
 TIP.initialize = 'render';
 
 // Setup plugin sanitization options
-TIP.sanitize = function(options)
-{
-	var style = options.style, opts;
-	if(style && 'tip' in style) {
+TIP.sanitize = function(options) {
+	if(options.style && 'tip' in options.style) {
 		opts = options.style.tip;
-		if(typeof opts !== 'object') { options.style.tip = { corner: opts }; }
+		if(typeof opts !== 'object') { opts = options.style.tip = { corner: opts }; }
 		if(!(/string|boolean/i).test(typeof opts.corner)) { opts.corner = TRUE; }
-		if(typeof opts.width !== 'number') { delete opts.width; }
-		if(typeof opts.height !== 'number') { delete opts.height; }
-		if(typeof opts.border !== 'number' && opts.border !== TRUE) { delete opts.border; }
-		if(typeof opts.offset !== 'number') { delete opts.offset; }
 	}
 };
 
@@ -47665,7 +48019,7 @@ TIP.sanitize = function(options)
 CHECKS.tip = {
 	'^position.my|style.tip.(corner|mimic|border)$': function() {
 		// Make sure a tip can be drawn
-		!this.init() && this.destroy();
+		this.create();
 		
 		// Reposition the tooltip
 		this.qtip.reposition();
@@ -47673,7 +48027,6 @@ CHECKS.tip = {
 	'^style.tip.(height|width)$': function(obj) {
 		// Re-set dimensions and redraw the tip
 		this.size = size = [ obj.width, obj.height ];
-		this.create();
 		this.update();
 
 		// Reposition the tooltip
@@ -47698,363 +48051,6 @@ $.extend(TRUE, QTIP.defaults, {
 	}
 });
 
-;var MODAL, OVERLAY,
-	MODALCLASS = 'qtip-modal',
-	MODALSELECTOR = '.'+MODALCLASS;
-
-OVERLAY = function()
-{
-	var self = this,
-		focusableElems = {},
-		current, onLast,
-		prevState, elem;
-
-	// Modified code from jQuery UI 1.10.0 source
-	// http://code.jquery.com/ui/1.10.0/jquery-ui.js
-	function focusable(element) {
-		// Use the defined focusable checker when possible
-		if($.expr[':'].focusable) { return $.expr[':'].focusable; }
-
-		var isTabIndexNotNaN = !isNaN($.attr(element, 'tabindex')),
-			nodeName = element.nodeName && element.nodeName.toLowerCase(),
-			map, mapName, img;
-
-		if('area' === nodeName) {
-			map = element.parentNode;
-			mapName = map.name;
-			if(!element.href || !mapName || map.nodeName.toLowerCase() !== 'map') {
-				return false;
-			}
-			img = $('img[usemap=#' + mapName + ']')[0];
-			return !!img && img.is(':visible');
-		}
-		return (/input|select|textarea|button|object/.test( nodeName ) ?
-				!element.disabled :
-				'a' === nodeName ? 
-					element.href || isTabIndexNotNaN : 
-					isTabIndexNotNaN
-			);
-	}
-
-	// Focus inputs using cached focusable elements (see update())
-	function focusInputs(blurElems) {
-		// Blurring body element in IE causes window.open windows to unfocus!
-		if(focusableElems.length < 1 && blurElems.length) { blurElems.not('body').blur(); }
-
-		// Focus the inputs
-		else { focusableElems.first().focus(); }
-	}
-
-	// Steal focus from elements outside tooltip
-	function stealFocus(event) {
-		if(!elem.is(':visible')) { return; }
-
-		var target = $(event.target),
-			tooltip = current.tooltip,
-			container = target.closest(selector),
-			targetOnTop;
-
-		// Determine if input container target is above this
-		targetOnTop = container.length < 1 ? FALSE :
-			(parseInt(container[0].style.zIndex, 10) > parseInt(tooltip[0].style.zIndex, 10));
-
-		// If we're showing a modal, but focus has landed on an input below
-		// this modal, divert focus to the first visible input in this modal
-		// or if we can't find one... the tooltip itself
-		if(!targetOnTop && target.closest(selector)[0] !== tooltip[0]) {
-			focusInputs(target);
-		}
-
-		// Detect when we leave the last focusable element...
-		onLast = event.target === focusableElems[focusableElems.length - 1];
-	}
-
-	$.extend(self, {
-		init: function()
-		{
-			// Create document overlay
-			elem = self.elem = $('<div />', {
-				id: 'qtip-overlay',
-				html: '<div></div>',
-				mousedown: function() { return FALSE; }
-			})
-			.hide();
-
-			// Update position on window resize or scroll
-			function resize() {
-				var win = $(this);
-				elem.css({
-					height: win.height(),
-					width: win.width()
-				});
-			}
-			$(window).bind('resize'+MODALSELECTOR, resize);
-			resize(); // Fire it initially too
-
-			// Make sure we can't focus anything outside the tooltip
-			$(document.body).bind('focusin'+MODALSELECTOR, stealFocus);
-
-			// Apply keyboard "Escape key" close handler
-			$(document).bind('keydown'+MODALSELECTOR, function(event) {
-				if(current && current.options.show.modal.escape && event.keyCode === 27) {
-					current.hide(event);
-				}
-			});
-
-			// Apply click handler for blur option
-			elem.bind('click'+MODALSELECTOR, function(event) {
-				if(current && current.options.show.modal.blur) {
-					current.hide(event);
-				}
-			});
-
-			return self;
-		},
-
-		update: function(api) {
-			// Update current API reference
-			current = api;
-
-			// Update focusable elements if enabled
-			if(api.options.show.modal.stealfocus !== FALSE) {
-				focusableElems = api.tooltip.find('*').filter(function() {
-					return focusable(this);
-				});
-			}
-			else { focusableElems = []; }
-		},
-
-		toggle: function(api, state, duration)
-		{
-			var docBody = $(document.body),
-				tooltip = api.tooltip,
-				options = api.options.show.modal,
-				effect = options.effect,
-				type = state ? 'show': 'hide',
-				visible = elem.is(':visible'),
-				visibleModals = $(MODALSELECTOR).filter(':visible:not(:animated)').not(tooltip),
-				zindex;
-
-			// Set active tooltip API reference
-			self.update(api);
-
-			// If the modal can steal the focus...
-			// Blur the current item and focus anything in the modal we an
-			if(state && options.stealfocus !== FALSE) {
-				focusInputs( $(':focus') );
-			}
-
-			// Toggle backdrop cursor style on show
-			elem.toggleClass('blurs', options.blur);
-
-			// Set position and append to body on show
-			if(state) {
-				elem.css({ left: 0, top: 0 })
-					.appendTo(document.body);
-			}
-
-			// Prevent modal from conflicting with show.solo, and don't hide backdrop is other modals are visible
-			if((elem.is(':animated') && visible === state && prevState !== FALSE) || (!state && visibleModals.length)) {
-				return self;
-			}
-
-			// Stop all animations
-			elem.stop(TRUE, FALSE);
-
-			// Use custom function if provided
-			if($.isFunction(effect)) {
-				effect.call(elem, state);
-			}
-
-			// If no effect type is supplied, use a simple toggle
-			else if(effect === FALSE) {
-				elem[ type ]();
-			}
-
-			// Use basic fade function
-			else {
-				elem.fadeTo( parseInt(duration, 10) || 90, state ? 1 : 0, function() {
-					if(!state) { elem.hide(); }
-				});
-			}
-
-			// Reset position and detach from body on hide
-			if(!state) {
-				elem.queue(function(next) {
-					elem.css({ left: '', top: '' });
-					if(!$(MODALSELECTOR).length) { elem.detach(); }
-					next();
-				});
-			}
-
-			// Cache the state
-			prevState = state;
-
-			// If the tooltip is destroyed, set reference to null
-			if(current.destroyed) { current = NULL; }
-
-			return self;
-		}
-	});	
-
-	self.init();
-};
-OVERLAY = new OVERLAY();
-
-function Modal(api)
-{
-	var self = this,
-		options = api.options.show.modal,
-		elems = api.elements,
-		tooltip = elems.tooltip,
-		namespace = MODALSELECTOR + api.id,
-		overlay;
-
-	$.extend(self, {
-		init: function()
-		{
-			// If modal is disabled... return
-			if(!options.on) { return self; }
-
-			// Set overlay reference
-			overlay = elems.overlay = OVERLAY.elem;
-
-			// Add unique attribute so we can grab modal tooltips easily via a selector
-			tooltip.addClass(MODALCLASS)
-
-			// Set z-index
-			.css('z-index', PLUGINS.modal.zindex + $(MODALSELECTOR).length)
-			
-			// Apply our show/hide/focus modal events
-			.bind('tooltipshow'+namespace+' tooltiphide'+namespace, function(event, api, duration) {
-				var oEvent = event.originalEvent;
-
-				// Make sure mouseout doesn't trigger a hide when showing the modal and mousing onto backdrop
-				if(event.target === tooltip[0]) {
-					if(oEvent && event.type === 'tooltiphide' && /mouse(leave|enter)/.test(oEvent.type) && $(oEvent.relatedTarget).closest(overlay[0]).length) {
-						try { event.preventDefault(); } catch(e) {}
-					}
-					else if(!oEvent || (oEvent && !oEvent.solo)) {
-						self.toggle(event, event.type === 'tooltipshow', duration);
-					}
-				}
-			})
-
-			// Adjust modal z-index on tooltip focus
-			.bind('tooltipfocus'+namespace, function(event, api) {
-				// If focus was cancelled before it reached us, don't do anything
-				if(event.isDefaultPrevented() || event.target !== tooltip[0]) { return; }
-
-				var qtips = $(MODALSELECTOR),
-
-				// Keep the modal's lower than other, regular qtips
-				newIndex = PLUGINS.modal.zindex + qtips.length,
-				curIndex = parseInt(tooltip[0].style.zIndex, 10);
-
-				// Set overlay z-index
-				overlay[0].style.zIndex = newIndex - 1;
-
-				// Reduce modal z-index's and keep them properly ordered
-				qtips.each(function() {
-					if(this.style.zIndex > curIndex) {
-						this.style.zIndex -= 1;
-					}
-				});
-
-				// Fire blur event for focused tooltip
-				qtips.filter('.' + focusClass).qtip('blur', event.originalEvent);
-
-				// Set the new z-index
-				tooltip.addClass(focusClass)[0].style.zIndex = newIndex;
-
-				// Set current
-				OVERLAY.update(api);
-
-				// Prevent default handling
-				try { event.preventDefault(); } catch(e) {}
-			})
-
-			// Focus any other visible modals when this one hides
-			.bind('tooltiphide'+namespace, function(event) {
-				if(event.target === tooltip[0]) {
-					$(MODALSELECTOR).filter(':visible').not(tooltip).last().qtip('focus', event);
-				}
-			});
-
-			return self;
-		},
-
-		toggle: function(event, state, duration)
-		{
-			// Make sure default event hasn't been prevented
-			if(event && event.isDefaultPrevented()) { return self; }
-
-			// Toggle it
-			OVERLAY.toggle(api, !!state, duration);
-
-			return self;
-		},
-
-		destroy: function() {
-			// Remove modal class
-			tooltip.removeClass(MODALCLASS);
-
-			// Remove bound events
-			tooltip.add(document).unbind(namespace);
-
-			// Delete element reference
-			OVERLAY.toggle(api, FALSE);
-			delete elems.overlay;
-		}
-	});
-
-	self.init();
-}
-
-MODAL = PLUGINS.modal = function(api) {
-	return new Modal(api);
-};
-
-// Setup sanitiztion rules
-MODAL.sanitize = function(opts) {
-	if(opts.show) { 
-		if(typeof opts.show.modal !== 'object') { opts.show.modal = { on: !!opts.show.modal }; }
-		else if(typeof opts.show.modal.on === 'undefined') { opts.show.modal.on = TRUE; }
-	}
-};
-
-// Base z-index for all modal tooltips (use qTip core z-index as a base)
-MODAL.zindex = QTIP.zindex - 200;
-
-// Plugin needs to be initialized on render
-MODAL.initialize = 'render';
-
-// Setup option set checks
-CHECKS.modal = {
-	'^show.modal.(on|blur)$': function() {
-		// Initialise
-		this.destroy();
-		this.init();
-		
-		// Show the modal if not visible already and tooltip is visible
-		this.qtip.elems.overlay.toggle(
-			this.qtip.tooltip[0].offsetWidth > 0
-		);
-	}
-};
-
-// Extend original api defaults
-$.extend(TRUE, QTIP.defaults, {
-	show: {
-		modal: {
-			on: FALSE,
-			effect: TRUE,
-			blur: TRUE,
-			stealfocus: TRUE,
-			escape: TRUE
-		}
-	}
-});
 ;PLUGINS.viewport = function(api, position, posOptions, targetWidth, targetHeight, elemWidth, elemHeight)
 {
 	var target = posOptions.target,
@@ -48166,525 +48162,355 @@ $.extend(TRUE, QTIP.defaults, {
 	}
 
 	return adjusted;
-};;PLUGINS.polys = {
-	// POLY area coordinate calculator
-	//	Special thanks to Ed Cradock for helping out with this.
-	//	Uses a binary search algorithm to find suitable coordinates.
-	polygon: function(baseCoords, corner) {
-		var result = {
-			width: 0, height: 0,
-			position: {
-				top: 1e10, right: 0,
-				bottom: 0, left: 1e10
-			},
-			adjustable: FALSE
-		},
-		i = 0, next,
-		coords = [],
-		compareX = 1, compareY = 1,
-		realX = 0, realY = 0,
-		newWidth, newHeight;
+};;var MODAL, OVERLAY,
+	MODALCLASS = 'qtip-modal',
+	MODALSELECTOR = '.'+MODALCLASS;
 
-		// First pass, sanitize coords and determine outer edges
-		i = baseCoords.length; while(i--) {
-			next = [ parseInt(baseCoords[--i], 10), parseInt(baseCoords[i+1], 10) ];
-
-			if(next[0] > result.position.right){ result.position.right = next[0]; }
-			if(next[0] < result.position.left){ result.position.left = next[0]; }
-			if(next[1] > result.position.bottom){ result.position.bottom = next[1]; }
-			if(next[1] < result.position.top){ result.position.top = next[1]; }
-
-			coords.push(next);
-		}
-
-		// Calculate height and width from outer edges
-		newWidth = result.width = Math.abs(result.position.right - result.position.left);
-		newHeight = result.height = Math.abs(result.position.bottom - result.position.top);
-
-		// If it's the center corner...
-		if(corner.abbrev() === 'c') {
-			result.position = {
-				left: result.position.left + (result.width / 2),
-				top: result.position.top + (result.height / 2)
-			};
-		}
-		else {
-			// Second pass, use a binary search algorithm to locate most suitable coordinate
-			while(newWidth > 0 && newHeight > 0 && compareX > 0 && compareY > 0)
-			{
-				newWidth = Math.floor(newWidth / 2);
-				newHeight = Math.floor(newHeight / 2);
-
-				if(corner.x === LEFT){ compareX = newWidth; }
-				else if(corner.x === RIGHT){ compareX = result.width - newWidth; }
-				else{ compareX += Math.floor(newWidth / 2); }
-
-				if(corner.y === TOP){ compareY = newHeight; }
-				else if(corner.y === BOTTOM){ compareY = result.height - newHeight; }
-				else{ compareY += Math.floor(newHeight / 2); }
-
-				i = coords.length; while(i--)
-				{
-					if(coords.length < 2){ break; }
-
-					realX = coords[i][0] - result.position.left;
-					realY = coords[i][1] - result.position.top;
-
-					if((corner.x === LEFT && realX >= compareX) ||
-					(corner.x === RIGHT && realX <= compareX) ||
-					(corner.x === CENTER && (realX < compareX || realX > (result.width - compareX))) ||
-					(corner.y === TOP && realY >= compareY) ||
-					(corner.y === BOTTOM && realY <= compareY) ||
-					(corner.y === CENTER && (realY < compareY || realY > (result.height - compareY)))) {
-						coords.splice(i, 1);
-					}
-				}
-			}
-			result.position = { left: coords[0][0], top: coords[0][1] };
-		}
-
-		return result;
-	},
-
-	rect: function(ax, ay, bx, by, corner) {
-		return {
-			width: Math.abs(bx - ax),
-			height: Math.abs(by - ay),
-			position: {
-				left: Math.min(ax, bx),
-				top: Math.min(ay, by)
-			}
-		};
-	},
-
-	_angles: {
-		tc: 3 / 2, tr: 7 / 4, tl: 5 / 4, 
-		bc: 1 / 2, br: 1 / 4, bl: 3 / 4, 
-		rc: 2, lc: 1, c: 0
-	},
-	ellipse: function(cx, cy, rx, ry, corner) {
-		var c = PLUGINS.polys._angles[ corner.abbrev() ],
-			rxc = rx * Math.cos( c * Math.PI ),
-			rys = ry * Math.sin( c * Math.PI );
-
-		return {
-			width: (rx * 2) - Math.abs(rxc),
-			height: (ry * 2) - Math.abs(rys),
-			position: {
-				left: cx + rxc,
-				top: cy + rys
-			},
-			adjustable: FALSE
-		};
-	},
-	circle: function(cx, cy, r, corner) {
-		return PLUGINS.polys.ellipse(cx, cy, r, r, corner);
-	}
-};;PLUGINS.svg = function(api, svg, corner, adjustMethod)
-{
-	var doc = $(document),
-		elem = svg[0],
-		result = FALSE,
-		name, box, position, dimensions;
-
-	// Ascend the parentNode chain until we find an element with getBBox()
-	while(!elem.getBBox) { elem = elem.parentNode; }
-	if(!elem.getBBox || !elem.parentNode) { return FALSE; }
-
-	// Determine which shape calculation to use
-	switch(elem.nodeName) {
-		case 'rect':
-			position = PLUGINS.svg.toPixel(elem, elem.x.baseVal.value, elem.y.baseVal.value);
-			dimensions = PLUGINS.svg.toPixel(elem,
-				elem.x.baseVal.value + elem.width.baseVal.value,
-				elem.y.baseVal.value + elem.height.baseVal.value
-			);
-
-			result = PLUGINS.polys.rect(
-				position[0], position[1],
-				dimensions[0], dimensions[1],
-				corner
-			);
-		break;
-
-		case 'ellipse':
-		case 'circle':
-			position = PLUGINS.svg.toPixel(elem,
-				elem.cx.baseVal.value,
-				elem.cy.baseVal.value
-			);
-
-			result = PLUGINS.polys.ellipse(
-				position[0], position[1],
-				(elem.rx || elem.r).baseVal.value, 
-				(elem.ry || elem.r).baseVal.value,
-				corner
-			);
-		break;
-
-		case 'line':
-		case 'polygon':
-		case 'polyline':
-			points = elem.points || [
-				{ x: elem.x1.baseVal.value, y: elem.y1.baseVal.value },
-				{ x: elem.x2.baseVal.value, y: elem.y2.baseVal.value }
-			];
-
-			for(result = [], i = -1, len = points.numberOfItems || points.length; ++i < len;) {
-				next = points.getItem ? points.getItem(i) : points[i];
-				result.push.apply(result, PLUGINS.svg.toPixel(elem, next.x, next.y));
-			}
-
-			result = PLUGINS.polys.polygon(result, corner);
-		break;
-
-		// Invalid shape
-		default: return FALSE;
-	}
-
-	// Adjust by scroll offset
-	result.position.left += doc.scrollLeft();
-	result.position.top += doc.scrollTop();
-
-	return result;
-};
-
-PLUGINS.svg.toPixel = function(elem, x, y) {
-	var mtx = elem.getScreenCTM(),
-		root = elem.farthestViewportElement || elem,
-		result, point;
-
-	// Create SVG point
-	if(!root.createSVGPoint) { return FALSE; }
-	point = root.createSVGPoint();
-
-	point.x = x; point.y = y;
-	result = point.matrixTransform(mtx);
-	return [ result.x, result.y ];
-};;PLUGINS.imagemap = function(api, area, corner, adjustMethod)
-{
-	if(!area.jquery) { area = $(area); }
-
-	var shape = area.attr('shape').toLowerCase().replace('poly', 'polygon'),
-		image = $('img[usemap="#'+area.parent('map').attr('name')+'"]'),
-		coordsString = area.attr('coords'),
-		coordsArray = coordsString.split(','),
-		imageOffset, coords, i, next;
-
-	// If we can't find the image using the map...
-	if(!image.length) { return FALSE; }
-
-	// Pass coordinates string if polygon
-	if(shape === 'polygon') {
-		result = PLUGINS.polys.polygon(coordsArray, corner);
-	}
-
-	// Otherwise parse the coordinates and pass them as arguments
-	else if(PLUGINS.polys[shape]) {
-		for(i = -1, len = coordsArray.length, coords = []; ++i < len;) {
-			coords.push( parseInt(coordsArray[i], 10) );
-		}
-
-		result = PLUGINS.polys[shape].apply(
-			this, coords.concat(corner)
-		);
-	}
-
-	// If no shapre calculation method was found, return false
-	else { return FALSE; }
-
-	// Make sure we account for padding and borders on the image
-	imageOffset = image.offset();
-	imageOffset.left += Math.ceil((image.outerWidth(FALSE) - image.width()) / 2);
-	imageOffset.top += Math.ceil((image.outerHeight(FALSE) - image.height()) / 2);
-
-	// Add image position to offset coordinates
-	result.position.left += imageOffset.left;
-	result.position.top += imageOffset.top;
-
-	return result;
-};;var IE6;
-
-/* 
- * BGIFrame adaption (http://plugins.jquery.com/project/bgiframe)
- * Special thanks to Brandon Aaron
- */
-function Ie6(api)
+OVERLAY = function()
 {
 	var self = this,
-		elems = api.elements,
-		options = api.options,
-		tooltip = elems.tooltip,
-		namespace = '.ie6-' + api.id,
-		bgiframe = $('select, object').length < 1,
-		modalProcessed = FALSE,
-		redrawContainer;
+		focusableElems = {},
+		current, onLast,
+		prevState, elem;
+
+	// Modified code from jQuery UI 1.10.0 source
+	// http://code.jquery.com/ui/1.10.0/jquery-ui.js
+	function focusable(element) {
+		// Use the defined focusable checker when possible
+		if($.expr[':'].focusable) { return $.expr[':'].focusable; }
+
+		var isTabIndexNotNaN = !isNaN($.attr(element, 'tabindex')),
+			nodeName = element.nodeName && element.nodeName.toLowerCase(),
+			map, mapName, img;
+
+		if('area' === nodeName) {
+			map = element.parentNode;
+			mapName = map.name;
+			if(!element.href || !mapName || map.nodeName.toLowerCase() !== 'map') {
+				return false;
+			}
+			img = $('img[usemap=#' + mapName + ']')[0];
+			return !!img && img.is(':visible');
+		}
+		return (/input|select|textarea|button|object/.test( nodeName ) ?
+				!element.disabled :
+				'a' === nodeName ? 
+					element.href || isTabIndexNotNaN : 
+					isTabIndexNotNaN
+			);
+	}
+
+	// Focus inputs using cached focusable elements (see update())
+	function focusInputs(blurElems) {
+		// Blurring body element in IE causes window.open windows to unfocus!
+		if(focusableElems.length < 1 && blurElems.length) { blurElems.not('body').blur(); }
+
+		// Focus the inputs
+		else { focusableElems.first().focus(); }
+	}
+
+	// Steal focus from elements outside tooltip
+	function stealFocus(event) {
+		if(!elem.is(':visible')) { return; }
+
+		var target = $(event.target),
+			tooltip = current.tooltip,
+			container = target.closest(SELECTOR),
+			targetOnTop;
+
+		// Determine if input container target is above this
+		targetOnTop = container.length < 1 ? FALSE :
+			(parseInt(container[0].style.zIndex, 10) > parseInt(tooltip[0].style.zIndex, 10));
+
+		// If we're showing a modal, but focus has landed on an input below
+		// this modal, divert focus to the first visible input in this modal
+		// or if we can't find one... the tooltip itself
+		if(!targetOnTop && target.closest(SELECTOR)[0] !== tooltip[0]) {
+			focusInputs(target);
+		}
+
+		// Detect when we leave the last focusable element...
+		onLast = event.target === focusableElems[focusableElems.length - 1];
+	}
 
 	$.extend(self, {
-		init: function()
-		{
-			var win = $(window), scroll;
+		init: function() {
+			// Create document overlay
+			elem = self.elem = $('<div />', {
+				id: 'qtip-overlay',
+				html: '<div></div>',
+				mousedown: function() { return FALSE; }
+			})
+			.hide();
 
-			// Create the BGIFrame element if needed
-			if(bgiframe) {
-				elems.bgiframe = $('<iframe class="qtip-bgiframe" frameborder="0" tabindex="-1" src="javascript:\'\';" ' +
-					' style="display:block; position:absolute; z-index:-1; filter:alpha(opacity=0); ' +
-						'-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";"></iframe>');
-
-				// Append the new element to the tooltip
-				elems.bgiframe.appendTo(tooltip);
-
-				// Update BGIFrame on tooltip move
-				tooltip.bind('tooltipmove'+namespace, self.adjustBGIFrame);	
+			// Update position on window resize or scroll
+			function resize() {
+				var win = $(this);
+				elem.css({
+					height: win.height(),
+					width: win.width()
+				});
 			}
+			$(window).bind('resize'+MODALSELECTOR, resize);
+			resize(); // Fire it initially too
 
-			// redraw() container for width/height calculations
-			redrawContainer = $('<div/>', { id: 'qtip-rcontainer' })
-				.appendTo(document.body);
+			// Make sure we can't focus anything outside the tooltip
+			$(document.body).bind('focusin'+MODALSELECTOR, stealFocus);
 
-			// Set dimensions
-			self.redraw();
+			// Apply keyboard "Escape key" close handler
+			$(document).bind('keydown'+MODALSELECTOR, function(event) {
+				if(current && current.options.show.modal.escape && event.keyCode === 27) {
+					current.hide(event);
+				}
+			});
 
-			// Fixup modal plugin if present too
-			if(elems.overlay && !modalProcessed) {
-				scroll = function() {
-					elems.overlay[0].style.top = win.scrollTop() + 'px';
-				};
-				win.bind('scroll.qtip-ie6, resize.qtip-ie6', scroll);
-				scroll(); // Fire it initially too
-
-				elems.overlay.addClass('qtipmodal-ie6fix'); // Add fix class
-
-				modalProcessed = TRUE; // Set flag
-			}
-		},
-
-		adjustBGIFrame: function()
-		{
-			var dimensions = {
-					height: tooltip.outerHeight(FALSE),
-					width: tooltip.outerWidth(FALSE)
-				},
-				plugin = api.plugins.tip,
-				tip = elems.tip,
-				tipAdjust, offset;
-
-			// Adjust border offset
-			offset = parseInt(tooltip.css('border-left-width'), 10) || 0;
-			offset = { left: -offset, top: -offset };
-
-			// Adjust for tips plugin
-			if(plugin && tip) {
-				tipAdjust = (plugin.corner.precedance === 'x') ? ['width', 'left'] : ['height', 'top'];
-				offset[ tipAdjust[1] ] -= tip[ tipAdjust[0] ]();
-			}
-
-			// Update bgiframe
-			elems.bgiframe.css(offset).css(dimensions);
-		},
-
-		// Max/min width simulator function
-		redraw: function()
-		{
-			if(api.rendered < 1 || api.drawing) { return self; }
-
-			var style = options.style,
-				container = options.position.container,
-				perc, width, max, min;
-
-			// Set drawing flag
-			api.drawing = 1;
-
-			// If tooltip has a set height/width, just set it... like a boss!
-			if(style.height) { tooltip.css(HEIGHT, style.height); }
-			if(style.width) { tooltip.css(WIDTH, style.width); }
-
-			// Simulate max/min width if not set width present...
-			else {
-				// Reset width and add fluid class
-				tooltip.css(WIDTH, '').appendTo(redrawContainer);
-
-				// Grab our tooltip width (add 1 if odd so we don't get wrapping problems.. huzzah!)
-				width = tooltip.width();
-				if(width % 2 < 1) { width += 1; }
-
-				// Grab our max/min properties
-				max = tooltip.css('max-width') || '';
-				min = tooltip.css('min-width') || '';
-
-				// Parse into proper pixel values
-				perc = (max + min).indexOf('%') > -1 ? container.width() / 100 : 0;
-				max = ((max.indexOf('%') > -1 ? perc : 1) * parseInt(max, 10)) || width;
-				min = ((min.indexOf('%') > -1 ? perc : 1) * parseInt(min, 10)) || 0;
-
-				// Determine new dimension size based on max/min/current values
-				width = max + min ? Math.min(Math.max(width, min), max) : width;
-
-				// Set the newly calculated width and remvoe fluid class
-				tooltip.css(WIDTH, Math.round(width)).appendTo(container);
-			}
-
-			// Set drawing flag
-			api.drawing = 0;
+			// Apply click handler for blur option
+			elem.bind('click'+MODALSELECTOR, function(event) {
+				if(current && current.options.show.modal.blur) {
+					current.hide(event);
+				}
+			});
 
 			return self;
 		},
 
-		destroy: function()
-		{
-			// Remove iframe
-			if(bgiframe) { elems.bgiframe.remove(); }
+		update: function(api) {
+			// Update current API reference
+			current = api;
 
-			// Remove bound events
-			tooltip.unbind(namespace);
+			// Update focusable elements if enabled
+			if(api.options.show.modal.stealfocus !== FALSE) {
+				focusableElems = api.tooltip.find('*').filter(function() {
+					return focusable(this);
+				});
+			}
+			else { focusableElems = []; }
+		},
+
+		toggle: function(api, state, duration) {
+			var docBody = $(document.body),
+				tooltip = api.tooltip,
+				options = api.options.show.modal,
+				effect = options.effect,
+				type = state ? 'show': 'hide',
+				visible = elem.is(':visible'),
+				visibleModals = $(MODALSELECTOR).filter(':visible:not(:animated)').not(tooltip),
+				zindex;
+
+			// Set active tooltip API reference
+			self.update(api);
+
+			// If the modal can steal the focus...
+			// Blur the current item and focus anything in the modal we an
+			if(state && options.stealfocus !== FALSE) {
+				focusInputs( $(':focus') );
+			}
+
+			// Toggle backdrop cursor style on show
+			elem.toggleClass('blurs', options.blur);
+
+			// Set position and append to body on show
+			if(state) {
+				elem.css({ left: 0, top: 0 })
+					.appendTo(document.body);
+			}
+
+			// Prevent modal from conflicting with show.solo, and don't hide backdrop is other modals are visible
+			if((elem.is(':animated') && visible === state && prevState !== FALSE) || (!state && visibleModals.length)) {
+				return self;
+			}
+
+			// Stop all animations
+			elem.stop(TRUE, FALSE);
+
+			// Use custom function if provided
+			if($.isFunction(effect)) {
+				effect.call(elem, state);
+			}
+
+			// If no effect type is supplied, use a simple toggle
+			else if(effect === FALSE) {
+				elem[ type ]();
+			}
+
+			// Use basic fade function
+			else {
+				elem.fadeTo( parseInt(duration, 10) || 90, state ? 1 : 0, function() {
+					if(!state) { elem.hide(); }
+				});
+			}
+
+			// Reset position and detach from body on hide
+			if(!state) {
+				elem.queue(function(next) {
+					elem.css({ left: '', top: '' });
+					if(!$(MODALSELECTOR).length) { elem.detach(); }
+					next();
+				});
+			}
+
+			// Cache the state
+			prevState = state;
+
+			// If the tooltip is destroyed, set reference to null
+			if(current.destroyed) { current = NULL; }
+
+			return self;
 		}
-	});
+	});	
 
 	self.init();
+};
+OVERLAY = new OVERLAY();
+
+function Modal(api, options) {
+	this.options = options;
+	this._ns = '-modal';
+
+	this.init( (this.qtip = api) );
 }
 
-IE6 = BROWSER.ie6 = function(api) {
-	// Proceed only if the browser is IE6
-	return BROWSER.ie === 6 ? new Ie6(api) : FALSE;
+$.extend(Modal.prototype, {
+	init: function(qtip) {
+		var tooltip = qtip.tooltip;
+
+		// If modal is disabled... return
+		if(!this.options.on) { return this; }
+
+		// Set overlay reference
+		qtip.elements.overlay = OVERLAY.elem;
+
+		// Add unique attribute so we can grab modal tooltips easily via a SELECTOR, and set z-index
+		tooltip.addClass(MODALCLASS).css('z-index', PLUGINS.modal.zindex + $(MODALSELECTOR).length);
+		
+		// Apply our show/hide/focus modal events
+		qtip._bind(tooltip, ['tooltipshow', 'tooltiphide'], function(event, api, duration) {
+			var oEvent = event.originalEvent;
+
+			// Make sure mouseout doesn't trigger a hide when showing the modal and mousing onto backdrop
+			if(event.target === tooltip[0]) {
+				if(oEvent && event.type === 'tooltiphide' && /mouse(leave|enter)/.test(oEvent.type) && $(oEvent.relatedTarget).closest(overlay[0]).length) {
+					try { event.preventDefault(); } catch(e) {}
+				}
+				else if(!oEvent || (oEvent && !oEvent.solo)) {
+					this.toggle(event, event.type === 'tooltipshow', duration);
+				}
+			}
+		}, this._ns, this);
+
+		// Adjust modal z-index on tooltip focus
+		qtip._bind(tooltip, 'tooltipfocus', function(event, api) {
+			// If focus was cancelled before it reached us, don't do anything
+			if(event.isDefaultPrevented() || event.target !== tooltip[0]) { return; }
+
+			var qtips = $(MODALSELECTOR),
+
+			// Keep the modal's lower than other, regular qtips
+			newIndex = PLUGINS.modal.zindex + qtips.length,
+			curIndex = parseInt(tooltip[0].style.zIndex, 10);
+
+			// Set overlay z-index
+			OVERLAY.elem[0].style.zIndex = newIndex - 1;
+
+			// Reduce modal z-index's and keep them properly ordered
+			qtips.each(function() {
+				if(this.style.zIndex > curIndex) {
+					this.style.zIndex -= 1;
+				}
+			});
+
+			// Fire blur event for focused tooltip
+			qtips.filter('.' + CLASS_FOCUS).qtip('blur', event.originalEvent);
+
+			// Set the new z-index
+			tooltip.addClass(CLASS_FOCUS)[0].style.zIndex = newIndex;
+
+			// Set current
+			OVERLAY.update(api);
+
+			// Prevent default handling
+			try { event.preventDefault(); } catch(e) {}
+		}, this._ns, this);
+
+		// Focus any other visible modals when this one hides
+		qtip._bind(tooltip, 'tooltiphide', function(event) {
+			if(event.target === tooltip[0]) {
+				$(MODALSELECTOR).filter(':visible').not(tooltip).last().qtip('focus', event);
+			}
+		}, this._ns, this);
+	},
+
+	toggle: function(event, state, duration) {
+		// Make sure default event hasn't been prevented
+		if(event && event.isDefaultPrevented()) { return this; }
+
+		// Toggle it
+		OVERLAY.toggle(this.qtip, !!state, duration);
+	},
+
+	destroy: function() {
+		// Remove modal class
+		this.qtip.tooltip.removeClass(MODALCLASS);
+
+		// Remove bound events
+		this.qtip._unbind(this.qtip.tooltip, this._ns);
+
+		// Delete element reference
+		OVERLAY.toggle(this.qtip, FALSE);
+		delete this.qtip.elements.overlay;
+	}
+});
+
+
+MODAL = PLUGINS.modal = function(api) {
+	return new Modal(api, api.options.show.modal);
 };
 
-IE6.initialize = 'render';
-
-CHECKS.ie6 = {
-	'^content|style$': function() { 
-		this.redraw();
+// Setup sanitiztion rules
+MODAL.sanitize = function(opts) {
+	if(opts.show) { 
+		if(typeof opts.show.modal !== 'object') { opts.show.modal = { on: !!opts.show.modal }; }
+		else if(typeof opts.show.modal.on === 'undefined') { opts.show.modal.on = TRUE; }
 	}
-};;}));
+};
+
+// Base z-index for all modal tooltips (use qTip core z-index as a base)
+MODAL.zindex = QTIP.zindex - 200;
+
+// Plugin needs to be initialized on render
+MODAL.initialize = 'render';
+
+// Setup option set checks
+CHECKS.modal = {
+	'^show.modal.(on|blur)$': function() {
+		// Initialise
+		this.destroy();
+		this.init();
+		
+		// Show the modal if not visible already and tooltip is visible
+		this.qtip.elems.overlay.toggle(
+			this.qtip.tooltip[0].offsetWidth > 0
+		);
+	}
+};
+
+// Extend original api defaults
+$.extend(TRUE, QTIP.defaults, {
+	show: {
+		modal: {
+			on: FALSE,
+			effect: TRUE,
+			blur: TRUE,
+			stealfocus: TRUE,
+			escape: TRUE
+		}
+	}
+});
+;}));
 }( window, document ));
 
 
 
-
-/*!
- * jQuery imagesLoaded plugin v2.1.1
- * http://github.com/desandro/imagesloaded
- *
- * MIT License. by Paul Irish et al.
- */
-
-/*jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
-/*global jQuery: false */
-
-;(function($, undefined) {
-'use strict';
-
-// blank image data-uri bypasses webkit log warning (thx doug jones)
-var BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
-
-$.fn.imagesLoaded = function( callback ) {
-	var $this = this,
-		deferred = $.isFunction($.Deferred) ? $.Deferred() : 0,
-		hasNotify = $.isFunction(deferred.notify),
-		$images = $this.find('img').add( $this.filter('img') ),
-		loaded = [],
-		proper = [],
-		broken = [];
-
-	// Register deferred callbacks
-	if ($.isPlainObject(callback)) {
-		$.each(callback, function (key, value) {
-			if (key === 'callback') {
-				callback = value;
-			} else if (deferred) {
-				deferred[key](value);
-			}
-		});
-	}
-
-	function doneLoading() {
-		var $proper = $(proper),
-			$broken = $(broken);
-
-		if ( deferred ) {
-			if ( broken.length ) {
-				deferred.reject( $images, $proper, $broken );
-			} else {
-				deferred.resolve( $images );
-			}
-		}
-
-		if ( $.isFunction( callback ) ) {
-			callback.call( $this, $images, $proper, $broken );
-		}
-	}
-
-	function imgLoadedHandler( event ) {
-		imgLoaded( event.target, event.type === 'error' );
-	}
-
-	function imgLoaded( img, isBroken ) {
-		// don't proceed if BLANK image, or image is already loaded
-		if ( img.src === BLANK || $.inArray( img, loaded ) !== -1 ) {
-			return;
-		}
-
-		// store element in loaded images array
-		loaded.push( img );
-
-		// keep track of broken and properly loaded images
-		if ( isBroken ) {
-			broken.push( img );
-		} else {
-			proper.push( img );
-		}
-
-		// cache image and its state for future calls
-		$.data( img, 'imagesLoaded', { isBroken: isBroken, src: img.src } );
-
-		// trigger deferred progress method if present
-		if ( hasNotify ) {
-			deferred.notifyWith( $(img), [ isBroken, $images, $(proper), $(broken) ] );
-		}
-
-		// call doneLoading and clean listeners if all images are loaded
-		if ( $images.length === loaded.length ) {
-			setTimeout( doneLoading );
-			$images.unbind( '.imagesLoaded', imgLoadedHandler );
-		}
-	}
-
-	// if no images, trigger immediately
-	if ( !$images.length ) {
-		doneLoading();
-	} else {
-		$images.bind( 'load.imagesLoaded error.imagesLoaded', imgLoadedHandler )
-		.each( function( i, el ) {
-			var src = el.src;
-
-			// find out if this image has been already checked for status
-			// if it was, and src has not changed, call imgLoaded on it
-			var cached = $.data( el, 'imagesLoaded' );
-			if ( cached && cached.src === src ) {
-				imgLoaded( el, cached.isBroken );
-				return;
-			}
-
-			// if complete is true and browser supports natural sizes, try
-			// to check for image status manually
-			if ( el.complete && el.naturalWidth !== undefined ) {
-				imgLoaded( el, el.naturalWidth === 0 || el.naturalHeight === 0 );
-				return;
-			}
-
-			// cached images don't fire load sometimes, so we reset src, but only when
-			// dealing with IE, or image is complete (loaded) and failed manual check
-			// webkit hack from http://groups.google.com/group/jquery-dev/browse_thread/thread/eee6ab7b2da50e1f
-			if ( el.readyState || el.complete ) {
-				el.src = BLANK;
-				el.src = src;
-			}
-		});
-	}
-
-	return deferred ? deferred.promise( $this ) : $this;
-};
-
-})(jQuery);
 (function ($) {
 	$.fn.rssReader = function (j) {
 	  var container = this;
@@ -48841,7 +48667,7 @@ $.fn.imagesLoaded = function( callback ) {
 		return d
 	}
 })(jQuery);
-// Spectrum Colorpicker v1.1.0
+// Spectrum Colorpicker v1.1.1
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
@@ -49004,7 +48830,8 @@ $.fn.imagesLoaded = function( callback ) {
             paletteArray = $.isArray(palette[0]) ? palette : [palette],
             selectionPalette = opts.selectionPalette.slice(0),
             maxSelectionSize = opts.maxSelectionSize,
-            draggingClass = "sp-dragging";
+            draggingClass = "sp-dragging",
+            shiftMovementDirection = null;
 
         var doc = element.ownerDocument,
             body = doc.body,
@@ -49040,7 +48867,7 @@ $.fn.imagesLoaded = function( callback ) {
             container.toggleClass("sp-flat", flat);
             container.toggleClass("sp-input-disabled", !opts.showInput);
             container.toggleClass("sp-alpha-enabled", opts.showAlpha);
-            container.toggleClass("sp-buttons-disabled", !opts.showButtons || flat);
+            container.toggleClass("sp-buttons-disabled", !opts.showButtons);
             container.toggleClass("sp-palette-disabled", !opts.showPalette);
             container.toggleClass("sp-palette-only", opts.showPaletteOnly);
             container.toggleClass("sp-initial-disabled", !opts.showInitial);
@@ -49152,10 +48979,32 @@ $.fn.imagesLoaded = function( callback ) {
                 move();
             }, dragStart, dragStop);
 
-            draggable(dragger, function (dragX, dragY) {
-                currentSaturation = parseFloat(dragX / dragWidth);
-                currentValue = parseFloat((dragHeight - dragY) / dragHeight);
+            draggable(dragger, function (dragX, dragY, e) {
+
+                // shift+drag should snap the movement to either the x or y axis.
+                if (!e.shiftKey) {
+                    shiftMovementDirection = null;
+                }
+                else if (!shiftMovementDirection) {
+                    var oldDragX = currentSaturation * dragWidth;
+                    var oldDragY = dragHeight - (currentValue * dragHeight);
+                    var furtherFromX = Math.abs(dragX - oldDragX) > Math.abs(dragY - oldDragY);
+
+                    shiftMovementDirection = furtherFromX ? "x" : "y";
+                }
+
+                var setSaturation = !shiftMovementDirection || shiftMovementDirection === "x";
+                var setValue = !shiftMovementDirection || shiftMovementDirection === "y";
+
+                if (setSaturation) {
+                    currentSaturation = parseFloat(dragX / dragWidth);
+                }
+                if (setValue) {
+                    currentValue = parseFloat((dragHeight - dragY) / dragHeight);
+                }
+
                 move();
+
             }, dragStart, dragStop);
 
             if (!!initialColor) {
@@ -49271,6 +49120,7 @@ $.fn.imagesLoaded = function( callback ) {
                 reflow();
             }
             container.addClass(draggingClass);
+            shiftMovementDirection = null;
         }
 
         function dragStop() {
@@ -49373,7 +49223,7 @@ $.fn.imagesLoaded = function( callback ) {
             var newColor = tinycolor(color);
             var newHsv = newColor.toHsv();
 
-            currentHue = newHsv.h;
+            currentHue = (newHsv.h % 360) / 360;
             currentSaturation = newHsv.s;
             currentValue = newHsv.v;
             currentAlpha = newHsv.a;
@@ -49663,8 +49513,8 @@ $.fn.imagesLoaded = function( callback ) {
         var duringDragEvents = {};
         duringDragEvents["selectstart"] = prevent;
         duringDragEvents["dragstart"] = prevent;
-        duringDragEvents[(hasTouch ? "touchmove" : "mousemove")] = move;
-        duringDragEvents[(hasTouch ? "touchend" : "mouseup")] = stop;
+        duringDragEvents["touchmove mousemove"] = move;
+        duringDragEvents["touchend mouseup"] = stop;
 
         function prevent(e) {
             if (e.stopPropagation) {
@@ -49729,7 +49579,7 @@ $.fn.imagesLoaded = function( callback ) {
             dragging = false;
         }
 
-        $(element).bind(hasTouch ? "touchstart" : "mousedown", start);
+        $(element).bind("touchstart mousedown", start);
     }
 
     function throttle(func, wait, debounce) {
@@ -49745,6 +49595,8 @@ $.fn.imagesLoaded = function( callback ) {
         };
     }
 
+
+    function log(){/* jshint -W021 */if(window.console){if(Function.prototype.bind)log=Function.prototype.bind.call(console.log,console);else log=function(){Function.prototype.apply.call(console.log,console,arguments);};log.apply(this,arguments);}}
 
     /**
     * Define a jQuery plugin
@@ -50696,32 +50548,27 @@ $.fn.imagesLoaded = function( callback ) {
 
     })(this);
 
-
-
     $(function () {
         if ($.fn.spectrum.load) {
             $.fn.spectrum.processNativeColorInputs();
         }
     });
 
-
-    function log(){window.console&&(log=Function.prototype.bind?Function.prototype.bind.call(console.log,console):function(){Function.prototype.apply.call(console.log,console,arguments)},log.apply(this,arguments))};
-
-
 })(window, jQuery);
 
 /*
- * Superfish v1.7.2 - jQuery menu widget
+ * jQuery Superfish Menu Plugin - v1.7.4
  * Copyright (c) 2013 Joel Birch
  *
  * Dual licensed under the MIT and GPL licenses:
- * 	http://www.opensource.org/licenses/mit-license.php
- * 	http://www.gnu.org/licenses/gpl.html
+ *	http://www.opensource.org/licenses/mit-license.php
+ *	http://www.gnu.org/licenses/gpl.html
  */
 
-;(function($) {
+;(function ($) {
+	"use strict";
 
-	var methods = (function(){
+	var methods = (function () {
 		// private properties and methods go here
 		var c = {
 				bcClass: 'sf-breadcrumb',
@@ -50729,43 +50576,44 @@ $.fn.imagesLoaded = function( callback ) {
 				anchorClass: 'sf-with-ul',
 				menuArrowClass: 'sf-arrows'
 			},
-			ios = /iPhone|iPad|iPod/i.test(navigator.userAgent),
-			wp7 = (function() {
-				var style = document.documentElement.style;
-				return ('behavior' in style && 'fill' in style && /iemobile/i.test(navigator.userAgent));
-			})(),
-			fixIos = (function(){
+			ios = (function () {
+				var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 				if (ios) {
 					// iOS clicks only bubble as far as body children
-					$(window).load(function() {
+					$(window).load(function () {
 						$('body').children().on('click', $.noop);
 					});
 				}
+				return ios;
 			})(),
-			toggleMenuClasses = function($menu, o) {
+			wp7 = (function () {
+				var style = document.documentElement.style;
+				return ('behavior' in style && 'fill' in style && /iemobile/i.test(navigator.userAgent));
+			})(),
+			toggleMenuClasses = function ($menu, o) {
 				var classes = c.menuClass;
 				if (o.cssArrows) {
 					classes += ' ' + c.menuArrowClass;
 				}
 				$menu.toggleClass(classes);
 			},
-			setPathToCurrent = function($menu, o) {
+			setPathToCurrent = function ($menu, o) {
 				return $menu.find('li.' + o.pathClass).slice(0, o.pathLevels)
 					.addClass(o.hoverClass + ' ' + c.bcClass)
-						.filter(function() {
-							return ($(this).children('ul').hide().show().length);
+						.filter(function () {
+							return ($(this).children(o.popUpSelector).hide().show().length);
 						}).removeClass(o.pathClass);
 			},
-			toggleAnchorClass = function($li) {
+			toggleAnchorClass = function ($li) {
 				$li.children('a').toggleClass(c.anchorClass);
 			},
-			toggleTouchAction = function($menu) {
+			toggleTouchAction = function ($menu) {
 				var touchAction = $menu.css('ms-touch-action');
 				touchAction = (touchAction === 'pan-y') ? 'auto' : 'pan-y';
 				$menu.css('ms-touch-action', touchAction);
 			},
-			applyHandlers = function($menu,o) {
-				var targets = 'li:has(ul)';
+			applyHandlers = function ($menu, o) {
+				var targets = 'li:has(' + o.popUpSelector + ')';
 				if ($.fn.hoverIntent && !o.disableHI) {
 					$menu.hoverIntent(over, out, targets);
 				}
@@ -50784,11 +50632,11 @@ $.fn.imagesLoaded = function( callback ) {
 				$menu
 					.on('focusin.superfish', 'li', over)
 					.on('focusout.superfish', 'li', out)
-					.on(touchevent, 'a', touchHandler);
+					.on(touchevent, 'a', o, touchHandler);
 			},
-			touchHandler = function(e) {
+			touchHandler = function (e) {
 				var $this = $(this),
-					$ul = $this.siblings('ul');
+					$ul = $this.siblings(e.data.popUpSelector);
 
 				if ($ul.length > 0 && $ul.is(':hidden')) {
 					$this.one('click.superfish', false);
@@ -50799,13 +50647,13 @@ $.fn.imagesLoaded = function( callback ) {
 					}
 				}
 			},
-			over = function() {
+			over = function () {
 				var $this = $(this),
 					o = getOptions($this);
 				clearTimeout(o.sfTimer);
 				$this.siblings().superfish('hide').end().superfish('show');
 			},
-			out = function() {
+			out = function () {
 				var $this = $(this),
 					o = getOptions($this);
 				if (ios) {
@@ -50816,8 +50664,8 @@ $.fn.imagesLoaded = function( callback ) {
 					o.sfTimer = setTimeout($.proxy(close, $this, o), o.delay);
 				}
 			},
-			close = function(o) {
-				o.retainPath = ( $.inArray(this[0], o.$path) > -1);
+			close = function (o) {
+				o.retainPath = ($.inArray(this[0], o.$path) > -1);
 				this.superfish('hide');
 
 				if (!this.parents('.' + o.hoverClass).length) {
@@ -50827,24 +50675,24 @@ $.fn.imagesLoaded = function( callback ) {
 					}
 				}
 			},
-			getMenu = function($el) {
+			getMenu = function ($el) {
 				return $el.closest('.' + c.menuClass);
 			},
-			getOptions = function($el) {
+			getOptions = function ($el) {
 				return getMenu($el).data('sf-options');
 			};
 
 		return {
 			// public methods
-			hide: function(instant) {
+			hide: function (instant) {
 				if (this.length) {
 					var $this = this,
 						o = getOptions($this);
-						if (!o) {
-							return this;
-						}
+					if (!o) {
+						return this;
+					}
 					var not = (o.retainPath === true) ? o.$path : '',
-						$ul = $this.find('li.' + o.hoverClass).add(this).not(not).removeClass(o.hoverClass).children('ul'),
+						$ul = $this.find('li.' + o.hoverClass).add(this).not(not).removeClass(o.hoverClass).children(o.popUpSelector),
 						speed = o.speedOut;
 
 					if (instant) {
@@ -50853,43 +50701,44 @@ $.fn.imagesLoaded = function( callback ) {
 					}
 					o.retainPath = false;
 					o.onBeforeHide.call($ul);
-					$ul.stop(true, true).animate(o.animationOut, speed, function() {
+					$ul.stop(true, true).animate(o.animationOut, speed, function () {
 						var $this = $(this);
 						o.onHide.call($this);
 					});
 				}
 				return this;
 			},
-			show: function() {
+			show: function () {
 				var o = getOptions(this);
 				if (!o) {
 					return this;
 				}
 				var $this = this.addClass(o.hoverClass),
-					$ul = $this.children('ul');
+					$ul = $this.children(o.popUpSelector);
 
 				o.onBeforeShow.call($ul);
-				$ul.stop(true, true).animate(o.animation, o.speed, function() {
+				$ul.stop(true, true).animate(o.animation, o.speed, function () {
 					o.onShow.call($ul);
 				});
 				return this;
 			},
-			destroy: function() {
-				return this.each(function(){
+			destroy: function () {
+				return this.each(function () {
 					var $this = $(this),
 						o = $this.data('sf-options'),
-						$liHasUl = $this.find('li:has(ul)');
+						$hasPopUp;
 					if (!o) {
 						return false;
 					}
+					$hasPopUp = $this.find(o.popUpSelector).parent('li');
 					clearTimeout(o.sfTimer);
 					toggleMenuClasses($this, o);
-					toggleAnchorClass($liHasUl);
+					toggleAnchorClass($hasPopUp);
 					toggleTouchAction($this);
 					// remove event handlers
 					$this.off('.superfish').off('.hoverIntent');
 					// clear animation's inline display style
-					$liHasUl.children('ul').attr('style', function(i, style){
+					$hasPopUp.children(o.popUpSelector).attr('style', function (i, style) {
 						return style.replace(/display[^;]+;?/g, '');
 					});
 					// reset 'current' path classes
@@ -50899,24 +50748,24 @@ $.fn.imagesLoaded = function( callback ) {
 					$this.removeData('sf-options');
 				});
 			},
-			init: function(op){
-				return this.each(function() {
+			init: function (op) {
+				return this.each(function () {
 					var $this = $(this);
 					if ($this.data('sf-options')) {
 						return false;
 					}
 					var o = $.extend({}, $.fn.superfish.defaults, op),
-						$liHasUl = $this.find('li:has(ul)');
+						$hasPopUp = $this.find(o.popUpSelector).parent('li');
 					o.$path = setPathToCurrent($this, o);
 
 					$this.data('sf-options', o);
 
 					toggleMenuClasses($this, o);
-					toggleAnchorClass($liHasUl);
+					toggleAnchorClass($hasPopUp);
 					toggleTouchAction($this);
 					applyHandlers($this, o);
 
-					$liHasUl.not('.' + c.bcClass).superfish('hide',true);
+					$hasPopUp.not('.' + c.bcClass).superfish('hide', true);
 
 					o.onInit.call(this);
 				});
@@ -50924,7 +50773,7 @@ $.fn.imagesLoaded = function( callback ) {
 		};
 	})();
 
-	$.fn.superfish = function(method, args) {
+	$.fn.superfish = function (method, args) {
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		}
@@ -50937,12 +50786,13 @@ $.fn.imagesLoaded = function( callback ) {
 	};
 
 	$.fn.superfish.defaults = {
+		popUpSelector: 'ul,.sf-mega', // within menu context
 		hoverClass: 'sfHover',
 		pathClass: 'overrideThisToUse',
 		pathLevels: 1,
 		delay: 800,
-		animation: {opacity:'show'},
-		animationOut: {opacity:'hide'},
+		animation: {opacity: 'show'},
+		animationOut: {opacity: 'hide'},
 		speed: 'normal',
 		speedOut: 'fast',
 		cssArrows: true,
@@ -50963,6 +50813,7 @@ $.fn.imagesLoaded = function( callback ) {
 	});
 
 })(jQuery);
+
 /**
  * Toolbar.js
  *
