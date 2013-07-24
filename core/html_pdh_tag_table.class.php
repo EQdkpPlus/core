@@ -307,7 +307,9 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$members[] = $main_id;
 			$id_position = array_search($this->id_tag, $this->columns[$this->sort_cid]['2']);
 			$sort_params = $this->pdh->post_process_preset($this->columns[$this->sort_cid]['2'], $this->sub_array);
-			$members = $this->pdh->sort($members, $this->columns[$this->sort_cid]['0'], $this->columns[$this->sort_cid]['1'], $this->sort_direction, $params, $id_position);
+			$sort_wt_pos = array_search('%with_twink%', $sort_params, true);
+			$sort_params[$sort_wt_pos] = false;
+			$members = $this->pdh->sort($members, $this->columns[$this->sort_cid]['0'], $this->columns[$this->sort_cid]['1'], $this->sort_direction, $sort_params, $id_position);
 			$method = 'get_html_'.$tag;
 			foreach($members as $member_id) {
 				if($member_id) {
