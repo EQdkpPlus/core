@@ -25,7 +25,7 @@ if(!defined('EQDKP_INC')){
 if(!class_exists('pageobject')){
 	class pageobject extends page_generic {
 		public static function __shortcuts() {
-			$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html');
+			$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 		

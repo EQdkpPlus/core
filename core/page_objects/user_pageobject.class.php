@@ -261,7 +261,8 @@ class user_pageobject extends pageobject {
 				array('name' => 'attendance_lt_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 		));
 
-		$arrMemberList = array($this->pdh->get('member', 'mainchar', array($user_id)));
+		$arrMemberList = ($this->pdh->get('member', 'mainchar', array($user_id))) ? array($this->pdh->get('member', 'mainchar', array($user_id))) : array();
+
 		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), 'userprofile_'.$user_id);
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array(
@@ -381,7 +382,7 @@ class user_pageobject extends pageobject {
 		);
 		$view_list = $this->pdh->get('event', 'id_list');
 		$hptt_page_settings = $arrEventAttSettings;
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->pdh->get('member', 'mainchar', array($user_id)), '%link_url%' => $this->routing->build('event', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => true), 'userprofile_'.$user_id, 'esort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->pdh->get('member', 'mainchar', array($user_id)), '%link_url%' => $this->routing->build('event', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => true, '%use_controller%' => true), 'userprofile_'.$user_id, 'esort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'EVENT_ATT_OUT' => $hptt->get_html_table($this->in->get('esort', ''), $this->vc_build_url('esort')),
@@ -411,7 +412,7 @@ class user_pageobject extends pageobject {
 		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
 			
 		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => '', '%use_controller%' => true));
-
+		$hptt->setPageRef($this->strPath);
 		//footer
 		$user_count			= count($view_list);
 		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);

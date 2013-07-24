@@ -866,6 +866,9 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "user_last_activity" => "Letzte Aktivität am",
 "about_me"	=> "Über mich",
 "userwall_no_permission" => "Du kannst diese Pinnwand leider nicht sehen, da der Benutzer diese nicht für dich freigegeben hat.",
+"manraid_title" => "Raids verwalten",
+"manage_members" => "Charaktere verwalten",
+"adding_raid" => "Raid hinzufügen",
  );
 
 ?>

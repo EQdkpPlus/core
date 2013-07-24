@@ -85,11 +85,11 @@ class controller extends page_generic {
 		$intArticleID = $intCategoryID = 0;
 		
 		//Suche Alias in Artikeln
-		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", $arrPath[0])));
+		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
 		
 		if (!$intArticleID){
 			//Suche Alias in Kategorien
-			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(".html", "", $arrPath[0])));
+			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
 			
 			//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
 			if (!$intCategoryID && isset($arrPath[1])) {

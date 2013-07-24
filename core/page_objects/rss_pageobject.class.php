@@ -63,7 +63,7 @@ class rss_pageobject extends pageobject {
 		$feed->feedfile		= $this->env->link.$this->strPathPlain.'?key='.$strExchangeKey;
 		$feed->link			= $this->env->link;
 		$feed->title		= $this->config->get('main_title').": ".$arrCategory['name'];
-		$feed->description	= $arrCategory['description'];
+		$feed->description	= strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrCategory['description']))));
 		$feed->published	= time();
 		$feed->language		= 'EN-EN';
 		
@@ -96,11 +96,10 @@ class rss_pageobject extends pageobject {
 					}
 				}
 
-			
 				$rssitem = registry::register('feeditems', array($intArticleID));
 				$rssitem->title			= sanitize($this->pdh->get('articles', 'title', array($intArticleID)));
 				$rssitem->description	= $strText;
-				$rssitem->link			= $this->env->link.$this->pdh->get('articles',  'path', array($intArticleID));
+				$rssitem->link			= $this->user->removeSIDfromString($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID)));
 				$rssitem->published		= $this->pdh->get('articles', 'date', array($intArticleID));
 				$rssitem->author		= $this->pdh->geth('articles', 'user_id', array($intArticleID));
 				$rssitem->source		= $feed->link;

@@ -40,7 +40,7 @@ if(!class_exists('pdh_r_event')){
 		public $presets = array(
 			'ename'		=> array('name', array('%event_id%', '%no_root%'), array()),
 			'eicon'		=> array('icon', array('%event_id%'), array()),
-			'elink'		=> array('eventlink', array('%event_id%', '%link_url%', '%link_url_suffix%'),	array()),
+			'elink'		=> array('eventlink', array('%event_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'),	array()),
 			'emdkps'	=> array('multidkppools', array('%event_id%'),	array()),
 			'eipools'	=> array('itempools',	array('%event_id%'), array()),
 			'evalue'	=> array('value', array('%event_id%'), array()),
@@ -115,12 +115,13 @@ if(!class_exists('pdh_r_event')){
 			return $this->game->decorate('events', array($event_id, $width, false, $alt));
 		}
 
-		public function get_eventlink($event_id, $baseurl, $url_suffix=''){
+		public function get_eventlink($event_id, $baseurl, $url_suffix='', $blnUseController=false){
+			if($blnUseController && $blnUseController !== "%use_controller%") return $baseurl.register('routing')->clean($this->get_name($event_id)).'-'.$event_id.'/'.$this->SID.$url_suffix;
 			return $baseurl.$this->SID.'&amp;event_id='.$event_id.$url_suffix;
 		}
 
-		public function get_html_eventlink($event_id, $baseurl, $url_suffix=''){
-			return "<a href='".$this->get_eventlink($event_id, $baseurl, $url_suffix)."'>".$this->get_name($event_id)."</a>";
+		public function get_html_eventlink($event_id, $baseurl, $url_suffix='', $blnUseController=false){
+			return "<a href='".$this->get_eventlink($event_id, $baseurl, $url_suffix, $blnUseController)."'>".$this->get_name($event_id)."</a>";
 		}
 		
 		public function comp_eventlink($params1, $params2){

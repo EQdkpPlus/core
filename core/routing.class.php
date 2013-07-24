@@ -103,8 +103,8 @@ if(!class_exists('routing')){
 			return array();
 		}
 		
-		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true){
-			$strPath = $this->controller_path;
+		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false){
+			$strPath = ($blnControllerPathPlain) ? $this->controller_path_plain : $this->controller_path;
 			$strPath .= ucfirst($this->get($strPageObject)).'/';
 			if ($strParam) $strPath .= $this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
 			if ($blnAddSID) $strPath .= $this->SID;
@@ -114,7 +114,7 @@ if(!class_exists('routing')){
 		public function clean($strText){
 			$strText = utf8_strtolower($strText);
 			$strText = str_replace(' ', '-', $strText);
-			$strText = preg_replace("/[^a-zA-Z0-9_-]/","",$strText);
+			$strText = preg_replace("/[^a-zA-Z0-9üÜäÄöÖ_-]/","",$strText);
 			return ucfirst($strText);
 		}
 		

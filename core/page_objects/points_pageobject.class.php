@@ -18,7 +18,7 @@
 
 class points_pageobject extends pageobject {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -52,10 +52,10 @@ class points_pageobject extends pageobject {
 		if($this->in->exists('compare_b') && $this->in->get('compare_b') == $this->user->lang('compare_members')){
 			$sort_suffix = (isset($sort))? '&amp;sort='.$sort : '';
 			if($this->in->exists('selected_ids')){
-				$compare_link	= $this->root_path.'listcharacters.php'.$this->SID.'&mdkpid='.$mdkpid.$sort_suffix.'&amp;filter=Member:'.implode(',', $this->in->getArray('selected_ids', 'int'));
+				$compare_link	= $this->routing->build('points', false, false, true, true).'&mdkpid='.$mdkpid.$sort_suffix.'&amp;filter=Member:'.implode(',', $this->in->getArray('selected_ids', 'int'));
 				redirect($compare_link);
 			}else{
-				$compare_link	= $this->root_path.'listcharacters.php'.$this->SID.'&mdkpid='.$mdkpid.$sort_suffix;
+				$compare_link	= $this->routing->build('points', false, false, true, true).'&mdkpid='.$mdkpid.$sort_suffix;
 				redirect($compare_link);
 			}
 		}
@@ -132,18 +132,21 @@ class points_pageobject extends pageobject {
 		$arrToolbarItems = array(				
 			array(
 				'icon'	=> 'icon-plus',
-				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_raids.php".$this->SID.'&upd=true\';"',
-				'check' => 'a_raid_add'
+				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_raids.php".$this->SID.'&upd=true\';"',
+				'check' => 'a_raid_add',
+				'title' => $this->user->lang('adding_raid'),
 			),
 			array(
 				'icon'	=> 'icon-edit',
-				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/manage_members.php".$this->SID.'\';"',
-				'check' => 'a_members_man'
+				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_members.php".$this->SID.'\';"',
+				'check' => 'a_members_man',
+				'title' => $this->user->lang('manage_members'),
 			),
 			array(
 				'icon'	=> 'icon-list',
-				'js'	=> 'onclick="window.location=\''.$this->root_path."admin/mmanage_raids.php".$this->SID.'\';"',
-				'check' => 'a_raid_'
+				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_raids.php".$this->SID.'\';"',
+				'check' => 'a_raid_',
+				'title' => $this->user->lang('manraid_title'),
 			),
 		);
 
@@ -153,7 +156,9 @@ class points_pageobject extends pageobject {
 		}else{
 			$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($view_list));
 		}
-		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => $mdkpid, '%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks'))), $mdkp_suffix);
+
+		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => $mdkpid, '%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
+		$hptt->setPageRef($this->strPath);
 		$myleaderboard			= registry::register('html_leaderboard');
 		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
 		$jqToolbar = $this->jquery->toolbar('listcharacters', $arrToolbarItems, array('position' => 'bottom'));

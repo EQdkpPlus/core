@@ -82,7 +82,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 					'user_id'		=> (int)$drow['user_id'],
 					'date'			=> (int)$drow['date'],
 					'previewimage'	=> $drow['previewimage'],
-					'alias'			=> $drow['alias'],
+					'alias'			=> utf8_strtolower($drow['alias']),
 					'hits'			=> (int)$drow['hits'],
 					'sort_id'		=> (int)$drow['sort_id'],
 					'tags'			=> $drow['tags'],
@@ -98,7 +98,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
 				$this->categories[(int)$drow['category']][] = (int)$drow['id'];
 				
-				$this->alias[$drow['alias']] = intval($drow['id']);
+				$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
 				
 				if ($drow['page_objects'] != ''){
 					$arrObjects = unserialize($drow['page_objects']);
@@ -355,6 +355,8 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 		
 		public function get_check_alias($strAlias, $blnCheckCategory=false){
+			$strAlias = utf8_strtolower($strAlias);
+		
 			foreach ($this->articles as $key => $val){
 				if ($this->get_alias($key) == $strAlias) return false;
 			}
@@ -371,6 +373,8 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 		
 		public function get_resolve_alias($strAlias){
+			$strAlias = utf8_strtolower($strAlias);
+			
 			if (isset($this->alias[$strAlias])){
 				return $this->alias[$strAlias];
 			}

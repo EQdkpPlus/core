@@ -65,7 +65,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 				$rows = ($max_member < count($member_ids)) ? $max_member : count($member_ids);
 				for($i=0; $i<$rows; $i++){
-					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], 'viewcharacter.php', '', true, true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('pk_show_twinks')))).'</td></tr>';
+					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], register('routing')->build('character', false, false,false), '', false,false,true,true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%use_controller%' => true, '%with_twink%' => !intval($this->config->get('pk_show_twinks')))).'</td></tr>';
 				}
 				$leaderboard .= '</table></td>';
 				$colnr++;

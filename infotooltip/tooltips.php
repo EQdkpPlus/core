@@ -46,7 +46,7 @@ $eqdkp_path = httpHost().$strPath;
 var EQdkpTooltip = new function(){
 	//Init Vars
 	var mmocms_root_path = '<?php echo $eqdkp_path; ?>';
-	var cache_tooltips = new Array();
+	var cached_itts = new Array();
 	var cache_labels = new Array();
 	
 	function addResources(){
@@ -143,42 +143,28 @@ var EQdkpTooltip = new function(){
 			$('.infotooltip').infotooltips();
 			
 			$('.infotooltip').tooltip({
+				track: true,
 				content: function(response) {
 					var direct = $(this).attr('title').substr(0,1);
-					if(direct == 1) {
+					var mytitle = $(this).attr('title');
+					if(direct == '1') {
 						$(this).attr('title', '');
 						return '';
 					}
-					gameid = ($(this).attr('data-game_id')) ? $(this).attr('data-game_id') : 0;
-					jsondata = {"name": $(this).attr('data-name'), "game_id": gameid}
-					var mytitle = $(this).attr('title');
-					
-					if (cache_tooltips['t_'+ mytitle] != undefined){
-						return cache_tooltips['t_'+ mytitle];
-					} else {
-						var bla = $.get( mmocms_root_path + 'infotooltip/infotooltip_feed.php?direct=1&jsondata='+$(this).attr('title'), jsondata, response);
-						bla.success(function(data) {
-							cache_tooltips['t_'+mytitle] = $.trim(data);
-						});
+					if (mytitle == ''){
+						return;
 					}
-					return 'Laden...';
-				},
-				open: function() {
-					var tooltip = $(this).tooltip('widget');
-					tooltip.removeClass('ui-tooltip ui-widget ui-corner-all ui-widget-content');
-					tooltip.addClass('ui-infotooltip');
-					$(document).mousemove(function(event) {
-						tooltip.position({
-							my: 'left center',
-							at: 'right center',
-							offset: '50 25',
-							of: event
+					if (cached_itts['t_'+$(this).attr('title')] != undefined){
+						return cached_itts['t_'+$(this).attr('title')];
+					} else {
+						var bla = $.get(mmocms_root_path+'infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
+						bla.success(function(data) {
+							cached_itts['t_'+mytitle] = $.trim(data);
 						});
-					});
+						return 'Loading...';
+					}
 				},
-				close: function() {
-					$(document).unbind('mousemove');
-				}
+				tooltipClass: "ui-infotooltip",
 			});
 		});
 	}

@@ -3073,11 +3073,11 @@ button#cboxPrevious, button#cboxNext, button#cboxClose {
 	box-shadow: none;
 }
 
-.permalink, .article-container .rsslink {
+.permalink, .rsslink {
 	display:none;
 }
 
-.article-container:hover .permalink, .contentHeader:hover .permalink, .article-container:hover .rsslink  {
+.article-container:hover .permalink, .contentHeader:hover .permalink, .article-container:hover .rsslink , .contentHeader:hover .rsslink {
 	display:inline;
 }
 
