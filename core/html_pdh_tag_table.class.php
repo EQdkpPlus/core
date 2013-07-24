@@ -199,7 +199,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			foreach($this->columns as $cid => $column){
 				$module		= $column[0];
 				$tag		= $column[1];
-				$params		= $column[3];
+				$params		= $this->pdh->post_process_preset($column[3], $this->sub_array);
 				$th_add		= $column['th_add'];
 				$caption = $this->pdh->get_html_caption($module, $tag, $params, $column['name']);
 				if($column['sort'] == true){

@@ -69,6 +69,8 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 				return true;
 			}
 			$main_id = $this->pdh->get('member', 'mainid', array($member_id));
+			$all_members = $this->pdh->get('member', 'other_members', array($member_id));
+			$all_members[] = $member_id;
 
 			if($time_period != 'LT') {
 				//midnight of x days before
@@ -96,23 +98,23 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 				}
 			}
 			//get raids
-			$raids = $this->pdh->maget('raid', array('date', 'event'), 0, array($this->pdh->get('raid', 'raidids4memberid', array($member_id))));
+			$raid_ids = array();
+			foreach($all_members as $mem_id) {
+				$raid_ids = array_merge($raid_ids, $this->pdh->get('raid', 'raidids4memberid', array($mem_id)));
+			}
+			$raid_ids = array_unique($raid_ids);
+			$raids = $this->pdh->maget('raid', array('date', 'event'), 0, array($raid_ids));
 			foreach($raids as $raid_id => $raid){
 				$date = $raid['date'];
 				$event_id = $raid['event'];
 				//raid not relevant for this attendance calculation
-				if($date < $first_date['main']) continue;
-				if(!isset($this->attendance[$time_period][$member_id]['member'][$event_id]['attended'])) $this->attendance[$time_period][$member_id]['member'][$event_id]['attended'] = 0;
-				$this->attendance[$time_period][$member_id]['member'][$event_id]['attended']++;
-				if($main_id != $member_id) {
-					$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
-					if(!in_array($main_id, $attendees)) {
-						if(!isset($this->attendance[$time_period][$main_id]['main'][$event_id]['attended'])) $this->attendance[$time_period][$main_id]['main'][$event_id]['attended'] = 0;
-						$this->attendance[$time_period][$main_id]['main'][$event_id]['attended']++;
-					}
-				} else {
-					if(!isset($this->attendance[$time_period][$member_id]['main'][$event_id]['attended'])) $this->attendance[$time_period][$member_id]['main'][$event_id]['attended'] = 0;
-					$this->attendance[$time_period][$member_id]['main'][$event_id]['attended']++;
+					if($date < $first_date['main']) continue;
+				if(!isset($this->attendance[$time_period][$member_id]['main'][$event_id]['attended'])) $this->attendance[$time_period][$member_id]['main'][$event_id]['attended'] = 0;
+				$this->attendance[$time_period][$member_id]['main'][$event_id]['attended']++;
+				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+				if(in_array($member_id, $attendees)) {
+					if(!isset($this->attendance[$time_period][$member_id]['member'][$event_id]['attended'])) $this->attendance[$time_period][$member_id]['member'][$event_id]['attended'] = 0;
+					$this->attendance[$time_period][$member_id]['member'][$event_id]['attended']++;
 				}
 			}
 			//cache it and let it expire at midnight

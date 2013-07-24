@@ -116,11 +116,10 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				if(is_array($attendees)) {
 					foreach($attendees as $attendee_id){
 						$this->member_attendance[$time_period][$mdkp_id]['members'][$attendee_id]['attended']++;
-						if($this->twink2main[$attendee_id] != $attendee_id AND !in_array($this->twink2main[$attendee_id], $attendees)) {
-							$this->member_attendance[$time_period][$mdkp_id]['mains'][$this->twink2main[$attendee_id]]['attended']++;
-						} elseif ($this->twink2main[$attendee_id] == $attendee_id) {
-							$this->member_attendance[$time_period][$mdkp_id]['mains'][$attendee_id]['attended']++;
-						}
+						$mains[$this->twink2main[$attendee_id]] = true;
+					}
+					foreach($mains as $main_id => $tru) {
+						$this->member_attendance[$time_period][$mdkp_id]['mains'][$main_id]['attended']++;
 					}
 				}
 				//increment total counter
