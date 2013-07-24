@@ -585,7 +585,7 @@ if (!class_exists("jquery")) {
 									$subicon	= (isset($row['img']) && strlen($row['img'])) ? '<img src="'.$mnuimagepth.$row['img'].'" alt="img" />' : '';
 									$subicon	= (isset($row['icon']) && strlen($row['icon'])) ? '<i class="'.$row['icon'].'"></i>' : $subicon;
 									$sub_rows .= '<li><a href="'.$this->root_path.$row['link'].'">';
-									$sub_rows .= $subicon.''.$row['text'].'</a></li>';
+									$sub_rows .= $subicon.' '.$row['text'].'</a></li>';
 								}
 							}
 						}
