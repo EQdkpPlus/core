@@ -276,7 +276,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$view_row .= "\t".'<td '.$td_add.'>';
 					if($this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
-					} elseif($this->settings['perm_detail_twink']) {
+					} elseif(isset($this->settings['perm_detail_twink']) && $this->settings['perm_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} else {
 						$view_row .= $this->pdh->geth($module, $tag, $params, $this->sub_array);

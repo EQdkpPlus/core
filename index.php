@@ -353,6 +353,9 @@ class controller extends page_generic {
 				'S_COMMENTS'	=> ($arrArticle['comments']) ? true : false,
 				'S_HIDE_HEADER' => ($arrArticle['hide_header']),
 			));
+			
+			$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('articles', 'permalink', array($intArticleID)).'" />');
+			$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 
 			//Comments
 			if ($arrArticle['comments'] && $this->config->get('pk_enable_comments') == 1){
@@ -580,12 +583,16 @@ class controller extends page_generic {
 				'CATEGORY_DESCRIPTION' => $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
 				'CATEGORY_NAME'		   => $arrCategory['name'],
 				'PERMALINK'		  	=> $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
+				'RSSLINK'			=> $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''),
 				'BREADCRUMB'	  	=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : '',
 				'ARTICLE_TOOLBAR' 	=> $jqToolbar['id'],
 				'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 				'LIST_TYPE'		  	=> $arrCategory['list_type'],
 				'S_HIDE_HEADER'		=> $arrCategory['hide_header'],
 			));
+			
+			$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
+			$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('article_categories', 'permalink', array($intCategoryID)).'" />');
 			
 			$this->core->set_vars(array(
 				'page_title'		=> $arrCategory['name'],

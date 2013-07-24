@@ -31,6 +31,7 @@ if(!class_exists('pageobject')){
 		
 		private $arrVars = array();
 		public $strPath = '';
+		public $strPathPlain = '';
 		
 		protected function set_vars($arrVars){
 			if (!isset($this->arrVars['display']) || $this->arrVars['display'] = false) $this->arrVars = $arrVars;
@@ -55,6 +56,7 @@ if(!class_exists('pageobject')){
 			$strPath .= $strPagePath;
 
 			$this->strPath = $strPath;
+			$this->strPathPlain = str_replace($this->server_path, "", $strPath);
 			
 			$this->tpl->assign_vars(array(
 				'ACTION'	=> $strPath.$this->SID.$this->simple_head_url.$this->url_id_ext,

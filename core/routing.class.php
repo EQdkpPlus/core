@@ -38,7 +38,8 @@ if(!class_exists('routing')){
 			'addcharacter'	=> 'addcharacter',
 			'editarticle'	=> 'editarticle',
 			'user'			=> 'user',
-			'usergroup'		=> 'usergroup'
+			'usergroup'		=> 'usergroup',
+			'rss'			=> 'rss',
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){

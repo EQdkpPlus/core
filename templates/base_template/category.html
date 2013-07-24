@@ -9,6 +9,7 @@
 		</div>
 	<!-- ENDIF -->
 	<div class="floatRight normal-fontsize">
+		<a href="{RSSLINK}" title="{L_rsslink}" class="rsslink"><i class="icon-rss"></i></a>
 		<a href="{PERMALINK}" title="{L_permalink}" class="permalink"><i class="icon-link"></i></a>
 	</div>
 	</h1>
@@ -18,21 +19,20 @@
 		<span class="breadcrumb">{BREADCRUMB}</span>
 	</div>
 </div>
-<div class="clear"></div>
+<!-- IF S_CHILDS -->
+<div class="categoryChildSitemap">
+	<ul>
+		<!-- BEGIN child_row -->
+		<li><a href="{child_row.U_PATH}" title="{child_row.DESC} ">{child_row.NAME} ({child_row.COUNT})</a></li>
+		<!-- END child_row -->
+	</ul>
+</div>
+<!-- ENDIF -->
 {CATEGORY_DESCRIPTION}
 <div class="clear"></div>
 <!-- ENDIF -->
 
-<!-- IF S_CHILDS -->
-<div class="article-child-container">
-	<!-- BEGIN child_row -->
-	<div class="article-child">
-		<h2><a href="{child_row.U_PATH}">{child_row.NAME} ({child_row.COUNT})</a></h2>
-		{child_row.DESC} 
-	</div>
-	<!-- END child_row -->
-</div>
-<!-- ENDIF -->
+
 
 <div class="article-container-wrapper">
 <!-- IF LIST_TYPE == 1 -->
@@ -48,6 +48,7 @@
 		</div>
 		<!-- ENDIF -->
 		<div class="floatRight">
+			<a href="{RSSLINK}" title="{L_rsslink}" class="rsslink"><i class="icon-rss"></i></a>
 			<a href="{article_row.PERMALINK}" title="{L_permalink}" class="permalink"><i class="icon-link"></i></a>
 		</div>
 	</h2>
