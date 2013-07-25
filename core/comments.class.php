@@ -141,7 +141,7 @@ if (!class_exists("comments")){
 								<div class="comment_container">
 									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';
 					if($this->isAdmin OR $row['userid'] == $this->UserID){
-						$out[] .= '<div class="comments_delete small bold floatRight hand" ><button type="button"><i class="icon-remove icon-large"></i></button>';
+						$out[] .= '<div class="comments_delete small bold floatRight hand" ><i class="icon-remove-sign icon-large"></i>';
 						$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
 						$out[] .= '<div style="display:none" class="comments_deleteid">'.$row['id'].'</div>';
 						$out[] .= '<div style="display:none" class="comments_attachid">'.$attachid.'</div>';
@@ -170,7 +170,7 @@ if (!class_exists("comments")){
 										<div class="comment_container">
 											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a> am '.$this->time->user_date($com['date'], true).'</div>';
 							if($this->isAdmin OR $com['userid'] == $this->UserID){
-								$out[] .= '<div class="comments_delete small bold floatRight hand" ><button type="button"><i class="icon-remove icon-large"></i></button>';
+								$out[] .= '<div class="comments_delete small bold floatRight hand" ><i class="icon-remove-sign icon-large"></i>';
 								$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
 								$out[] .= '<div style="display:none" class="comments_deleteid">'.$com['id'].'</div>';
 								$out[] .= '<div style="display:none" class="comments_attachid">'.$attachid.'</div>';
