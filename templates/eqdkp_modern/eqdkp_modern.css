@@ -473,6 +473,11 @@ a .icon-rotate-90:before,a .icon-rotate-180:before,a .icon-rotate-270:before,a .
 .icon-weibo:before{content:"\f18a";}
 .icon-renren:before{content:"\f18b";}
 
+/* icon styles */
+.icon-grey{
+	color:#6E6E6E;
+}
+
  /* body */
 html {
 	min-height: 100%;
