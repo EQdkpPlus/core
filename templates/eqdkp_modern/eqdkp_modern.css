@@ -3074,8 +3074,14 @@ ul.image-gallery li.folder a{
 	line-height: 260px;
 }
 
-button#cboxPrevious, button#cboxNext, button#cboxClose {
+/* Colorbox */
+
+button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	box-shadow: none;
+}
+
+#cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {
+	top:auto;
 }
 
 .permalink, .rsslink {

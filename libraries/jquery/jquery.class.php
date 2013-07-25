@@ -669,12 +669,15 @@ if (!class_exists("jquery")) {
 		public function lightbox($id, $options){
 			if(is_array($options)){
 				if(isset($options['slideshow']) && $options['slideshow'] == true){	$jsoptions[]	= "slideshow: true";}
-				if(isset($options['slideshowAuto']) && $options['slideshowAuto'] == true){	$jsoptions[]	= "slideshowAuto: true";}
+				if(isset($options['slideshowAuto'])){	$jsoptions[]	= "slideshowAuto: ".(($options['slideshowAuto'] == true) ? "true" : "false");}
 				if(isset($options['transition'])){	$jsoptions[]	= "transition: '".$options['transition']."'";}
 				if(isset($options['slideshowSpeed'])){	$jsoptions[]	= "slideshowSpeed:".$options['slideshowSpeed'];}
 			}
+			$jsoptions[] = 'rel:"'.$id.'"';
+			$jsoptions[] = 'maxWidth:"90%"';
+			$jsoptions[] = 'maxHeight:"90%"';
 			
-			$this->tpl->add_js('$(".lightbox_'.$id.'").colorbox({rel:"'.$id.'", maxWidth:"90%", maxHeight:"90%", slideshow: true, slideshowAuto:false, transition:"fade", slideshowSpeed:4500});', 'docready');
+			$this->tpl->add_js('$(".lightbox_'.$id.'").colorbox('.$this->gen_options($jsoptions).');', 'docready');
 		}
 
 		/**

@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('gallery')){
 	class gallery extends gen_class {		
-		public static $shortcuts = array('core', 'config', 'pdh', 'user', 'pfh', 'tpl', 'in');
+		public static $shortcuts = array('core', 'config', 'pdh', 'user', 'pfh', 'tpl', 'in', 'jquery');
 		
 		private $_cache = array();
 		
@@ -118,10 +118,8 @@ if(!class_exists('gallery')){
 
 			$strOut .= "</ul><div class=\"clear\"></div>";
 			
-			$this->tpl->add_js(
-				'$(".lightbox_'.md5($strFolder).'").colorbox({rel:"'.md5($strFolder).'", width:"90%", height:"90%", slideshow: true, slideshowAuto:false, transition:"fade", slideshowSpeed:4500});', 'docready'
-			);
-			
+			$this->jquery->lightbox(md5($strFolder), array('slideshow' => true, 'transition' => "elastic", 'slideshowSpeed' => 4500, 'slideshowAuto' => false));
+						
 			return $strOut;
 		}
 		
