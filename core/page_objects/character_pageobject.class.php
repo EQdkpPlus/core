@@ -168,8 +168,8 @@ class character_pageobject extends pageobject {
 		// Start the Output
 		$this->tpl->assign_vars($profile_out);
 
-		$this->core->set_vars(array(
-			'page_title'		=> sprintf($this->user->lang('viewmember_title'), $member_name),
+		$this->set_vars(array(
+			'page_title'		=> $member_name,
 			'template_file'		=> 'viewcharacter.html',
 			'display'			=> true
 		));

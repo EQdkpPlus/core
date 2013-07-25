@@ -59,8 +59,8 @@ class roster_pageobject extends pageobject {
 					foreach ($this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list', array()))) as $key => $value){
 						if ($key == 0) continue;
 
-						$hptt = $this->get_hptt($hptt_page_settings, $arrRoleMembers[$key], $arrRoleMembers[$key], array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks), 'role_'.$key);
-						
+						$hptt = $this->get_hptt($hptt_page_settings, $arrRoleMembers[$key], $arrRoleMembers[$key], array('%link_url%' => $this->routing->build('character', false,false,false), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'role_'.$key);
+						$hptt->setPageRef($this->strPath);
 						$this->tpl->assign_block_vars('class_row', array(
 							'CLASS_NAME'	=> $value,
 							'CLASS_ICONS'	=> $this->game->decorate('roles', array($key)),
@@ -79,8 +79,8 @@ class roster_pageobject extends pageobject {
 					if ($key == 0) continue;
 					if(empty($arrClassMembers[$key])) $arrClassMembers[$key] = array();
 
-					$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks), 'class_'.$key);
-					
+					$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => $this->routing->build('character', false,false,false), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'class_'.$key);
+					$hptt->setPageRef($this->strPath);
 					$this->tpl->assign_block_vars('class_row', array(
 						'CLASS_NAME'	=> $value,
 						'CLASS_ID'		=> $key ,
@@ -93,7 +93,6 @@ class roster_pageobject extends pageobject {
 		}
 
 		$this->set_vars(array(
-			'page_title'	=> $this->user->lang('menu_roster'),
 			'template_file'	=> ((is_file($rosterfolder.'roster_view.html')) ? $rosterfolder.'roster_view.html' : 'roster_view.html'),
 			'display'		=> true,
 			'show_article_subheader' => false,

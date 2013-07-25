@@ -64,11 +64,7 @@ if(!class_exists('pageobject')){
 				'PATH'		=> $strPath,
 			));
 		}
-		
-		public function set_path($strPath){
-		
-		}
-		
+				
 	}
 }
 ?>

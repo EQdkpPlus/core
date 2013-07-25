@@ -82,7 +82,7 @@ class controller extends page_generic {
 			$arrPath = array_filter(explode('/', $strPath));
 			$arrPath = array_reverse($arrPath);
 		}
-		$intArticleID = $intCategoryID = 0;
+		$intArticleID = $intCategoryID = $strSpecificID = 0;
 
 		//Suche Alias in Artikeln
 		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
@@ -107,8 +107,10 @@ class controller extends page_generic {
 					}
 					if (strlen($strID)) {
 						registry::add_const('url_id', $strID);
+						$strSpecificID = $strID;
 					} elseif (strlen($arrPath[0])){
 						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
+						$strSpecificID = $arrPath[0];
 					}
 				}
 			}
@@ -274,12 +276,13 @@ class controller extends page_generic {
 				));
 			}
 		}
-		
-		$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
+
+		$this->comments->SetVars(array('attach_id'=> $intArticleID.(($strSpecificID) ? '|'.$strSpecificID : ''), 'page'=>'articles'));
 		$intCommentsCount = $this->comments->Count();
 		
 		//Replace page objects from Content
 		$strContent = $this->bbcode->parse_shorttags($arrContent[$intPageID]);
+		$strAdditionalTitles = '';
 		preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strContent, $arrPageObjects, PREG_PATTERN_ORDER);
 		if (count($arrPageObjects[0])){
 			include_once($this->root_path.'core/pageobject.class.php');
@@ -295,7 +298,7 @@ class controller extends page_generic {
 				} else {
 					$strContent = str_replace($strHaystack, '', $strContent);
 				}
-				
+				if (isset($arrCoreVars['page_title']) && strlen($arrCoreVars['page_title'])) $strAdditionalTitles = ' - '.$arrCoreVars['page_title'];
 			}
 		}
 		
@@ -361,7 +364,7 @@ class controller extends page_generic {
 			//Comments
 			if ($arrArticle['comments'] && $this->config->get('pk_enable_comments') == 1){
 				$this->comments->SetVars(array(
-					'attach_id'	=> $intArticleID,
+					'attach_id'	=> $intArticleID.(($strSpecificID) ? '_'.$strSpecificID : ''),
 					'page'		=> 'articles',
 					'auth'		=> 'a_articles_man',
 				));
@@ -371,7 +374,7 @@ class controller extends page_generic {
 			};
 			
 			$this->core->set_vars(array(
-				'page_title'		=> $arrArticle['title'],
+				'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
 				'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
 				'template_file'		=> 'article.html',

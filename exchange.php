@@ -47,7 +47,7 @@ if(registry::register('input')->get('out') != ''){
 			}elseif(registry::register('input')->get('comment', '', 'htmlescape')){
 				registry::register('comments')->Save();
 			}else{
-				echo registry::register('comments')->Content(registry::register('input')->get('attach_id', 0), registry::register('input')->get('page'), registry::register('input')->get('rpath'), true, true);
+				echo registry::register('comments')->Content(registry::register('input')->get('attach_id'), registry::register('input')->get('page'), registry::register('input')->get('rpath'), true, true);
 			}
 			exit;
 		break;
