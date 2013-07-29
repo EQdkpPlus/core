@@ -201,7 +201,7 @@ $lang = array(
 "layout_not_exists" => "Das User Layout existiert nicht!",
 "confirm_delete_event" => "<b>Bist Du sicher, dass Du dieses Ereignis löschen willst?</b><br />%s<br /><br /><b><span class=\"negative\">Achtung:</span> Wenn du dieses Event löscht, werden alle Korrekturen und %d Raids die zu diesem Event zugeordnet sind ebenfalls gelöscht!</b>",
 "confirm_deletion" => "Löschbestätigung",
-"confirm_delete" => "Bist du sicher, dass Du die folgenden Einträge löschen willst?",
+"confirm_delete" => "Bist du sicher, dass Du die folgenden Einträge löschen willst? %s",
 "confirm_delete_adjustment" => "Bist Du sicher, dass Du diese individuelle Korrektur löschen willst?",
 "confirm_delete_calevents" => "Bist Du sicher, dass Du die Kalendereinträge %s löschen willst?",
 "confirm_delete_adjustments" => "Bist Du sicher, dass Du die individuellen Korrekturen %s löschen willst?",

@@ -12,5 +12,9 @@
 <div class="center pagination_wrapper">
 	{PAGINATION}
 </div>
+<div class="contentFooter">
+	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected_entries}</button>
+	<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+</div>
 {CSRF_TOKEN}
 </form>

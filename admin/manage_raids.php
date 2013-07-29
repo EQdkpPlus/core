@@ -34,29 +34,49 @@ class ManageRaids extends page_generic {
 			'refresh' => array('process' => 'update', 'check' => 'a_raid_'),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
 		);
-		parent::__construct('a_raid_', $handler, false, false, false, 'r');
+		parent::__construct('a_raid_', $handler, array('raid', 'event_name'), null, 'selected_ids[]', 'r');
 		$this->process();
 	}
 
 	public function delete() {
-		//delete everything connected to the raid
-		//adjustments first
-		$adj_ids = $this->pdh->get('adjustment', 'adjsofraid', array($this->url_id));
-		$adj_del = array(true);
-		foreach($adj_ids as $id) {
-			$adj_del[] = $this->pdh->put('adjustment', 'delete_adjustment', array($id));
+		$ids = $pos = $neg = $messages = array();
+		
+		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
+			foreach($this->in->getArray('selected_ids','int') as $s_id) {
+					$ids[] = $s_id;
+			}		
+		} elseif ($this->url_id > 0) {
+			$ids[] = $this->url_id;
+		} 
+		
+		
+		if (count($ids)){		
+			foreach ($ids as $raidid){
+				//delete everything connected to the raid
+				//adjustments first
+				$adj_ids = $this->pdh->get('adjustment', 'adjsofraid', array($raidid));
+				$adj_del = array(true);
+				foreach($adj_ids as $id) {
+					$adj_del[] = $this->pdh->put('adjustment', 'delete_adjustment', array($id));
+				}
+				//raid itself now
+				$raid_del = $this->pdh->put('raid', 'delete_raid', array($raidid));
+				if($raid_del) {
+					$pos[] = $this->user->lang('raid').' '.$raidid;
+				} else {
+					$neg[] = $this->user->lang('raid').' '.$raidid;
+				}
+				if(in_array(false, $adj_del)) {
+					$messages[] = array('text' => $this->user->lang('adjustments').' '.$this->user->lang('raid').' '.$raidid, 'title' => $this->user->lang('del_nosuc'), 'color' => 'red');
+				}
+			}		
 		}
-		//raid itself now
-		$raid_del = $this->pdh->put('raid', 'delete_raid', array($this->url_id));
-		if($raid_del) {
-			$messages[] = array('text' => $this->user->lang('raid').' '.$this->url_id, 'title' => $this->user->lang('del_suc'), 'color' => 'green');
-		} else {
-			$messages[] = array('text' => $this->user->lang('raid').' '.$this->url_id, 'title' => $this->user->lang('del_nosuc'), 'color' => 'red');
+		
+		if(!empty($pos)) {
+			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
 		}
-		if(in_array(false, $adj_del)) {
-			$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('del_nosuc'), 'color' => 'red');
-		} else {
-			$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('del_suc'), 'color' => 'green');
+		if(!empty($neg)) {
+			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
 		}
 		$this->display($messages);
 	}
@@ -273,6 +293,8 @@ class ManageRaids extends page_generic {
 		//footer
 		$raid_count = count($view_list);
 		$footer_text = sprintf($this->user->lang('listraids_footcount'), $raid_count ,$this->user->data['user_rlimit']);
+		
+		$this->confirm_delete($this->user->lang('confirm_delete'));
 
 		$this->tpl->assign_vars(array(
 			'RAID_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], $footer_text),
