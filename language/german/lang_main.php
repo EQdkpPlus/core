@@ -821,6 +821,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "notification_char_delete_requested" => "%s Charaktere zu löschen",
 "notification_user_enable" => "%s Benutzer zu aktivieren",
 "notification_none" => "Keine Benachrichtigungen vorhanden",
+"notifications" => "Benachrichtigungen",
 "home"	=> "Home",
 "select_mdkppool" => "MultiDKP Konto auswählen",
 "select_leaderboard" => "Leaderboard auswählen",

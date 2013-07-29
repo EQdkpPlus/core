@@ -1547,11 +1547,12 @@ $lang = array(
 "sortation_type" => "Sortierung der Artikel",
 "portal_layouts" => "Portal-Layouts",
 "portal_blocks"	=> "Portal-Blöcke",
-		"add_portal_layout" => "Portal-Layout hinzufügen",
-		"add_portal_block" => "Portal-Block hinzufügen",
-		"edit_portal_block"	=> "Portal-Block bearbeiten",
-		"wide_content"	=> "Breiten Inhalt bevorzugen",
-		"hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
+"add_portal_layout" => "Portal-Layout hinzufügen",
+"add_portal_block" => "Portal-Block hinzufügen",
+"edit_portal_block"	=> "Portal-Block bearbeiten",
+"wide_content"	=> "Breiten Inhalt bevorzugen",
+"hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
+"perm_u_files_man" => "Bilder verwalten",
  );
 
 ?>

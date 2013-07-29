@@ -9,9 +9,6 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_indivadj_del','
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_item_add','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_item_upd','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_item_del','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_news_add','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_news_upd','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_news_del','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raid_add','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raid_upd','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raid_del','N');
@@ -24,7 +21,6 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_extensions_man'
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_backup','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_reset','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_maintenance','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_pages_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_sms_send','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_files_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_event_man','N');

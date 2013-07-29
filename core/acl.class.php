@@ -162,7 +162,6 @@ class acl_manager extends gen_class {
 				array('CBNAME' => 'a_event_add',  'TEXT' => $this->user->lang('add')),
 				array('CBNAME' => 'a_event_upd',  'TEXT' => $this->user->lang('update')),
 				array('CBNAME' => 'a_event_del',  'TEXT' => $this->user->lang('delete')),
-				array('CBNAME' => 'u_event_view', 'TEXT' => $this->user->lang('view'))
 			),
 			// Individual adjustments
 			$this->user->lang('individual_adjustments') => array(
@@ -175,21 +174,17 @@ class acl_manager extends gen_class {
 				array('CBNAME' => 'a_item_add',  'TEXT' => $this->user->lang('add')),
 				array('CBNAME' => 'a_item_upd',  'TEXT' => $this->user->lang('update')),
 				array('CBNAME' => 'a_item_del',  'TEXT' => $this->user->lang('delete')),
-				array('CBNAME' => 'u_item_view', 'TEXT' => $this->user->lang('view'))
 			),
-			// News
-			$this->user->lang('news') => array(
-				array('CBNAME' => 'a_news_add', 'TEXT' => $this->user->lang('add')),
-				array('CBNAME' => 'a_news_upd', 'TEXT' => $this->user->lang('update')),
-				array('CBNAME' => 'a_news_del', 'TEXT' => $this->user->lang('delete')),
-				array('CBNAME' => 'u_news_view', 'TEXT' => $this->user->lang('view')),
+			// Article
+			$this->user->lang('articles') => array(
+				array('CBNAME' => 'a_articles_man', 'TEXT' => $this->user->lang('manage')),
+				array('CBNAME' => 'u_files_man',   'TEXT' => $this->user->lang('perm_u_files_man')),
 			),
 			// Raids
 			$this->user->lang('raids') => array(
 				array('CBNAME' => 'a_raid_add',  'TEXT' => $this->user->lang('add')),
 				array('CBNAME' => 'a_raid_upd',  'TEXT' => $this->user->lang('update')),
 				array('CBNAME' => 'a_raid_del',  'TEXT' => $this->user->lang('delete')),
-				array('CBNAME' => 'u_raid_view', 'TEXT' => $this->user->lang('view'))
 			),
 
 			// Calendar
@@ -204,8 +199,6 @@ class acl_manager extends gen_class {
 			// Members
 			$this->user->lang('chars') => array(
 				array('CBNAME' => 'a_members_man', 'TEXT' => $this->user->lang('manage')),
-				array('CBNAME' => 'u_roster_list', 'TEXT' => $this->user->lang('menu_roster')),
-				array('CBNAME' => 'u_member_view', 'TEXT' => $this->user->lang('listing_members')),
 				
 				array('CBNAME' => 'u_member_add',  'TEXT' => $this->user->lang('charsadd')),
 				array('CBNAME' => 'u_member_man',	'TEXT' => $this->user->lang('charsmanage')),
@@ -218,7 +211,7 @@ class acl_manager extends gen_class {
 				array('CBNAME' => 'a_extensions_man', 'TEXT' => $this->user->lang('extensions')),
 				array('CBNAME' => 'a_reset',   		'TEXT' => $this->user->lang('reset')),
 				array('CBNAME' => 'a_maintenance',   'TEXT' => $this->user->lang('maintenance')),
-				array('CBNAME' => 'a_files_man',   'TEXT' => $this->user->lang('manage_files'))
+				array('CBNAME' => 'a_files_man',   'TEXT' => $this->user->lang('manage_files')),
 			),
 			//User
 			$this->user->lang('user') => array(
@@ -237,10 +230,6 @@ class acl_manager extends gen_class {
 			// Backup Database
 			$this->user->lang('backup') => array(
 				array('CBNAME' => 'a_backup', 'TEXT' => $this->user->lang('backup_database'))
-			),
-			// Pages
-			$this->user->lang('info') => array(
-				array('CBNAME' => 'a_pages_man', 'TEXT' => $this->user->lang('manage')),
 			),
 			 // SMS
 			$this->user->lang('sms_perm') => array(

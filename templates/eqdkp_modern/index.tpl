@@ -116,7 +116,7 @@
 							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a></li><!-- ENDIF -->
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger" data-type="all"><i class="icon-bolt"></i>Benachrichtigungen</a>
+									<a class="notification-tooltip-trigger" data-type="all"><i class="icon-bolt"></i>{L_notifications}</a>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 										<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_RED > 0 -->
