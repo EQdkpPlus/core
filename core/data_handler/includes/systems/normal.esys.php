@@ -555,6 +555,7 @@ $system_def = array(
 				'page_ref' => 'manage_raids.php',
 				'show_numbers' => false,
 				'show_select_boxes' => true,
+				'selectboxes_checkall'=>true,
 				'show_detail_twink' => false,
 				'table_sort_col' => 1,
 				'table_sort_dir' => 'desc',
