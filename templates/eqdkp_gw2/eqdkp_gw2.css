@@ -1399,17 +1399,6 @@ fieldset.invisible dt label {
 .fc-event-title{
 	vertical-align: middle;
 }
-#events-layer{
-	width:38px;
-	text-align:right;
-	z-index:100;
-	position: absolute;
-	right:0px;
-	top:-20px;
-	background-color: rgba(0,0,0,0.6);
-	border:1px solid #333;
-	padding: 3px;
-}
 
 /* calendar: raidevent view */
 

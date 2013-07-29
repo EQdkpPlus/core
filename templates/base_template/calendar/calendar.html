@@ -79,7 +79,17 @@
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
 					}
 					element.qtip({
-						content: tmpttcontent,
+						content: {
+							text: tmpttcontent,
+							<!-- IF IS_OPERATOR -->title: {
+								text: '<div style="text-align:right;margin-right:-26px;"><i class="icon-pencil icon-large" onClick="editEvent('+event.eventid+');"></i>  <i class="icon-trash icon-large" onClick="deleteEvent('+event.eventid+');"></i></div>',
+								button: false
+							}<!-- ENDIF -->
+						},
+						hide: {
+							fixed: true,
+							delay: 300
+						},
 						position: {
 							at: "bottom center",
 							my: "top center"
@@ -87,10 +97,10 @@
 						style: {
 							classes: 'qtip-shadow',
 							tip: {
-								corner: true,
-								width: 20
+								height: 20
 							},
-							widget: true
+							widget: true,
+							def: false
 						}
 					});
 				}else{
@@ -103,7 +113,17 @@
 
 					tmpttcontent += (event.note) ? "<br/><div class='calendartt_note'>{L_note}: "+event.note+"</div>" : '';
 					element.qtip({
-						content: tmpttcontent,
+						content: {
+							text: tmpttcontent,
+							<!-- IF IS_OPERATOR -->title: {
+								text: '<div style="text-align:right;margin-right:-26px;"><i class="icon-pencil icon-large" onClick="editEvent('+event.eventid+');"></i>  <i class="icon-trash icon-large"></i></div>',
+								button: false
+							}<!-- ENDIF -->
+						},
+						hide: {
+							fixed: true,
+							delay: 300
+						},
 						position: {
 							at: "bottom center",
 							my: "top center"
@@ -111,10 +131,10 @@
 						style: {
 							classes: 'qtip-shadow',
 							tip: {
-								corner: true,
-								width: 20
+								height: 24
 							},
-							widget: true
+							widget: true,
+							def: false
 						}
 					});
 				}
@@ -150,16 +170,7 @@
 			loading: function(bool) {
 				if (bool) $('#calendar_loading').show();
 				else $('#calendar_loading').hide();
-			},<!-- IF IS_OPERATOR -->
-			eventMouseover: function(event, jsEvent, view) {
-				var layer =	"<div id='events-layer'><img class='hand' height='16' width='16' src='../images/global/edit.png' alt='edit' onClick='editEvent("+event.eventid+");'>  <img class='hand' height='16' width='16' src='../images/global/delete.png' alt='delete' onClick='deleteEvent("+event.eventid+");'></div>";
-				if(event.operator){
-					$(this).append(layer);
-				}
 			},
-			eventMouseout: function(calEvent, domEvent) {
-				$("#events-layer").remove();
-			},<!-- ENDIF -->
 			events: "index.php{SID}&json=true"
 		});
 
@@ -168,9 +179,18 @@
 
 		$("#export_calendar,#export_callist").qtip({
 			content: {
-				text: '<i class="icon-refresh icon-spin icon-large"></i>',
-				ajax: {
-					url: 'index.php{SID}&export_tooltip=true'
+				text: function(event, api) {
+					$.ajax({
+						url: 'index.php{SID}&export_tooltip=true'
+					})
+					.then(function(content) {
+						// Set the tooltip content upon successful retrieval
+						api.set('content.text', content);
+					}, function(xhr, status, error) {
+						// Upon failure... set the tooltip content to the status and error value
+						api.set('content.text', status + ': ' + error);
+					});
+					return '<i class="icon-refresh icon-spin icon-large"></i>';
 				},
 				title: {
 					text: "{L_calendar_export_head}",
@@ -186,7 +206,7 @@
 				width: 500,
 				tip: {
 					corner: true,
-					width: 20
+					height: 20
 				},
 				widget: true
 			},
