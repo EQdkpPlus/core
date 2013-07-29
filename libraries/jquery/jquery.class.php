@@ -1105,7 +1105,7 @@ if (!class_exists("jquery")) {
 		public function qtip($name, $content, $options=array()){
 			if(!isset($this->tt_init[$name])){
 				$content = (isset($options['contfunc'])) ? '{ text: function(api) { '.$content.' } }' : '"'.$content.'"';
-				$extra_class = (isset($options['classes'])) ? ' '.$options['classes'] : '';
+				$extra_class = (isset($options['classes'])) ? 'classes: "'.$options['classes'].'",' : '';
 				$my		= (isset($options['my'])) ? $options['my'] : 'top center';
 				$at		= (isset($options['at'])) ? $options['at'] : 'bottom center';
 				$width	= (isset($options['width'])) ? 'width: '.$options['width'].',' : '';
@@ -1119,10 +1119,9 @@ if (!class_exists("jquery")) {
 						event: "mouseenter"
 					},
 					style: {
-						classes: "ui-tooltip-shadow'.$extra_class.'",
 						tip: {
 							corner: true
-						},'.$width.'
+						},'.$width.$extra_class.'
 						widget: true
 					}
 				});', 'docready');

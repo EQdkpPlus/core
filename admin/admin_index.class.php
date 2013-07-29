@@ -565,11 +565,17 @@ class admin_index extends gen_class {
 			$(".ip_resolver").each(function() {
 				$(this).qtip({
 					content: {
-						text: \'<i class="icon-refresh icon-spin icon-large"></i>\',
-						ajax: {
-							url: \'index.php'.$this->SID.'\',
-							data: { ip_resolve: $(this).html() }
-						},
+						text: function(event, api) {
+							$.ajax({
+								url: \'index.php'.$this->SID.'\'
+							})
+							.then(function(content) {
+								api.set(\'content.text\', content);
+							}, function(xhr, status, error) {
+								api.set(\'content.text\', status + ': ' + error);
+							});
+							return \'<i class="icon-refresh icon-spin icon-large"></i>\';
+						}
 					},
 					position: {
 						at: "bottom right",
@@ -579,7 +585,7 @@ class admin_index extends gen_class {
 						width: 150,
 						tip: {
 							corner: true,
-							width: 20
+							height: 20
 						},
 						widget: true
 					}
