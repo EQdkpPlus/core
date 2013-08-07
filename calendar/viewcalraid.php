@@ -617,13 +617,27 @@ class viewcalraid extends page_generic {
 
 		// Dropdown Menu Array
 		$nextraidevent	= $this->pdh->get('calendar_events', 'next_event', array($this->url_id));
+		if($nextraidevent){
+			$nextevent = $this->pdh->get('calendar_events', 'data', array($nextraidevent));
+			
+			$this->tpl->assign_vars(array(
+				'S_NEXT_RAID_EVENT' => true,
+				'NEXT_RAID_EVENTID' => $nextraidevent,
+				'NEXT_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
+			));
+		}
+		$prevraidevent = $this->pdh->get('calendar_events', 'prev_event', array($this->url_id));
+		if($prevraidevent){
+			$prevevent = $this->pdh->get('calendar_events', 'data', array($prevraidevent));
+				
+			$this->tpl->assign_vars(array(
+					'S_PREV_RAID_EVENT' => true,
+					'PREV_RAID_EVENTID' => $prevraidevent,
+					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
+			));
+		}
+		
 		$optionsmenu = array(
-			0 => array(
-				'name'	=> $this->user->lang('raidevent_raid_next'),
-				'link'	=> $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.(($nextraidevent > 0) ? $nextraidevent : $this->url_id),
-				'icon'	=> 'icon-arrow-right icon-large',
-				'perm'	=> true,
-			),
 			1 => array(
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
 				'link'	=> 'javascript:EditRaid()',
@@ -727,6 +741,7 @@ class viewcalraid extends page_generic {
 			'COMMENTS'				=> ($this->config->get('pk_enable_comments') == 1) ? $this->comments->Show() : '',
 			'EVENT_ID'				=> $this->url_id,
 			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
+			'S_NEXT_OR_PREV_RAIDEVENT' => ($nextraidevent || $prevraidevent),
 
 			// settings endabled?
 			'S_NOTSIGNED_VISIBLE'	=> (in_array(4, $raidcal_status) && ($this->user->check_auth('a_cal_revent_conf', false) || $this->config->get('calendar_raid_shownotsigned') || $this->check_permission())) ? true : false,

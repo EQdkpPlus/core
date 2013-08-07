@@ -1,3 +1,19 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		{BREADCRUMB}
+	</ul>
+	<div class="clear"></div>
+	<!-- IF S_PREV_ARTICLE -->
+	<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="icon-chevron-left"></i> {PREV_TITLE}</a>
+	<!-- ENDIF -->
+
+	<!-- IF S_NEXT_ARTICLE -->
+	<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="floatRight">{NEXT_TITLE} <i class="icon-chevron-right"></i></a>
+	<!-- ENDIF -->
+	<div class="clear"></div>
+	<br />
+</div>
 <!-- IF not S_HIDE_HEADER -->
 <div class="contentHeader">
 	<h1 class="contentTitle">{ARTICLE_TITLE}
@@ -13,26 +29,14 @@
 		</div>
 	</h1>
 </div>
-<div>
-	<div class="breadcrumb-container">
-		
-		<!-- IF S_PREV_ARTICLE -->
-		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="icon-chevron-left"></i></a>
-		<!-- ENDIF -->
-		<span class="breadcrumb">{BREADCRUMB}</span>
-		<!-- IF S_NEXT_ARTICLE -->
-		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}"><i class="icon-chevron-right floatRight"></i></a>
-		<!-- ENDIF -->		
+<div class="news_author">
+	<div class="floatLeft">
+		<i class="icon-time"></i>{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
 	</div>
-	<div class="news_author">
-		<div class="floatLeft">
-			<i class="icon-time"></i>{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
-		</div>
-		<div class="news_social floatRight">
-			{ARTICLE_SOCIAL_BUTTONS}
-		</div>
-		<div class="clear"></div>
+	<div class="news_social floatRight">
+		{ARTICLE_SOCIAL_BUTTONS}
 	</div>
+	<div class="clear"></div>
 </div>
 
 <!-- ENDIF -->

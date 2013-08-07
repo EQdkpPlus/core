@@ -170,7 +170,7 @@ if (!class_exists("comments")){
 										<div class="comment_container">
 											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a> am '.$this->time->user_date($com['date'], true).'</div>';
 							if($this->isAdmin OR $com['userid'] == $this->UserID){
-								$out[] .= '<div class="comments_delete bold floatRight hand"><i class="icon-remove icon-large icon-grey"></i>';
+								$out[] .= '<div class="comments_delete bold floatRight hand"><i class="icon-remove-sign icon-large icon-grey"></i>';
 								$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
 								$out[] .= '<div style="display:none" class="comments_deleteid">'.$com['id'].'</div>';
 								$out[] .= '<div style="display:none" class="comments_attachid">'.$attachid.'</div>';

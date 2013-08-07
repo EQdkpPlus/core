@@ -572,7 +572,7 @@ class admin_index extends gen_class {
 							.then(function(content) {
 								api.set(\'content.text\', content);
 							}, function(xhr, status, error) {
-								api.set(\'content.text\', status + ': ' + error);
+								api.set(\'content.text\', status + \': \' + error);
 							});
 							return \'<i class="icon-refresh icon-spin icon-large"></i>\';
 						}

@@ -5,30 +5,25 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2007
- * Date:		$Date$
+ * Date:		$Date: 2013-03-25 17:40:09 +0100 (Mo, 25 Mrz 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13247 $
  *
- * $Id$
+ * $Id: listraids.php 13247 2013-03-25 16:40:09Z godmod $
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once ($eqdkp_root_path . 'common.php');
-
-class listraids extends page_generic {
+class raids_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'time');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
 	public function __construct() {
 		$handler = array();
-		$this->user->check_auth('u_raid_view');
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
@@ -61,16 +56,16 @@ class listraids extends page_generic {
 
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listraids', 'hptt_listraids_raidlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'viewraid.php', '%link_url_suffix%' => ''));
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build("raid",false,false,false), '%link_url_suffix%' => '', '%use_controller%' => true));
+		$hptt->setPageRef($this->strPath);
 
 		//footer
 		$raid_count			= count($view_list);
 		$footer_text		= sprintf($this->user->lang('listraids_footcount'), $raid_count ,$this->user->data['user_rlimit']);
 
 		$this->tpl->assign_vars(array (
-			'MANAGE_LINK'		=> ($this->user->check_auth('a_raid_', false)) ? '<a href="admin/manage_raids.php'.$this->SID.'" title="'.$this->user->lang('manage_raids').'"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="'.$this->user->lang('manage_raids').'" /></a>' : '',
 			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix.$date_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
-			'RAID_PAGINATION'	=> generate_pagination('listraids.php'.$this->SID.$sort_suffix.$date_suffix, $raid_count, $this->user->data['user_rlimit'], $start),
+			'RAID_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix.$date_suffix, $raid_count, $this->user->data['user_rlimit'], $start),
 
 			// Date Picker
 			'DATEPICK_DATE_FROM'		=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
@@ -79,12 +74,11 @@ class listraids extends page_generic {
 		
 		$this->jquery->Collapse('#toggleRaidsummary', true);
 
-		$this->core->set_vars(array(
+		$this->set_vars(array(
 			'page_title'		=> $this->user->lang('listraids_title'),
 			'template_file'		=> 'listraids.html',
 			'display'			=> true
 		));
 	}
 }
-registry::register('listraids');
 ?>

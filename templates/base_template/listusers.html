@@ -1,4 +1,16 @@
-<h1 class="pageTitle"><!-- IF S_DISPLAY_GROUP --><a href="{EQDKP_CONTROLLER_PATH}User/{SID}">{L_user_list}</a> &raquo; {GROUPNAME}<!-- ELSE -->{L_user_list}<!-- ENDIF --></h1>
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li <!-- IF not S_DISPLAY_GROUP -->class="current"<!-- ENDIF -->><a href="{EQDKP_CONTROLLER_PATH}User/{SID}">{L_user_list}</a></li>
+		<!-- IF S_DISPLAY_GROUP -->
+		<li class="current"><a>{L_usergroup}: {GROUPNAME}</a></li>
+		<!-- ENDIF -->
+	</ul>
+	<div class="clear"></div>
+</div>
+
+
+<h1 class="pageTitle"><!-- IF S_DISPLAY_GROUP -->{GROUPNAME}<!-- ELSE -->{L_user_list}<!-- ENDIF --></h1>
 <form method="post" action="{ACTION}&amp;send=sms" name="post">
 <!-- IF S_DISPLAY_GROUP -->
 <h3>{L_grpleaders}</h3>

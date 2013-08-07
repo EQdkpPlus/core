@@ -103,8 +103,8 @@ if (!class_exists("pdh_r_user")){
 		}
 		
 		public function get_html_name($user_id, $link_url = '', $link_url_suffix = '', $blnUseController=false){
-			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'">'.$this->get_name($user_id).'</a>';
-			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'">'.$this->get_name($user_id).'</a>';
+			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
+			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
 		}
 		
 		public function comp_name($params1, $params2) {
@@ -348,9 +348,9 @@ if (!class_exists("pdh_r_user")){
 			foreach($arrMemberships as $groupid){
 				if ($this->pdh->get('user_groups', 'hide', array($groupid))) continue;
 				if ($blnUseController) {
-					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'" data-usergroup-id="'.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				} else {
-					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'" data-usergroup-id="'.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				}			
 			}
 			$arrOut[] = '</div>';

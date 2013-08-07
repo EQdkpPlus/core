@@ -496,7 +496,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if ($intCategoryID == 1) return "";
 			$strBreadcrumb = ($this->get_parent($intCategoryID)) ? $this->add_breadcrumb($this->get_parent($intCategoryID)) : '';
 
-			$strBreadcrumb .=  '<a href="'.$this->server_path.$this->get_path($intCategoryID).'">'.$this->get_name($intCategoryID).'</a>';
+			$strBreadcrumb .=  '<li class="current"><a href="'.$this->server_path.$this->get_path($intCategoryID).'">'.$this->get_name($intCategoryID).'</a></li>';
 			return $strBreadcrumb;
 		}
 		
@@ -504,7 +504,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if ($intCategoryID == 1) return $strBreadcrumb;
 			$strName = $this->pdh->get('article_categories', 'name', array($intCategoryID));
 			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
-			$strBreadcrumb = '<a href="'.$this->server_path.$strPath.'">'.$strName.'</a> &raquo; '.$strBreadcrumb;
+			$strBreadcrumb = '<li><a href="'.$this->server_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
 			
 			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
 				$strBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', array($intCategoryID)), $strBreadcrumb);

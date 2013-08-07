@@ -870,6 +870,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "manraid_title" => "Raids verwalten",
 "manage_members" => "Charaktere verwalten",
 "adding_raid" => "Raid hinzufügen",
+"usergroup" => "Benutzergruppe",
  );
 
 ?>

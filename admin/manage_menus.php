@@ -211,7 +211,6 @@ class Manage_Menus extends page_generic {
 							}
 
 							$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $adm['link']);
-
 							$compare_array[] = $link;
 							if ($adm['link']){
 								$this->tpl->assign_block_vars('fav_row', array(
@@ -332,7 +331,7 @@ class Manage_Menus extends page_generic {
 	}
 	
 	private function build_article_dropdown(){
-		$arrItems = $this->core->build_menu_array(true);
+		$arrItems = $this->core->build_menu_array(true, true);
 		$arrOut[''] = "";
 		foreach($arrItems as $k => $v){
 			if ( !is_array($v) )continue;
@@ -371,12 +370,14 @@ class Manage_Menus extends page_generic {
 				foreach($v['childs'] as $k2 => $v2){
 					$id++;
 					if (!isset($v2['childs'])){
+						if (!$this->check_for_hidden_article($v2, $id)) continue;
 						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'</li>';
 					} else {
 						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'<ol>';
 						
 						foreach($v2['childs'] as $k3 => $v3){
 							$id++;
+							if (!$this->check_for_hidden_article($v3, $id)) continue;
 							$html .= '<li id="list_'.$id.'">'.$this->create_li($v3, $id).'</li>';
 							
 						}
@@ -406,7 +407,7 @@ class Manage_Menus extends page_generic {
 
 		$html = '
 			<div data-linkid="'.$id.'">
-			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>
+			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'" style="display:inline-block;"></span>
 			<span class="link-hide '.(((int)$arrLink['hidden']) ? 'eye-gray' : 'eye').'"></span>';
 			if ($blnPluslink){
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
