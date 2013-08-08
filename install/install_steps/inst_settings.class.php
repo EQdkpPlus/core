@@ -306,7 +306,10 @@ class inst_settings extends install_generic {
 	
 	private function InsertStartNews(){
 		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
-		(1, '".$this->lang['welcome_news_title']."', '".$this->lang['welcome_news']."', 2, 1, 1, 0, 1, '', '', 1, ".time().", '', 'welcome', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".time().", 1);");
+		(1, '".$this->lang['feature_news_title']."', '".$this->lang['feature_news']."', 2, 1, 1, 0, 1, '', '', 1, ".(time()-5).", '', 'new-features', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".(time()-5).", 1);");
+		
+		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
+		(11, '".$this->lang['welcome_news_title']."', '".$this->lang['welcome_news']."', 2, 1, 1, 0, 1, '', '', 1, ".time().", '', 'welcome', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".time().", 1);");
 		
 		$this->do_sql("UPDATE __articles SET date=".time().", last_edited=".time().";");
 	}
