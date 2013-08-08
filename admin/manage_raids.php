@@ -246,6 +246,8 @@ class ManageRaids extends page_generic {
 			'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
 			'EVENT'				=> $this->html->DropDown('event', $events, (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event'])),
+			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
+			'RAID_DATE'			=> $this->time->user_date($raid['date']),
 			'RAID_ID'			=> ($raid['id']) ? $raid['id'] : 0,
 			'VALUE'				=> (($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value']),
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),

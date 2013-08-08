@@ -1,4 +1,13 @@
-<!-- IF not S_EDIT -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_manage_cronjobs}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+
 <div class="contentHeader">
 	<h1 class="contentTitle">{L_manage_cronjobs}</h1>
 </div>
@@ -27,48 +36,3 @@
 		<th colspan="7" class="footer">{FC_CRONJOBS}</th>
 	</tr>  
 </table>
-<!-- ELSE -->
-<form action="{ACTION}&amp;cron={CRON_NAME}" method="post">
-	<div class="bluebox roundbox">
-		<div class="icon_info"><strong>{L_repeat_note}</strong></div>
-	</div>
-		
-	<fieldset class="settings">
-	<legend>{CRON_DESC}</legend>
-		<dl>
-			<dt><label>{L_name}:</label></dt>
-			<dd>{CRON_NAME}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_description}:</label></dt>
-			<dd><input name="cron_desc" type="text" class="input" id="cron_desc" value="{CRON_DESC}" style="width:95%;" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_cron_start_time}:</label></dt>
-			<dd>{START_PICKER}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_repeat}:</label></dt>
-			<dd><input type="checkbox" name="cron_repeat" value="1" {CRON_REPEAT} /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_repeat_interval}:</label></dt>
-			<dd><input name="repeat_value" type="text" class="input" id="start_h2" value="{CRON_REPEAT_VALUE}" size="5" maxlength="2" /> - {REPEAT_DD}</dd>
-		</dl>
-	</fieldset>
-	<!-- IF S_PARAMS -->
-	<fieldset class="settings">
-	<legend>{L_settings}</legend>
-		<!-- BEGIN param_row -->
-		<dl>
-			<dt><label>{param_row.NAME}:</label><br /><span>{param_row.HELP}</span></dt>
-			<dd>{param_row.FIELD}</dd>
-		</dl>
-		<!-- END param_row -->
-	</fieldset>
-	<!-- ENDIF -->
-	<button name="upd" type="submit" class="mainoption" id="update" ><i class="icon-ok"></i>{L_save}</button>
-	<button name="cancel" type="submit" class="liteoption" id="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
-{CSRF_TOKEN}
-</form>
-<!-- ENDIF -->

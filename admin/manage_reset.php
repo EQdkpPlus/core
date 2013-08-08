@@ -27,7 +27,7 @@ class reset_eqdkp extends page_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
-	private $resets		= array('raids', 'events', 'items', 'itempools', 'adjustments', 'multipools', 'chars', 'news', 'plugins', 'user', 'logs', 'calendar');
+	private $resets		= array('raids', 'events', 'items', 'itempools', 'adjustments', 'multipools', 'chars', 'plugins', 'user', 'logs', 'calendar');
 	private $dependency	= array(
 		'events'	=> array('raids', 'items', 'multipools', 'calendar'),
 		'raids'		=> array('items'),
@@ -44,7 +44,6 @@ class reset_eqdkp extends page_generic {
 		'adjustments'	=> 'adjustment',
 		'multipools'	=> 'multidkp',
 		'chars'			=> 'member',
-		'news'			=> 'news',
 		'user'			=> 'user'
 	);
 

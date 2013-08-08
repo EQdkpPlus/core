@@ -23,7 +23,7 @@ include_once ($eqdkp_root_path . 'common.php');
 $blnIsAdmin = register('user')->check_auth('a_files_man', false);
 $blnIsUser = register('user')->is_signedin() && register('user')->check_auth('u_files_man', false);
 
-if (!$blnIsUser) die('Access denied.');
+if (!$blnIsUser && !$blnIsAdmin) die('Access denied.');
 
 include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderConnector.class.php';
 include_once $eqdkp_root_path.'libraries/elfinder/php/elFinder.class.php';

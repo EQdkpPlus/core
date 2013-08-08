@@ -5,29 +5,21 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date$
+ * Date:		$Date: 2013-07-23 20:31:06 +0200 (Di, 23 Jul 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13426 $
  *
- * $Id$
+ * $Id: wrapper.php 13426 2013-07-23 18:31:06Z godmod $
  */
 
-/* TODO
-	- rewrite the JS code to use jquery -> not neccessary atm
-*/
-
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-include_once($eqdkp_root_path . 'common.php');
-
-class wrapper extends page_generic {
+class wrapper_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'env', 'hooks');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
 	private $data = false;
@@ -40,8 +32,8 @@ class wrapper extends page_generic {
 		$this->process();
 	}
 
-	public function handle_id(){
-		$linkID = $this->in->get('id', '');
+	private function handle_id($id, $url){
+		$linkID = $id;
 
 		//Plus-Link
 		if((int)$linkID > 0){
@@ -77,7 +69,7 @@ class wrapper extends page_generic {
 		}
 		
 		//Hooks
-		$arrHooks = $this->hooks->process('wrapper', array('id'=>$linkID, 'link'=>rawurldecode($this->in->get('l'))));
+		$arrHooks = $this->hooks->process('wrapper', array('id'=>$linkID, 'link'=>rawurldecode($url)));
 
 		if (count($arrHooks) > 0){
 			foreach($arrHooks as $arrHook){
@@ -95,7 +87,9 @@ class wrapper extends page_generic {
 		}
 	}
 
-	public function display(){	
+	public function display(){
+		$this->handle_id($this->url_id, $this->speaking_name);
+		
 		if (!$this->data || $this->data['url'] == ''){
 			message_die('URL not found');
 		} else {
@@ -280,5 +274,4 @@ class wrapper extends page_generic {
 	} #end function
 
 }
-registry::register('wrapper');
 ?>

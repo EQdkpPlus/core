@@ -75,7 +75,6 @@ class raids_pageobject extends pageobject {
 		$this->jquery->Collapse('#toggleRaidsummary', true);
 
 		$this->set_vars(array(
-			'page_title'		=> $this->user->lang('listraids_title'),
 			'template_file'		=> 'listraids.html',
 			'display'			=> true
 		));

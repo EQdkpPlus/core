@@ -1,3 +1,14 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_events.php{SID}">{L_manevents_title}</a></li>
+		<li class="current"><a><!-- IF S_UPD -->{NAME}<!-- ELSE -->{L_addevent_title}<!-- ENDIF --></a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
 <form method="post" action="{ACTION}" name="post">
 <input type="hidden" name="calendar" value="{CALENDAR}" />
 

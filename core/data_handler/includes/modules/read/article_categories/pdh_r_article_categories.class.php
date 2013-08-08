@@ -103,7 +103,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return array_keys($this->categories);
 		}
 		
-		public function get_published_id_list($intCategoryID, $intUserID = false){
+		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false){
 			$blnFeaturedOnly = $this->get_featured_only($intCategoryID);
 			if ($intUserID === false) $intUserID = $this->user->id;
 			$arrOut = array();
@@ -113,6 +113,8 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				foreach($arrAggregation as $intCatID){
 					//Check published cat
 					if (!$this->get_published($intCatID)) continue;
+					//Check if category should be hidden on RSS
+					if($forRSS && $this->get_hide_on_rss($intCatID)) continue;
 					
 					//Check cat permission
 					$arrPermissions = $this->get_user_permissions($intCatID, $intUserID);
@@ -457,7 +459,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		private function add_path($intCategoryID, $strPath=''){
-			$strAlias = $this->get_alias($intCategoryID);
+			$strAlias = ucfirst($this->get_alias($intCategoryID));
 			if ($strAlias != '' && $strAlias != 'system'){
 				$strPath = $strAlias.'/'.$strPath;
 			}

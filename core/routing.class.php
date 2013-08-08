@@ -34,12 +34,12 @@ if(!class_exists('routing')){
 			'mycharacters'	=> 'mycharacters',
 			'search'		=> 'search',
 			'register'		=> 'register',
-			'wrapper'		=> 'wrapper',
 			'addcharacter'	=> 'addcharacter',
 			'editarticle'	=> 'editarticle',
 			'user'			=> 'user',
 			'usergroup'		=> 'usergroup',
 			'rss'			=> 'rss',
+			'external'		=> 'wrapper',
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
@@ -50,21 +50,21 @@ if(!class_exists('routing')){
 			return $this->arrStaticRoutes;
 		}
 		
-		public function staticRoute($strPath){
+		public function staticRoute($strPath, $blnWithAlias=false){
 			$strPath = utf8_strtolower($strPath);
 			if (isset($this->arrStaticRoutes[$strPath])){
-				return $this->arrStaticRoutes[$strPath];
+				return (($blnWithAlias) ? $strPath : $this->arrStaticRoutes[$strPath]);
 			}
 			return false;
 		}
 		
-		public function get($strPageObject){
+		public function get($strPageObject, $blnWithAlias=false){
 			$strPageObject = utf8_strtolower($strPageObject);
 			if (isset($this->_cache[$strPageObject])) return $this->_cache[$strPageObject];
 			
 			//Check static route
 			if ($this->staticRoute($strPageObject)){
-				$this->_cache[$strPageObject] = $this->staticRoute($strPageObject);
+				$this->_cache[$strPageObject] = $this->staticRoute($strPageObject, $blnWithAlias);
 				return $this->_cache[$strPageObject];
 			}
 			
@@ -105,7 +105,7 @@ if(!class_exists('routing')){
 		
 		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false){
 			$strPath = ($blnControllerPathPlain) ? $this->controller_path_plain : $this->controller_path;
-			$strPath .= ucfirst($this->get($strPageObject)).'/';
+			$strPath .= ucfirst($this->get($strPageObject, true)).'/';
 			if ($strParam) $strPath .= $this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
 			if ($blnAddSID) $strPath .= $this->SID;
 			return $strPath;

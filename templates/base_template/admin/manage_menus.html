@@ -130,7 +130,7 @@
 		var container = $(obj).closest('div');
 		var siblings = container.siblings('ol');
 		if (siblings.length){
-			alert("Du kannst diesen Link nicht löschen, solange er weitere Links enthält.");
+			alert("{L_pluslink_delete_warning}");
 		} else {
 			$(obj).closest('li').remove();
 		}
@@ -140,7 +140,7 @@
 		var container = $(obj).closest('div');
 		var siblings = container.siblings('ol');
 		if (siblings.length){
-			alert("Du kannst diesen Link nicht löschen, solange er weitere Links enthält.");
+			alert("{L_pluslink_delete_warning}");
 		} else {
 			window.location.href='manage_menus.php{SID}&mode=del_plink&id='+pid+'&link_hash={CSRF_MODE_TOKEN}';
 		}
@@ -152,7 +152,16 @@
 		return true;
 	}
 </script>
-<div id="dialog-edit-menuitem" title="Link bearbeiten" style="display:none;">
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_manage_menus}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div id="dialog-edit-menuitem" title="{L_pluslink_edit}" style="display:none;">
 			<fieldset class="settings mediumsettings">
 				<dl>
 					<dt><label>{L_category}/{L_article}:</label></dt>
@@ -176,7 +185,7 @@
 					<dd>{DD_LINK_WINDOW}</dd>
 				</dl>
 				<dl>
-					<dt><label>Frame-Länge:</label></dt>
+					<dt><label>{L_pluslink_frame_length}:</label></dt>
 					<dd><input size="4" type="text" class="editlink-windowsize"/>px</dd>
 				</dl>
 				<dl>
@@ -205,7 +214,7 @@
 	
 	{MENU_OL}
 	<input type="hidden" value="" id="menuitems-serialized" name="serialized"/>
-	<button type="button" id="addMenuItem"><i class="icon-plus"></i>Link hinzufügen</button>
+	<button type="button" id="addMenuItem"><i class="icon-plus"></i>{L_pluslink_add}</button>
 	
 	<div id="addMenuItemTemplate" style="display:none;">
 		<div data-linkid="KEY">
@@ -253,7 +262,7 @@
 		<ul class="receiver connectedSortable5 manage_menues_block2" id="sortable9" style="min-height:120px;">
 		<!-- BEGIN fav_row -->
 			<li class="t_{fav_row.IDENT}" id="{fav_row.ID}" title="{fav_row.GROUP}">
-				<img src="{fav_row.ICON}" alt="" /> {fav_row.NAME}
+				{fav_row.ICON} {fav_row.NAME}
 				<input name="fav[]" type="checkbox" id="cb_{fav_row.ID}" value="{fav_row.DATA}" style="display:none;" />
 				<span id="icon_{fav_row.ID}" style="display:none;">{fav_row.ICON}</span>
 				<img src="../images/global/delete.png" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16" alt="" />
@@ -275,9 +284,8 @@
 				<div id="tt_{group_row.menu_row.IDENT}" class="toggle_container equalHeights">
 					<ul>
 						<!-- BEGIN item_row -->
-						<li class="t_{group_row.menu_row.IDENT}" id="{group_row.menu_row.item_row.ID}" title="{group_row.menu_row.GROUP}">{group_row.menu_row.item_row.NAME}
+						<li class="t_{group_row.menu_row.IDENT}" id="{group_row.menu_row.item_row.ID}" title="{group_row.menu_row.GROUP}">{group_row.menu_row.item_row.ICON} {group_row.menu_row.item_row.NAME}
 							<input type="checkbox" id="cb_{group_row.menu_row.item_row.ID}" name="fav[]" value="{group_row.menu_row.item_row.DATA}" style="display:none;" />
-							<span id="icon_{group_row.menu_row.item_row.ID}" style="display:none;">{group_row.menu_row.item_row.ICON}</span>
 						</li>
 						<!-- END item_row -->
 					</ul>

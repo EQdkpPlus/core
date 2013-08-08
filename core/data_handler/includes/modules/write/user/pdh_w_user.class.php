@@ -158,7 +158,7 @@ if(!class_exists('pdh_w_user')) {
 				$query_ary['user_login_key'] = '';
 			}
 
-			$query_ary['user_email']			= $this->crypt->encrypt($this->in->get('email_address'));
+			$query_ary['user_email']	= $this->crypt->encrypt($this->in->get('email_address'));
 			$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($user_id));
 			
 			$privArray = array();
@@ -178,16 +178,14 @@ if(!class_exists('pdh_w_user')) {
 				}
 			}
 			
-			//TODO: Create Thumbnail for User Avatar
-			if ($custom_fields['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $custom_fields['user_avatar']){
-
+			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
+				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
+				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
 			}
 			
 			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
-			
-			
-			
+
 
 			$plugin_settings = array();
 			if (is_array($this->pm->get_menus('settings'))){
@@ -274,10 +272,11 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function delete_user($user_id, $delete_member = false) {
-			$this->db->query("DELETE FROM __users WHERE user_id=".$this->db->escape($user_id));
-			$this->db->query("DELETE FROM __auth_users WHERE user_id=".$this->db->escape($user_id));
-			$this->db->query("DELETE FROM __groups_users WHERE user_id=".$this->db->escape($user_id));
-			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
+			
+			//Delete Avatars
+			$this->pfh->Delete('users/'.$user_id, 'files');
+			$this->pfh->Delete($this->pdh->get('user', 'avatarimglink', array($user_id)));
+						
 			if ($delete_member){
 				$members = $this->pdh->get('member', 'connection_id', array($user_id));
 				foreach ($members as $member){
@@ -288,6 +287,12 @@ if(!class_exists('pdh_w_user')) {
 				'{L_USER}'		=> $this->pdh->get('user', 'name', array($user_id))
 			);
 			$this->log_insert('action_user_deleted', $log_action);
+			
+			$this->db->query("DELETE FROM __users WHERE user_id=".$this->db->escape($user_id));
+			$this->db->query("DELETE FROM __auth_users WHERE user_id=".$this->db->escape($user_id));
+			$this->db->query("DELETE FROM __groups_users WHERE user_id=".$this->db->escape($user_id));
+			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
+			
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('member_update');
 			$this->pdh->enqueue_hook('update_connection');

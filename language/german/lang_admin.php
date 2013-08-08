@@ -598,7 +598,7 @@ $lang = array(
 "pk_set_link_type_self" => "normal",
 "pk_set_link_type_link" => "Neues Fenster",
 "pk_set_link_type_iframe" => "Eingebettet",
-"pk_set_link_type_D_iframe_womenues" => "Eingebettet, ohne Menüs/Portalspalten",
+"pk_set_link_type_D_iframe_womenues" => "Eingebettet, ohne Portalspalten recht/links",
 "pk_tab_game" => "Spiel",
 "pk_tab_user" => "Benutzer",
 "pk_tab_portal" => "Portal",
@@ -1553,6 +1553,10 @@ $lang = array(
 "wide_content"	=> "Breiten Inhalt bevorzugen",
 "hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
 "perm_u_files_man" => "Bilder verwalten",
+"pluslink_delete_warning" => "Du kannst diesen Link nicht löschen, solange er weitere Links enthält.",
+"pluslink_frame_length" => "Frame-Länge",
+"pluslink_edit"	=> "Link bearbeiten",
+"pluslink_add"	=> "Link hinzufügen",
  );
 
 ?>

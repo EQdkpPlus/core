@@ -1,7 +1,14 @@
 <!-- IF not S_GROUP_PERM_LIST -->
 <!-- IF S_USERGROUP_ADMIN -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_manage_user_groups}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
 <form method="post" action="{ACTION}" name="post">
-
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_manage_user_groups}</h1>
 	</div>
@@ -62,6 +69,14 @@
 {CSRF_TOKEN}
 </form>
 <!-- ELSE -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_manage_user_groups}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
 <div class="contentHeader">
 	<h1 class="contentTitle">{L_manage_user_groups}</h1>
 </div>
@@ -89,6 +104,15 @@
 	</table>
 <!-- ENDIF -->
 <!-- ELSE -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_user_groups.php{SID}">{L_manage_user_groups}</a></li>
+		<li class="current"><a>{L_user_group_permissions}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_user_group_permissions}</h1>

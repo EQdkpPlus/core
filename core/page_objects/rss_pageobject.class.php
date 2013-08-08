@@ -36,7 +36,7 @@ class rss_pageobject extends pageobject {
 		
 		//Get latest Articles for a specific category
 		if ($intCategoryID){
-			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id));
+			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id, true));
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			
 			switch($arrCategory['sortation_type']){

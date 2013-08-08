@@ -429,15 +429,19 @@ if (!class_exists("pdh_r_user")){
 			return $avatarimg;
 		}
 
-		public function get_avatarimglink($user_id){
+		public function get_avatarimglink($user_id, $fullSize=false){
+			
 			if($avatarimg = $this->get_custom_fields($user_id, 'user_avatar')){
-				return $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
+				$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
+				$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);		
+				if (!$fullSize && is_file($thumbnail)) return $thumbnail;
+				return $fullSizeImage;
 			}
 			return '';
 		}
 		
-		public function get_html_avatarimglink($user_id){
-			$strImg = $this->get_avatarimglink($user_id);
+		public function get_html_avatarimglink($user_id, $fullSize=false){
+			$strImg = $this->get_avatarimglink($user_id, $fullSize);
 			if (!strlen($strImg)){
 				$strImg = $this->server_path.'images/no_pic.png';
 			} else {

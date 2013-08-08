@@ -365,8 +365,8 @@ class core extends gen_class {
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
 				$this->tpl->assign_vars(array(
-					'FIRST_C'	=> false,
-					'THIRD_C'	=> false,
+					'S_PORTAL_LEFT'	=> false,
+					'S_PORTAL_RIGHT'=> false,
 				));
 			}
 
@@ -629,7 +629,7 @@ class core extends gen_class {
 					break ;
 				case '2':
 				case '3':
-				case '4':  $url = 'wrapper.php'.$this->SID.'&amp;id='.$wrapper_id;
+				case '4':  $url = $this->routing->build("external", $text, $wrapper_id, true, true);
 					break ;
 			}
 			$arrData['link'] = $url;

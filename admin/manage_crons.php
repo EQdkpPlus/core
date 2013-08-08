@@ -201,7 +201,6 @@ class ManageCrons extends page_generic {
 			
 		$this->tpl->assign_vars(array(
 			'S_PARAMS'				=> (count($options) > 0) ? true : false,
-			'S_EDIT'				=> true,
 			'CRON_NAME'				=> sanitize($this->in->get('cron')),
 			'CRON_DESC'				=> sanitize($cron_data['description']),
 			'CRON_REPEAT'			=> ($cron_data['repeat']) ? 'checked="checked"' : '',
@@ -212,7 +211,7 @@ class ManageCrons extends page_generic {
 		
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_cronjobs'),
-			'template_file'		=> 'admin/manage_crons.html',
+			'template_file'		=> 'admin/manage_crons_edit.html',
 			'display'			=> true)
 		);
 	}

@@ -21,7 +21,7 @@ $eqdkp_root_path = './../../../';
 include_once ($eqdkp_root_path . 'common.php');
 
 if (!register('user')->is_signedin()){
-	echo('You have no permission to see this page as you are not logged in');exit;
+	echo('You have no permission to see this page as you are not logged in'); exit;
 }
 
 include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderConnector.class.php';

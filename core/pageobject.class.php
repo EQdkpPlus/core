@@ -55,7 +55,8 @@ if(!class_exists('pageobject')){
 			if (strpos($strPagePath, "/") === 0) $strPagePath = substr($strPagePath, 1);
 			
 			$strPath .= $strPagePath;
-
+			
+			$this->strPage = $this->page;
 			$this->strPath = $strPath;
 			$this->strPathPlain = str_replace($this->server_path, "", $strPath);
 			

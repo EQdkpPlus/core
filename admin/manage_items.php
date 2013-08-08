@@ -147,7 +147,7 @@ class ManageItems extends page_generic {
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manitems_title'),
-			'template_file'		=> 'admin/manage_item_edit.html',
+			'template_file'		=> 'admin/manage_items_edit.html',
 			'display'			=> true)
 		);
 	}

@@ -242,7 +242,7 @@ class Manage_Massmail extends page_generic {
 	}
 
 	public function display(){
-		$editor = registry::register('tinyMCE', array($this->root_path));
+		$editor = registry::register('tinyMCE');
 		$editor->editor_normal(array('autoresize' => true, 'relative_urls'	=> false, 'remove_host' => false));
 
 		$bnlEventId = ($this->in->get('event_id', 0) > 0) ? true : false;

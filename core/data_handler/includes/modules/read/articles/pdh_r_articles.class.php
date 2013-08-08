@@ -388,7 +388,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public function get_plain_path($intArticleID){
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
-			$strPath .= $this->get_alias($intArticleID);
+			$strPath .= ucfirst($this->get_alias($intArticleID));
 			return $strPath;
 		}
 		
@@ -396,13 +396,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
 			if (!intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
-			$strPath .= $this->get_alias($intArticleID).((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
+			$strPath .= ucfirst($this->get_alias($intArticleID)).((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
 			return $strPath.$this->SID;
 		}
 		
 		private function add_path($intCategoryID, $strPath=''){
-			$strAlias = $this->pdh->get('article_categories', 'alias', array($intCategoryID));
-			if ($strAlias != '' && $strAlias != 'system'){
+			$strAlias = ucfirst($this->pdh->get('article_categories', 'alias', array($intCategoryID)));
+			if ($strAlias != '' && $strAlias != 'system' && $strAlias != 'System'){
 				$strPath = $strAlias.'/'.$strPath;
 			}
 			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
@@ -412,10 +412,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return $strPath;
 		}
 		
-		public function get_breadcrumb($intArticleID){
+		public function get_breadcrumb($intArticleID, $strAdditionalString=''){
 			$strBreadcrumb = $this->add_breadcrumb($this->get_category($intArticleID));
 
-			$strBreadcrumb .=  '<li class="current"><a href="'.$this->server_path.$this->get_path($intArticleID).'">'.$this->get_title($intArticleID).'</a></li>';
+			$strBreadcrumb .=  '<li class="current"><a href="'.$this->server_path.$this->get_path($intArticleID).'">'.$this->get_title($intArticleID).$strAdditionalString.'</a></li>';
 			return $strBreadcrumb;
 		}
 		

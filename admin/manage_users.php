@@ -517,6 +517,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			'S_PROTECT_USER'			=> ($this->user->data['user_id'] == $user_id || (isset($memberships[2]) && !isset($adm_memberships[2]))) ? true : false,
 			'IMAGE_DELETE'				=> 'manage_users.php'.$this->SID.'&amp;uid='.stripslashes($_REQUEST['u']).'&amp;deleteavatar=true',
 			'USER_ID'					=> $user_id,
+			'MU_USER_NAME'				=> $this->pdh->get('user', 'name', array($user_id)),
 			#'IMAGE_UPLOAD'				=> $logo_upload->Show('user_avatar', 'manage_users.php?performupload=true', $image, false),
 			'S_IMAGE'					=> ($image != "") ? true: false,
 

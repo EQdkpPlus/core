@@ -148,8 +148,7 @@ class Manage_Menus extends page_generic {
 							var content = $(ui.item).html();
 							var Oclass = $(ui.item).attr(\'class\');
 							var Oid = $(ui.item).attr(\'id\');
-							var Oicon = document.getElementById("icon_"+Oid).innerHTML;
-							$(ui.item).html(\'<img src="\'+Oicon+\'" alt="" /> \' +content + \'   <img src="../images/global/delete.png" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16" alt="" />\');
+							$(ui.item).html(content + \'   <img class="delete" src="../images/global/delete.png" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16" alt="" />\');
 							document.getElementById("cb_"+Oid).checked = true;
 						}
 
@@ -165,7 +164,7 @@ class Manage_Menus extends page_generic {
 				document.getElementById("cb_"+test).checked = false;
 				var name = document.getElementById(test).innerHTML;
 				var clas = document.getElementById(test).className;
-				regex = new RegExp(\'(<img.*?>)\',\'gi\');
+				regex = new RegExp(\'(<img class="delete".*?>)\',\'gi\');
 				do {
 					found = false;
 					if (regex.exec(name)) {
@@ -213,10 +212,13 @@ class Manage_Menus extends page_generic {
 							$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $adm['link']);
 							$compare_array[] = $link;
 							if ($adm['link']){
+								$caticon	= '<img src="'.((!isset($adm['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$adm['img']).'" alt="img" />';
+								$caticon	= (isset($adm['icon'])) ? '<i class="'.$adm['icon'].'"></i>' : $caticon;
+								
 								$this->tpl->assign_block_vars('fav_row', array(
 									'NAME' => $adm['text'],
 									'ID'	=> 'fav_'.$fav_key,
-									'ICON' => $image_path.$adm['icon'],
+									'ICON' => $caticon,
 									'DATA'	=> $fav,
 									'IDENT'	=> 'i'.md5($latest['name']),
 									'GROUP'	=> $latest['name'],	
@@ -242,8 +244,11 @@ class Manage_Menus extends page_generic {
 					
 					$ident = 'i'.md5($v['name']);
 					$this->jquery->Collapse('#container_'.$ident);
+					$caticon	= '<img src="'.((!isset($v['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$v['img']).'" alt="img" />';
+					$caticon	= (isset($v['icon'])) ? '<i class="'.$v['icon'].'"></i>' : $caticon;
+					
 					$this->tpl->assign_block_vars('group_row.menu_row', array(
-						'NAME' => '<img src="'.((isset($v['icon'])) ? $image_path.$v['icon'] : $image_path.'plugin.png').'" alt="" /> '.$v['name'],
+						'NAME' => $caticon.' '.$v['name'],
 						'GROUP'	=> $v['name'],
 						'IDENT'	=> $ident,
 					));
@@ -278,10 +283,13 @@ class Manage_Menus extends page_generic {
 
 											$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $row2['link']);
 											if (!in_array($link, $compare_array)){
+												$caticon	= '<img src="'.((!isset($row2['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$row2['img']).'" alt="img" />';
+												$caticon	= (isset($row2['icon'])) ? '<i class="'.$row2['icon'].'"></i>' : $caticon;
+												
 												$this->tpl->assign_block_vars('group_row.menu_row.item_row', array(
 													'NAME' => $row2['text'],
 													'ID'	=> 'l'.md5($link),
-													'ICON' => $image_path.$row2['icon'],
+													'ICON' => $caticon,
 													'DATA'	=> $k.'|'.$k2.'|'.$k3,
 												));
 											}
@@ -292,10 +300,13 @@ class Manage_Menus extends page_generic {
 
 								$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $row['link']);
 								if (!in_array($link, $compare_array)){
+									$caticon	= '<img src="'.((!isset($row['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$row['img']).'" alt="img" />';
+									$caticon	= (isset($row['icon'])) ? '<i class="'.$row['icon'].'"></i>' : $caticon;
+									
 									$this->tpl->assign_block_vars('group_row.menu_row.item_row', array(
 										'NAME' => $row['text'],
 										'ID'	=> 'l'.md5($link),
-										'ICON' => $image_path.$row['icon'],
+										'ICON' => $caticon,
 										'DATA'	=> $k.'|'.$k2,
 									));
 								}

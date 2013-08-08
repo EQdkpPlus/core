@@ -110,6 +110,7 @@ class controller extends page_generic {
 						$strSpecificID = $strID;
 					} elseif (strlen($arrPath[0])){
 						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
+						registry::add_const('url_id', $arrPath[0]);
 						$strSpecificID = $arrPath[0];
 					}
 				}
@@ -348,7 +349,7 @@ class controller extends page_generic {
 				'S_PAGINATION'	  => ($pageCount > 1) ? true : false,
 				'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$strPath, strip_tags($arrArticle['title'])) : '',
 				'PERMALINK'		  => $this->pdh->get('articles', 'permalink', array($intArticleID)),
-				'BREADCRUMB'	  => $this->pdh->get('articles', 'breadcrumb', array($intArticleID)),
+				'BREADCRUMB'	  => $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles)),
 				'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
 				'S_TOOLBAR'		=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
@@ -624,10 +625,12 @@ class controller extends page_generic {
 					if (strlen($strID)) {
 						registry::add_const('url_id', $strID);
 					} elseif (strlen($arrPath[0])){
+						registry::add_const('url_id', $arrPath[0]);
 						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
 					}
 					registry::add_const('page', str_replace('/'.$arrPath[0], '', $strPath));
 					registry::add_const('page_path', $strPath);
+					registry::add_const('speaking_name', str_replace('-'.$strID, '', $arrPath[0]));
 				}
 			} else {
 				registry::add_const('page_path', $strPath);
