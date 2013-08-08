@@ -25,8 +25,8 @@
 			
 			$(document).ready(function() {
 				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->380<!-- ELSE -->340<!-- ENDIF -->,
-					width: 500,
+					height: <!-- IF S_BRIDGE_INFO -->410<!-- ELSE -->340<!-- ENDIF -->,
+					width: 530,
 					modal: true,
 					autoOpen: false,
 				});

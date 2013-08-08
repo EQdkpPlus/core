@@ -103,6 +103,7 @@ if(!class_exists('pdh_w_articles')) {
 				}
 				
 				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}
 			
@@ -154,6 +155,7 @@ if(!class_exists('pdh_w_articles')) {
 						
 			if ($blnResult){
 				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}
 			
@@ -218,6 +220,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			if ($blnResult){
 				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}
 			return false;
@@ -226,16 +229,19 @@ if(!class_exists('pdh_w_articles')) {
 		public function set_published($arrIDs){
 			$this->db->query('UPDATE __articles SET published=1 WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
 			$this->pdh->enqueue_hook('articles_update');
+			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
 		public function set_unpublished($arrIDs){
 			$this->db->query('UPDATE __articles SET published=0 WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
 			$this->pdh->enqueue_hook('articles_update');
+			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
 		public function change_category($arrIDs, $intCategoryID){
 			$this->db->query("UPDATE __articles SET category = ".$this->db->escape($intCategoryID).' WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
-			$this->pdh->enqueue_hook('articles_update');	
+			$this->pdh->enqueue_hook('articles_update');
+			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
 		private function check_alias($id, $strAlias){

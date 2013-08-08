@@ -75,7 +75,7 @@ class inst_settings extends install_generic {
 		'pk_itemhistory_dia' 			=> '1',
 		'pk_color_items' 				=> 'a:2:{i:0;s:2:"34";i:1;s:2:"67";}',
 		'auth_method'					=> 'db',
-		'mainmenu' => 'a:6:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"828e0013b8f3bc1bb22b4f57172b019d";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e6b102bd046c62ceb7604249d87e0df7";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"68175ac4bc30de46b6fc7d64be2344fb";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"9dfc22859008eb0a92a20afabf5a7b32";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"6c4298cc62394cfe28ed5a6ab52888fa";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"50d8cb46ce022263c862cf839b617f0b";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"42500df250c8fdb9ff6d316515b25157";s:6:"hidden";s:1:"0";}}}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"261538ed19c75131954bacdec8850ec4";s:6:"hidden";s:1:"0";}}i:4;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"c8fbde983d8db71eba899bdcc2a484ea";s:6:"hidden";s:1:"0";}s:7:"_childs";a:2:{i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"268f3f919a94c379e9b8ec147c4799a0";s:6:"hidden";s:1:"0";}}i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"446829091172dd8c40e3fe6e165a514a";s:6:"hidden";s:1:"0";}}}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"60845e92591183a2d65a381fc95a78ed";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"437dae08dd98aa88d5a664f7e61fe4a5";s:6:"hidden";s:1:"0";}}}}}',
+		'mainmenu' => 'a:6:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"828e0013b8f3bc1bb22b4f57172b019d";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"261538ed19c75131954bacdec8850ec4";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"fd613a0f87638ad1372d9b06bad29cb3";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}}}}',
 		'eqdkpm_shownote'				=> '1',
 		
 		// Calendar settings
@@ -230,6 +230,7 @@ class inst_settings extends install_generic {
 		$this->set_config();
 		$this->game->ChangeGame($this->def_game, $this->def_game_lang);
 		$this->InsertStartNews();
+		
 		if(!$this->install_permissions()) return false;
 		return true;
 	}
@@ -306,6 +307,8 @@ class inst_settings extends install_generic {
 	private function InsertStartNews(){
 		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
 		(1, '".$this->lang['welcome_news_title']."', '".$this->lang['welcome_news']."', 2, 1, 1, 0, 1, '', '', 1, ".time().", '', 'welcome', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".time().", 1);");
+		
+		$this->do_sql("UPDATE __articles SET date=".time().", last_edited=".time().";");
 	}
 	
 	private function InsertGroupPermissions($grp_id, $perms=false, $noperms=false) {

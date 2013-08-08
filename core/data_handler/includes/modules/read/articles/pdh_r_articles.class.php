@@ -34,7 +34,8 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public $pageobjects = NULL;
 
 		public $hooks = array(
-			'articles_update'
+			'articles_update',
+			'article_categories_update',
 		);
 		
 		public $presets = array(
@@ -51,6 +52,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 
 		public function reset(){
 			$this->pdc->del('pdh_articles_table');
+			$this->pdc->del('pdh_articles_categories');
+			$this->pdc->del('pdh_articles_alias');
+			$this->pdc->del('pdh_articles_pageobjects');
+			
 			$this->articles = NULL;
 			$this->categories = NULL;
 			$this->alias = NULL;
@@ -62,6 +67,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->categories = $this->pdc->get('pdh_articles_categories');
 			$this->alias = $this->pdc->get('pdh_articles_alias');
 			$this->pageobjects = $this->pdc->get('pdh_articles_pageobjects');
+			
 			if($this->articles !== NULL){
 				return true;
 			}
