@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_articles')) {
 	class pdh_w_articles extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'pfh', 'user', 'time',  'bbcode'=>'bbcode', 'embedly'=>'embedly');
+		$shortcuts = array('pdh', 'db', 'pfh', 'user', 'time',  'bbcode'=>'bbcode', 'embedly'=>'embedly', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -32,8 +32,53 @@ if(!class_exists('pdh_w_articles')) {
 		}
 
 		public function delete($id) {
+			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			$this->db->query("DELETE FROM __articles WHERE id = '".$this->db->escape($id)."'");
 			$this->pdh->enqueue_hook('articles_update');
+			
+			$arrOld = array(
+					'title' 			=> $arrOldData["title"],
+					'text'				=> $arrOldData["text"],
+					'category'			=> $arrOldData["category"],
+					'featured'			=> $arrOldData["featured"],
+					'comments'			=> $arrOldData["comments"],
+					'votes'				=> $arrOldData["votes"],
+					'published'			=> $arrOldData["published"],
+					'show_from'			=> $arrOldData["show_from"],
+					'show_to'			=> $arrOldData["show_to"],
+					'user_id'			=> $arrOldData["user_id"],
+					'date'				=> $arrOldData["date"],
+					'previewimage'		=> $arrOldData["previewimage"],
+					'alias'				=> $arrOldData["alias"],
+					'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
+					'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+					'hide_header'		=> $arrOldData["hide_header"],
+			);
+			
+			//Logging
+			$arrLang = array(
+					'title' 			=> "{L_HEADLINE}",
+					'text'				=> "{L_DESCRIPTION}",
+					'category'			=> "{L_CATEGORY}",
+					'featured'			=> "{L_FEATURED}",
+					'comments'			=> "{L_INFO_COMMENTS}",
+					'votes'				=> "{L_INFO_VOTING}",
+					'published'			=> "{L_PUBLISHED}",
+					'show_from'			=> "{L_SHOW_FROM}",
+					'show_to'			=> "{L_SHOW_TO}",
+					'user_id'			=> "{L_USER}",
+					'date'				=> "{L_DATE}",
+					'previewimage'		=> "{L_PREVIEW_IMAGE}",
+					'alias'				=> "{L_ALIAS}",
+					'tags'				=> "{L_TAGS}",
+					'page_objects'		=> "{L_PAGE_OBJECTS}",
+					'hide_header'		=> "{L_HIDE_HEADER}",
+			);
+			
+			$arrChanges = $this->logs->diff($id, false, $arrOld, $arrLang);
+			if ($arrChanges){
+				$this->log_insert('action_article_deleted', $arrChanges, 1, 'article');
+			}
 		}
 		
 		public function delete_category($intCategoryID){
@@ -102,6 +147,51 @@ if(!class_exists('pdh_w_articles')) {
 					}
 				}
 				
+				
+				//Logging
+				$arrLang = array(
+						'title' 			=> "{L_HEADLINE}",
+						'text'				=> "{L_DESCRIPTION}",
+						'category'			=> "{L_CATEGORY}",
+						'featured'			=> "{L_FEATURED}",
+						'comments'			=> "{L_INFO_COMMENTS}",
+						'votes'				=> "{L_INFO_VOTING}",
+						'published'			=> "{L_PUBLISHED}",
+						'show_from'			=> "{L_SHOW_FROM}",
+						'show_to'			=> "{L_SHOW_TO}",
+						'user_id'			=> "{L_USER}",
+						'date'				=> "{L_DATE}",
+						'previewimage'		=> "{L_PREVIEW_IMAGE}",
+						'alias'				=> "{L_ALIAS}",
+						'tags'				=> "{L_TAGS}",
+						'page_objects'		=> "{L_PAGE_OBJECTS}",
+						'hide_header'		=> "{L_HIDE_HEADER}",
+				);
+				
+				$arrNew = array(
+						'title' 			=> $strTitle,
+						'text'				=> $strText,
+						'category'			=> $intCategory,
+						'featured'			=> $intFeatured,
+						'comments'			=> $intComments,
+						'votes'				=> $intVotes,
+						'published'			=> $intPublished,
+						'show_from'			=> $strShowFrom,
+						'show_to'			=> $strShowTo,
+						'user_id'			=> $intUserID,
+						'date'				=> $intDate,
+						'previewimage'		=> $strPreviewimage,
+						'alias'				=> ($blnAliasResult) ? $strAlias : '',
+						'tags'				=> implode(", ", $arrTags),
+						'page_objects'		=> implode(", ", $arrPageObjects),
+						'hide_header'		=> $intHideHeader,	
+				);
+					
+				$arrChanges = $this->logs->diff($id, false, $arrNew, $arrLang);
+				if ($arrChanges){
+					$this->log_insert('action_article_added', $arrChanges, 1, 'article');
+				}
+						
 				$this->pdh->enqueue_hook('articles_update');
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
@@ -130,7 +220,7 @@ if(!class_exists('pdh_w_articles')) {
 				foreach($arrTmpPageObjects[3] as $key=>$val){
 					$arrPageObjects[] = $val;
 				}
-			}
+			}			
 			
 			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
 				'title' 			=> $strTitle,
@@ -152,10 +242,80 @@ if(!class_exists('pdh_w_articles')) {
 				'page_objects'		=> serialize($arrPageObjects),
 				'hide_header'		=> $intHideHeader,
 			), $id);
+			
 						
 			if ($blnResult){
 				$this->pdh->enqueue_hook('articles_update');
 				$this->pdh->enqueue_hook('article_categories_update');
+				
+				//Log changes				
+				$arrNew = array(
+					'title' 			=> $strTitle,
+					'text'				=> $strText,
+					'category'			=> $intCategory,
+					'featured'			=> $intFeatured,
+					'comments'			=> $intComments,
+					'votes'				=> $intVotes,
+					'published'			=> $intPublished,
+					'show_from'			=> $strShowFrom,
+					'show_to'			=> $strShowTo,
+					'user_id'			=> $intUserID,
+					'date'				=> $intDate,
+					'previewimage'		=> $strPreviewimage,
+					'alias'				=> $strAlias,
+					'tags'				=> implode(", ", $arrTags),
+					'page_objects'		=> implode(", ", $arrPageObjects),
+					'hide_header'		=> $intHideHeader,
+				);
+				
+				$arrOldData = $this->pdh->get('articles', 'data', array($id));
+				$arrOld = array(
+					'title' 			=> $arrOldData["title"],
+					'text'				=> $arrOldData["text"],
+					'category'			=> $arrOldData["category"],
+					'featured'			=> $arrOldData["featured"],
+					'comments'			=> $arrOldData["comments"],
+					'votes'				=> $arrOldData["votes"],
+					'published'			=> $arrOldData["published"],
+					'show_from'			=> $arrOldData["show_from"],
+					'show_to'			=> $arrOldData["show_to"],
+					'user_id'			=> $arrOldData["user_id"],
+					'date'				=> $arrOldData["date"],
+					'previewimage'		=> $arrOldData["previewimage"],
+					'alias'				=> $arrOldData["alias"],
+					'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
+					'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+					'hide_header'		=> $arrOldData["hide_header"],
+				);
+				
+				$arrFlags = array(
+					'text'			=> 1,
+				);
+				
+				$arrLang = array(
+					'title' 			=> "{L_HEADLINE}",
+					'text'				=> "{L_DESCRIPTION}",
+					'category'			=> "{L_CATEGORY}",
+					'featured'			=> "{L_FEATURED}",
+					'comments'			=> "{L_INFO_COMMENTS}",
+					'votes'				=> "{L_INFO_VOTING}",
+					'published'			=> "{L_PUBLISHED}",
+					'show_from'			=> "{L_SHOW_FROM}",
+					'show_to'			=> "{L_SHOW_TO}",
+					'user_id'			=> "{L_USER}",
+					'date'				=> "{L_DATE}",
+					'previewimage'		=> "{L_PREVIEW_IMAGE}",
+					'alias'				=> "{L_ALIAS}",
+					'tags'				=> "{L_TAGS}",
+					'page_objects'		=> "{L_PAGE_OBJECTS}",
+					'hide_header'		=> "{L_HIDE_HEADER}",
+				);
+				
+				$arrChanges = $this->logs->diff($id, $arrOld, $arrNew, $arrLang, $arrFlags);
+				if ($arrChanges){
+					$this->log_insert('action_article_updated', $arrChanges, 1, 'article');
+				}
+				
 				return $id;
 			}
 			

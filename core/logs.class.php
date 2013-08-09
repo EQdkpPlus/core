@@ -30,6 +30,8 @@ if ( !defined('EQDKP_INC') ){
 			//Create Plugin List
 			$this->plugins[] = 'core';
 			$this->plugins[] = 'calendar';
+			$this->plugins[] = 'article';
+			$this->plugins[] = 'article_category';
 			foreach ($this->pm->get_plugins() as $key){
 				$this->plugins[] = $key;
 			}
@@ -61,5 +63,29 @@ if ( !defined('EQDKP_INC') ){
 			}
 			return $variable;
 		}
+		
+		/*
+		 * $arrOld = array(1,2,3)
+		 * $arrNew = array(4,5,6)
+		 * $arrLang = array("1", "2", "3")
+		 * $arrFlags = array(0,0,1)
+		 */
+		public function diff($intID, $arrOld, $arrNew, $arrLang, $arrFlags=array()){
+			if ($intID) $arrChanged["{L_ID}"] = array('old' => $intID, 'new' => $intID, 'flag' => 0);
+			if ($arrOld){
+				foreach($arrOld as $key => $val){
+					if ($arrNew[$key] != $val){
+						$arrChanged[$arrLang[$key]] = array('old' => $val, 'new' => $arrNew[$key], 'flag' => ((isset($arrFlags[$key])) ? $arrFlags[$key] : 0)); 
+					}
+				}
+			} else {
+				foreach($arrNew as $key => $val){
+					$arrChanged[$arrLang[$key]] = $arrNew[$key];
+				}	
+			}
+			
+			return (count($arrChanged)) ? $arrChanged : false;
+		}
+		
 	}
 ?>

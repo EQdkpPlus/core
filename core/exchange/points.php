@@ -26,7 +26,8 @@ if (!class_exists('exchange_points')){
 		public $options		= array();
 
 		public function get_points($params, $body){
-			if ($this->user->check_auth('u_event_view', false) && $this->user->check_auth('u_member_view', false) && $this->user->check_auth('u_item_view', false)){
+			if($this->user->check_pageobjects(array('points'), 'AND', false))
+			{
 				include_once($eqdkp_root_path . 'core/data_export.class.php');
 				$myexp = new content_export();
 				$withMemberItems = (isset($params['get']['exclude_memberitems']) && $params['get']['exclude_memberitems'] == 'true') ? false : true;

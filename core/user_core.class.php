@@ -462,6 +462,45 @@ class user_core extends gen_class {
 			return ($boolDie) ? message_die($this->lang('noauth_hostmode'), $this->lang('noauth_default_title'), 'access_denied', true) : false;
 		}
 	}
+	
+	public function check_pageobject($strPageObject, $boolDie = true, $intUserID = 0){
+		if($intUserID == 0) $intUserID = $this->data['user_id'];
+		
+		$blnResult = $this->pdh->get('articles', 'check_pageobject_permission', array($strPageObject, $intUserID));
+		if($blnResult) return true;
+		
+		return ($boolDie) ? message_die($this->lang('noauth'), $this->lang('noauth_default_title'), 'access_denied', true) : false;
+	}
+	
+	public function check_pageobjects($arrPageObjects, $mode = 'AND', $boolDie = true, $intUserID = 0){
+		if (is_array($arrPageObjects) && count($arrPageObjects) > 0){
+			if (strtolower($mode) == 'and'){
+				$intPerms = 0;
+				foreach ($arrPageObjects as $strPageObject){
+					if ($this->check_pageobject($strPageObject, $boolDie, $intUserID)){
+						$intPerms++;
+					}
+				}
+				if ($intPerms === count($arrPageObjects)){
+					return true;
+				}
+			} else {
+				$blnPerm = false;
+				foreach ($arrPageObjects as $strPageObject){
+					if ($this->check_pageobject($strPageObject, false, $intUserID)){
+						return true;
+					}
+				}
+	
+				if ($boolDie){
+					return message_die($this->lang('noauth'), $this->lang('noauth_default_title'), 'access_denied', true);
+				}
+			}
+	
+		}
+	
+		return false;
+	}
 
 
 	public function updateAutologinKey($intUserID, $strAutologinKey){

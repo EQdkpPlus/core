@@ -65,17 +65,20 @@
 		
 		</form>
 		<br />
+		<form method="post" action="{ACTION}" name="post3">
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 			{LOGS_LIST}
 		</table>
 		<div class="center pagination_wrapper">
 			{LOGS_PAGINATION}
 		</div>
-		<form method="post" action="{ACTION}" name="post">
+
 		<div class="contentFooter">
+			<button type="button" name="deleteselected" class="mainoption" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
+			<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 			{L_clear_last_logs} <input type="text" name="dellogdays" size="5" value="{RPDELLOGDAYS}" class="input" />
 			{L_days} <button type="submit" name="deletedays" class="mainoption"><i class="icon-remove"></i>{L_delete}</button>
-			<button type="button" class="mainoption" name="delall" onclick="delete_warning();" ><i class="icon-remove"></i>{L_clear_all_logs}</button>
+			<button type="button" class="mainoption" name="delall" onclick="delete_all_warning();" ><i class="icon-remove"></i>{L_clear_all_logs}</button>
 		</div>
 		{CSRF_TOKEN}
 		</form>

@@ -35,9 +35,19 @@ class Manage_Logs extends page_generic {
 			'del_errors'	=> array('process' => 'delete_errors',		'check' => 'a_logs_del', 'csrf'=>true),
 			'dellogdays'	=> array('process' => 'delete_log_days',	'check' => 'a_logs_del', 'csrf'=>true)
 		);
-		parent::__construct(false, $handler, array(), null, '', 'logid');
+		parent::__construct(false, $handler, array(), null, 'selected_ids[]', 'logid');
 		if($this->url_id > 0) $this->view_log();
 		$this->process();
+	}
+	
+	public function delete(){
+		echo "delete";
+		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
+			$ret = $this->pdh->put('logs', 'delete_ids', array($this->in->getArray('selected_ids','int')));
+			$this->pdh->process_hook_queue();
+			$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => count($this->in->getArray('selected_ids', 'int'))));
+			$this->display();
+		}	
 	}
 
 	public function reset_logs(){
@@ -62,13 +72,39 @@ class Manage_Logs extends page_generic {
 
 	public function view_log() {
 		$log_value = unserialize($this->pdh->get('logs', 'value', array($this->url_id)));
+		
+		$blnCompare = false;
 		if(is_array($log_value)) {
 			foreach ($log_value as $k => $v){
 				if($k != 'header'){
-					$this->tpl->assign_block_vars('log_row', array(
-						'KEY'			=> $this->logs->lang_replace(stripslashes($k)).':',
-						'VALUE'			=> $this->logs->lang_replace(stripslashes($v)))
-					);
+					//Enable Compare view
+					if (is_array($v)){
+						$blnCompare = true;
+						
+						if ($v['flag'] == 1){
+							require_once($this->root_path.'libraries/diff/diff.php');
+							require_once($this->root_path.'libraries/diff/engine.php');
+							require_once($this->root_path.'libraries/diff/renderer.php');
+							$diff = new diff(xhtml_entity_decode($this->logs->lang_replace($v['old'])), xhtml_entity_decode($this->logs->lang_replace($v['new'])), true);
+							$renderer = new diff_renderer_inline();
+							
+							$new = $content = $renderer->get_diff_content($diff);
+						} else {
+							$new = nl2br($this->logs->lang_replace($v['new']));
+						}
+						
+						$this->tpl->assign_block_vars('log_compare_row', array(
+								'KEY'			=> $this->logs->lang_replace(stripslashes($k)).':',
+								'OLD'			=> nl2br($this->logs->lang_replace($v['old'])),
+								'NEW'			=> $new,
+								'FLAG'			=> $v['flag'],
+						));
+					} else {				
+						$this->tpl->assign_block_vars('log_row', array(
+							'KEY'			=> $this->logs->lang_replace(stripslashes($k)).':',
+							'VALUE'			=> $this->logs->lang_replace(stripslashes($v)))
+						);
+					}
 				}
 			}
 		}
@@ -80,12 +116,14 @@ class Manage_Logs extends page_generic {
 			'LOG_IP_ADDRESS'	=> $this->pdh->geth('logs', 'ipaddress', array($this->url_id)),
 			'LOG_SESSION_ID'	=> $this->pdh->geth('logs', 'sid', array($this->url_id)),
 			'LOG_ACTION'		=> $this->pdh->geth('logs', 'tag', array($this->url_id)),
+			'S_COMPARE_VIEW'	=> $blnCompare,
 			'S_MORE_INFOS'		=> count($log_value),
 		));
 		$this->tpl->add_js('
 			$("#back2view").click(function(){
 				window.location="manage_logs.php'.$this->SID.'";
 			});', 'docready');
+		$this->tpl->css_file($this->root_path.'libraries/diff/diff.css');
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('viewlogs_title'),
 			'template_file'		=> 'admin/manage_logs_view.html',
@@ -194,7 +232,8 @@ class Manage_Logs extends page_generic {
 	
 
 		$start = $this->in->get('start', 0);
-		$this->jquery->Dialog('delete_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
+		$this->jquery->Dialog('delete_all_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
+		$this->confirm_delete($this->user->lang('confirm_delete_partial_logs'));
 		$this->jquery->Tab_header('log_tabs', true);
 		$error_type_array = array(
 			'warning'	=> 'WARNING',

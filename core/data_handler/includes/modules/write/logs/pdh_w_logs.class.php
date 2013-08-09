@@ -38,6 +38,13 @@ if(!class_exists('pdh_w_logs')) {
 			$this->pdh->enqueue_hook('logs_update');
 			return $this->db->affected_rows();
 		}
+		
+		public function delete_ids($arrIDs){
+			$this->db->query("DELETE FROM __logs WHERE log_id IN ('".implode("', '", $arrIDs)."');");
+			
+			$this->pdh->enqueue_hook('logs_update');
+			return count($arrIDs);
+		}
 
 		public function truncate_log(){
 			$this->db->query("TRUNCATE TABLE __logs");

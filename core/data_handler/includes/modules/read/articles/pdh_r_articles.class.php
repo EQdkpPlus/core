@@ -507,6 +507,22 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_check_pageobject_permission($strPageObject, $user_id=false){
+			if(!$user_id) $user_id = $this->user->id;
+			$arrArticles = $this->get_articles_for_pageobject($strPageObject);
+			if($arrArticles){
+				foreach($arrArticles as $id){
+					if (!$this->get_published($id)) continue;
+					$intCategoryID = $this->get_category($id);
+					if(!$this->pdh->get('article_categories', 'published', array($intCategoryID))) continue;
+						
+					$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $user_id));
+					if($arrPermissions['read']) return true;
+				}
+			}
+			return false;
+		}
 
 	}//end class
 }//end if

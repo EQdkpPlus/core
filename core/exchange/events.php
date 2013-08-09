@@ -27,7 +27,7 @@ if (!class_exists('exchange_events')){
 		
 
 		public function get_events($params, $body){
-			if ($this->user->check_auth('u_event_view', false)){
+			if($this->user->check_pageobjects(array('event', 'events'), 'AND', false)){
 				$arrEvents = $this->pdh->get('event', 'id_list');
 				$out = array();
 				foreach($arrEvents as $eventid){

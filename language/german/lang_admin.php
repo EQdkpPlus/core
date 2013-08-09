@@ -219,6 +219,7 @@ $lang = array(
 "confirm_delete_multi" => "Bist Du sicher, dass Du dieses Konto löschen willst?",
 "confirm_delete_itempools" => "Bist Du sicher, dass Du diesen Item-Pool löschen willst?",
 "confirm_delete_logs" => "Möchstest du wirklich alle Logs löschen?",
+"confirm_delete_partial_logs" => "Möchtest du wirklich die ausgewählten Logs löschen?",
 "confirm_delete_backup" => "Möchstest du dieses Backup wirklich löschen?",
 "confirm_restore_backup" => "Möchstest du dieses Backup wirklich einspielen? Dieser Vorgang überschreibt alle vorhandenen Daten! Beim Einspielen eines nicht kompatiblen Backups kann die Datenbank deines EQdkps zerstört werden!<br /><br /><label><input type=\"checkbox\" onclick=\"restore_data(this.checked)\" value=\"1\" checked=\"checked\"> Wichtige Einstellungen, die im data-Ordner gespeichert sind, wiederherstellen? (nur für zip-Archive)</label>",
 "action_event_added" => "Ereignis zugefügt",
@@ -237,9 +238,9 @@ $lang = array(
 "action_member_added" => "Charakter zugefügt",
 "action_member_deleted" => "Charakter gelöscht",
 "action_member_updated" => "Charakter aktualisiert",
-"action_news_added" => "Newsbeitrag zugefügt",
-"action_news_deleted" => "Newsbeitrag gelöscht",
-"action_news_updated" => "Newsbeitrag aktualisiert",
+"action_article_updated" => "Artikel aktualisiert",
+"action_article_added" => "Artikel hinzugefügt",
+"action_article_deleted" => "Artikel gelöscht",
 "action_raid_added" => "Raid zugefügt",
 "action_raid_deleted" => "Raid gelöscht",
 "action_raidsofevent_deleted" => "Raids zu einem Event gelöscht",
@@ -1550,6 +1551,9 @@ $lang = array(
 "pluslink_frame_length" => "Frame-Länge",
 "pluslink_edit"	=> "Link bearbeiten",
 "pluslink_add"	=> "Link hinzufügen",
+"new_value"	=> "Neuer Wert",
+"old_value"	=> "Alter Wert",
+"page_objects" => "Seiten-Objekte",
  );
 
 ?>
