@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_event')){
 	class pdh_r_event extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'config', 'game');
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'config', 'game', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -178,7 +178,7 @@ if(!class_exists('pdh_r_event')){
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_icon($id),
 							'name'	=> $this->get_name($id),
-							'link'	=> $this->root_path.'viewevent.php'.$this->SID.'&amp;event_id='.$id,
+							'link'	=> $this->routing->build('event', $value['name'], $id),
 						);
 					}
 				}

@@ -1,0 +1,65 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li class="current"><a>{L_tag}: {TAG}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_tag}: {TAG}</h1>
+</div>
+
+<div class="article-container-wrapper">
+
+<!-- BEGIN article_row -->
+<div class="article-container">
+	
+	<h2><a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a>
+		<!-- IF article_row.S_TOOLBAR --> 
+		<div class="floatRight">
+			<div class="toolbar-button">
+				<span class="{article_row.ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+			</div>
+		</div>
+		<!-- ENDIF -->
+		<div class="floatRight">
+			<a href="{article_row.PERMALINK}" title="{L_permalink}" class="permalink"><i class="icon-link"></i></a>
+		</div>
+	</h2>
+		
+	<div class="news_author">
+		<div class="floatLeft">
+			<i class="icon-time"></i>{article_row.ARTICLE_DATE} - {article_row.ARTICLE_SUBMITTED}<!-- IF article_row.S_COMMENTS --> &bull; <a href="{article_row.ARTICLE_PATH}#comments"><i class="icon-comments"></i>{article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
+		</div>
+		<div class="news_social floatRight">
+			{article_row.ARTICLE_SOCIAL_BUTTONS}
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="news_content">
+		{article_row.ARTICLE_CONTENT}
+	</div>
+	<!-- IF article_row.S_READMORE -->
+	<div>
+		<a href="{article_row.ARTICLE_PATH}#system-readmore" class="button"><i class="icon-chevron-down"></i>{L_news_readmore}</a>
+	</div>
+	<!-- ENDIF -->
+	
+	<div class="tags-container">
+		<!-- IF article_row.S_TAGS -->
+		 <ul class="tags small">
+			<!-- BEGIN tag_row -->
+			<li><a href="{article_row.tag_row.U_TAG}">{article_row.tag_row.TAG}</a></li>
+			<!-- END tag_row -->
+		</ul>
+		<!-- ENDIF -->
+		
+		<div class="floatRight"><a href="#top"><i class="icon-chevron-up"></i></a></div>
+	</div>
+	<div class="clear"></div>
+	
+</div>
+<!-- END article_row -->
+
+{PAGINATION}
+</div>

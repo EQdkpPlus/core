@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_item')){
 	class pdh_r_item extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time', 'jquery', 'config', 'apa' => 'auto_point_adjustments');
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time', 'jquery', 'config', 'apa' => 'auto_point_adjustments', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -355,7 +355,7 @@ if(!class_exists('pdh_r_item')){
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_date($id),
 							'name'	=> $this->get_name($id),
-							'link'	=> $this->root_path.'viewitem.php'.$this->SID.'&amp;i='.$id,
+							'link'	=> $this->routing->build('item', $value['name'], $id),
 						);
 					}
 				}

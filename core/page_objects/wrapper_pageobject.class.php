@@ -49,7 +49,7 @@ class wrapper_pageobject extends pageobject {
 		}
 
 		//Board
-		if (($linkID == 'board') and (strlen($this->config->get('cmsbridge_url')) > 0)){
+		if ((strtolower($linkID) == 'board') and (strlen($this->config->get('cmsbridge_url')) > 0)){
 			$this->data = array(
 				'url'	=> $this->config->get('cmsbridge_url'),
 				'title'	=> $this->user->lang('forum'),
@@ -59,11 +59,21 @@ class wrapper_pageobject extends pageobject {
 		}
 
 		//Register
-		if(($linkID == 'register') and (strlen($this->config->get('cmsbridge_reg_url')) > 0)){
+		if((strtolower($linkID) == 'boardregister') and (strlen($this->config->get('cmsbridge_reg_url')) > 0)){
 			$this->data = array(
 				'url'	=> $this->config->get('cmsbridge_reg_url'),
 				'title'	=> $this->user->lang('forum'),
-				'window'=> (int)$this->config->get('cmsbridge_reg_embedded'),
+				'window'=> (int)$this->config->get('cmsbridge_embedded'),
+				'height'=> '4024',
+			);
+		}
+		
+		//Register
+		if((strtolower($linkID) == 'lostpassword') and (strlen($this->config->get('cmsbridge_pwreset_url')) > 0)){
+			$this->data = array(
+				'url'	=> $this->config->get('cmsbridge_pwreset_url'),
+				'title'	=> $this->user->lang('forum'),
+				'window'=> (int)$this->config->get('cmsbridge_embedded'),
 				'height'=> '4024',
 			);
 		}

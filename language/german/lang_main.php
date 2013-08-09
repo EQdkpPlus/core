@@ -302,7 +302,7 @@ $lang = array(
 "characters_per_page" => "Charaktere pro Seite",
 "events_per_page" => "Ereignisse pro Seite",
 "items_per_page" => "Items pro Seite",
-"news_per_page" => "Newseinträge pro Seite",
+"news_per_page" => "Artikel pro Seite",
 "raids_per_page" => "Raids pro Seite",
 "associated_members" => "Verknüpfte Charaktere",
 "default_locale" => "Standard Gebietsschema",
@@ -871,6 +871,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "manage_members" => "Charaktere verwalten",
 "adding_raid" => "Raid hinzufügen",
 "usergroup" => "Benutzergruppe",
+"tag"	=> "Tag",
  );
 
 ?>

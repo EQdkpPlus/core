@@ -503,7 +503,7 @@ if (!class_exists("pdh_r_user")){
 						$arrSearchResults[] = array(
 							'id'	=> '',
 							'name'	=> $this->get_name($id),
-							'link'	=> $this->root_path.'listusers.php'.$this->SID.'&amp;u='.$id,
+							'link'	=> $this->routing->build('user', $value['username'], 'u'.$id),
 						);
 					}
 				}

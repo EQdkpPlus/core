@@ -69,11 +69,12 @@ $(document).ready(function() {
 				$.each(data, function(i,item){
 					//if(item.field == 'dw_raidleader'){
 						//$("#dw_raidleader").attr("value","3")
-						//$("#dw_raidleader").multiselect("refresh");
+						
 						//}else{
 						$("#"+item.field).val(item.value);
 						//}
 				});
+				$("#dw_raidleader").multiselect("refresh");
 				$('#cal_raidmodeselect').trigger('change');
 			});
 		}

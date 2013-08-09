@@ -26,6 +26,7 @@ class admin_index extends gen_class {
 	protected $extension_updates	= '';
 	protected $rsscachetime			= 48;
 	public $admin_menu				= '';
+	public $admin_functions			= NULL;
 
 	public function __construct(){
 		$this->user->check_auth('a_');
@@ -33,7 +34,12 @@ class admin_index extends gen_class {
 			if($this->in->get('rssajax') == 'twitter') $this->ajax_twitterfeed();
 			if($this->in->get('rssajax') == 'notification') $this->ajax_notification();
 		}
+		
+		include_once($this->root_path.'core/admin_functions.class.php');
+		$this->admin_functions = register('admin_functions');
+		
 		if ($this->in->exists('ip_resolve')) $this->resolve_ip();
+		
 		$this->updatecheck();
 		$this->adminmenu_output();
 	}
@@ -42,235 +48,18 @@ class admin_index extends gen_class {
 		header('content-type: text/html; charset=UTF-8');
 		$out = "Could not resolve IP";
 		if ($this->in->get('ip_resolve') != ""){
-			$return = $this->puf->fetch("http://www.geoplugin.net/php.gp?ip=".$this->in->get('ip_resolve'));
+			$return = $this->admin_functions->resolve_ip($this->in->get('ip_resolve'));
 			if ($return){
-				$unserialized = @unserialize($return);
-				if ($unserialized){
-					$out = ($unserialized['geoplugin_city'] != "") ? $unserialized['geoplugin_city'].'<br />' : '';
-					$out .= ($unserialized['geoplugin_regionName'] != "") ? $unserialized['geoplugin_regionName'].'<br />' : '';
-					$out .= ($unserialized['geoplugin_countryName'] != "") ? $unserialized['geoplugin_countryName'] : '';
-						
-					if (!strlen($out)) $out = "Could not resolve IP"; 
-				}
+				$out = ($return['city'] != "") ? $return['city'].'<br />' : '';
+				$out .= ($return['regionName'] != "") ? $return['regionName'].'<br />' : '';
+				$out .= ($return['countryName'] != "") ? $return['countryName'] : '';
+					
+				if (!strlen($out)) $out = "Could not resolve IP"; 
 			}
 		}
 		echo $out;
 		exit;
-	}
-	
-	public function resolve_bots($strUseragent){
-		$arrBots = array(
-			array( // row #0
-				'bot_agent' => 'AdsBot-Google',
-				'bot_name' => 'AdsBot [Google]',
-			),
-			array( // row #1
-				'bot_agent' => 'ia_archiver',
-				'bot_name' => 'Alexa [Bot]',
-			),
-			array( // row #2
-				'bot_agent' => 'Scooter/',
-				'bot_name' => 'Alta Vista [Bot]',
-			),
-			array( // row #3
-				'bot_agent' => 'Ask Jeeves',
-				'bot_name' => 'Ask Jeeves [Bot]',
-			),
-			array( // row #4
-				'bot_agent' => 'Baiduspider+(',
-				'bot_name' => 'Baidu [Spider]',
-			),
-			array( // row #5
-				'bot_agent' => 'Exabot/',
-				'bot_name' => 'Exabot [Bot]',
-			),
-			array( // row #6
-				'bot_agent' => 'FAST Enterprise Crawler',
-				'bot_name' => 'FAST Enterprise [Crawler]',
-			),
-			array( // row #7
-				'bot_agent' => 'FAST-WebCrawler/',
-				'bot_name' => 'FAST WebCrawler [Crawler]',
-			),
-			array( // row #8
-				'bot_agent' => 'http://www.neomo.de/',
-				'bot_name' => 'Francis [Bot]',
-			),
-			array( // row #9
-				'bot_agent' => 'Gigabot/',
-				'bot_name' => 'Gigabot [Bot]',
-			),
-			array( // row #10
-				'bot_agent' => 'Mediapartners-Google',
-				'bot_name' => 'Google Adsense [Bot]',
-			),
-			array( // row #11
-				'bot_agent' => 'Google Desktop',
-				'bot_name' => 'Google Desktop',
-			),
-			array( // row #12
-				'bot_agent' => 'Feedfetcher-Google',
-				'bot_name' => 'Google Feedfetcher',
-			),
-			array( // row #13
-				'bot_agent' => 'Googlebot',
-				'bot_name' => 'Google [Bot]',
-			),
-			array( // row #14
-				'bot_agent' => 'heise-IT-Markt-Crawler',
-				'bot_name' => 'Heise IT-Markt [Crawler]',
-			),
-			array( // row #15
-				'bot_agent' => 'heritrix/1.',
-				'bot_name' => 'Heritrix [Crawler]',
-			),
-			array( // row #16
-				'bot_agent' => 'ibm.com/cs/crawler',
-				'bot_name' => 'IBM Research [Bot]',
-			),
-			array( // row #17
-				'bot_agent' => 'ICCrawler - ICjobs',
-				'bot_name' => 'ICCrawler - ICjobs',
-			),
-			array( // row #18
-				'bot_agent' => 'ichiro/',
-				'bot_name' => 'ichiro [Crawler]',
-			),
-			array( // row #19
-				'bot_agent' => 'MJ12bot/',
-				'bot_name' => 'Majestic-12 [Bot]',
-			),
-			array( // row #20
-				'bot_agent' => 'MetagerBot/',
-				'bot_name' => 'Metager [Bot]',
-			),
-			array( // row #21
-				'bot_agent' => 'msnbot-NewsBlogs/',
-				'bot_name' => 'MSN NewsBlogs',
-			),
-			array( // row #22
-				'bot_agent' => 'msnbot/',
-				'bot_name' => 'MSN [Bot]',
-			),
-			array( // row #23
-				'bot_agent' => 'msnbot-media/',
-				'bot_name' => 'MSNbot Media',
-			),
-			array( // row #24
-				'bot_agent' => 'NG-Search/',
-				'bot_name' => 'NG-Search [Bot]',
-			),
-			array( // row #25
-				'bot_agent' => 'http://lucene.apache.org/nutch/',
-				'bot_name' => 'Nutch [Bot]',
-			),
-			array( // row #26
-				'bot_agent' => 'NutchCVS/',
-				'bot_name' => 'Nutch/CVS [Bot]',
-			),
-			array( // row #27
-				'bot_agent' => 'OmniExplorer_Bot/',
-				'bot_name' => 'OmniExplorer [Bot]',
-			),
-			array( // row #28
-				'bot_agent' => 'online link validator',
-				'bot_name' => 'Online link [Validator]',
-			),
-			array( // row #29
-				'bot_agent' => 'psbot/0',
-				'bot_name' => 'psbot [Picsearch]',
-			),
-			array( // row #30
-				'bot_agent' => 'Seekbot/',
-				'bot_name' => 'Seekport [Bot]',
-			),
-			array( // row #31
-				'bot_agent' => 'Sensis Web Crawler',
-				'bot_name' => 'Sensis [Crawler]',
-			),
-			array( // row #32
-				'bot_agent' => 'SEO search Crawler/',
-				'bot_name' => 'SEO Crawler',
-			),
-			array( // row #33
-				'bot_agent' => 'Seoma [SEO Crawler]',
-				'bot_name' => 'Seoma [Crawler]',
-			),
-			array( // row #34
-				'bot_agent' => 'SEOsearch/',
-				'bot_name' => 'SEOSearch [Crawler]',
-			),
-			array( // row #35
-				'bot_agent' => 'Snappy/1.1 ( http://www.urltrends.com/ )',
-				'bot_name' => 'Snappy [Bot]',
-			),
-			array( // row #36
-				'bot_agent' => 'http://www.tkl.iis.u-tokyo.ac.jp/~crawler/',
-				'bot_name' => 'Steeler [Crawler]',
-			),
-			array( // row #37
-				'bot_agent' => 'SynooBot/',
-				'bot_name' => 'Synoo [Bot]',
-			),
-			array( // row #38
-				'bot_agent' => 'crawleradmin.t-info@telekom.de',
-				'bot_name' => 'Telekom [Bot]',
-			),
-			array( // row #39
-				'bot_agent' => 'TurnitinBot/',
-				'bot_name' => 'TurnitinBot [Bot]',
-			),
-			array( // row #40
-				'bot_agent' => 'voyager/1.0',
-				'bot_name' => 'Voyager [Bot]',
-			),
-			array( // row #41
-				'bot_agent' => 'W3 SiteSearch Crawler',
-				'bot_name' => 'W3 [Sitesearch]',
-			),
-			array( // row #42
-				'bot_agent' => 'W3C-checklink/',
-				'bot_name' => 'W3C [Linkcheck]',
-			),
-			array( // row #43
-				'bot_agent' => 'W3C_*Validator',
-				'bot_name' => 'W3C [Validator]',
-			),
-			array( // row #44
-				'bot_agent' => 'http://www.WISEnutbot.com',
-				'bot_name' => 'WiseNut [Bot]',
-			),
-			array( // row #45
-				'bot_agent' => 'yacybot',
-				'bot_name' => 'YaCy [Bot]',
-			),
-			array( // row #46
-				'bot_agent' => 'Yahoo-MMCrawler/',
-				'bot_name' => 'Yahoo MMCrawler [Bot]',
-			),
-			array( // row #47
-				'bot_agent' => 'Yahoo! DE Slurp',
-				'bot_name' => 'Yahoo Slurp [Bot]',
-			),
-			array( // row #48
-				'bot_agent' => 'Yahoo! Slurp',
-				'bot_name' => 'Yahoo [Bot]',
-			),
-			array( // row #49
-				'bot_agent' => 'YahooSeeker/',
-				'bot_name' => 'YahooSeeker [Bot]',
-			),
-			
-		);
-		
-		foreach ($arrBots as $row){
-			if (preg_match('#' . str_replace('\*', '.*?', preg_quote($row['bot_agent'], '#')) . '#i', $strUseragent)){
-				return $row['bot_name'];
-			}
-		}
-		return false;
-	}
-	
+	}	
 	
 	private function updatecheck(){
 		// Check for required Plugin Database Updates
@@ -302,129 +91,9 @@ class admin_index extends gen_class {
 		}
 		*/
 	}
-
-	public function adminmenu($blnShowBadges = true){
-		$admin_menu = array(
-			'members' => array(
-				'icon'	=> 'icon-user icon-large',
-				'name'	=> $this->user->lang('chars'),
-				1		=> array('link' => 'admin/manage_members.php'.$this->SID,			'text' => $this->user->lang('manage_members'),	'check' => 'a_members_man',	'icon'	=> 'icon-user icon-large'),
-				2		=> array('link' => 'admin/manage_items.php'.$this->SID,			'text' => $this->user->lang('manitems_title'),	'check' => 'a_item_',		'icon' => 'icon-gift icon-large'),
-				3		=> array('link' => 'admin/manage_adjustments.php'.$this->SID,		'text' => $this->user->lang('manadjs_title'),		'check' => 'a_indivadj_',	'icon' => 'icon-tag icon-large'),
-				4		=> array('link' => 'admin/manage_ranks.php'.$this->SID,			'text' => $this->user->lang('manrank_title'),		'check' => 'a_members_man',	'icon' => 'icon-flag icon-large'),
-				5		=> array('link' => 'admin/manage_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_pf_menue'),	'check' => 'a_config_man',	'icon' => 'icon-sitemap icon-large'),
-				6		=> array('link' => 'admin/manage_roles.php'.$this->SID,			'text' => $this->user->lang('rolemanager'),		'check' => 'a_config_man',	'icon' => 'icon-beer icon-large'),
-				7		=> array('link' => 'admin/manage_auto_points.php'.$this->SID,		'text' => $this->user->lang('manage_auto_points'),'check' => 'a_config_man',	'icon' => 'icon-magic icon-large'),
-			),
-			'users' => array(
-				'icon'	=> 'icon-group icon-large',
-				'name'	=> $this->user->lang('users'),
-				1		=> array('link' => 'admin/manage_users.php'.$this->SID,			'text' => $this->user->lang('manage_users'),		'check' => 'a_users_man',	'icon' => 'icon-user icon-large'),
-				2		=> array('link' => 'admin/manage_user_groups.php'.$this->SID,		'text' => $this->user->lang('manage_user_groups'),'check' => array('OR', array('a_usergroups_man', 'a_usergroups_grpleader')),	'icon' => 'icon-group icon-large'),
-				3		=> array('link' => 'admin/manage_maintenance_user.php'.$this->SID,'text' => $this->user->lang('maintenanceuser_user'),'check' => 'a_maintenance','icon' => 'icon-user-md icon-large'),
-				4		=> array('link' => 'admin/manage_massmail.php'.$this->SID,'text' => $this->user->lang('massmail'),'check' => 'a_users_massmail','icon' => 'icon-envelope-alt icon-large'),
-			),
-			'extensions' => array(
-				'name'	=> $this->user->lang('extensions').(($blnShowBadges) ? $this->extension_updates : ''),
-				'icon' => 'icon-cogs icon-large',
-				1		=> array('link' => 'admin/manage_extensions.php'.$this->SID,		'text' => $this->user->lang('extension_repo'),'check' => 'a_config_man',	'icon' => 'icon-cogs icon-large'),
-			),
-			'portal'	=> array(
-				'icon'	=> 'icon-home icon-large',
-				'name'	=> $this->user->lang('portal'),
-				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_config_man',	'icon' => 'icon-columns icon-large'),
-				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'icon-file-text icon-large'),
-				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'icon-table icon-large'),
-				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'icon-reorder icon-large'),
-				
-			),
-			'raids'	=> array(
-				'icon'	=> 'icon-trophy icon-large',
-				'name'	=> $this->user->lang('raids'),
-				1		=> array('link' => 'admin/manage_raids.php'.$this->SID,			'text' => $this->user->lang('manage_raids'),		'check' => 'a_raid_add',	'icon' => 'icon-trophy icon-large'),
-				2		=> array('link' => 'admin/manage_events.php'.$this->SID,			'text' => $this->user->lang('manevents_title'),	'check' => 'a_event_upd',	'icon' => 'icon-key icon-large'),
-				3		=> array('link' => 'admin/manage_multidkp.php'.$this->SID,		'text' => $this->user->lang('manmdkp_title'),		'check' => 'a_event_upd',	'icon' => 'icon-legal icon-large'),
-				4		=> array('link' => 'admin/manage_itempools.php'.$this->SID,		'text' => $this->user->lang('manitempools_title'),'check' => 'a_event_upd',	'icon' => 'icon-tags icon-large'),
-			),
-			'calendar'	=> array(
-				'icon'	=> 'icon-calendar icon-large',
-				'name'	=> $this->user->lang('calendars'),
-				1		=> array('link' => 'admin/manage_calendars.php'.$this->SID,		'text' => $this->user->lang('manage_calendars'),	'check' => 'a_calendars_man',	'icon' => 'icon-calendar icon-large'),
-				2		=> array('link' => 'admin/manage_calevents.php'.$this->SID,		'text' => $this->user->lang('manage_calevents'),	'check' => 'a_cal_event_man',	'icon' => 'icon-time icon-large'),
-			),
-			'general' => array(
-				'icon'	=> 'icon-wrench icon-large',
-				'name'	=> $this->user->lang('general_admin'),
-				1		=> array('link' => 'admin/manage_settings.php'.$this->SID,		'text' => $this->user->lang('configuration'),		'check' => 'a_config_man',	'icon' => 'icon-wrench icon-large'),
-				2		=> array('link' => 'admin/manage_logs.php'.$this->SID,			'text' => $this->user->lang('view_logs'),			'check' => 'a_logs_view',	'icon' => 'icon-book icon-large'),
-				3		=> array('link' => 'admin/manage_tasks.php'.$this->SID,			'text' => $this->user->lang('mantasks_title'),		'check' => array('OR', array('a_users_man', 'a_members_man')),	'icon' => 'icon-tasks icon-large'),
-				4		=> array('link' => 'admin/manage_bridge.php'.$this->SID,		'text' => $this->user->lang('manage_bridge'),	'check' => 'a_config_man',	'icon' => 'icon-link icon-large'),
-				5		=> array('link' => 'admin/manage_crons.php'.$this->SID,			'text' => $this->user->lang('manage_cronjobs'),		'check' => 'a_config_man',	'icon' => 'icon-time icon-large'),
-				6		=> array('link' => 'admin/manage_media.php'.$this->SID,			'text' => $this->user->lang('manage_media'),		'check' => 'a_files_man',	'icon' => 'icon-picture icon-large'),
-			),
-			'maintenance' => array(
-				'icon'	=> 'icon-cog icon-large',
-				'name'	=> $this->user->lang('menu_maintenance').(($blnShowBadges) ? $this->core_updates : ''),
-				1		=> array('link' => 'maintenance/task_manager.php'.$this->SID,		'text' => $this->user->lang('maintenance'),		'check' => 'a_maintenance',	'icon' => 'icon-cog icon-large'),
-				2		=> array('link' => 'admin/manage_live_update.php'.$this->SID,		'text' => $this->user->lang('liveupdate'),		'check' => 'a_maintenance',	'icon' => 'icon-refresh icon-large'),
-				3		=> array('link' => 'admin/manage_backup.php'.$this->SID,			'text' => $this->user->lang('backup'),			'check' => 'a_backup',		'icon' => 'icon-save icon-large'),
-				4		=> array('link' => 'admin/manage_reset.php'.$this->SID,			'text' => $this->user->lang('reset'),				'check' => 'a_config_man',	'icon' => 'icon-retweet icon-large'),
-				5		=> array('link' => 'admin/manage_cache.php'.$this->SID,			'text' => $this->user->lang('pdc_manager'),		'check' => 'a_config_man',	'icon' => 'icon-briefcase icon-large'),
-				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_config_man',	'icon' => 'icon-info-sign icon-large'),				
-			),
-		);
-
-		// Now get plugin hooks for the menu
-		$admin_menu = (is_array($this->pm->get_menus('admin_menu'))) ? array_merge_recursive($admin_menu, array('extensions'=>$this->pm->get_menus('admin_menu'))) : $admin_menu;
-
-		//Now get the admin-favorits
-		$favs_array = array();
-		if($this->config->get('admin_favs')) {
-			$favs_array = @unserialize(stripslashes($this->config->get('admin_favs')));
-		}
-		$admin_menu['favorits']['icon'] = 'icon-star icon-large';
-		$admin_menu['favorits']['name'] = $this->user->lang('favorits');
-		//Style Management
-		$admin_menu['favorits'][1] = array(
-			'link'	=> 'admin/manage_extensions.php'.$this->SID.'&tab=1',
-			'text'	=> $this->user->lang('styles_title'),
-			'check'	=> 'a_extensions_man',
-			'icon'	=> 'icon-leaf icon-large',
-		);
-			
-		$i = 2;
-		if (is_array($favs_array) && count($favs_array) > 0){
-			foreach ($favs_array as $fav){
-				$items = explode('|', $fav);
-				$adm = $admin_menu;
-				foreach ($items as $item){
-					$latest = $adm;
-					$adm = (isset($adm[$item])) ? $adm[$item] : false;
-				}
-				if (isset($adm['link'])){
-					$admin_menu['favorits'][$i] = array(
-						'link'	=> $adm['link'],
-						'text'	=> $adm['text'].((count($items) == 3) ? ' ('.$latest['name'].')': ''),
-						'check'	=> $adm['check'],
-						'icon'	=> $adm['icon'],
-					);
-				}
-				$i++;
-			}
-		} else { //If there are no links, point to the favorits-management
-			$admin_menu['favorits'][2] = array(
-				'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
-				'text'	=> $this->user->lang('manage_menus'),
-				'check'	=> 'a_config_man',
-				'icon'	=> 'icon-reorder icon-large',
-			);
-		}
-		
-		return $admin_menu;
-	}
 	
 	public function adminmenu_output(){
-		$this->admin_menu = $this->adminmenu();
+		$this->admin_menu = $this->admin_functions->adminmenu();
 		
 		// menu output
 		$this->tpl->assign_vars(array(
@@ -567,7 +236,8 @@ class admin_index extends gen_class {
 					content: {
 						text: function(event, api) {
 							$.ajax({
-								url: \'index.php'.$this->SID.'\'
+								url: \'index.php'.$this->SID.'\',
+								data: { ip_resolve: $(this).html() }
 							})
 							.then(function(content) {
 								api.set(\'content.text\', content);
@@ -601,14 +271,14 @@ class admin_index extends gen_class {
 							ORDER BY u.username, s.session_current DESC';
 		$result = $this->db->query($sql);
 		while ($row = $this->db->fetch_record($result)){
-			$username = ( !empty($row['username']) ) ? $row['username'] : (($this->resolve_bots($row['session_browser'])) ? $this->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
+			$username = ( !empty($row['username']) ) ? $row['username'] : (($this->admin_functions->resolve_bots($row['session_browser'])) ? $this->admin_functions->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
 			$this->tpl->assign_block_vars('online_row', array(
-				'USERNAME'		=> $username,
+				'USERNAME'		=> sanitize($username),
 				'LOGIN'			=> $this->time->user_date($row['session_start'], true),
 				'LAST_UPDATE'	=> $this->time->user_date($row['session_current'], true),
-				'LOCATION'		=> resolve_eqdkp_page($row['session_page']),
-				'BROWSER'		=> resolve_browser($row['session_browser']),
-				'IP_ADDRESS'	=> $row['session_ip'])
+				'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
+				'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
+				'IP_ADDRESS'	=> sanitize($row['session_ip']))
 			);
 		}
 		$online_count = $this->db->num_rows($result);

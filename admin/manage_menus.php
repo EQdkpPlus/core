@@ -25,7 +25,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Menus extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'html', 'admin_index'=>'admin_index');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'html');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -193,7 +193,9 @@ class Manage_Menus extends page_generic {
 	
 
 			$image_path = '../images/admin/';
-			$admin_menu = $this->admin_index->adminmenu(false);
+			include_once($this->root_path.'core/admin_functions.class.php');
+			
+			$admin_menu = register('admin_functions')->adminmenu(false);
 			unset($admin_menu['favorits']);
 			$compare_array = array();
 			$favs_array = array();

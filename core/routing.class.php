@@ -40,6 +40,7 @@ if(!class_exists('routing')){
 			'usergroup'		=> 'usergroup',
 			'rss'			=> 'rss',
 			'external'		=> 'wrapper',
+			'tag'			=> 'tag',
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
@@ -105,8 +106,11 @@ if(!class_exists('routing')){
 		
 		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false){
 			$strPath = ($blnControllerPathPlain) ? $this->controller_path_plain : $this->controller_path;
-			$strPath .= ucfirst($this->get($strPageObject, true)).'/';
-			if ($strParam) $strPath .= $this->clean($strParamText).'-'.$strParam.((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
+			$strPath .= ucfirst($this->get($strPageObject, true));
+			if ($strParamText || $strParam) $strPath .= '/';
+			if ($strParamText) $strPath .= $this->clean($strParamText);
+			if ($strParam) $strPath .= '-'.$strParam;
+			$strPath .= ((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
 			if ($blnAddSID) $strPath .= $this->SID;
 			return $strPath;
 		}

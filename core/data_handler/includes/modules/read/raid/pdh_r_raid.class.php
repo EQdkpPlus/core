@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_raid')){
 	class pdh_r_raid extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'pdh', 'time', 'config', 'user', 'apa' => 'auto_point_adjustments');
+			$shortcuts = array('pdc', 'db', 'pdh', 'time', 'config', 'user', 'apa' => 'auto_point_adjustments', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -285,7 +285,7 @@ if(!class_exists('pdh_r_raid')){
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_date($id),
 							'name'	=> $this->get_event_name($id),
-							'link'	=> $this->root_path.'viewraid.php'.$this->SID.'&amp;r='.$id,
+							'link'	=> $this->routing->build('raid', $this->get_event_name($id), $id),
 						);
 					}
 				}

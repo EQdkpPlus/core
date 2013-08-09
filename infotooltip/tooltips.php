@@ -135,6 +135,14 @@ var EQdkpTooltip = new function(){
 					item_data['game_id'] = parseInt(itemname);
 					itemdatatag = 'data-game_id=""';
 				}
+				if (itemname.substring(0, 3) == 'id:'){
+					myitemid = itemname.substr(3);
+					item_data['game_id'] = myitemid;
+					itemdatatag = 'data-game_id=""';
+					item_data['name'] = myitemid;
+					itemname = myitemid;
+				}
+				
 				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" data-name="'+itemname.toString()+'" '+itemdatatag+' title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+itemname+'</span>';
 					
 				$(this).html(out);

@@ -228,14 +228,6 @@ class core extends gen_class {
 				$this->global_warning($this->user->lang('install_folder_warn'));
 			}
 
-			//Registration Link
-			if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-				$arrLinkData = $this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register');
-				$register_link = (isset($arrLinkData['plus_link'])) ? $arrLinkData['link'] : $this->root_path.$arrLinkData['link'];
-			} else {
-				$register_link = $this->root_path.'register.php'.$this->SID;
-			}
-
 			// Add a javascript code to make some checkboxes clickable through table rows
 			$this->tpl->add_js("$('.trcheckboxclick tr').click(function(event) {
 						if (event.target.type !== 'checkbox') {
@@ -308,13 +300,13 @@ class core extends gen_class {
 			if ( ! $this->user->is_signedin() && intval($this->config->get('disable_registration')) != 1){
 				//CMS register?
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'register', '', '', 'icon-check'));
+					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'icon-check'));
 				} else {
 					$registerLink = $this->createLink(array('link' => 'Register/' . $this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
 				}
 			}
 			
-			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
+			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'LostPassword');
 			$strAvatarImg = ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($this->user->id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($this->user->id)), false, 'absolute') : $this->server_path.'images/no_pic.png';
 			
 			// Load the jQuery stuff
@@ -350,7 +342,6 @@ class core extends gen_class {
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'S_REGISTER'				=> !(int)$this->config->get('disable_registration'),
-				'REGISTER_LINK'				=> $register_link,
 				'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout/'.$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters/' . $this->SID : '',
@@ -431,7 +422,7 @@ class core extends gen_class {
 			
 			//Forum
 			if (strlen($this->config->get('cmsbridge_url')) > 0 && $this->config->get('cmsbridge_active') == 1){
-				$inlineforum = $this->handle_link($this->config->get('cmsbridge_url'), $this->user->lang('forum'), $this->config->get('cmsbridge_embedded'), 'board');
+				$inlineforum = $this->handle_link($this->config->get('cmsbridge_url'), $this->user->lang('forum'), $this->config->get('cmsbridge_embedded'), 'Board');
 				$arrItems[]	= $inlineforum;
 			}
 			
@@ -629,7 +620,18 @@ class core extends gen_class {
 					break ;
 				case '2':
 				case '3':
-				case '4':  $url = $this->routing->build("external", $text, $wrapper_id, true, true);
+				case '4':  {
+							switch($wrapper_id){
+								case 'Board':
+								case 'LostPassword':
+								case 'BoardRegister':
+									$wrapperText = $wrapper_id; $wrapperID = false;
+								break;
+								default: $wrapperText = $text;$wrapperID = $wrapper_id;
+							}
+						
+							$url = $this->routing->build("external", $wrapperText, $wrapperID, true, true);
+						}
 					break ;
 			}
 			$arrData['link'] = $url;

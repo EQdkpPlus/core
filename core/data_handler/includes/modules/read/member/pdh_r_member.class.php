@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_member" ) ) {
 	class pdh_r_member extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time');
+			$shortcuts = array('pdc', 'db', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -642,7 +642,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$arrSearchResults[] = array(
 							'id'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($id)), false, $id)).$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($id)), $this->get_gender($id), $id)),
 							'name'	=> $this->get_html_name($id),
-							'link'	=> $this->root_path.'viewcharacter.php'.$this->SID.'&amp;member_id='.$id,
+							'link'	=> $this->routing->build('character', $value['name'], $id),
 						);
 					}
 				}

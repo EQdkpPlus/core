@@ -116,7 +116,7 @@ class auth extends user_core {
 					if ( ($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) ){
 						$this->db->query("UPDATE __sessions SET :params WHERE session_id = ?", array(
 							'session_current'	=> $this->current_time,
-							'session_page'		=> strlen($this->env->current_page) ? $this->env->current_page : '',
+							'session_page'		=> strlen($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
 						), $this->sid);
 					}
 					//The Session is valid, copy the user-data to the data-array and finish the init. You you can work with this data.
@@ -189,7 +189,7 @@ class auth extends user_core {
 				'session_current'		=> $this->current_time,
 				'session_ip'			=> $this->env->ip,
 				'session_browser'		=> $this->env->useragent,
-				'session_page'			=> ($this->env->current_page) ? $this->env->current_page : '',
+				'session_page'			=> ($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
 				'session_key'			=> $strSessionKey,
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);

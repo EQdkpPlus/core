@@ -180,9 +180,7 @@ class install extends gen_class {
 		//Set chmod644 for config.php
 		@chmod($this->root_path."config.php", 0644);
 		
-		//load portal modules (iframe)
-		$portals = '<iframe style="display:none;" src="'.$this->root_path.'admin/manage_portal.php"></iframe>';
-		return $this->lang['install_end_text'].$portals;
+		return $this->lang['install_end_text'];
 	}
 	
 	private function parse_end() {

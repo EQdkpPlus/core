@@ -274,6 +274,7 @@ class controller extends page_generic {
 			foreach($arrTags as $tag){
 				$this->tpl->assign_block_vars('tag_row', array(
 					'TAG'	=> $tag,
+					'U_TAG'	=> $this->routing->build('tag', $tag),
 				));
 			}
 		}
@@ -522,6 +523,7 @@ class controller extends page_generic {
 					foreach($arrTags as $tag){
 						$this->tpl->assign_block_vars('article_row.tag_row', array(
 							'TAG'	=> $tag,
+							'U_TAG'	=> $this->routing->build('tag', $tag),
 						));
 					}
 				}

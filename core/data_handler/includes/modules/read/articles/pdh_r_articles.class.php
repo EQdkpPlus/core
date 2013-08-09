@@ -32,6 +32,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public $categories = NULL;
 		public $alias = NULL;
 		public $pageobjects = NULL;
+		public $tags = NULL;
 
 		public $hooks = array(
 			'articles_update',
@@ -55,11 +56,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->pdc->del('pdh_articles_categories');
 			$this->pdc->del('pdh_articles_alias');
 			$this->pdc->del('pdh_articles_pageobjects');
+			$this->pdc->del('pdh_articles_tags');
 			
 			$this->articles = NULL;
 			$this->categories = NULL;
 			$this->alias = NULL;
 			$this->pageobjects = NULL;
+			$this->tags = NULL;
 		}
 
 		public function init(){
@@ -67,6 +70,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->categories = $this->pdc->get('pdh_articles_categories');
 			$this->alias = $this->pdc->get('pdh_articles_alias');
 			$this->pageobjects = $this->pdc->get('pdh_articles_pageobjects');
+			$this->tags = $this->pdc->get('pdh_articles_tags');
 			
 			if($this->articles !== NULL){
 				return true;
@@ -98,7 +102,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 					'last_edited'	=> (int)$drow['last_edited'],
 					'last_edited_user'	=> (int)$drow['last_edited_user'],
 					'page_objects'		=> $drow['page_objects'],
-					'hide_header'	=> (int)$drow['hide_header'],
+					'hide_header'		=> (int)$drow['hide_header'],
 				);
 				
 				if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
@@ -112,6 +116,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 						$this->pageobjects[$elem][] = (int)$drow['id'];
 					}
 				}
+				
+				if ($drow['tags'] != ''){
+					$arrTags = unserialize($drow['tags']);
+					foreach($arrTags as $elem){
+						$this->tags[$elem][] = (int)$drow['id'];
+					}
+				}
+				
 			}
 			$this->db->free_result($pff_result);
 			
@@ -119,6 +131,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->pdc->put('pdh_articles_categories', $this->categories, null);
 			$this->pdc->put('pdh_articles_alias', $this->alias, null);
 			$this->pdc->put('pdh_articles_pageobjects', $this->pageobjects, null);
+			$this->pdc->put('pdh_articles_tags', $this->tags, null);
 		}
 		
 		public function get_id_list($intCategoryID = false){
@@ -444,10 +457,21 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				foreach($this->articles as $id => $value) {
 					if (!$this->get_published($id)) continue;			
 					$intCategoryID = $this->get_category($id);
+					if(!$this->pdh->get('article_categories', 'published', array($intCategoryID))) continue;
+					
 					$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
 					if(!$arrPermissions['read']) continue;
-				
-					if(stripos($this->get_title($id), $search_value) !== false OR stripos($this->get_text($id), $search_value) !== false ) {
+					
+					$arrTags = $this->get_tags($id);
+					$blnTagSearch = false;
+					foreach($arrTags as $tag){
+						if (stripos($tag, $search_value) !== false){
+							$blnTagSearch = true;
+							break;
+						}
+					}
+					
+					if($blnTagSearch OR stripos($this->get_title($id), $search_value) !== false OR stripos($this->get_text($id), $search_value) !== false) {
 
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_date($id),
@@ -458,6 +482,23 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				}
 			}
 			return $arrSearchResults;
+		}
+		
+		public function get_articles_for_tag($strTag){
+			$arrOut = array();
+			if(isset($this->tags[$strTag])){
+				foreach($this->tags[$strTag] as $id){
+					if (!$this->get_published($id)) continue;
+					$intCategoryID = $this->get_category($id);
+					if(!$this->pdh->get('article_categories', 'published', array($intCategoryID))) continue;
+					
+					$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+					if(!$arrPermissions['read']) continue;
+					
+					$arrOut[] = $id;
+				}
+			}
+			return $arrOut;
 		}
 		
 		public function get_articles_for_pageobject($strPageObject){

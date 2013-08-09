@@ -205,9 +205,9 @@ class timekeeper extends gen_class {
 
 		if ($this->crontab[$task_name]['ajax'] === true){		
 			if ($force_run){
-				$this->tpl->add_js('$.get("'.$this->root_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true");');
+				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true");');
 			} else {
-				$this->tpl->add_js('$.get("'.$this->root_path.'cronjob.php'.$this->SID.'&task='.$task_name.'");');
+				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'");');
 			}
 		} else {
 			$this->execute_cron($task_name, $force_run);

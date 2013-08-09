@@ -142,7 +142,7 @@ class Manage_Articles extends page_generic {
 		$schluesselwoerter = preg_split("/[\s,]+/", $strTags);
 		$arrTags = array();
 		foreach($schluesselwoerter as $val){
-			$arrTags[] = utf8_strtolower($val);
+			$arrTags[] = utf8_strtolower(str_replace("-", "", $val));
 		}
 		
 		$intDate = $this->time->fromformat($this->in->get('date'), 1);
@@ -356,12 +356,11 @@ class Manage_Articles extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'ARTICLE_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_nlimit'], $footer_text),
-			'PAGINATION' => generate_pagination('manage_raids.php'.$sort_suffix, $raid_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
+			'PAGINATION' => generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
 			'CID'			=> $cid,
-			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), '', $this->user->lang('selected_articles').'...', ''),
-		
+			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), '', $this->user->lang('selected_articles').'...', ''),		
 		));
 
 		$this->core->set_vars(array(
