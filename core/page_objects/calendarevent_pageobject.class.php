@@ -15,14 +15,13 @@
  *
  * $Id$
  */
+class calendarevent_pageobject extends pageobject {
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = '../';
-include_once($eqdkp_root_path . 'common.php');
-
-class viewcalraid extends page_generic {
-	public static $shortcuts = array('user', 'db', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
-
+	public static function __shortcuts() {
+		$shortcuts = array('user', 'db', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
+		return array_merge(parent::__shortcuts(), $shortcuts);
+	}
+	
 	public function __construct() {
 		$handler = array(
 			'closedstatus'	=> array(
@@ -42,8 +41,8 @@ class viewcalraid extends page_generic {
 			'changenotemenu'	=> array('process' => 'change_note', 'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest', 'csrf'=>true),
 		);
-		$this->user->check_auth('u_calendar_view');
-		parent::__construct(false, $handler, array(), null, '', 'eventid');		
+
+		parent::__construct(false, $handler, array(), null, '', 'eventid');
 		$this->process();
 	}
 
@@ -217,7 +216,7 @@ class viewcalraid extends page_generic {
 				'STATUS'		=> $this->user->lang(array('raidevent_raid_status', $status)),
 				'RAIDLEADER'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 				'DATE'			=> $raiddate,
-				'RAID_LINK'		=> $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id,
+				'RAID_LINK'		=> $this->env->link.$this->routing->build('calendarevent', $raidname, $this->url_id, false, true),
 			);
 
 			// send the email to all attendees
@@ -246,7 +245,7 @@ class viewcalraid extends page_generic {
 				'CLOSEDOPEN'	=> ($status == 'open') ? $this->user->lang('raidevent_mail_opened') : $this->user->lang('raidevent_mail_closed'),
 				'RAIDLEADER'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 				'DATE'			=> $this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id))),
-				'RAID_LINK'		=> $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id,
+				'RAID_LINK'		=> $this->env->link.$this->routing->build('calendarevent', $raidname, $this->url_id, false, true),
 			);
 
 			// send the email to all attendees
@@ -320,7 +319,8 @@ class viewcalraid extends page_generic {
 	public function display() {
 		// Show an error Message if no ID is set
 		if(!$this->url_id){
-			message_die($this->user->lang('calendar_page_noid'));
+			redirect($this->routing->build('calendar',false,false,true,true));
+			//message_die($this->user->lang('calendar_page_noid'));
 		}
 
 		// Show an error message if the event is not a raid
@@ -329,13 +329,6 @@ class viewcalraid extends page_generic {
 		}
 
 		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
-
-		// COMMENT SYSTEM
-		$this->comments->SetVars(array(
-			'attach_id'	=> $this->url_id,
-			'page'		=> 'viewcalraid',
-			'auth'		=> 'a_cal_'
-		));
 
 		// check if roles are available
 		$allroles		= $this->pdh->get('roles', 'roles', array());
@@ -622,6 +615,7 @@ class viewcalraid extends page_generic {
 			
 			$this->tpl->assign_vars(array(
 				'S_NEXT_RAID_EVENT' => true,
+				'U_NEXT_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])), $nextraidevent),
 				'NEXT_RAID_EVENTID' => $nextraidevent,
 				'NEXT_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
 			));
@@ -632,6 +626,7 @@ class viewcalraid extends page_generic {
 				
 			$this->tpl->assign_vars(array(
 					'S_PREV_RAID_EVENT' => true,
+					'U_PREV_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])), $prevraidevent),
 					'PREV_RAID_EVENTID' => $prevraidevent,
 					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
 			));
@@ -646,7 +641,7 @@ class viewcalraid extends page_generic {
 			),
 			2 => array(
 				'name'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
-				'link'	=> ($eventdata['closed'] == '1') ? $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') :  $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
+				'link'	=> ($eventdata['closed'] == '1') ? $this->strPath.$this->SID.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') :  $this->strPath.$this->SID.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
 				'icon'	=> ($eventdata['closed'] == '1') ? 'icon-unlock icon-large' : 'icon-lock icon-large',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
@@ -658,7 +653,7 @@ class viewcalraid extends page_generic {
 			),
 			4 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
-				'link'	=> $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$this->url_id.'&amp;ical=true',
+				'link'	=> $this->strPath.$this->SID.'&amp;ical=true',
 				'icon'	=> 'icon-calendar icon-large',
 				'perm'	=> true,
 			),
@@ -676,7 +671,7 @@ class viewcalraid extends page_generic {
 			),
 			7 => array(
 				'name'	=> $this->user->lang('massmail_send'),
-				'link'	=> $this->root_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
+				'link'	=> $this->server_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
 				'icon'	=> 'icon-envelope-alt icon-large',
 				'perm'	=> $this->user->check_auth('a_users_massmail', false),
 			),
@@ -687,16 +682,16 @@ class viewcalraid extends page_generic {
 
 		$drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
 		if($eventdata['extension']['raidmode'] == 'role'){
-			$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, 'viewcalraid.php'.$this->SID.'&ajax=role');
+			$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, $this->strPath.$this->SID.'&ajax=role');
 		}
 
 		// jQuery Windows
-		$this->jquery->Dialog('AddRaid', $this->user->lang('calendar_win_add'), array('url'=>"addevent.php".$this->SID."&simple_head=true", 'width'=>'900', 'height'=>'580', 'onclose' => $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id));
-		$this->jquery->Dialog('EditRaid', $this->user->lang('calendar_win_edit'), array('url'=>"addevent.php".$this->SID."&eventid=".$this->url_id."&simple_head=true", 'width'=>'900', 'height'=>'650', 'onclose' => $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id));
-		$this->jquery->Dialog('ExportDialog', $this->user->lang('raidevent_raid_export_win'), array('url'=>"raidexport/exports.php".$this->SID."&eventid=".$this->url_id, 'width'=>'640', 'height'=>'470'));
-		$this->jquery->Dialog('EditGuest', $this->user->lang('raidevent_raid_editguest_win'), array('url'=>"guests.php".$this->SID."&simple_head=true&guestid='+id+'", 'width'=>'490', 'height'=>'160', 'onclose' => $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id, 'withid' => 'id'));
-		$this->jquery->Dialog('TransformRaid', $this->user->lang('raidevent_raid_transform'), array('url'=>"transform.php".$this->SID."&simple_head=true&eventid='+eventid+'", 'width'=>'400', 'height'=>'200', 'onclose' => $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id, 'withid' => 'eventid'));
-		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>"guests.php".$this->SID."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'230', 'onclose' => $this->env->link.'calendar/viewcalraid.php'.$this->SID.'&eventid='.$this->url_id, 'withid' => 'eventid'));
+		$this->jquery->Dialog('AddRaid', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'900', 'height'=>'580', 'onclose' => $this->strPath.$this->SID));
+		$this->jquery->Dialog('EditRaid', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'900', 'height'=>'650', 'onclose' => $this->strPath.$this->SID));
+		$this->jquery->Dialog('ExportDialog', $this->user->lang('raidevent_raid_export_win'), array('url'=> $this->routing->build('calendareventexport')."&eventid=".$this->url_id, 'width'=>'640', 'height'=>'470'));
+		$this->jquery->Dialog('EditGuest', $this->user->lang('raidevent_raid_editguest_win'), array('url'=> $this->routing->build('calendareventguests')."&simple_head=true&guestid='+id+'", 'width'=>'490', 'height'=>'160', 'onclose' => $this->strPath.$this->SID, 'withid' => 'id'));
+		$this->jquery->Dialog('TransformRaid', $this->user->lang('raidevent_raid_transform'), array('url'=> $this->routing->build('calendareventtransform')."&simple_head=true&eventid='+eventid+'", 'width'=>'400', 'height'=>'200', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
+		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'230', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('DeleteGuest', $this->user->lang('raidevent_raid_guest_del'), array('custom_js'=>"document.guestp.submit();", 'message'=>$this->user->lang('raidevent_raid_guest_delmsg'), 'withid'=>'id', 'onlickjs'=>'$("#guestid_field").val(id);', 'buttontxt'=>$this->user->lang('delete')), 'confirm');
 
 		// the status drodown
@@ -764,7 +759,7 @@ class viewcalraid extends page_generic {
 			'ATTENDEES_COLSPAN'		=> count($this->raidcategories),
 			'RAIDNAME'				=> $this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])),
 			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 40)),
-			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->root_path.'viewcharacter.php', '', false, false, true))) : '',
+			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->build('character',false,false,false), '', false, false, true))) : '',
 			'RAIDVALUE'				=> ($eventdata['extension']['raid_value'] > 0) ? $eventdata['extension']['raid_value'] : '0',
 			'RAIDNOTE'				=> ($eventdata['notes']) ? nl2br($eventdata['notes']) : '',
 			'RAID_ADDEDBY'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
@@ -786,15 +781,16 @@ class viewcalraid extends page_generic {
 			
 			'CSRF_CHANGECHARMENU_TOKEN' => $this->CSRFGetToken('changecharmenu'),
 			'CSRF_CHANGENOTEMENU_TOKEN' => $this->CSRFGetToken('changenotemenu'),
+				
+			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
 		));
 
-		$this->core->set_vars(array(
-			'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')),
+		$this->set_vars(array(
+			'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true),
 			'template_file'		=> 'calendar/viewcalraid.html',
 			'header_format'		=> $this->simple_head,
 			'display'			=> true
 		));
 	}
 }
-registry::register('viewcalraid');
 ?>

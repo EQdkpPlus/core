@@ -397,7 +397,7 @@ class core extends gen_class {
 				//array('link' => 'listevents.php'.$this->SID,		'text' => $this->user->lang('menu_events'),		'check' => 'u_event_view'),
 				//array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
 				//array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
-				array('link' => 'calendar/index.php'.$this->SID,	'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
+				//array('link' => 'calendar/index.php'.$this->SID,	'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
 				array('link' => $this->controller_path_plain.'User/'.$this->SID, 'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
 			);
 			

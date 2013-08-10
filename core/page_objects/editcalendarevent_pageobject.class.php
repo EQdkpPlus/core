@@ -16,13 +16,13 @@
  * $Id$
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = '../';
-include_once($eqdkp_root_path . 'common.php');
+class editcalendarevent_pageobject extends pageobject {
 
-class addevent extends page_generic {
-	public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html', 'time', 'env', 'logs'=> 'logs', 'timekeeper'=> 'timekeeper', 'email'=>'MyMailer');
-
+	public static function __shortcuts() {
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html', 'time', 'env', 'logs'=> 'logs', 'timekeeper'=> 'timekeeper', 'email'=>'MyMailer');
+		return array_merge(parent::__shortcuts(), $shortcuts);
+	}
+	
 	public function __construct() {
 		$handler = array(
 			'deletetemplate'=> array('process' => 'process_deletetemplate', 'csrf'=>true),
@@ -418,5 +418,4 @@ class addevent extends page_generic {
 		));
 	}
 }
-registry::register('addevent');
 ?>

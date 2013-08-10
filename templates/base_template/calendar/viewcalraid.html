@@ -53,7 +53,7 @@ $(function(){
 	});
 
 	$('[name="submit_charchange"]').click(function(){
-		$.post("viewcalraid.php", { 
+		$.post("{U_CALENDAREVENT}", {
 			changecharmenu: true,
 			charchange_status: $(this).parent().find('.charchange_status').val(),
 			charchange_role: $(this).parent().find('[name="charchange_role"]').val(),
@@ -63,12 +63,12 @@ $(function(){
 			link_hash: '{CSRF_CHANGECHARMENU_TOKEN}'
 		},
 		function(data){
-			window.location = 'viewcalraid.php{SID}&eventid='+$('[name="eventid"]').val();
+			window.location = '{U_CALENDAREVENT}';
 		});
 	});
 
 	$('[name="submit_notechange"]').click(function(){
-		$.post("viewcalraid.php", { 
+		$.post("{U_CALENDAREVENT}", { 
 			changenotemenu: true,
 			notechange_note: $(this).parent().find('[name="notechange_note"]').val(),
 			subscribed_member_id: $(this).parent().find('[name="notechange_attendee"]').val(),
@@ -76,7 +76,7 @@ $(function(){
 			link_hash: '{CSRF_CHANGENOTEMENU_TOKEN}'
 		},
 		function(data){
-			window.location = 'viewcalraid.php{SID}&eventid='+$('[name="eventid"]').val();
+			window.location = '{U_CALENDAREVENT}';
 		});
 	});
 });
@@ -219,26 +219,17 @@ function populate_unsigned(arrAttendees, arrCheckboxes){
 </div>
 <!-- ENDIF -->
 
-<div class="breadcrumb-container">
-	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}calendar/{SID}">{L_calendar}</a></li>
-		<li class="current"><a>{RAIDNAME}, {RAIDDATE}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
-
 <!-- IF S_NEXT_OR_PREV_RAIDEVENT -->
 <div>
 	<!-- IF S_PREV_RAID_EVENT -->
 	<div class="floatLeft">
-		<a href="viewcalraid.php{SID}&eventid={PREV_RAID_EVENTID}"><i class="icon-chevron-left"></i> {PREV_RAID_EVENTNAME}</a>
+		<a href="{U_PREV_RAID_EVENT}"><i class="icon-chevron-left"></i> {PREV_RAID_EVENTNAME}</a>
 	</div>
 	<!-- ENDIF -->
 	
 	<!-- IF S_NEXT_RAID_EVENT -->
 	<div class="floatRight">
-		<a href="viewcalraid.php{SID}&eventid={NEXT_RAID_EVENTID}">{NEXT_RAID_EVENTNAME} <i class="icon-chevron-right"></i></a>
+		<a href="{U_NEXT_RAID_EVENT}">{NEXT_RAID_EVENTNAME} <i class="icon-chevron-right"></i></a>
 	</div>
 	<!-- ENDIF -->
 	<div class="clear"></div>
@@ -369,5 +360,3 @@ function populate_unsigned(arrAttendees, arrCheckboxes){
 	</div>
 {CSRF_TOKEN}
 </form>
-<br />
-{COMMENTS}

@@ -5,27 +5,27 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date$
+ * Date:		$Date: 2013-01-29 17:35:08 +0100 (Di, 29 Jan 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12937 $
  * 
- * $Id$
+ * $Id: exports.php 12937 2013-01-29 16:35:08Z wallenium $
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = '../../';
-include_once($eqdkp_root_path . 'common.php');
+class calendareventexport_pageobject extends pageobject {
 
-class calraids_export extends page_generic {
-	public static $shortcuts = array('user', 'tpl', 'in', 'core', 'html');
+	public static function __shortcuts() {
+		$shortcuts = array('user', 'tpl', 'in', 'core', 'html');
+		return array_merge(parent::__shortcuts(), $shortcuts);
+	}
 
 	public function __construct() {
 		$handler = array();
-		$this->user->check_auth('u_calendar_view');
+		$this->user->check_pageobject('calendar');
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
@@ -43,7 +43,7 @@ class calraids_export extends page_generic {
 				$this->tpl->assign_var('EXPORT_OUTPUT', $this->user->lang('raidevent_raid_export_indx'));
 			}
 
-			$this->tpl->add_js('$("#exportdropdown").change(function(){ window.location.href = "exports.php'.$this->SID.'&eventid='.$eventid.'&output="+$(this).val();});', "docready");
+			$this->tpl->add_js('$("#exportdropdown").change(function(){ window.location.href = "'.$this->strPath.$this->SID.'&eventid='.$eventid.'&output="+$(this).val();});', "docready");
 
 			$this->tpl->assign_vars(array(
 				'DROPDOWN'			=> $this->html->DropDown('link', $menu_structure, $output, '', '', 'input', 'exportdropdown'),
@@ -64,9 +64,9 @@ class calraids_export extends page_generic {
 	private function generateMenuStructure(){
 		$export_array[] = "----";
 		// Search for plugins and make sure they are registered
-		if ( $dir = opendir($this->root_path . 'calendar/raidexport/plugins/') ){
+		if ( $dir = opendir($this->root_path . 'core/calendarexport/') ){
 			while ( $d_plugin_code = @readdir($dir) ){
-				$cwd = $this->root_path.'calendar/raidexport/plugins/'.$d_plugin_code; // regenerate the link to the 'plugin'
+				$cwd = $this->root_path.'core/calendarexport/'.$d_plugin_code; // regenerate the link to the 'plugin'
 				if((@is_file($cwd)) && valid_folder($d_plugin_code)){	// check if valid
 					include($cwd);
 					$export_array[$rpexport_plugin[$d_plugin_code]['function']] = $rpexport_plugin[$d_plugin_code]['name'];	// add to array
@@ -76,5 +76,4 @@ class calraids_export extends page_generic {
 		return $export_array;
 	}
 }
-registry::register('calraids_export');
 ?>

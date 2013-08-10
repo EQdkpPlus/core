@@ -229,6 +229,7 @@ class Manage_Article_Categories extends page_generic {
 				'DD_LIST_TYPE' => $this->html->Dropdown('list_type', array(1 => 'Voller Artikeltext', 2 => 'Nur Artikelüberschriften', 3 => 'Artikeltext bis 200 Wörter'), 1),
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, array()),
 				'DD_PUBLISHED_STATE' => $this->html->Dropdown('article_published_state', array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 1),
+				'DD_SORTATION_TYPE' => $this->html->Dropdown('sortation_type', array(1 => 'Erstellungsdatum Absteigend', 2 => 'Erstellungsdatum Aufsteigend', 3 => 'Letztes Änderungsdatum Absteigend', 4 => 'Letztes Änderungsdatum Aufsteigend'), $this->pdh->get('article_categories', 'sortation_type', array($id))),
 			));
 		}
 		

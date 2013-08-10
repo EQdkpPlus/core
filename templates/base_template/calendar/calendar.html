@@ -38,7 +38,7 @@
 			dayClick: function(date, allDay, jsEvent, view) {
 				if (allDay) {
 					jQuery.FrameDialog.create({
-						url: 'addevent.php{SID}&simple_head=true&timestamp='+(Date.parse(date)/1000),
+						url: '{U_EDIT_CALENDAREVENT}&simple_head=true&timestamp='+(Date.parse(date)/1000),
 						title: "{L_calendar_win_add}",
 						width: 900,
 						height:700,
@@ -141,7 +141,7 @@
 				// Save after event-drop is finished, use ajax() cause of error callback
 				$.ajax({
 					type: "POST",
-					url: 'index.php{SID}&link_hash={CSRF_RESIZE_TOKEN}',
+					url: '{U_CALENDAR}&link_hash={CSRF_RESIZE_TOKEN}',
 					data: { "resize": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "eventid": event.eventid },
 					error: function(){
 						revertFunc();
@@ -155,7 +155,7 @@
 				// Save after event-drop is finished, use ajax() cause of error callback
 				$.ajax({
 					type: "POST",
-					url: 'index.php{SID}&link_hash={CSRF_MOVE_TOKEN}',
+					url: '{U_CALENDAR}&link_hash={CSRF_MOVE_TOKEN}',
 					data: { "move": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "allday": allDay, "eventid": event.eventid },
 					error: function(){
 						revertFunc();
@@ -169,7 +169,7 @@
 				if (bool) $('#calendar_loading').show();
 				else $('#calendar_loading').hide();
 			},
-			events: "index.php{SID}&json=true"
+			events: "{U_CALENDAR}&json=true"
 		});
 
 		// add a new button to the calendar for the export
@@ -179,7 +179,7 @@
 			content: {
 				text: function(event, api) {
 					$.ajax({
-						url: 'index.php{SID}&export_tooltip=true'
+						url: '{U_CALENDAR}&export_tooltip=true'
 					})
 					.then(function(content) {
 						// Set the tooltip content upon successful retrieval
@@ -247,7 +247,7 @@
 
 	function editEvent(editid){
 		jQuery.FrameDialog.create({
-			url: 'addevent.php{SID}&simple_head=true&eventid='+editid,
+			url: '{U_EDIT_CALENDAREVENT}&simple_head=true&eventid='+editid,
 			title: "{L_calendar_win_edit}",
 			width: 900,
 			height:650,
@@ -258,7 +258,7 @@
 	}
 
 	function deleteEvent(deleteid){
-		$.get("index.php{SID}&checkrepeatable="+deleteid, function(data){
+		$.get("{U_CALENDAR}&checkrepeatable="+deleteid, function(data){
 			if($.trim(data) == 'true'){
 				var delclones_checked = '';
 				$("#confirm_caleventdelete_all").dialog({
@@ -271,7 +271,7 @@
 							if($('#delete_all_clones').prop('checked')){
 								delclones_checked = '&delete_clones=true';
 							}
-							$.post('index.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid+delclones_checked);
+							$.post('{U_CALENDAR}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid+delclones_checked);
 							$( this ).dialog( "close" );
 							$('#calendar').fullCalendar('refetchEvents');
 						},
@@ -287,7 +287,7 @@
 					modal: true,
 					buttons: {
 						"{L_delete}": function() {
-							$.post('index.php{SID}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid);
+							$.post('{U_CALENDAR}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid);
 							$( this ).dialog( "close" );
 							$('#calendar').fullCalendar('refetchEvents');
 						},
@@ -302,14 +302,6 @@
 
 //]]>
 </script>
-
-<div class="breadcrumb-container">
-	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
-		<li class="current"><a href="{EQDKP_ROOT_PATH}calendar/{SID}">{L_calendar}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
 
 <div id="confirm_caleventdelete_all" style="display:none;" title="{L_calendars_delete_title}">
 	<p>

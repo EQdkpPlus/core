@@ -16,15 +16,10 @@
  * $Id$
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './../';
-include_once($eqdkp_root_path . 'common.php');
-
-
-class viewcalendar extends page_generic {
+class calendar_pageobject extends pageobject {
 	public static function __shortcuts() {
 		$shortcuts = array('jquery', 'user', 'tpl', 'in', 'pdh', 'html', 'config', 'core', 'time', 'env');
-		return array_merge(parent::$shortcuts, $shortcuts);
+		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
 	public function __construct() {
@@ -37,7 +32,6 @@ class viewcalendar extends page_generic {
 			'mass_signin'		=> array('process' => 'mass_signin','csrf'=>true),
 			'export_tooltip'	=> array('process' => 'export_tooltip'),
 		);
-		$this->user->check_auth('u_calendar_view');
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
@@ -285,7 +279,7 @@ class viewcalendar extends page_generic {
 							'editable'		=> true,
 							'eventid'		=> $calid,
 							'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
-							'url'			=> 'viewcalraid.php'.$this->SID.'&eventid='.$calid,
+							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true, true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
@@ -360,12 +354,12 @@ class viewcalendar extends page_generic {
 		$settings = $this->pdh->get_page_settings('calendar', 'hptt_calendar_raidlist');
 		$view_list = $this->pdh->get('calendar_events', 'id_list', array(true));
 
-		$hptt = $this->get_hptt($settings, $view_list, $view_list, array('%user_id%' => $this->user->data['user_id']), $this->user->id);
-
+		$hptt = $this->get_hptt($settings, $view_list, $view_list, array('%user_id%' => $this->user->data['user_id'], '%use_controller%' => true), $this->user->id);
+		$hptt->setPageRef($this->strPath);
 		// Raid List
 		$presel_charid = $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']));
 		$drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
-		$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, 'viewcalraid.php'.$this->SID.'&ajax=role');
+		$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, $this->routing->build('calendarevent').'&ajax=role');
 		$raidcal_status = unserialize($this->config->get('calendar_raid_status'));
 		$raidstatus = array();
 		if(is_array($raidcal_status)){
@@ -391,15 +385,16 @@ class viewcalendar extends page_generic {
 			'CSRF_MOVE_TOKEN' => $this->CSRFGetToken('move'),
 			'CSRF_RESIZE_TOKEN' => $this->CSRFGetToken('resize'),
 			'CSRF_DELETEID_TOKEN' => $this->CSRFGetToken('deleteid'),
+			'U_CALENDAR'	=> $this->strPath.$this->SID,
+			'U_CALENDAREVENT' => $this->routing->build('CalendarEvent'),
+			'U_EDIT_CALENDAREVENT' => $this->routing->build('EditCalendarEvent'),
 		));
 
 		// template things
-		$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('calendars'),
+		$this->set_vars(array(
 			'template_file'		=> 'calendar/calendar.html',
 			'display'			=> true
 		));
 	}
 }
-registry::register('viewcalendar');
 ?>

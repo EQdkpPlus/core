@@ -10,8 +10,8 @@
 							<span class="membertooltip guesteditpanel<!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">
 								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME} 
 								<span style="display:none;cursor:pointer;" class='guestpanel'>
-									<img src="../images/global/delete.png" alt="{L_raidevent_raid_guest_del}" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"/>&nbsp;
-									<img src="../images/global/edit.png" alt="{L_raidevent_raid_guest_edit}" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');" />
+									<img src="{EQDKP_ROOT_PATH}/images/global/delete.png" alt="{L_raidevent_raid_guest_del}" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"/>&nbsp;
+									<img src="{EQDKP_ROOT_PATH}/images/global/edit.png" alt="{L_raidevent_raid_guest_edit}" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');" />
 								</span>
 							</span>
 							<!-- ELSE -->
@@ -24,7 +24,7 @@
 					<!-- IF IS_OPERATOR -->
 					<td width="10%" align="right">
 					<button id="addguest" type="button">
-						<img src="../images/calendar/addguest.png" border="0"  alt="{B_ADDGUEST}" title="{B_ADDGUEST}" />
+						<img src="{EQDKP_ROOT_PATH}/images/calendar/addguest.png" border="0"  alt="{B_ADDGUEST}" title="{B_ADDGUEST}" />
 					</button>
 						
 					</td>

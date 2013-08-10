@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-02-12 17:01:49 +0100 (Di, 12 Feb 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13071 $
  * 
- * $Id$
+ * $Id: wow_macro.class.php 13071 2013-02-12 16:01:49Z wallenium $
  */
 
 if ( !defined('EQDKP_INC') ){

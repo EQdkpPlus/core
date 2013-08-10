@@ -16,12 +16,12 @@
  * $Id$
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = '../';
-include_once($eqdkp_root_path . 'common.php');
+class calendareventguests_pageobject extends pageobject {
 
-class calraids_guests extends page_generic {
-	public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'core', 'html');
+	public static function __shortcuts() {
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'core', 'html');
+		return array_merge(parent::__shortcuts(), $shortcuts);
+	}
 
 	public function __construct() {
 		$handler = array();
@@ -75,5 +75,4 @@ class calraids_guests extends page_generic {
 		));
 	}
 }
-registry::register('calraids_guests');
 ?>

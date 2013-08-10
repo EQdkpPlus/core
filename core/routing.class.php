@@ -41,6 +41,12 @@ if(!class_exists('routing')){
 			'rss'			=> 'rss',
 			'external'		=> 'wrapper',
 			'tag'			=> 'tag',
+				
+			//Static Pages for Calendar
+			'editcalendarevent' => 'editcalendarevent',
+			'calendareventtransform' => 'calendareventtransform',
+			'calendareventexport' => 	'calendareventexport',
+			'calendareventguests'=> 'calendareventguests',
 		);
 		
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){

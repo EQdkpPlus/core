@@ -102,10 +102,12 @@ class controller extends page_generic {
 					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 					if (isset($arrMatches[0]) && count($arrMatches[0])){
 						if (count($arrMatches[0]) == 2){
+							if(is_numeric($arrMatches[0][1])) $arrMatches[0][1] = intval($arrMatches[0][1]);
 							$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
 						}
 					}
 					if (strlen($strID)) {
+						if(is_numeric($strID)) $strID = intval($strID);
 						registry::add_const('url_id', $strID);
 						$strSpecificID = $strID;
 					} elseif (strlen($arrPath[0])){
@@ -621,10 +623,12 @@ class controller extends page_generic {
 					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 					if (isset($arrMatches[0]) && count($arrMatches[0])){
 						if (count($arrMatches[0]) == 2){
+							if(is_numeric($arrMatches[0][1])) $arrMatches[0][1] = intval($arrMatches[0][1]);
 							$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
 						}
 					}
 					if (strlen($strID)) {
+						if(is_numeric($strID)) $strID = intval($strID);
 						registry::add_const('url_id', $strID);
 					} elseif (strlen($arrPath[0])){
 						registry::add_const('url_id', $arrPath[0]);
