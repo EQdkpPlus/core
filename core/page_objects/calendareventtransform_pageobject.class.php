@@ -16,12 +16,12 @@
  * $Id$
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = '../';
-include_once($eqdkp_root_path . 'common.php');
+class calendareventtransform_pageobject extends pageobject {
 
-class calraids_transform extends page_generic {
-	public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'time');
+	public static function __shortcuts() {
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'time');
+		return array_merge(parent::__shortcuts(), $shortcuts);
+	}
 
 	public function __construct() {
 		$handler = array(
@@ -59,7 +59,7 @@ class calraids_transform extends page_generic {
 
 		$htmlcode	= '<html>
 			<body onload="document.transform.submit();">
-			<form method="post" action="'.$this->root_path.'admin/manage_raids.php'.$this->SID.'&upd=true&dataimport=true" name="transform" target="_parent">
+			<form method="post" action="'.$this->server_path.'admin/manage_raids.php'.$this->SID.'&upd=true&dataimport=true" name="transform" target="_parent">
 			<input name="event" value="'.$raidext['raid_eventid'].'" type="hidden">
 			<input name="value" value="'.(($raidext['raid_value'] > 0) ? $raidext['raid_value'] : 0).'" type="hidden">
 			<input name="date" value="'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id)), true, false, false, function_exists('date_create_from_format')).'" type="hidden">
@@ -89,5 +89,4 @@ class calraids_transform extends page_generic {
 		);
 	}
 }
-registry::register('calraids_transform');
 ?>
