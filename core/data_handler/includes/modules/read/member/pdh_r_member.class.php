@@ -290,6 +290,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_rankname($member_id){
 			return $this->pdh->get('rank', 'name', array($this->data[$member_id]['rank_id']));
 		}
+
+		public function get_html_rankname($member_id){
+			return $this->pdh->geth('rank', 'name', array($this->data[$member_id]['rank_id']));
+		}
 		
 		public function get_rankname_sortid($member_id){
 			return $this->get_rankname($member_id);

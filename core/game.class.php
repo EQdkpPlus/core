@@ -75,7 +75,14 @@ class game extends gen_class {
 			$this->config->set('default_game', 'wow');
 			return $this->init_gameclass();
 		}
-		$this->gameinfo()->lang = (in_array($this->lang_name, $this->gameinfo()->langs)) ? $this->lang_name : $this->gameinfo()->langs[0];
+		// check for selected language
+		if(!in_array($this->lang_name, $this->gameinfo()->langs)) {
+			// file in selected language available but not listed, add it to the list
+			if(file_exists($this->root_path.'games/'.$this->game.'/language/'.$this->lang_name.'.php')) $this->gameinfo()->langs[] = $this->lang_name;
+			// file for selected language not available, revert to default language
+			else $this->lang_name = $this->gameinfo()->langs[0];
+		}
+		$this->gameinfo()->lang = $this->lang_name;
 		foreach($this->gameinfo()->get_types() as $type) {
 			$this->data[$type] = $this->gameinfo()->get($type);
 			$this->gameinfo()->flush($type);
