@@ -124,7 +124,7 @@ class Manage_Article_Categories extends page_generic {
 	
 		$arrPublished = $this->in->getArray('published', 'int');
 		foreach($arrPublished as $key => $val){
-			$this->pdh->put('article_categories', 'update_sortandpublished', array($key, $arrSortablesFlipped[$key], $val));
+			$this->pdh->put('article_categories', 'update_sortandpublished', array($key, (int)$arrSortablesFlipped[$key], (int)$val));
 		}
 		$this->pdh->process_hook_queue();
 		$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');

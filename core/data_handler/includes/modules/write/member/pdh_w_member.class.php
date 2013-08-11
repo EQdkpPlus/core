@@ -116,7 +116,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'{L_STATUS_AFTER}'		=> ($old['status'] != $data['status']) ? '<span class=\"negative\">'.$data['status'].'</span>' : $old['status'],
 					);
 
-					$this->log_insert('action_member_updated', $log_action);
+					$this->log_insert('action_member_updated', $log_action, $member_id, $old['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					return $member_id;
 				}
@@ -143,7 +143,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'{L_STATUS}'	=> !empty($data['status']) ? $data['status'] : 1,
 					);
 					if($member_id != $data['mainid']) $log_action['{L_MAINC}'] = $this->pdh->get('member', 'name', array($data['mainid']));
-					$this->log_insert('action_member_added', $log_action);
+					$this->log_insert('action_member_added', $log_action, $member_id, $data['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					return $member_id;
 				}
@@ -181,7 +181,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'{L_MAINC}' => $old['main'],
 						'{L_STATUS}' => $old['status']
 					);
-					$this->log_insert('action_member_deleted', $log_action);
+					$this->log_insert('action_member_deleted', $log_action, $member_id, $old['name']);
 				}
 				//delete items of member
 				$items = $this->pdh->get('item', 'itemids4memberid', array($member_id));
@@ -345,7 +345,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 							'{L_FROM}'	=> $this->pdh->get('member', 'name', array($fromid)),
 							'{L_TO}'	=> $this->pdh->get('member', 'name', array($toid)),
 						);
-						$this->log_insert('action_history_transfer', $log_action);
+						$this->log_insert('action_history_transfer', $log_action, $fromid, $this->pdh->get('member', 'name', array($fromid)));
 						$this->db->query("COMMIT;");
 						$this->pdh->enqueue_hook('item_udpate');
 						$this->pdh->enqueue_hook('adjustment_update');

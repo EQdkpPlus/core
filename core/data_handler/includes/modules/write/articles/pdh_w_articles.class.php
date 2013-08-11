@@ -23,9 +23,28 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_articles')) {
 	class pdh_w_articles extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'pfh', 'user', 'time',  'bbcode'=>'bbcode', 'embedly'=>'embedly', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
+			$shortcuts = array('pdh', 'db', 'pfh', 'user', 'time',  'bbcode'=>'bbcode', 'embedly'=>'embedly', 'logs');
+			return array_merge(parent::$shortcuts, $shortcuts);
+		}
+		
+		public $arrLang = array(
+			'title' 			=> "{L_HEADLINE}",
+			'text'				=> "{L_DESCRIPTION}",
+			'category'			=> "{L_CATEGORY}",
+			'featured'			=> "{L_FEATURED}",
+			'comments'			=> "{L_INFO_COMMENTS}",
+			'votes'				=> "{L_INFO_VOTING}",
+			'published'			=> "{L_PUBLISHED}",
+			'show_from'			=> "{L_SHOW_FROM}",
+			'show_to'			=> "{L_SHOW_TO}",
+			'user_id'			=> "{L_USER}",
+			'date'				=> "{L_DATE}",
+			'previewimage'		=> "{L_PREVIEW_IMAGE}",
+			'alias'				=> "{L_ALIAS}",
+			'tags'				=> "{L_TAGS}",
+			'page_objects'		=> "{L_PAGE_OBJECTS}",
+			'hide_header'		=> "{L_HIDE_HEADER}",
+		);
 
 		public function __construct() {
 			parent::__construct();
@@ -55,33 +74,43 @@ if(!class_exists('pdh_w_articles')) {
 					'hide_header'		=> $arrOldData["hide_header"],
 			);
 			
-			//Logging
-			$arrLang = array(
-					'title' 			=> "{L_HEADLINE}",
-					'text'				=> "{L_DESCRIPTION}",
-					'category'			=> "{L_CATEGORY}",
-					'featured'			=> "{L_FEATURED}",
-					'comments'			=> "{L_INFO_COMMENTS}",
-					'votes'				=> "{L_INFO_VOTING}",
-					'published'			=> "{L_PUBLISHED}",
-					'show_from'			=> "{L_SHOW_FROM}",
-					'show_to'			=> "{L_SHOW_TO}",
-					'user_id'			=> "{L_USER}",
-					'date'				=> "{L_DATE}",
-					'previewimage'		=> "{L_PREVIEW_IMAGE}",
-					'alias'				=> "{L_ALIAS}",
-					'tags'				=> "{L_TAGS}",
-					'page_objects'		=> "{L_PAGE_OBJECTS}",
-					'hide_header'		=> "{L_HIDE_HEADER}",
-			);
-			
-			$arrChanges = $this->logs->diff($id, false, $arrOld, $arrLang);
+			//Logging			
+			$arrChanges = $this->logs->diff(false, $arrOld, $this->arrLang);
 			if ($arrChanges){
-				$this->log_insert('action_article_deleted', $arrChanges, 1, 'article');
+				$this->log_insert('action_article_deleted', $arrChanges, $id, $arrOldData["title"], 1, 'article');
 			}
 		}
 		
 		public function delete_category($intCategoryID){
+			$arrArticles = $this->pdh->get('articles', 'id_list', $intCategoryID);
+			foreach($arrArticles as $intArticleID){
+				$arrOldData = $this->pdh->get('articles', 'data', array($intArticleID));
+					
+				$arrOld = array(
+						'title' 			=> $arrOldData["title"],
+						'text'				=> $arrOldData["text"],
+						'category'			=> $arrOldData["category"],
+						'featured'			=> $arrOldData["featured"],
+						'comments'			=> $arrOldData["comments"],
+						'votes'				=> $arrOldData["votes"],
+						'published'			=> $arrOldData["published"],
+						'show_from'			=> $arrOldData["show_from"],
+						'show_to'			=> $arrOldData["show_to"],
+						'user_id'			=> $arrOldData["user_id"],
+						'date'				=> $arrOldData["date"],
+						'previewimage'		=> $arrOldData["previewimage"],
+						'alias'				=> $arrOldData["alias"],
+						'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
+						'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+						'hide_header'		=> $arrOldData["hide_header"],
+				);
+				
+				$arrChanges = $this->logs->diff(false, $arrOld, $this->arrLang);
+				if ($arrChanges){
+					$this->log_insert('action_article_deleted', $arrChanges, $intArticleID, $arrOldData["title"], 1, 'article');
+				}
+			}
+
 			$this->db->query("DELETE FROM __articles WHERE category = '".$this->db->escape($intCategoryID)."'");
 			$this->pdh->enqueue_hook('articles_update');
 		}
@@ -146,28 +175,8 @@ if(!class_exists('pdh_w_articles')) {
 						return false;
 					}
 				}
-				
-				
-				//Logging
-				$arrLang = array(
-						'title' 			=> "{L_HEADLINE}",
-						'text'				=> "{L_DESCRIPTION}",
-						'category'			=> "{L_CATEGORY}",
-						'featured'			=> "{L_FEATURED}",
-						'comments'			=> "{L_INFO_COMMENTS}",
-						'votes'				=> "{L_INFO_VOTING}",
-						'published'			=> "{L_PUBLISHED}",
-						'show_from'			=> "{L_SHOW_FROM}",
-						'show_to'			=> "{L_SHOW_TO}",
-						'user_id'			=> "{L_USER}",
-						'date'				=> "{L_DATE}",
-						'previewimage'		=> "{L_PREVIEW_IMAGE}",
-						'alias'				=> "{L_ALIAS}",
-						'tags'				=> "{L_TAGS}",
-						'page_objects'		=> "{L_PAGE_OBJECTS}",
-						'hide_header'		=> "{L_HIDE_HEADER}",
-				);
-				
+						
+				//Logging			
 				$arrNew = array(
 						'title' 			=> $strTitle,
 						'text'				=> $strText,
@@ -187,9 +196,9 @@ if(!class_exists('pdh_w_articles')) {
 						'hide_header'		=> $intHideHeader,	
 				);
 					
-				$arrChanges = $this->logs->diff($id, false, $arrNew, $arrLang);
+				$arrChanges = $this->logs->diff(false, $arrNew, $this->arrLang);
 				if ($arrChanges){
-					$this->log_insert('action_article_added', $arrChanges, 1, 'article');
+					$this->log_insert('action_article_added', $arrChanges, $id, $strTitle, 1, 'article');
 				}
 						
 				$this->pdh->enqueue_hook('articles_update');
@@ -220,7 +229,9 @@ if(!class_exists('pdh_w_articles')) {
 				foreach($arrTmpPageObjects[3] as $key=>$val){
 					$arrPageObjects[] = $val;
 				}
-			}			
+			}
+			
+			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			
 			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
 				'title' 			=> $strTitle,
@@ -268,7 +279,6 @@ if(!class_exists('pdh_w_articles')) {
 					'hide_header'		=> $intHideHeader,
 				);
 				
-				$arrOldData = $this->pdh->get('articles', 'data', array($id));
 				$arrOld = array(
 					'title' 			=> $arrOldData["title"],
 					'text'				=> $arrOldData["text"],
@@ -291,29 +301,10 @@ if(!class_exists('pdh_w_articles')) {
 				$arrFlags = array(
 					'text'			=> 1,
 				);
-				
-				$arrLang = array(
-					'title' 			=> "{L_HEADLINE}",
-					'text'				=> "{L_DESCRIPTION}",
-					'category'			=> "{L_CATEGORY}",
-					'featured'			=> "{L_FEATURED}",
-					'comments'			=> "{L_INFO_COMMENTS}",
-					'votes'				=> "{L_INFO_VOTING}",
-					'published'			=> "{L_PUBLISHED}",
-					'show_from'			=> "{L_SHOW_FROM}",
-					'show_to'			=> "{L_SHOW_TO}",
-					'user_id'			=> "{L_USER}",
-					'date'				=> "{L_DATE}",
-					'previewimage'		=> "{L_PREVIEW_IMAGE}",
-					'alias'				=> "{L_ALIAS}",
-					'tags'				=> "{L_TAGS}",
-					'page_objects'		=> "{L_PAGE_OBJECTS}",
-					'hide_header'		=> "{L_HIDE_HEADER}",
-				);
-				
-				$arrChanges = $this->logs->diff($id, $arrOld, $arrNew, $arrLang, $arrFlags);
+								
+				$arrChanges = $this->logs->diff($arrOld, $arrNew, $this->arrLang, $arrFlags);
 				if ($arrChanges){
-					$this->log_insert('action_article_updated', $arrChanges, 1, 'article');
+					$this->log_insert('action_article_updated', $arrChanges, $id, $arrOldData["title"], 1, 'article');
 				}
 				
 				return $id;
@@ -330,6 +321,8 @@ if(!class_exists('pdh_w_articles')) {
 			), $id);
 			
 			if ($blnResult) {
+				$this->log_insert('action_article_reset_votes', array(), $id, $this->pdh->get('articles', 'title', array($id)), '', 1, 'article');
+				
 				$this->pdh->enqueue_hook('articles_update');
 				return true;
 			}
@@ -360,11 +353,16 @@ if(!class_exists('pdh_w_articles')) {
 		}
 		
 		public function delete_previewimage($id){
+			$arrOld = array('previewimage' => $this->pdh->get('articles', 'previewimage', array($id)));
+			
 			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
 				'previewimage' 		=> '',
 			), $id);
 			
-			if ($blnResult) {
+			if ($blnResult) {	
+				$arrNew = array('previewimage' => '');
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
+				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 				$this->pdh->enqueue_hook('articles_update');
 				return true;
 			}
@@ -373,12 +371,26 @@ if(!class_exists('pdh_w_articles')) {
 		}
 		
 		public function update_featuredandpublished($id, $intFeatured, $intPublished){
+			$arrOld = array(
+				'featured' => $this->pdh->get('articles', 'featured', array($id)),
+				'published'=> $this->pdh->get('articles', 'published', array($id))
+			);
+			
 			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
 				'featured'		=> $intFeatured,
 				'published'		=> $intPublished,
 			), $id);
 			
 			if ($blnResult){
+				
+				$arrNew = array(
+					'featured'	=> $intFeatured,
+					'published'	=> $intPublished,
+				);
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
+				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
+				
+				
 				$this->pdh->enqueue_hook('articles_update');
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
@@ -387,18 +399,53 @@ if(!class_exists('pdh_w_articles')) {
 		}
 		
 		public function set_published($arrIDs){
+			
+			foreach($arrIDs as $id){
+				$arrOld = array(
+						'published'=> $this->pdh->get('articles', 'published', array($id))
+				);
+				$arrNew = array(
+						'published'	=> 1,
+				);
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
+				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
+			}
+			
 			$this->db->query('UPDATE __articles SET published=1 WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
+			
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
-		public function set_unpublished($arrIDs){
+		public function set_unpublished($arrIDs){			
+			foreach($arrIDs as $id){
+				$arrOld = array(
+						'published'=> $this->pdh->get('articles', 'published', array($id))
+				);
+				$arrNew = array(
+						'published'	=> 0,
+				);
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
+				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
+			}
 			$this->db->query('UPDATE __articles SET published=0 WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
+			
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
 		public function change_category($arrIDs, $intCategoryID){
+			$arrNew = array(
+					'category'	=> $intCategoryID,
+			);
+			foreach($arrIDs as $id){
+				$arrOld = array(
+						'category'=> $this->pdh->get('articles', 'category', array($id))
+				);
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
+				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
+			}
+			
 			$this->db->query("UPDATE __articles SET category = ".$this->db->escape($intCategoryID).' WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');

@@ -36,7 +36,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			'article_categories_update',
 			'article_updates',
 		);
-		
+				
 		public $presets = array(
 			'category_sortable' => array('sort_id', array('%category_id%'), array()),
 			'category_editicon' => array('editicon', array('%category_id%'), array()),

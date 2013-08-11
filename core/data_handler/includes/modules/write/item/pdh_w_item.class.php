@@ -66,7 +66,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'{L_ITEMPOOL}'	=> $this->pdh->get('itempool', 'name', $itempool_id),
 					'{L_ADDED_BY}'	=> $this->admin_user
 				);
-				$this->log_insert('action_item_added', $log_action);
+				$this->log_insert('action_item_added', $log_action, $item_id, $item_name);
 				$this->pdh->enqueue_hook('item_update', $item_id);
 				return $item_id;
 			}
@@ -185,7 +185,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'{L_ITEMPOOL_AFTER}'	=> ($old['itempool_id'] != $itempool_id) ? "<span class=\"negative\">".$itempool."</span>" : $itempool,
 					'{L_UPDATED_BY}'		=> $this->admin_user
 				);
-				$this->log_insert('action_item_updated', $log_action);
+				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
 				#$this->db->query("COMMIT;");
 				$this->pdh->enqueue_hook('item_update', $hook_id);
 				return true;
@@ -210,7 +210,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'{L_RAID_ID}'	=> $old['raid_id'],
 					'{L_ITEMPOOL}'	=> $old['itempool'],
 					'{L_VALUE}'		=> $old['value']);
-				$this->log_insert('action_item_deleted', $log_action);
+				$this->log_insert('action_item_deleted', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $item_id);
 				return true;
 			}
@@ -225,7 +225,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				'{L_ID}'		=> implode(', ', $items),
 				'{L_RAID_ID}'	=> $raid_id
 			);
-			$this->log_insert('action_itemsofraid_deleted', $log_action);
+			$this->log_insert('action_itemsofraid_deleted', $log_action, $raid_id);
 			$this->pdh->enqueue_hook('item_update', $items);
 			return true;
 		}

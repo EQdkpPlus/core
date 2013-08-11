@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_calendar_events')) {
 	class pdh_w_calendar_events extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'user', 'config'	);
+		$shortcuts = array('pdh', 'db', 'user', 'config', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -35,16 +35,35 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$this->db->query("TRUNCATE TABLE __calendar_events;");
 			$this->pdh->enqueue_hook('calendar_events_update');
 		}
+		
+		private $arrLogLang = array(
+			'id' 					=> "{L_ID}",
+			'calendar_id'			=> "{L_CALENDAR}",
+			'name'					=> "{L_NAME}",
+			'creator'				=> "{L_USER}",
+			'timestamp_start'		=> "{L_CALENDAR_STARTDATE}",
+			'timestamp_end'			=> "{L_CALENDAR_ENDDATE}",
+			'allday'				=> "{L_CALENDAR_ALLDAY_EVENT}",
+			'private'				=> "Private",
+			'visible'				=> "Visible",
+			'closed'				=> "Closed",
+			'notes'					=> "{L_NOTE}",
+			'repeating'				=> "{L_CALENDAR_REPEAT}",
+			'extension'				=> "{L_EXTENSIONS}",
+			'cloneid'				=> "Clone-ID",
+			'mode'					=> "{L_CALENDAR_MODE}",
+		);
 
 		public function update_cevents($id, $cal_id, $name, $startdate, $enddate, $repeat, $editclones, $notes, $allday, $extension=false){
-			$old['cal_id']			= $this->pdh->get('calendar_events', 'calendar', array($id));
+			$old['cal_id']			= $this->pdh->get('calendar_events', 'calendar_id', array($id));
 			$old['name']			= ($name != false) ? $this->pdh->get('calendar_events', 'name', array($id)) : '';
 			$old['startdate']		= $this->pdh->get('calendar_events', 'time_start', array($id));
 			$old['enddate']			= $this->pdh->get('calendar_events', 'time_end', array($id));
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
-			#$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
+			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
 			$changes				= false;
+
 			foreach($old as $varname => $value) {
 				if(${$varname} == '') {
 					${$varname} = $value;
@@ -53,12 +72,18 @@ if(!class_exists('pdh_w_calendar_events')) {
 						$changes = true;
 					}
 				}
-			}
+			}	
+			
+			$tmp_old = $extdata_old = $this->pdh->get('calendar_events', 'extension', array($id));
+			if(is_array($extension)) $tmp_new = $extdata = array_merge($extdata_old, $extension);
+			unset($tmp_old['updated_on']);
+			unset($tmp_new['updated_on']);
+			asort($tmp_old); 
+			asort($tmp_new);
 
-			if($changes || is_array($extension)) {
+			if($changes || (serialize($tmp_old) !== serialize($tmp_new))) {
 				// the extensions array
-				$extdata = $this->pdh->get('calendar_events', 'extension', array($id));
-				if(is_array($extension)) $extdata = array_merge($extdata, $extension);
+
 
 				// Handle the cloned events..
 				if(isset($editclones) && $editclones != 0){
@@ -112,15 +137,35 @@ if(!class_exists('pdh_w_calendar_events')) {
 						return false;
 					}
 				}
+				
+				// add log entry
+				$arrOld = array(
+					'calendar_id'			=> $old['cal_id'],
+					'name'					=> $old['name'],
+					'timestamp_start'		=> "{D_".$old['startdate']."}",
+					'timestamp_end'			=> "{D_".$old['enddate']."}",
+					'allday'				=> $old['allday'],
+					'notes'					=> $old['notes'],
+					'repeating'				=> $old['repeat'],
+					'extension'				=> serialize($extdata),
+					'mode'					=> $extdata['calendarmode'],
+				);
+				$arrNew = array(
+					'calendar_id'			=> $cal_id,
+					'name'					=> $name,
+					'timestamp_start'		=> "{D_".$startdate."}",
+					'timestamp_end'			=> "{D_".$enddate."}",
+					'allday'				=> $allday,
+					'notes'					=> $notes,
+					'repeating'				=> $repeat,
+					'extension'				=> serialize($extension),
+					'mode'					=> $extension['calendarmode'],
+				);
+				
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+		
+				$this->log_insert('calendar_log_eventupdated', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar');
 			}
-			// add log entry
-			$log_action = array(
-				'{L_ID}'							=> $id,
-				'{L_calendar_log_eventadd_modus}'	=> $extension['calendarmode'],
-				'{L_calendar_log_eventadd_date}'	=> '{D_'.$startdate.'}',
-				'{L_calendar_log_eventadd_name}'	=> ($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name,
-			);
-			$this->log_insert('calendar_log_eventupdated', $log_action, true, 'calendar');
 
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return true;
@@ -149,20 +194,35 @@ if(!class_exists('pdh_w_calendar_events')) {
 			));
 			$id = $this->db->insert_id();
 			// add log entry if user ID is available
-			if(isset($this->user->data['user_id']) && $this->user->data['user_id'] > 0){
-				$log_action = array(
-					'{L_ID}'							=> $id,
-					'{L_calendar_log_eventadd_modus}'	=> $extension['calendarmode'],
-					'{L_calendar_log_eventadd_date}'	=> '{D_'.$startdate.'}',
-					'{L_calendar_log_eventadd_name}'	=> ($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name,
+			if(isset($this->user->data['user_id']) && $this->user->data['user_id'] != ANONYMOUS){
+				$arrNew = array(
+					'calendar_id'			=> $cal_id,
+					'name'					=> (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name),
+					'creator'				=> $creator,
+					'timestamp_start'		=> "{D_".$startdate."}",
+					'timestamp_end'			=> "{D_".$enddate."}",
+					'allday'				=> ($allday > 0) ? $allday : 0,
+					'private'				=> 0,
+					'visible'				=> 1,
+					'closed'				=> 0,
+					'notes'					=> $notes,
+					'repeating'				=> $repeat,
+					'extension'				=> (is_array($extension)) ? serialize($extension) : '',
+					'cloneid'				=> ($cloneid > 0) ? $cloneid : 0,
+					'mode'					=> $extension['calendarmode'],
 				);
-				$this->log_insert('calendar_log_eventadded', $log_action, true, 'calendar');
+				
+				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
+				
+				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar');
 			}
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return $id;
 		}
 
 		public function delete_cevent($id, $del_repeatable=false){
+			$arrOld = $this->pdh->get('calendar_events', 'data', array($id));
+			
 			$field = (is_array($id)) ? implode(', ', $id) : $id;
 			if($del_repeatable){
 				$query = $this->db->query("SELECT DISTINCT cloneid FROM __calendar_events WHERE id IN(".$field.")");
@@ -186,7 +246,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 					$this->db->query("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id=".$row['id']);
 				}
 			}
-
+			
+			//Logging
+			$arrOld['timestamp_start'] = "{D_".$arrOld['timestamp_start']."}";
+			$arrOld['timestamp_end'] = "{D_".$arrOld['timestamp_end']."}";
+			$arrOld['extension'] = serialize($arrOld['extension']);
+			$log_action = $this->logs->diff(false, $arrOld, $this->arrLogLang);
+			$this->log_insert('calendar_log_eventdeleted', $log_action, $id, $this->pdh->get('calendar_events', 'name', array($id)), true, 'calendar');
+			
 			// perform the hooks
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
@@ -194,11 +261,16 @@ if(!class_exists('pdh_w_calendar_events')) {
 		}
 		
 		public function change_closeraidstatus($id, $closed=true){
+			$arrOld['closed'] = $this->pdh->get('calendar_events', 'raidstatus', array($id));
 			$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
 				'closed'	=> (($closed) ? 1 : 0),
 			), $id);
+			
+			//Logging
+			$arrNew['closed'] =  (($closed) ? 1 : 0);	
 			$openclose = ($closed) ? 'closed' : 'opened';
-			$this->log_insert('calendar_log_raid'.$openclose, array('{L_ID}' => $eventid), true, 'calendar');
+			$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+			if ($log_action) $this->log_insert('calendar_log_raid'.$openclose, $log_action, $id, $this->pdh->get('calendar_events', 'name', array($id)), true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return $id;
 
@@ -208,7 +280,6 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
 				'notes'	=> $note,
 			), $id);
-			$id = $this->db->insert_id();
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return $id;
 
@@ -217,6 +288,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 		public function delete_clones($cloneid){
 			$this->db->query("DELETE FROM __calendar_events WHERE cloneid=?", false, $cloneid);
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
+			$this->log_insert('calendar_log_deletedclones', array(), $cloneid, $this->pdh->get('calendar_events', 'name', array($cloneid)), true, 'calendar');
 			return true;
 		}
 
@@ -228,6 +300,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 				if(is_array($a_extension) && $a_extension['calendarmode'] == 'raid'){
 					$a_extension['invitedate']		= $a_extension['invitedate'] + $general_delta_sec;
 				}
+				
+				$arrOld = array(
+						'timestamp_start'	=> "{D_".( $this->pdh->get('calendar_events', 'time_start', array($eventid)))."}",
+						'timestamp_end'		=> "{D_".( $this->pdh->get('calendar_events', 'time_end', array($eventid)))."}",
+						'allday'			=> $this->pdh->get('calendar_events', 'allday', array($eventid))
+				);
 
 				$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
 					'timestamp_start'	=> $eventdata['timestamp_start'] + (int)$general_delta_sec,
@@ -236,6 +314,16 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'extension'			=> serialize($a_extension)
 				), $eventid);
 				$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
+				
+				//Logging
+				$arrNew = array(
+					'timestamp_start'	=> "{D_".($eventdata['timestamp_start'] + (int)$general_delta_sec)."}",
+					'timestamp_end'		=> "{D_".($eventdata['timestamp_end'] + (int)$general_delta_sec)."}",
+					'allday'			=> (($move) ? (($allday == 'true') ? 1 : 0) : $eventdata['allday']),
+				);
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);				
+				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
+				
 				return $result;
 			}
 		}
@@ -247,6 +335,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
 					'timestamp_end'		=> $old_timestamp + (int)$general_delta_sec,
 				), $eventid);
+				
+				//Logging
+				$arrNew = array(
+						'timestamp_end'		=> $old_timestamp + (int)$general_delta_sec,
+				);
+				$log_action = $this->logs->diff(array('timestamp_end' => $old_timestamp), $arrNew, $this->arrLogLang);
+				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
+				
 				$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
 				return $result;
 			}

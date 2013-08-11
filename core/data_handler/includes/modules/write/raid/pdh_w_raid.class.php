@@ -68,7 +68,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'{L_VALUE}'		=> $raid_value,
 					'{L_DATE}'		=> '{D_'.$raid_date.'}',
 					'{L_ADDED_BY}'	=> $this->admin_user);
-				$this->log_insert('action_raid_added', $log_action);
+				$this->log_insert('action_raid_added', $log_action, $raid_id, $this->pdh->get('event', 'name', array($event_id)));
 				//call pdh hooks
 				$this->pdh->enqueue_hook('raid_update', $raid_id);
 				return $raid_id;
@@ -124,7 +124,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'{L_DATE_AFTER}'		=> '{D_'.$raid_date.'}',
 					'{L_UPDATED_BY}'		=> $this->admin_user
 				);
-				$this->log_insert('action_raid_updated', $log_action);
+				$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
 				$this->pdh->enqueue_hook('raid_update', $raid_id);
 				return true;
 			}
@@ -171,7 +171,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 						'{L_NOTE}'		=> $old['note'],
 						'{L_VALUE}'		=> $old['value']
 					);
-					$this->log_insert('action_raid_deleted', $log_action);
+					$this->log_insert('action_raid_deleted', $log_action, $raid_id, $old['event']);
 					#$this->db->query("COMMIT");
 					//call pdh hook
 					$this->pdh->enqueue_hook('raid_update', $raid_id);
@@ -195,7 +195,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				'{L_ID}'	=> implode(', ', $raids),
 				'{L_EVENT}'	=> $this->pdh->get('event', 'name', array($event_id))
 			);
-			$this->log_insert('action_raidsofevent_deleted', $log_action);
+			$this->log_insert('action_raidsofevent_deleted', $log_action, $event_id, $this->pdh->get('event', 'name', array($event_id)));
 			$this->pdh->enqueue_hook('raid_update', $raids);
 			return true;
 		}

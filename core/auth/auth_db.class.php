@@ -195,7 +195,7 @@ class auth_db extends auth {
 						$this->pdh->put('user', 'activate', array($userid, 0));
 						
 						//Write to admin-Log
-						$this->logs->add('action_user_failed_logins', '', false, '', 1, $userid);
+						$this->logs->add('action_user_failed_logins', '', $userid, $strUsername, false, '', 1, $userid);
 						
 						//Send the User an Email with activation link
 						$user_key = $this->pdh->put('user', 'create_new_activationkey', array($userid));

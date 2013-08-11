@@ -48,7 +48,7 @@ if(!class_exists('pdh_w_user')) {
 				$log_action = array(
 					'{L_USER}'	=> $arrData['username'],
 				);
-				$this->log_insert('action_user_added', $log_action);
+				$this->log_insert('action_user_added', $log_action, $user_id, sanitize($arrData['username']));
 			}
 
 			//Put him to the default group
@@ -137,7 +137,7 @@ if(!class_exists('pdh_w_user')) {
 				$log_action = array(
 					'{L_USER}'	=> $this->in->get('username'),
 				);
-				$this->log_insert('action_user_updated', $log_action);
+				$this->log_insert('action_user_updated', $log_action, $user_id, $this->in->get('username'));
 			}
 
 
@@ -286,7 +286,7 @@ if(!class_exists('pdh_w_user')) {
 			$log_action = array(
 				'{L_USER}'		=> $this->pdh->get('user', 'name', array($user_id))
 			);
-			$this->log_insert('action_user_deleted', $log_action);
+			$this->log_insert('action_user_deleted', $log_action, $user_id, $this->pdh->get('user', 'name', array($user_id)));
 			
 			$this->db->query("DELETE FROM __users WHERE user_id=".$this->db->escape($user_id));
 			$this->db->query("DELETE FROM __auth_users WHERE user_id=".$this->db->escape($user_id));

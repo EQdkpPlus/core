@@ -1554,6 +1554,13 @@ $lang = array(
 "new_value"	=> "Neuer Wert",
 "old_value"	=> "Alter Wert",
 "page_objects" => "Seiten-Objekte",
+"record" => "Datensatz",
+"recordid" => "Datensatz-ID",
+"action_articlecategory_updated" => "Artikelkategorie bearbeitet",
+"action_articlecategory_added" => "Artikelkategorie hinzugefügt",
+"action_articlecategory_deleted" => "Artikelkategorie gelöscht",
+"action_article_reset_comments" => "Kommentare gelöscht",
+"action_article_reset_votes" => "Bewertungen gelöscht",
  );
 
 ?>

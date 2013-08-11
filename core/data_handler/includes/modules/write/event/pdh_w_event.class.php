@@ -47,7 +47,7 @@ if(!class_exists('pdh_w_event')) {
 					'{L_ICON}'		=> $icon,
 					'{L_ADDED_BY}'	=> $this->admin_user
 				);
-				$this->log_insert('action_event_added', $log_action);
+				$this->log_insert('action_event_added', $log_action, $id, $name);
 				$this->pdh->enqueue_hook('event_update', array($id));
 				return $id;
 			}
@@ -77,7 +77,7 @@ if(!class_exists('pdh_w_event')) {
 					'{L_ICON_AFTER}'	=> ($old['icon'] != $icon) ? '<span class=\"negatvie\">'.$icon.'</span>' : $icon,
 					'{L_UPDATED_BY}'	=> $this->admin_user
 				);
-				$this->log_insert('action_event_updated', $log_action);
+				$this->log_insert('action_event_updated', $log_action, $id, $old['name']);
 				$this->pdh->enqueue_hook('event_update', array($id));
 				return true;
 			}
@@ -97,7 +97,7 @@ if(!class_exists('pdh_w_event')) {
 					'{L_VALUE}'		=> $old['value'],
 					'{L_ICON}'		=> $old['icon']
 				);
-				$this->log_insert('action_event_deleted', $log_action);
+				$this->log_insert('action_event_deleted', $log_action, $id, $old['name']);
 
 				//delete raids and adjustments
 				$retu = array(true);

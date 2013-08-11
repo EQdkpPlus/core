@@ -323,6 +323,8 @@ CREATE TABLE `__logs` (
 	`log_flag` smallint(3) NOT NULL DEFAULT '0',
 	`user_id` smallint(5) NOT NULL DEFAULT '0',
 	`username` VARCHAR(30) COLLATE utf8_bin NOT NULL,
+	`log_record` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`log_record_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	PRIMARY KEY (`log_id`),
 	KEY `user_id` (`user_id`),
 	KEY `log_tag` (`log_tag`),

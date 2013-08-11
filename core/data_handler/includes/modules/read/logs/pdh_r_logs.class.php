@@ -43,6 +43,8 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			'loguser'		=> array('user',		array('%log_id%'), array()),
 			'logipaddress'	=> array('ipaddress',	array('%log_id%'), array()),
 			'logresult'		=> array('result',		array('%log_id%'), array()),
+			'logrecord'		=> array('record',		array('%log_id%'), array()),
+			'logrecordid'	=> array('recordid',	array('%log_id%'), array()),
 			'viewlog'		=> array('viewicon',	array('%log_id%', '%link_url%', '%link_url_suffix%'), array()),
 		);
 
@@ -100,6 +102,8 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 						'log_plugin'		=> $drow['log_plugin'],
 						'user_id'			=> $drow['user_id'],
 						'username'			=> $drow['username'],
+						'log_record'		=> $drow['log_record'],
+						'log_recordid'		=> $drow['log_record_id'],
 					);
 				}
 				$this->db->free_result($pff_result);
@@ -134,7 +138,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			return $arrTags;
 		}
 		
-		public function get_filtered_id_list($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to){
+		public function get_filtered_id_list($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to, $recordid, $record){
 			$strQuery = "SELECT log_id FROM __logs WHERE ";
 			if ($plugin !== false) $strQuery .= " log_plugin= '".$this->db->escape($plugin). "' AND";
 			if ($result !== false) $strQuery .= " log_result= ".$this->db->escape($result). " AND";
@@ -145,6 +149,9 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			if ($value !== false) $strQuery .= " log_value LIKE '%".$this->db->escape($value). "%' AND";
 			if ($date_from !== false) $strQuery .= " log_date > ".$this->db->escape($date_from). " AND";
 			if ($date_to !== false) $strQuery .= " log_date < ".$this->db->escape($date_to)." AND";
+			if ($recordid !== false) $strQuery .= " log_record_id = '".$this->db->escape($recordid). "' AND";
+			if ($record !== false) $strQuery .= " log_record= '".$this->db->escape($record). "' AND";
+			
 			$strQuery .= " log_id > 0";
 			
 			$id_res = $this->db->query($strQuery);
@@ -251,6 +258,16 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			$color	= ($res) ? 'positive' : 'negative';
 			$lang	= ($res) ? $this->user->lang('success') : $this->user->lang('error');
 			return '<span class="'.$color.'">'.$lang.'</span>';
+		}
+		
+		public function get_record($id) {
+			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
+			return $this->data[$id]['log_record'];
+		}
+		
+		public function get_recordid($id) {
+			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
+			return $this->data[$id]['log_recordid'];
 		}
 
 		public function get_plugin($id){

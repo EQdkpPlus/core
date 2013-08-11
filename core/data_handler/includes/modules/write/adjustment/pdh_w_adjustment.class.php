@@ -23,14 +23,22 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_w_adjustment" ) ){
 	class pdh_w_adjustment extends pdh_w_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdh', 'db', 'game');
+			$shortcuts = array('pdh', 'db', 'game', 'logs');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
 		public function __construct(){
 			parent::__construct();
 		}
-
+		
+		private $arrLogLang = array(
+				'value' 	=> '{L_ADJUSTMENT}',
+				'reason'	=> '{L_REASON}',
+				'members'	=> '{L_MEMBERS}',
+				'event'		=> '{L_EVENT}',
+				'raid'		=> '{L_RAID}',
+		);
+		
 		public function add_adjustment($adjustment_value, $adjustment_reason, $member_ids, $event_id, $raid_id=NULL, $time=false, $group_key = null) {
 			$time = ($time) ? $time : time();
 			$group_key = ($group_key == null) ? $this->gen_group_key($time, array($adjustment_reason, $adjustment_value, $event_id, $raid_id)) : $group_key;
@@ -52,14 +60,15 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			}
 
 			$member_names = $this->pdh->aget('member', 'name', 0, array($member_ids));
+			
 			$log_action = array(
 				'{L_ADJUSTMENT}'	=> $adjustment_value,
 				'{L_REASON}'		=> $adjustment_reason,
 				'{L_MEMBERS}'		=> implode(', ', $member_names),
 				'{L_EVENT}'			=> $this->pdh->get('event', 'name', $event_id),
-				'{L_ADDED_BY}'		=> $this->admin_user
+				'{L_RAID}'			=> $raid_id,
 			);
-			$this->log_insert('action_indivadj_added', $log_action);
+			$this->log_insert('action_indivadj_added', $log_action, $group_key, $adjustment_reason);
 			$this->pdh->enqueue_hook('adjustment_update', $ids);
 			return $ids;
 		}
@@ -136,19 +145,27 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			if(!in_array(false, $retu)){
 				$old_names = $this->pdh->aget('member', 'name', 0, array($old['members']));
 				$member_string = get_coloured_names($updated_mems, $added_mems, $adjs2del);
+				
 				// Logging
-				$log_action = array(
-					'{L_ADJUSTMENT_BEFORE}'	=> $old['value'],
-					'{L_REASON_BEFORE}'		=> $old['reason'],
-					'{L_MEMBERS_BEFORE}'	=> implode(', ', $old_names),
-					'{L_EVENT_BEFORE}'		=> $this->pdh->get('event', 'name', array($old['event'])),
-					'{L_ADJUSTMENT_AFTER}'	=> ($old['value'] != $adj_value) ? "<span class=\"negative\">".$adj_value."</span>" : $adj_value,
-					'{L_REASON_AFTER}'		=> ($old['reason'] != $adj_reason) ? "<span class=\"negative\">".$adj_reason."</span>" : $adj_reason,
-					'{L_MEMBERS_AFTER}'		=> $member_string,
-					'{L_EVENT_AFTER}'		=> ($old['event'] != $event_id) ? "<span class=\"negative\">".$this->pdh->get('event', 'name', array($event_id))."</span>" : $this->pdh->get('event', 'name', array($event_id)),
-					'{L_UPDATED_BY}'		=> $this->admin_user
+				$arrOld = array(
+					'value'		=> $old['value'],
+					'reason'	=> $old['reason'],
+					'members'	=> implode(', ', $old_names),
+					'event'		=> $this->pdh->get('event', 'name', array($old['event'])),
+					'raid'		=> $this->pdh->get('adjustment', 'raid_id', array($adjustment_id)),
 				);
-				$this->log_insert('action_indivadj_updated', $log_action);
+				
+				$arrNew = array(
+					'value'		=> $adj_value,
+					'reason'	=> $adj_reason,
+					'members'	=> $member_string,
+					'event'		=> $this->pdh->get('event', 'name', array($event_id)),
+					'raid'		=> $raid_id,
+				);
+				
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+				
+				$this->log_insert('action_indivadj_updated', $log_action, $new_group_key, $old['reason']);
 				$this->pdh->enqueue_hook('adjustment_update', $hook_id);
 				return true;
 			}
@@ -161,17 +178,18 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$old['value'] = $this->pdh->get('adjustment', 'value', array($adjustment_id));
 			$old['reason'] = $this->pdh->get('adjustment', 'reason', array($adjustment_id));
 			$old['event'] = $this->pdh->get('adjustment', 'event', array($adjustment_id));
-
+			$old['raid'] = $this->pdh->get('adjustment', 'raid_id', array($adjustment_id));
+			
 			if($this->db->query("DELETE FROM __adjustments WHERE adjustment_id = ?;", false, $adjustment_id)){
 				//insert log
 				$log_action = array(
-					'{L_ID}'		=> $adjustment_id,
 					'{L_MEMBER}'	=> $this->pdh->get('member', 'name', array($old['member'])),
 					'{L_VALUE}'		=> $old['value'],
 					'{L_REASON}'	=> $old['reason'],
-					'{L_EVENT}'		=> $old['event']
+					'{L_EVENT}'		=> $old['event'],
+					'{L_RAID}'		=> $old['raid'],
 				);
-				$this->log_insert('action_indivadj_deleted', $log_action);
+				$this->log_insert('action_indivadj_deleted', $log_action, $adjustment_id, $old['reason']);
 				$this->pdh->enqueue_hook('adjustment_update', $adjustment_id);
 				return true;
 			}
@@ -180,12 +198,28 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 
 		public function delete_adjustments_by_group_key($group_key){
 			$adj_ids = $this->pdh->get('adjustment', 'ids_of_group_key', array($group_key));
+			foreach($adj_ids as $adjustment_id){
+				$old['member'][] = $this->pdh->get('adjustment', 'member', array($adjustment_id));
+				$old['value'] = $this->pdh->get('adjustment', 'value', array($adjustment_id));
+				$old['reason'] = $this->pdh->get('adjustment', 'reason', array($adjustment_id));
+				$old['event'] = $this->pdh->get('adjustment', 'event', array($adjustment_id));
+				$old['raid'] = $this->pdh->get('adjustment', 'raid_id', array($adjustment_id));
+			}
+			
 			if($this->db->query("DELETE FROM __adjustments WHERE adjustment_group_key = ?;", false, $group_key)){
+				
+				$old_names = $this->pdh->aget('member', 'name', 0, array($old['member']));
+				
 				//insert log
 				$log_action = array(
-					'group_key'	=> $group_key,
+					'{L_MEMBER}'	=> implode(', ', $old_names),
+					'{L_VALUE}'		=> $old['value'],
+					'{L_REASON}'	=> $old['reason'],
+					'{L_EVENT}'		=> $old['event'],
+					'{L_RAID}'		=> $old['raid'],
 				);
-				$this->log_insert('action_indivadj_deleted', $log_action);
+				
+				$this->log_insert('action_indivadj_deleted', $log_action, $group_key, $old['reason']);
 				$this->pdh->enqueue_hook('adjustment_update', $adj_ids);
 				return true;
 			}
@@ -200,7 +234,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_ID}'		=> implode(', ', $adjs),
 				'{L_RAID_ID}'	=> $raid_id,
 			);
-			$this->log_insert('action_indivadjofraid_deleted', $log_action);
+			$this->log_insert('action_indivadjofraid_deleted', $log_action, $raid_id);
 			$this->pdh->enqueue_hook('adjustment_update', $adjs);
 			return true;
 		}
@@ -213,7 +247,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_ID}'		=> implode(', ', $adjs),
 				'{L_EVENT_ID}'	=> $event_id,
 			);
-			$this->log_insert('action_indivadjofevent_deleted', $log_action);
+			$this->log_insert('action_indivadjofevent_deleted', $log_action, $event_id);
 			$this->pdh->enqueue_hook('adjustment_update', $adjs);
 			return true;
 		}

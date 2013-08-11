@@ -23,13 +23,37 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_article_categories')) {
 	class pdh_w_article_categories extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'pfh',  'bbcode'=>'bbcode', 'embedly'=>'embedly');
+		$shortcuts = array('pdh', 'db', 'pfh',  'bbcode'=>'bbcode', 'embedly'=>'embedly', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
 		public function __construct() {
 			parent::__construct();
 		}
+		
+		private $arrLogLang = array(
+				'id'				=> "{L_ID}",
+				'name'				=> "{L_NAME}",
+				'alias'				=> "{L_ALIAS}",
+				'description'		=> "{L_DESCRIPTION}",
+				'per_page'			=> "{L_ARTICLE_PER_PAGE}",
+				'permissions'		=> "{L_PERMISSIONS}",
+				'published'			=> "{L_PUBLISHED}",
+				'parent'			=> "{L_PARENT_CATEGORY}",
+				'sort_id'			=> "{L_SORTATION}",
+				'list_type'			=> "{L_LIST_TYPE}",
+				'aggregation'		=> "{L_AGGREGATION}",
+				'featured_only'		=> "{L_FEATURED_ONLY}",
+				'social_share_buttons'=> "{L_SOCIAL_SHARE_BUTTONS}",
+				'portal_layout'		=> "{L_PORTAL_LAYOUT}",
+				'show_childs'		=> "{L_SHOW_CHILD_CATEGORIES}",
+				'article_published_state' => "{L_ARTICLE_PUBLISHED_STATE}",
+				'notify_on_onpublished_articles' => "{L_NOTIFY_ON_UNPUBLISHED_ARTICLES}",
+				'hide_header'		=> "{L_HIDE_HEADER}",
+				'sortation_type'	=> "{L_SORTATION_TYPE}",
+				'featured_ontop'	=> "{L_FEATURED_ONTOP}",
+				'hide_on_rss'		=> "{L_HIDE_ON_RSS}",
+		);
 
 		public function delete($id) {
 			$this->delete_recursiv(intval($id));
@@ -42,11 +66,16 @@ if(!class_exists('pdh_w_article_categories')) {
 			if ($this->pdh->get('article_categories', 'childs', array($intCategoryID))){
 				foreach($this->pdh->get('article_categories', 'childs', array($intCategoryID)) as $intChildID){
 					$this->delete_recursiv($intChildID);
+					$arrOldData = $this->pdh->get('article_categories', 'data', array($intChildID));
 					$this->db->query("DELETE FROM __articles WHERE category='".$this->db->escape($intChildID)."'");
+					$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
+					$this->log_insert("action_articlecategory_deleted", $log_action, $intChildID, $arrOldData['title']);
 				}
 			}
+			$arrOldData = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			$this->db->query("DELETE FROM __article_categories WHERE id = '".$this->db->escape($intCategoryID)."'");
-			
+			$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
+			$this->log_insert("action_articlecategory_deleted", $log_action, $intCategoryID, $arrOldData["name"]);
 			
 			return true;
 		}
@@ -67,7 +96,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			$strDescription = $this->embedly->parseString($strDescription);
 			
-			$blnResult = $this->db->query("INSERT INTO __article_categories :params", array(
+			$arrQuery  = array(
 				'name' 			=> $strName,
 				'alias' 		=> $strAlias,
 				'portal_layout' => $intPortalLayout,
@@ -88,7 +117,9 @@ if(!class_exists('pdh_w_article_categories')) {
 				'sortation_type' => $intSortationType,
 				'featured_ontop' => $intFeaturedOntop,
 				'hide_on_rss'	=> $intHideOnRSS,
-			));
+			);
+			
+			$blnResult = $this->db->query("INSERT INTO __article_categories :params", $arrQuery);
 			
 			$id = $this->db->insert_id();
 			
@@ -97,6 +128,9 @@ if(!class_exists('pdh_w_article_categories')) {
 				$this->db->query("UPDATE __article_categories SET :params WHERE id=?", array(
 					'aggregation' => serialize($arrAggregation),
 				), $id);
+				
+				$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
+				$this->log_insert("action_articlecategory_added", $log_action, $id, $arrQuery["name"], 1, 'article');
 				
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
@@ -119,7 +153,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			$strDescription = $this->embedly->parseString($strDescription);
 			
-			$blnResult = $this->db->query("UPDATE __article_categories SET :params WHERE id=?", array(
+			$arrQuery = array(
 				'name' 			=> $strName,
 				'alias' 		=> $strAlias,
 				'portal_layout' => $intPortalLayout,
@@ -139,10 +173,18 @@ if(!class_exists('pdh_w_article_categories')) {
 				'sortation_type' => $intSortationType,
 				'featured_ontop' => $intFeaturedOntop,
 				'hide_on_rss'	=> $intHideOnRSS,
-			), $id);
+			);
+			
+			$arrOldData = $this->pdh->get('article_categories', 'data', array($id));
+			
+			$blnResult = $this->db->query("UPDATE __article_categories SET :params WHERE id=?", $arrQuery, $id);
 						
 			if ($blnResult){
 				$this->pdh->enqueue_hook('article_categories_update');
+				
+				$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
+				$this->log_insert("action_articlecategory_updated", $log_action, $id, $arrOldData["name"], 1, 'article');
+				
 				return $id;
 			}
 			
@@ -150,12 +192,22 @@ if(!class_exists('pdh_w_article_categories')) {
 		}
 		
 		public function update_sortandpublished($id, $intSortID, $intPublished){
+			$arrOldData = array(
+				'published' => $this->pdh->get('article_categories', 'published', array($id)),
+			);
+			
 			$blnResult = $this->db->query("UPDATE __article_categories SET :params WHERE id=?", array(
 				'sort_id'		=> $intSortID,
 				'published'		=> $intPublished,
 			), $id);
 			
 			if ($blnResult){
+				$arrNewData = array(
+					'published' => $intPublished,	
+				);
+				$log_action = $this->logs->diff($arrOldData, $arrNewData, $this->arrLogLang, array());
+				if ($log_action) $this->log_insert("action_articlecategory_updated", $log_action, $id, $this->pdh->get('article_categories', 'name', array($id)), 1, 'article');
+				
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}

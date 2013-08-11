@@ -47,9 +47,10 @@ if(!class_exists('pdh_w_logs')) {
 		}
 
 		public function truncate_log(){
+			$count = $this->db->query_first("SELECT count(*) FROM __logs");
 			$this->db->query("TRUNCATE TABLE __logs");
 			$this->pdh->enqueue_hook('logs_update');
-			return $this->db->affected_rows();
+			return intval($count);
 		}
 
 		public function delete_log($log_id){
@@ -58,7 +59,7 @@ if(!class_exists('pdh_w_logs')) {
 			return $this->db->affected_rows();
 		}
 
-		public function add_log($tag, $value, $admin_action=true, $plugin='', $result=1, $userid = false) {
+		public function add_log($tag, $value, $recordid=0, $record='',$admin_action=true, $plugin='', $result=1, $userid = false) {
 			$userid = ($userid) ? $userid : $this->user->id;
 			
 			$this->db->query('INSERT INTO __logs :params', array(
@@ -72,6 +73,8 @@ if(!class_exists('pdh_w_logs')) {
 				'username'			=> $this->pdh->get('user', 'name', array($userid)),
 				'log_plugin'		=> $plugin,
 				'log_flag'			=> ($admin_action) ? 1 : 0,
+				'log_record'		=> $record,
+				'log_record_id'		=> $recordid,
 			));
 			$this->pdh->enqueue_hook('logs_update', array($this->db->insert_id()));
 		}

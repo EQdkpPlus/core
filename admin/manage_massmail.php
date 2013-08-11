@@ -226,7 +226,7 @@ class Manage_Massmail extends page_generic {
 					'{L_email_receiver}'			=> $strRecipientNames,
 				);
 
-				$this->logs->add('action_massmail_sent', $log_action);
+				$this->logs->add('action_massmail_sent', $log_action, '', $this->in->get('subject', ''));
 
 
 			} else {

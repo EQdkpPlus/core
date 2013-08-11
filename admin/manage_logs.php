@@ -41,11 +41,10 @@ class Manage_Logs extends page_generic {
 	}
 	
 	public function delete(){
-		echo "delete";
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$ret = $this->pdh->put('logs', 'delete_ids', array($this->in->getArray('selected_ids','int')));
 			$this->pdh->process_hook_queue();
-			$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => count($this->in->getArray('selected_ids', 'int'))));
+			$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => count($this->in->getArray('selected_ids', 'int'))), '');
 			$this->display();
 		}	
 	}
@@ -53,7 +52,7 @@ class Manage_Logs extends page_generic {
 	public function reset_logs(){
 		$ret = $this->pdh->put('logs', 'truncate_log', array());
 		$this->pdh->process_hook_queue();
-		$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => $ret));
+		$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => $ret), '');
 		$this->display();
 	}
 
@@ -66,7 +65,7 @@ class Manage_Logs extends page_generic {
 	public function delete_log_days(){
 		$ret = $this->pdh->put('logs', 'clean_log', array($this->in->get('dellogdays')));
 		$this->pdh->process_hook_queue();
-		$this->logs->add( 'action_old_logs_deleted', array('{L_CLEAR_LAST_LOGS}' => $this->in->get('dellogdays').' {L_DAYS}', '{L_NUMBER_OF_LOGS}' => $ret));
+		$this->logs->add( 'action_old_logs_deleted', array('{L_CLEAR_LAST_LOGS}' => $this->in->get('dellogdays').' {L_DAYS}', '{L_NUMBER_OF_LOGS}' => $ret), '');
 		$this->display();
 	}
 
@@ -116,6 +115,8 @@ class Manage_Logs extends page_generic {
 			'LOG_IP_ADDRESS'	=> $this->pdh->geth('logs', 'ipaddress', array($this->url_id)),
 			'LOG_SESSION_ID'	=> $this->pdh->geth('logs', 'sid', array($this->url_id)),
 			'LOG_ACTION'		=> $this->pdh->geth('logs', 'tag', array($this->url_id)),
+			'LOG_RECORD'		=> $this->pdh->geth('logs', 'record', array($this->url_id)),
+			'LOG_RECORD_ID'		=> $this->pdh->geth('logs', 'recordid', array($this->url_id)),
 			'S_COMPARE_VIEW'	=> $blnCompare,
 			'S_MORE_INFOS'		=> count($log_value),
 		));
@@ -174,16 +175,18 @@ class Manage_Logs extends page_generic {
 			$tag	= ($this->in->get('filter_type') != "") ? $this->in->get('filter_type') : false;
 			$user_id= ($this->in->exists('filter_user') && $this->in->get('filter_user', 0) >= 0) ? $this->in->get('filter_user', 0) : false;
 			$value	= ($this->in->get('filter_value') != "") ? $this->in->get('filter_value') : false;
+			$recordid= ($this->in->get('filter_recordid') != "") ? $this->in->get('filter_recordid') : false;
+			$record	= ($this->in->get('filter_record') != "") ? $this->in->get('filter_record') : false;
 			$date_from = ($this->in->get('filter_date_from') != "") ? $this->time->fromformat($this->in->get('filter_date_from','1.1.1970').' 00:00', 1) : false;
 			$date_to = ($this->in->get('filter_date_to') != "") ? $this->time->fromformat($this->in->get('filter_date_to','1.1.1970').' 00:00', 1) : false;
 			if (!$date_from) {$date_from = ($this->in->get('f_date_from', 0)) ? $this->in->get('f_date_from', 0) : false;}
 			if (!$date_to) {$date_to = ($this->in->get('f_date_to', 0)) ? $this->in->get('f_date_to', 0) : false;}
 
 			//Do we have filters?
-			if ($plugin !== false || $result !== false || $ip !== false || $sid !== false || $tag !== false || $user_id !== false || $value !== false || $date_from !== false || $date_to !== false){
+			if ($plugin !== false || $result !== false || $ip !== false || $sid !== false || $tag !== false || $user_id !== false || $value !== false || $date_from !== false || $date_to !== false || $record !== false || $recordid !== false){
 				$blnFilter = true;
 				//Get filtered ID list
-				$view_list = $this->pdh->get('logs', 'filtered_id_list', array($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to));
+				$view_list = $this->pdh->get('logs', 'filtered_id_list', array($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to, $recordid, $record));
 				
 				//Build GET-Params for Sorting and Pagination
 				$strFilterSuffix .= "&amp;filter=1";
@@ -196,7 +199,8 @@ class Manage_Logs extends page_generic {
 				if ($value !== false) $strFilterSuffix .= "&amp;filter_value=".$value;
 				if ($date_from !== false) $strFilterSuffix .= "&amp;f_date_from=".$date_from;
 				if ($date_to !== false) $strFilterSuffix .= "&amp;f_date_to=".$date_to;
-				
+				if ($recordid !== false) $strFilterSuffix .= "&amp;filter_recordid=".$recordid;
+				if ($record !== false) $strFilterSuffix .= "&amp;filter_record=".$record;
 
 				$_date_from = ($date_from !== false) ? $this->time->user_date($date_from , false, false, false, function_exists('date_create_from_format')) : '';
 				$_date_to	= ($date_to !== false) ? $this->time->user_date($date_to , false, false, false, function_exists('date_create_from_format')) : '';
@@ -209,6 +213,8 @@ class Manage_Logs extends page_generic {
 					'FILTER_IP'		=> $ip,
 					'FILTER_SID'	=> $sid,
 					'FILTER_VALUE'	=> $value,
+					'FILTER_RECORD' => $record,
+					'FILTER_RECORDID' => $recordid,
 					'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', $_date_from),
 					'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', $_date_to),
 				));

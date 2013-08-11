@@ -44,8 +44,8 @@ if(!class_exists('pdh_w_generic')){
 			return $group_key;
 		}
 
-		public function log_insert($tag, $values, $admin_action=true, $plugin=''){
-			return $this->logs->add($tag, $values, $admin_action, $plugin, 1, false, 0);
+		public function log_insert($tag, $values, $record_id, $record='', $admin_action=true, $plugin=''){
+			return $this->logs->add($tag, $values, $record_id, $record, $admin_action, $plugin, 1, false, 0);
 		}
 	}//end class
 }//end if

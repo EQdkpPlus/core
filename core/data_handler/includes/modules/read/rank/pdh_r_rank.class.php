@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_rank" ) ) {
 	class pdh_r_rank extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db',	'game');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -81,6 +81,10 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 
 		public function get_name($rank_id){
 			return $this->ranks[$rank_id]['name'];
+		}
+
+		public function get_html_name($rank_id){
+			return $this->game->decorate('ranks', array($rank_id)).$this->ranks[$rank_id]['name'];
 		}
 
 		public function get_rank_image($rank_id){

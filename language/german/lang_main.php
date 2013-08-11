@@ -785,6 +785,8 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "calendar_log_charadd_name" => "Name des Charakters",
 "calendar_log_charadd_names" => "Namen der Charaktere",
 "calendar_log_charadd_status" => "Anmeldestatus",
+"calendar_log_eventdeleted" => "Kalendereintrag gelöscht",
+"calendar_log_deletedclones" => "Klone gelöscht",
 "auth_accounts" => "Verknüpfte Konten",
 "auth_accounts_help" => "Verknüpfte dein Benutzerkonto mit dem Konto bei oben genannten Anbieter, um dich damit anmelden zu können",
 "auth_connect_account" => "Account verknüpfen",

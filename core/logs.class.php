@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 	class logs extends gen_class {
-		public static $shortcuts = array('pm', 'pdh', 'user', 'time');
+		public static $shortcuts = array('pm', 'pdh', 'user', 'time', 'logs');
 
 		public $pluginname	= 'core';
 		public $plugins		= array();
@@ -41,9 +41,9 @@ if ( !defined('EQDKP_INC') ){
 			$this->pluginname 	= $name;
 		}
 
-		public function add($tag, $value, $admin_action=true, $plugin='', $result=1, $userid = false, $process_hooks=1){
+		public function add($tag, $value, $record_id = '', $record = '',  $admin_action=true, $plugin='', $result=1, $userid = false, $process_hooks=1){
 			$plugin = ($plugin != '') ? $plugin : $this->pluginname;
-			$this->pdh->put('logs', 'add_log', array($tag, $value, $admin_action, $plugin, $result, $userid));
+			$this->pdh->put('logs', 'add_log', array($tag, $value, $record_id, $record, $admin_action, $plugin, $result, $userid));
 			if($process_hooks) $this->pdh->process_hook_queue();
 		}
 
@@ -70,12 +70,17 @@ if ( !defined('EQDKP_INC') ){
 		 * $arrLang = array("1", "2", "3")
 		 * $arrFlags = array(0,0,1)
 		 */
-		public function diff($intID, $arrOld, $arrNew, $arrLang, $arrFlags=array()){
-			if ($intID) $arrChanged["{L_ID}"] = array('old' => $intID, 'new' => $intID, 'flag' => 0);
-			if ($arrOld){
+		public function diff($arrOld, $arrNew, $arrLang, $arrFlags=array(), $blnOnlyNewKeys=false){
+			if ($arrOld && !$blnOnlyNewKeys){
 				foreach($arrOld as $key => $val){
 					if ($arrNew[$key] != $val){
 						$arrChanged[$arrLang[$key]] = array('old' => $val, 'new' => $arrNew[$key], 'flag' => ((isset($arrFlags[$key])) ? $arrFlags[$key] : 0)); 
+					}
+				}
+			} elseif($arrOld && $blnOnlyNewKeys){
+				foreach($arrNew as $key => $val){
+					if ($arrOld[$key] != $val){
+						$arrChanged[$arrLang[$key]] = array('old' => $arrOld[$key], 'new' => $val, 'flag' => ((isset($arrFlags[$key])) ? $arrFlags[$key] : 0));
 					}
 				}
 			} else {

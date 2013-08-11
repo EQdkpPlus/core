@@ -28,6 +28,8 @@ $module_lang = array(
 	'ipaddress'	=> 'IP Adresse',
 	'result'	=> 'Ergebnis',
 	'viewicon'	=> '',
+	'record'	=> 'Datensatz',
+	'recordid'	=> 'Datensatz-ID',
 );
 
 $preset_lang = array(
@@ -37,6 +39,8 @@ $preset_lang = array(
 	'loguser'		=> 'Log-Benutzer',
 	'logipaddress'	=> 'Log-IP-Adresse',
 	'logresult'		=> 'Log-Ergebnis',
-	'viewlog'		=> 'Log-Ansehen Button'
+	'viewlog'		=> 'Log-Ansehen Button',
+	'logrecord'		=> 'Log-Datensatz',
+	'logrecordid'	=> 'Log-Datensatz-ID',
 );
 ?>

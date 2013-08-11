@@ -28,6 +28,8 @@ $module_lang = array(
 	'ipaddress'	=> 'IP Adress',
 	'result'	=> 'Result',
 	'viewicon'	=> '',
+	'record'	=> 'Record',
+	'recordid'	=> 'Record-ID',
 );
 
 $preset_lang = array(
@@ -38,5 +40,7 @@ $preset_lang = array(
 	'logipaddress'	=> 'Log-IP-Adress',
 	'logresult'		=> 'Log-Result',
 	'viewlog'		=> 'Log-View Button'
+	'logrecord'		=> 'Log-Record',
+	'logrecordid'	=> 'Log-Record-ID',
 );
 ?>
