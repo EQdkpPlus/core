@@ -397,7 +397,7 @@ class viewcalraid extends page_generic {
 
 						// if one member of this char is in the raud, remove the members and go to next user
 						if($char_status != '4'){
-							unset($tmp_chars);
+							$tmp_chars = array();
 							break;
 						}
 					}
