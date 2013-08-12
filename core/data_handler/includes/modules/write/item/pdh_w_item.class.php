@@ -30,6 +30,16 @@ if ( !class_exists( "pdh_w_item" ) ) {
 		public function __construct() {
 			parent::__construct();
 		}
+		
+		private $arrLogLang = array(
+				'item_name'			=> '{L_NAME}',
+				'member_id'			=> '{L_BUYERS}',
+				'raid_id'			=> '{L_RAID_ID}',
+				'item_value'		=> '{L_VALUE}',
+				'item_date'			=> '{L_DATE}',
+				'game_itemid'		=> '{L_ITEM_ID}',
+				'itempool'			=> '{L_ITEMPOOL}',
+		);
 
 		public function add_item($item_name, $item_buyers, $raid_id, $game_item_id, $item_value, $itempool_id, $time=false) {
 			$time		= ($time) ? $time : time();
@@ -57,15 +67,17 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			if($blnResult) {
 				//insert log
 				$item_id = $this->db->insert_id();
-				$log_action = array(
-					'{L_ID}'		=> $item_id,
-					'{L_NAME}'		=> $item_name,
-					'{L_BUYERS}'	=> implode(', ', $this->pdh->aget('member', 'name', '0', array($item_buyers))),
-					'{L_RAID_ID}'	=> $raid_id,
-					'{L_VALUE}'		=> $item_value,
-					'{L_ITEMPOOL}'	=> $this->pdh->get('itempool', 'name', $itempool_id),
-					'{L_ADDED_BY}'	=> $this->admin_user
+				$arrNew = array(
+					'item_name'			=> $item_name,
+					'member_id'			=> implode(', ', $this->pdh->aget('member', 'name', '0', array($item_buyers))),
+					'raid_id'			=> $raid_id,
+					'item_value'		=> $item_value,
+					'item_date'			=> '{D_'.$time.'}',
+					'game_itemid'		=> $game_item_id,
+					'itempool'			=> $this->pdh->get('itempool', 'name', $itempool_id),
 				);
+				
+				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_added', $log_action, $item_id, $item_name);
 				$this->pdh->enqueue_hook('item_update', $item_id);
 				return $item_id;
@@ -91,7 +103,9 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$old['name'] = $this->pdh->get('item', 'name', array($item_id));
 			$old['raid_id'] = $this->pdh->get('item', 'raid_id', array($item_id));
 			$old['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($item_id));
-	
+			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
+			$old['game_itemid'] = $this->pdh->get('item', 'game_itemid', array($item_id));
+			
 			#$this->db->query("START TRANSACTION;");
 			$retu = array(true);
 			$updated_mems = array();
@@ -171,20 +185,26 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				$new_name_string = get_coloured_names($updated_mems, $added_mems, $items2del);
 				$itempool = $this->pdh->get('itempool', 'name', $itempool_id);
 				//insert log
-				$log_action = array(
-					'{L_ID}'				=> $item_id,
-					'{L_NAME_BEFORE}'		=> $old['name'],
-					'{L_BUYERS_BEFORE}'		=> implode(', ', $old_names),
-					'{L_RAID_ID_BEFORE}'	=> $old['raid_id'],
-					'{L_VALUE_BEFORE}'		=> $old['value'],
-					'{L_ITEMPOOL_BEFORE}'	=> $this->pdh->get('itempool', 'name', $old['itempool_id']),
-					'{L_NAME_AFTER}'		=> ($old['name'] != $item_name) ? "<span class=\"negative\">".$item_name."</span>" : $item_name,
-					'{L_BUYERS_AFTER}'		=> $new_name_string,
-					'{L_RAID_ID_AFTER}'		=> ($old['raid_id'] != $raid_id) ? "<span class=\"negative\">".$raid_id."</span>" : $raid_id,
-					'{L_VALUE_AFTER}'		=> ($old['value'] != $item_value) ? "<span class=\"negative\">".$item_value."</span>" : $item_value,
-					'{L_ITEMPOOL_AFTER}'	=> ($old['itempool_id'] != $itempool_id) ? "<span class=\"negative\">".$itempool."</span>" : $itempool,
-					'{L_UPDATED_BY}'		=> $this->admin_user
+				$arrOld = array(
+						'item_name'			=> $old['name'],
+						'member_id'			=> implode(', ', $old_names),
+						'raid_id'			=> $old['raid_id'],
+						'item_value'		=> $old['value'],
+						'game_itemid'		=> $old['game_itemid'],
+						'itempool'			=> $old['itempool_id'],
+						'item_date'			=> '{D_'.$old['date'].'}',
 				);
+				$arrNew = array(
+						'item_name'			=> $item_name,
+						'member_id'			=> $new_name_string,
+						'raid_id'			=> $raid_id,
+						'item_value'		=> $item_value,
+						'item_date'			=> '{D_'.$time.'}',
+						'game_itemid'		=> $game_item_id,
+						'itempool'			=> $itempool_id
+				);
+				
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
 				#$this->db->query("COMMIT;");
 				$this->pdh->enqueue_hook('item_update', $hook_id);
@@ -201,15 +221,18 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$old['value'] = $this->pdh->get('item', 'value', array($item_id));
 			$old['raid_id'] = $this->pdh->get('item', 'raid_id', array($item_id));
 			$old['itempool'] = $this->pdh->get('itempool', 'name', array($this->pdh->get('item', 'itempool_id', array($item_id))));
+			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
+			
 			if($this->db->query("DELETE FROM __items WHERE item_id = ?;", false, $item_id)) {
 				//insert log
 				$log_action = array(
-					'{L_ID}'		=> $item_id,
 					'{L_NAME}'		=> $old['name'],
 					'{L_BUYERS}'	=> $old['buyer'],
 					'{L_RAID_ID}'	=> $old['raid_id'],
 					'{L_ITEMPOOL}'	=> $old['itempool'],
+					'{L_DATE}'		=> '{D_'.$old['date'].'}',
 					'{L_VALUE}'		=> $old['value']);
+				
 				$this->log_insert('action_item_deleted', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $item_id);
 				return true;
@@ -225,7 +248,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				'{L_ID}'		=> implode(', ', $items),
 				'{L_RAID_ID}'	=> $raid_id
 			);
-			$this->log_insert('action_itemsofraid_deleted', $log_action, $raid_id);
+			$this->log_insert('action_itemsofraid_deleted', $log_action, $raid_id, $this->pdh->get('raid', 'event_name', array($raid_id)));
 			$this->pdh->enqueue_hook('item_update', $items);
 			return true;
 		}

@@ -16,9 +16,13 @@
 			<th width="10px"></th>
 			<th width="20px;"><input type="checkbox" name="" id="selall_ranks" /></th>
 			<th>{L_name}</th>
+			<th>{L_default}</th>
 			<th>{L_hide}</th>
 			<th>{L_list_prefix}</th>
 			<th>{L_list_suffix}</th>
+			<!-- IF S_RANK_IMAGES -->
+			<th>{L_rank_icon}</th>
+			<!-- ENDIF -->
 		</tr>
 		</thead>
 		<tbody>
@@ -27,18 +31,26 @@
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
 			<td><input type="checkbox" name="rank_ids[]" value="{ranks.ID}" /><input type="hidden" name="ranks[{ranks.KEY}][id]" value="{ranks.ID}" /></td>
 			<td><input type="text" name="ranks[{ranks.KEY}][name]" size="30" maxlength="50" value="{ranks.NAME}" class="maininput" /></td>
+			<td><input type="radio" name="ranks_default" value="{ranks.KEY}" {ranks.DEFAULT} /></td>
 			<td><input type="checkbox" name="ranks[{ranks.KEY}][hide]" value="1" {ranks.HIDE} /></td>
 			<td><input type="text" name="ranks[{ranks.KEY}][prefix]" size="35" maxlength="75" value="{ranks.PREFIX}" class="maininput" /></td>
 			<td><input type="text" name="ranks[{ranks.KEY}][suffix]" size="35" maxlength="75" value="{ranks.SUFFIX}" class="maininput" /></td>
+			<!-- IF S_RANK_IMAGES -->
+			<td>{ranks.RANK_DD}</td>
+			<!-- ENDIF -->
 		</tr>
 		<!-- END ranks -->
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
 			<td><input type="hidden" name="ranks[{KEY}][id]" value="{ID}" /></td>
 			<td><input type="text" name="ranks[{KEY}][name]" size="30" maxlength="50" value="" class="maininput" /></td>
+			<td><input type="radio" name="ranks_default" value="{KEY}" /></td>
 			<td><input type="checkbox" name="ranks[{KEY}][hide]" value="1" /></td>
 			<td><input type="text" name="ranks[{KEY}][prefix]" size="35" maxlength="75" value="" class="maininput" /></td>
 			<td><input type="text" name="ranks[{KEY}][suffix]" size="35" maxlength="75" value="" class="maininput" /></td>
+			<!-- IF S_RANK_IMAGES -->
+			<td>{RANK_DD}</td>
+			<!-- ENDIF -->
 		</tr>
 		</tbody>
 	</table>

@@ -224,6 +224,8 @@ CREATE TABLE `__member_ranks` (
 	`rank_prefix` varchar(75) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`rank_suffix` varchar(75) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`rank_sortid` smallint(5) unsigned NOT NULL DEFAULT 0,
+	`rank_default`  tinyint(1) NOT NULL DEFAULT 0,
+	`rank_icon` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	UNIQUE KEY `rank_id` (`rank_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

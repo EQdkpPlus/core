@@ -40,6 +40,7 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 				$special_users = unserialize(stripslashes($this->config->get('special_user')));
 				unset($special_users[$muser['user_id']]);
 				$this->config->set('special_user', serialize($special_users));
+				$this->logs->add('action_maintenanceuser_deleted', array(), $muser['user_id'], $this->user->lang('maintenanceuser_user'));
 			}
 			$this->config->set('maintenance_user', '');
 		}

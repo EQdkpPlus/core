@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')){
 if(!class_exists('pdh_w_calendar_raids_attendees')){
 	class pdh_w_calendar_raids_attendees extends pdh_w_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'time', 'user'	);
+		$shortcuts = array('pdh', 'db', 'time', 'user', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -36,11 +36,23 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 		}
 
-		public function update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0){
+		public function update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0){		
 			$memberrole = ($memberrole>0) ? $memberrole : 0;
 			if($signed_memberid > 0){
 				// fetch the old note
 				$oldnote	= $this->pdh->get('calendar_raids_attendees', 'note', array($eventid, $signed_memberid));
+				$oldstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($eventid, $signed_memberid));
+				$arrOld = array(
+					'note'		=> $oldnote,
+					'member'	=> $this->pdh->get('member', 'name', array($signed_memberid)),
+					'status'	=> '{LA_raidevent_raid_status['.$oldstatus.']}',
+				);
+				$arrNew = array(
+					'note'	=> (trim($note) != '' && $oldnote != $note) ? $note : $oldnote,
+					'member'=> $this->pdh->get('member', 'name', array($memberid)),
+					'status'=> '{LA_raidevent_raid_status['.$signupstatus.']}',
+				);
+				
 				$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE member_id='".$this->db->escape($signed_memberid)."' AND calendar_events_id='".$this->db->escape($eventid)."'", array(
 					'member_id'				=> $memberid,
 					'note'					=> (trim($note) != '' && $oldnote != $note) ? $note : $oldnote,
@@ -63,14 +75,24 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'signup_status'			=> $signupstatus,
 					'signedbyadmin'			=> $signedbyadmin
 				));
+				$arrNew = array(
+					'note'	=> $note,
+					'member'=> $this->pdh->get('member', 'name', array($memberid)),
+					'status'=> '{LA_raidevent_raid_status['.$signupstatus.']}',
+				);
+				
+				$arrOld = false;
 			}
-			// add log entry
-			$log_action = array(
-				'{L_DATE}'							=> '{D_'.$this->time->time.'}',
-				'{L_NOTE}'							=> (($note) ? $note : $this->pdh->get('calendar_raids_attendees', 'note', array($signed_memberid))),
-				'{L_calendar_log_charadd_name}'		=> $this->pdh->get('member', 'name', array($memberid)),
-				'{L_calendar_log_charadd_status}'	=> '{LA_raidevent_raid_status['.$signupstatus.']}',
+			
+			$arrLang = array(
+				'note'	=> '{L_NOTE}',
+				'member'=> '{L_MEMBER}',
+				'status'=> '{L_calendar_log_charadd_status}',
 			);
+			
+			// add log entry
+			$log_action = $this->logs->diff($arrOld, $arrNew, $arrLang);
+			if ($arrOld['member'] == $arrNew['member']) $log_action['{L_MEMBER}'] = $this->pdh->get('member', 'name', array($memberid));
 			
 			$this->log_insert('calendar_log_charchanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
@@ -82,11 +104,10 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				array('signup_status'	=> $status), $eventid);
 				// add log entry
 				$log_action = array(
-					'{L_ID}'							=> $eventid,
 					'{L_calendar_log_charadd_names}'	=> implode(', ', $this->pdh->aget('member', 'name', 0, array($memberids))),
-					'{L_calendar_log_charadd_status}'	=> $status,
+					'{L_calendar_log_charadd_status}'	=> '{LA_raidevent_raid_status['.$status.']}',
 				);
-				$this->log_insert('calendar_log_statuschanged', $log_action, $eventid, '', true, 'calendar');
+				$this->log_insert('calendar_log_statuschanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 				$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 			}
 		}
@@ -110,29 +131,69 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				'member_id'		=> (int) $new_memid,
 				'member_role'	=> (int) $role
 			), $eventid);
+			
+			$arrOld = array(
+				'member' => $this->pdh->get('member', 'name', array($old_memid)),	
+			);
+			$arrNew = array(
+				'member' => $this->pdh->get('member', 'name', array($new_memid)),
+				'role'	 => $role,
+			);
+			$arrLang = array(
+				'member' => "{L_member}",
+				'role'	=> "{L_role}",	
+			);
+			
+			//Logging
+			$log_action = $this->logs->diff($arrOld, $arrNew, $arrLang);
+			$this->log_insert('calendar_log_twinkchanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
+			
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
 		
-		public function update_group($eventid, $memberid, $tempgroup){;
+		public function update_group($eventid, $memberid, $tempgroup){
+			$old_raidgroup = $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($eventid, $memberid));
+			
 			$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE member_id='".$this->db->escape($memberid)."' AND calendar_events_id=?", array(
 				'raidgroup'		=> $tempgroup
 			), $eventid);
+			
+			$log_action = $this->logs->diff(array($old_raidgroup), array($tempgroup), array("{L_CALENDAR_RAIDGROUP}"));
+			if($log_action) {
+				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
+				$this->log_insert('calendar_log_updatedgroup', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
+			}
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
 
-		public function update_note($eventid, $memberid, $note){;
+		public function update_note($eventid, $memberid, $note){
+			$old_note = $this->pdh->get('calendar_raids_attendees', 'note', array($eventid, $memberid));
+			
 			$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE member_id='".$this->db->escape($memberid)."' AND calendar_events_id=?", array(
 				'note'		=> $note
 			), $eventid);
+			
+			$log_action = $this->logs->diff(array($old_note), array($note), array("{L_NOTE}"));
+			if($log_action) {
+				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
+				$this->log_insert('calendar_log_updatednote', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
+			}
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
 
-		public function confirm_all($eventid){;
+		public function confirm_all($eventid){
+			$arrMembers = $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, 1));
+			
 			$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE calendar_events_id=? AND signup_status=1", array(
 				'signup_status'		=> 0
 			), $eventid);
+			
 			// add log entry
-			$this->log_insert('calendar_log_confirmedall', array('{L_ID}' => $eventid), $eventid, '',true, 'calendar');
+			$log_action = array(
+				'{L_calendar_log_charadd_names}'	=> implode(', ', $this->pdh->aget('member', 'name', 0, array($arrMembers))),
+				'{L_calendar_log_charadd_status}'	=> '{LA_raidevent_raid_status[1]}',
+			);
+			if(count($arrMembers)) $this->log_insert('calendar_log_confirmedall', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)),true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
 		

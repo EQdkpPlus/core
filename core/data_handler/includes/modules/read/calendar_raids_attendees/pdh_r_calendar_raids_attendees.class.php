@@ -190,6 +190,10 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		public function get_status($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['signup_status'] : '4';
 		}
+		
+		public function get_raidgroup($eventid, $memberid){
+			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['raidgroup'] : 0;
+		}
 
 		public function get_in_db($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? true : false;

@@ -23,7 +23,7 @@ require_once($eqdkp_root_path . 'common.php');
 
 class EQDKPBackup extends page_generic{
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup', 'pdc');
+		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup', 'pdc', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -228,6 +228,9 @@ class EQDKPBackup extends page_generic{
 			$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $matches[1])),$this->user->lang('backup'),'green');
 			//Flush cache
 			$this->pdc->flush();
+			
+			//Insert Log
+			$this->logs->add('action_backup_restored', array(), $this->time->date("Y-m-d H:i", $matches[1]), $file_name);
 		}
 		if (strlen($backup_file)){
 			$this->pfh->Delete($backup_file);
@@ -333,6 +336,10 @@ class EQDKPBackup extends page_generic{
 
 					if ($this->in->get('action') == 'store' || $this->in->get('action') == 'both'){
 						if ($result){
+							$log_action = array(
+								'{L_TABLES}' => implode(', ', $in_tables),
+							);
+							$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), $result);
 							$this->core->message($this->user->lang('backup_store_success'),$this->user->lang('backup'),'green');
 						} else {
 							$this->core->message($this->user->lang('error'),$this->user->lang('backup'),'red');

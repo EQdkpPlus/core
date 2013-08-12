@@ -45,7 +45,7 @@ if(!class_exists('pageobject')){
 		public function __construct($pre_check=false, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			parent::__construct($pre_check, $handler, $pdh_call, $params, $cb_name, $url_id);
 			if (registry::isset_const('url_id')){
-				$this->set_url_id(registry::get_const('url_id'));
+				$this->set_url_id((($url_id != "") ? $url_id  : registry::get_const('url_id')), registry::get_const('url_id'));
 			}
 			
 			//Build Path

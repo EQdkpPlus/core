@@ -54,8 +54,10 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 				$this->ranks[$r_row['rank_id']]['prefix']	= $r_row['rank_prefix'];
 				$this->ranks[$r_row['rank_id']]['suffix']	= $r_row['rank_suffix'];
 				$this->ranks[$r_row['rank_id']]['name']		= $r_row['rank_name'];
-				$this->ranks[$r_row['rank_id']]['hide']		= $r_row['rank_hide'];
-				$this->ranks[$r_row['rank_id']]['sortid']	= $r_row['rank_sortid'];
+				$this->ranks[$r_row['rank_id']]['hide']		= (int)$r_row['rank_hide'];
+				$this->ranks[$r_row['rank_id']]['sortid']	= (int)$r_row['rank_sortid'];
+				$this->ranks[$r_row['rank_id']]['default']	= (int)$r_row['rank_default'];
+				$this->ranks[$r_row['rank_id']]['icon']		= $r_row['rank_icon'];
 			}
 			if (!isset($this->ranks[0])) $this->ranks[0] = array('rank_id' => 0,	'prefix' => '',	'suffix' => '',	'name' => '', 'hide' => 0, 'sortid' => 0);
 			$this->db->free_result($r_result);
@@ -88,8 +90,11 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		}
 
 		public function get_rank_image($rank_id){
-			$rankimage = (is_file("images/ranks/'.$rank_id.'.png")) ? "images/ranks/'.$this->ranks[$rank_id]['name'].'" : "images/roles/unknown.png";
-			return '<img src="'.$rankimage.'" alt="rank image" width="20"/>';
+			$strGameFolder = 'games/'.$this->game->get_game().'/ranks/';
+			$strIcon = $this->get_icon($rank_id);
+			
+			$rankimage = (strlen($strIcon) && is_file($this->root_path.$strGameFolder.$strIcon)) ? $this->server_path.$strGameFolder.$strIcon : "";
+			return ($rankimage != "") ? '<img src="'.$rankimage.'" alt="rank image" width="20"/>' : '';
 		}
 
 		public function get_prefix($rank_id){
@@ -108,7 +113,21 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 			return $this->ranks[$rank_id]['sortid'];
 		}
 		
+		public function get_icon($rank_id){
+			return $this->ranks[$rank_id]['icon'];
+		}
+		
+		public function get_default_value($rank_id){
+			return $this->ranks[$rank_id]['default'];
+		}
+		
 		public function get_default(){
+			if(is_array($this->ranks)){
+				foreach($this->ranks as $key => $val){
+					if ($val['default'] == 1) return $key;
+				}
+			}
+			
 			$arrIDs = $this->get_id_list();
 			return ((isset($arrIDs[0])) ? $arrIDs[0] : 0);
 		}

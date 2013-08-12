@@ -23,7 +23,7 @@ include_once($eqdkp_root_path.'common.php');
 
 class Manage_Ranks extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'game', 'html');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -44,7 +44,7 @@ class Manage_Ranks extends page_generic {
 			$id_list = $this->pdh->get('rank', 'id_list');
 			foreach($ranks as $rank) {
 				$func = (in_array($rank['id'], $id_list)) ? 'update_rank' : 'add_rank';
-				$retu[] = $this->pdh->put('rank', $func, array($rank['id'], $rank['name'], $rank['hide'], $rank['prefix'], $rank['suffix'], $rank['sortid']));
+				$retu[] = $this->pdh->put('rank', $func, array($rank['id'], $rank['name'], $rank['hide'], $rank['prefix'], $rank['suffix'], $rank['sortid'],$rank['default'],$rank['icon']));
 				$names[] = $rank['name'];
 			}
 			if(in_array(false, $retu)) {
@@ -85,7 +85,7 @@ class Manage_Ranks extends page_generic {
 		
 		$this->tpl->add_js("
 			$(\"#rank_table tbody\").sortable({
-				cancel: '.not-sortable, input',
+				cancel: '.not-sortable, input, select',
 				cursor: 'pointer',
 			});
 		", "docready");
@@ -94,9 +94,21 @@ class Manage_Ranks extends page_generic {
 
 		$key = 0;
 		$new_id = 1;
-
+		
+		$default_rank = $this->pdh->get('rank', 'default');
+		
+		$arrRankImagesDD = array('' => '');
+		$blnRankImages = $this->game->icon_exists('ranks');
+		if($blnRankImages){
+			$arrRankImages = sdir($this->root_path.'games/'.$this->game->get_game().'/ranks');
+			foreach($arrRankImages as $strRankImage){
+				$arrRankImagesDD[$strRankImage] = $strRankImage;
+			}
+		}
+		natcasesort($arrRankImagesDD);
 		
 		foreach($ranks as $id => $name) {
+			$rank_image = $this->pdh->get('rank', 'icon', array($id));
 			$this->tpl->assign_block_vars('ranks', array(
 				'KEY'	=> $key,
 				'ID'	=> $id,
@@ -104,6 +116,8 @@ class Manage_Ranks extends page_generic {
 				'HIDE'	=> ($this->pdh->get('rank', 'is_hidden', array($id))) ? 'checked="checked"' : '',
 				'PREFIX' => $this->pdh->get('rank', 'prefix', array($id)),
 				'SUFFIX' => $this->pdh->get('rank', 'suffix', array($id)),
+				'DEFAULT' => ($id == $default_rank) ? 'checked="checked"' : '',
+				'RANK_DD' => ($blnRankImages) ? $this->html->DropDown("ranks[".$key."][icon]", $arrRankImagesDD, $rank_image) : '',
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
@@ -114,6 +128,8 @@ class Manage_Ranks extends page_generic {
 			'SID'		=> $this->SID,
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
+			'S_RANK_IMAGES' => $blnRankImages,
+			'RANK_DD' 	=> ($blnRankImages) ? $this->html->DropDown("ranks[".$key."][icon]", $arrRankImagesDD, $rank_image) : '',
 		));
 
 		$this->core->set_vars(array(
@@ -128,6 +144,7 @@ class Manage_Ranks extends page_generic {
 		$selected = $this->in->getArray('rank_ids', 'int');
 		if($this->in->exists('ranks', 'string')) {
 			$sortid = 0;
+			$rank_default = $this->in->get('ranks_default', 0);
 			foreach($this->in->getArray('ranks', 'string') as $key => $rank) {			
 				if( isset($rank['id']) && ((intval($rank['id']) == 0) && ($rank['name'] == '') || ($rank['name'] != '')) ) {
 					$ranks[] = array(
@@ -138,6 +155,8 @@ class Manage_Ranks extends page_generic {
 						'prefix'	=> $this->in->get('ranks:'.$key.':prefix',''),
 						'suffix'	=> $this->in->get('ranks:'.$key.':suffix',''),
 						'sortid'	=> $sortid,
+						'default'	=> ($rank_default == $key),
+						'icon'		=> $this->in->get('ranks:'.$key.':icon',''),
 					);
 					$sortid = $sortid + 1;
 				}

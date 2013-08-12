@@ -248,6 +248,11 @@ $lang = array(
 "action_old_logs_deleted" => "Ältere Logs gelöscht",
 "action_logs_deleted" => "Logs geleert",
 "action_massmail_sent" => "Massen E-Mail versendet",
+"action_maintenanceuser_added" => "Wartungsbenutzer angelegt",
+"action_maintenanceuser_renewed" => "Wartungsbenutzer verlängert",
+"action_maintenanceuser_deleted" => "Wartungsbenutzer gelöscht",
+"action_backup_restored"	=> "Backup eingespielt",
+"action_backup_created"	=> "Backup erstellt",
 "adjustment_after" => "Korrektur danach",
 "adjustment_before" => "Korrektur vorher",
 "attendees_after" => "Teilnehmer nachher",
@@ -1561,6 +1566,8 @@ $lang = array(
 "action_articlecategory_deleted" => "Artikelkategorie gelöscht",
 "action_article_reset_comments" => "Kommentare gelöscht",
 "action_article_reset_votes" => "Bewertungen gelöscht",
+"default" => "Standard",
+"rank_icon" => "Rang-Bild",
  );
 
 ?>

@@ -99,7 +99,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			if($member_id > 0) {
 				if($this->db->query("UPDATE __members SET :params WHERE member_id = ?;", $querystr, $member_id)) {
 					$log_action = array(
-						'{L_ID}'				=> $member_id,
 						'{L_NAME_BEFORE}'		=> $old['name'],
 						'{L_LEVEL_BEFORE}'		=> $old['lvl'],
 						'{L_RACE_BEFORE}'		=> $this->game->get_name('races', $old['raceid']),

@@ -594,9 +594,9 @@ $system_def = array(
 				'table_sort_col'	=> 0,
 				'table_presets'		=> array(
 					array('name' => 'logdatetime',	'sort' => true, 'th_add' => 'width="150"', 'td_add' => 'nowrap="nowrap"'),
-					array('name' => 'logtype',		'sort' => true, 'th_add' => 'width="100%"', 'td_add' => 'style="height:22px;"'),
-					array('name' => 'logrecordid',	'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'logrecord',	'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'logtype',		'sort' => true, 'th_add' => 'width="50%"', 'td_add' => 'style="height:22px;"'),
+					array('name' => 'logrecordid',	'sort' => true, 'th_add' => 'width="20%"', 'td_add' => ''),
+					array('name' => 'logrecord',	'sort' => true, 'th_add' => 'width="30%"', 'td_add' => ''),
 					array('name' => 'logplugin',	'sort' => true, 'th_add' => 'width="100"', 'td_add' => ''),
 					array('name' => 'loguser',		'sort' => true, 'th_add' => 'width="100"', 'td_add' => ''),
 					array('name' => 'logipaddress',	'sort' => true, 'th_add' => 'width="70"', 'td_add' => ''),

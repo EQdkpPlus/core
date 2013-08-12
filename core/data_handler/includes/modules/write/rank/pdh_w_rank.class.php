@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_rank')) {
 			parent::__construct();
 		}
 
-		public function add_rank($id, $name, $hide=0, $prefix='', $suffix='', $sortid=0) {
+		public function add_rank($id, $name, $hide=0, $prefix='', $suffix='', $sortid=0, $default=0,$icon='') {
 			$arrSet = array(
 				'rank_id'	=> $id,
 				'rank_name' => $name,
@@ -39,6 +39,8 @@ if(!class_exists('pdh_w_rank')) {
 				'rank_prefix' => $prefix,
 				'rank_suffix' => $suffix,
 				'rank_sortid' => $sortid,
+				'rank_default' => ($default) ? 1 : 0,
+				'rank_icon'	=> $icon,
 			);
 			if(!$this->db->query("INSERT INTO __member_ranks :params", $arrSet)) {
 				return false;
@@ -47,12 +49,16 @@ if(!class_exists('pdh_w_rank')) {
 			return $id;
 		}
 
-		public function update_rank($id, $name='', $hide='', $prefix='', $suffix='', $sortid=0) {
+		public function update_rank($id, $name='', $hide='', $prefix='', $suffix='', $sortid=0,$default=0,$icon='') {
 			$old['name'] = $this->pdh->get('rank', 'name', array($id));
 			$old['hide'] = $this->pdh->get('rank', 'is_hidden', array($id));
 			$old['prefix'] = $this->pdh->get('rank', 'prefix', array($id));
 			$old['suffix'] = $this->pdh->get('rank', 'suffix', array($id));
 			$old['sortid'] = $this->pdh->get('rank', 'sortid', array($id));
+			$old['default'] = $this->pdh->get('rank', 'default_value', array($id));
+			$old['icon'] = $this->pdh->get('rank', 'icon', array($id));
+			
+			
 			$changes = false;
 			foreach($old as $varname => $value) {
 				if(${$varname} != $value) {
@@ -66,6 +72,8 @@ if(!class_exists('pdh_w_rank')) {
 					'rank_prefix' => $prefix,
 					'rank_suffix' => $suffix,
 					'rank_sortid' => $sortid,
+					'rank_default' => ($default) ? 1 : 0,
+					'rank_icon'	=> $icon,
 				);
 				if(!$this->db->query("UPDATE __member_ranks SET :params WHERE rank_id=?", $arrSet, $id)) {
 					return false;

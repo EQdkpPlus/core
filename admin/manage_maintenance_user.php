@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class maintenance_user extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'db', 'time', 'env', 'timekeeper'=>'timekeeper', 'email'=>'MyMailer', 'crypt'=>'encrypt');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'db', 'time', 'env', 'timekeeper'=>'timekeeper', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -45,14 +45,14 @@ class maintenance_user extends page_generic {
 		$encr_password = $this->user->encrypt_password($password, $salt).':'.$salt;
 		
 		$arrUser = array(
-			'username'	=> $this->user->lang('maintenanceuser_user'),
+			'username'		=> $this->user->lang('maintenanceuser_user'),
 			'user_password' => $encr_password,
 			'user_active'	=> 1,
 			'rules'			=> 1,
 			'user_email'	=> $this->crypt->encrypt('maintenance@local.com'),
 		);
 		
-		$user_id = $this->pdh->put('user', 'insert_user', array($arrUser));
+		$user_id = $this->pdh->put('user', 'insert_user', array($arrUser, false));
 		
 		$user_data = array(
 			'user_id'	=> $user_id,
@@ -66,6 +66,10 @@ class maintenance_user extends page_generic {
 		$special_users[$user_id] = $user_id;
 		$this->config->set('special_user', serialize($special_users));
 		$this->timekeeper->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $this->in->get('valid_until_days', 0), 'active' => true), true);
+		$log_action = array(
+			'{L_maintenanceuser_valid}'	=> "{D_".$valid_until."}",
+		);
+		$this->logs->add('action_maintenanceuser_added', $log_action, $user_id, $this->user->lang('maintenanceuser_user'));
 	}
 	
 	public function renew(){
@@ -77,6 +81,10 @@ class maintenance_user extends page_generic {
 			$this->config->set('maintenance_user', $this->crypt->encrypt(serialize($user_data)));
 			$this->timekeeper->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $days_to_end, 'active' => true), true);
 			$this->core->message($this->user->lang('maintenanceuser_renew_suc'), $this->user->lang('success'), 'green');
+			$log_action = array(
+					'{L_maintenanceuser_valid}'	=> "{D_".$user_data['valid_until']."}",
+			);
+			$this->logs->add('action_maintenanceuser_renewed', $log_action, $user_data['user_id'], $this->user->lang('maintenanceuser_user'));
 		}
 	}
 	
@@ -92,6 +100,7 @@ class maintenance_user extends page_generic {
 			$special_users = unserialize(stripslashes($this->config->get('special_user')));
 			unset($special_users[$muser['user_id']]);
 			$this->config->set('special_user', serialize($special_users));
+			$this->logs->add('action_maintenanceuser_deleted', array(), $muser['user_id'], $this->user->lang('maintenanceuser_user'));
 		}
 		
 		$this->timekeeper->del_cron('maintenanceuser');

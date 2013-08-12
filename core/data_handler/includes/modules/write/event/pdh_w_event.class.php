@@ -30,6 +30,12 @@ if(!class_exists('pdh_w_event')) {
 		public function __construct() {
 			parent::__construct();
 		}
+		
+		private $arrLogLang = array(
+			'event_name' 	=> "{L_NAME}",
+			'event_value'	=> "{L_VALUE}",
+			'event_icon'	=> "{L_ICON}",
+		);
 
 		public function add_event($name, $value, $icon) {
 			$arrSet = array(
@@ -41,11 +47,9 @@ if(!class_exists('pdh_w_event')) {
 			if($this->db->query("INSERT INTO __events :params", $arrSet)) {
 				$id = $this->db->insert_id();
 				$log_action = array(
-					'id'			=> $id,
 					'{L_NAME}'		=> $name,
 					'{L_VALUE}'		=> $value,
 					'{L_ICON}'		=> $icon,
-					'{L_ADDED_BY}'	=> $this->admin_user
 				);
 				$this->log_insert('action_event_added', $log_action, $id, $name);
 				$this->pdh->enqueue_hook('event_update', array($id));
@@ -67,17 +71,19 @@ if(!class_exists('pdh_w_event')) {
 			);
 			
 			if($this->db->query("UPDATE __events SET :params WHERE event_id =?", $arrSet, $id)) {
-				$log_action = array(
-					'id'				=> $id,
-					'{L_NAME_BEFORE}'	=> $old['name'],
-					'{L_VALUE_BEFORE}'	=> $old['value'],
-					'{L_ICON_BEFORE}'	=> $old['icon'],
-					'{L_NAME_AFTER}'	=> ($old['name'] != $name) ? '<span class=\"negative\">'.$name.'</span>' : $name,
-					'{L_VALUE_AFTER}'	=> ($old['value'] != $value) ? '<span class=\"negative\">'.$value.'</span>' : $value,
-					'{L_ICON_AFTER}'	=> ($old['icon'] != $icon) ? '<span class=\"negatvie\">'.$icon.'</span>' : $icon,
-					'{L_UPDATED_BY}'	=> $this->admin_user
+				$arrOld = array(
+					'event_name' 	=> $old['name'],
+					'event_value'	=> $old['value'],
+					'event_icon'	=> $old['icon'],
 				);
-				$this->log_insert('action_event_updated', $log_action, $id, $old['name']);
+				$arrNew = array(
+					'event_name' 	=> $name,
+					'event_value'	=> $value,
+					'event_icon'	=> $icon,
+				);
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+				if ($log_action) $this->log_insert('action_event_updated', $log_action, $id, $old['name']);
+								
 				$this->pdh->enqueue_hook('event_update', array($id));
 				return true;
 			}
@@ -92,7 +98,6 @@ if(!class_exists('pdh_w_event')) {
 			$this->db->query("START TRANSACTION");
 			if($this->db->query("DELETE FROM __events WHERE event_id = ?;", false, $id)) {
 				$log_action = array(
-					'id'			=> $id,
 					'{L_NAME}'		=> $old['name'],
 					'{L_VALUE}'		=> $old['value'],
 					'{L_ICON}'		=> $old['icon']
