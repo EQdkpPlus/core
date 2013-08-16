@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class ipb3_bridge extends bridge_generic {
 	
-	public $name = "IPB 3";
+	public static $name = "IPB 3";
 	
 	public $data = array(
 		'user'	=> array( //User

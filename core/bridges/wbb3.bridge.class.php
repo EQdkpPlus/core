@@ -27,7 +27,7 @@ class wbb3_bridge extends bridge_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 	
-	public $name = 'WBB 3';
+	public static $name = 'WBB 3';
 	
 	public $data = array(
 		//Data

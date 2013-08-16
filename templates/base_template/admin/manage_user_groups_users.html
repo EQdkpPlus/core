@@ -13,6 +13,21 @@
 		<h1 class="contentTitle">{L_manage_user_groups}: {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></h1>
 	</div>
 	
+	<fieldset class="settings">
+		<dl>
+			<dt><label>{L_name}</label></dt>
+			<dd><input type="text" name="name" size="40" maxlength="50" value="{GROUP_NAME}" class="maininput" style="width: 95%;" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}</label></dt>
+			<dd><input type="text" name="desc" size="40" maxlength="50" value="{GROUP_DESC}" class="maininput" style="width: 95%;" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_hidden}</label></dt>
+			<dd><input type="checkbox" name="hidden" value="1" {GROUP_HIDDEN} /></dd>
+		</dl>
+	</fieldset>
+	<br />
 	<div id="groups_tabs">
 		<ul>
 			<li><a href='#members'><span>{L_group_members}</span></a></li>
@@ -141,13 +156,11 @@
 				</div>
 				
 			</div>
-			<div class="contentFooter">
-				<button class="mainoption" type="submit" name="save_group_perms"><i class="icon-ok"></i>{L_save}</button>
-			</div>
 		</div>
 	</div>
 	<!-- ENDIF -->
 	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="save_group_perms"><i class="icon-ok"></i>{L_save}</button>
 		<button class="mainoption" type="button" name="back" onclick="window.location='manage_user_groups.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
 	</div>
 

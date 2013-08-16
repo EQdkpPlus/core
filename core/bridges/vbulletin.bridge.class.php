@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class vbulletin_bridge extends bridge_generic {
 	
-	public $name = 'vBulletin';
+	public static $name = 'vBulletin';
 	
 	public $data = array(
 		//Data

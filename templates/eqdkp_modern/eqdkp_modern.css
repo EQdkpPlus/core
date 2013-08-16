@@ -1538,6 +1538,10 @@ div[aria-describedby="dialog-login"]  .password-forgot{
 	list-style: square inside none;
 }
 
+.ui-tabs.ui-widget-content {
+	border-color: #ccc;
+}
+
 
 
 /* general: information boxes */

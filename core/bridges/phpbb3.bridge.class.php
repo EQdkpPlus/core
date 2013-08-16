@@ -26,7 +26,7 @@ class phpbb3_bridge extends bridge_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 	
-	public $name = "phpBB3";
+	public static $name = "phpBB3";
 	
 	public $data = array(
 		'user'	=> array( //User

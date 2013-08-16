@@ -31,6 +31,18 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		public function __construct(){
 			parent::__construct();
 		}
+		
+		private $arrLogLang = array(
+			'name'			=> "{L_NAME}",
+			'lvl'			=> "{L_LEVEL}",
+			'raceid'		=> "{L_RACE}",
+			'classid'		=> "{L_CLASS}",
+			'rankid'		=> "{L_RANK}",
+			'mainid'		=> "{L_MAINCHAR}",
+			'status'		=> "{L_STATUS}",
+			'notes'			=> "{L_NOTE}",
+			'picture'		=> "Avatar",
+		);
 
 		public function addorupdate_member($member_id=0, $data=array(), $takechar=false) {
 			if($member_id > 0){

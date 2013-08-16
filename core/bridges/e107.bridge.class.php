@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class e107_bridge extends bridge_generic {
 		
-	public $name = "e107";
+	public static $name = "e107";
 	
 	public $data = array(
 		//Data

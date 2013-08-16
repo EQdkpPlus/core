@@ -74,7 +74,7 @@
 			//]]>
 		</script>
 	</head>
-	<body id="top" <!-- IF not S_NORMAL_HEADER -->class="simple-header"<!-- ENDIF -->>
+	<body id="top" class="<!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF -->{BROWSER_CLASS}">
 		{STATIC_HTMLCODE}
 		<!-- IF S_NORMAL_HEADER -->
 		<header>

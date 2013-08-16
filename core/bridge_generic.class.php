@@ -39,7 +39,7 @@ class bridge_generic extends gen_class {
 		
 		//Initialisierung der DB-Connection
 		if ($this->config->get('cmsbridge_notsamedb') == '1'){	
-			$this->db = dbal::factory(array('dbtype' => 'mysql', 'die_gracefully' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+			$this->db = dbal::factory(array('dbtype' => 'mysqli', 'die_gracefully' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
 			if(!$this->db->open($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password'))))
 				$this->db = false;
 				//$this->deactivate_bridge();
@@ -426,8 +426,8 @@ class bridge_generic extends gen_class {
 					include_once($this->root_path . 'core/bridges/' . $file);
 					$name = substr($file, 0, strpos($file, '.'));
 					$classname = $name.'_bridge';
-					$class = registry::register($classname);
-					$bridges[$name] = (isset($class->name)) ? $class->name : $name;
+					$static_name = $classname::$name;
+					$bridges[$name] = (strlen($static_name)) ? $static_name : $name;
 					unset($class);
 				}
 			}

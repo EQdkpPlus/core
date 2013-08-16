@@ -156,8 +156,10 @@ class game extends gen_class {
 	 * @return html string
 	 */
 	private function decorate_ranks($rank_id,  $size=16, $member_id=null, $pathonly=false){		
-		if(is_file($this->root_path.'games/'.$this->game.'/ranks/'.$rank_id.'.png')){
-			$icon_path = $this->server_path.'games/'.$this->game.'/ranks/'.$rank_id.'.png';
+		$strRankIcon = $this->pdh->get('rank', 'icon', array($rank_id));
+		
+		if(strlen($strRankIcon) && is_file($this->root_path.'games/'.$this->game.'/ranks/'.$strRankIcon)){
+			$icon_path = $this->server_path.'games/'.$this->game.'/ranks/'.$strRankIcon;
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='rank ".$rank_id."' class=\"".$this->game."_rankicon\" />";
 		}
 	}

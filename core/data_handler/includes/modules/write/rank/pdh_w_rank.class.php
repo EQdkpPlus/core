@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_rank')) {
 			parent::__construct();
 		}
 
-		public function add_rank($id, $name, $hide=0, $prefix='', $suffix='', $sortid=0, $default=0,$icon='') {
+		public function add_rank($id, $name, $hide=0, $prefix='', $suffix='', $sortid=0, $default=0, $icon='') {
 			$arrSet = array(
 				'rank_id'	=> $id,
 				'rank_name' => $name,
@@ -80,6 +80,22 @@ if(!class_exists('pdh_w_rank')) {
 				}
 			}
 			$this->pdh->enqueue_hook('rank_update', array($id));
+			return true;
+		}
+		
+		public function set_standardAndSort($intRankID, $blnDefault=false, $intSortID){
+			$old['sortid'] = $this->pdh->get('rank', 'sortid', array($intSortID));
+			$old['default'] = $this->pdh->get('rank', 'default_value', array($intSortID));
+			if ($old['sortid'] != $intSortID || $old['default'] != $blnDefault){
+				$arrSet = array(
+					'rank_sortid'	=> $intSortID,
+					'rank_default'	=> ($blnDefault) ? 1 : 0,
+				);
+				if(!$this->db->query("UPDATE __member_ranks SET :params WHERE rank_id=?", $arrSet, $intRankID)) {
+					return false;
+				}
+				$this->pdh->enqueue_hook('rank_update', array($intRankID));
+			}
 			return true;
 		}
 

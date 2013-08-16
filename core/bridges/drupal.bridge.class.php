@@ -49,7 +49,7 @@ class drupal_bridge extends bridge_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 	
-	public $name = 'Drupal';
+	public static $name = 'Drupal';
 	
 	public $data = array(
 		//Data

@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class joomla_bridge extends bridge_generic {
 	
-	public $name = "Joomla";
+	public static $name = "Joomla";
 	
 	public $data = array(
 		//Data

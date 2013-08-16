@@ -54,13 +54,6 @@ class mmocms_settings extends page_generic {
 		// ---------------------------------------------------------
 		// Build the Dropdown Arrays
 		// ---------------------------------------------------------
-		$newsloot_limit = array(
-			'all'		=> 0,
-			'5'			=> 5,
-			'10'		=> 10,
-			'15'		=> 15,
-			'20'		=> 20
-		);
 
 		$a_startday = array(
 			'sunday'	=> $this->user->lang(array('time_daynames', 6)),
@@ -124,6 +117,19 @@ class mmocms_settings extends page_generic {
 			'event'		=> 'calendar_mode_event',
 			'raid'		=> 'calendar_mode_raid'
 		);
+		
+		$mobile_template_array = array("" => $this->user->lang('default_setting'));
+		foreach($this->pdh->get('styles', 'styles', array(0, false)) as $styleid=>$row){
+			$mobile_template_array[$styleid] = $row['style_name'];
+		}
+		
+		$mobile_portallayout_array = array("" => $this->user->lang('default_setting'));
+		$mobile_portallayout_array = array_merge($mobile_portallayout_array, $this->pdh->aget('portal_layouts', 'name', 0, array($this->pdh->get('portal_layouts', 'id_list'))));
+		
+		$mobile_pagelayout_array = array("" => $this->user->lang('default_setting'));
+		foreach($this->pdh->get_layout_list() as $key => $val){
+			$mobile_pagelayout_array[$val] = $val;
+		}
 
 		$a_groups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 
@@ -134,7 +140,8 @@ class mmocms_settings extends page_generic {
 			$link = $this->user->removeSIDfromString($page['link']);
 			if ($link != "" && $link != "#" && $link != "index.php"){
 				if (isset($page['category'])){
-					$startpage_array[$this->pdh->get('article_categories', 'alias', array($page['id']))] = $this->pdh->get('article_categories', 'name_prefix', array($page['id'])).$this->pdh->get('article_categories', 'name', array($page['id']));
+					$strAlias = $this->pdh->get('article_categories', 'alias', array($page['id']));
+					if(!isset($startpage_array[$strAlias])) $startpage_array[$this->pdh->get('article_categories', 'alias', array($page['id']))] = $this->pdh->get('article_categories', 'name_prefix', array($page['id'])).$this->pdh->get('article_categories', 'name', array($page['id']));
 				} elseif(isset($page['article'])){
 					$catid = $this->pdh->get('articles', 'category', array($page['id']));
 					$startpage_array[$this->pdh->get('articles', 'alias', array($page['id']))] = $this->pdh->get('article_categories', 'name_prefix', array($catid)).' -> '.$this->pdh->get('articles', 'title', array($page['id']));
@@ -201,7 +208,6 @@ class mmocms_settings extends page_generic {
 		}
 		$this->jquery->spinner('#inactive_period, #pk_round_precision, #inactive_period, #default_nlimit, #calendar_raid_classbreak, #calendar_addraid_deadline, #failed_logins_inactivity', array('multiselector'=>true));
 		$this->jquery->spinner('#default_alimit, #default_climit, #default_ilimit, #default_rlimit, #default_elimit, #calendar_addraid_duration, #calendar_repeat_crondays', array('step'=>10, 'multiselector'=>true));
-		$this->jquery->spinner('pk_newsloot_limit', array('step'=>10, 'max'=>25, 'steps'=>5, 'min'=>0));
 
 		// ---------------------------------------------------------
 		// Output to the page
@@ -763,12 +769,25 @@ class mmocms_settings extends page_generic {
 						'name'			=> 'start_page',
 						'options'		=> $startpage_array,
 					),
-					'eqdkpm_shownote'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'eqdkpm_shownote',
+				),
+				'mobile' => array(
+					'mobile_template' => array(
+						'fieldtype'		=> 'dropdown',
+						'name'			=> 'mobile_template',
+						'options'		=> $mobile_template_array,
+					),
+					'mobile_portallayout' => array(
+						'fieldtype'		=> 'dropdown',
+						'name'			=> 'mobile_portallayout',
+						'options'		=> $mobile_portallayout_array,
+					),
+					'mobile_pagelayout' => array(
+						'fieldtype'		=> 'dropdown',
+						'name'			=> 'mobile_pagelayout',
+						'options'		=> $mobile_pagelayout_array,
 					),
 				),
-				'news'		=> array(
+				'article'		=> array(
 					'disable_embedly'	=> array(
 						'fieldtype'		=> 'checkbox',
 						'name'			=> 'disable_embedly',
@@ -846,14 +865,6 @@ class mmocms_settings extends page_generic {
 						'class'			=> '',
 						'default'		=> 0
 					),
-					'pk_newsloot_limit'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_newsloot_limit',
-						'size'			=> 5,
-						'id'			=> 'pk_newsloot_limit',
-						'class'			=> '',
-						'default'		=> '0'
-					)
 				)
 			),
 			'itemtooltip'	=> array(),	// placeholder for sorting..

@@ -266,33 +266,13 @@ class core extends gen_class {
 			});
 			", 'docready');
 
-			//Mobile Browser detection
-			if ((int)$this->config->get('eqdkpm_shownote')){
-			$this->tpl->add_js("function detectMobileBrowser() {
-				if (document.cookie.indexOf(\"eqdkpm_redirect=false\") < 0) {
-					if(screen.width < 500 || navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
-						setEQdkpmCookies();
-						if (confirm(\"".$this->user->lang('eqdkpm_redirectnote').".\"))
-							window.location = mmocms_root_path + \"m/\";
-					}
-				}
-			}
-
-			function setEQdkpmCookies() {
-				var date = new Date();
-				var days = 14;
-				date.setTime(date.getTime()+(days*24*60*60*1000));
-				var expires = \"; expires=\"+ date.toGMTString();
-				document.cookie = \"eqdkpm_redirect=false\" + expires;
-			}
-			detectMobileBrowser();", 'docready');
-			}
-
 			// global qtip
 			$this->jquery->qtip(".coretip", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200));
 
 			//Portal Output
 			$intPortalLayout = ($this->portal_layout != NULL) ? $this->portal_layout : 1;
+			$intPortalLayout = (strlen($this->config->get('mobile_portallayout')) && $this->env->agent->mobile) ? $this->config->get('mobile_portallayout') : $intPortalLayout;
+			
 			$this->portal->module_output($intPortalLayout);
 			
 			//Registration Link
@@ -308,7 +288,7 @@ class core extends gen_class {
 			
 			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'LostPassword');
 			$strAvatarImg = ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($this->user->id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($this->user->id)), false, 'absolute') : $this->server_path.'images/no_pic.png';
-			
+						
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
@@ -348,6 +328,7 @@ class core extends gen_class {
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul(),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
+				'BROWSER_CLASS'				=> $this->env->agent->class,
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
 				'S_BRIDGE_INFO'				=> ($this->config->get('cmsbridge_active') ==1) ? true : false,

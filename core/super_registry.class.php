@@ -198,7 +198,10 @@ abstract class super_registry {
 			
 			if(!$lite) {
 				//initiate PDH
-				registry::register('plus_datahandler')->init_eqdkp_layout(((registry::register('config')->get('eqdkp_layout') ) ? registry::register('config')->get('eqdkp_layout') : 'normal'));
+				$strPageLayout = ((registry::register('config')->get('eqdkp_layout') ) ? registry::register('config')->get('eqdkp_layout') : 'normal');
+				$strPageLayout = (strlen(registry::register('config')->get('mobile_pagelayout')) && registry::register('environment')->agent->mobile) ? registry::register('config')->get('mobile_pagelayout') : $strPageLayout;
+				
+				registry::register('plus_datahandler')->init_eqdkp_layout($strPageLayout);
 
 				registry::register('portal');
 			

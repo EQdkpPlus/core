@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_user_groups')) {
 			parent::__construct();
 		}
 
-		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $deletable=1, $sortid=0) {
+		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $sortid=0,$deletable=1) {
 			
 			$arrSet = array(
 				'groups_user_id' 	=> $id,

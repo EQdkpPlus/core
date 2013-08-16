@@ -27,7 +27,7 @@ class smf2_bridge extends bridge_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 	
-	public $name = "SMF 2";
+	public static $name = "SMF 2";
 	
 	public $data = array(
 		//Data

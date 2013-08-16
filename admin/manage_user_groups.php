@@ -448,13 +448,10 @@ class Manage_User_Groups extends page_generic {
 			}
 		}
 		unset($permission_boxes);
-		$this->tpl->assign_vars(array(
-			'S_GROUP_PERM_LIST'		=> true,
-		));
 		
 		$this->core->set_vars(array(
 				'page_title'		=> $this->user->lang('user_group_permissions'),
-				'template_file'		=> 'admin/manage_user_groups.html',
+				'template_file'		=> 'admin/manage_user_groups_permlist.html',
 				'display'			=> true)
 		);
 	

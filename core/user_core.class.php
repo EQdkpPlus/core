@@ -98,7 +98,9 @@ class user_core extends gen_class {
 			$intUserStyleID = (isset($this->data['user_style']) && !$this->config->get('default_style_overwrite')) ? $this->data['user_style'] : $this->config->get('default_style');
 		}
 		$intStyleID = (is_numeric($intUserStyleID) && $intUserStyleID > 0) ? $intUserStyleID : $this->db->query_first("SELECT style_id FROM __styles;");
-
+		//Mobile Device?
+		$intStyleID = (strlen($this->config->get('mobile_template')) && $this->env->agent->mobile) ? intval($this->config->get('mobile_template')) : $intStyleID;
+		
 		//Get Style-Information
 		$result = $this->db->query("SELECT * FROM __styles WHERE style_id='".$this->db->escape($intStyleID)."'");
 		$this->style = $this->db->fetch_record($result);

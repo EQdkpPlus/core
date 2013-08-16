@@ -95,7 +95,7 @@ class admin_user extends install_generic {
 			'user_date_short' => $this->config->get('default_date_short'),
 			'user_date_long' => $this->config->get('default_date_long'),
 		));
-		$this->db->query("INSERT INTO __groups_users (group_id, user_id) VALUES (2,1);");
+		$this->db->query("INSERT INTO __groups_users (group_id, user_id, grpleader) VALUES (2,1,1);");
 		$this->user->login($this->username, $this->in->get('user_password1'), $this->in->exists('auto_login'));
 		return true;
 	}

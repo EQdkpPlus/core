@@ -2,7 +2,7 @@
 	<ul class="breamcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a>{L_edit_ranks}</a></li>
+		<li class="current"><a>{L_manrank_title}</a></li>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -10,16 +10,20 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_edit_ranks}</h1>
 	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" onclick="window.location='manage_ranks.php{SID}&r=0'"><i class="icon-plus"></i>{L_add_rank}</button>
+	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="rank_table" class="colorswitch">
 		<thead>
 		<tr class="not-sortable">
 			<th width="10px"></th>
 			<th width="20px;"><input type="checkbox" name="" id="selall_ranks" /></th>
+			<th width="20px;"></th>
 			<th>{L_name}</th>
 			<th>{L_default}</th>
-			<th>{L_hide}</th>
-			<th>{L_list_prefix}</th>
-			<th>{L_list_suffix}</th>
+			<th>{L_prefix}</th>
+			<th>{L_suffix}</th>
+			<th>{L_hidden}</th>
 			<!-- IF S_RANK_IMAGES -->
 			<th>{L_rank_icon}</th>
 			<!-- ENDIF -->
@@ -29,29 +33,18 @@
 		<!-- BEGIN ranks -->
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
-			<td><input type="checkbox" name="rank_ids[]" value="{ranks.ID}" /><input type="hidden" name="ranks[{ranks.KEY}][id]" value="{ranks.ID}" /></td>
-			<td><input type="text" name="ranks[{ranks.KEY}][name]" size="30" maxlength="50" value="{ranks.NAME}" class="maininput" /></td>
-			<td><input type="radio" name="ranks_default" value="{ranks.KEY}" {ranks.DEFAULT} /></td>
-			<td><input type="checkbox" name="ranks[{ranks.KEY}][hide]" value="1" {ranks.HIDE} /></td>
-			<td><input type="text" name="ranks[{ranks.KEY}][prefix]" size="35" maxlength="75" value="{ranks.PREFIX}" class="maininput" /></td>
-			<td><input type="text" name="ranks[{ranks.KEY}][suffix]" size="35" maxlength="75" value="{ranks.SUFFIX}" class="maininput" /></td>
+			<td><input type="checkbox" name="rank_ids[]" value="{ranks.ID}" /><input type="hidden" name="ranks[]" value="{ranks.ID}" /></td>
+			<td><a href="manage_ranks.php{SID}&amp;r={ranks.ID}&amp;" title="{L_edit_rank}"><img src="{EQDKP_IMAGE_PATH}glyphs/edit.png" border="0" alt="" /></a></td>
+			<td>{ranks.NAME}</td>
+			<td><input type="radio" name="ranks_default" value="{ranks.ID}" {ranks.DEFAULT} /></td>
+			<td>{ranks.PREFIX}</td>
+			<td>{ranks.SUFFIX}</td>
+			<td>{ranks.HIDE}</td>
 			<!-- IF S_RANK_IMAGES -->
-			<td>{ranks.RANK_DD}</td>
+			<td>{ranks.ICON}</td>
 			<!-- ENDIF -->
 		</tr>
 		<!-- END ranks -->
-		<tr>
-			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
-			<td><input type="hidden" name="ranks[{KEY}][id]" value="{ID}" /></td>
-			<td><input type="text" name="ranks[{KEY}][name]" size="30" maxlength="50" value="" class="maininput" /></td>
-			<td><input type="radio" name="ranks_default" value="{KEY}" /></td>
-			<td><input type="checkbox" name="ranks[{KEY}][hide]" value="1" /></td>
-			<td><input type="text" name="ranks[{KEY}][prefix]" size="35" maxlength="75" value="" class="maininput" /></td>
-			<td><input type="text" name="ranks[{KEY}][suffix]" size="35" maxlength="75" value="" class="maininput" /></td>
-			<!-- IF S_RANK_IMAGES -->
-			<td>{RANK_DD}</td>
-			<!-- ENDIF -->
-		</tr>
 		</tbody>
 	</table>
 	<div class="contentFooter">

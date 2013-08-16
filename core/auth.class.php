@@ -113,7 +113,7 @@ class auth extends user_core {
 					$this->data['user_id'] = ($this->data['user_id'] == (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
 					$this->id = $this->data['user_id'];
 					// Only update session DB a minute or so after last update or if page changes
-					if ( ($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) ){
+					if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
 						$this->db->query("UPDATE __sessions SET :params WHERE session_id = ?", array(
 							'session_current'	=> $this->current_time,
 							'session_page'		=> strlen($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',

@@ -303,6 +303,7 @@ class admin_functions extends gen_class {
 			$arrQuery = array();
 			parse_str($strQuery, $arrQuery);
 			$arrFolder = explode('/', $strPath);
+			$strOut = "";
 			
 			//Prefixes for Admin, Plugins, Maintenance
 			switch($arrFolder[0]){

@@ -416,6 +416,7 @@ if (!class_exists("html")) {
 		*/
 		public function DropDown($name, $list, $selected, $text='', $javascr = '', $class = 'input', $customid='', $todisable=array(), $disable_select=false){
 			$dropdown = ( $text != '' ) ?  $text.": " : '';
+			$blnSelected = false;
 			$dropdown  .= "<select size='1' ".$javascr." name='".$name."' ".(($customid) ? "id='".$customid."'" : "id='".$this->cleanid($name)."'")." class='".$class."' ".(($disable_select) ? 'disabled="disabled"' : '').">";
 			$todisable = (is_array($todisable)) ? $todisable : array($todisable);
 			if(is_array($list) && count($list) > 0){
@@ -423,14 +424,20 @@ if (!class_exists("html")) {
 					if(is_array($value)){
 						$dropdown .= "<optgroup label='".$key."'>";
 						foreach ($value as $key2 => $value2) {
-							$selected_choice = ($key2 == $selected) ? ' selected="selected"' : '';
+							if (!$blnSelected && (($key2 == $selected))){
+								$selected_choice =  'selected="selected"';
+								$blnSelected = true;
+							} else $selected_choice = '';
 							$disabled = (isset($todisable[$key]) && is_array($todisable[$key]) && ($key === 0 && in_array($key, $todisable, true)) || ($key !== 0 && in_array($key, $todisable))) ? ' disabled="disabled"' : '';
 							$dropdown .= "<option value='".$key2."'".$selected_choice.$disabled.">".$value2."</option>";
 						}
 						$dropdown .= "</optgroup>";
 					}else{
 						$disabled = (($key === 0 && in_array($key, $todisable, true)) || ($key !== 0 && in_array($key, $todisable))) ? ' disabled="disabled"' : '';
-						$selected_choice = (($key == $selected)) ? 'selected="selected"' : '';
+						if (!$blnSelected && (($key == $selected))){
+							$selected_choice =  'selected="selected"';
+							$blnSelected = true;
+						} else $selected_choice = '';
 						$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
 					}
 				}

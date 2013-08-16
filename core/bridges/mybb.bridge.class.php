@@ -26,7 +26,7 @@ class mybb_bridge extends bridge_generic {
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
-	public $name = 'MyBB';
+	public static $name = 'MyBB';
 
 	public $data = array(
 		//Data
