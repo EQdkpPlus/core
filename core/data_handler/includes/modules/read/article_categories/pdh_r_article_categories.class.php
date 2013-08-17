@@ -105,6 +105,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		
 		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false){
 			$blnFeaturedOnly = $this->get_featured_only($intCategoryID);
+			if (!$this->get_published($intCategoryID)) return array();
 			if ($intUserID === false) $intUserID = $this->user->id;
 			$arrOut = array();
 			//Get articles from all aggregation categorys

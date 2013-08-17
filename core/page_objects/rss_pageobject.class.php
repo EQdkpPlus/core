@@ -52,7 +52,7 @@ class rss_pageobject extends pageobject {
 			$arrArticleCategoryIDs = $this->pdh->get('article_categories', 'id_list');
 			$arrArticleIDs = array();
 			foreach ($arrArticleCategoryIDs as $intCategoryID){
-				$arrArticleIDs = array_merge($arrArticleIDs, $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id)));
+				$arrArticleIDs = array_merge($arrArticleIDs, $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id, true)));
 			}
 			$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
 		}

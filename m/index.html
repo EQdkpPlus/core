@@ -256,7 +256,7 @@
 	function load_news(id){		
 		$.ajax({
 			   type: "GET",
-			   url: "../api.php?function=latest_news&number=10&format=json&s="+sid,
+			   url: "../api.php?function=latest_articles&number=10&format=json&s="+sid,
 			   success: function(msg){					
 					var obj = msg;
 					if (obj.status == '1'){
@@ -268,7 +268,7 @@
 						var output = '<ul data-role="listview" data-inset=\'true\'>';
 						if (obj.entries != null){
 							$.each(obj.entries, function(key, value) {
-								output = output + "<li><a href='javascript:show_news("+value.id+");'><h3>"+value.headline+"</h3><p>"+format_date(value.date)+", "+value.author+"</p><span class='ui-li-count'>"+value.comments.count+"</span></a></li>";
+								output = output + "<li><a href='javascript:show_news("+value.id+");'><h3>"+value.title+"</h3><p>"+format_date(value.date)+", "+value.author+"</p><span class='ui-li-count'>"+value.comments.count+"</span></a></li>";
 							});
 						} else {
 							output = output + '<li>'+loc['no_news']+'</li>';
@@ -308,13 +308,13 @@
 		if (news != false){
 			$.each(news, function(key, value) {
 				if (value.id == id){
-					output = output + "<h1>" + value.headline + '</h1><p>' + value.message + "</p>";
+					output = output + "<h1>" + value.title + '</h1><p>' + value.text + "</p>";
 					var comments = '<div data-role="collapsible" data-collapsed="false" data-theme="c" data-content-theme="d"><h3>'+loc['comments']+'</h3>';
 					
 					if (value.comments.count > 0){
 						comments = comments + '<ul data-role="listview" data-inset="true">';
 						$.each(value.comments.comments, function(ckey, cvalue) {
-							comments = comments + '<li class="notextcut"><img src="../'+cvalue.user_avatar+'" /><h3>' + cvalue.username + ', '+format_date(cvalue.date) + '</h3><p>' + cvalue.message + '</p></li>';
+							comments = comments + '<li class="notextcut"><img src="'+cvalue.user_avatar+'" /><h3>' + cvalue.username + ', '+format_date(cvalue.date) + '</h3><p>' + cvalue.message + '</p></li>';
 						});
 						comments = comments + '</ul>';
 						

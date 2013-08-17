@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Users extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'db', 'pfh', 'html', 'env', 'acl'=>'acl', 'email'=>'MyMailer', 'crypt' => 'encrypt');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'db', 'pfh', 'html', 'env', 'acl'=>'acl', 'email'=>'MyMailer', 'crypt' => 'encrypt', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -169,7 +169,7 @@ class Manage_Users extends page_generic {
 				unset($auth_defaults[$superperm]);
 			}
 		}
-		$auths_to_update = array();
+		$auths_to_update = $arrChanged = array();
 		foreach ( $auth_defaults as $auth_value => $auth_setting ){
 			$r_auth_id    = $this->acl->get_auth_id($auth_value);
 			$r_auth_value = $auth_value;
@@ -179,17 +179,26 @@ class Manage_Users extends page_generic {
 
 			if ( $chk_auth_value != $db_auth_value ){
 				$auths_to_update[$r_auth_id] = $db_auth_value;
+				$arrChanged[$r_auth_value] = array('old' => $chk_auth_value, 'new' => $db_auth_value);
 			}
 		}
-		if(count($auths_to_update) > 0)	$this->acl->update_user_permissions($auths_to_update, $user_id);
+		if(count($auths_to_update) > 0)	{
+			$this->acl->update_user_permissions($auths_to_update, $user_id);
+			$this->logs->add('action_user_changed_permissions', $arrChanged, $user_id, $this->pdh->get('user', 'name', array($user_id)));
+		}
 
 		$this->pdh->put('member', 'update_connection', array($this->in->getArray('member_id', 'int'), $user_id));
 
 		// User-Groups
 		$groups = $this->in->getArray('user_groups', 'int');
 		$group_list = $this->pdh->get('user_groups', 'id_list', 0);
+		$arrMemberships = array_keys($this->acl->get_user_group_memberships($user_id));
 		$this->pdh->put('user_groups_users', 'delete_user_from_groups', array($user_id, $group_list));
 		$this->pdh->put('user_groups_users', 'add_user_to_groups', array($user_id, $groups));
+		$arrayRemoved = array_diff($arrMemberships, $groups);
+		$arrayNew = array_diff($groups, $arrMemberships);
+		if (count($arrayRemoved)) $this->logs->add("action_user_removed_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayRemoved)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
+		if (count($arrayNew)) $this->logs->add("action_user_added_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayNew)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
 
 		// E-mail the user if he/she was activated by the admin and admin activation was set in the config
 		$email_success_message = '';

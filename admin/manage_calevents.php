@@ -57,6 +57,7 @@ class Manage_Calevents extends page_generic {
 		$this->tpl->assign_vars(array(
 			'CALEVENTS'			=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, $footer_text),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'PAGINATION' 		=> generate_pagination('manage_calevents.php'.$sort_suffix, count($view_list), 40, $this->in->get('start', 0)),
 		));
 
 		$this->core->set_vars(array(

@@ -50,7 +50,7 @@ class tinyMCE extends gen_class {
 					plugins: [
         "bbcode autolink link image charmap",
         "searchreplace visualblocks code fullscreen",
-        "media table contextmenu paste textcolor paste"
+        "media paste textcolor"
     ],
 					//language : "'.$this->language.'",
 					theme : "modern",

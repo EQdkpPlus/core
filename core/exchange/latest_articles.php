@@ -1,0 +1,149 @@
+<?php
+ /*
+ * Project:		EQdkp-Plus
+ * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+ * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * -----------------------------------------------------------------------
+ * Began:		2009
+ * Date:		$Date: 2012-10-29 20:26:16 +0100 (Mo, 29 Okt 2012) $
+ * -----------------------------------------------------------------------
+ * @author		$Author: godmod $
+ * @copyright	2006-2011 EQdkp-Plus Developer Team
+ * @link		http://eqdkp-plus.com
+ * @package		eqdkp-plus
+ * @version		$Rev: 12348 $
+ * 
+ * $Id: latest_articles.php 12348 2012-10-29 19:26:16Z godmod $
+ */
+
+if (!defined('EQDKP_INC')){
+	die('Do not access this file directly.');
+}
+
+if (!class_exists('exchange_latest_articles')){
+	class exchange_latest_articles extends gen_class {
+		public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html', 'bbcode' => 'bbcode', 'time', 'pex'=>'plus_exchange', 'env' => 'environment', 'pfh');
+		public $options		= array();
+
+		public function get_latest_articles($params, $body){
+				//Get Number; default: 10
+				$intNumber = (intval($params['get']['number']) > 0) ?  intval($params['get']['number']) : 10;
+				//Get sort direction; default: desc
+				$sort = (isset($params['get']['sort']) && $params['get']['sort'] == 'asc') ? 'asc' : 'desc';
+				
+				$intCategoryID = (isset($params['get']['c'])) ? intval($params['get']['c']) : 0;
+				
+				$user_id = $this->user->id;
+				
+				$response = array();
+								
+				//Get latest Articles for a specific category
+				if ($intCategoryID){
+					$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id, true));
+					$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
+						
+					switch($arrCategory['sortation_type']){
+						case 4:
+						case 3: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', $sort);
+						break;
+						case 2:
+						case 1:
+						default: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', $sort);
+					}
+				} else {
+					//Get global latest articles
+					$arrArticleCategoryIDs = $this->pdh->get('article_categories', 'id_list');
+					$arrArticleIDs = array();
+					foreach ($arrArticleCategoryIDs as $intCategoryID){
+						$arrArticleIDs = array_merge($arrArticleIDs, $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id, true)));
+					}
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', $sort);
+				}
+				
+				if (count($arrSortedArticleIDs)){
+					$arrSortedArticleIDs = $this->pdh->limit($arrSortedArticleIDs, 0, $intNumber);
+					foreach($arrSortedArticleIDs as $intArticleID){
+						$strText = $this->pdh->get('articles',  'text', array($intArticleID));
+						$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
+				
+						$strText = $this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrContent[0]));
+				
+						//Replace Image Gallery
+						$arrGalleryObjects = array();
+						preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
+						if (count($arrGalleryObjects[0])){
+							include_once($this->root_path.'core/gallery.class.php');
+							foreach($arrGalleryObjects[4] as $key=>$val){
+								$strText = str_replace($arrGalleryObjects[0][$key], "", $strText);
+							}
+						}
+				
+						//Replace Raidloot
+						$arrRaidlootObjects = array();
+						preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+						if (count($arrRaidlootObjects[0])){
+							include_once($this->root_path.'core/gallery.class.php');
+							foreach($arrRaidlootObjects[3] as $key=>$val){
+								$strText = str_replace($arrRaidlootObjects[0][$key], "", $strText);
+							}
+						}
+						
+						$category_id = $this->pdh->get('articles', 'category', array($intArticleID));
+						
+						
+						$comments = $this->pdh->get('comment', 'filtered_list', array('articles', $intArticleID));
+						$arrComments = array();
+						if (is_array($comments)){
+							foreach($comments as $key => $row){
+								$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
+						
+								$arrComments['comment:'.$key] = array(
+										'username'			=> $row['username'],
+										'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/no_pic.png'), false, 'absolute'),
+										'date'				=> $this->time->date('Y-m-d H:i', $row['date']),
+										'date_timestamp'	=> $row['date'],
+										'message'			=> $this->bbcode->toHTML($row['text']),
+								);
+							}
+						}
+						
+						$arrCommentsOut = array(
+								'count'		=> count($arrComments),
+								'page'		=> 'articles',
+								'attachid'	=> $intArticleID,
+								'comments'	=> $arrComments,
+						);
+						
+						$arrTags = array();
+						$arrArticleTags = $this->pdh->get('articles', 'tags', array($intArticleID));
+						if(is_array($arrArticleTags) && count($arrArticleTags) && $arrArticleTags[0] != ""){
+							foreach($arrArticleTags as $k => $strTag) {
+								$arrTags['tag:'.$k] = $strTag;
+							}
+						}
+						
+						$response['entries']['entry:'.$intArticleID] = array(
+								'id'			=> $intArticleID,
+								'title'			=> $this->pdh->get('articles', 'title', array($intArticleID)),
+								'text'			=> $strText,
+								'link'			=> $this->user->removeSIDfromString($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID))),
+								'permalink'		=> $this->env->link.'index.php?a='.$intArticleID,
+								'date'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('articles', 'date', array($intArticleID))),
+								'date_timestamp' => $this->pdh->get('articles', 'date', array($intArticleID)),
+								'author'		=> $this->pdh->geth('articles', 'user_id', array($intArticleID)),
+								'category_id' 	=> $category_id,
+								'category'		=> $this->pdh->get('article_categories', 'name', array($category_id)),
+								'category_url'	=> $this->user->removeSIDfromString($this->env->link.$this->pdh->get('article_categories',  'path', array($category_id))),
+								'tags'			=> $arrTags,
+								'comments'		=> $arrCommentsOut,
+						);
+
+					}
+				}
+
+				return $response;
+		}
+	}
+}
+
+?>

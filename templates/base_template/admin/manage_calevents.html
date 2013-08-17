@@ -12,7 +12,7 @@
 </div>
 
 <div class="tableHeader floatRight">
-		<button type="button" name="newRoleManager" class="mainoption" onclick="newCalevent()" ><i class="icon-plus"></i>{L_calendar_addevent}</button>
+	<button type="button" name="newRoleManager" class="mainoption" onclick="newCalevent()" ><i class="icon-plus"></i>{L_calendar_addevent}</button>
 </div>
 
 <div class="clear"></div>
@@ -20,7 +20,9 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 			{CALEVENTS}
 	</table>
-	
+	<div class="center pagination_wrapper">
+		{PAGINATION}
+	</div>
 <div class="contentFooter">
 	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
 	<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />

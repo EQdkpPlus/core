@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_w_member" ) ) {
 	class pdh_w_member extends pdh_w_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'in', 'user', 'config', 'xmltools'=>'xmltools', 'game');
+		$shortcuts = array('pdh', 'db', 'in', 'user', 'config', 'xmltools'=>'xmltools', 'game', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 		private $empty_profile = array();
@@ -35,10 +35,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		private $arrLogLang = array(
 			'name'			=> "{L_NAME}",
 			'lvl'			=> "{L_LEVEL}",
-			'raceid'		=> "{L_RACE}",
-			'classid'		=> "{L_CLASS}",
-			'rankid'		=> "{L_RANK}",
-			'mainid'		=> "{L_MAINCHAR}",
+			'race'			=> "{L_RACE}",
+			'class'			=> "{L_CLASS}",
+			'rank'			=> "{L_RANK}",
+			'main'			=> "{L_MAINCHAR}",
 			'status'		=> "{L_STATUS}",
 			'notes'			=> "{L_NOTE}",
 			'picture'		=> "Avatar",
@@ -110,22 +110,32 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			);
 			if($member_id > 0) {
 				if($this->db->query("UPDATE __members SET :params WHERE member_id = ?;", $querystr, $member_id)) {
-					$log_action = array(
-						'{L_NAME_BEFORE}'		=> $old['name'],
-						'{L_LEVEL_BEFORE}'		=> $old['lvl'],
-						'{L_RACE_BEFORE}'		=> $this->game->get_name('races', $old['raceid']),
-						'{L_CLASS_BEFORE}'		=> $this->game->get_name('races', $old['classid']),
-						'{L_RANK_BEFORE}'		=> $this->pdh->get('rank', 'name', array($old['rankid'])),
-						'{L_MAINC_BEFORE}'		=> $this->pdh->get('member', 'name', array($old['mainid'])),
-						'{L_STATUS_BEFORE}'		=> $old['status'],
-						'{L_NAME_AFTER}'		=> ($old['name'] != $data['name']) ? '<span class=\"negative\">'.$data['name'].'</span>' : $data['name'],
-						'{L_LEVEL_AFTER}'		=> ($old['lvl'] != $data['lvl']) ? '<span class=\"negative\">'.$data['lvl'] : $data['lvl'],
-						'{L_RACE_AFTER}'		=> ($old['raceid'] != $data['raceid']) ? '<span class=\"negative\">'.$this->game->get_name('races', $data['raceid']).'</span>' : $this->game->get_name('races', $old['raceid']),
-						'{L_CLASS_AFTER}'		=> ($old['classid'] != $data['classid']) ? '<span class=\"negative\">'.$this->game->get_name('classes', $data['classid']).'</span>' : $this->game->get_name('races', $old['classid']),
-						'{L_RANK_AFTER}'		=> ($old['rankid'] != $data['rankid']) ? '<span class=\"negative\">'.$this->pdh->get('rank', 'name', array($data['rankid'])).'</span>' : $this->pdh->get('rank', 'name', array($old['rankid'])),
-						'{L_MAINC_AFTER}'		=> ($old['mainid'] != $data['mainid']) ? '<span class=\"negative\">'.$this->pdh->get('member', 'name', array($data['mainid'])).'</span>' : $this->pdh->get('member', 'name', array($old['mainid'])),
-						'{L_STATUS_AFTER}'		=> ($old['status'] != $data['status']) ? '<span class=\"negative\">'.$data['status'].'</span>' : $old['status'],
+					$arrOld = array(
+						'name'			=> $old['name'],
+						'lvl'			=> $old['lvl'],
+						'race'			=> $this->game->get_name('races', $old['raceid']),
+						'class'			=> $this->game->get_name('classes', $old['classid']),
+						'rank'			=> $this->pdh->get('rank', 'name', array($old['rankid'])),
+						'main'			=> $this->pdh->get('member', 'name', array($old['mainid'])),
+						'status'		=> $old['status'],
+						'notes'			=> $old['notes'],
+						'picture'		=> $old['picture'],
 					);
+					
+					$arrNew = array(
+						'name'			=> $querystr['member_name'],
+						'lvl'			=> $querystr['member_level'],
+						'race'			=> $this->game->get_name('races', $querystr['member_race_id']),
+						'class'			=> $this->game->get_name('classes', $querystr['member_class_id']),
+						'rank'			=> $this->pdh->get('rank', 'name', array($querystr['member_rank_id'])),
+						'main'			=> $this->pdh->get('member', 'name', array($querystr['member_main_id'])),
+						'status'		=> $querystr['status'],
+						'notes'			=> $querystr['notes'],
+						'picture'		=> $querystr['picture'],
+					);
+					
+					
+					$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 
 					$this->log_insert('action_member_updated', $log_action, $member_id, $old['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
@@ -146,14 +156,19 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					if ($takechar){
 						$this->pdh->put('member', 'takeover', array($member_id));
 					}
-					$log_action = array(
-						'{L_NAME}'		=> $data['name'],
-						'{L_LEVEL}'		=> $data['lvl'],
-						'{L_RACE}'		=> $this->game->get_name('races', $data['raceid']),
-						'{L_CLASS}'		=> $this->game->get_name('classes', $data['classid']),
-						'{L_STATUS}'	=> !empty($data['status']) ? $data['status'] : 1,
+					
+					$arrNew = array(
+							'name'			=> $querystr['member_name'],
+							'lvl'			=> $querystr['member_level'],
+							'race'			=> $this->game->get_name('races', $querystr['member_race_id']),
+							'class'			=> $this->game->get_name('classes', $querystr['member_class_id']),
+							'rank'			=> $this->pdh->get('rank', 'name', array($querystr['member_rank_id'])),
+							'main'			=> $this->pdh->get('member', 'name', array($querystr['member_main_id'])),
+							'status'		=> $querystr['status'],
+							'notes'			=> $querystr['notes'],
+							'picture'		=> $querystr['picture'],
 					);
-					if($member_id != $data['mainid']) $log_action['{L_MAINC}'] = $this->pdh->get('member', 'name', array($data['mainid']));
+					$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 					$this->log_insert('action_member_added', $log_action, $member_id, $data['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					return $member_id;

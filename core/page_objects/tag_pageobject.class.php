@@ -51,6 +51,8 @@ class tag_pageobject extends pageobject {
 			$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
 		
 			$strText = $this->bbcode->parse_shorttags($arrContent[0]);
+			$strPath = $this->pdh->get('articles',  'path', array($intArticleID));
+			$intCategoryID = $this->pdh->get('articles',  'category', array($intArticleID));
 		
 			//Replace Image Gallery
 			$arrGalleryObjects = array();
@@ -82,15 +84,13 @@ class tag_pageobject extends pageobject {
 			//Tags
 			$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
 		
-		
 			$this->tpl->assign_block_vars('article_row', array(
 					'ARTICLE_CONTENT' => $strText,
 					'ARTICLE_TITLE'	  => $this->pdh->get('articles',  'title', array($intArticleID)),
 					'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
 					'ARTICLE_DATE'	  => $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true),
 					'ARTICLE_PATH'		=> $this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)),
-					'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
-					'ARTICLE_TOOLBAR' => $jqToolbar['id'],
+					'ARTICLE_SOCIAL_BUTTONS'  => ($this->pdh->get('article_categories', 'social_share_buttons', array($intCategoryID))) ? $this->social->createSocialButtons($this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
 					'PERMALINK'		=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
 					'ARTICLE_CUTTED_CONTENT' => truncate($strText, 600, '...', false, true),

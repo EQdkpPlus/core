@@ -182,7 +182,7 @@ if (!class_exists("bbcode")) {
 			$text = str_replace(array('"', "'"), array("",""), $arrURL[1]);
 			if (!filter_var($text, FILTER_VALIDATE_URL)) return '';
 			
-			return '<a href="'.filter_var($text, FILTER_SANITIZE_URL).'">'.$arrURL[2].'</a>';
+			return '<a href="'.filter_var($text, FILTER_SANITIZE_URL).'" rel="nofollow">'.$arrURL[2].'</a>';
 		}
 
 		// Download the Image to eqdkp
@@ -277,8 +277,6 @@ if (!class_exists("bbcode")) {
 			return '<div class="errorbox roundbox">
 						<div class="icon_brokenimage">'.$langBits.'</div>
 					</div>';
-
-			return '<br/><table class="errortable" width="100%"><tr><td width="120px" align="center"><img src="images/brokenimg.png" /></td><td>'.$langBits.'</td></tr></table>';
 		}
 
 		//Parse shorttags

@@ -53,7 +53,7 @@ if(!class_exists('pdh_w_user')) {
 
 			//Put him to the default group
 			if ($this->pdh->get('user_groups', 'standard_group') && $toDefaultGroup){
-				$this->pdh->put('user_groups_users', 'add_user_to_group', array($user_id, $this->pdh->get('user_groups', 'standard_group'), 1));
+				$this->pdh->put('user_groups_users', 'add_user_to_group', array($user_id, $this->pdh->get('user_groups', 'standard_group'), false));
 			}
 			$this->pdh->enqueue_hook('user');
 
@@ -139,8 +139,7 @@ if(!class_exists('pdh_w_user')) {
 				);
 				$this->log_insert('action_user_updated', $log_action, $user_id, $this->in->get('username'));
 			}
-
-
+			
 			$this->pdh->enqueue_hook('user');
 			return ($sql) ? true : false;
 		}
@@ -276,16 +275,19 @@ if(!class_exists('pdh_w_user')) {
 			//Delete Avatars
 			$this->pfh->Delete('users/'.$user_id, 'files');
 			$this->pfh->Delete($this->pdh->get('user', 'avatarimglink', array($user_id)));
-						
+			
+			$log_action = array(
+				'{L_USER}'		=> $this->pdh->get('user', 'name', array($user_id)),
+				'{L_EMAIL}'		=> $this->pdh->get('user', 'email', array($user_id)),
+			);	
+			
 			if ($delete_member){
 				$members = $this->pdh->get('member', 'connection_id', array($user_id));
 				foreach ($members as $member){
 					$this->pdh->put('member', 'delete_member', array($member));
 				}
 			}
-			$log_action = array(
-				'{L_USER}'		=> $this->pdh->get('user', 'name', array($user_id))
-			);
+			
 			$this->log_insert('action_user_deleted', $log_action, $user_id, $this->pdh->get('user', 'name', array($user_id)));
 			
 			$this->db->query("DELETE FROM __users WHERE user_id=".$this->db->escape($user_id));

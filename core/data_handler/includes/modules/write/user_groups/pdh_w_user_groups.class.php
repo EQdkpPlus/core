@@ -90,10 +90,12 @@ if(!class_exists('pdh_w_user_groups')) {
 			if ($id == $this->pdh->get('user_groups', 'standard_group', array())) {
 				return false;
 			} else {
+				$old['name'] = $this->pdh->get('user_groups', 'name', array($id));
 				if($this->db->query("DELETE FROM __groups_user WHERE (groups_user_id = ".$this->db->escape($id)." AND groups_user_deletable != '0' AND groups_user_default != '1');")) {
 					$this->pdh->put('user_groups_users', 'delete_all_user_from_group', $id);
 					$this->db->query("DELETE FROM __auth_groups WHERE group_id = '".$this->db->escape($id)."'");
 					$this->pdh->enqueue_hook('user_groups_update');
+					$this->log_insert('action_usergroups_deleted', array(), $id, $old['name']);
 					return true;
 				}
 			}

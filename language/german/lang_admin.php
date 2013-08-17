@@ -1574,7 +1574,15 @@ $lang = array(
 "add_rank" => "Rang hinzufügen",
 "edit_rank" => "Rang bearbeiten",
 "hidden"	=> "Versteckt",
-
+"action_usergroups_add_groupleader" => "Gruppenleiter hinzugefügt",
+"action_usergroups_remove_groupleader" => "Gruppenleiter entfernt",
+"action_usergroups_changed_permissions" => "Berechtigungen der Benutzergruppe geändert",
+"action_usergroups_added_user" => "Benutzer zu Benutzergruppe hinzugefügt",
+"action_usergroups_removed_user" => "Benutzer aus Benutzergruppe entfernt",
+"action_usergroups_deleted"	=> "Benutergruppe gelöscht",
+"action_user_changed_permissions" => "Berechtigungen des Benutzers geändert",
+"action_user_added_group" => "Benutzer zu Benutzergruppen hinzugefügt",
+"action_user_removed_group" => "Benutzer aus Benutzergruppen entfernt",
  );
 
 ?>

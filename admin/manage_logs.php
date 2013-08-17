@@ -155,6 +155,7 @@ class Manage_Logs extends page_generic {
 		foreach($arrTags as $tag){
 			$type_list[$tag] = $this->user->lang($tag, true, false);
 		}
+		natcasesort($type_list);
 		
 		$result_list = array(
 			'-1' => '',

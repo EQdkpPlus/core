@@ -23,13 +23,21 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_w_raid" ) ) {
 	class pdh_w_raid extends pdh_w_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'game', 'config', 'time');
+		$shortcuts = array('pdh', 'db', 'game', 'config', 'time', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
 		public function __construct() {
 			parent::__construct();
 		}
+		
+		private $arrLogLang = array(
+				'event' 	=> '{L_EVENT}',
+				'attendees' => '{L_ATTENDEES}',
+				'note'		=> '{L_NOTE}',
+				'value'		=> '{L_VALUE}',
+				'date'		=> '{L_DATE}',
+		);
 
 		public function add_raid($raid_date, $raid_attendees, $event_id, $raid_note, $raid_value) {
 			//check for correct data
@@ -61,13 +69,12 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			if($this->db->query($sql) AND $raid_id) {
 				//log insertion
 				$log_action = array(
-					'{L_ID}'		=> $raid_id,
 					'{L_EVENT}'		=> $this->pdh->get('event', 'name', array($event_id)),
 					'{L_ATTENDEES}'	=> implode(', ', $attendee_names),
 					'{L_NOTE}'		=> $raid_note,
 					'{L_VALUE}'		=> $raid_value,
 					'{L_DATE}'		=> '{D_'.$raid_date.'}',
-					'{L_ADDED_BY}'	=> $this->admin_user);
+				);
 				$this->log_insert('action_raid_added', $log_action, $raid_id, $this->pdh->get('event', 'name', array($event_id)));
 				//call pdh hooks
 				$this->pdh->enqueue_hook('raid_update', $raid_id);
@@ -110,20 +117,24 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					$this->db->query($sql);
 				}
 				$member_string = get_coloured_names($upd_atts, $add_atts, $del_atts);
-				$log_action = array(
-					'{L_ID}'				=> $raid_id,
-					'{L_EVENT_BEFORE}'		=> $this->pdh->get('event', 'name', array($old['event'])),
-					'{L_ATTENDEES_BEFORE}'	=> implode(', ', $old['m_names']),
-					'{L_NOTE_BEFORE}'		=> $old['note'],
-					'{L_VALUE_BEFORE}'		=> $old['value'],
-					'{L_DATE_BEFORE}'		=> '{D_'.$old['date'].'}',
-					'{L_EVENT_AFTER}'		=> $this->pdh->get('event', 'name', array($event_id)),
-					'{L_ATTENDEES_AFTER}'	=> $member_string,
-					'{L_NOTE_AFTER}'		=> $raid_note,
-					'{L_VALUE_AFTER}'		=> $raid_value,
-					'{L_DATE_AFTER}'		=> '{D_'.$raid_date.'}',
-					'{L_UPDATED_BY}'		=> $this->admin_user
+				
+				$arrOld = array(
+					'event' 	=> $this->pdh->get('event', 'name', array($old['event'])),
+					'attendees' => implode(', ', $old['m_names']),
+					'note'		=> $old['note'],
+					'value'		=> $old['value'],
+					'date'		=> '{D_'.$old['date'].'}',
 				);
+				$arrNew = array(
+					'event' 	=> $this->pdh->get('event', 'name', array($event_id)),
+					'attendees' => $member_string,
+					'note'		=> $raid_note,
+					'value'		=> $raid_value,
+					'date'		=> '{D_'.$raid_date.'}',
+				);
+				
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+				
 				$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
 				$this->pdh->enqueue_hook('raid_update', $raid_id);
 				return true;
@@ -164,7 +175,6 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				if(!in_array(false, $retu) AND $this->db->query($sql)) {
 					//log it
 					$log_action = array(
-						'{L_ID}'		=> $raid_id,
 						'{L_DATE}'		=> '{D_'.$old['date'].'}',
 						'{L_EVENT}'		=> $old['event'],
 						'{L_ATTENDEES}'	=> implode(', ', $old['members']),
@@ -187,7 +197,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			if(count($raids) < 1) return true;
 			foreach($raids as $raid_id) {
 				$this->pdh->put('item', 'delete_itemsofraid', array($raid_id));
-				$this->pdh->put('item', 'delete_adjsofraid', array($raid_id));
+				$this->pdh->put('adjustment', 'delete_adjustmentsofraid', array($raid_id));
 			}
 			$this->db->query("DELETE FROM __raids WHERE raid_id IN ('".implode("', '", $raids)."');");
 			$this->db->query("DELETE FROM __raid_attendees WHERE raid_id IN ('".implode("', '", $raids)."');");

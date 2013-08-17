@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_user_groups_users')) {
 			parent::__construct();
 		}
 
-		public function add_user_to_group($user_id, $group_id) {
+		public function add_user_to_group($user_id, $group_id, $blnLogging = true) {
 			$arrSet = array(
 				'group_id' => $group_id,
 				'user_id'  => $user_id,
@@ -72,11 +72,19 @@ if(!class_exists('pdh_w_user_groups_users')) {
 				'grpleader' => 1,
 			);
 			
+			$arrNames = array();
 			foreach($arrUserIDs as $user_id){
 				if(!$this->db->query("UPDATE __groups_users SET :params WHERE group_id='".$this->db->escape($group_id)."' AND user_id='".$this->db->escape($user_id)."'", $arrSet)) {
 					return false;
 				}
+				$arrNames[] = $this->pdh->get('user', 'name', array($user_id)); 
 			}
+			
+			$log_action = array(
+				'{L_USER}' => implode(', ', $arrNames),	
+			);
+			
+			$this->log_insert('action_usergroups_add_groupleader', $log_action, $group_id, $this->pdh->get('user_groups', 'name', array($group_id)));
 			
 			$this->pdh->enqueue_hook('user_groups_update');
 			return true;
@@ -91,11 +99,19 @@ if(!class_exists('pdh_w_user_groups_users')) {
 				'grpleader' => 0,
 			);
 			
+			$arrNames = array();
 			foreach($arrUserIDs as $user_id){
 				if(!$this->db->query("UPDATE __groups_users SET :params WHERE group_id='".$this->db->escape($group_id)."' AND user_id='".$this->db->escape($user_id)."'", $arrSet)) {
 					return false;
 				}
+				$arrNames[] = $this->pdh->get('user', 'name', array($user_id));
 			}
+			
+			$log_action = array(
+					'{L_USER}' => implode(', ', $arrNames),
+			);
+				
+			$this->log_insert('action_usergroups_remove_groupleader', $log_action, $group_id, $this->pdh->get('user_groups', 'name', array($group_id)));
 			
 			$this->pdh->enqueue_hook('user_groups_update');
 			return true;
