@@ -71,6 +71,7 @@ if ( !defined('EQDKP_INC') ){
 		 * $arrFlags = array(0,0,1)
 		 */
 		public function diff($arrOld, $arrNew, $arrLang, $arrFlags=array(), $blnOnlyNewKeys=false){
+			$arrChanged = array();
 			if ($arrOld && !$blnOnlyNewKeys){
 				foreach($arrOld as $key => $val){
 					if ($arrNew[$key] != $val){

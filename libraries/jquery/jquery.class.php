@@ -819,7 +819,6 @@ if (!class_exists("jquery")) {
 		*/
 		public function progressbar($id, $value=0, $options=''){
 			$html	= '';
-			
 			// options
 			$value = (isset($options['completed']) && isset($options['total']) && $options['total'] >= $options['completed']) ? (($options['completed'] != 0) ? intval(($options['completed'] / $options['total']) * 100) : 0) : (($value >= 0 && $value <= 100) ? $value : '0');
 

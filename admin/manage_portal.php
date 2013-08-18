@@ -130,6 +130,7 @@ class Manage_Portal extends page_generic {
 			if($options['type'] == 'jq_multiselect' && $options['selected']) {
 				$options['selected'] = (isset($options['selected']) && strlen($options['selected'])) ? unserialize($options['selected']) : array();
 			}
+
 			$ccfield			= $this->html->widget($options);
 			if($ccfield) {
 				if($save) {

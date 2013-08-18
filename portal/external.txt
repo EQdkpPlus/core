@@ -6,7 +6,6 @@
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/realmstatus/tags/1.1.3 realmstatus
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/whoisonline/tags/0.1.0 whoisonline
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mycontent/tags/2.0.1 mycontent
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/weather/trunk weather
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/nextraids/trunk nextraids
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/wordofthemoment/tags/2.0.0 wordofthemoment
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/rssfeed/tags/2.0.0 rssfeed
@@ -20,5 +19,3 @@
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/newsarchive/tags/0.1.0 newsarchive
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mumbleviewer/tags/1.1.0 mumbleviewer
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/guildnews/tags/0.1.0 guildnews
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/quickpolls/trunk quickpolls
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mybars/trunk mybars
