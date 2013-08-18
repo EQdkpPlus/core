@@ -1,6 +1,5 @@
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mmo_news/tags/0.1.1 mmo_news
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/quickdkp/trunk quickdkp
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/twitter/trunk twitter
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/recruitment/trunk recruitment
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/birthday/tags/2.0.0 birthday
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/lastitems/tags/2.0.0 lastitems
@@ -23,9 +22,3 @@
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/guildnews/tags/0.1.0 guildnews
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/quickpolls/trunk quickpolls
 //svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mybars/trunk mybars
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/menu/trunk menu
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/featurednews/trunk featurednews
-
-
-
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/latestposts/trunk latestposts
