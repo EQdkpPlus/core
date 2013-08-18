@@ -255,7 +255,7 @@ if (!class_exists("html")) {
 				case 'imageuploader':
 					$fileuploadid	= 'file_imageupl_'.$this->cleanid($options['name']);
 					$imgvalue		= (isset($options['value'])) ? $options['value'] : '';
-					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('admin', $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
+					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('all', $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
 				break;
 				
 				case 'userimageuploader':

@@ -65,7 +65,7 @@ function load_settings(){
 }
 
 function create_multiselect(name){
-	$("#"+name).multiselect({height: 200,minWidth: 200,checkAllText: "{L_cl_ms_checkall}",uncheckAllText: "{L_cl_ms_uncheckall}",noneSelectedText: "{L_cl_ms_noneselected}",selectedList: 5,selectedText: "{L_cl_ms_selection}",multiple: true,});
+	$("#"+name).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
 }
 function create_spinner(name, change){
 	if (change){

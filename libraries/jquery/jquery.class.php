@@ -1360,7 +1360,7 @@ if (!class_exists("jquery")) {
 		/**
 		* FileBrowser
 		* 
-		* @param $type		user / admin
+		* @param $type		user / all
 		* @param $filter	none / image
 		* @return void
 		*/

@@ -523,6 +523,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_tags_array(){
+			return (is_array($this->tags)) ? $this->tags : array();
+		}
 
 	}//end class
 }//end if

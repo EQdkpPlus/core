@@ -98,13 +98,21 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$this->pdc->put('pdh_article_categories_alias', $this->alias, null);
 		}
 
-		public function get_id_list() {
+		public function get_id_list($blnPublishedOnly = false) {
 			if ($this->categories == NULL) return array();
-			return array_keys($this->categories);
+			
+			if ($blnPublishedOnly){
+				$arrOut = array();
+				foreach($this->categories as $intCategoryID => $arrCat){
+					if ($this->get_published($intCategoryID)) $arrOut[] = $intCategoryID;
+				}
+				return $arrOut;
+			} else return array_keys($this->categories);
 		}
 		
-		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false){
-			$blnFeaturedOnly = $this->get_featured_only($intCategoryID);
+		//Get all published article IDs
+		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false, $blnFeaturedOnly=NULL){
+			if($blnFeaturedOnly === NULL) $blnFeaturedOnly = $this->get_featured_only($intCategoryID);
 			if (!$this->get_published($intCategoryID)) return array();
 			if ($intUserID === false) $intUserID = $this->user->id;
 			$arrOut = array();

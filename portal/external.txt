@@ -1,0 +1,31 @@
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mmo_news/tags/0.1.1 mmo_news
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/quickdkp/trunk quickdkp
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/twitter/trunk twitter
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/recruitment/trunk recruitment
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/birthday/tags/2.0.0 birthday
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/lastitems/tags/2.0.0 lastitems
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/realmstatus/tags/1.1.3 realmstatus
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/whoisonline/tags/0.1.0 whoisonline
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mycontent/tags/2.0.1 mycontent
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/weather/trunk weather
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/nextraids/trunk nextraids
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/wordofthemoment/tags/2.0.0 wordofthemoment
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/rssfeed/tags/2.0.0 rssfeed
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/rankimage/tags/1.1.0 rankimage
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/lastraids/tags/2.0.0 lastraids
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/dkpinfo/tags/2.0.0 dkpinfo
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/offi_conf/trunk offi_conf
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/teamspeak3/tags/1.0.3 teamspeak3
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/ventrilo/tags/1.0.0 ventrilo
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/latestnews/tags/0.1.0 latestnews
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/newsarchive/tags/0.1.0 newsarchive
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mumbleviewer/tags/1.1.0 mumbleviewer
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/guildnews/tags/0.1.0 guildnews
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/quickpolls/trunk quickpolls
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/mybars/trunk mybars
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/menu/trunk menu
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/featurednews/trunk featurednews
+
+
+
+//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/latestposts/trunk latestposts

@@ -478,7 +478,7 @@ a .icon-rotate-90:before,a .icon-rotate-180:before,a .icon-rotate-270:before,a .
 	color:#6E6E6E;
 }
 
- /* body */
+/* body */
 html {
 	min-height: 100%;
 }
@@ -492,7 +492,7 @@ body {
 	background: linear-gradient(to bottom,  #2e78b0 0%,#193759 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2e78b0', endColorstr='#193759',GradientType=0 ); /* IE6-9 */
 	font-size: 13px;
-	font-family: Tahoma,â€‹Arial,â€‹Verdana,â€‹sans-serif;
+	font-family: Tahoma,Arial,Verdana,sans-serif;
 	color: #000000;
 }
 
@@ -502,7 +502,7 @@ body.simple-header {
 }
 
 h1, h2, h3 {
-	font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family: 'Trebuchet MS',Arial,sans-serif;
     font-weight: bold;
     margin-bottom: 10px;
     padding-bottom: 5px;
@@ -538,7 +538,7 @@ h3 {
 
 	min-height: 39px;
 	color: #d9d7d7;
-	font: 13px 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font: 13px 'Trebuchet MS',Arial,sans-serif;
 	padding-left: 40px;
 	padding-right: 40px;
 	-moz-box-shadow: 10px 10px 5px #888;
@@ -590,7 +590,7 @@ h3 {
     height: 20px;
     padding: 2px 5px;
     width: 200px;
-	font: 14px 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font: 14px 'Trebuchet MS',Arial,sans-serif;
 }
 
 #personalAreaTime button {
@@ -612,7 +612,7 @@ h3 {
 #footer {
 	text-align: center;
 	color: #fff;
-	font-family:'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family:'Trebuchet MS',Arial,sans-serif;
 	font-size: 12px;
 	margin-top: 20px;
 }
@@ -736,7 +736,7 @@ h3 {
 	text-align:left;
 	padding-left:40px;
 	color: #fff;
-	font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family: 'Trebuchet MS',Arial,sans-serif;
 }
 
 #titles h1 {
@@ -791,7 +791,7 @@ h3 {
 .page-viewnews h1.contentTitle {
 	background-color: #EAEAEA;
     border-bottom: 1px solid #CCCCCC;
-    font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+    font-family: 'Trebuchet MS',Arial,sans-serif;
     padding: 5px 2px 5px 2px;
 	font-size: 14px;
 	margin: -5px -5px 5px;
@@ -814,7 +814,7 @@ h3 {
 .portalbox_head {
     background-color: #EAEAEA;
     border-bottom: 1px solid #CCCCCC;
-    font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+    font-family: 'Trebuchet MS',Arial,sans-serif;
     padding: 5px 2px 5px 2px;
 	font-size: 14px;
 }
@@ -915,7 +915,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     border: 1px solid #CCCCCC;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-	font-family: Tahoma,â€‹Arial,â€‹Verdana,â€‹sans-serif;
+	font-family: Tahoma,Arial,Verdana,sans-serif;
 	margin: 3px;
 }
 
@@ -1017,7 +1017,6 @@ input[type=radio], input[type=checkbox]{
 }
 .small {
 	font-size: 11px;
-	padding: .2em 1em .275em;
 }
 
 button[disabled], button[disabled]:hover, input[type=submit][disabled], input[type=button][disabled], input[type=reset][disabled],input[type=submit][disabled]:hover, input[type=button][disabled]:hover, input[type=reset][disabled]:hover {
@@ -1272,15 +1271,15 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	padding: 2px;
 }
 
-#contentBody th {
+#contentBody th, .portalbox_content th {
 	font-weight: bold;
 	background-color: #e8e8e8;
 	white-space:nowrap;
 	text-align:left;
-	font-family:'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family:'Trebuchet MS',Arial,sans-serif;
 }
 
-#contentBody th, #contentBody td {
+#contentBody th, #contentBody td{
     border-top: 1px solid #DDDDDD;
 	border-bottom: 1px solid #DDDDDD;
     line-height: 20px;
@@ -1288,6 +1287,16 @@ a.blue, a.blue:hover, a.button, a.button:hover {
     text-align: left;
     vertical-align: top;
 }
+
+.portalbox_content th, .portalbox_content td {
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+    line-height: 18px;
+    padding: 4px;
+    text-align: left;
+    vertical-align: top;
+}
+
 #contentBody .row1,.colorswitch tr:nth-child(even),.colorswitch>td:nth-child(even), .colorswitch > div:nth-child(even){
 	background-color: #F9F9F9;
 }
@@ -1307,7 +1316,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 #contentBody th a {
 	text-decoration: none;
 	color: #000;
-	font-family:'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family:'Trebuchet MS',Arial,sans-serif;
 }
 
 #contentBody th a:hover {
@@ -1358,7 +1367,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 
 fieldset.settings legend {
 	border-bottom: 1px solid #CCCCCC;
-    font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+    font-family: 'Trebuchet MS',Arial,sans-serif;
     font-size: 18px;
     font-weight: bold;
 	padding-top: 5px;
@@ -1505,7 +1514,7 @@ div[aria-describedby="dialog-login"]  .password-forgot{
 	border-left: 0px;
 	border-right: 0px;
 	border-bottom: 1px solid #CCCCCC;
-    font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+    font-family: 'Trebuchet MS',Arial,sans-serif;
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -2225,7 +2234,7 @@ ul.breamcrumb .current::before{
 }
 
 .manage_menues_block .toggle_button {
-	font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family: 'Trebuchet MS',Arial,sans-serif;
     font-weight: bold;
 	border-bottom: 1px solid #CCCCCC;
 	background-color: #EAEAEA;
@@ -2358,7 +2367,7 @@ ul.portal_block {
 /* calendar: raidevent view */
 .raidcal_name {
 	font-size: 28px;
-	font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family: 'Trebuchet MS',Arial,sans-serif;
     font-weight: bold;
     margin-bottom: 10px;
     padding-bottom: 5px;
@@ -2394,7 +2403,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 }
 
 .guesttable b {
-	font-family: 'Trebuchet MS',â€‹Arial,â€‹sans-serif;
+	font-family: 'Trebuchet MS',Arial,sans-serif;
 	font-weight: bold;
 }
 
