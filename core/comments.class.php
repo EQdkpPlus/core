@@ -245,7 +245,7 @@ if (!class_exists("comments")){
 			$editor->editor_bbcode();
 			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
 			
-			$html .= '<div class="commentReplyForm" style="display:none;">
+			$html = '<div class="commentReplyForm" style="display:none;">
 					<form class="comment_reply" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
 						<input type="hidden" name="page" value="'.$page.'"/>

@@ -838,7 +838,7 @@ if (!class_exists("jquery")) {
 			// generate percentage text if required
 			$text					= (isset($options['text']) && strpos($options['text'], "%percentage%") === false) ? $options['text'] : str_replace("%percentage%", $value.'%', $options['text']);
 			$text					= (isset($options['text']) && strpos($text, "%progress%") === false) ? $text : str_replace("%progress%", $options['completed'].'/'.$options['total'], $text);
-			
+			if (!isset($options['txtalign'])) $options['txtalign'] = 'center';
 
 			// the HTML of the progressbar
 			$html	.= '<div id="'.$id.'">'.((isset($options['text']) && $options['text']) ? '<span class="progressbar_label"'.(($options['txtalign']) ? ' style="text-align: '.$options['txtalign'].'"' : '').'>'.$text.'</span>' : '').'</div>';

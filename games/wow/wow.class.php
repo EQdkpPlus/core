@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('wow')) {
 	class wow extends game_generic {
-		public static $shortcuts = array('pdh', 'game', 'pm', 'html', 'user', 'config', 'jquery', 'in');
+		public static $shortcuts = array('pdh', 'game', 'pm', 'html', 'user', 'config', 'jquery', 'in', 'routing');
 
 		protected $this_game	= 'wow';
 		protected $types		= array('classes', 'races', 'factions', 'filters', 'realmlist', 'roles', 'professions', 'chartooltip');	// which information are stored?
@@ -70,7 +70,7 @@ if(!class_exists('wow')) {
 			$content = file_get_contents($template);
 			$charicon = $this->pdh->get('wow', 'charicon', array($intCharID));
 			if ($charicon == '') {
-				$charicon = $this->root_path.'images/no_pic.png';
+				$charicon = $this->server_path.'images/no_pic.png';
 			}
 			$charhtml = '<b>'.$this->pdh->get('member', 'html_name', array($intCharID)).'</b><br />';
 			$guild = $this->pdh->get('member', 'profile_field', array($intCharID, 'guild'));
@@ -265,7 +265,7 @@ if(!class_exists('wow')) {
 		/*
 		 * Parse the guild news of armory
 		 */
-		public function parseGuildnews($arrNews, $intCount = 50){
+		public function parseGuildnews($arrNews, $intCount = 50, $arrTypes = false){
 			$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
 
 			$arrOut = array();
@@ -280,17 +280,21 @@ if(!class_exists('wow')) {
 					
 					switch($val['type']){
 						case 'guildCreated':
+						if (is_array($arrTypes) && !in_array('guildCreated', $arrTypes)) continue;
+						
 						$arrOut[] = array(
 							'text' => $this->glang('news_guildCreated'),
-							'icon' => $this->root_path.'games/wow/roster/newsfeed_guild.png',
+							'icon' => $this->server_path.'games/wow/roster/newsfeed_guild.png',
 							'date' => substr($val['timestamp'], 0, -3),
 						);
 						break;
+						
 						case 'itemLoot':{
+							if (is_array($arrTypes) && !in_array('itemLoot', $arrTypes)) continue;
 						$itemData = $this->game->obj['armory']->item($val['itemId']);
 						$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 						if ($charID) {
-							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->root_path.'viewcharacter.php', '', false, false, true));
+							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->routing->build('character',false,false,false), '', false, false, true, true));
 						} else {
 							$charLink = $val['character'];
 						}
@@ -301,11 +305,13 @@ if(!class_exists('wow')) {
 						);
 						}
 						break;
+						
 						case 'itemPurchase':
+						if (is_array($arrTypes) && !in_array('itemPurchase', $arrTypes)) continue;
 						$itemData = $this->game->obj['armory']->item($val['itemId']);
 						$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 						if ($charID) {
-							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->root_path.'viewcharacter.php', '', false, false, true));
+							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID,  $this->routing->build('character',false,false,false), '', false, false, true, true));
 						} else {
 							$charLink = $val['character'];
 						}
@@ -315,14 +321,18 @@ if(!class_exists('wow')) {
 							'date' => substr($val['timestamp'], 0, -3),
 						);
 						break;
+						
 						case 'guildLevel':
+						if (is_array($arrTypes) && !in_array('guildLevel', $arrTypes)) continue;
 						$arrOut[] = array(
 							'text' => sprintf($this->glang('news_guildLevel'), $val['levelUp']),
 							'icon' => $this->root_path.'games/wow/roster/newsfeed_guild.png',
 							'date' => substr($val['timestamp'], 0, -3),
 						);
 						break;
+						
 						case 'guildAchievement':{
+							if (is_array($arrTypes) && !in_array('guildAchievement', $arrTypes)) continue;
 							$achievCat = $this->game->obj['armory']->getCategoryForAchievement((int)$val['achievement']['id'], $arrGuildAchievementsData);
 							$bnetLink = $this->game->obj['armory']->bnlink($val['character'], $this->config->get('uc_servername'), 'guild-achievements', $this->config->get('guildtag')).'#'.$achievCat.':a'.$val['achievement']['id'];
 						$arrOut[] = array(
@@ -333,6 +343,8 @@ if(!class_exists('wow')) {
 						}
 						break;
 						case 'playerAchievement':{
+							if (is_array($arrTypes) && !in_array('playerAchievement', $arrTypes)) continue;
+							
 							$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 							if ($charID) {
 								$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->root_path.'viewcharacter.php','', false, false, true));
