@@ -108,7 +108,7 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 		}
 		
 		public function get_usedby($intLayoutID){
-			return 0;
+			return $this->pdh->get('article_categories', 'used_portallayout_number', array($intLayoutID));
 		}
 		
 		public function get_editicon($intLayoutID){

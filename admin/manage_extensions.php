@@ -342,7 +342,7 @@ class Manage_Extensions extends page_generic {
 			foreach($dep as $key => $depdata) {
 				$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
 				$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-					'DEPENDENCY_STATUS' => $this->html->ToolTip($tt, $this->html->toggleIcons($depdata, 'status_green.gif','status_red.gif','images/glyphs/').' '.$this->user->lang('plug_dep_'.$key.'_short'))
+					'DEPENDENCY_STATUS' => $this->html->ToolTip($tt, $this->html->toggleIcons($depdata, 'status_green.png','status_red.png','images/glyphs/').' '.$this->user->lang('plug_dep_'.$key.'_short'))
 				));
 			}
 		}
@@ -370,7 +370,7 @@ class Manage_Extensions extends page_generic {
 					$tt = $this->user->lang('plug_dep_'.$key);
 
 					$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-						'DEPENDENCY_STATUS' => (($depdata === 'skip') ? '&nbsp;' : $this->html->ToolTip($tt, $this->html->toggleIcons($depdata, 'status_green.gif','status_red.gif','images/glyphs/').' '.$this->user->lang('plug_dep_'.$key.'_short'))),
+						'DEPENDENCY_STATUS' => (($depdata === 'skip') ? '&nbsp;' : $this->html->ToolTip($tt, $this->html->toggleIcons($depdata, 'status_green.png','status_red.png','images/glyphs/').' '.$this->user->lang('plug_dep_'.$key.'_short'))),
 					));
 				}
 			}

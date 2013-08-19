@@ -311,8 +311,8 @@ class Manage_User_Groups extends page_generic {
 		foreach($user_data as $key => $elem) {
 			if (in_array($key, $members)){
 			
-			$user_online = ( !empty($elem['session_id']) ) ? "<img src='../images/glyphs/status_green.gif' alt='' />" : "<img src='../images/glyphs/status_red.gif' alt='' />";
-			$user_active = ( $elem['user_active'] == '1' ) ? "<img src='../images/glyphs/status_green.gif' alt='' />" : "<img src='../images/glyphs/status_red.gif' alt='' />";
+			$user_online = ( !empty($elem['session_id']) ) ? "<img src='../images/glyphs/status_green.png' alt='' />" : "<img src='../images/glyphs/status_red.png' alt='' />";
+			$user_active = ( $elem['user_active'] == '1' ) ? "<img src='../images/glyphs/status_green.png' alt='' />" : "<img src='../images/glyphs/status_red.png' alt='' />";
 			
 			$row = ($this->pdh->get('user_groups_users', 'is_grpleader', array($elem['user_id'], $groupID))) ? '_grpleader' : '';
 			

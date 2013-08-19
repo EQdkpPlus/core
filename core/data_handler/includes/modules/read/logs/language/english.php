@@ -39,7 +39,7 @@ $preset_lang = array(
 	'loguser'		=> 'Log-User',
 	'logipaddress'	=> 'Log-IP-Adress',
 	'logresult'		=> 'Log-Result',
-	'viewlog'		=> 'Log-View Button'
+	'viewlog'		=> 'Log-View Button',
 	'logrecord'		=> 'Log-Record',
 	'logrecordid'	=> 'Log-Record-ID',
 );

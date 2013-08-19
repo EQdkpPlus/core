@@ -127,9 +127,9 @@ class sql_update extends task {
 		foreach($sqls as $key => $sql) {
 			$this->form .= '<tr><td>';
 			if($this->db->query($sql)) {
-				$this->form .= '<img src="'.$this->root_path.'images/glyphs/status_green.gif"> ';
+				$this->form .= '<img src="'.$this->root_path.'images/glyphs/status_green.png"> ';
 			} else {
-				$this->form .= '<img src="'.$this->root_path.'images/glyphs/status_red.gif"> ';
+				$this->form .= '<img src="'.$this->root_path.'images/glyphs/status_red.png"> ';
 			}
 			$this->form .=  $lang[$key].'</td></tr>';
 				

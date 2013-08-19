@@ -251,6 +251,21 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 		
+		public function get_html_portal_layout($intCategoryID){
+			if ($this->get_portal_layout($intCategoryID)) {
+				return $this->pdh->get('portal_layouts', 'name', array($this->get_portal_layout($intCategoryID)));
+			} else return '';
+		}
+		
+		public function get_used_portallayout_number($intPortalLayoutID){
+			$intCount = 0;
+			$intPortalLayoutID = intval($intPortalLayoutID);
+			foreach($this->categories as $key => $value){
+				if ($value['portal_layout'] === $intPortalLayoutID) $intCount++;
+			}
+			return $intCount;
+		}
+		
 		public function get_show_childs($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['show_childs'];

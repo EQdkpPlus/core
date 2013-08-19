@@ -139,7 +139,7 @@ if (!class_exists("pdh_r_user")){
 		}
 		
 		public function get_html_is_online($user_id){
-			return ($this->get_is_online($user_id)) ? '<img src="'.$this->server_path.'/images/glyphs/status_green.gif" alt="" />' : '<img src="'.$this->server_path.'/images/glyphs/status_red.gif" alt="" />';
+			return ($this->get_is_online($user_id)) ? '<img src="'.$this->server_path.'/images/glyphs/status_green.png" alt="" />' : '<img src="'.$this->server_path.'/images/glyphs/status_red.png" alt="" />';
 		}
 
 		public function get_userid_for_authaccount($strAuthAccount){

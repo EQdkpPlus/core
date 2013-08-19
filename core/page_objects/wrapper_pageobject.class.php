@@ -89,7 +89,7 @@ class wrapper_pageobject extends pageobject {
 				if ($arrHook['id'] == $linkID){
 					$arrData = $arrHook['data'];
 					//If URL should be verified, do this
-					if ($arrData['verify'] && !$this->VerifyLink($arrData['url'], $arrData['verify'])) break;
+					if (isset($arrData['verify']) && strlen($arrData['verify']) && !$this->VerifyLink($arrData['url'], $arrData['verify'])) break;
 					$this->data = $arrData;
 					break;
 				}

@@ -24,7 +24,7 @@ $module_lang = array(
 	'editicon'				=> '',
 	'name'					=> 'Name',
 	'blocks'				=> 'Verwendete Blöcke',
-	'usedby'				=> 'Verwendet von'
+	'usedby'				=> 'Verwendet von Kategorien'
 );
 
 ?>

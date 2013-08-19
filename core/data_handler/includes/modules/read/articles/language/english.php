@@ -25,23 +25,23 @@ $module_lang = array(
 	'editicon'				=> '',
 	'published'				=> '',
 	'featured'				=> '',
-	'title'					=> 'Titel',
+	'title'					=> 'Title',
 	'alias'					=> 'Alias',
-	'user_id'				=> 'Benutzer',
-	'date'					=> 'Datum',
-	'last_edited'			=> 'Zuletzt geändert',
+	'user_id'				=> 'User',
+	'date'					=> 'Date',
+	'last_edited'			=> 'Last edited',
 );
 
 $preset_lang = array(
-	'article_sortable'		=> 'Artikel Sortierung',
-	'article_editicon'		=> 'Artikel Editlink',
-	'article_published'		=> 'Artikel Veröffentlichungsstatus',
-	'article_title'			=> 'Artikel Titel',
-	'article_alias'			=> 'Artikel Alias',
-	'article_date'			=> 'Artikel Datum',
-	'article_user'			=> 'Artikel Benutzer',
-	'article_featured'		=> 'Artikel Featured',
-	'article_last_edited'	=> 'Artikel Letztes Änderungsdatum',
+	'article_sortable'		=> 'Article Sortation',
+	'article_editicon'		=> 'Article Editlink',
+	'article_published'		=> 'Article Published state',
+	'article_title'			=> 'Article Title',
+	'article_alias'			=> 'Article Alias',
+	'article_date'			=> 'Article Date',
+	'article_user'			=> 'Article User',
+	'article_featured'		=> 'Article Featured',
+	'article_last_edited'	=> 'Article Last edited',
 );
 
 ?>
