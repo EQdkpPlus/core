@@ -107,6 +107,7 @@ class ManageTasks extends page_generic {
 	public function delete_user(){
 		if ($this->in->exists('user')){
 			$this->pdh->put('user', 'delete_user', array($this->in->get('user', 0), true));
+			$this->pdh->process_hook_queue();
 		}
 		$this->display();
 	}
@@ -162,7 +163,7 @@ class ManageTasks extends page_generic {
 		$this->jquery->Dialog('DeleteChar', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete&link_hash='.$this->CSRFGetToken('mode').'&member=\'+member+\'', 'withid'=>'member', 'message'=>$this->user->lang('uc_del_warning')), 'confirm');
 		$this->jquery->Dialog('DeleteAllChars', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete_all&link_hash='.$this->CSRFGetToken('mode'), 'message'=>$this->user->lang('uc_del_msg_all')), 'confirm');
 		$this->jquery->Dialog('ActivateAllUsers', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=activate_all&link_hash='.$this->CSRFGetToken('mode'), 'message'=>$this->user->lang('activate_all_warning')), 'confirm');
-		$this->jquery->Dialog('DeleteUser', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete_user&link_hash='.$this->CSRFGetToken('mode').'&user=\'+v+\'', 'withid'=>'member', 'message'=>$this->user->lang('confirm_delete_user')), 'confirm');
+		$this->jquery->Dialog('DeleteUser', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete_user&link_hash='.$this->CSRFGetToken('mode').'&user=\'+member+\'', 'withid'=>'member', 'message'=>$this->user->lang('confirm_delete_user')), 'confirm');
 
 		$this->tpl->assign_vars(array(
 			'F_ACTION'			=> 'manage_tasks.php'.$this->SID,
