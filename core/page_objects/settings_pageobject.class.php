@@ -316,11 +316,27 @@ class settings_pageobject extends pageobject {
 							'format' => $birthday_format
 						),
 					),
+					'user_avatar_type' => array(
+						'fieldtype'	=> 'radio',
+						'name'		=> 'user_avatar_type',
+						'options'	=> array(
+							'0'	=> $this->user->lang('user_avatar_type_own'),
+							'1'	=> $this->user->lang('user_avatar_type_gravatar'),
+						),
+						'default'		=> '0',
+					),
 					'user_avatar'	=> array(
 						'fieldtype'	=> 'userimageuploader',
 						'name'		=> 'user_image',
 						'imgpath'	=> $this->pfh->FolderPath('users/'.$this->user->id,'files'),
 						'options'	=> array('deletelink'	=> 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode'), 'returnFormat' => 'filename'),
+					),
+					'user_gravatar_mail' => array(
+						'fieldtype'	=> 'text',
+						'name'	=> 'user_gravatar_mail',
+						'help'	=> 'user_gravatar_mail_help',
+						'dependency' => array('user_avatar_type', 1, 'radio'),
+						'size'	=> 40,
 					),
 				),
 				'user_contact' => array(
@@ -548,7 +564,6 @@ class settings_pageobject extends pageobject {
 		
 		$settingsdata = $this->get_settingsdata();
 		$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields']);
-		
 		//Deactive Profilefields synced by Bridge
 		$synced_fields = array();
 		if ($this->config->get('cmsbridge_active') == 1){
@@ -580,7 +595,7 @@ class settings_pageobject extends pageobject {
 						$help = $this->user->lang('adduser_bridge_note');
  					}
 					$no_lang = (isset($confvars['no_lang'])) ? true : false;
-					$confvars['value'] = (isset($confvars['no_value'])) ? '' : ((isset($userdata[$name]) && $userdata[$name] != "") ? $userdata[$name] : ((isset($confvars['value'])) ? $confvars['value'] : ''));
+					$confvars['value'] = $confvars['selected'] = (isset($confvars['no_value'])) ? '' : ((isset($userdata[$name]) && $userdata[$name] != "") ? $userdata[$name] : ((isset($confvars['value'])) ? $confvars['value'] : ''));
 					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
 						'NAME'		=> ((isset($confvars['required'])) ? '* ' : '').(($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name']),
 						'HELP'		=> ((!empty($confvars['help'])) ? $this->user->lang($confvars['help']) : '').' '.$help,

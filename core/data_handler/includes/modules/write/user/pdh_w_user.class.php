@@ -162,7 +162,7 @@ if(!class_exists('pdh_w_user')) {
 			
 			$privArray = array();
 			$customArray = array();
-			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube');
+			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube', 'user_gravatar_mail', 'user_avatar_type');
 			foreach($settingsdata as $group => $fieldsets) {
 				if($group == 'registration_information') continue;
 				foreach($fieldsets as $tab => $fields) {
@@ -177,6 +177,7 @@ if(!class_exists('pdh_w_user')) {
 				}
 			}
 			
+			//Create Thumbnail for User Avatar
 			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
 				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
 				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
@@ -208,6 +209,14 @@ if(!class_exists('pdh_w_user')) {
 			$custom = unserialize($result);
 			$this->pfh->Delete($this->pfh->FilePath('user_avatars/'.$custom['user_avatar']));
 			unset($custom['user_avatar']);
+			$this->db->query("UPDATE __users SET custom_fields = '".$this->db->escape(serialize($custom))."' WHERE user_id='".$this->db->escape($user_id)."'");
+			$this->pdh->enqueue_hook('user');
+		}
+		
+		public function disable_gravatar($user_id){
+			$result = $this->db->query_first("SELECT custom_fields FROM __users WHERE user_id = '".$this->db->escape($user_id)."'");
+			$custom = unserialize($result);
+			$custom['user_avatar_type'] = '0';
 			$this->db->query("UPDATE __users SET custom_fields = '".$this->db->escape(serialize($custom))."' WHERE user_id='".$this->db->escape($user_id)."'");
 			$this->pdh->enqueue_hook('user');
 		}

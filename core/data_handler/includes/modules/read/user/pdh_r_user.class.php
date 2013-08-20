@@ -430,13 +430,27 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_avatarimglink($user_id, $fullSize=false){
-			
-			if($avatarimg = $this->get_custom_fields($user_id, 'user_avatar')){
-				$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
-				$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);		
-				if (!$fullSize && is_file($thumbnail)) return $thumbnail;
-				return $fullSizeImage;
+			$intAvatarType = intval($this->get_custom_fields($user_id, 'user_avatar_type'));
+			if ($intAvatarType == 0){
+				if($avatarimg = $this->get_custom_fields($user_id, 'user_avatar')){
+					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
+					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);		
+					if (!$fullSize && is_file($thumbnail)) return $thumbnail;
+					return $fullSizeImage;
+				}
+			} elseif($intAvatarType == 1){
+				//Gravatar
+				include_once $this->root_path.'core/gravatar.class.php';
+				$gravatar = registry::register('gravatar');
+				$strEmail = $this->get_email($user_id);
+				$strGravatarMail = $this->get_custom_fields($user_id, 'user_gravatar_mail');
+				if (strlen($strGravatarMail)) $strEmail = $strGravatarMail;
+				$result = $gravatar->getAvatar($strEmail, (($fullSize) ? 400 : 68));
+				if ($result) return $result;
+				//Disable
+				$this->pdh->put('user', 'disable_gravatar', array($user_id));
 			}
+
 			return '';
 		}
 		

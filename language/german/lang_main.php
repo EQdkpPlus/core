@@ -873,6 +873,11 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "adding_raid" => "Raid hinzufügen",
 "usergroup" => "Benutzergruppe",
 "tag"	=> "Tag",
+"user_avatar_type" => "Avatar-Typ",
+"user_avatar_type_own" => "Eigenes Avatar",
+"user_avatar_type_gravatar" => "Gravatar",
+"user_gravatar_mail" => "Gravatar Email-Adresse",
+"user_gravatar_mail_help" => "Trage hier deine Gravatar-Email-Adresse ein, sofern sie von deiner Registrierungs-Email-Adresse abweicht.",
  );
 
 ?>

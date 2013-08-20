@@ -60,6 +60,14 @@ if (!class_exists("html")) {
 								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", true);
 							}
 						}
+							
+						function dep_check_radio(name, target, value){
+							if ($("input[name="+target+"]:checked").val() == value){
+								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", false);
+							} else {
+								$("input[name="+name+"],textarea[name="+name+"],select[name="+name+"]").prop("disabled", true);
+							}
+						}
 						
 					', 'docready');
 					$this->blnDepJS = true;
@@ -67,14 +75,23 @@ if (!class_exists("html")) {
 			
 			
 				if (is_array($options['dependency'])){
-					//It's a dropdown
-					$this->tpl->add_js('
-					$(document).on("change", "#'.$options['dependency'][0].'", function () {
+					//It's a radio
+					if(isset($options['dependency'][2]) && $options['dependency'][2] == 'radio'){
+						$this->tpl->add_js('
+						$(document).on("change", "input[name='.$options['dependency'][0].']", function () {
+								dep_check_radio("'.$options['name'].'", "'.$options['dependency'][0].'", "'.$options['dependency'][1].'");
+							});
+							dep_check_radio("'.$options['name'].'", "'.$options['dependency'][0].'", "'.$options['dependency'][1].'");
+						', 'docready');
+					} else {
+						//It's a dropdown
+						$this->tpl->add_js('
+						$(document).on("change", "#'.$options['dependency'][0].'", function () {
+								dep_check_value("'.$options['name'].'", "'.$options['dependency'][0].'", "'.$options['dependency'][1].'");
+							});
 							dep_check_value("'.$options['name'].'", "'.$options['dependency'][0].'", "'.$options['dependency'][1].'");
-						});	
-						dep_check_value("'.$options['name'].'", "'.$options['dependency'][0].'", "'.$options['dependency'][1].'");
-					', 'docready');
-					
+						', 'docready');
+					}					
 					
 				} else {
 					//It's a checkbox
