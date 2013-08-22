@@ -129,7 +129,7 @@ if(!class_exists('eq2_sony')) {
 				
 		protected function ItemDescription($item)
 		{
-		$description = $item->{'description'};
+		$description = html_entity_decode($item->{'description'});
 		if (is_string($description)) {
 		return "<div class='itemd_desc'>" . $description . "</div>\n";
 		} else { return ""; }

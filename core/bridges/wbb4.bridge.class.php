@@ -645,5 +645,4 @@ class wbb4_bridge extends bridge_generic {
 	}
 
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_wbb4_bridge',wbb4_bridge::__shortcuts());
 ?>

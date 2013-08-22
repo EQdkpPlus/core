@@ -1302,11 +1302,11 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	border-top: 1px solid #DDDDDD;
 }
 
-#contentBody .row1,.colorswitch tr:nth-child(even),.colorswitch>td:nth-child(even), .colorswitch > div:nth-child(even){
+#contentBody .row1, .portalbox_content .row1, .colorswitch tr:nth-child(even),.colorswitch>td:nth-child(even), .colorswitch > div:nth-child(even){
 	background-color: #F9F9F9;
 }
 
-#contentBody .row2,.helpline, .colorswitch  tr:nth-child(odd),.colorswitch>td:nth-child(odd), .colorswitch > div:nth-child(odd){
+#contentBody .row2,.portalbox_content .row2,.helpline, .colorswitch  tr:nth-child(odd),.colorswitch>td:nth-child(odd), .colorswitch > div:nth-child(odd){
 	background-color: #F5F5F5;
 }
 
