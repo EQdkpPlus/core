@@ -170,7 +170,9 @@ if(!class_exists('page_generic')){
 			$strAction = get_class($this).$strProcess;
 			$blnCheckGet = $this->user->checkCsrfGetToken($this->in->get('link_hash'), $strAction);
 			$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));
-			if ($blnCheckGet || $blnCheckPost) {
+			$blnCheckPostOld = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken(true)));
+			
+			if ($blnCheckGet || $blnCheckPost || $blnCheckPostOld) {
 				return true;
 			}
 			$this->core->message($this->user->lang('error_invalid_session_key'), $this->user->lang('error'), 'red');

@@ -106,27 +106,34 @@ class auth extends user_core {
 
 			//If the Session is in our Table && is the session_length ok && the IP&Browser fits
 			//prevent too short session_length
-			if ($arrResult && (($arrResult['session_start'] + $this->session_length) > $this->current_time) ){
+			if ($arrResult){
 				//If the IP&Browser fits
 				if (($arrResult['session_ip'] === $this->env->ip) && ($arrResult['session_browser'] === $this->env->useragent)){
-					//We have a valid session
-					$this->data['user_id'] = ($this->data['user_id'] == (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
-					$this->id = $this->data['user_id'];
-					// Only update session DB a minute or so after last update or if page changes
-					if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
-						$this->db->query("UPDATE __sessions SET :params WHERE session_id = ?", array(
-							'session_current'	=> $this->current_time,
-							'session_page'		=> strlen($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
-						), $this->sid);
+					//Check Session length
+					if ((($arrResult['session_start'] + $this->session_length) > $this->current_time)){				
+						//We have a valid session
+						$this->data['user_id'] = ($this->data['user_id'] == (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
+						$this->id = $this->data['user_id'];					
+						
+						// Only update session DB a minute or so after last update or if page changes
+						if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
+							$this->db->query("UPDATE __sessions SET :params WHERE session_id = ?", array(
+								'session_current'	=> $this->current_time,
+								'session_page'		=> strlen($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
+							), $this->sid);
+						}
+						//The Session is valid, copy the user-data to the data-array and finish the init. You you can work with this data.
+	
+						registry::add_const('SID', "?s=".((!empty($arrCookieData['sid'])) ? '' : $this->sid));
+						return true;
+					} else {
+						$arrSessionKeys = explode(";", $arrResult['session_key']);
+						$arrSessionKeys = array_reverse($arrSessionKeys);
+						$this->data['old_sessionkey'] = $arrSessionKeys[0];
 					}
-					//The Session is valid, copy the user-data to the data-array and finish the init. You you can work with this data.
-
-					registry::add_const('SID', "?s=".((!empty($arrCookieData['sid'])) ? '' : $this->sid));
-					return true;
 				}
 			}
 		}
-		
 		//START Autologin
 		$boolSetAutoLogin = false;
 
@@ -136,7 +143,7 @@ class auth extends user_core {
 			if (method_exists($objMethod, 'autologin')){
 				$arrAutologin = $objMethod->autologin($arrCookieData);
 				if ($arrAutologin){
-					$this->data = $arrAutologin;
+					$this->data = array_merge($this->data, $arrAutologin);
 					$boolSetAutoLogin = true;
 					break;
 				}
@@ -147,7 +154,7 @@ class auth extends user_core {
 		if (!$boolSetAutoLogin){
 			$arrAutologin = $this->autologin($arrCookieData);
 			if ($arrAutologin){
-				$this->data = $arrAutologin;
+				$this->data = array_merge($this->data, $arrAutologin);
 				$boolSetAutoLogin = true;
 			}
 		}
@@ -156,14 +163,14 @@ class auth extends user_core {
 		if (!$boolSetAutoLogin && $this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1){
 			$arrAutologin = $this->bridge->autologin($arrCookieData);
 			if ($arrAutologin){
-				$this->data = $arrAutologin;
+				$this->data = array_merge($this->data, $arrAutologin);
 				$boolSetAutoLogin = true;
 			}
 		}
 		//END Autologin
 
 		//Let's create a session
-		$this->create($this->data['user_id'], (isset($this->data['user_login_key']) ? $this->data['user_login_key'] : ''), $boolSetAutoLogin);
+		$this->create($this->data['user_id'], (isset($this->data['user_login_key']) ? $this->data['user_login_key'] : ''), $boolSetAutoLogin, ((isset($this->data['old_sessionkey'])) ? $this->data['old_sessionkey'] : false)  );
 		$this->id = $this->data['user_id'];
 		return true;
 	}
@@ -176,10 +183,11 @@ class auth extends user_core {
 	* @var bool $boolSetAutoLogin If the Autologin-Cookie should be set
 	* @return true
 	*/
-	public function create ($user_id, $strAutologinKey, $boolSetAutoLogin = false){
+	public function create ($user_id, $strAutologinKey, $boolSetAutoLogin = false, $strOldSessionKey=false){
 		if (!$user_id) $user_id = ANONYMOUS;
 		$this->sid = substr(md5(rand().uniqid('', true).rand()).md5(rand()), 0, 40);
 		$strSessionKey = $this->generate_session_key();
+		if ($strOldSessionKey) $strSessionKey = $strOldSessionKey.';'.$strSessionKey;
 		$this->current_time = $this->time->time;
 		$arrData = array(
 				'session_id'			=> $this->sid,
@@ -275,7 +283,7 @@ class auth extends user_core {
 		// Get expired sessions
 		$sql =	"SELECT session_page, session_user_id, MAX(session_current) AS recent_time
 						FROM __sessions
-						WHERE session_start < '" . $this->db->escape($this->time->time - $this->session_length) . "'
+						WHERE session_start < '" . $this->db->escape($this->time->time - ($this->session_length*2)) . "'
 						GROUP BY session_user_id";
 		$result = $this->db->query($sql);
 
@@ -345,7 +353,11 @@ class auth extends user_core {
 	*/
 	public function csrfGetToken($strAction){
 		$strUserPassword = (isset($this->data['user_password_clean'])) ? $this->data['user_password_clean'] : $this->data['session_start'];
-		$strSessionKey = $this->data['session_key'];
+		$strSessionKeys = $this->data['session_key'];
+		$arrSessionKeys = explode(";", $strSessionKeys);
+		$arrSessionKeys = array_reverse($arrSessionKeys);
+		$strSessionKey = $arrSessionKeys[0];
+		
 		return substr(sha1($strUserPassword.$strAction.$strSessionKey), 0, 12);
 	}
 
@@ -358,9 +370,21 @@ class auth extends user_core {
 	*/
 	public function checkCsrfGetToken($strToken, $strAction){
 		$strUserPassword = (isset($this->data['user_password_clean'])) ? $this->data['user_password_clean'] : $this->data['session_start'];
-		$strSessionKey = $this->data['session_key'];
-		$strExpectedToken = substr(sha1($strUserPassword.$strAction.$strSessionKey), 0, 12);
+		$strSessionKeys = $this->data['session_key'];
+		$arrSessionKeys = explode(";", $strSessionKeys);
+		$arrSessionKeys = array_reverse($arrSessionKeys);
+		$strSessionKeyNew = $arrSessionKeys[0];
+		//Check new Token
+		$strExpectedToken = substr(sha1($strUserPassword.$strAction.$strSessionKeyNew), 0, 12);
 		if ($strToken === $strExpectedToken) return true;
+		
+		//Check old Token
+		if (isset($arrSessionKeys[1])){
+			$strSessionKeyOld = $arrSessionKeys[1];
+			$strExpectedToken = substr(sha1($strUserPassword.$strAction.$strSessionKeyOld), 0, 12);
+			if ($strToken === $strExpectedToken) return true;
+		}
+		
 		return false;
 	}
 
@@ -369,8 +393,13 @@ class auth extends user_core {
 	*
 	* @return string
 	*/
-	public function csrfPostToken(){
-		return $this->data['session_key'];
+	public function csrfPostToken($blnReturnOld){
+		$strSessionKeys = $this->data['session_key'];
+		$arrSessionKeys = explode(";", $strSessionKeys);
+		$arrSessionKeys = array_reverse($arrSessionKeys);
+		$strSessionKeyNew = $arrSessionKeys[0];
+		if ($blnReturnOld && isset($arrSessionKeys[1])) return $arrSessionKeys[1];
+		return $strSessionKeyNew;
 	}
 
 	/**
@@ -380,8 +409,21 @@ class auth extends user_core {
 	* @return string
 	*/
 	public function checkCsrfPostToken($strToken){
-		$strExpectedToken = $this->data['session_key'];
+		$strSessionKeys = $this->data['session_key'];
+		$arrSessionKeys = explode(";", $strSessionKeys);
+		$arrSessionKeys = array_reverse($arrSessionKeys);
+		$strSessionKeyNew = $arrSessionKeys[0];
+		
+		$strExpectedToken = $strSessionKeyNew;
 		if ($strToken === $strExpectedToken) return true;
+		
+		//Check old Token
+		if (isset($arrSessionKeys[1])){
+			$strSessionKeyOld = $arrSessionKeys[1];
+			$strExpectedToken = $strSessionKeyOld;
+			if ($strToken === $strExpectedToken) return true;
+		}
+		
 		return false;
 	}
 

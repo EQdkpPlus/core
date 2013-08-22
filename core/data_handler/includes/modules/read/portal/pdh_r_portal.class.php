@@ -49,7 +49,6 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			while($drow = $this->db->fetch_record($pff_result)){
 				$this->portal[$drow['id']] = array(
 					'name'			=> $drow['name'],
-					'settings'		=> $drow['settings'],
 					'path'			=> $drow['path'],
 					'contact'		=> $drow['contact'],
 					'url'			=> $drow['url'],
@@ -107,10 +106,6 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 
 		public function get_collapsable($id) {
 			return (isset($this->portal[$id])) ? $this->portal[$id]['collapsable'] : false;
-		}
-
-		public function get_settings($id) {
-			return (isset($this->portal[$id])) ? $this->portal[$id]['settings'] : false;
 		}
 
 		public function get_name($id) {

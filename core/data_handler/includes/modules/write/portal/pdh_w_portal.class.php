@@ -31,11 +31,10 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 			parent::__construct();
 		}
 
-		public function install($path, $plugin='', $name='', $settings='0', $install=array(), $child = false) {
+		public function install($path, $plugin='', $name='', $install=array(), $child = false) {
 			$data = array(
 				'name'			=> $name,
 				'path'			=> $path,
-				'settings'		=> $settings,
 				'plugin'		=> $plugin,
 				//'enabled'		=> ((isset($install['autoenable'])) ? (($install['autoenable']) ? 1 : 0) : 0),
 				//'position'		=> ((isset($install['defaultposition'])) ? $install['defaultposition'] : 0),

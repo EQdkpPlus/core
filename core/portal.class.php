@@ -132,7 +132,7 @@ class portal extends gen_class {
 		}
 		
 		$editbutton = '';
-		if($this->isAdmin && $this->pdh->get('portal', 'settings', array($module_id))) {
+		if($this->isAdmin) {
 			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><img src="'.$this->server_path.'images/global/edit.png" alt="'.$this->user->lang('portalplugin_settings').'" /></span>';
 			$this->init_portalsettings();
 		}
@@ -161,8 +161,7 @@ class portal extends gen_class {
 	public function install($path, $plugin='', $child = false) {
 		$obj = $this->get_module($path, $plugin);
 		if(!$obj) return false;
-		$settings = ($obj->get_settings('fetch_new')) ? true : false;
-		$this->pdh->put('portal', 'install', array($path, $plugin, $obj->get_data('name'), $settings, $obj->install(), $child));
+		$this->pdh->put('portal', 'install', array($path, $plugin, $obj->get_data('name'), $obj->install(), $child));
 	}
 	
 	public function uninstall($path, $plugin='', $id=0) {
@@ -214,7 +213,6 @@ class portal extends gen_class {
 		if(version_compare($this->objs[$path]->get_data('version'), $this->pdh->get('portal', 'version', array($id))) <= 0) return true;
 		//update settings, contact, autor, version
 		$this->pdh->put('portal', 'update', array($id, array(
-			'settings' 	=> ($this->objs[$path]->get_settings('fetch_new')) ? 1 : 0,
 			'contact'	=> $this->objs[$path]->get_data('contact'),
 			'autor'		=> $this->objs[$path]->get_data('author'),
 			'version'	=> $this->objs[$path]->get_data('version'))

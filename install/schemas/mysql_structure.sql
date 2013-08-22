@@ -124,7 +124,7 @@ CREATE TABLE `__sessions` (
 	`session_page` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '0',
 	`session_ip` varchar(50) COLLATE utf8_bin NOT NULL,
 	`session_browser` TEXT COLLATE 'utf8_bin',
-	`session_key` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`session_key` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_type` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_perm_id` smallint(5) NULL DEFAULT '-1',
 	`session_failed_logins` INT(10) UNSIGNED NOT NULL DEFAULT '0',
@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `__links` (
 	`link_window` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`link_menu` tinyint(4) NOT NULL DEFAULT '0',
 	`link_sortid` int(11) NOT NULL DEFAULT '0',
-	`link_visibility` tinyint(3) unsigned NOT NULL DEFAULT '0',
+	`link_visibility` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`link_height` int(12) NOT NULL DEFAULT '4024',
 	PRIMARY KEY (`link_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -429,7 +429,6 @@ DROP TABLE IF EXISTS __portal;
 CREATE TABLE IF NOT EXISTS `__portal` (
 	`id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	`name` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`settings` tinyint(1) NOT NULL DEFAULT 0,
 	`path` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`contact` varchar(100) COLLATE utf8_bin DEFAULT NULL,
 	`url` varchar(100) COLLATE utf8_bin DEFAULT NULL,
@@ -454,8 +453,8 @@ DROP TABLE IF EXISTS __portal_layouts;
 CREATE TABLE `__portal_layouts` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`blocks` TEXT NOT NULL,
-	`modules` TEXT NOT NULL,
+	`blocks` TEXT COLLATE 'utf8_bin' NOT NULL,
+	`modules` TEXT COLLATE 'utf8_bin' NOT NULL,
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -466,7 +465,7 @@ DROP TABLE IF EXISTS __articles;
 CREATE TABLE `__articles` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`text` TEXT NOT NULL,
+	`text` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`category` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`featured` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	`comments` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
@@ -476,14 +475,14 @@ CREATE TABLE `__articles` (
 	`show_to` VARCHAR(11) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`user_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`date` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-	`previewimage` TEXT NOT NULL,
+	`previewimage` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`alias` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`hits` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`sort_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
-	`tags` TEXT NOT NULL,
+	`tags` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`votes_count` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`votes_sum` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-	`votes_users` TEXT NOT NULL,
+	`votes_users` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`last_edited` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`last_edited_user` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`page_objects` TEXT NULL,
