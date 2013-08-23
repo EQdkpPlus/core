@@ -17,13 +17,20 @@
 				var window = $(this).siblings('.link-window').val();
 				var windowsize = $(this).siblings('.link-windowsize').val();
 				var visibility = $(this).siblings('.link-visibility').val();
-				
+						
 				$('#editlink-button').val(linkid);
 				$('.editlink-name').val(name);
 				$('.editlink-url').val(url);
 				$('.editlink-window').val(window);
 				$('.editlink-windowsize').val(windowsize);
-				$('.editlink-visibility').val(visibility);
+				if (visibility != ""){
+				var objVis = JSON.parse(visibility);
+					console.log(objVis);
+					$('#dw_editlink-visibility').val(objVis);
+					$('#dw_editlink-visibility').multiselect('refresh');
+				} else {
+					$('#dw_editlink-visibility').multiselect('uncheckAll');
+				}
 				
 				$( "#dialog-edit-menuitem" ).dialog( "open" );
 			});
@@ -41,7 +48,9 @@
 				var url = $('.editlink-url').val();
 				var window = $('.editlink-window').val();
 				var windowsize = $('.editlink-windowsize').val();
-				var visibility = $('.editlink-visibility').val();
+				
+				var selectedVis = $('#dw_editlink-visibility').val();
+				var visibility = JSON.stringify(selectedVis);
 				
 				container.find('.link-url').val(url);
 				container.find('.link-name').val(name);
@@ -115,7 +124,8 @@
 			$('.editlink-url').val('');
 			$('.editlink-window').val(0);
 			$('.editlink-windowsize').val(4024);
-			$('.editlink-visibility').val(0);			
+			$('#dw_editlink-visibility').val(0);
+			$('#dw_editlink-visibility').multiselect('refresh');	
 			$( "#dialog-edit-menuitem" ).dialog( "open" );
 			
 			newitemid = newitemid + 1;
@@ -190,7 +200,7 @@
 				</dl>
 				<dl>
 					<dt><label>{L_info_opt_visibility}:</label></dt>
-					<dd>{DD_LINK_VISIBILITY}</dd>
+					<dd>{MS_LINK_VISIBILITY}</dd>
 				</dl>
 
 			</fieldset>
@@ -225,7 +235,7 @@
 			<input type="hidden" value=""  name="mainmenu[KEY][name]" class="link-name">
 			<input type="hidden" value=""  name="mainmenu[KEY][window]" class="link-window">
 			<input type="hidden" value="4024"  name="mainmenu[KEY][windowsize]" class="link-windowsize">
-			<input type="hidden" value=""  name="mainmenu[KEY][visibility]" class="link-visibility">
+			<input type="hidden" value='["0"]'  name="mainmenu[KEY][visibility]" class="link-visibility">
 			<input type="hidden" value="KEY"  name="mainmenu[KEY][specialid]" class="link-specialid">
 
 			<input type="hidden" value="pluslink"  name="mainmenu[KEY][type]" class="link-type">			

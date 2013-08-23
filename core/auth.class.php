@@ -393,7 +393,7 @@ class auth extends user_core {
 	*
 	* @return string
 	*/
-	public function csrfPostToken($blnReturnOld){
+	public function csrfPostToken($blnReturnOld=false){
 		$strSessionKeys = $this->data['session_key'];
 		$arrSessionKeys = explode(";", $strSessionKeys);
 		$arrSessionKeys = array_reverse($arrSessionKeys);

@@ -324,10 +324,16 @@ class Manage_Menus extends page_generic {
 		if ($this->in->exists('tab')){
 			$this->jquery->Tab_Select('menu_tabs', $this->in->get('tab',0));
 		}
+		
+		$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
+		$drpdwn_rights[0] = $this->user->lang('cl_all');
+		ksort($drpdwn_rights);
+		
 		$this->tpl->assign_vars(array(				
 			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
 			'DD_LINK_WINDOW'		=> $this->html->DropDown('editlink-window', $a_linkMode , '', '', '', 'editlink-window'),
+			'MS_LINK_VISIBILITY'	=> $this->jquery->MultiSelect("editlink-visibility", $drpdwn_rights, 0),
 			'DD_LINK_VISIBILITY'	=> $this->html->DropDown('editlink-visibility', $a_linkVis , '', '', '', 'editlink-visibility'),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
@@ -348,10 +354,9 @@ class Manage_Menus extends page_generic {
 		$arrOut[''] = "";
 		foreach($arrItems as $k => $v){
 			if ( !is_array($v) )continue;
-			$id++;
-			
+
 			if (!isset($v['childs'])){
-				if (!$this->check_for_hidden_article($v, $id)) {
+				if (!$this->check_for_hidden_article($v)) {
 					if (isset($v['category'])){
 						$arrOut[$v['_hash']] = $this->pdh->get('article_categories', 'name_prefix', array($v['id'])).$this->pdh->get('article_categories', 'name', array($v['id']));
 					} else {
@@ -431,7 +436,7 @@ class Manage_Menus extends page_generic {
 					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">
 					<input type="hidden" value="'.$arrPluslinkData['window'].'"  name="mainmenu['.$id.'][window]" class="link-window">
 					<input type="hidden" value="'.$arrPluslinkData['height'].'"  name="mainmenu['.$id.'][windowsize]" class="link-windowsize">
-					<input type="hidden" value="'.$arrPluslinkData['visibility'].'"  name="mainmenu['.$id.'][visibility]" class="link-visibility">
+					<input type="hidden" value=\''.$arrPluslinkData['visibility'].'\'  name="mainmenu['.$id.'][visibility]" class="link-visibility">
 					<input type="hidden" value="'.$plinkid.'"  name="mainmenu['.$id.'][specialid]" class="link-specialid">
 				';
 			} else {

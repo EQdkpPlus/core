@@ -57,10 +57,10 @@ INSERT INTO __member_ranks (rank_id, rank_name) VALUES ('0', '');
 INSERT INTO __member_ranks (rank_id, rank_name) VALUES ('1', 'Member');
 
 ## Links
-INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (1, '#', 'Guild', '0', 0, 0, 0, 4024);
-INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (2, '#', 'Links', '0', 0, 0, 0, 4024);
-INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (3, 'http://eqdkp-plus.eu', 'EQdkp-Plus', '1', 0, 0, 0, 4024);
-INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (4, '#', 'DKP-System', '0', 0, 0, 0, 4024);
+INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (1, '#', 'Guild', '0', 0, 0, '[&#34;0&#34;]', 4024);
+INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (2, '#', 'Links', '0', 0, 0, '[&#34;0&#34;]', 4024);
+INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (3, 'http://eqdkp-plus.eu', 'EQdkp-Plus', '1', 0, 0, '[&#34;0&#34;]', 4024);
+INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (4, '#', 'DKP-System', '0', 0, 0, '[&#34;0&#34;]', 4024);
 
 
 #multidkp-pool

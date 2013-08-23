@@ -376,7 +376,8 @@ class template extends gen_class {
 		$output = '';
 
 		foreach($array as $item){
-			$filetime	= (substr($item['file'],0,4) == "http") ? rand(1,100000000) : @filemtime($item['file']);
+			$relative_file = str_replace($this->server_path, $this->root_path, $item['file']);
+			$filetime	= (substr($item['file'],0,4) == "http") ? rand(1,100000000) : @filemtime($relative_file);
 			$type		= (is_array($item) && isset($item['type'])) ? "' type='".$item['type']."'" : '';
 			$media		= (is_array($item) && isset($item['media'])) ? " media='".$item['media']."'" : '';
 			$file 		= ((is_array($item)) ? $item['file'] : $item);

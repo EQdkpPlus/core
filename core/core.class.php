@@ -369,7 +369,7 @@ class core extends gen_class {
 		}
 		
 		//Returns all possible Menu Items
-		public function menu_items(){
+		public function menu_items($show_hidden = false){
 			$arrItems = array(
 				array('link' => 'index.php'.$this->SID,				'text' => $this->user->lang('home')),				
 				//array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
@@ -408,7 +408,7 @@ class core extends gen_class {
 			}
 			
 			//Plus Links
-			$arrItems = array_merge($arrItems, $this->pdh->get('links', 'menu', array()));
+			$arrItems = array_merge($arrItems, $this->pdh->get('links', 'menu', array($show_hidden)));
 			
 			return $arrItems;
 		}
@@ -425,7 +425,7 @@ class core extends gen_class {
 		}
 		
 		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
-			$arrItems = $this->menu_items();
+			$arrItems = $this->menu_items($show_hidden);
 			$arrSortation = unserialize($this->config->get('mainmenu'));
 
 			foreach ($arrItems as $key => $item){

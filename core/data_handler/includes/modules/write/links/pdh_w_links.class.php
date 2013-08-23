@@ -49,7 +49,7 @@ if(!class_exists('pdh_w_links')) {
 		public function update($id, $name, $url, $window, $visibility, $height, $force = false){
 			$data = $this->pdh->get('links', 'data', array($id));
 		
-			if ($force OR $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR (int)$data['visibility'] != (int)$visibility OR (int)$data['height'] != (int)$height){
+			if ($force OR $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR $data['visibility'] != $visibility OR (int)$data['height'] != (int)$height){
 				$blnResult = $this->db->query("UPDATE __links SET :params WHERE link_id=?", array(
 					'link_name'			=> $name,
 					'link_url'			=> $url,
