@@ -660,6 +660,11 @@ class controller extends gen_class {
 			message_die('Konnte Artikel bzw. Kategorie nicht finden.');
 		}
 	}
+	
+	protected function CSRFGetToken($strProcess){
+		$strAction = get_class($this).$strProcess;
+		return $this->user->csrfGetToken($strAction);
+	}
 }
 registry::register('controller');
 ?>
