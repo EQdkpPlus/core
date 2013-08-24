@@ -113,7 +113,7 @@ class viewnews extends page_generic {
 					$message .= "<br/><br/>".$news['extended_message'];
 				}else{ //listview
 					if (strlen($news['extended_message'])>1){
-						$message .= '<br><a class="button news_rmlink" href="viewnews.php'.$this->SID.'&amp;id='.$news['news_id'].'">'.$this->user->lang('news_readmore').'</a>';
+						$message .= '<br /><a class="button news_rmlink" href="viewnews.php'.$this->SID.'&amp;id='.$news['news_id'].'">'.$this->user->lang('news_readmore').'</a></p>';
 					}
 				}
 
