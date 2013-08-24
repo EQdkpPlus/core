@@ -39,9 +39,6 @@ if(registry::register('input')->get('out') != ''){
 	switch (registry::register('input')->get('out')){
 	
 		case 'comments':
-			if(!registry::fetch('user')->is_signedin()){
-				echo('You have no permission to see this page as you are not logged in');exit;
-			}
 			if(registry::register('input')->get('deleteid', 0)){
 				registry::register('comments')->Delete(registry::register('input')->get('page'), registry::register('input')->get('rpath'), registry::register('input')->get('replies'));
 			}elseif(registry::register('input')->get('comment', '', 'htmlescape')){

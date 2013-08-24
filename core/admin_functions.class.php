@@ -519,7 +519,7 @@ class admin_functions extends gen_class {
 		);
 
 		// Now get plugin hooks for the menu
-		$admin_menu = (is_array($this->pm->get_menus('admin_menu'))) ? array_merge_recursive($admin_menu, array('extensions'=>$this->pm->get_menus('admin_menu'))) : $admin_menu;
+		$admin_menu = (is_array($this->pm->get_menus('admin'))) ? array_merge_recursive($admin_menu, array('extensions'=>$this->pm->get_menus('admin'))) : $admin_menu;
 
 		//Now get the admin-favorits
 		$favs_array = array();

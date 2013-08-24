@@ -397,7 +397,7 @@ class core extends gen_class {
 			
 			//Plugins
 			if (is_object($this->pm)){
-				$plugin_menu = $this->pm->get_menus('main_menu1');
+				$plugin_menu = $this->pm->get_menus('main');
 				$arrItems = (is_array($plugin_menu)) ? array_merge($arrItems, $plugin_menu) : $arrItems;
 			}
 			

@@ -20,20 +20,20 @@ define('EQDKP_INC', true);
 $eqdkp_root_path = './';
 include_once($eqdkp_root_path . 'common.php');
 
-class controller extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env', 'acl', 'comments','social' => 'socialplugins', 'bbcode', 'pfh', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+class controller extends gen_class {
+	public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env', 'acl', 'comments','social' => 'socialplugins', 'bbcode', 'pfh','pm', 'routing');
+	
 	public function __construct() {
-		$handler = array(
-			'delete' 	=> array('process' => 'delete', 'csrf' => true),
-			'unpublish'	=> array('process' => 'unpublish', 'csrf' => true),
-		);
-		parent::__construct(false, $handler, array());
-
-		$this->process();
+		$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));
+		$blnCheckPostOld = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken(true)));
+		if ($this->in->exists('delete') && ($blnCheckPost || $blnCheckPostOld)){
+			$this->delete();
+		}
+		if ($this->in->exists('unpublish') && ($blnCheckPost || $blnCheckPostOld)){
+			$this->unpublish();
+		}
+	
+		$this->display();
 	}
 	
 	public function delete(){
@@ -71,6 +71,7 @@ class controller extends page_generic {
 		$strPath = $this->env->path;
 		$arrPath = array_filter(explode('/', $strPath));
 		$arrPath = array_reverse($arrPath);
+		register('pm');
 		
 		if (count($arrPath) == 0){
 			//Get Start Page
@@ -643,16 +644,14 @@ class controller extends page_generic {
 				registry::add_const('page', $strPath);
 			}
 			if ($strPageObject){
-				include_once($this->root_path.'core/pageobject.class.php');
-				if (is_file($this->root_path.'core/page_objects/'.$strPageObject.'_pageobject.class.php')){
-					include_once($this->root_path.'core/page_objects/'.$strPageObject.'_pageobject.class.php');
-					$objPage = registry::register($strPageObject.'_pageobject');
+				$objPage = $this->routing->getPageObject($strPageObject);
+				if ($objPage){
 					$arrVars = $objPage->get_vars();
 					$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
 						'display'			=> true)
-					);
+					);					
 				} else {
 					redirect();
 				}									

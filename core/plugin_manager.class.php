@@ -294,7 +294,7 @@ class plugin_manager extends gen_class {
 		}
 	}
 	
-	public function get_menus($menu_name='admin_menu') {
+	public function get_menus($menu_name='admin') {
 		$menu_array = array();
 		foreach($this->get_plugins() as $plugin_code) {
 			$plugin_menu = $this->get_plugin($plugin_code)->get_menu($menu_name);

@@ -49,8 +49,11 @@ if(!class_exists('routing')){
 			'calendareventguests'=> 'calendareventguests',
 		);
 		
-		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
+		private $arrStaticLocations = array();
 		
+		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
+			$this->arrStaticRoutes[strtolower($strRoutename)] = strtolower($strPageObject);
+			$this->arrStaticLocations[strtolower($strPageObject)] = $strPageObjectPath;
 		}
 		
 		public function getRoutes(){
@@ -126,6 +129,21 @@ if(!class_exists('routing')){
 			$strText = str_replace(' ', '-', $strText);
 			$strText = preg_replace("/[^a-zA-Z0-9üÜäÄöÖ_-]/","",$strText);
 			return ucfirst($strText);
+		}
+		
+		public function getPageObject($strObjectName){
+			include_once($this->root_path.'core/pageobject.class.php');
+			if (isset($this->arrStaticLocations[$strObjectName])){
+				$strLocation = $this->arrStaticLocations[$strObjectName];
+			} else {
+				$strLocation = 'core/page_objects';
+			}
+			if (is_file($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php')){
+				include_once($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php');
+				$objPage = registry::register($strObjectName.'_pageobject');
+				return $objPage;
+			}
+			return false;
 		}
 		
 	}

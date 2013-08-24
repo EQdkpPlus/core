@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("comments")){
 	class comments extends gen_class {
-		public static $shortcuts = array('user', 'tpl', 'pdh', 'time', 'in', 'pfh', 'routing',
+		public static $shortcuts = array('user', 'tpl', 'pdh', 'time', 'in', 'pfh', 'routing', 'hooks',
 			'bbcode'	=> 'bbcode',
 		);
 
@@ -30,11 +30,16 @@ if (!class_exists("comments")){
 		public $userPerm = true;
 		public $isAdmin = false;
 		public $showReplies = false;
+		private $id = '';
+		private $showFormForGuests=false;
 
 		// ---------------------------------------------------------
 		// Constructor
 		// ---------------------------------------------------------
-		public function __construct(){
+		public function __construct($id=''){
+			//ID for multiple instances on one page
+			$this->id = $id;
+			
 			$this->UserID		= (isset($this->user->data['user_id']) && $this->user->is_signedin()) ? $this->user->data['user_id'] : false;
 			$this->version		= '2.0.0';
 
@@ -61,6 +66,9 @@ if (!class_exists("comments")){
 			if(isset($array['replies'])){
 				$this->showReplies	= $array['replies'];
 			}
+			if(isset($array['formforguests'])){
+				$this->showFormForGuests = $array['formforguests'];
+			}
 		}
 
 		// ---------------------------------------------------------
@@ -74,10 +82,22 @@ if (!class_exists("comments")){
 		// Save the Comment
 		// ---------------------------------------------------------
 		public function Save(){
-			if($this->UserID){
-				$this->pdh->put('comment', 'insert', array($this->in->get('attach_id'), $this->UserID, $this->in->get('comment', '', 'htmlescape'), $this->in->get('page'), $this->in->get('reply_to', 0)));
+			$data = array(
+				'user_id' 	=> $this->UserID,
+				'attach_id' => 	$this->in->get('attach_id'),
+				'comment'	=> $this->in->get('comment', '', 'htmlescape'),
+				'page'		=> $this->in->get('page'),
+				'reply_to'	=>  $this->in->get('reply_to', 0),
+				'permission'=> ($this->UserID && $this->userPerm),
+			);
+			
+			//Hooks
+			$data = $this->hooks->process('comments_save', $data, true);
+			
+			if($data['permission']){
+				$this->pdh->put('comment', 'insert', array($data['attach_id'], $data['user_id'], $data['comment'], $data['page'], $data['reply_to']));
 				$this->pdh->process_hook_queue();
-				echo $this->Content($this->in->get('attach_id',''), $this->in->get('page'), $this->in->get('rpath'), true, ($this->in->get('reply_to', 0) || $this->in->get('replies', 0)));
+				echo $this->Content($data['attach_id'], $data['page'], $this->in->get('rpath'), true, ($data['reply_to'] || $this->in->get('replies', 0)));
 			}
 		}
 
@@ -97,15 +117,16 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		public function Show(){
 			$this->JScode();
-			$html	= '<div id="htmlCommentTable">';
+			$html	= '<div id="plusComments'.$this->id.'"><div id="htmlCommentTable'.$this->id.'">';
 			$html	.= $this->Content($this->attach_id, $this->page);
 			$html	.= '</div>';
 			$html .= $this->ReplyForm($this->attach_id, $this->page);
 
 			// the line for the comment to be posted
-			if($this->user->is_signedin() && $this->userPerm){
+			if(($this->user->is_signedin() && $this->userPerm) || $this->showFormForGuests){
 				$html .= $this->Form($this->attach_id, $this->page);
 			}
+			$html .= '</div>';
 			return $html;
 		}
 
@@ -220,7 +241,7 @@ if (!class_exists("comments")){
 			$html = '<div class="contentBox writeComments">';
 			$html .= '<div class="boxHeader"><h1>'.$this->user->lang('comments_write').'</h1></div>';
 			$html .= '<div class="boxContent"><br/>';
-			$html .= '<form id="comment_data" name="comment_data" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments&replies='.(($this->showReplies) ? 1 : 0).'" method="post">
+			$html .= '<form id="comment_data'.$this->id.'" name="comment_data" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments&replies='.(($this->showReplies) ? 1 : 0).'" method="post">
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
 						<input type="hidden" name="page" value="'.$page.'"/>
 						<div class="clearfix">
@@ -231,7 +252,7 @@ if (!class_exists("comments")){
 								<textarea name="comment" rows="5" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
 							</div>
 						</div>
-						<span id="comment_button"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
+						<span id="comment_button'.$this->id.'"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
 					</form>';
 			$html .= '</div></div>';
 			
@@ -270,65 +291,67 @@ if (!class_exists("comments")){
 		private function JScode(){
 			$jscode = "
 						// Delete Function
-						$(document).on('click', '.comments_delete', function(){
+						$(document).on('click', '#plusComments".$this->id." .comments_delete', function(){
 							var page			= $('.comments_page',		this).text();
 							var deleteid		= $('.comments_deleteid',	this).text();
 							var attachid		= $('.comments_attachid',	this).text();
 
 							$('#comment_delete').ajaxSubmit({
-								target: '#htmlCommentTable',
+								target: '#htmlCommentTable".$this->id."',
 								url:	'".$this->server_path."exchange.php".$this->SID."&out=comments&deleteid='+deleteid+'&page='+page+'&attach_id='+attachid+'&replies=".(($this->showReplies) ? 1 : 0)."',
 								success: function() {
-									$('#htmlCommentTable').fadeIn('slow');
+									$('#htmlCommentTable".$this->id."').fadeIn('slow');
 								}
 							});
 						});
 						
 						//Show Reply Form
-						$(document).on('click', '.reply-trigger', function(){
+						$(document).on('click', '#plusComments".$this->id." .reply-trigger', function(){
 							var reply_to = $(this).parent().parent().find('.comment_id:first').text();
 							console.log(reply_to);
-							var newform = $('.commentReplyForm').html();
-							$('.reply-trigger').show();
-							$('.form-active').remove();
+							var newform = $('#plusComments".$this->id." .commentReplyForm').html();
+							$('#plusComments".$this->id." .reply-trigger').show();
+							$('#plusComments".$this->id." .form-active').remove();
 							$(this).hide('fast');
 							var container = $(this).parent().find('.reply-form-container');						
 							$(container).html(newform);
 							$(container).find('.comment_reply').addClass('form-active');					
 							var myform = $(container).find('.comment_reply');
 							$(myform).find('textarea').addClass('mceEditor_bbcode');
-							$(myform).attr('id', 'comment_reply');
+							$(myform).attr('id', 'comment_reply".$this->id."');
 							$(myform).find('input[name=reply_to]').val(reply_to);
+							
 							initialize_bbcode_editor();
-							initialize_submit_reply();
+							initialize_submit_reply".$this->id."();
 						});
-						
+									
 						//Submit Reply
-						function initialize_submit_reply(){
-							$('#comment_reply').ajaxForm({
-								target: '#htmlCommentTable',
+						function initialize_submit_reply".$this->id."(){
+							$('#comment_reply".$this->id."').ajaxForm({
+								target: '#htmlCommentTable".$this->id."',
 								beforeSubmit:  function(){
-									$('.reply_button').html('<i class=\"icon-spinner icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
+									$('#plusComments".$this->id." .reply_button').html('<i class=\"icon-spinner icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
 								},
 								success: function() {
-									$('#htmlCommentTable').fadeIn('slow');
+									$('#htmlCommentTable".$this->id."').fadeIn('slow');
 									// clear the input field:
-									$('.reply_button').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
+									$('#plusComments".$this->id." .reply_button').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
 								}
 							});
 						}
-
+											
 						// submit Comment
-						$('#comment_data').ajaxForm({
-							target: '#htmlCommentTable',
+						$('#comment_data".$this->id."').ajaxForm({
+							target: '#htmlCommentTable".$this->id."',
 							beforeSubmit:  function(){
-								$('#comment_button').html('<i class=\"icon-spinner icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
+								$('#comment_button".$this->id."').html('<i class=\"icon-spinner icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
 							},
 							success: function() {
-								$('#htmlCommentTable').fadeIn('slow');
+								$('#htmlCommentTable".$this->id."').fadeIn('slow');
 								// clear the input field:
+								$(\".mceEditor_bbcode\").val('');
 								$(\".mceEditor_bbcode\").tinymce().setContent('');
-								$('#comment_button').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
+								$('#comment_button".$this->id."').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
 							}
 						});";
 			$this->tpl->add_js($jscode, 'docready');

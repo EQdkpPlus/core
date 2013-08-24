@@ -26,7 +26,7 @@ class notifications extends gen_class {
 	public static $dependencies = array('pm');
 	
 	private $notifications = array();
-	
+	//$strType = 'red', 'green', 'yellow'
 	public function add($strType, $strPlugin, $strMessage, $strLink, $intCount = 1){
 		if (!isset($this->notifications[$strType])) $this->notifications[$strType] = array();
 		if (!isset($this->notifications[$strType][$strPlugin])) $this->notifications[$strType][$strPlugin] = array();
