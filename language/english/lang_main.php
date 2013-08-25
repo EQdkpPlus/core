@@ -934,6 +934,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"user_avatar_type_gravatar" => "Gravatar",
 	"user_gravatar_mail" => "Gravatar Email-Address",
 	"user_gravatar_mail_help" => "Insert here your Gravatar-Email-Address if it's not your registration Email-Address.",
+	"user_avatar" => "Avatar",
 );
 
 ?>

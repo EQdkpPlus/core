@@ -34,22 +34,34 @@ class points_pageobject extends pageobject {
 		$show_inactive	= false;
 		$show_hidden	= false;
 		$show_twinks	= $this->config->get('pk_show_twinks');
+		$sort_suffix = (isset($sort))? '&amp;sort='.$sort : '';
 
 		if($this->in->exists('show_inactive')){
 			$show_inactive = true;
+			$sort_suffix = '&amp;show_inactive=1';
 		}
 
 		if($this->in->exists('show_hidden')){
 			$show_hidden = true;
+			$sort_suffix = '&amp;show_hidden=1';
 		}
 
 		if($this->in->exists('show_twinks')){
 			$show_twinks = true;
+			$sort_suffix = '&amp;show_twinks=1';
+		}
+		
+		//DKP Id
+		$mdkp_suffix = '';
+		$detail_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
+		if(!$this->in->exists('mdkpid') && isset($detail_settings['default_pool'])) {
+			$mdkpid = $detail_settings['default_pool'];
+		} else {
+			$mdkpid = $this->in->get('mdkpid', 0);
 		}
 
 		//redirect on member compare
 		if($this->in->exists('compare_b') && $this->in->get('compare_b') == $this->user->lang('compare_members')){
-			$sort_suffix = (isset($sort))? '&amp;sort='.$sort : '';
 			if($this->in->exists('selected_ids')){
 				$compare_link	= $this->routing->build('points', false, false, true, true).'&mdkpid='.$mdkpid.$sort_suffix.'&amp;filter=Member:'.implode(',', $this->in->getArray('selected_ids', 'int'));
 				redirect($compare_link);
@@ -59,14 +71,6 @@ class points_pageobject extends pageobject {
 			}
 		}
 
-		//DKP Id
-		$mdkp_suffix = '';
-		$detail_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
-		if(!$this->in->exists('mdkpid') && isset($detail_settings['default_pool'])) {
-			$mdkpid = $detail_settings['default_pool'];
-		} else {
-			$mdkpid = $this->in->get('mdkpid', 0);
-		}
 		if($mdkpid == 0){
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
 		}else{
@@ -77,6 +81,7 @@ class points_pageobject extends pageobject {
 
 		//Filter
 		$is_compare = false;
+		$filter_array = array();
 		if ($this->in->exists('filter')){
 			$filter = $this->in->get('filter');
 			if(strpos($filter, 'Member') !== false){
@@ -104,7 +109,7 @@ class points_pageobject extends pageobject {
 			}
 		}
 
-		$filter_array = $this->game->get('filters');
+		$filter_array = array_merge($filter_array, $this->game->get('filters'));
 		if(is_array($filter_array)) {
 			foreach($filter_array as $details){
 				$this->tpl->assign_block_vars('filter_row', array(
@@ -127,27 +132,6 @@ class points_pageobject extends pageobject {
 		$suffix		.= ($show_inactive)		? '&amp;show_inactive=1'	: '';
 		$suffix		.= ($show_hidden)		? '&amp;show_hidden=1'		: '';
 		$suffix		.= ($show_twinks)		? '&amp;show_twinks=1'		: '';
-		
-		$arrToolbarItems = array(				
-			array(
-				'icon'	=> 'icon-plus',
-				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_raids.php".$this->SID.'&upd=true\';"',
-				'check' => 'a_raid_add',
-				'title' => $this->user->lang('adding_raid'),
-			),
-			array(
-				'icon'	=> 'icon-edit',
-				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_members.php".$this->SID.'\';"',
-				'check' => 'a_members_man',
-				'title' => $this->user->lang('manage_members'),
-			),
-			array(
-				'icon'	=> 'icon-list',
-				'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_raids.php".$this->SID.'\';"',
-				'check' => 'a_raid_',
-				'title' => $this->user->lang('manraid_title'),
-			),
-		);
 
 		//footer stuff
 		if($is_compare){
@@ -173,7 +157,6 @@ class points_pageobject extends pageobject {
 			'SHOW_HIDDEN_RANKS_CHECKED'	=> ($show_hidden)?'checked="checked"':'',
 			'SHOW_TWINKS_CHECKED'		=> ($show_twinks)?'checked="checked"':'',
 			'S_SHOW_TWINKS'				=> !$this->config->get('pk_show_twinks'),
-			'LISTCHARS_TOOLBAR'			=> $jqToolbar['id'],
 			'MDKP_POOLNAME'				=> ($mdkpid > 0) ? $this->pdh->get('multidkp', 'name', array($mdkpid)) : '',
 			'LBC_VALUE'					=> ($this->in->get('lbc', 0)),
 		));

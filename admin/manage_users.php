@@ -580,7 +580,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 					}
 
 					$no_lang = (isset($confvars['no_lang'])) ? true : false;
-					$confvars['value'] = (isset($confvars['no_value'])) ? '' : (isset($this->user_data[$name]) ? $this->user_data[$name] : '');
+					$confvars['value'] = $confvars['selected'] = (isset($confvars['no_value'])) ? '' : (isset($this->user_data[$name]) ? $this->user_data[$name] : '');
 					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
 						'NAME'		=> ((isset($confvars['required'])) ? '* ' : '').(($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name']),
 						'HELP'		=> ((isset($confvars['help'])) ? $this->user->lang($confvars['help']) : ''),
@@ -780,12 +780,30 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 							'format' => $birthday_format
 						),
 					),
-					'user_avatar'	=> array(
-						'fieldtype'	=> 'imageuploader',
-						'name'		=> 'user_image',
-						'imgpath'	=> $this->pfh->FolderPath('users/'.$user_id,'files'),
-						'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar', 'returnFormat' => 'filename'),
-					),
+				),
+				'user_avatar' => array(
+						'user_avatar_type' => array(
+								'fieldtype'	=> 'radio',
+								'name'		=> 'user_avatar_type',
+								'options'	=> array(
+										'0'	=> $this->user->lang('user_avatar_type_own'),
+										'1'	=> $this->user->lang('user_avatar_type_gravatar'),
+								),
+								'default'		=> '0',
+						),
+						'user_avatar'	=> array(
+							'fieldtype'	=> 'imageuploader',
+							'name'		=> 'user_image',
+							'imgpath'	=> $this->pfh->FolderPath('users/'.$user_id,'files'),
+							'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar', 'returnFormat' => 'filename'),
+						),
+						'user_gravatar_mail' => array(
+								'fieldtype'	=> 'text',
+								'name'	=> 'user_gravatar_mail',
+								'help'	=> 'user_gravatar_mail_help',
+								'dependency' => array('user_avatar_type', 1, 'radio'),
+								'size'	=> 40,
+						),
 				),
 				'user_contact' => array(
 					'phone'	=> array(

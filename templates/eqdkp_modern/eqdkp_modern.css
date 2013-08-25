@@ -1341,7 +1341,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
     margin-top: 4px;
 }
 
-.rowHover, table tr.marked th, table tr.marked , #contentBody .hoverrows tr:hover, #contentBody .hoverrows > div:hover{
+.rowHover, table tr.marked th, table tr.marked , .hoverrows tr:hover, .hoverrows > div:hover{
 	background-color: #e8e8e8;
 }
 
@@ -2763,6 +2763,16 @@ em {
 
 .user-avatar {
 	max-height: 48px;
+}
+
+.user-avatar-small, .user-avatar-small img {
+	max-height: 32px;
+}
+
+.user-avatar-border img {
+	border: 1px solid #CCCCCC;
+    border-radius: 4px 4px 4px 4px;
+	background-color: #FFFFFF;
 }
 
 /* Toolbar */

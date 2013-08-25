@@ -316,6 +316,8 @@ class settings_pageobject extends pageobject {
 							'format' => $birthday_format
 						),
 					),
+				),
+				'user_avatar' => array(
 					'user_avatar_type' => array(
 						'fieldtype'	=> 'radio',
 						'name'		=> 'user_avatar_type',
