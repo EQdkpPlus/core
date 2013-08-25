@@ -52,6 +52,15 @@ class listcharacters extends page_generic {
 		if($this->in->exists('show_twinks')){
 			$show_twinks = true;
 		}
+		
+		//DKP Id
+		$mdkp_suffix = '';
+		$detail_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
+		if(!$this->in->exists('mdkpid') && isset($detail_settings['default_pool'])) {
+			$mdkpid = $detail_settings['default_pool'];
+		} else {
+			$mdkpid = $this->in->get('mdkpid', 0);
+		}
 
 		//redirect on member compare
 		if($this->in->exists('compare_b') && $this->in->get('compare_b') == $this->user->lang('compare_members')){
@@ -71,14 +80,6 @@ class listcharacters extends page_generic {
 			redirect($manage_link);
 		}
 
-		//DKP Id
-		$mdkp_suffix = '';
-		$detail_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
-		if(!$this->in->exists('mdkpid') && isset($detail_settings['default_pool'])) {
-			$mdkpid = $detail_settings['default_pool'];
-		} else {
-			$mdkpid = $this->in->get('mdkpid', 0);
-		}
 		if($mdkpid == 0){
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
 		}else{
@@ -89,6 +90,7 @@ class listcharacters extends page_generic {
 
 		//Filter
 		$is_compare = false;
+		$filter_array = array();
 		if ($this->in->exists('filter')){
 			$filter = $this->in->get('filter');
 			if(strpos($filter, 'Member') !== false){
@@ -116,7 +118,7 @@ class listcharacters extends page_generic {
 			}
 		}
 
-		$filter_array = $this->game->get('filters');
+		$filter_array = array_merge($filter_array, $this->game->get('filters'));
 		if(is_array($filter_array)) {
 			foreach($filter_array as $details){
 				$this->tpl->assign_block_vars('filter_row', array(
