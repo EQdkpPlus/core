@@ -206,19 +206,20 @@ class core extends gen_class {
 			
 
 			if (!is_file($storage_folder.'main.css')){
+				//Create combined CSS File
 				$this->tpl->parse_cssfile();
 				$this->tpl->css_file($storage_folder.'main.css');
-			} elseif (is_file($storage_folder.'main.css')){
+			} else{
+				//There is a combined CSS File
+				
 				//Renew file?
 				if ($this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($css_theme) ||
 					$this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($global_css) || (is_file($customcss) && $this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($customcss))){
 					$this->tpl->parse_cssfile();
 				}
 				$this->tpl->css_file($storage_folder.'main.css');
-			} elseif(is_file($css_theme)){
-				$this->tpl->css_file($global_css);
-				$this->tpl->css_file($css_theme);
 			}
+			
 			if ($this->config->get('pk_maintenance_mode') && $this->user->check_auth('a_', false)){
 				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'icon_maintenance');
 			}
