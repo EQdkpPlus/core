@@ -567,7 +567,7 @@ class Manage_Users extends page_generic {
 					}
 
 					$no_lang = (isset($confvars['no_lang'])) ? true : false;
-					$confvars['value'] = (isset($confvars['no_value'])) ? '' : (isset($this->user_data[$name]) ? $this->user_data[$name] : '');
+					$confvars['value'] = $confvars['selected'] = (isset($confvars['no_value'])) ? '' : (isset($this->user_data[$name]) ? $this->user_data[$name] : '');
 					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
 						'NAME'		=> ((isset($confvars['required'])) ? '* ' : '').(($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name']),
 						'HELP'		=> ((isset($confvars['help'])) ? $this->user->lang($confvars['help']) : ''),

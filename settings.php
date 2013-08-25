@@ -553,7 +553,7 @@ class user_settings extends page_generic {
 						$help = $this->user->lang('adduser_bridge_note');
  					}
 					$no_lang = (isset($confvars['no_lang'])) ? true : false;
-					$confvars['value'] = (isset($confvars['no_value'])) ? '' : ((isset($userdata[$name]) && $userdata[$name] != "") ? $userdata[$name] : ((isset($confvars['value'])) ? $confvars['value'] : ''));
+					$confvars['value'] = $confvars['selected'] = (isset($confvars['no_value'])) ? '' : ((isset($userdata[$name]) && $userdata[$name] != "") ? $userdata[$name] : ((isset($confvars['value'])) ? $confvars['value'] : ''));
 					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
 						'NAME'		=> ((isset($confvars['required'])) ? '* ' : '').(($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name']),
 						'HELP'		=> ((!empty($confvars['help'])) ? $this->user->lang($confvars['help']) : '').' '.$help,
