@@ -24,14 +24,14 @@
 		#guild_header_banner_alliance{
 			width:100%;
 			height:106px;
-			background: url('games/wow/profiles/factions/banner_alliance.jpg') no-repeat scroll 0px 0px transparent;
-			margin-top:20px;
+			background: url('".$this->server_path."games/wow/profiles/factions/banner_alliance.jpg') no-repeat scroll 0px 0px transparent;
+			margin-top:30px;
 		}
 		#guild_header_banner_horde{
 			width:100%;
 			height:106px;
-			background: url('games/wow/profiles/factions/banner_horde.jpg') no-repeat scroll 0px 0px transparent;
-			margin-top:20px;
+			background: url('".$this->server_path."games/wow/profiles/factions/banner_horde.jpg') no-repeat scroll 0px 0px transparent;
+			margin-top:30px;
 		}		
 		#guild_emblem { 
 			height:200px;
@@ -140,7 +140,7 @@ $this->tpl->assign_vars(array(
 		'ACHIEV_POINTS'	=> (isset($guilddata['achievementPoints'])) ? $guilddata['achievementPoints'] : 0,
 		'L_SKILLS'		=> $this->game->glang('skills'),
 		'L_ACHIEVEMENT_POINTS'	=> $this->game->glang('achievement_points'),
-		'TABARD'		=> ($guilddata) ? $this->game->obj['armory']->guildTabard($guilddata['emblem'], $guilddata['side'], $guilddata['name'], 180) : $this->root_path.'games/wow/guild/tabard_'.$faction.'.png',
+		'TABARD'		=> ($guilddata) ? $this->game->obj['armory']->guildTabard($guilddata['emblem'], $guilddata['side'], $guilddata['name'], 180) : $this->server_path.'games/wow/guild/tabard_'.$faction.'.png',
 ));
 
 $hptt_page_settings = $this->pdh->get_page_settings('roster', 'hptt_roster');
@@ -180,7 +180,7 @@ if ($this->config->get('roster_classorrole') == 'role'){
 	foreach ($this->game->get('classes') as $key => $value){
 		if ($key == 0) continue;
 		if (!isset($arrClassMembers[$key])) $arrClassMembers[$key] = array();
-		$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => 'viewcharacter.php', '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks), 'class_'.$key);
+		$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => $this->routing->build('character', false,false,false), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'class_'.$key);
 		
 		$this->tpl->assign_block_vars('class_row', array(
 			'CLASS_NAME'	=> $value,

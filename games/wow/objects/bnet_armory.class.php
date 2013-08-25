@@ -291,10 +291,11 @@ class bnet_armory {
 	public function characterIcon($chardata, $forceUpdateAll = false){
 		$cached_img	= str_replace('/', '_', 'image_character_'.$this->_config['serverloc'].'_'.$chardata['thumbnail']);
 		$img_charicon	= $this->get_CachedData($cached_img, false, true);
+		$img_charicon_sp= $this->get_CachedData($cached_img, false, true, false, true);
 		if(!$img_charicon && ($forceUpdateAll || ($this->chariconUpdates < $this->_config['maxChariconUpdates']))){
 			$this->set_CachedData($this->read_url($this->_config['apiRenderUrl'].sprintf('%s/%s', $this->_config['serverloc'], $chardata['thumbnail'])), $cached_img, true);
 			$img_charicon	= $this->get_CachedData($cached_img, false, true);
-
+			$img_charicon_sp= $this->get_CachedData($cached_img, false, true, false, true);
 			// this is due to an api bug and may be removed some day, thumbs are always set and could be 404!
 			if(filesize($img_charicon) < 400){
 				$linkprfx	= str_replace('/api', '/wow/static/images/2d/avatar/', $this->_config['apiUrl']);
@@ -306,11 +307,11 @@ class bnet_armory {
 		if (!$img_charicon){
 			$img_charicon	= $this->get_CachedData($cached_img, false, true, true);
 			if(filesize($img_charicon) < 400){
-				$img_charicon = '';
+				$img_charicon = $img_charicon_sp = "";
 			}
 		}
 		
-		return $img_charicon;
+		return $img_charicon_sp;
 	}
 
 	public function characterIconSimple($race, $gender='0'){
@@ -332,10 +333,10 @@ class bnet_armory {
 		}
 		$imgfile = str_replace('avatar.jpg', $dtype_ending.'.jpg', $chardata['thumbnail']);
 		$cached_img	= str_replace('/', '_', 'image_big_character_'.$this->_config['serverloc'].'_'.$imgfile);
-		$img_charicon	= $this->get_CachedData($cached_img, false, true);
+		$img_charicon	= $this->get_CachedData($cached_img, false, true, false, true);
 		if(!$img_charicon || $forceUpdateAll){
 			$this->set_CachedData($this->read_url($this->_config['apiRenderUrl'].sprintf('%s/%s', $this->_config['serverloc'], $imgfile)), $cached_img, true);
-			$img_charicon	= $this->get_CachedData($cached_img, false, true);
+			$img_charicon	= $this->get_CachedData($cached_img, false, true, false,true);
 		}
 		return $img_charicon;
 	}
@@ -394,11 +395,13 @@ class bnet_armory {
 	*/
 	public function guildTabard($emblemdata, $faction, $guild, $imgwidth=215){
 		$cached_img	= sprintf('image_tabard_%s_w%s.png', strtolower(str_replace(' ', '', $guild)), $imgwidth);
+		$imgfile_sp = $this->get_CachedData($cached_img, false, true, false, true);
 		if(!$imgfile = $this->get_CachedData($cached_img, false, true)){
 			if(!function_exists('imagecreatefrompng') || !function_exists('imagelayereffect') || version_compare(PHP_VERSION, "5.3.0", '<')){
-				return $this->root_path.sprintf('games/wow/guild/tabard_%s.png', (($faction == 0) ? 'alliance' : 'horde'));
+				return sprintf('games/wow/guild/tabard_%s.png', (($faction == 0) ? 'alliance' : 'horde'));
 			}
 			$imgfile	= $this->get_CachedData($cached_img, false, true, true);
+			$imgfile_sp	= $this->get_CachedData($cached_img, false, true, true, true);
 
 			// set the URL of the required image parts
 			$img_emblem		= $this->_config['apiTabardRenderUrl'].sprintf('emblem_%02s', $emblemdata['icon']) .'.png';
@@ -483,8 +486,9 @@ class bnet_armory {
 			if (is_object($this->pfh)){
 				$this->pfh->FileMove($strTmpFolder, $imgfile);
 			}
+			return $imgfile_sp;
 		}
-		return $imgfile;
+		return $imgfile_sp;
 	}
 
 	/**
@@ -806,14 +810,15 @@ class bnet_armory {
 	* @param	$force		force an update of the cached json file
 	* @return --
 	*/
-	protected function get_CachedData($filename, $force=false, $binary=false, $returniffalse=false){
+	protected function get_CachedData($filename, $force=false, $binary=false, $returniffalse=false, $returnServerPath=false){
 		if(!$this->_config['caching']){return false;}
 		$data_ctrl = false;
 		$rfilename	= (is_object($this->pfh)) ? $this->pfh->FolderPath('armory', 'cache').$this->binaryORdata($filename, $binary) : 'data/'.$this->binaryORdata($filename, $binary);
+		$rfilenameSP= (is_object($this->pfh)) ? $this->pfh->FolderPath('armory', 'cache', 'serverpath').$this->binaryORdata($filename, $binary) : 'data/'.$this->binaryORdata($filename, $binary);
 		if(is_file($rfilename)){
 			$data_ctrl	= (!$force && (filemtime($rfilename)+(3600*$this->_config['caching_time'])) > time()) ? true : false;
 		}
-		return ($data_ctrl || $returniffalse) ? (($binary) ? $rfilename : @file_get_contents($rfilename)) : false;
+		return ($data_ctrl || $returniffalse) ? (($binary) ? (($returnServerPath) ? $rfilenameSP : $rfilename ) : @file_get_contents($rfilename)) : false;
 	}
 
 	/**

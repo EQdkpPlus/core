@@ -326,7 +326,7 @@ if(!class_exists('wow')) {
 						if (is_array($arrTypes) && !in_array('guildLevel', $arrTypes)) continue;
 						$arrOut[] = array(
 							'text' => sprintf($this->glang('news_guildLevel'), $val['levelUp']),
-							'icon' => $this->root_path.'games/wow/roster/newsfeed_guild.png',
+							'icon' => $this->server_path.'games/wow/roster/newsfeed_guild.png',
 							'date' => substr($val['timestamp'], 0, -3),
 						);
 						break;
@@ -347,7 +347,7 @@ if(!class_exists('wow')) {
 							
 							$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 							if ($charID) {
-								$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->root_path.'viewcharacter.php','', false, false, true));
+								$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->routing->build('character', false, false, false),'', false, false, true, true));
 							} else {
 								$charLink = $val['character'];
 							}

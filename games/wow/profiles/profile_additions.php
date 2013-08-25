@@ -24,10 +24,10 @@
 	// Add css & JS Code
 	$this->tpl->add_css("
 		.uc_logo_Alliance { 
-			background:url('games/wow/profiles/factions/alliance-icon.png');
+			background:url('".$this->server_path."games/wow/profiles/factions/alliance-icon.png');
 		}
 		.uc_logo_Horde { 
-			background:url('games/wow/profiles/factions/horde-icon.png');
+			background:url('".$this->server_path."games/wow/profiles/factions/horde-icon.png');
 		}
 		.uc_name { 
 			text-align: left;
@@ -173,7 +173,7 @@
 		.profile_itemlevel_avgtxt, .profile_itemlevel_eq{
 			margin-left: 6px;
 		}
-		.raideventicon { background: url('games/wow/profiles/events/raid-icons.jpg') no-repeat; width: 59px; height: 59px; padding: 0 !important;}
+		.raideventicon { background: url('".$this->server_path."games/wow/profiles/events/raid-icons.jpg') no-repeat; width: 59px; height: 59px; padding: 0 !important;}
 		.raideventicon.id2717 { background-position:        0 0; }
 		.raideventicon.id2677 { background-position:    -61px 0; }
 		.raideventicon.id3429 { background-position:   -122px 0; }
@@ -290,7 +290,7 @@
 			margin: 0 0 0px;
 		}
 		.healthpowerbar li {
-			background: url('games/wow/profiles/bars/health_power_bars.png') repeat-x scroll 0 0 transparent;
+			background: url('".$this->server_path."games/wow/profiles/bars/health_power_bars.png') repeat-x scroll 0 0 transparent;
 			border-radius: 3px 3px 3px 3px;
 			display: inline-block;
 			margin-right: 11px;
@@ -346,7 +346,7 @@
 		// profilers
 		$a_profilers	= array(
 			1	=> array(
-				'icon'	=> 'games/wow/profiles/profilers/askmrrobot.png',
+				'icon'	=> $this->server_path.'games/wow/profiles/profilers/askmrrobot.png',
 				'name'	=> 'AskMrRobot.com',
 				'url'	=> $this->game->obj['armory']->bnlink($member['name'], $this->config->get('uc_servername'), 'askmrrobot')
 			)

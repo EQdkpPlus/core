@@ -93,7 +93,7 @@ if (!class_exists('pdh_r_wow')) {
 		}
 
 		public function get_html_achievementpoints($member_id){
-			return '<img src="'.$this->root_path.'games/wow/profiles/achievements.png" alt="Achievement-Points"/>&nbsp;'.$this->get_achievementpoints($member_id);
+			return '<img src="'.$this->server_path.'games/wow/profiles/achievements.png" alt="Achievement-Points"/>&nbsp;'.$this->get_achievementpoints($member_id);
 		}
 
 		public function get_charicon($member_id){
@@ -112,7 +112,7 @@ if (!class_exists('pdh_r_wow')) {
 		public function get_html_charicon($member_id){
 			$charicon = $this->get_charicon($member_id);
 			if ($charicon == '') {
-				$charicon = $this->root_path.'images/no_pic.png';
+				$charicon = $this->server_path.'images/no_pic.png';
 			}
 			return '<img src="'.$charicon.'" alt="Char-Icon" height="48" />';
 		}
