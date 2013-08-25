@@ -149,6 +149,7 @@ var.eq2-icon-sml img {height:16px;width:16px}
 	font-family: Arial, sans-serif;
 	font-size: 13px;
 }
+
 /* jQuery clearfix helper */
 .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
 .ui-helper-clearfix:after { clear: both; }
