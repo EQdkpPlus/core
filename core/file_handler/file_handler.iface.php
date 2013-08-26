@@ -28,7 +28,7 @@ if ( !interface_exists( "plus_filehandler" ) ){
 		public function Delete($path, $plugin=false);
 		public function FileDate($filename, $plugin=false);
 		public function FilePath($path, $plugin=false, $blnCreateFile=true);
-		public function FolderPath($foldername, $plugin=false, $blnPlain = false);
+		public function FolderPath($foldername, $plugin=false, $linkType = 'relative');
 		public function FileSize($file, $plugin=false);
 						
 		public function testWrite($file=false);

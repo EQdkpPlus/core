@@ -16,7 +16,18 @@
 ##
 
 # EQDKP-SEO-START
-# Please adjust your Rewrite Base and set it to the server-path your EQdkp Plus is installed, e.g. /eqdkp
+# Please adjust your Rewrite Base and set it to the server-path your EQdkp Plus is installed, e.g. /eqdkp, or / if your have EQdkp installed in your Root-Path
+#
+#	<IfModule mod_rewrite.c>
+#		RewriteEngine On
+#		RewriteBase /eqdkp
+#	
+#		RewriteCond %{REQUEST_FILENAME} !-d
+#		RewriteCond %{REQUEST_FILENAME} !-f
+#		RewriteRule (.*)$ index.php/$1 [L]
+#	</IfModule>
+#
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /

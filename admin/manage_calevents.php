@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Calevents extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'env');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'env', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -43,8 +43,8 @@ class Manage_Calevents extends page_generic {
 	public function display(){
 		// The jQuery stuff
 		$this->confirm_delete($this->user->lang('confirm_delete_calevents'));
-		$this->jquery->Dialog('newCalevent', $this->user->lang('calendar_win_add'), array('url'=>"../calendar/addevent.php".$this->SID."&simple_head=true", 'width'=>'900', 'height'=>'580', 'onclose' =>$this->env->link.'admin/manage_calevents.php'.$this->SID));
-		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=>"../calendar/addevent.php".$this->SID."&eventid='+editid+'&simple_head=true", 'width'=>'900', 'height'=>'650', 'withid' => 'editid', 'onclose' => $this->env->link.'admin/manage_calevents.php'.$this->SID));
+		$this->jquery->Dialog('newCalevent', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'900', 'height'=>'580', 'onclose' =>$this->env->link.'admin/manage_calevents.php'.$this->SID));
+		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid='+editid+'&simple_head=true", 'width'=>'900', 'height'=>'650', 'withid' => 'editid', 'onclose' => $this->env->link.'admin/manage_calevents.php'.$this->SID));
 
 		// Build the HPTT Table
 		$view_list			= $this->pdh->get('calendar_events', 'id_list');

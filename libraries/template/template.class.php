@@ -191,10 +191,12 @@ class template extends gen_class {
 		$strInlineCSS = "";
 		$arrHash = $data = $arrFiles = array();
 		
-		foreach($this->tpl_output['css_code'] as $key => $strInlineCode){
-			$arrHash[] = md5($strInlineCode);
-			$strInlineCSS .= " ".$strInlineCode;
-			unset($this->tpl_output['css_code'][$key]);
+		if (is_array($this->tpl_output['css_code'])){
+			foreach($this->tpl_output['css_code'] as $key => $strInlineCode){
+				$arrHash[] = md5($strInlineCode);
+				$strInlineCSS .= " ".$strInlineCode;
+				unset($this->tpl_output['css_code'][$key]);
+			}
 		}
 		$data[] = array('content' => $strInlineCSS, 'path' => false);
 			
@@ -203,7 +205,7 @@ class template extends gen_class {
 			$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 			if ($val['media'] == 'screen' && is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
-				$arrHash = md5_file($val['file']);
+				$arrHash[] = md5_file($val['file']);
 				$arrFiles[] = $val['file']; 
 				unset($this->tpl_output['css_file'][$key]);		
 			}

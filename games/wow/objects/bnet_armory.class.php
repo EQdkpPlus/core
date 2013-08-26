@@ -46,8 +46,8 @@ class bnet_armory {
 		'apiTabardRenderUrl'	=> '',
 		'apiKeyPrivate'			=> '',
 		'apiKeyPublic'			=> '',
-		'maxChariconUpdates'	=> 10,
-		'maxChardataUpdates'	=> 10,
+		'maxChariconUpdates'	=> 1,
+		'maxChardataUpdates'	=> 1,
 	);
 
 	protected $convert		= array(
@@ -305,12 +305,11 @@ class bnet_armory {
 		}
 		
 		if (!$img_charicon){
-			$img_charicon	= $this->get_CachedData($cached_img, false, true, true);
+			$img_charicon	= $this->get_CachedData($cached_img, false, true);
 			if(filesize($img_charicon) < 400){
 				$img_charicon = $img_charicon_sp = "";
-			}
+			} else $img_charicon = $this->get_CachedData($cached_img, false, true, false, true);
 		}
-		
 		return $img_charicon_sp;
 	}
 
@@ -796,7 +795,7 @@ class bnet_armory {
 		if($this->_config['caching']){
 			$cachinglink = $this->binaryORdata($filename, $binary);
 			if(is_object($this->pfh)){
-				$this->pfh->putContent($this->pfh->FolderPath('armory', 'cache', false).$cachinglink, $json);
+				$this->pfh->putContent($this->pfh->FolderPath('armory', 'cache').$cachinglink, $json);
 			}else{
 				file_put_contents('data/'.$cachinglink, $json);
 			}

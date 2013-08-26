@@ -95,13 +95,17 @@
 			<td class="nowrap">{activate_row.REG}</td>
 		</tr>
 		<!-- END activate_row -->
-		<tr>
-			<th colspan="6">
-				<button  type="submit" name="activateUser" class="mainoption"></button>
-				<button  type="submit" name="deleteUser" class="mainoption"></button>
-			</th>
-		</tr>
 	</table>
+	<div class="contentFooter">
+		{BUTTON_MENU_INACTIVE_USER}
+	
+		<button  type="button" class="mainoption" onclick="ActivateAllUsers();" id="activateUserTrigger" style="display:none;"></button>
+		<button  type="button" class="mainoption" onclick="DeleteUser();" id="deleteUserTrigger" style="display:none;"></button>
+		
+		<button  type="submit" name="activateUser" class="mainoption" style="display:none;" id="activateUser"></button>
+		<button  type="submit" name="deleteUser" class="mainoption" style="display:none;" id="deleteUser"></button>
+		<div class="clear"></div>
+	</div>
 	<!-- ENDIF -->
 {CSRF_TOKEN}
 </form>
