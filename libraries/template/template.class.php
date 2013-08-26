@@ -189,7 +189,8 @@ class template extends gen_class {
 	
 	public function combine_css(){
 		$strInlineCSS = "";
-		$arrHash = $data = array();
+		$arrHash = $data = $arrFiles = array();
+		
 		foreach($this->tpl_output['css_code'] as $key => $strInlineCode){
 			$arrHash[] = md5($strInlineCode);
 			$strInlineCSS .= " ".$strInlineCode;
@@ -202,17 +203,14 @@ class template extends gen_class {
 			$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 			if ($val['media'] == 'screen' && is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
-				$strContent = file_get_contents($val['file']);
-				$strPathDir = pathinfo($val['file'], PATHINFO_DIRNAME).'/';
-				$strPathDir = str_replace("./", "EQDKP_ROOT_PATH", $strPathDir);
-				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
-				$data[] = array('content' => "\r\n/* ".$val['file']."*/ \r\n".$strContent, 'path' => $strPathDir);
-				$arrHash[] = md5($strContent);		
-				unset($this->tpl_output['css_file'][$key]);
+				$arrHash = md5_file($val['file']);
+				$arrFiles[] = $val['file']; 
+				unset($this->tpl_output['css_file'][$key]);		
 			}
 		}
 		
 		//Check if there is an file for this hash
+		asort($arrHash);
 		$strHash = md5(implode(";", $arrHash));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.css';
 
@@ -222,6 +220,14 @@ class template extends gen_class {
 		} else {
 			//Generate it
 			$strCSS = "";
+			foreach($arrFiles as $strFile){
+				$strContent = file_get_contents($strFile);
+				$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
+				$strPathDir = str_replace("./", "EQDKP_ROOT_PATH", $strPathDir);
+				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
+			}
+			
 			foreach($data as $val){
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
 			}
@@ -236,23 +242,20 @@ class template extends gen_class {
 	}
 	//Combining JS Files
 	public function combine_js(){
-		$arrHash = $data = array();
+		$arrHash = $data = $arrFiles = array();
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
 		foreach($this->tpl_output['js_file'] as $key => $val){
 			$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 			if (is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
-				$strContent = file_get_contents($val['file']);
-				$strPathDir = pathinfo($val['file'], PATHINFO_DIRNAME).'/';
-				$strPathDir = str_replace("./", "EQDKP_ROOT_PATH", $strPathDir);
-				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
-				$data[] = array('content' => "\r\n/* ".$val['file']."*/ \r\n".$strContent, 'path' => $strPathDir);
-				$arrHash[] = md5($strContent);
+				$arrHash[] = md5_file($val['file']);
 				unset($this->tpl_output['js_file'][$key]);
+				$arrFiles[] = $val['file'];		
 			}
 		}
 		
 		//Check if there is an file for this hash
+		asort($arrHash);
 		$strHash = md5(implode(";", $arrHash));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.js';
 		
@@ -262,6 +265,15 @@ class template extends gen_class {
 		} else {
 			//Generate it
 			$strJS = "";
+			foreach($arrFiles as $strFile){
+				$strContent = file_get_contents($strFile);
+				$arrHash[] = md5($strContent);
+				$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
+				$strPathDir = str_replace("./", "EQDKP_ROOT_PATH", $strPathDir);
+				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
+			}
+			
 			foreach($data as $val){
 				$strJS .= ' '.$val['content'];
 			}

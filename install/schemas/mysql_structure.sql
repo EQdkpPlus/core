@@ -110,8 +110,9 @@ CREATE TABLE IF NOT EXISTS `__groups_user` (
 
 DROP TABLE IF EXISTS __groups_users;
 CREATE TABLE IF NOT EXISTS `__groups_users` (
-	`group_id` int(22) NOT NULL,
-	`user_id` int(22) NOT NULL
+	`group_id` int(11) NOT NULL,
+	`user_id` int(11) NOT NULL,
+	`grpleader` int(11) NOT NULL
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __sessions;

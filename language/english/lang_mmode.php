@@ -82,7 +82,7 @@ $lang = array(
 "jump_tour" => "Skip tour",
 "06_import" => "Import old 0.6 data",
 "guild_import" => "Import a guild from external Database",
-"guild_import_info" => "when supported by your game",
+"guild_import_info" => "* if supported by your game",
  );
 
 ?>
