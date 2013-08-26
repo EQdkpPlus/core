@@ -215,7 +215,7 @@ class template extends gen_class {
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.css';
 
 		if (is_file($combinedFile)){
-			$this->tpl_output['css_file'][] = array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css');
+			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 			return true;
 		} else {
 			//Generate it
@@ -227,7 +227,7 @@ class template extends gen_class {
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
-			
+
 			foreach($data as $val){
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
 			}
@@ -237,7 +237,7 @@ class template extends gen_class {
 			
 			$this->pfh->putContent($combinedFile, $strCSS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
-			$this->tpl_output['css_file'][] = array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css');
+			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 		}
 	}
 	//Combining JS Files

@@ -280,7 +280,7 @@ class portal extends gen_class {
 }
 
 abstract class portal_generic extends gen_class {
-	public static $shortcuts = array('db');
+	public static $shortcuts = array('db', 'config');
 
 	protected $path		= '';
 	protected $plugin	= '';

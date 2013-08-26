@@ -79,6 +79,7 @@
 	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		<tr>
+			<th width="35" class="nowrap"><input type="checkbox" id="selall_user" value="1"/></th>
 			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
 			<th align="left" width="50%">{L_name}</th>
 			<th align="left" width="50%" class="nowrap">{L_email}</th>
@@ -86,8 +87,9 @@
 		</tr>
 		<!-- BEGIN activate_row -->
 		<tr>
+			<td class="nowrap"><input type="checkbox" value="{activate_row.ID}" name="selected_user[]"></td>
 			<td width="16" class="nowrap" align="right"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_delete_user}" alt="{L_delete_user}" onclick="javascript:DeleteUser({activate_row.ID})" /></td>
-			<td width="16" class="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=activate&amp;user={activate_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}global/ok.png" alt="{L_activate_user}" height="16" border="0" style="cursor:pointer;" title="{L_activate_user}" /></a></td>
+			<td width="16" class="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=activate&amp;user={activate_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}glyphs/enable.png" alt="{L_activate_user}" height="16" border="0" style="cursor:pointer;" title="{L_activate_user}" /></a></td>
 			<td class="nowrap"><a href="manage_users.php{SID}&amp;u={activate_row.ID}">{activate_row.NAME}</a></td>
 			<td class="nowrap">{activate_row.EMAIL}</td>
 			<td class="nowrap">{activate_row.REG}</td>
@@ -95,7 +97,8 @@
 		<!-- END activate_row -->
 		<tr>
 			<th colspan="6">
-				<button  type="button" name="activateall" class="mainoption" onclick="ActivateAllUsers()"><i class="icon-ok"></i>{L_activate_all}</button>
+				<button  type="submit" name="activateUser" class="mainoption"></button>
+				<button  type="submit" name="deleteUser" class="mainoption"></button>
 			</th>
 		</tr>
 	</table>
