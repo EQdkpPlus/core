@@ -246,7 +246,12 @@ abstract class super_registry {
 	public static function load_config($install=false) {
 		if(is_file(self::$const['root_path'] . 'config.php')) require_once(self::$const['root_path'] . 'config.php');
 		if (!defined('EQDKP_INSTALLED') && !$install ){
-			echo ("<script>window.location.href = '".self::$const['root_path']."install/index.php';</script>");
+			$script_name = $_SERVER['SCRIPT_NAME'];
+			if (substr($script_name, -9) == "index.php"){
+				echo ("<script>window.location.href = '".str_replace("index.php", "", $script_name)."install/index.php';</script>");
+			} else {
+				echo ("<script>window.location.href = '".self::$const['root_path']."install/index.php';</script>");
+			}
 			die();
 		}
 		//copy config-data into our array

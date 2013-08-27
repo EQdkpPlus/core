@@ -25,7 +25,7 @@ include_once ($eqdkp_root_path . 'common.php');
 
 class manage_cache extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'core', 'config', 'pdc');
+		$shortcuts = array('user', 'tpl', 'in', 'core', 'config', 'pdc', 'time');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -131,13 +131,15 @@ class manage_cache extends page_generic {
 		$cache_list = $this->pdc->listing();
 		$total = 0;
 		$ctime = time();
-
+		
 		foreach($cache_list as $global_prefix => $keys){
 			foreach($keys as $key => $expiry_date){
+				$expiry_date = $expiry_date['exp_date'];
 				$this->tpl->assign_block_vars('cache_entity_list_row', array (
 					'GLOBAL_PREFIX'		=> $global_prefix,
 					'KEY'				=> $key,
-					'EXPIRED'			=> ($expiry_date < $ctime) ? '<span class="negative">'.$this->user->lang('pdc_entity_expired').'</span>':'<span class="positive">'.$this->user->lang('pdc_entity_valid').'</span>'
+					'EXPIRED'			=> ($expiry_date < $ctime) ? '<span class="negative">'.$this->user->lang('pdc_entity_expired').'</span>':'<span class="positive">'.$this->user->lang('pdc_entity_valid').'</span>',
+					'EXPIRY_DATE'		=> $this->time->date("Y-m-d H:i:s", $expiry_date),
 				));
 			}
 		}

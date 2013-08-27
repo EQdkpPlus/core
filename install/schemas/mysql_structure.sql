@@ -483,10 +483,10 @@ CREATE TABLE `__articles` (
 	`tags` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`votes_count` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`votes_sum` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-	`votes_users` TEXT COLLATE 'utf8_bin' NOT NULL,
+	`votes_users` TEXT COLLATE 'utf8_bin' NULL DEFAULT NULL,
 	`last_edited` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`last_edited_user` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-	`page_objects` TEXT NULL,
+	`page_objects` TEXT NULL DEFAULT NULL,
 	`hide_header` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

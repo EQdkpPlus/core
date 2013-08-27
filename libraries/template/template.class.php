@@ -1104,7 +1104,7 @@ class template extends gen_class {
 			$strUserFile = $this->root_path . 'templates/'.$stylepath.'/custom.css';
 			if (file_exists($strUserFile)){
 				$content = file_get_contents($strUserFile);
-				$data .= replace_paths_css($content);
+				$data .= $this->replace_paths_css($content);
 			}
 
 			$minify = new Minify_CSS();
