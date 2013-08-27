@@ -19,57 +19,68 @@
 	<div class="icon_ok">{L_uc_no_tasks}</div>
 </div>
 <!-- ENDIF -->
-<form method="post" action="{F_ACTION}" name="manage_tasks">
+<form method="post" action="{ACTION}" name="manage_tasks">
 	<!-- IF S_CONFIRM -->
 	<div class="tableHeader">
 		<h2>{L_uc_confirm_list}</h2>
 	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		<tr>
-			<th colspan="2" align="left">{L_action}</th>
-			<th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_name}</a></th>
-			<th align="left" width="40" class="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_level}</a></th>
+			<th width="35" class="nowrap"><input type="checkbox" id="selall_confirm_chars" value="1"/></th>
+			<th align="left">{L_name}</th>
+			<th align="left" class="nowrap">{L_level}</th>
+			<th align="left" class="nowrap">{L_user}</th>
 		</tr>
 		<!-- BEGIN confirm_row -->
 		<tr>
-			<td width="9" class="nowrap" align="center"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_uc_delete_char}" alt="{L_uc_delete_char}" onclick="DeleteChar({confirm_row.ID})" /></td>
-			<td width="10" class="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=confirm&amp;member={confirm_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}ok.png" alt="{L_uc_confirm_char}" height="16" border="0" style="cursor:pointer;" title="{L_uc_confirm_char}" /></a></td>
-			<td width="100%" class="nowrap"><span class="classes{confirm_row.CLASSID}">{confirm_row.CLASS_ICON}{confirm_row.RACE_ICON} {confirm_row.NAME}</span></td>
-			<td width="40" class="nowrap">{confirm_row.LEVEL}</td>
+			<td class="nowrap"><input type="checkbox" value="{confirm_row.ID}" name="confirm_chars[]"></td>
+			<td class="nowrap"><span class="classes{confirm_row.CLASSID}"><a href="javascript:EditChar({confirm_row.ID})">{confirm_row.NAME}</a></span></td>
+			<td class="nowrap">{confirm_row.LEVEL}</td>
+			<td class="nowrap">{confirm_row.USER}</td>
 		</tr>
 		<!-- END confirm_row -->
-		<tr>
-			<th colspan="5" class="footer">
-				<span style="float:left;"><button class="mainoption" type="button" name="confirm_all" onclick="ConfirmAllChars();"><i class=""></i>{L_uc_confirm_all}</button></span><span style="float:right;">{FC_CONFIRM}</span>
-			</th>
-		</tr>
 	</table>
+	<div class="contentFooter">
+		{BUTTON_MENU_CONFIRM_CHARS}
+	
+		<button  type="button" class="mainoption" onclick="ConfirmChars();" id="confirmCharsTrigger" style="display:none;"></button>
+		<button  type="button" class="mainoption" onclick="DeleteConfirmChars();" id="deleteConfirmCharsTrigger" style="display:none;"></button>
+		
+		<button  type="submit" name="deleteConfirmChars" class="mainoption" style="display:none;" id="deleteConfirmChars"></button>
+		<button  type="submit" name="confirmChars" class="mainoption" style="display:none;" id="confirmChars"></button>
+		<div class="clear"></div>
+	</div>
 	<br/>
 	<!-- ENDIF -->
+	
 	<!-- IF S_DELETE -->
 	<div class="tableHeader">
 		<h2>{L_uc_delete_list}</h2>
 	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		<tr>
-			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
-			<th align="left" width="100%"><a href="{U_LIST_MEMBERS}o={O_NAME}{URI_ADDON}">{L_name}</a></th>
-			<th align="left" width="40" class="nowrap"><a href="{U_LIST_MEMBERS}o={O_LEVEL}{URI_ADDON}">{L_level}</a></th>
+			<th width="35" class="nowrap"><input type="checkbox" id="selall_deleted_chars" value="1"/></th>
+			<th align="left">{L_name}</th>
+			<th align="left" class="nowrap">{L_level}</th>
 		</tr>
 		<!-- BEGIN delete_row -->
 		<tr>
-			<td align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_uc_delete_char}" alt="{L_uc_delete_char}" onclick="DeleteChar({delete_row.ID})" /></td>
- 			<td align="center" class="nowrap"><span class="{confirm_row.ROW_CLASS}"><a href="manage_tasks.php{SID}&amp;mode=revoke&amp;member={delete_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}global/update.png" alt="{L_uc_rewoke_char}" border="0" style="cursor:pointer;" title="{L_uc_rewoke_char}" /></a></span></td>
-			<td class="nowrap"><span class="classes{confirm_row.CLASSID}">{delete_row.CLASS_ICON}{delete_row.RACE_ICON} {delete_row.NAME}</span></td>
-			<td width="40" class="nowrap">{delete_row.LEVEL}</td>
+			<td class="nowrap"><input type="checkbox" value="{delete_row.ID}" name="deleted_chars[]"></td>
+			<td class="nowrap"><span class="classes{confirm_row.CLASSID}"><a href="javascript:EditChar({delete_row.ID})">{delete_row.NAME}</a></span></td>
+			<td class="nowrap">{delete_row.LEVEL}</td>
 		</tr>
 		<!-- END delete_row -->
-		<tr>
-			<th colspan="5" class="footer"><span style="float:left;">
-				<button class="mainoption" type="button" name="delete_all" onclick="DeleteAllChars()"><i class="icon-remove"></i>{L_uc_delete_allchar}</button></span><span style="float:right;">{FC_DELETE}</span>
-			</th>
-		</tr>
 	</table>
+	<div class="contentFooter">
+		{BUTTON_MENU_DELETE_CHARS}
+	
+		<button  type="button" class="mainoption" onclick="RevokeChars();" id="revokeCharsTrigger" style="display:none;"></button>
+		<button  type="button" class="mainoption" onclick="DeleteChars();" id="deleteCharsTrigger" style="display:none;"></button>
+		
+		<button  type="submit" name="deleteChars" class="mainoption" style="display:none;" id="deleteChars"></button>
+		<button  type="submit" name="revokeChars" class="mainoption" style="display:none;" id="revokeChars"></button>
+		<div class="clear"></div>
+	</div>
 
 	<br />
 	<!-- ENDIF -->
@@ -80,16 +91,13 @@
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		<tr>
 			<th width="35" class="nowrap"><input type="checkbox" id="selall_user" value="1"/></th>
-			<th width="35" colspan="2" align="left" class="nowrap">{L_action}</th>
-			<th align="left" width="50%">{L_name}</th>
-			<th align="left" width="50%" class="nowrap">{L_email}</th>
-			<th align="left" width="50%" class="nowrap">{L_registered_at}</th>
+			<th align="left" width="33%">{L_name}</th>
+			<th align="left" width="33%" class="nowrap">{L_email}</th>
+			<th align="left" width="33%" class="nowrap">{L_registered_at}</th>
 		</tr>
 		<!-- BEGIN activate_row -->
 		<tr>
 			<td class="nowrap"><input type="checkbox" value="{activate_row.ID}" name="selected_user[]"></td>
-			<td width="16" class="nowrap" align="right"><img src="{EQDKP_IMAGE_PATH}global/delete.png" style="cursor:pointer;" title="{L_delete_user}" alt="{L_delete_user}" onclick="javascript:DeleteUser({activate_row.ID})" /></td>
-			<td width="16" class="nowrap" align="center"><a href="manage_tasks.php{SID}&amp;mode=activate&amp;user={activate_row.ID}&amp;link_hash={CSRF_MODE_TOKEN}"><img src="{EQDKP_IMAGE_PATH}glyphs/enable.png" alt="{L_activate_user}" height="16" border="0" style="cursor:pointer;" title="{L_activate_user}" /></a></td>
 			<td class="nowrap"><a href="manage_users.php{SID}&amp;u={activate_row.ID}">{activate_row.NAME}</a></td>
 			<td class="nowrap">{activate_row.EMAIL}</td>
 			<td class="nowrap">{activate_row.REG}</td>

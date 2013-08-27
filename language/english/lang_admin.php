@@ -1580,7 +1580,7 @@ $lang = array(
 	"action_user_changed_permissions" => 'Changed Permissions of User',
 	"action_user_added_group" => 'Added User to Usergroups',
 	"action_user_removed_group" => 'Removed User from Usergroups',
-	
+	"uc_revoke_char_confirm" => "Should the selected Chars be revoked?",
 );
 
 ?>

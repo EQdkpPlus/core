@@ -691,7 +691,7 @@ $lang = array(
 "plug_enable_info" => "Aufgrund von Dateifehlern automatisch deaktiviertes Plugin wieder aktivieren.",
 "plug_tab_plugins" => "Plugins verwalten",
 "uc_del_warning" => "Soll der Charakter wirklick gelöscht werden? Alle Punkte und Items gehen unweigerlich verloren.",
-"uc_del_msg_all" => "Sollen wirklich alle Charakter gelöscht werden?",
+"uc_del_msg_all" => "Sollen die ausgewählten Charaktere wirklich gelöscht werden?",
 "uc_confirm_msg_all" => "Sollen wirklich alle Charakter freigegeben werden?",
 "uc_delete_manager" => "Aufgabenverwaltung",
 "uc_revoke_char" => "Charakter wiederherstellen",
@@ -1581,6 +1581,7 @@ $lang = array(
 "action_user_changed_permissions" => "Berechtigungen des Benutzers geändert",
 "action_user_added_group" => "Benutzer zu Benutzergruppen hinzugefügt",
 "action_user_removed_group" => "Benutzer aus Benutzergruppen entfernt",
+"uc_revoke_char_confirm" => "Sollen die ausgewählten Charaktere wirklich wiederhergestellt werden?",
  );
 
 ?>

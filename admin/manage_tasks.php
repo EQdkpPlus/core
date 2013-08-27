@@ -29,15 +29,13 @@ class ManageTasks extends page_generic {
 
 	public function __construct(){
 		$handler = array(
-			'mode' => array(
-				array('process' => 'confirm_all',	'value' => 'confirm_all',	'check' => 'a_members_man', 'csrf'=>true),
-				array('process' => 'confirm',		'value' => 'confirm',		'check' => 'a_members_man', 'csrf'=>true),
-				array('process' => 'delete_all',	'value' => 'delete_all',	'check' => 'a_members_man', 'csrf'=>true),
-				array('process' => 'delete',		'value' => 'delete',		'check' => 'a_members_man', 'csrf'=>true),
-				array('process' => 'revoke',		'value' => 'revoke',		'check' => 'a_members_man', 'csrf'=>true),
-				array('process' => 'activate',		'value' => 'activate',		'check' => 'a_users_man', 'csrf'=>true),
-				array('process' => 'activate_all',	'value' => 'activate_all',	'check' => 'a_users_man', 'csrf'=>true),
-				array('process' => 'delete_user',	'value' => 'delete_user',	'check' => 'a_users_man', 'csrf'=>true))
+			'confirmChars' 			=> array('process' => 'confirmChars', 'check' => 'a_members_man', 'csrf'=>true),
+			'revokeChars'  			=> array('process' => 'revokeChars', 'check' => 'a_members_man', 'csrf'=>true),
+			'deleteChars'  			=> array('process' => 'deleteChars', 'check' => 'a_members_man', 'csrf'=>true),
+			'deleteConfirmChars'  	=> array('process' => 'deleteConfirmChars', 'check' => 'a_members_man', 'csrf'=>true),
+			
+			'deleteUser'			=> array('process' => 'deleteUser', 'check' => 'a_users_man', 'csrf'=>true),
+			'activateUser'			=> array('process' => 'activateUser', 'check' => 'a_users_man', 'csrf'=>true),
 		);
 		$this->user->check_auths(array('a_users_man', 'a_members_man'), 'OR');
 		parent::__construct(false, $handler);
@@ -45,73 +43,82 @@ class ManageTasks extends page_generic {
 
 
 	}
-
-	public function confirm_all(){
-		$confirm = $this->pdh->get('member', 'confirm_required');
-		if(is_array($confirm)){
-			foreach ($confirm as $member){
-				$this->pdh->put('member', 'confirm', array($member));
+	
+	public function confirmChars(){
+		$arrMemberIDs = $this->in->getArray('confirm_chars', 'int');
+		if (count($arrMemberIDs)){
+			foreach($arrMemberIDs as $char_id){
+				$this->pdh->put('member', 'confirm', array($char_id));				
 			}
 			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('success'), $this->user->lang('uc_delete_char'), 'green');
+				
 		}
-		$this->display();
+		$this->display();	
 	}
-
-	public function confirm(){
-		if ($this->in->exists('member')){
-			$this->pdh->put('member', 'confirm', array($this->in->get('member',0)));
+	
+	public  function revokeChars(){
+		$arrMemberIDs = $this->in->getArray('deleted_chars', 'int');
+		if (count($arrMemberIDs)){
+			foreach($arrMemberIDs as $char_id){
+				$this->pdh->put('member', 'revoke', array($char_id));
+			}
 			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('uc_delete_char'), $this->user->lang('success'),'green');
+				
 		}
-		$this->display();
+		$this->display();	
 	}
-
-	public function delete(){
-		if ($this->in->exists('member')){
-			$this->pdh->put('member', 'delete_member', array($this->in->get('member',0)));
+	
+	public function deleteChars(){
+		$arrMemberIDs = $this->in->getArray('deleted_chars', 'int');
+		if (count($arrMemberIDs)){
+			foreach($arrMemberIDs as $char_id){
+				$this->pdh->put('member', 'delete_member', array($char_id));
+			}
 			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('uc_delete_char'), $this->user->lang('success'),'green');
+				
 		}
-		$this->display();
+		$this->display();	
 	}
-
-	public function delete_all(){
-		$deletion = $this->pdh->get('member', 'delete_requested');
-		foreach($deletion as $member){
-			$this->pdh->put('member', 'delete_member', array($member));
-		}
-		$this->pdh->process_hook_queue();
-		$this->display();
-	}
-
-	public function activate(){
-		if ($this->in->exists('user')) {
-			$this->pdh->put('user', 'activate', array($this->in->get('user', 0)));
+	
+	public function deleteConfirmChars(){
+		$arrMemberIDs = $this->in->getArray('confirm_chars', 'int');
+		if (count($arrMemberIDs)){
+			foreach($arrMemberIDs as $char_id){
+				$this->pdh->put('member', 'delete_member', array($char_id));
+			}
 			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('uc_delete_char'), $this->user->lang('success'), 'green');
+				
 		}
-		$this->display();
+		$this->display();		
 	}
-
-	public function activate_all(){
-		$this->pdh->put('user', 'activate', array($this->pdh->get('user', 'inactive')));
-		$this->pdh->process_hook_queue();
-		$this->display();
-	}
-
-	public function revoke(){
-		if ($this->in->exists('member')){
-			$this->pdh->put('member', 'revoke', array($this->in->get('member', 0)));
+	
+	public function deleteUser(){
+		$arrUserIDs = $this->in->getArray('selected_user', 'int');
+		if (count($arrUserIDs)){
+			foreach($arrUserIDs as $user_id){
+				$this->pdh->put('user', 'delete_user', array($user_id, true));
+			}
 			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('delete_user'), $this->user->lang('success'), 'green');
+			
 		}
 		$this->display();
 	}
-
-	public function delete_user(){
-		if ($this->in->exists('user')){
-			$this->pdh->put('user', 'delete_user', array($this->in->get('user', 0), true));
+	
+	public function activateUser(){
+		$arrUserIDs = $this->in->getArray('selected_user', 'int');
+		if (count($arrUserIDs)){
+			$this->pdh->put('user', 'activate', array($arrUserIDs));
 			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('activate_user'), $this->user->lang('success'), 'green');		
 		}
 		$this->display();
 	}
-
+	
 	public function display(){
 		$nothing = true;
 
@@ -120,12 +127,12 @@ class ManageTasks extends page_generic {
 		if (count($confirm) > 0){
 			$nothing = false;
 			foreach ($confirm as $member){
+				$userId = $this->pdh->get('member', 'user', array($member));
 				$this->tpl->assign_block_vars('confirm_row', array(
 					'ID'			=> $member,
-					'NAME'			=> $this->pdh->get('member', 'html_memberlink', array($member, $this->root_path.'viewcharacter.php', '')),
+					'NAME'			=> $this->pdh->get('member', 'name_decorated', array($member)),
 					'LEVEL'			=> $this->pdh->get('member', 'level', array($member)),
-					'CLASS_ICON'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($member)), false, $member)),
-					'RACE_ICON'		=> $this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($member)), $this->pdh->get('member', 'gender', array($member)), $member)),
+					'USER'			=> ($userId) ? $this->pdh->get('user', 'name', array($userId)) : '',
 				));
 			}
 		}
@@ -137,10 +144,8 @@ class ManageTasks extends page_generic {
 			foreach ($deletion as $member){
 				$this->tpl->assign_block_vars('delete_row', array(
 					'ID'			=> $member,
-					'NAME'			=> $this->pdh->get('member', 'html_memberlink', array($member, $this->root_path.'viewcharacter.php', '')),
+					'NAME'			=> $this->pdh->get('member', 'name_decorated', array($member)),
 					'LEVEL'			=> $this->pdh->get('member', 'level', array($member)),
-					'CLASS_ICON'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($member)), false, $member)),
-					'RACE_ICON'		=> $this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($member)), $this->pdh->get('member', 'gender', array($member)), $member)),
 				));
 			}
 		}
@@ -150,6 +155,7 @@ class ManageTasks extends page_generic {
 		if (count($inactive) > 0){
 			$nothing = false;
 			foreach ($inactive as $member){
+				
 				$this->tpl->assign_block_vars('activate_row', array(
 					'ID'			=> $member,
 					'NAME'			=> $this->pdh->get('user', 'name', array($member)),
@@ -158,22 +164,82 @@ class ManageTasks extends page_generic {
 				));
 			}
 		}
+		
+		$this->jquery->Dialog('ConfirmChars', '', array('url' =>'', 'message'=>$this->user->lang('uc_confirm_msg_all'), 'custom_js' => '$("#confirmChars").click();'), 'confirm');
+		$this->jquery->Dialog('DeleteConfirmChars', '', array('url'=>'', 'message'=>$this->user->lang('uc_del_msg_all'), 'custom_js' => '$("#deleteConfirmChars").click();'), 'confirm');
+		
+		$this->jquery->Dialog('DeleteChars', '', array('url'=>'', 'message'=>$this->user->lang('uc_del_msg_all'), 'custom_js' => '$("#deleteChars").click();'), 'confirm');
+		$this->jquery->Dialog('RevokeChars', '', array('url'=>'', 'message'=>$this->user->lang('uc_revoke_char_confirm'), 'custom_js' => '$("#revokeChars").click();'), 'confirm');
+		
+		$this->jquery->Dialog('ActivateAllUsers', '', array('url'=>'', 'message'=>$this->user->lang('activate_user_warning'), 'custom_js' => '$("#activateUser").click();'), 'confirm');
+		$this->jquery->Dialog('DeleteUser', '', array('url'=>'', 'message'=>$this->user->lang('confirm_delete_user'), 'custom_js' => '$("#deleteUser").click();'), 'confirm');
 
-		$this->jquery->Dialog('ConfirmAllChars', '', array('url' => 'manage_tasks.php'.$this->SID.'&mode=confirm_all&link_hash='.$this->CSRFGetToken('mode'), 'message' => $this->user->lang('uc_confirm_msg_all')), 'confirm');
-		$this->jquery->Dialog('DeleteChar', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete&link_hash='.$this->CSRFGetToken('mode').'&member=\'+member+\'', 'withid'=>'member', 'message'=>$this->user->lang('uc_del_warning')), 'confirm');
-		$this->jquery->Dialog('DeleteAllChars', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete_all&link_hash='.$this->CSRFGetToken('mode'), 'message'=>$this->user->lang('uc_del_msg_all')), 'confirm');
-		$this->jquery->Dialog('ActivateAllUsers', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=activate_all&link_hash='.$this->CSRFGetToken('mode'), 'message'=>$this->user->lang('activate_all_warning')), 'confirm');
-		$this->jquery->Dialog('DeleteUser', '', array('url'=>'manage_tasks.php'.$this->SID.'&mode=delete_user&link_hash='.$this->CSRFGetToken('mode').'&user=\'+member+\'', 'withid'=>'member', 'message'=>$this->user->lang('confirm_delete_user')), 'confirm');
-
+		$this->jquery->selectall_checkbox("selall_user", "selected_user[]");
+		$this->jquery->selectall_checkbox("selall_deleted_chars", "deleted_chars[]");
+		$this->jquery->selectall_checkbox("selall_confirm_chars", "confirm_chars[]");
+		
+		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=>"../addcharacter.php".$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'640', 'height'=>'520', 'onclose'=> 'manage_tasks.php'.$this->SID));
+				
+		$arrMenuItems = array(
+			0 => array(
+					'name'	=> $this->user->lang('activate_user'),
+					'type'	=> 'button', //link, button, javascript
+					'img'	=> 'images/glyphs/enable.png',
+					'perm'	=> true,
+					'link'	=> '#activateUserTrigger',
+			),
+			1 => array(
+					'name'	=> $this->user->lang('delete'),
+					'type'	=> 'button', //link, button, javascript
+					'img'	=> 'images/global/delete.png',
+					'perm'	=> true,
+					'link'	=> '#deleteUserTrigger',
+			),	
+		);
+		
+		$arrDeleteCharsMenuItems = array(
+			0 => array(
+					'name'	=> $this->user->lang('delete'),
+					'type'	=> 'button', //link, button, javascript
+					'img'	=> 'images/global/delete.png',
+					'perm'	=> true,
+					'link'	=> '#deleteCharsTrigger',
+			),
+			1 => array(
+					'name'	=> $this->user->lang('uc_rewoke_char'),
+					'type'	=> 'button', //link, button, javascript
+					'img'	=> 'images/global/update.png',
+					'perm'	=> true,
+					'link'	=> '#revokeCharsTrigger',
+			),
+		);
+		
+		$arrConfirmCharsMenuItems = array(
+			
+			0 => array(
+					'name'	=> $this->user->lang('uc_confirm_char'),
+					'type'	=> 'button', //link, button, javascript
+					'img'	=> 'images/glyphs/ok.png',
+					'perm'	=> true,
+					'link'	=> '#confirmCharsTrigger',
+			),
+			1 => array(
+					'name'	=> $this->user->lang('delete'),
+					'type'	=> 'button', //link, button, javascript
+					'img'	=> 'images/global/delete.png',
+					'perm'	=> true,
+					'link'	=> '#deleteConfirmCharsTrigger',
+			),
+		);
+		
 		$this->tpl->assign_vars(array(
-			'F_ACTION'			=> 'manage_tasks.php'.$this->SID,
 			'S_CONFIRM'				=> (count($confirm) > 0) ? true : false,
 			'S_DELETE'				=> (count($deletion) > 0) ? true : false,
 			'S_INACTIVE'			=> (count($inactive) > 0) ? true : false,
 			'S_NOTHING'				=> $nothing,
-			'FC_CONFIRM'			=> sprintf($this->user->lang('listmembers_footcount'), count($confirm)),
-			'FC_DELETE'				=> sprintf($this->user->lang('listmembers_footcount'), count($deletion)),
-			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
+			'BUTTON_MENU_INACTIVE_USER'	=> $this->jquery->ButtonDropDownMenu('inaktive_user_menu', $arrMenuItems, array("input[name=\"selected_user[]\"]"), '', $this->user->lang('selected_user').'...', ''),
+			'BUTTON_MENU_DELETE_CHARS'	=> $this->jquery->ButtonDropDownMenu('delete_char_menu', $arrDeleteCharsMenuItems, array("input[name=\"deleted_chars[]\"]"), '', $this->user->lang('selected_chars').'...', ''),
+			'BUTTON_MENU_CONFIRM_CHARS'	=> $this->jquery->ButtonDropDownMenu('confirm_char_menu', $arrConfirmCharsMenuItems, array("input[name=\"confirm_chars[]\"]"), '', $this->user->lang('selected_chars').'...', ''),
 		));
 
 		$this->core->set_vars(array(
