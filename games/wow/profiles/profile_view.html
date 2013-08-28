@@ -434,7 +434,9 @@
 		<!-- IF CUSTOM_FIELDS --><li><a href='#fragment-2-0'><span>{L_tab_customfields}</span></a></li><!-- ENDIF -->
 		<li><a href='#fragment-2-1'><span>{L_tab_raids}</span></a></li>
 		<li><a href='#fragment-2-2'><span>{L_tab_items}</span></a></li>
+		<!-- IF not S_POINTS_DISABLED -->
 		<li><a href='#fragment-2-3'><span>{L_tab_adjustments}</span></a></li>
+		<!-- ENDIF -->
 		<li><a href='#fragment-2-4'><span>{L_tab_attendance}</span></a></li>
 	</ul>
 
@@ -477,7 +479,8 @@
 			{ITEM_PAGINATION}
 		</div>
 	</div>
-
+	
+	<!-- IF not S_POINTS_DISABLED -->
 	<!-- ADJUSTMENTS TABLE-->
 	<div id="fragment-2-3">
 		<div class="tableHeader">
@@ -490,6 +493,7 @@
 			{ADJUSTMENT_PAGINATION}
 		</div>
 	</div>
+	<!-- ENDIF -->
 
 	<!-- ATTENDANCE -->
 	<div id="fragment-2-4">

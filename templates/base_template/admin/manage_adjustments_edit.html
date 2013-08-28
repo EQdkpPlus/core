@@ -9,7 +9,7 @@
 	<div class="clear"></div>
 </div>
 <!-- ENDIF -->
-
+<!-- IF not S_POINTS_DISABLED -->
 <form method="post" action="{ACTION}" name="post">
 <fieldset class="settings smallsettings">
 	<legend><!-- IF REASON == '' -->{L_add_adjustment}<!-- ELSE -->{L_editing_adj}<!-- ENDIF --></legend>
@@ -46,3 +46,8 @@
 </div>
 {CSRF_TOKEN}
 </form>
+<!-- ELSE -->
+	<div class="errorbox roundbox">
+		<div class="icon_false">{L_disabled_points_info}</div>
+	</div>
+<!-- ENDIF -->

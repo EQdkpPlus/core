@@ -9,6 +9,7 @@
 </div>
 <!-- ENDIF -->
 
+<!-- IF not S_POINTS_DISABLED -->
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_manadjs_title}</h1>
@@ -16,7 +17,6 @@
 	<div class="tableHeader floatRight">
 		<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_adjustments.php{SID}&amp;upd=true'"><i class="icon-plus"></i>{L_add_adjustment}</button>
 	</div>
-	
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		{ADJ_LIST}
 	</table>
@@ -29,3 +29,9 @@
 	</div>
 	{CSRF_TOKEN}
 </form>
+
+<!-- ELSE -->
+	<div class="errorbox roundbox">
+		<div class="icon_false">{L_disabled_points_info}</div>
+	</div>
+<!-- ENDIF -->

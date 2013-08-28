@@ -142,14 +142,18 @@ class points_pageobject extends pageobject {
 
 		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => $mdkpid, '%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
 		$hptt->setPageRef($this->strPath);
-		$myleaderboard			= registry::register('html_leaderboard');
-		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
+		if (!$this->config->get('pk_disable_points')){
+			$myleaderboard			= registry::register('html_leaderboard');
+			$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
+			$this->tpl->assign_vars(array (
+					'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings),
+			));
+		}
 		$jqToolbar = $this->jquery->toolbar('listcharacters', $arrToolbarItems, array('position' => 'bottom'));
 		$lb_id = $this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']);
 		$lb_id = ($this->in->get('lbc', 0)) ? $lb_id : $mdkpid;
 		
 		$this->tpl->assign_vars(array (
-			'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings),
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
 			'BUTTON_NAME'				=> 'compare_b',
 			'S_MANAGE_LINK'				=> ($this->user->check_auth('a_members_man', false)),

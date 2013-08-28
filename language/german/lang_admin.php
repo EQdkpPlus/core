@@ -1582,6 +1582,9 @@ $lang = array(
 "action_user_added_group" => "Benutzer zu Benutzergruppen hinzugefügt",
 "action_user_removed_group" => "Benutzer aus Benutzergruppen entfernt",
 "uc_revoke_char_confirm" => "Sollen die ausgewählten Charaktere wirklich wiederhergestellt werden?",
+"pk_disable_points" => "Punkte deaktivieren",
+"disabled_points_info" => "Da du in den Einstellungen die Punkte deaktivierst hast, steht dir diese Funktion nicht zur Verfügung.",
+"lm_layout_nopoints" => "EQdkp Plus Layout für deaktivierte Punkte",
  );
 
 ?>

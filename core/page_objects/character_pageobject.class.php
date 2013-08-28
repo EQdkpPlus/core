@@ -111,7 +111,7 @@ class character_pageobject extends pageobject {
 			'COMMENT'				=> ($this->config->get('pk_enable_comments') == 1) ? $this->comments->Show() : '',
 			'LAST_UPDATE'			=> $last_update,
 			'MEMBER_POINTS'			=> $hptt->get_html_table($this->in->get('msort', 0), $this->vc_build_url('msort')),
-			'L_DKP_NAME'			=> $this->config->get('dkp_name')." ".$this->user->lang('information'),
+			'L_DKP_NAME'			=> (!$this->config->get('pk_disable_points')) ? $this->config->get('dkp_name')." ".$this->user->lang('information') : $this->user->lang('tab_attendance'),
 			'U_VIEW_MEMBER'			=> $this->vc_build_url('', true).'&amp;',
 
 			// common data

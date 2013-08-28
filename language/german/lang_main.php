@@ -879,6 +879,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "user_gravatar_mail" => "Gravatar Email-Adresse",
 "user_gravatar_mail_help" => "Trage hier deine Gravatar-Email-Adresse ein, sofern sie von deiner Registrierungs-Email-Adresse abweicht.",
 "user_avatar" => "Avatar",
+"pk_disable_points" => "Disable Points",
  );
 
 ?>

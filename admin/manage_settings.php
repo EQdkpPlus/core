@@ -238,10 +238,14 @@ class mmocms_settings extends page_generic {
 						'name'			=> 'sub_title',
 						'size'			=> 40
 					),
+					'pk_disable_points'		=> array(
+							'fieldtype'		=> 'checkbox',
+							'name'			=> 'pk_disable_points',
+					),
 					'dkp_name'		=> array(
 						'fieldtype'		=> 'text',
 						'name'			=> 'dkp_name',
-						'size'			=> 5
+						'size'			=> 5,				
 					),
 					'pk_color_items'=> array(
 						'fieldtype'		=> 'slider',
@@ -1044,6 +1048,11 @@ class mmocms_settings extends page_generic {
 			//check for changed itt 1.prio and load defaults if so
 			if($this->config->get('itt_prio1') != $this->in->get('itt_prio1', '')) {
 				$save_array = array_merge($save_array, $this->itt->changed_prio1($this->in->get('itt_prio1')));
+			}
+			
+			//check for changed disable points
+			if((int)$this->config->get('pk_disable_points') != $this->in->get('pk_disable_points', 0)){
+				if ($this->in->get('pk_disable_points', 0) == 1) $this->config->set('eqdkp_layout', "nopoints");
 			}
 
 			// Save the settings array

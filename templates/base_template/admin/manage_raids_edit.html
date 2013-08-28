@@ -32,10 +32,12 @@
 					<dd>{EVENT}
 					<button class="liteoption" type="button" name="addevent" id="r_add_event"><i class="icon-plus"></i>{L_add_event}</button></dd>
 				</dl>
+				<!-- IF not S_POINTS_DISABLED -->
 				<dl>
 					<dt><label>{L_value}:</label></dt>
 					<dd><input type="text" name="value" value="{VALUE}" class="input" /></dd>
 				</dl>
+				<!-- ENDIF -->
 				<dl>
 					<dt><label>{L_attendees}:</label></dt>
 					<dd>{NEW_MEM_SEL}
@@ -45,6 +47,7 @@
 		</div>
 	</fieldset>
 </div>
+<!-- IF not S_POINTS_DISABLED -->
 <div id="toggleAdjustments">
 	<h2>{L_adjustments}<span class="toggle_button"></span></h2>
 	<div class="toggle_container">
@@ -69,7 +72,7 @@
 		<br />
 	</div>
 </div>
-
+<!-- ENDIF -->
 <div id="toggleItems">
 	<h2>{L_items}<span class="toggle_button"></span></h2>
 	<div class="toggle_container">
@@ -80,7 +83,10 @@
 		<div class="clear"></div>
 		<table width="100%" border="0" cellpadding="2" cellspacing="1" class="colorswitch">
 			<tr>
-				<th width="25">&nbsp;</th><th>{L_item}</th><th>{L_item_id}</th><th>{L_itempool}</th><th>{L_member}</th><th>{L_value}</th>
+				<th width="25">&nbsp;</th><th>{L_item}</th><th>{L_item_id}</th><th>{L_itempool}</th><th>{L_member}</th>
+				<!-- IF not S_POINTS_DISABLED -->
+				<th>{L_value}</th>
+				<!-- ENDIF -->
 			</tr>
 			<!-- BEGIN items -->
 			<tr>
@@ -89,7 +95,9 @@
 				<td><input type="text" name="items[{items.KEY}][itemid]" value="{items.ITEMID}" class="input" /></td>
 				<td>{items.ITEMPOOL}</td>
 				<td>{items.MEMBER}</td>
+				<!-- IF not S_POINTS_DISABLED -->
 				<td><input type="text" name="items[{items.KEY}][value]" value="{items.VALUE}" class="input" /></td>
+				<!-- ENDIF -->
 			</tr>
 			<!-- END items -->
 		</table>

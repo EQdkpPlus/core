@@ -195,9 +195,9 @@ class raid_pageobject extends pageobject {
 							array('name' => 'ibuyerlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'ilink_itt', 'sort' => true, 'th_add' => '', 'td_add' => 'style="height:21px;"'),
 							array('name' => 'ipoolname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-							array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 			);
+			if (!$this->config->get('pk_disable_points')) $arrItemListSettings['table_presets'][] = array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => '');
 			$hptt_page_settings	= $arrItemListSettings;
 			$hptt				= $this->get_hptt($hptt_page_settings, $items, $items, array('%link_url%' => $this->routing->build('item', false, false, false), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->build('character', false, false, false)), 'raid_'.$this->url_id, 'isort');
 			$hptt->setPageRef($this->strPath);
@@ -205,8 +205,9 @@ class raid_pageobject extends pageobject {
 					'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort'), '', null, false, sprintf($this->user->lang('viewitem_footcount'), count($items))),
 			));
 
-			//Adjustments
-			$arrAdjListSettings = array(
+			//Adjustments			
+			if (!$this->config->get('pk_disable_points')){
+				$arrAdjListSettings = array(
 					'name' => 'hptt_viewmember_adjlist',
 					'table_main_sub' => '%adjustment_id%',
 					'table_subs' => array('%adjustment_id%', '%raid_link_url%', '%raid_link_url_suffix%'),
@@ -221,16 +222,17 @@ class raid_pageobject extends pageobject {
 							array('name' => 'adj_reason', 'sort' => true, 'th_add' => 'width="70%"', 'td_add' => ''),
 							array('name' => 'adj_value', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 					),
-			);
+				);
+				$arrAdjustments = $this->pdh->get('adjustment', 'adjsofraid', array($this->url_id));
+				$hptt_page_settings = $arrAdjListSettings;
+				$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
+				$hptt->setPageRef($this->strPath);
+				$this->tpl->assign_vars(array (
+						'ADJUSTMENT_OUT' 		=> $hptt->get_html_table($this->in->get('asort', ''),''),
+						'S_ADJUSTMENTS'			=> count($arrAdjustments),
+				));
+			}	
 			
-			$arrAdjustments = $this->pdh->get('adjustment', 'adjsofraid', array($this->url_id));
-			$hptt_page_settings = $arrAdjListSettings;
-			$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
-			$hptt->setPageRef($this->strPath);
-			$this->tpl->assign_vars(array (
-					'ADJUSTMENT_OUT' 		=> $hptt->get_html_table($this->in->get('asort', ''),''),
-					'S_ADJUSTMENTS'			=> count($arrAdjustments),
-			));
 
 			$this->tpl->assign_vars(array(
 				'L_MEMBERS_PRESENT_AT'	=> sprintf($this->user->lang('members_present_at'),

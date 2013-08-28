@@ -95,7 +95,9 @@
 			<div id="userprofile_dkp_tabs">
 				<ul>
 					<li><a href='#items'><span>{L_tab_items}</span></a></li>
+					<!-- IF not S_POINTS_DISABLED -->
 					<li><a href='#adjustments'><span>{L_tab_adjustments}</span></a></li>
+					<!-- ENDIF -->
 					<li><a href='#raids'><span>{L_tab_raids}</span></a></li>
 					<li><a href='#attendance'><span>{L_tab_attendance}</span></a></li>
 				</ul>
@@ -125,7 +127,8 @@
 						{ITEM_PAGINATION}
 					</div>
 				</div>
-
+				
+				<!-- IF not S_POINTS_DISABLED -->
 				<!-- ADJUSTMENTS TABLE-->
 				<div id="adjustments">
 					<div class="tableHeader">
@@ -138,6 +141,7 @@
 						{ADJUSTMENT_PAGINATION}
 					</div>
 				</div>
+				<!-- ENDIF -->
 
 				<!-- ATTENDANCE -->
 				<div id="attendance">

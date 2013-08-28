@@ -1581,6 +1581,8 @@ $lang = array(
 	"action_user_added_group" => 'Added User to Usergroups',
 	"action_user_removed_group" => 'Removed User from Usergroups',
 	"uc_revoke_char_confirm" => "Should the selected Chars be revoked?",
+	"disabled_points_info" => "This feature is not available, because you have disabled Points in your Settings.",
+	"lm_layout_nopoints" => "EQdkp Plus Layout for disabled Points",
 );
 
 ?>

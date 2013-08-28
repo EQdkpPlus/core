@@ -1,6 +1,6 @@
 <form method="get" action="{ACTION}" id="form_listcharacters">
 <div class="contentHeader">
-	<h1 class="contentTitle">{L_menu_standings} <!-- IF MDKP_POOLNAME != "" -->&raquo; {MDKP_POOLNAME}<!-- ENDIF -->
+	<h1 class="contentTitle"><!-- IF not S_POINTS_DISABLED -->{L_menu_standings}<!-- ELSE -->{L_menu_members}<!-- ENDIF --> <!-- IF MDKP_POOLNAME != "" -->&raquo; {MDKP_POOLNAME}<!-- ENDIF -->
 	<div class="floatRight">
 	{COMPARE_LINK}
 	</div>

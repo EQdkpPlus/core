@@ -308,7 +308,8 @@ class core extends gen_class {
 				'USER_NAME'					=> isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous'),
 				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
-
+				
+				'S_POINTS_DISABLED'			=> ($this->config->get('pk_disable_points')) ? true : false,
 				'S_NORMAL_HEADER'			=> ($this->header_format != 'simple') ? true : false,
 				'S_NORMAL_FOOTER'			=> ($this->header_format != 'simple') ? true : false,
 				'S_NO_HEADER_FOOTER'		=> ($this->header_format == 'none') ? true : false,
