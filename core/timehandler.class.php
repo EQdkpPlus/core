@@ -469,10 +469,14 @@ if (!class_exists("timehandler")){
 						$slash = strpos($value, '/');
 						$continent = substr($value, 0, $slash);
 						$region = substr($value, $slash+1);
-						$tzlist[$continent][] = $value;
-						$current_tz = new DateTimeZone($value);
-						$offset = $current_tz->getOffset($london_dt);
-						$tzdata[$value] = 'GMT '.trim(self::formatOffset($offset));
+						
+						try {
+							$current_tz = new DateTimeZone($value);
+							$offset = $current_tz->getOffset($london_dt);
+							$tzdata[$value] = 'GMT '.trim(self::formatOffset($offset));
+							$tzlist[$continent][] = $value;
+						} catch (Exception $e) {
+						}
 					}
 				}
 				ksort($tzlist);

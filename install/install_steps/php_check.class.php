@@ -53,8 +53,8 @@ class php_check extends install_generic {
 			),
 			'memory'	=> array(
 				'required'		=> '60M',
-				'installed'		=> ini_get('memory_limit'),
-				'passfail'		=> (intval(ini_get('memory_limit')) >= 60) ? true : false,
+				'installed'		=> (intval(ini_get('memory_limit')) == -1) ? "Unlimited" : ini_get('memory_limit'),
+				'passfail'		=> $this->check_php_limit(),
 			),
 			'curl'		=> array(
 				'required'		=> $this->lang['yes'],
@@ -73,19 +73,28 @@ class php_check extends install_generic {
 				'installed'		=> (function_exists('hash')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (function_exists('hash')) ? true : false
 			),
-			/*
-			'soap'		=> array(
-				'required'		=> $this->lang['yes'],
-				'installed'		=> (class_exists('SoapClient')) ? $this->lang['yes'] : $this->lang['no'],
-				'passfail'		=> (class_exists('SoapClient')) ? true : false
-			),
-			*/
 			'autoload'	=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (function_exists('spl_autoload_register')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (function_exists('spl_autoload_register')) ? true : false
 			),
 		);
+	}
+	
+	private function check_php_limit($size){
+		$installed = ini_get('memory_limit');
+		if (intval($installed) == -1) return true;
+		$needed = REQ_PHP_MEMORY;
+		return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
+	}
+	
+	function convert_hr_to_bytes( $size ) {
+		( $bytes = (float) $size )
+		&& ( $last = strtolower( substr( $size, -1 ) ) )
+		&& ( $pos = strpos( ' kmg', $last , 1 ) )
+		&& $bytes *= pow( 1024, $pos )
+		;
+		return round( $bytes );
 	}
 
 	private function do_match_req(){
