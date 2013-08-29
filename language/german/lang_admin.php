@@ -1587,6 +1587,7 @@ $lang = array(
 "lm_layout_nopoints" => "EQdkp Plus Layout für deaktivierte Punkte",
 "lm_page_admin_manage_article_categories" => "Artikelkategorien-Verwaltung",
 "lm_page_admin_manage_articles" => "Artikel-Verwaltung",
+"lm_default_pool_ov" => "Standard Multidkp-Konto für Überblick",	
  );
 
 ?>

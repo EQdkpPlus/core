@@ -70,9 +70,14 @@ class points_pageobject extends pageobject {
 				redirect($compare_link);
 			}
 		}
-
+	
+		
+		//Multidkp selection output
+		$multilist = $this->pdh->get('multidkp', 'id_list', array());
+		
 		if($mdkpid == 0){
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
+			$defaultPoolOverview = (isset($detail_settings['default_pool_ov'])) ? $detail_settings['default_pool_ov'] : $multilist[0];
 		}else{
 			$hptt_page_settings = $detail_settings;
 			unset($detail_settings);
@@ -92,8 +97,7 @@ class points_pageobject extends pageobject {
 			$filter = 'none';
 		}
 
-		//Multidkp selection output
-		$multilist = $this->pdh->get('multidkp', 'id_list', array());
+
 		$this->tpl->assign_block_vars('mdkpid_row', array (
 			'VALUE'		=> 0,
 			'SELECTED'	=> ($mdkpid === 0) ? ' selected="selected"' : '',
@@ -140,18 +144,18 @@ class points_pageobject extends pageobject {
 			$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($view_list));
 		}
 
-		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => $mdkpid, '%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
+		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => (($mdkpid == 0) ? $defaultPoolOverview : $mdkpid), '%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
 		$hptt->setPageRef($this->strPath);
+		
+		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
+		$lb_id = $this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']);
+		$lb_id = ($this->in->get('lbc', 0)) ? $lb_id : $mdkpid;
 		if (!$this->config->get('pk_disable_points')){
 			$myleaderboard			= registry::register('html_leaderboard');
-			$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
 			$this->tpl->assign_vars(array (
 					'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings),
 			));
 		}
-		$jqToolbar = $this->jquery->toolbar('listcharacters', $arrToolbarItems, array('position' => 'bottom'));
-		$lb_id = $this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']);
-		$lb_id = ($this->in->get('lbc', 0)) ? $lb_id : $mdkpid;
 		
 		$this->tpl->assign_vars(array (
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),

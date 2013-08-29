@@ -86,6 +86,7 @@ class ManagePageLayouts extends page_generic {
 					$layout_def['pages'][$page][$page_object]['table_sort_dir'] = $this->in->get($prefix.':table_sort_dir', 'desc');
 					$layout_def['pages'][$page][$page_object]['table_sort_col'] = 0;
 					if($this->in->get($prefix.':default_pool', -1) >= 0) $layout_def['pages'][$page][$page_object]['default_pool'] = $this->in->get($prefix.':default_pool');
+					if($this->in->get($prefix.':default_pool_ov', -1) >= 0) $layout_def['pages'][$page][$page_object]['default_pool_ov'] = $this->in->get($prefix.':default_pool_ov');
 					$layout_def['pages'][$page][$page_object]['table_presets'] = array();
 					$presets = $this->in->getArray($prefix.':td_add', 'string');
 					$def_sort_column_id = 0;
@@ -475,9 +476,16 @@ class ManagePageLayouts extends page_generic {
 					if(in_array('%dkp_id%', $options['table_subs']) && '%dkp_id%' != $options['table_main_sub']) {
 						$this->init_multipools();
 						if(!isset($options['default_pool'])) $options['default_pool'] = 0;
+						if(!isset($options['default_pool_ov'])) $options['default_pool_ov'] = 1;
 						$add_setts[] = array(
 							'LANG'	=> $this->user->lang('lm_default_pool'),
 							'FIELD'	=> $this->html->DropDown($page.'['.$page_object.'][default_pool]', $this->multi_pools, $options['default_pool']),
+						);
+						$arrOvPools = $this->multi_pools;
+						unset($arrOvPools[0]);
+						$add_setts[] = array(
+							'LANG'	=> $this->user->lang('lm_default_pool_ov'),
+							'FIELD'	=> $this->html->DropDown($page.'['.$page_object.'][default_pool_ov]', $arrOvPools, $options['default_pool_ov']),
 						);
 					}
 					$this->tpl->assign_block_vars('page_row.page_object_row', array(

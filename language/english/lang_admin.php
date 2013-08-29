@@ -1347,7 +1347,7 @@ $lang = array(
 	"lm_warning" => 'Caution: The settings on this page are intended for very experienced users who know exactly what they are doing. Lack of knowledge and incorrect entries can cause EQdkp to cease functioning!',
 	"lm_add_preset" => 'Add custom column',
 	"lm_user_presets" => 'Custom columns',
-	"lm_default_pool" => 'Standard Multidkp account',
+	"lm_default_pool" => 'Default Multidkp pool',
 	"lm_module" => 'Module',
 	"lm_tag" => 'Day',
 	"lm_aparam" => 'Call params',
@@ -1585,6 +1585,7 @@ $lang = array(
 	"lm_layout_nopoints" => "EQdkp Plus Layout for disabled Points",
 	"lm_page_admin_manage_article_categories" => "Articlecategories Management",
 	"lm_page_admin_manage_articles" => "Article Management",
+	"lm_default_pool_ov" => "Default Multidkp pool for Overview",
 );
 
 ?>
