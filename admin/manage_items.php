@@ -130,9 +130,29 @@ class ManageItems extends page_generic {
 		} else {
 			$item['date'] = $this->time->time;
 		}
-
+		
+		$arrAutocomplete = array();
+		foreach($this->pdh->get('item', 'id_list') as $intItemID){
+			$arrAutocomplete[] = array(
+				'label'		=> 	$this->pdh->get('item', 'name', array($intItemID)).', '.$this->pdh->geth('item', 'date', array($intItemID)).((!$this->config->get('pk_disable_points')) ? ', '.runden($this->pdh->aget('item', 'value', array($intItemID))).' '.$this->config->get('dkp_name') : '').' (#'.$intItemID.')',
+				'ivalue'		=>  runden($this->pdh->get('item', 'value', array($intItemID))),
+				'game_id'	=>	$this->pdh->get('item', 'game_itemid', array($intItemID)),
+				'iname'		=>	$this->pdh->get('item', 'name', array($intItemID)),
+				'itempool'	=>	$this->pdh->get('item', 'itempool_id', array($intItemID)),
+			);
+		}
+		
+		$this->jquery->AutocompleteMultiple("name", $arrAutocomplete, '
+			$("#item_value").val(ui.item.ivalue);
+			$("#item_id").val(ui.item.game_id);
+			$("#name").val(ui.item.iname);
+			$("#itempool_id").val(ui.item.itempool);
+			event.preventDefault();
+		');
+		
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
-		$this->jquery->Autocomplete('name', array_unique($item_names));
+		
+
 		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".((isset($item['name'])) ? $item['name'] : ''), '', true);
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key)) ? $grp_key : '',

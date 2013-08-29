@@ -1585,6 +1585,8 @@ $lang = array(
 "pk_disable_points" => "Punkte deaktivieren",
 "disabled_points_info" => "Da du in den Einstellungen die Punkte deaktivierst hast, steht dir diese Funktion nicht zur Verfügung.",
 "lm_layout_nopoints" => "EQdkp Plus Layout für deaktivierte Punkte",
+"lm_page_admin_manage_article_categories" => "Artikelkategorien-Verwaltung",
+"lm_page_admin_manage_articles" => "Artikel-Verwaltung",
  );
 
 ?>

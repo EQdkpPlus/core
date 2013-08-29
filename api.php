@@ -31,7 +31,7 @@ if (registry::register('config')->get('pk_maintenance_mode')){
 	}
 	header('Content-Length: '.strlen($myOut));
 	if (registry::register('input')->get('format') != 'json'){
-		header('Content-type: text/xml');
+		header('Content-type: text/xml; charset=UTF-8');
 	} else {
 		header('Content-type: application/json');
 	}
@@ -42,7 +42,7 @@ if (registry::register('config')->get('pk_maintenance_mode')){
 $return	= register('plus_exchange')->execute();
 header('Content-Length: '.strlen($return));
 if (registry::register('input')->get('format') != 'json'){
-	header('Content-type: text/xml');
+	header('Content-type: text/xml; charset=UTF-8');
 } else {
 	header('Content-type: application/json');
 }

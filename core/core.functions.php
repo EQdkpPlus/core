@@ -78,7 +78,7 @@ function sdir( $path='.', $mask='*', $strip='', $nocache=0 ){
  */
 function runden($value){
 	$ret_val		= $value;
-	$precision	= registry::register('config')->get('pk_round_precision');
+	$precision	= (int)registry::register('config')->get('pk_round_precision');
 
 	if (($precision < 0) or ($precision > 5) ){
 		$precision = 2;

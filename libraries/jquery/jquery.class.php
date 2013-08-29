@@ -391,6 +391,27 @@ if (!class_exists("jquery")) {
 			}
 		}
 		
+		public function AutocompleteMultiple($id, $myarray, $js_function){
+			if(is_array($myarray) && count($myarray) > 0){
+				if (is_array($id)){
+					$ids = implode(',#', $id);
+					$id = array_shift($id);
+				} else {
+					$ids = $id;
+				}
+				$this->tpl->add_js('
+						var jquiac_'.$id.' = '.json_encode($myarray).';
+						$("#'.$ids.'").autocomplete({
+							source: jquiac_'.$id.',
+							select: function(event, ui){
+								'.$js_function.'
+							},
+							minLength:1
+						});
+				', 'docready');
+			}
+		}
+		
 		/**
 		* Spinner
 		*

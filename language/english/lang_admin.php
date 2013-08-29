@@ -1311,8 +1311,8 @@ $lang = array(
 	"lm_column_preset" => 'Column',
 	"lm_column_sortable" => 'sortable',
 	"lm_column_default_sort" => 'Default sorting order',
-	"lm_column_th_add" => 'HTML <th> addition',
-	"lm_column_td_add" => 'HTML <td> addition',
+	"lm_column_th_add" => 'HTML &lt;th&gt; addition',
+	"lm_column_td_add" => 'HTML &lt;td&gt; addition',
 	"lm_add_row" => 'Add column',
 	"lm_delete_row" => 'Delete column',
 	"lm_table_settings" => 'Table configuration',
@@ -1583,6 +1583,8 @@ $lang = array(
 	"uc_revoke_char_confirm" => "Should the selected Chars be revoked?",
 	"disabled_points_info" => "This feature is not available, because you have disabled Points in your Settings.",
 	"lm_layout_nopoints" => "EQdkp Plus Layout for disabled Points",
+	"lm_page_admin_manage_article_categories" => "Articlecategories Management",
+	"lm_page_admin_manage_articles" => "Article Management",
 );
 
 ?>

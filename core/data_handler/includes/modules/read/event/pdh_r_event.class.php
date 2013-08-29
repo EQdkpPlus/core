@@ -95,6 +95,10 @@ if(!class_exists('pdh_r_event')){
 		public function get_value($event_id){
 			return $this->events[$event_id]['value'];
 		}
+		
+		public function get_html_value($event_id){
+			return runden($this->events[$event_id]['value']);
+		}
 
 		public function get_icon($event_id, $withpath=false, $fallback=false, $no_root=false){
 			if(!isset($this->events[$event_id])) return '';

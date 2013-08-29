@@ -186,6 +186,7 @@ if(registry::register('input')->get('out') != ''){
 	if(is_file($myOut)){
 			ob_end_clean();
 			ob_start();
+			header('content-type: text/html; charset=UTF-8');
 			$outdata = file_get_contents($myOut);
 			echo((isset($outdata)) ? $outdata : '<?xml version="1.0" encoding="UTF-8"?><response><status>0</status><error>no data</error></response>');
 	}else{

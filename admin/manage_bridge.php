@@ -56,6 +56,8 @@ class Manage_Bridge extends page_generic {
 	}
 
 	public function ajax_load_prefix(){
+		header('content-type: text/html; charset=UTF-8');
+		
 		$arrPrefix = $this->get_prefix($this->in->get('notsamedb', 0));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
 		$arrKeys = array_keys($arrPrefix);
@@ -91,6 +93,8 @@ class Manage_Bridge extends page_generic {
 	}
 
 	public function ajax_check_database(){
+		header('content-type: text/html; charset=UTF-8');
+		
 		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('pw') != '' && $this->in->get('name') != ''){
 			$error = array();
 			$this->db = dbal::factory(array('dbtype' => 'mysql', 'die_gracefully' => true));
@@ -119,6 +123,7 @@ class Manage_Bridge extends page_generic {
 	}
 
 	public function ajax_check_usertable(){
+		header('content-type: text/html; charset=UTF-8');
 		$prefix = $this->in->get('prefix');
 		$this->config->set('cmsbridge_prefix', $prefix);
 
@@ -135,6 +140,7 @@ class Manage_Bridge extends page_generic {
 	}
 
 	public function ajax_load_usergroups(){
+		header('content-type: text/html; charset=UTF-8');
 		$groups = $this->bridge->get_user_groups(true);
 		$out = '';
 		foreach ($groups as $key=>$value){
@@ -146,6 +152,8 @@ class Manage_Bridge extends page_generic {
 	}
 
 	public function ajax_check_userlogin(){
+		header('content-type: text/html; charset=UTF-8');
+		
 		$groups = $this->in->get('groups', '');
 		$groups = str_replace('|', ',', $groups);
 		if ($groups != ''){

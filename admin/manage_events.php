@@ -126,7 +126,7 @@ class Manage_Events extends page_generic {
 			'S_UPD'			=> ($event['id']) ? TRUE : FALSE,
 			'EVENT_ID'		=> $event['id'],
 			'NAME'			=> (isset($event['name'])) ? $event['name'] : '',
-			'VALUE'			=> $event['value'],
+			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
 			'MDKP2EVENT' 	=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
 			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
 		));
@@ -184,7 +184,7 @@ class Manage_Events extends page_generic {
 		if(empty($event['name']) AND !$norefresh) {
 			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => $this->user->lang('name'), 'color' => 'red'));
 		}
-		$event['value'] = $this->in->get('value',0.0);
+		$event['value'] = $this->in->get('value', 0.0);
 		$event['icon'] = $this->in->get('icon','');
 		$event['id'] = $this->in->get('event_id',0);
 		$event['mdkp2event'] = $this->in->getArray('mdkp2event', 'int');

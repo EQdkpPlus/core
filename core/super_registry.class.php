@@ -188,6 +188,7 @@ abstract class super_registry {
 			
 			// Set the locale
 			setlocale(LC_ALL, registry::register('config')->get('default_locale'));
+			setlocale(LC_NUMERIC, "eng");
 
 			// Populate the admin menu if we're in an admin page, they have admin permissions
 			if(defined('IN_ADMIN') && IN_ADMIN === true){

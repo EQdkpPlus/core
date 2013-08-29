@@ -29,13 +29,24 @@ class ManageRaids extends page_generic {
 
 	public function __construct(){
 		$handler = array(
+			'raidvalue' => array('process' => 'ajax_raidvalue', 'check' => false),
 			'save' => array('process' => 'save', 'check' => 'a_raid_add', 'csrf'=>true),
 			'itemadj_del' => array('process' => 'update', 'check' => 'a_raid_del', 'csrf'=>true),
-			'refresh' => array('process' => 'update', 'check' => 'a_raid_'),
-			'upd'	=> array('process' => 'update', 'csrf'=>false),
+			'refresh'	=> array('process' => 'update', 'check' => 'a_raid_'),
+			'upd'		=> array('process' => 'update', 'csrf'=>false),			
 		);
 		parent::__construct('a_raid_', $handler, array('raid', 'event_name'), null, 'selected_ids[]', 'r');
 		$this->process();
+
+	}
+	
+	public function ajax_raidvalue(){
+		header('content-type: text/html; charset=UTF-8');
+		
+		$event_id = $this->in->get('event', 0);
+		$event_value = $this->pdh->geth("event", "value", array($event_id));
+		echo runden($event_value);
+		die();
 	}
 
 	public function delete() {
@@ -245,11 +256,11 @@ class ManageRaids extends page_generic {
 		$this->tpl->assign_vars(array(
 			'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
-			'EVENT'				=> $this->html->DropDown('event', $events, (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event'])),
+			'EVENT'				=> $this->html->DropDown('event', $events, (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), '', 'onchange="loadEventValue($(this).val())"'),
 			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
 			'RAID_DATE'			=> $this->time->user_date($raid['date']),
 			'RAID_ID'			=> ($raid['id']) ? $raid['id'] : 0,
-			'VALUE'				=> (($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value']),
+			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
 			'RAID_DROPDOWN'		=> $this->html->DropDown('draft', $raids, $this->in->get('draft', 0), '', 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"'),
 			//language vars

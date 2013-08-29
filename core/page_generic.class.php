@@ -115,7 +115,7 @@ if(!class_exists('page_generic')){
 		protected function process() {
 			foreach($this->handler as $key => $process) {
 				if($this->in->exists($key) AND !is_array(current($process))) {
-					if($this->pre_check) $this->user->check_auth($process['check']);
+					if($this->pre_check && $process['check'] !== false) $this->user->check_auth($process['check']);
 					
 					if(isset($process['csrf']) && $process['csrf']) {
 						$blnResult = $this->checkCSRF($key);
@@ -127,7 +127,7 @@ if(!class_exists('page_generic')){
 				} elseif($this->in->get($key) AND is_array(current($process))) {
 					foreach($process as $subprocess) {
 						if($subprocess['value'] == $this->in->get($key)) {
-							if($this->pre_check) $this->user->check_auth($subprocess['check']);
+							if($this->pre_check && $subprocess['check'] !== false) $this->user->check_auth($subprocess['check']);
 							
 							if(isset($subprocess['csrf']) && $subprocess['csrf']) {
 								$blnResult = $this->checkCSRF($key);

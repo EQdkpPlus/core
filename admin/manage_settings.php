@@ -1052,7 +1052,7 @@ class mmocms_settings extends page_generic {
 			
 			//check for changed disable points
 			if((int)$this->config->get('pk_disable_points') != $this->in->get('pk_disable_points', 0)){
-				if ($this->in->get('pk_disable_points', 0) == 1) $this->config->set('eqdkp_layout', "nopoints");
+				if ($this->in->get('pk_disable_points', 0) == 1) {$this->config->set('eqdkp_layout', "nopoints");} else $this->config->set('eqdkp_layout', "normal");
 			}
 
 			// Save the settings array

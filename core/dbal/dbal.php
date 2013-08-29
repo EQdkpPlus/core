@@ -140,7 +140,7 @@ abstract class dbal_common extends gen_class {
 			}
 		}
 		//ensure correct order
-		foreach($this->keys as $k) {
+		foreach($this->keys as $k) {			
 			$v = $data[$k];
 			if(is_null($v) || $v === 'NULL')
 				$values[] = 'NULL';
@@ -154,7 +154,8 @@ abstract class dbal_common extends gen_class {
 			elseif(is_string($v))
 				$values[] = "'" . $this->escape($v) . "'";
 			elseif(is_float($v))
-				$values[] = "'" . number_format($v, registry::register('config')->get('pk_round_precision'), '.', '') . "'";
+				//$values[] = "'" . number_format($v, registry::register('config')->get('pk_round_precision'), '.', '') . "'";
+				$values[] = "'" . str_replace(",", ".", $v) . "'";
 			elseif(is_bool($v))
 				$values[] = "'" . intval($v) . "'";
 			else
@@ -204,8 +205,10 @@ abstract class dbal_common extends gen_class {
 					}
 					elseif(is_string($v))
 						$values[] = "$k = '" . $this->escape($v) . "'";
-					elseif(is_float($v))
-						$values[] = "$k = '" . number_format($v, registry::register('config')->get('pk_round_precision'), '.', '') . "'";
+					elseif(is_float($v)){
+						//$values[] = "$k = '" . number_format($v, registry::register('config')->get('pk_round_precision'), '.', '') . "'";
+						$values[] = "$k = '" . str_replace(",", ".", $v) . "'";
+					}
 					elseif(is_bool($v))
 						$values[] = "$k = '" . intval($v) . "'";
 					else
