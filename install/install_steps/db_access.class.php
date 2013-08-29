@@ -25,7 +25,7 @@ class db_access extends install_generic {
 	public $next_button		= 'test_db';
 
 	//default settings
-	private $table_prefix	= 'eqdkp11_';
+	private $table_prefix	= 'eqdkp20_';
 	private $dbtype			= 'mysqli';
 	private $dbhost			= 'localhost';
 	private $dbname			= '';

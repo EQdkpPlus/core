@@ -5,73 +5,78 @@
 	</ul>
 	<div class="clear"></div>
 </div>
-<!-- IF not S_HIDE_HEADER -->
-<div>
-	<!-- IF S_PREV_ARTICLE -->
-	<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="icon-chevron-left"></i> {PREV_TITLE}</a>
-	<!-- ENDIF -->
 
-	<!-- IF S_NEXT_ARTICLE -->
-	<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="floatRight">{NEXT_TITLE} <i class="icon-chevron-right"></i></a>
-	<!-- ENDIF -->
-	<div class="clear"></div>
-	<br />
-</div>
-
-<div class="contentHeader">
-	<h1 class="contentTitle">{ARTICLE_TITLE}
-		<!-- IF S_TOOLBAR --> 
-		<div class="floatRight">
-			<div class="toolbar-button">
-				<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
-			</div>
-		</div>
+<section>
+	<!-- IF not S_HIDE_HEADER -->
+	<nav>
+		<!-- IF S_PREV_ARTICLE -->
+		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="icon-chevron-left"></i> {PREV_TITLE}</a>
 		<!-- ENDIF -->
-		<div class="floatRight">
-			<a href="{PERMALINK}" title="{L_permalink}"><i class="icon-link"></i></a>
+
+		<!-- IF S_NEXT_ARTICLE -->
+		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="floatRight">{NEXT_TITLE} <i class="icon-chevron-right"></i></a>
+		<!-- ENDIF -->
+		<div class="clear"></div>
+		<br />
+	</nav>
+	
+	<header>
+		<div class="contentHeader">
+			<h1 class="contentTitle">{ARTICLE_TITLE}
+				<!-- IF S_TOOLBAR --> 
+				<div class="floatRight">
+					<div class="toolbar-button">
+						<span class="{ARTICLE_TOOLBAR} toolbar"><i class="icon-cog"></i></span>
+					</div>
+				</div>
+				<!-- ENDIF -->
+				<div class="floatRight">
+					<a href="{PERMALINK}" title="{L_permalink}"><i class="icon-link"></i></a>
+				</div>
+			</h1>
 		</div>
-	</h1>
-</div>
-<div class="news_author">
-	<div class="floatLeft">
-		<i class="icon-time"></i>{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
-	</div>
-	<div class="news_social floatRight">
-		{ARTICLE_SOCIAL_BUTTONS}
-	</div>
-	<div class="clear"></div>
-</div>
+		<div class="news_author">
+			<div class="floatLeft">
+				<i class="icon-time"></i>{ARTICLE_DATE} - {ARTICLE_SUBMITTED}<!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="icon-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
+			</div>
+			<div class="news_social floatRight">
+				{ARTICLE_SOCIAL_BUTTONS}
+			</div>
+			<div class="clear"></div>
+		</div>
+	</header>
 
-<!-- ENDIF -->
-
-<!-- IF S_PAGINATION -->
-<div class="articleSitemap">
-	<ul>
-	<!-- BEGIN articlesitemap_row -->
-	<li <!-- IF articlesitemap_row.ACTIVE-->class="active"<!-- ENDIF -->>{articlesitemap_row.LINK}</li>
-	<!-- END articlesitemap_row -->
-	</ul>
-</div>
-<!-- ENDIF -->
-<div class="news_content">
-	<!-- PRE ARTICLE_CONTENT -->
-</div>
-<div class="clear"></div>
-{PAGINATION}
-
-<div class="tags-container">
-	<!-- IF S_TAGS -->
-	 <ul class="tags">
-		<!-- BEGIN tag_row -->
-		<li><a href="{tag_row.U_TAG}">{tag_row.TAG}</a></li>
-		<!-- END tag_row -->
-	</ul>
 	<!-- ENDIF -->
-	<div class="<!-- IF S_TAGS -->floatRight<!-- ENDIF -->">{ARTICLE_RATING}</div>
+
+	<!-- IF S_PAGINATION -->
+	<aside class="articleSitemap">
+		<ul>
+		<!-- BEGIN articlesitemap_row -->
+		<li <!-- IF articlesitemap_row.ACTIVE-->class="active"<!-- ENDIF -->>{articlesitemap_row.LINK}</li>
+		<!-- END articlesitemap_row -->
+		</ul>
+	</aside>
+	<!-- ENDIF -->
+	<article class="news_content">
+		<!-- PRE ARTICLE_CONTENT -->
+	</article>
 	<div class="clear"></div>
-</div>
-<div class="contentDivider"></div>
+	{PAGINATION}
 
-<span id="comments"></span>
-{COMMENTS}
+	<footer class="tags-container">
+		<!-- IF S_TAGS -->
+		 <ul class="tags">
+			<!-- BEGIN tag_row -->
+			<li><a href="{tag_row.U_TAG}">{tag_row.TAG}</a></li>
+			<!-- END tag_row -->
+		</ul>
+		<!-- ENDIF -->
+		<div class="<!-- IF S_TAGS -->floatRight<!-- ENDIF -->">{ARTICLE_RATING}</div>
+		<div class="clear"></div>
+	</footer>
+	<div class="contentDivider"></div>
 
+	<span id="comments"></span>
+	{COMMENTS}
+
+</section>

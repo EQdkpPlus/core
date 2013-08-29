@@ -175,7 +175,7 @@ class game extends gen_class {
 	private function decorate_talents($class_id, $talent=0, $member_id=null, $pathonly=false){
 		if(is_file($this->root_path.'games/'.$this->game.'/talents/'.$class_id.$talent.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/talents/'.$class_id.$talent.'.png';
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_talenticon talenticon\" title=\"".$this->get_name('talents', $class_id)."\" />";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_talenticon talenticon\" />";
 		}
 	}
 

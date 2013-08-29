@@ -1857,6 +1857,10 @@ ul.breamcrumb .current::before{
 	margin-top: 20px;
 }
 
+.article-container.list-type2 header, .article-container.list-type2 header h3, .article-container.list-type2 p {
+	display: inline !important;
+}
+
 .article-container-wrapper{
 	padding-right: 10px;
 	padding-left: 10px;

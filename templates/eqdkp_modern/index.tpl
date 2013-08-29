@@ -184,7 +184,6 @@
 				<div class="clear"></div>
 			</div> <!-- close personalArea -->
 		</header>
-		
 		<div id="wrapper" <!-- IF T_PORTAL_WIDTH -->class="fixed_width"<!-- ENDIF -->>
 			
 		<header>
@@ -194,61 +193,67 @@
 						<img src="{HEADER_LOGO}" alt="{MAIN_TITLE}" id="mainlogo" />
 					</div><!-- close logoArea -->
 					
-					<div id="titles">
+					<hgroup id="titles">
 							<h1>{MAIN_TITLE}</h1><br />
 							<h2>{SUB_TITLE}</h2>
-					</div><!-- close titles-->
+					</hgroup><!-- close titles-->
 				
 					<div class="clear noheight">&nbsp;</div>
 				</div>
 			</div> <!-- close header-->
 		</header>
-				
-		<section>
-		<div id="contentContainer">
-			<a id="content"></a>
-			
-			<nav>
-				<div id="mainmenu">
-					<div class="hiddenSmartphone">
-						{MAIN_MENU}
-						<div class="clear noheight">&nbsp;</div>
-					</div>
-					<div class="hiddenDesktop">
-						<select><option>Navigation</option></select>
-					</div>
-				</div><!-- close mainmenu -->
-				
-				<!-- IF S_IN_ADMIN -->
-				<div id="adminmenu">
-					<div class="hiddenSmartphone">
-						{ADMIN_MENU}
-					</div>
-					<div class="hiddenDesktop">
-						<select><option>Admin Navigation</option></select>
-					</div>
-				</div>
-				<!-- ENDIF -->
-			</nav>
 		
+		
+		<section id="contentContainer">
+			<a id="content"></a>
+			<header>
+				<nav id="nav">
+					<div id="mainmenu">
+						<div class="hiddenSmartphone">
+							{MAIN_MENU}
+							<div class="clear noheight">&nbsp;</div>
+						</div>
+						<div class="hiddenDesktop">
+							<select><option>Navigation</option></select>
+						</div>
+					</div><!-- close mainmenu -->
+					
+					<!-- IF S_IN_ADMIN -->
+					<div id="adminmenu">
+						<div class="hiddenSmartphone">
+							{ADMIN_MENU}
+						</div>
+						<div class="hiddenDesktop">
+							<select><option>Admin Navigation</option></select>
+						</div>
+					</div>
+					<!-- ENDIF -->
+				</nav>
+			</header>
+			
 			<div class="portal">
 				<div class="columnContainer">
 					<!-- IF S_PORTAL_LEFT -->
-					<div class="first column" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
-						{PORTAL_LEFT}						
-					</div> <!-- close first column -->
+					<aside class="first column portal-left" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
+						<div class="columnInner">
+							{PORTAL_LEFT}						
+						</div> <!-- close first column -->
+					</aside>
 					<!-- ENDIF -->
 					
-					<div class="second column <!-- IF not S_PORTAL_RIGHT -->no_third_column<!-- ENDIF -->">
+					<article class="second column <!-- IF not S_PORTAL_RIGHT -->no_third_column<!-- ENDIF -->">
 						<div class="columnInner">
 							<!-- BEGIN global_warnings -->
+							<header>
 								<div class="{global_warnings.CLASS} roundbox">
 									<div class="{global_warnings.ICON}">{global_warnings.MESSAGE}</div>
 								</div>
 								<br />
+							</header>
 							<!-- END global_warnings -->
-
-							{PORTAL_MIDDLE}
+							<aside id="portal-middle">
+								{PORTAL_MIDDLE}
+							</aside>
 							<!-- ENDIF -->
 							<div id="contentBody" class="{PAGE_CLASS}<!-- IF not S_NORMAL_HEADER --> simple-header <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER --> simple-footer <!-- ENDIF -->">
 								<div id="contentBody2">
@@ -256,8 +261,10 @@
 								</div>	
 							</div><!-- close contentBody -->
 							<!-- IF S_NORMAL_FOOTER -->
+							<aside id="portal-footer">
 							{PORTAL_BOTTOM}
-							<div class="debug">
+							</aside>
+							<footer class="debug">
 							<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
 							<!-- IF S_SHOW_DEBUG -->							
 							<br /><div class="center">
@@ -266,28 +273,25 @@
 								</span>
 							</div>
 							<!-- ENDIF -->
-							</div>
+							</footer>
 						</div>
-					</div><!-- close second column -->
+					</article><!-- close second column -->
 					
 					<!-- IF S_PORTAL_RIGHT -->
-					<div class="third column" style="<!-- IF T_COLUMN_RIGHT_WIDTH -->min-width:{T_COLUMN_RIGHT_WIDTH};max-width:{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
+					<aside class="third column portal-right" style="<!-- IF T_COLUMN_RIGHT_WIDTH -->min-width:{T_COLUMN_RIGHT_WIDTH};max-width:{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						<div class="columnInner">
 							{PORTAL_RIGHT}						
 						</div>
-					</div>
+					</aside>
 					<!-- ENDIF -->
 				</div>
 			</div>
 		
-		</div>
 		</section>
 		
-		<footer>
-			<div id="footer">
+		<footer id="footer">
 				{EQDKP_PLUS_COPYRIGHT}
-			</div> <!-- close footer -->
-		</footer>
+		</footer><!-- close footer -->
 	</div><!-- close wrapper -->
 	
 	<!-- ELSE -->

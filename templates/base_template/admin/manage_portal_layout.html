@@ -36,7 +36,7 @@ $(document).ready(function(){
 	<div class="clear"></div>
 </div>
 
-<form method="post" action="{ACTION}" name="post">
+<form method="post" action="{ACTION}" name="post" id="portal_layout_form">
 <div class="contentHeader">
 	<h1 class="contentTitle">{L_portalplugin_management}</h1>
 </div>
@@ -44,7 +44,7 @@ $(document).ready(function(){
 <fieldset class="settings">
 	<dl>
 		<dt><label>{L_name}:</label></dt>
-		<dd><input type="text" name="name" value="{NAME}" class="input" /></dd>
+		<dd><input type="text" name="name" value="{NAME}" class="input required" /></dd>
 	</dl>
 	<dl>
 		<dt><label>{L_portal_blocks}:</label></dt>
