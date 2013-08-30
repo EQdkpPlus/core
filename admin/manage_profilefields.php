@@ -112,11 +112,11 @@ class ManageProfileFields extends page_generic {
 		);
 
 		$this->tpl->assign_vars(array (
-			'S_EDIT'					=> true,
 			'L_IMAGE_NOTE'				=> sprintf($this->user->lang('profilefield_image_note'), $this->game->get_game()),
 			'F_PAGE_MANAGER'			=> 'manage_profilefields.php'.$this->SID,
 			'ID'						=> ($this->in->get('edit')) ? $this->in->get('edit') : '',
 			'LANGUAGE'					=> (isset($field_data['language'])) ? $field_data['language'] : '',
+			'OPTIONS_LANGUAGE'			=> (isset($field_data['options_language'])) ? $field_data['options_language'] : '',
 			'TYPE_DD'					=> $this->html->DropDown('type', $types, ((isset($field_data['fieldtype'])) ? $field_data['fieldtype'] : ''), '', ' onchange="handle_fieldtypes(this.value);"'),
 			'CATEGORY_DD'				=> $this->html->DropDown('category', $categories, ((isset($field_data['category'])) ? $field_data['category'] : '')),
 			'SIZE'						=> (isset($field_data['size'])) ? $field_data['size'] : '',
@@ -135,7 +135,7 @@ class ManageProfileFields extends page_generic {
 
 		$this->core->set_vars(array (
 			'page_title'		=> $this->user->lang('manage_profilefields'),
-			'template_file'		=> 'admin/manage_profilefields.html',
+			'template_file'		=> 'admin/manage_profilefields_edit.html',
 			'display'			=> true
 		));
 	}

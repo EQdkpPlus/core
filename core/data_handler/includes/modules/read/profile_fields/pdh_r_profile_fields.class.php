@@ -70,6 +70,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 					'size'			=> $drow['size'],
 					'visible'		=> $drow['visible'],
 					'language'		=> ($this->game->glang($drow['language'])) ? $this->game->glang($drow['language']) : $drow['language'],
+					'options_language' => $drow['options_language'],
 					'image'			=> $drow['image'],
 					'enabled'		=> $drow['enabled'],
 					'undeletable'	=> $drow['undeletable'],
@@ -105,6 +106,10 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 
 		public function get_language($name) {
 			return $this->profile_fields[$name]['language'];
+		}
+		
+		public function get_options_language($name) {
+			return $this->profile_fields[$name]['options_language'];
 		}
 
 	}//end class

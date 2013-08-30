@@ -243,6 +243,7 @@ CREATE TABLE `__member_profilefields` (
 	`undeletable` tinyint(1) NOT NULL DEFAULT 0,
 	`custom` tinyint(1) NOT NULL DEFAULT 0,
 	`options` text COLLATE utf8_bin,
+	`options_language` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	PRIMARY KEY (`name`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

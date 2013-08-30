@@ -266,19 +266,30 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			$arrField = $this->pdh->get('profile_fields', 'fields', array($profile_field));
 			$strMemberValue = $this->get_profile_field($member_id, $profile_field);
 			$out = $strMemberValue;
+			
+			$arrField['options_language'] = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}", "{RACEID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id),$this->get_raceid($member_id)), $arrField['options_language']);
+			
+			if($arrField['image'] != "" && $out){
+				$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}", "{RACEID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id),$this->get_raceid($member_id)), $arrField['image']);
+				if (is_file($this->root_path.$strPlainImage)){
+					$strImage =  $this->server_path.$strPlainImage;
+				}
+			} else $strImage = false;
+			
 			switch($arrField['fieldtype']){
 				case 'int':
 				case 'text': {
-					if ($arrField['image'] != "" && is_file($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'])){
-						$out = '<img src="'.$this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'" alt="'.$out.'" /> '.$out;
+					if ($strImage){
+						$out = '<img src="'.$strImage.'" alt="'.$out.'" /> '.$out;
 					}
 				}
 				break;
 
 				case 'link':
+					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}", "{RACEID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id),$this->get_raceid($member_id)), $strMemberValue);
 					$out = '<a href="'.$strMemberValue.'">';
-					if ($arrField['image'] != "" && is_file($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'])){
-						$out .= '<img src="'.$this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'" alt="'.$arrField['language'].'" />';
+					if ($strImage){
+						$out .= '<img src="'.$strImage.'" alt="'.$arrField['language'].'" title="'.$arrField['language'].'" />';
 					}else{
 						$out .= ($arrField['language']) ? $arrField['language'] : 'Link';
 					}
@@ -286,8 +297,17 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				break;
 
 				case 'dropdown':
-					if ($arrField['image'] != "" && is_dir($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image']) && is_file($this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'/'.$out.'.png')){
-						$out = '<img src="'.$this->root_path.'games/'.$this->config->get('default_game').'/profiles/'.$arrField['image'].'/'.$out.'.png" alt="'.$out.'" />';
+					if ($strImage){
+						$out = '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
+						if ($arrField['options_language'] != ""){
+							if (strpos($arrField['options_language'], 'lang:') === 0){
+								$arrSplitted = explode(':', $arrField['options_language']);
+								$arrGlang = $this->game->glang($arrSplitted[1]);				
+								$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+								
+							} else $arrLang = $this->game->get($arrField['options_language']);
+							if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
+						}
 					}
 				break;
 			}

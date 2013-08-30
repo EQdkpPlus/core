@@ -132,7 +132,7 @@ if (!class_exists('pdh_r_wow')) {
 			$output			= '';
 			$a_profilers	= array(
 				1	=> array(
-					'icon'	=> 'games/wow/profiles/profilers/askmrrobot.png',
+					'icon'	=> $this->server_path.'games/wow/profiles/profilers/askmrrobot.png',
 					'name'	=> 'AskMrRobot.com',
 					'url'	=> $this->game->obj['armory']->bnlink($membername, $this->config->get('uc_servername'), 'askmrrobot')
 				)

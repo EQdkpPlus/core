@@ -77,6 +77,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'fieldtype'		=> $this->in->get('type'),
 				'category'		=> $this->in->get('category'),
 				'language'		=> $this->in->get('language'),
+				'options_language' => $this->in->get('options_language'),
 				'size'			=> $this->in->get('size'),
 				'image'			=> $this->in->get('image'),
 				'visible'		=> '1',
@@ -90,7 +91,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function insert_field($data=array()){
-			$name = preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower((isset($data['lang'])) ? $data['lang'] : $this->in->get('language')));
+			$name = preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower((isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language')));
 			if (!$name || !strlen($name)) $data['name'] = ((isset($data['fieldtype'])) ? $data['fieldtype'] : $this->in->get('type')).'_'.rand();
 			//End if a field with this name exists
 			$fields = $this->pdh->get('profile_fields', 'fields');
@@ -114,6 +115,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'fieldtype'		=> (isset($data['fieldtype'])) ? $data['fieldtype'] : $this->in->get('type'),
 				'category'		=> (isset($data['category'])) ? $data['category'] : $this->in->get('category'),
 				'language'		=> (isset($data['lang'])) ? $data['lang'] : $this->in->get('language'),
+				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),
 				'size'			=> (isset($data['size'])) ? intval($data['size']) : $this->in->get('size', 3),
 				'options'		=> (isset($data['option'])) ? serialize($data['option']) : serialize($options),
 				'visible'		=> '1',

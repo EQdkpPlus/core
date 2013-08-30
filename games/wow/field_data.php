@@ -24,20 +24,24 @@ if ( !defined('EQDKP_INC') ){
 
 $xml_fields = array(
 	'skill_1'	=> array(
-		'type'			=> 'int',
+		'type'			=> 'dropdown',
 		'category'		=> 'character',
 		'name'			=> 'uc_skill1',
 		'size'			=> 4,
 		'undeletable'	=> true,
-		'visible'		=> true
+		'visible'		=> true,
+		'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
+		'options_lang'	=> "lang:talents:{CLASSID}",
 	),
 	'skill_2'	=> array(
-		'type'			=> 'int',
+		'type'			=> 'dropdown',
 		'category'		=> 'character',
 		'name'			=> 'uc_skill2',
 		'size'			=> 4,
 		'undeletable'	=> true,
-		'visible'		=> true
+		'visible'		=> true,
+		'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
+		'options_lang'	=> "lang:talents:{CLASSID}",
 	),
 	'gender'	=> array(
 		'type'			=> 'dropdown',
@@ -69,7 +73,9 @@ $xml_fields = array(
 		'name'			=> 'uc_prof1_name',
 		'options'		=> array(),
 		'undeletable'	=> true,
-		'visible'		=> true
+		'visible'		=> true,
+		'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
+		'options_lang'	=> "professions",
 	),
 	'prof2_value'	=> array(
 		'type'			=> 'int',
@@ -85,7 +91,9 @@ $xml_fields = array(
 		'name'			=> 'uc_prof2_name',
 		'options'		=> array(),
 		'undeletable'	=> true,
-		'visible'		=> true
+		'visible'		=> true,
+		'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
+		'options_lang'	=> "professions",
 	),
 	'health_bar'	=> array(
 		'type'			=> 'int',

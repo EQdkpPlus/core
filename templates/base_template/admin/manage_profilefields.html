@@ -1,4 +1,3 @@
-<!-- IF not S_EDIT -->
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
@@ -49,71 +48,3 @@
 </div>
 {CSRF_TOKEN}
 </form>
-<!-- ELSE -->
-<script type="text/javascript">
-//<![CDATA[
-function handle_fieldtypes(value){
-	if (value == 'dropdown'){
-		$("#options_row").show();
-	} else {
-		$("#options_row").hide();
-	}
-}
-
-function add_option(value){
-	
-		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /> <img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display=\'none\'" alt="add" />');
-}
-//]]>
-</script>
-<div class="breadcrumb-container">
-	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li><a href="{EQDKP_ROOT_PATH}admin/manage_profilefields.php{SID}">{L_manage_profilefields}</a></li>
-		<li class="current"><a><!-- IF ID == "" -->{L_new_profilefield}<!-- ELSE -->{LANGUAGE}<!-- ENDIF --></a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
-
-<form method="post" action="{F_PAGE_MANAGER}" name="post">
-	<fieldset class="settings">
-		<legend>{L_manage_profilefields}</legend>
-		<dl>
-			<dt><label>{L_name}:</label></dt>
-			<dd><input type="hidden" name="id" value="{ID}" /><input name="language" type="text" class="input" value="{LANGUAGE}" size="100" /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_type}:</label></dt>
-			<dd>{TYPE_DD}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_category}:</label></dt>
-			<dd>{CATEGORY_DD}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_field_length}:</label></dt>
-			<dd><input name="size" type="text"  class="input" id="size" value="{SIZE}" size="4" maxlength="4" /></dd>
-		</dl>	
-		<dl>
-			<dt><label>{L_profilefield_image}:</label><br /><span>{L_IMAGE_NOTE}</span></dt>
-			<dd><input name="image" type="text"  class="input" id="image" value="{IMAGE}" size="100" /></dd>
-		</dl>
-	</fieldset>
-	
-	<fieldset class="settings" {S_SHOW_OPTIONS} id="options_row">
-		<legend>{L_profilefield_optionen}</legend>
-		<dl>
-			<dt><label>{L_profilefield_optionen}:</label></dt>
-			<dd><!-- BEGIN options_row -->{L_ID}: <input type="text" value="{options_row.ID}" name="option_id[]" class="input" /> {L_name}: <input type="text" value="{options_row.LANGUAGE}" name="option_lang[]" class="input" /><br /><!-- END options_row -->
-			{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" />
-			<img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display='none'" alt="add" /><span id="new_options"></span></dd>
-		</dl>
-	</fieldset>
-	<div class="contentFooter">
-		<button class="mainoption" name="add" type="submit" id="add"><i class="icon-ok"></i>{L_save}</button>
-		<button class="liteoption" name="cancel" type="submit" id="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
-	</div>
-{CSRF_TOKEN}
-</form>
-<!-- ENDIF -->

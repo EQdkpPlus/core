@@ -635,6 +635,7 @@ class game extends gen_class {
 					'fieldtype'		=> $values['type'],
 					'category'		=> $values['category'],
 					'lang'			=> $values['name'],
+					'options_lang'	=> $values['options_lang'],
 					'size'			=> (isset($values['size'])) ? intval($values['size']) : '0',
 					'option'		=> (isset($values['options']) && is_array($values['options'])) ? $values['options'] : '',
 					'visible'		=> (isset($values['visible'])) ? intval($values['visible']) : '0',
