@@ -41,6 +41,42 @@ class portal extends gen_class {
 		}
 	}
 	
+	public function get_module_external($intModuleID){
+		$vis = $this->pdh->get('portal', 'visibility', array($intModuleID));
+		if(in_array(999999999, $vis)){
+			$data = $this->pdh->maget('portal', array('path', 'plugin'), 0, array(array($intModuleID)));
+			if (isset($data[$intModuleID])) $data = $data[$intModuleID]; else return "";
+			$position = $this->in->get('pos', 'left');
+			$wide = ($this->in->get('wide', 0));
+			
+			if(!$obj = $this->get_module($data['path'], $data['plugin'], $position, $intModuleID, $wide)) return '';
+
+			$obj->set_id($intModuleID);
+			$out = $obj->output();
+			$css = $obj->get_css();
+			$cssOut = '<style>';
+			$cssOut .= $css['content'];
+			foreach($css['files'] as $file){
+				$cssOut .= " ".file_get_contents($file);
+			}		
+			$cssOut .= '</style>';
+			
+			return
+			$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
+					'<div class="portalbox_head">
+						<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
+					</div>' : ''
+					).'<div class="portalbox_content">
+						<div class="toggle_container">'.str_replace($this->server_path, $this->env->link, $out).'</div>
+					</div>
+				</div>';
+
+		} else {
+			return "You don't have the required permission to view this module.";
+			
+		}
+	}
+	
 	public function module_output($intPortalLayout) {
 		//Get own Blocks
 		$arrBlocks 		= $this->pdh->get('portal_layouts', 'blocks', array($intPortalLayout));
@@ -309,6 +345,7 @@ abstract class portal_generic extends gen_class {
 	protected $exchangeModules = array();
 	protected $reset_pdh_hooks = array();
 	protected $hooks = array();
+	protected $css = array('files' => array(), 'content' => '');
 	
 	public $LoadSettingsOnchangeVisibility = false;
 	
@@ -322,6 +359,10 @@ abstract class portal_generic extends gen_class {
 		if(!$type) return $this->data;
 		if(isset($this->data[$type])) return $this->data[$type];
 		return false;
+	}
+	
+	public function get_css(){
+		return $this->css;
 	}
 	
 	public function get_multiple(){
@@ -398,6 +439,17 @@ abstract class portal_generic extends gen_class {
 	public function set_id($id){
 		$this->id = $id;
 	}
+	
+	public function add_css($content){
+		$this->css['content'] .= $content;
+		$this->tpl->add_css($content);
+	}
+	
+	public function css_file($file){
+		$this->css['file'][] = $file;
+		$this->tpl->css_file($file);
+	}
+
 
 	abstract public function output();
 }

@@ -231,6 +231,8 @@ class Manage_Portal extends page_generic {
 			// User groups
 			$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 			$drpdwn_rights[0] = $this->user->lang('cl_all');
+			$drpdwn_rights[999999999] = $this->user->lang('viewing_wrapper');
+			
 			ksort($drpdwn_rights);
 			$arrVisibilityOptions = array('no_lang' => true);
 			if ($this->portal->get_module($this->pdh->get('portal', 'path', array($id)), $this->pdh->get('portal', 'plugin', array($id)))->LoadSettingsOnchangeVisibility){

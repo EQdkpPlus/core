@@ -179,6 +179,12 @@ if(registry::register('input')->get('out') != ''){
 			echo registry::register('game')->chartooltip(registry::register('input')->get('charid', 0));
 			exit;
 		break;
+		
+		case 'portal':
+			header('content-type: text/html; charset=UTF-8');
+			echo registry::register('portal')->get_module_external(registry::register('input')->get('id', 0));
+			exit;
+		break;
 	}
 	
 
