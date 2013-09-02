@@ -218,7 +218,7 @@ class template extends gen_class {
 
 		if (is_file($combinedFile)){
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
-			return true;
+			return $combinedFile;
 		} else {
 			//Generate it
 			$strCSS = "";
@@ -241,6 +241,7 @@ class template extends gen_class {
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 		}
+		return $combinedFile;
 	}
 	//Combining JS Files
 	public function combine_js(){
@@ -402,6 +403,23 @@ class template extends gen_class {
 
 	private function security(){
 		return true;
+	}
+	
+	public function get_combined_css(){
+		return $this->combine_css();
+	}
+	
+	public function get_header_js(){
+		$imploded_jscode = "";
+		if(is_array($this->get_templatedata('js_code'))){
+			$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
+			if(is_array($this->get_templatedata('js_code_docready'))){
+				$imploded_jscode .= "jQuery(document).ready(function(){";
+				$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
+				$imploded_jscode .= "});";
+			}
+		}
+		return $imploded_jscode;
 	}
 
 	// Load the JS / CSS / RSS files to the header

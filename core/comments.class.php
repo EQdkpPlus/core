@@ -97,18 +97,18 @@ if (!class_exists("comments")){
 			if($data['permission']){
 				$this->pdh->put('comment', 'insert', array($data['attach_id'], $data['user_id'], $data['comment'], $data['page'], $data['reply_to']));
 				$this->pdh->process_hook_queue();
-				echo $this->Content($data['attach_id'], $data['page'], $this->in->get('rpath'), true, ($data['reply_to'] || $this->in->get('replies', 0)));
+				echo $this->Content($data['attach_id'], $data['page'], ($data['reply_to'] || $this->in->get('replies', 0)));
 			}
 		}
 
 		// ---------------------------------------------------------
 		// Delete the Comment
 		// ---------------------------------------------------------
-		public function Delete($page, $rpath, $blnShowReplies=false){
+		public function Delete($page, $blnShowReplies=false){
 			if($this->isAdmin || $this->pdh->get('comment', 'userid', array($this->in->get('deleteid', 0))) == $this->UserID){
 				$this->pdh->put('comment', 'delete', array($this->in->get('deleteid',0)));
 				$this->pdh->process_hook_queue();
-				echo $this->Content($this->in->get('attach_id',''), $this->in->get('page'), $rpath, true, $blnShowReplies);
+				echo $this->Content($this->in->get('attach_id',''), $this->in->get('page'), $blnShowReplies);
 			}
 		}
 
@@ -133,7 +133,7 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		// Generate the Content
 		// ---------------------------------------------------------
-		public function Content($attachid, $page, $rpath='', $issave = false, $blnShowReplies=false){
+		public function Content($attachid, $page, $blnShowReplies=false){
 			$i				= 0;
 			$comments		= $this->pdh->get('comment', 'filtered_list', array($page, $attachid));
 			$myrootpath		= $this->server_path;
@@ -304,7 +304,7 @@ if (!class_exists("comments")){
 								}
 							});
 						});
-						
+												
 						//Show Reply Form
 						$(document).on('click', '#plusComments".$this->id." .reply-trigger', function(){
 							var reply_to = $(this).parent().parent().find('.comment_id:first').text();
@@ -353,8 +353,28 @@ if (!class_exists("comments")){
 								$(\".mceEditor_bbcode\").tinymce().setContent('');
 								$('#comment_button".$this->id."').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
 							}
-						});";
+						});
+						
+						reload_comments".$this->id."();
+						";
 			$this->tpl->add_js($jscode, 'docready');
+			
+			$jscode =	"//Reload comments
+						function reload_comments".$this->id."(){
+							var form = $('#comment_data".$this->id."');
+							var page = form.find(\"input[name='page']\").val();
+							var attach_id = form.find(\"input[name='attach_id']\").val();
+							window.setTimeout(\"reload_comments".$this->id."()\", 60000*5); // 5 Minute
+							
+							$.ajax({
+							url: '".$this->server_path."exchange.php".$this->SID."&out=comments&page='+page+'&attach_id='+attach_id+'&replies=".(($this->showReplies) ? 1 : 0)."',
+								success: function(data){ $('#htmlCommentTable".$this->id."').html(data);},
+							});					
+						}
+						window.setTimeout(\"reload_comments".$this->id."()\", 60000*5); // 5 Minute
+						";
+			$this->tpl->add_js($jscode, 'eop');				
+
 		}
 	}
 }

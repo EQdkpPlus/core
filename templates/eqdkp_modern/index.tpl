@@ -22,10 +22,57 @@
 		<script type="text/javascript">
 			//<![CDATA[
 			{JS_CODE}
+					
+			var user_timestamp = "{USER_TIMESTAMP}";
+			var user_daynames = {USER_DAYNAMES};
+			var user_monthnames = {USER_MONTHNAMES};
+			var user_clock_format = "l, {USER_DATEFORMAT_LONG} {USER_TIMEFORMAT}";
+			var date = new Date(user_timestamp);
+			function user_clock(){
+				var zeroPad = function(number) {
+					 return ("0"+number).substr(-2,2);
+				}
+
+				var dateMarkers = {
+					l: ['getDay',function(v) { return user_daynames[((v+6)%7)]; }],
+					j: ['getDate'],
+					d: ['getDate',function(v) { return zeroPad(v)}],
+					F: ['getMonth',function(v) { return user_monthnames[v]; }],
+					m: ['getMonth',function(v) { return zeroPad(v+1)}],
+					n: ['getMonth',function(v) { return (v+1)}],
+					Y: ['getFullYear'],
+					y: ['getFullYear'],
+					h: ['getHours',function(v) { return zeroPad(v%12)}],
+					H: ['getHours',function(v) { return zeroPad(v)}],
+					g: ['getHours',function(v) { return (v%12)}],
+					G: ['getHours'],
+					i: ['getMinutes',function(v) { return zeroPad(v)}],
+				};
+				   
+				   
+				var dateTxt = this.user_clock_format.replace(/(.)/g, function(m, p) {
+					if (dateMarkers[p] == undefined){
+						return p;
+					}
+
+					var rv = date[(dateMarkers[p])[0]]();
+						
+					if ( dateMarkers[p][1] != null ) rv = dateMarkers[p][1](rv);
+
+					return rv
+
+				});
+
+				$('.user_time').html(dateTxt);
+				date.setMinutes(date.getMinutes() + 1);
+				window.setTimeout("user_clock()", 60000); // 60 seconds
+			}
 			
 			$(document).ready(function() {
+				user_clock();
+			
 				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->410<!-- ELSE -->340<!-- ENDIF -->,
+					height: <!-- IF S_BRIDGE_INFO -->410<!-- ELSE -->310<!-- ENDIF -->,
 					width: 530,
 					modal: true,
 					autoOpen: false,
@@ -170,7 +217,7 @@
 				</div>
 				<div id="personalAreaTime" class="hiddenSmartphone">
 					<ul>
-						<li class="personalAreaTime"><i class="icon-time"></i>{USER_TIME}</li>
+						<li class="personalAreaTime"><i class="icon-time"></i><span class="user_time">{USER_TIME}</span></li>
 						<li><!-- IF S_SEARCH -->
 						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search/{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>

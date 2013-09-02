@@ -38,6 +38,7 @@ class portal extends gen_class {
 				//Register global hooks
 				$this->register_global_hooks($data['path'], $data['plugin'], $module_id);
 			}
+			$this->objs = array();
 		}
 	}
 	
@@ -46,30 +47,41 @@ class portal extends gen_class {
 		if(in_array(999999999, $vis)){
 			$data = $this->pdh->maget('portal', array('path', 'plugin'), 0, array(array($intModuleID)));
 			if (isset($data[$intModuleID])) $data = $data[$intModuleID]; else return "";
-			$position = $this->in->get('pos', 'left');
+			$position = $this->in->get('position', 'left');
 			$wide = ($this->in->get('wide', 0));
 			
 			if(!$obj = $this->get_module($data['path'], $data['plugin'], $position, $intModuleID, $wide)) return '';
 
 			$obj->set_id($intModuleID);
-			$out = $obj->output();
-			$css = $obj->get_css();
-			$cssOut = '<style>';
-			$cssOut .= $css['content'];
-			foreach($css['files'] as $file){
-				$cssOut .= " ".file_get_contents($file);
-			}		
+			$moduleout = $obj->output();
+
+			$jsOut = '<div class="module_script"><script type="text/javascript">';
+			
+			$headerJS = $this->tpl->get_header_js();
+			$arrSplitted = explode('"hex6"});', $headerJS);
+			unset($arrSplitted[0]);
+			$headerJS = "jQuery(document).ready(function($) {".str_replace("$", "jQuery",  implode('"hex6"});', $arrSplitted));
+			
+			$headerJS = str_replace("$", "jQuery", $headerJS);
+			
+			$jsOut .= $headerJS.'</script></div>';
+			
+			
+			$cssOut = '<div class="external_module"><style>';
+			$cssFile = $this->tpl->get_combined_css();
+			
+			$cssOut .= " ".file_get_contents($cssFile);
 			$cssOut .= '</style>';
 			
 			return
-			$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
+			$jsOut.$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
 					'<div class="portalbox_head">
 						<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
 					</div>' : ''
 					).'<div class="portalbox_content">
-						<div class="toggle_container">'.str_replace($this->server_path, $this->env->link, $out).'</div>
+						<div class="toggle_container">'.str_replace($this->server_path, $this->env->link, $moduleout).'</div>
 					</div>
-				</div>';
+				</div></div>';
 
 		} else {
 			return "You don't have the required permission to view this module.";
@@ -440,17 +452,6 @@ abstract class portal_generic extends gen_class {
 		$this->id = $id;
 	}
 	
-	public function add_css($content){
-		$this->css['content'] .= $content;
-		$this->tpl->add_css($content);
-	}
-	
-	public function css_file($file){
-		$this->css['file'][] = $file;
-		$this->tpl->css_file($file);
-	}
-
-
 	abstract public function output();
 }
 ?>

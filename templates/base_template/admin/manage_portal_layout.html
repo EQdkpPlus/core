@@ -24,7 +24,45 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	$( "#dialog-embeddmodule" ).dialog({
+		height: 380,
+		width: 530,
+		modal: true,
+		autoOpen: false,
+	});
+	
+	$(".onchangeEmbedd").on("change", function(){
+		createEmbeddLink();
+	});
 });
+function embedddialog(intModuleID){
+	$( "#dialog-embeddmodule" ).dialog( "open" );
+	
+	moduleid = intModuleID.slice(5);
+	createEmbeddLink();
+}
+
+var moduleid = 0;
+function createEmbeddLink(){
+	var base = $("#embedd_base").html();
+	base = base.replace(/ID/g, moduleid);
+
+	var addition = "";
+	if(!$("#embedd_show_header").is(":checked")){
+		addition = addition + "EQdkpPortal.setVar(\"header\", 0); ";
+	}
+	if($("input[name='embedd_position']:checked").val() != "left"){
+		addition = addition + "EQdkpPortal.setVar(\"position\", \""+ $("input[name='embedd_position']:checked").val() +"\"); ";
+	}
+	if($("#embedd_wide_content").is(":checked")){
+		addition = addition + "EQdkpPortal.setVar(\"wide\", 1); ";
+	}	
+	base = base.replace(/ADDITION/g, addition);	
+	$("#embedd_html").html(base);
+}
+
+
 </script>
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
@@ -65,15 +103,19 @@ $(document).ready(function(){
 			<ul id="left" class="connectedSortable portal_block">
 				<!-- BEGIN left_row -->
 				<li class="ui-state-hover {left_row.CLASS}" id="item_{left_row.ID}" style="padding: 7px; margin-top: 4px;">
-					{left_row.INFO}
-					{left_row.NAME}
-					<!-- IF left_row.S_MULTIPLE -->
-					&nbsp;&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={left_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
-					<!-- ENDIF -->
-					<!-- IF left_row.S_CHILD -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({left_row.ID});" style="float:right;" class="hand" />
-					<!-- ENDIF -->
-					&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+					<div style="width: 70px;" class="floatRight">
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="icon-cog icon-large"></i></div>
+						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="icon-link icon-large"></i></div>
+						<!-- IF left_row.S_MULTIPLE -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={left_row.ID}&amp;l={LAYOUT_ID}"><i class="icon-plus icon-large"></i></a></div>
+						<!-- ENDIF -->
+						<!-- IF left_row.S_CHILD -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({left_row.ID});"><i class="icon-remove icon-large"></i></div>					
+						<!-- ENDIF -->
+					</div>
+						{left_row.INFO}
+						{left_row.NAME}
+					
 					<input name="sort[][{left_row.ID}]" type="hidden" value="1" />
 					<input type="hidden" name="pos[{left_row.ID}]" value="{left_row.POS}" id="block_item_{left_row.ID}" />
 				</li>
@@ -88,15 +130,19 @@ $(document).ready(function(){
 			<ul id="middle" class="connectedSortable portal_block">
 				<!-- BEGIN middle_row -->
 				<li class="ui-state-hover {middle_row.CLASS}" id="item_{middle_row.ID}" style="padding: 7px; margin-top: 4px;">
-					{middle_row.INFO}
-					{middle_row.NAME}
-					<!-- IF middle_row.S_MULTIPLE -->
-					&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={middle_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
-					<!-- ENDIF -->
-					<!-- IF middle_row.S_CHILD -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});" style="float:right;" class="hand" />
-					<!-- ENDIF -->
-					&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+					<div style="width: 70px;" class="floatRight">
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="icon-cog icon-large"></i></div>
+						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="icon-link icon-large"></i></div>
+						<!-- IF middle_row.S_MULTIPLE -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={middle_row.ID}&amp;l={LAYOUT_ID}"><i class="icon-plus icon-large"></i></a></div>
+						<!-- ENDIF -->
+						<!-- IF middle_row.S_CHILD -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});"><i class="icon-remove icon-large"></i></div>					
+						<!-- ENDIF -->
+					</div>
+						{middle_row.INFO}
+						{middle_row.NAME}
+					
 					<input name="sort[][{middle_row.ID}]" type="hidden" value="1" />
 					<input type="hidden" name="pos[{middle_row.ID}]" value="{middle_row.POS}" id="block_item_{middle_row.ID}" />
 				</li>
@@ -113,15 +159,19 @@ $(document).ready(function(){
 			<ul id="bottom" class="connectedSortable portal_block">
 				<!-- BEGIN bottom_row -->
 				<li class="ui-state-hover {bottom_row.CLASS}" id="item_{bottom_row.ID}" style="padding: 7px; margin-top: 4px;">
-					{bottom_row.INFO}
-					{bottom_row.NAME}
-					<!-- IF bottom_row.S_MULTIPLE -->
-					&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={bottom_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
-					<!-- ENDIF -->
-					<!-- IF bottom_row.S_CHILD -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});" style="float:right;" class="hand" />
-					<!-- ENDIF -->
-					&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+					<div style="width: 70px;" class="floatRight">
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="icon-cog icon-large"></i></div>
+						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="icon-link icon-large"></i></div>
+						<!-- IF bottom_row.S_MULTIPLE -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={bottom_row.ID}&amp;l={LAYOUT_ID}"><i class="icon-plus icon-large"></i></a></div>
+						<!-- ENDIF -->
+						<!-- IF bottom_row.S_CHILD -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});"><i class="icon-remove icon-large"></i></div>					
+						<!-- ENDIF -->
+					</div>
+						{bottom_row.INFO}
+						{bottom_row.NAME}
+				
 					<input name="sort[][{bottom_row.ID}]" type="hidden" value="1" />
 					<input type="hidden" name="pos[{bottom_row.ID}]" value="{bottom_row.POS}" id="block_item_{bottom_row.ID}" />
 				</li>
@@ -136,15 +186,19 @@ $(document).ready(function(){
 			<ul id="right" class="connectedSortable portal_block">
 				<!-- BEGIN right_row -->
 				<li class="ui-state-hover {right_row.CLASS}" id="item_{right_row.ID}" style="padding: 7px; margin-top: 4px;">
-					{right_row.INFO}
-					{right_row.NAME}
-					<!-- IF right_row.S_MULTIPLE -->
-					&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={right_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
-					<!-- ENDIF -->
-					<!-- IF right_row.S_CHILD -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});" style="float:right;" class="hand" />
-					<!-- ENDIF -->
-					&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+					<div style="width: 70px;" class="floatRight">
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="icon-cog icon-large"></i></div>
+						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="icon-link icon-large"></i></div>
+						<!-- IF right_row.S_MULTIPLE -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={right_row.ID}&amp;l={LAYOUT_ID}"><i class="icon-plus icon-large"></i></a></div>
+						<!-- ENDIF -->
+						<!-- IF right_row.S_CHILD -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});"><i class="icon-remove icon-large"></i></div>					
+						<!-- ENDIF -->
+					</div>
+						{right_row.INFO}
+						{right_row.NAME}
+					
 					<input name="sort[][{right_row.ID}]" type="hidden" value="1" />
 					<input type="hidden" name="pos[{right_row.ID}]" value="{right_row.POS}" id="block_item_{right_row.ID}" />
 				</li>
@@ -160,15 +214,20 @@ $(document).ready(function(){
 			<ul id="block{block_row.ID}" class="connectedSortable portal_block">
 				<!-- BEGIN module_row -->
 				<li class="ui-state-hover {block_row.module_row.CLASS}" id="item_{block_row.module_row.ID}" style="padding: 7px; margin-top: 4px;">
-					{block_row.module_row.INFO}
-					{block_row.module_row.NAME}
-					<!-- IF block_row.module_row.S_MULTIPLE -->
-					&nbsp;<a href="{ACTION}&amp;duplicate=true&amp;selected_id={block_row.module_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
-					<!-- ENDIF -->
-					<!-- IF block_row.module_row.S_CHILD -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({block_row.module_row.ID});" style="float:right;" class="hand" />
-					<!-- ENDIF -->
-					&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+					<div style="width: 70px;" class="floatRight">
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="icon-cog icon-large"></i></div>
+						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="icon-link icon-large"></i></div>
+						<!-- IF block_row.module_row.S_MULTIPLE -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={block_row.module_row.ID}&amp;l={LAYOUT_ID}"><i class="icon-plus icon-large"></i></a></div>
+						<!-- ENDIF -->
+						<!-- IF block_row.module_row.S_CHILD -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({block_row.module_row.ID});"><i class="icon-remove icon-large"></i></div>					
+						<!-- ENDIF -->
+					</div>
+						{block_row.module_row.INFO}
+						{block_row.module_row.NAME}
+					
+					
 					<input name="sort[][{block_row.module_row.ID}]" type="hidden" value="1" />
 					<input type="hidden" name="pos[{block_row.module_row.ID}]" value="{block_row.module_row.POS}" id="block_item_{block_row.module_row.ID}" />
 				</li>
@@ -185,15 +244,19 @@ $(document).ready(function(){
 			<ul id="disabled" class="connectedSortable portal_block" style="float:left;">
 				<!-- BEGIN disabled_row -->
 				<li class="ui-state-hover {disabled_row.CLASS} portal_disabled equalHeights" id="item_{disabled_row.ID}" style="padding: 7px; margin-top: 4px;">
-					{disabled_row.INFO}
-					{disabled_row.NAME}
-					<!-- IF disabled_row.S_MULTIPLE -->
-					<a href="{ACTION}&amp;duplicate=true&amp;selected_id={disabled_row.ID}" title="{L_portal_duplicate}"><img src="{EQDKP_IMAGE_PATH}global/add.png" alt="Clone" style="float:right;" class="hand" /></a>
-					<!-- ENDIF -->
-					<!-- IF right_row.S_CHILD -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/delete.png" alt="u" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});" style="float:right;" class="hand" />
-					<!-- ENDIF -->
-					&nbsp;&nbsp;<img src="{EQDKP_IMAGE_PATH}global/edit.png" alt="s" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().attr('id'));" style="float:right;" class="hand" />
+					<div style="width: 70px;" class="floatRight">
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="icon-cog icon-large"></i></div>
+						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))" ><i class="icon-link icon-large"></i></div>
+						<!-- IF disabled_row.S_MULTIPLE -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={disabled_row.ID}&amp;l={LAYOUT_ID}"><i class="icon-plus icon-large"></i></a></div>
+						<!-- ENDIF -->
+						<!-- IF disabled_row.S_CHILD -->
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});"><i class="icon-remove icon-large"></i></div>					
+						<!-- ENDIF -->
+					</div>
+						{disabled_row.INFO}
+						{disabled_row.NAME}
+			
 					<input name="sort[][{disabled_row.ID}]" type="hidden" value="1" />
 					<input type="hidden" name="pos[{disabled_row.ID}]" value="{disabled_row.POS}" id="block_item_{disabled_row.ID}" />
 				</li>
@@ -215,3 +278,28 @@ $(document).ready(function(){
 <input type="hidden" name="l" value="{LAYOUT_ID}"/>
 {CSRF_TOKEN}
 </form>
+
+<div id="dialog-embeddmodule" title="{L_embedd}">
+		<fieldset class="settings mediumsettings">	
+			<dl>
+				<dt><label>{L_embedd_show_header}:</label></dt>
+				<dd><input name="" type="checkbox" id="embedd_show_header" value="1" checked class="onchangeEmbedd" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_embedd_position}:</label></dt>
+				<dd>
+					<input type="radio" name="embedd_position" value="right" class="onchangeEmbedd"/> {L_portalplugin_right}
+					<input type="radio" name="embedd_position" value="middle" class="onchangeEmbedd" /> {L_embedd_middle}
+					<input type="radio" name="embedd_position" value="left" checked class="onchangeEmbedd"/> {L_portalplugin_left}		 	
+				</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_wide_content}:</label></dt>
+				<dd>
+					<dd><input name="" type="checkbox" id="embedd_wide_content" value="1" class="onchangeEmbedd" /></dd>		
+				</dd>
+			</dl>
+			<textarea style="width: 90%" rows="5" readonly="readonly" name="data" onclick="$(this).select()" id="embedd_html"></textarea>
+		</fieldset>
+		<textarea style="display:none;" id="embedd_base"><script src="{EMBEDD_URL}portal/widget.js" type="text/javascript"></script><div id="eqdkp_portal_ID" ></div><script type="text/javascript">ADDITIONEQdkpPortal.init(ID);</script></textarea>
+</div>

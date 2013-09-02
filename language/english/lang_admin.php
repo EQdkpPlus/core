@@ -1589,6 +1589,10 @@ $lang = array(
 	"lm_page_admin_manage_article_categories" => "Articlecategories Management",
 	"lm_page_admin_manage_articles" => "Article Management",
 	"lm_default_pool_ov" => "Default Multidkp pool for Overview",
+	"embedd" => "Embed Module",
+	"embedd_position" => "Position of Module in external page",
+	"embedd_middle"	=> "Middle",
+	"embedd_show_header" => "Show Module Header",
 );
 
 ?>

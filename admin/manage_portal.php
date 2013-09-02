@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Portal extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'pm', 'portal');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'pm', 'portal', 'env' => 'environment');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -209,7 +209,7 @@ class Manage_Portal extends page_generic {
 		$name = (is_object($obj)) ? $obj->get_data('name') : $path;
 		$this->core->message(sprintf($this->user->lang('portal_duplicated_success'), $name), $this->user->lang('success'), 'green');
 		$this->portal->install($path, $plugin, true);
-		$this->display();
+		$this->edit_portallayout();
 	}
 	
 	//Delete Portal Module
@@ -221,7 +221,7 @@ class Manage_Portal extends page_generic {
 		$name = (is_object($obj)) ? $obj->get_data('name') : $path;
 		$this->core->message(sprintf($this->user->lang('portal_delete_success'), $name), $this->user->lang('success'), 'green');
 		$this->portal->uninstall($path, $plugin, $this->in->get('selected_id', 0));
-		$this->display();
+		$this->edit_portallayout();
 	}
 	
 	//Edit Portal Module
@@ -402,7 +402,7 @@ class Manage_Portal extends page_generic {
 			
 		}
 		$this->portal->init_portalsettings();
-		$this->confirm_delete($this->user->lang('portal_delete_warn'), 'manage_portal.php'.$this->SID.'&del=true', true, array('function' => 'delete_portal'));
+		$this->confirm_delete($this->user->lang('portal_delete_warn'), 'manage_portal.php'.$this->SID.'&del=true&l='.$intLayoutID, true, array('function' => 'delete_portal'));
 
 		$filter_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 		$filter_rights[0] = $this->user->lang('portalplugin_filter3_all');
@@ -443,11 +443,12 @@ class Manage_Portal extends page_generic {
 				'S_MIDDLE_HIDDEN'	=> (!in_array('middle', $arrUsedBlocks)),
 				'S_BOTTOM_HIDDEN'	=> (!in_array('bottom', $arrUsedBlocks)),
 				'LAYOUT_ID'			=> $intLayoutID,
+				'EMBEDD_URL'		=> $this->env->link,
 		));
 		
 		$this->jquery->Validate("portal_layout_form");
 		
-		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclose' => 'manage_portal.php'.$this->SID));
+		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclose' => 'manage_portal.php'.$this->SID.'&l='.$intLayoutID));
 		$this->tpl->add_css(".portal_disabled { float:left; margin-left: 4px; width:230px; min-height: 16px;}");
 		$this->tpl->add_js('$(".equalHeights").equalHeights();', 'docready');
 		$this->core->set_vars(array(

@@ -314,7 +314,7 @@ class Manage_Styles extends page_generic{
 		//Now the files from the template
 		$arrTemplates = $this->objStyles->scan_templates($this->core->root_path . 'templates/'.$this->style['template_path']);
 		$arrTemplates = array_merge($arrBaseTemplates, $arrTemplates);
-		
+		$files[""] = "";
 		foreach ($arrTemplates as $path => $name){
 			$files[base64_encode($path)] = $path;
 		}

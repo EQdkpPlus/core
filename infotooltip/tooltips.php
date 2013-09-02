@@ -42,7 +42,24 @@ $strPath = substr(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['S
 $eqdkp_path = httpHost().$strPath;
 
 ?>
-
+ /*
+ * Project:		EQdkp-Plus
+ * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+ * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * -----------------------------------------------------------------------
+ * Began:		2010
+ * Date:		$Date$
+ * -----------------------------------------------------------------------
+ * @author		$Author$
+ * @copyright	2006-2011 EQdkp-Plus Developer Team
+ * @link		http://eqdkp-plus.com
+ * @package		eqdkp-plus
+ * @version		$Rev$
+ * 
+ * $Id$
+ */
+ 
+ 
 var EQdkpTooltip = new function(){
 	//Init Vars
 	var mmocms_root_path = '<?php echo $eqdkp_path; ?>';

@@ -40,11 +40,11 @@ if(registry::register('input')->get('out') != ''){
 	
 		case 'comments':
 			if(registry::register('input')->get('deleteid', 0)){
-				registry::register('comments')->Delete(registry::register('input')->get('page'), registry::register('input')->get('rpath'), registry::register('input')->get('replies'));
+				registry::register('comments')->Delete(registry::register('input')->get('page'), registry::register('input')->get('replies', 0));
 			}elseif(registry::register('input')->get('comment', '', 'htmlescape')){
 				registry::register('comments')->Save();
 			}else{
-				echo registry::register('comments')->Content(registry::register('input')->get('attach_id'), registry::register('input')->get('page'), registry::register('input')->get('rpath'), true, true);
+				echo registry::register('comments')->Content(registry::register('input')->get('attach_id'), registry::register('input')->get('page'), registry::register('input')->get('replies', 0));
 			}
 			exit;
 		break;

@@ -160,7 +160,7 @@ class core extends gen_class {
 			
 			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1){
 				if(stripos($this->env->path, 'register') === false){
-					redirect($this->controller_path.'Register/');
+					redirect($this->controller_path_plain.'Register/');
 				}
 			}
 			
@@ -334,7 +334,13 @@ class core extends gen_class {
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
 				'S_BRIDGE_INFO'				=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
-				'U_USER_PROFILE'			=> $this->routing->build('user', (isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous')), 'u'.$this->user->id)
+				'U_USER_PROFILE'			=> $this->routing->build('user', (isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous')), 'u'.$this->user->id),
+				'USER_TIMESTAMP'			=> $this->time->date("m d, Y H:i:s"),
+				'USER_DAYNAMES'				=> json_encode($this->user->lang('time_daynames')),
+				'USER_MONTHNAMES'			=> json_encode($this->user->lang("time_monthnames")),
+				'USER_DATEFORMAT_LONG'		=> $this->user->style['date_notime_long'],
+				'USER_DATEFORMAT_SHORT'		=> $this->user->style['date_notime_short'],
+				'USER_TIMEFORMAT'			=> $this->user->style['time'],
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
