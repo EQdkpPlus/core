@@ -223,5 +223,10 @@ class config extends gen_class {
 		$this->config_modified = false;
 
 	}
+	
+	public function flush(){
+		d(get_chmod());
+		$this->config_save();
+	}
 }
 ?>

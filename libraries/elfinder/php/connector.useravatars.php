@@ -56,6 +56,7 @@ $opts = array(
 			//'uploadOrder'	=> array('allow', 'deny'),
 			'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),
 			'maxFilesInDir' => 10,
+			'tmbPathMode'	=> get_chmod(),
 		)
 	)
 );

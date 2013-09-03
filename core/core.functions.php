@@ -877,6 +877,13 @@ function get_first_image($strHTML, $blnGetFullImage = false){
 	}
 	return '';
 }
+
+function get_chmod(){
+	if (defined("CHMOD")) return CHMOD;
+	return 0777;
+}
+
+
 //Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	$strPath = pathinfo($strFilelink, PATHINFO_DIRNAME);

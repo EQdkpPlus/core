@@ -62,8 +62,7 @@ if (!class_exists("filehandler_php")) {
 			return $this->FilePath($path.'/index.html', $plugin);
 		}
 
-		private function mkdir_r($name, $chmod=false){
-			if($chmod === false) $chmod = get_chmod();
+		private function mkdir_r($name, $chmod=0777){
 			$dirs = explode('/', $name);
 			$dir	= $part = '';
 			foreach ($dirs as $part) {
@@ -184,7 +183,7 @@ if (!class_exists("filehandler_php")) {
 
 			if(!is_dir($path)){
 				$old = umask(0); 
-				$this->mkdir_r($path, get_chmod());
+				$this->mkdir_r($path, 0777);
 				umask($old);
 			}
 			return (is_dir($path)) ? true : false;
@@ -220,7 +219,7 @@ if (!class_exists("filehandler_php")) {
 				}
 			}
 			if(is_file($path)){
-				@chmod($path, get_chmod());
+				@chmod($path, 0777);
 				return true;
 			}
 			
@@ -291,7 +290,7 @@ if (!class_exists("filehandler_php")) {
 		public function FileMove($filename, $tofile, $tmpmove=false) {
 			$blnResult = $this->copy($filename, $tofile);
 			unlink ($filename);
-			@chmod($tofile, get_chmod());
+			@chmod($tofile, 0777);
 			
 			return $blnResult;
 		}
@@ -347,7 +346,7 @@ if (!class_exists("filehandler_php")) {
 					case 3:	ImagePNG($img,	$thumbfolder.$filename, 0);	break;	// PNG
 				}
 			}
-			@chmod($thumbfolder.$filename, get_chmod());
+			@chmod($thumbfolder.$filename, 0777);
 		}
 	}
 }
