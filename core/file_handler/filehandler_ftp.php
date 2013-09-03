@@ -82,7 +82,7 @@ if (!class_exists("filehandler_ftp")) {
 
 					// We need the temp folder.. create it!
 					$blnResult = $this->CheckCreateFolder('', 'tmp');
-					$this->ftp->chmod($this->remove_rootpath($this->tmp_Folder), 0777);
+					$this->ftp->chmod($this->remove_rootpath($this->tmp_Folder), get_chmod());
 					$this->ftp->setTempDir($this->tmp_Folder);
 					if (!$blnResult){
 						echo 'FTP-Error: Could not create tmp-folder';
@@ -108,7 +108,8 @@ if (!class_exists("filehandler_ftp")) {
 			return $this->FilePath($path.'/index.html', $plugin);
 		}
 
-		private function mkdir_r($name, $chmod=0777){
+		private function mkdir_r($name, $chmod=false){
+			if($chmod === false) $chmod = get_chmod();
 			if (!$this->init_ftp()) return false;
 			$name = $this->remove_rootpath($name);
 			$this->ftp->mkdir_r($name, $chmod);
@@ -265,7 +266,7 @@ if (!class_exists("filehandler_ftp")) {
 			}
 			if(is_file($this->root_path.$path)){
 				if (!$this->init_ftp()) return false;
-				//$this->ftp->chmod($path, 0777);
+				//$this->ftp->chmod($path, get_chmod());
 			}
 			return is_file($this->root_path.$path);
 		}
@@ -289,7 +290,7 @@ if (!class_exists("filehandler_ftp")) {
 			$old_file = $this->remove_rootpath($old_file);
 			$new_file = $this->remove_rootpath($new_file);
 			$result = $this->ftp->rename($old_file, $new_file);
-			$this->ftp->chmod($new_file, 0777);
+			$this->ftp->chmod($new_file, get_chmod());
 			return $result;
 		}
 
