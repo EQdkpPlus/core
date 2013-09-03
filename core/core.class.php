@@ -260,7 +260,10 @@ class core extends gen_class {
 				var image = $(this).html();
 				var fullimage = $(this).attr('href');
 				var image_style = $(this).children().attr('style');
-				if (image_style) $(this).attr('style', image_style);
+				if (image_style) {
+					if (image_style == \"display: block; margin-left: auto; margin-right: auto;\") image_style = image_style + \" text-align:center;\";
+					$(this).attr('style', image_style);
+				}
 				var randomId = parseInt(Math.random() * 1000);
 				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a href=\"'+fullimage+'\" class=\"lightbox\"><img src=\"'+mmocms_root_path+'images/global/zoom.png\" alt=\"Resized\"/><\/a><\/div><a href=\"'+fullimage+'\" class=\"lightbox\">'+image+'<\/a><\/div>';
 				$(this).html(zoomIcon);

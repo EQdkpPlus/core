@@ -189,13 +189,12 @@ class task_manager_display extends gen_class {
 				'L_TYPE'	=> $this->user->lang($type),
 			));
 		}
-		$this->core->create_breadcrump($this->user->lang($this->in->get('type', 'home')));
+
 		$this->tpl->assign_vars(array(
 			'L_NAME'			=> $this->user->lang('name'),
 			'L_DESCRIPTION'		=> $this->user->lang('description'),
 			'L_AUTHOR'			=> $this->user->lang('author'),
 			'L_VERSION'			=> $this->user->lang('version'),
-			'L_MMODE_INFO'		=> $this->user->lang('mmode_info'),
 			'L_APPLICABLE_INFO'	=> $this->user->lang('applicable_info'),
 			'L_pfh_ERROR'		=> $this->user->lang('mmode_pfh_error'),
 			'UPDATE_ALL'		=> (isset($update_all)) ? $update_all : false,

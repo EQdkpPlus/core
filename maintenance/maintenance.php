@@ -38,17 +38,27 @@ class maintenance_display extends gen_class {
 				$auto_login	= ( $this->in->get('autologin') ) ? true : false;
 
 				if ( !$this->user->login($this->in->get('username'), $this->in->get('password'), $auto_login) ){
-					$redirect	= 'maintenance.php';
-					$this->tpl->assign_var('META', '<meta http-equiv="refresh" content="3;url=maintenance.php' . $this->SID . '&amp;redirect=' . $redirect . '">');
-					$this->core->message_die($this->user->lang('invalid_login_warning'));
+					$this->tpl->assign_vars(array(
+						'S_LOGIN_ERROR' => true,
+						'L_LOGIN_WARNING' => $this->user->lang('invalid_login_warning')
+					));
 				}
+				
+				if ($this->in->exists('redirect')){
+					$redirect_url = preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', base64_decode($this->in->get('redirect')));
+					if (strpos($redirect_url, '?') === false) {
+						$redirect_url = $redirect_url.$this->SID;
+					} else {
+						$redirect_url = str_replace("?&", $this->SID.'&', $redirect_url);
+					}
+					redirect($redirect_url);
+				}
+
 			}elseif ( $this->user->is_signedin() ){
 				$this->user->logout();
 			}
 
 			if($this->in->get('splash')) redirect('maintenance/task_manager.php'.$this->SID.'&splash=true');
-			$redirect_url = ( $this->in->exists('redirect') ) ? preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', $this->in->get('redirect')) : 'index.php'.$this->SID;
-			redirect($redirect_url);
 		}
 
 		// Login form

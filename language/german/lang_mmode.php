@@ -35,7 +35,7 @@ $lang = array(
 	'no_leave_accept' => 'Zurück zur Aufgabenübersicht',
 
 	//Maintenance page
-	'maintenance_message' => '<b>Das EQdkp Plus-System befindet sich gerade im Wartungsmodus.</b> Eine Anmeldung ist zur Zeit nicht möglich.',
+	'maintenance_message' => '<b>Das EQdkp Plus-System befindet sich gerade im Wartungsmodus.</b> Eine Anmeldung ist zur Zeit nur für Administratoren möglich.',
 	'reason'	=> '<br /><b>Grund:</b> ',
 	'admin_login'		=> 'Administrator-Login',
 	'login'		=> 'Anmelden',
@@ -56,7 +56,7 @@ $lang = array(
 	'yes' => 'Ja',
 	'no' => 'Nein',
 	'click_me' => 'Aufgabe ausführen',
-	'mmode_info' => 'Willkommen im Wartungsbereich deines EQdkp Plus-Systems. Hier kannst du dein EQdkp aktualisieren, und ältere Versionen von EQdkp Plus importieren.<br />Um Probleme zu verhindern, können sich Benutzer solange nicht anmelden, bis du den Wartungsmodus beendet hast.',
+	'mmode_info' => 'Dein System befindet sich momentan im Wartungsmodus und verweigert normalen Benutzern den Zugriff, bis du den Wartungsmodus beendet hast.',
 	'necessary_tasks' => 'Notwendige Aufgaben',
 	'applicable_tasks' => 'Nicht notwendige/bereits ausgeführte Aufgaben',
 	'not_applicable_tasks' => 'Nicht-Ausführbare Aufgaben',

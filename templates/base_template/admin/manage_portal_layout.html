@@ -288,16 +288,14 @@ function createEmbeddLink(){
 			<dl>
 				<dt><label>{L_embedd_position}:</label></dt>
 				<dd>
-					<input type="radio" name="embedd_position" value="right" class="onchangeEmbedd"/> {L_portalplugin_right}
+					<input type="radio" name="embedd_position" value="left" checked class="onchangeEmbedd"/> {L_portalplugin_left}
 					<input type="radio" name="embedd_position" value="middle" class="onchangeEmbedd" /> {L_embedd_middle}
-					<input type="radio" name="embedd_position" value="left" checked class="onchangeEmbedd"/> {L_portalplugin_left}		 	
+					<input type="radio" name="embedd_position" value="right" class="onchangeEmbedd"/> {L_portalplugin_right}	 	
 				</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_wide_content}:</label></dt>
-				<dd>
-					<dd><input name="" type="checkbox" id="embedd_wide_content" value="1" class="onchangeEmbedd" /></dd>		
-				</dd>
+				<dd><input name="" type="checkbox" id="embedd_wide_content" value="1" class="onchangeEmbedd" /></dd>		
 			</dl>
 			<textarea style="width: 90%" rows="5" readonly="readonly" name="data" onclick="$(this).select()" id="embedd_html"></textarea>
 		</fieldset>

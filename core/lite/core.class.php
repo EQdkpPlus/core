@@ -26,8 +26,8 @@ class core extends gen_class {
 	public $error_template_file		= '';				// Error Tp filename	@public $template_file
 	public $default_game			= '';				// Defaultgame			@public $default_game
 	public $game_language			= '';				// Defaultgame			@public $default_game
-	public $icon_error				= '<img src="../templates/maintenance/images/failed.png" alt="" class="absmiddle"/>';
-	public $icon_ok					= '<img src="../templates/maintenance/images/ok.png" alt="" class="absmiddle" />';
+	public $icon_error				= '<i class="icon-red icon-remove"></i>';
+	public $icon_ok					= '<i class="icon-green icon-ok"></i>';
 
 	public function StatusIcon($mystat= 'ok') {
 		return ($mystat=='ok') ? $this->icon_ok : $this->icon_error;
@@ -77,16 +77,16 @@ class core extends gen_class {
 	public function check_auth(){
 		if (!$this->user->check_auth('a_maintenance', false)){
 			if ($this->config->get('pk_maintenance_mode') == '1'){
-				redirect('maintenance/maintenance.php');
+				redirect('maintenance/maintenance.php'.$this->SID);
 			} else {
-				redirect('index.php');
+				redirect('index.php'.$this->SID);
 			}
 		}
 	}
 
 	public function create_breadcrump($name, $url = false) {
 		$this->tpl->assign_block_vars('breadcrumps', array (
-			'BREADCRUMP'	=> (($url) ? '<a href="'.$url.'">'.$name.'</a>' : $name)
+			'BREADCRUMP'	=> (($url) ? '<a href="'.$url.'">'.$name.'</a>' : '<a href="#">'.$name.'</a>')
 		));
 	}
 
@@ -139,6 +139,9 @@ class core extends gen_class {
 			'MAINTENANCE_MESSAGE' => $this->config->get('pk_maintenance_message'),
 			'S_SPLASH' => ($this->in->get('splash') == 'true') ? true : false,
 			'SID'	=> $this->SID,
+			'ROOT_PATH' => $this->root_path,
+			'L_MMODE_INFO'		=> $this->user->lang('mmode_info'),
+			'S_IS_ADMIN'	=> ($this->user->check_auth('a_maintenance', false)),
 		));
 		if($this->in->get('splash') == 'true') {
 			$this->tpl->assign_vars(array(

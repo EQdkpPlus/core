@@ -545,7 +545,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "uc_no_prmissions" => "Du besitzt keine Berechtigung diese Seite zu betrachten. Bitte frage einen Administrator",
 "save_nosuc" => "Speichern nicht erfolgreich",
 "save_suc" => "Speichern erfolgreich",
-"maintenance_mode_warn" => "Dein System befindet sich momentan im Wartungsmodus und verweigert normalen Benutzern den Zugriff. Bitte überprüfe das <a href=\"".registry::get_const('root_path')."maintenance/task_manager.php\">Wartungstool</a> und deaktiviere den Modus wenn alle Wartungen durchgeführt wurden.<ul><li><a href=\"".registry::get_const('root_path')."maintenance/task_manager.php\">Zum Wartungsbereich</a></li><li><a href=\"".registry::get_const('root_path')."maintenance/task_manager.php?disable=true\">Wartungsmodus beenden</a></li></ul>",
+"maintenance_mode_warn" => "Dein System befindet sich momentan im Wartungsmodus und verweigert normalen Benutzern den Zugriff. Bitte überprüfe das <a href=\"".registry::get_const('server_path')."maintenance/task_manager.php\">Wartungstool</a> und deaktiviere den Modus wenn alle Wartungen durchgeführt wurden.<ul><li><a href=\"".registry::get_const('server_path')."maintenance/task_manager.php\">Zum Wartungsbereich</a></li><li><a href=\"".registry::get_const('server_path')."maintenance/task_manager.php?disable=true\">Wartungsmodus beenden</a></li></ul>",
 "home_of_eqdkpplus" => "home of the EQDKP Plus Projekt",
 "manage_bridge" => "Bridge verwalten",
 "templates_error" => "Template-Fehler",

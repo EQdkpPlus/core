@@ -69,8 +69,9 @@ class task_display extends gen_class {
 					$dep_obj->init_lang();
 					$form		.= '<tr><td>'.$dep_obj->get_description().'</td></tr>';
 				}
-				$form .= '<tr><th><a href="./task.php'.$this->SID.'&amp;task='.$task_obj->dependencies[0].'">'.$this->user->lang('start_here').'</a></th></tr>';
-				$form .= '</table>';
+				$form .= '</table>
+					<a href="./task.php'.$this->SID.'&amp;task='.$task_obj->dependencies[0].'"><button>'.$this->user->lang('start_here').'</button></a>
+						';
 
 				$this->tpl->assign_vars(array(
 					'FORM_METHOD'		=> 'GET',

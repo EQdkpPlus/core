@@ -104,12 +104,12 @@ class sql_update extends task {
 		$this->plugin_path = $current->plugin_path;
 		if(method_exists($current, 'before_update_function')) {
 			$func = $current->before_update_function();
-			$this->form .= '<tr class="row'.$this->row_class.'"><td><img src="'.$this->root_path.'images/glyphs/status_'.(($func) ? 'green' : 'red').'.gif"> '.$current->lang['before_update_function'].'</td></tr>';
+			$this->form .= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="icon-ok icon-green"></i>' : '<i class="icon-remove icon-red"></i>').' '.$current->lang['before_update_function'].'</td></tr>';
 		}
 		$this->do_sql($current->sqls, $current->version, $current->lang, $current->name);
 		if(method_exists($current, 'update_function')) {
 			$func = $current->update_function();
-			$this->form .= '<tr class="row'.$this->row_class.'"><td><img src="'.$this->root_path.'images/glyphs/status_'.(($func) ? 'green' : 'red').'.gif"> '.$current->lang['update_function'].'</td></tr>';
+			$this->form .= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="icon-ok icon-green"></i>' : '<i class="icon-remove icon-red"></i>').' '.$current->lang['update_function'].'</td></tr>';
 		}
 		unset($current);
 		registry::register('datacache')->flush();
@@ -117,19 +117,19 @@ class sql_update extends task {
 	}
 
 	public function step_end() {
-		return $this->form."<tr><td align='center'><a href='".$this->root_path."maintenance/task_manager.php".$this->SID."'>".$this->user->lang('task_manager')."</a></td></tr></table>";
+		return $this->form."</table><br /><a href='".$this->root_path."maintenance/task_manager.php".$this->SID."'><button type=\"button\"><i class=\"icon-chevron-right\"></i>".$this->user->lang('task_manager')."</button></a>";
 	}
 
 	protected function do_sql($sqls, $version, $lang, $task_name) {
 		//run all queries if this task is necessary
-		$this->form .= '<table width="80%" align="center" class="colorswitch">';
-		$this->form .= '<tr><th class="th_sub">'.sprintf($this->user->lang('executed_tasks'), $task_name).'</th></tr>';
+		$this->form .= '<h2>'.sprintf($this->user->lang('executed_tasks'), $task_name).'</h2>';
+		$this->form .= '<table width="100%" align="center" class="colorswitch">';
 		foreach($sqls as $key => $sql) {
 			$this->form .= '<tr><td>';
 			if($this->db->query($sql)) {
-				$this->form .= '<img src="'.$this->root_path.'images/glyphs/status_green.png"> ';
+				$this->form .= '<i class="icon-ok icon-green"></i> ';
 			} else {
-				$this->form .= '<img src="'.$this->root_path.'images/glyphs/status_red.png"> ';
+				$this->form .= '<i class="icon-remove icon-red"></i> ';
 			}
 			$this->form .=  $lang[$key].'</td></tr>';
 				
