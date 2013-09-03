@@ -47,6 +47,8 @@
 					g: ['getHours',function(v) { return (v%12)}],
 					G: ['getHours'],
 					i: ['getMinutes',function(v) { return zeroPad(v)}],
+					a: ['getHours',function(v) { if(v >= 12) {return "pm";} else {return "am";}}],
+					A: ['getHours',function(v) { if(v >= 12) {return "PM";} else {return "AM";}}],
 				};
 				   
 				   
