@@ -35,7 +35,11 @@ if ( !class_exists( "cache_apc" ) ){
 
 		public function get( $key, $global_prefix, $uncompress = false ) {
 			$key = $global_prefix.$key;
-			return ($uncompress) ? $this->uncompress(apc_fetch($key)) : apc_fetch($key);
+			$result = apc_fetch($key);
+			//Read error
+			if ($result === false) return null;
+			
+			return ($uncompress) ? $this->uncompress($result) : $result;
 		}
 
 		public function del( $key, $global_prefix ) {
