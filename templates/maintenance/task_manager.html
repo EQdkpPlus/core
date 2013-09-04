@@ -7,9 +7,9 @@
 <br />
 <!-- ENDIF -->
 
-<ul class="tabnav">
+<ul class="nav nav-tabs">
 	<!-- BEGIN task_types -->
-	<li><a href="task_manager.php{SID}&amp;type={task_types.TYPE}" {task_types.ACTIVE}>{task_types.L_TYPE}</a></li>
+	<li {task_types.ACTIVE}><a href="task_manager.php{SID}&amp;type={task_types.TYPE}">{task_types.L_TYPE}</a></li>
 	<!-- END task_types -->
   </ul>
 <br />

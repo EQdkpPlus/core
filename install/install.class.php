@@ -269,7 +269,7 @@ class install extends gen_class {
 			<div id="header">
 				<div id="logo"></div>
 				<div id="languageselect">'.$this->lang['language'].': '.$this->lang_drop().'</div>
-				<div id="logotext">Installation</div>
+				<div id="logotext">Installation '.VERSION_EXT.'</div>
 			</div><br/>
 			<div id="steps">
 				<div id="progressbar"><span class="install_label">'.$progress.'%</span></div>

@@ -17,6 +17,24 @@
 			display:none;
 		}
   </style>
+  
+  	<script type="text/javascript" language="javascript">
+		function debug_show_me(id) {
+
+            for(var i=1; i<={MAX_ID}; i++) {
+            	var container = document.getElementById('debug_'+i);
+            	if(i != id) {
+            		container.className = 'debug_hide';
+            	} else {
+								if (container.className == 'debug_show'){
+            			container.className = 'debug_hide';
+								} else {
+									container.className = 'debug_show';
+								}
+            	}
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -102,7 +120,34 @@
 			<div class="content">
 			{GBL_CONTENT_BODY}
 			</div>
+			
+			<!-- IF not S_HIDE_DEBUG -->
+			<div class="debug">
+				<br />
+				<h2>Debug</h2>
+				<ul class="nav nav-tabs">
+					<!-- BEGIN debug_types -->
+					<li><a href="javascript:debug_show_me('{debug_types.ID}')">{debug_types.TYPE} {L_CLICK}</a></li>
+					<!-- END debug_types -->
+				</ul>
 
+				<!-- BEGIN debug_types -->
+				<div id='debug_{debug_types.ID}' class='debug_hide'>
+					<table border='1' cellspacing='0' cellpadding='1' class="task_table">
+						<tr>
+							<th>{debug_types.TYPE}</th>
+						</tr>
+						<!-- BEGIN debug_messages -->
+						<tr class="{debug_types.debug_messages.ROW_CLASS}">
+							<td>{debug_types.debug_messages.MESSAGE}</td>
+						</tr>
+						<!-- END debug_messages -->
+					</table>
+				</div>
+				<!-- END debug_types -->
+			</div>
+			<!-- ENDIF -->
+			
 		</div>
 	</div>
 
