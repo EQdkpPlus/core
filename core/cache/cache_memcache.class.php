@@ -44,7 +44,7 @@ if ( !class_exists( "cache_memcache" ) ) {
 
 		public function get( $key, $global_prefix, $uncompress = false ) {
 			$key = $global_prefix.$key;
-			$flags = ($compress) ? MEMCACHE_COMPRESSED : 0 ;
+			$flags = ($uncompress) ? MEMCACHE_COMPRESSED : 0 ;
 			$retval = $this->memcache->get($key, $flags);
 			return ($retval == false) ? null : $retval;
 		}

@@ -413,6 +413,7 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_custom_fields($user_id, $field = false){
+			if(!isset($this->users[$user_id])) return array();
 			$fields = unserialize($this->users[$user_id]['custom_fields']);
 			if ($fields){
 				if ($field){

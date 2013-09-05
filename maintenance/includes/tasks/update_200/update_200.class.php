@@ -28,7 +28,7 @@ class update_200 extends sql_update_task {
 	public $name		= '2.0.0 Migration from 1.x';
 
 	public static function __shortcuts() {
-		$shortcuts = array('time', 'config', 'routing');
+		$shortcuts = array('time', 'config', 'routing', 'pdc');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	
@@ -405,6 +405,9 @@ class update_200 extends sql_update_task {
 			
 		//Update Colors
 		$this->update_colors();
+		
+		//Clear cache
+		$this->pdc->flush();
 		
 		return true;
 	}

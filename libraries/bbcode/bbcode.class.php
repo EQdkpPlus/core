@@ -91,7 +91,7 @@ if (!class_exists("bbcode")) {
 				'/\[left](.*?)\[\/left\]/msi',
 				'/\[right](.*?)\[\/right\]/msi',
 				'/\[list\](.*?)\[\/list\]/msi',
-				'/\[\*\]\s?(.*?)\n/msi',
+				'/\[\*\]\s?(.*?)\[br\]/msi',
 				'/\[br\]/msi',
 				'/&#10;/msi'
 			);

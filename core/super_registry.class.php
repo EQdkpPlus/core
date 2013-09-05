@@ -130,6 +130,10 @@ abstract class super_registry {
 			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			
+			//New DBAL
+			include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
+			self::$const['db2'] = idbal::factory(array('open' => true, 'debug_prefix' => 'dbal2'));
+			
 			//Bridge
 			include_once($root_path . 'core/bridge_generic.class.php');
 			if (registry::register('config')->get('cmsbridge_type') != ''){

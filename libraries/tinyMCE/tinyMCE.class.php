@@ -64,7 +64,7 @@ class tinyMCE extends gen_class {
 					convert_fonts_to_spans : false,
 					force_p_newlines : false,
 					menubar: false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | forecolor | blockquote image link",
+					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | forecolor | blockquote image link",
 					statusbar : false,
 				});
 			}

@@ -177,9 +177,10 @@ if( !class_exists( "datacache" ) ) {
 			$this->pdl->log( 'pdc_query', 'CLEANUP', $key );
 			$ctime = time();
 			foreach($this->expiry_dates[$global_prefix] as $key => $expiry_date){
-				if(!isset($this->expiry_dates[$global_prefix][$key]) || $this->expiry_dates[$global_prefix][$key] < $ctime)
+				if(!isset($this->expiry_dates[$global_prefix][$key]) || $this->expiry_dates[$global_prefix][$key] < $ctime) {
 					$this->cache->del( $key, $global_prefix );
-				unset($this->expiry_dates[$global_prefix][$key]);
+					unset($this->expiry_dates[$global_prefix][$key]);
+				}
 			}
 			$this->save_expiry_dates();
 		}

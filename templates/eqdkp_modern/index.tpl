@@ -53,19 +53,12 @@
 				   
 				   
 				var dateTxt = this.user_clock_format.replace(/(.)/g, function(m, p) {
-					console.log(p);
 					if (dateMarkers[p] == undefined){
 						return p;
 					}
-					console.log("zwei "+p);
-					console.log((dateMarkers[p])[0]);
-					console.log(date);
 					var rv = date[(dateMarkers[p])[0]]();
-					console.log("drei "+p + "  "+rv);	
 					if ( dateMarkers[p][1] != null ) rv = dateMarkers[p][1](rv);
-
-					return rv
-
+					return rv;
 				});
 
 				$('.user_time').html(dateTxt);

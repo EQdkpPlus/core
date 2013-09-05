@@ -2575,10 +2575,10 @@ div.error { display: none; }
 	color: #9f9f9f;
 }
 
-.news_content{
+.article_content{
 	line-height: 16px;
 }
-.news_content p {
+.article_content p {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
@@ -3235,6 +3235,12 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 .user-profile .boxHeader {
 	display: none;
 }
+
+.boxContent ul, .article_content ul {
+	list-style-type: square;
+	padding-left: 20px;
+}
+
 	
 @media all and (max-width: 480px) {
 	body, html , #personalArea{
