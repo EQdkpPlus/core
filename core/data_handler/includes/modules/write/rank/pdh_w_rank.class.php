@@ -33,14 +33,14 @@ if(!class_exists('pdh_w_rank')) {
 
 		public function add_rank($id, $name, $hide=0, $prefix='', $suffix='', $sortid=0, $default=0, $icon='') {
 			$arrSet = array(
-				'rank_id'	=> $id,
-				'rank_name' => $name,
-				'rank_hide' => $hide,
-				'rank_prefix' => $prefix,
-				'rank_suffix' => $suffix,
-				'rank_sortid' => $sortid,
-				'rank_default' => ($default) ? 1 : 0,
-				'rank_icon'	=> $icon,
+				'rank_id'		=> $id,
+				'rank_name'		=> $name,
+				'rank_hide'		=> $hide,
+				'rank_prefix'	=> $prefix,
+				'rank_suffix'	=> $suffix,
+				'rank_sortid'	=> $sortid,
+				'rank_default'	=> ($default) ? 1 : 0,
+				'rank_icon'		=> $icon,
 			);
 			if(!$this->db->query("INSERT INTO __member_ranks :params", $arrSet)) {
 				return false;

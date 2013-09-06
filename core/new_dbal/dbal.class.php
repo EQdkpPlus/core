@@ -144,8 +144,8 @@ abstract class Database extends gen_class {
 	public function highlight($sql) {
 		$red_keywords = array('/(INSERT INTO)/', '/(UPDATE\s+)/i', '/(DELETE FROM\s+)/', '/(CREATE TABLE)/', '/(IF (NOT)? EXISTS)/', '/(ALTER TABLE)/', '/(CHANGE)/');
 		$green_keywords = array('/(SELECT\s+)/i', '/(FROM)/i', '/(WHERE)/', '/(LIMIT)/', '/(ORDER BY)/', '/(GROUP BY)/', '/(\s+AND\s+)/', '/(\s+OR\s+)/',
-		'/(BETWEEN)/', '/(DESC)/', '/(LEFT JOIN)/', '/(LIKE)/', '/(SHOW TABLE STATUS)/', '/(SHOW)/');
-		$sql = preg_replace('/(' . $this->table_prefix . ')(\S+?)([\s\.,]|$)/', "<b>$1$2$3</b>", $sql); // bold table names
+		'/(BETWEEN)/', '/(DESC)/', '/(LEFT JOIN)/', '/(LIKE)/', '/(SHOW TABLE STATUS)/', '/(SHOW)/',  '/(\s+ON\s+)/');
+		$sql = preg_replace('/(' . $this->strTablePrefix. ')(\S+?)([\s\.,]|$)/', "<b>$1$2$3</b>", $sql); // bold table names
 		$sql = preg_replace($red_keywords, "<span class=\"negative\">$1</span>", $sql); // active keywords
 		$sql = preg_replace($green_keywords, "<span class=\"positive\">$1</span>", $sql); //passive keywords
 		return $sql;
@@ -597,6 +597,9 @@ abstract class DatabaseStatement {
 	 * @return Database_Statement
 	 */
 	public function limit($intRows, $intOffset = 0){
+		$intRows = intval($intRows);
+		$intOffset = intval($intOffset);
+		
 		if ($intRows <= 0)
 		{
 			$intRows = 30;
@@ -751,6 +754,7 @@ abstract class DatabaseResult {
 	private $intRowIndex = -1;
 	private $blnDone = false;
 	protected $arrCache = array();
+	protected $arrRow = false;
 	
 	public function __construct($resResult, $strQuery) {
 		if (!is_resource($resResult) && !is_object($resResult))
@@ -794,19 +798,8 @@ abstract class DatabaseResult {
 				return $this->num_fields();
 				break;
 
-			case 'isModified':
-				return $this->blnModified;
-				break;
-
 			default:
-				if ($this->intIndex < 0)
-				{
-					$this->first();
-				}
-				if (isset($this->arrCache[$this->intIndex][$strKey]))
-				{
-					return $this->arrCache[$this->intIndex][$strKey];
-				}
+				if (is_array($this->arrRow) && isset($this->arrRow[$strKey])) return $this->arrRow[$strKey];
 				return null;
 				break;
 		}
@@ -814,32 +807,31 @@ abstract class DatabaseResult {
 
 
 	/**
-	 * Fetch the current row as enumerated array
+	 * Fetch the current row as enumerated array - does not use Cache
 	 * @return array
 	 */
 	public function fetchRow()
 	{
-		if (!$this->arrCache[++$this->intIndex])
-		{
-			if (($arrRow = $this->fetch_row()) == false)
-			{
-				--$this->intIndex;
-				return false;
-			}
-
-			$this->arrCache[$this->intIndex] = $arrRow;
-		}
-
-		return array_values($this->arrCache[$this->intIndex]);
+		$this->arrRow = $this->fetch_row();
+		return $this->arrRow;
 	}
 
 
 	/**
-	 * Fetch the current row as associative array
+	 * Fetch the current row as associative array - does not use Cache
 	 * @return array
 	 */
 	public function fetchAssoc()
 	{
+		$this->arrRow = $this->fetch_assoc();
+		return $this->arrRow;		
+	}
+	
+	/**
+	 * Fetch the current row as associative array
+	 * @return array
+	 */
+	private function fetchAssocCache(){
 		if (!isset($this->arrCache[++$this->intIndex]))
 		{
 			if (($arrRow = $this->fetch_assoc()) == false)
@@ -847,10 +839,10 @@ abstract class DatabaseResult {
 				--$this->intIndex;
 				return false;
 			}
-
+		
 			$this->arrCache[$this->intIndex] = $arrRow;
 		}
-
+		
 		return $this->arrCache[$this->intIndex];
 	}
 
@@ -886,7 +878,7 @@ abstract class DatabaseResult {
 	{
 		do
 		{
-			$blnHasNext = $this->fetchAssoc();
+			$blnHasNext = $this->fetchAssocCache();
 		}
 		while ($blnHasNext);
 
@@ -909,8 +901,7 @@ abstract class DatabaseResult {
 		}
 
 		return $arrFields;
-	}
-
+	}	
 
 	/**
 	 * Go to the first row of the current result
@@ -920,7 +911,7 @@ abstract class DatabaseResult {
 	{
 		if (!$this->arrCache)
 		{
-			$this->arrCache[++$this->intRowIndex] = $this->fetchAssoc();
+			$this->arrCache[++$this->intRowIndex] = $this->fetchAssocCache();
 		}
 
 		$this->intIndex = 0;

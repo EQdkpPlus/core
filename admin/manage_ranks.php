@@ -45,8 +45,8 @@ class Manage_Ranks extends page_generic {
 		$intHidden = $this->in->get('hidden', 0);
 		$strIcon = $this->in->get('icon');
 		
-		$intRankID = $this->in->get('r', 0);
-		if ($intRankID){
+		$intRankID = $this->in->get('r', -1);
+		if ($intRankID >= 0){
 			//Update rank
 			$intSortID = $this->pdh->get('rank', 'sortid', array($intRankID));
 			$intDefault = $this->pdh->get('rank', 'default_value', array($intRankID));
@@ -92,7 +92,7 @@ class Manage_Ranks extends page_generic {
 	}
 	
 	public function edit(){
-		$intRankID = $this->in->get('r', 0);
+		$intRankID = $this->in->get('r', -1);
 		
 		$arrRankImagesDD = array('' => '');
 		$blnRankImages = $this->game->icon_exists('ranks');
@@ -104,7 +104,7 @@ class Manage_Ranks extends page_generic {
 		}
 		natcasesort($arrRankImagesDD);
 		
-		if($intRankID){
+		if($intRankID >= 0){
 			
 			
 			$this->tpl->assign_vars(array(

@@ -142,7 +142,22 @@ if(!class_exists('wow')) {
 				array_push($info['aq'], 'INSERT INTO __multidkp2itempool (multidkp2itempool_itempool_id, multidkp2itempool_multi_id) VALUES (2, 2);');
 
 				//default links
-				array_push($info['aq'], "INSERT INTO __links (`link_url`, `link_name`, `link_window`, `link_menu`) VALUES ('http://eu.battle.net/wow/', 'WoW Battle.net', 1, 0);");
+				array_push($info['aq'], "INSERT INTO __links (`link_url`, `link_name`, `link_window`, `link_menu`, `link_visibility`) VALUES ('http://eu.battle.net/wow/', 'WoW Battle.net', 1, 0, '[&#34;0&#34;]');");
+				
+				//default ranks
+				array_push($info['aq'],"DELETE FROM `__member_ranks`;");
+
+				array_push($info['aq'],"INSERT INTO `__member_ranks` (`rank_id`, `rank_name`, `rank_hide`, `rank_prefix`, `rank_suffix`, `rank_sortid`, `rank_default`, `rank_icon`) VALUES
+					(0, 'Guildmaster', 0, '', '', 0, 0, ''),
+					(1, 'Officer', 0, '', '', 1, 0, ''),
+					(2, 'Veteran', 0, '', '', 2, 0, ''),
+					(3, 'Member', 0, '', '', 3, 0, ''),
+					(4, 'Initiate', 0, '', '', 4, 1, ''),
+					(5, 'Dummy Rank #1', 0, '', '', 6, 0, ''),
+					(6, 'Dummy Rank #2', 0, '', '', 7, 0, ''),
+					(7, 'Dummy Rank #3', 0, '', '', 8, 0, ''),
+					(8, 'Dummy Rank #4', 0, '', '', 9, 0, ''),
+					(9, 'Dummy Rank #5', 0, '', '', 10, 0, '');");
 				
 				$this->pdh->add_object_tablepreset($this->config->get('eqdkp_layout'), 'roster', 'hptt_roster',
 					array('name' => 'wow_charicon', 'sort' => false, 'th_add' => 'width="52"', 'td_add' => '')

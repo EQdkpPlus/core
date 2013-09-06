@@ -288,7 +288,7 @@ class Manage_Portal extends page_generic {
 		
 		$this->pdh->process_hook_queue();
 		$this->portal->reset();
-		$this->display();
+		$this->edit_portallayout();
 	}
 	
 	//Edit Portal Layout
