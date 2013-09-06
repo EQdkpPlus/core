@@ -1538,6 +1538,7 @@ $lang = array(
 "pk_tab_fs_seo" => "Suchmaschinenoptimierung",
 "seo_remove_index" => "index.php aus URLs entfernen",
 "seo_remove_index_help" => "Um diese Funktion verwenden zu können, musst Du in der .htaccess die SEO-Optionen einkommentieren und den Server-Pfad anpassen. Siehe dazu unsere Wiki.",
+"seo_extension"	=> "Dateiendung für index.php-URLs",
 "featured_ontop" => "Featured Artikel oben anzeigen",
 "sortation_type" => "Sortierung der Artikel",
 "portal_layouts" => "Portal-Layouts",

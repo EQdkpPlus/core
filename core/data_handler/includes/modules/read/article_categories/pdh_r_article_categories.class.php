@@ -468,13 +468,22 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 		
-		public function get_path($intCategoryID){
-			if (!intval($this->config->get('enable_seo'))) return 'index.php'.$this->SID.'&c='.(int)$intCategoryID;
-			
+		public function get_path($intCategoryID){			
 			$strPath = "";
 			$strPath = $this->add_path($intCategoryID);
-			if (!intval($this->config->get('seo_remove_index'))) $strPath .= 'index.php/'.$strPath;
-
+			if (!intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
+			
+			switch((int)$this->config->get('seo_extension')){
+				case 1: 
+					if(substr($strPath, -1) == "/") $strPath = substr($strPath, 0, -1);
+					$strPath .= '.html';
+				break;
+				case 2: if(substr($strPath, -1) == "/") $strPath = substr($strPath, 0, -1);
+						$strPath .= '.php';
+				break;
+				default: $strPath .= '/';
+			}
+			
 			return $strPath.$this->SID;
 		}
 		

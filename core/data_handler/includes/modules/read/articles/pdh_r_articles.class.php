@@ -415,7 +415,16 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
 			if (!intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
-			$strPath .= ucfirst($this->get_alias($intArticleID)).((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
+
+			$strPath .= ucfirst($this->get_alias($intArticleID));
+			
+			switch((int)$this->config->get('seo_extension')){
+				case 1: $strPath .= '.html';
+				break;
+				case 2: $strPath .= '.php';
+				break;
+				default: $strPath .= '/';
+			}
 			return $strPath.$this->SID;
 		}
 		

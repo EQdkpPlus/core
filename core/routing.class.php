@@ -119,9 +119,28 @@ if(!class_exists('routing')){
 			if ($strParamText || $strParam) $strPath .= '/';
 			if ($strParamText) $strPath .= $this->clean($strParamText);
 			if ($strParam) $strPath .= '-'.$strParam;
-			$strPath .= ((intval($this->config->get('seo_html_extension'))) ? '.html' : '/');
+			switch((int)$this->config->get('seo_extension')){
+				case 1: $strPath .= '.html';
+				break;
+				case 2: $strPath .= '.php';
+				break;
+				default: $strPath .= '/';
+			}
+
 			if ($blnAddSID) $strPath .= $this->SID;
 			return $strPath;
+		}
+		
+		public function getSeoExtension(){
+			switch((int)$this->config->get('seo_extension')){
+				case 1:
+					return '.html';
+					break;
+				case 2:
+					return '.php';
+					break;
+				default: return '/';
+			}
 		}
 		
 		public function clean($strText){

@@ -1534,6 +1534,7 @@ $lang = array(
 	"perm_chs" => 'Change published state',
 	"pk_tab_fs_seo" => 'Search Engine Optimization',
 	"seo_remove_index" => 'Remove index.php from URLs',
+	"seo_extension" => 'URL-Extension for index.php-Paths',
 	"seo_remove_index_help" => 'To use this feature, you have to uncomment the SEO-Options and to adjust the server-path in the .htaccess-file.',
 	"page_object" => 'Pageobject',
 	"hide_header" => 'Hide Header',

@@ -808,6 +808,11 @@ class mmocms_settings extends page_generic {
 						'fieldtype'		=> 'checkbox',
 						'name'			=> 'seo_remove_index',
 					),
+					'seo_extension'	=> array(
+							'fieldtype'		=> 'dropdown',
+							'name'			=> 'seo_extension',
+							'options'		=> array("/", ".html", ".php"),
+					),
 				),
 
 				'social_sharing' => $arrSocialFields,

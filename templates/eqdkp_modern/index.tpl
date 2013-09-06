@@ -105,7 +105,7 @@
 				
 				$('.user-tooltip-trigger').on('dblclick', function(event){
 					$("#user-tooltip").hide('fast');
-					window.location="{EQDKP_CONTROLLER_PATH}Settings/{SID}";		
+					window.location="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}";		
 				});
 				
 				$('ul.mainmenu li.link_li_indexphp a.link_indexphp').html('');
@@ -127,7 +127,7 @@
 				<div id="personalAreaUser">
 					<!-- IF not S_LOGGED_IN -->
 					<ul>
-						<li><a href="{EQDKP_CONTROLLER_PATH}Login/{SID}" class="openLoginModal" onclick="return false;"><i class="icon-signin"></i>{L_login}</a></li>
+						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="icon-signin"></i>{L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
@@ -138,7 +138,7 @@
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings/{SID}" class="user-tooltip-trigger"><i class="icon-user"></i>{USER_NAME}</a>
+									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="icon-user"></i>{USER_NAME}</a>
 									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
 										<li><a href="{U_USER_PROFILE}">
 												<div class="user-tooltip-avatar">
@@ -151,7 +151,7 @@
 											</a>
 										</li>
 										<li class="tooltip-divider"></li>
-										<li><a href="{EQDKP_CONTROLLER_PATH}Settings/{SID}"><i class="icon-cog"></i>{L_settings}</a></li>
+										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="icon-cog"></i>{L_settings}</a></li>
 										<li><a href="{U_LOGOUT}"><i class="icon-signout"></i>{L_logout}</a></li>
 									</ul>
 								</div>
@@ -205,7 +205,7 @@
 								<!-- ENDIF -->
 							</li>
 							<!-- IF S_SEARCH -->
-							<li class="hiddenDesktop"><a href="{EQDKP_ROOT_PATH}search.php{SID}"><i class="icon-search"></i>{L_search}</a></li>
+							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="icon-search"></i>{L_search}</a></li>
 							<!-- ENDIF -->
 							<!-- BEGIN personal_area_addition -->
 							<li>{personal_area_addition.TEXT}</li>
@@ -217,7 +217,7 @@
 					<ul>
 						<li class="personalAreaTime"><i class="icon-time"></i><span class="user_time">{USER_TIME}</span></li>
 						<li><!-- IF S_SEARCH -->
-						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search/{SID}" id="search_form">
+						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>
 							<button type="submit" class="search_button" value="" title="{L_search_do}">
 								<i class="icon-search"></i>
@@ -344,7 +344,7 @@
 	<!-- ENDIF -->
 
 	<div id="dialog-login" title="{L_login}">
-		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login/{SID}" name="login" id="login">
+		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login">
 			<!-- IF S_BRIDGE_INFO -->
 			<div class="bluebox roundbox">
 				<div class="icon_info">{L_login_bridge_notice}</div>

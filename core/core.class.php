@@ -286,7 +286,7 @@ class core extends gen_class {
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
 					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'icon-check'));
 				} else {
-					$registerLink = $this->createLink(array('link' => 'Register/' . $this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
+					$registerLink = $this->createLink(array('link' => 'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
 				}
 			}
 			
@@ -328,8 +328,8 @@ class core extends gen_class {
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'S_REGISTER'				=> !(int)$this->config->get('disable_registration'),
 				'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
-				'U_LOGOUT'					=> $this->controller_path.'Login/Logout/'.$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
-				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters/' . $this->SID : '',
+				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
+				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul(),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
@@ -344,6 +344,7 @@ class core extends gen_class {
 				'USER_DATEFORMAT_LONG'		=> $this->user->style['date_notime_long'],
 				'USER_DATEFORMAT_SHORT'		=> $this->user->style['date_notime_short'],
 				'USER_TIMEFORMAT'			=> $this->user->style['time'],
+				'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
