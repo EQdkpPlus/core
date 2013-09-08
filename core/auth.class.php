@@ -517,18 +517,20 @@ class auth extends user_core {
 		return $options;
 	}
 
-	public function handle_login_functions($method, $loginMethod=false){
+	public function handle_login_functions($method, $loginMethod=false, $arrOptions=false){
 		$arrLoginMethods = $this->get_active_loginmethods();
 		if ($loginMethod) $arrLoginMethods = array($loginMethod);
 		$arrReturn = array();
 		foreach($arrLoginMethods as $strMethod){
 			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
-			$objClass = register('login_'.$strMethod);
-			$functions = isset($objClass->functions) ? $objClass->functions : array();
-
-			if (isset($functions[$method]) && method_exists($objClass, $functions[$method])){
-				$arrReturn[$strMethod] = $objClass->$functions[$method]();
+			$classname = 'login_'.$strMethod;
+			$functions = isset($classname::$functions) ? $classname::$functions : array();
+			
+			if (isset($functions[$method])){
+				$objClass = register('login_'.$strMethod);
+				if (method_exists($objClass, $functions[$method])) $arrReturn[$strMethod] = $objClass->$functions[$method]($arrOptions);
 			}
+
 			if ($loginMethod) return $arrReturn[$strMethod];
 		}
 		return $arrReturn;

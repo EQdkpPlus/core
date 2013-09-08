@@ -105,7 +105,7 @@ class wbb4_bridge extends bridge_generic {
 	public function wbb4_sso($arrUserdata, $boolAutoLogin){
 		$user_id = intval($arrUserdata['id']);
 		$strSessionID = md5(rand().rand()).'a7w8er45';
-		$this->db->query("DELETE FROM ".$this->prefix."session WHERE userID='".$this->db->escape($user_id)."'");
+		$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
 			
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
@@ -118,15 +118,17 @@ class wbb4_bridge extends bridge_generic {
 			'requestMethod'				=> 'GET',
 			'sessionVariables'			=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(rand().rand()).'a7w8er45'.'.";}',
 		);
-			
-		$this->db->query("INSERT INTO ".$this->prefix."session :params", $arrSet);
+		$this->db->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSe)->execute();
 			
 		$config = array();
-		$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
-		if (is_array($result)){
-			foreach ($result as $value){
-				$config[$value['optionName']] = $value['optionValue'];
-			}
+		$objQuery =  $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		if($objQuery){
+			$result = $objQuery->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $value){
+					$config[$value['optionName']] = $value['optionValue'];
+				}
+			}		
 		}
 			
 		$expire = $this->time->time + 31536000;
@@ -150,14 +152,18 @@ class wbb4_bridge extends bridge_generic {
 	public function wbb4_logout(){
 		$arrUserdata = $this->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->query("DELETE FROM ".$this->prefix."session WHERE userID='".$this->db->escape($arrUserdata['id'])."'");
+			$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
 		}
+		
 		$config = array();
-		$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
-		if (is_array($result)){
-			foreach ($result as $value){
-				$config[$value['optionName']] = $value['optionValue'];
-			}
+		$objQuery =  $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		if($objQuery){
+			$result = $objQuery->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $value){
+					$config[$value['optionName']] = $value['optionValue'];
+				}
+			}		
 		}
 		
 		if($this->config->get('cmsbridge_sso_cookiedomain') == '') {

@@ -85,10 +85,13 @@ class wbb3_bridge extends bridge_generic {
 
 	private function get_encryption_settings(){
 		$config = array();
-		$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'encryption_method' OR optionName = 'encryption_enable_salting' OR optionName = 'encryption_salt_position' OR optionName = 'encryption_encrypt_before_salting'");
-		if (is_array($result)){
-			foreach ($result as $value){
-				$config[$value['optionName']] = $value['optionValue'];
+		$objQuery = $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'encryption_method' OR optionName = 'encryption_enable_salting' OR optionName = 'encryption_salt_position' OR optionName = 'encryption_encrypt_before_salting'");
+		if ($objQuery){
+			$result = $objQuery->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $value){
+					$config[$value['optionName']] = $value['optionValue'];
+				}
 			}
 		}
 		return $config;
@@ -112,66 +115,73 @@ class wbb3_bridge extends bridge_generic {
 	public function wbb3_sso($arrUserdata, $boolAutoLogin){
 		//Get wbb package ID
 		$query = $this->db->query("SELECT packageID FROM ".$this->prefix."package WHERE package='com.woltlab.wbb'");
-		$packageId = $this->db->fetch_row($query);
-		if (isset($packageId['packageID'])){
-			$user_id = intval($arrUserdata['id']);
-			$strSessionID = md5(rand().rand()).'a7w8er45';
-			$this->db->query("DELETE FROM ".$this->prefix."session WHERE userID='".$this->db->escape($user_id)."'");
-			//PW is true, logg the user into our Forum
-			$arrSet = array(
-				'sessionID'					=> $strSessionID,
-				'packageID'					=> $packageId['packageID'],
-				'userID'					=> (int) $user_id,
-				'ipAddress'					=> $this->env->ip,
-				'userAgent'					=> $this->env->useragent,
-				'lastActivityTime'			=> (int) $this->time->time,
-				'requestURI'				=> '',
-				'requestMethod'				=> 'GET',
-				'username'					=> $arrUserdata['username'],
-			);
-			
-			$this->db->query("INSERT INTO ".$this->prefix."session :params", $arrSet);
-			
-			$config = array();
-			$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
-			if (is_array($result)){
-				foreach ($result as $value){
-					if (isset($config[$value['optionName']]) && intval($packageId['packageID']) != intval($value['packageID'])) continue;
-					$config[$value['optionName']] = $value['optionValue'];
+		if($query){
+			$packageId = $query->fetchAssoc();
+			if (isset($packageId['packageID'])){
+				$user_id = intval($arrUserdata['id']);
+				$strSessionID = md5(rand().rand()).'a7w8er45';
+				$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
+				//PW is true, logg the user into our Forum
+				$arrSet = array(
+					'sessionID'					=> $strSessionID,
+					'packageID'					=> $packageId['packageID'],
+					'userID'					=> (int) $user_id,
+					'ipAddress'					=> $this->env->ip,
+					'userAgent'					=> $this->env->useragent,
+					'lastActivityTime'			=> (int) $this->time->time,
+					'requestURI'				=> '',
+					'requestMethod'				=> 'GET',
+					'username'					=> $arrUserdata['username'],
+				);
+				$this->db->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSet)->execute();
+				
+				$config = array();
+				$objQuery = $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
+				if ($objQuery){
+					$result = $objQuery->fetchAllAssoc();
+					if (is_array($result)){
+						foreach ($result as $value){
+							if (isset($config[$value['optionName']]) && intval($packageId['packageID']) != intval($value['packageID'])) continue;
+							$config[$value['optionName']] = $value['optionValue'];
+						}
+					}
+				} else return;
+				
+				$expire = $this->time->time + 31536000;
+				if($config['cookie_domain'] == '') {
+					$arrDomains = explode('.', $this->env->server_name);
+					$arrDomainsReversed = array_reverse($arrDomains);
+					if (count($arrDomainsReversed) > 1){
+						$config['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+					} else {
+						$config['cookie_domain'] = $this->env->server_name;
+					}
 				}
-			}
-			
-			$expire = $this->time->time + 31536000;
-			if($config['cookie_domain'] == '') {
-				$arrDomains = explode('.', $this->env->server_name);
-				$arrDomainsReversed = array_reverse($arrDomains);
-				if (count($arrDomainsReversed) > 1){
-					$config['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
-				} else {
-					$config['cookie_domain'] = $this->env->server_name;
-				}
-			}
-			//SID Cookie
-			setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
-			return true;
+				//SID Cookie
+				setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+				return true;
+			}					
 		}
-		
+
 		return false;
 	}
 	
 	public function wbb3_logout(){
 		$arrUserdata = $this->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->query("DELETE FROM ".$this->prefix."session WHERE userID='".$this->db->escape($arrUserdata['id'])."'");
+			$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
 		}
 		$config = array();
-		$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
-		if (is_array($result)){
-			foreach ($result as $value){
-				if (isset($config[$value['optionName']]) && intval($packageId['packageID']) != intval($value['packageID'])) continue;
-				$config[$value['optionName']] = $value['optionValue'];
+		$objQuery = $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
+		if ($objQuery){
+			$result = $objQuery->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $value){
+					if (isset($config[$value['optionName']]) && intval($packageId['packageID']) != intval($value['packageID'])) continue;
+					$config[$value['optionName']] = $value['optionValue'];
+				}
 			}
-		}
+		} else return;
 		
 		if($config['cookie_domain'] == '') {
 			$arrDomains = explode('.', $this->env->server_name);

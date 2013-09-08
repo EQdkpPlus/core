@@ -71,26 +71,32 @@ class wordpress_bridge extends bridge_generic {
 	}
 	
 	public function wordpress_get_groups($blnWithID){
-		$query = $this->db->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
-		$result = $this->db->fetch_row($query);
 		$arrGroups = array();
-		if ($arrDBGroups = unserialize($result['option_value'])){
-			foreach ($arrDBGroups as $id => $value){
-				$arrGroups[$id] = $value['name'].(($blnWithID) ? ' (#'.$id.')': '');
+		$query = $this->db->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
+		if ($query){
+			$result = $query->fetchAssoc();
+			if ($arrDBGroups = unserialize($result['option_value'])){
+				foreach ($arrDBGroups as $id => $value){
+					$arrGroups[$id] = $value['name'].(($blnWithID) ? ' (#'.$id.')': '');
+				}
 			}
 		}
+		
 		return $arrGroups;
 	}
 	
 	public function wordpress_get_user_groups($intUserID){
-		$query = $this->db->query("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='wp_capabilities' AND user_id='".$this->db->escape($intUserID)."'");
-		$result = $this->db->fetch_row($query);
+		$objQuery = $this->db->prepare("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='wp_capabilities' AND user_id=?")->execute($intUserID);
 		$arrReturn = array();
-		if ($arrDBGroups = unserialize($result['meta_value'])){
-			foreach ($arrDBGroups as $id => $value){
-				if ((int)$value == 1) $arrReturn[] = $id;
+		if ($objQuery){
+			$result = $objQuery->fetchAssoc();
+			if ($arrDBGroups = unserialize($result['meta_value'])){
+				foreach ($arrDBGroups as $id => $value){
+					if ((int)$value == 1) $arrReturn[] = $id;
+				}
 			}
 		}
+
 		return $arrReturn;
 	}
 

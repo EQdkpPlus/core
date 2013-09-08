@@ -25,23 +25,19 @@ class login_facebook extends gen_class {
 	public $fb = false;
 	private $js_loaded = false;
 	
-	public $functions = array();
-	public $options = array();
+	public static $functions = array(
+		'login_button'		=> 'login_button',
+		'register_button' 	=> 'register_button',
+		'account_button'	=> 'account_button',
+		'get_account'		=> 'get_account',
+		'pre_register'		=> 'pre_register',
+		'after_register'	=> 'after_register',
+	);
+	public static $options = array(
+		'connect_accounts'	=> true,	
+	);
 	
 	public function __construct(){
-		
-		$this->options = array(
-			'connect_accounts'	=> true,	
-		);
-		
-		$this->functions = array(
-			'login_button'		=> 'login_button',
-			'register_button' 	=> 'register_button',
-			'account_button'	=> 'account_button',
-			'get_account'		=> 'get_account',
-			'pre_register'		=> 'pre_register',
-			'after_register'	=> 'after_register',
-		);
 	}
 	
 	public function init_fb(){

@@ -93,17 +93,19 @@ class mybb_bridge extends bridge_generic {
 	}
 
 	public function mybb_get_user_groups($intUserID){
-		$query = $this->db->query("SELECT usergroup, additionalgroups FROM ".$this->prefix."users WHERE uid='".$this->db->escape($intUserID)."'");
-		$result = $this->db->fetch_row($query);
-		
-		$arrReturn[] = (int)$result['usergroup'];
-
-		$arrAditionalGroups = explode(',', $result['additionalgroups']);
-		if (is_array($arrAditionalGroups)){
-			foreach ($arrAditionalGroups as $group){
-				$arrReturn[] = (int)$group;
+		$objQuery = $this->db->prepare("SELECT usergroup, additionalgroups FROM ".$this->prefix."users WHERE uid=?")->execute($intUserID);
+		$arrReturn = array();
+		if ($objQuery){
+			$result = $objQuery->fetchAssoc();
+			$arrReturn[] = (int)$result['usergroup'];
+	
+			$arrAditionalGroups = explode(',', $result['additionalgroups']);
+			if (is_array($arrAditionalGroups)){
+				foreach ($arrAditionalGroups as $group){
+					$arrReturn[] = (int)$group;
+				}
 			}
-		}
+		}		
 
 		return $arrReturn;
 	}
@@ -149,22 +151,24 @@ class mybb_bridge extends bridge_generic {
 	public function mybb_sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(rand().rand());
-		$this->db->query("DELETE FROM ".$this->prefix."sessions WHERE uid='".$this->db->escape($user_id)."'");
+		$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($user_id);
 
 		$query = $this->db->query("SELECT name,value FROM ".$this->prefix."settings");
-		$result = $this->db->fetch_rowset($query);
-		if (is_array($result)){
-			foreach ($result as $row){
-				$arrConfig[$row['name']] = $row['value'];
+		if ($query){
+			$result = $query->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $row){
+					$arrConfig[$row['name']] = $row['value'];
+				}
 			}
-		}
+		} else return false;		
 
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
-			'sid'	=> $strSessionID,
-			'uid'	=> (int) $user_id,
-			'ip'	=> $this->get_ip(),
-			'time'	=> (int) $this->time->time,
+			'sid'		=> $strSessionID,
+			'uid'		=> (int) $user_id,
+			'ip'		=> $this->get_ip(),
+			'time'		=> (int) $this->time->time,
 			'location'	=> '',
 			'useragent'	=> (string) trim(substr($this->env->useragent, 0, 149)),
 			'anonymous'	=> 0,
@@ -172,9 +176,9 @@ class mybb_bridge extends bridge_generic {
 			'location1'	=> 0,
 			'location2'	=> 0,
 		);
-
-		$this->db->query("INSERT INTO ".$this->prefix."sessions :params", $arrSet);
-
+		
+		$this->db->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
+		
 		$logincredentials = $user_id.'_'.$arrUserdata['loginkey'];
 		
 		if($arrConfig['cookiedomain'] == '') {
@@ -236,16 +240,18 @@ class mybb_bridge extends bridge_generic {
 
 	public function mybb_logout(){
 		$query = $this->db->query("SELECT name,value FROM ".$this->prefix."settings");
-		$result = $this->db->fetch_rowset($query);
-		if (is_array($result)){
-			foreach ($result as $row){
-				$arrConfig[$row['name']] = $row['value'];
+		if ($query){
+			$result = $query->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $row){
+					$arrConfig[$row['name']] = $row['value'];
+				}
 			}
-		}
+		} else return false;
 
 		$arrUserdata = $this->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->query("DELETE FROM ".$this->prefix."sessions WHERE uid='".$this->db->escape($arrUserdata['id'])."'");
+			$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($arrUserdata['id']);
 		}
 		setcookie($arrConfig['cookieprefix'].'sid', '', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
 		//User-Cookie

@@ -114,15 +114,14 @@ class phpbb3_bridge extends bridge_generic {
 	public function phpbb3_sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(rand().rand());
-		$this->db->query("DELETE FROM ".$this->prefix."sessions WHERE session_user_id='".$this->db->escape($user_id)."'");
+		$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
 		
 		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
-		$result = $this->db->fetch_rowset($query);
-		if (is_array($result)){
-			foreach ($result as $row){
+		if ($query){
+			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
-		}
+		} else return false;
 		
 		$ip = $this->get_ip();
 
@@ -143,7 +142,7 @@ class phpbb3_bridge extends bridge_generic {
 			'session_forum_id'			=> 0,
 		);
 		
-		$this->db->query("INSERT INTO ".$this->prefix."sessions :params", $arrSet);
+		$this->db->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
 				
 		// Set cookie
 		$expire = $this->time->time + 31536000;
@@ -165,12 +164,12 @@ class phpbb3_bridge extends bridge_generic {
 		if ($boolAutoLogin){
 			$strLoginKey = substr($this->user->generate_salt(), 4, 16);
 			
-			$this->db->query("INSERT INTO ".$this->prefix."sessions_keys :params", array(
+			$this->db->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
 				'key_id'	=> md5($strLoginKey),
 				'last_ip'	=> $ip,
 				'last_login'=> (int)$this->time->time,
 				'user_id'	=> (int) $user_id,
-			));
+			))->execute();
 		
 			setcookie($arrConfig['cookie_name'].'_k', $strLoginKey, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		} else {
@@ -224,17 +223,16 @@ class phpbb3_bridge extends bridge_generic {
 	public function phpbb3_logout() {
 		$arrUserdata = $this->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->query("DELETE FROM ".$this->prefix."sessions WHERE session_user_id='".$this->db->escape($arrUserdata['id'])."'");
+			$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
 		}
 		
 		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
-		$result = $this->db->fetch_rowset($query);
-		if (is_array($result)){
-			foreach ($result as $row){
+		if ($query){
+			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
-		}
-		
+		} else return;
+				
 		setcookie($arrConfig['cookie_name'].'_sid', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
 		setcookie($arrConfig['cookie_name'].'_u', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
@@ -248,9 +246,9 @@ class phpbb3_bridge extends bridge_generic {
 		$sync_array = array(
 			'icq' 			=> $arrUserdata['user_icq'],
 			'town'			=> $arrUserdata['user_from'],
-			'interests'	=> $arrUserdata['user_interests'],
-			'birthday'	=> $this->_handle_birthday($arrUserdata['user_birthday']),
-			'msn'				=> $arrUserdata['user_msnm'],
+			'interests'		=> $arrUserdata['user_interests'],
+			'birthday'		=> $this->_handle_birthday($arrUserdata['user_birthday']),
+			'msn'			=> $arrUserdata['user_msnm'],
 		);
 		return $sync_array;
 	}

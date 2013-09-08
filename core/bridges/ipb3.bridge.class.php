@@ -68,15 +68,18 @@ class ipb3_bridge extends bridge_generic {
 	}
 	
 	public function ipb3_get_user_groups($intUserID){
-		$query = $this->db->query("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id='".$this->db->escape($intUserID)."'");
-		$result = $this->db->fetch_row($query);
-		$arrReturn[] = (int)$result['member_group_id'];
-		$arrAditionalGroups = explode(',', $result['mgroup_others']);
-		if (is_array($arrAditionalGroups)){
-			foreach ($arrAditionalGroups as $group){
-				if ($group != '') $arrReturn[] = (int)$group;
+		$query = $this->db->prepare("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id=?")->execute($intUserID);
+		$arrReturn = array();
+		if ($query){
+			$result = $query->fetchAssoc();
+			$arrReturn[] = (int)$result['member_group_id'];
+			$arrAditionalGroups = explode(',', $result['mgroup_others']);
+			if (is_array($arrAditionalGroups)){
+				foreach ($arrAditionalGroups as $group){
+					if ($group != '') $arrReturn[] = (int)$group;
+				}
 			}
-		}
+		}		
 		
 		return $arrReturn;
 	}

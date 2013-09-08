@@ -90,6 +90,7 @@ abstract class Database extends gen_class {
 	protected	$strDebugPrefix = '';
 	protected	$strCharset = "utf8";
 	private		$blnInConstruct = true;
+	protected	$strDatabase = '';
 	
 	
 	public function __construct($arrOptions = array()){
@@ -250,7 +251,7 @@ abstract class Database extends gen_class {
 	public function listTables($strDatabase = null){
 		if ($strDatabase === null)
 		{
-			$strDatabase = registry::get_const('dbname');
+			$strDatabase = $this->strDatabase;
 		}
 		
 		$arrReturn = array();

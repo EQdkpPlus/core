@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class bridge_generic extends gen_class {
-	public static $shortcuts = array('config', 'pdh', 'user', 'pdl',
+	public static $shortcuts = array('config', 'pdh', 'user', 'pdl', 'db2',
 		'crypt'	=> 'encrypt',
 	);
 
@@ -36,17 +36,27 @@ class bridge_generic extends gen_class {
 	public function __construct() {
 		$this->code = get_class($this);
 		$this->prefix = $this->config->get('cmsbridge_prefix');
-		
+		$this->connect();
+	}
+	
+	public function connect(){
 		//Initialisierung der DB-Connection
-		if ($this->config->get('cmsbridge_notsamedb') == '1'){	
-			$this->db = dbal::factory(array('dbtype' => 'mysqli', 'die_gracefully' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
-			if(!$this->db->open($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password'))))
+		if ((int)$this->config->get('cmsbridge_notsamedb') == 1){
+			try {
+				$this->db = idbal::factory(array('dbtype' => 'mysqli', 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->db->connect($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password')));
+			} catch(iDBALException $e){
 				$this->db = false;
-				//$this->deactivate_bridge();
+				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
+			}
 		} else {
-			$this->db = dbal::factory(array('dbtype' => $this->dbtype, 'die_gracefully' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
-			$this->db->open($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass);
-		}
+			try {
+				$this->db = idbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+			} catch(iDBALException $e){
+				$this->db = false;
+				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
+			}
+		}	
 	}
 			
 	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $boolUseHash = false, $blnCreateUser = true, $boolUsePassword = true){
@@ -222,22 +232,26 @@ class bridge_generic extends gen_class {
 			return $this->$method_name($blnWithID);
 		} else {
 			if ($this->check_query('groups')){
-				$strQuery = $this->check_query('groups');			
+				$strQuery = $this->check_query('groups');	
+				$objQuery = $this->db->query($strQuery);		
 			} else {
-				$strQuery = "SELECT ".$this->data['groups']['id'].' as id, '.$this->data['groups']['name'].' as name FROM '.$this->prefix.$this->data['groups']['table'];
+				$objQuery = $this->db->query("SELECT ".$this->data['groups']['id']." as id, ".$this->data['groups']['name']." as name FROM ".$this->prefix.$this->data['groups']['table']);
 			}
 			
-			$result = $this->db->fetch_array($strQuery);
-			$groups = false;
-
-			if (is_array($result) && count($result) >0) {
-				foreach ($result as $row){
-					$groups[$row['id']] = $row['name'].(($blnWithID) ? ' (#'.$row['id'].')': '');
+			if ($objQuery){
+				$arrResult = $objQuery->fetchAllAssoc();
+				$groups = false;
+				
+				if (is_array($arrResult) && count($arrResult) > 0) {
+					foreach ($arrResult as $row){
+						$groups[$row['id']] = $row['name'].(($blnWithID) ? ' (#'.$row['id'].')': '');
+					}
 				}
+				
+				return $groups;
 			}
-
-			return $groups;
 		}
+		return false;
 	}
 	
 	//Userdata of an User of the CMS/Forum
@@ -252,10 +266,11 @@ class bridge_generic extends gen_class {
 		}
 		
 		if ($this->check_query('user')){
-			$strQuery = $this->check_query('user').$this->db->escape($strCleanUsername);
+			$strQuery = $this->check_query('user')."?";
 		} else {
 			//Check if there's a user table
-			if ( !$this->db->num_rows($this->db->query("SHOW TABLES LIKE '".$this->prefix.$this->data['user']['table']."'"))){
+			$arrTables = $this->db->listTables();
+			if (!in_array($this->prefix.$this->data['user']['table'], $arrTables)){
 				$this->deactivate_bridge();
 				return false;
 			}
@@ -263,13 +278,16 @@ class bridge_generic extends gen_class {
 			$salt = ($this->data['user']['salt'] != '') ? ', '.$this->data['user']['salt'].' as salt ': '';
 			$strQuery = "SELECT *, ".$this->data['user']['id'].' as id, '.$this->data['user']['name'].' as name, '.$this->data['user']['password'].' as password, '.$this->data['user']['email'].' as email'.$salt.'
 						FROM '.$this->prefix.$this->data['user']['table'].' 
-						WHERE LOWER('.$this->data['user']['where'].") = '".$this->db->escape($strCleanUsername)."'";
+						WHERE LOWER('.$this->data['user']['where'].") = ?";
 		}
 
-		$query = $this->db->query($strQuery);
-		$arrResult = $this->db->fetch_record($query);
-		if ($salt == '')  $arrResult['salt'] = ''; 
-		return $arrResult;
+		$objQuery = $this->db->prepare($strQuery)->execute($strCleanUsername);
+		if ($objQuery){
+			$arrResult = $objQuery->fetchAssoc();
+			if ($salt == '')  $arrResult['salt'] = '';
+			return $arrResult;
+		}
+		return false;
 	}
 	
 	public function get_users(){
@@ -278,7 +296,8 @@ class bridge_generic extends gen_class {
 		if ($this->check_query('user')) return false;
 		
 		//Check if there's a user table
-		if ( !$this->db->num_rows($this->db->query("SHOW TABLES LIKE '".$this->prefix.$this->data['user']['table']."'"))){
+		$arrTables = $this->db->listTables();
+		if (!in_array($this->prefix.$this->data['user']['table'], $arrTables)){
 			$this->deactivate_bridge();
 			return false;
 		}
@@ -287,7 +306,11 @@ class bridge_generic extends gen_class {
 		
 		$strQuery = "SELECT ".$this->data['user']['id'].' as id, '.$this->data['user']['name'].' as name, '.$this->data['user']['password'].' as password, '.$this->data['user']['email'].' as email'.$salt.', LOWER('.$this->data['user']['where'].') AS username_clean
 						FROM '.$this->prefix.$this->data['user']['table'];
-		$arrResult = $this->db->fetch_array($strQuery);
+		$objQuery = $this->db->query($strQuery);
+		$arrResult = false;
+		if ($objQuery){
+			$arrResult = $arrResult->fetchAllAssoc();
+		}
 		
 		return $arrResult;
 	}
@@ -350,16 +373,19 @@ class bridge_generic extends gen_class {
 		} else {
 
 			if ($this->check_query('user_group')){
-				$strQuery = $this->check_query('user_group').$this->db->escape($intUserID);
+				$strQuery = $this->check_query('user_group')."?";
 			} else {
 				$strQuery = "SELECT ".$this->data['user_group']['group'].' as group_id 
 							FROM '.$this->prefix.$this->data['user_group']['table'].' 
-							WHERE '.$this->data['user_group']['user']." = '".$this->db->escape($intUserID)."'";
+							WHERE '.$this->data['user_group']['user']." = ?";
 			}
-			$result = $this->db->fetch_array($strQuery);
-			if ($result && is_array($result)){
-				foreach ($result as $row){
-					$arrReturn[] = $row['group_id'];
+			$objQuery = $this->db->prepare($strQuery)->execute($intUserID);
+			if ($objQuery){
+				$arrResult = $objQuery->fetchAllAssoc();
+				if ($arrResult && is_array($arrResult)){
+					foreach ($arrResult as $row){
+						$arrReturn[] = $row['group_id'];
+					}
 				}
 			}
 		}
@@ -403,7 +429,7 @@ class bridge_generic extends gen_class {
 	}
 	
 	public function get_prefix(){
-		$alltables = $this->db->get_tables();
+		$alltables = $this->db->listTables();
 		$tables		= array();
 		foreach ($alltables as $name){
 			if (strpos($name, '_') !== false){
@@ -428,7 +454,6 @@ class bridge_generic extends gen_class {
 					$classname = $name.'_bridge';
 					$static_name = $classname::$name;
 					$bridges[$name] = (strlen($static_name)) ? $static_name : $name;
-					unset($class);
 				}
 			}
 		}

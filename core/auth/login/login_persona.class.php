@@ -25,18 +25,17 @@ class login_persona extends gen_class {
 	
 	private $js_loaded = false;
 	
-	public function __construct(){
-		
-		$this->options = array(
+	public static $options = array(
 			'connect_accounts'	=> true,
-		);
-		
-		$this->functions = array(
+	);
+	
+	public static $functions = array(
 			'login_button'		=> 'login_button',
 			'account_button'	=> 'account_button',
 			'get_account'		=> 'get_account',
-		);
-		
+	);
+	
+	public function __construct(){		
 	}
 	
 	public function init_js(){

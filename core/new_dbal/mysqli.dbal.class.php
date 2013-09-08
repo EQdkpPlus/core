@@ -67,6 +67,7 @@ class idbal_mysqli extends Database
 			throw new iDBALException(@$this->resConnection->connect_error);
 		}
 		@$this->resConnection->set_charset($this->strCharset);
+		$this->strDatabase = $strDatabase;
 	}
 
 
@@ -216,8 +217,10 @@ class idbal_mysqli extends Database
 	 */
 	protected function set_database($strDatabase=false)
 	{
-		if ($strDatabase === false) $strDatabase = $this->strDBDatabase;
-		@$this->resConnection = new mysqli($this->strDBHost, $this->strDBUser, $this->strDBPassword, $strDatabase, $this->intPort);
+		if ($strDatabase === false) $strDatabase = $this->strDatabase;
+		$intPort = (registry::get_const("dbport") !== null) ? registry::get_const("dbport") : ini_get("mysqli.default_port");
+		if (is_object($this->resConnection)) @$this->resConnection->close();		
+		@$this->resConnection = new mysqli(registry::get_const("dbhost"), registry::get_const("dbuser"), registry::get_const("dbpass"), registry::get_const("dbname"), $intPort);
 	}
 
 

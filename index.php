@@ -67,10 +67,19 @@ class controller extends gen_class {
 		}
 	}
 	
+	private function filterPathArray($arrPath){
+		foreach($arrPath as $key => $val){
+			$arrPath[$key] = str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[$key]));
+		}
+		
+		return $arrPath;
+	}
+	
 	public function display(){
 		$strPath = $this->env->path;
 		$arrPath = array_filter(explode('/', $strPath));
 		$arrPath = array_reverse($arrPath);
+		$arrPath = $this->filterPathArray($arrPath);
 		register('pm');
 		
 		if (count($arrPath) == 0){
@@ -86,19 +95,19 @@ class controller extends gen_class {
 		$intArticleID = $intCategoryID = $strSpecificID = 0;
 
 		//Suche Alias in Artikeln
-		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array(str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[0]))));
+		$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array($arrPath[0]));
 		
 		if (!$intArticleID){
 			//Suche Alias in Kategorien
-			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[0]))));
+			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array($arrPath[0]));
 			
 			//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
 			if (!$intCategoryID && isset($arrPath[1])) {
 				
-				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[1]))));
+				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array($arrPath[1]));
 				if ($intArticleID){
 					//Zerlege .html
-					$strID = str_replace("-", "", strrchr(str_replace(array(".html", ".php"), "", $arrPath[0]), "-"));
+					$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
 					$arrMatches = array();
 					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 					if (isset($arrMatches[0]) && count($arrMatches[0])){
@@ -619,7 +628,7 @@ class controller extends gen_class {
 				$strPageObject = register('routing')->staticRoute($arrPath[1]);
 				if ($strPageObject){
 					//Zerlege .html
-					$strID = str_replace("-", "", strrchr(str_replace(array(".html", ".php"), "", $arrPath[0]), "-"));
+					$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
 					$arrMatches = array();
 					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 					if (isset($arrMatches[0]) && count($arrMatches[0])){

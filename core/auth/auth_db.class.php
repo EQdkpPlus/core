@@ -60,7 +60,7 @@ class auth_db extends auth {
 			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin, false);
 		}
 		
-		//Bridge Login failed, Auth-Method Login
+		//Bridge Login failed, Specific Auth-Method Login
 		if (!$arrStatus){
 			$this->pdl->log('login', 'Bridge Login failed or Bridge not activated');
 			//Login-Method Login like OpenID, Facebook, ...
@@ -175,6 +175,11 @@ class auth_db extends auth {
 
 			}
 		}
+		
+		//Auth Method Login Listener
+		$arrAfterLoginListener = $this->handle_login_functions("after_login");
+		//var_dump($arrAfterLoginListener);
+		//die();
 		
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');

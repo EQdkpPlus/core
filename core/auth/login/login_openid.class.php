@@ -24,21 +24,19 @@ class login_openid extends gen_class {
 	public static $shortcuts = array('user', 'jquery', 'db', 'in', 'config', 'env' => 'environment', 'pdh');
 
 	public $oid = false;
+	public static $options = array(
+		'connect_accounts'	=> true,
+	);
 	
-	public function __construct(){
-		
-		$this->options = array(
-			'connect_accounts'	=> true,	
-		);
-		
-		$this->functions = array(
-			'login_button'		=> 'login_button',
-			'register_button' 	=> 'register_button',
-			'account_button'	=> 'account_button',
-			'get_account'		=> 'get_account',
-			'pre_register'		=> 'pre_register',
-		);
-		
+	public static $functions = array(
+		'login_button'		=> 'login_button',
+		'register_button' 	=> 'register_button',
+		'account_button'	=> 'account_button',
+		'get_account'		=> 'get_account',
+		'pre_register'		=> 'pre_register',
+	);
+	
+	public function __construct(){		
 	}
 	
 	public function init_openid(){

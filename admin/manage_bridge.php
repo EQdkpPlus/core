@@ -86,7 +86,6 @@ class Manage_Bridge extends page_generic {
 
 		} else {
 			$tables = $this->bridge->get_prefix();
-
 		}
 
 		return $tables;
