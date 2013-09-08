@@ -214,7 +214,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				
-				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar');
+				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));
 			}
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return $id;

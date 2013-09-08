@@ -176,10 +176,8 @@ class auth_db extends auth {
 			}
 		}
 		
-		//Auth Method Login Listener
-		$arrAfterLoginListener = $this->handle_login_functions("after_login");
-		//var_dump($arrAfterLoginListener);
-		//die();
+		//Auth Method After-Login - reading only
+		$this->handle_login_functions("after_login", false, array($arrStatus, $strUsername, $strPassword, $boolUseHash));
 		
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');

@@ -114,6 +114,7 @@ abstract class super_registry {
 			// User Levels
 			define('ANONYMOUS',	-1);
 			define('USER',		0);
+			define('CRONJOB', -2);
 			
 			// Database Connectors
 			require(self::$const['root_path'] . 'core/dbal/dbal.php');
@@ -134,8 +135,8 @@ abstract class super_registry {
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			
 			//New DBAL
-			// include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
-			// self::$const['db2'] = idbal::factory(array('open' => true, 'debug_prefix' => 'dbal2'));
+			include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
+			self::$const['db2'] = idbal::factory(array('open' => true, 'debug_prefix' => 'dbal2'));
 			
 			//Bridge
 			include_once($root_path . 'core/bridge_generic.class.php');

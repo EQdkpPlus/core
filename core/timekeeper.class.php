@@ -215,6 +215,7 @@ class timekeeper extends gen_class {
 	}
 
 	public function execute_cron($task_name, $force_run = false){
+		define("IN_CRON", true);
 		
 		if(!$force_run && !$this->cron_necessary($task_name)){
 			return false;
