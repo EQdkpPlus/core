@@ -177,7 +177,8 @@ class auth_db extends auth {
 		}
 		
 		//Auth Method After-Login - reading only
-		$this->handle_login_functions("after_login", false, array($arrStatus, $strUsername, $strPassword, $boolUseHash));
+		$this->pdl->log('login', 'Possible Intercept by Auth Methods');
+		$this->handle_login_functions("after_login", false, array($arrStatus, $strUsername, $strPassword, $boolUseHash, ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
 		
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');

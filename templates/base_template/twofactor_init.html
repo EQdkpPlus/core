@@ -1,0 +1,15 @@
+<fieldset class="settings">
+	<legend>{L_login_twofactor_connect}</legend>
+	{L_login_twofactor_explain}<br />
+	<h3>{L_login_twofactor_key}</h3>
+	<input type="text" readonly size="30" value="{TWOFACTOR_KEY}"/><br /><br />
+	<img src="{TWOFACTOR_QR}" alt="" /><br /><br />
+	{L_login_twofactor_qr_explain}
+	<h2>{L_login_twofactor_code_init}</h2>
+	<form method="post" action="{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&lmethod=twofactor" name="register" id="register">
+	<input type="text" size="10" name="code" id="code"/><br />
+	{L_login_twofactor_code_explain}<br />
+	<button type="button" onclick="window.parent.location='{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&lmethod=twofactor&code='+$('#code').val()+'&secret={TWOFACTOR_KEY_ENCR}'"><i class="icon-ok"></i>{L_submit}</button>
+	</form>
+</fieldset>
+

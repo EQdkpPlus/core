@@ -880,6 +880,16 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "user_gravatar_mail_help" => "Trage hier deine Gravatar-Email-Adresse ein, sofern sie von deiner Registrierungs-Email-Adresse abweicht.",
 "user_avatar" => "Avatar",
 "pk_disable_points" => "Disable Points",
+"login_twofactor" => "Zweifaktor Authentifizierung",
+"login_twofactor_connect" => "Zweifaktor Authentifizierung einrichten",
+"login_twofactor_explain" => "Die Zweifaktor-Authentifizierung hilft deinen Account zu schützen, in dem du bei jedem Login nach einem einmaligen Code gefragt wirst. Um die Zweifaktor-Authentifizierung nutzen zu können, brauchst du eine RFC 6238 kompatible App, wie z.B. der Google-Authenticator.",
+"login_twofactor_key" => "Zweifaktor-Schlüssel",
+"login_twofactor_qr_explain" => "Scanne den angezeiten QR-Code, oder gebe den angezeigten Zweifaktor-Schlüssel in deine App ein. Um die Zweifaktor-Authentifizierung zu aktivieren, lasse dir von deiner App einen Code generieren und gebe ihn in das Feld unterhalb ein.",
+"login_twofactor_code_init" => "Zweifaktor-Code",
+"login_twofactor_code_explain" => "Trage hier den von deiner App generierten Code ein, um die Zweifaktor-Authentifizierung zu aktivieren.",
+"login_twofactor_code_help" => "Trage hier den von deiner App generierten Code ein.",
+"login_twofactor_emergency_token" => "Notfall-Token (deaktiviert bei Eingabe die Zweifaktor-Authentifizierung)",
+"login_twofactor_remember" => "Auf diesem Rechner für 30 Tage nicht mehr fragen",
  );
 
 ?>

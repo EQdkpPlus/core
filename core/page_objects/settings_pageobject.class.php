@@ -82,7 +82,6 @@ class settings_pageobject extends pageobject {
 		$this->pdh->put('user', 'delete_authaccount', array($this->user->id, $strMethod));
 		$this->pdh->process_hook_queue();
 		unset($this->user->data['auth_account'][$strMethod]);
-		$this->display();
 	}
 
 	public function add_authaccount() {
@@ -95,7 +94,6 @@ class settings_pageobject extends pageobject {
 		} else {
 			$this->core->message($this->user->lang('auth_connect_account_error'), $this->user->lang('error'), 'red');
 		}
-		$this->display();
 	}
 
 	public function update() {
@@ -537,10 +535,13 @@ class settings_pageobject extends pageobject {
 		foreach($auth_options as $method => $options){
 			if (isset($options['connect_accounts']) && $options['connect_accounts']){
 				if (isset($this->user->data['auth_account'][$method]) && strlen($this->user->data['auth_account'][$method])){
+					$display = $this->user->handle_login_functions('display_account', $method, array($this->user->data['auth_account'][$method]));
+					if (is_array($display)) $display = $this->user->data['auth_account'][$method];
+					
 					$auth_array['registration_information']['auth_accounts'] = array(
 						'auth_account_'.$method	=> array(
 							'name'	=> ($this->user->lang('login_'.$method)) ? $this->user->lang('login_'.$method) : ucfirst($method),
-							'text'	=> $this->user->data['auth_account'][$method].' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><img src="'.$this->root_path.'images/global/delete.png" alt="Delete" /></a>',
+							'text'	=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><img src="'.$this->server_path.'images/global/delete.png" alt="Delete" /></a>',
 							'help'	=> 'auth_accounts_help',
 						),
 					);

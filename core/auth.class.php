@@ -506,11 +506,12 @@ class auth extends user_core {
 	public function get_loginmethod_options(){
 		$arrLoginMethods = $this->get_active_loginmethods();
 		$options = array();
+
 		foreach($arrLoginMethods as $strMethod){
 			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
-			$objClass = register('login_'.$strMethod);
-			if (isset($objClass->options)){
-				$options[$strMethod] = $objClass->options;
+			$strClassname = 'login_'.$strMethod;
+			if (isset($strClassname::$options)){
+				$options[$strMethod] = $strClassname::$options;
 			}
 		}
 
