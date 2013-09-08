@@ -84,7 +84,7 @@ class tour extends gen_class {
 
 	public function start(){
 		set_cookie('tour', serialize(array('step'	=> 0)), $this->cookie_time);
-		redirect('index.php');
+		redirect('index.php'.$this->SID);
 	}
 
 	public function init_steps(){
@@ -118,7 +118,7 @@ class tour extends gen_class {
 				'type'	=> 'admin',
 			),
 			7	=> array(
-				'url'	=> 'admin/manage_pages.php',
+				'url'	=> 'admin/manage_article_categories.php',
 				'type'	=> 'admin',
 			),
 			8	=> array(
@@ -145,15 +145,15 @@ class tour extends gen_class {
 	public function execute_step($step, $show){
 		if (!$show && $this->steps[$step]['url'] != ''){
 			set_cookie('tour', serialize(array('step'	=> $step)), $this->cookie_time);
-			redirect($this->steps[$step]['url'].'?tour=show');
+			redirect($this->steps[$step]['url'].$this->SID.'&tour=show');
 		} else {
 
 			$custom_js = "var a = 1;";
 			if ($step == 0){
-				$custom_js = "window.location='?tour=next'";
+				$custom_js = "window.location='".$this->SID."&tour=next'";
 			}
 
-			$this->jquery->Dialog('tour_step', $this->lang['navi_title'], array('message'	=> '<b>'.$this->lang['navi_title'].' - '.$this->lang['step_'.$step.'_title'].'</b><br/><br/>'.$this->lang['step_'.$step], 'width' => 300, 'height'	=> 300, 'custom_js' => $custom_js, 'cancel_js'	=> "window.location='?tour=cancel'"), 'confirm');
+			$this->jquery->Dialog('tour_step', $this->lang['navi_title'], array('message'	=> '<b>'.$this->lang['navi_title'].' - '.$this->lang['step_'.$step.'_title'].'</b><br/><br/>'.$this->lang['step_'.$step], 'width' => 300, 'height'	=> 300, 'custom_js' => $custom_js, 'cancel_js'	=> "window.location='".$this->SID."&tour=cancel'"), 'confirm');
 			$this->tpl->add_js(
 				"$(document).ready(function () {
 					tour_step();
