@@ -220,6 +220,8 @@ class timekeeper extends gen_class {
 			return false;
 		}
 		
+		define("CRONJOB", true);
+		
 		$file_name	= $task_name.'_crontask.class.php';
 		$file_path	= $this->root_path.$this->crontab[$task_name]['path'].$file_name;
 

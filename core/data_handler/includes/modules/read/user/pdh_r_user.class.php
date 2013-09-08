@@ -62,6 +62,8 @@ if (!class_exists("pdh_r_user")){
 				return $this->users[$user_id]['username'];
 			} elseif ($user_id == ANONYMOUS) {
 				return $this->user->lang('anonymous');
+			} elseif ($user_id == -2) {
+				return "Cronjob";
 			} else {
 				return $this->user->lang('unknown');
 			}
