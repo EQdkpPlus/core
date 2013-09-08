@@ -20,8 +20,8 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-if (!class_exists("html")) {
-	class html extends gen_class {
+if (!class_exists("html_old")) {
+	class html_old extends gen_class {
 		public static $shortcuts = array('user', 'jquery', 'pm', 'in', 'game', 'time', 'editor'=>'tinyMCE', 'crypt'=>'encrypt', 'tpl');
 		
 		private $blnDepJS = false;
@@ -127,7 +127,7 @@ if (!class_exists("html")) {
 
 				// Checkbox
 				case 'boolean':
-					$ccfield = $this->CheckBox(@$options['name'], $this->is_set($options['text']), (isset($options['value'])) ? intval($options['value']) : '0', '1', '', $options['javascript']);
+					$ccfield = $this->CheckBox(@$options['name'], $this->is_set($options['text']), (isset($options['value'])) ? '1' : false, '', '', $options['javascript']);
 				break;
 
 				//Spinner
@@ -272,7 +272,7 @@ if (!class_exists("html")) {
 				case 'imageuploader':
 					$fileuploadid	= 'file_imageupl_'.$this->cleanid($options['name']);
 					$imgvalue		= (isset($options['value'])) ? $options['value'] : '';
-					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('all', $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
+					$ccfield = $this->TextField($options['name'], 10, $imgvalue, $type = 'hidden', $fileuploadid).$this->jquery->imageUploader('admin', $fileuploadid, $imgvalue, $options['imgpath'], $options['options']);
 				break;
 				
 				case 'userimageuploader':
@@ -309,7 +309,7 @@ if (!class_exists("html")) {
 					return $this->in->get($options['name'], 0);
 
 				case 'boolean':
-					return (($this->in->get($options['name'], 0) == 1) ? true : false);
+					return (($this->in->get($options['name'], 0) == '1') ? true : false);
 
 				case 'datepicker':
 					$input = $this->in->get($options['name']);
@@ -527,7 +527,7 @@ if (!class_exists("html")) {
 		* @param $notable		Table or not?
 		* @return Dropdown
 		*/
-		public function CheckBox($name, $langname, $options, $value='1', $mclass='', $js='', $disabled=false, $id=''){		
+		public function CheckBox($name, $langname, $options, $value='1', $mclass='', $js='', $disabled=false, $id=''){
 			$is_checked		= ( $options == '1' ) ? 'checked="checked"' : '';
 			$is_disabled	= ($disabled) ? 'disabled="disabled"' : '';
 			$is_class		= ($mclass) ? " class='".$mclass."'" : '';

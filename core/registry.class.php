@@ -58,11 +58,12 @@ final class registry extends super_registry{
 		}
 		self::load($classname);
 		if(empty($params)) {
+			#if($classname::$singleton) return new $classname();
 			self::$inst[$classname][$hash] = new $classname();
 		} else {
 			$ref = new ReflectionClass($classname);
+			#if($classname::$singleton) return $ref->newInstanceArgs($params);
 			self::$inst[$classname][$hash] = $ref->newInstanceArgs($params);
-			unset($ref);
 		}
 		self::$inst[$classname][$hash]->class_hash = $hash;
 		return self::$inst[$classname][$hash];

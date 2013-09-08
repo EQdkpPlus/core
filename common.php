@@ -44,13 +44,9 @@ ini_set("display_errors", 0);
 
 include_once($eqdkp_root_path.'core/constants.php');
 include_once($eqdkp_root_path.'core/super_registry.class.php');
-if(!version_compare(phpversion(), '5.3.0', ">=")) {
-	include_once($eqdkp_root_path.'core/registry.class.5.2.php');
-	include_once($eqdkp_root_path.'core/gen_class.class.5.2.php');
-} else {
-	include_once($eqdkp_root_path.'core/registry.class.php');
-	include_once($eqdkp_root_path.'core/gen_class.class.php');
-}
+include_once($eqdkp_root_path.'core/registry.class.php');
+include_once($eqdkp_root_path.'core/gen_class.class.php');
+
 if(!isset($lite)) $lite = false;
 if(!isset($noinit)) $noinit = false;
 if(!$noinit) registry::init($eqdkp_root_path, $lite);

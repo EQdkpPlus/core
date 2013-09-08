@@ -17,7 +17,7 @@
  */
 if(!class_exists('admin_functions')) {
 class admin_functions extends gen_class {
-	public static $shortcuts = array('user', 'in', 'core', 'config', 'tpl', 'game', 'jquery', 'pm', 'time', 'pdh', 'db', 'pdc','routing',
+	public static $shortcuts = array('user', 'in', 'core', 'config', 'tpl', 'game', 'jquery', 'pm', 'time', 'pdh', 'db', 'pdc','routing', 'html',
 		'xmltools'	=> 'xmltools',
 		'puf'		=> 'urlfetcher',
 	);
@@ -265,25 +265,25 @@ class admin_functions extends gen_class {
 	function resolve_browser($string){
 		$string = sanitize($string);
 		if( preg_match("/opera/i",$string)){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/opera_icon.png\" alt=\"Opera\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/opera_icon.png\" alt=\"Opera\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/msie/i",$string)){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/ie_icon.png\" alt=\"Internet Explorer\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/ie_icon.png\" alt=\"Internet Explorer\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/chrome/i", $string)){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/chrome_icon.png\" alt=\"Google Chrome\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/chrome_icon.png\" alt=\"Google Chrome\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/konqueror/i",$string)){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/konqueror_icon.png\" alt=\"Konqueror\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/konqueror_icon.png\" alt=\"Konqueror\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/safari/i",$string) ){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/safari_icon.png\" alt=\"Safari\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/safari_icon.png\" alt=\"Safari\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/lynx/i",$string) ){
-			return registry::register('html')->ToolTip($string, "Lynx");
+			return $this->html->ToolTip($string, "Lynx");
 		}else if( preg_match("/netscape6/i",$string) ){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/netscape_icon.png\" alt=\"Netscape\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/netscape_icon.png\" alt=\"Netscape\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/mozilla/i",$string) ){
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/browser/firefox_icon.png\" alt=\"Firefox\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/firefox_icon.png\" alt=\"Firefox\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}else if( preg_match("/w3m/i",$string) ){
-			return registry::register('html')->ToolTip($string, "w3m");
+			return $this->html->ToolTip($string, "w3m");
 		}else{
-			return registry::register('html')->ToolTip($string, "<img src=\"".registry::get_const('root_path')."images/glyphs/help_off.png\" alt=\"Help\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/help_off.png\" alt=\"Help\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
 		}
 	}
 	

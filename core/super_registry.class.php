@@ -32,7 +32,7 @@ abstract class super_registry {
 		'pdh'		=> 'plus_datahandler',
 		'tpl'		=> 'template',
 		'jquery'	=> 'jquery',
-		'html'		=> 'html',
+		'html'		=> 'html_old',
 		'game'		=> 'game',
 		'time'		=> 'timehandler',
 		'pm'		=> 'plugin_manager',
@@ -49,6 +49,9 @@ abstract class super_registry {
 		'datacache'				=> 'core/cache/',
 		'plus_datahandler'		=> 'core/data_handler/',
 		'file_handler'			=> 'core/file_handler/',
+		// html-fields
+		'hcheckbox'				=> 'core/html',
+		// core-classes
 		'acl'					=> 'core/',
 		'auto_point_adjustments'=> 'core/',
 		'article'				=> 'core/',
@@ -61,7 +64,7 @@ abstract class super_registry {
 		'encrypt'				=> 'core/',
 		'game'					=> 'core/',
 		'hooks'					=> 'core/',
-		'html'					=> 'core/',
+		'html_old'				=> 'core/',
 		'html_leaderboard'		=> 'core/',
 		'html_pdh_tag_table'	=> 'core/',
 		'input'					=> 'core/',
@@ -131,8 +134,8 @@ abstract class super_registry {
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			
 			//New DBAL
-			include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
-			self::$const['db2'] = idbal::factory(array('open' => true, 'debug_prefix' => 'dbal2'));
+			// include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
+			// self::$const['db2'] = idbal::factory(array('open' => true, 'debug_prefix' => 'dbal2'));
 			
 			//Bridge
 			include_once($root_path . 'core/bridge_generic.class.php');

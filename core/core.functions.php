@@ -178,6 +178,29 @@ function color_item($item, $percentage = false){
 	return $class;
 }
 
+
+/**
+* Toggle Icons
+* 
+* @param $value			on or off?
+* @param $icon_on		image for on
+* @param $icon_off		image for off
+* @param $path			path for images
+* @param $iconAltText	alt text for the images
+* @param $url			url
+* @return Tooltip
+*/
+function toggleIcons($value, $icon_on, $icon_off, $path, $iconAltText='', $url='', $notitle=false){
+	$mytitle = ($notitle) ? ' title="'.$iconAltText.'"' : '';
+	$icon = (!empty($value) || $value === true)? $icon_on : $icon_off;
+	$ret_val =	'<img src="'.registry::get_const('root_path').$path.$icon.'" alt="'.$iconAltText.$mytitle.'" />';
+
+	if (!empty($url)){
+		$ret_val = '<a href="'.$url.'">'.$ret_val.'</a>';
+	}
+	return $ret_val;
+}
+
 /**
  * Returns coloured member names
  *
