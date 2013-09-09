@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class maintenance_user extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'db', 'time', 'env', 'timekeeper'=>'timekeeper', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'logs');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'db2', 'time', 'env', 'timekeeper'=>'timekeeper', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -92,7 +92,7 @@ class maintenance_user extends page_generic {
 		$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
 		if ($muser_config != ''){
 			$muser = unserialize(stripslashes($muser_config));
-			$this->db->query("DELETE FROM __users WHERE user_id = ".$muser['user_id']);
+			$this->db2->prepare("DELETE FROM __users WHERE user_id = ?")->execute($muser['user_id']);
 
 			$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
 			$this->config->set('maintenance_user', '');
@@ -114,19 +114,22 @@ class maintenance_user extends page_generic {
 		if ($user_active){
 			$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
 			$muser = unserialize(stripslashes($muser_config));
-			$query = $this->db->query("SELECT * FROM __users WHERE user_id = ".$muser['user_id']);
-			while ($row = $this->db->fetch_record($query)){
-				$user_data = $row;
+			
+			$objQuery = $this->db2->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
+			if ($objQuery && $objQuery->numRows){
+				$user_data = $objQuery->fetchAssoc();
+			} else {
+				$this->display();
+				return;
 			}
 		}
 
 		$bodyvars = array(
-					'USERNAME'		=> $user_data['username'],
-					'PASSWORD'		=> $muser['password'],
-					'VALID'			=> $this->time->user_date($muser['valid_until'], true),
-					'EQDKP_URL'		=> $this->env->link,
-					'GUILD'			=> $this->config->get('guildtag'),
-
+			'USERNAME'		=> $user_data['username'],
+			'PASSWORD'		=> $muser['password'],
+			'VALID'			=> $this->time->user_date($muser['valid_until'], true),
+			'EQDKP_URL'		=> $this->env->link,
+			'GUILD'			=> $this->config->get('guildtag'),
 		);
 		
 		if ($this->in->get('email') == $this->in->get('email_repeat')){
@@ -148,9 +151,10 @@ class maintenance_user extends page_generic {
 		if ($user_active){
 			$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));		
 			$muser = unserialize(stripslashes($muser_config));
-			$query = $this->db->query("SELECT * FROM __users WHERE user_id = ".$muser['user_id']);
-			while ($row = $this->db->fetch_record($query)){
-				$user_data = $row;
+			
+			$objQuery = $this->db2->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
+			if ($objQuery && $objQuery->numRows){
+				$user_data = $objQuery->fetchAssoc();
 			}
 		}
 

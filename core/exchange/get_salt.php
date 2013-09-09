@@ -22,15 +22,16 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_get_salt')){
 	class exchange_get_salt extends gen_class {
-		public static $shortcuts = array('db', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('db2', 'pex'=>'plus_exchange');
 
 		public function post_get_salt($params, $body){
 			$xml = simplexml_load_string($body);
 			if ($xml && $xml->user){
 
-				$query = $this->db->query("SELECT user_password FROM __users WHERE LOWER(username)='".$this->db->escape(clean_username($xml->user))."' AND user_active='1'");
-				while ($row = $this->db->fetch_record($query)){
-
+				$objQuery = $this->db2->prepare("SELECT user_password FROM __users WHERE LOWER(username)=? AND user_active='1'")->limit(1)->execute(clean_username($xml->user));
+				if ($objQuery && $objQuery->numRows){
+					$row = $objQuery->fetchAssoc();
+					
 					if (strpos($row['user_password'], ':') !== false){
 						list($user_password, $user_salt) = explode(':', $row['user_password']);
 						$out = array(
@@ -38,7 +39,8 @@ if (!class_exists('exchange_get_salt')){
 						);
 						return $out;
 					}
-				}
+				} 
+
 				return $this->pex->error('user not found');
 			}
 		}

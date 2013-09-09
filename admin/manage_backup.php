@@ -23,7 +23,7 @@ require_once($eqdkp_root_path . 'common.php');
 
 class EQDKPBackup extends page_generic{
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup', 'pdc', 'logs');
+		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db2', 'time', 'backup'=>'backup', 'pdc', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -119,13 +119,14 @@ class EQDKPBackup extends page_generic{
 			}
 		}
 
-		$arrTables = $this->db->get_tables(true);
+		$arrTables = $this->db2->listTables();
 		foreach($arrTables as $name){
+			if (!$this->db2->isEQdkpTable($name)) continue;
 			$tables[$name] = $name;
 		}
 
 		$this->jquery->Dialog('delete_warning', '', array('custom_js'=>"submit_form('backup_delete');", 'message'=>$this->user->lang('confirm_delete_backup')), 'confirm');
-		$this->jquery->Dialog('restore_warning', '', array('custom_js'=>"submit_form('restore');", 'message'=>$this->user->lang('confirm_restore_backup')), 'confirm');
+		$this->jquery->Dialog('restore_warning', '', array('custom_js'=>"submit_form('restore');", 'message'=>$this->user->lang('confirm_restore_backup'), 'height' => 300), 'confirm');
 		$this->jquery->Tab_header('backup_tabs');
 		$this->jquery->Tab_Select('backup_tabs', $tab);
 
@@ -222,7 +223,7 @@ class EQDKPBackup extends page_generic{
 			@set_time_limit(0);
 			while (($sql = $this->$fgetd($fp, ";\n", $read, $seek, $eof)) !== false){
 				if (strpos($sql, "--") === false && $sql != ""){
-					$this->db->query($sql);
+					$this->db2->query($sql);
 				}
 			}
 			$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $matches[1])),$this->user->lang('backup'),'green');

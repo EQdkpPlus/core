@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class MySQL_Info extends page_generic{
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'pm', 'core', 'config', 'db');
+		$shortcuts = array('user', 'tpl', 'pm', 'core', 'config', 'db2');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -43,20 +43,22 @@ class MySQL_Info extends page_generic{
 		$table_size = 0;
 		$index_size = 0;
 
-		$arrTables = $this->db->get_table_information(false, true);
+		$arrTables = $this->db2->listTables();
 
-		foreach ($arrTables as $key => $value){
+		foreach ($arrTables as $strTablename){
+			$arrTableInfos = $this->db2->fieldInformation($strTablename);
+			
 			$this->tpl->assign_block_vars('table_row', array(
-				'TABLE_NAME'	=> $key,
-				'ROWS'			=> $value['rows'],
-				'COLLATION'		=> $value['collation'],
-				'ENGINE'		=> $value['engine'],
-				'TABLE_SIZE'	=> $this->convert_db_size($value['data_length']),
-				'INDEX_SIZE'	=> $this->convert_db_size($value['index_length']))
+				'TABLE_NAME'	=> $strTablename,
+				'ROWS'			=> $arrTableInfos['rows'],
+				'COLLATION'		=> $arrTableInfos['collation'],
+				'ENGINE'		=> $arrTableInfos['engine'],
+				'TABLE_SIZE'	=> $this->convert_db_size($arrTableInfos['data_length']),
+				'INDEX_SIZE'	=> $this->convert_db_size($arrTableInfos['index_length']))
 			);
 
-			$index_size += $value['index_length'];
-			$table_size += $value['data_length'];
+			$index_size += $arrTableInfos['index_length'];
+			$table_size += $arrTableInfos['data_length'];
 			$table_count++;
 		}
 
@@ -69,7 +71,7 @@ class MySQL_Info extends page_generic{
 			'DB_ENGINE'			=> $this->dbtype,
 			'DB_NAME'			=> $this->dbname,
 			'DB_PREFIX'			=> $this->table_prefix,
-			'DB_VERSION'		=> 'Client ('.$this->db->client_version().')<br/>Server ('.$this->db->server_version().')',
+			'DB_VERSION'		=> 'Client ('.$this->db2->client_version.')<br/>Server ('.$this->db2->server_version.')',
 		));
 
 		$this->core->set_vars(array(

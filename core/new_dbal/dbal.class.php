@@ -187,6 +187,10 @@ abstract class Database extends gen_class {
 			return $this->get_client_version();
 		}
 		
+		if ($strKey == 'server_version') {
+			return $this->get_server_version();
+		}
+		
 		if ($strKey == 'error') {
 			return $this->strError;
 		}
@@ -250,13 +254,16 @@ abstract class Database extends gen_class {
 	 * @param string
 	 * @return Database_Result
 	 */
-	public function query($strQuery){
+	public function query($strQuery, $blnGetFirstRow=false){
 		$strQuery = str_replace('__', $this->strTablePrefix, $strQuery);
 		$this->intQueryCount++;
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		try {
 			$objQuery = $objStatement->query($strQuery);
-			return $objQuery;
+			if($blnGetFirstRow){
+				$arrResult = $objQuery->fetchAssoc();
+				return $arrResult;
+			} else return $objQuery;
 		} catch(iDBALQueryException $e){
 			$this->error($e->getMessage(), $e->getQuery(), $e->getCode());
 		}
@@ -305,6 +312,10 @@ abstract class Database extends gen_class {
 	public function listFields($strTable){
 		$arrReturn = $this->list_fields($strTable);
 		return $arrReturn;
+	}
+	
+	public function fieldInformation($strTable){
+		return $this->field_information($strTable);
 	}
 	
 	/**
@@ -422,12 +433,14 @@ abstract class Database extends gen_class {
 	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false);
 	abstract protected function disconnect();
 	abstract protected function get_client_version();
+	abstract protected function get_server_version();
 	abstract protected function get_error();
 	abstract protected function get_connerror();
 	abstract protected function begin_transaction();
 	abstract protected function commit_transaction();
 	abstract protected function rollback_transaction();
 	abstract protected function list_fields($strTable);
+	abstract protected function field_information($strTable);
 	abstract protected function set_database($strDatabase);
 	abstract protected function get_size_of($strTable);
 	abstract protected function get_next_id($strTable);

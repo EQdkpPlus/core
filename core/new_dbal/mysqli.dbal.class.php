@@ -82,7 +82,10 @@ class idbal_mysqli extends Database
 	protected function get_client_version() {
 		return @$this->resConnection->get_client_info();
 	}
-
+	
+	protected function get_server_version(){
+		return @$this->resConnection->get_server_info();
+	}
 
 	/**
 	 * Return the last error message
@@ -294,6 +297,19 @@ class idbal_mysqli extends Database
 										  ->fetch_object();
 
 		return ($objStatus->Data_length + $objStatus->Index_length);
+	}
+	
+	protected function field_information($strTable){
+		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
+		->fetch_object();
+		return array(
+			'data_length'	=> $objStatus->Data_length,
+			'index_length'	=> $objStatus->Index_length,
+			'rows'			=> $objStatus->Rows,
+			'collation'		=> $objStatus->Collation,
+			'engine'		=> $objStatus->Engine,
+			'auto_increment'=> $objStatus->Auto_increment,
+		);
 	}
 
 

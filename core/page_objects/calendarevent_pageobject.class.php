@@ -18,7 +18,7 @@
 class calendarevent_pageobject extends pageobject {
 
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'db', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
+		$shortcuts = array('user', 'db2', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	
@@ -269,9 +269,11 @@ class calendarevent_pageobject extends pageobject {
 
 			//fetch the attendees
 			$a_attendees	= array();
-			$q_attendees	= $this->db->query("SELECT DISTINCT member_id FROM __calendar_raid_attendees WHERE calendar_events_id=".$this->db->escape($this->url_id)." AND signup_status=1");
-			while($arow = $this->db->fetch_record($q_attendees)){
-				$a_attendees[] = $arow['member_id'];
+			$objQuery = $this->db2->prepare("SELECT DISTINCT member_id FROM __calendar_raid_attendees WHERE calendar_events_id=? AND signup_status=1")->execute($this->url_id);
+			if ($objQuery){
+				while($arow = $objQuery->fetchAssoc()){
+					$a_attendees[] = $arow['member_id'];
+				}
 			}
 
 			// send mail to attendees

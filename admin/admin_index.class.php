@@ -17,7 +17,7 @@
  */
 if(!class_exists('admin_index')) {
 class admin_index extends gen_class {
-	public static $shortcuts = array('user', 'in', 'core', 'config', 'tpl', 'game', 'jquery', 'pm', 'time', 'pdh', 'db', 'pdc',
+	public static $shortcuts = array('user', 'in', 'core', 'config', 'tpl', 'game', 'jquery', 'pm', 'time', 'pdh', 'db2', 'pdc',
 		'xmltools'	=> 'xmltools',
 		'puf'		=> 'urlfetcher',
 		'UpdateCheck'	=> 'repository',
@@ -205,13 +205,15 @@ class admin_index extends gen_class {
 		$total_members_active	= count($this->pdh->get('member', 'id_list', array(true)));
 		$total_members_inactive	= $total_members_ - $total_members_active;
 		$total_members			= $total_members_active . ' / ' . $total_members_inactive;
-
-		$total_raids			= $this->db->query_first('SELECT count(*) FROM __raids');
+		
+		$objTotalRaids			= $this->db2->query('SELECT count(*) as count FROM __raids', true);
+		$total_raids			= $objTotalRaids['count'];
 		$raids_per_day			= sprintf("%.2f", ($total_raids / $days));
-
-		$total_items			= $this->db->query_first('SELECT count(*) FROM __items');
+		$objTotalItems			= $this->db2->query('SELECT count(*) as count FROM __items', true);
+		$total_items			= $objTotalItems['count'];
 		$items_per_day			= sprintf("%.2f", ($total_items / $days));
-		$total_logs				= $this->db->query_first('SELECT count(*) FROM __logs');
+		$objTotalLogs			= $this->db2->query('SELECT count(*) as count FROM __logs', true);
+		$total_logs				= $objTotalLogs['count'];
 
 		if ( (float)$raids_per_day > (float)$total_raids ){
 			$raids_per_day = $total_raids;
@@ -220,10 +222,10 @@ class admin_index extends gen_class {
 			$items_per_day = $total_items;
 		}
 
-		$arrTables = $this->db->get_table_information();
+		$arrTables = $this->db2->listTables();
 		$dbsize = 0;
-		foreach ($arrTables as $key => $value){
-			$dbsize += $value['data_length'] + $value['index_length'];
+		foreach ($arrTables as $key => $strTablename){			
+			$dbsize += $this->db2->getSizeOf($strTablename);;
 		}
 
 		if(is_int($dbsize)){
@@ -269,22 +271,21 @@ class admin_index extends gen_class {
 							ON u.user_id = s.session_user_id )
 							GROUP BY u.username, s.session_ip
 							ORDER BY u.username, s.session_current DESC';
-		$result = $this->db->query($sql);
-		while ($row = $this->db->fetch_record($result)){
-			$username = ( !empty($row['username']) ) ? $row['username'] : (($this->admin_functions->resolve_bots($row['session_browser'])) ? $this->admin_functions->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
-			$this->tpl->assign_block_vars('online_row', array(
-				'USERNAME'		=> sanitize($username),
-				'LOGIN'			=> $this->time->user_date($row['session_start'], true),
-				'LAST_UPDATE'	=> $this->time->user_date($row['session_current'], true),
-				'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
-				'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
-				'IP_ADDRESS'	=> sanitize($row['session_ip']))
-			);
-		}
-		$online_count = $this->db->num_rows($result);
-		
-		//$this->jquery->qtip('.ip_resolver', 'Loading', array('ajax' => "url: '".$this->root_path."admin/index.php".$this->SID."', type:'GET', data:{ip_resolve: $(this).html()}"));
-		
+		$result = $this->db2->query($sql);
+		if ($result){
+			while ($row = $result->fetchAssoc()){
+				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->admin_functions->resolve_bots($row['session_browser'])) ? $this->admin_functions->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
+				$this->tpl->assign_block_vars('online_row', array(
+					'USERNAME'		=> sanitize($username),
+					'LOGIN'			=> $this->time->user_date($row['session_start'], true),
+					'LAST_UPDATE'	=> $this->time->user_date($row['session_current'], true),
+					'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
+					'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
+					'IP_ADDRESS'	=> sanitize($row['session_ip']))
+				);
+			}
+			$online_count = $result->numRows;
+		} else $online_count = 0;
 
 		// Log Actions
 		$s_logs = false;
@@ -315,7 +316,7 @@ class admin_index extends gen_class {
 			'SERVERINFO_REGGLOBAL'	=> $this->get_php_setting('register_globals',1,0),
 			'SERVERINFO_CURL'		=> $this->get_curl_setting(1),
 			'SERVERINFO_FOPEN'		=> $this->check_PHP_Function('fopen',1),
-			'SERVERINFO_MYSQL'		=> 'Client ('.$this->db->client_version().')<br/>Server ('.$this->db->server_version().')',
+			'SERVERINFO_MYSQL'		=> 'Client ('.$this->db2->client_version.')<br/>Server ('.$this->db2->server_version.')',
 			'SERVERINFO_PHP'		=> (((phpversion() >= VERSION_PHP_RQ) ? '<span class="positive">' : '<span class="negative">').phpversion().'</span>'),
 
 			'NUMBER_OF_MEMBERS'		=> $total_members,
