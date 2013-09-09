@@ -101,13 +101,19 @@ $(function(){
 
 	// the search filed
 	var unsigned_attendees_f 	= unsigned_attendees;
+	// TODO: rewrite that for 2.0.. i think the unsigned_f is not longer usefull..
 	$('#notsignedfilter').bind('keyup change', function(){
-		searchname	= $(this).val();
+		searchname			= $(this).val();
+		filter_unsigned = [];
 		unsigned_attendees_f = $.grep(unsigned_attendees, function(unsignarr){
 	    	return unsignarr.name.match(new RegExp(searchname, 'i'));
-			//return (unsignarr.name.indexOf(searchname) != -1);
 		});
-		populate_unsigned(unsigned_attendees_f, a_checkboxes);
+		
+		// populate the filter
+		$.each(unsigned_attendees_f, function(i, item) {
+			filter_unsigned.push(item.id);
+		});
+		populate_unsigned(unsigned_attendees, a_checkboxes, filter_unsigned);
 
 		// disable the right chars..
 		$('.notsigned_check:checkbox:checked').each(function() {
@@ -166,10 +172,14 @@ function check_unsigned(selector, unsigned_attendees_f, a_checkboxes){
 	}
 }
 
-function populate_unsigned(arrAttendees, arrCheckboxes){
+function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	attoutput = '';
 	$.each(arrAttendees, function(i, item) {
-		checkbox_checked = (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
+		checkbox_checked	= (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
+		// TODO: Use css class instead of style tag
+		filter_applied		= (typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) ? ' style="display:none;"' : '';
+		
+		attoutput += '<div id="unsigened_'+item.id+'"'+filter_applied+'>';
 		attoutput += '<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="'+item.id+'" id="member'+item.id+'" title="'+item.userid+'" class="notsigned_check" '+checkbox_checked+' /> <!-- ENDIF -->';
 		if(item.class_icon != ''){
 			attoutput += item.class_icon;
@@ -188,7 +198,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes){
 			});
 			attoutput += '</select>';
 		}
-		attoutput += "<br/>";
+		attoutput += "</div>";
 	});
 	$("#memberScroller").html(attoutput);
 }
