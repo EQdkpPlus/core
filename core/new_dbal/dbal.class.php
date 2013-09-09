@@ -217,7 +217,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Result
 	 */
 	public function execute($strQuery){
-		$strQuery = str_replace(' __', ' '.$this->strTablePrefix, $strQuery);
+		$strQuery = str_replace('__', $this->strTablePrefix, $strQuery);
 		
 		// log the query
 		$this->pdl->log($this->strDebugPrefix . 'sql_query', $strQuery);
@@ -231,7 +231,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Result
 	 */
 	public function query($strQuery){
-		$strQuery = str_replace(' __', ' '.$this->strTablePrefix, $strQuery);
+		$strQuery = str_replace('__', $this->strTablePrefix, $strQuery);
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		try {
 			$objQuery = $objStatement->query($strQuery);
@@ -393,6 +393,11 @@ abstract class Database extends gen_class {
 		return true;
 	}
 	
+	public function escapeString($strString){
+		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
+		return $objStatement->escapeString();
+	}
+	
 	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false);
 	abstract protected function disconnect();
 	abstract protected function get_client_version();
@@ -545,8 +550,8 @@ abstract class DatabaseStatement {
 	{
 		$arrParams = $this->escapeParams($arrParams);
 
-		// INSERT
-		if (strncasecmp($this->strQuery, 'INSERT', 6) === 0)
+		// INSERT / REPLACE
+		if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 		{
 			$strQuery = sprintf('(%s) VALUES (%s)',
 								implode(', ', array_keys($arrParams)),
@@ -736,6 +741,10 @@ abstract class DatabaseStatement {
 		return $arrParams;
 	}
 	
+	public function escapeString($strString){
+		return $this->string_escape($strString);
+	}
+		
 	abstract protected function prepare_query($strQuery);
 	abstract protected function string_escape($strString);
 	abstract protected function limit_query($intOffset, $intRows);
