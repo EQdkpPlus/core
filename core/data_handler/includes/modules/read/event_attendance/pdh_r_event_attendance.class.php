@@ -74,8 +74,9 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 
 			if($time_period != 'LT') {
 				//midnight of x days before
-				$first_date = $this->time->time - ($time_period*86400);
-				$first_date -= $first_date%86400;
+				$first_date = $this->time->time-($time_period*86400);
+				$first_date -= 3600*$this->time->date('H')+60*$this->time->date('i')+$this->time->date('s');
+				
 				$first_date = array('member' => $first_date, 'main' => $first_date);
 			} else {
 				$first_date['member'] = $this->pdh->get('member_dates', 'first_raid', array($member_id, null, false));
@@ -150,7 +151,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 
 		public function get_html_attendance($member_id, $event_id, $time_period, $with_twinks=true){
 			$data = $this->get_attendance($member_id, $event_id, $time_period, $with_twinks, true);
-			$percent = runden($data['member_attendance']*100);
+			$percent = round($data['member_attendance']*100);
 			return $this->jquery->ProgressBar('evatt_'.$member_id.'_'.$event_id, $percent, $percent.'% ('.$data['member_raidcount'].'/'.$data['total_raidcount'].')', 'center', true);
 			return '<span class="'.color_item($percent*100, true).'">'.$percent*100 .'% ('.$data['member_raidcount'].'/'.$data['total_raidcount'].')</span>';
 		}

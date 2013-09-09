@@ -72,6 +72,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				return true;
 			}
 			$this->twink2main = $this->pdh->aget('member', 'mainid', 0, array($this->pdh->get('member', 'id_list')));
+
 			//initialise the basic array
 			$this->member_attendance[$time_period] = array();
 			foreach($this->pdh->get('member', 'id_list') as $member_id){
@@ -112,6 +113,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				if(!in_array($mdkp_id, $mdkpids)) continue;
 
 				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+				$mains = array();
 				//increment attendence counter
 				if(is_array($attendees)) {
 					foreach($attendees as $attendee_id){
@@ -185,7 +187,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
-			$percentage = ( $total_raidcount > 0 ) ? round(($member_raidcount/$total_raidcount) * 100) : 0;
+			$percentage = ( $total_raidcount > 0 ) ? round(($member_raidcount/$total_raidcount) * 100, 2) : 0;
 
 			return '<span class="'.color_item($percentage, true).'">'.$percentage.'% ('.$member_raidcount.'/'.$total_raidcount.')</span>';
 		}
