@@ -23,7 +23,7 @@
 define('EQDKP_INC', true);
 $eqdkp_root_path = './../';
 
-ini_set("display_errors", 0);
+ini_set("display_errors", 1);
 define('DEBUG', 99);
 
 include_once($eqdkp_root_path.'core/super_registry.class.php');
@@ -51,6 +51,14 @@ if($dbtype = registry::get_const('dbtype')) {
 	include_once($eqdkp_root_path.'core/dbal/dbal.php');
 	include_once($eqdkp_root_path.'core/dbal/'.$dbtype.'.php');
 }
+
+//New DBAL
+if($dbtype = registry::get_const('dbtype')) {
+	include_once(registry::get_const('root_path') .'core/new_dbal/dbal.class.php');
+	require_once(registry::get_const('root_path') . 'core/new_dbal/' . registry::get_const('dbtype') . '.dbal.class.php');
+	registry::$aliases['db2'] = array('idbal_'.registry::get_const('dbtype'), array(array('open' => true)));		
+}
+
 include_once($eqdkp_root_path . 'core/constants.php');
 include_once($eqdkp_root_path . 'core/core.functions.php');
 include_once($eqdkp_root_path . 'install/install.class.php');

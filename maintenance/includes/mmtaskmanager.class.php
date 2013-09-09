@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "mmtaskmanager" ) ) {
 	class mmtaskmanager extends gen_class {
-		public static $shortcuts = array('db', 'config');
+		public static $shortcuts = array('db2', 'config');
 
 		private $tasks		= array();
 		public $task_data	= array();
@@ -40,12 +40,14 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 				}
 			}
 			//scan update-tasks from installed plugins
-			$plug_res = $this->db->query("SELECT code FROM __plugins WHERE status = '1';");
+			$objQuery = $this->db2->query("SELECT code FROM __plugins WHERE status = '1';");
 			$plugs = array();
-			while ( $row = $this->db->fetch_record($plug_res) ) {
-				$plugs[] = $row['code'];
+			if ($objQuery){
+				while ( $row = $objQuery->fetchAssoc() ) {
+					$plugs[] = $row['code'];
+				}
 			}
-			$this->db->free_result($plug_res);
+			
 			$task_dir = $this->root_path.'plugins/';
 			$folder = scandir($task_dir);
 			foreach($folder as $file) {

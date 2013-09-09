@@ -91,6 +91,8 @@ abstract class Database extends gen_class {
 	protected	$strCharset = "utf8";
 	private		$blnInConstruct = true;
 	protected	$strDatabase = '';
+	protected 	$strError = '';
+	protected	$intErrno = '';
 	
 	
 	public function __construct($arrOptions = array()){
@@ -183,12 +185,23 @@ abstract class Database extends gen_class {
 		if ($strKey == 'client_version') {
 			return $this->get_client_version();
 		}
+		
+		if ($strKey == 'error') {
+			return $this->strError;
+		}
+		
+		if ($strKey == 'errno') {
+			return $this->intErrno;
+		}
 
 		return null;
 	}
 	
 	protected function error($strErrorMessage, $strQuery, $strErrorCode = '') {
 		static $sys_message = false;
+		$this->strError = $strErrorMessage;
+		$this->intErrno = $strErrorCode;
+		
 		if(!$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
@@ -395,7 +408,7 @@ abstract class Database extends gen_class {
 	
 	public function escapeString($strString){
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
-		return $objStatement->escapeString();
+		return $objStatement->escapeString($strString);
 	}
 	
 	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false);

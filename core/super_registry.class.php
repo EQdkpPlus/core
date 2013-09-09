@@ -27,6 +27,7 @@ abstract class super_registry {
 		'config' 	=> 'config',
 		'user'		=> '_user_',
 		'db'		=> '_dbal_',
+		'db2'		=> '_dbal_',
 		'bridge'	=> '_bridge_',
 		'in'		=> 'input',
 		'pdh'		=> 'plus_datahandler',
@@ -116,11 +117,16 @@ abstract class super_registry {
 			define('USER',		0);
 			define('CRONJOB', -2);
 			
+			//New DBAL
+			include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
+			require_once(self::get_const('root_path') . 'core/new_dbal/' . self::$const['dbtype'] . '.dbal.class.php');
+			self::$aliases['db2'] = array('idbal_'.self::$const['dbtype'], array(array('open' => true)));
+			
 			// Database Connectors
 			require(self::$const['root_path'] . 'core/dbal/dbal.php');
 			require_once(self::get_const('root_path') . 'core/dbal/' . self::$const['dbtype'] . '.php');
 			self::$aliases['db'] = array('dbal_'.self::$const['dbtype'], array(array('open' => true)));
-
+			
 			registry::register('input');
 			registry::register('config');
 			self::set_debug_level();
@@ -133,10 +139,6 @@ abstract class super_registry {
 			self::$const['server_path'] = registry::register('config')->get('server_path');
 			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
-			
-			//New DBAL
-			include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
-			self::$const['db2'] = idbal::factory(array('open' => true, 'debug_prefix' => 'dbal2'));
 			
 			//Bridge
 			include_once($root_path . 'core/bridge_generic.class.php');
@@ -230,6 +232,8 @@ abstract class super_registry {
 				redirect();
 			}
 		} catch (DBALException $e){
+			registry::register('plus_debug_logger')->catch_dbal_exception($e);
+		} catch(iDBALException $e){
 			registry::register('plus_debug_logger')->catch_dbal_exception($e);
 		}
 	}

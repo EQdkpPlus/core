@@ -44,8 +44,8 @@ class db_access extends install_generic {
 					<select name="dbtype" class="input">
 					';
 		// Build the database drop-down
-		include_once($this->root_path.'core/dbal/dbal.php');
-		foreach ( dbal::available_dbals() as $db_type => $db_name ){
+		include_once($this->root_path.'core/new_dbal/dbal.class.php');
+		foreach ( idbal::available_dbals() as $db_type => $db_name ){
 			$selected = ($db_type == $this->dbtype) ? ' selected="selected"' : '';
 			$content .= '	<option value="'.$db_type.'"'.$selected.'>'.$db_name.'</option>
 					';
@@ -100,16 +100,31 @@ class db_access extends install_generic {
 		}
 
 		$error = array();
-		include_once($this->root_path.'core/dbal/dbal.php');
-		$db = dbal::factory(array('dbtype' => $this->dbtype, 'die_gracefully' => true));
-		$connect_test = $db->check_connection(true, $error, $this->lang, $this->table_prefix, $this->dbhost, $this->dbuser, $this->dbpass, $this->dbname);
-
-		if(count($error) > 0) {
-			foreach($error as $amsg){
-				$this->pdl->log('install_error', $amsg);
-			}
+		include_once($this->root_path.'core/new_dbal/dbal.class.php');
+		try {
+			$db = idbal::factory(array('dbtype' => $this->dbtype));
+			$db->connect($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass);
+		
+		} catch(iDBALException $e){
+			$this->pdl->log('install_error', $e->getMessage());
 			return false;
 		}
+		
+		//Check the Table Prefix
+		if (strpos($this->table_prefix, '.') !== false || strpos($this->table_prefix, '\\') !== false || strpos($this->table_prefix, '/') !== false) {
+			$this->pdl->log('install_error', $this->lang['INST_ERR_PREFIX_INVALID']);
+			return false;
+		}		
+		
+		//Check for existing Installation
+		$arrTables = $db->listTables();
+		foreach($arrTables as $tbl) {
+			if(strncasecmp($tbl, $this->table_prefix, strlen($this->table_prefix)) == 0) {
+				$this->pdl->log('install_error', $this->lang['INST_ERR_PREFIX']);
+				return false;
+			}
+		}
+		
 		$this->pdl->log('install_success', $this->lang['dbcheck_success']);
 		
 		//Before writing the config-file, we have to check the writing-permissions of the tmp-folder
@@ -119,8 +134,8 @@ class db_access extends install_generic {
 		}
 		
 		$this->configfile_fill();
-		registry::$aliases['db'] = 'dbal_'.$this->dbtype;
-		include_once($this->root_path.'core/dbal/'.$this->dbtype.'.php');
+		registry::$aliases['db2'] = 'idbal_'.$this->dbtype;
+		include_once($this->root_path.'core/new_dbal/'.$this->dbtype.'.dbal.class.php');
 		return true;
 
 		//maybe show version?

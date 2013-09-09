@@ -28,7 +28,7 @@ class update_200 extends sql_update_task {
 	public $name		= '2.0.0 Migration from 1.x';
 
 	public static function __shortcuts() {
-		$shortcuts = array('time', 'config', 'routing', 'pdc');
+		$shortcuts = array('time', 'config', 'routing', 'pdc', 'db2');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	
@@ -325,84 +325,90 @@ class update_200 extends sql_update_task {
 	public function update_function(){
 		//Set Default Settings
 		$this->config->set( 'start_page' , 'news');
-		$arrQuery = $this->db->query_first("SELECT style_id FROM __styles WHERE template_path='eqdkp_modern'");
-		$this->config->set('default_style', (int)$arrQuery);
+		$objQuery = $this->db2->query("SELECT style_id FROM __styles WHERE template_path='eqdkp_modern'");
+		if ($objQuery) $arrData = $objQuery->fetchAssoc();
+		
+		$this->config->set('default_style', (int)$arrData['style_id']);
 		$this->config->set('default_style_overwrite', 1);
 		$this->config->set('mainmenu', 'a:6:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"828e0013b8f3bc1bb22b4f57172b019d";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"fd613a0f87638ad1372d9b06bad29cb3";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}}}}');
 		
 		
 		//Migrate News		
 		$sql = "SELECT * FROM __news";
-		$query = $this->db->query($sql);
-		while ($row = $this->db->fetch_record($query)) {
-			$message = $row['news_message'];
-			if ($row['extended_message'] != ""){
-				$message .= '<hr id="system-readmore" />';
-				$message .= $row['extended_message'];
-			}	
+		$query = $this->db2->query($sql);
+		if ($query){
+			while ($row = $query->fetchAssoc()) {
+				$message = $row['news_message'];
+				if ($row['extended_message'] != ""){
+					$message .= '<hr id="system-readmore" />';
+					$message .= $row['extended_message'];
+				}	
+				
+				$this->db2->prepare("INSERT INTO __articles :p")->set(array(
+						'title' 			=> $row['news_headline'],
+						'text'				=> $message,
+						'category'			=> 2,
+						'featured'			=> 0,
+						'comments'			=> !intval($row['nocomments']),
+						'votes'				=> 0,
+						'published'			=> 1,
+						'show_from'			=> $row['news_start'],
+						'show_to'			=> $row['news_stop'],
+						'user_id'			=> $row['user_id'],
+						'date'				=> $row['news_date'],
+						'previewimage'		=> "",
+						'alias'				=> $this->routing->clean($row['news_headline'].''.$row['news_id']),
+						'hits'				=> 0,
+						'sort_id'			=> 0,
+						'tags'				=> serialize(array()),
+						'votes_count'		=> 0,
+						'votes_sum'			=> 0,
+						'last_edited'		=> $row['news_date'],
+						'last_edited_user'	=> $row['user_id'],
+						'page_objects'		=> serialize(array()),
+						'hide_header'		=> 0,					
+				))->execute();
+			}
+			$prefix = registry::get_const("table_prefix");
 			
-			$this->db->query("INSERT INTO __articles :params", array(
-					'title' 			=> $row['news_headline'],
-					'text'				=> $message,
-					'category'			=> 2,
-					'featured'			=> 0,
-					'comments'			=> !intval($row['nocomments']),
-					'votes'				=> 0,
-					'published'			=> 1,
-					'show_from'			=> $row['news_start'],
-					'show_to'			=> $row['news_stop'],
-					'user_id'			=> $row['user_id'],
-					'date'				=> $row['news_date'],
-					'previewimage'		=> "",
-					'alias'				=> $this->routing->clean($row['news_headline'].''.$row['news_id']),
-					'hits'				=> 0,
-					'sort_id'			=> 0,
-					'tags'				=> serialize(array()),
-					'votes_count'		=> 0,
-					'votes_sum'			=> 0,
-					'last_edited'		=> $row['news_date'],
-					'last_edited_user'	=> $row['user_id'],
-					'page_objects'		=> serialize(array()),
-					'hide_header'		=> 0,					
-			));
+			$this->db2->query("RENAME TABLE `__news` TO `!OBSOLETE_".$prefix."news`;");
+			$this->db2->query("RENAME TABLE `__news_categories` TO `!OBSOLETE_".$prefix."news_categories`;");
 		}
-		$prefix = registry::get_const("table_prefix");
-		
-		$this->db->query("RENAME TABLE `__news` TO `!OBSOLETE_".$prefix."news`;");
-		$this->db->query("RENAME TABLE `__news_categories` TO `!OBSOLETE_".$prefix."news_categories`;");
 		
 		//Migrate Infopages
 		$sql = "SELECT * FROM __pages";
-		$query = $this->db->query($sql);
-		while ($row = $this->db->fetch_record($query)) {
-							
-			$this->db->query("INSERT INTO __articles :params", array(
-					'title' 			=> $row['page_title'],
-					'text'				=> $row['page_content'],
-					'category'			=> 7,
-					'featured'			=> 0,
-					'comments'			=> intval($row['page_comments']),
-					'votes'				=> intval($row['page_voting']),
-					'published'			=> 1,
-					'show_from'			=> '',
-					'show_to'			=> '',
-					'user_id'			=> $row['page_edit_user'],
-					'date'				=> $row['page_edit_date'],
-					'previewimage'		=> "",
-					'alias'				=> $this->routing->clean($row['page_title'].''.$row['page_id']),
-					'hits'				=> 0,
-					'sort_id'			=> 0,
-					'tags'				=> serialize(array()),
-					'votes_count'		=> 0,
-					'votes_sum'			=> 0,
-					'last_edited'		=> $row['page_edit_date'],
-					'last_edited_user'	=> $row['page_edit_user'],
-					'page_objects'		=> serialize(array()),
-					'hide_header'		=> 0,
-			));
+		$query = $this->db2->query($sql);
+		if ($query){
+			while ($row = $query->fetchAssoc()) {
+				
+				$this->db2->prepare("INSERT INTO __articles :p")->set(array(
+						'title' 			=> $row['page_title'],
+						'text'				=> $row['page_content'],
+						'category'			=> 7,
+						'featured'			=> 0,
+						'comments'			=> intval($row['page_comments']),
+						'votes'				=> intval($row['page_voting']),
+						'published'			=> 1,
+						'show_from'			=> '',
+						'show_to'			=> '',
+						'user_id'			=> $row['page_edit_user'],
+						'date'				=> $row['page_edit_date'],
+						'previewimage'		=> "",
+						'alias'				=> $this->routing->clean($row['page_title'].''.$row['page_id']),
+						'hits'				=> 0,
+						'sort_id'			=> 0,
+						'tags'				=> serialize(array()),
+						'votes_count'		=> 0,
+						'votes_sum'			=> 0,
+						'last_edited'		=> $row['page_edit_date'],
+						'last_edited_user'	=> $row['page_edit_user'],
+						'page_objects'		=> serialize(array()),
+						'hide_header'		=> 0,
+				))->execute();
+								
+			}
+			$this->db2->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
 		}
-		$this->db->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
-			
 		//Update Colors
 		$this->update_colors();
 		
@@ -418,16 +424,18 @@ class update_200 extends sql_update_task {
 			foreach($dbfields['field'] as $dbfieldvalue){
 				// now, lets change the values
 				$sql	= 'SELECT '.$dbfieldvalue.' as mycolorvalue, '.$dbfields['id'].' as mycolorid FROM '.$dbtable.';';
-				$query = $this->db->query($sql);
+				$query = $this->db2->query($sql);
 				$update = array();
-				while ($row = $this->db->fetch_record($query)) {
-					if(trim($row['mycolorvalue']) != ''){
-						// check if the # is already in the value
-						if (preg_match('/^#[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
-							continue;
-						}else if (preg_match('/^[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
-							$sql = "UPDATE ".$dbtable." SET ".$dbfieldvalue." = '#".$row['mycolorvalue']."' WHERE ".$dbfields['id']." = '".$row['mycolorid']."';";
-							$this->db->query($sql);
+				if ($query){
+					while ($row = $query->fetchAssoc()) {
+						if(trim($row['mycolorvalue']) != ''){
+							// check if the # is already in the value
+							if (preg_match('/^#[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
+								continue;
+							}else if (preg_match('/^[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
+								$sql = "UPDATE ".$dbtable." SET ".$dbfieldvalue." = '#".$row['mycolorvalue']."' WHERE ".$dbfields['id']." = '".$row['mycolorid']."';";
+								$this->db2->query($sql);
+							}
 						}
 					}
 				}

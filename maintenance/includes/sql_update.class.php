@@ -26,7 +26,7 @@ if ( !class_exists( "task" ) ) {
 
 class sql_update extends task {
 	public static function __shortcuts() {
-		$shortcuts = array('config', 'user', 'in', 'db',
+		$shortcuts = array('config', 'user', 'in', 'db2',
 			'mmt'	=> 'mmtaskmanager'
 		);
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -126,7 +126,7 @@ class sql_update extends task {
 		$this->form .= '<table width="100%" align="center" class="colorswitch">';
 		foreach($sqls as $key => $sql) {
 			$this->form .= '<tr><td>';
-			if($this->db->query($sql)) {
+			if($this->db2->query($sql)) {
 				$this->form .= '<i class="icon-ok icon-green"></i> ';
 			} else {
 				$this->form .= '<i class="icon-remove icon-red"></i> ';
@@ -135,7 +135,7 @@ class sql_update extends task {
 				
 		}
 		if($this->plugin_path) {
-			$this->db->query("UPDATE __plugins SET version = '".$version."' WHERE code = '".$this->plugin_path."';");
+			$this->db2->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
 		} else {
 			$this->config->set('plus_version', $version);
 		}

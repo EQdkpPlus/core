@@ -81,7 +81,7 @@ class php_check extends install_generic {
 		);
 	}
 	
-	private function check_php_limit($size){
+	private function check_php_limit(){
 		$installed = ini_get('memory_limit');
 		if (intval($installed) == -1) return true;
 		$needed = REQ_PHP_MEMORY;
@@ -108,7 +108,7 @@ class php_check extends install_generic {
 	private function do_match_opt(){
 		$allmatched_opt		= false;
 		foreach($this->getCheckParams() as $fname=>$fdata){
-			$allmatched_opt = ($fdata['adviced_fail']) ? true : $allmatched_opt;
+			$allmatched_opt = (isset($fdata['adviced_fail']) && $fdata['adviced_fail']) ? true : $allmatched_opt;
 		}
 		return $allmatched_opt;
 	}

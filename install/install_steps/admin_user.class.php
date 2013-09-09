@@ -19,7 +19,7 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class admin_user extends install_generic {
-	public static $shortcuts = array('pdl', 'in', 'user', 'db', 'time', 'config', 'crypt' => 'encrypt');
+	public static $shortcuts = array('pdl', 'in', 'user', 'db2', 'time', 'config', 'crypt' => 'encrypt');
 	public static $before 		= 'inst_settings';
 
 	public $next_button		= 'create_user';
@@ -77,9 +77,9 @@ class admin_user extends install_generic {
 		$this->config->set('admin_email', $strEmail);
 		$salt = $this->user->generate_salt();
 		$password = $this->user->encrypt_password($this->in->get('user_password1'), $salt);
-		$this->db->query("TRUNCATE __users;");
-
-		$this->db->query("INSERT INTO __users :params", array(
+		$this->db2->query("TRUNCATE __users;");
+		
+		$this->db2->prepare("INSERT INTO __users :p")->set(array(
 			'user_id'		=> 1,
 			'username'		=> $this->username,
 			'user_password'	=> $password.':'.$salt,
@@ -94,8 +94,9 @@ class admin_user extends install_generic {
 			'user_date_time' => $this->config->get('default_date_time'),
 			'user_date_short' => $this->config->get('default_date_short'),
 			'user_date_long' => $this->config->get('default_date_long'),
-		));
-		$this->db->query("INSERT INTO __groups_users (group_id, user_id, grpleader) VALUES (2,1,1);");
+		))->execute();
+
+		$this->db2->query("INSERT INTO __groups_users (group_id, user_id, grpleader) VALUES (2,1,1);");
 		$this->user->login($this->username, $this->in->get('user_password1'), $this->in->exists('auto_login'));
 		return true;
 	}

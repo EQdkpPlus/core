@@ -24,7 +24,7 @@ require_once(registry::get_const('root_path') . 'maintenance/includes/task.aclas
 
 class sql_update_task extends task {
 	public static function __shortcuts() {
-		$shortcuts = array('config', 'in', 'user', 'db');
+		$shortcuts = array('config', 'in', 'user', 'db2');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -34,9 +34,12 @@ class sql_update_task extends task {
 	public function is_necessary() {
 		$version = $this->config->get('plus_version');
 		if($this->plugin_path) {
-			$data = $this->db->fetch_record($this->db->query("SELECT version, status FROM __plugins WHERE code = '".$this->plugin_path."';"));
-			if($data['status'] != 1) return false;
-			$version = $data['version'];
+			$objQuery = $this->db2->prepare("SELECT version, status FROM __plugins WHERE code =?")->execute($this->plugin_path);
+			if ($objQuery){
+				$data = $objQuery->fetchAssoc();
+				if($data['status'] != 1) return false;
+				$version = $data['version'];
+			} else $version = false;
 		}
 		if(compareVersion($version, $this->version) == -1 AND $version) {
 			return true;
