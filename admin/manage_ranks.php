@@ -95,7 +95,7 @@ class Manage_Ranks extends page_generic {
 		$key = 0;
 		$new_id = 1;
 
-		
+		d($ranks);
 		foreach($ranks as $id => $name) {
 			$this->tpl->assign_block_vars('ranks', array(
 				'KEY'	=> $key,
@@ -112,7 +112,7 @@ class Manage_Ranks extends page_generic {
 		$this->jquery->selectall_checkbox('selall_ranks', 'rank_ids[]');
 		$this->tpl->assign_vars(array(
 			'SID'		=> $this->SID,
-			'ID'		=> $new_id,
+			'ID'		=> max($this->pdh->get('rank', 'id_list')) + 1,
 			'KEY'		=> $key,
 		));
 
