@@ -135,6 +135,7 @@ class idbal_mysqli extends Database
 	 * - attributes: attributes (e.g. "unsigned")
 	 * - index:      PRIMARY, UNIQUE or INDEX
 	 * - extra:      extra information (e.g. auto_increment)
+	 * - numeric:	 true/false
 	 * @param string
 	 * @return array
 	 * @todo Support all kind of keys (e.g. FULLTEXT or FOREIGN).
@@ -151,20 +152,20 @@ class idbal_mysqli extends Database
 			$arrReturn[$k]['name'] = $v['Field'];
 			$arrReturn[$k]['type'] = $arrChunks[0];
 
-			if (strlen($arrChunks[1]))
+			if (isset($arrChunks[1]) && strlen($arrChunks[1]))
 			{
 				$arrChunks[1] = str_replace(array('(', ')'), array('', ''), $arrChunks[1]);
 				$arrSubChunks = explode(',', $arrChunks[1]);
 
 				$arrReturn[$k]['length'] = trim($arrSubChunks[0]);
 
-				if (strlen($arrSubChunks[1]))
+				if (isset($arrSubChunks[1]) && strlen($arrSubChunks[1]))
 				{
 					$arrReturn[$k]['precision'] = trim($arrSubChunks[1]);
 				}
 			}
 
-			if (strlen($arrChunks[2]))
+			if (isset($arrChunks[2]) && strlen($arrChunks[2]))
 			{
 				$arrReturn[$k]['attributes'] = trim($arrChunks[2]);
 			}
@@ -194,6 +195,8 @@ class idbal_mysqli extends Database
 			$arrReturn[$k]['null'] = ($v['Null'] == 'YES') ? 'NULL' : 'NOT NULL';
 			$arrReturn[$k]['default'] = $v['Default'];
 			$arrReturn[$k]['extra'] = $v['Extra'];
+			$arrNumeric = array("tinyint", "smallint", "mediumint", "int", "bigint", "bit", "float", "double", "decimal");
+			$arrReturn[$k]['numeric'] = (in_array($arrReturn[$k]['type'], $arrNumeric));
 		}
 
 		$arrIndexes = $this->query("SHOW INDEXES FROM `$strTable`")->fetchAllAssoc();
@@ -319,8 +322,14 @@ class idbal_mysqli extends Database
 		return new DB_Mysqli_Statement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit);
 	}
 	
-	protected function show_create_table($strTable){
-	
+	protected function show_create_table($strTable){	
+		$objQuery = $this->query("SHOW CREATE TABLE ".$strTable);
+		if ($objQuery) {
+			$arrResult = $objQuery->fetchAssoc();
+			return $arrResult['Create Table'];
+		}
+			
+		return "";
 	}
 }
 

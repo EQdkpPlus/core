@@ -93,6 +93,7 @@ abstract class Database extends gen_class {
 	protected	$strDatabase = '';
 	protected 	$strError = '';
 	protected	$intErrno = '';
+	protected	$intQueryCount = 0;
 	
 	
 	public function __construct($arrOptions = array()){
@@ -193,6 +194,10 @@ abstract class Database extends gen_class {
 		if ($strKey == 'errno') {
 			return $this->intErrno;
 		}
+		
+		if ($strKey == 'query_count') {
+			return $this->intQueryCount;
+		}
 
 		return null;
 	}
@@ -220,6 +225,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Statement
 	 */
 	public function prepare($strQuery){
+		$this->intQueryCount++;
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix, $this->blnDisableAutocommit);
 		return $objStatement->prepare($strQuery);
 	}
@@ -234,6 +240,7 @@ abstract class Database extends gen_class {
 		
 		// log the query
 		$this->pdl->log($this->strDebugPrefix . 'sql_query', $strQuery);
+		$this->intQueryCount++;
 		
 		return $this->prepare($strQuery)->execute();
 	}
@@ -245,6 +252,7 @@ abstract class Database extends gen_class {
 	 */
 	public function query($strQuery){
 		$strQuery = str_replace('__', $this->strTablePrefix, $strQuery);
+		$this->intQueryCount++;
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		try {
 			$objQuery = $objStatement->query($strQuery);

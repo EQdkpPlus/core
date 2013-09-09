@@ -23,7 +23,7 @@ include_once($eqdkp_root_path.'common.php');
 
 class Manage_User_Groups extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db', 'pm', 'time', 'acl'=> 'acl', 'crypt' => 'encrypt','logs');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db2', 'pm', 'time', 'acl'=> 'acl', 'crypt' => 'encrypt','logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -301,10 +301,13 @@ class Manage_User_Groups extends page_generic {
 				GROUP BY u.username 
 				ORDER BY u.username '.(($order == '0.0') ? 'ASC' : 'DESC');
 		
-		$user_query = $this->db->query($sql);
-		while($row = $this->db->fetch_record($user_query)){
-			$user_data[$row['user_id']] = $row;
+		$user_query = $this->db2->query($sql);
+		if ($user_query){
+			while($row = $user_query->fetchAssoc()){
+				$user_data[$row['user_id']] = $row;
+			}
 		}
+		
 		$not_in = array();
 		
 		//Bring all members from Group to template
@@ -498,7 +501,7 @@ class Manage_User_Groups extends page_generic {
 					VALUES ('".$group_id."','".$auth_id."','".$auth_setting."')";
 		}
 
-		if ( !($result = $this->db->query($sql)) ){
+		if ( !$this->db2->query($sql) ){
 			return false;
 		}
 		return true;
@@ -510,7 +513,9 @@ class Manage_User_Groups extends page_generic {
 				WHERE (u.auth_id = o.auth_id)
 				AND (u.group_id='".$group_id."')
 				AND u.auth_id='".$auth_id."'";
-		if ( $this->db->num_rows($this->db->query($sql)) > 0 )
+		$objQuery = $this->db2->query($sql);
+		
+		if ( $objQuery && $objQuery->numRows > 0 )
 		{
 			return 'upd';
 		}

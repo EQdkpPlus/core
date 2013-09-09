@@ -120,7 +120,7 @@ abstract class super_registry {
 			//New DBAL
 			include_once(self::get_const('root_path') .'core/new_dbal/dbal.class.php');
 			require_once(self::get_const('root_path') . 'core/new_dbal/' . self::$const['dbtype'] . '.dbal.class.php');
-			self::$aliases['db2'] = array('idbal_'.self::$const['dbtype'], array(array('open' => true)));
+			self::$aliases['db2'] = array('idbal_'.self::$const['dbtype'], array(array('open' => true, 'debug_prefix' => 'dbal2')));
 			
 			// Database Connectors
 			require(self::$const['root_path'] . 'core/dbal/dbal.php');

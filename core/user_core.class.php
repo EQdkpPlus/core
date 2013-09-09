@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class user_core extends gen_class {
-	public static $shortcuts = array('pdl', 'config', 'pfh', 'db', 'tpl', 'time', 'in', 'acl', 'config', 'core', 'bridge', 'env', 'pw', 'pdh');
+	public static $shortcuts = array('pdl', 'config', 'pfh', 'db2', 'tpl', 'time', 'in', 'acl', 'config', 'core', 'bridge', 'env', 'pw', 'pdh');
 	public static $dependencies = array('pfh');
 
 	private $lang			= array();		// Loaded language pack
@@ -44,16 +44,15 @@ class user_core extends gen_class {
 	public function getUserIDfromExchangeKey($strKey){
 		if (!strlen($strKey)) return ANONYMOUS;
 
-		$sql =	"SELECT user_id FROM __users
-				WHERE exchange_key = '".$this->db->escape($strKey)."'";
-		$result	= $this->db->query($sql);
-		$data	= $this->db->fetch_record($result);
-
-		$this->db->free_result($result);
-
-		if(isset($data['user_id'])){
-			return (int)$data['user_id'];
+		$objQuery = $this->db2->prepare("SELECT user_id FROM __users
+				WHERE exchange_key =?")->execute($strKey);
+		if ($objQuery){
+			$data = $objQuery->fetchAssoc();
+			if(isset($data['user_id'])){
+				return (int)$data['user_id'];
+			}
 		}
+		
 		return ANONYMOUS;
 	}
 
@@ -97,18 +96,35 @@ class user_core extends gen_class {
 		} else {
 			$intUserStyleID = (isset($this->data['user_style']) && !$this->config->get('default_style_overwrite')) ? $this->data['user_style'] : $this->config->get('default_style');
 		}
-		$intStyleID = (is_numeric($intUserStyleID) && $intUserStyleID > 0) ? $intUserStyleID : $this->db->query_first("SELECT style_id FROM __styles;");
+		
+		//Fallback to first available style
+		if (is_numeric($intUserStyleID) && $intUserStyleID > 0){
+			$intStyleID = $intUserStyleID;
+		} else {
+			$objQuery = $this->db2->prepare("SELECT style_id FROM __styles;")->limit(1)->execute();
+			if ($objQuery && $objQuery->numRows) {
+				$arrData = $objQuery->fetchAssoc();
+				$intStyleID = $arrData['style_id'];
+			}
+		}
+
 		//Mobile Device?
 		$intStyleID = (strlen($this->config->get('mobile_template')) && $this->env->agent->mobile) ? intval($this->config->get('mobile_template')) : $intStyleID;
 		
 		//Get Style-Information
-		$result = $this->db->query("SELECT * FROM __styles WHERE style_id='".$this->db->escape($intStyleID)."'");
-		$this->style = $this->db->fetch_record($result);
+		$objQuery = $this->db2->prepare("SELECT * FROM __styles WHERE style_id=?")->execute($intStyleID);
+		if ($objQuery && $objQuery->numRows){
+			$this->style = $objQuery->fetchAssoc();	
+		}
+
 		//No Style-Information -> Fallback to the default style
 		if ( !$this->style && ($intStyleID != $this->config->get('default_style'))) {
-			$result = $this->db->query("SELECT * FROM __styles WHERE style_id='".$this->db->escape($this->config->get('default_style'))."'");
-			$this->style = $this->db->fetch_record($result);
+			$objQuery = $this->db2->prepare("SELECT * FROM __styles WHERE style_id=?")->execute((int)$this->config->get('default_style'));
+			if ($objQuery && $objQuery->numRows){
+				$this->style = $objQuery->fetchAssoc();
+			}
 		}
+		
 		//Now set the Style-Settings
 		if(empty($this->data['user_timezone']) || $this->data['user_timezone'] == '') $this->data['user_timezone'] = $this->config->get('timezone');
 
@@ -147,7 +163,6 @@ class user_core extends gen_class {
 		$this->style['logo_position'] = ($this->style['logo_position'] != '') ? $this->style['logo_position'] : 'center';
 
 		if (!$this->lite_mode) {
-			#if(empty($this->style['template_path'])) $this->style['template_path'] = $this->db->query_first("SELECT template_path FROM __styles;");
 			$this->tpl->set_template($this->style['template_path']);
 		}
 		//-----------------------------
@@ -155,10 +170,9 @@ class user_core extends gen_class {
 
 		//Global Warning if somebody has overtaken user permissions
 		if (!$this->lite_mode && isset($this->data['session_perm_id']) && $this->data['session_perm_id'] > 0){
-			$query = $this->db->query("SELECT username FROM __users WHERE user_id = '".$this->db->escape($this->data['session_perm_id'])."'");
-			$arrResult = $this->db->fetch_record($query);
-			$message = sprintf($this->lang('info_overtaken_permissions'), $arrResult['username']);
-			$message .= '<br /><b><a href="'.$this->root_path.'index.php'.$this->SID.'&mode=rstperms">'.$this->lang('link_overtaken_permissions')."</a></b>";
+			$username = $this->pdh->get('user', 'username', array((int)$this->data['session_perm_id']));
+			$message = sprintf($this->lang('info_overtaken_permissions'), $username);
+			$message .= '<br /><b><a href="'.$this->server_path.'index.php'.$this->SID.'&mode=rstperms">'.$this->lang('link_overtaken_permissions')."</a></b>";
 			$this->core->global_warning($message);
 		}
 	}
@@ -506,10 +520,11 @@ class user_core extends gen_class {
 
 
 	public function updateAutologinKey($intUserID, $strAutologinKey){
-		$query = $this->db->query('UPDATE __users SET :params WHERE user_id=?', array(
+		$objQuery = $this->db2->prepare('UPDATE __users :p WHERE user_id=?')->set(array(
 				'user_login_key' => $strAutologinKey,
-			), (int)$intUserID);
-		return $query;
+			))->execute((int)$intUserID);
+		
+		return $objQuery;
 	}
 
 	/**

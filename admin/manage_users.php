@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Users extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'db', 'pfh', 'html', 'env', 'acl'=>'acl', 'email'=>'MyMailer', 'crypt' => 'encrypt', 'logs');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'db2', 'pfh', 'html', 'env', 'acl'=>'acl', 'email'=>'MyMailer', 'crypt' => 'encrypt', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -275,11 +275,13 @@ class Manage_Users extends page_generic {
 		$start = $this->in->get('start', 0);
 
 		$online_users = array();
-		$result = $this->db->query("SELECT session_user_id FROM __sessions;");
-		while ( $row = $this->db->fetch_record($result) ) {
-			$online_users[] = $row['session_user_id'];
+		
+		$objQuery = $this->db2->query("SELECT session_user_id FROM __sessions;");
+		if ($objQuery){
+			while ( $row = $objQuery->fetchAssoc() ) {
+				$online_users[] = $row['session_user_id'];
+			}
 		}
-		$this->db->free_result($result);
 
 		$adm_memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
 		$k = 0;

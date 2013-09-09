@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class core extends gen_class {
-	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db', 'config', 'timekeeper', 'env', 'in', 'portal', 'ntfy', 'routing');
+	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db2', 'config', 'timekeeper', 'env', 'in', 'portal', 'ntfy', 'routing');
 
 		// General vars
 		public $header_format	= 'full';			// Use a simple header?		@var
@@ -692,7 +692,7 @@ class core extends gen_class {
 					'S_SHOW_DEBUG'			=> true,
 					'S_SHOW_QUERIES'		=> true,
 					'EQDKP_RENDERTIME'		=> pr('', 2),
-					'EQDKP_QUERYCOUNT'		=> $this->db->query_count,
+					'EQDKP_QUERYCOUNT'		=> $this->db2->query_count,
 					'EQDKP_MEM_PEAK'		=> number_format(memory_get_peak_usage()/1024, 0, '.', ',').' kb'
 				));
 

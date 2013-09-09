@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class plugin_generic extends gen_class {
-	public static $shortcuts = array('user', 'db', 'pdl', 'config', 
+	public static $shortcuts = array('user', 'db2', 'pdl', 'config', 
 		'acl' => 'acl'
 	);
 
@@ -73,8 +73,12 @@ class plugin_generic extends gen_class {
 			foreach ($permissions as $auth_value => $permission) {
 				if ($permission['groups']){
 					foreach($permission['groups'] as $key=>$group_id){
-						$this->db->query("DELETE FROM __auth_groups WHERE group_id = ".$this->db->escape($group_id)." AND auth_id = ".$this->db->escape($this->acl->get_auth_id($auth_value)));
-						$this->db->query("INSERT INTO __auth_groups (group_id, auth_id, auth_setting) VALUES (".$this->db->escape($group_id).", ".$this->db->escape($this->acl->get_auth_id($auth_value)).", 'Y')");
+						$this->db2->prepare("DELETE FROM __auth_groups WHERE group_id = ? AND auth_id = ?")->execute($group_id, $this->acl->get_auth_id($auth_value));
+						$this->db2->prepare("INSERT INTO __auth_groups :p")->set(array(
+								'group_id' => $group_id,
+								'auth_id'	=> $this->acl->get_auth_id($auth_value),
+								'auth_setting' => 'Y',
+						))->execute();
 					}
 				}
 			}
@@ -82,7 +86,7 @@ class plugin_generic extends gen_class {
 
 		ksort($this->sql_queries[SQL_INSTALL]);
 		foreach($this->sql_queries[SQL_INSTALL] as $sql) {
-			if(!$this->db->query($sql)) return $this->db->error($sql);
+			if(!$this->db2->query($sql)) return $this->db2->error;
 		}
 		return true;
 	}
@@ -97,13 +101,14 @@ class plugin_generic extends gen_class {
 				$auth_ids[] = $this->acl->get_auth_id($auth_value);
 				$this->acl->del_auth_option($auth_value);
 			}
-			$this->db->query("DELETE FROM __auth_users WHERE `auth_id` IN ('".implode("', '", $auth_ids)."');");
-			$this->db->query("DELETE FROM __auth_groups WHERE `auth_id` IN ('".implode("', '", $auth_ids)."');");
+			
+			$this->db2->prepare("DELETE FROM __auth_users WHERE `auth_id` :in")->in($auth_ids)->execute();
+			$this->db2->prepare("DELETE FROM __auth_groups WHERE `auth_id` :in")->in($auth_ids)->execute();
 		}
 		
 		ksort($this->sql_queries[SQL_UNINSTALL]);
 		foreach($this->sql_queries[SQL_UNINSTALL] as $sql) {
-			if(!$this->db->query($sql)) return $this->db->error($sql);
+			if(!$this->db2->query($sql)) return $this->db2->error;
 		}
 		return true;
 	}

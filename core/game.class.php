@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class game extends gen_class {
-	public static $shortcuts = array('config', 'user', 'pdl', 'pdh', 'tpl', 'db', 'itt' => 'infotooltip',
+	public static $shortcuts = array('config', 'user', 'pdl', 'pdh', 'tpl', 'db2', 'itt' => 'infotooltip',
 	);
 
 	private $data			= array();
@@ -726,7 +726,7 @@ class game extends gen_class {
 		}
 		if(is_array($queries)) {
 			foreach($queries as $sql) {
-				$this->db->query($sql);
+				$this->db2->query($sql);
 			}
 		}
 		$this->AddProfileFields();

@@ -154,7 +154,7 @@ class EQDKPBackup extends page_generic{
 
 			function submit_form(button){
 				$('#mode').attr('name', button);
-				$(\"form\").submit();
+				$(\"#backup_form\").submit();
 			}
 
 			function restore_data(value){

@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Bridge extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db', 'bridge', 'html',
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db2', 'bridge', 'html',
 			'crypt'	=> 'encrypt',
 		);
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -72,7 +72,7 @@ class Manage_Bridge extends page_generic {
 	public function get_prefix($notsamedb = false){
 		//Same Database
 		if (!$notsamedb){
-			$alltables = $this->db->get_tables();
+			$alltables = $this->db2->listTables();
 			$tables		= array();
 			foreach ($alltables as $name){
 				if (strpos($name, '_') !== false){
@@ -96,9 +96,9 @@ class Manage_Bridge extends page_generic {
 		
 		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('pw') != '' && $this->in->get('name') != ''){
 			$error = array();
-			$this->db = dbal::factory(array('dbtype' => 'mysql', 'die_gracefully' => true));
-			$result = $this->db->open($this->in->get('host'),$this->in->get('name'),$this->in->get('user'),$this->in->get('pw'));
-			if ($result){
+			try {
+				$db = idbal::factory(array('dbtype' => 'mysqli'));
+				$db->connect($this->in->get('host'),$this->in->get('name'),$this->in->get('user'),$this->in->get('pw'));
 				//Schreibe die Daten in die Config
 				$this->config->set('cmsbridge_host', $this->crypt->encrypt($this->in->get('host')));
 				$this->config->set('cmsbridge_user', $this->crypt->encrypt($this->in->get('user')));
@@ -107,14 +107,14 @@ class Manage_Bridge extends page_generic {
 				$this->config->set('cmsbridge_notsamedb', 1);
 				echo "true";
 				die();
-			} else {
+				
+			} catch(iDBALException $e){
 				$this->config->del('cmsbridge_host');
 				$this->config->del('cmsbridge_user');
 				$this->config->del('cmsbridge_password');
 				$this->config->del('cmsbridge_database');
 				$this->config->del('cmsbridge_notsamedb');
 			}
-
 		}
 
 		echo "false";

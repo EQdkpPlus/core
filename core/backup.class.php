@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class backup extends gen_class {
-	public static $shortcuts = array('config', 'user', 'pfh', 'jquery', 'db', 'time', 'core');
+	public static $shortcuts = array('config', 'user', 'pfh', 'jquery', 'db2', 'time', 'core');
 
 	public function __construct(){
 		//Secure the backup-folder
@@ -46,14 +46,17 @@ class backup extends gen_class {
 		set_time_limit(0);
 	
 		if (!$in_tables){
-			$in_tables		= $this->db->get_tables(true);
+			$in_tables		= $this->db2->listTables();
 		}
 
 		$uncomplete = false;
 
-		$all_tables		= $this->db->get_tables(true);
+		$all_tables		= $this->db2->listTables();
 		$tables = array();
 		foreach( $all_tables as $tablename ){
+			//If not eqdkp table
+			if (!$this->db2->isEQdkpTable($tablename)) continue;
+			
 			if (in_array($tablename, $in_tables)){
 				$tables[]		= $tablename;
 			} else {
@@ -264,14 +267,13 @@ class backup extends gen_class {
 
 	public function _create_table_sql_string($tablename){
 		// Generate the SQL string for this table
-		// NOTE: SHOW CREATE TABLE was added to MySQL version 3.23.20, so I think it's safe to use that instead of doing it all manually.
 
-		$createTable	= $this->db->show_create_table($tablename);
+		$createTable	= $this->db2->showCreateTable($tablename);
 
 		$sql_string		 = "DROP TABLE IF EXISTS `{$tablename}`;" . "\n";
 
 		$sql_string		.= $createTable;
-		$sql_string		.= ";\n\n";
+		$sql_string		.= ";";
 		return $sql_string;
 	}
 
@@ -281,9 +283,11 @@ class backup extends gen_class {
 		$sql_string		= "";
 
 		// Get field names from MySQL and output to a string in the correct MySQL syntax
-		$arrFields = $this->db->get_field_information($tablename);
+		$arrFields = $this->db2->listFields($tablename);
+
 		$field_set = array();
-		foreach ($arrFields as $value){
+		foreach ($arrFields as $key => $value){
+			if (!is_numeric($key)) continue;
 			$field_set[] = $value['name'];
 		}
 		$search				= array("\\", "'", "\x00", "\x0a", "\x0d", "\x1a", '"');
@@ -292,27 +296,29 @@ class backup extends gen_class {
 		$field_string		= 'INSERT INTO `' . $tablename . '` (' . $fields . ') VALUES ';
 
 		//Get Content
-		$result = $this->db->query("SELECT * FROM ".$this->db->escape($tablename));
-		while($row = $this->db->fetch_record($result)){
-			$values		= array();
-			$query		= $field_string . '(';
-
-			foreach ($arrFields as $key => $field){
-				$name = $field['name'];
-				if (!isset($row[$name]) || is_null($row[$name])){
-					$values[$key]		= 'NULL';
-				}else if ($field['numeric'] && ($field['type'] !== 'timestamp')){
-					$values[$key]		= $row[$name];
-				}else{
-					$values[$key]		= "'" . str_replace($search, $replace, $row[$name]) . "'";
+		$objQuery = $this->db2->query("SELECT * FROM ".$tablename);
+		if ($objQuery){
+			while($row = $objQuery->fetchAssoc()){
+				$values		= array();
+				$query		= $field_string . '(';
+	
+				foreach ($arrFields as $key => $field){
+					if (!is_numeric($key)) continue;
+	
+					$name = $field['name'];
+					if (!isset($row[$name]) || is_null($row[$name])){
+						$values[$key]		= 'NULL';
+					}else if (($field['numeric']) && ($field['type'] !== 'timestamp')){
+						$values[$key]		= $row[$name];
+					}else{
+						$values[$key]		= "'" . str_replace($search, $replace, $row[$name]) . "'";
+					}
 				}
+	
+				$query			 .= implode(', ', $values) . ')';
+				$sql_string		 .= $query . ";\n";
 			}
-
-			$query			 .= implode(', ', $values) . ')';
-			$sql_string		 .= $query . ";\n";
 		}
-
-		$this->db->free_result($result);
 		return $sql_string;
 	}
 
