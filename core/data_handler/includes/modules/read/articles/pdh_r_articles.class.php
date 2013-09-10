@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_articles" ) ) {
 	class pdh_r_articles extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time', 'env', 'config');
+		$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'time', 'env', 'config');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -75,57 +75,57 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			if($this->articles !== NULL){
 				return true;
 			}
-
-			$pff_result = $this->db->query("SELECT * FROM __articles ORDER BY category ASC, sort_id ASC");
-			while($drow = $this->db->fetch_record($pff_result) ){
-				$this->articles[(int)$drow['id']] = array(
-					'id'			=> (int)$drow['id'],
-					'title'			=> $drow['title'],
-					'text'			=> $drow['text'],
-					'category'		=> (int)$drow['category'],
-					'featured'		=> (int)$drow['featured'],
-					'comments'		=> (int)$drow['comments'],
-					'votes'			=> (int)$drow['votes'],
-					'published'		=> (int)$drow['published'],
-					'show_from'		=> $drow['show_from'],
-					'show_to'		=> $drow['show_to'],
-					'user_id'		=> (int)$drow['user_id'],
-					'date'			=> (int)$drow['date'],
-					'previewimage'	=> $drow['previewimage'],
-					'alias'			=> utf8_strtolower($drow['alias']),
-					'hits'			=> (int)$drow['hits'],
-					'sort_id'		=> (int)$drow['sort_id'],
-					'tags'			=> $drow['tags'],
-					'votes_count'	=> (int)$drow['votes_count'],
-					'votes_sum'		=> (int)$drow['votes_sum'],
-					'votes_users'	=> $drow['votes_users'],
-					'last_edited'	=> (int)$drow['last_edited'],
-					'last_edited_user'	=> (int)$drow['last_edited_user'],
-					'page_objects'		=> $drow['page_objects'],
-					'hide_header'		=> (int)$drow['hide_header'],
-				);
-				
-				if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
-				$this->categories[(int)$drow['category']][] = (int)$drow['id'];
-				
-				$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
-				
-				if ($drow['page_objects'] != ''){
-					$arrObjects = unserialize($drow['page_objects']);
-					foreach($arrObjects as $elem){
-						$this->pageobjects[$elem][] = (int)$drow['id'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __articles ORDER BY category ASC, sort_id ASC");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->articles[(int)$drow['id']] = array(
+						'id'			=> (int)$drow['id'],
+						'title'			=> $drow['title'],
+						'text'			=> $drow['text'],
+						'category'		=> (int)$drow['category'],
+						'featured'		=> (int)$drow['featured'],
+						'comments'		=> (int)$drow['comments'],
+						'votes'			=> (int)$drow['votes'],
+						'published'		=> (int)$drow['published'],
+						'show_from'		=> $drow['show_from'],
+						'show_to'		=> $drow['show_to'],
+						'user_id'		=> (int)$drow['user_id'],
+						'date'			=> (int)$drow['date'],
+						'previewimage'	=> $drow['previewimage'],
+						'alias'			=> utf8_strtolower($drow['alias']),
+						'hits'			=> (int)$drow['hits'],
+						'sort_id'		=> (int)$drow['sort_id'],
+						'tags'			=> $drow['tags'],
+						'votes_count'	=> (int)$drow['votes_count'],
+						'votes_sum'		=> (int)$drow['votes_sum'],
+						'votes_users'	=> $drow['votes_users'],
+						'last_edited'	=> (int)$drow['last_edited'],
+						'last_edited_user'	=> (int)$drow['last_edited_user'],
+						'page_objects'		=> $drow['page_objects'],
+						'hide_header'		=> (int)$drow['hide_header'],
+					);
+					
+					if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
+					$this->categories[(int)$drow['category']][] = (int)$drow['id'];
+					
+					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
+					
+					if ($drow['page_objects'] != ''){
+						$arrObjects = unserialize($drow['page_objects']);
+						foreach($arrObjects as $elem){
+							$this->pageobjects[$elem][] = (int)$drow['id'];
+						}
+					}
+					
+					if ($drow['tags'] != ''){
+						$arrTags = unserialize($drow['tags']);
+						foreach($arrTags as $elem){
+							$this->tags[$elem][] = (int)$drow['id'];
+						}
 					}
 				}
-				
-				if ($drow['tags'] != ''){
-					$arrTags = unserialize($drow['tags']);
-					foreach($arrTags as $elem){
-						$this->tags[$elem][] = (int)$drow['id'];
-					}
-				}
-				
 			}
-			$this->db->free_result($pff_result);
 			
 			$this->pdc->put('pdh_articles_table', $this->articles, null);
 			$this->pdc->put('pdh_articles_categories', $this->categories, null);

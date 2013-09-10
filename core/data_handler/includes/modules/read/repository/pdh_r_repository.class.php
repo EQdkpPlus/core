@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_repository" ) ) {
 	class pdh_r_repository extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -45,29 +45,30 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 			if($this->repository !== NULL){
 				return true;
 			}
-
-			$pff_result = $this->db->query("SELECT * FROM __repository ORDER BY dep_coreversion DESC");
-			while ( $row = $this->db->fetch_record($pff_result) ){
-
-				$this->repository[(int)$row['category']][$row['id']] = array(
-					'name'			=> $row['name'],
-					'plugin'		=> $row['plugin'],
-					'date'			=> $row['date'],
-					'author'		=> $row['author'],
-					'version'		=> $row['version'],
-					'version_ext'	=> $row['version_ext'],
-					'changelog'		=> $row['changelog'],
-					'lastupdate'	=> $row['updated'],
-					'shortdesc'		=> $row['shortdesc'],
-					'category'		=> $row['category'],
-					'level'			=> $row['level'],
-					'rating'		=> $row['rating'],
-					'dep_coreversion'=> $row['dep_coreversion'],
-					'dep_php'		=> $row['dep_php'],
-				);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __repository ORDER BY dep_coreversion DESC");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->repository[(int)$row['category']][$row['id']] = array(
+						'name'			=> $row['name'],
+						'plugin'		=> $row['plugin'],
+						'date'			=> $row['date'],
+						'author'		=> $row['author'],
+						'version'		=> $row['version'],
+						'version_ext'	=> $row['version_ext'],
+						'changelog'		=> $row['changelog'],
+						'lastupdate'	=> $row['updated'],
+						'shortdesc'		=> $row['shortdesc'],
+						'category'		=> $row['category'],
+						'level'			=> $row['level'],
+						'rating'		=> $row['rating'],
+						'dep_coreversion'=> $row['dep_coreversion'],
+						'dep_php'		=> $row['dep_php'],
+					);
+				}
 			}
-				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_repository_table', $this->repository, null);
+
+			$this->pdc->put('pdh_repository_table', $this->repository, null);
 		}
 
 		public function get_repository(){

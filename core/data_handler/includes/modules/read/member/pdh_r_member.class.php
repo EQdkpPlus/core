@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_member" ) ) {
 	class pdh_r_member extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time', 'routing');
+			$shortcuts = array('pdc', 'db2', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -116,34 +116,34 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 
 			//connection data
-			$conn_sql =		"SELECT m.member_id, mu.user_id
+			$objQuery = $this->db2->query("SELECT m.member_id, mu.user_id
 							FROM __members m
 							LEFT JOIN __member_user mu ON mu.member_id = m.member_id
 							WHERE (m.requested_del != '1' OR m.requested_del IS NULL)
-							ORDER BY m.member_main_id;";
-			$conn_result = $this->db->query($conn_sql);
-
+							ORDER BY m.member_main_id;");
+			
 			$this->member_connections = array(array());
 			$this->member_user = array();
-			while ($drow = $this->db->fetch_record($conn_result) ){
-				$this->member_connections[$drow['user_id']][] = $drow['member_id'];
-				$this->member_user[$drow['member_id']] = $drow['user_id'];
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->member_connections[$drow['user_id']][] = $drow['member_id'];
+					$this->member_user[$drow['member_id']] = $drow['user_id'];
+				}
 			}
-			$this->db->free_result($conn_result);
-
+			
 			// The free to take members..
-			$free_sql =		"SELECT m.member_id, mu.user_id
+			$objQuery = $this->db2->query("SELECT m.member_id, mu.user_id
 							FROM __members m
 							LEFT JOIN __member_user mu ON m.member_id = mu.member_id
 							WHERE mu.user_id IS NULL
 							AND (m.requested_del != '1' OR m.requested_del IS NULL)
-							ORDER BY m.member_main_id;";
-			$free_result = $this->db->query($free_sql);
-			while ($drow = $this->db->fetch_record($free_result) ){
-				$this->member_connections[0][] = $drow['member_id'];
-				$this->member_user[$drow['member_id']] = 0;
+							ORDER BY m.member_main_id;");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->member_connections[0][] = $drow['member_id'];
+					$this->member_user[$drow['member_id']] = 0;
+				}
 			}
-			$this->db->free_result($free_result);
 			$this->pdc->put('pdh_member_connections_table',		$this->member_connections,	null);
 
 			// basic member data
@@ -165,37 +165,41 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						require_confirm,
 						defaultrole
 						FROM __members;";
-			$bmd_result = $this->db->query($bmd_sql);
-
-			while( $bmd_row = $this->db->fetch_record($bmd_result) ){
-				if(!isset($this->data[$bmd_row['member_id']]['name'])){
-					$this->data[$bmd_row['member_id']]['name']				= $bmd_row['name'];
-					$this->data[$bmd_row['member_id']]['class_id']			= $bmd_row['class_id'];
-					$this->data[$bmd_row['member_id']]['class_name']		= $this->get_classname($bmd_row['member_id']);
-					$this->data[$bmd_row['member_id']]['race_id']			= $bmd_row['race_id'];
-					$this->data[$bmd_row['member_id']]['race_name']			= $this->get_racename($bmd_row['member_id']);
-					$this->data[$bmd_row['member_id']]['rank_id']			= $bmd_row['rank_id'];
-					$this->data[$bmd_row['member_id']]['status']			= $bmd_row['status'];
-					$this->data[$bmd_row['member_id']]['level']				= $bmd_row['level'];
-					$this->data[$bmd_row['member_id']]['main_id']			= ($bmd_row['main_id'] > 0)? $bmd_row['main_id'] : $bmd_row['member_id'];
-					$this->data[$bmd_row['member_id']]['creation_date']		= $bmd_row['creation_date'];
-					$this->data[$bmd_row['member_id']]['picture']			= $bmd_row['picture'];
-					$this->data[$bmd_row['member_id']]['notes']				= $bmd_row['notes'];
-					$this->data[$bmd_row['member_id']]['last_update']		= $bmd_row['last_update'];
-					$this->data[$bmd_row['member_id']]['requested_del']		= $bmd_row['requested_del'];
-					$this->data[$bmd_row['member_id']]['require_confirm']	= $bmd_row['require_confirm'];
-					$this->data[$bmd_row['member_id']]['defaultrole']		= $bmd_row['defaultrole'];
-					$this->data[$bmd_row['member_id']]['profiledata']		= $bmd_row['profiledata'];
-					$this->data[$bmd_row['member_id']]['user']				= isset($this->member_user[$bmd_row['member_id']]) ? $this->member_user[$bmd_row['member_id']] : 0;
-					if(is_array($this->cmfields)){
-						$my_data = $this->xmltools->Database2Array($bmd_row['profiledata']);
-						foreach($this->cmfields as $mmdata){
-							$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
+			
+			
+			$objQuery = $this->db2->query($bmd_sql);
+			
+			if($objQuery){
+				while($bmd_row = $objQuery->fetchAssoc()){
+					if(!isset($this->data[$bmd_row['member_id']]['name'])){
+						$this->data[$bmd_row['member_id']]['name']				= $bmd_row['name'];
+						$this->data[$bmd_row['member_id']]['class_id']			= $bmd_row['class_id'];
+						$this->data[$bmd_row['member_id']]['class_name']		= $this->get_classname($bmd_row['member_id']);
+						$this->data[$bmd_row['member_id']]['race_id']			= $bmd_row['race_id'];
+						$this->data[$bmd_row['member_id']]['race_name']			= $this->get_racename($bmd_row['member_id']);
+						$this->data[$bmd_row['member_id']]['rank_id']			= $bmd_row['rank_id'];
+						$this->data[$bmd_row['member_id']]['status']			= $bmd_row['status'];
+						$this->data[$bmd_row['member_id']]['level']				= $bmd_row['level'];
+						$this->data[$bmd_row['member_id']]['main_id']			= ($bmd_row['main_id'] > 0)? $bmd_row['main_id'] : $bmd_row['member_id'];
+						$this->data[$bmd_row['member_id']]['creation_date']		= $bmd_row['creation_date'];
+						$this->data[$bmd_row['member_id']]['picture']			= $bmd_row['picture'];
+						$this->data[$bmd_row['member_id']]['notes']				= $bmd_row['notes'];
+						$this->data[$bmd_row['member_id']]['last_update']		= $bmd_row['last_update'];
+						$this->data[$bmd_row['member_id']]['requested_del']		= $bmd_row['requested_del'];
+						$this->data[$bmd_row['member_id']]['require_confirm']	= $bmd_row['require_confirm'];
+						$this->data[$bmd_row['member_id']]['defaultrole']		= $bmd_row['defaultrole'];
+						$this->data[$bmd_row['member_id']]['profiledata']		= $bmd_row['profiledata'];
+						$this->data[$bmd_row['member_id']]['user']				= isset($this->member_user[$bmd_row['member_id']]) ? $this->member_user[$bmd_row['member_id']] : 0;
+						if(is_array($this->cmfields)){
+							$my_data = $this->xmltools->Database2Array($bmd_row['profiledata']);
+							foreach($this->cmfields as $mmdata){
+								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
+							}
 						}
 					}
 				}
 			}
-			$this->db->free_result($bmd_result);
+
 			$this->pdc->put('pdh_members_table', $this->data, null);
 		}
 

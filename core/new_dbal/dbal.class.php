@@ -582,28 +582,56 @@ abstract class DatabaseStatement {
 	 */
 	public function set($arrParams)
 	{
-		$arrParams = $this->escapeParams($arrParams);
-
-		// INSERT / REPLACE
-		if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
-		{
-			$strQuery = sprintf('(%s) VALUES (%s)',
-								implode(', ', array_keys($arrParams)),
-								str_replace('%', '%%', implode(', ', array_values($arrParams))));
-		}
-
-		// UPDATE
-		elseif (strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
-		{
-			$arrSet = array();
-
-			foreach ($arrParams as $k=>$v)
+		if (isset($arrParams[0]) && is_array($arrParams[0])){
+			$arrParamsArray = $arrParams;
+			
+			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 			{
-				$arrSet[] = $k . '=' . $v;
+				$strQuery = sprintf('(%s) VALUES ', implode(', ', array_keys($arrParams[0])));
 			}
 
-			$strQuery = 'SET ' . str_replace('%', '%%', implode(', ', $arrSet));
+			$arrQuery = array();
+			
+			foreach($arrParamsArray as $arrParams){
+				$arrParams = $this->escapeParams($arrParams);
+		
+				// INSERT / REPLACE
+				if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+				{
+					$arrQuery[] = sprintf('(%s)', str_replace('%', '%%', implode(', ', array_values($arrParams))));
+				}
+			}
+			
+			$strQuery .= implode(', ', $arrQuery);
+			
+			
+		} else {
+			$arrParams = $this->escapeParams($arrParams);
+	
+			// INSERT / REPLACE
+			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+			{
+				$strQuery = sprintf('(%s) VALUES (%s)',
+									implode(', ', array_keys($arrParams)),
+									str_replace('%', '%%', implode(', ', array_values($arrParams))));
+			}
+	
+			// UPDATE
+			elseif (strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
+			{
+				$arrSet = array();
+	
+				foreach ($arrParams as $k=>$v)
+				{
+					$arrSet[] = $k . '=' . $v;
+				}
+	
+				$strQuery = 'SET ' . str_replace('%', '%%', implode(', ', $arrSet));
+			}	
 		}
+		
+		
+
 
 		$this->strQuery = str_replace('%p', $strQuery, $this->strQuery);
 		return $this;

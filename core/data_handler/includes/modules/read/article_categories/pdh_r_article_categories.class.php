@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_article_categories" ) ) {
 	class pdh_r_article_categories extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh', 'acl', 'time', 'env' => 'environment', 'config');
+		$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'acl', 'time', 'env' => 'environment', 'config');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -61,36 +61,38 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if($this->categories !== NULL){
 				return true;
 			}
-
-			$pff_result = $this->db->query("SELECT * FROM __article_categories ORDER BY sort_id ASC");
-			while($drow = $this->db->fetch_record($pff_result) ){
-				$this->categories[intval($drow['id'])] = array(
-					'id'				=> intval($drow['id']),
-					'name'				=> $drow['name'],
-					'alias'				=> utf8_strtolower($drow['alias']),
-					'description'		=> $drow['description'],
-					'per_page'			=> intval($drow['per_page']),
-					'permissions'		=> $drow['permissions'],
-					'published'			=> intval($drow['published']),
-					'parent'			=> intval($drow['parent']),
-					'sort_id'			=> intval($drow['sort_id']),
-					'list_type'			=> intval($drow['list_type']),
-					'aggregation'		=> $drow['aggregation'],
-					'featured_only'		=> intval($drow['featured_only']),
-					'social_share_buttons'=> intval($drow['social_share_buttons']),
-					'portal_layout'		=> intval($drow['portal_layout']),
-					'show_childs'		=> intval($drow['show_childs']),
-					'article_published_state' => intval($drow['article_published_state']),
-					'notify_on_onpublished_articles' => intval($drow['notify_on_onpublished_articles']),
-					'hide_header'		=> intval($drow['hide_header']),
-					'sortation_type'	=> intval($drow['sortation_type']),
-					'featured_ontop'	=> intval($drow['featured_ontop']),
-					'hide_on_rss'		=> intval($drow['hide_on_rss']),
-				);
-				$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __article_categories ORDER BY sort_id ASC");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->categories[intval($drow['id'])] = array(
+						'id'				=> intval($drow['id']),
+						'name'				=> $drow['name'],
+						'alias'				=> utf8_strtolower($drow['alias']),
+						'description'		=> $drow['description'],
+						'per_page'			=> intval($drow['per_page']),
+						'permissions'		=> $drow['permissions'],
+						'published'			=> intval($drow['published']),
+						'parent'			=> intval($drow['parent']),
+						'sort_id'			=> intval($drow['sort_id']),
+						'list_type'			=> intval($drow['list_type']),
+						'aggregation'		=> $drow['aggregation'],
+						'featured_only'		=> intval($drow['featured_only']),
+						'social_share_buttons'=> intval($drow['social_share_buttons']),
+						'portal_layout'		=> intval($drow['portal_layout']),
+						'show_childs'		=> intval($drow['show_childs']),
+						'article_published_state' => intval($drow['article_published_state']),
+						'notify_on_onpublished_articles' => intval($drow['notify_on_onpublished_articles']),
+						'hide_header'		=> intval($drow['hide_header']),
+						'sortation_type'	=> intval($drow['sortation_type']),
+						'featured_ontop'	=> intval($drow['featured_ontop']),
+						'hide_on_rss'		=> intval($drow['hide_on_rss']),
+					);
+					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
+				}
 			}
-				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_article_categories_table', $this->categories, null);
+
+			$this->pdc->put('pdh_article_categories_table', $this->categories, null);
 			
 			$this->sortation = $this->get_sortation();
 			

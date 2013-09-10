@@ -24,7 +24,7 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 	class pdh_r_portal_layouts extends pdh_r_generic{
 	
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'user', 'pdh');
+			$shortcuts = array('pdc', 'db2', 'user', 'pdh');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -52,18 +52,19 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 			if($this->layouts !== NULL){
 				return true;
 			}
-
-			$pff_result = $this->db->query("SELECT * FROM __portal_layouts");
-			while($drow = $this->db->fetch_record($pff_result) ){
-				$this->layouts[intval($drow['id'])] = array(
-					'id'				=> intval($drow['id']),
-					'name'				=> $drow['name'],
-					'blocks'			=> unserialize($drow['blocks']),
-					'modules'			=> unserialize($drow['modules'])
-				);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __portal_layouts");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->layouts[intval($drow['id'])] = array(
+						'id'				=> intval($drow['id']),
+						'name'				=> $drow['name'],
+						'blocks'			=> unserialize($drow['blocks']),
+						'modules'			=> unserialize($drow['modules'])
+					);
+				}
 			}
 			
-			$this->db->free_result($pff_result);
 			$this->pdc->put('pdh_portal_layouts_table', $this->layouts, null);
 		}
 

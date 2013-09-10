@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_repository')) {
 	class pdh_w_repository extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
+		$shortcuts = array('pdh', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -32,19 +32,19 @@ if(!class_exists('pdh_w_repository')) {
 		}
 
 		public function insert($arrData){
-			$this->db->query("INSERT INTO __repository :params", $arrData);
+			$objQuery = $this->db2->prepare("INSERT INTO __repository :p")->set($arrData)->execute();
 			$this->pdh->enqueue_hook('repository_update');
 		}
 
 		public function reset() {
-			$this->db->query("TRUNCATE TABLE __repository;");
+			$this->db2->query("TRUNCATE TABLE __repository;");
 			$this->pdh->enqueue_hook('repository_update');
 		}
 		
 		public function setUpdateTime($time){
-			$this->db->query("UPDATE __repository SET :params", array(
+			$objQuery = $this->db2->prepare("UPDATE __repository :p")->set(array(
 				'updated' => $time,
-			));
+			))->execute();
 			$this->pdh->enqueue_hook('repository_update');
 		}
 	}

@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 	class pdh_r_portal_blocks extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh');
+		$shortcuts = array('pdc', 'db2', 'user', 'pdh');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -52,17 +52,18 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 			if($this->blocks !== NULL){
 				return true;
 			}
-
-			$pff_result = $this->db->query("SELECT * FROM __portal_blocks");
-			while($drow = $this->db->fetch_record($pff_result) ){
-				$this->blocks[intval($drow['id'])] = array(
-					'id'				=> intval($drow['id']),
-					'name'				=> $drow['name'],
-					'wide_content'		=> intval($drow['wide_content']),
-				);
-			}
 			
-			$this->db->free_result($pff_result);
+			$objQuery = $this->db2->query("SELECT * FROM __portal_blocks");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->blocks[intval($drow['id'])] = array(
+						'id'				=> intval($drow['id']),
+						'name'				=> $drow['name'],
+						'wide_content'		=> intval($drow['wide_content']),
+					);
+				}
+			}	
+
 			$this->pdc->put('pdh_portal_blocks_table', $this->blocks, null);
 		}
 

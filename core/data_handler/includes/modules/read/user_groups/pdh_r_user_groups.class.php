@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_user_groups" ) ){
 	class pdh_r_user_groups extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('db'	);
+		$shortcuts = array('db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -42,21 +42,22 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 
 		public function init(){
 			$this->user_groups = array();
-			$sql = "SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;";
-			$result = $this->db->query($sql);
-			while( $row = $this->db->fetch_record($result) ){
-				$this->user_groups[$row['groups_user_id']]['id']		= $row['groups_user_id'];
-				$this->user_groups[$row['groups_user_id']]['name']		= $row['groups_user_name'];
-				$this->user_groups[$row['groups_user_id']]['desc']		= $row['groups_user_desc'];
-				$this->user_groups[$row['groups_user_id']]['deletable']	= $row['groups_user_deletable'];
-				$this->user_groups[$row['groups_user_id']]['default']	= $row['groups_user_default'];
-				$this->user_groups[$row['groups_user_id']]['hide']		= $row['groups_user_hide'];
-				$this->user_groups[$row['groups_user_id']]['sortid']	= $row['groups_user_sortid'];
-				if ($row['groups_user_default'] == 1){
-					$this->user_standard_group = $row['groups_user_id'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->user_groups[$row['groups_user_id']]['id']		= $row['groups_user_id'];
+					$this->user_groups[$row['groups_user_id']]['name']		= $row['groups_user_name'];
+					$this->user_groups[$row['groups_user_id']]['desc']		= $row['groups_user_desc'];
+					$this->user_groups[$row['groups_user_id']]['deletable']	= $row['groups_user_deletable'];
+					$this->user_groups[$row['groups_user_id']]['default']	= $row['groups_user_default'];
+					$this->user_groups[$row['groups_user_id']]['hide']		= $row['groups_user_hide'];
+					$this->user_groups[$row['groups_user_id']]['sortid']	= $row['groups_user_sortid'];
+					if ($row['groups_user_default'] == 1){
+						$this->user_standard_group = $row['groups_user_id'];
+					}
 				}
 			}
-			$this->db->free_result($result);
 		}
 
 		public function get_id_list($hide = false){

@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_multidkp" ) ) {
 	class pdh_r_multidkp extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -54,32 +54,36 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 
 			//fetch multidkp2event data
 			$me_data = array();
-			$sql = "SELECT * FROM __multidkp2event;";
-			$me_result = $this->db->query($sql);
-			while($row = $this->db->fetch_record($me_result)){
-				$me_data[$row['multidkp2event_multi_id']][] = $row['multidkp2event_event_id'];
-				if($row['multidkp2event_no_attendance']) {
-					$noatt_data[$row['multidkp2event_multi_id']][] = $row['multidkp2event_event_id'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __multidkp2event;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$me_data[$row['multidkp2event_multi_id']][] = $row['multidkp2event_event_id'];
+					if($row['multidkp2event_no_attendance']) {
+						$noatt_data[$row['multidkp2event_multi_id']][] = $row['multidkp2event_event_id'];
+					}
 				}
 			}
-			$this->db->free_result($me_result);
-
+			
 			//fetch multidkp2itempool data
-			$ip_sql = "SELECT multidkp2itempool_itempool_id, multidkp2itempool_multi_id FROM __multidkp2itempool;";
-			$ip_result = $this->db->query($ip_sql);
-			while ($row = $this->db->fetch_record($ip_result)){
-				$ip_data[$row['multidkp2itempool_multi_id']][] = $row['multidkp2itempool_itempool_id'];
+			$objQuery = $this->db2->query("SELECT multidkp2itempool_itempool_id, multidkp2itempool_multi_id FROM __multidkp2itempool;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$ip_data[$row['multidkp2itempool_multi_id']][] = $row['multidkp2itempool_itempool_id'];
+				}
 			}
-			$this->db->free_result($ip_result);
-			$m_result = $this->db->query("SELECT * FROM __multidkp;");
-			while($row = $this->db->fetch_record($m_result)){
-				$this->multidkp[$row['multidkp_id']]['name'] = $row['multidkp_name'];
-				$this->multidkp[$row['multidkp_id']]['desc'] = $row['multidkp_desc'];
-				$this->multidkp[$row['multidkp_id']]['events'] = (isset($me_data[$row['multidkp_id']])) ? $me_data[$row['multidkp_id']] : array();
-				$this->multidkp[$row['multidkp_id']]['no_attendance'] = ((isset($noatt_data[$row['multidkp_id']])) ? $noatt_data[$row['multidkp_id']] : '');
-				$this->multidkp[$row['multidkp_id']]['itempools'] = (isset($ip_data[$row['multidkp_id']])) ? $ip_data[$row['multidkp_id']] : array();
+			
+			$objQuery = $this->db2->query("SELECT * FROM __multidkp;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->multidkp[$row['multidkp_id']]['name'] = $row['multidkp_name'];
+					$this->multidkp[$row['multidkp_id']]['desc'] = $row['multidkp_desc'];
+					$this->multidkp[$row['multidkp_id']]['events'] = (isset($me_data[$row['multidkp_id']])) ? $me_data[$row['multidkp_id']] : array();
+					$this->multidkp[$row['multidkp_id']]['no_attendance'] = ((isset($noatt_data[$row['multidkp_id']])) ? $noatt_data[$row['multidkp_id']] : '');
+					$this->multidkp[$row['multidkp_id']]['itempools'] = (isset($ip_data[$row['multidkp_id']])) ? $ip_data[$row['multidkp_id']] : array();
+				}
 			}
-			$this->db->free_result($m_result);
+
 			$this->pdc->put('pdh_multidkp_table', $this->multidkp, null);
 		}
 

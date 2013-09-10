@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_rank" ) ) {
 	class pdh_r_rank extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db',	'game');
+		$shortcuts = array('pdc', 'db2',	'game');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -47,20 +47,23 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		public function init(){
 			$this->ranks = $this->pdc->get('pdh_member_ranks');
 			if($this->ranks !== NULL) return true;
-
-			$r_result = $this->db->query("SELECT * FROM __member_ranks ORDER BY rank_sortid ASC;");
-			while($r_row = $this->db->fetch_record($r_result)){
-				$this->ranks[$r_row['rank_id']]['rank_id']	= $r_row['rank_id'];
-				$this->ranks[$r_row['rank_id']]['prefix']	= $r_row['rank_prefix'];
-				$this->ranks[$r_row['rank_id']]['suffix']	= $r_row['rank_suffix'];
-				$this->ranks[$r_row['rank_id']]['name']		= $r_row['rank_name'];
-				$this->ranks[$r_row['rank_id']]['hide']		= (int)$r_row['rank_hide'];
-				$this->ranks[$r_row['rank_id']]['sortid']	= (int)$r_row['rank_sortid'];
-				$this->ranks[$r_row['rank_id']]['default']	= (int)$r_row['rank_default'];
-				$this->ranks[$r_row['rank_id']]['icon']		= $r_row['rank_icon'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __member_ranks ORDER BY rank_sortid ASC;");
+			if($objQuery){
+				while($r_row = $objQuery->fetchAssoc()){
+					$this->ranks[$r_row['rank_id']]['rank_id']	= $r_row['rank_id'];
+					$this->ranks[$r_row['rank_id']]['prefix']	= $r_row['rank_prefix'];
+					$this->ranks[$r_row['rank_id']]['suffix']	= $r_row['rank_suffix'];
+					$this->ranks[$r_row['rank_id']]['name']		= $r_row['rank_name'];
+					$this->ranks[$r_row['rank_id']]['hide']		= (int)$r_row['rank_hide'];
+					$this->ranks[$r_row['rank_id']]['sortid']	= (int)$r_row['rank_sortid'];
+					$this->ranks[$r_row['rank_id']]['default']	= (int)$r_row['rank_default'];
+					$this->ranks[$r_row['rank_id']]['icon']		= $r_row['rank_icon'];
+				}
 			}
+
 			if (!isset($this->ranks[0])) $this->ranks[0] = array('rank_id' => 0,	'prefix' => '',	'suffix' => '',	'name' => '', 'hide' => 0, 'sortid' => 0);
-			$this->db->free_result($r_result);
+
 			$this->pdc->put('pdh_member_ranks', $this->ranks);
 		}
 

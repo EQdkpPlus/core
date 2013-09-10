@@ -41,7 +41,7 @@ if(registry::register('input')->get('ajax', 0) == '1'){
 
 class register_pageobject extends pageobject {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'html', 'jquery', 'db', 'time', 'env', 'email'=>'MyMailer','crypt' => 'encrypt');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'html', 'jquery', 'db2', 'time', 'env', 'email'=>'MyMailer','crypt' => 'encrypt');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
@@ -168,14 +168,16 @@ class register_pageobject extends pageobject {
 			$sql = 'SELECT auth_id, auth_default
 					FROM __auth_options
 					ORDER BY auth_id';
-			$result = $this->db->query($sql);
-			while ( $row = $this->db->fetch_record($result) ) {
-				$arrSet = array(
-					'user_id' => $user_id,
-					'auth_id' => $row['auth_id'],
-					'auth_setting' => $row['auth_default'],
-				);
-				$this->db->query("INSERT INTO __auth_users :params", $arrSet);
+			$result = $this->db2->query($sql);
+			if ($result){
+				while ( $row = $result->fetchAssoc() ) {
+					$arrSet = array(
+						'user_id' 		=> $user_id,
+						'auth_id' 		=> $row['auth_id'],
+						'auth_setting'	=> $row['auth_default'],
+					);
+					$this->db2->prepare("INSERT INTO __auth_users :p")->set($arrSet)->execute();
+				}
 			}
 		}
 
@@ -250,13 +252,15 @@ class register_pageobject extends pageobject {
 
 		$username   = ( $this->in->exists('username') )   ? trim(strip_tags($this->in->get('username'))) : '';
 
-		// Look up record based on the username and e-mail
-		$sql = "SELECT user_id, username, user_email, user_active, user_lang
+		// Look up record based on the username and e-mail		
+		$objQuery = $this->db2->prepare("SELECT user_id, username, user_email, user_active, user_lang
 				FROM __users
-				WHERE LOWER(user_email) = '" .$this->db->escape(utf8_strtolower($username))."'
-				OR LOWER(username)='".$this->db->escape(clean_username($username))."'";
-		if ( $result = $this->db->query($sql) ) {
-			if ( $row = $this->db->fetch_record($result) ) {
+				WHERE LOWER(user_email) = ?
+				OR LOWER(username)=?")->limit(1)->execute(utf8_strtolower($username), clean_username($username));
+		if ($objQuery){
+			if ($objQuery->numRows){
+				$row = $objQuery->fetchAssoc();
+				
 				// Account's inactive, can't give them their password
 				if ( $row['user_active'] || $this->config->get('account_activation') != 1) {
 					message_die($this->user->lang('error_already_activated'));
@@ -281,10 +285,13 @@ class register_pageobject extends pageobject {
 				}
 			} else {
 				message_die($this->user->lang('error_invalid_user_or_mail'), $this->user->lang('get_new_activation_mail'), '', '', '', array('value' => $this->user->lang('back'), 'onclick' => 'javascript:history.back()'));
+			
 			}
+			
 		} else {
 			message_die('Could not obtain user information', '', 'error', false,__FILE__, __LINE__, $sql);
 		}
+
 	}
 
 
@@ -292,38 +299,42 @@ class register_pageobject extends pageobject {
 	// Process Activate
 	// ---------------------------------------------------------
 	public function process_activate() {
-		$sql = "SELECT user_id, username, user_active, user_email, user_lang, user_key
+		$objQuery = $this->db2->prepare("SELECT user_id, username, user_active, user_email, user_lang, user_key
 				FROM __users
-				WHERE user_key='" . $this->db->escape($this->in->get('key')) . "'";
-		if ( !($result = $this->db->query($sql)) ) {
-			message_die('Could not obtain user information', '', 'error', false, __FILE__, __LINE__, $sql);
-		}
-		if ( $row = $this->db->fetch_record($result) ) {
-			// If they're already active, just bump them back
-			if ( ($row['user_active'] == '1') && ($row['user_key'] == '') ) {
-				message_die($this->user->lang('error_already_activated'));
-			} else {
-				$this->pdh->put('user', 'activate', array($row['user_id']));
-
-				// E-mail the user if this was activated by the admin
-				if ( $this->config->get('account_activation') == 2 ) {
-					$this->email->Set_Language($row['user_lang']);
-					$bodyvars = array(
-						'USERNAME' => $row['username'],
-					);
-					if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
-						$success_message = $this->user->lang('account_activated_admin');
-					}else{
-						$success_message = $this->user->lang('email_subject_send_error');
-					}
+				WHERE user_key=?")->execute($this->in->get('key'));
+		if($objQuery){
+			if($objQuery->numRows){
+				$row = $objQuery->fetchAssoc();
+				
+				// If they're already active, just bump them back
+				if ( ($row['user_active'] == '1') && ($row['user_key'] == '') ) {
+					message_die($this->user->lang('error_already_activated'));
 				} else {
-					$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
-					$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
+					$this->pdh->put('user', 'activate', array($row['user_id']));
+	
+					// E-mail the user if this was activated by the admin
+					if ( $this->config->get('account_activation') == 2 ) {
+						$this->email->Set_Language($row['user_lang']);
+						$bodyvars = array(
+							'USERNAME' => $row['username'],
+						);
+						if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
+							$success_message = $this->user->lang('account_activated_admin');
+						}else{
+							$success_message = $this->user->lang('email_subject_send_error');
+						}
+					} else {
+						$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
+						$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
+					}
+					message_die($success_message);
 				}
-				message_die($success_message);
+				
+			} else {
+				message_die($this->user->lang('error_invalid_key'));
 			}
 		} else {
-			message_die($this->user->lang('error_invalid_key'));
+			message_die('Could not obtain user information', '', 'error', false, __FILE__, __LINE__, $sql);
 		}
 	}
 
@@ -382,7 +393,7 @@ class register_pageobject extends pageobject {
 
 	public function process_confirmed() {
 		if ($this->user->is_signedin()){
-			$this->db->query("UPDATE __users SET rules = 1 WHERE user_id=?", false, $this->user->id);
+			$this->db2->prepare("UPDATE __users SET rules = 1 WHERE user_id=?")->execute($this->user->id);
 		}
 		redirect();
 	}

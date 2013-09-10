@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_calendar_raids_attendees')){
 	class pdh_r_calendar_raids_attendees extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
+			$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'time');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -85,49 +85,53 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$this->attendees		= array();
 			$this->lastraid			= array();
 			$this->attendee_status	= array();
-			$myresult				= $this->db->query('SELECT * FROM __calendar_raid_attendees');
 			$raids_90d				= $this->pdh->get('calendar_events', 'amount_raids', array(90, false));
 			$raids_60d				= $this->pdh->get('calendar_events', 'amount_raids', array(60, false));
 			$raids_30d				= $this->pdh->get('calendar_events', 'amount_raids', array(30, false));
-			while ($row = $this->db->fetch_record($myresult)){
-				// fill the last attendee raid array
-				$newdate	= $this->pdh->get('calendar_events', 'time_start', array($row['calendar_events_id']));
-				$actdate	= (isset($this->lastraid[$row['member_id']])) ? $this->lastraid[$row['member_id']] : false;
-				
-				if((!$actdate || ($actdate && $newdate > $actdate) && $newdate < time())){
-					$this->lastraid[$row['member_id']] = $newdate;
-				}
-
-				// attendee status array
-				
-				if(in_array($row['calendar_events_id'], array_keys($raids_90d))){
-					if(in_array($row['calendar_events_id'], array_keys($raids_30d))){
-						$days	= '30';
-					}elseif(in_array($row['calendar_events_id'], array_keys($raids_60d))){
-						$days	= '60';
-					}else{
-						$days	= '90';
+			
+			$objQuery = $this->db2->query('SELECT * FROM __calendar_raid_attendees');
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					// fill the last attendee raid array
+					$newdate	= $this->pdh->get('calendar_events', 'time_start', array($row['calendar_events_id']));
+					$actdate	= (isset($this->lastraid[$row['member_id']])) ? $this->lastraid[$row['member_id']] : false;
+					
+					if((!$actdate || ($actdate && $newdate > $actdate) && $newdate < time())){
+						$this->lastraid[$row['member_id']] = $newdate;
 					}
-					if(isset($this->attendee_status[$row['member_id']][$row['signup_status']][$days])){
-						$this->attendee_status[$row['member_id']][$row['signup_status']][$days]++;
-					}else{
-						$this->attendee_status[$row['member_id']][$row['signup_status']][$days] = 1;
+	
+					// attendee status array
+					
+					if(in_array($row['calendar_events_id'], array_keys($raids_90d))){
+						if(in_array($row['calendar_events_id'], array_keys($raids_30d))){
+							$days	= '30';
+						}elseif(in_array($row['calendar_events_id'], array_keys($raids_60d))){
+							$days	= '60';
+						}else{
+							$days	= '90';
+						}
+						if(isset($this->attendee_status[$row['member_id']][$row['signup_status']][$days])){
+							$this->attendee_status[$row['member_id']][$row['signup_status']][$days]++;
+						}else{
+							$this->attendee_status[$row['member_id']][$row['signup_status']][$days] = 1;
+						}
 					}
+	
+					// fill the attendee array
+					$this->attendees[$row['calendar_events_id']][$row['member_id']] = array(
+						'member_role'				=> $row['member_role'],
+						'signup_status'				=> $row['signup_status'],
+						'status_changedby'			=> $row['status_changedby'],
+						'note'						=> $row['note'],
+						'timestamp_signup'			=> $row['timestamp_signup'],
+						'timestamp_change'			=> $row['timestamp_change'],
+						'raidgroup'					=> $row['raidgroup'],
+						'random_value'				=> $row['random_value'],
+						'signedbyadmin'				=> $row['signedbyadmin'],
+					);
 				}
-
-				// fill the attendee array
-				$this->attendees[$row['calendar_events_id']][$row['member_id']] = array(
-					'member_role'				=> $row['member_role'],
-					'signup_status'				=> $row['signup_status'],
-					'status_changedby'			=> $row['status_changedby'],
-					'note'						=> $row['note'],
-					'timestamp_signup'			=> $row['timestamp_signup'],
-					'timestamp_change'			=> $row['timestamp_change'],
-					'raidgroup'					=> $row['raidgroup'],
-					'random_value'				=> $row['random_value'],
-					'signedbyadmin'				=> $row['signedbyadmin'],
-				);
 			}
+			
 			$this->pdc->put('pdh_calendar_raids_table.attendees', $this->attendees, NULL);
 			$this->pdc->put('pdh_calendar_raids_table.lastraid', $this->lastraid, NULL);
 			$this->pdc->put('pdh_calendar_raids_table.attendee_status', $this->attendee_status, NULL);

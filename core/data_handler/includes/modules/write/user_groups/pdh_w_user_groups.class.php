@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_user_groups')) {
 	class pdh_w_user_groups extends pdh_w_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
+		$shortcuts = array('pdh', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -34,16 +34,18 @@ if(!class_exists('pdh_w_user_groups')) {
 		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $sortid=0,$deletable=1) {
 			
 			$arrSet = array(
-				'groups_user_id' 	=> $id,
-				'groups_user_name' => $name,
-				'groups_user_desc' => $desc,
+				'groups_user_id' 		=> $id,
+				'groups_user_name'		=> $name,
+				'groups_user_desc'		=> $desc,
 				'groups_user_deletable' => $deletable,
-				'groups_user_default' => $standard,
-				'groups_user_hide' => $hide,
-				'groups_user_sortid' => $sortid,
+				'groups_user_default'	=> $standard,
+				'groups_user_hide'		=> $hide,
+				'groups_user_sortid'	=> $sortid,
 			);
 			
-			if(!$this->db->query("INSERT INTO __groups_user :params", $arrSet)) {
+			$objQuery = $this->db2->prepare("INSERT INTO __groups_user :p")->set($arrSet)->execute();
+			
+			if(!$objQuery) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('user_groups_update');
@@ -77,8 +79,10 @@ if(!class_exists('pdh_w_user_groups')) {
 					'groups_user_hide' => $hide,
 					'groups_user_sortid' => $sortid,
 				);
-
-				if(!$this->db->query("UPDATE __groups_user SET :params WHERE groups_user_id=?", $arrSet, $id)) {
+				
+				$objQuery = $this->db2->prepare("UPDATE __groups_user :p WHERE groups_user_id=?")->set($arrSet)->execute($id);
+				
+				if(!$objQuery) {
 					return false;
 				}
 			}
@@ -91,9 +95,11 @@ if(!class_exists('pdh_w_user_groups')) {
 				return false;
 			} else {
 				$old['name'] = $this->pdh->get('user_groups', 'name', array($id));
-				if($this->db->query("DELETE FROM __groups_user WHERE (groups_user_id = ".$this->db->escape($id)." AND groups_user_deletable != '0' AND groups_user_default != '1');")) {
+				
+				$objQuery = $this->db2->prepare("DELETE FROM __groups_user WHERE (groups_user_id = ? AND groups_user_deletable != '0' AND groups_user_default != '1');")->execute($id);	
+				if($objQuery) {
 					$this->pdh->put('user_groups_users', 'delete_all_user_from_group', $id);
-					$this->db->query("DELETE FROM __auth_groups WHERE group_id = '".$this->db->escape($id)."'");
+					$this->db2->prepare("DELETE FROM __auth_groups WHERE group_id =?")->execute($id);
 					$this->pdh->enqueue_hook('user_groups_update');
 					$this->log_insert('action_usergroups_deleted', array(), $id, $old['name']);
 					return true;

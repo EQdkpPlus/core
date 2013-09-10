@@ -47,11 +47,13 @@ class login_pageobject extends pageobject {
 					$blnShowCaptcha = true;
 				}
 				if (!$blnShowCaptcha){
-					$resQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip = '".$this->env->ip."'");
-					$arrResult = $this->db->fetch_row($resQuery);
-					if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
-						$blnShowCaptcha = true;
-					}
+					$objQuery = $this->db2->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+					if($objQuery && $objQuery->numRows){
+						$arrResult = $objQuery->fetchAssoc();
+						if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+							$blnShowCaptcha = true;
+						}
+					}		
 				}
 			}
 		
@@ -130,32 +132,37 @@ class login_pageobject extends pageobject {
 			if (!strlen($this->in->get('key', ''))){
 				message_die($this->user->lang('error_invalid_key'));
 			}
-
-			$sql = "SELECT user_id, user_active
+			
+			$objQuery = $this->db2->prepare("SELECT user_id, user_active
 				FROM __users
-				WHERE user_key ='" .$this->db->escape($this->in->get('key', ''))."'";
-			$query = $this->db->query($sql);
-			if ( $row = $this->db->fetch_record($query) ) {
+				WHERE user_key =?")->limit(1)->execute($this->in->get('key', ''));
+			
+			if ($objQuery && $objQuery->numRows){
+				$row = $objQuery->fetchAssoc();
+				
 				// Account's inactive, can't give them their password
 				if ( !(int)$row['user_active'] ) {
 					message_die($this->user->lang('error_account_inactive'));
 				}
-
+				
 				$user_salt = $this->user->generate_salt();
 				$user_password = $this->in->get('password1');
-
+				
 				$arrSet = array(
-					'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
-					'user_key' => '',
+						'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
+						'user_key' => '',
 				);
-				if ($this->db->query("UPDATE __users SET :params WHERE user_id=?", $arrSet, $row['user_id'])){
+				
+				$objQuery = $this->db2->prepare("UPDATE __users SET :params WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
+				
+				if ($objQuery){
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
 					$this->display();
 				} else {
 					$this->core->message($this->user->lang('error'),'', 'red');
 					$this->display_new_password();
 				}
-
+				
 			} else {
 				message_die($this->user->lang('error_invalid_key'));
 			}
@@ -176,50 +183,57 @@ class login_pageobject extends pageobject {
 		$username	= ( $this->in->exists('username') )	? trim(strip_tags($this->in->get('username'))) : '';
 
 		// Look up record based on the username
-		$sql = "SELECT user_id, username, user_email, user_active, user_lang
+		$objQuery = $this->db2->prepare("SELECT user_id, username, user_email, user_active, user_lang
 				FROM __users
-				WHERE LOWER(username)='".$this->db->escape(clean_username($username))."'";
-		$result = $this->db->query($sql);
-		$row = $this->db->fetch_record($result);
-		//Check if email
-		if(!$row){
-			$userid = $this->pdh->get('user', 'userid_for_email', array($username));
-			if ($userid) $row = $this->pdh->get('user', 'data', array($userid));
-		} else {
-			$row['user_email'] = $this->crypt->decrypt($row['user_email']);
-		}
-
-		//We have an hit
-		if ($row) {
-			// Account's inactive, can't give them their password
-			if ( !$row['user_active'] ) {
-				message_die($this->user->lang('error_account_inactive'));
-			}
-
-			$username = $row['username'];
-
-			// Create a new activation key
-			$user_key = $this->pdh->put('user', 'create_new_activationkey', array($row['user_id']));
-			if(!strlen($user_key)) {
-				$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
-				$this->display();
-			}
-
-			// Email them their new password
-			$bodyvars = array(
-				'USERNAME'		=> $row['username'],
-				'DATETIME'		=> $this->time->user_date(false, true),
-				'U_ACTIVATE'	=> $this->env->link . $this->controller_path_plain. '/Login/NewPassword/?key=' . $user_key,
-			);
-
-			if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
-				message_die($this->user->lang('password_sent'), $this->user->lang('get_new_password'));
+				WHERE LOWER(username)=?")->execute(clean_username($username));
+		if ($objQuery){
+			$row = $objQuery->fetchAssoc();
+			
+			//Check if email
+			if(!$row){
+				$userid = $this->pdh->get('user', 'userid_for_email', array($username));
+				if ($userid) $row = $this->pdh->get('user', 'data', array($userid));
 			} else {
-				message_die($this->user->lang('error_email_send'), $this->user->lang('get_new_password'));
+				$row['user_email'] = $this->crypt->decrypt($row['user_email']);
 			}
+			
+			//We have an hit
+			if ($row) {
+				// Account's inactive, can't give them their password
+				if ( !$row['user_active'] ) {
+					message_die($this->user->lang('error_account_inactive'));
+				}
+			
+				$username = $row['username'];
+			
+				// Create a new activation key
+				$user_key = $this->pdh->put('user', 'create_new_activationkey', array($row['user_id']));
+				if(!strlen($user_key)) {
+					$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
+					$this->display();
+				}
+			
+				// Email them their new password
+				$bodyvars = array(
+						'USERNAME'		=> $row['username'],
+						'DATETIME'		=> $this->time->user_date(false, true),
+						'U_ACTIVATE'	=> $this->env->link . $this->controller_path_plain. '/Login/NewPassword/?key=' . $user_key,
+				);
+			
+				if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
+					message_die($this->user->lang('password_sent'), $this->user->lang('get_new_password'));
+				} else {
+					message_die($this->user->lang('error_email_send'), $this->user->lang('get_new_password'));
+				}
+			} else {
+				message_die($this->user->lang('error_invalid_user_or_mail'), $this->user->lang('get_new_password'));
+			}
+			
+			
 		} else {
 			message_die($this->user->lang('error_invalid_user_or_mail'), $this->user->lang('get_new_password'));
 		}
+		
 	}
 
 	public function display_new_password(){
@@ -271,10 +285,12 @@ class login_pageobject extends pageobject {
 				$blnShowCaptcha = true;
 			}
 			if (!$blnShowCaptcha){
-				$resQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip = '".$this->env->ip."'");
-				$arrResult = $this->db->fetch_row($resQuery);
-				if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
-					$blnShowCaptcha = true;
+				$objQuery = $this->db2->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+				if($objQuery && $objQuery->numRows){
+					$arrResult = $objQuery->fetchAssoc();
+					if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
+						$blnShowCaptcha = true;
+					}
 				}
 			}
 		}

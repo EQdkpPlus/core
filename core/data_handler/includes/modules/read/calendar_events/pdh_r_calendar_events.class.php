@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_calendar_events" ) ) {
 	class pdh_r_calendar_events extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'time', 'pdh'	);
+		$shortcuts = array('pdc', 'db2', 'user', 'time', 'pdh'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -72,34 +72,35 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if($this->events !== NULL && $this->repeatable_events !== NULL && $this->event_timestamps !== NULL){
 				return true;
 			}
-
-			$query = $this->db->query("SELECT * FROM __calendar_events");
-			while ( $row = $this->db->fetch_record($query) ){
-				$this->events[$row['id']] = array(
-					'id'					=> $row['id'],
-					'calendar_id'			=> $row['calendar_id'],
-					'name'					=> $row['name'],
-					'creator'				=> $row['creator'],
-					'timestamp_start'		=> $row['timestamp_start'],
-					'timestamp_end'			=> $row['timestamp_end'],
-					'allday'				=> $row['allday'],
-					'private'				=> $row['private'],
-					'visible'				=> $row['visible'],
-					'closed'				=> $row['closed'],
-					'notes'					=> $row['notes'],
-					'repeating'				=> $row['repeating'],
-					'cloneid'				=> $row['cloneid'],
-				);
-				$this->events[$row['id']]['extension']	= unserialize($row['extension']);
-				$this->event_timestamps[$row['id']]		= $row['timestamp_start'];
-
-				// set the repeatable array
-				if($row['repeating'] != 'none'){
-					$parentid	= ($row['cloneid'] > 0) ? $row['cloneid'] : $row['id'];
-					$this->repeatable_events[$parentid][] = $row['id'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __calendar_events");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->events[$row['id']] = array(
+						'id'					=> $row['id'],
+						'calendar_id'			=> $row['calendar_id'],
+						'name'					=> $row['name'],
+						'creator'				=> $row['creator'],
+						'timestamp_start'		=> $row['timestamp_start'],
+						'timestamp_end'			=> $row['timestamp_end'],
+						'allday'				=> $row['allday'],
+						'private'				=> $row['private'],
+						'visible'				=> $row['visible'],
+						'closed'				=> $row['closed'],
+						'notes'					=> $row['notes'],
+						'repeating'				=> $row['repeating'],
+						'cloneid'				=> $row['cloneid'],
+					);
+					$this->events[$row['id']]['extension']	= unserialize($row['extension']);
+					$this->event_timestamps[$row['id']]		= $row['timestamp_start'];
+	
+					// set the repeatable array
+					if($row['repeating'] != 'none'){
+						$parentid	= ($row['cloneid'] > 0) ? $row['cloneid'] : $row['id'];
+						$this->repeatable_events[$parentid][] = $row['id'];
+					}
 				}
 			}
-			$this->db->free_result($query);
 
 			// sort the timestamps
 			asort($this->event_timestamps);
@@ -115,18 +116,20 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if(($start_date != 0) || ($end_date != 9999999999)){
 				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
 				$sqlstring	.= (is_array($calfilter)) ? ' (calendar_id IN ('.implode(",", $calfilter).')) AND' : '';
-				$sqlstring	.= " ((timestamp_start BETWEEN '".$this->db->escape($start_date)."' AND '".$this->db->escape($end_date)."') OR (timestamp_end BETWEEN '".$this->db->escape($start_date)."' AND '".$this->db->escape($end_date)."'))";
+				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db2->escapeString($start_date)." AND ".$this->db2->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db2->escapeString($start_date)." AND ".$this->db2->escapeString($end_date)."))";
 
-				$query = $this->db->query($sqlstring);
-				if($raids_only) {
-					while ( $row = $this->db->fetch_record($query) ){
-						if($this->get_calendartype($row['id']) == '1'){
+				$query = $this->db2->query($sqlstring);
+				if ($query){
+					if($raids_only) {
+						while ( $row = $query->fetchAssoc() ){
+							if($this->get_calendartype($row['id']) == '1'){
+								$ids[] = $row['id'];
+							}
+						}
+					}else{
+						while ( $row = $query->fetchAssoc() ){
 							$ids[] = $row['id'];
 						}
-					}
-				}else{
-					while ( $row = $this->db->fetch_record($query) ){
-						$ids[] = $row['id'];
 					}
 				}
 			}else if(isset($this->events)){

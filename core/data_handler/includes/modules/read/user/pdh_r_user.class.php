@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("pdh_r_user")){
 	class pdh_r_user extends pdh_r_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('db', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time', 'routing');
+		$shortcuts = array('db2', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -61,18 +61,19 @@ if (!class_exists("pdh_r_user")){
 
 		public function init(){
 			$this->users = array();
-			$sql = "SELECT * FROM __users u ORDER BY username ASC;";
-			$r_result = $this->db->query($sql);
-
-			while( $row = $this->db->fetch_record($r_result) ){
-				//decrypt email address
-				$row['user_email'] = $this->crypt->decrypt($row['user_email']);
-				$row['auth_account'] = unserialize($this->crypt->decrypt($row['auth_account']));
-				$this->users[$row['user_id']] = $row;
-				$this->users[$row['user_id']]['username_clean'] = clean_username($row['username']);
-				$this->users[$row['user_id']]['user_email_clean'] = utf8_strtolower($row['user_email']);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __users u ORDER BY username ASC;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					//decrypt email address
+					$row['user_email'] = $this->crypt->decrypt($row['user_email']);
+					$row['auth_account'] = unserialize($this->crypt->decrypt($row['auth_account']));
+					$this->users[$row['user_id']] = $row;
+					$this->users[$row['user_id']]['username_clean'] = clean_username($row['username']);
+					$this->users[$row['user_id']]['user_email_clean'] = utf8_strtolower($row['user_email']);
+				}
 			}
-			$this->db->free_result($r_result);
+
 		}
 
 		public function get_id_list($skip_special_users = true){
@@ -596,11 +597,12 @@ if (!class_exists("pdh_r_user")){
 		
 		private function init_online_user(){
 			if (!$this->online_user){
-				$result = $this->db->query("SELECT session_user_id FROM __sessions;");
-				while ( $row = $this->db->fetch_record($result) ) {
-					$this->online_user[] = $row['session_user_id'];
+				$objQuery = $this->db2->query("SELECT session_user_id FROM __sessions;");
+				if($objQuery){
+					while($row = $objQuery->fetchAssoc()){
+						$this->online_user[] = $row['session_user_id'];
+					}
 				}
-				$this->db->free_result($result);
 			}
 		}
 	}//end class

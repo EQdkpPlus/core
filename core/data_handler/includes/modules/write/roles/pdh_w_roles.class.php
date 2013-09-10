@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')){
 if(!class_exists('pdh_w_roles')){
 	class pdh_w_roles extends pdh_w_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
+		$shortcuts = array('pdh', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -32,32 +32,44 @@ if(!class_exists('pdh_w_roles')){
 		}
 
 		public function insert_role($role_id, $role_name, $role_classes=''){
-			$this->db->query("INSERT INTO __roles :params", array(
+			$objQuery = $this->db2->prepare("INSERT INTO __roles :p")->set(array(
 				'role_id'			=> $role_id,
 				'role_name'			=> $role_name,
 				'role_classes'		=> $role_classes
-			));
+			))->execute();
+			
+			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('roles_update');
+			
+			return true;
 		}
 
 		public function truncate_role(){
-			$this->db->query('TRUNCATE TABLE __roles');
+			$this->db2->query('TRUNCATE TABLE __roles');
 			$this->pdh->enqueue_hook('roles_update');
 		}
 
 		public function delete_roles($id){
-			$field = (is_array($id)) ? implode(', ', $id) : $id;
-			$this->db->query("DELETE FROM __roles WHERE role_id IN (".$field.")");
+			$field = (!is_array($id)) ? array($id) : $id;
+			
+			$objQuery = $this->db2->prepare("DELETE FROM __roles WHERE role_id :in")->in($field)->execute();
+			
 			$this->pdh->enqueue_hook('roles_update');
 		}
 
 		public function update_role($role_id, $role_name='', $role_classes=''){
 			$role_name		= ($role_name)		? $role_name		: $this->pdh->get('roles', 'name', array($role_id));
 			$role_classes	= ($role_classes)	? $role_classes 	: $this->pdh->get('roles', 'classes_r', array($role_id));
-			$this->db->query("UPDATE __roles SET :params WHERE role_id=?", array(
+			
+			$objQuery = $this->db2->prepare("UPDATE __roles :p WHERE role_id=?")->set(array(
 				'role_name'			=> $role_name,
 				'role_classes'		=> $role_classes
-			), $role_id);
+			))->execute($role_id);
+				
+			if(!$objQuery) return false;
+			$this->pdh->enqueue_hook('roles_update');
+				
+			return true;
 			$this->pdh->enqueue_hook('roles_update', array($role_id));
 		}
 	}

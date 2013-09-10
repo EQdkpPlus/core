@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_comment')){
 	class pdh_r_comment extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -56,12 +56,14 @@ if(!class_exists('pdh_r_comment')){
 			}
 
 			$this->comments = array();
-			$sql = "SELECT com.*, u.username FROM __comments com, __users u WHERE com.userid = u.user_id ORDER BY com.date DESC;";
-			$result = $this->db->query($sql);
-			while( $row = $this->db->fetch_record($result)){
-				$this->comments[$row['id']] = $row;
+			
+			$objQuery = $this->db2->query("SELECT com.*, u.username FROM __comments com, __users u WHERE com.userid = u.user_id ORDER BY com.date DESC;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->comments[$row['id']] = $row;
+				}
 			}
-			$this->db->free_result($result);
+			
 			$this->pdc->put('pdh_comments_table', $this->comments, null);
 		}
 

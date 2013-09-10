@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_calendar_raids_guests')){
 	class pdh_r_calendar_raids_guests extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -61,15 +61,18 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 			// empty array as default
 			$this->guests	= array();
-			$myresult		= $this->db->query('SELECT * FROM __calendar_raid_guests;');
-			while ($row = $this->db->fetch_record($myresult)){
-				$this->guests[$row['calendar_events_id']][$row['id']] = array(
-					'name'				=> $row['name'],
-					'note'				=> $row['note'],
-					'timestamp_signup'	=> $row['timestamp_signup'],
-					'raidgroup'			=> $row['raidgroup'],
-					'class'				=> $row['class'],
-				);
+			
+			$objQuery = $this->db2->query('SELECT * FROM __calendar_raid_guests;');
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->guests[$row['calendar_events_id']][$row['id']] = array(
+						'name'				=> $row['name'],
+						'note'				=> $row['note'],
+						'timestamp_signup'	=> $row['timestamp_signup'],
+						'raidgroup'			=> $row['raidgroup'],
+						'class'				=> $row['class'],
+					);
+				}
 			}
 
 			$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);

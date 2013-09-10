@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_user_groups_users" ) ){
 	class pdh_r_user_groups_users extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('db'	);
+		$shortcuts = array('db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -42,15 +42,15 @@ if ( !class_exists( "pdh_r_user_groups_users" ) ){
 
 		public function init(){
 			$this->user_groups_users = array();
-			$sql = "SELECT gu.* FROM __groups_users gu, __users u WHERE u.user_id = gu.user_id ORDER BY u.username ASC";
-			$r_result = $this->db->query($sql);
-
-			while( $row = $this->db->fetch_record($r_result) ){
-				$this->user_groups_users[$row['group_id']][$row['user_id']] = $row['user_id'];
-				//0 = regular member, 1 = group leader
-				$this->user_memberships[$row['user_id']][$row['group_id']] = (intval($row['grpleader'])) ? 1 : 0;
+			
+			$objQuery = $this->db2->query("SELECT gu.* FROM __groups_users gu, __users u WHERE u.user_id = gu.user_id ORDER BY u.username ASC");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->user_groups_users[$row['group_id']][$row['user_id']] = $row['user_id'];
+					//0 = regular member, 1 = group leader
+					$this->user_memberships[$row['user_id']][$row['group_id']] = (intval($row['grpleader'])) ? 1 : 0;
+				}
 			}
-			$this->db->free_result($r_result);
 		}
 
 		public function get_user_list($group_id){

@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_roles')){
 	class pdh_r_roles extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'game'	);
+		$shortcuts = array('pdc', 'db2', 'user', 'game'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -73,13 +73,16 @@ if (!class_exists('pdh_r_roles')){
 
 			// empty array as default
 			$this->roles	= $this->roles_id = array();
-			$roleresult		= $this->db->query('SELECT * FROM __roles');
-			while ($row = $this->db->fetch_record($roleresult)){
-				$this->roles[$row['role_id']]['id']			= $row['role_id'];
-				$this->roles[$row['role_id']]['name']		= $row['role_name'];
-				$this->roles[$row['role_id']]['classes']	= (substr_count($row['role_classes'], "|") > 0) ? explode("|", $row['role_classes']) : ((count($row['role_classes']) > 0) ? array($row['role_classes']) : array());
-				$this->roles[$row['role_id']]['classes_r']	= $row['role_classes'];
-				$this->roles_id[$row['role_id']]			= $row['role_name'];
+			
+			$objQuery = $this->db2->query('SELECT * FROM __roles');
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->roles[$row['role_id']]['id']			= $row['role_id'];
+					$this->roles[$row['role_id']]['name']		= $row['role_name'];
+					$this->roles[$row['role_id']]['classes']	= (substr_count($row['role_classes'], "|") > 0) ? explode("|", $row['role_classes']) : ((count($row['role_classes']) > 0) ? array($row['role_classes']) : array());
+					$this->roles[$row['role_id']]['classes_r']	= $row['role_classes'];
+					$this->roles_id[$row['role_id']]			= $row['role_name'];
+				}
 			}
 
 			$this->pdc->put('pdh_roles_table.roles', $this->roles, NULL);

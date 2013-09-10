@@ -61,16 +61,20 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 
 			// empty array as default
 			$this->rctemplates	= array();
-			$myresult		= $this->db->query('SELECT * FROM __calendar_raid_templates;');
-			while ($row = $this->db->fetch_record($myresult)){
-				$templatearray = json_decode($row['tpldata'], true);
-				$this->rctemplates[$row['id']]['name'] = $row['name'];
-				if(is_array($templatearray)){
-					foreach($templatearray as $tplkey=>$tplvalue){
-						$this->rctemplates[$row['id']][$tplkey] = $tplvalue;
+			
+			$objQuery = $this->db2->query('SELECT * FROM __calendar_raid_templates;');
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$templatearray = json_decode($row['tpldata'], true);
+					$this->rctemplates[$row['id']]['name'] = $row['name'];
+					if(is_array($templatearray)){
+						foreach($templatearray as $tplkey=>$tplvalue){
+							$this->rctemplates[$row['id']][$tplkey] = $tplvalue;
+						}
 					}
 				}
 			}
+
 			$this->pdc->put('pdh_calendar_raids_table.templates', $this->rctemplates, NULL);
 			return true;
 		}

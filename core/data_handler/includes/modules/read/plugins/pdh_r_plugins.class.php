@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_plugins" ) ) {
 	class pdh_r_plugins extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -44,15 +44,18 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 			if($this->plugins !== NULL){
 				return true;
 			}
-			$result = $this->db->query("SELECT * FROM __plugins ORDER BY code");
-			while($drow = $this->db->fetch_record($result) ){
-				$this->plugins[$drow['code']] = array(
-					'code'		=> $drow['code'],
-					'version'	=> $drow['version'],
-					'status'	=> $drow['status']
-				);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __plugins ORDER BY code");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->plugins[$drow['code']] = array(
+						'code'		=> $drow['code'],
+						'version'	=> $drow['version'],
+						'status'	=> $drow['status']
+					);
+				}
 			}
-			$this->db->free_result($result);
+
 			$this->pdc->put('pdh_plugins_table', $this->plugins, null);
 		}
 

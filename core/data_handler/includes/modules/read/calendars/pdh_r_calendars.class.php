@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_calendars" ) ) {
 	class pdh_r_calendars extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -45,21 +45,23 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 			if($this->calendars !== NULL){
 				return true;
 			}
-
-			$query = $this->db->query("SELECT * FROM __calendars");
-			while ( $row = $this->db->fetch_record($query) ){
-				$this->calendars[$row['id']] = array(
-					'id'						=> $row['id'],
-					'name'						=> $row['name'],
-					'color'						=> $row['color'],
-					'private'					=> $row['private'],
-					'feed'						=> $row['feed'],
-					'system'					=> $row['system'],
-					'type'						=> $row['type'],
-					'restricted'				=> $row['restricted'],
-				);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __calendars");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->calendars[$row['id']] = array(
+						'id'						=> $row['id'],
+						'name'						=> $row['name'],
+						'color'						=> $row['color'],
+						'private'					=> $row['private'],
+						'feed'						=> $row['feed'],
+						'system'					=> $row['system'],
+						'type'						=> $row['type'],
+						'restricted'				=> $row['restricted'],
+					);
+				}
 			}
-			$this->db->free_result($query);
+
 			$this->pdc->put('pdh_calendars_table', $this->calendars, null);
 		}
 

@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_rank')) {
 	class pdh_w_rank extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
+		$shortcuts = array('pdh', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -42,7 +42,10 @@ if(!class_exists('pdh_w_rank')) {
 				'rank_default'	=> ($default) ? 1 : 0,
 				'rank_icon'		=> $icon,
 			);
-			if(!$this->db->query("INSERT INTO __member_ranks :params", $arrSet)) {
+			
+			$objQuery = $this->db2->prepare("INSERT INTO __member_ranks :p")->set($arrSet)->execute();
+			
+			if(!$objQuery) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('rank_update', array($id));
@@ -75,7 +78,11 @@ if(!class_exists('pdh_w_rank')) {
 					'rank_default' => ($default) ? 1 : 0,
 					'rank_icon'	=> $icon,
 				);
-				if(!$this->db->query("UPDATE __member_ranks SET :params WHERE rank_id=?", $arrSet, $id)) {
+				
+				$objQuery = $this->db2->prepare("UPDATE __member_ranks :p WHERE rank_id=?")->set($arrSet)->execute($id);
+				
+				
+				if(!$objQuery) {
 					return false;
 				}
 			}
@@ -91,7 +98,9 @@ if(!class_exists('pdh_w_rank')) {
 					'rank_sortid'	=> $intSortID,
 					'rank_default'	=> ($blnDefault) ? 1 : 0,
 				);
-				if(!$this->db->query("UPDATE __member_ranks SET :params WHERE rank_id=?", $arrSet, $intRankID)) {
+				$objQuery = $this->db2->prepare("UPDATE __member_ranks :p WHERE rank_id=?")->set($arrSet)->execute($intRankID);
+				
+				if(!$objQuery) {
 					return false;
 				}
 				$this->pdh->enqueue_hook('rank_update', array($intRankID));
@@ -100,15 +109,17 @@ if(!class_exists('pdh_w_rank')) {
 		}
 
 		public function delete_rank($id) {
-			if($this->db->query("DELETE FROM __member_ranks WHERE rank_id = ?;", false, $id)) {
-				$this->pdh->enqueue_hook('rank_update', array($id));
+			$objQuery = $this->db2->prepare("DELETE FROM __member_ranks WHERE rank_id = ?;")->execute($id);
+			
+			if($objQuery) {
+				$this->pdh->enqueue_hook('rank_update', array());
 				return true;
 			}
 			return false;
 		}
 		
 		public function truncate(){
-			if($this->db->query("TRUNCATE __member_ranks;")) {
+			if($this->db2->query("TRUNCATE __member_ranks;")) {
 				$this->pdh->enqueue_hook('rank_update');
 				return true;
 			}

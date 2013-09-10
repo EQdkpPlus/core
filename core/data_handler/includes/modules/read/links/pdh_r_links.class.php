@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_links" ) ){
 	class pdh_r_links extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'bbcode'=>'bbcode', 'routing');
+		$shortcuts = array('pdc', 'db2', 'user', 'bbcode'=>'bbcode', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -57,18 +57,19 @@ if ( !class_exists( "pdh_r_links" ) ){
 					FROM
 					__links
 					ORDER BY link_sortid;";
-			$r_result = $this->db->query($sql);
-
-			while( $row = $this->db->fetch_record($r_result) ){
-				$this->links[$row['link_id']]['id']			= $row['link_id'];
-				$this->links[$row['link_id']]['name']		= $row['link_name'];
-				$this->links[$row['link_id']]['url']		= $row['link_url'];
-				$this->links[$row['link_id']]['window']		= $row['link_window'];
-				$this->links[$row['link_id']]['menu']		= $row['link_menu'];
-				$this->links[$row['link_id']]['visibility']	= xhtml_entity_decode($row['link_visibility']);
-				$this->links[$row['link_id']]['height']		= $row['link_height'];
+			
+			$objQuery = $this->db2->query($sql);
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->links[$row['link_id']]['id']			= $row['link_id'];
+					$this->links[$row['link_id']]['name']		= $row['link_name'];
+					$this->links[$row['link_id']]['url']		= $row['link_url'];
+					$this->links[$row['link_id']]['window']		= $row['link_window'];
+					$this->links[$row['link_id']]['menu']		= $row['link_menu'];
+					$this->links[$row['link_id']]['visibility']	= xhtml_entity_decode($row['link_visibility']);
+					$this->links[$row['link_id']]['height']		= $row['link_height'];
+				}
 			}
-			$this->db->free_result($r_result);
 
 			$this->pdc->put('pdh_links_table', $this->links, NULL);
 			return true;

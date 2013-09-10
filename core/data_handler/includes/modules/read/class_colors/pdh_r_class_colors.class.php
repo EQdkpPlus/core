@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_class_colors')){
 	class pdh_r_class_colors extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -50,12 +50,15 @@ if(!class_exists('pdh_r_class_colors')){
 			}
 
 			$this->class_colors = array();
-			$result = $this->db->query("SELECT * FROM __classcolors");
-			while($row = $this->db->fetch_record($result)){
-				$this->class_colors[$row['template']][$row['class_id']]	= $row['color'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __classcolors");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->class_colors[$row['template']][$row['class_id']]	= $row['color'];
+				}
 			}
+			
 			$this->pdc->put('pdh_classcolors_table', $this->class_colors, null);
-			$this->db->free_result($result);
 		}
 
 		public function get_class_colors($templateid){

@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_raid')){
 	class pdh_r_raid extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'pdh', 'time', 'config', 'user', 'apa' => 'auto_point_adjustments', 'routing');
+			$shortcuts = array('pdc', 'db2', 'pdh', 'time', 'config', 'user', 'apa' => 'auto_point_adjustments', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -68,29 +68,30 @@ if(!class_exists('pdh_r_raid')){
 			}
 
 			$this->raids = array();
-
-			$sql = "SELECT raid_id, event_id, raid_date, raid_value, raid_note, raid_added_by, raid_updated_by FROM __raids;";
-			$result = $this->db->query($sql);
-			while ( $row = $this->db->fetch_record($result) ){
-				$this->raids[$row['raid_id']]['event'] = $row['event_id'];
-				$this->raids[$row['raid_id']]['date'] = $row['raid_date'];
-				$this->raids[$row['raid_id']]['value'] = $row['raid_value'];
-				$this->raids[$row['raid_id']]['note'] = $row['raid_note'];
-				$this->raids[$row['raid_id']]['added_by'] = $row['raid_added_by'];
-				$this->raids[$row['raid_id']]['updated_by'] = $row['raid_updated_by'];
-				$this->raids[$row['raid_id']]['members'] = array();
-			}
-			$this->db->free_result($result);
-
-			$sql = "SELECT raid_id, member_id FROM __raid_attendees;";
-			$result = $this->db->query($sql);
-			while ( $row = $this->db->fetch_record($result) ){
-				//if there are any raid_ids in the raid_attendees table, that are not present in the raids table anymore
-				if(isset($this->raids[$row['raid_id']])){
-					$this->raids[$row['raid_id']]['members'][] = $row['member_id'];
+			
+			$objQuery = $this->db2->query("SELECT raid_id, event_id, raid_date, raid_value, raid_note, raid_added_by, raid_updated_by FROM __raids;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->raids[$row['raid_id']]['event'] = $row['event_id'];
+					$this->raids[$row['raid_id']]['date'] = $row['raid_date'];
+					$this->raids[$row['raid_id']]['value'] = $row['raid_value'];
+					$this->raids[$row['raid_id']]['note'] = $row['raid_note'];
+					$this->raids[$row['raid_id']]['added_by'] = $row['raid_added_by'];
+					$this->raids[$row['raid_id']]['updated_by'] = $row['raid_updated_by'];
+					$this->raids[$row['raid_id']]['members'] = array();
 				}
 			}
-			$this->db->free_result($result);
+			
+			$objQuery = $this->db2->query("SELECT raid_id, member_id FROM __raid_attendees;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					//if there are any raid_ids in the raid_attendees table, that are not present in the raids table anymore
+					if(isset($this->raids[$row['raid_id']])){
+						$this->raids[$row['raid_id']]['members'][] = $row['member_id'];
+					}
+				}
+			}
+
 			$this->pdc->put('pdh_raids_table', $this->raids, null);
 		}
 

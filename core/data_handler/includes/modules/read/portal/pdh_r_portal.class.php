@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_portal" ) ) {
 	class pdh_r_portal extends pdh_r_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
+		$shortcuts = array('pdc', 'db2'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -44,24 +44,26 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			if($this->portal !== NULL){
 				return true;
 			}
-
-			$pff_result = $this->db->query("SELECT * FROM __portal;");
-			while($drow = $this->db->fetch_record($pff_result)){
-				$this->portal[$drow['id']] = array(
-					'name'			=> $drow['name'],
-					'path'			=> $drow['path'],
-					'contact'		=> $drow['contact'],
-					'url'			=> $drow['url'],
-					'autor'			=> $drow['autor'],
-					'version'		=> $drow['version'],
-					'plugin'		=> $drow['plugin'],
-					'visibility'	=> unserialize($drow['visibility']),
-					'collapsable'	=> $drow['collapsable'],
-					'child'			=> $drow['child'],
-				);
+			
+			$objQuery = $this->db2->query("SELECT * FROM __portal");
+			if($objQuery){
+				while($drow = $objQuery->fetchAssoc()){
+					$this->portal[$drow['id']] = array(
+						'name'			=> $drow['name'],
+						'path'			=> $drow['path'],
+						'contact'		=> $drow['contact'],
+						'url'			=> $drow['url'],
+						'autor'			=> $drow['autor'],
+						'version'		=> $drow['version'],
+						'plugin'		=> $drow['plugin'],
+						'visibility'	=> unserialize($drow['visibility']),
+						'collapsable'	=> $drow['collapsable'],
+						'child'			=> $drow['child'],
+					);
+				}
 			}
-				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_portal_table', $this->portal, null);
+
+			$this->pdc->put('pdh_portal_table', $this->portal, null);
 		}
 
 		private function filter($type, $ids) {

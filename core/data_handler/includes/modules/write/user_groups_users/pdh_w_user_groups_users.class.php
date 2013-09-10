@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_user_groups_users')) {
 	class pdh_w_user_groups_users extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'user'	);
+		$shortcuts = array('pdh', 'db2', 'user'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -36,8 +36,10 @@ if(!class_exists('pdh_w_user_groups_users')) {
 				'group_id' => $group_id,
 				'user_id'  => $user_id,
 			);
+			
+			$objQuery = $this->db2->prepare("INSERT INTO __groups_users :p")->set($arrSet)->execute();
 
-			if(!$this->db->query("INSERT INTO __groups_users :params", $arrSet)) {
+			if(!$objQuery) {
 				return false;
 			}
 
@@ -74,7 +76,9 @@ if(!class_exists('pdh_w_user_groups_users')) {
 			
 			$arrNames = array();
 			foreach($arrUserIDs as $user_id){
-				if(!$this->db->query("UPDATE __groups_users SET :params WHERE group_id='".$this->db->escape($group_id)."' AND user_id='".$this->db->escape($user_id)."'", $arrSet)) {
+				$objQuery = $this->db2->prepare("UPDATE __groups_users :p WHERE group_id=? AND user_id=?")->set($arrSet)->execute($group_id, $user_id);
+				
+				if(!$objQuery) {
 					return false;
 				}
 				$arrNames[] = $this->pdh->get('user', 'name', array($user_id)); 
@@ -101,7 +105,9 @@ if(!class_exists('pdh_w_user_groups_users')) {
 			
 			$arrNames = array();
 			foreach($arrUserIDs as $user_id){
-				if(!$this->db->query("UPDATE __groups_users SET :params WHERE group_id='".$this->db->escape($group_id)."' AND user_id='".$this->db->escape($user_id)."'", $arrSet)) {
+				$objQuery = $this->db2->prepare("UPDATE __groups_users :p WHERE group_id=? AND user_id=?")->set($arrSet)->execute($group_id, $user_id);
+				
+				if(!$objQuery) {
 					return false;
 				}
 				$arrNames[] = $this->pdh->get('user', 'name', array($user_id));
@@ -131,7 +137,9 @@ if(!class_exists('pdh_w_user_groups_users')) {
 		}
 
 		public function delete_user_from_group($user_id, $group_id) {
-			if($this->db->query("DELETE FROM __groups_users WHERE group_id = ".$this->db->escape($group_id)." AND user_id = ".$this->db->escape($user_id).";")) {
+			$objQuery = $this->db2->prepare("DELETE FROM __groups_users WHERE group_id = ? AND user_id =?")->execute($group_id, $user_id);
+			
+			if($objQuery) {
 				$this->pdh->enqueue_hook('user_groups_update');
 				return true;
 			}
@@ -140,15 +148,14 @@ if(!class_exists('pdh_w_user_groups_users')) {
 
 		public function delete_users_from_group($user_array, $group_id) {
 			if (is_array($user_array)) {
-				$user = implode(",", $user_array);
-				$this->db->query("DELETE FROM __groups_users WHERE group_id = '".$this->db->escape($group_id)."' AND user_id IN (".$this->db->escape($user).");");
+				$objQuery = $this->db2->prepare("DELETE FROM __groups_users WHERE group_id =? AND user_id :in")->in($user_array)->execute($group_id);
 			} else {
 				return false;
 			}
 		}
 
 		public function delete_all_user_from_group($group_id) {
-			$this->db->query("DELETE FROM __groups_users WHERE group_id = '".$this->db->escape($group_id)."';");			
+			$objQuery = $this->db2->prepare("DELETE FROM __groups_users WHERE group_id =?")->execute($group_id);		
 			return true;
 		}
 
@@ -157,7 +164,7 @@ if(!class_exists('pdh_w_user_groups_users')) {
 			if (is_array($group_array)) {
 				foreach($group_array as $key=>$group) {
 					if (!($group == 2 && (!isset($memberships[2]) || $this->user->data['user_id'] == $user_id))) {
-						$this->db->query("DELETE FROM __groups_users WHERE group_id = '".$this->db->escape($group)."' AND user_id = '".$this->db->escape($user_id)."';");
+						$objQuery = $this->db2->prepare("DELETE FROM __groups_users WHERE group_id = ? AND user_id =?")->execute($group, $user_id);
 					}
 					
 				}

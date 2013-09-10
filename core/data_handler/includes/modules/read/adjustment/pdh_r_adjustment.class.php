@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_adjustment')){
 	class pdh_r_adjustment extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('db', 'pdh', 'user', 'time', 'pdc', 'apa' => 'auto_point_adjustments');
+			$shortcuts = array('db2', 'pdh', 'user', 'time', 'pdc', 'apa' => 'auto_point_adjustments');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -66,21 +66,22 @@ if(!class_exists('pdh_r_adjustment')){
 			if($this->adjustments !== NULL){
 				return true;
 			}
-			$sql = "SELECT * FROM __adjustments ORDER BY adjustment_date DESC;";
-			$result = $this->db->query($sql);
-
-			while( $row = $this->db->fetch_record($result) ){
-				$this->adjustments[$row['adjustment_id']]['value'] = $row['adjustment_value'];
-				$this->adjustments[$row['adjustment_id']]['date'] = $row['adjustment_date'];
-				$this->adjustments[$row['adjustment_id']]['member'] = $row['member_id'];
-				$this->adjustments[$row['adjustment_id']]['reason'] = $row['adjustment_reason'];
-				$this->adjustments[$row['adjustment_id']]['event'] = $row['event_id'];
-				$this->adjustments[$row['adjustment_id']]['added_by'] = $row['adjustment_added_by'];
-				$this->adjustments[$row['adjustment_id']]['updated_by'] = $row['adjustment_updated_by'];
-				$this->adjustments[$row['adjustment_id']]['group_key'] = $row['adjustment_group_key'];
-				$this->adjustments[$row['adjustment_id']]['raid_id'] = $row['raid_id'];
+			
+			$objQuery = $this->db2->query("SELECT * FROM __adjustments ORDER BY adjustment_date DESC;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$this->adjustments[$row['adjustment_id']]['value'] = $row['adjustment_value'];
+					$this->adjustments[$row['adjustment_id']]['date'] = $row['adjustment_date'];
+					$this->adjustments[$row['adjustment_id']]['member'] = $row['member_id'];
+					$this->adjustments[$row['adjustment_id']]['reason'] = $row['adjustment_reason'];
+					$this->adjustments[$row['adjustment_id']]['event'] = $row['event_id'];
+					$this->adjustments[$row['adjustment_id']]['added_by'] = $row['adjustment_added_by'];
+					$this->adjustments[$row['adjustment_id']]['updated_by'] = $row['adjustment_updated_by'];
+					$this->adjustments[$row['adjustment_id']]['group_key'] = $row['adjustment_group_key'];
+					$this->adjustments[$row['adjustment_id']]['raid_id'] = $row['raid_id'];
+				}
 			}
-			$this->db->free_result($result);
+
 			$this->pdc->put('pdh_adjustment_table', $this->adjustments, null);
 		}
 

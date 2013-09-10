@@ -74,13 +74,12 @@ class auth_db extends auth {
 			//Auth Login, because all other failed
 			if (!$arrStatus){
 				$this->pdl->log('login', 'Try EQdkp Plus Login');
-				$result	= $this->db->query("SELECT user_id, username, user_password, user_email, user_active, api_key, failed_login_attempts, user_login_key
+				$objQuery = $this->db2->prepare("SELECT user_id, username, user_password, user_email, user_active, api_key, failed_login_attempts, user_login_key
 								FROM __users 
-								WHERE LOWER(username) = '".$this->db->escape(clean_username($strUsername))."'");
-				$row	= $this->db->fetch_record($result);
+								WHERE LOWER(username) =?")->execute(clean_username($strUsername));
 				
-				if($row){		
-					$this->db->free_result($result);
+				if($objQuery && $objQuery->numRows){		
+					$row = $objQuery->fetchAssoc();
 					list($strUserPassword, $strUserSalt) = explode(':', $row['user_password']);
 					//If it's an old password without salt or there is a better algorythm
 					$blnNeedsUpdate = $this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt;
@@ -93,16 +92,16 @@ class auth_db extends auth {
 								$strNewPassword	= $this->encrypt_password($strPassword, $strNewSalt);
 								$strApiKey		= $this->generate_apikey($strPassword, $strNewSalt);
 								
-								$this->db->query("UPDATE __users 
-														SET user_password='".$this->db->escape($strNewPassword.':'.$strNewSalt)."',
-														api_key='".$this->db->escape($strApiKey)."'
-														WHERE user_id='".$this->db->escape($row['user_id'])."'");
+								$this->db2->prepare("UPDATE  __users :p WHERE user_id=?")->set(array(
+										'user_password' => $strNewPassword.':'.$strNewSalt,
+										'api_key'		=> $strApiKey
+								))->execute($row['user_id']);
 																		
 								$arrStatus = array(
-									'status'	=> 1,
-									'user_id'	=> (int)$row['user_id'],
-									'password_hash'	=> $strNewPassword,
-									'user_login_key' => $row['user_login_key'],
+									'status'			=> 1,
+									'user_id'			=> (int)$row['user_id'],
+									'password_hash'		=> $strNewPassword,
+									'user_login_key'	=> $row['user_login_key'],
 								);
 							} else {
 								$this->pdl->log('login', 'EQDKP Login failed: wrong password');
@@ -183,7 +182,8 @@ class auth_db extends auth {
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');
 			
-			$this->db->query("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?", false, $this->sid);
+			$this->db2->prepare("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?")->execute($this->sid);
+
 			$this->data['session_failed_logins']++;
 			
 			//Failed Login
@@ -219,7 +219,8 @@ class auth_db extends auth {
 		} else {
 			$this->pdl->log('login', 'User successfull authenticated');
 			//User successfull authenticated - destroy old session and create a new one
-			$this->db->query("UPDATE __users SET :params WHERE user_id=?", array('failed_login_attempts' => 0), $arrStatus['user_id']);
+			$this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array('failed_login_attempts' => 0))->execute($arrStatus['user_id']);
+
 			$this->destroy();
 			$this->create($arrStatus['user_id'], (isset($arrStatus['user_login_key']) ? $arrStatus['user_login_key'] : ''), ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin));
 			return true;	
@@ -240,17 +241,19 @@ class auth_db extends auth {
 		
 		if (isset($intCookieUserID) && intval($intCookieUserID) > 0){
 			
-			$query = $this->db->query("SELECT *
+			$objQuery = $this->db2->prepare("SELECT *
 								FROM __users
-								WHERE user_id = ?", false, $intCookieUserID);
-			$arrUserResult = $this->db->fetch_record($query);
-			$this->db->free_result($query);
+								WHERE user_id = ?")->execute($intCookieUserID);
 			
-			if ($arrUserResult){
-				if ($strCookieAutologinKey != "" && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
-					return $arrUserResult;
-				}
-			}	
+			if ($objQuery && $objQuery->numRows){
+				$arrUserResult = $objQuery->fetchAssoc();
+				if ($arrUserResult){
+					if ($strCookieAutologinKey != "" && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
+						return $arrUserResult;
+					}
+				}	
+			}			
+			
 		}
 		
 		return false;

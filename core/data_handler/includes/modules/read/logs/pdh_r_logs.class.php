@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_logs" ) ) {
 	class pdh_r_logs extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
+		$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'time');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -74,12 +74,13 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			if($id === false) {
 				$this->logs = $this->pdc->get('pdh_logs_table');
 				if(empty($this->logs)) {
-					$id_res = $this->db->query("SELECT log_id, log_plugin FROM __logs;");
-					while ( $row = $this->db->fetch_row($id_res) ) {
-						$this->logs['ids'][$row['log_id']] = $row['log_plugin'];
-						$this->logs['plugins'][$row['log_plugin']] = $row['log_plugin'];
+					$objQuery = $this->db2->query("SELECT log_id, log_plugin FROM __logs;");
+					if($objQuery){
+						while($row = $objQuery->fetchAssoc()){
+							$this->logs['ids'][$row['log_id']] = $row['log_plugin'];
+							$this->logs['plugins'][$row['log_plugin']] = $row['log_plugin'];
+						}
 					}
-					$this->db->free_result($id_res);
 				}
 				$this->pdc->put('pdh_logs_table', $this->logs, null);
 				return true;
@@ -90,23 +91,25 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 			$cache_result = $this->pdc->get('pdh_logs_table_'.$cache_name);
 			if(empty($cache_result)) {
-				$pff_result = $this->db->query("SELECT * FROM __logs WHERE log_id >= '".$cache_name*$this->cache_number."' AND log_id < '".($cache_name+1)*$this->cache_number."';");
-				while($drow = $this->db->fetch_row($pff_result) ){
-					$cache_result[$drow['log_id']] = array(
-						'log_id'			=> $drow['log_id'],
-						'log_date'			=> $drow['log_date'],
-						'log_ipaddress'		=> $drow['log_ipaddress'],
-						'log_result'		=> $drow['log_result'],
-						'log_tag'			=> $drow['log_tag'],
-						'log_flag'			=> $drow['log_flag'],
-						'log_plugin'		=> $drow['log_plugin'],
-						'user_id'			=> $drow['user_id'],
-						'username'			=> $drow['username'],
-						'log_record'		=> $drow['log_record'],
-						'log_recordid'		=> $drow['log_record_id'],
-					);
+				$objQuery = $this->db2->prepare("SELECT * FROM __logs WHERE log_id >= ? AND log_id < ?;")->execute($cache_name*$this->cache_number, ($cache_name+1)*$this->cache_number);
+				if($objQuery){
+					while($drow = $objQuery->fetchAssoc()){
+						$cache_result[$drow['log_id']] = array(
+							'log_id'			=> $drow['log_id'],
+							'log_date'			=> $drow['log_date'],
+							'log_ipaddress'		=> $drow['log_ipaddress'],
+							'log_result'		=> $drow['log_result'],
+							'log_tag'			=> $drow['log_tag'],
+							'log_flag'			=> $drow['log_flag'],
+							'log_plugin'		=> $drow['log_plugin'],
+							'user_id'			=> $drow['user_id'],
+							'username'			=> $drow['username'],
+							'log_record'		=> $drow['log_record'],
+							'log_recordid'		=> $drow['log_record_id'],
+						);
+					}
 				}
-				$this->db->free_result($pff_result);
+	
 				$this->pdc->put('pdh_logs_table_'.$cache_name, $cache_result, null);
 			}
 			if(!is_array($this->data)) $this->data = array();
@@ -119,46 +122,54 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		}
 		
 		public function get_grouped_users(){
-			$id_res = $this->db->query("SELECT DISTINCT user_id FROM __logs;");
+			$objQuery = $this->db2->query("SELECT DISTINCT user_id FROM __logs;");
 			$arrUsers = array();
-			while ( $row = $this->db->fetch_row($id_res) ) {
-				$arrUsers[] = $row['user_id'];
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrUsers[] = $row['user_id'];
+				}
 			}
-			$this->db->free_result($id_res);
+
 			return $arrUsers;
 		}
 		
 		public function get_grouped_tags(){
-			$id_res = $this->db->query("SELECT DISTINCT log_tag FROM __logs;");
 			$arrTags = array();
-			while ( $row = $this->db->fetch_row($id_res) ) {
-				$arrTags[] = $row['log_tag'];
+			$objQuery = $this->db2->query("SELECT DISTINCT log_tag FROM __logs;");
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrTags[] = $row['log_tag'];
+				}
 			}
-			$this->db->free_result($id_res);
+			
 			return $arrTags;
 		}
 		
 		public function get_filtered_id_list($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to, $recordid, $record){
 			$strQuery = "SELECT log_id FROM __logs WHERE ";
-			if ($plugin !== false) $strQuery .= " log_plugin= '".$this->db->escape($plugin). "' AND";
-			if ($result !== false) $strQuery .= " log_result= ".$this->db->escape($result). " AND";
-			if ($ip !== false) $strQuery .= " log_ipaddress LIKE '%".$this->db->escape($ip). "%' AND";
-			if ($sid !== false) $strQuery .= " log_sid LIKE '%".$this->db->escape($sid). "%' AND";
-			if ($tag !== false) $strQuery .= " log_tag = '".$this->db->escape($tag). "' AND";
-			if ($user_id !== false) $strQuery .= " user_id =".$this->db->escape($user_id). " AND";
-			if ($value !== false) $strQuery .= " log_value LIKE '%".$this->db->escape($value). "%' AND";
-			if ($date_from !== false) $strQuery .= " log_date > ".$this->db->escape($date_from). " AND";
-			if ($date_to !== false) $strQuery .= " log_date < ".$this->db->escape($date_to)." AND";
-			if ($recordid !== false) $strQuery .= " log_record_id = '".$this->db->escape($recordid). "' AND";
-			if ($record !== false) $strQuery .= " log_record= '".$this->db->escape($record). "' AND";
+			if ($plugin !== false) $strQuery .= " log_plugin= '".$this->db2->escapeString($plugin). "' AND";
+			if ($result !== false) $strQuery .= " log_result= ".$this->db2->escapeString($result). " AND";
+			if ($ip !== false) $strQuery .= " log_ipaddress LIKE '%".$this->db2->escapeString($ip). "%' AND";
+			if ($sid !== false) $strQuery .= " log_sid LIKE '%".$this->db2->escapeString($sid). "%' AND";
+			if ($tag !== false) $strQuery .= " log_tag = '".$this->db2->escapeString($tag). "' AND";
+			if ($user_id !== false) $strQuery .= " user_id =".$this->db2->escapeString($user_id). " AND";
+			if ($value !== false) $strQuery .= " log_value LIKE '%".$this->db2->escapeString($value). "%' AND";
+			if ($date_from !== false) $strQuery .= " log_date > ".$this->db2->escapeString($date_from). " AND";
+			if ($date_to !== false) $strQuery .= " log_date < ".$this->db2->escapeString($date_to)." AND";
+			if ($recordid !== false) $strQuery .= " log_record_id = '".$this->db2->escapeString($recordid). "' AND";
+			if ($record !== false) $strQuery .= " log_record= '".$this->db2->escapeString($record). "' AND";
 			
 			$strQuery .= " log_id > 0";
 			
-			$id_res = $this->db->query($strQuery);
+			
+			$objQuery = $this->db2->query($strQuery);
 			$arrIDs = array();
-			while ( $row = $this->db->fetch_row($id_res) ) {
-				$arrIDs[] = $row['log_id'];
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrIDs[] = $row['log_id'];
+				}
 			}
+			
 			return $arrIDs;
 		}
 
@@ -168,13 +179,15 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 			$direction = ($direction == 'asc') ? 'ASC' : 'DESC';
 						if($tag == 'user') { 
-				$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY username ".$direction.";");
+				$objQuery = $this->db2->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY username ".$direction.";")->in($id_list)->execute();
 			} else {
-				$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY log_".$tag." ".$direction.";");
+				$objQuery = $this->db2->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY log_".$tag." ".$direction.";")->in($id_list)->execute();
 			}
 			$id_list = array();
-			while ( $row = $this->db->fetch_row($result) ) {
-				$id_list[] = $row['log_id'];
+			if($objQuery){
+				while ( $row = $objQuery->fetchAssoc() ) {
+					$id_list[] = $row['log_id'];
+				}
 			}
 			return $id_list;
 		}
@@ -193,10 +206,13 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_lastxlogs($amount=10) {
 			if(!isset($this->last_logs[$amount])) {
 				$this->last_logs[$amount] = array();
-				$result = $this->db->query("SELECT log_id FROM __logs ORDER BY log_date DESC LIMIT 0, ".$this->db->escape($amount).";");
-				while ( $row = $this->db->fetch_row($result) ) {
-					$this->last_logs[$amount][] = $row['log_id'];
-				}
+				
+				$objQuery = $this->db2->prepare("SELECT log_id FROM __logs ORDER BY log_date DESC")->limit($amount)->execute();
+				if($objQuery){
+					while ( $row = $objQuery->fetchAssoc() ) {
+						$this->last_logs[$amount][] = $row['log_id'];
+					}
+				}	
 			}
 			return $this->last_logs[$amount];
 		}
@@ -233,7 +249,10 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_value($id){
 			if(!isset($this->logs['ids'][$id])) return false;
 			if(!isset($this->data[$id])) $this->init($id);
-			if(!isset($this->data[$id]['log_value'])) $this->data[$id]['log_value'] = $this->db->query_first("SELECT log_value FROM __logs WHERE log_id = '".$id."';");
+			if(!isset($this->data[$id]['log_value'])) {
+				$arrResult = $this->db2->query("SELECT log_value FROM __logs WHERE log_id = '".intval($id)."';", true);		
+				$this->data[$id]['log_value'] = $arrResult['log_value'];
+			}
 			return $this->data[$id]['log_value'];
 		}
 
@@ -244,7 +263,10 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 		public function get_sid($id) {
 			if(!isset($this->data[$id])) return false;
-			if(!isset($this->data[$id]['log_sid'])) $this->data[$id]['log_sid'] = $this->db->query_first("SELECT log_sid FROM __logs WHERE log_id = '".$id."';");
+			if(!isset($this->data[$id]['log_sid'])){
+				$arrResult = $this->db2->query("SELECT log_sid FROM __logs WHERE log_id = '".intval($id)."';", true);
+				$this->data[$id]['log_sid'] = $arrResult['log_sid'];
+			}
 			return $this->data[$id]['log_sid'];
 		}
 
