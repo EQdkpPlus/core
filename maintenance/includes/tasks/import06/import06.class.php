@@ -70,10 +70,14 @@ class import06 extends task {
 	protected function connect2olddb() {
 		if(!is_object($this->old[0])) {
 			if($this->step_data['old_db_data'][0] === true) {
-				$this->old[0] = dbal::factory(array('dbtype' => $this->dbtype));
-				$this->old[0]->open($this->step_data['old_db_data']['host'], $this->step_data['old_db_data']['name'], $this->step_data['old_db_data']['user'], $this->step_data['old_db_data']['pass']);
-				$this->old[1] = $this->step_data['old_db_data']['prefix'];
-				$this->old[2] = $this->step_data['old_db_data']['name'];
+				try {
+					$this->old[0] = dbal::factory(array('dbtype' => $this->dbtype, 'debug_prefix' => 'olddb_'));
+					$this->old[0]->connect($this->step_data['old_db_data']['host'], $this->step_data['old_db_data']['name'], $this->step_data['old_db_data']['user'], $this->step_data['old_db_data']['pass']);
+					$this->old[1] = $this->step_data['old_db_data']['prefix'];
+					$this->old[2] = $this->step_data['old_db_data']['name'];
+				} catch(DBALException $e){
+					return false;
+				}
 			} else {
 				$this->old[0] = $this->new[0];
 				$this->old[1] = $this->step_data['old_db_data']['prefix'];
@@ -244,19 +248,23 @@ class import06 extends task {
 		$this->connect2olddb();
 		//look for users with admin-rights
 		$result = $this->old[0]->query("SELECT u.user_id FROM ".$this->old[1]."auth_users u, ".$this->old[1]."auth_options o WHERE u.auth_id = o.auth_id AND o.auth_value IN ('a_users_man', 'a_config_man') AND u.auth_setting = 'Y';");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$admins[] = $row['user_id'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$admins[] = $row['user_id'];
+			}
 		}
-		$this->old[0]->free_result($result);
+
 		$result = $this->old[0]->query("SELECT username, user_id FROM ".$this->old[1]."users ORDER BY username ASC;");
 		$c = 0;
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$users[$c]['id'] = $row['user_id'];
-			$users[$c]['name'] = $row['username'];
-			if(in_array($row['user_id'], $admins)) {
-				$users[$c]['admin'] = true;
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$users[$c]['id'] = $row['user_id'];
+				$users[$c]['name'] = $row['username'];
+				if(in_array($row['user_id'], $admins)) {
+					$users[$c]['admin'] = true;
+				}
+				$c++;
 			}
-			$c++;
 		}
 		unset($admins);
 
@@ -330,53 +338,56 @@ class import06 extends task {
 			}
 			$sql = "SELECT * FROM ".$this->old[1]."users WHERE user_id IN (".implode(',',$users2import).");";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				if($row['user_id'] == $this->user->data['user_id'] AND $this->user->data['user_id'] != $this->get('your_user')) {
-					$row['user_id'] = $id;
-				}
-				if($row['user_id'] != $this->get('your_user') AND $row['username'] != $this->user->data['username']) {
-					foreach($row as $field => $value) {
-						if($field == 'user_style') {
-							$users[$row['user_id']][$field] = $this->config->get('default_style');
-						} elseif ($field == 'privacy_settings' && $value != NULL){
-							$priv = unserialize($value);
-							if (isset($priv['priv_set']) && intval($priv['priv_set']) == 0){
-								$priv['priv_set'] = 1;
-							}
-							if (isset($priv['priv_phone']) && intval($priv['priv_phone']) == 0){
-								$priv['priv_phone'] = 1;
-							}
-							$users[$row['user_id']][$field] = serialize($priv);
-						} elseif($field == 'user_email'){
-							$users[$row['user_id']][$field] = $this->encrypt->encrypt($value);
-						} elseif($field == 'birthday') {
-							list($d,$m,$y) = explode('.', $row['birthday']);
-							$users[$row['user_id']][$field] = $this->time->mktime(0,0,0,$m,$d,$y);
-						} elseif($field != 'user_newpassword') {
-							$users[$row['user_id']][$field] = isset($value) ? $value : NULL;
-						}
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					if($row['user_id'] == $this->user->data['user_id'] AND $this->user->data['user_id'] != $this->get('your_user')) {
+						$row['user_id'] = $id;
 					}
-					$users[$row['user_id']]['exchange_key'] = md5(uniqid());
-					$users[$row['user_id']]['user_timezone'] = $this->config->get('timezone');
+					if($row['user_id'] != $this->get('your_user') AND $row['username'] != $this->user->data['username']) {
+						foreach($row as $field => $value) {
+							if($field == 'user_style') {
+								$users[$row['user_id']][$field] = $this->config->get('default_style');
+							} elseif ($field == 'privacy_settings' && $value != NULL){
+								$priv = unserialize($value);
+								if (isset($priv['priv_set']) && intval($priv['priv_set']) == 0){
+									$priv['priv_set'] = 1;
+								}
+								if (isset($priv['priv_phone']) && intval($priv['priv_phone']) == 0){
+									$priv['priv_phone'] = 1;
+								}
+								$users[$row['user_id']][$field] = serialize($priv);
+							} elseif($field == 'user_email'){
+								$users[$row['user_id']][$field] = $this->encrypt->encrypt($value);
+							} elseif($field == 'birthday') {
+								list($d,$m,$y) = explode('.', $row['birthday']);
+								$users[$row['user_id']][$field] = $this->time->mktime(0,0,0,$m,$d,$y);
+							} elseif($field != 'user_newpassword') {
+								$users[$row['user_id']][$field] = isset($value) ? $value : NULL;
+							}
+						}
+						$users[$row['user_id']]['exchange_key'] = md5(uniqid());
+						$users[$row['user_id']]['user_timezone'] = $this->config->get('timezone');
+					}
 				}
 			}
-			$this->old[0]->free_result($result);
 
 			$result = $this->new[0]->query("SELECT * FROM ".$this->new[1]."users WHERE user_id = '".$this->user->data['user_id']."';");
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$pass = empty($users);
-				foreach($row as $field => $value) {
-					if($pass || in_array($field, array_keys(current($users)))) {
-						$users[$row['user_id']][$field] = $value;
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$pass = empty($users);
+					foreach($row as $field => $value) {
+						if($pass || in_array($field, array_keys(current($users)))) {
+							$users[$row['user_id']][$field] = $value;
+						}
 					}
 				}
 			}
-			$this->new[0]->free_result($result);
 
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."users;");
-			$this->new[0]->query("INSERT INTO ".$this->new[1]."users :params;", $users);
 			
-			$this->new[0]->query("UPDATE ".$this->new[1]."users SET rules = '".$this->new[0]->escape(1)."' WHERE user_id = '".$this->user->data['user_id']."';");
+			$this->new[0]->prepare("INSERT INTO ".$this->new[1]."users :p")->set($users)->execute();
+			
+			$this->new[0]->query("UPDATE ".$this->new[1]."users SET rules = '1' WHERE user_id = '".$this->user->data['user_id']."';");
 			
 			//user-permissions
 			$this->new[0]->query("DELETE FROM ".$this->new[1]."groups_users WHERE user_id != '".$this->user->data['user_id']."';");
@@ -418,33 +429,40 @@ class import06 extends task {
 			$sql = "SELECT * FROM ".$this->old[1]."plus_config;";
 			$result = $this->old[0]->query($sql);
 			$white_list = array_keys($this->config->get_config());
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				if(!in_array($row['config_name'], $ignore) AND in_array($row['config_name'], $white_list)) {
-					$configs[$row['config_name']] = $row['config_value'];
+			
+			
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					if(!in_array($row['config_name'], $ignore) AND in_array($row['config_name'], $white_list)) {
+						$configs[$row['config_name']] = $row['config_value'];
+					}
 				}
 			}
+
 			$new_games = array('Aion' => 'aion', 'Allods'=>'allods', 'AoC' => 'aoc', 'Atlantica' => 'atlantica', 'DAoC' => 'daoc', 'Everquest' => 'eq', 'Everquest2' => 'eq2', 'ffxi' => 'ffxi', 'LOTRO' => 'lotro', 'Rift'=> 'rift', 'RunesOfMagic' => 'rom', 'shakesfidget' => 'shakesfidget', 'sto'=>'sto', 'swtor'=>'swtor', 'Tera'=>'tera','TR' => 'tr', 'Vanguard-SoH' => 'vanguard', 'Warhammer' => 'warhammer', 'WoW' => 'wow');
 			$sql = "SELECT * FROM ".$this->old[1]."config;";
 			$classcolors = array();
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				if(!in_array($row['config_name'], $ignore) AND in_array($row['config_name'], $white_list)) {
-					$configs[$row['config_name']] = $row['config_value'];
-				}
-				if($row['config_name'] == 'default_game') {
-					$configs['default_game'] = $new_games[$row['config_value']];
-				}
-				if($row['config_name'] == 'pk_multidkp') $this->step_data['import_data']['pk_mdkp'] = $row['config_value'];
-				if($row['config_name'] == 'default_style') {
-					//import classcolor
-					$cc_res = $this->old[0]->query("SELECT class, color FROM ".$this->old[1]."classcolors WHERE template = '".$row['config_value']."';");
-					while( $row = $this->old[0]->fetch_row($cc_res) ) {
-						$classcolors[$row['class']] = $row['color'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					if(!in_array($row['config_name'], $ignore) AND in_array($row['config_name'], $white_list)) {
+						$configs[$row['config_name']] = $row['config_value'];
 					}
+					if($row['config_name'] == 'default_game') {
+						$configs['default_game'] = $new_games[$row['config_value']];
+					}
+					if($row['config_name'] == 'pk_multidkp') $this->step_data['import_data']['pk_mdkp'] = $row['config_value'];
+					if($row['config_name'] == 'default_style') {
+						//import classcolor
+						$cc_res = $this->old[0]->query("SELECT class, color FROM ".$this->old[1]."classcolors WHERE template = '".$row['config_value']."';");
+						while( $row = $this->old[0]->fetch_row($cc_res) ) {
+							$classcolors[$row['class']] = $row['color'];
+						}
+					}
+					if($row['config_name'] == 'admin_email') $configs['admin_email'] = $this->encrypt->encrypt($row['config_value']);
 				}
-				if($row['config_name'] == 'admin_email') $configs['admin_email'] = $this->encrypt->encrypt($row['config_value']);
 			}
-			$this->old[0]->free_result($result);
+
 			//some special handling for certain configs
 			$configs['pk_itemhistory_dia'] = ($configs['pk_itemhistory_dia']) ? 0 : 1;
 			$game_lang_conv = array('en' => 'english', 'de' => 'german', 'es' => 'spanish', 'fr' => 'french', 'ru' => 'russian');
@@ -458,6 +476,8 @@ class import06 extends task {
 				$template = $this->config->get('default_style');
 				foreach($classcolors as $class => $color) {
 					$class = registry::register('game')->get_id('classes', $class);
+					
+					//TODO
 					if($class) $this->new[0]->query("REPLACE INTO ".$this->new[1]."classcolors :params;", array('template' => $template, 'class_id' => $class, 'color' => $color));
 				}
 			}
@@ -470,15 +490,14 @@ class import06 extends task {
 			$result = $this->old[0]->query($sql);
 			while ( $row = $this->old[0]->fetch_record($result) ) {
 				foreach($row as $field => $value) {
-					if($field == 'news_message') $value = registry::register('bbcode')->toHTML($value);
+					if($field == 'news_message' || $field == 'extended_message') $value = registry::register('bbcode')->toHTML($value);
 					if($field != 'news_id') {
 						$news[$row['news_id']][$field] = $value;
 					}
 				}
 			}
 			$this->old[0]->free_result($result);
-			$this->new[0]->query("TRUNCATE ".$this->new[1]."news;");
-			$sql = "INSERT INTO ".$this->new[1]."news (news_id, news_headline, news_message, news_date, user_id, showRaids_id, extended_message, nocomments, news_permissions, news_flags) VALUES ";
+			$sql = "INSERT INTO ".$this->new[1]."articles (news_id, news_headline, news_message, news_date, user_id, showRaids_id, extended_message, nocomments, news_permissions, news_flags) VALUES ";
 			$sqls = array();
 			foreach($news as $id => $newss) {
 				if(isset($this->step_data['replace_users'][$newss['user_id']])) {
