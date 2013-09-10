@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_multidkp" ) ) {
 	class pdh_r_multidkp extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2'	);
+		$shortcuts = array('pdc', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -55,7 +55,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 			//fetch multidkp2event data
 			$me_data = array();
 			
-			$objQuery = $this->db2->query("SELECT * FROM __multidkp2event;");
+			$objQuery = $this->db->query("SELECT * FROM __multidkp2event;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$me_data[$row['multidkp2event_multi_id']][] = $row['multidkp2event_event_id'];
@@ -66,14 +66,14 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 			}
 			
 			//fetch multidkp2itempool data
-			$objQuery = $this->db2->query("SELECT multidkp2itempool_itempool_id, multidkp2itempool_multi_id FROM __multidkp2itempool;");
+			$objQuery = $this->db->query("SELECT multidkp2itempool_itempool_id, multidkp2itempool_multi_id FROM __multidkp2itempool;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$ip_data[$row['multidkp2itempool_multi_id']][] = $row['multidkp2itempool_itempool_id'];
 				}
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __multidkp;");
+			$objQuery = $this->db->query("SELECT * FROM __multidkp;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->multidkp[$row['multidkp_id']]['name'] = $row['multidkp_name'];

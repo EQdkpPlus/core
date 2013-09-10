@@ -52,7 +52,8 @@ if(!class_exists('pdh_w_articles')) {
 
 		public function delete($id) {
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
-			$this->db->query("DELETE FROM __articles WHERE id = '".$this->db->escape($id)."'");
+			$objQuery = $this->db->prepare("DELETE FROM __articles WHERE id =?")->execute($id);
+
 			$this->pdh->enqueue_hook('articles_update');
 			
 			$arrOld = array(
@@ -110,8 +111,8 @@ if(!class_exists('pdh_w_articles')) {
 					$this->log_insert('action_article_deleted', $arrChanges, $intArticleID, $arrOldData["title"], 1, 'article');
 				}
 			}
-
-			$this->db->query("DELETE FROM __articles WHERE category = '".$this->db->escape($intCategoryID)."'");
+			
+			$objQuery = $this->db->prepare("DELETE FROM __articles WHERE category =?")->execute($intCategoryID);
 			$this->pdh->enqueue_hook('articles_update');
 		}
 		
@@ -135,8 +136,7 @@ if(!class_exists('pdh_w_articles')) {
 					$arrPageObjects[] = $val;
 				}
 			}
-			
-			$blnResult = $this->db->query("INSERT INTO __articles :params", array(
+			$objQuery = $this->db->prepare("INSERT INTO __articles :p")->set(array(
 				'title' 			=> $strTitle,
 				'text'				=> $strText,
 				'category'			=> $intCategory,
@@ -159,19 +159,19 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
 				'hide_header'		=> $intHideHeader,
-			));
+			))->execute();
 			
-			$id = $this->db->insert_id();
-			
-			if ($blnResult){
+			if ($objQuery){
+				$id = $objQuery->insertId;
+				
 				if (!$blnAliasResult){
 					$blnAliasResult = $this->check_alias(0, $strAlias.'-'.$id);
 					if ($blnAliasResult){
-						$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
+						$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 							'alias' => $strAlias.'-'.$id,
-						), $id);
+						))->execute($id);
 					} else {
-						$this->db->query("DELETE FROM __articles WHERE id=?", false, $id);
+						$this->db->prepare("DELETE FROM __articles WHERE id=?")->execute($id);
 						return false;
 					}
 				}
@@ -233,7 +233,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			
-			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 				'title' 			=> $strTitle,
 				'text'				=> $strText,
 				'category'			=> $intCategory,
@@ -252,10 +252,9 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
 				'hide_header'		=> $intHideHeader,
-			), $id);
-			
-						
-			if ($blnResult){
+			))->execute($id);
+				
+			if ($objQuery){
 				$this->pdh->enqueue_hook('articles_update');
 				$this->pdh->enqueue_hook('article_categories_update');
 				
@@ -314,13 +313,13 @@ if(!class_exists('pdh_w_articles')) {
 		}
 		
 		public function reset_votes($id){
-			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 				'votes_count' 		=> 0,
 				'votes_sum'			=> 0,
 				'votes_users'		=> '',
-			), $id);
+			))->execute($id));
 			
-			if ($blnResult) {
+			if ($objQuery) {
 				$this->log_insert('action_article_reset_votes', array(), $id, $this->pdh->get('articles', 'title', array($id)), '', 1, 'article');
 				
 				$this->pdh->enqueue_hook('articles_update');
@@ -338,13 +337,13 @@ if(!class_exists('pdh_w_articles')) {
 			$intSum += $intVoting;
 			$intCount++;
 			
-			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 				'votes_count' 		=> $intCount,
 				'votes_sum'			=> $intSum,
 				'votes_users'		=> serialize($arrVotedUsers),
-			), $intArticleID);
+			))->execute($intArticleID);
 			
-			if ($blnResult) {
+			if ($objQuery) {
 				$this->pdh->enqueue_hook('articles_update');
 				return true;
 			}
@@ -355,11 +354,11 @@ if(!class_exists('pdh_w_articles')) {
 		public function delete_previewimage($id){
 			$arrOld = array('previewimage' => $this->pdh->get('articles', 'previewimage', array($id)));
 			
-			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 				'previewimage' 		=> '',
-			), $id);
+			))->execute($id);
 			
-			if ($blnResult) {	
+			if ($objQuery) {	
 				$arrNew = array('previewimage' => '');
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
 				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
@@ -376,12 +375,12 @@ if(!class_exists('pdh_w_articles')) {
 				'published'=> $this->pdh->get('articles', 'published', array($id))
 			);
 			
-			$blnResult = $this->db->query("UPDATE __articles SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 				'featured'		=> $intFeatured,
 				'published'		=> $intPublished,
-			), $id);
+			))->execute($id);
 			
-			if ($blnResult){
+			if ($objQuery){
 				
 				$arrNew = array(
 					'featured'	=> $intFeatured,
@@ -411,7 +410,9 @@ if(!class_exists('pdh_w_articles')) {
 				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 			}
 			
-			$this->db->query('UPDATE __articles SET published=1 WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id :in")->set(array(
+					'published'		=> 1,
+			))->in($arrIDs)->execute($id);
 			
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
@@ -428,7 +429,9 @@ if(!class_exists('pdh_w_articles')) {
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLang);
 				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 			}
-			$this->db->query('UPDATE __articles SET published=0 WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id :in")->set(array(
+					'published'		=> 0,
+			))->in($arrIDs)->execute($id);
 			
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
@@ -446,7 +449,10 @@ if(!class_exists('pdh_w_articles')) {
 				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 			}
 			
-			$this->db->query("UPDATE __articles SET category = ".$this->db->escape($intCategoryID).' WHERE id IN ('.$this->db->escape(implode(',', $arrIDs)).')');
+			$objQuery = $this->db->prepare("UPDATE __articles WHERE id :in")->set(array(
+				'category' => $intCategoryID,	
+			))->in($arrIDs)->execute();
+			
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
 		}
@@ -474,8 +480,7 @@ if(!class_exists('pdh_w_articles')) {
 			$strAlias = preg_replace("/[^a-zA-Z0-9_-]/","",$strAlias);
 			return $strAlias;
 		}
-		
-		
+	
 	}
 }
 ?>

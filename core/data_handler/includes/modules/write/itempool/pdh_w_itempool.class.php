@@ -36,9 +36,12 @@ if(!class_exists('pdh_w_itempool')) {
 				'itempool_name' => $name,
 				'itempool_desc' => $desc,
 			);
-			if($this->db->query("INSERT INTO __itempool :params", $arrSet)) {
-				$id = $this->db->insert_id();
-					$this->pdh->enqueue_hook('itempool_update', array($id));
+			
+			$objQuery = $this->db->prepare("INSERT INTO __itempool :p")->set($arrSet)->execute();
+			
+			if($objQuery) {
+				$id = $objQuery->insertId;
+				$this->pdh->enqueue_hook('itempool_update', array($id));
 				return $id;
 			}
 			return false;
@@ -52,7 +55,9 @@ if(!class_exists('pdh_w_itempool')) {
 				'itempool_desc' => $desc,
 			);
 
-			if($this->db->query("UPDATE __itempool SET :params WHERE itempool_id=?", $arrSet, $id)) {
+			$objQuery = $this->db->prepare("UPDATE __itempool :p WHERE itempool_id=?")->set($arrSet)->execute($id);
+			
+			if($objQuery) {
 				$this->pdh->enqueue_hook('itempool_update', array($id));
 				return true;
 			}
@@ -64,20 +69,21 @@ if(!class_exists('pdh_w_itempool')) {
 			if($id == 1) {
 				return false;
 			}
-
-			$this->db->query("START TRANSACTION;");
-			if($this->db->query("DELETE FROM __itempool WHERE itempool_id = ?;", false, $id)) {
-				if($this->db->query("DELETE FROM __multidkp2itempool WHERE multidkp2itempool_itempool_id =?", false, $id)) {
-					if($this->db->query("UPDATE __items SET itempool_id = '1' WHERE itempool_id = ?", false, $id)) {
+			
+			$this->db->beginTransaction();
+			if($this->db->prepare("DELETE FROM __itempool WHERE itempool_id = ?;")->execute($id)) {
+				
+				if($this->db->prepare("DELETE FROM __multidkp2itempool WHERE multidkp2itempool_itempool_id =?")->execute($id)) {
+					if($this->db->prepare("UPDATE __items SET itempool_id = '1' WHERE itempool_id = ?")->execute($id)) {
 						$this->pdh->enqueue_hook('itempool_update', array($id));
 						$items = $this->pdh->get('item', 'item_ids_of_itempool', array($id));
 						$this->pdh->enqueue_hook('item_update', array($items));
-						$this->db->query("COMMIT;");
+						$this->db->commitTransaction();
 						return true;
 					}
 				}
 			}
-			$this->db->query("ROLLBACK;");
+			$this->db->rollbackTransaction();
 			return false;
 		}
 		

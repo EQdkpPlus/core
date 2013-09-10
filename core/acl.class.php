@@ -40,7 +40,7 @@ class acl_manager extends gen_class {
 			$sql = 'SELECT auth_id, auth_value, auth_default
 					FROM __auth_options
 					ORDER BY auth_id';
-			$result = $this->db2->query($sql);
+			$result = $this->db->query($sql);
 			if ($result){
 				while ( $row = $result->fetchAssoc() ) {
 					$this->auth_defaults[ $row['auth_value'] ]	= $row['auth_default'];
@@ -100,7 +100,7 @@ class acl_manager extends gen_class {
 						AND (ag.group_id=?)";
 				
 				
-				$result = $this->db2->prepare($sql)->execute($group_id);
+				$result = $this->db->prepare($sql)->execute($group_id);
 				
 				if ($result){
 					while ( $row = $result->fetchAssoc() ){
@@ -118,11 +118,11 @@ class acl_manager extends gen_class {
 	public function update_auth_option($auth_value, $auth_default){
 		$auth_id = $this->get_auth_id($auth_value);
 		if ( $auth_id ){			
-			$objQuery = $this->db2->prepare("UPDATE __auth_users :p WHERE auth_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __auth_users :p WHERE auth_id=?")->set(array(
 					'auth_setting' => $auth_default,
 			))->execute($auth_id);
 		}else{
-			$objQuery = $this->db2->prepare("INSERT INTO __auth_options :p")->set(array(
+			$objQuery = $this->db->prepare("INSERT INTO __auth_options :p")->set(array(
 					'auth_value'	=> $auth_value,
 					'auth_default'	=> $auth_default,
 			))->execute();
@@ -131,14 +131,14 @@ class acl_manager extends gen_class {
 	}
 
 	public function del_auth_option($auth_value){
-		$objQuery = $this->db2->prepare("DELETE FROM __auth_options WHERE auth_value=?")->execute($auth_value);
+		$objQuery = $this->db->prepare("DELETE FROM __auth_options WHERE auth_value=?")->execute($auth_value);
 		return $objQuery;
 	}
 
 	public function update_user_permissions($permission_array, $user_id=0){
 		if ($user_id == 0){$user_id = $user->data['user_id'];}
 		
-		$this->db2->prepare("DELETE FROM __auth_users WHERE user_id=? AND auth_id :in")->in(array_keys($permission_array))->execute($user_id);
+		$this->db->prepare("DELETE FROM __auth_users WHERE user_id=? AND auth_id :in")->in(array_keys($permission_array))->execute($user_id);
 
 		$boolExecute = false;
 
@@ -154,7 +154,7 @@ class acl_manager extends gen_class {
 			}
 		}
 
-		if ($boolExecute) $this->db2->prepare("INSERT INTO __auth_users :p")->set($arrData)->execute();
+		if ($boolExecute) $this->db->prepare("INSERT INTO __auth_users :p")->set($arrData)->execute();
 		
 		
 		
@@ -254,7 +254,7 @@ class acl_manager extends gen_class {
 	}
 }
 class acl extends acl_manager {	
-	public static $shortcuts = array('db2', 'user');
+	public static $shortcuts = array('db', 'user');
 	public $user_permissions = array();
 	public $user_group_memberships = array();
 	public $user_group_permissions = array();
@@ -269,7 +269,7 @@ class acl extends acl_manager {
 			if ( $user_id != ANONYMOUS ){
 
 				//First Step: get Group memberships
-				$objQuery = $this->db2->prepare("SELECT * FROM __groups_users WHERE user_id=?")->execute($user_id);
+				$objQuery = $this->db->prepare("SELECT * FROM __groups_users WHERE user_id=?")->execute($user_id);
 				if ($objQuery){
 					while ( $row = $objQuery->fetchAssoc() ){
 						if (intval($row['grpleader']) && !isset($this->user_group_permissions[$user_id]['a_usergroups_grpleader'])) $this->user_group_permissions[$user_id]['a_usergroups_grpleader'] = "Y";
@@ -285,7 +285,7 @@ class acl extends acl_manager {
 					//If not superadmin: get user- and grouppermissions
 				} else {
 					//User-Permissions					
-					$objQuery = $this->db2->prepare("SELECT ao.auth_value, au.auth_setting
+					$objQuery = $this->db->prepare("SELECT ao.auth_value, au.auth_setting
 							FROM __auth_users au, __auth_options ao
 							WHERE (au.auth_id = ao.auth_id)
 							AND (au.user_id=?)")->execute($user_id);
@@ -297,7 +297,7 @@ class acl extends acl_manager {
 					}
 					
 					//Group-Permissions
-					$objQuery = $this->db2->prepare("SELECT ga.auth_setting, ao.auth_value, gu.group_id FROM __groups_users gu, __auth_groups ga, __auth_options ao WHERE gu.user_id=? AND ga.group_id = gu.group_id AND ga.auth_id = ao.auth_id")->execute($user_id);
+					$objQuery = $this->db->prepare("SELECT ga.auth_setting, ao.auth_value, gu.group_id FROM __groups_users gu, __auth_groups ga, __auth_options ao WHERE gu.user_id=? AND ga.group_id = gu.group_id AND ga.auth_id = ao.auth_id")->execute($user_id);
 					
 					if($objQuery){
 						while ( $row = $objQuery->fetchAssoc() ){
@@ -309,7 +309,7 @@ class acl extends acl_manager {
 					}
 				}
 			} else { //Permission for ANONYMOUS
-				$result =  $this->db2->query("SELECT ga.auth_setting, ao.auth_value FROM __auth_groups ga, __auth_options ao WHERE ga.auth_id = ao.auth_id AND ga.group_id = 1");
+				$result =  $this->db->query("SELECT ga.auth_setting, ao.auth_value FROM __auth_groups ga, __auth_options ao WHERE ga.auth_id = ao.auth_id AND ga.group_id = 1");
 				if($result){
 					while ( $row = $result->fetchAssoc() ){
 						if ($row['auth_setting'] == "Y" && substr($row['auth_value'], 0, 2)!= "a_"){

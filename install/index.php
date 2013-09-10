@@ -23,17 +23,13 @@
 define('EQDKP_INC', true);
 $eqdkp_root_path = './../';
 
-ini_set("display_errors", 1);
+ini_set("display_errors", 0);
 define('DEBUG', 99);
 
 include_once($eqdkp_root_path.'core/super_registry.class.php');
-if(!version_compare(phpversion(), '5.3.0', ">=")) {
-	include_once($eqdkp_root_path.'core/registry.class.5.2.php');
-	include_once($eqdkp_root_path.'core/gen_class.class.5.2.php');
-} else {
-	include_once($eqdkp_root_path.'core/registry.class.php');
-	include_once($eqdkp_root_path.'core/gen_class.class.php');
-}
+include_once($eqdkp_root_path.'core/registry.class.php');
+include_once($eqdkp_root_path.'core/gen_class.class.php');
+	
 registry::add_const('root_path', $eqdkp_root_path);
 registry::add_const('lite_mode', true);
 // switch to userdefined error-handling
@@ -46,17 +42,12 @@ $pdl->set_debug_level(DEBUG); //to prevent errors on further adding of debug-lev
 unset($pdl);
 
 registry::load_config(true);
-if($dbtype = registry::get_const('dbtype')) {
-	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));
-	include_once($eqdkp_root_path.'core/dbal/dbal.php');
-	include_once($eqdkp_root_path.'core/dbal/'.$dbtype.'.php');
-}
 
 //New DBAL
 if($dbtype = registry::get_const('dbtype')) {
-	include_once(registry::get_const('root_path') .'core/new_dbal/dbal.class.php');
-	require_once(registry::get_const('root_path') . 'core/new_dbal/' . registry::get_const('dbtype') . '.dbal.class.php');
-	registry::$aliases['db2'] = array('idbal_'.registry::get_const('dbtype'), array(array('open' => true)));		
+	include_once(registry::get_const('root_path') .'core/dbal/dbal.class.php');
+	require_once(registry::get_const('root_path') . 'core/dbal/' . registry::get_const('dbtype') . '.dbal.class.php');
+	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));		
 }
 
 include_once($eqdkp_root_path . 'core/constants.php');

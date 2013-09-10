@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class MySQL_Info extends page_generic{
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'pm', 'core', 'config', 'db2');
+		$shortcuts = array('user', 'tpl', 'pm', 'core', 'config', 'db');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -43,10 +43,10 @@ class MySQL_Info extends page_generic{
 		$table_size = 0;
 		$index_size = 0;
 
-		$arrTables = $this->db2->listTables();
+		$arrTables = $this->db->listTables();
 
 		foreach ($arrTables as $strTablename){
-			$arrTableInfos = $this->db2->fieldInformation($strTablename);
+			$arrTableInfos = $this->db->fieldInformation($strTablename);
 			
 			$this->tpl->assign_block_vars('table_row', array(
 				'TABLE_NAME'	=> $strTablename,
@@ -71,7 +71,7 @@ class MySQL_Info extends page_generic{
 			'DB_ENGINE'			=> $this->dbtype,
 			'DB_NAME'			=> $this->dbname,
 			'DB_PREFIX'			=> $this->table_prefix,
-			'DB_VERSION'		=> 'Client ('.$this->db2->client_version.')<br/>Server ('.$this->db2->server_version.')',
+			'DB_VERSION'		=> 'Client ('.$this->db->client_version.')<br/>Server ('.$this->db->server_version.')',
 		));
 
 		$this->core->set_vars(array(

@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class maintenance_user extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'db2', 'time', 'env', 'timekeeper'=>'timekeeper', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'logs');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'db', 'time', 'env', 'timekeeper'=>'timekeeper', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -92,7 +92,7 @@ class maintenance_user extends page_generic {
 		$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
 		if ($muser_config != ''){
 			$muser = unserialize(stripslashes($muser_config));
-			$this->db2->prepare("DELETE FROM __users WHERE user_id = ?")->execute($muser['user_id']);
+			$this->db->prepare("DELETE FROM __users WHERE user_id = ?")->execute($muser['user_id']);
 
 			$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
 			$this->config->set('maintenance_user', '');
@@ -115,7 +115,7 @@ class maintenance_user extends page_generic {
 			$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
 			$muser = unserialize(stripslashes($muser_config));
 			
-			$objQuery = $this->db2->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
+			$objQuery = $this->db->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
 			if ($objQuery && $objQuery->numRows){
 				$user_data = $objQuery->fetchAssoc();
 			} else {
@@ -152,7 +152,7 @@ class maintenance_user extends page_generic {
 			$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));		
 			$muser = unserialize(stripslashes($muser_config));
 			
-			$objQuery = $this->db2->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
+			$objQuery = $this->db->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
 			if ($objQuery && $objQuery->numRows){
 				$user_data = $objQuery->fetchAssoc();
 			}

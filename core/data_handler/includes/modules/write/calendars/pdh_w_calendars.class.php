@@ -53,15 +53,16 @@ if(!class_exists('pdh_w_calendars')) {
 				}
 			}
 			if($changes) {
-				$statt = $this->db->query("UPDATE __calendars SET :params WHERE id=?", array(
-					'name'			=> $this->db->escape($name),
-					'feed'			=> $this->db->escape($feed),
+				$objQuery = $this->db->prepare("UPDATE __calendars :p WHERE id=?")->set(array(
+					'name'			=> $name,
+					'feed'			=> $feed,
 					'private'		=> ($private) ? 1 : 0,
 					'color'			=> $color,
 					'type'			=> $type,
 					'restricted'	=> ($restricted) ? 1 : 0,
-				), $id);
-				if(!$statt) {
+				))->execute($id);
+				
+				if(!$objQuery) {
 					return false;
 				}
 			}
@@ -69,23 +70,28 @@ if(!class_exists('pdh_w_calendars')) {
 			return true;
 		}
 
-		public function add_calendar($id, $name, $color, $feed, $private, $type, $restricted){;
-			$result = $this->db->query('INSERT INTO __calendars :params', array(
+		public function add_calendar($id, $name, $color, $feed, $private, $type, $restricted){
+			$objQuery = $this->db->prepare('INSERT INTO __calendars :p')->set(array(
 				'feed'			=> ($feed) ? $feed : '',
 				'name'			=> $name,
 				'color'			=> $color,
 				'private'		=> ($private) ? 1 : 0,
 				'type'			=> $type,
 				'restricted'	=> ($restricted) ? 1 : 0
-			));
-			$id = $this->db->insert_id();
-			$this->pdh->enqueue_hook('calendar_update', array($id));
-			return $id;
+			))->execute();
+			
+			if($objQuery){
+				$id = $objQuery->insertId;
+				$this->pdh->enqueue_hook('calendar_update', array($id));
+				return $id;
+			}
+			
+			return false;
 		}
 
 		public function delete_calendar($id){
 			if(!$this->pdh->get('calendars', 'system', array($id))){
-				$this->db->query("DELETE FROM __calendars WHERE id=?", false, $id);
+				$objQuery = $this->db->prepare("DELETE FROM __calendars WHERE id=?")->execute($id);
 				$this->pdh->enqueue_hook('calendar_update', array($id));
 				return true;
 			}

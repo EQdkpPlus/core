@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_calendar_events" ) ) {
 	class pdh_r_calendar_events extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2', 'user', 'time', 'pdh'	);
+		$shortcuts = array('pdc', 'db', 'user', 'time', 'pdh'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -73,7 +73,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				return true;
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __calendar_events");
+			$objQuery = $this->db->query("SELECT * FROM __calendar_events");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->events[$row['id']] = array(
@@ -116,9 +116,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if(($start_date != 0) || ($end_date != 9999999999)){
 				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
 				$sqlstring	.= (is_array($calfilter)) ? ' (calendar_id IN ('.implode(",", $calfilter).')) AND' : '';
-				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db2->escapeString($start_date)." AND ".$this->db2->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db2->escapeString($start_date)." AND ".$this->db2->escapeString($end_date)."))";
+				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date)."))";
 
-				$query = $this->db2->query($sqlstring);
+				$query = $this->db->query($sqlstring);
 				if ($query){
 					if($raids_only) {
 						while ( $row = $query->fetchAssoc() ){

@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_adjustment')){
 	class pdh_r_adjustment extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('db2', 'pdh', 'user', 'time', 'pdc', 'apa' => 'auto_point_adjustments');
+			$shortcuts = array('db', 'pdh', 'user', 'time', 'pdc', 'apa' => 'auto_point_adjustments');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -67,7 +67,7 @@ if(!class_exists('pdh_r_adjustment')){
 				return true;
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __adjustments ORDER BY adjustment_date DESC;");
+			$objQuery = $this->db->query("SELECT * FROM __adjustments ORDER BY adjustment_date DESC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->adjustments[$row['adjustment_id']]['value'] = $row['adjustment_value'];

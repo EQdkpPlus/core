@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_rank" ) ) {
 	class pdh_r_rank extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2',	'game');
+		$shortcuts = array('pdc', 'db',	'game');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -48,7 +48,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 			$this->ranks = $this->pdc->get('pdh_member_ranks');
 			if($this->ranks !== NULL) return true;
 			
-			$objQuery = $this->db2->query("SELECT * FROM __member_ranks ORDER BY rank_sortid ASC;");
+			$objQuery = $this->db->query("SELECT * FROM __member_ranks ORDER BY rank_sortid ASC;");
 			if($objQuery){
 				while($r_row = $objQuery->fetchAssoc()){
 					$this->ranks[$r_row['rank_id']]['rank_id']	= $r_row['rank_id'];

@@ -46,27 +46,32 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			}
 
 			//insert raid
-			if($this->db->query('INSERT INTO __raids :params', array(
+			$objQuery = $this->db->prepare('INSERT INTO __raids :p')->set(array(
 				'event_id'		=> $event_id,
 				'raid_date'		=> $raid_date,
 				'raid_note'		=> $raid_note,
 				'raid_value'	=> $raid_value,
 				'raid_added_by'	=> $this->admin_user
-			))) {
-				$raid_id = $this->db->insert_id();
+			))->execute();
+			if($objQuery) {
+				$raid_id = $objQuery->insertId;
 			}
 
 			//insert attendees
 			$members = $this->pdh->maget('member', array('name', 'active'), 0, array($raid_attendees));
 			foreach ( $members as $member_id => $member){
-				$m_query[] = "('" . $raid_id . "', '" . $member_id . "')";
+				$arrData[] = array(
+					'raid_id'	=> $raid_id,
+					'member_id' => $member_id
+				);
+				
 				if(!$member['active'] && ($this->time->time - $this->config->get('inactive_period')*24*3600) < $raid_date) $this->pdh->put('member', 'change_status', array($member_id, 1));
 				$attendee_names[] = $member['name'];
 			}
-
-			$sql = 'INSERT INTO __raid_attendees (raid_id, member_id)
-				VALUES ' . implode(', ', $m_query);
-			if($this->db->query($sql) AND $raid_id) {
+			
+			$objQuery = $this->db->prepare('INSERT INTO __raid_attendees :p')->set($arrData)->execute();
+			
+			if($objQuery AND $raid_id) {
 				//log insertion
 				$log_action = array(
 					'{L_EVENT}'		=> $this->pdh->get('event', 'name', array($event_id)),
@@ -99,22 +104,23 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'raid_note' => $raid_note,
 					'raid_value' => $raid_value,
 					'raid_date' => $raid_date,
-			);				
+			);
+			
+			$objQuery = $this->db->prepare("UPDATE __raids :p WHERE raid_id=?")->set($arrSet)->execute($raid_id);
 							
-			if($this->db->query("UPDATE __raids SET :params WHERE raid_id=?", $arrSet, $raid_id)) {
+			if($objQuery) {
 				//update raid_attendees
 				$add_atts = array_diff($raid_attendees, $old['members']);
 				$del_atts = array_diff($old['members'], $raid_attendees);
 				$upd_atts = array_diff($old['members'], $del_atts);
 				foreach($add_atts as $add_att) {
-					$this->db->query("INSERT INTO __raid_attendees :params", array(
+					$objQuery = $this->db->prepare("INSERT INTO __raid_attendees :p")->set(array(
 						'raid_id' => $raid_id,
 						'member_id' => $add_att,
-					));
+					))->execute();
 				}
 				foreach($del_atts as $del_att) {
-					$sql = "DELETE FROM __raid_attendees WHERE raid_id = '".$this->db->escape($raid_id)."' AND member_id = '".$this->db->escape($del_att)."';";
-					$this->db->query($sql);
+					$objQuery = $this->db->prepare( "DELETE FROM __raid_attendees WHERE raid_id = ? AND member_id =?")->execute($raid_id, $del_att);
 				}
 				$member_string = get_coloured_names($upd_atts, $add_atts, $del_atts);
 				
@@ -146,16 +152,17 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			if(!$raid_id) {
 				return false;
 			}
-			#$this->db->query("START TRANSACTION");
+
 			//get old-data
 			$old['event']		= $this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($raid_id))));
 			$old['note']		= $this->pdh->get('raid', 'note', array($raid_id));
 			$old['value']		= $this->pdh->get('raid', 'value', array($raid_id));
 			$old['date']		= $this->pdh->get('raid', 'date', array($raid_id));
 			$old['members']		= $this->pdh->aget('member', 'name', 0, array($this->pdh->get('raid', 'raid_attendees', array($raid_id))));
+			
+			$objQuery = $this->db->prepare("DELETE FROM __raids WHERE raid_id = ?")->execute($raid_id);
 
-			$sql = "DELETE FROM __raids WHERE raid_id = '".$this->db->escape($raid_id)."';";
-			if($this->db->query($sql)) {
+			if($objQuery) {
 				$retu = array();
 				$items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
 					if(is_array($items)) {
@@ -171,8 +178,9 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					}
 				}
 				unset($adjs);
-				$sql = "DELETE FROM __raid_attendees WHERE raid_id = '".$this->db->escape($raid_id)."';";
-				if(!in_array(false, $retu) AND $this->db->query($sql)) {
+				$objQuery = $this->db->prepare("DELETE FROM __raid_attendees WHERE raid_id =?")->execute($raid_id);
+				
+				if(!in_array(false, $retu) AND $objQuery) {
 					//log it
 					$log_action = array(
 						'{L_DATE}'		=> '{D_'.$old['date'].'}',
@@ -182,13 +190,13 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 						'{L_VALUE}'		=> $old['value']
 					);
 					$this->log_insert('action_raid_deleted', $log_action, $raid_id, $old['event']);
-					#$this->db->query("COMMIT");
+
 					//call pdh hook
 					$this->pdh->enqueue_hook('raid_update', $raid_id);
 					return true;
 				}
 			}
-			#$this->db->query("ROLLBACK");
+
 			return false;
 		}
 		
@@ -199,8 +207,9 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				$this->pdh->put('item', 'delete_itemsofraid', array($raid_id));
 				$this->pdh->put('adjustment', 'delete_adjustmentsofraid', array($raid_id));
 			}
-			$this->db->query("DELETE FROM __raids WHERE raid_id IN ('".implode("', '", $raids)."');");
-			$this->db->query("DELETE FROM __raid_attendees WHERE raid_id IN ('".implode("', '", $raids)."');");
+			$this->db->prepare("DELETE FROM __raids WHERE raid_id :in")->in($raids)->execute();
+			$this->db->prepare("DELETE FROM __raid_attendees WHERE raid_id :in")->in($raids)->execute();
+
 			$log_action = array(
 				'{L_ID}'	=> implode(', ', $raids),
 				'{L_EVENT}'	=> $this->pdh->get('event', 'name', array($event_id))

@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_plugins" ) ) {
 	class pdh_r_plugins extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2'	);
+		$shortcuts = array('pdc', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -45,7 +45,7 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 				return true;
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __plugins ORDER BY code");
+			$objQuery = $this->db->query("SELECT * FROM __plugins ORDER BY code");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
 					$this->plugins[$drow['code']] = array(

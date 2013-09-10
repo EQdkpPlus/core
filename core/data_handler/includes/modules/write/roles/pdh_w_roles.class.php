@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')){
 if(!class_exists('pdh_w_roles')){
 	class pdh_w_roles extends pdh_w_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db2'	);
+		$shortcuts = array('pdh', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -32,7 +32,7 @@ if(!class_exists('pdh_w_roles')){
 		}
 
 		public function insert_role($role_id, $role_name, $role_classes=''){
-			$objQuery = $this->db2->prepare("INSERT INTO __roles :p")->set(array(
+			$objQuery = $this->db->prepare("INSERT INTO __roles :p")->set(array(
 				'role_id'			=> $role_id,
 				'role_name'			=> $role_name,
 				'role_classes'		=> $role_classes
@@ -45,14 +45,14 @@ if(!class_exists('pdh_w_roles')){
 		}
 
 		public function truncate_role(){
-			$this->db2->query('TRUNCATE TABLE __roles');
+			$this->db->query('TRUNCATE TABLE __roles');
 			$this->pdh->enqueue_hook('roles_update');
 		}
 
 		public function delete_roles($id){
 			$field = (!is_array($id)) ? array($id) : $id;
 			
-			$objQuery = $this->db2->prepare("DELETE FROM __roles WHERE role_id :in")->in($field)->execute();
+			$objQuery = $this->db->prepare("DELETE FROM __roles WHERE role_id :in")->in($field)->execute();
 			
 			$this->pdh->enqueue_hook('roles_update');
 		}
@@ -61,7 +61,7 @@ if(!class_exists('pdh_w_roles')){
 			$role_name		= ($role_name)		? $role_name		: $this->pdh->get('roles', 'name', array($role_id));
 			$role_classes	= ($role_classes)	? $role_classes 	: $this->pdh->get('roles', 'classes_r', array($role_id));
 			
-			$objQuery = $this->db2->prepare("UPDATE __roles :p WHERE role_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __roles :p WHERE role_id=?")->set(array(
 				'role_name'			=> $role_name,
 				'role_classes'		=> $role_classes
 			))->execute($role_id);

@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class backup extends gen_class {
-	public static $shortcuts = array('config', 'user', 'pfh', 'jquery', 'db2', 'time', 'core');
+	public static $shortcuts = array('config', 'user', 'pfh', 'jquery', 'db', 'time', 'core');
 
 	public function __construct(){
 		//Secure the backup-folder
@@ -46,16 +46,16 @@ class backup extends gen_class {
 		set_time_limit(0);
 	
 		if (!$in_tables){
-			$in_tables		= $this->db2->listTables();
+			$in_tables		= $this->db->listTables();
 		}
 
 		$uncomplete = false;
 
-		$all_tables		= $this->db2->listTables();
+		$all_tables		= $this->db->listTables();
 		$tables = array();
 		foreach( $all_tables as $tablename ){
 			//If not eqdkp table
-			if (!$this->db2->isEQdkpTable($tablename)) continue;
+			if (!$this->db->isEQdkpTable($tablename)) continue;
 			
 			if (in_array($tablename, $in_tables)){
 				$tables[]		= $tablename;
@@ -268,7 +268,7 @@ class backup extends gen_class {
 	public function _create_table_sql_string($tablename){
 		// Generate the SQL string for this table
 
-		$createTable	= $this->db2->showCreateTable($tablename);
+		$createTable	= $this->db->showCreateTable($tablename);
 
 		$sql_string		 = "DROP TABLE IF EXISTS `{$tablename}`;" . "\n";
 
@@ -283,7 +283,7 @@ class backup extends gen_class {
 		$sql_string		= "";
 
 		// Get field names from MySQL and output to a string in the correct MySQL syntax
-		$arrFields = $this->db2->listFields($tablename);
+		$arrFields = $this->db->listFields($tablename);
 
 		$field_set = array();
 		foreach ($arrFields as $key => $value){
@@ -296,7 +296,7 @@ class backup extends gen_class {
 		$field_string		= 'INSERT INTO `' . $tablename . '` (' . $fields . ') VALUES ';
 
 		//Get Content
-		$objQuery = $this->db2->query("SELECT * FROM ".$tablename);
+		$objQuery = $this->db->query("SELECT * FROM ".$tablename);
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
 				$values		= array();

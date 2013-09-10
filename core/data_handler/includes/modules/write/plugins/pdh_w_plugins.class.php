@@ -32,7 +32,11 @@ if(!class_exists('pdh_w_plugins')) {
 		}
 
 		public function update_version($version, $plugin_code) {
-			if($this->db->query("UPDATE __plugins SET :params WHERE code=?;", array('version'	=> $version), $plugin_code)) {
+			$objQuery = $this->db->prepare("UPDATE __plugins :p WHERE code=?;")->set(array(
+					'version'	=> $version
+			))->execute($plugin_code);
+			
+			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($plugin_code));
 				return true;
 			}
@@ -40,7 +44,9 @@ if(!class_exists('pdh_w_plugins')) {
 		}
 
 		public function delete_plugin($plugin_code) {
-			if($this->db->query("DELETE FROM __plugins WHERE `code` = ?", false, $plugin_code)) {
+			$objQuery = $this->db->prepare("DELETE FROM __plugins WHERE `code` = ?")->execute($plugin_code);
+				
+			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($plugin_code));
 				return true;
 			}
@@ -48,11 +54,13 @@ if(!class_exists('pdh_w_plugins')) {
 		}
 
 		public function add_plugin($code, $version) {
-			if($this->db->query("INSERT INTO __plugins :params", array(
+			$objQuery = $this->db->prepare("INSERT INTO __plugins :p")->set(array(
 				'code'		=> $code,
 				'status'	=> '0',
 				'version'	=> $version
-			))) {
+			))->execute();
+			
+			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($code));
 				return true;
 			}
@@ -60,7 +68,9 @@ if(!class_exists('pdh_w_plugins')) {
 		}
 		
 		public function set_status($code, $status) {
-			if($this->db->query("UPDATE __plugins SET :params WHERE code=?;", array('status' => $status), $code)) {
+			$objQuery = $this->db->prepare("UPDATE __plugins :p WHERE code=?;")->set(array('status' => $status))->execute($code);
+			
+			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($code));
 				return true;
 			}

@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class user_core extends gen_class {
-	public static $shortcuts = array('pdl', 'config', 'pfh', 'db2', 'tpl', 'time', 'in', 'acl', 'config', 'core', 'bridge', 'env', 'pw', 'pdh');
+	public static $shortcuts = array('pdl', 'config', 'pfh', 'db', 'tpl', 'time', 'in', 'acl', 'config', 'core', 'bridge', 'env', 'pw', 'pdh');
 	public static $dependencies = array('pfh');
 
 	private $lang			= array();		// Loaded language pack
@@ -44,7 +44,7 @@ class user_core extends gen_class {
 	public function getUserIDfromExchangeKey($strKey){
 		if (!strlen($strKey)) return ANONYMOUS;
 
-		$objQuery = $this->db2->prepare("SELECT user_id FROM __users
+		$objQuery = $this->db->prepare("SELECT user_id FROM __users
 				WHERE exchange_key =?")->execute($strKey);
 		if ($objQuery){
 			$data = $objQuery->fetchAssoc();
@@ -101,7 +101,7 @@ class user_core extends gen_class {
 		if (is_numeric($intUserStyleID) && $intUserStyleID > 0){
 			$intStyleID = $intUserStyleID;
 		} else {
-			$objQuery = $this->db2->prepare("SELECT style_id FROM __styles;")->limit(1)->execute();
+			$objQuery = $this->db->prepare("SELECT style_id FROM __styles;")->limit(1)->execute();
 			if ($objQuery && $objQuery->numRows) {
 				$arrData = $objQuery->fetchAssoc();
 				$intStyleID = $arrData['style_id'];
@@ -112,14 +112,14 @@ class user_core extends gen_class {
 		$intStyleID = (strlen($this->config->get('mobile_template')) && $this->env->agent->mobile) ? intval($this->config->get('mobile_template')) : $intStyleID;
 		
 		//Get Style-Information
-		$objQuery = $this->db2->prepare("SELECT * FROM __styles WHERE style_id=?")->execute($intStyleID);
+		$objQuery = $this->db->prepare("SELECT * FROM __styles WHERE style_id=?")->execute($intStyleID);
 		if ($objQuery && $objQuery->numRows){
 			$this->style = $objQuery->fetchAssoc();	
 		}
 
 		//No Style-Information -> Fallback to the default style
 		if ( !$this->style && ($intStyleID != $this->config->get('default_style'))) {
-			$objQuery = $this->db2->prepare("SELECT * FROM __styles WHERE style_id=?")->execute((int)$this->config->get('default_style'));
+			$objQuery = $this->db->prepare("SELECT * FROM __styles WHERE style_id=?")->execute((int)$this->config->get('default_style'));
 			if ($objQuery && $objQuery->numRows){
 				$this->style = $objQuery->fetchAssoc();
 			}
@@ -520,7 +520,7 @@ class user_core extends gen_class {
 
 
 	public function updateAutologinKey($intUserID, $strAutologinKey){
-		$objQuery = $this->db2->prepare('UPDATE __users :p WHERE user_id=?')->set(array(
+		$objQuery = $this->db->prepare('UPDATE __users :p WHERE user_id=?')->set(array(
 				'user_login_key' => $strAutologinKey,
 			))->execute((int)$intUserID);
 		

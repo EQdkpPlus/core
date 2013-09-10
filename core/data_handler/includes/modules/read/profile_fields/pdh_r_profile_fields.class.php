@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_profile_fields" ) ) {
 	class pdh_r_profile_fields extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2', 'game'	);
+		$shortcuts = array('pdc', 'db', 'game'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -53,7 +53,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 				return true;
 			}
 			$this->profile_fields = array();
-			$objQuery = $this->db2->query("SELECT * FROM __member_profilefields ORDER BY enabled DESC,category,name");
+			$objQuery = $this->db->query("SELECT * FROM __member_profilefields ORDER BY enabled DESC,category,name");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
 					if(!is_array($this->profile_categories) || !in_array($drow['category'], $this->profile_categories)){

@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Bridge extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db2', 'bridge', 'html',
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db', 'bridge', 'html',
 			'crypt'	=> 'encrypt',
 		);
 		return array_merge(parent::$shortcuts, $shortcuts);
@@ -72,7 +72,7 @@ class Manage_Bridge extends page_generic {
 	public function get_prefix($notsamedb = false){
 		//Same Database
 		if (!$notsamedb){
-			$alltables = $this->db2->listTables();
+			$alltables = $this->db->listTables();
 			$tables		= array();
 			foreach ($alltables as $name){
 				if (strpos($name, '_') !== false){
@@ -97,7 +97,7 @@ class Manage_Bridge extends page_generic {
 		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('pw') != '' && $this->in->get('name') != ''){
 			$error = array();
 			try {
-				$db = idbal::factory(array('dbtype' => 'mysqli'));
+				$db = dbal::factory(array('dbtype' => 'mysqli'));
 				$db->connect($this->in->get('host'),$this->in->get('name'),$this->in->get('user'),$this->in->get('pw'));
 				//Schreibe die Daten in die Config
 				$this->config->set('cmsbridge_host', $this->crypt->encrypt($this->in->get('host')));
@@ -108,7 +108,7 @@ class Manage_Bridge extends page_generic {
 				echo "true";
 				die();
 				
-			} catch(iDBALException $e){
+			} catch(DBALException $e){
 				$this->config->del('cmsbridge_host');
 				$this->config->del('cmsbridge_user');
 				$this->config->del('cmsbridge_password');

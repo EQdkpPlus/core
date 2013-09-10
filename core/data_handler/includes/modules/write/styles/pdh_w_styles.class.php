@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_styles')) {
 	class pdh_w_styles extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db2', 'config'	);
+		$shortcuts = array('pdh', 'db', 'config'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -32,7 +32,7 @@ if(!class_exists('pdh_w_styles')) {
 		}
 
 		public function update_status($styleid, $status=1){
-			$objQuery = $this->db2->prepare("UPDATE __styles :p WHERE style_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __styles :p WHERE style_id=?")->set(array(
 					'enabled'	=> $status
 			))->execute($styleid);
 			if(!$objQuery) return false;
@@ -41,7 +41,7 @@ if(!class_exists('pdh_w_styles')) {
 		}
 
 		public function update_version($version, $styleid){
-			$objQuery = $this->db2->prepare("UPDATE __styles :p WHERE style_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __styles :p WHERE style_id=?")->set(array(
 					'style_version'	=> $version
 			))->execute($style_id);
 			if(!$objQuery) return false;
@@ -50,9 +50,9 @@ if(!class_exists('pdh_w_styles')) {
 		}
 
 		public function delete_style($styleid){
-			$this->db2->prepare("DELETE FROM __styles WHERE style_id=?")->execute($style_id);
+			$this->db->prepare("DELETE FROM __styles WHERE style_id=?")->execute($style_id);
 
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_style=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_style=?")->set(array(
 					'user_style' => $this->config->get('default_style'),
 			))->execute($styleid);
 
@@ -61,7 +61,7 @@ if(!class_exists('pdh_w_styles')) {
 		}
 		
 		public function insert_styleparams($style){
-			$objQuery = $this->db2->prepare("INSERT INTO __styles :p")->set(array(
+			$objQuery = $this->db->prepare("INSERT INTO __styles :p")->set(array(
 				'style_name'	=> $style,
 				'template_path'	=> $style,
 				'enabled'		=> 1,
@@ -77,7 +77,7 @@ if(!class_exists('pdh_w_styles')) {
 		}
 		
 		public function add_style($data){
-			$objQuery = $this->db2->prepare("INSERT INTO __styles :p")->set($data)->execute();
+			$objQuery = $this->db->prepare("INSERT INTO __styles :p")->set($data)->execute();
 			if ($objQuery){
 				$this->pdh->enqueue_hook('styles_update');
 				return $objQuery->insertId;
@@ -87,7 +87,7 @@ if(!class_exists('pdh_w_styles')) {
 		}
 		
 		public function update_style($styleid ,$data){
-			$objQuery = $this->db2->prepare("UPDATE __styles :p WHERE style_id=?")->set($data)->execute($styleid);
+			$objQuery = $this->db->prepare("UPDATE __styles :p WHERE style_id=?")->set($data)->execute($styleid);
 			$this->pdh->enqueue_hook('styles_update');
 			return $styleid;
 		}

@@ -20,8 +20,8 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class config extends gen_class {
-	public static $shortcuts = array('pfh', 'db2');
-	public static $dependencies = array('pfh', 'db2');
+	public static $shortcuts = array('pfh', 'db');
+	public static $dependencies = array('pfh', 'db');
 
 	protected $config_modified	= false;
 	protected $config			= array();
@@ -118,7 +118,7 @@ class config extends gen_class {
 	public function get_dbconfig(){
 		if(!is_object($this->db)){return true;}
 		$this->config_modified = true;
-		$objQuery = $this->db2->query("SELECT * FROM __backup_cnf;");
+		$objQuery = $this->db->query("SELECT * FROM __backup_cnf;");
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc() ){
 				if($row['config_plugin'] != 'core'){
@@ -146,7 +146,7 @@ class config extends gen_class {
 			if(strlen(trim($changed['k'])) > 0 && !in_array($changed['k'], $done)) {
 				$done[] = $changed['k'];
 				
-				$this->db2->prepare("REPLACE INTO __backup_cnf :p")->set(array(
+				$this->db->prepare("REPLACE INTO __backup_cnf :p")->set(array(
 					'config_name'	=> $changed['k'],
 					'config_value'	=> addslashes($changed['v']),
 					'config_plugin'	=> $changed['p']
@@ -157,13 +157,13 @@ class config extends gen_class {
 		
 		foreach($this->deleted_keys as $dk => $deleted){
 			if($deleted['k'] != null)
-				$this->db2->prepare("DELETE FROM __backup_cnf WHERE config_name = ? AND config_plugin = ?")->execute($deleted['k'], $deleted['p']);
+				$this->db->prepare("DELETE FROM __backup_cnf WHERE config_name = ? AND config_plugin = ?")->execute($deleted['k'], $deleted['p']);
 			else
-				$this->db2->prepare("DELETE FROM __backup_cnf WHERE config_plugin = ?")->execute($deleted['p']);
+				$this->db->prepare("DELETE FROM __backup_cnf WHERE config_plugin = ?")->execute($deleted['p']);
 			unset($this->deleted_keys[$dk]);
 		}
 		//check if row-counts matches number of configs
-		$objQuery = $this->db2->query("SELECT COUNT(config_name) as count FROM __backup_cnf;");
+		$objQuery = $this->db->query("SELECT COUNT(config_name) as count FROM __backup_cnf;");
 		if ($objQuery){
 			$arrResult =  $objQuery->fetchAssoc();
 			$row_count = $arrResult['config_name'];	
@@ -184,7 +184,7 @@ class config extends gen_class {
 
 	private function save_backup($array){
 		if(is_array($array)){
-			$this->db2->query("TRUNCATE TABLE __backup_cnf");
+			$this->db->query("TRUNCATE TABLE __backup_cnf");
 			$data = array();
 			foreach($array as $name=>$value){
 				if(!is_array($value)) {
@@ -202,7 +202,7 @@ class config extends gen_class {
 					}
 				}
 			}
-			$this->db2->prepare("REPLACE INTO __backup_cnf :p")->set($data)->execute();
+			$this->db->prepare("REPLACE INTO __backup_cnf :p")->set($data)->execute();
 		}
 	}
 

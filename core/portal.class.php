@@ -20,7 +20,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class portal extends gen_class {
-	public static $shortcuts = array('jquery', 'db2', 'in', 'tpl', 'user', 'config', 'game', 'pdh', 'pm', 'env', 'acl', 'pgh');
+	public static $shortcuts = array('jquery', 'db', 'in', 'tpl', 'user', 'config', 'game', 'pdh', 'pm', 'env', 'acl', 'pgh');
 	
 	private $output		= array('left' => '', 'right' => '', 'middle' => '', 'bottom' => '');
 	private $lang_inits	= array();
@@ -328,7 +328,7 @@ class portal extends gen_class {
 }
 
 abstract class portal_generic extends gen_class {
-	public static $shortcuts = array('db2', 'config');
+	public static $shortcuts = array('db', 'config');
 
 	protected $path		= '';
 	protected $plugin	= '';
@@ -401,7 +401,7 @@ abstract class portal_generic extends gen_class {
 	public function install() {
 		if(!empty($this->sqls)) {
 			foreach($this->sqls as $sql){
-				$this->db2->query($sql);
+				$this->db->query($sql);
 			}
 		}
 		//set default settings
@@ -416,7 +416,7 @@ abstract class portal_generic extends gen_class {
 	public function uninstall() {
 		if(!empty($this->tables)) {
 			foreach($this->tables as $table) {
-				$this->db2->query("DROP TABLE IF EXISTS __".$table.";");
+				$this->db->query("DROP TABLE IF EXISTS __".$table.";");
 			}
 		}
 		return true;

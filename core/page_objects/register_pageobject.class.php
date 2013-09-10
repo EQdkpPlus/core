@@ -41,7 +41,7 @@ if(registry::register('input')->get('ajax', 0) == '1'){
 
 class register_pageobject extends pageobject {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'html', 'jquery', 'db2', 'time', 'env', 'email'=>'MyMailer','crypt' => 'encrypt');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'html', 'jquery', 'db', 'time', 'env', 'email'=>'MyMailer','crypt' => 'encrypt');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 
@@ -168,7 +168,7 @@ class register_pageobject extends pageobject {
 			$sql = 'SELECT auth_id, auth_default
 					FROM __auth_options
 					ORDER BY auth_id';
-			$result = $this->db2->query($sql);
+			$result = $this->db->query($sql);
 			if ($result){
 				while ( $row = $result->fetchAssoc() ) {
 					$arrSet = array(
@@ -176,7 +176,7 @@ class register_pageobject extends pageobject {
 						'auth_id' 		=> $row['auth_id'],
 						'auth_setting'	=> $row['auth_default'],
 					);
-					$this->db2->prepare("INSERT INTO __auth_users :p")->set($arrSet)->execute();
+					$this->db->prepare("INSERT INTO __auth_users :p")->set($arrSet)->execute();
 				}
 			}
 		}
@@ -253,7 +253,7 @@ class register_pageobject extends pageobject {
 		$username   = ( $this->in->exists('username') )   ? trim(strip_tags($this->in->get('username'))) : '';
 
 		// Look up record based on the username and e-mail		
-		$objQuery = $this->db2->prepare("SELECT user_id, username, user_email, user_active, user_lang
+		$objQuery = $this->db->prepare("SELECT user_id, username, user_email, user_active, user_lang
 				FROM __users
 				WHERE LOWER(user_email) = ?
 				OR LOWER(username)=?")->limit(1)->execute(utf8_strtolower($username), clean_username($username));
@@ -299,7 +299,7 @@ class register_pageobject extends pageobject {
 	// Process Activate
 	// ---------------------------------------------------------
 	public function process_activate() {
-		$objQuery = $this->db2->prepare("SELECT user_id, username, user_active, user_email, user_lang, user_key
+		$objQuery = $this->db->prepare("SELECT user_id, username, user_active, user_email, user_lang, user_key
 				FROM __users
 				WHERE user_key=?")->execute($this->in->get('key'));
 		if($objQuery){
@@ -393,7 +393,7 @@ class register_pageobject extends pageobject {
 
 	public function process_confirmed() {
 		if ($this->user->is_signedin()){
-			$this->db2->prepare("UPDATE __users SET rules = 1 WHERE user_id=?")->execute($this->user->id);
+			$this->db->prepare("UPDATE __users SET rules = 1 WHERE user_id=?")->execute($this->user->id);
 		}
 		redirect();
 	}

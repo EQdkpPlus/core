@@ -25,7 +25,7 @@ if(!class_exists('user_core')) include_once(registry::get_const('root_path').'/c
 class auth extends user_core {
 
 	public static function __shortcuts() {
-		$shortcuts = array('config', 'time', 'in', 'db2', 'pdh', 'bridge', 'logs', 'env');
+		$shortcuts = array('config', 'time', 'in', 'db', 'pdh', 'bridge', 'logs', 'env');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -90,7 +90,7 @@ class auth extends user_core {
 
 		//Do we have an session? If yes, try to look if it's a valid session and get all information about it
 		if ($this->sid != ''){
-			$objQuery = $this->db2->prepare("SELECT *
+			$objQuery = $this->db->prepare("SELECT *
 								FROM __sessions s
 								LEFT JOIN __users u
 								ON u.user_id = s.session_user_id
@@ -119,7 +119,7 @@ class auth extends user_core {
 						
 						// Only update session DB a minute or so after last update or if page changes
 						if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
-							$this->db2->prepare("UPDATE __sessions :p WHERE session_id = ?")->set(array(
+							$this->db->prepare("UPDATE __sessions :p WHERE session_id = ?")->set(array(
 								'session_current'	=> $this->current_time,
 								'session_page'		=> strlen($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
 							))->execute($this->sid);
@@ -203,7 +203,7 @@ class auth extends user_core {
 				'session_key'			=> $strSessionKey,
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);
-		$this->db2->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+		$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
 
 		//generate cookie-Data
 		$arrCookieData = array();
@@ -239,7 +239,7 @@ class auth extends user_core {
 	*/
 	public function destroy(){
 		//Update last visit of the user
-		$this->db2->prepare("UPDATE __users
+		$this->db->prepare("UPDATE __users
 				SET user_lastvisit=?
 				WHERE user_id=?")->execute(intval($this->data['session_current']), $this->data['user_id']);
 
@@ -262,9 +262,9 @@ class auth extends user_core {
 	*/
 	public function destroy_session($strSID, $intUserID = false){
 		if ($intUserID){
-			$this->db2->prepare("DELETE FROM __sessions WHERE session_id=? AND session_user_id=?")->execute($strSID, $intUserID);
+			$this->db->prepare("DELETE FROM __sessions WHERE session_id=? AND session_user_id=?")->execute($strSID, $intUserID);
 		} else {
-			$this->db2->prepare("DELETE FROM __sessions WHERE session_id=?")->execute($strSID);
+			$this->db->prepare("DELETE FROM __sessions WHERE session_id=?")->execute($strSID);
 		}
 
 		return true;
@@ -280,7 +280,7 @@ class auth extends user_core {
 	public function cleanup($intTime){
 		
 		// Get expired sessions
-		$objQuery = $this->db2->prepare("SELECT session_page, session_user_id, MAX(session_current) AS recent_time
+		$objQuery = $this->db->prepare("SELECT session_page, session_user_id, MAX(session_current) AS recent_time
 						FROM __sessions
 						WHERE session_start < ?
 						GROUP BY session_user_id")->execute($this->time->time - ($this->session_length*2));
@@ -288,13 +288,13 @@ class auth extends user_core {
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
 				if ( intval($row['session_user_id']) != ANONYMOUS ){
-					$this->db2->prepare("UPDATE __users SET :p WHERE user_id=?")->set(array(
+					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 						'user_lastvisit'	=> $row['recent_time'],
 						'user_lastpage'		=> $row['session_page'],
 					))->execute($row['session_user_id']);
 				}
 				
-				$this->db2->prepare("DELETE FROM __sessions
+				$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
 									AND session_start < ?")->execute($row['session_user_id'], ($this->time->time - $this->session_length));
 			}
@@ -310,7 +310,7 @@ class auth extends user_core {
 	* @return $user_id			Returns the User-ID
 	*/
 	public function check_session($sid){
-		$objQuery = $this->db2->prepare("SELECT u.*, s.*
+		$objQuery = $this->db->prepare("SELECT u.*, s.*
 				FROM __sessions s, __users u
 				WHERE s.session_id = ?
 				AND u.user_id = s.session_user_id")->execute($sid);	
@@ -435,7 +435,7 @@ class auth extends user_core {
 	* @param $intUserID						User-ID you want to overtake the permissions from
 	*/
 	public function overtake_permissions($intUserID){
-		$objQuery = $this->db2->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
+		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 			'session_perm_id' => $intUserID,
 		))->execute($this->sid);
 	}
@@ -444,7 +444,7 @@ class auth extends user_core {
 	* Restore your own permissions
 	*/
 	public function restore_permissions(){
-		$objQuery = $this->db2->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
+		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 				'session_perm_id'					=> ANONYMOUS,
 		))->execute($this->sid);
 	}

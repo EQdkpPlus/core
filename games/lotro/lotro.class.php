@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('lotro')) {
 	class lotro extends game_generic {
-		public static $shortcuts = array('db2');
+		public static $shortcuts = array('db');
 		protected $this_game	= 'lotro';
 		protected $types		= array('classes', 'races', 'factions', 'filters', 'roles');
 		public $icons			= array('3dmodel', 'classes', 'classes_big', 'events', 'races');
@@ -116,8 +116,8 @@ if(!class_exists('lotro')) {
 (20, '".$this->glang('event20')."', 0.00, '', '', 'isengard_giesserei.png),
 (21, '".$this->glang('event21')."', 0.00, '', '', 'isengard_dargnakh.png),
 (22, '".$this->glang('event22')."', 0.00, '', '', 'isengard_grube.png),
-(23, ".$this->db2->escapeString($this->glang('event23')).", 0.00, '', '', 'isengard_rande_des_fangorn.png),
-(24, ".$this->db2->escapeString($this->glang('event24')).", 0.00, '', '', 'isengard_draigoch.png),
+(23, ".$this->db->escapeString($this->glang('event23')).", 0.00, '', '', 'isengard_rande_des_fangorn.png),
+(24, ".$this->db->escapeString($this->glang('event24')).", 0.00, '', '', 'isengard_draigoch.png),
 (25, '".$this->glang('event25')."', 0.00, '', '', 'isengard_wdf.png),
 (26, '".$this->glang('event26')."', 0.00, '', '', 'skirmish_bruinenfurt.png),
 (27, '".$this->glang('event27')."', 0.00, '', '', 'skirmish_gondamon.png),
@@ -129,8 +129,8 @@ if(!class_exists('lotro')) {
 (33, '".$this->glang('event33')."', 0.00, '', '', 'skirmish_21_halle.png),
 (34, '".$this->glang('event34')."', 0.00, '', '', 'skirmish_buckelstadt.png),
 (35, '".$this->glang('event35')."', 0.00, '', '', 'skirmish_dannenglor.png),
-(36, ".$this->db2->escapeString($this->glang('event36')).", 0.00, '', '', 'skirmish_geisterbeschwoerer.png),
-(37, ".$this->db2->escapeString($this->glang('event37')).", 0.00, '', '', 'skirmish_ringgeister.png),
+(36, ".$this->db->escapeString($this->glang('event36')).", 0.00, '', '', 'skirmish_geisterbeschwoerer.png),
+(37, ".$this->db->escapeString($this->glang('event37')).", 0.00, '', '', 'skirmish_ringgeister.png),
 (38, '".$this->glang('event38')."', 0.00, '', '', 'skirmish_kamp_im_turm.png),
 (39, '".$this->glang('event39')."', 0.00, '', '', 'skirmish_dieberei_und_unheil.png),
 (40, '".$this->glang('event40')."', 0.00, '', '', 'skirmish_nurz_gashu.png),

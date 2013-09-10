@@ -44,8 +44,8 @@ class db_access extends install_generic {
 					<select name="dbtype" class="input">
 					';
 		// Build the database drop-down
-		include_once($this->root_path.'core/new_dbal/dbal.class.php');
-		foreach ( idbal::available_dbals() as $db_type => $db_name ){
+		include_once($this->root_path.'core/dbal/dbal.class.php');
+		foreach ( dbal::available_dbals() as $db_type => $db_name ){
 			$selected = ($db_type == $this->dbtype) ? ' selected="selected"' : '';
 			$content .= '	<option value="'.$db_type.'"'.$selected.'>'.$db_name.'</option>
 					';
@@ -100,12 +100,12 @@ class db_access extends install_generic {
 		}
 
 		$error = array();
-		include_once($this->root_path.'core/new_dbal/dbal.class.php');
+		include_once($this->root_path.'core/dbal/dbal.class.php');
 		try {
-			$db = idbal::factory(array('dbtype' => $this->dbtype));
+			$db = dbal::factory(array('dbtype' => $this->dbtype));
 			$db->connect($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass);
 		
-		} catch(iDBALException $e){
+		} catch(DBALException $e){
 			$this->pdl->log('install_error', $e->getMessage());
 			return false;
 		}
@@ -134,8 +134,8 @@ class db_access extends install_generic {
 		}
 		
 		$this->configfile_fill();
-		registry::$aliases['db2'] = 'idbal_'.$this->dbtype;
-		include_once($this->root_path.'core/new_dbal/'.$this->dbtype.'.dbal.class.php');
+		registry::$aliases['db'] = 'dbal_'.$this->dbtype;
+		include_once($this->root_path.'core/dbal/'.$this->dbtype.'.dbal.class.php');
 		return true;
 
 		//maybe show version?

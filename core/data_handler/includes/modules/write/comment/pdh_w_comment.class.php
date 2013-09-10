@@ -33,16 +33,18 @@ if(!class_exists('pdh_w_comment')) {
 
 		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
 			$strComment = xhtml_entity_decode($this->embedly->parseString($comment, 400));
-			if($this->db->query("INSERT INTO __comments :params", array(
+			
+			$objQuery = $this->db->prepare("INSERT INTO __comments :p")->set(array(
 					'attach_id'		=> $attach_id,
 					'date'			=> $this->time->time,
 					'userid'		=> $user_id,
 					'text'			=> str_replace("\n", "[br]", $strComment),
 					'page'			=> $page,
 					'reply_to'		=> $reply_to,
-					)
-				)) {
-				$id = $this->db->insert_id();
+				))->execute();
+			
+			if($objQuery){
+				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('comment_update', $id);
 				return $id;
 			}
@@ -51,35 +53,35 @@ if(!class_exists('pdh_w_comment')) {
 
 		public function delete($id) {
 			if(!$id) return false;
-			$this->db->query("DELETE FROM __comments WHERE id='".$this->db->escape($id)."' OR reply_to='".$this->db->escape($id)."';");
+			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE id=? OR reply_to=?")->execute($id, $id);
 			$this->pdh->enqueue_hook('comment_update', array($id));
 			return true;
 		}
 
 		public function uninstall($page) {
 			if(!$page) return false;
-			$this->db->query("DELETE FROM __comments WHERE page='".$this->db->escape($page)."';");
+			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE page=?")->execute($page);
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
 
 		public function delete_all($attach_id) {
 			if(!$attach_id) return false;
-			$this->db->query("DELETE FROM __comments WHERE attach_id='".$this->db->escape($attach_id)."';");
+			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE attach_id=?")->execute($attach_id);
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
 		
 		public function delete_page($page) {
 			if(!$page) return false;
-			$this->db->query("DELETE FROM __comments WHERE page='".$this->db->escape($page)."';");
+			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE page=?")->execute($page);
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
 
 		public function delete_attach_id($page, $attach_id){
 			if(!$attach_id) return false;
-			$this->db->query("DELETE FROM __comments WHERE page='".$this->db->escape($page)."' AND attach_id='".$this->db->escape($attach_id)."';");
+			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE page=? AND attach_id=?")->execute($page, $attach_id);
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}

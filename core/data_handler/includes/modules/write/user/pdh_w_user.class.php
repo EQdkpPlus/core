@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_user')) {
 	class pdh_w_user extends pdh_w_generic {
 		public static function __shortcuts() {
-			$shortcuts = array('pdh', 'db2', 'in', 'user', 'config', 'pfh', 'html', 'pm', 'jquery', 'time', 'core', 'crypt' => 'encrypt');
+			$shortcuts = array('pdh', 'db', 'in', 'user', 'config', 'pfh', 'html', 'pm', 'jquery', 'time', 'core', 'crypt' => 'encrypt');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -35,7 +35,7 @@ if(!class_exists('pdh_w_user')) {
 			$arrData = $this->set_defaults($arrData);
 			$arrData['user_registered'] = $this->time->time;
 			
-			$objQuery = $this->db2->prepare("INSERT INTO __users :p")->set($arrData)->execute();
+			$objQuery = $this->db->prepare("INSERT INTO __users :p")->set($arrData)->execute();
 
 			if ( !($objQuery) ) {
 				return false;
@@ -132,7 +132,7 @@ if(!class_exists('pdh_w_user')) {
 				$query_ary = $this->set_defaults($query_ary);
 			}
 			
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id = ?")->set($query_ary)->execute($user_id);
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id = ?")->set($query_ary)->execute($user_id);
 
 			if ($logging){
 				$log_action = array(
@@ -206,14 +206,14 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function delete_avatar($user_id) {
-			$objQuery = $this->db2->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
+			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
 				$custom = unserialize($arrResult['custom_fields']);
 				$this->pfh->Delete($this->pfh->FilePath('user_avatars/'.$custom['user_avatar']));
 				unset($custom['user_avatar']);
 				
-				$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'custom_fields' => serialize($custom)
 				))->execute($user_id);
 				
@@ -224,12 +224,12 @@ if(!class_exists('pdh_w_user')) {
 		}
 		
 		public function disable_gravatar($user_id){
-			$objQuery = $this->db2->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
+			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
 				$custom = unserialize($arrResult['custom_fields']);
 				$custom['user_avatar_type'] = '0';
-				$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'custom_fields' => serialize($custom)
 				))->execute($user_id);
 				
@@ -242,7 +242,7 @@ if(!class_exists('pdh_w_user')) {
 		public function delete_authaccount($user_id, $strMethod){
 			$arrAccounts = $this->pdh->get('user', 'auth_account', array($user_id));
 			unset($arrAccounts[$strMethod]);			
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'auth_account'	=> $this->crypt->encrypt(serialize($arrAccounts))
 			))->execute($user_id);
 			if(!$objQuery) return false;
@@ -253,7 +253,7 @@ if(!class_exists('pdh_w_user')) {
 		public function add_authaccount($user_id, $strAccount, $strMethod){
 			$arrAccounts = $this->pdh->get('user', 'auth_account', array($user_id));
 			$arrAccounts[$strMethod] = $strAccount;
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'auth_account'	=> $this->crypt->encrypt(serialize($arrAccounts))
 			))->execute($user_id);
 			if(!$objQuery) return false;
@@ -262,7 +262,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function update_userstyle($style){
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'user_style'	=> $style
 			))->execute($user_id);
 			if(!$objQuery) return false;
@@ -271,7 +271,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function activate($user_id, $active=1) {
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'user_active'	=> $active
 			))->execute($user_id);
 			if(!$objQuery) return false;
@@ -280,7 +280,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function update_failed_logins($user_id, $intFailedLogins) {
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'failed_login_attempts'	=> $intFailedLogins
 			))->execute($user_id);
 			if(!$objQuery) return false;
@@ -289,7 +289,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function hide_nochar_info($user_id) {
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'hide_nochar_info'	=> 1
 			))->execute($user_id);
 			if(!$objQuery) return false;
@@ -301,7 +301,7 @@ if(!class_exists('pdh_w_user')) {
 			// Create a new activation key
 			$user_key = random_string(true, 32);
 
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'user_key'	=> $user_key
 			))->execute($user_id);
 			
@@ -313,7 +313,7 @@ if(!class_exists('pdh_w_user')) {
 		public function create_new_exchangekey($user_id){
 			$app_key = random_string(true, 32);
 			
-			$objQuery = $this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'exchange_key'	=> $app_key
 			))->execute($user_id);
 			
@@ -342,10 +342,10 @@ if(!class_exists('pdh_w_user')) {
 			
 			$this->log_insert('action_user_deleted', $log_action, $user_id, $this->pdh->get('user', 'name', array($user_id)));
 			
-			$this->db2->prepare("DELETE FROM __users WHERE user_id=?")->execute($user_id);
-			$this->db2->prepare("DELETE FROM __auth_users WHERE user_id=?")->execute($user_id);
-			$this->db2->prepare("DELETE FROM __groups_users WHERE user_id=?")->execute($user_id);
-			$this->db2->prepare("DELETE FROM __comments WHERE userid=?")->execute($user_id);
+			$this->db->prepare("DELETE FROM __users WHERE user_id=?")->execute($user_id);
+			$this->db->prepare("DELETE FROM __auth_users WHERE user_id=?")->execute($user_id);
+			$this->db->prepare("DELETE FROM __groups_users WHERE user_id=?")->execute($user_id);
+			$this->db->prepare("DELETE FROM __comments WHERE userid=?")->execute($user_id);
 			
 			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
 			
@@ -357,8 +357,8 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function reset() {
-			$this->db2->prepare("DELETE FROM __users WHERE user_id !=?")->execute($this->user->id);
-			$this->db2->prepare("DELETE FROM __member_user WHERE user_id !=?")->execute($this->user->id);
+			$this->db->prepare("DELETE FROM __users WHERE user_id !=?")->execute($this->user->id);
+			$this->db->prepare("DELETE FROM __member_user WHERE user_id !=?")->execute($this->user->id);
 
 			$this->pdh->enqueue_hook('user');
 		}

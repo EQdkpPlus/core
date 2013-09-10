@@ -32,35 +32,31 @@ if(!class_exists('pdh_w_portal_blocks')) {
 		}
 
 		public function delete($id) {
-			$this->db->query("DELETE FROM __portal_blocks WHERE id = '".$this->db->escape($id)."'");
+			$objQuery = $this->db->prepare("DELETE FROM __portal_blocks WHERE id=?" )->execute($id);
 			$this->pdh->enqueue_hook('portal_blocks_update');
 		}
 		
 		public function add($strName, $intWideContent){
-
-			$blnResult = $this->db->query("INSERT INTO __portal_blocks :params", array(
+			$objQuery = $this->db->prepare("INSERT INTO __portal_blocks :p")->set(array(
 				'name' 			=> $strName,
 				'wide_content'	=> $intWideContent,
-			));
-			
-			$id = $this->db->insert_id();
-			
-			if ($blnResult){		
+			))->execute();
+
+			if($objQuery){
 				$this->pdh->enqueue_hook('portal_blocks_update');
-				return $id;
+				return $objQuery->insertId;
 			}
 			
 			return false;
 		}
 		
 		public function update($id, $strName, $intWideContent){
-			
-			$blnResult = $this->db->query("UPDATE __portal_blocks SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __portal_blocks :p WHERE id=?")->set(array(
 				'name' 			=> $strName,
 				'wide_content'	=> $intWideContent,
-			), $id);
+			))->execute($id);
 						
-			if ($blnResult){
+			if ($objQuery){
 				$this->pdh->enqueue_hook('portal_blocks_update');
 				return $id;
 			}

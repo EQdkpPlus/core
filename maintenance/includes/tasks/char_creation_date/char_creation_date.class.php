@@ -28,7 +28,7 @@ class char_creation_date extends task {
 	public $type = 'fix';
 
 	public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db2', 'time', 'config');
+		$shortcuts = array('pdh', 'db', 'time', 'config');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -69,7 +69,7 @@ class char_creation_date extends task {
 				} else $date = $first_raids[$member_id];
 			} else $date = $this->time->time;
 			
-			$this->db2->prepare("UPDATE __members SET member_creation_date = ? WHERE member_id = ?")->execute($date, $member_id);
+			$this->db->prepare("UPDATE __members SET member_creation_date = ? WHERE member_id = ?")->execute($date, $member_id);
 		}
 		$this->config->del('char_creation_date_update');
 		return $this->lang['fix_creation_date_done'];

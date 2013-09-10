@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_event')){
 	class pdh_r_event extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'config', 'game', 'routing');
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'config', 'game', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -61,7 +61,7 @@ if(!class_exists('pdh_r_event')){
 
 			$this->events = array();
 			
-			$objQuery = $this->db2->query("SELECT event_id, event_name, event_value, event_icon FROM __events;");
+			$objQuery = $this->db->query("SELECT event_id, event_name, event_value, event_icon FROM __events;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->events[$row['event_id']]['name'] = $row['event_name'];

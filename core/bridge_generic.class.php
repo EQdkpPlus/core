@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class bridge_generic extends gen_class {
-	public static $shortcuts = array('config', 'pdh', 'user', 'pdl', 'db2',
+	public static $shortcuts = array('config', 'pdh', 'user', 'pdl', 'db',
 		'crypt'	=> 'encrypt',
 	);
 
@@ -43,16 +43,16 @@ class bridge_generic extends gen_class {
 		//Initialisierung der DB-Connection
 		if ((int)$this->config->get('cmsbridge_notsamedb') == 1){
 			try {
-				$this->db = idbal::factory(array('dbtype' => 'mysqli', 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->db = dbal::factory(array('dbtype' => 'mysqli', 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
 				$this->db->connect($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password')));
-			} catch(iDBALException $e){
+			} catch(DBALException $e){
 				$this->db = false;
 				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
 			}
 		} else {
 			try {
-				$this->db = idbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
-			} catch(iDBALException $e){
+				$this->db = dbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+			} catch(DBALException $e){
 				$this->db = false;
 				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
 			}

@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("pdh_r_user")){
 	class pdh_r_user extends pdh_r_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('db2', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time', 'routing');
+		$shortcuts = array('db', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -62,7 +62,7 @@ if (!class_exists("pdh_r_user")){
 		public function init(){
 			$this->users = array();
 			
-			$objQuery = $this->db2->query("SELECT * FROM __users u ORDER BY username ASC;");
+			$objQuery = $this->db->query("SELECT * FROM __users u ORDER BY username ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					//decrypt email address
@@ -597,7 +597,7 @@ if (!class_exists("pdh_r_user")){
 		
 		private function init_online_user(){
 			if (!$this->online_user){
-				$objQuery = $this->db2->query("SELECT session_user_id FROM __sessions;");
+				$objQuery = $this->db->query("SELECT session_user_id FROM __sessions;");
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$this->online_user[] = $row['session_user_id'];

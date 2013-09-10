@@ -32,8 +32,11 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function enable_field($field_id){
-			$query = $this->db->query('UPDATE __member_profilefields SET enabled="1" WHERE name = "'.$this->db->escape($field_id).'"');
-			if ($query) {
+			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
+				'enabled' => 1	
+			))->execute($field_id);
+			
+			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
 				return true;
 			} else {
@@ -42,8 +45,11 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function disable_field($field_id) {
-			$query = $this->db->query('UPDATE __member_profilefields SET enabled="0" WHERE name = "'.$this->db->escape($field_id).'"');
-			if ($query) {
+			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
+					'enabled' => 0
+			))->execute($field_id);
+			
+			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
 				return true;
 			} else {
@@ -54,7 +60,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 		public function delete_fields($fields) {
 			if (is_array($fields)) {
 				foreach($fields as $value) {
-					$query = $this->db->query('DELETE FROM __member_profilefields WHERE name = "'.$this->db->escape($value).'"');
+					$objQuery = $this->db->prepare('DELETE FROM __member_profilefields WHERE name=?')->execute($value);
 				}
 				$this->pdh->enqueue_hook('game_update');
 				return true;
@@ -73,7 +79,8 @@ if(!class_exists('pdh_w_profile_fields')) {
 					}
 				}
 			}	
-			$sql = $this->db->query("UPDATE __member_profilefields SET :params WHERE name=?", array(
+			
+			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
 				'fieldtype'		=> $this->in->get('type'),
 				'category'		=> $this->in->get('category'),
 				'language'		=> $this->in->get('language'),
@@ -82,8 +89,9 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'image'			=> $this->in->get('image'),
 				'visible'		=> '1',
 				'options'		=> serialize($options),
-			), $id);	
-			if(!$sql) {
+			))->execute($id);
+				
+			if(!$objQuery) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('game_update');
@@ -124,9 +132,9 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'enabled'		=> 1,
 				'custom'		=> ($data['no_custom']) ? '0' : '1'
 			);
-			$sql = $this->db->query("INSERT INTO __member_profilefields :params", $data);
+			$objQuery = $this->db->prepare("INSERT INTO __member_profilefields :p")->set($data)->execute();
 
-			if(!$sql) {
+			if(!$objQuery) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('game_update');

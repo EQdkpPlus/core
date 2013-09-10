@@ -45,18 +45,21 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$ids = array();
 			if(!empty($member_ids) && !is_array($member_ids)) $member_ids = array($member_ids);
 			foreach($member_ids as $member_id){
-				if(!$this->db->query('INSERT INTO __adjustments :params', array(
+				$objQuery = $this->db->prepare('INSERT INTO __adjustments :p')->set(array(
 						'adjustment_value'			=> $adjustment_value,
 						'adjustment_date'			=> $time,
 						'member_id'					=> $member_id,
 						'event_id'					=> $event_id,
-						'adjustment_reason'			=> $this->db->escape($adjustment_reason),
+						'adjustment_reason'			=> $adjustment_reason,
 						'raid_id'					=> $raid_id,
 						'adjustment_group_key'		=> $group_key,
-						'adjustment_added_by'		=> $this->admin_user))){
+						'adjustment_added_by'		=> $this->admin_user
+				))->execute();
+				
+				if(!$objQuery){
 					return false;
 				}
-				$ids[] = $this->db->insert_id();
+				$ids[] = $objQuery->insertId;
 			}
 
 			$member_names = $this->pdh->aget('member', 'name', 0, array($member_ids));
@@ -110,7 +113,8 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 						'adjustment_updated_by' => $this->admin_user,
 						
 					);
-					if(!$this->db->query("UPDATE __adjustments SET :params WHERE adjustment_id = ?", $arrSet, $adj_id)){
+					$objQuery = $this->db->prepare("UPDATE __adjustments :p WHERE adjustment_id = ?")->set($arrSet)->execute($adj_id);
+					if(!$objQuery){
 						$retu[] = false;
 						break;
 					}
@@ -126,8 +130,9 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 						'adjustment_group_key'	=> $new_group_key,
 						'adjustment_added_by'	=> $this->admin_user,		
 					);
-
-					if(!$this->db->query("INSERT INTO __adjustments :params", $arrSet)){
+					$objQuery = $this->db->prepare("INSERT INTO __adjustments :p")->set($arrSet)->execute();
+					
+					if(!$objQuery){
 						$retu[] = false;
 						break;
 					}
@@ -135,7 +140,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			}
 			if(is_array($adjs2del)){
 				foreach($adjs2del as $adj_id => $unimportant){
-					if(!$this->db->query("DELETE FROM __adjustments WHERE adjustment_id = ?;", false, $adj_id)){
+					if(!$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_id = ?;")->execute($adj_id)){
 						$retu[] = false;
 						break;
 					}
@@ -180,7 +185,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$old['event'] = $this->pdh->get('adjustment', 'event', array($adjustment_id));
 			$old['raid'] = $this->pdh->get('adjustment', 'raid_id', array($adjustment_id));
 			
-			if($this->db->query("DELETE FROM __adjustments WHERE adjustment_id = ?;", false, $adjustment_id)){
+			if($this->db->prepare("DELETE FROM __adjustments WHERE adjustment_id = ?;")->execute($adjustment_id)){
 				//insert log
 				$log_action = array(
 					'{L_MEMBER}'	=> $this->pdh->get('member', 'name', array($old['member'])),
@@ -206,7 +211,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				$old['raid'] = $this->pdh->get('adjustment', 'raid_id', array($adjustment_id));
 			}
 			
-			if($this->db->query("DELETE FROM __adjustments WHERE adjustment_group_key = ?;", false, $group_key)){
+			if($this->db->prepare("DELETE FROM __adjustments WHERE adjustment_group_key = ?")->execute($group_key)){
 				
 				$old_names = $this->pdh->aget('member', 'name', 0, array($old['member']));
 				
@@ -229,7 +234,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 		public function delete_adjustmentsofraid($raid_id) {
 			$adjs = $this->pdh->get('adjustment', 'adjsofraid', array($raid_id));
 			if(count($adjs) < 1) return true;
-			$this->db->query("DELETE FROM __adjustments WHERE adjustment_id IN ('".implode("', '", $adjs)."');");
+			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_id :in;")->in($adjs)->execute();
 			$log_action = array(
 				'{L_ID}'		=> implode(', ', $adjs),
 				'{L_RAID_ID}'	=> $raid_id,
@@ -242,7 +247,8 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 		public function delete_adjustmentsofevent($event_id) {
 			$adjs = $this->pdh->get('adjustment', 'adjsofeventid', array($event_id));
 			if(count($adjs) < 1) return true;
-			$this->db->query("DELETE FROM __adjustments WHERE adjustment_id IN ('".implode("', '", $adjs)."');");
+			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_id :in;")->in($adjs)->execute();
+			
 			$log_action = array(
 				'{L_ID}'		=> implode(', ', $adjs),
 				'{L_EVENT_ID}'	=> $event_id,

@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class plugin_generic extends gen_class {
-	public static $shortcuts = array('user', 'db2', 'pdl', 'config', 
+	public static $shortcuts = array('user', 'db', 'pdl', 'config', 
 		'acl' => 'acl'
 	);
 
@@ -73,8 +73,8 @@ class plugin_generic extends gen_class {
 			foreach ($permissions as $auth_value => $permission) {
 				if ($permission['groups']){
 					foreach($permission['groups'] as $key=>$group_id){
-						$this->db2->prepare("DELETE FROM __auth_groups WHERE group_id = ? AND auth_id = ?")->execute($group_id, $this->acl->get_auth_id($auth_value));
-						$this->db2->prepare("INSERT INTO __auth_groups :p")->set(array(
+						$this->db->prepare("DELETE FROM __auth_groups WHERE group_id = ? AND auth_id = ?")->execute($group_id, $this->acl->get_auth_id($auth_value));
+						$this->db->prepare("INSERT INTO __auth_groups :p")->set(array(
 								'group_id' => $group_id,
 								'auth_id'	=> $this->acl->get_auth_id($auth_value),
 								'auth_setting' => 'Y',
@@ -86,7 +86,7 @@ class plugin_generic extends gen_class {
 
 		ksort($this->sql_queries[SQL_INSTALL]);
 		foreach($this->sql_queries[SQL_INSTALL] as $sql) {
-			if(!$this->db2->query($sql)) return $this->db2->error;
+			if(!$this->db->query($sql)) return $this->db->error;
 		}
 		return true;
 	}
@@ -102,13 +102,13 @@ class plugin_generic extends gen_class {
 				$this->acl->del_auth_option($auth_value);
 			}
 			
-			$this->db2->prepare("DELETE FROM __auth_users WHERE `auth_id` :in")->in($auth_ids)->execute();
-			$this->db2->prepare("DELETE FROM __auth_groups WHERE `auth_id` :in")->in($auth_ids)->execute();
+			$this->db->prepare("DELETE FROM __auth_users WHERE `auth_id` :in")->in($auth_ids)->execute();
+			$this->db->prepare("DELETE FROM __auth_groups WHERE `auth_id` :in")->in($auth_ids)->execute();
 		}
 		
 		ksort($this->sql_queries[SQL_UNINSTALL]);
 		foreach($this->sql_queries[SQL_UNINSTALL] as $sql) {
-			if(!$this->db2->query($sql)) return $this->db2->error;
+			if(!$this->db->query($sql)) return $this->db->error;
 		}
 		return true;
 	}

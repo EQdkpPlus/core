@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "maintenanceuser_crontask" ) ) {
 	class maintenanceuser_crontask extends crontask {
-		public static $shortcuts = array('db2', 'pdh', 'config', 'crypt'=>'encrypt');
+		public static $shortcuts = array('db', 'pdh', 'config', 'crypt'=>'encrypt');
 
 		public function __construct(){
 			$this->defaults['description']	= 'Deleting Maintenance-user';
@@ -33,7 +33,7 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 		public function run(){
 			$muser = unserialize(stripslashes($this->crypt->decrypt($this->config->get('maintenance_user'))));
 			if ($muser['user_id']){
-				$this->db2->prepare("DELETE FROM __users WHERE user_id =?")->execute($muser['user_id']);
+				$this->db->prepare("DELETE FROM __users WHERE user_id =?")->execute($muser['user_id']);
 				
 				$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
 				

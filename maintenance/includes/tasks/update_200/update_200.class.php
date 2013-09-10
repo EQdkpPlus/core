@@ -28,7 +28,7 @@ class update_200 extends sql_update_task {
 	public $name		= '2.0.0 Migration from 1.x';
 
 	public static function __shortcuts() {
-		$shortcuts = array('time', 'config', 'routing', 'pdc', 'db2');
+		$shortcuts = array('time', 'config', 'routing', 'pdc', 'db');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	
@@ -325,7 +325,7 @@ class update_200 extends sql_update_task {
 	public function update_function(){
 		//Set Default Settings
 		$this->config->set( 'start_page' , 'news');
-		$objQuery = $this->db2->query("SELECT style_id FROM __styles WHERE template_path='eqdkp_modern'");
+		$objQuery = $this->db->query("SELECT style_id FROM __styles WHERE template_path='eqdkp_modern'");
 		if ($objQuery) $arrData = $objQuery->fetchAssoc();
 		
 		$this->config->set('default_style', (int)$arrData['style_id']);
@@ -335,7 +335,7 @@ class update_200 extends sql_update_task {
 		
 		//Migrate News		
 		$sql = "SELECT * FROM __news";
-		$query = $this->db2->query($sql);
+		$query = $this->db->query($sql);
 		if ($query){
 			while ($row = $query->fetchAssoc()) {
 				$message = $row['news_message'];
@@ -344,7 +344,7 @@ class update_200 extends sql_update_task {
 					$message .= $row['extended_message'];
 				}	
 				
-				$this->db2->prepare("INSERT INTO __articles :p")->set(array(
+				$this->db->prepare("INSERT INTO __articles :p")->set(array(
 						'title' 			=> $row['news_headline'],
 						'text'				=> $message,
 						'category'			=> 2,
@@ -371,17 +371,17 @@ class update_200 extends sql_update_task {
 			}
 			$prefix = registry::get_const("table_prefix");
 			
-			$this->db2->query("RENAME TABLE `__news` TO `!OBSOLETE_".$prefix."news`;");
-			$this->db2->query("RENAME TABLE `__news_categories` TO `!OBSOLETE_".$prefix."news_categories`;");
+			$this->db->query("RENAME TABLE `__news` TO `!OBSOLETE_".$prefix."news`;");
+			$this->db->query("RENAME TABLE `__news_categories` TO `!OBSOLETE_".$prefix."news_categories`;");
 		}
 		
 		//Migrate Infopages
 		$sql = "SELECT * FROM __pages";
-		$query = $this->db2->query($sql);
+		$query = $this->db->query($sql);
 		if ($query){
 			while ($row = $query->fetchAssoc()) {
 				
-				$this->db2->prepare("INSERT INTO __articles :p")->set(array(
+				$this->db->prepare("INSERT INTO __articles :p")->set(array(
 						'title' 			=> $row['page_title'],
 						'text'				=> $row['page_content'],
 						'category'			=> 7,
@@ -407,7 +407,7 @@ class update_200 extends sql_update_task {
 				))->execute();
 								
 			}
-			$this->db2->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
+			$this->db->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
 		}
 		//Update Colors
 		$this->update_colors();
@@ -424,7 +424,7 @@ class update_200 extends sql_update_task {
 			foreach($dbfields['field'] as $dbfieldvalue){
 				// now, lets change the values
 				$sql	= 'SELECT '.$dbfieldvalue.' as mycolorvalue, '.$dbfields['id'].' as mycolorid FROM '.$dbtable.';';
-				$query = $this->db2->query($sql);
+				$query = $this->db->query($sql);
 				$update = array();
 				if ($query){
 					while ($row = $query->fetchAssoc()) {
@@ -434,7 +434,7 @@ class update_200 extends sql_update_task {
 								continue;
 							}else if (preg_match('/^[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
 								$sql = "UPDATE ".$dbtable." SET ".$dbfieldvalue." = '#".$row['mycolorvalue']."' WHERE ".$dbfields['id']." = '".$row['mycolorid']."';";
-								$this->db2->query($sql);
+								$this->db->query($sql);
 							}
 						}
 					}

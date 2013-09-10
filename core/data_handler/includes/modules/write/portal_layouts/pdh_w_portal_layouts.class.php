@@ -32,37 +32,33 @@ if(!class_exists('pdh_w_portal_layouts')) {
 		}
 
 		public function delete($id) {
-			$this->db->query("DELETE FROM __portal_layouts WHERE id = '".$this->db->escape($id)."'");
+			$objQuery = $this->db->prepare("DELETE FROM __portal_layouts WHERE id =?")->execute($id);
 			$this->pdh->enqueue_hook('portal_layouts_update');
+			return $objQuery;
 		}
 		
 		public function add($strName, $arrBlocks, $arrModules){
-
-			$blnResult = $this->db->query("INSERT INTO __portal_layouts :params", array(
+			$objQuery = $this->db->prepare("INSERT INTO __portal_layouts :p")->set(array(
 				'name' 			=> $strName,
 				'blocks'		=> serialize($arrBlocks),
 				'modules'		=> serialize($arrModules),
-			));
-			
-			$id = $this->db->insert_id();
-			
-			if ($blnResult){		
+			))->execute();
+			if($objQuery){
 				$this->pdh->enqueue_hook('portal_layouts_update');
-				return $id;
+				return $objQuery->insertId;
 			}
 			
 			return false;
 		}
 		
 		public function update($id, $strName, $arrBlocks, $arrModules){
-			
-			$blnResult = $this->db->query("UPDATE __portal_layouts SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __portal_layouts :p WHERE id=?")->set(array(
 				'name' 			=> $strName,
 				'blocks'		=> serialize($arrBlocks),
 				'modules'		=> serialize($arrModules),
-			), $id);
+			))->execute($id);
 						
-			if ($blnResult){
+			if ($objQuery){
 				$this->pdh->enqueue_hook('portal_layouts_update');
 				return $id;
 			}

@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_member" ) ) {
 	class pdh_r_member extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db2', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time', 'routing');
+			$shortcuts = array('pdc', 'db', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -116,7 +116,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 
 			//connection data
-			$objQuery = $this->db2->query("SELECT m.member_id, mu.user_id
+			$objQuery = $this->db->query("SELECT m.member_id, mu.user_id
 							FROM __members m
 							LEFT JOIN __member_user mu ON mu.member_id = m.member_id
 							WHERE (m.requested_del != '1' OR m.requested_del IS NULL)
@@ -132,7 +132,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			
 			// The free to take members..
-			$objQuery = $this->db2->query("SELECT m.member_id, mu.user_id
+			$objQuery = $this->db->query("SELECT m.member_id, mu.user_id
 							FROM __members m
 							LEFT JOIN __member_user mu ON m.member_id = mu.member_id
 							WHERE mu.user_id IS NULL
@@ -167,7 +167,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						FROM __members;";
 			
 			
-			$objQuery = $this->db2->query($bmd_sql);
+			$objQuery = $this->db->query($bmd_sql);
 			
 			if($objQuery){
 				while($bmd_row = $objQuery->fetchAssoc()){

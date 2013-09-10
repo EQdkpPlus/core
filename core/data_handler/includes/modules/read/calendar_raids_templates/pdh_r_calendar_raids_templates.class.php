@@ -62,7 +62,7 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 			// empty array as default
 			$this->rctemplates	= array();
 			
-			$objQuery = $this->db2->query('SELECT * FROM __calendar_raid_templates;');
+			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_templates;');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$templatearray = json_decode($row['tpldata'], true);

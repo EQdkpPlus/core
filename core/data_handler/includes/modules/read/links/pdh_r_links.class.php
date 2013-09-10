@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_links" ) ){
 	class pdh_r_links extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2', 'user', 'bbcode'=>'bbcode', 'routing');
+		$shortcuts = array('pdc', 'db', 'user', 'bbcode'=>'bbcode', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -58,7 +58,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 					__links
 					ORDER BY link_sortid;";
 			
-			$objQuery = $this->db2->query($sql);
+			$objQuery = $this->db->query($sql);
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->links[$row['link_id']]['id']			= $row['link_id'];

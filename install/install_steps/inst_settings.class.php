@@ -19,7 +19,7 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class inst_settings extends install_generic {
-	public static $shortcuts = array('pdl', 'in', 'html', 'game', 'config', 'db', 'pfh', 'core', 'time', 'db2');
+	public static $shortcuts = array('pdl', 'in', 'html', 'game', 'config', 'db', 'pfh', 'core', 'time', 'db');
 	public static $before 		= 'encryptionkey';
 	public static $ajax			= 'ajax';
 	
@@ -236,7 +236,7 @@ class inst_settings extends install_generic {
 		//remove installed tables from database
 		$this->data['installed_tables'] = array_unique($this->data['installed_tables']);
 		foreach($this->data['installed_tables'] as $key => $table) {
-			if($this->db2->query("DROP TABLE IF EXISTS ".$table.";")) unset($this->data['installed_tables'][$key]);
+			if($this->db->query("DROP TABLE IF EXISTS ".$table.";")) unset($this->data['installed_tables'][$key]);
 		}		
 	}
 	
@@ -274,9 +274,9 @@ class inst_settings extends install_generic {
 	
 	private function do_sql($sql) {
 		if($sql && !$this->sql_error) {
-			$objQuery = $this->db2->query($sql.';');
+			$objQuery = $this->db->query($sql.';');
 			if (!$objQuery){		
-				$this->pdl->log('install_error', 'SQL-Error:<br />Query: '.$sql.';<br />Code: '.$this->db2->errno.'<br />Message: '.$this->db2->error);
+				$this->pdl->log('install_error', 'SQL-Error:<br />Query: '.$sql.';<br />Code: '.$this->db->errno.'<br />Message: '.$this->db->error);
 				$this->undo();
 				$this->sql_error = true;
 				return false;
@@ -305,10 +305,10 @@ class inst_settings extends install_generic {
 	
 	private function InsertStartNews(){
 		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
-		(1, '".$this->lang['feature_news_title']."', ".$this->db2->escapeString($this->lang['feature_news']).", 2, 1, 1, 0, 1, '', '', 1, ".(time()-5).", '', 'new-features', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".(time()-5).", 1);");
+		(1, '".$this->lang['feature_news_title']."', ".$this->db->escapeString($this->lang['feature_news']).", 2, 1, 1, 0, 1, '', '', 1, ".(time()-5).", '', 'new-features', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".(time()-5).", 1);");
 		
 		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
-		(11, '".$this->lang['welcome_news_title']."', ".$this->db2->escapeString($this->lang['welcome_news']).", 2, 1, 1, 0, 1, '', '', 1, ".time().", '', 'welcome', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".time().", 1);");
+		(11, '".$this->lang['welcome_news_title']."', ".$this->db->escapeString($this->lang['welcome_news']).", 2, 1, 1, 0, 1, '', '', 1, ".time().", '', 'welcome', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".time().", 1);");
 		
 		$this->do_sql("UPDATE __articles SET date=".time().", last_edited=".time().";");
 	}
@@ -333,7 +333,7 @@ class inst_settings extends install_generic {
 	
 	private function init_auth_ids() {
 		if(!empty($this->auth_ids)) return true;
-		$result = $this->db2->query("SELECT auth_id, auth_value FROM __auth_options;");
+		$result = $this->db->query("SELECT auth_id, auth_value FROM __auth_options;");
 		if($result){
 			while($row = $result->fetchAssoc()) {
 				$this->auth_ids[$row['auth_value']] = $row['auth_id'];

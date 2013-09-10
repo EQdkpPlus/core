@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_links')) {
 	class pdh_w_links extends pdh_w_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db2'	);
+		$shortcuts = array('pdh', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -33,7 +33,7 @@ if(!class_exists('pdh_w_links')) {
 		
 		public function add($name, $url, $window=0, $visibility=0, $height=4024){
 			if (strlen($name)){
-				$objQuery = $this->db2->prepare("INSERT INTO __links :p")->set(array(
+				$objQuery = $this->db->prepare("INSERT INTO __links :p")->set(array(
 					'link_name'			=> $name,
 					'link_url'			=> $url,
 					'link_window'		=> $window,
@@ -53,7 +53,7 @@ if(!class_exists('pdh_w_links')) {
 			$data = $this->pdh->get('links', 'data', array($id));
 		
 			if ($force OR $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR $data['visibility'] != $visibility OR (int)$data['height'] != (int)$height){
-				$objQuery = $this->db2->prepare("UPDATE __links SET :p WHERE link_id=?")->set(array(
+				$objQuery = $this->db->prepare("UPDATE __links :p WHERE link_id=?")->set(array(
 					'link_name'			=> $name,
 					'link_url'			=> $url,
 					'link_window'		=> $window,
@@ -68,7 +68,7 @@ if(!class_exists('pdh_w_links')) {
 		}
 
 		public function delete_link($id){
-			$objQuery = $this->db2->prepare("DELETE FROM __links WHERE link_id =?")->execute($id);
+			$objQuery = $this->db->prepare("DELETE FROM __links WHERE link_id =?")->execute($id);
 			$this->pdh->enqueue_hook('links', array($id));
 		}
 	}

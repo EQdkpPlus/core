@@ -23,7 +23,7 @@ require_once($eqdkp_root_path . 'common.php');
 
 class EQDKPBackup extends page_generic{
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db2', 'time', 'backup'=>'backup', 'pdc', 'logs');
+		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup', 'pdc', 'logs');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -119,9 +119,9 @@ class EQDKPBackup extends page_generic{
 			}
 		}
 
-		$arrTables = $this->db2->listTables();
+		$arrTables = $this->db->listTables();
 		foreach($arrTables as $name){
-			if (!$this->db2->isEQdkpTable($name)) continue;
+			if (!$this->db->isEQdkpTable($name)) continue;
 			$tables[$name] = $name;
 		}
 
@@ -223,7 +223,7 @@ class EQDKPBackup extends page_generic{
 			@set_time_limit(0);
 			while (($sql = $this->$fgetd($fp, ";\n", $read, $seek, $eof)) !== false){
 				if (strpos($sql, "--") === false && $sql != ""){
-					$this->db2->query($sql);
+					$this->db->query($sql);
 				}
 			}
 			$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $matches[1])),$this->user->lang('backup'),'green');

@@ -41,17 +41,24 @@ if(!class_exists('pdh_w_calendar_raids_templates')){
 			if($templateid > 0){
 				$this->delete_template($templateid);
 			}
-			
-			$this->db->query("INSERT INTO __calendar_raid_templates :params", array(
+			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_templates :p")->set(array(
 				'name'			=> $name,
 				'tpldata'		=> json_encode($tpldata),
-			));
-			$id = $this->db->insert_id();
-			$this->pdh->enqueue_hook('calendar_templates_update', array($id));
+			))->execute();
+			
+			if ($objQuery){
+				$id = $objQuery->insertId;
+				$this->pdh->enqueue_hook('calendar_templates_update', array($id));
+				return $id;
+			}
+			
+			return false;		
 		}
 
 		public function delete_template($templateid){
-			if($this->db->query("DELETE FROM __calendar_raid_templates WHERE id=?;", false, $templateid)){
+			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_templates WHERE id=?;")->execute($templateid);
+			
+			if($objQuery){
 				$this->pdh->enqueue_hook('calendar_templates_update', array($templateid));
 				return true;
 			}

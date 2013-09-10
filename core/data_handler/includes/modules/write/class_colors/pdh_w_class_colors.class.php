@@ -33,13 +33,17 @@ if(!class_exists('pdh_w_class_colors')) {
 
 		public function add_classcolor($template, $clsid='', $color=''){
 			$color = (substr($color, 0, 1) == '#') ? $color : ((strlen($color)) ? '#'.$color : '');
-			$result = $this->db->query('INSERT INTO __classcolors :params', array(
+			
+			$objQuery = $this->db->prepare('INSERT INTO __classcolors :p')->set(array(
 				'template'		=> $template,
 				'class_id'		=> $clsid,
 				'color'			=> $color,
-			));
-			$this->pdh->enqueue_hook('classcolors_update');
-			return $this->db->insert_id();
+			))->execute();
+			if($objQuery){
+				$this->pdh->enqueue_hook('classcolors_update');
+				return $objQuery->insertId;
+			}
+			return false;
 		}
 
 		public function truncate_classcolor() {
@@ -48,7 +52,7 @@ if(!class_exists('pdh_w_class_colors')) {
 		}
 
 		public function delete_classcolor($template) {
-			$this->db->query("DELETE FROM __classcolors WHERE template=?", false, $template);
+			$objQuery = $this->db->prepare("DELETE FROM __classcolors WHERE template=?")->execute($template);
 			$this->pdh->enqueue_hook('classcolors_update');
 		}
 		

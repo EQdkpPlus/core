@@ -44,8 +44,11 @@ if(!class_exists('pdh_w_event')) {
 				'event_icon'	=> $icon,
 				'event_added_by'=> $this->admin_user,
 			);
-			if($this->db->query("INSERT INTO __events :params", $arrSet)) {
-				$id = $this->db->insert_id();
+			
+			$objQuery = $this->db->prepare("INSERT INTO __events :p")->set($arrSet)->execute();
+			
+			if($objQuery) {
+				$id = $objQuery->insertId;
 				$log_action = array(
 					'{L_NAME}'		=> $name,
 					'{L_VALUE}'		=> $value,
@@ -70,7 +73,9 @@ if(!class_exists('pdh_w_event')) {
 				'event_updated_by'=> $this->admin_user,
 			);
 			
-			if($this->db->query("UPDATE __events SET :params WHERE event_id =?", $arrSet, $id)) {
+			$objQuery = $this->db->prepare("UPDATE __events :p WHERE event_id =?")->set($arrSet)->execute($id);
+			
+			if($objQuery) {
 				$arrOld = array(
 					'event_name' 	=> $old['name'],
 					'event_value'	=> $old['value'],
@@ -94,9 +99,12 @@ if(!class_exists('pdh_w_event')) {
 			$old['name'] = $this->pdh->get('event', 'name', array($id));
 			$old['value'] = $this->pdh->get('event', 'value', array($id));
 			$old['icon'] = $this->pdh->get('event', 'icon', array($id));
+			
+			$this->db->beginTransaction();
+			
+			$objQuery = $this->db->prepare("DELETE FROM __events WHERE event_id = ?;")->execute($id);
 
-			$this->db->query("START TRANSACTION");
-			if($this->db->query("DELETE FROM __events WHERE event_id = ?;", false, $id)) {
+			if($objQuery) {
 				$log_action = array(
 					'{L_NAME}'		=> $old['name'],
 					'{L_VALUE}'		=> $old['value'],
@@ -110,13 +118,14 @@ if(!class_exists('pdh_w_event')) {
 				$retu[] = $this->pdh->put('adjustment', 'delete_adjustmentsofevent', array($id));
 
 				//delete multidkp2event data
-				if(!in_array(false, $retu, true) AND $this->db->query("DELETE FROM __multidkp2event WHERE multidkp2event_event_id = ?;", false, $id)) {
-					$this->db->query("COMMIT");
+				$objQuery = $this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_event_id = ?;")->execute($id);
+				if(!in_array(false, $retu, true) AND $objQuery) {
+					$this->db->commitTransaction();
 					$this->pdh->enqueue_hook('event_update', array($id));
 					return true;
 				}
 			}
-			$this->db->query("ROLLBACK");
+			$this->db->rollbackTransaction();
 			return false;
 		}
 		

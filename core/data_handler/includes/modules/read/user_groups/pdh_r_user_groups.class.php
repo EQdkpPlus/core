@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_user_groups" ) ){
 	class pdh_r_user_groups extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('db2'	);
+		$shortcuts = array('db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -43,7 +43,7 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 		public function init(){
 			$this->user_groups = array();
 			
-			$objQuery = $this->db2->query("SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;");
+			$objQuery = $this->db->query("SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->user_groups[$row['groups_user_id']]['id']		= $row['groups_user_id'];

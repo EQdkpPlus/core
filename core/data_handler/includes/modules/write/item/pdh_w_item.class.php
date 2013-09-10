@@ -51,7 +51,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				$item_buyers	= array($member);
 			}
 			foreach($item_buyers as $member_id){
-				$blnResult = $this->db->query("INSERT INTO __items :params", array(
+				$objQuery = $this->db->prepare("INSERT INTO __items :p")->set(array(
 					'item_name'			=> $item_name,
 					'member_id'			=> $member_id,
 					'raid_id'			=> $raid_id,
@@ -61,12 +61,12 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'item_added_by'		=> $this->admin_user,
 					'game_itemid'		=> $game_item_id,
 					'itempool_id'		=> $itempool_id
-				));
+				))->execute();
 			}
 
-			if($blnResult) {
+			if($objQuery) {
 				//insert log
-				$item_id = $this->db->insert_id();
+				$item_id = $objQuery->insertId;
 				$arrNew = array(
 					'item_name'			=> $item_name,
 					'member_id'			=> implode(', ', $this->pdh->aget('member', 'name', '0', array($item_buyers))),
@@ -106,13 +106,15 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
 			$old['game_itemid'] = $this->pdh->get('item', 'game_itemid', array($item_id));
 			
-			#$this->db->query("START TRANSACTION;");
 			$retu = array(true);
 			$updated_mems = array();
 			$added_mems = array();
 			$items2del = array();
+			
+			$this->db->beginTransaction();
+			
 			if($id || (count($item_buyers) == 1 && count($old['buyers']) == 1))	{
-				$succ_data = $this->db->query("UPDATE __items SET :params WHERE item_id=?;",array(
+				$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?;")->set(array(
 					'item_name'			=> $item_name,
 					'item_value'		=> $item_value,
 					'member_id'			=> $item_buyers[0],
@@ -121,11 +123,11 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'item_group_key'	=> $new_group_key,
 					'game_itemid'		=> $game_item_id,
 					'itempool_id'		=> $itempool_id
-				), $item_id);
+				))->execute($item_id);
 				
-				if(!$succ_data) {
-					#$this->db->query("ROLLBACK;");
-					return false;
+				if(!$objQuery) {
+					$retu[] = false;
+					break;
 				}
 				$hook_id = $item_id;
 			} else {
@@ -135,7 +137,8 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					if($item_id !== false) {
 						$updated_mems[] = $member_id;
 						unset($items2del[$item_id]);
-						$succ_data = $this->db->query("UPDATE __items SET :params WHERE item_id = ?;", array(
+						
+						$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id = ?;")->set(array(
 							'item_name'			=> $item_name,
 							'item_value'		=> $item_value,
 							'member_id'			=> $member_id,
@@ -145,16 +148,16 @@ if ( !class_exists( "pdh_w_item" ) ) {
 							'game_itemid'		=> $game_item_id,
 							'itempool_id'		=> $itempool_id,
 							'item_updated_by'	=> $this->admin_user
-						), $item_id);
-
-						if(!$succ_data) {
+						))->execute($item_id);
+	
+						if(!$objQuery) {
 							$retu[] = false;
 							break;
 						}
 						$hook_id[] = $item_id;
 					} else {
 						$added_mems[] = $member_id;
-						$blaa = $this->db->query("INSERT INTO __items :params", array(
+						$objQuery = $this->db->prepare("INSERT INTO __items :p")->set(array(
 							'item_name'			=> $item_name,
 							'item_value'		=> $item_value,
 							'member_id'			=> $member_id,
@@ -163,8 +166,9 @@ if ( !class_exists( "pdh_w_item" ) ) {
 							'item_group_key'	=> $new_group_key,
 							'item_added_by'		=> $this->admin_user,
 							'itempool_id'		=> $itempool_id
-						));
-						if(!$blaa) {
+						))->execute();
+						
+						if(!$objQuery) {
 							$retu[] = false;
 							break;
 						}
@@ -172,7 +176,9 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				}
 				if(is_array($items2del)) {
 					foreach($items2del as $item_id => $member_id) {
-						if(!$this->db->query("DELETE FROM __items WHERE item_id = ?", false, $item_id)) {
+						$objQuery = $this->db->prepare("DELETE FROM __items WHERE item_id = ?")->execute($item_id);
+						
+						if(!$objQuery) {
 							$retu[] = false;
 							break;
 						}
@@ -206,11 +212,11 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
-				#$this->db->query("COMMIT;");
 				$this->pdh->enqueue_hook('item_update', $hook_id);
+				$this->db->commitTransaction();
 				return true;
 			}
-			#$this->db->query("ROLLBACK;");
+			$this->db->rollbackTransaction();
 			return false;
 		}
 
@@ -223,7 +229,9 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$old['itempool'] = $this->pdh->get('itempool', 'name', array($this->pdh->get('item', 'itempool_id', array($item_id))));
 			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
 			
-			if($this->db->query("DELETE FROM __items WHERE item_id = ?;", false, $item_id)) {
+			$objQuery = $this->db->prepare("DELETE FROM __items WHERE item_id = ?;")->execute($item_id);
+			
+			if($objQuery) {
 				//insert log
 				$log_action = array(
 					'{L_NAME}'		=> $old['name'],
@@ -243,7 +251,8 @@ if ( !class_exists( "pdh_w_item" ) ) {
 		public function delete_itemsofraid($raid_id) {
 			$items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
 			if(count($items) < 1) return true;
-			$this->db->query("DELETE FROM __items WHERE item_id IN ('".implode("', '", $items)."');");
+			$objQuery = $this->db->prepare("DELETE FROM __items WHERE item_id :in")->in($items)->execute();
+
 			$log_action = array(
 				'{L_ID}'		=> implode(', ', $items),
 				'{L_RAID_ID}'	=> $raid_id

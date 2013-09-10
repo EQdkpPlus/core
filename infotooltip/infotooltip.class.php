@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('infotooltip')) {
 	class infotooltip extends gen_class {
-		public static $shortcuts = array('pfh' => array('file_handler', array('infotooltips')), 'pdl', 'puf' => 'urlfetcher', 'settings' => 'config', 'db', 'db2');
+		public static $shortcuts = array('pfh' => array('file_handler', array('infotooltips')), 'pdl', 'puf' => 'urlfetcher', 'settings' => 'config', 'db', 'db');
 
 		private $avail_parser	= array();
 
@@ -254,11 +254,11 @@ if(!class_exists('infotooltip')) {
 			//add color to item-table
 			if(isset($item['color'])) {
 				if($game_id > 0) {
-					$objQuery = $this->db2->prepare("UPDATE __items :p WHERE game_itemid=?")->set(array(
+					$objQuery = $this->db->prepare("UPDATE __items :p WHERE game_itemid=?")->set(array(
 							'item_color' => $item['color'],
 					))->execute($game_id);
 				} else {
-					$objQuery = $this->db2->prepare("UPDATE __items :p WHERE item_name=?")->set(array(
+					$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_name=?")->set(array(
 							'item_color' => $item['color'],
 					))->execute($name2search);
 				}

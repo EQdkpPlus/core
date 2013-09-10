@@ -86,8 +86,8 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					$data['mainid'] = $this->pdh->get('member','mainchar',array($this->user->data['user_id']));
 				}
 				if(empty($data['mainid']) || $data['mainid'] == 0) {
-					$table_infos = $this->db->get_table_information('__members');
-					$data['mainid'] = $table_infos['auto_increment'];
+					$this->db->getNextId("__members");
+					$data['mainid'] = $this->db->getNextId("__members");
 				}
 				if(empty($data['profiledata'])) $data['profiledata'] = $this->profilefields($data);
 			}
@@ -109,7 +109,9 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'picture'			=> !empty($data['picture']) ? $data['picture'] : ''
 			);
 			if($member_id > 0) {
-				if($this->db->query("UPDATE __members SET :params WHERE member_id = ?;", $querystr, $member_id)) {
+				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set($querystr)->execute($member_id);
+				
+				if($objQuery) {
 					$arrOld = array(
 						'name'			=> $old['name'],
 						'lvl'			=> $old['lvl'],
@@ -149,12 +151,14 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$arrRoleIDs = array_keys($arrRoles);
 				if (count($arrRoleIDs) == 1) $querystr['defaultrole'] = $arrRoleIDs[0];
 				
-				if(!$this->db->query("INSERT INTO __members :params", $querystr)) {
+				$objQuery = $this->db->prepare("INSERT INTO __members :p")->set($querystr)->execute();
+				
+				if(!$objQuery) {
 					return false;
 				}else{
-					$member_id	= $this->db->insert_id();
+					$member_id	= $objQuery->insertId;
 					if ($takechar){
-						$this->pdh->put('member', 'takeover', array($member_id));
+						$this->takeover($member_id);
 					}
 					
 					$arrNew = array(
@@ -195,8 +199,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$old['rank']	= $this->pdh->get('member', 'rankname', array($member_id));
 			$old['main']	= $this->pdh->get('member', 'mainname', array($member_id));
 			$old['status']	= $this->pdh->get('member', 'active', array($member_id));
-
-			if($this->db->query("DELETE FROM __members WHERE member_id = ?;", false, $member_id)) {
+			
+			$objQuery = $this->db->prepare("DELETE FROM __members WHERE member_id = ?;")->execute($member_id);
+			
+			if($objQuery) {
 				if(!$no_log) {
 					$log_action = array(
 						'{L_NAME}' => $old['name'],
@@ -223,14 +229,14 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				// delete calendar raid attendees
 				$this->pdh->put('calendar_raids_attendees', 'delete_attendees', array($member_id));
 				// delete raid_attendence
-				$this->db->query("DELETE FROM __raid_attendees WHERE member_id = ?", false, $member_id);
+				$this->db->prepare("DELETE FROM __raid_attendees WHERE member_id = ?")->execute($member_id);
 				// delete member-user connection
-				$this->db->query("DELETE FROM __member_user WHERE member_id = ?;",  false, $member_id);
+				$this->db->prepare("DELETE FROM __member_user WHERE member_id = ?;")->execute($member_id);
 				$this->pdh->enqueue_hook('member_update', array($member_id));
-				$raids = $this->pdh->get('raid', 'raidids4memberid', array($member_id));
+				$raids = $this->pdh->get('raid', 'raidids4memberid', array());
 				$this->pdh->enqueue_hook('raid_update', $raids);
 				// check for new mainchar
-				$twinks = $this->pdh->get('member', 'other_members', array($member_id));
+				$twinks = $this->pdh->get('member', 'other_members', array());
 				if(!empty($twinks)) {
 					$new_main = $twinks[0];
 					$this->change_mainid($twinks,$new_main);
@@ -250,18 +256,20 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			}
 		
 			// Users -> Members associations
-			$this->db->query('DELETE FROM __member_user WHERE user_id = ?', false, $user_id);
+			$this->db->prepare('DELETE FROM __member_user WHERE user_id = ?')->execute($user_id);
 
 			if (is_array($member_id) && count($member_id) > 0){
-				$sql = 'INSERT INTO __member_user
-						(member_id, user_id)
-						VALUES ';
+
 				$query = array();
 				foreach ( $member_id as $memberid ){
-					$query[]	= '('.$this->db->escape($memberid).', '.$this->db->escape($user_id).')';
+					$query[]	= array(
+						'member_id' => $memberid,
+						'user_id'	=> $user_id,
+					);
 				}
-				$sql	.= implode(', ', $query);
-				$this->db->query($sql);
+				
+				$this->db->prepare("INSERT INTO __member_user :p")->set($query)->execute();
+
 				$myupdate	= true;
 				
 				$this->pdh->enqueue_hook('member_update', $member_id);
@@ -284,71 +292,87 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		}
 
 		public function confirm($member_id){
-			$this->db->query("UPDATE __members SET :params WHERE member_id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id=?")->set(array(
 				'member_status'		=> '1',
 				'requested_del'		=> '0',
 				'require_confirm'	=> '0',
-			), $member_id);
+			))->execute($member_id);
+			
 			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
 
 		public function takeover($id){
-			$this->db->query('INSERT INTO __member_user :params', array(
+			$objQuery = $this->db->prepare('INSERT INTO __member_user :p')->set(array(
 				'member_id'		=> $id,
-				'user_id'		=> $this->user->data['user_id']
-			));
+				'user_id'		=> $this->user->id
+			))->execute();
+			
 			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
 
 		public function suspend($member_id){
 			if ($member_id == 'all'){
-				$this->db->query("UPDATE __members SET :params", array(
+				$objQuery = $this->db->prepare("UPDATE __members :p")->set(array(
 				'member_status' => 0,
 				'requested_del' => 1,
-				));
+				))->execute();
+
 			} else {
-				$this->db->query("UPDATE __members SET :params WHERE member_id=?", array(
+				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id=?")->set(array(
 					'member_status' => 0,
 					'requested_del' => 1,
-				), $member_id);
+				))->execute($member_id);
 			}
 			$this->pdh->enqueue_hook('member_update');
 		}
 		
 
 		public function revoke($member_id){
-			$this->db->query("UPDATE __members SET :params WHERE member_id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id=?")->set(array(
 				'member_status' => 1,
 				'requested_del' => 0,
-			), $member_id);
+			))->execute($member_id);
+
 			$this->pdh->enqueue_hook('member_update');
 		}
 
 		public function change_mainid($member_id, $mainid){
 			if(is_array($member_id)){
-				$this->db->query("UPDATE __members SET :params WHERE member_id IN(".implode(',', $member_id).");", array('member_main_id'	=> $mainid));
+				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id :in")->set(array(
+						'member_main_id'	=> $mainid
+						
+				))->in($member_id)->execute();
+
 			}else{
-				$this->db->query("UPDATE __members SET :params WHERE member_id = ?;", array('member_main_id'	=> $mainid), $member_id);
+				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
+						'member_main_id'	=> $mainid		
+				))->execute($member_id);
 			}
 			$this->pdh->enqueue_hook('member_update');
 		}
 
 		public function change_rank($member_id, $rankid){
-			$result = $this->db->query("UPDATE __members SET :params WHERE member_id = ?;", array('member_rank_id'	=> $rankid), $member_id);
+			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
+					'member_rank_id'	=> $rankid			
+			))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update');
 			return $result;
 		}
 
 		public function change_status($member_id, $status){
-			$result = $this->db->query("UPDATE __members SET :params WHERE member_id = ?;", array('member_status'	=> $status), $member_id);
+			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
+					'member_status'	=> $status
+			))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update');
 			return $result;
 		}
 		
 		public function change_defaultrole($member_id, $roleid){
-			$this->db->query("UPDATE __members SET :params WHERE member_id = ?;", array('defaultrole'	=> $roleid), $member_id);
+			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
+				'defaultrole'	=> $roleid
+			))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update', array($member_id));
 		}
 
@@ -356,30 +380,31 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			//raids
 			//select raids of tomember
 			$toid_raidids = $this->pdh->get('raid', 'raidids4memberid', $toid);
-			$this->db->query("START TRANSACTION;");
+			$this->db->beginTransaction();
+
 			$noraids_string = '';
 			foreach($toid_raidids as $raid_id){
-				$noraids_string .= " AND raid_id != '".$this->db->escape($raid_id)."'";
+				$noraids_string .= " AND raid_id != '".intval($raid_id)."'";
 			}
-			$sql = "UPDATE __raid_attendees SET member_id = '".$this->db->escape($toid)."' WHERE member_id = '".$this->db->escape($fromid)."'".$noraids_string.";";
+			$sql = "UPDATE __raid_attendees SET member_id = '".intval($toid)."' WHERE member_id = '".intval($fromid)."'".$noraids_string.";";
 			if($this->db->query($sql)) {
-				$sql = "UPDATE __adjustments SET member_id = '".$this->db->escape($toid)."' WHERE member_id = '".$this->db->escape($fromid)."';";
-				if($this->db->query($sql)) {
-					$sql = "UPDATE __items SET member_id = '".$this->db->escape($toid)."' WHERE member_id = '".$this->db->escape($fromid)."';";
-					if($this->db->query($sql)) {
+				$objQuery = $this->db->prepare("UPDATE __adjustments :p  WHERE member_id=?")->set(array('member_id' => $toid))->execute($fromid);
+				if($objQuery) {
+					$objQuery = $this->db->prepare("UPDATE __items :p  WHERE member_id=?")->set(array('member_id' => $toid))->execute($fromid);
+					if($objQuery) {
 						$log_action = array(
 							'{L_FROM}'	=> $this->pdh->get('member', 'name', array($fromid)),
 							'{L_TO}'	=> $this->pdh->get('member', 'name', array($toid)),
 						);
 						$this->log_insert('action_history_transfer', $log_action, $fromid, $this->pdh->get('member', 'name', array($fromid)));
-						$this->db->query("COMMIT;");
+						$this->db->commitTransaction();
 						$this->pdh->enqueue_hook('item_udpate');
 						$this->pdh->enqueue_hook('adjustment_update');
 						return true;
 					}
 				}
 			}
-			$this->db->query("ROLLBACK;");
+			$this->db->rollbackTransaction();
 			return false;
 		}
 		

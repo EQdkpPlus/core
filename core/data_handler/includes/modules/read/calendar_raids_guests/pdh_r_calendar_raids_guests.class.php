@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_calendar_raids_guests')){
 	class pdh_r_calendar_raids_guests extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2'	);
+		$shortcuts = array('pdc', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -62,7 +62,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			// empty array as default
 			$this->guests	= array();
 			
-			$objQuery = $this->db2->query('SELECT * FROM __calendar_raid_guests;');
+			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_guests;');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->guests[$row['calendar_events_id']][$row['id']] = array(

@@ -47,7 +47,7 @@ class login_pageobject extends pageobject {
 					$blnShowCaptcha = true;
 				}
 				if (!$blnShowCaptcha){
-					$objQuery = $this->db2->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+					$objQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
 					if($objQuery && $objQuery->numRows){
 						$arrResult = $objQuery->fetchAssoc();
 						if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
@@ -133,7 +133,7 @@ class login_pageobject extends pageobject {
 				message_die($this->user->lang('error_invalid_key'));
 			}
 			
-			$objQuery = $this->db2->prepare("SELECT user_id, user_active
+			$objQuery = $this->db->prepare("SELECT user_id, user_active
 				FROM __users
 				WHERE user_key =?")->limit(1)->execute($this->in->get('key', ''));
 			
@@ -153,7 +153,7 @@ class login_pageobject extends pageobject {
 						'user_key' => '',
 				);
 				
-				$objQuery = $this->db2->prepare("UPDATE __users SET :params WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
+				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
 				
 				if ($objQuery){
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
@@ -183,7 +183,7 @@ class login_pageobject extends pageobject {
 		$username	= ( $this->in->exists('username') )	? trim(strip_tags($this->in->get('username'))) : '';
 
 		// Look up record based on the username
-		$objQuery = $this->db2->prepare("SELECT user_id, username, user_email, user_active, user_lang
+		$objQuery = $this->db->prepare("SELECT user_id, username, user_email, user_active, user_lang
 				FROM __users
 				WHERE LOWER(username)=?")->execute(clean_username($username));
 		if ($objQuery){
@@ -285,7 +285,7 @@ class login_pageobject extends pageobject {
 				$blnShowCaptcha = true;
 			}
 			if (!$blnShowCaptcha){
-				$objQuery = $this->db2->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+				$objQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
 				if($objQuery && $objQuery->numRows){
 					$arrResult = $objQuery->fetchAssoc();
 					if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){

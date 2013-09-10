@@ -36,8 +36,11 @@ if(!class_exists('pdh_w_multidkp')) {
 				'multidkp_name' => $name,
 				'multidkp_desc' => $desc,
 			);
-			if($this->db->query("INSERT INTO __multidkp :params", $arrSet)) {
-				$id = $this->db->insert_id();
+			
+			$objQuery = $this->db->prepare("INSERT INTO __multidkp :p")->set($arrSet)->execute();
+			
+			if($objQuery) {
+				$id = $objQuery->insertId;
 				$retu = array(true);
 				foreach($events as $event_id) {
 					$s_no_att = (in_array($event_id, $no_atts)) ? 1 : 0;
@@ -45,8 +48,8 @@ if(!class_exists('pdh_w_multidkp')) {
 						'multidkp2event_multi_id' => $id,
 						'multidkp2event_event_id' => $event_id,
 						'multidkp2event_no_attendance' => $s_no_att,
-					);
-					$retu[] = ($this->db->query("INSERT INTO __multidkp2event :params", $arrSet)) ? true : false;
+					);				
+					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2event :p")->set($arrSet)->execute()) ? true : false;
 				}
 				foreach ($no_atts as $event_id){
 					if (in_array($event_id, $events)) continue;
@@ -55,12 +58,13 @@ if(!class_exists('pdh_w_multidkp')) {
 						'multidkp2event_event_id' => $event_id,
 						'multidkp2event_no_attendance' => 1,
 					);
-					$retu[] = ($this->db->query("INSERT INTO __multidkp2event :params", $arrSet)) ? true : false;	
+					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2event :p")->set($arrSet)->execute()) ? true : false;
 				}
-				
-				
+					
 				foreach($itempools as $itempool_id) {
-					$retu[] = ($this->db->query("INSERT INTO __multidkp2itempool :params", array('multidkp2itempool_multi_id' =>$id, 'multidkp2itempool_itempool_id'=>$itempool_id))) ? true : false;
+					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
+							'multidkp2itempool_multi_id' => $id, 
+							'multidkp2itempool_itempool_id' => $itempool_id))->execute()) ? true : false;
 				}
 				if(!in_array(false, $retu)) {
 					$this->pdh->enqueue_hook('multidkp_update',array($id));
@@ -79,71 +83,99 @@ if(!class_exists('pdh_w_multidkp')) {
 				'multidkp_name' => $name,
 				'multidkp_desc' => $desc,
 			);
-			if($this->db->query("UPDATE __multidkp SET :params WHERE multidkp_id=?", $arrSet, $id)) {
+			
+			$this->db->beginTransaction();
+			$objQuery = $this->db->prepare("UPDATE __multidkp :p WHERE multidkp_id=?")->set($arrSet)->execute($id);
+			if($objQuery) {
 				$all_events = array_merge($events, $old_events);
 				foreach($all_events as $event_id){
 					if(in_array($event_id, $old_events) AND in_array($event_id, $events)) {
 						if(in_array($event_id, $no_atts) AND !in_array($event_id, $old_no_atts)) {
-							$sql = "UPDATE __multidkp2event SET multidkp2event_no_attendance = '1' WHERE multidkp2event_multi_id = '".$this->db->escape($id)."' AND multidkp2event_event_id = '".$this->db->escape($event_id)."';";
-							$retu[] = $this->db->query($sql);
+							$objQuery = $this->db->prepare("UPDATE __multidkp2event :p WHERE multidkp2event_multi_id=? AND multidkp2event_event_id=?")->set(array(
+								'multidkp2event_no_attendance' => 1
+							))->execute($id, $event_id);
+
+							$retu[] = ($objQuery);
 						} elseif(!in_array($event_id, $no_atts) AND in_array($event_id, $old_no_atts)) {
-							$sql = "UPDATE __multidkp2event SET multidkp2event_no_attendance = '0' WHERE multidkp2event_multi_id = '".$this->db->escape($id)."' AND multidkp2event_event_id = '".$this->db->escape($event_id)."';";
-							$retu[] = $this->db->query($sql);
+							$objQuery = $this->db->prepare("UPDATE __multidkp2event :p WHERE multidkp2event_multi_id=? AND multidkp2event_event_id=?")->set(array(
+									'multidkp2event_no_attendance' => 0
+							))->execute($id, $event_id);
+							
+							$retu[] = ($objQuery);
 						}
 					} elseif(!in_array($event_id, $old_events)) {
 						$s_no_att = (in_array($event_id, $no_atts)) ? 1 : 0;
-						$sql = "INSERT INTO __multidkp2event (multidkp2event_multi_id, multidkp2event_event_id, multidkp2event_no_attendance)
-								VALUES ('".$this->db->escape($id)."', '".$this->db->escape($event_id)."', '".$this->db->escape($s_no_att)."');";
-						$retu[] = $this->db->query($sql);
+						$objQuery = $this->db->prepare("INSERT INTO __multidkp2event :p")->set(array(
+							'multidkp2event_multi_id' => $id,
+							'multidkp2event_event_id' => $event_id,
+							'multidkp2event_no_attendance' => $s_no_att,
+						))->execute();
+						
+						retu[] = ($objQuery);
 					} elseif(!in_array($event_id, $events)) {
-						$sql = "DELETE FROM __multidkp2event WHERE multidkp2event_multi_id = '".$this->db->escape($id)."' AND multidkp2event_event_id = '".$this->db->escape($event_id)."';";
-						$retu[] = $this->db->query($sql);
+						$objQuery = $this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_multi_id = ? AND multidkp2event_event_id =?")->execute($id, $event_id);
+						$retu[] = ($objQuery);
 					}
 				}
 				$all_itempools = (is_array($old_itempools)) ? array_unique(array_merge($itempools, $old_itempools)) : $itempools;
 				$retu = array(true);
 				foreach($all_itempools as $itempool_id) {
 					if(!$old_itempools OR !in_array($itempool_id, $old_itempools)) {
-						$sql = "INSERT INTO __multidkp2itempool (multidkp2itempool_multi_id, multidkp2itempool_itempool_id)
-								VALUES ('".$this->db->escape($id)."', '".$this->db->escape($itempool_id)."');";
-						$retu[] = $this->db->query($sql);
+						$objQuery = $this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
+								'multidkp2itempool_multi_id' => $id,
+								'multidkp2itempool_itempool_id' => $itempool_id,
+						))->execute();
+
+						$retu[] = ($objQuery);
 					}elseif(!in_array($itempool_id, $itempools)) {
-						$sql = "DELETE FROM __multidkp2itempool WHERE multidkp2itempool_multi_id = '".$this->db->escape($id)."' AND multidkp2itempool_itempool_id = '".$this->db->escape($itempool_id)."';";
-						$retu[] = $this->db->query($sql);
+						$objQuery = $this->db->prepare("DELETE FROM __multidkp2itempool WHERE multidkp2itempool_multi_id=? AND multidkp2itempool_itempool_id=?")->execute($id, $itempool_id);
+						
+						$retu[] = ($objQuery);
 					}
 				}
 				if(!in_array(false, $retu)) {
+					$this->db->commitTransaction();
 					$this->pdh->enqueue_hook('multidkp_update', array($id));
 					return true;
 				}
 			}
+			$this->db->rollbackTransaction();
 			return false;
 		}
 
 		public function delete_multidkp($id) {
-			$sql = "DELETE FROM __multidkp WHERE multidkp_id = '".$this->db->escape($id)."';";
-			if($this->db->query($sql)) {
-				$sql = "DELETE FROM __multidkp2event WHERE multidkp2event_multi_id = '".$this->db->escape($id)."';";
-				$retu[] = ($this->db->query($sql)) ? true : false;
-				$sql = "DELETE FROM __multidkp2itempool WHERE multidkp2itempool_multi_id = '".$this->db->escape($id)."';";
-				$retu[] = ($this->db->query($sql)) ? true : false;
+			$this->db->beginTransaction();
+			$objQuery = $this->db->prepare("DELETE FROM __multidkp WHERE multidkp_id =?")->set($id)->execute();
+			if($objQuery) {
+				$objQuery = $this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_multi_id=?")->execute($id);
+				$retu[] = ($objQuery);
+				$objQuery = $this->db->prepare("DELETE FROM __multidkp2itempool WHERE multidkp2itempool_multi_id =?")->execute($id);
+				$retu[] = ($objQuery);
 				if(!in_array(false, $retu)) {
+					$this->db->commitTransaction();
 					$this->pdh->enqueue_hook('multidkp_update', array($id));
 					return true;
 				}
 			}
+			$this->db->rollbackTransaction();
 			return false;
 		}
 		
 		public function add_multidkp2event($event_id, $mdkps) {
 			if(!is_array($mdkps) || count($mdkps) < 1) return true;
-			$this->db->query("DELETE FROM __multidkp2event WHERE multidkp2event_event_id = ?", false, $event_id);
+			$this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_event_id = ?")->execute($event_id);
+			
 			$sql = "INSERT INTO __multidkp2event (`multidkp2event_event_id`, `multidkp2event_multi_id`) VALUES ";
 			$sqls = array();
 			foreach($mdkps as $mdkp_id) {
-				$sqls[] = "('".$this->db->escape($event_id)."', '".$this->db->escape($mdkp_id)."')";
+				$sqls[] = array(
+					'multidkp2event_event_id' => $event_id,
+					'multidkp2event_multi_id' => $mdkp_id
+				);
 			}
-			if($this->db->query($sql.implode(', ', $sqls).';')) {
+			$objQuery = $this->db->prepare("INSERT INTO __multidkp2event :p")->set($sqls)->execute();
+			
+			if($objQuery) {
 				$this->pdh->enqueue_hook('multidkp_update');
 				return true;
 			}

@@ -91,7 +91,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 					$cloneid_eventid		= (($cloneid > 0) ? $cloneid : $id);
 					$timestamp_start_diff	= intval((($old['startdate'] != $startdate) ? ($startdate-$old['startdate']) : 0));
 					$timestamp_end_diff		= intval((($old['enddate'] != $enddate) ? ($enddate-$old['enddate']) : 0));
-					$statt = $this->db->query("UPDATE __calendar_events SET :params WHERE cloneid=?", array(
+					
+					$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE cloneid=?")->set(array(
 						'calendar_id'			=> $cal_id,
 						'name'					=> $name,
 						'timestamp_start'		=> 'timestamp_start'.((substr($timestamp_start_diff, 0, 1) === '-') ? '' : '+').$timestamp_start_diff,
@@ -102,10 +103,10 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
 						'extension'				=> serialize($extdata),
-					), $cloneid_eventid);
+					))->execute($cloneid_eventid);
 
 					//now, alter the parent event
-					$statt = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
+					$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 						'calendar_id'			=> $cal_id,
 						'name'					=> $name,
 						'timestamp_start'		=> 'timestamp_start'.((substr($timestamp_start_diff, 0, 1) === '-') ? '' : '+').$timestamp_start_diff,
@@ -116,12 +117,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
 						'extension'				=> serialize($extdata),
-					), $cloneid_eventid);
+					))->execute($cloneid_eventid);
+					
 					$this->pdh->enqueue_hook('calendar_events_update');
 
 				// and now, handle the single events
 				}else{
-					$statt = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
+					$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 						'calendar_id'			=> $cal_id,
 						'name'					=> $name,
 						'timestamp_start'		=> $startdate,
@@ -132,8 +134,9 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
 						'extension'				=> serialize($extdata),
-					), $id);
-					if(!$statt) {
+					))->execute($id);
+					
+					if(!$objQuery) {
 						return false;
 					}
 				}
@@ -176,8 +179,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 			if($startdate < ($this->time->time-604800)){
 				return 0;
 			}
-
-			$result = $this->db->query('INSERT INTO __calendar_events :params', array(
+			
+			$objQuery = $this->db->prepare('INSERT INTO __calendar_events :p')->set(array(
 				'calendar_id'			=> $cal_id,
 				'name'					=> $name,
 				'creator'				=> $creator,
@@ -191,10 +194,10 @@ if(!class_exists('pdh_w_calendar_events')) {
 				'repeating'				=> $repeat,
 				'extension'				=> (is_array($extension)) ? serialize($extension) : '',
 				'cloneid'				=> ($cloneid > 0) ? $cloneid : 0,
-			));
-			$id = $this->db->insert_id();
-			// add log entry if user ID is available
-			if(isset($this->user->data['user_id']) && $this->user->data['user_id'] != ANONYMOUS){
+			))->execute();
+			
+			if ($objQuery){
+				$id = $objQuery->insertId;
 				$arrNew = array(
 					'calendar_id'			=> $cal_id,
 					'name'					=> (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name),
@@ -214,8 +217,9 @@ if(!class_exists('pdh_w_calendar_events')) {
 				
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				
-				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));
+				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));		
 			}
+
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return $id;
 		}
@@ -223,28 +227,34 @@ if(!class_exists('pdh_w_calendar_events')) {
 		public function delete_cevent($id, $del_repeatable=false){
 			$arrOld = $this->pdh->get('calendar_events', 'data', array($id));
 			
-			$field = (is_array($id)) ? implode(', ', $id) : $id;
+			$field = (!is_array($id)) ? array($id) : $id;
 			if($del_repeatable){
-				$query = $this->db->query("SELECT DISTINCT cloneid FROM __calendar_events WHERE id IN(".$field.")");
-				$clone_events	= array();
-				while($row = $this->db->fetch_record($query)){
-					//Don't delete events with cloneid = 0
-					if (intval($row['cloneid']) == 0) continue;
-					$clone_events[]	= $row['cloneid'];
-					$this->db->query("DELETE FROM __calendar_events WHERE (cloneid=".$row['cloneid'].") OR (id=".$row['cloneid'].")");
-				}
-				$this->db->query("DELETE FROM __calendar_events WHERE (cloneid IN (".$field.")) OR (id IN (".$field."))");
-			}else{
-				$this->db->query("DELETE FROM __calendar_events WHERE id IN (".$field.")");
+				$objQuery = $this->db->prepare("SELECT DISTINCT cloneid FROM __calendar_events WHERE id :in")->in($field)->execute();
+				if($objQuery){
+					$clone_events	= array();
+					while($row = $objQuery->fetchAssoc()){
+						//Don't delete events with cloneid = 0
+						if (intval($row['cloneid']) == 0) continue;
+						$clone_events[]	= $row['cloneid'];
+						$this->db->prepare("DELETE FROM __calendar_events WHERE (cloneid=?) OR (id=?)")->execute($row['cloneid']);
+					}
+					$this->db->prepare("DELETE FROM __calendar_events WHERE (cloneid :in) OR (id :in)")->in($field)->execute();
+				}			
+			} else {
+				$this->db->prepare("DELETE FROM __calendar_events WHERE id :in")->in($field)->execute();
 			}
 			
 			// delete the attendees
-			$this->db->query("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id IN(".$field.")");
+			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id :in")->in($field)->execute();
+			
 			if($del_repeatable && is_array($clone_events) && count($clone_events) > 0){
-				$query = $this->db->query("SELECT DISTINCT id FROM __calendar_events WHERE cloneid IN(".implode(', ', $clone_events).")");
-				while($row = $this->db->fetch_record($query)){
-					$this->db->query("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id=".$row['id']);
+				$objQuery = $this->db->prepare("SELECT DISTINCT id FROM __calendar_events WHERE cloneid :in")->in($clone_events)->execute();
+				if($objQuery){
+					while($row = $objQuery->fetchAssoc()){
+						$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id=?")->execute($row['id']);
+					}
 				}
+
 			}
 			
 			//Logging
@@ -262,9 +272,10 @@ if(!class_exists('pdh_w_calendar_events')) {
 		
 		public function change_closeraidstatus($id, $closed=true){
 			$arrOld['closed'] = $this->pdh->get('calendar_events', 'raidstatus', array($id));
-			$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
+			
+			$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 				'closed'	=> (($closed) ? 1 : 0),
-			), $id);
+			))->execute($id);
 			
 			//Logging
 			$arrNew['closed'] =  (($closed) ? 1 : 0);	
@@ -277,16 +288,17 @@ if(!class_exists('pdh_w_calendar_events')) {
 		}
 		
 		public function update_note($id, $note=''){
-			$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
-				'notes'	=> $note,
-			), $id);
+			$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
+					'notes'	=> $note,
+			))->execute($id);
+			
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			return $id;
 
 		}
 		
 		public function delete_clones($cloneid){
-			$this->db->query("DELETE FROM __calendar_events WHERE cloneid=?", false, $cloneid);
+			$this->db->prepare("DELETE FROM __calendar_events WHERE cloneid=?")->execute($cloneid);
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
 			$this->log_insert('calendar_log_deletedclones', array(), $cloneid, $this->pdh->get('calendar_events', 'name', array($cloneid)), true, 'calendar');
 			return true;
@@ -306,13 +318,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'timestamp_end'		=> "{D_".( $this->pdh->get('calendar_events', 'time_end', array($eventid)))."}",
 						'allday'			=> $this->pdh->get('calendar_events', 'allday', array($eventid))
 				);
-
-				$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
+				
+				$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 					'timestamp_start'	=> $eventdata['timestamp_start'] + (int)$general_delta_sec,
 					'timestamp_end'		=> $eventdata['timestamp_end'] + (int)$general_delta_sec,
 					'allday'			=> (($move) ? (($allday == 'true') ? 1 : 0) : $eventdata['allday']),
 					'extension'			=> serialize($a_extension)
-				), $eventid);
+				))->execute($eventid);
+				
 				$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
 				
 				//Logging
@@ -332,9 +345,10 @@ if(!class_exists('pdh_w_calendar_events')) {
 			if($eventid > 0){
 				$general_delta_sec	= (($daydelta * 86400) + ($minutedelta * 60));
 				$old_timestamp		= $this->pdh->get('calendar_events', 'time_end', array($eventid));
-				$result = $this->db->query("UPDATE __calendar_events SET :params WHERE id=?", array(
+				
+				$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 					'timestamp_end'		=> $old_timestamp + (int)$general_delta_sec,
-				), $eventid);
+				))->execute($eventid);
 				
 				//Logging
 				$arrNew = array(

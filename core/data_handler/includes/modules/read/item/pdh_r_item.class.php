@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC'))
 if(!class_exists('pdh_r_item')){
 	class pdh_r_item extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'time', 'jquery', 'config', 'apa' => 'auto_point_adjustments', 'routing');
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time', 'jquery', 'config', 'apa' => 'auto_point_adjustments', 'routing');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -69,7 +69,7 @@ if(!class_exists('pdh_r_item')){
 			}
 
 			$sql = "SELECT item_id, item_name, member_id, item_value, item_date, raid_id, game_itemid, item_group_key, itempool_id, item_color FROM __items;";
-			$objQuery = $this->db2->query($sql);
+			$objQuery = $this->db->query($sql);
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->items[$row['item_id']]['name'] = $row['item_name'];

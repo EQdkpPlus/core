@@ -67,13 +67,15 @@ if(!class_exists('pdh_w_article_categories')) {
 				foreach($this->pdh->get('article_categories', 'childs', array($intCategoryID)) as $intChildID){
 					$this->delete_recursiv($intChildID);
 					$arrOldData = $this->pdh->get('article_categories', 'data', array($intChildID));
-					$this->db->query("DELETE FROM __articles WHERE category='".$this->db->escape($intChildID)."'");
+
+					$this->db->prepare("DELETE FROM __articles WHERE category=?")->execute($intChildID);
+					
 					$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
 					$this->log_insert("action_articlecategory_deleted", $log_action, $intChildID, $arrOldData['title']);
 				}
 			}
 			$arrOldData = $this->pdh->get('article_categories', 'data', array($intCategoryID));
-			$this->db->query("DELETE FROM __article_categories WHERE id = '".$this->db->escape($intCategoryID)."'");
+			$this->db->prepare("DELETE FROM __article_categories WHERE id =?")->execute($intCategoryID);
 			$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
 			$this->log_insert("action_articlecategory_deleted", $log_action, $intCategoryID, $arrOldData["name"]);
 			
@@ -119,15 +121,17 @@ if(!class_exists('pdh_w_article_categories')) {
 				'hide_on_rss'	=> $intHideOnRSS,
 			);
 			
-			$blnResult = $this->db->query("INSERT INTO __article_categories :params", $arrQuery);
+			$objQuery = $this->db->prepare("INSERT INTO __article_categories :p")->set($arrQuery)->execute();
 			
-			$id = $this->db->insert_id();
 			
-			if ($blnResult){
+			
+			if ($objQuery){
+				$id = $objQuery->insertId;
 				$arrAggregation[] = $id;
-				$this->db->query("UPDATE __article_categories SET :params WHERE id=?", array(
+				
+				$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set(array(
 					'aggregation' => serialize($arrAggregation),
-				), $id);
+				))->execute($id);
 				
 				$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
 				$this->log_insert("action_articlecategory_added", $log_action, $id, $arrQuery["name"], 1, 'article');
@@ -177,9 +181,9 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			$arrOldData = $this->pdh->get('article_categories', 'data', array($id));
 			
-			$blnResult = $this->db->query("UPDATE __article_categories SET :params WHERE id=?", $arrQuery, $id);
+			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set($arrQuery)->execute($id);
 						
-			if ($blnResult){
+			if ($objQuery){
 				$this->pdh->enqueue_hook('article_categories_update');
 				
 				$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
@@ -196,12 +200,12 @@ if(!class_exists('pdh_w_article_categories')) {
 				'published' => $this->pdh->get('article_categories', 'published', array($id)),
 			);
 			
-			$blnResult = $this->db->query("UPDATE __article_categories SET :params WHERE id=?", array(
+			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set(array(
 				'sort_id'		=> $intSortID,
 				'published'		=> $intPublished,
-			), $id);
+			))->execute($id);
 			
-			if ($blnResult){
+			if ($objQuery){
 				$arrNewData = array(
 					'published' => $intPublished,	
 				);

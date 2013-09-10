@@ -43,8 +43,11 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 				'collapsable'	=> ((isset($install['collapsable'])) ? (($install['collapsable']) ? 1 : 0) : 1),
 				'child'			=> ($child) ? 1 : 0,
 			);
-			if($this->db->query("INSERT INTO __portal :params", $data)) {
-				$id = $this->db->insert_id();
+			
+			$objQuery = $this->db->prepare("INSERT INTO __portal :p")->set($data)->execute();
+			
+			if($objQuery) {
+				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('update_portal', array($id));
 				return $id;
 			}
@@ -53,15 +56,21 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 
 		public function delete($id, $type='id') {
 			if($type != 'id' && $type != 'path') $type = 'id';
-			if($id && $this->db->query("DELETE FROM __portal WHERE ".$this->db->escape($type)." = ?", false, $id)) {
-				$this->pdh->enqueue_hook('update_portal', array($id));
+			if($id){
+				$objQuery = $this->db->prepare("DELETE FROM __portal WHERE ".$type." = ?")->execute($id);
+				if ($objQuery){
+					$this->pdh->enqueue_hook('update_portal', array($id));
 				return true;
+				}
 			}
 			return false;
 		}
 
 		public function update($id, $data) {
-			if($id && $this->db->query("UPDATE __portal SET :params WHERE id = ?;", $data, $id)) {
+			if (!$id) return false;
+			
+			$objQuery = $this->db->prepare("UPDATE __portal :p WHERE id = ?;")->set($data)->execute($id);
+			if($objQuery) {
 				$this->pdh->enqueue_hook('update_portal', array($id));
 				return true;
 			}
@@ -69,8 +78,14 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 		}
 
 		public function disable_enable($id, $status='0') {
+			if (!$id) return false;
+			
 			if($this->pdh->get('portal', 'enabled', array($id)) == $status) return true;
-			if($id && $this->db->query("UPDATE __portal SET enabled = '".$this->db->escape($status)."' WHERE id = ?;", false, $id)) {
+			
+			$objQuery = $this->db->prepare("UPDATE __portal :p WHERE id=?")->set(array(
+				'enabled' => $status,
+			))->execute( $id);
+			if($objQuery) {
 				$this->pdh->enqueue_hook('update_portal', array($id));
 				return true;
 			}

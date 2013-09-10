@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_styles" ) ) {
 	class pdh_r_styles extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2', 'pdh'	);
+		$shortcuts = array('pdc', 'db', 'pdh'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -46,7 +46,7 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 				return true;
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __styles ORDER BY enabled DESC, style_name");
+			$objQuery = $this->db->query("SELECT * FROM __styles ORDER BY enabled DESC, style_name");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
 					$this->styles[$drow['style_id']] = array(

@@ -74,7 +74,7 @@ class auth_db extends auth {
 			//Auth Login, because all other failed
 			if (!$arrStatus){
 				$this->pdl->log('login', 'Try EQdkp Plus Login');
-				$objQuery = $this->db2->prepare("SELECT user_id, username, user_password, user_email, user_active, api_key, failed_login_attempts, user_login_key
+				$objQuery = $this->db->prepare("SELECT user_id, username, user_password, user_email, user_active, api_key, failed_login_attempts, user_login_key
 								FROM __users 
 								WHERE LOWER(username) =?")->execute(clean_username($strUsername));
 				
@@ -92,7 +92,7 @@ class auth_db extends auth {
 								$strNewPassword	= $this->encrypt_password($strPassword, $strNewSalt);
 								$strApiKey		= $this->generate_apikey($strPassword, $strNewSalt);
 								
-								$this->db2->prepare("UPDATE  __users :p WHERE user_id=?")->set(array(
+								$this->db->prepare("UPDATE  __users :p WHERE user_id=?")->set(array(
 										'user_password' => $strNewPassword.':'.$strNewSalt,
 										'api_key'		=> $strApiKey
 								))->execute($row['user_id']);
@@ -182,7 +182,7 @@ class auth_db extends auth {
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');
 			
-			$this->db2->prepare("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?")->execute($this->sid);
+			$this->db->prepare("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?")->execute($this->sid);
 
 			$this->data['session_failed_logins']++;
 			
@@ -219,7 +219,7 @@ class auth_db extends auth {
 		} else {
 			$this->pdl->log('login', 'User successfull authenticated');
 			//User successfull authenticated - destroy old session and create a new one
-			$this->db2->prepare("UPDATE __users :p WHERE user_id=?")->set(array('failed_login_attempts' => 0))->execute($arrStatus['user_id']);
+			$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array('failed_login_attempts' => 0))->execute($arrStatus['user_id']);
 
 			$this->destroy();
 			$this->create($arrStatus['user_id'], (isset($arrStatus['user_login_key']) ? $arrStatus['user_login_key'] : ''), ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin));
@@ -241,7 +241,7 @@ class auth_db extends auth {
 		
 		if (isset($intCookieUserID) && intval($intCookieUserID) > 0){
 			
-			$objQuery = $this->db2->prepare("SELECT *
+			$objQuery = $this->db->prepare("SELECT *
 								FROM __users
 								WHERE user_id = ?")->execute($intCookieUserID);
 			

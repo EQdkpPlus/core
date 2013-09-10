@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_articles" ) ) {
 	class pdh_r_articles extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'time', 'env', 'config');
+		$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time', 'env', 'config');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -76,7 +76,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				return true;
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __articles ORDER BY category ASC, sort_id ASC");
+			$objQuery = $this->db->query("SELECT * FROM __articles ORDER BY category ASC, sort_id ASC");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
 					$this->articles[(int)$drow['id']] = array(

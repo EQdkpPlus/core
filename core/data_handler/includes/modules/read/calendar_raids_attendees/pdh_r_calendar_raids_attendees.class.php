@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_calendar_raids_attendees')){
 	class pdh_r_calendar_raids_attendees extends pdh_r_generic{
 		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db2', 'user', 'pdh', 'time');
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
 			return array_merge(parent::$shortcuts, $shortcuts);
 		}
 
@@ -89,7 +89,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$raids_60d				= $this->pdh->get('calendar_events', 'amount_raids', array(60, false));
 			$raids_30d				= $this->pdh->get('calendar_events', 'amount_raids', array(30, false));
 			
-			$objQuery = $this->db2->query('SELECT * FROM __calendar_raid_attendees');
+			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_attendees');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					// fill the last attendee raid array

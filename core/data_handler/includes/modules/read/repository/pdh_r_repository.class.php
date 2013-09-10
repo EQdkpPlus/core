@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_repository" ) ) {
 	class pdh_r_repository extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2'	);
+		$shortcuts = array('pdc', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -46,7 +46,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 				return true;
 			}
 			
-			$objQuery = $this->db2->query("SELECT * FROM __repository ORDER BY dep_coreversion DESC");
+			$objQuery = $this->db->query("SELECT * FROM __repository ORDER BY dep_coreversion DESC");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->repository[(int)$row['category']][$row['id']] = array(

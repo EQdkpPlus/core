@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')){
 if(!class_exists('pdh_r_itempool')){
 	class pdh_r_itempool extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2'	);
+		$shortcuts = array('pdc', 'db'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -48,7 +48,7 @@ if(!class_exists('pdh_r_itempool')){
 
 			$this->itempools = array();
 			
-			$objQuery = $this->db2->query("SELECT itempool_id, itempool_name, itempool_desc FROM __itempool;");
+			$objQuery = $this->db->query("SELECT itempool_id, itempool_name, itempool_desc FROM __itempool;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->itempools[$row['itempool_id']]['name'] = $row['itempool_name'];

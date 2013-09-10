@@ -23,7 +23,7 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_roles')){
 	class pdh_r_roles extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db2', 'user', 'game'	);
+		$shortcuts = array('pdc', 'db', 'user', 'game'	);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -74,7 +74,7 @@ if (!class_exists('pdh_r_roles')){
 			// empty array as default
 			$this->roles	= $this->roles_id = array();
 			
-			$objQuery = $this->db2->query('SELECT * FROM __roles');
+			$objQuery = $this->db->query('SELECT * FROM __roles');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->roles[$row['role_id']]['id']			= $row['role_id'];
