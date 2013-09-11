@@ -803,7 +803,7 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function Tab_Select($name, $selection){
-			$this->tpl->add_js('$("#'.$name.'").tabs(\'option\', \'selected\', '.$selection.');', 'docready');
+			$this->tpl->add_js('$("#'.$name.'").tabs("option", "active", '.$selection.');', 'docready');
 		}
 
 		/**
