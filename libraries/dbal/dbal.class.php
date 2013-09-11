@@ -27,7 +27,7 @@ class dbal{
 		$dbtype = (isset($arrOptions['dbtype'])) ? $arrOptions['dbtype'] : registry::get_const('dbtype');
 		if(empty($dbtype)) throw new DBALException('dbtype not set');
 		
-		require_once(registry::get_const('root_path') . 'core/dbal/' . $dbtype . '.dbal.class.php');
+		require_once(registry::get_const('root_path') . 'libraries/dbal/' . $dbtype . '.dbal.class.php');
 		$classname = 'dbal_' . $dbtype;
 		if(!extension_loaded($dbtype)) throw new DBALException('PHP-Extension ' . $dbtype . ' not available');
 

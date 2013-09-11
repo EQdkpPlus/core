@@ -45,8 +45,8 @@ registry::load_config(true);
 
 //New DBAL
 if($dbtype = registry::get_const('dbtype')) {
-	include_once(registry::get_const('root_path') .'core/dbal/dbal.class.php');
-	require_once(registry::get_const('root_path') . 'core/dbal/' . registry::get_const('dbtype') . '.dbal.class.php');
+	include_once(registry::get_const('root_path') .'libraries/dbal/dbal.class.php');
+	require_once(registry::get_const('root_path') . 'libraries/dbal/' . registry::get_const('dbtype') . '.dbal.class.php');
 	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));		
 }
 

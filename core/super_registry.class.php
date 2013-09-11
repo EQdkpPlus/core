@@ -117,8 +117,8 @@ abstract class super_registry {
 			define('CRONJOB', -2);
 			
 			//DBAL
-			include_once(self::get_const('root_path') .'core/dbal/dbal.class.php');
-			require_once(self::get_const('root_path') . 'core/dbal/' . self::$const['dbtype'] . '.dbal.class.php');
+			include_once(self::get_const('root_path') .'libraries/dbal/dbal.class.php');
+			require_once(self::get_const('root_path') . 'libraries/dbal/' . self::$const['dbtype'] . '.dbal.class.php');
 			self::$aliases['db'] = array('dbal_'.self::$const['dbtype'], array(array('open' => true)));
 						
 			registry::register('input');
