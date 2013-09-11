@@ -345,65 +345,141 @@ if ( !defined('EQDKP_INC') ){
 		}
 		
 		private function error_message_header($strErrorName = 'Fatal Error'){
-			return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+			return '<!DOCTYPE html>
 						<html>
 						<head>
 							<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
 							<title>EQdkp Plus - '.$strErrorName.'</title>
 							<style type="text/css">
-								body, html {
+							/* body */
+							html {
+								height: 100%;
+							}
+							
+							body {
+								background: #2e78b0; /* Old browsers */
+								background: -moz-linear-gradient(top,  #2e78b0 0%, #193759 100%); /* FF3.6+ */
+								background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2e78b0), color-stop(100%,#193759)); /* Chrome,Safari4+ */
+								background: -webkit-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* Chrome10+,Safari5.1+ */
+								background: -o-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* Opera 11.10+ */
+								background: -ms-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* IE10+ */
+								background: linear-gradient(to bottom,  #2e78b0 0%,#193759 100%); /* W3C */
+								filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#2e78b0\', endColorstr=\'#193759\',GradientType=0 ); /* IE6-9 */
+								font-size: 14px;
+								font-family: Tahoma,Arial,Verdana,sans-serif;
+								color: #000000;
 								padding:0;
-								margin:0;
-								font-family: \'Trebuchet MS\', Verdana, sans-serif;
-								font-size: 13px;
+							  	margin:0;
+								height: 100%;
+								line-height: 20px;
 							}
-
-							h1{
-								font-size: 20px;
-								padding: 0px;
-								margin: 0px;
-								text-decoration:underline;
+									
+							.header {
+								padding-top: 10px;
+								background: url(../images/header_background.png) repeat-x scroll center top transparent;
+								font-size: 45px;
+								font-weight: bold;
+								text-shadow: 1px 1px 2px #fff;
+								filter: dropshadow(color=#fff, offx=1, offy=1);
+								border: none;
+								color:  #fff;
+								text-align:center;
+								vertical-align: middle;
+								font-family: \'Trebuchet MS\',Arial,sans-serif;
 							}
-							.error_table{
+							
+							.header img {
+								height: 150px;
+								vertical-align: middle;
+							}
+							
+							.footer {
+								margin-top: 10px;
+								color: #fff;
+								text-align: center;
+							}
+							
+							.footer a, .footer a:link {
+								color: #fff;
+								text-decoration: none;
+							}
+							
+							.footer a:hover {
+								text-decoration: underline;
+							}
+							
+							.innerWrapper {
+								margin-right: auto;
+								margin-left: auto;
+								background-color: #F5F5F5;
+							    border: 1px solid #383838;
+							    border-radius: 4px 4px 4px 4px;
+							    box-shadow: 2px 2px 3px 0 #000000;
+								padding: 10px;
+								margin-bottom: 20px;
 								width: 700px;
-								border:1px solid #333;
-								background-color:#FFF;
+							}
+									
+							h1, h2, h3 {
+								font-family: \'Trebuchet MS\',Arial,sans-serif;
+							    font-weight: bold;
+							    margin-bottom: 10px;
+							    padding-bottom: 5px;
+								border-bottom: 1px solid #CCCCCC;
+								margin-top: 5px;
+							}
+							
+							h1 {
+							    font-size: 20px;
+							}
+							
+							h2 {
+								font-size: 18px;
+							}
+							
+							h3 {
+								font-size: 14px;
+								border-bottom: none;
+								margin-bottom: 5px;
+							}
+									
+							/* Links */
+							a,a:link,a:active,a:visited {
+								color: #4E7FA8;
+								text-decoration: none;
+							}
+							
+							a:hover {
+								color: #000;
+								text-decoration: none;
 							}
 						</style>
 						</head>
 
-						<body style="background-color:#efefef">
-						<div style="width:100%" align="center">
-						<div class="error_table">
-							<table width="400" border="0" cellspacing="1" cellpadding="2" style="background:#336c99 url(\''.$this->server_path.'templates/maintenance/images/header_back.png\') left no-repeat; font-size: 24px;
-							font-weight:bold;
-								height:110px;
-								width: 100%;
-								border: 0px;
-								border-bottom:2px solid #333;
-								text-transform: uppercase; color:#FFF;">
-									<tr>
-										<td width="100%">
-											<center>
-												<img src="'.$this->server_path.'templates/maintenance/images/logo.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
-											</center>
-										</td>
-									</tr>
-								</table>
+						<body>
+									
+						<div class="wrapper">
+							<div class="header">
+								<img src="'.$this->server_path.'templates/maintenance/images/logo_mirrored.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
+							</div>
+		
+							<div class="innerWrapper">
+								<h1>A '.$strErrorName.' occured!</h1><br />	
 
-						<div id="cont" align="left" style="margin:15px;">
-						<h1>A '.$strErrorName.' occured!</h1><br />';
+		
+';
 		}
 		
 		private function error_message_footer($blnShowEQdkpLink = true){
 			return (($blnShowEQdkpLink) ? '<br /><b><a href="'.EQDKP_PROJECT_URL.'">Please visit the EQdkp Plus Homepage!</a></b>' : '').'
-					</div>
-					</div>
-					<div style="width:700px;">
-					<a href="'.EQDKP_PROJECT_URL.'" target="_new">EQDKP Plus</a> &copy; 2003 - '.date('Y').' by EQDKP Plus Developer Team
-					</div>
-					</div>
+					
+							</div>	
+
+					</div>	
+					<div class="footer">
+						<a href="'.EQDKP_PROJECT_URL.'" target="_new">EQDKP Plus</a> &copy; 2003 - '.date('Y').' by EQDKP Plus Developer Team
+					</div>	
 					</body>
 					</html>';
 		}
