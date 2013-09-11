@@ -19,7 +19,7 @@
 if ( !defined('EQDKP_INC') ){
   header('HTTP/1.0 404 Not Found');exit;
 }
-$lang['import06'] = 'Importiere Daten vom 0.6';
+$lang['import06'] = 'Importiere Daten von EQdkp Plus 0.6';
 $lang['import_steps'] = 'Durchzuführere Importschritte auswählen';
 $lang['config_news_log'] = 'Einstellungen, News, Logs';
 $lang['users_auths'] = 'Benutzer, Berechtigungen';

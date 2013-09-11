@@ -558,7 +558,7 @@ abstract class DatabaseStatement {
 		$this->strQuery = $this->prepare_query($strQuery);
 
 		// Auto-generate the SET/VALUES subpart
-		if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
+		if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || strncasecmp($this->strQuery, 'REPLACE', 7) === 0 || strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
 		{
 			$this->strQuery = str_replace(':p', '%p', $this->strQuery);
 		}

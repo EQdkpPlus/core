@@ -455,8 +455,10 @@ class import06 extends task {
 					if($row['config_name'] == 'default_style') {
 						//import classcolor
 						$cc_res = $this->old[0]->query("SELECT class, color FROM ".$this->old[1]."classcolors WHERE template = '".$row['config_value']."';");
-						while( $row = $this->old[0]->fetch_row($cc_res) ) {
-							$classcolors[$row['class']] = $row['color'];
+						if ($cc_res){
+							while($row = $cc_res->fetchAssoc()){
+								$classcolors[$row['class']] = $row['color'];
+							}
 						}
 					}
 					if($row['config_name'] == 'admin_email') $configs['admin_email'] = $this->encrypt->encrypt($row['config_value']);
@@ -476,9 +478,7 @@ class import06 extends task {
 				$template = $this->config->get('default_style');
 				foreach($classcolors as $class => $color) {
 					$class = registry::register('game')->get_id('classes', $class);
-					
-					//TODO
-					if($class) $this->new[0]->query("REPLACE INTO ".$this->new[1]."classcolors :params;", array('template' => $template, 'class_id' => $class, 'color' => $color));
+					if($class) $this->new[0]->prepare("REPLACE INTO ".$this->new[1]."classcolors :p")->set(array('template' => $template, 'class_id' => $class, 'color' => $color))->execute();
 				}
 			}
 		}
@@ -488,34 +488,59 @@ class import06 extends task {
 			$date = mktime(0,0,0,$m,$d,$y);
 			$sql = "SELECT * FROM ".$this->old[1]."news WHERE news_date > ".$date.";";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				foreach($row as $field => $value) {
-					if($field == 'news_message' || $field == 'extended_message') $value = registry::register('bbcode')->toHTML($value);
-					if($field != 'news_id') {
-						$news[$row['news_id']][$field] = $value;
+
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$message = registry::register('bbcode')->toHTML($row['news_message']);
+					if ($row['extended_message'] != ""){
+						$message .= '<hr id="system-readmore" />';
+						$message .= registry::register('bbcode')->toHTML($row['extended_message']);
 					}
+					
+					if(isset($this->step_data['replace_users'][$row['user_id']])) {
+						$row['user_id'] = $this->step_data['replace_users'][$row['user_id']];
+					}
+					
+					$this->db->prepare("INSERT INTO __articles :p")->set(array(
+							'title' 			=> $row['news_headline'],
+							'text'				=> $message,
+							'category'			=> 2,
+							'featured'			=> 0,
+							'comments'			=> !intval($row['nocomments']),
+							'votes'				=> 0,
+							'published'			=> 1,
+							'show_from'			=> $row['news_start'],
+							'show_to'			=> $row['news_stop'],
+							'user_id'			=> $row['user_id'],
+							'date'				=> $row['news_date'],
+							'previewimage'		=> "",
+							'alias'				=> registry::register('routing')->clean($row['news_headline'].''.$row['news_id']),
+							'hits'				=> 0,
+							'sort_id'			=> 0,
+							'tags'				=> serialize(array()),
+							'votes_count'		=> 0,
+							'votes_sum'			=> 0,
+							'last_edited'		=> $row['news_date'],
+							'last_edited_user'	=> $row['user_id'],
+							'page_objects'		=> serialize(array()),
+							'hide_header'		=> 0,
+					))->execute();
 				}
 			}
-			$this->old[0]->free_result($result);
-			$sql = "INSERT INTO ".$this->new[1]."articles (news_id, news_headline, news_message, news_date, user_id, showRaids_id, extended_message, nocomments, news_permissions, news_flags) VALUES ";
-			$sqls = array();
-			foreach($news as $id => $newss) {
-				if(isset($this->step_data['replace_users'][$newss['user_id']])) {
-					$newss['user_id'] = $this->step_data['replace_users'][$newss['user_id']];
-				}
-				$sqls[] = "('".$this->new[0]->escape($id)."', '".$this->new[0]->escape($newss['news_headline'])."', '".$this->new[0]->escape($newss['news_message'])."', '".$this->new[0]->escape($newss['news_date'])."', '".$this->new[0]->escape($newss['user_id'])."', '".$this->new[0]->escape($newss['showRaids_id'])."', '".$this->new[0]->escape($newss['extended_message'])."', '".$this->new[0]->escape($newss['nocomments'])."', '".$this->new[0]->escape($newss['news_permissions'])."', '".$this->new[0]->escape($newss['news_flags'])."')";
-			}
-			$this->new[0]->query($sql.implode(', ', $sqls).';');
 			unset($news);
+			
+			
 			$comments = array();
 			$sql = "SELECT * FROM ".$this->old[1]."comments;";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				foreach($row as $field => $value) {
-					$comments[$row['id']][$field] = $this->new[0]->escape($value);
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					foreach($row as $field => $value) {
+						$comments[$row['id']][$field] = $this->new[0]->escape($value);
+					}
 				}
 			}
-			$this->old[0]->free_result($result);
+
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."comments;");
 			if (count($comments) > 0){
 				$sql = "INSERT INTO ".$this->new[1]."comments (`".implode('`, `', array_keys(current($comments)))."`) VALUES ";
@@ -534,29 +559,31 @@ class import06 extends task {
 			$sql = "SELECT * FROM ".$this->old[1]."logs WHERE log_date > ".$date." LIMIT 5000;";
 			$result = $this->old[0]->query($sql);
 			include($this->root_path.'maintenance/includes/tasks/import06/plugin_logs.php');
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				$current_log = array();
-				if(isset($this->step_data['replace_users'][$row['admin_id']])) {
-					$row['admin_id'] = $this->step_data['replace_users'][$row['admin_id']];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$current_log = array();
+					if(isset($this->step_data['replace_users'][$row['admin_id']])) {
+						$row['admin_id'] = $this->step_data['replace_users'][$row['admin_id']];
+					}
+					$current_log['log_id'] = $this->new[0]->escape($row['log_id']);
+					$current_log['log_date'] = $this->new[0]->escape($row['log_date']);
+					eval($row['log_action']);
+					if(isset($log_action['header'])) preg_match("/\{L_(.+)\}/", $log_action['header'], $to_replace);
+					else preg_match("/\{L_(.+)\}/", $this->new[0]->escape($row['log_type']), $to_replace);
+					if(!isset($to_replace[1]) || !$to_replace[1]) continue;
+					unset($log_action['header']);
+					$current_log['log_value'] = $this->new[0]->escape(serialize($log_action));
+					$current_log['log_ipaddress'] = $this->new[0]->escape($row['log_ipaddress']);
+					$current_log['log_sid'] = $this->new[0]->escape($row['log_sid']);
+					$current_log['log_result'] = ($this->new[0]->escape($row['log_result']) == '{L_SUCCESS}') ? 1 : 0;
+					$current_log['log_tag'] = strtolower($to_replace[1]);
+					$current_log['log_plugin'] = (in_array($row['log_type'], array_keys($plugin_logs))) ? $this->new[0]->escape($plugin_logs[$row['log_type']]) : 'core';
+					$current_log['log_flag'] = 1;
+					$current_log['user_id'] = $this->new[0]->escape($row['admin_id']);
+					if(in_array($current_log['log_plugin'], $copy)) $logs[$row['log_id']] = $current_log;
 				}
-				$current_log['log_id'] = $this->new[0]->escape($row['log_id']);
-				$current_log['log_date'] = $this->new[0]->escape($row['log_date']);
-				eval($row['log_action']);
-				if(isset($log_action['header'])) preg_match("/\{L_(.+)\}/", $log_action['header'], $to_replace);
-				else preg_match("/\{L_(.+)\}/", $this->new[0]->escape($row['log_type']), $to_replace);
-				if(!isset($to_replace[1]) || !$to_replace[1]) continue;
-				unset($log_action['header']);
-				$current_log['log_value'] = $this->new[0]->escape(serialize($log_action));
-				$current_log['log_ipaddress'] = $this->new[0]->escape($row['log_ipaddress']);
-				$current_log['log_sid'] = $this->new[0]->escape($row['log_sid']);
-				$current_log['log_result'] = ($this->new[0]->escape($row['log_result']) == '{L_SUCCESS}') ? 1 : 0;
-				$current_log['log_tag'] = strtolower($to_replace[1]);
-				$current_log['log_plugin'] = (in_array($row['log_type'], array_keys($plugin_logs))) ? $this->new[0]->escape($plugin_logs[$row['log_type']]) : 'core';
-				$current_log['log_flag'] = 1;
-				$current_log['user_id'] = $this->new[0]->escape($row['admin_id']);
-				if(in_array($current_log['log_plugin'], $copy)) $logs[$row['log_id']] = $current_log;
 			}
-			$this->old[0]->free_result($result);
+
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."logs;");
 			$sql_pre = "INSERT INTO ".$this->new[1]."logs (".implode(', ', array_keys(current($logs))).") VALUES ";
 			$sqls = array();
@@ -585,10 +612,12 @@ class import06 extends task {
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT event_name, event_id FROM ".$this->old[1]."events ORDER BY event_name ASC;");
 		$c = 0;
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$events[$c]['id'] = $row['event_id'];
-			$events[$c]['name'] = $row['event_name'];
-			$c++;
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$events[$c]['id'] = $row['event_id'];
+				$events[$c]['name'] = $row['event_name'];
+				$c++;
+			}
 		}
 
 		$max = count($events);
@@ -633,12 +662,13 @@ class import06 extends task {
 			$events2import = $this->get('event_id', 'int', true);
 			$sql = "SELECT * FROM ".$this->old[1]."events WHERE event_id IN (".implode(',',$events2import).");";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				foreach($row as $field => $value) {
-					$events[$row['event_id']][$field] = $this->new[0]->escape($value);
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					foreach($row as $field => $value) {
+						$events[$row['event_id']][$field] = $this->new[0]->escape($value);
+					}
 				}
 			}
-			$this->old[0]->free_result($result);
 			
 			if(!$events) return true; 	//no events to import
 			
@@ -661,9 +691,12 @@ class import06 extends task {
 		$sql = "SELECT multidkp_id, multidkp_name FROM ".$this->old[1]."multidkp ORDER BY multidkp_name DESC;";
 		$result = $this->old[0]->query($sql);
 		$multis = array();
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$multis[] = array('name' => $row['multidkp_name'], 'id' => $row['multidkp_id']);
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$multis[] = array('name' => $row['multidkp_name'], 'id' => $row['multidkp_id']);
+			}
 		}
+
 		$output = '<table width="60%" cellpadding="1" cellspacing="1" align="center" class="task_table colorswitch">';
 		//no multidkp, ask for name and desc
 		if(count($multis) == 0) {
@@ -718,11 +751,13 @@ class import06 extends task {
 			$multis2import = $this->get('multi_id', 'int', true);
 			$sql = "SELECT * FROM ".$this->old[1]."multidkp WHERE multidkp_id IN (".implode(',',$multis2import).");";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				$multis[$row['multidkp_id']]['name'] = $row['multidkp_name'];
-				$multis[$row['multidkp_id']]['desc'] = $row['multidkp_disc'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$multis[$row['multidkp_id']]['name'] = $row['multidkp_name'];
+					$multis[$row['multidkp_id']]['desc'] = $row['multidkp_disc'];
+				}
 			}
-			$this->old[0]->free_result($result);
+
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."multidkp;");
 			$sql = "INSERT INTO ".$this->new[1]."multidkp (multidkp_id, multidkp_name, multidkp_desc) VALUES ";
 			$sqls = array();
@@ -733,11 +768,13 @@ class import06 extends task {
 			$multi2ev = array();
 			$sql = "SELECT m.multidkp2event_id, m.multidkp2event_multi_id, e.event_id FROM ".$this->old[1]."multidkp2event m, ".$this->old[1]."events e WHERE m.multidkp2event_multi_id IN (".implode(',',$multis2import).") AND m.multidkp2event_eventname = e.event_name;";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				$multi2ev[$row['multidkp2event_id']]['multi_id'] = $row['multidkp2event_multi_id'];
-				$multi2ev[$row['multidkp2event_id']]['event_id'] = $row['event_id'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$multi2ev[$row['multidkp2event_id']]['multi_id'] = $row['multidkp2event_multi_id'];
+					$multi2ev[$row['multidkp2event_id']]['event_id'] = $row['event_id'];
+				}
 			}
-			$this->old[0]->free_result($result);
+
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."multidkp2event;");
 			$sql = "INSERT INTO ".$this->new[1]."multidkp2event (multidkp2event_multi_id, multidkp2event_event_id) VALUES ";
 			$sqls = array();
@@ -765,16 +802,17 @@ class import06 extends task {
 			unset($multis);
 		} else {
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."multidkp;");
-			$this->new[0]->query("INSERT INTO ".$this->new[1]."multidkp (multidkp_name, multidkp_desc) VALUES ('".$this->get('multi_name', 'default')."', '".$this->get('multi_desc', 'default')."');");
-			$id = $this->new[0]->insert_id();
+			$objQuery = $this->new[0]->query("INSERT INTO ".$this->new[1]."multidkp (multidkp_name, multidkp_desc) VALUES ('".$this->get('multi_name', 'default')."', '".$this->get('multi_desc', 'default')."');");
+			if($objQuery) $id = $objQuery->insertId;
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."multidkp2event;");
 			$sql = "INSERT INTO ".$this->new[1]."multidkp2event (multidkp2event_multi_id, multidkp2event_event_id) VALUES ";
 			$sqls = array();
 			$result = $this->new[0]->query("SELECT event_id FROM ".$this->new[1]."events;");
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$sqls[] = "('".$id."', '".$row['event_id']."')";
+			if ($result && $id){
+				while($row = $result->fetchAssoc()){
+					$sqls[] = "('".$id."', '".$row['event_id']."')";
+				}
 			}
-			$this->new[0]->free_result($result);
 			$this->new[0]->query($sql.implode(', ', $sqls).';');
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."multidkp2itempool;");
 			$this->new[0]->query("INSERT INTO ".$this->new[1]."multidkp2itempool (multidkp2itempool_itempool_id, multidkp2itempool_multi_id) VALUES ('1', '".$id."');");
@@ -789,12 +827,13 @@ class import06 extends task {
 		$result = $this->old[0]->query($sql);
 		$members = array();
 		$cc = 0;
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$members[$cc]['name'] = $row['member_name'];
-			$members[$cc]['id'] = $row['member_id'];
-			$cc++;
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$members[$cc]['name'] = $row['member_name'];
+				$members[$cc]['id'] = $row['member_id'];
+				$cc++;
+			}
 		}
-		$this->old[0]->free_result($result);
 
 		$output = '<table width="60%" cellpadding="1" cellspacing="1" align="center" class="task_table colorswitch">';
 		$output .= '<tr><td colspan="3" class="th_sub">'.$this->lang['which_members'].' '.$this->js_mark_boxes('{NUM}', 'm_').'</td></tr>';
@@ -844,13 +883,15 @@ class import06 extends task {
 			$ranks = array();
 			$this->connect2olddb();
 			$result = $this->old[0]->query("SELECT * FROM ".$this->old[1]."member_ranks WHERE rank_id > 0 ORDER BY rank_name DESC;");
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				$ranks[$row['rank_id']]['name'] = $row['rank_name'];
-				$ranks[$row['rank_id']]['hide'] = ($row['rank_hide']) ? '1' : '0';
-				$ranks[$row['rank_id']]['prefix'] = $row['rank_prefix'];
-				$ranks[$row['rank_id']]['suffix'] = $row['rank_suffix'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$ranks[$row['rank_id']]['name'] = $row['rank_name'];
+					$ranks[$row['rank_id']]['hide'] = ($row['rank_hide']) ? '1' : '0';
+					$ranks[$row['rank_id']]['prefix'] = $row['rank_prefix'];
+					$ranks[$row['rank_id']]['suffix'] = $row['rank_suffix'];
+				}
 			}
-			$this->old[0]->free_result($result);
+			
 			$sql = "REPLACE INTO ".$this->new[1]."member_ranks (rank_id, rank_name, rank_hide, rank_prefix, rank_suffix) VALUES ";
 			$sqls = array();
 			foreach($ranks as $rank_id => $rank) {
@@ -865,34 +906,41 @@ class import06 extends task {
 			$members2import = $this->get('member_id', 'int', true);
 			$factions = array();
 			if($result = $this->old[0]->query("SELECT faction, member_id FROM ".$this->old[1]."member_additions;")) {
-				while($row = $this->old[0]->fetch_row($result)) {
-					$factions[$row['member_id']] = $row['faction'];
+				if ($result){
+					while($row = $result->fetchAssoc()){
+						$factions[$row['member_id']] = $row['faction'];
+					}
 				}
 				$profilefields = array();
 				$pf_res = $this->new[0]->query("SELECT name FROM ".$this->new[1]."member_profilefields;");
-				while($row = $this->new[0]->fetch_row($pf_res)) $profilefields[$row['name']] = '';
-				$this->new[0]->free_result($pf_res);
+				if ($pf_res){
+					while($row = $pf_res->fetchAssoc()){
+						$profilefields[$row['name']] = '';
+					}
+				}
 				unset($pf_res);
 			}
 			$sql = "SELECT m.*, r.race_name, c.class_name FROM ".$this->old[1]."members m, ".$this->old[1]."races r, ".$this->old[1]."classes c WHERE r.race_id = m.member_race_id AND c.class_id = m.member_class_id AND m.member_id IN (".implode(',',$members2import).");";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				foreach($row as $field => $value) {
-					if(in_array($field, array('member_id', 'member_name', 'member_status', 'member_level', 'member_race_id', 'member_class_id', 'member_rank_id'))) {
-						$members[$row['member_id']][$field] = $this->new[0]->escape($value);
-					} elseif($field == 'member_current') {
-						$this->step_data['import_data']['members'][$row['member_id']] = $this->new[0]->escape($value);
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					foreach($row as $field => $value) {
+						if(in_array($field, array('member_id', 'member_name', 'member_status', 'member_level', 'member_race_id', 'member_class_id', 'member_rank_id'))) {
+							$members[$row['member_id']][$field] = $this->new[0]->escape($value);
+						} elseif($field == 'member_current') {
+							$this->step_data['import_data']['members'][$row['member_id']] = $this->new[0]->escape($value);
+						}
 					}
+					$members[$row['member_id']]['member_main_id'] = $row['member_id'];
+					if(isset($factions[$row['member_id']])) {
+						$profilefields['faction'] = $factions[$row['member_id']];
+					}
+					$members[$row['member_id']]['profiledata'] = registry::register('xmltools')->Array2Database($profilefields);
+					$m2cr[$row['member_id']]['class'] = $row['class_name'];
+					$m2cr[$row['member_id']]['race'] = $row['race_name'];
 				}
-				$members[$row['member_id']]['member_main_id'] = $row['member_id'];
-				if(isset($factions[$row['member_id']])) {
-					$profilefields['faction'] = $factions[$row['member_id']];
-				}
-				$members[$row['member_id']]['profiledata'] = registry::register('xmltools')->Array2Database($profilefields);
-				$m2cr[$row['member_id']]['class'] = $row['class_name'];
-				$m2cr[$row['member_id']]['race'] = $row['race_name'];
 			}
-			$this->old[0]->free_result($result);
+
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."members;");
 			$fields = "`".implode('`, `', array_keys(current($members)))."`";
 			$sql = "INSERT INTO ".$this->new[1]."members (".$fields.") VALUES ";
@@ -909,16 +957,21 @@ class import06 extends task {
 			$members = array();
 			$sql = "SELECT * FROM ".$this->old[1]."member_user WHERE member_id IN (".implode(',',$members2import).");";
 			$result = $this->old[0]->query($sql);
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				$members[$row['member_id']] = (isset($this->step_data['replace_users'][$row['user_id']])) ? $this->step_data['replace_users'][$row['user_id']] : $row['user_id'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$members[$row['member_id']] = (isset($this->step_data['replace_users'][$row['user_id']])) ? $this->step_data['replace_users'][$row['user_id']] : $row['user_id'];
+				}
 			}
+
 			if($members) {
-				$this->old[0]->free_result($result);
 				$user_ids = array();
 				$result = $this->new[0]->query("SELECT user_id FROM ".$this->new[1]."users;");
-				while ( $row = $this->new[0]->fetch_record($result) ) {
-					$user_ids[] = $row['user_id'];
+				if ($result){
+					while($row = $result->fetchAssoc()){
+						$user_ids[] = $row['user_id'];
+					}
 				}
+
 				if($user_ids) {
 					$this->new[0]->free_result($result);
 					$this->new[0]->query("TRUNCATE ".$this->new[1]."member_user;");
@@ -939,8 +992,8 @@ class import06 extends task {
 			$ids = array();
 			foreach($specials as $special_name) {
 				if($special_name) {
-					$this->new[0]->query("INSERT INTO ".$this->new[1]."members (member_name, profiledata) VALUES ('".$special_name."', '');");
-					$ids[] = $this->new[0]->insert_id();
+					$objQuery = $this->new[0]->query("INSERT INTO ".$this->new[1]."members (member_name, profiledata) VALUES ('".$special_name."', '');");
+					if ($objQuery) $ids[] = $objQuery->insertId;
 				}
 			}
 			$this->config->set('special_members', serialize($ids));
@@ -956,16 +1009,20 @@ class import06 extends task {
 		$sql = "SELECT raid_id, raid_name FROM ".$this->old[1]."raids;";
 		$result = $this->old[0]->query($sql);
 		$raids = array();
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$raids[$row['raid_id']] = $row['raid_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$raids[$row['raid_id']] = $row['raid_name'];
+			}
 		}
-		$this->old[0]->free_result($result);
+
 		$events = array();
 		$result = $this->new[0]->query("SELECT event_id, event_name FROM ".$this->new[1]."events ORDER BY event_name ASC;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$events[$row['event_id']] = $row['event_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$events[$row['event_id']] = $row['event_name'];
+			}
 		}
-		$this->new[0]->free_result($result);
+
 		$wrong_raids = array();
 		foreach($raids as $raid_id => $name) {
 			$key = array_search($name, $events);
@@ -998,19 +1055,21 @@ class import06 extends task {
 		$raids = array();
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT * FROM ".$this->old[1]."raids;");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			foreach($row as $field => $value) {
-				if($field != 'raid_name') {
-					$raids[$row['raid_id']][$field] = $this->new[0]->escape($value);
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				foreach($row as $field => $value) {
+					if($field != 'raid_name') {
+						$raids[$row['raid_id']][$field] = $this->new[0]->escape($value);
+					}
+				}
+				if($this->step_data['import_data']['raids'][$row['raid_id']]) {
+					$raids[$row['raid_id']]['event_id'] = $this->step_data['import_data']['raids'][$row['raid_id']];
+				} else {
+					$raids[$row['raid_id']]['event_id'] = $this->get('raid_event:'.$row['raid_id']);
 				}
 			}
-			if($this->step_data['import_data']['raids'][$row['raid_id']]) {
-				$raids[$row['raid_id']]['event_id'] = $this->step_data['import_data']['raids'][$row['raid_id']];
-			} else {
-				$raids[$row['raid_id']]['event_id'] = $this->get('raid_event:'.$row['raid_id']);
-			}
 		}
-		$this->old[0]->free_result($result);
+
 		unset($this->step_data['import_data']['raids']);
 		$fields = "`".implode('`, `', array_keys(current($raids)))."`";
 		$this->new[0]->query("TRUNCATE ".$this->new[1]."raids;");
@@ -1027,16 +1086,20 @@ class import06 extends task {
 		$raid_attendees = array();
 		$sql = "SELECT raid_id, member_name FROM ".$this->old[1]."raid_attendees WHERE raid_id IN (".implode(',',$ra_ids).");";
 		$result = $this->old[0]->query($sql);
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$raid_attendees[$row['raid_id']][] = $row['member_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$raid_attendees[$row['raid_id']][] = $row['member_name'];
+			}
 		}
-		$this->old[0]->free_result($result);
+
 		$members = array();
 		$result = $this->new[0]->query("SELECT member_name, member_id FROM ".$this->new[1]."members;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$members[$row['member_name']] = $row['member_id'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$members[$row['member_name']] = $row['member_id'];
+			}
 		}
-		$this->new[0]->free_result($result);
+
 		$raid_atts = array();
 		foreach($raid_attendees as $raid_id => $atts) {
 			foreach($atts as $name) {
@@ -1063,27 +1126,33 @@ class import06 extends task {
 		$items = array();
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT item_id, item_name, item_buyer, raid_id, item_date FROM ".$this->old[1]."items;");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$items[$row['item_id']]['name'] = stripslashes($row['item_name']);
-			$items[$row['item_id']]['buyer'] = $row['item_buyer'];
-			$items[$row['item_id']]['raid'] = $row['raid_id'];
-			$items[$row['item_id']]['date'] = $row['item_date'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$items[$row['item_id']]['name'] = stripslashes($row['item_name']);
+				$items[$row['item_id']]['buyer'] = $row['item_buyer'];
+				$items[$row['item_id']]['raid'] = $row['raid_id'];
+				$items[$row['item_id']]['date'] = $row['item_date'];
+			}
 		}
-		$this->old[0]->free_result($result);
+
 		$raids = array();
 		$raid_ids = array();
 		$result = $this->new[0]->query("SELECT r.raid_id, e.event_name, r.raid_date, r.raid_note  FROM ".$this->new[1]."raids r, ".$this->new[1]."events e WHERE e.event_id = r.event_id;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$raids[$row['raid_id']] = date($this->lang['date_format'], $row['raid_date']).' '.$row['event_name'].': '.((strlen($row['raid_note']) > 50) ? substr($row['raid_note'], 0, 45).' (...)' : $row['raid_note']);
-			$raid_ids[] = $row['raid_id'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$raids[$row['raid_id']] = date($this->lang['date_format'], $row['raid_date']).' '.$row['event_name'].': '.((strlen($row['raid_note']) > 50) ? substr($row['raid_note'], 0, 45).' (...)' : $row['raid_note']);
+				$raid_ids[] = $row['raid_id'];
+			}
 		}
-		$this->new[0]->free_result($result);
+		
 		$members = array();
 		$result = $this->new[0]->query("SELECT member_id, member_name FROM ".$this->new[1]."members;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$members[$row['member_id']] = $row['member_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$members[$row['member_id']] = $row['member_name'];
+			}
 		}
-		$this->new[0]->free_result($result);
+
 		asort($members);
 		$no_member_items = array();
 		$no_raid_items = array();
@@ -1227,39 +1296,45 @@ class import06 extends task {
 		$raid2itempool = array();
 		$sql = "SELECT mi.multidkp2itempool_itempool_id, r.raid_id FROM ".$this->new[1]."raids r LEFT JOIN (".$this->new[1]."multidkp2itempool mi LEFT JOIN ".$this->new[1]."multidkp2event me ON mi.multidkp2itempool_multi_id = me.multidkp2event_multi_id) ON me.multidkp2event_event_id = r.event_id;";
 		$result = $this->new[0]->query($sql);
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$raid2itempool[$row['raid_id']] = $row['multidkp2itempool_itempool_id'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$raid2itempool[$row['raid_id']] = $row['multidkp2itempool_itempool_id'];
+			}
 		}
-		$this->new[0]->free_result($result);
 		$this->connect2olddb();
 		$members = array();
+		
 		$result = $this->new[0]->query("SELECT member_id, member_name FROM ".$this->new[1]."members;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$members[$row['member_id']] = $row['member_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$members[$row['member_id']] = $row['member_name'];
+			}
 		}
-		$this->old[0]->free_result($result);
+
 		$result = $this->old[0]->query("SELECT * FROM ".$this->old[1]."items;");
 		$item_member = $this->step_data['import_data']['items']['item_member'];
 		$item_raid = $this->step_data['import_data']['items']['item_raid'];
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			if(is_array($item_raid) AND isset($item_raid[$row['item_id']])) {
-				$row['raid_id'] = $item_raid[$row['item_id']];
-			}
-			if(is_array($item_member) AND isset($item_member[$row['item_id']])) {
-				$row['member_id'] = $item_member[$row['item_id']];
-			} else {
-				$row['member_id'] = $this->array_isearch($row['item_buyer'], $members);
-			}
-			if(!$row['member_id'] || !$row['raid_id']) continue;
-			unset($row['item_buyer']);
-			unset($row['item_ctrt_wowitemid']);
-			foreach($row as $field => $value) {
-				$value = stripslashes($value);
-				$items[$row['item_id']][$field] = ($value != '') ? $value : null;
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				if(is_array($item_raid) AND isset($item_raid[$row['item_id']])) {
+					$row['raid_id'] = $item_raid[$row['item_id']];
+				}
+				if(is_array($item_member) AND isset($item_member[$row['item_id']])) {
+					$row['member_id'] = $item_member[$row['item_id']];
+				} else {
+					$row['member_id'] = $this->array_isearch($row['item_buyer'], $members);
+				}
+				if(!$row['member_id'] || !$row['raid_id']) continue;
+				unset($row['item_buyer']);
+				unset($row['item_ctrt_wowitemid']);
+				foreach($row as $field => $value) {
+					$value = stripslashes($value);
+					$items[$row['item_id']][$field] = ($value != '') ? $value : null;
+				}
 			}
 		}
+
 		unset($this->step_data['import_data']['items']);
-		$this->old[0]->free_result($result);
 		$this->new[0]->query("TRUNCATE ".$this->new[1]."items;");
 		$i = $n = 0;
 		$sqls = array();
@@ -1281,25 +1356,30 @@ class import06 extends task {
 		$adjs = array();
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT adjustment_id, adjustment_reason, member_name, raid_name, adjustment_date FROM ".$this->old[1]."adjustments;");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$adjs[$row['adjustment_id']]['reason'] = $row['adjustment_reason'];
-			$adjs[$row['adjustment_id']]['member'] = $row['member_name'];
-			$adjs[$row['adjustment_id']]['event'] = $row['raid_name'];
-			$adjs[$row['adjustment_id']]['date'] = $row['adjustment_date'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$adjs[$row['adjustment_id']]['reason'] = $row['adjustment_reason'];
+				$adjs[$row['adjustment_id']]['member'] = $row['member_name'];
+				$adjs[$row['adjustment_id']]['event'] = $row['raid_name'];
+				$adjs[$row['adjustment_id']]['date'] = $row['adjustment_date'];
+			}
 		}
-		$this->old[0]->free_result($result);
+
 		$events = array();
 		$result = $this->new[0]->query("SELECT event_name, event_id FROM ".$this->new[1]."events ORDER BY event_name ASC;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$events[$row['event_id']] = $row['event_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$events[$row['event_id']] = $row['event_name'];
+			}
 		}
-		$this->new[0]->free_result($result);
+
 		$members = array();
 		$result = $this->new[0]->query("SELECT member_name, member_id FROM ".$this->new[1]."members ORDER BY member_name ASC;");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$members[$row['member_id']] = $row['member_name'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$members[$row['member_id']] = $row['member_name'];
+			}
 		}
-		$this->new[0]->free_result($result);
 		$wrong_member_adj = array();
 		$wrong_event_adj = array();
 		foreach($adjs as $adj_id => $adj) {
@@ -1321,6 +1401,7 @@ class import06 extends task {
 		$max_vars = 100;
 		$suho = ini_get('suhosin.post.max_vars')-20;
 		$max_vars = (ini_get('suhosin.post.max_vars') && $suho < $max_vars) ? $suho : $max_vars;
+		$page = 0;
 		if($this->step_data['import_data']['adjustments']['paging']) {
 			$this->step_data['import_data']['adjustments']['current_page']++;	
 			$page = $this->step_data['import_data']['adjustments']['current_page'];
@@ -1393,27 +1474,29 @@ class import06 extends task {
 		$adjs = array();
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT * FROM ".$this->old[1]."adjustments;");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			if(isset($wrong_events[$row['adjustment_id']])) {
-				$row['event_id'] = $wrong_events[$row['adjustment_id']];
-			} else {
-				$row['event_id'] = $this->step_data['import_data']['adjustments']['adjustments'][$row['adjustment_id']]['event_id'];
-			}
-			if(isset($wrong_member[$row['adjustment_id']])) {
-				$row['member_id'] = $wrong_member[$row['adjustment_id']];
-			} else {
-				$row['member_id'] = $this->step_data['import_data']['adjustments']['adjustments'][$row['adjustment_id']]['member_id'];
-			}
-			if(!$row['event_id'] || !$row['member_id']) continue;
-			unset($row['member_name']);
-			unset($row['raid_name']);
-			foreach($row as $field => $value) {
-				$value = $this->new[0]->escape($value);
-				$adjs[$row['adjustment_id']][$field] = ($value != '') ? $value : null;
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				if(isset($wrong_events[$row['adjustment_id']])) {
+					$row['event_id'] = $wrong_events[$row['adjustment_id']];
+				} else {
+					$row['event_id'] = $this->step_data['import_data']['adjustments']['adjustments'][$row['adjustment_id']]['event_id'];
+				}
+				if(isset($wrong_member[$row['adjustment_id']])) {
+					$row['member_id'] = $wrong_member[$row['adjustment_id']];
+				} else {
+					$row['member_id'] = $this->step_data['import_data']['adjustments']['adjustments'][$row['adjustment_id']]['member_id'];
+				}
+				if(!$row['event_id'] || !$row['member_id']) continue;
+				unset($row['member_name']);
+				unset($row['raid_name']);
+				foreach($row as $field => $value) {
+					$value = $this->new[0]->escape($value);
+					$adjs[$row['adjustment_id']][$field] = ($value != '') ? $value : null;
+				}
 			}
 		}
+
 		unset($this->step_data['import_data']['adjustments']);
-		$this->old[0]->free_result($result);
 		$this->new[0]->query("TRUNCATE ".$this->new[1]."adjustments;");
 		$this->new[0]->query("INSERT INTO ".$this->new[1]."adjustments :params;", $adjs);
 		unset($adjs);
@@ -1427,31 +1510,41 @@ class import06 extends task {
 			$raids = array();
 			$sql = "SELECT m.raid_id, m.member_id, r.raid_value FROM ".$this->new[1]."raid_attendees m, ".$this->new[1]."raids r WHERE r.raid_id = m.raid_id;";
 			$result = $this->new[0]->query($sql);
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$raids[$row['member_id']][$row['raid_id']] = $row['raid_value'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$raids[$row['member_id']][$row['raid_id']] = $row['raid_value'];
+				}
 			}
 			$items = array();
 			$sql = "SELECT member_id, item_id, item_value FROM ".$this->new[1]."items;";
 			$result = $this->new[0]->query($sql);
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$items[$row['member_id']][$row['item_id']] = $row['item_value'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$items[$row['member_id']][$row['item_id']] = $row['item_value'];
+				}
 			}
 			$adjs = array();
 			$result = $this->new[0]->query("SELECT member_id, adjustment_value, adjustment_id FROM ".$this->new[1]."adjustments;");
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$adjs[$row['member_id']][$row['adjustment_id']] = $row['adjustment_value'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$adjs[$row['member_id']][$row['adjustment_id']] = $row['adjustment_value'];
+				}
 			}
 			$members = array();
 			$result = $this->new[0]->query("SELECT member_name, member_id FROM ".$this->new[1]."members;");
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$members[$row['member_id']] = $row['member_name'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$members[$row['member_id']] = $row['member_name'];
+				}
 			}
 			$events = array();
 			$result = $this->new[0]->query("SELECT event_name, event_id FROM ".$this->new[1]."events;");
-			while ( $row = $this->new[0]->fetch_record($result) ) {
-				$events[$row['event_id']] = $row['event_name'];
+			if ($result){
+				while($row = $result->fetchAssoc()){
+					$events[$row['event_id']] = $row['event_name'];
+				}
 			}
-			$this->new[0]->free_result($result);
+
 			$members_with_diff = array();
 			if(is_array($this->step_data['import_data']['members'])) {
 			foreach($this->step_data['import_data']['members'] as $mem_id => $mem_cur) {
@@ -1527,11 +1620,14 @@ class import06 extends task {
 		$this->connect2olddb();
 		$result = $this->old[0]->query("SELECT page_id, page_title FROM ".$this->old[1]."info_pages ORDER BY page_title ASC;");
 		$c = 0;
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$pages[$c]['id'] = $row['page_id'];
-			$pages[$c]['title'] = $row['page_title'];
-			$c++;
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$pages[$c]['id'] = $row['page_id'];
+				$pages[$c]['title'] = $row['page_title'];
+				$c++;
+			}
 		}
+
 		foreach($pages as $page) {
 			$output .= "<tr><td><input type='checkbox' ame='page_id[]' value='".$page['id']."' /></td><td>".$page['title']."</td></tr>";
 		}
@@ -1550,29 +1646,46 @@ class import06 extends task {
 			$sql = "SELECT page_id, page_title, page_content, page_menu_link, page_edit_user, page_edit_date FROM ".$this->old[1]."info_pages WHERE page_id IN (".$page_ids.");";
 			$result = $this->old[0]->query($sql);
 			$i = 0;
-			while ( $row = $this->old[0]->fetch_record($result) ) {
-				$pages[$i]['page_id'] = $row['page_id'];
-				$pages[$i]['page_title'] = $row['page_title'];
-				$pages[$i]['page_content'] = htmlentities($row['page_content'], ENT_QUOTES, "UTF-8");
-				$pages[$i]['page_visibility'] = serialize(array());
-				$pages[$i]['page_menu_link'] = $row['page_menu_link'];
+			if ($result){
+				$objQuery = $this->new[0]->query('INSERT INTO `__article_categories` (`name`, `alias`, `portal_layout`, `description`, `per_page`, `permissions`, `published`, `parent`, `sort_id`, `list_type`, `aggregation`, `featured_only`, `notify_on_onpublished_articles`, `social_share_buttons`, `show_childs`, `article_published_state`, `hide_header`, `sortation_type`, `featured_ontop`, `hide_on_rss`) VALUES (\'Imported Pages\', \'imported-pages\', 1, \'\', 25, \'a:5:{s:3:"rea";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"cre";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"upd";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"del";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"chs";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}}\', 1, 1, 99999999, 1, \'a:1:{i:0;i:7;}\', 0, 0, 0, 0, 1, 0, 1, 0, 0);
+			');
+				if ($objQuery) $category = $objQuery->insertId;
 				
-				if(isset($this->step_data['replace_users'][$row['page_edit_user']])) {
-					$pages[$i]['page_edit_user'] = $this->step_data['replace_users'][$row['page_edit_user']];
-				} else {
-					$pages[$i]['page_edit_user'] = $this->user->data['user_id'];
+				while($row = $result->fetchAssoc()){
+					if(isset($this->step_data['replace_users'][$row['page_edit_user']])) {
+						$user_id = $this->step_data['replace_users'][$row['page_edit_user']];
+					} else {
+						$user_id = $this->user->data['user_id'];
+					}
+					
+					$this->db->prepare("INSERT INTO __articles :p")->set(array(
+							'title' 			=> $row['page_title'],
+							'text'				=> htmlentities($row['page_content'], ENT_QUOTES, "UTF-8"),
+							'category'			=> $category,
+							'featured'			=> 0,
+							'comments'			=> 0,
+							'votes'				=> 0,
+							'published'			=> 1,
+							'show_from'			=> '',
+							'show_to'			=> '',
+							'user_id'			=> $user_id,
+							'date'				=> $row['page_edit_date'],
+							'previewimage'		=> "",
+							'alias'				=> registry::register('routing')->clean($row['page_title'].''.$row['page_id']),
+							'hits'				=> 0,
+							'sort_id'			=> 0,
+							'tags'				=> serialize(array()),
+							'votes_count'		=> 0,
+							'votes_sum'			=> 0,
+							'last_edited'		=> $row['page_edit_date'],
+							'last_edited_user'	=> $user_id,
+							'page_objects'		=> serialize(array()),
+							'hide_header'		=> 0,
+					))->execute();
+					
+					$i++;
 				}
-				$pages[$i]['page_edit_date'] = $row['page_edit_date'];
-				$pages[$i]['page_alias'] = '';
-				$pages[$i]['page_comments'] = 0;
-				$pages[$i]['page_voting'] = 0;
-				$pages[$i]['page_votes'] = 0;
-				$pages[$i]['page_ratingpoints'] = 0;
-				$pages[$i]['page_voters'] = '';
-				$pages[$i]['page_rating'] = 0;
-				$i++;
 			}
-			$this->old[0]->free_result();
 			
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."pages;");
 			$fields = "`".implode('`, `', array_keys(current($pages)))."`";
@@ -1592,17 +1705,22 @@ class import06 extends task {
 		$this->connect2olddb();
 		$new_plugins = array();
 		$result = $this->new[0]->query("SELECT code FROM ".$this->new[1]."plugins WHERE status = '1';");
-		while ( $row = $this->new[0]->fetch_record($result) ) {
-			$new_plugins[] = $row['code'];
-		}
-		$this->new[0]->free_result($result);
-		$plugins = array();
-		$result = $this->old[0]->query("SELECT plugin_name, plugin_code, plugin_path FROM ".$this->old[1]."plugins WHERE plugin_installed = '1';");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			if(is_file($this->root_path.'plugins/'.$row['plugin_path'].'/'.$row['plugin_code'].'_plugin_class.php')) {
-				$plugins[] = array('name' => $row['plugin_name'], 'code' => $row['plugin_code'], 'path' => $row['plugin_path']);
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$new_plugins[] = $row['code'];
 			}
 		}
+
+		$plugins = array();
+		$result = $this->old[0]->query("SELECT plugin_name, plugin_code, plugin_path FROM ".$this->old[1]."plugins WHERE plugin_installed = '1';");
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				if(is_file($this->root_path.'plugins/'.$row['plugin_path'].'/'.$row['plugin_code'].'_plugin_class.php')) {
+					$plugins[] = array('name' => $row['plugin_name'], 'code' => $row['plugin_code'], 'path' => $row['plugin_path']);
+				}
+			}
+		}
+
 		$output = "<style type='text/css'>
 					.plugin {
 						cursor: pointer;
@@ -1637,12 +1755,15 @@ class import06 extends task {
 		}
 		$portals = array();
 		$result = $this->old[0]->query("SELECT path, plugin, name FROM ".$this->old[1]."portal WHERE enabled = '1';");
-		while ( $row = $this->old[0]->fetch_record($result) ) {
-			$path =($row['plugin']) ? 'plugins/'.$row['plugin'].'/portal/'.$row['path'].'.php' : 'portal/'.$row['path'].'/module.php';
-			if(is_file($this->root_path.$path)) {
-				$portals[] = array('name' => $row['name'], 'path' => $row['path']);
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$path =($row['plugin']) ? 'plugins/'.$row['plugin'].'/portal/'.$row['path'].'.php' : 'portal/'.$row['path'].'/module.php';
+				if(is_file($this->root_path.$path)) {
+					$portals[] = array('name' => $row['name'], 'path' => $row['path']);
+				}
 			}
 		}
+
 		if($portals) {
 			$output .= "<tr><th colspan='2'>".$this->lang['which_portals']."</th></tr>";
 		}
@@ -1661,9 +1782,12 @@ class import06 extends task {
 		//get installed plugins
 		$result = $this->new[0]->query("SELECT code FROM ".$this->new[1]."plugins WHERE status = '1';");
 		$pluggs = array();
-		while($row = $this->new[0]->fetch_row($result)) {
-			$pluggs[] = $row['code'];
+		if ($result){
+			while($row = $result->fetchAssoc()){
+				$pluggs[] = $row['code'];
+			}
 		}
+
 		include_once($this->root_path.'maintenance/includes/tasks/import06/plugin_list.php');
 		$tables = array();
 		foreach($plugin_names as $code => $info) {
