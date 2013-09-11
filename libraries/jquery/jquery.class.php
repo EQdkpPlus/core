@@ -71,14 +71,14 @@ if (!class_exists("jquery")) {
 
 					<div id="error" class="notify_error">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->server_path.'images/global/false.png" alt="error"/></div>
+						<div style="float:left;margin:0 10px 0 0"><i class="icon-remove icon-3x"></i></div>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>
 
 					<div id="success" class="notify_success">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><img src="'.$this->server_path.'images/global/ok.png" alt="success"/></div>
+						<div style="float:left;margin:0 10px 0 0"><i class="icon-ok icon-3x"></i></div>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>

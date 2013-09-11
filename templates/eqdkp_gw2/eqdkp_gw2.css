@@ -1525,29 +1525,6 @@ a.attendee_Link:hover{
 	background-color:#466988;
 	overflow: hidden;
 }
-.charchange_button{
-	width: 20px; height: 20px;
-	background-image: url(../images/calendar/changechar.png);
-	display : inline-block;
-}
-.rcal_comment{
-	width: 20px; height: 20px;
-	background: url(../images/calendar/comment.png);
-	background-position: -0px -0px;
-	display : inline-block;
-}
-.rcal_comment_admin{
-	width: 20px; height: 20px;
-	background: url(../images/calendar/comment.png);
-	background-position: 0px -60px;
-	display : inline-block;
-}
-.rcal_comment_add{
-	width: 20px; height: 20px;
-	background:url(../images/calendar/comment.png);
-	background-position: 0px -30px;
-	display : inline-block;
-}
 
 /* general: information boxes */
 .roundbox{

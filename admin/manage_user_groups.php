@@ -457,7 +457,7 @@ class Manage_User_Groups extends page_generic {
 				foreach($grps as $group_id => $group){
 					$group_permissions = $this->acl->get_group_permissions($group_id);
 					$this->tpl->assign_block_vars('permissions_row.check_group.group_row', array(
-						'STATUS'	=> ( $group_permissions[$data['CBNAME']] == "Y") ? ' <img src="../images/global/ok.png" height="14" alt="" />' : '',
+						'STATUS'	=> ( $group_permissions[$data['CBNAME']] == "Y") ? ' <i class="icon-ok">' : '',
 					));
 				}
 			}

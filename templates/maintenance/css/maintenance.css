@@ -606,80 +606,6 @@ h3 {
     color: #468847;
 }
 
-/* general: information boxes */
-.roundbox{
-	-webkit-border-radius: 10px; 
-    -khtml-border-radius: 10px; 
-    -moz-border-radius: 10px; 
-    border-radius: 10px;
-	-webkit-box-shadow: 0px 0px 2px 2px rgba(255, 255, 255, 0.2);
-	box-shadow: 0px 0px 2px 2px rgba(255, 255, 255, 0.2); 
-}
-.errorbox{
-	background-color: #F2DEDE;
-    border: 1px solid #edc9ce;
-    color: #B94A48;
-	padding: 5px;
-	margin: 3px;
-}
-.errorbox a, .errorbox a:visited{
-	color:#ae0b08;
-	text-decoration: none;
-}
-.errorbox a:hover{
-	color:#000;
-	text-decoration: underline;
-}
-.errorbox div, .greenbox div, .bluebox div {
-	padding: 7px 10px 7px 72px;
-	background-position: 10px center;
-	margin: 10px 0px;
-	display:block;
-	min-height: 32px;	
-}
-.errorbox div span, .greenbox div span, .bluebox div span{
-	padding: 0px 0px 0px 0px;
-	margin: 10px 0px;
-	display:inline;
-}
-.greenbox{
-  background-color: #DFF0D8;
-    border-color: #D6E9C6;
-    color: #468847;
-	padding: 5px;
-	padding: 5px;
-	margin: 3px;
-}
-.bluebox{
-	background-color: #D9EDF7;
-    border: 1px solid #BCE8F1;
-    color: #3A87AD;
-	margin: 3px;
-	padding: 5px;
-}
-.greenbox a, .greenbox a:visited,
-.bluebox a, .bluebox a:visited{
-	color:black;
-	text-decoration: none;
-}
-.greenbox a:hover, .bluebox a:hover{
-	color:black;
-	text-decoration: underline;
-}
-
-div.icon_info {
-	background:transparent url(../../../images/global/info_big.png) center left no-repeat;
-}
-div.icon_ok {
-	background:transparent url(../../../images/global/ok.png) center left no-repeat;
-}
-div.icon_false {
-	background:transparent url(../../../images/global/false.png) center left no-repeat;
-}
-div.icon_maintenance {
-	background:transparent url(../../../images/global/maintenance.png) center left no-repeat;
-}
-
 ul.tabnav { /* general settings */
 	text-align: left; /* set to left, right or center */
 	margin: 18px 0 5px 0; /* set margins as desired */
@@ -947,4 +873,82 @@ fieldset.settings dt span {
 
 .negative{
 	color: #F80000;
+}
+
+/*****************************************/
+/* DEPRECATED                            */
+/*****************************************/
+
+/* general: information boxes */
+.roundbox{
+	-webkit-border-radius: 10px; 
+    -khtml-border-radius: 10px; 
+    -moz-border-radius: 10px; 
+    border-radius: 10px;
+	-webkit-box-shadow: 0px 0px 2px 2px rgba(255, 255, 255, 0.2);
+	box-shadow: 0px 0px 2px 2px rgba(255, 255, 255, 0.2); 
+}
+.errorbox{
+	background-color: #F2DEDE;
+    border: 1px solid #edc9ce;
+    color: #B94A48;
+	padding: 5px;
+	margin: 3px;
+}
+.errorbox a, .errorbox a:visited{
+	color:#ae0b08;
+	text-decoration: none;
+}
+.errorbox a:hover{
+	color:#000;
+	text-decoration: underline;
+}
+.errorbox div, .greenbox div, .bluebox div {
+	padding: 7px 10px 7px 72px;
+	background-position: 10px center;
+	margin: 10px 0px;
+	display:block;
+	min-height: 32px;	
+}
+.errorbox div span, .greenbox div span, .bluebox div span{
+	padding: 0px 0px 0px 0px;
+	margin: 10px 0px;
+	display:inline;
+}
+.greenbox{
+  background-color: #DFF0D8;
+    border-color: #D6E9C6;
+    color: #468847;
+	padding: 5px;
+	padding: 5px;
+	margin: 3px;
+}
+.bluebox{
+	background-color: #D9EDF7;
+    border: 1px solid #BCE8F1;
+    color: #3A87AD;
+	margin: 3px;
+	padding: 5px;
+}
+.greenbox a, .greenbox a:visited,
+.bluebox a, .bluebox a:visited{
+	color:black;
+	text-decoration: none;
+}
+.greenbox a:hover, .bluebox a:hover{
+	color:black;
+	text-decoration: underline;
+}
+
+div.icon_info {
+	background:transparent url(../../../images/global/info_big.png) center left no-repeat;
+}
+div.icon_ok {
+	background:transparent url(../../../images/global/ok.png) center left no-repeat;
+}
+div.icon_false {
+	background:transparent url(../../../images/global/false.png) center left no-repeat;
+}
+div.icon_maintenance {
+	background:transparent url(../../../images/global/maintenance.png) center left no-repeat;
 }

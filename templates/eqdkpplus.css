@@ -217,43 +217,6 @@ tr.cm_confirm{
 }
 
 /* information boxes icons */
-div.icon_brokenimage{
-	background:transparent url(../images/global/brokenimg.png) center left no-repeat;
-	padding-left: 90px !important;
-}
-div.icon_info {
-	background:transparent url(../images/global/info_big.png) center left no-repeat;
-}
-div.icon_ok {
-	background:transparent url(../images/global/ok.png) center left no-repeat;
-}
-div.icon_false {
-	background:transparent url(../images/global/false.png) center left no-repeat;
-}
-div.icon_stop {
-	background:transparent url(../images/global/icon_stop.png) center left no-repeat;
-}
-div.icon_noconnection {
-	background:transparent url(../images/global/connect_no.png) center left no-repeat;
-}
-div.icon_char{
-	background:transparent url(../images/calendar/personal_big.png) center left no-repeat;
-}
-div.icon_maintenance {
-	background:transparent url(../images/global/maintenance.png) center left no-repeat;
-}
-.errorbox div.closed {
-	background:transparent url(../images/calendar/closed.png) center left no-repeat;
-}
-.errorbox div.false {
-	background:transparent url(../images/calendar/false.png) center left no-repeat;
-}
-.errorbox div.deadline {
-	background:transparent url(../images/calendar/clock.png) center left no-repeat;
-}
-div.icon_repeating {
-	background:transparent url(../images/global/repeating.png) center left no-repeat;
-}
 .errorbox a, .infobox a{
 	text-decoration: none;
 	font-weight: bold;
@@ -261,82 +224,6 @@ div.icon_repeating {
 .errorbox a:hover, .infobox a:hover{
 	text-decoration: underline;	
 }
-
-/* Buttons with images */
-/*
-.e_mail{
-	background:url(../images/glyphs/email.png) no-repeat;
-	padding-left:20px;
-}
-.bi_archive{
-	background:url(../images/glyphs/archive.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_mail{
-	background:url(../images/glyphs/email.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_delete{
-	background:url(../images/global/delete.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_reset{
-	background:url(../images/glyphs/reset.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_reload{
-	background:url(../images/global/update.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_save{
-	background:url(../images/admin/manage_backup.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_ok{
-	background:url(../images/glyphs/ok.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_cancel{
-	background:url(../images/global/delete.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_key{
-	background:url(../images/glyphs/key.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_key_lost{
-	background:url(../images/glyphs/key_lost.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_cellphone{
-	background:url(../images/glyphs/phone_cell.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_back{
-	background:url(../images/arrows/left_arrow.png) no-repeat 5px center;
-	text-indent:16px;
-}
-.bi_next{
-	background:url(../images/arrows/right_arrow.png) no-repeat 5px 5px;
-	text-indent:16px;
-}
-.bi_new{
-	background:url(../images/global/add.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_edit{
-	background:url(../images/global/edit.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_manage{
-	background:url(../images/glyphs/edit.png) no-repeat 2px center;
-	text-indent:20px;
-}
-.bi_search{
-	background:url(../images/glyphs/view.png) no-repeat 2px center;
-	text-indent:20px;
-}
-*/
 
 /* Everything button image below this line has been ported to 1.1 */
 .bi_openid{
@@ -389,19 +276,6 @@ div.icon_repeating {
 	display: inline-block;
 	vertical-align: middle;
 	margin-right: 3px;
-}
-
-.bi_changechar{
-	background:url(../images/calendar/changechar.png) center no-repeat;
-	display: inline-block;
-    height: 16px;
-    width: 16px;
-}
-.bi_changenote{
-	background:url(../images/calendar/comment.png) center no-repeat;
-	display: inline-block;
-    height: 16px;
-    width: 16px;
 }
 
 /*Image Button without value*/

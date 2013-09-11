@@ -311,11 +311,11 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		</fieldset>
 	</div>
 	
-	<div class="greenbox" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
-		<div class="icon_info">
-			{L_SIGNEDIN_MSG}
-			<input type="button" value="{L_raidevent_raid_changesignin}" id="raidcal_change_signin" class="mainoption bi_edit" />
-		</div>
+	
+	<div class="infobox infobox-large infobox-green clearfix" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
+		<i class="icon-user icon-4x pull-left"></i>
+		{L_SIGNEDIN_MSG}
+		<input type="button" value="{L_raidevent_raid_changesignin}" id="raidcal_change_signin" class="mainoption bi_edit" />
 	</div>
 	<!-- ELSE -->
 	<!-- IF NO_CHAR_ASSIGNED and S_LOGGED_IN -->

@@ -475,20 +475,20 @@ function message_die($text = '', $title = '', $type = 'normal', $login_form = fa
 
 	//Switch rounded boxes and icons
 	switch($type){
-		case 'access_denied':	$message_class = 'errorbox';
-								$icon = 'icon_stop';
+		case 'access_denied':	$message_class = 'red';
+								$icon = 'icon-minus-sign';
 		break;
 
-		case 'info':			$message_class = 'infobox';
-								$icon = 'icon_info';
+		case 'info':			$message_class = 'blue';
+								$icon = 'icon-info-sign ';
 		break;
 
-		case 'error':			$message_class = 'errorbox';
-								$icon = 'icon_false';
+		case 'error':			$message_class = 'red';
+								$icon = 'icon-warning-sign';
 		break;
 
-		case 'ok':				$message_class = 'greenbox';
-								$icon = 'icon_ok';
+		case 'ok':				$message_class = 'green';
+								$icon = 'icon-ok';
 		break;
 
 	}
