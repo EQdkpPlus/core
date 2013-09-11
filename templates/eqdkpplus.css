@@ -191,6 +191,9 @@ ul.sf-ddm li li li.sfHover ul {
 .left {
 	text-align:left;
 }
+.displayNone{
+	display:none;
+}
 tr.cm_confirm{
 	text-decoration:line-through;
 	font-style:italic;
