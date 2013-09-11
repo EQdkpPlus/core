@@ -73,14 +73,14 @@ class addevent extends page_generic {
 		if($this->config->get('calendar_email_newraid') == 1){
 			// fetch the static data of the raid
 			$raidname		= $this->pdh->get('event', 'name', array($this->in->get('raid_eventid', 0)));
-			$raidnotes		= $this->pdh->get('calendar_events', 'notes', array($this->in->get('raid_eventid', 0)));
+			$raidnotes		= $this->pdh->get('calendar_events', 'notes', array($raidid));
 			$raiddate		= $this->time->user_date($this->time->fromformat($this->in->get('startdate'), 1), true);
 			$mailsubject	= sprintf($this->user->lang('raidevent_mail_subject_newraid'), $raidname, $raiddate);
 			$bodyvars = array(
 				'RAID_NAME'		=> $raidname,
 				'RAIDLEADER'	=> ($this->in->getArray('raidleader', 'int') > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($this->in->getArray('raidleader', 'int')))) : '',
-				'DATE'			=> $raiddate,
-				'NOTE'			=> ($raidnotes) ? nl2br($raidnotes) : '',
+				'RAID_DATE'		=> $raiddate,
+				'RAID_NOTE'		=> ($raidnotes) ? nl2br($raidnotes) : '',
 				'RAID_LINK'		=> $this->env->link.'calendar/viewcalraid.php?eventid='.$raidid,
 			);
 
