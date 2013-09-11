@@ -501,7 +501,7 @@ class import06 extends task {
 						$row['user_id'] = $this->step_data['replace_users'][$row['user_id']];
 					}
 					
-					$this->db->prepare("INSERT INTO __articles :p")->set(array(
+					$this->new[0]->prepare("INSERT INTO ".$this->new[1]."articles :p")->set(array(
 							'title' 			=> $row['news_headline'],
 							'text'				=> $message,
 							'category'			=> 2,
@@ -1647,7 +1647,7 @@ class import06 extends task {
 			$result = $this->old[0]->query($sql);
 			$i = 0;
 			if ($result){
-				$objQuery = $this->new[0]->query('INSERT INTO `__article_categories` (`name`, `alias`, `portal_layout`, `description`, `per_page`, `permissions`, `published`, `parent`, `sort_id`, `list_type`, `aggregation`, `featured_only`, `notify_on_onpublished_articles`, `social_share_buttons`, `show_childs`, `article_published_state`, `hide_header`, `sortation_type`, `featured_ontop`, `hide_on_rss`) VALUES (\'Imported Pages\', \'imported-pages\', 1, \'\', 25, \'a:5:{s:3:"rea";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"cre";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"upd";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"del";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"chs";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}}\', 1, 1, 99999999, 1, \'a:1:{i:0;i:7;}\', 0, 0, 0, 0, 1, 0, 1, 0, 0);
+				$objQuery = $this->new[0]->query('INSERT INTO `'.$this->new[1].'article_categories` (`name`, `alias`, `portal_layout`, `description`, `per_page`, `permissions`, `published`, `parent`, `sort_id`, `list_type`, `aggregation`, `featured_only`, `notify_on_onpublished_articles`, `social_share_buttons`, `show_childs`, `article_published_state`, `hide_header`, `sortation_type`, `featured_ontop`, `hide_on_rss`) VALUES (\'Imported Pages\', \'imported-pages\', 1, \'\', 25, \'a:5:{s:3:"rea";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"cre";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"upd";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"del";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}s:3:"chs";a:6:{i:1;s:2:"-1";i:2;s:2:"-1";i:3;s:2:"-1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:2:"-1";}}\', 1, 1, 99999999, 1, \'a:1:{i:0;i:7;}\', 0, 0, 0, 0, 1, 0, 1, 0, 0);
 			');
 				if ($objQuery) $category = $objQuery->insertId;
 				
@@ -1658,7 +1658,7 @@ class import06 extends task {
 						$user_id = $this->user->data['user_id'];
 					}
 					
-					$this->db->prepare("INSERT INTO __articles :p")->set(array(
+					$this->new[0]->prepare("INSERT INTO ".$this->new[1]."articles :p")->set(array(
 							'title' 			=> $row['page_title'],
 							'text'				=> htmlentities($row['page_content'], ENT_QUOTES, "UTF-8"),
 							'category'			=> $category,

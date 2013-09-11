@@ -119,7 +119,7 @@
 			//]]>
 		</script>
 	</head>
-	<body id="top" class="<!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}">
+	<body id="top" class="responsive <!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}">
 		{STATIC_HTMLCODE}
 		<!-- IF S_NORMAL_HEADER -->
 		<header>
@@ -234,7 +234,7 @@
 		<header>
 			<div id="header">
 				<div id="logoContainer" class="{T_LOGO_POSITION}">
-					<div id="logoArea">
+					<div id="logoArea" class="hiddenSmartphone">
 						<img src="{HEADER_LOGO}" alt="{MAIN_TITLE}" id="mainlogo" />
 					</div><!-- close logoArea -->
 					
@@ -258,8 +258,9 @@
 							{MAIN_MENU}
 							<div class="clear noheight">&nbsp;</div>
 						</div>
-						<div class="hiddenDesktop">
-							<select><option>Navigation</option></select>
+						<div class="hiddenDesktop mainmenu">
+							<i class="icon-list"></i>
+							{MAIN_MENU_SELECT}
 						</div>
 					</div><!-- close mainmenu -->
 					

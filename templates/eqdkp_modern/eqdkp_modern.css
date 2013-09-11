@@ -1014,7 +1014,7 @@ input[type=radio], input[type=checkbox]{
 	border-radius: 2em;
 }
 .medium, .button, input[type="submit"], input[type="button"],input[type="reset"], button {
-	font-size: 12px;
+	font-size: 13px;
 	padding: .3em 1em .32em;
 }
 .small {
@@ -3243,74 +3243,175 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 
 	
 @media all and (max-width: 480px) {
-	body, html , #personalArea{
-		font-size: 14px;
-		line-height: 15px;
+	body.responsive, html , .responsive #personalArea{
+		font-size: 13px;
+		line-height: 14px;
 	}
-	#personalArea {
-		line-height: 20px;
+	.responsive #personalArea {
+		line-height: 22px;
+		font-size: 16px;
 	}
-	.hiddenSmartphone, .debug {
+	
+	.responsive #header {
+		min-height: 10px;
+	}
+	
+	.responsive #logoContainer {
+		overflow: visible;
+	}
+	
+	.responsive .hiddenSmartphone, .responsive .debug {
 		display:none;
 	}
 	
-	.hiddenDesktop {
+	.responsive .hiddenDesktop {
 		display:block;
 	}
 	
-	#personalArea, #header, #footer {
+	.responsive .mainmenu i {
+		color: #fff;
+		font-size: 23px;
+		margin-left: 10px;
+		line-height: 23px;
+		vertical-align: middle;
+	}
+	
+	.responsive #personalArea, .responsive #header, .responsive #footer {
 		padding-right: 10px;
 		padding-left: 10px;
 	}
 	
-	#contentContainer {
+	.responsive #contentContainer {
 		margin-right: 0px;
 		margin-left: 0px;
 		margin-top: 5px;
 	}
 	
-	#personalAreaUser ul li, #titles, #titles h1, #titles h2, fieldset.settings dd, fieldset.settings dt{
+	.responsive #personalAreaUser, .responsive #titles, .responsive #titles h1, .responsive #titles h2, .responsive fieldset.settings dd, .responsive fieldset.settings dt{
 		display:block;
 		float:none;
 		margin:0px;
 		padding:0px;
 	}
 	
-	#titles h1 {
+	.responsive #titles h1 {
 		font-size: 30px;
 	}
 	
-	#titles h2 {
+	.responsive #titles h2 {
 		font-size: 20px;
 	}
 	
-	#logoArea img {
-		max-width: 100%;
-	}
-	
-	.column {
+	.responsive .column {
 		display: block;
 	}
 	
-	.portal .second, .portal .first {
+	.responsive .portal .second, .portal .first {
 		padding: 0px;
 	}
 	
-	fieldset.settings dd {
+	.responsive fieldset.settings dd {
 		border-left: none;
 		margin: 0px;
 		float:none;
 	}
 	
-	fieldset.settings dt {
+	.responsive fieldset.settings dt {
 		width: 100%;
 		border-right: none;
 		float: none;
 	}
 	
-	fieldset.settings dl:hover dt,fieldset.settings dl:hover dd{
+	.responsive fieldset.settings dl:hover dt,fieldset.settings dl:hover dd{
 		border-right: none;
 		border-left: none;
 	}
+	
+	.responsive .ui-dialog {
+		max-width: 95%;
+	}
+	
+	.responsive .breamcrumb li, .responsive .breamcrumb li a:after, .responsive .breamcrumb li a:before {
+		display: none;
+	}
+	
+	.responsive .breamcrumb li:first-child, .responsive .breamcrumb li:nth-last-of-type(2) {
+		display: inline;
+	}
+	
+	.responsive .breamcrumb li:first-child a {
+		border-right: 1px solid #ccc;
+		padding-right: 8px;
+		line-height: 27px;
+		padding-left: 8px !important;
+	}
+	
+	.responsive .breamcrumb li {
+		font-size: 14px;
+	}
+	
+	.responsive .breamcrumb li:nth-last-of-type(2) a {
+		padding-left: 22px;
+	}
+	
+	.responsive .breamcrumb li:nth-last-of-type(2) a:before {
+		content:"\f060";
+		display:inline;
+		border: none;
+		padding:0;
+		margin: 0;
+		left: 5px;
+	    margin: 0;
+	    padding: 0;
+	    top: 11px;
+	    font-family: "FontAwesome";
+	}
+	
+	.responsive .breamcrumb li:first-child a:before {
+		display: none;
+	}
+	
+	.responsive .medium, .responsive .button, .responsive input[type="submit"], .responsive input[type="button"],.responsive input[type="reset"], .responsive button, .responsive ui-dialog button {
+		font-size: 14px;
+		padding: .3em 1em .32em;
+	}
+	
+	.responsive .contentWidth60, .responsive .contentWidth30 {
+		width: auto;
+	}
+	
+	.responsive .contentSideRight {
+		float: none;
+		clear: both;
+		border: none;
+		margin-left: 0;
+		padding: 0;
+		margin-bottom: 10px;
+	}
+	
+	.article_content .cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+	.article_content * html .cf { zoom: 1; }
+	.article_content *:first-child+html .cf { zoom: 1; }
+	.article_content table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+	 
+	.article_content th,
+	.article_content td { margin: 0; vertical-align: top; }
+	.article_content th { text-align: left; }
+	.article_content table { display: block; position: relative; width: 100%; }
+	.article_content thead { display: block; float: left; }
+	.article_content tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
+	.article_content thead tr { display: block; }
+	.article_content th { display: block; text-align: right; }
+	.article_content tbody tr { display: inline-block; vertical-align: top; }
+	.article_content td { display: block; min-height: 1.25em; text-align: left; }
+	 
+	 
+	/* sort out borders */
+	 
+	.article_content th { border-bottom: 0; border-left: 0; }
+	.article_content td { border-left: 0; border-right: 0; border-bottom: 0; }
+	.article_content tbody tr { border-left: 1px solid #babcbf; }
+	.article_content th:last-child,
+	.article_content td:last-child { border-bottom: 1px solid #babcbf; }
 	
 }

@@ -47,7 +47,7 @@ class login_pageobject extends pageobject {
 					$blnShowCaptcha = true;
 				}
 				if (!$blnShowCaptcha){
-					$objQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+					$objQuery = $this->db->prepare("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
 					if($objQuery && $objQuery->numRows){
 						$arrResult = $objQuery->fetchAssoc();
 						if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
@@ -285,7 +285,7 @@ class login_pageobject extends pageobject {
 				$blnShowCaptcha = true;
 			}
 			if (!$blnShowCaptcha){
-				$objQuery = $this->db->query("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+				$objQuery = $this->db->prepare("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
 				if($objQuery && $objQuery->numRows){
 					$arrResult = $objQuery->fetchAssoc();
 					if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){

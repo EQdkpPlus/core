@@ -286,7 +286,7 @@ class core extends gen_class {
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
 					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'icon-check'));
 				} else {
-					$registerLink = $this->createLink(array('link' => 'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
+					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
 				}
 			}
 			
@@ -345,6 +345,7 @@ class core extends gen_class {
 				'USER_DATEFORMAT_SHORT'		=> $this->user->style['date_notime_short'],
 				'USER_TIMEFORMAT'			=> $this->user->style['time'],
 				'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
+				'MAIN_MENU_SELECT'			=> $this->build_menu_select(),
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
@@ -368,7 +369,7 @@ class core extends gen_class {
 			register('hooks')->process('portal', array($this->env->eqdkp_page));
 		}
 		
-		public function createLink($arrLinkData, $strCssClass = ''){
+		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){
 			$target = '';
 			if (isset($arrLinkData['target']) && strlen($arrLinkData['target'])){
 				$target = ' target="'.$arrLinkData['target'].'"';
@@ -377,7 +378,9 @@ class core extends gen_class {
 			if (isset($arrLinkData['icon']) && strlen($arrLinkData['icon'])){
 				$icon = '<i class="'.$arrLinkData['icon'].'"></i>';
 			}
-			return '<a href="' . ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']) . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
+			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
+			if ($blnHrefOnly) return $strHref;
+			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
 		}
 		
 		//Returns all possible Menu Items
@@ -509,8 +512,70 @@ class core extends gen_class {
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
 		
-		public function build_menu_select($show_hidden = true){
+		public function build_menu_select(){
+			$arrItems = $this->build_menu_array(false);
 			
+			$html  = '<select onchange="window.location=this.value"><option value="'.$this->server_path.'">Navigation</option>';
+				
+			foreach($arrItems as $k => $v){
+				if ( !is_array($v) )continue;
+			
+				if (!isset($v['childs'])){
+					if ( $this->check_url_for_permission($v)) {
+						$class = $this->clean_url($v['link']);
+						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
+						$html .= '<option value="'.$this->createLink($v, '', true).'">'.$v['text'].'</option>';
+					} else {
+						continue;
+					}
+						
+				} else {
+					if ( $this->check_url_for_permission($v)) {
+						$class = $this->clean_url($v['link']);
+						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
+						$html .= '<option value="'.$this->createLink($v, '', true).'">'.$v['text'].'</option>';
+					} else {
+						continue;
+					}
+						
+					foreach($v['childs'] as $k2 => $v2){
+						if (!isset($v2['childs'])){
+							if ( $this->check_url_for_permission($v2)) {
+								$class = $this->clean_url($v2['link']);
+								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
+								$html .= '<option value="'.$this->createLink($v2, '', true).'">&nbsp;&nbsp;&nbsp;'.$v2['text'].'</option>';
+							} else {
+								continue;
+							}
+						} else {
+							if ( $this->check_url_for_permission($v2)) {
+								$class = $this->clean_url($v2['link']);
+								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
+								$html .= '<option value="'.$this->createLink($v2, '', true).'">&nbsp;&nbsp;&nbsp;'.$v2['text'].'</option>';
+							} else {
+								continue;
+							}
+								
+							foreach($v2['childs'] as $k3 => $v3){
+								if ( $this->check_url_for_permission($v3)) {
+									$class = $this->clean_url($v3['link']);
+									if (!strlen($class)) $class = "entry_".$this->clean_url($v3['text']);
+									$html .= '<option value="'.$this->createLink($v3, '', true).'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$v3['text'].'</option>';
+								} else {
+									continue;
+								}
+							}
+								
+						}
+							
+					}
+
+				}
+			
+			}
+				
+			$html .= '</select>';
+			return $html;
 		}
 		
 		public function build_menu_ul(){
