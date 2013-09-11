@@ -1,0 +1,2 @@
+tinymce\skins\lightgraycontent.min.css: add EQdkp Plus CSS
+tinymce\plugins\bbcode\plugin.min.js: add BBCodes

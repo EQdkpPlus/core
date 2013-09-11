@@ -63,8 +63,8 @@ table {
 /* FontAwesome Icons */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('assets/fonts/FontAwesome/fontawesome-webfont.eot?v=3.2.1');
-  src: url('assets/fonts/FontAwesome/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('assets/fonts/FontAwesome/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('assets/fonts/FontAwesome/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('assets/fonts/FontAwesome/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
+  src: url('../libraries//FontAwesome/fontawesome-webfont.eot?v=3.2.1');
+  src: url('../libraries//FontAwesome/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../libraries//FontAwesome/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../libraries//FontAwesome/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../libraries//FontAwesome/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -3389,29 +3389,5 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-bottom: 10px;
 	}
 	
-	.article_content .cf:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
-	.article_content * html .cf { zoom: 1; }
-	.article_content *:first-child+html .cf { zoom: 1; }
-	.article_content table { width: 100%; border-collapse: collapse; border-spacing: 0; }
-	 
-	.article_content th,
-	.article_content td { margin: 0; vertical-align: top; }
-	.article_content th { text-align: left; }
-	.article_content table { display: block; position: relative; width: 100%; }
-	.article_content thead { display: block; float: left; }
-	.article_content tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; }
-	.article_content thead tr { display: block; }
-	.article_content th { display: block; text-align: right; }
-	.article_content tbody tr { display: inline-block; vertical-align: top; }
-	.article_content td { display: block; min-height: 1.25em; text-align: left; }
-	 
-	 
-	/* sort out borders */
-	 
-	.article_content th { border-bottom: 0; border-left: 0; }
-	.article_content td { border-left: 0; border-right: 0; border-bottom: 0; }
-	.article_content tbody tr { border-left: 1px solid #babcbf; }
-	.article_content th:last-child,
-	.article_content td:last-child { border-bottom: 1px solid #babcbf; }
 	
 }

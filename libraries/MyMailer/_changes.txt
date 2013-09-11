@@ -1,0 +1,1 @@
+2013-09-11 class.phpmailer.php: Line 44: class PHPMailer -> class PHPMailer extends gen_class

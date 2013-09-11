@@ -317,7 +317,7 @@ if(!class_exists('pdh_w_articles')) {
 				'votes_count' 		=> 0,
 				'votes_sum'			=> 0,
 				'votes_users'		=> '',
-			))->execute($id));
+			))->execute($id);
 			
 			if ($objQuery) {
 				$this->log_insert('action_article_reset_votes', array(), $id, $this->pdh->get('articles', 'title', array($id)), '', 1, 'article');

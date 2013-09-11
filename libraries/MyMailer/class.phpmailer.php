@@ -41,7 +41,7 @@ if (version_compare(PHP_VERSION, '5.0.0', '<') ) exit("Sorry, this version of PH
  * PHP email creation and transport class
  * @package PHPMailer
  */
-class PHPMailer {
+class PHPMailer extends gen_class{
 
   /////////////////////////////////////////////////
   // PROPERTIES, PUBLIC
