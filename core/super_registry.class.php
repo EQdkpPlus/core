@@ -117,6 +117,7 @@ abstract class super_registry {
 			define('CRONJOB', -2);
 			
 			//DBAL
+			if (self::$const['dbtype'] == "mysql") self::$const['dbtype'] = "mysqli";
 			include_once(self::get_const('root_path') .'libraries/dbal/dbal.class.php');
 			require_once(self::get_const('root_path') . 'libraries/dbal/' . self::$const['dbtype'] . '.dbal.class.php');
 			self::$aliases['db'] = array('dbal_'.self::$const['dbtype'], array(array('open' => true)));

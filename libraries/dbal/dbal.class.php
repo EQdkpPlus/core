@@ -26,6 +26,7 @@ class dbal{
 	public static function factory($arrOptions = array()) {	
 		$dbtype = (isset($arrOptions['dbtype'])) ? $arrOptions['dbtype'] : registry::get_const('dbtype');
 		if(empty($dbtype)) throw new DBALException('dbtype not set');
+		if ($dbtype == 'mysql') $dbtype = 'mysqli';
 		
 		require_once(registry::get_const('root_path') . 'libraries/dbal/' . $dbtype . '.dbal.class.php');
 		$classname = 'dbal_' . $dbtype;
