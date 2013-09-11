@@ -335,6 +335,7 @@ class Manage_Portal extends page_generic {
 			$this->portal->load_lang($path, $this->pdh->get('portal', 'plugin', array($id)));
 			$portalinfos = $portal_module[$path]->get_data();
 			$data['name'] = ($this->user->lang($path.'_name')) ? $this->user->lang($path.'_name') : $portalinfos['name'];
+			$data['icon'] = $portalinfos['icon'];
 			$contact = (strpos($portalinfos['contact'], '@')=== false) ? $portalinfos['contact'] : 'mailto:'.$portalinfos['contact'];
 			$data['desc'] = ($this->user->lang($path.'_desc')) ? $this->user->lang($path.'_desc') : $portalinfos['description'];
 			$data['desc'] .= "<br />".$this->user->lang('portalplugin_version').": ".$portalinfos['version']."<br />".$this->user->lang('portalplugin_author').": ".$portalinfos['author'];
@@ -348,10 +349,20 @@ class Manage_Portal extends page_generic {
 					$data['tpl_posi'] = 'later';
 				}
 			}
+
+			// Build the icon for the portal modules...
+			if($pdata['plugin']){
+				$icon = ($this->pm->get_data($pdata['plugin'], 'icon')) ? $this->pm->get_data($pdata['plugin'], 'icon') : 'icon-puzzle-piece';
+			}elseif(isset($data['icon'])){
+				$icon = $data['icon'];
+				echo 'test';
+			}else{
+				$icon = 'icon-info-sign';
+			}
 			
-			$icon = ($pdata['plugin']) ? (($this->pm->get_data($pdata['plugin'], 'icon')) ? $this->pm->get_data($pdata['plugin'], 'icon') : $this->root_path.'images/admin/plugin.png') : $this->root_path.'images/global/info.png';
-			$data['desc'] = $this->html->ToolTip($data['desc'], '<img src="'.$icon.'" alt="p" />');
-			$data['multiple'] = ($portal_module[$path]->get_multiple() && !$pdata['child']) ? true : false;
+			// start the description text
+			$data['desc']		= $this->html->ToolTip($data['desc'], $this->core->icon_font($icon, 'icon-large'));
+			$data['multiple']	= ($portal_module[$path]->get_multiple() && !$pdata['child']) ? true : false;
 			if ($portal_module[$path]->get_multiple()){
 				$portal_module[$path]->set_id($id);
 				$portal_module[$path]->output();

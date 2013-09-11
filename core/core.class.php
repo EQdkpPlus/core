@@ -914,5 +914,13 @@ class core extends gen_class {
 
 			return $iTaskCount;
 		}
+		
+		public function icon_font($icon, $size=""){
+			if(isset($icon) && pathinfo($icon, PATHINFO_EXTENSION) == 'png'){
+				return '<img src="'.$icon.'" alt="img" />';
+			}elseif(isset($icon)){
+				return '<i class="'.$icon.(($size)? ' '.$size : '').'"></i>';
+			}
+		}
 }
 ?>
