@@ -1,8 +1,8 @@
 <!-- IF S_MMODE_ACTIVE and S_IS_ADMIN -->
-<div class="bluebox roundbox">
-	<div class="icon_info">{L_MMODE_INFO}<br />
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="icon-info-sign icon-4x pull-left"></i>
+	{L_MMODE_INFO}<br />
 	<button onclick="window.location='task_manager.php{SID}&amp;disable=true'">{L_DEACTIVATE_MMODE}</button>
-	</div>
 </div>
 <br />
 <!-- ENDIF -->
@@ -15,27 +15,25 @@
 <br />
 <div class="contentWrapper">
 <!-- IF S_PFH_ERROR -->
-<div class="errorbox roundbox">
-	<div class="false">
-		<strong>{L_pfh_ERROR}</strong>
-		<ul>
-			<!-- BEGIN pfh_errors -->
-			<li>{pfh_errors.PFH_ERROR}</li>
-			<!-- END pfh_errors -->
-		</ul>
-	</div>
+<div class="infobox infobox-large infobox-red clearfix">
+	<i class="icon-warning-sign icon-4x pull-left"></i> 
+	<strong>{L_pfh_ERROR}</strong>
+	<ul>
+		<!-- BEGIN pfh_errors -->
+		<li>{pfh_errors.PFH_ERROR}</li>
+		<!-- END pfh_errors -->
+	</ul>
 </div>
-<br />
 <!-- ENDIF -->
 <!-- IF S_NEC_TASKS -->
-<div class="errorbox roundbox">
-	<div class="false">{L_NEC_TASK}</div>
+<div class="infobox infobox-large infobox-red clearfix">
+	<i class="icon-warning-sign icon-4x pull-left"></i> {L_NEC_TASK}
 </div>
-<br />
 <!-- ENDIF -->
 <!-- IF S_NO_NEC_TASKS -->
-<div class="greenbox roundbox">
-	<div class="icon_ok">{L_NO_NEC_TASK}</div>
+<div class="infobox infobox-large infobox-green clearfix">
+	<i class="icon-ok icon-4x pull-left"></i>
+	{L_NO_NEC_TASK}
 </div>
 <br />
 <!-- ENDIF -->

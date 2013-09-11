@@ -65,7 +65,7 @@ class guildImporter extends page_generic {
 	public function perform_step1(){
 		$xml = simplexml_load_string(trim($this->in->get('guildxml', '', 'raw')));
 		if (!$xml){
-			$hmtlout = '<div class="errorbox roundbox"><div class="icon_false" id="error_message_txt">'.$this->game->glang('guild_xml_error').'</div></div>';
+			$hmtlout = '<div class="infobox infobox-large infobox-red clearfix"><i class="icon-warning-sign icon-4x pull-left"></i> <span id="error_message_txt">'.$this->game->glang('guild_xml_error').'</span></div>';
 		} else {
 			//Import Ranks
 			$arrRankList = array();
@@ -114,8 +114,8 @@ class guildImporter extends page_generic {
 				$hmtlout .= "<dl><dt><label><img src=\"".$this->server_path.'images/no_pic.png'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".(string)$objMember->Name."<br/>".(($myStatus) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
 			}
 			
-			$hmtlout = "<dl><div class=\"greenbox roundbox\"><div class=\"icon_ok\" id=\"error_message_txt\">".$this->game->glang('uc_gimp_header_fnsh')."</div></div></dl>".$hmtlout;			
-			
+			$hmtlout = "<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"icon-ok icon-4x pull-left\"></i> ".$this->game->glang('uc_gimp_header_fnsh')."</div></dl>".$hmtlout;
+
 			// reset the cache
 			$this->pdh->process_hook_queue();
 		}

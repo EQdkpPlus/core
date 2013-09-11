@@ -144,8 +144,8 @@ class calendar_pageobject extends pageobject {
 		echo '<form><fieldset class="settings mediumsettings">
 					<dl>
 						<dt class="onerow">
-							<div class="bluebox roundbox">
-								<div class="icon_info">'.$this->user->lang('calendar_export_feed').'</div>
+							<div class="infobox infobox-large infobox-blue clearfix">
+								<i class="icon-info-sign icon-4x pull-left"></i> '.$this->user->lang('calendar_export_feed').'
 							</div>
 						</dt>
 					</dl>

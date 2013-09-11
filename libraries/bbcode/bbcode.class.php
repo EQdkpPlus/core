@@ -274,9 +274,9 @@ if (!class_exists("bbcode")) {
 
 			//Show error message becaue image is not available
 			$langBits = ($this->user->check_auth('a_news_', false)) ? $this->user->lang('images_not_available_admin') : $this->user->lang('images_not_available');
-			return '<div class="errorbox roundbox">
-						<div class="icon_brokenimage">'.$langBits.'</div>
-					</div>';
+			return '<div class="infobox infobox-large infobox-red clearfix">
+								<i class="icon-meh icon-4x pull-left"></i> '.$langBits.'
+							</div>';
 		}
 
 		//Parse shorttags

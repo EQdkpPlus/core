@@ -355,7 +355,6 @@ class Manage_Portal extends page_generic {
 				$icon = ($this->pm->get_data($pdata['plugin'], 'icon')) ? $this->pm->get_data($pdata['plugin'], 'icon') : 'icon-puzzle-piece';
 			}elseif(isset($data['icon'])){
 				$icon = $data['icon'];
-				echo 'test';
 			}else{
 				$icon = 'icon-info-sign';
 			}

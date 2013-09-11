@@ -7,21 +7,21 @@
 	<div class="clear"></div>
 </div>
 
-<div class="errorbox roundbox" id="lu_error" style="display:none;">
-		<div class="icon_false"><span id="lu_error_label"></span></div>
+<div class="infobox infobox-large infobox-red clearfix" id="lu_error" style="display:none;">
+	<i class="icon-warning-sign icon-4x pull-left"></i> <span id="lu_error_label"></span>
 </div>
 <!-- IF S_START -->
 	<!-- IF S_NEW_VERSION && S_REQUIREMENTS -->
-	<div class="errorbox roundbox">
-		<div class="icon_false"><b>{L_liveupdate_update_available}</b></div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-warning-sign icon-4x pull-left"></i> {L_liveupdate_update_available}
 	</div>
 	<!-- ELSEIF S_NEW_VERSION && not S_REQUIREMENTS -->
-	<div class="errorbox roundbox">
-		<div class="icon_false">{L_liveupdate_update_requirements_failed}</div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-warning-sign icon-4x pull-left"></i> {L_liveupdate_update_requirements_failed}
 	</div>
 	<!-- ELSE -->
-	<div class="greenbox roundbox">
-		<div class="icon_ok">{L_liveupdate_no_update_available}</div>
+	<div class="infobox infobox-large infobox-green clearfix">
+		<i class="icon-ok icon-4x pull-left"></i> {L_liveupdate_no_update_available}
 	</div>
 	<!-- ENDIF -->
 	<form method="post" action="{ACTION}">
@@ -64,8 +64,8 @@
 	.ui-progressbar { position:relative; height:30px;}
 	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 30px; left:5%; right:5%;}
 </style>
-<div class="bluebox roundbox" id="lu_dontclose">
-		<div class="icon_info"><strong>{L_liveupdate_dontclose}</strong></div>
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="icon-info-sign icon-4x pull-left"></i> {L_liveupdate_dontclose}
 </div>
 <br />
 <div id="nl_progressbar">
@@ -85,10 +85,10 @@
 	<!-- IF S_SHOW_5 -->
 	<form method="post" action="{ACTION}">
 		<!-- IF S_CONFLICTED_FILES -->
-		<div class="errorbox roundbox" id="lu_dontclose">
-			<div class="icon_false">{L_liveupdate_conflictedfiles_note}</div>
+		<div class="infobox infobox-large infobox-red clearfix" id="lu_dontclose">
+			<i class="icon-warning-sign icon-4x pull-left"></i> {L_liveupdate_conflictedfiles_note}
 		</div>
-		<br />
+
 		<fieldset class="settings">
 			<legend>{L_liveupdate_conflictedfiles}</legend>
 			<!-- BEGIN conflicted_row -->
@@ -123,9 +123,10 @@
 
 	<!-- IF S_SHOW_9 -->
 	<form method="post" action="{ACTION}">
-		<div class="errorbox roundbox" id="lu_dontclose">
-			<div class="icon_false">{L_liveupdate_missingfiles_note}</div>
+		<div class="infobox infobox-large infobox-red clearfix" id="lu_dontclose">
+			<i class="icon-warning-sign icon-4x pull-left"></i> {L_liveupdate_missingfiles_note}
 		</div>
+
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 			<tr>
 			  <th>{L_liveupdate_missingfiles}</th>

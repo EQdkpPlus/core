@@ -563,6 +563,49 @@ h3 {
 	margin-bottom: 5px;
 }
 
+/* general: clearfix */
+.clearfix {
+}
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.clearfix:after {
+    clear: both;
+}
+
+/* general: information boxes  NEW */
+.infobox {
+    background-color: #F5F5F5;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 19px;
+}
+
+.infobox-large {
+    border-radius: 6px 6px 6px 6px;
+    padding: 10px;
+}
+
+.infobox-blue {
+	background-color: #D9EDF7;
+    color: #3A87AD;
+}
+
+.infobox-red {
+	background-color: #F2DEDE;
+    color: #B94A48;
+}
+
+.infobox-green {
+	background-color: #DFF0D8;
+    color: #468847;
+}
+
 /* general: information boxes */
 .roundbox{
 	-webkit-border-radius: 10px; 

@@ -291,10 +291,9 @@
 						<div class="columnInner">
 							<!-- BEGIN global_warnings -->
 							<header>
-								<div class="{global_warnings.CLASS} roundbox">
-									<div class="{global_warnings.ICON}">{global_warnings.MESSAGE}</div>
+								<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
+									<i class="{global_warnings.ICON} icon-4x pull-left"></i> {global_warnings.MESSAGE}
 								</div>
-								<br />
 							</header>
 							<!-- END global_warnings -->
 							<aside id="portal-middle">
@@ -347,8 +346,8 @@
 	<div id="dialog-login" title="{L_login}">
 		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login">
 			<!-- IF S_BRIDGE_INFO -->
-			<div class="bluebox roundbox">
-				<div class="icon_info">{L_login_bridge_notice}</div>
+			<div class="infobox infobox-large infobox-blue clearfix">
+				<i class="icon-info-sign icon-4x pull-left"></i> {L_login_bridge_notice}
 			</div>
 			<!-- ENDIF -->
 			<fieldset class="settings mediumsettings">	

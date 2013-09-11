@@ -104,7 +104,7 @@ class core extends gen_class {
 		* @param		string		$title				Message title
 		* @param		string		$kind				Color Theme: red/green/default
 		*/
-		public function global_warning($message, $icon='icon_false', $class='errorbox') {
+		public function global_warning($message, $icon='icon-warning-sign ', $class='red') {
 			$this->tpl->assign_block_vars(
 				'global_warnings', array(
 					'MESSAGE'	=> $message,
@@ -221,7 +221,7 @@ class core extends gen_class {
 			}
 			
 			if ($this->config->get('pk_maintenance_mode') && $this->user->check_auth('a_', false)){
-				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'icon_maintenance');
+				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'icon-cog');
 			}
 
 			$s_in_admin		= (((defined('IN_ADMIN') ) ? IN_ADMIN : false) && ($this->user->check_auth('a_', false)) ) ? true : false;

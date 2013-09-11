@@ -63,8 +63,8 @@ function insert(text){
 	$('#mm_body').tinymce().execCommand('mceInsertContent',false,text);
 }
 </script>
-<div class="bluebox roundbox">
-	<div class="icon_info">{L_massmail_template_info}</div>
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="icon-info-sign icon-4x pull-left"></i> {L_massmail_template_info}
 </div>
 	
 <form method="post" action="{ACTION}{EVENT_ID}" name="massmail">
@@ -175,16 +175,16 @@ function success(){
 }
 </script>
 
-<div class="bluebox roundbox" id="massmail_dontclose">
-		<div class="icon_info"><strong>{L_massmail_dontclose}</strong></div>
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="icon-info-sign icon-4x pull-left"></i> <strong>{L_massmail_dontclose}</strong>
 </div>
 
-<div class="errorbox roundbox" id="massmail_error" style="display:none;">
-	<div class="icon_false">{L_massmail_error}</div>
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="icon-info-sign icon-4x pull-left"></i> {L_massmail_error}
 </div>
 
-<div class="greenbox roundbox" id="massmail_success" style="display:none;">
-	<div class="icon_ok">{L_MASSMAIL_SUCCESS}</div>
+<div class="infobox infobox-large infobox-green clearfix">
+	<i class="icon-ok icon-4x pull-left"></i> {L_MASSMAIL_SUCCESS}
 </div>
 <br /><br />
 <div id="nl_progressbar">

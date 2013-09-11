@@ -193,10 +193,10 @@
 					<div class="second column <!-- IF not THIRD_C -->no_third_column<!-- ENDIF -->">
 						<div class="columnInner">
 							<!-- BEGIN global_warnings -->
-								<div class="{global_warnings.CLASS} roundbox">
-									<div class="{global_warnings.ICON}">{global_warnings.MESSAGE}</div>
-								</div>
-								<br />
+							<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
+								<i class="{global_warnings.ICON} icon-4x pull-left"></i> {global_warnings.MESSAGE}
+							</div>
+								
 							<!-- END global_warnings -->
 
 							{NEWS_TICKER_H}

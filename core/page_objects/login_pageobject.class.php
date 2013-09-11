@@ -84,7 +84,7 @@ class login_pageobject extends pageobject {
 					default: $strErrorMessage = $strErrorCode;
 				}
 				
-				$this->core->global_warning($strErrorMessage.$this->user->lang('invalid_login_goto_admin'), 'icon_stop');
+				$this->core->global_warning($strErrorMessage.$this->user->lang('invalid_login_goto_admin'), 'icon-exclamation-sign');
 				
 				$this->display();
 				

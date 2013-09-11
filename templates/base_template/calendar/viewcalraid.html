@@ -319,29 +319,29 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	</div>
 	<!-- ELSE -->
 	<!-- IF NO_CHAR_ASSIGNED and S_LOGGED_IN -->
-	<div class="errorbox roundbox">
-		<div class="icon_char">{L_raidevent_raid_nochar}</div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-male icon-4x pull-left"></i> {L_raidevent_raid_nochar}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF RAID_CLOSED -->
-	<div class="errorbox roundbox">
-		<div class="closed">{L_raidevent_raid_closed}</div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-lock icon-4x pull-left"></i> {L_raidevent_raid_closed}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF RAID_DEADLINE -->
-	<div class="errorbox roundbox">
-		<div class="deadline">{L_raidevent_raid_deadl_reach}</div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-time icon-4x pull-left"></i> {L_raidevent_raid_deadl_reach}
 	</div>
 	<!-- ENDIF -->
 	<!-- ENDIF -->
 	<!-- IF NO_STATUSES -->
-	<div class="errorbox roundbox">
-		<div class="icon_false">{L_raidevent_raid_no_status}</div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-warning-sign icon-4x pull-left"></i> {L_raidevent_raid_no_status}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF ROLESWOCLASS -->
-	<div class="errorbox roundbox">
-		<div class="icon_false">{L_raidevent_raid_roleswoclass}</div>
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="icon-warning-sign icon-4x pull-left"></i> {L_raidevent_raid_roleswoclass}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF IS_OPERATOR -->
