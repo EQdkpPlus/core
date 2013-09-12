@@ -419,7 +419,7 @@ class Register extends page_generic {
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$this->tpl->assign_vars(array(
-				'CAPTCHA'				=> $captcha->recaptcha_get_html($this->config->get('lib_recaptcha_okey')),
+				'CAPTCHA'				=> $captcha->recaptcha_get_html($this->config->get('lib_recaptcha_okey'), null, (register('environment')->ssl)),
 				'S_DISPLAY_CATPCHA'		=> true,
 			));
 		}

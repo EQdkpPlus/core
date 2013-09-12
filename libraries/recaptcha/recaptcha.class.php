@@ -39,9 +39,9 @@ if ( !defined('EQDKP_INC') ){
 /**
  * The reCAPTCHA server URL's
  */
-define("RECAPTCHA_API_SERVER",			"http://api.recaptcha.net");
-define("RECAPTCHA_API_SECURE_SERVER",	"https://api-secure.recaptcha.net");
-define("RECAPTCHA_VERIFY_SERVER",		"api-verify.recaptcha.net");
+define("RECAPTCHA_API_SERVER", "http://www.google.com/recaptcha/api");
+define("RECAPTCHA_API_SECURE_SERVER", "https://www.google.com/recaptcha/api");
+define("RECAPTCHA_VERIFY_SERVER", "www.google.com");
 
 
 /**
@@ -170,7 +170,7 @@ if (!class_exists("recaptcha")) {
 				return $recaptcha_response;
 			}
 
-			$response = $this->_recaptcha_http_post (RECAPTCHA_VERIFY_SERVER, "/verify",
+			$response = $this->_recaptcha_http_post (RECAPTCHA_VERIFY_SERVER, "/recaptcha/api/verify",
 				array (
 					'privatekey'	=> $privkey,
 					'remoteip'		=> $remoteip,
