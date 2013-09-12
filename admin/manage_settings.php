@@ -137,7 +137,7 @@ class mmocms_settings extends page_generic {
 			$pages = array_merge_recursive( $pages, $this->pdh->get('pages', 'startpage_list', array()));
 		}
 		foreach($pages as $page){
-			$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $page['link']);
+			$link = preg_replace('#\?s\=([0-9A-Za-z]{1,40})?#', '', $page['link']);
 			$link = preg_replace('#\.php&amp;#', '.php?', $link);
 			$link = preg_replace('#\.php&#', '.php?', $link);
 			$text = ( isset($this->user->data['username']) ) ? str_replace($this->user->data['username'], $this->user->lang('username'), $page['text']) : $page['text'];
