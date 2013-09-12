@@ -597,14 +597,13 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		if (is_array($this->pm->get_menus('settings'))){
 			foreach ($this->pm->get_menus('settings') as $plugin => $values){
 				$name	= ($values['name']) ? $values['name'] : $this->user->lang($plugin);
-				$icon	= ($values['icon']) ? $values['icon'] : $this->root_path.'images/admin/plugin.png';
-				unset($values['name'], $values['icon']);
 
 				$this->tpl->assign_block_vars('plugin_settings_row', array(
 					'KEY'		=> $plugin,
 					'PLUGIN'	=> $name,
-					'ICON'		=> $icon,
+					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'icon-puzzle-piece', 'icon-large', $image_path),
 				));
+				unset($values['name'], $values['icon']);
 				$this->tpl->assign_block_vars('plugin_usersettings_div', array(
 					'KEY'		=> $plugin,
 					'PLUGIN'	=> $name,
@@ -701,7 +700,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 					'username'	=> array(
 						'fieldtype'	=> 'text',
 						'name'	=> 'username',
-						'text'	=> '<img id="tick_username" src="'.$this->root_path.'images/register/tick.png" style="display:none;" width="16" height="16" alt="" />',
+						'text'	=> '<i class="icon-ok icon-large icon-color-green" id="tick_username" style="display: none;"></i>',
 						'size'		=> 40,
 						'required'	=> true,
 						'id'	=> 'username',

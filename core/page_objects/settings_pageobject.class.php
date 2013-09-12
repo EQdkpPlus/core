@@ -219,7 +219,7 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'username',
 						'help'	=> ($this->config->get('pk_disable_username_change') == 1) ? $this->user->lang('register_help_disabled_username') : '',
 						'readonly'	=> ($this->config->get('pk_disable_username_change') == 1) ? true : false,
-						'text'	=> '<img id="tick_username" src="'.$this->server_path.'images/register/tick.png" style="display:none;" width="16" height="16" alt="" />',
+						'text'	=> '<i class="icon-ok icon-large icon-color-green" id="tick_username" style="display: none;"></i>',
 						'size'		=> 40,
 						'required'	=> true,
 						'id'	=> 'username',
@@ -629,13 +629,13 @@ class settings_pageobject extends pageobject {
 		if (is_array($this->pm->get_menus('settings'))){
 			foreach ($this->pm->get_menus('settings') as $plugin => $values){
 				$name = ($values['name']) ? $values['name'] : $this->user->lang($plugin);
-				$icon = ($values['icon']) ? $values['icon'] : $this->server_path.'images/admin/plugin.png';
-				unset($values['name'], $values['icon']);
+
 				$this->tpl->assign_block_vars('plugin_settings_row', array(
 					'KEY'		=> $plugin,
 					'PLUGIN'	=> $name,
-					'ICON'		=> $icon,
+					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'icon-puzzle-piece', 'icon-large', $image_path),
 				));
+				unset($values['name'], $values['icon']);
 				$this->tpl->assign_block_vars('plugin_usersettings_div', array(
 					'KEY'		=> $plugin,
 					'PLUGIN'	=> $name,

@@ -43,7 +43,7 @@ $module_lang = array(
 	'summed_up'					=> 'Gesamt',
 	'char_defrole'				=> 'Standardrolle',
 	'member_menu'				=> '',
-	'mainchar_radio'			=> '<img src="images//admin/favorites.png" alt="Mainchar" title="Mainchar" />',
+	'mainchar_radio'			=> '<i class="icon-star icon-large not-sortable" title="Mainchar"></i>',
 	'name_decorated'			=> 'Charaktername',
 	'memberlink_decorated'		=> 'Charaktername',
 	'last_update'				=> 'Letzte Aktualisierung',

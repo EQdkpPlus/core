@@ -113,7 +113,7 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		private function facebook_share($urlToShare, $text, $height){
-			$html = '<a href="https://www.facebook.com/sharer.php?t='.rawurlencode($text).'&amp;u='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=500,height=350,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_facebook_share').'"><img src="'.$this->root_path.'images/logos/facebook_icon_16.png" alt="Facebook" /></a>';
+			$html = '<a href="https://www.facebook.com/sharer.php?t='.rawurlencode($text).'&amp;u='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=500,height=350,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_facebook_share').'"><span class="icon-stack" style="font-size: 12px;"><i class="icon-check-empty icon-stack-base"></i><i class="icon-facebook"></i></span></a>';
 			return $html;
 		}
 		
@@ -123,7 +123,7 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		private function twitter_share($urlToShare, $text, $height){
-			$html = '<a href="https://twitter.com/share?text='.rawurlencode($text).'&amp;url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=570,height=370,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_twitter_share').'"><img src="'.$this->root_path.'images/logos/twitter_icon_16.png" alt="Twitter" /></a>';
+			$html = '<a href="https://twitter.com/share?text='.rawurlencode($text).'&amp;url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=570,height=370,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_twitter_share').'"><span class="icon-stack" style="font-size: 12px;"><i class="icon-check-empty icon-stack-base"></i><i class="icon-twitter"></i></span></a>';
 			return $html;
 		}
 		

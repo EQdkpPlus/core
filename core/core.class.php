@@ -920,6 +920,8 @@ class core extends gen_class {
 				return '<img src="'.$pathext.$icon.'" alt="img" />';
 			}elseif(isset($icon)){
 				return '<i class="'.$icon.(($size)? ' '.$size : '').'"></i>';
+			}else{
+				return '';
 			}
 		}
 }

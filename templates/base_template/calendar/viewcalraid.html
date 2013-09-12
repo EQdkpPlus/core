@@ -175,7 +175,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	attoutput = '';
 	$.each(arrAttendees, function(i, item) {
 		checkbox_checked	= (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
-		filter_applied		= (typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) ? ' class="displayNone"' : '';
+		filter_applied		= (typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) ? '  style="display: none;"' : '';
 		
 		attoutput += '<div id="unsigened_'+item.id+'"'+filter_applied+'>';
 		attoutput += '<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="'+item.id+'" id="member'+item.id+'" title="'+item.userid+'" class="notsigned_check" '+checkbox_checked+' /> <!-- ENDIF -->';

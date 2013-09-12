@@ -211,7 +211,7 @@ $(document).ready(function(){
 
 		<ul>
 			<!-- BEGIN tabs --> <li><a href='#fragment-{tabs.ID}'><span>{tabs.NAME}</span></a></li><!-- END tabs -->
-			<!-- BEGIN plugin_settings_row --><li><a href='#{plugin_settings_row.KEY}'><img src="{plugin_settings_row.ICON}" alt="Icon" />{plugin_settings_row.PLUGIN}</a></li><!-- END plugin_settings_row -->
+			<!-- BEGIN plugin_settings_row --><li><a href='#{plugin_settings_row.KEY}'>{plugin_settings_row.ICON} {plugin_settings_row.PLUGIN}</a></li><!-- END plugin_settings_row -->
 			<!-- IF S_SETTING_ADMIN -->
 			<li><a href='#permissions'>{L_permissions}</a></li>
 			<li><a href='#members'>{L_associated_members}</a></li>
