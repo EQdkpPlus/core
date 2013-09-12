@@ -419,7 +419,7 @@ class Manage_Menus extends page_generic {
 			if ($blnPluslink){
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
 				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));
-				$html .= '<i class="icon-cog"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
+				$html .= '<i class="icon-pencil"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
 					<i class="icon-trash icon-large hand" onclick="delete_plink('.$plinkid.', this)" title="'.$this->user->lang("delete").'"></i>
 					<input type="hidden" value="'.$arrPluslinkData['url'].'"  name="mainmenu['.$id.'][url]" class="link-url">
 					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">

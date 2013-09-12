@@ -180,19 +180,24 @@ class register_pageobject extends pageobject {
 				}
 			}
 		}
-
+			
+		$title = '';
+		
 		if ($this->config->get('account_activation') == 1) {
 			$success_message = sprintf($this->user->lang('register_activation_self'), $this->in->get('user_email'));
 			$email_template = 'register_activation_self';
 			$email_subject	= $this->user->lang('email_subject_activation_self');
+			$title = $this->user->lang('email_subject_activation_self');
 		} elseif ($this->config->get('account_activation') == 2) {
 			$success_message = sprintf($this->user->lang('register_activation_admin'), $this->in->get('user_email'));
 			$email_template = 'register_activation_admin';
 			$email_subject	= $this->user->lang('email_subject_activation_admin');
+			$title = $this->user->lang('email_subject_activation_admin');
 		} else {
-			$success_message = sprintf($this->user->lang('register_activation_none'), '<a href="login.php'.$this->SID.'">', '</a>', $this->in->get('user_email'));
+			$success_message = sprintf($this->user->lang('register_activation_none'), '<a href="'.$this->controller_path.'Login/'.$this->SID.'">', '</a>', $this->in->get('user_email'));
 			$email_template = 'register_activation_none';
 			$email_subject	= $this->user->lang('email_subject_activation_none');
+			$title = $this->user->lang('success');
 		}
 
 		// Email a notice
@@ -205,6 +210,7 @@ class register_pageobject extends pageobject {
 		);
 		if(!$this->email->SendMailFromAdmin($this->in->get('user_email'), $email_subject, $email_template.'.html', $bodyvars)){
 			$success_message = $this->user->lang('email_subject_send_error');
+			
 		}
 
 		// Now email the admin if we need to
@@ -216,9 +222,10 @@ class register_pageobject extends pageobject {
 			);
 			if(!$this->email->SendMailFromAdmin(register('encrypt')->decrypt($this->config->get('admin_email')), $this->user->lang('email_subject_activation_admin_act'), 'register_activation_admin_activate.html', $bodyvars)){
 				$success_message = $this->user->lang('email_subject_send_error');
+				$title = '';
 			}
 		}
-		message_die($success_message);
+		message_die($success_message, $title);
 	}
 
 	public function display_resend_activation_mail(){

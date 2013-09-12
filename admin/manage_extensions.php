@@ -639,7 +639,7 @@ class Manage_Extensions extends page_generic {
 				if (in_array($extension['plugin'], $arrGames)) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" ><i class="icon-download icon-large"></i> '.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" ><i class="icon-download-alt icon-large"></i> '.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),

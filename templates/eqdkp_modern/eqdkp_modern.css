@@ -842,13 +842,6 @@ h3 {
 	float:right;
 	padding-right: 5px;
 }
-.portal_fe_edit img {
-	display:none;
-}
-.portal_fe_edit:after {
-	content:"\f013";
-	font-family: FontAwesome;
-}
 
 .confirmdialog{
 	text-align:left;
