@@ -333,16 +333,16 @@ class Manage_Extensions extends page_generic {
 				'CONTACT'			=> ( !empty($contact) ) ? ( !empty($author) ) ? '<a href="mailto:' . $contact . '">' . $author . '</a>' : '<a href="mailto:' . $contact . '">' . $contact . '</a>'  : $author,
 				'DESCRIPTION'		=> ( !empty($description) ) ? $description : '&nbsp;',
 
-				'LONG_DESCRIPTION'	=> $this->html->ToolTip($long_description,toggleIcons($long_description,'help.png','help_off.png','images/glyphs/',$this->user->lang('description'),false, false)),
-				'HOMEPAGE'			=> $this->html->ToolTip($this->user->lang('homepage'),toggleIcons($homepagelink,'browser.png','browser_off.png','images/glyphs/',$this->user->lang('homepage'),$homepagelink, false)),
-				'MANUAL'			=> $this->html->ToolTip($this->user->lang('manual'),toggleIcons($manuallink,'acroread.png','acroread_off.png','images/glyphs/',$this->user->lang('manual'),$manuallink, false)),
+				'LONG_DESCRIPTION'	=> $this->html->ToolTip($long_description, (($long_description !="") ? '<i class="icon-info-sign icon-large"></i>' : '')),
+				'HOMEPAGE'			=> $this->html->ToolTip($this->user->lang('homepage'),  (($homepagelink !="") ? '<a href="'.$homepagelink.'" target="_blank" rel="nofollow"><i class="icon-globe icon-large"></i></a>' : '')),
+				'MANUAL'			=> $this->html->ToolTip($this->user->lang('manual'),(($manuallink !="") ? '<a href="'.$manuallink.'" target="_blank" rel="nofollow"><i class="icon-question-sign icon-large"></i></a>' : '')),
 				'ACTION_LINK'		=> $link,
 			));
 
 			foreach($dep as $key => $depdata) {
 				$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
 				$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-					'DEPENDENCY_STATUS' => $this->html->ToolTip($tt, toggleIcons($depdata, 'status_green.png','status_red.png','images/glyphs/').' '.$this->user->lang('plug_dep_'.$key.'_short'))
+					'DEPENDENCY_STATUS' => $this->html->ToolTip($tt, (($depdata)? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>').' '.$this->user->lang('plug_dep_'.$key.'_short'))
 				));
 			}
 		}
@@ -370,7 +370,7 @@ class Manage_Extensions extends page_generic {
 					$tt = $this->user->lang('plug_dep_'.$key);
 
 					$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-						'DEPENDENCY_STATUS' => (($depdata === 'skip') ? '&nbsp;' : $this->html->ToolTip($tt, toggleIcons($depdata, 'status_green.png','status_red.png','images/glyphs/').' '.$this->user->lang('plug_dep_'.$key.'_short'))),
+						'DEPENDENCY_STATUS' => (($depdata === 'skip') ? '&nbsp;' : $this->html->ToolTip($tt, (($depdata)? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>').' '.$this->user->lang('plug_dep_'.$key.'_short'))),
 					));
 				}
 			}

@@ -473,9 +473,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_html_active($member_id){
 			if($this->get_active($member_id) == 0){
-				return '<img src="'.$this->server_path.'images/glyphs/status_red.png" alt="i" />';
+				return '<i class="eqdkp-icon-offline"></i>';
 			}else{
-				return '<img src="'.$this->server_path.'images/glyphs/status_green.png" alt="a" />';
+				return '<i class="eqdkp-icon-online"></i>';
 			}
 		}
 

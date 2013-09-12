@@ -480,3 +480,33 @@ i.mce-i-readmore:before{
 	content:"\f078";
 	font-family:'FontAwesome';
 }
+
+i.eqdkp-icon-online {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: #32CD32;
+  font-size: 12px;
+  
+  border-radius: 50%;
+  box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
+  background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+  background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
+  background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+  background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+}
+
+i.eqdkp-icon-offline {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: #E80000;
+  font-size: 12px;
+  
+  border-radius: 50%;
+  box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
+  background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+  background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
+  background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+  background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+}

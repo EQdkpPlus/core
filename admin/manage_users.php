@@ -291,12 +291,12 @@ class Manage_Users extends page_generic {
 				continue;
 			}
 			if($k >= ($start+100)) break;
-			$user_online = (in_array($user_id, $online_users)) ? "<img src='../images/glyphs/status_green.png' alt='' />" : "<img src='../images/glyphs/status_red.png' alt='' />";
+			$user_online = (in_array($user_id, $online_users)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 			if($this->pdh->get('user', 'active', array($user_id))) {
-				$user_active = "<img src='../images/glyphs/status_green.png' alt='' />";
+				$user_active = '<i class="icon-circle online absmiddle"></i>';
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=deactivate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('deactivate').'"><img src="'.$this->root_path.'images/glyphs/disable.png" alt="" /></a>';
 			} else {
-				$user_active = "<img src='../images/glyphs/status_red.png' alt='' />";
+				$user_active = '<i class="icon-circle offline absmiddle"></i>';
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><img src="'.$this->root_path.'images/glyphs/enable.png" alt="" /></a>';
 			}
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
