@@ -347,15 +347,15 @@ function hide_update_warning(status){
 		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
 			<td width="10" class="nowrap">{styles_row_green.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
-			  <a href="{styles_row_green.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_green.ENABLE}.png" width="16" height="16" title="{styles_row_green.L_ENABLE}" alt="{styles_row_green.L_ENABLE}" /></a>  
+			  <a href="{styles_row_green.U_ENABLE}"><i class="{styles_row_green.ENABLE} icon-large"></i></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="icon-save icon-large"></i></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="icon-refresh icon-large"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>

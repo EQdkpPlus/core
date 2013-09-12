@@ -510,3 +510,10 @@ i.eqdkp-icon-offline {
   background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
   background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
+
+i.icon-color-green{
+	color: green;
+}
+i.icon-color-red{
+	color: red;
+}
