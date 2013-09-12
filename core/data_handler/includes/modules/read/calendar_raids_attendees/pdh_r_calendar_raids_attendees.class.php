@@ -208,7 +208,14 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			if($memberdata['member_id'] > 0){
 				$memberstatus = $this->pdh->get('calendar_raids_attendees', 'status', array($eventid, $memberdata['member_id']));
 				if($memberstatus == 0 || $memberstatus == 1 || $memberstatus == 2 || $memberstatus == 3){
-					return '<img src="'.$this->server_path.'images/calendar/status/status'.$memberstatus.'.png" alt="'.$this->user->lang(array('raidevent_raid_status', $memberstatus)).'" title="'.$this->user->lang(array('raidevent_raid_status', $memberstatus)).'" />';
+					switch($memberstatus){
+						case 0: $flagcolor	= 'icon-color-green';break;
+						case 1: $flagcolor	= 'icon-color-yellow';break;
+						case 2: $flagcolor	= 'icon-color-red';break;
+						case 3: $flagcolor	= 'icon-color-purple';break;
+						case 5: $flagcolor	= 'icon-color-blue';break;
+					}
+					return '<i class="icon-flag '.$flagcolor.' icon-large"></i>';
 				}
 			}
 		}

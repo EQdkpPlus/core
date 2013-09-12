@@ -230,8 +230,8 @@ if(!class_exists('pdh_r_adjustment')){
 
 		public function get_editicon($adj_id, $baseurl, $url_suffix='') {
 			return "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>
-			<img src='".$this->server_path."images/glyphs/edit.png' alt='".$this->user->lang('edit')."' title='".$this->user->lang('edit')."' />
-			</a>";
+						<i class='icon-pencil icon-large' title='".$this->user->lang('edit')."'></i>
+					</a>";
 		}
 
 		public function get_m4agk4a($adj_id) {

@@ -544,7 +544,7 @@ class Manage_Extensions extends page_generic {
 				}
 				//Add Reinstall Link if no update available
 				if($row == 'green') {
-					$link = '<img src="'.$this->root_path.'images/global/update.png" alt="'.$this->user->lang('reinstall').'" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;" />';
+					$link = '<i class="icon-retweet icon-large" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
 				}
 
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
@@ -610,11 +610,11 @@ class Manage_Extensions extends page_generic {
 				$plugin_code = $value;
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');"><i class="icon-refresh icon-large"></i> '.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[7]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
-					$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');"><i class="icon-refresh icon-large"></i> '.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[7]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -639,7 +639,7 @@ class Manage_Extensions extends page_generic {
 				if (in_array($extension['plugin'], $arrGames)) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" ><i class="icon-download icon-large"></i> '.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),

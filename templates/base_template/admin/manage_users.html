@@ -43,11 +43,11 @@
 		<!-- BEGIN users_row -->
 		<tr>
 			<td width="25" align="center" class="nowrap"><!-- IF not users_row.PROTECT_SUPERADMIN --><input type="checkbox" name="user_id[]" value="{users_row.USER_ID}" id="user_id_{users_row.USER_ID}"/><!-- ENDIF --></td>
-			<td width="20"><a href="{users_row.U_MANAGE_USER}" title="{L_edit}"><img src="{EQDKP_IMAGE_PATH}glyphs/edit.png" border="0" alt="edit" /></a></td>
-			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><img src="{EQDKP_IMAGE_PATH}glyphs/userpermissions.png" border="0" alt="" /></a><!-- ENDIF --></td>
+			<td width="20"><a href="{users_row.U_MANAGE_USER}" title="{L_edit}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a></td>
+			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><i class="icon-user icon-large"></i></a><!-- ENDIF --></td>
 			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->{users_row.ACTIVATE_ICON}<!-- ENDIF --></td>
 			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->
-				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><img src="{EQDKP_IMAGE_PATH}global/delete.png" border="0" alt="" /></a>    	<!-- ENDIF -->
+				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><i class="icon-trash icon-large"></i></a>    	<!-- ENDIF -->
 			</td>
 			<td width="5">{users_row.ADMIN_ICON}</td>
 			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>

@@ -148,7 +148,7 @@ class Manage_Menus extends page_generic {
 							var content = $(ui.item).html();
 							var Oclass = $(ui.item).attr(\'class\');
 							var Oid = $(ui.item).attr(\'id\');
-							$(ui.item).html(content + \'   <img class="delete" src="../images/global/delete.png" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16" alt="" />\');
+							$(ui.item).html(content + \'  <i class="icon-trash icon-large not-sortable hand" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();"></i>\');
 							document.getElementById("cb_"+Oid).checked = true;
 						}
 
@@ -214,13 +214,10 @@ class Manage_Menus extends page_generic {
 							$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $adm['link']);
 							$compare_array[] = $link;
 							if ($adm['link']){
-								$caticon	= '<img src="'.((!isset($adm['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$adm['img']).'" alt="img" />';
-								$caticon	= (isset($adm['icon'])) ? '<i class="'.$adm['icon'].'"></i>' : $caticon;
-								
 								$this->tpl->assign_block_vars('fav_row', array(
 									'NAME' => $adm['text'],
 									'ID'	=> 'fav_'.$fav_key,
-									'ICON' => $caticon,
+									'ICON' => $this->core->icon_font((isset($adm['icon'])) ? $adm['icon'] : ((isset($adm['img']) ? $adm['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path),
 									'DATA'	=> $fav,
 									'IDENT'	=> 'i'.md5($latest['name']),
 									'GROUP'	=> $latest['name'],	
@@ -246,11 +243,9 @@ class Manage_Menus extends page_generic {
 					
 					$ident = 'i'.md5($v['name']);
 					$this->jquery->Collapse('#container_'.$ident);
-					$caticon	= '<img src="'.((!isset($v['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$v['img']).'" alt="img" />';
-					$caticon	= (isset($v['icon'])) ? '<i class="'.$v['icon'].'"></i>' : $caticon;
-					
+
 					$this->tpl->assign_block_vars('group_row.menu_row', array(
-						'NAME' => $caticon.' '.$v['name'],
+						'NAME' => $this->core->icon_font((isset($v['icon'])) ? $v['icon'] : ((isset($v['img']) ? $v['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path).' '.$v['name'],
 						'GROUP'	=> $v['name'],
 						'IDENT'	=> $ident,
 					));
@@ -271,7 +266,7 @@ class Manage_Menus extends page_generic {
 								$ident = 'i'.md5($row['name']);
 								$this->jquery->Collapse('#container_'.$ident);
 								$this->tpl->assign_block_vars('group_row.menu_row', array(
-									'NAME' => '<img src="'.((isset($row['icon'])) ? $image_path.$row['icon'] : $image_path.'plugin.png').'" alt="" /> '.$row['name'],
+									'NAME' => $this->core->icon_font(((isset($row['icon'])) ? $row['icon'] : 'icon-puzzle-piece'), 'icon-large', $image_path).' '.$row['name'],
 									'GROUP'	=> $row['name'],
 									'IDENT'	=> $ident,
 								));
@@ -285,13 +280,10 @@ class Manage_Menus extends page_generic {
 
 											$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $row2['link']);
 											if (!in_array($link, $compare_array)){
-												$caticon	= '<img src="'.((!isset($row2['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$row2['img']).'" alt="img" />';
-												$caticon	= (isset($row2['icon'])) ? '<i class="'.$row2['icon'].'"></i>' : $caticon;
-												
 												$this->tpl->assign_block_vars('group_row.menu_row.item_row', array(
-													'NAME' => $row2['text'],
+													'NAME'	=> $row2['text'],
 													'ID'	=> 'l'.md5($link),
-													'ICON' => $caticon,
+													'ICON'	=> $this->core->icon_font((isset($row2['icon'])) ? $row2['icon'] : ((isset($row2['img']) ? $row2['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path),
 													'DATA'	=> $k.'|'.$k2.'|'.$k3,
 												));
 											}
@@ -302,13 +294,10 @@ class Manage_Menus extends page_generic {
 
 								$link = preg_replace('#\?s\=([0-9A-Za-z]{1,32})?#', '', $row['link']);
 								if (!in_array($link, $compare_array)){
-									$caticon	= '<img src="'.((!isset($row['img'])) ? (($nodefimage) ? '' : $image_path.'plugin.png') : $image_path.$row['img']).'" alt="img" />';
-									$caticon	= (isset($row['icon'])) ? '<i class="'.$row['icon'].'"></i>' : $caticon;
-									
 									$this->tpl->assign_block_vars('group_row.menu_row.item_row', array(
-										'NAME' => $row['text'],
+										'NAME'	=> $row['text'],
 										'ID'	=> 'l'.md5($link),
-										'ICON' => $caticon,
+										'ICON'	=> $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path),
 										'DATA'	=> $k.'|'.$k2,
 									));
 								}
@@ -431,7 +420,7 @@ class Manage_Menus extends page_generic {
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
 				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));
 				$html .= '<i class="icon-cog"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
-					<img src="'.$this->root_path.'images/global/delete.png" onclick="delete_plink('.$plinkid.', this)" alt="" title="'.$this->user->lang("delete").'" style="cursor:pointer;"/>
+					<i class="icon-trash icon-large hand" onclick="delete_plink('.$plinkid.', this)" title="'.$this->user->lang("delete").'"></i>
 					<input type="hidden" value="'.$arrPluslinkData['url'].'"  name="mainmenu['.$id.'][url]" class="link-url">
 					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">
 					<input type="hidden" value="'.$arrPluslinkData['window'].'"  name="mainmenu['.$id.'][window]" class="link-window">

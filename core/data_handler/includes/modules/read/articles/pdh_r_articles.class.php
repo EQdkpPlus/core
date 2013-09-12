@@ -370,7 +370,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 		
 		public function get_editicon($intArticleID){
-			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="edit"/></a>';
+			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><i class="icon-pencil icon-large" title="'.$this->user->lang('edit').'"></i></a>';
 		}
 		
 		public function get_check_alias($strAlias, $blnCheckCategory=false){

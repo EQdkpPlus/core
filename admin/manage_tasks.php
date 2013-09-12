@@ -184,14 +184,14 @@ class ManageTasks extends page_generic {
 			0 => array(
 					'name'	=> $this->user->lang('activate_user'),
 					'type'	=> 'button', //link, button, javascript
-					'img'	=> 'images/glyphs/enable.png',
+					'icon'	=> 'icon-ok',
 					'perm'	=> true,
 					'link'	=> '#activateUserTrigger',
 			),
 			1 => array(
 					'name'	=> $this->user->lang('delete'),
 					'type'	=> 'button', //link, button, javascript
-					'img'	=> 'images/global/delete.png',
+					'icon'	=> 'icon-trash',
 					'perm'	=> true,
 					'link'	=> '#deleteUserTrigger',
 			),	
@@ -201,14 +201,14 @@ class ManageTasks extends page_generic {
 			0 => array(
 					'name'	=> $this->user->lang('delete'),
 					'type'	=> 'button', //link, button, javascript
-					'img'	=> 'images/global/delete.png',
+					'icon'	=> 'icon-trash',
 					'perm'	=> true,
 					'link'	=> '#deleteCharsTrigger',
 			),
 			1 => array(
 					'name'	=> $this->user->lang('uc_rewoke_char'),
 					'type'	=> 'button', //link, button, javascript
-					'img'	=> 'images/global/update.png',
+					'icon'	=> 'icon-refresh',
 					'perm'	=> true,
 					'link'	=> '#revokeCharsTrigger',
 			),
@@ -219,14 +219,14 @@ class ManageTasks extends page_generic {
 			0 => array(
 					'name'	=> $this->user->lang('uc_confirm_char'),
 					'type'	=> 'button', //link, button, javascript
-					'img'	=> 'images/glyphs/ok.png',
+					'icon'	=> 'icon-ok',
 					'perm'	=> true,
 					'link'	=> '#confirmCharsTrigger',
 			),
 			1 => array(
 					'name'	=> $this->user->lang('delete'),
 					'type'	=> 'button', //link, button, javascript
-					'img'	=> 'images/global/delete.png',
+					'icon'	=> 'icon-trash',
 					'perm'	=> true,
 					'link'	=> '#deleteConfirmCharsTrigger',
 			),

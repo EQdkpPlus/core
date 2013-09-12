@@ -621,7 +621,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_editbutton($id){
-			return '<span onclick="EditChar('.$id.')" class="hand"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="Edit" width="16" height="16" border="0" /></span>';
+			return '<span onclick="EditChar('.$id.')" class="hand"><i class="icon-pencil icon-large" title="'.$this->user->lang('edit').'"></i></span>';
 		}
 
 		public function get_delete_requested(){

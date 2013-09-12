@@ -915,9 +915,9 @@ class core extends gen_class {
 			return $iTaskCount;
 		}
 		
-		public function icon_font($icon, $size=""){
+		public function icon_font($icon, $size="", $pathext=""){
 			if(isset($icon) && pathinfo($icon, PATHINFO_EXTENSION) == 'png'){
-				return '<img src="'.$icon.'" alt="img" />';
+				return '<img src="'.$pathext.$icon.'" alt="img" />';
 			}elseif(isset($icon)){
 				return '<i class="'.$icon.(($size)? ' '.$size : '').'"></i>';
 			}

@@ -264,7 +264,7 @@ if(!class_exists('pdh_r_raid')){
 
 		public function get_editicon($raid_id, $base_url, $url_suffix = ''){
 			return '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix).'">
-			<img src="'.$this->root_path.'images/glyphs/edit.png" alt="'.$this->user->lang('edit').'" title="'.$this->user->lang('edit').'" />
+				<i class="icon-pencil icon-large" title="'.$this->user->lang('edit').'"></i>
 			</a>';
 		}
 

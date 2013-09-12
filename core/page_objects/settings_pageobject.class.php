@@ -541,7 +541,7 @@ class settings_pageobject extends pageobject {
 					$auth_array['registration_information']['auth_accounts'] = array(
 						'auth_account_'.$method	=> array(
 							'name'	=> ($this->user->lang('login_'.$method)) ? $this->user->lang('login_'.$method) : ucfirst($method),
-							'text'	=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><img src="'.$this->server_path.'images/global/delete.png" alt="Delete" /></a>',
+							'text'	=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="icon-trash icon-large" title="{L_delte}"></i></a>',
 							'help'	=> 'auth_accounts_help',
 						),
 					);

@@ -500,7 +500,8 @@ if (!class_exists("jquery")) {
 						<ul><div class="clear"></div>';
 			foreach($menuitems as $key=>$value){
 				if($value['perm']){
-					$dmimg = ($value['img']) ? '<img src="'.$this->root_path.$imagepath.'/'.$value['img'].'" alt="" />' : '';
+					
+					$dmimg = ($value['icon']) ? $this->core->icon_font($value['icon'], 'icon-large', $this->root_path.$imagepath.'/') : '';
 					switch($value['type']){
 						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 						break;

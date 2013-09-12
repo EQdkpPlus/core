@@ -134,9 +134,7 @@ if(!class_exists('pdh_r_event')){
 		}
 
 		public function get_editicon($event_id, $baseurl, $url_suffix=''){
-			return "<a href='".$this->get_eventlink($event_id, $baseurl, $url_suffix)."'>
-				<img src='".$this->root_path."images/glyphs/edit.png' alt='".$this->user->lang('edit')."' title='".$this->user->lang('edit')."' />
-				</a>";
+			return "<a href='".$this->get_eventlink($event_id, $baseurl, $url_suffix)."'><i class='icon-pencil icon-large' title='".$this->user->lang('edit')."'></i></a>";
 		}
 
 		public function get_itempools($event_id){

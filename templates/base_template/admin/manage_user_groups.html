@@ -103,7 +103,7 @@
 			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><img src="{EQDKP_IMAGE_PATH}glyphs/groups.png" border="0" alt="" /></a></td>
 			<td align="center">
 				<!-- IF user_groups.S_DELETABLE -->
-				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><img src="{EQDKP_IMAGE_PATH}global/delete.png" border="0" alt="" /></a>
+				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><i class="icon-trash icon-large" title="{L_delete}"></i></a>
 				<!-- ENDIF -->
 			</td>
 			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>    

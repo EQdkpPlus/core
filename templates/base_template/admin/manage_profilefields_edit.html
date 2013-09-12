@@ -10,7 +10,7 @@ function handle_fieldtypes(value){
 
 function add_option(value){
 	
-		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /> <img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display=\'none\'" alt="add" />');
+		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /> <i class="icon-plus icon-large hand" onclick="add_option(); this.style.display=\'none\'"></i>');
 }
 //]]>
 </script>
@@ -64,7 +64,7 @@ function add_option(value){
 			<dt><label>{L_profilefield_optionen}:</label></dt>
 			<dd><!-- BEGIN options_row -->{L_ID}: <input type="text" value="{options_row.ID}" name="option_id[]" class="input" /> {L_name}: <input type="text" value="{options_row.LANGUAGE}" name="option_lang[]" class="input" /><br /><!-- END options_row -->
 			{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" />
-			<img src="{EQDKP_IMAGE_PATH}glyphs/add.png" onclick="add_option(); this.style.display='none'" alt="add" /><span id="new_options"></span></dd>
+			 <i class="icon-plus icon-large hand" onclick="add_option(); this.style.display='none'" ></i><span id="new_options"></span></dd>
 		</dl>
 	</fieldset>
 	<div class="contentFooter">

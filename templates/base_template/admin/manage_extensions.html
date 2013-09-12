@@ -145,7 +145,7 @@ function hide_update_warning(status){
 	
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		<tr>
-			<th align="left" width="16">&nbsp;</th>
+			<th align="left" width="20">&nbsp;</th>
 			<th align="left" class="nowrap" width="16">{L_action}</th>
 			<th align="left" class="nowrap">{L_name}</th>
 			<th align="left" class="nowrap" colspan="{DEP_COUNT}">{L_plug_dep_title}</th>
@@ -156,7 +156,7 @@ function hide_update_warning(status){
 		</tr>
 		<!-- BEGIN plugins_row_red -->
 		<tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
 			<td class="nowrap">{plugins_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_red.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -170,7 +170,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_red -->
 		<!-- BEGIN plugins_row_yellow -->
 		<tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
 			<td class="nowrap">{plugins_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_yellow.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -184,7 +184,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_yellow -->
 		<!-- BEGIN plugins_row_green -->
 		<tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
 			<td class="nowrap">{plugins_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_green.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -198,7 +198,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_green -->
 		<!-- BEGIN plugins_row_grey -->
 		<tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td class="nowrap">{plugins_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_grey.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -212,7 +212,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_grey -->
 		<!-- BEGIN plugins_row_grey_repo -->
 		<tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td class="nowrap">{plugins_row_grey_repo.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_grey_repo.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -226,7 +226,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_grey_repo -->
 		<!-- BEGIN plugins_row_broken -->
 		<tr>
-			 <td width="16" align="center" class="nowrap"></td>
+			 <td width="20" align="center" class="nowrap"></td>
 			<td><!-- IF plugins_row_broken.DELETE --><a href="{plugins_row_broken.DEL_LINK}" title="{L_delete_plugin}"><img src="{EQDKP_IMAGE_PATH}false.png" width="20" height="20" alt="!" />&nbsp;{L_delete}</a><!-- ENDIF -->&nbsp;</td>
 			<td colspan="20">{plugins_row_broken.NAME}: {L_broken_plugin}</td>
 		</tr>
@@ -254,7 +254,7 @@ function hide_update_warning(status){
 		<input type="hidden" name="override" value="0" />
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
 		  <tr>
-			<th width="16" class="nowrap">&nbsp;</th>
+			<th width="20" class="nowrap">&nbsp;</th>
 			<th colspan="6" align="left" class="nowrap">{L_action}</th>
 			<th width="16" align="left" class="nowrap">&nbsp;</th>
 			<th align="left" class="nowrap">{L_name}</th>
@@ -266,18 +266,18 @@ function hide_update_warning(status){
 			</tr>
 		  <!-- BEGIN styles_row_red_local -->
 		  <tr>
-		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
 			<td width="10" class="nowrap">{styles_row_red_local.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
 			  <a href="{styles_row_red_local.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_red_local.ENABLE}.png" width="16" height="16" title="{styles_row_red_local.L_ENABLE}" alt="{styles_row_red_local.L_ENABLE}" /></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large" title="{L_edit_style}"></i></a></td>
 			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="icon-reload icon-large"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
@@ -292,18 +292,18 @@ function hide_update_warning(status){
 		   <!-- END styles_row_red_local -->
 		  <!-- BEGIN styles_row_red -->
 		  <tr>
-		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+		  <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
 			<td width="10" class="nowrap">{styles_row_red.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
 			  <a href="{styles_row_red.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_red.ENABLE}.png" width="16" height="16" title="{styles_row_red.L_ENABLE}" alt="{styles_row_red.L_ENABLE}" /></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large" title="{L_edit_style}"></i></a></td>
 			<td width="10" class="nowrap"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="icon-reload icon-large"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
@@ -318,18 +318,18 @@ function hide_update_warning(status){
 		   <!-- END styles_row_red -->
 			<!-- BEGIN styles_row_yellow -->
 		  <tr>
-		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
 			<td width="10" class="nowrap">{styles_row_yellow.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
 			  <a href="{styles_row_yellow.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_yellow.ENABLE}.png" width="16" height="16" title="{styles_row_yellow.L_ENABLE}" alt="{styles_row_yellow.L_ENABLE}" /></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.png" width="16" height="16" alt="{L_edit_style}" /></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large" title="{L_edit_style}"></i></a></td>
 			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><img src="{EQDKP_ROOT_PATH}images/admin/manage_backup.png" width="16" height="16" alt="{L_download_style}" /></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><img src="{EQDKP_ROOT_PATH}images/global/delete.png" width="16" height="16" alt="{L_delete_style}" /></a>
+				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><img src="{EQDKP_ROOT_PATH}images/global/update.png" width="16" height="16" alt="{L_reset_style}" /></a>
+				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="icon-reload icon-large"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
@@ -344,7 +344,7 @@ function hide_update_warning(status){
 		   <!-- END styles_row_yellow -->
 		<!-- BEGIN styles_row_green -->
 		  <tr>
-		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
 			<td width="10" class="nowrap">{styles_row_green.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
 			  <a href="{styles_row_green.U_ENABLE}"><i class="{styles_row_green.ENABLE} icon-large"></i></a>  
@@ -370,7 +370,7 @@ function hide_update_warning(status){
 		   <!-- END styles_row_green -->
 		<!-- BEGIN styles_row_grey -->
 		  <tr>
-		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td width="10" class="nowrap">{styles_row_grey.ACTION_LINK}</td>
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>
@@ -388,7 +388,7 @@ function hide_update_warning(status){
 		   <!-- END styles_row_grey -->
 		<!-- BEGIN styles_row_grey_repo -->
 		  <tr>
-		   <td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td width="10" class="nowrap">{styles_row_grey_repo.ACTION_LINK}</td>
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>
@@ -418,7 +418,7 @@ function hide_update_warning(status){
 		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
-			<th align="left" width="16">&nbsp;</th>
+			<th align="left" width="20">&nbsp;</th>
 			<th align="left" class="nowrap" width="16">{L_action}</th>
 			<th align="left" class="nowrap">{L_name}</th>
 			<th align="left" class="nowrap">{L_version}</th>
@@ -428,7 +428,7 @@ function hide_update_warning(status){
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
 			<td class="nowrap">{pm_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_red.NAME}</td>
 			<td class="nowrap">{pm_row_red.VERSION}</td>
@@ -439,7 +439,7 @@ function hide_update_warning(status){
 		  <!-- END pm_row_red -->
 		  <!-- BEGIN pm_row_yellow -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
 			<td class="nowrap">{pm_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_yellow.NAME}</td>
 			<td class="nowrap">{pm_row_yellow.VERSION}</td>
@@ -450,7 +450,7 @@ function hide_update_warning(status){
 		  <!-- END pm_row_yellow -->
 		  <!-- BEGIN pm_row_green -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
 			<td class="nowrap">{pm_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_green.NAME}</td>
 			<td class="nowrap">{pm_row_green.VERSION}</td>
@@ -461,7 +461,7 @@ function hide_update_warning(status){
 		  <!-- END pm_row_green -->
 		  <!-- BEGIN pm_row_grey -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td class="nowrap">{pm_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_grey.NAME}</td>
 			<td class="nowrap">{pm_row_grey.VERSION}</td>
@@ -479,7 +479,7 @@ function hide_update_warning(status){
 		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
-			<th align="left" width="16">&nbsp;</th>
+			<th align="left" width="20">&nbsp;</th>
 			<th align="left" class="nowrap" width="16">{L_action}</th>
 			<th align="left" class="nowrap">{L_name}</th>
 			<th align="left" class="nowrap">{L_version}</th>
@@ -489,7 +489,7 @@ function hide_update_warning(status){
 		  </tr>
 		  <!-- BEGIN games_row_red -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
 			<td class="nowrap">{games_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_red.NAME}</td>
 			<td class="nowrap">{games_row_red.VERSION}</td>
@@ -500,7 +500,7 @@ function hide_update_warning(status){
 		  <!-- END games_row_red -->
 		  <!-- BEGIN games_row_yellow -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
 			<td class="nowrap">{games_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_yellow.NAME}</td>
 			<td class="nowrap">{games_row_yellow.VERSION}</td>
@@ -511,7 +511,7 @@ function hide_update_warning(status){
 		  <!-- END games_row_yellow -->
 		  <!-- BEGIN games_row_green -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
 			<td class="nowrap">{games_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_green.NAME}</td>
 			<td class="nowrap">{games_row_green.VERSION}</td>
@@ -522,7 +522,7 @@ function hide_update_warning(status){
 		  <!-- END games_row_green -->
 		  <!-- BEGIN games_row_grey -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td class="nowrap">{games_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_grey.NAME}</td>
 			<td class="nowrap">{games_row_grey.VERSION}</td>
@@ -541,14 +541,14 @@ function hide_update_warning(status){
 		</div>
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
-			<th align="left" width="16">&nbsp;</th>
+			<th align="left" width="20">&nbsp;</th>
 			<th align="left" class="nowrap" width="16">{L_action}</th>
 			<th align="left" class="nowrap">{L_name}</th>
 			<th align="left" class="nowrap">{L_version}</th>
 		  </tr>
 		  <!-- BEGIN language_row_red -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_red.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
 			<td class="nowrap">{language_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_red.NAME}</td>
 			<td class="nowrap">{language_row_red.VERSION}</td>
@@ -556,7 +556,7 @@ function hide_update_warning(status){
 		  <!-- END language_row_red -->
 		  <!-- BEGIN language_row_yellow -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_yellow.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
 			<td class="nowrap">{language_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_yellow.NAME}</td>
 			<td class="nowrap">{language_row_yellow.VERSION}</td>
@@ -564,7 +564,7 @@ function hide_update_warning(status){
 		  <!-- END language_row_yellow -->
 		  <!-- BEGIN language_row_green -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
 			<td class="nowrap">{language_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_green.NAME}</td>
 			<td class="nowrap">{language_row_green.VERSION}</td>
@@ -572,7 +572,7 @@ function hide_update_warning(status){
 		  <!-- END language_row_green -->
 		  <!-- BEGIN language_row_grey -->
 		  <tr>
-			<td width="16" align="center" class="nowrap"><img src="{EQDKP_IMAGE_PATH}admin/plugin_off.png" width="16" height="16" alt="{L_plugin}" /></td>
+			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
 			<td class="nowrap">{language_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_grey.NAME}</td>
 			<td class="nowrap">{language_row_grey.VERSION}</td>

@@ -265,7 +265,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_edit($id){
-			return '<img src="'.$this->root_path.'images/glyphs/edit.png" alt="'.$this->user->lang('calendar_edit').'" title="'.$this->user->lang('calendar_edit').'" onclick="editEvent(\''.$id.'\')"/>';
+			return '<i class="icon-pencil icon-large hand" title="'.$this->user->lang('calendar_edit').'" onclick="editEvent(\''.$id.'\')"></i>';
 		}
 
 		public function get_raid_event($id){

@@ -154,21 +154,21 @@ class Manage_Members extends page_generic {
 			0 => array(
 				'name'	=> $this->user->lang('delete'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/global/delete.png',
+				'icon'	=> 'icon-trash',
 				'perm'	=> true,
 				'link'	=> '#del_members',
 			),
 			1 => array(
 				'name'	=> $this->user->lang('mass_stat_change'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/global/update.png',
+				'icon'	=> 'icon-level-down',
 				'perm'	=> true,
 				'link'	=> '#member_statchange',
 			),
 			2 => array(
 				'name'	=> $this->user->lang('mass_rank_change'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/global/update.png',
+				'icon'	=> 'icon-level-down',
 				'perm'	=> true,
 				'link'	=> '#member_rankchange',
 				'append' => $this->html->DropDown('rank', $ranks, ''),

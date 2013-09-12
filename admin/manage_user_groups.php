@@ -392,21 +392,21 @@ class Manage_User_Groups extends page_generic {
 			0 => array(
 				'name'	=> $this->user->lang('delete_selected_from_group'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/global/delete.png',
+				'icon'	=> 'icon-trash',
 				'perm'	=> true,
 				'link'	=> '#del_group_users',
 			),
 			1 => array(
 				'name'	=> $this->user->lang('add_grpleader'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/glyphs/add_grpleader.png',
+				'icon'	=> 'icon-ok',
 				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
 				'link'	=> '#add_grpleader',
 			),
 			2 => array(
 				'name'	=> $this->user->lang('remove_grpleader'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'images/glyphs/remove_grpleader.png',
+				'icon'	=> 'icon-remove',
 				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
 				'link'	=> '#remove_grpleader',
 			),

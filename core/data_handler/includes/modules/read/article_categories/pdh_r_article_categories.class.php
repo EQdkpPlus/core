@@ -318,7 +318,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 				
 		public function get_editicon($intCategoryID){
-			return '<a href="'.$this->root_path.'admin/manage_article_categories.php'.$this->SID.'&c='.$intCategoryID.'"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="edit"/></a>';
+			return '<a href="'.$this->root_path.'admin/manage_article_categories.php'.$this->SID.'&c='.$intCategoryID.'"><i class="icon-pencil icon-large" title="{L_edit}"></i></a>';
 		}
 		
 		public function get_html_published($intCategoryID){

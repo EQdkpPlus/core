@@ -103,7 +103,7 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 		}
 		
 		public function get_editicon($intBlockID){
-			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;b='.$intBlockID.'"><img src="'.$this->root_path.'images/glyphs/edit.png" alt="edit"/></a>';
+			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;b='.$intBlockID.'"><i class="icon-pencil icon-large" title="'.$this->user->lang('edit').'"></i></a>';
 		}
 		
 		public function get_templatevar($intBlockID){

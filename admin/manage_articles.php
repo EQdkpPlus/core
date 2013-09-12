@@ -323,7 +323,7 @@ class Manage_Articles extends page_generic {
 			0 => array(
 				'name'	=> $this->user->lang('delete'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'icon-trash',
+				'icon'	=> 'icon-trash',
 				'perm'	=> true,
 				'link'	=> '#del_articles',
 			),
@@ -331,21 +331,21 @@ class Manage_Articles extends page_generic {
 			1 => array(
 				'name'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('published'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'icon-eye-open',
+				'icon'	=> 'icon-eye-open',
 				'perm'	=> true,
 				'link'	=> '#set_published',
 			),
 			2 => array(
 				'name'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('not_published'),
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'icon-eye-close',
+				'icon'	=> 'icon-eye-close',
 				'perm'	=> true,
 				'link'	=> '#set_unpublished',
 			),
 			3 => array(
 				'name'	=> $this->user->lang('move_to_other_category').':',
 				'type'	=> 'button', //link, button, javascript
-				'img'	=> 'icon-refresh',
+				'icon'	=> 'icon-refresh',
 				'perm'	=> true,
 				'link'	=> '#change_category',
 				'append' => $this->html->DropDown('new_category', $arrCategories, ''),

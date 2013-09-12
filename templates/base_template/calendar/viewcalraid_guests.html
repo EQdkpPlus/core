@@ -10,8 +10,9 @@
 							<span class="membertooltip guesteditpanel<!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" title="{guests.TOOLTIP}">
 								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME} 
 								<span style="display:none;cursor:pointer;" class='guestpanel'>
-									<img src="{EQDKP_ROOT_PATH}/images/global/delete.png" alt="{L_raidevent_raid_guest_del}" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"/>&nbsp;
-									<img src="{EQDKP_ROOT_PATH}/images/global/edit.png" alt="{L_raidevent_raid_guest_edit}" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');" />
+									<i class="icon-trash icon-large hand" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"></i>
+									&nbsp;
+									<i class="icon-pencil icon-large hand" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');"></i>
 								</span>
 							</span>
 							<!-- ELSE -->

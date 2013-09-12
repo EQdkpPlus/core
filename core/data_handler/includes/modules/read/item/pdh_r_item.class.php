@@ -263,7 +263,7 @@ if(!class_exists('pdh_r_item')){
 
 		public function get_editicon($item_id, $baseurl, $url_suffix=''){
 			return "<a href='".$this->get_link($item_id, $baseurl, $url_suffix)."'>
-			<img src='".$this->root_path."images/glyphs/edit.png' alt='".$this->user->lang('edit')."' title='".$this->user->lang('edit')."' />
+				<i class='icon-pencil icon-large' title='".$this->user->lang('edit')."'></i>
 			</a>";
 		}
 

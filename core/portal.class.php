@@ -181,7 +181,7 @@ class portal extends gen_class {
 		
 		$editbutton = '';
 		if($this->isAdmin) {
-			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><img src="'.$this->server_path.'images/global/edit.png" alt="'.$this->user->lang('portalplugin_settings').'" /></span>';
+			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><i class="icon-pencil icon-large hand" title="'.$this->user->lang('portalplugin_settings').'"></i></span>';
 			$this->init_portalsettings();
 		}
 		$obj->set_id($module_id);

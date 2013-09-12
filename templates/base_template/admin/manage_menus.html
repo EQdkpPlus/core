@@ -230,7 +230,7 @@
 		<div data-linkid="KEY">
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>
 			<span class="link-hide eye"></span>
-			<a href="javascript:void(0);" class="edit-menulink-trigger">Neuer Link</a> <img src="{EQDKP_IMAGE_PATH}global/delete.png" onclick="delete_row(this);" style="cursor:pointer;"/>
+			<a href="javascript:void(0);" class="edit-menulink-trigger">Neuer Link</a> <i class="icon-trash icon-large hand" title="{L_delte}" onclick="delete_row(this);"></i>
 			<input type="hidden" value=""  name="mainmenu[KEY][url]" class="link-url">
 			<input type="hidden" value=""  name="mainmenu[KEY][name]" class="link-name">
 			<input type="hidden" value=""  name="mainmenu[KEY][window]" class="link-window">
@@ -275,7 +275,7 @@
 				{fav_row.ICON} {fav_row.NAME}
 				<input name="fav[]" type="checkbox" id="cb_{fav_row.ID}" value="{fav_row.DATA}" style="display:none;" />
 				<span id="icon_{fav_row.ID}" style="display:none;">{fav_row.ICON}</span>
-				<img src="../images/global/delete.png" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();" class="not-sortable" height="16" width="16" alt="" />
+				<i class="icon-trash icon-large hand not-sortable" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();"></i>
 			</li>
 		<!-- END fav_row -->
 		<!-- IF S_NO_FAVS -->
