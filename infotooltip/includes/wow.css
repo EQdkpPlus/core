@@ -190,6 +190,11 @@ table.wowhead_tooltip div.wh_inner{
 .wowhead_tooltip table.shrink b { font-size: 12px; line-height: 15px }
 .wowhead_tooltip table.shrink td, .wowhead_tooltip table.shrink th { font-size: 10px; line-height: 14px }
 
+/* spacing/grouping */
+table.tooltipGrouping {
+	margin-top: 10px;
+}
+
 /* socket icons */
 .socket {
 	background: url(./images/wow/sockets.png) no-repeat scroll 0 0 transparent;
