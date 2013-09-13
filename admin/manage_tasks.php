@@ -184,7 +184,7 @@ class ManageTasks extends page_generic {
 			0 => array(
 					'name'	=> $this->user->lang('activate_user'),
 					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'icon-ok',
+					'icon'	=> 'icon-check',
 					'perm'	=> true,
 					'link'	=> '#activateUserTrigger',
 			),
@@ -219,7 +219,7 @@ class ManageTasks extends page_generic {
 			0 => array(
 					'name'	=> $this->user->lang('uc_confirm_char'),
 					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'icon-ok',
+					'icon'	=> 'icon-check',
 					'perm'	=> true,
 					'link'	=> '#confirmCharsTrigger',
 			),

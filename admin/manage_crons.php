@@ -143,7 +143,7 @@ class ManageCrons extends page_generic {
 					'LAST_RUN'	=> $last_run,
 					'NEXT_RUN'	=> $next_run,
 					'START'			=> ($value['active']) ? $this->time->user_date($value['start_time'], true) : ' - ',
-					'ACTIVATE_ICON'	=> ($value['active']) ? 'icon-minus-sign icon-color-red' : 'icon-plus-sign icon-color-green',
+					'ACTIVATE_ICON'	=> ($value['active']) ? 'icon-check icon-color-green' : 'icon-unchecked icon-color-red',
 					'U_RUN_CRON'	=> 'manage_crons.php'.$this->SID.'&amp;mode=run&amp;cron='.$key.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 					'U_EDIT_CRON'	=> 'manage_crons.php'.$this->SID.'&amp;mode=edit&amp;cron='.$key.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 					'U_ACTIVATE_CRON'	=> 'manage_crons.php'.$this->SID.'&amp;mode='.(($value['active']) ? 'disable' : 'enable').'&amp;cron='.$key.'&amp;link_hash='.$this->CSRFGetToken('mode'),
