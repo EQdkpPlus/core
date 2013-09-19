@@ -40,6 +40,14 @@ class login_pageobject extends pageobject {
 
 	public function process_login(){
 		if (!$this->user->is_signedin()){
+			//Check Password Length
+			if (strlen($this->in->get('password')) > 64) {
+				$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
+				$this->display();
+				return;	
+			}
+			
+			
 			//Check Captcha
 			$blnShowCaptcha = false;
 			if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){

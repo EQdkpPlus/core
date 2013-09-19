@@ -23,14 +23,17 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_logs" ) ) {
 	class pdh_r_logs extends pdh_r_generic{
 		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
+			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
+			return array_merge(parent::$shortcuts, $shortcuts);
+		}
 
 		public $default_lang = 'english';
 		private $data = array();
-		private $logs = array('ids'=>array(), 'plugins'=>array());
-
+		private $index = array();
+		private $logs = array();
+		private $objPagination = null;
+		private $last_logs = array();
+		
 		public $hooks = array(
 			'logs_update'
 		);
@@ -48,77 +51,26 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			'viewlog'		=> array('viewicon',	array('%log_id%', '%link_url%', '%link_url_suffix%'), array()),
 		);
 
-		private $cache_number = 100;
-		private $last_logs = array();
-
-		private function cache_id($id) {
-			return ($id-($id%$this->cache_number))/$this->cache_number;
+		public function init(){
+			$this->objPagination = register("cachePagination", array("logs", "log_id", "__logs", array(), 100));
+			$this->objPagination->initIndex();
+			$this->index = $this->objPagination->getIndex();
 		}
+		
 
 		public function reset($ids=false){
-			if($ids === false) $this->pdc->del_prefix('pdh_logs_table');
-			else {
-				$this->pdc->del('pdh_logs_table');
-				if(!is_array($ids)) $ids = array($ids);
-				foreach($ids as $id) {
-					if(!is_numeric($id)) return $this->reset();
-					$this->pdc->del('pdh_logs_table_'.$this->cache_id($id));
-				}
-			}
-			$this->logs = NULL;
-			$this->data = NULL;
-			return true;
-		}
-
-		public function init($id=false){
-			if($id === false) {
-				$this->logs = $this->pdc->get('pdh_logs_table');
-				if(empty($this->logs)) {
-					$objQuery = $this->db->query("SELECT log_id, log_plugin FROM __logs;");
-					if($objQuery){
-						while($row = $objQuery->fetchAssoc()){
-							$this->logs['ids'][$row['log_id']] = $row['log_plugin'];
-							$this->logs['plugins'][$row['log_plugin']] = $row['log_plugin'];
-						}
-					}
-				}
-				$this->pdc->put('pdh_logs_table', $this->logs, null);
-				return true;
-			}
-			if(!isset($this->logs['ids'][$id])) return false;
-			//load logs in 100er chunks
-			$cache_name = $this->cache_id($id);
-
-			$cache_result = $this->pdc->get('pdh_logs_table_'.$cache_name);
-			if(empty($cache_result)) {
-				$objQuery = $this->db->prepare("SELECT * FROM __logs WHERE log_id >= ? AND log_id < ?;")->execute($cache_name*$this->cache_number, ($cache_name+1)*$this->cache_number);
-				if($objQuery){
-					while($drow = $objQuery->fetchAssoc()){
-						$cache_result[$drow['log_id']] = array(
-							'log_id'			=> $drow['log_id'],
-							'log_date'			=> $drow['log_date'],
-							'log_ipaddress'		=> $drow['log_ipaddress'],
-							'log_result'		=> $drow['log_result'],
-							'log_tag'			=> $drow['log_tag'],
-							'log_flag'			=> $drow['log_flag'],
-							'log_plugin'		=> $drow['log_plugin'],
-							'user_id'			=> $drow['user_id'],
-							'username'			=> $drow['username'],
-							'log_record'		=> $drow['log_record'],
-							'log_recordid'		=> $drow['log_record_id'],
-						);
-					}
-				}
-	
-				$this->pdc->put('pdh_logs_table_'.$cache_name, $cache_result, null);
-			}
-			if(!is_array($this->data)) $this->data = array();
-			if(is_array($cache_result)) $this->data += $cache_result;
-			return true;
+			return $this->objPagination->reset($ids);
 		}
 
 		public function get_plugins() {
-			return $this->logs['plugins'];
+			$objQuery = $this->db->query("SELECT DISTINCT log_plugin FROM __logs;");
+			$arrPlugins = array();
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrPlugins[] = $row['log_plugin'];
+				}
+			}
+			return $arrPlugins;
 		}
 		
 		public function get_grouped_users(){
@@ -192,15 +144,8 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			return $id_list;
 		}
 
-		public function get_id_list($plugin = false) {
-			if ($plugin && isset($this->logs['plugins'][$plugin])) {
-				$out = array();
-				foreach($this->logs['ids'] as $id => $plug) {
-					if($plug == $plugin) $out[] = $id;
-				}
-				return $out;
-			}
-			return array_keys($this->logs['ids']);
+		public function get_id_list() {
+			return array_keys($this->index);
 		}
 
 		public function get_lastxlogs($amount=10) {
@@ -218,61 +163,45 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		}
 
 		public function get_tag($id) {
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['log_tag'];
+			return $this->objPagination->get($id, 'log_tag');
 		}
 
-		public function get_html_tag($id, $link_url=false, $link_suffix='') {
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			$flag = ($this->data[$id]['log_flag'] == 1) ? ' class="admin_icon"' : '';
+		public function get_html_tag($id, $link_url=false, $link_suffix='') {	
+			if(!$this->get_tag($id)) return "";
+			$intFlag = (int)$this->objPagination->get($id, 'log_flag');		
+			$flag = ($intFlag == 1) ? ' class="admin_icon"' : '';
 			if(!$link_url) return ($flag) ? '<span'.$flag.'><span>'.$this->user->lang($this->get_tag($id), true, false).'</span></span>' : $this->user->lang($this->get_tag($id), true, false);
 			$link = $link_url.$this->SID . '&amp;logid='.$id.$link_suffix;
-			$link = '<a'.$flag.' title="'.(($this->data[$id]['log_flag'] == 1) ? $this->user->lang('admin_action') : '').'" href="'.$link.'"><span>';
+			$link = '<a'.$flag.' title="'.(($intFlag == 1) ? $this->user->lang('admin_action') : '').'" href="'.$link.'"><span>';
 			return $link.$this->user->lang($this->get_tag($id), true, false).'</span></a>';
 		}
 
 		public function get_date($id){
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['log_date'];
+			return $this->objPagination->get($id, 'log_date');
 		}
 
 		public function get_html_date($id, $withtime=false){
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->time->user_date($this->data[$id]['log_date'], $withtime);
+			return $this->time->user_date($this->get_date($id), $withtime);
 		}
 
 		public function get_user($id){
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['username'];
+			return $this->objPagination->get($id, 'username');
 		}
 
 		public function get_value($id){
-			if(!isset($this->logs['ids'][$id])) return false;
-			if(!isset($this->data[$id])) $this->init($id);
-			if(!isset($this->data[$id]['log_value'])) {
-				$arrResult = $this->db->query("SELECT log_value FROM __logs WHERE log_id = '".intval($id)."';", true);		
-				$this->data[$id]['log_value'] = $arrResult['log_value'];
-			}
-			return $this->data[$id]['log_value'];
+			return $this->objPagination->get($id, 'log_value');
 		}
 
 		public function get_ipaddress($id){
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['log_ipaddress'];
+			return $this->objPagination->get($id, 'log_ipaddress');
 		}
 
 		public function get_sid($id) {
-			if(!isset($this->data[$id])) return false;
-			if(!isset($this->data[$id]['log_sid'])){
-				$arrResult = $this->db->query("SELECT log_sid FROM __logs WHERE log_id = '".intval($id)."';", true);
-				$this->data[$id]['log_sid'] = $arrResult['log_sid'];
-			}
-			return $this->data[$id]['log_sid'];
+			return $this->objPagination->get($id, 'log_sid');
 		}
 
 		public function get_result($id) {
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['log_result'];
+			return $this->objPagination->get($id, 'log_result');
 		}
 
 		public function get_html_result($id){
@@ -283,25 +212,22 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		}
 		
 		public function get_record($id) {
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['log_record'];
+			return $this->objPagination->get($id, 'log_record');
 		}
 		
 		public function get_recordid($id) {
-			if(!isset($this->data[$id]) && isset($this->logs['ids'][$id])) $this->init($id);
-			return $this->data[$id]['log_recordid'];
+			return $this->objPagination->get($id, 'log_record_id');
 		}
 
 		public function get_plugin($id){
-			if(!isset($this->logs['ids'][$id])) return false;
-			return $this->logs['ids'][$id];
+			return $this->objPagination->get($id, 'log_plugin');
 		}
 
 		public function get_html_plugin($id){
-			if(!isset($this->logs['ids'][$id])) return '';
-			if ($this->user->lang($this->logs['ids'][$id], false, false)) return $this->user->lang($this->logs['ids'][$id]);
+			if(!$this->get_plugin($id)) return '';
+			if ($this->user->lang($this->get_plugin($id), false, false)) return $this->user->lang($this->get_plugin($id));
 
-			return ucfirst($this->logs['ids'][$id]);
+			return ucfirst($this->get_plugin($id));
 		}
 
 		public function get_viewicon($id, $link='', $suffix='') {

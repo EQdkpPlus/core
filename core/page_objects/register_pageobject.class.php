@@ -115,7 +115,19 @@ class register_pageobject extends pageobject {
 				return;
 			}
 		}
-
+		
+		//Check Password
+		if ($this->in->get('new_user_password1') !== $this->in->get('new_user_password2')){
+			$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
+			$this->display_form();
+			return;
+		}
+		if (strlen($this->in->get('new_user_password1')) > 64) {
+			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
+			$this->display_form();
+			return;	
+		}
+		
 		//Check Email
 		if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
 			$this->core->message($this->user->lang('fv_email_alreadyuse'), $this->user->lang('error'), 'red');

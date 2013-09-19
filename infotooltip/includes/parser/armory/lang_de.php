@@ -57,9 +57,9 @@ $lang = array(
 		7	=> 'Ausdauer',
 		13	=> 'Ausweichwertung',
 		14	=> 'Parierwertung',
-		31	=> 'Trefferwertung',
-		32	=> 'Kritische Trefferwertung',
-		35	=> 'Abhärtungswertung',
+		31	=> 'Trefferchance',
+		32	=> 'kritische Trefferchance',
+		35	=> 'PvP-Abhärtung',
 		36	=> 'Tempowertung',
 		37	=> 'Waffenkundewertung',
 		38	=> 'Angriffskraft',
@@ -69,7 +69,7 @@ $lang = array(
 		49	=> 'Meisterschaftswertung',
 		57	=> 'PvP-Macht',
 	),
-	'secondary_stats'	=> 'Anlegen: Erhöht eure %s um %d.',
+	'secondary_stats'	=> '+%d %s',
 	'socket'	=> array(
 		'red'		=> 'Roter Sockel',
 		'blue'		=> 'Blauer Sockel',
@@ -91,6 +91,9 @@ $lang = array(
 		'ON_PROC'	=> 'Trefferchance:',
 		'UNKNOWN'	=> 'Unbekannt:'
 	),
-	'reforged'   => 'Umgeschmiedet'
+	'reforged'   => 'Umgeschmiedet',
+	'reforgedFrom' => 'Umgeschmiedet aus',
+	'enchanted' => 'Verzaubert',
+	'upgraded' => "Aufwertungsgrad"
 );
 ?>

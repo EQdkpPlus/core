@@ -259,35 +259,31 @@ if(!class_exists('armory')) {
 			$this->load_armory_lang($lang);
 
 			if(!empty($char_data['items'])) {
-				$char_data = $char_data['items'][$slot]['tooltipParams'];
+				// Replace standard item info by data found on equipped and possibly altered item
+				$char_data = $char_data['items'][$slot];
+				$data['itemLevel'] = $char_data['itemLevel'];
+				if(!empty($char_data['weaponInfo'])) $data['weaponInfo'] = $char_data['weaponInfo'];
+				if(!empty($char_data['stats'])) $data['bonusStats'] = $char_data['stats'];
+				
+				$char_data_params = $char_data['tooltipParams'];
 			}
 			if(!isset($this->armory_lang[$lang]) OR sizeof($this->armory_lang[$lang]) < 1) {
 				$this->pdl->log('infotooltip', 'No language from armory available.');
 				return false;
 			}
 			$html .= "<table><tr><td><b class=\"".$item['color']."\">".$item['name']."</b><br/>";
-			// heroic missing
+
+			// Extralabels ("Heroic" etc...)
 			$html .= (isset($data['nameDescription']) && $data['nameDescription'] != "") ? "<span class=\"q2\">".$data['nameDescription']."</span><br />" : "";
+			if(!empty($data['itemLevel'])) $html .= "<span class=\"q\">" . $this->armory_lang[$lang]['itemLevel']." ".$data['itemLevel']."</span><br />";
+			// Item upgrade information
+			if(!empty($char_data_params['upgrade'])) $html .= "<span class=\"q\">" . $this->armory_lang[$lang]['upgraded'].": " . $char_data_params['upgrade']['current'] . "/" . $char_data_params['upgrade']['total']."</span><br />";
 			$html .= (!empty($data['itemBind'])) ? $this->armory_lang[$lang]['itemBind'][$data['itemBind']]."<br />" : "";
 			//if(!empty($data['maxCount'])) $html .= 'max-count?'; //($data['maxCount']) ? $this->armory_lang[$lang]['tooltip']['unique-equipped'] : 
 			
 			// item class information
 			if(!empty($data['inventoryType']))
 				$html .= "<table><tr><td>".$this->armory_lang[$lang]['inventoryType'][$data['inventoryType']]."</td><th>".$this->armory_lang[$lang]['itemClass'][$data['itemClass']][$data['itemSubClass']]."</th></tr></table>";
-
-			// reforged data
-			if(!empty($char_data['reforge'])) {
-				$reforge = $this->reforged_stats[$char_data['reforge']];
-				foreach($data['bonusStats'] as $key => $stat) {
-					if($stat['stat'] == $reforge[0]) {
-						$val = round(0.4*$stat['amount']);
-						$data['bonusStats'][$key]['amount'] = $stat['amount']-$val;
-						break;
-					}
-				}
-				$data['bonusStats'][] = array('stat' => $reforge[1], 'amount' => $val);
-				$html .= "<span class=\"q2\">".$this->armory_lang[$lang]['reforged']." (".$val." ".$this->armory_lang[$lang]['bonusStats'][$reforge[0]]." &rarr; ".$val." ".$this->armory_lang[$lang]['bonusStats'][$reforge[1]].")</span><br />";
-			}
 
 			//damage (weapon only)
 			if(!empty($data['weaponInfo'])) {
@@ -301,7 +297,7 @@ if(!class_exists('armory')) {
 			if(!empty($data['armor'])) $html .= $data['armor']." ".$this->armory_lang[$lang]['armor']."<br />";
 			// (!empty($data['baseArmor'])) ? ((isset($tooltip_data['b_armor'])) ? "<span class=\"q2\">".$tooltip_data['armor'].' '.$this->armory_lang[$lang]['tooltip']['armor']."</span>" : $tooltip_data['armor'].$this->armory_lang[$lang]['tooltip']['armor'])."<br />" : "";
 			
-			//attributes
+			// main stats
 			if(!empty($data['bonusStats'])) {
 				foreach($data['bonusStats'] as $stat) {
 					// only main-attributes here
@@ -311,20 +307,43 @@ if(!class_exists('armory')) {
 				}
 			}
 			
-			// Enchants
-			if(isset($char_data['enchant'])) {
-				$this->load_enchants($lang);
-				$html .= "<span class=\"q2\">".$this->enchants[$lang][$char_data['enchant']]."</span><br />";
+			// secondary stats
+			if(!empty($data['bonusStats'])) {
+				// Check for reforge
+				if(!empty($char_data_params['reforge'])) $reforge = $this->reforged_stats[$char_data_params['reforge']];
+				foreach($data['bonusStats'] as $stat) {
+					if($stat['stat'] <= 7)
+						continue;
+					$html .= "<span class=\"q2\">".sprintf($this->armory_lang[$lang]['secondary_stats'], $stat['amount'], $this->armory_lang[$lang]['bonusStats'][$stat['stat']]);
+					// Add info about where this stat is reforged from
+					if(!empty($reforge)) {
+						if($stat['stat'] == $reforge[1]) {
+							$html .= " (" . $this->armory_lang[$lang]['reforgedFrom'] . " " . $this->armory_lang[$lang]['bonusStats'][$reforge[0]] . ")";
+						}
+					}
+					$html .= "</span><br />";
+				}
 			}
 			
-			// sockets
+			$html .= "</td></tr></table><table class=\"tooltipGrouping\"><tr><td>";
+			
+			// Enchants
+			if(isset($char_data_params['enchant'])) {
+				$this->load_enchants($lang);
+				$html .= "<span class=\"q2\">" . $this->armory_lang[$lang]['enchanted'] . ":  " .$this->enchants[$lang][$char_data_params['enchant']]."</span><br />";
+			}			
+			
+			// Check for extra socket and if found, add prismatic socket
+			if(!empty($char_data_params['extraSocket'])) $data['socketInfo']['sockets'][] = array('type' => "PRISMATIC");
+			
+			// Sockets
 			$socket_bonus = false;
 			if(!empty($data['socketInfo'])) {
 				$socket_bonus = true;
 				foreach($data['socketInfo']['sockets'] as $sockkey => $socket) {
 					$html .= "<span class=\"socket socket-".strtolower($socket['type']);
-					if(!empty($char_data['gem'.$sockkey])) {
-						$sock_dat = $this->bnet->item($char_data['gem'.$sockkey]);
+					if(!empty($char_data_params['gem'.$sockkey])) {
+						$sock_dat = $this->bnet->item($char_data_params['gem'.$sockkey]);
 						$html .= "\"><img src=\"".$this->config['icon_path'].$sock_dat['icon'].$this->config['icon_ext']."\" /></span><span class=\"socket-info\">".$sock_dat['gemInfo']['bonus']['name']."</span><br />";
 						if(!$this->socket_match($sock_dat['gemInfo']['type']['type'],$socket['type'])) $socket_bonus = false;
 					} else {
@@ -336,8 +355,45 @@ if(!class_exists('armory')) {
 			// socket bonus
 			if(!empty($data['socketInfo']['socketBonus'])) {
 				$sock_class = ($socket_bonus) ? "q2" : "q0";
-				$html .= "<span class=\"".$sock_class."\">".$this->armory_lang[$lang]['socketBonus'].": ".$data['socketInfo']['socketBonus']."</span><br />";
+				$html .= "<span class=\"".$sock_class."\">".$this->armory_lang[$lang]['socketBonus'].": ".$data['socketInfo']['socketBonus']."</span>";
 			}
+			
+			// set-bonus
+			if(!empty($data['itemSet'])) {
+				$html .= "</td></tr></table><table class=\"tooltipGrouping\"><tr><td>";
+				$html .= "<span class=\"q\">".$data['itemSet']['name']."</span><br />";
+				if(!empty($char_data_params['set'])) $set_count = count($char_data_params['set']);
+				
+				/* Marking and listing of set items disabled. 
+				 * Set items of different iLvl may be combined, but how to find all other item sets to check for item id?
+				 * 
+				foreach($data['itemSet']['items'] as $sdata) {
+					$sclass = 'q0';
+					if(in_array($sdata, $char_data_params['set'])) {
+						$sclass = 'q8';
+					} 
+					$itemName = $sdata;
+					$html .= "<div class=\"".$sclass." indent\">". $itemName ."</div>";
+				}*/
+				foreach($data['itemSet']['setBonuses'] as $bonus) {
+					$sclass = 'q0';
+					if($bonus['threshold'] <= $set_count) {
+						$sclass = 'q2';
+					}
+					$html .= "<span class=\"".$sclass."\">(".$bonus['threshold'].") ".$bonus['description']."</span><br />";
+				}
+			}
+			
+			// yellow description
+			if(!empty($data['description'])) $html .= "<span class=\"q\">".$data['description']."</span><br />";
+			
+			// spells
+			if(!empty($data['itemSpells'])) {
+				foreach($data['itemSpells'] as $spell) {
+					$html .= "<span class=\"q2\">".$this->armory_lang[$lang]['trigger'][$spell['trigger']]." ".$spell['spell']['description']."</span><br />";
+				}
+			}			
+			$html .= "</td></tr></table><table class=\"tooltipGrouping\"><tr><td>";
 			
 			// durability
 			if(!empty($data['maxDurability'])) $html .= $this->armory_lang[$lang]['maxDurability'].": ".$data['maxDurability']." / ".$data['maxDurability']."<br />";
@@ -355,59 +411,18 @@ if(!class_exists('armory')) {
 				//$html .= (isset($tooltip_data['requires']['name']) AND $tooltip_data['requires']['name']) ? $this->armory_lang[$lang]['tooltip']['requires']." ".$tooltip_data['requires']['name']." (".$tooltip_data['requires']['rank'].")<br />" : "";
 			}
 			if(!empty($data['requiredLevel'])) $html .= $this->armory_lang[$lang]['requiredLevel']." ".$data['requiredLevel']."<br />";
-			if(!empty($data['itemLevel'])) $html .= $this->armory_lang[$lang]['itemLevel']." ".$data['itemLevel']."<br />";
-			$html .= "</td></tr></table><table><tr><td>";
-			
-			// secondary stats
-			if(!empty($data['bonusStats'])) {
-				foreach($data['bonusStats'] as $stat) {
-					if($stat['stat'] <= 7)
-						continue;
-					$html .= "<span class=\"q2\">".sprintf($this->armory_lang[$lang]['secondary_stats'], $this->armory_lang[$lang]['bonusStats'][$stat['stat']], $stat['amount'])."</span><br />";
-				}
-			}
-			
-			// spells
-			if(!empty($data['itemSpells'])) {
-				foreach($data['itemSpells'] as $spell) {
-					$html .= "<span class=\"q2\">".$this->armory_lang[$lang]['trigger'][$spell['trigger']]." ".$spell['spell']['description']."</span><br />";
-				}
-			}
 			
 			// Sell-Price
-			if(!empty($data['buyPrice'])) {
-				$cop = $data['buyPrice']%100;
-				$sil = (($data['buyPrice']-$cop)%10000);
-				$gold = $data['buyPrice']-$cop-$sil;
+			if(!empty($data['sellPrice'])) {
+				$cop = $data['sellPrice']%100;
+				$sil = (($data['sellPrice']-$cop)%10000);
+				$gold = $data['sellPrice']-$cop-$sil;
 				$html .= "<span class=\"moneygold\">".($gold/10000)."</span> <span  class=\"moneysilver\">".($sil/100)."</span> <span  class=\"moneycopper\">".$cop."</span><br />";
 			}
-			
-			// set-bonus
-			if(!empty($data['itemSet'])) {
-				$html .= "<br /><span class=\"q\">".$data['itemSet']['name']."</span><br />";
-				$set_count = 0;
-				foreach($data['itemSet']['item'] as $sdata) {
-					$sclass = 'q0';
-					if($sdata['equipped']) {
-						$set_count++;
-						$sclass = 'q8';
-					}
-					$html .= "<div class=\"".$sclass." indent\">".$sdata['name']."</div>";
-				}
-				foreach($data['itemSet']['setBonuses'] as $bonus) {
-					$sclass = 'q0';
-					if($bonus['threshold'] <= $set_count) {
-						$sclass = 'q2';
-					}
-					$html .= "<span class=\"".$sclass."\">(".$bonus['threshold'].") ".$bonus['description']."</span><br />";
-				}
-				$html .= "<br />";
-			}
-			
-			// yellow description
-			if(!empty($data['description'])) $html .= "<span class=\"q\">".$data['description']."</span><br />";
-			
+						
 			// drop-source
+			/*			
+			$html .= "</td></tr></table><table class=\"tooltipGrouping\"><tr><td>";
 			if(!empty($data['itemSource'])) {
 				/* $lng_str = (isset($this->armory_lang[$lang]['source'][$tooltip_data['drop']['value']])) ? $this->armory_lang[$lang]['source'][$tooltip_data['drop']['value']] : $tooltip_data['drop']['value'];
 				$html .= "<span class=\"q\">".$this->armory_lang[$lang]['source']['source']."</span>: ".$lng_str."<br />";
@@ -415,8 +430,9 @@ if(!class_exists('armory')) {
 					$html .= ($tooltip_data['drop']['area']) ? "<span class=\"q\">".$this->armory_lang[$lang]['source']['dungeon']."</span> ".$tooltip_data['drop']['area']."<br />" : "";
 					$html .= ($tooltip_data['drop']['boss']) ? "<span class=\"q\">".$this->armory_lang[$lang]['source']['boss']."</span> ".$tooltip_data['drop']['boss']."<br />" : "";
 					$html .= "<span class=\"q\">".$this->armory_lang[$lang]['source']['droprate']."</span> ".$this->armory_lang[$lang]['drop'][$tooltip_data['drop']['drop']]."<br />";
-				}*/
-			}
+				}
+			}*/
+			
 			$html .= "</td></tr></table>";
 			$tpl_html = file_get_contents($this->root_path.'infotooltip/includes/parser/templates/wow_popup.tpl');
 			$html = str_replace('{ITEM_HTML}', $html, $tpl_html);
@@ -468,6 +484,8 @@ if(!class_exists('armory')) {
 					if($gem == 'ORANGE' || $gem == 'PURPLE') return true;
 				case 'YELLOW':
 					if($gem == 'ORANGE' || $gem == 'GREEN') return true;
+				case 'PRISMATIC':
+					return true;
 			}
 			return false;
 		}

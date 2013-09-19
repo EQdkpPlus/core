@@ -125,10 +125,15 @@ class settings_pageobject extends pageobject {
 		//Check matching new passwords
 		if($change_password) {
 			if($this->in->get('new_password') != $this->in->get('confirm_password')) {
-				$this->core->message($this->user->lang('fv_required_password_repeat'), $this->user->lang('error'), 'red');
+				$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;
 			}
+		}
+		if ($change_password && strlen($this->in->get('new_password')) > 64) {
+			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
+			$this->display();
+			return;
 		}
 		
 		// If they changed their username or password, we have to confirm their current password

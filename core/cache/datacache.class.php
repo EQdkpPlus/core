@@ -219,4 +219,178 @@ if( !class_exists( "datacache" ) ) {
 		}
 	}//end interface
 }//end if
+
+if( !class_exists( "cachePagination" ) ) {
+	class cachePagination extends gen_class {
+		public static $shortcuts = array('pdc', 'db', 'pdh');
+		
+		protected $strCacheKey = "";
+		protected $intItemsPerChunk = 50;
+		protected $arrQuerys;
+		protected $strID;
+		protected $strTablename = "";
+		
+		protected $index = array();
+		protected $data = array();
+		
+		//Finished
+		public function __construct($strCacheKey, $strID, $strTableName, $arrQuerys=array('index' => '', 'chunk' => '', 'direct' => '', 'tag_direct' => ''), $intItemsPerChunk=50){
+			$this->strCacheKey = $strCacheKey;
+			$this->intItemsPerChunk = $intItemsPerChunk;
+			$this->arrQuerys = $arrQuerys;
+			$this->strID = $strID;
+			$this->strTablename = $strTableName;
+		}
+				
+		//Finished
+		public function initIndex(){
+			$this->index = $this->pdc->get('pdh_'.$this->strCacheKey.'_index');
+			if ($this->index == null){
+				$strQuery = (isset($this->arrQuerys['index']) && strlen($this->arrQuerys['index'])) ? $this->arrQuerys['index'] : "SELECT ".$this->strID." FROM ".$this->strTablename;
+				
+				$objQuery = $this->db->query($strQuery);
+				if($objQuery){
+					while($row = $objQuery->fetchAssoc()){
+						$this->index[] = $row[$this->strID];
+					}
+				}
+				$this->pdc->put('pdh_'.$this->strCacheKey.'_index', $this->index, null);
+			}
+			return true;
+		}
+		
+		//Finished
+		public function getIndex(){
+			return $this->index;
+		}
+		
+		//Finished
+		public function initObject($intObjectID){
+			$intChunkID = $this->calculateChunkID($intObjectID);
+
+			if (!in_array($intObjectID, $this->index)) return false;
+			
+			if (!isset($this->data[$intChunkID])){
+				//Load Chunk
+				$arrCacheData = $this->pdc->get('pdh_'.$this->strCacheKey.'_chunk_'.$intChunkID);
+				if ($arrCacheData == null){
+					$strQuery = (isset($this->arrQuerys['chunk']) && strlen($this->arrQuerys['chunk'])) ? $this->arrQuerys['chunk'] : "SELECT * FROM ".$this->strTablename." WHERE ".$this->strID." >= ? AND ".$this->strID." < ?";
+					$objQuery = $this->db->prepare($strQuery)->execute($intChunkID*$this->intItemsPerChunk, ($intChunkID+1)*$this->intItemsPerChunk);
+					if($objQuery){
+						while($drow = $objQuery->fetchAssoc()){
+							$cache_result[$drow[$this->strID]] = $drow;
+						}
+					}
+					
+					$this->pdc->put('pdh_'.$this->strCacheKey.'_chunk_'.$intChunkID, $cache_result, null);
+					$this->data[$intChunkID] = $cache_result;
+					unset($cache_result);
+					if (isset($this->data[$intChunkID][$intObjectID])) return true;
+				}
+			} else {
+				if (isset($this->data[$intChunkID][$intObjectID])) return true;			
+			}
+			return false;
+		}
+		
+		//Finished
+		private function getObject($intObjectID){
+			$blnResult = $this->initObject($intObjectID);
+			if (!$blnResult) return false;
+			$intChunkID = $this->calculateChunkID($intObjectID);
+			if (isset($this->data[$intChunkID][$intObjectID])) return $this->data[$intChunkID][$intObjectID];
+			
+			return false;
+		}
+		
+		//Finished
+		public function get($intObjectID, $strObjectTag = false){
+			$dataSet = $this->getObject($intObjectID);
+			if ($dataSet){
+				if ($strObjectTag){
+					if (isset($dataSet[$strObjectTag])) return $dataSet[$strObjectTag];
+				} else return $dataSet;
+			}
+			return false;
+		}
+		
+		//Finished
+		public function getDirect($intObjectID, $strObjectTag = false){
+			$strQuery = (isset($this->arrQuerys['direct']) && strlen($this->arrQuerys['direct'])) ? $this->arrQuerys['direct'] : "SELECT * FROM ".$this->strTablename." WHERE ".$this->strID." = ?";
+			$objQuery = $this->db->prepare($strQuery)->execute($intObjectID);
+			if($objQuery){
+				$row = $objQuery->fetchAssoc();
+				if($strObjectTag){
+					if (isset($row[$strObjectTag])) return $row[$strObjectTag];
+				} else return $row;
+			}
+			return false;
+		}
+		
+		//Finished
+		public function getAssocTag($strObjectTag){
+			$arrOut = array();
+			foreach($this->index as $id){
+				$tag = $this->get($id, $strObjectTag);
+				if ($tag) $arrOut[$id] = $tag;
+			}
+			return $arrOut;
+		}
+		
+		//Finished
+		public function getAssocTagDirect($strObjectTag){
+			$strQuery = (isset($this->arrQuerys['tag_direct']) && strlen($this->arrQuerys['tag_direct'])) ? $this->arrQuerys['tag_direct'] : "SELECT ".$this->strID.",".$strObjectTag." FROM ".$this->strTablename;
+			
+			$objQuery = $this->db->prepare($strQuery)->execute($strObjectTag);
+			$arrOut = array();
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrOut[$row[$this->strID]] = $row[$strObjectTag];
+				}
+			}
+			return $arrOut;
+		}
+		
+		//Finished
+		private function calculateChunkID($intObjectID){
+			return ($intObjectID-($intObjectID%$this->intItemsPerChunk))/$this->intItemsPerChunk;
+		}
+		
+		//Finished
+		public function reset($mixedIDs = false){
+			//Delete Everything
+			if ($mixedIDs === false) {
+				$this->pdc->del_prefix('pdh_'.$this->strCacheKey);
+				return true;
+			}
+			
+			//Delete specific Objects
+			$this->pdc->del('pdh_'.$this->strCacheKey.'_index'); //Delete Index
+			if(!is_array($mixedIDs)) $mixedIDs = array($mixedIDs);
+			foreach($mixedIDs as $id) {
+				if(!is_numeric($id)) return $this->reset();
+				$intChunkID = $this->calculateChunkID($id);
+				$this->pdc->del('pdh_'.$this->strCacheKey.'_chunk_'.$intChunkID);
+				if (isset($this->data[$intChunkID])) unset($this->data[$intChunkID]);
+			}
+			return true;
+		}
+		
+		//Finished
+		public function sort($strObjectTag, $strSortDirection = "asc"){
+			$strSortDirection = (strtolower($strSortDirection) == "asc") ? "ASC" : "DESC";
+			$strQuery = (isset($this->arrQuerys['sort']) && strlen($this->arrQuerys['sort'])) ? $this->arrQuerys['sort'] : "SELECT ".$this->strID." FROM ".$this->strTablename." ORDER BY ";
+			$strQuery .= $strObjectTag." ".$strSortDirection;
+			
+			$objQuery = $this->db->prepare($strQuery)->execute();
+			$arrOut = array();
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrOut[] = $row[$this->strID]; 
+				}
+			}
+			return $arrOut;
+		}
+	}
+}
 ?>

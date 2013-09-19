@@ -890,6 +890,8 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "login_twofactor_code_help" => "Trage hier den von deiner App generierten Code ein.",
 "login_twofactor_emergency_token" => "Notfall-Token (deaktiviert bei Eingabe die Zweifaktor-Authentifizierung)",
 "login_twofactor_remember" => "Auf diesem Rechner für 30 Tage nicht mehr fragen",
+"password_not_match" => "Die eingegebenen Passwörter stimmen nicht überein.",
+"password_too_long" => "Das eingegeben Passwort ist zu lang. Bitte verwende ein kürzeres Passwort.",
  );
 
 ?>
