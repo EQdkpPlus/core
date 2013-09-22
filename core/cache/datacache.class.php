@@ -286,6 +286,8 @@ if( !class_exists( "cachePagination" ) ) {
 					$this->data[$intChunkID] = $cache_result;
 					unset($cache_result);
 					if (isset($this->data[$intChunkID][$intObjectID])) return true;
+				} else {
+					$this->data[$intChunkID] = $arrCacheData;
 				}
 			} else {
 				if (isset($this->data[$intChunkID][$intObjectID])) return true;			

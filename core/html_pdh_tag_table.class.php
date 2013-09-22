@@ -338,7 +338,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$data = $this->detail_twink_data($view_id_key, $wt_key, $dt_tags[$tag], $module, $tag, $params, $this->sub_array);
 			$add = '';
 			if(!$this->dt_arrow && !$this->settings['perm_detail_twink']) {
-				$add = '<img src="'.$this->root_path.'images/arrows/right_arrow.png" alt="right" class="toggle_members" id="toggle_member_'.$member_id.'" /> ';
+				$add = '<img src="'.$this->server_path.'images/arrows/right_arrow.png" alt="right" class="toggle_members" id="toggle_member_'.$member_id.'" /> ';
 				$this->dt_arrow = true;
 			}
 			$default = '<div style="height:20px; padding:1px; white-space:nowrap; display:block;" class="def_toggle_member_'.$member_id.'">'.$add.$data[(($dt_tags[$tag] == 'summed_up') ? 0 : $member_id)].'</div>';
@@ -360,11 +360,11 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 				$this->tpl->add_js("$('.toggle_members').toggle(function(){
 								$('.'+$(this).attr('id')).attr('style', 'display:block;');
 								$('.def_'+$(this).attr('id')).attr('style', 'display:none;');
-								$(this).attr('src', '".$this->root_path."images/arrows/down_arrow.png');
+								$(this).attr('src', '".$this->server_path."images/arrows/down_arrow.png');
 							},function(){
 								$('.'+$(this).attr('id')).attr('style', 'display:none;');
 								$('.def_'+$(this).attr('id')).attr('style', 'display:block;');
-								$(this).attr('src', '".$this->root_path."images/arrows/right_arrow.png');
+								$(this).attr('src', '".$this->server_path."images/arrows/right_arrow.png');
 							});", 'docready');
 				$this->dt_cssjs = true;
 			}

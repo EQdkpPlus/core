@@ -135,8 +135,9 @@ class Manage_Logs extends page_generic {
 	public function display(){
 	
 		$plugin_list['']	= '';
-		if (is_array($this->pdh->get('logs', 'plugins'))){
-			foreach($this->pdh->get('logs', 'plugins') as $pluginname){
+		$arrLogins = $this->pdh->get('logs', 'plugins');
+		if (is_array($arrLogins)){
+			foreach($arrLogins as $pluginname){
 				if (in_array($pluginname, $this->logs->plugins)){
 					$name = ($this->user->lang($pluginname)) ? $this->user->lang($pluginname) : ucfirst($pluginname);
 					$plugin_list[$pluginname] = $name;

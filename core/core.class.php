@@ -758,7 +758,7 @@ class core extends gen_class {
 					'S_SHOW_QUERIES'		=> true,
 					'EQDKP_RENDERTIME'		=> pr('', 2),
 					'EQDKP_QUERYCOUNT'		=> $this->db->query_count,
-					'EQDKP_MEM_PEAK'		=> number_format(memory_get_peak_usage()/1024, 0, '.', ',').' kb'
+					'EQDKP_MEM_PEAK'		=> number_format(memory_get_peak_usage(true)/1024, 0, '.', ',').' kb',
 				));
 
 				//debug tabs
