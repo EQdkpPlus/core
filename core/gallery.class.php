@@ -127,7 +127,7 @@ if(!class_exists('gallery')){
 			//Get Raid-Infos:
 			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
 			if ($intEventID){
-				$strOut = '<div class="raidloot"><h3>'.$this->user->lang('loot').' '.$this->pdh->get('event', 'html_icon', array($intEventID)).$this->pdh->get('raid', 'html_raidlink', array($intRaidID, register('routing')->build('raid', false, false, false), '', true));
+				$strOut = '<div class="raidloot"><h3>'.$this->user->lang('loot').' '.$this->pdh->get('event', 'html_icon', array($intEventID)).$this->pdh->get('raid', 'html_raidlink', array($intRaidID, register('routing')->simpleBuild('raid'), '', true));
 				$strRaidNote = $this->pdh->get('raid', 'html_note', array($intRaidID));
 				if ($strRaidNote != "") $strOut .= ' ('.$strRaidNote.')';
 				$strOut .= ', '.$this->pdh->get('raid', 'html_date', array($intRaidID)).'</h3>';
@@ -139,7 +139,7 @@ if(!class_exists('gallery')){
 				if (count($arrItemlist)){
 					foreach($arrItemlist as $item){
 						$buyer = $this->pdh->get('item', 'buyer', array($item));
-						$strOut .=  $this->pdh->get('item', 'link_itt', array($item, register('routing')->build('item', false, false, false), '', false, false, false, false, false, true)). ' - '.$this->pdh->geth('member', 'memberlink', array($buyer, register('routing')->build('character', false, false, false), '', false,false,true,true)).
+						$strOut .=  $this->pdh->get('item', 'link_itt', array($item, register('routing')->simpleBuild('item'), '', false, false, false, false, false, true)). ' - '.$this->pdh->geth('member', 'memberlink', array($buyer, register('routing')->simpleBuild('character'), '', false,false,true,true)).
 						', '.round($this->pdh->get('item', 'value', array($item))).' '.$this->config->get('dkp_name').'<br />';
 					}
 					

@@ -40,10 +40,10 @@ class event_pageobject extends pageobject {
 		$raid_hptt_settings	= $this->pdh->get_page_settings('viewevent', 'hptt_viewevent_raidlist');
 		$item_hptt_settings	= $this->pdh->get_page_settings('viewevent', 'hptt_viewevent_itemlist');
 		$raid_ids			= $this->pdh->get('raid', 'raidids4eventid', array($this->url_id));
-		$raid_hptt			= $this->get_hptt($raid_hptt_settings, $raid_ids, $raid_ids, array('%link_url%' => $this->routing->build('raid', false, false, false), '%link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'rsort');
+		$raid_hptt			= $this->get_hptt($raid_hptt_settings, $raid_ids, $raid_ids, array('%link_url%' => $this->routing->simpleBuild('raid'), '%link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'rsort');
 		$raid_hptt->setPageRef($this->strPath);
 		$item_ids			= $this->pdh->get('item', 'itemids4eventid', array($this->url_id));
-		$item_hptt			= $this->get_hptt($item_hptt_settings, $item_ids, $item_ids, array('%link_url%' => $this->routing->build('item', false, false, false), '%link_url_suffix%' => '', '%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%use_controller%' => true), $this->url_id, 'isort');
+		$item_hptt			= $this->get_hptt($item_hptt_settings, $item_ids, $item_ids, array('%link_url%' => $this->routing->simpleBuild('item'), '%link_url_suffix%' => '', '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%use_controller%' => true), $this->url_id, 'isort');
 		$item_hptt->setPageRef($this->strPath);
 		
 		infotooltip_js();

@@ -51,7 +51,7 @@ class items_pageobject extends pageobject {
 		infotooltip_js();
 
 		$hptt_page_settings		= $this->pdh->get_page_settings('listitems', 'hptt_listitems_itemlist');
-		$hptt					= $this->get_hptt($hptt_page_settings, $view_list, $filtered_list, array('%link_url%' => $this->routing->build("item",false,false,false) , '%link_url_suffix%' => '', '%raid_link_url%' => $this->routing->build("raid",false,false,false), '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%use_controller%'=>true), md5($searchType.$mySearch));
+		$hptt					= $this->get_hptt($hptt_page_settings, $view_list, $filtered_list, array('%link_url%' => $this->routing->simpleBuild('item') , '%link_url_suffix%' => '', '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%use_controller%'=>true), md5($searchType.$mySearch));
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array(
 			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_ilimit'], $footer_text),

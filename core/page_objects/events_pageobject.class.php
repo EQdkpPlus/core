@@ -48,7 +48,7 @@ class events_pageobject extends pageobject {
 		$footer_text		= sprintf($this->user->lang('listevents_footcount'), $event_count ,$this->user->data['user_elimit']);
 
 		$hptt_page_settings	= $this->pdh->get_page_settings('listevents', 'hptt_listevents_eventlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build("event",false,false,false), '%link_url_suffix%' => '', '%use_controller%' => true));
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('event'), '%link_url_suffix%' => '', '%use_controller%' => true));
 		$hptt->setPageRef($this->strPath);
 		
 		$this->tpl->assign_vars(array (

@@ -144,7 +144,7 @@ class points_pageobject extends pageobject {
 			$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($view_list));
 		}
 
-		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => (($mdkpid == 0) ? $defaultPoolOverview : $mdkpid), '%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
+		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => (($mdkpid == 0) ? $defaultPoolOverview : $mdkpid), '%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
 		$hptt->setPageRef($this->strPath);
 		
 		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');

@@ -151,7 +151,7 @@ abstract class Database extends gen_class {
 		$green_keywords = array('/(SELECT\s+)/i', '/(FROM)/i', '/(WHERE)/', '/(LIMIT)/', '/(ORDER BY)/', '/(GROUP BY)/', '/(\s+AND\s+)/', '/(\s+OR\s+)/',
 		'/(BETWEEN)/', '/(DESC)/', '/(LEFT JOIN)/', '/(LIKE)/', '/(SHOW TABLE STATUS)/', '/(SHOW)/',  '/(\s+ON\s+)/');
 		$sql = preg_replace('/(' . $this->strTablePrefix. ')(\S+?)([\s\.,]|$)/', "<b>$1$2$3</b>", $sql); // bold table names
-		$sql = preg_replace($red_keywords, "<span class=\"negative\">$1</span>", $sql); // active keywords
+		$sql = preg_replace($red_keywords, "<span style=\"color:orange;\">$1</span>", $sql); // active keywords
 		$sql = preg_replace($green_keywords, "<span class=\"positive\">$1</span>", $sql); //passive keywords
 		return $sql;
 	}

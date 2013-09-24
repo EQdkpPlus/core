@@ -56,7 +56,7 @@ class raids_pageobject extends pageobject {
 
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listraids', 'hptt_listraids_raidlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build("raid",false,false,false), '%link_url_suffix%' => '', '%use_controller%' => true));
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('raid'), '%link_url_suffix%' => '', '%use_controller%' => true));
 		$hptt->setPageRef($this->strPath);
 
 		//footer

@@ -131,6 +131,12 @@ if(!class_exists('routing')){
 			return $strPath;
 		}
 		
+		public function simpleBuild($strPageObject){
+			$strPath = $this->controller_path;
+			$strPath .= ucfirst($this->get($strPageObject, true));
+			return $strPath.'/';
+		}
+		
 		public function getSeoExtension(){
 			switch((int)$this->config->get('seo_extension')){
 				case 1:

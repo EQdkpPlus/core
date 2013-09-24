@@ -258,7 +258,7 @@ if(!class_exists('pdh_r_raid')){
 		}
 
 		public function get_raidlink($raid_id, $base_url, $url_suffix = '', $blnUseController=false){
-			if ($blnUseController && $blnUseController !== '%use_controller%') return $base_url.register('routing')->clean($this->get_event_name($raid_id)).'-'.$raid_id.'/'.$this->SID.$url_suffix;
+			if ($blnUseController && $blnUseController !== '%use_controller%') return $base_url.register('routing')->clean($this->get_event_name($raid_id)).'-'.$raid_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
 			return $base_url.$this->SID . '&amp;r='.$raid_id.$url_suffix;
 		}
 

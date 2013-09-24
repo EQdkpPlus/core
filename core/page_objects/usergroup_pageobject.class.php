@@ -56,7 +56,7 @@ class usergroup_pageobject extends pageobject {
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
 			
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build('user', false, false, false), '%link_url_suffix%' => '', '%use_controller%' => true), $groupID);
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('user'), '%link_url_suffix%' => '', '%use_controller%' => true), $groupID);
 		$hptt->setPageRef($this->strPath);
 		
 		//footer
@@ -72,7 +72,7 @@ class usergroup_pageobject extends pageobject {
 		
 		
 		
-		$hptt_grpleader		= $this->get_hptt($hptt_page_settings, $view_list_grpleader, $view_list_grpleader, array('%link_url%' => $this->routing->build('user', false, false, false), '%link_url_suffix%' => '', '%use_controller%' => true), $groupID.'_grpleader');
+		$hptt_grpleader		= $this->get_hptt($hptt_page_settings, $view_list_grpleader, $view_list_grpleader, array('%link_url%' => $this->routing->simpleBuild('user'), '%link_url_suffix%' => '', '%use_controller%' => true), $groupID.'_grpleader');
 		$hptt_grpleader->setPageRef($this->strPath);
 		//footer
 		$user_count			= count($view_list_grpleader);

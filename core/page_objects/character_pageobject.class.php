@@ -43,7 +43,7 @@ class character_pageobject extends pageobject {
 		// Raid Attendance
 		$view_list			= $this->pdh->get('raid', 'raidids4memberid', array($this->url_id));
 		$hptt_page_settings	= $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_raidlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build('raid', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), $this->url_id, 'rsort');
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('raid'), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), $this->url_id, 'rsort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'RAID_OUT'			=> $hptt->get_html_table($this->in->get('rsort', ''), $this->vc_build_url('rsort'), $this->in->get('rstart', 0), $this->user->data['user_rlimit']),
@@ -54,7 +54,7 @@ class character_pageobject extends pageobject {
 		infotooltip_js();
 		$view_list			= $this->pdh->get('item', 'itemids4memberid', array($this->url_id));
 		$hptt_page_settings	= $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_itemlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build('item', false, false, false), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'isort');
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('item'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'isort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort', ''), $this->vc_build_url('isort'), $this->in->get('istart', 0), $this->user->data['user_ilimit']),
@@ -64,7 +64,7 @@ class character_pageobject extends pageobject {
 		// Individual Adjustment History
 		$view_list = $this->pdh->get('adjustment', 'adjsofmember', array($this->url_id));
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_adjlist');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'asort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'asort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'ADJUSTMENT_OUT' => $hptt->get_html_table($this->in->get('asort', ''), $this->vc_build_url('asort'), $this->in->get('astart', 0), $this->user->data['user_alimit']),
@@ -74,7 +74,7 @@ class character_pageobject extends pageobject {
 		//Event-Attendance
 		$view_list = $this->pdh->get('event', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_eventatt');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%link_url%' => $this->routing->build('event', false, false, false), '%link_url_suffix%' => '', '%with_twinks%' => false, '%use_controller%' => true), $this->url_id, 'esort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%link_url%' => $this->routing->simpleBuild('event'), '%link_url_suffix%' => '', '%with_twinks%' => false, '%use_controller%' => true), $this->url_id, 'esort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'EVENT_ATT_OUT' => $hptt->get_html_table($this->in->get('esort', ''), $this->vc_build_url('esort')),

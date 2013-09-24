@@ -264,7 +264,7 @@ class user_pageobject extends pageobject {
 
 		$arrMemberList = ($this->pdh->get('member', 'mainchar', array($user_id))) ? array($this->pdh->get('member', 'mainchar', array($user_id))) : array();
 
-		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => $this->routing->build('character', false, false, false), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), 'userprofile_'.$user_id);
+		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), 'userprofile_'.$user_id);
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array(
 			'S_PROFILE_PERSONAL_ROW' => count($arrProfile),
@@ -301,7 +301,7 @@ class user_pageobject extends pageobject {
 		infotooltip_js();
 		$view_list			= $this->pdh->get('item', 'itemids4userid', array($user_id));
 		$hptt_page_settings	= $arrItemListSettings;
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build('item', false, false, false), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->build('character', false, false, false)), 'userprofile_'.$user_id, 'isort');
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->build('item', false, false, false), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->simpleBuild('character')), 'userprofile_'.$user_id, 'isort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort', ''), $this->vc_build_url('isort'), $this->in->get('istart', 0), $this->user->data['user_ilimit']),

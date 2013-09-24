@@ -59,7 +59,7 @@ class roster_pageobject extends pageobject {
 					foreach ($this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list', array()))) as $key => $value){
 						if ($key == 0) continue;
 
-						$hptt = $this->get_hptt($hptt_page_settings, $arrRoleMembers[$key], $arrRoleMembers[$key], array('%link_url%' => $this->routing->build('character', false,false,false), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'role_'.$key);
+						$hptt = $this->get_hptt($hptt_page_settings, $arrRoleMembers[$key], $arrRoleMembers[$key], array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'role_'.$key);
 						$hptt->setPageRef($this->strPath);
 						$this->tpl->assign_block_vars('class_row', array(
 							'CLASS_NAME'	=> $value,
@@ -79,7 +79,7 @@ class roster_pageobject extends pageobject {
 					if ($key == 0) continue;
 					if(empty($arrClassMembers[$key])) $arrClassMembers[$key] = array();
 
-					$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => $this->routing->build('character', false,false,false), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'class_'.$key);
+					$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'class_'.$key);
 					$hptt->setPageRef($this->strPath);
 					$this->tpl->assign_block_vars('class_row', array(
 						'CLASS_NAME'	=> $value,

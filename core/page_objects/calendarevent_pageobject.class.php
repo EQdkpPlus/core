@@ -765,7 +765,7 @@ class calendarevent_pageobject extends pageobject {
 			'ATTENDEES_COLSPAN'		=> count($this->raidcategories),
 			'RAIDNAME'				=> $this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])),
 			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 40)),
-			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->build('character',false,false,false), '', false, false, true))) : '',
+			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->simpleBuild('character'), '', false, false, true))) : '',
 			'RAIDVALUE'				=> ($eventdata['extension']['raid_value'] > 0) ? $eventdata['extension']['raid_value'] : '0',
 			'RAIDNOTE'				=> ($eventdata['notes']) ? nl2br($eventdata['notes']) : '',
 			'RAID_ADDEDBY'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),

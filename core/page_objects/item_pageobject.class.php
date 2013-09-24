@@ -65,7 +65,7 @@ class item_pageobject extends pageobject {
 		infotooltip_js();
 
 		$hptt_page_settings		= $this->pdh->get_page_settings('viewitem', 'hptt_viewitem_buyerslist');
-		$hptt					= $this->get_hptt($hptt_page_settings, $item_ids, $item_ids, array('%raid_link_url%' => $this->routing->build('raid', false, false, false), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id);
+		$hptt					= $this->get_hptt($hptt_page_settings, $item_ids, $item_ids, array('%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id);
 		$hptt->setPageRef($this->strPath);
 		
 		//linechart data

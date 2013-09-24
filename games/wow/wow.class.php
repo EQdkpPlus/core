@@ -362,7 +362,7 @@ if(!class_exists('wow')) {
 							
 							$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 							if ($charID) {
-								$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->routing->build('character', false, false, false),'', false, false, true, true));
+								$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->routing->simpleBuild('character'),'', false, false, true, true));
 							} else {
 								$charLink = $val['character'];
 							}
