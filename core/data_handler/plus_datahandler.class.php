@@ -560,8 +560,8 @@ if( !class_exists( "plus_datahandler")){
 			$typed_presets = array( );
 			foreach( $this->preset_list as $preset_name => $preset ) {
 				//primary id invalid
-				if( $preset[2][0] != $primary_id )
-					continue;
+				#if( $preset[2][0] != $primary_id )
+				#	continue;
 
 				//check call params
 				foreach( $preset[2] as $cparam ) {
