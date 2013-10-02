@@ -85,7 +85,7 @@ if ( !defined('EQDKP_INC') ){
 			}
 			$this->debug2errorlevel = array(
 				0	=> E_ERROR,
-				1	=> E_WARNING | E_ERROR,
+				1	=> E_ERROR,
 				2	=> E_WARNING | E_ERROR,
 				3	=> E_ALL & ~(E_NOTICE | E_USER_NOTICE),
 				4 	=> E_ALL

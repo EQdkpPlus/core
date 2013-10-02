@@ -202,7 +202,11 @@ class template extends gen_class {
 			
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
 		foreach($this->tpl_output['css_file'] as $key => $val){
-			$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
+			if ($this->server_path == "/") {
+				$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
+			} else {
+				$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
+			}
 			if ($val['media'] == 'screen' && is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
 				$arrHash[] = md5_file($val['file']);
@@ -247,8 +251,14 @@ class template extends gen_class {
 	public function combine_js(){
 		$arrHash = $data = $arrFiles = array();
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
+
 		foreach($this->tpl_output['js_file'] as $key => $val){
-			$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
+			if ($this->server_path == "/") {
+				$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
+			} else {
+				$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
+			}
+
 			if (is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
 				$arrHash[] = md5_file($val['file']);
@@ -256,14 +266,15 @@ class template extends gen_class {
 				$arrFiles[] = $val['file'];		
 			}
 		}
-		
+
 		//Check if there is an file for this hash
 		asort($arrHash);
 		$strHash = md5(implode(";", $arrHash));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.js';
 		
 		if (is_file($combinedFile)){
-			$this->tpl_output['js_file'][] = array('file' => $combinedFile);
+			array_push($this->tpl_output['js_file'], array('file' => $combinedFile));
+			
 			return true;
 		} else {
 			//Generate it

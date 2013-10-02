@@ -223,11 +223,6 @@ class mmocms_settings extends page_generic {
 						'name'			=> 'pk_updatecheck',
 						'not4hmode'		=> true,
 					),
-					'guildtag'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'guildtag',
-						'size'			=> 35
-					),
 					'main_title'	=> array(
 						'fieldtype'		=> 'text',
 						'name'			=> 'main_title',
@@ -763,7 +758,12 @@ class mmocms_settings extends page_generic {
 						'fieldtype'		=> 'direct',
 						'name'			=> 'pk_defaultgamelang',
 						'direct'		=> $game_array[1],
-					)
+					),
+					'guildtag'		=> array(
+							'fieldtype'		=> 'text',
+							'name'			=> 'guildtag',
+							'size'			=> 35
+					),
 				)
 			),
 			'portal'	=> array(
