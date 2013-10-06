@@ -466,7 +466,7 @@ class import06 extends task {
 			}
 
 			//some special handling for certain configs
-			$configs['pk_itemhistory_dia'] = ($configs['pk_itemhistory_dia']) ? 0 : 1;
+			$configs['itemhistory_dia'] = ($configs['itemhistory_dia']) ? 0 : 1;
 			$game_lang_conv = array('en' => 'english', 'de' => 'german', 'es' => 'spanish', 'fr' => 'french', 'ru' => 'russian');
 			$configs['game_language'] = $game_lang_conv[$configs['game_language']];
 			$this->config->set($configs);

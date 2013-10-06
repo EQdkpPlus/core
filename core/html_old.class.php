@@ -108,6 +108,7 @@ if (!class_exists("html_old")) {
 
 			switch ($type){
 				//Callback-Function
+				// reworked to: html folder in plugins, which is automatically checked
 				case 'function':
 					$plugin		= $options['plugin'];
 					$objPlugin	= $this->pm->get_plugin($plugin);
@@ -116,27 +117,31 @@ if (!class_exists("html_old")) {
 				break;
 				
 				//Plaintext
+				// reworked to text and text2
 				case 'plaintext':
 					$ccfield = '';
 				break;
 
 				// Checkboxes
+				// class hcheckbox
 				case 'checkbox':
 					$ccfield = $this->CheckBox($options['name'], ((isset($options['text'])) ? $options['text'] : ''), ((isset($options['selected'])) ? $options['selected'] : ''), ((isset($options['value'])) ? $options['value'] : ''), ((isset($options['class'])) ? $options['class'] : ''), $options['javascript'], ((isset($options['disabled'])) ? true : false));
 				break;
 
 				// Checkbox
+				// deleted, use radio instead
 				case 'boolean':
 					$ccfield = $this->CheckBox(@$options['name'], $this->is_set($options['text']), (isset($options['value'])) ? '1' : false, '', '', $options['javascript']);
 				break;
 
 				//Spinner
+				// class htextfield, with option 'spinner' => true OR class hspinner
 				case 'spinner':
 					if(!isset($options['id'])) $options['id'] = 'spin_'.uniqid();
-					$this->jquery->spinner($options['id'], $options);
-					$options['class'] = (isset($options['class'])) ? $options['class'] : '';
+					$this->jquery->Spinner($options['id'], $options);
 
 				// Text
+				// class htextfield
 				case 'text':
 				case 'link':
 				case 'int':
@@ -147,6 +152,7 @@ if (!class_exists("html_old")) {
 				
 
 				// Dropdown
+				// class hdropdown
 				case 'dropdown':
 					// make it translatable...
 					$tmpdrdwnrry = array();
@@ -165,33 +171,34 @@ if (!class_exists("html_old")) {
 					$ccfield = $this->DropDown($options['name'], $tmpdrdwnrry, $options['selected'], '', $options['javascript'], 'input', $options['id'],array(), $options['readonly']);
 				break;
 
-				case 'ajax_dropdown':
-					$ccfield = '';
-				break;
-
 				// Autocomplete
+				// class htextfield with option 'autocomplete' => autocompletelist
 				case 'autocomplete':
 					$this->jquery->Autocomplete('id'.$options['name'], $options['options']);
 					$ccfield = $this->TextField($options['name'], $options['size'], $options['selected'], 'text', 'id'.$options['name']);
 				break;
 
 				// Slider
+				// class hslider
 				case 'slider':
 					$ccfield = $this->jquery->Slider($options['name'], array('label' => $options['label'], 'values' => $options['value'], 'min'=>$options['min'], 'max'=>$options['max'], 'width'=> $options['width']), (($options['format']) ? $options['format'] : 'range'));
 				break;
 
-				// Timepicler
+				// Timepicker
+				// class htimepicker
 				case 'timepicker':
 					if(!isset($options['sec'])) $options['sec'] = 0;
 					if(!isset($options['enable_sec'])) $options['enable_sec'] = false;
 					$ccfield = $this->jquery->timePicker($options['name'], $options['value'], (isset($options['hour']) ? $options['hour'] : 0), (isset($options['min']) ? $options['min'] : 0), (isset($options['sec']) ? $options['sec'] : 0), $options['enable_sec'], (isset($options['hour_format'])) ? $options['hour_format'] : '24');
 				break;
 				
+				// class hcolorpicker
 				case 'colorpicker':
 					$ccfield = $this->jquery->colorpicker($options['name'], $options['value']);
 				break;
 
 				// Datepicker
+				// class hdatepicker
 				case 'datepicker':
 					$options['options']['readonly'] = (isset($options['readonly'])) ? $options['readonly'] : false;
 					if(!($options['allow_empty'] && (empty($options['value']) || $options['value'] == '0')) && is_numeric($options['value'])) {
@@ -203,11 +210,13 @@ if (!class_exists("html_old")) {
 				break;
 
 				// Hidden Field
+				// class hpassword
 				case 'hidden':
 					$ccfield = $this->TextField($options['name'], ((isset($options['size'])) ? $options['size'] : ''), $options['value'], 'hidden');
 				break;
 
 				// Password field
+				// class hpassword
 				case 'password':
 					$encrypt = (isset($options['encrypt'])) ? true : false;
 					$readonly = (isset($options['readonly'])) ? $options['readonly'] : false;
@@ -215,6 +224,7 @@ if (!class_exists("html_old")) {
 				break;
 
 				// jQuery Multiselect
+				// class hmultiselect
 				case 'jq_multiselect':
 					$tmpdrdwnrry = array();
 					foreach($options['options'] as $ddid=>$ddname){
@@ -229,6 +239,7 @@ if (!class_exists("html_old")) {
 				break;
 
 				// HTML MultiSelect
+				// deleted, since not used
 				case 'multiselect':
 					// make it translatable...
 					$tmpdrdwnrry = array();
@@ -245,23 +256,27 @@ if (!class_exists("html_old")) {
 				break;
 
 				//Textarea
+				// class htextarea
 				case 'textarea':
 					$encrypt = (isset($options['encrypt'])) ? true : false;
 					$ccfield = $this->TextArea($options['name'],  $options['rows'], $options['cols'],$options['value'], false, 'input', $encrypt, (isset($options['javascript']) ? $options['javascript'] : ''));
 				break;
 
 				//BBCode-Editor
+				// class hbbcodeeditor OR bbcodeeditor = true for textarea
 				case 'bbcodeeditor':
 					$ccfield = $this->TextArea($options['name'], $options['rows'], $options['cols'], $options['value'], $options['name'].'_bbcode', 'mceEditor_bbcode');
 					$this->editor->editor_bbcode();
 				break;
 
 				// Radio Button
+				// class hradio
 				case 'radio':
 					$ccfield = $this->RadioBox($options['name'], $options['options'], ((isset($options['selected'])) ? $options['selected'] : ''));
 				break;
 
 				// Direct Output
+				// use type 'no_type' and set 'text' to what was direct
 				case 'direct':
 					$ccfield = $options['direct'];
 				break;
@@ -269,6 +284,7 @@ if (!class_exists("html_old")) {
 				case 'filemanager':
 				break;
 				
+				// class himageuploader
 				case 'imageuploader':
 					$fileuploadid	= 'file_imageupl_'.$this->cleanid($options['name']);
 					$imgvalue		= (isset($options['value'])) ? $options['value'] : '';

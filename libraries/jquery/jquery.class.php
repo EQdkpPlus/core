@@ -29,6 +29,7 @@ if (!class_exists("jquery")) {
 		private $language_set			= array();
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
+		private $colorpicker_init		= false;
 		
 		/**
 		* Construct of the jquery class
@@ -85,7 +86,6 @@ if (!class_exists("jquery")) {
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
-				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
 		}
 
 		/**
@@ -306,7 +306,8 @@ if (!class_exists("jquery")) {
 			switch($type){
 				case 'normal' :
 					$this->tpl->add_js('$("#'.$id.'").slider();', 'docready');
-					return '<div id="'.$id.'"></div>';
+					$class = (!empty($options['class'])) ? ' class="'.$options['class'].'"' : '';
+					return '<div id="'.$id.'"'.$class.'></div>';
 				break;
 
 				case 'range' :
@@ -315,7 +316,7 @@ if (!class_exists("jquery")) {
 							range: true,
 							min: '.$options['min'].',
 							max: '.$options['max'].',
-							values: ['.$options['values'][0].', '.$options['values'][1].'],
+							values: ['.$options['value'][0].', '.$options['value'][1].'],
 							slide: function(event, ui) {
 								$("#'.$id.'-label").html(ui.values[0] + \' - \' + ui.values[1]);
 								$("#'.$id.'_0").val(ui.values[0]);
@@ -326,10 +327,12 @@ if (!class_exists("jquery")) {
 						$("#'.$id.'_0").val($("#'.$id.'-sr").slider("values", 0));
 						$("#'.$id.'_1").val($("#'.$id.'-sr").slider("values", 1));
 				', 'docready');
-				$html = '<label for="'.$id.'-label">'.$options['label'].': <span id="'.$id.'-label">'.$options['values'][0].' - '.$options['values'][1].'</span></label>
-									<input type="hidden" id="'.$id.'_0" name="'.$id.'[]" value="'.$options['values'][0].'" />
-									<input type="hidden" id="'.$id.'_1" name="'.$id.'[]" value="'.$options['values'][1].'" />
-									<div id="'.$id.'-sr" style="width:'.((isset($options['width'])) ? $options['width'] : '100%').';"></div>';
+				if(empty($options['name'])) $options['name'] = $id;
+				$class = (!empty($options['class'])) ? ' class="'.$options['class'].'"' : '';
+				$html = '<label for="'.$id.'-label">'.$options['label'].': <span id="'.$id.'-label">'.$options['value'][0].' - '.$options['value'][1].'</span></label>
+									<input type="hidden" id="'.$id.'_0" name="'.$options['name'].'[]" value="'.$options['value'][0].'" />
+									<input type="hidden" id="'.$id.'_1" name="'.$options['name'].'[]" value="'.$options['value'][1].'" />
+									<div id="'.$id.'-sr"'.$class.' style="width:'.((isset($options['width'])) ? $options['width'] : '100%').';"></div>';
 				return $html;
 				break;
 			}
@@ -419,7 +422,7 @@ if (!class_exists("jquery")) {
 		* @param $options		Options Array
 		* @return false
 		*/
-		public function spinner($id, $options=''){
+		public function Spinner($id, $options=''){
 			$tmpopt = array();
 			if(isset($options['step'])){ $tmpopt[] = 'step: '.$options['step'];}
 			if(isset($options['max'])){ $tmpopt[] = 'max: '.$options['max'];}
@@ -705,11 +708,6 @@ if (!class_exists("jquery")) {
 			$html		= '<input type="text" id="'.$itemid.'" name="'.$name.'" value="'.$value.'" size="15" '.$jscode.$mclass.$myreadonly.' />';
 			$MySettings	= ''; $dpSettings = array();
 			
-			//we need to use a fixed format if PHP 5.3 isnt in use
-			if(!function_exists('date_create_from_format')) {
-				$options['format'] = $this->time->translateformat2js('Y-m-d');
-				$options['timeformat'] = $this->time->translateformat2js('H:i');
-			}
 			// Load default settings if no custom ones are defined..
 			$options['format']		= (isset($options['format'])) ? $options['format'] : $this->time->translateformat2js($this->user->style['date_notime_short']);
 			$options['cal_icons']	= (isset($options['cal_icons'])) ? $options['cal_icons'] : true;
@@ -804,6 +802,10 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function colorpicker($id, $value, $name='', $size='14', $jscode=''){
+			if(!$this->colorpicker_init) {
+				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
+				$this->colorpicker_init = true;
+			}
 			return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 		}
 
@@ -914,7 +916,7 @@ if (!class_exists("jquery")) {
 		* @param $selected	selected items as string or array
 		* @param $height	height of the popup
 		* @param $width		width of the popup
-		* @param $options	Array with options [id, selections, no_animation, sel_text, header, single_select]
+		* @param $options	Array with options [id, preview_num, no_animation, sel_text, header, multiple]
 		* @return CHAR
 		*/
 		public function MultiSelect($name, $list, $selected, $options=''){
@@ -924,9 +926,8 @@ if (!class_exists("jquery")) {
 			$tmpopt		= array();
 			$tmpopt[] = 'height: '.$options['height'];
 			$tmpopt[] = 'minWidth: '.$options['width'];
-			$tmpopt[] = 'selectedList: '.((isset($options['selections']) && $options['selections'] > 0) ? $options['selections'] : '5');
-			$tmpopt[] = 'multiple: '.((isset($options['single_select'])) ? 'false' : 'true');
-			if(isset($options['selections'])){		$tmpopt[] = 'selectedList: '.$options['selections'];}
+			$tmpopt[] = 'selectedList: '.((isset($options['preview_num']) && $options['preview_num'] > 0) ? $options['preview_num'] : '5');
+			$tmpopt[] = 'multiple: '.((isset($options['multiple']) && !$options['multiple']) ? 'false' : 'true');
 			if(isset($options['no_animation'])){	$tmpopt[] = 'show: "blind",hide: "blind"';}
 			if(isset($options['header'])){			$tmpopt[] = 'header: "'.$options['header'].'"';}
 			$todisable = (isset($options['todisable'])) ? ((is_array($options['todisable'])) ? $options['todisable'] : array($options['todisable'])) : array();
@@ -939,7 +940,7 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js('$("#'.$myID.'").multiselect('.$this->gen_options($tmpopt).')'.$filterme.';', 'docready');
 			$dropdown = "<select name='".$name."[]' id='".$myID."' multiple='multiple'".$javascript.">";
 			$selected = (is_array($selected))? $selected : explode("|", $selected);
-			if($list){
+			if(is_array($list)){
 				foreach ($list as $key => $value) {
 					$selected_choice = (in_array($key, $selected)) ? ' selected="selected"' : '';
 					$disabled = (in_array($key, $todisable)) ? ' disabled="disabled"' : '';
@@ -1008,17 +1009,18 @@ if (!class_exists("jquery")) {
 		* @param $hourf			Format of the time: 24 or 12
 		* @return TimePicker	JS Code
 		*/
-		public function timePicker($name, $value='', $hour=0, $min=0, $sec=0, $enablesecs=false, $hourf=24){
+		public function timePicker($id, $name='', $value='', $enablesecs=false, $hourf=24){
+			if(!$name) $name = 'input_'.$id;
 			$tmpopt		= array();
-			$tmpopt[] = 'hour: "'.$min.'"';
-			$tmpopt[] = 'minute: "'.$hour.'"';
-			$tmpopt[] = 'second: "'.$sec.'"';
+			$tmpopt[] = 'hour: "'.($value-$value%3600)/3600 .'"';
+			$tmpopt[] = 'minute: "'.($value%3600-($value%3600)%60)/60 .'"';
+			$tmpopt[] = 'second: "'.($value%3600)%60 .'"';
 			$tmpopt[] = 'showSecond: '.(($enablesecs) ? 'true' : 'false');
 			$tmpopt[] = 'ampm: '.(($hourf == 12) ? 'true' : 'false');
 			
-			$this->tpl->add_js("$('#id_".$name."').timepicker(".$this->gen_options($tmpopt).");", 'docready');
+			$this->tpl->add_js("$('#".$id."').timepicker(".$this->gen_options($tmpopt).");", 'docready');
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
-			return '<input name="'.$name.'" id="id_'.$name.'" value="'.$value.'" type="text" />';
+			return '<input name="'.$name.'" id="'.$id.'" value="'.$value.'" type="text" />';
 		}
 
 		/**
@@ -1181,6 +1183,32 @@ if (!class_exists("jquery")) {
 			
 			$this->dyndd_counter++;
 			return $output;
+		}
+		
+		/**
+		 * Binding DropDowns: Select in parent, changes the input of child DD
+		 * Sets the necessary js-code, does not provide html-code!
+		 *
+		 * @string 			$id1		The ID of the first (parent) dropdown
+		 * @array/@string 	$id2		The ID (or array of IDs) of the second (child) dropdown(s)
+		 * @string 			$url		The URL to the ajax call, see "dd_create_ajax"
+		 * @string			$add_posts	additional post-variables to pass to the url
+		 */
+		public function js_dd_ajax($id1, $id2, $url, $add_posts='') {
+			$change_js = "$('#".$id1."').change(function() {";
+			$js = '';
+			$child_js = '';
+			// if we only have one child, put it in array for convenience
+			if(!is_array($id2)) $id2 = array($id2);
+			foreach($id2 as $key => $id) {
+				$child_js .= "$('#".$id."').find('option').remove();";
+				$child_js .= "$('#".$id."').append(data);";
+			}
+			$js .= "$.post('".$url."',{requestid:$('#".$id1."').val()".$add_posts."},function(data){".$child_js."});";
+			// initialize on page-load
+			$this->tpl->add_js($js, 'docready');
+			// update on selection change
+			$this->tpl->add_js($change_js.$js.'});', 'docready');
 		}
 
 		/**
@@ -1497,7 +1525,7 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		private function setLanguage($name, $initname){
-			if(!isset($this->language_set[$name]) && isset($name)){
+			if(!isset($this->language_set[$name]) && !empty($name)){
 				$MyLanguage	= ($this->user->lang('XML_LANG') && count($this->user->lang('XML_LANG')) < 3) ? $this->user->lang('XML_LANG') : '';
 				$this->tpl->add_js(str_replace('{!language!}', $MyLanguage, $initname), 'docready');
 				$this->language_set[$name] = true;

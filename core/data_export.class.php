@@ -66,7 +66,7 @@ class content_export extends gen_class {
 			'server_loc'		=> $this->config->get('uc_server_loc'),
 		);				
 		$out['info'] = array(
-			'with_twink'		=> (intval($this->config->get('pk_show_twinks'))) ? 0 : 1,
+			'with_twink'		=> (intval($this->config->get('show_twinks'))) ? 0 : 1,
 			'date'				=> $this->date_created,
 			'timestamp'			=> $this->timestamp,
 			'total_players'		=> count($this->pdh->get('member', 'id_list')),

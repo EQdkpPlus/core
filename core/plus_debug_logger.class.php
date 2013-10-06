@@ -52,6 +52,7 @@ if ( !defined('EQDKP_INC') ){
 			E_DEPRECATED			=> 'DEPRECATED NOTICE',
 			E_USER_DEPRECATED		=> 'USER DEPRECATED NOTICE',
 		);
+		private $fatals = array(E_ERROR, E_PARSE, E_COMPILE_ERROR, E_RECOVERABLE_ERROR);
 
 		private $debug2errorlevel = array();
 
@@ -488,7 +489,7 @@ if ( !defined('EQDKP_INC') ){
 			chdir($this->eqdkp_cwd);
 
 			if ($error = error_get_last()) {
-				if (isset($error['type']) && ($error['type'] == E_ERROR || $error['type'] == E_PARSE || $error['type'] == E_COMPILE_ERROR)) {
+				if (isset($error['type']) && in_array($error['type'], $this->fatals)) {
 					while (ob_get_level()) {
 						ob_end_clean();
 					}
@@ -558,6 +559,50 @@ if ( !defined('EQDKP_INC') ){
 			$output .= $strErrorMessage.'<br /><br />';
 			
 			$output .= $this->error_message_footer(false);
+			echo $output;
+			//Die, otherwise the next fatal error will occure
+			die();
+		}
+		
+		public function class_doesnt_exist($class) {
+			if (!headers_sent()){
+				header('HTTP/1.1 500 Internal Server Error');
+			}
+			$output = $this->error_message_header('Class loading error');
+			
+			$error_message = "Error while loading class <b>'".$class."'</b>: class not found!<br /><br /><b>Debug Backtrace:</b><br />";
+			$data = debug_backtrace();
+			$pos = strrpos($data[max(array_keys($data))]['file'], '/');
+			if($pos === false) $pos = strrpos($data[max(array_keys($data))]['file'], '\\');
+			foreach($data as $key => $call) {
+				$file = substr($call['file'], $pos);
+				$error_message .= $file.": ".$call['line']."<br />";
+			}
+			$output .= $error_message.$this->error_message_footer();
+			echo $output;
+			//Die, otherwise the next fatal error will occure
+			die();
+		}
+		
+		public function file_not_found($path) {
+			if (!headers_sent()){
+				header('HTTP/1.1 500 Internal Server Error');
+			}
+			$output = $this->error_message_header('File loading error');
+			
+			$error_message = "Error while loading file <b>'".$path."'</b>: File not found!<br />";
+			$error_message .= "Please ensure that all files are uploaded correctly!";
+			if($this->debug_level) {
+				$error_message .= "<br /><br /><b>Debug Backtrace:</b><br />";
+				$data = debug_backtrace();
+				$pos = strrpos($data[max(array_keys($data))]['file'], '/');
+				if($pos === false) $pos = strrpos($data[max(array_keys($data))]['file'], '\\');
+				foreach($data as $key => $call) {
+					$file = substr($call['file'], $pos);
+					$error_message .= $file.": ".$call['line']."<br />";
+				}
+			}
+			$output .= $error_message.$this->error_message_footer(false);
 			echo $output;
 			//Die, otherwise the next fatal error will occure
 			die();

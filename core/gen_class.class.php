@@ -36,15 +36,13 @@ abstract class gen_class {
 				return registry::register($shorts[$name]);
 			}
 		}
-		if(is_int(array_search($name, $shorts))) {
-			if(isset(registry::$aliases[$name])) {
-				if(is_array(registry::$aliases[$name])) {
-					return registry::register(registry::$aliases[$name][0], registry::$aliases[$name][1]);
-				} else {
-					return registry::register(registry::$aliases[$name]);
-				}
-			} elseif(registry::class_exists($name)) return registry::register($name);
-		}
+		if(isset(registry::$aliases[$name])) {
+			if(is_array(registry::$aliases[$name])) {
+				return registry::register(registry::$aliases[$name][0], registry::$aliases[$name][1]);
+			} else {
+				return registry::register(registry::$aliases[$name]);
+			}
+		} elseif(registry::class_exists($name)) return registry::register($name);
 		if($const = registry::get_const($name)) return $const;
 		return null;
 	}

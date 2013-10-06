@@ -354,7 +354,7 @@ class editcalendarevent_pageobject extends pageobject {
 				var newDate	= new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endDate.getHours(), endDate.getMinutes());
 				$('#cal_enddate').datetimepicker('setDate', newDate);";
 
-		$this->jquery->spinner('deadlinedate');
+		$this->jquery->Spinner('deadlinedate');
 		$this->jquery->Dialog('AddEventDialog', $this->user->lang('raidevent_raidevent_add'), array('url'=>$this->root_path.'admin/manage_events.php'.$this->SID.'&upd=true&simple_head=true&calendar=true', 'width'=>'600', 'height'=>'420', 'beforeclose'=>$beforeclosefunc));
 
 		if (isset($eventdata['extension']) && $eventdata['extension']['calendarmode']){

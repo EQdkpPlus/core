@@ -36,7 +36,7 @@ class user_pageobject extends pageobject {
 		if ($this->in->get('submit') != ''){
 			$this->user->check_auth('a_sms_send');
 
-			$objSMS			= register('sms', array($this->config->get('pk_sms_username'), $this->config->get('pk_sms_password')));
+			$objSMS			= register('sms', array($this->config->get('sms_username'), $this->config->get('sms_password')));
 
 			$arrReceiver	= array();
 			$strMessage		= ($this->in->get('text_area') != '')? $this->in->get('text_area') : '';
@@ -260,7 +260,7 @@ class user_pageobject extends pageobject {
 				array('name' => 'attendance_30_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'attendance_lt_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 		));
-		if($this->config->get('pk_disable_points')) unset($hptt_page_settings['table_presets'][4]);
+		if($this->config->get('disable_points')) unset($hptt_page_settings['table_presets'][4]);
 
 		$arrMemberList = ($this->pdh->get('member', 'mainchar', array($user_id))) ? array($this->pdh->get('member', 'mainchar', array($user_id))) : array();
 
@@ -297,7 +297,7 @@ class user_pageobject extends pageobject {
 					array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				),
 		);
-		if($this->config->get('pk_disable_points')) unset($arrItemListSettings['table_presets'][5]);
+		if($this->config->get('disable_points')) unset($arrItemListSettings['table_presets'][5]);
 		infotooltip_js();
 		$view_list			= $this->pdh->get('item', 'itemids4userid', array($user_id));
 		$hptt_page_settings	= $arrItemListSettings;
@@ -309,7 +309,7 @@ class user_pageobject extends pageobject {
 		));
 		
 		// Individual Adjustment History
-		if(!$this->config->get('pk_disable_points')){
+		if(!$this->config->get('disable_points')){
 			$arrAdjListSettings = array(
 				'name' => 'hptt_viewmember_adjlist',
 				'table_main_sub' => '%adjustment_id%',
@@ -358,7 +358,7 @@ class user_pageobject extends pageobject {
 					array('name' => 'rvalue', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				),
 		);
-		if($this->config->get('pk_disable_points')) unset($arrRaidListSettings['table_presets'][3]);
+		if($this->config->get('disable_points')) unset($arrRaidListSettings['table_presets'][3]);
 		
 		$view_list			= $this->pdh->get('raid', 'raidids4userid', array($user_id));
 		$hptt_page_settings	= $arrRaidListSettings;
@@ -427,8 +427,8 @@ class user_pageobject extends pageobject {
 			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
 		));
 
-		if (((int)$this->config->get('pk_sms_enable') == 1) && $this->user->check_auth('a_sms_send', false)){
-				if(strlen(($this->config->get('pk_sms_username'))) < 1 || strlen(($this->config->get('pk_sms_password')))){
+		if (((int)$this->config->get('sms_enable') == 1) && $this->user->check_auth('a_sms_send', false)){
+				if(strlen(($this->config->get('sms_username'))) < 1 || strlen(($this->config->get('sms_password')))){
 					$sms_info = $this->user->lang('sms_info_account')." ".$this->user->lang('sms_info_account_link') ;
 					if ($_HMODE) {$sms_info = $this->user->lang('sms_info_account')." ".$_HMODE_LINK;}
 				}

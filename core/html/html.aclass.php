@@ -25,15 +25,28 @@ abstract class html extends gen_class {
 	// field type
 	protected static $type = '';
 	
-	abstract public function __construct($name, $options=array());
+	protected static $ignore = array('text', 'text2', 'type');
 	
-	abstract public function __toString();
+	public function __construct($name, $options=array()) {
+		$this->name = $name;
+		foreach($options as $key => $option) {
+			if(in_array($key, self::$ignore)) continue;
+			$this->$key = $option;
+		}
+	}
+	
+	abstract protected function _toString();
 	
 	abstract public function inpval();
 	
-	public static function __get($name) {
+	public function __get($name) {
 		if($name == 'type') return self::$type;
 		return parent::__get($name);
+	}
+	
+	public function __toString() {
+		if(empty($this->value) && isset($this->default)) $this->value = $this->default;
+		return $this->_toString();
 	}
 	
 	protected function cleanid($input) {

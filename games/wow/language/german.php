@@ -147,7 +147,7 @@ $german_array = array(
 		'uc_achievement_tab_mop'		=> 'Mists of Pandaria',
 
 		// Profile Admin area
-		'pk_tab_fs_wowsettings'			=> 'WoW Einstellungen',
+		'core_sett_fs_gamesettings'		=> 'WoW Einstellungen',
 		'importer_head_txt'				=> 'battle.net Importer',
 		'uc_servername_help'			=> 'Servername des Spielservers (z.B. Mal\'Ganis)',
 		'uc_lockserver'					=> 'Servername unveränderbar machen',

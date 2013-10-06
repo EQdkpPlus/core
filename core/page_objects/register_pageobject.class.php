@@ -105,7 +105,7 @@ class register_pageobject extends pageobject {
 		}
 
 		//Check CAPTCHA
-		if ($this->config->get('pk_enable_captcha') == 1){
+		if ($this->config->get('enable_captcha') == 1){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$response = $captcha->recaptcha_check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('recaptcha_challenge_field'), $this->in->get('recaptcha_response_field'));
@@ -426,7 +426,7 @@ class register_pageobject extends pageobject {
 		}
 
 		//Captcha
-		if ($this->config->get('pk_enable_captcha') == 1){
+		if ($this->config->get('enable_captcha') == 1){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$this->tpl->assign_vars(array(

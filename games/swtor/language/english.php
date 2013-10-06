@@ -58,7 +58,7 @@ $english_array =  array(
 		'swtor'						=> 'Star Wars: The Old Republic',
 
 		//Admin Settings
-		'pk_tab_fs_swtorsettings'	=> 'SWToR Settings',
+		'core_sett_fs_gamesettings'	=> 'SWToR Settings',
 		'swtor_faction'				=> 'Faction',
 		'swtor_faction_help'		=> 'The faction is used to hide classes of the opposing faction.',
 

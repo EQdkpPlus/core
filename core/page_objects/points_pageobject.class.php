@@ -33,7 +33,7 @@ class points_pageobject extends pageobject {
 
 		$show_inactive	= false;
 		$show_hidden	= false;
-		$show_twinks	= $this->config->get('pk_show_twinks');
+		$show_twinks	= $this->config->get('show_twinks');
 		$sort_suffix = (isset($sort))? '&amp;sort='.$sort : '';
 
 		if($this->in->exists('show_inactive')){
@@ -144,13 +144,13 @@ class points_pageobject extends pageobject {
 			$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($view_list));
 		}
 
-		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => (($mdkpid == 0) ? $defaultPoolOverview : $mdkpid), '%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('pk_show_twinks')), '%use_controller%' => true), $mdkp_suffix);
+		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => (($mdkpid == 0) ? $defaultPoolOverview : $mdkpid), '%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('show_twinks')), '%use_controller%' => true), $mdkp_suffix);
 		$hptt->setPageRef($this->strPath);
 		
 		$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
 		$lb_id = $this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']);
 		$lb_id = ($this->in->get('lbc', 0)) ? $lb_id : $mdkpid;
-		if (!$this->config->get('pk_disable_points')){
+		if (!$this->config->get('disable_points')){
 			$myleaderboard			= registry::register('html_leaderboard');
 			$this->tpl->assign_vars(array (
 					'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings),
@@ -164,7 +164,7 @@ class points_pageobject extends pageobject {
 			'SHOW_INACTIVE_CHECKED'		=> ($show_inactive)?'checked="checked"':'',
 			'SHOW_HIDDEN_RANKS_CHECKED'	=> ($show_hidden)?'checked="checked"':'',
 			'SHOW_TWINKS_CHECKED'		=> ($show_twinks)?'checked="checked"':'',
-			'S_SHOW_TWINKS'				=> !$this->config->get('pk_show_twinks'),
+			'S_SHOW_TWINKS'				=> !$this->config->get('show_twinks'),
 			'MDKP_POOLNAME'				=> ($mdkpid > 0) ? $this->pdh->get('multidkp', 'name', array($mdkpid)) : '',
 			'LBC_VALUE'					=> ($this->in->get('lbc', 0)),
 		));

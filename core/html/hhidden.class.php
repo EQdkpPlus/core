@@ -22,27 +22,36 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
-class hcheckbox extends html {
+class hhidden extends html {
 
-	protected static $type = 'checkbox';
+	protected static $type = 'hidden';
 	
 	public $name = '';
-	public $disabled = false;
 	
-	protected function _toString() {
+	public $imageuploader = false;
+	public $imgup_type = 'admin';
+	
+	private $imgoptions = array('prevheight', 'deletelink', 'noimgfile');
+	
+	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
 		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->checked)) $out .= 'checked="checked" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
-		if($this->disabled) $out .= 'disabled="disabled" ';
+		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		return $out.' />';
+		$imgup = '';
+		if($this->imageuploader) {
+			$imgopts = array();
+			foreach($this->imgoptions as $opt) $imgopts[$opt] = $this->$opt;
+			$imgup = $this->jquery->imageUploader($this->imgup_type, $this->id, $this->value, $this->imgpath, $imgopts);
+		}
+		return $out.' />'.$imgup;
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, 0);
+		return $this->in->get($this->name, '');
 	}
 }
 ?>

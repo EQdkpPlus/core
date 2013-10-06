@@ -21,35 +21,25 @@ if ( !defined('EQDKP_INC') ){
 }
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
+include_once(registry::get_const('root_path').'core/html/hhidden.class.php');
 
-class htextfield extends html {
-	public static $shortcuts = array('in');
-
-	protected static $type = 'text';
+// this class acts as an alias for easier usability
+class himageuploader extends hhidden {
 	
-	public $name = '';
-	public $readonly = false;
-	
-	public function __construct($name, $options=array()) {
-		$this->name = $name;
-		foreach($options as $key => $option) {
-			$this->$key = $option;
-		}
-	}
-	
-	public function __toString() {
-		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
-		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$out .= 'id="'.$this->id.'" ';
-		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
-		if($this->readonly) $out .= 'readonly="readonly" ';
-		if(!empty($this->js)) $out.= $this->js.' ';
-		return $out.' />';
-	}
+	public $imageuploader = true;
+	public $returnFormat = '';
 	
 	public function inpval() {
-		return $this->in->get($this->name, '');
+		switch($this->returnFormat){
+			case 'relative': return str_replace($this->environment->link, $this->root_path, $this->in->get($this->name, ''));
+			
+			case 'in_data': return str_replace($this->pfh->FileLink('', 'files', 'absolute'), '', $this->in->get($this->name, ''));
+			
+			case 'filename': return  pathinfo($this->in->get($this->name, ''), PATHINFO_BASENAME);
+			
+			case 'absolute':
+			default: return $this->in->get($this->name, '');
+		}
 	}
 }
 ?>

@@ -33,14 +33,16 @@ final class registry extends super_registry{
 		if(isset(self::$loaded[$classname])) return true;
 		self::$loaded[$classname] = true;
 		if(!isset(self::$locs[$classname]) && !class_exists($classname) && !(self::get_const('lite_mode') && in_array($classname, self::$lite_igno))) {
-			$data = debug_backtrace();
-			foreach($data as $call) echo 'file: '.$call['file'].", line: ".$call['line']."<br />";
-			die('call to not listed class: '.$classname); //use pdl here later
+			if($classname == 'plus_debug_logger') die('Files not uploaded correctly. Please ensure you have all files uploaded.');
+			self::register('plus_debug_logger')->class_doesnt_exist($classname);
 		}
 		if(!class_exists($classname)) {
 			$lite = registry::get_const('lite_mode') ? 'lite/' : '';
 			$path = self::$const['root_path'].self::$locs[$classname];
 			if(!file_exists($path.$lite.$classname.'.class.php')) $lite = '';
+			if(!file_exists($path.$lite.$classname.'.class.php')) {
+				self::register('plus_debug_logger')->file_not_found($path.$lite.$classname.'.class.php');
+			}
 			include_once($path.$lite.$classname.'.class.php');
 		}
 	}

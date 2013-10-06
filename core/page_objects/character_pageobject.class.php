@@ -104,14 +104,14 @@ class character_pageobject extends pageobject {
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_points');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => !$this->config->get('pk_show_twinks'), '%use_controller%' => true), $this->url_id, 'msort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => !$this->config->get('show_twinks'), '%use_controller%' => true), $this->url_id, 'msort');
 		$hptt->setPageRef($this->strPath);
 		$profile_out = array(
 			'PROFILE_OUTPUT'		=> $profile_tplfile,
-			'COMMENT'				=> ($this->config->get('pk_enable_comments') == 1) ? $this->comments->Show() : '',
+			'COMMENT'				=> ($this->config->get('enable_comments') == 1) ? $this->comments->Show() : '',
 			'LAST_UPDATE'			=> $last_update,
 			'MEMBER_POINTS'			=> $hptt->get_html_table($this->in->get('msort', 0), $this->vc_build_url('msort')),
-			'L_DKP_NAME'			=> (!$this->config->get('pk_disable_points')) ? $this->config->get('dkp_name')." ".$this->user->lang('information') : $this->user->lang('tab_attendance'),
+			'L_DKP_NAME'			=> (!$this->config->get('disable_points')) ? $this->config->get('dkp_name')." ".$this->user->lang('information') : $this->user->lang('tab_attendance'),
 			'U_VIEW_MEMBER'			=> $this->vc_build_url('', true).'&amp;',
 
 			// common data

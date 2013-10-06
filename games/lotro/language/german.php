@@ -83,7 +83,7 @@ $german_array = array(
 		'Yeoman'	=>	'Freibauer',		
 
 		// Profile Admin area
-		'pk_tab_fs_lotrosettings'		=> 'LOTRO Einstellungen',
+		'core_sett_fs_gamesettings'		=> 'LOTRO Einstellungen',
 		'uc_faction'					=> 'Fraktion',
 		'uc_faction_help'				=> 'Die Fraktion im Spiel',
 		'uc_fact_pvp'					=> 'MonsterPlay',

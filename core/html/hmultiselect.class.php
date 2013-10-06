@@ -22,19 +22,25 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
-class hdropdown extends html {
+class hmultiselect extends html {
 
 	protected static $type = 'dropdown';
 	
 	public $name = '';
 	public $disabled = false;
+	
+	public $multiple = true;
+	public $width = 200;
+	public $height = 200;
+	public $preview_num = 5;
+	public $datatype = 'string';
 	public $tolang = false;
-	public $class = 'input';
+	
+	private $jq_options = array('id', 'height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter');
 	
 	public function _toString() {
-		$dropdown = '<select size="1" name="'.$this->name.'"';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$dropdown .= ' id="'.$this->id.'"';
+		$dropdown = '<select name="'.$this->name.'[]" id="'.$this->id.'" multiple="multiple"';
 		if(!empty($this->class)) $dropdown .= ' class="'.$this->class.'"';
 		if($this->disabled) $dropdown .= ' disabled="disabled"';
 		if(!empty($this->js)) $dropdown.= ' '.$this->js;
@@ -42,31 +48,27 @@ class hdropdown extends html {
 		if(!is_array($this->todisable)) $this->todisable = array($this->todisable);
 		if(is_array($this->options) && count($this->options) > 0){
 			foreach ($this->options as $key => $value) {
-				if(is_array($value)){
-					$dropdown .= "<optgroup label='".$key."'>";
-					foreach ($value as $key2 => $value2) {
-						if($this->tolang) $value2 = ($this->user->lang($value2, false, false)) ? $this->user->lang($value2) : (($this->game->glang($value2)) ? $this->game->glang($value2) : $value2);
-						$selected_choice = ($key2 == $this->value) ? ' selected="selected"' : '';
-						$disabled = (isset($this->todisable[$key]) && is_array($this->todisable[$key]) && (($key2 === 0 && in_array($key2, $this->todisable[$key], true)) || ($key2 !== 0 && in_array($key2, $this->todisable[$key])))) ? ' disabled="disabled"' : '';
-						$dropdown .= "<option value='".$key2."'".$selected_choice.$disabled.">".$value2."</option>";
-					}
-					$dropdown .= "</optgroup>";
-				}else{
-					if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
-					$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
-					$selected_choice = (($key == $this->value)) ? 'selected="selected"' : '';
-					$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
-				}
+				if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
+				$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
+				$selected_choice = (!empty($this->value) && in_array($key, $this->value)) ? 'selected="selected"' : '';
+				$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
 			}
-		}else{
+		} else {
 			$dropdown .= "<option value=''></option>";
 		}
 		$dropdown .= "</select>";
+		$options = array();
+		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
+		$this->jquery->MultiSelect('', array(), array(), $options);
 		return $dropdown;
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : '');
+		pd($this->name);
+		pd($this->datatype);
+		$ret = $this->in->getArray($this->name, $this->datatype);
+		pd($ret);
+		return $ret;
 	}
 }
 ?>

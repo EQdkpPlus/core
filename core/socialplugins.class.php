@@ -25,32 +25,17 @@ if (!class_exists("socialplugins")) {
 		public static $shortcuts = array('user', 'config', 'tpl', 'env'
 		);
 		
-		private $plugins = array();
-		private $buttons = array();
+		private $plugins = array('opengraph_tags');
+		private $buttons = array('google_plusone', 'twitter_tweet', 'facebook_like', 'facebook_share', 'twitter_share', 'socialshareprivacy');
 		private $ssp_included = false;
-		
-		public function __construct(){
-			$this->plugins = array(						
-				'opengraph_tags' => $this->user->lang('sp_opengraph_tags'),			
-			);
-			
-			$this->buttons = array(						
-				'google_plusone'=> $this->user->lang('sp_google_plusone'),
-				'twitter_tweet' => $this->user->lang('sp_twitter_tweet'),
-				'facebook_like'	=> $this->user->lang('sp_facebook_like'),
-				'facebook_share'=> $this->user->lang('sp_facebook_share'),
-				'twitter_share' => $this->user->lang('sp_twitter_share'),
-				'socialshareprivacy' => '2Click Solution',
-			);
-			
-		}
-		
+
+
 		public function getSocialPlugins($blnOnlyActive = false){
 			if ($blnOnlyActive){
 				$arrOut = array();
-				foreach ($this->plugins as $key => $name){
+				foreach ($this->plugins as $key){
 					if ((int)$this->config->get('sp_'.$key) == 1){
-						$arrOut[$key] = $name;
+						$arrOut[] = $key;
 					}
 				}
 				return $arrOut;
@@ -62,9 +47,9 @@ if (!class_exists("socialplugins")) {
 		public function getSocialButtons($blnOnlyActive = false){
 			if ($blnOnlyActive){
 				$arrOut = array();
-				foreach ($this->buttons as $key => $name){
+				foreach ($this->buttons as $key){
 					if ((int)$this->config->get('sp_'.$key) == 1){
-						$arrOut[$key] = $name;
+						$arrOut[] = $key;
 					}
 				}
 				return $arrOut;
@@ -82,7 +67,7 @@ if (!class_exists("socialplugins")) {
 				if ((int)$this->config->get('sp_socialshareprivacy') == 1){
 					$html .= '<li class="'.$key.'">'.$this->socialshareprivacy($urlToShare, $text, $height).'</li>';
 				} else {				
-					foreach ($arrButtons as $key => $name){
+					foreach ($arrButtons as $key){
 						$html .= '<li class="'.$key.'">'.$this->$key($urlToShare, $text, $height).'</li>';
 					}
 				}
@@ -93,7 +78,7 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		public function callSocialPlugins($title, $description, $image){
-			foreach ($this->getSocialPlugins(true) as $key => $name){
+			foreach ($this->getSocialPlugins(true) as $key){
 				$this->$key($title, $description, $image);
 			}
 		}

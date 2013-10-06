@@ -509,25 +509,20 @@ $realmnames = array(
 $realmnames = array_unique($realmnames);
 
 $settingsdata_admin = array(
-	'game' => array(
-		'wowsettings' => array(
 			'uc_faction'	=> array(
-				'name'		=> 'uc_faction',
-				'fieldtype'	=> 'dropdown',
-				'size'		=> '1',
+				'lang'		=> 'uc_faction',
+				'type'		=> 'dropdown',
 				'options'	=> registry::register('game')->get('factions'),
 				'default'	=> 'alliance'
 			),
 			'uc_server_loc'	=> array(
-				'name'		=> 'uc_server_loc',
-				'fieldtype' => 'dropdown',
-				'size'		=> '1',
+				'lang'		=> 'uc_server_loc',
+				'type' 		=> 'dropdown',
 				'options'	=> array('eu' => 'EU', 'us' => 'US', 'tw' => 'TW', 'kr' => 'KR', 'cn' => 'CN'),
 			),
 			'uc_data_lang'	=> array(
-				'name'		=> 'uc_data_lang',
-				'fieldtype' => 'dropdown',
-				'size'		=> '1',
+				'lang'		=> 'uc_data_lang',
+				'type' 		=> 'dropdown',
 				'options'	=> array(
 								'en_US' => 'English',
 								'es_MX' => 'Mexican',
@@ -543,21 +538,17 @@ $settingsdata_admin = array(
 								'zh_CN'	=> 'Chinese'
 							),
 			),
+			// TODO: check if apostrophe is saved correctly
 			'uc_servername'	=> array(
-				'name'		=> 'uc_servername',
-				'fieldtype'	=> 'autocomplete',
-				'size'		=> '21',
-				'edecode'	=> true,
-				'options'	=> $realmnames,
+				'lang'			=> 'uc_servername',
+				'type'			=> 'text',
+				'size'			=> '21',
+				'autocomplete'	=> $realmnames,
 			),
 			'uc_lockserver'	=> array(
-				'name'		=> 'uc_lockserver',
-				'fieldtype'	=> 'checkbox',
-				'size'		=> false,
-				'options'	=> false,
+				'lang'		=> 'uc_lockserver',
+				'type'		=> 'radio',
 			)
-		)
-	)
 );
 
 ?>

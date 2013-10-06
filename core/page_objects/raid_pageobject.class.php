@@ -197,7 +197,7 @@ class raid_pageobject extends pageobject {
 							array('name' => 'ipoolname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 			);
-			if (!$this->config->get('pk_disable_points')) $arrItemListSettings['table_presets'][] = array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => '');
+			if (!$this->config->get('disable_points')) $arrItemListSettings['table_presets'][] = array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => '');
 			$hptt_page_settings	= $arrItemListSettings;
 			$hptt				= $this->get_hptt($hptt_page_settings, $items, $items, array('%link_url%' => $this->routing->simpleBuild('item'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->simpleBuild('character')), 'raid_'.$this->url_id, 'isort');
 			$hptt->setPageRef($this->strPath);
@@ -206,7 +206,7 @@ class raid_pageobject extends pageobject {
 			));
 
 			//Adjustments			
-			if (!$this->config->get('pk_disable_points')){
+			if (!$this->config->get('disable_points')){
 				$arrAdjListSettings = array(
 					'name' => 'hptt_viewmember_adjlist',
 					'table_main_sub' => '%adjustment_id%',

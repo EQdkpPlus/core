@@ -232,26 +232,6 @@ if (!class_exists("timehandler")){
 		}
 		
 		/**
-		 * Output dateformat in Calendar format, according to options
-		 *
-		 * @array 	$options		Option-Array in HTML-Widget format
-		 * @return 	dateformat
-		 */
-		public function calendarformat($options) {
-			//we need to use a fixed format if PHP 5.3 isnt in use
-			if(!function_exists('date_create_from_format')) {
-				$options['format'] = 'Y-m-d';
-				$options['timeformat'] = 'H:i';
-			}
-			// Load default settings if no custom ones are defined..
-			if(!isset($options['format'])) $options['format'] = $this->user->style['date_notime_short'];
-			if(!isset($options['timeformat'])) $options['timeformat'] = $this->user->style['time'];
-			$format = $options['format'];
-			if(isset($options['timepicker'])) $format .= ' '.$options['timeformat'];
-			return $format;
-		}
-		
-		/**
 		 * Output Date in nice-format, like 7 days ago
 		 *
 		 * @int 	$time			Unix-Timestamp

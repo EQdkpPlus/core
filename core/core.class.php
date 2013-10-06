@@ -299,8 +299,8 @@ class core extends gen_class {
 				'MAIN_TITLE'				=> $this->config->get('main_title'),
 				'SUB_TITLE'					=> $this->config->get('sub_title'),
 				'GUILD_TAG'					=> $this->config->get('guildtag'),
-				'META_KEYWORDS'				=> ($this->config->get('pk_meta_keywords') && strlen($this->config->get('pk_meta_keywords'))) ? $this->config->get('pk_meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('uc_servername'))) ? ', '.$this->config->get('uc_servername') : ''),
-				'META_DESCRIPTION'			=> ($this->config->get('pk_meta_description') && strlen($this->config->get('pk_meta_description'))) ? $this->config->get('pk_meta_description') : $this->config->get('guildtag'),
+				'META_KEYWORDS'				=> ($this->config->get('meta_keywords') && strlen($this->config->get('meta_keywords'))) ? $this->config->get('meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('uc_servername'))) ? ', '.$this->config->get('uc_servername') : ''),
+				'META_DESCRIPTION'			=> ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'),
 				'EQDKP_ROOT_PATH'			=> $this->server_path,
 				'EQDKP_IMAGE_PATH'			=> $this->server_path.'images/',
 				'EQDKP_CONTROLLER_PATH'		=> $this->controller_path,
@@ -312,7 +312,7 @@ class core extends gen_class {
 				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
 				
-				'S_POINTS_DISABLED'			=> ($this->config->get('pk_disable_points')) ? true : false,
+				'S_POINTS_DISABLED'			=> ($this->config->get('disable_points')) ? true : false,
 				'S_NORMAL_HEADER'			=> ($this->header_format != 'simple') ? true : false,
 				'S_NORMAL_FOOTER'			=> ($this->header_format != 'simple') ? true : false,
 				'S_NO_HEADER_FOOTER'		=> ($this->header_format == 'none') ? true : false,
@@ -719,7 +719,7 @@ class core extends gen_class {
 			//Call Social Plugins
 			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/logo.png");
 			$image = ($this->image != '') ? $this->image : $image;
-			$description = ($this->description != '') ? $this->description : (($this->config->get('pk_meta_description') && strlen($this->config->get('pk_meta_description'))) ? $this->config->get('pk_meta_description') : $this->config->get('guildtag'));
+			$description = ($this->description != '') ? $this->description : (($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
 			$this->checkAdminTasks();
 			
@@ -807,14 +807,14 @@ class core extends gen_class {
 
 		public function Copyright(){
 			$disclaimer_txt = '';
-			if($this->config->get('pk_disclaimer_show')){
+			if($this->config->get('disclaimer_show')){
 				$array_contactdetails = array(
-					'name'		=> $this->config->get('pk_disclaimer_name'),
-					'address'	=> $this->config->get('pk_disclaimer_address'),
-					'email'		=> $this->config->get('pk_disclaimer_email'),
-					'messenger'	=> $this->config->get('pk_disclaimer_messenger'),
-					'irc'		=> $this->config->get('pk_disclaimer_irc'),
-					'custom'	=> $this->config->get('pk_disclaimer_custom'),
+					'name'		=> $this->config->get('disclaimer_name'),
+					'address'	=> $this->config->get('disclaimer_address'),
+					'email'		=> $this->config->get('disclaimer_email'),
+					'messenger'	=> $this->config->get('disclaimer_messenger'),
+					'irc'		=> $this->config->get('disclaimer_irc'),
+					'custom'	=> $this->config->get('disclaimer_custom'),
 				);
 
 				$static_disclaimer = '

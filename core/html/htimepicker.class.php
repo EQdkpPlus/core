@@ -22,27 +22,25 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
-class hcheckbox extends html {
+class htimepicker extends html {
 
-	protected static $type = 'checkbox';
+	protected static $type = 'timepicker';
 	
 	public $name = '';
-	public $disabled = false;
+	public $enablesecs = false;
+	public $hourf = 24;
+	public $value = 0;
 	
-	protected function _toString() {
-		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
+	public function _toString() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$out .= 'id="'.$this->id.'" ';
-		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->checked)) $out .= 'checked="checked" ';
+		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->value.'"';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
-		if($this->disabled) $out .= 'disabled="disabled" ';
-		if(!empty($this->js)) $out.= $this->js.' ';
+		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf);
 		return $out.' />';
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, 0);
+		return $this->in->get($this->name, '');
 	}
 }
 ?>

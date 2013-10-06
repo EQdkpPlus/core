@@ -222,8 +222,8 @@ class settings_pageobject extends pageobject {
 					'username'	=> array(
 						'fieldtype'	=> 'text',
 						'name'	=> 'username',
-						'help'	=> ($this->config->get('pk_disable_username_change') == 1) ? $this->user->lang('register_help_disabled_username') : '',
-						'readonly'	=> ($this->config->get('pk_disable_username_change') == 1) ? true : false,
+						'help'	=> ($this->config->get('disable_username_change') == 1) ? $this->user->lang('register_help_disabled_username') : '',
+						'readonly'	=> ($this->config->get('disable_username_change') == 1) ? true : false,
 						'text'	=> '<i class="icon-ok icon-large icon-color-green" id="tick_username" style="display: none;"></i>',
 						'size'		=> 40,
 						'required'	=> true,
@@ -615,8 +615,8 @@ class settings_pageobject extends pageobject {
 		}
 
 		$this->jquery->Tab_header('usersettings_tabs', true);
-		$this->jquery->spinner('#user_alimit, #user_climit, #user_ilimit, #user_rlimit, #user_elimit', array('step'=>10, 'multiselector'=>true));
-		$this->jquery->spinner('user_nlimit');
+		$this->jquery->Spinner('#user_alimit, #user_climit, #user_ilimit, #user_rlimit, #user_elimit', array('step'=>10, 'multiselector'=>true));
+		$this->jquery->Spinner('user_nlimit');
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->controller_path.$this->SID."&style='+ $(\"select[name='style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
 		$this->tpl->assign_vars(array(
 			'S_CURRENT_PASSWORD'			=> true,

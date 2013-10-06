@@ -32,7 +32,7 @@ class roster_pageobject extends pageobject {
 		// The Multigame Roster..
 		$rosterfolder = $this->root_path.'games/'.$this->game->get_game().'/roster/';
 		$skip_inactive = ((int)$this->config->get('hide_inactive') == 1) ? true : false;
-		$skip_twinks = ((int)$this->config->get('pk_show_twinks') == 1) ? false : !(int)$this->config->get('roster_show_twinks');
+		$skip_twinks = ((int)$this->config->get('show_twinks') == 1) ? false : !(int)$this->config->get('roster_show_twinks');
 		$skip_hidden = !((int)$this->config->get('roster_show_hidden'));
 		
 		//Init chartooltip

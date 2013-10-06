@@ -273,7 +273,7 @@ class user_core extends gen_class {
 			$tmp_lang = array_merge($tmp_lang, $lang);
 			unset($lang);
 		}
-		if (defined('IN_ADMIN') || $this->config->get('pk_debug') >= 4) {
+		if (defined('IN_ADMIN') || $this->config->get('debug') >= 4) {
 			include($file_path . 'lang_admin.php');
 			if (is_array($lang)) {
 				$tmp_lang = array_merge($tmp_lang, $lang);

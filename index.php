@@ -376,7 +376,7 @@ class controller extends gen_class {
 			$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 
 			//Comments
-			if ($arrArticle['comments'] && $this->config->get('pk_enable_comments') == 1){
+			if ($arrArticle['comments'] && $this->config->get('enable_comments') == 1){
 				$this->comments->SetVars(array(
 					'attach_id'	=> $intArticleID.(($strSpecificID) ? '_'.$strSpecificID : ''),
 					'page'		=> 'articles',

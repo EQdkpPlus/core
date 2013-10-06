@@ -114,6 +114,15 @@ class config extends gen_class {
 		}
 		return ($plugin) ? $this->config[$plugin] : $this->config;
 	}
+	
+	private function unserialize($val) {
+		//check for '{', only in this case we try a unserialize
+		if(strpos($val, '{') === false) return $val;
+		$value = unserialize($val);
+		// if value is an array now, return value, else return val
+		if(is_array($value)) return $value;
+		return $val;
+	}
 
 	public function get_dbconfig(){
 		if(!is_object($this->db)){return true;}
@@ -122,9 +131,9 @@ class config extends gen_class {
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc() ){
 				if($row['config_plugin'] != 'core'){
-					$this->config[$row['config_plugin']][$row['config_name']] = $row['config_value'];
+					$this->config[$row['config_plugin']][$row['config_name']] = $this->unserialize($row['config_value']);
 				}else{
-					$this->config[$row['config_name']] = $row['config_value'];
+					$this->config[$row['config_name']] = $this->unserialize($row['config_value']);
 				}
 			}
 		}
@@ -148,7 +157,7 @@ class config extends gen_class {
 				
 				$this->db->prepare("REPLACE INTO __backup_cnf :p")->set(array(
 					'config_name'	=> $changed['k'],
-					'config_value'	=> addslashes($changed['v']),
+					'config_value'	=> addslashes(is_array($changed['v']) ? serialize($changed['v']) : $changed['v']),
 					'config_plugin'	=> $changed['p']
 				))->execute();
 			}
@@ -196,7 +205,7 @@ class config extends gen_class {
 					if(strlen(trim($pname)) > 0){
 						$data[] = array(
 							'config_name'	=> $pname,
-							'config_value'	=> addslashes($pvalue),
+							'config_value'	=> addslashes(is_array($pvalue) ? serialize($pvalue) : $pvalue),
 							'config_plugin'	=> $name
 						);
 					}

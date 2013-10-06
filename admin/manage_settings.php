@@ -23,7 +23,10 @@ include_once($eqdkp_root_path . 'common.php');
 
 class mmocms_settings extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html', 'db', 'pfh', 'pdc', 'pdl', 'env', 'itt' => 'infotooltip', 'social' => 'socialplugins');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html', 'db', 'pfh', 'pdc', 'pdl', 'env',
+			'itt' => 'infotooltip',
+			'social' => 'socialplugins',
+			'form'	=> array('form', array('core_settings')));
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -76,10 +79,10 @@ class mmocms_settings extends page_generic {
 		);
 
 		$a_debug_mode = array(
-			'0'			=> 'pk_set_debug_type0',
-			'1'			=> 'pk_set_debug_type1',
-			'2'			=> 'pk_set_debug_type2',
-			'3'			=> 'pk_set_debug_type3',
+			'0'			=> 'core_sett_f_debug_type0',
+			'1'			=> 'core_sett_f_debug_type1',
+			'2'			=> 'core_sett_f_debug_type2',
+			'3'			=> 'core_sett_f_debug_type3',
 			//'4'			=> 'pk_set_debug_type4',
 		);
 
@@ -107,7 +110,7 @@ class mmocms_settings extends page_generic {
 			'smtp'		=> 'lib_email_smtp',
 		);
 
-		$stmp_connection_methods = array(
+		$smtp_connection_methods = array(
 			''	=> 'none',
 			'ssl'	=> 'SSL/TLS',
 			'tls'	=> 'STARTTLS'
@@ -166,17 +169,15 @@ class mmocms_settings extends page_generic {
 		//Social Plugins
 		$arrSocialPlugins = $this->social->getSocialPlugins();
 		$arrSocialFields = array();
-		foreach ($arrSocialPlugins as $key => $value){
+		foreach ($arrSocialPlugins as $key){
 			$arrSocialFields['sp_'.$key] = array(
-				'fieldtype' => 'checkbox',
-				'name' 		=> 'sp_'.$key,
+				'type' => 'radio',
 			);
 		}
 		$arrSocialButtons = $this->social->getSocialButtons();
-		foreach ($arrSocialButtons as $key => $value){
+		foreach ($arrSocialButtons as $key){
 			$arrSocialFields['sp_'.$key] = array(
-				'fieldtype' => 'checkbox',
-				'name' 		=> 'sp_'.$key,
+				'type' => 'radio',
 			);
 		}
 
@@ -206,755 +207,582 @@ class mmocms_settings extends page_generic {
 		if(($this->game->get_importAuth('a_members_man', 'char_mupdate') || $this->game->get_importAuth('a_members_man', 'guild_import')) && $this->game->get_importers('import_data_cache')){
 			$this->jquery->Dialog('ClearImportCache', $this->user->lang('uc_importer_cache'), array('url'=>$this->game->get_importers('import_reseturl', true), 'width'=>'400', 'height'=>'250', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
 		}
-		$this->jquery->spinner('#inactive_period, #pk_round_precision, #inactive_period, #default_nlimit, #calendar_raid_classbreak, #calendar_addraid_deadline, #failed_logins_inactivity', array('multiselector'=>true));
-		$this->jquery->spinner('#default_alimit, #default_climit, #default_ilimit, #default_rlimit, #default_elimit, #calendar_addraid_duration, #calendar_repeat_crondays', array('step'=>10, 'multiselector'=>true));
+		$this->jquery->Spinner('#inactive_period, #round_precision, #inactive_period, #default_nlimit, #calendar_raid_classbreak, #calendar_addraid_deadline, #failed_logins_inactivity', array('multiselector'=>true));
+		$this->jquery->Spinner('#default_alimit, #default_climit, #default_ilimit, #default_rlimit, #default_elimit, #calendar_addraid_duration, #calendar_repeat_crondays', array('step'=>10, 'multiselector'=>true));
 
 		// ---------------------------------------------------------
 		// Output to the page
 		// ---------------------------------------------------------
-		$this->jquery->Tab_header('plus_sett_tabs', true);
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&amp;style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
-		$game_array = $this->jquery->dd_ajax_request('default_game', 'game_language', $games, array('--------'), $this->config->get('default_game'), 'manage_settings.php'.$this->SID.'&ajax=games');
+		$this->jquery->js_dd_ajax('default_game', 'default_gamelang', 'manage_settings.php'.$this->SID.'&ajax=games');
 		$settingsdata = array(
 			'global' => array(
 				'global' => array(
-					'pk_updatecheck'=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_updatecheck',
-						'not4hmode'		=> true,
+					'update_check'	=> array(
+						'type'		=> 'radio',
 					),
 					'main_title'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'main_title',
-						'size'			=> 40
+						'type'		=> 'text',
+						'size'		=> 40
 					),
 					'sub_title'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'sub_title',
-						'size'			=> 40
+						'type'		=> 'text',
+						'size'		=> 40
 					),
-					'pk_disable_points'		=> array(
-							'fieldtype'		=> 'checkbox',
-							'name'			=> 'pk_disable_points',
+					'disable_points'=> array(
+						'type'		=> 'radio',
 					),
 					'dkp_name'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'dkp_name',
-						'size'			=> 5,				
+						'type'		=> 'text',
+						'size'		=> 5,				
 					),
-					'pk_color_items'=> array(
-						'fieldtype'		=> 'slider',
-						'name'			=> 'pk_color_items',
-						'label'			=> $this->user->lang('pk_color_items'),
-						'min'			=> 0,
-						'max'			=> 100,
-						'width'			=> '300px',
-						'format'		=> 'range',
-						'serialized'	=> true,
-						'datatype'		=> 'int'
+					'color_items'	=> array(
+						'type'		=> 'slider',
+						'label'		=> $this->user->lang('core_sett_f_color_items'),
+						'min'		=> 0,
+						'max'		=> 100,
+						'width'		=> '300px'
 					),
-					'pk_enable_comments'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_enable_comments',
+					'enable_comments'	=> array(
+						'type'		=> 'radio',
 					),
-					'pk_round_activate'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_round_activate',
-						'default'		=> 0
+					'round_activate'	=> array(
+						'type'		=> 'radio',
+						'default'	=> 0
 					),
-					'pk_round_precision'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_round_precision',
-						'size'			=> 2,
-						'id'			=> 'pk_round_precision',
-						'class'			=> '',
-						'default'		=> 0
+					'round_precision'	=> array(
+						'type'		=> 'text',
+						'size'		=> 2,
+						'default'	=> 0
 					),
-					'pk_debug'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'pk_debug',
-						'options'		=> $a_debug_mode,
+					'debug'	=> array(
+						'type'		=> 'dropdown',
+						'tolang'	=> true,
+						'options'	=> $a_debug_mode,
 					)
 				),
 				'meta'	=> array(
-					'pk_meta_keywords' => array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_meta_keywords',
-						'size'			=> 40
+					'meta_keywords' => array(
+						'type'		=> 'text',
+						'size'		=> 40
 					),
-					'pk_meta_description' => array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_meta_description',
-						'size'			=> 40
+					'meta_description' => array(
+						'type'		=> 'text',
+						'size'		=> 40
 					),
 				),
 				'disclaimer'	=> array(
-					'pk_disclaimer_show'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_disclaimer_show',
+					'disclaimer_show'	=> array(
+						'type'			=> 'radio',
 					),
-					'pk_disclaimer_name'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_disclaimer_name',
+					'disclaimer_name'	=> array(
+						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'pk_disclaimer_show',
+						'dependency'	=> 'disclaimer_show',
 					),
-					'pk_disclaimer_address'	=> array(
-						'fieldtype'		=> 'textarea',
-						'name'			=> 'pk_disclaimer_address',
+					'disclaimer_address'	=> array(
+						'type'			=> 'textarea',
 						'cols'			=> 50,
 						'rows'			=> 4,
-						'dependency'	=> 'pk_disclaimer_show',
+						'dependency'	=> 'disclaimer_show',
 					),
-					'pk_disclaimer_email'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_disclaimer_email',
+					'disclaimer_email'	=> array(
+						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'pk_disclaimer_show',
+						'dependency'	=> 'disclaimer_show',
 					),
-					'pk_disclaimer_irc'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_disclaimer_irc',
+					'disclaimer_irc'	=> array(
+						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'pk_disclaimer_show',
+						'dependency'	=> 'disclaimer_show',
 					),
-					'pk_disclaimer_messenger'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_disclaimer_messenger',
+					'disclaimer_messenger'	=> array(
+						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'pk_disclaimer_show',
+						'dependency'	=> 'disclaimer_show',
 					),
-					'pk_disclaimer_custom'		=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_disclaimer_custom',
+					'disclaimer_custom'	=> array(
+						'type'			=> 'text',
 						'size'			=> 50,
-						'dependency'	=> 'pk_disclaimer_show',
+						'dependency'	=> 'disclaimer_show',
 					)
 				)
 			),
 			'system'	=> array(
 				'globalsettings'	=> array(
 					'default_locale'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'default_locale',
+						'type'			=> 'dropdown',
 						'options'		=> $locale_array,
-						'no_lang'		=> true,
 					),
 					'server_path'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'server_path',
-						'size'			=> 50,
-						'not4hmode'		=> true
+						'type'		=> 'text',
+						'size'		=> 50,
 					),
 					'enable_gzip'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'enable_gzip',
-						'not4hmode'		=> true,
-						'default'		=> 0
+						'type'		=> 'radio',
+						'default'	=> 0
 					),
 				),
-				'auth'				=> array(
+				'auth'			=> array(
 					'auth_method'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'auth_method',
-						'options'		=> $this->user->get_available_authmethods(),
-						'default'		=> 'db',
+						'type'		=> 'dropdown',
+						'options'	=> $this->user->get_available_authmethods(),
+						'default'	=> 'db',
 					),
-
-
 				),
-				'login'				=> array(
+				'login'			=> array(
 					'login_method'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'login_method',
-						'options'		=> $this->user->get_available_loginmethods(),
-						'serialized'	=> true,
-						'default'		=> '',
+						'type'		=> 'multiselect',
+						'options'	=> $this->user->get_available_loginmethods(),
 					),
 				),
 				'cookie'			=> array(
 					'cookie_domain'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'cookie_domain',
-						'size'			=> 25,
-						'not4hmode'		=> true
+						'type'		=> 'text',
+						'size'		=> 25,
 					),
 					'cookie_name'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'cookie_name',
-						'size'			=> 25,
-						'not4hmode'		=> true
+						'type'		=> 'text',
+						'size'		=> 25,
 					),
 					'cookie_path'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'cookie_path',
-						'size'			=> 25,
-						'not4hmode'		=> true
+						'type'		=> 'text',
+						'size'		=> 25,
 					),
 				),
 				'email'				=> array(
 					'lib_email_method'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'lib_email_method',
-						'options'		=> $mail_array,
+						'type'		=> 'dropdown',
+						'tolang'	=> true,
+						'options'	=> $mail_array,
 					),
 					'admin_email'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'admin_email',
-						'size'			=> 30,
-						'encrypt'		=> true,
+						'type'		=> 'text',
+						'size'		=> 30,
+						'encrypt'	=> true,
 					),
 					'lib_email_sender_name'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_email_sender_name',
-						'size'			=> 30
+						'type'		=> 'text',
+						'size'		=> 30
 					),
 					'lib_email_sendmail_path'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_email_sendmail_path',
+						'type'			=> 'text',
 						'size'			=> 30,
 						'dependency'	=> array('lib_email_method', 'sendmail'),
 					),
 					'lib_email_smtp_host'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_email_smtp_host',
+						'type'			=> 'text',
 						'size'			=> 30,
 						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_port'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_email_smtp_port',
+						'type'			=> 'text',
 						'size'			=> 5,
 						'default'		=> 25,
 						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_connmethod'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'lib_email_smtp_connmethod',
-						'options'		=> $stmp_connection_methods,
+						'type'			=> 'dropdown',
+						'options'		=> $smtp_connection_methods,
 						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_auth'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'lib_email_smtp_auth',
+						'type'			=> 'radio',
 						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_user'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_email_smtp_user',
+						'type'			=> 'text',
 						'size'			=> 30,
 						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_pw'	=> array(
-						'fieldtype'		=> 'password',
-						'name'			=> 'lib_email_smtp_pw',
+						'type'			=> 'password',
 						'size'			=> 30,
 						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_signature'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'lib_email_signature',
+						'type'			=> 'radio',
 						'default'		=> 0
 					),
 					'lib_email_signature_value'	=> array(
-						'fieldtype'		=> 'textarea',
-						'name'			=> 'lib_email_signature_value',
+						'type'			=> 'textarea',
 						'default'		=> $signature,
 						'cols'			=> 80,
 						'rows'			=> 5,
 						'dependency'	=> 'lib_email_signature',
 					),
 				),
-				'recaptcha'			=> array(
+				'recaptcha'		=> array(
 					'lib_recaptcha_okey'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_recaptcha_okey',
-						'size'			=> 30
+						'type'		=> 'text',
+						'size'		=> 30
 					),
 					'lib_recaptcha_pkey'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'lib_recaptcha_pkey',
-						'size'			=> 30
+						'type'		=> 'text',
+						'size'		=> 30
 					)
 				),
-				'date'				=> array(
+				'date'		=> array(
 					'timezone'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'timezone',
-						'options'		=> $this->time->timezones,
+						'type'		=> 'dropdown',
+						'options'	=> $this->time->timezones,
 					),
-					'pk_date_startday'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'pk_date_startday',
-						'options'		=> $a_startday,
-						'no_lang'		=> true,
+					'date_startday'	=> array(
+						'type'		=> 'dropdown',
+						'options'	=> $a_startday,
 					),
 					'default_date_time'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_date_time',
-						'size'			=> 10,
-						'default'		=> $this->user->lang('style_time')
+						'type'		=> 'text',
+						'size'		=> 10,
+						'default'	=> $this->user->lang('style_time')
 					),
 					'default_date_short'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_date_short',
-						'size'			=> 20,
-						'default'		=> $this->user->lang('style_date_short')
+						'type'		=> 'text',
+						'size'		=> 20,
+						'default'	=> $this->user->lang('style_date_short')
 					),
 					'default_date_long'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_date_long',
-						'size'			=> 20,
-						'default'		=> $this->user->lang('style_date_long')
+						'type'		=> 'text',
+						'size'		=> 20,
+						'default'	=> $this->user->lang('style_date_long')
 					),
 					'default_jsdate_time'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_jsdate_time',
-						'size'			=> 20,
-						'default'		=> $this->user->lang('style_jstime')
+						'type'		=> 'text',
+						'size'		=> 20,
+						'default'	=> $this->user->lang('style_jstime')
 					),
 					'default_jsdate_nrml'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_jsdate_nrml',
-						'size'			=> 20,
-						'default'		=> $this->user->lang('style_jsdate_nrml')
+						'type'		=> 'text',
+						'size'		=> 20,
+						'default'	=> $this->user->lang('style_jsdate_nrml')
 					),
 					'default_jsdate_short'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_jsdate_short',
-						'size'			=> 20,
-						'default'		=> $this->user->lang('style_jsdate_short')
+						'type'		=> 'text',
+						'size'		=> 20,
+						'default'	=> $this->user->lang('style_jsdate_short')
 					)
 				)
 			),
-			'user'		=> array(
+			'user'	=> array(
 				'user'	=> array(
 					'default_lang'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'default_lang',
-						'options'		=> $language_array,
-						'no_lang'		=> true,
+						'type'		=> 'dropdown',
+						'options'	=> $language_array,
 					),
 					'account_activation'	=> array(
-						'fieldtype'		=> 'radio',
-						'name'			=> 'account_activation',
-						'options'		=> $accact_array,
-						'default'		=> 0
+						'type'		=> 'radio',
+						'options'	=> $accact_array,
+						'default'	=> 0
 					),
 					'failed_logins_inactivity'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'failed_logins_inactivity',
-						'size'			=> 5,
-						'id'			=> 'failed_logins_inactivity',
-						'class'			=> '',
-						'default'		=> 5,
+						'type'		=> 'text',
+						'size'		=> 5,
+						'default'	=> 5,
 					),
 					'disable_registration'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'disable_registration',
+						'type'		=> 'radio',
 					),
-					'pk_enable_captcha'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_enable_captcha',
+					'enable_captcha'	=> array(
+						'type'		=> 'radio',
 					),
-					'pk_disable_username_change'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_disable_username_change',
+					'disable_username_change'	=> array(
+						'type'		=> 'radio',
 					),
 					'default_style_overwrite'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'default_style_overwrite',
+						'type'		=> 'radio',
 					),
 					'special_user'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'special_user',
+						'type'			=> 'multiselect',
 						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))),
-						'serialized'	=> true,
-						'datatype'		=> 'int',
-						'no_lang'		=> true
+						'datatype'		=> 'int'
 					),
 				)
 			),
 			'chars'		=> array(
 				'chars'		=> array(
-					'pk_class_color'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_class_color',
+					'class_color'	=> array(
+						'type'		=> 'radio',
 					),
 					'special_members'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'special_members',
+						'type'		=> 'multiselect',
 						'options'		=> $members,
-						'serialized'	=> true,
-						'datatype'		=> 'int',
-						'no_lang'		=> true
 					),
-					'pk_show_twinks'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_show_twinks',
-						'default'		=> 0
+					'show_twinks'	=> array(
+						'type'		=> 'radio',
+						'default'	=> 0
 					),
-					'pk_detail_twink'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_detail_twink',
-						'default'		=> 0
+					'detail_twink'	=> array(
+						'type'		=> 'radio',
+						'default'	=> 0
 					),
 					'hide_inactive'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'hide_inactive',
-						'default'		=> 0
+						'type'		=> 'checkbox',
+						'default'	=> 0
 					),
 					'inactive_period'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'inactive_period',
-						'size'			=> 5,
-						'id'			=> 'inactive_period',
-						'class'			=> '',
-						'default'		=> 0
+						'type'		=> 'text',
+						'size'		=> 5,
+						'default'	=> 0
 					)
 				)
 			),
 			'calendar'	=> array(
 				'calendar'	=> array(
 					'calendar_addevent_mode'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'calendar_addevent_mode',
-						'options'		=> $a_calendar_addevmode,
+						'type'		=> 'dropdown',
+						'options'	=> $a_calendar_addevmode,
+						'tolang'	=> true
 					),
 					'calendar_show_birthday'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_show_birthday'
+						'type'		=> 'radio',
 					)
 				),
 				'raids'		=> array(
 					'calendar_raid_guests'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_raid_guests',
+						'type'	=> 'radio',
 					),
 					'calendar_raid_random'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_raid_random',
+						'type'	=> 'radio',
 					),
 					'calendar_raid_classbreak'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'calendar_raid_classbreak',
-						'size'			=> 4,
-						'id'			=> 'calendar_raid_classbreak',
-						'class'			=> ''
+						'type'	=> 'spinner',
+						'size'	=> 4,
 					),
 					'calendar_raid_status'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'calendar_raid_status',
-						'options'		=> $a_calraid_status,
-						'serialized'	=> true,
-						'datatype'		=> 'int',
-						'no_lang'		=> true
+						'type'		=> 'multiselect',
+						'options'	=> $a_calraid_status,
+						'datatype'	=> 'int'
 					),
 					'calendar_raid_nsfilter'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'calendar_raid_nsfilter',
-						'options'		=> $a_calraid_nsfilter,
-						'serialized'	=> true,
-						'datatype'		=> 'string'
+						'type'		=> 'multiselect',
+						'options'	=> $a_calraid_nsfilter,
+						'tolang'	=> true
 					),
 					'calendar_addraid_deadline'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'calendar_addraid_deadline',
-						'size'			=> 5,
-						'id'			=> 'calendar_addraid_deadline',
-						'class'			=> '',
-						'default'		=> '1'
+						'type'		=> 'spinner',
+						'size'		=> 5,
+						'default'	=> 1
 					),
 					'calendar_addraid_duration'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'calendar_addraid_duration',
-						'size'			=> 5,
-						'id'			=> 'calendar_addraid_duration',
-						'class'			=> '',
-						'default'		=> '120'
+						'type'		=> 'spinner',
+						'size'		=> 5,
+						'default'	=> 120
 					),
 					'calendar_addraid_use_def_start'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_addraid_use_def_start',
+						'type'		=> 'radio',
 					),
 					'calendar_addraid_def_starttime'	=> array(
-						'fieldtype'		=> 'timepicker',
-						'name'			=> 'calendar_addraid_def_starttime',
+						'type'		=> 'timepicker',
 						'dependency'	=> 'calendar_addraid_use_def_start',
 						'default'		=> '20:00'
 					),
 					'calendar_repeat_crondays'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'calendar_repeat_crondays',
-						'size'			=> 5,
-						'id'			=> 'calendar_repeat_crondays',
-						'class'			=> '',
-						'default'		=> '40'
+						'type'		=> 'spinner',
+						'size'		=> 5,
+						'default'	=> 40
 					),
 					'calendar_raid_autoconfirm'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'calendar_raid_autoconfirm',
-						'options'		=> $a_groups,
-						'serialized'	=> true,
-						'datatype'		=> 'int',
-						'no_lang'		=> true
+						'type'		=> 'multiselect',
+						'options'	=> $a_groups,
+						'datatype'	=> 'int',
 					),
 					'calendar_raid_autocaddchars'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'calendar_raid_autocaddchars',
-						'options'		=> $a_groups,
-						'serialized'	=> true,
-						'datatype'		=> 'int',
-						'no_lang'		=> true
+						'type'		=> 'multiselect',
+						'options'	=> $a_groups,
+						'datatype'	=> 'int',
 					),
 					'calendar_raid_shownotes'	=> array(
-						'fieldtype'		=> 'jq_multiselect',
-						'name'			=> 'calendar_raid_shownotes',
-						'options'		=> $a_groups,
-						'serialized'	=> true,
-						'datatype'		=> 'int',
-						'no_lang'		=> true
+						'type'		=> 'multiselect',
+						'options'	=> $a_groups,
+						'datatype'	=> 'int',
 					),
 					'calendar_raid_notsigned_classsort'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_raid_notsigned_classsort',
+						'type'		=> 'radio',
 					),
 					'calendar_raid_coloredclassnames'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_raid_coloredclassnames',
+						'type'		=> 'radio',
 					),
 					'calendar_raid_shownotsigned'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_raid_shownotsigned',
+						'type'		=> 'radio',
 					),
 					'calendar_raid_allowstatuschange'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_raid_allowstatuschange',
+						'type'		=> 'radio',
 					),
 				),
 				'calendar_mails'	=> array(
 					'calendar_email_statuschange'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_email_statuschange',
+						'type'		=> 'radio',
 					),
 					'calendar_email_newraid'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_email_newraid',
+						'type'		=> 'radio',
 					),
 					'calendar_email_openclose'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'calendar_email_openclose',
+						'type'		=> 'radio',
 					),
 				)
 			),
 			'game'		=> array(
 				'game'	=> array(
-					'pk_defaultgame'	=> array(
-						'fieldtype'		=> 'direct',
-						'name'			=> 'pk_defaultgame',
-						'direct'		=> $game_array[0],
+					'default_game'	=> array(
+						'type'		=> 'dropdown',
+						'options'	=> $games,
 					),
-					'pk_defaultgamelang'	=> array(
-						'fieldtype'		=> 'direct',
-						'name'			=> 'pk_defaultgamelang',
-						'direct'		=> $game_array[1],
+					'default_gamelang'	=> array(
+						'type'		=> 'dropdown',
+						'options'	=> array('--------'),
 					),
 					'guildtag'		=> array(
-							'fieldtype'		=> 'text',
-							'name'			=> 'guildtag',
-							'size'			=> 35
+						'type'		=> 'text',
+						'size'			=> 35
 					),
 				)
 			),
 			'portal'	=> array(
 				'portal'	=> array(
 					'start_page'	=> array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'start_page',
-						'options'		=> $startpage_array,
+						'type'		=> 'dropdown',
+						'options'	=> $startpage_array,
 					),
 				),
 				'mobile' => array(
 					'mobile_template' => array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'mobile_template',
-						'options'		=> $mobile_template_array,
+						'type'		=> 'dropdown',
+						'options'	=> $mobile_template_array,
 					),
 					'mobile_portallayout' => array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'mobile_portallayout',
-						'options'		=> $mobile_portallayout_array,
+						'type'		=> 'dropdown',
+						'options'	=> $mobile_portallayout_array,
 					),
 					'mobile_pagelayout' => array(
-						'fieldtype'		=> 'dropdown',
-						'name'			=> 'mobile_pagelayout',
-						'options'		=> $mobile_pagelayout_array,
+						'type'		=> 'dropdown',
+						'options'	=> $mobile_pagelayout_array,
 					),
 				),
 				'article'		=> array(
 					'disable_embedly'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'disable_embedly',
+						'type'	=> 'radio',
 					),
 					'thumbnail_defaultsize' => array(
-						'fieldtype'		=> 'int',
-						'name'			=> 'thumbnail_defaultsize',
-						'size'			=> 3,
-						'default'		=> 500,
+						'type'		=> 'spinner',
+						'size'		=> 3,
+						'default'	=> 500,
+						'step'		=> 25
 					),
 				),
 				'seo'	=> array(
 					'seo_remove_index'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'seo_remove_index',
+						'type'		=> 'radio',
 					),
 					'seo_extension'	=> array(
-							'fieldtype'		=> 'dropdown',
-							'name'			=> 'seo_extension',
-							'options'		=> array("/", ".html", ".php"),
+						'type'		=> 'dropdown',
+						'options'	=> array("/", ".html", ".php"),
 					),
 				),
-
 				'social_sharing' => $arrSocialFields,
 			),
 			'layout'	=> array(
 				'layout'	=> array(
 					'custom_logo'	=> array(
-						'fieldtype'	=> 'imageuploader',
-						'name'		=> 'custom_logo',
+						'type'	=> 'imageuploader',
 						'imgpath'	=> $this->pfh->FolderPath('','files'),
-						'options'	=> array(
-							'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
-							'returnFormat' => 'in_data',
-						),
+						'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
+						'returnFormat' => 'in_data',
 					),
-					'pk_itemhistory_dia'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_itemhistory_dia',
+					'itemhistory_dia'	=> array(
+						'type'		=> 'radio',
 					),
 				),
 				'default'	=> array(
 					'default_alimit'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_alimit',
-						'size'			=> 5,
-						'id'			=> 'default_alimit',
-						'class'			=> '',
-						'default'		=> 0
+						'type'		=> 'spinner',
 					),
 					'default_elimit'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_elimit',
-						'size'			=> 5,
-						'id'			=> 'default_elimit',
-						'class'			=> '',
-						'default'		=> 0
+						'type'		=> 'spinner',
 					),
 					'default_ilimit'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_ilimit',
-						'size'			=> 5,
-						'id'			=> 'default_ilimit',
-						'class'			=> '',
-						'default'		=> 0
+						'type'		=> 'spinner',
 					),
 					'default_nlimit'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_nlimit',
-						'size'			=> 5,
-						'id'			=> 'default_nlimit',
-						'class'			=> '',
-						'default'		=> 0
+						'type'		=> 'spinner',
 					),
 					'default_rlimit'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'default_rlimit',
-						'size'			=> 5,
-						'id'			=> 'default_rlimit',
-						'class'			=> '',
-						'default'		=> 0
+						'type'		=> 'spinner',
 					),
 				)
 			),
 			'itemtooltip'	=> array(),	// placeholder for sorting..
 			'sms'		=> array(
 				'sms'	=> array(
-					'pk_sms_enable'	=> array(
-						'fieldtype'		=> 'checkbox',
-						'name'			=> 'pk_sms_enable',
+					'sms_enable'	=> array(
+						'type'		=> 'radio',
 					),
-					'pk_sms_username'	=> array(
-						'fieldtype'		=> 'text',
-						'name'			=> 'pk_sms_username',
+					'sms_username'	=> array(
+						'type'		=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'pk_sms_enable',
+						'dependency'	=> 'sms_enable',
 					),
-					'pk_sms_password'	=> array(
-						'fieldtype'		=> 'password',
-						'name'			=> 'pk_sms_password',
+					'sms_password'	=> array(
+						'type'		=> 'password',
 						'size'			=> 40,
-						'dependency'	=> 'pk_sms_enable',
+						'dependency'	=> 'sms_enable',
 					)
 				)
 			),
 		);
+		$this->form->add_tabs($settingsdata);
 
 		// ItemTooltip Inject
 		if(in_array($this->game->get_game(), $this->itt->get_supported_games())){
-			$settingsdata['itemtooltip']['itemtooltip'] = array(
+			$fields = array(
 				'infotooltip_use'	=> array(
-					'fieldtype'		=> 'checkbox',
-					'name'			=> 'infotooltip_use',
+					'type'		=> 'radio',
 				),
 				'itt_debug'	=> array(
-					'fieldtype'		=> 'checkbox',
-					'name'			=> 'itt_debug',
+					'type'		=> 'radio',
 				),
 				'itt_trash'	=> array(
-					'name'			=> 'itt_trash',
-					'fieldtype'		=> 'direct',
-					'direct'		=> '<input type="submit" name="itt_reset" value="'.$this->user->lang('pk_itt_reset').'" class="mainoption bi_reset" />',
+					'type'		=> 'direct',
+					'text'		=> '<input type="submit" name="itt_reset" value="'.$this->user->lang('itt_reset').'" class="mainoption bi_reset" />',
 				),
 			);
+			$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
 
 			$itt_parserlist	= $this->itt->get_parserlist();
-			$settingsdata['itemtooltip']['priorities']	= array(
+			$fields	= array(
 				'itt_prio1'	=> array(
-					'fieldtype'		=> 'dropdown',
+					'type'		=> 'dropdown',
 					'name'			=> 'itt_prio1',
 					'options'		=> $itt_parserlist
 				),
 				'itt_prio2'	=> array(
-					'fieldtype'		=> 'dropdown',
+					'type'		=> 'dropdown',
 					'name'			=> 'itt_prio2',
 					'options'		=> $itt_parserlist
 				),
 			);
+			$this->form->add_fields($fields, 'priorities' ,'itemtooltip');
 
+			// TODO: rework this, it overwrites settings of previous parsers (in ittsettdata), mb use ajax-dd
 			$ittsettdata = $this->itt->get_extra_settings();
 			if(is_array($ittsettdata)){
-				foreach($ittsettdata as $confvars){
-					$ittsett_value = ($this->config->get($confvars['name'])) ? $this->config->get($confvars['name']) : $confvars['default'];
-					$settingsdata['itemtooltip']['ittdbsettings'][$confvars['name']]	= $confvars;
-				}
+				$this->form->add_fields($ittsettdata, 'ittdbsettings', 'itemtooltip');
 				//add button to reload defaults
-				$settingsdata['itemtooltip']['ittdbsettings']['itt_force_default'] = array(
-					'name'			=> 'pk_itt_force_default',
-					'fieldtype'		=> 'direct',
-					'direct'		=> '<input type="submit" name="itt_force_default" value="'.$this->user->lang('pk_itt_force_default').'" class="mainoption bi_reset" />',
-				);
+				$this->form->add_field('itt_force_default', array(
+					'type'		=> 'direct',
+					'text'		=> '<input type="submit" name="itt_force_default" value="'.$this->user->lang('core_sett_f_itt_force_default').'" class="mainoption bi_reset" />',
+				), 'ittdbsettings', 'itemtooltip');
 			}
 
 			$itt_langlist	= $this->itt->get_supported_languages();
+			$fields = array();
 			for($i=1; $i<=3; $i++){
-				$settingsdata['itemtooltip']['ittlanguages']['itt_langprio'.$i]	= array(
-					'fieldtype'	=> 'dropdown',
-					'name'		=> 'itt_langprio'.$i,
+				$fields['itt_langprio'.$i]	= array(
+					'type'	=> 'dropdown',
 					'options'	=> $itt_langlist,
-					'no_lang'	=> true
 				);
 			}
-
+			$this->form->add_fields($fields, 'ittlanguages', 'itemtooltip');
+			
 			//check if user wanted to reset itt-cache
 			if($this->in->get('itt_reset', false)) {
 				$this->itt->reset_cache();
@@ -975,11 +803,11 @@ class mmocms_settings extends page_generic {
 			}else{
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" class="mainoption" onclick="javascript:GuildImport()" />';
 			}
-			$settingsdata['game']['importer']['uc_import_guild'] = array(
-				'name'			=> 'uc_import_guild',
-				'fieldtype'		=> 'direct',
-				'direct'		=> $gimport_out,
-			);
+			$this->form->add_field('uc_import_guild', array(
+				'lang'	=> 'uc_import_guild',
+				'type'	=> 'direct',
+				'text'	=> $gimport_out,
+			), 'importer', 'game');
 		}
 
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
@@ -989,20 +817,20 @@ class mmocms_settings extends page_generic {
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" class="mainoption" onclick="javascript:MassUpdateChars()" />';
 			}
 			$cupdate_out .= ' ['.(($this->config->get('uc_profileimported')) ? $this->user->lang('uc_last_updated').': '.date($this->user->style['date_time'], $this->config->get('uc_profileimported')) : $this->user->lang('uc_never_updated')).']';
-			$settingsdata['game']['importer']['uc_update_all'] = array(
-				'name'			=> 'uc_update_all',
-				'fieldtype'		=> 'direct',
-				'direct'		=> $cupdate_out,
-			);
+			$this->form->add_field('uc_update_all', array(
+				'lang'	=> 'uc_update_all',
+				'type'	=> 'direct',
+				'text'	=> $cupdate_out,
+			), 'importer', 'game');
 		}
 
 		// Importer cache reset button
 		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $this->game->get_importers('import_data_cache')){
-			$settingsdata['game']['importer']['uc_importer_cache'] = array(
-				'name'			=> 'uc_importer_cache',
-				'fieldtype'		=> 'direct',
-				'direct'		=> '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_resetcache').'" class="mainoption" onclick="javascript:ClearImportCache()" />',
-			);
+			$this->form->add_field('uc_importer_cache', array(
+				'lang'	=> 'uc_importer_cache',
+				'type'	=> 'direct',
+				'text'	=> '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_resetcache').'" class="mainoption" onclick="javascript:ClearImportCache()" />',
+			), 'importer', 'game');
 		}
 
 		// merge the game admin array to the existing one
@@ -1010,41 +838,32 @@ class mmocms_settings extends page_generic {
 		if(is_file($myprofiledata)){
 			require_once($myprofiledata);
 			if(is_array($settingsdata_admin)){
-				$settingsdata = array_merge_recursive($settingsdata, $settingsdata_admin);
+				$this->form->add_fields($settingsdata_admin, 'gamesettings', 'game');
 			}
 		}
 
 		//Merge authmethod-settings
-		if ($this->user->get_authmethod_settings()){
-			$settingsdata = array_merge_recursive($settingsdata, $this->user->get_authmethod_settings());
+		if ($authmethodSettings = $this->user->get_authmethod_settings()){
+			$this->form->add_fields($authmethodSettings, 'auth', 'system');
 		}
 
 		//Merge loginmethod-settings
 		if ($arrLoginmethodSettings = $this->user->get_loginmethod_settings()){
-			$settingsdata = array_merge_recursive($settingsdata, $arrLoginmethodSettings);
+			$this->form->add_fields($arrLoginmethodSettings, 'login', 'system');
 		}
 
 		// Inject Plugin Settings
 		// PLACEHOLDER.. maybe we will do that one day...
+		
+		//initialize form class
+		$this->form->lang_prefix = 'core_sett_';
+		$this->form->use_tabs = true;
+		$this->form->use_fieldsets = true;
 
 		// save the setting
 		if ($this->in->exists('save_plus') && $this->checkCSRF('display')){
 
-			foreach($settingsdata as $tabname=>$fieldsetdata){
-				foreach($fieldsetdata as $fieldsetname=>$fielddata){
-					foreach($fielddata as $name=>$confvars){
-						if(isset($confvars['serialized'])){
-							$tmp_get	= serialize($this->in->getArray($confvars['name'], $confvars['datatype']));
-						}else{
-							$tmp_get	= $this->html->widget_return($confvars);
-						}
-						if(isset($confvars['edecode'])){
-							$tmp_get	= html_entity_decode($tmp_get);
-						}
-						$save_array[$confvars['name']] = $tmp_get;
-					}
-				}
-			}
+			$save_array = $this->form->return_values();
 			//check for changed game
 			$game_changed = false;
 			if (($this->in->get('default_game') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
@@ -1056,15 +875,15 @@ class mmocms_settings extends page_generic {
 			}
 			
 			//check for changed disable points
-			if((int)$this->config->get('pk_disable_points') != $this->in->get('pk_disable_points', 0)){
-				if ($this->in->get('pk_disable_points', 0) == 1) {$this->config->set('eqdkp_layout', "nopoints");} else $this->config->set('eqdkp_layout', "normal");
+			if((int)$this->config->get('disable_points') != $this->in->get('disable_points', 0)){
+				if ($this->in->get('disable_points', 0) == 1) {$this->config->set('eqdkp_layout', "nopoints");} else $this->config->set('eqdkp_layout', "normal");
 			}
 
 			// Save the settings array
 			$this->config->set($save_array);
 
 			// Since ChangeGame alters Config it has to be executed after config-save
-			if($game_changed) {
+			if($game_changed && false) {
 				$this->game->ChangeGame($this->in->get('default_game'), $this->in->get('game_language'));
 				$this->pdc->flush();
 				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
@@ -1078,34 +897,7 @@ class mmocms_settings extends page_generic {
 		}
 
 		// Output
-		foreach($settingsdata as $tabname=>$fieldsetdata){
-			$this->tpl->assign_block_vars('tabs', array(
-				'NAME'	=> $this->user->lang('pk_tab_'.$tabname),
-				'ID'	=> $tabname
-				)
-			);
-
-			foreach($fieldsetdata as $fieldsetname=>$fielddata){
-				$this->tpl->assign_block_vars('tabs.fieldset', array(
-					'NAME'		=> ($this->user->lang('pk_tab_fs_'.$fieldsetname, false, false)) ? $this->user->lang('pk_tab_fs_'.$fieldsetname) : $this->game->glang('pk_tab_fs_'.$fieldsetname),
-					'INFO'		=> ($this->user->lang('pk_tab_info_'.$fieldsetname, false, false)) ? $this->user->lang('pk_tab_info_'.$fieldsetname) : $this->game->glang('pk_tab_info_'.$fieldsetname),
-				));
-
-				foreach($fielddata as $name=>$confvars){
-					// continue if hmode == true
-					if(($this->hmode && $confvars['not4hmode']) || (isset($confvars['disabled']) && $confvars['disabled']===true)){
-						continue;
-					}
-					$no_lang	= (isset($confvars['no_lang'])) ? true : false;
-					$selection	= ($this->config->get($confvars['name'])) ? $this->config->get($confvars['name']) : ((isset($confvars['default'])) ? $confvars['default'] : '');
-					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
-						'NAME'		=> ($this->user->lang($confvars['name'], false, false)) ? $this->user->lang($confvars['name']) : (($this->game->glang($confvars['name'])) ? $this->game->glang($confvars['name']) : $confvars['name']),
-						'HELP'		=> ($this->user->lang($confvars['name'].'_help', false, false)) ? $this->user->lang($confvars['name'].'_help') : (($this->game->glang($confvars['name'].'_help')) ? $this->game->glang($confvars['name'].'_help') : ''),
-						'FIELD'		=> $this->html->generateField($confvars, $name, $selection, $no_lang),
-					));
-				}
-			}
-		}
+		$this->form->output($this->config->get_config());
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('config_title'),

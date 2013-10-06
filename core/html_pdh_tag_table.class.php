@@ -274,7 +274,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$this->sub_array[$this->id_tag] = $view_id;
 
 					$view_row .= "\t".'<td '.$td_add.'>';
-					if($this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink']) {
+					if($this->config->get('detail_twink') AND $this->settings['show_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} elseif(isset($this->settings['perm_detail_twink']) && $this->settings['perm_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
@@ -355,7 +355,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		}
 
 		private function detail_twink_css_js() {
-			if(!$this->dt_cssjs AND ($this->config->get('pk_detail_twink') AND $this->settings['show_detail_twink'])) {
+			if(!$this->dt_cssjs AND ($this->config->get('detail_twink') AND $this->settings['show_detail_twink'])) {
 				$this->tpl->add_css('.toggle_members { cursor: default; width: 10px; height: 10px; }');
 				$this->tpl->add_js("$('.toggle_members').toggle(function(){
 								$('.'+$(this).attr('id')).attr('style', 'display:block;');

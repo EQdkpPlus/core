@@ -59,7 +59,7 @@ $german_array = array(
 		'swtor'						=> 'Star Wars: The Old Republic',
 
 		//Admin Settings
-		'pk_tab_fs_swtorsettings'	=> 'SWToR Einstellungen',
+		'core_sett_fs_gamesettings'	=> 'SWToR Einstellungen',
 		'swtor_faction'				=> 'Fraktion',
 		'swtor_faction_help'		=> 'Die Fraktion dient dem Ausblenden der Klassen der jeweils anderen Fraktion.',
 

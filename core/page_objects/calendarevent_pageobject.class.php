@@ -739,7 +739,7 @@ class calendarevent_pageobject extends pageobject {
 			// globals
 			'NO_STATUSES'			=> (is_array($raidcal_status) && count($raidcal_status) < 1) ? true : false,
 			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
-			'COMMENTS'				=> ($this->config->get('pk_enable_comments') == 1) ? $this->comments->Show() : '',
+			'COMMENTS'				=> ($this->config->get('enable_comments') == 1) ? $this->comments->Show() : '',
 			'EVENT_ID'				=> $this->url_id,
 			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
 			'S_NEXT_OR_PREV_RAIDEVENT' => ($nextraidevent || $prevraidevent),

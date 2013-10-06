@@ -514,8 +514,8 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		$this->jquery->Tab_header('usersettings_tabs');
 		$this->jquery->Tab_header('permission_tabs');
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
-		$this->jquery->spinner('#user_alimit, #user_climit, #user_ilimit, #user_rlimit, #user_elimit', array('step'=>10, 'multiselector'=>true));
-		$this->jquery->spinner('user_nlimit');
+		$this->jquery->Spinner('#user_alimit, #user_climit, #user_ilimit, #user_rlimit, #user_elimit', array('step'=>10, 'multiselector'=>true));
+		$this->jquery->Spinner('user_nlimit');
 
 		$this->tpl->assign_vars(array(
 			// Form vars

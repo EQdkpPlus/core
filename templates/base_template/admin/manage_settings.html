@@ -6,30 +6,30 @@
 	</ul>
 	<div class="clear"></div>
 </div>
-<form method="post" action="{ACTION}" name="settings">
-	<div id='plus_sett_tabs'>
+<form method="post" action="{ACTION}" name="{FORM_ID}">
+	<div id='core_sett_tabs'>
 		<ul>
 			<!-- BEGIN tabs --> <li><a href='#fragment-{tabs.ID}'><span>{tabs.NAME}</span></a></li><!-- END tabs -->
 		</ul>
 
 		<!-- BEGIN tabs -->
 		<div id="fragment-{tabs.ID}">
-			<!-- BEGIN fieldset -->
-			<!-- IF tabs.fieldset.INFO -->
+			<!-- BEGIN fieldsets -->
+			<!-- IF tabs.fieldsets.INFO -->
 			<div class="infobox infobox-large infobox-blue clearfix">
-				<i class="icon-info-sign icon-4x pull-left"></i> {tabs.fieldset.INFO}
+				<i class="icon-info-sign icon-4x pull-left"></i> {tabs.fieldsets.INFO}
 			</div>
 			<!-- ENDIF -->
 			<fieldset class="settings">
-				<legend>{tabs.fieldset.NAME}</legend>
-				<!-- BEGIN field -->
+				<legend>{tabs.fieldsets.NAME}</legend>
+				<!-- BEGIN fields -->
 				<dl>
-					<dt><label>{tabs.fieldset.field.NAME}</label><br /><span>{tabs.fieldset.field.HELP}</span></dt>
-					<dd>{tabs.fieldset.field.FIELD}</dd>
+					<dt><label>{tabs.fieldsets.fields.NAME}</label><br /><span>{tabs.fieldsets.fields.HELP}</span></dt>
+					<dd>{tabs.fieldsets.fields.FIELD}</dd>
 				</dl>
-				<!-- END field -->
+				<!-- END fields -->
 			</fieldset>
-			<!-- END fieldset -->
+			<!-- END fieldsets -->
 		</div>
 		<!-- END tabs -->
 

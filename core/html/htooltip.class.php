@@ -23,8 +23,6 @@ if ( !defined('EQDKP_INC') ){
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 class htooltip extends html {
-	public static $shortcuts = array('in');
-
 	protected static $type = 'none';
 	
 	public $name = '';
@@ -33,20 +31,14 @@ class htooltip extends html {
 	public $usediv = false;
 	private $contfunc = true;
 	private $all_opts = array('contfunc', 'name', 'my', 'at', 'classes', 'width');
-	
-	public function __construct($text, $content, $options=array()) {
-		$this->text = $text;
-		$this->content = $content;
-		foreach($options as $key => $option) {
-			$this->$key = $option;
-		}
-	}
-	
-	public function __toString() {
+
+	public function _toString() {
 		if(empty($this->name)) $this->name = uniqid();
 		if(empty($this->id)) $this->id = uniqid();
 		$options = array();
-		foreach($this->all_opts as $opt) $options[$opt] = $this->$opt;
+		foreach($this->all_opts as $opt) {
+			$options[$opt] = $this->$opt;
+		}
 		$this->jquery->qtip('.'.$name, 'return $(".'.$name.'_c", this).html();', $options);
 		if(isset($this->usediv) && $this->usediv){
 			return '<div class="'.$this->name.'" id="'.$this->id.'"><div class="'.$this->name.'_c" style="display:none;">'.$this->content.'</div>'.$this->text.'</div>';

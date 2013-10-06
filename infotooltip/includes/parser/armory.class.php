@@ -28,25 +28,16 @@ if(!class_exists('armory')) {
 		public $av_langs = array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR', 'ru' => 'ru_RU');#, 'jp' => 'ja_JP');
 
 		public $settings = array(
-			'itt_icon_loc' => array('name' => 'itt_icon_loc',
-									'language' => 'pk_itt_icon_loc',
-									'fieldtype' => 'text',
-									'size' => false,
-									'options' => false,
-									'default' => 'http://eu.media.blizzard.com/wow/icons/56/'),
-			'itt_icon_ext' => array('name' => 'itt_icon_ext',
-									'language' => 'pk_itt_icon_ext',
-									'fieldtype' => 'text',
-									'size' => false,
-									'options' => false,
-									'default' => '.jpg'),
-			'itt_default_icon' => array('name' => 'itt_default_icon',
-										'language' => 'pk_itt_default_icon',
-										'fieldtype' => 'text',
-										'size' => false,
-										'options' => false,
-										'default' => 'inv_misc_questionmark')
-								);
+			'itt_icon_loc' => array(
+				'type' => 'text',
+				'default' => 'http://eu.media.blizzard.com/wow/icons/56/'),
+			'itt_icon_ext' => array(
+				'type' => 'text',
+				'default' => '.jpg'),
+			'itt_default_icon' => array(
+				'type' => 'text',
+				'default' => 'inv_misc_questionmark')
+			);
 
 		private $url_prefix = '';
 		private $searched_langs = array();

@@ -78,13 +78,13 @@ function sdir( $path='.', $mask='*', $strip='', $nocache=0 ){
  */
 function runden($value){
 	$ret_val		= $value;
-	$precision	= (int)registry::register('config')->get('pk_round_precision');
+	$precision	= (int)registry::register('config')->get('round_precision');
 
 	if (($precision < 0) or ($precision > 5) ){
 		$precision = 2;
 	}
 
-	if (registry::register('config')->get('pk_round_activate') == "1"){
+	if (registry::register('config')->get('round_activate') == "1"){
 		$ret_val = round($value,$precision)	;
 	} else {
 		$ret_val = round($value, 5);
@@ -158,7 +158,7 @@ function color_item($item, $percentage = false){
 		return false;
 	}
 	$class		= 'neutral';
-	$vals = unserialize(registry::register('config')->get('pk_color_items'));
+	$vals = unserialize(registry::register('config')->get('color_items'));
 	$max_val	= ($vals[1]) ? $vals[1] : 67;
 	$min_val	= ($vals[0]) ? $vals[0] : 34;
 

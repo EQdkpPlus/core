@@ -50,7 +50,22 @@ abstract class super_registry {
 		'plus_datahandler'		=> 'core/data_handler/',
 		'file_handler'			=> 'core/file_handler/',
 		// html-fields
-		'hcheckbox'				=> 'core/html',
+		'hbbcodeeditor'			=> 'core/html/',
+		'hcheckbox'				=> 'core/html/',
+		'hcolorpicker'			=> 'core/html/',
+		'hdatepicker'			=> 'core/html/',
+		'hdropdown'				=> 'core/html/',
+		'hhidden'				=> 'core/html/',
+		'himageuploader'		=> 'core/html/',
+		'hmultiselect'			=> 'core/html/',
+		'hpassword'				=> 'core/html/',
+		'hradio'				=> 'core/html/',
+		'hslider'				=> 'core/html/',
+		'hspinner'				=> 'core/html/',
+		'htext'					=> 'core/html/',
+		'htextarea'				=> 'core/html/',
+		'htimepicker'			=> 'core/html/',
+		'htooltip'				=> 'core/html/',
 		// core-classes
 		'acl'					=> 'core/',
 		'auto_point_adjustments'=> 'core/',
@@ -62,6 +77,7 @@ abstract class super_registry {
 		'embedly'				=> 'core/',
 		'environment'			=> 'core/',
 		'encrypt'				=> 'core/',
+		'form'					=> 'core/',
 		'game'					=> 'core/',
 		'hooks'					=> 'core/',
 		'html_old'				=> 'core/',
@@ -273,9 +289,9 @@ abstract class super_registry {
 				define('DEBUG', self::$const['debug']);
 			}
 		}
-		if (!defined('DEBUG') && registry::register('config')->get('pk_debug')){
+		if (!defined('DEBUG') && registry::register('config')->get('debug')){
 			//No debug mode is set in the config File, so we check if in the eqdkpsettings menu the debug mode isset
-			define('DEBUG', intval(registry::register('config')->get('pk_debug')));
+			define('DEBUG', intval(registry::register('config')->get('debug')));
 		} elseif (!defined('DEBUG')) define('DEBUG', 0);
 		registry::register('plus_debug_logger')->set_debug_level(DEBUG);
 	}

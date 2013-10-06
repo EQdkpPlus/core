@@ -60,35 +60,27 @@ $realmnames = array(
 $realmnames = array_unique($realmnames);
 
 $settingsdata_admin = array(
-	'game' => array(
-		'lotrosettings' => array(
-			'uc_faction'	=> array(
-				'name'		=> 'uc_faction',
-				'fieldtype'	=> 'dropdown',
-				'size'		=> '1',
-				'options'	=> $this->game->get('factions'),
-				'default'	=> 'alliance'
-			),
-			'uc_server_loc'  => array(
-				'name'		=> 'uc_server_loc',
-				'fieldtype' => 'dropdown',
-				'size'		=> '1',
-				'options'	=> array('eu' => 'EU', 'us' => 'US'),
-			),
-			'uc_servername'     => array(
-				'name'		=> 'uc_servername',
-				'fieldtype'	=> 'autocomplete',
-				'size'		=> '21',
-				'edecode'	=> true,
-				'options'	=> $realmnames,
-			),
-			'uc_lockserver'	=> array(
-				'name'		=> 'uc_lockserver',
-				'fieldtype'	=> 'checkbox',
-				'size'		=> false,
-				'options'	=> false,
-			)
-		)
+	'uc_faction'	=> array(
+		'lang'		=> 'uc_faction',
+		'type'		=> 'dropdown',
+		'options'	=> $this->game->get('factions'),
+		'default'	=> 'alliance'
+	),
+	'uc_server_loc'  => array(
+		'lang'		=> 'uc_server_loc',
+		'type' 		=> 'dropdown',
+		'options'	=> array('eu' => 'EU', 'us' => 'US'),
+	),
+	// TODO: check if apostrophe is saved correctly
+	'uc_servername'     => array(
+		'lang'			=> 'uc_servername',
+		'type'			=> 'text',
+		'size'			=> '21',
+		'autocomplete'	=> $realmnames,
+	),
+	'uc_lockserver'	=> array(
+		'lang'		=> 'uc_lockserver',
+		'type'		=> 'radio',
 	)
 );
 

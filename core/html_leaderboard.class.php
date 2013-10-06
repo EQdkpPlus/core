@@ -65,7 +65,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 				$rows = ($max_member < count($member_ids)) ? $max_member : count($member_ids);
 				for($i=0; $i<$rows; $i++){
-					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], register('routing')->build('character', false, false,false), '', false,false,true,true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%use_controller%' => true, '%with_twink%' => !intval($this->config->get('pk_show_twinks')))).'</td></tr>';
+					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], register('routing')->build('character', false, false,false), '', false,false,true,true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%use_controller%' => true, '%with_twink%' => !intval($this->config->get('show_twinks')))).'</td></tr>';
 				}
 				$leaderboard .= '</table></td>';
 				$colnr++;
@@ -80,8 +80,8 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 		private function sort_by_points($a, $b){
 			//return $this->pdh->comp('points', 'current', -1, array($a, $this->mdkpid ), array($b, $this->mdkpid ));
-			$params1 = $this->pdh->post_process_preset($this->vpre[2], array('%member_id%' => $a, '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('pk_show_twinks'))));
-			$params2 = $this->pdh->post_process_preset($this->vpre[2], array('%member_id%' => $b, '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('pk_show_twinks'))));
+			$params1 = $this->pdh->post_process_preset($this->vpre[2], array('%member_id%' => $a, '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('show_twinks'))));
+			$params2 = $this->pdh->post_process_preset($this->vpre[2], array('%member_id%' => $b, '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('show_twinks'))));
 
 			return $this->pdh->comp($this->vpre[0], $this->vpre[1], $this->sort_direction, $params1, $params2);
 		}

@@ -23,22 +23,14 @@ if ( !defined('EQDKP_INC') ){
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 class hradio extends html {
-	public static $shortcuts = array('in', 'user');
 
 	protected static $type = 'radio';
 	
 	public $name = '';
 	public $disabled = false;
-	public $desc = '';
+	public $default = 0;
 	
-	public function __construct($name, $options=array()) {
-		$this->name = $name;
-		foreach($options as $key => $option) {
-			$this->$key = $option;
-		}
-	}
-	
-	public function __toString() {
+	public function _toString() {
 		$radiobox  = '';
 		if(!is_array($this->list)){
 			$this->list = array (
@@ -47,14 +39,14 @@ class hradio extends html {
 			);
 		}
 		foreach ($this->list as $key => $value) {
-			$selected_choice = ((string)$key == (string)$this->selected) ? 'checked="checked"' : '';
+			$selected_choice = ((string)$key == (string)$this->value) ? 'checked="checked"' : '';
 			$radiobox .='<label><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'" '.$selected_choice.' class="'.$this->class.'"/>'.$value.'</label>&nbsp;';
 		}
 		return $radiobox;
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, 0);
+		return $this->in->get($this->name, '');
 	}
 }
 ?>

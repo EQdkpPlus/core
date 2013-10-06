@@ -113,12 +113,10 @@ class login_facebook extends gen_class {
 		$settings = array(
 			'login_fb_appid'	=> array(
 				'type'	=> 'text',
-				'name'	=> 'login_fb_appid'
-				),
+			),
 			'login_fb_appsecret' => array(
 				'type'	=> 'text',
-				'name'	=> 'login_fb_appsecret'
-				),		
+			),
 		);
 		return $settings;
 	}

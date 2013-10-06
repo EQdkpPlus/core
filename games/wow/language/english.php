@@ -147,7 +147,7 @@ $english_array = array(
 		'uc_achievement_tab_mop'		=> 'Mists of Pandaria',
 
 		// Profile Admin area
-		'pk_tab_fs_wowsettings'			=> 'WoW Settings',
+		'core_sett_fs_gamesettings'		=> 'WoW Settings',
 		'importer_head_txt'				=> 'battle.net Importer',
 		'uc_servername_help'			=> 'Name of your realmserver (e.g. Mal\'Ganis)',
 		'uc_lockserver'					=> 'Lock the realm name for users',

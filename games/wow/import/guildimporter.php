@@ -58,11 +58,11 @@ class guildImporter extends page_generic {
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'delete_old_chars')).'</dd>
+				<dd>'.$this->html->widget(array('fieldtype'=>'radio','name'=>'delete_old_chars')).'</dd>
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('uc_sync_ranks').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'sync_ranks')).'</dd>
+				<dd>'.$this->html->widget(array('fieldtype'=>'radio','name'=>'sync_ranks')).'</dd>
 			</dl>
 			</fieldset>
 			<fieldset class="settings mediumsettings">

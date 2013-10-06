@@ -22,27 +22,43 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
-class hcheckbox extends html {
+class htext extends html {
 
-	protected static $type = 'checkbox';
+	protected static $type = 'text';
 	
 	public $name = '';
-	public $disabled = false;
+	public $readonly = false;
+	public $spinner = false;
+	public $colorpicker = false;
+	public $autocomplete = array();
+	public $class = 'input';
 	
-	protected function _toString() {
+	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector');
+	
+	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
-		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->checked)) $out .= 'checked="checked" ';
+		if($this->spinner) {
+			$spin_options = array();
+			foreach($this->spinner_opts as $opt) $spin_options[$opt] = $this->$opt;
+			$this->jquery->Spinner($this->id, $spin_options);
+		} elseif(!empty($this->autocomplete)) {
+			$this->jquery->Autocomplete($this->id, $this->autocomplete);
+		} elseif($this->colorpicker) {
+			$this->jquery->colorpicker(0,0);
+			$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
+		}
+		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
-		if($this->disabled) $out .= 'disabled="disabled" ';
+		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
+		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		return $out.' />';
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, 0);
+		return $this->in->get($this->name, '');
 	}
 }
 ?>

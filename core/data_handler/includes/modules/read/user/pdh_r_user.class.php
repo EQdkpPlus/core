@@ -78,7 +78,7 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_id_list($skip_special_users = true){
 			if ($skip_special_users){
-				$special_user	= unserialize(stripslashes($this->config->get('special_user')));
+				$special_user = $this->config->get('special_user');
 				$special_user = (!$special_user) ? array() : $special_user;
 				if (count($special_user)){
 					$arrOut = array();
@@ -485,7 +485,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_sms_checkbox($user_id){
 			$privacy = $this->get_privacy_settings($user_id);
-			if((int)$this->config->get('pk_sms_enable') == 1 && strlen($this->get_cellphone($user_id)) && $privacy['priv_nosms'] != 1 && $this->user->check_auth('a_sms_send', false)){
+			if((int)$this->config->get('sms_enable') == 1 && strlen($this->get_cellphone($user_id)) && $privacy['priv_nosms'] != 1 && $this->user->check_auth('a_sms_send', false)){
 				return '<input type="checkbox" name="sendto['.$user_id.']" value="'.$this->crypt->encrypt($this->get_cellphone($user_id).';'.$this->get_name($user_id)).'" class="cellphonebox" />';
 			}
 			return '';

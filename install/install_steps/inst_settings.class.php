@@ -60,18 +60,18 @@ class inst_settings extends install_generic {
 		'account_activation'			=> 1,
 		'default_style_overwrite'		=> '0',
 		'upload_allowed_extensions'		=> 'zip,rar,jpg,bmp,gif,png',
-		'pk_enable_captcha'				=> '1',
+		'enable_captcha'				=> '1',
 		'lib_recaptcha_okey'			=> '6LdKQMUSAAAAAOFATjZq_IyMruO1jxQL-rSVNF-g',
 		'lib_recaptcha_pkey'			=> '6LdKQMUSAAAAAC-pf92A4AVGjBOImTD9eIGr2WH7',
 		'pk_attendance90'				=> '1',
 		'pk_lastraid'					=> '1',
-		'pk_class_color'				=> '1',
+		'class_color'				=> '1',
 		'pk_newsloot_limit'				=> 'all',
-		'pk_debug'						=> '0',
+		'debug'						=> '0',
 		'pk_maintenance_mode'			=> '1',
-		'pk_enable_comments'			=> '1',
-		'pk_itemhistory_dia' 			=> '1',
-		'pk_color_items' 				=> 'a:2:{i:0;s:2:"34";i:1;s:2:"67";}',
+		'enable_comments'			=> '1',
+		'itemhistory_dia' 			=> '1',
+		'color_items' 				=> 'a:2:{i:0;s:2:"34";i:1;s:2:"67";}',
 		'auth_method'					=> 'db',
 		'mainmenu' => 'a:6:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"828e0013b8f3bc1bb22b4f57172b019d";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"fd613a0f87638ad1372d9b06bad29cb3";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}}}}',
 		
@@ -198,7 +198,7 @@ class inst_settings extends install_generic {
 		$this->def_game_lang = $this->core->config('game_language');
 		$this->def_server_path = $this->core->config('server_path');
 		$this->def_timezone = $this->core->config('timezone');
-		$this->def_startday = $this->core->config('pk_date_startday');
+		$this->def_startday = $this->core->config('date_startday');
 		return $this->get_output();
 	}
 	
@@ -249,7 +249,7 @@ class inst_settings extends install_generic {
 		$this->config_data['game_language']		= $this->def_game_lang;
 		$this->config_data['eqdkp_start']		= time();
 		$this->config_data['timezone']			= $this->def_timezone;
-		$this->config_data['pk_date_startday']	= $this->def_startday;
+		$this->config_data['date_startday']	= $this->def_startday;
 		$this->config_data['default_date_time'] = (isset($this->lang['time_format'])) ? $this->lang['time_format'] : 'H:i';
 		$this->config_data['default_date_short'] = (isset($this->lang['date_short_format'])) ? $this->lang['date_short_format'] : 'm/d/Y';
 		$this->config_data['default_date_long'] = (isset($this->lang['date_long_format'])) ? $this->lang['date_long_format'] : 'F j, Y';

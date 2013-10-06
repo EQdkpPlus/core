@@ -43,11 +43,10 @@ class auth extends user_core {
 
 	private $settings = array(
 		'session_length'	=> array(
-			'fieldtype'		=> 'text',
-			'name'			=> 'session_length',
-			'size'			=> 7,
-			'not4hmode'		=> true,
-			'default'		=> 3600,
+			'type'		=> 'spinner',
+			'size'		=> 7,
+			'default'	=> 3600,
+			'step'		=> 900
 		)
 	);
 
@@ -487,7 +486,7 @@ class auth extends user_core {
 	}
 
 	public function get_active_loginmethods(){
-		$arrLoginMethods = unserialize($this->config->get('login_method'));
+		$arrLoginMethods = $this->config->get('login_method');
 		if(!$arrLoginMethods) return array();
 		return $arrLoginMethods;
 	}
@@ -499,7 +498,7 @@ class auth extends user_core {
 			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
 			$objClass = register('login_'.$strMethod);
 			if (method_exists($objClass, 'settings')){
-				$settings['system']['login'] = $objClass->settings();
+				$settings = $objClass->settings();
 			}
 		}
 		return $settings;
@@ -561,7 +560,7 @@ class auth extends user_core {
 			while ( $file = @readdir($dir) ){
 				if ((is_file($this->root_path . 'core/auth/' . $file)) && valid_folder($file)){
 					$name = substr(substr($file, 0, strpos($file, '.')), 5);
-					$auth[$name] = ($this->lang('auth_'.$name)) ? 'auth_'.$name : ucfirst($name);
+					$auth[$name] = ($this->lang('auth_'.$name, false, false)) ? $this->lang('auth_'.$name) : ucfirst($name);
 				}
 			}
 		}
@@ -569,10 +568,7 @@ class auth extends user_core {
 	}
 
 	public function get_authmethod_settings(){
-		if (count($this->settings) > 0){
-			$settings['system']['auth'] = $this->settings;
-			return $settings;
-		}
+		if (count($this->settings) > 0) return $this->settings;
 		return false;
 	}
 

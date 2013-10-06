@@ -363,7 +363,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_name($member_id, $rank_prefix = false, $rank_suffix = false) {
-			if($this->config->get('pk_class_color')){
+			if($this->config->get('class_color')){
 				return '<span class="class_'.$this->get_classid($member_id).'">'.$this->get_name($member_id,$rank_prefix,$rank_suffix)."</span>";
 			}else{
 				return $this->get_name($member_id,$rank_prefix,$rank_suffix);

@@ -371,7 +371,7 @@ class calendar_pageobject extends pageobject {
 		}
 
 		$this->tpl->assign_vars(array(
-			'STARTDAY'		=> ($this->config->get('pk_date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
+			'STARTDAY'		=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
 			'JS_TIMEFORMAT'	=> ($this->config->get('default_jsdate_time') != '') ? $this->config->get('default_jsdate_time') : $this->user->lang('style_jstime'),
 			'JS_DATEFORMAT'	=> ($this->config->get('default_jsdate_nrml') != '') ? $this->config->get('default_jsdate_nrml') : $this->user->lang('style_jsdate_nrml'),
 			'JS_DATEFORMAT2'=> ($this->config->get('default_jsdate_short') != '') ? $this->config->get('default_jsdate_short') : $this->user->lang('style_jsdate_short'),

@@ -23,7 +23,6 @@ if ( !defined('EQDKP_INC') ){
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 class htextarea extends html {
-	public static $shortcuts = array('in');
 
 	protected static $type = 'textarea';
 	
@@ -33,18 +32,13 @@ class htextarea extends html {
 	public $disabled = false;
 	public $codeinput = false;
 	public $inp_encrypt = false;
+	public $bbcodeeditor = false;
 	
-	public function __construct($name, $options=array()) {
-		$this->name = $name;
-		foreach($options as $key => $option) {
-			$this->$key = $option;
-		}
-	}
-	
-	public function __toString() {
+	public function _toString() {
 		$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
+		if($this->bbcodeeditor) $this->class = (empty($this->class)) ? 'mceEditor_bbcode' : $this->class.' mceEditor_bbcode';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
@@ -53,8 +47,7 @@ class htextarea extends html {
 	}
 	
 	public function inpval() {
-		$value = $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : ''));
-		if($this->inp_encrypt) $value = $this->encrypt->encrypt($value);
+		$value = $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : '');
 		return $value;
 	}
 }

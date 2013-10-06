@@ -21,25 +21,14 @@ if ( !defined('EQDKP_INC') ){
 }
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
+include_once(registry::get_const('root_path').'core/html/htext.class.php');
 
-class hcheckbox extends html {
-
-	protected static $type = 'checkbox';
+// this class acts as an alias for easier usability
+class hspinner extends htext {
 	
-	public $name = '';
-	public $disabled = false;
-	
-	protected function _toString() {
-		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
-		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$out .= 'id="'.$this->id.'" ';
-		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->checked)) $out .= 'checked="checked" ';
-		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
-		if($this->disabled) $out .= 'disabled="disabled" ';
-		if(!empty($this->js)) $out.= $this->js.' ';
-		return $out.' />';
-	}
+	public $spinner = true;
+	public $default = 0;
+	public $size = 5;
 	
 	public function inpval() {
 		return $this->in->get($this->name, 0);
