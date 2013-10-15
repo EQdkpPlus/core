@@ -283,7 +283,8 @@ $german_array = array(
 		'mop_endlessspring_10'			=> 'Terrasse des Endlosen Frühlings (10)',
 		'mop_endlessspring_25'			=> 'Terrasse des Endlosen Frühlings (25)',
 		'mop_throneofthunder_10'		=> 'Thron des Donners (10)',
-		'mop_throneofthunder_25'		=> 'Thron des Donners (25)', 
+		'mop_throneofthunder_25'		=> 'Thron des Donners (25)',
+		'mop_siegeoforgrimmar'			=> 'Schlacht um Orgrimmar',
 
 		'char_news'						=> 'Char News',
 		'no_armory'						=> 'Es konnten keine gültigen Daten für diesen Charakter geladen werden. Die battle.net API meldet folgenden Fehler: "%s".',
