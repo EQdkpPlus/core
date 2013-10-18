@@ -58,7 +58,7 @@ if(!class_exists('wow')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public $lang			= false;
-		public $version			= '5.1.1';
+		public $version			= '5.4.0';
 
 		public function __construct() {
 			parent::__construct();
@@ -128,6 +128,7 @@ if(!class_exists('wow')) {
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (6, "'.$this->glang('mop_endlessspring_25').'", 0.00, "default", NULL, "tes.png"); ');
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (7, "'.$this->glang('mop_throneofthunder_10').'", 0.00, "default", NULL, "tot.png"); ');
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (8, "'.$this->glang('mop_throneofthunder_25').'", 0.00, "default", NULL, "tot.png"); ');
+				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES (5, "'.$this->glang('mop_siegeoforgrimmar').'", 0.00, "default", NULL, "soo.png"); ');
 
 				//Default Events
 				array_push($info['aq'], 'INSERT INTO __events (event_id, event_name, event_value, event_added_by, event_updated_by, event_icon) VALUES(9, "'.$this->glang('wotlk').'", 0.00, "default", NULL, "wotlk.png"); ');
