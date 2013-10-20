@@ -220,12 +220,7 @@ class charImporter extends page_generic {
 		$hmtlout .= '<dl>
 				<dt><label>'.$this->game->glang('uc_servername').'</label></dt>
 				<dd>';
-		if($this->config->get('uc_lockserver') == 1){
-			$hmtlout .= ' @'.stripslashes($this->config->get('uc_servername')).'<br/>';
-			$hmtlout .= $this->html->widget(array('fieldtype'=>'hidden','name'=>'servername','value'=>stripslashes($this->config->get('uc_servername'))));
-		}else{
-			$hmtlout .= $this->html->widget(array('fieldtype'=>'text','name'=>'servername','value'=>(($this->config->get('uc_servername')) ? stripslashes($this->config->get('uc_servername')) : ''), 'size'=>'25'));
-		}
+		$hmtlout .= $this->html->widget(array('fieldtype'=>'autocomplete','name'=>'servername','selected'=>(($this->config->get('uc_servername')) ? stripslashes($this->config->get('uc_servername')) : ''), 'size'=>'25', 'edecode' => true, 'options' => $this->game->get('realmlist')));
 		$hmtlout .= '</dd>
 			</dl>
 			<dl>
@@ -281,6 +276,7 @@ class charImporter extends page_generic {
 			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_race_id','value'=>$this->game->obj['armory']->ConvertID($chardata['race'], 'int', 'races')));
 			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_class_id','value'=>$this->game->obj['armory']->ConvertID($chardata['class'], 'int', 'classes')));
 			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'guild','value'=>$chardata['guild']['name']));
+			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'servername','value'=>$isServerName));
 			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'last_update','value'=>($chardata['lastModified']/1000)));
 
 			// primary professions
@@ -357,6 +353,7 @@ class charImporter extends page_generic {
 			'health_bar'		=> $this->in->get('health_bar', 0),
 			'second_bar'		=> $this->in->get('second_bar', 0),
 			'second_name'		=> $this->in->get('second_name', ''),
+			'servername'		=> $this->in->get('servername', ''),
 		);
 
 		$info		= $this->pdh->put('member', 'addorupdate_member', array($this->in->get('member_id', 0), $data, $this->in->get('overtakeuser', 0)));

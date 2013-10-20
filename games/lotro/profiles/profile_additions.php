@@ -370,8 +370,10 @@
 		$this->tpl->assign_array('CHARDATA', $chardata['character']['@attributes']);
 		
 		$arrStats = array();
-		foreach ($chardata['character']['stats']['stat'] as $value){
-			$arrStats[$value['@attributes']['name']] = $value['@attributes']['value'];
+		if(isset($chardata['character']['stats'])){
+			foreach ($chardata['character']['stats']['stat'] as $value){
+				$arrStats[$value['@attributes']['name']] = $value['@attributes']['value'];
+			}
 		}
 		$this->tpl->assign_array('CHARSTATS', $arrStats);
 		
@@ -380,16 +382,18 @@
 		
 		infotooltip_js();
 
-		foreach ($chardata['character']['equipment']['item'] as $value){
-			$slot_id = $arrSlots[$value['@attributes']['slot']];
-			if (!$slot_id) {echo "Unknown slot: ".$value['@attributes']['slot'];}
-			$this->tpl->assign_block_vars('equipment', array(
-				'SLOT_ID' 	=> $slot_id,
-				'LINK'	 	=> $value['@attributes']['lorebookEntry'],
-				'ITEM_ID'	=> $value['@attributes']['item_id'],
-				'ITEM_NAME'	=> $value['@attributes']['name'],
-				'ICON'		=> infotooltip($value['@attributes']['name'], intval($value['@attributes']['item_id']), false, 0, 32),
-			));
+		if(isset($chardata['character']['equipment'])){
+			foreach ($chardata['character']['equipment']['item'] as $value){
+				$slot_id = $arrSlots[$value['@attributes']['slot']];
+				if (!$slot_id) {echo "Unknown slot: ".$value['@attributes']['slot'];}
+				$this->tpl->assign_block_vars('equipment', array(
+					'SLOT_ID' 	=> $slot_id,
+					'LINK'	 	=> $value['@attributes']['lorebookEntry'],
+					'ITEM_ID'	=> $value['@attributes']['item_id'],
+					'ITEM_NAME'	=> $value['@attributes']['name'],
+					'ICON'		=> infotooltip($value['@attributes']['name'], intval($value['@attributes']['item_id']), false, 0, 32),
+				));
+			}
 		}
 		
 		if (isset($chardata['character']['vocation'])){

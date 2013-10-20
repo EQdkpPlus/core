@@ -55,6 +55,14 @@ $xml_fields = array(
 		'undeletable'	=> true,
 		'visible'		=> true
 	),
+	'servername'	=> array(
+		'category'		=> 'character',
+		'name'			=> 'uc_servername',
+		'type'			=> 'autocomplete',
+		'size'			=> '21',
+		'edecode'		=> true,
+		'options'		=> registry::register('game')->get('realmlist'),
+	),
 	'prof1_value'	=> array(
 		'type'			=> 'int',
 		'category'		=> 'profession',
