@@ -36,7 +36,7 @@ if(!class_exists('wow')) {
 		protected $professions	= array();
 		public $objects			= array('bnet_armory');												// eventually there are some objects (php-classes) in this game
 		public $no_reg_obj		= array('bnet_armory');												// a list with all objects, which dont need registry
-		public $langs			= array('english', 'german', 'french', 'russian');					// in which languages do we have information?
+		public $langs			= array('english', 'german');										// in which languages do we have information?
 		public $importers 		= array(
 			'char_import'		=> 'charimporter.php',						// filename of the character import
 			'char_update'		=> 'charimporter.php',						// filename of the character update, member_id (POST) is passed
@@ -51,7 +51,7 @@ if(!class_exists('wow')) {
 			'bc'		=> array(3457, 3836, 3923, 3607, 3845, 3606, 3959, 4075),
 			'wotlk'		=> array(4603, 3456, 4493, 4500, 4273, 2159, 4722, 4812, 4987),
 			'cataclysm'	=> array(5600, 5094, 5334, 5638, 5723, 5892),
-			'mop'		=> array(6125, 6297, 6067, 6622)
+			'mop'		=> array(6125, 6297, 6067, 6622, 6738)
 		);
 
 		protected $glang		= array();
