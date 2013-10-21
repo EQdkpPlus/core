@@ -508,20 +508,19 @@ class bnet_armory {
 	/**
 	* Fetch pvpteam information
 	* 
-	* @param $realm		Realm Name
-	* @param $teamname	Team name
-	* @param $teamsize	TeamSize = "2v2" | "3v3" | "5v5"
+	* @param $teamsize	TeamSize = "2v2" | "3v3" | "5v5" | "rbg"
 	* @param $force		Force the cache to update?
 	* @return bol
 	*/
-	public function pvpteam($realm, $teamname, $teamsize, $force=false){
+	public function pvpteam($teamsize, $force=false){
 		switch($teamname){
 			case '2v2':	$teamsize = '2v2'; break;
 			case '3v3':	$teamsize = '3v3'; break;
 			case '5v5':	$teamsize = '5v5'; break;
+			case 'rbg':	$teamsize = 'rbg'; break;
 			default: $teamsize = '2v2';
 		}
-		$wowurl = $this->_config['apiUrl'].sprintf('wow/arena/%s/%s/%s?locale=%s', $this->ConvertInput($realm), $teamsize, $this->ConvertInput($teamname), $this->_config['locale']);
+		$wowurl = $this->_config['apiUrl'].sprintf('wow/leaderboard/%s?locale=%s', $this->ConvertInput($realm), $teamsize, $this->ConvertInput($teamname), $this->_config['locale']);
 		if(!$json	= $this->get_CachedData('pvpdata_'.$guild.$teamname.$teamsize, $force)){
 			$json	= $this->read_url($wowurl);
 			$this->set_CachedData($json, 'pvpdata_'.$guild.$teamname.$teamsize);
