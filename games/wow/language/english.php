@@ -145,6 +145,11 @@ $english_array = array(
 		'uc_achievement_tab_wotlk'		=> 'Wrath of the Lich King',
 		'uc_achievement_tab_cataclysm'	=> 'Cataclysm',
 		'uc_achievement_tab_mop'		=> 'Mists of Pandaria',
+		
+		'challenge'						=> 'Challenge',
+		'challenge_title'				=> 'Challenge Mode Leaderboards',
+		'off_realm_toon'				=> 'This character seems to be not in your guild. As the challenges are Battle-Realm based, could be foreign characters in this list.',
+		
 
 		// Profile Admin area
 		'pk_tab_fs_wowsettings'			=> 'WoW Settings',

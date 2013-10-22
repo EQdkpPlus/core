@@ -145,6 +145,10 @@ $german_array = array(
 		'uc_achievement_tab_wotlk'		=> 'Wrath of the Lich King',
 		'uc_achievement_tab_cataclysm'	=> 'Cataclysm',
 		'uc_achievement_tab_mop'		=> 'Mists of Pandaria',
+		
+		'challenge'						=> 'Herausforderungsmodus',
+		'challenge_title'				=> 'Herausforderungsmodus: Ranglisten',
+		'off_realm_toon'				=> 'Dieser Charakter scheint nicht in deiner Gilde zu sein. Da die Herausforderungen realmübergreifend sind, können auch fremde CHarakter in dieser Liste auftauchen.',
 
 		// Profile Admin area
 		'pk_tab_fs_wowsettings'			=> 'WoW Einstellungen',

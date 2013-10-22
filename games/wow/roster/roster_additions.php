@@ -62,7 +62,7 @@
 			cursor: pointer;
 		}
 	");
-	
+	$this->tpl->css_file($this->path.'games/wow/roster/challenge.css');
 
 # Amory Stuff
 if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
@@ -121,6 +121,40 @@ if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 			));
 		}
 		
+		// the challenges
+		#$arrChallenge = register('pdc')->get('roster_wow.challenge');
+		#if (!$arrChallenge){
+			$arrChallenge = $this->game->callFunc('parseGuildChallenge', array($guilddata));
+			#register('pdc')->put('roster_wow.challenge', $arrChallenge, 3600);
+			#}
+		//d($arrChallenge);
+		foreach ($arrChallenge as $val){
+			$this->tpl->assign_block_vars('challenges', array(
+				'NAME'		=> $val['name'],
+				'ICON'		=> $val['icon'],
+				'TIME'		=> $val['time']
+			));
+			foreach ($val['group'] as $challgroups){
+				$this->tpl->assign_block_vars('challenges.groups', array(
+					'NAME'		=> $challgroups['name'],
+					'TIME'		=> $challgroups['time'],
+					'DATE'		=> $challgroups['date'],
+					'MEDAL'		=> strtolower($challgroups['medal']),
+				));
+				
+				foreach ($challgroups['members'] as $chalmember){
+					$this->tpl->assign_block_vars('challenges.groups.members', array(
+						'NAME'			=> $chalmember['name'],
+						'OFF_REALM'		=> ($chalmember['memberid'] > 0) ? true : false,
+						'CLASSID'		=> $chalmember['class'],
+						'SHOW_LINK'		=> ($chalmember['memberid'] > 0) ? true : false,
+						'MEMBERID'		=> $chalmember['memberid'],
+					));
+				}
+			}
+		}
+		
+		// the tab things
 		$this->jquery->Tab_header('wow_roster');
 		$this->tpl->assign_vars(array(
 			'S_ARMORY_INFO' => true,

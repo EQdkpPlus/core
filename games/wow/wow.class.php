@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('wow')) {
 	class wow extends game_generic {
-		public static $shortcuts = array('pdh', 'game', 'pm', 'html', 'user', 'config', 'jquery', 'in');
+		public static $shortcuts = array('pdh', 'game', 'pm', 'html', 'user', 'config', 'jquery', 'in', 'time');
 
 		protected $this_game	= 'wow';
 		protected $types		= array('classes', 'races', 'factions', 'filters', 'realmlist', 'roles', 'professions', 'chartooltip');	// which information are stored?
@@ -58,7 +58,7 @@ if(!class_exists('wow')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public $lang			= false;
-		public $version			= '5.4.0';
+		public $version			= '5.4.1';
 
 		public function __construct() {
 			parent::__construct();
@@ -555,6 +555,47 @@ if(!class_exists('wow')) {
 				}
 			}
 			return $arrAchievsOut;
+		}
+
+		/*
+		 * parse the guild challenges of armory
+		 */
+		public function parseGuildChallenge($arrInput){
+			$arrChallengeOut	= array();
+			foreach($arrInput['challenge'] as $a_values){
+				$a_groupout = array();
+				foreach($a_values['groups'] as $a_groupid => $a_groups){
+					$a_membersout = array();
+					foreach($a_groups['members'] as $a_memid => $a_members){
+						if(isset($a_members['character']['name']) && $a_members['character']['name'] != ''){
+							$memberid = $this->pdh->get('member', 'id', array($a_members['character']['name']));
+							$a_membersout[] = array(
+								'name'			=> $a_members['character']['name'],
+								'realm'			=> $a_members['character']['realm'],
+								'guild'			=> $a_members['character']['guild'],
+								'class'			=> $this->game->obj['armory']->ConvertID($a_members['character']['class'], 'int', 'classes'),
+								'off_realm'		=> ($this->config->get('uc_servername') != $a_members['character']['realm']) ? true : false,
+								'memberid'		=> (isset($memberid) && $memberid > 0) ? $memberid : 0,
+							);
+						}
+					}
+					$a_groupout[] = array(
+						'name'		=> $a_groups['ranking'],
+						'medal'		=> $a_groups['medal'],
+						'faction'	=> $a_groups['faction'],
+						'date'		=> $this->time->user_date($this->time->fromformat($a_groups['date'], 1)),
+						'time'		=> sprintf('%02d', $a_groups['time']['hours']).':'.sprintf('%02d', $a_groups['time']['minutes']).':'.sprintf('%02d', $a_groups['time']['seconds']),
+						'members'	=> $a_membersout
+					);
+				}
+				$arrChallengeOut[$a_values['map']['id']] = array(
+					'name'		=> $a_values['map']['name'],
+					'icon'		=> $a_values['map']['slug'],
+					'time'		=> '',
+					'group'		=> $a_groupout
+				);
+			}
+			return $arrChallengeOut;
 		}
 
 		/*
