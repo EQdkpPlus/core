@@ -1,0 +1,346 @@
+.dungeon-name {
+	height: 38px;
+	line-height: 38px;
+	padding: 6px;
+	font-size: 18px;
+	vertical-align: middle;
+}
+
+.challenge_member{
+	padding: 4px;
+}
+
+.challenge_title{
+	font-size: 18px;
+	padding: 16px;
+}
+
+.medal {
+	background: url("medals-sprite.png") no-repeat scroll 0 27px rgba(0, 0, 0, 0);
+	display: inline-block;
+	line-height: 27px;
+	padding-left: 35px;
+}
+.medal.gold {
+	background-position: 0 0;
+}
+.medal.silver {
+	background-position: 0 -27px;
+}
+.medal.bronze {
+	background-position: 0 -54px;
+}
+
+.zone-thumbnail {
+	background-color: #3B1C11;
+	background-image: url("thumbnails.png");
+	background-repeat: no-repeat;
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 0 5px #0D0703;
+	display: block;
+	float: left;
+	height: 38px;
+	margin: 1px 11px 1px 1px;
+	overflow: hidden;
+	width: 38px;
+}
+.thumb-ahnkahet-the-old-kingdom {
+	background-position: -960px 0;
+}
+.thumb-ahnqiraj-temple {
+	background-position: -2040px 0;
+}
+.thumb-auchenai-crypts {
+	background-position: -760px 0;
+}
+.thumb-azjolnerub {
+	background-position: -1000px 0;
+}
+.thumb-baradin-hold {
+	background-position: -2800px 0;
+}
+.thumb-blackfathom-deeps {
+	background-position: 0 0;
+}
+.thumb-blackrock-caverns {
+	background-position: -1600px 0;
+}
+.thumb-blackrock-depths {
+	background-position: -40px 0;
+}
+.thumb-blackrock-spire {
+	background-position: -80px 0;
+}
+.thumb-black-temple {
+	background-position: -2360px 0;
+}
+.thumb-blackwing-descent {
+	background-position: -2880px 0;
+}
+.thumb-blackwing-lair {
+	background-position: -1960px 0;
+}
+.thumb-deadmines {
+	background-position: -120px 0;
+}
+.thumb-dire-maul {
+	background-position: -160px 0;
+}
+.thumb-draktharon-keep {
+	background-position: -1080px 0;
+}
+.thumb-firelands {
+	background-position: -2960px 0;
+}
+.thumb-gnomeregan {
+	background-position: -200px 0;
+}
+.thumb-grim-batol {
+	background-position: -1640px 0;
+}
+.thumb-gruuls-lair {
+	background-position: -2120px 0;
+}
+.thumb-gundrak {
+	background-position: -1160px 0;
+}
+.thumb-halls-of-lightning {
+	background-position: -1200px 0;
+}
+.thumb-halls-of-origination {
+	background-position: -1680px 0;
+}
+.thumb-halls-of-reflection {
+	background-position: -1240px 0;
+}
+.thumb-halls-of-stone {
+	background-position: -1280px 0;
+}
+.thumb-hellfire-ramparts {
+	background-position: -840px 0;
+}
+.thumb-icecrown-citadel {
+	background-position: -2720px 0;
+}
+.thumb-karazhan {
+	background-position: -2080px 0;
+}
+.thumb-lost-city-of-the-tolvir {
+	background-position: -1720px 0;
+}
+.thumb-magisters-terrace {
+	background-position: -880px 0;
+}
+.thumb-magtheridons-lair {
+	background-position: -2160px 0;
+}
+.thumb-manatombs {
+	background-position: -760px 0;
+}
+.thumb-maraudon {
+	background-position: -240px 0;
+}
+.thumb-molten-core {
+	background-position: -1920px 0;
+}
+.thumb-naxxramas {
+	background-position: -2440px 0;
+}
+.thumb-onyxias-lair {
+	background-position: -2680px 0;
+}
+.thumb-opening-of-the-dark-portal {
+	background-position: -800px 0;
+}
+.thumb-pit-of-saron {
+	background-position: -1400px 0;
+}
+.thumb-ragefire-chasm {
+	background-position: -280px 0;
+}
+.thumb-razorfen-downs {
+	background-position: -320px 0;
+}
+.thumb-razorfen-kraul {
+	background-position: -360px 0;
+}
+.thumb-ruins-of-ahnqiraj {
+	background-position: -2000px 0;
+}
+.thumb-scarlet-monastery {
+	background-position: -3280px 0;
+}
+.thumb-scholomance {
+	background-position: -3320px 0;
+}
+.thumb-serpentshrine-cavern {
+	background-position: -2240px 0;
+}
+.thumb-sethekk-halls {
+	background-position: -760px 0;
+}
+.thumb-shadowfang-keep {
+	background-position: -480px 0;
+}
+.thumb-shadow-labyrinth {
+	background-position: -760px 0;
+}
+.thumb-stormwind-stockade {
+	background-position: -520px 0;
+}
+.thumb-stratholme {
+	background-position: -560px 0;
+}
+.thumb-sunken-temple {
+	background-position: -600px 0;
+}
+.thumb-tempest-keep {
+	background-position: -2280px 0;
+}
+.thumb-the-arcatraz {
+	background-position: -2280px 0;
+}
+.thumb-the-bastion-of-twilight {
+	background-position: -2840px 0;
+}
+.thumb-the-battle-for-mount-hyjal {
+	background-position: -2320px 0;
+}
+.thumb-the-blood-furnace {
+	background-position: -840px 0;
+}
+.thumb-the-botanica {
+	background-position: -2280px 0;
+}
+.thumb-the-culling-of-stratholme {
+	background-position: -1040px 0;
+}
+.thumb-the-escape-from-durnholde {
+	background-position: -800px 0;
+}
+.thumb-the-eye-of-eternity {
+	background-position: -2560px 0;
+}
+.thumb-the-forge-of-souls {
+	background-position: -1120px 0;
+}
+.thumb-the-mechanar {
+	background-position: -2280px 0;
+}
+.thumb-the-nexus {
+	background-position: -1320px 0;
+}
+.thumb-the-obsidian-sanctum {
+	background-position: -2480px 0;
+}
+.thumb-the-oculus {
+	background-position: -1360px 0;
+}
+.thumb-the-ruby-sanctum {
+	background-position: -2760px 0;
+}
+.thumb-the-shattered-halls {
+	background-position: -840px 0;
+}
+.thumb-the-slave-pens {
+	background-position: -2240px 0;
+}
+.thumb-the-steamvault {
+	background-position: -2240px 0;
+}
+.thumb-the-stonecore {
+	background-position: -1760px 0;
+}
+.thumb-the-sunwell {
+	background-position: -2400px 0;
+}
+.thumb-the-underbog {
+	background-position: -2240px 0;
+}
+.thumb-the-vortex-pinnacle {
+	background-position: -1840px 0;
+}
+.thumb-throne-of-the-four-winds {
+	background-position: -2920px 0;
+}
+.thumb-throne-of-the-tides {
+	background-position: -1800px 0;
+}
+.thumb-trial-of-the-champion {
+	background-position: -1440px 0;
+}
+.thumb-trial-of-the-crusader {
+	background-position: -2640px 0;
+}
+.thumb-uldaman {
+	background-position: -620px 0;
+}
+.thumb-ulduar {
+	background-position: -2600px 0;
+}
+.thumb-utgarde-keep {
+	background-position: -1480px 0;
+}
+.thumb-utgarde-pinnacle {
+	background-position: -1520px 0;
+}
+.thumb-vault-of-archavon {
+	background-position: -2520px 0;
+}
+.thumb-violet-hold {
+	background-position: -1560px 0;
+}
+.thumb-wailing-caverns {
+	background-position: -680px 0;
+}
+.thumb-zulaman {
+	background-position: -920px 0;
+}
+.thumb-zulfarrak {
+	background-position: -720px 0;
+}
+.thumb-zulgurub {
+	background-position: -1880px 0;
+}
+.thumb-well-of-eternity {
+	background-position: -3040px 0;
+}
+.thumb-end-time {
+	background-position: -3120px 0;
+}
+.thumb-dragon-soul {
+	background-position: -3000px 0;
+}
+.thumb-hour-of-twilight {
+	background-position: -3080px 0;
+}
+.thumb-gate-of-the-setting-sun {
+	background-position: -3160px 0;
+}
+.thumb-mogushan-palace {
+	background-position: -3200px 0;
+}
+.thumb-scarlet-halls {
+	background-position: -3240px 0;
+}
+.thumb-shadopan-monastery {
+	background-position: -3360px 0;
+}
+.thumb-siege-of-niuzao-temple {
+	background-position: -3400px 0;
+}
+.thumb-stormstout-brewery {
+	background-position: -3440px 0;
+}
+.thumb-temple-of-the-jade-serpent {
+	background-position: -3480px 0;
+}
+.thumb-heart-of-fear {
+	background-position: -3520px 0;
+}
+.thumb-mogushan-vaults {
+	background-position: -3560px 0;
+}
+.thumb-terrace-of-endless-spring {
+	background-position: -3600px 0;
+}
