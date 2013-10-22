@@ -122,12 +122,12 @@ if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 		}
 		
 		// the challenges
-		#$arrChallenge = register('pdc')->get('roster_wow.challenge');
-		#if (!$arrChallenge){
+		$arrChallenge = register('pdc')->get('roster_wow.challenge');
+		if (!$arrChallenge){
 			$arrChallenge = $this->game->callFunc('parseGuildChallenge', array($guilddata));
-			#register('pdc')->put('roster_wow.challenge', $arrChallenge, 3600);
-			#}
-		//d($arrChallenge);
+			register('pdc')->put('roster_wow.challenge', $arrChallenge, 3600);
+		}
+
 		foreach ($arrChallenge as $val){
 			$this->tpl->assign_block_vars('challenges', array(
 				'NAME'		=> $val['name'],
@@ -145,7 +145,7 @@ if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 				foreach ($challgroups['members'] as $chalmember){
 					$this->tpl->assign_block_vars('challenges.groups.members', array(
 						'NAME'			=> $chalmember['name'],
-						'OFF_REALM'		=> ($chalmember['memberid'] > 0) ? true : false,
+						'OFF_REALM'		=> ($chalmember['memberid'] == 0) ? true : false,
 						'CLASSID'		=> $chalmember['class'],
 						'SHOW_LINK'		=> ($chalmember['memberid'] > 0) ? true : false,
 						'MEMBERID'		=> $chalmember['memberid'],
