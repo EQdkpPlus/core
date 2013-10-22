@@ -146,7 +146,7 @@ $english_array = array(
 		'uc_achievement_tab_cataclysm'	=> 'Cataclysm',
 		'uc_achievement_tab_mop'		=> 'Mists of Pandaria',
 		
-		'challenge'						=> 'Challenge',
+		'challenge'						=> 'Challenge Mode',
 		'challenge_title'				=> 'Challenge Mode Leaderboards',
 		'off_realm_toon'				=> 'This character seems to be not in your guild. As the challenges are Battle-Realm based, could be foreign characters in this list.',
 		
