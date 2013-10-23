@@ -146,6 +146,7 @@ if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 					$this->tpl->assign_block_vars('challenges.groups.members', array(
 						'NAME'			=> $chalmember['name'],
 						'OFF_REALM'		=> ($chalmember['memberid'] == 0) ? true : false,
+						'BNETLINK'		=> $this->game->obj['armory']->bnlink($chalmember['name'], $chalmember['realm']),
 						'CLASSID'		=> $chalmember['class'],
 						'SHOW_LINK'		=> ($chalmember['memberid'] > 0) ? true : false,
 						'MEMBERID'		=> $chalmember['memberid'],
