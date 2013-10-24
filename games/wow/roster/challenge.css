@@ -16,7 +16,7 @@
 }
 
 .medal {
-	background: url("medals-sprite.png") no-repeat scroll 0 27px rgba(0, 0, 0, 0);
+	background: url("../../../games/wow/roster/medals-sprite.png") no-repeat scroll 0 27px rgba(0, 0, 0, 0);
 	display: inline-block;
 	line-height: 27px;
 	padding-left: 35px;
@@ -33,7 +33,7 @@
 
 .zone-thumbnail {
 	background-color: #3B1C11;
-	background-image: url("thumbnails.png");
+	background-image: url("../../../games/wow/roster/thumbnails.png");
 	background-repeat: no-repeat;
 	border-radius: 3px 3px 3px 3px;
 	box-shadow: 0 0 5px #0D0703;
