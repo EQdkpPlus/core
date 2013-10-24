@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
 
 class bnet_armory {
 
-	private $version		= '5.0';
+	private $version		= '5.0.1';
 	private $build			= '$Rev$';
 	private $chariconUpdates = 0;
 	private $chardataUpdates = 0;
@@ -273,6 +273,7 @@ class bnet_armory {
 		$user		= $this->ConvertInput($user);
 		$basicparam	= array('guild', 'stats', 'feed', 'talents', 'items', 'titles', 'professions', 'achievements', 'progression');
 		$usedparams = array_merge($basicparam, $params);
+		$force		= (count($params) > 1 && $force == false) ? true : $force;
 		$wowurl		= $this->_config['apiUrl'].sprintf('wow/character/%s/%s?locale=%s&fields='.implode(',', $usedparams), $realm, $user, $this->_config['locale']);
 		$json		= $this->get_CachedData('chardata_'.$user.$realm, $force);		
 		if(!$json && ($this->chardataUpdates < $this->_config['maxChardataUpdates'])){
