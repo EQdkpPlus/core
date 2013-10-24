@@ -76,9 +76,9 @@
 			<td width="100"><span class="medal {challenges.groups.MEDAL}">{challenges.groups.TIME}</span></td>
 			<td>
 				<!-- BEGIN members -->
-				<!-- IF challenges.groups.members.SHOW_LINK --> <a href="viewcharacter.php?s={SID}&member_id={challenges.groups.members.MEMBERID}"><!-- ENDIF -->
-				<span class="challenge_member class_{challenges.groups.members.CLASSID} <!-- IF challenges.groups.members.SHOW_LINK -->chartooltip" title="{challenges.groups.members.MEMBERID}"<!-- ELSE -->coretip" data-coretip="{GL_off_realm_toon}"<!-- ENDIF -->>{challenges.groups.members.NAME} <!-- IF challenges.groups.members.OFF_REALM --> (*)<!-- ENDIF --></span>
-				<!-- IF challenges.groups.members.SHOW_LINK --> </a><!-- ENDIF -->
+				<a href="<!-- IF challenges.groups.members.SHOW_LINK -->viewcharacter.php?s={SID}&member_id={challenges.groups.members.MEMBERID}<!-- ELSE -->{challenges.groups.members.BNETLINK}<!-- ENDIF -->">
+					<span class="challenge_member class_{challenges.groups.members.CLASSID} <!-- IF challenges.groups.members.SHOW_LINK -->chartooltip" title="{challenges.groups.members.MEMBERID}"<!-- ELSE -->coretip" data-coretip="{GL_off_realm_toon}"<!-- ENDIF -->>{challenges.groups.members.NAME} <!-- IF challenges.groups.members.OFF_REALM --> (*)<!-- ENDIF --></span>
+				</a>
 				<!-- END members -->
 			</td>
 			<td width="30">{challenges.groups.DATE}</td>
