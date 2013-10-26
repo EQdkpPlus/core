@@ -242,8 +242,8 @@ HTP69g==
 				}
 				$strFileHash = sha1_file($src);
 				
-				include_once('libraries/phpseclib/X509.php');
-				include_once('libraries/phpseclib/RSA.php');
+				include_once($this->root_path.'libraries/phpseclib/X509.php');
+				include_once($this->root_path.'libraries/phpseclib/RSA.php');
 				$x509 = new File_X509();
 		
 				foreach ($arrVerified as $intermCert){

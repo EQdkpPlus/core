@@ -243,7 +243,7 @@ class auth_db extends auth {
 			$this->db->free_result($query);
 			
 			if ($arrUserResult){
-				if ($strCookieAutologinKey != "" && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
+				if ($strCookieAutologinKey != "" && $arrUserResult['user_login_key'] != "" && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
 					return $arrUserResult;
 				}
 			}	
