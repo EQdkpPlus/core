@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_maintenanceuser_user}</a></li>
 	</ul>
@@ -8,10 +8,10 @@
 </div>
 
 <div class="infobox infobox-large infobox-blue clearfix">
-	<i class="icon-info-sign icon-4x pull-left"></i> {L_maintenanceuser_info}
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_maintenanceuser_info}
 </div>
 <div class="infobox infobox-large infobox-red clearfix">
-	<i class="icon-warning-sign icon-4x pull-left"></i> {L_maintenanceuser_warning}
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_maintenanceuser_warning}
 </div>
 <br />
 <form action="{ACTION}" method="post">
@@ -41,8 +41,8 @@
 	</dd>
 </dl>
 </fieldset>
-<button class="mainoption" name="del" type="submit"><i class="icon-remove"></i>{L_maintenanceuser_delete}</button>
-<button class="mainoption" name="renew" type="submit" id="renew"><i class="icon-repeat"></i>{L_maintenanceuser_renew}</button>
+<button class="mainoption" name="del" type="submit"><i class="fa fa-times"></i>{L_maintenanceuser_delete}</button>
+<button class="mainoption" name="renew" type="submit" id="renew"><i class="fa fa-repeat"></i>{L_maintenanceuser_renew}</button>
 <br /><br />
 <fieldset class="settings smallsettings">
 <legend>{L_maintenanceuser_send}</legend>
@@ -63,7 +63,7 @@
 	</dd>
 </dl>
 </fieldset>
-<button class="mainoption" type="submit" name="email_submit"><i class="icon-envelope"></i>{L_maintenanceuser_send_mail}</button>
+<button class="mainoption" type="submit" name="email_submit"><i class="fa fa-envelope"></i>{L_maintenanceuser_send_mail}</button>
 
 <!-- ENDIF -->
 {CSRF_TOKEN}

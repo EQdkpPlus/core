@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_viewlogs_title}</a></li>
 	</ul>
@@ -66,8 +66,8 @@
 					<dd>{FILTER_RESULT}</dd>
 				</dl>
 				
-				<button class="mainoption" type="submit" name="filter"><i class="icon-ok"></i>{L_portalplugin_filter}</button>
-				<button class="mainoption" type="submit" name="resetfilter"><i class="icon-trash"></i>{L_filter_reset}</button>
+				<button class="mainoption" type="submit" name="filter"><i class="fa fa-check"></i>{L_portalplugin_filter}</button>
+				<button class="mainoption" type="submit" name="resetfilter"><i class="fa fa-trash-o"></i>{L_filter_reset}</button>
 			</div>
 		</fieldset>
 		
@@ -82,11 +82,11 @@
 		</div>
 
 		<div class="contentFooter">
-			<button type="button" name="deleteselected" class="mainoption" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
+			<button type="button" name="deleteselected" class="mainoption" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
 			<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 			{L_clear_last_logs} <input type="text" name="dellogdays" size="5" value="{RPDELLOGDAYS}" class="input" />
-			{L_days} <button type="submit" name="deletedays" class="mainoption"><i class="icon-remove"></i>{L_delete}</button>
-			<button type="button" class="mainoption" name="delall" onclick="delete_all_warning();" ><i class="icon-remove"></i>{L_clear_all_logs}</button>
+			{L_days} <button type="submit" name="deletedays" class="mainoption"><i class="fa fa-times"></i>{L_delete}</button>
+			<button type="button" class="mainoption" name="delall" onclick="delete_all_warning();" ><i class="fa fa-times"></i>{L_clear_all_logs}</button>
 		</div>
 		{CSRF_TOKEN}
 		</form>
@@ -122,7 +122,7 @@
 			{EL_PAGINATION}
 		</div>
 		<div class="contentFooter">
-			<button name="del_errors" type="submit" class="mainoption" id="del_errors"><i class="icon-remove"></i>{L_clear_all_logs}</button>
+			<button name="del_errors" type="submit" class="mainoption" id="del_errors"><i class="fa fa-times"></i>{L_clear_all_logs}</button>
 		</div>
 		{CSRF_TOKEN}
 		</form>

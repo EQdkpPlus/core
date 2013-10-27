@@ -9,7 +9,7 @@
 	<form method="post" action="{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&lmethod=twofactor" name="register" id="register">
 	<input type="text" size="10" name="code" id="code"/><br />
 	{L_login_twofactor_code_explain}<br />
-	<button type="button" onclick="window.parent.location='{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&lmethod=twofactor&code='+$('#code').val()+'&secret={TWOFACTOR_KEY_ENCR}'"><i class="icon-ok"></i>{L_submit}</button>
+	<button type="button" onclick="window.parent.location='{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&lmethod=twofactor&code='+$('#code').val()+'&secret={TWOFACTOR_KEY_ENCR}'"><i class="fa fa-check"></i>{L_submit}</button>
 	</form>
 </fieldset>
 

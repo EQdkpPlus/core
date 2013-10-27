@@ -352,15 +352,15 @@ class Manage_Portal extends page_generic {
 
 			// Build the icon for the portal modules...
 			if($pdata['plugin']){
-				$icon = ($this->pm->get_data($pdata['plugin'], 'icon')) ? $this->pm->get_data($pdata['plugin'], 'icon') : 'icon-puzzle-piece';
+				$icon = ($this->pm->get_data($pdata['plugin'], 'icon')) ? $this->pm->get_data($pdata['plugin'], 'icon') : 'fa-puzzle-piece';
 			}elseif(isset($data['icon'])){
 				$icon = $data['icon'];
 			}else{
-				$icon = 'icon-info-sign';
+				$icon = 'fa-info-circle';
 			}
 			
 			// start the description text
-			$data['desc']		= $this->html->ToolTip($data['desc'], $this->core->icon_font($icon, 'icon-large'));
+			$data['desc']		= $this->html->ToolTip($data['desc'], $this->core->icon_font($icon, 'fa-lg'));
 			$data['multiple']	= ($portal_module[$path]->get_multiple() && !$pdata['child']) ? true : false;
 			if ($portal_module[$path]->get_multiple()){
 				$portal_module[$path]->set_id($id);

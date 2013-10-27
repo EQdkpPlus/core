@@ -293,7 +293,7 @@ if (!class_exists("recaptcha")) {
 							<label>'.register('user')->lang('lib_captcha_head').'</label><br /><span>'.register('user')->lang('lib_captcha_insertword').'</span>
 						</dt>
 						<dd>
-							<div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="'.register('user')->lang('lib_captcha_reload').'"></div><i class="icon-refresh icon-large hand" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" style="float: none; margin-left: 20px; padding-top: 40px;vertical-align: middle;"></i><div style="clear:both;"></div>
+							<div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="'.register('user')->lang('lib_captcha_reload').'"></div><i class="fa fa-refresh fa-lg hand" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" style="float: none; margin-left: 20px; padding-top: 40px;vertical-align: middle;"></i><div style="clear:both;"></div>
 							<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input"/>
 							'.$this->recaptcha_get_html($core->config('lib_recaptcha_okey')).'
 						</dd>

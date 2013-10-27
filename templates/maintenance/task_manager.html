@@ -1,6 +1,6 @@
 <!-- IF S_MMODE_ACTIVE and S_IS_ADMIN -->
 <div class="infobox infobox-large infobox-blue clearfix">
-	<i class="icon-info-sign icon-4x pull-left"></i>
+	<i class="fa fa-info-circle fa-4x pull-left"></i>
 	{L_MMODE_INFO}<br />
 	<button onclick="window.location='task_manager.php{SID}&amp;disable=true'">{L_DEACTIVATE_MMODE}</button>
 </div>
@@ -16,7 +16,7 @@
 <div class="contentWrapper">
 <!-- IF S_PFH_ERROR -->
 <div class="infobox infobox-large infobox-red clearfix">
-	<i class="icon-warning-sign icon-4x pull-left"></i> 
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> 
 	<strong>{L_pfh_ERROR}</strong>
 	<ul>
 		<!-- BEGIN pfh_errors -->
@@ -27,12 +27,12 @@
 <!-- ENDIF -->
 <!-- IF S_NEC_TASKS -->
 <div class="infobox infobox-large infobox-red clearfix">
-	<i class="icon-warning-sign icon-4x pull-left"></i> {L_NEC_TASK}
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_NEC_TASK}
 </div>
 <!-- ENDIF -->
 <!-- IF S_NO_NEC_TASKS -->
 <div class="infobox infobox-large infobox-green clearfix">
-	<i class="icon-ok icon-4x pull-left"></i>
+	<i class="fa fa-check fa-4x pull-left"></i>
 	{L_NO_NEC_TASK}
 </div>
 <br />

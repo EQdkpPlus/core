@@ -275,7 +275,7 @@ if (!class_exists("bbcode")) {
 			//Show error message becaue image is not available
 			$langBits = ($this->user->check_auth('a_news_', false)) ? $this->user->lang('images_not_available_admin') : $this->user->lang('images_not_available');
 			return '<div class="infobox infobox-large infobox-red clearfix">
-								<i class="icon-meh icon-4x pull-left"></i> '.$langBits.'
+								<i class="fa fa-meh-o fa-4x pull-left"></i> '.$langBits.'
 							</div>';
 		}
 

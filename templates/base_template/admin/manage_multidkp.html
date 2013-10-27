@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_manmdkp_title}</a></li>
 	</ul>
@@ -11,7 +11,7 @@
 	<h1 class="contentTitle">{L_manmdkp_title}</h1>
 </div>
 <div class="tableHeader floatRight">
-		<button type="button" name="add" class="mainoption" onclick="window.location='manage_multidkp.php{SID}&amp;upd=true'" ><i class="icon-plus"></i>{L_Multi_addkonto}</button>
+		<button type="button" name="add" class="mainoption" onclick="window.location='manage_multidkp.php{SID}&amp;upd=true'" ><i class="fa fa-plus"></i>{L_Multi_addkonto}</button>
 </div>
 <div class="clear"></div>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
@@ -30,7 +30,7 @@
 	</tr>
 	<!-- BEGIN multi_row -->
 	<tr>
-		<td width="16"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a></td>
+		<td width="16"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
 		<td width="150"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}">{multi_row.NAME}</a></td>
 		<td width="250">{multi_row.DESC}</td>
 		<td width="50%">{multi_row.EVENTS}</td>

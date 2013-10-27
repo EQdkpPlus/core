@@ -67,9 +67,9 @@
 					<a href="{EQDKP_ROOT_PATH}settings.php{SID}"><img src="{EQDKP_IMAGE_PATH}admin/manage_users.png" alt="user" class="absmiddle" /> {USER_NAME}</a> 
 					<!-- IF S_ADMIN -->&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}admin/index.php{SID}"><img src="{EQDKP_IMAGE_PATH}admin/task_manager.png" class="absmiddle" alt="Admin" /> {L_menu_admin_panel}</a> <!-- ENDIF -->
 					&nbsp;&bull;&nbsp; <a href="{EQDKP_ROOT_PATH}login.php{SID}&amp;logout=true&amp;link_hash={CSRF_LOGOUT_TOKEN}"><img src="{EQDKP_IMAGE_PATH}glyphs/logout.png" alt="user" class="absmiddle" /> {L_logout}</a>				
-					<!-- IF U_CHARACTERS != "" -->&nbsp;&bull;&nbsp; <img src="{TEMPLATE_PATH}/images/group.png" alt="Characters"/><a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a><!-- ENDIF -->
+					<!-- IF U_CHARACTERS != "" -->&nbsp;&bull;&nbsp; <img src="{TEMPLATE_PATH}/images/group.png" alt="Characters"/><a href="{U_CHARACTERS}"><i class="fa fa-group"></i>{L_menu_members}</a><!-- ENDIF -->
 										<div class="notification-tooltip-container">
-						&nbsp;&bull;&nbsp; <img src="{TEMPLATE_PATH}/images/lightning.png" alt="Characters"/><a class="notification-tooltip-trigger" data-type="all"><i class="icon-bolt"></i>Benachrichtigungen</a>
+						&nbsp;&bull;&nbsp; <img src="{TEMPLATE_PATH}/images/lightning.png" alt="Characters"/><a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt"></i>Benachrichtigungen</a>
 						<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 							<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 								<!-- IF NOTIFICATION_COUNT_RED > 0 -->
@@ -172,7 +172,7 @@
 						<div class="columnInner">
 							<!-- BEGIN global_warnings -->
 							<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
-								<i class="{global_warnings.ICON} icon-4x pull-left"></i> {global_warnings.MESSAGE}
+								<i class="{global_warnings.ICON} fa-4x pull-left"></i> {global_warnings.MESSAGE}
 							</div>
 							<!-- END global_warnings -->
 

@@ -104,12 +104,12 @@ class core extends gen_class {
 		* @param		string		$title				Message title
 		* @param		string		$kind				Color Theme: red/green/default
 		*/
-		public function global_warning($message, $icon='icon-warning-sign ', $class='red') {
+		public function global_warning($message, $icon='fa-exclamation-triangle ', $class='red') {
 			$this->tpl->assign_block_vars(
 				'global_warnings', array(
 					'MESSAGE'	=> $message,
 					'CLASS'		=> $class,
-					'ICON'		=> $icon,
+					'ICON'		=> 'fa '.$icon,
 				)
 			);
 		}
@@ -221,7 +221,7 @@ class core extends gen_class {
 			}
 			
 			if ($this->config->get('pk_maintenance_mode') && $this->user->check_auth('a_', false)){
-				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'icon-cog');
+				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'fa-cog');
 			}
 
 			$s_in_admin		= (((defined('IN_ADMIN') ) ? IN_ADMIN : false) && ($this->user->check_auth('a_', false)) ) ? true : false;
@@ -284,9 +284,9 @@ class core extends gen_class {
 			if ( ! $this->user->is_signedin() && intval($this->config->get('disable_registration')) != 1){
 				//CMS register?
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'icon-check'));
+					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-check-square-o'));
 				} else {
-					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'icon-check'));
+					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-check-square-o'));
 				}
 			}
 			

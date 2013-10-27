@@ -26,8 +26,8 @@ class core extends gen_class {
 	public $error_template_file		= '';				// Error Tp filename	@public $template_file
 	public $default_game			= '';				// Defaultgame			@public $default_game
 	public $game_language			= '';				// Defaultgame			@public $default_game
-	public $icon_error				= '<i class="icon-red icon-remove"></i>';
-	public $icon_ok					= '<i class="icon-green icon-ok"></i>';
+	public $icon_error				= '<i class="icon-red fa fa-times"></i>';
+	public $icon_ok					= '<i class="icon-green fa fa-check"></i>';
 
 	public function StatusIcon($mystat= 'ok') {
 		return ($mystat=='ok') ? $this->icon_ok : $this->icon_error;

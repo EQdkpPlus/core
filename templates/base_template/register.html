@@ -9,8 +9,8 @@
 		</div>
 		<br />
 		<div class="contentFooter">
-			<button class="mainoption" type="submit" name="{SUBMIT_BUTTON}"><i class="icon-ok"></i>{L_accept}</button>
-			<button class="liteoption" type="submit" name="deny"><i class="icon-remove"></i>{L_deny}</button>
+			<button class="mainoption" type="submit" name="{SUBMIT_BUTTON}"><i class="fa fa-check"></i>{L_accept}</button>
+			<button class="liteoption" type="submit" name="deny"><i class="fa fa-times"></i>{L_deny}</button>
 		</div>
 	</div>
 {CSRF_TOKEN}
@@ -104,7 +104,7 @@ $(document).ready(function(){
 		
 			<fieldset class="settings">
 				<legend>{L_adduser_tab_registration_information}</legend>
-				<i class="icon-info-sign icon-large"></i> {L_required_field_note}
+				<i class="fa fa-info-circle fa-lg"></i> {L_required_field_note}
 
 				<dl>
 					<dt>
@@ -112,7 +112,7 @@ $(document).ready(function(){
 					</dt>
 					<dd>
 						<input type="text" name="username" id="username" size="40" maxlength="30" value="{USERNAME}" class="input" />
-						<i class="icon-ok icon-large icon-color-green" id="tick_username" style="display:none;" ></i>
+						<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display:none;" ></i>
 					</dd>
 				</dl>
 				<dl>
@@ -121,7 +121,7 @@ $(document).ready(function(){
 					</dt>
 					<dd>
 						<input type="text" name="user_email" size="40" maxlength="100" value="{USER_EMAIL}" id="useremail" class="input" />
-						<i class="icon-ok icon-large icon-color-green" id="tick_mail" style="display:none;" ></i>
+						<i class="fa fa-check fa-lg icon-color-green" id="tick_mail" style="display:none;" ></i>
 					</dd>
 				</dl>
 				<dl>
@@ -179,7 +179,7 @@ $(document).ready(function(){
 				<dt>
 					<label>{L_lib_captcha_head}</label><br /><span>{L_lib_captcha_insertword}</span>
 				</dt>
-				<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><i class="icon-refresh icon-large hand" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" style="float: none; margin-left: 20px; padding-top: 40px;vertical-align: middle;"></i><div style="clear:both;"></div>
+				<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><i class="fa fa-refresh fa-lg hand" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" style="float: none; margin-left: 20px; padding-top: 40px;vertical-align: middle;"></i><div style="clear:both;"></div>
 				<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input"/>
 				{FV_CAPTCHA}
 				{CAPTCHA}</dd>
@@ -188,8 +188,8 @@ $(document).ready(function(){
 	</div>
 	<!-- ENDIF -->
 		<div class="contentFooter">
-			<button class="" type="submit" name="submit"><i class="icon-ok"></i>{L_submit}</button>
-			<button class="" type="reset" name="reset"><i class="icon-trash" onclick="reset_validator_register();"></i>{L_reset}</button>
+			<button class="" type="submit" name="submit"><i class="fa fa-check"></i>{L_submit}</button>
+			<button class="" type="reset" name="reset"><i class="fa fa-trash-o" onclick="reset_validator_register();"></i>{L_reset}</button>
 		</div>
 	</div>
 	{HIDDEN_FIELDS}

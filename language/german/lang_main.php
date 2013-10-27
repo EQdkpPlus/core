@@ -437,7 +437,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "deny" => "Ablehnen",
 "accept" => "Akzeptieren",
 "guildrules" => "Gildenregeln",
-"sticky_news_prefix" => "<i class=\"icon-info-sign\"></i> Sticky:",
+"sticky_news_prefix" => "<i class=\"fa fa-info-circle\"></i> Sticky:",
 "news_sticky" => "News immer oben anzeigen?",
 "menu_main" => "Hauptmenü",
 "menu_eqdkp" => "Menü",

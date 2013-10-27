@@ -145,7 +145,7 @@ class calendar_pageobject extends pageobject {
 					<dl>
 						<dt class="onerow">
 							<div class="infobox infobox-large infobox-blue clearfix">
-								<i class="icon-info-sign icon-4x pull-left"></i> '.$this->user->lang('calendar_export_feed').'
+								<i class="fa fa-info-circle fa-4x pull-left"></i> '.$this->user->lang('calendar_export_feed').'
 							</div>
 						</dt>
 					</dl>
@@ -268,7 +268,7 @@ class calendar_pageobject extends pageobject {
 
 						$deadlinedate	= $this->pdh->get('calendar_events', 'time_start', array($calid)) - ($eventextension['deadlinedate'] * 3600);
 						$deadline = ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) > 0 && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) != 4 && $this->pdh->get('calendar_events', 'time_end', array($calid)) > $this->time->time)) ? false : true;
-						$deadlineflag = ($deadline) ? '<i class="icon-lock icon-large" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
+						$deadlineflag = ($deadline) ? '<i class="fa fa-lock fa-lg" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
 
 						// Build the JSON
 						$event_json[] = array(

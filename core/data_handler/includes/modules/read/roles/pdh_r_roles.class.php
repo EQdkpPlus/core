@@ -128,7 +128,7 @@ if (!class_exists('pdh_r_roles')){
 		}
 
 		public function get_edit($id){
-			return '<i class="icon-pencil icon-large hand" title="'.$this->user->lang('edit_role').'" onclick="editRole(\''.$id.'\')"></i>';
+			return '<i class="fa fa-pencil fa-lg hand" title="'.$this->user->lang('edit_role').'" onclick="editRole(\''.$id.'\')"></i>';
 		}
 
 		public function get_memberroles($classid, $addfirstrow=false){

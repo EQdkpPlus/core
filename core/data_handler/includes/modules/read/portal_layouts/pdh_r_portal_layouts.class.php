@@ -113,7 +113,7 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 		}
 		
 		public function get_editicon($intLayoutID){
-			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;l='.$intLayoutID.'"><i class="icon-pencil icon-large" title="'.$this->user->lang('edit').'"></i></a>';
+			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;l='.$intLayoutID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
 		}
 		
 		public function get_checkbox_check($intLayoutID){

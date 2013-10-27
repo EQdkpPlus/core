@@ -642,43 +642,43 @@ class calendarevent_pageobject extends pageobject {
 			1 => array(
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
 				'link'	=> 'javascript:EditRaid()',
-				'icon'	=> 'icon-edit icon-large',
+				'icon'	=> 'fa fa-pencil-square-o fa-lg',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			2 => array(
 				'name'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
 				'link'	=> ($eventdata['closed'] == '1') ? $this->strPath.$this->SID.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') :  $this->strPath.$this->SID.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
-				'icon'	=> ($eventdata['closed'] == '1') ? 'icon-unlock icon-large' : 'icon-lock icon-large',
+				'icon'	=> ($eventdata['closed'] == '1') ? 'fa-unlock fa-lg' : 'fa-lock fa-lg',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			3 => array(
 				'name'	=> $this->user->lang('raidevent_raid_transform'),
 				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
-				'icon'	=> 'icon-exchange icon-large',
+				'icon'	=> 'fa-exchange fa-lg',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			4 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
 				'link'	=> $this->strPath.$this->SID.'&amp;ical=true',
-				'icon'	=> 'icon-calendar icon-large',
+				'icon'	=> 'fa-calendar fa-lg',
 				'perm'	=> true,
 			),
 			5 => array(
 				'name'	=> $this->user->lang('raidevent_raid_export'),
 				'link'	=> 'javascript:ExportDialog()',
-				'icon'	=> 'icon-share icon-large',
+				'icon'	=> 'fa-share-square-o fa-lg',
 				'perm'	=> true,
 			),
 			6 => array(
 				'name'	=> $this->user->lang('calendars_add_title'),
 				'link'	=> 'javascript:AddRaid()',
-				'icon'	=> 'icon-plus icon_large',
+				'icon'	=> 'fa-plus icon_large',
 				'perm'	=> $this->user->check_auth('u_cal_event_add', false),
 			),
 			7 => array(
 				'name'	=> $this->user->lang('massmail_send'),
 				'link'	=> $this->server_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
-				'icon'	=> 'icon-envelope-alt icon-large',
+				'icon'	=> 'fa-envelope fa-lg',
 				'perm'	=> $this->user->check_auth('a_users_massmail', false),
 			),
 		);
@@ -754,7 +754,7 @@ class calendarevent_pageobject extends pageobject {
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
 
 			//Data
-			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="icon-cog icon-large"></i> '.$this->user->lang('raidevent_raid_settbutton')),
+			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton')),
 			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : $this->html->DropDown('member_id', $drpdwn_members, $presel_charid),
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
 			'DD_SIGNUPSTATUS'		=> $this->html->DropDown('signup_status', $status_dropdown, $this->mystatus['signup_status']),

@@ -6,14 +6,14 @@
 }
 </style>
 <div class="infobox infobox-large infobox-blue clearfix">
-	<i class="icon-info-sign icon-4x pull-left"></i> {L_MAINTENANCE_MESSAGE} {REASON}
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_MAINTENANCE_MESSAGE} {REASON}
 </div>
 <br />
 <form method="post" action="maintenance.php{SID}" name="post" id="login">
 	
 	<!-- IF S_LOGIN_ERROR -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="icon-warning-sign icon-4x pull-left"></i> {L_LOGIN_WARNING}
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_LOGIN_WARNING}
 	</div>
 	<!-- ENDIF -->
 	
@@ -21,11 +21,11 @@
 		<legend>{L_LOGIN}</legend>		
 		<dl>
 			<dt><label>{L_USERNAME}:</label></dt>
-			<dd><div class="input-icon"><i class="icon-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username" placeholder="{L_USERNAME}" /></div></dd>
+			<dd><div class="input-icon"><i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username" placeholder="{L_USERNAME}" /></div></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_PASSWORD}:</label></dt>
-			<dd><div class="input-icon"><i class="icon-key"></i><input type="password" name="password" size="30" maxlength="32" placeholder="{L_PASSWORD}" /></div>
+			<dd><div class="input-icon"><i class="fa fa-key"></i><input type="password" name="password" size="30" maxlength="32" placeholder="{L_PASSWORD}" /></div>
 				<!-- IF S_SHOW_PWRESET_LINK -->
 				<br />{U_PWRESET_LINK}
 				<!-- ENDIF -->
@@ -35,5 +35,5 @@
 	</fieldset>				
 	
 	<input type="hidden" name="splash" value="{SPLASH}" />	
-	<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i> {L_LOGIN}</button>
+	<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i> {L_LOGIN}</button>
 </form>

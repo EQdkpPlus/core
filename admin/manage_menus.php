@@ -148,7 +148,7 @@ class Manage_Menus extends page_generic {
 							var content = $(ui.item).html();
 							var Oclass = $(ui.item).attr(\'class\');
 							var Oid = $(ui.item).attr(\'id\');
-							$(ui.item).html(content + \'  <i class="icon-trash icon-large not-sortable hand" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();"></i>\');
+							$(ui.item).html(content + \'  <i class="fa fa-trash-o fa-lg not-sortable hand" onclick="removeThis(this.parentNode.id); 	$(this).parent().remove();"></i>\');
 							document.getElementById("cb_"+Oid).checked = true;
 						}
 
@@ -217,7 +217,7 @@ class Manage_Menus extends page_generic {
 								$this->tpl->assign_block_vars('fav_row', array(
 									'NAME' => $adm['text'],
 									'ID'	=> 'fav_'.$fav_key,
-									'ICON' => $this->core->icon_font((isset($adm['icon'])) ? $adm['icon'] : ((isset($adm['img']) ? $adm['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path),
+									'ICON' => $this->core->icon_font((isset($adm['icon'])) ? $adm['icon'] : ((isset($adm['img']) ? $adm['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $image_path),
 									'DATA'	=> $fav,
 									'IDENT'	=> 'i'.md5($latest['name']),
 									'GROUP'	=> $latest['name'],	
@@ -245,7 +245,7 @@ class Manage_Menus extends page_generic {
 					$this->jquery->Collapse('#container_'.$ident);
 
 					$this->tpl->assign_block_vars('group_row.menu_row', array(
-						'NAME' => $this->core->icon_font((isset($v['icon'])) ? $v['icon'] : ((isset($v['img']) ? $v['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path).' '.$v['name'],
+						'NAME' => $this->core->icon_font((isset($v['icon'])) ? $v['icon'] : ((isset($v['img']) ? $v['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $image_path).' '.$v['name'],
 						'GROUP'	=> $v['name'],
 						'IDENT'	=> $ident,
 					));
@@ -266,7 +266,7 @@ class Manage_Menus extends page_generic {
 								$ident = 'i'.md5($row['name']);
 								$this->jquery->Collapse('#container_'.$ident);
 								$this->tpl->assign_block_vars('group_row.menu_row', array(
-									'NAME' => $this->core->icon_font(((isset($row['icon'])) ? $row['icon'] : 'icon-puzzle-piece'), 'icon-large', $image_path).' '.$row['name'],
+									'NAME' => $this->core->icon_font(((isset($row['icon'])) ? $row['icon'] : 'fa-puzzle-piece'), 'fa-lg', $image_path).' '.$row['name'],
 									'GROUP'	=> $row['name'],
 									'IDENT'	=> $ident,
 								));
@@ -283,7 +283,7 @@ class Manage_Menus extends page_generic {
 												$this->tpl->assign_block_vars('group_row.menu_row.item_row', array(
 													'NAME'	=> $row2['text'],
 													'ID'	=> 'l'.md5($link),
-													'ICON'	=> $this->core->icon_font((isset($row2['icon'])) ? $row2['icon'] : ((isset($row2['img']) ? $row2['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path),
+													'ICON'	=> $this->core->icon_font((isset($row2['icon'])) ? $row2['icon'] : ((isset($row2['img']) ? $row2['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $image_path),
 													'DATA'	=> $k.'|'.$k2.'|'.$k3,
 												));
 											}
@@ -297,7 +297,7 @@ class Manage_Menus extends page_generic {
 									$this->tpl->assign_block_vars('group_row.menu_row.item_row', array(
 										'NAME'	=> $row['text'],
 										'ID'	=> 'l'.md5($link),
-										'ICON'	=> $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $image_path),
+										'ICON'	=> $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $image_path),
 										'DATA'	=> $k.'|'.$k2,
 									));
 								}
@@ -419,8 +419,8 @@ class Manage_Menus extends page_generic {
 			if ($blnPluslink){
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
 				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));
-				$html .= '<i class="icon-pencil"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
-					<i class="icon-trash icon-large hand" onclick="delete_plink('.$plinkid.', this)" title="'.$this->user->lang("delete").'"></i>
+				$html .= '<i class="fa fa-pencil"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
+					<i class="fa fa-trash-o fa-lg hand" onclick="delete_plink('.$plinkid.', this)" title="'.$this->user->lang("delete").'"></i>
 					<input type="hidden" value="'.$arrPluslinkData['url'].'"  name="mainmenu['.$id.'][url]" class="link-url">
 					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">
 					<input type="hidden" value="'.$arrPluslinkData['window'].'"  name="mainmenu['.$id.'][window]" class="link-window">

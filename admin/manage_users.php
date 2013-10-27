@@ -294,10 +294,10 @@ class Manage_Users extends page_generic {
 			$user_online = (in_array($user_id, $online_users)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 			if($this->pdh->get('user', 'active', array($user_id))) {
 				$user_active = '<i class="eqdkp-icon-online"></i>';
-				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=deactivate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('deactivate').'"><i class="icon-check icon-large icon-color-green"></i></a>';
+				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=deactivate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('deactivate').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
 			} else {
 				$user_active = '<i class="eqdkp-icon-offline"></i>';
-				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="icon-unchecked icon-large icon-color-red"></i></a>';
+				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="icon-unchecked fa-lg icon-color-red"></i></a>';
 			}
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
 $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
@@ -601,7 +601,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 				$this->tpl->assign_block_vars('plugin_settings_row', array(
 					'KEY'		=> $plugin,
 					'PLUGIN'	=> $name,
-					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'icon-puzzle-piece', 'icon-large', $image_path),
+					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'fa-puzzle-piece', 'fa-lg', $image_path),
 				));
 				unset($values['name'], $values['icon']);
 				$this->tpl->assign_block_vars('plugin_usersettings_div', array(
@@ -700,7 +700,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 					'username'	=> array(
 						'fieldtype'	=> 'text',
 						'name'	=> 'username',
-						'text'	=> '<i class="icon-ok icon-large icon-color-green" id="tick_username" style="display: none;"></i>',
+						'text'	=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
 						'size'		=> 40,
 						'required'	=> true,
 						'id'	=> 'username',

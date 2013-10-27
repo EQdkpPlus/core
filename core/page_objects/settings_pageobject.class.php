@@ -224,7 +224,7 @@ class settings_pageobject extends pageobject {
 						'name'	=> 'username',
 						'help'	=> ($this->config->get('disable_username_change') == 1) ? $this->user->lang('register_help_disabled_username') : '',
 						'readonly'	=> ($this->config->get('disable_username_change') == 1) ? true : false,
-						'text'	=> '<i class="icon-ok icon-large icon-color-green" id="tick_username" style="display: none;"></i>',
+						'text'	=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
 						'size'		=> 40,
 						'required'	=> true,
 						'id'	=> 'username',
@@ -262,7 +262,7 @@ class settings_pageobject extends pageobject {
 				'user_app_key' => array(
 					'exchange_key' => array(
 						'fieldtype' => 'plaintext',
-						'text'		=> $this->user->data['exchange_key'].'<br /><button class="" type="submit" name="newexchangekey"><i class="icon-refresh"></i>'.$this->user->lang('user_create_new appkey').'</button>',
+						'text'		=> $this->user->data['exchange_key'].'<br /><button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new appkey').'</button>',
 						'name'		=> 'user_app_key'
 					),
 				),
@@ -546,7 +546,7 @@ class settings_pageobject extends pageobject {
 					$auth_array['registration_information']['auth_accounts'] = array(
 						'auth_account_'.$method	=> array(
 							'name'	=> ($this->user->lang('login_'.$method)) ? $this->user->lang('login_'.$method) : ucfirst($method),
-							'text'	=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="icon-trash icon-large" title="{L_delte}"></i></a>',
+							'text'	=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="{L_delte}"></i></a>',
 							'help'	=> 'auth_accounts_help',
 						),
 					);
@@ -638,7 +638,7 @@ class settings_pageobject extends pageobject {
 				$this->tpl->assign_block_vars('plugin_settings_row', array(
 					'KEY'		=> $plugin,
 					'PLUGIN'	=> $name,
-					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'icon-puzzle-piece', 'icon-large', $image_path),
+					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'fa-puzzle-piece', 'fa-lg', $image_path),
 				));
 				unset($values['name'], $values['icon']);
 				$this->tpl->assign_block_vars('plugin_usersettings_div', array(

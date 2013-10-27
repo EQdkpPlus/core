@@ -167,7 +167,7 @@ function attendeeCount(){
 
 	<!-- IF IS_CLONED -->
 	<div class="infobox infobox-large infobox-blue clearfix">
-		<i class="icon-retweet icon-4x pull-left"></i> {L_calendar_event_clones_info}<br/>{RADIO_EDITCLONES}
+		<i class="fa fa-retweet fa-4x pull-left"></i> {L_calendar_event_clones_info}<br/>{RADIO_EDITCLONES}
 	</div>
 	<!-- ENDIF -->
 
@@ -182,7 +182,7 @@ function attendeeCount(){
 		<dl class="raid">
 			<dt><label>{L_raidevent_template}</label></dt>
 			<dd>{DR_TEMPLATE} 
-				<button type="button" name="delete_template" id="template_delbutton"><i class="icon-remove"></i></button>
+				<button type="button" name="delete_template" id="template_delbutton"><i class="fa fa-times"></i></button>
 			</dd>
 		</dl>
 		<hr />
@@ -202,7 +202,7 @@ function attendeeCount(){
 			<dt><label>{L_raidevent_raidevent}:</label></dt>
 			<dd>
 				<span id="raidevent_dropdown">{DR_EVENT}</span> 
-				<button type="button" name="add_event" onclick="AddEventDialog()"><i class="icon-plus"></i></button>
+				<button type="button" name="add_event" onclick="AddEventDialog()"><i class="fa fa-plus"></i></button>
 			</dd>
 		</dl>
 		<dl class="raid">
@@ -247,11 +247,11 @@ function attendeeCount(){
 	<fieldset class="settings floatRight raid" style="width: 310px;">
 		<legend>{L_raidevent_attendees}</legend>
 		<dl>
-			<dt><label><i class="icon-cogs icon-large"></i> {L_calendar_distri}:</label></dt>
+			<dt><label><i class="fa fa-cogs fa-lg"></i> {L_calendar_distri}:</label></dt>
 			<dd>{DR_RAIDMODE}</dd>
 		</dl>
 		<dl>
-			<dt><label><i class="icon-group icon-large"></i> {L_raidevent_attendees}:</label></dt>
+			<dt><label><i class="fa fa-group fa-lg"></i> {L_raidevent_attendees}:</label></dt>
 			<dd><input type="text" size="3" maxlength="2" name="raid_attendees_count" value="{ATTENDEE_COUNT}" readonly="readonly" id="attendees_summ" /></dd>
 		</dl>
 		<div id="raidmode_class">
@@ -277,13 +277,13 @@ function attendeeCount(){
 	<div class="clear"></div>
 
 	<!-- IF IS_EDIT -->
-		<button type="submit" name="upd" class="mainoption"><i class="icon-ok"></i>{L_calendars_upd_button}</button>
-		<button type="submit" name="addtemplate" class="liteoption raid"><i class="icon-paste"></i>{L_raidevent_savetemplate}</button>
+		<button type="submit" name="upd" class="mainoption"><i class="fa fa-check"></i>{L_calendars_upd_button}</button>
+		<button type="submit" name="addtemplate" class="liteoption raid"><i class="fa fa-clipboard"></i>{L_raidevent_savetemplate}</button>
 	<!-- ELSE -->
 		<input type="hidden" name="addevent"/>
-		<button type="submit" name="addevent" id="submittheform" class="mainoption"><i class="icon-ok"></i>{L_calendars_add_button}</button>
-		<button type="submit" name="addtemplate" class="liteoption raid" id="save_template"><i class="icon-paste"></i>{L_raidevent_savetemplate}</button>
-		<button type="reset"  name="reset" class="liteoption"><i class="icon-trash"></i>{L_reset}</button>
+		<button type="submit" name="addevent" id="submittheform" class="mainoption"><i class="fa fa-check"></i>{L_calendars_add_button}</button>
+		<button type="submit" name="addtemplate" class="liteoption raid" id="save_template"><i class="fa fa-clipboard"></i>{L_raidevent_savetemplate}</button>
+		<button type="reset"  name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
 	<!-- ENDIF -->
 {CSRF_TOKEN}
 </form>

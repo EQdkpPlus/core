@@ -127,7 +127,7 @@
 				<div id="personalAreaUser">
 					<!-- IF not S_LOGGED_IN -->
 					<ul>
-						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="icon-signin"></i>{L_login}</a></li>
+						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in"></i>{L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
@@ -138,7 +138,7 @@
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="icon-user"></i>{USER_NAME}</a>
+									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user"></i>{USER_NAME}</a>
 									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
 										<li><a href="{U_USER_PROFILE}">
 												<div class="user-tooltip-avatar">
@@ -151,17 +151,17 @@
 											</a>
 										</li>
 										<li class="tooltip-divider"></li>
-										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="icon-cog"></i>{L_settings}</a></li>
-										<li><a href="{U_LOGOUT}"><i class="icon-signout"></i>{L_logout}</a></li>
+										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog"></i>{L_settings}</a></li>
+										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out"></i>{L_logout}</a></li>
 									</ul>
 								</div>
 							</li>
-							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="icon-cog"></i>{L_menu_admin_panel}</a></li><!-- ENDIF -->
+							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog"></i>{L_menu_admin_panel}</a></li><!-- ENDIF -->
 							
-							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="icon-group"></i>{L_menu_members}</a></li><!-- ENDIF -->
+							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group"></i>{L_menu_members}</a></li><!-- ENDIF -->
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger" data-type="all"><i class="icon-bolt"></i>{L_notifications}</a>
+									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt"></i>{L_notifications}</a>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 										<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_RED > 0 -->
@@ -205,7 +205,7 @@
 								<!-- ENDIF -->
 							</li>
 							<!-- IF S_SEARCH -->
-							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="icon-search"></i>{L_search}</a></li>
+							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="fa fa-search"></i>{L_search}</a></li>
 							<!-- ENDIF -->
 							<!-- BEGIN personal_area_addition -->
 							<li>{personal_area_addition.TEXT}</li>
@@ -215,12 +215,12 @@
 				</div>
 				<div id="personalAreaTime" class="hiddenSmartphone">
 					<ul>
-						<li class="personalAreaTime"><i class="icon-time"></i><span class="user_time">{USER_TIME}</span></li>
+						<li class="personalAreaTime"><i class="fa fa-clock-o"></i><span class="user_time">{USER_TIME}</span></li>
 						<li><!-- IF S_SEARCH -->
 						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>
 							<button type="submit" class="search_button" value="" title="{L_search_do}">
-								<i class="icon-search"></i>
+								<i class="fa fa-search"></i>
 							</button>
 						</form>
 					<!-- ENDIF -->	</li>
@@ -259,7 +259,7 @@
 							<div class="clear noheight">&nbsp;</div>
 						</div>
 						<div class="hiddenDesktop mainmenu">
-							<i class="icon-list"></i>
+							<i class="fa fa-list"></i>
 							{MAIN_MENU_SELECT}
 						</div>
 					</div><!-- close mainmenu -->
@@ -292,7 +292,7 @@
 							<!-- BEGIN global_warnings -->
 							<header>
 								<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
-									<i class="{global_warnings.ICON} icon-4x pull-left"></i> {global_warnings.MESSAGE}
+									<i class="{global_warnings.ICON} fa-4x pull-left"></i> {global_warnings.MESSAGE}
 								</div>
 							</header>
 							<!-- END global_warnings -->
@@ -347,17 +347,17 @@
 		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login">
 			<!-- IF S_BRIDGE_INFO -->
 			<div class="infobox infobox-large infobox-blue clearfix">
-				<i class="icon-info-sign icon-4x pull-left"></i> {L_login_bridge_notice}
+				<i class="fa fa-info-circle fa-4x pull-left"></i> {L_login_bridge_notice}
 			</div>
 			<!-- ENDIF -->
 			<fieldset class="settings mediumsettings">	
 				<dl>
 					<dt><label>{L_username}:</label></dt>
-					<dd><div class="input-icon"><i class="icon-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></div></dd>
+					<dd><div class="input-icon"><i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></div></dd>
 				</dl>
 				<dl>
 					<dt><label>{L_password}:</label></dt>
-					<dd><div class="input-icon"><i class="icon-key"></i><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password"/></div>
+					<dd><div class="input-icon"><i class="fa fa-key"></i><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password"/></div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}<br />
 						<!-- ENDIF -->
@@ -365,7 +365,7 @@
 					</dd>
 				</dl>
 			</fieldset>
-			<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i> {L_login}</button>
+			<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i> {L_login}</button>
 			<!-- IF AUTH_LOGIN_BUTTON != "" -->
 			<br /><br />
 			<fieldset class="settings mediumsettings">

@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_manage_users}</a></li>
 	</ul>
@@ -12,7 +12,7 @@
 	<h1 class="contentTitle">{L_manage_users}</h1>
 </div>
 <div class="tableHeader floatRight">
-	<button class="mainoption" type="button" name="create" onclick="window.location.href='{U_MANAGE_USERS}u=0'"><i class="icon-plus"></i>{L_user_creation}</button>
+	<button class="mainoption" type="button" name="create" onclick="window.location.href='{U_MANAGE_USERS}u=0'"><i class="fa fa-plus"></i>{L_user_creation}</button>
 </div>
 <div class="clear"></div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch hoverrows">
@@ -43,11 +43,11 @@
 		<!-- BEGIN users_row -->
 		<tr>
 			<td width="25" align="center" class="nowrap"><!-- IF not users_row.PROTECT_SUPERADMIN --><input type="checkbox" name="user_id[]" value="{users_row.USER_ID}" id="user_id_{users_row.USER_ID}"/><!-- ENDIF --></td>
-			<td width="20"><a href="{users_row.U_MANAGE_USER}" title="{L_edit}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a></td>
-			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><i class="icon-user icon-large"></i></a><!-- ENDIF --></td>
+			<td width="20"><a href="{users_row.U_MANAGE_USER}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
+			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><i class="fa fa-user fa-lg"></i></a><!-- ENDIF --></td>
 			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->{users_row.ACTIVATE_ICON}<!-- ENDIF --></td>
 			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->
-				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><i class="icon-trash icon-large"></i></a>    	<!-- ENDIF -->
+				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><i class="fa fa-trash-o fa-lg"></i></a>    	<!-- ENDIF -->
 			</td>
 			<td width="5">{users_row.ADMIN_ICON}</td>
 			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
@@ -103,7 +103,7 @@
 	</div>
 	<div class="contentFooter">
 
-		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
+		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
 		<input type="hidden" name="del_assocmem" value="0" id="del_assocmem" />
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>

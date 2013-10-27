@@ -312,7 +312,7 @@ class ManageRaids extends page_generic {
 		$this->tpl->assign_vars(array(
 			'RAID_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], $footer_text),
 			'PAGINATION' => generate_pagination('manage_raids.php'.$sort_suffix, $raid_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
-			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<button onclick="window.location=\''.$this->root_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'\'" type="button" class="mainoption"><i class="icon-upload-alt"></i>'.$this->user->lang('raidlogimport_dkp').'</button>' : '',
+			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<button onclick="window.location=\''.$this->root_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'\'" type="button" class="mainoption"><i class="fa-upload"></i>'.$this->user->lang('raidlogimport_dkp').'</button>' : '',
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 

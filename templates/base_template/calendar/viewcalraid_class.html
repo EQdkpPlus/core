@@ -48,15 +48,15 @@
 									<span style="float:right;">
 										<!-- IF NOTEPERMISSION -->
 										<!-- IF raidstatus.classes.status.NOTE -->
-										<span class="<!-- IF raidstatus.classes.status.ADMINNOTE -->icon-bullhorn<!-- ELSE -->icon-comment<!-- ENDIF --> icon-large coretip <!-- IF IS_OPERATOR -->charnote_toggle hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></span>
+										<span class="<!-- IF raidstatus.classes.status.ADMINNOTE -->fa-bullhorn<!-- ELSE -->fa fa-comment<!-- ENDIF --> fa-lg coretip <!-- IF IS_OPERATOR -->charnote_toggle hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></span>
 										<!-- ELSE -->
 											<!-- IF IS_OPERATOR -->
-											<span class="icon-comment-alt icon-large charnote_toggle hand"></span>
+											<span class="fa fa-comment-o fa-lg charnote_toggle hand"></span>
 											<!-- ENDIF -->
 										<!-- ENDIF -->
 										<!-- ENDIF -->
 										<!-- IF IS_OPERATOR -->
-										<span class="icon-random icon-large charname_toggle hand" title="{L_raidevent_raid_changecharmenu}"></span>
+										<span class="fa fa-random fa-lg charname_toggle hand" title="{L_raidevent_raid_changecharmenu}"></span>
 										<!-- ENDIF -->
 									</span>
 									<!-- IF IS_OPERATOR -->
@@ -67,7 +67,7 @@
 											<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 											<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
 											{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-											<button type="button" name="submit_charchange" value=""><i class="icon-thumbs-up icon-large"></i></button>
+											<button type="button" name="submit_charchange" value=""><i class="fa fa-thumbs-up fa-lg"></i></button>
 										</fieldset>
 									</div>
 									<div class="notechange_menu" style="width:100%;">
@@ -76,7 +76,7 @@
 											<legend>{L_raidevent_raid_changenotemenu}</legend>
 											<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 											<textarea name="notechange_note" cols="18" rows="3">{raidstatus.classes.status.NOTE}</textarea>
-											<button type="button" name="submit_notechange" value=""><i class="icon-thumbs-up icon-large"></i></button>
+											<button type="button" name="submit_notechange" value=""><i class="fa fa-thumbs-up fa-lg"></i></button>
 										</fieldset>
 									</div>
 									<!-- ENDIF -->

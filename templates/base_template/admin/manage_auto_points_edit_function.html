@@ -8,7 +8,7 @@
 </fieldset>
 
 <div class="infobox infobox-large infobox-blue clearfix">
-	<i class="icon-info-sign icon-4x pull-left"></i> {L_apa_func_help}
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_apa_func_help}
 </div>
 
 <fieldset class="settings smallsettings">
@@ -19,7 +19,7 @@
 	<div id="exprs_block">
 		<!-- BEGIN exprs -->
 		<dl>
-			<i class="icon-trash icon-large del_me hand" title="{L_delte}"></i><span class="apa_var">{exprs.VAR}</span> = <input type="text" size="70" name="exprs[]" value="{exprs.EXPR}" class="input expr_field" />;
+			<i class="fa fa-trash-o fa-lg del_me hand" title="{L_delte}"></i><span class="apa_var">{exprs.VAR}</span> = <input type="text" size="70" name="exprs[]" value="{exprs.EXPR}" class="input expr_field" />;
 		</dl>
 		<!-- END exprs -->
 	</div>
@@ -27,14 +27,14 @@
 	<dl>
 		{L_tab_points} = <input type="text" size="70" name="exprs[]" value="{POINT_EXPR}" class="input expr_field expr_last points" />;
 	</dl>
-	<button class="mainoption" type="button" id="add_expr"><i class="icon-plus"></i>{L_apa_func_add_expr}</button>
+	<button class="mainoption" type="button" id="add_expr"><i class="fa fa-plus"></i>{L_apa_func_add_expr}</button>
 </fieldset>
-<button class="mainoption" type="submit" name="save_func"><i class="icon-ok"></i>{L_save}</button>
-<button class="mainoption" type="reset" name="reset"><i class="icon-trash"></i>{L_reset}</button>
+<button class="mainoption" type="submit" name="save_func"><i class="fa fa-check"></i>{L_save}</button>
+<button class="mainoption" type="reset" name="reset"><i class="fa fa-trash-o"></i>{L_reset}</button>
 {CSRF_TOKEN}
 </form>
 <div id="clone" style="display:none;">
 	<dl>
-		<i class="icon-trash icon-large del_me hand" title="{L_delte}"></i> <span class="apa_var">Var0</span> = <input type="text" size="70" name="exprs[]" value="{exprs.EXPR}" class="input expr_field" />;
+		<i class="fa fa-trash-o fa-lg del_me hand" title="{L_delte}"></i> <span class="apa_var">Var0</span> = <input type="text" size="70" name="exprs[]" value="{exprs.EXPR}" class="input expr_field" />;
 	</dl>
 </div>

@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_manage_cronjobs}</a></li>
 	</ul>
@@ -24,7 +24,7 @@
 	<!-- BEGIN cron_row -->
 	<tr>
 		<td width="25" class="nowrap" align="center"><i class="eqdkp-icon-{cron_row.ENABLE_ICON}"></i></td>
-		<td width="20" class="nowrap"><a href="{cron_row.U_RUN_CRON}" title="{L_execute}"><i class="icon-play icon-large"></i></a> <!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_ACTIVATE_CRON}" title="{cron_row.L_ENABLE}"><i class="{cron_row.ACTIVATE_ICON} icon-large"></i></a> <a href="{cron_row.U_EDIT_CRON}" title="{L_edit}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a><!-- ENDIF --></td>
+		<td width="20" class="nowrap"><a href="{cron_row.U_RUN_CRON}" title="{L_execute}"><i class="fa fa-play fa-lg"></i></a> <!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_ACTIVATE_CRON}" title="{cron_row.L_ENABLE}"><i class="{cron_row.ACTIVATE_ICON} fa-lg"></i></a> <a href="{cron_row.U_EDIT_CRON}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
 		<td width="50%" class="nowrap"><!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_EDIT_CRON}">{cron_row.NAME}</a><!-- ELSE -->{cron_row.NAME}<!-- ENDIF --></td>
 		<td class="nowrap">{cron_row.REPEAT}</td>
 		<td class="nowrap">{cron_row.START}</td>

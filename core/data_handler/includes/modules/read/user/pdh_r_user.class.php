@@ -196,7 +196,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($this->check_privacy($user_id) && $this->user->is_signedin() && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
-				return '<a href="javascript:usermailer('.$user_id.');"><i class="icon-envelope"></i>'.$this->user->lang('adduser_send_mail').'</a>';
+				return '<a href="javascript:usermailer('.$user_id.');"><i class="fa fa-envelope"></i>'.$this->user->lang('adduser_send_mail').'</a>';
 			}
 		
 			return '';
@@ -279,7 +279,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_skype($user_id){
 			if ($this->check_privacy($user_id) && strlen($this->get_skype($user_id))){
-				return '<a href="skype:'.$this->get_skype($user_id).'?add"><i class="icon-skype icon-large"></i>'.sanitize($this->get_skype($user_id)).'</a>';
+				return '<a href="skype:'.$this->get_skype($user_id).'?add"><i class="fa fa-skype fa-lg"></i>'.sanitize($this->get_skype($user_id)).'</a>';
 			}
 			return '';
 		}
@@ -292,7 +292,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_twitter($user_id){
 			if ($this->check_privacy($user_id) && strlen($this->get_twitter($user_id))){
-				return '<a href="http://twitter.com/'.$this->get_twitter($user_id).'" target="_blank"><i class="icon-twitter icon-large"></i>'.$this->get_twitter($user_id).'</a>';
+				return '<a href="http://twitter.com/'.$this->get_twitter($user_id).'" target="_blank"><i class="fa fa-twitter fa-lg"></i>'.$this->get_twitter($user_id).'</a>';
 			}
 			return '';	
 		}
@@ -305,7 +305,7 @@ if (!class_exists("pdh_r_user")){
 		
 		public function get_html_facebook($user_id){
 			if ($this->check_privacy($user_id) && strlen($this->get_facebook($user_id))){
-				return '<a href="http://facebook.com/'.((is_numeric($this->get_facebook($user_id))) ? 'profile.php?id='.$this->get_facebook($user_id) : $this->get_facebook($user_id)).'" target="_blank"><i class="icon-facebook icon-large"></i>'.sanitize($this->get_facebook($user_id)).'</a>';
+				return '<a href="http://facebook.com/'.((is_numeric($this->get_facebook($user_id))) ? 'profile.php?id='.$this->get_facebook($user_id) : $this->get_facebook($user_id)).'" target="_blank"><i class="fa fa-facebook fa-lg"></i>'.sanitize($this->get_facebook($user_id)).'</a>';
 			}
 			return '';	
 		}

@@ -529,23 +529,23 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				0 => array(
 					'name'		=> $this->user->lang('uc_edit_char'),
 					'link'		=> "javascript:EditChar('".$memberid."')",
-					'icon'		=> 'icon-edit icon-large',
+					'icon'		=> 'fa fa-pencil-square-o fa-lg',
 					'perm'		=> $this->user->check_auth('u_member_view', false),
 				),
 				1 => array(
 					'name'		=> $this->user->lang('uc_delete_char'),
 					'link'		=> "javascript:DeleteChar('".$memberid."')",
-					'icon'		=> 'icon-remove icon-large',
+					'icon'		=> 'fa-times fa-lg',
 					'perm'		=> $this->user->check_auth('u_member_del', false),
 				),
 				2 => array(
 					'name'		=> $this->game->glang('uc_updat_armory'),
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
-					'icon'		=> 'icon-refresh icon-large',
+					'icon'		=> 'fa-refresh fa-lg',
 					'perm'		=> $this->game->get_importAuth('u_member_view', 'char_update'),
 				),
 			);
-			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, '<i class="icon-wrench icon-large"></i>');
+			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, '<i class="fa fa-wrench fa-lg"></i>');
 		}
 
 		public function get_other_members($member_id){
@@ -621,7 +621,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_editbutton($id){
-			return '<span onclick="EditChar('.$id.')" class="hand"><i class="icon-pencil icon-large" title="'.$this->user->lang('edit').'"></i></span>';
+			return '<span onclick="EditChar('.$id.')" class="hand"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></span>';
 		}
 
 		public function get_delete_requested(){

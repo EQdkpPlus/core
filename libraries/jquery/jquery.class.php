@@ -72,14 +72,14 @@ if (!class_exists("jquery")) {
 
 					<div id="error" class="notify_error">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><i class="icon-remove icon-3x"></i></div>
+						<div style="float:left;margin:0 10px 0 0"><i class="fa fa-times fa-3x"></i></div>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>
 
 					<div id="success" class="notify_success">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><i class="icon-ok icon-3x"></i></div>
+						<div style="float:left;margin:0 10px 0 0"><i class="fa fa-check fa-3x"></i></div>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>
@@ -504,7 +504,7 @@ if (!class_exists("jquery")) {
 			foreach($menuitems as $key=>$value){
 				if($value['perm']){
 					
-					$dmimg = ($value['icon']) ? $this->core->icon_font($value['icon'], 'icon-large', $this->root_path.$imagepath.'/') : '';
+					$dmimg = ($value['icon']) ? $this->core->icon_font($value['icon'], 'fa-lg', $this->root_path.$imagepath.'/') : '';
 					switch($value['type']){
 						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 						break;
@@ -556,7 +556,7 @@ if (!class_exists("jquery")) {
 					// Restart next loop if the element isn't an array we can use
 					if ( !is_array($v) ){continue;}
 
-					$header_row = '<li><a href="#">'.$this->core->icon_font((isset($v['icon'])) ? $v['icon'] : ((isset($v['img']) ? $v['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $mnuimagepth).' '.$v['name'].'</a>
+					$header_row = '<li><a href="#">'.$this->core->icon_font((isset($v['icon'])) ? 'fa '.$v['icon'] : ((isset($v['img']) ? $v['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $mnuimagepth).' '.$v['name'].'</a>
 										<ul>';
 
 					// Generate the Menues
@@ -572,7 +572,7 @@ if (!class_exists("jquery")) {
 							// the extension submenues
 							if($admnsubmenu) {
 								// build the icons
-								$icon = $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : 'icon-puzzle-piece'))), 'icon-large', $mnuimagepth);
+								$icon = $this->core->icon_font((isset($row['icon'])) ? 'fa '.$row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $mnuimagepth);
 								$plugin_header_row = '<li><a href="#">'.$icon.' '.((isset($row['name'])) ? $row['name'] : 'UNKNOWN').'</a>
 													<ul>';
 								// Submenu
@@ -585,7 +585,7 @@ if (!class_exists("jquery")) {
 											}
 
 											if ($row2['check'] == '' || ((is_array($row2['check'])) ? $this->user->check_auths($row2['check'][1], $row2['check'][0], false) : $this->user->check_auth($row2['check'], false))){
-												$subsub_icon = $this->core->icon_font((isset($row2['icon'])) ? $row2['icon'] : ((isset($row2['img']) ? $row2['img'] : (($nodefimage) ? '' : ''))), 'icon-large', $mnuimagepth);
+												$subsub_icon = $this->core->icon_font((isset($row2['icon'])) ? 'fa '.$row2['icon'] : ((isset($row2['img']) ? $row2['img'] : (($nodefimage) ? '' : ''))), 'fa-lg', $mnuimagepth);
 												$plugin_sub_row .= '<li><a href="'.$this->root_path.$row2['link'].'">';
 												$plugin_sub_row .= $subsub_icon.' '.$row2['text'].'</a></li>';
 											}
@@ -595,7 +595,7 @@ if (!class_exists("jquery")) {
 								if(strlen($plugin_sub_row) > 0) $sub_rows .= $plugin_header_row.$plugin_sub_row.'</ul></li>';
 							}else{
 								if (($row['check'] == '' || ((is_array($row['check'])) ? $this->user->check_auths($row['check'][1], $row['check'][0], false) : $this->user->check_auth($row['check'], false))) && (!isset($row['check2']) || $row['check2'] == true)){
-									$subicon	= $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : ''))), 'icon-large', $mnuimagepth);
+									$subicon	= $this->core->icon_font((isset($row['icon'])) ? 'fa '.$row['icon'] : ((isset($row['img']) ? $row['img'] : (($nodefimage) ? '' : ''))), 'fa-lg', $mnuimagepth);
 									$sub_rows .= '<li><a href="'.$this->root_path.$row['link'].'">';
 									$sub_rows .= $subicon.' '.$row['text'].'</a></li>';
 								}
@@ -1385,9 +1385,9 @@ if (!class_exists("jquery")) {
 			} else {
 				$out .= '<img src="'.$imgpreview.'" class="previewimage" alt="'.$this->user->lang('imageuploader_preview').'" style="max-height:'.$imgprevheight.'px"/>';
 			}	
-			$out .=	'</div><button class="mainoption" type="button" id="iubutton_'.$inputid.'_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"><i class="icon-edit"></i>'.$this->user->lang('imageuploader_editbutton').'</button>';
+			$out .=	'</div><button class="mainoption" type="button" id="iubutton_'.$inputid.'_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"><i class="fa fa-pencil-square-o"></i>'.$this->user->lang('imageuploader_editbutton').'</button>';
 			if(isset($options['deletelink']) && (isset($imgname) && is_file($imgpath.$imgname))){
-				$out .= '<button class="mainoption" value="" type="button" id="iubutton_'.$inputid.'_delete"><i class="icon-remove"></i></button>';
+				$out .= '<button class="mainoption" value="" type="button" id="iubutton_'.$inputid.'_delete"><i class="fa fa-times"></i></button>';
 				$this->tpl->add_js("$('#iubutton_".$inputid."_delete').click(function(){ location.href='".$options['deletelink']."' });", 'docready');
 			}
 			return $out;
@@ -1440,7 +1440,7 @@ if (!class_exists("jquery")) {
 				if (isset($value['check'])){
 					if (!$this->user->check_auth($value['check'], false)) continue;
 				}
-				$strItems .= '<a href="'.((isset($value['href'])) ? $value['href'] : '#').'" '.((isset($value['js'])) ? $value['js'] : '').' title="'.((isset($value['title'])) ? $value['title'] : '').'"><i class="'.$value['icon'].'"></i></a>';
+				$strItems .= '<a href="'.((isset($value['href'])) ? $value['href'] : '#').'" '.((isset($value['js'])) ? $value['js'] : '').' title="'.((isset($value['title'])) ? $value['title'] : '').'"><i class="fa '.$value['icon'].'"></i></a>';
 				$intItems++;
 			}
 			

@@ -162,7 +162,7 @@ if (!class_exists("comments")){
 								<div class="comment_container">
 									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';
 					if($this->isAdmin OR $row['userid'] == $this->UserID){
-						$out[] .= '<div class="comments_delete bold floatRight hand"><i class="icon-remove-sign icon-large icon-grey"></i>';
+						$out[] .= '<div class="comments_delete bold floatRight hand"><i class="fa fa-times-circle fa-lg icon-grey"></i>';
 						$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
 						$out[] .= '<div style="display:none" class="comments_deleteid">'.$row['id'].'</div>';
 						$out[] .= '<div style="display:none" class="comments_attachid">'.$attachid.'</div>';
@@ -191,7 +191,7 @@ if (!class_exists("comments")){
 										<div class="comment_container">
 											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a> am '.$this->time->user_date($com['date'], true).'</div>';
 							if($this->isAdmin OR $com['userid'] == $this->UserID){
-								$out[] .= '<div class="comments_delete bold floatRight hand"><i class="icon-remove-sign icon-large icon-grey"></i>';
+								$out[] .= '<div class="comments_delete bold floatRight hand"><i class="fa fa-times-circle fa-lg icon-grey"></i>';
 								$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
 								$out[] .= '<div style="display:none" class="comments_deleteid">'.$com['id'].'</div>';
 								$out[] .= '<div style="display:none" class="comments_attachid">'.$attachid.'</div>';
@@ -208,7 +208,7 @@ if (!class_exists("comments")){
 					}
 					if (($this->showReplies || $blnShowReplies) && $this->user->is_signedin()){
 						$out[] .= '<div class="comment_reply_container">
-										<button class="reply-trigger"><i class="icon-reply"></i>'.$this->user->lang('reply').'</button>
+										<button class="reply-trigger"><i class="fa fa-reply"></i>'.$this->user->lang('reply').'</button>
 										<div class="reply-form-container">
 										</div>
 									</div>';
@@ -330,7 +330,7 @@ if (!class_exists("comments")){
 							$('#comment_reply".$this->id."').ajaxForm({
 								target: '#htmlCommentTable".$this->id."',
 								beforeSubmit:  function(){
-									$('#plusComments".$this->id." .reply_button').html('<i class=\"icon-spinner icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
+									$('#plusComments".$this->id." .reply_button').html('<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".$this->user->lang('comments_savewait')."');
 								},
 								success: function() {
 									$('#htmlCommentTable".$this->id."').fadeIn('slow');
@@ -344,7 +344,7 @@ if (!class_exists("comments")){
 						$('#comment_data".$this->id."').ajaxForm({
 							target: '#htmlCommentTable".$this->id."',
 							beforeSubmit:  function(){
-								$('#comment_button".$this->id."').html('<i class=\"icon-spinner icon-spin icon-large\"></i> ".$this->user->lang('comments_savewait')."');
+								$('#comment_button".$this->id."').html('<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".$this->user->lang('comments_savewait')."');
 							},
 							success: function() {
 								$('#htmlCommentTable".$this->id."').fadeIn('slow');

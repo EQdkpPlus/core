@@ -333,9 +333,9 @@ class Manage_Extensions extends page_generic {
 				'CONTACT'			=> ( !empty($contact) ) ? ( !empty($author) ) ? '<a href="mailto:' . $contact . '">' . $author . '</a>' : '<a href="mailto:' . $contact . '">' . $contact . '</a>'  : $author,
 				'DESCRIPTION'		=> ( !empty($description) ) ? $description : '&nbsp;',
 
-				'LONG_DESCRIPTION'	=> $this->html->ToolTip($long_description, (($long_description !="") ? '<i class="icon-info-sign icon-large"></i>' : '')),
-				'HOMEPAGE'			=> $this->html->ToolTip($this->user->lang('homepage'),  (($homepagelink !="") ? '<a href="'.$homepagelink.'" target="_blank" rel="nofollow"><i class="icon-globe icon-large"></i></a>' : '')),
-				'MANUAL'			=> $this->html->ToolTip($this->user->lang('manual'),(($manuallink !="") ? '<a href="'.$manuallink.'" target="_blank" rel="nofollow"><i class="icon-question-sign icon-large"></i></a>' : '')),
+				'LONG_DESCRIPTION'	=> $this->html->ToolTip($long_description, (($long_description !="") ? '<i class="fa fa-info-circle fa-lg"></i>' : '')),
+				'HOMEPAGE'			=> $this->html->ToolTip($this->user->lang('homepage'),  (($homepagelink !="") ? '<a href="'.$homepagelink.'" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a>' : '')),
+				'MANUAL'			=> $this->html->ToolTip($this->user->lang('manual'),(($manuallink !="") ? '<a href="'.$manuallink.'" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a>' : '')),
 				'ACTION_LINK'		=> $link,
 			));
 
@@ -461,7 +461,7 @@ class Manage_Extensions extends page_generic {
 				#'ENABLE_ICON'		=> ($row['enabled'] == '1') ? 'green' : 'red',
 				#'ENABLE_ICON_INFO'	=> ($row['enabled'] == '1') ? $this->user->lang('style_enabled_info') : $this->user->lang('style_disabled_info'),
 				'L_ENABLE'			=> ($row['enabled'] == '1') ? $this->user->lang('deactivate') : $this->user->lang('activate'),
-				'ENABLE'			=> ($row['enabled'] == '1') ? 'icon-minus-sign icon-color-red' : 'icon-plus-sign icon-color-green',
+				'ENABLE'			=> ($row['enabled'] == '1') ? 'fa fa-minus-circle icon-color-red' : 'fa fa-plus-circle icon-color-green',
 				'U_ENABLE'			=> ($row['enabled'] == '1') ? 'manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=disable&amp;code=' . $row['style_id'].'&amp;link_hash='.$this->CSRFGetToken('mode') : 'manage_extensions.php' . $this->SID . '&amp;mode=enable&amp;cat=2&amp;code=' . $row['style_id'].'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				'S_DEFAULT'			=> ($row['style_id'] == $default_style) ? true : false,
 				'S_DEACTIVATED'		=> ($row['enabled'] != '1') ? true : false,
@@ -544,7 +544,7 @@ class Manage_Extensions extends page_generic {
 				}
 				//Add Reinstall Link if no update available
 				if($row == 'green') {
-					$link = '<i class="icon-retweet icon-large" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
+					$link = '<i class="fa fa-retweet fa-lg" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
 				}
 
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
@@ -610,11 +610,11 @@ class Manage_Extensions extends page_generic {
 				$plugin_code = $value;
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');"><i class="icon-refresh icon-large"></i> '.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');"><i class="fa fa-refresh fa-lg"></i> '.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[7]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
-					$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');"><i class="icon-refresh icon-large"></i> '.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update(7, \''.$plugin_code.'\');"><i class="fa fa-refresh fa-lg"></i> '.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[7]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -639,7 +639,7 @@ class Manage_Extensions extends page_generic {
 				if (in_array($extension['plugin'], $arrGames)) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" ><i class="icon-download-alt icon-large"></i> '.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install(7, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i> '.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),

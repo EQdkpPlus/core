@@ -1,7 +1,7 @@
 <!-- IF S_NORMAL_HEADER -->
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_apa_manager}</a></li>
 	</ul>
@@ -24,8 +24,8 @@
 	</tr>
 	<!-- BEGIN apa_row -->
 	<tr>
-		<td width="20"><i class="icon-pencil icon-large hand apa_edit" alt="{apa_row.ID}" title="{L_edit}"></i></td>
-		<td width="20"><i class="icon-trash icon-large hand apa_del" alt="{apa_row.ID}" title="{L_delete}"></i></td>
+		<td width="20"><i class="fa fa-pencil fa-lg hand apa_edit" alt="{apa_row.ID}" title="{L_edit}"></i></td>
+		<td width="20"><i class="fa fa-trash-o fa-lg hand apa_del" alt="{apa_row.ID}" title="{L_delete}"></i></td>
 		<td width="20"><a href="manage_auto_points.php{SID}&amp;recalc=true&amp;id={apa_row.ID}" title="{L_apa_recalculate}"><img src="{EQDKP_IMAGE_PATH}glyphs/recalculate.png" alt="" /></a></td>
 		<td>{apa_row.TYPE}</td>
 		<td>{apa_row.NAME}</td>
@@ -35,7 +35,7 @@
 	<!-- END apa_row -->
 </table>
 <div class="tableFooter">
-	<button class="mainoption" type="button" id="add_apa"><i class="icon-plus"></i>{L_APA_ADD}</button> {TYPE_DD}
+	<button class="mainoption" type="button" id="add_apa"><i class="fa fa-plus"></i>{L_APA_ADD}</button> {TYPE_DD}
 </div>
 <br />
 <div class="tableHeader">
@@ -50,8 +50,8 @@
 	</tr>
 	<!-- BEGIN func_row -->
 	<tr>
-		<td width="20"><i class="icon-pencil icon-large hand func_edit" alt="{func_row.NAME}" title="{L_edit}"></i></td>
-		<td width="20"><i class="icon-trash icon-large hand func_del" alt="{func_row.NAME}" title="{L_delete}" <!-- IF func_row.NODEL --> style="display:none;"<!-- ENDIF -->></i></td>
+		<td width="20"><i class="fa fa-pencil fa-lg hand func_edit" alt="{func_row.NAME}" title="{L_edit}"></i></td>
+		<td width="20"><i class="fa fa-trash-o fa-lg hand func_del" alt="{func_row.NAME}" title="{L_delete}" <!-- IF func_row.NODEL --> style="display:none;"<!-- ENDIF -->></i></td>
 		<td>{func_row.NAME}</td>
 		<td>{func_row.USED}</td>
 		<td>{func_row.EXPL}</td>
@@ -59,12 +59,12 @@
 	<!-- END func_row -->
 </table>
 <div class="tableFooter">
-	<button class="mainoption" type="button" id="add_func"><i class="icon-plus"></i>{L_apa_add_func}</button>
+	<button class="mainoption" type="button" id="add_func"><i class="fa fa-plus"></i>{L_apa_add_func}</button>
 </div>	
 {CSRF_TOKEN}
 </form>
 <!-- ELSE -->
 <div class="infobox infobox-large infobox-red clearfix">
-	<i class="icon-warning-sign icon-4x pull-left"></i> {L_disabled_points_info}
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_disabled_points_info}
 </div>
 <!-- ENDIF -->

@@ -29,7 +29,7 @@ function check_alias() {
 
 function calculate_permission(perm, gid, obj){
 	tr = $(obj).closest('tr');
-	tr.find('.calc-perm').html('<i class="icon-spinner icon-spin icon-large"></i>');
+	tr.find('.calc-perm').html('<i class="fa-spinner fa-spin fa-lg"></i>');
 				
 	jQuery.ajax({
 			type: "POST",
@@ -47,7 +47,7 @@ function calculate_permission(perm, gid, obj){
 
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_article_categories.php{SID}">{L_manage_article_categories}</a></li>
 		<li class="current"><a><!-- IF NAME != "" -->{NAME}<!-- ELSE -->{L_add_article_category}<!-- ENDIF --></a></li>
@@ -86,8 +86,8 @@ function calculate_permission(perm, gid, obj){
 			<dl>
 				<dt><label>{L_alias}</label></dt>
 				<dd><input name="alias" type="text" class="input" id="alias" value="{ALIAS}" size="50" />
-					<i class="icon-ok icon-large icon-color-green" id="tick_alias" style="display: none;"></i>
-					<div id="cross_alias" style="display:none;"><i class="icon-remove icon-large icon-color-red"></i> {L_info_error_alias}</div></dd>
+					<i class="fa fa-check fa-lg icon-color-green" id="tick_alias" style="display: none;"></i>
+					<div id="cross_alias" style="display:none;"><i class="fa fa-times fa-lg icon-color-red"></i> {L_info_error_alias}</div></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_published}</label></dt>
@@ -217,9 +217,9 @@ function calculate_permission(perm, gid, obj){
 	</div>
 	<div class="contentFooter">
 		<input type="hidden" name="c" value="{CID}" />
-		<button type="submit" name="update" class="mainoption"><i class="icon-ok"></i>{L_save}</button>
-		<button type="reset" name="reset" class="liteoption"><i class="icon-trash"></i>{L_reset}</button>
-		<button type="button" class="liteoption" onclick="window.location='manage_article_categories.php{SID}'"><i class="icon-chevron-left"></i>{L_back}</button>
+		<button type="submit" name="update" class="mainoption"><i class="fa fa-check"></i>{L_save}</button>
+		<button type="reset" name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
+		<button type="button" class="liteoption" onclick="window.location='manage_article_categories.php{SID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
 	</div>
 {CSRF_TOKEN}	
 </form>

@@ -239,7 +239,7 @@ class import06 extends task {
 		$output .= '<tr><th colspan="3" class="th_sub">'.$this->lang['which_users'].' '.$this->js_mark_boxes('{NUM}', 'u_').'</th></tr>';
 		$output .= '<tr><td colspan="3" align="center">
 						<div class="infobox infobox-large infobox-red clearfix">
-							<i class="icon-warning-sign icon-4x pull-left"></i> '.$this->lang['notice_admin_perm'].'
+							<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> '.$this->lang['notice_admin_perm'].'
 						</div>
 				</td></tr>';
 		//build userlist

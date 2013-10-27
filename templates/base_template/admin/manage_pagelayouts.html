@@ -14,7 +14,7 @@ $(document).ready(function() {
 </script>
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_page_manager}</a></li>
 	</ul>
@@ -32,7 +32,7 @@ $(document).ready(function() {
 			<h1 class="contentTitle">{L_lm_manage_layouts}</h1>
 		</div>
 		<div class="infobox infobox-large infobox-blue clearfix">
-			<i class="icon-info-sign icon-4x pull-left"></i> {L_lm_info}
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_lm_info}
 		</div>
 		<br/><br/>
 		<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch hoverrows">
@@ -49,7 +49,7 @@ $(document).ready(function() {
 			<tr>
 				<td><input type="radio" name="current_layout" value="{layouts_row.NAME}" {layouts_row.IS_CURRENT} /></td>
 				<td width="20" class="nowrap">
-					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={layouts_row.NAME}" title="{L_edit}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a>
+					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={layouts_row.NAME}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a>
 				</td>
 				<td>{layouts_row.NAME}</td>
 				<td>{layouts_row.DESC}</td>
@@ -63,8 +63,8 @@ $(document).ready(function() {
 			<tr>
 				<td><input type="radio" name="current_layout" value="{user_layouts_row.NAME}" {user_layouts_row.IS_CURRENT} /></td>
 				<td width="20" class="nowrap">
-					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}" title="{L_edit}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a> &nbsp;
-					<a href="manage_pagelayouts.php{SID}&amp;del=true&amp;layout={user_layouts_row.NAME}&amp;link_hash={CSRF_DEL_TOKEN}" title="{L_delete}"> <i class="icon-trash icon-large" title="{L_delete}"></i></a>
+					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a> &nbsp;
+					<a href="manage_pagelayouts.php{SID}&amp;del=true&amp;layout={user_layouts_row.NAME}&amp;link_hash={CSRF_DEL_TOKEN}" title="{L_delete}"> <i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				</td>
 				<td><a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}">{user_layouts_row.NAME}</a></td>
 				<td width="84%">{user_layouts_row.DESC}</td>
@@ -72,13 +72,13 @@ $(document).ready(function() {
 			<!-- END user_layouts_row -->
 		</table>
 		<br />
-		<button type="submit" name="set_current_layout" class="mainoption"><i class="icon-ok"></i>{L_lm_make_current}</button>
-		<button type="button" name="add_layout" class="mainoption" id="newLayoutTrigger"><i class="icon-plus"></i>{L_lm_new_layout}</button>
+		<button type="submit" name="set_current_layout" class="mainoption"><i class="fa fa-check"></i>{L_lm_make_current}</button>
+		<button type="button" name="add_layout" class="mainoption" id="newLayoutTrigger"><i class="fa fa-plus"></i>{L_lm_new_layout}</button>
 				
 	</div>
 	<div id="advanced">
 		<div class="infobox infobox-large infobox-red clearfix">
-			<i class="icon-warning-sign icon-4x pull-left"></i> {L_lm_warning}
+			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_lm_warning}
 		</div>
 		<div class="tableHeader">
 			<h2>{L_lm_user_presets}</h2>
@@ -95,7 +95,7 @@ $(document).ready(function() {
 			</tr>
 			<!-- BEGIN preset_row -->
 			<tr>
-				<td width="20" align="center"><a href="manage_pagelayouts.php{SID}&amp;del_pre={preset_row.NAME}&amp;link_hash={CSRF_DELPRESET_TOKEN}" title="{L_delete}"><i class="icon-trash icon-large" title="{L_delete}"></i></a></td>
+				<td width="20" align="center"><a href="manage_pagelayouts.php{SID}&amp;del_pre={preset_row.NAME}&amp;link_hash={CSRF_DELPRESET_TOKEN}" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a></td>
 				<td>{preset_row.NAME}</td>
 				<td>{preset_row.MODULE}</td>
 				<td>{preset_row.TAG}</td>
@@ -112,7 +112,7 @@ $(document).ready(function() {
 			<dd><textarea name="new_preset_xml" rows="20" class="input" style="width: 90%">{NEW_PRESET_XML}</textarea></dd>
 		</dl>
 		</fieldset>
-		<button name="add_preset" type="submit" class="mainoption" id="add_preset"><i class="icon-ok"></i>{L_lm_add_preset}</button>
+		<button name="add_preset" type="submit" class="mainoption" id="add_preset"><i class="fa fa-check"></i>{L_lm_add_preset}</button>
 	</div>
 </div>
 {CSRF_TOKEN}
@@ -135,7 +135,7 @@ $(document).ready(function() {
 			<dd>{LAYOUT_DROPDOWN}</dd>
 		</dl>
 		</fieldset>
-		<button class="mainoption" type="submit" name="add_layout"><i class="icon-ok"></i>{L_lm_new_layout}</button>
+		<button class="mainoption" type="submit" name="add_layout"><i class="fa fa-check"></i>{L_lm_new_layout}</button>
 	{CSRF_TOKEN}
 	</form>
 </div>

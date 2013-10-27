@@ -133,7 +133,7 @@ class charImporter extends page_generic {
 							getData(i+1);
 						}else{
 							$.post("charimporter.php?ajax_mudate=true");
-							$("#controlbox").html("<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"icon-ok icon-4x pull-left\"></i> '.$this->game->glang('uc_cupdt_header_fnsh').'</div></dl>").fadeIn("slow");
+							$("#controlbox").html("<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"fa fa-check fa-4x pull-left\"></i> '.$this->game->glang('uc_cupdt_header_fnsh').'</div></dl>").fadeIn("slow");
 							return;
 						}
 					});
@@ -298,7 +298,7 @@ class charImporter extends page_generic {
 			if(!isset($chardata['status'])){
 				$hmtlout	.= '
 				<div class="infobox infobox-large infobox-red clearfix">
-					<i class="icon-warning-sign icon-4x pull-left"></i> '.$this->game->glang('uc_charfound3').'
+					<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> '.$this->game->glang('uc_charfound3').'
 				</div>
 
 				<fieldset class="settings mediumsettings">
@@ -324,12 +324,12 @@ class charImporter extends page_generic {
 				$hmtlout		.= '<center><input type="submit" name="submiti" value="'.$this->game->glang('uc_prof_import').'" class="mainoption" /></center>';
 			}else{
 				$hmtlout		.= '<div class="infobox infobox-large infobox-red clearfix">
-										<i class="icon-warning-sign icon-4x pull-left"></i> <b>WARNING: </b> '.$chardata['reason'].'
+										<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <b>WARNING: </b> '.$chardata['reason'].'
 									</div>';
 			}
 		}else{
 			$hmtlout	.= '<div class="infobox infobox-large infobox-red clearfix">
-								<i class="icon-warning-sign icon-4x pull-left"></i> '.$this->game->glang('uc_notyourchar').'
+								<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> '.$this->game->glang('uc_notyourchar').'
 							</div>';
 		}
 		return $hmtlout;
@@ -362,11 +362,11 @@ class charImporter extends page_generic {
 		$this->pdh->process_hook_queue();
 		if($info){
 			$hmtlout	= '<div class="infobox infobox-large infobox-green clearfix">
-								<i class="icon-ok icon-4x pull-left"></i> '.$this->game->glang('uc_armory_updated').'
+								<i class="fa fa-check fa-4x pull-left"></i> '.$this->game->glang('uc_armory_updated').'
 							</div>';
 		}else{
 			$hmtlout	= '<div class="infobox infobox-large infobox-red clearfix">
-								<i class="icon-warning-sign icon-4x pull-left"></i> '.$this->game->glang('uc_armory_updfailed').'
+								<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> '.$this->game->glang('uc_armory_updfailed').'
 							</div>';
 		}
 		return $hmtlout;

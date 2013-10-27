@@ -233,7 +233,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 		public function get_viewicon($id, $link='', $suffix='') {
 			$link = $link.$this->SID . '&amp;logid='.$id.$suffix;
-			return '<a href="'.$link.'"><i class="icon-search icon-large"></i></a>';
+			return '<a href="'.$link.'"><i class="fa fa-search fa-lg"></i></a>';
 		}
 	}//end class
 }//end if

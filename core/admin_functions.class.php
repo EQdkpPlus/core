@@ -450,71 +450,71 @@ class admin_functions extends gen_class {
 	public function adminmenu($blnShowBadges = true){
 		$admin_menu = array(
 			'members' => array(
-				'icon'	=> 'icon-user icon-large',
+				'icon'	=> 'fa-user fa-lg',
 				'name'	=> $this->user->lang('chars'),
-				1		=> array('link' => 'admin/manage_members.php'.$this->SID,			'text' => $this->user->lang('manage_members'),	'check' => 'a_members_man',	'icon'	=> 'icon-user icon-large'),
-				2		=> array('link' => 'admin/manage_items.php'.$this->SID,			'text' => $this->user->lang('manitems_title'),	'check' => 'a_item_',		'icon' => 'icon-gift icon-large'),
-				3		=> array('link' => 'admin/manage_adjustments.php'.$this->SID,		'text' => $this->user->lang('manadjs_title'),		'check' => 'a_indivadj_',	'icon' => 'icon-tag icon-large'),
-				4		=> array('link' => 'admin/manage_ranks.php'.$this->SID,			'text' => $this->user->lang('manrank_title'),		'check' => 'a_members_man',	'icon' => 'icon-flag icon-large'),
-				5		=> array('link' => 'admin/manage_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_pf_menue'),	'check' => 'a_config_man',	'icon' => 'icon-sitemap icon-large'),
-				6		=> array('link' => 'admin/manage_roles.php'.$this->SID,			'text' => $this->user->lang('rolemanager'),		'check' => 'a_config_man',	'icon' => 'icon-beer icon-large'),
-				7		=> array('link' => 'admin/manage_auto_points.php'.$this->SID,		'text' => $this->user->lang('manage_auto_points'),'check' => 'a_config_man',	'icon' => 'icon-magic icon-large'),
+				1		=> array('link' => 'admin/manage_members.php'.$this->SID,			'text' => $this->user->lang('manage_members'),	'check' => 'a_members_man',	'icon'	=> 'fa-user fa-lg'),
+				2		=> array('link' => 'admin/manage_items.php'.$this->SID,			'text' => $this->user->lang('manitems_title'),	'check' => 'a_item_',		'icon' => 'fa-gift fa-lg'),
+				3		=> array('link' => 'admin/manage_adjustments.php'.$this->SID,		'text' => $this->user->lang('manadjs_title'),		'check' => 'a_indivadj_',	'icon' => 'fa-tag fa-lg'),
+				4		=> array('link' => 'admin/manage_ranks.php'.$this->SID,			'text' => $this->user->lang('manrank_title'),		'check' => 'a_members_man',	'icon' => 'fa-flag fa-lg'),
+				5		=> array('link' => 'admin/manage_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_pf_menue'),	'check' => 'a_config_man',	'icon' => 'fa-sitemap fa-lg'),
+				6		=> array('link' => 'admin/manage_roles.php'.$this->SID,			'text' => $this->user->lang('rolemanager'),		'check' => 'a_config_man',	'icon' => 'fa-beer fa-lg'),
+				7		=> array('link' => 'admin/manage_auto_points.php'.$this->SID,		'text' => $this->user->lang('manage_auto_points'),'check' => 'a_config_man',	'icon' => 'fa-magic fa-lg'),
 			),
 			'users' => array(
-				'icon'	=> 'icon-group icon-large',
+				'icon'	=> 'fa-group fa-lg',
 				'name'	=> $this->user->lang('users'),
-				1		=> array('link' => 'admin/manage_users.php'.$this->SID,			'text' => $this->user->lang('manage_users'),		'check' => 'a_users_man',	'icon' => 'icon-user icon-large'),
-				2		=> array('link' => 'admin/manage_user_groups.php'.$this->SID,		'text' => $this->user->lang('manage_user_groups'),'check' => array('OR', array('a_usergroups_man', 'a_usergroups_grpleader')),	'icon' => 'icon-group icon-large'),
-				3		=> array('link' => 'admin/manage_maintenance_user.php'.$this->SID,'text' => $this->user->lang('maintenanceuser_user'),'check' => 'a_maintenance','icon' => 'icon-user-md icon-large'),
-				4		=> array('link' => 'admin/manage_massmail.php'.$this->SID,'text' => $this->user->lang('massmail'),'check' => 'a_users_massmail','icon' => 'icon-envelope-alt icon-large'),
+				1		=> array('link' => 'admin/manage_users.php'.$this->SID,			'text' => $this->user->lang('manage_users'),		'check' => 'a_users_man',	'icon' => 'fa-user fa-lg'),
+				2		=> array('link' => 'admin/manage_user_groups.php'.$this->SID,		'text' => $this->user->lang('manage_user_groups'),'check' => array('OR', array('a_usergroups_man', 'a_usergroups_grpleader')),	'icon' => 'fa-group fa-lg'),
+				3		=> array('link' => 'admin/manage_maintenance_user.php'.$this->SID,'text' => $this->user->lang('maintenanceuser_user'),'check' => 'a_maintenance','icon' => 'fa-user-md fa-lg'),
+				4		=> array('link' => 'admin/manage_massmail.php'.$this->SID,'text' => $this->user->lang('massmail'),'check' => 'a_users_massmail','icon' => 'fa fa-envelope fa-lg'),
 			),
 			'extensions' => array(
 				'name'	=> $this->user->lang('extensions').(($blnShowBadges) ? $this->extension_updates : ''),
-				'icon' => 'icon-cogs icon-large',
-				1		=> array('link' => 'admin/manage_extensions.php'.$this->SID,		'text' => $this->user->lang('extension_repo'),'check' => 'a_config_man',	'icon' => 'icon-cogs icon-large'),
+				'icon' => 'fa-cogs fa-lg',
+				1		=> array('link' => 'admin/manage_extensions.php'.$this->SID,		'text' => $this->user->lang('extension_repo'),'check' => 'a_config_man',	'icon' => 'fa-cogs fa-lg'),
 			),
 			'portal'	=> array(
-				'icon'	=> 'icon-home icon-large',
+				'icon'	=> 'fa-home fa-lg',
 				'name'	=> $this->user->lang('portal'),
-				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_config_man',	'icon' => 'icon-columns icon-large'),
-				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'icon-file-text icon-large'),
-				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'icon-table icon-large'),
-				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'icon-reorder icon-large'),
+				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_config_man',	'icon' => 'fa-columns fa-lg'),
+				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'fa-file-text fa-lg'),
+				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'fa-table fa-lg'),
+				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'fa-reorder fa-lg'),
 				
 			),
 			'raids'	=> array(
-				'icon'	=> 'icon-trophy icon-large',
+				'icon'	=> 'fa-trophy fa-lg',
 				'name'	=> $this->user->lang('raids'),
-				1		=> array('link' => 'admin/manage_raids.php'.$this->SID,			'text' => $this->user->lang('manage_raids'),		'check' => 'a_raid_add',	'icon' => 'icon-trophy icon-large'),
-				2		=> array('link' => 'admin/manage_events.php'.$this->SID,			'text' => $this->user->lang('manevents_title'),	'check' => 'a_event_upd',	'icon' => 'icon-key icon-large'),
-				3		=> array('link' => 'admin/manage_multidkp.php'.$this->SID,		'text' => $this->user->lang('manmdkp_title'),		'check' => 'a_event_upd',	'icon' => 'icon-legal icon-large'),
-				4		=> array('link' => 'admin/manage_itempools.php'.$this->SID,		'text' => $this->user->lang('manitempools_title'),'check' => 'a_event_upd',	'icon' => 'icon-tags icon-large'),
+				1		=> array('link' => 'admin/manage_raids.php'.$this->SID,			'text' => $this->user->lang('manage_raids'),		'check' => 'a_raid_add',	'icon' => 'fa-trophy fa-lg'),
+				2		=> array('link' => 'admin/manage_events.php'.$this->SID,			'text' => $this->user->lang('manevents_title'),	'check' => 'a_event_upd',	'icon' => 'fa-key fa-lg'),
+				3		=> array('link' => 'admin/manage_multidkp.php'.$this->SID,		'text' => $this->user->lang('manmdkp_title'),		'check' => 'a_event_upd',	'icon' => 'fa-gavel fa-lg'),
+				4		=> array('link' => 'admin/manage_itempools.php'.$this->SID,		'text' => $this->user->lang('manitempools_title'),'check' => 'a_event_upd',	'icon' => 'fa-tags fa-lg'),
 			),
 			'calendar'	=> array(
-				'icon'	=> 'icon-calendar icon-large',
+				'icon'	=> 'fa-calendar fa-lg',
 				'name'	=> $this->user->lang('calendars'),
-				1		=> array('link' => 'admin/manage_calendars.php'.$this->SID,		'text' => $this->user->lang('manage_calendars'),	'check' => 'a_calendars_man',	'icon' => 'icon-calendar icon-large'),
-				2		=> array('link' => 'admin/manage_calevents.php'.$this->SID,		'text' => $this->user->lang('manage_calevents'),	'check' => 'a_cal_event_man',	'icon' => 'icon-time icon-large'),
+				1		=> array('link' => 'admin/manage_calendars.php'.$this->SID,		'text' => $this->user->lang('manage_calendars'),	'check' => 'a_calendars_man',	'icon' => 'fa-calendar fa-lg'),
+				2		=> array('link' => 'admin/manage_calevents.php'.$this->SID,		'text' => $this->user->lang('manage_calevents'),	'check' => 'a_cal_event_man',	'icon' => 'fa-clock-o fa-lg'),
 			),
 			'general' => array(
-				'icon'	=> 'icon-wrench icon-large',
+				'icon'	=> 'fa-wrench fa-lg',
 				'name'	=> $this->user->lang('general_admin'),
-				1		=> array('link' => 'admin/manage_settings.php'.$this->SID,		'text' => $this->user->lang('configuration'),		'check' => 'a_config_man',	'icon' => 'icon-wrench icon-large'),
-				2		=> array('link' => 'admin/manage_logs.php'.$this->SID,			'text' => $this->user->lang('view_logs'),			'check' => 'a_logs_view',	'icon' => 'icon-book icon-large'),
-				3		=> array('link' => 'admin/manage_tasks.php'.$this->SID,			'text' => $this->user->lang('mantasks_title'),		'check' => array('OR', array('a_users_man', 'a_members_man')),	'icon' => 'icon-tasks icon-large'),
-				4		=> array('link' => 'admin/manage_bridge.php'.$this->SID,		'text' => $this->user->lang('manage_bridge'),	'check' => 'a_config_man',	'icon' => 'icon-link icon-large'),
-				5		=> array('link' => 'admin/manage_crons.php'.$this->SID,			'text' => $this->user->lang('manage_cronjobs'),		'check' => 'a_config_man',	'icon' => 'icon-time icon-large'),
-				6		=> array('link' => 'admin/manage_media.php'.$this->SID,			'text' => $this->user->lang('manage_media'),		'check' => 'a_files_man',	'icon' => 'icon-picture icon-large'),
+				1		=> array('link' => 'admin/manage_settings.php'.$this->SID,		'text' => $this->user->lang('configuration'),		'check' => 'a_config_man',	'icon' => 'fa-wrench fa-lg'),
+				2		=> array('link' => 'admin/manage_logs.php'.$this->SID,			'text' => $this->user->lang('view_logs'),			'check' => 'a_logs_view',	'icon' => 'fa-book fa-lg'),
+				3		=> array('link' => 'admin/manage_tasks.php'.$this->SID,			'text' => $this->user->lang('mantasks_title'),		'check' => array('OR', array('a_users_man', 'a_members_man')),	'icon' => 'fa-tasks fa-lg'),
+				4		=> array('link' => 'admin/manage_bridge.php'.$this->SID,		'text' => $this->user->lang('manage_bridge'),	'check' => 'a_config_man',	'icon' => 'fa-link fa-lg'),
+				5		=> array('link' => 'admin/manage_crons.php'.$this->SID,			'text' => $this->user->lang('manage_cronjobs'),		'check' => 'a_config_man',	'icon' => 'fa-clock-o fa-lg'),
+				6		=> array('link' => 'admin/manage_media.php'.$this->SID,			'text' => $this->user->lang('manage_media'),		'check' => 'a_files_man',	'icon' => 'fa-picture-o fa-lg'),
 			),
 			'maintenance' => array(
-				'icon'	=> 'icon-cog icon-large',
+				'icon'	=> 'fa-cog fa-lg',
 				'name'	=> $this->user->lang('menu_maintenance').(($blnShowBadges) ? $this->core_updates : ''),
-				1		=> array('link' => 'maintenance/task_manager.php'.$this->SID,		'text' => $this->user->lang('maintenance'),		'check' => 'a_maintenance',	'icon' => 'icon-cog icon-large'),
-				2		=> array('link' => 'admin/manage_live_update.php'.$this->SID,		'text' => $this->user->lang('liveupdate'),		'check' => 'a_maintenance',	'icon' => 'icon-refresh icon-large'),
-				3		=> array('link' => 'admin/manage_backup.php'.$this->SID,			'text' => $this->user->lang('backup'),			'check' => 'a_backup',		'icon' => 'icon-save icon-large'),
-				4		=> array('link' => 'admin/manage_reset.php'.$this->SID,			'text' => $this->user->lang('reset'),				'check' => 'a_config_man',	'icon' => 'icon-retweet icon-large'),
-				5		=> array('link' => 'admin/manage_cache.php'.$this->SID,			'text' => $this->user->lang('pdc_manager'),		'check' => 'a_config_man',	'icon' => 'icon-briefcase icon-large'),
-				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_config_man',	'icon' => 'icon-info-sign icon-large'),				
+				1		=> array('link' => 'maintenance/task_manager.php'.$this->SID,		'text' => $this->user->lang('maintenance'),		'check' => 'a_maintenance',	'icon' => 'fa-cog fa-lg'),
+				2		=> array('link' => 'admin/manage_live_update.php'.$this->SID,		'text' => $this->user->lang('liveupdate'),		'check' => 'a_maintenance',	'icon' => 'fa fa-refresh fa-lg'),
+				3		=> array('link' => 'admin/manage_backup.php'.$this->SID,			'text' => $this->user->lang('backup'),			'check' => 'a_backup',		'icon' => 'fa-floppy-o fa-lg'),
+				4		=> array('link' => 'admin/manage_reset.php'.$this->SID,			'text' => $this->user->lang('reset'),				'check' => 'a_config_man',	'icon' => 'fa-retweet fa-lg'),
+				5		=> array('link' => 'admin/manage_cache.php'.$this->SID,			'text' => $this->user->lang('pdc_manager'),		'check' => 'a_config_man',	'icon' => 'fa-briefcase fa-lg'),
+				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_config_man',	'icon' => 'fa-info-circle fa-lg'),				
 			),
 		);
 
@@ -526,14 +526,14 @@ class admin_functions extends gen_class {
 		if($this->config->get('admin_favs')) {
 			$favs_array = @unserialize(stripslashes($this->config->get('admin_favs')));
 		}
-		$admin_menu['favorits']['icon'] = 'icon-star icon-large';
+		$admin_menu['favorits']['icon'] = 'fa-star fa-lg';
 		$admin_menu['favorits']['name'] = $this->user->lang('favorits');
 		//Style Management
 		$admin_menu['favorits'][1] = array(
 			'link'	=> 'admin/manage_extensions.php'.$this->SID.'&tab=1',
 			'text'	=> $this->user->lang('styles_title'),
 			'check'	=> 'a_extensions_man',
-			'icon'	=> 'icon-leaf icon-large',
+			'icon'	=> 'fa-leaf fa-lg',
 		);
 			
 		$i = 2;
@@ -560,7 +560,7 @@ class admin_functions extends gen_class {
 				'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
 				'text'	=> $this->user->lang('manage_menus'),
 				'check'	=> 'a_config_man',
-				'icon'	=> 'icon-reorder icon-large',
+				'icon'	=> 'fa-reorder fa-lg',
 			);
 		}
 		

@@ -10,13 +10,13 @@ function handle_fieldtypes(value){
 
 function add_option(value){
 	
-		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /> <i class="icon-plus icon-large hand" onclick="add_option(); this.style.display=\'none\'"></i>');
+		$("#new_options").append('<br/>{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /> <i class="fa fa-plus fa-lg hand" onclick="add_option(); this.style.display=\'none\'"></i>');
 }
 //]]>
 </script>
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_profilefields.php{SID}">{L_manage_profilefields}</a></li>
 		<li class="current"><a><!-- IF ID == "" -->{L_new_profilefield}<!-- ELSE -->{LANGUAGE}<!-- ENDIF --></a></li>
@@ -25,7 +25,7 @@ function add_option(value){
 </div>
 
 <div class="infobox infobox-large infobox-blue clearfix">
-	<i class="icon-info-sign icon-4x pull-left"></i> {L_profilefields_help}
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_profilefields_help}
 </div>
 <br />
 
@@ -64,12 +64,12 @@ function add_option(value){
 			<dt><label>{L_profilefield_optionen}:</label></dt>
 			<dd><!-- BEGIN options_row -->{L_ID}: <input type="text" value="{options_row.ID}" name="option_id[]" class="input" /> {L_name}: <input type="text" value="{options_row.LANGUAGE}" name="option_lang[]" class="input" /><br /><!-- END options_row -->
 			{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" />
-			 <i class="icon-plus icon-large hand" onclick="add_option(); this.style.display='none'" ></i><span id="new_options"></span></dd>
+			 <i class="fa fa-plus fa-lg hand" onclick="add_option(); this.style.display='none'" ></i><span id="new_options"></span></dd>
 		</dl>
 	</fieldset>
 	<div class="contentFooter">
-		<button class="mainoption" name="add" type="submit" id="add"><i class="icon-ok"></i>{L_save}</button>
-		<button class="liteoption" name="cancel" type="submit" id="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
+		<button class="mainoption" name="add" type="submit" id="add"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="liteoption" name="cancel" type="submit" id="cancel"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
 	</div>
 {CSRF_TOKEN}
 </form>

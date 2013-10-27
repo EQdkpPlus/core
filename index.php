@@ -247,28 +247,28 @@ class controller extends gen_class {
 		$arrToolbarItems = array();
 		if ($arrPermissions['create']) {
 			$arrToolbarItems[] = array(
-				'icon'	=> 'icon-plus',
+				'icon'	=> 'fa-plus',
 				'js'	=> 'onclick="editArticle(0)"',
 				'title'	=> $this->user->lang('add_new_article'),
 			); 
 		}
 		if ($arrPermissions['update']) {
 			$arrToolbarItems[] = array(
-				'icon'	=> 'icon-edit',
+				'icon'	=> 'fa fa-pencil-square-o',
 				'js'	=> 'onclick="editArticle('.$intArticleID.')"',
 				'title'	=> $this->user->lang('edit_article'),
 			); 
 		}				
 		if ($arrPermissions['delete']) {
 			$arrToolbarItems[] = array(
-				'icon'	=> 'icon-trash',
+				'icon'	=> 'fa-trash-o',
 				'js'	=> 'onclick="deleteArticle('.$intArticleID.')"',
 				'title'	=> $this->user->lang('delete_article'),
 			);
 		}
 		if ($arrPermissions['change_state']) {
 			$arrToolbarItems[] = array(
-				'icon'	=> 'icon-eye-close',
+				'icon'	=> 'fa-eye-slash',
 				'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
 				'title'	=> $this->user->lang('article_unpublish'),
 			);
@@ -472,28 +472,28 @@ class controller extends gen_class {
 				$arrToolbarItems = array();
 				if ($arrPermissions['create']) {
 					$arrToolbarItems[] = array(
-						'icon'	=> 'icon-plus',
+						'icon'	=> 'fa-plus',
 						'js'	=> 'onclick="editArticle(0)"',
 						'title'	=> $this->user->lang('add_new_article'),
 					); 
 				}
 				if ($arrPermissions['update']) {
 					$arrToolbarItems[] = array(
-						'icon'	=> 'icon-edit',
+						'icon'	=> 'fa fa-pencil-square-o',
 						'js'	=> 'onclick="editArticle('.$intArticleID.')"',
 						'title'	=> $this->user->lang('edit_article'),
 					); 
 				}				
 				if ($arrPermissions['delete']) {
 					$arrToolbarItems[] = array(
-						'icon'	=> 'icon-trash',
+						'icon'	=> 'fa-trash-o',
 						'js'	=> 'onclick="deleteArticle('.$intArticleID.')"',
 						'title'	=> $this->user->lang('delete_article'),
 					);
 				}
 				if ($arrPermissions['change_state']) {
 					$arrToolbarItems[] = array(
-						'icon'	=> 'icon-eye-close',
+						'icon'	=> 'fa-eye-slash',
 						'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
 						'title'	=> $this->user->lang('article_unpublish'),
 					);
@@ -564,19 +564,19 @@ class controller extends gen_class {
 			$arrToolbarItems = array();
 			if ($arrPermissions['create']) {
 				$arrToolbarItems[] = array(
-					'icon'	=> 'icon-plus',
+					'icon'	=> 'fa-plus',
 					'js'	=> 'onclick="editArticle(0)"',
 					'title'	=> $this->user->lang('add_new_article'),
 				); 
 			}
 			if ($this->user->check_auth('a_articles_man', false)) {
 				$arrToolbarItems[] = array(
-					'icon'	=> 'icon-edit',
+					'icon'	=> 'fa fa-pencil-square-o',
 					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_article_categories.php".$this->SID.'&c='.$intCategoryID.'\';"',
 					'title'	=> $this->user->lang('edit_article_category'),
 				);
 				$arrToolbarItems[] = array(
-					'icon'	=> 'icon-list',
+					'icon'	=> 'fa-list',
 					'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$intCategoryID.'\';"',
 					'title'	=> $this->user->lang('list_articles'),
 				);

@@ -37,7 +37,7 @@ $module_lang = array(
 	'summed_up'					=> 'Total',
 	'char_defrole'				=> 'Default role',
 	'member_menu'				=> '',
-	'mainchar_radio'			=> '<i class="icon-star icon-large not-sortable" title="Mainchar"></i>',
+	'mainchar_radio'			=> '<i class="fa fa-star fa-lg not-sortable" title="Mainchar"></i>',
 	'name_decorated'			=> 'Character name',
 	'memberlink_decorated'		=> 'Character name',
 	'last_update'				=> 'Last update',

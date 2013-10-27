@@ -232,13 +232,13 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 <div>
 	<!-- IF S_PREV_RAID_EVENT -->
 	<div class="floatLeft">
-		<a href="{U_PREV_RAID_EVENT}"><i class="icon-chevron-left"></i> {PREV_RAID_EVENTNAME}</a>
+		<a href="{U_PREV_RAID_EVENT}"><i class="fa fa-chevron-left"></i> {PREV_RAID_EVENTNAME}</a>
 	</div>
 	<!-- ENDIF -->
 	
 	<!-- IF S_NEXT_RAID_EVENT -->
 	<div class="floatRight">
-		<a href="{U_NEXT_RAID_EVENT}">{NEXT_RAID_EVENTNAME} <i class="icon-chevron-right"></i></a>
+		<a href="{U_NEXT_RAID_EVENT}">{NEXT_RAID_EVENTNAME} <i class="fa fa-chevron-right"></i></a>
 	</div>
 	<!-- ENDIF -->
 	<div class="clear"></div>
@@ -313,35 +313,35 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	
 	
 	<div class="infobox infobox-large infobox-green clearfix" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
-		<i class="icon-user icon-4x pull-left"></i>
+		<i class="fa fa-user fa-4x pull-left"></i>
 		{L_SIGNEDIN_MSG}
 		<input type="button" value="{L_raidevent_raid_changesignin}" id="raidcal_change_signin" class="mainoption bi_edit" />
 	</div>
 	<!-- ELSE -->
 	<!-- IF NO_CHAR_ASSIGNED and S_LOGGED_IN -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="icon-male icon-4x pull-left"></i> {L_raidevent_raid_nochar}
+		<i class="fa fa-male fa-4x pull-left"></i> {L_raidevent_raid_nochar}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF RAID_CLOSED -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="icon-lock icon-4x pull-left"></i> {L_raidevent_raid_closed}
+		<i class="fa fa-lock fa-4x pull-left"></i> {L_raidevent_raid_closed}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF RAID_DEADLINE -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="icon-time icon-4x pull-left"></i> {L_raidevent_raid_deadl_reach}
+		<i class="fa fa-clock-o fa-4x pull-left"></i> {L_raidevent_raid_deadl_reach}
 	</div>
 	<!-- ENDIF -->
 	<!-- ENDIF -->
 	<!-- IF NO_STATUSES -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="icon-warning-sign icon-4x pull-left"></i> {L_raidevent_raid_no_status}
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_raidevent_raid_no_status}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF ROLESWOCLASS -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="icon-warning-sign icon-4x pull-left"></i> {L_raidevent_raid_roleswoclass}
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_raidevent_raid_roleswoclass}
 	</div>
 	<!-- ENDIF -->
 	<!-- IF IS_OPERATOR -->

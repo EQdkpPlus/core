@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_itempools.php{SID}">{L_menu_itempools}</a></li>
 		<li class="current"><a><!-- IF IID -->{L_add_itempool}<!-- ELSE -->{NAME}<!-- ENDIF --></a></li>
@@ -20,11 +20,11 @@
 			<dd><input type="text" name="desc" value="{DESC}" class="input" /></dd>
 		</dl>
 	</fieldset>
-	<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
+	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
 	<!-- IF IID -->
 	<input type="hidden" name="ip_id" value="{IID}" />
-	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete}</button>
+	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>
 	<!-- ENDIF -->
-	<button class="mainoption" type="submit" name="cancel"><i class="icon-chevron-left"></i>{L_cancel}</button>
+	<button class="mainoption" type="submit" name="cancel"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
 {CSRF_TOKEN}
 </form>

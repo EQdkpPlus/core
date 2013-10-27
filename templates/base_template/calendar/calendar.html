@@ -63,7 +63,7 @@
 				}
 				// onclick Event Tooltip
 				if(event.className == 'cal_birthday'){
-					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<i class='absmiddle icon-gift'></i> "));
+					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<i class='absmiddle fa fa-gift'></i> "));
 				}else if(!event.url){
 					if(event.allDay){
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}')+"</div>";
@@ -82,7 +82,7 @@
 						content: {
 							text: tmpttcontent,
 							<!-- IF IS_OPERATOR -->title: {
-								text: '<div style="text-align:right;margin-right:-26px;"><i class="icon-pencil icon-large hand" onclick="editEvent('+event.eventid+');"></i>  <i class="icon-trash icon-large hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
+								text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
 								button: false
 							}<!-- ENDIF -->
 						},
@@ -115,7 +115,7 @@
 						content: {
 							text: tmpttcontent,
 							<!-- IF IS_OPERATOR -->title: {
-								text: '<div style="text-align:right;margin-right:-26px;"><i class="icon-pencil icon-large hand" onClick="editEvent('+event.eventid+');"></i>  <i class="icon-trash icon-large hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
+								text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onClick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
 								button: false
 							}<!-- ENDIF -->
 						},
@@ -188,7 +188,7 @@
 						// Upon failure... set the tooltip content to the status and error value
 						api.set('content.text', status + ': ' + error);
 					});
-					return '<i class="icon-refresh icon-spin icon-large"></i>';
+					return '<i class="fa fa-refresh fa-spin fa-lg"></i>';
 				},
 				title: {
 					text: "{L_calendar_export_head}",
@@ -324,14 +324,14 @@
 
 	<div id="fragment-calendar">
 		<div id="calDialog"></div>
-		<div id='calendar_loading'><i class="icon-spinner icon-spin icon-large"></i> {L_lib_loading}</div>
+		<div id='calendar_loading'><i class="fa fa-spinner fa-spin fa-lg"></i> {L_lib_loading}</div>
 		<div id='calendar'></div>
 	</div>
 
 	<div id="fragment-list">
 		<form name="masssignin" method="post" action="{ACTION}">
 		<div class="tableHeader">
-			<span id="export_callist"><button type="button" class="mainoption"><i class="icon-calendar icon-large"></i> {L_raideventlist_export_ical}</button></span>
+			<span id="export_callist"><button type="button" class="mainoption"><i class="fa fa-calendar fa-lg"></i> {L_raideventlist_export_ical}</button></span>
 		</div>
 		<div class="clear"></div>
 		<br />
@@ -341,9 +341,9 @@
 					<td width="35%">{L_raideventlist_masssignin}</td>
 					<td width="10%">{DD_CHARS}</td>
 					<td width="10%">{DD_ROLES}</td>
-					<td width="25%" align="right"><i class="icon-comment icon-large"></i> {TXT_NOTE}</td>
+					<td width="25%" align="right"><i class="fa fa-comment fa-lg"></i> {TXT_NOTE}</td>
 					<td width="10%">{DD_STATUS}</td>
-					<td width="10%"><button type="submit" name="mass_signin" class="mainoption"><i class="icon-ok"></i>{L_raideventlist_masssignbttn}</button>
+					<td width="10%"><button type="submit" name="mass_signin" class="mainoption"><i class="fa fa-check"></i>{L_raideventlist_masssignbttn}</button>
 				</tr>
 			</table>
 		</div>

@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_pagelayouts.php{SID}">{L_page_manager}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_pagelayouts.php{SID}">{L_lm_title}</a>
@@ -162,7 +162,7 @@
 				<tr class="not-sortable">
 					<th colspan="99">
 						{page_row.page_object_row.DROPDOWN}
-						<button class="add_row_button mainoption" type="button" id="button_{page_row.page_object_row.ID}" {page_row.page_object_row.DISABLED}><i class="icon-plus"></i>{L_lm_add_row}</button>
+						<button class="add_row_button mainoption" type="button" id="button_{page_row.page_object_row.ID}" {page_row.page_object_row.DISABLED}><i class="fa fa-plus"></i>{L_lm_add_row}</button>
 					</th>
 				</tr>
 			</tfoot>
@@ -173,7 +173,7 @@
 						<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" />
 					</td>
 					<td align="center">
-						<i class="icon-trash icon-large" title="{L_lm_delete_row}"></i>
+						<i class="fa fa-trash-o fa-lg" title="{L_lm_delete_row}"></i>
 						<span class="delete_id" style="display:none;">{page_row.page_object_row.preset_row.ID}</span>
 						<span class="prefix_id" style="display:none;">{page_row.page_object_row.PREFIX}</span>
 					</td>
@@ -204,8 +204,8 @@
 
 <div class="contentFooter">
 	<input type="hidden" name="filename" value="{FILENAME}" />
-	<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
-	<button class="liteoption" type="submit" name=""><i class="icon-chevron-left"></i>{L_cancel}</button>
+	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+	<button class="liteoption" type="submit" name=""><i class="fa fa-chevron-left"></i>{L_cancel}</button>
 </div>
 {CSRF_TOKEN}
 </form>

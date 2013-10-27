@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_manage_profilefields}</a></li>
 	</ul>
@@ -11,7 +11,7 @@
 		<h1 class="contentTitle">{L_manage_profilefields}</h1>
 	</div>
 	<div class="tableHeader floatRight">
-		<button class="mainoption" name="new" type="submit" id="new"><i class="icon-plus"></i>{L_new_profilefield}</button>
+		<button class="mainoption" name="new" type="submit" id="new"><i class="fa fa-plus"></i>{L_new_profilefield}</button>
 	</div>
 	<div class="clear"></div>
   <table width="100%" cellpadding="2" cellspacing="1" class="colorswitch">
@@ -29,7 +29,7 @@
       <td width="20" class="nowrap" align="center"><img src="{EQDKP_ROOT_PATH}images/glyphs/status_{profile_row.ENABLED_ICON}.png" alt="" /></td>
       <td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
       <td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{profile_row.ENABLE}.png" width="16" height="16" alt="" /></a><!-- ENDIF --></td>
-      <td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><i class="icon-pencil icon-large" title="{L_edit}"></i></a></td>
+      <td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
       <td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
       <td>{profile_row.ID}</td>
       <td>{profile_row.TYPE}</td>
@@ -43,7 +43,7 @@
 	</tr>
 </table>
 <div class="contentFooter">
-	<button class="mainoption" name="del" type="button" id="delete" onclick="delete_warning();"><i class="icon-remove"></i>{L_delete_selected}</button>
+	<button class="mainoption" name="del" type="button" id="delete" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
 	<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 </div>
 {CSRF_TOKEN}

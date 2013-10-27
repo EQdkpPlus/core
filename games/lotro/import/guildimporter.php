@@ -68,7 +68,7 @@ class guildImporter extends page_generic {
 
 	public function perform_step1(){
 		if($this->in->get('guildname', '') == ''){
-			return '<div class="infobox infobox-large infobox-red clearfix"><i class="icon-warning-sign icon-4x pull-left"></i> '.$this->game->glang('uc_imp_noguildname').'</div>';
+			return '<div class="infobox infobox-large infobox-red clearfix"><i class="fa fa-exclamation-triangle fa-4x pull-left"></i> '.$this->game->glang('uc_imp_noguildname').'</div>';
 		}
 		
 		//Suspend all Chars
@@ -142,14 +142,14 @@ class guildImporter extends page_generic {
 						if(guilddataArry.length > i+1){
 							getData(i+1);
 						}else{
-							$("#controlbox").html("<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"icon-ok icon-4x pull-left\"></i> '.$this->game->glang('uc_gimp_header_fnsh').'</div></dl>").fadeIn("slow");
+							$("#controlbox").html("<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"fa fa-check fa-4x pull-left\"></i> '.$this->game->glang('uc_gimp_header_fnsh').'</div></dl>").fadeIn("slow");
 							return;
 						}
 					});
 				}
 			}');
 		}else{
-			$hmtlout .= '<div class="infobox infobox-large infobox-red clearfix"><i class="icon-warning-sign icon-4x pull-left"></i> '.$guilddata['reason'].'</div>';
+			$hmtlout .= '<div class="infobox infobox-large infobox-red clearfix"><i class="fa fa-exclamation-triangle fa-4x pull-left"></i> '.$guilddata['reason'].'</div>';
 		}
 		return $hmtlout;
 	}

@@ -246,7 +246,7 @@ class admin_index extends gen_class {
 							}, function(xhr, status, error) {
 								api.set(\'content.text\', status + \': \' + error);
 							});
-							return \'<i class="icon-refresh icon-spin icon-large"></i>\';
+							return \'<i class="fa fa-refresh fa-spin fa-lg"></i>\';
 						}
 					},
 					position: {

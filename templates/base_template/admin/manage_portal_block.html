@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_portal.php{SID}">{L_portalmanager}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_portal.php{SID}#blocks">{L_edit_portal_block}</a>
@@ -20,10 +20,10 @@
 			<dd><input type="checkbox" name="wide_content" value="1" {WIDE_CONTENT_CHECKED} /></dd>
 		</dl>
 	</fieldset>
-	<button class="mainoption" type="submit" name="save_block"><i class="icon-ok"></i>{L_save}</button>
+	<button class="mainoption" type="submit" name="save_block"><i class="fa fa-check"></i>{L_save}</button>
 	<!-- IF BLOCKID -->
 	<input type="hidden" name="b" value="{BLOCKID}" />
 	<!-- ENDIF -->
-	<button class="mainoption" type="button" name="cancel" onclick="window.location='manage_portal.php{SID}'"><i class="icon-chevron-left"></i>{L_cancel}</button>
+	<button class="mainoption" type="button" name="cancel" onclick="window.location='manage_portal.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
 {CSRF_TOKEN}
 </form>

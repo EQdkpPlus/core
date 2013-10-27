@@ -1,6 +1,6 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_portalmanager}</a></li>
 	</ul>
@@ -16,14 +16,14 @@
 				<h1 class="contentTitle">{L_portal_layouts}</h1>
 			</div>
 			<div class="tableHeader floatRight">
-				<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;l=0'"><i class="icon-plus"></i>{L_add_portal_layout}</button>
+				<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;l=0'"><i class="fa fa-plus"></i>{L_add_portal_layout}</button>
 			</div>
 			<div class="clear"></div>
 			<form method="post" action="{ACTION}" name="post">
 				<table width="100%" class="colorswitch" id="layout-table">
 					{LAYOUT_LIST}
 				</table>
-				<button class="mainoption" type="submit" name="del_layouts" id="del_layouts"><i class="icon-remove"></i>{L_delete_selected_entries}</button>
+				<button class="mainoption" type="submit" name="del_layouts" id="del_layouts"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
 				{CSRF_TOKEN}
 			</form>
 		</div>
@@ -32,14 +32,14 @@
 				<h1 class="contentTitle">{L_portal_blocks}</h1>
 			</div>
 			<div class="tableHeader floatRight">
-				<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;b=0'"><i class="icon-plus"></i>{L_add_portal_block}</button>
+				<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;b=0'"><i class="fa fa-plus"></i>{L_add_portal_block}</button>
 			</div>
 			<div class="clear"></div>
 			<form method="post" action="{ACTION}" name="post">
 				<table width="100%" class="colorswitch" id="block-table">
 					{BLOCK_LIST}
 				</table>
-				<button class="mainoption" type="submit" name="del_blocks" id="del_blocks"><i class="icon-remove"></i>{L_delete_selected_entries}</button>
+				<button class="mainoption" type="submit" name="del_blocks" id="del_blocks"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
 				{CSRF_TOKEN}
 			</form>
 		</div>

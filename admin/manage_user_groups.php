@@ -392,21 +392,21 @@ class Manage_User_Groups extends page_generic {
 			0 => array(
 				'name'	=> $this->user->lang('delete_selected_from_group'),
 				'type'	=> 'button', //link, button, javascript
-				'icon'	=> 'icon-trash',
+				'icon'	=> 'fa-trash-o',
 				'perm'	=> true,
 				'link'	=> '#del_group_users',
 			),
 			1 => array(
 				'name'	=> $this->user->lang('add_grpleader'),
 				'type'	=> 'button', //link, button, javascript
-				'icon'	=> 'icon-ok',
+				'icon'	=> 'fa-check',
 				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
 				'link'	=> '#add_grpleader',
 			),
 			2 => array(
 				'name'	=> $this->user->lang('remove_grpleader'),
 				'type'	=> 'button', //link, button, javascript
-				'icon'	=> 'icon-remove',
+				'icon'	=> 'fa-times',
 				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
 				'link'	=> '#remove_grpleader',
 			),
@@ -457,7 +457,7 @@ class Manage_User_Groups extends page_generic {
 				foreach($grps as $group_id => $group){
 					$group_permissions = $this->acl->get_group_permissions($group_id);
 					$this->tpl->assign_block_vars('permissions_row.check_group.group_row', array(
-						'STATUS'	=> ( $group_permissions[$data['CBNAME']] == "Y") ? ' <i class="icon-ok">' : '',
+						'STATUS'	=> ( $group_permissions[$data['CBNAME']] == "Y") ? ' <i class="fa fa-check">' : '',
 					));
 				}
 			}

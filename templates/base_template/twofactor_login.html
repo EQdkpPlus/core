@@ -8,7 +8,7 @@
 			<div>
 				<dl>
 					<dt><label>{L_login_twofactor_code_init}:</label><br /><span>{L_login_twofactor_code_help}</span></dt>
-					<dd><div class="input-icon"><i class="icon-time"></i><input type="text" name="twofactor_code" size="10" maxlength="10" class="input required"/></div>
+					<dd><div class="input-icon"><i class="fa fa-clock-o"></i><input type="text" name="twofactor_code" size="10" maxlength="10" class="input required"/></div>
 					<br /><br /><label><input type="checkbox" name="twofactor_cookie" value="1" />{L_login_twofactor_remember}</label>
 					</dd>
 				</dl>
@@ -19,7 +19,7 @@
 					<dt>
 						<label>{L_lib_captcha_head}</label><br /><span>{L_lib_captcha_insertword}</span>
 					</dt>
-					<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><i class="icon-refresh icon-large hand" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" style="float: none; margin-left: 20px; padding-top: 40px;vertical-align: middle;"></i><div style="clear:both;"></div>
+					<dd><div id="recaptcha_image" style="float:left; cursor:pointer;" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}"></div><i class="fa fa-refresh fa-lg hand" onclick="javascript:Recaptcha.reload();" title="{L_lib_captcha_reload}" style="float: none; margin-left: 20px; padding-top: 40px;vertical-align: middle;"></i><div style="clear:both;"></div>
 					<input name="recaptcha_response_field" type="text" id="recaptcha_response_field" style="width:300px; margin-top:5px;" class="input"/>
 					{FV_CAPTCHA}
 					{CAPTCHA}</dd>
@@ -33,7 +33,7 @@
 	<div class="contentFooter">
 		<input type="hidden" name="twofactor_data" value="{TWOFACTOR_DATA}" />
 		<input type="checkbox" name="auto_login" style="display:none;" {TWOFACTOR_AUTOLOGIN}>
-		<button type="submit" name="login" class="mainoption"><i class="icon-signin"></i>{L_login}</button>
+		<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i>{L_login}</button>
 	</div>
 		
 	{CSRF_TOKEN}

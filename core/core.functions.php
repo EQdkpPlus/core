@@ -363,7 +363,7 @@ function infotooltip_js() {
 								bla.success(function(data) {
 									cached_itts['t_'+mytitle] = $.trim(data);
 								});
-								return '<i class=\"icon-spinner icon-spin icon-large\"></i> ".registry::fetch('user')->lang('lib_loading')."';
+								return '<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".registry::fetch('user')->lang('lib_loading')."';
 							}
 						},
 						tooltipClass: \"ui-infotooltip\",
@@ -416,7 +416,7 @@ function chartooltip_js() {
 								bla.success(function(data) {
 									cached_charTT['t_'+mytitle] = $.trim(data);
 								});
-								return '<i class=\"icon-spinner icon-spin icon-large\"></i> ".registry::fetch('user')->lang('lib_loading')."';
+								return '<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".registry::fetch('user')->lang('lib_loading')."';
 							}
 						},
 						tooltipClass: \"ui-infotooltip\",
@@ -476,19 +476,19 @@ function message_die($text = '', $title = '', $type = 'normal', $login_form = fa
 	//Switch rounded boxes and icons
 	switch($type){
 		case 'access_denied':	$message_class = 'red';
-								$icon = 'icon-minus-sign';
+								$icon = 'fa-minus-circle';
 		break;
 
 		case 'info':			$message_class = 'blue';
-								$icon = 'icon-info-sign ';
+								$icon = 'fa-info-circle ';
 		break;
 
 		case 'error':			$message_class = 'red';
-								$icon = 'icon-warning-sign';
+								$icon = 'fa-exclamation-triangle';
 		break;
 
 		case 'ok':				$message_class = 'green';
-								$icon = 'icon-ok';
+								$icon = 'fa-check';
 		break;
 
 	}

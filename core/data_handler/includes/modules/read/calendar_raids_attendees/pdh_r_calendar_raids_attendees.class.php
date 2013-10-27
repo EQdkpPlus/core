@@ -215,7 +215,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 						case 3: $flagcolor	= 'icon-color-purple';break;
 						case 5: $flagcolor	= 'icon-color-blue';break;
 					}
-					return '<i class="icon-flag '.$flagcolor.' icon-large"></i>';
+					return '<i class="fa fa-flag '.$flagcolor.' fa-lg"></i>';
 				}
 			}
 		}

@@ -202,14 +202,14 @@ class user_pageobject extends pageobject {
 		
 		//Contact Information
 		$arrContact = array();
-		if ($perm && ($this->user->is_signedin()) && strlen($row['user_email'])) $arrContact['email_address'] = '<a href="javascript:usermailer();"><i class="icon-envelope icon-large"></i> '.$this->user->lang('adduser_send_mail').'</a>';
-		if ($phone_perm && strlen($row['cellphone'])) $arrContact['adduser_cellphone'] = '<i class="icon-mobile-phone icon-large"></i> '.sanitize($row['cellphone']);
-		if ($phone_perm && strlen($row['phone'])) $arrContact['adduser_phone'] = '<i class="icon-phone icon-large"></i> '.sanitize($row['phone']);
+		if ($perm && ($this->user->is_signedin()) && strlen($row['user_email'])) $arrContact['email_address'] = '<a href="javascript:usermailer();"><i class="fa fa-envelope fa-lg"></i> '.$this->user->lang('adduser_send_mail').'</a>';
+		if ($phone_perm && strlen($row['cellphone'])) $arrContact['adduser_cellphone'] = '<i class="fa fa-mobile fa-lg"></i> '.sanitize($row['cellphone']);
+		if ($phone_perm && strlen($row['phone'])) $arrContact['adduser_phone'] = '<i class="fa fa-phone fa-lg"></i> '.sanitize($row['phone']);
 		if ($perm && strlen($row['icq'])) $arrContact['adduser_icq'] = '<a href="http://www.icq.com/people/'.sanitize($row['icq']).'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.sanitize($row['icq']).'&amp;img=5" alt="icq" /> '.sanitize($row['icq']).'</a>';
-		if ($perm && strlen($row['skype'])) $arrContact['adduser_skype'] = '<a href="skype:'.sanitize($row['skype']).'?add"><i class="icon-skype icon-large"></i> '.sanitize($row['skype']).'</a>';
-		if ($perm && strlen($custom['twitter'])) $arrContact['adduser_twitter'] = '<a href="https://twitter.com/'.sanitize($custom['twitter']).'" target="_blank"><i class="icon-twitter icon-large"></i> '.sanitize($custom['twitter']).'</a>';
-		if ($perm && strlen($custom['facebook'])) $arrContact['adduser_facebook'] = '<a href="https://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.sanitize($custom['facebook']) : sanitize($custom['facebook'])).'" target="_blank"><i class="icon-facebook icon-large"></i> '.sanitize($custom['facebook']).'</a>';
-		if ($perm && strlen($custom['youtube'])) $arrContact['adduser_youtube'] = '<a href="https://www.youtube.com/user/'.sanitize($custom['youtube']).'" target="_blank"><i class="icon-youtube icon-large"></i> '.sanitize($custom['youtube']).'</a>';
+		if ($perm && strlen($row['skype'])) $arrContact['adduser_skype'] = '<a href="skype:'.sanitize($row['skype']).'?add"><i class="fa fa-skype fa-lg"></i> '.sanitize($row['skype']).'</a>';
+		if ($perm && strlen($custom['twitter'])) $arrContact['adduser_twitter'] = '<a href="https://twitter.com/'.sanitize($custom['twitter']).'" target="_blank"><i class="fa fa-twitter fa-lg"></i> '.sanitize($custom['twitter']).'</a>';
+		if ($perm && strlen($custom['facebook'])) $arrContact['adduser_facebook'] = '<a href="https://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.sanitize($custom['facebook']) : sanitize($custom['facebook'])).'" target="_blank"><i class="fa fa-facebook fa-lg"></i> '.sanitize($custom['facebook']).'</a>';
+		if ($perm && strlen($custom['youtube'])) $arrContact['adduser_youtube'] = '<a href="https://www.youtube.com/user/'.sanitize($custom['youtube']).'" target="_blank"><i class="fa fa-youtube fa-lg"></i> '.sanitize($custom['youtube']).'</a>';
 		
 		if($row['irq'] != ""){
 			$irc_parts			= explode('@',$row['irq']);

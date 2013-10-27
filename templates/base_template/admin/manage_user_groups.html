@@ -62,12 +62,12 @@
 				<dd><input type="checkbox" class="addgroup-hidden" value="1"/></dd>
 			</dl>
 		</fieldset>
-		<button type="button" id="addgroup-button"><i class="icon-ok"></i> {L_submit}</button>
+		<button type="button" id="addgroup-button"><i class="fa fa-check"></i> {L_submit}</button>
 </div>
 
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_manage_user_groups}</a></li>
 	</ul>
@@ -78,8 +78,8 @@
 		<h1 class="contentTitle">{L_manage_user_groups}</h1>
 	</div>
 	<div class="tableHeader floatRight">
-		<button class="mainoption add_user_group_trigger" type="button"><i class="icon-plus"></i>{L_add_user_group}</button>
-		<button class="mainoption" name="user_group_perms" type="submit" id="user_group_perms"><i class="icon-list"></i>{L_user_group_permissions}</button>
+		<button class="mainoption add_user_group_trigger" type="button"><i class="fa fa-plus"></i>{L_add_user_group}</button>
+		<button class="mainoption" name="user_group_perms" type="submit" id="user_group_perms"><i class="fa fa-list"></i>{L_user_group_permissions}</button>
 	</div>
 	<div class="clear"></div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" id="user_groups_table" class="colorswitch">
@@ -100,10 +100,10 @@
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
 			<td align="center"><!-- IF user_groups.S_DELETABLE --><input type="checkbox" name="user_group_ids[]" value="{user_groups.ID}" /><!-- ENDIF --><input type="hidden" name="user_groups[{user_groups.KEY}][id]" value="{user_groups.ID}" /></td>
-			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="icon-pencil icon-large"></i></a></td>
+			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
 			<td align="center">
 				<!-- IF user_groups.S_DELETABLE -->
-				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><i class="icon-trash icon-large" title="{L_delete}"></i></a>
+				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				<!-- ENDIF -->
 			</td>
 			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>    
@@ -116,8 +116,8 @@
 		</tbody>
 	</table>
 	<div class="contentFooter">
-		<button class="mainoption" type="submit" name="save"><i class="icon-ok"></i>{L_save}</button>
-		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="icon-remove" ></i>{L_delete_selected_group}</button>
+		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times" ></i>{L_delete_selected_group}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
 	
@@ -140,7 +140,7 @@
 <!-- ELSE -->
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_manage_user_groups}</a></li>
 	</ul>

@@ -113,7 +113,7 @@ function hide_update_warning(status){
 
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="icon-home"></i></a></li>
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li class="current"><a>{L_extension_repo}</a></li>
 	</ul>
@@ -121,11 +121,11 @@ function hide_update_warning(status){
 </div>
 
 <div class="infobox infobox-large infobox-red clearfix" id="lu_error" style="display:none;">
-	<i class="icon-warning-sign icon-4x pull-left"></i> <span id="lu_error_label"></span>
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <span id="lu_error_label"></span>
 </div>
 
 <div id="nl_progressbar" style="display:none; margin-bottom: 20px;">
-	<span class="nl_progressbar_label"><i class="icon-retweet icon-spin icon-large"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
+	<span class="nl_progressbar_label"><i class="fa fa-retweet fa-spin fa-lg"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 
 <div id='plus_plugins_tab'>
@@ -156,7 +156,7 @@ function hide_update_warning(status){
 		</tr>
 		<!-- BEGIN plugins_row_red -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap">{plugins_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_red.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -170,7 +170,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_red -->
 		<!-- BEGIN plugins_row_yellow -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap">{plugins_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_yellow.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -184,7 +184,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_yellow -->
 		<!-- BEGIN plugins_row_green -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap">{plugins_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_green.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -198,7 +198,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_green -->
 		<!-- BEGIN plugins_row_grey -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap">{plugins_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_grey.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -212,7 +212,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_grey -->
 		<!-- BEGIN plugins_row_grey_repo -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap">{plugins_row_grey_repo.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_grey_repo.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -266,18 +266,18 @@ function hide_update_warning(status){
 			</tr>
 		  <!-- BEGIN styles_row_red_local -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
+		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td width="10" class="nowrap">{styles_row_red_local.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
 			  <a href="{styles_row_red_local.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_red_local.ENABLE}.png" width="16" height="16" title="{styles_row_red_local.L_ENABLE}" alt="{styles_row_red_local.L_ENABLE}" /></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large" title="{L_edit_style}"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="icon-save icon-large" title="{L_download_style}"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
+				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="icon-retweet icon-large"></i></a>
+				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
@@ -292,18 +292,18 @@ function hide_update_warning(status){
 		   <!-- END styles_row_red_local -->
 		  <!-- BEGIN styles_row_red -->
 		  <tr>
-		  <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
+		  <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td width="10" class="nowrap">{styles_row_red.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
 			  <a href="{styles_row_red.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_red.ENABLE}.png" width="16" height="16" title="{styles_row_red.L_ENABLE}" alt="{styles_row_red.L_ENABLE}" /></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large" title="{L_edit_style}"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="icon-save icon-large" title="{L_download_style}"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
+				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="icon-retweet icon-large"></i></a>
+				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
@@ -318,18 +318,18 @@ function hide_update_warning(status){
 		   <!-- END styles_row_red -->
 			<!-- BEGIN styles_row_yellow -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
+		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td width="10" class="nowrap">{styles_row_yellow.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
 			  <a href="{styles_row_yellow.U_ENABLE}"><img src="{EQDKP_IMAGE_PATH}glyphs/{styles_row_yellow.ENABLE}.png" width="16" height="16" title="{styles_row_yellow.L_ENABLE}" alt="{styles_row_yellow.L_ENABLE}" /></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large" title="{L_edit_style}"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="icon-save icon-large" title="{L_download_style}"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
+				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="icon-retweet icon-large"></i></a>
+				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
@@ -344,18 +344,18 @@ function hide_update_warning(status){
 		   <!-- END styles_row_yellow -->
 		<!-- BEGIN styles_row_green -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
+		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td width="10" class="nowrap">{styles_row_green.ACTION_LINK}</td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
-			  <a href="{styles_row_green.U_ENABLE}"><i class="{styles_row_green.ENABLE} icon-large"></i></a>  
+			  <a href="{styles_row_green.U_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="icon-pencil icon-large"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="icon-save icon-large"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg"></i></a></td>
+			<td width="10" class="nowrap"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a></td>
 			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><i class="icon-trash icon-large"></i></a>
+				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
 			<td width="10" class="nowrap">
-				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="icon-retweet icon-large"></i></a>
+				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
@@ -370,7 +370,7 @@ function hide_update_warning(status){
 		   <!-- END styles_row_green -->
 		<!-- BEGIN styles_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td width="10" class="nowrap">{styles_row_grey.ACTION_LINK}</td>
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>
@@ -388,7 +388,7 @@ function hide_update_warning(status){
 		   <!-- END styles_row_grey -->
 		<!-- BEGIN styles_row_grey_repo -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td width="10" class="nowrap">{styles_row_grey_repo.ACTION_LINK}</td>
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>
@@ -405,8 +405,8 @@ function hide_update_warning(status){
 		   <!-- END styles_row_grey_repo -->
 		</table>
 		<div class="contentFooter">
-			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="icon-ok"></i>{L_make_default_style}</button>
-			<button name="cache_reset" type="button" class="liteoption" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'"><i class="icon-trash"></i>{L_delete_template_cache}</button>
+			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="fa fa-check"></i>{L_make_default_style}</button>
+			<button name="cache_reset" type="button" class="liteoption" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'"><i class="fa fa-trash-o"></i>{L_delete_template_cache}</button>
 		</div>
 		{CSRF_TOKEN}
 		</form>
@@ -428,7 +428,7 @@ function hide_update_warning(status){
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap">{pm_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_red.NAME}</td>
 			<td class="nowrap">{pm_row_red.VERSION}</td>
@@ -439,7 +439,7 @@ function hide_update_warning(status){
 		  <!-- END pm_row_red -->
 		  <!-- BEGIN pm_row_yellow -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap">{pm_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_yellow.NAME}</td>
 			<td class="nowrap">{pm_row_yellow.VERSION}</td>
@@ -450,7 +450,7 @@ function hide_update_warning(status){
 		  <!-- END pm_row_yellow -->
 		  <!-- BEGIN pm_row_green -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap">{pm_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_green.NAME}</td>
 			<td class="nowrap">{pm_row_green.VERSION}</td>
@@ -461,7 +461,7 @@ function hide_update_warning(status){
 		  <!-- END pm_row_green -->
 		  <!-- BEGIN pm_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap">{pm_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{pm_row_grey.NAME}</td>
 			<td class="nowrap">{pm_row_grey.VERSION}</td>
@@ -489,7 +489,7 @@ function hide_update_warning(status){
 		  </tr>
 		  <!-- BEGIN games_row_red -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap">{games_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_red.NAME}</td>
 			<td class="nowrap">{games_row_red.VERSION}</td>
@@ -500,7 +500,7 @@ function hide_update_warning(status){
 		  <!-- END games_row_red -->
 		  <!-- BEGIN games_row_yellow -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap">{games_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_yellow.NAME}</td>
 			<td class="nowrap">{games_row_yellow.VERSION}</td>
@@ -511,7 +511,7 @@ function hide_update_warning(status){
 		  <!-- END games_row_yellow -->
 		  <!-- BEGIN games_row_green -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap">{games_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_green.NAME}</td>
 			<td class="nowrap">{games_row_green.VERSION}</td>
@@ -522,7 +522,7 @@ function hide_update_warning(status){
 		  <!-- END games_row_green -->
 		  <!-- BEGIN games_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap">{games_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{games_row_grey.NAME}</td>
 			<td class="nowrap">{games_row_grey.VERSION}</td>
@@ -548,7 +548,7 @@ function hide_update_warning(status){
 		  </tr>
 		  <!-- BEGIN language_row_red -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-red"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap">{language_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_red.NAME}</td>
 			<td class="nowrap">{language_row_red.VERSION}</td>
@@ -556,7 +556,7 @@ function hide_update_warning(status){
 		  <!-- END language_row_red -->
 		  <!-- BEGIN language_row_yellow -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-yellow"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap">{language_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_yellow.NAME}</td>
 			<td class="nowrap">{language_row_yellow.VERSION}</td>
@@ -564,7 +564,7 @@ function hide_update_warning(status){
 		  <!-- END language_row_yellow -->
 		  <!-- BEGIN language_row_green -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-green"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap">{language_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_green.NAME}</td>
 			<td class="nowrap">{language_row_green.VERSION}</td>
@@ -572,7 +572,7 @@ function hide_update_warning(status){
 		  <!-- END language_row_green -->
 		  <!-- BEGIN language_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="icon-puzzle-piece icon-large icon-color-gray"></i></td>
+			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap">{language_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{language_row_grey.NAME}</td>
 			<td class="nowrap">{language_row_grey.VERSION}</td>
