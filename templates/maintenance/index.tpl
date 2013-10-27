@@ -5,7 +5,7 @@
   {META}
   <title>EQdkp Plus {L_MMODE}</title>
   <link rel='stylesheet' href='{ROOT_PATH}templates/maintenance/css/maintenance.css' type='text/css' media='screen' />
-   <link rel='stylesheet' href='{ROOT_PATH}libraries/FontAwesome/font-awesome.min.css' type='text/css' media='screen' />
+  <link rel='stylesheet' href='{ROOT_PATH}libraries/FontAwesome/font-awesome.min.css' type='text/css' media='screen' />
   
   <style type="text/css">
   		.debug_show {
