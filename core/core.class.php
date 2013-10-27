@@ -919,7 +919,7 @@ class core extends gen_class {
 			if(isset($icon) && pathinfo($icon, PATHINFO_EXTENSION) == 'png'){
 				return '<img src="'.$pathext.$icon.'" alt="img" />';
 			}elseif(isset($icon)){
-				return '<i class="'.$icon.(($size)? ' '.$size : '').'"></i>';
+				return '<i class="fa '.$icon.(($size)? ' '.$size : '').'"></i>';
 			}else{
 				return '';
 			}

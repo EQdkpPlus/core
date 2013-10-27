@@ -529,7 +529,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				0 => array(
 					'name'		=> $this->user->lang('uc_edit_char'),
 					'link'		=> "javascript:EditChar('".$memberid."')",
-					'icon'		=> 'fa fa-pencil-square-o fa-lg',
+					'icon'		=> 'fa-pencil fa-lg',
 					'perm'		=> $this->user->check_auth('u_member_view', false),
 				),
 				1 => array(

@@ -89,13 +89,13 @@ class mycharacters_pageobject extends pageobject {
 			0 => array(
 				'name'		=> $this->user->lang('uc_add_char_plain'),
 				'link'		=> "javascript:AddChar()",
-				'icon'		=> 'fa-plus icon large',
+				'icon'		=> 'fa-plus fa-lg',
 				'perm'		=> $this->user->check_auth('u_member_add', false),
 			),
 			1 => array(
 				'name'		=> $this->user->lang('uc_add_char_armory'),
 				'link'		=> "javascript:AddCharArmory()",
-				'icon'		=> 'fa fa-download fa-lg',
+				'icon'		=> 'fa-download fa-lg',
 				'perm'		=> $this->game->get_importAuth('u_member_add', 'char_import'),
 			),
 			2 => array(
@@ -160,7 +160,7 @@ class mycharacters_pageobject extends pageobject {
 
 			// JS Code
 			'JS_CONNECTIONS'		=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 350, 'height' => 180, 'filter'=>true)),
-			'ADD_MENU'				=> $this->jquery->DropDownMenu('colortab', $cm_addmenu, '<i class="fa fa-plus fa-lg"> </i>'.$this->user->lang('uc_add_char')),
+			'ADD_MENU'				=> $this->jquery->DropDownMenu('colortab', $cm_addmenu, '<i class="fa fa-plus fa-lg"> </i> '.$this->user->lang('uc_add_char')),
 
 			'S_SHOW_NO_CONN_INFO'	=> $show_no_conn_info,
 		));
