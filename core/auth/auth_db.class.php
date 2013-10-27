@@ -248,7 +248,7 @@ class auth_db extends auth {
 			if ($objQuery && $objQuery->numRows){
 				$arrUserResult = $objQuery->fetchAssoc();
 				if ($arrUserResult){
-					if ($strCookieAutologinKey != "" && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
+					if ($strCookieAutologinKey != "" && strlen($arrUserResult['user_login_key']) && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
 						return $arrUserResult;
 					}
 				}	
