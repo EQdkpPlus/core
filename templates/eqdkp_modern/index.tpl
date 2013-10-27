@@ -84,7 +84,7 @@
 					$(".notification-tooltip").hide('fast');
 					$("#notification-tooltip-"+dest).show('fast');
 					$(document).on('click', function(event) {
-						var count = $(event.target).parents('.notification-tooltip-container').length;									
+						var count = $(event.target).parents('.notification-tooltip-container').length;
 						if (count == 0){
 							$(".notification-tooltip").hide('fast');
 						}
@@ -127,7 +127,7 @@
 				<div id="personalAreaUser">
 					<!-- IF not S_LOGGED_IN -->
 					<ul>
-						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in"></i>{L_login}</a></li>
+						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in"></i> {L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
@@ -138,7 +138,7 @@
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user"></i>{USER_NAME}</a>
+									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user"></i> {USER_NAME}</a>
 									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
 										<li><a href="{U_USER_PROFILE}">
 												<div class="user-tooltip-avatar">
@@ -151,17 +151,17 @@
 											</a>
 										</li>
 										<li class="tooltip-divider"></li>
-										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog"></i>{L_settings}</a></li>
-										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out"></i>{L_logout}</a></li>
+										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog"></i> {L_settings}</a></li>
+										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out"></i> {L_logout}</a></li>
 									</ul>
 								</div>
 							</li>
-							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog"></i>{L_menu_admin_panel}</a></li><!-- ENDIF -->
+							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog"></i> {L_menu_admin_panel}</a></li><!-- ENDIF -->
 							
-							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group"></i>{L_menu_members}</a></li><!-- ENDIF -->
+							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group"></i> {L_menu_members}</a></li><!-- ENDIF -->
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt"></i>{L_notifications}</a>
+									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt"></i> {L_notifications}</a>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 										<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_RED > 0 -->
@@ -205,7 +205,7 @@
 								<!-- ENDIF -->
 							</li>
 							<!-- IF S_SEARCH -->
-							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="fa fa-search"></i>{L_search}</a></li>
+							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="fa fa-search"></i> {L_search}</a></li>
 							<!-- ENDIF -->
 							<!-- BEGIN personal_area_addition -->
 							<li>{personal_area_addition.TEXT}</li>
@@ -215,7 +215,7 @@
 				</div>
 				<div id="personalAreaTime" class="hiddenSmartphone">
 					<ul>
-						<li class="personalAreaTime"><i class="fa fa-clock-o"></i><span class="user_time">{USER_TIME}</span></li>
+						<li class="personalAreaTime"><i class="fa fa-clock-o"></i> <span class="user_time">{USER_TIME}</span></li>
 						<li><!-- IF S_SEARCH -->
 						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>
