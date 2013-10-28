@@ -255,6 +255,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 
 			if(isset($this->cached_table_rows[$view_id])){
 				$view_row = $this->cached_table_rows[$view_id];
+				$view_row = str_replace("{SID}", $this->SID, $view_row);
 			}else{
 				$view_row = '';
 				foreach($this->columns as $cid => $column){
@@ -272,7 +273,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					}
 					$view_row .= "</td>\n";
 				}
-				$this->cached_table_rows[$view_id] = $view_row;
+				$this->cached_table_rows[$view_id] = str_replace($this->SID, "{SID}", $view_row);
 				$this->not_cached_row_count++;
 			}
 
