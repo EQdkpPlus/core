@@ -390,6 +390,7 @@ if(!class_exists('armory')) {
 			// spells
 			if(!empty($data['itemSpells'])) {
 				foreach($data['itemSpells'] as $spell) {
+					$html .= "</td></tr></table><table class=\"tooltipGrouping\"><tr><td>";
 					$html .= "<span class=\"q2\">".$this->armory_lang[$lang]['trigger'][$spell['trigger']]." ".$spell['spell']['description']."</span><br />";
 				}
 			}			
