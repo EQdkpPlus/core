@@ -239,25 +239,18 @@
 
 								<!-- BEGIN bossprogress_cat -->
 								<div id="achievementtab-{bossprogress_cat.ID}">
-									<table border="0" width="100%" cellspacing="0" cellpadding="2" class="colorswitch">
+									<table border="0" width="100%" class="colorswitch">
 									<!-- BEGIN bossprogress_val -->
 										<tr>
-											<td width="470">
-												<table border="0" width="400">
-													<tr>
-														<td class="raideventicon id{bossprogress_cat.bossprogress_val.ID}">
-														</td>
-														<td align="center" class="nowrap">
-															<b>{bossprogress_cat.bossprogress_val.NAME}</b>
-															<hr />{bossprogress_cat.bossprogress_val.RUNS}
-														</td>
-													</tr>
-												</table>
+											<td class="raideventicon id{bossprogress_cat.bossprogress_val.ID}"></td>
+											<td align="center" class="nowrap" width="300">
+												<b>{bossprogress_cat.bossprogress_val.NAME}</b>
+												<hr />{bossprogress_cat.bossprogress_val.RUNS}
 											</td>
-											<td width="250">{bossprogress_cat.bossprogress_val.BARS}</td>
+											<td>{bossprogress_cat.bossprogress_val.BARS}</td>
 										</tr>
 										<!-- END bossprogress_val -->
-									</table>
+										</table>
 								</div>
 								<!-- END bossprogress_cat -->
 							</div>

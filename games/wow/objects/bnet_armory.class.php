@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
 
 class bnet_armory {
 
-	private $version		= '5.0';
+	private $version		= '5.0.1';
 	private $build			= '$Rev$';
 	private $chariconUpdates = 0;
 	private $chardataUpdates = 0;
@@ -264,14 +264,18 @@ class bnet_armory {
 	* 
 	* @param $user		Character Name
 	* @param $realm		Realm Name
-	* @param $force		Force the cache to update?
+	* @param $force		Force the cache to update
+	* @param $params	array, optional fields such as reputation, appearance, mounts, pets, hunterPets,petSlots, quests, pvp
 	* @return bol
 	*/
-	public function character($user, $realm, $force=false){
-		$realm	= $this->ConvertInput($this->cleanServername($realm));
-		$user	= $this->ConvertInput($user);
-		$wowurl	= $this->_config['apiUrl'].sprintf('wow/character/%s/%s?locale=%s&fields=guild,stats,feed,talents,items,reputation,titles,professions,appearance,mounts,pets,achievements,progression,pvp,quests,hunterPets,petSlots', $realm, $user, $this->_config['locale']);
-		$json	= $this->get_CachedData('chardata_'.$user.$realm, $force);		
+	public function character($user, $realm, $force=false, $params=array()){
+		$realm		= $this->ConvertInput($this->cleanServername($realm));
+		$user		= $this->ConvertInput($user);
+		$basicparam	= array('guild', 'stats', 'feed', 'talents', 'items', 'titles', 'professions', 'achievements', 'progression');
+		$usedparams = array_merge($basicparam, $params);
+		$force		= (count($params) > 1 && $force == false) ? true : $force;
+		$wowurl		= $this->_config['apiUrl'].sprintf('wow/character/%s/%s?locale=%s&fields='.implode(',', $usedparams), $realm, $user, $this->_config['locale']);
+		$json		= $this->get_CachedData('chardata_'.$user.$realm, $force);		
 		if(!$json && ($this->chardataUpdates < $this->_config['maxChardataUpdates'])){
 			$json	= $this->read_url($wowurl);
 			$this->set_CachedData($json, 'chardata_'.$user.$realm);

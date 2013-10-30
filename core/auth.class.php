@@ -127,6 +127,9 @@ class auth extends user_core {
 			}
 		}
 		
+		//Reset User ID, because we are still here and have no valid session
+		$this->data['user_id'] = ANONYMOUS;
+
 		//START Autologin
 		$boolSetAutoLogin = false;
 

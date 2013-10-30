@@ -69,8 +69,11 @@ if ( !defined('EQDKP_INC') ){
 			$this->eqdkp_cwd = getcwd();
 			if($this->do_file_logging) {
 				$this->logfile_folder = $this->pfh->FolderPath('tmp', "");
-				if(!is_writable($this->logfile_folder))
+				if(!is_writable($this->logfile_folder)) {
 					$this->do_file_logging = false;
+				} else {
+					$this->pfh->secure_folder($this->pfh->FolderPath('tmp', ""));
+				}
 			}
 				//register_shutdown_function(array($this, "catch_fatals"));
 			if($this->do_file_logging) {
