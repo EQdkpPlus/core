@@ -135,6 +135,10 @@ class auth extends user_core {
 				}
 			}
 		}
+		
+		$this->data['user_id'] = ANONYMOUS;
+		
+		
 		//START Autologin
 		$boolSetAutoLogin = false;
 
@@ -523,17 +527,19 @@ class auth extends user_core {
 		$arrLoginMethods = $this->get_active_loginmethods();
 		if ($loginMethod) $arrLoginMethods = array($loginMethod);
 		$arrReturn = array();
-		foreach($arrLoginMethods as $strMethod){
-			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
-			$classname = 'login_'.$strMethod;
-			$functions = isset($classname::$functions) ? $classname::$functions : array();
-			
-			if (isset($functions[$method])){
-				$objClass = register('login_'.$strMethod);
-				if (method_exists($objClass, $functions[$method])) $arrReturn[$strMethod] = $objClass->$functions[$method]($arrOptions);
-			}
+		if (is_array($arrLoginMethods)){
+			foreach($arrLoginMethods as $strMethod){
+				include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
+				$classname = 'login_'.$strMethod;
+				$functions = isset($classname::$functions) ? $classname::$functions : array();
+				
+				if (isset($functions[$method])){
+					$objClass = register('login_'.$strMethod);
+					if (method_exists($objClass, $functions[$method])) $arrReturn[$strMethod] = $objClass->$functions[$method]($arrOptions);
+				}
 
-			if ($loginMethod) return $arrReturn[$strMethod];
+				if ($loginMethod) return $arrReturn[$strMethod];
+			}
 		}
 		return $arrReturn;
 	}
@@ -542,11 +548,13 @@ class auth extends user_core {
 		$arrLoginMethods = $this->get_active_loginmethods();
 		if ($loginMethod) $arrLoginMethods = array($loginMethod);
 		$arrReturn = array();
-		foreach($arrLoginMethods as $strMethod){
-			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
-			$objClass = register('login_'.$strMethod);
-			$arrReturn[$strMethod] = $objClass;
-			if ($loginMethod) return $arrReturn[$strMethod];
+		if (is_array($arrLoginMethods)){
+			foreach($arrLoginMethods as $strMethod){
+				include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
+				$objClass = register('login_'.$strMethod);
+				$arrReturn[$strMethod] = $objClass;
+				if ($loginMethod) return $arrReturn[$strMethod];
+			}
 		}
 		return $arrReturn;
 	}
