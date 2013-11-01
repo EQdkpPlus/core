@@ -60,63 +60,65 @@
 
         #cboxSlideshow{position:absolute; bottom:4px; right:0px; color:#0092ef;}
         #cboxPrevious{
-			background-color: #FFFFFF;
-			bottom: 55%;
+			top: 47%;
 			color: #0092EF;
-			font-size: 25px;
+			font-size: 30px;
 			left: 2px;
 			overflow: hidden;
-			position: relative;
-			width: 27px;
+			position: absolute;
+			width: 30px;
 		}
 		#cboxPrevious:before{
 			content: "\f0a8";
 			font-family: FontAwesome;
-			color: #000;
+			color: #fff;
 			margin-right: 3px;
 		}
-        #cboxPrevious:hover{background-position:-75px -25px;}
         #cboxNext{
-			background-color: #FFFFFF;
-			bottom: 55%;
 			color: #0092EF;
-			font-size: 25px;
-			right: 2px;
-			overflow: hidden;
-			position: relative;
-			width: 27px;
 			float: right;
-			text-indent: -51px;
+			font-size: 30px;
 			margin-right: 2px;
+			overflow: hidden;
+			position: absolute;
+			right: 2px;
+			text-indent: -59px;
+			top: 47%;
+			width: 32px;
 		}
 		#cboxNext:after {
 			content: "\f0a9";
 			font-family: FontAwesome;
-			color: #000;
+			color: #fff;
 			margin-left: 3px;
 		}
 		
-		
-		
-        #cboxNext:hover{background-position:-50px -25px;}
-        #cboxClose{display:none;}
-        #cboxClose:hover{background-position:-25px -25px;}
+		#cboxPrevious:active, #cboxNext:active {
+			top: 47% !important;
+		}
 
-/*
-  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
-  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
-  See: http://jacklmoore.com/notes/ie-transparency-problems/
-*/
-.cboxIE #cboxTopLeft,
-.cboxIE #cboxTopCenter,
-.cboxIE #cboxTopRight,
-.cboxIE #cboxBottomLeft,
-.cboxIE #cboxBottomCenter,
-.cboxIE #cboxBottomRight,
-.cboxIE #cboxMiddleLeft,
-.cboxIE #cboxMiddleRight {
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
-}
+        #cboxClose{
+			top: 2px;
+			right: 2px;
+			font-size: 30px;
+			overflow: hidden;
+			position: absolute;
+			width: 30px;
+		}
+		
+		
+        #cboxClose:before{
+			content: "\f057";
+			font-family: FontAwesome;
+			color: #fff;
+			margin-right: 3px;
+		}
+		
+		#cboxClose:active {
+			top: 2px !important;
+		}
+
+
 /*rules for the plot target div.  These will be cascaded down to all plot elements according to css rules*/
 .jqplot-target {
     position: relative;
