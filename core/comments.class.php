@@ -308,7 +308,6 @@ if (!class_exists("comments")){
 						//Show Reply Form
 						$(document).on('click', '#plusComments".$this->id." .reply-trigger', function(){
 							var reply_to = $(this).parent().parent().find('.comment_id:first').text();
-							console.log(reply_to);
 							var newform = $('#plusComments".$this->id." .commentReplyForm').html();
 							$('#plusComments".$this->id." .reply-trigger').show();
 							$('#plusComments".$this->id." .form-active').remove();

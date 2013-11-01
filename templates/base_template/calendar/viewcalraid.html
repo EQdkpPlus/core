@@ -81,7 +81,6 @@ $(function(){
 	});
 
 	var checkboxes = $('[name="modstat_change[]"]').click(function(event){
-		console.log()
 		$('#button_confirmall').prop("disabled", checkboxes.filter(':checked').length == 0);
 	});
 });

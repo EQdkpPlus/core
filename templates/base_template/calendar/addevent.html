@@ -82,7 +82,6 @@ $(document).ready(function() {
 
 	// Delete templates
 	$("#template_delbutton").bind("click", function(){
-		console.log('test');
 		if($("#cal_raidtemplate").val() > 0){
 			$.get('addevent.php{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
 				$('#cal_raidtemplate').find('option').remove();

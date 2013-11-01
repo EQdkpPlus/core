@@ -36,8 +36,8 @@
 							<td valign="top">
 								<!-- BEGIN status -->
 								<div class="ui-state-hover charchange_menucontainer" id="item_{raidstatus.classes.status.MEMBERID}" style="padding: 5px; margin-top: 4px;">
-									<!-- IF IS_OPERATOR --><input id="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
-									<!--<span class="membertooltip" data-membertt="{raidstatus.classes.status.TOOLTIP}">-->
+									<!-- IF IS_OPERATOR --><input class="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
+									<span class="membertooltip" data-membertt='{raidstatus.classes.status.TOOLTIP}'>
 										<span class="membertooltip">
 										<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}"<!-- ENDIF --> href="../viewcharacter.php{SID}&amp;member_id={raidstatus.classes.status.MEMBERID}" target="_blank">{raidstatus.classes.status.NAME}</a>
 										<!-- IF SHOW_RANDOMVALUE -->
@@ -49,10 +49,10 @@
 									<span style="float:right;">
 										<!-- IF NOTEPERMISSION -->
 										<!-- IF raidstatus.classes.status.NOTE -->
-										<span class="<!-- IF raidstatus.classes.status.ADMINNOTE -->fa-bullhorn<!-- ELSE -->fa fa-comment<!-- ENDIF --> fa-lg coretip <!-- IF IS_OPERATOR -->charnote_toggle hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></span>
+										<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-bullhorn<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> charnote_toggle hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
 										<!-- ELSE -->
-											<!-- IF IS_OPERATOR -->
-											<span class="fa fa-comment-o fa-lg charnote_toggle hand"></span>
+											<!-- IF IS_OPERATOR && SHOW_CHARCHANGE -->
+											<i class="fa fa-comment-o fa-lg charnote_toggle hand"></i>
 											<!-- ENDIF -->
 										<!-- ENDIF -->
 										<!-- ENDIF -->

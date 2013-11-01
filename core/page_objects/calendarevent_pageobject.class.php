@@ -514,7 +514,6 @@ class calendarevent_pageobject extends pageobject {
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.$eventdata['extension']['distribution'][$classid],
 					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
 				));
-
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 					foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
@@ -526,7 +525,7 @@ class calendarevent_pageobject extends pageobject {
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
-							$membertooltip[]	= $this->game->decorate('classes', array($real_classid, false, $memberid)).'&nbsp;'.$this->game->get_name('classes', $real_classid);
+							$membertooltip[]	= $this->game->decorate('classes', array($real_classid)).' '.$this->game->get_name('classes', $real_classid);
 						}
 						if($memberrank){
 							$membertooltip[]	= $this->user->lang('rank').": ".$memberrank;
@@ -579,6 +578,7 @@ class calendarevent_pageobject extends pageobject {
 						$sanitized_note = str_replace('"', "'", $memberdata['note']);
 						$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 							'MEMBERID'			=> $memberid,
+							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 1 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],

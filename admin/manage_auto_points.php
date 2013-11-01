@@ -390,7 +390,6 @@ class ManageAutoPoints extends page_generic {
 				func_new($('#apa_type').val());
 			});
 			$('.func_edit').click(function(){
-				console.log($(this).attr('alt'));
 				func_edit($(this).attr('alt'));
 			});
 			$('.func_del').click(function(){
