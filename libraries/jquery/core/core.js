@@ -43854,7 +43854,9 @@ function log() {
 			//Set the default values, use comma to separate the settings, example:
 			var defaults = {
 				state			: 'active',
-				persistence		: true
+				persistence		: true,
+				cookiepath		: '/',
+				cookieexpires	: 365
 			}
 			
 			var debug			= true;
@@ -43881,12 +43883,12 @@ function log() {
 				$('.toggle_container', container).slideToggle("slow", function() {
 				if(options.persistence){
 					if($('.toggle_container', container).is(":visible")){
-							$.cookie(cookie_name, 'active', { expires: 365 });
+							$.cookie(cookie_name, 'active', { expires: options.cookieexpires, path: options.cookiepath });
 					}else{
-						$.cookie(cookie_name, null, { expires: 365 });
-						$.cookie(cookie_name, 'inactive', { expires: 365 });
+						$.cookie(cookie_name, null, { expires: options.cookieexpires, path: options.cookiepath});
+						$.cookie(cookie_name, 'inactive', { expires: options.cookieexpires, path: options.cookiepath });
 					}
-					}
+				}
 			  });
 				$(this).toggleClass("active");
 			});

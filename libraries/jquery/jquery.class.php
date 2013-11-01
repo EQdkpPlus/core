@@ -1158,7 +1158,7 @@ if (!class_exists("jquery")) {
 		* @return Tooltip
 		*/
 		public function Collapse($id, $hide=false, $persist=true){
-			$this->tpl->add_js("$('".$id."').jcollapser({ state: '".(($hide) ? 'inactive' : 'active')."', persistence:	".(($persist) ? 'true' : 'false')." });", 'docready');
+			$this->tpl->add_js("$('".$id."').jcollapser({ state: '".(($hide) ? 'inactive' : 'active')."', persistence:	".(($persist) ? 'true' : 'false').", cookiepath: '".$this->server_path."' });", 'docready');
 		}
 
 		/**
