@@ -79,6 +79,11 @@ $(function(){
 			window.location = '{U_CALENDAREVENT}';
 		});
 	});
+
+	var checkboxes = $('[name="modstat_change[]"]').click(function(event){
+		console.log()
+		$('#button_confirmall').prop("disabled", checkboxes.filter(':checked').length == 0);
+	});
 });
 
 <!-- IF S_NOTSIGNED_VISIBLE -->
@@ -357,7 +362,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 				</dl>
 				<dl>
 					<dt><label>{L_raidevent_raid_confirmall}</label></dt>
-					<dd><input type="submit" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" /></dd>
+					<dd><input type="submit" disabled="disabled" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" id="button_confirmall"/></dd>
 				</dl>
 			</span>
 		</fieldset>
