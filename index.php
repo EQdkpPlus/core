@@ -429,7 +429,7 @@ class controller extends gen_class {
 			
 			$intStart = $this->in->get('start', 0);
 			$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
-			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
+			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID, false));
 			registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
 			
 			//Articles to template

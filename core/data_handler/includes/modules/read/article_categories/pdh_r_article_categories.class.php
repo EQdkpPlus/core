@@ -470,10 +470,10 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 		
-		public function get_path($intCategoryID){			
+		public function get_path($intCategoryID, $blnWithIndex=true){			
 			$strPath = "";
 			$strPath = $this->add_path($intCategoryID);
-			if (!intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
+			if ($blnWithIndex && !intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
 			
 			switch((int)$this->config->get('seo_extension')){
 				case 1: 
