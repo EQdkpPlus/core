@@ -41394,7 +41394,7 @@ $.widget( "ui.tooltip", {
 
 })(jQuery);
 /*!
-	Colorbox v1.4.29 - 2013-09-10
+	Colorbox v1.4.32 - 2013-10-16
 	jQuery lightbox and modal window plugin
 	(c) 2013 Jack Moore - http://www.jacklmoore.com/colorbox
 	license: http://www.opensource.org/licenses/mit-license.php
@@ -41404,6 +41404,13 @@ $.widget( "ui.tooltip", {
 	// Default settings object.
 	// See http://jacklmoore.com/colorbox for details.
 	defaults = {
+		// data sources
+		html: false,
+		photo: false,
+		iframe: false,
+		inline: false,
+
+		// behavior and appearance
 		transition: "elastic",
 		speed: 300,
 		fadeOut: 300,
@@ -41417,17 +41424,32 @@ $.widget( "ui.tooltip", {
 		maxHeight: false,
 		scalePhotos: true,
 		scrolling: true,
-		inline: false,
-		html: false,
-		iframe: false,
-		fastIframe: true,
-		photo: false,
 		href: false,
 		title: false,
 		rel: false,
 		opacity: 0.9,
 		preloading: true,
 		className: false,
+		overlayClose: true,
+		escKey: true,
+		arrowKey: true,
+		top: false,
+		bottom: false,
+		left: false,
+		right: false,
+		fixed: false,
+		data: undefined,
+		closeButton: true,
+		fastIframe: true,
+		open: false,
+		reposition: true,
+		loop: true,
+		slideshow: false,
+		slideshowAuto: true,
+		slideshowSpeed: 2500,
+		slideshowStart: "start slideshow",
+		slideshowStop: "stop slideshow",
+		photoRegex: /\.(gif|png|jp(e|g|eg)|bmp|ico|webp)((#|\?).*)?$/i,
 
 		// alternate image paths for high-res displays
 		retinaImage: false,
@@ -41442,34 +41464,16 @@ $.widget( "ui.tooltip", {
 		xhrError: "This content failed to load.",
 		imgError: "This image failed to load.",
 
-		open: false,
+		// accessbility
 		returnFocus: true,
 		trapFocus: true,
-		reposition: true,
-		loop: true,
-		slideshow: false,
-		slideshowAuto: true,
-		slideshowSpeed: 2500,
-		slideshowStart: "start slideshow",
-		slideshowStop: "stop slideshow",
-		photoRegex: /\.(gif|png|jp(e|g|eg)|bmp|ico|webp)((#|\?).*)?$/i,
 
+		// callbacks
 		onOpen: false,
 		onLoad: false,
 		onComplete: false,
 		onCleanup: false,
-		onClosed: false,
-
-		overlayClose: true,
-		escKey: true,
-		arrowKey: true,
-		top: false,
-		bottom: false,
-		left: false,
-		right: false,
-		fixed: false,
-		data: undefined,
-		closeButton: true
+		onClosed: false
 	},
 	
 	// Abstracting the HTML and event identifiers for easy rebranding
@@ -41854,7 +41858,7 @@ $.widget( "ui.tooltip", {
 				)
 			).find('div div').css({'float': 'left'});
 			
-			$loadingBay = $tag(div, false, 'position:absolute; width:9999px; visibility:hidden; display:none');
+			$loadingBay = $tag(div, false, 'position:absolute; width:9999px; visibility:hidden; display:none; max-width:none;');
 			
 			$groupControls = $next.add($prev).add($current).add($slideshow);
 
@@ -42344,7 +42348,12 @@ $.widget( "ui.tooltip", {
 					return;
 				}
 
-				photo.alt = $(element).attr('alt') || $(element).attr('data-alt') || '';
+				$.each(['alt', 'longdesc', 'aria-describedby'], function(i,val){
+					var attr = $(element).attr(val) || $(element).attr('data-'+val);
+					if (attr) {
+						photo.setAttribute(val, attr);
+					}
+				});
 
 				if (settings.retinaImage && window.devicePixelRatio > 1) {
 					photo.height = photo.height / window.devicePixelRatio;
@@ -42470,55 +42479,74 @@ $.widget( "ui.tooltip", {
 }(jQuery, document, window));
 
 /*!
- * jQuery Cookie Plugin v1.3.1
+ * jQuery Cookie Plugin v1.4.0
  * https://github.com/carhartl/jquery-cookie
  *
  * Copyright 2013 Klaus Hartl
  * Released under the MIT license
  */
-(function ($, document, undefined) {
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals.
+		factory(jQuery);
+	}
+}(function ($) {
 
 	var pluses = /\+/g;
 
-	function raw(s) {
-		return s;
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
 	}
 
-	function decoded(s) {
-		return unRfc2068(decodeURIComponent(s.replace(pluses, ' ')));
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
 	}
 
-	function unRfc2068(value) {
-		if (value.indexOf('"') === 0) {
-			// This is a quoted cookie as according to RFC2068, unescape
-			value = value.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
 		}
-		return value;
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+		} catch(e) {
+			return;
+		}
+
+		try {
+			// If we can't parse the cookie, ignore it, it's unusable.
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
 	}
 
-	function fromJSON(value) {
-		return config.json ? JSON.parse(value) : value;
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
 	}
 
 	var config = $.cookie = function (key, value, options) {
 
-		// write
-		if (value !== undefined) {
+		// Write
+		if (value !== undefined && !$.isFunction(value)) {
 			options = $.extend({}, config.defaults, options);
-
-			if (value === null) {
-				options.expires = -1;
-			}
 
 			if (typeof options.expires === 'number') {
 				var days = options.expires, t = options.expires = new Date();
 				t.setDate(t.getDate() + days);
 			}
 
-			value = config.json ? JSON.stringify(value) : String(value);
-
 			return (document.cookie = [
-				encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+				encode(key), '=', stringifyCookieValue(value),
 				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
 				options.path    ? '; path=' + options.path : '',
 				options.domain  ? '; domain=' + options.domain : '',
@@ -42526,22 +42554,29 @@ $.widget( "ui.tooltip", {
 			].join(''));
 		}
 
-		// read
-		var decode = config.raw ? raw : decoded;
-		var cookies = document.cookie.split('; ');
-		var result = key ? null : {};
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
 		for (var i = 0, l = cookies.length; i < l; i++) {
 			var parts = cookies[i].split('=');
 			var name = decode(parts.shift());
-			var cookie = decode(parts.join('='));
+			var cookie = parts.join('=');
 
 			if (key && key === name) {
-				result = fromJSON(cookie);
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
 				break;
 			}
 
-			if (!key) {
-				result[name] = fromJSON(cookie);
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
 			}
 		}
 
@@ -42551,14 +42586,15 @@ $.widget( "ui.tooltip", {
 	config.defaults = {};
 
 	$.removeCookie = function (key, options) {
-		if ($.cookie(key) !== null) {
-			$.cookie(key, null, options);
+		if ($.cookie(key) !== undefined) {
+			// Must not alter options, thus extending a fresh object...
+			$.cookie(key, '', $.extend({}, options, { expires: -1 }));
 			return true;
 		}
 		return false;
 	};
 
-})(jQuery, document);
+}));
 
 /**
  * Equal Heights Plugin
@@ -42595,7 +42631,7 @@ $.widget( "ui.tooltip", {
 })(jQuery);
 /*!
  * jQuery Form Plugin
- * version: 3.43.0-2013.09.03
+ * version: 3.45.0-2013.10.17
  * Requires jQuery v1.5 or later
  * Copyright (c) 2013 M. Alsup
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -42804,7 +42840,7 @@ $.fn.ajaxSubmit = function(options) {
 
     // [value] (issue #113), also see comment:
     // https://github.com/malsup/form/commit/588306aedba1de01388032d5f42a60159eea9228#commitcomment-2180219
-    var fileInputs = $('input[type=file]:enabled', this).filter(function() { return $(this).val() != ''; });
+    var fileInputs = $('input[type=file]:enabled', this).filter(function() { return $(this).val() !== ''; });
 
     var hasFileInputs = fileInputs.length > 0;
     var mp = 'multipart/form-data';
@@ -42907,11 +42943,15 @@ $.fn.ajaxSubmit = function(options) {
         }
 
         s.data = null;
-            var beforeSend = s.beforeSend;
-            s.beforeSend = function(xhr, o) {
+        var beforeSend = s.beforeSend;
+        s.beforeSend = function(xhr, o) {
+            //Send FormData() provided by user
+            if (options.formData)
+                o.data = options.formData;
+            else
                 o.data = formdata;
-                if(beforeSend)
-                    beforeSend.call(this, xhr, o);
+            if(beforeSend)
+                beforeSend.call(this, xhr, o);
         };
         return $.ajax(s);
     }
@@ -43427,7 +43467,7 @@ function doAjaxSubmit(e) {
     var options = e.data;
     if (!e.isDefaultPrevented()) { // if event has been canceled, don't proceed
         e.preventDefault();
-        $(this).ajaxSubmit(options);
+        $(e.target).ajaxSubmit(options); // #365
     }
 }
 
@@ -43793,6 +43833,7 @@ function log() {
 }
 
 })( (typeof(jQuery) != 'undefined') ? jQuery : window.Zepto );
+
 /*!
  * jQuery Collapser 1.0.0
  *
@@ -44111,7 +44152,7 @@ function log() {
 			// mjs - to find the previous sibling in the list, keep backtracking until we hit a valid list item.
 			var previousItem = this.placeholder[0].previousSibling ? $(this.placeholder[0].previousSibling) : null;
 			if (previousItem != null) {
-				while (previousItem[0].nodeName.toLowerCase() != 'li' || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
+				while (previousItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
 					if (previousItem[0].previousSibling) {
 						previousItem = $(previousItem[0].previousSibling);
 					} else {
@@ -44124,7 +44165,7 @@ function log() {
 			// mjs - to find the next sibling in the list, keep stepping forward until we hit a valid list item.
 			var nextItem = this.placeholder[0].nextSibling ? $(this.placeholder[0].nextSibling) : null;
 			if (nextItem != null) {
-				while (nextItem[0].nodeName.toLowerCase() != 'li' || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
+				while (nextItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
 					if (nextItem[0].nextSibling) {
 						nextItem = $(nextItem[0].nextSibling);
 					} else {
@@ -44146,7 +44187,7 @@ function log() {
 			) {
 
 				parentItem.after(this.placeholder[0]);
-				if (o.isTree && parentItem.children(o.listItem).children('li:visible:not(.ui-sortable-helper)').length < 1) {
+				if (o.isTree && parentItem.children(o.listItem).children(o.listItem + ':visible:not(.ui-sortable-helper)').length < 1) {
 					parentItem.removeClass(this.options.branchClass + ' ' + this.options.expandedClass)
 							  .addClass(this.options.leafClass);
 				}
@@ -44177,7 +44218,7 @@ function log() {
 		        	previousItem.children(o.listType).prepend(this.placeholder);
 		        }
 		        // mjs - otherwise, add it to the bottom of the list.
-		        else {
+		        else if(previousItem.children(o.listType).length) {
 					previousItem.children(o.listType)[0].appendChild(this.placeholder[0]);
 				}
 
@@ -44465,7 +44506,6 @@ function log() {
 
 	$.mjs.nestedSortable.prototype.options = $.extend({}, $.ui.sortable.prototype.options, $.mjs.nestedSortable.prototype.options);
 })(jQuery);
-
 /* jshint forin:true, noarg:true, noempty:true, eqeqeq:true, boss:true, undef:true, curly:true, browser:true, jquery:true */
 /*
  * jQuery MultiSelect UI Widget Filtering Plugin 1.5pre
@@ -48542,7 +48582,6 @@ $.extend(TRUE, QTIP.defaults, {
 			targeturl: "http://www.clashdesign.net/blog/index.php/feed/rss2",
 			items: 5,
 			Maxlength: 80,
-			loadingImg: '35-1.gif',
 			background: '#fff',
 			lang_readmore: 'Read more',
 			lang_loadingalt: 'Feed is loading ...',
@@ -48560,7 +48599,7 @@ $.extend(TRUE, QTIP.defaults, {
 					'z-index': 90,
 					'opacity': 0.4
 				});
-				$('<img class="loading" src="' + l.loadingImg + '" alt="'+l.lang_loadingalt+'" />').css({
+				$('<i class="fa fa-spinner fa-spin fa-4x"></i>').css({
 					'opacity': 1
 				}).appendTo(container)
 			});
@@ -48574,7 +48613,7 @@ $.extend(TRUE, QTIP.defaults, {
 				dataType: 'xml',
 				processData: false,
 				success: function (f) {
-				$(container).children('img').remove();
+				$(container).children('i').remove();
 				$(container).css({
 					backgroundColor: l.background,
 					'opacity': 1
@@ -48631,7 +48670,7 @@ $.extend(TRUE, QTIP.defaults, {
 						'z-index': 90,
 						'opacity': 0.4
 					});
-					$('<img class="loading" src="' + l.loadingImg + '" alt="'+l.lang_loadingalt+'" />').css({
+					$('<i class="fa fa-spinner fa-spin fa-4x"></i>').css({
 						'opacity': 1
 					}).appendTo(container)
 				},
@@ -48639,7 +48678,7 @@ $.extend(TRUE, QTIP.defaults, {
 					$(container).css({
 						'opacity': 1
 					});
-					$(container).children('img').remove();
+					$(container).children('i').remove();
 					var i = 0;
 					var g = j.items;
 					function h(e) {

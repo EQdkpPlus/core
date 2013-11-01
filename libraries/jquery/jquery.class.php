@@ -762,6 +762,17 @@ if (!class_exists("jquery")) {
 						$('#".$itemid."').".$functioncall.";", 'docready');
 				}
 			}
+			/*if(!isset($options['return_function'])) {
+				$this->tpl->add_js("
+					$(\"img[class='ui-datepicker-trigger']\").each(function(){ 
+					  $(this).after('<i class=\"fa fa-calendar ui-datepicker-trigger\"></i>');
+					 // $(this).remove();
+					 });
+					
+					", 'docready');
+			}*/
+			
+			
 			$this->setLanguage('datepicker', "$.datepicker.setDefaults($.datepicker.regional['{!language!}']);");
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return (isset($options['return_function'])) ? $functioncall : $html;
@@ -977,7 +988,6 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'targeturl: "'.$url.'"';
 			$tmpopt[] = 'items: '.$items;
 			$tmpopt[] = 'Maxlength: '.$length;
-			$tmpopt[] = 'loadingImg: "'.$this->path.'core/images/35-1.gif"';
 			$tmpopt[] = 'background: "'.$backgr.'"';
 			$tmpopt[] = 'lang_readmore: "'.$this->sanitize($this->user->lang('lib_rss_readmore')).'"';
 			$tmpopt[] = 'lang_loadingalt: "'.$this->sanitize($this->user->lang('lib_rss_loading')).'"';
