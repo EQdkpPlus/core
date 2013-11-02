@@ -189,7 +189,9 @@ class form extends gen_class {
 						var_dump($name);
 						continue;
 					}
-					$values[$name] = register('h'.$options['type'], array($name, $options))->inpval();
+					$field_class = 'h'.$options['type'];
+					$field_class = new $field_class($name, $options);
+					$values[$name] = $field_class->inpval();
 					if(!empty($options['encrypt'])) $values[$name] = $this->encrypt->encrypt($values[$name]);
 				}
 			}
@@ -238,7 +240,8 @@ class form extends gen_class {
 		// additional text around field?
 		$text = (empty($options['text'])) ? '' : $options['text'];
 		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
-		$field = (registry::class_exists('h'.$options['type'])) ? register('h'.$options['type'], array($name, $options)) : '';
+		$field_class = 'h'.$options['type'];
+		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
 		$this->tpl->assign_block_vars($key, array(
 			'NAME'		=> ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $name),
 			'HELP'		=> ($this->user->lang($help, false, false)) ? $this->user->lang($help) : (($this->game->glang($help)) ? $this->game->glang($help) : ''),

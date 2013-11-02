@@ -20,8 +20,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-abstract class html extends gen_class {
-	public static $singleton = false;
+abstract class html {
 	// field type
 	protected static $type = '';
 	
@@ -41,7 +40,9 @@ abstract class html extends gen_class {
 	
 	public function __get($name) {
 		if($name == 'type') return self::$type;
-		return parent::__get($name);
+		$class = register($name);
+		if($class) return $class;
+		return null;
 	}
 	
 	public function __toString() {

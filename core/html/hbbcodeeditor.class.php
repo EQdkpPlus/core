@@ -21,6 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
+include_once(registry::get_const('root_path').'core/html/htextarea.class.php');
 
 // this class acts as an alias for easier usability
 class hbbcodeeditor extends htextarea {

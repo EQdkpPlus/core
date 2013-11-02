@@ -245,6 +245,8 @@ abstract class super_registry {
 		} catch (DBALException $e){
 			registry::register('plus_debug_logger')->catch_dbal_exception($e);
 		}
+		// maybe find a more elegant solution later on
+		self::load_html_fields();
 	}
 	
 	public static function class_exists($name) {
@@ -312,6 +314,14 @@ abstract class super_registry {
 			if($default_timezone == 'GMT'){
 				registry::register('config')->message(registry::fetch('user')->lang('timezone_set_gmt'));
 			}
+		}
+	}
+	
+	private static function load_html_fields() {
+		$path = self::$const['root_path'].'core/html/';
+		$classes = sdir($path, '*.class.php');
+		foreach($classes as $file) {
+			include_once($path.$file);
 		}
 	}
 }
