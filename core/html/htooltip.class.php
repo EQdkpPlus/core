@@ -50,7 +50,7 @@ class htooltip extends html {
 		foreach($this->all_opts as $opt) {
 			$options[$opt] = $this->$opt;
 		}
-		$this->jquery->qtip('.'.$name, 'return $(".'.$name.'_c", this).html();', $options);
+		$this->jquery->qtip('.'.$this->name, 'return $(".'.$this->name.'_c", this).html();', $options);
 		if(isset($this->usediv) && $this->usediv){
 			return '<div class="'.$this->name.'" id="'.$this->id.'"><div class="'.$this->name.'_c" style="display:none;">'.$this->content.'</div>'.$this->label.'</div>';
 		}else{
