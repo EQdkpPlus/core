@@ -289,7 +289,7 @@ class Manage_Massmail extends page_generic {
 			'BODY'		=> ($this->in->exists('body')) ? $this->in->get('body', '', 'raw') : $body,
 			'EVENT_ID'	=> ($bnlEventId) ? '&amp;event_id='.$eventid : '',
 			'S_EVENT_ID'=> $bnlEventId,
-			'DD_TEMPLATE' => $this->html->DropDown('templates', $arrTempl, $this->in->get('template', ''), '', 'onchange="window.location=\'manage_massmail.php'.$this->SID.'&event_id='.$eventid.'&template=\'+this.value"'),
+			'DD_TEMPLATE' => new hdropdown('templates', array('options' => $arrTempl, 'value' => $this->in->get('template', ''), 'js' => 'onchange="window.location=\'manage_massmail.php'.$this->SID.'&event_id='.$eventid.'&template=\'+this.value"')),
 		));
 
 		$this->core->set_vars(array(

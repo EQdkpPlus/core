@@ -165,7 +165,7 @@ class login_facebook extends gen_class {
 			$me = $this->get_me();
 			$uid = $me['uid'];
 			$me = $me['me'];
-			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>'.$this->html->TextField('auth_account', '', $uid, 'hidden');
+			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
 		} else {
 			$this->init_js();
 			

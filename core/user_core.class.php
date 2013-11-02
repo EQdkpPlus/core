@@ -134,6 +134,7 @@ class user_core extends gen_class {
 			$this->data['user_ilimit']				= $this->config->get('default_ilimit');
 			$this->data['user_nlimit']				= $this->config->get('default_nlimit');
 			$this->data['user_rlimit']				= $this->config->get('default_rlimit');
+
 			$this->style['date_notime_long']	= ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long');
 			$this->style['date_notime_short']	= ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->lang('style_date_short');
 			$this->style['time']							= ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->lang('style_time');

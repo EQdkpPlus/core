@@ -256,7 +256,7 @@ class addcharacter extends page_generic {
 			'MEMBER_ID'				=> ($this->url_id > 0) ? $this->url_id : 0,
 			'MEMBER_NAME'			=> ((isset($member_data['name'])) ? $member_data['name'] : ''),
 			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
-			'DD_HISTORY_RECEIVER'	=> $this->html->DropDown('history_receiver', $arrHistoryReceivers, $this->url_id),
+			'DD_HISTORY_RECEIVER'	=> new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)),
 			'MEMBER_PICTURE'		=> '<input type="hidden" value="'.$member_data['picture'].'" name="picture"/>',
 			'MAIN_ID'				=> $intMainID,
 			'COUNT_OTHER_MEMBERS'	=> $intCountOtherMembers,

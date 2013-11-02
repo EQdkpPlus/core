@@ -223,8 +223,8 @@ if (!class_exists("timehandler")){
 		public function user_date($time=false, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false) {
 			if($time === 0 || $time === '0') return $this->user->lang('never');
 			if(!$time) return '';
-			
-			$format = (($withday) ? 'l, ' : '').(($long) ? $this->user->style['date_notime_long'] : $this->user->style['date_notime_short']);
+
+			$format = (($withday) ? (($withday === '2') ? 'D, ' : 'l, ') : '').(($long) ? $this->user->style['date_notime_long'] : $this->user->style['date_notime_short']);
 			if($withtime) $format .= ' '.$this->user->style['time'];
 			if($timeonly) $format = $this->user->style['time'];
 			if(!$fromformat) $format = 'Y-m-d'.(($withtime) ? ' H:i' : '');

@@ -246,7 +246,7 @@ class Manage_Portal extends page_generic {
 			//Collapsable
 			$this->tpl->assign_block_vars('config_row', array(
 				'NAME'	=> $this->user->lang('portal_collapsable'),
-				'FIELD'	=> $this->html->Checkbox('collapsable', '', $this->pdh->get('portal', 'collapsable', array($id))),
+				'FIELD'	=> new hcheckbox('collapsable', array('value' => $this->pdh->get('portal', 'collapsable', array($id)))),
 				'ID'	=> 'collapsable',
 			));
 
@@ -445,7 +445,7 @@ class Manage_Portal extends page_generic {
 		}
 		
 		$this->tpl->assign_vars(array(
-				'PERM_FILTER' 		=> $this->html->DropDown('fvisibility', $filter_rights , $this->in->get('fvisibility', 0),'','onchange="javascript:form.submit();"'),
+				'PERM_FILTER' 		=> new hdropdown('fvisibility', array('options' => $filter_rights, 'value' => $this->in->get('fvisibility', 0), 'js' => 'onchange="javascript:form.submit();"')),
 				'NAME'				=> ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '',
 				'MS_PORTAL_BLOCKS'	=> $this->jquery->MultiSelect('portal_blocks', $arrBlockList, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), array('width' => 300)),
 				'S_RIGHT_HIDDEN'	=> (!in_array('right', $arrUsedBlocks)),

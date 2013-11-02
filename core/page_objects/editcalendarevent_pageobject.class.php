@@ -63,7 +63,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 	// this function generates a dropdown with the events
 	public function ajax_dropdown(){
-		$output = $this->html->DropDown('raid_eventid', $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list'))), $this->in->get('raidevent_id', 0), '', '', 'input resettemplate_input', 'input_eventid');
+		$output = new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list'))), 'value' => $this->in->get('raidevent_id', 0), 'id' => 'input_eventid', 'class' => 'resettemplate_input'));
 		echo($output);
 		exit;
 	}
@@ -380,18 +380,18 @@ class editcalendarevent_pageobject extends pageobject {
 				}
 			}
 		}
-
+new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)),
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
 			'IS_CLONED'			=> ((isset($eventdata['repeating']) && $eventdata['repeating'] != 'none') ? true : false),
 			#'IS_OPERATOR'		=> $this->user->check_auth('a_cal_revent_conf', false),
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
 			'DR_CALENDAR_CID'	=> (isset($eventdata['calendar_id'])) ? $eventdata['calendar_id'] : 0,
-			'DR_REPEAT'			=> $this->html->DropDown('repeating', $drpdwn_repeat, ((isset($eventdata['repeating'])) ? $eventdata['repeating'] : '')),
-			'DR_TEMPLATE'		=> $this->html->DropDown('raidtemplate', $this->pdh->get('calendar_raids_templates', 'dropdowndata'), '', '', '', 'input', 'cal_raidtemplate'),
-			'DR_CALENDARMODE'	=> $this->html->DropDown('calendarmode', $calendar_mode_array, $calendermode, '', '', 'input', 'selectmode'),
-			'DR_EVENT'			=> $this->html->DropDown('raid_eventid', $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), '', '', 'input resettemplate_input', 'input_eventid'),
-			'DR_RAIDMODE'		=> $this->html->DropDown('raidmode', $raidmode_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), '', '', 'input', 'cal_raidmodeselect'),
+			'DR_REPEAT'			=> new hdropdown('repeating', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating'])) ? $eventdata['repeating'] : ''))),
+			'DR_TEMPLATE'		=> new hdropdown('raidtemplate', array('options' => $this->pdh->get('calendar_raids_templates', 'dropdowndata'), 'id' => 'cal_raidtemplate')),
+			'DR_CALENDARMODE'	=> new hdropdown('calendarmode', array('options' => $calendar_mode_array, 'value' => $calendermode, 'id' => 'selectmode')),
+			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),
+			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
 			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidleader'] : ''), array('width' => 300, 'filter' => true)),
 			'CB_ALLDAY'			=> $this->html->widget(array('fieldtype'=>'checkbox','name'=>'allday','selected'=>((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class'=>'allday_cb')),
 			'RADIO_EDITCLONES'	=> $this->html->widget(array('fieldtype'=>'radio','name'=>'edit_clones','options'=> array('0'=>$this->user->lang('calendar_event_editone'), '1'=>$this->user->lang('calendar_event_editall')))),

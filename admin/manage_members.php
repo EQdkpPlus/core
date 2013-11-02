@@ -171,7 +171,7 @@ class Manage_Members extends page_generic {
 				'icon'	=> 'fa-level-down',
 				'perm'	=> true,
 				'link'	=> '#member_rankchange',
-				'append' => $this->html->DropDown('rank', $ranks, ''),
+				'append' => new hdropdown('rank', array('options' => $ranks)),
 			),
 		
 		);

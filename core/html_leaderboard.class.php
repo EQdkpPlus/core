@@ -52,7 +52,8 @@ if ( !class_exists( "html_leaderboard" ) ) {
 			}
 			if(count($column_list) < 1 || count(current($column_list)) < 1) return '';
 
-			$mdkp_sel = $this->html->DropDown('lb_mdkpid', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->mdkpid, '', ' onchange="$(\'#lbc\').val(1); form.submit();"');
+			$mdkp_sel = new hdropdown('lb_mdkpid', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $this->pdh->get('calendars', 'type', array($id)), 'js' => ' onchange="$(\'#lbc\').val(1); form.submit();"', 'value' => $this->mdkpid));
+
 			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<table width="100%" border="0" cellpadding="1" cellspacing="1" class="leaderboard">';
 			$colnr = 0;
 			foreach($columns as $col) {

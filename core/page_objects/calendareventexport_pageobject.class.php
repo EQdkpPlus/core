@@ -46,7 +46,7 @@ class calendareventexport_pageobject extends pageobject {
 			$this->tpl->add_js('$("#exportdropdown").change(function(){ window.location.href = "'.$this->strPath.$this->SID.'&eventid='.$eventid.'&output="+$(this).val();});', "docready");
 
 			$this->tpl->assign_vars(array(
-				'DROPDOWN'			=> $this->html->DropDown('link', $menu_structure, $output, '', '', 'input', 'exportdropdown'),
+				'DROPDOWN'			=> new hdropdown('link', array('options' => $menu_structure, 'value' => $output, 'id' => 'exportdropdown')),
 				'MACROEXPORT'		=> ($output == 'WoWMacroexport') ? true : false,
 				'EVENT_ID'			=> $eventid,
 				'F_MULTISIGNIN'		=> 'listraids.php',

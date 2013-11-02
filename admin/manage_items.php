@@ -157,12 +157,12 @@ class ManageItems extends page_generic {
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key)) ? $grp_key : '',
 			'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
-			'RAID'			=> $this->html->DropDown('raid_id', $raids, ((isset($item['raid_id'])) ? $item['raid_id'] : '')),
+			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))),
 			'BUYERS'		=> $this->jquery->MultiSelect('buyers', $members, ((isset($item['buyers'])) ? $item['buyers'] : ''), array('width' => 350, 'filter' => true)),
 			'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date($item['date'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'VALUE'			=> (isset($item['value'])) ? $item['value'] : '',
 			'ITEM_ID'		=> (isset($item['item_id'])) ? $item['item_id'] : '',
-			'ITEMPOOLS'		=> $this->html->DropDown('itempool_id', $itempools, ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))
+			'ITEMPOOLS'		=> new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))),
 		));
 
 		$this->core->set_vars(array(

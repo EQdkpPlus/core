@@ -205,7 +205,7 @@ class editarticle_pageobject extends pageobject {
 			'AID' => $id,
 			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
 			'ARTICLE_NAME' => $this->pdh->get('articles', 'title', array($id)),
-			'DD_PAGE_OBJECTS'	=> $this->html->Dropdown('page_objects',  $arrPageObjects),
+			'DD_PAGE_OBJECTS'	=> new hdropdown('page_objects', array('options' => $arrPageObjects)),
 		));
 		
 		$this->core->set_vars(array(

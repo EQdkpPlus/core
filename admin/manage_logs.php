@@ -208,10 +208,10 @@ class Manage_Logs extends page_generic {
 				$_date_to	= ($date_to !== false) ? $this->time->user_date($date_to , false, false, false, function_exists('date_create_from_format')) : '';
 				//Template Vars
 				$this->tpl->assign_vars(array(
-					'FILTER_PLUGINS' => $this->html->DropDown('filter_plugin', $plugin_list, (($plugin !== false) ? $plugin : '')),
-					'FILTER_USER'	 => $this->html->DropDown('filter_user', $user_list, (($user_id !== false) ? $user_id : '')),
-					'FILTER_TYPE'	 => $this->html->DropDown('filter_type', $type_list, (($tag !== false) ? $tag : '')),
-					'FILTER_RESULT'  => $this->html->DropDown('filter_result', $result_list, (($result !== false) ? $result : -1)),
+					'FILTER_PLUGINS' => new hdropdown('filter_plugin', array('options' => $plugin_list, 'value' => (($plugin !== false) ? $plugin : ''))),
+					'FILTER_USER'	 => new hdropdown('filter_user', array('options' => $user_list, 'value' => (($user_id !== false) ? $user_id : ''))),
+					'FILTER_TYPE'	 => new hdropdown('filter_type', array('options' => $type_list, 'value' => (($tag !== false) ? $tag : ''))),
+					'FILTER_RESULT'  => new hdropdown('filter_result', array('options' => $result_list, 'value' => (($result !== false) ? $result : -1))),
 					'FILTER_IP'		=> $ip,
 					'FILTER_SID'	=> $sid,
 					'FILTER_VALUE'	=> $value,
@@ -227,10 +227,10 @@ class Manage_Logs extends page_generic {
 		if (!$blnFilter){
 			//Common Filter Output
 			$this->tpl->assign_vars(array(
-				'FILTER_PLUGINS' => $this->html->DropDown('filter_plugin', $plugin_list, ''),
-				'FILTER_USER'	 => $this->html->DropDown('filter_user', $user_list, ''),
-				'FILTER_TYPE'	 => $this->html->DropDown('filter_type', $type_list, ''),
-				'FILTER_RESULT'  => $this->html->DropDown('filter_result', $result_list,-1),
+				'FILTER_PLUGINS' => new hdropdown('filter_plugin', array('options' => $plugin_list)),
+				'FILTER_USER'	 => new hdropdown('filter_user', array('options' => $user_list)),
+				'FILTER_TYPE'	 => new hdropdown('filter_type', array('options' => $type_list)),
+				'FILTER_RESULT'  => new hdropdown('filter_result', array('options' => $result_list, 'value' => -1)),
 				'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', ''),
 				'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', ''),
 			));
@@ -315,8 +315,8 @@ class Manage_Logs extends page_generic {
 			'LOGS_LIST'				=> $logs_list,
 			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-			'ERROR_FILTER_SELECT'	=> $this->html->DropDown('error_dd', $error_list, $this->in->get('error'), '', 'onchange="window.location=\'manage_logs.php'.$this->SID.'&error=\'+document.post2.error_dd.value"'),
-			'ERROR_TYPE_SELECT'		=> $this->html->DropDown('error_type_dd', $type_list, $this->in->get('type'), '', 'onchange="window.location=\'manage_logs.php'.$this->SID.'&type=\'+document.post2.error_type_dd.value"'),
+			'ERROR_FILTER_SELECT'	=> new hdropdown('error_dd', array('options' => $error_list, 'value' => $this->in->get('error'), 'js' => 'onchange="window.location=\'manage_logs.php'.$this->SID.'&error=\'+document.post2.error_dd.value"')),
+			'ERROR_TYPE_SELECT'		=> new hdropdown('error_type_dd', array('options' => $type_list, 'value' => $this->in->get('type'), 'js' => 'onchange="window.location=\'manage_logs.php'.$this->SID.'&type=\'+document.post2.error_type_dd.value"')),
 			'EL_FOOTCOUNT'			=> sprintf($this->user->lang('viewlogs_footcount'), $total_errors, 50),
 			'EL_PAGINATION'			=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $max_page, 50, $start),
 		));

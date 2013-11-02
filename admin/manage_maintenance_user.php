@@ -169,7 +169,7 @@ class maintenance_user extends page_generic {
 				
 		// Assign the rest of the variables.
 		$this->tpl->assign_vars(array(
-			'DAY_DROPDOWN'			=> $this->html->DropDown('valid_until_days', $day_dropdown, 3),
+			'DAY_DROPDOWN'			=> new hdropdown('valid_until_days', array('options' => $day_dropdown, 'value' => 3)),
 			'USER_ACTIVE'			=> $user_active,
 			'USER_DATA'				=> $this->user->lang('username').": ".((isset($user_data['username'])) ? $user_data['username'] : '')."\n".$this->user->lang('password').": ".((isset($muser['password'])) ? $muser['password'] : '')."\n".$this->user->lang('maintenanceuser_valid_until').": ".((isset($muser['valid_until'])) ? date($this->user->style['date_time'], $muser['valid_until']) : '')."\n".$this->user->lang('pk_set_linkurl').": ".$this->env->link,
 		));

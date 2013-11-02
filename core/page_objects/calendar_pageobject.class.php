@@ -378,8 +378,8 @@ class calendar_pageobject extends pageobject {
 			'RAID_LIST'		=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
 			'DD_CHARS'		=> $memberrole[0],
 			'DD_ROLES'		=> $memberrole[1],
-			'DD_STATUS'		=> $this->html->DropDown('member_signupstatus', $raidstatus, ''),
-			'TXT_NOTE'		=> $this->html->TextField('member_note', '25'),
+			'DD_STATUS'		=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
+			'TXT_NOTE'		=> new htext('member_note', array('size' => '20')),
 			'IS_OPERATOR'	=> $this->user->check_auth('u_cal_event_add', false),
 
 			'CSRF_MOVE_TOKEN' => $this->CSRFGetToken('move'),

@@ -332,17 +332,20 @@ class Manage_Extensions extends page_generic {
 				'CODE'				=> $plugin_code,
 				'CONTACT'			=> ( !empty($contact) ) ? ( !empty($author) ) ? '<a href="mailto:' . $contact . '">' . $author . '</a>' : '<a href="mailto:' . $contact . '">' . $contact . '</a>'  : $author,
 				'DESCRIPTION'		=> ( !empty($description) ) ? $description : '&nbsp;',
-
-				'LONG_DESCRIPTION'	=> $this->html->ToolTip($long_description, (($long_description !="") ? '<i class="fa fa-info-circle fa-lg"></i>' : '')),
-				'HOMEPAGE'			=> $this->html->ToolTip($this->user->lang('homepage'),  (($homepagelink !="") ? '<a href="'.$homepagelink.'" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a>' : '')),
-				'MANUAL'			=> $this->html->ToolTip($this->user->lang('manual'),(($manuallink !="") ? '<a href="'.$manuallink.'" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a>' : '')),
+				'LONG_DESCRIPTION'	=> $long_description,
+				'HOMEPAGE_LINK'		=> ($homepagelink != '') ? $homepagelink : false,
+				'HOMEPAGE'			=> $this->user->lang('homepage'),
+				'MANUAL_LINK'		=> ($homepagelink != '') ? $homepagelink : false,
+				'MANUAL'			=> $this->user->lang('manual'),
 				'ACTION_LINK'		=> $link,
 			));
 
 			foreach($dep as $key => $depdata) {
 				$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
 				$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-					'DEPENDENCY_STATUS' => $this->html->ToolTip($tt, (($depdata)? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>').' '.$this->user->lang('plug_dep_'.$key.'_short'))
+					'DEPENDENCY_TT'		=> $tt,
+					'DEPENDENCY_NAME'	=> $this->user->lang('plug_dep_'.$key.'_short'),
+					'ICON'				=> ($depdata) ? 'eqdkp-icon-online' : 'eqdkp-icon-offline'
 				));
 			}
 		}
@@ -370,7 +373,9 @@ class Manage_Extensions extends page_generic {
 					$tt = $this->user->lang('plug_dep_'.$key);
 
 					$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-						'DEPENDENCY_STATUS' => (($depdata === 'skip') ? '&nbsp;' : $this->html->ToolTip($tt, (($depdata)? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>').' '.$this->user->lang('plug_dep_'.$key.'_short'))),
+						'DEPENDENCY_TT'		=> $tt,
+						'DEPENDENCY_NAME'	=> $this->user->lang('plug_dep_'.$key.'_short'),
+						'ICON'				=> ($depdata) ? 'eqdkp-icon-online' : 'eqdkp-icon-offline'
 					));
 				}
 			}
@@ -410,13 +415,14 @@ class Manage_Extensions extends page_generic {
 			
 			$screenshot = '';
 			if (file_exists($this->root_path.'templates/'.$plugin_code.'/screenshot.png' )){
-				$screenshot = '<img src=\''.$this->root_path.'templates/'.$plugin_code.'/screenshot.png\' style=\'max-width:300px;\' alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$plugin_code.'/screenshot.png" style="max-width:300px;" alt="" />';
 			} elseif(file_exists($this->root_path.'templates/'.$plugin_code.'/screenshot.jpg' )){
-				$screenshot = '<img src=\''.$this->root_path.'templates/'.$plugin_code.'/screenshot.jpg\' style=\'max-width:300px;\' alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$plugin_code.'/screenshot.jpg" style="max-width:300px;" alt="" />';
 			}
 
 			$this->tpl->assign_block_vars('styles_row_'.$row, array(
-				'NAME'			=> $this->html->ToolTip($screenshot, (($install_xml->name) ? $install_xml->name : stripslashes($key))),
+				'TT_CONTENT'	=> $screenshot,
+				'TT_NAME'		=> ($install_xml->name) ? $install_xml->name : stripslashes($key),
 				'VERSION'		=> $install_xml->version,
 				'AUTHOR'		=> ($install_xml->authorEmail != "") ? '<a href="mailto:'.$install_xml->authorEmail.'">'.$install_xml->author.'</a>': $install_xml->author,
 				'ACTION_LINK'	=> $link,
@@ -428,9 +434,9 @@ class Manage_Extensions extends page_generic {
 		foreach($arrTemplates as $row){
 			$screenshot = '';
 			if (file_exists($this->root_path.'templates/'.$row['template_path'].'/screenshot.png' )){
-				$screenshot = '<img src=\''.$this->root_path.'templates/'.$row['template_path'].'/screenshot.png\' style=\'max-width:300px;\' alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$row['template_path'].'/screenshot.png" style="max-width:300px;" alt="" />';
 			} elseif(file_exists($this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg' )){
-				$screenshot = '<img src=\''.$this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg\' style=\'max-width:300px;\' alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg" style="max-width:300px;" alt="" />';
 			}
 
 			$plugin_code = $row['template_path'];
@@ -468,7 +474,8 @@ class Manage_Extensions extends page_generic {
 				'STANDARD'			=> ($row['style_id'] == $default_style) ? 'checked="checked"' : '',
 				'VERSION'			=> $row['style_version'],
 				'AUTHOR'			=> ($row['style_contact'] != "") ? '<a href="mailto:'.$row['style_contact'].'">'.$row['style_author'].'</a>': $row['style_author'],
-				'NAME'				=> $this->html->ToolTip($screenshot, ((isset($arrExtensionListNamed[2][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[2][$plugin_code].')">'.$row['style_name'].'</a>' : $row['style_name'])),
+				'TT_CONTENT'		=> $screenshot,
+				'TT_NAME'			=> (isset($arrExtensionListNamed[2][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[2][$plugin_code].')">'.$row['style_name'].'</a>' : $row['style_name'],
 				'TEMPLATE'			=> $row['template_path'],
 				'USERS'				=> $row['users'],
 				'ACTION_LINK'		=> $link,

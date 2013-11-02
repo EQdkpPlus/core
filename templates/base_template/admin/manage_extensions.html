@@ -160,12 +160,24 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_red.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_red.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">{plugins_row_red.dep_row.DEPENDENCY_STATUS}</td>
+			<td class="nowrap">
+				<span class="coretip" data-coretip="{plugins_row_red.dep_row.DEPENDENCY_TT}">
+					<i class="{plugins_row_red.dep_row.ICON}"></i> {plugins_row_red.dep_row.DEPENDENCY_NAME}
+				</span>
+			</td>
 			<!-- END dep_row -->
 			<td class="nowrap">{plugins_row_red.VERSION}</td>
 			<td class="nowrap">{plugins_row_red.CONTACT}</td>
 			<td>{plugins_row_red.DESCRIPTION}</td>
-			<td class="nowrap">{plugins_row_red.LONG_DESCRIPTION}  {plugins_row_red.HOMEPAGE} {plugins_row_red.MANUAL}</td>
+			<td class="nowrap">
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_red.LONG_DESCRIPTION}"></i>
+				<!-- IF plugins_row_red.HOMEPAGE_LINK -->
+				<span dlass="coretip" data-coretip="{plugins_row_red.HOMEPAGE}"><a href="{plugins_row_red.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_red.MANUAL_LINK -->
+				<span dlass="coretip" data-coretip="{plugins_row_red.MANUAL}"><a href="{plugins_row_red.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a>
+				<!-- ENDIF -->
+			</td>
 		</tr>
 		<!-- END plugins_row_red -->
 		<!-- BEGIN plugins_row_yellow -->
@@ -174,7 +186,11 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_yellow.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">{plugins_row_yellow.dep_row.DEPENDENCY_STATUS}</td>
+			<td class="nowrap">
+				<span class="coretip" data-coretip="{plugins_row_yellow.dep_row.DEPENDENCY_TT}">
+					<i class="{plugins_row_yellow.dep_row.ICON}"></i> {plugins_row_yellow.dep_row.DEPENDENCY_NAME}
+				</span>
+			</td>
 			<!-- END dep_row -->
 			<td class="nowrap">{plugins_row_yellow.VERSION}</td>
 			<td class="nowrap">{plugins_row_yellow.CONTACT}</td>
@@ -188,12 +204,24 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_green.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_green.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">{plugins_row_green.dep_row.DEPENDENCY_STATUS}</td>
+			<td class="nowrap">
+				<span class="coretip" data-coretip="{plugins_row_green.dep_row.DEPENDENCY_TT}">
+					<i class="{plugins_row_green.dep_row.ICON}"></i> {plugins_row_green.dep_row.DEPENDENCY_NAME}
+				</span>
+			</td>
 			<!-- END dep_row -->
 			<td class="nowrap">{plugins_row_green.VERSION}</td>
 			<td class="nowrap">{plugins_row_green.CONTACT}</td>
 			<td>{plugins_row_green.DESCRIPTION}</td>
-			<td class="nowrap">{plugins_row_green.LONG_DESCRIPTION}  {plugins_row_green.HOMEPAGE} {plugins_row_green.MANUAL}</td>
+			<td class="nowrap">
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_green.LONG_DESCRIPTION}"></i>
+				<!-- IF plugins_row_green.HOMEPAGE_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_green.HOMEPAGE}"><a href="{plugins_row_green.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_green.MANUAL_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_green.MANUAL}"><a href="{plugins_row_green.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a>
+				<!-- ENDIF -->
+			</td>
 		</tr>
 		<!-- END plugins_row_green -->
 		<!-- BEGIN plugins_row_grey -->
@@ -202,7 +230,11 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_grey.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_grey.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">{plugins_row_grey.dep_row.DEPENDENCY_STATUS}</td>
+			<td class="nowrap">
+				<span class="coretip" data-coretip="{plugins_row_grey.dep_row.DEPENDENCY_TT}">
+					<i class="{plugins_row_grey.dep_row.ICON}"></i> {plugins_row_grey.dep_row.DEPENDENCY_NAME}
+				</span>
+			</td>
 			<!-- END dep_row -->
 			<td class="nowrap">{plugins_row_grey.VERSION}</td>
 			<td class="nowrap">{plugins_row_grey.CONTACT}</td>
@@ -216,7 +248,11 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_grey_repo.ACTION_LINK}</td>
 			<td class="nowrap">{plugins_row_grey_repo.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">{plugins_row_grey_repo.dep_row.DEPENDENCY_STATUS}</td>
+			<td class="nowrap">
+				<span class="coretip" data-coretip="{plugins_row_grey_repo.dep_row.DEPENDENCY_TT}">
+					<i class="{plugins_row_grey_repo.dep_row.ICON}"></i> {plugins_row_grey_repo.dep_row.DEPENDENCY_NAME}
+				</span>
+			</td>
 			<!-- END dep_row -->
 			<td class="nowrap">{plugins_row_grey_repo.VERSION}</td>
 			<td class="nowrap">{plugins_row_grey_repo.CONTACT}</td>
@@ -281,7 +317,7 @@ function hide_update_warning(status){
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF -->{styles_row_red_local.NAME} <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><span class="coretip" data-coretip='{styles_row_red_local.TT_CONTENT}'>{styles_row_red_local.TT_NAME}</span> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="nowrap">{styles_row_red_local.TEMPLATE}</td>
 			<td class="nowrap">{styles_row_red_local.USERS}</td>
@@ -307,7 +343,7 @@ function hide_update_warning(status){
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}">{styles_row_red.NAME}</a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_red.TT_CONTENT}'>{styles_row_red.TT_NAME}</span></a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="nowrap">{styles_row_red.TEMPLATE}</td>
 			<td class="nowrap">{styles_row_red.USERS}</td>
@@ -333,7 +369,7 @@ function hide_update_warning(status){
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}">{styles_row_yellow.NAME}</a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_yellow.TT_CONTENT}'>{styles_row_yellow.TT_NAME}</span></a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="nowrap">{styles_row_yellow.TEMPLATE}</td>
 			<td class="nowrap">{styles_row_yellow.USERS}</td>
@@ -359,7 +395,7 @@ function hide_update_warning(status){
 			</td>
 			
 			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_green.U_EDIT_STYLE}">{styles_row_green.NAME}</a> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td class="nowrap"><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_green.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_green.TT_CONTENT}'>{styles_row_green.TT_NAME}</span></a> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="nowrap">{styles_row_green.TEMPLATE}</td>
 			<td class="nowrap">{styles_row_green.USERS}</td>
@@ -378,7 +414,7 @@ function hide_update_warning(status){
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>			
 			<td width="25" class="nowrap" align="center"></td>
-			<td class="nowrap">{styles_row_grey.NAME}</td>
+			<td class="nowrap"><span class="coretip" data-coretip='{styles_row_grey.TT_CONTENT}'>{styles_row_grey.TT_NAME}</span></td>
 			<td class="nowrap">{styles_row_grey.TEMPLATE}</td>
 			<td class="nowrap">0</td>
 			<td class="nowrap">{styles_row_grey.VERSION}</td>
@@ -395,7 +431,7 @@ function hide_update_warning(status){
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>
 			<td width="10" class="nowrap"></td>		
-			<td width="25" class="nowrap">{styles_row_grey_repo.NAME}</td>
+			<td width="25" class="nowrap"><span class="coretip" data-coretip='{styles_row_grey_repo.TT_CONTENT}'>{styles_row_grey_repo.TT_NAME}</span></td>
 			<td class="nowrap">{styles_row_grey_repo.TEMPLATE}</td>
 			<td class="nowrap">0</td>
 			<td class="nowrap">{styles_row_grey_repo.VERSION}</td>

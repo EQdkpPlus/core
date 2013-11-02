@@ -571,7 +571,7 @@ class calendarevent_pageobject extends pageobject {
 							);
 						}else{
 							$charchangemenu = array(
-								'chars'	=> $this->html->DropDown('charchange_char', $drpdwn_twinks, '0'),
+								'chars'	=> new hdropdown('charchange_char', array('options' => $drpdwn_twinks, 'value' => '0')),
 								'roles'	=> ''
 							);
 						}
@@ -757,11 +757,11 @@ class calendarevent_pageobject extends pageobject {
 
 			//Data
 			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton')),
-			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : $this->html->DropDown('member_id', $drpdwn_members, $presel_charid),
+			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : new hdropdown('member_id', array('options' => $drpdwn_members, 'value' => $presel_charid)),
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
-			'DD_SIGNUPSTATUS'		=> $this->html->DropDown('signup_status', $status_dropdown, $this->mystatus['signup_status']),
-			'DD_MODSIGNUPSTATUS'	=> $this->html->DropDown('moderation_raidstatus', $this->raidstatus_full, '0'),
-			'DD_NOTSIGNEDINSTATUS'	=> $this->html->DropDown('notsigned_raidstatus', $this->raidstatus, '0'),
+			'DD_SIGNUPSTATUS'		=> new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])),
+			'DD_MODSIGNUPSTATUS'	=> new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')),
+			'DD_NOTSIGNEDINSTATUS'	=> new hdropdown('notsigned_raidstatus', array('options' => $this->raidstatus, 'value' => '0')),
 
 			'SUBSCRIBED_MEMBER_ID'	=> $this->mystatus['member_id'],
 			'ATTENDEES_COLSPAN'		=> count($this->raidcategories),

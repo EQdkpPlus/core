@@ -109,14 +109,14 @@ class Manage_Ranks extends page_generic {
 			
 			$this->tpl->assign_vars(array(
 					'NAME'				=> $this->pdh->get('rank', 'name', array($intRankID)),
-					'RANK_ICON_DD' 		=> $this->html->Dropdown('icon', $arrRankImagesDD, $this->pdh->get('rank', 'icon', array($intRankID))),
+					'RANK_ICON_DD' 		=> new hdropdown('icon', array('options' => $arrRankImagesDD, 'value' => $this->pdh->get('rank', 'icon', array($intRankID)))),
 					'HIDE'				=> ($this->pdh->get('rank', 'is_hidden', array($intRankID))) ? 'checked="checked"' : "",
 					'PREFIX' 			=> $this->pdh->get('rank', 'prefix', array($intRankID)),
 					'SUFFIX' 			=> $this->pdh->get('rank', 'suffix', array($intRankID)),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
-					'RANK_ICON_DD' 		=> $this->html->Dropdown('icon', $arrRankImagesDD, ''),
+					'RANK_ICON_DD' 		=> new hdropdown('icon', array('options' => $arrRankImagesDD)),
 			));
 		}
 		

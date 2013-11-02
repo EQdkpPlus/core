@@ -60,7 +60,7 @@ class calendareventguests_pageobject extends pageobject {
 			'S_ADD'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->is_raidleader()) ? true : false,
 			'EVENT_ID'		=> $this->in->get('eventid', 0),
 			'GUEST_ID'		=> $this->in->get('guestid', 0),
-			'CLASS_DD'		=> $this->html->DropDown('class', $this->game->get('classes', array('id_0')), ((isset($guestdata['class'])) ? $guestdata['class'] : '')),
+			'CLASS_DD'		=> new hdropdown('class', array('options' => $this->game->get('classes', array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
 	
 			// the edit input
 			'MEMBER_NAME'	=> (isset($guestdata['name'])) ? sanitize($guestdata['name']) : '',

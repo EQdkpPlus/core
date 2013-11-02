@@ -534,7 +534,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 
 			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true)),
 			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),
-			'ACTIVE_RADIO'				=> $this->html->RadioBox('user_active', array('1'	=> $this->user->lang('yes'), '0'	=> $this->user->lang('no')), ($user_id) ? $this->user_data['user_active'] : '1'),
+			'ACTIVE_RADIO'				=> new hradio('user_active', array('options' => array('1'	=> $this->user->lang('yes'), '0'	=> $this->user->lang('no')), 'value' => (($user_id) ? $this->user_data['user_active'] : '1'))),
 
 			// Validation
 			'VALIDTAELNK_PREFIX'		=> '../',
@@ -546,6 +546,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'send_new_pw'	=> array(
 							'name'	=> 'adduser_send_new_pw',
 							'text'	=> $this->html->TextField('send_new_pw', '', $this->user->lang('adduser_send_new_pw'), 'submit', 'send_new_pw', 'mainoption bi_mail'),
+							//'text'	=> new htext('send_new_pw', array('value' => $this->user->lang('adduser_send_new_pw'), 'id' => 'send_new_pw', 'class' => 'mainoption bi_mail')),
 							'help'	=> 'adduser_send_new_pw_note',
 						),
 					),

@@ -190,8 +190,8 @@ class ManageAutoPoints extends page_generic {
 		
 		$this->tpl->assign_vars(array(
 			'FUNC_NAME'			=> str_replace('func_','',$this->in->get('func')),
-			'EXAMPLE_FUNCS'		=> $this->html->DropDown('func_example', $examples, 'no_sel'),
-			'AVAILABLE_ARGS'	=> $this->html->DropDown('func_args', $this->apa->get_calc_args(true), 'no_sel', '', '', 'input', '', array('no_sel')),
+			'EXAMPLE_FUNCS'		=> new hdropdown('func_example', array('options' => $examples, 'value' => 'no_sel')),
+			'AVAILABLE_ARGS'	=> new hdropdown('func_args', array('options' => $this->apa->get_calc_args(true), 'value' => 'no_sel')),
 			'VALID_SYMBOLS'		=> implode("&nbsp;&nbsp;", $this->apa->get_func_valid_symbols()),
 		));
 		$this->tpl->add_js("
@@ -398,7 +398,7 @@ class ManageAutoPoints extends page_generic {
 		
 		$this->tpl->assign_vars(array (
 			'L_APA_ADD'			=> sprintf($this->user->lang('apa_add'), ''),
-			'TYPE_DD'			=> $this->html->DropDown('apa_type', $type_dd, false),
+			'TYPE_DD'			=> new hdropdown('apa_type', array('options' => $type_dd)),
 		));
 
 		$this->core->set_vars(array (

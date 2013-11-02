@@ -1187,8 +1187,8 @@ if (!class_exists("jquery")) {
 			}).change();", 'docready');
 
 			$output	= array(
-				$this->html->DropDown($id1, $array1, $selected1, '','', 'input', $id1.$this->dyndd_counter),
-				$this->html->DropDown($id2, $array2, '', '', '', 'input', $id2.$this->dyndd_counter)
+				new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter)),
+				new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter))
 			);
 			
 			$this->dyndd_counter++;
@@ -1251,7 +1251,7 @@ if (!class_exists("jquery")) {
 			$jscode .= "});";
 			$this->tpl->add_js($jscode, 'docready');
 
-			$output[] = $this->html->DropDown($id1, $array1, $selected1, '','', 'input', $id1.$this->dyndd_counter);
+			$output[] = new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter));
 			if(is_array($id2)){
 				$jscode2 = '';
 				$jscode2_p = '';
@@ -1259,7 +1259,7 @@ if (!class_exists("jquery")) {
 				foreach($id2 as $ids2){
 					$fieldname	= $ids2;
 					$ids2		= preg_replace("~[^A-Za-z0-9]~", "", $ids2);
-					$output[] = $this->html->DropDown($fieldname, $array2, '', '', '', 'input', $ids2.$this->dyndd_counter);
+					$output[] = new hdropdown($fieldname, array('options' => $array2, 'id' => $ids2.$this->dyndd_counter));
 
 					// Load the input of the selection
 					$jscode2	.= "$('#".$ids2.$this->dyndd_counter."').find('option').remove();";
@@ -1271,7 +1271,8 @@ if (!class_exists("jquery")) {
 				}
 				$jscode2	.= "$.post('".$url."', { requestid: $('#".$id1.$this->dyndd_counter."').val()".$add_posts." } , function(data){ ".$jscode2_p." });";
 			}else{
-				$output[] = $this->html->DropDown($id2, $array2, '', '', '', 'input', $id2.$this->dyndd_counter);
+				$output[] = new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter));
+				
 				$jscode2 = "$('#".$id2.$this->dyndd_counter."').find('option').remove();
 						$.post('".$url."', { requestid: $('#".$id1.$this->dyndd_counter."').val()".$add_posts." } , function(data){ $('#".$id2.$this->dyndd_counter."').append(data) });";
 			}

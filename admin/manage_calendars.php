@@ -107,11 +107,11 @@ class Manage_Calendars extends page_generic {
 				'DELETABLE'		=> $this->pdh->get('calendars', 'is_deletable', array($id)),
 				'ID'			=> $id,
 				'NAME'			=> $name,
-				'TYPE'			=> $this->html->DropDown('calendars['.$key.'][type]', $types, $this->pdh->get('calendars', 'type', array($id)), '', '', 'input', 'calendars'.$key),
+				'TYPE'			=> new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)),
 				'COLOR'			=> $this->jquery->colorpicker('cal_'.$key, $this->pdh->get('calendars', 'color', array($id)), 'calendars['.$key.'][color]'),
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
-				'RESTRICTED'	=> $this->html->CheckBox('calendars['.$key.'][restricted]', '', $this->pdh->get('calendars', 'restricted', array($id))),
+				'RESTRICTED'	=> new hcheckbox('calendars['.$key.'][restricted]', array('checked' => ($this->pdh->get('calendars', 'restricted', array($id)) == '1'))),
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
@@ -122,7 +122,7 @@ class Manage_Calendars extends page_generic {
 			'SID'		=> $this->SID,
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
-			'TYPE'		=> $this->html->DropDown('calendars['.$key.'][type]', $types, '', '', '', 'input', 'calendars'.$key),
+			'TYPE'			=> new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)),
 			'COLOR'		=> $this->jquery->colorpicker('cal_'.$key, '', 'calendars['.$key.'][color]'),
 		));
 

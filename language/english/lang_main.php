@@ -30,6 +30,7 @@ $lang = array(
 	"style_time" => 'h:i a',
 	"style_date_long" => 'F j, Y',
 	"style_date_short" => 'd/m/y',
+	"style_date_short_noyear" => "d/m",
 	"style_jsdate_nrml" => 'dd/MM/yyyy',
 	"style_jsdate_short" => 'd.M',
 	"style_jstime" => 'h:mm tt',

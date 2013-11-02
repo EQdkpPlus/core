@@ -61,7 +61,7 @@ class Manage_Bridge extends page_generic {
 		$arrPrefix = $this->get_prefix($this->in->get('notsamedb', 0));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
 		$arrKeys = array_keys($arrPrefix);
-		$dropdown = $this->html->DropDown('db_prefix', $arrPrefix, $arrKeys[1], '', 'onchange="onchange_prefix()"');
+		$dropdown = new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $arrKeys[1], 'id' => 'onchange="onchange_prefix()"'));
 		$this->config->set('cmsbridge_notsamedb', $this->in->get('notsamedb', 0));
 
 		echo $dropdown;
@@ -286,7 +286,7 @@ class Manage_Bridge extends page_generic {
 			'MS_USERGROUPS'		=> $this->jquery->MultiSelect('usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_groups')), array('height' => 170, 'width' => 300)),
 			'S_BRIDGE_ACTIVE'	=> ($this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_BRIDGE_SETTINGS'	=> (is_array($settings) && count($settings) > 0) ? true : false,
-			'DD_SYSTEMS'		=> $this->html->DropDown('cms_type',$arrBridges, $this->config->get('cmsbridge_type'), '', 'onchange="onchange_type()"'),
+			'DD_SYSTEMS'		=> new hdropdown('cms_type', array('options' => $arrBridges, 'value' => $this->config->get('cmsbridge_type'), 'js' => 'onchange="onchange_type()"')),
 			'S_SAMEDB'			=> ($this->config->get('cmsbridge_notsamedb') == '0' && $this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_NOTSAMEDB'		=> ($this->config->get('cmsbridge_notsamedb') == '1' && $this->config->get('cmsbridge_active') == 1) ? true : false,
 
@@ -294,10 +294,10 @@ class Manage_Bridge extends page_generic {
 			'DB_USER'			=> ($this->crypt->decrypt($this->config->get('cmsbridge_user')) == '') ? $this->dbuser : $this->crypt->decrypt($this->config->get('cmsbridge_user')),
 			'DB_PW'				=> ($this->crypt->decrypt($this->config->get('cmsbridge_password'))  == '') ? '' : $this->crypt->decrypt($this->config->get('cmsbridge_password')),
 			'DB_DATABASE'		=> $this->crypt->decrypt($this->config->get('cmsbridge_database')),
-			'DD_PREFIX'			=> $this->html->DropDown('db_prefix', $arrPrefix, $this->config->get('cmsbridge_prefix'), '', 'onchange="onchange_prefix()"'),
+			'DD_PREFIX'			=> new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $this->config->get('cmsbridge_prefix'), 'js' => 'onchange="onchange_prefix()"')),
 			'OWN_PREFIX'		=> (!in_array($this->config->get('cmsbridge_prefix'), $arrPrefix)) ? $this->config->get('cmsbridge_prefix') : '',
 			'S_ACTIVATE_MESSAGE'=> ($this->in->get('activate') == 'true') ? true : false,
-			'DD_EMBEDD_OPTIONS'	=> $this->html->DropDown('cms_embedded', $a_linkMode , $this->config->get('cmsbridge_embedded')),
+			'DD_EMBEDD_OPTIONS'	=> new hdropdown('cms_embedded', array('options' => $a_linkMode, 'value' => $this->config->get('cmsbridge_embedded'))),
 			'CMS_URL'			=> $this->config->get('cmsbridge_url'),
 			'CMS_PWRESET_URL'	=> $this->config->get('cmsbridge_pwreset_url'),
 			'CMS_REG_URL'		=> $this->config->get('cmsbridge_reg_url'),

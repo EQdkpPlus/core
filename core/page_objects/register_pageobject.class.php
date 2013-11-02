@@ -455,9 +455,9 @@ class register_pageobject extends pageobject {
 
 			'REGISTER'						=> true,
 
-			'DD_LANGUAGE'					=> $this->html->DropDown('user_lang', $language_array, $this->data['user_lang']),
-			'DD_TIMEZONES'					=> $this->html->DropDown('user_timezone', $this->time->timezones, $this->data['user_timezone']),
-			'HIDDEN_FIELDS'					=> (isset($this->data['auth_account'])) ? $this->html->TextField('lmethod', '', $this->in->get('lmethod'), 'hidden').$this->html->TextField('auth_account', '', $this->crypt->encrypt($this->data['auth_account']), 'hidden') : '',
+			'DD_LANGUAGE'					=> new hdropdown('user_lang', array('options' => $language_array, 'value' => $this->data['user_lang'])),
+			'DD_TIMEZONES'					=> new hdropdown('user_timezone', array('options' => $this->time->timezones, 'value' => $this->data['user_timezone'])),
+			'HIDDEN_FIELDS'					=> (isset($this->data['auth_account'])) ? new hhidden('lmethod', array('value' => $this->in->get('lmethod'))).new hhidden('auth_account', array('value' => $this->crypt->encrypt($this->data['auth_account']))) : '',
 
 			'USERNAME'						=> $this->data['username'],
 			'USER_EMAIL'					=> $this->data['user_email'],

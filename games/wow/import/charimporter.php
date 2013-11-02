@@ -230,7 +230,7 @@ class charImporter extends page_generic {
 			$hmtlout .= $this->config->get('uc_server_loc');
 			$hmtlout .= $this->html->widget(array('fieldtype'=>'hidden','name'=>'server_loc','value'=>$this->config->get('uc_server_loc')));
 		}else{
-			$hmtlout .= $this->html->DropDown('server_loc', $this->game->obj['armory']->getServerLoc(), '', '', '', 'input');
+			$hmtlout .= new hdropdown('server_loc', array('options' => $this->game->obj['armory']->getServerLoc()));
 		}
 		$hmtlout .= '</dd>
 			</dl>';

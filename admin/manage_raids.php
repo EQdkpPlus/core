@@ -222,7 +222,7 @@ class ManageRaids extends page_generic {
 					'GK'		=> $adj['group_key'],
 					'MEMBER'	=> $this->jquery->MultiSelect('adjs['.$key.'][members]', $members, $adj['members'], array('width' => 250, 'id'=>'adjs_'.$key.'_members', 'filter' => true)),
 					'REASON'	=> sanitize($adj['reason']),
-					'EVENT'		=> $this->html->DropDown('adjs['.$key.'][event]', $events, $adj['event'], '', '', 'input', 'event_'.$key),
+					'EVENT'		=> new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key)),
 					'VALUE'		=> $adj['value'])
 				);
 				$adjs_ids[] = 'adjs_'.$key;
@@ -242,7 +242,7 @@ class ManageRaids extends page_generic {
 					'ITEMID'	=> $item['item_id'],
 					'MEMBER'	=> $this->jquery->MultiSelect('items['.$key.'][members]', $members, $item['members'], array('width' => 250, 'id'=>'items_'.$key.'_members', 'filter' => true)),
 					'VALUE'		=> $item['value'],
-					'ITEMPOOL'	=> $this->html->DropDown('items['.$key.'][itempool_id]', $itempools, $item['itempool_id'], '', '', 'input', 'itempool_id_'.$key))
+					'ITEMPOOL'	=> new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)),
 				);
 				$item_ids[] = 'items_'.$key;
 			}
@@ -256,13 +256,13 @@ class ManageRaids extends page_generic {
 		$this->tpl->assign_vars(array(
 			'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
-			'EVENT'				=> $this->html->DropDown('event', $events, (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), '', 'onchange="loadEventValue($(this).val())"'),
+			'EVENT'				=> new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')),
 			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
 			'RAID_DATE'			=> $this->time->user_date($raid['date']),
 			'RAID_ID'			=> ($raid['id']) ? $raid['id'] : 0,
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
-			'RAID_DROPDOWN'		=> $this->html->DropDown('draft', $raids, $this->in->get('draft', 0), '', 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"'),
+			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
 			//language vars
 			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new') ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars

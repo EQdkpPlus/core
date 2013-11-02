@@ -117,8 +117,9 @@ class ManageProfileFields extends page_generic {
 			'ID'						=> ($this->in->get('edit')) ? $this->in->get('edit') : '',
 			'LANGUAGE'					=> (isset($field_data['language'])) ? $field_data['language'] : '',
 			'OPTIONS_LANGUAGE'			=> (isset($field_data['options_language'])) ? $field_data['options_language'] : '',
-			'TYPE_DD'					=> $this->html->DropDown('type', $types, ((isset($field_data['fieldtype'])) ? $field_data['fieldtype'] : ''), '', ' onchange="handle_fieldtypes(this.value);"'),
-			'CATEGORY_DD'				=> $this->html->DropDown('category', $categories, ((isset($field_data['category'])) ? $field_data['category'] : '')),
+			'TYPE_DD'					=> new hdropdown('type', array('options' => $types, 'value' => ((isset($field_data['fieldtype'])) ? $field_data['fieldtype'] : ''), 'js' => ' onchange="handle_fieldtypes(this.value);"')),
+			
+			'CATEGORY_DD'				=> new hdropdown('type', array('options' => $categories, 'value' => ((isset($field_data['category'])) ? $field_data['category'] : ''))),
 			'SIZE'						=> (isset($field_data['size'])) ? $field_data['size'] : '',
 			'IMAGE'						=> (isset($field_data['image'])) ? $field_data['image'] : '',
 			'S_SHOW_OPTIONS'			=> (isset($field_data['fieldtype']) && $field_data['fieldtype'] == 'dropdown') ? '' : 'style="display:none;"',

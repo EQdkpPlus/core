@@ -558,13 +558,13 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_mainchar_radio($member_id){
-			return $this->html->RadioBox('mainchar', array($member_id=>''), $this->get_mainid($member_id), 'input cmainradio');
+			return new hradio('mainchar', array('options' => array($member_id=>''), 'value' => $this->get_mainid($member_id), 'class' => 'cmainradio'));
 		}
 
 		public function get_char_defrole($member_id){
 			$defaultrole = $this->get_defaultrole($member_id);
 			$roles_array = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($member_id)), true));
-			return $this->html->DropDown('defaultrole_'.$member_id, $roles_array, $defaultrole, '', '', 'input cdefroledd');
+			return new hdropdown('defaultrole_'.$member_id, array('options' => $roles_array, 'value' => $defaultrole, 'class' => 'cdefroledd'));
 		}
 
 		public function get_twink($member_id){

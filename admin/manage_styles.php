@@ -143,7 +143,7 @@ class Manage_Styles extends page_generic{
 		$this->tpl->assign_vars(array(
 			'CONTENT'	=> $content,
 			'FILENAME'	=> $strFilename,
-			'RENDERER_DROPDOWN' => $this->html->DropDown('renderer', $arrRenderer, $this->in->get('renderer', 'side_by_side'), '', 'onchange="this.form.submit();"'),
+			'RENDERER_DROPDOWN' => new hdropdown('renderer', array('options' => $arrRenderer, 'value' => $this->in->get('renderer', 'side_by_side'), 'js' => 'onchange="this.form.submit();"')),
 			'ENCODED_FILENAME' => $this->in->get('diff', ''),
 			'S_RENDERER' => $blnRenderer,
 		));
@@ -350,7 +350,7 @@ class Manage_Styles extends page_generic{
 			// Form vars
 			'F_ADD_STYLE'			=> 'manage_styles.php' . $this->SID.'&amp;update=true',
 			'STYLE_ID'				=> $this->url_id,
-			'DD_EDIT_TEMPLTES'		=> $this->html->DropDown('template_dd', $files, $this->in->get('template'), '', 'onchange="this.form.template.value=this.value;this.form.action =\'manage_styles.php'.$this->SID.'&amp;edit=true&amp;styleid=' . $this->url_id.'\'; this.form.submit();"', 'input'),
+			'DD_EDIT_TEMPLTES'		=> new hdropdown('template_dd', array('options' => $files, 'value' => $this->in->get('template'), 'js' => 'onchange="this.form.template.value=this.value;this.form.action =\'manage_styles.php'.$this->SID.'&amp;edit=true&amp;styleid=' . $this->url_id.'\'; this.form.submit();"')),
 			'TEMPLATE_CONTENT'		=> $this->jquery->CodeEditor('template_edit', ((isset($contents)) ? htmlentities($contents) : ''), $editor_type),
 			'S_USE_DBVARS'			=> ($this->style['use_db_vars']) ? true : false,
 
@@ -376,18 +376,21 @@ class Manage_Styles extends page_generic{
 			'STYLE_PORTAL_WIDTH'	=> (isset($this->style['portal_width'])) ? (int)$this->style['portal_width'] : 1100,
 			'STYLE_COLUMN_LEFT_WIDTH'	=> (isset($this->style['column_left_width'])) ? (int)$this->style['column_left_width'] : 180,
 			'STYLE_COLUMN_RIGHT_WIDTH'	=> (isset($this->style['column_right_width'])) ? (int)$this->style['column_right_width'] : 180,
-			'DD_PORTAL_WIDTH'		=> $this->html->DropDown('dd_portal_width', $width_options, ((strpos($this->style['portal_width'], '%') !== false) ? '%' : 'px'), '', '', 'input'),
-			'DD_COLUMN_LEFT_WIDTH'	=> $this->html->DropDown('dd_column_left_width', $width_options, ((strpos($this->style['column_left_width'], '%') !== false) ? '%' : 'px'), '', '', 'input'),
-			'DD_COLUMN_RIGHT_WIDTH'	=> $this->html->DropDown('dd_column_right_width', $width_options, ((strpos($this->style['column_right_width'], '%') !== false) ? '%' : 'px'), '', '', 'input'),
+			'DD_PORTAL_WIDTH'		=> new hdropdown('dd_portal_width', array('options' => $width_options, 'value' => ((strpos($this->style['portal_width'], '%') !== false) ? '%' : 'px'))),
+			'DD_COLUMN_LEFT_WIDTH'	=> new hdropdown('dd_column_left_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_left_width'], '%') !== false) ? '%' : 'px'))),
+			
+			'DD_COLUMN_RIGHT_WIDTH'	=>new hdropdown('dd_column_right_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_right_width'], '%') !== false) ? '%' : 'px'))),
 
-			'DD_LINK_STYLE'			=> $this->html->DropDown('body_link_style', $text_decoration, $this->style['body_link_style'], '', '', 'input'),
-			'DD_HLINK_STYLE'		=> $this->html->DropDown('body_hlink_style', $text_decoration, $this->style['body_hlink_style'], '', '', 'input'),
-			'DD_HEAD_LINK_STYLE'	=> $this->html->DropDown('header_link_style', $text_decoration, $this->style['header_link_style'], '', '', 'input'),
-			'DD_HEAD_HLINK_STYLE'	=> $this->html->DropDown('header_hlink_style', $text_decoration, $this->style['header_hlink_style'], '', '', 'input'),
-			'DD_TABLE_BORDERSTYLE'	=> $this->html->DropDown('table_border_style', $border_style, $this->style['table_border_style'], '', '', 'input'),
-			'DD_INPUT_BORDERSTYLE'	=> $this->html->DropDown('input_border_style', $border_style, $this->style['input_border_style'], '', '', 'input'),
-			'DD_ATTENDEE_COLUMNS'	=> $this->html->DropDown('attendees_columns', $attendee_colums, $this->style['attendees_columns'], '', '', 'input'),
-			'DD_LOGO_POSITION'		=> $this->html->DropDown('logo_position', $logo_positions, $this->style['logo_position'], '', '', 'input'),
+			'DD_LINK_STYLE'			=> new hdropdown('body_link_style', array('options' => $text_decoration, 'value' => $this->style['body_link_style'])),
+			
+			'DD_HLINK_STYLE'		=> new hdropdown('body_hlink_style', array('options' => $text_decoration, 'value' => $this->style['body_hlink_style'])),
+			'DD_HEAD_LINK_STYLE'	=> new hdropdown('header_link_style', array('options' => $text_decoration, 'value' => $this->style['header_link_style'])),
+			'DD_HEAD_HLINK_STYLE'	=> new hdropdown('header_hlink_style', array('options' => $text_decoration, 'value' => $this->style['header_hlink_style'])),
+			'DD_TABLE_BORDERSTYLE'	=> new hdropdown('table_border_style', array('options' => $border_style, 'value' => $this->style['table_border_style'])),
+			'DD_INPUT_BORDERSTYLE'	=> new hdropdown('input_border_style', array('options' => $border_style, 'value' => $this->style['input_border_style'])),
+			'DD_ATTENDEE_COLUMNS'	=> new hdropdown('attendees_columns', array('options' => $attendee_colums, 'value' => $this->style['attendees_columns'])),
+			'DD_LOGO_POSITION'		=> new hdropdown('logo_position', array('options' => $logo_positions, 'value' => $this->style['logo_position'])),
+
 			// Color pickers
 			'CP_BODY_BG'			=> $this->jquery->colorpicker('body_background', $this->style['body_background']),
 			'CP_FONTCOLOR1'			=> $this->jquery->colorpicker('fontcolor1', $this->style['fontcolor1']),

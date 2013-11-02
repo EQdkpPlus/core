@@ -206,7 +206,7 @@ class ManageCrons extends page_generic {
 			'CRON_REPEAT'			=> ($cron_data['repeat']) ? 'checked="checked"' : '',
 			'CRON_REPEAT_VALUE'		=> $cron_data['repeat_interval'],
 			'START_PICKER'			=> $this->jquery->Calendar('start_date', $this->time->user_date($cron_data['start_time'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-			'REPEAT_DD'				=> $this->html->DropDown('repeat_key', $repeat_dd, $cron_data['repeat_type']),
+			'REPEAT_DD'				=> new hdropdown('repeat_key', array('options' => $repeat_dd, 'value' => $cron_data['repeat_type'])),
 		));
 		
 		$this->core->set_vars(array(

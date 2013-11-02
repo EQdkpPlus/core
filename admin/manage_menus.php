@@ -321,12 +321,12 @@ class Manage_Menus extends page_generic {
 		$this->tpl->assign_vars(array(				
 			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
-			'DD_LINK_WINDOW'		=> $this->html->DropDown('editlink-window', $a_linkMode , '', '', '', 'editlink-window'),
+			'DD_LINK_WINDOW'		=> new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')),
 			'MS_LINK_VISIBILITY'	=> $this->jquery->MultiSelect("editlink-visibility", $drpdwn_rights, 0),
-			'DD_LINK_VISIBILITY'	=> $this->html->DropDown('editlink-visibility', $a_linkVis , '', '', '', 'editlink-visibility'),
+			'DD_LINK_VISIBILITY'	=> new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
-			'DD_ARTICLES'			=> $this->html->DropDown('editlink-article', $this->build_article_dropdown(), '', '', '', 'editlink-article'),
+			'DD_ARTICLES'			=> new hdropdown('editlink', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')),
 		));
 		
 		

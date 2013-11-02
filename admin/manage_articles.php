@@ -231,13 +231,13 @@ class Manage_Articles extends page_generic {
 				'TEXT'	=> $this->pdh->get('articles', 'text', array($id)),
 				'ALIAS'	=> $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'	=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
-				'DD_CATEGORY' => $this->html->Dropdown('category', $arrCategories, $this->pdh->get('articles', 'category', array($id))),
+				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $this->pdh->get('articles', 'category', array($id)))),
 				'PUBLISHED_CHECKED' => ($this->pdh->get('articles', 'published', array($id))) ? 'checked="checked"' : '',
 				'FEATURED_CHECKED' => ($this->pdh->get('articles', 'featured', array($id))) ? 'checked="checked"' : '',
 				'COMMENTS_CHECKED' => ($this->pdh->get('articles', 'comments', array($id))) ? 'checked="checked"' : '',
 				'VOTES_CHECKED' 	=> ($this->pdh->get('articles', 'votes', array($id))) ? 'checked="checked"' : '',
 				'HIDE_HEADER_CHECKED' => ($this->pdh->get('articles', 'hide_header', array($id))) ? 'checked="checked"' : '',
-				'DD_USER' 			=> $this->html->Dropdown('user_id',  $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->pdh->get('articles', 'user_id', array($id))),
+				'DD_USER' 			=> new hdropdown('user_id', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => $this->pdh->get('articles', 'user_id', array($id)))),
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -256,10 +256,10 @@ class Manage_Articles extends page_generic {
 		} else {
 			
 			$this->tpl->assign_vars(array(
-				'DD_CATEGORY' => $this->html->Dropdown('category', $arrCategories, $cid),
+				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)),
 				'PUBLISHED_CHECKED'=> 'checked="checked"',
 				'COMMENTS_CHECKED' => 'checked="checked"',
-				'DD_USER' 		   => $this->html->Dropdown('user_id',  $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->user->id),
+				'DD_USER' 		   => new hdropdown('user_id', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => $this->user->id)),
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -348,7 +348,7 @@ class Manage_Articles extends page_generic {
 				'icon'	=> 'fa-refresh',
 				'perm'	=> true,
 				'link'	=> '#change_category',
-				'append' => $this->html->DropDown('new_category', $arrCategories, ''),
+				'append' => new hdropdown('new_category', array('options' => $arrCategories)),
 			),
 		
 		);
