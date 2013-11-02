@@ -22,6 +22,18 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
+/*
+ * available options
+ * name			(string) 	name of the field
+ * id			(string)	id of the field, defaults to a clean form of name if not set
+ * value		(string)	selected option
+ * class		(string)	class for the field
+ * js			(string)	extra js which shall be injected into the field
+ * options		(array)		dropdown-list
+ * tolang		(boolean)	whether to put the vals of the list into language
+ * disabled		(boolean)	disabled field
+ * todisable	(array)		if not empty: array containing the elements which shall be disabled
+ */
 class hdropdown extends html {
 
 	protected static $type = 'dropdown';
@@ -66,7 +78,7 @@ class hdropdown extends html {
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : '');
+		return $this->in->get($this->name, '');
 	}
 }
 ?>

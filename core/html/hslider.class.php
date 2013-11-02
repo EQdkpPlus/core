@@ -22,6 +22,17 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
+/*
+ * available options
+ * name			(string) 	name of the field
+ * id			(string)	id of the field, defaults to a clean form of name if not set
+ * value		
+ * label		(string)	displayed text next to the slider
+ * range		(boolean)	a double slider (range of two values) or a single slider (one value)?
+ * min			(int)		minimum value of the field
+ * max			(int)		maximum value of the field
+ * width		(string)	width in (px) for the slider
+ */
 class hslider extends html {
 
 	protected static $type = 'slider';

@@ -22,6 +22,15 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
+/*
+ * available options
+ * name			(string) 	name of the input
+ * id			(string)	id of the input
+ * value		(int) 		timestamp
+ * class		(string)	class for the input
+ * enablesecs	(boolean) 	wether seconds shall be used
+ * hourf		(int) 		24 or 12 hour format
+ */
 class htimepicker extends html {
 
 	protected static $type = 'timepicker';

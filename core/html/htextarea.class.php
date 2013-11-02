@@ -22,6 +22,18 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
+/*
+ * available options
+ * name			(string) 	name of the textarea
+ * id			(string)	id of the textarea
+ * value		(int) 		text
+ * class		(string)	class for the textarea
+ * rows			(int) 		rows of the textarea
+ * cols			(int) 		cols of the textarea
+ * disabled		(boolean)	disabled field
+ * codeinput	(boolean)	allow html-tags being used
+ * bbcodeeditor	(boolean) 	apply a bbcodeeditor to this textarea
+ */
 class htextarea extends html {
 
 	protected static $type = 'textarea';
@@ -31,7 +43,6 @@ class htextarea extends html {
 	public $cols = 10;
 	public $disabled = false;
 	public $codeinput = false;
-	public $inp_encrypt = false;
 	public $bbcodeeditor = false;
 	
 	public function _toString() {
@@ -42,7 +53,6 @@ class htextarea extends html {
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		if($this->inp_encrypt) $this->value = $this->encrypt->decrypt($this->value);
 		return $out.'>'.$this->value.'</textarea>';
 	}
 	

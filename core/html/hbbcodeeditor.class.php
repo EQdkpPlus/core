@@ -24,6 +24,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 include_once(registry::get_const('root_path').'core/html/htextarea.class.php');
 
 // this class acts as an alias for easier usability
+// see htextarea for all available options
 class hbbcodeeditor extends htextarea {
 	
 	public $bbcodeeditor = true;

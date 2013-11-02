@@ -24,6 +24,9 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 include_once(registry::get_const('root_path').'core/html/hhidden.class.php');
 
 // this class acts as an alias for easier usability
+/*
+ * see hhidden for all available options
+ */
 class himageuploader extends hhidden {
 	
 	public $imageuploader = true;

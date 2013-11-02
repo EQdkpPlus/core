@@ -22,6 +22,17 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
+/*
+ * available options
+ * name			(string) 	name of the field
+ * id			(string)	id of the field, defaults to a clean form of name if not set
+ * value		
+ * class		(string)	class for the field
+ * readonly		(boolean)	field readonly?
+ * js			(string)	extra js which shall be injected into the field
+ * imageuploader(boolean)	make an imageuploader out of the field?
+ * 		additional options for the imageuplaoder-field according to $imgoptions
+ */
 class hhidden extends html {
 
 	protected static $type = 'hidden';

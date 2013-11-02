@@ -22,6 +22,17 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
+/*
+ * available options
+ * name			classname for the tooltip call
+ * id			id for the div/span
+ * content		content of the tooltip
+ * text			text on which the tooltip shall be displayed
+ * usediv		use a div or a span
+ * additional options for qtip
+ *		contfunc, name, my, mat, classes, width
+ */
+
 class htooltip extends html {
 	protected static $type = 'none';
 	

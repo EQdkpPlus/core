@@ -24,6 +24,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 include_once(registry::get_const('root_path').'core/html/htext.class.php');
 
 // this class acts as an alias for easier usability
+// see htext for all available options
 class hcolorpicker extends htext {
 	
 	public $colorpicker = true;
