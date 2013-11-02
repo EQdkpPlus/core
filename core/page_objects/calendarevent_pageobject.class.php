@@ -459,6 +459,8 @@ class calendarevent_pageobject extends pageobject {
 					$array_json[]	= array(
 						'id'			=> $us_classdata['memberid'],
 						'name'			=> $us_classdata['name'],
+						'active'		=> (int) $this->pdh->get('member', 'active', array($us_classdata['memberid'])),
+						'level'			=> $this->pdh->get('member', 'level', array($us_classdata['memberid'])),
 						'class_id'		=> $us_classdata['classid'],
 						'class_icon'	=> $this->game->decorate('classes', array($us_classdata['classid'], false, $us_classdata['memberid'])),
 						'userid'		=> $us_classdata['userid'],

@@ -759,6 +759,8 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"raidevent_raid_changed" => 'Changed',
 	"raidevent_raid_unsigned_head" => 'Unsigned characters',
 	"raidevent_raid_unsigned_search" => 'Search for a character',
+	"raidevent_raid_unsigned_active" => "Only show active character",
+	"raidevent_raid_unsigned_level" => "Filter by level (0 = no filter)",
 	"raidevent_raid_unsigned_button" => 'Unsigned chars',
 	"raidevent_raid_status" => array(
 	0 => 'confirmed',

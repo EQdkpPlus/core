@@ -104,18 +104,44 @@ $(function(){
 
 	// the search filed
 	var unsigned_attendees_f 	= unsigned_attendees;
-	// TODO: rewrite that for 2.0.. i think the unsigned_f is not longer usefull..
-	$('#notsignedfilter').bind('keyup change', function(){
-		searchname			= $(this).val();
-		filter_unsigned = [];
-		unsigned_attendees_f = $.grep(unsigned_attendees, function(unsignarr){
-	    	return unsignarr.name.match(new RegExp(searchname, 'i'));
-		});
-		
+
+	$('#notsignedfilter, #notsignedlevel, #notsignedactive').bind('keyup change', function(){
+		searchname				= $('#notsignedfilter').val();
+		levelfilter				= $('#notsignedlevel').val();
+		filter_unsigned			= -1;
+		unsigned_attendees_f 	= unsigned_attendees;
+
+		// show only active members
+		if($('#notsignedactive').is(':checked')){
+			unsigned_attendees_f = $.grep(unsigned_attendees_f, function(unsignarr){
+		    	return unsignarr.active > 0;
+			});
+		}
+
+		// filter by level
+		if(levelfilter > 0 && levelfilter != ''){
+			unsigned_attendees_f = $.grep(unsigned_attendees_f, function(unsignarr){
+		    	return unsignarr.level > levelfilter;
+			});
+		}
+
+		if(searchname != ''){
+			unsigned_attendees_f = $.grep(unsigned_attendees_f, function(unsignarr){
+				return unsignarr.name.match(new RegExp(searchname, 'i'));
+			});
+		}
+
 		// populate the filter
-		$.each(unsigned_attendees_f, function(i, item) {
-			filter_unsigned.push(item.id);
-		});
+		console.log(unsigned_attendees_f.length);
+		if(unsigned_attendees_f.length > 0){
+			filter_unsigned			= [];
+			$.each(unsigned_attendees_f, function(i, item) {
+				filter_unsigned.push(item.id);
+			});
+		}
+		
+
+		// populate now
 		populate_unsigned(unsigned_attendees, a_checkboxes, filter_unsigned);
 
 		// disable the right chars..
@@ -125,7 +151,7 @@ $(function(){
 	});
 
 	// Build the unsigned list
-	populate_unsigned(unsigned_attendees, '')
+	populate_unsigned(unsigned_attendees, '');
 
 	// handle the 
 	$(document).on("click", '.notsigned_check', function(){
@@ -179,8 +205,8 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	attoutput = '';
 	$.each(arrAttendees, function(i, item) {
 		checkbox_checked	= (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
-		filter_applied		= (typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) ? '  style="display: none;"' : '';
-		
+		filter_applied		= ((typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) || arrFilter == -1) ? '  style="display: none;"' : '';
+		console.log(arrFilter);console.log(filter_applied);
 		attoutput += '<div id="unsigened_'+item.id+'"'+filter_applied+'>';
 		attoutput += '<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="'+item.id+'" id="member'+item.id+'" title="'+item.userid+'" class="notsigned_check" '+checkbox_checked+' /> <!-- ENDIF -->';
 		if(item.class_icon != ''){
@@ -219,7 +245,23 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	<form name="unsingnn" method="post" action="{ACTION}">
 		<input type="hidden" name="eventid" value="{EVENT_ID}" />
 		<div id='pnlHeader'>{L_raidevent_raid_unsigned_head}</div><br/>
-		<div>{L_raidevent_raid_unsigned_search}: <input type="text" name="notsignedfilter" id="notsignedfilter" value="" /></div>
+		
+		<fieldset class="settings">
+			<dl>
+				<dt><label>{L_raidevent_raid_unsigned_search}</label></dt>
+				<dd><input type="text" name="notsignedfilter" id="notsignedfilter" value="" /></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{L_raidevent_raid_unsigned_active}</label></dt>
+				<dd><input type="checkbox" name="notsignedactive" value="1" id="notsignedactive" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_raidevent_raid_unsigned_level}</label></dt>
+				<dd><input type="text" name="notsignedlevel" id="notsignedlevel" value="0" size="5" /></dd>
+			</dl>
+		</fieldset>
+		
 		<div id="memberScroller">
 		</div>
 		<!-- IF IS_OPERATOR -->
