@@ -27,7 +27,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * name			classname for the tooltip call
  * id			id for the div/span
  * content		content of the tooltip
- * text			text on which the tooltip shall be displayed
+ * label		text on which the tooltip shall be displayed
  * usediv		use a div or a span
  * additional options for qtip
  *		contfunc, name, my, mat, classes, width
@@ -38,7 +38,7 @@ class htooltip extends html {
 	
 	public $name = '';
 	public $content = '';
-	public $text = '';
+	public $label = '';
 	public $usediv = false;
 	private $contfunc = true;
 	private $all_opts = array('contfunc', 'name', 'my', 'at', 'classes', 'width');
@@ -52,9 +52,9 @@ class htooltip extends html {
 		}
 		$this->jquery->qtip('.'.$name, 'return $(".'.$name.'_c", this).html();', $options);
 		if(isset($this->usediv) && $this->usediv){
-			return '<div class="'.$this->name.'" id="'.$this->id.'"><div class="'.$this->name.'_c" style="display:none;">'.$this->content.'</div>'.$this->text.'</div>';
+			return '<div class="'.$this->name.'" id="'.$this->id.'"><div class="'.$this->name.'_c" style="display:none;">'.$this->content.'</div>'.$this->label.'</div>';
 		}else{
-			return '<span class="'.$this->name.'" id="'.$this->id.'"><span class="'.$this->name.'_c" style="display:none;">'.$this->content.'</span>'.$this->text.'</span>';
+			return '<span class="'.$this->name.'" id="'.$this->id.'"><span class="'.$this->name.'_c" style="display:none;">'.$this->content.'</span>'.$this->label.'</span>';
 		}
 		return ;
 	}
