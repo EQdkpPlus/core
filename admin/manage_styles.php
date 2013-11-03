@@ -140,10 +140,12 @@ class Manage_Styles extends page_generic{
 			}
 		}
 		
+		$render_dd = new hdropdown('renderer', array('options' => $arrRenderer, 'default' => 'side_by_side', 'tolang' => true, 'js' => 'onchange="this.form.submit();"'));
+		$render_dd->value = $render_dd->inpval();
 		$this->tpl->assign_vars(array(
 			'CONTENT'	=> $content,
 			'FILENAME'	=> $strFilename,
-			'RENDERER_DROPDOWN' => new hdropdown('renderer', array('options' => $arrRenderer, 'value' => $this->in->get('renderer', 'side_by_side'), 'js' => 'onchange="this.form.submit();"')),
+			'RENDERER_DROPDOWN' => $render_dd,
 			'ENCODED_FILENAME' => $this->in->get('diff', ''),
 			'S_RENDERER' => $blnRenderer,
 		));

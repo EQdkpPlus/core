@@ -171,7 +171,7 @@ class Manage_Article_Categories extends page_generic {
 				'DD_UPDATE' => new hdropdown('perm[upd]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['upd'][$gid]) ? $arrPermissions['upd'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'upd\', '.$gid.', this)"')),
 				'DD_DELETE' => new hdropdown('perm[del]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['del'][$gid]) ? $arrPermissions['del'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'del\', '.$gid.', this)"')),
 				'DD_READ' 	=> new hdropdown('perm[rea]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['rea'][$gid]) ? $arrPermissions['rea'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'rea\', '.$gid.', this)"')),
-				'DD_CHANGE_STATE' => new hdropdown('perm[chs]['.$gid.']', array('options' => array(-1 => 'Vererbt', 1 => 'Erlaubt', 0 => 'Nicht erlaubt'), 'value' => (isset($arrPermissions['chs'][$gid]) ? $arrPermissions['chs'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'chs\', '.$gid.', this)"')),
+				'DD_CHANGE_STATE' => new hdropdown('perm[chs]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['chs'][$gid]) ? $arrPermissions['chs'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'chs\', '.$gid.', this)"')),
 				'CALC_CREATE' 		=> $this->pdh->get('article_categories', 'calculated_permissions', array((($id) ? $id : 1), 'cre', $gid)) ? '<span class="positive">'.$this->user->lang('allowed').'</span>' : '<span class="negative">'.$this->user->lang('disallowed').'</span>',
 				'CALC_UPDATE' 		=> $this->pdh->get('article_categories', 'calculated_permissions', array((($id) ? $id : 1), 'upd', $gid)) ? '<span class="positive">'.$this->user->lang('allowed').'</span>' : '<span class="negative">'.$this->user->lang('disallowed').'</span>',
 				'CALC_DELETE' 		=> $this->pdh->get('article_categories', 'calculated_permissions', array((($id) ? $id : 1), 'del', $gid)) ? '<span class="positive">'.$this->user->lang('allowed').'</span>' : '<span class="negative">'.$this->user->lang('disallowed').'</span>',
@@ -206,16 +206,19 @@ class Manage_Article_Categories extends page_generic {
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => $this->pdh->get('article_categories', 'portal_layout', array($id)))),
 				'PUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'published', array($id))) ? 'checked="checked"' : '',
 				'DD_PARENT' => new hdropdown('parent', array('options' => $arrCategories, 'value' => $this->pdh->get('article_categories', 'parent', array($id)))),
+				// TODO: language
 				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => 'Voller Artikeltext', 2 => 'Nur Artikelüberschriften', 3 => 'Artikeltext bis 200 Wörter'), 'value' => $this->pdh->get('article_categories', 'list_type', array($id)))),
 				'SHOW_CHILDS_CHECKED' => ($this->pdh->get('article_categories', 'show_childs', array($id))) ? 'checked="checked"' : '',
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, $this->pdh->get('article_categories', 'aggregation', array($id))),
 				'FEATURED_ONLY_CHECKED' => ($this->pdh->get('article_categories', 'featured_only', array($id))) ? 'checked="checked"' : '',
 				'SHOW_SSB_CHECKED' => ($this->pdh->get('article_categories', 'social_share_buttons', array($id))) ? 'checked="checked"' : '',
 				'HIDE_ON_RSS_CHECKED' => ($this->pdh->get('article_categories', 'hide_on_rss', array($id))) ? 'checked="checked"' : '',
+				// TODO: use radio here?
 				'DD_PUBLISHED_STATE' => new hdropdown('article_published_state]', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))),
 				'NOTIFY_UNPUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'notify_on_onpublished_articles', array($id))) ? 'checked="checked"' : '',
 				'FEATURED_ONTOP_CHECKED' => ($this->pdh->get('article_categories', 'featured_ontop', array($id))) ? 'checked="checked"' : '',
 				'HIDE_HEADER_CHECKED' => ($this->pdh->get('article_categories', 'hide_header', array($id))) ? 'checked="checked"' : '',
+				// TODO: language
 				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => array(1 => 'Erstellungsdatum Absteigend', 2 => 'Erstellungsdatum Aufsteigend', 3 => 'Letztes Änderungsdatum Absteigend', 4 => 'Letztes Änderungsdatum Aufsteigend'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
 			));
 			
@@ -226,9 +229,12 @@ class Manage_Article_Categories extends page_generic {
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)),
 				'PUBLISHED_CHECKED' => 'checked="checked"',
 				'DD_PARENT' => new hdropdown('parent', array('options' => $arrCategories, 'value' => 0)),
+				// TODO: language
 				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => 'Voller Artikeltext', 2 => 'Nur Artikelüberschriften', 3 => 'Artikeltext bis 200 Wörter'), 'value' => 1)),
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, array()),
+				// TODO: use radio here?
 				'DD_PUBLISHED_STATE' => new hdropdown('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)),
+				// TODO: language
 				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => array(1 => 'Erstellungsdatum Absteigend', 2 => 'Erstellungsdatum Aufsteigend', 3 => 'Letztes Änderungsdatum Absteigend', 4 => 'Letztes Änderungsdatum Aufsteigend'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
 			));
 		}

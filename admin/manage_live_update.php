@@ -585,7 +585,7 @@ class Manage_Live_Update extends page_generic {
 		$this->tpl->assign_vars(array(
 			'CONTENT'	=> $content,
 			'FILENAME'	=> $strFilename,
-			'RENDERER_DROPDOWN' => new hdropdown('renderer', array('options' => $arrRenderer, 'value' => $this->in->get('renderer', 'side_by_side'), 'js' => 'onchange="this.form.submit();"')),
+			'RENDERER_DROPDOWN' => new hdropdown('renderer', array('options' => $arrRenderer, 'value' => $this->in->get('renderer', 'side_by_side'), 'js' => 'onchange="this.form.submit();"', 'tolang' => true)),
 			'ENCODED_FILENAME' => $this->in->get('diff', ''),
 			'S_RENDERER' => $blnRenderer,
 		));
