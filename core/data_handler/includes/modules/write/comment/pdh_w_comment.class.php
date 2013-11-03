@@ -73,6 +73,14 @@ if(!class_exists('pdh_w_comment')) {
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
+		
+		public function delete_attach_id($page, $attach_id){
+			if(!$attach_id) return false;
+			$this->db->query("DELETE FROM __comments WHERE page='".$this->db->escape($page)."' AND attach_id='".$this->db->escape($attach_id)."';");
+			
+			$this->pdh->enqueue_hook('comment_update');
+			return true;
+		}
 	}
 }
 if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_pdh_w_comment', pdh_w_comment::__shortcuts());
