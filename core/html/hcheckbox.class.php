@@ -43,7 +43,7 @@ class hcheckbox extends html {
 			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
 			$out .= '<label';
 			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
-			$out .= '><input type="'.self::$type.'" name="'.$this->name.'[]" value="'.$key.'"'.$selected_choice.$disabled'/>'.$opt.'</label>&nbsp;';
+			$out .= '><input type="'.self::$type.'" name="'.$this->name.'[]" value="'.$key.'"'.$selected_choice.$disabled.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $out;
 	}

@@ -43,19 +43,19 @@ class guildImporter extends page_generic {
 		$hmtlout = '<fieldset class="settings mediumsettings">
 			<dl>
 				<dt><label>'.$this->game->glang('import_ranks').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'radio','name'=>'ranks')).'</dd>
+				<dd>'.new hradio('ranks').'</dd>
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'radio','name'=>'delete_old_chars')).'</dd>
+				<dd>'.new hradio('delete_old_chars').'</dd>
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('guild_xml_lang').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'dropdown','name'=>'xmllang', 'options' => $arrLangs, 'selected' => $this->config->get('game_language'))).'</dd>
+				<dd>'.new hdropdown('xmllang', array('options' => $arrLangs, 'value' => $this->config->get('game_language'))).'</dd>
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('guild_xml').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'textarea','name'=>'guildxml','rows'=>20, 'cols'=>40)).'</dd>
+				<dd>'.new htextarea('guildxml', array('rows' => 20, 'cols' => 40)).'</dd>
 			</dl>
 			</fieldset>';
 		$hmtlout .= '<br/><input type="submit" name="submiti" value="'.$this->game->glang('uc_import_forw').'" class="mainoption bi_ok" />';

@@ -208,7 +208,7 @@ class charImporter extends page_generic {
 		$hmtlout = '<fieldset class="settings mediumsettings">
 			<dl>
 				<dt><label>'.$this->game->glang('uc_charname').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'text','name'=>'charname','value'=>(($tmpmemname) ? $tmpmemname : ''), 'size'=>'25')).'</dd>
+				<dd>'.new htext('charname', array('value' => (($tmpmemname) ? $tmpmemname : ''), 'size' => '25')).'</dd>
 			</dl>';
 		
 		// Server Name
@@ -217,9 +217,9 @@ class charImporter extends page_generic {
 				<dd>';
 		if($this->config->get('uc_lockserver') == 1){
 			$hmtlout .= ' @'.stripslashes($this->config->get('uc_servername')).'<br/>';
-			$hmtlout .= $this->html->widget(array('fieldtype'=>'hidden','name'=>'servername','value'=>stripslashes($this->config->get('uc_servername'))));
+			$hmtlout .= new hhidden('servername', array('value' => stripslashes($this->config->get('uc_servername'))));
 		}else{
-			$hmtlout .= $this->html->widget(array('fieldtype'=>'text','name'=>'servername','value'=>(($this->config->get('uc_servername')) ? stripslashes($this->config->get('uc_servername')) : ''), 'size'=>'25'));
+			$hmtlout .= new htext('servername', array('value' => (($this->config->get('uc_servername')) ? stripslashes($this->config->get('uc_servername')) : ''), 'size' => '25'));
 		}
 		$hmtlout .= '</dd>
 			</dl>';
@@ -260,25 +260,26 @@ class charImporter extends page_generic {
 			}
 
 			// Basics
-			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_id','value'=>$isindatabase));
-			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_name','value'=>$isMemberName));
-			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_level','value'=>$cdata['level']));
-			
-			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_race_id','value'=>$this->game->obj['ldata']->ConvertID($cdata['race_id'], 'int', 'races')));
-			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_class_id','value'=>$this->game->obj['ldata']->ConvertID($cdata['class_id'], 'int', 'classes')));
-			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'guild','value'=>$chardata['character']['guild']['@attributes']['name']));
-			
+			$hmtlout	.= new hhidden('member_id', array('value' => $isindatabase));
+			$hmtlout	.= new hhidden('member_name', array('value' => $isMemberName));
+			$hmtlout	.= new hhidden('member_level', array('value' => $cdata['level']));
+
+			$hmtlout	.= new hhidden('member_race_id', array('value' => $this->game->obj['ldata']->ConvertID($cdata['race_id'], 'int', 'races')));
+			$hmtlout	.= new hhidden('member_class_id', array('value' => $this->game->obj['ldata']->ConvertID($cdata['class_id'], 'int', 'classes')));
+			$hmtlout	.= new hhidden('guild', array('value' => $chardata['character']['guild']['@attributes']['name']));
+
 			if (isset($chardata['character']['vocation'])){
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'vocation','value'=>strtolower($chardata['character']['vocation']['@attributes']['name'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession1','value'=>strtolower($chardata['character']['vocation']['professions']['profession'][0]['@attributes']['name'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession2','value'=>strtolower($chardata['character']['vocation']['professions']['profession'][1]['@attributes']['name'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession3','value'=>strtolower($chardata['character']['vocation']['professions']['profession'][2]['@attributes']['name'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession1_proficiency','value'=>intval($chardata['character']['vocation']['professions']['profession'][0]['@attributes']['proficiency'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession2_proficiency','value'=>intval($chardata['character']['vocation']['professions']['profession'][1]['@attributes']['proficiency'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession3_proficiency','value'=>intval($chardata['character']['vocation']['professions']['profession'][2]['@attributes']['proficiency'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession1_mastery','value'=>intval($chardata['character']['vocation']['professions']['profession'][0]['@attributes']['mastery'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession2_mastery','value'=>intval($chardata['character']['vocation']['professions']['profession'][1]['@attributes']['mastery'])));
-				$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'profession3_mastery','value'=>intval($chardata['character']['vocation']['professions']['profession'][2]['@attributes']['mastery'])));
+				$hmtlout	.= new hhidden('vocation', array('value' => strtolower($chardata['character']['vocation']['@attributes']['name'])));
+				$hmtlout	.= new hhidden('server_loc', array('value' => $this->config->get('uc_server_loc')));
+				$hmtlout	.= new hhidden('profession1', array('value' => strtolower($chardata['character']['vocation']['professions']['profession'][0]['@attributes']['name'])));
+				$hmtlout	.= new hhidden('profession2', array('value' => strtolower($chardata['character']['vocation']['professions']['profession'][1]['@attributes']['name'])));
+				$hmtlout	.= new hhidden('profession3', array('value' => strtolower($chardata['character']['vocation']['professions']['profession'][2]['@attributes']['name'])));
+				$hmtlout	.= new hhidden('profession1_proficiency', array('value' => intval($chardata['character']['vocation']['professions']['profession'][0]['@attributes']['proficiency'])));
+				$hmtlout	.= new hhidden('profession2_proficiency', array('value' => intval($chardata['character']['vocation']['professions']['profession'][1]['@attributes']['proficiency'])));
+				$hmtlout	.= new hhidden('profession3_proficiency', array('value' => intval($chardata['character']['vocation']['professions']['profession'][2]['@attributes']['proficiency'])));
+				$hmtlout	.= new hhidden('profession1_mastery', array('value' => intval($chardata['character']['vocation']['professions']['profession'][0]['@attributes']['mastery'])));
+				$hmtlout	.= new hhidden('profession2_mastery', array('value' => intval($chardata['character']['vocation']['professions']['profession'][1]['@attributes']['mastery'])));
+				$hmtlout	.= new hhidden('profession3_mastery', array('value' => intval($chardata['character']['vocation']['professions']['profession'][2]['@attributes']['mastery'])));
 			}
 			
 			// viewable Output
@@ -298,10 +299,10 @@ class charImporter extends page_generic {
 					<dl>';
 				if(!$isindatabase){
 					if($this->user->check_auth('u_member_conn', false)){
-						$hmtlout	.= $this->html->widget(array('fieldtype'=>'checkbox','name'=>'overtakeuser','selected'=>'1')).' '.$this->user->lang('overtake_char');
+						$hmtlout	.= $this->user->lang('overtake_char').' '.new hradio('overtakeuser', array('value' => 1));
 					}else{
-						$hmtlout	.= $this->html->widget(array('fieldtype'=>'checkbox','name'=>'overtakeuser','selected'=>'1', 'disabled'=>true));
-						$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'overtakeuser','value'=>'1'));
+						$hmtlout	.= $this->user->lang('overtake_char').' '.new hradio('overtakeuser', array('value' => 1, 'disabled' => true));
+						$hmtlout	.= new hhidden('overtakeuser', array('value' => '1'));
 					}
 				}
 				$hmtlout	.= '
