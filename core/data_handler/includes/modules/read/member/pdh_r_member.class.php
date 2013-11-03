@@ -530,7 +530,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'name'		=> $this->user->lang('uc_edit_char'),
 					'link'		=> "javascript:EditChar('".$memberid."')",
 					'icon'		=> 'fa-pencil fa-lg',
-					'perm'		=> $this->user->check_auth('u_member_view', false),
+					'perm'		=> $this->user->check_auth('u_member_man', false),
 				),
 				1 => array(
 					'name'		=> $this->user->lang('uc_delete_char'),
@@ -542,7 +542,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'name'		=> $this->game->glang('uc_updat_armory'),
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
 					'icon'		=> 'fa-refresh fa-lg',
-					'perm'		=> $this->game->get_importAuth('u_member_view', 'char_update'),
+					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update'),
 				),
 			);
 			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, '<i class="fa fa-wrench fa-lg"></i>');

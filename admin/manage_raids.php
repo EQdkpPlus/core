@@ -243,7 +243,7 @@ class ManageRaids extends page_generic {
 					'MEMBER'	=> $this->jquery->MultiSelect('items['.$key.'][members]', $members, $item['members'], array('width' => 250, 'id'=>'items_'.$key.'_members', 'filter' => true)),
 					'VALUE'		=> $item['value'],
 					'ITEMPOOL'	=> new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)),
-				);
+				));
 				$item_ids[] = 'items_'.$key;
 			}
 			if (isset($item_ids) AND is_array($item_ids)){
@@ -276,7 +276,7 @@ class ManageRaids extends page_generic {
 	$('#r_add_event').click(function() {
 		r_add_event_durl();
 	});", 'docready');
-		$this->jquery->dialog('r_add_mem_durl', $this->user->lang('add_member'), array('url' => $this->root_path.'addcharacter.php'.$this->SID.'&adminmode=1', 'width' =>'640', 'height' => '520', 'onclosejs' => 'document.getElementById("refresh_button").click();'));
+		$this->jquery->dialog('r_add_mem_durl', $this->user->lang('add_member'), array('url' => $this->controller_path.'AddCharacter/'.$this->SID.'&adminmode=1', 'width' =>'640', 'height' => '520', 'onclosejs' => 'document.getElementById("refresh_button").click();'));
 		$this->jquery->dialog('r_add_event_durl', $this->user->lang('add_event'), array('url' => 'manage_events.php'.$this->SID.'&upd=true&simple_head=true', 'width' =>'700', 'height' =>'550', 'onclosejs' => 'document.getElementById("refresh_button").click();'));
 		$this->jquery->Collapse('#toggleAdjustments');
 		$this->jquery->Collapse('#toggleItems');

@@ -137,8 +137,8 @@ class Manage_Members extends page_generic {
 		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), $character_count);
 
 		$onclose_url = "if(event.originalEvent == undefined) { window.location.href = 'admin/manage_members.php".$this->SID."'; } else { window.location.href = 'manage_members.php".$this->SID."'; }";
-		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=>"../addcharacter.php".$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
-		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=>'../addcharacter.php'.$this->SID.'&adminmode=1', 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
+		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
+		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID.'&adminmode=1', 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
 		$this->confirm_delete($this->user->lang('confirm_delete_members'));
 
 		$this->tpl->add_js("
