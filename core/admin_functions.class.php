@@ -265,25 +265,23 @@ class admin_functions extends gen_class {
 	function resolve_browser($string){
 		$string = sanitize($string);
 		if( preg_match("/opera/i",$string)){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/opera_icon.png\" alt=\"Opera\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<img src=\"".$this->root_path."images/glyphs/browser/opera_icon.png\" alt=\"Opera\" class=\"coretip-left\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/msie/i",$string)){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/ie_icon.png\" alt=\"Internet Explorer\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<img src=\"".$this->root_path."images/glyphs/browser/ie_icon.png\" alt=\"Internet Explorer\" class=\"coretip-left\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/chrome/i", $string)){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/chrome_icon.png\" alt=\"Google Chrome\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<img src=\"".$this->root_path."images/glyphs/browser/chrome_icon.png\" alt=\"Google Chrome\" class=\"coretip-left\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/konqueror/i",$string)){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/konqueror_icon.png\" alt=\"Konqueror\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<img src=\"".$this->root_path."images/glyphs/browser/konqueror_icon.png\" alt=\"Konqueror\" class=\"coretip-left\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/safari/i",$string) ){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/safari_icon.png\" alt=\"Safari\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<img src=\"".$this->root_path."images/glyphs/browser/safari_icon.png\" alt=\"Safari\" class=\"coretip-left\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/lynx/i",$string) ){
-			return $this->html->ToolTip($string, "Lynx");
-		}else if( preg_match("/netscape6/i",$string) ){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/netscape_icon.png\" alt=\"Netscape\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">Lynx</span>";
 		}else if( preg_match("/mozilla/i",$string) ){
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/browser/firefox_icon.png\" alt=\"Firefox\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<img src=\"".$this->root_path."images/glyphs/browser/firefox_icon.png\" alt=\"Firefox\" class=\"coretip-left\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/w3m/i",$string) ){
-			return $this->html->ToolTip($string, "w3m");
+			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">w3m</span>";
 		}else{
-			return $this->html->ToolTip($string, "<img src=\"".$this->root_path."images/glyphs/help_off.png\" alt=\"Help\" />", '', array('name' => 'aibrowsers', 'my'	=> 'top right', 'at' => 'bottom right'));
+			return "<i class=\"fa fa-question-circle fa-lg coretip-left\" data-coretip=\"".$string."\"></i>";
 		}
 	}
 	

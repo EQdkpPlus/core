@@ -272,6 +272,8 @@ class core extends gen_class {
 
 			// global qtip
 			$this->jquery->qtip(".coretip", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200));
+			$this->jquery->qtip(".coretip-left", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top right', 'at' => 'bottom right'));
+			$this->jquery->qtip(".coretip-right", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top left', 'at' => 'bottom left'));
 
 			//Portal Output
 			$intPortalLayout = ($this->portal_layout != NULL) ? $this->portal_layout : 1;

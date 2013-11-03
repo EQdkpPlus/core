@@ -129,7 +129,7 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 				foreach($events as $event_id){
 					$tooltip	.= $this->pdh->get('event', 'name', array($event_id))."<br />";
 				}
-				$text	= $this->html->ToolTip($tooltip, $text);
+				$text	= '<span class="coretip" data-coretip="'.$tooltip.'">'.$text.'</span>';
 			}
 
 			return $text;

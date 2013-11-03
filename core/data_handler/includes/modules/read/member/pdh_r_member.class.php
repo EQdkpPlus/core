@@ -588,7 +588,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			foreach($twinks as $twinkid){
 				$htmllist .= $this->get_name($twinkid)."<br />";
 			}
-			return $this->html->ToolTip($htmllist, $text);
+			return '<span class="coretip" data-coretip="'.$htmllist.'">'.$text.'</span>';
 		}
 
 		public function comp_twink($params1, $params2){
