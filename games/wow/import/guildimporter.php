@@ -54,15 +54,15 @@ class guildImporter extends page_generic {
 		$hmtlout = '<fieldset class="settings mediumsettings">
 			<dl>
 				<dt><label>'.$this->game->glang('uc_guild_name').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'text','name'=>'guildname','value'=> $this->config->get('guildtag'), 'size'=>'40')).'</dd>
+				<dd>'.new htext('guildname', array('value' => $this->config->get('guildtag'), 'size' => '40')).'</dd>
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'radio','name'=>'delete_old_chars')).'</dd>
+				<dd>'.new hradio('delete_old_chars').'</dd>
 			</dl>
 			<dl>
 				<dt><label>'.$this->game->glang('uc_sync_ranks').'</label></dt>
-				<dd>'.$this->html->widget(array('fieldtype'=>'radio','name'=>'sync_ranks')).'</dd>
+				<dd>'.new hradio('sync_ranks').'</dd>
 			</dl>
 			</fieldset>
 			<fieldset class="settings mediumsettings">
@@ -70,15 +70,15 @@ class guildImporter extends page_generic {
 
 				<dl>
 					<dt><label>'.$this->game->glang('uc_class_filter').'</label></dt>
-					<dd>'.$this->html->widget(array('fieldtype'=>'dropdown','name'=>'filter_class','value'=> '', 'options'=>$classfilter)).'</dd>
+					<dd>'.new hdropdown('filter_class', array('options' => $classfilter)).'</dd>
 				</dl>
 				<dl>
 					<dt><label>'.$this->game->glang('uc_level_filter').'</label></dt>
-					<dd>'.$this->html->widget(array('fieldtype'=>'text','name'=>'filter_level','value'=> 0, 'size'=>'5')).'</dd>
+					<dd>'.new htext('filter_level', array('value' => 0, 'size' => '5')).'</dd>
 				</dl>
 				<dl>
 					<dt><label>'.$this->game->glang('uc_rank_filter').'</label></dt>
-					<dd>'.$this->html->widget(array('fieldtype'=>'dropdown','name'=>'rank_sort','value'=> '', 'options'=>array(1=>$this->game->glang('uc_rank_filter1a'), 2=>$this->game->glang('uc_rank_filter1b')))).' '.$this->html->widget(array('fieldtype'=>'text','name'=>'filter_rank','value'=> 0, 'size'=>'5')).'</dd>
+					<dd>'.new hdropdown('rank_sort', array('options' => array(1=>$this->game->glang('uc_rank_filter1a'), 2=>$this->game->glang('uc_rank_filter1b')))).' '.new htext('filter_rank', array('value' => 0, 'size' => '5')).'</dd>
 				</dl>
 			</fieldset>';
 		$hmtlout .= '<br/><input type="submit" name="submiti" value="'.$this->game->glang('uc_import_forw').'" class="mainoption bi_ok" />';
