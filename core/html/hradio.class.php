@@ -47,10 +47,11 @@ class hradio extends html {
 			);
 		}
 		foreach ($this->options as $key => $opt) {
-			$selected_choice = ((string)$key == (string)$this->value) ? 'checked="checked"' : '';
+			$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
+			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
 			$radiobox .= '<label';
 			if(!empty($this->class)) $raidobox .= ' class="'.$this->class.'"';
-			$raidobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'" '.$selected_choice.'/>'.$opt.'</label>&nbsp;';
+			$raidobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $radiobox;
 	}

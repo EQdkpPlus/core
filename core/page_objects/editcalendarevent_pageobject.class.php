@@ -393,7 +393,7 @@ new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' =>
 			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),
 			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
 			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidleader'] : ''), array('width' => 300, 'filter' => true)),
-			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => $types, 'checked' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
+			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => $types, 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
 			'RADIO_EDITCLONES'	=> new hradio('edit_clones', array('options' => array('0'=>$this->user->lang('calendar_event_editone'), '1'=>$this->user->lang('calendar_event_editall')))),
 
 			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),

@@ -494,7 +494,7 @@ class ManagePageLayouts extends page_generic {
 						'NAME'				=> $page_object,
 						'DROPDOWN'			=> new hdropdown('dp'.$page_object_id, array('options' => $pps, 'id' => 'dp'.$page_object_id, 'disabled' => ((count($pps) == 0) ? true : false))),
 						'PREFIX'			=> $page.'['.$page_object.']',
-						'NUMBERS'			=> new hcheckbox($page.'['.$page_object.'][numbers]', array('checked' => $$options['show_numbers'])),
+						'NUMBERS'			=> new hradio($page.'['.$page_object.'][numbers]', array('value' => $options['show_numbers'])),
 						'TABLE_SORT_DIR'	=> new hdropdown($page.'['.$page_object.'][table_sort_dir]', array('options' => $table_sort_dirs, 'value' => $options['table_sort_dir'], 'id' => $page.'_'.$page_object.'_sort_dir')),
 						'DISABLED'			=> (count($pps) == 0) ? 'disabled="disabled"' : '',
 						'S_ADD_SETTS'		=> (count($add_setts) > 0) ? true : false,
@@ -503,7 +503,7 @@ class ManagePageLayouts extends page_generic {
 						$preset = $column_options['name'];
 						$this->tpl->assign_block_vars('page_row.page_object_row.preset_row', array(
 							'NAME'			=> ($this->pdh->get_preset_description($preset)) ? $this->pdh->get_preset_description($preset) : $preset,
-							'SORTABLE'		=> new hcheckbox($page.'['.$page_object.'][sortable]['.$preset.']', array('value' => '1', 'checked' => $column_options['sort'], 'class' => 'sortable')),
+							'SORTABLE'		=> new hradio($page.'['.$page_object.'][sortable]['.$preset.']', array('value' => $column_options['sort'], 'class' => 'sortable')),
 							'CODE'			=> $preset,
 							'DEFAULT_SORT'	=> (isset($options['table_sort_col']) && $options['table_sort_col'] == $column_id) ? 'checked="checked"' : '',
 							'TH_ADD'		=> sanitize($column_options['th_add']),

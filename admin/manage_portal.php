@@ -246,7 +246,7 @@ class Manage_Portal extends page_generic {
 			//Collapsable
 			$this->tpl->assign_block_vars('config_row', array(
 				'NAME'	=> $this->user->lang('portal_collapsable'),
-				'FIELD'	=> new hcheckbox('collapsable', array('value' => $this->pdh->get('portal', 'collapsable', array($id)))),
+				'FIELD'	=> new hradio('collapsable', array('value' => $this->pdh->get('portal', 'collapsable', array($id)))),
 				'ID'	=> 'collapsable',
 			));
 
@@ -360,7 +360,8 @@ class Manage_Portal extends page_generic {
 			}
 			
 			// start the description text
-			$data['desc']		= $this->html->ToolTip($data['desc'], $this->core->icon_font($icon, 'fa-lg'));
+			$data['desc']		= (string) new htooltip('mptt_'.$id, array('content' => $data['desc'], 'label' => $this->core->icon_font($icon, 'fa-lg')));
+			pd($data['desc']);
 			$data['multiple']	= ($portal_module[$path]->get_multiple() && !$pdata['child']) ? true : false;
 			if ($portal_module[$path]->get_multiple()){
 				$portal_module[$path]->set_id($id);
