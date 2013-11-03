@@ -53,6 +53,8 @@ if(!class_exists('pdh_w_articles')) {
 		public function delete($id) {
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			$objQuery = $this->db->prepare("DELETE FROM __articles WHERE id =?")->execute($id);
+			
+			$this->pdh->put("comment", "delete_attach_id", array("articles", $id));
 
 			$this->pdh->enqueue_hook('articles_update');
 			
@@ -86,6 +88,7 @@ if(!class_exists('pdh_w_articles')) {
 			$arrArticles = $this->pdh->get('articles', 'id_list', $intCategoryID);
 			foreach($arrArticles as $intArticleID){
 				$arrOldData = $this->pdh->get('articles', 'data', array($intArticleID));
+				$this->pdh->put("comment", "delete_attach_id", array("articles", $intArticleID));
 					
 				$arrOld = array(
 						'title' 			=> $arrOldData["title"],
