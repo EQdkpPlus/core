@@ -42,7 +42,7 @@ class hcheckbox extends html {
 			$selected_choice = ((string)$key == (string)$this->value) ? 'checked="checked"' : '';
 			$out .= '<label';
 			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
-			$out .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'" '.$selected_choice.'/>'.$opt.'</label>&nbsp;';
+			$out .= '><input type="'.self::$type.'" name="'.$this->name.'[]" value="'.$key.'" '.$selected_choice.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $out;
 	}
