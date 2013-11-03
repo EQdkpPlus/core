@@ -25,16 +25,9 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 /*
  * available options
  * name			(string) 	name of the textarea
- * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
- * class		(string)	class for the field
- * readonly		(boolean)	field readonly?
- * size			(int)		size of the field
- * js			(string)	extra js which shall be injected into the field
- * spinner		(boolean)	make a spinner out of the field?
- * disabled		(boolean)	disabled field
- * autocomplete	(array)		if not empty: array containing the elements on which to autocomplete (not to use together with spinner)
- * colorpicker	(boolean) 	apply a colorpicker to this field
+ * value					key of the checkbox to be checked
+ * class		(string)	class for the labels of the fields
+ * options		(array)		list of all checkboxes: key (value) => option (label)
  */
 class hcheckbox extends html {
 
@@ -44,15 +37,14 @@ class hcheckbox extends html {
 	public $disabled = false;
 	
 	protected function _toString() {
-		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
-		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$out .= 'id="'.$this->id.'" ';
-		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->checked)) $out .= 'checked="checked" ';
-		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
-		if($this->disabled) $out .= 'disabled="disabled" ';
-		if(!empty($this->js)) $out.= $this->js.' ';
-		return $out.' />';
+		$out = '';
+		foreach ($this->options as $key => $opt) {
+			$selected_choice = ((string)$key == (string)$this->value) ? 'checked="checked"' : '';
+			$out .= '<label';
+			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
+			$out .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'" '.$selected_choice.'/>'.$opt.'</label>&nbsp;';
+		}
+		return $out;
 	}
 	
 	public function inpval() {

@@ -24,16 +24,11 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 /*
  * available options
- * name			(string) 	name of the textarea
- * value		
- * class		(string)	class for the field
- * readonly		(boolean)	field readonly?
- * size			(int)		size of the field
- * js			(string)	extra js which shall be injected into the field
- * spinner		(boolean)	make a spinner out of the field?
+ * name			(string) 	name of the field
+ * value					key of the radio to be checked
+ * class		(string)	class for labels of the fields
+ * options		(array)		list containing all the options, if empty it defaults to yes / no
  * disabled		(boolean)	disabled field
- * autocomplete	(array)		if not empty: array containing the elements on which to autocomplete (not to use together with spinner)
- * colorpicker	(boolean) 	apply a colorpicker to this field
  */
 class hradio extends html {
 
@@ -45,16 +40,17 @@ class hradio extends html {
 	
 	public function _toString() {
 		$radiobox  = '';
-		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		if(!is_array($this->options)){
+		if(empty($this->options)){
 			$this->options = array (
 				'0'   => $this->user->lang('cl_off'),
 				'1'   => $this->user->lang('cl_on')
 			);
 		}
-		foreach ($this->options as $key => $value) {
+		foreach ($this->options as $key => $opt) {
 			$selected_choice = ((string)$key == (string)$this->value) ? 'checked="checked"' : '';
-			$radiobox .='<label><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'" '.$selected_choice.' class="'.$this->class.'"/>'.$value.'</label>&nbsp;';
+			$radiobox .= '<label';
+			if(!empty($this->class)) $raidobox .= ' class="'.$this->class.'"';
+			$raidobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'" '.$selected_choice.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $radiobox;
 	}

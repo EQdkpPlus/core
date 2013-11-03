@@ -24,17 +24,15 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 /*
  * available options
- * name			(string) 	name of the textarea
+ * name			(string) 	name of the field
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value		(string)	formatted date
  * class		(string)	class for the field
- * readonly		(boolean)	field readonly?
  * size			(int)		size of the field
  * js			(string)	extra js which shall be injected into the field
- * spinner		(boolean)	make a spinner out of the field?
  * disabled		(boolean)	disabled field
- * autocomplete	(array)		if not empty: array containing the elements on which to autocomplete (not to use together with spinner)
- * colorpicker	(boolean) 	apply a colorpicker to this field
+ * allow_empty	(boolean) 	parse empty field as empty and don't try to make a date out of it
+ * any additional options jquery->Calendar might want
  */
 class hdatepicker extends html {
 
@@ -52,8 +50,8 @@ class hdatepicker extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
 		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->checked)) $out .= 'checked="checked" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
+		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		

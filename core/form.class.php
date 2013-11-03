@@ -143,12 +143,12 @@ class form extends gen_class {
 					foreach($tabdata as $fieldsetname => $fieldsetdata) {
 						$this->fs2tpl($fieldsetname, 'tabs.fieldsets');
 						foreach($fieldsetdata as $name => $options) {
-							$this->f2tpl($name, $options, 'tabs.fieldsets.fields', $values);
+							$this->f2tpl($name, $options, 'tabs.fieldsets.fields', $values[$name]);
 						}
 					}
 				} else {
 					foreach($tabdata['f'] as $name => $options) {
-						$this->f2tpl($name, $options, 'tabs.fields', $values);
+						$this->f2tpl($name, $options, 'tabs.fields', $values[$name]);
 					}
 				}
 			}
@@ -157,12 +157,12 @@ class form extends gen_class {
 				foreach($this->field_array['fs'] as $fieldsetname => $fieldsetdata) {
 					$this->fs2tpl($fieldsetname);
 					foreach($fieldsetdata as $name => $options) {
-						$this->f2tpl($name, $options, 'fieldsets.fields', $values);
+						$this->f2tpl($name, $options, 'fieldsets.fields', $values[$name]);
 					}
 				}
 			} else {
 				foreach($this->field_array['f'] as $name => $options) {
-					$this->f2tpl($name, $options, 'fields', $value);
+					$this->f2tpl($name, $options, 'fields', $values[$name]);
 				}
 			}
 		}
@@ -196,7 +196,6 @@ class form extends gen_class {
 				}
 			}
 		}
-		pd($_POST);
 		return $values;
 	}
 	
@@ -217,7 +216,7 @@ class form extends gen_class {
 		));
 	}
 	
-	private function f2tpl($name, $options, $key, $values=array()) {
+	private function f2tpl($name, $options, $key, $value) {
 		// TODO: check 'disabled'
 		
 		// choose language var
@@ -233,9 +232,8 @@ class form extends gen_class {
 		// encryption
 		if(!empty($options['encrypt'])) $values[$name] = $this->encrypt->decrypt($values[$name]);
 		
-		// default value?
+		// fill in the field
 		if(isset($values[$name])) $options['value'] = $values[$name];
-		elseif(isset($options['default']) && !isset($options['value'])) $options['value'] = $options['default'];
 		
 		// additional text around field?
 		$text = (empty($options['text'])) ? '' : $options['text'];

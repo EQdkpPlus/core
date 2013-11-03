@@ -24,17 +24,22 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 /*
  * available options
- * name			(string) 	name of the textarea
+ * name			(string) 	name of the field
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value		(array)		array containing the selected values
  * class		(string)	class for the field
- * readonly		(boolean)	field readonly?
- * size			(int)		size of the field
- * js			(string)	extra js which shall be injected into the field
- * spinner		(boolean)	make a spinner out of the field?
  * disabled		(boolean)	disabled field
- * autocomplete	(array)		if not empty: array containing the elements on which to autocomplete (not to use together with spinner)
- * colorpicker	(boolean) 	apply a colorpicker to this field
+ * js			(string)	extra js which shall be injected into the field
+ * options		(array)		list of all available options
+ * todisable	(array)		list of all options which shall not be selectable
+ * 
+ * additional options for jquery->multiselect
+ * height 		(int)		height of the dropdown in px
+ * width 		(int)		width of the dropdown in px
+ * preview_num	(int)		number of selected options to be displayed in a comma seperated list in collapsed state
+ * no_animation (boolean)	disable collapse animation?
+ * header
+ * filter
  */
 class hmultiselect extends html {
 
@@ -78,11 +83,7 @@ class hmultiselect extends html {
 	}
 	
 	public function inpval() {
-		pd($this->name);
-		pd($this->datatype);
-		$ret = $this->in->getArray($this->name, $this->datatype);
-		pd($ret);
-		return $ret;
+		return $this->in->getArray($this->name, $this->datatype);
 	}
 }
 ?>
