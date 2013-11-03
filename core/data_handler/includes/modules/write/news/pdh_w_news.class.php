@@ -144,6 +144,8 @@ if(!class_exists('pdh_w_news')) {
 					'{L_HEADLINE}'	=> $this->pdh->get('news', 'headline', array($news_id)),
 				);
 				$this->log_insert('action_news_deleted', $log_action);
+				
+				$this->pdh->put("comment", "delete_attach_id", array('news', $news_id));
 			}
 			
 			$this->db->query('DELETE FROM __news WHERE news_id IN ('.implode(', ', $id).')');
