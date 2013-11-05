@@ -107,7 +107,7 @@ class bridge_generic extends gen_class {
 				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword) || !$strEQdkpUserSalt;
 				
 				//Update Email und Password - den Rest soll die Sync-Funktion machen	
-				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($arrUserdata['email'] != $arrEQdkpUserdata['user_email']) || $blnHashNeedsUpdate){
+				if ($boolUsePassword && (!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($arrUserdata['email'] != $arrEQdkpUserdata['user_email']) || $blnHashNeedsUpdate){
 					$strSalt = $this->user->generate_salt();
 					$strApiKey = $this->user->generate_apikey($strPassword, $strSalt);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
