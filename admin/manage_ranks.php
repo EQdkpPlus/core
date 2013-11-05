@@ -95,7 +95,6 @@ class Manage_Ranks extends page_generic {
 		$key = 0;
 		$new_id = 1;
 
-		d($ranks);
 		foreach($ranks as $id => $name) {
 			$this->tpl->assign_block_vars('ranks', array(
 				'KEY'	=> $key,
