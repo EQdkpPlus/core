@@ -24,15 +24,34 @@ class form extends gen_class {
 	public static $shortcuts = array();
 	// public static $singleton = false;
 	
-	public static $form_id = '';
+	public static $form_id = '';		// the form_id is the identifier of the form, it should be unique and has otherwise no specific use
 	
 	public $use_tabs = false;
 	public $use_fieldsets = false;
 	public $use_dependency = false;
 	
 	public $lang_prefix = '';
+	/* the language variables are build as follows:
+	 *	- for tabs: $this->lang_prefix.'tab_'.$tabname
+	 *	- for fieldsets: 
+	 *		- $lang = $this->lang_prefix.'fs_'.$fieldsetname;
+	 *		- $info = $this->lang_prefix.'fs_info_'.$fieldsetname;
+	 *	- for fields:
+	 *		- $lang = $this->lang_prefix.'f_'.$name;
+	 *		- $help = $this->lang_prefix.'f_help_'.$name;
+	 */
 	
 	private $field_array = array(); // tab => array(fieldset => array(field => array(options)), field => array(options), field => array(options))
+	/*	the options of each field is an array containing the following elements
+	 * 		- type: the type of the field to use (e.g. 'dropdown')
+	 *		- any additional options for the chosen fieldtype
+	 *		- optionally the following entries can be included
+	 *			- 'text' 	=> 'text to put in front of the field'
+	 *			- 'text2'	=> 'text to put behind the field'
+	 *			- 'encrypt'	=> whether to encrypt the data of the field (encrypt on read, decrypt on output)
+	 *			- 'lang'	=> if a custom language variable shall be used for the field
+	 *			- 'help'	=> if a custom help-language variable shall be used
+	 */
 	
 	public function __construct($form_id) {
 		self::$form_id = $form_id;
