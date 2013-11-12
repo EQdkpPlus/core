@@ -1083,8 +1083,6 @@ class template extends gen_class {
 
 			$minify = new Minify_CSS();
 			$data = $minify->minify($data);
-d($storage_folder);
-d($data);
 			$this->pfh->putContent($storage_folder.'main.css', $data);
 			$this->timekeeper->put('tpl_cache_'.$stylepath, 'main.css');
 		}

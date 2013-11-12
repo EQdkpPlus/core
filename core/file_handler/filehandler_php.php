@@ -290,8 +290,8 @@ if (!class_exists("filehandler_php")) {
 		* If you want to move a file..
 		*/
 		public function FileMove($filename, $tofile, $tmpmove=false) {
-			$blnResult = $this->rename($filename, $tofile);
-			#unlink ($filename);
+			$blnResult = $this->copy($filename, $tofile);
+			unlink ($filename);
 			@chmod($tofile, 0777);
 			
 			return $blnResult;
