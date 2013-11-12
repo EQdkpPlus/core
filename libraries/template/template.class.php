@@ -941,13 +941,13 @@ class template extends gen_class {
 		if (file_exists($this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg')){
 			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		} else {
-			$template_background_file	= $root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
+			$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.jpg';
 		}
-		if ($this->user->style['background_img'] != ''){
-			if (strpos($this->user->style['background_img'],'://') > 1){
-				$template_background_file = $this->user->style['background_img'];
+		if ($style['background_img'] != ''){
+			if (strpos($style['background_img'],'://') > 1){
+				$template_background_file = $$style['background_img'];
 			} else {
-				$template_background_file = $root_path.$this->user->style['background_img'];
+				$template_background_file = $root_path.$style['background_img'];
 			}
 		}
 
@@ -1083,7 +1083,8 @@ class template extends gen_class {
 
 			$minify = new Minify_CSS();
 			$data = $minify->minify($data);
-
+d($storage_folder);
+d($data);
 			$this->pfh->putContent($storage_folder.'main.css', $data);
 			$this->timekeeper->put('tpl_cache_'.$stylepath, 'main.css');
 		}
