@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
 
 class bnet_armory {
 
-	private $version		= '5.0.1';
+	private $version		= '5.1.0';
 	private $build			= '$Rev$';
 	private $chariconUpdates = 0;
 	private $chardataUpdates = 0;
@@ -793,7 +793,7 @@ class bnet_armory {
 	*/
 	protected function set_CachedData($json, $filename, $binary=false){
 		if($this->_config['caching']){
-			$cachinglink = $this->binaryORdata($filename, $binary);
+			$cachinglink = $this->binaryORdata($this->clean_name($filename), $binary);
 			if(is_object($this->pfh)){
 				$this->pfh->putContent($this->pfh->FolderPath('armory', 'cache', false).$cachinglink, $json);
 			}else{
@@ -812,11 +812,21 @@ class bnet_armory {
 	protected function get_CachedData($filename, $force=false, $binary=false, $returniffalse=false){
 		if(!$this->_config['caching']){return false;}
 		$data_ctrl = false;
-		$rfilename	= (is_object($this->pfh)) ? $this->pfh->FolderPath('armory', 'cache').$this->binaryORdata($filename, $binary) : 'data/'.$this->binaryORdata($filename, $binary);
+		$rfilename	= (is_object($this->pfh)) ? $this->pfh->FolderPath('armory', 'cache').$this->binaryORdata($this->clean_name($filename), $binary) : 'data/'.$this->binaryORdata($this->clean_name($filename), $binary);
 		if(is_file($rfilename)){
 			$data_ctrl	= (!$force && (filemtime($rfilename)+(3600*$this->_config['caching_time'])) > time()) ? true : false;
 		}
 		return ($data_ctrl || $returniffalse) ? (($binary) ? $rfilename : @file_get_contents($rfilename)) : false;
+	}
+
+	/**
+	* strip all non conform chars out of the filename
+	* 
+	* @param	$name	name of the file to be cleaned
+	* @return --
+	*/
+	protected function clean_name($name){
+		return preg_replace('/[^a-zA-Z0-9_ \.]/s', '_', $name);
 	}
 
 	/**
