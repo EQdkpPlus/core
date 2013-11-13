@@ -138,7 +138,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 				}
 				return $out;
 			}
-			return array_keys($this->logs['ids']);
+			return (is_array($this->logs['ids'])) ? array_keys($this->logs['ids']) : array();
 		}
 
 		public function get_lastxlogs($amount=10) {
