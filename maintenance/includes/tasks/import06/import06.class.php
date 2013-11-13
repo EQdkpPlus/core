@@ -556,7 +556,7 @@ class import06 extends task {
 			$logs = array();
 			list($d,$m,$y) = explode('.',$this->get('logs_date', '1.1.1970'));
 			$date = mktime(0,0,0,$m,$d,$y);
-			$sql = "SELECT * FROM ".$this->old[1]."logs WHERE log_date > ".$date." LIMIT 5000;";
+			$sql = "SELECT l.*, u.username FROM ".$this->old[1]."logs l LEFT JOIN ".$this->old[1]."users u ON l.admin_id=u.user_id WHERE log_date > ".$date." LIMIT 5000;";
 			$result = $this->old[0]->query($sql);
 			include($this->root_path.'maintenance/includes/tasks/import06/plugin_logs.php');
 			if ($result){
@@ -579,7 +579,12 @@ class import06 extends task {
 					$current_log['log_tag'] = strtolower($to_replace[1]);
 					$current_log['log_plugin'] = (in_array($row['log_type'], array_keys($plugin_logs))) ? $this->new[0]->escape($plugin_logs[$row['log_type']]) : 'core';
 					$current_log['log_flag'] = 1;
-					$current_log['user_id'] = $this->new[0]->escape($row['admin_id']);
+
+					if(isset($this->step_data['replace_users'][$row['admin_id']])) {
+						$current_log['user_id'] = $this->step_data['replace_users'][$row['admin_id']];
+					} else $current_log['user_id'] = -1;
+					$current_log['username'] = ($row['username'] == "") ? "Unknown" : $this->new[0]->escape($row['username']);
+
 					if(in_array($current_log['log_plugin'], $copy)) $logs[$row['log_id']] = $current_log;
 				}
 			}
@@ -1107,17 +1112,17 @@ class import06 extends task {
 					$raid_atts[$raid_id][] = $members[$name];
 				}
 			}
-		}
-		$sql = "INSERT INTO ".$this->new[1]."raid_attendees (raid_id, member_id) VALUES ";
-		$sqls = array();
-		foreach($raid_atts as $raid_id => $atts) {
-			foreach($atts as $member_id) {
-				$sqls[] = "('".$raid_id."', '".$member_id."')";
+			$sql = "INSERT INTO ".$this->new[1]."raid_attendees (raid_id, member_id) VALUES ";
+			$sqls = array();
+			foreach($raid_atts as $raid_id => $atts) {
+				foreach($atts as $member_id) {
+					$sqls[] = "('".$raid_id."', '".$member_id."')";
+				}
 			}
+			$this->new[0]->query($sql.implode(', ', $sqls).';');
+			unset($raid_atts);
+			unset($raid_attendees);
 		}
-		$this->new[0]->query($sql.implode(', ', $sqls).';');
-		unset($raid_atts);
-		unset($raid_attendees);
 		return true;
 	}
 
