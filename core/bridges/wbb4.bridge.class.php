@@ -36,6 +36,7 @@ class wbb4_bridge extends bridge_generic {
 			'id'	=> 'groupID',
 			'name'	=> 'groupName',
 			'QUERY'	=> 'SELECT g.groupID as id, l.languageItemValue as name FROM ___user_group g, ___language_item l WHERE l.languageItem = g.groupName',
+			'FUNCTION' => 'get_groups'
 		),
 		'user_group' => array( //Zuordnung User zu Gruppe
 			'table'	=> 'user_to_group',
@@ -100,6 +101,28 @@ class wbb4_bridge extends bridge_generic {
 			$this->wbb4_sso($arrUserdata, $boolAutoLogin);
 		}
 		return true;
+	}
+	
+	public function get_groups($blnWithID){
+		$strQuery = "SELECT g.groupID as id, groupName as name, l.languageItemValue as lang FROM ".$this->prefix."user_group g LEFT JOIN ".$this->prefix."language_item l ON l.languageItem = g.groupName";
+		$objQuery = $this->db->query($strQuery);
+		$groups = false;
+		
+		if ($objQuery){
+			$arrResult = $objQuery->fetchAllAssoc();
+			$groups = false;
+			
+			if (is_array($arrResult) && count($arrResult) > 0) {
+				foreach ($arrResult as $row){
+					$name = (strpos($row['name'], 'wcf.acp.group') === 0 && $row['lang'] != "") ? $row['lang'] : $row['name'];
+					$groups[$row['id']] = $name.(($blnWithID) ? ' (#'.$row['id'].')': '');
+				}
+			}
+			
+			return $groups;
+		}
+
+		return false;
 	}
 	
 	public function wbb4_sso($arrUserdata, $boolAutoLogin){
