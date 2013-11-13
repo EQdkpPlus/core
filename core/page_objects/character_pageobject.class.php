@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2009
- * Date:		$Date: 2013-03-12 13:33:52 +0100 (Di, 12 Mrz 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy_leon $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13193 $
+ * @version		$Rev$
  *
- * $Id: viewcharacter.php 13193 2013-03-12 12:33:52Z hoofy_leon $
+ * $Id$
  */
 
 define('ITEMSTATS', true);

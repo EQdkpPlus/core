@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date: 2013-04-22 23:19:36 +0200 (Mo, 22 Apr 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13335 $
+ * @version		$Rev$
  * 
- * $Id: characters.php 13335 2013-04-22 21:19:36Z wallenium $
+ * $Id$
  */
 
 class mycharacters_pageobject extends pageobject {

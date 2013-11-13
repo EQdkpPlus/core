@@ -5,15 +5,15 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2009
-* Date:			$Date: 2013-03-23 18:01:39 +0100 (Sa, 23 Mrz 2013) $
+* Date:			$Date$
 * -----------------------------------------------------------------------
-* @author		$Author: godmod $
+* @author		$Author$
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkpplus
-* @version		$Rev: 13242 $
+* @version		$Rev$
 *
-* $Id: Manage_Articles.php 13242 2013-03-23 17:01:39Z godmod $
+* $Id$
 */
 
 class editarticle_pageobject extends pageobject {

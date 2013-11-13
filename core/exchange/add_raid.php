@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2009
- * Date:		$Date: 2011-11-29 17:10:46 +0100 (Di, 29 Nov 2011) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: Godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 11470 $
+ * @version		$Rev$
  * 
- * $Id: add_raid.php 11470 2011-11-29 16:10:46Z Godmod $
+ * $Id$
  */
 
 if (!defined('EQDKP_INC')){

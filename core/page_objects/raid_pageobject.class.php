@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date: 2013-03-25 12:12:44 +0100 (Mo, 25 Mrz 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13246 $
+ * @version		$Rev$
  *
- * $Id: viewraid.php 13246 2013-03-25 11:12:44Z godmod $
+ * $Id$
  */
 
 

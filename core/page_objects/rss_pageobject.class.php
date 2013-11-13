@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date: 2013-02-24 19:15:29 +0100 (So, 24 Feb 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13116 $
+ * @version		$Rev$
  * 
- * $Id: roster.php 13116 2013-02-24 18:15:29Z godmod $
+ * $Id$
  */
 
 class rss_pageobject extends pageobject {

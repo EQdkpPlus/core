@@ -5,29 +5,29 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2013-02-12 17:01:49 +0100 (Di, 12 Feb 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13071 $
+ * @version		$Rev$
  * 
- * $Id: wow_macro.class.php 13071 2013-02-12 16:01:49Z wallenium $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-$rpexport_plugin['wow_macro.class.php'] = array(
-	'name'			=> 'WoW Macro',
-	'function'		=> 'WoWMacroexport',
+$rpexport_plugin['csv.class.php'] = array(
+	'name'			=> 'CSV',
+	'function'		=> 'CSVexport',
 	'contact'		=> 'webmaster@wallenium.de',
-	'version'		=> '2.0.0');
+	'version'		=> '1.0.0');
 
-if(!function_exists('WoWMacroexport')){
-	function WoWMacroexport($raid_id){
+if(!function_exists('CSVexport')){
+	function CSVexport($raid_id){
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
 
@@ -61,17 +61,17 @@ if(!function_exists('WoWMacroexport')){
 			var attendee_data = '.$json.';
 			output = "";
 
-			cb_guests		= ($("#cb_guests").prop("checked")) ? true : false;
-			cb_confirmed	= ($("#cb_confirmed").prop("checked")) ? true : false;
-			cb_signedin		= ($("#cb_signedin").prop("checked")) ? true : false;
-			cb_backup		= ($("#cb_backup").prop("checked")) ? true : false;
+			cb_guests		= ($("#cb_guests").attr("checked")) ? true : false;
+			cb_confirmed	= ($("#cb_confirmed").attr("checked")) ? true : false;
+			cb_signedin		= ($("#cb_signedin").attr("checked")) ? true : false;
+			cb_backup		= ($("#cb_backup").attr("checked")) ? true : false;
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					output += "/inv " + item.name + "\n";
+					output += item.name + ",";
 				}
 			});
-			$("#attendeeout").html(output);
+			$("#attendeeout").html(output.substring(0, output.length-1));
 		}
 			');
 

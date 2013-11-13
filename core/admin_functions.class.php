@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date: 2013-08-07 20:08:00 +0200 (Mi, 07 Aug 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13456 $
+ * @version		$Rev$
  *
- * $Id: admin_index.class.php 13456 2013-08-07 18:08:00Z godmod $
+ * $Id$
  */
 if(!class_exists('admin_functions')) {
 class admin_functions extends gen_class {

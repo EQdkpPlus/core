@@ -5,15 +5,15 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2002
-* Date:			$Date: 2013-03-06 21:57:56 +0100 (Mi, 06 Mrz 2013) $
+* Date:			$Date$
 * -----------------------------------------------------------------------
-* @author		$Author: godmod $
+* @author		$Author$
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkp-plus
-* @version		$Rev: 13174 $
+* @version		$Rev$
 *
-* $Id: register.php 13174 2013-03-06 20:57:56Z godmod $
+* $Id$
 */
 
 

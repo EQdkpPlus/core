@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2013-01-29 17:35:08 +0100 (Di, 29 Jan 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 12937 $
+ * @version		$Rev$
  * 
- * $Id: exports.php 12937 2013-01-29 16:35:08Z wallenium $
+ * $Id$
  */
 
 class calendareventexport_pageobject extends pageobject {
@@ -64,9 +64,21 @@ class calendareventexport_pageobject extends pageobject {
 	private function generateMenuStructure(){
 		$export_array[] = "----";
 		// Search for plugins and make sure they are registered
-		if ( $dir = opendir($this->root_path . 'core/calendarexport/') ){
+		$raidexport_folder = $this->root_path . 'core/calendarexport/';
+		if ( $dir = opendir($raidexport_folder) ){
 			while ( $d_plugin_code = @readdir($dir) ){
-				$cwd = $this->root_path.'core/calendarexport/'.$d_plugin_code; // regenerate the link to the 'plugin'
+				$cwd = $raidexport_folder.$d_plugin_code; // regenerate the link to the 'plugin'
+				if((@is_file($cwd)) && valid_folder($d_plugin_code)){	// check if valid
+					include($cwd);
+					$export_array[$rpexport_plugin[$d_plugin_code]['function']] = $rpexport_plugin[$d_plugin_code]['name'];	// add to array
+				}
+			}
+		}
+		// search for game export plugins
+		$raidexport_game = $this->root_path.'games/'.$this->game->get_game().'/raidexport/';
+		if(is_dir($raidexport_game) && $dir = opendir($raidexport_game)){
+			while($d_plugin_code = @readdir($dir)){
+				$cwd = $raidexport_game.$d_plugin_code; // regenerate the link to the 'plugin'
 				if((@is_file($cwd)) && valid_folder($d_plugin_code)){	// check if valid
 					include($cwd);
 					$export_array[$rpexport_plugin[$d_plugin_code]['function']] = $rpexport_plugin[$d_plugin_code]['name'];	// add to array
