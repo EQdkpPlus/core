@@ -20,14 +20,14 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-$rpexport_plugin['wow_macro.class.php'] = array(
-	'name'			=> 'WoW Macro',
-	'function'		=> 'WoWMacroexport',
+$rpexport_plugin['csv.class.php'] = array(
+	'name'			=> 'CSV',
+	'function'		=> 'CSVexport',
 	'contact'		=> 'webmaster@wallenium.de',
-	'version'		=> '2.0.0');
+	'version'		=> '1.0.0');
 
-if(!function_exists('WoWMacroexport')){
-	function WoWMacroexport($raid_id){
+if(!function_exists('CSVexport')){
+	function CSVexport($raid_id){
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
 
@@ -52,9 +52,7 @@ if(!function_exists('WoWMacroexport')){
 		registry::register('template')->add_js('
 			genOutput()
 			$("input[type=\'checkbox\']").change(function (){
-				if ($(this).is(":checked")){
-					genOutput()
-				}
+				genOutput()
 			});
 		', "docready");
 
@@ -70,10 +68,10 @@ if(!function_exists('WoWMacroexport')){
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					output += "/inv " + item.name + "\n";
+					output += item.name + ",";
 				}
 			});
-			$("#attendeeout").html(output);
+			$("#attendeeout").html(output.substring(0, output.length-1));
 		}
 			');
 

@@ -21,7 +21,7 @@ $eqdkp_root_path = '../../';
 include_once($eqdkp_root_path . 'common.php');
 
 class calraids_export extends page_generic {
-	public static $shortcuts = array('user', 'tpl', 'in', 'core', 'html');
+	public static $shortcuts = array('user', 'tpl', 'in', 'core', 'html', 'game');
 
 	public function __construct() {
 		$handler = array();
@@ -64,9 +64,21 @@ class calraids_export extends page_generic {
 	private function generateMenuStructure(){
 		$export_array[] = "----";
 		// Search for plugins and make sure they are registered
-		if ( $dir = opendir($this->root_path . 'calendar/raidexport/plugins/') ){
-			while ( $d_plugin_code = @readdir($dir) ){
-				$cwd = $this->root_path.'calendar/raidexport/plugins/'.$d_plugin_code; // regenerate the link to the 'plugin'
+		$raidexport_folder = $this->root_path . 'calendar/raidexport/plugins/';
+		if($dir = opendir($raidexport_folder)){
+			while($d_plugin_code = @readdir($dir)){
+				$cwd = $raidexport_folder.$d_plugin_code; // regenerate the link to the 'plugin'
+				if((@is_file($cwd)) && valid_folder($d_plugin_code)){	// check if valid
+					include($cwd);
+					$export_array[$rpexport_plugin[$d_plugin_code]['function']] = $rpexport_plugin[$d_plugin_code]['name'];	// add to array
+				}
+			}
+		}
+		// search for game export plugins
+		$raidexport_game = $this->root_path.'games/'.$this->game->get_game().'/raidexport/';
+		if(is_dir($raidexport_game) && $dir = opendir($raidexport_game)){
+			while($d_plugin_code = @readdir($dir)){
+				$cwd = $raidexport_game.$d_plugin_code; // regenerate the link to the 'plugin'
 				if((@is_file($cwd)) && valid_folder($d_plugin_code)){	// check if valid
 					include($cwd);
 					$export_array[$rpexport_plugin[$d_plugin_code]['function']] = $rpexport_plugin[$d_plugin_code]['name'];	// add to array
