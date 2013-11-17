@@ -28,6 +28,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * value					key of the radio to be checked
  * class		(string)	class for labels of the fields
  * options		(array)		list containing all the options, if empty it defaults to yes / no
+ * dependency	(array)		array containing IDs of other inputs fields to disable, format: array(opt1_key => array(id1,id2,...), opt2_key => array(id5,id6,...))
  * disabled		(boolean)	disabled field
  */
 class hradio extends html {
@@ -37,6 +38,7 @@ class hradio extends html {
 	public $name = '';
 	public $disabled = false;
 	public $default = 0;
+	public $class = '';
 	
 	public function _toString() {
 		$radiobox  = '';
@@ -46,12 +48,15 @@ class hradio extends html {
 				'1'   => $this->user->lang('cl_on')
 			);
 		}
+		if(!empty($this->dependency)) $this->class .= ' form_change_radio';
 		foreach ($this->options as $key => $opt) {
 			$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
 			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
 			$radiobox .= '<label';
 			if(!empty($this->class)) $radiobox .= ' class="'.$this->class.'"';
-			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.'/>'.$opt.'</label>&nbsp;';
+			$data = (!empty($this->dependency[$key])) ? implode(',', $this->dependency[$key]) : '';
+			$dep = (!empty($this->dependency)) ? ' data-form-change="'.$data.'"' : '';
+			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $radiobox;
 	}

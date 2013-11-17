@@ -52,10 +52,12 @@ abstract class gen_class {
 	}
 	
 	public static function __dependencies() {
+		if(!isset(static::$dependencies)) return array();
 		return static::$dependencies;
 	}
 	
 	public static function __shortcuts() {
+		if(!isset(static::$shortcuts)) return array();
 		return static::$shortcuts;
 	}
 	

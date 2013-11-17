@@ -28,6 +28,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * value					key of the checkbox to be checked
  * class		(string)	class for the labels of the fields
  * options		(array)		list of all checkboxes: key (value) => option (label)
+ * dependency	(array)		array containing IDs of other inputs fields to disable, format: array(opt1_key => array(id1,id2,...), opt2_key => array(id5,id6,...))
  */
 class hcheckbox extends html {
 
@@ -35,6 +36,7 @@ class hcheckbox extends html {
 	
 	public $name = '';
 	public $disabled = false;
+	public $class = '';
 	
 	protected function _toString() {
 		$out = '';
@@ -42,8 +44,14 @@ class hcheckbox extends html {
 			$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
 			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
 			$out .= '<label';
+			$dep = '';
+			if(!empty($this->dependency)) {
+				$this->class .= ' form_change_checkbox';
+				$data = (!empty($this->dependency[$key])) ? implode(',', $this->dependency[$key]) : '';
+				$dep = ' data-form-change="'.$data.'"';
+			}
 			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
-			$out .= '><input type="'.self::$type.'" name="'.$this->name.'[]" value="'.$key.'"'.$selected_choice.$disabled.'/>'.$opt.'</label>&nbsp;';
+			$out .= '><input type="'.self::$type.'" name="'.$this->name.'[]" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $out;
 	}

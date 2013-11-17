@@ -24,7 +24,7 @@ class form extends gen_class {
 	public static $shortcuts = array();
 	// public static $singleton = false;
 	
-	public static $form_id = '';		// the form_id is the identifier of the form, it should be unique and has otherwise no specific use
+	public $form_id = '';		// the form_id is the identifier of the form, it should be unique and has otherwise no specific use
 	
 	public $use_tabs = false;
 	public $use_fieldsets = false;
@@ -53,8 +53,13 @@ class form extends gen_class {
 	 *			- 'help'	=> if a custom help-language variable shall be used
 	 */
 	
+	// flags if dependency jquery stuff has been initialised
+	private $jq_dropdown 	= false;
+	private $jq_checkbox 	= false;
+	private $jq_radio 		= false;
+	
 	public function __construct($form_id) {
-		self::$form_id = $form_id;
+		$this->form_id = $form_id;
 	}
 	
 	/*  add a tab and put existing fieldsets and fields into it
@@ -162,11 +167,13 @@ class form extends gen_class {
 					foreach($tabdata as $fieldsetname => $fieldsetdata) {
 						$this->fs2tpl($fieldsetname, 'tabs.fieldsets');
 						foreach($fieldsetdata as $name => $options) {
+							if(!isset($values[$name])) $values[$name] = '';
 							$this->f2tpl($name, $options, 'tabs.fieldsets.fields', $values[$name]);
 						}
 					}
 				} else {
 					foreach($tabdata['f'] as $name => $options) {
+						if(!isset($values[$name])) $values[$name] = '';
 						$this->f2tpl($name, $options, 'tabs.fields', $values[$name]);
 					}
 				}
@@ -176,15 +183,18 @@ class form extends gen_class {
 				foreach($this->field_array['fs'] as $fieldsetname => $fieldsetdata) {
 					$this->fs2tpl($fieldsetname);
 					foreach($fieldsetdata as $name => $options) {
+						if(!isset($values[$name])) $values[$name] = '';
 						$this->f2tpl($name, $options, 'fieldsets.fields', $values[$name]);
 					}
 				}
 			} else {
 				foreach($this->field_array['f'] as $name => $options) {
+					if(!isset($values[$name])) $values[$name] = '';
 					$this->f2tpl($name, $options, 'fields', $values[$name]);
 				}
 			}
 		}
+		$this->tpl->assign_var('FORM_ID', $this->form_id);
 	}
 	
 	/*	read input data according to form-fields
@@ -249,14 +259,18 @@ class form extends gen_class {
 		}
 		
 		// encryption
-		if(!empty($options['encrypt'])) $values[$name] = $this->encrypt->decrypt($values[$name]);
+		if(!empty($options['encrypt'])) $value = $this->encrypt->decrypt($value);
 		
 		// fill in the field
-		if(isset($values[$name])) $options['value'] = $values[$name];
+		if(!empty($value)) $options['value'] = $value;
 		
 		// additional text around field?
 		$text = (empty($options['text'])) ? '' : $options['text'];
 		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
+		
+		// dependency stuff - hide other elements depening on selection
+		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
+		
 		$field_class = 'h'.$options['type'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
 		$this->tpl->assign_block_vars($key, array(
@@ -264,6 +278,52 @@ class form extends gen_class {
 			'HELP'		=> ($this->user->lang($help, false, false)) ? $this->user->lang($help) : (($this->game->glang($help)) ? $this->game->glang($help) : ''),
 			'FIELD'		=> $text.$field.$text2
 		));
+	}
+	
+	private function jq_dep_init($type) {
+		if($this->{'jq_'.$type}) return;
+		switch($type) {
+			case 'dropdown':
+				$js = "
+	$('.form_change').change(function(){
+		$.each($(this).find('option'), function(){
+			var selected = this.selected;
+			$.each($(this).data('form-change').split(','), function(index, value){
+				if(selected){
+					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
+				}else{
+					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
+					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
+				}
+			});
+		});
+	}).trigger('change');";
+				break;
+				
+			case 'checkbox':
+			case 'radio':
+				$js = "
+	$('.form_change_checkbox, .form_change_radio').change(function(){
+		$.each($('.form_change_checkbox > input, .form_change_radio > input'), function(){
+			var checked = this.checked;
+			$.each($(this).data('form-change').split(','), function(index, value){
+				if(checked){
+					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
+				}else{
+					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
+					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
+				}
+			});
+		});
+	}).trigger('change');";
+				break;
+				
+			default: return;
+		}
+		$this->{'jq_'.$type} = true;
+		$this->tpl->add_js($js, 'docready');
 	}
 }
 ?>

@@ -274,37 +274,32 @@ class mmocms_settings extends page_generic {
 				'disclaimer'	=> array(
 					'disclaimer_show'	=> array(
 						'type'			=> 'radio',
+						'dependency'	=> array(1 => array('disclaimer_name', 'disclaimer_address', 'disclaimer_email', 'disclaimer_irc', 'disclaimer_messenger', 'disclaimer_custom'))
 					),
 					'disclaimer_name'	=> array(
 						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'disclaimer_show',
 					),
 					'disclaimer_address'	=> array(
 						'type'			=> 'textarea',
 						'cols'			=> 50,
 						'rows'			=> 4,
-						'dependency'	=> 'disclaimer_show',
 					),
 					'disclaimer_email'	=> array(
 						'type'			=> 'text',
-						'size'			=> 40,
-						'dependency'	=> 'disclaimer_show',
+						'size'			=> 40
 					),
 					'disclaimer_irc'	=> array(
 						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'disclaimer_show',
 					),
 					'disclaimer_messenger'	=> array(
 						'type'			=> 'text',
 						'size'			=> 40,
-						'dependency'	=> 'disclaimer_show',
 					),
 					'disclaimer_custom'	=> array(
 						'type'			=> 'text',
 						'size'			=> 50,
-						'dependency'	=> 'disclaimer_show',
 					)
 				)
 			),
@@ -352,9 +347,13 @@ class mmocms_settings extends page_generic {
 				),
 				'email'				=> array(
 					'lib_email_method'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $mail_array,
+						'type'			=> 'dropdown',
+						'tolang'		=> true,
+						'options'		=> $mail_array,
+						'dependency'	=> array(
+							'sendmail' => array('lib_email_sendmail_path'), 
+							'smtp' => array('lib_email_smtp_host', 'lib_email_smtp_port', 'lib_email_smtp_connmethod', 'lib_email_smtp_auth', 'lib_email_smtp_user', 'lib_email_smtp_pw')
+						)
 					),
 					'admin_email'	=> array(
 						'type'		=> 'text',
@@ -368,48 +367,40 @@ class mmocms_settings extends page_generic {
 					'lib_email_sendmail_path'	=> array(
 						'type'			=> 'text',
 						'size'			=> 30,
-						'dependency'	=> array('lib_email_method', 'sendmail'),
 					),
 					'lib_email_smtp_host'	=> array(
 						'type'			=> 'text',
 						'size'			=> 30,
-						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_port'	=> array(
 						'type'			=> 'text',
 						'size'			=> 5,
 						'default'		=> 25,
-						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_connmethod'	=> array(
 						'type'			=> 'dropdown',
 						'options'		=> $smtp_connection_methods,
-						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_auth'	=> array(
 						'type'			=> 'radio',
-						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_user'	=> array(
 						'type'			=> 'text',
 						'size'			=> 30,
-						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_smtp_pw'	=> array(
 						'type'			=> 'password',
 						'size'			=> 30,
-						'dependency'	=> array('lib_email_method', 'smtp'),
 					),
 					'lib_email_signature'	=> array(
 						'type'			=> 'radio',
-						'default'		=> 0
+						'dependency'	=> array(1 => array('lib_email_signature_value')),
 					),
 					'lib_email_signature_value'	=> array(
 						'type'			=> 'textarea',
 						'default'		=> $signature,
 						'cols'			=> 80,
 						'rows'			=> 5,
-						'dependency'	=> 'lib_email_signature',
 					),
 				),
 				'recaptcha'		=> array(
@@ -508,16 +499,13 @@ class mmocms_settings extends page_generic {
 						'options'		=> $members,
 					),
 					'show_twinks'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0
+						'type'		=> 'radio'
 					),
 					'detail_twink'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0
+						'type'		=> 'radio'
 					),
 					'hide_inactive'	=> array(
-						'type'		=> 'checkbox',
-						'default'	=> 0
+						'type'		=> 'radio'
 					),
 					'inactive_period'	=> array(
 						'type'		=> 'text',
@@ -569,12 +557,12 @@ class mmocms_settings extends page_generic {
 						'default'	=> 120
 					),
 					'calendar_addraid_use_def_start'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
+						'dependency'	=> array(1 => array('calendar_addraid_def_starttime')),
 					),
 					'calendar_addraid_def_starttime'	=> array(
 						'type'		=> 'timepicker',
-						'dependency'	=> 'calendar_addraid_use_def_start',
-						'default'		=> '20:00'
+						'default'	=> '20:00'
 					),
 					'calendar_repeat_crondays'	=> array(
 						'type'		=> 'spinner',
@@ -714,17 +702,16 @@ class mmocms_settings extends page_generic {
 			'sms'		=> array(
 				'sms'	=> array(
 					'sms_enable'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
+						'dependency'	=> array(1 => array('sms_username', 'sms_password'))
 					),
 					'sms_username'	=> array(
 						'type'		=> 'text',
-						'size'			=> 40,
-						'dependency'	=> 'sms_enable',
+						'size'		=> 40,
 					),
 					'sms_password'	=> array(
 						'type'		=> 'password',
-						'size'			=> 40,
-						'dependency'	=> 'sms_enable',
+						'size'		=> 40,
 					)
 				)
 			),
