@@ -101,13 +101,13 @@ class MyMailer extends PHPMailer {
 	* @param $method				Method to send the mails (smtp, sendmail, mail)
 	* @return traue/false
 	*/
-	public function SendMailFromAdmin($adress, $subject, $templatename, $bodyvars){
+	public function SendMailFromAdmin($adress, $subject, $templatename, $bodyvars = array()){
 		$this->AddAddress(stripslashes($adress));
 		$this->GenerateMail($subject, $templatename, $bodyvars, $this->adminmail);
 		return $this->PerformSend();
 	}
 	
-	public function SendMail($adress, $from, $subject, $templatename, $bodyvars){
+	public function SendMail($adress, $from, $subject, $templatename, $bodyvars = array()){
 		$this->AddAddress(stripslashes($adress));
 		$this->GenerateMail($subject, $templatename, $bodyvars, $from);
 		return $this->PerformSend();
