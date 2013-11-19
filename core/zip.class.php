@@ -150,8 +150,10 @@ if (!class_exists("zip")) {
 				if ($resZip){
 					if (is_array($this->files['add'])){
 						foreach ($this->files['add'] as $key => $value){
-							$blnResult = $objZip->addFile($value, $key);
-							if (!$blnResult) return false;
+							if (is_file($value)){						
+								$blnResult = $objZip->addFile($value, $key);
+								if (!$blnResult) return false;
+							}
 						}
 					}
 					if (is_array($this->files['delete'])){

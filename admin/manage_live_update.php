@@ -224,7 +224,7 @@ class Manage_Live_Update extends page_generic {
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile, 'changed');
 		if($arrFiles && count($arrFiles) > 0){
 			foreach ($arrFiles as $file){
-				if (md5_file($this->root_path.$file['name']) != $file['md5_old'] && md5_file($this->root_path.$file['name']) != $file['md5']){
+				if (is_file($this->root_path.$file['name']) && md5_file($this->root_path.$file['name']) != $file['md5_old'] && md5_file($this->root_path.$file['name']) != $file['md5']){
 					$arrChanged[] = $file['name'];
 				}
 			}
