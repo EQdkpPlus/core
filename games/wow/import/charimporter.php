@@ -158,7 +158,10 @@ class charImporter extends page_generic {
 	}
 
 	public function ajax_massupdate(){
-		$chardata	= $this->game->obj['armory']->character($this->in->get('charname', ''), $this->config->get('uc_servername'), true);
+		// due to connected/virtual realms, check for a servername of the char
+		$char_server	= $this->pdh->get('member', 'profile_field', array($this->in->get('charid', 0), 'servername'));
+		$servername		= ($char_server != '') ? $char_server : $this->config->get('uc_servername');
+		$chardata		= $this->game->obj['armory']->character($this->in->get('charname', ''), $servername, true);
 
 		if(!isset($chardata['status'])){
 			$errormsg	= '';
