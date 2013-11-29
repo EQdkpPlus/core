@@ -112,6 +112,9 @@ var.eq2-icon-sml img {height:16px;width:16px}
 .itemd_white {
 	color: white;
 }
+.itemd_purple {
+	color: #ff00ff;
+}
 .adorncontainer {
     display: table;
 	width: auto; 
@@ -130,6 +133,9 @@ var.eq2-icon-sml img {height:16px;width:16px}
 }
 .itemd_adiconwhite {
 	background-image: url(./images/eq2/white.jpg); width: 32px; height: 32px; display: table-cell;
+}
+.itemd_adiconpurple {
+	background-image: url(./images/eq2/purple.jpg); width: 32px; height: 32px; display: table-cell;
 }
 .itemd_recipe {
 	color: #e6e970; margin-top: 12px; height: 150px; overflow: auto;

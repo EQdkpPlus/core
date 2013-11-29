@@ -71,8 +71,8 @@ if(!class_exists('eq2_sony')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$itemInfo = urlencode('displayname=' . $itemname );
-			$link = 'http://data.soe.com/json/get/eq2/item/?' . $itemInfo;
+			$itemInfo = urlencode($itemname);
+			$link = 'http://data.soe.com/json/get/eq2/item/?displayname=' . $itemInfo;
 			$data = $this->puf->fetch($link);
 			$this->searched_langs[] = $lang;
 			$itemData = json_decode($data);
@@ -129,7 +129,41 @@ if(!class_exists('eq2_sony')) {
 				
 		protected function ItemDescription($item)
 		{
-		$description = html_entity_decode($item->{'description'});
+		$description = $item->{'description'};
+					if (substr($description, 0, 2) == '\#') { 
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
+					}
+					
+					
+					
+					
+					/*
+					if (strncmp("\\#00FFFF",$description,8) == 0)
+					{
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
+					}
+					if (strncmp("\\#FF0000",$description,8) == 0)
+					{
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
+					}
+					if (strncmp("\\#FFF380",$description,8) == 0)
+					{
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:". $desccolor .";'>" . $description . "</span>";
+					}*/
+					
+					
 		if (is_string($description)) {
 		return "<div class='itemd_desc'>" . $description . "</div>\n";
 		} else { return ""; }
@@ -139,7 +173,7 @@ if(!class_exists('eq2_sony')) {
 		{
 		if (array_key_exists('growth_table',$item))
 		{
-		    $content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
+		    $content .= "<br><div style='width: 80px; float: left; color: white;'>Level</div>";
 			$itemLevel = $item->{'leveltouse'};
 			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div>";
 			$content .= "<div class='ui-helper-clearfix'</div>";
@@ -340,7 +374,7 @@ if(!class_exists('eq2_sony')) {
 				$tierColor = "#d99fe9";
 				$tierShadow = "text-shadow: -1px 0px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0), 1px 0px 0px rgb(0, 0, 0), 0px -1px 0px rgb(0, 0, 0), 0px 0px 4px rgb(200, 89, 230), 0px 0px 4px rgb(200, 89, 230);";
 			}
-			return "<div style='color: $tierColor;' class='itemd_tier'>$tierName</div>";
+			return "<div style='color: $tierColor; $tierShadow' class='itemd_tier'>$tierName</div>";
 		}
 		
 		protected function ItemFlags($item)
@@ -369,6 +403,11 @@ if(!class_exists('eq2_sony')) {
 		protected function ItemAttributes($item)
 		{
 			$content = "";
+			$typeInfo = $item->{'typeinfo'};
+			$growth = $typeInfo->{'growthdescription'};
+			$growthinfo = $growth->{'growthdescription'};
+			if (array_key_exists('growth_table',$item)) { $content = ""; } 
+			else {
 			$modifiers = $item->{'modifiers'};
 			$count = 0;
 			foreach($modifiers as $key => $value) {
@@ -380,14 +419,13 @@ if(!class_exists('eq2_sony')) {
 					$content .= "+" . strtoupper($value->{'value'}) . " ";
 					$content .= $value->{'displayname'} . " &nbsp;";
 					$count++;
-					if ($count % 5 == 0) {
-						$content .= "</div>\n";
-					}
+					if ($count % 5 == 0) { $content .= "</div>\n"; }
 				}
+			}
 			}
 			return $content;
 		}
-		
+				
 		protected function ItemResists($item)
 		{
 			$content = "";
@@ -495,6 +533,8 @@ if(!class_exists('eq2_sony')) {
 			   if ($className == "Inquisitor") { $priestCount++; $priestList .= "Inquisitor "; }
 			   if ($className == "Fury") { $priestCount++; $priestList .= "Fury "; }
 			   if ($className == "Warden") { $priestCount++; $priestList .= "Warden "; }
+			   # channeler
+			   if ($className == "Channeler") { $priestCount++; $priestList .= "Channeler "; }
 			   # fighters
 			   if ($className == "Berserker") { $fighterCount++; $fighterList .= "Berserker "; }
 			   if ($className == "Guardian") { $fighterCount++; $fighterList .= "Guardian "; }
@@ -511,7 +551,7 @@ if(!class_exists('eq2_sony')) {
 			   if ($className == "Ranger") { $scoutCount++; $scoutList .= "Ranger "; }
 			   # beastlord
 			   if ($className == "Beastlord") { $scoutCount++; $scoutList .= "Beastlord "; }
-			   # mages
+			     # mages
 			   if ($className == "Illusionist") { $mageCount++; $mageList .= "Illusionist "; }
 			   if ($className == "Coercer") { $mageCount++; $mageList .= "Coercer "; }
 			   if ($className == "Conjuror") { $mageCount++; $mageList .= "Conjuror "; }
@@ -525,7 +565,7 @@ if(!class_exists('eq2_sony')) {
 			else {
 				$classList .= $fighterList;
 			}
-			if ($priestCount == 6) {
+			if ($priestCount >= 6) {
 				$classList .= "All Priests ";
 			}
 			else {
@@ -722,6 +762,7 @@ if(!class_exists('eq2_sony')) {
 		{
 			$content = "";
 			$effects = $item->{'effect_list'};
+			if ($effects == NULL) { return $content; } else {
 			$content .= "<div class='itemd_effects'>Effects:</div>\n";
 			$content .= "<div style='font-weight: normal; color:white;'>";
 			foreach($effects as $key) {
@@ -745,11 +786,8 @@ if(!class_exists('eq2_sony')) {
 			}
 			$content .= "</div>";
 			return $content;
+			}
 		}
-
-		
-		
-		
 		
 		protected function ItemSetBonus($item)
 		{
@@ -817,7 +855,7 @@ if(!class_exists('eq2_sony')) {
 					if ($flurry !=0) { $content .= "  +" . $flurry . "%&nbspFlurry&nbsp&nbsp"; }
 					if ($spelldoubleattackchance !=0) { $content .= "  +" . $spelldoubleattackchance . "%&nbspDoublecast Chance&nbsp&nbsp"; }
 					if ($mana !=0) { $content .= "  +" . $mana . "&nbspPower&nbsp&nbsp"; }			
-		if (!empty($set->{'effect'})) { $content .= "&nbsp".($set->{'effect'}). " <br>"; }
+		if (!empty($set->{'effect'})) { $content .= "<br>&nbsp".($set->{'effect'}). " <br>"; }
 	    for ($d = 1; $d <= 30; $d++) {
 		if (!empty($set->{'descriptiontag_'.$d})) { $content .= "&nbsp".($set->{'descriptiontag_'.$d})."<br>"; }		
 		}
@@ -827,9 +865,6 @@ if(!class_exists('eq2_sony')) {
         }
 		return $content;
 		}
-		
-	
-		
 		
 		protected function ItemAdornmentSlots($item) 
 		{
@@ -849,7 +884,25 @@ if(!class_exists('eq2_sony')) {
 			}
 			return $content;
 		}
-				
+		
+		protected function ItemPattern($item) 
+		{
+			$content = "";
+			$typeInfo = $item->{'typeinfo'};
+			if ($typeInfo->{'name'} == "itempattern") {
+			$content .= "<br><div style='color: yellow;'>Creates:</div><br>";
+			$patterns = $typeInfo->{'item_list'};
+			if ($patterns == NULL) { return $content; } else {
+			$content .= "<div style='font-weight: normal; color:white;'>";
+				foreach($patterns as $key) {
+					$display = $key->{'displayname'};
+					$content .= "<div style='font-weight: normal; color:white;'>".$display."</div>";
+				}
+			}
+			}
+			return $content;
+		}
+		
 		protected function GenerateItemStatsHTML($myItem) {
 			$content = $this->OuterDivNoHide($myItem);
 			$content .= $this->DisplayName($myItem);
@@ -859,7 +912,6 @@ if(!class_exists('eq2_sony')) {
 			$content .= $this->ItemTier($myItem);
 			$content .= $this->ItemFlags($myItem);
 			$content .= $this->ItemAdornmentSlots($myItem);
-			$content .= $this->GreenAdornMax($myItem);
 			$content .= $this->Adornments($myItem);
 			$content .= $this->ItemAttributes($myItem);
 			$content .= $this->ItemResists($myItem);
@@ -869,6 +921,8 @@ if(!class_exists('eq2_sony')) {
 			$content .= $this->ItemType($myItem);
 			$content .= $this->ItemEffects($myItem);
 			$content .= $this->ItemSetBonus($myItem);
+			$content .= $this->GreenAdornMax($myItem);
+			$content .= $this->ItemPattern($myItem);
 			$content .= "</div>\n";
 			return $content;
 		}

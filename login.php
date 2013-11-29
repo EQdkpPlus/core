@@ -223,7 +223,7 @@ class login extends page_generic {
 			// Email them their new password
 			$bodyvars = array(
 				'USERNAME'		=> $row['username'],
-				'DATETIME'		=> $this->time->user_date(false, true),
+				'DATETIME'		=> $this->time->user_date($this->time->time, true),
 				'U_ACTIVATE'	=> $this->env->link . 'login.php?mode=newpassword&key=' . $user_key,
 			);
 

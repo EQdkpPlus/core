@@ -1,4 +1,266 @@
-/*
+.fhtt-wrapper{zoom:1;}.fhtt-wrapper:before,.fhtt-wrapper:after{display:table;content:"";}
+.fhtt-wrapper:after{clear:left;}
+.clear{clear:both;}
+.clear-left{clear:left;}
+.clear-right{clear:right;}
+.float,.float-left{float:left !important;}
+.float-right{float:right !important;}
+.no-float{float:none !important;}
+.no-margin{margin:0;}
+.margin{margin-bottom:20px;}
+.half-margin{margin-bottom:10px;}
+.half-top-margin{margin-top:20px;}
+.half-bottom-margin{margin-bottom:20px;}
+.top-margin{margin-top:20px;}
+.bottom-margin{margin-bottom:20px;}
+.big-top-margin{margin-top:30px;}
+.big-bottom-margin{margin-bottom:30px;}
+.huge-top-margin{margin-top:30px;}
+.huge-bottom-margin{margin-bottom:30px;}
+.extra-margin{margin-bottom:3em !important;margin-top:3em !important;}
+.small{font-size:11px;}
+.large{font-size:16px;line-height:1.125;}
+.cleartext{font-family:Verdana,"Helvetica Neue",Arial,Helvetica,sans-serif;}
+.text-underline{text-decoration:underline !important;}
+.text-nounderline{text-decoration:none !important;}
+.text-hoverunderline{text-decoration:none !important;}.text-hoverunderline:hover{text-decoration:underline !important;}
+.text-uncolored{color:inherit;}
+.text-alwaysuncolored{color:inherit !important;}
+.center-this{float:none !important;margin-left:auto !important;margin-right:auto !important;}
+.no-wrap{white-space:nowrap;}
+.float-left{float:left;}
+.float-right{float:right;}
+.left-align{text-align:left !important;}
+.center-align{text-align:center !important;}
+.right-align{text-align:right !important;}
+table.left-cells th,table.left-cells td{text-align:left !important;}
+table.center-cells th,table.center-cells td{text-align:center !important;}
+table.right-cells th,table.right-cells td{text-align:right !important;}
+.auto-width{width:auto;}
+.pos-rel{position:relative;}
+.pos-abs{position:absolute;}
+.pos-full{bottom:0;left:0;position:absolute;right:0;top:0;}
+.inline{display:inline;}
+.block{display:block;}
+.image-border{background:#00090b;border:2px solid #015669;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;}
+.image-border-hover{background:#010e11;border-color:#01738c;}
+.clearfix{zoom:1;}.clearfix:before,.clearfix:after{display:table;content:"";}
+.clearfix:after{clear:both;}
+.clearfix.left:after{clear:left;float:none;}
+.clearfix.right:after{clear:right;float:none;}
+.clearfix-left{zoom:1;}.clearfix-left:before,.clearfix-left:after{display:table;content:"";}
+.clearfix-left:after{clear:left;}
+.clearfix-right{zoom:1;}.clearfix-right:before,.clearfix-right:after{display:table;content:"";}
+.clearfix-right:after{clear:right;}
+#tc .icon-help{position:absolute;right:0;top:10px;}
+.q,.q a,.color-q{color:#f7d565 !important;}
+.q0,.q0 a,.color-q0{color:#9d9d9d !important;}
+.q1,.q1 a,.color-q1{color:#ffffff !important;}
+.q2,.q2 a,.color-q2{color:#1eff00 !important;}
+.q3,.q3 a,.color-q3{color:#0070dd !important;}
+.q4,.q4 a,.color-q4{color:#a335ee !important;}
+.q5,.q5 a,.color-q5{color:#ff8000 !important;}
+.q6,.q6 a,.color-q6{color:#e5cc80 !important;}
+.q7,.q7 a,.color-q7{color:#e5cc80 !important;}
+.q8,.q8 a,.color-q8{color:#ffff98 !important;}
+.q9,.q9 a,.color-q9{color:#71d5ff !important;}
+.q10,.q10 a,.color-q10{color:#ff4040 !important;}
+.r1{color:#ff8040 !important;}
+.r2{color:#ffff00 !important;}
+.r3{color:#40bf40 !important;}
+.r4{color:#808080 !important;}
+.c1,.c1 a{color:#c69b6d !important;}
+.c2,.c2 a{color:#f48cba !important;}
+.c3,.c3 a{color:#aad372 !important;}
+.c4,.c4 a{color:#fff468 !important;}
+.c5,.c5 a{color:#ffffff !important;}
+.c6,.c6 a{color:#c41e3b !important;}
+.c7,.c7 a{color:#2359ff !important;}
+.c8,.c8 a{color:#68ccef !important;}
+.c9,.c9 a{color:#9382c9 !important;}
+.c11,.c11 a{color:#ff7c0a !important;}
+.gem1{color:#9d9d9d !important;}
+.gem2{color:#e60c0b !important;}
+.gem4{color:#ffff35 !important;}
+.gem6{color:#f48905 !important;}
+.gem8{color:#295df1 !important;}
+.gem10{color:#b957fc !important;}
+.gem12{color:#22c516 !important;}
+.gem14{color:#ffffff !important;}
+.s1{color:#ff3f40 !important;}
+.s2{color:#fffb9f !important;}
+.s3{color:#ffb2eb !important;}
+h1.text-icon{background-position:0 3px !important;}
+.fh-icon{background:none;position:relative;z-index:0;display:inline-block;text-decoration:none !important;vertical-align:middle;}.fh-icon ins{background-repeat:no-repeat;background-position:center !important;background-size:contain;display:block;position:absolute;z-index:5;}
+.fh-icon del{background-repeat:no-repeat;display:block;height:100%;position:absolute;width:100%;z-index:10;}
+.fh-icon a{display:block;height:100%;position:absolute;left:0;text-decoration:none !important;top:0;width:100%;z-index:20;}.fh-icon a:hover{text-decoration:none !important;}
+.fh-icon i{box-shadow:0 0 5px #000000;-moz-box-shadow:0 0 5px #000000;-webkit-box-shadow:0 0 5px #000000;box-shadow:0 0 5px #000000;-moz-box-shadow:0 0 5px #000000;-webkit-box-shadow:0 0 5px #000000;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;bottom:0;display:block;left:0;position:absolute;right:0;top:0;}
+.fh-icon b{color:#fff;line-height:normal;position:absolute;text-shadow:1px 1px 0 #000000,1px -1px 0 #000000,-1px 1px 0 #000000,-1px -1px 0 #000000;text-shadow:0 0 0 1px #000000;text-shadow:1px 1px 0 #000000,1px -1px 0 #000000,-1px 1px 0 #000000,-1px -1px 0 #000000;text-shadow:0 0 0 1px #000000;filter:glow(color=black,strength=1);z-index:5;}.fh-icon b b{display:none;}
+.fh-icon.tiny{height:14px;width:14px;}.fh-icon.tiny ins{box-shadow:inset 0 0 1px #000000;-moz-box-shadow:inset 0 0 1px #000000;-webkit-box-shadow:inset 0 0 1px #000000;box-shadow:inset 0 0 1px #000000;-moz-box-shadow:inset 0 0 1px #000000;-webkit-box-shadow:inset 0 0 1px #000000;height:12px;left:1px;top:1px;width:12px;}
+.fh-icon.tiny i{box-shadow:0 0 3px #000000;-moz-box-shadow:0 0 3px #000000;-webkit-box-shadow:0 0 3px #000000;box-shadow:0 0 3px #000000;-moz-box-shadow:0 0 3px #000000;-webkit-box-shadow:0 0 3px #000000;}
+.fh-icon.tiny>b,.fh-icon.tiny>a>b{bottom:0;font-size:9px;right:2px;}
+.fh-icon.small{height:20px;width:20px;}.fh-icon.small ins{border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;box-shadow:inset 0 0 2px #000000;-moz-box-shadow:inset 0 0 2px #000000;-webkit-box-shadow:inset 0 0 2px #000000;box-shadow:inset 0 0 2px #000000;-moz-box-shadow:inset 0 0 2px #000000;-webkit-box-shadow:inset 0 0 2px #000000;height:18px;left:1px;top:1px;width:18px;}
+.fh-icon.small i{box-shadow:0 0 3px #000000;-moz-box-shadow:0 0 3px #000000;-webkit-box-shadow:0 0 3px #000000;box-shadow:0 0 3px #000000;-moz-box-shadow:0 0 3px #000000;-webkit-box-shadow:0 0 3px #000000;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;}
+.fh-icon.small>b,.fh-icon.small>a>b{bottom:0;font-size:11px;right:3px;}
+.fh-icon.medium{height:44px;width:44px;}.fh-icon.medium ins{border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;height:36px;left:4px;top:4px;width:36px;}
+.fh-icon.medium i{box-shadow:0 0 4px #000000;-moz-box-shadow:0 0 4px #000000;-webkit-box-shadow:0 0 4px #000000;box-shadow:0 0 4px #000000;-moz-box-shadow:0 0 4px #000000;-webkit-box-shadow:0 0 4px #000000;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;bottom:2px;left:2px;right:2px;top:2px;}
+.fh-icon.medium>b,.fh-icon.medium>a>b{bottom:4px;font-size:13px;right:6px;}
+.fh-icon.large{height:60px;width:60px;}.fh-icon.large ins{border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;height:56px;left:6px;top:6px;width:56px;}
+.fh-icon.large i{box-shadow:0 0 5px #000000;-moz-box-shadow:0 0 5px #000000;-webkit-box-shadow:0 0 5px #000000;box-shadow:0 0 5px #000000;-moz-box-shadow:0 0 5px #000000;-webkit-box-shadow:0 0 5px #000000;border-radius:6px;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;-moz-border-radius:6px;-webkit-border-radius:6px;bottom:3px;left:3px;right:3px;top:3px;}
+.fh-icon.large>b,.fh-icon.large>a>b{bottom:4px;font-size:18px;right:8px;}
+.fh-icon.no-border ins{background-color:transparent !important;}
+.fh-icon.no-border a{background:none !important;}
+.fh-icon.icon-inline{margin-right:3px;}
+.fhtt .xdebug-error th{background:none !important;font-size:13px !important;height:auto !important;line-height:normal !important;}
+.fhtt-clear{clear:both;}
+.fhtt-wrapper>.fhtt-icon{float:left;}
+#headtt.hide-icon>.fhtt-icon{display:none !important;}
+.fhtt{color:#fff;font:13px/normal Arial,"Helvetica Neue",Helvetica,sans-serif;float:left;max-width:500px;position:relative;}.fhtt a{color:inherit;text-decoration:none;}.fhtt a:hover{text-decoration:underline;}
+.fhtt table{background:none;border:0;border-collapse:collapse;border-spacing:0;line-height:17px;margin:0;padding:0;}
+.fhtt thead,.fhtt tbody,.fhtt tr,.fhtt td,.fhtt th{background:none;border:0;height:auto;line-height:17px;margin:0;padding:0;text-align:left;}
+.fhtt th{line-height:0;}
+.th-q0,.th-q0 a{color:#8f8f8f !important;}
+.th-q2,.th-q2 a{color:#ffffff !important;}
+.th-q3,.th-q3 a{color:#00fa00 !important;}
+.th-q4,.th-q4 a{color:#1d8afa !important;}
+.th-q4c,.th-q4c a{color:#d95c00 !important;}
+.th-q5,.th-q5 a{color:#a335ee !important;}
+.th-q6,.th-q6 a{color:#212cfb !important;}
+.th-q7,.th-q7 a{color:#e5cc80 !important;}
+.th-q8,.th-q8 a{color:#e5cc80 !important;}
+.th-q9,.th-q9 a{color:#ffff98 !important;}
+.th-q10,.th-q10 a{color:#71d5ff !important;}
+.th-q11,.th-q11 a{color:#ff4040 !important;}
+.th-quest,.th-quest a{color:#eeee36 !important;}
+.th-c1,.th-c1 a{color:#c69b6d !important;}
+.th-c2,.th-c2 a{color:#f48cba !important;}
+.th-c3,.th-c3 a{color:#aad372 !important;}
+.th-c4,.th-c4 a{color:#fff468 !important;}
+.th-c5,.th-c5 a{color:#ff6666 !important;}
+.th-c6,.th-c6 a{color:#c41e3b !important;}
+.th-c7,.th-c7 a{color:#2359ff !important;}
+.th-c8,.th-c8 a{color:#68ccef !important;}
+.th-d0{color:#808080 !important;}
+.th-d1{color:#40bf40 !important;}
+.th-d2{color:#ffff00 !important;}
+.th-d3{color:#ff8040 !important;}
+.th-d4{color:#ff4040 !important;}
+.th-icon i{border-radius:0 !important;-moz-border-radius:0 !important;-webkit-border-radius:0 !important;border-radius:0 !important;-moz-border-radius:0 !important;-webkit-border-radius:0 !important;bottom:auto !important;box-shadow:none !important;-moz-box-shadow:none !important;-webkit-box-shadow:none !important;box-shadow:none !important;-moz-box-shadow:none !important;-webkit-box-shadow:none !important;height:100%;left:0 !important;right:auto !important;top:0 !important;width:100%;z-index:12;}
+.th-icon.tiny{top:-1px;}
+.th-icon.tinyxxxx a i{background:url(./images/swtor/tiny.png?1) 0 14px no-repeat;}
+.th-icon.tiny a[href]:hover i{background-position:0 -14px;}
+.th-icon.tiny a[href]:active i{background-position:-56px -14px;}
+.th-icon.small{height:20px;top:-1px;width:20px;}
+.th-icon.smallxxxx a i{background:url(./images/swtor/small.png?1) 0 20px no-repeat;}
+.th-icon.smallxx a[href]:hover i{background-position:0 -20px;}
+.th-icon.smallxx a[href]:active i{background-position:-80px -20px;}
+.th-icon.medium a i{background:url(./images/swtor/medium.png?1) 0 44px no-repeat;}
+.th-icon.medium a[href]:hover i{background-position:0 -44px;}
+.th-icon.medium a[href]:active i{background-position:-176px -44px;}
+.th-icon.large{height:60px;width:60px;}.th-icon.large ins{height:50px;left:5px;top:5px;width:50px;}
+.th-icon.large a i{background:url(./images/swtor/large.png?1) 0 60px no-repeat;}
+.th-icon.large a[href]:hover i{background-position:0 -60px;}
+.th-icon.large a[href]:active i{background-position:-240px -60px;}
+.th-icon.tiny del{background:url(./images/swtor/tiny.png?1) -126px -14px;}
+.th-icon.tiny.th-q1 del{background-position:-168px 0;}
+.th-icon.tiny.th-q2 del{background-position:-154px 0;}
+.th-icon.tiny.th-q3 del{background-position:0 0;}
+.th-icon.tiny.th-q4 del{background-position:-210px 0;}
+.th-icon.tiny.th-q4c del{background-position:-182px 0;}
+.th-icon.tiny.th-q5 del{background-position:-84px 0;}
+.th-icon.tiny.th-q6 del{background-position:-28px 0;}
+.th-icon.tiny.th-q7 del,.th-icon.tiny.th-q8 del{background-position:-294px 0;}
+.th-icon.tiny.th-quest del{background-position:-238px 0;}
+.th-icon.small del{background:url(./images/swtor/small.png?1) -180px -20px;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;}
+.th-icon.small.th-q1 del{background-position:-240px 0;}
+.th-icon.small.th-q2 del{background-position:-220px 0;}
+.th-icon.small.th-q3 del{background-position:0 0;}
+.th-icon.small.th-q4 del{background-position:-300px 0;}
+.th-icon.small.th-q4c del{background-position:-260px 0;}
+.th-icon.small.th-q5 del{background-position:-120px 0;}
+.th-icon.small.th-q6 del{background-position:-40px 0;}
+.th-icon.small.th-q7 del,.th-icon.small.th-q8 del{background-position:-420px 0;}
+.th-icon.small.th-quest del{background-position:-340px 0;}
+.th-icon.medium del{background:url(./images/swtor/medium.png?1) -396px -44px;}
+.th-icon.medium.th-q1 del{background-position:-528 0;}
+.th-icon.medium.th-q2 del{background-position:-484px 0;}
+.th-icon.medium.th-q3 del{background-position:0 0;}
+.th-icon.medium.th-q4 del{background-position:-660px 0;}
+.th-icon.medium.th-q4c del{background-position:-572px 0;}
+.th-icon.medium.th-q5 del{background-position:-264px 0;}
+.th-icon.medium.th-q6 del{background-position:-88px 0;}
+.th-icon.medium.th-q7 del,.th-icon.medium.th-q8 del{background-position:-924px 0;}
+.th-icon.medium.th-quest del{background-position:-748px 0;}
+.th-icon.large del{background:url(./images/swtor/large.png?1) -540px -60px;}
+.th-icon.large.th-q1 del{background-position:-720px 0;}
+.th-icon.large.th-q2 del{background-position:-660px 0;}
+.th-icon.large.th-q3 del{background-position:0 0;}
+.th-icon.large.th-q4 del{background-position:-900px 0;}
+.th-icon.large.th-q4c del{background-position:-780px 0;}
+.th-icon.large.th-q5 del{background-position:-360px 0;}
+.th-icon.large.th-q6 del{background-position:-120px 0;}
+.th-icon.large.th-q7 del,.th-icon.large.th-q8 del{background-position:-1260px 0;}
+.th-icon.large.th-quest del{background-position:-1020px 0;}
+.th-icon.icon-inline{margin-right:3px;}
+.th-icon.medium .bubble{background:rgba(2, 21, 37, 0.85);border:1px solid #017f9c;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;box-shadow:0 0 2px #000000;-moz-box-shadow:0 0 2px #000000;-webkit-box-shadow:0 0 2px #000000;box-shadow:0 0 2px #000000;-moz-box-shadow:0 0 2px #000000;-webkit-box-shadow:0 0 2px #000000;color:#ffffff;cursor:default;font-family:Verdana,sans-serif;font-size:11px;left:12px;line-height:1;padding:0 0 1px;position:absolute;right:12px;text-align:center;top:35px;z-index:21;}
+.th-affection{background:url(./images/swtor/heart.png) right no-repeat;padding-right:17px;}
+.th-align-light{background:url(./images/swtor/ide-tiny-light.png) right no-repeat;padding-right:16px;}
+.th-align-dark{background:url(./images/swtor/side-tiny-dark.png) right no-repeat;padding-right:16px;}
+.th-money{background:no-repeat right center;color:#ffffff;}
+.th-money.item{padding-right:15px;}
+.th-money.credits{padding-right:15px;background-image:url(./images/swtor/money-credits.png);}
+.th-money.achievement{padding-right:13px;background-image:url(./images/swtor/achievement.gif);}
+.fhtt.th{color:#3dd0f0;font-size:13px;max-width:320px;}.fhtt.th .thtt-bottom,.fhtt.th .thtt-right,.fhtt.th .thtt-bottomright{background:url(./images/swtor/background.png?1) bottom left;bottom:-13px;font-size:1px;height:19px;left:-14px;position:absolute;right:0;z-index:-1;}
+.fhtt.th .thtt-right{background-position:top right;bottom:6px;height:auto;left:auto;right:-17px;top:-11px;width:17px;}
+.fhtt.th .thtt-bottomright{background-position:bottom right;left:auto;right:-17px;width:17px;}
+.fhtt.th .thtt-cont{background:url(./images/swtor/background.png);zoom:1;margin:0 17px 19px 0;padding:11px 0 0 14px;position:relative;}.fhtt.th .thtt-cont:before,.fhtt.th .thtt-cont:after{display:table;content:'';}
+.fhtt.th .thtt-cont:after{clear:both;}
+.fhtt.th .thtt-innercont{margin-bottom:-6px;position:relative;}.fhtt.th .thtt-innercont>.thtt-top-margin:first-child{margin-top:0;}
+.fhtt.th .thtt-cont-cap{background:url(./images/swtor/background.png?1) right 0;bottom:0;position:absolute;right:-17px;top:0;width:17px;}
+.fhtt.th .thtt-equipped{font-size:11px;}
+.fhtt.th .thtt-character{color:#94dffb;font-size:16px;}
+.fhtt.th .thtt-name{font-size:16px;margin:0 0 10px;}.fhtt.th .thtt-name .tiny.icon-inline{top:-2px;}
+.fhtt.th .thtt-name-float{color:#999999;float:right;line-height:16px;margin-top:1px;}
+.fhtt.th .thtt-title{margin:-10px 0 10px;}
+.fhtt.th .thtt-indent{padding:0 0 0 10px;}
+.fhtt.th .thtt-spacer{height:10px;}
+.fhtt.th .thtt-top-margin{margin-top:10px;}
+.fhtt.th .thtt-shiftup{margin-top:-10px;}
+.fhtt.th .thtt-components,.fhtt.th .thtt-stats,.fhtt.th .thtt-tasks{color:#94dffb;margin:10px 0 0;}.fhtt.th .thtt-components>div,.fhtt.th .thtt-stats>div,.fhtt.th .thtt-tasks>div{color:#f1c241;padding:0 0 0 10px;}
+.fhtt.th .thtt-tasks{color:#f1c241;}.fhtt.th .thtt-tasks>div{color:#94dffb;}
+.fhtt.th .thtt-enhancements{color:#94dffb;margin:10px 0 0;}.fhtt.th .thtt-enhancements div{padding:0 0 0 10px;color:#3dd0f0;}
+.fhtt.th .thtt-enhancements a.locked{padding-left:16px;background-image:url(./images/swtor/mod-locked.png);background-repeat:no-repeat;background-position:0 50%;}
+.fhtt.th .thtt-req{margin:10px 0 0;}
+.fhtt.th .thtt-desc{color:#f1c241;margin:10px 0 0;}
+.fhtt.th .thtt-journal{margin:10px 0 0;}
+.fhtt.th .thtt-usedesc{color:#5ade6d;margin:10px 0 0;}
+.fhtt.th .thtt-nextrank{margin:10px 0 -10px;}
+.fhtt.th .thtt-powerrating{color:#d7ab00;}
+.fhtt.th .thtt-gift{color:#fb0059;}
+.fhtt.th .thtt-set{color:#f7f550;}.fhtt.th .thtt-set>a.thtt-item{color:#858484;display:block;margin-left:5px;}
+.fhtt.th .thtt-setbonus{color:#858484;}
+.fhtt.th.thtt-has-classification-strong .thtt-innercont,.fhtt.th.thtt-has-classification-elite .thtt-innercont,.fhtt.th.thtt-has-classification-boss .thtt-innercont,.fhtt.th.thtt-has-classification-standardboss .thtt-innercont,.fhtt.th.thtt-has-classification-strongboss .thtt-innercont,.fhtt.th.thtt-has-classification-heroicworldboss .thtt-innercont,.fhtt.th.thtt-has-classification-heroicboss .thtt-innercont,.fhtt.th.thtt-has-classification-boss_raid .thtt-innercont,.fhtt.th.thtt-has-classification-champion .thtt-innercont{min-height:62px;}
+.fhtt.th .thtt-classification-icon{background-position:no-repeat !important;display:none;height:84px;left:-52px;position:absolute;top:-19px;width:117px;z-index:1;}.fhtt.th .thtt-classification-icon.thtt-strong{background:url(./images/swtor/classification-silver.png);display:block;}
+.fhtt.th .thtt-classification-icon.thtt-elite{background:url(./images/swtor/classification-gold.png);display:block;}
+.fhtt.th .thtt-classification-icon.thtt-boss,.fhtt.th .thtt-classification-icon.thtt-standardboss,.fhtt.th .thtt-classification-icon.thtt-strongboss,.fhtt.th .thtt-classification-icon.thtt-heroicworldboss,.fhtt.th .thtt-classification-icon.thtt-heroicboss,.fhtt.th .thtt-classification-icon.thtt-boss_raid,.fhtt.th .thtt-classification-icon.thtt-champion{background:url(./images/swtor/classification-platinum.png);display:block;}
+.fhtt.th .thtt-float-right,.fhtt.th .thtt-float{float:right;}
+.fhtt.th .thtt-float-left{float:left;}
+.fhtt-wrapper>.fhtt-icon.th-icon.medium{top:3px;}
+.fhtt-wrapper>.fhtt-icon.th-icon.large{top:1px;}
+#headtt>.fhtt-icon{left:-44px;position:absolute;top:0;}#headtt>.fhtt-icon.tiny{left:-14px;}
+#headtt>.fhtt-icon.small{left:-26px;}
+#headtt>.fhtt-icon.medium{top:2px;}
+#headtt>.fhtt-icon.large{left:-60px;top:1px;}
+.fhtt.th-ability,.fhtt.th-mission{color:#afe8fb;}.fhtt.th-ability .thtt-name,.fhtt.th-mission .thtt-name{color:#d7ab00;margin:0;}
+.fhtt.th-ability .thtt-general,.fhtt.th-mission .thtt-general{margin:10px 0;}
+.fhtt.th-ability .thtt-label,.fhtt.th-mission .thtt-label{color:#ebb954;}
+.fhtt.th-ability .thtt-desc,.fhtt.th-mission .thtt-desc{color:inherit;}
+.fhtt.th-item .thtt-innercont,.fhtt.th-schematic .thtt-innercont{padding-bottom:6px;}
+
+
+
+
+/* swdb.com
  * Tooltips.css
  */
 
