@@ -71,8 +71,8 @@ if(!class_exists('eq2_sony')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$itemInfo = urlencode('displayname=' . $itemname );
-			$link = 'http://data.soe.com/json/get/eq2/item/?' . $itemInfo;
+			$itemInfo = urlencode($itemname);
+			$link = 'http://data.soe.com/json/get/eq2/item/?displayname=' . $itemInfo;
 			$data = $this->puf->fetch($link);
 			$this->searched_langs[] = $lang;
 			$itemData = json_decode($data);
@@ -129,7 +129,41 @@ if(!class_exists('eq2_sony')) {
 				
 		protected function ItemDescription($item)
 		{
-		$description = html_entity_decode($item->{'description'});
+		$description = $item->{'description'};
+					if (substr($description, 0, 2) == '\#') { 
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
+					}
+					
+					
+					
+					
+					/*
+					if (strncmp("\\#00FFFF",$description,8) == 0)
+					{
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
+					}
+					if (strncmp("\\#FF0000",$description,8) == 0)
+					{
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
+					}
+					if (strncmp("\\#FFF380",$description,8) == 0)
+					{
+						$desccolor   = substr($description,1,7);
+						$description = substr($description,8);
+						$description = str_replace("\\/c","",$description);
+						$description = "<span style='color:". $desccolor .";'>" . $description . "</span>";
+					}*/
+					
+					
 		if (is_string($description)) {
 		return "<div class='itemd_desc'>" . $description . "</div>\n";
 		} else { return ""; }
@@ -139,7 +173,7 @@ if(!class_exists('eq2_sony')) {
 		{
 		if (array_key_exists('growth_table',$item))
 		{
-		    $content .= "<div style='width: 80px; float: left; color: white;'>Level</div>";
+		    $content .= "<br><div style='width: 80px; float: left; color: white;'>Level</div>";
 			$itemLevel = $item->{'leveltouse'};
 			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div>";
 			$content .= "<div class='ui-helper-clearfix'</div>";
@@ -201,9 +235,6 @@ if(!class_exists('eq2_sony')) {
 		}
 		if (!empty(${"m{$j}"}->{'spellweapondps'})) {
 		$spellweapondps = $spellweapondps + (${"m{$j}"}->{'spellweapondps'});
-		}
-		if (!empty(${"m{$j}"}->{'spellweapondoubleattackchance'})) {
-		$spellweapondoubleattackchance = $spellweapondoubleattackchance + (${"m{$j}"}->{'spellweapondoubleattackchance'});
 		}
 		if (!empty(${"m{$j}"}->{'spellweapondoubleattackchance'})) {
 		$spellweapondoubleattackchance = $spellweapondoubleattackchance + (${"m{$j}"}->{'spellweapondoubleattackchance'});
@@ -317,9 +348,11 @@ if(!class_exists('eq2_sony')) {
 			$tierColor = "white";
 			if ($tierName == "FABLED") {
 				$tierColor = "#ff939d";
+				$tierShadow = "text-shadow: -1px 0px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0), 1px 0px 0px rgb(0, 0, 0), 0px -1px 0px rgb(0, 0, 0), 0px 0px 4px rgb(223, 83, 95), 0px 0px 4px rgb(223, 83, 95);";
 			}
 			if ($tierName == "MASTERCRAFTED FABLED") {
 				$tierColor = "#ff939d";
+				$tierShadow = "text-shadow: -1px 0px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0), 1px 0px 0px rgb(0, 0, 0), 0px -1px 0px rgb(0, 0, 0), 0px 0px 4px rgb(223, 83, 95), 0px 0px 4px rgb(223, 83, 95);";
 			}
 			if ($tierName == "LEGENDARY") {
 				$tierColor = "#ffc993";
@@ -335,11 +368,13 @@ if(!class_exists('eq2_sony')) {
 			}
 			if ($tierName == "ETHEREAL") {
 				$tierColor = "#ff8C00";
+				$tierShadow = "text-shadow: -1px 0px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0), 1px 0px 0px rgb(0, 0, 0), 0px -1px 0px rgb(0, 0, 0), 0px 0px 4px rgb(213, 105, 0), 0px 0px 4px rgb(213, 105, 0);";
 			}
 			if ($tierName == "MYTHICAL") {
 				$tierColor = "#d99fe9";
+				$tierShadow = "text-shadow: -1px 0px 0px rgb(0, 0, 0), 0px 1px 0px rgb(0, 0, 0), 1px 0px 0px rgb(0, 0, 0), 0px -1px 0px rgb(0, 0, 0), 0px 0px 4px rgb(200, 89, 230), 0px 0px 4px rgb(200, 89, 230);";
 			}
-			return "<div style='color: $tierColor;' class='itemd_tier'>$tierName</div>";
+			return "<div style='color: $tierColor; $tierShadow' class='itemd_tier'>$tierName</div>";
 		}
 		
 		protected function ItemFlags($item)
@@ -368,6 +403,11 @@ if(!class_exists('eq2_sony')) {
 		protected function ItemAttributes($item)
 		{
 			$content = "";
+			$typeInfo = $item->{'typeinfo'};
+			$growth = $typeInfo->{'growthdescription'};
+			$growthinfo = $growth->{'growthdescription'};
+			if (array_key_exists('growth_table',$item)) { $content = ""; } 
+			else {
 			$modifiers = $item->{'modifiers'};
 			$count = 0;
 			foreach($modifiers as $key => $value) {
@@ -379,14 +419,13 @@ if(!class_exists('eq2_sony')) {
 					$content .= "+" . strtoupper($value->{'value'}) . " ";
 					$content .= $value->{'displayname'} . " &nbsp;";
 					$count++;
-					if ($count % 5 == 0) {
-						$content .= "</div>\n";
-					}
+					if ($count % 5 == 0) { $content .= "</div>\n"; }
 				}
+			}
 			}
 			return $content;
 		}
-		
+				
 		protected function ItemResists($item)
 		{
 			$content = "";
@@ -494,6 +533,8 @@ if(!class_exists('eq2_sony')) {
 			   if ($className == "Inquisitor") { $priestCount++; $priestList .= "Inquisitor "; }
 			   if ($className == "Fury") { $priestCount++; $priestList .= "Fury "; }
 			   if ($className == "Warden") { $priestCount++; $priestList .= "Warden "; }
+			   # channeler
+			   if ($className == "Channeler") { $priestCount++; $priestList .= "Channeler "; }
 			   # fighters
 			   if ($className == "Berserker") { $fighterCount++; $fighterList .= "Berserker "; }
 			   if ($className == "Guardian") { $fighterCount++; $fighterList .= "Guardian "; }
@@ -510,7 +551,7 @@ if(!class_exists('eq2_sony')) {
 			   if ($className == "Ranger") { $scoutCount++; $scoutList .= "Ranger "; }
 			   # beastlord
 			   if ($className == "Beastlord") { $scoutCount++; $scoutList .= "Beastlord "; }
-			   # mages
+			     # mages
 			   if ($className == "Illusionist") { $mageCount++; $mageList .= "Illusionist "; }
 			   if ($className == "Coercer") { $mageCount++; $mageList .= "Coercer "; }
 			   if ($className == "Conjuror") { $mageCount++; $mageList .= "Conjuror "; }
@@ -524,7 +565,7 @@ if(!class_exists('eq2_sony')) {
 			else {
 				$classList .= $fighterList;
 			}
-			if ($priestCount == 6) {
+			if ($priestCount >= 6) {
 				$classList .= "All Priests ";
 			}
 			else {
@@ -669,7 +710,7 @@ if(!class_exists('eq2_sony')) {
 			$itemLevel = $item->{'leveltouse'};
 			$content .= "<div class='ui-helper-clearfix'</div>";
 			$content .= "<div style='width: 150px; float: left;' class='itemd_green'>$itemLevel</div><br>";
-			$content .= "<br><div class='itemd_green'>";
+			$content .= "<div class='itemd_green'>";
 			$usableByClasses = $this->GetUsableByClasses($typeInfo);
 			$content .= $usableByClasses;
 			$content .= "</div>";
@@ -716,46 +757,115 @@ if(!class_exists('eq2_sony')) {
 			    return $this->ItemTypeFood($item);
 			}
 		}
-		
-		protected function ItemEffects($item) 
+
+		protected function ItemEffects($item)
 		{
 			$content = "";
 			$effects = $item->{'effect_list'};
-			$count = 0;
+			if ($effects == NULL) { return $content; } else {
+			$content .= "<div class='itemd_effects'>Effects:</div>\n";
+			$content .= "<div style='font-weight: normal; color:white;'>";
 			foreach($effects as $key) {
-					$count++;
-					if ($count == 1) {
-						$content .= "<div class='itemd_effects'>Effects:</div>\n";
-						$content .= "<div style='font-weight: normal; color:white;'>";
-					}
-					# format the value
 					$description = $key->{'description'};
+					$indent = intval($key->{'indentation'});
+					$indented = (6 + ($indent * 2));
+					$padded = (8 + ($indent * 13));
 					if (strncmp("\\#FF0000",$description,8) == 0)
-				{
+					{
 						$description = substr($description,8);
 						$description = str_replace("\\/c","",$description);
-						$content .= "&nbsp;&nbsp;&bull;&nbsp;";
-						$content .= "<span style='color:red;'>" . $description . "</span></br>";
+						$description = "<span style='color:red;'>" . $description . "</span>";
 					}
-					else
+					if ($indent == 0)
 					{
-						$indent = $key->{'indentation'};
-						if ($indent > 0) {
-							for ($i=0;$i<$indent;$i++)
-							{
-								$content .= "&nbsp;&nbsp;";
-							}
-							$content .= "&bull;&nbsp;";
-						}
 						$content .= $description . " <br/>";
 					}
+					else  {
+					$content .= "<div style='text-indent: -".$indented."px; padding-left: ".$padded."px;'>&bull;&nbsp;" .$description . " <br/></div>";
+					}
 			}
-			if ($count > 0) {
-				$content .= "</div>\n";
-			}
+			$content .= "</div>";
 			return $content;
+			}
 		}
-
+		
+		protected function ItemSetBonus($item)
+		{
+			$content = "";
+			if(isset($item->{'setbonus_info'})) {
+			$setbonus = $item->{'setbonus_list'};
+			$setinfo = $item->{'setbonus_info'};
+			$setname = $setinfo->{'displayname'};
+			$required = $setbonus->{'requireditems'};
+			$content .= "<br><div style='width: 300px; float: left; color: yellow;'>".$setname."</div><br><br>";
+			foreach ($setbonus as $set) {
+					$content .= "<div style='color: white;'>(".$set->{'requireditems'}.")";
+					$agi = 0; $int = 0; $sta = 0; $str = 0; $wis = 0; 
+					$attackspeed = 0; $dps = 0; $doubleattackchance = 0; $critbonus = 0; $spellweaponattackspeed = 0; $flurry = 0; 
+					$spellweapondps = 0; $spellweapondoubleattackchance = 0; $weapondamagebonus = 0; $basemodifier = 0; $maxhpperc = 0;
+					$armormitigationincrease = 0; $strikethrough = 0; $spellcastpct = 0; $spelltimereusespellonly = 0; $hategainmod = 0; $all = 0;
+					$spelldoubleattackchance = 0; $mana = 0; $effect = 0;
+					if (!empty($set->{'agi'})) { $agi = ($set->{'agi'}); }
+					if (!empty($set->{'int'})) { $int = ($set->{'int'}); }
+					if (!empty($set->{'sta'})) { $sta = ($set->{'sta'}); }
+					if (!empty($set->{'str'})) { $str = ($set->{'str'}); }
+					if (!empty($set->{'wis'})) { $wis = ($set->{'wis'}); }
+					if (!empty($set->{'attackspeed'})) { $attackspeed = ($set->{'attackspeed'}); }
+					if (!empty($set->{'dps'})) { $dps = ($set->{'dps'}); }
+					if (!empty($set->{'flurry'})) { $flurry = ($set->{'flurry'}); }
+					if (!empty($set->{'spelldoubleattackchance'})) { $spelldoubleattackchance = ($set->{'spelldoubleattackchance'}); }
+					if (!empty($set->{'doubleattackchance'})) { $doubleattackchance = ($set->{'doubleattackchance'}); }
+					if (!empty($set->{'critbonus'})) { $critbonus = ($set->{'critbonus'}); }
+					if (!empty($set->{'spellweaponattackspeed'})) { $spellweaponattackspeed = ($set->{'spellweaponattackspeed'}); }
+					if (!empty($set->{'spellweapondps'})) { $spellweapondps = ($set->{'spellweapondps'}); }
+					if (!empty($set->{'spellweapondoubleattackchance'})) { $spellweapondoubleattackchance = ($set->{'spellweapondoubleattackchance'}); }
+					if (!empty($set->{'weapondamagebonus'})) { $weapondamagebonus = ($set->{'weapondamagebonus'}); }
+					if (!empty($set->{'basemodifier'})) { $basemodifier = ($set->{'basemodifier'}); }
+					if (!empty($set->{'maxhpperc'})) { $maxhpperc = ($set->{'maxhpperc'}); }
+					if (!empty($set->{'armormitigationincrease'})) { $armormitigationincrease = ($set->{'armormitigationincrease'}); }
+					if (!empty($set->{'strikethrough'})) { $strikethrough = ($set->{'strikethrough'}); }
+					if (!empty($set->{'spellcastpct'})) { $spellcastpct = ($set->{'spellcastpct'}); }
+					if (!empty($set->{'spelltimereusepct'})) { $spelltimereusepct = ($set->{'spelltimereusepct'}); }
+					if (!empty($set->{'spelltimereusespellonly'})) { $spelltimereusespellonly = ($set->{'spelltimereusespellonly'}); }
+					if (!empty($set->{'hategainmod'})) { $hategainmod = ($set->{'hategainmod'}); }
+					if (!empty($set->{'all'})) { $all = ($set->{'all'}); }
+					if (!empty($set->{'mana'})) { $mana = ($set->{'mana'}); }
+					if ($int != 0) { $content .= "  +" . $int . " int&nbsp&nbsp"; }
+					if ($wis != 0) { $content .= "  +" . $wis . " wis&nbsp&nbsp"; }
+					if ($str != 0) { $content .= "  +" . $str . " str&nbsp&nbsp"; }
+					if ($agi != 0) { $content .= "  +" . $agi . " agi&nbsp&nbsp"; }
+					if ($sta != 0) { $content .= "  +" . $sta . " sta&nbsp&nbsp"; }
+					if ($attackspeed != 0) { $content .= "  +" . $attackspeed . "%&nbspAttack&nbspSpeed&nbsp&nbsp"; }
+					if ($dps != 0) { $content .= "  +" . $dps . "&nbspDamage&nbspPer&nbspSecond&nbsp&nbsp"; }
+					if ($doubleattackchance != 0) { $content .= "  +" . $doubleattackchance . "%&nbspMulti&nbspAttack&nbspChance&nbsp&nbsp"; }
+					if ($critbonus != 0) { $content .= "  +" . $critbonus . "%&nbspCrit&nbspBonus&nbsp&nbsp"; }
+					if ($spellweaponattackspeed != 0) { $content .= "  +" . $spellweaponattackspeed . "%&nbspSpell&nbspWeapon&nbspAttack&nbspSpeed&nbsp&nbsp"; }
+					if ($spellweapondps != 0) {	$content .= "  +" . $spellweapondps . "&nbspSpell&nbspWeapon&nbspDamage&nbspPer&nbspSecond&nbsp&nbsp"; }
+					if ($spellweapondoubleattackchance != 0) { $content .= "  +" . $spellweapondoubleattackchance . "%&nbspSpell&nbspWeapon&nbspMulti&nbspAttack&nbspChance&nbsp&nbsp"; }
+					if ($weapondamagebonus != 0) { $content .= "  +" . $weapondamagebonus . "&nbspWeapon&nbspDamage&nbspBonus&nbsp&nbsp"; }
+					if ($basemodifier != 0) { $content .= "  +" . $basemodifier . "%&nbspPotency&nbsp&nbsp"; }
+					if ($maxhpperc != 0) { $content .= "  +" . $maxhpperc . "%&nbspMax&nbspHealth&nbsp&nbsp"; }
+					if ($armormitigationincrease != 0) { $content .= "  +" . $armormitigationincrease . "%&nbspMitigation&nbspIncrease&nbsp&nbsp"; }
+					if ($strikethrough != 0) { $content .= "  +" . $strikethrough . "%&nbspStrikethrough&nbsp&nbsp"; }
+					if ($spellcastpct != 0) { $content .= "  +" . $spellcastpct . "%&nbspAbility&nbspCasting&nbspSpeed&nbsp&nbsp"; }
+					if ($spelltimereusepct != 0) { $content .= "  +" . $spelltimereusepct . "%&nbspAbility&nbspReuse&nbspSpeed&nbsp&nbsp"; }
+					if ($spelltimereusespellonly != 0) { $content .= "  +" . $spelltimereusespellonly . "%&nbspSpell&nbspReuse&nbspSpeed&nbsp&nbsp"; }
+					if ($all !=0) { $content .= "  +" . $all . "&nbspAbility&nbspModifier&nbsp&nbsp"; }
+					if ($hategainmod !=0) { $content .= "  +" . $hategainmod . "%&nbspHate&nbspGain&nbsp&nbsp"; }
+					if ($flurry !=0) { $content .= "  +" . $flurry . "%&nbspFlurry&nbsp&nbsp"; }
+					if ($spelldoubleattackchance !=0) { $content .= "  +" . $spelldoubleattackchance . "%&nbspDoublecast Chance&nbsp&nbsp"; }
+					if ($mana !=0) { $content .= "  +" . $mana . "&nbspPower&nbsp&nbsp"; }			
+		if (!empty($set->{'effect'})) { $content .= "<br>&nbsp".($set->{'effect'}). " <br>"; }
+	    for ($d = 1; $d <= 30; $d++) {
+		if (!empty($set->{'descriptiontag_'.$d})) { $content .= "&nbsp".($set->{'descriptiontag_'.$d})."<br>"; }		
+		}
+			
+			}
+		
+        }
+		return $content;
+		}
+		
 		protected function ItemAdornmentSlots($item) 
 		{
 			$content = "";
@@ -774,7 +884,25 @@ if(!class_exists('eq2_sony')) {
 			}
 			return $content;
 		}
-				
+		
+		protected function ItemPattern($item) 
+		{
+			$content = "";
+			$typeInfo = $item->{'typeinfo'};
+			if ($typeInfo->{'name'} == "itempattern") {
+			$content .= "<br><div style='color: yellow;'>Creates:</div><br>";
+			$patterns = $typeInfo->{'item_list'};
+			if ($patterns == NULL) { return $content; } else {
+			$content .= "<div style='font-weight: normal; color:white;'>";
+				foreach($patterns as $key) {
+					$display = $key->{'displayname'};
+					$content .= "<div style='font-weight: normal; color:white;'>".$display."</div>";
+				}
+			}
+			}
+			return $content;
+		}
+		
 		protected function GenerateItemStatsHTML($myItem) {
 			$content = $this->OuterDivNoHide($myItem);
 			$content .= $this->DisplayName($myItem);
@@ -784,7 +912,6 @@ if(!class_exists('eq2_sony')) {
 			$content .= $this->ItemTier($myItem);
 			$content .= $this->ItemFlags($myItem);
 			$content .= $this->ItemAdornmentSlots($myItem);
-			$content .= $this->GreenAdornMax($myItem);
 			$content .= $this->Adornments($myItem);
 			$content .= $this->ItemAttributes($myItem);
 			$content .= $this->ItemResists($myItem);
@@ -793,6 +920,9 @@ if(!class_exists('eq2_sony')) {
 			$content .= $this->ItemAdornments($myItem);
 			$content .= $this->ItemType($myItem);
 			$content .= $this->ItemEffects($myItem);
+			$content .= $this->ItemSetBonus($myItem);
+			$content .= $this->GreenAdornMax($myItem);
+			$content .= $this->ItemPattern($myItem);
 			$content .= "</div>\n";
 			return $content;
 		}
