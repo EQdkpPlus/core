@@ -261,7 +261,7 @@ class ManagePageLayouts extends page_generic {
 		
 		$this->tpl->assign_vars(array (
 			'NEW_PRESET_XML'			=> $readd_xml,
-			'LAYOUT_DROPDOWN'			=> new hdropdown('new_layout_source', array('options' => $layout_options, 'value' => $this->config->get('eqdkp_layout'))),,
+			'LAYOUT_DROPDOWN'			=> new hdropdown('new_layout_source', array('options' => $layout_options, 'value' => $this->config->get('eqdkp_layout'))),
 			'JS_LM_TABS'				=> $this->jquery->Tab_header('lm_tabs'),
 			'CSRF_DEL_TOKEN'			=> $this->CSRFGetToken('del'),
 			'CSRF_DELPRESET_TOKEN'		=> $this->CSRFGetToken('del_pre'),

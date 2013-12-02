@@ -334,6 +334,7 @@ $lang = array(
 "register_help_disabled_username" => "Der Administrator hat das Ändern des Benutzernames nicht freigegeben. Wende dich an ihn, damit er deinen Benutzernamen für dich ändert.",
 "register_help_irc" => "Gib hier deinen Channel und deinen IRC-Server an, z.B. #eqdkp-plus@quakenet",
 "news_submitter" => "geschrieben von %1\$s um %2\$s Uhr",
+"clock",
 "Itemsearch_searchby" => "Suche nach: ",
 "Itemsearch_item" => "Item",
 "Itemsearch_buyer" => "Käufer",

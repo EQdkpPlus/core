@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Massmail extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'env', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'html', 'time', 'logs', 'hooks');
+		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'env', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'html', 'time', 'logs', 'hooks', 'routing');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -62,7 +62,7 @@ class Manage_Massmail extends page_generic {
 		$arrRaidList = array();
 		if (is_array($arrRaidIDlist)){
 			foreach ($arrRaidIDlist as $intRaidID){
-				$ahref_start = ((int)$this->pdh->get('calendar_events', 'calendartype', array($intRaidID)) == 1) ? '<a href="'.$this->env->link.'calendar/viewcalraid.php?eventid='.$intRaidID.'">' : '';
+				$ahref_start = ((int)$this->pdh->get('calendar_events', 'calendartype', array($intRaidID)) == 1) ? '<a href="'.$this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intRaidID)), $intRaidID, false, true).'">' : '';
 				$ahref_end	= ((int)$this->pdh->get('calendar_events', 'calendartype', array($intRaidID)) == 1) ? '</a>' : '';
 
 				$arrRaidList[] = array(

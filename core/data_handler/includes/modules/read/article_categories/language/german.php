@@ -38,6 +38,7 @@ $preset_lang = array(
 	'category_name'			=> 'Artikelkategorie Name',
 	'category_alias'		=> 'Artikelkategorie Alias',
 	'category_portallayout'	=> 'Artikelkategorie Portallayout',
+	'category_article_count'=> 'Artikelkategorie Artikelanzahl',
 );
 
 ?>

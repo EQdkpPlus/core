@@ -60,7 +60,7 @@
 					
 				<div class="news_author">
 					<div class="floatLeft">
-						<i class="fa fa-clock-o"></i>{article_row.ARTICLE_DATE} - {article_row.ARTICLE_SUBMITTED}<!-- IF article_row.S_COMMENTS --> &bull; <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i>{article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
+						<i class="fa fa-clock-o"></i> {article_row.ARTICLE_DATE}, {article_row.ARTICLE_TIME} &bull; <i class="fa fa-user"></i> {article_row.ARTICLE_AUTHOR} <!-- IF article_row.S_COMMENTS --> &bull; <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i> {article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
 					</div>
 					<div class="news_social floatRight">
 						{article_row.ARTICLE_SOCIAL_BUTTONS}
@@ -126,7 +126,7 @@
 				
 				<div class="news_author">
 					<div class="floatLeft">
-						<i class="fa fa-clock-o"></i> {article_row.ARTICLE_DATE} - {article_row.ARTICLE_SUBMITTED}<!-- IF article_row.S_COMMENTS --> &bull; <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i>{article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
+						<i class="fa fa-clock-o"></i>  {article_row.ARTICLE_DATE}, {article_row.ARTICLE_TIME} &bull; <i class="fa fa-user"></i> {article_row.ARTICLE_AUTHOR} <!-- IF article_row.S_COMMENTS --> &bull; <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i>{article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
 					</div>
 					<div class="news_social floatRight">
 						{article_row.ARTICLE_SOCIAL_BUTTONS}
