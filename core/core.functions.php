@@ -476,19 +476,19 @@ function message_die($text = '', $title = '', $type = 'normal', $login_form = fa
 	//Switch rounded boxes and icons
 	switch($type){
 		case 'access_denied':	$message_class = 'red';
-								$icon = 'fa fa-minus-circle';
+								$icon = 'fa-minus-circle';
 		break;
 
 		case 'info':			$message_class = 'blue';
-								$icon = 'fa fa-info-circle ';
+								$icon = 'fa-info-circle ';
 		break;
 
 		case 'error':			$message_class = 'red';
-								$icon = 'fa fa-exclamation-triangle';
+								$icon = 'fa-exclamation-triangle';
 		break;
 
 		case 'ok':				$message_class = 'green';
-								$icon = 'fa fa-check';
+								$icon = 'fa-check';
 		break;
 
 	}
