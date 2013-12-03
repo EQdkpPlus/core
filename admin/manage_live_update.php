@@ -30,7 +30,7 @@ class Manage_Live_Update extends page_generic {
 
 	public function __construct(){
 		$this->user->check_auth('a_maintenance');
-		$this->user->check_hostmode();
+
 		$handler = array(
 			'show' 	=> array('process' => 'handle_steps'),
 			'step'	=> array('process' => 'handle_ajax_steps', 'csrf'=>true),

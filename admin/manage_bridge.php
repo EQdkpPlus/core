@@ -266,8 +266,7 @@ class Manage_Bridge extends page_generic {
 		$settings = $this->bridge->get_settings();
 		if (is_array($settings)){
 			foreach($settings as $name=>$confvars){
-				// continue if hmode == true
-				if(($this->HMODE && $confvars['not4hmode']) || (isset($confvars['disabled']) && $confvars['disabled']===true)){
+				if((isset($confvars['disabled']) && $confvars['disabled']===true)){
 					continue;
 				}
 				$no_lang = (isset($confvars['no_lang'])) ? true : false;

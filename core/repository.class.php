@@ -65,14 +65,13 @@ HTP69g==
 		public $update_count	= 0;
 		private $extensions 	= array();
 		public $updates = array();
-		private $plusversion, $user_auth, $host_mode, $new_version = false;		
+		private $plusversion, $user_auth, $new_version = false;		
 
 		//Constructor
 		public function __construct(){
 			$this->RepoEndpoint		= EQDKP_REPO_URL."repository.php?function=";
 			$this->plusversion		= VERSION_INT;
 			$this->user_auth		= $this->user->check_auth('a_', false);
-			$this->host_mode		= $this->user->check_hostmode(false);
 			$this->updates			= $this->BuildUpdateArray();
 			//reduce caching time if it's a tester
 			if ($this->getChannel() != "stable"){

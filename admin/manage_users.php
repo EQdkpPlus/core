@@ -577,10 +577,6 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 				));
 
 				foreach($fielddata as $name=>$confvars){
-					// continue if hmode == true
-					if((isset($_HMODE) && $confvars['not4hmode'])){
-						continue;
-					}
 
 					$no_lang = (isset($confvars['no_lang'])) ? true : false;
 					$confvars['value'] = $confvars['selected'] = (isset($confvars['no_value'])) ? '' : (isset($this->user_data[$name]) ? $this->user_data[$name] : '');

@@ -465,20 +465,6 @@ class user_core extends gen_class {
 			return ($boolDie) ? message_die($this->lang('noauth'), $this->lang('noauth_default_title'), 'access_denied', true) : false;
 		}
 	}
-
-	/**
-	* Checks if the eqdkp runs in the easy mode...
-	*
-	* @param $die					If they don't have permission, exit with message_die or just return false?
-	* @return bool
-	*/
-	public function check_hostmode($boolDie = true){
-		if(!$this->HMODE){
-			return true;
-		}else{
-			return ($boolDie) ? message_die($this->lang('noauth_hostmode'), $this->lang('noauth_default_title'), 'access_denied', true) : false;
-		}
-	}
 	
 	public function check_pageobject($strPageObject, $boolDie = true, $intUserID = 0){
 		if($intUserID == 0) $intUserID = $this->data['user_id'];

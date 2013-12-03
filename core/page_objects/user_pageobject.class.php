@@ -430,7 +430,6 @@ class user_pageobject extends pageobject {
 		if (((int)$this->config->get('sms_enable') == 1) && $this->user->check_auth('a_sms_send', false)){
 				if(strlen(($this->config->get('sms_username'))) < 1 || strlen(($this->config->get('sms_password')))){
 					$sms_info = $this->user->lang('sms_info_account')." ".$this->user->lang('sms_info_account_link') ;
-					if ($_HMODE) {$sms_info = $this->user->lang('sms_info_account')." ".$_HMODE_LINK;}
 				}
 
 				$this->tpl->assign_vars(array(
