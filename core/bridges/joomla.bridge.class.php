@@ -63,11 +63,31 @@ class joomla_bridge extends bridge_generic {
 	
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
-		list($strHash, $strSalt) = explode(':', $hash);
-		if (md5($password.$strSalt) == $strHash){
-			return true;
+		
+		//Bcrypt
+		if (substr($hash, 0, 4) == '$2a$' || substr($hash, 0, 4) == '$2y$')
+		{
+			if (!function_exists("crypt")) return false;
+			
+			return (crypt($password, $hash) === $hash);
 		}
+	
+		// Check if the hash is an MD5 hash.
+		if (substr($hash, 0, 3) == '$1$')
+		{
+			if (!function_exists("crypt")) return false;
+			
+			return (crypt($password, $hash) === $hash);
+		}
+
+		// Check if the hash is a Joomla hash.
+		if (preg_match('#[a-z0-9]{32}:[A-Za-z0-9]{32}#', $hash) === 1)
+		{
+			return md5($password . substr($hash, 33)) == substr($hash, 0, 32);
+		}
+
 		return false;
+
 	}
 	
 	public function joomla_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
