@@ -189,7 +189,7 @@ class config extends gen_class {
 					if(strlen(trim($pname)) > 0){
 						$data[] = array(
 							'config_name'	=> $pname,
-							'config_value'	=> addslashes($pvalue),
+							'config_value'	=> $pvalue,
 							'config_plugin'	=> $name
 						);
 					}
