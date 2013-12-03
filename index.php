@@ -431,7 +431,7 @@ class controller extends gen_class {
 			
 			$intStart = $this->in->get('start', 0);
 			$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
-			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID, false));
+			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 			registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
 			
 			//Articles to template
@@ -450,6 +450,7 @@ class controller extends gen_class {
 				//Replace Image Gallery
 				$arrGalleryObjects = array();
 				preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
+
 				if (count($arrGalleryObjects[0])){
 					include_once($this->root_path.'core/gallery.class.php');
 					foreach($arrGalleryObjects[4] as $key=>$val){

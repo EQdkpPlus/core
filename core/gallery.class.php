@@ -28,7 +28,7 @@ if(!class_exists('gallery')){
 		
 		private $_cache = array();
 		
-		public function create($strFolder, $intSortation, $strPath, $intPageNumber  = 0){
+		public function create($strFolder, $intSortation, $strPath, $intPageNumber  = 0){		
 			$strFolder = str_replace("*+*+*", "/", $strFolder);
 			$strOrigFolder = $strFolder;
 			//Subfolder navigation

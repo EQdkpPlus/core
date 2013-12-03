@@ -364,7 +364,7 @@ class wbb4_bridge extends bridge_generic {
 	 */
 	public static function checkPassword($username, $password, $dbHash) {
 		$type = self::detectEncryption($dbHash);
-		var_dump($type);
+		#var_dump($type);
 		if ($type === 'unknown') {
 			return false;
 		}

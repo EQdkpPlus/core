@@ -215,7 +215,7 @@ class form extends gen_class {
 			foreach($fieldsets as $fields) {
 				foreach($fields as $name => $options) {
 					if(!registry::class_exists('h'.$options['type'])) {
-						var_dump($name);
+						#var_dump($name);
 						continue;
 					}
 					$field_class = 'h'.$options['type'];
