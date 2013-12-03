@@ -78,10 +78,18 @@ class password extends gen_class {
 
 			case "salted_sha512": $strHash = hash('sha512', $strSalt.$strPassword);
 		}
+		
+		//Prevent Timing attacks
+		for ($i = 0; $i < strlen($strHash); $i++) {
+            $status |= (ord($strHash[$i]) ^ ord($strStoredHash[$i]));
+        }
+
+        $blnCompareStatus = ($status === 0);
+		
 		if ($blnReturnHash){
-				return ($strHash && $strHash === $strStoredHash) ? $strHash : false;
+				return ($strHash &&  $blnCompareStatus) ? $strHash : false;
 		}
-		return ($strHash && $strHash === $strStoredHash);
+		return ($strHash &&  $blnCompareStatus);
 	}
 
 

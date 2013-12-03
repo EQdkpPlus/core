@@ -116,7 +116,7 @@ if(!class_exists('pdh_w_user')) {
 				'user_date_long'	=> ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->user->lang('style_date_long'),
 				'user_date_short'	=> ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->user->lang('style_date_short'),
 				'user_date_time'	=> ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->user->lang('style_date_time'),
-				'exchange_key'			=> md5(rand().rand()),
+				'exchange_key'		=> md5(generateRandomBytes()),
 			);
 			$arrReturn = $arrData;
 			foreach ($arrDefaults as $key => $value){

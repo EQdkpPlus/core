@@ -61,7 +61,6 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'signup_status'			=> $signupstatus,
 				))->execute($signed_memberid, $eventid);
 			}else{
-				srand((double)microtime()*1000000);
 				$rand_value = rand(1,100);
 				$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_attendees :p")->set(array(
 					'note'					=> $note,

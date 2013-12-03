@@ -119,7 +119,7 @@ class wbb3_bridge extends bridge_generic {
 			$packageId = $query->fetchAssoc();
 			if (isset($packageId['packageID'])){
 				$user_id = intval($arrUserdata['id']);
-				$strSessionID = md5(rand().rand()).'a7w8er45';
+				$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 40);
 				$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
 				//PW is true, logg the user into our Forum
 				$arrSet = array(

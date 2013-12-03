@@ -139,7 +139,7 @@ if (!class_exists("zip")) {
 		public function create(){
 			//existing archive
 			if ($this->objZip && $this->objZip->numFiles > 0){
-				$tmpExisting = $this->pfh->FilePath(md5(uniqid().rand()).'.zip', 'tmp');
+				$tmpExisting = $this->pfh->FilePath(md5(generateRandomBytes()).'.zip', 'tmp');
 				//Move archive to temp folder
 				$this->pfh->copy($this->zipfile, $tmpExisting);
 				
@@ -172,7 +172,7 @@ if (!class_exists("zip")) {
 				}
 				
 			} else {
-				$strTempArchiv = $this->pfh->FilePath(md5(uniqid().rand()).'.zip', 'tmp');
+				$strTempArchiv = $this->pfh->FilePath(md5(generateRandomBytes()).'.zip', 'tmp');
 				//Create new archive
 				$blnOpen = $this->objZip->open($strTempArchiv, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
 				if ($blnOpen){

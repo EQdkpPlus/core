@@ -232,7 +232,7 @@ class ftp_handler{
 	}
 
 	public function moveuploadedfile($tmpfile, $newfile, $mode=FTP_BINARY){
-		$tmplfilename = $this->tmp_dir.md5(uniqid(mt_rand(), true));
+		$tmplfilename = $this->tmp_dir.md5(generateRandomBytes());
 		move_uploaded_file($tmpfile, $tmplfilename);
 		$this->login();
 		$this->cdToHome();
@@ -243,7 +243,7 @@ class ftp_handler{
 	}
 
 	public function put_string($remote_file, $data, $mode=FTP_BINARY, $startpos=0){
-		$tmplfilename = $this->tmp_dir.md5(uniqid(mt_rand(), true));
+		$tmplfilename = $this->tmp_dir.md5(generateRandomBytes());
 		file_put_contents($tmplfilename, $data);
 		$result = $this->put_upload($remote_file, $tmplfilename, $mode);
 		@ftp_chmod($this->link_id, 0755, $this->root_dir.$remote_file);
@@ -252,7 +252,7 @@ class ftp_handler{
 	}
 
 	public function ftp_copy($from , $to){
-		$tmplfilename = $this->tmp_dir.md5(uniqid(mt_rand(), true));
+		$tmplfilename = $this->tmp_dir.md5(generateRandomBytes());
 		
 		if($this->get($tmplfilename, $from)){
 			if($this->put_upload($to, $tmplfilename)){

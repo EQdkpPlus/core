@@ -194,7 +194,7 @@ if (!class_exists("bbcode")) {
 				}
 
 				// Load it...
-				$tmp_name = md5(rand());
+				$tmp_name = md5(generateRandomBytes());
 				$this->pfh->CheckCreateFile($this->strImageCacheFolder.$tmp_name);
 				$this->pfh->putContent($this->strImageCacheFolder.$tmp_name, $this->puf->fetch($img));
 				$i = getimagesize($this->strImageCacheFolder.$tmp_name);

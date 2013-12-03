@@ -305,7 +305,7 @@ class EQDKPBackup extends page_generic{
 	public function do_backup(){
 				if ($this->in->get('system') == 'data'){
 				//Download data-Folder
-					$file = $this->pfh->FolderPath('backup/tmp', 'eqdkp').md5(rand()).'.zip';
+					$file = $this->pfh->FolderPath('backup/tmp', 'eqdkp').md5(generateRandomBytes()).'.zip';
 					$archive = registry::register('zip', array($file));
 					$archive->add($this->pfh->get_cachefolder(), $this->pfh->get_cachefolder());
 					$archive->delete('cache/');

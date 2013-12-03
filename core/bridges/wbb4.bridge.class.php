@@ -127,7 +127,7 @@ class wbb4_bridge extends bridge_generic {
 	
 	public function wbb4_sso($arrUserdata, $boolAutoLogin){
 		$user_id = intval($arrUserdata['id']);
-		$strSessionID = md5(rand().rand()).'a7w8er45';
+		$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 40);
 		$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
 			
 		//PW is true, logg the user into our Forum
@@ -139,7 +139,7 @@ class wbb4_bridge extends bridge_generic {
 			'lastActivityTime'			=> (int) $this->time->time,
 			'requestURI'				=> '',
 			'requestMethod'				=> 'GET',
-			'sessionVariables'			=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(rand().rand()).'a7w8er45'.'.";}',
+			'sessionVariables'			=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(generateRandomBytes()).'a7w8er45'.'.";}',
 		);
 		$this->db->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSe)->execute();
 			

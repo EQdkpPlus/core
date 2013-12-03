@@ -21,7 +21,7 @@ function DownloadImage($img){
 		}
 		
 		// Load it...
-		$tmp_name = md5(rand());
+		$tmp_name = md5(generateRandomBytes());
 		$pfh->CheckCreateFile($imgfolder.$tmp_name);
 		$pfh->putContent($imgfolder.$tmp_name, $puf->fetch($img)); 
 		$i = getimagesize($imgfolder.$tmp_name);
@@ -32,7 +32,7 @@ function DownloadImage($img){
 			return false;
 		}
 		
-		$myFileName = $imgfolder.substr(md5(rand()), 0,8).'_'.$path_parts['filename'].'.'.$path_parts['extension'];
+		$myFileName = $imgfolder.substr(md5(generateRandomBytes()), 0,8).'_'.$path_parts['filename'].'.'.$path_parts['extension'];
 		$pfh->rename($imgfolder.$tmp_name, $myFileName);
 		return $myFileName;
 }

@@ -244,7 +244,7 @@ class inst_settings extends install_generic {
 		$this->config_data['server_path']		= $this->def_server_path;
 		$this->config_data['default_lang']		= $this->def_lang;
 		$this->config_data['default_locale']	= $this->def_locale;
-		$this->config_data['cookie_name']		= "eqdkp_".substr(md5(rand().rand().rand()), 4, 6);
+		$this->config_data['cookie_name']		= "eqdkp_".substr(md5(generateRandomBytes()), 4, 6);
 		$this->config_data['default_game']		= $this->def_game;
 		$this->config_data['game_language']		= $this->def_game_lang;
 		$this->config_data['eqdkp_start']		= time();

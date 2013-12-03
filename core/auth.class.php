@@ -190,7 +190,7 @@ class auth extends user_core {
 	*/
 	public function create ($user_id, $strAutologinKey, $boolSetAutoLogin = false, $strOldSessionKey=false){
 		if (!$user_id) $user_id = ANONYMOUS;
-		$this->sid = substr(md5(rand().uniqid('', true).rand()).md5(rand()), 0, 40);
+		$this->sid = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes()), 0, 40);
 		$strSessionKey = $this->generate_session_key();
 		if ($strOldSessionKey) $strSessionKey = $strOldSessionKey.';'.$strSessionKey;
 		$this->current_time = $this->time->time;
@@ -347,7 +347,7 @@ class auth extends user_core {
 	* @return string
 	*/
 	public function generate_session_key(){
-		return substr(md5(rand().uniqid('', true).rand()), 0, 12);
+		return substr(md5(generateRandomBytes(55)), 0, 12);
 	}
 
 	/**

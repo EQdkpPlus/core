@@ -89,7 +89,7 @@ class admin_user extends install_generic {
 			'rules'			=> 1,
 			'user_style'	=> 1,
 			'user_registered' => $this->time->time,
-			'exchange_key'	=> md5(rand().rand()),
+			'exchange_key'	=> md5(generateRandomBytes()),
 			'user_timezone' => $this->config->get('timezone'),
 			'user_date_time' => $this->config->get('default_date_time'),
 			'user_date_short' => $this->config->get('default_date_short'),

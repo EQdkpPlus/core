@@ -110,7 +110,7 @@ class backup extends gen_class {
 		}
 		unset($tablename, $table_sql_string, $data_sql_string);
 
-		$random = mt_rand();
+		$random = md5(generateRandomBytes());
 
 		$name = 'eqdkp-'.$addition.'backup_' .$time.'_'.$random;
 

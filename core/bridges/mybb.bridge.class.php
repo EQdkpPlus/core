@@ -150,7 +150,7 @@ class mybb_bridge extends bridge_generic {
 
 	public function mybb_sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
-		$strSessionID = md5(rand().rand());
+		$strSessionID = md5(generateRandomBytes(55));
 		$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($user_id);
 
 		$query = $this->db->query("SELECT name,value FROM ".$this->prefix."settings");
