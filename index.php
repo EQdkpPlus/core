@@ -32,6 +32,9 @@ class controller extends gen_class {
 		if ($this->in->exists('unpublish') && ($blnCheckPost || $blnCheckPostOld)){
 			$this->unpublish();
 		}
+		if ($this->in->exists('savevote')){
+			$this->saveRating();
+		}
 	
 		$this->display();
 	}
@@ -74,7 +77,13 @@ class controller extends gen_class {
 		
 		return $arrPath;
 	}
-	
+
+	public function saveRating(){
+		$this->pdh->put('articles', 'vote', array($this->in->get('name'), $this->in->get('score')));
+		$this->pdh->process_hook_queue();
+		die('done');
+	}
+
 	public function display(){
 		$strPath = $this->env->path;
 		$arrPath = array_filter(explode('/', $strPath));
@@ -231,18 +240,6 @@ class controller extends gen_class {
 		
 			
 			$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
-			$myRatings = array(
-				'1'		=> '1',
-				'2'		=> '2',
-				'3'		=> '3',
-				'4'		=> '4',
-				'5'		=> '5',
-				'6'		=> '6',
-				'7'		=> '7',
-				'8'		=> '8',
-				'9'		=> '9',
-				'10'	=> '10',
-			);
 		
 		$arrToolbarItems = array();
 		if ($arrPermissions['create']) {
@@ -365,7 +362,8 @@ class controller extends gen_class {
 				'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$strPath, strip_tags($arrArticle['title'])) : '',
 				'PERMALINK'		  => $this->pdh->get('articles', 'permalink', array($intArticleID)),
 				'BREADCRUMB'	  => $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles)),
-				'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
+				'ARTICLE_RATING'  => 'dd'.($arrArticle['votes']) ? $this->jquery->starrating($intArticleID, $this->server_path.$strPath.'&savevote&link_hash='.$this->CSRFGetToken('savevote'), array('score' => (($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), 'number' => 10)) : '',
+				//'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
 				'S_TOOLBAR'		=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 				'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,

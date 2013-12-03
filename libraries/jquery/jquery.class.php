@@ -30,6 +30,7 @@ if (!class_exists("jquery")) {
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
 		private $colorpicker_init		= false;
+		private $starrating_init		= false;
 		
 		/**
 		* Construct of the jquery class
@@ -871,52 +872,45 @@ if (!class_exists("jquery")) {
 		* Star Rating Widget
 		*
 		* @param $name			name/id of the rating thing
-		* @param $array			array with rating infos
-		* @param $post			URL for $_P.O.S.T
-		* @param $value			amount of stars to be selected by default
-		* @param $disabled		disable the possibility to vote
-		* @param $onevote		Let the user only vote once
-		* @param $halfstars		Use half stars
+		* @param $url			url for the ajax post request
+		* @param $options		Options array
 		* @return CHAR
 		*/
-		public function StarRating($name, $array, $post, $value='', $disabled=false, $onevote=true, $halfstars=false){
-			$lang_cancvote	= ($this->user->lang('lib_starrating_cancel')) ?$this->sanitize( $this->user->lang('lib_starrating_cancel')) : 'Cancel Rating';
-
-			// Generate the JS Code
-			$tmpopt		= array();
-			$tmpopt[]	= (!$onevote) ? 'cancelValue: 99' : '';
-			$tmpopt[]	= (!$onevote) ? 'cancelTitle: "Cancel Rating"' : '';
-			$tmpopt[]	= 'callback: function(ui, type, value){
-							$.post("'.$post.'", {'.$name.': value}, function(data){
-								$("#ajax_response_'.$name.'").html(data);
-							});
-						}';
-			$tmpopt[]	= ($disabled) ? 'disabled: true' : '';
-			$tmpopt[]	= ($onevote) ? 'oneVoteOnly: true' : '';
-			$tmpopt[]	= ($halfstars) ? 'split: 2' : '';
-			$this->tpl->add_js('$("#'.$name.'_form").children().not(":radio").hide();
-								$("#'.$name.'_form").stars('.$this->gen_options($tmpopt).');', 'docready');
-
-			// Generate the HTML Code
-			$html= '<form id="'.$name.'_form" action="'.$post.'" method="post">';
-			foreach($array as $no=>$element){
-				$select_me	= ($no == $value) ? 'checked="checked"' : '';
-				$html  .= '<input type="radio" name="'.$name.'" value="'.$no.'" title="'.$element.'" id="'.$name.$no.'" '.$select_me.' /> <label for="'.$name.$no.'">'.$element.'</label><br />';
+		public function starrating($name, $url, $options=''){
+			if(!$this->starrating_init){
+				$this->starrating_js();
+				$this->starrating_init = true;
 			}
-			$html .= '<input type="submit" value="Rate it!" />
-						</form>';
-			$html .= '<p id="ajax_response_'.$name.'"></p>';
-			return $html;
+			$tmpopt		= array();
+			$tmpopt[]	= 'data-star-number="'.((isset($options['number']) && $options['number'] > 0) ? $options['number'] : 5).'"';
+			$tmpopt[]	= 'data-star-score="'.((isset($options['score']) && $options['score'] > 0) ? $options['score'] : 0).'"';
+			if(isset($options['readonly']) && $options['readonly']){
+				$tmpopt[]	= 'data-star-readonly="true"';
+			}
+
+			return '<div class="starrating" data-star-url="'.$url.'" data-star-name="'.$name.'" '.implode(" ", $tmpopt).'></div>';
 		}
 
-		/**
-		* Set the Value of the StarRating
-		*
-		* @param $name		Name/ID of the colorpicker field (must be unique)
-		* @param $value		Value to be set
-		*/
-		public function StarRatingValue($name, $value){
-			$this->tpl->add_js('$("#'.$name.'_form").stars("select", parseInt('.$value.'));');
+		public function starrating_js(){
+			//$lang_cancvote	= ($this->user->lang('lib_starrating_cancel')) ?$this->sanitize( $this->user->lang('lib_starrating_cancel')) : 'Cancel Rating';
+			$tmpopt		= array();
+			$tmpopt[] = 'font: true';
+			$tmpopt[] = 'cancelOff: "fa-times-circle-o"';
+			$tmpopt[] = 'cancelOn: "fa-times-circle"';
+			$tmpopt[] = 'starHalf: "fa-star-half"';
+			$tmpopt[] = 'starOff: "fa-star-o"';
+			$tmpopt[] = 'starOn: "fa-star"';
+			$tmpopt[] = 'size: 16';
+			$tmpopt[] = 'score: function() { return $(this).attr("data-star-score"); }';
+			$tmpopt[] = 'number: function() { return $(this).attr("data-star-number"); }';
+			$tmpopt[] = 'readOnly: function() { return $(this).attr("data-star-readonly") == "true"; }';
+			$tmpopt[] = 'click: function(score, evt) {
+			$.post($(this).attr("data-star-url"), {name: $(this).attr("data-star-name"), score: score}, function(data){
+				$("#result").html(data);
+			});
+		  }';
+
+			$this->tpl->add_js('$(".starrating").raty('.$this->gen_options($tmpopt).');', 'docready');
 		}
 
 		/**
@@ -960,16 +954,6 @@ if (!class_exists("jquery")) {
 			}
 			$dropdown .= "</select>";
 			return $dropdown;
-		}
-
-		public function rssfeed($name, $url, $options=''){
-			$backgr = ($backgr) ? $backgr : $this->user->style['tr_color1'];
-			$tmpopt		= array();
-			$tmpopt[] = 'FeedUrl: "'.$url.'"';
-			$tmpopt[] = 'MaxCount: '.(($options['items']) ? $options['items'] : 4);
-			$tmpopt[] = 'ShowDesc: '.(($options['description']) ? 'true' : 'false');
-			$tmpopt[] = 'ShowPubDate: "'.(($options['pubdate']) ? 'true' : 'false');
-			$this->tpl->add_js('$("#'.$name.'").FeedEk('.$this->gen_options($tmpopt).');', 'docready');
 		}
 
 		/**

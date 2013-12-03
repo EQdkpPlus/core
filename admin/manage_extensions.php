@@ -65,7 +65,7 @@ class Manage_Extensions extends page_generic {
 			'VERSION'			=> sanitize($extension['version']),
 			'LEVEL'				=> sanitize($extension['level']),
 			'CHANGELOG'			=> nl2br(sanitize($extension['changelog'])),
-			'RATING'			=> $this->jquery->StarRating('extension_'.md5($extension['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $extension['rating'], true),
+			'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $_SERVER['PHP_SELF'], array('score' => $extension['rating'], 'readonly' => true)),
 		));
 		
 		$this->core->set_vars(array(
@@ -582,7 +582,7 @@ class Manage_Extensions extends page_generic {
 					'CONTACT'			=> sanitize($extension['author']),
 					'DESCRIPTION'		=> '<a href="javascript:repoinfo('.$id.')">'.sanitize(cut_text($extension['shortdesc'])).'</a>',
 					'ACTION_LINK'		=> $link,
-					'RATING'			=> $this->jquery->StarRating('extension_'.md5($extension['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $extension['rating'], true),
+					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $_SERVER['PHP_SELF'] , array('score' => $extension['rating'], 'readonly' => true))
 				));
 
 			}
@@ -634,7 +634,7 @@ class Manage_Extensions extends page_generic {
 					'CODE'				=> sanitize($plugin_code),
 					'CONTACT'			=> (isset($arrTmpExtension[$plugin_code])) ? $arrTmpExtension[$plugin_code]['author'] : '',
 					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['shortdesc'], 100).'</a>' : '',
-					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->StarRating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $arrTmpExtension[$plugin_code]['rating'], true) : '',
+					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->starrating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), $_SERVER['PHP_SELF'] , array('score' => $arrTmpExtension[$plugin_code]['rating'], 'readonly' => true)) : '',
 					'ACTION_LINK'		=> $link,
 				));
 			}
@@ -654,7 +654,7 @@ class Manage_Extensions extends page_generic {
 					'CONTACT'			=> sanitize($extension['author']),
 					'DESCRIPTION'		=> sanitize(cut_text($extension['shortdesc'], 100)),
 					'ACTION_LINK'		=> $link,
-					'RATING'			=> $this->jquery->StarRating('extension_'.md5($extension['plugin']), array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5), '', $extension['rating'], true),
+					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $_SERVER['PHP_SELF'] , array('score' => $extension['rating'], 'readonly' => true)),
 				));
 
 			}

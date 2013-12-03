@@ -39259,7 +39259,7 @@ $.widget( "ui.tooltip", {
 })(jQuery);
     
     
-/*! jQuery Timepicker Addon - v1.4 - 2013-08-11
+/*! jQuery Timepicker Addon - v1.4.3 - 2013-11-30
 * http://trentrichardson.com/examples/timepicker
 * Copyright (c) 2013 Trent Richardson; Licensed MIT */
 (function ($) {
@@ -39277,7 +39277,7 @@ $.widget( "ui.tooltip", {
 	*/
 	$.extend($.ui, {
 		timepicker: {
-			version: "1.4"
+			version: "1.4.3"
 		}
 	});
 
@@ -40004,13 +40004,23 @@ $.widget( "ui.tooltip", {
 			if (microsec !== false) {
 				microsec = parseInt(microsec, 10);
 			}
+			if (timezone !== false) {
+				timezone = timezone.toString();
+			}
 
 			var ampm = o[hour < 12 ? 'amNames' : 'pmNames'][0];
 
 			// If the update was done in the input field, the input field should not be updated.
 			// If the update was done using the sliders, update the input field.
-			var hasChanged = (hour !== this.hour || minute !== this.minute || second !== this.second || millisec !== this.millisec || microsec !== this.microsec || 
-					(this.ampm.length > 0 && (hour < 12) !== ($.inArray(this.ampm.toUpperCase(), this.amNames) !== -1)) || (this.timezone !== null && timezone !== this.timezone));
+			var hasChanged = (
+						hour !== parseInt(this.hour,10) || // sliders should all be numeric
+						minute !== parseInt(this.minute,10) || 
+						second !== parseInt(this.second,10) || 
+						millisec !== parseInt(this.millisec,10) || 
+						microsec !== parseInt(this.microsec,10) || 
+						(this.ampm.length > 0 && (hour < 12) !== ($.inArray(this.ampm.toUpperCase(), this.amNames) !== -1)) || 
+						(this.timezone !== null && timezone !== this.timezone.toString()) // could be numeric or "EST" format, so use toString()
+					);
 
 			if (hasChanged) {
 
@@ -40057,6 +40067,7 @@ $.widget( "ui.tooltip", {
 			this.timeDefined = true;
 			if (hasChanged) {
 				this._updateDateTime();
+				this.$input.focus();
 			}
 		},
 
@@ -40090,7 +40101,7 @@ $.widget( "ui.tooltip", {
 			var formattedDateTime = this.formattedDate;
 			
 			// if a slider was changed but datepicker doesn't have a value yet, set it
-			if (dp_inst.lastVa === "") {
+			if (dp_inst.lastVal === "") {
                 dp_inst.currentYear = dp_inst.selectedYear;
                 dp_inst.currentMonth = dp_inst.selectedMonth;
                 dp_inst.currentDay = dp_inst.selectedDay;
@@ -40855,7 +40866,7 @@ $.widget( "ui.tooltip", {
 		// object will only return the timezone offset for the current locale, so we 
 		// adjust it accordingly.  If not using timezone option this won't matter..
 		// If a timezone is different in tp, keep the timezone as is
-		if (tp_inst) {
+		if (tp_inst && tp_date) {
 			// look out for DST if tz wasn't specified
 			if (!tp_inst.support.timezone && tp_inst._defaults.timezone === null) {
 				tp_inst.timezone = tp_date.getTimezoneOffset() * -1;
@@ -41390,11 +41401,12 @@ $.widget( "ui.tooltip", {
 	/*
 	* Keep up with the version
 	*/
-	$.timepicker.version = "1.4";
+	$.timepicker.version = "1.4.3";
 
 })(jQuery);
+
 /*!
-	Colorbox v1.4.32 - 2013-10-16
+	Colorbox v1.4.33 - 2013-10-31
 	jQuery lightbox and modal window plugin
 	(c) 2013 Jack Moore - http://www.jacklmoore.com/colorbox
 	license: http://www.opensource.org/licenses/mit-license.php
@@ -41510,7 +41522,7 @@ $.widget( "ui.tooltip", {
 	$prev,
 	$close,
 	$groupControls,
-	$events = $('<a/>'),
+	$events = $('<a/>'), // $([]) would be prefered, but there is an issue with jQuery 1.4.2
 	
 	// Variables for cached values or use across multiple functions
 	settings,
@@ -41622,7 +41634,7 @@ $.widget( "ui.tooltip", {
 		$(document).trigger(event);
 
 		// for internal use
-		$events.trigger(event);
+		$events.triggerHandler(event);
 
 		if ($.isFunction(callback)) {
 			callback.call(element);
@@ -45577,15 +45589,15 @@ function log() {
 })(jQuery);
 
 /*
- * qTip2 - Pretty powerful tooltips - v2.1.1
+ * qTip2 - Pretty powerful tooltips - v2.2.0
  * http://qtip2.com
  *
  * Copyright (c) 2013 Craig Michael Thompson
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Wed Jul 17 2013 08:33 UTC+0000
- * Plugins: tips viewport modal
+ * Date: Fri Nov 29 2013 01:51 EST-0500
+ * Plugins: tips viewport svg modal
  * Styles: basic css3
  */
 /*global window: false, jQuery: false, console: false, define: false */
@@ -45597,15 +45609,14 @@ function log() {
 (function( factory ) {
 	"use strict";
 	if(typeof define === 'function' && define.amd) {
-		define(['jquery', 'imagesloaded'], factory);
+		define(['jquery'], factory);
 	}
 	else if(jQuery && !jQuery.fn.qtip) {
 		factory(jQuery);
 	}
 }
 (function($) {
-	/* This currently causes issues with Safari 6, so for it's disabled */
-	//"use strict"; // (Dis)able ECMAScript "strict" operation for this function. See more: http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
+	"use strict"; // Enable ECMAScript "strict" operation for this function. See more: http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
 
 ;// Munge the primitives - Paul Irish tip
 var TRUE = true,
@@ -45647,7 +45658,7 @@ CLASS_DISABLED = NAMESPACE+'-disabled',
 
 replaceSuffix = '_replacedByqTip',
 oldtitle = 'oldtitle',
-trackingBound;
+trackingBound,
 
 // Browser detection
 BROWSER = {
@@ -45679,7 +45690,7 @@ BROWSER = {
 	this.id = id;
 	this.target = target;
 	this.tooltip = NULL;
-	this.elements = elements = { target: target };
+	this.elements = { target: target };
 
 	// Internal constructs
 	this._id = NAMESPACE + '-' + id;
@@ -45688,7 +45699,7 @@ BROWSER = {
 	this.plugins = {};
 
 	// Cache object
-	this.cache = cache = {
+	this.cache = {
 		event: {},
 		target: $(),
 		disabled: FALSE,
@@ -45703,6 +45714,10 @@ BROWSER = {
 }
 PROTOTYPE = QTip.prototype;
 
+PROTOTYPE._when = function(deferreds) {
+	return $.when.apply($, deferreds);
+};
+
 PROTOTYPE.render = function(show) {
 	if(this.rendered || this.destroyed) { return this; } // If tooltip has already been rendered, exit
 
@@ -45715,7 +45730,8 @@ PROTOTYPE.render = function(show) {
 		button = options.content.button,
 		posOptions = options.position,
 		namespace = '.'+this._id+' ',
-		deferreds = [];
+		deferreds = [],
+		tooltip;
 
 	// Add ARIA attributes to target
 	$.attr(this.target[0], 'aria-describedby', this._id);
@@ -45774,14 +45790,6 @@ PROTOTYPE.render = function(show) {
 	// Setup widget classes
 	this._setWidget();
 
-	// Assign passed event callbacks (before plugins!)
-	$.each(options.events, function(name, callback) {
-		$.isFunction(callback) && tooltip.bind(
-			(name === 'toggle' ? ['tooltipshow','tooltiphide'] : ['tooltip'+name])
-				.join(namespace)+namespace, callback
-		);
-	});
-
 	// Initialize 'render' plugins
 	$.each(PLUGINS, function(name) {
 		var instance;
@@ -45790,11 +45798,12 @@ PROTOTYPE.render = function(show) {
 		}
 	});
 
-	// Assign events
+	// Unassign initial events and assign proper events
+	this._unassignEvents();
 	this._assignEvents();
 
 	// When deferreds have completed
-	$.when.apply($, deferreds).then(function() {
+	this._when(deferreds).then(function() {
 		// tooltiprender event
 		self._trigger('render');
 
@@ -45842,7 +45851,9 @@ PROTOTYPE.destroy = function(immediate) {
 		this._unassignEvents();
 
 		// Remove api object and ARIA attributes
-		target.removeData(NAMESPACE).removeAttr(ATTR_ID)
+		target.removeData(NAMESPACE)
+			.removeAttr(ATTR_ID)
+			.removeAttr(ATTR_HAS)
 			.removeAttr('aria-describedby');
 
 		// Reset old title attribute if removed
@@ -45863,8 +45874,8 @@ PROTOTYPE.destroy = function(immediate) {
 	}
 
 	// If an immediate destory is needed
-	if(immediate !== TRUE && this.rendered) {
-		tooltip.one('tooltiphidden', $.proxy(process, this));
+	if((immediate !== TRUE || this.triggering === 'hide') && this.rendered) {
+		this.tooltip.one('tooltiphidden', $.proxy(process, this));
 		!this.triggering && this.hide();
 	}
 
@@ -46018,7 +46029,7 @@ CHECKS = PROTOTYPE.checks = {
 			'string' === typeof v && (obj[o] = new CORNER(v, o === 'at'));
 		},
 		'^position.container$': function(obj, o, v){
-			this.tooltip.appendTo(v);
+			this.rendered && this.tooltip.appendTo(v);
 		},
 
 		// Show checks
@@ -46028,29 +46039,30 @@ CHECKS = PROTOTYPE.checks = {
 
 		// Style checks
 		'^style.classes$': function(obj, o, v, p) {
-			this.tooltip.removeClass(p).addClass(v);
+			this.rendered && this.tooltip.removeClass(p).addClass(v);
 		},
-		'^style.width|height': function(obj, o, v) {
-			this.tooltip.css(o, v);
+		'^style.(width|height)': function(obj, o, v) {
+			this.rendered && this.tooltip.css(o, v);
 		},
 		'^style.widget|content.title': function() {
-			this._setWidget();
+			this.rendered && this._setWidget();
 		},
 		'^style.def': function(obj, o, v) {
-			this.tooltip.toggleClass(CLASS_DEFAULT, !!v);
+			this.rendered && this.tooltip.toggleClass(CLASS_DEFAULT, !!v);
 		},
 
 		// Events check
 		'^events.(render|show|move|hide|focus|blur)$': function(obj, o, v) {
-			tooltip[($.isFunction(v) ? '' : 'un') + 'bind']('tooltip'+o, v);
+			this.rendered && this.tooltip[($.isFunction(v) ? '' : 'un') + 'bind']('tooltip'+o, v);
 		},
 
 		// Properties which require event reassignment
 		'^(show|hide|position).(event|target|fixed|inactive|leave|distance|viewport|adjust)': function() {
-			var posOptions = this.options.position;
+			if(!this.rendered) { return; }
 
 			// Set tracking flag
-			tooltip.attr('tracking', posOptions.target === 'mouse' && posOptions.adjust.mouse);
+			var posOptions = this.options.position;
+			this.tooltip.attr('tracking', posOptions.target === 'mouse' && posOptions.adjust.mouse);
 
 			// Reassign events
 			this._unassignEvents();
@@ -46121,7 +46133,7 @@ PROTOTYPE.set = function(option, value) {
 
 	// Set all of the defined options to their new values
 	$.each(option, function(notation, value) {
-		if(!rendered && !rrender.test(notation)) {
+		if(rendered && rrender.test(notation)) {
 			delete option[notation]; return;
 		}
 
@@ -46184,24 +46196,31 @@ PROTOTYPE.set = function(option, value) {
 
 	// Append new content if its a DOM array and show it if hidden
 	if(content.jquery && content.length > 0) {
-		element.children().detach().end().append( content.css({ display: 'block' }) );
+		element.empty().append(
+			content.css({ display: 'block', visibility: 'visible' })
+		);
 	}
 
 	// Content is a regular string, insert the new content
 	else { element.html(content); }
 
-	// If imagesLoaded is included, ensure images have loaded and return promise
+	// Wait for content to be loaded, and reposition
+	return this._waitForContent(element).then(function(images) {
+		if(images.images && images.images.length && self.rendered && self.tooltip[0].offsetWidth > 0) {
+			self.reposition(cache.event, !images.length);
+		}
+	});
+};
+
+PROTOTYPE._waitForContent = function(element) {
+	var cache = this.cache;
+	
+	// Set flag
 	cache.waiting = TRUE;
 
-	return ( $.fn.imagesLoaded ? element.imagesLoaded() : $.Deferred().resolve($([])) )
-		.done(function(images) {
-			cache.waiting = FALSE;
-
-			// Reposition if rendered
-			if(images.length && self.rendered && self.tooltip[0].offsetWidth > 0) {
-				self.reposition(cache.event, !images.length);
-			}
-		})
+	// If imagesLoaded is included, ensure images have loaded and return promise
+	return ( $.fn.imagesLoaded ? element.imagesLoaded() : $.Deferred().resolve([]) )
+		.done(function() { cache.waiting = FALSE; })
 		.promise();
 };
 
@@ -46277,8 +46296,8 @@ PROTOTYPE._removeTitle = function(reposition)
 		container = posOptions.container,
 		adjust = posOptions.adjust,
 		method = adjust.method.split(' '),
-		elemWidth = tooltip.outerWidth(FALSE),
-		elemHeight = tooltip.outerHeight(FALSE),
+		tooltipWidth = tooltip.outerWidth(FALSE),
+		tooltipHeight = tooltip.outerHeight(FALSE),
 		targetWidth = 0,
 		targetHeight = 0,
 		type = tooltip.css('position'),
@@ -46298,20 +46317,33 @@ PROTOTYPE._removeTitle = function(reposition)
 	}
 
 	// Check if mouse was the target
-	else if(target === 'mouse' && ((event && event.pageX) || cache.event.pageX)) {
+	else if(target === 'mouse') {
 		// Force left top to allow flipping
 		at = { x: LEFT, y: TOP };
 
-		// Use cached event if one isn't available for positioning
-		event = mouse && mouse.pageX && (adjust.mouse || !event || !event.pageX) ? mouse :
-			(event && (event.type === 'resize' || event.type === 'scroll') ? cache.event :
-			event && event.pageX && event.type === 'mousemove' ? event :
-			(!adjust.mouse || this.options.show.distance) && cache.origin && cache.origin.pageX ? cache.origin :
-			event) || event || cache.event || mouse || {};
+		// Use the cached mouse coordinates if available, or passed event has no coordinates
+		if(mouse && mouse.pageX && (adjust.mouse || !event || !event.pageX) ) {
+			event = mouse;
+		}
+		
+		// If the passed event has no coordinates (such as a scroll event)
+		else if(!event || !event.pageX) {
+			// Use the mouse origin that caused the show event, if distance hiding is enabled
+			if((!adjust.mouse || this.options.show.distance) && cache.origin && cache.origin.pageX) {
+				event =  cache.origin;
+			}
+
+			// Use cached event for resize/scroll events
+			else if(!event || (event && (event.type === 'resize' || event.type === 'scroll'))) {
+				event = cache.event;
+			}
+		}
 
 		// Calculate body and container offset and take them into account below
 		if(type !== 'static') { position = container.offset(); }
-		if(doc.body.offsetWidth !== (window.innerWidth || doc.documentElement.clientWidth)) { offset = $(doc.body).offset(); }
+		if(doc.body.offsetWidth !== (window.innerWidth || doc.documentElement.clientWidth)) {
+			offset = $(document.body).offset();
+		}
 
 		// Use event coordinates for position
 		position = {
@@ -46320,20 +46352,25 @@ PROTOTYPE._removeTitle = function(reposition)
 		};
 
 		// Scroll events are a pain, some browsers
-		if(adjust.mouse && isScroll) {
-			position.left -= mouse.scrollX - win.scrollLeft();
-			position.top -= mouse.scrollY - win.scrollTop();
+		if(adjust.mouse && isScroll && mouse) {
+			position.left -= (mouse.scrollX || 0) - win.scrollLeft();
+			position.top -= (mouse.scrollY || 0) - win.scrollTop();
 		}
 	}
 
 	// Target wasn't mouse or absolute...
 	else {
 		// Check if event targetting is being used
-		if(target === 'event' && event && event.target && event.type !== 'scroll' && event.type !== 'resize') {
-			cache.target = $(event.target);
+		if(target === 'event') {
+			if(event && event.target && event.type !== 'scroll' && event.type !== 'resize') {
+				cache.target = $(event.target);
+			}
+			else if(!event.target) {
+				cache.target = this.elements.target;
+			}
 		}
 		else if(target !== 'event'){
-			cache.target = $(target.jquery ? target : elements.target);
+			cache.target = $(target.jquery ? target : this.elements.target);
 		}
 		target = cache.target;
 
@@ -46360,7 +46397,7 @@ PROTOTYPE._removeTitle = function(reposition)
 		}
 
 		// Check if the target is an SVG element
-		else if(PLUGINS.svg && target[0].ownerSVGElement) {
+		else if(PLUGINS.svg && target && target[0].ownerSVGElement) {
 			pluginCalculations = PLUGINS.svg(this, target, at, PLUGINS.viewport ? method : FALSE);
 		}
 
@@ -46399,13 +46436,13 @@ PROTOTYPE._removeTitle = function(reposition)
 	}
 
 	// Adjust position relative to tooltip
-	position.left += adjust.x + (my.x === RIGHT ? -elemWidth : my.x === CENTER ? -elemWidth / 2 : 0);
-	position.top += adjust.y + (my.y === BOTTOM ? -elemHeight : my.y === CENTER ? -elemHeight / 2 : 0);
+	position.left += adjust.x + (my.x === RIGHT ? -tooltipWidth : my.x === CENTER ? -tooltipWidth / 2 : 0);
+	position.top += adjust.y + (my.y === BOTTOM ? -tooltipHeight : my.y === CENTER ? -tooltipHeight / 2 : 0);
 
 	// Use viewport adjustment plugin if enabled
 	if(PLUGINS.viewport) {
 		position.adjusted = PLUGINS.viewport(
-			this, position, posOptions, targetWidth, targetHeight, elemWidth, elemHeight
+			this, position, posOptions, targetWidth, targetHeight, tooltipWidth, tooltipHeight
 		);
 
 		// Apply offsets supplied by positioning plugin (if used)
@@ -46529,7 +46566,7 @@ PROTOTYPE.toggle = function(state, event) {
 		}
 
 		// Cache event
-		cache.event = $.extend({}, event);
+		cache.event = cloneEvent(event);
 	}
 		
 	// If we're currently waiting and we've just hidden... stop it
@@ -46545,10 +46582,10 @@ PROTOTYPE.toggle = function(state, event) {
 		posOptions = this.options.position,
 		contentOptions = this.options.content,
 		width = this.tooltip.css('width'),
-		visible = this.tooltip[0].offsetWidth > 0,
+		visible = this.tooltip.is(':visible'),
 		animate = state || opts.target.length === 1,
 		sameTarget = !event || opts.target.length < 2 || cache.target[0] === event.target,
-		identicalState, allow, showEvent, delay;
+		identicalState, allow, showEvent, delay, after;
 
 	// Detect state if valid one isn't provided
 	if((typeof state).search('boolean|number')) { state = !visible; }
@@ -46558,6 +46595,9 @@ PROTOTYPE.toggle = function(state, event) {
 
 	// Fire tooltip(show/hide) event and check if destroyed
 	allow = !identicalState ? !!this._trigger(type, [90]) : NULL;
+
+	// Check to make sure the tooltip wasn't destroyed in the callback
+	if(this.destroyed) { return this; }
 
 	// If the user didn't stop the method prematurely and we're showing the tooltip, focus it
 	if(allow !== FALSE && state) { this.focus(event); }
@@ -46571,7 +46611,7 @@ PROTOTYPE.toggle = function(state, event) {
 	// Execute state specific properties
 	if(state) {
 		// Store show origin coordinates
-		cache.origin = $.extend({}, this.mouse);
+		cache.origin = cloneEvent(this.mouse);
 
 		// Update tooltip content & title if it's a dynamic function
 		if($.isFunction(contentOptions.text)) { this._updateContent(contentOptions.text, FALSE); }
@@ -46720,8 +46760,14 @@ PROTOTYPE.blur = function(event) {
 ;PROTOTYPE.disable = function(state) {
 	if(this.destroyed) { return this; }
 
-	if('boolean' !== typeof state) {
-		state = !(this.tooltip.hasClass(CLASS_DISABLED) || this.disabled);
+	// If 'toggle' is passed, toggle the current state
+	if(state === 'toggle') {
+		state = !(this.rendered ? this.tooltip.hasClass(CLASS_DISABLED) : this.disabled);
+	}
+
+	// Disable if no state passed
+	else if('boolean' !== typeof state) {
+		state = TRUE;
 	}
 
 	if(this.rendered) {
@@ -46812,7 +46858,29 @@ PROTOTYPE._setWidget = function()
 	if(elements.button) {
 		elements.button.toggleClass(NAMESPACE+'-icon', !on);
 	}
-};;function showMethod(event) {
+};;function cloneEvent(event) {
+	return event && {
+		type: event.type,
+		pageX: event.pageX,
+		pageY: event.pageY,
+		target: event.target,
+		relatedTarget: event.relatedTarget,
+		scrollX: event.scrollX || window.pageXOffset || document.body.scrollLeft || document.documentElement.scrollLeft,
+		scrollY: event.scrollY || window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop
+	} || {};
+}
+
+function delay(callback, duration) {
+	// If tooltip has displayed, start hide timer
+	if(duration > 0) {
+		return setTimeout(
+			$.proxy(callback, this), duration
+		);
+	}
+	else{ callback.call(this); }
+}
+
+function showMethod(event) {
 	if(this.tooltip.hasClass(CLASS_DISABLED)) { return FALSE; }
 
 	// Clear hide timers
@@ -46820,11 +46888,10 @@ PROTOTYPE._setWidget = function()
 	clearTimeout(this.timers.hide);
 
 	// Start show timer
-	var callback = $.proxy(function(){ this.toggle(TRUE, event); }, this);
-	if(this.options.show.delay > 0) {
-		this.timers.show = setTimeout(callback, this.options.show.delay);
-	}
-	else{ callback(); }
+	this.timers.show = delay.call(this,
+		function() { this.toggle(TRUE, event); },
+		this.options.show.delay
+	);
 }
 
 function hideMethod(event) {
@@ -46856,11 +46923,11 @@ function hideMethod(event) {
 	}
 
 	// If tooltip has displayed, start hide timer
-	var callback = $.proxy(function(){ this.toggle(FALSE, event); }, this);
-	if(this.options.hide.delay > 0) {
-		this.timers.hide = setTimeout(callback, this.options.hide.delay);
-	}
-	else{ callback(); }
+	this.timers.hide = delay.call(this,
+		function() { this.toggle(FALSE, event); },
+		this.options.hide.delay,
+		this
+	);
 }
 
 function inactiveMethod(event) {
@@ -46868,8 +46935,10 @@ function inactiveMethod(event) {
 
 	// Clear timer
 	clearTimeout(this.timers.inactive);
-	this.timers.inactive = setTimeout(
-		$.proxy(function(){ this.hide(event); }, this), this.options.hide.inactive
+
+	this.timers.inactive = delay.call(this,
+		function(){ this.hide(event); },
+		this.options.hide.inactive
 	);
 }
 
@@ -46879,13 +46948,7 @@ function repositionMethod(event) {
 
 // Store mouse coordinates
 PROTOTYPE._storeMouse = function(event) {
-	this.mouse = {
-		pageX: event.pageX,
-		pageY: event.pageY,
-		type: 'mousemove',
-		scrollX: window.pageXOffset || document.body.scrollLeft || document.documentElement.scrollLeft,
-		scrollY: window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop
-	};
+	(this.mouse = cloneEvent(event)).type = 'mousemove';
 };
 
 // Bind events
@@ -46950,16 +47013,99 @@ PROTOTYPE._trigger = function(type, args, event) {
 	var callback = $.Event('tooltip'+type);
 	callback.originalEvent = (event && $.extend({}, event)) || this.cache.event || NULL;
 
-	this.triggering = TRUE;
+	this.triggering = type;
 	this.tooltip.trigger(callback, [this].concat(args || []));
 	this.triggering = FALSE;
 
 	return !callback.isDefaultPrevented();
 };
 
+PROTOTYPE._bindEvents = function(showEvents, hideEvents, showTarget, hideTarget, showMethod, hideMethod) {
+	// If hide and show targets are the same...
+	if(hideTarget.add(showTarget).length === hideTarget.length) {
+		var toggleEvents = [];
+
+		// Filter identical show/hide events
+		hideEvents = $.map(hideEvents, function(type) {
+			var showIndex = $.inArray(type, showEvents);
+
+			// Both events are identical, remove from both hide and show events
+			// and append to toggleEvents
+			if(showIndex > -1) {
+				toggleEvents.push( showEvents.splice( showIndex, 1 )[0] );
+				return;
+			}
+
+			return type;
+		});
+
+		// Toggle events are special case of identical show/hide events, which happen in sequence
+		toggleEvents.length && this._bind(showTarget, toggleEvents, function(event) {
+			var state = this.rendered ? this.tooltip[0].offsetWidth > 0 : false;
+			(state ? hideMethod : showMethod).call(this, event);
+		});
+	}
+
+	// Apply show/hide/toggle events
+	this._bind(showTarget, showEvents, showMethod);
+	this._bind(hideTarget, hideEvents, hideMethod);
+};
+
+PROTOTYPE._assignInitialEvents = function(event) {
+	var options = this.options,
+		showTarget = options.show.target,
+		hideTarget = options.hide.target,
+		showEvents = options.show.event ? $.trim('' + options.show.event).split(' ') : [],
+		hideEvents = options.hide.event ? $.trim('' + options.hide.event).split(' ') : [];
+
+	/*
+	 * Make sure hoverIntent functions properly by using mouseleave as a hide event if
+	 * mouseenter/mouseout is used for show.event, even if it isn't in the users options.
+	 */
+	if(/mouse(over|enter)/i.test(options.show.event) && !/mouse(out|leave)/i.test(options.hide.event)) {
+		hideEvents.push('mouseleave');
+	}
+
+	/*
+	 * Also make sure initial mouse targetting works correctly by caching mousemove coords
+	 * on show targets before the tooltip has rendered. Also set onTarget when triggered to
+	 * keep mouse tracking working.
+	 */
+	this._bind(showTarget, 'mousemove', function(event) {
+		this._storeMouse(event);
+		this.cache.onTarget = TRUE;
+	});
+
+	// Define hoverIntent function
+	function hoverIntent(event) {
+		// Only continue if tooltip isn't disabled
+		if(this.disabled || this.destroyed) { return FALSE; }
+
+		// Cache the event data
+		this.cache.event = cloneEvent(event);
+		this.cache.target = event ? $(event.target) : [undefined];
+
+		// Start the event sequence
+		clearTimeout(this.timers.show);
+		this.timers.show = delay.call(this,
+			function() { this.render(typeof event === 'object' || options.show.ready); },
+			options.show.delay
+		);
+	}
+
+	// Filter and bind events
+	this._bindEvents(showEvents, hideEvents, showTarget, hideTarget, hoverIntent, function() {
+		clearTimeout(this.timers.show);
+	});
+
+	// Prerendering is enabled, create tooltip now
+	if(options.show.ready || options.prerender) { hoverIntent.call(this, event); }
+};
+
 // Event assignment method
 PROTOTYPE._assignEvents = function() {
-	var options = this.options,
+	var self = this,
+		options = this.options,
 		posOptions = options.position,
 
 		tooltip = this.tooltip,
@@ -46972,8 +47118,13 @@ PROTOTYPE._assignEvents = function() {
 		windowTarget = $(window),
 
 		showEvents = options.show.event ? $.trim('' + options.show.event).split(' ') : [],
-		hideEvents = options.hide.event ? $.trim('' + options.hide.event).split(' ') : [],
-		toggleEvents = [];
+		hideEvents = options.hide.event ? $.trim('' + options.hide.event).split(' ') : [];
+
+
+	// Assign passed event callbacks
+	$.each(options.events, function(name, callback) {
+		self._bind(tooltip, name === 'toggle' ? ['tooltipshow','tooltiphide'] : ['tooltip'+name], callback, null, tooltip);
+	});
 
 	// Hide tooltips when leaving current window/frame (but not select/option elements)
 	if(/mouse(out|leave)/i.test(options.hide.event) && options.hide.leave === 'window') {
@@ -47023,25 +47174,8 @@ PROTOTYPE._assignEvents = function() {
 		this._bind(hideTarget.add(tooltip), QTIP.inactiveEvents, inactiveMethod, '-inactive');
 	}
 
-	// Apply hide events (and filter identical show events)
-	hideEvents = $.map(hideEvents, function(type) {
-		var showIndex = $.inArray(type, showEvents);
-
-		// Both events and targets are identical, apply events using a toggle
-		if((showIndex > -1 && hideTarget.add(showTarget).length === hideTarget.length)) {
-			toggleEvents.push( showEvents.splice( showIndex, 1 )[0] ); return;
-		}
-
-		return type;
-	});
-
-	// Apply show/hide/toggle events
-	this._bind(showTarget, showEvents, showMethod);
-	this._bind(hideTarget, hideEvents, hideMethod);
-	this._bind(showTarget, toggleEvents, function(event) {
-		(this.tooltip[0].offsetWidth > 0 ? hideMethod : showMethod).call(this, event);
-	});
-
+	// Filter and bind events
+	this._bindEvents(showEvents, hideEvents, showTarget, hideTarget, showMethod, hideMethod);
 
 	// Mouse movement bindings
 	this._bind(showTarget.add(tooltip), 'mousemove', function(event) {
@@ -47107,20 +47241,13 @@ PROTOTYPE._unassignEvents = function() {
 		document
 	];
 
-	// Check if tooltip is rendered
-	if(this.rendered) {
-		this._unbind($([]).pushStack( $.grep(targets, function(i) {
-			return typeof i === 'object';
-		})));
-	}
-
-	// Tooltip isn't yet rendered, remove render event
-	else { $(targets[0]).unbind('.'+this._id+'-create'); }
+	this._unbind($([]).pushStack( $.grep(targets, function(i) {
+		return typeof i === 'object';
+	})));
 };
 
 ;// Initialization method
-function init(elem, id, opts)
-{
+function init(elem, id, opts) {
 	var obj, posOptions, attr, config, title,
 
 	// Setup element references
@@ -47179,7 +47306,7 @@ function init(elem, id, opts)
 	// Destroy previous tooltip if overwrite is enabled, or skip element if not
 	if(elem.data(NAMESPACE)) {
 		if(config.overwrite) {
-			elem.qtip('destroy');
+			elem.qtip('destroy', true);
 		}
 		else if(config.overwrite === FALSE) {
 			return FALSE;
@@ -47201,7 +47328,7 @@ function init(elem, id, opts)
 
 	// Catch remove/removeqtip events on target element to destroy redundant tooltip
 	elem.one('remove.qtip-'+id+' removeqtip.qtip-'+id, function() { 
-		var api; if((api = $(this).data(NAMESPACE))) { api.destroy(); }
+		var api; if((api = $(this).data(NAMESPACE))) { api.destroy(true); }
 	});
 
 	return obj;
@@ -47222,10 +47349,8 @@ QTIP = $.fn.qtip = function(options, notation, newValue)
 	}
 
 	// Execute API command if present
-	else if('string' === typeof options)
-	{
-		this.each(function()
-		{
+	else if('string' === typeof options) {
+		this.each(function() {
 			var api = $.data(this, NAMESPACE);
 			if(!api) { return TRUE; }
 
@@ -47253,100 +47378,35 @@ QTIP = $.fn.qtip = function(options, notation, newValue)
 	}
 
 	// No API commands. validate provided options and setup qTips
-	else if('object' === typeof options || !arguments.length)
-	{
+	else if('object' === typeof options || !arguments.length) {
+		// Sanitize options first
 		opts = sanitizeOptions($.extend(TRUE, {}, options));
 
-		// Bind the qTips
-		return QTIP.bind.call(this, opts, event);
+		return this.each(function(i) {
+			var api, id;
+
+			// Find next available ID, or use custom ID if provided
+			id = $.isArray(opts.id) ? opts.id[i] : opts.id;
+			id = !id || id === FALSE || id.length < 1 || QTIP.api[id] ? QTIP.nextid++ : id;
+
+			// Initialize the qTip and re-grab newly sanitized options
+			api = init($(this), id, opts);
+			if(api === FALSE) { return TRUE; }
+			else { QTIP.api[id] = api; }
+
+			// Initialize plugins
+			$.each(PLUGINS, function() {
+				if(this.initialize === 'initialize') { this(api); }
+			});
+
+			// Assign initial pre-render events
+			api._assignInitialEvents(event);
+		});
 	}
 };
 
-// $.fn.qtip Bind method
-QTIP.bind = function(opts, event)
-{
-	return this.each(function(i) {
-		var options, targets, events, namespace, api, id;
-
-		// Find next available ID, or use custom ID if provided
-		id = $.isArray(opts.id) ? opts.id[i] : opts.id;
-		id = !id || id === FALSE || id.length < 1 || QTIP.api[id] ? QTIP.nextid++ : id;
-
-		// Setup events namespace
-		namespace = '.qtip-'+id+'-create';
-
-		// Initialize the qTip and re-grab newly sanitized options
-		api = init($(this), id, opts);
-		if(api === FALSE) { return TRUE; }
-		else { QTIP.api[id] = api; }
-		options = api.options;
-
-		// Initialize plugins
-		$.each(PLUGINS, function() {
-			if(this.initialize === 'initialize') { this(api); }
-		});
-
-		// Determine hide and show targets
-		targets = { show: options.show.target, hide: options.hide.target };
-		events = {
-			show: $.trim('' + options.show.event).replace(/ /g, namespace+' ') + namespace,
-			hide: $.trim('' + options.hide.event).replace(/ /g, namespace+' ') + namespace
-		};
-
-		/*
-		 * Make sure hoverIntent functions properly by using mouseleave as a hide event if
-		 * mouseenter/mouseout is used for show.event, even if it isn't in the users options.
-		 */
-		if(/mouse(over|enter)/i.test(events.show) && !/mouse(out|leave)/i.test(events.hide)) {
-			events.hide += ' mouseleave' + namespace;
-		}
-
-		/*
-		 * Also make sure initial mouse targetting works correctly by caching mousemove coords
-		 * on show targets before the tooltip has rendered.
-		 *
-		 * Also set onTarget when triggered to keep mouse tracking working
-		 */
-		targets.show.bind('mousemove'+namespace, function(event) {
-			api._storeMouse(event);
-			api.cache.onTarget = TRUE;
-		});
-
-		// Define hoverIntent function
-		function hoverIntent(event) {
-			function render() {
-				// Cache mouse coords,render and render the tooltip
-				api.render(typeof event === 'object' || options.show.ready);
-
-				// Unbind show and hide events
-				targets.show.add(targets.hide).unbind(namespace);
-			}
-
-			// Only continue if tooltip isn't disabled
-			if(api.disabled) { return FALSE; }
-
-			// Cache the event data
-			api.cache.event = $.extend({}, event);
-			api.cache.target = event ? $(event.target) : [undefined];
-
-			// Start the event sequence
-			if(options.show.delay > 0) {
-				clearTimeout(api.timers.show);
-				api.timers.show = setTimeout(render, options.show.delay);
-				if(events.show !== events.hide) {
-					targets.hide.bind(events.hide, function() { clearTimeout(api.timers.show); });
-				}
-			}
-			else { render(); }
-		}
-
-		// Bind show events to target
-		targets.show.bind(events.show, hoverIntent);
-
-		// Prerendering is enabled, create tooltip now
-		if(options.show.ready || options.prerender) { hoverIntent(event); }
-	});
-};
+// Expose class
+$.qtip = QTip;
 
 // Populated in render method
 QTIP.api = {};
@@ -47420,7 +47480,7 @@ if(!$.ui) {
 }
 
 ;// qTip version
-QTIP.version = '2.1.1';
+QTIP.version = '2.2.0';
 
 // Base ID for all qTips
 QTIP.nextid = 0;
@@ -47502,7 +47562,7 @@ QTIP.defaults = {
 	}
 };
 
-;var TIP,
+;var TIP, 
 
 // .bind()/.on() namespace
 TIPNS = '.qtip-tip',
@@ -47547,18 +47607,28 @@ function vendorCss(elem, prop) {
 
 // Parse a given elements CSS property into an int
 function intCss(elem, prop) {
-	return parseInt(vendorCss(elem, prop), 10);
+	return Math.ceil(parseFloat(vendorCss(elem, prop)));
 }
 
 
 // VML creation (for IE only)
 if(!HASCANVAS) {
-	createVML = function(tag, props, style) {
+	var createVML = function(tag, props, style) {
 		return '<qtipvml:'+tag+' xmlns="urn:schemas-microsoft.com:vml" class="qtip-vml" '+(props||'')+
 			' style="behavior: url(#default#VML); '+(style||'')+ '" />';
 	};
 }
 
+// Canvas only definitions
+else {
+	var PIXEL_RATIO = window.devicePixelRatio || 1,
+		BACKING_STORE_RATIO = (function() {
+			var context = document.createElement('canvas').getContext('2d');
+			return context.backingStorePixelRatio || context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || 
+					context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || 1;
+		}()),
+		SCALE = PIXEL_RATIO / BACKING_STORE_RATIO;
+}
 
 
 function Tip(qtip, options) {
@@ -47585,7 +47655,7 @@ $.extend(Tip.prototype, {
 
 			// Setup constant parameters
 			context.lineJoin = 'miter';
-			context.miterLimit = 100;
+			context.miterLimit = 100000;
 			context.save();
 		}
 		else {
@@ -47644,7 +47714,7 @@ $.extend(Tip.prototype, {
 		return (use ? intCss(use, prop) : (
 			intCss(elements.content, prop) ||
 			intCss(this._useTitle(corner) && elements.titlebar || elements.content, prop) ||
-			intCss(tooltip, prop)
+			intCss(elements.tooltip, prop)
 		)) || 0;
 	},
 
@@ -47671,11 +47741,11 @@ $.extend(Tip.prototype, {
 
 		// Attempt to detect the background colour from various elements, left-to-right precedance
 		color[0] = css(tip, BG_COLOR) || css(colorElem, BG_COLOR) || css(elements.content, BG_COLOR) || 
-			css(tooltip, BG_COLOR) || tip.css(BG_COLOR);
+			css(elements.tooltip, BG_COLOR) || tip.css(BG_COLOR);
 
 		// Attempt to detect the correct border side colour from various elements, left-to-right precedance
 		color[1] = css(tip, borderSide, COLOR) || css(colorElem, borderSide, COLOR) || 
-			css(elements.content, borderSide, COLOR) || css(tooltip, borderSide, COLOR) || tooltip.css(borderSide);
+			css(elements.content, borderSide, COLOR) || css(elements.tooltip, borderSide, COLOR) || elements.tooltip.css(borderSide);
 
 		// Reset background and border colours
 		$('*', tip).add(tip).css('cssText', BG_COLOR+':'+TRANSPARENT+IMPORTANT+';'+BORDER+':0'+IMPORTANT+';');
@@ -47685,10 +47755,10 @@ $.extend(Tip.prototype, {
 
 	_calculateSize: function(corner) {
 		var y = corner.precedance === Y,
-			width = this.options[ y ? 'height' : 'width' ],
-			height = this.options[ y ? 'width' : 'height' ],
+			width = this.options['width'],
+			height = this.options['height'],
 			isCenter = corner.abbrev() === 'c',
-			base = width * (isCenter ? 0.5 : 1),
+			base = (y ? width: height) * (isCenter ? 0.5 : 1),
 			pow = Math.pow,
 			round = Math.round,
 			bigHyp, ratio, result,
@@ -47703,13 +47773,16 @@ $.extend(Tip.prototype, {
 		ratio = bigHyp / smallHyp;
 
 		result = [ round(ratio * width), round(ratio * height) ];
-
 		return y ? result : result.reverse();
 	},
 
 	// Tip coordinates calculator
-	_calculateTip: function(corner) {	
-		var width = this.size[0], height = this.size[1],
+	_calculateTip: function(corner, size, scale) {
+		scale = scale || 1;
+		size = size || this.size;
+
+		var width = size[0] * scale,
+			height = size[1] * scale,
 			width2 = Math.ceil(width / 2), height2 = Math.ceil(height / 2),
 
 		// Define tip coordinates in terms of height and width values
@@ -47729,6 +47802,15 @@ $.extend(Tip.prototype, {
 		tips.lb = tips.tr; tips.rb = tips.tl;
 
 		return tips[ corner.abbrev() ];
+	},
+
+	// Tip coordinates drawer (canvas)
+	_drawCoords: function(context, coords) {
+		context.beginPath();
+		context.moveTo(coords[0], coords[1]);
+		context.lineTo(coords[2], coords[3]);
+		context.lineTo(coords[4], coords[5]);
+		context.closePath();
 	},
 
 	create: function() {
@@ -47757,11 +47839,11 @@ $.extend(Tip.prototype, {
 			tip = this.element,
 			inner = tip.children(),
 			options = this.options,
-			size = this.size,
+			curSize = this.size,
 			mimic = options.mimic,
 			round = Math.round,
 			color, precedance, context,
-			coords, translate, newSize, border;
+			coords, bigCoords, translate, newSize, border, BACKING_STORE_RATIO;
 
 		// Re-determine tip if not already set
 		if(!corner) { corner = this.qtip.cache.corner || this.corner; }
@@ -47794,8 +47876,8 @@ $.extend(Tip.prototype, {
 			// Grab border width
 			border = this.border = this._parseWidth(corner, corner[corner.precedance]);
 
-			// If border width isn't zero, use border color as fill (1.0 style tips)
-			if(options.border && border < 1) { color[0] = color[1]; }
+			// If border width isn't zero, use border color as fill if it's not invalid (1.0 style tips)
+			if(options.border && border < 1 && !INVALID.test(color[1])) { color[0] = color[1]; }
 
 			// Set border width (use detected border width if options.border is true)
 			this.border = border = options.border !== TRUE ? options.border : border;
@@ -47803,9 +47885,6 @@ $.extend(Tip.prototype, {
 
 		// Border colour was invalid, set border to zero
 		else { this.border = border = 0; }
-
-		// Calculate coordinates
-		coords = this._calculateTip(mimic);
 
 		// Determine tip size
 		newSize = this.size = this._calculateSize(corner);
@@ -47818,79 +47897,72 @@ $.extend(Tip.prototype, {
 		// Calculate tip translation
 		if(corner.precedance === Y) {
 			translate = [
-				round(mimic.x === LEFT ? border : mimic.x === RIGHT ? newSize[0] - size[0] - border : (newSize[0] - size[0]) / 2),
-				round(mimic.y === TOP ? newSize[1] - size[1] : 0)
+				round(mimic.x === LEFT ? border : mimic.x === RIGHT ? newSize[0] - curSize[0] - border : (newSize[0] - curSize[0]) / 2),
+				round(mimic.y === TOP ? newSize[1] - curSize[1] : 0)
 			];
 		}
 		else {
 			translate = [
-				round(mimic.x === LEFT ? newSize[0] - size[0] : 0),
-				round(mimic.y === TOP ? border : mimic.y === BOTTOM ? newSize[1] - size[1] - border : (newSize[1] - size[1]) / 2)
+				round(mimic.x === LEFT ? newSize[0] - curSize[0] : 0),
+				round(mimic.y === TOP ? border : mimic.y === BOTTOM ? newSize[1] - curSize[1] - border : (newSize[1] - curSize[1]) / 2)
 			];
 		}
 
 		// Canvas drawing implementation
 		if(HASCANVAS) {
-			// Set the canvas size using calculated size
-			inner.attr(WIDTH, newSize[0]).attr(HEIGHT, newSize[1]);
-
 			// Grab canvas context and clear/save it
 			context = inner[0].getContext('2d');
 			context.restore(); context.save();
-			context.clearRect(0,0,3000,3000);
+			context.clearRect(0,0,6000,6000);
+			
+			// Calculate coordinates
+			coords = this._calculateTip(mimic, curSize, SCALE);
+			bigCoords = this._calculateTip(mimic, this.size, SCALE);
 
-			// Set properties
+			// Set the canvas size using calculated size
+			inner.attr(WIDTH, newSize[0] * SCALE).attr(HEIGHT, newSize[1] * SCALE);
+			inner.css(WIDTH, newSize[0]).css(HEIGHT, newSize[1]);
+
+			// Draw the outer-stroke tip
+			this._drawCoords(context, bigCoords);
+			context.fillStyle = color[1];
+			context.fill();
+
+			// Draw the actual tip
+			context.translate(translate[0] * SCALE, translate[1] * SCALE);
+			this._drawCoords(context, coords);
 			context.fillStyle = color[0];
-			context.strokeStyle = color[1];
-			context.lineWidth = border * 2;
-
-			// Draw the tip
-			context.translate(translate[0], translate[1]);
-			context.beginPath();
-			context.moveTo(coords[0], coords[1]);
-			context.lineTo(coords[2], coords[3]);
-			context.lineTo(coords[4], coords[5]);
-			context.closePath();
-
-			// Apply fill and border
-			if(border) {
-				// Make sure transparent borders are supported by doing a stroke
-				// of the background colour before the stroke colour
-				if(tooltip.css('background-clip') === 'border-box') {
-					context.strokeStyle = color[0];
-					context.stroke();
-				}
-				context.strokeStyle = color[1];
-				context.stroke();
-			}
 			context.fill();
 		}
 
 		// VML (IE Proprietary implementation)
 		else {
+			// Calculate coordinates
+			coords = this._calculateTip(mimic);
+
 			// Setup coordinates string
 			coords = 'm' + coords[0] + ',' + coords[1] + ' l' + coords[2] +
 				',' + coords[3] + ' ' + coords[4] + ',' + coords[5] + ' xe';
 
 			// Setup VML-specific offset for pixel-perfection
-			translate[2] = border && /^(r|b)/i.test(corner.string()) ? 
+			translate[2] = border && /^(r|b)/i.test(corner.string()) ?
 				BROWSER.ie === 8 ? 2 : 1 : 0;
 
 			// Set initial CSS
 			inner.css({
-				coordsize: (size[0]+border) + ' ' + (size[1]+border),
+				coordsize: (newSize[0]+border) + ' ' + (newSize[1]+border),
 				antialias: ''+(mimic.string().indexOf(CENTER) > -1),
 				left: translate[0] - (translate[2] * Number(precedance === X)),
 				top: translate[1] - (translate[2] * Number(precedance === Y)),
-				width: size[0] + border,
-				height: size[1] + border
+				width: newSize[0] + border,
+				height: newSize[1] + border
 			})
 			.each(function(i) {
 				var $this = $(this);
 
 				// Set shape specific attributes
 				$this[ $this.prop ? 'prop' : 'attr' ]({
-					coordsize: (size[0]+border) + ' ' + (size[1]+border),
+					coordsize: (newSize[0]+border) + ' ' + (newSize[1]+border),
 					path: coords,
 					fillcolor: color[0],
 					filled: !!i,
@@ -47905,27 +47977,36 @@ $.extend(Tip.prototype, {
 			});
 		}
 
+		// Opera bug #357 - Incorrect tip position
+		// https://github.com/Craga89/qTip2/issues/367
+		window.opera && setTimeout(function() {
+			elements.tip.css({
+				display: 'inline-block',
+				visibility: 'visible'
+			});
+		}, 1);
+
 		// Position if needed
-		if(position !== FALSE) { this.calculate(corner); }
+		if(position !== FALSE) { this.calculate(corner, newSize); }
 	},
 
-	calculate: function(corner) {
+	calculate: function(corner, size) {
 		if(!this.enabled) { return FALSE; }
 
 		var self = this,
 			elements = this.qtip.elements,
 			tip = this.element,
 			userOffset = this.options.offset,
-			isWidget = this.qtip.tooltip.hasClass('ui-widget'),
+			isWidget = elements.tooltip.hasClass('ui-widget'),
 			position = {  },
-			precedance, size, corners;
+			precedance, corners;
 
 		// Inherit corner if not provided
 		corner = corner || this.corner;
 		precedance = corner.precedance;
 
 		// Determine which tip dimension to use for adjustment
-		size = this._calculateSize(corner);
+		size = size || this._calculateSize(corner);
 
 		// Setup corners and offset array
 		corners = [ corner.x, corner.y ];
@@ -47969,23 +48050,39 @@ $.extend(Tip.prototype, {
 			shift = { left: FALSE, top: FALSE, x: 0, y: 0 },
 			offset, css = {}, props;
 
-		// If our tip position isn't fixed e.g. doesn't adjust with viewport...
-		if(this.corner.fixed !== TRUE) {
+		function shiftflip(direction, precedance, popposite, side, opposite) {
 			// Horizontal - Shift or flip method
-			if(horizontal === SHIFT && newCorner.precedance === X && adjust.left && newCorner.y !== CENTER) {
+			if(direction === SHIFT && newCorner.precedance === precedance && adjust[side] && newCorner[popposite] !== CENTER) {
 				newCorner.precedance = newCorner.precedance === X ? Y : X;
 			}
-			else if(horizontal !== SHIFT && adjust.left){
-				newCorner.x = newCorner.x === CENTER ? (adjust.left > 0 ? LEFT : RIGHT) : (newCorner.x === LEFT ? RIGHT : LEFT);
+			else if(direction !== SHIFT && adjust[side]){
+				newCorner[precedance] = newCorner[precedance] === CENTER ? 
+					(adjust[side] > 0 ? side : opposite) : (newCorner[precedance] === side ? opposite : side);
 			}
+		}
 
-			// Vertical - Shift or flip method
-			if(vertical === SHIFT && newCorner.precedance === Y && adjust.top && newCorner.x !== CENTER) {
-				newCorner.precedance = newCorner.precedance === Y ? X : Y;
+		function shiftonly(xy, side, opposite) {
+			if(newCorner[xy] === CENTER) {
+				css[MARGIN+'-'+side] = shift[xy] = offset[MARGIN+'-'+side] - adjust[side];
 			}
-			else if(vertical !== SHIFT && adjust.top) {
-				newCorner.y = newCorner.y === CENTER ? (adjust.top > 0 ? TOP : BOTTOM) : (newCorner.y === TOP ? BOTTOM : TOP);
+			else {
+				props = offset[opposite] !== undefined ?
+					[ adjust[side], -offset[side] ] : [ -adjust[side], offset[side] ];
+
+				if( (shift[xy] = Math.max(props[0], props[1])) > props[0] ) {
+					pos[side] -= adjust[side];
+					shift[side] = FALSE;
+				}
+				
+				css[ offset[opposite] !== undefined ? opposite : side ] = shift[xy];
 			}
+		}
+
+		// If our tip position isn't fixed e.g. doesn't adjust with viewport...
+		if(this.corner.fixed !== TRUE) {
+			// Perform shift/flip adjustments
+			shiftflip(horizontal, X, Y, LEFT, RIGHT);
+			shiftflip(vertical, Y, X, TOP, BOTTOM);
 
 			// Update and redraw the tip if needed (check cached details of last drawn tip)
 			if(newCorner.string() !== cache.corner.string() && (cache.cornerTop !== adjust.top || cache.cornerLeft !== adjust.left)) {
@@ -47994,46 +48091,16 @@ $.extend(Tip.prototype, {
 		}
 
 		// Setup tip offset properties
-		offset = this.calculate(newCorner, adjust);
+		offset = this.calculate(newCorner);
 
 		// Readjust offset object to make it left/top
 		if(offset.right !== undefined) { offset.left = -offset.right; }
 		if(offset.bottom !== undefined) { offset.top = -offset.bottom; }
 		offset.user = this.offset;
 
-		// Viewport "shift" specific adjustments
-		if(shift.left = (horizontal === SHIFT && !!adjust.left)) {
-			if(newCorner.x === CENTER) {
-				css[MARGIN+'-left'] = shift.x = offset[MARGIN+'-left'] - adjust.left;
-			}
-			else {
-				props = offset.right !== undefined ?
-					[ adjust.left, -offset.left ] : [ -adjust.left, offset.left ];
-
-				if( (shift.x = Math.max(props[0], props[1])) > props[0] ) {
-					pos.left -= adjust.left;
-					shift.left = FALSE;
-				}
-				
-				css[ offset.right !== undefined ? RIGHT : LEFT ] = shift.x;
-			}
-		}
-		if(shift.top = (vertical === SHIFT && !!adjust.top)) {
-			if(newCorner.y === CENTER) {
-				css[MARGIN+'-top'] = shift.y = offset[MARGIN+'-top'] - adjust.top;
-			}
-			else {
-				props = offset.bottom !== undefined ?
-					[ adjust.top, -offset.top ] : [ -adjust.top, offset.top ];
-
-				if( (shift.y = Math.max(props[0], props[1])) > props[0] ) {
-					pos.top -= adjust.top;
-					shift.top = FALSE;
-				}
-
-				css[ offset.bottom !== undefined ? BOTTOM : TOP ] = shift.y;
-			}
-		}
+		// Perform shift adjustments
+		if(shift.left = (horizontal === SHIFT && !!adjust.left)) { shiftonly(X, LEFT, RIGHT); }
+		if(shift.top = (vertical === SHIFT && !!adjust.top)) { shiftonly(Y, TOP, BOTTOM); }
 
 		/*
 		* If the tip is adjusted in both dimensions, or in a
@@ -48045,8 +48112,10 @@ $.extend(Tip.prototype, {
 		);
 
 		// Adjust position to accomodate tip dimensions
-		pos.left -= offset.left.charAt ? offset.user : horizontal !== SHIFT || shift.top || !shift.left && !shift.top ? offset.left : 0;
-		pos.top -= offset.top.charAt ? offset.user : vertical !== SHIFT || shift.left || !shift.left && !shift.top ? offset.top : 0;
+		pos.left -= offset.left.charAt ? offset.user : 
+			horizontal !== SHIFT || shift.top || !shift.left && !shift.top ? offset.left + this.border : 0;
+		pos.top -= offset.top.charAt ? offset.user : 
+			vertical !== SHIFT || shift.left || !shift.left && !shift.top ? offset.top + this.border : 0;
 
 		// Cache details
 		cache.cornerLeft = adjust.left; cache.cornerTop = adjust.top;
@@ -48075,7 +48144,7 @@ TIP.initialize = 'render';
 // Setup plugin sanitization options
 TIP.sanitize = function(options) {
 	if(options.style && 'tip' in options.style) {
-		opts = options.style.tip;
+		var opts = options.style.tip;
 		if(typeof opts !== 'object') { opts = options.style.tip = { corner: opts }; }
 		if(!(/string|boolean/i).test(typeof opts.corner)) { opts.corner = TRUE; }
 	}
@@ -48092,7 +48161,7 @@ CHECKS.tip = {
 	},
 	'^style.tip.(height|width)$': function(obj) {
 		// Re-set dimensions and redraw the tip
-		this.size = size = [ obj.width, obj.height ];
+		this.size = [ obj.width, obj.height ];
 		this.update();
 
 		// Reposition the tooltip
@@ -48130,61 +48199,60 @@ $.extend(TRUE, QTIP.defaults, {
 		viewport = posOptions.viewport,
 		container = posOptions.container,
 		cache = api.cache,
-		tip = api.plugins.tip,
 		adjusted = { left: 0, top: 0 },
-		fixed, newMy, newClass;
+		fixed, newMy, newClass, containerOffset, containerStatic,
+		viewportWidth, viewportHeight, viewportScroll, viewportOffset;
 
-	// If viewport is not a jQuery element, or it's the window/document or no adjustment method is used... return
+	// If viewport is not a jQuery element, or it's the window/document, or no adjustment method is used... return
 	if(!viewport.jquery || target[0] === window || target[0] === document.body || adjust.method === 'none') {
 		return adjusted;
 	}
 
+	// Cach container details
+	containerOffset = container.offset() || adjusted;
+	containerStatic = container.css('position') === 'static';
+
 	// Cache our viewport details
 	fixed = tooltip.css('position') === 'fixed';
-	viewport = {
-		elem: viewport,
-		width: viewport[0] === window ? viewport.width() : viewport.outerWidth(FALSE),
-		height: viewport[0] === window ? viewport.height() : viewport.outerHeight(FALSE),
-		scrollleft: fixed ? 0 : viewport.scrollLeft(),
-		scrolltop: fixed ? 0 : viewport.scrollTop(),
-		offset: viewport.offset() || { left: 0, top: 0 }
-	};
-	container = {
-		elem: container,
-		scrollLeft: container.scrollLeft(),
-		scrollTop: container.scrollTop(),
-		offset: container.offset() || { left: 0, top: 0 }
-	};
+	viewportWidth = viewport[0] === window ? viewport.width() : viewport.outerWidth(FALSE);
+	viewportHeight = viewport[0] === window ? viewport.height() : viewport.outerHeight(FALSE);
+	viewportScroll = { left: fixed ? 0 : viewport.scrollLeft(), top: fixed ? 0 : viewport.scrollTop() };
+	viewportOffset = viewport.offset() || adjusted;
 
 	// Generic calculation method
 	function calculate(side, otherSide, type, adjust, side1, side2, lengthName, targetLength, elemLength) {
 		var initialPos = position[side1],
-			mySide = my[side], atSide = at[side],
+			mySide = my[side],
+			atSide = at[side],
 			isShift = type === SHIFT,
-			viewportScroll = -container.offset[side1] + viewport.offset[side1] + viewport['scroll'+side1],
 			myLength = mySide === side1 ? elemLength : mySide === side2 ? -elemLength : -elemLength / 2,
 			atLength = atSide === side1 ? targetLength : atSide === side2 ? -targetLength : -targetLength / 2,
-			tipLength = tip && tip.size ? tip.size[lengthName] || 0 : 0,
-			tipAdjust = tip && tip.corner && tip.corner.precedance === side && !isShift ? tipLength : 0,
-			overflow1 = viewportScroll - initialPos + tipAdjust,
-			overflow2 = initialPos + elemLength - viewport[lengthName] - viewportScroll + tipAdjust,
+			sideOffset = viewportScroll[side1] + viewportOffset[side1] - (containerStatic ? 0 : containerOffset[side1]),
+			overflow1 = sideOffset - initialPos,
+			overflow2 = initialPos + elemLength - (lengthName === WIDTH ? viewportWidth : viewportHeight) - sideOffset,
 			offset = myLength - (my.precedance === side || mySide === my[otherSide] ? atLength : 0) - (atSide === CENTER ? targetLength / 2 : 0);
 
 		// shift
 		if(isShift) {
-			tipAdjust = tip && tip.corner && tip.corner.precedance === otherSide ? tipLength : 0;
-			offset = (mySide === side1 ? 1 : -1) * myLength - tipAdjust;
+			offset = (mySide === side1 ? 1 : -1) * myLength;
 
 			// Adjust position but keep it within viewport dimensions
 			position[side1] += overflow1 > 0 ? overflow1 : overflow2 > 0 ? -overflow2 : 0;
 			position[side1] = Math.max(
-				-container.offset[side1] + viewport.offset[side1] + (tipAdjust && tip.corner[side] === CENTER ? tip.offset : 0),
+				-containerOffset[side1] + viewportOffset[side1],
 				initialPos - offset,
 				Math.min(
-					Math.max(-container.offset[side1] + viewport.offset[side1] + viewport[lengthName], initialPos + offset),
-					position[side1]
+					Math.max(
+						-containerOffset[side1] + viewportOffset[side1] + (lengthName === WIDTH ? viewportWidth : viewportHeight),
+						initialPos + offset
+					),
+					position[side1],
+
+					// Make sure we don't adjust complete off the element when using 'center'
+					mySide === 'center' ? initialPos - myLength : 1E9
 				)
 			);
+
 		}
 
 		// flip/flipinvert
@@ -48228,6 +48296,222 @@ $.extend(TRUE, QTIP.defaults, {
 	}
 
 	return adjusted;
+};
+;PLUGINS.polys = {
+	// POLY area coordinate calculator
+	//	Special thanks to Ed Cradock for helping out with this.
+	//	Uses a binary search algorithm to find suitable coordinates.
+	polygon: function(baseCoords, corner) {
+		var result = {
+			width: 0, height: 0,
+			position: {
+				top: 1e10, right: 0,
+				bottom: 0, left: 1e10
+			},
+			adjustable: FALSE
+		},
+		i = 0, next,
+		coords = [],
+		compareX = 1, compareY = 1,
+		realX = 0, realY = 0,
+		newWidth, newHeight;
+
+		// First pass, sanitize coords and determine outer edges
+		i = baseCoords.length; while(i--) {
+			next = [ parseInt(baseCoords[--i], 10), parseInt(baseCoords[i+1], 10) ];
+
+			if(next[0] > result.position.right){ result.position.right = next[0]; }
+			if(next[0] < result.position.left){ result.position.left = next[0]; }
+			if(next[1] > result.position.bottom){ result.position.bottom = next[1]; }
+			if(next[1] < result.position.top){ result.position.top = next[1]; }
+
+			coords.push(next);
+		}
+
+		// Calculate height and width from outer edges
+		newWidth = result.width = Math.abs(result.position.right - result.position.left);
+		newHeight = result.height = Math.abs(result.position.bottom - result.position.top);
+
+		// If it's the center corner...
+		if(corner.abbrev() === 'c') {
+			result.position = {
+				left: result.position.left + (result.width / 2),
+				top: result.position.top + (result.height / 2)
+			};
+		}
+		else {
+			// Second pass, use a binary search algorithm to locate most suitable coordinate
+			while(newWidth > 0 && newHeight > 0 && compareX > 0 && compareY > 0)
+			{
+				newWidth = Math.floor(newWidth / 2);
+				newHeight = Math.floor(newHeight / 2);
+
+				if(corner.x === LEFT){ compareX = newWidth; }
+				else if(corner.x === RIGHT){ compareX = result.width - newWidth; }
+				else{ compareX += Math.floor(newWidth / 2); }
+
+				if(corner.y === TOP){ compareY = newHeight; }
+				else if(corner.y === BOTTOM){ compareY = result.height - newHeight; }
+				else{ compareY += Math.floor(newHeight / 2); }
+
+				i = coords.length; while(i--)
+				{
+					if(coords.length < 2){ break; }
+
+					realX = coords[i][0] - result.position.left;
+					realY = coords[i][1] - result.position.top;
+
+					if((corner.x === LEFT && realX >= compareX) ||
+					(corner.x === RIGHT && realX <= compareX) ||
+					(corner.x === CENTER && (realX < compareX || realX > (result.width - compareX))) ||
+					(corner.y === TOP && realY >= compareY) ||
+					(corner.y === BOTTOM && realY <= compareY) ||
+					(corner.y === CENTER && (realY < compareY || realY > (result.height - compareY)))) {
+						coords.splice(i, 1);
+					}
+				}
+			}
+			result.position = { left: coords[0][0], top: coords[0][1] };
+		}
+
+		return result;
+	},
+
+	rect: function(ax, ay, bx, by) {
+		return {
+			width: Math.abs(bx - ax),
+			height: Math.abs(by - ay),
+			position: {
+				left: Math.min(ax, bx),
+				top: Math.min(ay, by)
+			}
+		};
+	},
+
+	_angles: {
+		tc: 3 / 2, tr: 7 / 4, tl: 5 / 4, 
+		bc: 1 / 2, br: 1 / 4, bl: 3 / 4, 
+		rc: 2, lc: 1, c: 0
+	},
+	ellipse: function(cx, cy, rx, ry, corner) {
+		var c = PLUGINS.polys._angles[ corner.abbrev() ],
+			rxc = c === 0 ? 0 : rx * Math.cos( c * Math.PI ),
+			rys = ry * Math.sin( c * Math.PI );
+
+		return {
+			width: (rx * 2) - Math.abs(rxc),
+			height: (ry * 2) - Math.abs(rys),
+			position: {
+				left: cx + rxc,
+				top: cy + rys
+			},
+			adjustable: FALSE
+		};
+	},
+	circle: function(cx, cy, r, corner) {
+		return PLUGINS.polys.ellipse(cx, cy, r, r, corner);
+	}
+};;PLUGINS.svg = function(api, svg, corner)
+{
+	var doc = $(document),
+		elem = svg[0],
+		root = $(elem.ownerSVGElement),
+		xScale = 1, yScale = 1,
+		complex = true,
+		rootWidth, rootHeight,
+		mtx, transformed, viewBox,
+		len, next, i, points,
+		result, position, dimensions;
+
+	// Ascend the parentNode chain until we find an element with getBBox()
+	while(!elem.getBBox) { elem = elem.parentNode; }
+	if(!elem.getBBox || !elem.parentNode) { return FALSE; }
+
+	// Determine dimensions where possible
+	rootWidth = root.attr('width') || root.width() || parseInt(root.css('width'), 10);
+	rootHeight = root.attr('height') || root.height() || parseInt(root.css('height'), 10);
+
+	// Add stroke characteristics to scaling
+	var strokeWidth2 = (parseInt(svg.css('stroke-width'), 10) || 0) / 2;
+	if(strokeWidth2) {
+		xScale += strokeWidth2 / rootWidth;
+		yScale += strokeWidth2 / rootHeight;
+	}
+
+	// Determine which shape calculation to use
+	switch(elem.nodeName) {
+		case 'ellipse':
+		case 'circle':
+			result = PLUGINS.polys.ellipse(
+				elem.cx.baseVal.value,
+				elem.cy.baseVal.value,
+				(elem.rx || elem.r).baseVal.value + strokeWidth2,
+				(elem.ry || elem.r).baseVal.value + strokeWidth2,
+				corner
+			);
+		break;
+
+		case 'line':
+		case 'polygon':
+		case 'polyline':
+			// Determine points object (line has none, so mimic using array)
+			points = elem.points || [ 
+				{ x: elem.x1.baseVal.value, y: elem.y1.baseVal.value },
+				{ x: elem.x2.baseVal.value, y: elem.y2.baseVal.value }
+			];
+
+			for(result = [], i = -1, len = points.numberOfItems || points.length; ++i < len;) {
+				next = points.getItem ? points.getItem(i) : points[i];
+				result.push.apply(result, [next.x, next.y]);
+			}
+
+			result = PLUGINS.polys.polygon(result, corner);
+		break;
+
+		// Unknown shape or rectangle? Use bounding box
+		default:
+			result = elem.getBoundingClientRect();
+			result = {
+				width: result.width, height: result.height,
+				position: {
+					left: result.left,
+					top: result.top
+				}
+			};
+			complex = false;
+		break;
+	}
+
+	// Shortcut assignments
+	position = result.position;
+	root = root[0];
+
+	// If the shape was complex (i.e. not using bounding box calculations)
+	if(complex) {
+		// Convert position into a pixel value
+		if(root.createSVGPoint) {
+			mtx = elem.getScreenCTM();
+			points = root.createSVGPoint();
+
+			points.x = position.left;
+			points.y = position.top;
+			transformed = points.matrixTransform( mtx );
+			position.left = transformed.x;
+			position.top = transformed.y;
+		}
+
+		// Calculate viewBox characteristics
+		if(root.viewBox && (viewBox = root.viewBox.baseVal) && viewBox.width && viewBox.height) {
+			xScale *= rootWidth / viewBox.width;
+			yScale *= rootHeight / viewBox.height;
+		}
+	}
+
+	// Adjust by scroll offset
+	position.left += doc.scrollLeft();
+	position.top += doc.scrollTop();
+
+	return result;
 };;var MODAL, OVERLAY,
 	MODALCLASS = 'qtip-modal',
 	MODALSELECTOR = '.'+MODALCLASS;
@@ -48309,17 +48593,6 @@ OVERLAY = function()
 			})
 			.hide();
 
-			// Update position on window resize or scroll
-			function resize() {
-				var win = $(this);
-				elem.css({
-					height: win.height(),
-					width: win.width()
-				});
-			}
-			$(window).bind('resize'+MODALSELECTOR, resize);
-			resize(); // Fire it initially too
-
 			// Make sure we can't focus anything outside the tooltip
 			$(document.body).bind('focusin'+MODALSELECTOR, stealFocus);
 
@@ -48375,10 +48648,9 @@ OVERLAY = function()
 			// Toggle backdrop cursor style on show
 			elem.toggleClass('blurs', options.blur);
 
-			// Set position and append to body on show
+			// Append to body on show
 			if(state) {
-				elem.css({ left: 0, top: 0 })
-					.appendTo(document.body);
+				elem.appendTo(document.body);
 			}
 
 			// Prevent modal from conflicting with show.solo, and don't hide backdrop is other modals are visible
@@ -48447,7 +48719,7 @@ $.extend(Modal.prototype, {
 		qtip.elements.overlay = OVERLAY.elem;
 
 		// Add unique attribute so we can grab modal tooltips easily via a SELECTOR, and set z-index
-		tooltip.addClass(MODALCLASS).css('z-index', PLUGINS.modal.zindex + $(MODALSELECTOR).length);
+		tooltip.addClass(MODALCLASS).css('z-index', QTIP.modal_zindex + $(MODALSELECTOR).length);
 		
 		// Apply our show/hide/focus modal events
 		qtip._bind(tooltip, ['tooltipshow', 'tooltiphide'], function(event, api, duration) {
@@ -48455,10 +48727,10 @@ $.extend(Modal.prototype, {
 
 			// Make sure mouseout doesn't trigger a hide when showing the modal and mousing onto backdrop
 			if(event.target === tooltip[0]) {
-				if(oEvent && event.type === 'tooltiphide' && /mouse(leave|enter)/.test(oEvent.type) && $(oEvent.relatedTarget).closest(overlay[0]).length) {
+				if(oEvent && event.type === 'tooltiphide' && /mouse(leave|enter)/.test(oEvent.type) && $(oEvent.relatedTarget).closest(OVERLAY.elem[0]).length) {
 					try { event.preventDefault(); } catch(e) {}
 				}
-				else if(!oEvent || (oEvent && !oEvent.solo)) {
+				else if(!oEvent || (oEvent && oEvent.type !== 'tooltipsolo')) {
 					this.toggle(event, event.type === 'tooltipshow', duration);
 				}
 			}
@@ -48472,7 +48744,7 @@ $.extend(Modal.prototype, {
 			var qtips = $(MODALSELECTOR),
 
 			// Keep the modal's lower than other, regular qtips
-			newIndex = PLUGINS.modal.zindex + qtips.length,
+			newIndex = QTIP.modal_zindex + qtips.length,
 			curIndex = parseInt(tooltip[0].style.zIndex, 10);
 
 			// Set overlay z-index
@@ -48541,7 +48813,7 @@ MODAL.sanitize = function(opts) {
 };
 
 // Base z-index for all modal tooltips (use qTip core z-index as a base)
-MODAL.zindex = QTIP.zindex - 200;
+QTIP.modal_zindex = QTIP.zindex - 200;
 
 // Plugin needs to be initialized on render
 MODAL.initialize = 'render';
@@ -48576,6 +48848,527 @@ $.extend(TRUE, QTIP.defaults, {
 }( window, document ));
 
 
+
+/*!
+ * jQuery Raty - A Star Rating Plugin
+ * ------------------------------------------------------------------
+ *
+ * jQuery Raty is a plugin that generates a customizable star rating.
+ *
+ * Licensed under The MIT License
+ *
+ * @version        2.5.2
+ * @since          2010.06.11
+ * @author         Washington Botelho
+ * @documentation  wbotelhos.com/raty
+ *
+ * ------------------------------------------------------------------
+ *
+ *  <div id="star"></div>
+ *
+ *  $('#star').raty();
+ *
+ */
+
+;(function($) {
+
+  var methods = {
+    init: function(settings) {
+      return this.each(function() {
+        methods.destroy.call(this);
+
+        this.opt = $.extend(true, {}, $.fn.raty.defaults, settings);
+
+        var that  = $(this),
+            inits = ['number', 'readOnly', 'score', 'scoreName'];
+
+        methods._callback.call(this, inits);
+
+        if (this.opt.precision) {
+          methods._adjustPrecision.call(this);
+        }
+
+        this.opt.number = methods._between(this.opt.number, 0, this.opt.numberMax);
+
+        this.opt.path = this.opt.path || '';
+
+        if (this.opt.path && this.opt.path.charAt( this.opt.path.length - 1 ) !== '/') {
+          this.opt.path += '/';
+        }
+
+        this.stars = methods._createStars.call(this);
+        this.score = methods._createScore.call(this);
+
+        methods._apply.call(this, this.opt.score);
+
+        var space  = this.opt.space ? 4 : 0,
+            width  = this.opt.width || (this.opt.number * this.opt.size + this.opt.number * space);
+
+        if (this.opt.cancel) {
+          this.cancel = methods._createCancel.call(this);
+
+          width += (this.opt.size + space);
+        }
+
+        if (this.opt.readOnly) {
+          methods._lock.call(this);
+        } else {
+          that.css('cursor', 'pointer');
+          methods._binds.call(this);
+        }
+
+        if (this.opt.width !== false) {
+			if(this.opt.font == true){
+				that.css('font-size', this.opt.size);
+			}else{
+				that.css('width', width);
+			}
+        }
+
+        methods._target.call(this, this.opt.score);
+
+        that.data({ 'settings': this.opt, 'raty': true });
+      });
+    }, _adjustPrecision: function() {
+      this.opt.targetType = 'score';
+      this.opt.half       = true;
+    }, _apply: function(score) {
+      if (score && score > 0) {
+        score = methods._between(score, 0, this.opt.number);
+        this.score.val(score);
+      }
+
+      methods._fill.call(this, score);
+
+      if (score) {
+        methods._roundStars.call(this, score);
+      }
+    }, _between: function(value, min, max) {
+      return Math.min(Math.max(parseFloat(value), min), max);
+    }, _binds: function() {
+      if (this.cancel) {
+        methods._bindCancel.call(this);
+      }
+
+      methods._bindClick.call(this);
+      methods._bindOut.call(this);
+      methods._bindOver.call(this);
+    }, _bindCancel: function() {
+      methods._bindClickCancel.call(this);
+      methods._bindOutCancel.call(this);
+      methods._bindOverCancel.call(this);
+    }, _bindClick: function() {
+      var self = this,
+          that = $(self);
+
+      self.stars.on('click.raty', function(evt) {
+		  if(self.opt.font == true){
+			  self.score.val((self.opt.half || self.opt.precision) ? that.data('score') : $(this).data('ival'));
+		  }else{
+			  self.score.val((self.opt.half || self.opt.precision) ? that.data('score') : this.alt);
+		  }
+        
+
+        if (self.opt.click) {
+          self.opt.click.call(self, parseFloat(self.score.val()), evt);
+        }
+      });
+    }, _bindClickCancel: function() {
+      var self = this;
+
+      self.cancel.on('click.raty', function(evt) {
+        self.score.removeAttr('value');
+
+        if (self.opt.click) {
+          self.opt.click.call(self, null, evt);
+        }
+      });
+    }, _bindOut: function() {
+      var self = this;
+
+      $(this).on('mouseleave.raty', function(evt) {
+        var score = parseFloat(self.score.val()) || undefined;
+
+        methods._apply.call(self, score);
+        methods._target.call(self, score, evt);
+
+        if (self.opt.mouseout) {
+          self.opt.mouseout.call(self, score, evt);
+        }
+      });
+    }, _bindOutCancel: function() {
+      var self = this;
+
+      self.cancel.on('mouseleave.raty', function(evt) {
+		  if(self.opt.font == true){
+		  	$(this).attr('class', 'fa ' + self.opt.cancelOff);
+		  }else{
+		  	 $(this).attr('src', self.opt.path + self.opt.cancelOff);
+		  }
+
+        if (self.opt.mouseout) {
+          self.opt.mouseout.call(self, self.score.val() || null, evt);
+        }
+      });
+    }, _bindOverCancel: function() {
+      var self = this;
+
+      self.cancel.on('mouseover.raty', function(evt) {
+		  if(self.opt.font == true){
+        	  $(this).attr('class', 'fa ' + self.opt.cancelOn);
+			  self.stars.attr('class', 'fa ' + self.opt.starOff);
+		  }else{
+			  $(this).attr('src', self.opt.path + self.opt.cancelOn);
+			  self.stars.attr('src', self.opt.path + self.opt.starOff);
+		  }
+
+        methods._target.call(self, null, evt);
+
+        if (self.opt.mouseover) {
+          self.opt.mouseover.call(self, null);
+        }
+      });
+    }, _bindOver: function() {
+      var self   = this,
+          that   = $(self),
+          action = self.opt.half ? 'mousemove.raty' : 'mouseover.raty';
+
+      self.stars.on(action, function(evt) {
+        var score = ((self.opt.font == true) ? $(this).data('ival') : parseInt(this.alt, 10));
+
+        if (self.opt.half) {
+          var position = parseFloat((evt.pageX - $(this).offset().left) / self.opt.size),
+              plus     = (position > .5) ? 1 : .5;
+
+          score = score - 1 + plus;
+
+          methods._fill.call(self, score);
+
+          if (self.opt.precision) {
+            score = score - plus + position;
+          }
+
+          methods._roundStars.call(self, score);
+
+          that.data('score', score);
+        } else {
+          methods._fill.call(self, score);
+        }
+
+        methods._target.call(self, score, evt);
+
+        if (self.opt.mouseover) {
+          self.opt.mouseover.call(self, score, evt);
+        }
+      });
+    }, _callback: function(options) {
+      for (var i in options) {
+        if (typeof this.opt[options[i]] === 'function') {
+          this.opt[options[i]] = this.opt[options[i]].call(this);
+        }
+      }
+    }, _createCancel: function() {
+      var that   = $(this),
+          icon   = ((this.opt.font == true) ? 'fa ' + this.opt.cancelOff : this.opt.path + this.opt.cancelOff),
+          cancel = ((this.opt.font == true) ? $('<i />', { title: this.opt.cancelHint, 'class': 'raty-cancel '+icon}) : $('<img />', { src: icon, alt: 'x', title: this.opt.cancelHint, 'class': 'raty-cancel' }));
+
+      if (this.opt.cancelPlace == 'left') {
+        that.prepend('&#160;').prepend(cancel);
+      } else {
+        that.append('&#160;').append(cancel);
+      }
+
+      return cancel;
+    }, _createScore: function() {
+      return $('<input />', { type: 'hidden', name: this.opt.scoreName }).appendTo(this);
+    }, _createStars: function() {
+      var that = $(this);
+
+      for (var i = 1; i <= this.opt.number; i++) {
+        var title = methods._getHint.call(this, i),
+            icon  = (this.opt.score && this.opt.score >= i) ? 'starOn' : 'starOff';
+
+        icon = ((this.opt.font == true) ? 'fa ' + this.opt[icon] : this.opt.path + this.opt[icon]);
+
+		if(this.opt.font == true){
+			$('<i />', { 'class' : 'fa ' + icon, title: title }).data('ival', i).appendTo(this);
+		}else{
+			$('<img />', { src : icon, alt: i, title: title }).appendTo(this);
+		}
+        
+
+        if (this.opt.space) {
+          that.append((i < this.opt.number) ? '&#160;' : '');
+        }
+      }
+
+	  if(this.opt.font == true){
+		  return that.children('i');
+	  }else{
+		  return that.children('img');
+	  }
+      
+    }, _error: function(message) {
+      $(this).html(message);
+
+      $.error(message);
+    }, _fill: function(score) {
+      var self  = this,
+          hash  = 0;
+
+      for (var i = 1; i <= self.stars.length; i++) {
+        var star   = self.stars.eq(i - 1),
+            select = self.opt.single ? (i == score) : (i <= score);
+
+        if (self.opt.iconRange && self.opt.iconRange.length > hash) {
+          var irange = self.opt.iconRange[hash],
+              on     = irange.on  || self.opt.starOn,
+              off    = irange.off || self.opt.starOff,
+              icon   = select ? on : off;
+
+          if (i <= irange.range) {
+			  if(this.opt.font == true){
+				  star.attr('class', 'fa ' + icon);
+			  }else{
+				  star.attr('src', self.opt.path + icon);
+			  }
+            
+          }
+
+          if (i == irange.range) {
+            hash++;
+          }
+        } else {
+          var icon = select ? 'starOn' : 'starOff';
+
+		  if(this.opt.font == true){
+			  star.attr('class', 'fa ' + this.opt[icon]);
+		  }else{
+			  star.attr('src', this.opt.path + this.opt[icon]);
+		  }
+        }
+      }
+    }, _getHint: function(score) {
+      var hint = this.opt.hints[score - 1];
+      return (hint === '') ? '' : (hint || score);
+    }, _lock: function() {
+      var score = parseInt(this.score.val(), 10), // TODO: 3.1 >> [['1'], ['2'], ['3', '.1', '.2']]
+          hint  = score ? methods._getHint.call(this, score) : this.opt.noRatedMsg;
+
+      $(this).data('readonly', true).css('cursor', '').attr('title', hint);
+
+      this.score.attr('readonly', 'readonly');
+      this.stars.attr('title', hint);
+
+      if (this.cancel) {
+        this.cancel.hide();
+      }
+    }, _roundStars: function(score) {
+      var rest = (score - Math.floor(score)).toFixed(2);
+
+      if (rest > this.opt.round.down) {
+        var icon = 'starOn';                                 // Up:   [x.76 .. x.99]
+
+        if (this.opt.halfShow && rest < this.opt.round.up) { // Half: [x.26 .. x.75]
+          icon = 'starHalf';
+        } else if (rest < this.opt.round.full) {             // Down: [x.00 .. x.5]
+          icon = 'starOff';
+        }
+
+		if(this.opt.font == true){
+			this.stars.eq(Math.ceil(score) - 1).attr('class', 'fa ' + this.opt[icon]);
+		}else{
+			this.stars.eq(Math.ceil(score) - 1).attr('src', this.opt.path + this.opt[icon]);
+		}
+       
+      }                              // Full down: [x.00 .. x.25]
+    }, _target: function(score, evt) {
+      if (this.opt.target) {
+        var target = $(this.opt.target);
+
+        if (target.length === 0) {
+          methods._error.call(this, 'Target selector invalid or missing!');
+        }
+
+        if (this.opt.targetFormat.indexOf('{score}') < 0) {
+          methods._error.call(this, 'Template "{score}" missing!');
+        }
+
+        var mouseover = evt && evt.type == 'mouseover';
+
+        if (score === undefined) {
+          score = this.opt.targetText;
+        } else if (score === null) {
+          score = mouseover ? this.opt.cancelHint : this.opt.targetText;
+        } else {
+          if (this.opt.targetType == 'hint') {
+            score = methods._getHint.call(this, Math.ceil(score));
+          } else if (this.opt.precision) {
+            score = parseFloat(score).toFixed(1);
+          }
+
+          if (!mouseover && !this.opt.targetKeep) {
+            score = this.opt.targetText;
+          }
+        }
+
+        if (score) {
+          score = this.opt.targetFormat.toString().replace('{score}', score);
+        }
+
+        if (target.is(':input')) {
+          target.val(score);
+        } else {
+          target.html(score);
+        }
+      }
+    }, _unlock: function() {
+      $(this).data('readonly', false).css('cursor', 'pointer').removeAttr('title');
+
+      this.score.removeAttr('readonly', 'readonly');
+
+      for (var i = 0; i < this.opt.number; i++) {
+        this.stars.eq(i).attr('title', methods._getHint.call(this, i + 1));
+      }
+
+      if (this.cancel) {
+        this.cancel.css('display', '');
+      }
+    }, cancel: function(click) {
+      return this.each(function() {
+        if ($(this).data('readonly') !== true) {
+          methods[click ? 'click' : 'score'].call(this, null);
+          this.score.removeAttr('value');
+        }
+      });
+    }, click: function(score) {
+      return $(this).each(function() {
+        if ($(this).data('readonly') !== true) {
+          methods._apply.call(this, score);
+
+          if (!this.opt.click) {
+            methods._error.call(this, 'You must add the "click: function(score, evt) { }" callback.');
+          }
+
+
+          this.opt.click.call(this, score, $.Event('click'));
+
+          methods._target.call(this, score);
+        }
+      });
+    }, destroy: function() {
+      return $(this).each(function() {
+        var that = $(this),
+            raw  = that.data('raw');
+
+        if (raw) {
+          that.off('.raty').empty().css({ cursor: raw.style.cursor, width: raw.style.width }).removeData('readonly');
+        } else {
+          that.data('raw', that.clone()[0]);
+        }
+      });
+    }, getScore: function() {
+      var score = [],
+          value ;
+
+      $(this).each(function() {
+        value = this.score.val();
+
+        score.push(value ? parseFloat(value) : undefined);
+      });
+
+      return (score.length > 1) ? score : score[0];
+    }, readOnly: function(readonly) {
+      return this.each(function() {
+        var that = $(this);
+
+        if (that.data('readonly') !== readonly) {
+          if (readonly) {
+			 if(this.opt.font == true){
+				 that.off('.raty').children('i').off('.raty');
+			 }else{
+				 that.off('.raty').children('img').off('.raty');
+			 }
+
+            methods._lock.call(this);
+          } else {
+            methods._binds.call(this);
+            methods._unlock.call(this);
+          }
+
+          that.data('readonly', readonly);
+        }
+      });
+    }, reload: function() {
+      return methods.set.call(this, {});
+    }, score: function() {
+      return arguments.length ? methods.setScore.apply(this, arguments) : methods.getScore.call(this);
+    }, set: function(settings) {
+      return this.each(function() {
+        var that   = $(this),
+            actual = that.data('settings'),
+            news   = $.extend({}, actual, settings);
+
+        that.raty(news);
+      });
+    }, setScore: function(score) {
+      return $(this).each(function() {
+        if ($(this).data('readonly') !== true) {
+          methods._apply.call(this, score);
+          methods._target.call(this, score);
+        }
+      });
+    }
+  };
+
+  $.fn.raty = function(method) {
+    if (methods[method]) {
+      return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+    } else if (typeof method === 'object' || !method) {
+      return methods.init.apply(this, arguments);
+    } else {
+      $.error('Method ' + method + ' does not exist!');
+    }
+  };
+
+  $.fn.raty.defaults = {
+    cancel        : false,
+    cancelHint    : 'Cancel this rating!',
+    cancelOff     : 'cancel-off.png',
+    cancelOn      : 'cancel-on.png',
+    cancelPlace   : 'left',
+    click         : undefined,
+    half          : false,
+    halfShow      : true,
+    hints         : ['bad', 'poor', 'regular', 'good', 'gorgeous'],
+    iconRange     : undefined,
+    mouseout      : undefined,
+    mouseover     : undefined,
+    noRatedMsg    : 'Not rated yet!',
+    number        : 5,
+    numberMax     : 20,
+    path          : '',
+    precision     : false,
+    readOnly      : false,
+    round         : { down: .25, full: .6, up: .76 },
+    score         : undefined,
+    scoreName     : 'score',
+    single        : false,
+    size          : 16,
+    space         : true,
+    starHalf      : 'star-half.png',
+    starOff       : 'star-off.png',
+    starOn        : 'star-on.png',
+    target        : undefined,
+    targetFormat  : '{score}',
+    targetKeep    : false,
+    targetText    : '',
+    targetType    : 'hint',
+    width         : undefined,
+	font          : false,
+  };
+
+})(jQuery);
 
 (function ($) {
 	$.fn.rssReader = function (j) {
@@ -48732,7 +49525,7 @@ $.extend(TRUE, QTIP.defaults, {
 		return d
 	}
 })(jQuery);
-// Spectrum Colorpicker v1.1.1
+// Spectrum Colorpicker v1.2.0
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
@@ -48751,6 +49544,7 @@ $.extend(TRUE, QTIP.defaults, {
         color: false,
         flat: false,
         showInput: false,
+        allowEmpty: false,
         showButtons: true,
         clickoutFiresChange: false,
         showInitial: false,
@@ -48781,6 +49575,10 @@ $.extend(TRUE, QTIP.defaults, {
         var style = elem.style;
         style.cssText = 'background-color:rgba(0,0,0,.5)';
         return contains(style.backgroundColor, 'rgba') || contains(style.backgroundColor, 'hsla');
+    })(),
+    inputTypeColorSupport = (function() {
+        var colorInput = $("<input type='color' value='!' />")[0];
+        return colorInput.type === "color" && colorInput.value !== "!";
     })(),
     replaceInput = [
         "<div class='sp-replacer'>",
@@ -48815,6 +49613,8 @@ $.extend(TRUE, QTIP.defaults, {
                                     "</div>",
                                 "</div>",
                             "</div>",
+                            "<div class='sp-clear sp-clear-display' title='Clear Color Selection'>",
+                            "</div>",
                             "<div class='sp-hue'>",
                                 "<div class='sp-slider'></div>",
                                 gradientFix,
@@ -48838,12 +49638,18 @@ $.extend(TRUE, QTIP.defaults, {
     function paletteTemplate (p, color, className) {
         var html = [];
         for (var i = 0; i < p.length; i++) {
-            var tiny = tinycolor(p[i]);
-            var c = tiny.toHsl().l < 0.5 ? "sp-thumb-el sp-thumb-dark" : "sp-thumb-el sp-thumb-light";
-            c += (tinycolor.equals(color, p[i])) ? " sp-thumb-active" : "";
+            var current = p[i];
+            if(current) {
+                var tiny = tinycolor(current);
+                var c = tiny.toHsl().l < 0.5 ? "sp-thumb-el sp-thumb-dark" : "sp-thumb-el sp-thumb-light";
+                c += (tinycolor.equals(color, current)) ? " sp-thumb-active" : "";
 
-            var swatchStyle = rgbaSupport ? ("background-color:" + tiny.toRgbString()) : "filter:" + tiny.toFilter();
-            html.push('<span title="' + tiny.toRgbString() + '" data-color="' + tiny.toRgbString() + '" class="' + c + '"><span class="sp-thumb-inner" style="' + swatchStyle + ';" /></span>');
+                var swatchStyle = rgbaSupport ? ("background-color:" + tiny.toRgbString()) : "filter:" + tiny.toFilter();
+                html.push('<span title="' + tiny.toRgbString() + '" data-color="' + tiny.toRgbString() + '" class="' + c + '"><span class="sp-thumb-inner" style="' + swatchStyle + ';" /></span>');
+            } else {
+                var cls = 'sp-clear-display';
+                html.push('<span title="No Color Selected" data-color="" style="background-color:transparent;" class="' + cls + '"></span>');
+            }
         }
         return "<div class='sp-cf " + className + "'>" + html.join('') + "</div>";
     }
@@ -48914,8 +49720,10 @@ $.extend(TRUE, QTIP.defaults, {
             paletteContainer = container.find(".sp-palette"),
             initialColorContainer = container.find(".sp-initial"),
             cancelButton = container.find(".sp-cancel"),
+            clearButton = container.find(".sp-clear"),
             chooseButton = container.find(".sp-choose"),
             isInput = boundElement.is("input"),
+            isInputTypeColor = isInput && inputTypeColorSupport && boundElement.attr("type") === "color",
             shouldReplace = isInput && !flat,
             replacer = (shouldReplace) ? $(replaceInput).addClass(theme).addClass(opts.className) : $([]),
             offsetElement = (shouldReplace) ? replacer : boundElement,
@@ -48924,14 +49732,20 @@ $.extend(TRUE, QTIP.defaults, {
             colorOnShow = false,
             preferredFormat = opts.preferredFormat,
             currentPreferredFormat = preferredFormat,
-            clickoutFiresChange = !opts.showButtons || opts.clickoutFiresChange;
-
+            clickoutFiresChange = !opts.showButtons || opts.clickoutFiresChange,
+            isEmpty = !initialColor,
+            allowEmpty = opts.allowEmpty && !isInputTypeColor;
 
         function applyOptions() {
+
+            if (opts.showPaletteOnly) {
+                opts.showPalette = true;
+            }
 
             container.toggleClass("sp-flat", flat);
             container.toggleClass("sp-input-disabled", !opts.showInput);
             container.toggleClass("sp-alpha-enabled", opts.showAlpha);
+            container.toggleClass("sp-clear-enabled", allowEmpty);
             container.toggleClass("sp-buttons-disabled", !opts.showButtons);
             container.toggleClass("sp-palette-disabled", !opts.showPalette);
             container.toggleClass("sp-palette-only", opts.showPaletteOnly);
@@ -48951,6 +49765,10 @@ $.extend(TRUE, QTIP.defaults, {
 
             if (shouldReplace) {
                 boundElement.after(replacer).hide();
+            }
+
+            if (!allowEmpty) {
+                clearButton.hide();
             }
 
             if (flat) {
@@ -49019,6 +49837,21 @@ $.extend(TRUE, QTIP.defaults, {
                 hide("cancel");
             });
 
+
+            clearButton.bind("click.spectrum", function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+               isEmpty = true;
+
+                move();
+                if(flat) {
+                    //for the flat style, this is a change event
+                    updateOriginalInput(true);
+                }
+            });
+
+
             chooseButton.text(opts.chooseText);
             chooseButton.bind("click.spectrum", function (e) {
                 e.stopPropagation();
@@ -49032,6 +49865,7 @@ $.extend(TRUE, QTIP.defaults, {
 
             draggable(alphaSlider, function (dragX, dragY, e) {
                 currentAlpha = (dragX / alphaWidth);
+                isEmpty = false;
                 if (e.shiftKey) {
                     currentAlpha = Math.round(currentAlpha * 10) / 10;
                 }
@@ -49041,6 +49875,7 @@ $.extend(TRUE, QTIP.defaults, {
 
             draggable(slider, function (dragX, dragY) {
                 currentHue = parseFloat(dragY / slideHeight);
+                isEmpty = false;
                 move();
             }, dragStart, dragStop);
 
@@ -49067,6 +49902,8 @@ $.extend(TRUE, QTIP.defaults, {
                 if (setValue) {
                     currentValue = parseFloat((dragHeight - dragY) / dragHeight);
                 }
+
+                isEmpty = false;
 
                 move();
 
@@ -49193,12 +50030,20 @@ $.extend(TRUE, QTIP.defaults, {
         }
 
         function setFromTextInput() {
-            var tiny = tinycolor(textInput.val());
-            if (tiny.ok) {
-                set(tiny);
+
+            var value = textInput.val();
+
+            if ((value === null || value === "") && allowEmpty) {
+                set(null);
             }
             else {
-                textInput.addClass("sp-validation-error");
+                var tiny = tinycolor(value);
+                if (tiny.ok) {
+                    set(tiny);
+                }
+                else {
+                    textInput.addClass("sp-validation-error");
+                }
             }
         }
 
@@ -49285,23 +50130,33 @@ $.extend(TRUE, QTIP.defaults, {
                 return;
             }
 
-            var newColor = tinycolor(color);
-            var newHsv = newColor.toHsv();
+            var newColor;
+            if (!color && allowEmpty) {
+                isEmpty = true;
+            } else {
+                isEmpty = false;
+                newColor = tinycolor(color);
+                var newHsv = newColor.toHsv();
 
-            currentHue = (newHsv.h % 360) / 360;
-            currentSaturation = newHsv.s;
-            currentValue = newHsv.v;
-            currentAlpha = newHsv.a;
-
+                currentHue = (newHsv.h % 360) / 360;
+                currentSaturation = newHsv.s;
+                currentValue = newHsv.v;
+                currentAlpha = newHsv.a;
+            }
             updateUI();
 
-            if (newColor.ok && !ignoreFormatChange) {
+            if (newColor && newColor.ok && !ignoreFormatChange) {
                 currentPreferredFormat = preferredFormat || newColor.format;
             }
         }
 
         function get(opts) {
             opts = opts || { };
+
+            if (allowEmpty && isEmpty) {
+                return null;
+            }
+
             return tinycolor.fromRatio({
                 h: currentHue,
                 s: currentSaturation,
@@ -49340,39 +50195,51 @@ $.extend(TRUE, QTIP.defaults, {
             }
 
             var realColor = get({ format: format }),
-                realHex = realColor.toHexString(),
-                realRgb = realColor.toRgbString();
+                displayColor = '';
 
-            // Update the replaced elements background color (with actual selected color)
-            if (rgbaSupport || realColor.alpha === 1) {
-                previewElement.css("background-color", realRgb);
+             //reset background info for preview element
+            previewElement.removeClass("sp-clear-display");
+            previewElement.css('background-color', 'transparent');
+
+            if (!realColor && allowEmpty) {
+                // Update the replaced elements background with icon indicating no color selection
+                previewElement.addClass("sp-clear-display");
             }
             else {
-                previewElement.css("background-color", "transparent");
-                previewElement.css("filter", realColor.toFilter());
-            }
+               var realHex = realColor.toHexString(),
+                    realRgb = realColor.toRgbString();
 
-            if (opts.showAlpha) {
-                var rgb = realColor.toRgb();
-                rgb.a = 0;
-                var realAlpha = tinycolor(rgb).toRgbString();
-                var gradient = "linear-gradient(left, " + realAlpha + ", " + realHex + ")";
-
-                if (IE) {
-                    alphaSliderInner.css("filter", tinycolor(realAlpha).toFilter({ gradientType: 1 }, realHex));
+                // Update the replaced elements background color (with actual selected color)
+                if (rgbaSupport || realColor.alpha === 1) {
+                    previewElement.css("background-color", realRgb);
                 }
                 else {
-                    alphaSliderInner.css("background", "-webkit-" + gradient);
-                    alphaSliderInner.css("background", "-moz-" + gradient);
-                    alphaSliderInner.css("background", "-ms-" + gradient);
-                    alphaSliderInner.css("background", gradient);
+                    previewElement.css("background-color", "transparent");
+                    previewElement.css("filter", realColor.toFilter());
                 }
+
+                if (opts.showAlpha) {
+                    var rgb = realColor.toRgb();
+                    rgb.a = 0;
+                    var realAlpha = tinycolor(rgb).toRgbString();
+                    var gradient = "linear-gradient(left, " + realAlpha + ", " + realHex + ")";
+
+                    if (IE) {
+                        alphaSliderInner.css("filter", tinycolor(realAlpha).toFilter({ gradientType: 1 }, realHex));
+                    }
+                    else {
+                        alphaSliderInner.css("background", "-webkit-" + gradient);
+                        alphaSliderInner.css("background", "-moz-" + gradient);
+                        alphaSliderInner.css("background", "-ms-" + gradient);
+                        alphaSliderInner.css("background", gradient);
+                    }
+                }
+
+                displayColor = realColor.toString(format);
             }
-
-
             // Update the text entry input as it changes happen
             if (opts.showInput) {
-                textInput.val(realColor.toString(format));
+                textInput.val(displayColor);
             }
 
             if (opts.showPalette) {
@@ -49386,49 +50253,67 @@ $.extend(TRUE, QTIP.defaults, {
             var s = currentSaturation;
             var v = currentValue;
 
-            // Where to show the little circle in that displays your current selected color
-            var dragX = s * dragWidth;
-            var dragY = dragHeight - (v * dragHeight);
-            dragX = Math.max(
-                -dragHelperHeight,
-                Math.min(dragWidth - dragHelperHeight, dragX - dragHelperHeight)
-            );
-            dragY = Math.max(
-                -dragHelperHeight,
-                Math.min(dragHeight - dragHelperHeight, dragY - dragHelperHeight)
-            );
-            dragHelper.css({
-                "top": dragY,
-                "left": dragX
-            });
+            if(allowEmpty && isEmpty) {
+                //if selected color is empty, hide the helpers
+                alphaSlideHelper.hide();
+                slideHelper.hide();
+                dragHelper.hide();
+            }
+            else {
+                //make sure helpers are visible
+                alphaSlideHelper.show();
+                slideHelper.show();
+                dragHelper.show();
 
-            var alphaX = currentAlpha * alphaWidth;
-            alphaSlideHelper.css({
-                "left": alphaX - (alphaSlideHelperWidth / 2)
-            });
+                // Where to show the little circle in that displays your current selected color
+                var dragX = s * dragWidth;
+                var dragY = dragHeight - (v * dragHeight);
+                dragX = Math.max(
+                    -dragHelperHeight,
+                    Math.min(dragWidth - dragHelperHeight, dragX - dragHelperHeight)
+                );
+                dragY = Math.max(
+                    -dragHelperHeight,
+                    Math.min(dragHeight - dragHelperHeight, dragY - dragHelperHeight)
+                );
+                dragHelper.css({
+                    "top": dragY,
+                    "left": dragX
+                });
 
-            // Where to show the bar that displays your current selected hue
-            var slideY = (currentHue) * slideHeight;
-            slideHelper.css({
-                "top": slideY - slideHelperHeight
-            });
+                var alphaX = currentAlpha * alphaWidth;
+                alphaSlideHelper.css({
+                    "left": alphaX - (alphaSlideHelperWidth / 2)
+                });
+
+                // Where to show the bar that displays your current selected hue
+                var slideY = (currentHue) * slideHeight;
+                slideHelper.css({
+                    "top": slideY - slideHelperHeight
+                });
+            }
         }
 
         function updateOriginalInput(fireCallback) {
-            var color = get();
+            var color = get(),
+                displayColor = '',
+                hasChanged = !tinycolor.equals(color, colorOnShow);
 
-            if (isInput) {
-                boundElement.val(color.toString(currentPreferredFormat)).change();
+            if(color) {
+                displayColor = color.toString(currentPreferredFormat);
+                // Update the selection palette with the current color
+                addColorToSelectionPalette(color);
             }
 
-            var hasChanged = !tinycolor.equals(color, colorOnShow);
+            if (isInput) {
+                boundElement.val(displayColor);
+            }
+
             colorOnShow = color;
 
-            // Update the selection palette with the current color
-            addColorToSelectionPalette(color);
             if (fireCallback && hasChanged) {
                 callbacks.change(color);
-                boundElement.trigger('change.spectrum', [ color ]);
+                boundElement.trigger('change', [ color ]);
             }
         }
 
@@ -49722,896 +50607,926 @@ $.extend(TRUE, QTIP.defaults, {
     $.spectrum.palettes = { };
 
     $.fn.spectrum.processNativeColorInputs = function () {
-        var colorInput = $("<input type='color' value='!' />")[0];
-        var supportsColor = colorInput.type === "color" && colorInput.value != "!";
-
-        if (!supportsColor) {
+        if (!inputTypeColorSupport) {
             $("input[type=color]").spectrum({
                 preferredFormat: "hex6"
             });
         }
     };
-    // TinyColor v0.9.14
+
+    // TinyColor v0.9.16
     // https://github.com/bgrins/TinyColor
-    // 2013-02-24, Brian Grinstead, MIT License
+    // 2013-08-10, Brian Grinstead, MIT License
 
-    (function(root) {
+    (function() {
 
-        var trimLeft = /^[\s,#]+/,
-            trimRight = /\s+$/,
-            tinyCounter = 0,
-            math = Math,
-            mathRound = math.round,
-            mathMin = math.min,
-            mathMax = math.max,
-            mathRandom = math.random;
+    var trimLeft = /^[\s,#]+/,
+        trimRight = /\s+$/,
+        tinyCounter = 0,
+        math = Math,
+        mathRound = math.round,
+        mathMin = math.min,
+        mathMax = math.max,
+        mathRandom = math.random;
 
-        function tinycolor (color, opts) {
+    function tinycolor (color, opts) {
 
-            color = (color) ? color : '';
-            opts = opts || { };
+        color = (color) ? color : '';
+        opts = opts || { };
 
-            // If input is already a tinycolor, return itself
-            if (typeof color == "object" && color.hasOwnProperty("_tc_id")) {
-               return color;
-            }
-            var rgb = inputToRGB(color);
-            var r = rgb.r,
-                g = rgb.g,
-                b = rgb.b,
-                a = rgb.a,
-                roundA = mathRound(100*a) / 100,
-                format = opts.format || rgb.format;
-
-            // Don't let the range of [0,255] come back in [0,1].
-            // Potentially lose a little bit of precision here, but will fix issues where
-            // .5 gets interpreted as half of the total, instead of half of 1
-            // If it was supposed to be 128, this was already taken care of by `inputToRgb`
-            if (r < 1) { r = mathRound(r); }
-            if (g < 1) { g = mathRound(g); }
-            if (b < 1) { b = mathRound(b); }
-
-            return {
-                ok: rgb.ok,
-                format: format,
-                _tc_id: tinyCounter++,
-                alpha: a,
-                toHsv: function() {
-                    var hsv = rgbToHsv(r, g, b);
-                    return { h: hsv.h * 360, s: hsv.s, v: hsv.v, a: a };
-                },
-                toHsvString: function() {
-                    var hsv = rgbToHsv(r, g, b);
-                    var h = mathRound(hsv.h * 360), s = mathRound(hsv.s * 100), v = mathRound(hsv.v * 100);
-                    return (a == 1) ?
-                      "hsv("  + h + ", " + s + "%, " + v + "%)" :
-                      "hsva(" + h + ", " + s + "%, " + v + "%, "+ roundA + ")";
-                },
-                toHsl: function() {
-                    var hsl = rgbToHsl(r, g, b);
-                    return { h: hsl.h * 360, s: hsl.s, l: hsl.l, a: a };
-                },
-                toHslString: function() {
-                    var hsl = rgbToHsl(r, g, b);
-                    var h = mathRound(hsl.h * 360), s = mathRound(hsl.s * 100), l = mathRound(hsl.l * 100);
-                    return (a == 1) ?
-                      "hsl("  + h + ", " + s + "%, " + l + "%)" :
-                      "hsla(" + h + ", " + s + "%, " + l + "%, "+ roundA + ")";
-                },
-                toHex: function(allow3Char) {
-                    return rgbToHex(r, g, b, allow3Char);
-                },
-                toHexString: function(allow3Char) {
-                    return '#' + rgbToHex(r, g, b, allow3Char);
-                },
-                toRgb: function() {
-                    return { r: mathRound(r), g: mathRound(g), b: mathRound(b), a: a };
-                },
-                toRgbString: function() {
-                    return (a == 1) ?
-                      "rgb("  + mathRound(r) + ", " + mathRound(g) + ", " + mathRound(b) + ")" :
-                      "rgba(" + mathRound(r) + ", " + mathRound(g) + ", " + mathRound(b) + ", " + roundA + ")";
-                },
-                toPercentageRgb: function() {
-                    return { r: mathRound(bound01(r, 255) * 100) + "%", g: mathRound(bound01(g, 255) * 100) + "%", b: mathRound(bound01(b, 255) * 100) + "%", a: a };
-                },
-                toPercentageRgbString: function() {
-                    return (a == 1) ?
-                      "rgb("  + mathRound(bound01(r, 255) * 100) + "%, " + mathRound(bound01(g, 255) * 100) + "%, " + mathRound(bound01(b, 255) * 100) + "%)" :
-                      "rgba(" + mathRound(bound01(r, 255) * 100) + "%, " + mathRound(bound01(g, 255) * 100) + "%, " + mathRound(bound01(b, 255) * 100) + "%, " + roundA + ")";
-                },
-                toName: function() {
-                    return hexNames[rgbToHex(r, g, b, true)] || false;
-                },
-                toFilter: function(secondColor) {
-                    var hex = rgbToHex(r, g, b);
-                    var secondHex = hex;
-                    var alphaHex = Math.round(parseFloat(a) * 255).toString(16);
-                    var secondAlphaHex = alphaHex;
-                    var gradientType = opts && opts.gradientType ? "GradientType = 1, " : "";
-
-                    if (secondColor) {
-                        var s = tinycolor(secondColor);
-                        secondHex = s.toHex();
-                        secondAlphaHex = Math.round(parseFloat(s.alpha) * 255).toString(16);
-                    }
-
-                    return "progid:DXImageTransform.Microsoft.gradient("+gradientType+"startColorstr=#" + pad2(alphaHex) + hex + ",endColorstr=#" + pad2(secondAlphaHex) + secondHex + ")";
-                },
-                toString: function(format) {
-                    format = format || this.format;
-                    var formattedString = false;
-                    if (format === "rgb") {
-                        formattedString = this.toRgbString();
-                    }
-                    if (format === "prgb") {
-                        formattedString = this.toPercentageRgbString();
-                    }
-                    if (format === "hex" || format === "hex6") {
-                        formattedString = this.toHexString();
-                    }
-                    if (format === "hex3") {
-                        formattedString = this.toHexString(true);
-                    }
-                    if (format === "name") {
-                        formattedString = this.toName();
-                    }
-                    if (format === "hsl") {
-                        formattedString = this.toHslString();
-                    }
-                    if (format === "hsv") {
-                        formattedString = this.toHsvString();
-                    }
-
-                    return formattedString || this.toHexString();
-                }
-            };
+        // If input is already a tinycolor, return itself
+        if (typeof color == "object" && color.hasOwnProperty("_tc_id")) {
+           return color;
         }
 
-        // If input is an object, force 1 into "1.0" to handle ratios properly
-        // String input requires "1.0" as input, so 1 will be treated as 1
-        tinycolor.fromRatio = function(color, opts) {
-            if (typeof color == "object") {
-                var newColor = {};
-                for (var i in color) {
-                    if (color.hasOwnProperty(i)) {
-                        if (i === "a") {
-                            newColor[i] = color[i];
-                        }
-                        else {
-                            newColor[i] = convertToPercentage(color[i]);
-                        }
-                    }
-                }
-                color = newColor;
-            }
+        var rgb = inputToRGB(color);
+        var r = rgb.r,
+            g = rgb.g,
+            b = rgb.b,
+            a = rgb.a,
+            roundA = mathRound(100*a) / 100,
+            format = opts.format || rgb.format;
 
-            return tinycolor(color, opts);
+        // Don't let the range of [0,255] come back in [0,1].
+        // Potentially lose a little bit of precision here, but will fix issues where
+        // .5 gets interpreted as half of the total, instead of half of 1
+        // If it was supposed to be 128, this was already taken care of by `inputToRgb`
+        if (r < 1) { r = mathRound(r); }
+        if (g < 1) { g = mathRound(g); }
+        if (b < 1) { b = mathRound(b); }
+
+        return {
+            ok: rgb.ok,
+            format: format,
+            _tc_id: tinyCounter++,
+            alpha: a,
+            getAlpha: function() {
+                return a;
+            },
+            setAlpha: function(value) {
+                a = boundAlpha(value);
+                roundA = mathRound(100*a) / 100;
+            },
+            toHsv: function() {
+                var hsv = rgbToHsv(r, g, b);
+                return { h: hsv.h * 360, s: hsv.s, v: hsv.v, a: a };
+            },
+            toHsvString: function() {
+                var hsv = rgbToHsv(r, g, b);
+                var h = mathRound(hsv.h * 360), s = mathRound(hsv.s * 100), v = mathRound(hsv.v * 100);
+                return (a == 1) ?
+                  "hsv("  + h + ", " + s + "%, " + v + "%)" :
+                  "hsva(" + h + ", " + s + "%, " + v + "%, "+ roundA + ")";
+            },
+            toHsl: function() {
+                var hsl = rgbToHsl(r, g, b);
+                return { h: hsl.h * 360, s: hsl.s, l: hsl.l, a: a };
+            },
+            toHslString: function() {
+                var hsl = rgbToHsl(r, g, b);
+                var h = mathRound(hsl.h * 360), s = mathRound(hsl.s * 100), l = mathRound(hsl.l * 100);
+                return (a == 1) ?
+                  "hsl("  + h + ", " + s + "%, " + l + "%)" :
+                  "hsla(" + h + ", " + s + "%, " + l + "%, "+ roundA + ")";
+            },
+            toHex: function(allow3Char) {
+                return rgbToHex(r, g, b, allow3Char);
+            },
+            toHexString: function(allow3Char) {
+                return '#' + rgbToHex(r, g, b, allow3Char);
+            },
+            toRgb: function() {
+                return { r: mathRound(r), g: mathRound(g), b: mathRound(b), a: a };
+            },
+            toRgbString: function() {
+                return (a == 1) ?
+                  "rgb("  + mathRound(r) + ", " + mathRound(g) + ", " + mathRound(b) + ")" :
+                  "rgba(" + mathRound(r) + ", " + mathRound(g) + ", " + mathRound(b) + ", " + roundA + ")";
+            },
+            toPercentageRgb: function() {
+                return { r: mathRound(bound01(r, 255) * 100) + "%", g: mathRound(bound01(g, 255) * 100) + "%", b: mathRound(bound01(b, 255) * 100) + "%", a: a };
+            },
+            toPercentageRgbString: function() {
+                return (a == 1) ?
+                  "rgb("  + mathRound(bound01(r, 255) * 100) + "%, " + mathRound(bound01(g, 255) * 100) + "%, " + mathRound(bound01(b, 255) * 100) + "%)" :
+                  "rgba(" + mathRound(bound01(r, 255) * 100) + "%, " + mathRound(bound01(g, 255) * 100) + "%, " + mathRound(bound01(b, 255) * 100) + "%, " + roundA + ")";
+            },
+            toName: function() {
+                if (a === 0) {
+                    return "transparent";
+                }
+
+                return hexNames[rgbToHex(r, g, b, true)] || false;
+            },
+            toFilter: function(secondColor) {
+                var hex = rgbToHex(r, g, b);
+                var secondHex = hex;
+                var alphaHex = Math.round(parseFloat(a) * 255).toString(16);
+                var secondAlphaHex = alphaHex;
+                var gradientType = opts && opts.gradientType ? "GradientType = 1, " : "";
+
+                if (secondColor) {
+                    var s = tinycolor(secondColor);
+                    secondHex = s.toHex();
+                    secondAlphaHex = Math.round(parseFloat(s.alpha) * 255).toString(16);
+                }
+
+                return "progid:DXImageTransform.Microsoft.gradient("+gradientType+"startColorstr=#" + pad2(alphaHex) + hex + ",endColorstr=#" + pad2(secondAlphaHex) + secondHex + ")";
+            },
+            toString: function(format) {
+                var formatSet = !!format;
+                format = format || this.format;
+
+                var formattedString = false;
+                var hasAlphaAndFormatNotSet = !formatSet && a < 1 && a > 0;
+                var formatWithAlpha = hasAlphaAndFormatNotSet && (format === "hex" || format === "hex6" || format === "hex3" || format === "name");
+
+                if (format === "rgb") {
+                    formattedString = this.toRgbString();
+                }
+                if (format === "prgb") {
+                    formattedString = this.toPercentageRgbString();
+                }
+                if (format === "hex" || format === "hex6") {
+                    formattedString = this.toHexString();
+                }
+                if (format === "hex3") {
+                    formattedString = this.toHexString(true);
+                }
+                if (format === "name") {
+                    formattedString = this.toName();
+                }
+                if (format === "hsl") {
+                    formattedString = this.toHslString();
+                }
+                if (format === "hsv") {
+                    formattedString = this.toHsvString();
+                }
+
+                if (formatWithAlpha) {
+                    return this.toRgbString();
+                }
+
+                return formattedString || this.toHexString();
+            }
         };
+    }
 
-        // Given a string or object, convert that input to RGB
-        // Possible string inputs:
-        //
-        //     "red"
-        //     "#f00" or "f00"
-        //     "#ff0000" or "ff0000"
-        //     "rgb 255 0 0" or "rgb (255, 0, 0)"
-        //     "rgb 1.0 0 0" or "rgb (1, 0, 0)"
-        //     "rgba (255, 0, 0, 1)" or "rgba 255, 0, 0, 1"
-        //     "rgba (1.0, 0, 0, 1)" or "rgba 1.0, 0, 0, 1"
-        //     "hsl(0, 100%, 50%)" or "hsl 0 100% 50%"
-        //     "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
-        //     "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
-        //
-        function inputToRGB(color) {
-
-            var rgb = { r: 0, g: 0, b: 0 };
-            var a = 1;
-            var ok = false;
-            var format = false;
-
-            if (typeof color == "string") {
-                color = stringInputToObject(color);
-            }
-
-            if (typeof color == "object") {
-                if (color.hasOwnProperty("r") && color.hasOwnProperty("g") && color.hasOwnProperty("b")) {
-                    rgb = rgbToRgb(color.r, color.g, color.b);
-                    ok = true;
-                    format = String(color.r).substr(-1) === "%" ? "prgb" : "rgb";
-                }
-                else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("v")) {
-                    color.s = convertToPercentage(color.s);
-                    color.v = convertToPercentage(color.v);
-                    rgb = hsvToRgb(color.h, color.s, color.v);
-                    ok = true;
-                    format = "hsv";
-                }
-                else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("l")) {
-                    color.s = convertToPercentage(color.s);
-                    color.l = convertToPercentage(color.l);
-                    rgb = hslToRgb(color.h, color.s, color.l);
-                    ok = true;
-                    format = "hsl";
-                }
-
-                if (color.hasOwnProperty("a")) {
-                    a = color.a;
+    // If input is an object, force 1 into "1.0" to handle ratios properly
+    // String input requires "1.0" as input, so 1 will be treated as 1
+    tinycolor.fromRatio = function(color, opts) {
+        if (typeof color == "object") {
+            var newColor = {};
+            for (var i in color) {
+                if (color.hasOwnProperty(i)) {
+                    if (i === "a") {
+                        newColor[i] = color[i];
+                    }
+                    else {
+                        newColor[i] = convertToPercentage(color[i]);
+                    }
                 }
             }
-
-            a = parseFloat(a);
-
-            // Handle invalid alpha characters by setting to 1
-            if (isNaN(a) || a < 0 || a > 1) {
-                a = 1;
-            }
-
-            return {
-                ok: ok,
-                format: color.format || format,
-                r: mathMin(255, mathMax(rgb.r, 0)),
-                g: mathMin(255, mathMax(rgb.g, 0)),
-                b: mathMin(255, mathMax(rgb.b, 0)),
-                a: a
-            };
+            color = newColor;
         }
 
+        return tinycolor(color, opts);
+    };
 
+    // Given a string or object, convert that input to RGB
+    // Possible string inputs:
+    //
+    //     "red"
+    //     "#f00" or "f00"
+    //     "#ff0000" or "ff0000"
+    //     "rgb 255 0 0" or "rgb (255, 0, 0)"
+    //     "rgb 1.0 0 0" or "rgb (1, 0, 0)"
+    //     "rgba (255, 0, 0, 1)" or "rgba 255, 0, 0, 1"
+    //     "rgba (1.0, 0, 0, 1)" or "rgba 1.0, 0, 0, 1"
+    //     "hsl(0, 100%, 50%)" or "hsl 0 100% 50%"
+    //     "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
+    //     "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
+    //
+    function inputToRGB(color) {
 
-        // Conversion Functions
-        // --------------------
+        var rgb = { r: 0, g: 0, b: 0 };
+        var a = 1;
+        var ok = false;
+        var format = false;
 
-        // `rgbToHsl`, `rgbToHsv`, `hslToRgb`, `hsvToRgb` modified from:
-        // <http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript>
-
-        // `rgbToRgb`
-        // Handle bounds / percentage checking to conform to CSS color spec
-        // <http://www.w3.org/TR/css3-color/>
-        // *Assumes:* r, g, b in [0, 255] or [0, 1]
-        // *Returns:* { r, g, b } in [0, 255]
-        function rgbToRgb(r, g, b){
-            return {
-                r: bound01(r, 255) * 255,
-                g: bound01(g, 255) * 255,
-                b: bound01(b, 255) * 255
-            };
+        if (typeof color == "string") {
+            color = stringInputToObject(color);
         }
 
-        // `rgbToHsl`
-        // Converts an RGB color value to HSL.
-        // *Assumes:* r, g, and b are contained in [0, 255] or [0, 1]
-        // *Returns:* { h, s, l } in [0,1]
-        function rgbToHsl(r, g, b) {
-
-            r = bound01(r, 255);
-            g = bound01(g, 255);
-            b = bound01(b, 255);
-
-            var max = mathMax(r, g, b), min = mathMin(r, g, b);
-            var h, s, l = (max + min) / 2;
-
-            if(max == min) {
-                h = s = 0; // achromatic
+        if (typeof color == "object") {
+            if (color.hasOwnProperty("r") && color.hasOwnProperty("g") && color.hasOwnProperty("b")) {
+                rgb = rgbToRgb(color.r, color.g, color.b);
+                ok = true;
+                format = String(color.r).substr(-1) === "%" ? "prgb" : "rgb";
             }
-            else {
-                var d = max - min;
-                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                switch(max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    case b: h = (r - g) / d + 4; break;
-                }
-
-                h /= 6;
+            else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("v")) {
+                color.s = convertToPercentage(color.s);
+                color.v = convertToPercentage(color.v);
+                rgb = hsvToRgb(color.h, color.s, color.v);
+                ok = true;
+                format = "hsv";
+            }
+            else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("l")) {
+                color.s = convertToPercentage(color.s);
+                color.l = convertToPercentage(color.l);
+                rgb = hslToRgb(color.h, color.s, color.l);
+                ok = true;
+                format = "hsl";
             }
 
-            return { h: h, s: s, l: l };
+            if (color.hasOwnProperty("a")) {
+                a = color.a;
+            }
         }
 
-        // `hslToRgb`
-        // Converts an HSL color value to RGB.
-        // *Assumes:* h is contained in [0, 1] or [0, 360] and s and l are contained [0, 1] or [0, 100]
-        // *Returns:* { r, g, b } in the set [0, 255]
-        function hslToRgb(h, s, l) {
-            var r, g, b;
+        a = boundAlpha(a);
 
-            h = bound01(h, 360);
-            s = bound01(s, 100);
-            l = bound01(l, 100);
+        return {
+            ok: ok,
+            format: color.format || format,
+            r: mathMin(255, mathMax(rgb.r, 0)),
+            g: mathMin(255, mathMax(rgb.g, 0)),
+            b: mathMin(255, mathMax(rgb.b, 0)),
+            a: a
+        };
+    }
 
-            function hue2rgb(p, q, t) {
-                if(t < 0) t += 1;
-                if(t > 1) t -= 1;
-                if(t < 1/6) return p + (q - p) * 6 * t;
-                if(t < 1/2) return q;
-                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                return p;
-            }
 
-            if(s === 0) {
-                r = g = b = l; // achromatic
-            }
-            else {
-                var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                var p = 2 * l - q;
-                r = hue2rgb(p, q, h + 1/3);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h - 1/3);
-            }
+    // Conversion Functions
+    // --------------------
 
-            return { r: r * 255, g: g * 255, b: b * 255 };
+    // `rgbToHsl`, `rgbToHsv`, `hslToRgb`, `hsvToRgb` modified from:
+    // <http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript>
+
+    // `rgbToRgb`
+    // Handle bounds / percentage checking to conform to CSS color spec
+    // <http://www.w3.org/TR/css3-color/>
+    // *Assumes:* r, g, b in [0, 255] or [0, 1]
+    // *Returns:* { r, g, b } in [0, 255]
+    function rgbToRgb(r, g, b){
+        return {
+            r: bound01(r, 255) * 255,
+            g: bound01(g, 255) * 255,
+            b: bound01(b, 255) * 255
+        };
+    }
+
+    // `rgbToHsl`
+    // Converts an RGB color value to HSL.
+    // *Assumes:* r, g, and b are contained in [0, 255] or [0, 1]
+    // *Returns:* { h, s, l } in [0,1]
+    function rgbToHsl(r, g, b) {
+
+        r = bound01(r, 255);
+        g = bound01(g, 255);
+        b = bound01(b, 255);
+
+        var max = mathMax(r, g, b), min = mathMin(r, g, b);
+        var h, s, l = (max + min) / 2;
+
+        if(max == min) {
+            h = s = 0; // achromatic
         }
-
-        // `rgbToHsv`
-        // Converts an RGB color value to HSV
-        // *Assumes:* r, g, and b are contained in the set [0, 255] or [0, 1]
-        // *Returns:* { h, s, v } in [0,1]
-        function rgbToHsv(r, g, b) {
-
-            r = bound01(r, 255);
-            g = bound01(g, 255);
-            b = bound01(b, 255);
-
-            var max = mathMax(r, g, b), min = mathMin(r, g, b);
-            var h, s, v = max;
-
+        else {
             var d = max - min;
-            s = max === 0 ? 0 : d / max;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
 
-            if(max == min) {
-                h = 0; // achromatic
-            }
-            else {
-                switch(max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    case b: h = (r - g) / d + 4; break;
-                }
-                h /= 6;
-            }
-            return { h: h, s: s, v: v };
+            h /= 6;
         }
 
-        // `hsvToRgb`
-        // Converts an HSV color value to RGB.
-        // *Assumes:* h is contained in [0, 1] or [0, 360] and s and v are contained in [0, 1] or [0, 100]
-        // *Returns:* { r, g, b } in the set [0, 255]
-         function hsvToRgb(h, s, v) {
+        return { h: h, s: s, l: l };
+    }
 
-            h = bound01(h, 360) * 6;
-            s = bound01(s, 100);
-            v = bound01(v, 100);
+    // `hslToRgb`
+    // Converts an HSL color value to RGB.
+    // *Assumes:* h is contained in [0, 1] or [0, 360] and s and l are contained [0, 1] or [0, 100]
+    // *Returns:* { r, g, b } in the set [0, 255]
+    function hslToRgb(h, s, l) {
+        var r, g, b;
 
-            var i = math.floor(h),
-                f = h - i,
-                p = v * (1 - s),
-                q = v * (1 - f * s),
-                t = v * (1 - (1 - f) * s),
-                mod = i % 6,
-                r = [v, q, p, p, t, v][mod],
-                g = [t, v, v, q, p, p][mod],
-                b = [p, p, t, v, v, q][mod];
+        h = bound01(h, 360);
+        s = bound01(s, 100);
+        l = bound01(l, 100);
 
-            return { r: r * 255, g: g * 255, b: b * 255 };
+        function hue2rgb(p, q, t) {
+            if(t < 0) t += 1;
+            if(t > 1) t -= 1;
+            if(t < 1/6) return p + (q - p) * 6 * t;
+            if(t < 1/2) return q;
+            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
         }
 
-        // `rgbToHex`
-        // Converts an RGB color to hex
-        // Assumes r, g, and b are contained in the set [0, 255]
-        // Returns a 3 or 6 character hex
-        function rgbToHex(r, g, b, allow3Char) {
-
-            var hex = [
-                pad2(mathRound(r).toString(16)),
-                pad2(mathRound(g).toString(16)),
-                pad2(mathRound(b).toString(16))
-            ];
-
-            // Return a 3 character hex if possible
-            if (allow3Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1)) {
-                return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0);
-            }
-
-            return hex.join("");
+        if(s === 0) {
+            r = g = b = l; // achromatic
+        }
+        else {
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
         }
 
-        // `equals`
-        // Can be called with any tinycolor input
-        tinycolor.equals = function (color1, color2) {
-            if (!color1 || !color2) { return false; }
-            return tinycolor(color1).toRgbString() == tinycolor(color2).toRgbString();
-        };
-        tinycolor.random = function() {
-            return tinycolor.fromRatio({
-                r: mathRandom(),
-                g: mathRandom(),
-                b: mathRandom()
-            });
-        };
+        return { r: r * 255, g: g * 255, b: b * 255 };
+    }
 
+    // `rgbToHsv`
+    // Converts an RGB color value to HSV
+    // *Assumes:* r, g, and b are contained in the set [0, 255] or [0, 1]
+    // *Returns:* { h, s, v } in [0,1]
+    function rgbToHsv(r, g, b) {
 
-        // Modification Functions
-        // ----------------------
-        // Thanks to less.js for some of the basics here
-        // <https://github.com/cloudhead/less.js/blob/master/lib/less/functions.js>
+        r = bound01(r, 255);
+        g = bound01(g, 255);
+        b = bound01(b, 255);
 
+        var max = mathMax(r, g, b), min = mathMin(r, g, b);
+        var h, s, v = max;
 
-        tinycolor.desaturate = function (color, amount) {
-            var hsl = tinycolor(color).toHsl();
-            hsl.s -= ((amount || 10) / 100);
-            hsl.s = clamp01(hsl.s);
-            return tinycolor(hsl);
-        };
-        tinycolor.saturate = function (color, amount) {
-            var hsl = tinycolor(color).toHsl();
-            hsl.s += ((amount || 10) / 100);
-            hsl.s = clamp01(hsl.s);
-            return tinycolor(hsl);
-        };
-        tinycolor.greyscale = function(color) {
-            return tinycolor.desaturate(color, 100);
-        };
-        tinycolor.lighten = function(color, amount) {
-            var hsl = tinycolor(color).toHsl();
-            hsl.l += ((amount || 10) / 100);
-            hsl.l = clamp01(hsl.l);
-            return tinycolor(hsl);
-        };
-        tinycolor.darken = function (color, amount) {
-            var hsl = tinycolor(color).toHsl();
-            hsl.l -= ((amount || 10) / 100);
-            hsl.l = clamp01(hsl.l);
-            return tinycolor(hsl);
-        };
-        tinycolor.complement = function(color) {
-            var hsl = tinycolor(color).toHsl();
-            hsl.h = (hsl.h + 180) % 360;
-            return tinycolor(hsl);
-        };
+        var d = max - min;
+        s = max === 0 ? 0 : d / max;
 
-
-        // Combination Functions
-        // ---------------------
-        // Thanks to jQuery xColor for some of the ideas behind these
-        // <https://github.com/infusion/jQuery-xcolor/blob/master/jquery.xcolor.js>
-
-        tinycolor.triad = function(color) {
-            var hsl = tinycolor(color).toHsl();
-            var h = hsl.h;
-            return [
-                tinycolor(color),
-                tinycolor({ h: (h + 120) % 360, s: hsl.s, l: hsl.l }),
-                tinycolor({ h: (h + 240) % 360, s: hsl.s, l: hsl.l })
-            ];
-        };
-        tinycolor.tetrad = function(color) {
-            var hsl = tinycolor(color).toHsl();
-            var h = hsl.h;
-            return [
-                tinycolor(color),
-                tinycolor({ h: (h + 90) % 360, s: hsl.s, l: hsl.l }),
-                tinycolor({ h: (h + 180) % 360, s: hsl.s, l: hsl.l }),
-                tinycolor({ h: (h + 270) % 360, s: hsl.s, l: hsl.l })
-            ];
-        };
-        tinycolor.splitcomplement = function(color) {
-            var hsl = tinycolor(color).toHsl();
-            var h = hsl.h;
-            return [
-                tinycolor(color),
-                tinycolor({ h: (h + 72) % 360, s: hsl.s, l: hsl.l}),
-                tinycolor({ h: (h + 216) % 360, s: hsl.s, l: hsl.l})
-            ];
-        };
-        tinycolor.analogous = function(color, results, slices) {
-            results = results || 6;
-            slices = slices || 30;
-
-            var hsl = tinycolor(color).toHsl();
-            var part = 360 / slices;
-            var ret = [tinycolor(color)];
-
-            for (hsl.h = ((hsl.h - (part * results >> 1)) + 720) % 360; --results; ) {
-                hsl.h = (hsl.h + part) % 360;
-                ret.push(tinycolor(hsl));
+        if(max == min) {
+            h = 0; // achromatic
+        }
+        else {
+            switch(max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
             }
-            return ret;
-        };
-        tinycolor.monochromatic = function(color, results) {
-            results = results || 6;
-            var hsv = tinycolor(color).toHsv();
-            var h = hsv.h, s = hsv.s, v = hsv.v;
-            var ret = [];
-            var modification = 1 / results;
+            h /= 6;
+        }
+        return { h: h, s: s, v: v };
+    }
 
-            while (results--) {
-                ret.push(tinycolor({ h: h, s: s, v: v}));
-                v = (v + modification) % 1;
+    // `hsvToRgb`
+    // Converts an HSV color value to RGB.
+    // *Assumes:* h is contained in [0, 1] or [0, 360] and s and v are contained in [0, 1] or [0, 100]
+    // *Returns:* { r, g, b } in the set [0, 255]
+     function hsvToRgb(h, s, v) {
+
+        h = bound01(h, 360) * 6;
+        s = bound01(s, 100);
+        v = bound01(v, 100);
+
+        var i = math.floor(h),
+            f = h - i,
+            p = v * (1 - s),
+            q = v * (1 - f * s),
+            t = v * (1 - (1 - f) * s),
+            mod = i % 6,
+            r = [v, q, p, p, t, v][mod],
+            g = [t, v, v, q, p, p][mod],
+            b = [p, p, t, v, v, q][mod];
+
+        return { r: r * 255, g: g * 255, b: b * 255 };
+    }
+
+    // `rgbToHex`
+    // Converts an RGB color to hex
+    // Assumes r, g, and b are contained in the set [0, 255]
+    // Returns a 3 or 6 character hex
+    function rgbToHex(r, g, b, allow3Char) {
+
+        var hex = [
+            pad2(mathRound(r).toString(16)),
+            pad2(mathRound(g).toString(16)),
+            pad2(mathRound(b).toString(16))
+        ];
+
+        // Return a 3 character hex if possible
+        if (allow3Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1)) {
+            return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0);
+        }
+
+        return hex.join("");
+    }
+
+    // `equals`
+    // Can be called with any tinycolor input
+    tinycolor.equals = function (color1, color2) {
+        if (!color1 || !color2) { return false; }
+        return tinycolor(color1).toRgbString() == tinycolor(color2).toRgbString();
+    };
+    tinycolor.random = function() {
+        return tinycolor.fromRatio({
+            r: mathRandom(),
+            g: mathRandom(),
+            b: mathRandom()
+        });
+    };
+
+
+    // Modification Functions
+    // ----------------------
+    // Thanks to less.js for some of the basics here
+    // <https://github.com/cloudhead/less.js/blob/master/lib/less/functions.js>
+
+    tinycolor.desaturate = function (color, amount) {
+        amount = (amount === 0) ? 0 : (amount || 10);
+        var hsl = tinycolor(color).toHsl();
+        hsl.s -= amount / 100;
+        hsl.s = clamp01(hsl.s);
+        return tinycolor(hsl);
+    };
+    tinycolor.saturate = function (color, amount) {
+        amount = (amount === 0) ? 0 : (amount || 10);
+        var hsl = tinycolor(color).toHsl();
+        hsl.s += amount / 100;
+        hsl.s = clamp01(hsl.s);
+        return tinycolor(hsl);
+    };
+    tinycolor.greyscale = function(color) {
+        return tinycolor.desaturate(color, 100);
+    };
+    tinycolor.lighten = function(color, amount) {
+        amount = (amount === 0) ? 0 : (amount || 10);
+        var hsl = tinycolor(color).toHsl();
+        hsl.l += amount / 100;
+        hsl.l = clamp01(hsl.l);
+        return tinycolor(hsl);
+    };
+    tinycolor.darken = function (color, amount) {
+        amount = (amount === 0) ? 0 : (amount || 10);
+        var hsl = tinycolor(color).toHsl();
+        hsl.l -= amount / 100;
+        hsl.l = clamp01(hsl.l);
+        return tinycolor(hsl);
+    };
+    tinycolor.complement = function(color) {
+        var hsl = tinycolor(color).toHsl();
+        hsl.h = (hsl.h + 180) % 360;
+        return tinycolor(hsl);
+    };
+
+
+    // Combination Functions
+    // ---------------------
+    // Thanks to jQuery xColor for some of the ideas behind these
+    // <https://github.com/infusion/jQuery-xcolor/blob/master/jquery.xcolor.js>
+
+    tinycolor.triad = function(color) {
+        var hsl = tinycolor(color).toHsl();
+        var h = hsl.h;
+        return [
+            tinycolor(color),
+            tinycolor({ h: (h + 120) % 360, s: hsl.s, l: hsl.l }),
+            tinycolor({ h: (h + 240) % 360, s: hsl.s, l: hsl.l })
+        ];
+    };
+    tinycolor.tetrad = function(color) {
+        var hsl = tinycolor(color).toHsl();
+        var h = hsl.h;
+        return [
+            tinycolor(color),
+            tinycolor({ h: (h + 90) % 360, s: hsl.s, l: hsl.l }),
+            tinycolor({ h: (h + 180) % 360, s: hsl.s, l: hsl.l }),
+            tinycolor({ h: (h + 270) % 360, s: hsl.s, l: hsl.l })
+        ];
+    };
+    tinycolor.splitcomplement = function(color) {
+        var hsl = tinycolor(color).toHsl();
+        var h = hsl.h;
+        return [
+            tinycolor(color),
+            tinycolor({ h: (h + 72) % 360, s: hsl.s, l: hsl.l}),
+            tinycolor({ h: (h + 216) % 360, s: hsl.s, l: hsl.l})
+        ];
+    };
+    tinycolor.analogous = function(color, results, slices) {
+        results = results || 6;
+        slices = slices || 30;
+
+        var hsl = tinycolor(color).toHsl();
+        var part = 360 / slices;
+        var ret = [tinycolor(color)];
+
+        for (hsl.h = ((hsl.h - (part * results >> 1)) + 720) % 360; --results; ) {
+            hsl.h = (hsl.h + part) % 360;
+            ret.push(tinycolor(hsl));
+        }
+        return ret;
+    };
+    tinycolor.monochromatic = function(color, results) {
+        results = results || 6;
+        var hsv = tinycolor(color).toHsv();
+        var h = hsv.h, s = hsv.s, v = hsv.v;
+        var ret = [];
+        var modification = 1 / results;
+
+        while (results--) {
+            ret.push(tinycolor({ h: h, s: s, v: v}));
+            v = (v + modification) % 1;
+        }
+
+        return ret;
+    };
+
+
+    // Readability Functions
+    // ---------------------
+    // <http://www.w3.org/TR/AERT#color-contrast>
+
+    // `readability`
+    // Analyze the 2 colors and returns an object with the following properties:
+    //    `brightness`: difference in brightness between the two colors
+    //    `color`: difference in color/hue between the two colors
+    tinycolor.readability = function(color1, color2) {
+        var a = tinycolor(color1).toRgb();
+        var b = tinycolor(color2).toRgb();
+        var brightnessA = (a.r * 299 + a.g * 587 + a.b * 114) / 1000;
+        var brightnessB = (b.r * 299 + b.g * 587 + b.b * 114) / 1000;
+        var colorDiff = (
+            Math.max(a.r, b.r) - Math.min(a.r, b.r) +
+            Math.max(a.g, b.g) - Math.min(a.g, b.g) +
+            Math.max(a.b, b.b) - Math.min(a.b, b.b)
+        );
+
+        return {
+            brightness: Math.abs(brightnessA - brightnessB),
+            color: colorDiff
+        };
+    };
+
+    // `readable`
+    // http://www.w3.org/TR/AERT#color-contrast
+    // Ensure that foreground and background color combinations provide sufficient contrast.
+    // *Example*
+    //    tinycolor.readable("#000", "#111") => false
+    tinycolor.readable = function(color1, color2) {
+        var readability = tinycolor.readability(color1, color2);
+        return readability.brightness > 125 && readability.color > 500;
+    };
+
+    // `mostReadable`
+    // Given a base color and a list of possible foreground or background
+    // colors for that base, returns the most readable color.
+    // *Example*
+    //    tinycolor.mostReadable("#123", ["#fff", "#000"]) => "#000"
+    tinycolor.mostReadable = function(baseColor, colorList) {
+        var bestColor = null;
+        var bestScore = 0;
+        var bestIsReadable = false;
+        for (var i=0; i < colorList.length; i++) {
+
+            // We normalize both around the "acceptable" breaking point,
+            // but rank brightness constrast higher than hue.
+
+            var readability = tinycolor.readability(baseColor, colorList[i]);
+            var readable = readability.brightness > 125 && readability.color > 500;
+            var score = 3 * (readability.brightness / 125) + (readability.color / 500);
+
+            if ((readable && ! bestIsReadable) ||
+                (readable && bestIsReadable && score > bestScore) ||
+                ((! readable) && (! bestIsReadable) && score > bestScore)) {
+                bestIsReadable = readable;
+                bestScore = score;
+                bestColor = tinycolor(colorList[i]);
             }
+        }
+        return bestColor;
+    };
 
-            return ret;
+
+    // Big List of Colors
+    // ------------------
+    // <http://www.w3.org/TR/css3-color/#svg-color>
+    var names = tinycolor.names = {
+        aliceblue: "f0f8ff",
+        antiquewhite: "faebd7",
+        aqua: "0ff",
+        aquamarine: "7fffd4",
+        azure: "f0ffff",
+        beige: "f5f5dc",
+        bisque: "ffe4c4",
+        black: "000",
+        blanchedalmond: "ffebcd",
+        blue: "00f",
+        blueviolet: "8a2be2",
+        brown: "a52a2a",
+        burlywood: "deb887",
+        burntsienna: "ea7e5d",
+        cadetblue: "5f9ea0",
+        chartreuse: "7fff00",
+        chocolate: "d2691e",
+        coral: "ff7f50",
+        cornflowerblue: "6495ed",
+        cornsilk: "fff8dc",
+        crimson: "dc143c",
+        cyan: "0ff",
+        darkblue: "00008b",
+        darkcyan: "008b8b",
+        darkgoldenrod: "b8860b",
+        darkgray: "a9a9a9",
+        darkgreen: "006400",
+        darkgrey: "a9a9a9",
+        darkkhaki: "bdb76b",
+        darkmagenta: "8b008b",
+        darkolivegreen: "556b2f",
+        darkorange: "ff8c00",
+        darkorchid: "9932cc",
+        darkred: "8b0000",
+        darksalmon: "e9967a",
+        darkseagreen: "8fbc8f",
+        darkslateblue: "483d8b",
+        darkslategray: "2f4f4f",
+        darkslategrey: "2f4f4f",
+        darkturquoise: "00ced1",
+        darkviolet: "9400d3",
+        deeppink: "ff1493",
+        deepskyblue: "00bfff",
+        dimgray: "696969",
+        dimgrey: "696969",
+        dodgerblue: "1e90ff",
+        firebrick: "b22222",
+        floralwhite: "fffaf0",
+        forestgreen: "228b22",
+        fuchsia: "f0f",
+        gainsboro: "dcdcdc",
+        ghostwhite: "f8f8ff",
+        gold: "ffd700",
+        goldenrod: "daa520",
+        gray: "808080",
+        green: "008000",
+        greenyellow: "adff2f",
+        grey: "808080",
+        honeydew: "f0fff0",
+        hotpink: "ff69b4",
+        indianred: "cd5c5c",
+        indigo: "4b0082",
+        ivory: "fffff0",
+        khaki: "f0e68c",
+        lavender: "e6e6fa",
+        lavenderblush: "fff0f5",
+        lawngreen: "7cfc00",
+        lemonchiffon: "fffacd",
+        lightblue: "add8e6",
+        lightcoral: "f08080",
+        lightcyan: "e0ffff",
+        lightgoldenrodyellow: "fafad2",
+        lightgray: "d3d3d3",
+        lightgreen: "90ee90",
+        lightgrey: "d3d3d3",
+        lightpink: "ffb6c1",
+        lightsalmon: "ffa07a",
+        lightseagreen: "20b2aa",
+        lightskyblue: "87cefa",
+        lightslategray: "789",
+        lightslategrey: "789",
+        lightsteelblue: "b0c4de",
+        lightyellow: "ffffe0",
+        lime: "0f0",
+        limegreen: "32cd32",
+        linen: "faf0e6",
+        magenta: "f0f",
+        maroon: "800000",
+        mediumaquamarine: "66cdaa",
+        mediumblue: "0000cd",
+        mediumorchid: "ba55d3",
+        mediumpurple: "9370db",
+        mediumseagreen: "3cb371",
+        mediumslateblue: "7b68ee",
+        mediumspringgreen: "00fa9a",
+        mediumturquoise: "48d1cc",
+        mediumvioletred: "c71585",
+        midnightblue: "191970",
+        mintcream: "f5fffa",
+        mistyrose: "ffe4e1",
+        moccasin: "ffe4b5",
+        navajowhite: "ffdead",
+        navy: "000080",
+        oldlace: "fdf5e6",
+        olive: "808000",
+        olivedrab: "6b8e23",
+        orange: "ffa500",
+        orangered: "ff4500",
+        orchid: "da70d6",
+        palegoldenrod: "eee8aa",
+        palegreen: "98fb98",
+        paleturquoise: "afeeee",
+        palevioletred: "db7093",
+        papayawhip: "ffefd5",
+        peachpuff: "ffdab9",
+        peru: "cd853f",
+        pink: "ffc0cb",
+        plum: "dda0dd",
+        powderblue: "b0e0e6",
+        purple: "800080",
+        red: "f00",
+        rosybrown: "bc8f8f",
+        royalblue: "4169e1",
+        saddlebrown: "8b4513",
+        salmon: "fa8072",
+        sandybrown: "f4a460",
+        seagreen: "2e8b57",
+        seashell: "fff5ee",
+        sienna: "a0522d",
+        silver: "c0c0c0",
+        skyblue: "87ceeb",
+        slateblue: "6a5acd",
+        slategray: "708090",
+        slategrey: "708090",
+        snow: "fffafa",
+        springgreen: "00ff7f",
+        steelblue: "4682b4",
+        tan: "d2b48c",
+        teal: "008080",
+        thistle: "d8bfd8",
+        tomato: "ff6347",
+        turquoise: "40e0d0",
+        violet: "ee82ee",
+        wheat: "f5deb3",
+        white: "fff",
+        whitesmoke: "f5f5f5",
+        yellow: "ff0",
+        yellowgreen: "9acd32"
+    };
+
+    // Make it easy to access colors via `hexNames[hex]`
+    var hexNames = tinycolor.hexNames = flip(names);
+
+
+    // Utilities
+    // ---------
+
+    // `{ 'name1': 'val1' }` becomes `{ 'val1': 'name1' }`
+    function flip(o) {
+        var flipped = { };
+        for (var i in o) {
+            if (o.hasOwnProperty(i)) {
+                flipped[o[i]] = i;
+            }
+        }
+        return flipped;
+    }
+
+    // Return a valid alpha value [0,1] with all invalid values being set to 1
+    function boundAlpha(a) {
+        a = parseFloat(a);
+
+        if (isNaN(a) || a < 0 || a > 1) {
+            a = 1;
+        }
+
+        return a;
+    }
+
+    // Take input from [0, n] and return it as [0, 1]
+    function bound01(n, max) {
+        if (isOnePointZero(n)) { n = "100%"; }
+
+        var processPercent = isPercentage(n);
+        n = mathMin(max, mathMax(0, parseFloat(n)));
+
+        // Automatically convert percentage into number
+        if (processPercent) {
+            n = parseInt(n * max, 10) / 100;
+        }
+
+        // Handle floating point rounding errors
+        if ((math.abs(n - max) < 0.000001)) {
+            return 1;
+        }
+
+        // Convert into [0, 1] range if it isn't already
+        return (n % max) / parseFloat(max);
+    }
+
+    // Force a number between 0 and 1
+    function clamp01(val) {
+        return mathMin(1, mathMax(0, val));
+    }
+
+    // Parse an integer into hex
+    function parseHex(val) {
+        return parseInt(val, 16);
+    }
+
+    // Need to handle 1.0 as 100%, since once it is a number, there is no difference between it and 1
+    // <http://stackoverflow.com/questions/7422072/javascript-how-to-detect-number-as-a-decimal-including-1-0>
+    function isOnePointZero(n) {
+        return typeof n == "string" && n.indexOf('.') != -1 && parseFloat(n) === 1;
+    }
+
+    // Check to see if string passed in is a percentage
+    function isPercentage(n) {
+        return typeof n === "string" && n.indexOf('%') != -1;
+    }
+
+    // Force a hex value to have 2 characters
+    function pad2(c) {
+        return c.length == 1 ? '0' + c : '' + c;
+    }
+
+    // Replace a decimal with it's percentage value
+    function convertToPercentage(n) {
+        if (n <= 1) {
+            n = (n * 100) + "%";
+        }
+
+        return n;
+    }
+
+    var matchers = (function() {
+
+        // <http://www.w3.org/TR/css3-values/#integers>
+        var CSS_INTEGER = "[-\\+]?\\d+%?";
+
+        // <http://www.w3.org/TR/css3-values/#number-value>
+        var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
+
+        // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
+        var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
+
+        // Actual matching.
+        // Parentheses and commas are optional, but not required.
+        // Whitespace can take the place of commas or opening paren
+        var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+        var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+
+        return {
+            rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
+            rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
+            hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
+            hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
+            hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
+            hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+            hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
         };
+    })();
 
-        // Readability Functions
-        // ---------------------
-        // <http://www.w3.org/TR/AERT#color-contrast>
+    // `stringInputToObject`
+    // Permissive string parsing.  Take in a number of formats, and output an object
+    // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
+    function stringInputToObject(color) {
 
-        // `readability`
-        // Analyze the 2 colors and returns an object with the following properties:
-        //    `brightness`: difference in brightness between the two colors
-        //    `color`: difference in color/hue between the two colors
-        tinycolor.readability = function(color1, color2) {
-            var a = tinycolor(color1).toRgb();
-            var b = tinycolor(color2).toRgb();
-            var brightnessA = (a.r * 299 + a.g * 587 + a.b * 114) / 1000;
-            var brightnessB = (b.r * 299 + b.g * 587 + b.b * 114) / 1000;
-            var colorDiff = (
-                Math.max(a.r, b.r) - Math.min(a.r, b.r) +
-                Math.max(a.g, b.g) - Math.min(a.g, b.g) +
-                Math.max(a.b, b.b) - Math.min(a.b, b.b)
-            );
+        color = color.replace(trimLeft,'').replace(trimRight, '').toLowerCase();
+        var named = false;
+        if (names[color]) {
+            color = names[color];
+            named = true;
+        }
+        else if (color == 'transparent') {
+            return { r: 0, g: 0, b: 0, a: 0, format: "name" };
+        }
 
+        // Try to match string input using regular expressions.
+        // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
+        // Just return an object and let the conversion functions handle that.
+        // This way the result will be the same whether the tinycolor is initialized with string or object.
+        var match;
+        if ((match = matchers.rgb.exec(color))) {
+            return { r: match[1], g: match[2], b: match[3] };
+        }
+        if ((match = matchers.rgba.exec(color))) {
+            return { r: match[1], g: match[2], b: match[3], a: match[4] };
+        }
+        if ((match = matchers.hsl.exec(color))) {
+            return { h: match[1], s: match[2], l: match[3] };
+        }
+        if ((match = matchers.hsla.exec(color))) {
+            return { h: match[1], s: match[2], l: match[3], a: match[4] };
+        }
+        if ((match = matchers.hsv.exec(color))) {
+            return { h: match[1], s: match[2], v: match[3] };
+        }
+        if ((match = matchers.hex6.exec(color))) {
             return {
-                brightness: Math.abs(brightnessA - brightnessB),
-                color: colorDiff
+                r: parseHex(match[1]),
+                g: parseHex(match[2]),
+                b: parseHex(match[3]),
+                format: named ? "name" : "hex"
             };
-        };
-
-        // `readable`
-        // http://www.w3.org/TR/AERT#color-contrast
-        // Ensure that foreground and background color combinations provide sufficient contrast.
-        // *Example*
-        //    tinycolor.readable("#000", "#111") => false
-        tinycolor.readable = function(color1, color2) {
-            var readability = tinycolor.readability(color1, color2);
-            return readability.brightness > 125 && readability.color > 500;
-        };
-
-        // `mostReadable`
-        // Given a base color and a list of possible foreground or background
-        // colors for that base, returns the most readable color.
-        // *Example*
-        //    tinycolor.mostReadable("#123", ["#fff", "#000"]) => "#000"
-        tinycolor.mostReadable = function(baseColor, colorList) {
-            var bestColor = null;
-            var bestScore = 0;
-            var bestIsReadable = false;
-            for (var i=0; i < colorList.length; i++) {
-
-                // We normalize both around the "acceptable" breaking point,
-                // but rank brightness constrast higher than hue.
-
-                var readability = tinycolor.readability(baseColor, colorList[i]);
-                var readable = readability.brightness > 125 && readability.color > 500;
-                var score = 3 * (readability.brightness / 125) + (readability.color / 500);
-
-                if ((readable && ! bestIsReadable) ||
-                    (readable && bestIsReadable && score > bestScore) ||
-                    ((! readable) && (! bestIsReadable) && score > bestScore)) {
-                    bestIsReadable = readable;
-                    bestScore = score;
-                    bestColor = tinycolor(colorList[i]);
-                }
-            }
-            return bestColor;
-        };
-
-
-        // Big List of Colors
-        // ------------------
-        // <http://www.w3.org/TR/css3-color/#svg-color>
-        var names = tinycolor.names = {
-            aliceblue: "f0f8ff",
-            antiquewhite: "faebd7",
-            aqua: "0ff",
-            aquamarine: "7fffd4",
-            azure: "f0ffff",
-            beige: "f5f5dc",
-            bisque: "ffe4c4",
-            black: "000",
-            blanchedalmond: "ffebcd",
-            blue: "00f",
-            blueviolet: "8a2be2",
-            brown: "a52a2a",
-            burlywood: "deb887",
-            burntsienna: "ea7e5d",
-            cadetblue: "5f9ea0",
-            chartreuse: "7fff00",
-            chocolate: "d2691e",
-            coral: "ff7f50",
-            cornflowerblue: "6495ed",
-            cornsilk: "fff8dc",
-            crimson: "dc143c",
-            cyan: "0ff",
-            darkblue: "00008b",
-            darkcyan: "008b8b",
-            darkgoldenrod: "b8860b",
-            darkgray: "a9a9a9",
-            darkgreen: "006400",
-            darkgrey: "a9a9a9",
-            darkkhaki: "bdb76b",
-            darkmagenta: "8b008b",
-            darkolivegreen: "556b2f",
-            darkorange: "ff8c00",
-            darkorchid: "9932cc",
-            darkred: "8b0000",
-            darksalmon: "e9967a",
-            darkseagreen: "8fbc8f",
-            darkslateblue: "483d8b",
-            darkslategray: "2f4f4f",
-            darkslategrey: "2f4f4f",
-            darkturquoise: "00ced1",
-            darkviolet: "9400d3",
-            deeppink: "ff1493",
-            deepskyblue: "00bfff",
-            dimgray: "696969",
-            dimgrey: "696969",
-            dodgerblue: "1e90ff",
-            firebrick: "b22222",
-            floralwhite: "fffaf0",
-            forestgreen: "228b22",
-            fuchsia: "f0f",
-            gainsboro: "dcdcdc",
-            ghostwhite: "f8f8ff",
-            gold: "ffd700",
-            goldenrod: "daa520",
-            gray: "808080",
-            green: "008000",
-            greenyellow: "adff2f",
-            grey: "808080",
-            honeydew: "f0fff0",
-            hotpink: "ff69b4",
-            indianred: "cd5c5c",
-            indigo: "4b0082",
-            ivory: "fffff0",
-            khaki: "f0e68c",
-            lavender: "e6e6fa",
-            lavenderblush: "fff0f5",
-            lawngreen: "7cfc00",
-            lemonchiffon: "fffacd",
-            lightblue: "add8e6",
-            lightcoral: "f08080",
-            lightcyan: "e0ffff",
-            lightgoldenrodyellow: "fafad2",
-            lightgray: "d3d3d3",
-            lightgreen: "90ee90",
-            lightgrey: "d3d3d3",
-            lightpink: "ffb6c1",
-            lightsalmon: "ffa07a",
-            lightseagreen: "20b2aa",
-            lightskyblue: "87cefa",
-            lightslategray: "789",
-            lightslategrey: "789",
-            lightsteelblue: "b0c4de",
-            lightyellow: "ffffe0",
-            lime: "0f0",
-            limegreen: "32cd32",
-            linen: "faf0e6",
-            magenta: "f0f",
-            maroon: "800000",
-            mediumaquamarine: "66cdaa",
-            mediumblue: "0000cd",
-            mediumorchid: "ba55d3",
-            mediumpurple: "9370db",
-            mediumseagreen: "3cb371",
-            mediumslateblue: "7b68ee",
-            mediumspringgreen: "00fa9a",
-            mediumturquoise: "48d1cc",
-            mediumvioletred: "c71585",
-            midnightblue: "191970",
-            mintcream: "f5fffa",
-            mistyrose: "ffe4e1",
-            moccasin: "ffe4b5",
-            navajowhite: "ffdead",
-            navy: "000080",
-            oldlace: "fdf5e6",
-            olive: "808000",
-            olivedrab: "6b8e23",
-            orange: "ffa500",
-            orangered: "ff4500",
-            orchid: "da70d6",
-            palegoldenrod: "eee8aa",
-            palegreen: "98fb98",
-            paleturquoise: "afeeee",
-            palevioletred: "db7093",
-            papayawhip: "ffefd5",
-            peachpuff: "ffdab9",
-            peru: "cd853f",
-            pink: "ffc0cb",
-            plum: "dda0dd",
-            powderblue: "b0e0e6",
-            purple: "800080",
-            red: "f00",
-            rosybrown: "bc8f8f",
-            royalblue: "4169e1",
-            saddlebrown: "8b4513",
-            salmon: "fa8072",
-            sandybrown: "f4a460",
-            seagreen: "2e8b57",
-            seashell: "fff5ee",
-            sienna: "a0522d",
-            silver: "c0c0c0",
-            skyblue: "87ceeb",
-            slateblue: "6a5acd",
-            slategray: "708090",
-            slategrey: "708090",
-            snow: "fffafa",
-            springgreen: "00ff7f",
-            steelblue: "4682b4",
-            tan: "d2b48c",
-            teal: "008080",
-            thistle: "d8bfd8",
-            tomato: "ff6347",
-            turquoise: "40e0d0",
-            violet: "ee82ee",
-            wheat: "f5deb3",
-            white: "fff",
-            whitesmoke: "f5f5f5",
-            yellow: "ff0",
-            yellowgreen: "9acd32"
-        };
-
-        // Make it easy to access colors via `hexNames[hex]`
-        var hexNames = tinycolor.hexNames = flip(names);
-
-
-        // Utilities
-        // ---------
-
-        // `{ 'name1': 'val1' }` becomes `{ 'val1': 'name1' }`
-        function flip(o) {
-            var flipped = { };
-            for (var i in o) {
-                if (o.hasOwnProperty(i)) {
-                    flipped[o[i]] = i;
-                }
-            }
-            return flipped;
         }
-
-        // Take input from [0, n] and return it as [0, 1]
-        function bound01(n, max) {
-            if (isOnePointZero(n)) { n = "100%"; }
-
-            var processPercent = isPercentage(n);
-            n = mathMin(max, mathMax(0, parseFloat(n)));
-
-            // Automatically convert percentage into number
-            if (processPercent) {
-                n = parseInt(n * max, 10) / 100;
-            }
-
-            // Handle floating point rounding errors
-            if ((math.abs(n - max) < 0.000001)) {
-                return 1;
-            }
-
-            // Convert into [0, 1] range if it isn't already
-            return (n % max) / parseFloat(max);
-        }
-
-        // Force a number between 0 and 1
-        function clamp01(val) {
-            return mathMin(1, mathMax(0, val));
-        }
-
-        // Parse an integer into hex
-        function parseHex(val) {
-            return parseInt(val, 16);
-        }
-
-        // Need to handle 1.0 as 100%, since once it is a number, there is no difference between it and 1
-        // <http://stackoverflow.com/questions/7422072/javascript-how-to-detect-number-as-a-decimal-including-1-0>
-        function isOnePointZero(n) {
-            return typeof n == "string" && n.indexOf('.') != -1 && parseFloat(n) === 1;
-        }
-
-        // Check to see if string passed in is a percentage
-        function isPercentage(n) {
-            return typeof n === "string" && n.indexOf('%') != -1;
-        }
-
-        // Force a hex value to have 2 characters
-        function pad2(c) {
-            return c.length == 1 ? '0' + c : '' + c;
-        }
-
-        // Replace a decimal with it's percentage value
-        function convertToPercentage(n) {
-            if (n <= 1) {
-                n = (n * 100) + "%";
-            }
-
-            return n;
-        }
-
-        var matchers = (function() {
-
-            // <http://www.w3.org/TR/css3-values/#integers>
-            var CSS_INTEGER = "[-\\+]?\\d+%?";
-
-            // <http://www.w3.org/TR/css3-values/#number-value>
-            var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
-
-            // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
-            var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
-
-            // Actual matching.
-            // Parentheses and commas are optional, but not required.
-            // Whitespace can take the place of commas or opening paren
-            var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
-            var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
-
+        if ((match = matchers.hex3.exec(color))) {
             return {
-                rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
-                rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
-                hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
-                hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
-                hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
-                hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
-                hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
+                r: parseHex(match[1] + '' + match[1]),
+                g: parseHex(match[2] + '' + match[2]),
+                b: parseHex(match[3] + '' + match[3]),
+                format: named ? "name" : "hex"
             };
-        })();
-
-        // `stringInputToObject`
-        // Permissive string parsing.  Take in a number of formats, and output an object
-        // based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
-        function stringInputToObject(color) {
-
-            color = color.replace(trimLeft,'').replace(trimRight, '').toLowerCase();
-            var named = false;
-            if (names[color]) {
-                color = names[color];
-                named = true;
-            }
-            else if (color == 'transparent') {
-                return { r: 0, g: 0, b: 0, a: 0 };
-            }
-
-            // Try to match string input using regular expressions.
-            // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
-            // Just return an object and let the conversion functions handle that.
-            // This way the result will be the same whether the tinycolor is initialized with string or object.
-            var match;
-            if ((match = matchers.rgb.exec(color))) {
-                return { r: match[1], g: match[2], b: match[3] };
-            }
-            if ((match = matchers.rgba.exec(color))) {
-                return { r: match[1], g: match[2], b: match[3], a: match[4] };
-            }
-            if ((match = matchers.hsl.exec(color))) {
-                return { h: match[1], s: match[2], l: match[3] };
-            }
-            if ((match = matchers.hsla.exec(color))) {
-                return { h: match[1], s: match[2], l: match[3], a: match[4] };
-            }
-            if ((match = matchers.hsv.exec(color))) {
-                return { h: match[1], s: match[2], v: match[3] };
-            }
-            if ((match = matchers.hex6.exec(color))) {
-                return {
-                    r: parseHex(match[1]),
-                    g: parseHex(match[2]),
-                    b: parseHex(match[3]),
-                    format: named ? "name" : "hex"
-                };
-            }
-            if ((match = matchers.hex3.exec(color))) {
-                return {
-                    r: parseHex(match[1] + '' + match[1]),
-                    g: parseHex(match[2] + '' + match[2]),
-                    b: parseHex(match[3] + '' + match[3]),
-                    format: named ? "name" : "hex"
-                };
-            }
-
-            return false;
         }
 
-        root.tinycolor = tinycolor;
+        return false;
+    }
 
-    })(this);
+    // Expose tinycolor to window, does not need to run in non-browser context.
+    window.tinycolor = tinycolor;
+
+    })();
+
 
     $(function () {
         if ($.fn.spectrum.load) {
@@ -51117,325 +52032,6 @@ if ( typeof Object.create !== 'function' ) {
     };
 
 }) ( jQuery, window, document );
-
-/*!
- * jQuery UI Stars v3.0.X
- * http://plugins.jquery.com/project/Star_Rating_widget
- *
- * Copyright (c) 2008-2011 Marek "Orkan" Zajac (orkans@gmail.com)
- * Dual licensed under the MIT and GPL licenses.
- * http://docs.jquery.com/License
- *
- * THIS IS AN UNOFFICIAL RELEASE WITH INCLUDED PATCH FOR JQUERY 1.6
- *
- * Depends:
- *	jquery.ui.core.js
- *	jquery.ui.widget.js
- *
- */
-(function($) {
-
-$.widget('ui.stars', {
-	options: {
-		inputType: 'radio', // [radio|select]
-		split: 0, // decrease number of stars by splitting each star into pieces [2|3|4|...]
-		disabled: false, // set to [true] to make the stars initially disabled
-		cancelTitle: 'Cancel Rating',
-		cancelValue: 0, // default value of Cancel btn.
-		cancelShow: true,
-		disableValue: true, // set to [false] to not disable the hidden input when Cancel btn is clicked, so the value will present in POST data.
-		oneVoteOnly: false,
-		showTitles: false,
-		captionEl: null, // jQuery object - target for text captions 
-		callback: null, // function(ui, type, value, event)
-
-		/*
-		 * CSS classes
-		 */
-		starWidth: 16, // width of the star image
-		cancelClass: 'ui-stars-cancel',
-		starClass: 'ui-stars-star',
-		starOnClass: 'ui-stars-star-on',
-		starHoverClass: 'ui-stars-star-hover',
-		starDisabledClass: 'ui-stars-star-disabled',
-		cancelHoverClass: 'ui-stars-cancel-hover',
-		cancelDisabledClass: 'ui-stars-cancel-disabled'
-	},
-	
-	_create: function() {
-		var self = this, o = this.options, starId = 0;
-		this.element.data('former.stars', this.element.html());
-
-		o.isSelect = o.inputType == 'select';
-		this.$form = $(this.element).closest('form');
-		this.$selec = o.isSelect ? $('select', this.element)  : null;
-		this.$rboxs = o.isSelect ? $('option', this.$selec)   : $(':radio', this.element);
-
-		/*
-		 * Map all inputs from $rboxs array to Stars elements
-		 */
-		this.$stars = this.$rboxs.map(function(i)
-		{
-			var el = {
-				value:      this.value,
-				title:      (o.isSelect ? this.text : this.title) || this.value,
-				isDefault:  (o.isSelect && this.defaultSelected) || this.defaultChecked
-			};
-
-			if(i==0) {
-				o.split = typeof o.split != 'number' ? 0 : o.split;
-				o.val2id = [];
-				o.id2val = [];
-				o.id2title = [];
-				o.name = o.isSelect ? self.$selec.get(0).name : this.name;
-//				o.disabled = o.disabled || (o.isSelect ? $(self.$selec).attr('disabled') : $(this).attr('disabled'));
-				o.disabled = o.disabled || (o.isSelect ? $(self.$selec).prop('disabled') : $(this).prop('disabled'));
-			}
-
-			/*
-			 * Consider it as a Cancel button?
-			 */
-			if(el.value == o.cancelValue) {
-				o.cancelTitle = el.title;
-				return null;
-			}
-
-			o.val2id[el.value] = starId;
-			o.id2val[starId] = el.value;
-			o.id2title[starId] = el.title;
-
-			if(el.isDefault) {
-				o.checked = starId;
-				o.value = o.defaultValue = el.value;
-				o.title = el.title;
-			}
-
-			var $s = $('<div/>').addClass(o.starClass);
-			var $a = $('<a/>').attr('title', o.showTitles ? el.title : '').text(el.value);
-
-			/*
-			 * Prepare division settings
-			 */
-			if(o.split) {
-				var oddeven = (starId % o.split);
-				var stwidth = Math.floor(o.starWidth / o.split);
-				$s.width(stwidth);
-				$a.css('margin-left', '-' + (oddeven * stwidth) + 'px');
-			}
-
-			starId++;
-			return $s.append($a).get(0);
-		});
-
-		/*
-		 * How many Stars?
-		 */
-		o.items = starId;
-
-		/*
-		 * Remove old content
-		 */
-		o.isSelect ? this.$selec.remove() : this.$rboxs.remove();
-
-		/*
-		 * Append Stars interface
-		 */
-		this.$cancel = $('<div/>').addClass(o.cancelClass).append( $('<a/>').attr('title', o.showTitles ? o.cancelTitle : '').text(o.cancelValue) );
-		o.cancelShow &= !o.disabled && !o.oneVoteOnly;
-		o.cancelShow && this.element.append(this.$cancel);
-		this.element.append(this.$stars);
-
-		/*
-		 * Initial selection
-		 */
-		if(o.checked === undefined) {
-			o.checked = -1;
-			o.value = o.defaultValue = o.cancelValue;
-			o.title = '';
-		}
-		
-		/*
-		 * The only FORM element, that has been linked to the stars control. The value field is updated on each Star click event
-		 */
-		this.$value = $("<input type='hidden' name='"+o.name+"' value='"+o.value+"' />");
-		this.element.append(this.$value);
-
-
-		/*
-		 * Attach stars event handler
-		 */
-		this.$stars.bind('click.stars', function(e) {
-			if(!o.forceSelect && o.disabled) return false;
-
-			var i = self.$stars.index(this);
-			o.checked = i;
-			o.value = o.id2val[i];
-			o.title = o.id2title[i];
-//			self.$value.attr({disabled: o.disabled ? 'disabled' : '', value: o.value});
-			self.$value.val(o.value);
-			self.$value.prop('disabled', o.disabled);
-			
-			fillTo(i, false);
-			self._disableCancel();
-
-			!o.forceSelect && self.callback(e, 'star');
-		})
-		.bind('mouseover.stars', function() {
-			if(o.disabled) return false;
-			var i = self.$stars.index(this);
-			fillTo(i, true);
-		})
-		.bind('mouseout.stars', function() {
-			if(o.disabled) return false;
-			fillTo(self.options.checked, false);
-		});
-
-
-		/*
-		 * Attach cancel event handler
-		 */
-		this.$cancel.bind('click.stars', function(e) {
-			if(!o.forceSelect && (o.disabled || o.value == o.cancelValue)) return false;
-
-			o.checked = -1;
-			o.value = o.cancelValue;
-			o.title = '';
-			
-			self.$value.val(o.value);
-//			o.disableValue && self.$value.attr({disabled: 'disabled'});
-			o.disableValue && self.$value.prop('disabled', true);
-
-			fillNone();
-			self._disableCancel();
-
-			!o.forceSelect && self.callback(e, 'cancel');
-		})
-		.bind('mouseover.stars', function() {
-			if(self._disableCancel()) return false;
-			self.$cancel.addClass(o.cancelHoverClass);
-			fillNone();
-			self._showCap(o.cancelTitle);
-		})
-		.bind('mouseout.stars', function() {
-			if(self._disableCancel()) return false;
-			self.$cancel.removeClass(o.cancelHoverClass);
-			self.$stars.triggerHandler('mouseout.stars');
-		});
-
-
-		/*
-		 * Attach onReset event handler to the parent FORM
-		 */
-		this.$form.bind('reset.stars', function(){
-			!o.disabled && self.select(o.defaultValue);
-		});
-
-
-		/*
-		 * Clean up to avoid memory leaks in certain versions of IE 6
-		 */
-		$(window).unload(function(){
-			self.$cancel.unbind('.stars');
-			self.$stars.unbind('.stars');
-			self.$form.unbind('.stars');
-			self.$selec = self.$rboxs = self.$stars = self.$value = self.$cancel = self.$form = null;
-		});
-
-
-		/*
-		 * Star selection helpers
-		 */
-		function fillTo(index, hover) {
-			if(index != -1) {
-				var addClass = hover ? o.starHoverClass : o.starOnClass;
-				var remClass = hover ? o.starOnClass    : o.starHoverClass;
-				self.$stars.eq(index).prevAll('.' + o.starClass).andSelf().removeClass(remClass).addClass(addClass);
-				self.$stars.eq(index).nextAll('.' + o.starClass).removeClass(o.starHoverClass + ' ' + o.starOnClass);
-				self._showCap(o.id2title[index]);
-			}
-			else fillNone();
-		};
-		function fillNone() {
-			self.$stars.removeClass(o.starOnClass + ' ' + o.starHoverClass);
-			self._showCap('');
-		};
-
-
-		/*
-		 * Finally, set up the Stars
-		 */
-		this.select(o.value);
-		o.disabled && this.disable();
-
-	},
-
-	/*
-	 * Private functions
-	 */
-	_disableCancel: function() {
-		var o = this.options, disabled = o.disabled || o.oneVoteOnly || (o.value == o.cancelValue);
-		if(disabled)  this.$cancel.removeClass(o.cancelHoverClass).addClass(o.cancelDisabledClass);
-		else          this.$cancel.removeClass(o.cancelDisabledClass);
-		this.$cancel.css('opacity', disabled ? 0.5 : 1);
-		return disabled;
-	},
-	_disableAll: function() {
-		var o = this.options;
-		this._disableCancel();
-		if(o.disabled)  this.$stars.filter('div').addClass(o.starDisabledClass);
-		else            this.$stars.filter('div').removeClass(o.starDisabledClass);
-	},
-	_showCap: function(s) {
-		var o = this.options;
-		if(o.captionEl) o.captionEl.text(s);
-	},
-
-	/*
-	 * Public functions
-	 */
-	value: function() {
-		return this.options.value;
-	},
-	select: function(val) {
-		var o = this.options, e = (val == o.cancelValue) ? this.$cancel : this.$stars.eq(o.val2id[val]);
-		o.forceSelect = true;
-		e.triggerHandler('click.stars');
-		o.forceSelect = false;
-	},
-	selectID: function(id) {
-		var o = this.options, e = (id == -1) ? this.$cancel : this.$stars.eq(id);
-		o.forceSelect = true;
-		e.triggerHandler('click.stars');
-		o.forceSelect = false;
-	},
-	enable: function() {
-		this.options.disabled = false;
-		this._disableAll();
-	},
-	disable: function() {
-		this.options.disabled = true;
-		this._disableAll();
-	},
-	destroy: function() {
-		this.$form.unbind('.stars');
-		this.$cancel.unbind('.stars').remove();
-		this.$stars.unbind('.stars').remove();
-		this.$value.remove();
-		this.element.unbind('.stars').html(this.element.data('former.stars')).removeData('stars');
-		return this;
-	},
-	callback: function(e, type) {
-		var o = this.options;
-		o.callback && o.callback(this, type, o.value, e);
-		o.oneVoteOnly && !o.disabled && this.disable();
-	}
-});
-
-$.extend($.ui.stars, {
-	version: '@VERSION@'
-});
-
-})(jQuery);
 
 /*!
  * jQuery Validation Plugin 1.11.1

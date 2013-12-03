@@ -60,65 +60,63 @@
 
         #cboxSlideshow{position:absolute; bottom:4px; right:0px; color:#0092ef;}
         #cboxPrevious{
-			top: 47%;
+			background-color: #FFFFFF;
+			bottom: 55%;
 			color: #0092EF;
-			font-size: 30px;
+			font-size: 25px;
 			left: 2px;
 			overflow: hidden;
-			position: absolute;
-			width: 30px;
+			position: relative;
+			width: 27px;
 		}
 		#cboxPrevious:before{
 			content: "\f0a8";
 			font-family: FontAwesome;
-			color: #fff;
+			color: #000;
 			margin-right: 3px;
 		}
+        #cboxPrevious:hover{background-position:-75px -25px;}
         #cboxNext{
+			background-color: #FFFFFF;
+			bottom: 55%;
 			color: #0092EF;
-			float: right;
-			font-size: 30px;
-			margin-right: 2px;
-			overflow: hidden;
-			position: absolute;
+			font-size: 25px;
 			right: 2px;
-			text-indent: -59px;
-			top: 47%;
-			width: 32px;
+			overflow: hidden;
+			position: relative;
+			width: 27px;
+			float: right;
+			text-indent: -51px;
+			margin-right: 2px;
 		}
 		#cboxNext:after {
 			content: "\f0a9";
 			font-family: FontAwesome;
-			color: #fff;
+			color: #000;
 			margin-left: 3px;
 		}
 		
-		#cboxPrevious:active, #cboxNext:active {
-			top: 47% !important;
-		}
-
-        #cboxClose{
-			top: 2px;
-			right: 2px;
-			font-size: 30px;
-			overflow: hidden;
-			position: absolute;
-			width: 30px;
-		}
 		
 		
-        #cboxClose:before{
-			content: "\f057";
-			font-family: FontAwesome;
-			color: #fff;
-			margin-right: 3px;
-		}
-		
-		#cboxClose:active {
-			top: 2px !important;
-		}
+        #cboxNext:hover{background-position:-50px -25px;}
+        #cboxClose{display:none;}
+        #cboxClose:hover{background-position:-25px -25px;}
 
-
+/*
+  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
+  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
+  See: http://jacklmoore.com/notes/ie-transparency-problems/
+*/
+.cboxIE #cboxTopLeft,
+.cboxIE #cboxTopCenter,
+.cboxIE #cboxTopRight,
+.cboxIE #cboxBottomLeft,
+.cboxIE #cboxBottomCenter,
+.cboxIE #cboxBottomRight,
+.cboxIE #cboxMiddleLeft,
+.cboxIE #cboxMiddleRight {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+}
 /*rules for the plot target div.  These will be cascaded down to all plot elements according to css rules*/
 .jqplot-target {
     position: relative;
@@ -408,15 +406,15 @@ div.jqplot-noData-container {
 .ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
 
 /*
- * qTip2 - Pretty powerful tooltips - v2.0.1-83-
+ * qTip2 - Pretty powerful tooltips - v2.2.0
  * http://qtip2.com
  *
  * Copyright (c) 2013 Craig Michael Thompson
  * Released under the MIT, GPL licenses
  * http://jquery.org/license
  *
- * Date: Thu Apr 18 2013 05:30 UTC+0000
- * Plugins: tips modal viewport svg imagemap ie6
+ * Date: Fri Nov 29 2013 01:51 EST-0500
+ * Plugins: tips viewport svg modal
  * Styles: basic css3
  */
 .qtip{
@@ -798,12 +796,12 @@ div.jqplot-noData-container {
 }
 
 	.qtip-tipsy .qtip-titlebar{
-		padding: 6px 35px 0 10;
+		padding: 6px 35px 0 10px;
 		background-color: transparent;
 	}
 
 	.qtip-tipsy .qtip-content{
-		padding: 6px 10;
+		padding: 6px 10px;
 	}
 	
 	.qtip-tipsy .qtip-icon{
@@ -1005,8 +1003,8 @@ div.jqplot-noData-container {
 
 #qtip-overlay{
 	position: fixed;
-	left: -10000em;
-	top: -10000em;
+	left: 0; top: 0;
+	width: 100%; height: 100%;
 }
 
 	/* Applied to modals with show.modal.blur set to true */
@@ -1026,12 +1024,8 @@ div.jqplot-noData-container {
 	}
 
 
-
-.qtipmodal-ie6fix{
-	position: absolute !important;
-}
 /***
-Spectrum Colorpicker v1.1.1
+Spectrum Colorpicker v1.2.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
@@ -1044,7 +1038,8 @@ License: MIT
     display:inline-block;
     *display: inline;
     *zoom: 1;
-    z-index: 2147483647;
+    /* https://github.com/bgrins/spectrum/issues/40 */
+    z-index: 9999994;
     overflow: hidden;
 }
 .sp-container.sp-flat {
@@ -1079,6 +1074,12 @@ License: MIT
     left:84%;
     height: 100%;
 }
+
+.sp-clear-enabled .sp-hue {
+    top:33px;
+    height: 77.5%;
+}
+
 .sp-fill {
     padding-top: 80%;
 }
@@ -1090,17 +1091,13 @@ License: MIT
     bottom:0;
 }
 
-.sp-alpha-enabled .sp-top
-{
+.sp-alpha-enabled .sp-top {
     margin-bottom: 18px;
 }
-.sp-alpha-enabled .sp-alpha
-{
+.sp-alpha-enabled .sp-alpha {
     display: block;
 }
-
-.sp-alpha-handle
-{
+.sp-alpha-handle {
     position:absolute;
     top:-4px;
     bottom: -4px;
@@ -1111,9 +1108,7 @@ License: MIT
     background: white;
     opacity: .8;
 }
-
-.sp-alpha
-{
+.sp-alpha {
     display: none;
     position: absolute;
     bottom: -14px;
@@ -1121,12 +1116,30 @@ License: MIT
     left: 0;
     height: 8px;
 }
-.sp-alpha-inner{
+.sp-alpha-inner {
     border: solid 1px #333;
 }
 
+.sp-clear {
+    display: none;
+}
+
+.sp-clear.sp-clear-display {
+    background-position: center;
+}
+
+.sp-clear-enabled .sp-clear {
+    display: block;
+    position:absolute;
+    top:0px;
+    right:0;
+    bottom:0;
+    left:84%;
+    height: 28px;
+}
+
 /* Don't allow text selection */
-.sp-container, .sp-replacer, .sp-preview, .sp-dragger, .sp-slider, .sp-alpha, .sp-alpha-handle, .sp-container.sp-dragging .sp-input, .sp-container button  {
+.sp-container, .sp-replacer, .sp-preview, .sp-dragger, .sp-slider, .sp-alpha, .sp-clear, .sp-alpha-handle, .sp-container.sp-dragging .sp-input, .sp-container button  {
     -webkit-user-select:none;
     -moz-user-select: -moz-none;
     -o-user-select:none;
@@ -1185,7 +1198,6 @@ License: MIT
    Generate 6 divs, line them up, and do two color gradients for each.
    Yes, really.
  */
-
 .sp-1 {
     height:17%;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0000', endColorstr='#ffff00');
@@ -1226,7 +1238,6 @@ License: MIT
     .sp-hue { left: 63%; }
     .sp-fill { padding-top: 60%; }
 }
-
 .sp-dragger {
    border-radius: 5px;
    height: 5px;
@@ -1250,14 +1261,19 @@ License: MIT
     opacity: .8;
 }
 
-/* Basic display options (colors, fonts, global widths) */
+/*
+Theme authors:
+Here are the basic themeable display options (colors, fonts, global widths).
+See http://bgrins.github.io/spectrum/themes/ for instructions.
+*/
+
 .sp-container {
     border-radius: 0;
     background-color: #ECECEC;
     border: solid 1px #f0c49B;
     padding: 0;
 }
-.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue
+.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear
 {
     font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
     -webkit-box-sizing: border-box;
@@ -1269,7 +1285,7 @@ License: MIT
 {
     margin-bottom: 3px;
 }
-.sp-color, .sp-hue
+.sp-color, .sp-hue, .sp-clear
 {
     border: solid 1px #666;
 }
@@ -1354,6 +1370,10 @@ License: MIT
     margin:0;
 }
 
+.sp-initial .sp-clear-display {
+    background-position: center;
+}
+
 /* Buttons */
 .sp-button-container {
     float: right;
@@ -1426,7 +1446,6 @@ License: MIT
   background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
   background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
   background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
   background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
   border: 1px solid #ccc;
   border-bottom: 1px solid #bbb;
@@ -1445,7 +1464,6 @@ License: MIT
     background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
     background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
     background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
     background-image: linear-gradient(to bottom, #dddddd, #bbbbbb);
     border: 1px solid #bbb;
     border-bottom: 1px solid #999;
@@ -1511,6 +1529,13 @@ License: MIT
 {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAMdJREFUOE+tkgsNwzAMRMugEAahEAahEAZhEAqlEAZhEAohEAYh81X2dIm8fKpEspLGvudPOsUYpxE2BIJCroJmEW9qJ+MKaBFhEMNabSy9oIcIPwrB+afvAUFoK4H0tMaQ3XtlrggDhOVVMuT4E5MMG0FBbCEYzjYT7OxLEvIHQLY2zWwQ3D+9luyOQTfKDiFD3iUIfPk8VqrKjgAiSfGFPecrg6HN6m/iBcwiDAo7WiBeawa+Kwh7tZoSCGLMqwlSAzVDhoK+6vH4G0P5wdkAAAAASUVORK5CYII=);
 }
+
+.sp-clear-display {
+    background-repeat:no-repeat;
+    background-position: center;
+    background-image: url(data:image/gif;base64,R0lGODlhFAAUAPcAAAAAAJmZmZ2dnZ6enqKioqOjo6SkpKWlpaampqenp6ioqKmpqaqqqqurq/Hx8fLy8vT09PX19ff39/j4+Pn5+fr6+vv7+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAAUABQAAAihAP9FoPCvoMGDBy08+EdhQAIJCCMybCDAAYUEARBAlFiQQoMABQhKUJBxY0SPICEYHBnggEmDKAuoPMjS5cGYMxHW3IiT478JJA8M/CjTZ0GgLRekNGpwAsYABHIypcAgQMsITDtWJYBR6NSqMico9cqR6tKfY7GeBCuVwlipDNmefAtTrkSzB1RaIAoXodsABiZAEFB06gIBWC1mLVgBa0AAOw==);
+}
+
 
 .tool-container {
 	background-color: #d0cbcb;
