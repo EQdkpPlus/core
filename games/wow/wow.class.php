@@ -841,6 +841,122 @@ if(!class_exists('wow')) {
 			}
 			return $a_raidprogress;
 		}
+		
+		public function cronjobOptions(){
+			$arrOptions = array(
+				'sync_ranks'	=> array(
+						'lang'	=> 'Sync Ranks',
+						'name'	=> 'sync_ranks',
+						'type'	=> 'radio',
+				),
+			);
+			return $arrOptions;
+		}
+		
+		public function cronjob($arrParams){
+			$blnSyncRanks = ((int)$arrParams['sync_ranks'] == 1) ? true : false;
+			
+			$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
+			
+			//Guildimport
+			$guilddata	= $this->game->obj['armory']->guild($this->config->get('guildtag'), $this->config->get('uc_servername'), true);
+			if(!isset($guilddata['status'])){
+				foreach($guilddata['members'] as $guildchars){
+					$jsondata = array(
+							'thumbnail'	=> $guildchars['character']['thumbnail'],
+							'name'		=> $guildchars['character']['name'],
+							'class'		=> $guildchars['character']['class'],
+							'race'		=> $guildchars['character']['race'],
+							'level'		=> $guildchars['character']['level'],
+							'gender'	=> $guildchars['character']['gender'],
+							'rank'		=> $guildchars['rank'],
+					);
+					
+					//Build Rank ID
+					$intRankID = $this->pdh->get('rank', 'default', array());
+					if ($blnSyncRanks){
+						$arrRanks = $this->pdh->get('rank', 'id_list');
+						$inRankID = (int)$jsondata['rank'];
+						if (isset($arrRanks[$inRankID])) $intRankID = $arrRanks[$inRankID];
+					}
+					
+					//char available
+					if(in_array($jsondata['name'], $this->pdh->get('member', 'names', array()))){
+							
+						//Sync Rank
+						if ($blnSyncRanks){
+							$member_id = $this->pdh->get('member', 'id', array($jsondata['name']));
+							if ($member_id) {
+								$dataarry = array(
+									'rankid'	=> $intRankID,
+								);
+								$myStatus = $this->pdh->put('member', 'addorupdate_member', array($member_id, $dataarry));
+							}
+						}
+							
+					} else {
+					
+						//Create new char
+						$dataarry = array(
+								'name'		=> $jsondata['name'],
+								'lvl'		=> $jsondata['level'],
+								'classid'	=> $this->game->obj['armory']->ConvertID(intval($jsondata['class']), 'int', 'classes'),
+								'raceid'	=> $this->game->obj['armory']->ConvertID(intval($jsondata['class']), 'int', 'races'),
+								'rankid'	=> $intRankID,
+						);
+						$myStatus = $this->pdh->put('member', 'addorupdate_member', array(0, $dataarry));
+					
+						// reset the cache
+						$this->pdh->process_hook_queue();
+					}
+				}
+			}
+			
+			//Guildupdate
+
+			$members	= $this->pdh->get('member', 'names', array());
+			if(is_array($members)){
+				asort($members);
+				foreach($members as $membername){
+					if($membername != ''){
+						$charid = $this->pdh->get('member', 'id', array($membername));
+						if($charid){
+							$chardata	= $this->game->obj['armory']->character($membername, $this->config->get('uc_servername'), true);
+							
+							if(!isset($chardata['status'])){
+								$errormsg	= '';
+								$charname	= $chardata['name'];
+							
+								// insert into database
+								$info = $this->pdh->put('member', 'addorupdate_member', array($charid, array(
+										'name'				=> $membername,
+										'lvl'				=> $chardata['level'],
+										'gender'			=> $this->game->obj['armory']->ConvertID($chardata['gender'], 'int', 'gender'),
+										'raceid'			=> $this->game->obj['armory']->ConvertID($chardata['race'], 'int', 'races'),
+										'classid'			=> $this->game->obj['armory']->ConvertID($chardata['class'], 'int', 'classes'),
+										'guild'				=> $chardata['guild']['name'],
+										'last_update'		=> ($chardata['lastModified']/1000),
+										'prof1_name'		=> $this->game->get_id('professions', $chardata['professions']['primary'][0]['name']),
+										'prof1_value'		=> $chardata['professions']['primary'][0]['rank'],
+										'prof2_name'		=> $this->game->get_id('professions', $chardata['professions']['primary'][1]['name']),
+										'prof2_value'		=> $chardata['professions']['primary'][1]['rank'],
+										'skill_1'			=> $this->game->obj['armory']->ConvertTalent($chardata['talents'][0]['spec']['icon']),
+										'skill_2'			=> $this->game->obj['armory']->ConvertTalent($chardata['talents'][1]['spec']['icon']),
+										'health_bar'		=> $chardata['stats']['health'],
+										'second_bar'		=> $chardata['stats']['power'],
+										'second_name'		=> $chardata['stats']['powerType'],
+								), 0));
+							}
+						}
+					}
+				}
+			}
+			
+			
+			
+			
+			$this->pdh->process_hook_queue();
+		}
 	}#class
 }
 ?>

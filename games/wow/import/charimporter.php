@@ -119,7 +119,7 @@ class charImporter extends page_generic {
 					i=0;
 	
 				if (chardataArry.length >= i){
-					$.post("charimporter.php?ajax_massupdate=true&totalcount="+chardataArry.length+"&actcount="+i, chardataArry[i], function(data){
+					$.post("charimporter.php'.$this->SID.'&ajax_massupdate=true&totalcount="+chardataArry.length+"&actcount="+i, chardataArry[i], function(data){
 						chardata = $.parseJSON(data);
 						if(chardata.success == "imported"){
 							successdata = "<span style=\"color:green;\">'.$this->game->glang('uc_armory_updated').'</span>";
@@ -132,7 +132,7 @@ class charImporter extends page_generic {
 						if(chardataArry.length > i+1){
 							getData(i+1);
 						}else{
-							$.post("charimporter.php?ajax_mudate=true");
+							$.post("charimporter.php'.$this->SID.'&ajax_mudate=true");
 							$("#controlbox").html("<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"fa fa-check fa-4x pull-left\"></i> '.$this->game->glang('uc_cupdt_header_fnsh').'</div></dl>").fadeIn("slow");
 							return;
 						}

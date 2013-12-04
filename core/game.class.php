@@ -617,6 +617,8 @@ class game extends gen_class {
 	public function gameVersion(){
 		return $this->gameinfo()->version;
 	}
+	
+	
 
 	/**
 	 * Add the profile fields for selected game
@@ -735,6 +737,24 @@ class game extends gen_class {
 		$this->load_default_roles();
 		if (!$install) {$this->tpl->parse_cssfile();}
 		$this->pdh->process_hook_queue();
+	}
+	
+	/**
+	 * Will be executed from the Game Cronjob
+	 *
+	 * @return string
+	 */
+	public function cronjob($params){
+		return $this->gameinfo()->cronjob($params);
+	}
+	
+	/**
+	 * Options for the Game Cronjob
+	 *
+	 * @return string
+	 */
+	public function cronjobOptions(){
+		return $this->gameinfo()->cronjobOptions();
 	}
 }
 
@@ -932,6 +952,24 @@ if(!class_exists('game_generic')) {
 				$this->icons_checked[$icon] = true;
 				$this->icons[] = $icon;
 			}
+		}
+		
+		/**
+		 * Will be executed from the Game Cronjob
+		 *
+		 * @return string
+		 */
+		public function cronjob($params = array()){
+			return false;
+		}
+		
+		/**
+		 * Options for the Game Cronjob
+		 *
+		 * @return string
+		 */
+		public function cronjobOptions(){
+			return false;
 		}
 
 		public abstract function get_OnChangeInfos($install=false);
