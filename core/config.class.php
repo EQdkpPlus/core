@@ -157,7 +157,7 @@ class config extends gen_class {
 				
 				$this->db->prepare("REPLACE INTO __backup_cnf :p")->set(array(
 					'config_name'	=> $changed['k'],
-					'config_value'	=> addslashes(is_array($changed['v']) ? serialize($changed['v']) : $changed['v']),
+					'config_value'	=> (is_array($changed['v'])) ? serialize($changed['v']) : $changed['v'],
 					'config_plugin'	=> $changed['p']
 				))->execute();
 			}
@@ -205,7 +205,7 @@ class config extends gen_class {
 					if(strlen(trim($pname)) > 0){
 						$data[] = array(
 							'config_name'	=> $pname,
-							'config_value'	=> addslashes(is_array($pvalue) ? serialize($pvalue) : $pvalue),
+							'config_value'	=> (is_array($pvalue)) ? serialize($pvalue) : $pvalue,
 							'config_plugin'	=> $name
 						);
 					}
