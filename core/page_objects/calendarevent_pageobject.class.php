@@ -702,12 +702,6 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'230', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('DeleteGuest', $this->user->lang('raidevent_raid_guest_del'), array('custom_js'=>"document.guestp.submit();", 'message'=>$this->user->lang('raidevent_raid_guest_delmsg'), 'withid'=>'id', 'onlickjs'=>'$("#guestid_field").val(id);', 'buttontxt'=>$this->user->lang('delete')), 'confirm');
 
-		// the status drodown
-		$status_dropdown = $this->raidstatus;
-		if(isset($status_dropdown[0])){
-			unset($status_dropdown[0]);
-		}
-
 		// already signed in message
 		if($presel_charid > 0){
 			$sstat_mname = $this->pdh->get('member', 'name', array($presel_charid));
@@ -732,6 +726,12 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Collapse('#toogleRaidcalSignin');
 		
 		$mysignedstatus		= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->mystatus['member_id']));
+		// the status drodown
+		$status_dropdown = $this->raidstatus;
+		if(isset($status_dropdown[0]) && $mysignedstatus != 0){
+			unset($status_dropdown[0]);
+		}
+
 		$this->tpl->assign_vars(array(
 			// error messages
 			'RAID_CLOSED'			=> ($eventdata['closed'] == '1') ? true : false,
