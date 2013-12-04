@@ -179,12 +179,13 @@ class addevent extends page_generic {
 			$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid));
 			$this->email_newraid($raidid);
 		}else{
+			$withtime = ($this->in->get('allday') == '1') ? 0 : 1;
 			$this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id'),
 				$this->in->get('eventname'),
 				$this->user->data['user_id'],
-				$this->time->fromformat($this->in->get('startdate'), 1),
-				$this->time->fromformat($this->in->get('enddate'), 1),
+				$this->time->fromformat($this->in->get('startdate'), $withtime),
+				$this->time->fromformat($this->in->get('enddate'), $withtime),
 				$this->in->get('repeating'),
 				$this->in->get('note'),
 				$this->in->get('allday'),
