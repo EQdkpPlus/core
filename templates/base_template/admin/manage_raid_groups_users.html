@@ -1,0 +1,114 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_raid_groups.php{SID}">{L_manage_raid_groups}</a></li>
+		<li class="current"><a>{GROUP_NAME}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_raid_groups}: {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></h1>
+	</div>
+
+		<div id="members">
+			<table width="100%" border="0" cellspacing="1" cellpadding="2" id="raid_groups_table" class="colorswitch">
+				<tr>
+					<th width="20"><input type="checkbox" id="selall_usergr" /></th>
+					<th>
+						<a href="{U_MANAGE_USERS}&amp;o=0.0">
+							<span class="down_arrow{RED00}"></span>
+						</a> 
+						<a href="{U_MANAGE_USERS}&amp;o=0.1">
+							<span class="up_arrow{RED01}"></span>
+						</a> 
+						{L_username}
+					</th>
+					<th>{L_email}</th>
+					<th>{L_last_visit}</th>
+					<th>{L_active}</th>
+					<th>{L_online}</th>
+				</tr>
+				<tr>
+					<th align="center" colspan="6">{L_grpleaders}</th>
+				</tr>
+				<!-- BEGIN user_row_grpleader -->
+				<tr>
+					<td>
+					<!-- IF S_USERGROUP_ADMIN -->
+						<!-- IF not user_row_grpleader.S_UNDELETABLE --><input type="checkbox" name="group_raid[{user_row_grpleader.ID}]" value="{user_row_grpleader.ID}" class="usercheckbox" />
+						<!-- ENDIF -->
+					<!-- ENDIF -->
+					</td>
+					<td>
+						<a href="manage_users.php{SID}&amp;u={user_row_grpleader.ID}">{user_row_grpleader.NAME}</a>
+					</td>
+					<td>{user_row_grpleader.EMAIL}</td>
+					<td>{user_row_grpleader.LAST_VISIT}</td>
+					<td>{user_row_grpleader.ACTIVE}</td>
+					<td>{user_row_grpleader.ONLINE}</td>
+				</tr>
+				<!-- END user_row_grpleader -->
+				
+				
+				<tr>
+					<th colspan="6" />{L_group_members}</th>
+				</tr>
+				<!-- BEGIN user_row -->
+				<tr>
+					<td><!-- IF not user_row.S_UNDELETABLE --><input type="checkbox" name="group_raid[{user_row.ID}]" value="{user_row.ID}" class="usercheckbox" /><!-- ENDIF --></td>
+					<td>
+						<a href="manage_users.php{SID}&amp;u={user_row.ID}">{user_row.NAME}</a>
+					</td>
+					<td>{user_row.EMAIL}</td>
+					<td>{user_row.LAST_VISIT}</td>
+					<td>{user_row.ACTIVE}</td>
+					<td>{user_row.ONLINE}</td>
+				</tr>
+				<!-- END user_row -->
+				<tr>
+					<th colspan="6">
+						{BUTTON_MENU} 
+					<input type="submit" name="del_group_users" value="{L_delete_selected_from_group}" class="mainoption bi_delete" id="del_group_users" style="display:none;" /> 
+					<input type="submit" name="add_grpleader" value="{L_add_grpleader}" class="mainoption bi_new" id="add_grpleader"  style="display:none;"/>
+					<input type="submit" name="remove_grpleader" value="{L_remove_grpleader}" class="mainoption bi_new" id="remove_grpleader"  style="display:none;"/>
+					</th>
+				</tr>
+				
+				</table>
+				<br />
+				<fieldset class="settings mediumsettings" class="settings">
+						<legend>{L_add_user_to_group}</legend>
+						{ADD_USER_DROPDOWN}
+						<br /><br />
+						<button class="mainoption" type="submit" name="add_group_users" id="add_group_users"><i class="fa fa-plus"></i>{L_add_selected_to_group}</button>
+				</fieldset>
+		</div>
+	<div class="contentFooter">
+		<button class="mainoption" type="button" name="back" onclick="window.location='manage_raid_groups.php{SID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
+	</div>
+
+{CSRF_TOKEN}
+</form>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$('.changepermcolor').change(function() {
+		if($(this).prop('checked')){
+			$('#span_'+this.id).attr('class', 'positive');
+		}else{
+			$('#span_'+this.id).attr('class', 'negative');
+		}
+	});
+	
+	$("#selall_usergr").click(function(){
+		var checked_status = this.checked;
+		$(".usercheckbox").each(function(){
+			$(this).prop("checked", checked_status).trigger('change');
+		});
+	});
+});
+//]]>
+</script>
