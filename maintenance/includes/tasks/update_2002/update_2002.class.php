@@ -62,9 +62,9 @@ class update_2002 extends sql_update_task {
 					`groups_raid_sortid` smallint(5) unsigned NOT NULL DEFAULT '0',
 					PRIMARY KEY (`groups_raid_id`)
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
-			2 => "CREATE TABLE `__groups_raid_users` (
+			2 => "CREATE TABLE `__groups_raid_members` (
 					`group_id` int(22) NOT NULL,
-					`user_id` int(22) NOT NULL,
+					`member_id` int(22) NOT NULL,
 					`grpleader` int(1) NOT NULL DEFAULT '0'
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			3 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`)

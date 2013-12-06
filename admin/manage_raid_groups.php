@@ -31,9 +31,9 @@ class Manage_Raid_Groups extends page_generic {
 		$this->user->check_auths(array('a_usergroups_man', 'a_usergroups_grpleader'), 'or');
 		
 		$handler = array(
-			'save'				=> array('process' => 'user_group_save',			'csrf'=>true),
-			'del_group_users'	=> array('process' => 'user_group_users_del',		'csrf'=>true),
-			'add_group_users'	=> array('process' => 'user_group_users_save',		'csrf'=>true),
+			'save'				=> array('process' => 'raid_group_save',			'csrf'=>true),
+			'del_group_members'	=> array('process' => 'raid_group_members_del',		'csrf'=>true),
+			'add_group_members'	=> array('process' => 'raid_group_members_save',	'csrf'=>true),
 			'add_grpleader'		=> array('process' => 'process_add_grpleader',		'csrf'=>true),
 			'remove_grpleader'	=> array('process' => 'process_remove_grpleader',	'csrf'=>true),
 			'g'					=> array('process' => 'edit'),
@@ -43,17 +43,17 @@ class Manage_Raid_Groups extends page_generic {
 	}
 	
 	//Delete User of a Group
-	public function user_group_users_del(){
+	public function raid_group_members_del(){
 		$intGroupID = $this->in->get('g', 0);
 		
-		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_users', 'is_grpleader', array($this->user->id, $intGroupID))){
+		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $intGroupID))){
 			$this->user->check_auth('a_usergroups_man');
 		}
 	
 		$members = $this->in->getArray('group_raid', 'int');
 		if (count($members) > 0){
-			$this->pdh->put('raid_groups_users', 'delete_users_from_group', array($members, $intGroupID));
-			$arrMemberNames = $this->pdh->aget('user', 'name', 0, array($members));
+			$this->pdh->put('raid_groups_members', 'delete_members_from_group', array($members, $intGroupID));
+			$arrMemberNames = $this->pdh->aget('member', 'name', 0, array($members));
 			$arrChanged["{L_USER}"] = implode(', ', $arrMemberNames);
 			$this->logs->add('action_raidgroups_removed_user', $arrChanged, $intGroupID, $this->pdh->get('raid_groups', 'name', array($intGroupID)));
 		}
@@ -62,7 +62,7 @@ class Manage_Raid_Groups extends page_generic {
 	}
 	
 	//Add User to a Group
-	public function user_group_users_save(){
+	public function raid_group_members_save(){
 		$intGroupID = $this->in->get('g', 0);
 		
 		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_users', 'is_grpleader', array($this->user->id, $intGroupID))){
@@ -73,9 +73,9 @@ class Manage_Raid_Groups extends page_generic {
 		if ($members[0] == 0){unset($members[0]);};
 		
 		if (count($members) > 0){
-			$this->pdh->put('raid_groups_users', 'add_users_to_group', array($members, $intGroupID));
+			$this->pdh->put('raid_groups_members', 'add_members_to_group', array($members, $intGroupID));
 			
-			$arrMemberNames = $this->pdh->aget('user', 'name', 0, array($members));
+			$arrMemberNames = $this->pdh->aget('member', 'name', 0, array($members));
 			$arrChanged["{L_USER}"] = implode(', ', $arrMemberNames);
 			$this->logs->add('action_raidgroups_added_user', $arrChanged, $intGroupID, $this->pdh->get('raid_groups', 'name', array($intGroupID)));
 		}
@@ -89,7 +89,7 @@ class Manage_Raid_Groups extends page_generic {
 		
 		$members = $this->in->getArray('group_raid', 'int');
 		if (count($members) > 0){
-			$this->pdh->put('raid_groups_users', 'add_grpleader', array($members, $this->in->get('g')));
+			$this->pdh->put('raid_groups_members', 'add_grpleader', array($members, $this->in->get('g')));
 		}
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
 		$this->edit($message);
@@ -100,14 +100,14 @@ class Manage_Raid_Groups extends page_generic {
 		
 		$members = $this->in->getArray('group_raid', 'int');
 		if (count($members) > 0){
-			$this->pdh->put('raid_groups_users', 'remove_grpleader', array($members, $this->in->get('g')));
+			$this->pdh->put('raid_groups_members', 'remove_grpleader', array($members, $this->in->get('g')));
 		}
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
 		$this->edit($message);
 	}
 	
-	//Save the user-Groups
-	public function user_group_save() {
+	//Save the raid-Groups
+	public function raid_group_save() {
 		$this->user->check_auth('a_usergroups_man');
 		$retu = array();
 		$group_post = $this->get_post();
@@ -191,10 +191,10 @@ class Manage_Raid_Groups extends page_generic {
 				'ID'	=> $id,
 				'NAME'	=> $name,
 				'DESC'	=> $this->pdh->get('raid_groups', 'desc', array($id)),
-				'USER_COUNT'	=> $this->pdh->get('raid_groups_users', 'groupcount', array($id)),
+				'USER_COUNT'	=> $this->pdh->get('raid_groups_members', 'groupcount', array($id)),
 				'S_DELETABLE' => ($this->pdh->get('raid_groups', 'deletable', array($id))) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('raid_groups', 'standard', array($id))) ? 'checked="checked"' : '',
-				'S_IS_GRPLEADER' => $this->pdh->get('raid_groups_users', 'is_grpleader', array($this->user->id, $id)),
+				'S_IS_GRPLEADER' => $this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $id)),
 			));
 			$key++;
 			$new_id = ($id >= $new_id) ? $id+1 : $new_id;
@@ -235,13 +235,13 @@ class Manage_Raid_Groups extends page_generic {
 		$red = 'RED'.str_replace('.', '', $order);
 		
 		//Get Users in Group
-		$members = $this->pdh->get('raid_groups_users', 'user_list', array($groupID));
+		$members = $this->pdh->get('raid_groups_members', 'member_list', array($groupID));
 		
 		//Get Group-name
 		$group_name = $this->pdh->get('raid_groups', 'name', array($groupID));	
 		
 		//Get all Userdata
-		$sql = 'SELECT u.user_id, u.username, u.user_email, u.user_lastvisit, u.user_active, s.session_id
+		/*$sql = 'SELECT u.user_id, u.username, u.user_email, u.user_lastvisit, u.user_active, s.session_id
 				FROM (__users u
 				LEFT JOIN __sessions s
 				ON u.user_id = s.session_user_id)
@@ -253,40 +253,33 @@ class Manage_Raid_Groups extends page_generic {
 			while($row = $user_query->fetchAssoc()){
 				$user_data[$row['user_id']] = $row;
 			}
-		}
-		
+		}*/
+		$member_data = $this->pdh->get('member', 'id_list');
 		$not_in = array();
 		
 		//Bring all members from Group to template
-		foreach($user_data as $key => $elem) {
-			if (in_array($key, $members)){
-				$user_online = ( !empty($elem['session_id']) ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
-				$user_active = ( $elem['user_active'] == '1' ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
-
-				$row = ($this->pdh->get('raid_groups_users', 'is_grpleader', array($elem['user_id'], $groupID))) ? '_grpleader' : '';
+		foreach($member_data as $memberid) {
+			if (in_array($memberid, $members)){
+				$row = ($this->pdh->get('raid_groups_users', 'is_grpleader', array($memberid, $groupID))) ? '_grpleader' : '';
 
 				$this->tpl->assign_block_vars('user_row'.$row, array(
-					'ID'			=> $elem['user_id'],
-					'NAME'			=> sanitize($elem['username']),
-					'EMAIL'			=> ( !empty($elem['user_email']) ) ? '<a href="javascript:usermailer('.$elem['user_id'].');">'.$this->crypt->decrypt($elem['user_email']).'</a>' : '',
-					'LAST_VISIT'	=> $this->time->user_date($elem['user_lastvisit'], true),
-					'ACTIVE'		=> $user_active,
-					'ONLINE'		=> $user_online,
+					'ID'			=> $memberid,
+					'NAME'			=> sanitize($this->pdh->get('member', 'name', array($memberid))),
+					'CLASS'			=> 'Klasse',
+					'ACTIVE'		=> ($this->pdh->get('member', 'active', array($memberid)) == '1') ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>',
 				));
 			} else {
-				$not_in[$key] = $elem['username'];
+				$not_in[$memberid] = $this->pdh->get('member', 'name', array($memberid));
 			}
 		}
-		
-		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
-		
+
 		$arrMenuItems = array(
 			0 => array(
 				'name'	=> $this->user->lang('delete_selected_from_group'),
 				'type'	=> 'button', //link, button, javascript
 				'icon'	=> 'fa-trash-o',
 				'perm'	=> true,
-				'link'	=> '#del_group_users',
+				'link'	=> '#del_group_members',
 			),
 			1 => array(
 				'name'	=> $this->user->lang('add_grpleader'),
