@@ -51,8 +51,6 @@ class Manage_Raid_Groups extends page_generic {
 		}
 	
 		$members = $this->in->getArray('group_raid', 'int');
-		if ($intGroupID == 2){unset($members[$this->user->id]);}
-		
 		if (count($members) > 0){
 			$this->pdh->put('raid_groups_users', 'delete_users_from_group', array($members, $intGroupID));
 			$arrMemberNames = $this->pdh->aget('user', 'name', 0, array($members));
@@ -119,7 +117,7 @@ class Manage_Raid_Groups extends page_generic {
 			foreach($group_post as $key=>$group) {
 				$standard = ($this->in->get('raid_groups_standard') == $group['id']) ? 1 : 0;
 				$func = (in_array($group['id'], $id_list)) ? 'update_grp' : 'add_grp';
-				$retu[] = $this->pdh->put('raid_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $group['hide'], $key));
+				$retu[] = $this->pdh->put('raid_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $key));
 				$names[] = $group['name'];
 				$add_name = (in_array($group['id'], $id_list)) ? '' : $group['name'];
 			}
@@ -195,9 +193,7 @@ class Manage_Raid_Groups extends page_generic {
 				'DESC'	=> $this->pdh->get('raid_groups', 'desc', array($id)),
 				'USER_COUNT'	=> $this->pdh->get('raid_groups_users', 'groupcount', array($id)),
 				'S_DELETABLE' => ($this->pdh->get('raid_groups', 'deletable', array($id))) ? true : false,
-				'S_NO_STANDARD' => ($id == 2 || $id == 3) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('raid_groups', 'standard', array($id))) ? 'checked="checked"' : '',
-				'HIDE'	=> ($this->pdh->get('raid_groups', 'hide', array($id))) ? 'checked="checked"' : '',
 				'S_IS_GRPLEADER' => $this->pdh->get('raid_groups_users', 'is_grpleader', array($this->user->id, $id)),
 			));
 			$key++;
@@ -276,7 +272,6 @@ class Manage_Raid_Groups extends page_generic {
 					'LAST_VISIT'	=> $this->time->user_date($elem['user_lastvisit'], true),
 					'ACTIVE'		=> $user_active,
 					'ONLINE'		=> $user_online,
-					'S_UNDELETABLE'	=> ($groupID == 2 && $elem == $this->user->data['user_id']) ? true : false,
 				));
 			} else {
 				$not_in[$key] = $elem['username'];
@@ -330,14 +325,13 @@ class Manage_Raid_Groups extends page_generic {
 
 	private function get_post() {
 		$grps = array();
-		if(is_array($this->in->getArray('raid_groups', 'string'))) {			
+		if(is_array($this->in->getArray('raid_groups', 'string'))) {
 			foreach($this->in->getArray('raid_groups', 'string') as $key => $grp) {
 				if(isset($grp['id']) AND $grp['id'] AND !empty($grp['name'])) {
 					$grps[] = array(
 						'id'		=> $this->in->get('raid_groups:'.$key.':id',0),
 						'name'		=> $this->in->get('raid_groups:'.$key.':name',''),
 						'desc'		=> $this->in->get('raid_groups:'.$key.':desc',''),
-						'hide'		=> $this->in->get('raid_groups:'.$key.':hide',0),
 						'deletable'	=> $this->in->get('raid_groups:'.$key.':deletable',false)
 					);
 				}
@@ -358,7 +352,6 @@ class Manage_Raid_Groups extends page_generic {
 						'id'		=> $this->in->get('raid_groups:'.$key.':id',0),
 						'name'		=> $this->in->get('raid_groups:'.$key.':name',''),
 						'desc'		=> $this->in->get('raid_groups:'.$key.':desc',''),
-						'hide'		=> $this->in->get('raid_groups:'.$key.':hide',0),
 						'deletable'	=> $this->in->get('raid_groups:'.$key.':deletable',false)
 					);
 				}

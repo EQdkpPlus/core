@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 			parent::__construct();
 		}
 
-		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $sortid=0,$deletable=1) {
+		public function add_grp($id, $name, $desc='', $standard=0, $sortid=0,$deletable=1) {
 			
 			$arrSet = array(
 				'groups_raid_id' 		=> $id,
@@ -39,7 +39,6 @@ if(!class_exists('pdh_w_raid_groups')) {
 				'groups_raid_desc'		=> $desc,
 				'groups_raid_deletable' => $deletable,
 				'groups_raid_default'	=> $standard,
-				'groups_raid_hide'		=> $hide,
 				'groups_raid_sortid'	=> $sortid,
 			);
 			
@@ -52,12 +51,11 @@ if(!class_exists('pdh_w_raid_groups')) {
 			return true;
 		}
 
-		public function update_grp($id, $name='', $desc='', $standard=0, $hide=0, $sortid=0) {
+		public function update_grp($id, $name='', $desc='', $standard=0, $sortid=0) {
 			$old = array();
 			$old['name']		= $this->pdh->get('raid_groups', 'name', array($id));
 			$old['desc']		= $this->pdh->get('raid_groups', 'desc', array($id));
 			$old['standard']	= (int)$this->pdh->get('raid_groups', 'standard', array($id));
-			$old['hide']		= (int)$this->pdh->get('raid_groups', 'hide', array($id));
 			$old['sortid']		= (int)$this->pdh->get('raid_groups', 'sortid', array($id));
 			$changes = false;
 			
@@ -73,11 +71,10 @@ if(!class_exists('pdh_w_raid_groups')) {
 
 			if ($changes) {
 				$arrSet = array(
-					'groups_raid_name' => $name,
-					'groups_raid_desc' => $desc,
-					'groups_raid_default' => $standard,
-					'groups_raid_hide' => $hide,
-					'groups_raid_sortid' => $sortid,
+					'groups_raid_name'		=> $name,
+					'groups_raid_desc'		=> $desc,
+					'groups_raid_default'	=> $standard,
+					'groups_raid_sortid'	=> $sortid,
 				);
 				
 				$objQuery = $this->db->prepare("UPDATE __groups_raid :p WHERE groups_raid_id=?")->set($arrSet)->execute($id);
@@ -100,7 +97,6 @@ if(!class_exists('pdh_w_raid_groups')) {
 
 				if($objQuery) {
 					$this->pdh->put('raid_groups_users', 'delete_all_user_from_group', $id);
-					//$this->db->prepare("DELETE FROM __auth_groups WHERE group_id =?")->execute($id);
 					$this->pdh->enqueue_hook('raid_groups_update');
 					$this->log_insert('action_raidgroups_deleted', array(), $id, $old['name']);
 					return true;

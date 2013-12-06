@@ -51,7 +51,6 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 					$this->raid_groups[$row['groups_raid_id']]['desc']		= $row['groups_raid_desc'];
 					$this->raid_groups[$row['groups_raid_id']]['deletable']	= $row['groups_raid_deletable'];
 					$this->raid_groups[$row['groups_raid_id']]['default']	= $row['groups_raid_default'];
-					$this->raid_groups[$row['groups_raid_id']]['hide']		= $row['groups_raid_hide'];
 					$this->raid_groups[$row['groups_raid_id']]['sortid']	= $row['groups_raid_sortid'];
 					if ($row['groups_raid_default'] == 1){
 						$this->raid_standard_group = $row['groups_raid_id'];
@@ -60,17 +59,8 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 			}
 		}
 
-		public function get_id_list($hide = false){
-			if (!$hide){
-				return array_keys($this->raid_groups);
-			} else {
-				foreach ($this->raid_groups as $key=>$value){
-					if ($value['hide'] != 1){
-						$out[$key] = $key;
-					}
-				}
-				return $out;
-			}
+		public function get_id_list(){
+			return array_keys($this->raid_groups);
 		}
 
 		public function get_data($groups_raid_id){
@@ -93,10 +83,6 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 			return $this->raid_groups[$groups_raid_id]['default'];
 		}
 
-		public function get_hide($groups_raid_id){
-			return $this->raid_groups[$groups_raid_id]['hide'];
-		}
-		
 		public function get_sortid($groups_raid_id){
 			return $this->raid_groups[$groups_raid_id]['sortid'];
 		}
@@ -107,6 +93,10 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 			} else {
 				return 4;
 			}
+		}
+
+		public function get_groups_enabled(){
+			return (is_array($this->raid_groups) && count($this->raid_groups) > 1) ? true : false;
 		}
 	}//end class
 }//end if

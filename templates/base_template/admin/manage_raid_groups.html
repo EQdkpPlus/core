@@ -92,7 +92,6 @@
 			<th>{L_description}</th>
 			<th width="50" class="nowrap">{L_group_members}</th>
 			<th>{L_default_group}</th>
-			<th>{L_hide}</th>
 		</tr>
 		</thead>
 		<tbody class="add_container">
@@ -109,8 +108,7 @@
 			<td><input type="text" name="raid_groups[{raid_groups.KEY}][name]" size="40" maxlength="50" value="{raid_groups.NAME}" class="maininput" style="width:95%" /></td>    
 			<td><input type="text" name="raid_groups[{raid_groups.KEY}][desc]" size="50" maxlength="75" value="{raid_groups.DESC}" class="maininput" style="width:95%" /></td>
 			<td>{raid_groups.USER_COUNT}</td>
-			<td width="50" class="nowrap"><!-- IF not raid_groups.S_NO_STANDARD --><input type="radio" value="{raid_groups.ID}" name="raid_groups_standard" {raid_groups.STANDARD} /><!-- ENDIF --></td>
-			<td><input type="checkbox" value="1" name="raid_groups[{raid_groups.KEY}][hide]" {raid_groups.HIDE} />&nbsp;</td>
+			<td width="50" class="nowrap"><input type="radio" value="{raid_groups.ID}" name="raid_groups_standard" {raid_groups.STANDARD} /></td>
 		</tr>
 		<!-- END raid_groups -->
 		</tbody>
@@ -133,7 +131,6 @@
 			<td><input type="text" name="raid_groups[KEY][desc]" size="50" maxlength="75" value="DESC" class="maininput" style="width:95%" /></td>
 			<td></td>
 			<td width="50" class="nowrap"></td>
-			<td><input type="checkbox" value="1" name="raid_groups[KEY][hide]" checked="checked"/></td>
 		</tr>
 	</table>
 	
