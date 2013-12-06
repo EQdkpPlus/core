@@ -49,6 +49,7 @@ class sql_update extends task {
 		$this->calling_update['code'] = $calling_task[0];
 		$this->calling_update['desc'] = $calling_task[1];
 		$this->calling_update['version'] = $calling_task[2];
+		$this->calling_update['ext_version'] = $calling_task[5];
 		$this->plugin_path = $calling_task[3];
 		$this->calling_update['name'] = $calling_task[4];
 		$this->get_needed_updates($all);
@@ -76,7 +77,7 @@ class sql_update extends task {
 			}
 			$output .= "</ul><input type='submit' name='start_sql_update' value='".$this->user->lang('start_update')."' class=\"mainoption\"/><br /><br />";
 		}
-		$output .= '<b>'.$this->user->lang('only_this_update')."</b></br><ul><li>".$this->calling_update['version']." - ".$this->calling_update['desc']."</li></ul><input type='submit' name='single_update' value='".$this->calling_update['name']."' class=\"mainoption\"/><input type='hidden' name='single_update_code' value='".$this->calling_update['code']."' />";
+		$output .= '<b>'.$this->user->lang('only_this_update')."</b></br><ul><li>".(($this->calling_update['ext_version']) ? $this->calling_update['ext_version'] : $this->calling_update['version'])." - ".$this->calling_update['desc']."</li></ul><input type='submit' name='single_update' value='".$this->calling_update['name']."' class=\"mainoption\"/><input type='hidden' name='single_update_code' value='".$this->calling_update['code']."' />";
 		$output .= ($this->in->get('update_all', 0)) ? "<input type='hidden' name='update_all' value='1' />" : "";
 
 		return $output;

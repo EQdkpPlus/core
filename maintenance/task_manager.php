@@ -128,8 +128,8 @@ class task_manager_display extends gen_class {
 									'LINK'			=> "./task.php".$this->SID."&amp;task=".$task,
 									'DESCRIPTION'	=> $data['desc'],
 									'AUTHOR'		=> $data['author'],
-									'VERSION'		=> $data['version'])
-								);
+									'VERSION'		=> ((isset($data['ext_version']) && $data['ext_version']) ? $data['ext_version'] : $data['version'])
+								));
 								$update_all = $task;
 							}
 						}
@@ -158,7 +158,7 @@ class task_manager_display extends gen_class {
 					));
 
 					//sort task_data 1st by type, 2nd by version
-					uasort($task_data[$key], 'sort_tasks');
+					uasort($task_data[$key], 'sort_tasks');d($task_data[$key]);
 					foreach($task_data[$key] as $task => $data) {
 						if($this->in->get('type', 'home') != $data['type'] AND $this->in->get('type', 'home') != 'home') continue;
 						$this->tpl->assign_block_vars('tasks_list.spec_task_list', array(
@@ -167,7 +167,7 @@ class task_manager_display extends gen_class {
 							'LINK'				=> "./task.php".$this->SID."&amp;task=".$task,
 							'DESCRIPTION'		=> $data['desc'],
 							'AUTHOR'			=> $data['author'],
-							'VERSION'			=> $data['version'],
+							'VERSION'			=> ((isset($data['ext_version']) && $data['ext_version']) ? $data['ext_version'] : $data['version']),
 							'S_NOT_APPLICABLE'	=> ($key == 'not_applicable_tasks') ? true : false)
 						);
 					}

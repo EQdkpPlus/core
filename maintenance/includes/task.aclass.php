@@ -28,6 +28,7 @@ if ( !class_exists( "task" ) ){
 		public $author				= "unknown";
 		public $name				= "unknown";
 		public $version				= "0.0.0";
+		public $ext_version			= false;
 
 		public $task_dependencies	= array();
 		public $type				= 'update';			//types: update, plugin_update, fix, import

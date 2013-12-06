@@ -120,6 +120,7 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 					'necessary'		=> $task_obj->a_is_necessary(),
 					'applicable'	=> $task_obj->a_is_applicable(),
 					'version'		=> $task_obj->version,
+					'ext_version'	=> $task_obj->ext_version,
 					'author'		=> $task_obj->author,
 					'name'			=> $task_obj->name
 				);

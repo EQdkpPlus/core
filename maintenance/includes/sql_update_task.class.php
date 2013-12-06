@@ -53,7 +53,7 @@ class sql_update_task extends task {
 
 	public function get_form_content() {
 		include_once($this->root_path.'/maintenance/includes/sql_update.class.php');
-		$sql_update = registry::register('sql_update', array(array(get_class($this), $this->lang[get_class($this)], $this->version, $this->plugin_path, $this->name), $this->in->get('update_all', false)));
+		$sql_update = registry::register('sql_update', array(array(get_class($this), $this->lang[get_class($this)], $this->version, $this->plugin_path, $this->name, $this->ext_version), $this->in->get('update_all', false)));
 		return $sql_update->a_get_form_content();
 	}
 
