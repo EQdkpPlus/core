@@ -275,7 +275,9 @@ $german_array = array(
 
 		// bossprogress
 		'bossprogress_normalruns'		=> '%sx normal',
+		'normalrun'						=> 'Normal',
 		'bossprogress_heroicruns'		=> '%sx heroisch',
+		'heroicrun'						=> 'Heroisch',
 
 		'wotlk'							=> 'Wrath of the Lich King',
 		'cataclysm'						=> 'Cataclysm',

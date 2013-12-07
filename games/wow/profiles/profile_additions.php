@@ -555,8 +555,8 @@
 					$tt_bossprogress = "<div class='table colorswitch hoverrows'>
 											<div class='tr'>
 												<div class='td'></div>
-												<div class='td'>normal</div>
-												<div class='td'>heroic</div>
+												<div class='td'>".$this->game->glang('normalrun')."</div>
+												<div class='td'>".$this->game->glang('heroicrun')."</div>
 											</div>";
 					foreach($v_bossprogress['bosses'] as $bosses){
 						$tt_bossprogress .= "<div class='tr'>
