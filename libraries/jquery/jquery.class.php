@@ -1483,15 +1483,20 @@ if (!class_exists("jquery")) {
 		}
 		
 		private function gen_options($array){
-				$output  = "{";
-				if(is_array($array) && count($array) > 0){
-					foreach($array as $values){
-						if($values != ''){
-							$output .= $values.",";
+			$set_comma = false;
+			$output  = "{";
+			if(is_array($array) && count($array) > 0){
+				foreach($array as $values){
+					if($values != ''){
+						if($set_comma){
+							$output .= ',';
 						}
+						$set_comma = true;
+						$output .= $values;
 					}
 				}
-				$output .= "}";
+			}
+			$output .= "}";
 			return $output;
 		}
 
