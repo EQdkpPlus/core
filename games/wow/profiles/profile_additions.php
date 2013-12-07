@@ -552,7 +552,7 @@
 				foreach($a_bossprogress as $v_bossprogress){
 
 					// build the tooltip
-					$tt_bossprogress = "<div class='table colorswitch hoverrows'>
+					$tt_bossprogress = "<div class='table'>
 											<div class='tr'>
 												<div class='td'></div>
 												<div class='td'>".$this->game->glang('normalrun')."</div>
