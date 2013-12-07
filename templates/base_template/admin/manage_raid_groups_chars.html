@@ -18,59 +18,62 @@
 				<tr>
 					<th width="20"><input type="checkbox" id="selall_usergr" /></th>
 					<th>
-						<a href="{U_MANAGE_USERS}&amp;o=0.0">
+						<a href="{U_MANAGE_MEMBERS}&amp;o=0.0">
 							<span class="down_arrow{RED00}"></span>
 						</a> 
-						<a href="{U_MANAGE_USERS}&amp;o=0.1">
+						<a href="{U_MANAGE_MEMBERS}&amp;o=0.1">
 							<span class="up_arrow{RED01}"></span>
 						</a> 
-						{L_username}
+						{L_name}
 					</th>
-					<th>{L_email}</th>
-					<th>{L_last_visit}</th>
+					<th>{L_level}</th>
+					<th>{L_rank}</th>
+					<th>{L_race}</th>
+					<th>{L_class}</th>
 					<th>{L_active}</th>
-					<th>{L_online}</th>
 				</tr>
 				<tr>
-					<th align="center" colspan="6">{L_grpleaders}</th>
+					<th align="center" colspan="7">{L_grpleaders}</th>
 				</tr>
-				<!-- BEGIN user_row_grpleader -->
+				<!-- BEGIN char_row_grpleader -->
 				<tr>
 					<td>
 					<!-- IF S_USERGROUP_ADMIN -->
-						<input type="checkbox" name="group_raid[{user_row_grpleader.ID}]" value="{user_row_grpleader.ID}" class="usercheckbox" />
+						<input type="checkbox" name="group_raid[{char_row_grpleader.ID}]" value="{char_row_grpleader.ID}" class="usercheckbox" />
 					<!-- ENDIF -->
 					</td>
 					<td>
-						<a href="manage_users.php{SID}&amp;u={user_row_grpleader.ID}">{user_row_grpleader.NAME}</a>
+						<a href="manage_members.php{SID}&amp;m={char_row_grpleader.ID}">{char_row_grpleader.NAME}</a>
 					</td>
-					<td>{user_row_grpleader.EMAIL}</td>
-					<td>{user_row_grpleader.LAST_VISIT}</td>
-					<td>{user_row_grpleader.ACTIVE}</td>
-					<td>{user_row_grpleader.ONLINE}</td>
+					<td>{char_row_grpleader.LEVEL}</td>
+					<td>{char_row_grpleader.RANK}</td>
+					<td>{char_row_grpleader.RACE}</td>
+					<td>{char_row_grpleader.CLASS}</td>
+					<td>{char_row_grpleader.ACTIVE}</td>
 				</tr>
-				<!-- END user_row_grpleader -->
+				<!-- END char_row_grpleader -->
 				
 				
 				<tr>
-					<th colspan="6" />{L_group_members}</th>
+					<th colspan="7" />{L_group_members}</th>
 				</tr>
-				<!-- BEGIN user_row -->
+				<!-- BEGIN char_row -->
 				<tr>
-					<td><!-- IF not user_row.S_UNDELETABLE --><input type="checkbox" name="group_raid[{user_row.ID}]" value="{user_row.ID}" class="usercheckbox" /><!-- ENDIF --></td>
+					<td><input type="checkbox" name="group_raid[{char_row.ID}]" value="{user_row.ID}" class="usercheckbox" /></td>
 					<td>
-						<a href="manage_users.php{SID}&amp;u={user_row.ID}">{user_row.NAME}</a>
+						<a href="manage_members.php{SID}&amp;m={char_row.ID}">{char_row.NAME}</a>
 					</td>
-					<td>{user_row.EMAIL}</td>
-					<td>{user_row.LAST_VISIT}</td>
-					<td>{user_row.ACTIVE}</td>
-					<td>{user_row.ONLINE}</td>
+					<td>{char_row.LEVEL}</td>
+					<td>{char_row.RANK}</td>
+					<td>{char_row.RACE}</td>
+					<td>{char_row.CLASS}</td>
+					<td>{char_row.ACTIVE}</td>
 				</tr>
-				<!-- END user_row -->
+				<!-- END char_row -->
 				<tr>
-					<th colspan="6">
+					<th colspan="7">
 						{BUTTON_MENU} 
-					<input type="submit" name="del_group_users" value="{L_delete_selected_from_group}" class="mainoption bi_delete" id="del_group_users" style="display:none;" /> 
+					<input type="submit" name="del_group_members" value="{L_delete_selected_from_group}" class="mainoption bi_delete" id="del_group_members" style="display:none;" /> 
 					<input type="submit" name="add_grpleader" value="{L_add_grpleader}" class="mainoption bi_new" id="add_grpleader"  style="display:none;"/>
 					<input type="submit" name="remove_grpleader" value="{L_remove_grpleader}" class="mainoption bi_new" id="remove_grpleader"  style="display:none;"/>
 					</th>

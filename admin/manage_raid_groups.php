@@ -65,7 +65,7 @@ class Manage_Raid_Groups extends page_generic {
 	public function raid_group_members_save(){
 		$intGroupID = $this->in->get('g', 0);
 		
-		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_users', 'is_grpleader', array($this->user->id, $intGroupID))){
+		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $intGroupID))){
 			$this->user->check_auth('a_usergroups_man');
 		}
 		
@@ -222,7 +222,7 @@ class Manage_Raid_Groups extends page_generic {
 	public function edit($messages=false, $group = false){
 		$groupID  = ($group) ? $group : $this->in->get('g', 0);
 		
-		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_users', 'is_grpleader', array($this->user->id, $groupID))){
+		if (!$this->user->check_auth('a_usergroups_man', false) && !$this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $groupID))){
 			$this->user->check_auth('a_usergroups_man');
 		}
 	
@@ -240,32 +240,21 @@ class Manage_Raid_Groups extends page_generic {
 		//Get Group-name
 		$group_name = $this->pdh->get('raid_groups', 'name', array($groupID));	
 		
-		//Get all Userdata
-		/*$sql = 'SELECT u.user_id, u.username, u.user_email, u.user_lastvisit, u.user_active, s.session_id
-				FROM (__users u
-				LEFT JOIN __sessions s
-				ON u.user_id = s.session_user_id)
-				GROUP BY u.username 
-				ORDER BY u.username '.(($order == '0.0') ? 'ASC' : 'DESC');
-		
-		$user_query = $this->db->query($sql);
-		if ($user_query){
-			while($row = $user_query->fetchAssoc()){
-				$user_data[$row['user_id']] = $row;
-			}
-		}*/
+		//Get all chars
 		$member_data = $this->pdh->get('member', 'id_list');
 		$not_in = array();
 		
 		//Bring all members from Group to template
 		foreach($member_data as $memberid) {
 			if (in_array($memberid, $members)){
-				$row = ($this->pdh->get('raid_groups_users', 'is_grpleader', array($memberid, $groupID))) ? '_grpleader' : '';
-
-				$this->tpl->assign_block_vars('user_row'.$row, array(
+				$row = ($this->pdh->get('raid_groups_members', 'is_grpleader', array($memberid, $groupID))) ? '_grpleader' : '';
+				$this->tpl->assign_block_vars('char_row'.$row, array(
 					'ID'			=> $memberid,
 					'NAME'			=> sanitize($this->pdh->get('member', 'name', array($memberid))),
-					'CLASS'			=> 'Klasse',
+					'CLASS'			=> $this->pdh->get('member', 'html_classname', array($memberid)),
+					'RACE'			=> $this->pdh->get('member', 'html_racename', array($memberid)),
+					'LEVEL'			=> $this->pdh->get('member', 'level', array($memberid)),
+					'RANK'			=> $this->pdh->get('member', 'html_rankname', array($memberid)),
 					'ACTIVE'		=> ($this->pdh->get('member', 'active', array($memberid)) == '1') ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>',
 				));
 			} else {
@@ -301,7 +290,7 @@ class Manage_Raid_Groups extends page_generic {
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
 			$red 					=> '_red',
-			'U_MANAGE_USERS'		=> 'manage_raid_groups.php'.$this->SID.'&amp;g='.$groupID,
+			'U_MANAGE_MEMBERS'		=> 'manage_raid_groups.php'.$this->SID.'&amp;g='.$groupID,
 			'KEY'					=> $key,
 			'ADD_USER_DROPDOWN'		=> $this->jquery->MultiSelect('add_user', $not_in, '', array('width' => 350, 'filter' => true)),
 			'GRP_ID'				=> $groupID,

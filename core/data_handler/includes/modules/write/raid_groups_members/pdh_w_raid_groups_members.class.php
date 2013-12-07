@@ -65,19 +65,14 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 			}
 		}
 		
-		public function add_grpleader($arrUserIDs, $group_id){
-			if (!is_array($arrUserIDs)){
-				$arrUserIDs = array($arrUserIDs);
+		public function add_grpleader($arrMemberIDs, $group_id){
+			if (!is_array($arrMemberIDs)){
+				$arrMemberIDs = array($arrMemberIDs);
 			}
-			
-			$arrSet = array(
-				'grpleader' => 1,
-			);
-			
+
 			$arrNames = array();
-			foreach($arrUserIDs as $user_id){
-				$objQuery = $this->db->prepare("UPDATE __groups_raid_members :p WHERE group_id=? AND member_id=?")->set($arrSet)->execute($group_id, $member_id);
-				
+			foreach($arrMemberIDs as $member_id){
+				$objQuery = $this->db->prepare("UPDATE __groups_raid_members :p WHERE group_id=? AND member_id=?")->set(array('grpleader' => 1))->execute($group_id, $member_id);
 				if(!$objQuery) {
 					return false;
 				}
@@ -155,22 +150,8 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 		}
 
 		public function delete_all_member_from_group($group_id) {
-			$objQuery = $this->db->prepare("DELETE FROM __groups_raid_members WHERE group_id =?")->execute($group_id);		
+			$objQuery = $this->db->prepare("DELETE FROM __groups_raid_members WHERE group_id =?")->execute($group_id);
 			return true;
-		}
-
-		public function delete_member_from_groups($member_id, $group_array) {
-			$memberships = $this->pdh->get('raid_groups_members', 'memberships_status', array($this->user->data['user_id']));
-			if (is_array($group_array)) {
-				foreach($group_array as $key=>$group) {
-					if (!($group == 2 && (!isset($memberships[2]) || $this->user->data['user_id'] == $member_id))) {
-						$objQuery = $this->db->prepare("DELETE FROM __groups_raid_members WHERE group_id = ? AND member_id =?")->execute($group, $member_id);
-					}
-					
-				}
-			} else {
-				return false;
-			}
 		}
 	}
 }

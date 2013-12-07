@@ -406,7 +406,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_classname($member_id){
-			return $this->game->decorate('classes', array($this->get_classid($member_id), false, $member_id))."<span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
+			return $this->game->decorate('classes', array($this->get_classid($member_id), false, $member_id))." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
 		}
 
 		public function get_classid($member_id){
