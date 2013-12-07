@@ -311,7 +311,7 @@ class Manage_Raid_Groups extends page_generic {
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_user_group').': '.sanitize($group_name),
-			'template_file'		=> 'admin/manage_raid_groups_users.html',
+			'template_file'		=> 'admin/manage_raid_groups_chars.html',
 			'display'			=> true)
 		);
 	}

@@ -358,7 +358,7 @@ class Manage_Extensions extends page_generic {
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
 				$dep['games']	= 'skip';
 				$dep['phpf']	= 'skip';
-				$dl_link = '<a href="javascript:repo_install(1, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				$dl_link = '<a href="javascript:repo_install(1, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
@@ -490,7 +490,7 @@ class Manage_Extensions extends page_generic {
 				if (in_array($extension['plugin'], $arrStyles)) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install(2, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install(2, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('styles_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -561,8 +561,8 @@ class Manage_Extensions extends page_generic {
 					'CONTACT'			=> sanitize($value['autor']),
 					'ACTION_LINK'		=> $link,
 					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['shortdesc'], 100)).'</a>' : '',
-
 				));
+
 			}
 			$this->confirm_delete($this->user->lang('portal_reinstall_warn'), 'manage_extensions.php'.$this->SID.'&cat=3', true, array('function' => 'reinstall_portal', 'handler' => 'mode'));
 		}
@@ -574,7 +574,7 @@ class Manage_Extensions extends page_generic {
 				if ((is_array(search_in_array($extension['plugin'], $arrModules, true, 'path')))) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install(3, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install(3, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -717,7 +717,7 @@ class Manage_Extensions extends page_generic {
 				if (isset($arrLanguages[$extension['plugin']])) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install(11, \''.sanitize($extension['plugin']).'\');" >'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install(11, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('language_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
