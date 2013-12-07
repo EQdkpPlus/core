@@ -552,20 +552,20 @@
 				foreach($a_bossprogress as $v_bossprogress){
 
 					// build the tooltip
-					$tt_bossprogress = '<table border="0" width="100%" cellspacing="0" cellpadding="2" >
-											<tr>
-												<td></td>
-												<td>normal</td>
-												<td>heroic</td>
-											</tr>';
+					$tt_bossprogress = "<div class='table colorswitch hoverrows'>
+											<div class='tr'>
+												<div class='td'></div>
+												<div class='td'>normal</div>
+												<div class='td'>heroic</div>
+											</div>";
 					foreach($v_bossprogress['bosses'] as $bosses){
-						$tt_bossprogress .= '<tr>
-												<td>'.$bosses['name'].'</td>
-												<td>'.$bosses['normalKills'].'</td>
-												<td>'.$bosses['heroicKills'].'</td>
-											</tr>';
+						$tt_bossprogress .= "<div class='tr'>
+												<div class='td'>".$bosses['name']."</div>
+												<div class='td'>".$bosses['normalKills']."</div>
+												<div class='td'>".$bosses['heroicKills']."</div>
+											</div>";
 					}
-					$tt_bossprogress .= '</table>';
+					$tt_bossprogress .= '</div>';
 
 					// normal
 					$bar_bc_normal		= $this->jquery->progressbar('bcnormal_'.$v_bossprogress['id'], 0, array('completed' => $v_bossprogress['bosses_normal'], 'total' => $v_bossprogress['bosses_max'], 'text' => '%progress% (%percentage%)'));
