@@ -43853,8 +43853,8 @@ function log() {
  * Licensed under the LGPL license.
  * http://docs.jquery.com/License
  *
- * $Rev: 10979 $
- * $Date:: 2011-08-12 #$
+ * $Rev: 13748 $
+ * $Date:: 2013-12-03 #$
  *
  */
 (function($){
@@ -49394,7 +49394,7 @@ $.extend(TRUE, QTIP.defaults, {
 					'z-index': 90,
 					'opacity': 0.4
 				});
-				$('<i class="fa fa-spinner fa-spin fa-4x"></i>').css({
+				$('<i class="fa fa-spinner fa-spin fa-4x rssreader_spinner"></i>').css({
 					'opacity': 1
 				}).appendTo(container)
 			});
@@ -49465,7 +49465,7 @@ $.extend(TRUE, QTIP.defaults, {
 						'z-index': 90,
 						'opacity': 0.4
 					});
-					$('<i class="fa fa-spinner fa-spin fa-4x"></i>').css({
+					$('<i class="fa fa-spinner fa-spin fa-4x rssreader_spinner"></i>').css({
 						'opacity': 1
 					}).appendTo(container)
 				},

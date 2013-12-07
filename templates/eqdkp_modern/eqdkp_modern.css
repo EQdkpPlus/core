@@ -1770,8 +1770,8 @@ ul.breamcrumb .current::before{
 	padding: 10px;
 }
 
-.loading{
-	margin:20% 0% 0% 40%;
+.rssreader_spinner{
+	margin:15% 0% 0% 44%;
 	float:left;
 }
 
