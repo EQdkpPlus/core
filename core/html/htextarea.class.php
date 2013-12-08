@@ -45,7 +45,9 @@ class htextarea extends html {
 	public $codeinput = false;
 	public $bbcodeeditor = false;
 	
-	public function _toString() {
+	private $out = '';
+	
+	public function _construct() {
 		$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
@@ -53,7 +55,11 @@ class htextarea extends html {
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		return $out.'>'.$this->value.'</textarea>';
+		$this->out = $out.'>'.$this->value.'</textarea>';
+	}
+	
+	public function _toString() {
+		return $this->out;
 	}
 	
 	public function inpval() {
