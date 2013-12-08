@@ -138,7 +138,7 @@ class ManageAdjs extends page_generic {
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key)) ? $grp_key : '',
 			'REASON'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
-			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : '')),
+			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))),
 			'MEMBERS'		=> $this->jquery->MultiSelect('members', $members, ((isset($adj['members'])) ? $adj['members'] : ''), array('width' => 350, 'filter' => true)),
 			'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'VALUE'			=> (isset($adj['value'])) ? $adj['value'] : '',
