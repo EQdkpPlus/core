@@ -363,7 +363,7 @@ $('.js_reload').change(function(){
 			$data['multiple']	= ($portalinfos['multiple'] && !$pdata['child']) ? true : false;
 			if ($portalinfos['multiple']) {
 				$portal_module[$id]->output();
-				$data['header'] = ' ('.$portal_module[$path]->get_header().')';
+				$data['header'] = ' ('.$portal_module[$id]->get_header() .')';
 			} else {
 				$data['header'] = '';
 			}
