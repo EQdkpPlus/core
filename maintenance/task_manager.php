@@ -158,7 +158,7 @@ class task_manager_display extends gen_class {
 					));
 
 					//sort task_data 1st by type, 2nd by version
-					uasort($task_data[$key], 'sort_tasks');d($task_data[$key]);
+					uasort($task_data[$key], 'sort_tasks');
 					foreach($task_data[$key] as $task => $data) {
 						if($this->in->get('type', 'home') != $data['type'] AND $this->in->get('type', 'home') != 'home') continue;
 						$this->tpl->assign_block_vars('tasks_list.spec_task_list', array(
