@@ -713,6 +713,7 @@ $lang = array(
 	"manage_user_groups" => 'Usergroups Management',
 	"manage_user_group" => 'Usergroup Management',
 	"manage_raid_groups" => 'Raidgroups Management',
+	"manage_raid_group" => 'Raidgroup Management',
 	"group_permissions" => 'Group permissions',
 	"manage" => 'Manage',
 	"delete_selected_group" => 'Delete selected groups',
@@ -1611,6 +1612,18 @@ $lang = array(
 	"embedd_position" => "Position of Module in external page",
 	"embedd_middle"	=> "Middle",
 	"embedd_show_header" => "Show Module Header",
+	
+	"list_type_full" => "Full Articletext",
+	"list_type_headline" => "Headlines only",
+	"list_type_teaser" => "Articletext up to 200 Words",
+	"sortation_types" => array(
+		1 => "Creation-Date Descending",
+		2 => "Creation-Date Ascending",
+		3 => "Last Update-Date Descending",
+		4 => "Last Update-Date Ascending",
+	),
+	"add_member_to_group" => "Add Member to Group",
+	"add_selected_char_to_group" => "Add selected characters to group",
 );
 
 ?>

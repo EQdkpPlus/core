@@ -938,6 +938,12 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"login_twofactor_code_help" => "Insert here the generated Twofactor Code.",
 	"login_twofactor_emergency_token" => "Emergency Token (disables the Twofactor Authentification)",
 	"login_twofactor_remember" => "Don't ask for 30 days on this computer",
+	
+	"article_unpublished" => "This Article is not published.",
+	"article_noauth"	=> "You do not have permission to view this Article.",
+	"category_noauth"	=> "You do not have permission to view this Category.",
+	"category_unpublished" => "This Category is not published.",
+	"article_not_found" => "Cound not find Article or Category.",
 );
 
 ?>

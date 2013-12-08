@@ -53,10 +53,9 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 
 				foreach($group_array as $key=>$group) {
 					$group = intval($group);
-					if (!(($group == 2 && !isset($memberships[2])) || $group == 0)) {
-						if(!$this->add_member_to_group($member_id, $group)) {
-							return false;
-						}
+
+					if(!$this->add_member_to_group($member_id, $group)) {
+						return false;
 					}
 				}
 				return true;
@@ -80,10 +79,10 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 			}
 			
 			$log_action = array(
-				'{L_USER}' => implode(', ', $arrNames),	
+				'{L_MEMBER}' => implode(', ', $arrNames),	
 			);
 			
-			$this->log_insert('action_usergroups_add_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
+			$this->log_insert('action_membergroups_add_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
 			
 			$this->pdh->enqueue_hook('raid_groups_update');
 			return true;
@@ -112,7 +111,7 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 					'{L_USER}' => implode(', ', $arrNames),
 			);
 				
-			$this->log_insert('action_usergroups_remove_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
+			$this->log_insert('action_membergroups_remove_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
 			
 			$this->pdh->enqueue_hook('raid_groups_update');
 			return true;

@@ -853,7 +853,7 @@ if(!class_exists('wow')) {
 			return $arrOptions;
 		}
 		
-		public function cronjob($arrParams){
+		public function cronjob($arrParams = array()){
 			$blnSyncRanks = ((int)$arrParams['sync_ranks'] == 1) ? true : false;
 			
 			$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));

@@ -209,7 +209,7 @@ class acl_manager extends gen_class {
 			// Members
 			$this->user->lang('chars') => array(
 				array('CBNAME' => 'a_members_man', 'TEXT' => $this->user->lang('manage')),
-				
+				array('CBNAME' => 'a_membergroups_man',   'TEXT' => $this->user->lang('manage_raid_groups')),
 				array('CBNAME' => 'u_member_add',  'TEXT' => $this->user->lang('charsadd')),
 				array('CBNAME' => 'u_member_man',	'TEXT' => $this->user->lang('charsmanage')),
 				array('CBNAME' => 'u_member_del',  'TEXT' => $this->user->lang('charsdelete')),

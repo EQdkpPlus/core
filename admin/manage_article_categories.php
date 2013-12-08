@@ -206,8 +206,7 @@ class Manage_Article_Categories extends page_generic {
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => $this->pdh->get('article_categories', 'portal_layout', array($id)))),
 				'PUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'published', array($id))) ? 'checked="checked"' : '',
 				'DD_PARENT' => new hdropdown('parent', array('options' => $arrCategories, 'value' => $this->pdh->get('article_categories', 'parent', array($id)))),
-				// TODO: language
-				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => 'Voller Artikeltext', 2 => 'Nur Artikelüberschriften', 3 => 'Artikeltext bis 200 Wörter'), 'value' => $this->pdh->get('article_categories', 'list_type', array($id)))),
+				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')), 'value' => $this->pdh->get('article_categories', 'list_type', array($id)))),
 				'SHOW_CHILDS_CHECKED' => ($this->pdh->get('article_categories', 'show_childs', array($id))) ? 'checked="checked"' : '',
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, $this->pdh->get('article_categories', 'aggregation', array($id))),
 				'FEATURED_ONLY_CHECKED' => ($this->pdh->get('article_categories', 'featured_only', array($id))) ? 'checked="checked"' : '',
@@ -218,8 +217,7 @@ class Manage_Article_Categories extends page_generic {
 				'NOTIFY_UNPUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'notify_on_onpublished_articles', array($id))) ? 'checked="checked"' : '',
 				'FEATURED_ONTOP_CHECKED' => ($this->pdh->get('article_categories', 'featured_ontop', array($id))) ? 'checked="checked"' : '',
 				'HIDE_HEADER_CHECKED' => ($this->pdh->get('article_categories', 'hide_header', array($id))) ? 'checked="checked"' : '',
-				// TODO: language
-				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => array(1 => 'Erstellungsdatum Absteigend', 2 => 'Erstellungsdatum Aufsteigend', 3 => 'Letztes Änderungsdatum Absteigend', 4 => 'Letztes Änderungsdatum Aufsteigend'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
+				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => $this->user->lang('sortation_types'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
 			));
 			
 		} else {
@@ -229,16 +227,13 @@ class Manage_Article_Categories extends page_generic {
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)),
 				'PUBLISHED_CHECKED' => 'checked="checked"',
 				'DD_PARENT' => new hdropdown('parent', array('options' => $arrCategories, 'value' => 0)),
-				// TODO: language
-				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => 'Voller Artikeltext', 2 => 'Nur Artikelüberschriften', 3 => 'Artikeltext bis 200 Wörter'), 'value' => 1)),
+				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')))),
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, array()),
 				// TODO: use radio here?
 				'DD_PUBLISHED_STATE' => new hdropdown('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)),
-				// TODO: language
-				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => array(1 => 'Erstellungsdatum Absteigend', 2 => 'Erstellungsdatum Aufsteigend', 3 => 'Letztes Änderungsdatum Absteigend', 4 => 'Letztes Änderungsdatum Aufsteigend'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
+				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => array($this->user->lang('sortation_types')), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
 			));
 		}
-		
 		$this->jquery->Spinner('article_per_page', array('min' => 0));
 		$this->tpl->assign_vars(array(
 			'CID' => $id,

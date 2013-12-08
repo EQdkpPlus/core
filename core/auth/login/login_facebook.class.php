@@ -136,7 +136,7 @@ class login_facebook extends gen_class {
 			}
 		");
 		
-		return '<button type="button" class="mainoption" onclick="facebook_login()"><i class="bi_facebook"></i>'.$this->user->lang('login_title').'</button>';	
+		return '<button type="button" class="mainoption" onclick="facebook_login()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('login_title').'</button>';	
 	}
 	
 	public function register_button(){
@@ -154,7 +154,7 @@ class login_facebook extends gen_class {
 			}	  
 	  ");
 	  		
-		return '<button type="button" class="mainoption" onclick="facebook_register()"><i class="bi_facebook"></i>'.$this->user->lang('register_title').'</button>';
+		return '<button type="button" class="mainoption" onclick="facebook_register()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('register_title').'</button>';
 	}
 	
 	public function account_button(){
@@ -165,7 +165,7 @@ class login_facebook extends gen_class {
 			$me = $this->get_me();
 			$uid = $me['uid'];
 			$me = $me['me'];
-			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
+			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
 		} else {
 			$this->init_js();
 			
@@ -181,7 +181,7 @@ class login_facebook extends gen_class {
 				 });
 			}	  
 			");
-			return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="bi_facebook"></i>'.$this->user->lang('auth_connect_account').'</button>';		
+			return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>';		
 		}
 	}
 	

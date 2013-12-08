@@ -59,7 +59,7 @@
 				</tr>
 				<!-- BEGIN char_row -->
 				<tr>
-					<td><input type="checkbox" name="group_raid[{char_row.ID}]" value="{user_row.ID}" class="usercheckbox" /></td>
+					<td><input type="checkbox" name="group_raid[{char_row.ID}]" value="{char_row.ID}" class="usercheckbox" /></td>
 					<td>
 						<a href="manage_members.php{SID}&amp;m={char_row.ID}">{char_row.NAME}</a>
 					</td>
@@ -82,10 +82,10 @@
 				</table>
 				<br />
 				<fieldset class="settings mediumsettings" class="settings">
-						<legend>{L_add_user_to_group}</legend>
+						<legend>{L_add_member_to_group}</legend>
 						{ADD_USER_DROPDOWN}
 						<br /><br />
-						<button class="mainoption" type="submit" name="add_group_members" id="add_group_members"><i class="fa fa-plus"></i>{L_add_selected_to_group}</button>
+						<button class="mainoption" type="submit" name="add_group_members" id="add_group_members"><i class="fa fa-plus"></i>{L_add_selected_char_to_group}</button>
 				</fieldset>
 		</div>
 	<div class="contentFooter">

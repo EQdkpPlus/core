@@ -169,7 +169,7 @@ class controller extends gen_class {
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			
 			//Check Start to/start from
-			if (!$intPublished || !$arrCategory['published']) message_die('Dieser Artikel ist nicht veröffentlicht.');
+			if (!$intPublished || !$arrCategory['published']) message_die($this->user->lang('article_unpublished'));
 			
 			registry::add_const('page_path', $strPath);
 			$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
@@ -180,7 +180,7 @@ class controller extends gen_class {
 			
 			//Category Permissions
 			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
-			if (!$arrPermissions['read']) message_die('Keine Berechtigung, diesen Artikel anzusehen.', $this->user->lang('noauth_default_title'), 'access_denied', true);
+			if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			
 			//Page divisions
 			$strText = xhtml_entity_decode($arrArticle['text']);
@@ -251,7 +251,7 @@ class controller extends gen_class {
 		}
 		if ($arrPermissions['update']) {
 			$arrToolbarItems[] = array(
-				'icon'	=> 'fa fa-pencil-square-o',
+				'icon'	=> 'fa-pencil-square-o',
 				'js'	=> 'onclick="editArticle('.$intArticleID.')"',
 				'title'	=> $this->user->lang('edit_article'),
 			); 
@@ -401,13 +401,13 @@ class controller extends gen_class {
 			//Check if Published
 			$intPublished = $arrCategory['published'];
 							
-			if (!$intPublished) message_die('Dieser Artikel ist nicht veröffentlicht.');
+			if (!$intPublished) message_die($this->user->lang('category_unpublished'));
 						
 			//User Memberships
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
 			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
 						
-			if (!$arrPermissions['read']) message_die('Keine Berechtigung, diese Kategorie anzusehen.', $this->user->lang('noauth_default_title'), 'access_denied', true);
+			if (!$arrPermissions['read']) message_die($this->user->lang('category_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			
 			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID));
 			switch($arrCategory['sortation_type']){
@@ -669,7 +669,7 @@ class controller extends gen_class {
 				}									
 			}		 
 		} else {
-			message_die('Konnte Artikel bzw. Kategorie nicht finden.');
+			message_die($this->user->lang('article_not_found'));
 		}
 	}
 	
