@@ -67,11 +67,11 @@ class hdatepicker extends html {
 	}
 	
 	public function _toString() {
-		$this->out;
+		return $this->out;
 	}
 	
 	public function inpval() {
-		$input = $this->in->get($this->name, 0);
+		$input = $this->in->get($this->name, '');
 		if($this->allow_empty && empty($input)) return $input;
 		return $this->time->fromformat($input, $this->calendarformat());
 	}

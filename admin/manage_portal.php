@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Portal extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config', 'html', 'pm', 'portal', 'env' => 'environment');
+		$shortcuts = array('form' => array('form', array('form_moduleconfig')));
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -105,54 +105,27 @@ class Manage_Portal extends page_generic {
 	
 	
 	//Get Portal Module Settings
-	private function get_settings($id, $save=false, $state='fetch_new') {
-		$module = $this->portal->get_module($this->pdh->get('portal', 'path', array($id)), $this->pdh->get('portal', 'plugin', array($id)));
-		$module->set_id($id);
+	private function get_settings($id, $state='fetch_new') {
+		$module = $this->portal->get_module($id);
 		$data = $module->get_settings($state);
-		if(!$data) return array();
-		$save_array = array();
-		$child = $this->pdh->get('portal', 'child', array($id));
-
-		foreach($data as $confvars) {
-			$options			= $confvars;
-			$options['type']	= $confvars['property'];
-			//is child?
-			if ($child){
-				$confvars['name'] = $confvars['name'].'_'.$id;
-			}
-
-
-			if ($this->config->get($confvars['name']) !==false){
-				$options['value']	= $options['selected'] = $this->config->get($confvars['name']);
-			} else {
-				$options['selected'] = (isset($options['selected'])) ? $options['selected'] : ((isset($options['value'])) ? $options['value'] : '');
-			}
-			if($options['type'] == 'jq_multiselect' && $options['selected']) {
-				$options['selected'] = (isset($options['selected']) && strlen($options['selected'])) ? unserialize($options['selected']) : array();
-			}
-
-			$ccfield			= $this->html->widget($options);
-			if($ccfield) {
-				if($save) {
-					$save_array[$confvars['name']]	= $this->html->widget_return($options);
-				} else {
-					$this->tpl->assign_block_vars('config_row', array(
-						'NAME'	=> $this->user->lang($confvars['language'], true),
-						'FIELD'	=> $ccfield,
-						'HELP'	=> (isset($confvars['help'])) ? $this->user->lang($confvars['help'], false, false) : '',
-						'ID'	=> $confvars['name'],
-					));
-					$save_array[$confvars['name']] = array(
-						'name' => $this->user->lang($confvars['language'], true),
-						'field'=> $ccfield,
-						'help' => (isset($confvars['help'])) ? $this->user->lang($confvars['help'], false, false) : '',
-						'type' => $options['type'],
-						'change' => (isset($options['change'])) ? true : false,
-					);
-				}
-			}
+		if(!empty($data)) {
+			$this->form->add_fields($data);
 		}
-		return $save_array;
+		
+		// Visibility - User groups
+		$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
+		$drpdwn_rights[0] = $this->user->lang('cl_all');
+		ksort($drpdwn_rights);
+		$drpdwn_rights[PMOD_VIS_EXT] = $this->user->lang('viewing_wrapper');
+		
+		$visopts = array('type' => 'multiselect', 'options' => $drpdwn_rights, 'lang' => 'portalplugin_rights');
+		if ($this->portal->get_module($id)->LoadSettingsOnchangeVisibility){
+			$visopts['class'] = 'js_reload';
+		}
+		$this->form->add_field('visibility', $visopts);
+		
+		// Collapsable
+		$this->form->add_field('collapsable', array('type' => 'radio', 'lang' => 'portal_collapsable'));
 	}
 	
 	//Load Portal Module Settings
@@ -188,10 +161,12 @@ class Manage_Portal extends page_generic {
 	//Save Portal Module Settings
 	public function save_settings($displayPage = true) {
 		if($id = $this->in->get('id')){
-			$this->pdh->put('portal', 'update', array($id, array('collapsable' => $this->in->get('collapsable', 0), 'visibility' => serialize($this->in->getArray('visibility', 'int')))));
-			$save_array = $this->get_settings($id, true, 'save');
+			$this->get_settings($id, 'save');
+			$save_array = $this->form->return_values();
+			pd($save_array);
+			pd($id);
 			if(count($save_array) > 0){
-				$this->config->set($save_array);
+				$this->config->set($save_array, '', 'pmod_'.$id);
 			}
 			$this->portal->reset_portal($this->pdh->get('portal', 'path', array($id)), $this->pdh->get('portal', 'plugin', array($id)));
 			$this->pdh->process_hook_queue();
@@ -201,7 +176,7 @@ class Manage_Portal extends page_generic {
 		}
 	}
 	
-	//Duplicate Portal Module
+	// Duplicate Portal Module (create child)
 	public function duplicate(){
 		$path = $this->pdh->get('portal', 'path', array($this->in->get('selected_id', 0)));
 		if(!$path) $this->display();
@@ -212,47 +187,72 @@ class Manage_Portal extends page_generic {
 		$this->edit_portallayout();
 	}
 	
-	//Delete Portal Module
+	// Delete Portal Module (child only)
 	public function delete() {
-		$path = $this->pdh->get('portal', 'path', array($this->in->get('selected_id', 0)));
-		if(!$this->pdh->get('portal', 'child', array($this->in->get('selected_id',0))) || !$path) $this->display();
-		$plugin = $this->pdh->get('portal', 'plugin', array($this->in->get('selected_id')));
-		$obj = $this->portal->get_module($path, $plugin);
-		$name = (is_object($obj)) ? $obj->get_data('name') : $path;
-		$this->core->message(sprintf($this->user->lang('portal_delete_success'), $name), $this->user->lang('success'), 'green');
-		$this->portal->uninstall($path, $plugin, $this->in->get('selected_id', 0));
+		$id = $this->in->get('selected_id', 0);
+		$path = $this->pdh->get('portal', 'path', array($id));
+		if(!$this->pdh->get('portal', 'child', array($id))) $this->display();
+		$class_name = $path.'_portal';
+		$this->pdh->put('portal', 'delete', array($id));
+		$this->core->message(sprintf($this->user->lang('portal_delete_success'), $class_name::get_data('name')), $this->user->lang('success'), 'green');
 		$this->edit_portallayout();
 	}
 	
 	//Edit Portal Module
 	public function edit($id=false) {
 		if($id || $id = $this->in->get('id', 0)) {
-			$this->get_settings($id);
-			// User groups
-			$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
-			$drpdwn_rights[0] = $this->user->lang('cl_all');
-			$drpdwn_rights[999999999] = $this->user->lang('viewing_wrapper');
+			$portal_class = $this->pdh->get('portal', 'path', array($id)).'_portal';
 			
-			ksort($drpdwn_rights);
-			$arrVisibilityOptions = array('no_lang' => true);
-			if ($this->portal->get_module($this->pdh->get('portal', 'path', array($id)), $this->pdh->get('portal', 'plugin', array($id)))->LoadSettingsOnchangeVisibility){
-				$arrVisibilityOptions['javascript'] = ' onchange="load_settings()"';
-			}
-			$this->tpl->assign_block_vars('config_row', array(
-				'NAME'	=> $this->user->lang('portalplugin_rights'),
-				'FIELD'	=> $this->jquery->MultiSelect('visibility', $drpdwn_rights, $this->pdh->get('portal', 'visibility', array($id)), $arrVisibilityOptions),
-				'ID'	=> 'visibility',
-			));
-			//Collapsable
-			$this->tpl->assign_block_vars('config_row', array(
-				'NAME'	=> $this->user->lang('portal_collapsable'),
-				'FIELD'	=> new hradio('collapsable', array('value' => $this->pdh->get('portal', 'collapsable', array($id)))),
-				'ID'	=> 'collapsable',
-			));
+			// initialize form class
+			$this->form->lang_prefix = $portal_class::get_data('lang_prefix');
+				
+			$this->get_settings($id);
 
+			// Output the form, pass values in
+			$this->form->output($this->config->get_config('pmod_'.$id));
+			
+			// js for reload on input-change
+			$this->tpl->add_js("
+$('.js_reload').change(function(){
+	var form = $('#form_moduleconfig').serializeArray();
+	$.post(\"manage_portal.php".$this->SID."&settings&id=".$id."\", form, function(data){
+		if (data.reload){
+			$('#form_moduleconfig').submit();
+		}
+		if (data.new){
+			$.each(data.new, function(index, value) {
+				var help = (value.help) ? value.help : '';
+				$('#'+index).remove();
+				$('#visibility').before('<dl id=\"'+index+'\"><dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd></dl>');
+				if (value.type == 'multiselect'){
+					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
+				}
+				if (value.type == 'spinner'){
+					$('#'+index).spinner();
+				}
+			});
+		}
+		if (data.changed){
+			$.each(data.changed, function(index, value) {
+				var help = (value.help) ? value.help : '';	
+				$('#'+index).html('<dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd>');
+				if (value.type == 'multiselect'){
+					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
+				}
+				if (value.type== 'spinner'){
+					$('#'+index).spinner();
+				}
+			});
+		}
+		if (data.removed){
+			$.each(data.removed, function(index, value) {
+				$('#'+index).remove();
+			});
+		}
+	}, 'json');
+});", 'docready');
 		}		
 		$this->tpl->assign_var('ACTION', $_SERVER['SCRIPT_NAME'].$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
-		$this->tpl->assign_var('MODULE_ID', $id);
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal_moduleconfig.html',
@@ -287,7 +287,6 @@ class Manage_Portal extends page_generic {
 		}
 		
 		$this->pdh->process_hook_queue();
-		$this->portal->reset();
 		$this->edit_portallayout();
 	}
 	
@@ -307,7 +306,7 @@ class Manage_Portal extends page_generic {
 
 		$arrBlocksIDList = $this->pdh->get('portal_blocks', 'id_list');
 		
-		// Install the Plugins if required
+		// Install the portal modules if required
 		$portal_module = $this->portal->get_all_modules();
 
 		$filter = array();
@@ -316,7 +315,7 @@ class Manage_Portal extends page_generic {
 
 		$arrSort = array();
 		foreach($arrModuleIDs as $intModuleID){
-			$arrSort[] = (isset($arrSortIDs[$intModuleID])) ? $arrSortIDs[$intModuleID] : 9999999;
+			$arrSort[] = (isset($arrSortIDs[$intModuleID])) ? $arrSortIDs[$intModuleID] : PMOD_VIS_EXT;
 		}
 		
 		array_multisort($arrSort, SORT_ASC, SORT_NUMERIC, $arrModuleIDs);
@@ -327,13 +326,13 @@ class Manage_Portal extends page_generic {
 		$arrModulesForOwnBlocks = array();
 		foreach($modules as $id => &$data) {
 			$path = $data['path'];
-			if(!$portal_module[$path]) {
+			$class_name = $path.'_portal';
+			if(empty($portal_module[$id])) {
 				unset($data);
 				unset($modules[$id]);
 				continue;
 			}
-			$this->portal->load_lang($path, $this->pdh->get('portal', 'plugin', array($id)));
-			$portalinfos = $portal_module[$path]->get_data();
+			$portalinfos = $class_name::get_data();
 			$data['name'] = ($this->user->lang($path.'_name')) ? $this->user->lang($path.'_name') : $portalinfos['name'];
 			$data['icon'] = $portalinfos['icon'];
 			$contact = (strpos($portalinfos['contact'], '@')=== false) ? $portalinfos['contact'] : 'mailto:'.$portalinfos['contact'];
@@ -361,11 +360,9 @@ class Manage_Portal extends page_generic {
 			
 			// start the description text
 			$data['desc']		= (string) new htooltip('mptt_'.$id, array('content' => $data['desc'], 'label' => $this->core->icon_font($icon, 'fa-lg')));
-			pd($data['desc']);
-			$data['multiple']	= ($portal_module[$path]->get_multiple() && !$pdata['child']) ? true : false;
-			if ($portal_module[$path]->get_multiple()){
-				$portal_module[$path]->set_id($id);
-				$portal_module[$path]->output();
+			$data['multiple']	= ($portalinfos['multiple'] && !$pdata['child']) ? true : false;
+			if ($portalinfos['multiple']) {
+				$portal_module[$id]->output();
 				$data['header'] = ' ('.$portal_module[$path]->get_header().')';
 			} else {
 				$data['header'] = '';
@@ -374,7 +371,7 @@ class Manage_Portal extends page_generic {
 			if($data['tpl_posi'] != 'later' && $data['tpl_posi'] != 'disabled') {
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', array(
 					'NAME'			=> $data['name'].$data['header'],
-					'CLASS'			=> $data['class'],
+					'CLASS'			=> $data['class'],				// does not seem to be used?
 					'ID'			=> $id,
 					'POS'			=> $data['tpl_posi'],
 					'INFO'			=> $data['desc'],
@@ -396,7 +393,7 @@ class Manage_Portal extends page_generic {
 		foreach($modules as $id => $data) {
 			$tpl_data = array(
 				'NAME'			=> $data['name'].$data['header'],
-				'CLASS'			=> $data['class'],
+				'CLASS'			=> $data['class'],				// does not seem to be used?
 				'ID'			=> $id,
 				'POS'			=> $data['tpl_posi'],
 				'INFO'			=> $data['desc'],

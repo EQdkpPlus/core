@@ -23,10 +23,11 @@ include_once($eqdkp_root_path . 'common.php');
 
 class mmocms_settings extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html', 'db', 'pfh', 'pdc', 'pdl', 'env',
+		$shortcuts = array(
 			'itt' => 'infotooltip',
 			'social' => 'socialplugins',
-			'form'	=> array('form', array('core_settings')));
+			'form'	=> array('form', array('core_settings'))
+		);
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -215,6 +216,13 @@ class mmocms_settings extends page_generic {
 		// ---------------------------------------------------------
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&amp;style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
 		$this->jquery->js_dd_ajax('default_game', 'default_gamelang', 'manage_settings.php'.$this->SID.'&ajax=games');
+		
+		// initialize form class
+		$this->form->lang_prefix = 'core_sett_';
+		$this->form->use_tabs = true;
+		$this->form->use_fieldsets = true;
+		
+		// define standard data for settings
 		$settingsdata = array(
 			'global' => array(
 				'global' => array(
@@ -718,6 +726,7 @@ class mmocms_settings extends page_generic {
 		);
 		$this->form->add_tabs($settingsdata);
 
+		// add some additional fields
 		// ItemTooltip Inject
 		if(in_array($this->game->get_game(), $this->itt->get_supported_games())){
 			$fields = array(
@@ -841,11 +850,6 @@ class mmocms_settings extends page_generic {
 
 		// Inject Plugin Settings
 		// PLACEHOLDER.. maybe we will do that one day...
-		
-		//initialize form class
-		$this->form->lang_prefix = 'core_sett_';
-		$this->form->use_tabs = true;
-		$this->form->use_fieldsets = true;
 
 		// save the setting
 		if ($this->in->exists('save_plus') && $this->checkCSRF('display')){
@@ -883,7 +887,7 @@ class mmocms_settings extends page_generic {
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('pk_save_title'), 'green');
 		}
 
-		// Output
+		// Output the form, pass values in
 		$this->form->output($this->config->get_config());
 
 		$this->core->set_vars(array(

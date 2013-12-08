@@ -35,14 +35,15 @@ if( !class_exists( "plus_exchange" ) ) {
 			$this->scan_modules();
 		}
 
-		public function register_module($module_name, $module_dir){
+		public function register_module($module_name, $module_dir, $class_params=array()){
 			//create object
 			$module = 'exchange_'.$module_name;
 			if (!is_file($this->root_path.$module_dir.'.php')) return false;
 			include($this->root_path.$module_dir.'.php');
-			$class = register($module);
+			$class = register($module, $class_params);
 			$this->modules[$module_name] = array(
-				'path'		=> $module_dir				
+				'path'			=> $module_dir,
+				'class_params'	=> $class_params,
 			);
 			return true;
 		}
@@ -83,20 +84,18 @@ if( !class_exists( "plus_exchange" ) ) {
 			//Portal modules
 			$enabled_modules = $this->pdh->aget('portal', 'position', 0, array($this->pdh->get('portal', 'id_list', array(array('enabled' => 1)))));
 			if(is_array($enabled_modules)){
-				foreach($enabled_modules as $module_id => $posi) {
-					$path = $this->pdh->get('portal', 'path', array($module_id));
-					$plugin = $this->pdh->get('portal', 'plugin', array($module_id));
-					$obj = $this->portal->get_module($path, $plugin);
-					
-					if ($obj && $this->portal->check_visibility($module_id)){
-						$arrExchangeModules = $obj->get_exchangeModules();
+				foreach($enabled_modules as $module_id => $path) {
+					$obj = $path.'_portal';
+					$arrExchangeModules = $obj::get_data('exchangeMod');
+					if (class_exists($obj) && $this->portal->check_visibility($module_id)){
+						$plugin = $this->pdh->get('portal', 'plugin', array($module_id));
 						foreach ($arrExchangeModules as $module_name){
 							if ($plugin != ''){
 								$module_dir = 'plugins/'.$plugin.'/portal/exchange/'.$module_name;
 							} else {
 								$module_dir = 'portal/'.$path.'/exchange/'.$module_name;
 							}
-							$this->register_module($module_name, $module_dir);
+							$this->register_module($module_name, $module_dir, array($module_id));
 						}
 					}
 				}
@@ -120,7 +119,7 @@ if( !class_exists( "plus_exchange" ) ) {
 
 				include ($this->root_path.$this->modules[$function]['path'].'.php');
 				$module = 'exchange_'.$function;
-				$class = register($module);
+				$class = register($module, $this->modules[$function]['class_params']);
 				$method = strtolower($request_method).'_'.$function;
 
 				if (method_exists($class, $method)){

@@ -45,7 +45,7 @@ class htooltip extends html {
 	private $all_opts = array('contfunc', 'name', 'my', 'at', 'classes', 'width');
 	private $out = '';
 
-	public function _toString() {
+	public function _construct() {
 		if(empty($this->name)) $this->name = uniqid();
 		if(empty($this->id)) $this->id = uniqid();
 		$options = array();
@@ -61,7 +61,7 @@ class htooltip extends html {
 	}
 	
 	public function _toString() {
-		$this->out;
+		return $this->out;
 	}
 	
 	public function inpval() {

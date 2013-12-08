@@ -51,13 +51,8 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 					$this->portal[$drow['id']] = array(
 						'name'			=> $drow['name'],
 						'path'			=> $drow['path'],
-						'contact'		=> $drow['contact'],
-						'url'			=> $drow['url'],
-						'autor'			=> $drow['autor'],
 						'version'		=> $drow['version'],
 						'plugin'		=> $drow['plugin'],
-						'visibility'	=> unserialize($drow['visibility']),
-						'collapsable'	=> $drow['collapsable'],
 						'child'			=> $drow['child'],
 					);
 				}
@@ -106,16 +101,8 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			return (isset($this->portal[$id])) ? $this->portal[$id]['plugin'] : false;
 		}
 
-		public function get_collapsable($id) {
-			return (isset($this->portal[$id])) ? $this->portal[$id]['collapsable'] : false;
-		}
-
 		public function get_name($id) {
 			return (isset($this->portal[$id])) ? $this->portal[$id]['name'] : false;
-		}
-
-		public function get_visibility($id) {
-			return (isset($this->portal[$id])) ? $this->portal[$id]['visibility'] : false;
 		}
 
 		public function get_version($id) {

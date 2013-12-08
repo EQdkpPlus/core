@@ -46,11 +46,13 @@ class form extends gen_class {
 	 * 		- type: the type of the field to use (e.g. 'dropdown')
 	 *		- any additional options for the chosen fieldtype
 	 *		- optionally the following entries can be included
-	 *			- 'text' 	=> 'text to put in front of the field'
-	 *			- 'text2'	=> 'text to put behind the field'
-	 *			- 'encrypt'	=> whether to encrypt the data of the field (encrypt on read, decrypt on output)
-	 *			- 'lang'	=> if a custom language variable shall be used for the field
-	 *			- 'help'	=> if a custom help-language variable shall be used
+	 *			- 'text' 		=> 'text to put in front of the field'
+	 *			- 'text2'		=> 'text to put behind the field'
+	 *			- 'encrypt'		=> whether to encrypt the data of the field (encrypt on read, decrypt on output)
+	 *			- 'lang'		=> if a custom language variable shall be used for the field
+	 *			- 'dir_lang'	=> if a custom (direct) string shall be used instead of a language variable
+	 *			- 'help'		=> if a custom help-language variable shall be used
+	 *			- 'dir_help'	=> if a custom (direct) string shall be used instead of a language variable
 	 */
 	
 	// flags if dependency jquery stuff has been initialised
@@ -147,10 +149,10 @@ class form extends gen_class {
 			if(empty($this->field_array[$tab]['f'])) $this->field_array[$tab]['f'] = $fieldarray;
 			else $this->field_array[$tab]['f'] = array_merge($this->field_array[$tab], $fieldarray);
 		} elseif($fieldset) {
-			if(empty($this->field_array['fs'][$fieldset])) $this->field_array['fs'][$fieldset] = $field_array;
+			if(empty($this->field_array['fs'][$fieldset])) $this->field_array['fs'][$fieldset] = $fieldarray;
 			else $this->field_array['fs'][$fieldset] = array_merge($this->field_array[$fieldset], $fieldarray);
 		} else {
-			if(empty($this->field_array['f'])) $this->field_array['f'] = $field_array;
+			if(empty($this->field_array['f'])) $this->field_array['f'] = $fieldarray;
 			else $this->field_array['f'] = array_merge($this->field_array['f'], $fieldarray);
 		}
 	}
@@ -207,7 +209,10 @@ class form extends gen_class {
 			if($tabname == 'f') {
 				// variable fieldsets holds fields in this case
 				foreach($fieldsets as $name => $options) {
-					$values[$name] = register('h'.$options['type'], array($name, $options))->inpval();
+					$class_name = 'h'.$options['type'];
+					$class = new $class_name($name, $options);
+					$values[$name] = $class->inpval();
+					unset($class);
 					if(!empty($options['encrypt'])) $values[$name] = $this->encrypt->encrypt($values[$name]);
 				}
 				continue;
@@ -257,6 +262,18 @@ class form extends gen_class {
 			if(!isset($options['help'])) $help = $lang.'_help';
 			else $help = $options['help'];
 		}
+		// direct language string?
+		if(!empty($options['dir_lang'])) {
+			$language = $options['dir_lang'];
+		} else {
+			$language = ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $name);
+		}
+		// direct help string?
+		if(!empty($options['dir_help'])) {
+			$help_message = $options['dir_help'];
+		} else {
+			$help_message = ($this->user->lang($help, false, false)) ? $this->user->lang($help) : (($this->game->glang($help)) ? $this->game->glang($help) : '');
+		}
 		
 		// encryption
 		if(!empty($options['encrypt'])) $value = $this->encrypt->decrypt($value);
@@ -274,8 +291,8 @@ class form extends gen_class {
 		$field_class = 'h'.$options['type'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
 		$this->tpl->assign_block_vars($key, array(
-			'NAME'		=> ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $name),
-			'HELP'		=> ($this->user->lang($help, false, false)) ? $this->user->lang($help) : (($this->game->glang($help)) ? $this->game->glang($help) : ''),
+			'NAME'		=> $language,
+			'HELP'		=> $help_message,
 			'FIELD'		=> $text.$field.$text2
 		));
 	}

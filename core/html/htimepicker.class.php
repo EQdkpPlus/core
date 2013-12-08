@@ -42,7 +42,7 @@ class htimepicker extends html {
 	
 	private $out = '';
 	
-	public function _toString() {
+	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->value.'"';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
@@ -51,7 +51,7 @@ class htimepicker extends html {
 	}
 	
 	public function _toString() {
-		$this->out;
+		return $this->out;
 	}
 	
 	public function inpval() {

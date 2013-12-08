@@ -63,7 +63,7 @@ class hhidden extends html {
 	}
 	
 	public function _toString() {
-		$this->out;
+		return $this->out;
 	}
 	
 	public function inpval() {

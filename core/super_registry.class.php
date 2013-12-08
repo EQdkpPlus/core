@@ -120,7 +120,7 @@ abstract class super_registry {
 			include_once(self::get_const('root_path') .'libraries/dbal/dbal.class.php');
 			require_once(self::get_const('root_path') . 'libraries/dbal/' . self::$const['dbtype'] . '.dbal.class.php');
 			self::$aliases['db'] = array('dbal_'.self::$const['dbtype'], array(array('open' => true)));
-						
+			
 			registry::register('input');
 			registry::register('config');
 			self::set_debug_level();

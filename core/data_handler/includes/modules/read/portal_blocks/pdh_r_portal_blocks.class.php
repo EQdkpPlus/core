@@ -68,7 +68,7 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 		}
 
 		public function get_id_list() {
-			return array_keys($this->blocks);
+			return (empty($this->blocks)) ? array() : array_keys($this->blocks);
 		}
 		
 		public function get_name($intBlockID){

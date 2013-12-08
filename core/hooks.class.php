@@ -35,11 +35,11 @@ class hooks extends gen_class {
 	 * @string				$strCallpath	Path to the $strClassname, without eqdkp_root_path
 	 * return @array
 	 */
-	public function register($strHook, $strClassname, $strMethodname, $strClasspath){
+	public function register($strHook, $strClassname, $strMethodname, $strClasspath, $arrClassparams=array()){
 		if (!isset($this->hooks[$strHook])) $this->hooks[$strHook] = array();
-		$strHookHash = md5($strClassname.$strMethodname.$strClasspath);
+		$strHookHash = md5($strClassname.$strMethodname.$strClasspath.serialize($arrClassparams));
 		if (!isset($this->hooks[$strHook][$strHookHash])) {
-			$this->hooks[$strHook][$strHookHash] = array('class'=> $strClassname, 'method'=> $strMethodname, 'classpath'=>$strClasspath);
+			$this->hooks[$strHook][$strHookHash] = array('class'=> $strClassname, 'method'=> $strMethodname, 'classpath'=>$strClasspath, 'class_params'=>$arrClassparams);
 		}
 	}
 	
@@ -60,16 +60,17 @@ class hooks extends gen_class {
 		if (!isset($this->hooks[$strHook])) return ($blnRecursive) ? $arrParams : array();
 		
 		$arrOutput = ($blnRecursive) ? $arrParams : array();
-		foreach($this->hooks[$strHook] as $hook){
+		foreach($this->hooks[$strHook] as $hook_data){
 			
-			include_once($this->root_path.$hook['classpath'].'/'.$hook['class'].'.class.php');
-			$objHookClass = register($hook['class']);
+			include_once($this->root_path.$hook_data['classpath'].'/'.$hook_data['class'].'.class.php');
+			if(empty($hook_data['class_params'])) $hook_data['class_params'] = array();
+			$objHookClass = register($hook_data['class'], $hook_data['class_params']);
 			if ($objHookClass) {
-				$strMethodname = $hook['method'];
+				$strMethodname = $hook_data['method'];
 				if ($blnRecursive){
 					$arrOutput = $objHookClass->$strMethodname($arrOutput);
 				} else {
-					$arrOutput[$hook['class']] = $objHookClass->$strMethodname($arrParams);
+					$arrOutput[$hook_data['class']] = $objHookClass->$strMethodname($arrParams);
 				}
 			}
 		}

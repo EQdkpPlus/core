@@ -22,8 +22,6 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('page_generic')){
 	class page_generic extends gen_class {
-		public static $shortcuts = array('config', 'in', 'jquery', 'time', 'user', 'pdh', 'tpl', 'core', 'env');
-
 		private $cd_module = false;
 		private $cd_tag = false;
 		private $cd_params = array('%id%');

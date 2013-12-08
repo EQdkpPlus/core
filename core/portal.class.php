@@ -20,39 +20,35 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class portal extends gen_class {
-	public static $shortcuts = array('jquery', 'db', 'in', 'tpl', 'user', 'config', 'game', 'pdh', 'pm', 'env', 'acl', 'pgh');
-	
+
 	private $output		= array('left' => '', 'right' => '', 'middle' => '', 'bottom' => '');
 	private $lang_inits	= array();
 	private $objs		= array();
-	private $enabled_modules = array();
+	private $loaded 	= array();
 
 	public function __construct() {
 		// init the variables...
 		$this->isAdmin			= $this->user->check_auth('a_config_man', false);
-		$this->enabled_modules	= $this->pdh->maget('portal', array('path', 'plugin'), 0, array($this->pdh->get('portal', 'id_list', array())));
-		if(is_array($this->enabled_modules)) {
-			foreach($this->enabled_modules as $module_id => $data) {
+		// TODO: find a way to get all enabled modules
+		// $arrUsedModules = $this->pdh->get('portal_layouts', 'modules', array($intPortalLayout));
+		$module_ids = $this->pdh->get('portal', 'id_list');
+		if(is_array($module_ids)) {
+			foreach($module_ids as $module_id) {
 				//Register pdh callbacks
-				$this->register_pdh_callback($data['path'], $data['plugin'], $module_id);
+				$this->register_pdh_callback($module_id);
 				//Register global hooks
-				$this->register_global_hooks($data['path'], $data['plugin'], $module_id);
+				$this->register_global_hooks($module_id);
 			}
-			$this->objs = array();
 		}
 	}
 	
 	public function get_module_external($intModuleID){
-		$vis = $this->pdh->get('portal', 'visibility', array($intModuleID));
-		if(in_array(999999999, $vis)){
-			$data = $this->pdh->maget('portal', array('path', 'plugin'), 0, array(array($intModuleID)));
-			if (isset($data[$intModuleID])) $data = $data[$intModuleID]; else return "";
+		if(in_array(PMOD_VIS_EXT, $this->config->get('visibility', 'pmod_'.$intModuleID))) {
 			$position = $this->in->get('position', 'left');
 			$wide = ($this->in->get('wide', 0));
 			
-			if(!$obj = $this->get_module($data['path'], $data['plugin'], $position, $intModuleID, $wide)) return '';
+			if(!$obj = $this->get_module($intModuleID, $position, $wide)) return '';
 
-			$obj->set_id($intModuleID);
 			$moduleout = $obj->output();
 
 			$jsOut = '<div class="module_script"><script type="text/javascript">';
@@ -85,7 +81,6 @@ class portal extends gen_class {
 
 		} else {
 			return "You don't have the required permission to view this module.";
-			
 		}
 	}
 	
@@ -98,20 +93,20 @@ class portal extends gen_class {
 			$this->output[$strBlockID] = '';
 		}
 		
+		// reset object-cache s.t. they get correctly initialised with position etc.
 		$this->objs = array();
 		
 		//Don't show modules in Admin Area
 		if (!defined('IN_ADMIN')){		
 			foreach($arrUsedModules as $strBlockID => $arrModules){
 				foreach($arrModules as $intModuleID){
-					$data = $this->enabled_modules[$intModuleID];
 					$blnWideContent = false;
 					if (strpos($strBlockID, 'block') === 0) {
 						$blnWideContent = $this->pdh->get('portal_blocks', 'wide_content', array(str_replace('block', '', $strBlockID)));
 					} elseif($strBlockID == 'middle' || $strBlockID == 'bottom'){
 						$blnWideContent = true;
 					}
-					$this->output[$strBlockID] .= $this->get_module_content($data['path'], $data['plugin'], $intModuleID, $strBlockID, $blnWideContent);
+					$this->output[$strBlockID] .= $this->get_module_content($intModuleID, $strBlockID, $blnWideContent);
 				}	
 			}
 		}
@@ -127,28 +122,20 @@ class portal extends gen_class {
 		}
 	}
 	
-	// To avoid reloading after saving on manage_portal
-	public function reset() {
-		$this->output = array();
-		$this->assign_to_tpl();
-		$this->module_output();
-	}
-	
-	//to reset cache of module
+	// to reset cache of module
 	public function reset_portal($path, $plugin='') {
-		$this->get_module($path, $plugin);
-		if(method_exists($this->objs[$path], 'reset')) $this->objs[$path]->reset();
+		if(!$this->load_module($path, $plugin)) return;
+		$portal = $path.'_portal';
+		if(method_exists($portal, 'reset')) $portal::reset();
 	}
 	
 	public function check_visibility($module_id){
-		$vis = $this->pdh->get('portal', 'visibility', array($module_id));
-		$perm = ($this->user->check_group($vis, false) || intval($vis[0]) == 0);
-		return $perm;
+		$vis = $this->config->get('visibility', 'pmod_'.$module_id);
+		return ($this->user->check_group($vis, false) || intval($vis[0]) == 0);
 	}
 	
-	private function register_pdh_callback($path, $plugin, $module_id) {
-		$obj = $this->get_module($path, $plugin, 'left', $module_id);
-		if ($obj){
+	private function register_pdh_callback($module_id) {
+		if ($obj = $this->get_module($module_id)){
 			$arrHooks = $obj->get_reset_pdh_hooks();
 			if (is_array($arrHooks) && count($arrHooks) > 0){
 				$this->pdh->register_hook_callback(array($obj, "reset"), $arrHooks);
@@ -156,14 +143,15 @@ class portal extends gen_class {
 		}
 	}
 	
-	private function register_global_hooks($path, $plugin, $module_id) {
-		$obj = $this->get_module($path, $plugin, 'left', $module_id);
-		$cwd = ($plugin) ?'plugins/'.$plugin.'/portal/hooks' :'portal/' . $path .'/hooks';
-		if ($obj){
+	private function register_global_hooks($module_id) {
+		$path = $this->pdh->get('portal', 'path', array($module_id));
+		$plugin = $this->pdh->get('portal', 'plugin', array($module_id));
+		$cwd = ($plugin) ? 'plugins/'.$plugin.'/portal/hooks' : 'portal/'.$path.'/hooks';
+		if ($obj = $this->get_module($module_id)){
 			$arrHooks = $obj->get_hooks();
 			if (is_array($arrHooks) && count($arrHooks) > 0){
 				foreach($arrHooks as $arrHook){
-					$this->pgh->register($arrHook[0], $arrHook[1], $arrHook[0].'_hook', $cwd);
+					$this->pgh->register($arrHook[0], $arrHook[1], $arrHook[0].'_hook', $cwd, array($module_id));
 				}
 			}
 		}
@@ -171,11 +159,11 @@ class portal extends gen_class {
 
 
 	// The Module Style
-	private function get_module_content($path, $plugin, $module_id, $posi, $wideContent = false) {
+	private function get_module_content($module_id, $posi, $wideContent = false) {
 		$perm = $this->check_visibility($module_id);
 		
-		if(!$perm || !$obj = $this->get_module($path, $plugin, $posi, $module_id, $wideContent)) return '';
-		if($this->pdh->get('portal', 'collapsable', array($module_id)) == '1'){
+		if(!$perm || !$obj = $this->get_module($module_id, $posi, $wideContent)) return '';
+		if($this->config->get('collapsable', 'pmod_'.$module_id) == '1'){
 			$this->jquery->Collapse('#portalbox'.$module_id);
 		}
 		
@@ -184,11 +172,10 @@ class portal extends gen_class {
 			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><i class="fa fa-wrench hand" title="'.$this->user->lang('portalplugin_settings').'"></i></span>';
 			$this->init_portalsettings();
 		}
-		$obj->set_id($module_id);
 		$out = $obj->output();
 		return 
 '				<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">
-					<div class="portalbox_head">'.(($this->pdh->get('portal', 'collapsable', array($module_id)) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'
+					<div class="portalbox_head">'.(($this->config->get('collapsable', 'pmod_'.$module_id) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'
 						
 						'.$editbutton.'
 						<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
@@ -205,24 +192,44 @@ class portal extends gen_class {
 			$this->jquery->Dialog('fe_portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->server_path."admin/manage_portal.php".$this->SID."&simple_head=true&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs'=> 'location.reload(true);'));
 		}
 	}
+	
+	public function get_module($module_id, $position='', $wideContent = false) {
+		if(!isset($this->objs[$module_id])) {
+			$path = $this->pdh->get('portal', 'path', array($module_id));
+			$plugin = $this->pdh->get('portal', 'plugin', array($module_id));
+			if($this->load_module($path, $plugin)) {
+				$this->load_lang($path, $plugin);
+				$class_name = $path.'_portal';
+				$this->objs[$module_id] = registry::register($class_name, array($module_id, $position, $wideContent));
+			} else $this->objs[$module_id] = false;
+		}
+		return $this->objs[$module_id];
+	}
 
 	public function install($path, $plugin='', $child = false) {
-		$obj = $this->get_module($path, $plugin);
-		if(!$obj) return false;
-		$this->pdh->put('portal', 'install', array($path, $plugin, $obj->get_data('name'), $obj->install(), $child));
+		if(!$this->load_module($path, $plugin)) return false;
+		$class_name = $path.'_portal';
+		$inst = $class_name::install($child);
+		if(!$id = $this->pdh->put('portal', 'install', array($path, $plugin, $class_name::get_data(), $child))) return false;
+		
+		// set defaults for collapsable and visibility
+		$this->config->set('visibility', $inst['visibility'], 'pmod_'.$id);
+		$this->config->set('collapsable', $inst['collapsable'], 'pmod_'.$id);
+		
+		// set other default settings
+		if($settings = $this->get_module($id)->get_settings('fetch_new')) {
+			foreach($settings as $name => $sett) {
+				if(!empty($sett['default'])) $this->config->set($name, $sett['default'], 'pmod_'.$id);
+			}
+		}
 	}
 	
-	public function uninstall($path, $plugin='', $id=0) {
-		$obj = $this->get_module($path, $plugin);
-		if(!$obj) return false;
-		if($id) {
-			$child = $this->pdh->get('portal', 'child', array($id));
-			$this->pdh->put('portal', 'delete', array($id));
-		} else
-			$this->pdh->put('portal', 'delete', array($path, 'path'));
-			
-		$obj->uninstall();
-		if ($id && !$child) unset($this->objs[$path]);
+	public function uninstall($path, $plugin='') {
+		if(!$this->module_loaded($path, $plugin)) return false;
+		$this->pdh->put('portal', 'delete', array($path, 'path'));
+		$class_name = $path.'_portal';
+		$class_name::uninstall();
+		unset($this->objs[$path]);
 	}
 	
 	// Check if the Portal-Module-File is still available
@@ -241,41 +248,28 @@ class portal extends gen_class {
 		}
 	}
 
-	public function get_module($path, $plugin='', $position='', $module_id = 0, $wideContent = false) {
-		if(!isset($this->objs[$path])) {
-			$cwd = $this->check_file($path, $plugin);
-			if($cwd) {
+	public function load_module($path, $plugin) {
+		if(!isset($this->loaded[$path])) {
+			if($cwd = $this->check_file($path, $plugin)) {
 				include_once($cwd);
-				if(!class_exists($path.'_portal')) $this->objs[$path] = false;
-				else {
-					$this->load_lang($path, $plugin);
-					$class_name = $path.'_portal';
-					$this->objs[$path] = registry::register($class_name, array($position, $module_id, $wideContent));
-				}
-			} else $this->objs[$path] = false;
+				$this->loaded[$path] = class_exists($path.'_portal') ? true : false;
+			} else $this->loaded[$path] = false;
 		}
-		return $this->objs[$path];
+		return $this->loaded[$path];
 	}
 	
 	private function check_update($id, $path) {
-		if(version_compare($this->objs[$path]->get_data('version'), $this->pdh->get('portal', 'version', array($id))) <= 0) return true;
+		$class_name = $path.'_portal';
+		if(version_compare($class_name::get_data('version'), $this->pdh->get('portal', 'version', array($id))) <= 0) return true;
 		//update settings, contact, autor, version
-		$this->pdh->put('portal', 'update', array($id, array(
-			'contact'	=> $this->objs[$path]->get_data('contact'),
-			'autor'		=> $this->objs[$path]->get_data('author'),
-			'version'	=> $this->objs[$path]->get_data('version'))
-		));
+		$this->pdh->put('portal', 'update', array($id, array('version' => $class_name::get_data('version'))));
 		//maybe they have something else to do
-		if(method_exists($this->objs[$path], 'update_function')) $this->objs[$path]->update_function($this->pdh->get('portal', 'version', array($id)));
+		if(method_exists($this->objs[$id], 'update_function')) $this->objs[$id]->update_function($this->pdh->get('portal', 'version', array($id)));
 	}
 
 	public function get_all_modules() {
 		$this->pdh->process_hook_queue();
 		$modules = $this->pdh->aget('portal', 'path', 0, array($this->pdh->get('portal', 'id_list')));
-		foreach($modules as $id => $path) {
-			if(!$this->get_module($path, $this->pdh->get('portal', 'plugin', array($id)))) continue;
-			$this->check_update($id, $path);
-		}
 
 		//EQDKP PORTAL MODULES
 		// Search for portal-modules and make sure they are registered
@@ -303,6 +297,11 @@ class portal extends gen_class {
 			}
 		}
 		$this->pdh->process_hook_queue();
+		$modules = $this->pdh->aget('portal', 'path', 0, array($this->pdh->get('portal', 'id_list')));
+		foreach($modules as $id => $path) {
+			if(!$this->get_module($id)) continue;
+			$this->check_update($id, $path);
+		}
 		return $this->objs;
 	}
 	
@@ -328,66 +327,58 @@ class portal extends gen_class {
 }
 
 abstract class portal_generic extends gen_class {
-	public static $shortcuts = array('db', 'config');
-
-	protected $path		= '';
-	protected $plugin	= '';
-	protected $data		= array(
-			'name'			=> '',
-			'version'		=> '0.0',
-			'author'		=> '',
-			'contact'		=> '',
-			'description'	=> ''
-		);
-	protected $settings	= array();
-	protected $install	= array(
-			'autoenable'		=> '0',
-			'defaultposition'	=> 'left',
-			'defaultnumber'		=> '0',
-			'visibility'		=> array(0),
-			'collapsable'		=> '1'
-		);
-	protected $tables	= array();
-	protected $sqls		= array();
+	protected static $path		= '';
+	protected static $plugin	= '';
+	protected static $data		= array(
+		'name'			=> '',
+		'version'		=> '0.0',
+		'author'		=> '',
+		'contact'		=> '',
+		'description'	=> '',
+		'icon'			=> '',
+		'exchangeMod'	=> array(),
+		'multiple'		=> false,
+		'wide_content'	=> false,
+		'reload_on_vis'	=> false,
+		'positions'		=> array('left'),
+		'lang_prefix'	=> ''
+	);
+	// data required for installation of portal module
+	protected static $install	= array(
+		'autoenable'		=> '0',
+		'defaultposition'	=> 'left',
+		'defaultnumber'		=> '0',
+		'visibility'		=> array(0),
+		'collapsable'		=> '1'
+	);
+	protected static $tables	= array();
+	protected static $sqls		= array();
 	
-	protected $position	= '';
-	protected $id = '';
-	protected $wide_content = false;
-	protected $multiple = false;
-	protected $exchangeModules = array();
-	protected $reset_pdh_hooks = array();
-	protected $hooks = array();
-	protected $css = array('files' => array(), 'content' => '');
+	protected $position			= '';
+	protected $id 				= 0;
+	protected $settings			= array();
+	protected $reset_pdh_hooks 	= array();
+	protected $hooks 			= array();
 	
-	public $LoadSettingsOnchangeVisibility = false;
+	// TODO: $css does not seem to be used, what was it intended for?
+	// protected $css = array('files' => array(), 'content' => '');
 	
-	public function __construct($position='', $module_id = 0, $wideContent = false) {
+	final public function __construct($module_id, $position='', $wideContent = false) {
 		$this->position = $position;
 		$this->id = $module_id;
-		$this->wide_content = $wideContent;
+		static::$data['wide_content'] = $wideContent;
 	}
 
-	public function get_data($type='') {
-		if(!$type) return $this->data;
-		if(isset($this->data[$type])) return $this->data[$type];
-		return false;
-	}
-	
-	public function get_css(){
-		return $this->css;
-	}
-	
-	public function get_multiple(){
-		if(isset($this->multiple)) return $this->multiple;
+	final public static function get_data($type='') {
+		// add default data to the data array
+		$data = array_merge(self::$data, static::$data);
+		if(!$type) return $data;
+		if(isset($data[$type])) return $data[$type];
 		return false;
 	}
 
 	public function get_settings($state) {
 		return (empty($this->settings)) ? false : $this->settings;
-	}
-	
-	public function get_exchangeModules(){
-		return $this->exchangeModules;
 	}
 	
 	public function get_reset_pdh_hooks(){
@@ -398,32 +389,26 @@ abstract class portal_generic extends gen_class {
 		return $this->hooks;
 	}
 	
-	public function install() {
-		if(!empty($this->sqls)) {
-			foreach($this->sqls as $sql){
-				$this->db->query($sql);
+	public static function install($child=false) {
+		if(!empty(static::$sqls) && !$child) {
+			foreach(static::$sqls as $sql){
+				register('db')->query($sql);
 			}
 		}
-		//set default settings
-		if($settings = $this->get_settings('fetch_new')) {
-			foreach($settings as $sett) {
-				if(!empty($sett['default'])) $this->config->set($sett['name'], $sett['default']);
-			}
-		}
-		return $this->install;
+		return static::$install;
 	}
 	
-	public function uninstall() {
-		if(!empty($this->tables)) {
-			foreach($this->tables as $table) {
-				$this->db->query("DROP TABLE IF EXISTS __".$table.";");
+	public static function uninstall() {
+		if(!empty(static::$tables)) {
+			foreach(static::$tables as $table) {
+				register('db')->query("DROP TABLE IF EXISTS __".$table.";");
 			}
 		}
 		return true;
 	}
 	
 	public function get_header() {
-		return (isset($this->header)) ? $this->header : registry::fetch('user')->lang($this->path, true);
+		return (isset($this->header)) ? $this->header : $this->user->lang($this->path, true, false);
 	}
 	
 	public function update_function($old_version) {
@@ -431,25 +416,19 @@ abstract class portal_generic extends gen_class {
 	}
 
 	public function config($value){
-		$child = registry::register('plus_datahandler')->get('portal', 'child', array($this->id));
-		if (!$child) return registry::register('config')->get($value);
-		return registry::register('config')->get($value.'_'.$this->id);
+		return $this->config->get($value, 'pmod_'.$this->id);
 	}
 	
 	public function set_config($key, $value){
-		$child = registry::register('plus_datahandler')->get('portal', 'child', array($this->id));
-		if (!$child) return registry::register('config')->set($key, $value);
-		return registry::register('config')->set($key.'_'.$this->id, $value);
+		return $this->config->set($key, $value, 'pmod_'.$this->id);
 	}
 	
 	public function del_config($key){
-		$child = registry::register('plus_datahandler')->get('portal', 'child', array($this->id));
-		if (!$child) return registry::register('config')->del($key);
-		return registry::register('config')->del($key.'_'.$this->id);
+		return $this->config->del($key, 'pmod_'.$this->id);
 	}
 	
-	public function set_id($id){
-		$this->id = $id;
+	public static function reset() {
+		register('pdc')->del_prefix('portal.module.'.static::$path);
 	}
 	
 	abstract public function output();

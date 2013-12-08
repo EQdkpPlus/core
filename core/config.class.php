@@ -20,7 +20,6 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class config extends gen_class {
-	public static $shortcuts = array('pfh', 'db');
 	public static $dependencies = array('pfh', 'db');
 
 	protected $config_modified	= false;
@@ -45,6 +44,8 @@ class config extends gen_class {
 	}
 
 	public function set($config_name, $config_value='', $plugin=''){
+		pd($config_name);
+		pd($plugin);
 		if(is_array($config_name)){
 			foreach($config_name as $d_name => $d_value){
 				$this->set($d_name, $d_value, $plugin);
@@ -72,6 +73,7 @@ class config extends gen_class {
 				}
 			}
 		}
+		pd($this->config[$plugin]);
 	}
 
 	public function del($config_name, $plugin=''){
@@ -112,11 +114,11 @@ class config extends gen_class {
 				$this->get_dbconfig();
 			}
 		}
-		return ($plugin) ? $this->config[$plugin] : $this->config;
+		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
 	}
 	
 	private function unserialize($val) {
-		//check for '{', only in this case we try a unserialize
+		//check for '{', only in this case we try an unserialize
 		if(strpos($val, '{') === false) return $val;
 		$value = unserialize($val);
 		// if value is an array now, return value, else return val

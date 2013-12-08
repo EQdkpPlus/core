@@ -22,25 +22,13 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_portal" ) ) {
 	class pdh_w_portal extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
-
-		public function install($path, $plugin='', $name='', $install=array(), $child = false) {
-			$data = array(
+	
+		public function install($path, $plugin='', $name='', $version='', $child = false) {
+			$dbdata = array(
 				'name'			=> $name,
 				'path'			=> $path,
 				'plugin'		=> $plugin,
-				//'enabled'		=> ((isset($install['autoenable'])) ? (($install['autoenable']) ? 1 : 0) : 0),
-				//'position'		=> ((isset($install['defaultposition'])) ? $install['defaultposition'] : 0),
-				//'number'		=> ((isset($install['defaultnumber'])) ? $install['defaultnumber'] : 0),
-				'visibility'	=> ((isset($install['visibility'])) ? serialize($install['visibility']) : serialize(array(0))),
-				'collapsable'	=> ((isset($install['collapsable'])) ? (($install['collapsable']) ? 1 : 0) : 1),
+				'version'		=> $version,
 				'child'			=> ($child) ? 1 : 0,
 			);
 			
@@ -60,7 +48,7 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 				$objQuery = $this->db->prepare("DELETE FROM __portal WHERE ".$type." = ?")->execute($id);
 				if ($objQuery){
 					$this->pdh->enqueue_hook('update_portal', array($id));
-				return true;
+					return true;
 				}
 			}
 			return false;
@@ -70,21 +58,6 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 			if (!$id) return false;
 			
 			$objQuery = $this->db->prepare("UPDATE __portal :p WHERE id = ?;")->set($data)->execute($id);
-			if($objQuery) {
-				$this->pdh->enqueue_hook('update_portal', array($id));
-				return true;
-			}
-			return false;
-		}
-
-		public function disable_enable($id, $status='0') {
-			if (!$id) return false;
-			
-			if($this->pdh->get('portal', 'enabled', array($id)) == $status) return true;
-			
-			$objQuery = $this->db->prepare("UPDATE __portal :p WHERE id=?")->set(array(
-				'enabled' => $status,
-			))->execute( $id);
 			if($objQuery) {
 				$this->pdh->enqueue_hook('update_portal', array($id));
 				return true;

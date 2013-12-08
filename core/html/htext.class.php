@@ -50,7 +50,7 @@ class htext extends html {
 	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector');
 	private $out = '';
 	
-	public function _toString() {
+	public function _construct() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
@@ -73,7 +73,7 @@ class htext extends html {
 	}
 	
 	public function _toString() {
-		$this->out;
+		return $this->out;
 	}
 	
 	public function inpval() {
