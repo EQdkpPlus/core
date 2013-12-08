@@ -32,6 +32,7 @@ abstract class html {
 			if(in_array($key, self::$ignore)) continue;
 			$this->$key = $option;
 		}
+		if(method_exists($this, '_construct')) $this->_construct();
 	}
 	
 	abstract protected function _toString();

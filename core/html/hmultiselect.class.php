@@ -32,6 +32,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * js			(string)	extra js which shall be injected into the field
  * options		(array)		list of all available options
  * todisable	(array)		list of all options which shall not be selectable
+ * tolang		(boolean)	apply language function on values of option-array
  * 
  * additional options for jquery->multiselect
  * height 		(int)		height of the dropdown in px
@@ -56,8 +57,9 @@ class hmultiselect extends html {
 	public $tolang = false;
 	
 	private $jq_options = array('id', 'height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter');
+	private $out = '';
 	
-	public function _toString() {
+	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$dropdown = '<select name="'.$this->name.'[]" id="'.$this->id.'" multiple="multiple"';
 		if(!empty($this->class)) $dropdown .= ' class="'.$this->class.'"';
@@ -79,7 +81,11 @@ class hmultiselect extends html {
 		$options = array();
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
 		$this->jquery->MultiSelect('', array(), array(), $options);
-		return $dropdown;
+		$this->out = $dropdown;
+	}
+	
+	public function _toString() {
+		return $this->out;
 	}
 	
 	public function inpval() {
