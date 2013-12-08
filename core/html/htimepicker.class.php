@@ -40,12 +40,18 @@ class htimepicker extends html {
 	public $hourf = 24;
 	public $value = 0;
 	
+	private $out = '';
+	
 	public function _toString() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->value.'"';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf);
-		return $out.' />';
+		$this->out = $out.' />';
+	}
+	
+	public function _toString() {
+		$this->out;
 	}
 	
 	public function inpval() {

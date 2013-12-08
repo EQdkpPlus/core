@@ -41,8 +41,11 @@ class hdatepicker extends html {
 	public $name = '';
 	public $disabled = false;
 	public $allow_empty = false;
+	public $options = array();
 	
-	protected function _toString() {	
+	private $out = '';
+	
+	protected function _construct() {	
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
 			$this->value = $this->time->date($this->calendarformat(), $this->value);
 		}
@@ -60,7 +63,11 @@ class hdatepicker extends html {
 		if(isset($this->options['timeformat'])) $this->options['timeformat'] = $this->time->translateformat2js($this->options['timeformat']);
 		$this->jquery->Calendar($this->name, $this->value, '', $this->options);
 		
-		return $out.' />';
+		$this->out = $out.' />';
+	}
+	
+	public function _toString() {
+		$this->out;
 	}
 	
 	public function inpval() {

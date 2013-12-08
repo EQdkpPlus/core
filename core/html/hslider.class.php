@@ -40,12 +40,17 @@ class hslider extends html {
 	public $name = '';
 	public $range = true;
 	private $options = array('min', 'max', 'value', 'width', 'label', 'name');
+	private $out = '';
 	
-	protected function _toString() {
+	protected function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$options = array();
 		foreach($this->options as $opt) $options[$opt] = $this->$opt;
-		return $this->jquery->Slider($this->id, $options, ($this->range) ? 'range' : 'normal');
+		$this->out = $this->jquery->Slider($this->id, $options, ($this->range) ? 'range' : 'normal');
+	}
+	
+	public function _toString() {
+		$this->out;
 	}
 	
 	public function inpval() {

@@ -43,8 +43,9 @@ class hhidden extends html {
 	public $imgup_type = 'admin';
 	
 	private $imgoptions = array('prevheight', 'deletelink', 'noimgfile');
+	private $out = '';
 	
-	public function _toString() {
+	public function _construct() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
@@ -58,7 +59,11 @@ class hhidden extends html {
 			foreach($this->imgoptions as $opt) $imgopts[$opt] = $this->$opt;
 			$imgup = $this->jquery->imageUploader($this->imgup_type, $this->id, $this->value, $this->imgpath, $imgopts);
 		}
-		return $out.' />'.$imgup;
+		$this->out = $out.' />'.$imgup;
+	}
+	
+	public function _toString() {
+		$this->out;
 	}
 	
 	public function inpval() {

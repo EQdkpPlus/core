@@ -48,6 +48,7 @@ class htext extends html {
 	public $class = 'input';
 	
 	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector');
+	private $out = '';
 	
 	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
@@ -68,7 +69,11 @@ class htext extends html {
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		return $out.' />';
+		$this->out = $out.' />';
+	}
+	
+	public function _toString() {
+		$this->out;
 	}
 	
 	public function inpval() {

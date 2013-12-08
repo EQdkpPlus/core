@@ -40,8 +40,10 @@ class htooltip extends html {
 	public $content = '';
 	public $label = '';
 	public $usediv = false;
+	
 	private $contfunc = true;
 	private $all_opts = array('contfunc', 'name', 'my', 'at', 'classes', 'width');
+	private $out = '';
 
 	public function _toString() {
 		if(empty($this->name)) $this->name = uniqid();
@@ -52,11 +54,14 @@ class htooltip extends html {
 		}
 		$this->jquery->qtip('.'.$this->name, 'return $(".'.$this->name.'_c", this).html();', $options);
 		if(isset($this->usediv) && $this->usediv){
-			return '<div class="'.$this->name.'" id="'.$this->id.'"><div class="'.$this->name.'_c" style="display:none;">'.$this->content.'</div>'.$this->label.'</div>';
+			$this->out = '<div class="'.$this->name.'" id="'.$this->id.'"><div class="'.$this->name.'_c" style="display:none;">'.$this->content.'</div>'.$this->label.'</div>';
 		}else{
-			return '<span class="'.$this->name.'" id="'.$this->id.'"><span class="'.$this->name.'_c" style="display:none;">'.$this->content.'</span>'.$this->label.'</span>';
+			$this->out = '<span class="'.$this->name.'" id="'.$this->id.'"><span class="'.$this->name.'_c" style="display:none;">'.$this->content.'</span>'.$this->label.'</span>';
 		}
-		return ;
+	}
+	
+	public function _toString() {
+		$this->out;
 	}
 	
 	public function inpval() {
