@@ -210,14 +210,15 @@ class portal extends gen_class {
 		if(!$this->load_module($path, $plugin)) return false;
 		$class_name = $path.'_portal';
 		$inst = $class_name::install($child);
-		if(!$id = $this->pdh->put('portal', 'install', array($path, $plugin, $class_name::get_data(), $child))) return false;
+		if(!$id = $this->pdh->put('portal', 'install', array($path, $plugin, $class_name::get_data('name'), $class_name::get_data('version'), $child))) return false;
 		
 		// set defaults for collapsable and visibility
 		$this->config->set('visibility', $inst['visibility'], 'pmod_'.$id);
 		$this->config->set('collapsable', $inst['collapsable'], 'pmod_'.$id);
 		
 		// set other default settings
-		if($settings = $this->get_module($id)->get_settings('fetch_new')) {
+		$obj = $this->get_module($id);
+		if($obj && $settings = $obj->get_settings('fetch_new')) {
 			foreach($settings as $name => $sett) {
 				if(!empty($sett['default'])) $this->config->set($name, $sett['default'], 'pmod_'.$id);
 			}

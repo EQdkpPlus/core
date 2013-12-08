@@ -32,7 +32,7 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 				'child'			=> ($child) ? 1 : 0,
 			);
 			
-			$objQuery = $this->db->prepare("INSERT INTO __portal :p")->set($data)->execute();
+			$objQuery = $this->db->prepare("INSERT INTO __portal :p")->set($dbdata)->execute();
 			
 			if($objQuery) {
 				$id = $objQuery->insertId;
