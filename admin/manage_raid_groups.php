@@ -28,7 +28,7 @@ class Manage_Raid_Groups extends page_generic {
 	}
 
 	public function __construct(){
-		$this->user->check_auths(array('a_membergroups_man', 'a_membergroups_grpleader'), 'or');
+		$this->user->check_auths(array('a_raidgroups_man', 'a_raidgroups_grpleader'), 'or');
 		
 		$handler = array(
 			'save'				=> array('process' => 'raid_group_save',			'csrf'=>true),
@@ -46,8 +46,8 @@ class Manage_Raid_Groups extends page_generic {
 	public function raid_group_members_del(){
 		$intGroupID = $this->in->get('g', 0);
 		
-		if (!$this->user->check_auth('a_membergroups_man', false) && !$this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $intGroupID))){
-			$this->user->check_auth('a_membergroups_man');
+		if (!$this->user->check_auth('a_raidgroups_man', false) && !$this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $intGroupID))){
+			$this->user->check_auth('a_raidgroups_man');
 		}
 	
 		$members = $this->in->getArray('group_raid', 'int');
@@ -65,8 +65,8 @@ class Manage_Raid_Groups extends page_generic {
 	public function raid_group_members_save(){
 		$intGroupID = $this->in->get('g', 0);
 		
-		if (!$this->user->check_auth('a_membergroups_man', false) && !$this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $intGroupID))){
-			$this->user->check_auth('a_membergroups_man');
+		if (!$this->user->check_auth('a_raidgroups_man', false) && !$this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $intGroupID))){
+			$this->user->check_auth('a_raidgroups_man');
 		}
 		
 		$members = $this->in->getArray('add_user', 'int');
@@ -85,7 +85,7 @@ class Manage_Raid_Groups extends page_generic {
 	}
 	
 	public function process_add_grpleader (){
-		$this->user->check_auth('a_membergroups_man');
+		$this->user->check_auth('a_raidgroups_man');
 		
 		$members = $this->in->getArray('group_raid', 'int');
 
@@ -97,7 +97,7 @@ class Manage_Raid_Groups extends page_generic {
 	}
 	
 	public function process_remove_grpleader (){
-		$this->user->check_auth('a_membergroups_man');
+		$this->user->check_auth('a_raidgroups_man');
 		
 		$members = $this->in->getArray('group_raid', 'int');
 		if (count($members) > 0){
@@ -109,7 +109,7 @@ class Manage_Raid_Groups extends page_generic {
 	
 	//Save the raid-Groups
 	public function raid_group_save() {
-		$this->user->check_auth('a_membergroups_man');
+		$this->user->check_auth('a_raidgroups_man');
 		$retu = array();
 		$group_post = $this->get_post();
 
@@ -142,7 +142,7 @@ class Manage_Raid_Groups extends page_generic {
 	
 	//Delete user-groups
 	public function delete() {
-		$this->user->check_auth('a_membergroups_man');
+		$this->user->check_auth('a_raidgroups_man');
 		
 		$grpids = array();
 		if(count($this->in->getArray('raid_group_ids', 'int')) > 0) {
@@ -195,7 +195,7 @@ class Manage_Raid_Groups extends page_generic {
 				'USER_COUNT'	=> $this->pdh->get('raid_groups_members', 'groupcount', array($id)),
 				'S_DELETABLE' => ($this->pdh->get('raid_groups', 'deletable', array($id))) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('raid_groups', 'standard', array($id))) ? 'checked="checked"' : '',
-				'S_IS_GRPLEADER' => $this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $id)),
+				'S_IS_GRPLEADER' => $this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $id)),
 			));
 			$key++;
 			$new_id = ($id >= $new_id) ? $id+1 : $new_id;
@@ -207,7 +207,7 @@ class Manage_Raid_Groups extends page_generic {
 		$this->tpl->assign_vars(array(
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
-			'S_USERGROUP_ADMIN' => $this->user->check_auth('a_membergroups_man', false),
+			'S_USERGROUP_ADMIN' => $this->user->check_auth('a_raidgroups_man', false),
 		));
 
 		$this->core->set_vars(array(
@@ -223,8 +223,9 @@ class Manage_Raid_Groups extends page_generic {
 	public function edit($messages=false, $group = false){
 		$groupID  = ($group) ? $group : $this->in->get('g', 0);
 		
-		if (!$this->user->check_auth('a_membergroups_man', false) && !$this->pdh->get('raid_groups_members', 'is_grpleader', array($this->user->id, $groupID))){
-			$this->user->check_auth('a_membergroups_man');
+		//Check Permissions
+		if (!$this->user->check_auth('a_raidgroups_man', false) && !$this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $groupID))){
+			$this->user->check_auth('a_raidgroups_man');
 		}
 	
 		if($messages) {
@@ -275,14 +276,14 @@ class Manage_Raid_Groups extends page_generic {
 				'name'	=> $this->user->lang('add_grpleader'),
 				'type'	=> 'button', //link, button, javascript
 				'icon'	=> 'fa-check',
-				'perm'	=> $this->user->check_auth('a_membergroups_man', false),
+				'perm'	=> $this->user->check_auth('a_raidgroups_man', false),
 				'link'	=> '#add_grpleader',
 			),
 			2 => array(
 				'name'	=> $this->user->lang('remove_grpleader'),
 				'type'	=> 'button', //link, button, javascript
 				'icon'	=> 'fa-times',
-				'perm'	=> $this->user->check_auth('a_membergroups_man', false),
+				'perm'	=> $this->user->check_auth('a_raidgroups_man', false),
 				'link'	=> '#remove_grpleader',
 			),
 		
@@ -296,7 +297,7 @@ class Manage_Raid_Groups extends page_generic {
 			'ADD_USER_DROPDOWN'		=> $this->jquery->MultiSelect('add_user', $not_in, '', array('width' => 350, 'filter' => true)),
 			'GRP_ID'				=> $groupID,
 			'BUTTON_MENU'			=> $this->jquery->ButtonDropDownMenu('raid_groups_user_menu', $arrMenuItems, array(".usercheckbox"), '', $this->user->lang('selected_chars').'...', ''),
-			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_membergroups_man', false),
+			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_raidgroups_man', false),
 		));
 
 		$this->core->set_vars(array(

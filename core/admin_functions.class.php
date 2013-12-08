@@ -487,7 +487,7 @@ class admin_functions extends gen_class {
 				2		=> array('link' => 'admin/manage_events.php'.$this->SID,			'text' => $this->user->lang('manevents_title'),	'check' => 'a_event_upd',	'icon' => 'fa-key fa-lg'),
 				3		=> array('link' => 'admin/manage_multidkp.php'.$this->SID,		'text' => $this->user->lang('manmdkp_title'),		'check' => 'a_event_upd',	'icon' => 'fa-gavel fa-lg'),
 				4		=> array('link' => 'admin/manage_itempools.php'.$this->SID,		'text' => $this->user->lang('manitempools_title'),'check' => 'a_event_upd',	'icon' => 'fa-tags fa-lg'),
-				5		=> array('link' => 'admin/manage_raid_groups.php'.$this->SID,		'text' => $this->user->lang('manage_raid_groups'),'check' => 'a_raid_add',	'icon' => 'fa-users fa-lg'),
+				5		=> array('link' => 'admin/manage_raid_groups.php'.$this->SID,		'text' => $this->user->lang('manage_raid_groups'),'check' => array('OR', array('a_raidgroups_man', 'a_raidgroups_grpleader')),	'icon' => 'fa-users fa-lg'),
 			),
 			'calendar'	=> array(
 				'icon'	=> 'fa-calendar fa-lg',

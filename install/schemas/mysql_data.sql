@@ -30,6 +30,9 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_massmail'
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_grpleader','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_articles_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_grpleader','N');
+
 ### User Permissions
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_man','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_add','Y');

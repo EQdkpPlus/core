@@ -143,6 +143,7 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 		public function delete_members_from_group($member_array, $group_id) {
 			if (is_array($member_array)) {
 				$objQuery = $this->db->prepare("DELETE FROM __groups_raid_members WHERE group_id =? AND member_id :in")->in($member_array)->execute($group_id);
+				$this->pdh->enqueue_hook('raid_groups_update');
 			} else {
 				return false;
 			}
@@ -150,6 +151,7 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 
 		public function delete_all_member_from_group($group_id) {
 			$objQuery = $this->db->prepare("DELETE FROM __groups_raid_members WHERE group_id =?")->execute($group_id);
+			$this->pdh->enqueue_hook('raid_groups_update');
 			return true;
 		}
 	}

@@ -209,7 +209,7 @@ class acl_manager extends gen_class {
 			// Members
 			$this->user->lang('chars') => array(
 				array('CBNAME' => 'a_members_man', 'TEXT' => $this->user->lang('manage')),
-				array('CBNAME' => 'a_membergroups_man',   'TEXT' => $this->user->lang('manage_raid_groups')),
+				array('CBNAME' => 'a_raidgroups_man',   'TEXT' => $this->user->lang('manage_raid_groups')),
 				array('CBNAME' => 'u_member_add',  'TEXT' => $this->user->lang('charsadd')),
 				array('CBNAME' => 'u_member_man',	'TEXT' => $this->user->lang('charsmanage')),
 				array('CBNAME' => 'u_member_del',  'TEXT' => $this->user->lang('charsdelete')),
@@ -308,6 +308,10 @@ class acl extends acl_manager {
 						}
 					}
 				}
+				
+				//Check if he has chars that are grpleader of raidgroups
+				if ($this->pdh->get('raid_groups_members', 'user_has_grpleaders', array($user_id))) $this->user_group_permissions[$user_id]['a_raidgroups_grpleader'] = "Y";
+				
 			} else { //Permission for ANONYMOUS
 				$result =  $this->db->query("SELECT ga.auth_setting, ao.auth_value FROM __auth_groups ga, __auth_options ao WHERE ga.auth_id = ao.auth_id AND ga.group_id = 1");
 				if($result){

@@ -71,6 +71,30 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			if (isset($this->raid_memberships[$member_id][$group_id]) && $this->raid_memberships[$member_id][$group_id] == 1) return true;
 			return false;
 		}
+		
+		public function get_user_is_grpleader($user_id, $group_id){
+			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
+			if (is_array($arrMembers)){
+				foreach($arrMembers as $member_id){
+					if ($this->get_is_grpleader($member_id, $group_id)) return true;
+				}
+			}
+			return false;
+		}
+		
+		public function get_user_has_grpleaders($user_id){
+			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
+			if (is_array($arrMembers)){
+				$arrRaidGroups = $this->pdh->get('raid_groups', 'id_list');
+				
+				foreach($arrRaidGroups as $raidgroup_id){
+					foreach($arrMembers as $member_id){
+						if ($this->get_is_grpleader($member_id, $raidgroup_id)) return true;
+					}
+				}
+			}
+			return false;
+		}
 
 		public function get_memberships($member_id){
 			if (isset($this->raid_memberships[$member_id]) && is_array($this->raid_memberships[$member_id])){

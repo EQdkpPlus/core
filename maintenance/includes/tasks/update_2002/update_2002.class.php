@@ -73,8 +73,8 @@ class update_2002 extends sql_update_task {
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			3 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`)
 VALUES (1, 'Default','',0,1,1);",
-			4 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_membergroups_grpleader');",
-			5 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_membergroups_man');",
+			4 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_raidgroups_grpleader');",
+			5 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_raidgroups_man');",
 		);
 
 	}
