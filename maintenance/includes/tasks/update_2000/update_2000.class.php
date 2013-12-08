@@ -22,10 +22,11 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
-class update_200 extends sql_update_task {
-	public $author		= 'GodMod';
-	public $version		= '2.0.0'; //new plus-version
-	public $name		= '2.0.0 Migration from 1.x';
+class update_2000 extends sql_update_task {
+	public $author			= 'GodMod';
+	public $version			= '2.0.0.0'; //new plus-version
+	public $ext_version		= '2.0.0'; //new plus-version
+	public $name			= '2.0.0 Migration from 1.x';
 
 	public static function __shortcuts() {
 		$shortcuts = array('time', 'config', 'routing', 'pdc', 'db');
@@ -59,7 +60,7 @@ class update_200 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_200'		=> 'EQdkp Plus 2.0 Migrate from 1.x',
+				'update_2000'		=> 'EQdkp Plus 2.0 Migrate from 1.x',
 				1 => 'Alter session-table, change session-key',
 				2 => 'Alter user-table, remove allvatar_nick',
 				3 => 'Alter groups_user-table',
@@ -110,7 +111,7 @@ class update_200 extends sql_update_task {
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
-				'update_200'		=> 'EQdkp Plus 2.0 Migration von 1.x',
+				'update_2000'		=> 'EQdkp Plus 2.0 Migration von 1.x',
 				1 => 'Alter session-table, change session-key',
 				2 => 'Alter user-table, remove allvatar_nick',
 				3 => 'Alter groups_user-table',

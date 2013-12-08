@@ -22,18 +22,19 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
-class update_201 extends sql_update_task {
-	public $author		= 'Hoofy';
-	public $version		= '2.0.1'; //new plus-version
-	public $name		= 'Change saving of portal-module settings';
+class update_2001 extends sql_update_task {
+	public $author			= 'Hoofy';
+	public $version			= '2.0.0.1'; //new plus-version
+	public $ext_version		= '2.0.0'; //new plus-version
+	public $name			= 'Change saving of portal-module settings';
 	
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_201' => 'Change saving of portal-module settings',
-				'update_function' => 'Port portal-module settings',
+				'update_2001'		=> 'Change saving of portal-module settings',
+				'update_function'	=> 'Port portal-module settings',
 			),
 		);
 		
