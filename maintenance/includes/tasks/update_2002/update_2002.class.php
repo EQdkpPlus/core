@@ -42,12 +42,14 @@ class update_2002 extends sql_update_task {
 				1 => 'Add raid group table',
 				2 => 'Add raid group user table',
 				3 => 'Add default raid group',
+				4 => 'Add Permission',
 			),
 			'german' => array(
 				'update_2002'		=> 'EQdkp Plus 2.0 Raidgruppen Update',
 				1 => 'Add raid group table',
 				2 => 'Add raid group user table',
 				3 => 'Add default raid group',
+				4 => 'Add Permission',
 			),
 		);
 		
@@ -68,7 +70,8 @@ class update_2002 extends sql_update_task {
 					`grpleader` int(1) NOT NULL DEFAULT '0'
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			3 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`)
-VALUES (1, 'Default','',0,1,1);"
+VALUES (1, 'Default','',0,1,1);",
+			4 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_membergroups_grpleader');",
 		);
 
 	}
