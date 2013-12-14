@@ -158,7 +158,7 @@ class viewraid extends page_generic {
 
 				$this->tpl->assign_block_vars('class_row', array(
 					'CLASS'			=> $this->game->decorate('classes', $class_id).' <span class="class_'.$class_id.'">'.$class.'</span>',
-					'BAR'			=> $this->jquery->ProgressBar('bar_'.$class, $percentage, $percentage.'%'),
+					'BAR'			=> $this->jquery->ProgressBar('bar_'.md5($class), $percentage, $percentage.'%'),
 					'ATTENDEES'		=> $class_dist[$class_id]['names']
 				));
 			}
