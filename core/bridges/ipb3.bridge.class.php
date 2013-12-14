@@ -36,7 +36,7 @@ class ipb3_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 		'groups' => array( //Where I find the Usergroup
-			'table'	=> 'groups', //without prefix
+			'table'	=> 'groups',
 			'id'	=> 'g_id',
 			'name'	=> 'g_title',
 			'QUERY'	=> '',

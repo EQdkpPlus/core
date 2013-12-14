@@ -61,7 +61,7 @@ class Manage_Bridge extends page_generic {
 		$arrPrefix = $this->get_prefix($this->in->get('notsamedb', 0));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
 		$arrKeys = array_keys($arrPrefix);
-		$dropdown = new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $arrKeys[1], 'id' => 'onchange="onchange_prefix()"'));
+		$dropdown = new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $arrKeys[1], 'js' => 'onchange="onchange_prefix()"'));
 		$this->config->set('cmsbridge_notsamedb', $this->in->get('notsamedb', 0));
 
 		echo $dropdown;

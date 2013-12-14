@@ -53,7 +53,11 @@ class hdropdown extends html {
 		if($this->disabled) $dropdown .= ' disabled="disabled"';
 		if(!empty($this->js)) $dropdown.= ' '.$this->js;
 		$dropdown .= '>';
-		if(!is_array($this->todisable)) $this->todisable = array($this->todisable);
+		if(!is_array($this->todisable)) {
+			if (isset($this->todisable)) {
+				$this->todisable = array($this->todisable);
+			} else $this->todisable = array();
+		}
 		if(is_array($this->options) && count($this->options) > 0){
 			foreach ($this->options as $key => $value) {
 				if(is_array($value)){
@@ -71,7 +75,7 @@ class hdropdown extends html {
 					if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 					$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
 					$selected_choice = (($key == $this->value)) ? 'selected="selected"' : '';
-					$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.$dep.">".$value."</option>";
+					$dropdown .= "<option value=\"".$key."\" ".$selected_choice.$disabled.$dep.">".$value."</option>";
 				}
 			}
 		}else{

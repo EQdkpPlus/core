@@ -158,7 +158,7 @@ class raid_pageobject extends pageobject {
 
 				$this->tpl->assign_block_vars('class_row', array(
 					'CLASS'			=> $this->game->decorate('classes', $class_id).' <span class="class_'.$class_id.'">'.$class.'</span>',
-					'BAR'			=> $this->jquery->progressbar('bar_'.$class, $percentage, array('text' => '%percentage%')),
+					'BAR'			=> $this->jquery->progressbar('bar_'.md5($class), $percentage, array('text' => '%percentage%')),
 					'ATTENDEES'		=> $class_dist[$class_id]['names']
 				));
 			}
