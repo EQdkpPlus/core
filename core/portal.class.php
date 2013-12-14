@@ -131,7 +131,7 @@ class portal extends gen_class {
 	
 	public function check_visibility($module_id){
 		$vis = $this->config->get('visibility', 'pmod_'.$module_id);
-		return ($this->user->check_group($vis, false) || intval($vis[0]) == 0);
+		return ($this->user->check_group($vis, false) || (isset($vis[0]) && intval($vis[0]) == 0));
 	}
 	
 	private function register_pdh_callback($module_id) {
@@ -173,6 +173,7 @@ class portal extends gen_class {
 			$this->init_portalsettings();
 		}
 		$out = $obj->output();
+		pd($obj->get_header());
 		return 
 '				<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">
 					<div class="portalbox_head">'.(($this->config->get('collapsable', 'pmod_'.$module_id) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'
@@ -409,7 +410,7 @@ abstract class portal_generic extends gen_class {
 	}
 	
 	public function get_header() {
-		return (isset($this->header)) ? $this->header : $this->user->lang($this->path, true, false);
+		return (isset($this->header)) ? $this->header : $this->user->lang(static::$path, true, false);
 	}
 	
 	public function update_function($old_version) {
