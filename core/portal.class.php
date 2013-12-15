@@ -228,7 +228,7 @@ class portal extends gen_class {
 	}
 	
 	public function uninstall($path, $plugin='') {
-		if(!$this->module_loaded($path, $plugin)) return false;
+		if(!$this->load_module($path, $plugin)) return false;
 		$this->pdh->put('portal', 'delete', array($path, 'path'));
 		$class_name = $path.'_portal';
 		$class_name::uninstall();

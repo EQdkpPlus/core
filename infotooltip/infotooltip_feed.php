@@ -37,6 +37,13 @@ try {
 	$itt = registry::register('infotooltip');
 	$in = registry::register('input');
 	registry::$aliases['bridge'] = 'bridge_generic';
+	
+	if (!function_exists("get_chmod")){
+		function get_chmod(){
+			if (defined("CHMOD")) return CHMOD;
+			return 0777;
+		}
+	}
 
 	/* Itemfetching
 	 * Parameters accepted:
