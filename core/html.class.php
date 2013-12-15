@@ -155,8 +155,9 @@ if (!class_exists("html")) {
 
 				// Autocomplete
 				case 'autocomplete':
-					$this->jquery->Autocomplete('id'.$options['name'], $options['options']);
-					$ccfield = $this->TextField($options['name'], $options['size'], $options['selected'], 'text', 'id'.$options['name']);
+					$autocomplete_id	= 'id'.(isset($options['id'])) ? $options['id'] : $options['name'];
+					$this->jquery->Autocomplete($autocomplete_id, $options['options']);
+					$ccfield = $this->TextField($options['name'], $options['size'], $options['selected'], 'text', $autocomplete_id);
 				break;
 
 				// Slider

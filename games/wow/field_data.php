@@ -61,6 +61,7 @@ $xml_fields = array(
 		'type'			=> 'autocomplete',
 		'size'			=> '21',
 		'edecode'		=> true,
+		'id'			=> 'settings_servername'
 		'options'		=> registry::register('game')->get('realmlist'),
 	),
 	'prof1_value'	=> array(
