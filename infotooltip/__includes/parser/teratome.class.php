@@ -5,24 +5,24 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-01-30 16:51:43 +0100 (Mi, 30 Jan 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12953 $
  * 
- * $Id$
+ * $Id: teratome.class.php 12953 2013-01-30 15:51:43Z wallenium $
  */
 
 include_once('itt_parser.aclass.php');
 
-if(!class_exists('ffxiv_zam')) {
-	class ffxiv_zam extends itt_parser {
+if(!class_exists('teratome')) {
+	class teratome extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
-		public $supported_games = array('ffxiv');
+		public $supported_games = array('tera');
 		public $av_langs = array();
 
 		public $settings = array();
@@ -35,7 +35,7 @@ if(!class_exists('ffxiv_zam')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'ffxiv' => array('icon_loc' => 'http://zam.zamimg.com/ffxiv/icons/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
+				'tera' => array('icon_loc' => 'http://static.teratome.com/teratome/images/icons/backgrounds/tera/large/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -61,7 +61,7 @@ if(!class_exists('ffxiv_zam')) {
 				),
 			);
 			$g_lang = array(
-				'ffxiv' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR'),
+				'tera' => array('en' => 'en_US'),
 			);
 			$this->av_langs = ((isset($g_lang[$this->config['game']])) ? $g_lang[$this->config['game']] : '');
 		}
@@ -76,40 +76,41 @@ if(!class_exists('ffxiv_zam')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$encoded_name = urlencode($itemname);
-			$link = 'http://ffxiv.zam.com/'.$lang.'/search.html?q='.$encoded_name;
-			
-			$data = $this->puf->fetch($link);
 
+			$data = $this->puf->fetch('http://www.teratome.com/search/'. $itemname);
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#\<a href=\"\/(.*?)\/item\.html\?ffxivitem=(.*?)\" class=\"(.*?)\"><span(.*?)<\/span>(.*?)\<\/a\>#', $data, $matches))
-			{
-				foreach ($matches[0] as $key => $match)
-				{
-					// Extract the item's ID from the match.
-					$item_id = $matches[2][$key];
-					$found_name = $matches[5][$key];
 
-					if(strcasecmp($itemname, $found_name) == 0) {
-						return array($item_id, 'items');
+			//Check for direct hit
+			if (preg_match('#href=\"(.*)\/item\/([0-9]*)\/(.*?)\" rel="canonical" >#', $data, $matches)){
+				$item_id[0] = $matches[2];
+				$item_id[1] = 'items';
+				return $item_id;
+			}
+			
+			//Search page
+			if (preg_match_all('#href=\"\/item\/([0-9]*)\/(.*?)\" class="(.*?)">(.*?)<\/a>#', $data, $matches)) {
+
+				foreach ($matches[0] as $key => $match) {
+					if (strcasecmp($matches[4][$key], $itemname) == 0) {
+						$item_id[0] = $matches[1][$key];
+						$item_id[1] = 'items';
+						break;
 					}
 				}
 			}
 			
-			//search in other languages
-			if(!$item_id AND $searchagain < count($this->av_langs)) {
-				$this->pdl->log('infotooltip', 'No Items found.');
-				if(count($this->config['lang_prio']) >= $searchagain) {
-					$this->pdl->log('infotooltip', 'Search again in other language.');
-					$this->searched_langs[] = $lang;
-					foreach($this->config['lang_prio'] as $slang) {
-						if(!in_array($slang, $this->searched_langs)) {
-							return $this->getItemIDfromUrl($itemname, $slang, $searchagain);
-						}
+
+			if(!$item_id AND count($this->av_langs) > $searchagain) {
+				foreach($this->av_langs as $c_lang => $langlong) {
+					if(!in_array($c_lang,$this->searched_langs)) {
+						$item_id = $this->getItemIDfromUrl($itemname, $c_lang, $searchagain);
+					}
+					if($item_id[0]) {
+						break;
 					}
 				}
 			}
-			
+
 			return $item_id;
 		}
 
@@ -120,19 +121,18 @@ if(!class_exists('ffxiv_zam')) {
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-
-			$url = 'http://ffxiv.zam.com/'.$lang.'/tooltip.html?items='.$item['id'];
+			//http://www.guildhead.com/item/50455/tooltips
+			$url = 'http://www.teratome.com/item/'.$item['id'].'/tooltips';
 			$item['link'] = $url;
 			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
 
-			if (preg_match('#zamTooltip\.store\({\"icon\":\"(.*?)\",\"lang\":\"(.*?)\",\"html\":\"(.*?)\",\"site\":\"(.*?)\",\"dataType\":\"(.*?)\",\"name\":\"(.*?)\",\"id\":\"(.*?)\"#', $itemdata, $matches)){
-				$quality = $matches[2];
-				$content = stripslashes(str_replace('\n', '', $matches[3]));
-				if (preg_match('#icons\/(.*?).png#',stripslashes($matches[1]), $icon_matches)){
+			if (preg_match('#fhTooltip\.store\(\"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\"#', $itemdata, $matches)){
+				$quality = $matches[4];
+				$content = stripslashes(str_replace('\r\n', '', $matches[3]));
+				if (preg_match('#\|small\|(.*?).jpg\)#',str_replace('\\/', '|', $matches[5]), $icon_matches)){
 					$icon = $icon_matches[1];
 				}
-
-				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/ffxiv_popup.tpl'));
+				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/tera_popup.tpl'));
 				$template_html = str_replace('{ITEM_HTML}', $content, $template_html);
 				$item['html'] = $template_html;
 				$item['lang'] = $lang;
@@ -142,6 +142,7 @@ if(!class_exists('ffxiv_zam')) {
 			} else {
 				$item['baditem'] = true;
 			}
+			
 			return $item;
 		}
 	}

@@ -5,24 +5,24 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-01-30 16:51:43 +0100 (Mi, 30 Jan 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12953 $
  * 
- * $Id$
+ * $Id: guildhead.class.php 12953 2013-01-30 15:51:43Z wallenium $
  */
 
 include_once('itt_parser.aclass.php');
 
-if(!class_exists('eq_zam')) {
-	class eq_zam extends itt_parser {
+if(!class_exists('guildhead')) {
+	class guildhead extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
-		public $supported_games = array('eq');
+		public $supported_games = array('guildwars2');
 		public $av_langs = array();
 
 		public $settings = array();
@@ -35,7 +35,7 @@ if(!class_exists('eq_zam')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'eq' => array('icon_loc' => 'http://everquest.allakhazam.com/pgfx/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
+				'guildwars2' => array('icon_loc' => 'http://static.guildhead.com/guildhead/images/icons/backgrounds/gw2/medium/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -61,7 +61,7 @@ if(!class_exists('eq_zam')) {
 				),
 			);
 			$g_lang = array(
-				'eq' => array('en' => 'en_US'),
+				'guildwars2' => array('en' => 'en_US'),
 			);
 			$this->av_langs = ((isset($g_lang[$this->config['game']])) ? $g_lang[$this->config['game']] : '');
 		}
@@ -76,22 +76,26 @@ if(!class_exists('eq_zam')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$encoded_name = urlencode($itemname);
-			$link = 'http://everquest.allakhazam.com/search.html?q='.$encoded_name;
-			
-			$data = $this->puf->fetch($link);
 
+			$data = $this->puf->fetch('http://www.guildhead.com/search/'. $itemname);
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#\<a href=\"\/db\/item\.html\?item=(.*?)\">(.*?)\<\/a\>#', $data, $matches))
-			{
-				foreach ($matches[0] as $key => $match)
-				{
-					// Extract the item's ID from the match.
-					$item_id = $matches[1][$key];
-					$found_name = $matches[2][$key];
+			if (preg_match_all('#href=\"\/item\/([0-9]*)\/(.*?)\" class="(.*?)">(.*?)<\/a>#', $data, $matches)) {	
+				foreach ($matches[0] as $key => $match) {
+					if (strcasecmp($matches[4][$key], $itemname) == 0) {
+						$item_id[0] = $matches[1][$key];
+						$item_id[1] = 'items';
+						break;
+					}
+				}
+			}
 
-					if(strcasecmp($itemname, $found_name) == 0) {
-						return array($item_id, 'items');
+			if(!$item_id AND count($this->av_langs) > $searchagain) {
+				foreach($this->av_langs as $c_lang => $langlong) {
+					if(!in_array($c_lang,$this->searched_langs)) {
+						$item_id = $this->getItemIDfromUrl($itemname, $c_lang, $searchagain);
+					}
+					if($item_id[0]) {
+						break;
 					}
 				}
 			}
@@ -103,27 +107,27 @@ if(!class_exists('eq_zam')) {
 		}
 
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
-
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-
-			$url = 'http://everquest.allakhazam.com/cluster/ihtml.pl?zamtt=1&item='.$item['id'];
+			//http://www.guildhead.com/item/50455/tooltips
+			$url = 'http://www.guildhead.com/item/'.$item['id'].'/tooltips';
 			$item['link'] = $url;
 			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
 
-			if (preg_match('#zamTooltip\.store\({\"icon\":\"(.*?)\",\"site\":\"(.*?)\",\"html\":\"(.*?)\",\"dataType\":\"(.*?)\",\"name\":\"(.*?)\",\"id\":\"(.*?)\"#', $itemdata, $matches)){
-
+			if (preg_match('#fhTooltip\.store\(\"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\"#', $itemdata, $matches)){
+				$quality = $matches[4];
 				$content = stripslashes(str_replace('\n', '', $matches[3]));
-				if (preg_match('#pgfx\/(.*?)\.png\"#',stripslashes($matches[1]), $icon_matches)){
+				if (preg_match('#\|small\|(.*?).jpg\)#',str_replace('\\/', '|', $matches[5]), $icon_matches)){
 					$icon = $icon_matches[1];
 				}
 
-				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/eq_popup.tpl'));
+				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/guildwars2_popup.tpl'));
 				$template_html = str_replace('{ITEM_HTML}', $content, $template_html);
 				$item['html'] = $template_html;
 				$item['lang'] = $lang;
 				$item['icon'] = $icon;
-				$item['name'] = $matches[5];
+				$item['color'] = $quality;
+				$item['name'] = $matches[6];
 			} else {
 				$item['baditem'] = true;
 			}

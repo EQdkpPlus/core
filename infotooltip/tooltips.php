@@ -78,10 +78,10 @@ var EQdkpTooltip = new function(){
 			ac.rel = 'stylesheet';
 			head.appendChild(ac);
 
-			<?php if (is_file($eqdkp_root_path.'infotooltip/includes/'.$itt->config['game'].'.css')) { ?>
+			<?php if (is_file($eqdkp_root_path.'games/'.$itt->config['game'].'/infotooltip/'.$itt->config['game'].'.css')) { ?>
 			//Game-Specific CSS
 			var ac2 = document.createElement("link");
-			ac2.href = mmocms_root_path  + "infotooltip/includes/<?php echo $itt->config['game'];?>.css";
+			ac2.href = mmocms_root_path  + "games/<?php echo $itt->config['game'];?>/infotooltip/<?php echo $itt->config['game'];?>.css";
 			ac2.type = 'text/css';
 			ac2.rel = 'stylesheet';
 			head.appendChild(ac2);

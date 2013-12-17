@@ -5,24 +5,24 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-02-01 16:35:50 +0100 (Fr, 01 Feb 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: hoofy_leon $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12963 $
  * 
- * $Id$
+ * $Id: eq_zam.class.php 12963 2013-02-01 15:35:50Z hoofy_leon $
  */
 
 include_once('itt_parser.aclass.php');
 
-if(!class_exists('rifthead')) {
-	class rifthead extends itt_parser {
+if(!class_exists('eq_zam')) {
+	class eq_zam extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
-		public $supported_games = array('rift');
+		public $supported_games = array('eq');
 		public $av_langs = array();
 
 		public $settings = array();
@@ -35,7 +35,7 @@ if(!class_exists('rifthead')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'rift' => array('icon_loc' => 'http://static.rifthead.com/rifthead/images/icons/backgrounds/rift/medium/', 'icon_ext' => '.jpg', 'default_icon' => 'unknown'),
+				'eq' => array('icon_loc' => 'http://everquest.allakhazam.com/pgfx/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -61,7 +61,7 @@ if(!class_exists('rifthead')) {
 				),
 			);
 			$g_lang = array(
-				'rift' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR'),
+				'eq' => array('en' => 'en_US'),
 			);
 			$this->av_langs = ((isset($g_lang[$this->config['game']])) ? $g_lang[$this->config['game']] : '');
 		}
@@ -76,17 +76,19 @@ if(!class_exists('rifthead')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-
-			$data = $this->puf->fetch('http://www.rifthead.com/search/'. $itemname);
-			$this->searched_langs[] = $lang;
-			if (preg_match_all('#href=\"\/item\/(.[0-9a-zA-Z]*?)\/(.*?)\" class="(.*?)">(.*?)<\/a>#', $data, $matches))
-			{
+			$encoded_name = urlencode($itemname);
+			$link = 'http://everquest.allakhazam.com/search.html?q='.$encoded_name;
 			
+			$data = $this->puf->fetch($link);
+
+			$this->searched_langs[] = $lang;
+			if (preg_match_all('#\<a href=\"\/db\/item\.html\?item=(.*?)\">(.*?)\<\/a\>#', $data, $matches))
+			{
 				foreach ($matches[0] as $key => $match)
 				{
 					// Extract the item's ID from the match.
 					$item_id = $matches[1][$key];
-					$found_name = $matches[4][$key];
+					$found_name = $matches[2][$key];
 
 					if(strcasecmp($itemname, $found_name) == 0) {
 						return array($item_id, 'items');
@@ -105,23 +107,23 @@ if(!class_exists('rifthead')) {
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
 
-			$url = 'http://www.rifthead.com/item/'.$item['id'].'/tooltips';
+			$url = 'http://everquest.allakhazam.com/cluster/ihtml.pl?zamtt=1&item='.$item['id'];
 			$item['link'] = $url;
 			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
-			if (preg_match('#fhTooltip\.store\(\"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\", \"(.*?)\"#', $itemdata, $matches)){
-				$quality = $matches[4];
+
+			if (preg_match('#zamTooltip\.store\({\"icon\":\"(.*?)\",\"site\":\"(.*?)\",\"html\":\"(.*?)\",\"dataType\":\"(.*?)\",\"name\":\"(.*?)\",\"id\":\"(.*?)\"#', $itemdata, $matches)){
+
 				$content = stripslashes(str_replace('\n', '', $matches[3]));
-				if (preg_match('#\|small\|(.*?).jpg\)#',str_replace('\\/', '|', $matches[5]), $icon_matches)){
+				if (preg_match('#pgfx\/(.*?)\.png\"#',stripslashes($matches[1]), $icon_matches)){
 					$icon = $icon_matches[1];
 				}
 
-				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/rift_popup.tpl'));
+				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/eq_popup.tpl'));
 				$template_html = str_replace('{ITEM_HTML}', $content, $template_html);
 				$item['html'] = $template_html;
 				$item['lang'] = $lang;
 				$item['icon'] = $icon;
-				$item['color'] = $quality;
-				$item['name'] = $matches[6];
+				$item['name'] = $matches[5];
 			} else {
 				$item['baditem'] = true;
 			}

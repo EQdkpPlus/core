@@ -5,24 +5,24 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-01-30 16:51:43 +0100 (Mi, 30 Jan 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12953 $
  * 
- * $Id$
+ * $Id: ffxiv_zam.class.php 12953 2013-01-30 15:51:43Z wallenium $
  */
 
 include_once('itt_parser.aclass.php');
 
-if(!class_exists('riftspot')) {
-	class riftspot extends itt_parser {
+if(!class_exists('ffxiv_zam')) {
+	class ffxiv_zam extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
-		public $supported_games = array('rift');
+		public $supported_games = array('ffxiv');
 		public $av_langs = array();
 
 		public $settings = array();
@@ -35,7 +35,7 @@ if(!class_exists('riftspot')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'rift' => array('icon_loc' => 'http://www.riftspot.com/res/icons/40/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
+				'ffxiv' => array('icon_loc' => 'http://zam.zamimg.com/ffxiv/icons/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -61,7 +61,7 @@ if(!class_exists('riftspot')) {
 				),
 			);
 			$g_lang = array(
-				'rift' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR'),
+				'ffxiv' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR'),
 			);
 			$this->av_langs = ((isset($g_lang[$this->config['game']])) ? $g_lang[$this->config['game']] : '');
 		}
@@ -76,49 +76,40 @@ if(!class_exists('riftspot')) {
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$codedname = str_replace(' ', '%2B', $itemname);
-			$data = $this->puf->fetch('http://'.(($lang == 'en') ? 'www' : $lang).'.riftspot.com/search?q='. $codedname);
+			$encoded_name = urlencode($itemname);
+			$link = 'http://ffxiv.zam.com/'.$lang.'/search.html?q='.$encoded_name;
+			
+			$data = $this->puf->fetch($link);
+
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#\[\{\"tpl\":\"items\",\"n\":\"(.*?)\",\"id\":\"items\",\"tclass\":\"default-table\",\"rows\":\[(.*?)\]}\]#', $data, $matchs)) {
-				if (preg_match_all('#\{\"id\":\"(.*?)\",\"n\":\"(.*?)\",\"v\":(.*?),\"rl\":([0-9]*),\"rf\":(.*?),\"i\":\"(.*?)\",\"cat\":\{(.*?)\}(.*?)\}#', $matchs[2][0], $matches)) {
-					foreach ($matches[0] as $key => $match) {
+			if (preg_match_all('#\<a href=\"\/(.*?)\/item\.html\?ffxivitem=(.*?)\" class=\"(.*?)\"><span(.*?)<\/span>(.*?)\<\/a\>#', $data, $matches))
+			{
+				foreach ($matches[0] as $key => $match)
+				{
+					// Extract the item's ID from the match.
+					$item_id = $matches[2][$key];
+					$found_name = $matches[5][$key];
 
-						$item_name_tosearch = substr(html_entity_decode($matches[2][$key]),1);
-						$objJson = json_decode('{"t":"'.$item_name_tosearch.'"}');
-
-						if (strcasecmp($objJson->t, $itemname) == 0) {
-							$item_id[0] = $matches[1][$key];
-							$item_id[1] = 'items';
-							break;
+					if(strcasecmp($itemname, $found_name) == 0) {
+						return array($item_id, 'items');
+					}
+				}
+			}
+			
+			//search in other languages
+			if(!$item_id AND $searchagain < count($this->av_langs)) {
+				$this->pdl->log('infotooltip', 'No Items found.');
+				if(count($this->config['lang_prio']) >= $searchagain) {
+					$this->pdl->log('infotooltip', 'Search again in other language.');
+					$this->searched_langs[] = $lang;
+					foreach($this->config['lang_prio'] as $slang) {
+						if(!in_array($slang, $this->searched_langs)) {
+							return $this->getItemIDfromUrl($itemname, $slang, $searchagain);
 						}
 					}
 				}
 			}
-
-			if(!$item_id[0]) {
-				if (preg_match_all('#\[\{\"tpl\":\"recipes\",\"n\":\"(.*?)\",\"id\":\"recipes\",\"rows\":\[(.*?)\]}\]#', $data, $matchs)) {
-					if (preg_match_all('#\{\"id\":([0-9]*),\"sl\":([0-9]*),\"r\":([0-9]*),\"rn\":\"(.*?)\",\"p\":\{(.*?)},\"n\":\"(.*?)\",\"comp\":(.*?)\}#', $matchs[2][0], $matches)) {
-						foreach ($matches[0] as $key => $match) {
-							$item_name_tosearch = substr(html_entity_decode($matches[6][$key]),1);
-							if (strcasecmp($item_name_tosearch, $itemname) == 0) {
-								$item_id[0] = $matches[1][$key];
-								$item_id[1] = 'recipes';
-								break;
-							}
-						}
-					}
-				}
-			}
-			if(!$item_id AND count($this->av_langs) > $searchagain) {
-				foreach($this->av_langs as $c_lang => $langlong) {
-					if(!in_array($c_lang,$this->searched_langs)) {
-						$item_id = $this->getItemIDfromUrl($itemname, $c_lang, $searchagain);
-					}
-					if($item_id[0]) {
-						break;
-					}
-				}
-			}
+			
 			return $item_id;
 		}
 
@@ -129,22 +120,25 @@ if(!class_exists('riftspot')) {
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-			if ($type == 'items') $type = 'item';
-			$url = 'http://www.riftspot.com/res/tooltip/'.$this->av_langs[$lang].'/20111212/'.$type.'/js/'.$item['id'].'.js';
+
+			$url = 'http://ffxiv.zam.com/'.$lang.'/tooltip.html?items='.$item['id'];
 			$item['link'] = $url;
 			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
 
-			if (preg_match('#name:\'(.*?)\', quality:\'(.*?)\', content:\'(.*?)\', icon:\'(.*?)\'#', $itemdata, $matches)){
+			if (preg_match('#zamTooltip\.store\({\"icon\":\"(.*?)\",\"lang\":\"(.*?)\",\"html\":\"(.*?)\",\"site\":\"(.*?)\",\"dataType\":\"(.*?)\",\"name\":\"(.*?)\",\"id\":\"(.*?)\"#', $itemdata, $matches)){
 				$quality = $matches[2];
-				$content = $matches[3];
-				$icon = $matches[4];
-				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/riftspot.tpl'));
+				$content = stripslashes(str_replace('\n', '', $matches[3]));
+				if (preg_match('#icons\/(.*?).png#',stripslashes($matches[1]), $icon_matches)){
+					$icon = $icon_matches[1];
+				}
+
+				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/ffxiv_popup.tpl'));
 				$template_html = str_replace('{ITEM_HTML}', $content, $template_html);
 				$item['html'] = $template_html;
 				$item['lang'] = $lang;
 				$item['icon'] = $icon;
-				$item['color'] = 'rift_q'.$quality;
-				$item['name'] = $matches[1];
+				$item['color'] = $quality;
+				$item['name'] = $matches[6];
 			} else {
 				$item['baditem'] = true;
 			}

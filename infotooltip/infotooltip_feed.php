@@ -20,7 +20,8 @@ define('EQDKP_INC', true);
 $eqdkp_root_path = './../';
 $noinit = true;
 include($eqdkp_root_path.'/common.php');
-ini_set('display_errors', 1);
+#error_reporting(E_ALL);
+ini_set('display_errors', 0);
 registry::add_const('root_path', $eqdkp_root_path);
 
 try {
@@ -29,8 +30,7 @@ try {
 	require($eqdkp_root_path.'libraries/dbal/dbal.class.php');
 	require_once($eqdkp_root_path.'libraries/dbal/'.registry::get_const('dbtype').'.dbal.class.php');
 	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
+	#error_reporting(E_ALL);
 	header('content-type: text/html; charset=UTF-8');
 	include($eqdkp_root_path.'infotooltip/infotooltip.class.php');
 

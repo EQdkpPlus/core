@@ -61,15 +61,17 @@ if(!class_exists('infotooltip')) {
 			$this->pdl->register_type('infotooltip', null, array($this, 'html_format_debug'), array(2,3));
 
 			//scan available source-reader
-			if($srcs = opendir($this->root_path.'infotooltip/includes/parser')) {
-				$ignore = array('.', '..', '.svn', 'itt_parser.aclass.php');
-				while(false !== ($file = readdir($srcs))) {
-					if(!in_array($file, $ignore) AND is_file($this->root_path.'infotooltip/includes/parser/'.$file) AND substr($file, -10) == '.class.php') {
-						$this->avail_parser[] = substr($file, 0, strpos($file, '.')); //dont save .class.php
+			if (is_dir($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip')){
+				if($srcs = opendir($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip')) {
+					$ignore = array('.', '..', '.svn', 'itt_parser.aclass.php');
+					while(false !== ($file = readdir($srcs))) {
+						if(!in_array($file, $ignore) AND is_file($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip/'.$file) AND substr($file, -10) == '.class.php') {
+							$this->avail_parser[] = substr($file, 0, strpos($file, '.')); //dont save .class.php
+						}
 					}
 				}
 			}
-
+			
 			//set config
 			$this->copy_config($config);
 		}
@@ -91,30 +93,13 @@ if(!class_exists('infotooltip')) {
 		/*
 		* returns list with parsers useable for selected game
 		*/
-		public function get_parserlist($game=false) {
-			$game = ($game) ? $game : $this->config['game'];
+		public function get_parserlist() {
 			$parserlist = array();
 			$this->load_parser(true);
 			foreach($this->parser_info as $parse) {
-				if(in_array($game, $parse->supported_games)) {
-					$parserlist[get_class($parse)] = get_class($parse);
-				}
+				$parserlist[get_class($parse)] = get_class($parse);
 			}
 			return $parserlist;
-		}
-
-		/*
-		* returns list with supported games (dynamically created)
-		*/
-		public function get_supported_games() {
-			$supp_games = array();
-			$this->load_parser(true);
-			foreach($this->parser_info as $parse) {
-				foreach($parse->supported_games as $game) {
-					$supp_games[] = $game;
-				}
-			}
-			return array_unique($supp_games);
 		}
 
 		/*
@@ -125,10 +110,8 @@ if(!class_exists('infotooltip')) {
 			$supp_langs = array();
 			$this->load_parser(true);
 			foreach($this->parser_info as $parse) {
-				if(in_array($game, $parse->supported_games)) {
-					foreach($parse->av_langs as $short => $long) {
-						$supp_langs[$short] = $short;
-					}
+				foreach($parse->av_langs as $short => $long) {
+					$supp_langs[$short] = $short;
 				}
 			}
 			return $supp_langs;
@@ -210,10 +193,11 @@ if(!class_exists('infotooltip')) {
 		 * @string $parser
 		 */
 		private function load_parser($info=false) {
+			include_once($this->root_path.'infotooltip/itt_parser.aclass.php');
 			if($info) {
 				if(!$this->parser_info) {
 					foreach($this->avail_parser as $parse) {
-						include($this->root_path.'infotooltip/includes/parser/'.$parse.'.class.php');
+						include($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip/'.$parse.'.class.php');
 						$this->parser_info[$parse] = registry::register($parse, array(false, $this->config));
 					}
 				}
@@ -224,7 +208,7 @@ if(!class_exists('infotooltip')) {
 				foreach($this->config['prio'] as $key => $parse) {
 					$log .= $key.'. '.$parse.', ';
 					if(in_array($parse, $this->avail_parser)) {
-						include($this->root_path.'infotooltip/includes/parser/'.$parse.'.class.php');
+						include($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip/'.$parse.'.class.php');
 						$this->parser[$key] = registry::register($parse, array(true, $this->config, $this->root_path, $this->cache, $this->puf, $this->pdl));
 					}
 				}
@@ -406,7 +390,7 @@ if(!class_exists('infotooltip')) {
 
 		private function item_return($item) {
 			if(!isset($item['html']) OR !$item['html'] OR !isset($item['name'])) {
-				$item['html'] = file_get_contents($this->root_path.'infotooltip/includes/parser/templates/'.$this->config['game'].'_popup.tpl');
+				$item['html'] = file_get_contents($this->root_path.'games/'.$this->config['game'].'/infotooltip/templates/'.$this->config['game'].'_popup.tpl');
 				$item['html'] = str_replace('{ITEM_HTML}', $item['name']."<br />Item not found.<br />", $item['html']);
 			}
 			if($this->config['debug']) {

@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2013-01-30 16:51:43 +0100 (Mi, 30 Jan 2013) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 12953 $
  * 
- * $Id$
+ * $Id: xxxdatabase.class.php 12953 2013-01-30 15:51:43Z wallenium $
  */
 
 include_once('itt_parser.aclass.php');
