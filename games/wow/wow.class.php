@@ -310,7 +310,7 @@ if(!class_exists('wow')) {
 						$itemData = $this->game->obj['armory']->item($val['itemId']);
 						$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 						if ($charID) {
-							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->routing->build('character',false,false,false), '', false, false, true, true));
+							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID, $this->routing->simpleBuild('character'), '', false, false, true, true));
 						} else {
 							$charLink = $val['character'];
 						}
@@ -327,7 +327,7 @@ if(!class_exists('wow')) {
 						$itemData = $this->game->obj['armory']->item($val['itemId']);
 						$charID = register('pdh')->get('member', 'id', array(trim($val['character'])));
 						if ($charID) {
-							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID,  $this->routing->build('character',false,false,false), '', false, false, true, true));
+							$charLink = register('pdh')->get('member', 'html_memberlink', array($charID,  $this->routing->simpleBuild('character'), '', false, false, true, true));
 						} else {
 							$charLink = $val['character'];
 						}

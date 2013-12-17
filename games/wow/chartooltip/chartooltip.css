@@ -20,7 +20,7 @@ div.tile  {
 	z-index: 2;
 	margin-left: -3px;
 	margin-top: -2px;
-	background-image: url(../../../infotooltip/includes/images/wow/icon_border_medium.gif);
+	background-image: url(../infotooltip/images/icon_border_medium.gif);
 }
 
 /* icon */
@@ -75,63 +75,63 @@ table.wowhead_tooltip td, table.wowhead_tooltip tr, table.wowhead_tooltip th {
 }
 
 table.wowhead_tooltip td.top-left {
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_tl.png);
+	background-image: url(../infotooltip/images/tooltip_tl.png);
 	background-position: top left;
 	height: 5px;
 	width: 5px;
 }
 
 table.wowhead_tooltip td.wh_top {
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_t.png);
+	background-image: url(../infotooltip/images/tooltip_t.png);
 	background-repeat: repeat-x;
 	background-position: top center;
 	height: 5px;
 }
 
 table.wowhead_tooltip td.top-right{
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_tr.png);
+	background-image: url(../infotooltip/images/tooltip_tr.png);
 	background-position: top right;
 	height: 5px;
 	width: 5px;
 }
 
 table.wowhead_tooltip td.wh_left{
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_l.png);
+	background-image: url(../infotooltip/images/tooltip_l.png);
 	background-repeat: repeat-y;
 	background-position: center left;
 	width: 5px;
 }
 
 table.wowhead_tooltip td.bottom-left {
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_bl.png);
+	background-image: url(../infotooltip/images/tooltip_bl.png);
 	background-position: bottom left;
 	height: 5px;
 	width: 5px;
 }
 
 table.wowhead_tooltip td.bottom-right {
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_br.png);
+	background-image: url(../infotooltip/images/tooltip_br.png);
 	background-position: bottom right;
 	height: 5px;
 	width: 5px;
 }
 
 table.wowhead_tooltip td.wh_bottom{
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_b.png);
+	background-image: url(../infotooltip/images/tooltip_b.png);
 	background-repeat: repeat-x;
 	background-position: bottom center;
 	height: 5px;
 }
 
 table.wowhead_tooltip td.wh_right {
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_r.png);
+	background-image: url(../infotooltip/images/tooltip_r.png);
 	background-repeat: repeat-y;
 	background-position: center right;
 	width: 5px;
 }
 
 table.wowhead_tooltip td.wh_center{
-	background-image: url(../../../infotooltip/includes/images/wow/tooltip_c.png);
+	background-image: url(../infotooltip/images/tooltip_c.png);
 	background-repeat: repeat-x repeat-y;
 }
 
