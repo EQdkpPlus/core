@@ -342,7 +342,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 function infotooltip_js() {
 	static $added = 0;
 	if(!$added AND registry::register('config')->get('infotooltip_use')) {
-		registry::register('template')->js_file(registry::get_const('server_path').'infotooltip/includes/jquery.infotooltip.js');
+		registry::register('template')->js_file(registry::get_const('server_path').'infotooltip/jquery.infotooltip.js');
 		$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
 			$js .= "$('.infotooltip').tooltip({
 						track: true,
@@ -369,7 +369,7 @@ function infotooltip_js() {
 						tooltipClass: \"ui-infotooltip\",
 					});";
 		registry::register('template')->add_js($js, 'docready');
-		registry::register('template')->css_file(registry::get_const('server_path').'infotooltip/includes/'.registry::register('config')->get('default_game').'.css');
+		registry::register('template')->css_file(registry::get_const('server_path').'games/'.registry::register('config')->get('default_game').'/infotooltip/'.registry::register('config')->get('default_game').'.css');
 	}
 	$added = 1;
 	return true;

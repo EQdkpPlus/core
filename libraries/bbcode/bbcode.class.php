@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("bbcode")) {
 	class bbcode extends gen_class {
-		public static $shortcuts = array('core', 'user', 'pdh', 'pm', 'config', 'pfh', 'puf'=>'urlfetcher', 'hooks');
+		public static $shortcuts = array('core', 'user', 'pdh', 'pm', 'config', 'pfh', 'puf'=>'urlfetcher', 'hooks', 'routing');
 
 		private $smiliepath = '';
 		private $arrImageExtensions = array('jpg', 'png', 'gif', 'jpeg');
@@ -346,7 +346,7 @@ if (!class_exists("bbcode")) {
 
 					case 'char':	$member_id = $this->pdh->get('member', 'id', array($elements[1]));
 									if ($member_id){
-										$arrCache[$strTag] = $this->pdh->get('member', 'html_memberlink', array($member_id, 'viewcharacter.php', '', false, false, true));
+										$arrCache[$strTag] = $this->pdh->get('member', 'html_memberlink', array($member_id, $this->routing->simpleBuild('character'), '', false, false, true));
 									}
 						break;
 

@@ -728,7 +728,7 @@ class mmocms_settings extends page_generic {
 
 		// add some additional fields
 		// ItemTooltip Inject
-		if(in_array($this->game->get_game(), $this->itt->get_supported_games())){
+		if(count($this->itt->get_parserlist())){
 			$fields = array(
 				'infotooltip_use'	=> array(
 					'type'		=> 'radio',
@@ -744,6 +744,7 @@ class mmocms_settings extends page_generic {
 			$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
 
 			$itt_parserlist	= $this->itt->get_parserlist();
+
 			$fields	= array(
 				'itt_prio1'	=> array(
 					'type'		=> 'dropdown',
