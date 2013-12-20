@@ -111,7 +111,7 @@ if(!class_exists('pdh_w_multidkp')) {
 							'multidkp2event_no_attendance' => $s_no_att,
 						))->execute();
 						
-						retu[] = ($objQuery);
+						$retu[] = ($objQuery);
 					} elseif(!in_array($event_id, $events)) {
 						$objQuery = $this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_multi_id = ? AND multidkp2event_event_id =?")->execute($id, $event_id);
 						$retu[] = ($objQuery);

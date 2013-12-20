@@ -22,16 +22,19 @@ if ( !defined('EQDKP_INC') ){
 
 class form extends gen_class {
 	public static $shortcuts = array();
-	// public static $singleton = false;
 	
-	public $form_id = '';		// the form_id is the identifier of the form, it should be unique and has otherwise no specific use
+	/**
+	 *	the form_id is the identifier of the form, it should be unique and has otherwise no specific use
+	 */
+	public $form_id = '';
 	
-	public $use_tabs = false;
-	public $use_fieldsets = false;
-	public $use_dependency = false;
+	public $use_tabs 		= false;
+	public $use_fieldsets 	= false;
+	public $use_dependency 	= false;
+	public $assign2tpl 		= true;
 	
-	public $lang_prefix = '';
-	/* the language variables are build as follows:
+	/**
+	 *	the language variables are build as follows:
 	 *	- for tabs: $this->lang_prefix.'tab_'.$tabname
 	 *	- for fieldsets: 
 	 *		- $lang = $this->lang_prefix.'fs_'.$fieldsetname;
@@ -40,9 +43,12 @@ class form extends gen_class {
 	 *		- $lang = $this->lang_prefix.'f_'.$name;
 	 *		- $help = $this->lang_prefix.'f_help_'.$name;
 	 */
+	public $lang_prefix = '';
 	
-	private $field_array = array(); // tab => array(fieldset => array(field => array(options)), field => array(options), field => array(options))
-	/*	the options of each field is an array containing the following elements
+	/**
+	 *	structure: tab => array(fieldset => array(field => array(options)), field => array(options), field => array(options))
+	 * 
+	 *	the options of each field is an array containing the following elements
 	 * 		- type: the type of the field to use (e.g. 'dropdown')
 	 *		- any additional options for the chosen fieldtype
 	 *		- optionally the following entries can be included
@@ -54,6 +60,7 @@ class form extends gen_class {
 	 *			- 'help'		=> if a custom help-language variable shall be used
 	 *			- 'dir_help'	=> if a custom (direct) string shall be used instead of a language variable
 	 */
+	private $field_array = array();
 	
 	// flags if dependency jquery stuff has been initialised
 	private $jq_dropdown 	= false;
@@ -64,10 +71,15 @@ class form extends gen_class {
 		$this->form_id = $form_id;
 	}
 	
-	/*  add a tab and put existing fieldsets and fields into it
-	 *	@tab (string):		name of the tab, according to language variable "{lang_prefix}tab_{name}"
-	 *	@fieldsets (array):	array with names of the fieldsets which shall be moved to this tab (from ungrouped)
-	 *	@fields (array):	array with names of the fields which shall be moved to this tab (from ungrouped)
+	public function reset_fields() {
+		$this->field_array = array();
+	}
+	
+	/**
+	 *	add a tab and put existing fieldsets and fields into it
+	 *	@param string	$tab:		name of the tab, according to language variable "{lang_prefix}tab_{name}"
+	 *	@param array	$fieldsets:	array with names of the fieldsets which shall be moved to this tab (from ungrouped)
+	 *	@param array	fields:		array with names of the fields which shall be moved to this tab (from ungrouped)
 	 */
 	public function add_tab($tab, $fieldsets=array(), $fields=array()) {
 		foreach($fieldsets as $fieldset) {
@@ -161,42 +173,44 @@ class form extends gen_class {
 	 *	@values (array):	key => value, array containing the values with which to fill the formular
 	 */
 	public function output($values=array()) {
+		$out = array();
 		if($this->use_tabs) {
-			$this->jquery->Tab_header($this->lang_prefix.'tabs', true);
+			if($this->assign2tpl) $this->jquery->Tab_header($this->lang_prefix.'tabs', true);
 			foreach($this->field_array as $tabname => $tabdata) {
-				$this->tab2tpl($tabname);
+				if($this->assign2tpl) $this->tab2tpl($tabname);
 				if($this->use_fieldsets) {
 					foreach($tabdata as $fieldsetname => $fieldsetdata) {
-						$this->fs2tpl($fieldsetname, 'tabs.fieldsets');
+						if($this->assign2tpl) $this->fs2tpl($fieldsetname, 'tabs.fieldsets');
 						foreach($fieldsetdata as $name => $options) {
 							if(!isset($values[$name])) $values[$name] = '';
-							$this->f2tpl($name, $options, 'tabs.fieldsets.fields', $values[$name]);
+							$out[$tabname][$fieldsetname][$name] = $this->f2tpl($name, $options, 'tabs.fieldsets.fields', $values[$name]);
 						}
 					}
 				} else {
 					foreach($tabdata['f'] as $name => $options) {
 						if(!isset($values[$name])) $values[$name] = '';
-						$this->f2tpl($name, $options, 'tabs.fields', $values[$name]);
+						$out[$tabname][$name] = $this->f2tpl($name, $options, 'tabs.fields', $values[$name]);
 					}
 				}
 			}
 		} else {
 			if($this->use_fieldsets) {
 				foreach($this->field_array['fs'] as $fieldsetname => $fieldsetdata) {
-					$this->fs2tpl($fieldsetname);
+					if($this->assign2tpl) $this->fs2tpl($fieldsetname);
 					foreach($fieldsetdata as $name => $options) {
 						if(!isset($values[$name])) $values[$name] = '';
-						$this->f2tpl($name, $options, 'fieldsets.fields', $values[$name]);
+						$out[$fieldsetname][$name] = $this->f2tpl($name, $options, 'fieldsets.fields', $values[$name]);
 					}
 				}
 			} else {
 				foreach($this->field_array['f'] as $name => $options) {
 					if(!isset($values[$name])) $values[$name] = '';
-					$this->f2tpl($name, $options, 'fields', $values[$name]);
+					$out[$name] = $this->f2tpl($name, $options, 'fields', $values[$name]);
 				}
 			}
 		}
-		$this->tpl->assign_var('FORM_ID', $this->form_id);
+		if($this->assign2tpl) $this->tpl->assign_var('FORM_ID', $this->form_id);
+		else return $out;
 	}
 	
 	/*	read input data according to form-fields
@@ -260,8 +274,8 @@ class form extends gen_class {
 		} else {
 			$lang = $options['lang'];
 			if(!isset($options['help'])) $help = $lang.'_help';
-			else $help = $options['help'];
 		}
+		if(isset($options['help'])) $help = $options['help'];
 		// direct language string?
 		if(!empty($options['dir_lang'])) {
 			$language = $options['dir_lang'];
@@ -290,11 +304,16 @@ class form extends gen_class {
 		
 		$field_class = 'h'.$options['type'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
-		$this->tpl->assign_block_vars($key, array(
-			'NAME'		=> $language,
-			'HELP'		=> $help_message,
-			'FIELD'		=> $text.$field.$text2
-		));
+		if($this->assign2tpl) $this->tpl->assign_block_vars($key, array(
+				'NAME'		=> $language,
+				'HELP'		=> $help_message,
+				'FIELD'		=> $text.$field.$text2
+			));
+		else return array(
+				'name'		=> $language,
+				'help'		=> $help_message,
+				'field'		=> $text.$field.$text2
+			);
 	}
 	
 	private function jq_dep_init($type) {

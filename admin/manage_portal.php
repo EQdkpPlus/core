@@ -23,7 +23,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Portal extends page_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('form' => array('form', array('form_moduleconfig')));
+		$shortcuts = array('form' => array('form', array('form_moduleconfig')), 'ajax_form' => array('form', array('ajax_form')));
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -119,7 +119,8 @@ class Manage_Portal extends page_generic {
 		$drpdwn_rights[PMOD_VIS_EXT] = $this->user->lang('viewing_wrapper');
 		
 		$visopts = array('type' => 'multiselect', 'options' => $drpdwn_rights, 'lang' => 'portalplugin_rights');
-		if ($this->portal->get_module($id)->LoadSettingsOnchangeVisibility){
+		$portal_class = get_class($module);
+		if ($portal_class::get_data('reload_on_vis')){
 			$visopts['class'] = 'js_reload';
 		}
 		$this->form->add_field('visibility', $visopts);
@@ -131,23 +132,55 @@ class Manage_Portal extends page_generic {
 	//Load Portal Module Settings
 	public function ajax_load_settings(){
 		$id = $this->in->get('id', 0);
+		$module = $this->portal->get_module($id);
 		//get old settings
-		$old_settings = $this->get_settings($id, false, 'fetch_old');
+		$old_settings = $module->get_settings('fetch_old');
+		$old_data = $this->config->get('pmod_'.$id);
 		//save settings
 		$this->save_settings(false);
 		//get new settings
-		$new_settings = $this->get_settings($id, false, 'fetch_new');
-		$out = array();
-		$out['new'] = array_diff_key($new_settings, $old_settings);
+		$new_settings = $module->get_settings('fetch_new');
+		$data = array();
+		$data['new'] = array_diff_key($new_settings, $old_settings);
 		//get removed settings
-		$out['removed'] = array_diff_key($old_settings, $new_settings);
+		$data['removed'] = array_diff_key($old_settings, $new_settings);
 
 		//search for changed settings
-		foreach ($old_settings as $key => $value){
-			if (isset($new_settings[$key]) && ($value['field'] != $new_settings[$key]['field'] || $value['name'] != $new_settings[$key]['name'])){
-				$out['changed'][$key] = $new_settings[$key];
+		foreach ($old_settings as $name => $sett){
+			if(!isset($new_settings[$name])) continue;
+			foreach($sett as $key => $value) {
+				if(!isset($new_settings[$name][$key])) {
+					$data['changed'][$name] = $new_settings[$name];
+					break;
+				}
+				if(is_array($value)) {
+					foreach($value as $k => $a) {
+						if(!isset($new_settings[$name][$key][$k]) || $a != $new_settings[$name][$key][$k]) {
+							$data['changed'][$name] = $new_settings[$name];
+							break 2;
+						}
+					}
+				} elseif($new_settings[$name][$key] != $value) {
+					$data['changed'][$name] = $new_settings[$name];
+					break;
+				}
 			}
 		}
+		
+		// build output array
+		$out = array();
+		// initialize form class
+		$portal_class = $this->pdh->get('portal', 'path', array($id)).'_portal';
+		$this->ajax_form->lang_prefix = $portal_class::get_data('lang_prefix');
+		$this->ajax_form->assign2tpl = false;
+			
+		$this->ajax_form->add_fields($data['new']);
+		$out['new'] = $this->ajax_form->output($this->config->get('pmod_'.$id));
+		$this->ajax_form->reset_fields();
+		$this->ajax_form->add_fields($data['changed']);
+		$out['changed'] = $this->ajax_form->output($this->config->get('pmod_'.$id));
+		$out['removed'] = $data['removed'];
+		
 		//search new settings for javascript, if there is some, force reload;
 		$arrForceReload = array('datepicker');
 		foreach ($new_settings as $key => $value){
@@ -163,8 +196,6 @@ class Manage_Portal extends page_generic {
 		if($id = $this->in->get('id')){
 			$this->get_settings($id, 'save');
 			$save_array = $this->form->return_values();
-			pd($save_array);
-			pd($id);
 			if(count($save_array) > 0){
 				$this->config->set($save_array, '', 'pmod_'.$id);
 			}
@@ -222,8 +253,8 @@ $('.js_reload').change(function(){
 		if (data.new){
 			$.each(data.new, function(index, value) {
 				var help = (value.help) ? value.help : '';
-				$('#'+index).remove();
-				$('#visibility').before('<dl id=\"'+index+'\"><dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd></dl>');
+				$('#'+index).parent().parent().remove();
+				$('#visibility').parent().parent().before('<dl><dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd></dl>');
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
 				}
@@ -235,7 +266,7 @@ $('.js_reload').change(function(){
 		if (data.changed){
 			$.each(data.changed, function(index, value) {
 				var help = (value.help) ? value.help : '';	
-				$('#'+index).html('<dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd>');
+				$('#'+index).parent().parent().html('<dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd>');
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
 				}
@@ -246,7 +277,7 @@ $('.js_reload').change(function(){
 		}
 		if (data.removed){
 			$.each(data.removed, function(index, value) {
-				$('#'+index).remove();
+				$('#'+index).parent().parent().remove();
 			});
 		}
 	}, 'json');
