@@ -13,16 +13,16 @@
  * @package		eqdkp-plus
  * @version		$Rev: 13832 $
  * 
- * $Id: ffxiv_zam.class.php 13832 2013-12-21 08:10:07Z godmod $
+ * $Id: allodswikiru.class.php 13832 2013-12-21 08:10:07Z godmod $
  */
 
 include_once('itt_parser.aclass.php');
 
-if(!class_exists('ffxiv_zam')) {
-	class ffxiv_zam extends itt_parser {
+if(!class_exists('allodswikiru')) {
+	class allodswikiru extends itt_parser {
 		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
-		public $supported_games = array('ffxiv');
+		public $supported_games = array('allods');
 		public $av_langs = array();
 
 		public $settings = array();
@@ -35,7 +35,7 @@ if(!class_exists('ffxiv_zam')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'ffxiv' => array('icon_loc' => 'http://xivdbimg.zamimg.com/images/icons/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
+				'allods' => array('icon_loc' => 'http://eu.allodswiki.ru/', 'icon_ext' => '.png', 'default_icon' => 'Interface/Icons/Misc/PlaceholderOrange'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -61,7 +61,7 @@ if(!class_exists('ffxiv_zam')) {
 				),
 			);
 			$g_lang = array(
-				'ffxiv' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR'),
+				'allods' => array('en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR', 'pts' => 'ru_RU'),
 			);
 			$this->av_langs = ((isset($g_lang[$this->config['game']])) ? $g_lang[$this->config['game']] : '');
 		}
@@ -73,37 +73,19 @@ if(!class_exists('ffxiv_zam')) {
 			parent::__destruct();
 		}
 		
-		private function getLangID($strLang){
-			$arrLang = array(
-				'en' => 1,
-				'de' => 2,
-				'fr' => 3,
-			);
-			return $arrLang[$strLang];
-		}
-
-
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
-			$encoded_name = urlencode($itemname);
-			if (!$lang) $lang = "en";
-			$link = "http://xivdb.com/modules/search/search.php?query=".$encoded_name."&page=1&pagearray=%7B%7D&language=".$this->getLangID($lang)."&filters=null&showview=0";			
+			
+			$link = "http://".$lang.".allodswiki.ru/api.php/item?version=2&name=".urlencode($itemname);		
 			$data = $this->puf->fetch($link);
 			$item_id = false;
+			
+			$arrData = json_decode($data);
 
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#href\=\"\?item\/(.*?)\/(.*?)\">(.*?)<\/a>#', $data, $matches))
+			if ($arrData && isset($arrData->id))
 			{				
-				foreach ($matches[0] as $key => $match)
-				{
-					// Extract the item's ID from the match.
-					$item_id = (int)$matches[1][$key];
-					$found_name = strip_tags($matches[3][$key]);
-					
-					if(strcasecmp($itemname, $found_name) == 0) {
-						return array($item_id, 'items');
-					}
-				}
+				return array(intval($arrData->id), 'items');
 			}
 			
 			//search in other languages
@@ -131,33 +113,34 @@ if(!class_exists('ffxiv_zam')) {
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
 			
-			$url = "http://xivdb.com/modules/fpop/fpop.php?callback=&lang=".$this->getLangID($lang)."&version=1.5&host=xivdb.com&type=item&id=".$item_id."&location=http%3A%2F%2Fxivdb.com%2F%3Ftooltip&convertQuotes=true&frameShadow=false&compact=false&statsOnly=false&replaceName=true&colorName=true&showIcon=true&_=1387608577170";
+			$url = "http://".$lang.".allodswiki.ru/api.php/item?version=2&name=".urlencode($itemname);		
+			
 			$item['link'] = $url;
-			$itemdata = $this->puf->fetch($item['link']);
-			$itemdata = substr(trim($itemdata), 1);
-			$itemdata = substr($itemdata, 0, -1);			
-			$arrData = json_decode($itemdata);
-			$strItemName = trim(strip_tags($arrData->name));
-
-			if ($strItemName != ""){
+			$itemdata = $this->puf->fetch($item['link']);		
+			$arrTooltipData = json_decode($itemdata);
+			if ($arrTooltipData && isset($arrTooltipData->id) && $arrTooltipData->name != ""){
+				$url = "http://".$lang.".allodswiki.ru/api.php/Item/".$arrTooltipData->id;
+				$itemdata = $this->puf->fetch($url);
+				$arrData = json_decode($itemdata);
 				
-				if (preg_match('/color\:(.*?);\"><img src="\/\/xivdbimg\.zamimg\.com\/images\/icons\/(.*?)\.png"/',$arrData->name, $icon_matches)){
-					$item['icon'] = $icon_matches[2];
-					$item['color'] = $icon_matches[1];
-				}
+				$item['icon'] = str_replace(".png", "", $arrData->texture);
+				$item['color'] = $arrData->quality;
 
-				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/ffxiv_popup.tpl'));
-				$template_html = str_replace('{ITEM_HTML}', $arrData->html, $template_html);
+				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/allods_popup.tpl'));
+				$html = str_replace('src="/images/', 'http://eu.allodswiki.ru/images/', $arrTooltipData->html);
+				$template_html = str_replace('{ITEM_HTML}', $html, $template_html);
 				$item['html'] = $template_html;
 				$item['lang'] = $lang;
-				$item['name'] = $strItemName;
+				$item['name'] = $arrTooltipData->name;
 				
 			} else {
 				$item['baditem'] = true;
 			}
+
 			return $item;
 		}
+		
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_ffxiv_zam', ffxiv_zam::$shortcuts);
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_allodswikiru', allodswikiru::$shortcuts);
 ?>

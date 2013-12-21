@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2013-12-14 16:34:57 +0100 (Sa, 14 Dez 2013) $
+ * Date:		$Date: 2013-04-04 18:08:23 +0200 (Thu, 04 Apr 2013) $
  * -----------------------------------------------------------------------
  * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13802 $
+ * @version		$Rev: 13287 $
  * 
- * $Id: eq2_sony.class.php 13802 2013-12-14 15:34:57Z godmod $
+ * $Id: eq2_sony.class.php 13287 2013-04-04 16:08:23Z godmod $
  */
 
 include_once('itt_parser.aclass.php');
@@ -901,4 +901,5 @@ if(!class_exists('eq2_sony')) {
 		
 	}
 }
+if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_eq2_sony', eq2_sony::$shortcuts);
 ?>

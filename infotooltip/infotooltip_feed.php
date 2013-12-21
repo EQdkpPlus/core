@@ -100,7 +100,11 @@ try {
 		if(!isset($item['html']) OR !$item['html']) {
 			echo $data['name'];
 		} elseif(isset($item['color'])) {
-			echo '<span class="'.$item['color'].'">'.$visible.'</span>';
+			if (substr($item['color'], 0, 1) == "#"){
+				echo '<span style="color:'.$item['color'].'">'.$visible.'</span>';
+			} else {
+				echo '<span class="'.$item['color'].'">'.$visible.'</span>';
+			}
 		} else {
 			echo $visible;
 		}
