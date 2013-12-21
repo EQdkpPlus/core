@@ -42,6 +42,7 @@ class hradio extends html {
 	
 	public function _toString() {
 		$radiobox  = '';
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		if(empty($this->options)){
 			$this->options = array (
 				'0'   => $this->user->lang('cl_off'),
@@ -58,7 +59,7 @@ class hradio extends html {
 			$dep = (!empty($this->dependency)) ? ' data-form-change="'.$data.'"' : '';
 			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
 		}
-		return $radiobox;
+		return '<div id="'.$this->id.'">'.$radiobox.'</div>';
 	}
 	
 	public function inpval() {

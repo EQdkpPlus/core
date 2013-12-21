@@ -341,7 +341,6 @@ abstract class portal_generic extends gen_class {
 		'icon'			=> '',
 		'exchangeMod'	=> array(),
 		'multiple'		=> false,
-		'wide_content'	=> false,
 		'reload_on_vis'	=> false,
 		'positions'		=> array('left'),
 		'lang_prefix'	=> ''
@@ -359,6 +358,7 @@ abstract class portal_generic extends gen_class {
 	
 	protected $position			= '';
 	protected $id 				= 0;
+	protected $wide_content		= false;
 	protected $settings			= array();
 	protected $reset_pdh_hooks 	= array();
 	protected $hooks 			= array();
@@ -369,7 +369,7 @@ abstract class portal_generic extends gen_class {
 	final public function __construct($module_id, $position='', $wideContent = false) {
 		$this->position = $position;
 		$this->id = $module_id;
-		static::$data['wide_content'] = $wideContent;
+		$this->wide_content = $wideContent;
 	}
 
 	final public static function get_data($type='') {
