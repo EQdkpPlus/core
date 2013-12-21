@@ -3,101 +3,52 @@
 .tooltip-icon {left:-36px;position:absolute;top:0}
 .hide-icon .tooltip-icon {display:none}
 
-/* FFXIV */
-.xivtt {color:#dedfd9;font:14px 'Times New Roman',Times,serif;overflow:hidden;padding:14px;position:relative;text-align:left;width:500px;_width:528px}
-.xivtt a {color:#8193ac}
-.xivtt-bg {background:#141342 url(http://zam.zamimg.com/ffxiv/i/tt-bg.png)}
-.xivtt-wm {background:url(/i/tt-watermark.png);bottom:16px;height:14px;position:absolute;right:17px;width:29px;z-index:2}
-.xivtt-inner {position:relative;top:0;*zoom:100%}
-.xivtt-topleft, .xivtt-topright, .xivtt-botleft, .xivtt-botright {background:url(http://zam.zamimg.com/ffxiv/i/tt-corners.png);_background:url(http://zam.zamimg.com/ffxiv/i/tt-corners.gif);height:33px;position:absolute;width:33px}
-.xivtt-topleft {left:3px;top:3px}
-.xivtt-topright {background-position:top right;height:33px;right:3px;top:3px}
-.xivtt-botleft {background-position:bottom left;bottom:0;height:35px;left:3px}
-.xivtt-botright {background-position:bottom right;bottom:0;height:35px;right:3px;width:37px}
-.xivtt-top, .xivtt-right, .xivtt-bot, .xivtt-left {background:url(http://zam.zamimg.com/ffxiv/i/tt-horiz.png) top repeat-x;_background:url(http://zam.zamimg.com/ffxiv/i/tt-horiz.gif) top repeat-x;position:absolute}
-.xivtt-top {height:30px;left:36px;right:36px;top:3px;_width:456px}
-.xivtt-right {background:url(http://zam.zamimg.com/ffxiv/i/tt-vert.png) right repeat-y;_background:url(http://zam.zamimg.com/ffxiv/i/tt-vert.gif) right repeat-y;bottom:35px;_height:expression(this.parentNode.offsetHeight - 43 + 'px');right:3px;top:36px;width:30px}
-.xivtt-bot {background-position:bottom;bottom:0;height:30px;left:36px;right:40px;_width:456px}
-.xivtt-left {background:url(http://zam.zamimg.com/ffxiv/i/tt-vert.png) left repeat-y;_background:url(http://zam.zamimg.com/ffxiv/i/tt-vert.gif) left repeat-y;bottom:35px;_height:expression(this.parentNode.offsetHeight - 43 + 'px');left:-1px;top:36px;width:30px}
-.xivtt table {color:#dedfd9}
-.xivtt td {vertical-align:top}
-.xivtt-inner {padding:3px}
-.xivtt-head {background:url(http://zam.zamimg.com/ffxiv/i/tt-head.png);_background:url(http://zam.zamimg.com/ffxiv/i/tt-head.jpg);height:48px;_height:60px;padding:6px 6px 6px 59px;position:relative}
-.xivtt-head h2 {font-size:inherit;*font-size:14px;*line-height:1.5em;margin:0;*margin-bottom:-6px !important}
-.xivtt-head div.right {*margin-top:-5px}
-.xivtt-head img {left:6px;height:48px;position:absolute;top:6px;width:48px}
-.xivtt-body {margin:5px 0;padding:0 0 0 10px}
-.xivtt-base {}
-.xivtt-desc, .xivtt-flags {}
-.xivtt hr {border:solid #3d4062;border-width:1px 0 0;box-shadow:0 0 3px rgba(0,0,0,.75);-moz-box-shadow:0 0 3px rgba(0,0,0,.75);-webkit-box-shadow:0 0 3px rgba(0,0,0,.75);margin:4px 0 3px}
-.xivtt-body hr {margin-left:-10px}
-.xivtt-maininfo {min-height:85px}
-.xivtt-maininfo.no-resists {min-height:0}
-.xivtt-stats table {border-collapse:collapse}
-.xivtt-stats th, .xivtt-stats td {padding:0 10px 0 0}
-.xivtt-stats th {color:#cec59b;font-weight:normal;text-align:left}
-.xivtt-resists {float:right;position:relative;top:-2px}
-.xivtt-res-dark, .xivtt-res-air, .xivtt-res-fire, .xivtt-res-water, .xivtt-res-earth, .xivtt-res-light {background:url(http://zam.zamimg.com/ffxiv/i/resists.png);height:16px;position:absolute;right:46px;top:16px;width:16px}
-.xivtt-res-dark b, .xivtt-res-air b, .xivtt-res-fire b, .xivtt-res-water b, .xivtt-res-earth b, .xivtt-res-light b {display:block;font-weight:normal;height:16px;;position:absolute;text-align:center;top:-16px;width:16px}
-.xivtt-res-air {background-position:-16px 0;right:66px;top:26px}
-.xivtt-res-fire {background-position:-32px 0;right:26px;top:26px}
-.xivtt-res-water {background-position:-48px 0;right:66px;top:46px}
-.xivtt-res-earth {background-position:-64px 0;right:26px;top:46px}
-.xivtt-res-light {background-position:-80px 0;top:56px}
-.xivtt-res-air b {left:-16px;top:-8px}
-.xivtt-res-fire b {left:16px;top:-8px}
-.xivtt-res-water b {left:-16px;top:8px}
-.xivtt-res-earth b {left:16px;top:8px}
-.xivtt-res-light b {top:16px}
-.xivtt-foot {background:url(http://zam.zamimg.com/ffxiv/i/tt-foot.png);_background:url(http://zam.zamimg.com/ffxiv/i/tt-foot.jpg);height:35px;padding:6px 6px 6px 6px;position:relative}
-.xivtt-foot th, .xivtt-foot td {font-size:.9em;padding:0}
-.xivtt-foot th {color:#cec59b;font-weight:normal;padding-right:10px;text-align:left}
+/* Tooltip Frame | bg = #292929 */
+.xivdb-tooltip-frame * { font-family: Verdana; font-size: 12px; color:#eee; }
+.xivdb-tooltip-frame-width { width:16px; line-height:0; }
+.xivdb-tooltip-frame-height { height:16px; line-height:0; }
+.xivdb-tooltip-frame-contents { background-color:#292929; font-size:12px; padding:0 0 3px 0; min-width: 150px; }
+.xivdb-tooltip-frame-top { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite-height.png') repeat-x top center; }
+.xivdb-tooltip-frame-top-left { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite.png') no-repeat top left; }
+.xivdb-tooltip-frame-top-right { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite.png') no-repeat top right; }
+.xivdb-tooltip-frame-bottom { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite-height.png') repeat-x bottom center; }
+.xivdb-tooltip-frame-bottom-left { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite.png') no-repeat bottom left; }
+.xivdb-tooltip-frame-bottom-right { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite.png') no-repeat bottom right; }
+.xivdb-tooltip-frame-mid-left { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite-width.png') repeat-y center left; }
+.xivdb-tooltip-frame-mid-right { background:url('http://xivdb.com/modules/tooltip/tooltip-sprite-width.png') repeat-y center right; }
 
-.xivtt-pos {color:#91e3a3}
-.xivtt-neg {color:#f99}
+/* Copyright */
+.xivdb-tooltip-copyright { clear:both; margin: 5px 0 -5px 0; font-size: 11px; text-align: right; color: #999; }
 
-.xivtt-untradable {color:#85e1b4}
-.xivtt-unique {color:#f4e986}
-
-.xivtt-abil .xivtt-head {line-height:24px}
-.xivtt-abil .xivtt-head img {background:none}
-.xivtt-abil .xivtt-head h2 {color:#fff}
-.xivtt-abil .xivtt-head {background:url(http://zam.zamimg.com/ffxiv/i/tt-head-blank.png);_background:url(http://zam.zamimg.com/ffxiv/i/tt-head-blank.jpg)}
-
-.xivtt-gleve .xivtt-head {background:url(http://zam.zamimg.com/ffxiv/i/tt-head-blank.png);_background:url(http://zam.zamimg.com/ffxiv/i/tt-head-blank.jpg);padding:6px}
-.xivtt-gleve .xivtt-head h2 {color:inherit}
-.xivtt-gleve .xivtt-body {padding:0 0 0 4px}
-.xivtt-gleve .xivtt-body hr {margin-left:-4px}
-.xivtt-gleve h2, .xivtt-gleve p {margin:0}
-.xivtt-gleve h3 {background:url(http://zam.zamimg.com/ffxiv/i/tt-subhead.png) bottom left no-repeat;_background:url(http://zam.zamimg.com/ffxiv/i/tt-subhead.gif) bottom left no-repeat;color:#d1d4b7;font-size:inherit;margin:5px 0 0;padding:0 0 8px 16px}
-.xivtt-gleve .gleve-data {padding:0 0 0 20px}
-
-.glborder-2, .glborder-4, .glborder-5 {float:right;height:255px;overflow:hidden;position:relative;width:162px}
-.glborder-2 b, .glborder-4 b, .glborder-5 b {background:url(http://zam.zamimg.com/ffxiv/i/glborder-2.png);_background:url(http://zam.zamimg.com/ffxiv/i/glborder-2.gif);display:block;height:255px;left:0;position:absolute;top:0;width:162px;z-index:1}
-.glborder-4 b {background:url(http://zam.zamimg.com/ffxiv/i/glborder-4.png);_background:url(http://zam.zamimg.com/ffxiv/i/glborder-4.gif)}
-.glborder-5 b {background:url(http://zam.zamimg.com/ffxiv/i/glborder-5.png);_background:url(http://zam.zamimg.com/ffxiv/i/glborder-5.gif)}
-.glborder-2 i, .glborder-4 i, .glborder-5 i {display:block;height:226px;left:-48px;overflow:hidden;position:absolute;top:0;width:256px}
-.gltext-1, .gltext-2, .gltext-3, .gltext-4 {background:url(http://zam.zamimg.com/ffxiv/i/gltext-1.png);_background:url(http://zam.zamimg.com/ffxiv/i/gltext-1.gif);display:block;height:16px;left:74px;position:absolute;top:234px;width:64px;z-index:1}
-.gltext-2 {background:url(http://zam.zamimg.com/ffxiv/i/gltext-2.png);_background:url(http://zam.zamimg.com/ffxiv/i/gltext-2.gif)}
-.gltext-3 {background:url(http://zam.zamimg.com/ffxiv/i/gltext-3.png);_background:url(http://zam.zamimg.com/ffxiv/i/gltext-3.gif)}
-.gltext-4 {background:url(http://zam.zamimg.com/ffxiv/i/gltext-4.png);_background:url(http://zam.zamimg.com/ffxiv/i/gltext-4.gif)}
-
-.xivtt-obj-rew {border-collapse:collapse;width:320px}
-.xivtt-obj-rew th, .xivtt-obj-rew td {padding:0 10px 0 0}
-.xivtt-obj-rew th:last-child, .xivtt-obj-rew td:last-child {padding:0}
-
-.xivicon {background:#3e3d4d url(http://zam.zamimg.com/ffxiv/i/iconbg-32-light.jpg);cursor:default;display:inline-block;*height:32px;margin:0 4px 0 0;position:relative;text-decoration:none !important;vertical-align:middle;*width:32px}
-a .xivicon {cursor:pointer}
-.xivicon-sml {background:#3e3d4d url(http://zam.zamimg.com/ffxiv/i/iconbg-16-light.jpg);*height:16px;vertical-align:top;*width:16px}
-.xivicon b {display:block;position:absolute;top:0;z-index:1}
-
-.xivicon img {height:30px;left:1px;position:absolute;top:1px;width:30px}
-.xivicon-sml img {height:16px;left:0;top:0;width:16px}
-
-.xivicon, .xivicon b {height:32px;width:32px}
-.xivicon-sml {height:16px;width:16px;margin:0 2px 0 0}
-.xivicon-sml b {height:16px;width:16px}
+/* Tooltip Content */
+.xivdb-tooltip-content-header { }
+.xivdb-tooltip-content-header-icon { float:left; width:40px; height: 40px; background-position:center; background-repeat:no-repeat; }
+.xivdb-tooltip-content-header-data { float:left; margin:0 30px 0 12px; }
+.xivdb-tooltip-content-header-data-title { font-size: 18px; letter-spacing:-1px; font-weight:normal; font-family: Arial; max-width: 250px; }
+.xivdb-tooltip-content-header-data-subtitle { font-size: 11px; margin: 2px 0 0 0; }
+.xivdb-tooltip-content-corestats-block { display: inline-block; text-align: right; border-radius: 3px; border-bottom: solid 6px #333; margin: 0 5px 0 0; height: 34px; padding: 0 5px 0 0; }
+.xivdb-tooltip-content-corestats-block-title { color:#948c7b; letter-spacing: -1px; font-size: 11px; margin: 0 0 5px 0; }
+.xivdb-tooltip-content-corestats-block-number { color: #5EA0F2; letter-spacing: -1px; font-size: 20px; font-family: Arial; }
+.xivdb-tooltip-content-substats-block { display: block; margin:4px 0; } 
+.xivdb-tooltip-content-substats-block-title { display: inline-block; width: 120px; color: #DCC9A5; font-size: 11px; }
+.xivdb-tooltip-content-substats-block-number { display: inline-block; width: 40px; color: #5EA0F2; font-size: 12px; }
+.xivdb-tooltip-content-substats-block-number2 { display: inline-block; width: 40px; color: #95b153; font-size: 12px; }
+.xivdb-tooltip-content-substats-block-number3 { display: inline-block; width: 70px; color: #EAB63C; font-size: 12px; }
+.xivdb-tooltip-content-statsbox {  padding: 4px 10px 8px 10px; border-bottom:solid 1px #181818; }
+.xivdb-tooltip-content-statsbox2 { background:url('http://xivdb.com/images/transparency/d20.png'); padding: 10px; font-size: 11px; }
+.xivdb-tooltip-content-header-set-bonus { color: #95b153; margin: 15px 0 2px 0; font-size: 10px; }
+.xivdb-tooltip-content-label { font-size: 10px; }
+.xivdb-tooltip-content-title { width: 100px; color: #948c7b; font-size: 11px; display: inline-block; }
+.xivdb-tooltip-content-context { width: 180px; color: #eee; font-size: 12px; display: inline-block; }
+.xivdb-tooltip-content-info { background:url('http://xivdb.com/images/transparency/blue.png'); font-size: 11px; line-height: 18px; color: #96BFCF;  max-width: 320px; padding: 10px; border-bottom:solid 1px #181818; }
+.xivdb-tooltip-content-recipeicon { border-radius: 10px; margin:0 5px -5px 0; }
+.xivdb-tooltip-content-recipe-item-title { color: #777; font-size:11px; }
+.xivdb-tooltip-content-wardrobe-gearicon { width:32px; height:32px; border-radius:3px; margin:0 3px 3px 0; box-shadow: 0 1px 2px #000 }
 
 
-/* make sure div shows up on top */
-#tmpItemFrm {z-index:499}
+/* Tooltip Effects */
+.xivdb-tooltip-effects-seperator { margin: 10px -10px; height: 1px; background-color: #181818; }
+.xivdb-tooltip-effects-frameShadow { border-radius: 8px; box-shadow:0 0 15px #000; }
+.xivdb-tooltip-effects-textShadow { text-shadow:0 0 2px #000, 0 1px 2px #000, 0 1px 2px #000; }
+.xivdb-tooltip-effects-indentShadowBorderRadius { border:solid 1px #000; border-radius:5px; box-shadow:0 0 3px #555; }
+.xivdb-tooltip-effects-gradientBackgroundWithShadow { background-image:url('http://xivdb.com/images/hudbg_dark.png'); box-shadow: inset 0 0 5px #222; border:solid 1px #191919; }

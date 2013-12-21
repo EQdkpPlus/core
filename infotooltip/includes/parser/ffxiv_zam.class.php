@@ -35,7 +35,7 @@ if(!class_exists('ffxiv_zam')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'ffxiv' => array('icon_loc' => 'http://zam.zamimg.com/ffxiv/icons/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
+				'ffxiv' => array('icon_loc' => 'http://xivdbimg.zamimg.com/images/icons/', 'icon_ext' => '.png', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -72,24 +72,34 @@ if(!class_exists('ffxiv_zam')) {
 			unset($this->searched_langs);
 			parent::__destruct();
 		}
+		
+		private function getLangID($strLang){
+			$arrLang = array(
+				'en' => 1,
+				'de' => 2,
+				'fr' => 3,
+			);
+			return $arrLang[$strLang];
+		}
 
 
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
 			$encoded_name = urlencode($itemname);
-			$link = 'http://ffxiv.zam.com/'.$lang.'/search.html?q='.$encoded_name;
-			
+			if (!$lang) $lang = "en";
+			$link = "http://xivdb.com/modules/search/search.php?query=".$encoded_name."&page=1&pagearray=%7B%7D&language=".$this->getLangID($lang)."&filters=null&showview=0";			
 			$data = $this->puf->fetch($link);
+			$item_id = false;
 
 			$this->searched_langs[] = $lang;
-			if (preg_match_all('#\<a href=\"\/(.*?)\/item\.html\?ffxivitem=(.*?)\" class=\"(.*?)\"><span(.*?)<\/span>(.*?)\<\/a\>#', $data, $matches))
-			{
+			if (preg_match_all('#href\=\"\?item\/(.*?)\/(.*?)\">(.*?)<\/a>#', $data, $matches))
+			{				
 				foreach ($matches[0] as $key => $match)
 				{
 					// Extract the item's ID from the match.
-					$item_id = $matches[2][$key];
-					$found_name = $matches[5][$key];
-
+					$item_id = (int)$matches[1][$key];
+					$found_name = strip_tags($matches[3][$key]);
+					
 					if(strcasecmp($itemname, $found_name) == 0) {
 						return array($item_id, 'items');
 					}
@@ -120,25 +130,28 @@ if(!class_exists('ffxiv_zam')) {
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-
-			$url = 'http://ffxiv.zam.com/'.$lang.'/tooltip.html?items='.$item['id'];
+			
+			$url = "http://xivdb.com/modules/fpop/fpop.php?callback=&lang=".$this->getLangID($lang)."&version=1.5&host=xivdb.com&type=item&id=".$item_id."&location=http%3A%2F%2Fxivdb.com%2F%3Ftooltip&convertQuotes=true&frameShadow=false&compact=false&statsOnly=false&replaceName=true&colorName=true&showIcon=true&_=1387608577170";
 			$item['link'] = $url;
-			$itemdata = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
+			$itemdata = $this->puf->fetch($item['link']);
+			$itemdata = substr(trim($itemdata), 1);
+			$itemdata = substr($itemdata, 0, -1);			
+			$arrData = json_decode($itemdata);
+			$strItemName = trim(strip_tags($arrData->name));
 
-			if (preg_match('#zamTooltip\.store\({\"icon\":\"(.*?)\",\"lang\":\"(.*?)\",\"html\":\"(.*?)\",\"site\":\"(.*?)\",\"dataType\":\"(.*?)\",\"name\":\"(.*?)\",\"id\":\"(.*?)\"#', $itemdata, $matches)){
-				$quality = $matches[2];
-				$content = stripslashes(str_replace('\n', '', $matches[3]));
-				if (preg_match('#icons\/(.*?).png#',stripslashes($matches[1]), $icon_matches)){
-					$icon = $icon_matches[1];
+			if ($strItemName != ""){
+				
+				if (preg_match('/color\:(.*?);\"><img src="\/\/xivdbimg\.zamimg\.com\/images\/icons\/(.*?)\.png"/',$arrData->name, $icon_matches)){
+					$item['icon'] = $icon_matches[2];
+					$item['color'] = $icon_matches[1];
 				}
 
 				$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/ffxiv_popup.tpl'));
-				$template_html = str_replace('{ITEM_HTML}', $content, $template_html);
+				$template_html = str_replace('{ITEM_HTML}', $arrData->html, $template_html);
 				$item['html'] = $template_html;
 				$item['lang'] = $lang;
-				$item['icon'] = $icon;
-				$item['color'] = $quality;
-				$item['name'] = $matches[6];
+				$item['name'] = $strItemName;
+				
 			} else {
 				$item['baditem'] = true;
 			}

@@ -136,34 +136,6 @@ if(!class_exists('eq2_sony')) {
 						$description = str_replace("\\/c","",$description);
 						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
 					}
-					
-					
-					
-					
-					/*
-					if (strncmp("\\#00FFFF",$description,8) == 0)
-					{
-						$desccolor   = substr($description,1,7);
-						$description = substr($description,8);
-						$description = str_replace("\\/c","",$description);
-						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
-					}
-					if (strncmp("\\#FF0000",$description,8) == 0)
-					{
-						$desccolor   = substr($description,1,7);
-						$description = substr($description,8);
-						$description = str_replace("\\/c","",$description);
-						$description = "<span style='color:" . $desccolor . ";'>" . $description . "</span>";
-					}
-					if (strncmp("\\#FFF380",$description,8) == 0)
-					{
-						$desccolor   = substr($description,1,7);
-						$description = substr($description,8);
-						$description = str_replace("\\/c","",$description);
-						$description = "<span style='color:". $desccolor .";'>" . $description . "</span>";
-					}*/
-					
-					
 		if (is_string($description)) {
 		return "<div class='itemd_desc'>" . $description . "</div>\n";
 		} else { return ""; }
@@ -766,7 +738,7 @@ if(!class_exists('eq2_sony')) {
 			$content .= "<div class='itemd_effects'>Effects:</div>\n";
 			$content .= "<div style='font-weight: normal; color:white;'>";
 			foreach($effects as $key) {
-					$description = $key->{'description'};
+					$description = htmlspecialchars_decode($key->{'description'});
 					$indent = intval($key->{'indentation'});
 					$indented = (6 + ($indent * 2));
 					$padded = (8 + ($indent * 13));
