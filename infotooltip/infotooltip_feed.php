@@ -27,7 +27,7 @@ require($eqdkp_root_path.'core/dbal/dbal.php');
 require_once($eqdkp_root_path.'core/dbal/'.registry::get_const('dbtype').'.php');
 registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 header('content-type: text/html; charset=UTF-8');
 include($eqdkp_root_path.'infotooltip/infotooltip.class.php');
 
