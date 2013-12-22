@@ -225,7 +225,7 @@ class plugin_generic extends gen_class {
 		$cbox_group = ( $this->user->lang($code.'_plugin') ) ? $this->user->lang($code . '_plugin') : $this->user->lang($code);	
 		$plugin_icon = (strlen($this->get_data('icon'))) ? $this->get_data('icon') : "fa-puzzle-piece";
 
-		$cbox_group = $this->core->icon_font($plugin_icon, 'fa-lg').' '.$cbox_group ;
+		$cbox_group = $this->core->icon_font($plugin_icon, 'fa-lg fa-fw').' '.$cbox_group ;
 
 		foreach ( $this->permissions as $auth_id => $permissions ){
 			$cbox_array[$cbox_group][] = array(
