@@ -174,7 +174,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			} else {
 				$previous_calc = $cache_date - $this->apa->get_data('decay_time', $apa_id)*86400;
 				$value = ($previous_calc < $data['date']) ? $data['value'] : $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
-				$decayed_val = $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $data['date'], $cache_date));
+				$decayed_val = $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $cache_date, $data['date']));
 			}
 			$ttl = $this->apa->get_data('decay_time', $apa_id)*86400*3; //3 times decay_period
 			return array($decayed_val, $ttl);

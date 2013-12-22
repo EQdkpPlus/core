@@ -337,7 +337,7 @@ class ManageAutoPoints extends page_generic {
 				$this->tpl->assign_block_vars('func_row', array(
 					'NAME'	=> $name,
 					'USED'	=> (isset($used_funcs[$name])) ? implode(', ', $used_funcs[$name]) : '',
-					'EXPL'	=> $this->apa->run_calc_func($name, array(100, ($this->time->time-24*7*2*3600), $this->time->time)),
+					'EXPL'	=> $this->apa->run_calc_func($name, array(100, $this->time->time, ($this->time->time-24*7*2*3600))),
 					'NODEL'	=> (isset($used_funcs[$name])) ? true : false,
 				));
 			}
