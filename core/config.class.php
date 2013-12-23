@@ -44,8 +44,6 @@ class config extends gen_class {
 	}
 
 	public function set($config_name, $config_value='', $plugin=''){
-		pd($config_name);
-		pd($plugin);
 		if(is_array($config_name)){
 			foreach($config_name as $d_name => $d_value){
 				$this->set($d_name, $d_value, $plugin);
@@ -73,7 +71,6 @@ class config extends gen_class {
 				}
 			}
 		}
-		pd($this->config[$plugin]);
 	}
 
 	public function del($config_name, $plugin=''){

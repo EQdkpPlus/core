@@ -217,6 +217,7 @@ class portal extends gen_class {
 		if(!isset($inst['visibility'])) $inst['visibility'] = array(0);
 		$this->config->set('visibility', $inst['visibility'], 'pmod_'.$id);
 		$this->config->set('collapsable', $inst['collapsable'], 'pmod_'.$id);
+		$this->config->set($inst['default_settings'], '', 'pmod_'.$id);
 		
 		// set other default settings
 		$obj = $this->get_module($id);

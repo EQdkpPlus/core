@@ -210,9 +210,10 @@ class Manage_Portal extends page_generic {
 	// Duplicate Portal Module (create child)
 	public function duplicate(){
 		$path = $this->pdh->get('portal', 'path', array($this->in->get('selected_id', 0)));
-		if(!$path) $this->display();
+		$portal_class = $path.'_portal';
+		if(!$path || !class_exists($portal_class) || !$portal_class::get_data('multiple')) $this->display();
 		$plugin = $this->pdh->get('portal', 'plugin', array($this->in->get('selected_id')));
-		$name = (is_object($obj)) ? $obj->get_data('name') : $path;
+		$name = $portal_class::get_data('name');
 		$this->core->message(sprintf($this->user->lang('portal_duplicated_success'), $name), $this->user->lang('success'), 'green');
 		$this->portal->install($path, $plugin, true);
 		$this->edit_portallayout();
@@ -242,6 +243,7 @@ class Manage_Portal extends page_generic {
 			// Output the form, pass values in
 			$this->form->output($this->config->get_config('pmod_'.$id));
 			
+			// TODO: if an element is added, which has a js_reload, this doesnt work, some manual initializing needs to be added
 			// js for reload on input-change
 			$this->tpl->add_js("
 $('.js_reload').change(function(){
@@ -402,7 +404,7 @@ $('.js_reload').change(function(){
 			if($data['tpl_posi'] != 'later' && $data['tpl_posi'] != 'disabled') {
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', array(
 					'NAME'			=> $data['name'].$data['header'],
-					'CLASS'			=> $data['class'],				// does not seem to be used?
+					#'CLASS'			=> $data['class'],				// does not seem to be used?
 					'ID'			=> $id,
 					'POS'			=> $data['tpl_posi'],
 					'INFO'			=> $data['desc'],
@@ -424,7 +426,7 @@ $('.js_reload').change(function(){
 		foreach($modules as $id => $data) {
 			$tpl_data = array(
 				'NAME'			=> $data['name'].$data['header'],
-				'CLASS'			=> $data['class'],				// does not seem to be used?
+				#'CLASS'			=> $data['class'],				// does not seem to be used?
 				'ID'			=> $id,
 				'POS'			=> $data['tpl_posi'],
 				'INFO'			=> $data['desc'],
