@@ -325,6 +325,9 @@ $('.js_reload').change(function(){
 	
 	//Edit Portal Layout
 	public function edit_portallayout() {
+		// Install the portal modules if required
+		$portal_module = $this->portal->get_all_modules();
+		
 		$intLayoutID = $this->in->get('l', 0);
 		$arrUsedBlocks = ($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom');
 		$arrUsedBlockModules = ($intLayoutID) ? $this->pdh->get('portal_layouts', 'modules', array($intLayoutID)) : array();
@@ -339,8 +342,6 @@ $('.js_reload').change(function(){
 
 		$arrBlocksIDList = $this->pdh->get('portal_blocks', 'id_list');
 		
-		// Install the portal modules if required
-		$portal_module = $this->portal->get_all_modules();
 
 		$filter = array();
 		if($this->in->exists('fvisibility') && $this->in->get('fvisibility', 0) !== 0) $filter['visibility'] = $this->in->get('fvisibility', 0);

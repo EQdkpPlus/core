@@ -29,9 +29,17 @@ class portal extends gen_class {
 	public function __construct() {
 		// init the variables...
 		$this->isAdmin			= $this->user->check_auth('a_config_man', false);
-		// TODO: find a way to get all enabled modules
-		// $arrUsedModules = $this->pdh->get('portal_layouts', 'modules', array($intPortalLayout));
-		$module_ids = $this->pdh->get('portal', 'id_list');
+		// get a list of all potentially used modules
+		$layouts = $this->pdh->get('portal_layouts', 'id_list');
+		$module_ids = array();
+		foreach($layouts as $layout_id) {
+			$modules = $this->pdh->get('portal_layouts', 'modules', array($layout_id));
+			foreach($modules as $position => $module) {
+				foreach($module as $mod_id) {
+					$module_ids[$mod_id] = $mod_id;
+				}
+			}
+		}
 		if(is_array($module_ids)) {
 			foreach($module_ids as $module_id) {
 				//Register pdh callbacks
@@ -216,8 +224,7 @@ class portal extends gen_class {
 		// set defaults for collapsable and visibility
 		if(!isset($inst['visibility'])) $inst['visibility'] = array(0);
 		$this->config->set('visibility', $inst['visibility'], 'pmod_'.$id);
-		$this->config->set('collapsable', $inst['collapsable'], 'pmod_'.$id);
-		$this->config->set($inst['default_settings'], '', 'pmod_'.$id);
+		if(!empty($inst['collapsable'])) $this->config->set('collapsable', $inst['collapsable'], 'pmod_'.$id);
 		
 		// set other default settings
 		$obj = $this->get_module($id);
@@ -300,6 +307,8 @@ class portal extends gen_class {
 				}
 			}
 		}
+		// get a full clean list of all modules
+		$this->objs = array();
 		$this->pdh->process_hook_queue();
 		$modules = $this->pdh->aget('portal', 'path', 0, array($this->pdh->get('portal', 'id_list')));
 		foreach($modules as $id => $path) {
