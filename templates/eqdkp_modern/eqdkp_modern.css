@@ -1688,7 +1688,7 @@ ul.breamcrumb .current::before{
 .sf-btn-ddm li li, .sf-btn-ddm li.sfHover li.sfHover {
 	background: transparent;
 	color: #606060;
-	padding: 2px 0;
+	padding: 4px 10px 4px 10px;
 }
 
 .sf-btn-ddm li li:hover  {
