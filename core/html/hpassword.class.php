@@ -36,11 +36,12 @@ class hpassword extends html {
 	protected static $type = 'password';
 	
 	public $name = '';
+	public $set_value = false;
 	
 	public function _toString() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
-		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
+		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';

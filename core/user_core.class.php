@@ -21,8 +21,13 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class user_core extends gen_class {
-	public static $shortcuts = array('pdl', 'config', 'pfh', 'db', 'tpl', 'time', 'in', 'acl', 'config', 'core', 'bridge', 'env', 'pw', 'pdh');
 	public static $dependencies = array('pfh');
+	
+	/**
+	 *	Field Definitions
+	 */
+	public static $customFields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube', 'user_gravatar_mail', 'user_avatar_type');
+	public static $privFields 	= array('priv_no_boardemails', 'priv_set', 'priv_phone', 'priv_nosms', 'priv_bday', 'priv_wall_posts_read', 'priv_wall_posts_write');
 
 	private $lang			= array();		// Loaded language pack
 	private $loaded_plugs	= array();		// Not loaded plug-langs

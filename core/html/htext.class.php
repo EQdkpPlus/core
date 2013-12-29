@@ -46,6 +46,7 @@ class htext extends html {
 	public $colorpicker = false;
 	public $autocomplete = array();
 	public $class = 'input';
+	public $inptype = '';
 	
 	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector');
 	private $out = '';
@@ -77,7 +78,7 @@ class htext extends html {
 	}
 	
 	public function inpval() {
-		return $this->in->get($this->name, '');
+		return $this->in->get($this->name, '', $this->inptype);
 	}
 }
 ?>

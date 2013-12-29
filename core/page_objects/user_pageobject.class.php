@@ -125,7 +125,7 @@ class user_pageobject extends pageobject {
 		switch($row['gender']){
 			case '1' : $strGender = $this->user->lang('adduser_gender_m').', ';
 			break;
-			case '1' : $strGender = $this->user->lang('adduser_gender_m').', ';
+			case '2' : $strGender = $this->user->lang('adduser_gender_f').', ';
 			break;
 			default: $strGender = "";
 		}

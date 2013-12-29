@@ -302,6 +302,7 @@ class form extends gen_class {
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
 		
+		if(empty($options['type'])) $options['type'] = '';
 		$field_class = 'h'.$options['type'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
 		if($this->assign2tpl) $this->tpl->assign_block_vars($key, array(

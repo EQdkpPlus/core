@@ -39,6 +39,7 @@ class hradio extends html {
 	public $disabled = false;
 	public $default = 0;
 	public $class = '';
+	public $tolang = false;
 	
 	public function _toString() {
 		$radiobox  = '';
@@ -57,6 +58,7 @@ class hradio extends html {
 			if(!empty($this->class)) $radiobox .= ' class="'.$this->class.'"';
 			$data = (!empty($this->dependency[$key])) ? implode(',', $this->dependency[$key]) : '';
 			$dep = (!empty($this->dependency)) ? ' data-form-change="'.$data.'"' : '';
+			if($this->tolang) $opt = $this->user->lang($opt);
 			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
 		}
 		return '<div id="'.$this->id.'">'.$radiobox.'</div>';

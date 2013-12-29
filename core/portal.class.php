@@ -181,7 +181,6 @@ class portal extends gen_class {
 			$this->init_portalsettings();
 		}
 		$out = $obj->output();
-		pd($obj->get_header());
 		return 
 '				<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">
 					<div class="portalbox_head">'.(($this->config->get('collapsable', 'pmod_'.$module_id) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'

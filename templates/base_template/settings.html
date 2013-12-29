@@ -1,7 +1,7 @@
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-	$("#register").validate({
+	$("#{FORM_ID}").validate({
 		rules: {
 			username: {
 				required: true,
@@ -205,7 +205,7 @@ $(document).ready(function(){
 </div>
 <!-- ENDIF -->
 
-<form method="post" action="{ACTION}" name="register" id="register">
+<form method="post" action="{ACTION}" name="{FORM_ID}" id="{FORM_ID}">
 <div class="content">
 	<div id="usersettings_tabs">
 
@@ -223,25 +223,25 @@ $(document).ready(function(){
 
 		<!-- BEGIN tabs -->
 		<div id="fragment-{tabs.ID}">
-			<!-- BEGIN fieldset -->
-			<!-- IF tabs.fieldset.INFO -->
+			<!-- BEGIN fieldsets -->
+			<!-- IF tabs.fieldsets.INFO -->
 			<div class="infobox infobox-large infobox-blue clearfix">
-				<i class="fa fa-info-circle fa-4x pull-left"></i> {tabs.fieldset.INFO}
+				<i class="fa fa-info-circle fa-4x pull-left"></i> {tabs.fieldsets.INFO}
 			</div>
 
 			<!-- ENDIF -->
 
 			<fieldset class="settings">
-				<legend>{tabs.fieldset.NAME}</legend>
+				<legend>{tabs.fieldsets.NAME}</legend>
 
-				<!-- BEGIN field -->
+				<!-- BEGIN fields -->
 				<dl>
-					<dt><label>{tabs.fieldset.field.NAME}</label><br /><span>{tabs.fieldset.field.HELP}</span></dt>
-					<dd>{tabs.fieldset.field.FIELD}{tabs.fieldset.field.TEXT}</dd>
+					<dt><label>{tabs.fieldsets.fields.NAME}</label><br /><span>{tabs.fieldsets.fields.HELP}</span></dt>
+					<dd>{tabs.fieldsets.fields.FIELD}{tabs.fieldsets.fields.TEXT}</dd>
 				</dl>
-				<!-- END field -->
+				<!-- END fields -->
 			</fieldset>
-			<!-- END fieldset -->
+			<!-- END fieldsets -->
 		</div>
 		<!-- END tabs -->
 

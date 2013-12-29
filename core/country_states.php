@@ -260,7 +260,24 @@ $country_array = array(
 	'ZW'=>'ZIMBABWE',
 );
 
-$state_array = array(
+$state_array['DE'] = array(
+	'BW'=>'Baden-Württemberg',
+	'BY'=>'Bayern',
+	'BE'=>'Berlin',
+	'BB'=>'Brandenburg',
+	'HB'=>'Bremen',
+	'HH'=>'Hamburg',
+	'HE'=>'Hessen',
+	'MV'=>'Mecklenburg-Vorpommern',
+	'NI'=>'Niedersachsen',
+	'NW'=>'Nord-Rhein-Westfalen',
+	'RP'=>'Rheinland-Pfalz',
+	'SL'=>'Saarland',
+	'SN'=>'Sachsen',
+	'ST'=>'Sachsen-Anhalt',
+	'SH'=>'Schleswig-Holstein',
+	'TH'=>'Thüringen');
+$state_array['US'] = array(
 	'AL'=>"Alabama",
     'AK'=>"Alaska", 
     'AZ'=>"Arizona", 
@@ -312,5 +329,4 @@ $state_array = array(
     'WV'=>"West Virginia", 
     'WI'=>"Wisconsin", 
     'WY'=>"Wyoming");
- 
 ?>
