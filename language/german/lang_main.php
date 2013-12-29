@@ -209,12 +209,8 @@ $lang = array(
 "user_sett_f_user_date_time" => "Uhrzeit-Format",
 "user_sett_f_user_date_short" => "Datums-Format (kurz)",
 "user_sett_f_user_date_long" => "Daturms-Format (lang)",
-"adduser_date_note" => "Die Syntax entspricht der der <a href=\"http://www.php.net/date\" target=\"_blank\">date()</a>-Funktion von PHP.",
+"user_sett_date_note" => "Die Syntax entspricht der der <a href=\"http://www.php.net/date\" target=\"_blank\">date()</a>-Funktion von PHP.",
 
-
-
-
-"adduser_address" => "Anschrift (Straße und Hausnummer)",
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",
 "adduser_send_mail_subject" => "Betreff",
@@ -224,7 +220,6 @@ $lang = array(
 "adduser_send_new_pw" => "Neues Passwort senden",
 "adduser_send_new_pw_note" => "Sende dem Benutzer ein neues, zufälliges Passwort",
 "adduser_passwordreset_note" => "Achtung: Bitte gebe das Passwort erneut ein, damit der Benutzer kein zufällig Generiertes bekommt.",
-
 
 "purchase_history_for" => "Kauf-Historie für %1\$s",
 "quote_of" => "Zitat von",
