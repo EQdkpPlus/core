@@ -22,11 +22,8 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Users extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'db', 'pfh', 'html', 'env', 'acl'=>'acl', 'email'=>'MyMailer', 'crypt' => 'encrypt', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	public static $shortcuts = array('email' => 'MyMailer', 'crypt' => 'encrypt', 'form' => array('form', array('user_edit_settings')));
+	
 	public function __construct(){
 		$this->user->check_auth('a_users_man');
 		$handler = array(
@@ -57,7 +54,7 @@ class Manage_Users extends page_generic {
 			'U_ACTIVATE'	=> $this->env->link.'login.php?mode=newpassword&amp;key=' . $pwkey,
 		);
 
-		if($this->email->SendMailFromAdmin($this->in->get('email_address'), $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
+		if($this->email->SendMailFromAdmin($this->in->get('user_email'), $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
 			$this->core->message($this->user->lang('password_sent'), $this->user->lang('success'), 'green');
 		} else {
 			$this->core->message($this->user->lang('error_email_send'), $this->user->lang('error'), 'red');
@@ -100,6 +97,47 @@ class Manage_Users extends page_generic {
 		$new_user = ($user_id) ? false : true;
 		$password = false;
 		
+		$this->create_form($user_id);
+		$values = $this->form->return_values();
+		// Error-check the form
+		$change_username = ( $values['username'] != $this->in->get('old_username') ) ? true : false;
+		$change_password = ( $values['new_password'] != '' || $values['confirm_password'] != '') ? true : false;
+		$change_email = ( $values['user_email'] != $this->pdh->get('user', 'email', array($user_id)) ) ? true : false;
+
+		// Check username
+		if ($change_username && $this->pdh->get('user', 'check_username', array($values['username'])) == 'false'){
+			$this->core->message(str_replace('{0}', $values['username'], $this->user->lang('fv_username_alreadyuse')), $this->user->lang('error'), 'red');
+			$this->edit();
+			return;
+		}
+
+		// Check email
+		if($change_email) {
+			if ($this->pdh->get('user', 'check_email', array($values['user_email'])) == 'false'){
+				$this->core->message(str_replace('{0}', $values['user_email'], $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
+				$this->edit();
+				return;
+			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $values['user_email']) ){
+				$this->core->message($this->user->lang('fv_invalid_email'), $this->user->lang('error'), 'red');
+				$this->edit();
+				return;
+			}
+		}
+		
+		//Check matching new passwords
+		if($change_password) {
+			if($values['new_password'] != $values['confirm_password']) {
+				$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
+				$this->edit();
+				return;
+			}
+		}
+		if ($change_password && strlen($values['new_password']) > 64) {
+			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
+			$this->edit();
+			return;
+		}
+		
 		//The Group-Memberships of the admin who has submitted this form
 		$adm_memberships   = $this->acl->get_user_group_memberships($this->user->id);
 
@@ -109,55 +147,111 @@ class Manage_Users extends page_generic {
 				$this->display();
 				return;
 			}
+			$query_ary = array();
+			if ( $change_username ) $query_ary['username'] = $values['username'];
+			if ( $change_password ) {
+				$new_salt = $this->user->generate_salt();
+				$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
+				$strApiKey = $this->user->generate_apikey($values['new_password'], $new_salt);
+				$query_ary['api_key'] = $strApiKey;
+				$query_ary['user_login_key'] = '';
+			}
+
+			$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
 			
-			$this->pdh->put('user', 'update_user_settings', array($user_id, $this->get_settingsdata()));
+			//copy all other values to appropriate array
+			$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
+			$privArray = array();
+			$customArray = array();
+			foreach($values as $name => $value) {
+				if(in_array($name, $ignore)) continue;
+				if(in_array($name, user_core::$privFields)) 
+					$privArray[$name] = $value;
+				elseif(in_array($name, user_core::$customFields)) 
+					$customArray[$name] = $value;
+				else 
+					$query_ary[$name] = $value;
+			}
 			
+			//Create Thumbnail for User Avatar
+			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
+				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
+				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
+			}
+			
+			$query_ary['privacy_settings']		= serialize($privArray);
+			$query_ary['custom_fields']			= serialize($customArray);
+			
+			/* NYI - TODO
+			$plugin_settings = array();
+			if (is_array($this->pm->get_menus('settings'))){
+				foreach ($this->pm->get_menus('settings') as $plugin => $values){
+					
+					foreach ($values as $key=>$setting){
+					if ($key == 'icon' || $key == 'name') continue;
+						$name = $setting['name'];
+						$setting['name'] = $plugin.':'.$setting['name'];
+						$setting['plugin'] = $plugin;
+						$plugin_settings[$plugin][$name] = $this->html->widget_return($setting);
+					}
+				}
+			}
+			$query_ary['plugin_settings']	= serialize($plugin_settings);
+			*/
+			
+			$this->pdh->put('user', 'update_user', array($user_id, $query_ary));
 			$this->pdh->put('user', 'activate', array($user_id, $this->in->get('user_active', 0)));
 		} else {
-			$password = ($this->in->get('password') == "") ? random_string() : $this->in->get('password');
+			$password = ($values['new_password'] == "") ? random_string() : $values['new_password'];
 			$new_salt = $this->user->generate_salt();
 			$new_password = $this->user->encrypt_password($password, $new_salt).':'.$new_salt;
 			
 			$query_ar = array(
 				'username'				=> $this->in->get('username'),
 				'user_password'			=> $new_password,
-				'user_email'			=> $this->crypt->encrypt($this->in->get('email_address'))
+				'user_email'			=> $this->crypt->encrypt($values['user_email'])
 			);
 			
 			$privArray = array();
 			$customArray = array();
 			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter');
-			foreach($settingsdata as $group => $fieldsets) {
-				if($group == 'registration_information') continue;
-				foreach($fieldsets as $tab => $fields) {
-					foreach($fields as $name => $field) {
-						if($tab == 'user_priv') 
-							$privArray[$name] = $this->html->widget_return($field);
-						elseif(in_array($name, $custom_fields)) 
-							$customArray[$name] = $this->html->widget_return($field);
-						else 
-							$query_ary[$name] = $this->html->widget_return($field);
-					}
-				}
+			foreach($values as $name => $value) {
+				if(in_array($name, $ignore)) continue;
+				if(in_array($name, user_core::$privFields)) 
+					$privArray[$name] = $value;
+				elseif(in_array($name, user_core::$customFields)) 
+					$customArray[$name] = $value;
+				else 
+					$query_ar[$name] = $value;
 			}
+			
+			//Create Thumbnail for User Avatar
+			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
+				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
+				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
+			}
+			
 			
 			$plugin_settings = array();
+			/* NYI - TODO
 			if (is_array($this->pm->get_menus('settings'))){
 				foreach ($this->pm->get_menus('settings') as $plugin => $values){
+					
 					foreach ($values as $key=>$setting){
-						$name								= $setting['name'];
-						$setting['name']					= $plugin.':'.$setting['name'];
-						$plugin_settings[$plugin][$name]	= $this->html->widget_return($setting);
+					if ($key == 'icon' || $key == 'name') continue;
+						$name = $setting['name'];
+						$setting['name'] = $plugin.':'.$setting['name'];
+						$setting['plugin'] = $plugin;
+						$plugin_settings[$plugin][$name] = $this->html->widget_return($setting);
 					}
 				}
 			}
-			
+			*/
+
 			$query_ar['privacy_settings']	= serialize($privArray);
 			$query_ar['custom_fields']		= serialize($customArray);
 			$query_ar['plugin_settings']	= serialize($plugin_settings);
-
 			$user_id = $this->pdh->put('user', 'insert_user', array($query_ar, true, false));
-			
 		}
 
 		// Permissions
@@ -205,7 +299,7 @@ class Manage_Users extends page_generic {
 		if ($password OR ($this->config->get('account_activation') == 2 ) && ( $this->pdh->get('user', 'active', array($user_id)) < $this->in->get('user_active'))){
 
 			// Email them their new password
-			$this->email->Set_Language($this->in->get('user_lang'));
+			$this->email->Set_Language($values['user_lang']);
 
 			$user_key = $this->pdh->put('user', 'create_new_activationkey', array($user_id));
 			if(!strlen($user_key)) {
@@ -214,11 +308,11 @@ class Manage_Users extends page_generic {
 			$strPasswordLink = $this->env->link . 'login.php?mode=newpassword&key=' . $user_key;
 
 			$bodyvars = array(
-				'USERNAME'	=> $this->in->get('username'),
+				'USERNAME'	=> $values['username'],
 				'U_ACTIVATE'=> ($password) ? $this->user->lang('email_changepw').'<br /><br /><a href="'.$strPasswordLink.'">'.$strPasswordLink.'</a>' : '',
 				'GUILDTAG'	=> $this->config->get('guildtag'),
 			);
-			if($this->email->SendMailFromAdmin($this->in->get('email_address'), $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
+			if($this->email->SendMailFromAdmin($values['user_email'], $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
 				$email_success_message = $this->user->lang('account_activated_admin')."\n";
 			}
 		}
@@ -480,116 +574,49 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		}
 		
 		// user field settings
-		$settingsdata = $this->get_settingsdata($user_id);
-
-		if($user_id) {
-			$this->user_data = $this->pdh->get('user', 'data', array($user_id));
-		} else {
-			$this->user_data = array(
-				'country'			=> '',
-				'gender'			=> '',
-				'user_alimit'		=> ($this->config->get('default_alimit')) ? $this->config->get('default_alimit') : 100,
-				'user_climit'		=> ($this->config->get('default_climit')) ? $this->config->get('default_climit') : 100,
-				'user_elimit'		=> ($this->config->get('default_elimit')) ? $this->config->get('default_elimit') : 100,
-				'user_ilimit'		=> ($this->config->get('default_ilimit')) ? $this->config->get('default_ilimit') : 100,
-				'user_nlimit'		=> ($this->config->get('default_nlimit')) ? $this->config->get('default_nlimit') : 10,
-				'user_rlimit'		=> ($this->config->get('default_rlimit')) ? $this->config->get('default_rlimit') : 100,
-				'user_lang'			=> $this->config->get('default_lang'),
-				'user_style'		=> $this->config->get('default_style'),
-				'user_timezone'		=> $this->config->get('timezone'),
-				'user_date_long'	=> ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->user->lang('style_date_long'),
-				'user_date_short'	=> ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->user->lang('style_date_short'),
-				'user_date_time'	=> ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->user->lang('style_date_time'),
-				'user_timezone'		=> $this->config->get('timezone'),
-			);
+		$this->create_form($user_id);
+		// user field values
+		$user_data = array();
+		if($user_id > 0) {
+			$user_data = $this->pdh->get('user', 'data', array($user_id));
+			$user_data = array_merge($user_data, $this->pdh->get('user', 'privacy_settings', array($user_id)));
+			$user_data = array_merge($user_data, $this->pdh->get('user', 'custom_fields', array($user_id)));
 		}
-		$privacy = ($user_id) ? $this->pdh->get('user', 'privacy_settings', array($user_id)) : array('priv_set' => 1, 'priv_phone' => 1);
-		$custom = ($user_id) ? $this->pdh->get('user', 'custom_fields', array($user_id)) : array();
-		$image = (isset($custom['user_avatar']) && $custom['user_avatar'] != '') ? $this->pfh->FilePath('user_avatars/'.$custom['user_avatar'], 'eqdkp') : '';
-		
-		$this->user_data = array_merge($this->user_data, $privacy);
-		$this->user_data = array_merge($this->user_data, $custom);
-
-		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br />'.((isset($this->user_data['username'])) ? sanitize($this->user_data['username']) : '').'<br /><label><input type="checkbox" name="delete_associated_members" value="1"> '. $this->user->lang('delete_associated members').'</label>', '', true, array('height'	=> 300, 'custom_js' => "if($('input[name=delete_associated_members]').is(':checked')){ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID+'&del_assocmem=1';}else{ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID;}"));
+		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br />'.((isset($user_data['username'])) ? sanitize($user_data['username']) : '').'<br /><label><input type="checkbox" name="delete_associated_members" value="1"> '. $this->user->lang('delete_associated members').'</label>', '', true, array('height'	=> 300, 'custom_js' => "if($('input[name=delete_associated_members]').is(':checked')){ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID+'&del_assocmem=1';}else{ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID;}"));
 		$this->jquery->Tab_header('usersettings_tabs');
 		$this->jquery->Tab_header('permission_tabs');
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
-		$this->jquery->Spinner('#user_alimit, #user_climit, #user_ilimit, #user_rlimit, #user_elimit', array('step'=>10, 'multiselector'=>true));
-		$this->jquery->Spinner('user_nlimit');
 
 		$this->tpl->assign_vars(array(
 			// Form vars
-			'F_SETTINGS'				=> 'manage_users.php' . $this->SID,
-			'S_CURRENT_PASSWORD'		=> false,
 			'S_SETTING_ADMIN'			=> true,
 			'S_MU_TABLE'				=> true,
-			'S_CREATE_NEW_PW'			=> ($user_id) ? true : false,
 			'JS_TAB_SELECT'				=> $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 3 : 0)),
 			'S_PROTECT_USER'			=> ($this->user->data['user_id'] == $user_id || (isset($memberships[2]) && !isset($adm_memberships[2]))) ? true : false,
-			'IMAGE_DELETE'				=> 'manage_users.php'.$this->SID.'&amp;uid='.stripslashes($_REQUEST['u']).'&amp;deleteavatar=true',
 			'USER_ID'					=> $user_id,
-			'MU_USER_NAME'				=> $this->pdh->get('user', 'name', array($user_id)),
-			#'IMAGE_UPLOAD'				=> $logo_upload->Show('user_avatar', 'manage_users.php?performupload=true', $image, false),
-			'S_IMAGE'					=> ($image != "") ? true: false,
+			'USERNAME'					=> $user_data['username'],
 
 			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true)),
 			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),
-			'ACTIVE_RADIO'				=> new hradio('user_active', array('options' => array('1'	=> $this->user->lang('yes'), '0'	=> $this->user->lang('no')), 'value' => (($user_id) ? $this->user_data['user_active'] : '1'))),
+			'ACTIVE_RADIO'				=> new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : '1'))),
 
 			// Validation
 			'VALIDTAELNK_PREFIX'		=> '../',
 		));
 		if($user_id) {
-			$additional_fields = array(
-				'registration_information'	=> array(
-					'adduser_tab_registration_information' => array(
-						'send_new_pw'	=> array(
-							'name'	=> 'adduser_send_new_pw',
-							'text'	=> $this->html->TextField('send_new_pw', '', $this->user->lang('adduser_send_new_pw'), 'submit', 'send_new_pw', 'mainoption bi_mail'),
-							//'text'	=> new htext('send_new_pw', array('value' => $this->user->lang('adduser_send_new_pw'), 'id' => 'send_new_pw', 'class' => 'mainoption bi_mail')),
-							'help'	=> 'adduser_send_new_pw_note',
-						),
-					),
-				),
-			);
-			$settingsdata = array_merge_recursive($settingsdata, $additional_fields);
-
 			$this->tpl->assign_vars(array(
 				//Validation
-				'AJAXEXTENSION_USER'		=> '&olduser='.$this->user_data['username'],
-				'AJAXEXTENSION_MAIL'		=> '&oldmail='.urlencode($this->user_data['user_email']),
+				'AJAXEXTENSION_USER'		=> '&olduser='.$user_data['username'],
+				'AJAXEXTENSION_MAIL'		=> '&oldmail='.urlencode($user_data['user_email']),
 
-				'L_SEND_MAIL2'				=> sprintf($this->user->lang('adduser_send_mail2'), $this->user_data['username']),
+				'L_SEND_MAIL2'				=> sprintf($this->user->lang('adduser_send_mail2'), $user_data['username']),
 			));
 		}
 
 		// Output
-		foreach($settingsdata as $tabname=>$fieldsetdata){
-			$this->tpl->assign_block_vars('tabs', array(
-				'NAME'	=> $this->user->lang('adduser_tab_'.$tabname),
-				'ID'	=> $tabname,
-			));
-
-			foreach($fieldsetdata as $fieldsetname=>$fielddata){
-
-				$this->tpl->assign_block_vars('tabs.fieldset', array(
-					'NAME'		=> $this->user->lang($fieldsetname),
-				));
-
-				foreach($fielddata as $name=>$confvars){
-
-					$no_lang = (isset($confvars['no_lang'])) ? true : false;
-					$confvars['value'] = $confvars['selected'] = (isset($confvars['no_value'])) ? '' : (isset($this->user_data[$name]) ? $this->user_data[$name] : '');
-					$this->tpl->assign_block_vars('tabs.fieldset.field', array(
-						'NAME'		=> ((isset($confvars['required'])) ? '* ' : '').(($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name']),
-						'HELP'		=> ((isset($confvars['help'])) ? $this->user->lang($confvars['help']) : ''),
-						'FIELD'		=> $this->html->widget($confvars),
-						'TEXT'		=> isset($confvars['text']) ? $confvars['text'] : '',
-					));
-				}
-			}
-		}
-
+		$this->form->output($user_data);
+	
+		/* NYI - TODO
 		//Generate Plugin-Tabs
 		if (is_array($this->pm->get_menus('settings'))){
 			foreach ($this->pm->get_menus('settings') as $plugin => $values){
@@ -620,379 +647,39 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 					));
 				}
 			}
-		}
+		}*/
 
 		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 3+count($this->pm->get_menus('settings')) : 0)));
 
 		$this->core->set_vars(array(
-			'page_title'		=> ($user_id) ? $this->user->lang('manage_users').': '.sanitize($this->user_data['username']) : $this->user->lang('user_creation'),
+			'page_title'		=> ($user_id) ? $this->user->lang('manage_users').': '.sanitize($user_data['username']) : $this->user->lang('user_creation'),
 			'template_file'		=> 'settings.html',
 			'display'			=> true)
 		);
 	}
 	
-	private function get_settingsdata($user_id=-1) {
-		//Privacy - Phone numbers
-		$priv_phone_array = array(
-			'0'=>$this->user->lang('user_priv_all'),
-			'1'=>$this->user->lang('user_priv_user'),
-			'2'=>$this->user->lang('user_priv_admin'),
-			'3'=>$this->user->lang('user_priv_no')
-		);
-
-		$priv_set_array = array(
-			'0'=>$this->user->lang('user_priv_all'),
-			'1'=>$this->user->lang('user_priv_user'),
-			'2'=>$this->user->lang('user_priv_admin')
-		);
+	private function create_form($user_id) {
+		// initialize form class
+		$this->form->lang_prefix = 'user_sett_';
+		$this->form->use_tabs = true;
+		$this->form->use_fieldsets = true;
 		
-		$priv_wall_posts_read_array = array(
-			'0'=>'user_priv_all',
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_onlyme'
-		);
+		$settingsdata = user_core::get_settingsdata($user_id);
+		// get rid of current_password field
+		unset($settingsdata['registration_info']['registration_info']['current_password']);
+		// vary help messages for user creation
+		if($user_id <= 0) {
+			$settingsdata['registration_info']['registration_info']['new_password']['help'] = 'user_creation_password_note';
+			$settingsdata['registration_info']['registration_info']['confirm_password']['help'] = 'user_creation_password_note';
+		}
+		// add deletelink for user-avatar
+		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar';
 		
-		$priv_wall_posts_write_array = array(
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_onlyme'
-		);
-
-		$gender_array = array(
-			'0'=> "---",
-			'1'=> $this->user->lang('adduser_gender_m'),
-			'2'=> $this->user->lang('adduser_gender_f')
-		);
-
-		$cfile = $this->root_path.'core/country_states.php';
-		if (file_exists($cfile)){
-			include($cfile);
+		$this->form->add_tabs($settingsdata);
+		// add send-new-password-button (if editing user)
+		if($user_id > 0) {
+			$this->form->add_field('send_new_pw', array('type' => 'button', 'buttontype' => 'submit', 'class' => 'mainoption bi_mail', 'buttonvalue' => 'user_sett_f_send_new_pw', 'tolang' => true), 'registration_info', 'registration_info');
 		}
-
-		// Build language array
-		$language_array = array();
-		if($dir = @opendir($this->core->root_path . 'language/')){
-			while ( $file = @readdir($dir) ){
-				if ((!is_file($this->core->root_path . 'language/' . $file)) && (!is_link($this->core->root_path . 'language/' . $file)) && valid_folder($file)){
-					include($this->core->root_path.'language/'.$file.'/lang_main.php');
-					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
-					$language_array[$file]					= $lang_name_tp;
-					$locale_array[$lang['ISO_LANG_SHORT']]	= $lang_name_tp;
-				}
-			}
-		}
-
-		$style_array = array();
-		foreach($this->pdh->get('styles', 'styles', array(0, false)) as $styleid=>$row){
-			$style_array[$styleid] = $row['style_name'];
-		}
-		
-		// hack the birthday format, to be sure there is a 4 digit year in it
-		$birthday_format = $this->user->style['date_notime_short'];
-		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
-		$birthday_format = str_replace('y', 'Y', $birthday_format);
-
-		$settingsdata = array(
-			'registration_information'	=> array(
-				'adduser_tab_registration_information'	=> array(
-					'username'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'username',
-						'text'	=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
-						'size'		=> 40,
-						'required'	=> true,
-						'id'	=> 'username',
-					),
-					'user_email' => array(
-						'fieldtype'	=> 'text',
-						'name'		=> 'email_address',
-						'size'		=> 40,
-						'required'	=> true,
-						'id'		=> 'useremail',
-					),
-					'new_user_password1' => array(
-						'fieldtype'	=> 'password',
-						'name'		=> ($user_id) ?'new_password' : 'password',
-						'size'		=> 40,
-						'id'		=> 'password1',
-						'help'		=> ($user_id) ? 'new_password_note' : 'user_creation_password_note',
-					),
-					'new_user_password2' => array(
-						'fieldtype'	=> 'password',
-						'name'		=> 'confirm_password',
-						'size'		=> 40,
-						'help'		=> ($user_id) ? 'confirm_password_note' : 'user_creation_password_note',
-						'id'		=> 'password2',
-					),
-
-				),
-			),
-			'profile'	=> array(
-				'adduser_tab_profile'	=> array(
-					'first_name'	=> array(
-						'fieldtype'	=> 'text',
-						'name'		=> 'adduser_first_name',
-						'size'		=> 40,
-						'id'		=> 'first_name',
-					),
-					'last_name'	=> array(
-						'fieldtype'	=> 'text',
-						'name'		=> 'adduser_last_name',
-						'size'		=> 40,
-					),
-					'gender' => array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'adduser_gender',
-						'options'	=> $gender_array,
-						'id'		=> 'gender',
-					),
-					'country' => array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'adduser_country',
-						'options'	=> $country_array,
-						'no_lang'	=> true,
-						'id'		=> 'country',
-					),
-					'state' => array(
-						'fieldtype'	=> 'text',
-						'name'		=> 'adduser_state',
-						'options'	=> $country_array,
-						'no_lang'	=> true,
-					),
-					'ZIP_code'	=> array(
-						'fieldtype'	=> 'int',
-						'size'	=> 5,
-						'name'	=> 'adduser_ZIP_code'
-					),
-					'town'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_town',
-						'size'	=> 40,
-					),
-					'birthday'	=> array(
-						'fieldtype'	=> 'datepicker',
-						'name'	=> 'adduser_birthday',
-						'allow_empty' => true,
-						'options' => array(
-							'year_range' => '-80:+0',
-							'change_fields' => true,
-							'format' => $birthday_format
-						),
-					),
-				),
-				'user_avatar' => array(
-						'user_avatar_type' => array(
-								'fieldtype'	=> 'radio',
-								'name'		=> 'user_avatar_type',
-								'options'	=> array(
-										'0'	=> $this->user->lang('user_avatar_type_own'),
-										'1'	=> $this->user->lang('user_avatar_type_gravatar'),
-								),
-								'default'		=> '0',
-						),
-						'user_avatar'	=> array(
-							'fieldtype'	=> 'imageuploader',
-							'name'		=> 'user_image',
-							'imgpath'	=> $this->pfh->FolderPath('users/'.$user_id,'files'),
-							'options'	=> array('deletelink'	=> 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar', 'returnFormat' => 'filename'),
-						),
-						'user_gravatar_mail' => array(
-								'fieldtype'	=> 'text',
-								'name'	=> 'user_gravatar_mail',
-								'help'	=> 'user_gravatar_mail_help',
-								'dependency' => array('user_avatar_type', 1, 'radio'),
-								'size'	=> 40,
-						),
-				),
-				'user_contact' => array(
-					'phone'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_phone',
-						'size'	=> 40,
-						'help'	=> 'adduser_foneinfo',
-					),
-					'cellphone'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_cellphone',
-						'size'	=> 40,
-						'help'	=> 'adduser_cellinfo',
-					),
-					'icq'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_icq',
-						'size'	=> 40,
-					),
-					'skype'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_skype',
-						'size'	=> 40,
-					),
-					'youtube'=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_youtube',
-						'size'	=> 40,
-					),
-					'irq'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_irq',
-						'size'	=> 40,
-						'help'	=> 'register_help_irc',
-					),
-					'twitter'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_twitter',
-						'size'	=> 40,
-					),
-					'facebook'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_facebook',
-						'size'	=> 40,
-					),
-				),
-				'adduser_misc' => array(
-					'work'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_work',
-						'size'	=> 40,
-					),
-					'interests'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_interests',
-						'size'	=> 40,
-					),
-					'hardware'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_hardware',
-						'size'	=> 40,
-					),
-				),
-			),
-			'privacy_options' => array(
-				'user_priv' => array(
-					'priv_no_boardemails'	=> array(
-						'fieldtype'	=> 'checkbox',
-						'default'	=> 0,
-						'name'		=> 'user_priv_no_boardemails',
-					),
-					'priv_set'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'	=> 'user_priv_set_global',
-						'options'	=> $priv_set_array,
-						'value'	=> '1',
-					),
-					'priv_phone'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'	=> 'user_priv_tel_all',
-						'options'	=> $priv_phone_array,
-						'value'	=> '1',
-					),
-					'priv_nosms'	=> array(
-						'fieldtype'	=> 'checkbox',
-						'default'	=> 0,
-						'name'		=> 'user_priv_tel_sms',
-					),
-					'priv_bday'	=> array(
-						'fieldtype'	=> 'checkbox',
-						'default'	=> 0,
-						'name'		=> 'user_priv_bday',
-					),
-				),
-				'user_wall' => array(
-					'priv_wall_posts_read'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'options'	=> $priv_wall_posts_read_array,
-						'name'		=> 'user_priv_wall_posts_read',
-					),
-					'priv_wall_posts_write'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'options'	=> $priv_wall_posts_write_array,
-						'name'		=> 'user_priv_wall_posts_write',
-					),
-				),
-			),
-			'view_options'		=> array(
-				'adduser_tab_view_options'	=> array(
-					'user_lang'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'	=> 'language',
-						'options'	=> $language_array,
-						'no_lang' => true
-					),
-					'user_timezone'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'user_timezones',
-						'options'	=> $this->time->timezones,
-						'value'		=> $this->config->get('timezone'),
-					),
-					'user_style'	=> array(
-						'fieldtype'	=> 'dropdown',
-						'name'		=> 'style',
-						'options'	=> $style_array,
-						'text'		=> ' (<a href="javascript:template_preview()">'.$this->user->lang('preview').'</a>)',
-						'no_lang'	=> true,
-					),
-					'user_alimit'	=> array(
-						'fieldtype'	=> 'spinner',
-						'name'	=> 'adjustments_per_page',
-						'size'	=> 5,
-						'step'	=> 10,
-						'id'	=> 'user_alimit'
-					),
-					'user_climit'	=> array(
-						'fieldtype'	=> 'spinner',
-						'name'	=> 'characters_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'id'	=> 'user_climit'
-					),
-					'user_elimit'	=> array(
-						'fieldtype'	=> 'spinner',
-						'name'	=> 'events_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'id'	=> 'user_elimit'
-					),
-					'user_ilimit'	=> array(
-						'fieldtype'	=> 'spinner',
-						'name'	=> 'items_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'id'	=> 'user_ilimit'
-					),
-					'user_rlimit'	=> array(
-						'fieldtype'	=> 'spinner',
-						'name'	=> 'raids_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'id'	=> 'user_rlimit'
-					),
-					'user_nlimit'	=> array(
-						'fieldtype'	=> 'spinner',
-						'name'	=> 'news_per_page',
-						'size'	=> 5,
-						'id'	=> 'user_nlimit'
-					),
-					'user_date_time'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_date_time',
-						'size'	=> 40,
-						'help'	=> 'adduser_date_note',
-					),
-					'user_date_short'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_date_short',
-						'size'	=> 40,
-						'help'	=> 'adduser_date_note',
-					),
-					'user_date_long'	=> array(
-						'fieldtype'	=> 'text',
-						'name'	=> 'adduser_date_long',
-						'size'	=> 40,
-						'help'	=> 'adduser_date_note',
-					),
-				),
-			),
-		);
-		return $settingsdata;
 	}
 }
 registry::register('Manage_users');

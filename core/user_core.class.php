@@ -553,6 +553,347 @@ class user_core extends gen_class {
 		$strEncrypted = $objCrypt->encrypt($strRandom);
 		return $strRandom.':'.$strEncrypted;
 	}
+	
+	
+	/**
+	 *	Generate User-Settings
+	 */	
+	public static function get_settingsdata($user_id=-1) {
+		$settingsdata = array();
+
+		//Privacy - Phone numbers
+		$priv_phone_array = array(
+			'0'=>'user_priv_all',
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_admin',
+			'3'=>'user_priv_no'
+		);
+		
+		$priv_wall_posts_read_array = array(
+			'0'=>'user_priv_all',
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_onlyme'
+		);
+		
+		$priv_wall_posts_write_array = array(
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_onlyme'
+		);
+
+		$priv_set_array = array(
+			'0'=>'user_priv_all',
+			'1'=>'user_priv_user',
+			'2'=>'user_priv_admin'
+		);
+
+		$gender_array = array(
+			'1'=> 'gender_m',
+			'2'=> 'gender_f',
+		);
+
+		$root_path = registry::get_const('root_path');
+		$cfile = $root_path.'core/country_states.php';
+		if (file_exists($cfile)){
+			include($cfile);
+		}
+
+		// Build language array
+		if($dir = @opendir($root_path . 'language/')){
+			while ( $file = @readdir($dir) ){
+				if ((!is_file($root_path . 'language/' . $file)) && (!is_link($root_path . 'language/' . $file)) && valid_folder($file)){
+					include($root_path.'language/'.$file.'/lang_main.php');
+					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
+					$language_array[$file]					= $lang_name_tp;
+					$locale_array[$lang['ISO_LANG_SHORT']]	= $lang_name_tp;
+				}
+			}
+		}
+
+		$style_array = array();
+		foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
+			$style_array[$styleid] = $row['style_name'];
+		}
+		
+		// hack the birthday format, to be sure there is a 4 digit year in it
+		$birthday_format = register('user')->style['date_notime_short'];
+		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
+		$birthday_format = str_replace('y', 'Y', $birthday_format);
+		
+		// commented lines are for form-validate - NYI
+		$settingsdata = array(
+			'registration_info'	=> array(
+				'registration_info'	=> array(
+					'username'	=> array(
+						'type'		=> 'text',
+						'lang'		=> 'username',
+						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
+						'size'		=> 40,
+						#'required'	=> true,
+					),
+					'user_email' => array(
+						'type'		=> 'text',
+						'lang'		=> 'email_address',
+						'size'		=> 40,
+						'id'		=> 'useremail',
+						#'required'	=> true,
+					),
+					'current_password'	=> array(
+						'type'	=> 'password',
+						'size'		=> 40,
+						'id'		=> 'oldpassword',
+						#'required'	=> true,
+					),
+					'new_password' => array(
+						'type'		=> 'password',
+						'size'		=> 40,
+						'id'		=> 'password1',
+					),
+					'confirm_password' => array(
+						'type'		=> 'password',
+						'size'		=> 40,
+						'id'		=> 'password2',
+					),
+				),
+			),
+			'profile'	=> array(
+				'profile'	=> array(
+					'first_name'	=> array(
+						'type'		=> 'text',
+						'size'		=> 40,
+					),
+					'last_name'	=> array(
+						'type'		=> 'text',
+						'size'		=> 40,
+					),
+					'gender' => array(
+						'type'		=> 'radio',
+						'tolang'	=> true,
+						'options'	=> $gender_array,
+					),
+					'country' => array(
+						'type'		=> 'dropdown',
+						'options'	=> $country_array,
+					),
+					'state' => array(
+						'type'		=> 'dropdown',
+						'options'	=> $state_array,
+					),
+					'ZIP_code'	=> array(
+						'type'		=> 'text',
+						'inptype'	=> 'int',
+						'size'		=> 5,
+					),
+					'town'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'birthday'	=> array(
+						'type'	=> 'datepicker',
+						'allow_empty' => true,
+						'year_range' => '-80:+0',
+						'change_fields' => true,
+						'format' => $birthday_format
+					),
+				),
+				'user_avatar' => array(
+					'user_avatar_type' => array(
+						'type'		=> 'radio',
+						'tolang'	=> true,
+						'options'	=> array(
+							'0'	=> 'user_avatar_type_own',
+							'1'	=> 'user_avatar_type_gravatar',
+						),
+						'default'	=> '0',
+						'dependency'=> array(1 => array('user_gravatar_mail')),
+					),
+					'user_avatar'	=> array(
+						'type'			=> 'imageuploader',
+						'imgpath'		=> register('pfh')->FolderPath('users/'.$user_id,'files'),
+						'returnFormat'	=> 'filename',
+					),
+					'user_gravatar_mail' => array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+				),
+				'user_contact' => array(
+					'phone'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'cellphone'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'icq'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'skype'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'youtube'=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'irq'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+						'help'	=> 'register_help_irc',
+					),
+					'twitter'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'facebook'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+				),
+				'misc' => array(
+					'work'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'interests'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+					'hardware'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+					),
+
+				),
+			),
+			'privacy_options' => array(
+				'user_priv' => array(
+					'priv_no_boardemails'	=> array(
+						'type'		=> 'radio',
+						'default'	=> 0,
+					),
+					'priv_set'	=> array(
+						'type'		=> 'dropdown',
+						'tolang'	=> true,
+						'options'	=> $priv_set_array,
+						'default'	=> '1',
+					),
+					'priv_phone'	=> array(
+						'type'		=> 'dropdown',
+						'tolang'	=> true,
+						'options'	=> $priv_phone_array,
+						'default'	=> '1',
+					),
+					'priv_nosms'	=> array(
+						'type'		=> 'radio',
+						'default'	=> 0,
+					),
+					'priv_bday'	=> array(
+						'type'		=> 'radio',
+						'default'	=> 0,
+					),
+				),
+				'user_wall' => array(
+					'priv_wall_posts_read'	=> array(
+						'type'		=> 'dropdown',
+						'tolang'	=> true,
+						'options'	=> $priv_wall_posts_read_array,
+					),
+					'priv_wall_posts_write'	=> array(
+						'type'		=> 'dropdown',
+						'tolang'	=> true,
+						'options'	=> $priv_wall_posts_write_array,
+					),
+				),
+			),
+			
+			'view_options'		=> array(
+				'adduser_tab_view_options'	=> array(
+					'user_lang'	=> array(
+						'type'	=> 'dropdown',
+						'lang'	=> 'language',
+						'options'	=> $language_array,
+						'default'	=> register('config')->get('default_lang'),
+					),
+					'user_timezone'	=> array(
+						'type'	=> 'dropdown',
+						'lang'		=> 'user_timezones',
+						'options'	=> register('time')->timezones,
+						'default'	=> register('config')->get('timezone'),
+					),
+					'user_style'	=> array(
+						'type'	=> 'dropdown',
+						'lang'		=> 'style',
+						'options'	=> $style_array,
+						'text2'		=> ' (<a href="javascript:template_preview()">'.register('user')->lang('preview').'</a>)',
+						'default'	=> register('config')->get('default_style'),
+					),
+					'user_alimit'	=> array(
+						'type'	=> 'spinner',
+						'lang'	=> 'adjustments_per_page',
+						'size'	=> 5,
+						'step'	=> 10,
+						'default'	=> (register('config')->get('default_alimit')) ? register('config')->get('default_alimit') : 100,
+					),
+					'user_climit'	=> array(
+						'type'	=> 'spinner',
+						'lang'	=> 'characters_per_page',
+						'size'	=> 5,
+						'step' => 10,
+						'default'	=> (register('config')->get('default_climit')) ? register('config')->get('default_climit') : 100,
+					),
+					'user_elimit'	=> array(
+						'type'	=> 'spinner',
+						'lang'	=> 'events_per_page',
+						'size'	=> 5,
+						'step' => 10,
+						'default'	=> (register('config')->get('default_elimit')) ? register('config')->get('default_elimit') : 100,
+					),
+					'user_ilimit'	=> array(
+						'type'	=> 'spinner',
+						'lang'	=> 'items_per_page',
+						'size'	=> 5,
+						'step' => 10,
+						'default'	=> (register('config')->get('default_ilimit')) ? register('config')->get('default_ilimit') : 100,
+					),
+					'user_rlimit'	=> array(
+						'type'	=> 'spinner',
+						'lang'	=> 'raids_per_page',
+						'size'	=> 5,
+						'step' => 10,
+						'default'	=> (register('config')->get('default_rlimit')) ? register('config')->get('default_rlimit') : 100,
+					),
+					'user_nlimit'	=> array(
+						'type'	=> 'spinner',
+						'lang'	=> 'news_per_page',
+						'size'	=> 5,
+						'default'	=> (register('config')->get('default_nlimit')) ? register('config')->get('default_nlimit') : 10,
+					),
+					'user_date_time'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+						'help'	=> 'user_sett_date_note',
+						'default'	=> (register('config')->get('default_date_time')) ? register('config')->get('default_date_time') : $this->user->lang('style_date_time'),
+					),
+					'user_date_short'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+						'help'	=> 'user_sett_date_note',
+						'default'	=> (register('config')->get('default_date_short')) ? register('config')->get('default_date_short') : $this->user->lang('style_date_short'),
+					),
+					'user_date_long'	=> array(
+						'type'	=> 'text',
+						'size'	=> 40,
+						'help'	=> 'user_sett_date_note',
+						'default'	=> (register('config')->get('default_date_long')) ? register('config')->get('default_date_long') : $this->user->lang('style_date_long'),
+					),
+				),
+			),
+		);
+
+		return $settingsdata;
+	}
 
 
 	public function __destruct() {

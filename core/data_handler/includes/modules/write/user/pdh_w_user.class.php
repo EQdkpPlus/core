@@ -145,66 +145,6 @@ if(!class_exists('pdh_w_user')) {
 			return ($objQuery) ? true : false;
 		}
 
-		public function update_user_settings ($user_id, $settingsdata) {
-			$query_ary = array();
-			if ( $this->in->get('username') != $this->in->get('old_username') ){
-				$query_ary['username'] = $this->in->get('username');
-			}
-			if ( $this->in->get('new_password') ){
-				$new_salt = $this->user->generate_salt();
-				$query_ary['user_password'] = $this->user->encrypt_password($this->in->get('new_password'), $new_salt).':'.$new_salt;
-				$strApiKey = $this->user->generate_apikey($this->in->get('new_password'), $new_salt);
-				$query_ary['api_key'] = $strApiKey;
-				$query_ary['user_login_key'] = '';
-			}
-
-			$query_ary['user_email']	= $this->crypt->encrypt($this->in->get('email_address'));
-			$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($user_id));
-			
-			$privArray = array();
-			$customArray = array();
-			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube', 'user_gravatar_mail', 'user_avatar_type');
-			foreach($settingsdata as $group => $fieldsets) {
-				if($group == 'registration_information') continue;
-				foreach($fieldsets as $tab => $fields) {
-					foreach($fields as $name => $field) {
-						if($tab == 'user_priv' || $tab == 'user_wall') 
-							$privArray[$name] = $this->html->widget_return($field);
-						elseif(in_array($name, $custom_fields)) 
-							$customArray[$name] = $this->html->widget_return($field);
-						else 
-							$query_ary[$name] = $this->html->widget_return($field);
-					}
-				}
-			}
-			
-			//Create Thumbnail for User Avatar
-			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
-				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
-				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
-			}
-			
-			$query_ary['privacy_settings']		= serialize($privArray);
-			$query_ary['custom_fields']			= serialize($customArray);
-
-
-			$plugin_settings = array();
-			if (is_array($this->pm->get_menus('settings'))){
-				foreach ($this->pm->get_menus('settings') as $plugin => $values){
-					
-					foreach ($values as $key=>$setting){
-					if ($key == 'icon' || $key == 'name') continue;
-						$name = $setting['name'];
-						$setting['name'] = $plugin.':'.$setting['name'];
-						$setting['plugin'] = $plugin;
-						$plugin_settings[$plugin][$name] = $this->html->widget_return($setting);
-					}
-				}
-			}
-			$query_ary['plugin_settings']	= serialize($plugin_settings);
-			return $this->update_user($user_id, $query_ary);
-		}
-
 		public function delete_avatar($user_id) {
 			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){

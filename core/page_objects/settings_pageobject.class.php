@@ -103,7 +103,7 @@ class settings_pageobject extends pageobject {
 
 		//Check username
 		if ($change_username && $this->pdh->get('user', 'check_username', array($values['username'])) == 'false'){
-			$this->core->message($this->user->lang('fv_username_alreadyuse'), $this->user->lang('error'), 'red');
+			$this->core->message(str_replace('{0}', $values['username'], $this->user->lang('fv_username_alreadyuse')), $this->user->lang('error'), 'red');
 			$this->display();
 			return;
 		}
@@ -111,7 +111,7 @@ class settings_pageobject extends pageobject {
 		//Check email
 		if ($change_email){
 			if ($this->pdh->get('user', 'check_email', array($values['user_email'])) == 'false'){
-				$this->core->message($this->user->lang('fv_email_alreadyuse'), $this->user->lang('error'), 'red');
+				$this->core->message(str_replace('{0}', $values['user_email'], $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
 				$this->display();
 				return;
 			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $values['user_email']) ){
@@ -160,6 +160,8 @@ class settings_pageobject extends pageobject {
 		
 		//copy all other values to appropriate array
 		$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
+		$privArray = array();
+		$customArray = array();
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
 			if(in_array($name, user_core::$privFields)) 
@@ -171,9 +173,9 @@ class settings_pageobject extends pageobject {
 		}
 		
 		//Create Thumbnail for User Avatar
-		if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
-			$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
-			$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
+		if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($this->user->id)) != $customArray['user_avatar']){
+			$image = $this->pfh->FolderPath('users/'.$this->user->id,'files').$customArray['user_avatar'];
+			$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$this->user->id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
 		}
 		
 		$query_ary['privacy_settings']		= serialize($privArray);
@@ -242,7 +244,7 @@ class settings_pageobject extends pageobject {
 		$this->form->use_tabs = true;
 		$this->form->use_fieldsets = true;
 		
-		$settingsdata = self::get_settingsdata($this->user->id);
+		$settingsdata = user_core::get_settingsdata($this->user->id);
 		// set username readonly
 		if($this->config->get('disable_username_change')) {
 			$settingsdata['registration_info']['registration_info']['username']['help'] =  'register_help_disabled_username';
@@ -331,334 +333,7 @@ class settings_pageobject extends pageobject {
 			}
 		}*/
 	}
-	
-	public static function get_settingsdata($user_id=-1) {
-		$settingsdata = array();
 
-		//Privacy - Phone numbers
-		$priv_phone_array = array(
-			'0'=>'user_priv_all',
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_admin',
-			'3'=>'user_priv_no'
-		);
-		
-		$priv_wall_posts_read_array = array(
-			'0'=>'user_priv_all',
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_onlyme'
-		);
-		
-		$priv_wall_posts_write_array = array(
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_onlyme'
-		);
-
-		$priv_set_array = array(
-			'0'=>'user_priv_all',
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_admin'
-		);
-
-		$gender_array = array(
-			'1'=> 'gender_m',
-			'2'=> 'gender_f',
-		);
-
-		$root_path = registry::get_const('root_path');
-		$cfile = $root_path.'core/country_states.php';
-		if (file_exists($cfile)){
-			include($cfile);
-		}
-
-		// Build language array
-		if($dir = @opendir($root_path . 'language/')){
-			while ( $file = @readdir($dir) ){
-				if ((!is_file($root_path . 'language/' . $file)) && (!is_link($root_path . 'language/' . $file)) && valid_folder($file)){
-					include($root_path.'language/'.$file.'/lang_main.php');
-					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
-					$language_array[$file]					= $lang_name_tp;
-					$locale_array[$lang['ISO_LANG_SHORT']]	= $lang_name_tp;
-				}
-			}
-		}
-
-		$style_array = array();
-		foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
-			$style_array[$styleid] = $row['style_name'];
-		}
-		
-		// hack the birthday format, to be sure there is a 4 digit year in it
-		$birthday_format = register('user')->style['date_notime_short'];
-		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
-		$birthday_format = str_replace('y', 'Y', $birthday_format);
-		
-		// commented lines are for form-validate - NYI
-		$settingsdata = array(
-			'registration_info'	=> array(
-				'registration_info'	=> array(
-					'username'	=> array(
-						'type'		=> 'text',
-						'lang'		=> 'username',
-						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
-						'size'		=> 40,
-						#'required'	=> true,
-					),
-					'user_email' => array(
-						'type'		=> 'text',
-						'lang'		=> 'email_address',
-						'size'		=> 40,
-						'id'		=> 'useremail',
-						#'required'	=> true,
-					),
-					'current_password'	=> array(
-						'type'	=> 'password',
-						'size'		=> 40,
-						'id'		=> 'oldpassword',
-						#'required'	=> true,
-					),
-					'new_password' => array(
-						'type'		=> 'password',
-						'name'		=> 'new_password',
-						'size'		=> 40,
-						'id'		=> 'password1',
-					),
-					'confirm_password' => array(
-						'type'		=> 'password',
-						'name'		=> 'confirm_password',
-						'size'		=> 40,
-						'id'		=> 'password2',
-					),
-				),
-			),
-			'profile'	=> array(
-				'profile'	=> array(
-					'first_name'	=> array(
-						'type'		=> 'text',
-						'size'		=> 40,
-					),
-					'last_name'	=> array(
-						'type'		=> 'text',
-						'size'		=> 40,
-					),
-					'gender' => array(
-						'type'		=> 'radio',
-						'tolang'	=> true,
-						'options'	=> $gender_array,
-					),
-					'country' => array(
-						'type'		=> 'dropdown',
-						'options'	=> $country_array,
-					),
-					'state' => array(
-						'type'		=> 'dropdown',
-						'options'	=> $state_array,
-					),
-					'ZIP_code'	=> array(
-						'type'		=> 'text',
-						'inptype'	=> 'int',
-						'size'		=> 5,
-					),
-					'town'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'birthday'	=> array(
-						'type'	=> 'datepicker',
-						'allow_empty' => true,
-						'year_range' => '-80:+0',
-						'change_fields' => true,
-						'format' => $birthday_format
-					),
-				),
-				'user_avatar' => array(
-					'user_avatar_type' => array(
-						'type'		=> 'radio',
-						'tolang'	=> true,
-						'options'	=> array(
-							'0'	=> 'user_avatar_type_own',
-							'1'	=> 'user_avatar_type_gravatar',
-						),
-						'default'	=> '0',
-						'dependency'=> array(1 => array('user_gravatar_mail')),
-					),
-					'user_avatar'	=> array(
-						'type'			=> 'imageuploader',
-						'imgpath'		=> register('pfh')->FolderPath('users/'.$user_id,'files'),
-						'returnFormat'	=> 'filename',
-					),
-					'user_gravatar_mail' => array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-				),
-				'user_contact' => array(
-					'phone'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'cellphone'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'icq'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'skype'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'youtube'=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'irq'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-						'help'	=> 'register_help_irc',
-					),
-					'twitter'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'facebook'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-				),
-				'misc' => array(
-					'work'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'interests'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'hardware'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-
-				),
-			),
-			'privacy_options' => array(
-				'user_priv' => array(
-					'priv_no_boardemails'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
-					),
-					'priv_set'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $priv_set_array,
-						'default'	=> '1',
-					),
-					'priv_phone'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $priv_phone_array,
-						'default'	=> '1',
-					),
-					'priv_nosms'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
-					),
-					'priv_bday'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
-					),
-				),
-				'user_wall' => array(
-					'priv_wall_posts_read'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $priv_wall_posts_read_array,
-					),
-					'priv_wall_posts_write'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $priv_wall_posts_write_array,
-					),
-				),
-			),
-			
-			'view_options'		=> array(
-				'adduser_tab_view_options'	=> array(
-					'user_lang'	=> array(
-						'type'	=> 'dropdown',
-						'lang'	=> 'language',
-						'options'	=> $language_array,
-					),
-					'user_timezone'	=> array(
-						'type'	=> 'dropdown',
-						'lang'		=> 'user_timezones',
-						'options'	=> register('time')->timezones,
-						'default'	=> register('config')->get('timezone'),
-					),
-					'user_style'	=> array(
-						'type'	=> 'dropdown',
-						'lang'		=> 'style',
-						'options'	=> $style_array,
-						'text2'		=> ' (<a href="javascript:template_preview()">'.register('user')->lang('preview').'</a>)',
-					),
-					'user_alimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'adjustments_per_page',
-						'size'	=> 5,
-						'step'	=> 10,
-					),
-					'user_climit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'characters_per_page',
-						'size'	=> 5,
-						'step' => 10,
-					),
-					'user_elimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'events_per_page',
-						'size'	=> 5,
-						'step' => 10,
-					),
-					'user_ilimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'items_per_page',
-						'size'	=> 5,
-						'step' => 10,
-					),
-					'user_rlimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'raids_per_page',
-						'size'	=> 5,
-						'step' => 10,
-					),
-					'user_nlimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'news_per_page',
-						'size'	=> 5,
-					),
-					'user_date_time'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-						'help'	=> 'user_sett_date_note',
-					),
-					'user_date_short'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-						'help'	=> 'user_sett_date_note',
-					),
-					'user_date_long'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-						'help'	=> 'user_sett_date_note',
-					),
-				),
-			),
-		);
-
-		return $settingsdata;
-	}
 }
 
 ?>

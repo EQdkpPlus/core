@@ -146,6 +146,8 @@ $lang = array(
 "auth_connect_account" => "Account verknüpfen",
 "auth_connect_account_error" => "Es konnte kein Account gefunden werden oder der Account ist bereits mit einem anderen Benutzer verknüpft",
 "user_sett_bridge_note" => "Da dieses Feld durch die CMS/Forums-Bridge aktualisiert wird, kannst du es nur in deinem CMS/Forum ändern.",
+"user_sett_f_send_new_pw" => "Neues Passwort senden",
+"user_sett_f_help_send_new_pw" => "Sende dem Benutzer ein neues, zufälliges Passwort",
 
 "user_sett_tab_profile" => "Profilinformationen",
 "user_sett_fs_profile" => "Profilinformationen",
@@ -217,8 +219,6 @@ $lang = array(
 "adduser_send_mail_body" => "Nachricht",
 "adduser_send_mail_suc" => "Die E-Mail wurde erfolgreich versendet.",
 "adduser_send_mail_error_fields" => "Es wurden nicht alle Felder ausgefüllt.",
-"adduser_send_new_pw" => "Neues Passwort senden",
-"adduser_send_new_pw_note" => "Sende dem Benutzer ein neues, zufälliges Passwort",
 "adduser_passwordreset_note" => "Achtung: Bitte gebe das Passwort erneut ein, damit der Benutzer kein zufällig Generiertes bekommt.",
 
 "purchase_history_for" => "Kauf-Historie für %1\$s",
@@ -302,7 +302,7 @@ $lang = array(
 "add_itemvote_success" => "Deine Abstimmung zu dem Item wurde gespeichert.",
 "update_itemvote_success" => "Deine Abstimmung zu dem Item wurde aktualisiert.",
 "update_settings_success" => "Die Benutzereinstellungen wurden aktualisiert.",
-"fv_invalid_email" => " Die E-Mail-Adresse scheint nicht gültig zu sein.",
+"fv_invalid_email" => "Die E-Mail-Adresse scheint nicht gültig zu sein.",
 "fv_required" => "Das Feld ist notwendig.",
 "fv_required_email" => "Bitte gib eine gültige Emailadresse ein",
 "fv_required_headline" => "Das Kopfzeilen-Feld ist notwendig.",
