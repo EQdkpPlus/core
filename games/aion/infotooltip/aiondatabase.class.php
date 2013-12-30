@@ -91,7 +91,7 @@ if(!class_exists('aiondatabase')) {
 					$name = (string) $item['name'];
 					$this->{$type.'list'}[(int)$item['id']][$lang] = $name;
 				}
-				$this->cache->putContent($this->pfh->FilePath($this->config['game'].'_'.$lang.'_'.$type.'list.itt', 'itt_cache'), serialize($this->{$type.'list'}));
+				$this->pfh->putContent($this->pfh->FilePath($this->config['game'].'_'.$lang.'_'.$type.'list.itt', 'itt_cache'), serialize($this->{$type.'list'}));
 			}
 			return true;
 		}
@@ -229,7 +229,7 @@ if(!class_exists('aiondatabase')) {
 			$template_html = trim(file_get_contents($this->root_path.'games/aion/infotooltip/templates/aion_popup.tpl'));
 			$item['html'] = str_replace('{ITEM_HTML}', stripslashes($html), $template_html);
 			$item['lang'] = $lang;
-			$item['icon'] = $itemxml->iconpath;
+			$item['icon'] = (string)$itemxml->iconpath;
 			$item['color'] = 'aion_q'.$itemxml->quality;
 			return $item;
 		}

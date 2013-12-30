@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2013-01-30 16:51:43 +0100 (Mi, 30 Jan 2013) $
+ * Date:		$Date: 2011-11-01 13:38:39 +0100 (Di, 01 Nov 2011) $
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author: hoofy $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 12953 $
+ * @version		$Rev: 11419 $
  * 
- * $Id: xxxdatabase.class.php 12953 2013-01-30 15:51:43Z wallenium $
+ * $Id: xxxdatabase.class.php 11419 2011-11-01 12:38:39Z hoofy $
  */
 
 include_once('itt_parser.aclass.php');
@@ -31,6 +31,7 @@ if(!class_exists('xxxdatabase')) {
 		public $recipelist = array();
 
 		private $searched_langs = array();
+		
 
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
@@ -93,7 +94,7 @@ if(!class_exists('xxxdatabase')) {
 					$name = (string) $item['name'];
 					$this->{$type.'list'}[(int)$item['id']][$lang] = $name;
 				}
-				$this->cache->putContent($this->pfh->FilePath($this->config['game'].'_'.$lang.'_'.$type.'list.itt', 'itt_cache'), serialize($this->{$type.'list'}));
+				$this->pfh->putContent($this->pfh->FilePath($this->config['game'].'_'.$lang.'_'.$type.'list.itt', 'itt_cache'), serialize($this->{$type.'list'}));
 			}
 			return true;
 		}
@@ -231,7 +232,7 @@ if(!class_exists('xxxdatabase')) {
 			$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/aion_popup.tpl'));
 			$item['html'] = str_replace('{ITEM_HTML}', stripslashes($html), $template_html);
 			$item['lang'] = $lang;
-			$item['icon'] = $itemxml->iconpath;
+			$item['icon'] = (string)$itemxml->iconpath;
 			$item['color'] = 'aion_q'.$itemxml->quality;
 			return $item;
 		}
