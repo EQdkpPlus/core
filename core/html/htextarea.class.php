@@ -51,7 +51,10 @@ class htextarea extends html {
 		$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
-		if($this->bbcodeeditor) $this->class = (empty($this->class)) ? 'mceEditor_bbcode' : $this->class.' mceEditor_bbcode';
+		if($this->bbcodeeditor) {
+			$this->class = (empty($this->class)) ? 'mceEditor_bbcode' : $this->class.' mceEditor_bbcode';
+			$this->tinyMCE->editor_bbcode();
+		}
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
