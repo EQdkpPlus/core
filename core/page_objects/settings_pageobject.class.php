@@ -296,7 +296,7 @@ class settings_pageobject extends pageobject {
 						'help'		=> 'auth_accounts_help',
 					);
 				}
-				$this->form->add_field('auth_account_'.$method, $field_opts, 'auth_accounts', 'registration_information');
+				$this->form->add_field('auth_account_'.$method, $field_opts, 'auth_accounts', 'registration_info');
 			}
 		}
 		
