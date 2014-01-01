@@ -166,15 +166,11 @@ class editarticle_pageobject extends pageobject {
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'PREVIEW_IMAGE'		=> $this->html->widget(array(
-						'fieldtype'	=> 'imageuploader',
-						'name'		=> 'previewimage',
+				'PREVIEW_IMAGE'		=> new himageuploader('previewimage', array(
 						'imgpath'	=> $this->pfh->FolderPath('','files'),
 						'value'		=> $this->pdh->get('articles', 'previewimage', array($id)),
-						'options'	=> array(
-							'noimgfile'	=> "images/global/brokenimg.png",
-							'deletelink'=> $this->SID.'&aid='.$id.'&cid='.$cid.'&delpreviewimage=true&link_hash='.$this->CSRFGetToken('delpreviewimage'),
-						),
+						'noimgfile'	=> "images/global/brokenimg.png",
+						'deletelink'=> $this->SID.'&aid='.$id.'&cid='.$cid.'&delpreviewimage=true&link_hash='.$this->CSRFGetToken('delpreviewimage'),
 					)),
 			));
 			
@@ -186,13 +182,9 @@ class editarticle_pageobject extends pageobject {
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'PREVIEW_IMAGE'		=> $this->html->widget(array(
-						'fieldtype'	=> 'imageuploader',
-						'name'		=> 'previewimage',
+				'PREVIEW_IMAGE'		=> new himageuploader('previewimage', array(
 						'imgpath'	=> $this->pfh->FolderPath('logo','eqdkp'),
-						'options'	=> array(
-							'noimgfile'	=> "images/global/brokenimg.png"
-						),
+						'noimgfile'	=> "images/global/brokenimg.png"
 					)),
 			));
 		}

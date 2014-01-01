@@ -65,12 +65,10 @@ class mybb_bridge extends bridge_generic {
 
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
-			'fieldtype'		=> 'checkbox',
-			'name'			=> 'cmsbridge_disable_sso',
+			'type'	=> 'radio',
 		),
 		'cmsbridge_disable_sync' => array(
-			'fieldtype'		=> 'checkbox',
-			'name'			=> 'cmsbridge_disable_sync',
+			'type'	=> 'radio',
 		),
 	);
 

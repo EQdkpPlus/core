@@ -269,12 +269,12 @@ class Manage_Bridge extends page_generic {
 				if((isset($confvars['disabled']) && $confvars['disabled']===true)){
 					continue;
 				}
-				$no_lang = (isset($confvars['no_lang'])) ? true : false;
+				$confvars['value'] = $this->config->get($name);
 
 				$this->tpl->assign_block_vars('field', array(
-					'NAME'		=> ($this->user->lang($confvars['name'])) ? $this->user->lang($confvars['name']) : $confvars['name'],
-					'HELP'		=> ($this->user->lang($confvars['name'].'_help')) ? $this->user->lang($confvars['name'].'_help') : $confvars['help'],
-					'FIELD'		=> $this->html->generateField($confvars, $name, $this->config->get($name), $no_lang),
+					'NAME'		=> ($this->user->lang($name)) ? $this->user->lang($name) : $name,
+					'HELP'		=> ($this->user->lang($name.'_help')) ? $this->user->lang($name.'_help') : $confvars['help'],
+					'FIELD'		=> form::field($name, $confvars),
 				));
 			}
 		}

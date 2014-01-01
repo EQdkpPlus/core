@@ -19,7 +19,6 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class inst_settings extends install_generic {
-	public static $shortcuts = array('pdl', 'in', 'html', 'game', 'config', 'db', 'pfh', 'core', 'time', 'db');
 	public static $before 		= 'encryptionkey';
 	public static $ajax			= 'ajax';
 	
@@ -150,11 +149,11 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_lang'].':</strong></td>
-							<td>'.$this->html->DropDown('default_lang', $language_array, $this->def_lang).'</td>
+							<td>'.new hdropdown('default_lang', array('options' => $language_array, 'value' => $this->def_lang)).'</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_locale'].':</strong></td>
-							<td>'.$this->html->DropDown('default_locale', $locale_array, $this->def_locale).'</td>
+							<td>'.new hdropdown('default_locale', array('options' => $locale_array, 'value' => $this->def_locale)).'</td>
 						</tr>
 						<tr>
 							<th class="ui-state-default" colspan="2">'.$this->lang['game_config'].'</th>
@@ -170,7 +169,7 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_game'].':</strong></td>
-							<td>'.$this->html->DropDown('game', $games, $this->def_game).' <select name="game_lang" id="game_lang">'.self::ajax_out(false, $this->def_game).'</select></td>
+							<td>'.new hdropdown('game', array('options' => $games, 'value' => $this->def_game)).' <select name="game_lang" id="game_lang">'.self::ajax_out(false, $this->def_game).'</select></td>
 						</tr>
 						<tr>
 							<th class="ui-state-default" colspan="2">'.$this->lang['server_config'].'</th>
@@ -181,11 +180,11 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['timezone'].':</strong></td>
-							<td>'.$this->html->DropDown('timezone', timehandler::fetch_timezones(), $this->def_timezone).'</td>
+							<td>'.new hdropdown('timezone', array('options' => timehandler::fetch_timezones(), 'value' => $this->def_timezone)).'</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['startday'].':</strong></td>
-							<td>'.$this->html->DropDown('startday', $startdays, $this->def_startday).'</td>
+							<td>'.new hdropdown('startday', array('options' => $startdays, 'value' => $this->def_startday)).'</td>
 						</tr>
 					</table>';
 		return $content;

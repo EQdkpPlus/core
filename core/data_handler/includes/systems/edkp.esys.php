@@ -49,7 +49,6 @@ $system_def = array(
 	'substitutions' => array(
 		'edkp_days'	=> array(
 			'lang'	=> 'Effective dkp days',
-			'name'	=> 'edkp_days',
 			'type'	=> 'int',
 			'size'	=> 5,
 			'value' => 30

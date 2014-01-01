@@ -46,7 +46,6 @@ $system_def = array(
 	'options' => array(
 	  'base_points'	=> array(
 		'lang'	=> 'Base points',
-		'name'	=> 'base_points',
 		'type'	=> 'int',
 		'size'	=> 5,
 		'value' => 0

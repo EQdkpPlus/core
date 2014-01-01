@@ -20,7 +20,6 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 include_once(registry::get_const('root_path').'core/html/htext.class.php');
 
 /*

@@ -178,14 +178,12 @@ class ManageCrons extends page_generic {
 		}
 		if (is_array($options)){
 			foreach ($options as $key=>$value){
-				if($value['type'] == 'dropdown' || $value['type'] == 'jq_multiselect' || $value['type'] == 'multiselect' || $value['type'] == 'checkbox')
-					$value['selected'] = isset($params[$key]) ? $params[$key] : '';
-				else $value['value'] = isset($params[$key]) ? $params[$key] : '';
-				$value['name'] = 'params['.$value['name'].']';
+				$value['value'] = isset($params[$key]) ? $params[$key] : '';
+				$name = 'params['.$key.']';
 				$this->tpl->assign_block_vars('param_row', array(
 					'NAME'	=> ($this->user->lang('cron_'.$this->in->get('cron').'_'.$key, false, false)) ? $this->user->lang('cron_'.$this->in->get('cron').'_'.$key) : $value['lang'],
 					'HELP'	=> ($this->user->lang('cron_'.$this->in->get('cron').'_'.$key.'_help', false, false)) ? $this->user->lang('cron_'.$this->in->get('cron').'_'.$key.'_help') : '',
-					'FIELD'	=> $this->html->widget($value),
+					'FIELD'	=> form::field($name, $value),
 				));
 			}
 		}

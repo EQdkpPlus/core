@@ -76,16 +76,13 @@ class smf2_bridge extends bridge_generic {
 	
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
-			'fieldtype'	=> 'checkbox',
-			'name'		=> 'cmsbridge_disable_sso',
+			'type'	=> 'radio',
 		),
 		'cmsbridge_disable_sync' => array(
-			'fieldtype'	=> 'checkbox',
-			'name'			=> 'cmsbridge_disable_sync',
+			'type'	=> 'radio',
 		),
 		'cmsbridge_sso_cookiename'	=> array(
-			'fieldtype'	=> 'text',
-			'name'		=> 'cmsbridge_sso_cookiename',
+			'type'	=> 'text',
 		),
 	);
 	

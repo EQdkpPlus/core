@@ -26,32 +26,27 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 
 		protected $ext_options = array(
 			'zero_time'	=> array(
-				'name'		=> 'zero_time',
 				'type'		=> 'dropdown',
 				'options'	=> array(),
-				'value'		=> 3,
+				'default'	=> 3,
 			),
 			'decay_time' => array(
-				'name'		=> 'decay_time',
 				'type'		=> 'spinner',
 				'max'		=> 99,
 				'min'		=> 1,
 				'step'		=> 1,
 				'size'		=> 2,
-				'value'		=> 1
+				'default'	=> 1
 			),
 			'start_date' => array(
-				'name'		=> 'start_date',
 				'type'		=> 'datepicker',
 				'options'	=> array('timepicker' => true),
-				'value'		=> 0,
+				'default'	=> 'now',
 				'class'		=> 'input'
 			),
 			'calc_func' => array(
-				'name'		=> 'calc_func',
 				'type'		=> 'dropdown',
 				'options'	=> array(),
-				'value'		=> 0,
 			)
 		);
 		

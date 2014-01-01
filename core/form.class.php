@@ -67,6 +67,37 @@ class form extends gen_class {
 	private $jq_checkbox 	= false;
 	private $jq_radio 		= false;
 	
+	/**
+	 *	shortcut to create a field
+	 *
+	 *	@param string	$name:		name of the field
+	 *	@param array	$options:	any options for the field
+	 *	@return object/string		returns the html-field as object, which can automatically transform into the appropriate html
+	 */
+	public static function field($name, $options) {
+		// encryption
+		if(!empty($options['encrypt'])) $value = register('encrypt')->decrypt($value);
+		if(empty($options['type'])) $options['type'] = '';
+		$field_class = 'h'.$options['type'];
+		return (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
+	}
+	
+	/**
+	 *	shortcut for the return value of a field
+	 *
+	 *	@param string	$name:		name of the field
+	 *	@param array	$options:	any options for the field
+	 *	@return mixed				returns the input-value of the field
+	 */
+	public static function value($name, $options) {
+		if(empty($options['type'])) $options['type'] = '';
+		$class_name = 'h'.$options['type'];
+		if(!registry::class_exists($class_name)) return null;
+		$class = new $class_name($name, $options);
+		if(!empty($options['encrypt'])) return register('encrypt')->encrypt($class->inpval())
+		return $value = $class->inpval();
+	}
+	
 	public function __construct($form_id) {
 		$this->form_id = $form_id;
 	}
@@ -223,24 +254,13 @@ class form extends gen_class {
 			if($tabname == 'f') {
 				// variable fieldsets holds fields in this case
 				foreach($fieldsets as $name => $options) {
-					$class_name = 'h'.$options['type'];
-					$class = new $class_name($name, $options);
-					$values[$name] = $class->inpval();
-					unset($class);
-					if(!empty($options['encrypt'])) $values[$name] = $this->encrypt->encrypt($values[$name]);
+					$values[$name] = self::value($name, $options);
 				}
 				continue;
 			}
 			foreach($fieldsets as $fields) {
 				foreach($fields as $name => $options) {
-					if(!registry::class_exists('h'.$options['type'])) {
-						#var_dump($name);
-						continue;
-					}
-					$field_class = 'h'.$options['type'];
-					$field_class = new $field_class($name, $options);
-					$values[$name] = $field_class->inpval();
-					if(!empty($options['encrypt'])) $values[$name] = $this->encrypt->encrypt($values[$name]);
+					$values[$name] = self::value($name, $options);
 				}
 			}
 		}
@@ -289,9 +309,6 @@ class form extends gen_class {
 			$help_message = ($this->user->lang($help, false, false)) ? $this->user->lang($help) : (($this->game->glang($help)) ? $this->game->glang($help) : '');
 		}
 		
-		// encryption
-		if(!empty($options['encrypt'])) $value = $this->encrypt->decrypt($value);
-		
 		// fill in the field
 		if(!empty($value)) $options['value'] = $value;
 		
@@ -302,13 +319,10 @@ class form extends gen_class {
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
 		
-		if(empty($options['type'])) $options['type'] = '';
-		$field_class = 'h'.$options['type'];
-		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
 		if($this->assign2tpl) $this->tpl->assign_block_vars($key, array(
 				'NAME'		=> $language,
 				'HELP'		=> $help_message,
-				'FIELD'		=> $text.$field.$text2
+				'FIELD'		=> $text.self::field($name, $options).$text2
 			));
 		else return array(
 				'name'		=> $language,

@@ -66,11 +66,8 @@ class ManageAutoPoints extends page_generic {
 		}
 		$result = false;
 		if (is_array($options) && $this->in->get('name') != ''){
-			foreach ($options as $option){
-				$options_array[$option['name']] = $this->in->get($option['name']);
-				if($option['name'] == 'start_date') $options_array['start_date'] = $this->time->fromformat($options_array['start_date'], 1);
-				if($option['name'] == 'pools') $options_array['pools'] = $this->in->getArray('pools', 'int');
-				if($option['name'] == 'exectime') $options_array['exectime'] = $this->time->fromformat('01.01.70 '.$options_array['exectime'], 'd.m.y H:i');
+			foreach ($options as $name => $option){
+				$options_array[$name] = form::value($name, $option);
 			}
 			if($this->in->exists('id')) {
 				$result = $this->apa->update_apa($this->in->get('id'), $options_array);
@@ -250,30 +247,25 @@ class ManageAutoPoints extends page_generic {
 		$options = ($foptions) ? $foptions : $options;
 		$type = ($ftype) ? $ftype : $type;
 		if(!$options || !is_array($options)) $this->display();
-		foreach ($options as $option){
-			if($option['name'] == 'pools') {
+		foreach ($options as $name => $option){
+			if($name == 'pools') {
 				$option['options'] = $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));
 				if(!$this->in->exists('id')) {
 					$used = $this->apa->get_pools_used($type);
 					foreach($used as $dkpid) {
-						if(!in_array($dkpid, $option['selected'])) unset($option['options'][$dkpid]);
+						if(!in_array($dkpid, $option['value'])) unset($option['options'][$dkpid]);
 					}
 				}
 			}
-			if($option['type'] == 'dropdown' || $option['type'] == 'jq_multiselect') $option['selected'] = $option['value'];
-			if($option['type'] == 'checkbox' && $option['value']) $option['selected'] = true;
-			if($option['name'] == 'start_date') $option['value'] = $this->time->user_date($option['value'], true, false, false, function_exists('date_create_from_format'));
-			if($option['name'] == 'exectime') $option['value'] = $this->time->date('H:i', $option['value']);
-			$ccfield = $this->html->widget($option);
-			$name = ($this->user->lang('apa_'.$type.'_'.$option['name'], false, false)) ? $this->user->lang('apa_'.$type.'_'.$option['name']) : '';
-			$help = ($this->user->lang('apa_'.$type.'_'.$option['name'].'_help', false, false)) ? $this->user->lang('apa_'.$type.'_'.$option['name'].'_help') : '';
+			$lang = ($this->user->lang('apa_'.$type.'_'.$name, false, false)) ? $this->user->lang('apa_'.$type.'_'.$name) : '';
+			$help = ($this->user->lang('apa_'.$type.'_'.$name.'_help', false, false)) ? $this->user->lang('apa_'.$type.'_'.$name.'_help') : '';
 			$this->tpl->assign_block_vars('input', array(
-				'NAME'		=> $name ? $name : $this->user->lang('apa_'.$option['name'], true, false),
-				'HELP'		=> $help ? $help : $this->user->lang('apa_'.$option['name'].'_help', false, false),
-				'FIELD'		=> $ccfield,
-				'FUNC'		=> ($option['name'] == 'calc_func') ? true : false,
+				'NAME'		=> $lang ? $lang : $this->user->lang('apa_'.$name, true, false),
+				'HELP'		=> $help ? $help : $this->user->lang('apa_'.$name.'_help', false, false),
+				'FIELD'		=> form::field($name, $option),
+				'FUNC'		=> ($name == 'calc_func') ? true : false,
 			));
-			$name = $help = '';
+			$lang = $help = '';
 		}
 		$job_list = $this->apa->list_apas();
 		

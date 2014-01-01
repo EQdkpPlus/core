@@ -24,24 +24,19 @@ if( !class_exists( "apa_type_generic" ) ) {
 	abstract class apa_type_generic extends gen_class {
 		protected $options = array(
 			'name'	=> array(
-				'name'		=> 'name',
 				'type'		=> 'text',
 				'size'		=> 20,
-				'value'		=> '',
 				'class'		=> 'input required'
 			),
 			'exectime'	=> array(
-				'name'		=> 'exectime',
 				'type'		=> 'timepicker',
-				'value'		=> 14400,
+				'default'	=> 14400,
 				'hour'		=> 4,
 				'min'		=> 0,
 				'class'		=> 'required'
 			),
 			'pools'	=> array(
-				'name'		=> 'pools',
-				'type'		=> 'jq_multiselect',
-				'value'		=> 0
+				'type'		=> 'multiselect',
 			)
 		);
 		

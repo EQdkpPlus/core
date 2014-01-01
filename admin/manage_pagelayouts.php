@@ -53,16 +53,20 @@ class ManagePageLayouts extends page_generic {
 		$layout_def['data']['description'] = addslashes($this->in->get('description', 'No description given.'));
 		$page_list = $this->pdh->get_page_list();
 	
-		//options
-		$options = $this->in->getArray('params', 'string');
-		foreach($options as $key => $value){
-			$layout_def['options'][$key]['value'] = $value;
+		//general options
+		if (is_array($layout_def['options']) && !empty($layout_def['options'])){
+			foreach ($layout_def['options'] as $key=>&$value) {
+				$name = 'params['.$key.']';
+				$value['value'] = form::value($name, $value);
+			}
 		}
-	
+
 		//substitutions
-		$subs = $this->in->getArray('subs', 'string');
-		foreach($subs as $key => $value){
-			$layout_def['substitutions'][$key]['value'] = $value;
+		if (is_array($layout_def['substitutions']) && !empty($layout_def['substitutions'])){
+			foreach ($layout_def['substitutions'] as $key=>&$value){
+				$name = 'subs['.$key.']';
+				$value['value'] = form::value($name, $value);
+			}
 		}
 	
 		//leaderboard
@@ -374,10 +378,10 @@ class ManagePageLayouts extends page_generic {
 		//general options
 		if (is_array($layout_def['options']) && !empty($layout_def['options'])){
 			foreach ($layout_def['options'] as $key=>$value){
-				$value['name'] = 'params['.$value['name'].']';
+				$name = 'params['.$key.']';
 				$this->tpl->assign_block_vars('param_row', array(
 					'NAME'	=> $value['lang'],
-					'FIELD'	=> $this->html->widget($value),
+					'FIELD'	=> form::field($name, $value),
 				));
 			}
 		}
@@ -385,10 +389,10 @@ class ManagePageLayouts extends page_generic {
 		//substitutions
 		if (is_array($layout_def['substitutions']) && !empty($layout_def['substitutions'])){
 			foreach ($layout_def['substitutions'] as $key=>$value){
-				$value['name'] = 'subs['.$value['name'].']';
+				$name = 'subs['.$key.']';
 				$this->tpl->assign_block_vars('subs_row', array(
 					'NAME'	=> $value['lang'],
-					'FIELD'	=> $this->html->widget($value),
+					'FIELD'	=> form::field($name, $value),
 				));
 			}
 		}

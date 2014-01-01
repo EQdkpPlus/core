@@ -26,38 +26,32 @@ if ( !class_exists( "apa_startpoints" ) ) {
 
 		protected $ext_options = array(
 			'start_date' => array(
-				'name'		=> 'start_date',
 				'options'	=> array('timepicker' => true),
 				'type'		=> 'datepicker',
-				'value'		=> 0,
+				'default'	=> 'now',
 				'class'		=> 'input'
 			),
 			'before'	=> array(
-				'name'	=> 'before',
-				'type'	=> 'checkbox',
-				'value' => 0,
+				'type'		=> 'radio',
+				'default'	=> 0
 			),
 			'event'	=> array(
-				'name'	=> 'event',
-				'type'	=> 'dropdown',
+				'type'		=> 'dropdown',
 				'options'	=> array(),
-				'value' => '',
 			),
 			'value'		=> array(
-				'name'	=> 'value',
-				'type'	=> 'int',
-				'size'	=> 5,
-				'value'	=> 0
+				'type'		=> 'text',
+				'inptype'	=> 'int',
+				'size'		=> 5,
+				'default'	=> 0
 			),
 			'creation'	=> array(
-				'name'	=> 'creation',
-				'type'	=> 'checkbox',
-				'value' => 0,
+				'type'		=> 'radio',
+				'default' 	=> 0,
 			),
 			'twinks'	=> array(
-				'name'	=> 'twinks',
-				'type'	=> 'checkbox',
-				'value' => 0,
+				'type'		=> 'radio',
+				'default' 	=> 0,
 			),
 		);
 
