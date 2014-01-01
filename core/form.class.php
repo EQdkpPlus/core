@@ -94,8 +94,8 @@ class form extends gen_class {
 		$class_name = 'h'.$options['type'];
 		if(!registry::class_exists($class_name)) return null;
 		$class = new $class_name($name, $options);
-		if(!empty($options['encrypt'])) return register('encrypt')->encrypt($class->inpval())
-		return $value = $class->inpval();
+		if(!empty($options['encrypt'])) return register('encrypt')->encrypt($class->inpval());
+		return $class->inpval();
 	}
 	
 	public function __construct($form_id) {
