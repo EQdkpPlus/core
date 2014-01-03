@@ -42,7 +42,8 @@ $english_array =  array(
 		'Miraluka',
 		'Mirialan',
 		'Zabrak',
-		'Cyborg'
+		'Cyborg',
+		'Cathar',
 	),
 	'factions' => array(
 		'Republic',
