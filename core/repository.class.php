@@ -148,7 +148,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// fetch the extension list and save to database
 		private function fetchExtensionList(){
-			$response = $this->puf->fetch($this->RepoEndpoint.'extension_list'.$this->getChannelURL(), "", 1);
+			$response = $this->puf->fetch($this->RepoEndpoint.'extension_list'.$this->getChannelURL()."&core=".$this->plusversion, "", 1);
 			if ($response){
 				$this->ResetExtensionList();		
 				$arrJson = json_decode($response);
