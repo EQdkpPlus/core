@@ -38,7 +38,7 @@ if(!class_exists('swtor')) {
 		protected $lang_file	= array();
 		protected $path			= false;
 		public $lang			= false;
-		public $version			= '1.1';
+		public $version			= '1.2';
 		
 		/**
 		 * Load classes
