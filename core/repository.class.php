@@ -198,7 +198,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// generate download link for extension
 		public function getExtensionDownloadLink($intCategory, $strExtensionName){
-			$response = $this->puf->fetch($this->RepoEndpoint.'download_link&category='.intval($intCategory).'&name='.$strExtensionName, "", 1);
+			$response = $this->puf->fetch($this->RepoEndpoint.'download_link&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 1);
 			$arrJson = json_decode($response);
 			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->link)){
 				return array('link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
