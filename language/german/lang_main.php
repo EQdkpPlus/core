@@ -908,6 +908,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "login_twofactor_remember" => "Auf diesem Rechner für 30 Tage nicht mehr fragen",
 "password_not_match" => "Die eingegebenen Passwörter stimmen nicht überein.",
 "password_too_long" => "Das eingegeben Passwort ist zu lang. Bitte verwende ein kürzeres Passwort.",
+"rsslink" => "RSS-Feed dieser Kategorie",
  );
 
 ?>

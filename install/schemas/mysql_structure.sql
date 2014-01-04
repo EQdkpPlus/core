@@ -547,7 +547,7 @@ CREATE TABLE `__repository` (
 	`name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`date` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`author` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`shortdesc` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`description` text COLLATE utf8_bin,
 	`version` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`version_ext` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`category` varchar(255) COLLATE utf8_bin DEFAULT NULL,

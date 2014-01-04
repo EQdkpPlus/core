@@ -43,7 +43,8 @@ $german_array = array(
 		'Miraluka',
 		'Mirialan',
 		'Zabrak',
-		'Cyborg'
+		'Cyborg',
+		'Cathar',
 	),
 	'factions' => array(
 		'Rebublik',

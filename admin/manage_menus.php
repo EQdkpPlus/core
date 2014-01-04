@@ -326,7 +326,7 @@ class Manage_Menus extends page_generic {
 			'DD_LINK_VISIBILITY'	=> new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
-			'DD_ARTICLES'			=> new hdropdown('editlink', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')),
+			'DD_ARTICLES'			=> new hdropdown('editlink-article', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')),
 		));
 		
 		

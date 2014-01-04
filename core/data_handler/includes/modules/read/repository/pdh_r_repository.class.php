@@ -58,7 +58,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						'version_ext'	=> $row['version_ext'],
 						'changelog'		=> $row['changelog'],
 						'lastupdate'	=> $row['updated'],
-						'shortdesc'		=> $row['shortdesc'],
+						'description'	=> $row['description'],
 						'category'		=> $row['category'],
 						'level'			=> $row['level'],
 						'rating'		=> $row['rating'],

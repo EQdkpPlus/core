@@ -947,6 +947,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"category_noauth"	=> "You do not have permission to view this Category.",
 	"category_unpublished" => "This Category is not published.",
 	"article_not_found" => "Cound not find Article or Category.",
+	"rsslink" => "RSS-Feed for this category",
 );
 
 ?>

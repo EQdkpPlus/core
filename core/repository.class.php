@@ -164,7 +164,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 								'name'				=> $ext->name,
 								'date'				=> $ext->releasedate,
 								'author'			=> $ext->author,
-								'shortdesc'			=> $ext->shortdesc,
+								'description'		=> $ext->shortdesc,
 								'version'			=> $ext->version,
 								'category'			=> $ext->category,
 								'level'				=> $ext->level,

@@ -61,7 +61,7 @@ class Manage_Extensions extends page_generic {
 			'NAME'				=> sanitize($extension['name']),
 			'DATE'				=> $this->time->user_date($extension['date'], true),
 			'AUTHOR'			=> sanitize($extension['author']),
-			'DESCRIPTION'		=> nl2br(sanitize($extension['shortdesc'])),
+			'DESCRIPTION'		=> nl2br(sanitize($extension['description'])),
 			'VERSION'			=> sanitize($extension['version']),
 			'LEVEL'				=> sanitize($extension['level']),
 			'CHANGELOG'			=> nl2br(sanitize($extension['changelog'])),
@@ -365,7 +365,7 @@ class Manage_Extensions extends page_generic {
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
-					'DESCRIPTION'		=> sanitize($extension['shortdesc']),
+					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
 				));
 
@@ -497,7 +497,7 @@ class Manage_Extensions extends page_generic {
 					'CODE'				=> sanitize($extension['plugin']),
 					'AUTHOR'			=> sanitize($extension['author']),
 					'TEMPLATE'			=> sanitize($extension['plugin']),
-					'DESCRIPTION'		=> sanitize($extension['shortdesc']),
+					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
 				));
 
@@ -560,7 +560,7 @@ class Manage_Extensions extends page_generic {
 					'CODE'				=> sanitize($value['path']),
 					'CONTACT'			=> sanitize($value['autor']),
 					'ACTION_LINK'		=> $link,
-					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['shortdesc'], 100)).'</a>' : '',
+					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['description'], 100)).'</a>' : '',
 				));
 
 			}
@@ -580,7 +580,7 @@ class Manage_Extensions extends page_generic {
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
-					'DESCRIPTION'		=> '<a href="javascript:repoinfo('.$id.')">'.sanitize(cut_text($extension['shortdesc'])).'</a>',
+					'DESCRIPTION'		=> '<a href="javascript:repoinfo('.$id.')">'.sanitize(cut_text($extension['description'])).'</a>',
 					'ACTION_LINK'		=> $link,
 					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $_SERVER['PHP_SELF'] , array('score' => $extension['rating'], 'readonly' => true))
 				));
@@ -633,7 +633,7 @@ class Manage_Extensions extends page_generic {
 					'VERSION'			=> $arrGameVersions[$plugin_code],
 					'CODE'				=> sanitize($plugin_code),
 					'CONTACT'			=> (isset($arrTmpExtension[$plugin_code])) ? $arrTmpExtension[$plugin_code]['author'] : '',
-					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['shortdesc'], 100).'</a>' : '',
+					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['description'], 100).'</a>' : '',
 					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->starrating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), $_SERVER['PHP_SELF'] , array('score' => $arrTmpExtension[$plugin_code]['rating'], 'readonly' => true)) : '',
 					'ACTION_LINK'		=> $link,
 				));
@@ -652,7 +652,7 @@ class Manage_Extensions extends page_generic {
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'CONTACT'			=> sanitize($extension['author']),
-					'DESCRIPTION'		=> sanitize(cut_text($extension['shortdesc'], 100)),
+					'DESCRIPTION'		=> sanitize(cut_text($extension['description'], 100)),
 					'ACTION_LINK'		=> $link,
 					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $_SERVER['PHP_SELF'] , array('score' => $extension['rating'], 'readonly' => true)),
 				));

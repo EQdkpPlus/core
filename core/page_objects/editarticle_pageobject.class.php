@@ -92,6 +92,11 @@ class editarticle_pageobject extends pageobject {
 		if ($strPreviewimage != "") $strPreviewimage = str_replace(register('pfh')->FileLink('', 'files', 'absolute'), '', $strPreviewimage);
 		$strAlias = $this->in->get('alias');
 		$intPublished = $this->in->get('published', 0);
+		
+		//Get default published state
+		$intDefaultPublished = $this->pdh->get("article_categories", "article_published_state", array($cid));
+		if ($intPublished && !$intDefaultPublished) $intPublished = 0;
+		
 		$intFeatured = $this->in->get('featured', 0);
 		$intCategory = $cid;
 		$intUserID = $this->user->id;
