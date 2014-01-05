@@ -39,7 +39,7 @@
 	</fieldset>
 	<!-- ENDIF -->
 	
-	<input type="submit" name="process_update" value="{L_bridge_continue}" class="mainoption bi_ok" /> <!-- IF S_CHANGED_FILES --><input type="button" value="{L_style_localupdate_dlchangedfiles}" class="mainoption bi_save" onclick="window.location='manage_styles.php{SID}&export_changed_files=true&styleid={TEMPLATE_ID}'"/><!-- ENDIF -->
+	<button type="submit" name="process_update" class="mainoption"><i class="fa fa-check"></i>{L_bridge_continue}</button> <!-- IF S_CHANGED_FILES --><button type="button" class="mainoption" onclick="window.location='manage_styles.php{SID}&export_changed_files=true&styleid={TEMPLATE_ID}'"><i class="fa fa-download"></i>{L_style_localupdate_dlchangedfiles}</button><!-- ENDIF -->
 {CSRF_TOKEN}
 	</form>
 <!-- ELSE -->

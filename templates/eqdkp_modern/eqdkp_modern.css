@@ -185,8 +185,8 @@ h3 {
 	font: 14px 'Trebuchet MS',Arial,sans-serif;
 }
 
-#personalAreaTime button {
-    background: none repeat scroll 0 0 transparent;
+#personalAreaTime button, #personalAreaTime button:hover {
+    background: none repeat scroll 0 0 transparent !important;
     border: medium none;
     position: absolute;
     right: 2px;
@@ -1008,6 +1008,7 @@ fieldset.settings dl {
 	overflow: hidden;
 	margin-bottom: 10px;
 	font-size: 0.95em;
+	padding-bottom: 1px;
 }
 fieldset.settings dl:hover dt{
 	border-right: 1px solid #000;
