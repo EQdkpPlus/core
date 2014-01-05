@@ -445,7 +445,7 @@ class admin_functions extends gen_class {
 		return $strPrefix.$strOut;
 	}
 	
-	public function adminmenu($blnShowBadges = true){
+	public function adminmenu($blnShowBadges = true, $coreUpdates="", $extensionUpdates=""){
 		$admin_menu = array(
 			'members' => array(
 				'icon'	=> 'fa-user fa-lg fa-fw',
@@ -467,7 +467,7 @@ class admin_functions extends gen_class {
 				4		=> array('link' => 'admin/manage_massmail.php'.$this->SID,'text' => $this->user->lang('massmail'),'check' => 'a_users_massmail','icon' => 'fa fa-envelope fa-lg fa-fw'),
 			),
 			'extensions' => array(
-				'name'	=> $this->user->lang('extensions').(($blnShowBadges) ? $this->extension_updates : ''),
+				'name'	=> $this->user->lang('extensions').(($blnShowBadges) ? $extensionUpdates : ''),
 				'icon' => 'fa-cogs fa-lg fa-fw',
 				1		=> array('link' => 'admin/manage_extensions.php'.$this->SID,		'text' => $this->user->lang('extension_repo'),'check' => 'a_config_man',	'icon' => 'fa-cogs fa-lg fa-fw'),
 			),
@@ -507,7 +507,7 @@ class admin_functions extends gen_class {
 			),
 			'maintenance' => array(
 				'icon'	=> 'fa-cog fa-lg fa-fw',
-				'name'	=> $this->user->lang('menu_maintenance').(($blnShowBadges) ? $this->core_updates : ''),
+				'name'	=> $this->user->lang('menu_maintenance').(($blnShowBadges) ? $coreUpdates : ''),
 				1		=> array('link' => 'maintenance/task_manager.php'.$this->SID,		'text' => $this->user->lang('maintenance'),		'check' => 'a_maintenance',	'icon' => 'fa-cog fa-lg fa-fw'),
 				2		=> array('link' => 'admin/manage_live_update.php'.$this->SID,		'text' => $this->user->lang('liveupdate'),		'check' => 'a_maintenance',	'icon' => 'fa fa-refresh fa-lg fa-fw'),
 				3		=> array('link' => 'admin/manage_backup.php'.$this->SID,			'text' => $this->user->lang('backup'),			'check' => 'a_backup',		'icon' => 'fa-floppy-o fa-lg fa-fw'),

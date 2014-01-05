@@ -467,7 +467,7 @@ class Manage_Extensions extends page_generic {
 				#'ENABLE_ICON'		=> ($row['enabled'] == '1') ? 'green' : 'red',
 				#'ENABLE_ICON_INFO'	=> ($row['enabled'] == '1') ? $this->user->lang('style_enabled_info') : $this->user->lang('style_disabled_info'),
 				'L_ENABLE'			=> ($row['enabled'] == '1') ? $this->user->lang('deactivate') : $this->user->lang('activate'),
-				'ENABLE'			=> ($row['enabled'] == '1') ? 'fa fa-minus-circle icon-color-red' : 'fa fa-plus-circle icon-color-green',
+				'ENABLE'			=> ($row['enabled'] == '1') ? 'fa fa-check-square-o fa-lg icon-color-green' : 'fa fa-square-o fa-lg icon-color-red',
 				'U_ENABLE'			=> ($row['enabled'] == '1') ? 'manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=disable&amp;code=' . $row['style_id'].'&amp;link_hash='.$this->CSRFGetToken('mode') : 'manage_extensions.php' . $this->SID . '&amp;mode=enable&amp;cat=2&amp;code=' . $row['style_id'].'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				'S_DEFAULT'			=> ($row['style_id'] == $default_style) ? true : false,
 				'S_DEACTIVATED'		=> ($row['enabled'] != '1') ? true : false,

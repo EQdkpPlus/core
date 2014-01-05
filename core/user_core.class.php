@@ -688,11 +688,11 @@ class user_core extends gen_class {
 						'size'	=> 40,
 					),
 					'birthday'	=> array(
-						'type'	=> 'datepicker',
-						'allow_empty' => true,
-						'year_range' => '-80:+0',
+						'type'			=> 'datepicker',
+						'allow_empty'	=> true,
+						'year_range'	=> '-80:+0',
 						'change_fields' => true,
-						'format' => $birthday_format
+						'format'		=> $birthday_format
 					),
 				),
 				'user_avatar' => array(

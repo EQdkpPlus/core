@@ -23,6 +23,7 @@ class admin_index extends gen_class {
 		'UpdateCheck'	=> 'repository',
 	);
 
+	protected $core_updates			= '';
 	protected $extension_updates	= '';
 	protected $rsscachetime			= 48;
 	public $admin_menu				= '';
@@ -93,7 +94,7 @@ class admin_index extends gen_class {
 	}
 	
 	public function adminmenu_output(){
-		$this->admin_menu = $this->admin_functions->adminmenu();
+		$this->admin_menu = $this->admin_functions->adminmenu(true, $this->core_updates, $this->extension_updates);
 		
 		// menu output
 		$this->tpl->assign_vars(array(

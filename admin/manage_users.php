@@ -391,7 +391,7 @@ class Manage_Users extends page_generic {
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=deactivate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('deactivate').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
 			} else {
 				$user_active = '<i class="eqdkp-icon-offline"></i>';
-				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="icon-unchecked fa-lg icon-color-red"></i></a>';
+				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
 			}
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
 $a_members = $this->pdh->get('member', 'connection_id', array($user_id));

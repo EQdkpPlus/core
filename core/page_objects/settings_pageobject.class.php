@@ -164,7 +164,9 @@ class settings_pageobject extends pageobject {
 		$customArray = array();
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
-			if(in_array($name, user_core::$privFields)) 
+			if (strpos($name, "auth_account_") === 0) continue;
+			
+			if(in_array($name, user_core::$privFields))
 				$privArray[$name] = $value;
 			elseif(in_array($name, user_core::$customFields)) 
 				$customArray[$name] = $value;
