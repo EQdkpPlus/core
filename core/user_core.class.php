@@ -809,7 +809,7 @@ class user_core extends gen_class {
 			),
 			
 			'view_options'		=> array(
-				'adduser_tab_view_options'	=> array(
+				'view_options'	=> array(
 					'user_lang'	=> array(
 						'type'	=> 'dropdown',
 						'lang'	=> 'language',

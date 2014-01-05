@@ -162,16 +162,15 @@ $lang = array(
 "user_sett_f_town" => "Ort",
 "user_sett_f_birthday" => "Geburtstag",
 
-"user_sett_fs_avatar" => "Avatar",
+"user_sett_fs_user_avatar" => "Avatar",
 "user_sett_f_user_avatar_type" => "Avatar-Typ",
 "user_avatar_type_own" => "Eigenes Avatar",
 "user_avatar_type_gravatar" => "Gravatar",
 "user_sett_f_user_avatar"	=> "Bild-Datei",
-"user_sett_f_help_user_avatar" => "TODO: Bildgröße beschränken?",
 "user_sett_f_user_gravatar_mail" => "Gravatar Email-Adresse",
 "user_sett_f_help_user_gravatar_mail" => "Trage hier deine Gravatar-Email-Adresse ein, sofern sie von deiner Registrierungs-Email-Adresse abweicht.",
 
-"user_sett_fs_contact" => "Kontaktinformationen",
+"user_sett_fs_user_contact" => "Kontaktinformationen",
 "user_sett_f_phone" => "Festnetz-Nr.",
 "user_sett_f_help_phone" => "Du kannst unter &raquo;Privatssphäre&laquo; einstellen, wer Zugriff auf deine Telefonnummer haben darf.",
 "user_sett_f_cellphone" => "Handynummer",
@@ -208,6 +207,7 @@ $lang = array(
 "user_priv_gallery" => "Eigene Gallery-Bilder nicht im Profil anzeigen?",
 
 "user_sett_tab_view_options" => "Anzeige-Optionen",
+"user_sett_fs_view_options" => "Anzeige-Optionen",
 "user_sett_f_user_date_time" => "Uhrzeit-Format",
 "user_sett_f_user_date_short" => "Datums-Format (kurz)",
 "user_sett_f_user_date_long" => "Daturms-Format (lang)",

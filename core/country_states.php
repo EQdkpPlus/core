@@ -17,7 +17,7 @@
  */
 
 $country_array = array(
-	''=>'-',
+	''=>'',
 	'DE'=>'GERMANY',
 	'AT'=>'AUSTRIA',
 	'GB'=>'UNITED KINGDOM',
@@ -259,7 +259,7 @@ $country_array = array(
 	'ZM'=>'ZAMBIA',
 	'ZW'=>'ZIMBABWE',
 );
-
+$state_array[''] = '';
 $state_array['DE'] = array(
 	'BW'=>'Baden-Württemberg',
 	'BY'=>'Bayern',
