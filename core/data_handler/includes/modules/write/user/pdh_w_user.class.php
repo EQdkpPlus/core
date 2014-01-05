@@ -202,9 +202,9 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function update_userstyle($style){
-			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __users :p")->set(array(
 					'user_style'	=> $style
-			))->execute($user_id);
+			))->execute();
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
 			return true;
