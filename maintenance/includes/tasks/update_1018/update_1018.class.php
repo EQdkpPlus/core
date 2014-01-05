@@ -37,11 +37,11 @@ class update_1018 extends sql_update_task {
 		$this->langs = array(
 			'english' => array(
 				'update_1018'		=> 'EQdkp Plus 1.0 Update 1',
-				'task01'			=> 'Alter item table',
+				'task01'			=> 'Alter repo table',
 			),
 			'german' => array(
 				'update_1018'		=> 'EQdkp Plus 1.0 Update 1',
-				'task01'			=> 'Alter item table',
+				'task01'			=> 'Alter repo table',
 			),
 		);
 	

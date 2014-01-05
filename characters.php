@@ -56,7 +56,7 @@ class characters extends page_generic {
 			$this->pdh->put('member', 'suspend', array($this->in->get('delete_id', 0)));
 			//Change Mainchar
 			$arrOtherMembers = $this->pdh->get('member', 'other_members', array($this->in->get('delete_id', 0)));
-			if (count($arrOtherMembers) && isset($arrOtherMembers[0])) $this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])), $arrOtherMembers[0]));
+			if (count($arrOtherMembers) && isset($arrOtherMembers[0])) $this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->id)), $arrOtherMembers[0]));
 			
 			$this->pdh->process_hook_queue();
 		}
@@ -64,7 +64,7 @@ class characters extends page_generic {
 	}
 	
 	public function ajax_mainchar(){
-		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])), $this->in->get('maincharchange', 0)));
+		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->id)), $this->in->get('maincharchange', 0)));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_main'));
 		exit;
