@@ -30,10 +30,9 @@ class php_check extends install_generic {
 		return array(
 			'php'		=> array(
 				'required'		=> VERSION_PHP_RQ.'+',
-				'installed'		=> '5.3.18',
-				'passfail'		=> (version_compare('5.3.18', VERSION_PHP_RQ, '>=')) ? true : false,
-				'adviced_fail'	=> (version_compare('5.3.18', VERSION_PHP_REC, '<=')) ? true : false,
-				'recommended'	=> VERSION_PHP_REC,
+				'installed'		=> phpversion(),
+				'passfail'		=> (version_compare(PHP_VERSION, VERSION_PHP_RQ, '>=')) ? true : false,
+				'adviced_fail'	=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<=')) ? true : false
 			),
 			'mysql'		=> array(
 				'required'		=> $this->lang['yes'],
