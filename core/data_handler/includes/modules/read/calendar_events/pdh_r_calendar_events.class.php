@@ -95,9 +95,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 					$this->repeatable_events[$parentid][] = $row['id'];
 				}
 			}
-			$this->db->free_result($query);
-			$this->pdc->put('pdh_calendar_events_table', $this->events, null);
-			$this->pdc->put('pdh_calendar_repeatable_events_table', $this->repeatable_events, null);
+			if($query){
+				$this->db->free_result($query);
+				$this->pdc->put('pdh_calendar_events_table', $this->events, null);
+				$this->pdc->put('pdh_calendar_repeatable_events_table', $this->repeatable_events, null);
+			}
 		}
 
 		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999){

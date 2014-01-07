@@ -68,7 +68,7 @@ if(!class_exists( "pdh_r_pages")) {
 			}
 
 			$this->db->free_result($r_result);
-			$this->pdc->put('pdh_pages_table', $this->pagelist, NULL);
+			if($r_result) $this->pdc->put('pdh_pages_table', $this->pagelist, NULL);
 			return true;
 		}
 

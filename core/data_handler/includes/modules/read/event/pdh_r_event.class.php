@@ -69,7 +69,7 @@ if(!class_exists('pdh_r_event')){
 			}
 
 			$this->db->free_result($result);
-			$this->pdc->put('pdh_events_table', $this->events, null);
+			if($result) $this->pdc->put('pdh_events_table', $this->events, null);
 		}
 
 		public function get_events(){

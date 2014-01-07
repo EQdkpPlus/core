@@ -98,8 +98,8 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 					'users'					=> $this->pdh->get('user','stylecount', array($drow['style_id']))
 				);
 			}
-				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_styles_table', $this->styles, null);
+			$this->db->free_result($pff_result);
+			if($pff_result) $this->pdc->put('pdh_styles_table', $this->styles, null);
 		}
 
 		public function get_styles($styleid=0, $all=true){

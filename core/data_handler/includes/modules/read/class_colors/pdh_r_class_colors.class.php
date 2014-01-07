@@ -54,7 +54,7 @@ if(!class_exists('pdh_r_class_colors')){
 			while($row = $this->db->fetch_record($result)){
 				$this->class_colors[$row['template']][$row['class_id']]	= $row['color'];
 			}
-			$this->pdc->put('pdh_classcolors_table', $this->class_colors, null);
+			if($result) $this->pdc->put('pdh_classcolors_table', $this->class_colors, null);
 			$this->db->free_result($result);
 		}
 

@@ -80,7 +80,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 				$this->multidkp[$row['multidkp_id']]['itempools'] = (isset($ip_data[$row['multidkp_id']])) ? $ip_data[$row['multidkp_id']] : array();
 			}
 			$this->db->free_result($m_result);
-			$this->pdc->put('pdh_multidkp_table', $this->multidkp, null);
+			if($m_result) $this->pdc->put('pdh_multidkp_table', $this->multidkp, null);
 		}
 
 		public function get_id_list(){

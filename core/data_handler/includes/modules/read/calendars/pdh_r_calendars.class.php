@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 				);
 			}
 			$this->db->free_result($query);
-			$this->pdc->put('pdh_calendars_table', $this->calendars, null);
+			if($query) $this->pdc->put('pdh_calendars_table', $this->calendars, null);
 		}
 
 		//1 = raid, 2=event 3=feed

@@ -65,7 +65,7 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 				);
 			}
 				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_portal_table', $this->portal, null);
+				if($pff_result) $this->pdc->put('pdh_portal_table', $this->portal, null);
 		}
 
 		private function filter($type, $ids) {

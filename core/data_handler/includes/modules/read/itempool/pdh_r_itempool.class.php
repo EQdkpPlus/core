@@ -54,7 +54,7 @@ if(!class_exists('pdh_r_itempool')){
 				$this->itempools[$row['itempool_id']]['desc'] = $row['itempool_desc'];
 			}
 			$this->db->free_result($i_result);
-			$this->pdc->put('pdh_itempools_table', $this->itempools, null);
+			if($i_result) $this->pdc->put('pdh_itempools_table', $this->itempools, null);
 		}
 
 		public function get_id_list(){

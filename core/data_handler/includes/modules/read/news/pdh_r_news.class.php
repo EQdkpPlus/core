@@ -77,7 +77,7 @@ if ( !class_exists( "pdh_r_news" ) ) {
 				);
 			}
 				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_news_table', $this->news, null);
+				if($pff_result) $this->pdc->put('pdh_news_table', $this->news, null);
 		}
 
 		public function get_id_list(){

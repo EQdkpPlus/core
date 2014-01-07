@@ -70,7 +70,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 			}
 			$this->db->free_result($r_result);
 
-			$this->pdc->put('pdh_links_table', $this->links, NULL);
+			if($r_result) $this->pdc->put('pdh_links_table', $this->links, NULL);
 			return true;
 		}
 

@@ -81,7 +81,7 @@ if(!class_exists('pdh_r_adjustment')){
 				$this->adjustments[$row['adjustment_id']]['raid_id'] = $row['raid_id'];
 			}
 			$this->db->free_result($result);
-			$this->pdc->put('pdh_adjustment_table', $this->adjustments, null);
+			if($result) $this->pdc->put('pdh_adjustment_table', $this->adjustments, null);
 		}
 
 		public function get_id_list(){

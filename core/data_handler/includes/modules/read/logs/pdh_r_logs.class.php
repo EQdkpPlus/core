@@ -76,7 +76,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 						$this->logs['ids'][$row['log_id']] = $row['log_plugin'];
 						$this->logs['plugins'][$row['log_plugin']] = $row['log_plugin'];
 					}
-					$this->db->free_result($id_res);
+					$this->db->free_result($id_res);		
 				}
 				$this->pdc->put('pdh_logs_table', $this->logs, null);
 				return true;
@@ -102,7 +102,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 					);
 				}
 				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_logs_table_'.$cache_name, $cache_result, null);
+				if($pff_result) $this->pdc->put('pdh_logs_table_'.$cache_name, $cache_result, null);
 			}
 			if(!is_array($this->data)) $this->data = array();
 			if(is_array($cache_result)) $this->data += $cache_result;

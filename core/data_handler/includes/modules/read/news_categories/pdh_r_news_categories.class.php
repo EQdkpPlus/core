@@ -54,8 +54,9 @@ if ( !class_exists( "pdh_r_news_categories" ) ) {
 					'category_color'	=> $drow['category_color']
 				);
 			}
-				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_news_categories_table', $this->news_categories, null);
+			
+			$this->db->free_result($pff_result);
+			if($pff_result) $this->pdc->put('pdh_news_categories_table', $this->news_categories, null);
 		}
 
 		public function get_id_list() {

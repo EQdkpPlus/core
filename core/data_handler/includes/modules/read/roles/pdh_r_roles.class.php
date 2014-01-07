@@ -81,9 +81,10 @@ if (!class_exists('pdh_r_roles')){
 				$this->roles[$row['role_id']]['classes_r']	= $row['role_classes'];
 				$this->roles_id[$row['role_id']]			= $row['role_name'];
 			}
-
-			$this->pdc->put('pdh_roles_table.roles', $this->roles, NULL);
-			$this->pdc->put('pdh_roles_table.roles_id', $this->roles_id, NULL);
+			if($roleresult){
+				$this->pdc->put('pdh_roles_table.roles', $this->roles, NULL);
+				$this->pdc->put('pdh_roles_table.roles_id', $this->roles_id, NULL);
+			}
 			return true;
 		}
 

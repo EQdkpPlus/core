@@ -91,7 +91,7 @@ if(!class_exists('pdh_r_raid')){
 				}
 			}
 			$this->db->free_result($result);
-			$this->pdc->put('pdh_raids_table', $this->raids, null);
+			if($result) $this->pdc->put('pdh_raids_table', $this->raids, null);
 		}
 
 		public function get_id_list(){

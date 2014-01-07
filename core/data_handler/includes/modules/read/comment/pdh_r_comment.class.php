@@ -62,7 +62,7 @@ if(!class_exists('pdh_r_comment')){
 				$this->comments[$row['id']] = $row;
 			}
 			$this->db->free_result($result);
-			$this->pdc->put('pdh_comments_table', $this->comments, null);
+			if($result) $this->pdc->put('pdh_comments_table', $this->comments, null);
 		}
 
 		public function get_comments() {

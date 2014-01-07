@@ -71,7 +71,7 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 					}
 				}
 			}
-			$this->pdc->put('pdh_calendar_raids_table.templates', $this->rctemplates, NULL);
+			if($myresult) $this->pdc->put('pdh_calendar_raids_table.templates', $this->rctemplates, NULL);
 			return true;
 		}
 

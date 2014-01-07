@@ -85,10 +85,12 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 			}
 
 			// save all the stuff to the cache
-			$this->db->free_result($pff_result);
-			$this->pdc->put('pdh_profile_fields_table', $this->profile_fields, null);
-			$this->pdc->put('pdh_profile_fieldlist_table', $this->field_list, null);
-			$this->pdc->put('pdh_profile_categories_table', $this->profile_categories, null);
+			if($pff_result){
+				$this->db->free_result($pff_result);
+				$this->pdc->put('pdh_profile_fields_table', $this->profile_fields, null);
+				$this->pdc->put('pdh_profile_fieldlist_table', $this->field_list, null);
+				$this->pdc->put('pdh_profile_categories_table', $this->profile_categories, null);
+			}
 		}
 
 		public function get_categories(){

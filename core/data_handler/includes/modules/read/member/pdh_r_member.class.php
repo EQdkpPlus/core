@@ -143,7 +143,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				$this->member_user[$drow['member_id']] = 0;
 			}
 			$this->db->free_result($free_result);
-			$this->pdc->put('pdh_member_connections_table',		$this->member_connections,	null);
+			if($free_sql) $this->pdc->put('pdh_member_connections_table',		$this->member_connections,	null);
 
 			// basic member data
 			$bmd_sql = "SELECT
@@ -195,7 +195,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}
 			}
 			$this->db->free_result($bmd_result);
-			$this->pdc->put('pdh_members_table', $this->data, null);
+			if($bmd_result) $this->pdc->put('pdh_members_table', $this->data, null);
 		}
 
 		public function get_id_list($skip_inactive=false, $skip_hidden=false, $skip_special = true, $skip_twinks=false){

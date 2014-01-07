@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 			}
 			if (!isset($this->ranks[0])) $this->ranks[0] = array('rank_id' => 0,	'prefix' => '',	'suffix' => '',	'name' => '', 'hide' => 0, 'sortid' => 0);
 			$this->db->free_result($r_result);
-			$this->pdc->put('pdh_member_ranks', $this->ranks);
+			if($r_result) $this->pdc->put('pdh_member_ranks', $this->ranks);
 		}
 
 		public function get_id($name) {

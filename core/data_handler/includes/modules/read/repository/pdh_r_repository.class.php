@@ -66,8 +66,9 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					'dep_php'		=> $row['dep_php'],
 				);
 			}
-				$this->db->free_result($pff_result);
-				$this->pdc->put('pdh_repository_table', $this->repository, null);
+			
+			$this->db->free_result($pff_result);
+			if($pff_result) $this->pdc->put('pdh_repository_table', $this->repository, null);
 		}
 
 		public function get_repository(){

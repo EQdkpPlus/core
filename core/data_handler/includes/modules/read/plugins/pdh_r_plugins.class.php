@@ -53,7 +53,7 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 				);
 			}
 			$this->db->free_result($result);
-			$this->pdc->put('pdh_plugins_table', $this->plugins, null);
+			if($result) $this->pdc->put('pdh_plugins_table', $this->plugins, null);
 		}
 
 		public function get_id_list() {
