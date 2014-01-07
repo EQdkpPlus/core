@@ -117,7 +117,8 @@ class Manage_Extensions extends page_generic {
 			$this->core->message(sprintf($this->user->lang('plugin_upload_error2'), $name, $mime), $this->user->lang('error'), 'red');
 		} else {
 			//Everything ok, lets unpack it
-			$this->pfh->secure_folder('tmp/'.$upload_id, 'repository');
+			$this->pfh->FolderPath('tmp', 'repository');
+			$this->pfh->secure_folder('tmp', 'repository');
 			$blnResult = $this->repo->unpackPackage($tempname, $this->pfh->FolderPath('tmp/'.$upload_id, 'repository'));
 			if ($blnResult){
 				$src_path = $extension_name = false;
