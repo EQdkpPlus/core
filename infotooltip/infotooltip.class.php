@@ -60,20 +60,11 @@ if(!class_exists('infotooltip')) {
 			//pdl
 			$this->pdl->register_type('infotooltip', null, array($this, 'html_format_debug'), array(2,3));
 
-			//scan available source-reader
-			if (is_dir($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip')){
-				if($srcs = opendir($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip')) {
-					$ignore = array('.', '..', '.svn', 'itt_parser.aclass.php');
-					while(false !== ($file = readdir($srcs))) {
-						if(!in_array($file, $ignore) AND is_file($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip/'.$file) AND substr($file, -10) == '.class.php') {
-							$this->avail_parser[] = substr($file, 0, strpos($file, '.')); //dont save .class.php
-						}
-					}
-				}
-			}
-			
 			//set config
 			$this->copy_config($config);
+			
+			//scan available source-reader for default_game
+			$this->avail_parser[] = $this->get_parserlist();
 		}
 
 		/*
@@ -90,27 +81,41 @@ if(!class_exists('infotooltip')) {
 			return $text;
 		}
 
-		/*
-		* returns list with parsers useable for selected game
-		*/
-		public function get_parserlist() {
-			$parserlist = array();
-			$this->load_parser(true);
-			foreach($this->parser_info as $parse) {
-				$parserlist[get_class($parse)] = get_class($parse);
+
+		/**
+		 * Returns an Array with available Parser for a specific game
+		 * 
+		 * @param string $game
+		 * @return multitype:string 
+		 */
+		public function get_parserlist($game=false) {
+			if (!$game) $game = $this->config['game'];
+			$arrParser = array();
+			if (is_dir($this->root_path.'games/'.$game.'/infotooltip')){
+				if($srcs = opendir($this->root_path.'games/'.$game.'/infotooltip')) {
+					$ignore = array('.', '..', '.svn', 'itt_parser.aclass.php');
+					while(false !== ($file = readdir($srcs))) {
+						if(!in_array($file, $ignore) AND is_file($this->root_path.'games/'.$game.'/infotooltip/'.$file) AND substr($file, -10) == '.class.php') {
+							$strParserName = substr($file, 0, strpos($file, '.'));
+							$arrParser[$strParserName] = $strParserName;
+						}
+					}
+				}
 			}
-			return $parserlist;
+			return $arrParser;
 		}
 
-		/*
-		* returns list with supported languages (dynamically created)
-		*/
+		/**
+		 * returns list with supported languages (dynamically created)
+		 * @param string $game
+		 * @return multitype:unknown 
+		 */
 		public function get_supported_languages($game=false) {
 			$game = ($game) ? $game : $this->config['game'];
 			$supp_langs = array();
-			$this->load_parser(true);
-			foreach($this->parser_info as $parse) {
-				foreach($parse->av_langs as $short => $long) {
+			$arrParserObjects = $this->load_parser($game, true);
+			foreach($arrParserObjects as $objParser) {
+				foreach($objParser->av_langs as $short => $long) {
 					$supp_langs[$short] = $short;
 				}
 			}
@@ -121,10 +126,10 @@ if(!class_exists('infotooltip')) {
 		* return needed settings for parsers
 		*/
 		public function get_extra_settings() {
-			$this->load_parser(true);
+			$arrParser = $this->load_parser(false, true);
 			$setts = array();
 			foreach($this->get_parserlist() as $parse) {
-				foreach($this->parser_info[$parse]->settings as $key => $val) {
+				foreach($arrParser[$parse]->settings as $key => $val) {
 					$setts[$key] = $val;
 				}
 			}
@@ -134,10 +139,10 @@ if(!class_exists('infotooltip')) {
 		/*
 		* execute on update of firstprio of parser (called by settings.php)
 		*/
-		public function changed_prio1($parser) {
-			$this->load_parser(true);
+		public function changed_prio1($game, $parser) {
+			$arrParser = $this->load_parser($game, true);
 			$setts = array();
-			foreach($this->parser_info[$parser]->settings as $skey => $sval) {
+			foreach($arrParser[$parser]->settings as $skey => $sval) {
 				$setts[$skey] = $sval['default'];
 			}
 			return $setts;
@@ -192,29 +197,33 @@ if(!class_exists('infotooltip')) {
 		 * loads parser
 		 * @string $parser
 		 */
-		private function load_parser($info=false) {
+		private function load_parser($game=false, $info=false) {
 			include_once($this->root_path.'infotooltip/itt_parser.aclass.php');
+			$game = ($game) ? $game : $this->config['game'];
+			$arrAvailableParser = $this->get_parserlist($game);
+					
 			if($info) {
-				if(!$this->parser_info) {
-					foreach($this->avail_parser as $parse) {
-						include($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip/'.$parse.'.class.php');
-						$this->parser_info[$parse] = registry::register($parse, array(false, $this->config));
+				if(!isset($this->parser_info[$game])) {
+					foreach($arrAvailableParser as $parse) {
+						include($this->root_path.'games/'.$game.'/infotooltip/'.$parse.'.class.php');
+						$this->parser_info[$game][$parse] = registry::register($parse, array(false, $this->config));
 					}
 				}
-				return true;
+				return $this->parser_info[$game];
 			}
-			if(!$this->parser) {
+			if(!isset($this->parser[$game])) {
 				$log = 'Load Parser in priority: ';
 				foreach($this->config['prio'] as $key => $parse) {
 					$log .= $key.'. '.$parse.', ';
-					if(in_array($parse, $this->avail_parser)) {
-						include($this->root_path.'games/'.registry::register('config')->get('default_game').'/infotooltip/'.$parse.'.class.php');
-						$this->parser[$key] = registry::register($parse, array(true, $this->config, $this->root_path, $this->cache, $this->puf, $this->pdl));
+					if(in_array($parse, $arrAvailableParser)) {
+						include($this->root_path.'games/'.$game.'/infotooltip/'.$parse.'.class.php');
+						$this->parser[$game][$key] = registry::register($parse, array(true, $this->config, $this->root_path, $this->cache, $this->puf, $this->pdl));
 					}
 				}
 				$this->pdl->log('infotooltip', $log);
-				ksort($this->parser);
+				ksort($this->parser[$game]);
 			}
+			return $this->parser[$game];
 		}
 
 		/*
@@ -297,10 +306,10 @@ if(!class_exists('infotooltip')) {
 		protected function update($item_name, $lang=false, $game_id=false, $data=array()) {
 			$this->pdl->log('infotooltip', 'update called: item_name: '.$item_name.', lang: '.$lang.', game_id: '.$game_id.', data: '.implode(', ', $data));
 			$lang = (!$lang) ? $this->config['game_lang'] : $lang;
-			$this->load_parser();
+			$arrParser = $this->load_parser();
 			$this->init_cache();
 			$ext = '';
-			foreach($this->parser as $parse) {
+			foreach($arrParser as $parse) {
 				if(!$parse->av_langs[$lang]) {
 					$lang = $this->config['game_lang'];
 					if(!$parse->av_langs[$lang]) {
@@ -334,6 +343,7 @@ if(!class_exists('infotooltip')) {
 		 * return @array
 		 */
 		public function getitem($item_name, $lang=false, $game_id=false, $forceupdate=false, $data=array()) {
+			$game = $this->config['game'];
 			$this->pdl->log('infotooltip', 'getitem called: item_name: '.$item_name.', lang: '.$lang.', game_id: '.$game_id.', forceupdate: '.$forceupdate.', data: '.implode(', ', $data));
 			$lang = (!$lang || $lang == '') ? $this->config['game_language'] : $lang;
 			$this->init_cache();
@@ -357,15 +367,15 @@ if(!class_exists('infotooltip')) {
 					}
 				} else { //check for language
 					$this->pdl->log('infotooltip', 'Item not found. Check if language '.$lang.' is available.');
-					$this->load_parser(true);
+					$this->load_parser(false, true);
 					$new_lang_set = false;
 					$before_lang = $lang;
 					foreach($this->config['prio'] as $parsing) {
-						if(!isset($this->parser_info[$parsing]->av_langs[$before_lang])) {
+						if(!isset($this->parser_info[$game][$parsing]->av_langs[$before_lang])) {
 							$mid_lang = $this->config['game_language'];
 							$new_lang_set = true;
-							if(!isset($this->parser_info[$parsing]->av_langs[$mid_lang])) {
-								$mid_lang = key($this->parser_info[$parsing]->av_langs);
+							if(!isset($this->parser_info[$game][$parsing]->av_langs[$mid_lang])) {
+								$mid_lang = key($this->parser_info[$game][$parsing]->av_langs);
 							}
 						} else {
 							$new_lang_set = false;

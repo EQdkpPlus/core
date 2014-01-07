@@ -226,9 +226,6 @@ class mmocms_settings extends page_generic {
 		$settingsdata = array(
 			'global' => array(
 				'global' => array(
-					'update_check'	=> array(
-						'type'		=> 'radio',
-					),
 					'main_title'	=> array(
 						'type'		=> 'text',
 						'size'		=> 40
@@ -256,7 +253,8 @@ class mmocms_settings extends page_generic {
 					),
 					'round_activate'	=> array(
 						'type'		=> 'radio',
-						'default'	=> 0
+						'default'	=> 0,
+						'dependency' => array(1=>array('round_precision')),
 					),
 					'round_precision'	=> array(
 						'type'		=> 'text',
@@ -788,7 +786,7 @@ class mmocms_settings extends page_generic {
 
 			//check if user wanted to reload defaults$
 			if($this->in->get('itt_force_default', '') != ''){
-				$this->config->set($this->itt->changed_prio1($this->in->get('itt_prio1')));
+				$this->config->set($this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
 				$this->core->message($this->user->lang('itt_default_success'), $this->user->lang('success'), 'green');
 			}
 		}
@@ -863,7 +861,7 @@ class mmocms_settings extends page_generic {
 			}
 			//check for changed itt 1.prio and load defaults if so
 			if($this->config->get('itt_prio1') != $this->in->get('itt_prio1', '')) {
-				$save_array = array_merge($save_array, $this->itt->changed_prio1($this->in->get('itt_prio1')));
+				$save_array = array_merge($save_array, $this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
 			}
 			
 			//check for changed disable points
@@ -875,7 +873,7 @@ class mmocms_settings extends page_generic {
 			$this->config->set($save_array);
 
 			// Since ChangeGame alters Config it has to be executed after config-save
-			if($game_changed && false) {
+			if($game_changed) {
 				$this->game->ChangeGame($this->in->get('default_game'), $this->in->get('game_language'));
 				$this->pdc->flush();
 				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings

@@ -268,6 +268,14 @@ abstract class super_registry {
 		}
 	}
 	
+	public static function load_html_fields() {
+		$path = self::$const['root_path'].'core/html/';
+		$classes = sdir($path, '*.class.php');
+		foreach($classes as $file) {
+			include_once($path.$file);
+		}
+	}
+	
 	private static function set_debug_level() {
 		if(!defined('DEBUG')) {
 			if ( isset(self::$const['debug']) && self::$const['debug'] != 0 ){
@@ -300,13 +308,6 @@ abstract class super_registry {
 		}
 	}
 	
-	private static function load_html_fields() {
-		$path = self::$const['root_path'].'core/html/';
-		$classes = sdir($path, '*.class.php');
-		foreach($classes as $file) {
-			include_once($path.$file);
-		}
-	}
 }
 
 ?>

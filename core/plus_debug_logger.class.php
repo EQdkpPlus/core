@@ -462,7 +462,7 @@ if ( !defined('EQDKP_INC') ){
 									
 						<div class="wrapper">
 							<div class="header">
-								<img src="'.$this->server_path.'templates/maintenance/images/logo_mirrored.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
+								<img src="'.$this->root_path.'templates/maintenance/images/logo_mirrored.png" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
 							</div>
 		
 							<div class="innerWrapper">

@@ -30,9 +30,10 @@ class php_check extends install_generic {
 		return array(
 			'php'		=> array(
 				'required'		=> VERSION_PHP_RQ.'+',
-				'installed'		=> phpversion(),
-				'passfail'		=> (version_compare(PHP_VERSION, VERSION_PHP_RQ, '>=')) ? true : false,
-				'adviced_fail'	=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<=')) ? true : false
+				'installed'		=> '5.3.18',
+				'passfail'		=> (version_compare('5.3.18', VERSION_PHP_RQ, '>=')) ? true : false,
+				'adviced_fail'	=> (version_compare('5.3.18', VERSION_PHP_REC, '<=')) ? true : false,
+				'recommended'	=> VERSION_PHP_REC,
 			),
 			'mysql'		=> array(
 				'required'		=> $this->lang['yes'],
@@ -47,19 +48,21 @@ class php_check extends install_generic {
 			'safemode'	=> array(
 				'required'		=> $this->lang['no'],
 				'installed'		=> (ini_get('safe_mode') != '1') ? $this->lang['no'] : $this->lang['yes'],
-				'passfail'		=> (ini_get('safe_mode') != '1') ? true : false,
+				'passfail'		=> true,
 				'adviced_fail'	=> (ini_get('safe_mode') == '1') ? true : false,
-				'ignore'		=> true
+				'ignore'		=> true,
 			),
 			'memory'	=> array(
-				'required'		=> '60M',
+				'required'		=> REQ_PHP_MEMORY,
 				'installed'		=> (intval(ini_get('memory_limit')) == -1) ? "Unlimited" : ini_get('memory_limit'),
-				'passfail'		=> $this->check_php_limit(),
+				'passfail'		=> $this->check_php_limit(REQ_PHP_MEMORY),
+				'adviced_fail'	=> ($this->check_php_limit(REQ_PHP_MEMORY_REC) ? false :true),
+				'recommended'	=> REQ_PHP_MEMORY_REC,
 			),
 			'curl'		=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (function_exists('curl_version')) ? $this->lang['yes'] : $this->lang['no'],
-				'passfail'		=> (function_exists('curl_version')) ? true : false,
+				'passfail'		=> true,
 				'adviced_fail'	=> (!function_exists('curl_version')) ? true : false,
 				'ignore'		=> true
 			),
@@ -81,10 +84,9 @@ class php_check extends install_generic {
 		);
 	}
 	
-	private function check_php_limit(){
+	private function check_php_limit($needed){
 		$installed = ini_get('memory_limit');
 		if (intval($installed) == -1) return true;
-		$needed = REQ_PHP_MEMORY;
 		return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
 	}
 	
@@ -116,19 +118,26 @@ class php_check extends install_generic {
 	public function get_output() {
 		$content = '';
 		$phpcheckdata	= $this->getCheckParams();
+		
+		if(!$this->do_match_req()){
+			$content .='<div style="margin-top: 10px; padding: 0pt 0.7em; border-color: #FF0000; background-color:#FFEFEF;color: #ff0000;background-image:none;" class="ui-state-highlight ui-corner-all">
+				<p>'.$this->lang['phpcheck_failed'].'</p>
+			</div>';
+		} else {
 
-		// show a message if safemode is on, as we can install eqdkp+ with ftp handler
-		if(!$phpcheckdata['safemode']['passfail']){
-			$content .='<div style="margin-top: 10px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
-					<p>'.$this->lang['safemode_warning'].'</p>
-				</div>';
-		}
-
-		// show a warning if one of the optional steps does not match
-		if($this->do_match_opt()){
-			$content .='<div style="margin-top: 10px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
-					<p>'.$this->lang['do_match_opt_failed'].'</p>
-				</div>';
+			// show a message if safemode is on, as we can install eqdkp+ with ftp handler
+			if(!$phpcheckdata['safemode']['passfail']){
+				$content .='<div style="margin-top: 10px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
+						<p>'.$this->lang['safemode_warning'].'</p>
+					</div>';
+			}
+	
+			// show a warning if one of the optional steps does not match
+			if($this->do_match_opt()){
+				$content .='<div style="margin-top: 10px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
+						<p>'.$this->lang['do_match_opt_failed'].'</p>
+					</div>';
+			}
 		}
 
 		$content .= '<br/>
@@ -136,15 +145,16 @@ class php_check extends install_generic {
 			<thead class="ui-state-default">
 			<tr>
 				<th width="54%">'.$this->lang['table_pcheck_name'].'</th>
-				<th width="19%">'.$this->lang['table_pcheck_installed'].'</th>
-				<th width="19%">'.$this->lang['table_pcheck_required'].'</th>
+				<th width="13%">'.$this->lang['table_pcheck_installed'].'</th>
+				<th width="13%">'.$this->lang['table_pcheck_rec'].'</th>
+				<th width="13%">'.$this->lang['table_pcheck_required'].'</th>
 				<th width="6%"></th>
 			</tr>
 			</thead>
 			<tbody class="ui-widget-content">';
 
 		foreach($phpcheckdata as $fname=>$fdata){
-			if(isset($fdata['adviced_fail'])){
+			if(isset($fdata['adviced_fail']) && $fdata['passfail']){
 				$passfail_color	= ($fdata['adviced_fail']) ? 'neutral' : (($fdata['passfail']) ? 'positive' : 'negative');
 				$passfail_icon	= ($fdata['adviced_fail']) ? 'style/warn.png' : (($fdata['passfail']) ? 'style/ok.png' : 'style/failed.png');
 			}else{
@@ -154,6 +164,7 @@ class php_check extends install_generic {
 			$content .= '<tr>
 				<td>'.(($this->lang['module_'.$fname]) ? $this->lang['module_'.$fname] : $fname).'</td>
 				<td class="'.$passfail_color.'">'.$fdata['installed'].'</td>
+				<td class="positive">'.((isset($fdata['recommended'])) ? $fdata['recommended'] : $fdata['required']).'</td>		
 				<td class="positive">'.$fdata['required'].'</td>
 				<td><img src="'.$passfail_icon.'" alt="passfail" /></td>
 			</tr>';

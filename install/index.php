@@ -43,6 +43,7 @@ unset($pdl);
 
 registry::load_config(true);
 
+
 //New DBAL
 if($dbtype = registry::get_const('dbtype')) {
 	include_once(registry::get_const('root_path') .'libraries/dbal/dbal.class.php');
@@ -53,6 +54,7 @@ if($dbtype = registry::get_const('dbtype')) {
 include_once($eqdkp_root_path . 'core/constants.php');
 include_once($eqdkp_root_path . 'core/core.functions.php');
 include_once($eqdkp_root_path . 'install/install.class.php');
+registry::load_html_fields();
 registry::register('install')->init();
 
 ?>

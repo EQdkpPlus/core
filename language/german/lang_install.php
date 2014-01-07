@@ -59,6 +59,7 @@ $lang = array(
 	'table_pcheck_name'		=> 'Name',
 	'table_pcheck_required'	=> 'Benötigt',
 	'table_pcheck_installed'=> 'Vorhanden',
+	'table_pcheck_rec'		=> 'Empfohlen',
 	'module_php'			=> 'PHP-Version',
 	'module_mysql'			=> 'MySQL Datenbank',
 	'module_zLib'			=> 'zLib PHP-Modul',
@@ -69,10 +70,10 @@ $lang = array(
 	'module_autoload'		=> 'spl_autoload_register PHP-Funktion',
 	'module_hash'			=> 'hash PHP-Funktion',
 	'module_memory'			=> 'PHP Speicherlimit',
-	'safemode_warning'		=> '<strong>ACHTUNG</strong><br/>Der PHP Safe Mode ist aktiv, es muss den FTP Modus verwenden, an Sonsten funktioniert EQDKP-PLUS nicht!',
+	'safemode_warning'		=> '<strong>ACHTUNG</strong><br/>Da der  PHP Safe Mode aktiv ist, musst du im nächsten Schritt den FTP-Modus nutzen, ansonsten kann EQdkp Plus nicht verwendet werden!',
 	'phpcheck_success'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden erfüllt. Die Installation kann fortgesetzt werden.',
 	'phpcheck_failed'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden leider nicht erfüllt.<br />Eine Auswahl von geeigneten Hostern findest Du auf unserer <a href="'.EQDKP_PROJECT_URL.'" target="_blank">Website</a>',
-	'do_match_opt_failed'	=> 'Es werden nicht alle Bedingungen erfüllt. EQDKP-PLUS wird auf diesem System funktionieren, jedoch können nicht alle Features verwendet werden.',
+	'do_match_opt_failed'	=> 'Es werden nicht alle Empfehlungen erfüllt. EQDKP-PLUS wird zwar auf diesem System funktionieren, jedoch eventuell mit Einschränkungen.',
 	
 	//Step: ftp access
 	'ftphost'				=> 'FTP-Host',

@@ -698,9 +698,10 @@ class game extends gen_class {
 		$itt_config = array(
 			'infotooltip_use' => 0
 		);
-		if(in_array($newgame, $this->itt->get_supported_games())) {
+		
+		$parserlist = $this->itt->get_parserlist($newgame);
+		if(count($parserlist)) {
 			$itt_config['infotooltip_use'] = 1;
-			$parserlist = $this->itt->get_parserlist($newgame);
 			ksort($parserlist);
 			reset($parserlist);
 			$itt_config['itt_prio1'] = current($parserlist);
