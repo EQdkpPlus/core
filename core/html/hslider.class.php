@@ -46,7 +46,6 @@ class hslider extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$options = array();
 		foreach($this->options as $opt) $options[$opt] = $this->$opt;
-		$options['value'] = unserialize($options['value']);
 		$this->out = $this->jquery->Slider($this->id, $options, ($this->range) ? 'range' : 'normal');
 	}
 	
@@ -55,7 +54,7 @@ class hslider extends html {
 	}
 	
 	public function inpval() {
-		return ($this->range) ? serialize($this->in->getArray($this->name, 'int')) : $this->in->get($this->name, 0);
+		return ($this->range) ? $this->in->getArray($this->name, 'int') : $this->in->get($this->name, 0);
 	}
 }
 ?>
