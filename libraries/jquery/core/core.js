@@ -44166,7 +44166,7 @@ function log() {
 			// mjs - to find the previous sibling in the list, keep backtracking until we hit a valid list item.
 			var previousItem = this.placeholder[0].previousSibling ? $(this.placeholder[0].previousSibling) : null;
 			if (previousItem != null) {
-				while (previousItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
+				while (previousItem[0].nodeName.toLowerCase() != 'li' || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
 					if (previousItem[0].previousSibling) {
 						previousItem = $(previousItem[0].previousSibling);
 					} else {
@@ -44179,7 +44179,7 @@ function log() {
 			// mjs - to find the next sibling in the list, keep stepping forward until we hit a valid list item.
 			var nextItem = this.placeholder[0].nextSibling ? $(this.placeholder[0].nextSibling) : null;
 			if (nextItem != null) {
-				while (nextItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
+				while (nextItem[0].nodeName.toLowerCase() != 'li' || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
 					if (nextItem[0].nextSibling) {
 						nextItem = $(nextItem[0].nextSibling);
 					} else {
@@ -44201,7 +44201,7 @@ function log() {
 			) {
 
 				parentItem.after(this.placeholder[0]);
-				if (o.isTree && parentItem.children(o.listItem).children(o.listItem + ':visible:not(.ui-sortable-helper)').length < 1) {
+				if (o.isTree && parentItem.children(o.listItem).children('li:visible:not(.ui-sortable-helper)').length < 1) {
 					parentItem.removeClass(this.options.branchClass + ' ' + this.options.expandedClass)
 							  .addClass(this.options.leafClass);
 				}
@@ -44232,7 +44232,7 @@ function log() {
 		        	previousItem.children(o.listType).prepend(this.placeholder);
 		        }
 		        // mjs - otherwise, add it to the bottom of the list.
-		        else if(previousItem.children(o.listType).length) {
+		        else {
 					previousItem.children(o.listType)[0].appendChild(this.placeholder[0]);
 				}
 
