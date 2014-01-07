@@ -59,12 +59,12 @@ if(!class_exists('infotooltip')) {
 		public function __construct($config=false) {
 			//pdl
 			$this->pdl->register_type('infotooltip', null, array($this, 'html_format_debug'), array(2,3));
-
-			//set config
-			$this->copy_config($config);
 			
 			//scan available source-reader for default_game
 			$this->avail_parser[] = $this->get_parserlist();
+			
+			//set config
+			$this->copy_config($config);
 		}
 
 		/*
@@ -89,7 +89,7 @@ if(!class_exists('infotooltip')) {
 		 * @return multitype:string 
 		 */
 		public function get_parserlist($game=false) {
-			if (!$game) $game = $this->config['game'];
+			if (!$game) $game = $this->settings->get('default_game');
 			$arrParser = array();
 			if (is_dir($this->root_path.'games/'.$game.'/infotooltip')){
 				if($srcs = opendir($this->root_path.'games/'.$game.'/infotooltip')) {
@@ -183,6 +183,7 @@ if(!class_exists('infotooltip')) {
 			$this->config['lang_prio'][2] = $cconfig['itt_langprio2'];
 			$this->config['lang_prio'][3] = $cconfig['itt_langprio3'];
 			//check prio-array for valid data
+			
 			foreach($this->config['prio'] as $parse) {
 				if(!in_array($parse, $this->avail_parser) AND $parse) {
 					$this->pdl->log('infotooltip', 'Invalid element in prio-list!');

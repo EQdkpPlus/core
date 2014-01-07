@@ -215,7 +215,7 @@ class mmocms_settings extends page_generic {
 		// Output to the page
 		// ---------------------------------------------------------
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&amp;style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
-		$this->jquery->js_dd_ajax('default_game', 'default_gamelang', 'manage_settings.php'.$this->SID.'&ajax=games');
+		$this->jquery->js_dd_ajax('default_game', 'game_language', 'manage_settings.php'.$this->SID.'&ajax=games');
 		
 		// initialize form class
 		$this->form->lang_prefix = 'core_sett_';
@@ -621,7 +621,7 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'dropdown',
 						'options'	=> $games,
 					),
-					'default_gamelang'	=> array(
+					'game_language'	=> array(
 						'type'		=> 'dropdown',
 						'options'	=> array('--------'),
 					),
@@ -677,10 +677,10 @@ class mmocms_settings extends page_generic {
 			'layout'	=> array(
 				'layout'	=> array(
 					'custom_logo'	=> array(
-						'type'	=> 'imageuploader',
-						'imgpath'	=> $this->pfh->FolderPath('','files'),
-						'noimgfile'	=> "templates/".$this->user->style['template_path']."/images/logo.png",
-						'returnFormat' => 'in_data',
+						'type'			=> 'imageuploader',
+						'imgpath'		=> $this->pfh->FolderPath('','files'),
+						'noimgfile'		=> "templates/".$this->user->style['template_path']."/images/logo.png",
+						'returnFormat'	=> 'in_data',
 					),
 					'itemhistory_dia'	=> array(
 						'type'		=> 'radio',
@@ -856,6 +856,7 @@ class mmocms_settings extends page_generic {
 			$save_array = $this->form->return_values();
 			//check for changed game
 			$game_changed = false;
+
 			if (($this->in->get('default_game') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
 				$game_changed = true;
 			}
@@ -876,7 +877,7 @@ class mmocms_settings extends page_generic {
 			if($game_changed) {
 				$this->game->ChangeGame($this->in->get('default_game'), $this->in->get('game_language'));
 				$this->pdc->flush();
-				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
+				//redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}
 
 			//clear cache now

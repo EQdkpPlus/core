@@ -40,7 +40,7 @@ class hhidden extends html {
 	public $name = '';
 	
 	public $imageuploader = false;
-	public $imgup_type = 'admin';
+	public $imgup_type = 'all';
 	
 	private $imgoptions = array('prevheight', 'deletelink', 'noimgfile');
 	private $out = '';
