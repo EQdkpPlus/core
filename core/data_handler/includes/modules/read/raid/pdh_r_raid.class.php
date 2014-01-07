@@ -90,9 +90,8 @@ if(!class_exists('pdh_r_raid')){
 						$this->raids[$row['raid_id']]['members'][] = $row['member_id'];
 					}
 				}
+				$this->pdc->put('pdh_raids_table', $this->raids, null);
 			}
-
-			$this->pdc->put('pdh_raids_table', $this->raids, null);
 		}
 
 		public function get_id_list(){

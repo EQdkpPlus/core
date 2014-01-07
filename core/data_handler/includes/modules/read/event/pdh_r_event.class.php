@@ -68,9 +68,8 @@ if(!class_exists('pdh_r_event')){
 					$this->events[$row['event_id']]['value'] = $row['event_value'];
 					$this->events[$row['event_id']]['icon'] = $row['event_icon'];
 				}
+				$this->pdc->put('pdh_events_table', $this->events, null);
 			}
-
-			$this->pdc->put('pdh_events_table', $this->events, null);
 		}
 
 		public function get_events(){

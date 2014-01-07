@@ -62,9 +62,9 @@ if(!class_exists('pdh_r_comment')){
 				while($row = $objQuery->fetchAssoc()){
 					$this->comments[$row['id']] = $row;
 				}
+				
+				$this->pdc->put('pdh_comments_table', $this->comments, null);
 			}
-			
-			$this->pdc->put('pdh_comments_table', $this->comments, null);
 		}
 
 		public function get_comments() {

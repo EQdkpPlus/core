@@ -60,11 +60,10 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 					$this->ranks[$r_row['rank_id']]['default']	= (int)$r_row['rank_default'];
 					$this->ranks[$r_row['rank_id']]['icon']		= $r_row['rank_icon'];
 				}
+				if (!isset($this->ranks[0])) $this->ranks[0] = array('rank_id' => 0,	'prefix' => '',	'suffix' => '',	'name' => '', 'hide' => 0, 'sortid' => 0);
+
+				$this->pdc->put('pdh_member_ranks', $this->ranks);
 			}
-
-			if (!isset($this->ranks[0])) $this->ranks[0] = array('rank_id' => 0,	'prefix' => '',	'suffix' => '',	'name' => '', 'hide' => 0, 'sortid' => 0);
-
-			$this->pdc->put('pdh_member_ranks', $this->ranks);
 		}
 
 		public function get_id($name) {

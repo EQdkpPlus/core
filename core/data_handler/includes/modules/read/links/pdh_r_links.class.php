@@ -69,9 +69,8 @@ if ( !class_exists( "pdh_r_links" ) ){
 					$this->links[$row['link_id']]['visibility']	= xhtml_entity_decode($row['link_visibility']);
 					$this->links[$row['link_id']]['height']		= $row['link_height'];
 				}
+				$this->pdc->put('pdh_links_table', $this->links, NULL);
 			}
-
-			$this->pdc->put('pdh_links_table', $this->links, NULL);
 			return true;
 		}
 

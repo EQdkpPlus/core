@@ -125,13 +125,15 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 						}
 					}
 				}
+				
+				$this->pdc->put('pdh_articles_table', $this->articles, null);
+				$this->pdc->put('pdh_articles_categories', $this->categories, null);
+				$this->pdc->put('pdh_articles_alias', $this->alias, null);
+				$this->pdc->put('pdh_articles_pageobjects', $this->pageobjects, null);
+				$this->pdc->put('pdh_articles_tags', $this->tags, null);
 			}
 			
-			$this->pdc->put('pdh_articles_table', $this->articles, null);
-			$this->pdc->put('pdh_articles_categories', $this->categories, null);
-			$this->pdc->put('pdh_articles_alias', $this->alias, null);
-			$this->pdc->put('pdh_articles_pageobjects', $this->pageobjects, null);
-			$this->pdc->put('pdh_articles_tags', $this->tags, null);
+
 		}
 		
 		public function get_id_list($intCategoryID = false){

@@ -77,18 +77,18 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 						'custom'		=> $drow['custom'],
 					);
 				}
-			}
-			
-			// check if the character tab is in the categories list, if not add it
-			if (!is_array($this->profile_categories)) $this->profile_categories = array();
-			if(!in_array('character', $this->profile_categories)){
-				$this->profile_categories[] = 'character';
-			}
-
-			// save all the stuff to the cache
-			$this->pdc->put('pdh_profile_fields_table', $this->profile_fields, null);
-			$this->pdc->put('pdh_profile_fieldlist_table', $this->field_list, null);
-			$this->pdc->put('pdh_profile_categories_table', $this->profile_categories, null);
+				
+				// check if the character tab is in the categories list, if not add it
+				if (!is_array($this->profile_categories)) $this->profile_categories = array();
+				if(!in_array('character', $this->profile_categories)){
+					$this->profile_categories[] = 'character';
+				}
+	
+				// save all the stuff to the cache
+				$this->pdc->put('pdh_profile_fields_table', $this->profile_fields, null);
+				$this->pdc->put('pdh_profile_fieldlist_table', $this->field_list, null);
+				$this->pdc->put('pdh_profile_categories_table', $this->profile_categories, null);
+			}	
 		}
 
 		public function get_categories(){

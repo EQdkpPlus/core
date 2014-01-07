@@ -62,9 +62,9 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 						'wide_content'		=> intval($drow['wide_content']),
 					);
 				}
-			}	
-
-			$this->pdc->put('pdh_portal_blocks_table', $this->blocks, null);
+				
+				$this->pdc->put('pdh_portal_blocks_table', $this->blocks, null);
+			}		
 		}
 
 		public function get_id_list() {

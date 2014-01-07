@@ -60,9 +60,9 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 						'restricted'				=> $row['restricted'],
 					);
 				}
+				
+				$this->pdc->put('pdh_calendars_table', $this->calendars, null);
 			}
-
-			$this->pdc->put('pdh_calendars_table', $this->calendars, null);
 		}
 
 		//1 = raid, 2=event 3=feed

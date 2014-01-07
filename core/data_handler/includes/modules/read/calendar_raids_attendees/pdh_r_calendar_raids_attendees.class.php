@@ -130,11 +130,12 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 						'signedbyadmin'				=> $row['signedbyadmin'],
 					);
 				}
+				
+				$this->pdc->put('pdh_calendar_raids_table.attendees', $this->attendees, NULL);
+				$this->pdc->put('pdh_calendar_raids_table.lastraid', $this->lastraid, NULL);
+				$this->pdc->put('pdh_calendar_raids_table.attendee_status', $this->attendee_status, NULL);
 			}
 			
-			$this->pdc->put('pdh_calendar_raids_table.attendees', $this->attendees, NULL);
-			$this->pdc->put('pdh_calendar_raids_table.lastraid', $this->lastraid, NULL);
-			$this->pdc->put('pdh_calendar_raids_table.attendee_status', $this->attendee_status, NULL);
 			return true;
 		}
 

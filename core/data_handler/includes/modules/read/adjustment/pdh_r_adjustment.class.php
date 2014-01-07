@@ -80,9 +80,10 @@ if(!class_exists('pdh_r_adjustment')){
 					$this->adjustments[$row['adjustment_id']]['group_key'] = $row['adjustment_group_key'];
 					$this->adjustments[$row['adjustment_id']]['raid_id'] = $row['raid_id'];
 				}
+				
+				$this->pdc->put('pdh_adjustment_table', $this->adjustments, null);
 			}
-
-			$this->pdc->put('pdh_adjustment_table', $this->adjustments, null);
+	
 		}
 
 		public function get_id_list(){

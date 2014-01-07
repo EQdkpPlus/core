@@ -73,9 +73,9 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'class'				=> $row['class'],
 					);
 				}
+				$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);
 			}
-
-			$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);
+	
 			return true;
 		}
 

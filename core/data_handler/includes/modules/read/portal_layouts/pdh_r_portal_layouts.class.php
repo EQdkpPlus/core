@@ -63,9 +63,9 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 						'modules'			=> unserialize($drow['modules'])
 					);
 				}
+				
+				$this->pdc->put('pdh_portal_layouts_table', $this->layouts, null);
 			}
-			
-			$this->pdc->put('pdh_portal_layouts_table', $this->layouts, null);
 		}
 
 		public function get_id_list() {

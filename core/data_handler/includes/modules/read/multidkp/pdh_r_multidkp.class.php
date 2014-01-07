@@ -82,9 +82,9 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 					$this->multidkp[$row['multidkp_id']]['no_attendance'] = ((isset($noatt_data[$row['multidkp_id']])) ? $noatt_data[$row['multidkp_id']] : '');
 					$this->multidkp[$row['multidkp_id']]['itempools'] = (isset($ip_data[$row['multidkp_id']])) ? $ip_data[$row['multidkp_id']] : array();
 				}
+				
+				$this->pdc->put('pdh_multidkp_table', $this->multidkp, null);
 			}
-
-			$this->pdc->put('pdh_multidkp_table', $this->multidkp, null);
 		}
 
 		public function get_id_list(){

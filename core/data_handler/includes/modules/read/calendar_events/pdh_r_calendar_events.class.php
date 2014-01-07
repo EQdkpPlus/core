@@ -100,15 +100,16 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						$this->repeatable_events[$parentid][] = $row['id'];
 					}
 				}
+				
+				// sort the timestamps
+				asort($this->event_timestamps);
+	
+				// set the cache
+				$this->pdc->put('pdh_calendar_events_table.events', $this->events, null);
+				$this->pdc->put('pdh_calendar_events_table.repeatable', $this->repeatable_events, null);
+				$this->pdc->put('pdh_calendar_events_table.timestamps', $this->event_timestamps, null);
 			}
 
-			// sort the timestamps
-			asort($this->event_timestamps);
-
-			// set the cache
-			$this->pdc->put('pdh_calendar_events_table.events', $this->events, null);
-			$this->pdc->put('pdh_calendar_events_table.repeatable', $this->repeatable_events, null);
-			$this->pdc->put('pdh_calendar_events_table.timestamps', $this->event_timestamps, null);
 		}
 
 		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999, $calfilter=false){

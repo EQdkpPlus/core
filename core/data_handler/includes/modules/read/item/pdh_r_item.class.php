@@ -82,9 +82,9 @@ if(!class_exists('pdh_r_item')){
 					$this->items[$row['item_id']]['itempool_id'] = $row['itempool_id'];
 					$this->items[$row['item_id']]['item_color'] = $row['item_color'];
 				}
+				
+				$this->pdc->put('pdh_item_table', $this->items, null);
 			}
-
-			$this->pdc->put('pdh_item_table', $this->items, null);
 		}
 
 		public function get_id_list(){

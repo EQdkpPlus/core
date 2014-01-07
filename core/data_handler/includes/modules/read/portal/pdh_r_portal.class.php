@@ -56,9 +56,9 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 						'child'			=> $drow['child'],
 					);
 				}
+				
+				$this->pdc->put('pdh_portal_table', $this->portal, null);
 			}
-
-			$this->pdc->put('pdh_portal_table', $this->portal, null);
 		}
 
 		private function filter($type, $ids) {

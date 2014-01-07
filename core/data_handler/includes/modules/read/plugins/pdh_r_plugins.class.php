@@ -54,9 +54,9 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 						'status'	=> $drow['status']
 					);
 				}
+				
+				$this->pdc->put('pdh_plugins_table', $this->plugins, null);
 			}
-
-			$this->pdc->put('pdh_plugins_table', $this->plugins, null);
 		}
 
 		public function get_id_list() {
