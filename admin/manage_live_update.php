@@ -497,7 +497,7 @@ class Manage_Live_Update extends page_generic {
 			$this->tpl->assign_vars(array(
 				'S_NEW_VERSION'	=> true,
 				'NEW_VERSION'	=> $updates['version'],
-				'CHANGELOG'		=> $updates['changelog'],
+				'CHANGELOG'		=> nl2br($updates['changelog']),
 				'RELEASE_DATE'	=> $updates['release'],
 			));
 		}
