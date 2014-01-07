@@ -632,3 +632,21 @@ CREATE TABLE `__calendar_raid_templates` (
 	`tpldata` text COLLATE utf8_bin,
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS __groups_raid;
+CREATE TABLE `__groups_raid` (
+	`groups_raid_id` int(11) NOT NULL AUTO_INCREMENT,
+	`groups_raid_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`groups_raid_desc` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`groups_raid_deletable` tinyint(1) NOT NULL DEFAULT '0',
+	`groups_raid_default` tinyint(1) NOT NULL DEFAULT '0',
+	`groups_raid_sortid` smallint(5) unsigned NOT NULL DEFAULT '0',
+	PRIMARY KEY (`groups_raid_id`)
+)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+DROP TABLE IF EXISTS __groups_raid_members;
+CREATE TABLE `__groups_raid_members` (
+	`group_id` int(22) NOT NULL,
+	`member_id` int(22) NOT NULL,
+	`grpleader` int(1) NOT NULL DEFAULT '0'
+)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

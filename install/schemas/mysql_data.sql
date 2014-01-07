@@ -99,3 +99,6 @@ INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `commen
 
 #portal layouts
 INSERT INTO `__portal_layouts` (`id`, `name`, `blocks`, `modules`) VALUES (1, 'Standard', 'a:4:{i:0;s:4:"left";i:1;s:6:"middle";i:2;s:6:"bottom";i:3;s:5:"right";}', 'a:0:{}');
+
+#raid groups
+INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`) VALUES (1, 'Default','',0,1,1);
