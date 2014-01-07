@@ -178,10 +178,11 @@ class config extends gen_class {
 		} else $row_count = 0;
 
 		$array_count = 0;
-		foreach($this->config as $data) {
-			if(is_array($data)) {
+		foreach($this->config as $key => $data) {
+			if(is_array($data) && !is_numeric(key($value))) {
+				$array_count = 0;
 				foreach($data as $dat) {
-					$array_count++;
+					$array_count[$key]++;
 				}
 			} else {
 				$array_count++;
@@ -195,7 +196,8 @@ class config extends gen_class {
 			$this->db->query("TRUNCATE TABLE __backup_cnf");
 			$data = array();
 			foreach($array as $name=>$value){
-				if(!is_array($value)) {
+				//include multiselects and sliders of core (they have numerical keys)
+				if(!is_array($value) || is_numeric(key($value))) {
 					// Core
 					$value = array($name => $value);
 					$name = 'core';

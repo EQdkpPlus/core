@@ -76,7 +76,7 @@ class form extends gen_class {
 	 */
 	public static function field($name, $options) {
 		// encryption
-		if(!empty($options['encrypt'])) $value = register('encrypt')->decrypt($value);
+		if(!empty($options['encrypt'])) $options['value'] = register('encrypt')->decrypt($options['value']);
 		if(empty($options['type'])) $options['type'] = '';
 		$field_class = 'h'.$options['type'];
 		return (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';

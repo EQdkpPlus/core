@@ -468,6 +468,7 @@ class mmocms_settings extends page_generic {
 					),
 					'account_activation'	=> array(
 						'type'		=> 'radio',
+						'tolang'	=> true,
 						'options'	=> $accact_array,
 						'default'	=> 0
 					),
@@ -717,6 +718,7 @@ class mmocms_settings extends page_generic {
 					),
 					'sms_password'	=> array(
 						'type'		=> 'password',
+						'set_value'	=> true,
 						'size'		=> 40,
 					)
 				)
@@ -871,6 +873,7 @@ class mmocms_settings extends page_generic {
 			}
 
 			// Save the settings array
+			pd($save_array);
 			$this->config->set($save_array);
 
 			// Since ChangeGame alters Config it has to be executed after config-save
