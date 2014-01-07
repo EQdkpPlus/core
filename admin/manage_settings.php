@@ -880,7 +880,7 @@ class mmocms_settings extends page_generic {
 			if($game_changed) {
 				$this->game->ChangeGame($this->in->get('default_game'), $this->in->get('game_language'));
 				$this->pdc->flush();
-				//redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
+				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}
 
 			//clear cache now

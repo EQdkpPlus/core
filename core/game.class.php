@@ -712,7 +712,7 @@ class game extends gen_class {
 			$itt_config['itt_langprio3'] = (in_array('fr', $langlist)) ? 'fr' : ((next($langlist)) ? current($langlist) : prev($langlist));
 			unset($langlist);
 		}
-		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($itt_config['itt_prio1'])));
+		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($newgame, $itt_config['itt_prio1'])));
 
 		$queries = $info['aq'];
 
