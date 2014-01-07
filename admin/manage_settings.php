@@ -831,7 +831,7 @@ class mmocms_settings extends page_generic {
 		}
 
 		// merge the game admin array to the existing one
-		$myprofiledata = $this->root_path.'games/'.$this->game->get_game().'/admin_data.php';
+		$myprofiledata = $this->game->admin_settings();
 		if(is_file($myprofiledata)){
 			require_once($myprofiledata);
 			if(is_array($settingsdata_admin)){

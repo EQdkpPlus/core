@@ -23,8 +23,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class game extends gen_class {
-	public static $shortcuts = array('config', 'user', 'pdl', 'pdh', 'tpl', 'db', 'itt' => 'infotooltip',
-	);
+	public static $shortcuts = array('itt' => 'infotooltip');
 
 	private $data			= array();
 	private $games			= array();
@@ -627,14 +626,14 @@ class game extends gen_class {
 	 * @param string $lang
 	 */
 	public function AddProfileFields() {
-		$xml_fields = $this->gameinfo()->get_profilefields();
+		$xml_fields = $this->gameinfo()->profilefields();
 		$this->pdh->put('profile_fields', 'truncate_fields');
 		// Insert the field names in database
 		if(is_array($xml_fields)){
 			foreach($xml_fields as $name=>$values) {
 				$this->pdh->put('profile_fields', 'insert_field', array(array(
 					'name'			=> $name,
-					'fieldtype'		=> $values['type'],
+					'type'			=> $values['type'],
 					'category'		=> $values['category'],
 					'lang'			=> $values['name'],
 					'options_lang'	=> $values['options_lang'],
@@ -756,6 +755,15 @@ class game extends gen_class {
 	 */
 	public function cronjobOptions(){
 		return $this->gameinfo()->cronjobOptions();
+	}
+		
+	/**
+	 * additional fields for admin-settings
+	 *
+	 * @return array
+	 */
+	public function admin_settings() {
+		return $this->gameinfo()->admin_settings();
 	}
 }
 
@@ -919,18 +927,14 @@ if(!class_exists('game_generic')) {
 			if($return_key) return $var;
 			return false;
 		}
-
+	
 		/**
-		 * Returns profile fields
+		 * Default profilefields
 		 *
-		 * @return string
+		 * @return array
 		 */
-		public function get_profilefields(){
-			$game_file = $this->path.'field_data.php';
-			if(is_file($game_file)){
-				include($game_file);
-			}
-			return (isset($xml_fields) && is_array($xml_fields)) ? $xml_fields : array();
+		public function profilefields() {
+			return array();
 		}
 
 		/**
@@ -971,6 +975,15 @@ if(!class_exists('game_generic')) {
 		 */
 		public function cronjobOptions(){
 			return false;
+		}
+		
+		/**
+		 * additional fields for admin-settings
+		 *
+		 * @return array
+		 */
+		public function admin_settings() {
+			return array();
 		}
 
 		public abstract function get_OnChangeInfos($install=false);

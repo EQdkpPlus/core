@@ -327,7 +327,7 @@ class form extends gen_class {
 		else return array(
 				'name'		=> $language,
 				'help'		=> $help_message,
-				'field'		=> $text.$field.$text2
+				'field'		=> $text.self::field($name, $options).$text2
 			);
 	}
 	

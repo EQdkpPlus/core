@@ -218,11 +218,112 @@ if(!class_exists('wow')) {
 		 * add professions to array
 		 */
 		public function get_profilefields(){
+			// Category 'character' is a fix one! All others are created dynamically!
 			$this->load_type('professions', array($this->lang));
-			$professions = $this->professions[$this->lang];
-			$xml_fields = parent::get_profilefields();
-			$xml_fields['prof1_name']['options'] = $professions;
-			$xml_fields['prof2_name']['options'] = $professions;
+			$xml_fields = array(
+				'skill_1'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'character',
+					'name'			=> 'uc_skill1',
+					'size'			=> 4,
+					'undeletable'	=> true,
+					'visible'		=> true,
+					'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
+					'options_lang'	=> "lang:talents:{CLASSID}",
+				),
+				'skill_2'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'character',
+					'name'			=> 'uc_skill2',
+					'size'			=> 4,
+					'undeletable'	=> true,
+					'visible'		=> true,
+					'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
+					'options_lang'	=> "lang:talents:{CLASSID}",
+				),
+				'gender'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'character',
+					'name'			=> 'uc_gender',
+					'options'		=> array('Male' => 'uc_male', 'Female' => 'uc_female'),
+					'undeletable'	=> true,
+					'visible'		=> true
+				),
+				'guild'	=> array(
+					'type'			=> 'text',
+					'category'		=> 'character',
+					'name'			=> 'uc_guild',
+					'size'			=> 40,
+					'undeletable'	=> true,
+					'visible'		=> true
+				),
+				'servername'	=> array(
+					'category'		=> 'character',
+					'name'			=> 'uc_servername',
+					'type'			=> 'autocomplete',
+					'size'			=> '21',
+					'edecode'		=> true,
+					'options'		=> registry::register('game')->get('realmlist'),
+				),
+				'prof1_value'	=> array(
+					'type'			=> 'int',
+					'category'		=> 'profession',
+					'name'			=> 'uc_prof1_value',
+					'size'			=> 4,
+					'undeletable'	=> true,
+					'visible'		=> true
+				),
+				'prof1_name'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'profession',
+					'name'			=> 'uc_prof1_name',
+					'options'		=> $this->professions[$this->lang],
+					'undeletable'	=> true,
+					'visible'		=> true,
+					'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
+					'options_lang'	=> "professions",
+				),
+				'prof2_value'	=> array(
+					'type'			=> 'int',
+					'category'		=> 'profession',
+					'name'			=> 'uc_prof2_value',
+					'size'			=> 4,
+					'undeletable'	=> true,
+					'visible'		=> true
+				),
+				'prof2_name'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'profession',
+					'name'			=> 'uc_prof2_name',
+					'options'		=> $this->professions[$this->lang],
+					'undeletable'	=> true,
+					'visible'		=> true,
+					'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
+					'options_lang'	=> "professions",
+				),
+				'health_bar'	=> array(
+					'type'			=> 'int',
+					'category'		=> 'character',
+					'name'			=> 'uc_bar_health',
+					'undeletable'	=> true,
+					'size'			=> 4
+				),
+				'second_bar'	=> array(
+					'type'			=> 'int',
+					'category'		=> 'character',
+					'name'			=> 'uc_bar_2value',
+					'size'			=> 4,
+					'undeletable'	=> true,
+				),
+				'second_name'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'character',
+					'name'			=> 'uc_bar_2name',
+					'options'		=> array('rage' => 'uc_bar_rage', 'energy' => 'uc_bar_energy', 'mana' => 'uc_bar_mana', 'focus' => 'uc_bar_focus', 'runic-power' => 'uc_bar_runic-power'),
+					'size'			=> 40,
+					'undeletable'	=> true,
+				),
+			);
 			return $xml_fields;
 		}
 
@@ -231,29 +332,26 @@ if(!class_exists('wow')) {
 			$talents_array = $this->jquery->dd_ajax_request('member_class_id', array('profilefields[skill_1]', 'profilefields[skill_2]'), $this->game->get('classes', array('id_0')), array('--------'), $member_data['class_id'], 'addcharacter.php?ajax=talents', '', array($member_data['skill_1'], $member_data['skill_2']));
 			return array(
 				'member_class_id'	=> array(
-					'fieldtype'		=> 'direct',
 					'category'		=> 'character',
 					'name'			=> 'class_id',
-					'language'		=> $this->user->lang('class'),
-					'direct'		=> $talents_array[0],
+					'lang'			=> 'class',
+					'text'			=> $talents_array[0],
 					'directfield'	=> true,
 					'visible'		=> true
 				),
 				'skill_1'	=> array(
-					'fieldtype'		=> 'direct',
 					'category'		=> 'character',
 					'name'			=> 'skill_1',
-					'language'		=> $this->game->glang('uc_skill1'),
-					'direct'		=> $talents_array[1],
+					'lang'			=> 'uc_skill1',
+					'text'			=> $talents_array[1],
 					'directfield'	=> true,
 					'visible'		=> true
 				),
 				'skill_2'	=> array(
-					'fieldtype'		=> 'direct',
 					'category'		=> 'character',
 					'name'			=> 'skill_2',
-					'language'		=> $this->game->glang('uc_skill2'),
-					'direct'		=> $talents_array[2],
+					'lang'			=> 'uc_skill2',
+					'text'			=> $talents_array[2],
 					'directfield'	=> true,
 					'visible'		=> true
 				)
@@ -956,6 +1054,48 @@ if(!class_exists('wow')) {
 			
 			
 			$this->pdh->process_hook_queue();
+		}
+		
+		public function admin_settings() {
+			$settingsdata_admin = array(
+				'uc_faction'	=> array(
+					'lang'		=> 'uc_faction',
+					'type'		=> 'dropdown',
+					'options'	=> registry::register('game')->get('factions'),
+					'default'	=> 'alliance'
+				),
+				'uc_server_loc'	=> array(
+					'lang'		=> 'uc_server_loc',
+					'type' 		=> 'dropdown',
+					'options'	=> array('eu' => 'EU', 'us' => 'US', 'tw' => 'TW', 'kr' => 'KR', 'cn' => 'CN'),
+				),
+				'uc_data_lang'	=> array(
+					'lang'		=> 'uc_data_lang',
+					'type' 		=> 'dropdown',
+					'options'	=> array(
+						'en_US' => 'English',
+						'es_MX' => 'Mexican',
+						'pt_BR' => 'Brasil',
+						'en_GB' => 'English (GB)',
+						'es_ES' => 'Spanish',
+						'fr_FR' => 'French',
+						'ru_RU' => 'Russian',
+						'de_DE'	=> 'German',
+						'pt_PT'	=> 'Portuguese',
+						'ko_KR'	=> 'Korean',
+						'zh_TW'	=> 'Taiwanese',
+						'zh_CN'	=> 'Chinese'
+					),
+				),
+				// TODO: check if apostrophe is saved correctly
+				'uc_servername'	=> array(
+					'lang'			=> 'uc_servername',
+					'type'			=> 'text',
+					'size'			=> '21',
+					'autocomplete'	=> registry::register('game')->get('realmlist'),
+				)
+			);
+			return $settingsdata_admin;
 		}
 	}#class
 }

@@ -64,7 +64,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 					$this->field_list[] = $drow['name'];
 	
 					$this->profile_fields[$drow['name']] = array(
-						'fieldtype'		=> $drow['fieldtype'],
+						'type'			=> $drow['type'],
 						'category'		=> $drow['category'],
 						'size'			=> $drow['size'],
 						'visible'		=> $drow['visible'],

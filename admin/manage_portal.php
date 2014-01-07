@@ -246,7 +246,7 @@ class Manage_Portal extends page_generic {
 			// TODO: if an element is added, which has a js_reload, this doesnt work, some manual initializing needs to be added
 			// js for reload on input-change
 			$this->tpl->add_js("
-$('.js_reload').change(function(){
+function reload_settings(){
 	var form = $('#form_moduleconfig').serializeArray();
 	$.post(\"manage_portal.php".$this->SID."&settings&id=".$id."\", form, function(data){
 		if (data.reload){
@@ -263,6 +263,9 @@ $('.js_reload').change(function(){
 				if (value.type == 'spinner'){
 					$('#'+index).spinner();
 				}
+				if ($('#'+index).hasClass('js_reload')) {
+					$('#'+index).change(reload_settings);
+				}
 			});
 		}
 		if (data.changed){
@@ -272,7 +275,7 @@ $('.js_reload').change(function(){
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
 				}
-				if (value.type== 'spinner'){
+				if (value.type== 'spinner') {
 					$('#'+index).spinner();
 				}
 			});
@@ -283,7 +286,8 @@ $('.js_reload').change(function(){
 			});
 		}
 	}, 'json');
-});", 'docready');
+}
+$('.js_reload').change(reload_settings);", 'docready');
 		}		
 		$this->tpl->assign_var('ACTION', $_SERVER['SCRIPT_NAME'].$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
 		$this->core->set_vars(array(

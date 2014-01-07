@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_profile_fields')) {
 	class pdh_w_profile_fields extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'in'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 
 		public function enable_field($field_id){
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
@@ -81,7 +73,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}	
 			
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
-				'fieldtype'		=> $this->in->get('type'),
+				'type'			=> $this->in->get('type'),
 				'category'		=> $this->in->get('category'),
 				'language'		=> $this->in->get('language'),
 				'options_language' => $this->in->get('options_language'),
@@ -120,7 +112,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}
 			$data = array(
 				'name'			=> (isset($data['name'])) ? $data['name'] : $name,
-				'fieldtype'		=> (isset($data['fieldtype'])) ? $data['fieldtype'] : $this->in->get('type'),
+				'type'			=> (isset($data['fieldtype'])) ? $data['fieldtype'] : $this->in->get('type'),
 				'category'		=> (isset($data['category'])) ? $data['category'] : $this->in->get('category'),
 				'language'		=> (isset($data['lang'])) ? $data['lang'] : $this->in->get('language'),
 				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),

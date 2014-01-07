@@ -130,11 +130,11 @@ class addcharacter_pageobject extends pageobject {
 				asort($maincharsel);
 			}
 			$static_fields['main_id']	= array(
-				'fieldtype'		=> 'dropdown',
+				'type'			=> 'dropdown',
 				'category'		=> 'character',
 				'name'			=> 'main_id',
 				'options'		=> $maincharsel,
-				'language'		=> $this->user->lang('mainchar'),
+				'lang'			=> 'mainchar',
 				'directfield'	=> true,
 				'visible'		=> true
 			);
@@ -142,28 +142,28 @@ class addcharacter_pageobject extends pageobject {
 
 		$static_fields = array_merge($static_fields, array(
 			'member_race_id'	=> array(
-				'fieldtype'		=> 'dropdown',
+				'type'			=> 'dropdown',
 				'category'		=> 'character',
 				'name'			=> 'race_id',
 				'options'		=> $this->game->get('races'),
-				'language'		=> $this->user->lang('race'),
+				'lang'			=> 'race',
 				'directfield'	=> true,
 				'visible'		=> true
 			),
 			'member_class_id'	=> array(
-				'fieldtype'		=> 'dropdown',
+				'type'			=> 'dropdown',
 				'category'		=> 'character',
 				'name'			=> 'class_id',
 				'options'		=> $this->game->get('classes', array('id_0')),
-				'language'		=> $this->user->lang('class'),
+				'lang'			=> 'class',
 				'directfield'	=> true,
 				'visible'		=> true
 			),
 			'member_level'	=> array(
-				'fieldtype'		=> 'int',
+				'type'			=> 'int',
 				'category'		=> 'character',
 				'name'			=> 'level',
-				'language'		=> $this->user->lang('level'),
+				'lang'			=> 'level',
 				'directfield'	=> true,
 				'size'			=> 4,
 				'visible'		=> true,
@@ -174,11 +174,11 @@ class addcharacter_pageobject extends pageobject {
 		if($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)){
 			$tmpranks		= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list')));
 			$static_fields['rank_id']	= array(
-				'fieldtype'		=> 'dropdown',
+				'type'			=> 'dropdown',
 				'category'		=> 'character',
 				'name'			=> 'rank_id',
 				'options'		=> $tmpranks,
-				'language'		=> $this->user->lang('rank'),
+				'lang'			=> 'rank',
 				'directfield'	=> true,
 				'visible'		=> true,
 			);
@@ -201,7 +201,10 @@ class addcharacter_pageobject extends pageobject {
 				$profilefields = array_merge($static_fields, $this->pdh->get('profile_fields', 'fields'), $changed_profilefields);
 				foreach($profilefields as $name=>$confvars){
 					if($confvars['category'] == $catname){
-						$ccfield = $this->html->generateField($confvars, ((isset($confvars['directfield']) && $confvars['directfield']) ? $name : 'profilefields['.$name.']'), (isset($confvars['name']) && (isset($member_data[$confvars['name']])) ? $member_data[$confvars['name']] : $member_data[$name]));
+						$fieldname = (isset($confvars['directfield']) && $confvars['directfield']) ? $name : 'profilefields['.$name.']';
+						$confvars['value'] = (isset($confvars['name']) && isset($member_data[$confvars['name']])) ? $member_data[$confvars['name']] : $member_data[$name];
+						registry::load('form');
+						$ccfield = form::field($fieldname, $confvars);
 						if($ccfield && $confvars['visible']){
 							$dynwhereto = ($confvars['category'] == 'character') ? 'character_row' : 'cmrow.tabs';
 							$this->tpl->assign_block_vars($dynwhereto, array(
