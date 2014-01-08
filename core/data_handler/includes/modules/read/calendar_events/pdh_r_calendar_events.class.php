@@ -102,7 +102,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				}
 				
 				// sort the timestamps
-				asort($this->event_timestamps);
+				if(is_array($this->event_timestamps)) asort($this->event_timestamps);
 	
 				// set the cache
 				$this->pdc->put('pdh_calendar_events_table.events', $this->events, null);
