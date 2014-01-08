@@ -662,6 +662,7 @@ class controller extends gen_class {
 					$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
+						'portal_layout'		=> $arrCategory['portal_layout'],
 						'display'			=> true)
 					);					
 				} else {

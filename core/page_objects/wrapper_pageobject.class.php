@@ -103,6 +103,7 @@ class wrapper_pageobject extends pageobject {
 		if (!$this->data || $this->data['url'] == ''){
 			message_die('URL not found');
 		} else {
+			
 			$sop = parse_url($this->data['url']);
 			$sop = ( $sop['host'] == $this->env->server_name) ? true : false;
 			$output = '<div id="wrapper">';

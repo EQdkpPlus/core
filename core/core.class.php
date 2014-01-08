@@ -278,7 +278,6 @@ class core extends gen_class {
 			//Portal Output
 			$intPortalLayout = ($this->portal_layout != NULL) ? $this->portal_layout : 1;
 			$intPortalLayout = (strlen($this->config->get('mobile_portallayout')) && $this->env->agent->mobile) ? $this->config->get('mobile_portallayout') : $intPortalLayout;
-			
 			$this->portal->module_output($intPortalLayout);
 			
 			//Registration Link
