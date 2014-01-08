@@ -831,12 +831,9 @@ class mmocms_settings extends page_generic {
 		}
 
 		// merge the game admin array to the existing one
-		$myprofiledata = $this->game->admin_settings();
-		if(is_file($myprofiledata)){
-			require_once($myprofiledata);
-			if(is_array($settingsdata_admin)){
-				$this->form->add_fields($settingsdata_admin, 'gamesettings', 'game');
-			}
+		$settingsdata_admin = $this->game->admin_settings();
+		if(is_array($settingsdata_admin)){
+			$this->form->add_fields($settingsdata_admin, 'gamesettings', 'game');
 		}
 
 		//Merge authmethod-settings

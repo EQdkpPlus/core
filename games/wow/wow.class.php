@@ -1064,7 +1064,7 @@ if(!class_exists('wow')) {
 				'uc_faction'	=> array(
 					'lang'		=> 'uc_faction',
 					'type'		=> 'dropdown',
-					'options'	=> registry::register('game')->get('factions'),
+					'options'	=> $this->game->get('factions'),
 					'default'	=> 'alliance'
 				),
 				'uc_server_loc'	=> array(
@@ -1095,7 +1095,7 @@ if(!class_exists('wow')) {
 					'lang'			=> 'uc_servername',
 					'type'			=> 'text',
 					'size'			=> '21',
-					'autocomplete'	=> registry::register('game')->get('realmlist'),
+					'autocomplete'	=> $this->game->get('realmlist'),
 				)
 			);
 			return $settingsdata_admin;
