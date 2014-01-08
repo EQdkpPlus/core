@@ -245,6 +245,9 @@ class Manage_Bridge extends page_generic {
 			$this->delete_settings();
 		}
 
+		//TODO: Remove tmp fix
+		register('form');
+		
 		$arrPrefix = $this->get_prefix($this->config->get('cmsbridge_notsamedb'));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
 		$arrKeys = array_keys($arrPrefix);
