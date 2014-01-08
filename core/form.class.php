@@ -240,6 +240,7 @@ class form extends gen_class {
 				}
 			}
 		}
+
 		if($this->assign2tpl) $this->tpl->assign_var('FORM_ID', $this->form_id);
 		else return $out;
 	}
@@ -327,7 +328,8 @@ class form extends gen_class {
 		else return array(
 				'name'		=> $language,
 				'help'		=> $help_message,
-				'field'		=> $text.self::field($name, $options).$text2
+				'field'		=> $text.self::field($name, $options).$text2,
+				'type'		=> $options['type'],
 			);
 	}
 	
