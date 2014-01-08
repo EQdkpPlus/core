@@ -37,15 +37,8 @@ if(!class_exists('wow')) {
 		public $objects			= array('bnet_armory');												// eventually there are some objects (php-classes) in this game
 		public $no_reg_obj		= array('bnet_armory');												// a list with all objects, which dont need registry
 		public $langs			= array('english', 'german');										// in which languages do we have information?
-		public $importers 		= array(
-			'char_import'		=> 'charimporter.php',						// filename of the character import
-			'char_update'		=> 'charimporter.php',						// filename of the character update, member_id (POST) is passed
-			'char_mupdate'		=> 'charimporter.php?massupdate=true',		// filename of the "update all characters" aka mass update
-			'guild_import'		=> 'guildimporter.php',						// filename of the guild import
-			'import_reseturl'	=> 'charimporter.php?resetcache=true',		// filename of the reset cache
-			'guild_imp_rsn'		=> true,									// Guild import & Mass update requires server name
-			'import_data_cache'	=> true,									// Is the data cached and requires a reset call?
-		);
+		public $importers 		= array();
+		
 		protected $ArrInstanceCategories = array(
 			'classic'	=> array(2717, 2677, 3429, 3428),
 			'bc'		=> array(3457, 3836, 3923, 3607, 3845, 3606, 3959, 4075),
@@ -61,6 +54,16 @@ if(!class_exists('wow')) {
 		public $version			= '5.4.3';
 
 		public function __construct() {
+			$this->importers = array(
+				'char_import'		=> 'charimporter.php',						// filename of the character import
+				'char_update'		=> 'charimporter.php',						// filename of the character update, member_id (POST) is passed
+				'char_mupdate'		=> 'charimporter.php'.$this->SID.'&massupdate=true',		// filename of the "update all characters" aka mass update
+				'guild_import'		=> 'guildimporter.php',						// filename of the guild import
+				'import_reseturl'	=> 'charimporter.php'.$this->SID.'&resetcache=true',		// filename of the reset cache
+				'guild_imp_rsn'		=> true,									// Guild import & Mass update requires server name
+				'import_data_cache'	=> true,									// Is the data cached and requires a reset call?
+			);
+			
 			parent::__construct();
 			$this->pdh->register_read_module($this->this_game, $this->path . 'pdh/read/'.$this->this_game);
 		}
