@@ -63,7 +63,7 @@ class wbb4_bridge extends bridge_generic {
 			'callafter'		=> 'wbb4_callafter',
 		),
 		'logout' 	=> 'wbb4_logout',
-		'autologin' => '',	
+		'autologin' => 'wbb4_autologin',	
 		'sync'		=> '',
 	);
 	
@@ -161,6 +161,35 @@ class wbb4_bridge extends bridge_generic {
 		setcookie($config['cookie_prefix'].'userID', (int) $user_id, $expire, '/', $config['cookie_domain'], $this->env->ssl);
 		if ($boolAutoLogin) setcookie($config['cookie_prefix'].'password', $arrUserdata['password'], $expire, '/', $config['cookie_domain'], $this->env->ssl);
 		return true;
+	}
+	
+	public function wbb4_autologin(){
+		$config = array();
+		$result = $this->db->fetch_array("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		if (is_array($result)){
+			foreach ($result as $value){
+				$config[$value['optionName']] = $value['optionValue'];
+			}
+		}
+		
+		$userID = $_COOKIE[$config['cookie_prefix'].'userID'];
+		$cookieHash = $_COOKIE[$config['cookie_prefix'].'cookieHash'];
+		
+		$result = $this->db->query("SELECT * FROM ".$this->prefix."session WHERE userID = '".$this->db->escape($userID)."' and sessionID='".$this->db->escape($cookieHash)."'");
+		$row = $this->db->fetch_row($result);
+		if ($row){
+			if ($row['ipAddress'] == self::getIpAddress() && $row['userAgent'] == $this->env->useragent){
+				$result2 = $this->db->query("SELECT * FROM ".$this->prefix."user WHERE userID='".$this->db->escape($userID)."'");
+				$row2 = $this->db->fetch_row($result2);
+				if($row2){
+					$strUsername = utf8_strtolower($row2['username']);
+					$user_id = $this->pdh->get('user', 'userid', array($strUsername));
+					$data = $this->pdh->get('user', 'data', array($user_id));
+					return $data;
+				}	
+			}	
+		}
+		return false;
 	}
 	
 	public function wbb4_logout(){
