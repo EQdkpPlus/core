@@ -353,6 +353,15 @@ class core extends gen_class {
 				$this->tpl->assign_vars(array(
 					'S_PORTAL_LEFT'	=> false,
 					'S_PORTAL_RIGHT'=> false,
+					'PORTAL_MIDDLE' => '',
+					'PORTAL_BOTTOM' => '',
+				));
+			}
+			
+			if (isset($this->page_body) && $this->page_body == 'full_width'){
+				$this->tpl->assign_vars(array(
+						'S_PORTAL_LEFT'	=> false,
+						'S_PORTAL_RIGHT'=> false,
 				));
 			}
 

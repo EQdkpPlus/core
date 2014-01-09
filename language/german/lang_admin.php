@@ -594,6 +594,7 @@ $lang = array(
 "pk_set_link_type_link" => "Neues Fenster",
 "pk_set_link_type_iframe" => "Eingebettet",
 "pk_set_link_type_D_iframe_womenues" => "Eingebettet, ohne Portalspalten recht/links",
+"pk_set_link_type_D_iframe_woblocks" => "Eingebettet, ohne Portalblöcke",		
 "core_sett_tab_game" => "Spiel",
 "core_sett_tab_user" => "Benutzer",
 "core_sett_tab_portal" => "Portal",

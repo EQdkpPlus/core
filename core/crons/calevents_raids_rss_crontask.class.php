@@ -70,7 +70,7 @@ if ( !class_exists( "calevents_raids_rss_crontask" ) ) {
 					}
 
 					// fetch per raid data
-					$raidcal_status = unserialize($this->config->get('calendar_raid_status'));
+					$raidcal_status = $this->config->get('calendar_raid_status');
 					$rstatusdata = array();
 					if(is_array($raidcal_status)){
 						foreach($raidcal_status as $raidcalstat_id){

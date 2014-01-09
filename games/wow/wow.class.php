@@ -897,7 +897,7 @@ if(!class_exists('wow')) {
 
 			// fill the item slots with data
 			foreach ($d_itemoptions as $slot=>$options){
-				$a_items[$options['position']][] = (isset($data[$slot]['id']) && $data[$slot]['id'] > 0) ? infotooltip($data[$slot]['name'], $data[$slot]['id'], false, 0, $icons_size, false, $member_name, false, false, '', $slot) : "<img src='games/wow/profiles/slots/".$options['bnetid'].".png' height='$icons_size' width='$icons_size' alt='' />";
+				$a_items[$options['position']][] = (isset($data[$slot]['id']) && $data[$slot]['id'] > 0) ? infotooltip($data[$slot]['name'], $data[$slot]['id'], false, 0, $icons_size, false, $member_name, false, false, '', $slot) : "<img src='".$this->server_path."games/wow/profiles/slots/".$options['bnetid'].".png' height='$icons_size' width='$icons_size' alt='' />";
 			}
 			return $a_items;
 		}
@@ -929,7 +929,7 @@ if(!class_exists('wow')) {
 					$a_raidprogress[$v_progresscat][$v_progression['id']] = array(
 						'id'			=> $v_progression['id'],
 						'name'			=> $v_progression['name'],
-						'icon'			=> 'games/wow/events/'.$v_progression['id'].'.png',
+						'icon'			=> $this->server_path.'games/wow/events/'.$v_progression['id'].'.png',
 						'bosses'		=> $v_progression['bosses'],
 						'bosses_max'	=> count($v_progression['bosses']),
 						'bosses_normal'	=> $a_bosses['progress_normal'],

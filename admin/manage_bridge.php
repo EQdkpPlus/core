@@ -245,8 +245,7 @@ class Manage_Bridge extends page_generic {
 			$this->delete_settings();
 		}
 
-		//TODO: Remove tmp fix
-		register('form');
+		registry::load("form");
 		
 		$arrPrefix = $this->get_prefix($this->config->get('cmsbridge_notsamedb'));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
@@ -261,6 +260,7 @@ class Manage_Bridge extends page_generic {
 			'1'				=> $this->user->lang('pk_set_link_type_link'),
 			'2'				=> $this->user->lang('pk_set_link_type_iframe'),
 			'4'				=> $this->user->lang('pk_set_link_type_D_iframe_womenues'),
+			'5'				=> $this->user->lang('pk_set_link_type_D_iframe_woblocks'),
 		);
 
 		$arrSelectedGroups = ($this->config->get('cmsbridge_active') == 1) ? $this->bridge->get_user_groups(true) : array();

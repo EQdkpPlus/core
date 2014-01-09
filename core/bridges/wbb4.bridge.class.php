@@ -63,7 +63,7 @@ class wbb4_bridge extends bridge_generic {
 			'callafter'		=> 'wbb4_callafter',
 		),
 		'logout' 	=> 'wbb4_logout',
-		'autologin' => '',	
+		'autologin' => 'wbb4_autologin',	
 		'sync'		=> '',
 	);
 	
@@ -153,6 +153,7 @@ class wbb4_bridge extends bridge_generic {
 		}
 			
 		$expire = $this->time->time + 31536000;
+
 		if($this->config->get('cmsbridge_sso_cookiedomain') == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
@@ -161,13 +162,52 @@ class wbb4_bridge extends bridge_generic {
 			} else {
 				$config['cookie_domain'] = $this->env->server_name;
 			}
-		}
+		} else $config['cookie_domain'] = $this->config->get('cmsbridge_sso_cookiedomain');
 
 		//SID Cookie
 		setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, '/', $config['cookie_domain'], $this->env->ssl);
 		setcookie($config['cookie_prefix'].'userID', (int) $user_id, $expire, '/', $config['cookie_domain'], $this->env->ssl);
 		if ($boolAutoLogin) setcookie($config['cookie_prefix'].'password', $arrUserdata['password'], $expire, '/', $config['cookie_domain'], $this->env->ssl);
 		return true;
+	}
+	
+	public function wbb4_autologin(){
+	$config = array();
+		$objQuery =  $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		if($objQuery){
+			$result = $objQuery->fetchAllAssoc();
+			if (is_array($result)){
+				foreach ($result as $value){
+					$config[$value['optionName']] = $value['optionValue'];
+				}
+			}		
+		}
+		
+		$userID = $_COOKIE[$config['cookie_prefix'].'userID'];
+		$cookieHash = $_COOKIE[$config['cookie_prefix'].'cookieHash'];
+		
+		if ($cookieHash == NULL || $cookieHash == "") return false;
+		
+		$result = $this->db->prepare("SELECT * FROM ".$this->prefix."session WHERE userID = ? and sessionID=?")->execute($userID, $cookieHash);
+		if ($result){
+			$row = $result->fetchRow();
+			if ($row){
+				if ($row['ipAddress'] == self::getIpAddress() && $row['userAgent'] == $this->env->useragent){
+					$result2 = $this->db->prepare("SELECT * FROM ".$this->prefix."user WHERE userID=?")->execute($userID);
+					if ($result2){
+						$row2 = $result2->fetchRow();
+						if($row2){
+							$strUsername = utf8_strtolower($row2['username']);
+							$user_id = $this->pdh->get('user', 'userid', array($strUsername));
+							$data = $this->pdh->get('user', 'data', array($user_id));
+							return $data;
+						}					
+					}		
+				}	
+			}
+		}
+
+		return false;
 	}
 	
 	public function wbb4_logout(){

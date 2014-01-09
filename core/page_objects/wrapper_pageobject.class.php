@@ -130,9 +130,18 @@ class wrapper_pageobject extends pageobject {
 			);
 		}
 
+		//switch page_body
+		switch($this->data['window']){
+			case '4': $page_body = "full_width";
+			break;
+			case '5': $page_body = "full";
+			break;
+			default: $page_body = '';
+		}
+		
 		$this->core->set_vars(array(
 			'page_title'		=> isset($this->data['title']) ? $this->data['title'] : 'Wrapper',
-			'page_body'			=> (isset($this->data['window']) && $this->data['window'] == 4) ? 'full' : '',
+			'page_body'			=> $page_body,
 			'template_file'		=> 'wrapper.html',
 			'display'			=> true)
 		);

@@ -61,7 +61,7 @@ class phpbb3_bridge extends bridge_generic {
 			'callafter'		=> 'phpbb3_callafter',
 		),
 		'logout' 	=> 'phpbb3_logout',
-		'autologin' => '',	
+		'autologin' => 'phpbb3_autologin',	
 		'sync'		=> 'phpbb3_sync',
 	);
 		
@@ -175,6 +175,43 @@ class phpbb3_bridge extends bridge_generic {
 		}
 		
 		return true;
+	}
+	
+	public function phpbb3_autologin(){
+		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+		if ($query){
+			while($row = $query->fetchAssoc()){
+				$arrConfig[$row['config_name']] = $row['config_value'];
+			}
+		} else return false;
+		
+		$ip = $this->get_ip();
+	
+		$userID = (int)$_COOKIE[$arrConfig['cookie_name'].'_u'];
+		$SID = $_COOKIE[$arrConfig['cookie_name'].'_sid'];
+		
+		if ($SID == NULL || $SID == "") return false;
+	
+		$result = $this->db->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
+		if ($result){
+			$row = $result->fetchRow();
+			if($row){
+				if ($row['session_ip'] == $ip && $row['session_browser'] == (string) trim(substr($this->env->useragent, 0, 149))){
+					$result2 = $this->db->prepare("SELECT * FROM ".$this->prefix."users WHERE user_id=?")->execute($userID);
+					if ($result2){
+						$row2 = $result2->fetchRow();
+						if ($row2){
+							$strUsername = utf8_strtolower($row2['username']);
+							$user_id = $this->pdh->get('user', 'userid', array($strUsername));
+							$data = $this->pdh->get('user', 'data', array($user_id));
+							return $data;	
+						}	
+					}
+				}	
+			}
+		}
+		
+		return false;
 	}
 	
 	private function get_ip(){
