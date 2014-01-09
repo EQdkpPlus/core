@@ -175,6 +175,8 @@ class wbb4_bridge extends bridge_generic {
 		$userID = $_COOKIE[$config['cookie_prefix'].'userID'];
 		$cookieHash = $_COOKIE[$config['cookie_prefix'].'cookieHash'];
 		
+		if ($cookieHash == NULL || $cookieHash == "") return false;
+		
 		$result = $this->db->query("SELECT * FROM ".$this->prefix."session WHERE userID = '".$this->db->escape($userID)."' and sessionID='".$this->db->escape($cookieHash)."'");
 		$row = $this->db->fetch_row($result);
 		if ($row){

@@ -193,6 +193,8 @@ class phpbb3_bridge extends bridge_generic {
 	
 		$userID = (int)$_COOKIE[$arrConfig['cookie_name'].'_u'];
 		$SID = $_COOKIE[$arrConfig['cookie_name'].'_sid'];
+		
+		if ($SID == NULL || $SID == "") return false;
 	
 		$result = $this->db->query("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = '".$this->db->escape($userID)."' and session_id='".$this->db->escape($SID)."'");
 		$row = $this->db->fetch_row($result);
