@@ -145,6 +145,7 @@ class wbb4_bridge extends bridge_generic {
 		}
 			
 		$expire = $this->time->time + 31536000;
+
 		if($this->config->get('cmsbridge_sso_cookiedomain') == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
@@ -153,7 +154,7 @@ class wbb4_bridge extends bridge_generic {
 			} else {
 				$config['cookie_domain'] = $this->env->server_name;
 			}
-		}
+		} else $config['cookie_domain'] = $this->config->get('cmsbridge_sso_cookiedomain');
 
 		//SID Cookie
 		setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, '/', $config['cookie_domain'], $this->env->ssl);
