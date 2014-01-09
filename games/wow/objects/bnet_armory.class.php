@@ -728,9 +728,10 @@ class bnet_armory {
 		$error = '';
 		if($status){
 			return array('status'=>$status,'reason'=>$reason);
-		}else{
-			return false;
+		}elseif(is_array($data) && count($data) == 0){
+			return array('status'=>'nok','reason'=>'Battle.net API returned an empty array.');
 		}
+		return false;
 	}
 
 	/**
