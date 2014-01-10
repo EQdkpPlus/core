@@ -717,7 +717,6 @@ if (!class_exists("jquery")) {
 			if(isset($options['format']) && $options['format'] != ''){
 				$dpSettings[] = "dateFormat: '".$options['format']."'";
 			}
-			pd($options);
 			$dpSettings[] = (isset($options['change_fields'])) ? 'changeMonth: true, changeYear: true' : 'changeMonth: false, changeYear: false';
 
 			if($options['cal_icons']){
