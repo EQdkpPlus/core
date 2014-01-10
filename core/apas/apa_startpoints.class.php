@@ -26,7 +26,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 
 		protected $ext_options = array(
 			'start_date' => array(
-				'options'	=> array('timepicker' => true),
+				'timepicker' => true,
 				'type'		=> 'datepicker',
 				'default'	=> 'now',
 				'class'		=> 'input'

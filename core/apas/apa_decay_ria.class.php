@@ -40,7 +40,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			),
 			'start_date' => array(
 				'type'		=> 'datepicker',
-				'options'	=> array('timepicker' => true),
+				'timepicker' => true,
 				'default'	=> 'now',
 				'class'		=> 'input'
 			),

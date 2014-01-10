@@ -41,9 +41,9 @@ class hdatepicker extends html {
 	public $name = '';
 	public $disabled = false;
 	public $allow_empty = false;
-	public $options = array();
 	
 	private $out = '';
+	private $all_options = array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'timepicker', 'return_function');
 	
 	protected function _construct() {	
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
@@ -58,10 +58,14 @@ class hdatepicker extends html {
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		
-		$this->options['id'] = $this->id;
-		if(isset($this->options['format'])) $this->options['format'] = $this->time->translateformat2js($this->options['format']);
-		if(isset($this->options['timeformat'])) $this->options['timeformat'] = $this->time->translateformat2js($this->options['timeformat']);
-		$this->jquery->Calendar($this->name, $this->value, '', $this->options);
+		if(isset($this->format)) $this->format = $this->time->translateformat2js($this->format);
+		if(isset($this->timeformat)) $this->timeformat = $this->time->translateformat2js($this->timeformat);
+		//copy options
+		$opts = array();
+		foreach($this->all_options as $opt) {
+			if(isset($this->$opt)) $opts[$opt] = $this->$opt;
+		}
+		$this->jquery->Calendar($this->name, $this->value, '', $opts);
 		
 		$this->out = $out.' />';
 	}
@@ -84,10 +88,10 @@ class hdatepicker extends html {
 	 */
 	public function calendarformat() {
 		// Load default settings if no custom ones are defined..
-		if(!isset($this->options['format'])) $this->options['format'] = $this->user->style['date_notime_short'];
-		if(!isset($this->options['timeformat'])) $this->options['timeformat'] = $this->user->style['time'];
-		$format = $this->options['format'];
-		if(isset($this->options['timepicker'])) $format .= ' '.$this->options['timeformat'];
+		if(!isset($this->format)) $this->format = $this->user->style['date_notime_short'];
+		if(!isset($this->timeformat)) $this->timeformat = $this->user->style['time'];
+		$format = $this->format;
+		if(isset($this->timepicker)) $format .= ' '.$this->timeformat;
 		return $format;
 	}
 }
