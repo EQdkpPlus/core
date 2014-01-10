@@ -223,7 +223,7 @@ class Manage_Portal extends page_generic {
 		if($this->in->exists('fvisibility') && $this->in->get('fvisibility', 0) !== 0) $filter['visibility'] = $this->in->get('fvisibility', 0);
 
 		$modules = $this->pdh->aget('portal', 'path', 0, array($this->pdh->sort($this->pdh->get('portal', 'id_list', array($filter)), 'portal', 'number')), true);
-		foreach($modules as $id => &$data) {
+		foreach($modules as $id => $data) {
 			$path = $data['path'];
 			if(!$portal_module[$path]) {
 				unset($data);
@@ -266,9 +266,9 @@ class Manage_Portal extends page_generic {
 				));
 				unset($data);
 				unset($modules[$id]);
-			}
+			} else $modules[$id] = $data;
 		}
-		unset($data); //important, strange results without this
+		
 		function my_sort($a, $b) {
 			if ($a['name'] == $b['name']) {
 				return 0;
