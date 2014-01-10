@@ -80,6 +80,11 @@ class php_check extends install_generic {
 				'installed'		=> (function_exists('spl_autoload_register')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (function_exists('spl_autoload_register')) ? true : false
 			),
+			'json'		=> array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> (extension_loaded('json')) ? $this->lang['yes'] : $this->lang['no'],
+				'passfail'		=> (extension_loaded('json')) ? true : false
+			),
 		);
 	}
 	

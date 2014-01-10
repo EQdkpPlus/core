@@ -182,6 +182,7 @@ class Manage_Menus extends page_generic {
 			'1'				=> $this->user->lang('pk_set_link_type_link'),
 			'2'				=> $this->user->lang('pk_set_link_type_iframe'),
 			'4'				=> $this->user->lang('pk_set_link_type_D_iframe_womenues'),
+			'5'				=> $this->user->lang('pk_set_link_type_D_iframe_woblocks'),
 		);
 					
 		$a_linkVis= array(

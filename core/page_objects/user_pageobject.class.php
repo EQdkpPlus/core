@@ -123,9 +123,9 @@ class user_pageobject extends pageobject {
 		
 		//Gender
 		switch($row['gender']){
-			case '1' : $strGender = $this->user->lang('adduser_gender_m').', ';
+			case '1' : $strGender = $this->user->lang('gender_m').', ';
 			break;
-			case '2' : $strGender = $this->user->lang('adduser_gender_f').', ';
+			case '2' : $strGender = $this->user->lang('gender_f').', ';
 			break;
 			default: $strGender = "";
 		}
@@ -188,13 +188,13 @@ class user_pageobject extends pageobject {
 		if ($row['first_name'] != "" || $row['last_name'] != "") $arrProfile['name'] = (($row['first_name'] != '') ? sanitize($row['first_name']).' ' : '').(($row['last_name'] != '') ? sanitize($row['last_name']) : '');
 		$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
 		if (strlen($age)) $arrProfile['age'] = ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
-		if ($row['town'] != "") $arrProfile['adduser_town'] = (($row['ZIP_code'] != "") ? sanitize($row['ZIP_code']).' ': '').sanitize($row['town']);
-		if ($row['state'] != "") $arrProfile['adduser_state'] = sanitize($row['state']);
-		if ($row['country'] != "") $arrProfile['adduser_country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.png" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+		if ($row['town'] != "") $arrProfile['town'] = (($row['ZIP_code'] != "") ? sanitize($row['ZIP_code']).' ': '').sanitize($row['town']);
+		if ($row['state'] != "") $arrProfile['state'] = sanitize($row['state']);
+		if ($row['country'] != "") $arrProfile['country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.png" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
 		
 		foreach($arrProfile as $key => $val){
 			$this->tpl->assign_block_vars('profile_personal_row', array(
-				'NAME' => $this->user->lang($key),
+				'NAME' => $this->user->lang("user_sett_f_".$key) ? $this->user->lang("user_sett_f_".$key) : $this->user->lang($key),
 				'TEXT' => $val,
 			));
 			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
@@ -203,13 +203,13 @@ class user_pageobject extends pageobject {
 		//Contact Information
 		$arrContact = array();
 		if ($perm && ($this->user->is_signedin()) && strlen($row['user_email'])) $arrContact['email_address'] = '<a href="javascript:usermailer();"><i class="fa fa-envelope fa-lg"></i> '.$this->user->lang('adduser_send_mail').'</a>';
-		if ($phone_perm && strlen($row['cellphone'])) $arrContact['adduser_cellphone'] = '<i class="fa fa-mobile fa-lg"></i> '.sanitize($row['cellphone']);
-		if ($phone_perm && strlen($row['phone'])) $arrContact['adduser_phone'] = '<i class="fa fa-phone fa-lg"></i> '.sanitize($row['phone']);
-		if ($perm && strlen($row['icq'])) $arrContact['adduser_icq'] = '<a href="http://www.icq.com/people/'.sanitize($row['icq']).'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.sanitize($row['icq']).'&amp;img=5" alt="icq" /> '.sanitize($row['icq']).'</a>';
-		if ($perm && strlen($row['skype'])) $arrContact['adduser_skype'] = '<a href="skype:'.sanitize($row['skype']).'?add"><i class="fa fa-skype fa-lg"></i> '.sanitize($row['skype']).'</a>';
-		if ($perm && strlen($custom['twitter'])) $arrContact['adduser_twitter'] = '<a href="https://twitter.com/'.sanitize($custom['twitter']).'" target="_blank"><i class="fa fa-twitter fa-lg"></i> '.sanitize($custom['twitter']).'</a>';
-		if ($perm && strlen($custom['facebook'])) $arrContact['adduser_facebook'] = '<a href="https://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.sanitize($custom['facebook']) : sanitize($custom['facebook'])).'" target="_blank"><i class="fa fa-facebook fa-lg"></i> '.sanitize($custom['facebook']).'</a>';
-		if ($perm && strlen($custom['youtube'])) $arrContact['adduser_youtube'] = '<a href="https://www.youtube.com/user/'.sanitize($custom['youtube']).'" target="_blank"><i class="fa fa-youtube fa-lg"></i> '.sanitize($custom['youtube']).'</a>';
+		if ($phone_perm && strlen($row['cellphone'])) $arrContact['cellphone'] = '<i class="fa fa-mobile fa-lg"></i> '.sanitize($row['cellphone']);
+		if ($phone_perm && strlen($row['phone'])) $arrContact['phone'] = '<i class="fa fa-phone fa-lg"></i> '.sanitize($row['phone']);
+		if ($perm && strlen($row['icq'])) $arrContact['icq'] = '<a href="http://www.icq.com/people/'.sanitize($row['icq']).'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.sanitize($row['icq']).'&amp;img=5" alt="icq" /> '.sanitize($row['icq']).'</a>';
+		if ($perm && strlen($row['skype'])) $arrContact['skype'] = '<a href="skype:'.sanitize($row['skype']).'?add"><i class="fa fa-skype fa-lg"></i> '.sanitize($row['skype']).'</a>';
+		if ($perm && strlen($custom['twitter'])) $arrContact['twitter'] = '<a href="https://twitter.com/'.sanitize($custom['twitter']).'" target="_blank"><i class="fa fa-twitter fa-lg"></i> '.sanitize($custom['twitter']).'</a>';
+		if ($perm && strlen($custom['facebook'])) $arrContact['facebook'] = '<a href="https://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.sanitize($custom['facebook']) : sanitize($custom['facebook'])).'" target="_blank"><i class="fa fa-facebook fa-lg"></i> '.sanitize($custom['facebook']).'</a>';
+		if ($perm && strlen($custom['youtube'])) $arrContact['youtube'] = '<a href="https://www.youtube.com/user/'.sanitize($custom['youtube']).'" target="_blank"><i class="fa fa-youtube fa-lg"></i> '.sanitize($custom['youtube']).'</a>';
 		
 		if($row['irq'] != ""){
 			$irc_parts			= explode('@',$row['irq']);
@@ -217,11 +217,11 @@ class user_pageobject extends pageobject {
 		} else {
 			$data['irq'] = '';
 		}
-		if ($perm && strlen($data['irq'])) $arrContact['adduser_irq'] = $data['irq'];
+		if ($perm && strlen($data['irq'])) $arrContact['irq'] = $data['irq'];
 		
 		foreach($arrContact as $key => $val){
 			$this->tpl->assign_block_vars('profile_contact_row', array(
-				'NAME' => $this->user->lang($key),
+				'NAME' => $this->user->lang("user_sett_f_".$key) ? $this->user->lang("user_sett_f_".$key) : $this->user->lang($key),
 				'TEXT' => $val,
 			));
 			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
@@ -229,13 +229,13 @@ class user_pageobject extends pageobject {
 		
 		//Misc Profile Information
 		$arrMisc = array();
-		if (strlen($custom['hardware'])) $arrMisc['adduser_hardware'] = sanitize($custom['hardware']);
-		if (strlen($custom['work'])) $arrMisc['adduser_work'] = sanitize($custom['work']);
-		if (strlen($custom['interests'])) $arrMisc['adduser_interests'] = sanitize($custom['interests']);
+		if (strlen($custom['hardware'])) $arrMisc['hardware'] = sanitize($custom['hardware']);
+		if (strlen($custom['work'])) $arrMisc['work'] = sanitize($custom['work']);
+		if (strlen($custom['interests'])) $arrMisc['interests'] = sanitize($custom['interests']);
 		
 		foreach($arrMisc as $key => $val){
 			$this->tpl->assign_block_vars('profile_misc_row', array(
-				'NAME' => $this->user->lang($key),
+				'NAME' => $this->user->lang("user_sett_f_".$key) ? $this->user->lang("user_sett_f_".$key) : $this->user->lang($key),
 				'TEXT' => $val,
 			));
 			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
