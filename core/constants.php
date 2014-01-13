@@ -30,6 +30,7 @@ define('VERSION_EXT',		'1.0.1');				// the external version number to be shown i
 define('VERSION_WIP',		false);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.2.0');				// required version of PHP
 define('VERSION_PHP_REC', 	'5.3.0');				// recommended version of PHP
+define('REQ_PHP_MEMORY',	'60M');
 
 
 // Plugin states

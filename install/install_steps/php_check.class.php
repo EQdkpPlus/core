@@ -83,8 +83,8 @@ class php_check extends install_generic {
 	
 	private function check_php_limit($size){
 		$installed = ini_get('memory_limit');
-		if (intval($installed) == -1) return true;
 		$needed = REQ_PHP_MEMORY;
+		if (intval($installed) == -1) return true;
 		return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
 	}
 	
