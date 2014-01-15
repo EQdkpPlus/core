@@ -129,13 +129,15 @@ class guildImporter extends page_generic {
 
 				// Build the array
 				$jsondata[] = array(
-					'thumbnail'	=> $guildchars['character']['thumbnail'],
-					'name'		=> $guildchars['character']['name'],
-					'class'		=> $guildchars['character']['class'],
-					'race'		=> $guildchars['character']['race'],
-					'level'		=> $guildchars['character']['level'],
-					'gender'	=> $guildchars['character']['gender'],
-					'rank'		=> $guildchars['rank'],
+					'thumbnail'		=> $guildchars['character']['thumbnail'],
+					'name'			=> $guildchars['character']['name'],
+					'class'			=> $guildchars['character']['class'],
+					'race'			=> $guildchars['character']['race'],
+					'level'			=> $guildchars['character']['level'],
+					'gender'		=> $guildchars['character']['gender'],
+					'rank'			=> $guildchars['rank'],
+					'servername'	=> $guildchars['character']['realm'],
+					'guild'			=> $guildchars['character']['guild'],
 				);
 			}
 
@@ -192,10 +194,13 @@ class guildImporter extends page_generic {
 		}else{
 			//Create new char
 			$dataarry = array(
-				'name'		=> $this->in->get('name',''),
-				'lvl'		=> $this->in->get('level', 0),
-				'classid'	=> $this->game->obj['armory']->ConvertID($this->in->get('class', 0), 'int', 'classes'),
-				'raceid'	=> $this->game->obj['armory']->ConvertID($this->in->get('race', 0), 'int', 'races'),
+				'name'			=> $this->in->get('name',''),
+				'lvl'			=> $this->in->get('level', 0),
+				'classid'		=> $this->game->obj['armory']->ConvertID($this->in->get('class', 0), 'int', 'classes'),
+				'raceid'		=> $this->game->obj['armory']->ConvertID($this->in->get('race', 0), 'int', 'races'),
+				'guild'			=> $this->in->get('guild', ''),
+				'servername'	=> $this->in->get('servername', ''),
+				'gender'		=> $this->in->get('gender', 0),
 			);
 			$myStatus = $this->pdh->put('member', 'addorupdate_member', array(0, $dataarry));
 			
