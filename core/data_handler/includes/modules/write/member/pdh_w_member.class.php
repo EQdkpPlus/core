@@ -144,7 +144,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					$this->log_insert('action_member_updated', $log_action, $member_id, $old['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					
-					//Überprüfe Ringabhängigkeit von Mainchars
+					//ÃœberprÃ¼fe RingabhÃ¤ngigkeit von Mainchars
 					$this->pdh->process_hook_queue();
 					if ($member_id != $data['mainid']){
 						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['member_id'])){
@@ -186,7 +186,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					$this->log_insert('action_member_added', $log_action, $member_id, $data['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					
-					//Überprüfe Ringabhängigkeit von Mainchars
+					//ÃœberprÃ¼fe RingabhÃ¤ngigkeit von Mainchars
 					$this->pdh->process_hook_queue();
 					if ($member_id != $data['mainid']){
 						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['member_id'])){
