@@ -327,6 +327,15 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$this->pdh->enqueue_hook('member_update');
 		}
 
+		public function update_profilefield($member_id, $data){
+			if(empty($data['profiledata'])) {
+				$old['profiledata'] = $this->pdh->get('member', 'profiledata', array($member_id));
+				$data['profiledata'] = $this->profilefields(array_merge($this->xmltools->Database2Array($old['profiledata']), $data));
+			}
+			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata'=>$data['profiledata']))->execute($member_id);
+			$this->pdh->enqueue_hook('member_update');
+		}
+
 		public function change_rank($member_id, $rankid){
 			$result = $this->db->query("UPDATE __members SET :params WHERE member_id = ?;", array('member_rank_id'	=> $rankid), $member_id);
 			$this->pdh->enqueue_hook('member_update');
