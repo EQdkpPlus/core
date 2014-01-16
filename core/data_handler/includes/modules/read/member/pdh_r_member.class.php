@@ -415,8 +415,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return $this->game->get_name('races', $this->get_raceid($member_id));
 		}
 
-		public function get_profiledata($member_id, $value=false){
-			return ($value) ? ((isset($this->data[$member_id]['profiledata'][$value])) ? $this->data[$member_id]['profiledata'][$value] : $this->data[$member_id]['profiledata']) : $this->data[$member_id]['profiledata'];
+		public function get_profiledata($member_id){
+			return $this->data[$member_id]['profiledata'];
 		}
 
 		public function get_defaultrole($member_id){
