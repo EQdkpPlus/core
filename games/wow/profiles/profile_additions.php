@@ -341,10 +341,9 @@
 
 	// Armory based information
 	$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
-	d($member['name']);
-	$chardata = $this->game->obj['armory']->character($member['name'],$this->config->get('uc_servername'));
-	
-	var_dump($chardata);
+	$member_servername	= $this->pdh->get('member', 'profile_field', array($this->url_id, 'servername'));
+	$servername			= ($member_servername != '') ? $member_servername : $this->config->get('uc_servername');
+	$chardata			= $this->game->obj['armory']->character($member['name'], $servername);
 	if($this->config->get('uc_servername') != '' && !isset($chardata['status'])){
 
 		// profilers
