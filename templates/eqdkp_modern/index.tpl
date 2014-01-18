@@ -353,11 +353,11 @@
 			<fieldset class="settings mediumsettings">	
 				<dl>
 					<dt><label>{L_username}:</label></dt>
-					<dd><div class="input-icon"><i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username"/></div></dd>
+					<dd><div class="input-icon"><i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username" placeholder="{L_username}" /></div></dd>
 				</dl>
 				<dl>
 					<dt><label>{L_password}:</label></dt>
-					<dd><div class="input-icon"><i class="fa fa-key"></i><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password"/></div>
+					<dd><div class="input-icon"><i class="fa fa-key"></i><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password" placeholder="{L_password}"/></div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}<br />
 						<!-- ENDIF -->

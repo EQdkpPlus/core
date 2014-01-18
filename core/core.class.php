@@ -725,6 +725,26 @@ class core extends gen_class {
 				'S_NORMAL_FOOTER' 			=> ($this->header_format != 'simple') ? true : false,
 				'EQDKP_PLUS_COPYRIGHT'		=> $this->Copyright())
 			);
+			
+			//Update Warnings
+			if ($this->user->check_auths(array('a_extensions_man', 'a_maintenance'), 'or', false)){
+				$objRepository = register("repository");
+				if (count($objRepository->updates)){
+					$arrUpdates = $objRepository->updates;
+					if (isset($arrUpdates['pluskernel']) && $this->user->check_auth("a_maintenance")){
+						$this->ntfy->add("red", "EQdkp Plus", $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID);
+						unset($arrUpdates['pluskernel']);
+					}
+
+					if (count($arrUpdates)){
+						$text = "";
+						foreach($arrUpdates as $id => $data){
+							$text	.= "<br />".sprintf($this->user->lang('lib_pupd_updtxt_tt'), (($this->user->lang($data['plugin'])) ? $this->user->lang($data['plugin']) : $data['name']), $data['version'], $data['plugin'], $data['release']);
+						}
+						$this->ntfy->add("red", $this->user->lang("extensions"), $this->user->lang("lib_pupd_intro").$text, $this->server_path.'admin/manage_extensions.php'.$this->SID, count($arrUpdates));
+					}
+				}
+			}
 
 			//Call Social Plugins
 			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/logo.png");

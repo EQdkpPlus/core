@@ -949,6 +949,10 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"category_unpublished" => "This Category is not published.",
 	"article_not_found" => "Cound not find Article or Category.",
 	"rsslink" => "RSS-Feed for this category",
+	"pluskernel_new_version" => "A new version of EQDKP Plus was found.<br /> Please update your EQDKP Plus.",
+	"lib_pupd_intro" => 'There are new Versions available:',
+	"lib_pupd_updtxt_tt" => '<b>%1$s</b>: Version %2$s from %4$s',
+	"extensions" => "Extensions",
 );
 
 ?>

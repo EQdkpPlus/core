@@ -909,6 +909,10 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "password_not_match" => "Die eingegebenen Passwörter stimmen nicht überein.",
 "password_too_long" => "Das eingegeben Passwort ist zu lang. Bitte verwende ein kürzeres Passwort.",
 "rsslink" => "RSS-Feed dieser Kategorie",
+"pluskernel_new_version" => "Es wurde eine neue Version von EQdkp Plus gefunden.<br />Bitte aktualisiere dein EQdkp Plus.",
+"lib_pupd_intro" => "Es sind neuere Versionen verfügbar:",
+"lib_pupd_updtxt_tt" => "<b>%1\$s</b>: Version %2\$s vom %4\$s",
+"extensions" => "Erweiterungen",
  );
 
 ?>

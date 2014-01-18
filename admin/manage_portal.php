@@ -360,9 +360,8 @@ $('.js_reload').change(reload_settings);", 'docready');
 			
 		$modules = $this->pdh->aget('portal', 'path', 0, array($arrModuleIDs), true);
 		
-		
 		$arrModulesForOwnBlocks = array();
-		foreach($modules as $id => &$data) {
+		foreach($modules as $id => $data) {
 			$path = $data['path'];
 			$class_name = $path.'_portal';
 			if(empty($portal_module[$id])) {
@@ -418,9 +417,9 @@ $('.js_reload').change(reload_settings);", 'docready');
 				));
 				unset($data);
 				unset($modules[$id]);
-			}
+			} else $modules[$id] = $data;		
 		}
-		unset($data); //important, strange results without this
+
 		function my_sort($a, $b) {
 			if ($a['name'] == $b['name']) {
 				return 0;
