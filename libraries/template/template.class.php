@@ -945,7 +945,7 @@ class template extends gen_class {
 		}
 		if ($style['background_img'] != ''){
 			if (strpos($style['background_img'],'://') > 1){
-				$template_background_file = $$style['background_img'];
+				$template_background_file = $style['background_img'];
 			} else {
 				$template_background_file = $root_path.$style['background_img'];
 			}
