@@ -36,7 +36,7 @@ if(!class_exists('aion')) {
 		protected $lang_file	= array();
 		protected $path			= false;
 		public $lang			= false;
-		public $version			= '2.1.1';
+		public $version			= '4.5';
 
 		/**
 		* Initialises filters
@@ -66,14 +66,17 @@ if(!class_exists('aion')) {
 		public function get_OnChangeInfos($install=false){
 			//classcolors
 			$info['class_color'] = array(
-				1 => '#80FF00',
-				2 => '#FFFFFF',
-				3 => '#FFFFFF',
-				4 => '#4080FF',
-				5 => '#80FF00',
-				6 => '#7d5ebc',
-				7 => '#7d5ebc',
-				8 => '#4080FF',
+				1	=> '#80FF00',
+				2	=> '#FFFFFF',
+				3	=> '#FFFFFF',
+				4	=> '#4080FF',
+				5	=> '#80FF00',
+				6	=> '#7d5ebc',
+				7	=> '#7d5ebc',
+				8	=> '#4080FF',
+				9	=> '#ff3300',
+				10	=> '#cc3399',
+				11	=> '#ff3300',
 			);
 
 			/*

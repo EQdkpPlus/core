@@ -22,15 +22,18 @@ if ( !defined('EQDKP_INC') ){
 }
 $german_array = array(
 	'classes' => array(
-		0 => 'Unbekannt',
-		1 => 'Assassine',
-		2 => 'Kantor',
-		3 => 'Kleriker',
-		4 => 'Gladiator',
-		5 => 'Jäger',
-		6 => 'Zauberer',
-		7 => 'Beschwörer',
-		8 => 'Templer',
+		0	=> 'Unbekannt',
+		1	=> 'Assassine',
+		2	=> 'Kantor',
+		3	=> 'Kleriker',
+		4	=> 'Gladiator',
+		5	=> 'Jäger',
+		6	=> 'Zauberer',
+		7	=> 'Beschwörer',
+		8	=> 'Templer',
+		9	=> 'Schütze',
+		10	=> 'Barde',
+		11	=> 'Äthertech',
 	),
 	'races' => array(
 		'Elyoss',
@@ -40,17 +43,17 @@ $german_array = array(
 		'Member',
 	),
 	'lang' => array(
-		'aion' => 'Aion',
-		'plate' => 'Platte',
-		'cloth' => 'Stoff',
-		'leather' => 'Leder',
-		'mail' => 'Schwere Rüstung',
+		'aion'						=> 'Aion',
+		'plate'						=> 'Platte',
+		'cloth'						=> 'Stoff',
+		'leather'					=> 'Leder',
+		'mail'						=> 'Schwere Rüstung',
 		
 		// Profile information
-		'uc_gender'						=> 'Geschlecht',
-		'uc_male'						=> 'Männlich',
-		'uc_female'						=> 'Weiblich',
-		'uc_guild'						=> 'Gilde',
+		'uc_gender'					=> 'Geschlecht',
+		'uc_male'					=> 'Männlich',
+		'uc_female'					=> 'Weiblich',
+		'uc_guild'					=> 'Gilde',
 	),
 );
 
