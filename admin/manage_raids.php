@@ -152,6 +152,7 @@ class ManageRaids extends page_generic {
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
 			
+			
 			//Add additional members
 			if (count($raid['attendees']) > 0){
 				$arrIDList = array_keys($members);
@@ -331,6 +332,8 @@ class ManageRaids extends page_generic {
 
 	private function get_itemsofraid($raid_id) {
 		$item_ids = $this->pdh->get('item', 'itemsofraid', array($raid_id));
+		// sort items by date (so sks works properly)
+		$item_ids = $this->pdh->sort($item_ids, 'item', 'date');
 		$ik = 0;
 		$items = array();
 		foreach($item_ids as $id) {
@@ -355,7 +358,7 @@ class ManageRaids extends page_generic {
 				$ret_items[$key]['group_key'] = $group_key[$key];
 				$ret_group_key[$key] = $group_key[$key];
 			}
-		}
+		}		
 		return $ret_items;
 	}
 
