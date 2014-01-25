@@ -2,6 +2,7 @@
 //<![CDATA[
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({
+			firstDay: {STARTDAY},
 
 			// define the time formats
 			axisFormat: 'H(:mm)',
@@ -38,6 +39,7 @@
 			},
 			eventRender: function(event, element) {
 				if(event.icon){
+					element.find('.fc-event-time').hide();
 					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='absmiddle' />"));
 				}
 

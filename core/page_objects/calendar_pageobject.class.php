@@ -346,12 +346,6 @@ class calendar_pageobject extends pageobject {
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('u_calendar_view'));
 
-		// set the multidimensional lang arrays to template
-		$this->tpl->assign_array('daynames',			$this->user->lang('time_daynames'));
-		$this->tpl->assign_array('daynames_short',		$this->user->lang('time_daynames_short'));
-		$this->tpl->assign_array('monthnames',			$this->user->lang('time_monthnames'));
-		$this->tpl->assign_array('monthnames_short',	$this->user->lang('time_monthnames_short'));
-
 		//raid-list
 		$settings = $this->pdh->get_page_settings('calendar', 'hptt_calendar_raidlist');
 		$view_list = $this->pdh->get('calendar_events', 'id_list', array(true));
