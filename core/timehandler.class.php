@@ -84,7 +84,6 @@ if (!class_exists("timehandler")){
 			'r'		=> '#D, j M Y H:i:s O',
 			'U'		=> 'return',
 		);
-		private $backslash_sequence = array('t', 'r', 'n');
 		
 		private $timestamp = 0;
 		public $summertime = 0;
@@ -309,7 +308,7 @@ if (!class_exists("timehandler")){
 				}
 				$c = substr($format, $i, 1);
 				$ca = substr($format, ($i+1), 1);
-				if($c == '/' && $cb != '/' && in_array($ca, $this->backslash_sequence)) {
+				if($c == '\\' && $cb != '\\') {
 					$escape = true;
 					$cb = $c;
 					continue;
