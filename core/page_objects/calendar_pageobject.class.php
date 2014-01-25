@@ -170,8 +170,10 @@ class calendar_pageobject extends pageobject {
 
 	// fetch the data for the calendar and output as JSON
 	public function get_json(){
-		$event_json	= array();
-		$filters	= ($this->in->exists('filters', 'int')) ? $this->in->getArray('filters', 'int') : false;
+		$event_json		= array();
+		$filters		= ($this->in->exists('filters', 'int')) ? $this->in->getArray('filters', 'int') : false;
+		$range_start	= $this->time->fromformat($this->in->get('start', ''), DATE_ATOM);
+		$range_end		= $this->time->fromformat($this->in->get('end', ''), DATE_ATOM);
 
 		// parse the feeds
 		$feeds = $this->pdh->get('calendars', 'idlist', array('feed', $filters));
@@ -219,7 +221,7 @@ class calendar_pageobject extends pageobject {
 
 		// add the calendar events to the json feed
 		$calendars	= $this->pdh->get('calendars', 'idlist', array('nofeed', $filters));
-		$caleventids	= $this->pdh->get('calendar_events', 'id_list', array(false, $this->in->get('start', 0), $this->in->get('end', 0)));
+		$caleventids	= $this->pdh->get('calendar_events', 'id_list', array(false, $range_start, $range_end));
 		if(is_array($caleventids) && count($caleventids) > 0){
 			foreach($caleventids as $calid){
 				$eventextension	= $this->pdh->get('calendar_events', 'extension', array($calid));
@@ -306,11 +308,11 @@ class calendar_pageobject extends pageobject {
 
 		// birthday calendar
 		if($this->config->get('calendar_show_birthday') && $this->user->check_auth('u_userlist', false)){
-			$birthday_y	= $this->time->date('Y', $this->in->get('end', 0));
+			$birthday_y	= $this->time->date('Y', $range_end);
 			$birthdays	= $this->pdh->get('user', 'birthday_list');
 			if(is_array($birthdays)){
 				foreach($birthdays as $birthday_uid=>$birthday_ts){
-					if($birthday_ts > $this->in->get('start', 0) && $birthday_ts < $this->in->get('end', 0)){
+					if($birthday_ts > $range_start && $birthday_ts < $range_end){
 						$event_json[] = array(
 							'className'				=> 'cal_birthday',
 							'title'					=> $this->pdh->get('user', 'name', array($birthday_uid)),

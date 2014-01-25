@@ -2,19 +2,6 @@
 //<![CDATA[
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({
-			allDayDefault: false,
-			buttonText: {
-				today: "{L_calendar_today}",
-				month: "{L_calendar_month}",
-				week: "{L_calendar_week}",
-				day: "{L_calendar_day}"
-			},
-			allDayText: "{calendar_allday}",
-			monthNames: ["{monthnames:0}","{monthnames:1}","{monthnames:2}","{monthnames:3}","{monthnames:4}","{monthnames:5}","{monthnames:6}","{monthnames:7}","{monthnames:8}","{monthnames:9}","{monthnames:10}","{monthnames:11}"],
-			monthNamesShort: ["{monthnames_short:0}","{monthnames_short:1}","{monthnames_short:2}","{monthnames_short:3}","{monthnames_short:4}","{monthnames_short:5}","{monthnames_short:6}","{monthnames_short:7}","{monthnames_short:8}","{monthnames_short:9}","{monthnames_short:10}","{monthnames_short:11}"],
-			dayNames: ["{daynames:6}","{daynames:0}","{daynames:1}","{daynames:2}","{daynames:3}","{daynames:4}","{daynames:5}"],
-			dayNamesShort: ["{daynames_short:6}","{daynames_short:0}","{daynames_short:1}","{daynames_short:2}","{daynames_short:3}","{daynames_short:4}","{daynames_short:5}"],
-			firstDay: {STARTDAY},
 
 			// define the time formats
 			axisFormat: 'H(:mm)',
@@ -66,14 +53,14 @@
 					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<i class='absmiddle fa fa-gift'></i> "));
 				}else if(!event.url){
 					if(event.allDay){
-						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}')+"</div>";
-						if(($.fullCalendar.formatDate(event.end, 'dd') != $.fullCalendar.formatDate(event.start, 'dd')) || ($.fullCalendar.formatDate(event.end, 'MM') != $.fullCalendar.formatDate(event.start, 'MM'))){
-							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, '{JS_DATEFORMAT}')+"</div>";
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}')+"</div>";
+						if((moment(event.end).format('dd') != moment(event.start).format('dd')) || (moment(event.end).format('MM') != moment(event.start).format('MM'))){
+							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}')+"</div>";
 						}
 						tmpttcontent += "<div class='calendartt_allday'>{L_calendar_allday}</div>";
 					}else{
-						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
-						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
 					}
 					if(event.note){
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
@@ -105,8 +92,8 @@
 				}else{
 					tmpttcontent = '';
 					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
-					tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+$.fullCalendar.formatDate(event.start, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
-					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+$.fullCalendar.formatDate(event.end, '{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+					tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
 
 					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
 
@@ -166,10 +153,14 @@
 				});
 			},
 			loading: function(bool) {
-				if (bool) $('#calendar_loading').show();
-				else $('#calendar_loading').hide();
+				$('#calendar_loading').toggle(bool);
 			},
-			events: "{U_CALENDAR}&json=true"
+			events: {
+				url: '{U_CALENDAR}&json=true',
+				//error: function() {
+			//		$('#script-warning').show();
+			//	}
+			}
 		});
 
 		// add a new button to the calendar for the export
