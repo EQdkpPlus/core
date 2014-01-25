@@ -368,7 +368,11 @@ if (!class_exists("timehandler")){
 			if($format === 1) $format = $this->user->style['date_notime_short'].' '.$this->user->style['time'];
 			if(function_exists('date_create_from_format')) {
 				if(!$this->check_format($string, $format)) return $this->time;
+				var_dump($format);
+				var_dump($string);
+				var_dump($this->userTimeZone);
 				$dateTime = DateTimeLocale::createFromFormat($format, $string, $this->userTimeZone);
+				var_dump($dateTime);
 				if(!is_object($dateTime)) {
 					$this->pdl->log('time_error', "parsing string '".$string."' in format '".$format."' did not work");
 					return $this->time;
