@@ -156,6 +156,9 @@ $lang = array(
 	'time_format'			=> 'H:i',
 	'date_long_format'		=> 'j. F Y',
 	'date_short_format'		=> 'd.m.y',
+	"style_jsdate_nrml"		=> "dd.MM.yyyy",
+	"style_jsdate_short"	=> "d.M",
+	"style_jstime"			=> "H:mm",
 	//Welcome-News
 	'welcome_news_title'	=> 'Willkommen bei EQdkp-Plus',
 	'welcome_news'			=> '<p>Die Installation deines EQdkp-Plus wurde erfolgreich abgeschlossen - du kannst es nun nach deinen Wünschen einrichten.</p>

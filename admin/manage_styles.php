@@ -166,7 +166,8 @@ class Manage_Styles extends page_generic{
 			$filename = str_replace('admin/', '', $filename);
 
 			$storage_folder  = $this->pfh->FolderPath('templates/'.$this->style['template_path'].$admin_folder, 'eqdkp');
-			$this->pfh->putContent($storage_folder.$filename, $this->in->get('template_edit', '', 'raw'));
+			$this->pfh->FilePath($storage_folder.$filename);
+			d($this->pfh->putContent($storage_folder.$filename, $this->in->get('template_edit', '', 'raw')));
 
 			//Create new parsed css file
 			if ($filename == $this->style['template_path'].'.css'){

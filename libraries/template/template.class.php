@@ -258,14 +258,22 @@ class template extends gen_class {
 			} else {
 				$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 			}
-
+			
+			//Put the jquery lang file at the end of all other JS files
+			if (pathinfo($val['file'], PATHINFO_FILENAME) == 'lang_jquery'){
+				$key = 99999999;
+			}
+			
 			if (is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
 				$arrHash[] = md5_file($val['file']);
 				unset($this->tpl_output['js_file'][$key]);
-				$arrFiles[] = $val['file'];		
+				$arrFiles[$key] = $val['file'];
 			}
 		}
+		
+		ksort($arrFiles);
+		
 
 		//Check if there is an file for this hash
 		asort($arrHash);

@@ -329,12 +329,14 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'dropdown',
 						'options'	=> $this->user->get_available_authmethods(),
 						'default'	=> 'db',
+						
 					),
 				),
 				'login'			=> array(
 					'login_method'	=> array(
 						'type'		=> 'multiselect',
 						'options'	=> $this->user->get_available_loginmethods(),
+						'tolang'	=> true,
 					),
 				),
 				'cookie'			=> array(

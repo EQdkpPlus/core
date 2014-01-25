@@ -153,7 +153,7 @@ abstract class super_registry {
 			if (!defined('MAINTENANCE_MODE')){
 				//Maintenance mode redirect for non admins
 				if(registry::register('config')->get('pk_maintenance_mode') && !registry::fetch('user')->check_auth('a_', false) && !defined('NO_MMODE_REDIRECT')){
-					redirect('maintenance/maintenance.php');
+					redirect('maintenance/maintenance.php'.self::get_const('SID'));
 				}
 
 				//Maintenance Modus for admins
@@ -167,7 +167,7 @@ abstract class super_registry {
 					if(registry::register('mmtaskmanager')->status['necessary_tasks']) {
 						registry::register('config')->set('pk_maintenance_mode', true);
 						if (!defined('NO_MMODE_REDIRECT')){
-							redirect('maintenance/task_manager.php');
+							redirect('maintenance/task_manager.php'.self::get_const('SID'));
 						}
 					}
 				}
@@ -176,7 +176,7 @@ abstract class super_registry {
 				if(count(registry::register('file_handler')->get_errors()) > 0) {
 					registry::register('config')->set('pk_maintenance_mode', true);
 					if (!defined('NO_MMODE_REDIRECT')){
-						redirect('maintenance/task_manager.php');
+						redirect('maintenance/task_manager.php'.self::get_const('SID'));
 					}
 				}
 				
@@ -252,7 +252,9 @@ abstract class super_registry {
 		if(is_file(self::$const['root_path'] . 'config.php')) require_once(self::$const['root_path'] . 'config.php');
 		if (!defined('EQDKP_INSTALLED') && !$install ){
 			$script_name = $_SERVER['SCRIPT_NAME'];
-			if (substr($script_name, -9) == "index.php" && !substr($script_name, -15) == "admin/index.php"){
+			var_dump($script_name);
+
+			if (substr($script_name, -9) == "index.php" && substr($script_name, -15) != "admin/index.php"){
 				echo ("<script>window.location.href = '".str_replace("index.php", "", $script_name)."install/index.php';</script>");
 			} else {
 				echo ("<script>window.location.href = '".self::$const['root_path']."install/index.php';</script>");

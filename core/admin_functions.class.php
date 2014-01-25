@@ -333,6 +333,7 @@ class admin_functions extends gen_class {
 					break;
 					
 					case 'admin':
+					case 'admin/index':
 						$strOut = registry::fetch('user')->lang('menu_admin_panel');
 						$strPrefix = "";
 					break;
