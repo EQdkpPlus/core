@@ -261,20 +261,19 @@ class template extends gen_class {
 			
 			//Put the jquery lang file at the end of all other JS files
 			if (pathinfo($val['file'], PATHINFO_FILENAME) == 'lang_jquery'){
-				$key = 99999999;
-			}
+				$nkey = 99999999;
+			} else $nkey = $key;
 			
 			if (is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
 				$arrHash[] = md5_file($val['file']);
 				unset($this->tpl_output['js_file'][$key]);
-				$arrFiles[$key] = $val['file'];
+				$arrFiles[$nkey] = $val['file'];
 			}
 		}
 		
 		ksort($arrFiles);
 		
-
 		//Check if there is an file for this hash
 		asort($arrHash);
 		$strHash = md5(implode(";", $arrHash));
