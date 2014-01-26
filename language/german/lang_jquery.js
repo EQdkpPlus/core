@@ -83,7 +83,7 @@ $.extend($.ech.multiselectfilter.prototype.options, {
  * Translated default messages for the jQuery validation plugin.
  * Locale: DE (German, Deutsch)
  */
-(function ($) {
+(function($) {
 	$.extend($.validator.messages, {
 		required: "Dieses Feld ist ein Pflichtfeld.",
 		maxlength: $.validator.format("Geben Sie bitte maximal {0} Zeichen ein."),
@@ -100,7 +100,8 @@ $.extend($.ech.multiselectfilter.prototype.options, {
 		min: $.validator.format("Geben Sie bitte einen Wert größer oder gleich {0} ein."),
 		creditcard: "Geben Sie bitte eine gültige Kreditkarten-Nummer ein."
 	});
-}(jQuery));/*
+}(jQuery));
+/*
 	jQuery Colorbox language configuration
 	language: German (de)
 	translated by: wallenium
@@ -128,16 +129,7 @@ jQuery.extend(jQuery.colorbox.settings, {
     $.extend($.fn.spectrum.defaults, localization);
 
 })( jQuery );
-
-$.fullCalendar.lang("de", {
-	buttonText: {
-		month: "Monat",
-		week: "Woche",
-		day: "Tag",
-		list: "Terminübersicht"
-	},
-	allDayText: "Ganztägig"
-});// moment.js language configuration
+// moment.js language configuration
 // language : german (de)
 // author : lluchs : https://github.com/lluchs
 // author: Menelion Elensúle: https://github.com/Oire

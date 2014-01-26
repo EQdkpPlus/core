@@ -50,14 +50,15 @@ if (!class_exists("jquery")) {
 
 			// jquery language file
 			$langfile = '';
-			if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
+			$this->langfile('lang_jquery.js');
+			/*if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
 				$langfile = $this->root_path.'language/'.$this->user->data['user_lang'].'/lang_jquery.js';
 			}elseif(is_object($this->core)){
 				$langfile = $this->root_path.'language/'.$this->config->get('default_lang').'/lang_jquery.js';
 			}
 			if(is_file($langfile)){
 				$this->tpl->js_file($langfile);
-			}
+			}*/
 
 			// set the custom UI for jquery.ui
 			$this->CustomUI($this->user->style['template_path']);
@@ -87,6 +88,30 @@ if (!class_exists("jquery")) {
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
+		}
+		public function langfile($file){
+			if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
+				$langfile = $this->root_path.'language/'.$this->user->data['user_lang'].'/'.$file;
+			}elseif(is_object($this->core)){
+				$langfile = $this->root_path.'language/'.$this->config->get('default_lang').'/'.$file;
+			}
+			if(is_file($langfile)){
+				$this->tpl->js_file($langfile);
+			}
+		}
+
+		public function fullcalendar(){
+			// include the calendar js/css.. css is included in base template dir, but can be overwritten by adding to template
+			$this->tpl->js_file($this->path."js/fullcalendar/fullcalendar.min.js");
+			if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
+				$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css');
+			}else{
+				$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.css');
+			}
+			$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
+			
+			// now laod the fullcalendar language file
+			$this->langfile('lang_fullcalendar.js');
 		}
 
 		/**

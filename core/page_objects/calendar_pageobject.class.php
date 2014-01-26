@@ -335,13 +335,7 @@ class calendar_pageobject extends pageobject {
 	// the main page display
 	public function display(){
 		// include the calendar js/css.. css is included in base template dir, but can be overwritten by adding to template
-		$this->tpl->js_file($this->root_path."libraries/jquery/js/fullcalendar/fullcalendar.min.js");
-		if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
-			$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css');
-		}else{
-			$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.css');
-		}
-		$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
+		$this->jquery->fullcalendar();
 
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('u_calendar_view'));
