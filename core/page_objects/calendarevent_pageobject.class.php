@@ -78,7 +78,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// auto confirm if enabled
-		$usergroups		= unserialize($this->config->get('calendar_raid_autoconfirm'));
+		$usergroups		= $this->config->get('calendar_raid_autoconfirm');
 		$signupstatus	= $this->in->get('signup_status', 4);
 		if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 			if($this->user->check_group($usergroups, false)){
@@ -348,7 +348,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// get the members
-		$notsigned_filter		= unserialize($this->config->get('calendar_raid_nsfilter'));
+		$notsigned_filter		= $this->config->get('calendar_raid_nsfilter');
 		$this->members			= $this->pdh->maget('member', array('userid', 'name', 'classid', 'memberid'), 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(
 										((in_array('inactive', $notsigned_filter)) ? false : true),
 										((in_array('hidden', $notsigned_filter)) ? false : true),
@@ -391,7 +391,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
 		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
-		$shownotes_ugroups		= unserialize($this->config->get('calendar_raid_shownotes'));
+		$shownotes_ugroups		= $this->config->get('calendar_raid_shownotes');
 
 		// Build the attendees aray for this raid by class
 		if(is_array($this->attendees_raw)){
@@ -426,7 +426,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		//The Status & Member data
-		$raidcal_status = unserialize($this->config->get('calendar_raid_status'));
+		$raidcal_status = $this->config->get('calendar_raid_status');
 		$this->raidstatus_full = $this->raidstatus = array();
 		if(is_array($raidcal_status)){
 			foreach($raidcal_status as $raidcalstat_id){

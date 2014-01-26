@@ -79,7 +79,11 @@ class form extends gen_class {
 		if(!empty($options['encrypt'])) $options['value'] = register('encrypt')->decrypt($options['value']);
 		if(empty($options['type'])) $options['type'] = '';
 		$field_class = 'h'.$options['type'];
-		return (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
+		// additional text around field?
+		$text = (empty($options['text'])) ? '' : $options['text'];
+		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
+		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
+		return $text.$field.$text2;
 	}
 	
 	/**
@@ -312,18 +316,14 @@ class form extends gen_class {
 		
 		// fill in the field
 		if(!empty($value)) $options['value'] = $value;
-		
-		// additional text around field?
-		$text = (empty($options['text'])) ? '' : $options['text'];
-		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
-		
+				
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
 		
 		if($this->assign2tpl) $this->tpl->assign_block_vars($key, array(
 				'NAME'		=> $language,
 				'HELP'		=> $help_message,
-				'FIELD'		=> $text.self::field($name, $options).$text2
+				'FIELD'		=> self::field($name, $options)
 			));
 		else return array(
 				'name'		=> $language,

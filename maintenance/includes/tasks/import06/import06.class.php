@@ -940,7 +940,7 @@ class import06 extends task {
 					if(isset($factions[$row['member_id']])) {
 						$profilefields['faction'] = $factions[$row['member_id']];
 					}
-					$members[$row['member_id']]['profiledata'] = registry::register('xmltools')->Array2Database($profilefields);
+					$members[$row['member_id']]['profiledata'] = json_encode($profilefields);
 					$m2cr[$row['member_id']]['class'] = $row['class_name'];
 					$m2cr[$row['member_id']]['race'] = $row['race_name'];
 				}

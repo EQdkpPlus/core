@@ -207,10 +207,11 @@ class addcharacter_pageobject extends pageobject {
 						$ccfield = form::field($fieldname, $confvars);
 						if($ccfield && $confvars['visible']){
 							$dynwhereto = ($confvars['category'] == 'character') ? 'character_row' : 'cmrow.tabs';
+							$lang_var = ($this->game->glang($confvars['lang'])) ? $this->game->glang($confvars['lang']) : (($this->user->lang($confvars['lang'])) ? $this->user->lang($confvars['lang']) : $confvars['lang']);
 							$this->tpl->assign_block_vars($dynwhereto, array(
-								'NAME'		=> ($this->game->glang($confvars['language'])) ? $this->game->glang($confvars['language']) : $confvars['language'],
+								'NAME'		=> $lang_var,
 								'FIELD'		=> $ccfield,
-								'HELP'		=> ($this->game->glang($confvars['language'].'_help')) ? $this->game->glang($confvars['language'].'_help') : '',
+								'HELP'		=> ($this->game->glang($confvars['lang'].'_help')) ? $this->game->glang($confvars['lang'].'_help') : '',
 							));
 						}
 					}

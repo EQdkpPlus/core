@@ -834,7 +834,7 @@ class mmocms_settings extends page_generic {
 
 		// merge the game admin array to the existing one
 		$settingsdata_admin = $this->game->admin_settings();
-		if(is_array($settingsdata_admin)){
+		if(is_array($settingsdata_admin) && !empty($settingsdata_admin)){
 			$this->form->add_fields($settingsdata_admin, 'gamesettings', 'game');
 		}
 
@@ -872,14 +872,15 @@ class mmocms_settings extends page_generic {
 			}
 
 			// Save the settings array
-			pd($save_array);
 			$this->config->set($save_array);
 
 			// Since ChangeGame alters Config it has to be executed after config-save
 			if($game_changed) {
 				$this->game->ChangeGame($this->in->get('default_game'), $this->in->get('game_language'));
 				$this->pdc->flush();
-				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
+				$this->form->reset_fields();
+				$this->display();
+				#redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}
 
 			//clear cache now

@@ -635,13 +635,13 @@ class game extends gen_class {
 					'name'			=> $name,
 					'type'			=> $values['type'],
 					'category'		=> $values['category'],
-					'lang'			=> $values['name'],
-					'options_lang'	=> $values['options_lang'],
+					'lang'			=> (!empty($values['lang'])) ? $values['lang'] : $name,
+					'options_lang'	=> (isset($values['options_lang'])) ? $values['options_lang'] : '',
 					'size'			=> (isset($values['size'])) ? intval($values['size']) : '0',
 					'option'		=> (isset($values['options']) && is_array($values['options'])) ? $values['options'] : '',
 					'visible'		=> (isset($values['visible'])) ? intval($values['visible']) : '0',
 					'image'			=> (isset($values['image'])) ? $values['image'] : '',
-					'undeletable'	=> (($values['undeletable']) ? '1' : '0'),
+					'undeletable'	=> (isset($values['undeletable']) && $values['undeletable']) ? '1' : '0',
 					'enabled'		=> 1,
 					'no_custom'		=> true
 				)));

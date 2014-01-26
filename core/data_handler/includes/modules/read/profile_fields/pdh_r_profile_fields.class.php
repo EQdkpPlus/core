@@ -22,15 +22,10 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_profile_fields" ) ) {
 	class pdh_r_profile_fields extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'game'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		public $default_lang = 'english';
 		public $profile_fields;
 		public $profile_categories;
-		public $field_list;
 
 		public $hooks = array(
 			'game_update'
@@ -39,36 +34,33 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		public function reset(){
 			$this->pdc->del('pdh_profile_fields_table');
 			$this->pdc->del('pdh_profile_categories_table');
-			$this->pdc->del('pdh_profile_fieldlist_table');
 			$this->profile_fields = NULL;
 			$this->profile_categories = NULL;
-			$this->field_list = NULL;
 		}
 
 		public function init(){
 			$this->profile_fields			= $this->pdc->get('pdh_profile_fields_table');
 			$this->profile_categories		= $this->pdc->get('pdh_profile_categories_table');
-			$this->field_list				= $this->pdc->get('pdh_profile_fieldlist_table');
-			if($this->profile_fields !== NULL && $this->field_list !== NULL && $this->profile_categories !== NULL){
+			if($this->profile_fields !== NULL && $this->profile_categories !== NULL){
 				return true;
 			}
 			$this->profile_fields = array();
 			$objQuery = $this->db->query("SELECT * FROM __member_profilefields ORDER BY enabled DESC,category,name");
 			if($objQuery){
-				while($drow = $objQuery->fetchAssoc()){
+				while($drow = $objQuery->fetchAssoc()) {
+					// build categories array
 					if(!is_array($this->profile_categories) || !in_array($drow['category'], $this->profile_categories)){
 						if($drow['category'] != 'character'){
 							$this->profile_categories[] = $drow['category'];
 						}
 					}
-					$this->field_list[] = $drow['name'];
 	
 					$this->profile_fields[$drow['name']] = array(
 						'type'			=> $drow['type'],
 						'category'		=> $drow['category'],
 						'size'			=> $drow['size'],
 						'visible'		=> $drow['visible'],
-						'language'		=> ($this->game->glang($drow['language'])) ? $this->game->glang($drow['language']) : $drow['language'],
+						'lang'			=> $drow['lang'],
 						'options_language' => $drow['options_language'],
 						'image'			=> $drow['image'],
 						'enabled'		=> $drow['enabled'],
@@ -76,6 +68,8 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 						'options'		=> unserialize($drow['options']),
 						'custom'		=> $drow['custom'],
 					);
+					if($drow['type'] == 'dropdown')
+						$this->profile_fields[$drow['name']]['tolang'] = true;
 				}
 				
 				// check if the character tab is in the categories list, if not add it
@@ -85,14 +79,14 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 				}
 	
 				// save all the stuff to the cache
+				$this->profile_categories = array_unique($this->profile_categories);
 				$this->pdc->put('pdh_profile_fields_table', $this->profile_fields, null);
-				$this->pdc->put('pdh_profile_fieldlist_table', $this->field_list, null);
 				$this->pdc->put('pdh_profile_categories_table', $this->profile_categories, null);
-			}	
+			}
 		}
 
 		public function get_categories(){
-			return array_unique($this->profile_categories);
+			return $this->profile_categories;
 		}
 
 		public function get_fields($name=''){
@@ -100,11 +94,11 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		}
 
 		public function get_fieldlist(){
-			return $this->field_list;
+			return array_keys($this->profile_fields);
 		}
 
-		public function get_language($name) {
-			return $this->profile_fields[$name]['language'];
+		public function get_lang($name) {
+			return $this->profile_fields[$name]['lang'];
 		}
 		
 		public function get_options_language($name) {

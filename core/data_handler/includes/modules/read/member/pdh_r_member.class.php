@@ -84,7 +84,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			if(is_array($this->cmfields)) {
 				foreach($this->cmfields as $mmdata){
 					$this->presets['profile_'.$mmdata] = array('profile_field', array('%member_id%', $mmdata), array($mmdata));
-					$this->preset_lang['profile_'.$mmdata] = 'Profil-'.$this->pdh->get('profile_fields', 'language', array($mmdata));;
+					$this->preset_lang['profile_'.$mmdata] = 'Profil-'.$this->pdh->get('profile_fields', 'lang', array($mmdata));;
 				}
 			}
 		}
@@ -189,10 +189,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$this->data[$bmd_row['member_id']]['requested_del']		= $bmd_row['requested_del'];
 						$this->data[$bmd_row['member_id']]['require_confirm']	= $bmd_row['require_confirm'];
 						$this->data[$bmd_row['member_id']]['defaultrole']		= $bmd_row['defaultrole'];
-						$this->data[$bmd_row['member_id']]['profiledata']		= $bmd_row['profiledata'];
+						$this->data[$bmd_row['member_id']]['profiledata']		= json_decode($bmd_row['profiledata'], true);
 						$this->data[$bmd_row['member_id']]['user']				= isset($this->member_user[$bmd_row['member_id']]) ? $this->member_user[$bmd_row['member_id']] : 0;
 						if(is_array($this->cmfields)){
-							$my_data = $this->xmltools->Database2Array($bmd_row['profiledata']);
+							$my_data = $this->data[$bmd_row['member_id']]['profiledata'];
 							foreach($this->cmfields as $mmdata){
 								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
 							}
@@ -205,7 +205,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_id_list($skip_inactive=false, $skip_hidden=false, $skip_special = true, $skip_twinks=false){
 			$members = array();
-			$special_members = ($this->config->get('special_members') && unserialize($this->config->get('special_members'))) ? unserialize($this->config->get('special_members')) : array();
+			$special_members = (is_array($this->config->get('special_members'))) ? $this->config->get('special_members') : array();
 			if(is_array($this->data)){
 				foreach (array_keys($this->data) as $member_id){
 					//special members like disenchanted or banked
@@ -679,7 +679,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_caption_profile_field($params){
-			return $this->pdh->get('profile_fields', 'language', array($params));
+			return $this->pdh->get('profile_fields', 'lang', array($params));
 		}
 	}//end class
 }//end if

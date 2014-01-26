@@ -21,13 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $settingsdata_admin = array(
-	'swtor_faction'	=> array(
-		'name'		=> 'swtor_faction',
-		'fieldtype'	=> 'dropdown',
-		'size'		=> '1',
-		'options'	=> registry::register('game')->get('factions'),
-		'default'	=> 0
-	),
 );
 
 ?>

@@ -75,7 +75,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				//check profile fields
 				if(empty($data['profiledata'])) {
 					$old['profiledata'] = $this->pdh->get('member', 'profiledata', array($member_id));
-					$data['profiledata'] = $this->profilefields(array_merge($this->xmltools->Database2Array($old['profiledata']), $data));
+					$data['profiledata'] = $this->profilefields(array_merge($old['profiledata'], $data));
 				}
 				if($changes == false && $old['profiledata'] == $data['profiledata']) {
 					return true;
@@ -205,7 +205,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			foreach($fielddata as $pfname => $value){
 				$myxml[$pfname] = in_array($pfname, $prof_fields) ? $value : '';
 			}
-			return $this->xmltools->Array2Database($myxml);
+			return json_encode($myxml);
 		}
 
 		public function delete_member($member_id, $no_log=false) {

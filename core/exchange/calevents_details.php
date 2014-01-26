@@ -45,7 +45,7 @@ if (!class_exists('exchange_calevents_details')){
 					if ($raidmode) {
 
 						// get the memners
-						$notsigned_filter		= unserialize($this->config->get('calendar_raid_nsfilter'));
+						$notsigned_filter		= $this->config->get('calendar_raid_nsfilter');
 						$this->members			= $this->pdh->maget('member', array('userid', 'name', 'classid'), 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(
 														((in_array('inactive', $notsigned_filter)) ? false : true),
 														((in_array('hidden', $notsigned_filter)) ? false : true),
@@ -88,7 +88,7 @@ if (!class_exists('exchange_calevents_details')){
 						}
 
 						//The Status & Member data
-						$raidcal_status = unserialize($this->config->get('calendar_raid_status'));
+						$raidcal_status = $this->config->get('calendar_raid_status');
 						$this->raidstatus_full = $this->raidstatus = array();
 						if(is_array($raidcal_status)){
 							foreach($raidcal_status as $raidcalstat_id){
@@ -108,7 +108,7 @@ if (!class_exists('exchange_calevents_details')){
 
 								if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 									foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
-										//$shownotes_ugroups = unserialize($this->config->get('calendar_raid_shownotes'));
+										//$shownotes_ugroups = $this->config->get('calendar_raid_shownotes');
 
 										$arrChars['char:'.$memberid] = array(
 											'id'			=> $memberid,

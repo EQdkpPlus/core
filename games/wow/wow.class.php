@@ -220,24 +220,25 @@ if(!class_exists('wow')) {
 		/*
 		 * add professions to array
 		 */
-		public function get_profilefields(){
+		public function profilefields(){
 			// Category 'character' is a fix one! All others are created dynamically!
 			$this->load_type('professions', array($this->lang));
+			$this->load_type('realmlist', array($this->lang));
 			$xml_fields = array(
-				'skill_1'	=> array(
+				'skill1'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'character',
-					'name'			=> 'uc_skill1',
+					'lang'			=> 'uc_skill1',
 					'size'			=> 4,
 					'undeletable'	=> true,
 					'visible'		=> true,
 					'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
 					'options_lang'	=> "lang:talents:{CLASSID}",
 				),
-				'skill_2'	=> array(
+				'skill2'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'character',
-					'name'			=> 'uc_skill2',
+					'lang'			=> 'uc_skill2',
 					'size'			=> 4,
 					'undeletable'	=> true,
 					'visible'		=> true,
@@ -247,31 +248,32 @@ if(!class_exists('wow')) {
 				'gender'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'character',
-					'name'			=> 'uc_gender',
-					'options'		=> array('Male' => 'uc_male', 'Female' => 'uc_female'),
+					'lang'			=> 'uc_gender',
+					'options'		=> array('male' => 'uc_male', 'female' => 'uc_female'),
+					'tolang'		=> true,
 					'undeletable'	=> true,
 					'visible'		=> true
 				),
 				'guild'	=> array(
 					'type'			=> 'text',
 					'category'		=> 'character',
-					'name'			=> 'uc_guild',
+					'lang'			=> 'uc_guild',
 					'size'			=> 40,
 					'undeletable'	=> true,
 					'visible'		=> true
 				),
 				'servername'	=> array(
 					'category'		=> 'character',
-					'name'			=> 'uc_servername',
+					'lang'			=> 'uc_servername',
 					'type'			=> 'autocomplete',
 					'size'			=> '21',
 					'edecode'		=> true,
-					'options'		=> registry::register('game')->get('realmlist'),
+					'options'		=> $this->realmlist[$this->lang],
 				),
 				'prof1_value'	=> array(
 					'type'			=> 'int',
 					'category'		=> 'profession',
-					'name'			=> 'uc_prof1_value',
+					'lang'			=> 'uc_prof1_value',
 					'size'			=> 4,
 					'undeletable'	=> true,
 					'visible'		=> true
@@ -279,7 +281,7 @@ if(!class_exists('wow')) {
 				'prof1_name'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'profession',
-					'name'			=> 'uc_prof1_name',
+					'lang'			=> 'uc_prof1_name',
 					'options'		=> $this->professions[$this->lang],
 					'undeletable'	=> true,
 					'visible'		=> true,
@@ -289,7 +291,7 @@ if(!class_exists('wow')) {
 				'prof2_value'	=> array(
 					'type'			=> 'int',
 					'category'		=> 'profession',
-					'name'			=> 'uc_prof2_value',
+					'lang'			=> 'uc_prof2_value',
 					'size'			=> 4,
 					'undeletable'	=> true,
 					'visible'		=> true
@@ -297,7 +299,7 @@ if(!class_exists('wow')) {
 				'prof2_name'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'profession',
-					'name'			=> 'uc_prof2_name',
+					'lang'			=> 'uc_prof2_name',
 					'options'		=> $this->professions[$this->lang],
 					'undeletable'	=> true,
 					'visible'		=> true,
@@ -307,22 +309,23 @@ if(!class_exists('wow')) {
 				'health_bar'	=> array(
 					'type'			=> 'int',
 					'category'		=> 'character',
-					'name'			=> 'uc_bar_health',
+					'lang'			=> 'uc_bar_health',
 					'undeletable'	=> true,
 					'size'			=> 4
 				),
 				'second_bar'	=> array(
 					'type'			=> 'int',
 					'category'		=> 'character',
-					'name'			=> 'uc_bar_2value',
+					'lang'			=> 'uc_bar_2value',
 					'size'			=> 4,
 					'undeletable'	=> true,
 				),
 				'second_name'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'character',
-					'name'			=> 'uc_bar_2name',
+					'lang'			=> 'uc_bar_2name',
 					'options'		=> array('rage' => 'uc_bar_rage', 'energy' => 'uc_bar_energy', 'mana' => 'uc_bar_mana', 'focus' => 'uc_bar_focus', 'runic-power' => 'uc_bar_runic-power'),
+					'tolang'		=> true,
 					'size'			=> 40,
 					'undeletable'	=> true,
 				),
@@ -332,27 +335,25 @@ if(!class_exists('wow')) {
 
 		public function changeprofilefields(){
 			$member_data	= $this->pdh->get('member', 'array', array($this->in->get('editid')));
-			$talents_array = $this->jquery->dd_ajax_request('member_class_id', array('profilefields[skill_1]', 'profilefields[skill_2]'), $this->game->get('classes', array('id_0')), array('--------'), $member_data['class_id'], 'addcharacter.php?ajax=talents', '', array($member_data['skill_1'], $member_data['skill_2']));
+			$talents_array = $this->jquery->dd_ajax_request('member_class_id', array('profilefields[skill1]', 'profilefields[skill2]'), $this->game->get('classes', array('id_0')), array('--------'), $member_data['class_id'], 'addcharacter.php?ajax=talents', '', array($member_data['skill1'], $member_data['skill2']));
 			return array(
 				'member_class_id'	=> array(
 					'category'		=> 'character',
-					'name'			=> 'class_id',
 					'lang'			=> 'class',
+					'name'			=> 'class_id',
 					'text'			=> $talents_array[0],
 					'directfield'	=> true,
 					'visible'		=> true
 				),
-				'skill_1'	=> array(
+				'skill1'	=> array(
 					'category'		=> 'character',
-					'name'			=> 'skill_1',
 					'lang'			=> 'uc_skill1',
 					'text'			=> $talents_array[1],
 					'directfield'	=> true,
 					'visible'		=> true
 				),
-				'skill_2'	=> array(
+				'skill2'	=> array(
 					'category'		=> 'character',
-					'name'			=> 'skill_2',
 					'lang'			=> 'uc_skill2',
 					'text'			=> $talents_array[2],
 					'directfield'	=> true,

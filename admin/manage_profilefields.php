@@ -34,7 +34,7 @@ class ManageProfileFields extends page_generic {
 			'disable' => array('process' => 'disable', 'csrf'=>true),
 			'new'	=> array('process' => 'edit'),
 		);
-		parent::__construct(false, $handler, array('profile_fields', 'language'), null, 'del_ids[]');
+		parent::__construct(false, $handler, array('profile_fields', 'lang'), null, 'del_ids[]');
 		$this->process();
 	}
 
@@ -96,7 +96,9 @@ class ManageProfileFields extends page_generic {
 	}
 
 	public function edit(){
-		$field_data = $this->pdh->get('profile_fields', 'fields', array($this->in->get('edit')));
+		if($this->in->get('edit')) $field_data = $this->pdh->get('profile_fields', 'fields', array($this->in->get('edit')));
+		else $field_data = array('lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
+		pd($field_data);
 		$types = array(
 			'text'		=> 'Text',
 			'int'		=> 'Integer',
@@ -114,18 +116,18 @@ class ManageProfileFields extends page_generic {
 		$this->tpl->assign_vars(array (
 			'L_IMAGE_NOTE'				=> sprintf($this->user->lang('profilefield_image_note'), $this->game->get_game()),
 			'F_PAGE_MANAGER'			=> 'manage_profilefields.php'.$this->SID,
-			'ID'						=> ($this->in->get('edit')) ? $this->in->get('edit') : '',
-			'LANGUAGE'					=> (isset($field_data['language'])) ? $field_data['language'] : '',
-			'OPTIONS_LANGUAGE'			=> (isset($field_data['options_language'])) ? $field_data['options_language'] : '',
-			'TYPE_DD'					=> new hdropdown('type', array('options' => $types, 'value' => ((isset($field_data['fieldtype'])) ? $field_data['fieldtype'] : ''), 'js' => ' onchange="handle_fieldtypes(this.value);"')),
+			'ID'						=> $this->in->get('edit'),
+			'LANGUAGE'					=> $field_data['lang'],
+			'OPTIONS_LANGUAGE'			=> $field_data['options_language'],
+			'TYPE_DD'					=> new hdropdown('type', array('options' => $types, 'value' => $field_data['type'], 'id' => 'type_dd')),
 			
-			'CATEGORY_DD'				=> new hdropdown('type', array('options' => $categories, 'value' => ((isset($field_data['category'])) ? $field_data['category'] : ''))),
-			'SIZE'						=> (isset($field_data['size'])) ? $field_data['size'] : '',
-			'IMAGE'						=> (isset($field_data['image'])) ? $field_data['image'] : '',
-			'S_SHOW_OPTIONS'			=> (isset($field_data['fieldtype']) && $field_data['fieldtype'] == 'dropdown') ? '' : 'style="display:none;"',
+			'CATEGORY_DD'				=> new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])),
+			'SIZE'						=> $field_data['size'],
+			'IMAGE'						=> $field_data['image'],
+			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown') ? '' : 'style="display:none;"',
 		));
 
-		if (isset($field_data['fieldtype']) && $field_data['fieldtype'] == 'dropdown'){
+		if ($field_data['type'] == 'dropdown'){
 			foreach ($field_data['options'] as $key => $value){
 				$this->tpl->assign_block_vars('options_row', array(
 					'ID'		=> $key,
@@ -133,6 +135,20 @@ class ManageProfileFields extends page_generic {
 				));
 			}
 		}
+		
+		$this->tpl->add_js('
+$("#addopt_icon").click(function(){
+	var fields = $("#new_options > span:last-child").clone(true);
+	$("#addopt_icon").remove();
+	$("#new_options").append(fields);
+});
+$("#type_dd").change(function(){
+	if($("#type_dd").attr("value") == "dropdown") {
+		$("#options_row").show();
+	} else {
+		$("#options_row").hide();
+	}
+});', 'docready');
 
 		$this->core->set_vars(array (
 			'page_title'		=> $this->user->lang('manage_profilefields'),
@@ -152,11 +168,11 @@ class ManageProfileFields extends page_generic {
 			foreach ($fields as $key=>$value){
 				$this->tpl->assign_block_vars('profile_row', array (
 					'ID'			=> $key,
-					'TYPE'			=> $value['fieldtype'],
+					'TYPE'			=> $value['type'],
 					'CATEGORY'		=> ($this->game->glang('uc_cat_'.$value['category'])) ?  $this->game->glang('uc_cat_'.$value['category']) : $this->user->lang('uc_cat_'.$value['category']),
 					'SIZE'			=> $value['size'],
 					'VISIBLE'		=> $value['visible'],
-					'NAME'			=> $value['language'],
+					'NAME'			=> $value['lang'],
 					'ENABLED_ICON'	=> ($value['enabled'] == 1) ? 'green' : 'red',
 					'ENABLE'		=> ($value['enabled'] == 1) ? 'disable' : 'enable',
 					'L_ENABLE'		=> ($value['enabled'] == 1) ? $this->user->lang('deactivate') : $this->user->lang('activate'),

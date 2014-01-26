@@ -77,6 +77,28 @@ if(!class_exists('swtor')) {
 		* @param array $langs
 		*/
 		protected function load_filters($langs) {}
+		
+		public function profilefields() {
+			$fields = array(
+				'gender'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'character',
+					'lang'			=> 'uc_gender',
+					'options'		=> array('male' => 'uc_male', 'female' => 'uc_female'),
+					'undeletable'	=> true,
+					'visible'		=> true
+				),
+				'guild'	=> array(
+					'type'			=> 'text',
+					'category'		=> 'character',
+					'lang'			=> 'uc_guild',
+					'size'			=> 40,
+					'undeletable'	=> true,
+					'visible'		=> true
+				)
+			);
+			return $fields;
+		}
 
 		public function get_OnChangeInfos($install=false){
 			//classcolors
@@ -87,6 +109,17 @@ if(!class_exists('swtor')) {
 			#if($install){
 			#}
 			return $info;
+		}
+		
+		public function admin_settings() {
+			$admin_settings = array('swtor_faction'	=> array(
+				'lang'		=> 'swtor_faction',
+				'type'		=> 'dropdown',
+				'size'		=> '1',
+				'options'	=> $this->game->get('factions'),
+				'default'	=> 0
+			));
+			return $admin_settings;
 		}
 	}
 }

@@ -53,7 +53,7 @@ if (!class_exists('exchange_raid_signup')){
 						
 						if (intval($memberid) > 0 && in_array($memberid, $mychars)){
 							// auto confirm if enabled
-							$usergroups		= unserialize($this->config->get('calendar_raid_autoconfirm'));
+							$usergroups		= $this->config->get('calendar_raid_autoconfirm');
 							$signupstatus	= ($xml->status && intval($xml->status) < 5 && intval($xml->status) >0) ? intval($xml->status) : 4;
 							if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 								if($this->user->check_group($usergroups, false)){
