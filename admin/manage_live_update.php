@@ -24,7 +24,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Live_Update extends page_generic {
 		public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'jquery', 'core', 'config', 'pfh', 'repo' => 'repository', 'html');
+		$shortcuts = array('user', 'tpl', 'in', 'jquery', 'core', 'config', 'pfh', 'repo' => 'repository', 'html', 'encrypt' => 'encrypt');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -167,11 +167,12 @@ class Manage_Live_Update extends page_generic {
 	public function process_step1(){
 		$downloadLink = $this->repo->getCoreUpdateDownloadLink();
 
-		$encrypt = register('encrypt');
 		if ($downloadLink && strlen($downloadLink['link'])){
-			$this->config->set('download_link', $encrypt->encrypt($downloadLink['link']), 'live_update');
-			$this->config->set('download_hash', $encrypt->encrypt($downloadLink['hash']), 'live_update');
-			$this->config->set('download_signature', $encrypt->encrypt($downloadLink['signature']), 'live_update');
+			$this->config->set('download_link', $this->encrypt->encrypt($downloadLink['link']), 'live_update');
+			$this->config->set('download_hash', $this->encrypt->encrypt($downloadLink['hash']), 'live_update');
+			$this->config->set('download_signature', $this->encrypt->encrypt($downloadLink['signature']), 'live_update');
+			$new_version = str_replace('.', '', $this->getNewVersion());
+			$this->config->set('download_newversion', $this->encrypt->encrypt($new_version), 'live_update');
 			echo "true";
 		} else {
 			echo $this->user->lang('liveupdate_step1_error');
@@ -181,8 +182,8 @@ class Manage_Live_Update extends page_generic {
 
 	//Download Package
 	public function process_step2(){
-		$encrypt = register('encrypt');
-		$downloadLink = $encrypt->decrypt($this->config->get('download_link', 'live_update'));
+		
+		$downloadLink = $this->encrypt->decrypt($this->config->get('download_link', 'live_update'));
 		$new_version = str_replace('.', '', $this->getNewVersion());
 
 		$destFolder = $this->pfh->FolderPath('update_to_'.$new_version,'live_update');
@@ -190,7 +191,7 @@ class Manage_Live_Update extends page_generic {
 		$this->pfh->secure_folder('','live_update');
 		$this->repo->downloadPackage($downloadLink, $destFolder, $filename);
 
-		if ($this->repo->verifyPackage($destFolder.$filename, $encrypt->decrypt($this->config->get('download_hash', 'live_update')), $encrypt->decrypt($this->config->get('download_signature', 'live_update')))){
+		if ($this->repo->verifyPackage($destFolder.$filename, $this->encrypt->decrypt($this->config->get('download_hash', 'live_update')), $this->encrypt->decrypt($this->config->get('download_signature', 'live_update')))){
 			echo "true";
 		} else {
 			echo $this->user->lang('liveupdate_step2_error');
@@ -231,8 +232,8 @@ class Manage_Live_Update extends page_generic {
 		}
 
 		if (count($arrChanged) > 0){
-			$encrypt = register('encrypt');
-			$this->config->set('conflicted_files', $encrypt->encrypt(serialize($arrChanged)), 'live_update');
+			
+			$this->config->set('conflicted_files', $this->encrypt->encrypt(serialize($arrChanged)), 'live_update');
 		}
 
 		echo "true";
@@ -244,10 +245,10 @@ class Manage_Live_Update extends page_generic {
 		$zipfile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'conflicted_files.zip';
 		$archive = registry::register('zip', array($zipfile));
 
-		$encrypt = register('encrypt');
+		
 
 		//Conflicted Files
-		$arrConflictedFiles = unserialize($encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
+		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
 		foreach ($arrConflictedFiles as $file){
 			$arrFiles[] = $this->root_path.$file;
 		}
@@ -276,11 +277,11 @@ class Manage_Live_Update extends page_generic {
 			return;
 		}
 
-		$encrypt = register('encrypt');
+		
 		$stop = false;
 
 		//Conflicted Files
-		$arrConflictedFiles = unserialize($encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
+		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
 		if ($arrConflictedFiles && is_array($arrConflictedFiles) && count($arrConflictedFiles) > 0){
 			$stop = true;
 			
@@ -366,7 +367,8 @@ class Manage_Live_Update extends page_generic {
 
 	//Check if all new files have been copied to the right place
 	public function process_step8(){
-		$new_version = str_replace('.', '', $this->getNewVersion());
+		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
+		
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
@@ -381,22 +383,22 @@ class Manage_Live_Update extends page_generic {
 				}
 			}
 		}
-		$encrypt = register('encrypt');
-		$this->config->set('missing_files', $encrypt->encrypt(serialize($arrMissingFiles)), 'live_update');
+		
+		$this->config->set('missing_files', $this->encrypt->encrypt(serialize($arrMissingFiles)), 'live_update');
 
 		echo "true";
 		exit;
 	}
 
 	private function download_missing_files(){
-		$new_version = str_replace('.', '', $this->getNewVersion());
+		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version,'live_update');
 		$zipfile = $tmp_folder.'missing_files.zip';
 		$archive = registry::register('zip', array($zipfile));
 
 		//Missing Files
-		$encrypt = register('encrypt');
-		$arrConflictedFiles = unserialize($encrypt->decrypt($this->config->get('missing_files', 'live_update')));
+		
+		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
 		foreach ($arrConflictedFiles as $file){
 			if (file_exists($tmp_folder.'tmp/'.$file)) {
 				$arrFiles[] = $tmp_folder.'tmp/'.$file;
@@ -422,8 +424,8 @@ class Manage_Live_Update extends page_generic {
 			$this->download_missing_files();
 			return;
 		}
-		$encrypt = register('encrypt');
-		$arrMissingFiles = unserialize($encrypt->decrypt($this->config->get('missing_files', 'live_update')));
+		
+		$arrMissingFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
 		if ($arrMissingFiles && count($arrMissingFiles) > 0){
 			$this->bring_steps_to_template(9, false, 8);
 
@@ -442,7 +444,7 @@ class Manage_Live_Update extends page_generic {
 
 	//Delete removed files
 	public function process_step10(){
-		$new_version = str_replace('.', '', $this->getNewVersion());
+		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile, 'removed');
@@ -458,7 +460,7 @@ class Manage_Live_Update extends page_generic {
 
 	//Delete Installationfiles
 	public function process_step11(){
-		$new_version = str_replace('.', '', $this->getNewVersion());
+		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
 		$folder = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update');
 		$this->pfh->Delete('update_to_'.$new_version, 'live_update');
 		$this->config->del('live_update');

@@ -177,8 +177,10 @@ if (!class_exists("zip")) {
 				$blnOpen = $this->objZip->open($strTempArchiv, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
 				if ($blnOpen){
 					foreach ($this->files['add'] as $key => $value){
-						$blnResult = $this->objZip->addFile($value, $key);
-						if (!$blnResult) return false;
+						if (is_file($value)){
+							$blnResult = $this->objZip->addFile($value, $key);
+							if (!$blnResult) return false;
+						}
 					}
 					$this->objZip->close();
 					$this->pfh->FileMove($strTempArchiv, $this->zipfile);
