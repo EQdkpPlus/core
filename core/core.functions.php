@@ -235,13 +235,14 @@ function get_coloured_names($norm, $pos=array(), $neg=array()){
 * CHANGING, REMOVING OR OBSTRUCTING IT IS PROHIBITED BY LAW!
 */
 function gen_htmlhead_copyright($text){
-	return preg_replace('/(<head[^>]*>)/',
+
+	return preg_replace('/(<head[^er>]*>)/',
 			"$1\n\t<!--\n\n"
 			."\tThis website is powered by EQDKP-PLUS Gamers CMS :: Licensed under Creative Commons by-nc-sa 3.0\n"
 			."\tCopyright © 2006-" . date('Y') . " by EQDKP-PLUS Dev Team :: Plugins are copyright of their authors\n"
 			."\tVisit the project website at ".EQDKP_PROJECT_URL." for more information\n\n"
 			."\t//-->",
-			$text, 1);
+			$text);
 }
 
 /**
