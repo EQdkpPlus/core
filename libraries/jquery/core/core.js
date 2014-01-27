@@ -52164,6 +52164,110 @@ $.extend(TRUE, QTIP.defaults, {
 
 })(jQuery);
 
+/*!
+ * jQuery relativeTime v1.0.0
+ *
+ * Copyright 2014 Eqdkp-Plus Dev Team
+ */
+(function($) {
+
+	var relativeTime = {
+		_elements: null,
+
+		_selector: 'time.datetime',
+
+		_settings: {
+			disableAtDiff: 518400,
+			debug: 0,
+		},
+
+		_domInserted: 0,
+
+		_domNodeInserted: function(){
+			if (this._settings.debug) console.log("dom");
+			
+			this._domInserted = 1;
+		},
+
+		init: function (options, selector){
+			this._settings = options;
+			this._selector = selector;
+			
+			this._elements = $(selector);
+			this._refresh();
+			
+			$("html").bind("DOMNodeInserted", function( e ) {
+				if (e.target.className != "user_time") {
+					$.proxy(relativeTime, "_domNodeInserted")();
+				}
+			});
+			
+			this._periodic();
+			this._periodicDomInserted();
+		},
+		
+		_periodic: function (){
+			if (this._settings.debug) console.log("periodic");
+			
+			this._refresh();
+		
+			window.setTimeout($.proxy(function() {
+				relativeTime._periodic();
+			}), 60000);
+		},
+		
+		_periodicDomInserted: function() {
+			if (this._domInserted){
+				this._elements = $(this._selector);
+				this._refresh();
+				
+				this._domInserted = 0;	
+			}
+			
+			window.setTimeout($.proxy(function() {
+				relativeTime._periodicDomInserted();
+			}), 500);
+		},
+		
+		_refresh: function (){
+			if (this._settings.debug) console.log("refresh");
+						
+			this._elements.each($.proxy(this._refreshElement, this));
+		},
+		
+		_refreshElement: function(index, element){
+			var $element = $(element);
+			timestamp = moment($element.attr('datetime'));
+			unix = moment().unix();
+			if (moment.isMoment(timestamp)){
+				delta = unix - timestamp.unix();
+				
+				if (this._settings.debug) console.log("Delta: "+delta);
+				if (this._settings.disableAtDiff){
+					if (delta <= this._settings.disableAtDiff){
+						$element.html(timestamp.fromNow());
+					}
+				}
+
+			}
+			
+		}
+		
+		
+	};
+	
+	$.fn.relativeTime = function( options ) {
+
+		// Establish our default settings
+		var settings = $.extend({
+			disableAtDiff	: 518400,
+			debug: 0,
+		}, options);
+
+		relativeTime.init(settings, this.selector);
+		return this;
+	};
+}(jQuery));
 (function ($) {
 	$.fn.rssReader = function (j) {
 	  var container = this;
@@ -56058,136 +56162,6 @@ $.format = $.validator.format;
 		}
 	});
 }(jQuery));
-
-// Livestamp.js / v1.1.2 / (c) 2012 Matt Bradley / MIT License
-(function($, moment) {
-  var updateInterval = 1e3,
-      paused = false,
-      $livestamps = $([]),
-
-  init = function() {
-    livestampGlobal.resume();
-  },
-
-  prep = function($el, timestamp) {
-    var oldData = $el.data('livestampdata');
-    if (typeof timestamp == 'number')
-      timestamp *= 1e3;
-
-    $el.removeAttr('data-livestamp')
-      .removeData('livestamp');
-
-    timestamp = moment(timestamp);
-    if (moment.isMoment(timestamp) && !isNaN(+timestamp)) {
-      var newData = $.extend({ }, { 'original': $el.contents() }, oldData);
-      newData.moment = moment(timestamp);
-
-      $el.data('livestampdata', newData).empty();
-      $livestamps.push($el[0]);
-    }
-  },
-
-  run = function() {
-    if (paused) return;
-    livestampGlobal.update();
-    setTimeout(run, updateInterval);
-  },
-
-  livestampGlobal = {
-    update: function() {
-      $('[data-livestamp]').each(function() {
-        var $this = $(this);
-        prep($this, $this.data('livestamp'));
-      });
-
-      var toRemove = [];
-      $livestamps.each(function() {
-        var $this = $(this),
-            data = $this.data('livestampdata');
-
-        if (data === undefined)
-          toRemove.push(this);
-        else if (moment.isMoment(data.moment)) {
-          var from = $this.html(),
-              to = data.moment.fromNow();
-
-          if (from != to) {
-            var e = $.Event('change.livestamp');
-            $this.trigger(e, [from, to]);
-            if (!e.isDefaultPrevented())
-              $this.html(to);
-          }
-        }
-      });
-
-      $livestamps = $livestamps.not(toRemove);
-    },
-
-    pause: function() {
-      paused = true;
-    },
-
-    resume: function() {
-      paused = false;
-      run();
-    },
-
-    interval: function(interval) {
-      if (interval === undefined)
-        return updateInterval;
-      updateInterval = interval;
-    }
-  },
-
-  livestampLocal = {
-    add: function($el, timestamp) {
-      if (typeof timestamp == 'number')
-        timestamp *= 1e3;
-      timestamp = moment(timestamp);
-
-      if (moment.isMoment(timestamp) && !isNaN(+timestamp)) {
-        $el.each(function() {
-          prep($(this), timestamp);
-        });
-        livestampGlobal.update();
-      }
-
-      return $el;
-    },
-
-    destroy: function($el) {
-      $livestamps = $livestamps.not($el);
-      $el.each(function() {
-        var $this = $(this),
-            data = $this.data('livestampdata');
-
-        if (data === undefined)
-          return $el;
-
-        $this
-          .html(data.original ? data.original : '')
-          .removeData('livestampdata');
-      });
-
-      return $el;
-    },
-
-    isLivestamp: function($el) {
-      return $el.data('livestampdata') !== undefined;
-    }
-  };
-
-  $.livestamp = livestampGlobal;
-  $(init);
-  $.fn.livestamp = function(method, options) {
-    if (!livestampLocal[method]) {
-      options = method;
-      method = 'add';
-    }
-
-    return livestampLocal[method](this, options);
-  };
-})(jQuery, moment);
 
 /*
 * jQuery Frame Dialog 1.1.2
