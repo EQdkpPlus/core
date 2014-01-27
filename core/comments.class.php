@@ -125,6 +125,9 @@ if (!class_exists("comments")){
 			// the line for the comment to be posted
 			if(($this->user->is_signedin() && $this->userPerm) || $this->showFormForGuests){
 				$html .= $this->Form($this->attach_id, $this->page);
+			} else {
+				$html .= '<div id="comment_data'.$this->id.'"><input type="hidden" name="attach_id" value="'.$this->attach_id.'"/>
+						<input type="hidden" name="page" value="'.$this->page.'"/></div>';
 			}
 			$html .= '</div>';
 			return $html;
@@ -160,7 +163,7 @@ if (!class_exists("comments")){
 									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 								</div>
 								<div class="comment_container">
-									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a> am '.$this->time->user_date($row['date'], true).'</div>';
+									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a>, '.$this->time->createTimeTag($row['date'], $this->time->user_date($row['date'], true)).'</div>';
 					if($this->isAdmin OR $row['userid'] == $this->UserID){
 						$out[] .= '<div class="comments_delete bold floatRight hand"><i class="fa fa-times-circle fa-lg icon-grey"></i>';
 						$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
@@ -189,7 +192,7 @@ if (!class_exists("comments")){
 											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
 										</div>
 										<div class="comment_container">
-											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a> am '.$this->time->user_date($com['date'], true).'</div>';
+											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a>, '.$this->time->createTimeTag($com['date'], $this->time->user_date($com['date'], true)).'</div>';
 							if($this->isAdmin OR $com['userid'] == $this->UserID){
 								$out[] .= '<div class="comments_delete bold floatRight hand"><i class="fa fa-times-circle fa-lg icon-grey"></i>';
 								$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
@@ -354,7 +357,6 @@ if (!class_exists("comments")){
 							}
 						});
 						
-						reload_comments".$this->id."();
 						";
 			$this->tpl->add_js($jscode, 'docready');
 			

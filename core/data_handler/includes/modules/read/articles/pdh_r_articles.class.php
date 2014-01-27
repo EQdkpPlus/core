@@ -416,7 +416,6 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public function get_path($intArticleID){		
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
-			if (!intval($this->config->get('seo_remove_index'))) $strPath = 'index.php/'.$strPath;
 
 			$strPath .= ucfirst($this->get_alias($intArticleID));
 			
@@ -445,7 +444,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public function get_breadcrumb($intArticleID, $strAdditionalString=''){
 			$strBreadcrumb = $this->add_breadcrumb($this->get_category($intArticleID));
 
-			$strBreadcrumb .=  '<li class="current"><a href="'.$this->server_path.$this->get_path($intArticleID).'">'.$this->get_title($intArticleID).$strAdditionalString.'</a></li>';
+			$strBreadcrumb .=  '<li class="current"><a href="'.$this->controller_path.$this->get_path($intArticleID).'">'.$this->get_title($intArticleID).$strAdditionalString.'</a></li>';
 			return $strBreadcrumb;
 		}
 		
@@ -453,7 +452,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			if ($intCategoryID == 1) return $strBreadcrumb;
 			$strName = $this->pdh->get('article_categories', 'name', array($intCategoryID));
 			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
-			$strBreadcrumb = '<li><a href="'.$this->server_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+			$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
 			
 			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
 				$strBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', array($intCategoryID)), $strBreadcrumb);

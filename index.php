@@ -212,7 +212,7 @@ class controller extends gen_class {
 			if ($pageCount > 1) {
 				foreach($arrTitles as $key => $val){
 					$this->tpl->assign_block_vars('articlesitemap_row', array(
-						'LINK' => '<a href="'.$this->server_path.$strPath.'&amp;page='.$key.'">'.$val.'</a>',
+						'LINK' => '<a href="'.$this->controller_path.$strPath.'&amp;page='.$key.'">'.$val.'</a>',
 						'ACTIVE' => ($key == $intPageID),
 					));
 				}
@@ -231,8 +231,8 @@ class controller extends gen_class {
 				$this->tpl->assign_vars(array(
 					'S_NEXT_ARTICLE'	=> ($nextID !== false) ? true : false,
 					'S_PREV_ARTICLE'	=> ($prevID !== false) ? true : false,
-					'U_NEXT_ARTICLE'	=> ($nextID) ? $this->server_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
-					'U_PREV_ARTICLE'	=> ($prevID) ? $this->server_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
+					'U_NEXT_ARTICLE'	=> ($nextID) ? $this->controller_path.$this->pdh->get('articles', 'path', array($nextID)) : '',
+					'U_PREV_ARTICLE'	=> ($prevID) ? $this->controller_path.$this->pdh->get('articles', 'path', array($prevID)) : '',
 					'NEXT_TITLE'		=> ($nextID) ? $this->pdh->get('articles', 'title', array($nextID)) : '',
 					'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
 				));
@@ -320,7 +320,7 @@ class controller extends gen_class {
 			include_once($this->root_path.'core/gallery.class.php');
 			foreach($arrGalleryObjects[4] as $key=>$val){
 				$objGallery = registry::register('gallery');
-				$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->server_path.$strPath, $intPageID);
+				$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->controller_path.$strPath, $intPageID);
 				$strContent = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strContent);
 			}
 		}
@@ -351,18 +351,19 @@ class controller extends gen_class {
 		}
 
 			$this->tpl->assign_vars(array(
-				'PAGINATION' 	  => generate_pagination($this->server_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
+				'PAGINATION' 	  => generate_pagination($this->controller_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
 				'ARTICLE_CONTENT' => $strContent,
 				'ARTICLE_TITLE'	  => $arrTitles[$intPageID],
 				'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($arrArticle['date'], false, true)),
 				'ARTICLE_DATE'	  => $this->time->user_date($arrArticle['date'], false, false, true),
+				'ARTICLE_TIMETAG'	=> $this->time->createTimeTag($arrArticle['date'], $this->time->user_date($arrArticle['date'], false, false, true).', '.$this->time->user_date($arrArticle['date'], false, true)),					
 				'ARTICLE_AUTHOR'	=> $userlink,
 				'ARTICLE_TIME'		=> $this->time->user_date($arrArticle['date'], false, true),
 				'S_PAGINATION'	  => ($pageCount > 1) ? true : false,
 				'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$strPath, strip_tags($arrArticle['title'])) : '',
 				'PERMALINK'		  => $this->pdh->get('articles', 'permalink', array($intArticleID)),
 				'BREADCRUMB'	  => $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles)),
-				'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->starrating($intArticleID, $this->server_path.$strPath.'&savevote&link_hash='.$this->CSRFGetToken('savevote'), array('score' => (($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), 'number' => 10)) : '',
+				'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->starrating($intArticleID, $this->controller_path.$strPath.'&savevote&link_hash='.$this->CSRFGetToken('savevote'), array('score' => (($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), 'number' => 10)) : '',
 				//'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 				'ARTICLE_TOOLBAR' => $jqToolbar['id'],
 				'S_TOOLBAR'		=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
@@ -453,7 +454,7 @@ class controller extends gen_class {
 					include_once($this->root_path.'core/gallery.class.php');
 					foreach($arrGalleryObjects[4] as $key=>$val){
 						$objGallery = registry::register('gallery');
-						$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->server_path.$strPath, 1);
+						$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->controller_path.$strPath, 1);
 						$strText = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strText);
 					}
 				}
@@ -511,16 +512,18 @@ class controller extends gen_class {
 				//Tags
 				$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
 
-				
+
 				$this->tpl->assign_block_vars('article_row', array(
 					'ARTICLE_CONTENT' => $strText,
 					'ARTICLE_TITLE'	  => $this->pdh->get('articles',  'title', array($intArticleID)),
 					'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
-					'ARTICLE_DATE'	  => $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true),
+					'ARTICLE_DATE'	  => $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true),	
+					'ARTICLE_TS'		=> $this->pdh->get('articles', 'date', array($intArticleID)),
+					'ARTICLE_TIMETAG'	=> $this->time->createTimeTag($this->pdh->get('articles', 'date', array($intArticleID)), $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true).', '.$this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
 					'ARTICLE_AUTHOR'	=> $userlink,
 					'ARTICLE_TIME'		=> $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true),
-					'ARTICLE_PATH'		=> $this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)),
-					'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
+					'ARTICLE_PATH'		=> $this->controller_path.$this->pdh->get('articles',  'path', array($intArticleID)),
+					'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->controller_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
 					'ARTICLE_TOOLBAR' => $jqToolbar['id'],
 					'PERMALINK'		=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
@@ -555,7 +558,7 @@ class controller extends gen_class {
 					foreach($arrChilds as $intChildID){
 						$this->tpl->assign_block_vars('child_row', array(
 							'NAME' 	=> $this->pdh->get('article_categories', 'name', array($intChildID)),
-							'U_PATH'=> $this->server_path.$this->pdh->get('article_categories', 'path', array($intChildID)),
+							'U_PATH'=> $this->controller_path.$this->pdh->get('article_categories', 'path', array($intChildID)),
 							'COUNT' => count($this->pdh->get('article_categories', 'published_id_list', array($intChildID))),
 							'DESC'  => strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($this->pdh->get('article_categories', 'description', array($intChildID)))))),
 						));
@@ -601,7 +604,7 @@ class controller extends gen_class {
 			}
 			
 			$this->tpl->assign_vars(array(
-				'PAGINATION' 	  		=> generate_pagination($this->server_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
+				'PAGINATION' 	  		=> generate_pagination($this->controller_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
 				'CATEGORY_DESCRIPTION' => $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
 				'CATEGORY_NAME'		   => $arrCategory['name'],
 				'PERMALINK'		  	=> $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),

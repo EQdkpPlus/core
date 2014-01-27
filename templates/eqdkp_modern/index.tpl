@@ -23,47 +23,15 @@
 			//<![CDATA[
 			{JS_CODE}
 					
-			var user_timestamp = "{USER_TIMESTAMP}";
-			var user_daynames = {USER_DAYNAMES};
-			var user_monthnames = {USER_MONTHNAMES};
-			var user_clock_format = "l, {USER_DATEFORMAT_LONG} {USER_TIMEFORMAT}";
-			var date = new Date(user_timestamp);
-			function user_clock(){
-				var zeroPad = function(number) {
-					 return ("0"+number).substr(-2,2);
-				}
-
-				var dateMarkers = {
-					l: ['getDay',function(v) { return user_daynames[((v+6)%7)]; }],
-					j: ['getDate'],
-					d: ['getDate',function(v) { return zeroPad(v)}],
-					F: ['getMonth',function(v) { return user_monthnames[v]; }],
-					m: ['getMonth',function(v) { return zeroPad(v+1)}],
-					n: ['getMonth',function(v) { return (v+1)}],
-					Y: ['getFullYear'],
-					y: ['getFullYear'],
-					h: ['getHours',function(v) { return zeroPad(v%12)}],
-					H: ['getHours',function(v) { return zeroPad(v)}],
-					g: ['getHours',function(v) { return (v%12)}],
-					G: ['getHours'],
-					i: ['getMinutes',function(v) { return zeroPad(v)}],
-					a: ['getHours',function(v) { if(v >= 12) {return "pm";} else {return "am";}}],
-					A: ['getHours',function(v) { if(v >= 12) {return "PM";} else {return "AM";}}],
-				};
-				   
-				   
-				var dateTxt = this.user_clock_format.replace(/(.)/g, function(m, p) {
-					if (dateMarkers[p] == undefined){
-						return p;
-					}
-					var rv = date[(dateMarkers[p])[0]]();
-					if ( dateMarkers[p][1] != null ) rv = dateMarkers[p][1](rv);
-					return rv;
-				});
-
-				$('.user_time').html(dateTxt);
-				date.setMinutes(date.getMinutes() + 1);
-				window.setTimeout("user_clock()", 60000); // 60 seconds
+			var user_timestamp_atom = "{USER_TIMESTAMP_ATOM}";
+			var user_clock_format = "dddd, {USER_DATEFORMAT_LONG} {USER_TIMEFORMAT}";
+			
+			var mymoment = moment(user_timestamp_atom);
+			function user_clock(){	
+				var mydate = mymoment.format(user_clock_format);
+				$('.user_time').html(mydate);
+				mymoment.add('s', 1);
+				window.setTimeout("user_clock()", 1000);
 			}
 			
 			$(document).ready(function() {

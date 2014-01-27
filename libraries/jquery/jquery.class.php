@@ -88,6 +88,7 @@ if (!class_exists("jquery")) {
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
+				$this->tpl->add_js('$("time.datetime").relativeTime();', 'docready');
 		}
 		public function langfile($file){
 			if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {

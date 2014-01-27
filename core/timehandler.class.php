@@ -406,6 +406,12 @@ if (!class_exists("timehandler")){
 		
 		
 		
+		/**
+		 * Transforms php date format into moment.js format
+		 * 
+		 * @param string $format PHP-Date-Format
+		 * @return string	moment.js Format
+		 */
 		public function translateformat2momentjs($format){
 			//php => momentjs
 			$types = array(
@@ -429,6 +435,11 @@ if (!class_exists("timehandler")){
 				's'		=> 'ss'	
 			);
 			return str_replace(array_keys($types), array_values($types), $format);
+		}
+		
+		public function createTimeTag($date, $strText, $strCSSClass=""){
+			return '<time class="datetime '.$strCSSClass.'" data-timestamp="'.$date.'" datetime="'.$this->date(DATE_ATOM, $date).'" title="'.$strText.'">
+			'.$strText.'</time>';
 		}
 		
 		/**
