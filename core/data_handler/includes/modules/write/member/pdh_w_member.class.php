@@ -332,7 +332,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$old['profiledata'] = $this->pdh->get('member', 'profiledata', array($member_id));
 				$data['profiledata'] = $this->profilefields(array_merge($this->xmltools->Database2Array($old['profiledata']), $data));
 			}
-			$this->db->query("UPDATE __members :p WHERE member_id = ?;", array('profiledata'=>$data['profiledata']), $member_id);
+			$this->db->query("UPDATE __members :params WHERE member_id = ?;", array('profiledata'=>$data['profiledata']), $member_id);
 			$this->pdh->enqueue_hook('member_update');
 		}
 
