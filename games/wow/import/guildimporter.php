@@ -183,15 +183,16 @@ class guildImporter extends page_generic {
 		if(in_array($this->in->get('name', ''), $this->pdh->get('member', 'names', array()))){
 			$successmsg = 'available';
 
-			// Fix for connected realms.... 
+			// Fix for connected realms....
+			$member_id = $this->pdh->get('member', 'id', array($this->in->get('name', '')));
+			
 			$server_name = $this->in->get('servername', '');
 			if(isset($server_name) && $server_name != ''){
 				$this->pdh->put('member', 'update_profilefield', array($member_id, array('servername'=>$server_name)));
 			}
 
 			//Revoke Char
-			if ($this->in->get('del', '') == 'true'){
-				$member_id = $this->pdh->get('member', 'id', array($this->in->get('name', '')));
+			if ($this->in->get('del', '') == 'true'){		
 				if ($member_id) {
 					$this->pdh->put('member', 'revoke', array($member_id));
 					$this->pdh->process_hook_queue();
