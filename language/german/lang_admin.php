@@ -580,6 +580,7 @@ $lang = array(
 "pdc_cache_info_xcache" => "XCache Caching System. Siehe <a href=\"http://xcache.lighttpd.net\">hier</a> für mehr Informationen.",
 "pdc_cache_info_apc" => "Alternativer PHP Cache (APC). Siehe <a href=\"http://de.php.net/apc\">hier</a> für mehr Informationen.",
 "pdc_cache_info_memcache" => "Memcache. Siehe <a href=\"http://de.php.net/memcache\">hier</a> für mehr Informationen.",
+"pdc_expire_time" => "Ablaufdatum",
 "pluskernel" => "EQDKP-PLUS Core",
 "attention" => "Achtung",
 "pk_save_title" => "Einstellungen gespeichert",
