@@ -404,6 +404,33 @@ if (!class_exists("timehandler")){
 			return str_replace(array_keys($this->formtrans), array_values($this->formtrans), $format);
 		}
 		
+		
+		
+		public function translateformat2momentjs($format){
+			//php => momentjs
+			$types = array(
+				'd'		=> 'DD',
+				'z'		=> 'DDD',
+				'l'		=> 'dddd',
+				'D'		=> 'ddd',
+				'j'		=> 'D',
+				'm'		=> 'MM',
+				'n'		=> 'm',
+				'F'		=> 'MMMM',
+				'Y'		=> 'YYYY',
+				'y'		=> 'YY',
+				'a'		=> 'a',
+				'A'		=> 'A',
+				'h'		=> 'hh',
+				'H'		=> 'HH',
+				'g'		=> 'h',
+				'G'		=> 'H',
+				'i'		=> 'mm',
+				's'		=> 'ss'	
+			);
+			return str_replace(array_keys($types), array_values($types), $format);
+		}
+		
 		/**
 		 * Converts timezone offset to human-readable form
 		 * Part of timezone fix
