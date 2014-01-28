@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
 
 class bnet_armory {
 
-	private $version		= '5.1.0';
+	private $version		= '5.2.0';
 	private $build			= '$Rev$';
 	private $chariconUpdates = 0;
 	private $chardataUpdates = 0;
@@ -437,27 +437,45 @@ class bnet_armory {
 			$ring_size		= getimagesize($img_ring);
 			$emblem_image	= imagecreatefrompng($img_emblem);
 			$emblem_size	= getimagesize($img_emblem);
-			imagelayereffect($emblem_image, IMG_EFFECT_OVERLAY);
+			if($this->checkImageLayerEffect()){
+				imagelayereffect($emblem_image, IMG_EFFECT_OVERLAY);
+			}
 			$tmp_emblemcolor= preg_replace('/^ff/i','',$emblemdata['iconColor']);
 			$emblemcolor	= array(hexdec(substr($tmp_emblemcolor,0,2)), hexdec(substr($tmp_emblemcolor,2,2)), hexdec(substr($tmp_emblemcolor,4,2)));
-			imagefilledrectangle($emblem_image,0,0,$emblem_size[0],$emblem_size[1],imagecolorallocate($emblem_image, $emblemcolor[0], $emblemcolor[1], $emblemcolor[2]));
+			if($this->checkImageLayerEffect()){
+				imagefilledrectangle($emblem_image,0,0,$emblem_size[0],$emblem_size[1],imagecolorallocate($emblem_image, $emblemcolor[0], $emblemcolor[1], $emblemcolor[2]));
+			}else{
+				$this->imageColorize($emblem_image, $emblemcolor[0], $emblemcolor[1], $emblemcolor[2]);
+			}
 
 			// generate the border
 			$border			= imagecreatefrompng($img_border);
 			$border_size	= getimagesize($img_border);
-			imagelayereffect($border, IMG_EFFECT_OVERLAY);
+			if($this->checkImageLayerEffect()){
+				imagelayereffect($border, IMG_EFFECT_OVERLAY);
+			}
 			$tmp_bcolor		= preg_replace('/^ff/i','',$emblemdata['borderColor']);
 			$bordercolor	= array(hexdec(substr($tmp_bcolor,0,2)), hexdec(substr($tmp_bcolor,2,2)), hexdec(substr($tmp_bcolor,4,2)));
-			imagefilledrectangle($border,0,0,$border_size[0]+100,$border_size[0]+100,imagecolorallocate($border, $bordercolor[0], $bordercolor[1], $bordercolor[2]));
+			if($this->checkImageLayerEffect()){
+				imagefilledrectangle($border,0,0,$border_size[0]+100,$border_size[0]+100,imagecolorallocate($border, $bordercolor[0], $bordercolor[1], $bordercolor[2]));
+			}else{
+				$this->imageColorize($border, $bordercolor[0], $bordercolor[1], $bordercolor[2]);
+			}
 
 			// generate the background
 			$shadow			= imagecreatefrompng($img_shadow);
 			$bg				= imagecreatefrompng($img_background);
 			$bg_size		= getimagesize($img_background);
-			imagelayereffect($bg, IMG_EFFECT_OVERLAY);
+			if($this->checkImageLayerEffect()){
+				imagelayereffect($bg, IMG_EFFECT_OVERLAY);
+			}
 			$tmp_bgcolor	= preg_replace('/^ff/i','',$emblemdata['backgroundColor']);
 			$bgcolor		= array(hexdec(substr($tmp_bgcolor,0,2)), hexdec(substr($tmp_bgcolor,2,2)), hexdec(substr($tmp_bgcolor,4,2)));
-			imagefilledrectangle($bg,0,0,$bg_size[0]+100,$bg_size[0]+100,imagecolorallocate($bg, $bgcolor[0], $bgcolor[1], $bgcolor[2]));
+			if($this->checkImageLayerEffect()){
+				imagefilledrectangle($bg,0,0,$bg_size[0]+100,$bg_size[0]+100,imagecolorallocate($bg, $bgcolor[0], $bgcolor[1], $bgcolor[2]));
+			}else{
+				$this->imageColorize($bg, $bgcolor[0], $bgcolor[1], $bgcolor[2]);
+			}
 
 			// put it together...
 			imagecopy($img_genoutput,$ring,0,0,0,0, $ring_size[0],$ring_size[1]);
@@ -896,6 +914,65 @@ class bnet_armory {
 	*/
 	public function CheckError(){
 		return ($this->error) ? $this->error : false;
+	}
+
+	/**
+	* Check if the function imagelayereffect for GD is available
+	* 
+	* @return true/false
+	*/
+	private function checkImageLayerEffect(){
+		return function_exists('imagelayereffect');
+	}
+
+	/**
+	* Loop over image, and colorize non transparent pixels.
+	*
+	* Simulates the following two lines:  (see above)
+	*   imagelayereffect($image, IMG_EFFECT_OVERLAY);
+	*   imagefilledrectangle($image,0,0,$emblem_size[0],$emblem_size[1],imagecolorallocatealpha($image, $color_r, $color_g, $color_b,0));
+	*
+	* Source: http://drupal.org/node/1154970
+	*
+	* @param Image $image
+	* @param int $r_overlay
+	* @param int $g_overlay
+	* @param int $b_overlay
+	*/
+	private function imageColorize(&$image, $r_overlay, $g_overlay, $b_overlay) {
+		$height		= imagesy($image);
+		$width		= imagesx($image);
+
+		for($y=0;$y<$height;$y++) {
+			for($x=0;$x<$width;$x++) {
+				$rgb		= imagecolorat($image, $x, $y);
+				$alpha		= ($rgb >> 24) & 0xFF;
+				$r_source	= ($rgb >> 16) & 0xFF;
+				$g_source	= ($rgb >> 8) & 0xFF;
+				$b_source	= $rgb & 0xFF;
+
+				// Tweak this number if overlay looks weird.  (0 = Fully transparent, 127 = No transparancy)
+				if ($alpha < 50) {
+					if($r_source <= 128) {
+						$final_r = (2 * $r_source * $r_overlay) / 256;
+					}else{
+						$final_r = 255 - (((255 - (2 * ($r_source - 128))) * (255 - $r_overlay)) / 256);
+					}
+					if($g_source <= 128) {
+						$final_g = (2 * $g_source * $g_overlay) / 256;
+					}else{
+						$final_g = 255 - (((255 - (2 * ($g_source - 128))) * (255 - $g_overlay)) / 256);
+					}
+					if ($b_source <= 128) {
+						$final_b = (2 * $b_source * $b_overlay) / 256;
+					}else{
+						$final_b = 255 - (((255 - (2 * ($b_source - 128))) * (255 - $b_overlay)) / 256);
+					}
+					$final_colour = imagecolorallocate($image, $final_r, $final_g, $final_b);
+					imagesetpixel($image, $x, $y, $final_colour);
+				}
+			}
+		}
 	}
 }
 ?>
