@@ -415,7 +415,7 @@ class core extends gen_class {
 				$arrArticles = $this->pdh->get('articles', 'id_list', array($cid));
 				foreach($arrArticles as $articleID){
 					if (!$this->pdh->get('articles', 'published', array($articleID))) continue;
-					$arrItems[] = array('link' => $this->pdh->get('articles', 'path', array($articleID)), 'text' => $this->pdh->get('articles', 'title', array( $articleID)), 'article' => true, 'id' => $articleID);
+					$arrItems[] = array('link' => $this->controller_path_plain.$this->pdh->get('articles', 'path', array($articleID)), 'text' => $this->pdh->get('articles', 'title', array( $articleID)), 'article' => true, 'id' => $articleID);
 				}
 			}
 			
