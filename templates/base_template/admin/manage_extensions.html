@@ -195,7 +195,15 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_yellow.VERSION}</td>
 			<td class="nowrap">{plugins_row_yellow.CONTACT}</td>
 			<td>{plugins_row_yellow.DESCRIPTION}</td>
-			<td class="nowrap">{plugins_row_yellow.LONG_DESCRIPTION}  {plugins_row_yellow.HOMEPAGE} {plugins_row_yellow.MANUAL}</td>
+			<td class="nowrap">
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_yellow.LONG_DESCRIPTION}"></i>
+				<!-- IF plugins_row_yellow.HOMEPAGE_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_yellow.HOMEPAGE}"><a href="{plugins_row_yellow.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_yellow.MANUAL_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_yellow.MANUAL}"><a href="{plugins_row_yellow.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		</tr>
 		<!-- END plugins_row_yellow -->
 		<!-- BEGIN plugins_row_green -->
@@ -239,7 +247,15 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_grey.VERSION}</td>
 			<td class="nowrap">{plugins_row_grey.CONTACT}</td>
 			<td>{plugins_row_grey.DESCRIPTION}</td>
-			<td class="nowrap">{plugins_row_grey.LONG_DESCRIPTION}  {plugins_row_grey.HOMEPAGE} {plugins_row_grey.MANUAL}</td>
+			<td class="nowrap">
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey.LONG_DESCRIPTION}"></i>
+				<!-- IF plugins_row_grey.HOMEPAGE_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_grey.HOMEPAGE}"><a href="{plugins_row_grey.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_grey.MANUAL_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_grey.MANUAL}"><a href="{plugins_row_grey.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		</tr>
 		<!-- END plugins_row_grey -->
 		<!-- BEGIN plugins_row_grey_repo -->
@@ -257,7 +273,15 @@ function hide_update_warning(status){
 			<td class="nowrap">{plugins_row_grey_repo.VERSION}</td>
 			<td class="nowrap">{plugins_row_grey_repo.CONTACT}</td>
 			<td>{plugins_row_grey_repo.DESCRIPTION}</td>
-			<td class="nowrap">{plugins_row_grey_repo.LONG_DESCRIPTION}  {plugins_row_grey_repo.HOMEPAGE} {plugins_row_grey_repo.MANUAL}</td>
+			<td class="nowrap">
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey_repo.LONG_DESCRIPTION}"></i>
+				<!-- IF grey_repo.HOMEPAGE_LINK -->
+				<span class="coretip" data-coretip="{grey_repo.HOMEPAGE}"><a href="{grey_repo.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF grey_repo.MANUAL_LINK -->
+				<span class="coretip" data-coretip="{grey_repo.MANUAL}"><a href="{grey_repo.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		</tr>
 		<!-- END plugins_row_grey_repo -->
 		<!-- BEGIN plugins_row_broken -->

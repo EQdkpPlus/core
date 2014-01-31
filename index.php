@@ -523,7 +523,7 @@ class controller extends gen_class {
 					'ARTICLE_AUTHOR'	=> $userlink,
 					'ARTICLE_TIME'		=> $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true),
 					'ARTICLE_PATH'		=> $this->controller_path.$this->pdh->get('articles',  'path', array($intArticleID)),
-					'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->controller_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
+					'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
 					'ARTICLE_TOOLBAR' => $jqToolbar['id'],
 					'PERMALINK'		=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TOOLBAR'			=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),

@@ -139,18 +139,21 @@ if (!class_exists("socialplugins")) {
 			$strID = md5($urlToShare.$text);
 			$this->tpl->add_js('
 				$("#ssp_'.$strID.'").socialSharePrivacy({
-					uri : "'.$urlToShare.'",
+					"lang_path" : "'.$this->server_path.'/libraries/jquery/js/socialshareprivacy/lang/",
+					"css_path"	: "",
+					"language"  : "'.(($this->user->data['user_lang'] == 'german') ? 'de' : 'en').'",
+					"uri" : "'.$urlToShare.'",
 					services : {
 					facebook : {
-						"dummy_img"  : "'.$this->root_path.'libraries/jquery/js/socialshareprivacy/images/dummy_facebook'.(($this->user->data['user_lang']!= 'german') ? '_en' : '').'.png",
+						"dummy_img"  : "'.$this->server_path.'libraries/jquery/js/socialshareprivacy/images/dummy_facebook'.(($this->user->data['user_lang']!= 'german') ? '_en' : '').'.png",
 						'.(((int)$this->config->get('sp_facebook_like') != 1) ? '"status" : "off"': '').'
 					}, 
 					twitter : {
-						"dummy_img"  : "'.$this->root_path.'libraries/jquery/js/socialshareprivacy/images/dummy_twitter.png",
+						"dummy_img"  : "'.$this->server_path.'libraries/jquery/js/socialshareprivacy/images/dummy_twitter.png",
 						'.(((int)$this->config->get('sp_twitter_tweet') != 1) ? '"status" : "off"': '').'
 					},
 					gplus : {
-						"dummy_img"  : "'.$this->root_path.'libraries/jquery/js/socialshareprivacy/images/dummy_gplus.png",
+						"dummy_img"  : "'.$this->server_path.'libraries/jquery/js/socialshareprivacy/images/dummy_gplus.png",
 						'.(((int)$this->config->get('sp_google_plusone') != 1) ? '"status" : "off"': '').'
 					}
 				}

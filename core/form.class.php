@@ -102,7 +102,7 @@ class form extends gen_class {
 		return $class->inpval();
 	}
 	
-	public function __construct($form_id) {
+	public function __construct($form_id = 'myform') {
 		$this->form_id = $form_id;
 	}
 	
