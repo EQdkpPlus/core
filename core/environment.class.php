@@ -227,6 +227,12 @@ if (!class_exists("environment")) {
 				}
 			}
 			
+			// Android tablets are not mobile
+			if ($os == 'android' && stripos($ua, 'mobile') === false)
+			{
+				$mobile = false;
+			}
+			
 			$return->os = $os;
 			
 			// Browser and version
@@ -258,13 +264,7 @@ if (!class_exists("environment")) {
 			{
 				$return->class .= ' mobile';
 			}
-			
-			// Android tablets are not mobile (see #4150)
-			if ($os == 'Android' && stripos('mobile', $ua) === false)
-			{
-				$mobile = false;
-			}
-			
+						
 			$return->browser  = $browser;
 			$return->shorty   = $shorty;
 			$return->version  = $version;

@@ -70,7 +70,7 @@ class auth extends user_core {
 		}
 
 		// Remove old sessions and update user information if necessary.
-		if($this->current_time - $this->session_length > $this->config->get('session_last_cleanup')){
+		if(($this->current_time - $this->session_length) > $this->config->get('session_last_cleanup')){
 			$this->cleanup($this->current_time);
 		}
 		//Cookie-Data
