@@ -210,7 +210,7 @@ h1.text-icon{background-position:0 3px !important;}
 .th-money.item{padding-right:15px;}
 .th-money.credits{padding-right:15px;background-image:url(./images/swtor/money-credits.png);}
 .th-money.achievement{padding-right:13px;background-image:url(./images/swtor/achievement.gif);}
-.fhtt.th{color:#3dd0f0;font-size:13px;max-width:320px;}.fhtt.th .thtt-bottom,.fhtt.th .thtt-right,.fhtt.th .thtt-bottomright{background:url(./images/swtor/background.png?1) bottom left;bottom:-13px;font-size:1px;height:19px;left:-14px;position:absolute;right:0;z-index:-1;}
+.fhtt.th{color:#3dd0f0;font-size:13px;max-width:320px;}.fhtt.th .thtt-bottom,.fhtt.th .thtt-right,.fhtt.th .thtt-bottomright{background:url(./images/swtor/background.png?1) bottom left;bottom:-13px;font-size:1px;height:19px;left:-14px;position:absolute;right:0;}
 .fhtt.th .thtt-right{background-position:top right;bottom:6px;height:auto;left:auto;right:-17px;top:-11px;width:17px;}
 .fhtt.th .thtt-bottomright{background-position:bottom right;left:auto;right:-17px;width:17px;}
 .fhtt.th .thtt-cont{background:url(./images/swtor/background.png);zoom:1;margin:0 17px 19px 0;padding:11px 0 0 14px;position:relative;}.fhtt.th .thtt-cont:before,.fhtt.th .thtt-cont:after{display:table;content:'';}

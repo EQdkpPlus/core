@@ -28,6 +28,7 @@ class urlfetcher  extends gen_class {
 	private $conn_timeout		= 5;											// Connection Timeout
 	private $methods			= array('curl','file_gets','fopen');			// available function methods
 	private $method				= '';											// the selected method
+	private $maxRedirects		= 5;
 
 	public function get_method(){
 		return $this->method;
@@ -86,18 +87,63 @@ class urlfetcher  extends gen_class {
 			CURLOPT_SSL_VERIFYHOST	=> false,
 			CURLOPT_SSL_VERIFYPEER	=> false,
 			CURLOPT_VERBOSE			=> false,
-			CURLOPT_FOLLOWLOCATION	=> true,
 			CURLOPT_HTTPAUTH		=> CURLAUTH_ANY,
 			CURLOPT_HTTPHEADER		=> ((is_array($header) && count($header) > 0) ? $header : array())
 		);
-		if (@ini_get('open_basedir') == '' && !@ini_get('safe_mode')) {
+		if (@ini_get('open_basedir') == '' && (!@ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
 			$curlOptions[CURLOPT_FOLLOWLOCATION] = true;
+			
+			$curl = curl_init();
+			curl_setopt_array($curl, $curlOptions);
+			$getdata = curl_exec($curl);
+			curl_close($curl);
+			return $getdata;	
+		} else {
+			$curlOptions[CURLOPT_HEADER] = true;
+			$curlOptions[CURLOPT_FORBID_REUSE] = false;
+			$curlOptions[CURLOPT_RETURNTRANSFER] = true;
+			
+			$maxRedirects = $this->maxRedirects;
+			
+			$curl = curl_init();
+			curl_setopt_array($curl, $curlOptions);
+			
+			$newurl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
+			$code = 0;
+			do {
+				curl_setopt($curl, CURLOPT_URL, $newurl);
+				$header = curl_exec($curl);
+				if (curl_errno($curl)) {
+					$code = 0;
+				} else {
+					$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+					if ($code == 301 || $code == 302) {
+						preg_match('/Location:(.*?)\n/', $header, $matches);
+						$newurl = trim(array_pop($matches));
+						if(stripos($newurl, '://') === false){
+							$curlData = curl_getinfo($curl);						
+							$urlData = parse_url($curlData['url']);
+							$newurl = $urlData['scheme'].'://'.$urlData['host'].$newurl;
+						}
+						curl_setopt($curl, CURLOPT_POSTFIELDS, null); //also switch modes after Redirect
+						curl_setopt($curl, CURLOPT_HTTPGET, true);
+					} else {
+						$code = 0;
+					}
+				}
+			
+			} while ($code && --$maxRedirects);
+			
+			if ($maxRedirects < 0) {
+				trigger_error('Too many redirects. When following redirects, libcurl hit the maximum amount.', E_USER_WARNING);
+				return false;
+			}
+			
+			curl_setopt($curl, CURLOPT_URL, $newurl);
+			$getdata = curl_exec($curl);
+			curl_close($curl);
+			return $getdata;
 		}
-		$curl = curl_init();
-		curl_setopt_array($curl, $curlOptions);
-		$getdata = curl_exec($curl);
-		curl_close($curl);
-		return $getdata;
 	}
 	
 	private function post_curl($url, $data, $content_type, $header, $conn_timeout, $timeout){
