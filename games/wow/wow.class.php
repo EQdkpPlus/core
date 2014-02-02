@@ -221,7 +221,7 @@ if(!class_exists('wow')) {
 		 * add professions to array
 		 */
 		public function profilefields(){
-			// Category 'character' is a fix one! All others are created dynamically!
+			// Category 'character' is a fixed one! All others are created dynamically!
 			$this->load_type('professions', array($this->lang));
 			$this->load_type('realmlist', array($this->lang));
 			$xml_fields = array(

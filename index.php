@@ -21,7 +21,7 @@ $eqdkp_root_path = './';
 include_once($eqdkp_root_path . 'common.php');
 
 class controller extends gen_class {
-	public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html', 'time', 'env', 'acl', 'comments','social' => 'socialplugins', 'bbcode', 'pfh','pm', 'routing');
+	public static $shortcuts = array('social' => 'socialplugins');
 	
 	public function __construct() {
 		$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));

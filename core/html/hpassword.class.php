@@ -38,8 +38,11 @@ class hpassword extends html {
 	public $name = '';
 	public $set_value = false;
 	
-	public function _toString() {
+	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+	}
+	
+	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
 		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';

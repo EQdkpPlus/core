@@ -74,7 +74,7 @@ class form extends gen_class {
 	 *	@param array	$options:	any options for the field
 	 *	@return object/string		returns the html-field as object, which can automatically transform into the appropriate html
 	 */
-	public static function field($name, $options) {
+	public static function field($name, &$options) {
 		// encryption
 		if(!empty($options['encrypt'])) $options['value'] = register('encrypt')->decrypt($options['value']);
 		if(empty($options['type'])) $options['type'] = '';
@@ -83,6 +83,8 @@ class form extends gen_class {
 		$text = (empty($options['text'])) ? '' : $options['text'];
 		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
+		// add the correct id into the options-array
+		if(is_object($field)) $options['id'] = $field->id;
 		return $text.$field.$text2;
 	}
 	
@@ -316,19 +318,25 @@ class form extends gen_class {
 		
 		// fill in the field
 		if(!empty($value)) $options['value'] = $value;
-				
+		
+		// create the field
+		$field = self::field($name, $options);
+		
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
+		
+		// ajax-reload for dropdown-options
+		if(!empty($options['ajax_reload'])) $this->jquery->js_dd_ajax($options['id'], $options['ajax_reload'][0], $options['ajax_reload'][1], (isset($options['ajax_reload'][2]) ? $options['ajax_reload'][2] : ''));
 		
 		if($this->assign2tpl) $this->tpl->assign_block_vars($key, array(
 				'NAME'		=> $language,
 				'HELP'		=> $help_message,
-				'FIELD'		=> self::field($name, $options)
+				'FIELD'		=> $field
 			));
 		else return array(
 				'name'		=> $language,
 				'help'		=> $help_message,
-				'field'		=> $text.self::field($name, $options).$text2,
+				'field'		=> $field,
 				'type'		=> $options['type'],
 			);
 	}
@@ -342,12 +350,14 @@ class form extends gen_class {
 		$.each($(this).find('option'), function(){
 			var selected = this.selected;
 			$.each($(this).data('form-change').split(','), function(index, value){
-				if(selected){
-					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
-					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
-				}else{
-					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
-					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
+				if(value){
+					if(selected){
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
+					}else{
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
+						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
+					}
 				}
 			});
 		});
@@ -361,12 +371,14 @@ class form extends gen_class {
 		$.each($('.form_change_checkbox > input, .form_change_radio > input'), function(){
 			var checked = this.checked;
 			$.each($(this).data('form-change').split(','), function(index, value){
-				if(checked){
-					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
-					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
-				}else{
-					$('#".$this->form_id."').find('input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
-					$('#".$this->form_id."').find('dl:has(input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
+				if(value){
+					if(checked){
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
+					}else{
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
+						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
+					}
 				}
 			});
 		});

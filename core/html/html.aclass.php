@@ -32,6 +32,7 @@ abstract class html {
 			if(in_array($key, self::$ignore)) continue;
 			$this->$key = $option;
 		}
+		if(empty($this->value) && isset($this->default)) $this->value = $this->default;
 		if(method_exists($this, '_construct')) $this->_construct();
 	}
 	
@@ -47,7 +48,6 @@ abstract class html {
 	}
 	
 	public function __toString() {
-		if(empty($this->value) && isset($this->default)) $this->value = $this->default;
 		return $this->_toString();
 	}
 	

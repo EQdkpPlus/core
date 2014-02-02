@@ -22,14 +22,11 @@ $eqdkp_root_path = '../';
 include_once($eqdkp_root_path . 'common.php');
 
 class mmocms_settings extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array(
+	public static $shortcuts = array(
 			'itt' => 'infotooltip',
 			'social' => 'socialplugins',
 			'form'	=> array('form', array('core_settings'))
 		);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public function __construct(){
 		$this->user->check_auth('a_config_man');
@@ -44,7 +41,15 @@ class mmocms_settings extends page_generic {
 	}
 
 	public function ajax_gamelanguage() {
-		echo($this->jquery->dd_create_ajax(sdir($this->root_path . 'games/'.$this->in->get('requestid').'/language/', '*.php', '.php'), array('format'=>'ucfirst','noid'=>true,'selected'=>$this->config->get('game_language'))));
+		$options = array(
+			'options_only'	=> true,
+			'tolang'		=> true,
+			'no_key'		=> true,
+			'format'		=> 'ucfirst',
+			'options' 		=> sdir($this->root_path . 'games/'.$this->in->get('requestid').'/language/', '*.php', '.php'),
+			'value'			=> $this->config->get('game_language'),
+		);
+		echo new hdropdown('dummy', $options);
 		exit;
 	}
 
@@ -208,14 +213,11 @@ class mmocms_settings extends page_generic {
 		if(($this->game->get_importAuth('a_members_man', 'char_mupdate') || $this->game->get_importAuth('a_members_man', 'guild_import')) && $this->game->get_importers('import_data_cache')){
 			$this->jquery->Dialog('ClearImportCache', $this->user->lang('uc_importer_cache'), array('url'=>$this->game->get_importers('import_reseturl', true), 'width'=>'400', 'height'=>'250', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
 		}
-		$this->jquery->Spinner('#inactive_period, #round_precision, #inactive_period, #default_nlimit, #calendar_raid_classbreak, #calendar_addraid_deadline, #failed_logins_inactivity', array('multiselector'=>true));
-		$this->jquery->Spinner('#default_alimit, #default_climit, #default_ilimit, #default_rlimit, #default_elimit, #calendar_addraid_duration, #calendar_repeat_crondays', array('step'=>10, 'multiselector'=>true));
 
 		// ---------------------------------------------------------
 		// Output to the page
 		// ---------------------------------------------------------
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&amp;style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
-		$this->jquery->js_dd_ajax('default_game', 'game_language', 'manage_settings.php'.$this->SID.'&ajax=games');
 		
 		// initialize form class
 		$this->form->lang_prefix = 'core_sett_';
@@ -623,6 +625,7 @@ class mmocms_settings extends page_generic {
 					'default_game'	=> array(
 						'type'		=> 'dropdown',
 						'options'	=> $games,
+						'ajax_reload' => array('game_language', 'manage_settings.php'.$this->SID.'&ajax=games'),
 					),
 					'game_language'	=> array(
 						'type'		=> 'dropdown',

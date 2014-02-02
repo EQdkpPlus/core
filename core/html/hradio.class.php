@@ -41,9 +41,12 @@ class hradio extends html {
 	public $class = '';
 	public $tolang = false;
 	
+	public function _construct() {
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+	}
+	
 	public function _toString() {
 		$radiobox  = '';
-		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		if(empty($this->options)){
 			$this->options = array (
 				'0'   => $this->user->lang('cl_off'),

@@ -34,8 +34,7 @@ function dummy(){
 //d(uniqid("hallo_", false));
 */
 class ManageAutoPoints extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'time', 'html', 'pdc', 'env', 'apa'=>'auto_point_adjustments');
+	public static $shortcuts = array('apa' => 'auto_point_adjustments');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
@@ -65,6 +64,7 @@ class ManageAutoPoints extends page_generic {
 			$options = $this->apa->get_apa_add_form($this->in->get('type'));
 		}
 		$result = false;
+		registry::load('form');
 		if (is_array($options) && $this->in->get('name') != ''){
 			foreach ($options as $name => $option){
 				$options_array[$name] = form::value($name, $option);
@@ -247,6 +247,7 @@ class ManageAutoPoints extends page_generic {
 		$options = ($foptions) ? $foptions : $options;
 		$type = ($ftype) ? $ftype : $type;
 		if(!$options || !is_array($options)) $this->display();
+		registry::load('form');
 		foreach ($options as $name => $option){
 			if($name == 'pools') {
 				$option['options'] = $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));

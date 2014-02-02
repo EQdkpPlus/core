@@ -20,11 +20,6 @@ class addcharacter_pageobject extends pageobject {
 
 	private $data = array();
 
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'config', 'core', 'html');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct() {
 		$handler = array(
 			'add'	=> array('process' => 'add', 'check' => 'u_member_add', 'csrf'=>true),
