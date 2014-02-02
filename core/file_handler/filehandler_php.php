@@ -89,7 +89,7 @@ if (!class_exists("filehandler_php")) {
 
 		public function putContent($filename, $data){
 			$intBits = file_put_contents($filename, $data);
-			chmod($filename, get_chmod());
+			@chmod($filename, get_chmod());
 			return ($intBits !== false) ? true : false;
 		}
 

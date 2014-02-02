@@ -139,9 +139,16 @@ ul.sf-ddm li li li.sfHover ul {
 	cursor:pointer;
 }
 
-/* Admin - Icon */
+/* Admin - Icon 
 .admin_icon {
 	background: url('../images/global/admin_flag.png') no-repeat;
+}*/
+.admin_icon:before {
+	content: "\f132"; 
+	font-family: FontAwesome;
+	color: gold;
+	font-size: 18px;
+	position: absolute;
 }
 .admin_icon  > * {
 	margin-left: 16px;
@@ -253,24 +260,6 @@ tr.cm_confirm{
 }
 .bi_compare{
 	background:url(../images/glyphs/compare.png) no-repeat 2px center;
-	height: 16px;
-    width: 16px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 3px;
-}
-
-.bi_plus{
-	background:url(../images/global/plus.png) 6% 55% no-repeat;
-	height: 16px;
-    width: 16px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 3px;
-}
-
-.bi_minus{
-	background:url(../images/global/minus.png) 6% 55% no-repeat;
 	height: 16px;
     width: 16px;
 	display: inline-block;
@@ -531,4 +520,7 @@ i.icon-color-purple{
 }
 i.icon-color-gray{
 	color: gray;
+}
+.nodisplay{
+	display: none;
 }

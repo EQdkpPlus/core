@@ -139,8 +139,24 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return true;
 		}
 
-		public function get_attendees($eventid=''){
-			return ($eventid) ? ((isset($this->attendees[$eventid])) ? $this->attendees[$eventid] : '') : $this->attendees;
+		public function get_attendees($eventid=0, $raidgroup=0){
+			if($eventid > 0){
+				if(isset($this->attendees[$eventid])){
+					$attendees	= $this->attendees[$eventid];
+					if($raidgroup > 0){
+						foreach($attendees as $attendeeID=>$attendeedata){
+							if($attendeedata['raidgroup'] != $raidgroup){
+								unset($attendees[$attendeeID]);
+							}
+						}
+					}
+					return $attendees;
+				}else{
+					return '';
+				}
+			}else{
+				return $this->attendees;
+			}
 		}
 
 		public function get_attendee_stats($eventid, $status){

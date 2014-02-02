@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')) {
 //Source-Language: german_2.0
 
 $lang = array( 
-	"php_warning" => 'The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version 5.3.0. For any questions about updating your php version, please contact your hoster.',
+	"php_warning" => 'The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version '.VERSION_PHP_RQ.'. For any questions about updating your php version, please contact your hoster.',
 	"manitempool_title" => 'Itempool Management',
 	"addevent_title" => 'Add an event',
 	"addnews_title" => 'Add a news',

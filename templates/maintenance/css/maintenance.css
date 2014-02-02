@@ -939,16 +939,3 @@ fieldset.settings dt span {
 	color:black;
 	text-decoration: underline;
 }
-
-div.icon_info {
-	background:transparent url(../../../images/global/info_big.png) center left no-repeat;
-}
-div.icon_ok {
-	background:transparent url(../../../images/global/ok.png) center left no-repeat;
-}
-div.icon_false {
-	background:transparent url(../../../images/global/false.png) center left no-repeat;
-}
-div.icon_maintenance {
-	background:transparent url(../../../images/global/maintenance.png) center left no-repeat;
-}

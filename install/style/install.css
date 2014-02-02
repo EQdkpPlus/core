@@ -125,23 +125,44 @@ ul.steps{
 }
 ul.steps li{
 	background-repeat: no-repeat;
-	background-position: 4px 3px;
 	margin:10px 0 10px 0;
-	padding:0;
-	padding-left:30px;
-	display:block;
+	padding-left: 30px;
+	display: inline-block;
 }
-ul.steps li.now{
-	background-image: url('active.png');
-	font-weight:bold;
+.notsignedpanel_close{
+	display: inline-block;
 }
-ul.steps li.notactive{
-	background-image: url('notactive.png');
+ul.steps li.now:before {
+	content: '\f0a9';
+	font-family: FontAwesome;
+	display: inline-block;
+	position: absolute;
+	margin-left: -30px;
+	padding:4px 0px 0px 10px;
+	width: 30px;
+	font-size: 16px;
+}
+ul.steps li.notactive:before {
+	content: '\f18e';
 	color:#707070;
+	font-family: FontAwesome;
+	display: inline-block;
+	position: absolute;
+	margin-left: -30px;
+	padding:4px 0px 0px 10px;
+	width: 30px;
+	font-size: 16px;
 }
-ul.steps li.done{
-	background-image: url('done.png');
-	color:#707070;
+ul.steps li.done:before {
+	content: '\f14a';
+	color:green;
+	font-family: FontAwesome;
+	display: inline-block;
+	position: absolute;
+	margin-left: -30px;
+	padding:4px 0px 0px 10px;
+	width: 30px;
+	font-size: 16px;
 }
 
 /* Content */

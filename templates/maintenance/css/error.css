@@ -177,14 +177,6 @@ input:hover, input:focus {
 border:0px;
 background:none;
 }
-
-.bi_ok{
-	background:url(../images/glyphs/ok.png) no-repeat 2px 2px;
-	text-indent:20px;
-}
-.icon_ok{
-	background:transparent url(../images/global/ok.png) center left no-repeat;
-}
 .roundbox{
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;

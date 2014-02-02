@@ -265,13 +265,14 @@ class core extends gen_class {
 					$(this).attr('style', image_style);
 				}
 				var randomId = parseInt(Math.random() * 1000);
-				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a href=\"'+fullimage+'\" class=\"lightbox\"><img src=\"'+mmocms_root_path+'images/global/zoom.png\" alt=\"Resized\"/><\/a><\/div><a href=\"'+fullimage+'\" class=\"lightbox\">'+image+'<\/a><\/div>';
+				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a href=\"'+fullimage+'\" class=\"lightbox\"><span class=\"fa-stack fa-lg\"><i class=\"fa fa-square fa-stack-2x image_zoom\"></i><i class=\"fa fa-search-plus fa-stack-1x fa-inverse\"></i></span><\/a><\/div><a href=\"'+fullimage+'\" class=\"lightbox\">'+image+'<\/a><\/div>';
 				$(this).html(zoomIcon);
 			});
 			", 'docready');
 
 			// global qtip
 			$this->jquery->qtip(".coretip", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200));
+			$this->jquery->qtip(".coretip-large", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>400));
 			$this->jquery->qtip(".coretip-left", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top right', 'at' => 'bottom right'));
 			$this->jquery->qtip(".coretip-right", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top left', 'at' => 'bottom left'));
 

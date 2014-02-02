@@ -14,7 +14,7 @@
 						</th>
 						<!-- IF S_NOTSIGNED_VISIBLE && raidstatus.FIRSTROW -->
 						<th align="right">
-							<button type="button" class="notsigned_button"><i class="bi_plus"></i>{L_raidevent_raid_unsigned_button}</button>
+							<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i>{L_raidevent_raid_unsigned_button}</button>
 						</th>
 						<!-- ENDIF -->
 					</tr>
@@ -35,51 +35,56 @@
 						<tr>
 							<td valign="top">
 								<!-- BEGIN status -->
-								<div class="ui-state-hover charchange_menucontainer" id="item_{raidstatus.classes.status.MEMBERID}" style="padding: 5px; margin-top: 4px;">
-									<!-- IF IS_OPERATOR --><input class="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
-									<span class="membertooltip" data-membertt='{raidstatus.classes.status.TOOLTIP}'>
-										<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}"<!-- ENDIF --> href="../viewcharacter.php{SID}&amp;member_id={raidstatus.classes.status.MEMBERID}" target="_blank">{raidstatus.classes.status.NAME}</a>
-										<!-- IF SHOW_RANDOMVALUE -->
-										<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
-										  [{raidstatus.classes.status.RANDOM}]
-										<!-- ENDIF -->
-										<!-- ENDIF -->
-									</span>
-									<span style="float:right;">
-										<!-- IF NOTEPERMISSION -->
-										<!-- IF raidstatus.classes.status.NOTE -->
-										<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-bullhorn<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> charnote_toggle hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
-										<!-- ELSE -->
-											<!-- IF IS_OPERATOR && SHOW_CHARCHANGE -->
-											<span class="fa fa-comment-o fa-lg charnote_toggle hand"></span>
+								<div class="ui-state-hover table" style="padding: 5px; margin-top: 4px;">
+									<div class="tr">
+										<div class="td" style="vertical-align:middle;">
+											<!-- IF IS_OPERATOR --><input class="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
+										</div>
+										<div class="td" style="vertical-align:middle;">
+											<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
+												<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}"<!-- ENDIF --> href="../viewcharacter.php{SID}&amp;member_id={raidstatus.classes.status.MEMBERID}" target="_blank">{raidstatus.classes.status.NAME}</a>
+												<!-- IF SHOW_RANDOMVALUE -->
+												<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
+											  	[{raidstatus.classes.status.RANDOM}]
+												<!-- ENDIF -->
+												<!-- ENDIF -->
+											</span>
+										</div>
+										<div class="td" style="float:right;vertical-align:middle;">
+											<!-- IF NOTEPERMISSION -->
+											<!-- IF raidstatus.classes.status.NOTE -->
+											<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
 											<!-- ENDIF -->
-										<!-- ENDIF -->
-										<!-- ENDIF -->
-										<!-- IF IS_OPERATOR -->
-										<span class="fa fa-random fa-lg charname_toggle hand" title="{L_raidevent_raid_changecharmenu}"></span>
-										<!-- ENDIF -->
-									</span>
-									<!-- IF IS_OPERATOR -->
-									<div class="charchange_menu" style="width:100%;">
-										<br/>
-										<fieldset class='blubb'>
-											<legend>{L_raidevent_raid_changecharmenu}</legend>
-											<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-											<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
-											{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-											<button type="button" name="submit_charchange" value=""><i class="fa fa-thumbs-up fa-lg"></i></button>
-										</fieldset>
+											<!-- ENDIF -->
+											<!-- IF raidstatus.classes.status.RAIDGROUP_TT -->
+											<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}"></i>
+											<!-- ENDIF -->
+											<!-- IF IS_OPERATOR -->
+											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-charadmintt-id="member_{raidstatus.classes.status.MEMBERID}"></span>
+											<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
+												<fieldset class="settings">
+													<legend class="smaller"><i class="fa fa-random fa-lg"> {L_raidevent_raid_changecharmenu}</i></legend>
+													<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+													<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
+													{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
+													<button type="button" name="submit_charchange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
+												</fieldset><br/>
+												<fieldset class="settings">
+													<legend class="smaller"><i class="fa fa-comment fa-lg"> {L_raidevent_raid_changenotemenu}</i></legend>
+													<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+													<textarea name="notechange_note" cols="30" rows="3">{raidstatus.classes.status.NOTE}</textarea>
+													<button type="button" name="submit_notechange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
+												</fieldset><br/>
+												<fieldset class="settings">
+													<legend class="smaller"><i class="fa fa-users fa-lg"> {L_raidevent_raid_groupsmenu}</i></legend>
+													{raidstatus.classes.status.GROUPS}
+													<input type="hidden" name="groupchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+													<button type="button" name="submit_groupchange" class="submit_groupchange" value="" style="float:right;"><i class="fa fa-check fa-lg"></i></button>
+												</fieldset>
+											</div>
+											<!-- ENDIF -->
+										</div>
 									</div>
-									<div class="notechange_menu" style="width:100%;">
-										<br/>
-										<fieldset class='blubb'>
-											<legend>{L_raidevent_raid_changenotemenu}</legend>
-											<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-											<textarea name="notechange_note" cols="18" rows="3">{raidstatus.classes.status.NOTE}</textarea>
-											<button type="button" name="submit_notechange" value=""><i class="fa fa-thumbs-up fa-lg"></i></button>
-										</fieldset>
-									</div>
-									<!-- ENDIF -->
 								</div>
 								<!-- END status -->
 							</td>

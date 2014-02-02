@@ -11,72 +11,81 @@ $(function(){
 	$('#addguest').click( function(){
 		AddGuest('{EVENT_ID}');
 	});
-	
-	$(".membertooltip").qtip({
-		content: {
-			text: true,
-			attr: 'data-membertt',
-			title: {
-				text: false,
-				button: false
-			}
-		},
-		position: {
-			at: "bottom center",
-			my: "top center"
-		},
-		style: {
-			tip: {
-				corner: true,
-				height: 20
-			},
-			widget: true
-		},
-		events: {
-			render: function() {
-				$(this).css({ width: 300 });
-			}
-		}
-	});
-	
+
 	$('#raidcal_change_signin').click(function(){
 		$('#raidcal_signin_form').show();
 		$('#raidcal_alrdysignin').hide();
 	});
-	
-	$('.charname_toggle').click(function() {
-		$(".charchange_menu", $(this).parent().parent()).slideToggle("slow");
-	});
 
-	$('.charnote_toggle').click(function() {
-		$(".notechange_menu", $(this).parent().parent()).slideToggle("slow");
-	});
+	$('.char_adminmenu').each(function() {
+		var id = $(this).attr('data-charadmintt-id');
+		var $this = $(this);
+		
+		$this.qtip({
+			content: {
+				text: $('#' + id + '').html(),
+				title: {
+					text: "{L_calendar_admin_menu}",
+					button: true
+				}
+			},
+			position: {
+				viewport: $('div.portal')
+			},
+			hide: false,
+			style: {
+				classes: 'tooltip_maxwidth',
+				tip: {
+					corner: true,
+					height: 20
+				},
+				width: 400,
+				widget: true
+			},
+			events: {
+				show: function(event, api) {
+					$('[name="submit_charchange"]').click(function(){
+						$.post("{U_CALENDAREVENT}", {
+							change_char: true,
+							charchange_status: $(this).parent().find('.charchange_status').val(),
+							charchange_role: $(this).parent().find('[name="charchange_role"]').val(),
+							charchange_char: $(this).parent().find('[name="charchange_char"]').val(),
+							subscribed_member_id : $(this).parent().find('[name="charchange_attendee"]').val(),
+							eventid: $('[name="eventid"]').val(),
+							link_hash: '{CSRF_CHANGECHAR_TOKEN}'
+						},
+						function(data){
+							window.location = '{U_CALENDAREVENT}';
+						});
+					});
 
-	$('[name="submit_charchange"]').click(function(){
-		$.post("{U_CALENDAREVENT}", {
-			changecharmenu: true,
-			charchange_status: $(this).parent().find('.charchange_status').val(),
-			charchange_role: $(this).parent().find('[name="charchange_role"]').val(),
-			charchange_char: $(this).parent().find('[name="charchange_char"]').val(),
-			subscribed_member_id : $(this).parent().find('[name="charchange_attendee"]').val(),
-			eventid: $('[name="eventid"]').val(),
-			link_hash: '{CSRF_CHANGECHARMENU_TOKEN}'
-		},
-		function(data){
-			window.location = '{U_CALENDAREVENT}';
-		});
-	});
+					$('[name="submit_groupchange"]').click(function(){
+						$.post("{U_CALENDAREVENT}", {
+							change_group: true,
+							groupchange_group: $(this).parent().find('[name="groupchange_group"]').val(),
+							subscribed_member_id: $(this).parent().find('[name="groupchange_attendee"]').val(),
+							eventid: $('[name="eventid"]').val(),
+							link_hash: '{CSRF_CHANGEGRP_TOKEN}'
+						},
+						function(data){
+							window.location = '{U_CALENDAREVENT}';
+						});
+					});
 
-	$('[name="submit_notechange"]').click(function(){
-		$.post("{U_CALENDAREVENT}", { 
-			changenotemenu: true,
-			notechange_note: $(this).parent().find('[name="notechange_note"]').val(),
-			subscribed_member_id: $(this).parent().find('[name="notechange_attendee"]').val(),
-			eventid: $('[name="eventid"]').val(),
-			link_hash: '{CSRF_CHANGENOTEMENU_TOKEN}'
-		},
-		function(data){
-			window.location = '{U_CALENDAREVENT}';
+					$('[name="submit_notechange"]').click(function(){
+						$.post("{U_CALENDAREVENT}", { 
+							change_note: true,
+							notechange_note: $(this).parent().find('[name="notechange_note"]').val(),
+							subscribed_member_id: $(this).parent().find('[name="notechange_attendee"]').val(),
+							eventid: $('[name="eventid"]').val(),
+							link_hash: '{CSRF_CHANGENOTE_TOKEN}'
+						},
+						function(data){
+							window.location = '{U_CALENDAREVENT}';
+						});
+					});
+				}
+			}
 		});
 	});
 
@@ -91,15 +100,15 @@ $(function(){
 
 	$(".notsigned_button").click(function(){
 		$(".notsignedpanel").toggle("fast");
-		$(".notsigned_button i").toggleClass("bi_plus");
-		$(".notsigned_button i").toggleClass("bi_minus");
+		$(".notsigned_button i").toggleClass("fa fa-plus-circle");
+		$(".notsigned_button i").toggleClass("fa fa-minus-circle");
 		return false;
 	});
 	
 	$(".notsignedpanel_close").click(function(){
 		$(".notsignedpanel").hide("fast");
-		$(".notsigned_button i").toggleClass("bi_minus");
-		$(".notsigned_button i").toggleClass("bi_plus");
+		$(".notsigned_button i").toggleClass("fa fa-minus-circle");
+		$(".notsigned_button i").toggleClass("fa fa-plus-circle");
 	});
 
 	// the search filed
@@ -397,8 +406,16 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			<span class="toggle_container">
 				<dl>
 					<dt><label>{L_raidevent_raid_mod_select}</label></dt>
-					<dd>{DD_MODSIGNUPSTATUS} 
+					<dd>
+						{DD_MODSIGNUPSTATUS} 
 						<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
+					</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_raidevent_raid_mod_raidgroup}</label></dt>
+					<dd>
+						{DD_MODRAIDGROUPS} 
+						<input type="submit" name="moderate_group" value="{L_raidevent_raid_modgroup}" class="mainoption bi_ok" />
 					</dd>
 				</dl>
 				<dl>
@@ -408,6 +425,14 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			</span>
 		</fieldset>
 	</div>
+	<div class="table">
+		<div class="tr">
+			<div class="td">
+				<span class="group_selector"><i class="fa fa-users fa-lg"></i> {DD_RAIDGROUPS}</span>
+			</div>
+		</div>
+	</div>
+	
 	<!-- ENDIF -->
 	
 	<div class="row1">

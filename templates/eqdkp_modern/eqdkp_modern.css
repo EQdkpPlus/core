@@ -966,6 +966,10 @@ fieldset.settings legend {
 	width: 100%;
 }
 
+fieldset.settings legend.smaller {
+	font-size: 14px;
+}
+
 fieldset.settings dt {
 	float: left;
 	width: auto;
@@ -1800,42 +1804,47 @@ ul.breamcrumb .current::before{
 	padding: 3px;
 }
 
-.eye {
+.eye{
 	display: inline-block;
-	background: url('../images/glyphs/eye.png');
-	width: 16px;
-	height: 16px;
 	cursor: pointer;
-	margin-right: 5px;
 }
-
+.eye:before {
+	content: "\f06e"; 
+	font-family: FontAwesome;
+	font-size: 16px;
+}
 .eye-gray {
 	display: inline-block;
-	background: url('../images/glyphs/eye_gray.png');
-	width: 16px;
-	height: 16px;
 	cursor: pointer;
-	margin-right: 5px;
 }
-
+.eye-gray:before {
+	content: "\f070"; 
+	font-family: FontAwesome;
+	color: #B3B3B3;
+	font-size: 16px;
+}
 .featured {
 	display: inline-block;
-	background: url('../images/admin/favorites.png');
-	width: 16px;
-	height: 16px;
 	cursor: pointer;
 	margin-right: 5px;
 }
-
+.featured:before {
+	content: "\f005"; 
+	font-family: FontAwesome;
+	color: gold;
+	font-size: 16px;
+}
 .not-featured {
 	display: inline-block;
-	background: url('../images/glyphs/favorites-gray.png');
-	width: 16px;
-	height: 16px;
 	cursor: pointer;
 	margin-right: 5px;
 }
-
+.not-featured:before {
+	content: "\f005"; 
+	font-family: FontAwesome;
+	color: #B3B3B3;
+	font-size: 16px;
+}
 
 /*  ACP: portal module management */
 .portal_block_border {
@@ -2008,14 +2017,23 @@ a.attendee_Link:hover{
 	display: block;
 }
 
-.notsignedpanel_close {
-	position:absolute;
-	background: url(../images/global/close.png) no-repeat;
-	height: 32px;
-	width: 32px;
-	top: -16px;
-	left: -16px;
+span.group_selector {
+	outline: none;
+	float: right;
+	display: block;
+}
+
+.notsignedpanel_close{
 	cursor: pointer;
+}
+.notsignedpanel_close:before{
+	content: "\f057"; 
+	font-family: FontAwesome;
+	color: red;
+	font-size: 32px;
+	position: absolute;
+	top: -12px;
+	left: -12px;
 }
 
 #memberScroller{
@@ -2134,6 +2152,10 @@ div.error { display: none; }
 
 .news_comments .top {
 	font-size: 22px;
+}
+
+.image_zoom{
+	color:#204C75;
 }
 
 .contentWidth30{

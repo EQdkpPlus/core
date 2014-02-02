@@ -79,9 +79,8 @@
 			</div>
 			<div id="inner_layer">
 				<h2>{L_SPLASH_WELCOME}</h2>
-				<p>{L_SPLASH_DESC}</p>
-				<div><img src="../images/admin/admin_index/support_tour.png" border="0" style="float:left;"/>
-				
+				<p>{L_SPLASH_DESC}</p><br/>
+				<div><span class="fa-stack fa-3x"  style="float:left;"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-tachometer fa-stack-1x fa-inverse"></i></span>
 					<br />{L_SPLASH_NEW} <br /> <strong><a href="task_manager.php{SID}&start_tour=true">{L_TOUR_START}</a>
 					<div class="clear"></div>
 				</div>

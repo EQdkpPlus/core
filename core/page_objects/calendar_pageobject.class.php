@@ -18,8 +18,7 @@
 
 class calendar_pageobject extends pageobject {
 	public static function __shortcuts() {
-		$shortcuts = array('jquery', 'user', 'tpl', 'in', 'pdh', 'html', 'config', 'core', 'time', 'env');
-		return array_merge(parent::__shortcuts(), $shortcuts);
+		return array_merge(parent::__shortcuts(), array());
 	}
 
 	public function __construct() {

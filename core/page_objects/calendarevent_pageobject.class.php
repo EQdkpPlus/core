@@ -18,28 +18,30 @@
 class calendarevent_pageobject extends pageobject {
 
 	public static function __shortcuts() {
-		$shortcuts = array('user', 'db', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'env', 'config', 'html', 'time', 'logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
+		$shortcuts = array('logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
 		return array_merge(parent::__shortcuts(), $shortcuts);
 	}
 	
 	public function __construct() {
 		$handler = array(
 			'closedstatus'	=> array(
-				array('process' => 'close_raid',	'value' => 'close', 'csrf'=>true),
-				array('process' => 'open_raid',		'value' => 'open', 'csrf'=>true),
+				array('process' => 'close_raid',	'value' => 'close',			'csrf'=>true),
+				array('process' => 'open_raid',		'value' => 'open',			'csrf'=>true),
 			),
 			'ajax'	=> array(
 				array('process' => 'role_ajax',	'value' => 'role'),
 			),
-			'savenote'			=> array('process' => 'save_raidnote', 'csrf'=>true),
-			'update_status'		=> array('process' => 'update_status', 'csrf'=>true),
-			'moderate_status'	=> array('process' => 'moderate_status', 'csrf'=>true),
-			'confirmall'		=> array('process' => 'confirm_all', 'csrf'=>true),
+			'savenote'			=> array('process' => 'save_raidnote',			'csrf'=>true),
+			'update_status'		=> array('process' => 'update_status',			'csrf'=>true),
+			'moderate_status'	=> array('process' => 'moderate_status',		'csrf'=>true),
+			'moderate_group'	=> array('process' => 'moderate_group',			'csrf'=>true),
+			'confirmall'		=> array('process' => 'confirm_all',			'csrf'=>true),
 			'ical'				=> array('process' => 'generate_ical'),
-			'add_notsigned'		=> array('process' => 'add_notsigned_chars', 'csrf'=>true),
-			'changecharmenu'	=> array('process' => 'change_char', 'csrf'=>true),
-			'changenotemenu'	=> array('process' => 'change_note', 'csrf'=>true),
-			'guestid'			=> array('process' => 'delete_guest', 'csrf'=>true),
+			'add_notsigned'		=> array('process' => 'add_notsigned_chars',	'csrf'=>true),
+			'change_char'		=> array('process' => 'change_char',			'csrf'=>true),
+			'change_note'		=> array('process' => 'change_note',			'csrf'=>true),
+			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
+			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
 		);
 
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
@@ -133,6 +135,18 @@ class calendarevent_pageobject extends pageobject {
 		}
 	}
 
+	// moderator/operator changes a raid group for an already signed in char
+	public function moderate_group(){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
+			$this->pdh->put('calendar_raids_attendees', 'moderate_group', array(
+				$this->url_id,
+				$this->in->get('moderation_raidgroup'),
+				$this->in->getArray('modstat_change', 'int')
+			));
+			$this->pdh->process_hook_queue();
+		}
+	}
+
 	// delete a guest
 	public function delete_guest(){
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
@@ -182,6 +196,18 @@ class calendarevent_pageobject extends pageobject {
 				$this->url_id,
 				$this->in->get('subscribed_member_id', 0),
 				$this->in->get('notechange_note', ''),
+			));
+			$this->pdh->process_hook_queue();
+		}
+	}
+
+	// moderator/operator changes the group of an already signed in char
+	public function change_group(){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
+			$this->pdh->put('calendar_raids_attendees', 'update_group', array(
+				$this->url_id,
+				$this->in->get('subscribed_member_id', 0),
+				$this->in->get('groupchange_group', 0),
 			));
 			$this->pdh->process_hook_queue();
 		}
@@ -357,7 +383,7 @@ class calendarevent_pageobject extends pageobject {
 									)), 'member', 'classname')));
 
 		// get all attendees
-		$this->attendees_raw	= $this->pdh->get('calendar_raids_attendees', 'attendees', array($this->url_id));
+		$this->attendees_raw	= $this->pdh->get('calendar_raids_attendees', 'attendees', array($this->url_id, $this->in->get('raidgroup_filter', 0)));
 		$userlist				= $this->pdh->get('user', 'id_list', array());
 		$attendee_ids			= (is_array($this->attendees_raw)) ? array_keys($this->attendees_raw) : array();
 		$this->unsigned			= array();
@@ -371,7 +397,7 @@ class calendarevent_pageobject extends pageobject {
 						$char_status			= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $char_id));
 						$tmp_chars[$char_id]	= $this->members[$char_id];
 
-						// if one member of this char is in the raud, remove the members and go to next user
+						// if one member of this char is in the raid, remove the members and go to next user
 						if($char_status != '4'){
 							$tmp_chars = array();
 							break;
@@ -575,19 +601,21 @@ class calendarevent_pageobject extends pageobject {
 								'roles'	=> ''
 							);
 						}
-
 						// put the data to the template engine
-						$sanitized_note = str_replace('"', "'", $memberdata['note']);
+						$sanitized_note	= str_replace('"', "'", $memberdata['note']);
+						$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $memberid));
 						$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 							'MEMBERID'			=> $memberid,
 							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 1 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
+							'GROUPS'			=> new hdropdown('groupchange_group', array('options' => $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))), 'value' => $raidgroup)),
 							'TOOLTIP'			=> implode('<br />', $membertooltip),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : false),
-							'NOTE_TT'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $sanitized_note : false),
+							'NOTE_TT'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? htmlspecialchars('<i class="fa fa-comment"> '.$sanitized_note.'</i>') : false),
+							'RAIDGROUP_TT'		=> ($raidgroup > 0) ? htmlspecialchars('<i class="fa fa-users"> '.$this->pdh->get('raid_groups', 'name', array($raidgroup))) : false,
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
 						));
@@ -761,6 +789,8 @@ class calendarevent_pageobject extends pageobject {
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
 			'DD_SIGNUPSTATUS'		=> new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])),
 			'DD_MODSIGNUPSTATUS'	=> new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')),
+			'DD_MODRAIDGROUPS'		=> new hdropdown('moderation_raidgroup', array('options' => $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))), 'value' => 0)),
+			'DD_RAIDGROUPS'			=> new hdropdown('raidgroup_filter', array('options' => array_merge(array(0=>$this->user->lang('raidevent_raid_all_raidgroups')), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')))), 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')),
 			'DD_NOTSIGNEDINSTATUS'	=> new hdropdown('notsigned_raidstatus', array('options' => $this->raidstatus, 'value' => '0')),
 
 			'SUBSCRIBED_MEMBER_ID'	=> $this->mystatus['member_id'],
@@ -787,8 +817,9 @@ class calendarevent_pageobject extends pageobject {
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
 			'L_SIGNEDIN_MSG'		=> $alreadysignedinmsg,
 			
-			'CSRF_CHANGECHARMENU_TOKEN' => $this->CSRFGetToken('changecharmenu'),
-			'CSRF_CHANGENOTEMENU_TOKEN' => $this->CSRFGetToken('changenotemenu'),
+			'CSRF_CHANGECHAR_TOKEN'	=> $this->CSRFGetToken('change_char'),
+			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),
+			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
 				
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
 		));

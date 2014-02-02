@@ -160,17 +160,17 @@ class php_check extends install_generic {
 		foreach($phpcheckdata as $fname=>$fdata){
 			if(isset($fdata['adviced_fail']) && $fdata['passfail']){
 				$passfail_color	= ($fdata['adviced_fail']) ? 'neutral' : (($fdata['passfail']) ? 'positive' : 'negative');
-				$passfail_icon	= ($fdata['adviced_fail']) ? 'style/warn.png' : (($fdata['passfail']) ? 'style/ok.png' : 'style/failed.png');
+				$passfail_icon	= ($fdata['adviced_fail']) ? 'fa-exclamation-triangle' : (($fdata['passfail']) ? 'fa-check-circle' : 'fa-times-circle');
 			}else{
 				$passfail_color	= ($fdata['passfail']) ? 'positive' : 'negative';
-				$passfail_icon	= (($fdata['passfail']) ? 'style/ok.png' : 'style/failed.png');
+				$passfail_icon	= (($fdata['passfail']) ? 'fa-check-circle' : 'fa-times-circle');
 			}
 			$content .= '<tr>
 				<td>'.(($this->lang['module_'.$fname]) ? $this->lang['module_'.$fname] : $fname).'</td>
 				<td class="'.$passfail_color.'">'.$fdata['installed'].'</td>
 				<td class="positive">'.((isset($fdata['recommended'])) ? $fdata['recommended'] : $fdata['required']).'</td>		
 				<td class="positive">'.$fdata['required'].'</td>
-				<td><img src="'.$passfail_icon.'" alt="passfail" /></td>
+				<td><i class="fa '.$passfail_icon.' fa-2x '.$passfail_color.'"></i></td>
 			</tr>';
 		}
 		$content .='</tbody>
