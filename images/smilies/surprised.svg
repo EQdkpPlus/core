@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="16px" height="16px" viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
+<title>Scared</title>
+<desc>Scared Smiley</desc>
+<g id="SmileyBody">
+	<g id="BlushBody">
+		<path style="fill:#FFFFFF;" d="M0,8.6c0-4.1,3.4-7.4,7.5-7.4S15,4.5,15,8.6c0,4.1-3.4,7.4-7.5,7.4S0,12.7,0,8.6z"/>
+		<g>
+			
+				<radialGradient id="SVGID_1_" cx="3.4619" cy="5.3516" r="7.2499" gradientTransform="matrix(1 0 0 -1 4 11)" gradientUnits="userSpaceOnUse">
+				<stop  offset="0" style="stop-color:#FFFFFF"/>
+				<stop  offset="1" style="stop-color:#FFF5AB"/>
+				<stop  offset="1" style="stop-color:#FFF4A8"/>
+				<stop  offset="1" style="stop-color:#FFF29E"/>
+				<stop  offset="1" style="stop-color:#FEEE8D"/>
+				<stop  offset="1" style="stop-color:#FEE976"/>
+				<stop  offset="1" style="stop-color:#FDE258"/>
+				<stop  offset="1" style="stop-color:#FCDA33"/>
+				<stop  offset="1" style="stop-color:#FCD621"/>
+			</radialGradient>
+			<path style="fill:url(#SVGID_1_);" d="M7.5,14.8c-4,0-7.3-3.3-7.3-7.2c0-4,3.3-7.3,7.3-7.3c4,0,7.2,3.3,7.2,7.3
+				C14.8,11.5,11.5,14.8,7.5,14.8L7.5,14.8z"/>
+			<path style="fill:#999966;" d="M7.5,0.5c3.9,0,7,3.1,7,7c0,3.9-3.1,7-7,7c-3.9,0-7-3.1-7-7C0.5,3.6,3.6,0.5,7.5,0.5 M7.5,0
+				C3.4,0,0,3.4,0,7.5C0,11.6,3.4,15,7.5,15c4.1,0,7.5-3.4,7.5-7.5C15,3.4,11.6,0,7.5,0L7.5,0z"/>
+		</g>
+	</g>
+</g>
+<g id="SmileyFace">
+	<g id="ScaredSmiley">
+		<g id="Mouth">
+			<path style="fill:#666633;" d="M7,8c-1.6,0-3,1.1-3,2.5S5.4,13,7,13h1c1.7,0,3-1.1,3-2.5S9.7,8,8,8H7z"/>
+		</g>
+		<g id="Tounge">
+			<path id="Frame" style="fill:#993300;" d="M7.5,11.2c0,0-3-1.2-1.7,1.6c0,0,0.7,0.2,1.1,0.2h1.1c0.4,0,1.1-0.2,1.1-0.2
+				C10.5,10,7.5,11.2,7.5,11.2z"/>
+			
+				<linearGradient id="Inner_1_" gradientUnits="userSpaceOnUse" x1="3.5005" y1="-0.251" x2="3.5005" y2="-2.0005" gradientTransform="matrix(1 0 0 -1 4 11)">
+				<stop  offset="0" style="stop-color:#FF0000"/>
+				<stop  offset="0.2919" style="stop-color:#FC0202"/>
+				<stop  offset="0.5263" style="stop-color:#F2080A"/>
+				<stop  offset="0.7407" style="stop-color:#E11316"/>
+				<stop  offset="0.9422" style="stop-color:#C92227"/>
+				<stop  offset="1" style="stop-color:#C1272D"/>
+			</linearGradient>
+			<path id="Inner" style="fill:url(#Inner_1_);" d="M7.5,11.4c0,0-2.5-0.9-1.5,1.4c0,0,0.6,0.1,1,0.1h1c0.3,0,1-0.1,1-0.1
+				C10,10.5,7.5,11.4,7.5,11.4z"/>
+		</g>
+		<g id="RightEye">
+			<g id="EyeR">
+				<path style="fill:#666633;" d="M11.5,4.5c0,0.8-0.6,1.5-1.2,1.5S9,5.3,9,4.5C9,3.7,9.6,3,10.2,3S11.5,3.7,11.5,4.5z"/>
+			</g>
+			<circle id="PupillR" style="fill:#FFFFFF;" cx="10.5" cy="4.5" r="0.5"/>
+			<g id="BrowR">
+				<path style="fill:#666633;" d="M2.2,3.6C2.1,3.8,2.1,4,2.1,4s0.2-0.2,0.3-0.5l0.6-1.2C3.2,2.1,3.5,2,3.8,2l0.6,0.1
+					C4.6,2.3,5,2.2,5.2,2l0,0C5.4,1.8,5.3,1.5,5,1.5L3.5,1.1C3.2,1.1,2.9,1.2,2.8,1.5L2.2,3.6z"/>
+			</g>
+		</g>
+		<g id="LeftEye">
+			<g id="EyeL">
+				<path style="fill:#666633;" d="M6,4.5C6,5.3,5.4,6,4.8,6S3.5,5.3,3.5,4.5C3.5,3.7,4.1,3,4.8,3S6,3.7,6,4.5z"/>
+			</g>
+			<circle id="PupillL" style="fill:#FFFFFF;" cx="4.5" cy="4.5" r="0.5"/>
+			<g id="BrowL">
+				<path style="fill:#666633;" d="M12.8,3.6c0.1,0.3,0.1,0.5,0,0.5s-0.2-0.2-0.3-0.5l-0.6-1.2C11.8,2.1,11.5,2,11.2,2l-0.6,0.1
+					C10.4,2.3,10,2.2,9.8,2l0,0C9.6,1.8,9.7,1.5,10,1.5l1.6-0.4c0.3-0.1,0.6,0.1,0.6,0.4L12.8,3.6z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

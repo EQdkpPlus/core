@@ -170,7 +170,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_html_tag($id, $link_url=false, $link_suffix='') {	
 			if(!$this->get_tag($id)) return "";
 			$intFlag = (int)$this->objPagination->get($id, 'log_flag');		
-			$flag = ($intFlag == 1) ? ' class="admin_icon"' : '';
+			$flag = ($intFlag == 1) ? ' class="adminicon"' : '';
 			if(!$link_url) return ($flag) ? '<span'.$flag.'><span>'.$this->user->lang($this->get_tag($id), true, false).'</span></span>' : $this->user->lang($this->get_tag($id), true, false);
 			$link = $link_url.$this->SID . '&amp;logid='.$id.$link_suffix;
 			$link = '<a'.$flag.' title="'.(($intFlag == 1) ? $this->user->lang('admin_action') : '').'" href="'.$link.'"><span>';

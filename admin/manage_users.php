@@ -403,7 +403,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 				'U_DELETE'			=> 'manage_users.php'.$this->SID.'&amp;del=single&amp;user_id='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('del'),
 				'USER_ID'			=> $user_id,
 				'NAME_STYLE'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? 'font-weight: bold' : 'font-weight: none',
-				'ADMIN_ICON'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? '<img src="../images/global/admin_flag.png" title="'.$this->user->lang('admin').'" alt="'.$this->user->lang('admin').'" /> ' : '',
+				'ADMIN_ICON'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? '<span class="adminicon"></span> ' : '',
 				'USERNAME'			=> $this->pdh->get('user', 'name', array($user_id)),
 				'EMAIL'				=> $this->pdh->get('user', 'email', array($user_id)),
 				'LAST_VISIT'		=> ($this->pdh->get('user', 'last_visit', array($user_id))) ? $this->time->user_date($this->pdh->get('user', 'last_visit', array($user_id)), true) : '',

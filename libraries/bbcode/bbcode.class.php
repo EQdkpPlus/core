@@ -63,12 +63,12 @@ if (!class_exists("bbcode")) {
 			);
 
 			$out = array(
-				'<img alt=":)" src="'.$this->smiliepath.'/happy.png" />',
-				'<img alt=":D" src="'.$this->smiliepath.'/smile.png" />',
-				'<img alt=":o" src="'.$this->smiliepath.'/surprised.png" />',
-				'<img alt=":p" src="'.$this->smiliepath.'/tongue.png" />',
-				'<img alt=":(" src="'.$this->smiliepath.'/unhappy.png" />',
-				'<img alt=";)" src="'.$this->smiliepath.'/wink.png" />'
+				'<img alt=":)" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
+				'<img alt=":D" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
+				'<img alt=":o" src="'.$this->smiliepath.'/surprised.svg" class="smilies" />',
+				'<img alt=":p" src="'.$this->smiliepath.'/tongue.svg" class="smilies" />',
+				'<img alt=":(" src="'.$this->smiliepath.'/unhappy.svg" class="smilies" />',
+				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'
 			);
 
 			$text = preg_replace('/\<img(.*?)alt=\"(\W.*?)\"(.*?)\>/si' , '$2' , $text);

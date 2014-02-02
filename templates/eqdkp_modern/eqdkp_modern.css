@@ -796,6 +796,22 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 [class^="bi_"],[class*=" bi_"]{
 	text-indent: 0px;
 }
+.bi_compare:before{
+	content: "\f0ec"; 
+	font-family: FontAwesome;
+	font-size: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+}
+.bi_facebook:before{
+	content: "\f082"; 
+	font-family: FontAwesome;
+	font-size: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 3px;
+}
 
 /*Image Button without value*/
 .novalue {
@@ -1731,6 +1747,13 @@ ul.breamcrumb .current::before{
 	color: #606060 !important;
 }
 
+/* ACP: index, browsers */
+.browser-icon{
+	width:24px;
+	height:24px;
+	color: grey;
+}
+
 /* ACP: index, rss notifications */
 #notifications,
 #twitterfeed{
@@ -1970,6 +1993,30 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	padding-top: 0px;
 }
 
+.add_guest{
+	display: block;
+	width:  40px;
+	height: 40px;
+	margin: 4px;
+	font-size: 20px;
+	color:red;
+	background-image: url(EQDKP_IMAGE_PATHsvg/icon-adduser.png) no-repeat;
+	background-size: contain;
+}
+
+.default-avatar{
+	background-image: url(EQDKP_IMAGE_PATHsvg/avatar-default.png) no-repeat;
+	background-size: contain;
+	display:inline-block;
+	width:  24px;
+	height: 24px;
+}
+
+.default-avatar.small{
+	width:  24px;
+	height: 24px;
+}
+
 .guesttable b {
 	font-family: 'Trebuchet MS',Arial,sans-serif;
 	font-weight: bold;
@@ -2179,6 +2226,10 @@ div.error { display: none; }
 }
 
 /* comments */
+.smilies{
+	width:20px;
+	height:20px;
+}
 .comment_avatar {
 	vertical-align:middle;
 	text-align:center;

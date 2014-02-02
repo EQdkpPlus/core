@@ -460,12 +460,12 @@ if (!class_exists("pdh_r_user")){
 		public function get_html_avatarimglink($user_id, $fullSize=false){
 			$strImg = $this->get_avatarimglink($user_id, $fullSize);
 			if (!strlen($strImg)){
-				$strImg = $this->server_path.'images/no_pic.png';
+				$strImg = '<span class="fa-stack fa-2x"><i class="fa fa-square fa-stack-2x" style="color:gray;"></i><i class="fa fa-user fa-stack-1x fa-inverse" style="font-size: 1.7em;"></i></span>';
 			} else {
-				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
+				$strImg = '<img src="'.$this->pfh->FileLink($strImg, false, 'absolute').'" class="user-avatar" alt="" />';
 			}
 			
-			return '<img src="'.$strImg.'" class="user-avatar" alt="" />';
+			return $strImg;
 		}
 
 		public function get_privacy_settings($user_id) {

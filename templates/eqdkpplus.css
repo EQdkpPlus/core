@@ -139,19 +139,13 @@ ul.sf-ddm li li li.sfHover ul {
 	cursor:pointer;
 }
 
-/* Admin - Icon 
-.admin_icon {
-	background: url('../images/global/admin_flag.png') no-repeat;
-}*/
-.admin_icon:before {
+/* Admin - Icon */
+.adminicon:before {
 	content: "\f132"; 
 	font-family: FontAwesome;
 	color: gold;
-	font-size: 18px;
-	position: absolute;
-}
-.admin_icon  > * {
-	margin-left: 16px;
+	font-size: 16px;
+	margin-right:6px;
 }
 
 /* BBCode */
@@ -241,25 +235,8 @@ tr.cm_confirm{
 	vertical-align: middle;
 	margin-right: 3px;
 }
-.bi_facebook{
-	background:url(../images/glyphs/facebook.png) no-repeat 2px center;
-	height: 16px;
-    width: 16px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 3px;
-}
-
 .bi_persona{
 	background:url(../images/glyphs/persona.png) no-repeat 2px center;
-	height: 16px;
-    width: 16px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 3px;
-}
-.bi_compare{
-	background:url(../images/glyphs/compare.png) no-repeat 2px center;
 	height: 16px;
     width: 16px;
 	display: inline-block;
