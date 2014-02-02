@@ -151,7 +151,7 @@ class guildImporter extends page_generic {
 				});
 				getData();', 'docready');
 			$this->tpl->add_js('
-			var guilddataArry = $.parseJSON(\''.json_encode($jsondata).'\');
+			var guilddataArry = $.parseJSON(\''.json_encode($jsondata, JSON_HEX_APOS).'\');
 			function getData(i){
 				if (!i)
 					i=0;
