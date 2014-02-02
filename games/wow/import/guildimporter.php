@@ -204,7 +204,7 @@ class guildImporter extends page_generic {
 			}
 
 			//Revoke Char
-			if ($this->in->get('del', '') == 'true'){		
+			if ($this->in->get('del', '') == 'true'){
 				if ($member_id) {
 					$this->pdh->put('member', 'revoke', array($member_id));
 					$this->pdh->process_hook_queue();
