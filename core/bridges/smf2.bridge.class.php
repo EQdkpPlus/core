@@ -67,7 +67,6 @@ class smf2_bridge extends bridge_generic {
 	public $sync_fields = array(
 		'icq',
 		'birthday',
-		'msn',
 		'user_email',
 		'username',
 		'town',
@@ -170,7 +169,6 @@ class smf2_bridge extends bridge_generic {
 			'icq' 			=> $arrUserdata['icq'],
 			'town'			=> $arrUserdata['location'],
 			'birthday'		=> $this->_handle_birthday($arrUserdata['birthdate']),
-			'msn'			=> $arrUserdata['msn'],
 			'gender'		=> $arrUserdata['gender'],
 		);
 		return $sync_array;

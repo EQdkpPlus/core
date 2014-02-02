@@ -79,7 +79,6 @@ class phpbb3_bridge extends bridge_generic {
 		'town',
 		'interests',
 		'birthday',
-		'msn',
 		'user_email',
 		'username',
 	);
@@ -283,7 +282,6 @@ class phpbb3_bridge extends bridge_generic {
 			'town'			=> $arrUserdata['user_from'],
 			'interests'		=> $arrUserdata['user_interests'],
 			'birthday'		=> $this->_handle_birthday($arrUserdata['user_birthday']),
-			'msn'			=> $arrUserdata['user_msnm'],
 		);
 		return $sync_array;
 	}

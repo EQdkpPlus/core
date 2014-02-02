@@ -54,7 +54,6 @@ CREATE TABLE `__users` (
 	`address` text COLLATE utf8_bin,
 	`icq` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`skype` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`msn` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`irq` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`gender` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`birthday` BIGINT(10) NULL DEFAULT '0',

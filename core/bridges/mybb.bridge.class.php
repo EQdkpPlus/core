@@ -75,7 +75,6 @@ class mybb_bridge extends bridge_generic {
 	public $sync_fields = array(
 		'icq',
 		'birthday',
-		'msn',
 		'user_email',
 		'username',
 	);
@@ -133,7 +132,6 @@ class mybb_bridge extends bridge_generic {
 		$sync_array = array(
 			'icq' 			=> $arrUserdata['icq'],
 			'birthday'		=> $this->_handle_birthday($arrUserdata['birthday']),
-			'msn'			=> $arrUserdata['msn'],
 		);
 		return $sync_array;
 	}
