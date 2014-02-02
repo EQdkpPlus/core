@@ -411,6 +411,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 						<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
 					</dd>
 				</dl>
+				<!-- IF SHOW_RAIDGROUPS -->
 				<dl>
 					<dt><label>{L_raidevent_raid_mod_raidgroup}</label></dt>
 					<dd>
@@ -418,6 +419,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 						<input type="submit" name="moderate_group" value="{L_raidevent_raid_modgroup}" class="mainoption bi_ok" />
 					</dd>
 				</dl>
+				<!-- ENDIF -->
 				<dl>
 					<dt><label>{L_raidevent_raid_confirmall}</label></dt>
 					<dd><input type="submit" disabled="disabled" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" id="button_confirmall"/></dd>
@@ -425,6 +427,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			</span>
 		</fieldset>
 	</div>
+	<!-- IF SHOW_RAIDGROUPS -->
 	<div class="table">
 		<div class="tr">
 			<div class="td">
@@ -432,6 +435,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			</div>
 		</div>
 	</div>
+	<!-- ENDIF -->
 	
 	<!-- ENDIF -->
 	

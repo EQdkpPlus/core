@@ -529,19 +529,19 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				0 => array(
 					'name'		=> $this->user->lang('uc_edit_char'),
 					'link'		=> "javascript:EditChar('".$memberid."')",
-					'icon'		=> 'fa-pencil fa-lg',
+					'icon'		=> 'fa-pencil',
 					'perm'		=> $this->user->check_auth('u_member_man', false),
 				),
 				1 => array(
 					'name'		=> $this->user->lang('uc_delete_char'),
 					'link'		=> "javascript:DeleteChar('".$memberid."')",
-					'icon'		=> 'fa-times fa-lg',
+					'icon'		=> 'fa-times',
 					'perm'		=> $this->user->check_auth('u_member_del', false),
 				),
 				2 => array(
 					'name'		=> $this->game->glang('uc_updat_armory'),
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
-					'icon'		=> 'fa-refresh fa-lg',
+					'icon'		=> 'fa-refresh',
 					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update'),
 				),
 			);

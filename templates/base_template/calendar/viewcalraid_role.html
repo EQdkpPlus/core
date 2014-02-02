@@ -56,14 +56,14 @@
 											<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
 											<!-- ENDIF -->
 											<!-- ENDIF -->
-											<!-- IF raidstatus.classes.status.RAIDGROUP_TT -->
+											<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
 											<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}"></i>
 											<!-- ENDIF -->
 											<!-- IF IS_OPERATOR -->
 											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-charadmintt-id="member_{raidstatus.classes.status.MEMBERID}"></span>
 											<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
 												<fieldset class="settings">
-													<legend class="smaller"><i class="fa fa-random fa-lg"> {L_raidevent_raid_changecharmenu}</i></legend>
+													<legend class="smaller"><i class="fa fa-random fa-lg"></i> {L_raidevent_raid_changecharmenu}</legend>
 													<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 													<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
 													{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
@@ -71,14 +71,14 @@
 												</fieldset><br/>
 												<!-- IF IS_OPERATOR && SHOW_CHARCHANGE -->
 												<fieldset class="settings">
-													<legend class="smaller"><i class="fa fa-comment fa-lg"> {L_raidevent_raid_changenotemenu}</i></legend>
+													<legend class="smaller"><i class="fa fa-comment fa-lg"></i> {L_raidevent_raid_changenotemenu}</legend>
 													<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 													<textarea name="notechange_note" cols="30" rows="3">{raidstatus.classes.status.NOTE}</textarea>
 													<button type="button" name="submit_notechange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
 												</fieldset><br/>
 												<!-- ENDIF -->
 												<fieldset class="settings">
-													<legend class="smaller"><i class="fa fa-users fa-lg"> {L_raidevent_raid_groupsmenu}</i></legend>
+													<legend class="smaller"><i class="fa fa-users fa-lg"></i> {L_raidevent_raid_groupsmenu}</legend>
 													{raidstatus.classes.status.GROUPS}
 													<input type="hidden" name="groupchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 													<button type="button" name="submit_groupchange" class="submit_groupchange" value="" style="float:right;"><i class="fa fa-check fa-lg"></i></button>

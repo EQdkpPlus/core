@@ -418,6 +418,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
 		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
 		$shownotes_ugroups		= $this->config->get('calendar_raid_shownotes');
+		$this->raidgroup_dd		= $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 
 		// Build the attendees aray for this raid by class
 		if(is_array($this->attendees_raw)){
@@ -610,7 +611,7 @@ class calendarevent_pageobject extends pageobject {
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
-							'GROUPS'			=> new hdropdown('groupchange_group', array('options' => $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))), 'value' => $raidgroup)),
+							'GROUPS'			=> new hdropdown('groupchange_group', array('options' => $this->raidgroup_dd, 'value' => $raidgroup)),
 							'TOOLTIP'			=> implode('<br />', $membertooltip),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : false),
@@ -672,7 +673,7 @@ class calendarevent_pageobject extends pageobject {
 			1 => array(
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
 				'link'	=> 'javascript:EditRaid()',
-				'icon'	=> 'fa fa-pencil-square-o fa-lg',
+				'icon'	=> 'fa-pencil-square-o',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			2 => array(
@@ -684,31 +685,31 @@ class calendarevent_pageobject extends pageobject {
 			3 => array(
 				'name'	=> $this->user->lang('raidevent_raid_transform'),
 				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
-				'icon'	=> 'fa-exchange fa-lg',
+				'icon'	=> 'fa-exchange',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			4 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
 				'link'	=> $this->strPath.$this->SID.'&amp;ical=true',
-				'icon'	=> 'fa-calendar fa-lg',
+				'icon'	=> 'fa-calendar',
 				'perm'	=> true,
 			),
 			5 => array(
 				'name'	=> $this->user->lang('raidevent_raid_export'),
 				'link'	=> 'javascript:ExportDialog()',
-				'icon'	=> 'fa-share-square-o fa-lg',
+				'icon'	=> 'fa-share-square-o',
 				'perm'	=> true,
 			),
 			6 => array(
 				'name'	=> $this->user->lang('calendars_add_title'),
 				'link'	=> 'javascript:AddRaid()',
-				'icon'	=> 'fa-plus icon_large',
+				'icon'	=> 'fa-plus',
 				'perm'	=> $this->user->check_auth('u_cal_event_add', false),
 			),
 			7 => array(
 				'name'	=> $this->user->lang('massmail_send'),
 				'link'	=> $this->server_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
-				'icon'	=> 'fa-envelope fa-lg',
+				'icon'	=> 'fa-envelope',
 				'perm'	=> $this->user->check_auth('a_users_massmail', false),
 			),
 		);
@@ -782,6 +783,7 @@ class calendarevent_pageobject extends pageobject {
 			'IS_SIGNEDIN'			=> ($this->mystatus['member_id'] > 0 && $mysignedstatus != 4) ? true : false,
 			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
+			'SHOW_RAIDGROUPS'		=> $this->pdh->get('raid_groups', 'groups_enabled'),
 
 			//Data
 			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton')),
@@ -789,8 +791,8 @@ class calendarevent_pageobject extends pageobject {
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
 			'DD_SIGNUPSTATUS'		=> new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])),
 			'DD_MODSIGNUPSTATUS'	=> new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')),
-			'DD_MODRAIDGROUPS'		=> new hdropdown('moderation_raidgroup', array('options' => $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))), 'value' => 0)),
-			'DD_RAIDGROUPS'			=> new hdropdown('raidgroup_filter', array('options' => array_merge(array(0=>$this->user->lang('raidevent_raid_all_raidgroups')), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')))), 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')),
+			'DD_MODRAIDGROUPS'		=> new hdropdown('moderation_raidgroup', array('options' => $this->raidgroup_dd, 'value' => 0)),
+			'DD_RAIDGROUPS'			=> new hdropdown('raidgroup_filter', array('options' => array_merge(array(0=>$this->user->lang('raidevent_raid_all_raidgroups')), $this->raidgroup_dd), 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')),
 			'DD_NOTSIGNEDINSTATUS'	=> new hdropdown('notsigned_raidstatus', array('options' => $this->raidstatus, 'value' => '0')),
 
 			'SUBSCRIBED_MEMBER_ID'	=> $this->mystatus['member_id'],

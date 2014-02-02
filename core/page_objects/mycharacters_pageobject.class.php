@@ -89,19 +89,19 @@ class mycharacters_pageobject extends pageobject {
 			0 => array(
 				'name'		=> $this->user->lang('uc_add_char_plain'),
 				'link'		=> "javascript:AddChar()",
-				'icon'		=> 'fa-plus fa-lg',
+				'icon'		=> 'fa-plus',
 				'perm'		=> $this->user->check_auth('u_member_add', false),
 			),
 			1 => array(
 				'name'		=> $this->user->lang('uc_add_char_armory'),
 				'link'		=> "javascript:AddCharArmory()",
-				'icon'		=> 'fa-download fa-lg',
+				'icon'		=> 'fa-download',
 				'perm'		=> $this->game->get_importAuth('u_member_add', 'char_import'),
 			),
 			2 => array(
 				'name'		=> $this->user->lang('uc_add_massupdate'),
 				'link'		=> "javascript:MassUpdateChars()",
-				'icon'		=> 'fa-refresh fa-lg',
+				'icon'		=> 'fa-refresh',
 				'perm'		=> $this->game->get_importAuth('a_members_man', 'char_mupdate'),
 			),
 		);
