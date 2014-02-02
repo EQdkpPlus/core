@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
 
 class bnet_armory {
 
-	private $version		= '5.2.0';
+	private $version		= '5.2.1';
 	private $build			= '$Rev$';
 	private $chariconUpdates = 0;
 	private $chardataUpdates = 0;
@@ -400,7 +400,7 @@ class bnet_armory {
 		$cached_img	= sprintf('image_tabard_%s_w%s.png', strtolower(str_replace(' ', '', $guild)), $imgwidth);
 		$imgfile_sp = $this->get_CachedData($cached_img, false, true, false, true);
 		if(!$imgfile = $this->get_CachedData($cached_img, false, true)){
-			if(!function_exists('imagecreatefrompng') || !function_exists('imagelayereffect') || version_compare(PHP_VERSION, "5.3.0", '<')){
+			if(!function_exists('imagecreatefrompng') || version_compare(PHP_VERSION, "5.3.0", '<')){
 				return sprintf('games/wow/guild/tabard_%s.png', (($faction == 0) ? 'alliance' : 'horde'));
 			}
 			$imgfile	= $this->get_CachedData($cached_img, false, true, true);
@@ -926,7 +926,10 @@ class bnet_armory {
 	* @return true/false
 	*/
 	private function checkImageLayerEffect(){
-		return function_exists('imagelayereffect');
+		$gdInfo		= gd_info();
+		if (function_exists('imagelayereffect') && strpos($gdInfo['GD Version'], 'bundled')) {
+			return true;
+		}
 	}
 
 	/**
