@@ -1994,18 +1994,21 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 }
 
 .add_guest{
+	background: url('EQDKP_IMAGE_PATHsvg/icon-adduser.svg') no-repeat;
+	background-size: contain;
 	display: block;
 	width:  40px;
 	height: 40px;
-	margin: 4px;
 	font-size: 20px;
-	color:red;
-	background-image: url(EQDKP_IMAGE_PATHsvg/icon-adduser.png) no-repeat;
-	background-size: contain;
+}
+
+.svg-button-inline {
+	fill: #fff;
+	stroke: #fff;
 }
 
 .default-avatar{
-	background-image: url(EQDKP_IMAGE_PATHsvg/avatar-default.png) no-repeat;
+	background: url(EQDKP_IMAGE_PATHsvg/avatar-default.svg) no-repeat;
 	background-size: contain;
 	display:inline-block;
 	width:  24px;

@@ -158,7 +158,7 @@ function color_item($item, $percentage = false){
 		return false;
 	}
 	$class		= 'neutral';
-	$vals = unserialize(registry::register('config')->get('color_items'));
+	$vals = registry::register('config')->get('color_items');
 	$max_val	= ($vals[1]) ? $vals[1] : 67;
 	$min_val	= ($vals[0]) ? $vals[0] : 34;
 
