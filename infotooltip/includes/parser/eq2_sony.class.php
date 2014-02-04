@@ -31,7 +31,7 @@ if(!class_exists('eq2_sony')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'eq2' => array('icon_loc' => 'http://data.soe.com/img/eq2/icons/', 'icon_ext' => '/item/', 'default_icon' => 'unknown'),
+				'eq2' => array('icon_loc' => 'http://census.soe.com/img/eq2/icons/', 'icon_ext' => '/item/', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -72,7 +72,7 @@ if(!class_exists('eq2_sony')) {
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
 			$itemInfo = urlencode($itemname);
-			$link = 'http://data.soe.com/json/get/eq2/item/?displayname=' . $itemInfo;
+			$link = 'http://census.soe.com/json/get/eq2/item/?displayname=' . $itemInfo;
 			$data = $this->puf->fetch($link);
 			$this->searched_langs[] = $lang;
 			$itemData = json_decode($data);
@@ -91,7 +91,7 @@ if(!class_exists('eq2_sony')) {
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-			$url = 'http://data.soe.com/json/get/eq2/item/' . $item['id'];
+			$url = 'http://census.soe.com/json/get/eq2/item/' . $item['id'];
 			$item['link'] = $url;
 			$data = $this->puf->fetch($item['link']);
 			$itemdata = json_decode($data);
@@ -310,7 +310,7 @@ if(!class_exists('eq2_sony')) {
 		protected function ItemIcon($item) 
 		{
 			$iconId = $item->{'iconid'};
-			return "<div class='itemd_icon'><img src='http://data.soe.com/img/eq2/icons/$iconId/item/'></div>";
+			return "<div class='itemd_icon'><img src='http://census.soe.com/img/eq2/icons/$iconId/item/'></div>";
 		}
 		
 		protected function ItemTier($item) 
