@@ -869,6 +869,7 @@ class template extends gen_class {
 
 				case '==':
 				case 'eq':
+				case 'EQ':
 					$token = '==';
 				break;
 
@@ -876,22 +877,26 @@ class template extends gen_class {
 				case '<>':
 				case 'ne':
 				case 'neq':
+				case 'NEQ':
 					$token = '!=';
 				break;
 
 				case '<':
 				case 'lt':
+				case 'LT':
 					$token = '<';
 				break;
 
 				case '<=':
 				case 'le':
 				case 'lte':
+				case 'LE':
 					$token = '<=';
 				break;
 
 				case '>':
 				case 'gt':
+				case 'GET':
 					$token = '>';
 				break;
 
@@ -903,21 +908,25 @@ class template extends gen_class {
 
 				case '&&':
 				case 'and':
+				case 'AND':
 					$token = '&&';
 				break;
 
 				case '||':
 				case 'or':
+				case 'OR':
 					$token = '||';
 				break;
 
 				case '!':
 				case 'not':
+				case 'NOT':
 					$token = '!';
 				break;
 
 				case '%':
 				case 'mod':
+				case 'MOD':
 					$token = '%';
 				break;
 
@@ -925,6 +934,7 @@ class template extends gen_class {
 					array_push($is_arg_stack, $i);
 				break;
 
+				case 'IS':
 				case 'is':	$is_arg_start	= ($tokens[$i-1] == ')') ? array_pop($is_arg_stack) : $i-1;
 							$is_arg			= implode('    ', array_slice($tokens, $is_arg_start, $i - $is_arg_start));
 							$new_tokens		= $this->_parse_is_expr($is_arg, array_slice($tokens, $i+1));

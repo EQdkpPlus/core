@@ -1390,8 +1390,8 @@ if (!class_exists("jquery")) {
 			");
 		}
 
-		public function imageUploader($type, $inputid, $imgname, $imgpath, $options=''){
-			$this->fileBrowser($type, 'image');
+		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
+			$this->fileBrowser($type, 'image', $storageFolder);
 			
 			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/no_pic.png');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
@@ -1421,13 +1421,14 @@ if (!class_exists("jquery")) {
 		* @param $filter	none / image
 		* @return void
 		*/
-		public function fileBrowser($type = 'user', $filter = 'none'){
+		public function fileBrowser($type = 'user', $filter = 'none', $storageFolder = false){
 			$type = ($type == 'user') ? 'user' : 'all';
 			
 			if (!isset($this->file_browser[$type])){
+				$strStorageFolder = ($storageFolder) ? '&sf='.urlencode($this->encrypt->encrypt($storageFolder)) : '';
 				$this->tpl->add_js("function elfinder_".$type."(fieldid){
 					jQuery.FrameDialog.create({
-						url: '".$this->server_path."libraries/elfinder/elfinder".(($type == 'user') ? '.useravatars' : '').".php".$this->SID."&type=".$filter."&field='+fieldid,
+						url: '".$this->server_path."libraries/elfinder/elfinder".(($type == 'user') ? '.useravatars' : '').".php".$this->SID."&type=".$filter.$strStorageFolder."&field='+fieldid,
 						title: '".$this->sanitize($this->user->lang('imageuploader_wintitle'))."',
 						height: 500,
 						width: 840,

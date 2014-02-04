@@ -122,7 +122,7 @@ if (!$blnIsAdmin) $strType = 'image';
 		
 			$().ready(function() {
 				var elf = $('#elfinder').elfinder({
-					url : 'php/connector.php<?php echo registry::get_const('SID'); ?>',  // connector URL (REQUIRED)
+					url : 'php/connector.php<?php echo registry::get_const('SID').'&sf='.register('input')->get('sf'); ?>',  // connector URL (REQUIRED)
 					// lang: 'ru',             // language (OPTIONAL)
 					<?php if ($strType == 'image') echo 'onlyMimes: ["image/jpeg","image/png","image/gif"],';?>
 					commands : myCommands,

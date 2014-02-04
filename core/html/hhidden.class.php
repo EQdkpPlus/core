@@ -41,6 +41,7 @@ class hhidden extends html {
 	
 	public $imageuploader = false;
 	public $imgup_type = 'all';
+	public $storageFolder = false;
 	
 	private $imgoptions = array('prevheight', 'deletelink', 'noimgfile');
 	private $out = '';
@@ -54,10 +55,11 @@ class hhidden extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$imgup = '';
+		
 		if($this->imageuploader) {
 			$imgopts = array();
 			foreach($this->imgoptions as $opt) $imgopts[$opt] = $this->$opt;
-			$imgup = $this->jquery->imageUploader($this->imgup_type, $this->id, $this->value, $this->imgpath, $imgopts);
+			$imgup = $this->jquery->imageUploader($this->imgup_type, $this->id, $this->value, $this->imgpath, $imgopts, $this->storageFolder);
 		}
 		$this->out = $out.' />'.$imgup;
 	}

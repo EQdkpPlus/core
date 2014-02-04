@@ -87,6 +87,15 @@ if ($blnIsAdmin){
 	);
 }
 
+if (register('input')->get('sf') != ""){
+	$path = register('encrypt')->decrypt(str_replace(" ", "+", register('input')->get('sf')));
+	$rel_path = str_replace(register('environment')->link, registry::get_const('root_path'), $path);
+	$opts['roots'][0]['path'] = $opts['roots'][0]['startPath'] = $rel_path;
+	$opts['roots'][0]['URL'] = $path;
+	register('pfh')->FolderPath($rel_path);
+}
+
+
 //Create system folder
 register('pfh')->FolderPath('system', 'files');
 

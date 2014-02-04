@@ -2002,11 +2002,6 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	font-size: 20px;
 }
 
-.svg-button-inline {
-	fill: #fff;
-	stroke: #fff;
-}
-
 .default-avatar{
 	background: url(EQDKP_IMAGE_PATHsvg/avatar-default.svg) no-repeat;
 	background-size: contain;
@@ -2082,8 +2077,8 @@ span.group_selector {
 	color: red;
 	font-size: 32px;
 	position: absolute;
-	top: -12px;
-	left: -12px;
+	top: -8px;
+	left: -14px;
 }
 
 #memberScroller{
