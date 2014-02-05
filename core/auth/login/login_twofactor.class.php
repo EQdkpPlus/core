@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_twofactor extends gen_class {
-	public static $shortcuts = array('user', 'jquery', 'db', 'in', 'config', 'env' => 'environment', 'pdh', 'core', 'tpl');
 	
 	public static $options = array(
 		'connect_accounts'	=> true,

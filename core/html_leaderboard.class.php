@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "html_leaderboard" ) ) {
 	class html_leaderboard extends gen_class {
-		public static $shortcuts = array('pdh', 'config', 'game', 'html', 'user', 'jquery');
 		private $mdkpid;
 		private $vpre;
 

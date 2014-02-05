@@ -22,8 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "inactive_crontask" ) ) {
 	class inactive_crontask extends crontask {
-		public static $shortcuts = array('pdh', 'config', 'time'
-		);
 
 		public function __construct(){
 			$this->defaults['active']		= true;

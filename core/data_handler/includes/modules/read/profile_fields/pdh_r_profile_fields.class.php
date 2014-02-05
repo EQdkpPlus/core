@@ -64,12 +64,13 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 						'options_language' => $drow['options_language'],
 						'image'			=> $drow['image'],
 						'enabled'		=> $drow['enabled'],
+						'data'			=> unserialize($drow['data']),
 						'undeletable'	=> $drow['undeletable'],
-						'options'		=> unserialize($drow['options']),
 						'custom'		=> $drow['custom'],
 					);
-					if($drow['type'] == 'dropdown')
-						$this->profile_fields[$drow['name']]['tolang'] = true;
+					foreach($this->profile_fields[$drow['name']]['data'] as $key => $dat) {
+						$this->profile_fields[$drow['name']][$key] = $dat;
+					}
 				}
 				
 				// check if the character tab is in the categories list, if not add it

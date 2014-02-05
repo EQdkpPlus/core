@@ -21,10 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class mybb_bridge extends bridge_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('config', 'user', 'env', 'time');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public static $name = 'MyBB';
 

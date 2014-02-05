@@ -24,11 +24,6 @@ $eqdkp_root_path = './../';
 include_once ($eqdkp_root_path . 'common.php');
 
 class ManagePageLayouts extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pfh', 'html', 'game', 'pdc', 'pdl'	=> 'plus_debug_logger', 'xmltools'=>'xmltools');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
 	private $multi_pools = array();
 
 	public function __construct(){

@@ -23,11 +23,8 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Live_Update extends page_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'jquery', 'core', 'config', 'pfh', 'repo' => 'repository', 'html', 'encrypt' => 'encrypt');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	public static $shortcuts = array('repo' => 'repository');
+	
 	public function __construct(){
 		$this->user->check_auth('a_maintenance');
 

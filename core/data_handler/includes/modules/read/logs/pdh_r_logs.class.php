@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_logs" ) ) {
 	class pdh_r_logs extends pdh_r_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
 
 		public $default_lang = 'english';
 		private $data = array();

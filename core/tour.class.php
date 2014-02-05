@@ -20,7 +20,6 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class tour extends gen_class {
-	public static $shortcuts = array('in', 'config', 'jquery', 'user', 'tpl', 'core');
 
 	private $cookie			= array();
 	private $cookie_time	= 0;

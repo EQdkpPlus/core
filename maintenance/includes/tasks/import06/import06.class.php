@@ -21,10 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class import06 extends task {
-	public static function __shortcuts() {
-		$shortcuts = array('db', 'in', 'pdl', 'user', 'config', 'encrypt', 'time');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public $author = 'Hoofy';
 	public $version = '1.1.0';

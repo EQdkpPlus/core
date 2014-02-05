@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_user_chars')){
 	class exchange_user_chars extends gen_class{
-		public static $shortcuts = array('user', 'pdh', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
 		public function get_user_chars($params, $body){

@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('pdh_w_roles')){
 	class pdh_w_roles extends pdh_w_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct(){
-			parent::__construct();
-		}
 
 		public function insert_role($role_id, $role_name, $role_classes=''){
 			$objQuery = $this->db->prepare("INSERT INTO __roles :p")->set(array(

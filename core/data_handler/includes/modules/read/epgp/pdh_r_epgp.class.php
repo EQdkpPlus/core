@@ -22,11 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_epgp" ) ) {
 	class pdh_r_epgp extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'pdh', 'html', 'user');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	
 		public $default_lang = 'english';
 		public $epgp;
 

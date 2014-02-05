@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_raid_groups_members')) {
 	class pdh_w_raid_groups_members extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'user'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 
 		public function add_member_to_group($member_id, $group_id, $blnLogging = true) {
 			$arrSet = array(

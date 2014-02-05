@@ -22,10 +22,6 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('pdh_r_calendar_raids_attendees')){
 	class pdh_r_calendar_raids_attendees extends pdh_r_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'user', 'pdh', 'time');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
 
 		public $presets = array(
 			'raidattendees_status'				=> array('html_status', array('%calevent_id%', '%user_id%'), array()),

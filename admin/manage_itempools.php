@@ -22,10 +22,6 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path.'common.php');
 
 class Manage_Itempools extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'config');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public function __construct(){
 		$handler = array(

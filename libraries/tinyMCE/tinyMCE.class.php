@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 } 
 
 class tinyMCE extends gen_class {
-	public static $shortcuts = array('tpl', 'user', 'env' => 'environment', 'pdh', 'config');
 
 	protected $tinymce_version = '3.5.6';
 	protected $language	= 'en';

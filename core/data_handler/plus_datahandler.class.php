@@ -22,9 +22,6 @@ if( !defined( 'EQDKP_INC' ) ) {
 
 if( !class_exists( "plus_datahandler")){
 	class plus_datahandler extends gen_class {
-		public static $shortcuts = array('pdl', 'config', 'time', 'user', 'pfh', 'core',
-			'timekeeper' => 'timekeeper',
-		);
 		
 		public static $dependencies = array('pfh');
 

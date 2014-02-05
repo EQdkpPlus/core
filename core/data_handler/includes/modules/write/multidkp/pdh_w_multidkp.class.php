@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_multidkp')) {
 	class pdh_w_multidkp extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 
 		public function add_multidkp($name, $desc, $events, $itempools, $no_atts) {
 			$arrSet = array(

@@ -22,16 +22,8 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_member" ) ) {
 	class pdh_w_member extends pdh_w_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'in', 'user', 'config', 'xmltools'=>'xmltools', 'game', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 		private $empty_profile = array();
 
-		public function __construct(){
-			parent::__construct();
-		}
-		
 		private $arrLogLang = array(
 			'name'			=> "{L_NAME}",
 			'lvl'			=> "{L_LEVEL}",

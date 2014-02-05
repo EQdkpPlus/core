@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_comment_add')){
 	class exchange_comment_add extends gen_class {
-		public static $shortcuts = array('user', 'config', 'pex'=>'plus_exchange', 'pdh', 'time');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
 		public function post_comment_add($params, $body){

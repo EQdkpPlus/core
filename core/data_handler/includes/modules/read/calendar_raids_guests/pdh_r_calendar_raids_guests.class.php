@@ -22,10 +22,6 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('pdh_r_calendar_raids_guests')){
 	class pdh_r_calendar_raids_guests extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		private $guests;
 		public $hooks = array(

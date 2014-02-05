@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 if (!class_exists("environment")) {
 	class environment extends gen_class {
-		public static $shortcuts = array('config');
 
 		public $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax;
 

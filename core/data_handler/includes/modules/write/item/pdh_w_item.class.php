@@ -22,14 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_item" ) ) {
 	class pdh_w_item extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'game');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 		
 		private $arrLogLang = array(
 				'item_name'			=> '{L_NAME}',

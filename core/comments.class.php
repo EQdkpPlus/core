@@ -22,9 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("comments")){
 	class comments extends gen_class {
-		public static $shortcuts = array('user', 'tpl', 'pdh', 'time', 'in', 'pfh', 'routing', 'hooks',
-			'bbcode'	=> 'bbcode',
-		);
 
 		public $count = array();
 		public $userPerm = true;

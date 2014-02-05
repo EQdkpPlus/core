@@ -22,8 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('dummy')) {
 	class dummy extends game_generic {
-		public static $shortcuts = array('pdh', 'game', 'pm', 'html', 'user', 'config', 'jquery', 'in');
-
 		protected $this_game	= 'dummy';
 		protected $types		= array();	// which information are stored?
 		public $icons			= array();	// which icons do we have?

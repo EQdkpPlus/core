@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('pdh_w_calendar_raids_attendees')){
 	class pdh_w_calendar_raids_attendees extends pdh_w_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'time', 'user', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct(){
-			parent::__construct();
-		}
 
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __calendar_raid_attendees;");

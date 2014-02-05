@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 	class pdh_r_suicide_kings_fixed extends pdh_r_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'pdh', 'user', 'html', 'config');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
 
 		public $default_lang = 'english';
 		private $sk_list = array();

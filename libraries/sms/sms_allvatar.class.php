@@ -22,16 +22,13 @@ if ( !defined('EQDKP_INC') ){
 
 class sms_allvatar extends sms_service {
 
+	public static $shortcuts = array('puf' => 'urlfetcher');
+	
 	private $username	= "";
 	private $passwort	= "";
 	private $error		= false;
 	private $status		= false;
 	private $statMessage= "";
-	
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'xmltools', 'puf' => 'urlfetcher');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 	
 	public function __construct($strUsername = false, $strPassword = false){
 		$this->username = $strUsername;

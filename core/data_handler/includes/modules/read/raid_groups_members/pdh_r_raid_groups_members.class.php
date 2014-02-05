@@ -22,11 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 	class pdh_r_raid_groups_members extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	
 		public $default_lang = 'english';
 		public $raid_groups_members;
 		public $raid_memberships;

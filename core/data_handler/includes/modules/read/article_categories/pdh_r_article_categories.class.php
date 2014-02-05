@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_article_categories" ) ) {
 	class pdh_r_article_categories extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'pdh', 'acl', 'time', 'env' => 'environment', 'config');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		public $default_lang = 'english';
 		public $categories;

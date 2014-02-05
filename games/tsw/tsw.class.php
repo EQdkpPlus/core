@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('tsw')) {
 	class tsw extends game_generic {
-		public static $shortcuts = array();
 		protected $this_game	= 'tsw';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
 		public $icons			= array('classes', 'classes_big', 'races', 'events');

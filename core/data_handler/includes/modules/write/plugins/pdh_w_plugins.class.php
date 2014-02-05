@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_plugins')) {
 	class pdh_w_plugins extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 
 		public function update_version($version, $plugin_code) {
 			$objQuery = $this->db->prepare("UPDATE __plugins :p WHERE code=?;")->set(array(

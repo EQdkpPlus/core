@@ -22,15 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_adjustment" ) ){
 	class pdh_w_adjustment extends pdh_w_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('pdh', 'db', 'game', 'logs');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
 
-		public function __construct(){
-			parent::__construct();
-		}
-		
 		private $arrLogLang = array(
 				'value' 	=> '{L_ADJUSTMENT}',
 				'reason'	=> '{L_REASON}',

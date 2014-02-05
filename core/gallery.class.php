@@ -23,8 +23,7 @@ if(!defined('EQDKP_INC')){
 }
 
 if(!class_exists('gallery')){
-	class gallery extends gen_class {		
-		public static $shortcuts = array('core', 'config', 'pdh', 'user', 'pfh', 'tpl', 'in', 'jquery');
+	class gallery extends gen_class {	
 		
 		private $_cache = array();
 		

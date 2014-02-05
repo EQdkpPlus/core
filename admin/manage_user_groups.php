@@ -22,10 +22,6 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path.'common.php');
 
 class Manage_User_Groups extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'db', 'pm', 'time', 'acl'=> 'acl', 'crypt' => 'encrypt','logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public function __construct(){
 		$this->user->check_auths(array('a_usergroups_man', 'a_usergroups_grpleader'), 'or');
@@ -322,7 +318,7 @@ class Manage_User_Groups extends page_generic {
 			$this->tpl->assign_block_vars('user_row'.$row, array(
 				'ID'			=> $elem['user_id'],
 				'NAME'			=> sanitize($elem['username']),
-				'EMAIL'			=> ( !empty($elem['user_email']) ) ? '<a href="javascript:usermailer('.$elem['user_id'].');">'.$this->crypt->decrypt($elem['user_email']).'</a>' : '',
+				'EMAIL'			=> ( !empty($elem['user_email']) ) ? '<a href="javascript:usermailer('.$elem['user_id'].');">'.$this->encrypt->decrypt($elem['user_email']).'</a>' : '',
 				'LAST_VISIT'	=> $this->time->user_date($elem['user_lastvisit'], true),
 				'ACTIVE'		=> $user_active,
 				'ONLINE'		=> $user_online,

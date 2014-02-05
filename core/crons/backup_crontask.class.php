@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "backup_crontask" ) ) {
 	class backup_crontask extends crontask {
-		public static $shortcuts = array('pfh', 'time', 'tpl', 
-			'backup' => 'backup',
-		);
-
 		public function __construct(){
 			$this->defaults['repeat']		= true;
 			$this->defaults['repeat_type']	= 'daily';

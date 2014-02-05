@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "apa_decay_ria" ) ) {
 	class apa_decay_ria extends apa_type_generic {
-		public static $shortcuts = array('user', 'time', 'pdc', 'pdh', 'config', 'pdl', 'apa'=>'auto_point_adjustments');
+		public static $shortcuts = array('apa'=>'auto_point_adjustments');
 
 		protected $ext_options = array(
 			'zero_time'	=> array(

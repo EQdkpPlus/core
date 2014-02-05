@@ -631,20 +631,8 @@ class game extends gen_class {
 		// Insert the field names in database
 		if(is_array($xml_fields)){
 			foreach($xml_fields as $name=>$values) {
-				$this->pdh->put('profile_fields', 'insert_field', array(array(
-					'name'			=> $name,
-					'type'			=> $values['type'],
-					'category'		=> $values['category'],
-					'lang'			=> (!empty($values['lang'])) ? $values['lang'] : $name,
-					'options_lang'	=> (isset($values['options_lang'])) ? $values['options_lang'] : '',
-					'size'			=> (isset($values['size'])) ? intval($values['size']) : '0',
-					'option'		=> (isset($values['options']) && is_array($values['options'])) ? $values['options'] : '',
-					'visible'		=> (isset($values['visible'])) ? intval($values['visible']) : '0',
-					'image'			=> (isset($values['image'])) ? $values['image'] : '',
-					'undeletable'	=> (isset($values['undeletable']) && $values['undeletable']) ? '1' : '0',
-					'enabled'		=> 1,
-					'no_custom'		=> true
-				)));
+				$values['name'] = $name;
+				$this->pdh->put('profile_fields', 'insert_field', array($values));
 			}
 		}
 	}

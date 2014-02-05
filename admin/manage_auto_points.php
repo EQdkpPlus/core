@@ -35,9 +35,7 @@ function dummy(){
 */
 class ManageAutoPoints extends page_generic {
 	public static $shortcuts = array('apa' => 'auto_point_adjustments');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	
 	public function __construct(){
 		$this->user->check_auth('a_config_man');
 		

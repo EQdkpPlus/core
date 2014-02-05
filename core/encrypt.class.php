@@ -21,8 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class encrypt extends gen_class {
-	public static $shortcuts = array('config', 'user', 'core');
-	
 	private $resMycrypt;
 	private $strKeyLength;
 	private $strEncryptionKey;

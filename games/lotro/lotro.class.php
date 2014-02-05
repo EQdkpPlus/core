@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('lotro')) {
 	class lotro extends game_generic {
-		public static $shortcuts = array('db');
 		protected $this_game	= 'lotro';
 		protected $types		= array('classes', 'races', 'factions', 'filters', 'roles');
 		public $icons			= array('3dmodel', 'classes', 'classes_big', 'events', 'races');

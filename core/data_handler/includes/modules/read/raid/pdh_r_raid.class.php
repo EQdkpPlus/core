@@ -23,10 +23,7 @@ if(!defined('EQDKP_INC'))
 
 if(!class_exists('pdh_r_raid')){
 	class pdh_r_raid extends pdh_r_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'pdh', 'time', 'config', 'user', 'apa' => 'auto_point_adjustments', 'routing');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
+		public static $shortcuts = array('apa' => 'auto_point_adjustments');
 
 		public $default_lang = 'english';
 		public $raids;

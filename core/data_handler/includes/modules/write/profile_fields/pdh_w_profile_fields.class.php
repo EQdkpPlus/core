@@ -22,6 +22,8 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_profile_fields')) {
 	class pdh_w_profile_fields extends pdh_w_generic {
+	
+		private $fields = array('name', 'type', 'category', 'lang', 'options_language', 'size', 'data', 'visible', 'image', 'undeletable', 'enabled', 'custom');
 
 		public function enable_field($field_id){
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
@@ -61,6 +63,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function update_field($id) {
+			$field = $this->pdh->get('profile_fields', 'fields', array($id));
 			$options = array();
 			if ($this->in->get('type') == 'dropdown'){
 				$in_options_id = $this->in->getArray('option_id', 'string');
@@ -71,6 +74,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 					}
 				}
 			}
+			$field['data']['options'] = $options;
 			
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
 				'type'			=> $this->in->get('type'),
@@ -80,7 +84,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'size'			=> $this->in->get('size'),
 				'image'			=> $this->in->get('image'),
 				'visible'		=> '1',
-				'options'		=> serialize($options),
+				'data'			=> serialize($field['data']),
 			))->execute($id);
 				
 			if(!$objQuery) {
@@ -111,6 +115,11 @@ if(!class_exists('pdh_w_profile_fields')) {
 					}
 				}
 			}
+			foreach($data as $key => $dat) {
+				if(!in_array($key, $this->fields)) {
+					$data['data'][$key] = $dat;
+				}
+			}
 			$data = array(
 				'name'			=> (isset($data['name'])) ? $data['name'] : $name,
 				'type'			=> (isset($data['type'])) ? $data['type'] : $this->in->get('type'),
@@ -118,7 +127,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'lang'			=> (isset($data['lang'])) ? $data['lang'] : $this->in->get('language'),
 				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),
 				'size'			=> (isset($data['size'])) ? intval($data['size']) : $this->in->get('size', 3),
-				'options'		=> (isset($data['option'])) ? serialize($data['option']) : serialize($options),
+				'data'			=> (isset($data['data'])) ? serialize($data['data']) : serialize(array('options' => $options)),
 				'visible'		=> '1',
 				'image'			=> (isset($data['image'])) ? $data['image'] : $this->in->get('image'),
 				'undeletable'	=> (isset($data['undeletable']) && $data['undeletable']) ? '1' : '0',

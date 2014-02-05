@@ -18,10 +18,7 @@
 
 class editcalendarevent_pageobject extends pageobject {
 
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html', 'time', 'env', 'logs'=> 'logs', 'timekeeper'=> 'timekeeper', 'email'=>'MyMailer');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
+	public static $shortcuts = array('email'=>'MyMailer');
 	
 	public function __construct() {
 		$handler = array(

@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_add_raid')){
 	class exchange_add_raid extends gen_class {
-		public static $shortcuts = array('user', 'config', 'pex'=>'plus_exchange', 'pdh', 'time');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 		
 		/*

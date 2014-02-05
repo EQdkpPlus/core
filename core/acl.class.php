@@ -253,8 +253,7 @@ class acl_manager extends gen_class {
 		return $group_permissions;
 	}
 }
-class acl extends acl_manager {	
-	public static $shortcuts = array('db', 'user');
+class acl extends acl_manager {
 	public $user_permissions = array();
 	public $user_group_memberships = array();
 	public $user_group_permissions = array();

@@ -22,11 +22,6 @@ $eqdkp_root_path = './../';
 require_once($eqdkp_root_path . 'common.php');
 
 class EQDKPBackup extends page_generic{
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pfh', 'jquery', 'core', 'config', 'db', 'time', 'backup'=>'backup', 'pdc', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
 	public function __construct(){
 		$this->user->check_auth('a_backup');
 		$handler = array(

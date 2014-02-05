@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_comment')) {
 	class pdh_w_comment extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'time', 'embedly'=>'embedly');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 
 		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
 			$strComment = xhtml_entity_decode($this->embedly->parseString($comment, 400));

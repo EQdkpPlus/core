@@ -17,10 +17,6 @@
  */
 
 class wrapper_pageobject extends pageobject {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'env', 'hooks');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
 
 	private $data = false;
 

@@ -21,11 +21,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("pdh_r_user")){
 	class pdh_r_user extends pdh_r_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('db', 'user', 'pfh', 'pdh', 'crypt' => 'encrypt', 'config', 'html', 'time', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	
 		public $default_lang = 'english';
 		public $users;
 		private $countries = false;
@@ -66,8 +62,8 @@ if (!class_exists("pdh_r_user")){
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					//decrypt email address
-					$row['user_email'] = $this->crypt->decrypt($row['user_email']);
-					$row['auth_account'] = unserialize($this->crypt->decrypt($row['auth_account']));
+					$row['user_email'] = $this->encrypt->decrypt($row['user_email']);
+					$row['auth_account'] = unserialize($this->encrypt->decrypt($row['auth_account']));
 					$this->users[$row['user_id']] = $row;
 					$this->users[$row['user_id']]['username_clean'] = clean_username($row['username']);
 					$this->users[$row['user_id']]['user_email_clean'] = utf8_strtolower($row['user_email']);
@@ -485,7 +481,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_sms_checkbox($user_id){
 			$privacy = $this->get_privacy_settings($user_id);
 			if((int)$this->config->get('sms_enable') == 1 && strlen($this->get_cellphone($user_id)) && $privacy['priv_nosms'] != 1 && $this->user->check_auth('a_sms_send', false)){
-				return '<input type="checkbox" name="sendto['.$user_id.']" value="'.$this->crypt->encrypt($this->get_cellphone($user_id).';'.$this->get_name($user_id)).'" class="cellphonebox" />';
+				return '<input type="checkbox" name="sendto['.$user_id.']" value="'.$this->encrypt->encrypt($this->get_cellphone($user_id).';'.$this->get_name($user_id)).'" class="cellphonebox" />';
 			}
 			return '';
 		}

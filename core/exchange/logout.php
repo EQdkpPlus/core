@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_logout')){
 	class exchange_logout extends gen_class{
-		public static $shortcuts = array('user', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 
 		public function post_logout($params, $body){
 			$xml = simplexml_load_string($body);

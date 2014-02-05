@@ -23,10 +23,6 @@ die('Do not access this file directly.');
 
 if ( !class_exists( "pdh_r_member_dates" ) ) {
 	class pdh_r_member_dates extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'pdh', 'time'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		public $default_lang = 'english';
 

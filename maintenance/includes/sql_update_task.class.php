@@ -23,10 +23,6 @@ if ( !defined('EQDKP_INC') ){
 require_once(registry::get_const('root_path') . 'maintenance/includes/task.aclass.php');
 
 class sql_update_task extends task {
-	public static function __shortcuts() {
-		$shortcuts = array('config', 'in', 'user', 'db');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public $sqls = array();
 	public $plugin_path = '';

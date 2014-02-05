@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class gravatar extends gen_class {
 
-	public static $shortcuts = array('puf' => 'urlfetcher', 'pfh');
+	public static $shortcuts = array('puf' => 'urlfetcher');
 	
 	private $url = 'http://gravatar.com/avatar/%s?s=%d&r=g&d=%s';
 	private $intCachingTime = 24; //hours

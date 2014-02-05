@@ -19,7 +19,6 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class php_check extends install_generic {
-	public static $shortcuts = array('pdl');
 	public static $before 		= 'licence';
 
 	public static function before() {

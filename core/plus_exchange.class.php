@@ -22,7 +22,6 @@ if( !defined( 'EQDKP_INC' ) ) {
 
 if( !class_exists( "plus_exchange" ) ) {
 	class plus_exchange extends gen_class {
-		public static $shortcuts = array('xmltools' => 'xmltools', 'pm', 'portal', 'pdh');
 
 		//module lists
 		private $initialized_modules	= array();

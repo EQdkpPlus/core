@@ -24,11 +24,6 @@ if(!class_exists('user_core')) include_once(registry::get_const('root_path').'/c
 
 class auth extends user_core {
 
-	public static function __shortcuts() {
-		$shortcuts = array('config', 'time', 'in', 'db', 'pdh', 'bridge', 'logs', 'env');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
 	public static function __dependencies() {
 		$dependencies = array('timekeeper');
 		return array_merge(parent::$dependencies, $dependencies);

@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_persona extends gen_class {
-	public static $shortcuts = array('user', 'jquery', 'db', 'in', 'config', 'env' => 'environment', 'pdh', 'tpl', 'puf'=>'urlfetcher');
+	public static $shortcuts = array('puf'=>'urlfetcher');
 	
 	private $js_loaded = false;
 	

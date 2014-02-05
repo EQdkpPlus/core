@@ -21,8 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class core extends gen_class {
-	public static $shortcuts = array('pfh', 'jquery', 'time', 'pdh', 'pm', 'pdl', 'tpl', 'user','db', 'config', 'timekeeper', 'env', 'in', 'portal', 'ntfy', 'routing');
-
 		// General vars
 		public $header_format	= 'full';			// Use a simple header?		@var
 		public $page_title		= '';				// Page title				@var page_title

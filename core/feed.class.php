@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("feed")) {
 
 	class feed extends gen_class {
-		public static $shortcuts = array('pfh', 'time');
 		private $encoding		= 'UTF-8';
 		protected $items		= array();
 		protected $data			= array();

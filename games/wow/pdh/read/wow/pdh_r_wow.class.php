@@ -25,7 +25,6 @@ if (!defined('EQDKP_INC')){
   +--------------------------------------------------------------------------*/
 if (!class_exists('pdh_r_wow')) {
 	class pdh_r_wow extends pdh_r_generic {
-		public static $shortcuts = array('core', 'game', 'pdh', 'config');
 
 		/**
 		* Data array loaded by initialize

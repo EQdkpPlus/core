@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_member" ) ) {
 	class pdh_r_member extends pdh_r_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('pdc', 'db', 'pdh', 'game', 'user', 'html', 'config', 'jquery', 'xmltools'=>'xmltools', 'time', 'routing');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
 
 		public $default_lang	= 'english';
 		public $data			= array();

@@ -23,15 +23,6 @@ if ( !defined('EQDKP_INC') ){
 if(!class_exists('auth')) include_once(registry::get_const('root_path').'core/auth.class.php');
 
 class auth_db extends auth {
-	public static function __shortcuts() {
-		$shortcuts = array();
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-	
-	public static function __dependencies() {
-		$dependencies = array();
-		return array_merge(parent::__dependencies(), $dependencies);
-	}
 	
 	public $error = false;
 	

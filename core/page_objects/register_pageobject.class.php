@@ -40,10 +40,7 @@ if(registry::register('input')->get('ajax', 0) == '1'){
 }
 
 class register_pageobject extends pageobject {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core', 'html', 'jquery', 'db', 'time', 'env', 'email'=>'MyMailer','crypt' => 'encrypt');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
+	public static $shortcuts = array('email'=>'MyMailer','crypt' => 'encrypt');
 
 	public $server_url	= '';
 	public $data		= array();

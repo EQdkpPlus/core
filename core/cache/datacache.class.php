@@ -22,7 +22,6 @@ if( !defined( 'EQDKP_INC' ) ) {
 
 if( !class_exists( "datacache" ) ) {
 	class datacache extends gen_class {
-		public static $shortcuts = array('pdl', 'pfh', 'config');
 	
 		private $cache			= null;
 
@@ -222,7 +221,6 @@ if( !class_exists( "datacache" ) ) {
 
 if( !class_exists( "cachePagination" ) ) {
 	class cachePagination extends gen_class {
-		public static $shortcuts = array('pdc', 'db', 'pdh');
 		
 		protected $strCacheKey = "";
 		protected $intItemsPerChunk = 50;

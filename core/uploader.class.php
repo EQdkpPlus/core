@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class uploader extends gen_class {
-	public static $shortcuts = array('core', 'pfh', 'in', 'tpl', 'config');
 
 	private $added_js = false;
 	

@@ -22,8 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "calevents_raids_rss_crontask" ) ) {
 	class calevents_raids_rss_crontask extends crontask {
-		public static $shortcuts = array('pfh', 'time', 'pdh', 'user', 'config', 'env');
-
 		public function __construct(){
 			$this->defaults['active']			= true;
 			$this->defaults['repeat']			= true;

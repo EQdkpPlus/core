@@ -17,11 +17,6 @@
  */
 
 class item_pageobject extends pageobject {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'pm', 'time', 'comments'	=> 'comments');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct() {
 		$handler = array();
 		parent::__construct(false, $handler, array(), null, '', 'i');

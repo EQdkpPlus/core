@@ -22,11 +22,6 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class reset_eqdkp extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'logs', 'backup'	=> 'backup');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
 	private $resets		= array('raids', 'events', 'items', 'itempools', 'adjustments', 'multipools', 'chars', 'plugins', 'user', 'logs', 'calendar');
 	private $dependency	= array(
 		'events'	=> array('raids', 'items', 'multipools', 'calendar'),

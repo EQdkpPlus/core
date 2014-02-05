@@ -22,14 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_logs')) {
 	class pdh_w_logs extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'user', 'env');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 
 		public function clean_log($timestamp){
 			$log_date = time()-($timestamp*24*60*60);

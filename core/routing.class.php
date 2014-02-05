@@ -23,9 +23,7 @@ if(!defined('EQDKP_INC')){
 }
 
 if(!class_exists('routing')){
-	class routing extends gen_class {		
-		public static $shortcuts = array('core', 'config', 'pdh', 'user');
-		
+	class routing extends gen_class {
 		private $_cache = array();
 		
 		private $arrStaticRoutes = array(

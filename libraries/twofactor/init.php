@@ -21,10 +21,6 @@ $eqdkp_root_path = './../../';
 include_once($eqdkp_root_path . 'common.php');
 
 class TwofactorInit extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'html', 'pfh', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public function __construct(){
 		if (!$this->user->is_signedin()) return;

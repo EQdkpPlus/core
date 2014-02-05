@@ -22,10 +22,6 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_articles')) {
 	class pdh_w_articles extends pdh_w_generic {
-		public static function __shortcuts() {
-			$shortcuts = array('pdh', 'db', 'pfh', 'user', 'time',  'bbcode'=>'bbcode', 'embedly'=>'embedly', 'logs');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
 		
 		public $arrLang = array(
 			'title' 			=> "{L_HEADLINE}",

@@ -22,8 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("styles")){
 	class styles extends gen_class {
-		public static $shortcuts = array('in', 'user', 'config', 'pdh', 'pfh', 'tpl', 'game', 'core', 'time', 'jquery');
-
 		private $update_styles = array();
 		private $arrIgnoreFolder = array(
 			'maintenance',

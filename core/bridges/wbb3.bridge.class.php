@@ -22,11 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 class wbb3_bridge extends bridge_generic {
 	
-	public static function __shortcuts() {
-		$shortcuts = array('env', 'config', 'user', 'time');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-	
 	public static $name = 'WBB 3';
 	
 	public $data = array(

@@ -21,9 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class plugin_generic extends gen_class {
-	public static $shortcuts = array('user', 'core', 'db', 'pdl', 'config', 
-		'acl' => 'acl'
-	);
 
 	protected $code 				= '';
 	protected $pm 					= false;

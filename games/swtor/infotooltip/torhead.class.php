@@ -18,7 +18,7 @@
 
 if(!class_exists('torhead')) {
 	class torhead extends itt_parser {
-		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
+		public static $shortcuts = array('puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 		public $supported_games = array('swtor');
 		public $av_langs = array();
 		public $settings = array();

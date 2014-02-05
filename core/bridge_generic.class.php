@@ -21,7 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class bridge_generic extends gen_class {
-	public static $shortcuts = array('config', 'pdh', 'user', 'pdl', 'db',
+	public static $shortcuts = array(
 		'crypt'	=> 'encrypt',
 	);
 

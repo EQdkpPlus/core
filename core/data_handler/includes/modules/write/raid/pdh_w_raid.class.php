@@ -22,14 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_raid" ) ) {
 	class pdh_w_raid extends pdh_w_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'game', 'config', 'time', 'logs');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
 		
 		private $arrLogLang = array(
 				'event' 	=> '{L_EVENT}',

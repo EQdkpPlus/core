@@ -20,7 +20,7 @@ include_once('itt_parser.aclass.php');
 
 if(!class_exists('eq2_sony')) {
 	class eq2_sony extends itt_parser {
-		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
+		public static $shortcuts = array('puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 		public $supported_games = array('eq2');
 		public $av_langs = array();
 		public $settings = array();
@@ -901,5 +901,4 @@ if(!class_exists('eq2_sony')) {
 		
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_eq2_sony', eq2_sony::$shortcuts);
 ?>

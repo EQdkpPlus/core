@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "maintenanceuser_crontask" ) ) {
 	class maintenanceuser_crontask extends crontask {
-		public static $shortcuts = array('db', 'pdh', 'config', 'crypt'=>'encrypt');
 
 		public function __construct(){
 			$this->defaults['description']	= 'Deleting Maintenance-user';

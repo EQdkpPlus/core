@@ -22,7 +22,6 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_check_session')){
 	class exchange_check_session extends gen_class {
-		public static $shortcuts = array('user');
 
 		public function post_check_session($params, $body){
 			$xml = simplexml_load_string($body);

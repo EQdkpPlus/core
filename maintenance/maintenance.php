@@ -24,7 +24,7 @@ define('DEBUG', 3);
 require_once($eqdkp_root_path.'common.php');
 
 class maintenance_display extends gen_class {
-	public static $shortcuts = array('in', 'user', 'config', 'tpl',
+	public static $shortcuts = array(
 		'core'	=> array('core', array('maintenance', 'maintenance.html', 'maintenance_message.html')),
 	);
 

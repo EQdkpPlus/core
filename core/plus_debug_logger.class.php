@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 	class plus_debug_logger extends gen_class {
-		public static $shortcuts = array('pfh');
 
 		private $log = array();
 		private $known_types = array();

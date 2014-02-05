@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_login')){
 	class exchange_login extends gen_class{
-		public static $shortcuts = array('user','config', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 
 		public function post_login($params, $body){
 			$xml = simplexml_load_string($body);

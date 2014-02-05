@@ -22,11 +22,8 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Massmail extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'time', 'env', 'email'=>'MyMailer', 'crypt'=>'encrypt', 'html', 'time', 'logs', 'hooks', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	public static $shortcuts = array('email'=>'MyMailer', 'crypt'=>'encrypt');
+		
 	public function __construct(){
 		$this->user->check_auth('a_users_massmail');
 		$handler = array(

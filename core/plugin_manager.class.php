@@ -21,8 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class plugin_manager extends gen_class {
-	public static $shortcuts = array('pdh', 'pdl', 'pgh');
-
 	public $plugins 		= array();		// Store Plugin-Objects
 	public $status			= array();		// Store Plugin-Status
 	

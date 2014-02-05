@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists("calevents_repeatable_crontask")){
 	class calevents_repeatable_crontask extends crontask{
-		public static $shortcuts = array('time', 'config', 'pdh');
 		
 		public function __construct(){
 			$this->defaults['active']			= true;

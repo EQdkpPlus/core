@@ -24,10 +24,6 @@ $eqdkp_root_path = './../';
 include_once ($eqdkp_root_path . 'common.php');
 
 class manage_cache extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'core', 'config', 'pdc', 'time');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	//private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'apc');
 	private $pdc_cache_types =		array('none', 'file', 'xcache', 'apc'); // removed memcache for now, as it does not work

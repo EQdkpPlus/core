@@ -18,7 +18,7 @@
 
 if(!class_exists('itt_lotro')) {
 	class itt_lotro extends itt_parser {
-		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher');
+		public static $shortcuts = array('puf' => 'urlfetcher');
 
 		public $supported_games = array('lotro');
 		public $av_langs = array('en' => 'en_US');#, 'de' => 'de_DE', 'fr' => 'fr_FR', 'ru' => 'ru_RU', 'jp' => 'ja_JP');

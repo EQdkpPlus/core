@@ -22,7 +22,6 @@ if( !defined( 'EQDKP_INC' ) ) {
 
 if(!class_exists( "cache_file")){
 	class cache_file extends gen_class implements plus_datacache {
-		public static $shortcuts = array('pfh');
 
 		private $cache_folder				= "./data/";
 		private $file_extension				= '.cf.php';

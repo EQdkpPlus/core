@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_calevents_details')){
 	class exchange_calevents_details extends gen_class {
-		public static $shortcuts = array('user', 'config', 'pdh', 'time', 'game', 'bbcode'=>'bbcode', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 
 		public function get_calevents_details($params, $body){
 			if ($this->user->check_auth('u_calendar_view', false)){

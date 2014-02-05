@@ -17,10 +17,7 @@
  */
 
 class login_pageobject extends pageobject {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'config', 'core', 'db', 'time', 'env', 'email'=>'MyMailer', 'crypt' => 'encrypt');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
+	public static $shortcuts = array('email'=>'MyMailer', 'crypt' => 'encrypt');
 
 	public function __construct() {
 		$handler = array(

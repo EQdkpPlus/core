@@ -19,7 +19,6 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class install extends gen_class {
-	public static $shortcuts = array('in', 'pdl');
 
 	private $current_step	= 'start';
 	private $previous		= 'start';

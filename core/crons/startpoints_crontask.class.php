@@ -22,9 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "startpoints_crontask" ) ) {
 	class startpoints_crontask extends crontask {
-		public static $shortcuts = array('pdh', 'apa' => 'auto_point_adjustments',
-			'timekeeper'	=> 'timekeeper',
-		);
+		public static $shortcuts = array('apa' => 'auto_point_adjustments');
 
 		public function __construct(){
 			$this->defaults['repeat']		= true;

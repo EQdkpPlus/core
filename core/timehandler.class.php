@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("timehandler")){
 	class timehandler extends gen_class {
-		public static $shortcuts = array('pdl', 'user', 'config');
 
 		private static $ArrTimezones = array();
 		

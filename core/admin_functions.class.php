@@ -17,10 +17,7 @@
  */
 if(!class_exists('admin_functions')) {
 class admin_functions extends gen_class {
-	public static $shortcuts = array('user', 'in', 'core', 'config', 'tpl', 'game', 'jquery', 'pm', 'time', 'pdh', 'db', 'pdc','routing', 'html',
-		'xmltools'	=> 'xmltools',
-		'puf'		=> 'urlfetcher',
-	);
+	public static $shortcuts = array('puf' => 'urlfetcher');
 
 	public function resolve_ip($strIP){
 		$out = false;

@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('wow')) {
 	class wow extends game_generic {
-		public static $shortcuts = array('pdh', 'game', 'pm', 'html', 'user', 'config', 'jquery', 'in', 'routing', 'time');
 
 		protected $this_game	= 'wow';
 		protected $types		= array('classes', 'races', 'factions', 'filters', 'realmlist', 'roles', 'professions', 'chartooltip');	// which information are stored?
@@ -265,10 +264,10 @@ if(!class_exists('wow')) {
 				'servername'	=> array(
 					'category'		=> 'character',
 					'lang'			=> 'uc_servername',
-					'type'			=> 'autocomplete',
+					'type'			=> 'text',
 					'size'			=> '21',
 					'edecode'		=> true,
-					'options'		=> $this->realmlist[$this->lang],
+					'autocomplete'	=> $this->realmlist[$this->lang],
 				),
 				'prof1_value'	=> array(
 					'type'			=> 'int',

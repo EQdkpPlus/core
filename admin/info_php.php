@@ -22,10 +22,6 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class php_info extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'core', 'config');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public function __construct(){
 		$this->user->check_auth('a_');

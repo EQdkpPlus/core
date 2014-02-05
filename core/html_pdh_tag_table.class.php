@@ -22,9 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "html_pdh_tag_table" ) ) {
 	class html_pdh_tag_table extends gen_class {
-		public static $shortcuts = array('pdh', 'pdc', 'jquery', 'config', 'tpl', 'user',
-			'timekeeper' => 'timekeeper',
-		);
 
 		private $columns				= array();
 		private $sort_cid				= 1;

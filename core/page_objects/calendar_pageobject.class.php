@@ -17,9 +17,6 @@
  */
 
 class calendar_pageobject extends pageobject {
-	public static function __shortcuts() {
-		return array_merge(parent::__shortcuts(), array());
-	}
 
 	public function __construct() {
 		$handler = array(

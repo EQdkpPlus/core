@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class form extends gen_class {
-	public static $shortcuts = array();
 	
 	/**
 	 *	the form_id is the identifier of the form, it should be unique and has otherwise no specific use

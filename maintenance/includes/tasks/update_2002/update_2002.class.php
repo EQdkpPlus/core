@@ -28,11 +28,6 @@ class update_2002 extends sql_update_task {
 	public $ext_version	= '2.0.0';
 	public $name		= '2.0.0 Add raid groups tables';
 
-	public static function __shortcuts() {
-		$shortcuts = array('time', 'config', 'routing', 'pdc', 'db');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct(){
 		parent::__construct();
 

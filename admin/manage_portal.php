@@ -22,10 +22,7 @@ $eqdkp_root_path = '../';
 include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Portal extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('form' => array('form', array('form_moduleconfig')), 'ajax_form' => array('form', array('ajax_form')));
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
+	public static $shortcuts = array('form' => array('form', array('form_moduleconfig')), 'ajax_form' => array('form', array('ajax_form')));
 
 	public function __construct() {
 		$handler = array(

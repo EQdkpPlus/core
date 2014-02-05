@@ -20,7 +20,7 @@ include_once('itt_parser.aclass.php');
 
 if(!class_exists('allodswikiru')) {
 	class allodswikiru extends itt_parser {
-		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
+		public static $shortcuts = array('puf' => 'urlfetcher', 'pfh' => array('file_handler', array('infotooltips')));
 
 		public $supported_games = array('allods');
 		public $av_langs = array();
@@ -142,5 +142,4 @@ if(!class_exists('allodswikiru')) {
 		
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_allodswikiru', allodswikiru::$shortcuts);
 ?>

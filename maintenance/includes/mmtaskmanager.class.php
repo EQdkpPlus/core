@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "mmtaskmanager" ) ) {
 	class mmtaskmanager extends gen_class {
-		public static $shortcuts = array('db', 'config');
 
 		private $tasks		= array();
 		public $task_data	= array();

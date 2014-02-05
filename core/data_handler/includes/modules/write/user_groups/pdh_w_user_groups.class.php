@@ -22,15 +22,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_user_groups')) {
 	class pdh_w_user_groups extends pdh_w_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
-
+	
 		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $sortid=0,$deletable=1) {
 			
 			$arrSet = array(

@@ -21,8 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 if (!class_exists("zip")) {
 	class zip extends gen_class {
-		public static $shortcuts = array('pfh');
-
 		private $zipfile = false;
 		private $objZip = false;
 		private $files = array();

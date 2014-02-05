@@ -18,11 +18,6 @@
 
 class calendareventguests_pageobject extends pageobject {
 
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'core', 'html');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct() {
 		$handler = array();
 		parent::__construct(false, $handler, array());

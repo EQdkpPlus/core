@@ -25,13 +25,8 @@ if ( !class_exists( "task" ) ) {
 }
 
 class sql_update extends task {
-	public static function __shortcuts() {
-		$shortcuts = array('config', 'user', 'in', 'db',
-			'mmt'	=> 'mmtaskmanager'
-		);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
+	public static $shortcuts = array('mmt'	=> 'mmtaskmanager');
+	
 	public $form_method		= "get";
 	public $author			= "sql_update";
 	public $version			= "0.0.0";

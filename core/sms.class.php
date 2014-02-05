@@ -25,8 +25,6 @@ class sms extends gen_class {
 	private $username;
 	private $password;
 	private $service;
-	
-	public static $shortcuts = array('config');
 
 	public function __construct($strUsername = false, $strPassword = false){
 		$this->username = $strUsername;
@@ -54,7 +52,6 @@ class sms extends gen_class {
 }
 
 abstract class sms_service extends gen_class {
-	public static $shortcuts = array();
 	
 	abstract public function __construct($strUsername = false, $strPassword = false);
 	abstract public function send($strMessage, $arrReceiver);

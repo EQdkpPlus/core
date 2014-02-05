@@ -22,14 +22,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_user')) {
 	class pdh_w_user extends pdh_w_generic {
-		public static function __shortcuts() {
-			$shortcuts = array('pdh', 'db', 'in', 'user', 'config', 'pfh', 'html', 'pm', 'jquery', 'time', 'core', 'crypt' => 'encrypt');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
-
-		public function __construct() {
-			parent::__construct();
-		}
+		public static $shortcuts = array('crypt' => 'encrypt');
 
 		public function insert_user($arrData, $logging = true, $toDefaultGroup = true){
 			$arrData = $this->set_defaults($arrData);

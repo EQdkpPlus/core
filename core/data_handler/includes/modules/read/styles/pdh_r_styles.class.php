@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_styles" ) ) {
 	class pdh_r_styles extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'pdh'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		public $default_lang = 'english';
 		public $styles;

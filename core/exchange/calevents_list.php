@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_calevents_list')){
 	class exchange_calevents_list extends gen_class{
-		public static $shortcuts = array('user', 'config', 'pdh', 'time', 'pex'=>'plus_exchange', 'env'=>'environment');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
 		public function get_calevents_list($params, $body){

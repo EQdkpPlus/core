@@ -23,10 +23,7 @@ if(!defined('EQDKP_INC'))
 
 if(!class_exists('pdh_r_adjustment')){
 	class pdh_r_adjustment extends pdh_r_generic{
-		public static function __shortcuts() {
-			$shortcuts = array('db', 'pdh', 'user', 'time', 'pdc', 'apa' => 'auto_point_adjustments');
-			return array_merge(parent::$shortcuts, $shortcuts);
-		}
+		public static $shortcuts = array('apa' => 'auto_point_adjustments');
 
 		public $default_lang = 'english';
 		public $adjustments;

@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class urlfetcher  extends gen_class {
-	public static $shortcuts = array();
 
 	private $useragent			= '';		// User Agent
 	private $timeout			= 15;											// Timeout

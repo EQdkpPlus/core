@@ -18,11 +18,6 @@
 
 class calendareventtransform_pageobject extends pageobject {
 
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'core', 'time');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct() {
 		$handler = array(
 			'transformraid'			=> array('process' => 'transform_raid'),

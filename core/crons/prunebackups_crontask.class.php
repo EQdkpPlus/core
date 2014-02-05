@@ -22,11 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "prunebackups_crontask" ) ) {
 	class prunebackups_crontask extends crontask {
-		public static $shortcuts = array('pfh', 'time', 'tpl',
-			'timekeeper'	=> 'timekeeper',
-			'backup'		=> 'backup',
-		);
-
 		public $options = array(
 			'days'	=> array(
 				'lang'	=> 'Delete Backups older than x days',

@@ -17,10 +17,7 @@
  */
 class calendarevent_pageobject extends pageobject {
 
-	public static function __shortcuts() {
-		$shortcuts = array('logs'=> 'logs', 'comments'=> 'comments', 'email'=>'MyMailer');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
+	public static $shortcuts = array('email'=>'MyMailer');
 	
 	public function __construct() {
 		$handler = array(

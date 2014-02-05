@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class content_export extends gen_class {
-	public static $shortcuts = array('config', 'pdh', 'time');
 	
 	private $timestamp;
 	private $date_created;

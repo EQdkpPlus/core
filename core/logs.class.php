@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 	class logs extends gen_class {
-		public static $shortcuts = array('pm', 'pdh', 'user', 'time', 'logs');
 
 		public $pluginname	= 'core';
 		public $plugins		= array();

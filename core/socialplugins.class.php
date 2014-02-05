@@ -22,8 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("socialplugins")) {
 	class socialplugins extends gen_class {
-		public static $shortcuts = array('user', 'config', 'tpl', 'env'
-		);
 		
 		private $plugins = array('opengraph_tags');
 		private $buttons = array('google_plusone', 'twitter_tweet', 'facebook_like', 'facebook_share', 'twitter_share', 'socialshareprivacy');

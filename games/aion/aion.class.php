@@ -22,7 +22,6 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('aion')) {
 	class aion extends game_generic {
-		public static $shortcuts = array();
 		protected $this_game	= 'aion';
 		protected $types		= array('classes', 'races', 'factions', 'filters');
 		protected $classes		= array();

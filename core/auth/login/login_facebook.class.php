@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_facebook extends gen_class {
-	public static $shortcuts = array('config', 'tpl', 'html', 'user', 'db', 'in', 'pdh', 'time', 'core');
 	public $fb = false;
 	private $js_loaded = false;
 	

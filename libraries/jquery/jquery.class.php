@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("jquery")) {
 	class jquery extends gen_class {
-		public static $shortcuts = array('tpl', 'user', 'core', 'time', 'pfh', 'html', 'config', 'puf'=> 'urlfetcher','encrypt'	=> 'encrypt', 'env' => 'environment');
+		public static $shortcuts = array('puf'=> 'urlfetcher');
 
 		private $tt_init				= '';
 		private $ce_loaded				= false;

@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_points')){
 	class exchange_points extends gen_class{
-		public static $shortcuts = array('user', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
 		public function get_points($params, $body){

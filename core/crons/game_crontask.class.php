@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "game_crontask" ) ) {
 	class game_crontask extends crontask {
-		public static $shortcuts = array('pfh', 'time', 'tpl', 'game');
 		
 		public $options = array();
 

@@ -22,15 +22,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_class_colors')) {
 	class pdh_w_class_colors extends pdh_w_generic {
-		public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
-		public function __construct() {
-			parent::__construct();
-		}
-
+	
 		public function add_classcolor($template, $clsid='', $color=''){
 			$color = (substr($color, 0, 1) == '#') ? $color : ((strlen($color)) ? '#'.$color : '');
 			

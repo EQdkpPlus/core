@@ -22,10 +22,6 @@ $eqdkp_root_path = './../';
 include_once ($eqdkp_root_path . 'common.php');
 
 class ManageProfileFields extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'game', 'core', 'config', 'html');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public function __construct(){
 		$this->user->check_auth('a_config_man');
@@ -98,7 +94,6 @@ class ManageProfileFields extends page_generic {
 	public function edit(){
 		if($this->in->get('edit')) $field_data = $this->pdh->get('profile_fields', 'fields', array($this->in->get('edit')));
 		else $field_data = array('lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
-		pd($field_data);
 		$types = array(
 			'text'		=> 'Text',
 			'int'		=> 'Integer',

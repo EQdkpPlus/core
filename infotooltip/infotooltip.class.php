@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('infotooltip')) {
 	class infotooltip extends gen_class {
-		public static $shortcuts = array('pfh' => array('file_handler', array('infotooltips')), 'pdl', 'puf' => 'urlfetcher', 'settings' => 'config', 'db', 'db');
+		public static $shortcuts = array('pfh' => array('file_handler', array('infotooltips')), 'puf' => 'urlfetcher', 'settings' => 'config');
 
 		private $avail_parser	= array();
 

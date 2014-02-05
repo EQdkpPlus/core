@@ -19,7 +19,7 @@
 if(!class_exists('swtor_curse')) {
 	class swtor_curse extends itt_parser {
 
-		public static $shortcuts = array('pdl', 'puf' => 'urlfetcher');
+		public static $shortcuts = array('puf' => 'urlfetcher');
 		
 		public $supported_games = array('swtor');
 		public $av_langs = array('en' => 'en_US');#, 'de' => 'de_DE', 'fr' => 'fr_FR', 'ru' => 'ru_RU', 'es' => 'es_ES', 'pl' => 'pl_PL');

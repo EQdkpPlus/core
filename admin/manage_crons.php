@@ -22,10 +22,6 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class ManageCrons extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'jquery', 'core', 'config', 'time', 'html', 'timekeeper'=>'timekeeper');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 	public $crons = array();
 	

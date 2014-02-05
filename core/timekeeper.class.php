@@ -21,7 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class timekeeper extends gen_class {
-	public static $shortcuts = array('pfh', 'time', 'tpl');
 	public static $dependencies = array('pfh');
 
 	private $times = array();

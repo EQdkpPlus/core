@@ -26,7 +26,7 @@ define('DEBUG', 3);
 require_once($eqdkp_root_path.'common.php');
 require_once($eqdkp_root_path.'maintenance/includes/task.aclass.php');
 class task_manager_display extends gen_class {
-	public static $shortcuts = array('tpl', 'config', 'pfh', 'in', 'user',
+	public static $shortcuts = array(
 		'core'	=> array('core', array('maintenance', 'task_manager.html', 'maintenance_message.html')),
 		'mmt'	=> 'mmtaskmanager',
 	);

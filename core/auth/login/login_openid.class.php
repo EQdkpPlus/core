@@ -21,8 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_openid extends gen_class {
-	public static $shortcuts = array('user', 'jquery', 'db', 'in', 'config', 'env' => 'environment', 'pdh');
-
 	public $oid = false;
 	public static $options = array(
 		'connect_accounts'	=> true,

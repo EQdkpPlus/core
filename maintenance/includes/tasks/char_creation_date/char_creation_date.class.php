@@ -27,11 +27,6 @@ class char_creation_date extends task {
 	public $name = 'Character creation date';
 	public $type = 'fix';
 
-	public static function __shortcuts() {
-		$shortcuts = array('pdh', 'db', 'time', 'config');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
 	public function is_applicable() {
 		$creation_dates = $this->pdh->aget('member', 'creation_date', 0, array($this->pdh->get('member', 'id_list')));
 		if(in_array(0, $creation_dates)) return true;

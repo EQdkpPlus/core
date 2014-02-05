@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("bbcode")) {
 	class bbcode extends gen_class {
-		public static $shortcuts = array('core', 'user', 'pdh', 'pm', 'config', 'pfh', 'puf'=>'urlfetcher', 'hooks', 'routing');
+		public static $shortcuts = array('puf'=>'urlfetcher');
 
 		private $smiliepath = '';
 		private $arrImageExtensions = array('jpg', 'png', 'gif', 'jpeg');

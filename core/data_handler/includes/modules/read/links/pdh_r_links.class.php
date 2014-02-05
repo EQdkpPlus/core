@@ -22,11 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_links" ) ){
 	class pdh_r_links extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db', 'user', 'bbcode'=>'bbcode', 'routing');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-
 		public $links;
 
 		public $hooks = array(

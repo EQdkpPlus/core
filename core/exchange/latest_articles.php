@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_latest_articles')){
 	class exchange_latest_articles extends gen_class {
-		public static $shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html', 'bbcode' => 'bbcode', 'time', 'pex'=>'plus_exchange', 'env' => 'environment', 'pfh');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
 		public function get_latest_articles($params, $body){

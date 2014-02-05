@@ -21,8 +21,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class backup extends gen_class {
-	public static $shortcuts = array('config', 'user', 'pfh', 'jquery', 'db', 'time', 'core');
-
 	public function __construct(){
 		//Secure the backup-folder
 		//Check if .htaccess exists

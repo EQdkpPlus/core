@@ -17,11 +17,6 @@
  */
 
 class events_pageobject extends pageobject {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'config', 'core');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct() {
 		$handler = array();
 		parent::__construct(false, $handler, array());

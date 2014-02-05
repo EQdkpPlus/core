@@ -21,12 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class smf2_bridge extends bridge_generic {
-	
-	public static function __shortcuts() {
-		$shortcuts = array('time', 'config');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
-	
+
 	public static $name = "SMF 2";
 	
 	public $data = array(

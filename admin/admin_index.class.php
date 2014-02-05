@@ -17,8 +17,7 @@
  */
 if(!class_exists('admin_index')) {
 class admin_index extends gen_class {
-	public static $shortcuts = array('user', 'in', 'core', 'config', 'tpl', 'game', 'jquery', 'pm', 'time', 'pdh', 'db', 'pdc',
-		'xmltools'	=> 'xmltools',
+	public static $shortcuts = array(
 		'puf'		=> 'urlfetcher',
 		'UpdateCheck'	=> 'repository',
 	);

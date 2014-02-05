@@ -17,10 +17,6 @@
  */
 
 class rss_pageobject extends pageobject {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'game', 'config', 'core', 'html', 'bbcode' => 'bbcode');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
 
 	public function __construct() {
 		$handler = array(

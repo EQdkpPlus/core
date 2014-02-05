@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_rank" ) ) {
 	class pdh_r_rank extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'db',	'game');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		public $default_lang = 'english';
 		public $ranks;

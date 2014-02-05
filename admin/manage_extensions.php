@@ -23,14 +23,12 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Extensions extends page_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'pdh', 'jquery', 'core', 'config', 'pm', 'pfh', 'html', 'portal', 'game',
+	public static $shortcuts = array(
 			'repo'		=> 'repository',
 			'objStyles'	=> 'styles',
 			'encrypt'	=> 'encrypt'
 		);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
+		
 	private $code = '';
 
 	public function __construct(){

@@ -22,7 +22,6 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('pdh_w_generic')){
 	class pdh_w_generic extends gen_class {
-		public static $shortcuts = array('logs', 'time');
 		public $admin_user			= '';		// Username of admin		@var admin_user
 		public $current_time		= 0;		// Current time				@var time
 

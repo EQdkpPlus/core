@@ -18,11 +18,6 @@
 
 class calendareventexport_pageobject extends pageobject {
 
-	public static function __shortcuts() {
-		$shortcuts = array('user', 'tpl', 'in', 'core', 'html');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
-
 	public function __construct() {
 		$handler = array();
 		$this->user->check_pageobject('calendar');

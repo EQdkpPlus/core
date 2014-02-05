@@ -20,7 +20,6 @@ if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
 	class auto_point_adjustments extends gen_class {
-		public static $shortcuts = array('pfh', 'pdc', 'time', 'user');
 		public static $dependencies = array('pdc');
 
 		private $apa_tab			= array();

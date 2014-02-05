@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 class notifications extends gen_class {
 
-	public static $shortcuts = array();
 	public static $dependencies = array('pm');
 	
 	private $notifications = array();

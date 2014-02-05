@@ -19,7 +19,6 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class admin_user extends install_generic {
-	public static $shortcuts = array('pdl', 'in', 'user', 'db', 'time', 'config', 'crypt' => 'encrypt');
 	public static $before 		= 'inst_settings';
 
 	public $next_button		= 'create_user';
@@ -73,7 +72,7 @@ class admin_user extends install_generic {
 			$this->pdl->log('install_error', $this->lang['no_pw_match']);
 			return false;
 		}
-		$strEmail =  $this->crypt->encrypt($this->useremail);
+		$strEmail =  $this->encrypt->encrypt($this->useremail);
 		$this->config->set('admin_email', $strEmail);
 		$salt = $this->user->generate_salt();
 		$password = $this->user->encrypt_password($this->in->get('user_password1'), $salt);

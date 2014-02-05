@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "task" ) ){
 	abstract class task extends gen_class {
-		public static $shortcuts = array('user', 'config', 'tpl');
 
 		public $form_method			= "get";
 		public $author				= "unknown";

@@ -22,9 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("repository")) {
 	class repository extends gen_class {
-		public static $shortcuts = array('user', 'config', 'time', 'pdh', 'pfh', 'jquery', 'tpl', 'game', 'pm',
-			'puf'	=> 'urlfetcher', 'objStyles'=> 'styles'
-		);
+		public static $shortcuts = array('puf'	=> 'urlfetcher', 'objStyles'=> 'styles');
 		
 		//Dummy URL, should be a secure connection
 		private $RepoEndpoint	= "";

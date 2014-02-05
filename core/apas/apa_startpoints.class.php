@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "apa_startpoints" ) ) {
 	class apa_startpoints extends apa_type_generic {
-		public static $shortcuts = array('user', 'time', 'pdc', 'pdh', 'config', 'pdl', 'apa'=>'auto_point_adjustments', 'timekeeper');
+		public static $shortcuts = array('apa'=>'auto_point_adjustments');
 
 		protected $ext_options = array(
 			'start_date' => array(

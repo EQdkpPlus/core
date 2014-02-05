@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists('swtor')) {
 	class swtor extends game_generic {
-		public static $shortcuts = array('config');
 
 		protected $this_game	= 'swtor';
 		protected $types		= array('classes', 'races', 'factions', 'roles');

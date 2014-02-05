@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_get_salt')){
 	class exchange_get_salt extends gen_class {
-		public static $shortcuts = array('db', 'pex'=>'plus_exchange');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 
 		public function post_get_salt($params, $body){
 			$xml = simplexml_load_string($body);

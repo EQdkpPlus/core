@@ -36,7 +36,6 @@ class MyMailer extends PHPMailer {
 	private $myoptions = array();
 
 	public static $shortcuts = array(
-		'core', 'user', 'config',
 		'crypt'		=> 'encrypt',
 	);
 

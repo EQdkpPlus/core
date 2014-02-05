@@ -19,7 +19,7 @@ if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
 class encryptionkey extends install_generic {
-	public static $shortcuts = array('pdl', 'in', 'pfh' => array('file_handler', array('installer')));
+	public static $shortcuts = array('pfh' => array('file_handler', array('installer')));
 	public static $before 		= 'db_access';
 
 	private $key			= '';

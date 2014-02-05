@@ -22,10 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_member_attendance" ) ) {
 	class pdh_r_member_attendance extends pdh_r_generic{
-		public static function __shortcuts() {
-		$shortcuts = array('pdc', 'pdh', 'time'	);
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
 		public $default_lang = 'english';
 

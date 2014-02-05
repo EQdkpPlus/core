@@ -17,7 +17,6 @@
  */
 
 class core extends gen_class {
-	public static $shortcuts = array('user', 'pdl', 'config', 'tpl', 'in', 'time');
 
 	public $error_message			= array();			// Array of errors		@public $error_message
 	public $header_inc				= false;			// Printed header?		@public $header_inc

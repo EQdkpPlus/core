@@ -27,10 +27,6 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class template extends gen_class {
-	public static $shortcuts = array('pfh', 'user', 'game', 'pdh', 'config',
-		'encrypt' 		=> 'encrypt',
-		'timekeeper' 	=> 'timekeeper',
-	);
 	
 	private $handle					= '';
 	protected $_data				= array();

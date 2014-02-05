@@ -22,9 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "bridge_usersync_crontask" ) ) {
 	class bridge_usersync_crontask extends crontask {
-		public static $shortcuts = array('pfh', 'time', 'tpl', 'bridge', 'pdh', 'user'
-		);
-
 		public function __construct(){
 			$this->defaults['repeat']		= true;
 			$this->defaults['repeat_type']	= 'daily';

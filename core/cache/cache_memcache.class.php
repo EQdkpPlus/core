@@ -26,7 +26,6 @@ if ( !interface_exists( "plus_datacache" ) ) {
 
 if ( !class_exists( "cache_memcache" ) ) {
 	class cache_memcache extends gen_class implements plus_datacache{
-		public static $shortcuts = array('config' => 'core');
 
 		public $server = 'localhost';
 		public $memcache;

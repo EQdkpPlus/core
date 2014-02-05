@@ -22,7 +22,7 @@ if (!defined('EQDKP_INC')){
 
 if (!class_exists('exchange_data')){
 	class exchange_data extends gen_class{
-		public static $shortcuts = array('user', 'pex'=>'plus_exchange', 'config');
+		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
 		public function get_data($params, $body){
