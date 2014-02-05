@@ -169,7 +169,7 @@ class demo_form extends page_generic {
 		$this->form->add_tabs($definitions);
 		
 		
-		if($this->in->get('save')) {
+		if($this->in->exists('save')) {
 			$values = $this->form->return_values();
 			echo $this->pdl->format_var($values);
 			exit;
