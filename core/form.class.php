@@ -104,7 +104,7 @@ class form extends gen_class {
 		return $class->inpval();
 	}
 	
-	public function __construct($form_id = 'myform') {
+	public function __construct($form_id) {
 		$this->form_id = $form_id;
 	}
 	
@@ -114,52 +114,72 @@ class form extends gen_class {
 	
 	/**
 	 *	add a tab and put existing fieldsets and fields into it
-	 *	@param string	$tab:		name of the tab, according to language variable "{lang_prefix}tab_{name}"
-	 *	@param array	$fieldsets:	array with names of the fieldsets which shall be moved to this tab (from ungrouped)
-	 *	@param array	fields:		array with names of the fields which shall be moved to this tab (from ungrouped)
+	 *
+	 *	@param string/array	$tab:		name of the tab, according to language variable "{lang_prefix}tab_{name}" OR array('name' => $name, 'lang' => $lang)
+	 *	@param array		$fieldsets:	array with names of the fieldsets which shall be moved to this tab (from ungrouped)
+	 *	@param array		$fields:	array with names of the fields which shall be moved to this tab (from ungrouped)
 	 */
 	public function add_tab($tab, $fieldsets=array(), $fields=array()) {
+		if(is_array($tab)) {
+			$tabname = $tab['name'];
+			$this->field_array[$tabname]['_lang'] = $tab['lang'];
+		} else {
+			$tabname = $tab;
+		}
 		foreach($fieldsets as $fieldset) {
 			if(isset($this->field_array[$fieldset])) {
-				$this->field_array[$tab][$fieldset] = $this->field_array['fs'][$fieldset];
+				$this->field_array[$tabname][$fieldset] = $this->field_array['fs'][$fieldset];
 				unset($this->field_array['fs'][$field]);
 			}
 		}
 		foreach($fields as $field) {
 			if(isset($this->field_array[$field])) {
-				$this->field_array[$tab]['f'][$field] = $this->field_array['f'][$field];
+				$this->field_array[$tabname]['f'][$field] = $this->field_array['f'][$field];
 				unset($this->field_array['f'][$field]);
 			}
 		}
 	}
 	
-	/*	add multiple tabs at once
-	 *	@fieldarray (array):	 tabname => array(fieldsetname => array(fieldname => array(options)))
+	/**
+	 *	add multiple tabs at once
+	 *
+	 *	@param array	$fieldarray:	 tabname => array(fieldsetname => array(fieldname => array(options)))
 	 */
 	public function add_tabs($fieldarray) {
 		$this->field_array = array_merge($this->field_array, $fieldarray);
 	}
 	
-	/*	group existing fields in a fieldset
-	 *	@fieldset (string):	name of the fieldset, according to language variable "{lang_prefix}fs_{name}"
-	 *	@fields (array):	array with names of the fields to be moved
-	 *	@tab (string):		name of the tab in which the fieldset shall be created (and the fields are currently located in)
+	/**
+	 *	group existing fields in a fieldset
+	 *
+	 *	@param string/array	$fieldset:	name of the fieldset, according to language variable "{lang_prefix}fs_{name}" OR array('name' => $name, 'lang' => $lang. (optional) 'info' => $info)
+	 *	@param array		$fields:	array with names of the fields to be moved
+	 *	@param string 		$tab:		name of the tab in which the fieldset shall be created (and the fields are currently located in)
 	 */
 	public function add_fieldset($fieldset, $fields=array(), $tab='') {
+		if(is_array($fieldset)) {
+			$fsname = $fieldset['name'];
+			$this->field_array[$fsname]['_lang'] = $fieldset['lang'];
+			if(!empty($fieldset['info'])) $this->field_array[$fsname]['_info'] = $fieldset['info'];
+		} else {
+			$fsname = $fieldset;
+		}
 		foreach($fields as $field) {
 			if($tab) {
-				$this->field_array[$tab][$fieldset][$field] = $this->field_array[$tab]['f'][$field];
+				$this->field_array[$tab][$fsname][$field] = $this->field_array[$tab]['f'][$field];
 				unset($this->field_array[$tab]['f'][$field]);
 			} else {
-				$this->field_array['fs'][$fieldset][$field] = $this->field_array['f'][$field];
+				$this->field_array['fs'][$fsname][$field] = $this->field_array['f'][$field];
 				unset($this->field_array['f'][$field]);
 			}
 		}
 	}
 	
-	/*	add one or more fieldsets including its fields in array format
-	 *	@fieldarray (array):	fieldsetname => array(fieldname => array(options))
-	 *	@tab (string):			name of the tab into which the fieldset shall be put
+	/**
+	 *	add one or more fieldsets including its fields in array format
+	 *
+	 *	@param array	$fieldarray:	fieldsetname => array(fieldname => array(options))
+	 *	@param string	$tab:			name of the tab into which the fieldset shall be put
 	 */
 	public function add_fieldsets($fieldarray, $tab='') {
 		if($tab)
@@ -168,11 +188,13 @@ class form extends gen_class {
 			$this->field_array['fs'] = array_merge($this->field_array, $fieldarray);
 	}
 	
-	/*	add a single field to the form
-	 *	@name (string):		name of the field, according to language variable "{lang_prefix}{name}"
-	 *	@options (array):	argument-array for the field
-	 *	@fieldset (string):	name of the fieldset where the field shall be placed
-	 *	@tab (string):		name of the tab where the field shall be placed
+	/**
+	 *	add a single field to the form
+	 *
+	 *	@param string	$name:		name of the field, according to language variable "{lang_prefix}{name}"
+	 *	@param array	$options:	argument-array for the field
+	 *	@param string	$fieldset:	name of the fieldset where the field shall be placed
+	 *	@param string	$tab:		name of the tab where the field shall be placed
 	 */
 	public function add_field($name, $options, $fieldset='', $tab='') {
 		if($tab && $fieldset)
@@ -214,10 +236,12 @@ class form extends gen_class {
 		if($this->use_tabs) {
 			if($this->assign2tpl) $this->jquery->Tab_header($this->lang_prefix.'tabs', true);
 			foreach($this->field_array as $tabname => $tabdata) {
-				if($this->assign2tpl) $this->tab2tpl($tabname);
+				if(strpos($tabname, '_') === 0) continue;
+				if($this->assign2tpl) $this->tab2tpl($tabname, $tabdata);
 				if($this->use_fieldsets) {
 					foreach($tabdata as $fieldsetname => $fieldsetdata) {
-						if($this->assign2tpl) $this->fs2tpl($fieldsetname, 'tabs.fieldsets');
+						if(strpos($fieldsetname, '_') === 0) continue;
+						if($this->assign2tpl) $this->fs2tpl($fieldsetname, $fieldsetdata, 'tabs.fieldsets');
 						foreach($fieldsetdata as $name => $options) {
 							if(!isset($values[$name])) $values[$name] = '';
 							$out[$tabname][$fieldsetname][$name] = $this->f2tpl($name, $options, 'tabs.fieldsets.fields', $values[$name]);
@@ -233,7 +257,8 @@ class form extends gen_class {
 		} else {
 			if($this->use_fieldsets) {
 				foreach($this->field_array['fs'] as $fieldsetname => $fieldsetdata) {
-					if($this->assign2tpl) $this->fs2tpl($fieldsetname);
+					if(strpos($fieldsetname, '_') === 0) continue;
+					if($this->assign2tpl) $this->fs2tpl($fieldsetname, $fieldsetdata, 'fieldsets');
 					foreach($fieldsetdata as $name => $options) {
 						if(!isset($values[$name])) $values[$name] = '';
 						$out[$fieldsetname][$name] = $this->f2tpl($name, $options, 'fieldsets.fields', $values[$name]);
@@ -257,6 +282,7 @@ class form extends gen_class {
 	public function return_values() {
 		$values = array();
 		foreach($this->field_array as $tabname => $fieldsets) {
+			if(strpos($tabname, '_') === 0) continue;
 			// extra handling for the only case of a 2-deep array
 			if($tabname == 'f') {
 				// variable fieldsets holds fields in this case
@@ -265,7 +291,8 @@ class form extends gen_class {
 				}
 				continue;
 			}
-			foreach($fieldsets as $fields) {
+			foreach($fieldsets as $fieldsetname => $fields) {
+				if(strpos($fieldsetname, '_') === 0) continue;
 				foreach($fields as $name => $options) {
 					$values[$name] = self::value($name, $options);
 				}
@@ -274,20 +301,21 @@ class form extends gen_class {
 		return $values;
 	}
 	
-	private function tab2tpl($tabname) {
+	private function tab2tpl($tabname, $data) {
+		$lang = (!empty($data['_lang'])) ? $data['_lang'] : $this->lang_prefix.'tab_'.$tabname;
 		$this->tpl->assign_block_vars('tabs', array(
-			'NAME'	=> $this->user->lang($this->lang_prefix.'tab_'.$tabname),
+			'NAME'	=> $this->lang($lang),
 			'ID'	=> $tabname
 			)
 		);
 	}
 	
-	private function fs2tpl($fieldsetname, $key) {
-		$lang = $this->lang_prefix.'fs_'.$fieldsetname;
-		$info = $this->lang_prefix.'fs_info_'.$fieldsetname;
+	private function fs2tpl($fieldsetname, $data, $key) {
+		$lang = (!empty($data['_lang'])) ? $data['_lang'] : $this->lang_prefix.'fs_'.$fieldsetname;
+		$info = (!empty($data['_info'])) ? $data['_info'] : $this->lang_prefix.'fs_info_'.$fieldsetname;
 		$this->tpl->assign_block_vars($key, array(
-			'NAME'		=> ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : $this->game->glang($lang),
-			'INFO'		=> ($this->user->lang($info, false, false)) ? $this->user->lang($info) : $this->game->glang($info),
+			'NAME'		=> $this->lang($lang),
+			'INFO'		=> $this->lang($info, false),
 		));
 	}
 	
@@ -307,13 +335,13 @@ class form extends gen_class {
 		if(!empty($options['dir_lang'])) {
 			$language = $options['dir_lang'];
 		} else {
-			$language = ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $name);
+			$language = $this->lang($lang);
 		}
 		// direct help string?
 		if(!empty($options['dir_help'])) {
 			$help_message = $options['dir_help'];
 		} else {
-			$help_message = ($this->user->lang($help, false, false)) ? $this->user->lang($help) : (($this->game->glang($help)) ? $this->game->glang($help) : '');
+			$help_message = $this->lang($help, false);
 		}
 		
 		// fill in the field
@@ -389,6 +417,11 @@ class form extends gen_class {
 		}
 		$this->{'jq_'.$type} = true;
 		$this->tpl->add_js($js, 'docready');
+	}
+	
+	private function lang($lang, $no_empty=true) {
+		$fallback = ($no_empty) ? $lang : '';
+		return ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $fallback);
 	}
 }
 ?>
