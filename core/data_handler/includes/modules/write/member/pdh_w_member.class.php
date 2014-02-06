@@ -124,10 +124,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					//Überprüfe Ringabhängigkeit von Mainchars
 					$this->pdh->process_hook_queue();
 					if ($member_id != $data['mainid']){
-						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['member_id'])){
-							$this->change_mainid($data['mainid'], $member_id);
+						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['mainid'])){
+							$this->change_mainid($data['mainid'], $data['mainid']);
 						}
-					}					
+					}						
 					return $member_id;
 				}
 			} else {
@@ -159,8 +159,8 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					//Überprüfe Ringabhängigkeit von Mainchars
 					$this->pdh->process_hook_queue();
 					if ($member_id != $data['mainid']){
-						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['member_id'])){
-							$this->change_mainid($data['mainid'], $member_id);
+						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['mainid'])){
+							$this->change_mainid($data['mainid'], $data['mainid']);
 						}
 					}
 					return $member_id;
