@@ -262,9 +262,16 @@ class editcalendarevent_pageobject extends pageobject {
 
 	// the main page display
 	public function display() {
-		// add custom css
-
-		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
+		if(($this->in->get('hookid', 0) > 0) && $this->in->get('hookapp', '') != ''){
+			$eventdata	= $this->hooks->process('calendarevent_prefill', array('hookapp' => $this->in->get('hookapp'), 'hookid' => $this->in->get('hookid', 0)), true);
+			$this->values_available	= true;
+		}else{
+			$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
+			$this->values_available	= ($this->url_id > 0) ? true : false;
+		}
+		if($this->in->get('debug', 0) == 1){
+			var_dump($eventdata);die();
+		}
 
 		// the repeat array
 		$drpdwn_repeat = array(
@@ -316,14 +323,14 @@ class editcalendarevent_pageobject extends pageobject {
 		asort($raidleader_array);
 
 		// Load the default dates
-		if($this->url_id > 0){
+		$default_deadlineoffset	= (($this->config->get('calendar_addraid_deadline')) ? $this->config->get('calendar_addraid_deadline') : 1);
+		if($this->values_available > 0){
 			$defdates = array(
 				'start'		=> $eventdata['timestamp_start'],
 				'end'		=> $eventdata['timestamp_end'],
-				'deadline'	=> $eventdata['extension']['deadlinedate']
+				'deadline'	=> (isset($eventdata['extension']['deadlinedate']) && $eventdata['extension']['deadlinedate'] > 0) ? $eventdata['extension']['deadlinedate'] : $default_deadlineoffset
 			);
 		}else{
-			$default_deadlineoffset	= (($this->config->get('calendar_addraid_deadline')) ? $this->config->get('calendar_addraid_deadline') : 1);
 			$default_raidduration	= ((($this->config->get('calendar_addraid_duration')) ? $this->config->get('calendar_addraid_duration') : 120)*60);
 
 			// if the default time should be used, set it...
