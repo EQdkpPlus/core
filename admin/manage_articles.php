@@ -240,7 +240,7 @@ class Manage_Articles extends page_generic {
 				'PREVIEW_IMAGE'		=> new himageuploader('previewimage', array(
 						'imgpath'	=> $this->pfh->FolderPath('','files'),
 						'value'		=> $this->pdh->get('articles', 'previewimage', array($id)),
-						'noimgfile'	=> "images/global/brokenimg.png",
+						'noimgfile'	=> "images/global/default-image.svg",
 						'deletelink'=> 'manage_articles.php'.$this->SID.'&a='.$id.'&c='.$cid.'&delpreviewimage=true&link_hash='.$this->CSRFGetToken('delpreviewimage'),
 					)),
 			));
@@ -257,7 +257,7 @@ class Manage_Articles extends page_generic {
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'PREVIEW_IMAGE'		=> new himageuploader('previewimage', array(
 						'imgpath'	=> $this->pfh->FolderPath('logo','eqdkp'),
-						'noimgfile'	=> "images/global/brokenimg.png"
+						'noimgfile'	=> "images/global/default-image.svg"
 					)),
 			));
 		}

@@ -177,7 +177,7 @@ class guildImporter extends page_generic {
 		}
 
 		die(json_encode(array(
-			'image'		=> $this->root_path.'images/no_pic.png',
+			'image'		=> $this->root_path.'images/global/avatar-default.svg',
 			'name'		=> $this->in->get('name', ''),
 			'success'	=> $successmsg
 		)));

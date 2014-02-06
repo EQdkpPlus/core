@@ -111,7 +111,7 @@ if (!class_exists('pdh_r_wow')) {
 		public function get_html_charicon($member_id){
 			$charicon = $this->get_charicon($member_id);
 			if ($charicon == '') {
-				$charicon = $this->server_path.'images/no_pic.png';
+				$charicon = $this->server_path.'images/global/avatar-default.svg';
 			}
 			return '<img src="'.$charicon.'" alt="Char-Icon" height="48" />';
 		}

@@ -189,7 +189,7 @@ class charImporter extends page_generic {
 			$successmsg	= 'error';
 			$errormsg	= $chardata['reason'];
 			$charname	= $this->in->get('charname', '');
-			$charicon	= $this->server_path.'images/no_pic.png';
+			$charicon	= $this->server_path.'images/global/avatar-default.svg';
 		}
 
 		die(json_encode(array(

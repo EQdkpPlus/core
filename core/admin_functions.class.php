@@ -262,19 +262,19 @@ class admin_functions extends gen_class {
 	function resolve_browser($string){
 		$string = sanitize($string);
 		if( preg_match("/opera/i",$string)){
-			return "<img src=\"".$this->root_path."images/glyphs/browser/opera.svg\" alt=\"Opera\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<img src=\"".$this->root_path."images/browser/opera.svg\" alt=\"Opera\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/msie/i",$string)){
-			return "<img src=\"".$this->root_path."images/glyphs/browser/ie.svg\" alt=\"Internet Explorer\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<img src=\"".$this->root_path."images/browser/ie.svg\" alt=\"Internet Explorer\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/chrome/i", $string)){
-			return "<img src=\"".$this->root_path."images/glyphs/browser/chrome.svg\" alt=\"Google Chrome\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<img src=\"".$this->root_path."images/browser/chrome.svg\" alt=\"Google Chrome\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/konqueror/i",$string)){
-			return "<img src=\"".$this->root_path."images/glyphs/browser/konqueror.svg\" alt=\"Konqueror\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<img src=\"".$this->root_path."images/browser/konqueror.svg\" alt=\"Konqueror\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/safari/i",$string) ){
-			return "<img src=\"".$this->root_path."images/glyphs/browser/safari.svg\" alt=\"Safari\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<img src=\"".$this->root_path."images/browser/safari.svg\" alt=\"Safari\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/lynx/i",$string) ){
 			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">Lynx</span>";
 		}else if( preg_match("/mozilla/i",$string) ){
-			return "<img src=\"".$this->root_path."images/glyphs/browser/firefox.svg\" alt=\"Firefox\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<img src=\"".$this->root_path."images/browser/firefox.svg\" alt=\"Firefox\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
 		}else if( preg_match("/w3m/i",$string) ){
 			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">w3m</span>";
 		}else{

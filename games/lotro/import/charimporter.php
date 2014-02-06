@@ -184,7 +184,7 @@ class charImporter extends page_generic {
 			$errormsg	= $chardata['reason'];
 			$charname	= $this->in->get('charname', '');
 		}
-		$charicon	= $this->root_path.'images/no_pic.png';
+		$charicon	= $this->root_path.'images/global/avatar-default.svg';
 
 		die(json_encode(array(
 			'image'		=> $charicon,
@@ -287,7 +287,7 @@ class charImporter extends page_generic {
 
 				<fieldset class="settings mediumsettings">
 					<dl>
-						<dt><label><img src="'.$this->root_path.'images/no_pic.png" name="char_icon" alt="icon" width="44px" height="44px" align="middle" /></label></dt>
+						<dt><label><img src="'.$this->root_path.'images/global/avatar-default.svg" name="char_icon" alt="icon" width="44px" height="44px" align="middle" /></label></dt>
 						<dd>
 							'.sprintf($this->game->glang('uc_charfound'), $isMemberName).'
 						</dd>

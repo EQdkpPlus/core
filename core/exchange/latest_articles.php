@@ -99,7 +99,7 @@ if (!class_exists('exchange_latest_articles')){
 						
 								$arrComments['comment:'.$key] = array(
 										'username'			=> $row['username'],
-										'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/no_pic.png'), false, 'absolute'),
+										'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
 										'date'				=> $this->time->date('Y-m-d H:i', $row['date']),
 										'date_timestamp'	=> $row['date'],
 										'message'			=> $this->bbcode->toHTML($row['text']),

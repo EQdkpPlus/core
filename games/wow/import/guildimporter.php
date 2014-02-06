@@ -241,7 +241,7 @@ class guildImporter extends page_generic {
 		// show the charimage & the name
 		$chararray	= array('thumbnail'=>$this->in->get('thumbnail', ''), 'race'=>$this->in->get('race', 0), 'gender'=>$this->in->get('gender', 0));
 		$charicon = $this->game->obj['armory']->characterIcon($chararray);
-		if ($charicon == "") $charicon = $this->server_path.'images/no_pic.png';
+		if ($charicon == "") $charicon = $this->server_path.'images/global/avatar-default.svg';
 		
 		die(json_encode(array(
 			'image'		=> $charicon,

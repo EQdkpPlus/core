@@ -72,7 +72,7 @@ if(!class_exists('wow')) {
 			$content = file_get_contents($template);
 			$charicon = $this->pdh->get('wow', 'charicon', array($intCharID));
 			if ($charicon == '') {
-				$charicon = $this->server_path.'images/no_pic.png';
+				$charicon = $this->server_path.'images/global/avatar-default.svg';
 			}
 			$charhtml = '<b>'.$this->pdh->get('member', 'html_name', array($intCharID)).'</b><br />';
 			$guild = $this->pdh->get('member', 'profile_field', array($intCharID, 'guild'));

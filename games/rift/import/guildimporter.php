@@ -106,7 +106,7 @@ class guildImporter extends page_generic {
 					}
 				}
 				
-				$hmtlout .= "<dl><dt><label><img src=\"".$this->server_path.'images/no_pic.png'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".(string)$objMember->Name."<br/>".(($myStatus) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
+				$hmtlout .= "<dl><dt><label><img src=\"".$this->server_path.'images/global/avatar-default.svg'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".(string)$objMember->Name."<br/>".(($myStatus) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
 			}
 			
 			$hmtlout = "<dl><div class=\"infobox infobox-large infobox-green clearfix\"><i class=\"fa fa-check fa-4x pull-left\"></i> ".$this->game->glang('uc_gimp_header_fnsh')."</div></dl>".$hmtlout;

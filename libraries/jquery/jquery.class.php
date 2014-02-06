@@ -1393,7 +1393,7 @@ if (!class_exists("jquery")) {
 		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
 			$this->fileBrowser($type, 'image', $storageFolder);
 			
-			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/no_pic.png');
+			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/global/avatar-default.svg');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
 			
 			$imgprevheight	= (isset($options['prevheight'])) ? $options['prevheight'] : '120';

@@ -157,7 +157,7 @@ if (!class_exists("comments")){
 					$out[] .= '<div class="comment '.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
 								<div class="comment_id" style="display:none;">'.$row['id'].'</div>
 								<div class="comment_avatar_container">
-									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
 								</div>
 								<div class="comment_container">
 									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a>, '.$this->time->createTimeTag($row['date'], $this->time->user_date($row['date'], true)).'</div>';
@@ -186,7 +186,7 @@ if (!class_exists("comments")){
 							$out[] .= '<div class="clear"></div><br/><div class="comment-reply '.(($j%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
 										<div class="comment_id" style="display:none;">'.$com['id'].'</div>
 										<div class="comment_avatar_container">
-											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
 										</div>
 										<div class="comment_container">
 											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a>, '.$this->time->createTimeTag($com['date'], $this->time->user_date($com['date'], true)).'</div>';
@@ -246,7 +246,7 @@ if (!class_exists("comments")){
 						<input type="hidden" name="page" value="'.$page.'"/>
 						<div class="clearfix">
 							<div class="comment_avatar_container">
-								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
 							</div>
 							<div class="comment_write_container">
 								<textarea name="comment" rows="5" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
@@ -273,7 +273,7 @@ if (!class_exists("comments")){
 						<input type="hidden" name="reply_to" value="0"/>
 						<div class="clearfix">
 							<div class="comment_avatar_container">
-								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/no_pic.png').'" alt="Avatar" class="user-avatar"/></a></div>
+								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
 							</div>
 							<div class="comment_write_container">
 								<textarea name="comment" rows="2" cols="80" class="" style="width:100%;"></textarea>
