@@ -41,8 +41,8 @@ class update_2005 extends sql_update_task {
 		
 		// init SQL querys
 		$this->sqls = array(
-			1 	=> 'ALTER TABLE __member_profilefields CHANGE `language` `lang` VARCHAR(255);'
-			2 	=> 'ALTER TABLE __member_profilefields CHANGE `options` `data` TEXT;'
+			1 	=> 'ALTER TABLE __member_profilefields CHANGE `language` `lang` VARCHAR(255);',
+			2 	=> 'ALTER TABLE __member_profilefields CHANGE `options` `data` TEXT;',
 		);
 	}
 }

@@ -63,7 +63,7 @@ if (!class_exists("socialplugins")) {
 			if (count($arrButtons)){
 				$html = '<ul class="social-bookmarks">';
 				if ((int)$this->config->get('sp_socialshareprivacy') == 1){
-					$html .= '<li class="'.$key.'">'.$this->socialshareprivacy($urlToShare, $text, $height).'</li>';
+					$html .= '<li class="ssp">'.$this->socialshareprivacy($urlToShare, $text, $height).'</li>';
 				} else {				
 					foreach ($arrButtons as $key){
 						$html .= '<li class="'.$key.'">'.$this->$key($urlToShare, $text, $height).'</li>';

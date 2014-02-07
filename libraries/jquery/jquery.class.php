@@ -744,9 +744,9 @@ if (!class_exists("jquery")) {
 				$dpSettings[] = "dateFormat: '".$options['format']."'";
 			}
 			$dpSettings[] = (isset($options['change_fields'])) ? 'changeMonth: true, changeYear: true' : 'changeMonth: false, changeYear: false';
-
 			if($options['cal_icons']){
-				$dpSettings[] = "showOn: 'button', buttonImage: '".$this->path."core/images/calendar.png', buttonImageOnly: true";
+				$html = '<span class="input-icon">'.$html.'<i class="fa fa-calendar" <i class="fa fa-calendar" onclick="$( \'#'.$itemid.'\' ).datepicker( \'show\' );"></i>></i></span>';
+				//$dpSettings[] = "showOn: 'button', buttonImage: '".$this->path."core/images/calendar.png', buttonImageOnly: true";
 			}
 			if(isset($options['show_buttons'])){
 				$dpSettings[] = "showButtonPanel: true";
@@ -798,7 +798,6 @@ if (!class_exists("jquery")) {
 					
 					", 'docready');
 			}*/
-			
 			
 			$this->setLanguage('datepicker', "$.datepicker.setDefaults($.datepicker.regional['{!language!}']);");
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
@@ -1393,7 +1392,7 @@ if (!class_exists("jquery")) {
 		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
 			$this->fileBrowser($type, 'image', $storageFolder);
 			
-			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/global/avatar-default.svg');
+			$imgpreview		= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? $options['noimgfile'] : 'images/global/default-image.svg');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
 			
 			$imgprevheight	= (isset($options['prevheight'])) ? $options['prevheight'] : '120';

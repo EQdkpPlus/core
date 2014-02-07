@@ -165,6 +165,10 @@ class MyMailer extends PHPMailer {
 			$this->MsgHTML($tmp_body.nl2br($signature));
 			$this->AltBody = $this->nohtmlmssg;
 		}
+		
+		if (DEBUG == 4){
+			pd($this->Body);
+		}
 	}
 
 	/**

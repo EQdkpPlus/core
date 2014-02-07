@@ -155,7 +155,7 @@ class demo_form extends page_generic {
 							'opt2' => 'Option 2',
 							'opt3' => 'Option 3',
 						),
-						'ajax_reload' => array(array('dropdown3', 'dropdown4'), 'demo_form.php?ajax=true'),
+						'ajax_reload' => array(array('dropdown3', 'dropdown4'), 'demo_form.php'.$this->SID.'&ajax=true'),
 					),
 					'dropdown3' => array(
 						'type'	=> 'dropdown',

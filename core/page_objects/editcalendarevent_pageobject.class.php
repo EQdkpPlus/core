@@ -263,14 +263,15 @@ class editcalendarevent_pageobject extends pageobject {
 	// the main page display
 	public function display() {
 		if(($this->in->get('hookid', 0) > 0) && $this->in->get('hookapp', '') != ''){
-			$eventdata	= $this->hooks->process('calendarevent_prefill', array('hookapp' => $this->in->get('hookapp'), 'hookid' => $this->in->get('hookid', 0)), true);
+			$arrHookData	= $this->hooks->process('calendarevent_prefill', array('hookapp' => $this->in->get('hookapp'), 'hookid' => $this->in->get('hookid', 0)), true);
+			$eventdata = $arrHookData['eventdata'];
 			$this->values_available	= true;
 		}else{
 			$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
 			$this->values_available	= ($this->url_id > 0) ? true : false;
 		}
 		if($this->in->get('debug', 0) == 1){
-			var_dump($eventdata);die();
+			pd($eventdata);
 		}
 
 		// the repeat array

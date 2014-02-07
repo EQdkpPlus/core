@@ -49,7 +49,7 @@ class hdatepicker extends html {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
 			$this->value = $this->time->date($this->calendarformat(), $this->value);
 		}
-		$out = '<input type="text" name="'.$this->name.'" ';
+		$out = '<span class="input-icon-append"><input type="text" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
 		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
@@ -67,7 +67,7 @@ class hdatepicker extends html {
 		}
 		$this->jquery->Calendar($this->name, $this->value, '', $opts);
 		
-		$this->out = $out.' />';
+		$this->out = $out.' /><i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i></span>';
 	}
 	
 	public function _toString() {

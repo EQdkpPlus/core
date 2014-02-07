@@ -77,6 +77,12 @@ class hooks extends gen_class {
 		return $arrOutput;
 	}
 	
+	public function isRegistered($strHookname){
+		if (isset($this->hooks[$strHook])) return true;
+		
+		return false;
+	}
+	
 	private function scanGlobalHookFolder(){
 		if($dir = @opendir($this->root_path . 'core/hooks/')){
 			while ( $file = @readdir($dir) ){
