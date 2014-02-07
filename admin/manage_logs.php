@@ -213,8 +213,8 @@ class Manage_Logs extends page_generic {
 					'FILTER_VALUE'	=> $value,
 					'FILTER_RECORD' => $record,
 					'FILTER_RECORDID' => $recordid,
-					'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', $_date_from),
-					'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', $_date_to),
+					'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', $_date_from, '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3, 'onclose' => ' $( "#filter_date_to" ).datepicker( "option", "minDate", selectedDate );')),
+					'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', $_date_to, '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3,  'onclose' => ' $( "#filter_date_from" ).datepicker( "option", "maxDate", selectedDate );')),
 				));
 			}
 			
@@ -227,8 +227,8 @@ class Manage_Logs extends page_generic {
 				'FILTER_USER'	 => new hdropdown('filter_user', array('options' => $user_list)),
 				'FILTER_TYPE'	 => new hdropdown('filter_type', array('options' => $type_list)),
 				'FILTER_RESULT'  => new hdropdown('filter_result', array('options' => $result_list, 'value' => -1)),
-				'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', ''),
-				'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', ''),
+				'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', '', '', array('change_year' => true,'change_month' => true, 'other_months' => true, 'number_months' => 3, 'onclose' => ' $( "#cal_filter_date_to" ).datepicker( "option", "minDate", selectedDate );')),
+				'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', '', '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3,  'onclose' => ' $( "#cal_filter_date_from" ).datepicker( "option", "maxDate", selectedDate );')),		
 			));
 			$view_list			= $this->pdh->get('logs', 'id_list', array());
 		}

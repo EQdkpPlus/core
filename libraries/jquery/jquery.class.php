@@ -759,12 +759,22 @@ if (!class_exists("jquery")) {
 			if(isset($options['other_months'])){
 				$dpSettings[] = "showOtherMonths: true";
 			}
+			if(isset($options['change_month'])){
+				$dpSettings[] = "changeMonth: true";
+			}
+			if(isset($options['change_year'])){
+				$dpSettings[] = "changeYear: true";
+			}
 			if(!isset($options['timeformat'])) $options['timeformat'] = $this->time->translateformat2js($this->user->style['time']);
 			if(strpos($options['timeformat'], 's') !== false || isset($options['enablesecs'])) {
 				$dpSettings[] = 'showSecond: true';
 			}
 			if(isset($options['onselect'])){
 				$dpSettings[] = "onSelect: function(dateText, inst) { ".$options['onselect']." }";
+			}
+			
+			if(isset($options['onclose'])){
+				$dpSettings[] = "onClose: function( selectedDate ) { ".$options['onclose']." }";
 			}
 
 			if(count($dpSettings)>0){
