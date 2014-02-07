@@ -746,7 +746,6 @@ if (!class_exists("jquery")) {
 			$dpSettings[] = (isset($options['change_fields'])) ? 'changeMonth: true, changeYear: true' : 'changeMonth: false, changeYear: false';
 			if($options['cal_icons']){
 				$html = '<span class="input-icon-append">'.$html.'<i class="fa fa-calendar" onclick="$( \'#'.$itemid.'\' ).datepicker( \'show\' );"></i></span>';
-				//$dpSettings[] = "showOn: 'button', buttonImage: '".$this->path."core/images/calendar.png', buttonImageOnly: true";
 			}
 			if(isset($options['show_buttons'])){
 				$dpSettings[] = "showButtonPanel: true";

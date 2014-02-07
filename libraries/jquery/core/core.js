@@ -44126,9 +44126,9 @@ $.widget( "ui.tooltip", {
 })(jQuery);
 
 /*!
-	Colorbox v1.4.33 - 2013-10-31
+	Colorbox v1.4.36 - 2014-02-01
 	jQuery lightbox and modal window plugin
-	(c) 2013 Jack Moore - http://www.jacklmoore.com/colorbox
+	(c) 2014 Jack Moore - http://www.jacklmoore.com/colorbox
 	license: http://www.opensource.org/licenses/mit-license.php
 */
 (function ($, document, window) {
@@ -45363,7 +45363,7 @@ $.widget( "ui.tooltip", {
 })(jQuery);
 /*!
  * jQuery Form Plugin
- * version: 3.48.0-2013.12.28
+ * version: 3.49.0-2014.02.05
  * Requires jQuery v1.5 or later
  * Copyright (c) 2013 M. Alsup
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -46313,7 +46313,7 @@ $.fn.formToArray = function(semantic, elements) {
     var els = semantic ? form.getElementsByTagName('*') : form.elements;
     var els2;
 
-    if ( els ) {
+    if (els && !/MSIE 8/.test(navigator.userAgent)) { // #390
         els = $(els).get();  // convert to standard array
     }
 
@@ -46638,7 +46638,6 @@ function log() {
 }
 
 }));
-
 
 /*!
  * jQuery Collapser 1.0.0
@@ -52423,7 +52422,7 @@ $.extend(TRUE, QTIP.defaults, {
 		return d
 	}
 })(jQuery);
-// Spectrum Colorpicker v1.2.0
+// Spectrum Colorpicker v1.3.0
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
@@ -52454,6 +52453,7 @@ $.extend(TRUE, QTIP.defaults, {
         maxSelectionSize: 7,
         cancelText: "cancel",
         chooseText: "choose",
+        clearText: "Clear Color Selection",
         preferredFormat: false,
         className: "",
         showAlpha: false,
@@ -52511,7 +52511,7 @@ $.extend(TRUE, QTIP.defaults, {
                                     "</div>",
                                 "</div>",
                             "</div>",
-                            "<div class='sp-clear sp-clear-display' title='Clear Color Selection'>",
+                            "<div class='sp-clear sp-clear-display'>",
                             "</div>",
                             "<div class='sp-hue'>",
                                 "<div class='sp-slider'></div>",
@@ -52595,8 +52595,8 @@ $.extend(TRUE, QTIP.defaults, {
             currentSaturation = 0,
             currentValue = 0,
             currentAlpha = 1,
-            palette = opts.palette.slice(0),
-            paletteArray = $.isArray(palette[0]) ? palette : [palette],
+            palette = [],
+            paletteArray = [],
             selectionPalette = opts.selectionPalette.slice(0),
             maxSelectionSize = opts.maxSelectionSize,
             draggingClass = "sp-dragging",
@@ -52638,6 +52638,11 @@ $.extend(TRUE, QTIP.defaults, {
 
             if (opts.showPaletteOnly) {
                 opts.showPalette = true;
+            }
+
+            if (opts.palette) {
+                palette = opts.palette.slice(0);
+                paletteArray = $.isArray(palette[0]) ? palette : [palette];
             }
 
             container.toggleClass("sp-flat", flat);
@@ -52735,20 +52740,18 @@ $.extend(TRUE, QTIP.defaults, {
                 hide("cancel");
             });
 
-
+            clearButton.attr("title", opts.clearText);
             clearButton.bind("click.spectrum", function (e) {
                 e.stopPropagation();
                 e.preventDefault();
-
-               isEmpty = true;
-
+                isEmpty = true;
                 move();
+
                 if(flat) {
                     //for the flat style, this is a change event
                     updateOriginalInput(true);
                 }
             });
-
 
             chooseButton.text(opts.chooseText);
             chooseButton.bind("click.spectrum", function (e) {
@@ -52774,6 +52777,9 @@ $.extend(TRUE, QTIP.defaults, {
             draggable(slider, function (dragX, dragY) {
                 currentHue = parseFloat(dragY / slideHeight);
                 isEmpty = false;
+                if (!opts.showAlpha) {
+                    currentAlpha = 1;
+                }
                 move();
             }, dragStart, dragStop);
 
@@ -52802,6 +52808,9 @@ $.extend(TRUE, QTIP.defaults, {
                 }
 
                 isEmpty = false;
+                if (!opts.showAlpha) {
+                    currentAlpha = 1;
+                }
 
                 move();
 
@@ -52921,10 +52930,12 @@ $.extend(TRUE, QTIP.defaults, {
             }
             container.addClass(draggingClass);
             shiftMovementDirection = null;
+            boundElement.trigger('dragstart.spectrum', [ get() ]);
         }
 
         function dragStop() {
             container.removeClass(draggingClass);
+            boundElement.trigger('dragstop.spectrum', [ get() ]);
         }
 
         function setFromTextInput() {
@@ -52933,11 +52944,13 @@ $.extend(TRUE, QTIP.defaults, {
 
             if ((value === null || value === "") && allowEmpty) {
                 set(null);
+                updateOriginalInput(true);
             }
             else {
                 var tiny = tinycolor(value);
                 if (tiny.ok) {
                     set(tiny);
+                    updateOriginalInput(true);
                 }
                 else {
                     textInput.addClass("sp-validation-error");
@@ -52976,9 +52989,6 @@ $.extend(TRUE, QTIP.defaults, {
             replacer.addClass("sp-active");
             container.removeClass("sp-hidden");
 
-            if (opts.showPalette) {
-                drawPalette();
-            }
             reflow();
             updateUI();
 
@@ -53025,16 +53035,19 @@ $.extend(TRUE, QTIP.defaults, {
 
         function set(color, ignoreFormatChange) {
             if (tinycolor.equals(color, get())) {
+                // Update UI just in case a validation error needs
+                // to be cleared.
+                updateUI();
                 return;
             }
 
-            var newColor;
+            var newColor, newHsv;
             if (!color && allowEmpty) {
                 isEmpty = true;
             } else {
                 isEmpty = false;
                 newColor = tinycolor(color);
-                var newHsv = newColor.toHsv();
+                newHsv = newColor.toHsv();
 
                 currentHue = (newHsv.h % 360) / 360;
                 currentSaturation = newHsv.s;
@@ -53086,7 +53099,7 @@ $.extend(TRUE, QTIP.defaults, {
 
             // Get a format that alpha will be included in (hex and names ignore alpha)
             var format = currentPreferredFormat;
-            if (currentAlpha < 1) {
+            if (currentAlpha < 1 && !(currentAlpha === 0 && format === "name")) {
                 if (format === "hex" || format === "hex3" || format === "hex6" || format === "name") {
                     format = "rgb";
                 }
@@ -53104,7 +53117,7 @@ $.extend(TRUE, QTIP.defaults, {
                 previewElement.addClass("sp-clear-display");
             }
             else {
-               var realHex = realColor.toHexString(),
+                var realHex = realColor.toHexString(),
                     realRgb = realColor.toRgbString();
 
                 // Update the replaced elements background color (with actual selected color)
@@ -53135,6 +53148,7 @@ $.extend(TRUE, QTIP.defaults, {
 
                 displayColor = realColor.toString(format);
             }
+
             // Update the text entry input as it changes happen
             if (opts.showInput) {
                 textInput.val(displayColor);
@@ -53175,19 +53189,19 @@ $.extend(TRUE, QTIP.defaults, {
                     Math.min(dragHeight - dragHelperHeight, dragY - dragHelperHeight)
                 );
                 dragHelper.css({
-                    "top": dragY,
-                    "left": dragX
+                    "top": dragY + "px",
+                    "left": dragX + "px"
                 });
 
                 var alphaX = currentAlpha * alphaWidth;
                 alphaSlideHelper.css({
-                    "left": alphaX - (alphaSlideHelperWidth / 2)
+                    "left": (alphaX - (alphaSlideHelperWidth / 2)) + "px"
                 });
 
                 // Where to show the bar that displays your current selected hue
                 var slideY = (currentHue) * slideHeight;
                 slideHelper.css({
-                    "top": slideY - slideHelperHeight
+                    "top": (slideY - slideHelperHeight) + "px"
                 });
             }
         }
@@ -53197,7 +53211,7 @@ $.extend(TRUE, QTIP.defaults, {
                 displayColor = '',
                 hasChanged = !tinycolor.equals(color, colorOnShow);
 
-            if(color) {
+            if (color) {
                 displayColor = color.toString(currentPreferredFormat);
                 // Update the selection palette with the current color
                 addColorToSelectionPalette(color);
@@ -53231,6 +53245,12 @@ $.extend(TRUE, QTIP.defaults, {
             }
 
             updateHelperLocations();
+
+            if (opts.showPalette) {
+                drawPalette();
+            }
+
+            boundElement.trigger('reflow.spectrum');
         }
 
         function destroy() {
@@ -53396,6 +53416,7 @@ $.extend(TRUE, QTIP.defaults, {
                 onmove.apply(element, [dragX, dragY, e]);
             }
         }
+
         function start(e) {
             var rightclick = (e.which) ? (e.which == 3) : (e.button == 2);
             var touches = e.originalEvent.touches;
@@ -53418,6 +53439,7 @@ $.extend(TRUE, QTIP.defaults, {
                 }
             }
         }
+
         function stop() {
             if (dragging) {
                 $(doc).unbind(duringDragEvents);
@@ -53443,7 +53465,6 @@ $.extend(TRUE, QTIP.defaults, {
         };
     }
 
-
     function log(){/* jshint -W021 */if(window.console){if(Function.prototype.bind)log=Function.prototype.bind.call(console.log,console);else log=function(){Function.prototype.apply.call(console.log,console,arguments);};log.apply(this,arguments);}}
 
     /**
@@ -53460,7 +53481,6 @@ $.extend(TRUE, QTIP.defaults, {
             this.each(function () {
                 var spect = spectrums[$(this).data(dataID)];
                 if (spect) {
-
                     var method = spect[opts];
                     if (!method) {
                         throw new Error( "Spectrum: no such method: '" + opts + "'" );
@@ -53490,7 +53510,8 @@ $.extend(TRUE, QTIP.defaults, {
 
         // Initializing a new instance of spectrum
         return this.spectrum("destroy").each(function () {
-            var spect = spectrum(this, opts);
+            var options = $.extend({}, opts, $(this).data());
+            var spect = spectrum(this, options);
             $(this).data(dataID, spect.id);
         });
     };

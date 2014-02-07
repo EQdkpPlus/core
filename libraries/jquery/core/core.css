@@ -1025,7 +1025,7 @@ div.jqplot-noData-container {
 
 
 /***
-Spectrum Colorpicker v1.2.0
+Spectrum Colorpicker v1.3.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
@@ -1669,52 +1669,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 	text-decoration: none;
 	cursor: pointer;
 }
-/*!
- * jQuery UI Stars v3.0.1
- * http://plugins.jquery.com/project/Star_Rating_widget
- *
- * Copyright (c) 2010 Marek "Orkan" Zajac (orkans@gmail.com)
- * Dual licensed under the MIT and GPL licenses.
- * http://docs.jquery.com/License
- *
- * $Rev: 164 $
- * $Date:: 2010-05-01 #$
- * $Build: 35 (2010-05-01)
- *
- */
-.ui-stars-star,
-.ui-stars-cancel {
-  float: left;
-  display: block;
-  overflow: hidden;
-  text-indent: -999em;
-  cursor: pointer;
-}
-.ui-stars-star a,
-.ui-stars-cancel a {
-  width: 16px;
-  height: 15px;
-  display: block;
-	background: url(images/ui.stars.png) no-repeat 0 0;
-}
-.ui-stars-star a {
-  background-position: 0 -32px;
-}
-.ui-stars-star-on a {
-  background-position: 0 -48px;
-}
-.ui-stars-star-hover a {
-  background-position: 0 -64px;
-}
-.ui-stars-cancel-hover a {
-  background-position: 0 -16px;
-}
-.ui-stars-star-disabled,
-.ui-stars-star-disabled a,
-.ui-stars-cancel-disabled a {
-  cursor: default !important;
-}
-
 .ui-notify { width:350px; position:fixed; top:10px; right:10px; z-index: 9999; }
 .ui-notify-message { padding:10px; margin-bottom:15px; -moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px }
 .ui-notify-message h1 { font-size:14px; margin:0; padding:0 }

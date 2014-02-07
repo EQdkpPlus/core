@@ -194,7 +194,11 @@ class editcalendarevent_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 
 		// close the dialog
-		$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		if($this->in->get('redirect', 0) > 0){
+			redirect($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->url_id, true, true));
+		}else{
+			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		}
 	}
 
 	// update the event in the database
@@ -257,7 +261,11 @@ class editcalendarevent_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 
 		// close the dialog
-		$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		if($this->in->get('redirect', 0) > 0){
+			redirect($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->url_id, true, true));
+		}else{
+			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		}
 	}
 
 	// the main page display
@@ -389,6 +397,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
+			'REDIRECT_ON_SAVE'	=> $this->in->get('redirect', 0),
 			'IS_CLONED'			=> ((isset($eventdata['repeating']) && $eventdata['repeating'] != 'none') ? true : false),
 			#'IS_OPERATOR'		=> $this->user->check_auth('a_cal_revent_conf', false),
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
