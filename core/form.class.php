@@ -31,6 +31,7 @@ class form extends gen_class {
 	public $use_fieldsets 	= false;
 	public $use_dependency 	= false;
 	public $assign2tpl 		= true;
+	public $ajax_url		= '';
 	
 	/**
 	 *	the language variables are build as follows:
@@ -42,7 +43,7 @@ class form extends gen_class {
 	 *		- $lang = $this->lang_prefix.'f_'.$name;
 	 *		- $help = $this->lang_prefix.'f_help_'.$name;
 	 */
-	public $lang_prefix = '';
+	public $lang_prefix 	= '';
 	
 	/**
 	 *	structure: tab => array(fieldset => array(field => array(options)), field => array(options), field => array(options))
@@ -59,7 +60,8 @@ class form extends gen_class {
 	 *			- 'help'		=> if a custom help-language variable shall be used
 	 *			- 'dir_help'	=> if a custom (direct) string shall be used instead of a language variable
 	 */
-	private $field_array = array();
+	private $field_array 	= array();
+	private $hidden			= '';
 	
 	// flags if dependency jquery stuff has been initialised
 	private $jq_dropdown 	= false;
@@ -271,7 +273,11 @@ class form extends gen_class {
 			}
 		}
 
-		if($this->assign2tpl) $this->tpl->assign_var('FORM_ID', $this->form_id);
+		if($this->assign2tpl) 
+			$this->tpl->assign_vars(array(
+				'FORM_ID'	=> $this->form_id,
+				'HIDDEN'	=> $this->hidden
+			));
 		else return $out;
 	}
 	
@@ -353,14 +359,31 @@ class form extends gen_class {
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
 		
 		// ajax-reload for dropdown-options
-		if(!empty($options['ajax_reload'])) $this->jquery->js_dd_ajax($options['id'], $options['ajax_reload'][0], $options['ajax_reload'][1], (isset($options['ajax_reload'][2]) ? $options['ajax_reload'][2] : ''));
+		if(!empty($options['ajax_reload'])) {
+			if(isset($options['ajax_reload']['multiple'])) {
+				$ajax_reload = $options['ajax_reload']['multiple'];
+			} else {
+				$ajax_reload = array($options['ajax_reload']);
+			}
+			foreach($ajax_reload as $ajre) {
+				if(strpos($ajre[1], '%URL%') !== false) {
+					$ajre[1] = str_replace('%URL%', $this->ajax_url, $ajre[1]);
+				}
+				$this->jquery->js_dd_ajax($options['id'], $ajre[0], $ajre[1], (isset($ajre[2]) ? $ajre[2] : ''));
+			}
+		}
 		
-		if($this->assign2tpl) $this->tpl->assign_block_vars($key, array(
-				'NAME'		=> $language,
-				'HELP'		=> $help_message,
-				'FIELD'		=> $field
-			));
-		else return array(
+		if($this->assign2tpl) {
+			if($options['type'] == 'hidden') {
+				$this->hidden .= $field;
+			} else {
+				$this->tpl->assign_block_vars($key, array(
+					'NAME'		=> $language,
+					'HELP'		=> $help_message,
+					'FIELD'		=> $field
+				));
+			}
+		} else return array(
 				'name'		=> $language,
 				'help'		=> $help_message,
 				'field'		=> $field,

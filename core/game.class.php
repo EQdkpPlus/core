@@ -53,9 +53,9 @@ class game extends gen_class {
 	}
 
 	/**
-	 * Returns information of the selected game
+	 * Returns the gameobject
 	 *
-	 * @return string
+	 * @return object
 	 */
 	private function gameinfo() {
 		return registry::register($this->game);
@@ -470,6 +470,25 @@ class game extends gen_class {
 	}
 
 	/**
+	 * Filter data
+	 *
+	 * @param string $data
+	 * @param array $filter, possible values ('id_0')
+	 * @return array
+	 */
+	private function filter($filters, $data) {
+		foreach($filters as $filter) {
+			switch($filter) {
+				case 'id_0': 
+					unset($data[0]); break;
+
+				default: break;
+			}
+		}
+		return $data;
+	}
+
+	/**
 	 * Returns whole array (such as filters, realmlist)
 	 *
 	 * @param string $type
@@ -496,21 +515,65 @@ class game extends gen_class {
 		$this->pdl->log('game', 'Type "'.$type.'" does not exists');
 		return false;
 	}
-
+	
 	/**
-	 * Filter data
+	 * Returns whole array for the primary class (necessary in e.g. calendar, role assignment)
 	 *
-	 * @param string $data
 	 * @param array $filter, possible values ('id_0')
+	 * @param string $lang
 	 * @return array
 	 */
-	private function filter($filters, $data) {
-		foreach($filters as $filter) {
-			switch($filter) {
-				case 'id_0': 
-					unset($data[0]); break;
-
-				default: break;
+	public function get_primary_classes($filter=array(), $lang=false) {
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		foreach($class_dep as $class) {
+			if(isset($class['primary']) && $class['primary']) {
+				return $this->get($class['type'], $filter, $lang);
+			}
+		}
+	}
+	
+	/**
+	 * Returns an array with all possible dependent classes
+	 *
+	 * @param string	$parent:	Fieldname of the parent class
+	 * @param string 	$child:		Fieldname of child class
+	 * @param string 	$selection:	ID of the parent-class
+	 * @return array
+	 */
+	public function get_dep_classes($parent, $child, $selection, $filter=array(), $lang=false) {
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		foreach($class_dep as $class) {
+			if($class['name'] == $child) {
+				break;
+			}
+		}
+		$class['parent'][$parent][$selection];
+		$all_data = $this->get($class['type'], $filter, $lang);
+		if(empty($class['parent'][$parent][$selection]) || $class['parent'][$parent][$selection] == 'all') {
+			return $all_data;
+		}
+		foreach($all_data as $id => $name) {
+			if(!in_array($id, $class['parent'][$parent][$selection])) {
+				unset($all_data[$id]);
+			}
+		}
+		return $all_data;
+	}
+	
+	/**
+	 * Returns an array with all possible dependent classes
+	 *
+	 * @param string	$parent:	Fieldname of the parent class
+	 * @param string 	$child:		Fieldname of child class
+	 * @param string 	$selection:	ID of the parent-class
+	 * @return array
+	 */
+	public function get_admin_classdata() {
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		$data = array();
+		foreach($class_dep as $class) {
+			if(isset($class['admin']) && $class['admin']) {
+				$data[$class['name']] = $this->config->get($class['name']);
 			}
 		}
 		return $data;
@@ -594,19 +657,27 @@ class game extends gen_class {
 				return call_user_func_array(array($this->gameinfo(), 'decorate_'.$type), $params);
 			} elseif(method_exists($this, 'decorate_'.$type)) {
 				return call_user_func_array(array($this, 'decorate_'.$type), $params);
-			} elseif($this->type_exists($type)) {
-				if(!$this->data[$type]) {
-					$this->data[$type] = $this->gameinfo()->get($type);
-					$this->gameinfo()->flush($type);
-				}
-				return $this->get_name($type, $params[0]);
-			}
-		
+			}		
 		// there are no game specific icons, check if there are default ones
 		}elseif($this->default_icons($type)){
 			return call_user_func_array(array($this, 'decorate_def_'.$type), $params);
+		} elseif($this->type_exists($type)) {
+			if(!$this->data[$type]) {
+				$this->data[$type] = $this->gameinfo()->get($type);
+				$this->gameinfo()->flush($type);
+			}
+			return $this->get_name($type, $params[0]);
 		}
 		return '';
+	}
+	
+	/**
+	 * Creates all Icons of classes/subclasses to decorate a character
+	 *
+	 * @param int 	$char_id
+	 * @return html string
+	 */
+	public function decorate_character($char_id) {
 	}
 
 	/**
@@ -627,6 +698,38 @@ class game extends gen_class {
 	 */
 	public function AddProfileFields() {
 		$xml_fields = $this->gameinfo()->profilefields();
+		// add fields for classes/subclasses etc
+		$class_data = $this->gameinfo()->get_class_dependencies();
+		// build an array with parent-name , child-name => child-type
+		$class_deps = array();
+		foreach($class_data as $class) {
+			if(!is_array($class['parent'])) continue;
+			foreach($class['parent'] as $parent => $ids) {
+				$class_deps[$parent][$class['name']] = $class['type'];
+			}
+		}
+		foreach($class_data as $class) {
+			if($class['admin']) {
+				// make it a hidden field
+				$xml_fields[$class['name']] = array(
+					'type'			=> 'hidden',
+					'lang'			=> 'uc_'.$class['name'],
+					'undeletable'	=> 1,
+					'category'		=> 'character',
+				);
+			} else {
+				$xml_fields[$class['name']] = array(
+					'type'			=> 'dropdown',
+					'lang'			=> 'uc_'.$class['name'],
+					'category'		=> 'character',
+					'undeletable'	=> 1,
+					'options'		=> array('-----'),
+				);
+			}
+			foreach($class_deps[$class['name']] as $child => $type) {
+				$xml_fields[$class['name']]['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
+			}
+		}
 		$this->pdh->put('profile_fields', 'truncate_fields');
 		// Insert the field names in database
 		if(is_array($xml_fields)){
@@ -751,7 +854,18 @@ class game extends gen_class {
 	 * @return array
 	 */
 	public function admin_settings() {
-		return $this->gameinfo()->admin_settings();
+		$fields = $this->gameinfo()->admin_settings();
+		$class_deps = $this->gameinfo()->get_class_dependencies();
+		foreach($class_deps as $class) {
+			if(isset($class['admin']) && $class['admin']) {
+				$fields[$class['name']] = array(
+					'type'		=> 'dropdown',
+					'lang'		=> 'uc_'.$class['name'],
+					'options'	=> $this->get($class['type']),
+				);
+			}
+		}
+		return $fields;
 	}
 }
 
@@ -972,6 +1086,15 @@ if(!class_exists('game_generic')) {
 		 */
 		public function admin_settings() {
 			return array();
+		}
+		
+		/**
+		 * class-dependency array
+		 *
+		 * @return array
+		 */
+		public function get_class_dependencies() {
+			return $this->class_dependencies;
 		}
 
 		public abstract function get_OnChangeInfos($install=false);

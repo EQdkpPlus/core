@@ -55,8 +55,9 @@ if(!class_exists('pageobject')){
 			$this->strPath = $strPath;
 			$this->strPathPlain = str_replace($this->server_path, "", $strPath);
 			
+			$this->action = $strPath.$this->SID.$this->simple_head_url.$this->url_id_ext;
 			$this->tpl->assign_vars(array(
-				'ACTION'	=> $strPath.$this->SID.$this->simple_head_url.$this->url_id_ext,
+				'ACTION'	=> $this->action,
 				'PATH'		=> $strPath,
 			));
 		}

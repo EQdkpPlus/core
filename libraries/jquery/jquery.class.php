@@ -1230,7 +1230,7 @@ if (!class_exists("jquery")) {
 			if(!is_array($id2)) $id2 = array($id2);
 			foreach($id2 as $key => $id) {
 				$child_js .= "$('#".$id."').find('option').remove();";
-				$child_js .= "$('#".$id."').append(data);";
+				$child_js .= "$('#".$id."').append(data).trigger('change');";
 			}
 			$js .= "$.post('".$url."',{requestid:$('#".$id1."').val()".$add_posts."},function(data){".$child_js."});";
 			// initialize on page-load

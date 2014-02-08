@@ -39,6 +39,7 @@ if(!class_exists('page_generic')){
 		
 		protected $url_id = false;
 		protected $simple_head = '';
+		protected $action = '';
 	
 		public function __construct($pre_check, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			$this->pre_check = $pre_check;
@@ -64,9 +65,9 @@ if(!class_exists('page_generic')){
 			foreach($this->handler as $key => &$handle) {
 				if(!isset($handle['check'])) $handle['check'] = $this->pre_check.$key;
 			}
-
+			$this->action = $this->env->phpself.$this->SID.$this->simple_head_url.$this->url_id_ext;
 			$this->tpl->assign_vars(array(
-				'ACTION'	=> $this->env->phpself.$this->SID.$this->simple_head_url.$this->url_id_ext,
+				'ACTION'	=> $this->action,
 			));
 		}
 		

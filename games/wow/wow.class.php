@@ -24,7 +24,7 @@ if(!class_exists('wow')) {
 	class wow extends game_generic {
 
 		protected $this_game	= 'wow';
-		protected $types		= array('classes', 'races', 'factions', 'filters', 'realmlist', 'roles', 'professions', 'chartooltip');	// which information are stored?
+		protected $types		= array('factions', 'races', 'classes', 'talents', 'filters', 'realmlist', 'roles', 'professions', 'chartooltip');	// which information are stored?
 		public $icons			= array('classes', 'classes_big', 'races', 'roles', 'ranks', 'events', 'talents', '3dmodel');	// which icons do we have?
 		protected $classes		= array();
 		protected $roles		= array();
@@ -44,6 +44,97 @@ if(!class_exists('wow')) {
 			'wotlk'		=> array(4603, 3456, 4493, 4500, 4273, 2159, 4722, 4812, 4987),
 			'cataclysm'	=> array(5600, 5094, 5334, 5638, 5723, 5892),
 			'mop'		=> array(6125, 6297, 6067, 6622, 6738)
+		);
+		
+		protected $class_dependencies = array(
+			array(
+				'name'		=> 'faction',
+				'type'		=> 'factions',
+				'admin' 	=> true,
+				'decorate'	=> false,
+				'parent'	=> false,
+			),
+			array(
+				'name'		=> 'race',
+				'type'		=> 'races',
+				'admin'		=> false,
+				'decorate'	=> true,
+				'parent'	=> array(
+					'faction' => array(
+						'alliance' => array(0,1,2,3,4,9,11,13),
+						'horde' => array(0,5,6,7,8,10,12,13),
+					),
+				),
+			),
+			array(
+				'name'		=> 'class',
+				'type'		=> 'classes',
+				'admin'		=> false,
+				'decorate'	=> true,
+				'primary'	=> true,
+				'colorize'	=> true,
+				'roster'	=> true,
+				'parent'	=> array(
+					'race' => array(	// TODO: fill in class-ids correctly
+						0 	=> 'all',			// Unknown
+						1 	=> array(1,2,3),	// Gnome
+						2 	=> array(4,5,6),	// Human
+						3 	=> array(7,8,9),	// Dwarf
+						4 	=> array(10,11),	// Night Elf
+						5 	=> array(1,2,3),	// Troll
+						6 	=> array(4,5,6),	// Undead
+						7 	=> array(7,8,9),	// Orc
+						8 	=> array(10,11),	// Tauren
+						9 	=> array(4,5,6),	// Draenai
+						10 	=> array(4,5,6),	// Blood Elf
+						11 	=> array(4,5,6),	// Worgen
+						12 	=> array(4,5,6),	// Goblin
+						13 	=> array(4,5,6),	// Pandaren
+					),
+				),
+			),
+			array(
+				'name'		=> 'talent1',
+				'type'		=> 'talents',
+				'admin'		=> false,
+				'decorate'	=> true,
+				'parent'	=> array(
+					'class' => array(
+						1 	=> array(0,1,2),	// Death Knight
+						2 	=> array(3,4,5,6),	// Druid
+						3 	=> array(7,8,9),	// Hunter
+						4 	=> array(10,11,12),	// Mage
+						5 	=> array(13,14,15),	// Paladin
+						6 	=> array(16,17,18),	// Priest
+						7 	=> array(19,20,21),	// Rogue
+						8 	=> array(22,23,24),	// Shaman
+						9 	=> array(25,26,27),	// Warlock
+						10 	=> array(28,29,30),	// Warrior
+						11 	=> array(31,32,33),	// Monk
+					),
+				),
+			),
+			array(
+				'name'		=> 'talent2',
+				'type'		=> 'talents',
+				'admin'		=> false,
+				'decorate'	=> false,
+				'parent'	=> array(
+					'class' => array(
+						1 	=> array(0,1,2),	// Death Knight
+						2 	=> array(3,4,5,6),	// Druid
+						3 	=> array(7,8,9),	// Hunter
+						4 	=> array(10,11,12),	// Mage
+						5 	=> array(13,14,15),	// Paladin
+						6 	=> array(16,17,18),	// Priest
+						7 	=> array(19,20,21),	// Rogue
+						8 	=> array(22,23,24),	// Shaman
+						9 	=> array(25,26,27),	// Warlock
+						10 	=> array(28,29,30),	// Warrior
+						11 	=> array(31,32,33),	// Monk
+					),
+				),
+			),
 		);
 
 		protected $glang		= array();
@@ -224,26 +315,6 @@ if(!class_exists('wow')) {
 			$this->load_type('professions', array($this->lang));
 			$this->load_type('realmlist', array($this->lang));
 			$xml_fields = array(
-				'skill1'	=> array(
-					'type'			=> 'dropdown',
-					'category'		=> 'character',
-					'lang'			=> 'uc_skill1',
-					'size'			=> 4,
-					'undeletable'	=> true,
-					'visible'		=> true,
-					'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
-					'options_lang'	=> "lang:talents:{CLASSID}",
-				),
-				'skill2'	=> array(
-					'type'			=> 'dropdown',
-					'category'		=> 'character',
-					'lang'			=> 'uc_skill2',
-					'size'			=> 4,
-					'undeletable'	=> true,
-					'visible'		=> true,
-					'image'			=> "games/wow/talents/{CLASSID}{VALUE}.png",
-					'options_lang'	=> "lang:talents:{CLASSID}",
-				),
 				'gender'	=> array(
 					'type'			=> 'dropdown',
 					'category'		=> 'character',
@@ -268,6 +339,8 @@ if(!class_exists('wow')) {
 					'size'			=> '21',
 					'edecode'		=> true,
 					'autocomplete'	=> $this->realmlist[$this->lang],
+					'undeletable'	=> true,
+					'visible'		=> true
 				),
 				'prof1_value'	=> array(
 					'type'			=> 'int',
@@ -326,6 +399,14 @@ if(!class_exists('wow')) {
 					'options'		=> array('rage' => 'uc_bar_rage', 'energy' => 'uc_bar_energy', 'mana' => 'uc_bar_mana', 'focus' => 'uc_bar_focus', 'runic-power' => 'uc_bar_runic-power'),
 					'tolang'		=> true,
 					'size'			=> 40,
+					'undeletable'	=> true,
+				),
+				'level'	=> array(
+					'type'			=> 'spinner',
+					'category'		=> 'character',
+					'lang'			=> 'uc_level',
+					'max'			=> 90,
+					'min'			=> 1,
 					'undeletable'	=> true,
 				),
 			);
@@ -1061,12 +1142,6 @@ if(!class_exists('wow')) {
 		
 		public function admin_settings() {
 			$settingsdata_admin = array(
-				'uc_faction'	=> array(
-					'lang'		=> 'uc_faction',
-					'type'		=> 'dropdown',
-					'options'	=> $this->game->get('factions'),
-					'default'	=> 'alliance'
-				),
 				'uc_server_loc'	=> array(
 					'lang'		=> 'uc_server_loc',
 					'type' 		=> 'dropdown',

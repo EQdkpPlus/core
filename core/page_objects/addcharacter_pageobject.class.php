@@ -73,29 +73,15 @@ class addcharacter_pageobject extends pageobject {
 			return true;
 		} else {
 			$this->core->message($this->user->lang('missing_values').$this->user->lang('name'), $this->user->lang('error'), 'red', true);
-			return false;
+			$this->display($values);
 		}
 	}
 
 	public function edit(){
-		$data = array(
-			'lvl'		=> $this->in->get('member_level', 0),
-			'classid'	=> $this->in->get('member_class_id', 0),
-			'raceid'	=> $this->in->get('member_race_id', 0),
-			'notes'		=> htmlspecialchars($this->in->get('notes'), ENT_QUOTES),
-			'picture'	=> $this->in->get('picture'),
-		);
-		//Admin only things
-		if ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false) && strlen($this->in->get('member_name'))){
-			$data['name'] 	= $this->in->get('member_name');
-			$data['rankid']	= $this->in->get('rank_id', $this->pdh->get('rank', 'default', array()));
-			$data['status'] = $this->in->get('status', 0);
-			$data['mainid'] = $this->in->get('main_id', 0);
-		}
+		$data = $this->form->return_values();
+		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
+		$data['picture'] = $this->in->get('picture');
 
-		$data = array_merge($this->in->getArray('profilefields', 'string'), $data);
-		$this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $this->in->get('overtakeuser')));
-		
 		//Transfer character history
 		if ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false) && ($this->url_id != $this->in->get('history_receiver', 0)) && $this->in->get('history_receiver', 0) > 0){
 			$this->pdh->put('member', 'trans_member', array($this->url_id, $this->in->get('history_receiver', 0)));
@@ -104,20 +90,66 @@ class addcharacter_pageobject extends pageobject {
 		$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 	}
 	
-	public function display() {
+	public function display($member_data=array()) {
 		// Read the Data
-		$member_data	= ($this->url_id > 0) ? $this->pdh->get('member', 'array', array($this->url_id)) : $this->data;
+		if(empty($member_data)) {
+			$member_data = $this->pdh->get('member', 'array', array($this->url_id));
+			if($this->url_id > 0) $member_data['editid'] = $this->url_id;
+			// get class data which is selected by admin /such as faction/
+			$member_data = array_merge($member_data, $this->game->get_admin_classdata());
+		}
 		$userid_real	= ($this->url_id > 0) ? $this->pdh->get('member', 'userid', array($this->url_id)) : $this->user->data['user_id'];
 
 		// test
-		if($this->in->get('ajax')){
-			echo($this->game->callfunc('gameprofile_'.$this->in->get('ajax'), array($this->in->get('requestid'))));
+		if($this->in->get('ajax', false)) {
+			$data = $this->game->get_dep_classes($this->in->get('parent'), $this->in->get('child'), $this->in->get('requestid'));
+			$options = array(
+				'options_only'	=> true,
+				'options' 		=> $data,
+			);
+			if($this->url_id > 0) {
+				$options['value'] = $this->pdh->get('member', 'profile_field', array($this->url_id, $this->in->get('child')));
+			}
+			echo new hdropdown('dummy', $options);
 			exit;
 		}
 		
+		$this->build_form();
+		
+		// Fill fields with values
+		$this->form->output($member_data);		
+
+		$arrHistoryReceivers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
+		asort($arrHistoryReceivers);
+		$this->jquery->Validate('addchar', array(
+			array('name' => 'name', 'value' => '<br/>'.$this->user->lang('fv_required_name'))
+		));
+		$this->jquery->ResetValidate('addchar');
+		$this->tpl->assign_vars(array(
+			// Permissions
+			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
+			'USER_CAN_CONNECT'		=> ($this->user->check_auth('u_member_conn', false)) ? true : false,
+			'ADMINMODE'				=> ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)),
+
+			// Data
+			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
+			'DD_HISTORY_RECEIVER'	=> new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)),
+			'MEMBER_PICTURE'		=> '<input type="hidden" value="'.$member_data['picture'].'" name="picture"/>',
+		));
+
+		$this->core->set_vars(array(
+			'page_title'		=> '',
+			'template_file'		=> 'addcharacter.html',
+			'header_format'		=> 'simple',
+			'display'			=> true)
+		);
+	}
+	
+	private function build_form() {		
 		// initialize form class
 		$this->form->lang_prefix = 'addchar_';
 		$this->form->use_tabs = true;
+		$this->form->ajax_url = html_entity_decode($this->action);
 		
 		// Static fields
 		$static_fields = array(
@@ -168,6 +200,7 @@ class addcharacter_pageobject extends pageobject {
 				'type'			=> 'dropdown',
 				'options'		=> $tmpranks,
 				'lang'			=> 'rank',
+				'default'		=> $this->pdh->get('rank', 'default', array()),
 			);
 		}
 		$this->form->add_tab(array('name' => 'character', 'lang' => 'character'));
@@ -180,186 +213,10 @@ class addcharacter_pageobject extends pageobject {
 		}
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
-		pd($profilefields);
 		foreach($profilefields as $fieldname => $fielddata) {
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$this->form->add_field($fieldname, $fielddata, '', $tab);
-		}		
-		# $changed_profilefields	= $this->game->callfunc('changeprofilefields');
-		
-		// Fill fields with values
-		$this->form->output($member_data);		
-
-		$arrHistoryReceivers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
-		asort($arrHistoryReceivers);
-		$this->jquery->Validate('addchar', array(
-			array('name' => 'name', 'value' => '<br/>'.$this->user->lang('fv_required_name'))
-		));
-		$this->jquery->ResetValidate('addchar');
-		$this->tpl->assign_vars(array(
-			// Permissions
-			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
-			'USER_CAN_CONNECT'		=> ($this->user->check_auth('u_member_conn', false)) ? true : false,
-			'ADMINMODE'				=> ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)),
-
-			// Data
-			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
-			'DD_HISTORY_RECEIVER'	=> new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)),
-			'MEMBER_PICTURE'		=> '<input type="hidden" value="'.$member_data['picture'].'" name="picture"/>',
-		));
-
-		$this->core->set_vars(array(
-			'page_title'		=> '',
-			'template_file'		=> 'addcharacter1.html',
-			'header_format'		=> 'simple',
-			'display'			=> true)
-		);
-	}
-	
-	 ###### 	##		  ######
-	##	  ##	##		  ##   ##
-	##	  ##	##        ##   ##
-	##    ##	## 		  ##   ##
-	 ######     #######	  ######
-	public function display1(){
-		// Read the Data
-		$member_data	= ($this->url_id > 0) ? $this->pdh->get('member', 'array', array($this->url_id)) : $this->data;
-		$userid_real	= ($this->url_id > 0) ? $this->pdh->get('member', 'userid', array($this->url_id)) : $this->user->data['user_id'];
-
-		// test
-		if($this->in->get('ajax')){
-			echo($this->game->callfunc('gameprofile_'.$this->in->get('ajax'), array($this->in->get('requestid'))));
-			exit;
 		}
-		
-		// Static fields
-		$static_fields = array();
-		if($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)){
-			$maincharsel	= $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,false,true,true))));
-			asort($maincharsel);
-			if (!$this->url_id){
-				$maincharsel[0] = $this->user->lang('mainchar');
-			} else {
-				$maincharsel[$this->url_id] = $member_data['name'];
-				asort($maincharsel);
-			}
-			$static_fields['main_id']	= array(
-				'type'			=> 'dropdown',
-				'category'		=> 'character',
-				'name'			=> 'main_id',
-				'options'		=> $maincharsel,
-				'lang'			=> 'mainchar',
-				'directfield'	=> true,
-				'visible'		=> true
-			);
-		}
-
-		$static_fields = array_merge($static_fields, array(
-			'member_race_id'	=> array(
-				'type'			=> 'dropdown',
-				'category'		=> 'character',
-				'name'			=> 'race_id',
-				'options'		=> $this->game->get('races'),
-				'lang'			=> 'race',
-				'directfield'	=> true,
-				'visible'		=> true
-			),
-			'member_class_id'	=> array(
-				'type'			=> 'dropdown',
-				'category'		=> 'character',
-				'name'			=> 'class_id',
-				'options'		=> $this->game->get('classes', array('id_0')),
-				'lang'			=> 'class',
-				'directfield'	=> true,
-				'visible'		=> true
-			),
-			'member_level'	=> array(
-				'type'			=> 'int',
-				'category'		=> 'character',
-				'name'			=> 'level',
-				'lang'			=> 'level',
-				'directfield'	=> true,
-				'size'			=> 4,
-				'visible'		=> true,
-				'undeletable'	=> 1
-			),
-		));
-
-		if($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)){
-			$tmpranks		= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list')));
-			$static_fields['rank_id']	= array(
-				'type'			=> 'dropdown',
-				'category'		=> 'character',
-				'name'			=> 'rank_id',
-				'options'		=> $tmpranks,
-				'lang'			=> 'rank',
-				'directfield'	=> true,
-				'visible'		=> true,
-			);
-		}
-
-		// Dynamic Fields
-		$this->jquery->Tab_header('addchar_tab');
-		$categorynames			= $this->pdh->get('profile_fields', 'categories');
-		$categorynames			= (is_array($categorynames)) ? $categorynames : array('character');
-		$changed_profilefields	= $this->game->callfunc('changeprofilefields');
-		if(is_array($categorynames)){
-			foreach($categorynames as $catname){
-				if($catname != 'character'){
-					$this->tpl->assign_block_vars('cmrow', array(
-						'NAME'	=> ($this->game->glang('uc_cat_'.$catname)) ? $this->game->glang('uc_cat_'.$catname) : $this->user->lang('uc_cat_'.$catname),
-						'ID'	=> $catname
-						)
-					);
-				}
-				$profilefields = array_merge($static_fields, $this->pdh->get('profile_fields', 'fields'), $changed_profilefields);
-				foreach($profilefields as $name=>$confvars){
-					if($confvars['category'] == $catname){
-						$fieldname = (isset($confvars['directfield']) && $confvars['directfield']) ? $name : 'profilefields['.$name.']';
-						$confvars['value'] = (isset($confvars['name']) && isset($member_data[$confvars['name']])) ? $member_data[$confvars['name']] : $member_data[$name];
-						registry::load('form');
-						$ccfield = form::field($fieldname, $confvars);
-						if($ccfield && $confvars['visible']){
-							$dynwhereto = ($confvars['category'] == 'character') ? 'character_row' : 'cmrow.tabs';
-							$lang_var = ($this->game->glang($confvars['lang'])) ? $this->game->glang($confvars['lang']) : (($this->user->lang($confvars['lang'])) ? $this->user->lang($confvars['lang']) : $confvars['lang']);
-							$this->tpl->assign_block_vars($dynwhereto, array(
-								'NAME'		=> $lang_var,
-								'FIELD'		=> $ccfield,
-								'HELP'		=> ($this->game->glang($confvars['lang'].'_help')) ? $this->game->glang($confvars['lang'].'_help') : '',
-							));
-						}
-					}
-				}
-			}
-		}
-
-		$arrHistoryReceivers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
-		asort($arrHistoryReceivers);
-		$this->jquery->Validate('addchar', array(
-			array('name' => 'member_name', 'value' => '<br/>'.$this->user->lang('fv_required_name'))
-		));
-		$this->jquery->ResetValidate('addchar');
-		$this->tpl->assign_vars(array(
-			// Permissions
-			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
-			'USER_CAN_CONNECT'		=> ($this->user->check_auth('u_member_conn', false)) ? true : false,
-			'ADMINMODE'				=> ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)),
-
-			// Data
-			'STATUS'				=> (isset($member_data['status'])) ? $member_data['status'] : '',
-			'MEMBER_ID'				=> ($this->url_id > 0) ? $this->url_id : 0,
-			'MEMBER_NAME'			=> ((isset($member_data['name'])) ? $member_data['name'] : ''),
-			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
-			'DD_HISTORY_RECEIVER'	=> new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)),
-			'MEMBER_PICTURE'		=> '<input type="hidden" value="'.$member_data['picture'].'" name="picture"/>',
-		));
-
-		$this->core->set_vars(array(
-			'page_title'		=> '',
-			'template_file'		=> 'addcharacter.html',
-			'header_format'		=> 'simple',
-			'display'			=> true)
-		);
 	}
 }
 
