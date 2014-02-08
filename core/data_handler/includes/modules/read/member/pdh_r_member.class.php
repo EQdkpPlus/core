@@ -146,10 +146,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			$bmd_sql = "SELECT
 						member_id,
 						member_name AS name,
-						member_level AS level,
 						member_status AS status,
-						member_class_id AS class_id,
-						member_race_id AS race_id,
 						member_rank_id AS rank_id,
 						member_main_id AS main_id,
 						member_creation_date AS creation_date,
@@ -169,12 +166,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				while($bmd_row = $objQuery->fetchAssoc()){
 					if(!isset($this->data[$bmd_row['member_id']]['name'])){
 						$this->data[$bmd_row['member_id']]['name']				= $bmd_row['name'];
-						$this->data[$bmd_row['member_id']]['class_id']			= $bmd_row['class_id'];		
-						//$this->data[$bmd_row['member_id']]['race_id']			= $bmd_row['race_id'];
-						//$this->data[$bmd_row['member_id']]['race_name']			= $this->get_racename($bmd_row['member_id']);
 						$this->data[$bmd_row['member_id']]['rank_id']			= $bmd_row['rank_id'];
 						$this->data[$bmd_row['member_id']]['status']			= $bmd_row['status'];
-						$this->data[$bmd_row['member_id']]['level']				= $bmd_row['level'];
 						$this->data[$bmd_row['member_id']]['main_id']			= ($bmd_row['main_id'] > 0)? $bmd_row['main_id'] : $bmd_row['member_id'];
 						$this->data[$bmd_row['member_id']]['creation_date']		= $bmd_row['creation_date'];
 						$this->data[$bmd_row['member_id']]['picture']			= $bmd_row['picture'];
@@ -191,7 +184,6 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
 							}
 						}
-						$this->data[$bmd_row['member_id']]['class_name']		= $this->get_classname($bmd_row['member_id']);
 					}
 				}
 				$this->pdc->put('pdh_members_table', $this->data, null);
@@ -266,10 +258,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			$strMemberValue = $this->get_profile_field($member_id, $profile_field);
 			$out = $strMemberValue;
 			
-			$arrField['options_language'] = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}", "{RACEID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id),$this->get_raceid($member_id)), $arrField['options_language']);
+			$arrField['options_language'] = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $arrField['options_language']);
 			
 			if($arrField['image'] != "" && $out){
-				$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}", "{RACEID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id),$this->get_raceid($member_id)), $arrField['image']);
+				$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $arrField['image']);
 				if (is_file($this->root_path.$strPlainImage)){
 					$strImage =  $this->server_path.$strPlainImage;
 				}
@@ -285,7 +277,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				break;
 
 				case 'link':
-					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}", "{RACEID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id),$this->get_raceid($member_id)), $strMemberValue);
+					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $strMemberValue);
 					$out = '<a href="'.$strMemberValue.'">';
 					if ($strImage){
 						$out .= '<img src="'.$strImage.'" alt="'.$arrField['language'].'" title="'.$arrField['language'].'" />';

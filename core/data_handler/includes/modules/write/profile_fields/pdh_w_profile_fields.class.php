@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_profile_fields')) {
 	class pdh_w_profile_fields extends pdh_w_generic {
 	
-		private $fields = array('name', 'type', 'category', 'lang', 'options_language', 'size', 'data', 'visible', 'image', 'undeletable', 'enabled', 'custom');
+		private $fields = array('name', 'type', 'category', 'lang', 'options_language', 'size', 'data', 'sort', 'image', 'undeletable', 'enabled', 'custom');
 
 		public function enable_field($field_id){
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
@@ -83,7 +83,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'options_language' => $this->in->get('options_language'),
 				'size'			=> $this->in->get('size'),
 				'image'			=> $this->in->get('image'),
-				'visible'		=> '1',
+				'sort'			=> $this->in->get('sort', 1),
 				'data'			=> serialize($field['data']),
 			))->execute($id);
 				
@@ -128,7 +128,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),
 				'size'			=> (isset($data['size'])) ? intval($data['size']) : $this->in->get('size', 3),
 				'data'			=> (isset($data['data'])) ? serialize($data['data']) : serialize(array('options' => $options)),
-				'visible'		=> '1',
+				'sort'			=> (isset($data['sort'])) ? intval($data['sort']) : $this->in->get('sort', 1),
 				'image'			=> (isset($data['image'])) ? $data['image'] : $this->in->get('image'),
 				'undeletable'	=> (isset($data['undeletable']) && $data['undeletable']) ? '1' : '0',
 				'enabled'		=> 1,

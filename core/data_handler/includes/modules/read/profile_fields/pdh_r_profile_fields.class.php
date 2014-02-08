@@ -45,7 +45,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 				return true;
 			}
 			$this->profile_fields = array();
-			$objQuery = $this->db->query("SELECT * FROM __member_profilefields ORDER BY enabled DESC,category,name");
+			$objQuery = $this->db->query("SELECT * FROM __member_profilefields ORDER BY sort ASC,category,name");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()) {
 					// build categories array
@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 						'type'			=> $drow['type'],
 						'category'		=> $drow['category'],
 						'size'			=> $drow['size'],
-						'visible'		=> $drow['visible'],
+						'sort'			=> $drow['sort'],
 						'lang'			=> $drow['lang'],
 						'options_language' => $drow['options_language'],
 						'image'			=> $drow['image'],

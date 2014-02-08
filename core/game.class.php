@@ -561,11 +561,64 @@ class game extends gen_class {
 	}
 	
 	/**
-	 * Returns an array with all possible dependent classes
+	 * Returns the class-dependencies as an associative array
 	 *
-	 * @param string	$parent:	Fieldname of the parent class
-	 * @param string 	$child:		Fieldname of child class
-	 * @param string 	$selection:	ID of the parent-class
+	 * @return array
+	 */
+	public function get_assoc_classes() {
+		/*
+		 *	a fully linear dependency for all classes with flag roster is assumed, ordering has to be correct beforehand
+		 *	means, e.g. faction => race => class => talent
+		 */
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		// create a name 2 type array
+		$name2type = array();
+		$todisplay = array();
+		foreach($class_dep as $class) {
+			$name2type[$class['name']] = $class['type'];
+			if(isset($class['roster']) && $class['roster']) $todisplay[] = $class['type'];
+		}
+		// get all single dependencies
+		$relevant_deps = array();
+		foreach($class_dep as $class) {
+			if($class['parent'] && isset($name2type[key($class['parent'])])) {
+				$relevant_deps[$name2type[key($class['parent'])]] = $class['type'];
+				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
+			}
+		}
+		// find first "level"
+		pd($relevant_deps);
+		pd($child_ids);
+		pd($name2type);
+		$first = key($relevant_deps);
+		while($key = array_search($first, $relevant_deps)) {
+			$first = $key;
+		}
+		// build associative array
+		pd($first);
+		return $this->build_assoc_array($first, $relevant_deps, $child_ids);
+	}
+	
+	private function build_assoc_array($type, $dep_order, $child_ids, $parent_id=false) {
+		$assoc_array = array();
+		$data = $this->get($type);
+		foreach($data as $id => $name) {
+			if(isset($dep_order[$type])) {
+				if($parent_id !== false) {
+					$true_ids = $child_ids[array_search($type, $dep_order)][$parent_id];
+					if(!in_array($id, $true_ids))
+						continue;
+				}
+				$assoc_array[$id] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $id);
+			// last level reached
+			} else $assoc_array = $child_ids[$type][$parent_id];
+		}
+		return $assoc_array;
+	}
+	
+	/**
+	 * Returns a data-array containing all admin-selected class stuff
+	 *
 	 * @return array
 	 */
 	public function get_admin_classdata() {
@@ -705,7 +758,7 @@ class game extends gen_class {
 	 * @param string $lang
 	 */
 	public function AddProfileFields() {
-		$xml_fields = $this->gameinfo()->profilefields();
+		$this->pdh->put('profile_fields', 'truncate_fields');
 		// add fields for classes/subclasses etc
 		$class_data = $this->gameinfo()->get_class_dependencies();
 		// build an array with parent-name , child-name => child-type
@@ -716,33 +769,41 @@ class game extends gen_class {
 				$class_deps[$parent][$class['name']] = $class['type'];
 			}
 		}
+		$z = 0;
 		foreach($class_data as $class) {
 			if($class['admin']) {
 				// make it a hidden field
-				$xml_fields[$class['name']] = array(
+				$field = array(
+					'name'			=> $class['name'],
 					'type'			=> 'hidden',
 					'lang'			=> 'uc_'.$class['name'],
 					'undeletable'	=> 1,
 					'category'		=> 'character',
 				);
 			} else {
-				$xml_fields[$class['name']] = array(
+				$z++;
+				$field = array(
+					'name'			=> $class['name'],
 					'type'			=> 'dropdown',
 					'lang'			=> 'uc_'.$class['name'],
 					'category'		=> 'character',
 					'undeletable'	=> 1,
 					'options'		=> array('-----'),
+					'sort' 			=> $z,
 				);
 			}
 			foreach($class_deps[$class['name']] as $child => $type) {
-				$xml_fields[$class['name']]['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
+				$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
 			}
+			$this->pdh->put('profile_fields', 'insert_field', array($field));
 		}
-		$this->pdh->put('profile_fields', 'truncate_fields');
 		// Insert the field names in database
+		$xml_fields = $this->gameinfo()->profilefields();
 		if(is_array($xml_fields)){
 			foreach($xml_fields as $name=>$values) {
 				$values['name'] = $name;
+				// move the static profilefields behind the class-stuff
+				$values['sort'] = $values['sort'] + $z;
 				$this->pdh->put('profile_fields', 'insert_field', array($values));
 			}
 		}

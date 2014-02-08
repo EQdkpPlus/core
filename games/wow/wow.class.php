@@ -52,6 +52,7 @@ if(!class_exists('wow')) {
 				'type'		=> 'factions',
 				'admin' 	=> true,
 				'decorate'	=> false,
+				'roster'	=> true,
 				'parent'	=> false,
 			),
 			array(
@@ -98,6 +99,7 @@ if(!class_exists('wow')) {
 				'type'		=> 'talents',
 				'admin'		=> false,
 				'decorate'	=> true,
+				'roster'	=> true,
 				'parent'	=> array(
 					'class' => array(
 						1 	=> array(0,1,2),	// Death Knight
@@ -315,22 +317,13 @@ if(!class_exists('wow')) {
 			$this->load_type('professions', array($this->lang));
 			$this->load_type('realmlist', array($this->lang));
 			$xml_fields = array(
-				'gender'	=> array(
-					'type'			=> 'dropdown',
-					'category'		=> 'character',
-					'lang'			=> 'uc_gender',
-					'options'		=> array('male' => 'uc_male', 'female' => 'uc_female'),
-					'tolang'		=> true,
-					'undeletable'	=> true,
-					'visible'		=> true
-				),
 				'guild'	=> array(
 					'type'			=> 'text',
 					'category'		=> 'character',
 					'lang'			=> 'uc_guild',
 					'size'			=> 40,
 					'undeletable'	=> true,
-					'visible'		=> true
+					'sort'			=> 1
 				),
 				'servername'	=> array(
 					'category'		=> 'character',
@@ -340,50 +333,33 @@ if(!class_exists('wow')) {
 					'edecode'		=> true,
 					'autocomplete'	=> $this->realmlist[$this->lang],
 					'undeletable'	=> true,
-					'visible'		=> true
+					'sort'			=> 2
 				),
-				'prof1_value'	=> array(
-					'type'			=> 'int',
-					'category'		=> 'profession',
-					'lang'			=> 'uc_prof1_value',
-					'size'			=> 4,
-					'undeletable'	=> true,
-					'visible'		=> true
-				),
-				'prof1_name'	=> array(
+				'gender'	=> array(
 					'type'			=> 'dropdown',
-					'category'		=> 'profession',
-					'lang'			=> 'uc_prof1_name',
-					'options'		=> $this->professions[$this->lang],
+					'category'		=> 'character',
+					'lang'			=> 'uc_gender',
+					'options'		=> array('male' => 'uc_male', 'female' => 'uc_female'),
+					'tolang'		=> true,
 					'undeletable'	=> true,
-					'visible'		=> true,
-					'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
-					'options_lang'	=> "professions",
+					'sort'			=> 3
 				),
-				'prof2_value'	=> array(
-					'type'			=> 'int',
-					'category'		=> 'profession',
-					'lang'			=> 'uc_prof2_value',
-					'size'			=> 4,
+				'level'	=> array(
+					'type'			=> 'spinner',
+					'category'		=> 'character',
+					'lang'			=> 'uc_level',
+					'max'			=> 90,
+					'min'			=> 1,
 					'undeletable'	=> true,
-					'visible'		=> true
-				),
-				'prof2_name'	=> array(
-					'type'			=> 'dropdown',
-					'category'		=> 'profession',
-					'lang'			=> 'uc_prof2_name',
-					'options'		=> $this->professions[$this->lang],
-					'undeletable'	=> true,
-					'visible'		=> true,
-					'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
-					'options_lang'	=> "professions",
+					'sort'			=> 4
 				),
 				'health_bar'	=> array(
 					'type'			=> 'int',
 					'category'		=> 'character',
 					'lang'			=> 'uc_bar_health',
 					'undeletable'	=> true,
-					'size'			=> 4
+					'size'			=> 4,
+					'sort'			=> 5
 				),
 				'second_bar'	=> array(
 					'type'			=> 'int',
@@ -391,6 +367,7 @@ if(!class_exists('wow')) {
 					'lang'			=> 'uc_bar_2value',
 					'size'			=> 4,
 					'undeletable'	=> true,
+					'sort'			=> 6
 				),
 				'second_name'	=> array(
 					'type'			=> 'dropdown',
@@ -400,14 +377,43 @@ if(!class_exists('wow')) {
 					'tolang'		=> true,
 					'size'			=> 40,
 					'undeletable'	=> true,
+					'sort'			=> 7
 				),
-				'level'	=> array(
-					'type'			=> 'spinner',
-					'category'		=> 'character',
-					'lang'			=> 'uc_level',
-					'max'			=> 90,
-					'min'			=> 1,
+				'prof1_name'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'profession',
+					'lang'			=> 'uc_prof1_name',
+					'options'		=> $this->professions[$this->lang],
 					'undeletable'	=> true,
+					'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
+					'options_lang'	=> "professions",
+					'sort'			=> 1,
+				),
+				'prof1_value'	=> array(
+					'type'			=> 'int',
+					'category'		=> 'profession',
+					'lang'			=> 'uc_prof1_value',
+					'size'			=> 4,
+					'undeletable'	=> true,
+					'sort'			=> 2
+				),
+				'prof2_name'	=> array(
+					'type'			=> 'dropdown',
+					'category'		=> 'profession',
+					'lang'			=> 'uc_prof2_name',
+					'options'		=> $this->professions[$this->lang],
+					'undeletable'	=> true,
+					'image'			=> "games/wow/profiles/professions/{VALUE}.jpg",
+					'options_lang'	=> "professions",
+					'sort'			=> 3,
+				),
+				'prof2_value'	=> array(
+					'type'			=> 'int',
+					'category'		=> 'profession',
+					'lang'			=> 'uc_prof2_value',
+					'size'			=> 4,
+					'undeletable'	=> true,
+					'sort'			=> 4
 				),
 			);
 			return $xml_fields;

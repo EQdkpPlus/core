@@ -108,6 +108,11 @@ class update_2000 extends sql_update_task {
 				46 => 'Alter groups_user table',
 				47 => 'Update Link Visbilities',
 				48 => 'Alter member_profilefields table',
+				49 => 'Alter member_profilefields table',
+				50 => 'Alter member_profilefields table',
+				51 => 'Alter member_profilefields table',
+				52 => 'Alter member_profilefields table',
+				53 => 'Alter member table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -159,6 +164,11 @@ class update_2000 extends sql_update_task {
 				46 => 'Alter groups_user table',
 				47 => 'Update Link Visbilities',
 				48 => 'Alter member_profilefields table',
+				49 => 'Alter member_profilefields table',
+				50 => 'Alter member_profilefields table',
+				51 => 'Alter member_profilefields table',
+				52 => 'Alter member_profilefields table',
+				53 => 'Alter member table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -317,8 +327,17 @@ class update_2000 extends sql_update_task {
 			46 => "ALTER TABLE `__groups_user` ADD COLUMN `groups_user_sortid` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' AFTER `groups_user_hide`;",
 			47 => "UPDATE __links SET link_visibility='[&#34;0&#34;]';",
 			48 => "ALTER TABLE `__member_profilefields` ADD COLUMN `options_language` VARCHAR(255) NULL AFTER `options`;",
+			49 => "ALTER TABLE `__member_profilefields` CHANGE `language` `lang` VARCHAR(255);",
+			50 => "ALTER TABLE `__member_profilefields` CHANGE `options` `data` TEXT;",
+			51 => "ALTER TABLE `__member_profilefields` CHANGE `visible` `sort` SMALLINT( 2 ) UNSIGNED NULL DEFAULT '1';",
+			52 => "ALTER TABLE `__member_profilefields` CHANGE `fieldtype` `type` VARCHAR(255);",
+			53 => "ALTER TABLE `__members` DROP `member_level`, DROP `member_race_id`, DROP `member_class_id`;",
 		);
-
+	}
+	
+	// Transfer data into new format
+	// (maybe do that for: class, race, level)
+	public function before_update_function() {
 	}
 	 
 	//Settings, Migrate News and Infopages, Update Colors
@@ -413,6 +432,9 @@ class update_2000 extends sql_update_task {
 		//Update Colors
 		$this->update_colors();
 		
+		// Update Portal-Module Settings (maybe do that)
+		$this->update_portal_module_settings();
+		
 		//Clear cache
 		$this->pdc->flush();
 		
@@ -443,6 +465,51 @@ class update_2000 extends sql_update_task {
 			}
 		}
 	}
+	
+	
+	public function update_portal_module_settings() {
+		
+		$settings_conv = array(
+			'latestsposts' => array(
+				'pk_latestposts_bbmodule'	=> 'bbmodule',
+				'pk_latestposts_dbprefix'	=> 'dbprefix',
+				'pk_latestposts_dbmode' 	=> 'dbmode',
+				'pk_latestposts_dbhost' 	=> 'dbhost',
+				'pk_latestposts_dbname' 	=> 'dbname',
+				'pk_latestposts_dbuser' 	=> 'dbuser',
+				'pk_latestposts_dbpassword' => 'dbpassword',
+				'pk_latestposts_url' 		=> 'url',
+				'pk_latestposts_trimtitle' 	=> 'trimtitle',
+				'pk_latestposts_amount' 	=> 'amount',
+				'pk_latestposts_linktype' 	=> 'linktype',
+				'pk_latestposts_blackwhitelist' => 'blackwhitelist'
+			),
+			'offi_conf' => array(
+				'pk_oc_type' 	=> 'type',
+				'pk_oc_period' 	=> 'period',
+				'pk_oc_day' 	=> 'day',
+				'pk_oc_date' 	=> 'date',
+				'pk_oc_time_type' => 'time_type',
+				'pk_oc_time' 	=> 'time'
+			),
+		);
+		
+		/* standalone code to get output for settings conversion
+	$data =array(
+		// paste old settings here
+	);
+	
+	foreach ($data as $key => $stuff) {
+		echo "'".$key."'\t \t => '".str_replace('pk_oc_', '', $key)."',<br />";
+	}
+	*/
+		
+		//Clear cache
+		$this->pdc->flush();
+		
+		return true;
+	}
+}
 
 }
 ?>

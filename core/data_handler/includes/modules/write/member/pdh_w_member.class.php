@@ -26,9 +26,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 
 		private $arrLogLang = array(
 			'name'			=> "{L_NAME}",
-			'lvl'			=> "{L_LEVEL}",
-			'race'			=> "{L_RACE}",
-			'class'			=> "{L_CLASS}",
 			'rank'			=> "{L_RANK}",
 			'main'			=> "{L_MAINCHAR}",
 			'status'		=> "{L_STATUS}",
@@ -46,9 +43,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			// Update the member
 			if($member_id > 0) {
 				$old['name']			= $this->pdh->get('member', 'name', array($member_id));
-				$old['lvl']				= $this->pdh->get('member', 'level', array($member_id));
-				$old['raceid']			= $this->pdh->get('member', 'raceid', array($member_id));
-				$old['classid']			= $this->pdh->get('member', 'classid', array($member_id));
 				$old['rankid']			= $this->pdh->get('member', 'rankid', array($member_id));
 				$old['mainid']			= $this->pdh->get('member', 'mainid', array($member_id));
 				$old['status']			= $this->pdh->get('member', 'active', array($member_id));
@@ -91,9 +85,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			if(empty($data['name'])) return false;
 			$querystr = array(
 				'member_name'		=> trim($data['name']),
-				'member_level'		=> !empty($data['lvl']) ? $data['lvl'] : 0,
-				'member_race_id'	=> !empty($data['raceid']) ? $data['raceid'] : 0,
-				'member_class_id'	=> !empty($data['classid']) ? $data['classid'] : 0,
 				'member_rank_id'	=> !empty($data['rankid']) ? $data['rankid'] : $this->pdh->get('rank', 'default', array()),
 				'member_main_id'	=> $data['mainid'],
 				'member_status'		=> isset($data['status']) ? $data['status'] : 1,
@@ -108,9 +99,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				if($objQuery) {
 					$arrOld = array(
 						'name'			=> $old['name'],
-						'lvl'			=> $old['lvl'],
-						'race'			=> $this->game->get_name('races', $old['raceid']),
-						'class'			=> $this->game->get_name('classes', $old['classid']),
 						'rank'			=> $this->pdh->get('rank', 'name', array($old['rankid'])),
 						'main'			=> $this->pdh->get('member', 'name', array($old['mainid'])),
 						'status'		=> $old['status'],
@@ -120,9 +108,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					
 					$arrNew = array(
 						'name'			=> $querystr['member_name'],
-						'lvl'			=> $querystr['member_level'],
-						'race'			=> $this->game->get_name('races', $querystr['member_race_id']),
-						'class'			=> $this->game->get_name('classes', $querystr['member_class_id']),
 						'rank'			=> $this->pdh->get('rank', 'name', array($querystr['member_rank_id'])),
 						'main'			=> $this->pdh->get('member', 'name', array($querystr['member_main_id'])),
 						'status'		=> $querystr['member_status'],
@@ -165,9 +150,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					
 					$arrNew = array(
 							'name'			=> $querystr['member_name'],
-							'lvl'			=> $querystr['member_level'],
-							'race'			=> $this->game->get_name('races', $querystr['member_race_id']),
-							'class'			=> $this->game->get_name('classes', $querystr['member_class_id']),
 							'rank'			=> $this->pdh->get('rank', 'name', array($querystr['member_rank_id'])),
 							'main'			=> $this->pdh->get('member', 'name', array($querystr['member_main_id'])),
 							'status'		=> $querystr['status'],
@@ -203,9 +185,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		public function delete_member($member_id, $no_log=false) {
 			//get old data
 			$old['name']	= $this->pdh->get('member', 'name', array($member_id));
-			$old['lvl']		= $this->pdh->get('member', 'level', array($member_id));
-			$old['race']	= $this->pdh->get('member', 'racename', array($member_id));
-			$old['class']	= $this->pdh->get('member', 'classname', array($member_id));
 			$old['rank']	= $this->pdh->get('member', 'rankname', array($member_id));
 			$old['main']	= $this->pdh->get('member', 'mainname', array($member_id));
 			$old['status']	= $this->pdh->get('member', 'active', array($member_id));
@@ -216,9 +195,6 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				if(!$no_log) {
 					$log_action = array(
 						'{L_NAME}' => $old['name'],
-						'{L_LEVEL}' => $old['lvl'],
-						'{L_RACE}' => $old['race'],
-						'{L_CLASS}' => $old['class'],
 						'{L_RANK}' => $old['rank'],
 						'{L_MAINC}' => $old['main'],
 						'{L_STATUS}' => $old['status']
