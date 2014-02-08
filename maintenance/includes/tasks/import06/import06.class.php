@@ -936,9 +936,14 @@ class import06 extends task {
 					if(isset($factions[$row['member_id']])) {
 						$profilefields['faction'] = $factions[$row['member_id']];
 					}
-					$members[$row['member_id']]['profiledata'] = json_encode($profilefields);
+					
+					$profilefields['class'] = registry::register('game')->get_id(registry::register('game')->get_primary_classes(), $m2cr[$member['member_id']]['class']);
+					$profilefields['race'] = registry::register('game')->get_id('races', $m2cr[$member['member_id']]['race']);
+					
 					$m2cr[$row['member_id']]['class'] = $row['class_name'];
 					$m2cr[$row['member_id']]['race'] = $row['race_name'];
+					
+					$members[$row['member_id']]['profiledata'] = json_encode($profilefields);
 				}
 			}
 
@@ -947,10 +952,9 @@ class import06 extends task {
 			$sql = "INSERT INTO ".$this->new[1]."members (".$fields.") VALUES ";
 			$sqls = array();
 			foreach($members as $member) {
-				$member['member_race_id'] = registry::register('game')->get_id('races', $m2cr[$member['member_id']]['race']);
-				$member['member_class_id'] = registry::register('game')->get_id('classes', $m2cr[$member['member_id']]['class']);
+				$member['member_class_id'] = registry::register('game')->get_id(registry::register('game')->get_primary_classes(), $m2cr[$member['member_id']]['class']);
 				if(!$member['member_class_id']) $member['member_class_id'] = 0;
-				if(!$member['member_race_id']) $member['member_race_id'] = 0;
+
 				$sqls[] = "('".implode("', '", $member)."')";
 			}
 			$this->new[0]->query($sql.implode(', ', $sqls).';');

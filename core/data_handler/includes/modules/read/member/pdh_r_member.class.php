@@ -169,8 +169,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				while($bmd_row = $objQuery->fetchAssoc()){
 					if(!isset($this->data[$bmd_row['member_id']]['name'])){
 						$this->data[$bmd_row['member_id']]['name']				= $bmd_row['name'];
-						$this->data[$bmd_row['member_id']]['class_id']			= $bmd_row['class_id'];
-						$this->data[$bmd_row['member_id']]['class_name']		= $this->get_classname($bmd_row['member_id']);
+						$this->data[$bmd_row['member_id']]['class_id']			= $bmd_row['class_id'];		
 						//$this->data[$bmd_row['member_id']]['race_id']			= $bmd_row['race_id'];
 						//$this->data[$bmd_row['member_id']]['race_name']			= $this->get_racename($bmd_row['member_id']);
 						$this->data[$bmd_row['member_id']]['rank_id']			= $bmd_row['rank_id'];
@@ -192,6 +191,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
 							}
 						}
+						$this->data[$bmd_row['member_id']]['class_name']		= $this->get_classname($bmd_row['member_id']);
 					}
 				}
 				$this->pdc->put('pdh_members_table', $this->data, null);
@@ -381,7 +381,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_level($member_id){
-			return $this->data[$member_id]['level'];
+			return $this->get_profile_field($member_id, 'level');
 		}
 
 		public function get_array($member_id){

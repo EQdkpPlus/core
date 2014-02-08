@@ -232,16 +232,16 @@ CREATE TABLE `__member_ranks` (
 DROP TABLE IF EXISTS __member_profilefields;
 CREATE TABLE `__member_profilefields` (
 	`name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`fieldtype` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`category` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`language` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`lang` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`size` smallint(5) DEFAULT NULL,
 	`image` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`visible` tinyint(1) NOT NULL DEFAULT 0,
 	`enabled` tinyint(1) NOT NULL DEFAULT 0,
 	`undeletable` tinyint(1) NOT NULL DEFAULT 0,
 	`custom` tinyint(1) NOT NULL DEFAULT 0,
-	`options` text COLLATE utf8_bin,
+	`data` text COLLATE utf8_bin,
 	`options_language` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	PRIMARY KEY (`name`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

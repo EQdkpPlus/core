@@ -105,7 +105,7 @@ $system_def = array(
 				'table_presets' => array(
 					array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mlevel', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'mrace', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					
 					array('name' => 'mrank', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mcname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -329,7 +329,7 @@ $system_def = array(
 				'table_presets' => array(
 					array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mlevel', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'mrace', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					
 					array('name' => 'mrank', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mcname', 'sort' => true, 'th_add' => '', 'td_add' => 'class="nowrap"'),
@@ -349,7 +349,7 @@ $system_def = array(
 				'table_presets' => array(
 					array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					//array('name' => 'mlevel', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					//array('name' => 'mrace', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					//
 					//array('name' => 'mrank', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					//array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					//array('name' => 'mcname', 'sort' => true, 'th_add' => '', 'td_add' => 'class="nowrap"'),
@@ -430,7 +430,7 @@ $system_def = array(
 					array('name' => 'mlink',	'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mrank',	'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mlevel',	'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'mrace', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					
 				),
 			),
 		),//end roster
@@ -452,7 +452,7 @@ $system_def = array(
 					array('name' => 'mname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mrank', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mcname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'mrace', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					
 					array('name' => 'mlevel', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mmainname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),

@@ -639,6 +639,7 @@ class game extends gen_class {
 			return $this->data[$type][$lang][$id];
 		} else {
 			$this->pdl->log('game', 'ID "'.$id.'" does not exists for type "'.$type.'".');
+			pd(debug_backtrace());
 			return false;
 		}
 	}
@@ -682,7 +683,7 @@ class game extends gen_class {
 		$decor = '';
 		foreach($class_dep as $class) {
 			if(isset($class['decorate']) && $class['decorate'])
-				$decor .= $this->decorate($class['type'], array($this->pdh->get('member', 'profile_field', array($char_id, $class['name']))));
+				$decor .= ' '.$this->decorate($class['type'], array($this->pdh->get('member', 'profile_field', array($char_id, $class['name']))));
 		}
 		return $decor;
 	}
