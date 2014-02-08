@@ -527,7 +527,7 @@ class game extends gen_class {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		foreach($class_dep as $class) {
 			if(isset($class['primary']) && $class['primary']) {
-				return $this->get($class['type'], $filter, $lang);
+				return $class['type'];
 			}
 		}
 	}
