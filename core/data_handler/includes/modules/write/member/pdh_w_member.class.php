@@ -125,7 +125,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'class'			=> $this->game->get_name('classes', $querystr['member_class_id']),
 						'rank'			=> $this->pdh->get('rank', 'name', array($querystr['member_rank_id'])),
 						'main'			=> $this->pdh->get('member', 'name', array($querystr['member_main_id'])),
-						'status'		=> $querystr['status'],
+						'status'		=> $querystr['member_status'],
 						'notes'			=> $querystr['notes'],
 						'picture'		=> $querystr['picture'],
 					);

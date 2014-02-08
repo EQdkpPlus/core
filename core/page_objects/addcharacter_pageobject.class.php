@@ -19,6 +19,7 @@
 class addcharacter_pageobject extends pageobject {
 
 	private $data = array();
+	private $form_build = false;
 	
 	public static $shortcuts = array('form' => array('form', array('addchar')));
 
@@ -44,43 +45,30 @@ class addcharacter_pageobject extends pageobject {
 		
 	//Add a new character
 	public function add(){
-		$data = array(
-			'name'		=> $this->in->get('member_name'),
-			'lvl'		=> $this->in->get('member_level', 0),
-			'classid'	=> $this->in->get('member_class_id', 0),
-			'raceid'	=> $this->in->get('member_race_id', 0),				
-			'notes'		=> htmlspecialchars($this->in->get('notes'), ENT_QUOTES),
-			'picture'	=> $this->in->get('picture'),
-		);
-		$this->data = array(
-			'level'	=> $data['lvl'],
-			'class_id'=> $data['classid'],
-			'race_id'=> $data['raceid'],
-		);
-		
-		if ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)){
-			$data['mainid'] = $this->in->get('main_id', 0);
-			$data['rankid']	= $this->in->get('rank_id', $this->pdh->get('rank', 'default', array()));
-		}
-		
-		$data = array_merge($this->in->getArray('profilefields', 'string'), $data);
-		$this->data = array_merge($this->data, $data);
-		if (strlen($this->in->get('member_name'))){
-			$this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $this->in->get('overtakeuser')));
+		$this->build_form();
+		$data = $this->form->return_values();
+		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
+		$data['picture'] = $this->in->get('picture');
+		if (strlen($data['name'])){
+			$this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 		
 			$this->pdh->process_hook_queue();
 			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 			return true;
 		} else {
 			$this->core->message($this->user->lang('missing_values').$this->user->lang('name'), $this->user->lang('error'), 'red', true);
-			$this->display($values);
+			$this->display($data);
 		}
 	}
 
 	public function edit(){
+		$this->build_form();
 		$data = $this->form->return_values();
 		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
 		$data['picture'] = $this->in->get('picture');
+		// dont allow name-change if not in adminmode
+		if(!($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false))) unset($data['name']);
+		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 
 		//Transfer character history
 		if ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false) && ($this->url_id != $this->in->get('history_receiver', 0)) && $this->in->get('history_receiver', 0) > 0){
@@ -97,6 +85,9 @@ class addcharacter_pageobject extends pageobject {
 			if($this->url_id > 0) $member_data['editid'] = $this->url_id;
 			// get class data which is selected by admin /such as faction/
 			$member_data = array_merge($member_data, $this->game->get_admin_classdata());
+			// some modifications - TODO: solve this inconsistency
+			$member_data['rankid'] = $member_data['rank_id'];
+			$member_data['mainid'] = $member_data['main_id'];
 		}
 		$userid_real	= ($this->url_id > 0) ? $this->pdh->get('member', 'userid', array($this->url_id)) : $this->user->data['user_id'];
 
@@ -145,7 +136,9 @@ class addcharacter_pageobject extends pageobject {
 		);
 	}
 	
-	private function build_form() {		
+	private function build_form() {
+		if($this->form_build) return true;
+		$this->form_build = true;
 		// initialize form class
 		$this->form->lang_prefix = 'addchar_';
 		$this->form->use_tabs = true;
@@ -187,16 +180,16 @@ class addcharacter_pageobject extends pageobject {
 				asort($maincharsel);
 				$maincharsel[0] = $this->user->lang('mainchar');
 			} else {
-				$maincharsel[$this->url_id] = $member_data['name'];
+				$maincharsel[$this->url_id] = $this->pdh->get('member', 'name', array($this->url_id));
 				asort($maincharsel);
 			}
-			$static_fields['main_id']	= array(
+			$static_fields['mainid']	= array(
 				'type'			=> 'dropdown',
 				'options'		=> $maincharsel,
 				'lang'			=> 'mainchar',
 			);
 			$tmpranks		= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list')));
-			$static_fields['rank_id']	= array(
+			$static_fields['rankid']	= array(
 				'type'			=> 'dropdown',
 				'options'		=> $tmpranks,
 				'lang'			=> 'rank',
