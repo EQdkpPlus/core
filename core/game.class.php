@@ -678,6 +678,13 @@ class game extends gen_class {
 	 * @return html string
 	 */
 	public function decorate_character($char_id) {
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		$decor = '';
+		foreach($class_dep as $class) {
+			if(isset($class['decorate']) && $class['decorate'])
+				$decor .= $this->decorate($class['type'], array($this->pdh->get('member', 'profile_field', array($char_id, $class['name']))));
+		}
+		return $decor;
 	}
 
 	/**
