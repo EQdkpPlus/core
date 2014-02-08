@@ -523,11 +523,11 @@ class game extends gen_class {
 	 * @param string $lang
 	 * @return array
 	 */
-	public function get_primary_classes($filter=array(), $lang=false) {
+	public function get_primary_classes($blnReturnName = false) {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		foreach($class_dep as $class) {
 			if(isset($class['primary']) && $class['primary']) {
-				return $class['type'];
+				return ($blnReturnName) ? $class['name'] : $class['type'];
 			}
 		}
 	}

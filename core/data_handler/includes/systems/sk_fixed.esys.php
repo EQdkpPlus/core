@@ -316,7 +316,7 @@ $system_def = array(
 				'maxperrow' => 5,
 				'sort_direction' => 'asc',
 				'column_type' => 'classid',
-				'columns' => array_keys(registry::register('game')->get('classes', 'id_0')),
+				'columns' => array_keys(registry::register('game')->get(registry::register('game')->get_primary_classes(), 'id_0')),
 				'default_pool'	=> 1,
 			),
 			'hptt_listmembers_memberlist_overview' => array(

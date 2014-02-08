@@ -430,13 +430,13 @@ class ManagePageLayouts extends page_generic {
 					$classes = $page_settings['listmembers_leaderboard']['columns'];
 					$roles = $this->pdh->get('roles', 'id_list');
 				} else {
-					$classes = array_keys($this->game->get('classes', 'id_0'));
+					$classes = array_keys($this->game->get($this->game->get_primary_classes(), 'id_0'));
 					$roles = $page_settings['listmembers_leaderboard']['columns'];
 				}
 				foreach($classes as $class){
 					$this->tpl->assign_block_vars('page_row.class_row', array(
 						'CLASS'	=> $class,
-						'NAME'	=>	$this->game->decorate('classes', array($class)).' '.$this->game->get_name('classes', $class),
+						'NAME'	=>	$this->game->decorate($this->game->get_primary_classes(), array($class)).' '.$this->game->get_name($this->game->get_primary_classes(), $class),
 					));
 				}
 				foreach($roles as $role){

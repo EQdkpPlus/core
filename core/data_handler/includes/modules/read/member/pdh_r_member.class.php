@@ -43,8 +43,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'mname'			=> array('name', array('%member_id%'), array()),
 			'medit'			=> array('editbutton', array('%member_id%'), array()),
 			'mlink'			=> array('memberlink', array('%member_id%', '%link_url%', '%link_url_suffix%', true, true, false, '%use_controller%'), array()),
-			'mlevel'		=> array('level', array('%member_id%'), array()),
-			'mrace'			=> array('racename', array('%member_id%'), array()),
+			'mlevel'		=> array('level', array('%member_id%'), array()),		
 			'mrank'			=> array('rankname', array('%member_id%'), array()),
 			'mrank_sortid'	=> array('rankname_sortid', array('%member_id%'), array()),
 			'mrankimg'		=> array('rankimage', array('%member_id%'), array()),
@@ -172,8 +171,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$this->data[$bmd_row['member_id']]['name']				= $bmd_row['name'];
 						$this->data[$bmd_row['member_id']]['class_id']			= $bmd_row['class_id'];
 						$this->data[$bmd_row['member_id']]['class_name']		= $this->get_classname($bmd_row['member_id']);
-						$this->data[$bmd_row['member_id']]['race_id']			= $bmd_row['race_id'];
-						$this->data[$bmd_row['member_id']]['race_name']			= $this->get_racename($bmd_row['member_id']);
+						//$this->data[$bmd_row['member_id']]['race_id']			= $bmd_row['race_id'];
+						//$this->data[$bmd_row['member_id']]['race_name']			= $this->get_racename($bmd_row['member_id']);
 						$this->data[$bmd_row['member_id']]['rank_id']			= $bmd_row['rank_id'];
 						$this->data[$bmd_row['member_id']]['status']			= $bmd_row['status'];
 						$this->data[$bmd_row['member_id']]['level']				= $bmd_row['level'];
@@ -398,15 +397,16 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_classname($member_id){
-			return $this->game->get_name('classes', $this->get_classid($member_id));
+			return $this->game->get_name($this->game->get_primary_classes(), $this->get_classid($member_id));
 		}
 
 		public function get_html_classname($member_id){
-			return $this->game->decorate('classes', array($this->get_classid($member_id), false, $member_id))." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
+			return $this->game->decorate($this->game->get_primary_classes(), array($this->get_classid($member_id), false, $member_id))." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
 		}
 
 		public function get_classid($member_id){
-			return ((isset($this->data[$member_id]['class_id'])) ? $this->data[$member_id]['class_id'] : 0);
+			$intClassID = $this->get_profile_field($member_id, $this->game->get_primary_classes(true));
+			return $intClassID;
 		}
 
 		// seems stupid, but is used by maget to add the memberid to the array
@@ -415,7 +415,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_classid($member_id){
-			return $this->game->decorate('classes', array($this->get_classid($member_id), false, $member_id));
+			return $this->game->decorate($this->game->get_primary_classes(), array($this->get_classid($member_id), false, $member_id));
 		}
 
 		public function get_note($member_id){
@@ -438,13 +438,16 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return $this->data[$member_id]['picture'];
 		}
 
+		/*
 		public function get_raceid($member_id){
 			return $this->data[$member_id]['race_id'];
 		}
 
+		
 		public function get_racename($member_id){
 			return $this->game->get_name('races', $this->get_raceid($member_id));
 		}
+		*/
 
 		public function get_profiledata($member_id){
 			return $this->data[$member_id]['profiledata'];
@@ -453,11 +456,13 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_defaultrole($member_id){
 			return $this->data[$member_id]['defaultrole'];
 		}
-
+		
+		/*
 		public function get_html_racename($member_id){
 			$gender = (isset($this->data[$member_id]['gender'])) ? $this->data[$member_id]['gender'] : 'Male';
 			return $this->game->decorate('races', array($this->get_raceid($member_id),$gender,$member_id)).' <span class="racename">'.$this->get_racename($member_id).'</span>';
 		}
+		*/
 
 		public function get_gender($member_id){
 			return (isset($this->data[$member_id]['gender'])) ? $this->data[$member_id]['gender'] : false;
@@ -501,9 +506,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_name_decorated($memberid){
-			$output =	' '.$this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($memberid)), false, $memberid)).' '.
-						$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($memberid)),$this->pdh->get('member', 'gender', array($memberid)), $memberid)).
-						' '.$this->get_html_name($memberid);
+			$output =	' '.$this->game->decorate_character($memberid).' '.$this->get_html_name($memberid);
 			return $output;
 		}
 
@@ -664,7 +667,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					stripos($this->get_rankname($id), $search_value) !== false) {
 
 						$arrSearchResults[] = array(
-							'id'	=> $this->game->decorate('classes', array($this->pdh->get('member', 'classid', array($id)), false, $id)).$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($id)), $this->get_gender($id), $id)),
+							'id'	=> $this->game->decorate($this->game->get_primary_classes(), array($this->pdh->get('member', 'classid', array($id)), false, $id)).$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($id)), $this->get_gender($id), $id)),
 							'name'	=> $this->get_html_name($id),
 							'link'	=> $this->routing->build('character', $value['name'], $id),
 						);

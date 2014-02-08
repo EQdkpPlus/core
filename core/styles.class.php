@@ -216,7 +216,7 @@ if (!class_exists("styles")){
 							$this->ClassColorManagement($style_id, $settings_xml->classcolors, false);
 						} else {
 							$arrClassColorsDefaultStyle = $this->pdh->get('class_colors', 'class_colors', array((int)$this->config->get('default_style')));
-							foreach($this->game->get('classes') as $class_id => $class_name){
+							foreach($this->game->get($this->game->get_primary_classes()) as $class_id => $class_name){
 								if (!isset($arrClassColorsDefaultStyle[$class_id])) continue;
 								$color = $arrClassColorsDefaultStyle[$class_id];
 								$this->pdh->put('class_colors', 'add_classcolor', array($style_id, $class_id, $color));
@@ -455,7 +455,7 @@ if (!class_exists("styles")){
 
 		public function ClassColorManagement($template, $xml=false, $with_delete=true) {
 			if($with_delete) $this->pdh->put('class_colors', 'delete_classcolor', array($template));
-			foreach($this->game->get('classes') as $class_id => $class_name){
+			foreach($this->game->get($this->game->get_primary_classes()) as $class_id => $class_name){
 				$color = (is_object($xml)) ? (string)$xml->{'cc_'.$class_id} : $this->in->get('classc_'.$class_id);
 				$this->pdh->put('class_colors', 'add_classcolor', array($template, $class_id, $color));
 			}

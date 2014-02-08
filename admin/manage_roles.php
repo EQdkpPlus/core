@@ -79,7 +79,7 @@ class Manage_Roles extends page_generic {
 		$this->tpl->assign_vars(array(
 			'S_ADD'			=> true,
 			'EDITID'		=> $this->in->get('editid'),
-			'MULTISELECT'	=> $this->jquery->MultiSelect('role_classes', $this->game->get('classes'), ((isset($row['classes'])) ? $row['classes'] : ''), array('width' => 350, 'height' => 70)),
+			'MULTISELECT'	=> $this->jquery->MultiSelect('role_classes', $this->game->get($this->game->get_primary_classes()), ((isset($row['classes'])) ? $row['classes'] : ''), array('width' => 350, 'height' => 70)),
 			'REALNAME'		=> (isset($row['name'])) ? $row['name'] : '',
 			'BUTTON_NAME'	=> ($this->in->get('editid')) ? 'upd': 'add',
 		));

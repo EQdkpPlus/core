@@ -140,7 +140,7 @@ if (!class_exists('pdh_r_roles')){
 
 		public function get_roleid2classid($list){
 			foreach(explode("|", $list) as $class_id){
-				$output[$class_id] = $this->game->get_name('classes', $class_id);
+				$output[$class_id] = $this->game->get_name($this->game->get_primary_classes(), $class_id);
 			}
 			$classnames = implode(", ", $output);
 			return ($classnames) ? $classnames : $list;
