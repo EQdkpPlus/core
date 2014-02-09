@@ -294,7 +294,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 		if ($recent_page == 1){
 			$pagination .= '<li class="active"><a href="#">1</a></li>';
 		} else {
-			$pagination .= '<li class="arrow-left"><a href="'.$base_url.'='.(( ($recent_page - 2) * $per_page) + $offset).'" title="'.registry::fetch('user')->lang('previous_page').'"><img src="'.registry::get_const('server_path').'images/arrows/left_arrow.png" border="0" alt="left"/></a></li><li><a href="'.$url.'" class="pagination">1</a></li>';
+			$pagination .= '<li class="arrow-left"><a href="'.$base_url.'='.(( ($recent_page - 2) * $per_page) + $offset).'" title="'.registry::fetch('user')->lang('previous_page').'"><i class="fa fa-angle-double-left"></i></a></li><li><a href="'.$url.'" class="pagination">1</a></li>';
 		}
 
 		//If total-pages <= 4 show all page-links
@@ -330,7 +330,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 		if ($recent_page == $total_pages){
 			$pagination .= '<li class="active"><a href="#">'.$recent_page.'</a></li>';
 		} else {
-			$pagination .= '<li><a href="'.$base_url.'='.((($total_pages - 1) * $per_page)+$offset) . '" class="pagination" title="'.registry::fetch('user')->lang('page').' '.$total_pages.'">'.$total_pages.'</a></li><li class="arrow-right"><a href="'.$base_url.'='.(($recent_page * $per_page)+$offset).'" title="'.registry::fetch('user')->lang('next_page').'"><img src="'.registry::get_const('server_path').'images/arrows/right_arrow.png" border="0" alt="right"/></a></li>';
+			$pagination .= '<li><a href="'.$base_url.'='.((($total_pages - 1) * $per_page)+$offset) . '" class="pagination" title="'.registry::fetch('user')->lang('page').' '.$total_pages.'">'.$total_pages.'</a></li><li class="arrow-right"><a href="'.$base_url.'='.(($recent_page * $per_page)+$offset).'" title="'.registry::fetch('user')->lang('next_page').'"><i class="fa fa-angle-double-right"></i></a></li>';
 		}
 
 	$pagination .= '</ul><div class="clear"></div></div>';

@@ -271,7 +271,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$td_add = $column['td_add'];
 					$this->sub_array[$this->id_tag] = $view_id;
 
-					$view_row .= "\t".'<td '.$td_add.'>';
+					$view_row .= "\t".'<td '.$td_add.' class="twinktd">';
 					if($this->config->get('detail_twink') AND $this->settings['show_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} elseif(isset($this->settings['perm_detail_twink']) && $this->settings['perm_detail_twink']) {
@@ -336,14 +336,14 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$data = $this->detail_twink_data($view_id_key, $wt_key, $dt_tags[$tag], $module, $tag, $params, $this->sub_array);
 			$add = '';
 			if(!$this->dt_arrow && !$this->settings['perm_detail_twink']) {
-				$add = '<img src="'.$this->server_path.'images/arrows/right_arrow.png" alt="right" class="toggle_members" id="toggle_member_'.$member_id.'" /> ';
+				$add = '<i class="fa fa-caret-square-o-down fa-fw toggle_members" id="toggle_member_'.$member_id.'""></i> ';
 				$this->dt_arrow = true;
 			}
-			$default = '<div style="height:20px; padding:1px; white-space:nowrap; display:block;" class="def_toggle_member_'.$member_id.'">'.$add.$data[(($dt_tags[$tag] == 'summed_up') ? 0 : $member_id)].'</div>';
+			$default = $add.'<div style="height:20px; padding:1px; white-space:nowrap; display:inline-block;" class="def_toggle_member_'.$member_id.'">'.$data[(($dt_tags[$tag] == 'summed_up') ? 0 : $member_id)].'</div>';
 			$sub_start = '<div class="toggle_member_'.$member_id.'" style="display:'.(($this->settings['perm_detail_twink']) ? 'block' : 'none').';">';
 			$sub = '';
 			foreach($data as $mem_id => $out) {
-				$sub .= '<div style="height:20px; padding:1px; white-space: nowrap; '.(($add) ? 'margin-left:14px;' : '').'">'.$out.'</div>';
+				$sub .= '<div style="height:20px; padding:1px; white-space: nowrap;">'.$out.'</div>';
 			}
 			$sub_end = '</div>';
 			if($this->settings['perm_detail_twink']) {
@@ -356,13 +356,15 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			if(!$this->dt_cssjs AND ($this->config->get('detail_twink') AND $this->settings['show_detail_twink'])) {
 				$this->tpl->add_css('.toggle_members { cursor: default; width: 10px; height: 10px; }');
 				$this->tpl->add_js("$('.toggle_members').toggle(function(){
-								$('.'+$(this).attr('id')).attr('style', 'display:block;');
-								$('.def_'+$(this).attr('id')).attr('style', 'display:none;');
-								$(this).attr('src', '".$this->server_path."images/arrows/down_arrow.png');
+								$('.'+$(this).attr('id')).attr('style', 'display:inline-block;');
+								$('.def_'+$(this).attr('id')).hide();
+								$(this).removeClass('fa-caret-square-o-down');
+								$(this).addClass('fa-caret-square-o-up');
 							},function(){
-								$('.'+$(this).attr('id')).attr('style', 'display:none;');
-								$('.def_'+$(this).attr('id')).attr('style', 'display:block;');
-								$(this).attr('src', '".$this->server_path."images/arrows/right_arrow.png');
+								$('.'+$(this).attr('id')).hide();
+								$('.def_'+$(this).attr('id')).show();
+								$(this).removeClass('fa-caret-square-o-up');
+								$(this).addClass('fa-caret-square-o-down');
 							});", 'docready');
 				$this->dt_cssjs = true;
 			}

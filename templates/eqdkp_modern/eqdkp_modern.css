@@ -1237,20 +1237,12 @@ div.pagination ul li:last-child  > a{
 	color: #000;
 }
 
-div.pagination ul li.arrow-right a img, div.pagination ul li.arrow-left a img{
-	display:none;
-}
-
-.pagination .arrow-right a:after{
-	content:"\f101";
-	font-family: FontAwesome;
+.pagination .arrow-right a i{
 	font-size: 15px;
 	line-height: 15px;
 }
 
-.pagination .arrow-left a:after{
-	content:"\f100";
-	font-family: FontAwesome;
+.pagination .arrow-left a i{
 	font-size: 15px;
 	line-height: 15px;
 }
@@ -2232,7 +2224,7 @@ div.error { display: none; }
 
 .comment_avatar img{
 	max-width: 100px;
-	max-height: 68px;
+	height: 70px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-shadow: 1px 1px 2px #000000;
@@ -2751,7 +2743,6 @@ ul.image-gallery li img {
 }
 
 ul.image-gallery li.folder {
-	background: #fff url('EQDKP_IMAGE_PATHglobal/folder.png') center top no-repeat;
     text-align: center;
 	overflow: hidden;
 }
@@ -2760,7 +2751,8 @@ ul.image-gallery li.folderup {
 	text-align: center;
 }
 
-ul.image-gallery li.folderup a {
+ul.image-gallery li.folderup a,
+ul.image-gallery li.folder a {
 	line-height: 20px;
 }
 
@@ -2769,8 +2761,17 @@ ul.image-gallery li.folderup i {
     line-height: 120px;
 }
 
-ul.image-gallery li.folder a{
-	line-height: 260px;
+ul.image-gallery li.folder i {
+	margin-top: 20px;
+	font-size: 100px;
+    line-height: 100px;
+}
+
+td.twinktd > * {
+    vertical-align : top;
+}
+td.twinktd i {
+	margin-top: 5px;
 }
 
 /* Colorbox */

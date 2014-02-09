@@ -84,12 +84,12 @@ if(!class_exists('gallery')){
 				} else {
 					$strFolderUp = base64_encode($strFolderUp);
 				}
-				$strOut .='<li class="folderup"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.$strFolderUp.'"><i class="fa fa-level-up fa-flip-horizontal"></i><br>'.$this->user->lang('back').'</a></li>';
+				$strOut .='<li class="folderup"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.$strFolderUp.'"><i class="fa fa-level-up fa-flip-horizontal"></i><br/>'.$this->user->lang('back').'</a></li>';
 			}
 			
 			natcasesort($arrDirs);
-			foreach($arrDirs as $foldername){				
-				$strOut .= '<li class="folder"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.base64_encode($strFolder.'/'.$foldername).'">'.sanitize($foldername).'</a></li>';
+			foreach($arrDirs as $foldername){
+				$strOut .= '<li class="folder"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.base64_encode($strFolder.'/'.$foldername).'"><i class="fa fa-folder"></i><br/>'.sanitize($foldername).'</a></li>';
 			}
 			
 			$strThumbFolder = $this->pfh->FolderPath('system/thumbs', 'files');
