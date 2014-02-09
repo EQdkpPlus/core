@@ -166,10 +166,10 @@ class charImporter extends page_generic {
 			// insert into database
 			$info		= $this->pdh->put('member', 'addorupdate_member', array($this->in->get('charid', 0), array(
 				'name'				=> $this->in->get('charname', ''),
-				'lvl'				=> $chardata['level'],
+				'level'				=> $chardata['level'],
 				'gender'			=> $this->game->obj['armory']->ConvertID($chardata['gender'], 'int', 'gender'),
-				'raceid'			=> $this->game->obj['armory']->ConvertID($chardata['race'], 'int', 'races'),
-				'classid'			=> $this->game->obj['armory']->ConvertID($chardata['class'], 'int', 'classes'),
+				'race'				=> $this->game->obj['armory']->ConvertID($chardata['race'], 'int', 'races'),
+				'class'				=> $this->game->obj['armory']->ConvertID($chardata['class'], 'int', 'classes'),
 				'guild'				=> $chardata['guild']['name'],
 				'last_update'		=> ($chardata['lastModified']/1000),
 				'prof1_name'		=> $this->game->get_id('professions', $chardata['professions']['primary'][0]['name']),
@@ -339,10 +339,10 @@ class charImporter extends page_generic {
 	public function perform_step2(){
 		$data = array(
 			'name'				=> $this->in->get('member_name'),
-			'lvl'				=> $this->in->get('member_level', 0),
+			'level'				=> $this->in->get('member_level', 0),
 			'gender'			=> $this->in->get('gender', 'Male'),
-			'raceid'			=> $this->in->get('member_race_id', 0),
-			'classid'			=> $this->in->get('member_class_id', 0),
+			'race'				=> $this->in->get('member_race_id', 0),
+			'class'				=> $this->in->get('member_class_id', 0),
 			'guild'				=> $this->in->get('guild',''),
 			'last_update'		=> $this->in->get('last_update', 0),
 			'prof1_name'		=> $this->game->get_id('professions', $this->in->get('prof1_name', '')),
@@ -356,8 +356,6 @@ class charImporter extends page_generic {
 			'second_name'		=> $this->in->get('second_name', ''),
 			'servername'		=> $this->in->get('servername', ''),
 		);
-		var_dump($this->in->get('member_id', 0));
-		var_dump($this->in->get('overtakeuser', 0));
 
 		$info		= $this->pdh->put('member', 'addorupdate_member', array($this->in->get('member_id', 0), $data, $this->in->get('overtakeuser', 0)));
 		$this->pdh->process_hook_queue();

@@ -222,13 +222,13 @@ class guildImporter extends page_generic {
 			//Create new char
 			$dataarry = array(
 				'name'			=> $this->in->get('name',''),
-				'lvl'			=> $this->in->get('level', 0),
-				'classid'		=> $this->game->obj['armory']->ConvertID($this->in->get('class', 0), 'int', 'classes'),
-				'raceid'		=> $this->game->obj['armory']->ConvertID($this->in->get('race', 0), 'int', 'races'),
+				'level'			=> $this->in->get('level', 0),
+				'class'			=> $this->game->obj['armory']->ConvertID($this->in->get('class', 0), 'int', 'classes'),
+				'race'			=> $this->game->obj['armory']->ConvertID($this->in->get('race', 0), 'int', 'races'),
 				'guild'			=> $this->in->get('guild', ''),
 				'servername'	=> $this->in->get('servername', ''),
 				'gender'		=> $this->in->get('gender', 0),
-				'rankid'	=> $intRankID,
+				'rankid'		=> $intRankID,
 			);
 			$myStatus = $this->pdh->put('member', 'addorupdate_member', array(0, $dataarry));
 			
