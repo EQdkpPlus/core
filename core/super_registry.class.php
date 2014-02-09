@@ -252,8 +252,7 @@ abstract class super_registry {
 		if(is_file(self::$const['root_path'] . 'config.php')) require_once(self::$const['root_path'] . 'config.php');
 		if (!defined('EQDKP_INSTALLED') && !$install ){
 			$script_name = $_SERVER['SCRIPT_NAME'];
-			var_dump($script_name);
-
+			
 			if (substr($script_name, -9) == "index.php" && substr($script_name, -15) != "admin/index.php"){
 				echo ("<script>window.location.href = '".str_replace("index.php", "", $script_name)."install/index.php';</script>");
 			} else {

@@ -28,11 +28,11 @@ class encrypt extends gen_class {
 	public function __construct($strEncryptionKey = ''){
 		include_once($this->root_path.'libraries/aes/AES.class.php');
 		
-		if ($strEncryptionKey == '' && $this->encryptionKey == ''){
+		if ($strEncryptionKey == '' && registry::get_const('encryptionKey') == ''){
 			$this->core->message('Encryption Key is missing. Please take a look at our Wiki.', $this->user->lang('error'), 'red');
 			$this->strEncryptionKey = '';
 		} else {		
-			$this->strEncryptionKey = ($strEncryptionKey != '') ? $strEncryptionKey : $this->encryptionKey;
+			$this->strEncryptionKey = ($strEncryptionKey != '') ? $strEncryptionKey : registry::get_const('encryptionKey');
 			$this->strEncryptionKey = md5($this->strEncryptionKey);		
 		}
 	}

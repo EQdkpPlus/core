@@ -72,6 +72,7 @@ class admin_user extends install_generic {
 			$this->pdl->log('install_error', $this->lang['no_pw_match']);
 			return false;
 		}
+
 		$strEmail =  $this->encrypt->encrypt($this->useremail);
 		$this->config->set('admin_email', $strEmail);
 		$salt = $this->user->generate_salt();
