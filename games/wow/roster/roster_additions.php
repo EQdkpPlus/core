@@ -178,7 +178,7 @@ $this->tpl->assign_vars(array(
 		'TABARD'		=> ($guilddata) ? $this->game->obj['armory']->guildTabard($guilddata['emblem'], $guilddata['side'], $guilddata['name'], 180) : $this->server_path.'games/wow/guild/tabard_'.$faction.'.png',
 ));
 
-$hptt_page_settings = $this->pdh->get_page_settings('roster', 'hptt_roster');
+$this->hptt_page_settings = $this->pdh->get_page_settings('roster', 'hptt_roster');
 
 if ($this->config->get('roster_classorrole') == 'role'){
 	$members = $this->pdh->aget('member', 'defaultrole', 0, array($this->pdh->get('member', 'id_list', array($skip_inactive, $skip_hidden, true, $skip_twinks))));
@@ -206,24 +206,21 @@ if ($this->config->get('roster_classorrole') == 'role'){
 	
 	
 } else {
-	$members = $this->pdh->aget('member', 'classid', 0, array($this->pdh->get('member', 'id_list', array($skip_inactive, $skip_hidden, true, $skip_twinks))));
-	$arrClassMembers = array();
-	foreach ($members as $memberid => $classid){
-		$arrClassMembers[$classid][] = $memberid;
-	}
-
-	foreach ($this->game->get('classes') as $key => $value){
-		if ($key == 0) continue;
-		if (!isset($arrClassMembers[$key])) $arrClassMembers[$key] = array();
-		$hptt = $this->get_hptt($hptt_page_settings, $arrClassMembers[$key], $arrClassMembers[$key], array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $skip_twinks, '%use_controller%' => true), 'class_'.$key);
+		$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
 		
-		$this->tpl->assign_block_vars('class_row', array(
-			'CLASS_NAME'	=> $value,
-			'CLASS_ID'		=> $key,
-			'CLASS_ICONS'	=> $this->game->decorate('classes', array($key, true)),
-			'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
-		));
-	}
+		$rosterClasses = $this->game->get_roster_classes();
+		
+		$arrRosterMembers = array();
+		foreach($arrMembers as $memberid){
+			$string = "";
+			foreach($rosterClasses['todisplay'] as $key => $val){
+				$string .= $this->pdh->get('member', 'profile_field', array($memberid, $this->game->get_name_for_type($val)))."_";
+			}
+				
+			$arrRosterMembers[$string][] = $memberid;
+		}
+		
+		$this->build_class_block($rosterClasses['data'], $rosterClasses['todisplay'], $arrRosterMembers);
 }
 
 ?>

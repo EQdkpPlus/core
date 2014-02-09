@@ -591,6 +591,20 @@ class game extends gen_class {
 	}
 	
 	/**
+	 * Returns the name for the type, e.g. "class" for name "classes"
+	 *
+	 * @param string $strName
+	 * @return string
+	 */
+	public function get_name_for_type($strType){
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		foreach($class_dep as $class) {
+			if ($class['type'] == $strType) return $class['name'];
+		}
+		return false;
+	}
+	
+	/**
 	 * Returns an array with all possible dependent classes
 	 *
 	 * @param 	string	$parent:	Fieldname of the parent class

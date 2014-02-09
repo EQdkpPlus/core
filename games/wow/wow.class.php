@@ -52,7 +52,7 @@ if(!class_exists('wow')) {
 				'type'		=> 'factions',
 				'admin' 	=> true,
 				'decorate'	=> false,
-				'roster'	=> true,
+				'roster'	=> false,
 				'parent'	=> false,
 			),
 			array(
@@ -100,7 +100,7 @@ if(!class_exists('wow')) {
 				'type'		=> 'talents',
 				'admin'		=> false,
 				'decorate'	=> true,
-				'roster'	=> true,
+				#'roster'	=> true,
 				'parent'	=> array(
 					'class' => array(
 						1 	=> array(0,1,2),	// Death Knight
