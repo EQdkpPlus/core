@@ -60,6 +60,7 @@ if(!class_exists('wow')) {
 				'type'		=> 'races',
 				'admin'		=> false,
 				'decorate'	=> true,
+				#'roster'	=> true,
 				'parent'	=> array(
 					'faction' => array(
 						'alliance' => array(0,1,2,3,4,9,11,13),

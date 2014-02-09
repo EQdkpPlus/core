@@ -302,7 +302,8 @@ class Manage_Styles extends page_generic{
 		}
 
 		// Class Colors
-		foreach($this->game->get($this->game->get_primary_classes()) as $class_id => $class_name){
+		$arrClasses = $this->game->get_primary_classes();
+		foreach($arrClasses as $class_id => $class_name){
 			$this->tpl->assign_block_vars('classes', array(
 				'NAME'		=> $class_name,
 				'CPICKER'	=> $this->jquery->colorpicker('classc_'.$class_id, $this->game->get_class_color($class_id, $this->url_id)),

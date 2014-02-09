@@ -71,7 +71,7 @@ if (!class_exists('exchange_calevents_details')){
 
 						// Guests / rest
 						$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($event_id));
-						$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get($this->game->get_primary_classes(), 'id_0');
+						$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
 						$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($event_id, $this->user->data['user_id']));
 
 						// Build the attendees aray for this raid by class
@@ -149,7 +149,7 @@ if (!class_exists('exchange_calevents_details')){
 									'id'		=> $guestid,
 									'name'		=> $guestsdata['name'],
 									'classid'	=> $guestsdata['class'],
-									'class'		=> $this->game->get_name($this->game->get_primary_classes(), $guestsdata['class']),
+									'class'		=> $this->game->get_name('primary', $guestsdata['class']),
 								);
 							}
 						}

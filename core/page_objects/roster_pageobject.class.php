@@ -71,7 +71,8 @@ class roster_pageobject extends pageobject {
 					$arrClassMembers[$classid][] = $memberid;
 				}
 
-				foreach ($this->game->get($this->game->get_primary_classes()) as $key => $value){
+				$arrClasses = $this->game->get_primary_classes();
+				foreach ($arrClasses as $key => $value){
 					if ($key == 0) continue;
 					if(empty($arrClassMembers[$key])) $arrClassMembers[$key] = array();
 
@@ -80,7 +81,7 @@ class roster_pageobject extends pageobject {
 					$this->tpl->assign_block_vars('class_row', array(
 						'CLASS_NAME'	=> $value,
 						'CLASS_ID'		=> $key ,
-						'CLASS_ICONS'	=> $this->game->decorate($this->game->get_primary_classes(), array($key, true)),
+						'CLASS_ICONS'	=> $this->game->decorate('primary', array($key, true)),
 						'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
 					));
 				}

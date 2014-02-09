@@ -59,7 +59,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 				if(!isset($column_list[$col])) continue;
 				$member_ids = $column_list[$col];
 				$leaderboard .= '<td align="center" valign="top" width="200"><table class="borderless nowrap colorswitch" border="0" cellpadding="2" cellspacing="0" width="100%"><tr><th colspan="2">';
-				$leaderboard .= ($column == 'classid') ? $this->game->decorate($this->game->get_primary_classes(), $col).' <span class="class_'.$col.'">'.$this->game->get_name($this->game->get_primary_classes(), $col).'</span>' : $this->game->decorate('roles', $col).' '.$this->pdh->get('roles', 'name', array($col));
+				$leaderboard .= ($column == 'classid') ? $this->game->decorate('primary', $col).' <span class="class_'.$col.'">'.$this->game->get_name('primary', $col).'</span>' : $this->game->decorate('roles', $col).' '.$this->pdh->get('roles', 'name', array($col));
 				$leaderboard .= '</th></tr>';
 				usort($member_ids, array(&$this, "sort_by_points"));
 

@@ -147,12 +147,12 @@ class raid_pageobject extends pageobject {
 			$chartcolors = array();
 			foreach ( $class_dist as $class_id => $details ){
 				$percentage		= ($total_attendee_count > 0) ? round(($details['count'] / $total_attendee_count) * 100) : 0;
-				$class			= $this->game->get_name($this->game->get_primary_classes(), $class_id);
+				$class			= $this->game->get_name('primary', $class_id);
 				$chartarray[]	= array('value' => $percentage, 'name' => $class." (".$class_dist[$class_id]['count']." - ".$percentage."%)");
 				$chartcolors[] = $this->game->get_class_color($class_id);
 
 				$this->tpl->assign_block_vars('class_row', array(
-					'CLASS'			=> $this->game->decorate($this->game->get_primary_classes(), $class_id).' <span class="class_'.$class_id.'">'.$class.'</span>',
+					'CLASS'			=> $this->game->decorate('primary', $class_id).' <span class="class_'.$class_id.'">'.$class.'</span>',
 					'BAR'			=> $this->jquery->progressbar('bar_'.md5($class), $percentage, array('text' => '%percentage%')),
 					'ATTENDEES'		=> $class_dist[$class_id]['names']
 				));

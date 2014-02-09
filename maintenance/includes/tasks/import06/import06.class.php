@@ -937,7 +937,7 @@ class import06 extends task {
 						$profilefields['faction'] = $factions[$row['member_id']];
 					}
 					
-					$profilefields['class'] = registry::register('game')->get_id(registry::register('game')->get_primary_classes(), $m2cr[$member['member_id']]['class']);
+					$profilefields['class'] = registry::register('game')->get_id('primary', $m2cr[$member['member_id']]['class']);
 					$profilefields['race'] = registry::register('game')->get_id('races', $m2cr[$member['member_id']]['race']);
 					$profilefields['level'] = $row['member_level'];
 					

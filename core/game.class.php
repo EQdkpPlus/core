@@ -442,7 +442,7 @@ class game extends gen_class {
 		if(!isset($this->class_colors[$style_id]['fetched']) || $this->class_colors[$style_id]['fetched'] == false) {
 			$this->class_colors[$style_id] = $this->pdh->get('class_colors', 'class_colors', array($style_id));
 			
-			if (count($this->class_colors[$style_id]) != count($this->get($this->get_primary_classes(), 'id_0'))){
+			if (count($this->class_colors[$style_id]) != count($this->get_primary_classes(array('id_0')))){
 				$arrGameColors = $this->gameinfo()->get_class_colors();
 				foreach($this->get($this->get_primary_classes(), 'id_0') as $key => $val){
 					if (!isset($this->class_colors[$style_id][$key]) && isset($arrGameColors[$key])){
@@ -488,11 +488,19 @@ class game extends gen_class {
 	 */
 	private function filter($filters, $data) {
 		foreach($filters as $filter) {
-			switch($filter) {
-				case 'id_0': 
-					unset($data[0]); break;
+			if(is_array($filter)) {
+				foreach($data as $id => $dat) {
+					if(!in_array($id, $filter)) {
+						unset($data[$id]);
+					}
+				}
+			} else {
+				switch($filter) {
+					case 'id_0': 
+						unset($data[0]); break;
 
-				default: break;
+					default: break;
+				}
 			}
 		}
 		return $data;
@@ -507,6 +515,7 @@ class game extends gen_class {
 	 * @return array
 	 */
 	public function get($type, $filter=array(), $lang=false){
+		if($type == 'primary') $type = $this->get_primary_class();
 		if(!$lang) $lang = $this->gameinfo()->lang;
 		if(!is_array($filter) AND $filter) $filter = array($filter);
 		if($this->type_exists($type)) {
@@ -527,19 +536,44 @@ class game extends gen_class {
 	}
 	
 	/**
-	 * Returns whole array for the primary class (necessary in e.g. calendar, role assignment)
+	 * Returns name or type for the primary class (necessary in e.g. calendar, role assignment)
 	 *
-	 * @param array $filter, possible values ('id_0')
-	 * @param string $lang
-	 * @return array
+	 * @param 	boolean		$returnName:	return name (true) or type (false)
+	 * @return 	string
 	 */
-	public function get_primary_classes($blnReturnName = false) {
+	public function get_primary_class($returnName = false) {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		foreach($class_dep as $class) {
 			if(isset($class['primary']) && $class['primary']) {
-				return ($blnReturnName) ? $class['name'] : $class['type'];
+				return ($returnName) ? $class['name'] : $class['type'];
 			}
 		}
+	}	
+	
+	/**
+	 * Returns selectable data (respecting e.g. faction selection of admin) for the primary class
+	 *
+	 * @param 	string 	$selection:	ID of the parent-class
+	 * @param 	array 	$filter:	possible values ('id_0')
+	 * @return 	string
+	 */
+	public function get_primary_classes($filter=array(), $lang=false) {
+		$admin_data = $this->get_admin_classdata(true);
+		$primary = $this->get_primary_class();
+		$todisplay = array_keys($admin_data);
+		$todisplay[] = $primary;
+		
+		$ids = $this->get_assoc_classes($todisplay, $filter, $lang);
+		reset($todisplay);
+		$type = current($todisplay);
+		while($type != $primary) {
+			if(!isset($ids[$admin_data[$type]])) {
+				return $this->get($primary, $filter, $lang);
+			}
+			$ids = $ids[$admin_data[$type]];
+			$type = next($todisplay);
+		}
+		return $this->get($end, array($ids), $lang);
 	}
 	
 	/**
@@ -559,10 +593,12 @@ class game extends gen_class {
 	/**
 	 * Returns an array with all possible dependent classes
 	 *
-	 * @param string	$parent:	Fieldname of the parent class
-	 * @param string 	$child:		Fieldname of child class
-	 * @param string 	$selection:	ID of the parent-class
-	 * @return array
+	 * @param 	string	$parent:	Fieldname of the parent class
+	 * @param 	string 	$child:		Fieldname of child class
+	 * @param 	string 	$selection:	ID of the parent-class
+	 * @param 	array 	$filter:	possible values ('id_0')
+	 * @param 	string	$lang
+	 * @return 	array
 	 */
 	public function get_dep_classes($parent, $child, $selection, $filter=array(), $lang=false) {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
@@ -585,11 +621,32 @@ class game extends gen_class {
 	}
 	
 	/**
+	 * Returns the class-dependencies as an associative array for the roster
+	 *
+	 * @param 	array	$todisplay:		array containing the types which shall be contained in the associative array
+	 * @param 	array 	$filter:	possible values ('id_0')
+	 * @param 	string	$lang
+	 * @return 	array
+	 */
+	public function get_roster_classes($filter=array(), $lang=false) {
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		// gather all classes for roster
+		$todisplay = array();
+		foreach($class_dep as $class) {
+			if(isset($class['roster']) && $class['roster']) $todisplay[] = $class['type'];
+		}
+		return $this->get_assoc_classes($todisplay, $filter, $lang);
+	}
+	
+	/**
 	 * Returns the class-dependencies as an associative array
 	 *
-	 * @return array
+	 * @param 	array	$todisplay:		array containing the types which shall be contained in the associative array
+	 * @param 	array 	$filter:	possible values ('id_0')
+	 * @param 	string	$lang
+	 * @return 	array
 	 */
-	public function get_assoc_classes() {
+	public function get_assoc_classes($todisplay, $filter=array(), $lang=false) {
 		/*
 		 *	a fully linear dependency for all classes with flag roster is assumed, ordering has to be correct beforehand
 		 *	means, e.g. faction => race => class => talent
@@ -597,10 +654,8 @@ class game extends gen_class {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		// create a name 2 type array
 		$name2type = array();
-		$todisplay = array();
 		foreach($class_dep as $class) {
 			$name2type[$class['name']] = $class['type'];
-			if(isset($class['roster']) && $class['roster']) $todisplay[] = $class['type'];
 		}
 		// get all single dependencies
 		$relevant_deps = array();
@@ -610,32 +665,45 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
-		// find first "level"
-		pd($relevant_deps);
-		pd($child_ids);
-		pd($name2type);
-		$first = key($relevant_deps);
-		while($key = array_search($first, $relevant_deps)) {
-			$first = $key;
-		}
 		// build associative array
-		pd($first);
-		return $this->build_assoc_array($first, $relevant_deps, $child_ids);
+		return array(
+			'todisplay'	=> $todisplay,
+			'data'		=> $this->build_assoc_array(current($todisplay), $relevant_deps, $child_ids, $todisplay, $filter, $lang),
+		);
 	}
 	
-	private function build_assoc_array($type, $dep_order, $child_ids, $parent_id=false) {
+	private function build_assoc_array($type, $dep_order, $child_ids, $todisplay, $filter=array(), $lang=false, $parent_id=false) {
 		$assoc_array = array();
-		$data = $this->get($type);
+		$data = $this->get($type, $filter, $lang);
+		if(count($todisplay) == 1) return array_keys($data);
 		foreach($data as $id => $name) {
-			if(isset($dep_order[$type])) {
-				if($parent_id !== false) {
-					$true_ids = $child_ids[array_search($type, $dep_order)][$parent_id];
-					if(!in_array($id, $true_ids))
-						continue;
+			// filter out ids not allowed
+			if($parent_id !== false) {
+				$true_ids = $child_ids[array_search($type, $dep_order)][$parent_id];
+				if(!in_array($id, $true_ids))
+					continue;
+			}
+			// last "level" reached
+			if($dep_order[$type] == end($todisplay)) {
+				if($child_ids[$type][$id] == 'all') {
+					$child_ids[$type][$id] = $this->get($dep_order[$type], $filter, $lang);
 				}
-				$assoc_array[$id] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $id);
-			// last level reached
-			} else $assoc_array = $child_ids[$type][$parent_id];
+				if(in_array($type, $todisplay)) {
+					$assoc_array[$id] = $child_ids[$type][$id];
+				} else {
+					$assoc_array = array_unique(array_merge($assoc_array, $child_ids[$type][$id]));
+				}
+			} else {
+				if(in_array($type, $todisplay)) {
+					$assoc_array[$id] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id);
+				} else {
+					if(in_array($dep_order[$type], $todisplay)) {
+						$assoc_array = $assoc_array + $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id);
+					} else {
+						$assoc_array = array_unique(array_merge($assoc_array, $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id)));
+					}
+				}
+			}
 		}
 		return $assoc_array;
 	}
@@ -645,12 +713,12 @@ class game extends gen_class {
 	 *
 	 * @return array
 	 */
-	public function get_admin_classdata() {
+	public function get_admin_classdata($type_key=false) {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		$data = array();
 		foreach($class_dep as $class) {
 			if(isset($class['admin']) && $class['admin']) {
-				$data[$class['name']] = $this->config->get($class['name']);
+				$data[$class[($type_key ? 'type' : 'name')]] = $this->config->get($class['name']);
 			}
 		}
 		return $data;
@@ -665,6 +733,7 @@ class game extends gen_class {
 	 * @return int
 	 */
 	public function get_id($type, $name, $searched=false){
+		if($type == 'primary') $type = $this->get_primary_class();
 		if(!$this->type_exists($type)) {
 			$this->pdl->log('game', 'Type "'.$type.'" does not exists');
 			return false;
@@ -701,6 +770,7 @@ class game extends gen_class {
 	 * @return string
 	 */
 	public function get_name($type, $id, $lang=false){
+		if($type == 'primary') $type = $this->get_primary_class();
 		if(!$lang OR !in_array($lang, $this->gameinfo()->langs)) {
 			$lang = $this->gameinfo()->lang;
 		}
@@ -729,6 +799,7 @@ class game extends gen_class {
 	 * @return html string
 	 */
 	public function decorate($type, $params){
+		if($type == 'primary') $type = $this->get_primary_class();
 		$params =  (is_array($params)) ? $params : array($params);
 		if($this->icon_exists($type)) {
 			if(method_exists($this->gameinfo(), 'decorate_'.$type)) {

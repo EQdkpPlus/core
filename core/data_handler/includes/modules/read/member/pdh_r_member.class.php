@@ -395,15 +395,15 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_classname($member_id){
-			return $this->game->get_name($this->game->get_primary_classes(), $this->get_classid($member_id));
+			return $this->game->get_name('primary', $this->get_classid($member_id));
 		}
 
 		public function get_html_classname($member_id){
-			return $this->game->decorate($this->game->get_primary_classes(), array($this->get_classid($member_id), false, $member_id))." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
+			return $this->game->decorate('primary', array($this->get_classid($member_id), false, $member_id))." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
 		}
 
 		public function get_classid($member_id){
-			$intClassID = $this->get_profile_field($member_id, $this->game->get_primary_classes(true));
+			$intClassID = $this->get_profile_field($member_id, $this->game->get_primary_class(true));
 			return $intClassID;
 		}
 
@@ -413,7 +413,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_classid($member_id){
-			return $this->game->decorate($this->game->get_primary_classes(), array($this->get_classid($member_id), false, $member_id));
+			return $this->game->decorate('primary', array($this->get_classid($member_id), false, $member_id));
 		}
 
 		public function get_note($member_id){
@@ -654,7 +654,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function comp_user($params1, $params2) {
 			return strcasecmp($this->pdh->get('user', 'name', array($this->get_user($params1[0]))), $this->pdh->get('user', 'name', array($this->get_user($params2[0]))));
 		}
-
+		
+		// TODO: needs some work  (class_name and race_name doesnt exist anymore)
 		public function get_search($search_value) {
 			$arrSearchResults = array();
 			if (is_array($this->data)){
@@ -665,7 +666,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					stripos($this->get_rankname($id), $search_value) !== false) {
 
 						$arrSearchResults[] = array(
-							'id'	=> $this->game->decorate($this->game->get_primary_classes(), array($this->pdh->get('member', 'classid', array($id)), false, $id)).$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($id)), $this->get_gender($id), $id)),
+							'id'	=> $this->game->decorate('primary', array($this->pdh->get('member', 'classid', array($id)), false, $id)).$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($id)), $this->get_gender($id), $id)),
 							'name'	=> $this->get_html_name($id),
 							'link'	=> $this->routing->build('character', $value['name'], $id),
 						);

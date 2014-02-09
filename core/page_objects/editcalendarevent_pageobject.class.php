@@ -102,7 +102,8 @@ class editcalendarevent_pageobject extends pageobject {
 				$raid_clsdistri[$classid] = $this->in->get('roles_'.$classid.'_count', 0);
 			}
 		}else{
-			foreach($this->game->get($this->game->get_primary_classes(), 'id_0') as $classid=>$classname){
+			$classdata = $this->game->get_primary_classes(array('id_0'));
+			foreach($classdata as $classid=>$classname){
 				$raid_clsdistri[$classid] = $this->in->get('classes_'.$classid.'_count', 0);
 			}
 		}
@@ -147,7 +148,8 @@ class editcalendarevent_pageobject extends pageobject {
 					$raid_clsdistri[$classid] = $this->in->get('roles_'.$classid.'_count', 0);
 				}
 			}else{
-				foreach($this->game->get($this->game->get_primary_classes(), 'id_0') as $classid=>$classname){
+				$classdata = $this->game->get_primary_classes(array('id_0'));
+				foreach($classdata as $classid=>$classname){
 					$raid_clsdistri[$classid] = $this->in->get('classes_'.$classid.'_count', 0);
 				}
 			}
@@ -210,7 +212,8 @@ class editcalendarevent_pageobject extends pageobject {
 					$raid_clsdistri[$classid] = $this->in->get('roles_'.$classid.'_count', 0);
 				}
 			}else{
-				foreach($this->game->get($this->game->get_primary_classes(), 'id_0') as $classid=>$classname){
+				$classdata = $this->game->get_primary_classes(array('id_0'));
+				foreach($classdata as $classid=>$classname){
 					$raid_clsdistri[$classid] = $this->in->get('classes_'.$classid.'_count', 0);
 				}
 			}
@@ -316,13 +319,14 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 
 		// The class fields
-		foreach($this->game->get($this->game->get_primary_classes(), 'id_0') as $classid=>$classname){
+		$classdata = $this->game->get_primary_classes(array('id_0'));
+		foreach($classdata as $classid=>$classname){
 			$this->tpl->assign_block_vars('raid_classes', array(
 				'LABEL'			=> $classname,
 				'NAME'			=> "classes_" . $classid . "_count",
 				'CLSSID'		=> $classid,
 				'COUNT'			=> (isset($eventdata['extension']['distribution'][$classid]) && $eventdata['extension']['distribution'][$classid]) ? $eventdata['extension']['distribution'][$classid] : '0',
-				'ICON'			=> $this->game->decorate($this->game->get_primary_classes(), array($classid)),
+				'ICON'			=> $this->game->decorate('primary', array($classid)),
 				'DISABLED'		=> (isset($eventdata['extension']) && $eventdata['extension']['raidmode'] == 'role') ? 'disabled="disabled"' : ''
 			));
 		}

@@ -1128,7 +1128,7 @@ class template extends gen_class {
 			$data .= $this->replace_paths_css($content, $stylepath, $style);
 
 			//Now the class colors
-			$gameclasses = $this->game->get($this->game->get_primary_classes());
+			$gameclasses = $this->game->get_primary_classes();
 			if(isset($gameclasses) && is_array($gameclasses)){
 				foreach($gameclasses as $class_id => $class_name) {
 					$data .= '

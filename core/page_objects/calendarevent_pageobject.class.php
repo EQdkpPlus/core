@@ -410,7 +410,7 @@ class calendarevent_pageobject extends pageobject {
 		// Guests / rest
 		$this->twinks			= array();
 		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
-		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get($this->game->get_primary_classes(), 'id_0');
+		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
 		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
@@ -486,7 +486,7 @@ class calendarevent_pageobject extends pageobject {
 						'active'		=> (int) $this->pdh->get('member', 'active', array($us_classdata['memberid'])),
 						'level'			=> $this->pdh->get('member', 'level', array($us_classdata['memberid'])),
 						'class_id'		=> $us_classdata['classid'],
-						'class_icon'	=> $this->game->decorate($this->game->get_primary_classes(), array($us_classdata['classid'], false, $us_classdata['memberid'])),
+						'class_icon'	=> $this->game->decorate('primary', array($us_classdata['classid'], false, $us_classdata['memberid'])),
 						'userid'		=> $us_classdata['userid'],
 						'roles'			=> (($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $myrolesrry : '',
 						'defaultrole'	=> strlen($this->pdh->get('member', 'defaultrole', array($us_classdata['memberid']))) ? $this->pdh->get('member', 'defaultrole', array($us_classdata['memberid'])) : '',
@@ -536,7 +536,7 @@ class calendarevent_pageobject extends pageobject {
 					'BREAK'			=> ($mybreak) ? true : false,
 					'ID'			=> $classid,
 					'NAME'			=> $classname,
-					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', array($classid)) : $this->game->decorate($this->game->get_primary_classes(), array($classid)),
+					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', array($classid)) : $this->game->decorate('primary', array($classid)),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.$eventdata['extension']['distribution'][$classid],
 					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
 				));
@@ -551,7 +551,7 @@ class calendarevent_pageobject extends pageobject {
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
-							$membertooltip[]	= $this->game->decorate($this->game->get_primary_classes(), array($real_classid)).' '.$this->game->get_name($this->game->get_primary_classes(), $real_classid);
+							$membertooltip[]	= $this->game->decorate('primary', array($real_classid)).' '.$this->game->get_name('primary', $real_classid);
 						}
 						if($memberrank){
 							$membertooltip[]	= $this->user->lang('rank').": ".$memberrank;
@@ -628,9 +628,9 @@ class calendarevent_pageobject extends pageobject {
 		// raid guests
 		if(is_array($this->guests) && count($this->guests) > 0){
 			foreach($this->guests as $guestid=>$guestsdata){
-				$guest_clssicon	= $this->game->decorate($this->game->get_primary_classes(), array($guestsdata['class']));
+				$guest_clssicon	= $this->game->decorate('primary', array($guestsdata['class']));
 				$guest_tooltip 	= $this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true)."<br/>".
-									$guest_clssicon.'&nbsp;'.$this->game->get_name($this->game->get_primary_classes(), $guestsdata['class'])."<br/>".
+									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class'])."<br/>".
 									$guestsdata['note'];
 				$this->tpl->assign_block_vars('guests', array(
 					'NAME'		=> $guestsdata['name'],
