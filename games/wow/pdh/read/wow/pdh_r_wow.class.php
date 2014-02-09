@@ -92,7 +92,7 @@ if (!class_exists('pdh_r_wow')) {
 		}
 
 		public function get_html_achievementpoints($member_id){
-			return '<img src="'.$this->server_path.'games/wow/profiles/achievements.png" alt="Achievement-Points"/>&nbsp;'.$this->get_achievementpoints($member_id);
+			return '<i class="adminicon"></i>&nbsp;'.$this->get_achievementpoints($member_id);
 		}
 
 		public function get_charicon($member_id){
