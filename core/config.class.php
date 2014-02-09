@@ -179,10 +179,10 @@ class config extends gen_class {
 
 		$array_count = 0;
 		foreach($this->config as $key => $data) {
-			if(is_array($data) && !is_numeric(key($value))) {
+			if(is_array($data) && !is_numeric(key($data))) {
 				$array_count = 0;
 				foreach($data as $dat) {
-					$array_count[$key]++;
+					$array_count++;
 				}
 			} else {
 				$array_count++;
