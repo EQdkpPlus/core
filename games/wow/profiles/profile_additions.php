@@ -653,9 +653,10 @@
 			'ARMORY'				=> 0,
 			'CHARDATA_GUILDREALM'	=> $this->config->get('uc_servername'),
 			'NO_SERVER_SET'			=> ($this->config->get('uc_servername') != '') ? false : true,
-			'CHARACTER_IMG'			=> $this->game->obj['armory']->characterIconSimple($this->game->obj['armory']->ConvertID($member['race_id'], 'int', 'races', true), (($member['gender'] == 'Female') ? '1' : '0')),
+			'CHARACTER_IMG'			=> $this->game->obj['armory']->characterIconSimple($this->game->obj['armory']->ConvertID($member['race'], 'int', 'races', true), (($member['gender'] == 'Female') ? '1' : '0')),
 			'POWER_BAR_NAME'		=> ($this->game->glang('uc_bar_'.$member['second_name'])) ? $this->game->glang('uc_bar_'.$member['second_name']) : $member['second_name'],
 			'ERRORMSG_BNET'			=> sprintf($this->game->glang('no_armory'), $chardata['reason']),
+			'CHARDATA_NAME'			=> $member['name'],
 		));
 	}
 ?>

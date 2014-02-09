@@ -123,7 +123,7 @@ class character_pageobject extends pageobject {
 		foreach($member as $profile_id=>$profile_value){
 			$profile_out['DATA_ID_'.strtoupper($profile_id)]	= $profile_value;
 			$profile_out['DATA_NAME_'.strtoupper($profile_id)]	= $this->pdh->geth('member', 'profile_field', array($this->url_id, $profile_id, true));
-			$profile_out['DATA_'.strtoupper($profile_id)]	= $this->pdh->geth('member', 'profile_field', array($this->url_id, $profile_id));
+			$profile_out['DATA_'.strtoupper($profile_id)]		= $this->pdh->geth('member', 'profile_field', array($this->url_id, $profile_id));
 
 			$profile_out['L_'.strtoupper($profile_id)]		= $this->game->glang($profile_id);
 		}
