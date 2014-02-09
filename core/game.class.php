@@ -686,7 +686,7 @@ class game extends gen_class {
 			// last "level" reached
 			if($dep_order[$type] == end($todisplay)) {
 				if($child_ids[$type][$id] == 'all') {
-					$child_ids[$type][$id] = $this->get($dep_order[$type], $filter, $lang);
+					$child_ids[$type][$id] = array_keys($this->get($dep_order[$type], $filter, $lang));
 				}
 				if(in_array($type, $todisplay)) {
 					$assoc_array[$id] = $child_ids[$type][$id];
