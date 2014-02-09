@@ -798,7 +798,7 @@ class game extends gen_class {
 	 * @param array $params
 	 * @return html string
 	 */
-	public function decorate($type, $params){
+	public function decorate($type, $params, $allow_empty=true){
 		if($type == 'primary') $type = $this->get_primary_class();
 		$params =  (is_array($params)) ? $params : array($params);
 		if($this->icon_exists($type)) {
@@ -810,7 +810,7 @@ class game extends gen_class {
 		// there are no game specific icons, check if there are default ones
 		}elseif($this->default_icons($type)){
 			return call_user_func_array(array($this, 'decorate_def_'.$type), $params);
-		} elseif($this->type_exists($type)) {
+		} elseif($this->type_exists($type) && !$allow_empty) {
 			if(!$this->data[$type]) {
 				$this->data[$type] = $this->gameinfo()->get($type);
 				$this->gameinfo()->flush($type);
