@@ -228,7 +228,7 @@ tr.cm_confirm{
 
 /* Everything button image below this line has been ported to 1.1 */
 .bi_openid{
-	background:url(../images/glyphs/openid.png) no-repeat 2px center;
+	background:url(../images/global/openid.svg) no-repeat 2px center;
 	height: 16px;
     width: 16px;
 	display: inline-block;
@@ -236,7 +236,7 @@ tr.cm_confirm{
 	margin-right: 3px;
 }
 .bi_persona{
-	background:url(../images/glyphs/persona.png) no-repeat 2px center;
+	background:url(../images/global/persona.png) no-repeat 2px center;
 	height: 16px;
     width: 16px;
 	display: inline-block;
