@@ -63,8 +63,8 @@ if(!class_exists('wow')) {
 				#'roster'	=> true,
 				'parent'	=> array(
 					'faction' => array(
-						'alliance' => array(0,1,2,3,4,9,11,13),
-						'horde' => array(0,5,6,7,8,10,12,13),
+						'alliance'	=> array(0,1,2,3,4,9,11,13),
+						'horde'		=> array(0,5,6,7,8,10,12,13),
 					),
 				),
 			),
@@ -77,21 +77,21 @@ if(!class_exists('wow')) {
 				'colorize'	=> true,
 				'roster'	=> true,
 				'parent'	=> array(
-					'race' => array(	// TODO: fill in class-ids correctly
-						0 	=> 'all',			// Unknown
-						1 	=> array(1,2,3),	// Gnome
-						2 	=> array(4,5,6),	// Human
-						3 	=> array(7,8,9),	// Dwarf
-						4 	=> array(10,11),	// Night Elf
-						5 	=> array(1,2,3),	// Troll
-						6 	=> array(4,5,6),	// Undead
-						7 	=> array(7,8,9),	// Orc
-						8 	=> array(10,11),	// Tauren
-						9 	=> array(4,5,6),	// Draenai
-						10 	=> array(4,5,6),	// Blood Elf
-						11 	=> array(4,5,6),	// Worgen
-						12 	=> array(4,5,6),	// Goblin
-						13 	=> array(4,5,6),	// Pandaren
+					'race' => array(
+						0 	=> 'all',							// Unknown
+						1 	=> array(1,4,6,7,9,10,11),			// Gnome
+						2 	=> array(1,3,4,5,6,7,9,10,11),		// Human
+						3 	=> array(1,3,4,5,6,7,8,9,10,11),	// Dwarf
+						4 	=> array(1,2,3,4,6,7,10,11),		// Night Elf
+						5 	=> array(1,2,3,4,6,7,8,9,10,11),	// Troll
+						6 	=> array(1,3,4,6,7,9,10,11),		// Undead
+						7 	=> array(1,3,4,7,8,9,10,11),		// Orc
+						8 	=> array(1,2,3,5,6,8,10,11),		// Tauren
+						9 	=> array(1,3,4,5,6,8,10,11),		// Draenai
+						10 	=> array(1,3,4,5,6,7,9,10,11),		// Blood Elf
+						11 	=> array(1,2,3,4,6,7,9,10),			// Worgen
+						12 	=> array(1,3,4,6,7,8,9,10),			// Goblin
+						13 	=> array(3,4,6,7,8,10,11),			// Pandaren
 					),
 				),
 			),
