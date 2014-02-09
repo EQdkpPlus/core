@@ -58,7 +58,8 @@ if(!class_exists('pdh_r_class_colors')){
 		}
 
 		public function get_class_colors($templateid){
-			return ($templateid) ? ((isset($this->class_colors[$templateid])) ? $this->class_colors[$templateid] : '') : $this->class_colors;
+			$colors = ($templateid) ? ((isset($this->class_colors[$templateid])) ? $this->class_colors[$templateid] : array()) : $this->class_colors;			
+			return $colors;
 		}
 	}
 }

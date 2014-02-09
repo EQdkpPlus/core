@@ -441,6 +441,16 @@ class game extends gen_class {
 	
 		if(!isset($this->class_colors[$style_id]['fetched']) || $this->class_colors[$style_id]['fetched'] == false) {
 			$this->class_colors[$style_id] = $this->pdh->get('class_colors', 'class_colors', array($style_id));
+			
+			if (count($this->class_colors[$style_id]) != count($this->get($this->get_primary_classes(), 'id_0'))){
+				$arrGameColors = $this->gameinfo()->get_class_colors();
+				foreach($this->get($this->get_primary_classes(), 'id_0') as $key => $val){
+					if (!isset($this->class_colors[$style_id][$key]) && isset($arrGameColors[$key])){
+						$this->pdh->put('class_colors', 'add_classcolor', array($style_id, $key, $arrGameColors[$key]));
+					}
+				}
+			}
+						
 			if(!is_array($this->class_colors[$style_id])) {
 				$this->pdl->log('game', 'Unable to load class-colors.');
 			} else {
@@ -530,6 +540,20 @@ class game extends gen_class {
 				return ($blnReturnName) ? $class['name'] : $class['type'];
 			}
 		}
+	}
+	
+	/**
+	 * Returns the type for the name, e.g. "classes" for name "class"
+	 * 
+	 * @param string $strName
+	 * @return string
+	 */
+	public function get_type_for_name($strName){
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		foreach($class_dep as $class) {
+			if ($class['name'] == $strName) return $class['type'];
+		}
+		return false;
 	}
 	
 	/**
@@ -877,10 +901,10 @@ class game extends gen_class {
 		$queries = $info['aq'];
 
 		//classcolors
-		if(is_array($info['class_color']) && $this->pdh->put('class_colors', 'truncate_classcolor', array())) {
+		if(is_array($this->gameinfo()->get_class_colors()) && $this->pdh->put('class_colors', 'truncate_classcolor', array())) {
 			$style_ids = array();
 			$style_ids = $this->pdh->get('styles', 'id_list');
-			foreach ($info['class_color'] as $class_id => $color) {
+			foreach ($this->gameinfo()->get_class_colors() as $class_id => $color) {
 				foreach($style_ids as $id) {
 					$this->pdh->put('class_colors', 'add_classcolor', array($id, $class_id, $color));
 				}
@@ -1168,6 +1192,11 @@ if(!class_exists('game_generic')) {
 
 		public abstract function get_OnChangeInfos($install=false);
 		protected abstract function load_filters($langs);
+		
+		public function get_class_colors(){
+			if (isset($this->class_colors)) return $this->class_colors;
+			return false;
+		}
 	}
 }
 ?>

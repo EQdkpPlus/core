@@ -73,14 +73,16 @@ class Manage_Multidkp extends page_generic {
 		} else {
 			$mdkp['name'] = $this->pdh->get('multidkp', 'name', array($mdkp_id));
 			$mdkp['desc'] = $this->pdh->get('multidkp', 'desc', array($mdkp_id));
-			$mdkp['events'] = $this->pdh->get('multidkp', 'event_ids', array($mdkp_id, true));
+			$mdkp['events'] = array_merge($this->pdh->get('multidkp', 'event_ids', array($mdkp_id, true)), $this->pdh->get('multidkp', 'event_ids', array($mdkp_id)));	
 			$mdkp['itempools'] = $this->pdh->get('multidkp', 'itempool_ids', array($mdkp_id));
-			$mdkp['no_attendance'] = $this->pdh->get('multidkp', 'no_attendance', array($mdkp_id));
+			$mdkp['no_attendance'] = array_diff($this->pdh->get('multidkp', 'event_ids', array($mdkp_id)), $this->pdh->get('multidkp', 'event_ids', array($mdkp_id, true)));
 		}
 
 		//events
-		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));
-
+		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));		
+		$sel_events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($mdkp['events'], 'event', 'name')));
+		d($mdkp['no_attendance']);
+		
 		//itempools
 		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->sort($this->pdh->get('itempool', 'id_list'), 'itempool', 'name')));
 
@@ -90,7 +92,7 @@ class Manage_Multidkp extends page_generic {
 			'DESC'					=> $mdkp['desc'],
 			'EVENT_SEL'				=> $this->jquery->MultiSelect('events', $events, $mdkp['events'], array('width' => 300, 'filter' => true)),
 			'ITEMPOOL_SEL'			=> $this->jquery->MultiSelect('itempools', $itempools, $mdkp['itempools'], array('width' => 300)),
-			'NO_ATT_SEL'			=> $this->jquery->MultiSelect('no_atts', $events, $mdkp['no_attendance'], array('width' => 300, 'filter' => true)),
+			'NO_ATT_SEL'			=> $this->jquery->MultiSelect('no_atts', $sel_events, $mdkp['no_attendance'], array('width' => 300, 'filter' => true)),
 			'MDKP_ID'				=> $mdkp_id,
 		));
 

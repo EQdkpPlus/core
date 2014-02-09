@@ -144,6 +144,20 @@ if(!class_exists('wow')) {
 		protected $path			= '';
 		public $lang			= false;
 		public $version			= '5.4.5';
+		
+		protected $class_colors = array(
+				1	=> '#C41F3B',
+				2	=> '#FF7C0A',
+				3	=> '#AAD372',
+				4	=> '#68CCEF',
+				5	=> '#F48CBA',
+				6	=> '#FFFFFF',
+				7	=> '#FFF468',
+				8	=> '#1a3caa',
+				9	=> '#9382C9',
+				10	=> '#C69B6D',
+				11	=> '#00C77B',
+		);
 
 		public function __construct() {
 			$this->importers = array(
@@ -190,20 +204,6 @@ if(!class_exists('wow')) {
 		 * @return array
 		 */
 		public function get_OnChangeInfos($install=false){
-			//classcolors
-			$info['class_color'] = array(
-				1	=> '#C41F3B',
-				2	=> '#FF7C0A',
-				3	=> '#AAD372',
-				4	=> '#68CCEF',
-				5	=> '#F48CBA',
-				6	=> '#FFFFFF',
-				7	=> '#FFF468',
-				8	=> '#1a3caa',
-				9	=> '#9382C9',
-				10	=> '#C69B6D',
-				11	=> '#00C77B',
-			);
 
 			//config-values
 			$info['config'] = array();

@@ -511,5 +511,5 @@ class update_2000 extends sql_update_task {
 	}
 }
 
-}
+
 ?>

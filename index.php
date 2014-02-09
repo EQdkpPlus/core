@@ -36,6 +36,8 @@ class controller extends gen_class {
 			$this->saveRating();
 		}
 	
+		$this->game->get_class_color(1, 1);
+		
 		$this->display();
 	}
 	

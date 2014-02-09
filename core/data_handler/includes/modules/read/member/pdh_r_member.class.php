@@ -267,7 +267,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}
 			} else $strImage = false;
 			
-			switch($arrField['fieldtype']){
+			switch($arrField['type']){
 				case 'int':
 				case 'text': {
 					if ($strImage){
@@ -298,6 +298,11 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								
 							} else $arrLang = $this->game->get($arrField['options_language']);
 							if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
+						}
+					} else {
+						$strType = $this->game->get_type_for_name($profile_field);
+						if ($strType){
+							return $this->game->decorate($strType, array((int)$strMemberValue, false, $member_id));
 						}
 					}
 				break;
@@ -670,6 +675,13 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_caption_profile_field($params){
+			$strKey = $this->pdh->get('profile_fields', 'lang', array($params));
+			
+			if ($this->user->lang($strKey)){
+				return $this->user->lang($strKey);
+			}elseif($this->game->glang($strKey)){
+				return $this->game->glang($strKey);
+			}
 			return $this->pdh->get('profile_fields', 'lang', array($params));
 		}
 	}//end class

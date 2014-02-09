@@ -43,15 +43,6 @@ if(!class_exists('pdh_w_multidkp')) {
 					);				
 					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2event :p")->set($arrSet)->execute()) ? true : false;
 				}
-				foreach ($no_atts as $event_id){
-					if (in_array($event_id, $events)) continue;
-					$arrSet = array(
-						'multidkp2event_multi_id' => $id,
-						'multidkp2event_event_id' => $event_id,
-						'multidkp2event_no_attendance' => 1,
-					);
-					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2event :p")->set($arrSet)->execute()) ? true : false;
-				}
 					
 				foreach($itempools as $itempool_id) {
 					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(

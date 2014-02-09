@@ -8,6 +8,37 @@
 	<div class="clear"></div>
 </div>
 
+<script>
+$(document).ready(function(){
+	$("#dw_events").multiselect().bind("multiselectclick multiselectcheckall multiselectuncheckall", function( event, ui ){
+		var checkedValues = $.map($(this).multiselect("getChecked"), function( input ){
+			return input.value;
+		});
+		
+		var checkedValuesNA = $.map($("#dw_no_atts").multiselect("getChecked"), function( input ){
+			return input.value;
+		});
+		
+		$("#dw_no_atts").html("");
+		
+		$.each(checkedValues, function(index, value) {
+			var text = $("#dw_events option[value='"+value+"']").text();
+			
+			
+			$("#dw_no_atts").append(
+			    $('<option></option>').val(value).html(text)
+			);
+		});
+		
+		$.each(checkedValuesNA, function(index, value) {
+			$("#dw_no_atts option[value='"+value+"']").prop("selected", true);
+		});
+		
+		$("#dw_no_atts").multiselect("refresh");
+	});
+});
+</script>
+
 <form method="post" action="{ACTION}" name="post">
 	<fieldset class="settings">
 		<legend>{L_Multi_addkonto}</legend>
