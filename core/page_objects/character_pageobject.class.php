@@ -113,9 +113,6 @@ class character_pageobject extends pageobject {
 			// common data
 			'DATA_GUILDTAG'			=> $this->config->get('guildtag'),
 			'DATA_NAME'				=> $member_name,
-			'DATA_LEVEL'			=> $member['level'],
-			'DATA_RACENAME'			=> $member['race_name'],
-			'DATA_CLASSNAME'		=> $member['class_name'],
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
 
 			// images
@@ -124,7 +121,10 @@ class character_pageobject extends pageobject {
 
 		// Add the game-specific Fields...
 		foreach($member as $profile_id=>$profile_value){
-			$profile_out['DATA_'.strtoupper($profile_id)]	= $profile_value;
+			$profile_out['DATA_ID_'.strtoupper($profile_id)]	= $profile_value;
+			$profile_out['DATA_NAME_'.strtoupper($profile_id)]	= $this->pdh->geth('member', 'profile_field', array($this->url_id, $profile_id, true));
+			$profile_out['DATA_'.strtoupper($profile_id)]	= $this->pdh->geth('member', 'profile_field', array($this->url_id, $profile_id));
+
 			$profile_out['L_'.strtoupper($profile_id)]		= $this->game->glang($profile_id);
 		}
 
@@ -150,10 +150,10 @@ class character_pageobject extends pageobject {
 			$custfields	= false;
 			foreach($pfields as $pfname=>$pfoption){
 				// only relevant data!
-				if($pfoption['custom'] == '1' && $pfoption['enabled'] == '1'){
+				if($pfoption['custom'] == '1' && $pfoption['enabled'] == '1' && $pfoption['sort'] != 0){
 					$custfields = true;
 					$this->tpl->assign_block_vars('pfield_custom', array(
-						'NAME'		=> $pfoption['language'],
+						'NAME'		=> $this->pdh->get('member', 'html_caption_profile_field', array($pfname)),
 						'VALUE'		=> $this->pdh->get('member', 'html_profile_field', array($this->url_id, $pfname))
 					));
 				}

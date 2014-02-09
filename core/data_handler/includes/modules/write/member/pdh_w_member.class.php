@@ -134,7 +134,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$querystr['member_creation_date'] = $this->current_time;
 				
 				//Add defaultrole if there is only one role for the class
-				$arrRoles = $this->pdh->get('roles', 'memberroles', array($data['classid']));
+				$arrRoles = $this->pdh->get('roles', 'memberroles', array($data['profiledata'][$this->game->get_primary_classes(true)]));
 				$arrRoleIDs = array_keys($arrRoles);
 				if (count($arrRoleIDs) == 1) $querystr['defaultrole'] = $arrRoleIDs[0];
 				

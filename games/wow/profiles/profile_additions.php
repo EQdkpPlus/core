@@ -260,7 +260,7 @@
 			-webkit-border-radius:4px; /* Safari, Chrome */
 			-khtml-border-radius:4px; /* Konqueror */
 			border-radius:4px; /* CSS3 */
-			display: inline-block !important;
+			//display: inline-block !important;
 		}
 		.icon-frame.frame-14 { height: 14px; width: 14px; }
 		.icon-frame.frame-18 { height: 18px; width: 18px; }
@@ -631,12 +631,12 @@
 		$a_lang_profession = $this->game->get('professions');
 		$a_professions = array(
 			0	=> array(
-				'icon'			=> "games/wow/profiles/professions/".(($member['prof1_name']) ? $member['prof1_name'] : '0').".jpg",
+				'icon'			=> $this->server_path."games/wow/profiles/professions/".(($member['prof1_name']) ? $member['prof1_name'] : '0').".jpg",
 				'name'			=> $a_lang_profession[$member['prof1_name']],
 				'progressbar'	=> $this->jquery->progressbar('profession1', 0, array('completed' => $member['prof1_value'], 'total' => 600, 'text' => '%progress%'))
 			),
 			1	=> array(
-				'icon'			=> "games/wow/profiles/professions/".(($member['prof2_name']) ? $member['prof2_name'] : '0').".jpg",
+				'icon'			=> $this->server_path."games/wow/profiles/professions/".(($member['prof2_name']) ? $member['prof2_name'] : '0').".jpg",
 				'name'			=> $a_lang_profession[$member['prof2_name']],
 				'progressbar'	=> $this->jquery->progressbar('profession2', 0, array('completed' => $member['prof2_value'], 'total' => 600, 'text' => '%progress%'))
 			)

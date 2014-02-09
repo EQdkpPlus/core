@@ -253,8 +253,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return $this->data[$member_id][$profile_field];
 		}
 		
-		public function get_html_profile_field($member_id, $profile_field){
+		public function get_html_profile_field($member_id, $profile_field, $nameOnly=false){
 			$arrField = $this->pdh->get('profile_fields', 'fields', array($profile_field));
+			if (!$arrField) return '';
 			$strMemberValue = $this->get_profile_field($member_id, $profile_field);
 			$out = $strMemberValue;
 			
@@ -270,7 +271,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			switch($arrField['type']){
 				case 'int':
 				case 'text': {
-					if ($strImage){
+					if ($strImage && !$nameOnly){
 						$out = '<img src="'.$strImage.'" alt="'.$out.'" /> '.$out;
 					}
 				}
@@ -279,7 +280,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				case 'link':
 					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $strMemberValue);
 					$out = '<a href="'.$strMemberValue.'">';
-					if ($strImage){
+					if ($strImage && !$nameOnly){
 						$out .= '<img src="'.$strImage.'" alt="'.$arrField['language'].'" title="'.$arrField['language'].'" />';
 					}else{
 						$out .= ($arrField['language']) ? $arrField['language'] : 'Link';
@@ -288,7 +289,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				break;
 
 				case 'dropdown':
-					if ($strImage){
+					if ($strImage && !$nameOnly){
 						$out = '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
 						if ($arrField['options_language'] != ""){
 							if (strpos($arrField['options_language'], 'lang:') === 0){
@@ -302,14 +303,14 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					} else {
 						$strType = $this->game->get_type_for_name($profile_field);
 						if ($strType){
-							return $this->game->decorate($strType, array((int)$strMemberValue, false, $member_id));
+							return ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberValue) : $this->game->decorate($strType, array((int)$strMemberValue, false, $member_id));
 						}
 					}
 				break;
 			}
 			return $out;
 		}
-
+		
 		public function get_rankid($member_id){
 			return $this->data[$member_id]['rank_id'];
 		}
@@ -684,6 +685,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			return $this->pdh->get('profile_fields', 'lang', array($params));
 		}
+		
 	}//end class
 }//end if
 ?>

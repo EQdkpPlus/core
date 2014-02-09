@@ -338,6 +338,7 @@ class update_2000 extends sql_update_task {
 	// Transfer data into new format
 	// (maybe do that for: class, race, level)
 	public function before_update_function() {
+		//TODO: Implement!!
 	}
 	 
 	//Settings, Migrate News and Infopages, Update Colors

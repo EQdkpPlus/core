@@ -926,7 +926,7 @@ class import06 extends task {
 			if ($result){
 				while($row = $result->fetchAssoc()){
 					foreach($row as $field => $value) {
-						if(in_array($field, array('member_id', 'member_name', 'member_status', 'member_level', 'member_race_id', 'member_class_id', 'member_rank_id'))) {
+						if(in_array($field, array('member_id', 'member_name', 'member_status', 'member_rank_id'))) {
 							$members[$row['member_id']][$field] = $this->new[0]->escape($value);
 						} elseif($field == 'member_current') {
 							$this->step_data['import_data']['members'][$row['member_id']] = $this->new[0]->escape($value);
@@ -939,9 +939,7 @@ class import06 extends task {
 					
 					$profilefields['class'] = registry::register('game')->get_id(registry::register('game')->get_primary_classes(), $m2cr[$member['member_id']]['class']);
 					$profilefields['race'] = registry::register('game')->get_id('races', $m2cr[$member['member_id']]['race']);
-					
-					$m2cr[$row['member_id']]['class'] = $row['class_name'];
-					$m2cr[$row['member_id']]['race'] = $row['race_name'];
+					$profilefields['level'] = $row['member_level'];
 					
 					$members[$row['member_id']]['profiledata'] = json_encode($profilefields);
 				}
@@ -952,9 +950,6 @@ class import06 extends task {
 			$sql = "INSERT INTO ".$this->new[1]."members (".$fields.") VALUES ";
 			$sqls = array();
 			foreach($members as $member) {
-				$member['member_class_id'] = registry::register('game')->get_id(registry::register('game')->get_primary_classes(), $m2cr[$member['member_id']]['class']);
-				if(!$member['member_class_id']) $member['member_class_id'] = 0;
-
 				$sqls[] = "('".implode("', '", $member)."')";
 			}
 			$this->new[0]->query($sql.implode(', ', $sqls).';');

@@ -829,7 +829,7 @@ if(!class_exists('wow')) {
 	
 					$professions[$k_profession] = array(
 						'name'			=> $v_profession['name'],
-						'icon'			=> "games/wow/profiles/professions/".(($v_profession['icon']) ? $v_profession['icon'] : '0').".jpg",
+						'icon'			=> $this->server_path."games/wow/profiles/professions/".(($v_profession['icon']) ? $v_profession['icon'] : '0').".jpg",
 						'progressbar'	=> $this->jquery->progressbar('profession_'.$v_profession['id'], 0, array('completed' => $akt, 'total' => $max, 'text' => '%progress%'))
 					);
 				}
