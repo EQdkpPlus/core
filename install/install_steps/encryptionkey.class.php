@@ -30,14 +30,11 @@ class encryptionkey extends install_generic {
 
 	public function get_output() {
 		$content = '
-		<div class="ui-widget" align="left">
-			<div style="margin-top: 20px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-				<p>
-				'.$this->lang['encryptkey_info'].'<br /></p>
-			</div>
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i>'.$this->lang['encryptkey_info'].'
 		</div>
 		<br />
-		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 			<tr>
 				<td align="right"><strong>'.$this->lang['encryptkey'].': </strong><div class="subname">'.$this->lang['encryptkey_help'].'</div></td>
 				<td><input type="password" name="key1" size="25" value="" class="input" /></td>

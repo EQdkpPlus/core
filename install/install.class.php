@@ -183,7 +183,7 @@ class install extends gen_class {
 	}
 	
 	private function parse_end() {
-		header('Location: '.$this->root_path.'maintenance/task_manager.php'.$this->SID.'&splash=true');
+		header('Location: '.$this->root_path.'maintenance/task_manager.php?splash=true');
 		exit;
 	}
 	
@@ -248,13 +248,7 @@ class install extends gen_class {
 				$("#back_"+$(this).attr("id")).removeAttr("disabled");
 				$("#form_install").submit();
 			});
-			$("input:submit, input:button").button();
-			$(".prevstep").button({
-				icons: {
-					primary: "ui-icon-arrowreturnthick-1-w"
-				}
-			})
-			$("tbody tr").hover(function(){$(this).addClass("ui-state-highlight");},function(){ $(this).removeClass("ui-state-highlight");});
+			
 			'.$_step->head_js.'
 		});
 			//]]>
@@ -265,12 +259,14 @@ class install extends gen_class {
 
 	<body>
 		<form action="index.php" method="post" id="form_install">
-		<div id="installer">
+		<div id="outerWrapper">
 			<div id="header">
 				<div id="logo"></div>
-				<div id="languageselect">'.$this->lang['language'].': '.$this->lang_drop().'</div>
+				<div id="languageselect"><i class="fa fa-globe"></i> '.$this->lang['language'].': '.$this->lang_drop().'</div>
 				<div id="logotext">Installation '.VERSION_EXT.'</div>
-			</div><br/>
+			</div>
+				
+		<div id="installer">
 			<div id="steps">
 				<div id="progressbar"><span class="install_label">'.$progress.'%</span></div>
 				<ul class="steps">'.$this->gen_menu().'
@@ -292,12 +288,12 @@ class install extends gen_class {
 					'.$this->get_content().'
 					<div class="buttonbar">';
 		if($this->previous != 'start' && $this->current_step != 'end') $content .= '
-						<button id="previous_step" class="prevstep">'.$this->lang['back'].'</button>
+						<button id="previous_step" class="prevstep"><i class="fa fa-mail-reply"></i> '.$this->lang['back'].'</button>
 						<input type="hidden" name="prev" value="'.$this->previous.'" id="back_previous_step" disabled="disabled" />';
 		if($_step->skippable) $content .= '
 						<input type="submit" name="'.(($_step->parseskip) ? 'next' : 'skip').'" value="'.$this->lang['skip'].'" class="'.(($_step->parseskip) ? 'nextstep' : 'skipstep').'" />';
 		$content .= 	'
-						<input type="submit" class="ui-button-text-icon-primary" name="next" value="'.$this->next_button().'" />
+						<button type="submit" name="next" /><i class="fa fa-arrow-right"></i> '.$this->next_button().'</button>
 						<input type="hidden" name="current_step" value="'.$this->current_step.'" />
 						<input type="hidden" name="install_done" value="'.implode(',', $this->done).'" />
 						<input type="hidden" name="step_data" value="'.base64_encode(serialize($this->data)).'" />
@@ -308,6 +304,7 @@ class install extends gen_class {
 		<div id="footer">
 			<a href="http://eqdkp-plus.eu">EQDKP Plus '.VERSION_EXT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team</a>
 		</div>
+		</div>
 		</form>
 	</body>
 </html>';
@@ -316,32 +313,27 @@ class install extends gen_class {
 	
 	public function install_error($log) {
 		$title = (isset($log['args'][1])) ? $log['args'][1] : $this->lang['error'];
-		return '<div class="ui-widget" align="left">
-			<div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
-				<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
-				<strong>'.$title.'</strong><br />'.$log['args'][0].'</p>
-			</div>
-		</div>';
+
+		return '<div class="infobox infobox-large infobox-red clearfix">
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i><strong>'.$title.'</strong><br /> '.$log['args'][0].'
+	</div>';
+
 	}
 	
 	public function install_warning($log) {
 		$title = (isset($log['args'][1])) ? $log['args'][1] : $this->lang['warning'];
-		return '<div class="ui-widget" align="left">
-			<div style="margin-top: 20px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-				<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
-				<strong>'.$title.'</strong><br />'.$log['args'][0].'</p>
-			</div>
+		
+		return '<div class="infobox infobox-large infobox-red clearfix">
+			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i><strong>'.$title.'</strong><br />'.$log['args'][0].'
 		</div>';
 	}
 	
 	public function install_success($log) {
 		$title = (isset($log['args'][1])) ? $log['args'][1] : $this->lang['success'];
-		return '<div class="ui-widget" align="left">
-			<div style="margin-top: 20px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-				<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-circle-check"></span>
-				<strong>'.$title.'</strong><br />'.$log['args'][0].'</p>
-			</div>
-		</div>';
+		
+		return '<div class="infobox infobox-large infobox-green clearfix">
+		<i class="fa fa-check fa-4x pull-left"></i><strong>'.$title.'</strong><br />'.$log['args'][0].'
+	</div>';
 	}
 }
 

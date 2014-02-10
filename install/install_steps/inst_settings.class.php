@@ -145,9 +145,9 @@ class inst_settings extends install_generic {
 		$startdays = array('sunday' => $this->lang['sunday'], 'monday' => $this->lang['monday']);
 		
 		registry::load('timehandler');
-		$content = '<table class="ui-widget" style="border-collapse: collapse;" width="100%">
+		$content = '<table class="no-borders" style="border-collapse: collapse;" width="100%">
 						<tr>
-							<th class="ui-state-default" colspan="2">'.$this->lang['lang_config'].'</th>
+							<th class="" colspan="2">'.$this->lang['lang_config'].'</th>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_lang'].':</strong></td>
@@ -158,15 +158,13 @@ class inst_settings extends install_generic {
 							<td>'.new hdropdown('default_locale', array('options' => $locale_array, 'value' => $this->def_locale)).'</td>
 						</tr>
 						<tr>
-							<th class="ui-state-default" colspan="2">'.$this->lang['game_config'].'</th>
+							<th class="" colspan="2">'.$this->lang['game_config'].'</th>
 						</tr>
 						<tr>
 							<td colspan="2">
-										<div class="ui-widget" align="left">
-											<div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-												'.$this->lang['game_info'].'
-											</div>
-										</div>
+								<div class="infobox infobox-large infobox-blue clearfix">
+									<i class="fa fa-info-circle fa-4x pull-left"></i>'.$this->lang['game_info'].'
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -174,7 +172,7 @@ class inst_settings extends install_generic {
 							<td>'.new hdropdown('game', array('options' => $games, 'value' => $this->def_game)).' <select name="game_lang" id="game_lang">'.self::ajax_out(false, $this->def_game).'</select></td>
 						</tr>
 						<tr>
-							<th class="ui-state-default" colspan="2">'.$this->lang['server_config'].'</th>
+							<th class="" colspan="2">'.$this->lang['server_config'].'</th>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['server_path'].':</strong></td>

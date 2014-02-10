@@ -36,14 +36,12 @@ class ftp_access extends install_generic {
 
 	public function get_output() {
 		$content = '
-		<div class="ui-widget" align="left">
-			<div style="margin-top: 20px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-				<p>
-				<strong>'.$this->lang['ftp_info'].'</strong><br /></p>
-			</div>
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i>'.$this->lang['ftp_info'].'
 		</div>
+		
 		<br />
-		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 			<tr>
 				<td align="right"><strong>'.$this->lang['ftphost'].': </strong></td>
 				<td><input type="text" name="ftphost" size="25" value="'.$this->ftphost.'" class="input" /></td>

@@ -32,7 +32,7 @@ class admin_user extends install_generic {
 	}
 
 	public function get_output() {
-		$content = '<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		$content = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 						<tr>
 							<td align="right"><strong>'.$this->lang['username'].':</strong></td>
 							<td align="left"><input type="text" name="username" value="'.$this->username.'" class="input" /></td>

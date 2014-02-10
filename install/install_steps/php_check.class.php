@@ -123,9 +123,9 @@ class php_check extends install_generic {
 		$phpcheckdata	= $this->getCheckParams();
 		
 		if(!$this->do_match_req()){
-			$content .='<div style="margin-top: 10px; padding: 0pt 0.7em; border-color: #FF0000; background-color:#FFEFEF;color: #ff0000;background-image:none;" class="ui-state-highlight ui-corner-all">
-				<p>'.$this->lang['phpcheck_failed'].'</p>
-			</div>';
+			$content .='<div class="infobox infobox-large infobox-red clearfix">
+			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <strong>'.$this->lang['phpcheck_failed'].'</strong>
+		</div>';
 		} else {
 
 			// show a message if safemode is on, as we can install eqdkp+ with ftp handler
@@ -137,15 +137,15 @@ class php_check extends install_generic {
 	
 			// show a warning if one of the optional steps does not match
 			if($this->do_match_opt()){
-				$content .='<div style="margin-top: 10px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
-						<p>'.$this->lang['do_match_opt_failed'].'</p>
-					</div>';
+				$content .='<div class="infobox infobox-large infobox-orange clearfix">
+			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <strong>'.$this->lang['do_match_opt_failed'].'</strong>
+		</div>';
 			}
 		}
 
 		$content .= '<br/>
-		<table class="ui-widget" style="border-collapse: collapse;">
-			<thead class="ui-state-default">
+		<table class="colorswitch" style="border-collapse: collapse;">
+			<thead>
 			<tr>
 				<th width="54%">'.$this->lang['table_pcheck_name'].'</th>
 				<th width="13%">'.$this->lang['table_pcheck_installed'].'</th>
@@ -154,7 +154,7 @@ class php_check extends install_generic {
 				<th width="6%"></th>
 			</tr>
 			</thead>
-			<tbody class="ui-widget-content">';
+			<tbody>';
 
 		foreach($phpcheckdata as $fname=>$fdata){
 			if(isset($fdata['adviced_fail']) && $fdata['passfail']){

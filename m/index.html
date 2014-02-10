@@ -446,7 +446,7 @@
 					var obj = msg;
 					if (obj.status == '1'){
 						
-						var title = '<ul data-role="listview" data-inset="true" id="show_raid_title"><li><img src="../'+obj.icon+'">' + '<h3>'+obj.title+'</h3><p>'+format_date(obj.start)+' - '+format_date(obj.end)+'</p><p>'+obj.note+'</p></li></ul>';
+						var title = '<ul data-role="listview" data-inset="true" id="show_raid_title"><li><img src="'+obj.icon+'">' + '<h3>'+obj.title+'</h3><p>'+format_date(obj.start)+' - '+format_date(obj.end)+'</p><p>'+obj.note+'</p></li></ul>';
 						$('#show_raid_title').html(title).trigger('create');
 						//Display Status Information
 						$.each(obj.raidstatus, function(key, value){

@@ -37,7 +37,7 @@ class db_access extends install_generic {
 
 	public function get_output() {
 		$content = '
-		<table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 			<tr>
 				<td width="40%" align="right"><strong>'.$this->lang['dbtype'].':</strong></td>
 				<td width="60%">
