@@ -56,6 +56,17 @@ if(!class_exists('pdh_w_multidkp')) {
 			}
 			return false;
 		}
+		
+		public function save_sort($arrData){
+			foreach($arrData as $sortid => $id){
+				$arrSet = array(
+					'multidkp_sortid' => $sortid,
+				);
+					
+				$objQuery = $this->db->prepare("UPDATE __multidkp :p WHERE multidkp_id=?")->set($arrSet)->execute($id);
+			}
+			$this->pdh->enqueue_hook('multidkp_update',array());
+		}
 
 		public function update_multidkp($id, $name, $desc, $events, $itempools, $no_atts) {
 			$old_events = $this->pdh->get('multidkp', 'event_ids', array($id));

@@ -290,7 +290,8 @@ h3 {
 
 /* Header and Site-Titles */
 #wrapper header {
-	background: url(images/header_background.png) repeat-x scroll center top transparent;;
+	background: url(images/background-head.svg) no-repeat scroll center top transparent;
+	background-size: 100%;
 }
 
 #header {

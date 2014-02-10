@@ -26,6 +26,7 @@ class Manage_Multidkp extends page_generic {
 	public function __construct(){
 		$handler = array(
 			'save' => array('process' => 'save', 'check' => 'a_event_add', 'csrf'=>true),
+			'save_sort' => array('process' => 'save_sort', 'check' => 'a_event_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
 		);
 		parent::__construct('a_event_', $handler);
@@ -47,6 +48,16 @@ class Manage_Multidkp extends page_generic {
 				$message = array('title' => $this->user->lang('save_suc'), 'text' => $mdkp['name'], 'color' => 'green');
 			}
 		}
+		$this->display($message);
+	}
+	
+	public function save_sort(){
+		$arrSort = $this->in->getArray("sort", "int");
+		
+		$this->pdh->put('multidkp', 'save_sort', array($arrSort));
+		
+		
+		$message = array('title' => $this->user->lang('success'),'text' => $this->user->lang('save_suc'), 'color' => 'green');
 		$this->display($message);
 	}
 
@@ -81,7 +92,6 @@ class Manage_Multidkp extends page_generic {
 		//events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));		
 		$sel_events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($mdkp['events'], 'event', 'name')));
-		d($mdkp['no_attendance']);
 		
 		//itempools
 		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->sort($this->pdh->get('itempool', 'id_list'), 'itempool', 'name')));
@@ -115,6 +125,7 @@ class Manage_Multidkp extends page_generic {
 		$mdkp = array();
 		foreach($mdkp_ids as $id)
 		{
+			$mdkp[$id]['sortid'] = $this->pdh->get('multidkp', 'sortid', $id);
 			$mdkp[$id]['name'] = $this->pdh->get('multidkp', 'name', $id);
 			$mdkp[$id]['desc'] = $this->pdh->get('multidkp', 'desc', $id);
 			$mdkp[$id]['events'] = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('multidkp', 'event_ids', $id)));
@@ -123,7 +134,7 @@ class Manage_Multidkp extends page_generic {
 			$mdkp[$id]['itempools'] = $this->pdh->aget('itempool', 'name', 0, array(((is_array($ip_ids)) ? $ip_ids : array())));
 		}
 
-		$sort_ids = get_sortedids($mdkp, explode('.', $order), array('name', 'desc'));
+		$sort_ids = get_sortedids($mdkp, explode('.', $order), array('sortid', 'name', 'desc'));
 		foreach($sort_ids as $id) {
 			$event_string = array();
 			foreach($mdkp[$id]['events'] as $eid => $event) {
@@ -142,6 +153,13 @@ class Manage_Multidkp extends page_generic {
 			$red 	=> '_red',
 			'LISTMULTI_FOOTCOUNT'	=> sprintf($this->user->lang('multi_footcount'), count($sort_ids)),
 		));
+		
+		$this->tpl->add_js("
+			$(\"#multidkpsort tbody\").sortable({
+				cancel: '.not-sortable, input, tr th.footer, th',
+				cursor: 'pointer',
+			});
+		", "docready");
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manmdkp_title'),

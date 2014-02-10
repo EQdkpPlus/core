@@ -67,7 +67,8 @@ body {
 
 .header {
 	padding-top: 10px;
-	background: url(../images/header_background.png) repeat-x scroll center top transparent;
+	background: url(../images/background-head.svg) no-repeat scroll center top transparent;
+	background-size: 100%;
 	font-size: 45px;
 	font-weight: bold;
 	text-shadow: 1px 1px 2px #fff;

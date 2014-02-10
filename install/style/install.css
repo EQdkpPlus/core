@@ -21,7 +21,8 @@ body {
 }
 
 #outerWrapper {
-	background: url('header_background.png') repeat-x scroll center center transparent;
+	background: url('background-head.svg') no-repeat scroll center center transparent;
+	background-size: 100%;
 }
 
 /* Header */

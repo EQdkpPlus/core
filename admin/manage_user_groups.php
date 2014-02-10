@@ -181,7 +181,7 @@ class Manage_User_Groups extends page_generic {
 		
 		$this->tpl->add_js("
 			$(\"#user_groups_table tbody\").sortable({
-				cancel: '.not-sortable, input',
+				cancel: '.not-sortable, input, th',
 				cursor: 'pointer',
 			});
 		", "docready");

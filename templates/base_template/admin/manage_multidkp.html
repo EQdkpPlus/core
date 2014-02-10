@@ -14,15 +14,17 @@
 		<button type="button" name="add" class="mainoption" onclick="window.location='manage_multidkp.php{SID}&amp;upd=true'" ><i class="fa fa-plus"></i>{L_Multi_addkonto}</button>
 </div>
 <div class="clear"></div>
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+<form method="post" action="{ACTION}">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch" id="multidkpsort">
 	<tr>
+		<th width="16"><a href="manage_multidkp.php{SID}&amp;sort=0.0"><span class="down_arrow{RED00}" /></a><a href="manage_multidkp.php{SID}&amp;sort=0.1"><span class="up_arrow{RED01}" /></a></th>
 		<th width="16">&nbsp;</th>
 		<th width="150">
-			<a href="manage_multidkp.php{SID}&amp;sort=0.0"><span class="down_arrow{RED00}" /></a><a href="manage_multidkp.php{SID}&amp;sort=0.1"><span class="up_arrow{RED01}" /></a>
+			<a href="manage_multidkp.php{SID}&amp;sort=0.0"><span class="down_arrow{RED10}" /></a><a href="manage_multidkp.php{SID}&amp;sort=1.1"><span class="up_arrow{RED11}" /></a>
 			{L_Multi_kontoname_short}
 		</th>
 		<th width="25%">
-			<a href="manage_multidkp.php{SID}&amp;sort=1.0"><span class="down_arrow{RED10}" /></a><a href="manage_multidkp.php{SID}&amp;sort=1.1"><span class="up_arrow{RED11}" /></a>
+			<a href="manage_multidkp.php{SID}&amp;sort=1.0"><span class="down_arrow{RED20}" /></a><a href="manage_multidkp.php{SID}&amp;sort=2.1"><span class="up_arrow{RED21}" /></a>
 			{L_description}
 		</th>
 		<th>{L_Multi_events}</th>
@@ -30,6 +32,7 @@
 	</tr>
 	<!-- BEGIN multi_row -->
 	<tr>
+		<td width="16"><i class="fa fa-arrows-v fa-lg" title="{L_dragndrop}"></i><input type="hidden" name="sort[]" value="{multi_row.ID}"></td>
 		<td width="16"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
 		<td width="150"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}">{multi_row.NAME}</a></td>
 		<td width="250">{multi_row.DESC}</td>
@@ -38,6 +41,12 @@
 	</tr>
 	<!-- END multi_row -->
 	<tr>
-		<th colspan="5" class="footer">{LISTMULTI_FOOTCOUNT}</th>
+		<th colspan="6" class="footer">{LISTMULTI_FOOTCOUNT}</th>
 	</tr>
 </table>
+
+<div class="contentFooter">
+	<button class="mainoption" type="submit" name="save_sort"><i class="fa fa-check"></i>{L_save}</button>
+</div>
+{CSRF_TOKEN}
+</form>

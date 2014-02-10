@@ -68,11 +68,12 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 				}
 			}
 			
-			$objQuery = $this->db->query("SELECT * FROM __multidkp;");
+			$objQuery = $this->db->query("SELECT * FROM __multidkp ORDER BY multidkp_sortid ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->multidkp[$row['multidkp_id']]['name'] = $row['multidkp_name'];
 					$this->multidkp[$row['multidkp_id']]['desc'] = $row['multidkp_desc'];
+					$this->multidkp[$row['multidkp_id']]['sortid'] = $row['multidkp_sortid'];
 					$this->multidkp[$row['multidkp_id']]['events'] = (isset($me_data[$row['multidkp_id']])) ? $me_data[$row['multidkp_id']] : array();
 					$this->multidkp[$row['multidkp_id']]['no_attendance'] = ((isset($noatt_data[$row['multidkp_id']])) ? $noatt_data[$row['multidkp_id']] : '');
 					$this->multidkp[$row['multidkp_id']]['itempools'] = (isset($ip_data[$row['multidkp_id']])) ? $ip_data[$row['multidkp_id']] : array();
@@ -134,6 +135,10 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 
 		public function get_name($mdkp_id){
 			return (isset($this->multidkp[$mdkp_id]['name'])) ? $this->multidkp[$mdkp_id]['name'] : '';
+		}
+		
+		public function get_sortid($mdkp_id){
+			return (isset($this->multidkp[$mdkp_id]['sortid'])) ? $this->multidkp[$mdkp_id]['sortid'] : 0;
 		}
 
 		public function get_desc($mdkp_id){

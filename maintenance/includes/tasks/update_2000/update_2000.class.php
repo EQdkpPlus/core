@@ -113,6 +113,7 @@ class update_2000 extends sql_update_task {
 				51 => 'Alter member_profilefields table',
 				52 => 'Alter member_profilefields table',
 				53 => 'Alter member table',
+				54 => 'Alter multidkp table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -169,6 +170,7 @@ class update_2000 extends sql_update_task {
 				51 => 'Alter member_profilefields table',
 				52 => 'Alter member_profilefields table',
 				53 => 'Alter member table',
+				54 => 'Alter multidkp table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -332,6 +334,7 @@ class update_2000 extends sql_update_task {
 			51 => "ALTER TABLE `__member_profilefields` CHANGE `visible` `sort` SMALLINT( 2 ) UNSIGNED NULL DEFAULT '1';",
 			52 => "ALTER TABLE `__member_profilefields` CHANGE `fieldtype` `type` VARCHAR(255);",
 			53 => "ALTER TABLE `__members` DROP `member_level`, DROP `member_race_id`, DROP `member_class_id`;",
+			54 => "ALTER TABLE `__multidkp` ADD COLUMN `multidkp_sortid` INT(11) UNSIGNED NULL DEFAULT '0';",
 		);
 	}
 	

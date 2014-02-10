@@ -155,7 +155,7 @@ class Manage_Ranks extends page_generic {
 		
 		$this->tpl->add_js("
 			$(\"#rank_table tbody\").sortable({
-				cancel: '.not-sortable, input, select',
+				cancel: '.not-sortable, input, select, th',
 				cursor: 'pointer',
 			});
 		", "docready");

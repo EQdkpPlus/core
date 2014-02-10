@@ -248,7 +248,7 @@ class Manage_Article_Categories extends page_generic {
 	
 		$this->tpl->add_js("
 			$(\"#article_categories-table tbody\").sortable({
-				cancel: '.not-sortable, input, tr th.footer',
+				cancel: '.not-sortable, input, tr th.footer, th',
 				cursor: 'pointer',
 			});
 		", "docready");
