@@ -2116,13 +2116,19 @@ span.group_selector {
 }
 
 /* general: validate error messages */
-label.error, label.error {
+label.error {
 	color: red;
 	font-style: italic;
 	display:inline-block;
 	padding-left:20px;
 	line-height:16px;
-	background:transparent url(images/warning.png) center left no-repeat;
+}
+label.error:before {
+	content: "\f071"; 
+	font-family: FontAwesome;
+	color: red;
+	line-height:16px;
+	margin-right: 2px;
 }
 div.error { display: none; }
 
