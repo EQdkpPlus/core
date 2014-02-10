@@ -653,6 +653,24 @@ class game extends gen_class {
 	}
 	
 	/**
+	 * Returns the class-dependencies as an associative array for the recruitment module
+	 *
+	 * @param 	array	$todisplay:		array containing the types which shall be contained in the associative array
+	 * @param 	array 	$filter:	possible values ('id_0')
+	 * @param 	string	$lang
+	 * @return 	array
+	 */
+	public function get_recruitment_classes($filter=array(), $lang=false) {
+		$class_dep = $this->gameinfo()->get_class_dependencies();
+		// gather all classes for roster
+		$todisplay = array();
+		foreach($class_dep as $class) {
+			if(isset($class['recruitment']) && $class['recruitment']) $todisplay[] = $class['type'];
+		}
+		return $this->get_assoc_classes($todisplay, $filter, $lang);
+	}
+	
+	/**
 	 * Returns the class-dependencies as an associative array
 	 *
 	 * @param 	array	$todisplay:		array containing the types which shall be contained in the associative array

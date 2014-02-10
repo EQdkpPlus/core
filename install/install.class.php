@@ -306,7 +306,7 @@ class install extends gen_class {
 			</div>
 		</div>
 		<div id="footer">
-			EQDKP Plus '.VERSION_EXT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team
+			<a href="http://eqdkp-plus.eu">EQDKP Plus '.VERSION_EXT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team</a>
 		</div>
 		</form>
 	</body>
