@@ -116,7 +116,7 @@ class character_pageobject extends pageobject {
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
 
 			// images
-			'IMG_CLASSICON'			=> $this->game->decorate('primary', array($member['class_id'], true, $this->url_id)),
+			'IMG_CLASSICON'			=> $this->game->decorate('primary', $member['class_id'], $this->pdh->get('member', 'profiledata', array($this->url_id))),
 		);
 
 		// Add the game-specific Fields...

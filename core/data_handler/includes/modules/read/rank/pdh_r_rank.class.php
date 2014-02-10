@@ -84,7 +84,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		}
 
 		public function get_html_name($rank_id){
-			return $this->game->decorate('ranks', array($rank_id)).$this->ranks[$rank_id]['name'];
+			return $this->game->decorate('ranks', $rank_id).$this->ranks[$rank_id]['name'];
 		}
 
 		public function get_rank_image($rank_id){

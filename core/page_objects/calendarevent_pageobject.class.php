@@ -486,7 +486,7 @@ class calendarevent_pageobject extends pageobject {
 						'active'		=> (int) $this->pdh->get('member', 'active', array($us_classdata['memberid'])),
 						'level'			=> $this->pdh->get('member', 'level', array($us_classdata['memberid'])),
 						'class_id'		=> $us_classdata['classid'],
-						'class_icon'	=> $this->game->decorate('primary', array($us_classdata['classid'], false, $us_classdata['memberid'])),
+						'class_icon'	=> $this->game->decorate('primary', $us_classdata['classid'], $this->pdh->get('member', 'profiledata', array($us_classdata['memberid']))),
 						'userid'		=> $us_classdata['userid'],
 						'roles'			=> (($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $myrolesrry : '',
 						'defaultrole'	=> strlen($this->pdh->get('member', 'defaultrole', array($us_classdata['memberid']))) ? $this->pdh->get('member', 'defaultrole', array($us_classdata['memberid'])) : '',
@@ -536,7 +536,7 @@ class calendarevent_pageobject extends pageobject {
 					'BREAK'			=> ($mybreak) ? true : false,
 					'ID'			=> $classid,
 					'NAME'			=> $classname,
-					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', array($classid)) : $this->game->decorate('primary', array($classid)),
+					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.$eventdata['extension']['distribution'][$classid],
 					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
 				));
@@ -551,7 +551,7 @@ class calendarevent_pageobject extends pageobject {
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
-							$membertooltip[]	= $this->game->decorate('primary', array($real_classid)).' '.$this->game->get_name('primary', $real_classid);
+							$membertooltip[]	= $this->game->decorate('primary', $real_classid).' '.$this->game->get_name('primary', $real_classid);
 						}
 						if($memberrank){
 							$membertooltip[]	= $this->user->lang('rank').": ".$memberrank;
@@ -628,7 +628,7 @@ class calendarevent_pageobject extends pageobject {
 		// raid guests
 		if(is_array($this->guests) && count($this->guests) > 0){
 			foreach($this->guests as $guestid=>$guestsdata){
-				$guest_clssicon	= $this->game->decorate('primary', array($guestsdata['class']));
+				$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
 				$guest_tooltip 	= $this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true)."<br/>".
 									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class'])."<br/>".
 									$guestsdata['note'];

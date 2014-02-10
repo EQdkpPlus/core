@@ -235,7 +235,7 @@ class raid_pageobject extends pageobject {
 					$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), false, true)
 				),
 
-				'EVENT_ICON'			=> $this->game->decorate('events', array($this->pdh->get('raid', 'event', array($raid_id)), 40)),
+				'EVENT_ICON'			=> $this->game->decorate('events', $this->pdh->get('raid', 'event', array($raid_id)), array(), 40),
 				'EVENT_NAME'			=> stripslashes($this->pdh->get('raid', 'event_name', array($raid_id))),
 
 				'S_COLUMN0'				=> ( isset($s_column0) ) ? true : false,

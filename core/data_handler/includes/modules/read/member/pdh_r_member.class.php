@@ -303,7 +303,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					} else {
 						$strType = $this->game->get_type_for_name($profile_field);
 						if ($strType){
-							return ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberValue) : $this->game->decorate($strType, array((int)$strMemberValue, false, $member_id));
+							return ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberValue) : $this->game->decorate($strType, $strMemberValue, $this->data[$member_id]);
 						}
 					}
 				break;
@@ -399,7 +399,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_classname($member_id){
-			return $this->game->decorate('primary', array($this->get_classid($member_id), false, $member_id))." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
+			return $this->game->decorate('primary', $this->get_classid($member_id), $this->data[$member_id])." <span class='class_".$this->get_classid($member_id)."'>".$this->get_classname($member_id)."</span>";
 		}
 
 		public function get_classid($member_id){
@@ -413,7 +413,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_html_classid($member_id){
-			return $this->game->decorate('primary', array($this->get_classid($member_id), false, $member_id));
+			return $this->game->decorate('primary', $this->get_classid($member_id), $this->data[$member_id]);
 		}
 
 		public function get_note($member_id){
@@ -454,13 +454,6 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_defaultrole($member_id){
 			return $this->data[$member_id]['defaultrole'];
 		}
-		
-		/*
-		public function get_html_racename($member_id){
-			$gender = (isset($this->data[$member_id]['gender'])) ? $this->data[$member_id]['gender'] : 'Male';
-			return $this->game->decorate('races', array($this->get_raceid($member_id),$gender,$member_id)).' <span class="racename">'.$this->get_racename($member_id).'</span>';
-		}
-		*/
 
 		public function get_gender($member_id){
 			return (isset($this->data[$member_id]['gender'])) ? $this->data[$member_id]['gender'] : false;
@@ -503,13 +496,14 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return false;
 		}
 
-		public function get_name_decorated($memberid){
-			$output =	' '.$this->game->decorate_character($memberid).' '.$this->get_html_name($memberid);
+		public function get_name_decorated($memberid, $size=20){
+			$output =	' '.$this->game->decorate_character($memberid, $size).' '.$this->get_html_name($memberid);
 			return $output;
 		}
 
 		public function comp_name_decorated($params1, $params2){
-			return ($this->pdh->get('member', 'name', array($params1[0])) < $this->pdh->get('member', 'name', array($params2[0]))) ? -1 : 1;
+			// return ($this->pdh->get('member', 'name', array($params1[0])) < $this->pdh->get('member', 'name', array($params2[0]))) ? -1 : 1;
+			return ($this->data[$params1[0]]['name'] < $this->data[$params2[0]]['name']) ? -1 : 1;
 		}
 
 		public function get_memberlink_decorated($member_id, $base_url, $url_suffix = '', $blnUseController=false){
@@ -517,7 +511,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 		
 		public function comp_memberlink_decorated($params1, $params2){
-			return ($this->pdh->get('member', 'name', array($params1[0])) < $this->pdh->get('member', 'name', array($params2[0]))) ? -1 : 1;
+			// return ($this->pdh->get('member', 'name', array($params1[0])) < $this->pdh->get('member', 'name', array($params2[0]))) ? -1 : 1;
+			return ($this->data[$params1[0]]['name'] < $this->data[$params2[0]]['name']) ? -1 : 1;
 		}
 
 		public function get_member_menu($memberid){
@@ -657,6 +652,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		
 		// TODO: needs some work  (class_name and race_name doesnt exist anymore)
 		public function get_search($search_value) {
+			return array(); // temporary, to prevent any errors
 			$arrSearchResults = array();
 			if (is_array($this->data)){
 				foreach($this->data as $id => $value) {

@@ -339,6 +339,7 @@ class update_2000 extends sql_update_task {
 	// (maybe do that for: class, race, level)
 	public function before_update_function() {
 		//TODO: Implement!!
+		//TODO: profile-fields xml to json
 	}
 	 
 	//Settings, Migrate News and Infopages, Update Colors

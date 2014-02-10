@@ -46,7 +46,7 @@ class event_pageobject extends pageobject {
 		$this->tpl->assign_vars(array(
 			'RAID_LIST'		=> $raid_hptt->get_html_table($rsort, ''),
 			'ITEM_LIST'		=> $item_hptt->get_html_table($isort, ''),
-			'EVENT_ICON'	=> $this->game->decorate('events', array($this->url_id, 64)),
+			'EVENT_ICON'	=> $this->game->decorate('events', $this->url_id, array(), 64),
 			'EVENT_NAME'	=> $this->pdh->get('event', 'name', array($this->url_id)),
 			'MDKPPOOLS'		=> $this->pdh->geth('event', 'multidkppools', array($this->url_id)),
 			'ITEMPOOLS'		=> $this->pdh->geth('event', 'itempools', array($this->url_id)),

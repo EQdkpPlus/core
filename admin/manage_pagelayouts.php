@@ -436,13 +436,13 @@ class ManagePageLayouts extends page_generic {
 				foreach($classes as $class){
 					$this->tpl->assign_block_vars('page_row.class_row', array(
 						'CLASS'	=> $class,
-						'NAME'	=>	$this->game->decorate('primary', array($class)).' '.$this->game->get_name('primary', $class),
+						'NAME'	=>	$this->game->decorate('primary', $class).' '.$this->game->get_name('primary', $class),
 					));
 				}
 				foreach($roles as $role){
 					$this->tpl->assign_block_vars('page_row.role_row', array(
 						'ROLE'	=> $role,
-						'NAME'	=>	$this->game->decorate('roles', array($role)).' '.$this->pdh->get('roles', 'name', array($role)),
+						'NAME'	=>	$this->game->decorate('roles', $role).' '.$this->pdh->get('roles', 'name', array($role)),
 					));
 				}
 			}

@@ -313,7 +313,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'NAME'			=> "roles_" . $row['id'] . "_count",
 				'CLSSID'		=> $row['id'],
 				'COUNT'			=> (isset($eventdata['extension']) && $eventdata['extension']['distribution'][$row['id']]) ? $eventdata['extension']['distribution'][$row['id']] : '0',
-				'ICON'			=> $this->game->decorate('roles', array($row['id'])),
+				'ICON'			=> $this->game->decorate('roles', $row['id']),
 				'DISABLED'		=> (isset($eventdata['extension']) && $eventdata['extension']['raidmode'] == 'class') ? 'disabled="disabled"' : ''
 			));
 		}
@@ -326,7 +326,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'NAME'			=> "classes_" . $classid . "_count",
 				'CLSSID'		=> $classid,
 				'COUNT'			=> (isset($eventdata['extension']['distribution'][$classid]) && $eventdata['extension']['distribution'][$classid]) ? $eventdata['extension']['distribution'][$classid] : '0',
-				'ICON'			=> $this->game->decorate('primary', array($classid)),
+				'ICON'			=> $this->game->decorate('primary', $classid),
 				'DISABLED'		=> (isset($eventdata['extension']) && $eventdata['extension']['raidmode'] == 'role') ? 'disabled="disabled"' : ''
 			));
 		}

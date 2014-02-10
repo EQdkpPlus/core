@@ -64,7 +64,7 @@ class roster_pageobject extends pageobject {
 						$hptt->setPageRef($this->strPath);
 						$this->tpl->assign_block_vars('class_row', array(
 							'CLASS_NAME'	=> $value,
-							'CLASS_ICONS'	=> $this->game->decorate('roles', array($key)),
+							'CLASS_ICONS'	=> $this->game->decorate('roles', $key, array(), 48),
 							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
 						));
 					}
@@ -103,7 +103,7 @@ class roster_pageobject extends pageobject {
 				
 				$this->tpl->assign_block_vars('class_row', array(
 						'CLASS_NAME'	=> $this->game->get_name($arrToDisplay[$level], $key),
-						'CLASS_ICONS'	=> $this->game->decorate($arrToDisplay[$level], array($key, true)),
+						'CLASS_ICONS'	=> $this->game->decorate($arrToDisplay[$level], $key, array(), 48),
 						'CLASS_ID'		=> $key,
 						'CLASS_LEVEL'	=> $level+1,
 						'ENDLEVEL'		=> false,
@@ -121,7 +121,7 @@ class roster_pageobject extends pageobject {
 				
 				$this->tpl->assign_block_vars('class_row', array(
 						'CLASS_NAME'	=> $this->game->get_name($arrToDisplay[$level], $key),
-						'CLASS_ICONS'	=> $this->game->decorate($arrToDisplay[$level], array($key, true)),
+						'CLASS_ICONS'	=> $this->game->decorate($arrToDisplay[$level], $key, array(), 48),
 						'CLASS_ID'		=> $key,
 						'CLASS_LEVEL'	=> $level+1,
 						'IS_PRIMARY'	=> ($arrToDisplay[$level] == $this->game->get_primary_class()),

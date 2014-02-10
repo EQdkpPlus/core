@@ -110,9 +110,8 @@ if(!class_exists('pdh_r_event')){
 			return '';
 		}
 
-		public function get_html_icon($event_id, $width=16, $alt=true){
-			$alt = ($alt) ? $this->get_name($event_id) : '';
-			return $this->game->decorate('events', array($event_id, $width, false, $alt));
+		public function get_html_icon($event_id, $width=16){
+			return $this->game->decorate('events', $event_id, $width);
 		}
 
 		public function get_eventlink($event_id, $baseurl, $url_suffix='', $blnUseController=false){
