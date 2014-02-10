@@ -321,6 +321,7 @@ class Manage_Menus extends page_generic {
 			'DD_LINK_WINDOW'		=> new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')),
 			'MS_LINK_VISIBILITY'	=> $this->jquery->MultiSelect("editlink-visibility", $drpdwn_rights, 0),
 			'DD_LINK_VISIBILITY'	=> new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')),
+			'DD_LINK_TYPE'			=> new hdropdown('link_type', array('options' => array('internal' => $this->user->lang('link_type_internal'), 'external' => $this->user->lang('link_type_external')), 'class' => 'link_type')),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
 			'DD_ARTICLES'			=> new hdropdown('editlink-article', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')),
@@ -411,12 +412,12 @@ class Manage_Menus extends page_generic {
 
 		$html = '
 			<div data-linkid="'.$id.'">
-			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'" style="display:inline-block;"></span>
-			<span class="link-hide '.(((int)$arrLink['hidden']) ? 'eye-gray' : 'eye').'"></span>';
+			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'" style="display:inline-block;"></span>&nbsp;
+			<span class="link-hide '.(((int)$arrLink['hidden']) ? 'eye-gray' : 'eye').'"></span>&nbsp;';
 			if ($blnPluslink){
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
 				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));
-				$html .= '<i class="fa fa-pencil"></i><a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
+				$html .= '<i class="fa fa-pencil"></i>&nbsp;<a href="javascript:void(0);" class="edit-menulink-trigger">'.$arrLink['text'].' ('.$arrLink['link'].')</a>
 					<i class="fa fa-trash-o fa-lg hand" onclick="delete_plink('.$plinkid.', this)" title="'.$this->user->lang("delete").'"></i>
 					<input type="hidden" value="'.$arrPluslinkData['url'].'"  name="mainmenu['.$id.'][url]" class="link-url">
 					<input type="hidden" value="'.$arrPluslinkData['name'].'"  name="mainmenu['.$id.'][name]" class="link-name">

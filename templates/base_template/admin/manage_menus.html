@@ -7,8 +7,22 @@
 			autoOpen: false,
 		});
 		
+		$('.link_type').on('change', function(event){
+			if ($('.link_type').val() == 'internal'){
+				$('.internalLink').show();
+				$('.externalLink').hide();
+			} else {
+				$('.internalLink').hide();
+				$('.externalLink').show();
+			}
+		});
+		
 		function editMenuLink(){
 			$('.edit-menulink-trigger').on('click', function(event){
+				$('.internalLink').hide();
+				$('.externalLink').show();
+				$('.link_type').val('external');
+				
 				var parent = $(this).parent();
 				var linkid = $(this).parent().attr('data-linkid');
 				
@@ -174,35 +188,44 @@
 <div id="dialog-edit-menuitem" title="{L_pluslink_edit}" style="display:none;">
 			<fieldset class="settings mediumsettings">
 				<dl>
+					<dt><label>{L_link_type}:</label></dt>
+					<dd>
+						{DD_LINK_TYPE}
+					</dd>
+				</dl>
+				
+				<div class="internalLink">
+				<dl>
 					<dt><label>{L_category}/{L_article}:</label></dt>
 					<dd>
 						{DD_ARTICLES}
 					</dd>
 				</dl>
-				<div class="contentDivider"></div>
-				<dl>
-					<dt><label>{L_menu_entry}:</label></dt>
-					<dd>
-						<input type="text" style="width:90%" class="editlink-name"/>
-					</dd>
-				</dl>
-				<dl>
-					<dt><label>{L_link}:</label></dt>					
-					<dd><input type="text" style="width:90%" class="editlink-url"/></dd>
-				</dl>
-				<dl>
-					<dt><label>{L_pk_set_link_type_header}:</label></dt>
-					<dd>{DD_LINK_WINDOW}</dd>
-				</dl>
-				<dl>
-					<dt><label>{L_pluslink_frame_length}:</label></dt>
-					<dd><input size="4" type="text" class="editlink-windowsize"/>px</dd>
-				</dl>
-				<dl>
-					<dt><label>{L_info_opt_visibility}:</label></dt>
-					<dd>{MS_LINK_VISIBILITY}</dd>
-				</dl>
-
+				</div>
+				<div class="externalLink" style="display:none;">
+					<dl>
+						<dt><label>{L_menu_entry}:</label></dt>
+						<dd>
+							<input type="text" style="width:90%" class="editlink-name"/>
+						</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_link}:</label></dt>					
+						<dd><input type="text" style="width:90%" class="editlink-url"/></dd>
+					</dl>
+					<dl>
+						<dt><label>{L_pk_set_link_type_header}:</label></dt>
+						<dd>{DD_LINK_WINDOW}</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_pluslink_frame_length}:</label></dt>
+						<dd><input size="4" type="text" class="editlink-windowsize"/>px</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_info_opt_visibility}:</label></dt>
+						<dd>{MS_LINK_VISIBILITY}</dd>
+					</dl>
+				</div>
 			</fieldset>
 			<button type="button" id="editlink-button"><i class="fa fa-check"></i> {L_submit}</button>
 	</div>
@@ -228,8 +251,8 @@
 	
 	<div id="addMenuItemTemplate" style="display:none;">
 		<div data-linkid="KEY">
-			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>
-			<span class="link-hide eye"></span>
+			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;
+			<span class="link-hide eye"></span>&nbsp;
 			<a href="javascript:void(0);" class="edit-menulink-trigger">Neuer Link</a> <i class="fa fa-trash-o fa-lg hand" title="{L_delte}" onclick="delete_row(this);"></i>
 			<input type="hidden" value=""  name="mainmenu[KEY][url]" class="link-url">
 			<input type="hidden" value=""  name="mainmenu[KEY][name]" class="link-name">
@@ -246,8 +269,8 @@
 	
 	<div id="addArticleItemTemplate" style="display:none;">
 		<div data-linkid="KEY">
-			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>
-			<span class="link-hide eye"></span>
+			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;
+			<span class="link-hide eye"></span>&nbsp;
 			TEXT
 			<input type="hidden" value="normal"  name="mainmenu[KEY][type]" class="link-type">			
 			<input type="hidden" value="0"  name="mainmenu[KEY][hidden]" class="link-hidden">

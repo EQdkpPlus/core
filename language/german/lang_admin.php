@@ -1625,7 +1625,10 @@ $lang = array(
 "embedd" => "Einbetten",
 "embedd_position" => "Position des Moduls auf externer Seite",
 "embedd_middle"	=> "Mitte",
-"embedd_show_header" => "Modulüberschrift anzeigen",		
+"embedd_show_header" => "Modulüberschrift anzeigen",
+"link_type"	=> "Link-Typ auswählen",
+"link_type_internal" => "Interner Link",
+"link_type_external" => "Externer Link",
  );
 
 ?>

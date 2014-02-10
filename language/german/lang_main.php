@@ -917,6 +917,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "lib_pupd_intro" => "Es sind neuere Versionen verfügbar:",
 "lib_pupd_updtxt_tt" => "<b>%1\$s</b>: Version %2\$s vom %4\$s",
 "extensions" => "Erweiterungen",
+"confirm_password" => "Passwort wiederholen",
  );
 
 ?>
