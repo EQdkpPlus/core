@@ -278,7 +278,7 @@ class calendar_pageobject extends pageobject {
 							'eventid'		=> $calid,
 							'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
 							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
-							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true, true)) : '',
+							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 							'rstatusdata'	=> $rstatusdata,

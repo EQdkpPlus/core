@@ -35,7 +35,7 @@ if (!class_exists('exchange_events')){
 						'id'	=> $eventid,
 						'name'	=> $this->pdh->get('event', 'name', array($eventid)),
 						'value'	=> $this->pdh->get('event', 'value', array($eventid)),
-						'icon'  => str_replace("{ROOT_PATH}", $this->env->link, $this->pdh->get('event', 'icon', array($eventid, true, false, true))),
+						'icon'  => $this->env->link.$this->pdh->get('event', 'icon', array($eventid, true)),
 					);
 					$arrMultidkpPools = $this->pdh->get('event', 'multidkppools', array($eventid));
 					foreach($arrMultidkpPools as $mdkp){

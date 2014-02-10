@@ -214,7 +214,7 @@ if (!class_exists('exchange_calevents_details')){
 							'deadline_timestamp'=> $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600),
 							'allDay'		=> ($this->pdh->get('calendar_events', 'allday', array($event_id)) > 0) ? 1 : 0,
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($event_id)) == 1) ? 1 : 0,
-							'icon'			=> ($eventdata['extension']['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventdata['extension']['raid_eventid'], true, true)) : '',
+							'icon'			=> ($eventdata['extension']['raid_eventid']) ? $this->env->link.$this->pdh->get('event', 'icon', array($eventdata['extension']['raid_eventid'], true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($event_id)),
 							'raidleader'	=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventdata['extension']['raidleader']))) : '',
 							'raidstatus'	=> $arrStatus,

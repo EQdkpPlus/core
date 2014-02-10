@@ -88,7 +88,7 @@ class Manage_Events extends page_generic {
 		//get icons
 		if($this->game->icon_exists('events')) {
 			$this->tpl->assign_var('ICONS', true);
-			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/events';
+			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/icons/events';
 			$files = scandir($events_folder);
 			$ignorefiles = array('.', '..', '.svn', 'index.html');
 			$icons = array();
@@ -108,7 +108,7 @@ class Manage_Events extends page_generic {
 					$this->tpl->assign_block_vars('files_row.fields', array(
 						'NAME'		=> $icon,
 						'CHECKED'	=> (isset($event['icon']) AND $icon == $event['icon']) ? ' checked="checked"' : '',
-						'IMAGE'		=> "<img src='".$this->root_path."games/".$this->config->get("default_game")."/events/".$icon."' alt='".$icon."' width='48px' />",
+						'IMAGE'		=> "<img src='".$this->root_path."games/".$this->config->get("default_game")."/icons/events/".$icon."' alt='".$icon."' width='48px' />",
 						'CHECKBOX'	=> ($i < $num) ? true : false)
 					);
 				}

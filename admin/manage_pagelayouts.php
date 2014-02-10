@@ -430,7 +430,7 @@ class ManagePageLayouts extends page_generic {
 					$classes = $page_settings['listmembers_leaderboard']['columns'];
 					$roles = $this->pdh->get('roles', 'id_list');
 				} else {
-					$classes = array_keys($this->game->get_primary_classes(array('id_0'));
+					$classes = array_keys($this->game->get_primary_classes(array('id_0')));
 					$roles = $page_settings['listmembers_leaderboard']['columns'];
 				}
 				foreach($classes as $class){

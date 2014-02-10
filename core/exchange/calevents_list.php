@@ -104,7 +104,7 @@ if (!class_exists('exchange_calevents_list')){
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($intRaidID)) == 1) ? 1 : 0,
 							'eventid'		=> $intRaidID,						
 							'url'			=> ($raidmode) ? register('routing')->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intRaidID)), $intRaidID, false) : '',
-							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true, true)) : '',
+							'icon'			=> ($eventextension['raid_eventid']) ? $this->env->link.$this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($intRaidID)),
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 							'raidstatus'	=> ($raidmode) ? $rstatusdata : '',
