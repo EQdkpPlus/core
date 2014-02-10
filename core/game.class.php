@@ -694,7 +694,7 @@ class game extends gen_class {
 			// filter out ids not allowed
 			if($parent_id !== false) {
 				$true_ids = $child_ids[array_search($type, $dep_order)][$parent_id];
-				if(!in_array($id, $true_ids))
+				if(!(!is_array($true_ids) && $true_ids == 'all') || !in_array($id, $true_ids))
 					continue;
 			}
 			// last "level" reached
