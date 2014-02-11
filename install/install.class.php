@@ -230,11 +230,12 @@ class install extends gen_class {
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" media="screen" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
-		<script type="text/javascript" language="javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-		<script type="text/javascript" language="javascript" src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+		
+		<link rel="stylesheet" type="text/css" media="screen" href="../libraries/jquery/core/core.min.css" />
+		<script type="text/javascript" language="javascript" src="../libraries/jquery/core/core.min.js"></script>
+		<link href="../libraries/FontAwesome/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" media="screen" href="style/install.css" />
+		<link rel="stylesheet" type="text/css" media="screen" href="style/jquery_tmpl.css" />
 		<script type="text/javascript">
 			//<![CDATA[
 		$(function() {
@@ -261,7 +262,7 @@ class install extends gen_class {
 		<form action="index.php" method="post" id="form_install">
 		<div id="outerWrapper">
 			<div id="header">
-				<div id="logo"></div>
+				<img src="style/logo.svg" id="logo" />
 				<div id="languageselect"><i class="fa fa-globe"></i> '.$this->lang['language'].': '.$this->lang_drop().'</div>
 				<div id="logotext">Installation '.VERSION_EXT.'</div>
 			</div>

@@ -40,7 +40,7 @@
 <body>
 	<div class="wrapper">
 		<div class="header">
-			<img src="../templates/maintenance/images/logo_mirrored.png" alt="EQdkp Plus" class="absmiddle" /> {L_MMODE}
+			<img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus" class="absmiddle" /> {L_MMODE}
 		</div>
 		
 		<div class="innerWrapper">

@@ -81,8 +81,8 @@ body {
 }
 
 .header img {
-	height: 150px;
 	vertical-align: middle;
+	margin-bottom: 10px;
 }
 
 .footer {
