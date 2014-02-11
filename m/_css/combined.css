@@ -106,10 +106,12 @@
 
 
 /* Header */
-.eq-demos .eq-header {
+.eq-demos .eq-header-container .eq-header {
 	border-top: 3px solid #276293 !important;
 	border-bottom-color: #276293 !important;
-	
+}
+
+.eq-demos .eq-header-container{
 	background: #2e78b0; /* Old browsers */
 	background: -moz-linear-gradient(top,  #2e78b0 0%, #193759 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2e78b0), color-stop(100%,#193759)); /* Chrome,Safari4+ */
@@ -118,19 +120,19 @@
 	background: -ms-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #2e78b0 0%,#193759 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2e78b0', endColorstr='#193759',GradientType=0 ); /* IE6-9 */
-	
 }
-.eq-demos .eq-header h2 {
+
+.eq-demos .eq-header-container .eq-header h2 {
 	padding: .4em 0 .1em;
 	margin: 0 3em;
 }
 
-.eq-demos .eq-header h2 img {
+.eq-demos .eq-header-container .eq-header h2 img {
 	display: block;
 	width: 140px;
 	height: auto;
 }
-.eq-demos .eq-header h2 > img {
+.eq-demos .eq-header-container .eq-header h2 > img {
 	display: inline-block;
 }
 
@@ -140,10 +142,10 @@
 	min-height: 40px;
 }
 
-.eq-demos .eq-header h2 > img {
+.eq-demos .eq-header-container .eq-header h2 > img {
 	display: inline-block;
 }
-.eq-demos .eq-header p {
+.eq-demos .eq-header-container .eq-header p {
 	position: absolute;
 	bottom: -2em;
 	left: 1em;
@@ -154,7 +156,7 @@
 	text-transform: uppercase;
 }
 
-.eq-demos .eq-header .ui-btn {
+.eq-demos .eq-header-container .eq-header .ui-btn {
 	top: 50%;
 	margin-top: -1em;
 }
@@ -302,6 +304,11 @@
 }
 
 @media (min-width: 60em) {
+	.eq-demos .eq-header-container .eq-header {
+		background: url(images/background-head.svg) no-repeat scroll center top transparent;
+		background-size: 100%;
+	}
+
 	.eq-demos .ui-content .eq-sidenav-tablet li a span.fa-stack {
 		right: 0.3em;
 	}
@@ -350,17 +357,17 @@
 		float: right;
 	}
 	
-	.eq-demos .eq-header h2 {
-		padding: 1em 0 .7em;
+	.eq-demos .eq-header-container .eq-header h2 {
+		padding: 0.4em 0 .7em;
 		margin: 0 1em 0 3%;
 		text-align: left;
 	}
-	.eq-demos .eq-header h2 img {
+	.eq-demos .eq-header-container .eq-header h2 img {
 		width: 275px;
 		height: 78px;
 	}
 	
-	.eq-demos .eq-header p {
+	.eq-demos .eq-header-container .eq-header p {
 		bottom: auto;
 		left: auto;
 		top: 50%;
@@ -370,7 +377,7 @@
 		color: #fff;
 	}
 	
-	.eq-demos .eq-login-link {
+	.eq-demos .eq-header-container .eq-login-link {
 		right: 3%;
 	}
 }
