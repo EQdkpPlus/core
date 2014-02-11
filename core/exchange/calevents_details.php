@@ -32,8 +32,10 @@ if (!class_exists('exchange_calevents_details')){
 					$comments = $this->pdh->get('comment', 'filtered_list', array('viewcalraid', $event_id));
 					if (is_array($comments)){
 						foreach($comments as $key => $row){
+							$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
 							$arrComments['comment:'.$key] = array(
 								'username'			=> $row['username'],
+								'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
 								'date'				=> $this->time->date('Y-m-d H:i', $row['date']),
 								'date_timestamp'	=> $row['date'],
 								'message'			=> $this->bbcode->toHTML($row['text']),

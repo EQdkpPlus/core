@@ -484,11 +484,11 @@
 						
 						//Display Comments
 						if (obj.comments.count > 0){
-							comments = comments + '<ul data-role="listview" data-inset="true">';
+							comments = comments + '<div>';
 							$.each(obj.comments.comments, function(ckey, cvalue) {
 								comments = comments + '<div class="comment-container"><div class="comment-avatar"><img src="'+cvalue.user_avatar+'" /></div><div class="comment-message"><h3>' + cvalue.username + ', '+format_date(cvalue.date) + '</h3><p>' + cvalue.message + '</p></div></div>';
 							});
-							comments = comments + '</ul>';
+							comments = comments + '</div>';
 							
 						}			
 						if (is_loggedin()){
