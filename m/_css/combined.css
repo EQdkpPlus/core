@@ -303,6 +303,13 @@
 	margin-left: 4px;
 }
 
+.positive {
+	color: #3c3;
+}
+.negative {
+	color: #e23b30;
+}
+
 @media (min-width: 60em) {
 	.eq-demos .eq-header-container .eq-header {
 		background: url(images/background-head.svg) no-repeat scroll center top transparent;
