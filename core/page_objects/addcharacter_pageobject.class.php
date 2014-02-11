@@ -108,7 +108,7 @@ class addcharacter_pageobject extends pageobject {
 		$this->build_form();
 		
 		// Fill fields with values
-		$this->form->output($member_data);		
+		$this->form->output($member_data);
 
 		$arrHistoryReceivers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
 		asort($arrHistoryReceivers);
