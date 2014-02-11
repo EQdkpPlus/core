@@ -65,6 +65,7 @@ if( !class_exists( "plus_exchange" ) ) {
 					}
 				}
 			}
+			
 			//Plugins
 			$plugs = $this->pm->get_plugins(PLUGIN_INSTALLED);
 			if (is_array($plugs)){
@@ -81,9 +82,20 @@ if( !class_exists( "plus_exchange" ) ) {
 				}
 			}
 			//Portal modules
-			$enabled_modules = $this->pdh->aget('portal', 'position', 0, array($this->pdh->get('portal', 'id_list', array(array('enabled' => 1)))));
-			if(is_array($enabled_modules)){
-				foreach($enabled_modules as $module_id => $path) {
+			$layouts = $this->pdh->get('portal_layouts', 'id_list');
+			$module_ids = array();
+			foreach($layouts as $layout_id) {
+				$modules = $this->pdh->get('portal_layouts', 'modules', array($layout_id));
+				foreach($modules as $position => $module) {
+					foreach($module as $mod_id) {
+						$module_ids[$mod_id] = $mod_id;
+					}
+				}
+			}
+			
+			if(is_array($module_ids)) {
+				foreach($module_ids as $module_id) {
+					$path = $this->pdh->get('portal', 'path', array($module_id));
 					$obj = $path.'_portal';
 					$arrExchangeModules = $obj::get_data('exchangeMod');
 					if (class_exists($obj) && $this->portal->check_visibility($module_id)){
@@ -99,6 +111,7 @@ if( !class_exists( "plus_exchange" ) ) {
 					}
 				}
 			}
+			
 		}
 
 		public function execute(){

@@ -32,9 +32,9 @@ class Manage_Users extends page_generic {
 				array('process' => 'deactivate', 'value' => 'deactivate', 'csrf' => true),
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
 				),
-			'u' => array('process' => 'edit'),
 			'submit' => array('process' => 'submit', 'csrf' => true),
 			'send_new_pw' => array('process' => 'send_new_pw', 'csrf' => true),
+			'u' => array('process' => 'edit'),
 		);
 		parent::__construct(false, $handler, array('user', 'name'), null, 'user_id[]');
 		$this->process();
@@ -49,9 +49,9 @@ class Manage_Users extends page_generic {
 
 		// Email them their new password
 		$bodyvars = array(
-			'USERNAME'		=> $this->pdh->get('user', 'name', array($this->in->get('u'))),
-			'DATETIME'		=> $this->time->date('m/d/y h:ia T'),
-			'U_ACTIVATE'	=> $this->env->link.'login.php?mode=newpassword&amp;key=' . $pwkey,
+			'USERNAME'		=> $this->pdh->get('user', 'name', array($this->in->get('u', 0))),
+			'DATETIME'		=> $this->time->user_date(),
+			'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'/Login/NewPassword/&amp;key=' . $pwkey,
 		);
 
 		if($this->email->SendMailFromAdmin($this->in->get('user_email'), $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
@@ -181,6 +181,7 @@ class Manage_Users extends page_generic {
 			
 			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
+			unset($query_ary['send_new_pw']);
 			
 			/* NYI - TODO
 			$plugin_settings = array();

@@ -199,7 +199,7 @@ class auth_db extends auth {
 						$email = registry::register('MyMailer');
 						$bodyvars = array(
 							'USERNAME'		=> $strUsername,
-							'U_ACTIVATE'	=> $this->env->link.'register.php?mode=activate&key=' . $user_key,
+							'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'Register/Activate/?key=' . $user_key,
 						);
 						$email->SendMailFromAdmin($this->pdh->get('user', 'email', array($userid)), $this->lang('email_subject_activation_self'), 'user_activation_failed_logins.html', $bodyvars);
 					}

@@ -128,6 +128,7 @@ class login_pageobject extends pageobject {
 
 	//Save new password
 	public function process_new_password(){
+		
 		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}

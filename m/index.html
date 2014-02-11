@@ -624,7 +624,7 @@
 		if (note == '') {
 			return false;
 		}
-		$("#shoutButton").button('disable');
+		$("#shoutButton").button().button('disable');
 		$.mobile.loading( 'show');
 		$.ajax({
 		   type: "POST",
@@ -740,7 +740,7 @@
 						var output = '<ul data-role="listview" data-inset=\'true\'>';
 						if (obj.posts != null){
 							$.each(obj.posts, function(key, value) {
-								output = output + '<li><a href="'+value.topic_link+'" rel="external"><h3>'+value.topic_title+'</h3><p>'+format_date(value.topic_lastpost_date)+', '+value.topic_lastpost_username+"</p><span class='ui-li-count'>"+value.topic_replies+"</span></a></li>";
+								output = output + '<li><a href="'+value.topic_link+'" rel="external"><h3>'+value.topic_title+'</h3><p>'+format_date(value.topic_lastpost_date)+', '+value.topic_lastpost_username+"</p><span class='ui-li-count'>"+value.topic_replies+" <i class='fa fa-comments'></i></span></a></li>";
 							});
 						} else {
 							output = '<li>'+loc['no_posts']+'</li>';
@@ -1145,7 +1145,7 @@
 			<div id="shouts"></div>
 			<div id="shoutform">
 				<textarea id="shouttext"></textarea>
-				<input type="button" onclick="shout();" id="shoutButton" data-icon="check" data-theme="b" value="Shout!"/>		
+				<button onclick="shout();" id="shoutButton" data-icon="check" data-theme="b">Shout!</button>	
 			</div>
 		</div>
 
