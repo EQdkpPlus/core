@@ -33,7 +33,9 @@ if (!class_exists('exchange_comment_add')){
 					//Check for page and attachid
 					if (!$xml->page || !$xml->attachid) return $this->pex->error('page or attachid is missing');
 					
-					$this->pdh->put('comment', 'insert', array($xml->attachid, $this->user->id, strip_tags($xml->comment), $xml->page));
+					$intReplyTo = ((int)$xml->reply_to) ? (int)$xml->reply_to : 0;
+					
+					$this->pdh->put('comment', 'insert', array((string)$xml->attachid, $this->user->id, (string)strip_tags($xml->comment), (string)$xml->page, $intReplyTo));
 					
 					$this->pdh->process_hook_queue();
 					return array('status'	=> 1);
