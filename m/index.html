@@ -484,11 +484,11 @@
 						
 						//Display Comments
 						if (obj.comments.count > 0){
-							comments = comments + '<div>';
+							comments = comments + '<ul data-role="listview" data-inset="true">';
 							$.each(obj.comments.comments, function(ckey, cvalue) {
 								comments = comments + '<div class="comment-container"><div class="comment-avatar"><img src="'+cvalue.user_avatar+'" /></div><div class="comment-message"><h3>' + cvalue.username + ', '+format_date(cvalue.date) + '</h3><p>' + cvalue.message + '</p></div></div>';
 							});
-							comments = comments + '</div>';
+							comments = comments + '</ul>';
 							
 						}			
 						if (is_loggedin()){
@@ -1012,7 +1012,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
@@ -1080,7 +1080,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
@@ -1151,7 +1151,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
@@ -1227,7 +1227,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
@@ -1295,7 +1295,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
@@ -1401,7 +1401,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
@@ -1474,7 +1474,7 @@
 
 	<div data-role="header" class="eq-header-container">
 		<div class="eq-header">
-			<h2><img src="_css/images/logo.svg" alt="EQdkp Plus"></h2>
+			<h2><img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus"></h2>
 			<p><span class="guildname">The Gamer CMS &amp; DKP System</span></p>
 			<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 			<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>

@@ -312,7 +312,7 @@
 
 @media (min-width: 60em) {
 	.eq-demos .eq-header-container .eq-header {
-		background: url(images/background-head.svg) no-repeat scroll center top transparent;
+		background: url(../../templates/maintenance/images/background-head.svg) no-repeat scroll center top transparent;
 		background-size: 100%;
 	}
 
