@@ -52,40 +52,51 @@
 	text-decoration: underline;
 }
 
-.eq-demos .eq-sidenav {
+/* Sidenav */
+.eq-sidenav-tablet {
+	display: none;
+}
+
+.eq-demos .ui-content .eq-sidenav-tablet, .eq-navmenu-panel .eq-panelnav {
 	margin-top: 20px;
 	background: none;
 }
 
-.eq-demos .eq-sidenav li , .eq-demos .eq-sidenav li a {
+.eq-demos .ui-content .eq-sidenav-tablet li , .eq-demos .ui-content .eq-sidenav-tablet li a, .eq-panelnav li, .eq-navmenu-panel .eq-panelnav li a {
 	background: none;
 	font-weight: normal;
 }
 
-.eq-demos .eq-sidenav li a {
+.eq-demos .ui-content .eq-sidenav-tablet li a {
 	padding-left: 50px;
 }
 
-.eq-demos .eq-sidenav li a:after {
+.eq-demos .ui-content .eq-sidenav-tablet li a:after, .eq-navmenu-panel .eq-panelnav li a:after {
 	display: none;
 }
 
-.eq-demos .eq-sidenav li a span.fa-stack {
+.eq-demos .ui-content .eq-sidenav-tablet li a span.fa-stack, .eq-navmenu-panel .eq-panelnav li a span.fa-stack {
 	right: 1.0em;
 	top: 0.35em;
 	color: #b1b1b1;
 	position: absolute;
 }
 
-.eq-demos .eq-sidenav li a:hover {
+.eq-demos .ui-content .eq-sidenav-tablet li a:hover {
 	color: #3388cc !important;
 }
 
-.eq-demos .eq-sidenav li.active a, .eq-demos .eq-sidenav li.active a span.fa-stack {
+.eq-navmenu-panel .eq-panelnav li a:hover {
+	color: #3388cc !important;
+	background: none;
+}
+
+.eq-demos .ui-content .eq-sidenav-tablet li.active a, .eq-demos .ui-content .eq-sidenav-tablet li.active a span.fa-stack,
+.eq-navmenu-panel .eq-panelnav li.active a, .eq-navmenu-panel .eq-panelnav li.active a span.fa-stack {
 	color: #3388cc !important;
 }
 
-.eq-demos .eq-sidenav li:first-child a{
+.eq-demos .ui-content .eq-sidenav-tablet li:first-child a, .eq-navmenu-panel .eq-panelnav li:first-child a{
 	border-top: none;
 }
 
@@ -224,7 +235,7 @@
 .comment-message h3 {
 	color: #9f9f9f;
 	font-size: 0.8em;
-	font-weight: bold;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
@@ -291,7 +302,7 @@
 }
 
 @media (min-width: 60em) {
-	.eq-demos .eq-sidenav li a span.fa-stack {
+	.eq-demos .ui-content .eq-sidenav-tablet li a span.fa-stack {
 		right: 0.3em;
 	}
 	
@@ -312,7 +323,7 @@
 		margin: 1.25em 1.25em 1.25em 3%;
 	}
 	
-	.eq-demos .eq-navmenu-panel {
+	.eq-demos .eq-sidenav-tablet {
 		visibility: visible;
 		position: relative;
 		left: 0;

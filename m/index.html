@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!--
+ * Project:		EQdkp-Plus
+ * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
+ * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * Began:		2010
+ * Date:		$Date: 2012-02-21 11:03:48 +0100 (Di, 21. Feb 2012) $
+ * @author		$Author: Godmod $
+ * @copyright	2006-2012 EQdkp-Plus Developer Team
+ * @link		http://eqdkp-plus.com
+ * @package		eqdkp-plus mobile
+ * @version		$Rev: 11698 $
+ *
+ */
+ --> 
+
+
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -27,10 +43,16 @@
 		$("body>[data-role='panel']").trigger( "updatelayout" );
 		$("#login_submit").button();
 		
-		$( "#eq-login-panel" ).on( "panelopen", function( event, ui ) {
+		$(document).delegate("#eq-login-panel", "panelopen", function(event, ui){
 			$("#eqdkp_username").focus();
 			$("#eq-login-panel .message").hide();
-		} );
+		});
+		
+		$(document).delegate("#eq-navmenu-panel", "panelbeforeopen", function(event, ui){
+			var recent_page = $.mobile.activePage.attr('id');
+			$(".eq-navmenu-panel .eq-panelnav li").removeClass('active');
+			$("#eq-navmenu-panel").find("a[href=#"+recent_page+"]").parent().addClass('active');
+		});
 	});
 </script>
 
@@ -586,11 +608,11 @@
 					//Start Cron
 					window.clearInterval(cron_shouts);
 					cron_shouts = window.setInterval(load_shouts, 1000 * 60 * 3); //3 Min
-					var output = '<ul data-role="listview" data-inset="true" >';
+					var output = '<div class="shouts">';
 					$.each(obj.entries, function(key, value){
-						output = output + '<li class="notextcut"><h3>'+value.name+'</h3><p>'+value.text+'</p><p class="ui-li-aside"><strong>'+format_date(value.date)+'</strong></p></li>';
+						output = output + '<div class="comment-container"><div class="comment-avatar"><img src="'+value.user_avatar+'" /></div><div class="comment-message"><h3>' + value.name + ', '+format_date(value.date) + '</h3><p>' + value.text + '</p></div></div>';
 					});
-					output = output + '</ul>';
+					output = output + '</div>';
 					$('#shouts').html(output).trigger('create');				
 					if (!is_loggedin()){
 						$('#shoutform').hide();
@@ -982,7 +1004,9 @@
 
 </script>
 
-
+<!-- NEWS = MAIN PAGE
+===========================================================================
+-->
 
 <div data-role="page" class="eq-demos eq-home" id="main">
 
@@ -993,19 +1017,15 @@
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
 
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_news">Home</span></h1>
-		<div class="message">
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+			<h1><span class="loc_news">Home</span></h1>
+			<div class="message">
+			</div>
+			<div id="content_news">
+			</div>
 		</div>
-		<div id="content_news">
-		</div>
-
-	</div><!-- /content -->
-	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-		<ul class="eq-sidenav" data-role="listview">
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li class="active"><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1019,7 +1039,6 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
 			</a>
 			
 			</li>
@@ -1042,8 +1061,9 @@
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
 
+	</div><!-- /content -->
+	
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
 		<p><a href="http://eqdkp-plus.eu/about" data-ajax="false">Copyright 2014 EQdkp Plus Team</a></p>
@@ -1062,21 +1082,18 @@
 		<a href="#eq-navmenu-panel" class="eq-hide-tablet ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-left">Menu</a>
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
-
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_news">Show News</span></h1>
-		<div class="message">
-		</div>
-
-		<div id="content_show_news">
-		</div>
-
-	</div><!-- /content -->
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+		
+			<h1><span class="loc_news">Show News</span></h1>
+			<div class="message">
+			</div>
 	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-		<ul class="eq-sidenav" data-role="listview">
+			<div id="content_show_news">
+			</div>
+		
+		</div>
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li class="active"><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1090,9 +1107,7 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
-			</a>
-			
+			</a>		
 			</li>
 			<li><a href="#raids" class="a_raids"><span class="loc_raids">Raids</span>
 					<span class="fa-stack">
@@ -1113,8 +1128,9 @@
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
 
+	</div><!-- /content -->
+	
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
 		<p><a href="http://eqdkp-plus.eu/about" data-ajax="false">Copyright 2014 EQdkp Plus Team</a></p>
@@ -1135,25 +1151,21 @@
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
 
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_shouts">Shoutbox</span></h1>	
-		
-		<div class="message">
-		</div>
-		<div id="content_shouts" style="display:none;">
-			<div id="shouts"></div>
-			<div id="shoutform">
-				<textarea id="shouttext"></textarea>
-				<button onclick="shout();" id="shoutButton" data-icon="check" data-theme="b">Shout!</button>	
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+			<h1><span class="loc_shouts">Shoutbox</span></h1>	
+			
+			<div class="message">
+			</div>
+			<div id="content_shouts" style="display:none;">
+				<div id="shouts"></div>
+				<div id="shoutform">
+					<textarea id="shouttext"></textarea>
+					<button onclick="shout();" id="shoutButton" data-icon="check" data-theme="b">Shout!</button>	
+				</div>
 			</div>
 		</div>
-
-	</div><!-- /content -->
-	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-				<ul class="eq-sidenav" data-role="listview">
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1167,7 +1179,6 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
 			</a>
 			
 			</li>
@@ -1190,8 +1201,8 @@
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
-
+	</div><!-- /content -->
+	
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
 		<p><a href="http://eqdkp-plus.eu/about" data-ajax="false">Copyright 2014 EQdkp Plus Team</a></p>
@@ -1214,18 +1225,15 @@
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
 
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_raids">Raids</span></h1>	
-		<div class="message">
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+			<h1><span class="loc_raids">Raids</span></h1>	
+			<div class="message">
+			</div>
+			<div id="content_raids">
+			</div>	
 		</div>
-		<div id="content_raids">
-		</div>	
-	</div><!-- /content -->
-	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-				<ul class="eq-sidenav" data-role="listview">
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1239,7 +1247,6 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
 			</a>
 			
 			</li>
@@ -1262,8 +1269,8 @@
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
-
+	</div><!-- /content -->
+	
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
 		<p><a href="http://eqdkp-plus.eu/about" data-ajax="false">Copyright 2014 EQdkp Plus Team</a></p>
@@ -1284,55 +1291,53 @@
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
 
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_raids">Raids</span></h1>	
-		<div class="message">
-		</div>
-
-		<div id="content_show_raid" style="display:none;">
-			<div id="show_raid_title"></div>
-		
-		<div class="ui-body ui-body-e ui-corner-all ui-shadow" id="infos" style="display:none; margin-bottom: 15px;">
-		</div>
-		<br />
-		<ul data-role="listview"  data-inset="true">
-			<li><div class="ui-bar ui-bar-c" id="raid_status_count_0"></div></li>
-			<li><div class="ui-bar ui-bar-c" id="raid_status_count_1"></div></li>
-			<li><div class="ui-bar ui-bar-c" id="raid_status_count_2"></div></li>
-			<li><div class="ui-bar ui-bar-c" id="raid_status_count_3"></div></li>
-		</ul>
-		
-		<br />
-		<div class="ui-body ui-body-a ui-corner-all ui-shadow" id="signup_form" style="display:none;">
-			<h3 class="loc_raid_signup">Signup for this Raid</h3>
-			<div data-role="fieldcontain">
-				<label for="charSelect" class="loc_select_char">Select Char:</label>
-				<select id="charSelect" onchange="changeRoles();" name="charSelect" data-native-menu="false"></select>
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+			<h1><span class="loc_raids">Raids</span></h1>	
+			<div class="message">
 			</div>
-			<div data-role="fieldcontain" id="rolerow">
-				<label for="roleSelect" class="loc_select_role">Select Role:</label>
-				<select id="roleSelect" data-native-menu="false" name="roleSelect"></select>
-			</div>
-			<div data-role="fieldcontain">
-				<label for="statusSelect" class="loc_select_status">Select Status</label>
-				<select id="statusSelect" name="statusSelect" data-native-menu="false"></select>
-			</div>
-			<div data-role="fieldcontain">
-				<label for="note" class="loc_note">Note</label>
-				<input type="text" id="note" name="note" />
-			</div>
-			<button name="signup" onclick="raid_signup();" data-theme="b" id="signup_button">Signup</button>
-		</div>
-		
-		<div id="raid_comments"></div>
-		
-		</div>
-	</div><!-- /content -->
 	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-				<ul class="eq-sidenav" data-role="listview">
+			<div id="content_show_raid" style="display:none;">
+				<div id="show_raid_title"></div>
+			
+			<div class="ui-body-a ui-body ui-corner-all ui-shadow" id="infos" style="display:none;">
+			</div>
+			<br />
+			<ul data-role="listview"  data-inset="true">
+				<li><div class="ui-bar ui-bar-c" id="raid_status_count_0"></div></li>
+				<li><div class="ui-bar ui-bar-c" id="raid_status_count_1"></div></li>
+				<li><div class="ui-bar ui-bar-c" id="raid_status_count_2"></div></li>
+				<li><div class="ui-bar ui-bar-c" id="raid_status_count_3"></div></li>
+			</ul>
+			
+			<br />
+			<div class="ui-body ui-body-a ui-corner-all ui-shadow" id="signup_form" style="display:none;">
+				<h3 class="loc_raid_signup">Signup for this Raid</h3>
+				<div data-role="fieldcontain">
+					<label for="charSelect" class="loc_select_char">Select Char:</label>
+					<select id="charSelect" onchange="changeRoles();" name="charSelect" data-native-menu="false"></select>
+				</div>
+				<div data-role="fieldcontain" id="rolerow">
+					<label for="roleSelect" class="loc_select_role">Select Role:</label>
+					<select id="roleSelect" data-native-menu="false" name="roleSelect"></select>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="statusSelect" class="loc_select_status">Select Status</label>
+					<select id="statusSelect" name="statusSelect" data-native-menu="false"></select>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="note" class="loc_note">Note</label>
+					<input type="text" id="note" name="note" />
+				</div>
+				<button name="signup" onclick="raid_signup();" data-theme="b" id="signup_button">Signup</button>
+			</div>
+			<br />
+			<div id="raid_comments"></div>
+			
+			</div>
+		
+		</div>
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1346,11 +1351,9 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
 			</a>
-			
 			</li>
-			<li class="active"><a href="#raids" class="a_raids"><span class="loc_raids">Raids</span>
+			<li  class="active"><a href="#raids" class="a_raids"><span class="loc_raids">Raids</span>
 					<span class="fa-stack">
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
@@ -1369,7 +1372,7 @@
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
+	</div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
@@ -1392,20 +1395,16 @@
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
 
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_forum">Forum</span></h1>
-		
-		<div class="message">
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+			<h1><span class="loc_forum">Forum</span></h1>
+			
+			<div class="message">
+			</div>
+			<div id="content_forum">
+			</div>
 		</div>
-		<div id="content_forum">
-		</div>		
-
-	</div><!-- /content -->
-	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-		<ul class="eq-sidenav" data-role="listview">
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1419,7 +1418,6 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
 			</a>
 			
 			</li>
@@ -1429,7 +1427,7 @@
 					  <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
 					</span>
 			</a></li>
-			<li class="active"><a href="#forum" class="a_forum"><span class="loc_forum">Forum</span>
+			<li  class="active"><a href="#forum" class="a_forum"><span class="loc_forum">Forum</span>
 			
 				<span class="fa-stack">
 					  <i class="fa fa-circle fa-stack-2x"></i>
@@ -1442,8 +1440,9 @@
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
 
+	</div><!-- /content -->
+	
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
 		<p><a href="http://eqdkp-plus.eu/about" data-ajax="false">Copyright 2014 EQdkp Plus Team</a></p>
@@ -1467,18 +1466,14 @@
 		<a href="#eq-login-panel" class="eq-login-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-lock ui-nodisc-icon ui-alt-icon ui-btn-right">Login</a>
 	</div><!-- /header -->
 
-	<div role="main" class="ui-content eq-content">
-
-		<h1><span class="loc_points">Points</span></h1>
-		<div class="message">
+	<div role="main" class="ui-content">
+		<div class="eq-content">
+			<h1><span class="loc_points">Points</span></h1>
+			<div class="message">
+			</div>
+			<div id="content_points"></div>
 		</div>
-		<div id="content_points"></div>
-
-	</div><!-- /content -->
-	
-	
-	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
-		<ul class="eq-sidenav" data-role="listview">
+		<ul class="eq-sidenav-tablet" data-role="listview">
 			<li><a href="#main"><span class="loc_news">Home</span>
 			
 			<span class="fa-stack">
@@ -1492,7 +1487,6 @@
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
 					</span>
-			
 			</a>
 			
 			</li>
@@ -1509,13 +1503,14 @@
 					  <i class="fa fa-comments fa-stack-1x fa-inverse"></i>
 					</span>
 			</a></li>
-			<li class="active"><a href="#points" class="a_points"><span class="loc_points">Points</span>
+			<li  class="active"><a href="#points" class="a_points"><span class="loc_points">Points</span>
 			<span class="fa-stack">
 					  <i class="fa fa-circle fa-stack-2x"></i>
 					  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
 					</span></a></li>
 		</ul>
-	</div><!-- /panel -->
+
+	</div><!-- /content -->
 
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false" class="eq-footer">
 		<p><a href="../" rel="external" class="loc_fulllink" data-ajax="false">Back to full version</a></p>
@@ -1525,7 +1520,7 @@
 </div><!-- /page -->
 
 
-<!-- EXTERNAL CONTENT 
+<!-- LOGIN PANEL
 ===========================================================================
 -->
 <div data-role="panel" class="eq-login-panel" data-position="right" data-display="overlay" data-theme="a" id="eq-login-panel">
@@ -1554,7 +1549,51 @@
 			<button onclick="javascript:logout();" id="logout_button" data-theme="b">Logout</button>
 		</div>
 	</div><!-- /content -->
+	</div><!-- /panel -->
 	
-</div><!-- /panel -->
+<!-- NAVIGATION PANEL
+===========================================================================
+-->
+
+	<div data-role="panel" class="eq-navmenu-panel eq-navmenu-panel-page" data-position="left" data-display="reveal" data-theme="a" id="eq-navmenu-panel">
+		<div data-role="content">
+			<ul class="eq-panelnav" data-role="listview">
+				<li><a href="#main"><span class="loc_news">Home</span>
+				
+				<span class="fa-stack">
+				  <i class="fa fa-circle fa-stack-2x"></i>
+				  <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+				</span>
+				
+				</a></li>
+				<li><a href="#shout" class="a_shout"><span class="loc_shouts">Shoutbox</span>
+						<span class="fa-stack">
+						  <i class="fa fa-circle fa-stack-2x"></i>
+						  <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i>
+						</span>
+				</a>				
+				</li>
+				<li><a href="#raids" class="a_raids"><span class="loc_raids">Raids</span>
+						<span class="fa-stack">
+						  <i class="fa fa-circle fa-stack-2x"></i>
+						  <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
+						</span>
+				</a></li>
+				<li><a href="#forum" class="a_forum"><span class="loc_forum">Forum</span>
+				
+					<span class="fa-stack">
+						  <i class="fa fa-circle fa-stack-2x"></i>
+						  <i class="fa fa-comments fa-stack-1x fa-inverse"></i>
+						</span>
+				</a></li>
+				<li><a href="#points" class="a_points"><span class="loc_points">Points</span>
+				<span class="fa-stack">
+						  <i class="fa fa-circle fa-stack-2x"></i>
+						  <i class="fa fa-list fa-stack-1x fa-inverse"></i>
+						</span></a></li>
+			</ul>
+		</div><!-- /content -->
+	
+	</div><!-- /panel -->
 </body>
 </html>
