@@ -433,6 +433,12 @@ class ManagePageLayouts extends page_generic {
 					$classes = array_keys($this->game->get('classes', 'id_0'));
 					$roles = $page_settings['listmembers_leaderboard']['columns'];
 				}
+				$arrGameClasses = array_keys($this->game->get('classes', 'id_0'));
+				$arrDiff = array_diff($arrGameClasses, $classes);
+				foreach($arrDiff as $val){
+					array_push($classes, $val);
+				}
+				
 				foreach($classes as $class){
 					$this->tpl->assign_block_vars('page_row.class_row', array(
 						'CLASS'	=> $class,

@@ -31,6 +31,11 @@ if ( !class_exists( "html_leaderboard" ) ) {
 			$this->mdkpid = ($mdkpid) ? $mdkpid : $settings['default_pool'];
 			$this->mdkpid = (in_array($this->mdkpid, $arrMdkpIDList)) ? $this->mdkpid : ((isset($arrMdkpIDList[0])) ? $arrMdkpIDList[0] : 0);
 			$columns = $settings['columns'];
+			$arrGameClasses = array_keys($this->game->get('classes', 'id_0'));
+			$arrDiff = array_diff($arrGameClasses, $columns);
+			foreach($arrDiff as $val){
+				array_push($columns, $val);
+			}
 			$break = (isset($settings['maxperrow'])) ? $settings['maxperrow'] : 5;
 			$max_member = (isset($settings['maxpercolumn'])) ? $settings['maxpercolumn'] : 5;
 			$sort = (isset($settings['sort_direction'])) ? $settings['sort_direction'] : 'asc';
