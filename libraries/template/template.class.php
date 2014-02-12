@@ -197,17 +197,19 @@ class template extends gen_class {
 		$data[] = array('content' => $strInlineCSS, 'path' => false);
 			
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
-		foreach($this->tpl_output['css_file'] as $key => $val){
-			if ($this->server_path == "/") {
-				$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
-			} else {
-				$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
-			}
-			if ($val['media'] == 'screen' && is_file($val['file'])){
-				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
-				$arrHash[] = md5_file($val['file']);
-				$arrFiles[] = $val['file']; 
-				unset($this->tpl_output['css_file'][$key]);		
+		if (is_array($this->tpl_output['css_file'])){
+			foreach($this->tpl_output['css_file'] as $key => $val){
+				if ($this->server_path == "/") {
+					$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
+				} else {
+					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
+				}
+				if ($val['media'] == 'screen' && is_file($val['file'])){
+					if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
+					$arrHash[] = md5_file($val['file']);
+					$arrFiles[] = $val['file']; 
+					unset($this->tpl_output['css_file'][$key]);		
+				}
 			}
 		}
 		

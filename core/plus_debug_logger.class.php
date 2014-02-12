@@ -374,10 +374,14 @@ if ( !defined('EQDKP_INC') ){
 								height: 100%;
 								line-height: 20px;
 							}
-									
+							
+							.wrapper{
+								background: url('.$this->root_path.'templates/maintenance/images/background-head.svg) no-repeat scroll center top transparent;
+								background-size: 100%;
+							}							
+							
 							.header {
 								padding-top: 10px;
-								background: url(../images/header_background.png) repeat-x scroll center top transparent;
 								font-size: 45px;
 								font-weight: bold;
 								text-shadow: 1px 1px 2px #fff;
@@ -400,7 +404,7 @@ if ( !defined('EQDKP_INC') ){
 								text-align: center;
 							}
 							
-							.footer a, .footer a:link {
+							.footer a, .footer a:link, .footer a:visited {
 								color: #fff;
 								text-decoration: none;
 							}
@@ -418,6 +422,7 @@ if ( !defined('EQDKP_INC') ){
 							    box-shadow: 2px 2px 3px 0 #000000;
 								padding: 10px;
 								margin-bottom: 20px;
+								margin-top: 10px;
 								width: 700px;
 							}
 									
@@ -461,7 +466,7 @@ if ( !defined('EQDKP_INC') ){
 									
 						<div class="wrapper">
 							<div class="header">
-								<img src="'.$this->root_path.'templates/maintenance/images/logo.svg" alt="EQdkp Plus" class="absmiddle" /> '.$strErrorName.'
+								<img src="'.$this->root_path.'templates/maintenance/images/logo.svg" alt="EQdkp Plus" class="absmiddle" style="height: 130px;"/> '.$strErrorName.'
 							</div>
 		
 							<div class="innerWrapper">
