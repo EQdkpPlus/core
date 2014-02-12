@@ -22,21 +22,21 @@ include_once($eqdkp_root_path . 'common.php');
 
 // the member & email check functionality. POST == security. Not use in-get!!!
 if(registry::register('input')->get('ajax', 0) == '1'){
-	if($_POST['username']){
+	if(isset($_POST['username'])){
 		if(registry::register('input')->exists('olduser') && registry::register('input')->get('olduser') === $_POST['username']){
 			echo 'true';
 		}else{
 			echo registry::register('plus_datahandler')->get('user', 'check_username', array(registry::register('input')->get('username')));
 		}
 	}
-	if($_POST['user_email']){
+	if(isset($_POST['user_email'])){
 		if(registry::register('input')->exists('oldmail') && urldecode(registry::register('input')->get('oldmail')) === $_POST['user_email']){
 			echo 'true';
 		}else{
 			echo registry::register('plus_datahandler')->get('user', 'check_email', array(registry::register('input')->get('user_email')));
 		}
 	}
-	if($_POST['oldpassword']){
+	if(isset($_POST['oldpassword'])){
 		echo registry::register('plus_datahandler')->get('user', 'check_password', array(registry::register('input')->get('oldpassword')));
 	}
 	exit;
