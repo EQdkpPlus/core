@@ -208,9 +208,9 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 		public function get_first_raid($member_id, $mdkp_id=null, $with_twink=true){
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null){
-				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['total']['first_date'])) ? 0 : $this->fl_raid_dates[$with_twink][$member_id]['total']['first_date'];
+				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['total']['first_date'])) ? 2147483647 : $this->fl_raid_dates[$with_twink][$member_id]['total']['first_date'];
 			} else {
-				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['first_date'])) ? 0 : $this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['first_date'];
+				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['first_date'])) ? 2147483647 : $this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['first_date'];
 			}
 		}
 
@@ -221,9 +221,9 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 		public function get_last_raid($member_id, $mdkp_id=null, $with_twink=true){
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null AND isset($this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'])){
-				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'])) ? 0 : $this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'];
+				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'])) ? 2147483647 : $this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'];
 			} elseif($mdkp_id AND isset($this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['last_date'])) {
-				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['last_date'])) ? 0 : $this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['last_date'];
+				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['last_date'])) ? 2147483647 : $this->fl_raid_dates[$with_twink][$member_id]['mdkp'][$mdkp_id]['last_date'];
 			}
 			return false;
 		}
