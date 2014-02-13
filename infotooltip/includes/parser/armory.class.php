@@ -136,7 +136,7 @@ if(!class_exists('armory')) {
 			
 			if(preg_match_all('#<a href=\"\/wow\/([a-z]{2})\/item\/(.*?)\" class=\"(.*?)\">#', $data, $matches)){
 				if((int)$matches[2] > 0){
-					$item_id = $matches[2];
+					$item_id = $matches[2][0];
 					$this->pdl->log('infotooltip', 'Item-ID found for '.$lang);
 				}
 			}
@@ -154,7 +154,8 @@ if(!class_exists('armory')) {
 				}
 			}
 
-			#echo $url;var_dump($matches);
+			#var_dump($matches);
+			#var_dump($item_id);
 
 			$debug_out = ($item_id > 0) ? 'Item-ID found: '.$item_id : 'No Item-ID found';
 			$this->pdl->log('infotooltip', $debug_out);
@@ -169,6 +170,7 @@ if(!class_exists('armory')) {
 				return $item;
 			}
 			$item_data = $this->bnet->item($item_id);
+			#var_dump($item_data);
 			$char_data = array();
 			if(!empty($data)) {
 				$char_data = $this->bnet->character($data[1], $data[0]);
