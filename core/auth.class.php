@@ -84,6 +84,8 @@ class auth extends user_core {
 
 		//Do we have an session? If yes, try to look if it's a valid session and get all information about it
 		if ($this->sid != ''){
+			$arrResult = false;
+			
 			$objQuery = $this->db->prepare("SELECT *
 								FROM __sessions s
 								LEFT JOIN __users u

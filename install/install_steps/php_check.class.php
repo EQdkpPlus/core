@@ -30,6 +30,7 @@ class php_check extends install_generic {
 			'php'		=> array(
 				'required'		=> VERSION_PHP_RQ.'+',
 				'installed'		=> phpversion(),
+				'recommended'	=> VERSION_PHP_REC,
 				'passfail'		=> (version_compare(PHP_VERSION, VERSION_PHP_RQ, '>=')) ? true : false,
 				'adviced_fail'	=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<=')) ? true : false
 			),

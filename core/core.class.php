@@ -395,7 +395,7 @@ class core extends gen_class {
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
 			$arrItems = array(
-				array('link' => 'index.php'.$this->SID,				'text' => $this->user->lang('home')),				
+				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home')),				
 				//array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
 				//array('link' => 'roster.php'.$this->SID,			'text' => $this->user->lang('menu_roster'),		'check' => 'u_roster_list'),
 				//array('link' => 'listraids.php'.$this->SID,			'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
@@ -403,7 +403,7 @@ class core extends gen_class {
 				//array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
 				//array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
 				//array('link' => 'calendar/index.php'.$this->SID,	'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
-				array('link' => $this->controller_path_plain.'User/'.$this->SID, 'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
+				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
 			);
 			
 			//Articles & Categories
