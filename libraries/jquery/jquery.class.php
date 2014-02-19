@@ -1402,7 +1402,7 @@ if (!class_exists("jquery")) {
 			$this->fileBrowser($type, 'image', $storageFolder);
 			
 			$default_img_svg	= str_replace('.png', '.svg', $options['noimgfile']);
-			$imgpreview			= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? ((file_exists($this->root_path.$default_img_svg)) ? $default_img_svg : $options['noimgfile']) : 'images/global/default-image.svg');echo $imgpreview;
+			$imgpreview			= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? ((file_exists($this->root_path.$default_img_svg)) ? $default_img_svg : $options['noimgfile']) : 'images/global/default-image.svg');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
 			
 			$imgprevheight	= (isset($options['prevheight'])) ? $options['prevheight'] : '120';
