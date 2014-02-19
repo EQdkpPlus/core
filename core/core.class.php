@@ -292,8 +292,15 @@ class core extends gen_class {
 			
 			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'LostPassword');
 			$strAvatarImg = ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($this->user->id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($this->user->id)), false, 'absolute') : $this->server_path.'images/global/avatar-default.svg';
-			$strHeaderLogoPath	= $this->server_path."templates/".$this->user->style['template_path']."/images/";
-						
+			$strHeaderLogoPath	= $this->root_path."templates/".$this->user->style['template_path']."/images/";
+
+			// the logo...
+			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
+				$headerlogo	= $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo');
+			}else{
+				$headerlogo	= (file_exists($strHeaderLogoPath."logo.svg")) ? $strHeaderLogoPath."logo.svg" : $strHeaderLogoPath."logo.png";
+			}
+
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
@@ -305,7 +312,7 @@ class core extends gen_class {
 				'EQDKP_ROOT_PATH'			=> $this->server_path,
 				'EQDKP_IMAGE_PATH'			=> $this->server_path.'images/',
 				'EQDKP_CONTROLLER_PATH'		=> $this->controller_path,
-				'HEADER_LOGO'				=> (is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))) ? $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo') : $this->server_path."templates/".$this->user->style['template_path']."/images/logo.png",
+				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 				'TEMPLATE_PATH'				=> $this->server_path . 'templates/' . $this->user->style['template_path'],
 				'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
@@ -746,7 +753,8 @@ class core extends gen_class {
 			}
 
 			//Call Social Plugins
-			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/logo.png");
+			$default_img_link	= $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/";
+			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : ((file_exists($default_img_link."logo.svg")) ? $default_img_link."logo.svg": $default_img_link."logo.png"));
 			$image = ($this->image != '') ? $this->image : $image;
 			$description = ($this->description != '') ? $this->description : (($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
