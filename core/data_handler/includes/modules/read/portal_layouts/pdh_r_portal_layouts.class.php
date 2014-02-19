@@ -5,15 +5,15 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2010
-* Date:			$Date: 2013-01-29 17:35:08 +0100 (Di, 29 Jan 2013) $
+* Date:			$Date$
 * -----------------------------------------------------------------------
-* @author		$Author: wallenium $
+* @author		$Author$
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkpplus
-* @version		$Rev: 12937 $
+* @version		$Rev$
 *
-* $Id: pdh_r_portal_layouts.class.php 12937 2013-01-29 16:35:08Z wallenium $
+* $Id$
 */
 
 if ( !defined('EQDKP_INC') ){

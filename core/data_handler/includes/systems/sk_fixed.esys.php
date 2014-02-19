@@ -5,15 +5,15 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2007
-* Date:			$Date: 2012-12-21 09:52:11 +0100 (Fr, 21. Dez 2012) $
+* Date:			$Date$
 * -----------------------------------------------------------------------
-* @author		$Author: godmod $
+* @author		$Author$
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkpplus
-* @version		$Rev: 12649 $
+* @version		$Rev$
 *
-* $Id: sk.esys.php 12649 2012-12-21 08:52:11Z godmod $
+* $Id$
 */
 
 if (!defined('EQDKP_INC')) {

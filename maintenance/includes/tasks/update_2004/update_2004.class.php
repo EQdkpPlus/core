@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2013-12-08 11:06:58 +0100 (So, 08 Dez 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13783 $
+ * @version		$Rev$
  *
- * $Id: update_2004.class.php 13783 2013-12-08 10:06:58Z godmod $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){

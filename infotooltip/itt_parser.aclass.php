@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2012-12-24 03:00:57 +0100 (Mo, 24 Dez 2012) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy_leon $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 12663 $
+ * @version		$Rev$
  * 
- * $Id: itt_parser.aclass.php 12663 2012-12-24 02:00:57Z hoofy_leon $
+ * $Id$
  */
 
 if(!class_exists('itt_parser')) {

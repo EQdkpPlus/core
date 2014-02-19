@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2007
- * Date:		$Date: 2013-01-09 20:51:38 +0100 (Mi, 09. Jan 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 12785 $
+ * @version		$Rev$
  *
- * $Id: pdh_r_suicide_kings_bottom.class.php 12785 2013-01-09 19:51:38Z godmod $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){

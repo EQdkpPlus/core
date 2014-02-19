@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2013
- * Date:		$Date: 2013-11-13 22:11:01 +0100 (Mi, 13 Nov 2013) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2013 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13719 $
+ * @version		$Rev$
  * 
- * $Id: hspinner.class.php 13719 2013-11-13 21:11:01Z wallenium $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){
