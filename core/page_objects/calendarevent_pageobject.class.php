@@ -612,7 +612,7 @@ class calendarevent_pageobject extends pageobject {
 							'TOOLTIP'			=> implode('<br />', $membertooltip),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : false),
-							'NOTE_TT'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? htmlspecialchars('<i class="fa fa-comment"> '.$sanitized_note.'</i>') : false),
+							'NOTE_TT'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? htmlspecialchars('<i class="fa fa-comment"></i> '.$sanitized_note) : false),
 							'RAIDGROUP_TT'		=> ($raidgroup > 0) ? htmlspecialchars('<i class="fa fa-users"> '.$this->pdh->get('raid_groups', 'name', array($raidgroup))) : false,
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],

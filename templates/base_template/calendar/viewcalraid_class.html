@@ -62,6 +62,7 @@
 											<!-- IF IS_OPERATOR -->
 											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-charadmintt-id="member_{raidstatus.classes.status.MEMBERID}"></span>
 											<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
+												<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
 												<fieldset class="settings">
 													<legend class="smaller"><i class="fa fa-random fa-lg"></i> {L_raidevent_raid_changecharmenu}</legend>
 													<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
@@ -69,18 +70,22 @@
 													{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
 													<button type="button" name="submit_charchange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
 												</fieldset><br/>
+												<!-- ENDIF -->
 												<fieldset class="settings">
 													<legend class="smaller"><i class="fa fa-comment fa-lg"></i> {L_raidevent_raid_changenotemenu}</legend>
 													<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 													<textarea name="notechange_note" cols="30" rows="3">{raidstatus.classes.status.NOTE}</textarea>
 													<button type="button" name="submit_notechange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
-												</fieldset><br/>
+												</fieldset>
+												<!-- IF SHOW_RAIDGROUPS -->
+												<br/>
 												<fieldset class="settings">
 													<legend class="smaller"><i class="fa fa-users fa-lg"></i> {L_raidevent_raid_groupsmenu}</legend>
 													{raidstatus.classes.status.GROUPS}
 													<input type="hidden" name="groupchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 													<button type="button" name="submit_groupchange" class="submit_groupchange" value="" style="float:right;"><i class="fa fa-check fa-lg"></i></button>
 												</fieldset>
+												<!-- ENDIF -->
 											</div>
 											<!-- ENDIF -->
 										</div>
