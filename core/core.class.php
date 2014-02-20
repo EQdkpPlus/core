@@ -292,13 +292,13 @@ class core extends gen_class {
 			
 			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'LostPassword');
 			$strAvatarImg = ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($this->user->id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($this->user->id)), false, 'absolute') : $this->server_path.'images/global/avatar-default.svg';
-			$strHeaderLogoPath	= $this->root_path."templates/".$this->user->style['template_path']."/images/";
+			$strHeaderLogoPath	= "templates/".$this->user->style['template_path']."/images/";
 
 			// the logo...
 			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
 				$headerlogo	= $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo');
 			}else{
-				$headerlogo	= (file_exists($strHeaderLogoPath."logo.svg")) ? $strHeaderLogoPath."logo.svg" : $strHeaderLogoPath."logo.png";
+				$headerlogo	= (file_exists($this->root_path.$strHeaderLogoPath."logo.svg")) ? $this->server_path.$strHeaderLogoPath."logo.svg" : $this->server_path.$strHeaderLogoPath."logo.png";
 			}
 
 			// Load the jQuery stuff
