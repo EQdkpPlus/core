@@ -187,7 +187,7 @@ class user_pageobject extends pageobject {
 		if (strlen($age)) $arrProfile['age'] = ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
 		if ($row['town'] != "") $arrProfile['town'] = (($row['ZIP_code'] != "") ? sanitize($row['ZIP_code']).' ': '').sanitize($row['town']);
 		if ($row['state'] != "") $arrProfile['state'] = sanitize($row['state']);
-		if ($row['country'] != "") $arrProfile['country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.png" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+		if ($row['country'] != "") $arrProfile['country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.svg" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
 		
 		foreach($arrProfile as $key => $val){
 			$this->tpl->assign_block_vars('profile_personal_row', array(

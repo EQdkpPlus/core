@@ -214,7 +214,7 @@ if (!class_exists("pdh_r_user")){
 			$country = $this->get_country($user_id);
 			if (strlen($country)){
 				$this->init_countries();
-				return '<img src="'.$this->server_path.'images/flags/'.strtolower($country).'.png" alt="'.$country.'" class="coretip" data-coretip="'.ucfirst(strtolower($this->countries[$country])).'" />';
+				return '<img src="'.$this->server_path.'images/flags/'.strtolower($country).'.svg" alt="'.$country.'" class="coretip" data-coretip="'.ucfirst(strtolower($this->countries[$country])).'" />';
 			}
 			return '';
 		}
