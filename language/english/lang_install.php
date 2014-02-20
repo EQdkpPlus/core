@@ -17,7 +17,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English 2.0	
-//Created by EQdkp Plus Translation Tool on  2013-08-19 16:40
+//Created by EQdkp Plus Translation Tool on  2014-02-20 09:20
 //File: language/english_2.0/lang_install.php
 //Source-Language: german_2.0
 
@@ -140,6 +140,9 @@ $lang = array(
 	"time_format" => 'H:i',
 	"date_long_format" => 'j. F Y',
 	"date_short_format" => 'd.m.y',
+	"style_jsdate_nrml" => 'dd/MM/YYYY',
+	"style_jsdate_short" => 'd.M',
+	"style_jstime" => 'h:mm tt',
 	"welcome_news_title" => 'Welcome to EQDKP-Plus',
 	"welcome_news" => '<p>The installation of your EQdkp Plus was completed successfully - you can now set it up according to your wishes.</p>
 <p>You can find assistance to administration and general use in our <a href="http://eqdkp-plus.eu/wiki/" target="_blank">Wiki</a>.</p>
