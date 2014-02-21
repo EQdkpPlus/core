@@ -38,7 +38,7 @@ if (!class_exists("timehandler")){
 			'a'		=> 'T',
 			'A'		=> 'TT',
 			'h'		=> 'hh',
-			'H'		=> 'hh',
+			'H'		=> 'HH',
 			'g'		=> 'h',
 			'G'		=> 'h',
 			'i'		=> 'mm',
