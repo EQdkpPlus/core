@@ -156,7 +156,7 @@ $lang = array(
 	'time_format'			=> 'H:i',
 	'date_long_format'		=> 'j. F Y',
 	'date_short_format'		=> 'd.m.y',
-	"style_jsdate_nrml"		=> "dd.MM.yyyy",
+	"style_jsdate_nrml"		=> "dd.MM.YYYY",
 	"style_jsdate_short"	=> "d.M",
 	"style_jstime"			=> "H:mm",
 	//Welcome-News

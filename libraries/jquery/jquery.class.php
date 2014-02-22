@@ -251,7 +251,7 @@ if (!class_exists("jquery")) {
 							".((isset($options['onlickjs'])) ? $options['onlickjs'] : '')."
 							var ".$name."_confirm = 
 								$('<div><\/div>')
-								.html('<div class=\"confirmdialog\"><span class=\"ui-icon ui-icon-alert\" style=\"float:left; margin:0 7px 200px 0;\"><\/span>".$this->sanitize($options['message'], false, true)."<\/div>')
+								.html('<div class=\"confirmdialog\"><i class=\"fa fa-exclamation-triangle fa-2x\" style=\"float:left; margin:0 7px 24px 0;\"></i>".$this->sanitize($options['message'], false, true)."<\/div>')
 								.dialog({
 									title: '".$this->sanitize($title)."',
 									resizable: false,
@@ -296,7 +296,7 @@ if (!class_exists("jquery")) {
 				case 'alert':
 					$jscod = "var ".$name."_alert = 
 								$('<div></div>')
-								.html('<p class=\"confirmdialog\"><span class=\"ui-icon ui-icon-alert\" style=\"float:left; margin:0 7px 20px 0;\"></span>".$this->sanitize($options['message'])."</p>')
+								.html('<p class=\"confirmdialog\"><i class=\"fa fa-exclamation-triangle fa-2x\" style=\"float:left; margin:0 7px 24px 0;\"></i>".$this->sanitize($options['message'])."</p>')
 								.dialog({
 								bgiframe: true,
 								modal: true,

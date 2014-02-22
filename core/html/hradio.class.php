@@ -62,7 +62,7 @@ class hradio extends html {
 			$data = (!empty($this->dependency[$key])) ? implode(',', $this->dependency[$key]) : '';
 			$dep = (!empty($this->dependency)) ? ' data-form-change="'.$data.'"' : '';
 			if($this->tolang) $opt = $this->user->lang($opt);
-			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
+			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/> '.$opt.'</label>&nbsp;';
 		}
 		return '<div id="'.$this->id.'">'.$radiobox.'</div>';
 	}

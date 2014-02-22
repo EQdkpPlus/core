@@ -121,8 +121,8 @@ class calendar_pageobject extends pageobject {
 	// Operator/Admin: Delete an event in the calendar
 	public function delete_event(){
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($this->in->get('eventid', 0))){
-			$delete_clones = ($this->in->get('delete_clones', 'false') != 'false') ? true : false;
-			$status = $this->pdh->put('calendar_events', 'delete_cevent', array($this->in->get('deleteid', 0), $delete_clones));
+			$clones_selection	= $this->in->get('cc_selection', 'this');
+			$status				= $this->pdh->put('calendar_events', 'delete_cevent', array($this->in->get('deleteid', 0), $clones_selection));
 			$this->pdh->process_hook_queue();
 			echo($status);
 			exit;
@@ -168,8 +168,9 @@ class calendar_pageobject extends pageobject {
 	public function get_json(){
 		$event_json		= array();
 		$filters		= ($this->in->exists('filters', 'int')) ? $this->in->getArray('filters', 'int') : false;
-		$range_start	= $this->time->fromformat($this->in->get('start', ''), DATE_ATOM);
-		$range_end		= $this->time->fromformat($this->in->get('end', ''), DATE_ATOM);
+		#$range_start	= $this->time->fromformat($this->in->get('start', ''), DATE_ATOM);
+		$range_start	= $this->time->fromformat($this->in->get('start', ''), 'Y-m-d');
+		$range_end		= $this->time->fromformat($this->in->get('end', ''), 'Y-m-d');
 
 		// parse the feeds
 		$feeds = $this->pdh->get('calendars', 'idlist', array('feed', $filters));
@@ -316,8 +317,8 @@ class calendar_pageobject extends pageobject {
 							'end'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
 							'allDay'				=> true,
 							'textColor'				=> '#000000',
-							'backgroundColor'	=> '#E8E8E8',
-							'borderColor'		=> '#7F7F7F'
+							'backgroundColor'		=> '#E8E8E8',
+							'borderColor'			=> '#7F7F7F'
 						);
 					}
 				}
@@ -356,6 +357,14 @@ class calendar_pageobject extends pageobject {
 			}
 		}
 
+		// the delete - series - dropdown
+		$deleteall_drpdown 	= array(
+			'this'		=> $this->user->lang('calendar_deleteall_drpdwn_this'),
+			'all'		=> $this->user->lang('calendar_deleteall_drpdwn_all'),
+			'future'	=> $this->user->lang('calendar_deleteall_drpdwn_future'),
+			'past'		=> $this->user->lang('calendar_deleteall_drpdwn_past'),
+		);
+
 		$this->tpl->assign_vars(array(
 			'STARTDAY'		=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
 			'JS_TIMEFORMAT'	=> ($this->config->get('default_jsdate_time') != '') ? $this->config->get('default_jsdate_time') : $this->user->lang('style_jstime'),
@@ -365,6 +374,7 @@ class calendar_pageobject extends pageobject {
 			'DD_CHARS'		=> $memberrole[0],
 			'DD_ROLES'		=> $memberrole[1],
 			'DD_STATUS'		=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
+			'DD_MULTIDEL'	=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
 			'TXT_NOTE'		=> new htext('member_note', array('size' => '20')),
 			'IS_OPERATOR'	=> $this->user->check_auth('u_cal_event_add', false),
 
