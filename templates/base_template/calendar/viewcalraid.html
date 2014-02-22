@@ -346,23 +346,21 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		
 	<!-- IF not RAID_CLOSED and not RAID_DEADLINE and not NO_CHAR_ASSIGNED -->
 	<div id="toogleRaidcalSignin">
-		<fieldset class="settings smallsettings" id="raidcal_signin_form" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
-			<legend>{L_raidevent_raid_signin}<span class="toggle_button">&nbsp;</span></legend>
-			<span class="toggle_container">
-				<dl>
-					<dt><label>{L_raidevent_raid_char_role}</label></dt>
-					<dd>{DD_MYCHARS} {DD_MYROLE}</dd>
-				</dl>
-				<dl>
-					<dt><label>{L_note}</label></dt>
-					<dd><input type="text" name="signupnote" size="45" class="input" value="{PLAYER_NOTE}" /></dd>
-				</dl>
-				<dl>
-					<dt><label>{L_status}</label></dt>
-					<dd>{DD_SIGNUPSTATUS} </dd>
-				</dl>
-				<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
-			</span>
+		<h2>{L_raidevent_raid_signin}<span class="toggle_button">&nbsp;</span></h2>
+		<fieldset class="toggle_container settings smallsettings" id="raidcal_signin_form" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
+			<dl>
+				<dt><label>{L_raidevent_raid_char_role}</label></dt>
+				<dd>{DD_MYCHARS} {DD_MYROLE}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_note}</label></dt>
+				<dd><input type="text" name="signupnote" size="45" class="input" value="{PLAYER_NOTE}" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_status}</label></dt>
+				<dd>{DD_SIGNUPSTATUS} </dd>
+			</dl>
+			<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
 		</fieldset>
 	</div>
 	
@@ -401,30 +399,28 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	<!-- ENDIF -->
 	<!-- IF IS_OPERATOR -->
 	<div id="toogleRaidcalModeration">
-		<fieldset class="settings smallsettings moderation_panel">
-			<legend>{L_raidevent_raid_moderation}<span class="toggle_button">&nbsp;</span></legend>
-			<span class="toggle_container">
-				<dl>
-					<dt><label>{L_raidevent_raid_mod_select}</label></dt>
-					<dd>
-						{DD_MODSIGNUPSTATUS} 
-						<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
-					</dd>
-				</dl>
-				<!-- IF SHOW_RAIDGROUPS -->
-				<dl>
-					<dt><label>{L_raidevent_raid_mod_raidgroup}</label></dt>
-					<dd>
-						{DD_MODRAIDGROUPS} 
-						<input type="submit" name="moderate_group" value="{L_raidevent_raid_modgroup}" class="mainoption bi_ok" />
-					</dd>
-				</dl>
-				<!-- ENDIF -->
-				<dl>
-					<dt><label>{L_raidevent_raid_confirmall}</label></dt>
-					<dd><input type="submit" disabled="disabled" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" id="button_confirmall"/></dd>
-				</dl>
-			</span>
+		<h2>{L_raidevent_raid_moderation}<span class="toggle_button">&nbsp;</span></h2>
+		<fieldset class="settings smallsettings moderation_panel toggle_container">
+			<dl>
+				<dt><label>{L_raidevent_raid_mod_select}</label></dt>
+				<dd>
+					{DD_MODSIGNUPSTATUS} 
+					<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
+				</dd>
+			</dl>
+			<!-- IF SHOW_RAIDGROUPS -->
+			<dl>
+				<dt><label>{L_raidevent_raid_mod_raidgroup}</label></dt>
+				<dd>
+					{DD_MODRAIDGROUPS} 
+					<input type="submit" name="moderate_group" value="{L_raidevent_raid_modgroup}" class="mainoption bi_ok" />
+				</dd>
+			</dl>
+			<!-- ENDIF -->
+			<dl>
+				<dt><label>{L_raidevent_raid_confirmall}</label></dt>
+				<dd><input type="submit" disabled="disabled" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" id="button_confirmall"/></dd>
+			</dl>
 		</fieldset>
 	</div>
 	<!-- IF SHOW_RAIDGROUPS -->

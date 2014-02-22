@@ -1965,7 +1965,7 @@ ul.portal_block {
 	line-height: 35px;
 }
 
-#raidcal_signin_form.settings legend span.toggle_button:before,  .moderation_panel.settings legend span.toggle_button:before {
+#raidcal_signin_form h2 span.toggle_button:before,  #toogleRaidcalModeration h2 span.toggle_button:before {
     float: none !important;
     font-size: 13px;
     line-height: 18px;
@@ -2804,11 +2804,12 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	max-height: 68px;
 	float: left;
 }
+
 .user-profile > .user-avatar img{
 	border: 1px solid #CCCCCC;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 1px 1px 2px #000000;
-    max-height: 68px;
+    height: 68px;
 }
 
 .user-name h2 {

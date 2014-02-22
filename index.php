@@ -26,10 +26,11 @@ class controller extends gen_class {
 	public function __construct() {
 		$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));
 		$blnCheckPostOld = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken(true)));
-		if ($this->in->exists('delete') && ($blnCheckPost || $blnCheckPostOld)){
+
+		if ($this->in->exists('delete') && ($blnCheckPost || $blnCheckPostOld || $this->user->checkCsrfGetToken($this->in->get('link_hash'), get_class($this).'delete'))){
 			$this->delete();
 		}
-		if ($this->in->exists('unpublish') && ($blnCheckPost || $blnCheckPostOld)){
+		if ($this->in->exists('unpublish') && ($blnCheckPost || $blnCheckPostOld || $this->user->checkCsrfGetToken($this->in->get('link_hash'), get_class($this).'unpublish'))){
 			$this->unpublish();
 		}
 		if ($this->in->exists('savevote')){
