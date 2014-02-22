@@ -70,18 +70,13 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 			//add new member
 			} else {
-				if($takechar) {
-					$data['mainid'] = $this->pdh->get('member','mainchar',array($this->user->data['user_id']));
-				}
-				if(empty($data['mainid']) || $data['mainid'] == 0) {
+				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->data['user_id'])) : 0;
+				/*if(empty($data['mainid']) || $data['mainid'] == 0) {
 					$table_infos = $this->db->get_table_information('__members');
 					$data['mainid'] = $table_infos['auto_increment'];
-				}
+				}*/
 				if(empty($data['profiledata'])) $data['profiledata'] = $this->profilefields($data);
 			}
-			
-			
-			
 			
 			//dont allow chars without a name
 			if(empty($data['name'])) return false;
@@ -127,7 +122,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['mainid'])){
 							$this->change_mainid($data['mainid'], $data['mainid']);
 						}
-					}						
+					}
 					return $member_id;
 				}
 			} else {
@@ -156,7 +151,12 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					$this->log_insert('action_member_added', $log_action);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					
-					//Überprüfe Ringabhängigkeit von Mainchars
+					// Set main ID
+					if(empty($data['mainid']) || $data['mainid'] == 0) {
+						$this->change_mainid($member_id, $member_id);
+					}
+
+					// Überprüfe Ringabhängigkeit von Mainchars
 					$this->pdh->process_hook_queue();
 					if ($member_id != $data['mainid']){
 						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['mainid'])){
