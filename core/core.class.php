@@ -348,6 +348,7 @@ class core extends gen_class {
 				'U_USER_PROFILE'			=> $this->routing->build('user', (isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous')), 'u'.$this->user->id),
 				'USER_TIMESTAMP'			=> $this->time->date("m/d/Y H:i:s"),
 				'USER_TIMESTAMP_ATOM'		=> $this->time->date(DATE_ATOM),
+				'USER_TIMEZONE'				=> $this->time->date("P"),
 				'USER_DATEFORMAT_LONG'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_long']),
 				'USER_DATEFORMAT_SHORT'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_short']),
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),

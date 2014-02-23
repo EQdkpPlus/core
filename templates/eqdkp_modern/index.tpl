@@ -25,8 +25,9 @@
 					
 			var user_timestamp_atom = "{USER_TIMESTAMP_ATOM}";
 			var user_clock_format = "dddd, {USER_DATEFORMAT_LONG} {USER_TIMEFORMAT}";
+			var user_timezone = "{USER_TIMEZONE}";
 			
-			var mymoment = moment(user_timestamp_atom);
+			var mymoment = moment(user_timestamp_atom).zone(user_timezone);
 			function user_clock(){	
 				var mydate = mymoment.format(user_clock_format);
 				$('.user_time').html(mydate);
