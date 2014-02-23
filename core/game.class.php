@@ -434,10 +434,10 @@ class game extends gen_class {
 	
 		if(!isset($this->class_colors[$style_id]['fetched']) || $this->class_colors[$style_id]['fetched'] == false) {
 			$this->class_colors[$style_id] = $this->pdh->get('class_colors', 'class_colors', array($style_id));
-			
-			if (count($this->class_colors[$style_id]) != count($this->get_primary_classes(array('id_0')))){
+			$classes = $this->get_primary_classes(array('id_0'));
+			if (count($this->class_colors[$style_id]) != count($classes)){
 				$arrGameColors = $this->gameinfo()->get_class_colors();
-				foreach($this->get($this->get_primary_classes(), 'id_0') as $key => $val){
+				foreach($classes as $key => $val){
 					if (!isset($this->class_colors[$style_id][$key]) && isset($arrGameColors[$key])){
 						$this->pdh->put('class_colors', 'add_classcolor', array($style_id, $key, $arrGameColors[$key]));
 					}
@@ -538,6 +538,7 @@ class game extends gen_class {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		foreach($class_dep as $class) {
 			if(isset($class['primary']) && $class['primary']) {
+				#pd($class);
 				return ($returnName) ? $class['name'] : $class['type'];
 			}
 		}
@@ -557,6 +558,7 @@ class game extends gen_class {
 		$todisplay[] = $primary;
 		
 		$ids = $this->get_assoc_classes($todisplay, $filter, $lang);
+		$ids = $ids['data'];
 		reset($todisplay);
 		$type = current($todisplay);
 		while($type != $primary) {
@@ -566,7 +568,7 @@ class game extends gen_class {
 			$ids = $ids[$admin_data[$type]];
 			$type = next($todisplay);
 		}
-		return $this->get($end, array($ids), $lang);
+		return $this->get($primary, array($ids), $lang);
 	}
 	
 	/**
@@ -880,6 +882,7 @@ class game extends gen_class {
 	 */
 	public function AddProfileFields() {
 		$this->pdh->put('profile_fields', 'truncate_fields');
+		$this->pdh->process_hook_queue();
 		// add fields for classes/subclasses etc
 		$class_data = $this->gameinfo()->get_class_dependencies();
 		// build an array with parent-name , child-name => child-type
