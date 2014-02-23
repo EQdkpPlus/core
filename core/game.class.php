@@ -811,7 +811,7 @@ class game extends gen_class {
 			return $this->data[$type][$lang][$id];
 		} else {
 			$this->pdl->log('game', 'ID "'.$id.'" does not exists for type "'.$type.'".');
-			pd(debug_backtrace());
+			pd();
 			return false;
 		}
 	}
@@ -936,9 +936,9 @@ class game extends gen_class {
 	public function load_default_roles() {
 		$this->pdh->put('roles', 'truncate_role');
 		if($this->type_exists('roles')) {
-			$roles = $this->get('roles');
+			$roles = $this->gameinfo()->default_roles;
 			foreach($roles as $roleid => $classes){
-				$this->pdh->put('roles', 'insert_role', array($roleid, $this->glang('role'.$roleid), implode('|', $classes)));
+				$this->pdh->put('roles', 'insert_role', array($roleid, $this->get_name('roles', $roleid), implode('|', $classes)));
 			}
 		} else {
 			if($this->installer) $role_lang = array($this->lang['role_healer'], $this->lang['role_tank'], $this->lang['role_range'], $this->lang['role_melee']);

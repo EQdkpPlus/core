@@ -339,10 +339,18 @@ class update_2000 extends sql_update_task {
 	}
 	
 	// Transfer data into new format
-	// (maybe do that for: class, race, level)
 	public function before_update_function() {
-		//TODO: Implement!!
-		//TODO: profile-fields xml to json
+		// convert profile-fields from xml to json
+		$objQuery = $this->db->query("SELECT member_id, profiledata, member_race_id as race, member_level as level, member_class_id as class FROM __members;");
+		$profiledata = array();
+		while($objQuery && $row = $objQuery->fetchAssoc()) {
+			$profiledata = $this->xmltools->Database2Array($row['profiledata']);
+			$profiledata['class'] = $row['class'];
+			$profiledata['race'] = $row['race'];
+			$profiledata['level'] = $row['level'];
+			$this->db->query("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => $profiledata))->execute($row['member_id']);
+		}
+		return true;
 	}
 	 
 	//Settings, Migrate News and Infopages, Update Colors
