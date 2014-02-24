@@ -99,7 +99,19 @@ class wrapper_pageobject extends pageobject {
 		if (!$this->data || $this->data['url'] == ''){
 			message_die('URL not found');
 		} else {
-			
+			//Direkt link to a page in the wrapper
+			if (strlen($this->in->get('p'))){
+				$arrReplace = array(':', '\\');
+				$direktLink = urldecode($this->in->get('p'));
+				$direktLink = str_replace($arrReplace, "", $direktLink);
+				$arrParts = parse_url($direktLink);
+				$direktLink = $arrParts['path'];
+				if (isset($arrParts['query'])) $direktLink .= '?'.$arrParts['query'];
+				if (!filter_var($direktLink, FILTER_VALIDATE_URL)){
+					$this->data['url'] = $this->data['url'].$direktLink;
+				}		
+			}
+
 			$sop = parse_url($this->data['url']);
 			$sop = ( $sop['host'] == $this->env->server_name) ? true : false;
 			$output = '<div id="wrapper">';
