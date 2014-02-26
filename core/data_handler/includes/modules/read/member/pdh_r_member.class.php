@@ -516,8 +516,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_other_members($member_id){
 			$twinks = array();
 			foreach($this->data as $id => $details){
-			if($details['main_id'] == $this->get_mainid($member_id) && $id != $member_id)
-				$twinks[] = $id;
+				if($details['main_id'] == $this->get_mainid($member_id) && $id != $member_id && $details['requested_del'] != '1' && $details['require_confirm'] != '1')
+					$twinks[] = $id;
 			}
 			return $twinks;
 		}
