@@ -293,7 +293,7 @@ class bnet_armory {
 	* @return string
 	*/
 	public function characterIcon($chardata, $forceUpdateAll = false){
-		$cached_img	= str_replace('/', '_', 'image_character_'.$this->_config['serverloc'].'_'.$chardata['thumbnail']);
+		$cached_img	= str_replace(array('/', '-'), '_', 'image_character_'.$this->_config['serverloc'].'_'.$chardata['thumbnail']);
 		$img_charicon	= $this->get_CachedData($cached_img, false, true);
 		if(!$img_charicon && ($forceUpdateAll || ($this->chariconUpdates < $this->_config['maxChariconUpdates']))){
 			$this->set_CachedData($this->read_url($this->_config['apiRenderUrl'].sprintf('%s/%s', $this->_config['serverloc'], $chardata['thumbnail'])), $cached_img, true);
@@ -335,7 +335,7 @@ class bnet_armory {
 			default: $dtype_ending = 'profilemain';
 		}
 		$imgfile = str_replace('avatar.jpg', $dtype_ending.'.jpg', $chardata['thumbnail']);
-		$cached_img	= str_replace('/', '_', 'image_big_character_'.$this->_config['serverloc'].'_'.$imgfile);
+		$cached_img	= str_replace(array('/', '-'), '_', 'image_big_character_'.$this->_config['serverloc'].'_'.$imgfile);
 		$img_charicon	= $this->get_CachedData($cached_img, false, true);
 		if(!$img_charicon || $forceUpdateAll){
 			$this->set_CachedData($this->read_url($this->_config['apiRenderUrl'].sprintf('%s/%s', $this->_config['serverloc'], $imgfile)), $cached_img, true);
