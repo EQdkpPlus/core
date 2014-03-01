@@ -101,7 +101,7 @@ class wrapper_pageobject extends pageobject {
 		} else {
 			//Direkt link to a page in the wrapper
 			if (strlen($this->in->get('p'))){
-				$arrReplace = array(':', '\\');
+				$arrReplace = array(':', '\\', '&#58');
 				$direktLink = urldecode($this->in->get('p'));
 				$direktLink = str_replace($arrReplace, "", $direktLink);
 				$arrParts = parse_url($direktLink);
