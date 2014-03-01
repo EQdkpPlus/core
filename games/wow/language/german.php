@@ -168,7 +168,7 @@ $german_array = array(
 		'uc_error_noserver'				=> 'Es wurde kein Server in den globalen Einstellungen gefunden. Dieser wird für die Nutzung dieses Features jedoch benötigt. Bitte benachrichtige einen Administrator.',
 	
 		// Armory Import
-		"uc_updat_armory" 				=> "Vom batle.net aktualisieren",
+		"uc_updat_armory" 				=> "Vom battle.net aktualisieren",
 		'uc_charname'					=> 'Charaktername',
 		'uc_servername'					=> 'Servername',
 		'uc_charfound'					=> "Der Charakter  <b>%1\$s</b> wurde im battle.net gefunden.",
