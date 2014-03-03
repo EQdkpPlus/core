@@ -86,15 +86,17 @@ class guildImporter extends page_generic {
 			return '<div class="errorbox roundbox"><div class="icon_ok" id="error_message_txt">'.$this->game->glang('uc_imp_noguildname').'</div></div>';
 		}
 		
-		//Suspend all Chars
-		if ($this->in->get('delete_old_chars',0)){
-			$this->pdh->put('member', 'suspend', array('all'));
-		}
+
 		
 		// generate output
 		$guilddata	= $this->game->obj['armory']->guild($this->in->get('guildname', ''), $this->config->get('uc_servername'), true);
 
 		if(!isset($guilddata['status'])){
+			//Suspend all Chars
+			if ($this->in->get('delete_old_chars',0)){
+				$this->pdh->put('member', 'suspend', array('all'));
+			}
+		
 			$hmtlout = '<div id="guildimport_dataset">
 							<div id="controlbox">
 								<fieldset class="settings">

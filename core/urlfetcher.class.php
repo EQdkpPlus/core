@@ -99,7 +99,7 @@ class urlfetcher  extends gen_class {
 			curl_close($curl);
 			return $getdata;	
 		} else {
-			$curlOptions[CURLOPT_HEADER] = true;
+			$curlOptions[CURLOPT_HEADER] = false;
 			$curlOptions[CURLOPT_FORBID_REUSE] = false;
 			$curlOptions[CURLOPT_RETURNTRANSFER] = true;
 			
