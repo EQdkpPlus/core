@@ -79,7 +79,6 @@ class hfile extends html {
 		if ($this->mimetypes){
 			$mime = false;
 			if(function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')){
-				echo "finfo";
 				$finfo			= finfo_open(FILEINFO_MIME);
 				$mime			= finfo_file($finfo, $tempname);
 				finfo_close($finfo);
@@ -87,7 +86,6 @@ class hfile extends html {
 				$mime = array_shift(preg_split('/[; ]/', $mime));					
 				if (!in_array($mime, $this->mimetypes)) return false;
 			}elseif(function_exists('mime_content_type')){
-				echo "mime_content";
 				$mime			= mime_content_type( $tempname );
 				$mime = array_shift(preg_split('/[; ]/', $mime));
 				if (!in_array($mime, $this->mimetypes)) return false;

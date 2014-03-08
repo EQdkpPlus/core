@@ -142,7 +142,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		}
 
 		public function get_id_list() {
-			return array_keys($this->index);
+			return $this->index;
 		}
 
 		public function get_lastxlogs($amount=10) {
