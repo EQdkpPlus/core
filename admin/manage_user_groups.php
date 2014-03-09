@@ -298,18 +298,22 @@ class Manage_User_Groups extends page_generic {
 				ORDER BY u.username '.(($order == '0.0') ? 'ASC' : 'DESC');
 		
 		$user_query = $this->db->query($sql);
+		$userNames = $user_data = array();
 		if ($user_query){
 			while($row = $user_query->fetchAssoc()){
 				$user_data[$row['user_id']] = $row;
+				$userNames[$row['user_id']] = $row['username'];
 			}
 		}
+		
+		natcasesort($userNames);
 		
 		$not_in = array();
 		
 		//Bring all members from Group to template
-		foreach($user_data as $key => $elem) {
+		foreach($userNames as $key => $name) {
 			if (in_array($key, $members)){
-			
+			$elem = $user_data[$key];
 			$user_online = ( !empty($elem['session_id']) ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 			$user_active = ( $elem['user_active'] == '1' ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 			
@@ -327,7 +331,7 @@ class Manage_User_Groups extends page_generic {
 			
 
 			} else {
-				$not_in[$key] = $elem['username'];
+				$not_in[$key] = $name;
 			}
 
 		}
