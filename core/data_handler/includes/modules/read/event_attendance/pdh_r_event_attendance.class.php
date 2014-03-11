@@ -120,7 +120,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 			}
 			//cache it and let it expire at midnight
 			$stm = 86400-$this->time->time%86400;
-			$this->pdc->put('pdh_member_attendance_'.$time_period.'_'.$member_id, $this->attendance[$time_period][$member_id], $stm);
+			$this->pdc->put('pdh_event_attendance_'.$time_period.'_'.$member_id, $this->attendance[$time_period][$member_id], $stm);
 		}
 
 		public function get_attendance($member_id, $event_id, $time_period, $with_twinks=true, $count=false){
