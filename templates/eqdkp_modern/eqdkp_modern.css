@@ -2601,8 +2601,8 @@ blockquote:before {
 	display: block;
 }
 
-.tableHeader.floatRight {
-	margin-bottom: 5px;
+.tableHeader {
+	padding-bottom: 5px;
 }
 
 table.leaderboard tbody tr td {

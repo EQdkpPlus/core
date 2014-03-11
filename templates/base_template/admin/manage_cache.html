@@ -107,12 +107,17 @@
 </fieldset>
 
 <!-- IF PDC_CACHE_ENABLED -->
+<br />
 <fieldset class="settings">
 	<legend>{L_pdc_table}</legend>
 	<div class="infobox infobox-large infobox-blue clearfix">
 		<i class="fa fa-info-circle fa-4x pull-left"></i> {L_CACHE_TABLE_INFO}
 	</div>
 	<br />
+	<div class="tableHeader floatRight">
+		<button type="submit" name="cache_clear" class="mainoption"><i class="fa fa-times"></i>{L_pdc_clear}</button>
+		<button type="submit" name="cache_cleanup" class="mainoption"><i class="fa fa-trash-o"></i>{L_pdc_cleanup}</button>
+	</div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch hoverrows">
 		<tr>
 			<th>{L_pdc_globalprefix}</th>

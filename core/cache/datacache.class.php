@@ -220,6 +220,11 @@ if( !class_exists( "datacache" ) ) {
 }//end if
 
 if( !class_exists( "cachePagination" ) ) {
+	/**
+	 * This Cache tries to load big Data into Chunks and handles the access to save memory and execution time, because it let's to the Database some Operations like Sorting and Searching
+	 * 
+	 * @author GodMod
+	 */
 	class cachePagination extends gen_class {
 		
 		protected $strCacheKey = "";
@@ -231,7 +236,15 @@ if( !class_exists( "cachePagination" ) ) {
 		protected $index = array();
 		protected $data = array();
 		
-		//Finished
+		/**
+		 * Constructor
+		 * 
+		 * @param string $strCacheKey - Name of the Cache Key
+		 * @param string $strID - Name of the Primary Key
+		 * @param string $strTableName - Name of the Table, e.g. __items
+		 * @param string $arrQuerys - Array with specific Querys, if the generic Query won't work
+		 * @param number $intItemsPerChunk - Items per Chunk, Default 50
+		 */
 		public function __construct($strCacheKey, $strID, $strTableName, $arrQuerys=array('index' => '', 'chunk' => '', 'direct' => '', 'tag_direct' => ''), $intItemsPerChunk=50){
 			$this->strCacheKey = $strCacheKey;
 			$this->intItemsPerChunk = $intItemsPerChunk;
@@ -240,7 +253,11 @@ if( !class_exists( "cachePagination" ) ) {
 			$this->strTablename = $strTableName;
 		}
 				
-		//Finished
+		/**
+		 * Builds the Index-File with all Primary IDs
+		 * 
+		 * @return boolean
+		 */
 		public function initIndex(){
 			$this->index = $this->pdc->get('pdh_'.$this->strCacheKey.'_index');
 			if ($this->index == null){
@@ -257,12 +274,21 @@ if( !class_exists( "cachePagination" ) ) {
 			return true;
 		}
 		
-		//Finished
+		/**
+		 * Returns an array with all Primary IDs 
+		 * 
+		 * @return array: IDs
+		 */
 		public function getIndex(){
 			return $this->index;
 		}
 		
-		//Finished
+		/**
+		 * Gets a Object from the Database, saves it to the Cache-Chunks
+		 * 
+		 * @param integer $intObjectID
+		 * @return boolean
+		 */
 		public function initObject($intObjectID){
 			$intChunkID = $this->calculateChunkID($intObjectID);
 
@@ -293,7 +319,13 @@ if( !class_exists( "cachePagination" ) ) {
 			return false;
 		}
 		
-		//Finished
+		
+		/**
+		 * Internal function for getting Object from Cache
+		 * 
+		 * @param integer $intObjectID
+		 * @return array/boolean Data
+		 */
 		private function getObject($intObjectID){
 			$blnResult = $this->initObject($intObjectID);
 			if (!$blnResult) return false;
@@ -303,7 +335,13 @@ if( !class_exists( "cachePagination" ) ) {
 			return false;
 		}
 		
-		//Finished
+		/**
+		 * Returns an Object; You can filter the returned data for a specific Column
+		 * 
+		 * @param integer $intObjectID
+		 * @param string $strObjectTag
+		 * @return array/boolean Data
+		 */
 		public function get($intObjectID, $strObjectTag = false){
 			$dataSet = $this->getObject($intObjectID);
 			if ($dataSet){
@@ -314,7 +352,14 @@ if( !class_exists( "cachePagination" ) ) {
 			return false;
 		}
 		
-		//Finished
+		
+		/**
+		 * Returns an Object direct from the Database; You can filter the returned data for a specific Column
+		 * 
+		 * @param integer $intObjectID
+		 * @param string $strObjectTag
+		 * @return array/boolean Data
+		 */
 		public function getDirect($intObjectID, $strObjectTag = false){
 			$strQuery = (isset($this->arrQuerys['direct']) && strlen($this->arrQuerys['direct'])) ? $this->arrQuerys['direct'] : "SELECT * FROM ".$this->strTablename." WHERE ".$this->strID." = ?";
 			$objQuery = $this->db->prepare($strQuery)->execute($intObjectID);
@@ -327,7 +372,13 @@ if( !class_exists( "cachePagination" ) ) {
 			return false;
 		}
 		
-		//Finished
+		/**
+		 * Returns an Array where the Index is the ObjectID, and the Value is the ObjectTag Value
+		 * E.g. getAssocTagDirect("item_name") returns array(1 => 'Axt', 2 => 'Handschuhe', ...)
+		 * 
+		 * @param string $strObjectTag
+		 * @return array IDs
+		 */
 		public function getAssocTag($strObjectTag){
 			$arrOut = array();
 			foreach($this->index as $id){
@@ -337,7 +388,14 @@ if( !class_exists( "cachePagination" ) ) {
 			return $arrOut;
 		}
 		
-		//Finished
+
+		/**
+		 * Returns an Array directly from the Database where the Index is the ObjectID, and the Value is the ObjectTag Value
+		 * E.g. getAssocTagDirect("item_name") returns array(1 => 'Axt', 2 => 'Handschuhe', ...)
+		 * 
+		 * @param string $strObjectTag
+		 * @return array IDs
+		 */
 		public function getAssocTagDirect($strObjectTag){
 			$strQuery = (isset($this->arrQuerys['tag_direct']) && strlen($this->arrQuerys['tag_direct'])) ? $this->arrQuerys['tag_direct'] : "SELECT ".$this->strID.",".$strObjectTag." FROM ".$this->strTablename;
 			
@@ -351,12 +409,24 @@ if( !class_exists( "cachePagination" ) ) {
 			return $arrOut;
 		}
 		
-		//Finished
+
+		/**
+		 * Calculates the Chunk-ID for a ObjectID
+		 * 
+		 * @param integer $intObjectID
+		 * @return number
+		 */
 		private function calculateChunkID($intObjectID){
 			return ($intObjectID-($intObjectID%$this->intItemsPerChunk))/$this->intItemsPerChunk;
 		}
 		
-		//Finished
+
+		/**
+		 * Reset Cache and Index
+		 * 
+		 * @param array $mixedIDs
+		 * @return boolean
+		 */
 		public function reset($mixedIDs = false){
 			//Delete Everything
 			if ($mixedIDs === false) {
@@ -376,7 +446,14 @@ if( !class_exists( "cachePagination" ) ) {
 			return true;
 		}
 		
-		//Finished
+
+		/**
+		 * Sort for a specific column
+		 * 
+		 * @param string $strObjectTag Column
+		 * @param string $strSortDirection Sort-direction
+		 * @return array IDs
+		 */
 		public function sort($strObjectTag, $strSortDirection = "asc"){
 			$strSortDirection = (strtolower($strSortDirection) == "asc") ? "ASC" : "DESC";
 			$strQuery = (isset($this->arrQuerys['sort']) && strlen($this->arrQuerys['sort'])) ? $this->arrQuerys['sort'] : "SELECT ".$this->strID." FROM ".$this->strTablename." ORDER BY ";
@@ -390,6 +467,36 @@ if( !class_exists( "cachePagination" ) ) {
 				}
 			}
 			return $arrOut;
+		}
+		
+		
+
+
+		/**
+		 * Search for a specific Tag-Value
+		 * 
+		 * @param string $strObjectTag Column
+		 * @param string $strSearchValue SearchValue
+		 * @param boolean $allowParts False if Result must be identical with SearchValue, True if SearchValue can be a part of result
+		 * @return array IDs
+		 */
+		public function search($strObjectTag, $strSearchValue, $allowParts=false){
+			if ($allowParts){
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." LIKE '%.$this->db->escapeString($strSearchValue).'%";
+					
+			} else {
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." LIKE '.$this->db->escapeString($strSearchValue).'";
+			}
+
+			$objQuery = $this->db->prepare($strQuery)->execute();
+			$arrOut = array();
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrOut[] = $row[$this->strID];
+				}
+			}
+			return $arrOut;
+			
 		}
 	}
 }
