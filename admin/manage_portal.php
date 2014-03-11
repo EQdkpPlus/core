@@ -485,7 +485,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'S_MIDDLE_HIDDEN'	=> (!in_array('middle', $arrUsedBlocks)),
 				'S_BOTTOM_HIDDEN'	=> (!in_array('bottom', $arrUsedBlocks)),
 				'LAYOUT_ID'			=> $intLayoutID,
-				'EMBEDD_URL'		=> $this->env->link,
+				'EMBEDD_URL'		=> str_replace(array("https:", "http:"), "", $this->env->link),
 		));
 		
 		$this->jquery->Validate("portal_layout_form");

@@ -89,7 +89,7 @@ class urlfetcher  extends gen_class {
 			CURLOPT_HTTPAUTH		=> CURLAUTH_ANY,
 			CURLOPT_HTTPHEADER		=> ((is_array($header) && count($header) > 0) ? $header : array())
 		);
-		if (@ini_get('open_basedir') == '' && (!@ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
+		if (false) {
 			$curlOptions[CURLOPT_FOLLOWLOCATION] = true;
 			
 			$curl = curl_init();
@@ -98,7 +98,7 @@ class urlfetcher  extends gen_class {
 			curl_close($curl);
 			return $getdata;	
 		} else {
-			$curlOptions[CURLOPT_HEADER] = false;
+			$curlOptions[CURLOPT_HEADER] = true;
 			$curlOptions[CURLOPT_FORBID_REUSE] = false;
 			$curlOptions[CURLOPT_RETURNTRANSFER] = true;
 			
@@ -141,7 +141,10 @@ class urlfetcher  extends gen_class {
 			curl_setopt($curl, CURLOPT_URL, $newurl);
 			$getdata = curl_exec($curl);
 			curl_close($curl);
-			return $getdata;
+			//Remove Header
+			list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
+			 
+			return $page;
 		}
 	}
 	

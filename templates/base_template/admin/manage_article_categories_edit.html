@@ -29,7 +29,7 @@ function check_alias() {
 
 function calculate_permission(perm, gid, obj){
 	tr = $(obj).closest('tr');
-	tr.find('.calc-perm').html('<i class="fa-spinner fa-spin fa-lg"></i>');
+	tr.find('.calc-perm').html('<i class="fa fa-spinner fa-spin fa-lg"></i>');
 				
 	jQuery.ajax({
 			type: "POST",
