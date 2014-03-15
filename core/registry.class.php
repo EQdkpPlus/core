@@ -48,13 +48,12 @@ final class registry extends super_registry{
 	}
 	
 	public static function register($classname, $params=array(), $diff_inst=false) {
-		$hash = 0;
+		$hash = 'default';
 		if($diff_inst) {
 			$hash = $diff_inst;
 		} elseif(!empty($params)) {
-			$hash = serialize($params);
+			$hash = md5(serialize($params));
 		}
-		$hash = md5($hash);
 		if(isset(self::$inst[$classname][$hash])) {
 			return self::$inst[$classname][$hash];
 		}
@@ -69,6 +68,11 @@ final class registry extends super_registry{
 		}
 		self::$inst[$classname][$hash]->class_hash = $hash;
 		return self::$inst[$classname][$hash];
+	}
+	
+	public static function grab($classname, $hash) {
+		if(isset(self::$inst[$classname][$hash])) return self::$inst[$classname][$hash];
+		return null;
 	}
 
 	public static function fetch($name, $params=array()) {
@@ -102,7 +106,7 @@ final class registry extends super_registry{
 			}
 		}
 		self::_destruct($class, $class_hash);
-		self::$destruct_started = false;
+		#self::$destruct_started = false;
 	}
 	
 	private static function _destruct($class, $class_hash='') {
