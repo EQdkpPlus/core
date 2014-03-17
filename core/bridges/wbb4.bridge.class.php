@@ -76,6 +76,10 @@ class wbb4_bridge extends bridge_generic {
 			'fieldtype'	=> 'text',
 			'name'		=> 'cmsbridge_sso_cookiedomain',
 		),
+		'cmsbridge_sso_cookiepath' => array(
+			'fieldtype'	=> 'text',
+			'name'		=> 'cmsbridge_sso_cookiepath',
+		),
 	);
 	
 	//Needed function
@@ -155,11 +159,13 @@ class wbb4_bridge extends bridge_generic {
 				$config['cookie_domain'] = $this->env->server_name;
 			}
 		} else $config['cookie_domain'] = $this->config->get('cmsbridge_sso_cookiedomain');
+		
+		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiedomain') : '/';
 
 		//SID Cookie
-		setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, '/', $config['cookie_domain'], $this->env->ssl);
-		setcookie($config['cookie_prefix'].'userID', (int) $user_id, $expire, '/', $config['cookie_domain'], $this->env->ssl);
-		if ($boolAutoLogin) setcookie($config['cookie_prefix'].'password', $arrUserdata['password'], $expire, '/', $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'userID', (int) $user_id, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		if ($boolAutoLogin) setcookie($config['cookie_prefix'].'password', $arrUserdata['password'], $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 		return true;
 	}
 	
@@ -215,11 +221,13 @@ class wbb4_bridge extends bridge_generic {
 			} else {
 				$config['cookie_domain'] = $this->env->server_name;
 			}
-		}
+		} else $config['cookie_domain'] = $this->config->get('cmsbridge_sso_cookiedomain');
 		
-		setcookie($config['cookie_prefix'].'cookieHash', '', 0, '/', $config['cookie_domain'], $this->env->ssl);
-		setcookie($config['cookie_prefix'].'userID', '', 0, '/', $config['cookie_domain'], $this->env->ssl);
-		setcookie($config['cookie_prefix'].'password', '', 0, '/', $config['cookie_domain'], $this->env->ssl);
+		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiedomain') : '/';
+		
+		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'userID', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'password', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
 	
 	public function __checkPassword($username, $password, $hash) {
