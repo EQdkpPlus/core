@@ -384,13 +384,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 			}
 		}
 		
-		public function auto_addchars($raidtype, $raidid, $raidleaders=array()){			
+		public function auto_addchars($raidtype, $raidid, $raidleaders=array(), $group=false, $status=false){
 			//Auto confirm Groups
 			$arrAutoconfirmGroups = unserialize($this->config->get('calendar_raid_autoconfirm'));
 			$signupstatus	= 1; //Angemeldet
 
 			// auto add groups
-			$usergroups = unserialize($this->config->get('calendar_raid_autocaddchars'));
+			$usergroups = ($group && is_array($group)) ? $group : unserialize($this->config->get('calendar_raid_autocaddchars'));
 			if(is_array($usergroups) && count($usergroups) > 0){
 				$userids = $this->pdh->get('user_groups_users', 'user_list', array($usergroups));
 				if(is_array($userids)){
@@ -400,9 +400,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 						if($memberid > 0){
 							if(($raidtype == 'role' && $defaultrole > 0) || $raidtype == 'class' || $raidtype == 'none'){
 								//Autoconfirm
-								if(is_array($arrAutoconfirmGroups) && count($arrAutoconfirmGroups) > 0 && $signupstatus == 1){
-									if($this->user->check_group($usergroups, false, $userid)){
-										$signupstatus = 0;
+								if($status){
+									$signupstatus = $status;
+								}else{
+									if(is_array($arrAutoconfirmGroups) && count($arrAutoconfirmGroups) > 0 && $signupstatus == 1){
+										if($this->user->check_group($usergroups, false, $userid)){
+											$signupstatus = 0;
+										}
 									}
 								}
 

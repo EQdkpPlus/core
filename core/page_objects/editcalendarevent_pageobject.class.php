@@ -175,7 +175,12 @@ class editcalendarevent_pageobject extends pageobject {
 					'created_on'		=> $this->time->time,
 				)
 			));
-			$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int')));
+			
+			// Auto confirm / confirm by raid-add-setting
+			$asi_groups	= $this->in->getArray('asi_group');
+			$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status') : false;
+			
+			$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int'), $asi_groups, $asi_status));
 			$this->email_newraid($raidid);
 		}else{
 			$withtime = ($this->in->get('allday') == '1') ? 0 : 1;
@@ -306,12 +311,23 @@ class editcalendarevent_pageobject extends pageobject {
 			'raid'		=> $this->user->lang('calendar_mode_raid')
 		);
 		
-		// 
+		// Repeat array
 		$radio_repeat_array	= array(
 			'0'			=>$this->user->lang('calendar_event_editone'),
 			'1'			=>$this->user->lang('calendar_event_editall'),
 			'2'			=>$this->user->lang('calendar_event_editall_future'),
 		);
+
+		// raid status array
+		$raidcal_status = $this->config->get('calendar_raid_status');
+		$raidstatus = array();
+		if(is_array($raidcal_status)){
+			foreach($raidcal_status as $raidcalstat_id){
+				if($raidcalstat_id != 4){
+					$raidstatus[$raidcalstat_id]	= $this->user->lang(array('raidevent_raid_status', $raidcalstat_id));
+				}
+			}
+		}
 
 		// The roles Fields
 		foreach($this->pdh->get('roles', 'roles', array()) as $row){
@@ -418,7 +434,9 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),
 			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
 			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidleader'] : ''), array('width' => 300, 'filter' => true)),
-			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => $types, 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
+			'DR_GROUPS'			=> new hmultiselect('asi_group', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => $this->config->get('calendar_raid_autocaddchars'))),
+			'DR_STATUS'			=> new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)),
+			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
 			'RADIO_EDITCLONES'	=> new hradio('edit_clones', array('options' => $radio_repeat_array)),
 
 			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),

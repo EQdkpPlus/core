@@ -38,7 +38,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.allday_cb').change(function() {
+	$("input[type='checkbox'][name='allday']").change(function() {
 		if($(this).prop('checked') == true){
 			$('#cal_startdate').datetimepicker('disableTimepicker');
 			$('#cal_enddate').datetimepicker('disableTimepicker');
@@ -170,7 +170,7 @@ function attendeeCount(){
 	</div>
 	<!-- ENDIF -->
 
-	<fieldset class="settings mediumsettings floatLeft" id="eventsettings" style="width: 470px;">
+	<fieldset class="settings mediumsettings floatLeft" id="eventsettings" style="width: 540px;">
 		<legend class="event">{L_calendar_mode_event}</legend>
 		<legend class="raid">{L_calendar_mode_raid}</legend>
 
@@ -217,12 +217,8 @@ function attendeeCount(){
 			<dd>{DR_RAIDLEADER}</dd>
 		</dl>
 		<dl>
-			<dt><label><span id="startdate_title">{L_calendar_startdate}</span>:</label></dt>
-			<dd>{JQ_DATE_START}</dd>
-		</dl>
-		<dl class="allday">
-			<dt><label>{L_calendar_enddate}:</label></dt>
-			<dd>{JQ_DATE_END}</dd>
+			<dt><label>{L_calendar_date}:</label></dt>
+			<dd>{JQ_DATE_START} - {JQ_DATE_END}</dd>
 		</dl>
 		<dl class="raid">
 			<dt><label>{L_calendar_deadline}:</label></dt>
@@ -240,6 +236,14 @@ function attendeeCount(){
 			<dt><label>{L_note}:</label></dt>
 			<dd><textarea name="note" class="input resettemplate_input" id="input_note" rows="2" cols="32">{NOTE}</textarea></dd>
 		</dl>
+
+		<!-- IF not IS_EDIT -->
+		<hr />
+		<dl class="raid">
+			<dt><label>{L_raidevent_autogroups}:</label></dt>
+			<dd>{DR_GROUPS} {DR_STATUS}</dd>
+		</dl>
+		<!-- ENDIF -->
 
 	</fieldset>
 
