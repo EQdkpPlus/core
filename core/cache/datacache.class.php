@@ -306,12 +306,26 @@ if( !class_exists( "cachePagination" ) ) {
 						}
 					}
 					
+					//Additional Cache Data
+					if (isset($this->arrQuerys['additionalData']) && strlen($this->arrQuerys['additionalData'])){
+						$objQuery = $this->db->prepare($this->arrQuerys['additionalData'])->execute($intChunkID*$this->intItemsPerChunk, ($intChunkID+1)*$this->intItemsPerChunk);
+
+						if($objQuery){
+							while($drow = $objQuery->fetchAssoc()){
+								if (isset($cache_result[$drow['object_key']])){
+									$cache_result[$drow['object_key']]['additional'][] = $drow; 
+								}
+							}
+						}
+					}
+					
 					$this->pdc->put('pdh_'.$this->strCacheKey.'_chunk_'.$intChunkID, $cache_result, null);
 					$this->data[$intChunkID] = $cache_result;
 					unset($cache_result);
 					if (isset($this->data[$intChunkID][$intObjectID])) return true;
 				} else {
 					$this->data[$intChunkID] = $arrCacheData;
+					if (isset($this->data[$intChunkID][$intObjectID])) return true;
 				}
 			} else {
 				if (isset($this->data[$intChunkID][$intObjectID])) return true;			
@@ -482,10 +496,11 @@ if( !class_exists( "cachePagination" ) ) {
 		 */
 		public function search($strObjectTag, $strSearchValue, $allowParts=false){
 			if ($allowParts){
-				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." LIKE '%.$this->db->escapeString($strSearchValue).'%";
-					
+				$escapedString = $this->db->escapeString('%'.$strSearchValue.'%');
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." LIKE ".$escapedString;	
 			} else {
-				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." LIKE '.$this->db->escapeString($strSearchValue).'";
+				$escapedString = $this->db->escapeString($strSearchValue);
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." = ".$escapedString;
 			}
 
 			$objQuery = $this->db->prepare($strQuery)->execute();
@@ -498,6 +513,7 @@ if( !class_exists( "cachePagination" ) ) {
 			return $arrOut;
 			
 		}
+
 	}
 }
 ?>

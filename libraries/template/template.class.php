@@ -568,6 +568,7 @@ class template extends gen_class {
 				$this->compile_write($handle, $this->compiled_code[$handle]);
 				$this->handle = $handle;
 				@eval($this->compiled_code[$handle]);
+				@flush();
 			}
 		}
 		exit;

@@ -391,11 +391,11 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	{
 		if (strncasecmp($this->strQuery, 'SELECT', 6) === 0)
 		{
-			$this->strQuery .= ' LIMIT ' . $intOffset . ',' . $intRows;
+			$this->strQuery .= ' LIMIT ' . (int)$intOffset . ',' . (int)$intRows;
 		}
 		else
 		{
-			$this->strQuery .= ' LIMIT ' . $intRows;
+			$this->strQuery .= ' LIMIT ' . (int)$intRows;
 		}
 	}
 
