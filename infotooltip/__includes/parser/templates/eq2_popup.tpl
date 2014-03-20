@@ -1,2 +1,0 @@
-{ITEM_HTML}
-{DEBUG}
