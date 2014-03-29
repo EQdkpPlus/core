@@ -56,12 +56,13 @@ class EQDKPBackup extends page_generic{
 			}
 			closedir($dir);
 		}
+				
 		//Generate backup-array, only list eqdkp-backups
 		foreach ($files as $elem){
-			if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $elem, $matches)){
+			if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $elem, $matches)){
 				$backups[$elem] = $matches[1];
 			}
-			if (preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $elem, $matches)){
+			if (preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $elem, $matches)){
 				$backups[$elem] = $matches[1];
 				$full[] = $elem;
 
@@ -182,7 +183,7 @@ class EQDKPBackup extends page_generic{
 		$file_name = $this->in->get('backups');
 		$file = $this->pfh->FolderPath('backup', 'eqdkp').$file_name;
 
-		if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $file_name, $matches) || preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $file_name, $matches)){
+		if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $file_name, $matches) || preg_match('#^eqdkp-fbackup_([0-9]{10})_(([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $file_name, $matches)){
 
 			switch ($matches[3])
 			{
@@ -391,6 +392,19 @@ class EQDKPBackup extends page_generic{
 			}
 		}
 		return false;
+	}
+	
+	private function do_sql($sql) {
+		if($sql && !$this->sql_error) {
+			$objQuery = $this->db->query($sql.';');
+			if (!$objQuery){		
+				$this->pdl->log('install_error', 'SQL-Error:<br />Query: '.$sql.';<br />Code: '.$this->db->errno.'<br />Message: '.$this->db->error);
+				$this->undo();
+				$this->sql_error = true;
+				return false;
+			}
+		}
+		return true;
 	}
 }
 registry::register('EQDKPBackup');

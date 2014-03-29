@@ -284,12 +284,16 @@ abstract class Database extends gen_class {
 		}
 		
 		$arrReturn = array();
-		$arrTables = $this->query(sprintf($this->strListTables, $strDatabase))->fetchAllAssoc();
+		$objQuery = $this->query(sprintf($this->strListTables, $strDatabase));
+		if ($objQuery){
+			$arrTables = $objQuery->fetchAllAssoc();
 
-		foreach ($arrTables as $arrTable)
-		{
-			$arrReturn[] = current($arrTable);
+			foreach ($arrTables as $arrTable)
+			{
+				$arrReturn[] = current($arrTable);
+			}
 		}
+		
 		return $arrReturn;
 	}
 	
@@ -490,7 +494,8 @@ abstract class DatabaseStatement {
 	}
 	
 	protected function error($strErrorMessage, $strQuery, $strErrorCode = '') {
-		if(!registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
+		
+		/*if(!registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
 	
@@ -498,6 +503,7 @@ abstract class DatabaseStatement {
 		}
 		$exception = new Exception();
 		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
+		*/
 	}
 		
 	
