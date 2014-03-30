@@ -57,6 +57,10 @@ class guildImporter extends page_generic {
 				<dd>'.$this->html->widget(array('fieldtype'=>'text','name'=>'guildname','value'=> $this->config->get('guildtag'), 'size'=>'40')).'</dd>
 			</dl>
 			<dl>
+				<dt><label>'.$this->game->glang('uc_servername').'</label></dt>
+				<dd>'.$this->html->widget(array('fieldtype'=>'autocomplete','name'=>'servername','selected'=> $this->config->get('uc_servername'), 'size'=>'40', 'options' => $this->game->get('realmlist'))).'</dd>
+			</dl>
+			<dl>
 				<dt><label>'.$this->game->glang('uc_delete_chars_onimport').'</label></dt>
 				<dd>'.$this->html->widget(array('fieldtype'=>'boolean','name'=>'delete_old_chars')).'</dd>
 			</dl>
@@ -89,7 +93,7 @@ class guildImporter extends page_generic {
 
 		
 		// generate output
-		$guilddata	= $this->game->obj['armory']->guild($this->in->get('guildname', ''), $this->config->get('uc_servername'), true);
+		$guilddata	= $this->game->obj['armory']->guild($this->in->get('guildname', ''), $this->in->get('servername', $this->config->get('uc_servername')), true);
 
 		if(!isset($guilddata['status'])){
 			//Suspend all Chars

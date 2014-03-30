@@ -58,7 +58,7 @@ if(!class_exists('wow')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public $lang			= false;
-		public $version			= '5.4.5';
+		public $version			= '5.4.6';
 
 		public function __construct() {
 			parent::__construct();
