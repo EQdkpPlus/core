@@ -83,6 +83,11 @@ class calendarevent_pageobject extends pageobject {
 			if($this->user->check_group($usergroups, false)){
 				$signupstatus = 0;
 			}
+		}else{
+			// now, check if the member was confirmed and tried to change the char and the admin setting for the status is set to 1 (signed in)
+			if($this->config->get('calendar_raid_statuschange_status') == 1 && $signupstatus == 0){
+				$signupstatus = 1;
+			}
 		}
 
 		$myrole = ($this->in->get('member_role', 0) > 0) ? $this->in->get('member_role', 0) : $this->pdh->get('member', 'defaultrole', array($this->in->get('member_id', 0)));
@@ -781,6 +786,8 @@ class calendarevent_pageobject extends pageobject {
 			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
 			'SHOW_RAIDGROUPS'		=> $this->pdh->get('raid_groups', 'groups_enabled'),
+			'IS_STATUSCHANGE_WARN'	=> ($this->config->get('calendar_raid_statuschange_status', 0) == 1) ? true : false,
+			'IS_STATUS_CONFIRMED'	=> ($this->mystatus['signup_status'] == 0) ? true : false,
 
 			//Data
 			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton')),

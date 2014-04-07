@@ -708,6 +708,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "raidevent_raid_closed" => "Der Raid wurde von einem Raidleiter abgesagt.",
 "raidevent_raid_nochar" => "Deinem Benutzer sind bisher keine Charaktere zugeordnet. In der Charakterverwaltung kannst du dir vorhandene Charaktere zuweisen oder neue erstellen.<br/><a href=\"".register('routing')->build('mycharacters')."\">Zur Charakterverwaltung</a>",
 "raidevent_raid_note" => "Raidnotiz",
+"raidevent_raid_statuschange_warning"	=> "ACHTUNG: Bei einem Wechsel des Charakters wird dein Anmeldestatus auf 'Angemeldet' zurückgesetzt.",
 "raidevent_raid_addedby" => "Hinzugefügt von",
 "raidevent_raid_transform" => "In Raid umwandeln",
 "raidevent_raid_adminnote" => "Angemeldet von einem Raidleiter",

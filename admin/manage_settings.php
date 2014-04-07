@@ -77,6 +77,11 @@ class mmocms_settings extends page_generic {
 			4	=> $this->user->lang(array('raidevent_raid_status', 4))
 		);
 
+		$a_calraid_status2 = array(
+			0	=> $this->user->lang(array('raidevent_raid_status', 0)),
+			1	=> $this->user->lang(array('raidevent_raid_status', 1)),
+		);
+
 		$a_calraid_nsfilter = array(
 			'twinks'	=> 'raidevent_raid_nsf_twink',
 			'inactive'	=> 'raidevent_raid_nsf_inctv',
@@ -606,6 +611,11 @@ class mmocms_settings extends page_generic {
 					),
 					'calendar_raid_allowstatuschange'	=> array(
 						'type'		=> 'radio',
+					),
+					'calendar_raid_statuschange_status'	=> array(
+						'type'		=> 'dropdown',
+						'options'	=> $a_calraid_status2,
+						'datatype'	=> 'int'
 					),
 				),
 				'calendar_mails'	=> array(

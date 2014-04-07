@@ -13,7 +13,7 @@ $(function(){
 	});
 
 	$('#raidcal_change_signin').click(function(){
-		$('#raidcal_signin_form').show();
+		$('#toogleRaidcalSignin').show();
 		$('#raidcal_alrdysignin').hide();
 	});
 
@@ -34,12 +34,10 @@ $(function(){
 			},
 			hide: false,
 			style: {
-				classes: 'tooltip_maxwidth',
 				tip: {
 					corner: true,
-					height: 20
+					height: 8
 				},
-				width: 400,
 				widget: true
 			},
 			events: {
@@ -141,7 +139,6 @@ $(function(){
 		}
 
 		// populate the filter
-		console.log(unsigned_attendees_f.length);
 		if(unsigned_attendees_f.length > 0){
 			filter_unsigned			= [];
 			$.each(unsigned_attendees_f, function(i, item) {
@@ -345,9 +342,14 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	</div>
 		
 	<!-- IF not RAID_CLOSED and not RAID_DEADLINE and not NO_CHAR_ASSIGNED -->
-	<div id="toogleRaidcalSignin">
+	<div id="toogleRaidcalSignin" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
 		<h2>{L_raidevent_raid_signin}<span class="toggle_button">&nbsp;</span></h2>
-		<fieldset class="toggle_container settings smallsettings" id="raidcal_signin_form" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
+		<fieldset class="toggle_container settings smallsettings">
+			<!-- IF IS_SIGNEDIN and IS_STATUSCHANGE_WARN and IS_STATUS_CONFIRMED -->
+			<div class="infobox infobox-large infobox-red clearfix">
+				<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_raidevent_raid_statuschange_warning}
+			</div>
+			<!-- ENDIF -->
 			<dl>
 				<dt><label>{L_raidevent_raid_char_role}</label></dt>
 				<dd>{DD_MYCHARS} {DD_MYROLE}</dd>
@@ -357,14 +359,13 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 				<dd><input type="text" name="signupnote" size="45" class="input" value="{PLAYER_NOTE}" /></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_status}</label></dt>
+				<dt><label>{L_status}<!-- IF IS_SIGNEDIN and IS_STATUSCHANGE_WARN --> <i class="fa fa-exclamation-triangle coretip" data-coretip="{L_raidevent_raid_statuschange_warning}"></i><!-- ENDIF --></label></dt>
 				<dd>{DD_SIGNUPSTATUS} </dd>
 			</dl>
 			<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
 		</fieldset>
 	</div>
-	
-	
+
 	<div class="infobox infobox-large infobox-green clearfix" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
 		<i class="fa fa-user fa-4x pull-left"></i>
 		{L_SIGNEDIN_MSG}
