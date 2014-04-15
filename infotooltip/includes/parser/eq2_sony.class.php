@@ -31,7 +31,7 @@ if(!class_exists('eq2_sony')) {
 		public function __construct($init=false, $config=false, $root_path=false, $cache=false, $puf=false, $pdl=false){
 			parent::__construct($init, $config, $root_path, $cache, $puf, $pdl);
 			$g_settings = array(
-				'eq2' => array('icon_loc' => 'http://census.soe.com/img/eq2/icons/', 'icon_ext' => '/item/', 'default_icon' => 'unknown'),
+				'eq2' => array('icon_loc' => 'http://census.soe.com/s:eqdkpplus/img/eq2/icons/', 'icon_ext' => '/item/', 'default_icon' => 'unknown'),
 			);
 			$this->settings = array(
 				'itt_icon_loc' => array(	'name' => 'itt_icon_loc',
@@ -72,7 +72,7 @@ if(!class_exists('eq2_sony')) {
 		private function getItemIDfromUrl($itemname, $lang, $searchagain=0){
 			$searchagain++;
 			$itemInfo = urlencode($itemname);
-			$link = 'http://census.soe.com/json/get/eq2/item/?displayname=' . $itemInfo;
+			$link = 'http://census.soe.com/s:eqdkpplus/json/get/eq2/item/?displayname=' . $itemInfo;
 			$data = $this->puf->fetch($link);
 			$this->searched_langs[] = $lang;
 			$itemData = json_decode($data);
@@ -91,7 +91,7 @@ if(!class_exists('eq2_sony')) {
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-			$url = 'http://census.soe.com/json/get/eq2/item/' . $item['id'];
+			$url = 'http://census.soe.com/s:eqdkpplus/son/get/eq2/item/' . $item['id'];
 			$item['link'] = $url;
 			$data = $this->puf->fetch($item['link']);
 			$itemdata = json_decode($data);
@@ -175,7 +175,8 @@ if(!class_exists('eq2_sony')) {
 		$str = $str + (${"l{$i}"}->{'str'});
 		$wis = $wis + (${"l{$i}"}->{'wis'});
 		}
-		$content .= "<div class='itemd_name'>Spirit Stone at Max Level</div>\n";
+		//$content .= "<div class='itemd_name'>Spirit Stone at Max Level</div>\n";
+		$content .= "<div class='itemd_name'><small>Adds the following to an item at Level ".($i-1).":</small></div>\n";
 		$content .= "<div class='ui-helper-clearfix'></div>";
 		$content .= "<div class='itemd_green'>";
 		if ($intel != 0) { $content .= "  +" . $intel . " int"; }
@@ -186,6 +187,7 @@ if(!class_exists('eq2_sony')) {
 		$content .= "</div>\n";
 		$content .= "<div class='itemd_blue'>";
 		$attackspeed = 0; $dps = 0; $doubleattackchance = 0; $critbonus = 0; $spellweaponattackspeed = 0;
+		$spellweapondamagebonus = 0; $spelldoubleattackchance = 0;
 		$spellweapondps = 0; $spellweapondoubleattackchance = 0; $weapondamagebonus = 0; $basemodifier = 0; $maxhpperc = 0;
 		$armormitigationincrease = 0; $strikethrough = 0; $spellcastpct = 0; $spelltimereusespellonly = 0; $hategainmod = 0; $all = 0;
 		for ($j = 1; $j <= 50; $j++) {
@@ -210,6 +212,12 @@ if(!class_exists('eq2_sony')) {
 		}
 		if (!empty(${"m{$j}"}->{'spellweapondoubleattackchance'})) {
 		$spellweapondoubleattackchance = $spellweapondoubleattackchance + (${"m{$j}"}->{'spellweapondoubleattackchance'});
+		}
+		if (!empty(${"m{$j}"}->{'spelldoubleattackchance'})) {
+		$spelldoubleattackchance = $spelldoubleattackchance + (${"m{$j}"}->{'spelldoubleattackchance'});
+		}
+		if (!empty(${"m{$j}"}->{'spellweapondamagebonus'})) {
+		$spellweapondamagebonus = $spellweapondamagebonus + (${"m{$j}"}->{'spellweapondamagebonus'});
 		}
 		if (!empty(${"m{$j}"}->{'weapondamagebonus'})) {
 		$weapondamagebonus = $weapondamagebonus + (${"m{$j}"}->{'weapondamagebonus'});
@@ -239,6 +247,7 @@ if(!class_exists('eq2_sony')) {
 		$all = $all + (${"m{$j}"}->{'all'});
 		}
 		}
+		/*
 		if ($attackspeed != 0) { $content .= "  +" . $attackspeed . "% Attack Speed<br>"; }
 		if ($dps != 0) { $content .= "  +" . $dps . " Damage Per Second<br>"; }
 		if ($doubleattackchance != 0) { $content .= "  +" . $doubleattackchance . "% Multi Attack Chance<br>"; }
@@ -246,6 +255,8 @@ if(!class_exists('eq2_sony')) {
 		if ($spellweaponattackspeed != 0) { $content .= "  +" . $spellweaponattackspeed . "% Spell Weapon Attack Speed<br>"; }
 		if ($spellweapondps != 0) {	$content .= "  +" . $spellweapondps . " Spell Weapon Damage Per Second<br>"; }
 		if ($spellweapondoubleattackchance != 0) { $content .= "  +" . $spellweapondoubleattackchance . "% Spell Weapon Multi Attack Chance<br>"; }
+		if ($spellweapondamagebonus != 0) { $content .= "  +" . $spellweapondamagebonus . " Spell Weapon Damage Bonus<br>"; }
+		if ($spelldoubleattackchance != 0) { $content .= "  +" . $spelldoubleattackchance . "% Doublecast Chance<br>"; }
 		if ($weapondamagebonus != 0) { $content .= "  +" . $weapondamagebonus . " Weapon Damage Bonus<br>"; }
 		if ($basemodifier != 0) { $content .= "  +" . $basemodifier . "% Potency<br>"; }
 		if ($maxhpperc != 0) { $content .= "  +" . $maxhpperc . "% Max Health<br>"; }
@@ -255,6 +266,25 @@ if(!class_exists('eq2_sony')) {
 		if ($spelltimereusespellonly != 0) { $content .= "  +" . $spelltimereusespellonly . "% Spell Reuse Speed<br>"; }
 		if ($all !=0) { $content .= "  +" . $all . " Ability Modifier<br>"; }
 		if ($hategainmod !=0) { $content .= "  +" . $hategainmod . "% Hate Gain<br>"; }
+		*/
+		if ($weapondamagebonus != 0) { $content .= $weapondamagebonus . " Weapon Damage Bonus<br>"; }
+		if ($spellweapondamagebonus != 0) { $content .= $spellweapondamagebonus . " Spell Weapon Damage Bonus<br>"; }
+		if ($basemodifier != 0) { $content .= $basemodifier . "% Potency<br>"; }
+		if ($critbonus != 0) { $content .= $critbonus . "% Crit Bonus<br>"; }
+		if ($spelldoubleattackchance != 0) { $content .= $spelldoubleattackchance . "% Doublecast Chance<br>"; }
+		if ($attackspeed != 0) { $content .= $attackspeed . "% Attack Speed<br>"; }
+		if ($dps != 0) { $content .= $dps . " Damage Per Second<br>"; }
+		if ($doubleattackchance != 0) { $content .= $doubleattackchance . "% Multi Attack Chance<br>"; }
+		if ($spellweaponattackspeed != 0) { $content .= $spellweaponattackspeed . "% Spell Weapon Attack Speed<br>"; }
+		if ($spellweapondps != 0) {	$content .= $spellweapondps . " Spell Weapon Damage Per Second<br>"; }
+		if ($spellweapondoubleattackchance != 0) { $content .= $spellweapondoubleattackchance . "% Spell Weapon Multi Attack Chance<br>"; }
+		if ($maxhpperc != 0) { $content .= $maxhpperc . "% Max Health<br>"; }
+		if ($armormitigationincrease != 0) { $content .= $armormitigationincrease . "% Mitigation Increase<br>"; }
+		if ($strikethrough != 0) { $content .= $strikethrough . "% Strikethrough<br>"; }
+		if ($spellcastpct != 0) { $content .= $spellcastpct . "% Ability Casting Speed<br>"; }
+		if ($spelltimereusespellonly != 0) { $content .= $spelltimereusespellonly . "% Spell Reuse Speed<br>"; }
+		if ($all !=0) { $content .= $all . " Ability Modifier<br>"; }
+		if ($hategainmod !=0) { $content .= $hategainmod . "% Hate Gain<br>"; }
 		return $content;
 		}
 		else { return ""; }
@@ -267,7 +297,7 @@ if(!class_exists('eq2_sony')) {
 			$growth = $typeInfo->{'growthdescription'};
 			$growthinfo = $growth->{'growthdescription'};
 			if (array_key_exists('growth_table',$item)) { 
-			$content = "<div class='itemd_desc'>" . $growthinfo . "</div>"; }
+			$content = "<div class='itemd_desc'><font color='yellow'>" . $growthinfo . "</font></div>"; }
 			else { $content = ""; }
 		return $content;
 		}	
@@ -310,7 +340,7 @@ if(!class_exists('eq2_sony')) {
 		protected function ItemIcon($item) 
 		{
 			$iconId = $item->{'iconid'};
-			return "<div class='itemd_icon'><img src='http://census.soe.com/img/eq2/icons/$iconId/item/'></div>";
+			return "<div class='itemd_icon'><img src='http://census.soe.com/s:eqdkpplus/img/eq2/icons/$iconId/item/'></div>";
 		}
 		
 		protected function ItemTier($item) 
@@ -361,7 +391,8 @@ if(!class_exists('eq2_sony')) {
 					if ($count == 0) {
 						$content = "<div class='itemd_flags'>\n";
 					}
-				if ($key == 'notrasmute') {($key = 'no-transmute');}					
+				if ($key == 'notrasmute') {($key = 'no-transmute');}
+				if ($key == 'indestructible') {($key = '');($indes = 1);}
 					$content .= strtoupper($key)." &nbsp;\n";
 					$count++;
 				}
@@ -369,6 +400,7 @@ if(!class_exists('eq2_sony')) {
 			if ($count > 0) {
 				$content .= "</div>\n";
 			}
+			if ($indes == 1) {($content .= "<div style='color: #7f00ff; font-size: 14px; font-weight: bold; margin-bottom: 3px;'>INDESTRUCTIBLE</div>");}
 			return $content;
 		}
 		
