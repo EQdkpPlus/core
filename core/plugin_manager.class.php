@@ -58,6 +58,8 @@ class plugin_manager extends gen_class {
 		foreach($registered as $plugin_code => $data) {
 			$this->status[$plugin_code] = PLUGIN_REGISTERED | $data['status'];
 			if(($data['status'] & PLUGIN_INSTALLED) && !($data['status'] & PLUGIN_DISABLED)) {
+				$this->tpl->assign_var("S_PLUGIN_".strtoupper($plugin_code), true);
+				
 				if(!$this->initialize($plugin_code)) {
 					$this->pdl->log('plugin_error', $plugin_code, 'Initialisation failed.');
 				} else {

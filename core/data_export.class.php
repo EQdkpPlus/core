@@ -37,7 +37,7 @@ class content_export extends gen_class {
 		);
 	}
 	
-	public function export($withMemberItems = true){
+	public function export($withMemberItems = true, $filter = false, $filterid = false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
@@ -77,6 +77,17 @@ class content_export extends gen_class {
 		//Alle Member
 		$total_points = 0;
 		$members = $this->pdh->sort($this->pdh->get('member', 'id_list'), 'member', 'name');
+		
+		//Filter here
+		if ($filter && $filterid){
+			switch($filter){
+				case 'user': $members = $this->pdh->sort($this->pdh->get('member', 'connection_id', array($filterid)), 'member', 'name');
+				break;
+				case 'character': $members = array($filterid);
+				break;
+			}
+		}
+		
 		if (is_array($members) && count($members) > 0) {
 			foreach ($members as $member){		
 				$points = array();

@@ -328,6 +328,7 @@ class core extends gen_class {
 				'S_IN_ADMIN'				=> $s_in_admin,
 				'S_SEARCH'					=> $this->user->check_auth('u_search', false),
 				'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
+				'GAME'						=> $this->config->get('default_game'),
 				'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 				'FIRST_C'					=> true,
 				'T_PORTAL_WIDTH'			=> $this->user->style['portal_width'],
@@ -384,6 +385,12 @@ class core extends gen_class {
 			
 			//Do portal hook
 			register('hooks')->process('portal', array($this->env->eqdkp_page));
+			
+			//Template Vars for Group Memberships
+			$arrGroupmemberships = $this->acl->get_user_group_memberships($this->user->id);
+			foreach($arrGroupmemberships as $groupID => $status){
+				if ($status) $this->tpl->assign_var("S_AUTH_GROUP_".$groupID, true);
+			}
 		}
 		
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){

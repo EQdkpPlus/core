@@ -31,7 +31,15 @@ if (!class_exists('exchange_points')){
 				include_once($this->root_path . 'core/data_export.class.php');
 				$myexp = new content_export();
 				$withMemberItems = (isset($params['get']['exclude_memberitems']) && $params['get']['exclude_memberitems'] == 'true') ? false : true;
-				return $myexp->export($withMemberItems);
+				
+				//Filter
+				$filter = $filterid = false;
+				if (isset($params['get']['filter']) && in_array($params['get']['filter'], array('user', 'character')) && isset($params['get']['filterid'])){
+					$filter = $params['get']['filter'];
+					$filterid = intval($params['get']['filterid']);
+				}
+				
+				return $myexp->export($withMemberItems, $filter, $filterid);
 			} else {
 				return $this->pex->error('access denied');
 			}
