@@ -310,6 +310,9 @@ class phpbb3_bridge extends bridge_generic {
 	 */
 	function _hash_crypt_private($password, $setting, &$itoa64)
 	{
+		$password = trim(htmlspecialchars(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $password), ENT_COMPAT, 'UTF-8'));
+		
+		
 		$output = '*';
 
 		// Check for correct hash
