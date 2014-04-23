@@ -160,7 +160,7 @@ class ManageAdjs extends page_generic {
 		$view_list = $this->pdh->aget('adjustment', 'group_key', 0, array($this->pdh->get('adjustment', 'id_list', array())));
 		$view_list = array_flip($view_list);
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_adjustments', 'hptt_admin_manage_adjustments_adjlist');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_adjustments.php', '%link_url_suffix%' => '&amp;upd=true'));
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_adjustments.php', '%link_url_suffix%' => '&amp;upd=true', '%raid_link_url%' => 'manage_raids.php', '%raid_link_url_suffix%' => '&amp;upd=true'));
 		$page_suffix = '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix = '?sort='.$this->in->get('sort');
 	
