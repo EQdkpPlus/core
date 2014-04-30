@@ -159,7 +159,7 @@ class bridge_generic extends gen_class {
 	
 	public function autologin($arrCookieData){
 		$result = false;
-		if ($this->functions['autologin']!= '' && method_exists($this, $this->functions['autologin'])){
+		if ($this->functions['autologin']!= '' && method_exists($this, $this->functions['autologin']) && $this->db){
 			$method = $this->functions['autologin'];
 			$result = $this->$method($arrCookieData);
 		}
