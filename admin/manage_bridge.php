@@ -101,7 +101,7 @@ class Manage_Bridge extends page_generic {
 				$this->config->set('cmsbridge_database', $this->crypt->encrypt($this->in->get('name')));
 				$this->config->set('cmsbridge_notsamedb', 1);
 				echo "true";
-				die();
+				exit;
 				
 			} catch(DBALException $e){
 				$this->config->del('cmsbridge_host');
