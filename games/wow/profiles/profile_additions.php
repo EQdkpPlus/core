@@ -542,8 +542,8 @@
 					foreach($v_bossprogress['bosses'] as $bosses){
 						$tt_bossprogress .= '<tr>
 												<td>'.$bosses['name'].'</td>
-												<td>'.$bosses['normalKills'].'</td>
-												<td>'.$bosses['heroicKills'].'</td>
+												<td>'.(isset($bosses['normalKills']) ? $bosses['normalKills'] : 0).'</td>
+												<td>'.(isset($bosses['heroicKills']) ? $bosses['heroicKills'] : 0).'</td>
 											</tr>';
 					}
 					$tt_bossprogress .= '</table>';
