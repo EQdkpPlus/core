@@ -37,11 +37,19 @@ class login_pageobject extends pageobject {
 
 	public function process_login(){
 		if (!$this->user->is_signedin()){
+			
 			//Check Password Length
 			if (strlen($this->in->get('password')) > 64) {
 				$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;	
+			}
+			
+			//Check Honeypot
+			if (strlen($this->in->get($this->user->csrfGetToken("honeypot")))){
+				$this->core->message($this->user->lang('invalid_login'), $this->user->lang('error'), 'red');
+				$this->display();
+				return;
 			}
 			
 			

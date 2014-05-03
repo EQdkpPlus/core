@@ -303,7 +303,7 @@ $(document).ready(function(){
 						<!-- BEGIN check_group -->
 						<!-- IF not u_permissions_row.check_group.S_SUPERADMIN_PERM -->
 						<div class="permissions">
-							<label>
+							<label title="{u_permissions_row.check_group.CBNAME}">
 								<!-- IF u_permissions_row.check_group.S_IS_GROUP -->
 								<input type="checkbox" name="{u_permissions_row.check_group.CBNAME}" value="Y" {u_permissions_row.check_group.CBCHECKED} disabled="disabled" class="changepermcolor" id="cb_{u_permissions_row.check_group.CBNAME}" />
 								<!-- ELSE -->

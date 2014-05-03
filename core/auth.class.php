@@ -339,14 +339,14 @@ class auth extends user_core {
 	}
 
 	/**
-	* Session Key
+	* Generates new Session Key for insertion
 	*
 	* @return string
 	*/
 	public function generate_session_key(){
 		return substr(md5(generateRandomBytes(55)), 0, 12);
 	}
-
+	
 	/**
 	* CSRF GET Token
 	*

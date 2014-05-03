@@ -355,6 +355,7 @@ class core extends gen_class {
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
 				'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
 				'MAIN_MENU_SELECT'			=> $this->build_menu_select(),
+				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){

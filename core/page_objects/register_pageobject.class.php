@@ -101,6 +101,13 @@ class register_pageobject extends pageobject {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
 
+		//Check Honeypot
+		if (strlen($this->in->get($this->user->csrfGetToken("honeypot")))){
+			$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
+			$this->display();
+			return;
+		}
+		
 		//Check CAPTCHA
 		if ($this->config->get('enable_captcha') == 1){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
