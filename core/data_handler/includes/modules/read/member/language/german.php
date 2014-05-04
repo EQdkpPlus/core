@@ -47,6 +47,7 @@ $module_lang = array(
 	'name_decorated'			=> 'Charaktername',
 	'memberlink_decorated'		=> 'Charaktername',
 	'last_update'				=> 'Letzte Aktualisierung',
+	'defaultrole'				=> 'Rolle',
 );
 
 $preset_lang = array(
@@ -77,6 +78,7 @@ $preset_lang = array(
 	'muser'		=> 'Benutzer des Charakters',
 	'charmenu'	=> 'Charakter-Menü',
 	'cmainchar'	=> 'Radiobox Hauptcharakter',
+	'mrole'		=> 'Charakter-Rolle',
 );
 
 ?>

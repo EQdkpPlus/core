@@ -52,6 +52,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'mtwink'		=> array('twink', array('%member_id%', true), array(true)),
 			'mmainname'		=> array('mainname', array('%member_id%'), array(true)),
 			'muser'			=> array('user', array('%member_id%'), array()),
+			'mrole'			=> array('defaultrole',  array('%member_id%'), array()),	
 			'picture'		=> array('picture', array('%member_id%'), array(true)),
 			'note'			=> array('note', array('%member_id%'), array(true)),
 			'last_update'	=> array('last_update', array('%member_id%'), array(true)),
@@ -454,6 +455,12 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_defaultrole($member_id){
 			return $this->data[$member_id]['defaultrole'];
 		}
+		
+		public function get_html_defaultrole($member_id){
+			return $this->pdh->get("roles", "name", array($member_id));
+		}
+		
+		
 
 		public function get_gender($member_id){
 			return (isset($this->data[$member_id]['gender'])) ? $this->data[$member_id]['gender'] : false;
