@@ -83,8 +83,8 @@ class viewcalraid extends page_generic {
 	// the role dropdown, attached to the character selection
 	public function role_ajax(){
 		$tmp_classID	= $this->pdh->get('member', 'classid', array($this->in->get('requestid')));
-		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
-		$myrole			= ($mystatus['member_role'] > 0) ? $mystatus['member_role'] : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
+		$memberrole		= $this->pdh->get('calendar_raids_attendees', 'role', array($this->url_id, $this->in->get('requestid')));
+		$myrole			= ($memberrole > 0) ? $memberrole : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
 		header('content-type: text/html; charset=UTF-8');
 		echo $this->jquery->dd_create_ajax($this->pdh->get('roles', 'memberroles', array($tmp_classID)), array('selected'=>$myrole));exit;
 	}
@@ -576,7 +576,7 @@ class viewcalraid extends page_generic {
 
 						$drpdwn_twinks = $drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->pdh->get('member', 'userid', array($memberid))))));
 						if($eventdata['extension']['raidmode'] == 'role'){
-							$memberrole = $this->jquery->dd_ajax_request('charchange_char', 'charchange_role', $drpdwn_twinks, array(), 0, 'viewcalraid.php'.$this->SID.'&ajax=role');
+							$memberrole = $this->jquery->dd_ajax_request('charchange_char', 'charchange_role', $drpdwn_twinks, array(), 0, 'viewcalraid.php'.$this->SID.'&eventid='.$this->url_id.'&ajax=role');
 							$charchangemenu = array(
 								'chars'	=> $memberrole[0],
 								'roles'	=> $memberrole[1]
@@ -677,7 +677,7 @@ class viewcalraid extends page_generic {
 
 		$drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
 		if($eventdata['extension']['raidmode'] == 'role'){
-			$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, 'viewcalraid.php'.$this->SID.'&ajax=role');
+			$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, 'viewcalraid.php'.$this->SID.'&eventid='.$this->url_id.'&ajax=role');
 		}
 
 		// jQuery Windows
