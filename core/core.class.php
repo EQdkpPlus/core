@@ -173,6 +173,9 @@ class core extends gen_class {
 			//Disable Browser Cache
 			@header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 			@header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Datum in der Vergangenheit
+			if (!$this->config->get('disable_xframe_header')){
+				@header("X-Frame-Options: SAMEORIGIN");
+			}
 
 			// some style additions (header, background image..)
 			if ($this->user->style['background_img'] != ''){

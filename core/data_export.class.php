@@ -138,8 +138,6 @@ class content_export extends gen_class {
 
 					'class_id'		=> $this->pdh->get('member', 'classid', array($member)),
 					'class_name'	=> $this->pdh->get('member', 'classname', array($member)),
-					'race_id'		=> $this->pdh->get('member', 'raceid', array($member)),
-					'race_name'		=> $this->pdh->get('member', 'racename', array($member)),
 
 					'points'		=> $points,
 					'items'			=> $items,

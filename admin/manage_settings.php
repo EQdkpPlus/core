@@ -653,6 +653,9 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'dropdown',
 						'options'	=> $startpage_array,
 					),
+					'disable_xframe_header' => array(
+						'type'	=> 'radio',
+					)	
 				),
 				'mobile' => array(
 					'mobile_template' => array(

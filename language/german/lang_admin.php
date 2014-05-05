@@ -1632,6 +1632,7 @@ $lang = array(
 "link_type"	=> "Link-Typ auswählen",
 "link_type_internal" => "Interner Link",
 "link_type_external" => "Externer Link",
+"core_sett_f_disable_xframe_header" => "Einbettung des EQdkp Plus in andere Webseiten erlauben",
  );
 
 ?>
