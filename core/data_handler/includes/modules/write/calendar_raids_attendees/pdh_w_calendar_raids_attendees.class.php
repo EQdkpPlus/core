@@ -188,6 +188,20 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
 
+		public function update_role($eventid, $memberid, $role){
+			$old_role = $this->pdh->get('calendar_raids_attendees', 'role', array($eventid, $memberid));
+			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE member_id=? AND calendar_events_id=?")->set(array(
+				'member_role'		=> $role
+			))->execute($memberid, $eventid);
+			
+			$log_action = $this->logs->diff(array($old_role), array($role), array("{L_ROLE}"));
+			if($log_action) {
+				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
+				$this->log_insert('calendar_log_updatedrole', $log_action, $eventid, $role, true, 'calendar');
+			}
+			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
+		}
+
 		public function confirm_all($eventid){
 			$arrMembers = $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, 1));
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND signup_status=1")->set(array(

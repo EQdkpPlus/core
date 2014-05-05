@@ -498,7 +498,7 @@ i.icon-color-purple{
 i.icon-color-gray{
 	color: gray;
 }
-.nodisplaym, .userpass{
+.nodisplay, .userpass{
 	display: none;
 }
 
