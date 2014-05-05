@@ -212,6 +212,7 @@
 			select: function(e, ui) {
 				$.cookie('eqdkpCalendarTabs', ui.index, { expires: 30 });
 			},
+			active: {TAB_SELECTION},
 			show: function(event, ui) {
 				$('#calendar').fullCalendar('render');
 			}

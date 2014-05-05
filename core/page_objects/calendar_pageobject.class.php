@@ -365,6 +365,7 @@ class calendar_pageobject extends pageobject {
 			'past'		=> $this->user->lang('calendar_deleteall_drpdwn_past'),
 		);
 
+		$raidlist_tab	= $this->in->get('raidlist_tab', false);
 		$this->tpl->assign_vars(array(
 			'STARTDAY'		=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
 			'JS_TIMEFORMAT'	=> ($this->config->get('default_jsdate_time') != '') ? $this->config->get('default_jsdate_time') : $this->user->lang('style_jstime'),
@@ -377,6 +378,7 @@ class calendar_pageobject extends pageobject {
 			'DD_MULTIDEL'	=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
 			'TXT_NOTE'		=> new htext('member_note', array('size' => '20')),
 			'IS_OPERATOR'	=> $this->user->check_auth('u_cal_event_add', false),
+			'TAB_SELECTION'	=> ($raidlist_tab) ? 1 : 0,
 
 			'CSRF_MOVE_TOKEN' => $this->CSRFGetToken('move'),
 			'CSRF_RESIZE_TOKEN' => $this->CSRFGetToken('resize'),
