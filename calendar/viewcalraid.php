@@ -106,6 +106,16 @@ class viewcalraid extends page_generic {
 					));
 					$this->pdh->process_hook_queue();
 				}
+
+				// check if the role changed
+				if($this->pdh->get('calendar_raids_attendees', 'role', array($this->url_id, $this->in->get('member_id', 0))) != $this->in->get('member_role', 0)){
+					$this->pdh->put('calendar_raids_attendees', 'update_role', array(
+						$this->url_id,
+						$this->in->get('member_id', 0),
+						$this->in->get('member_role', 0)
+					));
+					$this->pdh->process_hook_queue();
+				}
 				return false;
 			}
 		}

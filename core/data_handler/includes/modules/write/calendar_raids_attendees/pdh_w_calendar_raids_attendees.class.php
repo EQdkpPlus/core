@@ -127,6 +127,13 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
 
+		public function update_role($eventid, $memberid, $role){
+			$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE member_id='".$this->db->escape($memberid)."' AND calendar_events_id=?", array(
+				'member_role'		=> $role
+			), $eventid);
+			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
+		}
+
 		public function confirm_all($eventid){;
 			$this->db->query("UPDATE __calendar_raid_attendees SET :params WHERE calendar_events_id=? AND signup_status=1", array(
 				'signup_status'		=> 0

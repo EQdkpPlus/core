@@ -139,6 +139,10 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['signup_status'] : '4';
 		}
 
+		public function get_role($eventid, $memberid){
+			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['member_role'] : '';
+		}
+
 		public function get_in_db($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? true : false;
 		}
