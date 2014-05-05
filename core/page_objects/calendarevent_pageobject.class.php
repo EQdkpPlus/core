@@ -740,7 +740,7 @@ class calendarevent_pageobject extends pageobject {
 
 		$drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
 		if($eventdata['extension']['raidmode'] == 'role'){
-			$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, $this->strPath.$this->SID.'&ajax=role');
+			$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, $this->strPath.$this->SID.'&eventid='.$this->url_id.'&ajax=role');
 		}
 
 		// jQuery Windows
