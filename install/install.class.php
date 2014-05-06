@@ -51,7 +51,7 @@ class install extends gen_class {
 				<html>
 					<head>
 						<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-						<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" />
+						<link rel="stylesheet" type="text/css" media="screen" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" />
 						<title>Installation - Error</title>
 					</head>
 					<body>
@@ -233,9 +233,9 @@ class install extends gen_class {
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" />
-		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-		<script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" />
+		<script type="text/javascript" language="javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+		<script type="text/javascript" language="javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
 		<link rel="stylesheet" type="text/css" media="screen" href="style/install.css" />
 		<script type="text/javascript">
 			//<![CDATA[
