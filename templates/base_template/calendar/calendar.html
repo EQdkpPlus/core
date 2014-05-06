@@ -208,15 +208,18 @@
 			fxSlide: true,
 			fxFade: true,
 			fxSpeed: 'normal',
-			selected: ($.cookie('eqdkpCalendarTabs') || 0),
-			select: function(e, ui) {
-				$.cookie('eqdkpCalendarTabs', ui.index, { expires: 30 });
+			beforeActivate: function(e, ui) {
+				localStorage.setItem("tabs.calendar", ui.newTab.index());
 			},
-			active: {TAB_SELECTION},
+			create: function (e, ui) {
+				var tabID		= (window.location.hash) ? $('#' +  window.location.hash.replace('#', '')).index() : 0;
+				var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((localStorage.getItem("tabs.calendar") != null) ? localStorage.getItem("tabs.calendar") : 0);
+			},
 			show: function(event, ui) {
 				$('#calendar').fullCalendar('render');
 			}
 		});
+		
 
 		$('[name="selected_ids[]"], #pdh_selectall1').change( function() {
 			if($(this).prop('checked') == true && $('#raid_masssignin_panel').is(':hidden')){
