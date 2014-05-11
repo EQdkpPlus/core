@@ -405,6 +405,7 @@ class Manage_Styles extends page_generic{
 
 			'CP_INPUT_COLOR'		=> $this->jquery->colorpicker('input_color', $this->style['input_color']),
 			'CP_INPUT_BORDER'		=> $this->jquery->colorpicker('input_border_color', $this->style['input_border_color']),
+			'S_DEFAULT_STYLE'		=> ($this->url_id == $this->config->get('default_style')) ? true : false,
 
 			// Language
 			'L_TEMPLATE_WARNING'	=> sprintf($this->user->lang('template_warning'), $this->pfh->FileLink('templates', 'eqdkp').'/'.$this->style['template_path']),

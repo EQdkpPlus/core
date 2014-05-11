@@ -268,7 +268,7 @@
     <th align="center" colspan="2"> 
       <input type="submit" name="update" value="{L_update_style}" class="mainoption bi_ok" />
       <input type="submit" name="" value="{L_cancel}" class="liteoption bi_back" />
-      <input type="button"  name="del" value="{L_delete_style}" class="liteoption bi_delete" onclick="delete_warning();" />
+      <!-- IF not S_DEFAULT_STYLE --><input type="button"  name="del" value="{L_delete_style}" class="liteoption bi_delete" onclick="delete_warning();" /><!-- ENDIF -->
     </th>
   </tr>
 </table>
