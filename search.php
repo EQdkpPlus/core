@@ -138,7 +138,7 @@ class search extends page_generic {
 		$this->tpl->assign_vars(array(
 			'S_RESULTS'			=> $blnResults,
 			'S_SEARCHED'		=> $blnSearched,
-			'SEARCH_VALUE'		=> ($this->in->get('svalue', '') != $this->user->lang('search').'...') ? $this->in->get('svalue', '') : '',
+			'SEARCH_VALUE'		=> ($this->in->get('svalue', '') != $this->user->lang('search').'...') ? sanitize($this->in->get('svalue', '')) : '',
 			'L_SEARCH_RESULTS'	=> sprintf($this->user->lang('search_results'), $this->in->get('svalue', ''), $intResultCount),
 			'L_NO_RESULTS'		=> sprintf($this->user->lang('search_no_results'), $this->in->get('svalue', '')),
 		));
