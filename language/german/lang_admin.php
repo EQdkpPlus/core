@@ -1512,6 +1512,10 @@ $lang = array(
 
 "thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',
 "thumbnail_defaultsize_help" => 'Trage hier die Breite (in Pixeln) der Vorschaubilder für große Bilder ein',
+"manexport_title" => 'Daten-Export',
+"export_memberitems" => "Charakter-Items mit exportieren?",
+"export_format"	=> "Ausgabe-Format",
+"export_data" => "Daten",
  );
 
 ?>

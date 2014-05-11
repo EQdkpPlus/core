@@ -1,0 +1,40 @@
+<fieldset class="settings mediumsettings">
+	<legend>{L_manexport_title}</legend>
+	
+	<dl>
+		<dt><label>{L_export_memberitems}</label></dt>
+		<dd><input type="checkbox" id="memberitems" value="1" checked="checked" onchange="ajax_reload_export()" /></dd>
+	</dl>
+	
+	<dl>
+		<dt><label>{L_export_format}</label></dt>
+		<dd><label><input type="radio" id="format" name="format" value="xml" checked="checked"  onchange="ajax_reload_export()"/>XML</label>
+			<label><input type="radio" id="format" name="format" value="json"  onchange="ajax_reload_export()" />JSON</label></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_export_data}</label></dt>
+		<dd><textarea style="width: 95%; height: 200px;" id="export_data" readonly="readonly">{EXPORT_DATA}</textarea></dd>
+	</dl>
+</fieldset>
+<script type="text/javascript">
+$(document).ready(function(){
+	document.getElementById("export_data").focus();
+    document.getElementById("export_data").select();
+});
+
+function ajax_reload_export(){
+	var memberitems = $('#memberitems').attr("checked");
+	if (memberitems == "checked") {
+		memberitems = 1;
+	} else {
+		memberitems = 0;
+	}
+	var format = $('input[name=format]:checked').val();
+	
+	$.get('manage_export.php{SID}&ajax_export=1&format='+format+'&memberitems='+memberitems, function(data) {
+		$('#export_data').val(data);
+		document.getElementById("export_data").focus();
+		document.getElementById("export_data").select();
+	});
+}
+</script>

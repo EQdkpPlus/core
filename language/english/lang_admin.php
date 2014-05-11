@@ -1513,5 +1513,9 @@ $lang = array(
 "pk_meta_keywords_help" => "Keywords are used for search engine optimazation.",
 "pk_meta_description" => "Meta-Description",
 "pk_meta_description_help" => "Description used for search engine optimazation.",
+"manexport_title" => 'Data-Export',
+"export_memberitems" => "Include Character-Items in Export?",
+"export_format"	=> "Export-Format",
+"export_data" => "Data",
  );
 ?>

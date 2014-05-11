@@ -129,6 +129,7 @@ class admin_index extends gen_class {
 				2		=> array('link' => 'admin/manage_events.php'.$this->SID,			'text' => $this->user->lang('manevents_title'),	'check' => 'a_event_upd',	'icon' => 'manage_events.png'),
 				3		=> array('link' => 'admin/manage_multidkp.php'.$this->SID,		'text' => $this->user->lang('manmdkp_title'),		'check' => 'a_event_upd',	'icon' => 'manage_multidkp.png'),
 				4		=> array('link' => 'admin/manage_itempools.php'.$this->SID,		'text' => $this->user->lang('manitempools_title'),'check' => 'a_event_upd',	'icon' => 'manage_itempools.png'),
+				5		=> array('link' => 'admin/manage_export.php'.$this->SID,		'text' => $this->user->lang('manexport_title'),'check' => 'a_',	'icon' => 'manage_export.png'),
 			),
 			'calendar'	=> array(
 				'icon'	=> 'manage_calendars.png',
