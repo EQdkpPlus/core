@@ -55,7 +55,7 @@ class Manage_Export extends page_generic {
 	public function display() {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
-		$arrData = $myexp->export(true);
+		$arrData = $myexp->export(false);
 		
 		$this->tpl->assign_vars(array(
 			'EXPORT_DATA' => $this->returnXML($arrData),
