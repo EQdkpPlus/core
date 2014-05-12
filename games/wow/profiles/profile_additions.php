@@ -362,7 +362,7 @@
 		$items = $this->game->callFunc('getItemArray', array($chardata['items'], $member['name']));
 
 		// talents & professions
-		$this->tpl->assign_array('bnetlinks',	$this->game->obj['armory']->a_bnlinks($member['name'],$this->config->get('uc_servername'), $chardata['guild']['name']));
+		$this->tpl->assign_array('bnetlinks',	$this->game->obj['armory']->a_bnlinks($member['name'],$servername, $chardata['guild']['name']));
 		$this->tpl->assign_array('items',		$items);
 
 		// talents
@@ -480,7 +480,7 @@
 				switch ($v_charfeed['type']){
 						case 'achievement':
 							$achievCat = $this->game->obj['armory']->getCategoryForAchievement((int)$v_charfeed['achievementID'], $arrCharacterAchievements);
-							$bnetLink = $this->game->obj['armory']->bnlink($chardata['name'], $this->config->get('uc_servername'), 'achievements', $this->config->get('guildtag')).'#'.$achievCat.':a'.$v_charfeed['achievementID'];
+							$bnetLink = $this->game->obj['armory']->bnlink($chardata['name'], $servername, 'achievements', $this->config->get('guildtag')).'#'.$achievCat.':a'.$v_charfeed['achievementID'];
 							$class='';
 							if ($v_charfeed['accountWide']) $class = 'accountwide';
 						
@@ -492,7 +492,7 @@
 						break;
 						case 'criteria':
 							$achievCat = $this->game->obj['armory']->getCategoryForAchievement((int)$v_charfeed['achievementID'], $arrCharacterAchievements);
-							$bnetLink = $this->game->obj['armory']->bnlink($chardata['name'], $this->config->get('uc_servername'), 'achievements', $this->config->get('guildtag')).'#'.$achievCat.':a'.$v_charfeed['achievementID'];
+							$bnetLink = $this->game->obj['armory']->bnlink($chardata['name'], $servername, 'achievements', $this->config->get('guildtag')).'#'.$achievCat.':a'.$v_charfeed['achievementID'];
 							
 							$cnf_output = sprintf($this->game->glang('charnf_criteria'), '<b>'.$v_charfeed['criteria'].'</b>', '<a href="'.$bnetLink.'">'.$v_charfeed['title'].'</a>');
 						break;
@@ -574,7 +574,7 @@
 				'NAME'	=> $v_achievements['name'],
 				'BAR'	=> $this->jquery->ProgressBar('guildachievs_'.$id_achievements, $percent_achievements, $v_achievements['completed'] .' / ' . $v_achievements['total'].' ('.$percent_achievements.'%)'),
 				'ID'	=> $id_achievements,
-				'LINK'	=> ($id_achievements != 'total') ? $this->game->obj['armory']->bnlink($chardata['name'], register('config')->get('uc_servername'), 'achievements').'#achievement#'.$id_achievements : '',
+				'LINK'	=> ($id_achievements != 'total') ? $this->game->obj['armory']->bnlink($chardata['name'], $servername, 'achievements').'#achievement#'.$id_achievements : '',
 			));
 		}
 
