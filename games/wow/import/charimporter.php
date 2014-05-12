@@ -36,7 +36,7 @@ class charImporter extends page_generic {
 		parent::__construct(false, $handler, array());
 		$this->user->check_auth('u_member_man');
 		$this->user->check_auth('u_member_add');
-		$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
+		$this->game->new_object('bnet_armory', 'armory', array(unsanitize($this->config->get('uc_server_loc')), $this->config->get('uc_data_lang')));
 		$this->process();
 	}
 
@@ -161,7 +161,7 @@ class charImporter extends page_generic {
 		// due to connected/virtual realms, check for a servername of the char
 		$char_server	= $this->pdh->get('member', 'profile_field', array($this->in->get('charid', 0), 'servername'));
 		$servername		= ($char_server != '') ? $char_server : $this->config->get('uc_servername');
-		$chardata		= $this->game->obj['armory']->character($this->in->get('charname', ''), $servername, true);
+		$chardata		= $this->game->obj['armory']->character(unsanitize($this->in->get('charname', '')), unsanitize($servername), true);
 
 		if(!isset($chardata['status'])){
 			$errormsg	= '';
@@ -269,7 +269,7 @@ class charImporter extends page_generic {
 		if($is_mine){
 			// Load the Armory Data
 			$this->game->obj['armory']->setSettings(array('loc'=>$isServerLoc));
-			$chardata	= $this->game->obj['armory']->character($isMemberName, $isServerName, true);
+			$chardata	= $this->game->obj['armory']->character(unsanitize($isMemberName), unsanitize($isServerName), true);
 
 			// Basics
 			$hmtlout	.= $this->html->widget(array('fieldtype'=>'hidden','name'=>'member_id','value'=>$isindatabase));

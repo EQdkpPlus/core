@@ -93,7 +93,7 @@ class guildImporter extends page_generic {
 
 		
 		// generate output
-		$guilddata	= $this->game->obj['armory']->guild($this->in->get('guildname', ''), $this->in->get('servername', $this->config->get('uc_servername')), true);
+		$guilddata	= $this->game->obj['armory']->guild(unsanitize($this->in->get('guildname', '')), unsanitize($this->in->get('servername', $this->config->get('uc_servername'))), true);
 
 		if(!isset($guilddata['status'])){
 			//Suspend all Chars
