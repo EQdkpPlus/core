@@ -33,7 +33,7 @@ if (!class_exists('exchange_events')){
 				foreach($arrEvents as $eventid){
 					$out['event:'.$eventid] = array(
 						'id'	=> $eventid,
-						'name'	=> $this->pdh->get('event', 'name', array($eventid)),
+						'name'	=> unsanitize($this->pdh->get('event', 'name', array($eventid))),
 						'value'	=> $this->pdh->get('event', 'value', array($eventid)),
 						'icon'  => str_replace("{ROOT_PATH}", $this->env->link, $this->pdh->get('event', 'icon', array($eventid, true, false, true))),
 					);
@@ -41,8 +41,8 @@ if (!class_exists('exchange_events')){
 					foreach($arrMultidkpPools as $mdkp){
 						$arrPools['multidkp_pool:'.$mdkp] = array(
 							'id'				=> $mdkp,
-							'name'				=> $this->pdh->get('multidkp', 'name', array($mdkp)),
-							'desc'				=> $this->pdh->get('multidkp', 'desc', array($mdkp)),
+							'name'				=> unsanitize($this->pdh->get('multidkp', 'name', array($mdkp))),
+							'desc'				=> unsanitize($this->pdh->get('multidkp', 'desc', array($mdkp))),
 						);
 					}
 					$out['event:'.$eventid]['multidkp_pools'] = $arrPools;
@@ -51,8 +51,8 @@ if (!class_exists('exchange_events')){
 					foreach($arrItempoolsForEvent as $itempoolid){
 						$arrItempools['itempool:'.$itempoolid] = array(
 							'id'				=> $itempoolid,
-							'name'				=> $this->pdh->get('itempool', 'name', array($itempoolid)),
-							'desc'				=> $this->pdh->get('itempool', 'desc', array($itempoolid)),
+							'name'				=> unsanitize($this->pdh->get('itempool', 'name', array($itempoolid))),
+							'desc'				=> unsanitize($this->pdh->get('itempool', 'desc', array($itempoolid))),
 						);
 					}
 					$out['event:'.$eventid]['itempools'] = $arrItempools;

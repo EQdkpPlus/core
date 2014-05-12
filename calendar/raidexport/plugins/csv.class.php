@@ -34,7 +34,7 @@ if(!function_exists('CSVexport')){
 		$a_json	= array();
 		foreach($attendees as $id_attendees=>$d_attendees){
 			$a_json[]	= array(
-				'name'		=> registry::register('plus_datahandler')->get('member', 'name', array($id_attendees)),
+				'name'		=> unsanitize(registry::register('plus_datahandler')->get('member', 'name', array($id_attendees))),
 				'status'	=> $d_attendees['signup_status'],
 				'guest'		=> false
 			);

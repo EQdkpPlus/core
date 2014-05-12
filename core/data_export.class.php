@@ -51,8 +51,8 @@ class content_export extends gen_class {
 		$out = array();
 		
 		$out['eqdkp'] = array(
-			'name'				=> $this->config->get('guildtag'),
-			'guild'				=> $this->config->get('guildtag'),
+			'name'				=> unsanitize($this->config->get('guildtag')),
+			'guild'				=> unsanitize($this->config->get('guildtag')),
 			'dkp_name'			=> $this->config->get('dkp_name'),
 			'version'			=> $this->config->get('plus_version'),
 			'layout'			=> $this->config->get('eqdkp_layout'),
@@ -62,7 +62,7 @@ class content_export extends gen_class {
 			'name'				=> $this->config->get('default_game'),
 			'version'			=> $this->config->get('game_version'),
 			'language'			=> $this->config->get('game_language'),
-			'server_name'		=> $this->config->get('uc_servername'),
+			'server_name'		=> unsanitize($this->config->get('uc_servername')),
 			'server_loc'		=> $this->config->get('uc_server_loc'),
 		);				
 		$out['info'] = array(
@@ -120,11 +120,11 @@ class content_export extends gen_class {
 
 				$out['players']['player:'.$member] = array(
 					'id'			=> $member,
-					'name'			=> $this->pdh->get('member', 'name', array($member)),
+					'name'			=> unsanitize($this->pdh->get('member', 'name', array($member))),
 					'active'		=> $this->pdh->get('member', 'active', array($member)),
 					'hidden'		=> $this->pdh->get('member', 'is_hidden', array($member)),
 					'main_id'		=> $this->pdh->get('member', 'mainid', array($member)),
-					'main_name'		=> $this->pdh->get('member', 'mainname', array($member)),
+					'main_name'		=> unsanitize($this->pdh->get('member', 'mainname', array($member))),
 
 					'class_id'		=> $this->pdh->get('member', 'classid', array($member)),
 					'class_name'	=> $this->pdh->get('member', 'classname', array($member)),
@@ -159,8 +159,8 @@ class content_export extends gen_class {
 
 				$out['multidkp_pools']['multidkp_pool:'.$mdkp] = array(
 					'id'				=> $mdkp,
-					'name'				=> $this->pdh->get('multidkp', 'name', array($mdkp)),
-					'desc'				=> $this->pdh->get('multidkp', 'desc', array($mdkp)),
+					'name'				=> unsanitize($this->pdh->get('multidkp', 'name', array($mdkp))),
+					'desc'				=> unsanitize($this->pdh->get('multidkp', 'desc', array($mdkp))),
 					'events'			=> $events,
 					'mdkp_itempools'	=> $itempools,
 				);
@@ -175,8 +175,8 @@ class content_export extends gen_class {
 			foreach ($itempools as $itempool){
 				$out['itempools']['itempool:'.$itempool] = array(
 					'id'		=> $itempool,
-					'name'		=> $this->pdh->get('itempool', 'name', array($itempool)),
-					'desc'		=> $this->pdh->get('itempool', 'desc', array($itempool)),
+					'name'		=> unsanitize($this->pdh->get('itempool', 'name', array($itempool))),
+					'desc'		=> unsanitize($this->pdh->get('itempool', 'desc', array($itempool))),
 				);
 			}
 		} else {

@@ -34,14 +34,14 @@ if(!function_exists('WoWMacroexport')){
 		$a_json	= array();
 		foreach($attendees as $id_attendees=>$d_attendees){
 			$a_json[]	= array(
-				'name'		=> registry::register('plus_datahandler')->get('member', 'name', array($id_attendees)),
+				'name'		=> unsanitize(registry::register('plus_datahandler')->get('member', 'name', array($id_attendees))),
 				'status'	=> $d_attendees['signup_status'],
 				'guest'		=> false
 			);
 		}
 		foreach($guests as $guestsdata){
 			$a_json[]	= array(
-				'name'		=> $guestsdata['name'],
+				'name'		=> unsanitize($guestsdata['name']),
 				'status'	=> false,
 				'guest'		=> true
 			);

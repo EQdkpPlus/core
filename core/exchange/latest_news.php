@@ -79,7 +79,7 @@ if (!class_exists('exchange_latest_news')){
 						
 						$response['entries']['entry:'.$id] = array(
 						  'id'			=> $news['news_id'],
-						  'headline'	=> $news['news_headline'],
+						  'headline'	=> unsanitize($news['news_headline']),
 						  'message'		=> $message,
 						  'date'		=> $this->time->date('Y-m-d H:i', $news['news_date']),
 						  'date_timestamp'=> $news['news_date'],

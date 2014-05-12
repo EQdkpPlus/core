@@ -52,7 +52,7 @@ if(!function_exists('wowautoinviteexport')){
 		$a_json	= array();
 		foreach($attendees as $id_attendees=>$d_attendees){
 			$a_json[]	= array(
-				'name'		=> registry::register('plus_datahandler')->get('member', 'name', array($id_attendees)),
+				'name'		=> unsanitize(registry::register('plus_datahandler')->get('member', 'name', array($id_attendees))),
 				'status'	=> $d_attendees['signup_status'],
 				'class'		=> autoinvite_eclass(registry::register('plus_datahandler')->get('member', 'classid', array($id_attendees))),
 				'note'		=> $d_attendees['note'],
@@ -62,7 +62,7 @@ if(!function_exists('wowautoinviteexport')){
 		}
 		foreach($guests as $guestsdata){
 			$a_json[]	= array(
-				'name'		=> $guestsdata['name'],
+				'name'		=> unsanitize($guestsdata['name']),
 				'status'	=> false,
 				'class'		=> autoinvite_eclass($guestsdata['class']),
 				'note'		=> $guestsdata['note'],

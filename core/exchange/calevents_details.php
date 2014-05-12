@@ -112,7 +112,7 @@ if (!class_exists('exchange_calevents_details')){
 
 										$arrChars['char:'.$memberid] = array(
 											'id'			=> $memberid,
-											'name'			=> $this->pdh->get('member', 'name', array($memberid)),
+											'name'			=> unsanitize($this->pdh->get('member', 'name', array($memberid))),
 											'classid'		=> $this->pdh->get('member', 'classid', array($memberid)),
 											'signedbyadmin'	=> ($memberdata['signedbyadmin']) ? 1 : 0,
 											'note'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : ''),
@@ -147,7 +147,7 @@ if (!class_exists('exchange_calevents_details')){
 							foreach($this->guests as $guestid=>$guestsdata){
 								$arrGuests['guest:'.$guestid] = array(
 									'id'		=> $guestid,
-									'name'		=> $guestsdata['name'],
+									'name'		=> unsanitize($guestsdata['name']),
 									'classid'	=> $guestsdata['class'],
 									'class'		=> $this->game->get_name('classes', $guestsdata['class']),
 								);
@@ -174,7 +174,7 @@ if (!class_exists('exchange_calevents_details')){
 
 								$arrUserChars['char:'.$key] = array(
 									'id'		=> $key,
-									'name'		=> $charname,
+									'name'		=> unsanitize($charname),
 									'signed_in'	=> ($this->mystatus['member_id'] == $key) ? 1 : 0,
 									'main'		=> ($key == $mainchar) ? 1 : 0,
 									'class'		=> $this->pdh->get('member', 'classid', array($key)),
@@ -205,7 +205,7 @@ if (!class_exists('exchange_calevents_details')){
 						$out = array(
 							'type'			=> ($raidmode == 'raid') ? 'raid' : 'event',
 							'categories'	=> ($eventdata['extension']['raidmode'] == 'role') ? 'roles' : 'classes',
-							'title' 		=> $this->pdh->get('calendar_events', 'name', array($event_id)),
+							'title' 		=> unsanitize($this->pdh->get('calendar_events', 'name', array($event_id))),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($event_id))),
 							'start_timestamp'=> $this->pdh->get('calendar_events', 'time_start', array($event_id)),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($event_id))),
@@ -215,8 +215,8 @@ if (!class_exists('exchange_calevents_details')){
 							'allDay'		=> ($this->pdh->get('calendar_events', 'allday', array($event_id)) > 0) ? 1 : 0,
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($event_id)) == 1) ? 1 : 0,
 							'icon'			=> ($eventdata['extension']['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventdata['extension']['raid_eventid'], true, true)) : '',
-							'note'			=> $this->pdh->get('calendar_events', 'notes', array($event_id)),
-							'raidleader'	=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventdata['extension']['raidleader']))) : '',
+							'note'			=> unsanitize($this->pdh->get('calendar_events', 'notes', array($event_id))),
+							'raidleader'	=> unsanitize(($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventdata['extension']['raidleader']))) : ''),
 							'raidstatus'	=> $arrStatus,
 							'user_status'	=> $userstatus,
 							'user_chars'	=> $arrUserChars,
@@ -227,13 +227,13 @@ if (!class_exists('exchange_calevents_details')){
 					} else {
 						$out = array(
 							'type'			=> ($raidmode == 'raid') ? 'raid' : 'event',
-							'title' 		=> $this->pdh->get('calendar_events', 'name', array($event_id)),
+							'title' 		=> unsanitize($this->pdh->get('calendar_events', 'name', array($event_id))),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($event_id))),
 							'start_timestamp'=> $this->pdh->get('calendar_events', 'time_start', array($event_id)),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($event_id))),
 							'end_timestamp'	=> $this->pdh->get('calendar_events', 'time_end', array($event_id)),
 							'allDay'		=> ($this->pdh->get('calendar_events', 'allday', array($event_id)) > 0) ? 1 : 0,
-							'note'			=> $this->pdh->get('calendar_events', 'notes', array($event_id)),
+							'note'			=> unsanitize($this->pdh->get('calendar_events', 'notes', array($event_id))),
 							'calendar'		=> $eventdata['calendar_id'],
 							'calendar_name'	=> $this->pdh->get('calendar_events', 'calendar', array($event_id)),
 						);

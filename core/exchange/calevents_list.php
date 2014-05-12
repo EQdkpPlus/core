@@ -95,7 +95,7 @@ if (!class_exists('exchange_calevents_list')){
 					
 						$arrRaids['event:'.$intRaidID] = array(
 							'type'			=> ($raidmode) ? 'raid' : 'event',
-							'title' 		=> $this->pdh->get('calendar_events', 'name', array($intRaidID)),
+							'title' 		=> unsanitize($this->pdh->get('calendar_events', 'name', array($intRaidID))),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($intRaidID))),
 							'start_timestamp'=> $this->pdh->get('calendar_events', 'time_start', array($intRaidID)),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($intRaidID))),
@@ -106,12 +106,12 @@ if (!class_exists('exchange_calevents_list')){
 							'url'			=> ($raidmode) ? 'calendar/viewcalraid.php?eventid='.$intRaidID : '',
 							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true, true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($intRaidID)),
-							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
+							'raidleader'	=> unsanitize(($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : ''),
 							'raidstatus'	=> ($raidmode) ? $rstatusdata : '',
 							'user_status'	=> ($raidmode) ? $memberstatus : '',
 							'color'			=> '#'.$eventcolor,
 							'calendar'		=> $this->pdh->get('calendar_events', 'calendar_id', array($intRaidID)),
-							'calendar_name'	=> $this->pdh->get('calendar_events', 'calendar', array($intRaidID)),
+							'calendar_name'	=> unsanitize($this->pdh->get('calendar_events', 'calendar', array($intRaidID))),
 							'icalfeed'		=> ($this->user->is_signedin()) ? $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'] : '',
 						);
 					}
