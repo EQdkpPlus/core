@@ -90,7 +90,7 @@ class input extends gen_class {
 	private function _options($filter){
 		switch($filter){
 			case FILTER_SANITIZE_NUMBER_FLOAT:	$out = FILTER_FLAG_ALLOW_FRACTION;	break;
-			case FILTER_SANITIZE_STRING:		$out = FILTER_FLAG_NO_ENCODE_QUOTES; break;
+			//case FILTER_SANITIZE_STRING:		$out = FILTER_FLAG_NO_ENCODE_QUOTES; break;
 			default:							$out = '';
 		}
 		return $out;
