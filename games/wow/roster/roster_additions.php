@@ -67,7 +67,7 @@
 # Amory Stuff
 if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 	$this->game->new_object('bnet_armory', 'armory', array($this->config->get('uc_server_loc'), $this->config->get('uc_data_lang')));
-	$guilddata = $this->game->obj['armory']->guild($this->config->get('guildtag'), $this->config->get('uc_servername'));
+	$guilddata = $this->game->obj['armory']->guild(unsanitize($this->config->get('guildtag')), unsanitize($this->config->get('uc_servername')));
 	$this->tpl->assign_array('guilddata', $guilddata);
 	if ($guilddata && !isset($chardata['status'])){
 		infotooltip_js();
@@ -100,7 +100,7 @@ if($this->config->get('uc_servername') && $this->config->get('uc_server_loc')){
 				'NAME'	=> $val['name'],
 				'BAR'	=> $this->jquery->ProgressBar('guildachievs_'.$id, $value, $val['completed'] .' / ' . $val['total'].' ('.$value.'%)'),
 				'ID'	=> $id,
-				'LINK'	=> ($id != 'total') ? $this->game->obj['armory']->bnlink('', register('config')->get('uc_servername'), 'guild-achievements', register('config')->get('guildtag')).'#achievement#'.$id : '',
+				'LINK'	=> ($id != 'total') ? $this->game->obj['armory']->bnlink('', unsanitize(register('config')->get('uc_servername')), 'guild-achievements', unsanitize(register('config')->get('guildtag'))).'#achievement#'.$id : '',
 			));
 		}
 		
