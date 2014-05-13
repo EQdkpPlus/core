@@ -93,7 +93,7 @@ class guildImporter extends page_generic {
 			//Import Chars
 			foreach ($xml->Members->Member as $objMember) {	
 				$dataarry = array(
-					'name'		=> (string)$objMember->Name,
+					'name'		=> sanitize((string)$objMember->Name),
 					'lvl'		=> (int)$objMember->Level,
 					'classid'	=> $this->game->get_id('classes', (string)$objMember->Calling),
 					'raceid'	=> 0,
@@ -111,7 +111,7 @@ class guildImporter extends page_generic {
 					}
 				}
 				
-				$hmtlout .= "<dl><dt><label><img src=\"".$this->root_path.'images/no_pic.png'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".(string)$objMember->Name."<br/>".(($myStatus) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
+				$hmtlout .= "<dl><dt><label><img src=\"".$this->root_path.'images/no_pic.png'."\" alt=\"charicon\" height=\"84\" width=\"84\" /></label></dt><dd>".sanitize((string)$objMember->Name)."<br/>".(($myStatus) ? '<span class="positive">'.$this->game->glang('import_status_true').'</span>' : '<span class="negative">'.$this->game->glang('import_status_false').'</span>')."</dd></dl>";
 			}
 			
 			$hmtlout = "<dl><div class=\"greenbox roundbox\"><div class=\"icon_ok\" id=\"error_message_txt\">".$this->game->glang('uc_gimp_header_fnsh')."</div></div></dl>".$hmtlout;			

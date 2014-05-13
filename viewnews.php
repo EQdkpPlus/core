@@ -34,6 +34,9 @@ class viewnews extends page_generic {
 	}
 
 	public function display(){
+		echo ("Andiäü?&\"'");
+		echo sanitize("Andiäü?&\"'");
+	
 		$start = $this->in->get('start', 0);
 		$news_array = array();
 		if ($this->url_id > 0){			//Single News

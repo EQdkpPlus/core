@@ -104,7 +104,8 @@ class lotro_data {
 	* @return bol
 	*/
 	public function guild($guild, $realm, $force=false){
-		$guild	= rawurlencode($guild);
+		$guild	= rawurlencode(unsanitize($guild));
+		$realm = unsanitize($realm);
 		$url	= $this->apiurl.base64_decode("Z29kbW9kLzkzNGY1ZDY4ZGUwOTljMjYyNTMyZWY2ODI1YzJkZDA3Lw==").'guildroster/w/'.$realm.'/g/'.$guild;
 		if(!$json	= $this->get_CachedData('guilddata_'.$guild.$realm, $force)){
 			$json	= $this->read_url($url);
@@ -125,7 +126,8 @@ class lotro_data {
 	* @return bol
 	*/
 	public function character($user, $realm, $force=false){
-		$user	= rawurlencode($user);
+		$user	= rawurlencode(unsanitize($user));
+		$realm = unsanitize($realm);
 		$url	= $this->apiurl.base64_decode("Z29kbW9kLzkzNGY1ZDY4ZGUwOTljMjYyNTMyZWY2ODI1YzJkZDA3Lw==").'charactersheet/w/'.$realm.'/c/'.$user;
 		if(!$json	= $this->get_CachedData('chardata_'.$user.$realm, $force)){
 			$json	= $this->read_url($url);
