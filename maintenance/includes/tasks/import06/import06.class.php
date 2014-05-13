@@ -85,7 +85,7 @@ class import06 extends task {
 
 	protected function get($key, $default='', $array=false) {
 		return ($array) ? $this->in->getArray($key, $default) : $this->in->get($key, $default);
-	}
+	
 	
 	protected function js_select_global() {
 		return "<script type='text/javascript'>
@@ -668,6 +668,7 @@ class import06 extends task {
 					foreach($row as $field => $value) {
 						$events[$row['event_id']][$field] = $this->new[0]->escape($value);
 					}
+					$events[$row['event_id']]['event_name'] = sanitize($events[$row['event_id']]['event_name']);
 				}
 			}
 			
@@ -942,6 +943,8 @@ class import06 extends task {
 					$profilefields['level'] = $row['member_level'];
 					
 					$members[$row['member_id']]['profiledata'] = json_encode($profilefields);
+					
+					$members[$row['member_id']]['member_name'] = sanitize($member_name);
 				}
 			}
 
@@ -1267,7 +1270,9 @@ class import06 extends task {
 	}
 	
 	private function array_isearch($needle, $array) {
+		$needle = unsanitize($needle);
 		foreach($array as $key => $val) {
+			$val = unsanitize($val);
 			if(strlen($val) == strlen($needle) AND stripos($val, $needle) === 0) {
 				return $key;
 			}
@@ -1331,6 +1336,7 @@ class import06 extends task {
 					$value = stripslashes($value);
 					$items[$row['item_id']][$field] = ($value != '') ? $value : null;
 				}
+				$items[$row['item_id']]['item_name'] = sanitize($items[$row['item_id']]['item_name']);
 			}
 		}
 

@@ -27,8 +27,8 @@ if (!class_exists('exchange_data')){
 
 		public function get_data($params, $body){
 			$out['eqdkp'] = array(
-				'name'				=> $this->config->get('guildtag'),
-				'guild'				=> $this->config->get('guildtag'),
+				'name'				=> unsanitize($this->config->get('guildtag')),
+				'guild'				=> unsanitize($this->config->get('guildtag')),
 				'dkp_name'			=> $this->config->get('dkp_name'),
 				'forum_url'			=> $this->config->get('cmsbridge_url'),
 				'language'			=> $this->config->get('default_lang'),
@@ -37,7 +37,7 @@ if (!class_exists('exchange_data')){
 				'name'				=> $this->config->get('default_game'),
 				'version'			=> $this->config->get('game_version'),
 				'language'			=> $this->config->get('game_language'),
-				'server_name'		=> $this->config->get('uc_servername'),
+				'server_name'		=> unsanitize($this->config->get('uc_servername')),
 				'server_loc'		=> $this->config->get('uc_server_loc'),
 			);
 			return $out;

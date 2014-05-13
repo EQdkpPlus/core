@@ -48,7 +48,7 @@ if (!class_exists('exchange_user_chars')){
 
 						$arrUserChars['char:'.$key] = array(
 							'id'	=> $key,
-							'name'	=> $charname,
+							'name'	=> unsanitize($charname),
 							'main'	=> ($key == $mainchar) ? 1 : 0,
 							'class'	=> $this->pdh->get('member', 'classid', array($key)),
 							'classname'	=> $this->pdh->get('member', 'classname', array($key)),

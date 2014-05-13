@@ -98,7 +98,7 @@ if (!class_exists('exchange_latest_articles')){
 								$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
 						
 								$arrComments['comment:'.$key] = array(
-										'username'			=> $row['username'],
+										'username'			=> unsanitize($row['username']),
 										'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
 										'date'				=> $this->time->date('Y-m-d H:i', $row['date']),
 										'date_timestamp'	=> $row['date'],
@@ -124,13 +124,13 @@ if (!class_exists('exchange_latest_articles')){
 						
 						$response['entries']['entry:'.$intArticleID] = array(
 								'id'			=> $intArticleID,
-								'title'			=> $this->pdh->get('articles', 'title', array($intArticleID)),
+								'title'			=> unsanitize($this->pdh->get('articles', 'title', array($intArticleID))),
 								'text'			=> $strText,
 								'link'			=> $this->user->removeSIDfromString($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID))),
 								'permalink'		=> $this->env->link.'index.php?a='.$intArticleID,
 								'date'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('articles', 'date', array($intArticleID))),
 								'date_timestamp' => $this->pdh->get('articles', 'date', array($intArticleID)),
-								'author'		=> $this->pdh->geth('articles', 'user_id', array($intArticleID)),
+								'author'		=> unsanitize($this->pdh->geth('articles', 'user_id', array($intArticleID))),
 								'category_id' 	=> $category_id,
 								'category'		=> $this->pdh->get('article_categories', 'name', array($category_id)),
 								'category_url'	=> $this->user->removeSIDfromString($this->env->link.$this->pdh->get('article_categories',  'path', array($category_id))),

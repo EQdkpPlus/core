@@ -67,15 +67,18 @@ class input extends gen_class {
 	public function inject($strKey, $strValue){
 		$this->_own[$strKey] = $strValue;
 	}
-
-	/**
-	* Get the type of the thing..
-	*
-	* @var string
-	* @access private
-	*/
-	private function _type($default, $nonget=false){
-		$type = ($nonget) ? $default : gettype($default);
+	
+	private function _getType($default, $owntype){
+		if (strlen($owntype)){
+			return $owntype;
+		} elseif(strlen($default)){
+			return gettype($default);
+		}
+		return 'string';
+	}
+	
+	
+	private function _getFilter($type){
 		switch($type){
 			case 'int':					$out = FILTER_SANITIZE_NUMBER_INT;		break;
 			case 'integer':				$out = FILTER_SANITIZE_NUMBER_INT;		break;
@@ -85,28 +88,43 @@ class input extends gen_class {
 			case 'float':
 			case 'double':				$out = FILTER_SANITIZE_NUMBER_FLOAT; 	break;
 			case 'string':
+			case 'noencquotes':
 			default:					$out = FILTER_SANITIZE_STRING;
 		}
 		return $out;
 	}
-
+	
+	
 	private function _convert($value, $type){
 		switch($type){
-			case FILTER_SANITIZE_NUMBER_FLOAT:		$out = $this->floatvalue($value);	break;
-			case FILTER_SANITIZE_NUMBER_INT:		$out = intval($value);		break;
-			default:								$out = $value;
+			case 'int':					
+			case 'integer': $out = intval($value);
+				break;
+
+			case 'float':
+			case 'double': $out = $this->floatvalue($value);
+				break;
+			
+			default: $out = $value;
 		}
+		return $out;
+	}
+	
+	private function _options($type){
+		switch($type){
+			case 'noencquotes' : $out = FILTER_FLAG_NO_ENCODE_QUOTES;
+				break;
+			
+			case 'float':
+			case 'double': $out = FILTER_FLAG_ALLOW_FRACTION;
+				break;
+				
+			default: $out = '';
+		}
+		
 		return $out;
 	}
 
-	private function _options($filter){
-		switch($filter){
-			case FILTER_SANITIZE_NUMBER_FLOAT:	$out = FILTER_FLAG_ALLOW_FRACTION;	break;
-			case FILTER_SANITIZE_STRING:		$out = FILTER_FLAG_NO_ENCODE_QUOTES; break;
-			default:							$out = '';
-		}
-		return $out;
-	}
 
 	/**
 	* Get an input variable from a superglobal. POST > SESSION > GET
@@ -154,19 +172,20 @@ class input extends gen_class {
 	* @return mixed
 	*/
 	public function get($key, $default='', $owntype=''){
-		$filter	= (($owntype) ? $this->_type($owntype, true) : $this->_type($default));
+		$type = $this->_getType($default, $owntype);
+		$filter = $this->_getFilter($type);
 	
 		if($this->_caching && isset($this->_cache[$filter][$key])){
 			$out = $this->_cache[$filter][$key];
 		}else{	
 			if(strpos($key,':')) {
-				$out		= filter_var($this->_get_deep(explode(':', $key),$default), $filter, $this->_options($filter));
+				$out		= filter_var($this->_get_deep(explode(':', $key),$default), $filter, $this->_options($type));
 			} else {
-				$out		= filter_input($this->_superglobal($key), $key, $filter, $this->_options($filter));
+				$out		= filter_input($this->_superglobal($key), $key, $filter, $this->_options($type));
 				//Could be in own array
 				if ($out === false || $out === NULL){
 					if (isset($this->_own[$key])){
-						$out = filter_var($this->_own[$key], $filter, $this->_options($filter));
+						$out = filter_var($this->_own[$key], $filter, $this->_options($type));
 					}
 				}
 				
@@ -174,7 +193,7 @@ class input extends gen_class {
 			$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
 			$this->_cache[$filter][$key] = $out;
 		}
-		return (isset($filter) && $filter != '') ? $this->_convert($out, $filter) : $out;
+		return (isset($filter) && $filter != '') ? $this->_convert($out, $type) : $out;
 	}
 
 	/**
@@ -193,7 +212,7 @@ class input extends gen_class {
 		} else {
 			$checkarr = is_array($key) ? $_POST : (isset($_POST[$key])) ? $_POST[$key] : false;
 		}
-		$valarr		= is_array($type) ? $type : $this->_type($type, true);
+		$valarr		= is_array($type) ? $type : $this->_getType(false, $type);
 		return (!$checkarr) ? array() : filter_var_array($checkarr, $valarr);
 	}
 

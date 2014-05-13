@@ -253,6 +253,10 @@ function gen_htmlhead_copyright($text){
  * @return		string
  */
 function sanitize($input){
+	if (is_array($input)){
+		return array_map("sanitize", $input);
+	}
+	
 	return filter_var($input, FILTER_SANITIZE_STRING);
 }
 
@@ -263,6 +267,10 @@ function sanitize($input){
  * @return		string
  */
 function unsanitize($input){
+	if (is_array($input)){
+		return array_map("unsanitize", $input);
+	}
+	
 	return htmlspecialchars_decode($input, ENT_QUOTES);
 }
 
