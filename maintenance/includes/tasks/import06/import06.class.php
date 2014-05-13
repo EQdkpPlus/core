@@ -622,6 +622,7 @@ class import06 extends task {
 				foreach($row as $field => $value) {
 					$events[$row['event_id']][$field] = $this->new[0]->escape($value);
 				}
+				$events[$row['event_id']]['event_name'] = sanitize($events[$row['event_id']]['event_name']);
 			}
 			$this->old[0]->free_result($result);
 			
@@ -876,6 +877,8 @@ class import06 extends task {
 				$members[$row['member_id']]['profiledata'] = registry::register('xmltools')->Array2Database($profilefields);
 				$m2cr[$row['member_id']]['class'] = $row['class_name'];
 				$m2cr[$row['member_id']]['race'] = $row['race_name'];
+				
+				$members[$row['member_id']]['member_name'] = sanitize($member_name);
 			}
 			$this->old[0]->free_result($result);
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."members;");
@@ -1185,7 +1188,9 @@ class import06 extends task {
 	}
 	
 	private function array_isearch($needle, $array) {
+		$needle = unsanitize($needle);
 		foreach($array as $key => $val) {
+			$val = unsanitize($val);
 			if(strlen($val) == strlen($needle) AND stripos($val, $needle) === 0) {
 				return $key;
 			}
@@ -1244,6 +1249,7 @@ class import06 extends task {
 				$value = stripslashes($value);
 				$items[$row['item_id']][$field] = ($value != '') ? $value : null;
 			}
+			$items[$row['item_id']]['item_name'] = sanitize($items[$row['item_id']]['item_name']);
 		}
 		unset($this->step_data['import_data']['items']);
 		$this->old[0]->free_result($result);
