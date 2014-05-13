@@ -344,6 +344,7 @@ if(!class_exists('infotooltip')) {
 		 * return @array
 		 */
 		public function getitem($item_name, $lang=false, $game_id=false, $forceupdate=false, $data=array()) {
+			$item_name = htmlspecialchars_decode($item_name, ENT_QUOTES);
 			$game = $this->config['game'];
 			$this->pdl->log('infotooltip', 'getitem called: item_name: '.$item_name.', lang: '.$lang.', game_id: '.$game_id.', forceupdate: '.$forceupdate.', data: '.implode(', ', $data));
 			$lang = (!$lang || $lang == '') ? $this->config['game_language'] : $lang;
