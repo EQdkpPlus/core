@@ -822,9 +822,26 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function Tab_header($name, $cookie=false, $taboptions=false){
-			$mycookie		= ($cookie) ? ', active: ($.cookie("cookie'.$name.'") || 0), beforeActivate: function(e, ui) { $.cookie("cookie'.$name.'",  ui.newTab.index(), { expires: 30 }) } ' : '';
-			$taboptions		= ($taboptions) ? $taboptions : '{ show: { effect: "fade", duration: \'normal\' } '.$mycookie.'}';
-			$this->tpl->add_js('$("#'.$name.'").tabs('.$taboptions.');', 'docready');
+			$jsoptions = array();
+			
+			if($cookie){
+				$jsoptions[] = "beforeActivate: function(e, ui) { localStorage.setItem('tabs.".$name."', ui.newTab.index()); },
+									create: function (e, ui) {
+										var tabID		= (window.location.hash) ? $('#' +  window.location.hash.replace('#', '')).index() : 0;
+										var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((localStorage.getItem('tabs.".$name."') != null) ? localStorage.getItem('tabs.".$name."') : 0);
+										$(this).tabs('option', 'active', selectionId);
+									}";
+			}
+			$jsoptions[]	= 'fxSlide: '.(isset($taboptions['fxSlide'])) ? $taboptions['fxSlide'] : 'true';
+			$jsoptions[]	= 'fxFade: '.(isset($taboptions['fxFade'])) ? $taboptions['fxFade'] : 'true';
+			$jsoptions[]	= 'fxSpeed: '.(isset($taboptions['fxSpeed'])) ? $taboptions['fxSpeed'] : 'normal';
+			if(isset($taboptions['show'])){
+				$jsoptions[]	= 'show: function(event, ui) {'.$taboptions['show'].'}';
+			}
+			if(isset($taboptions['custom'])){
+				$jsoptions[]	= $taboptions['custom'];
+			}
+			$this->tpl->add_js('$("#'.$name.'").tabs('.$this->gen_options($jsoptions).');', 'docready');
 		}
 
 		/**
