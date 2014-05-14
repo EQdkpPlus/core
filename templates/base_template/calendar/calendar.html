@@ -214,6 +214,7 @@
 			create: function (e, ui) {
 				var tabID		= (window.location.hash) ? $('#' +  window.location.hash.replace('#', '')).index() : 0;
 				var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((localStorage.getItem("tabs.calendar") != null) ? localStorage.getItem("tabs.calendar") : 0);
+				$(this).tabs("option", "active", selectionId);
 			},
 			show: function(event, ui) {
 				$('#calendar').fullCalendar('render');
