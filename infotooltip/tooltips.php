@@ -130,21 +130,23 @@ var EQdkpTooltip = new function(){
 				
 				item_data['name'] = itemname.toString();
 				var is_numeric = /^[0-9]+$/.test(itemname);
+				console.log(is_numeric);
 				var itemdatatag = ""
 				if (is_numeric){
 					item_data['game_id'] = parseInt(itemname);
-					itemdatatag = 'data-game_id=""';
+					itemdatatag = 'data-game_id="'+item_data['game_id']+'"';
 				}
+				console.log(itemname.substring(0, 3) == 'id:');
 				if (itemname.substring(0, 3) == 'id:'){
 					myitemid = itemname.substr(3);
 					item_data['game_id'] = myitemid;
-					itemdatatag = 'data-game_id=""';
+					itemdatatag = 'data-game_id="'+myitemid+'"';
 					item_data['name'] = myitemid;
 					itemname = myitemid;
 				}
 				
 				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" data-name="'+itemname.toString()+'" '+itemdatatag+' title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+itemname+'</span>';
-					
+				console.log(out);	
 				$(this).html(out);
 			});
 									
