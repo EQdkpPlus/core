@@ -150,12 +150,12 @@ var EQdkpTooltip = new function(){
 				var itemdatatag = ""
 				if (is_numeric){
 					item_data['game_id'] = parseInt(itemname);
-					itemdatatag = 'data-game_id=""';
+					itemdatatag = 'data-game_id="'+item_data['game_id']+'"';
 				}
 				if (itemname.substring(0, 3) == 'id:'){
 					myitemid = itemname.substr(3);
 					item_data['game_id'] = myitemid;
-					itemdatatag = 'data-game_id=""';
+					itemdatatag = 'data-game_id="'+item_data['game_id']+'"';
 					item_data['name'] = myitemid;
 					itemname = myitemid;
 				}
