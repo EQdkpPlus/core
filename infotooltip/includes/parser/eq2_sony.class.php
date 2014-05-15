@@ -91,7 +91,7 @@ if(!class_exists('eq2_sony')) {
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
 			$item = array('id' => $item_id);
 			if(!$item_id) return null;
-			$url = 'http://census.soe.com/s:eqdkpplus/son/get/eq2/item/' . $item['id'];
+			$url = 'http://census.soe.com/s:eqdkpplus/json/get/eq2/item/' . $item['id'];
 			$item['link'] = $url;
 			$data = $this->puf->fetch($item['link']);
 			$itemdata = json_decode($data);
@@ -167,16 +167,17 @@ if(!class_exists('eq2_sony')) {
 		$content .= "<br>";
 		$growth = $item->{'growth_table'};
 		$agi = 0; $intel = 0; $sta = 0; $str = 0; $wis = 0;
+		$lcount = 0;
 		for ($i = 1; $i <= 50; $i++) {
 		(${"l{$i}"} = $growth->{'level'.$i});
+		if ($growth->{'level'.$i} != "") {$lcount = $lcount +1;}
 		$agi = $agi + (${"l{$i}"}->{'agi'});
 		$intel = $intel + (${"l{$i}"}->{'int'});
 		$sta = $sta + (${"l{$i}"}->{'sta'});
 		$str = $str + (${"l{$i}"}->{'str'});
 		$wis = $wis + (${"l{$i}"}->{'wis'});
 		}
-		//$content .= "<div class='itemd_name'>Spirit Stone at Max Level</div>\n";
-		$content .= "<div class='itemd_name'><small>Adds the following to an item at Level ".($i-1).":</small></div>\n";
+		$content .= "<div class='itemd_name'><small>Adds the following to an item at Level ".$lcount.":</small></div>\n";
 		$content .= "<div class='ui-helper-clearfix'></div>";
 		$content .= "<div class='itemd_green'>";
 		if ($intel != 0) { $content .= "  +" . $intel . " int"; }
@@ -308,6 +309,12 @@ if(!class_exists('eq2_sony')) {
 			$typecolor = $typeInfo->{'color'};
 			$typename = $typeInfo->{'name'};
 			if ($typeInfo->{'name'} == "adornment") {
+				if (strncmp("\\#FF0000",$typename,8) == 0)
+					{
+						$description = substr($typename,8);
+						$description = str_replace("\\/c","",$typename);
+						$description = "<span style='color:red;'>" . $typename . "</span>";
+					}
 			# Item Level
 			$content .= "<div class='ui-helper-clearfix'</div>";
 			$content .= "<br><div style='width: 80px; float: left; color: white;'>Level</div>";
@@ -385,13 +392,18 @@ if(!class_exists('eq2_sony')) {
 			#return $content;
 			$count = 0;
 			$flags = $item->{'flags'};
-			foreach($flags as $key => $value) {
+			foreach($flags as $key => $value) { 
 				$enabled = $value->{'value'};
-				if ($enabled == 1) {
+				if ($enabled == 1) { 
 					if ($count == 0) {
 						$content = "<div class='itemd_flags'>\n";
 					}
 				if ($key == 'notrasmute') {($key = 'no-transmute');}
+				if ($key == 'nodestroy') {($key = 'no-destroy');}
+				if ($key == 'novalue') {($key = 'no-value');}
+				if ($key == 'notrade') {($key = 'no-trade');}
+				if ($key == 'artiface') {($key = 'artifact');}
+				if ($key == 'attunable') {($key = 'attuneable');}
 				if ($key == 'indestructible') {($key = '');($indes = 1);}
 					$content .= strtoupper($key)." &nbsp;\n";
 					$count++;
@@ -508,7 +520,19 @@ if(!class_exists('eq2_sony')) {
 						$content .= "<div class='itemd_blue'>";
 					}
 					# format the value
+					if (strncmp("\\#B000B0",$key->{'name'},8) == 0)
+					{
+						$an1 = substr($key->{'name'},8);
+						$an2 = str_replace("\\/c","",$an1);
+						$content .= "<span style='color:#B000B0;'>" . $an2 . "</span>";
+					} else if (strncmp("\\#FF6600",$key->{'name'},8) == 0)
+					{
+						$an1 = substr($key->{'name'},8);
+						$an2 = str_replace("\\/c","",$an1);
+						$content .= "<span style='color:#FF6600;'>" . $an2 . "</span>";
+					} else {
 					$content .= $key->{'name'} . " <br/>";
+					}
 			}
 			if ($count > 0) {
 				$content .= "</div>\n";
