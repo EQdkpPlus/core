@@ -916,8 +916,10 @@ class game extends gen_class {
 					'sort' 			=> $z,
 				);
 			}
-			foreach($class_deps[$class['name']] as $child => $type) {
-				$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
+			if (is_array($class_deps[$class['name']])){
+				foreach($class_deps[$class['name']] as $child => $type) {
+					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
+				}
 			}
 			$this->pdh->put('profile_fields', 'insert_field', array($field));
 		}
@@ -954,32 +956,37 @@ class game extends gen_class {
 		$this->pdh->process_hook_queue();
 	}	
 
-	/**
-	 * Does DB-Updates for Game Changing
-	 *
-	 * @param string $newgame
-	 * @param string $lang
-	 */
-	public function ChangeGame($newgame, $lang){
+	
+	public function installGame($newgame, $lang){
+		
+		
+		//Uninstall old game
+		$this->uninstallGame();
+		
+		//Install new game
 		$this->game = $newgame;
 		$this->init_gameclass();
+		
 		if(!in_array($lang, $this->gameinfo()->langs)) {
 			$lang = $this->gameinfo()->langs[0];
 		}
+		
+		
+		
 		$this->gameinfo()->lang = $lang;
 		$install = (defined('EQDKP_INSTALLED') && EQDKP_INSTALLED) ? false : true;
-		$info = $this->gameinfo()->get_OnChangeInfos($install);
+		
+		$info = $this->gameinfo()->install($install);
 		
 		$game_config = array(
-			'default_game'		=> $newgame,
-			'game_language'		=> $lang,
-			'game_version'		=> $this->gameinfo()->version
-			
+				'default_game'		=> $newgame,
+				'game_language'		=> $lang,
+				'game_version'		=> $this->gameinfo()->version
 		);
-
+		
 		//infotooltip-config changes
 		$itt_config = array(
-			'infotooltip_use' => 0
+				'infotooltip_use' => 0
 		);
 		
 		$parserlist = $this->itt->get_parserlist($newgame);
@@ -997,9 +1004,9 @@ class game extends gen_class {
 			unset($langlist);
 		}
 		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($newgame, $itt_config['itt_prio1'])));
-
-		$queries = $info['aq'];
-
+		
+		$queries = $info['queries'];
+		
 		//classcolors
 		if(is_array($this->gameinfo()->get_class_colors()) && $this->pdh->put('class_colors', 'truncate_classcolor', array())) {
 			$style_ids = array();
@@ -1015,6 +1022,7 @@ class game extends gen_class {
 				$this->db->query($sql);
 			}
 		}
+		//Add Profilefields
 		$this->AddProfileFields();
 		
 		//roles
@@ -1022,6 +1030,62 @@ class game extends gen_class {
 		if (!$install) {$this->tpl->parse_cssfile();}
 		$this->pdh->process_hook_queue();
 	}
+	
+	/**
+	 * Uninstalls recent game
+	 */
+	private function uninstallGame(){
+		if (defined('EQDKP_INSTALLED')){
+			$this->gameinfo()->uninstall();
+		}
+	}
+	
+	
+	public function resetEvents(){
+		$this->pdh->put("event", "reset", array());
+		$this->pdh->process_hook_queue();
+	}
+	
+	public function addEvent($strName, $intValue, $strIcon){
+		return $this->pdh->put("event", "add_event", array($strName, $intValue, $strIcon));
+	}
+	
+	public function resetItempools(){
+		$this->pdh->put("itempool", "reset", array());
+		$this->pdh->process_hook_queue();
+	}
+	
+	public function addItempool($strName, $strDescription){
+		return $this->pdh->put("itempool", "add_itempool", array($strName, $strDescription));
+	}
+	
+	public function addLink($strName, $strURL){
+		return $this->pdh->put("links", "add", array($strName, $strURL));
+	}
+	
+	public function removeLink($strName){
+		$this->pdh->put("links", "deleteByName", array($strName));
+		$this->pdh->process_hook_queue();
+	}
+	
+	public function resetMultiDKPPools(){
+		$this->pdh->put("multidkp", "reset", array());
+		$this->pdh->process_hook_queue();
+	}
+	
+	public function addMultiDKPPool($strName, $strDescription, $arrEventIDs, $arrItempoolIDs){
+		return $this->pdh->put("multidkp", "add_multidkp", array($strName, $strDescription, $arrEventIDs, $arrItempoolIDs));
+	}
+	
+	public function resetRanks(){
+		$this->pdh->put("rank", "truncate", array());
+		$this->pdh->process_hook_queue();
+	}
+	
+	public function addRank($intID, $strName, $blnDefault=false, $strIcon=''){
+		return $this->pdh->put("rank", "add_rank", array($intID, $strName, false, '', '', $intID+1, $blnDefault, $strIcon));
+	}
+	
 	
 	/**
 	 * Will be executed from the Game Cronjob
@@ -1288,8 +1352,13 @@ if(!class_exists('game_generic')) {
 		public function get_class_dependencies() {
 			return $this->class_dependencies;
 		}
-
-		public abstract function get_OnChangeInfos($install=false);
+		
+		public abstract function install($blnEQdkpInstall=false);
+		
+		public function uninstall(){
+			return false;
+		}
+		
 		protected abstract function load_filters($langs);
 		
 		public function get_class_colors(){

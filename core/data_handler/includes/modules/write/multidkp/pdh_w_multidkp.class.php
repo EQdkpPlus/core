@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_multidkp')) {
 	class pdh_w_multidkp extends pdh_w_generic {
 
-		public function add_multidkp($name, $desc, $events, $itempools, $no_atts) {
+		public function add_multidkp($name, $desc, $events, $itempools, $no_atts=array()) {
 			$arrSet = array(
 				'multidkp_name' => $name,
 				'multidkp_desc' => $desc,
@@ -159,7 +159,6 @@ if(!class_exists('pdh_w_multidkp')) {
 			if(!is_array($mdkps) || count($mdkps) < 1) return true;
 			$this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_event_id = ?")->execute($event_id);
 			
-			$sql = "INSERT INTO __multidkp2event (`multidkp2event_event_id`, `multidkp2event_multi_id`) VALUES ";
 			$sqls = array();
 			foreach($mdkps as $mdkp_id) {
 				$sqls[] = array(

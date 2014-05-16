@@ -868,12 +868,12 @@ class mmocms_settings extends page_generic {
 		// PLACEHOLDER.. maybe we will do that one day...
 
 		// save the setting
-		if ($this->in->exists('save_plus') && $this->checkCSRF('display')){
+		if ($this->in->exists('save_plus') && $this->checkCSRF('display') && !$this->settings_saved){
 
 			$save_array = $this->form->return_values();
 			//check for changed game
 			$game_changed = false;
-
+			
 			if (($this->in->get('default_game') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
 				$game_changed = true;
 			}
@@ -892,9 +892,10 @@ class mmocms_settings extends page_generic {
 
 			// Since ChangeGame alters Config it has to be executed after config-save
 			if($game_changed) {
-				$this->game->ChangeGame($this->in->get('default_game'), $this->in->get('game_language'));
+				$this->game->installGame($this->in->get('default_game'), $this->in->get('game_language'));
 				$this->pdc->flush();
 				$this->form->reset_fields();
+				$this->settings_saved = true;
 				$this->display();
 				#redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}

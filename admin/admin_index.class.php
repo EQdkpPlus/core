@@ -86,7 +86,7 @@ class admin_index extends gen_class {
 			}
 			//no update: reinstall the game
 			if(!$found) {
-				$this->game->ChangeGame($this->config->get('default_game'), $this->config->get('game_language'));
+				$this->game->installGame($this->config->get('default_game'), $this->config->get('game_language'));
 			}
 		}
 		*/

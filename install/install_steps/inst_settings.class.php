@@ -224,7 +224,7 @@ class inst_settings extends install_generic {
 		}
 		$this->check_data_folder();
 		$this->set_config();
-		$this->game->ChangeGame($this->def_game, $this->def_game_lang);
+		$this->game->installGame($this->def_game, $this->def_game_lang);
 		$this->InsertStartNews();
 		
 		if(!$this->install_permissions()) return false;

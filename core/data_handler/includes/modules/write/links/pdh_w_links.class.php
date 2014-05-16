@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_links')) {
 	class pdh_w_links extends pdh_w_generic {
 		
-		public function add($name, $url, $window=0, $visibility=0, $height=4024){
+		public function add($name, $url, $window=0, $visibility='[&#34;0&#34;]', $height=4024){
 			if (strlen($name)){
 				$objQuery = $this->db->prepare("INSERT INTO __links :p")->set(array(
 					'link_name'			=> $name,
@@ -62,6 +62,11 @@ if(!class_exists('pdh_w_links')) {
 		public function delete_link($id){
 			$objQuery = $this->db->prepare("DELETE FROM __links WHERE link_id =?")->execute($id);
 			$this->pdh->enqueue_hook('links', array($id));
+		}
+		
+		public function deleteByName($strName){
+			$objQuery = $this->db->prepare("DELETE FROM __links WHERE link_name =?")->execute($strName);
+			$this->pdh->enqueue_hook('links');
 		}
 	}
 }
