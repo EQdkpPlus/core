@@ -1028,6 +1028,8 @@ class game extends gen_class {
 		//roles
 		$this->load_default_roles();
 		if (!$install) {$this->tpl->parse_cssfile();}
+		
+		//Reset PDH Cache
 		$this->pdh->process_hook_queue();
 	}
 	

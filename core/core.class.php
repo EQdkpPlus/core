@@ -536,6 +536,10 @@ class core extends gen_class {
 				$arrOut[] = $item;
 				$arrOutOneLevel[] = $item;
 			}
+			
+			$arrOut = $this->hooks->process("menu", $arrOut, true);
+			$arrOutOneLevel = $this->hooks->process("menu_onelevel", $arrOutOneLevel, true);
+			
 
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
