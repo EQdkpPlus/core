@@ -85,7 +85,7 @@ class import06 extends task {
 
 	protected function get($key, $default='', $array=false) {
 		return ($array) ? $this->in->getArray($key, $default) : $this->in->get($key, $default);
-	
+	}	
 	
 	protected function js_select_global() {
 		return "<script type='text/javascript'>
@@ -361,7 +361,7 @@ class import06 extends task {
 								$users[$row['user_id']][$field] = isset($value) ? $value : NULL;
 							}
 						}
-						$users[$row['user_id']]['exchange_key'] = md5(uniqid());
+						$users[$row['user_id']]['exchange_key'] = md5(unique_id());
 						$users[$row['user_id']]['user_timezone'] = $this->config->get('timezone');
 					}
 				}
