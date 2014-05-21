@@ -70,8 +70,8 @@ class game extends gen_class {
 		include_once($this->root_path.'games/'.$this->game.'/'.$this->game.'.class.php');
 		if(!class_exists($this->game)) {
 			$this->pdl->log('game', 'Tried to initialize undefined game \''.$this->game.'\', default to game \'wow\'.');
-			$this->game = 'wow';
-			$this->config->set('default_game', 'wow');
+			$this->game = 'dummy';
+			$this->config->set('default_game', 'dummy');
 			return $this->init_gameclass();
 		}
 		// check for selected language
@@ -277,8 +277,9 @@ class game extends gen_class {
 	public function get_games(){
 		if(empty($this->games)) {
 			if ( $dir = opendir($this->root_path . 'games/') ) {
-				while ( $game_name = @readdir($dir) ) {
-					$cwd = $this->root_path . 'games/'.$game_name.'/'.$game_name.'.class.php';	// regenerate the link to the game
+				while ( $game_name = @readdir($dir)) {
+					if (!valid_folder($game_name)) continue;
+ 					$cwd = $this->root_path . 'games/'.$game_name.'/'.$game_name.'.class.php';	// regenerate the link to the game
 					if(valid_folder($game_name) && (@is_file($cwd))){							// check if valid
 						$this->games[] = $game_name;											// add to array
 					}
