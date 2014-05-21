@@ -40,7 +40,7 @@ class Manage_Menus extends page_generic {
 	// ---------------------------------------------------------
 	public function save() {
 	
-		$json = $this->in->get('serialized');
+		$json = $this->in->get('serialized', '', 'noencquotes');
 		$arrItems = $this->in->getArray('mainmenu', 'string');
 		
 		$decoded = json_decode($json, true);
