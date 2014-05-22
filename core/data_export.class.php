@@ -38,7 +38,7 @@ class content_export extends gen_class {
 		);
 	}
 	
-	public function export($withMemberItems = true){
+	public function export($withMemberItems = true, $blnExcludeHTML = false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
@@ -93,15 +93,18 @@ class content_export extends gen_class {
 						'points_adjustment'	=> (isset($arrPresets['adjustment'])) ? $this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false,
 						'points_adjustment_with_twink'	=> (isset($arrPresets['adjustment'])) ? $this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false,
 						
-						'points_current_html' => (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false,
-						'points_current_with_twink_html' => (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false,
-						'points_earned_html'	=> (isset($arrPresets['earned'])) ? $this->pdh->geth($arrPresets['earned'][0], $arrPresets['earned'][1], $arrPresets['earned'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false,
-						'points_earned_with_twink_html' => (isset($arrPresets['earned'])) ? $this->pdh->geth($arrPresets['earned'][0], $arrPresets['earned'][1], $arrPresets['earned'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false,
-						'points_spent_html'	=> (isset($arrPresets['spent'])) ? $this->pdh->geth($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false,
-						'points_spent_with_twink_html'	=> (isset($arrPresets['spent'])) ? $this->pdh->geth($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false,
-						'points_adjustment_html'	=> (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false,
-						'points_adjustment_with_twink_html'	=> (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false,
 					);
+					if (!$blnExcludeHTML){
+						$points['multidkp_points:'.$mdkp]['points_current_html'] 			= (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
+						$points['multidkp_points:'.$mdkp]['points_current_with_twink_html'] = (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
+						$points['multidkp_points:'.$mdkp]['points_earned_html']				= (isset($arrPresets['earned'])) ? $this->pdh->geth($arrPresets['earned'][0], $arrPresets['earned'][1], $arrPresets['earned'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
+						$points['multidkp_points:'.$mdkp]['points_earned_with_twink_html']	= (isset($arrPresets['earned'])) ? $this->pdh->geth($arrPresets['earned'][0], $arrPresets['earned'][1], $arrPresets['earned'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
+						$points['multidkp_points:'.$mdkp]['points_spent_html']				= (isset($arrPresets['spent'])) ? $this->pdh->geth($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
+						$points['multidkp_points:'.$mdkp]['points_spent_with_twink_html']	= (isset($arrPresets['spent'])) ? $this->pdh->geth($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
+						$points['multidkp_points:'.$mdkp]['points_adjustment_html']			= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
+						$points['multidkp_points:'.$mdkp]['points_adjustment_with_twink_html']	= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
+					
+					}
 				}
 
 				$items = array();

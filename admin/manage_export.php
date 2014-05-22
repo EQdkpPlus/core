@@ -42,7 +42,7 @@ class Manage_Export extends page_generic {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
 		$withMemberItems = $this->in->get('memberitems', 0);
-		$arrData = $myexp->export($withMemberItems);
+		$arrData = $myexp->export($withMemberItems, true);
 		header('content-type: text/html; charset=UTF-8');
 		if ($this->in->get('format') == 'json'){
 			echo $this->returnJSON($arrData);
@@ -55,7 +55,7 @@ class Manage_Export extends page_generic {
 	public function display() {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
-		$arrData = $myexp->export(false);
+		$arrData = $myexp->export(false, true);
 		
 		$this->tpl->assign_vars(array(
 			'EXPORT_DATA' => $this->returnXML($arrData),

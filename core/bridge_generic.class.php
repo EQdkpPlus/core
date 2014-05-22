@@ -250,7 +250,7 @@ class bridge_generic extends gen_class {
 		}
 		
 		if ($this->check_query('user')){
-			$strQuery = $this->check_query('user').$this->db->escape($strCleanUsername);
+			$strQuery = str_replace("_USERNAME_", $this->db->escape($strCleanUsername), $this->check_query('user'));
 		} else {
 			//Check if there's a user table
 			if ( !$this->db->num_rows($this->db->query("SHOW TABLES LIKE '".$this->prefix.$this->data['user']['table']."'"))){
@@ -282,7 +282,7 @@ class bridge_generic extends gen_class {
 		} else {
 
 			if ($this->check_query('user_group')){
-				$strQuery = $this->check_query('user_group').$this->db->escape($intUserID);
+				$strQuery = str_replace("_USERID_", $this->db->escape($intUserID), $this->check_query('user_group'));
 			} else {
 				$strQuery = "SELECT ".$this->data['user_group']['group'].' as group_id 
 							FROM '.$this->prefix.$this->data['user_group']['table'].' 
