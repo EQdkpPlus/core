@@ -677,7 +677,7 @@
 	function load_points(){					
 		$.ajax({
 		   type: "GET",
-		   url: "../api.php?function=points&format=json&exclude_memberitems=true&s="+sid,
+		   url: "../api.php?function=points&format=json&include_html=true&s="+sid,
 		   success: function(msg){
 				var obj = msg;
 				if (obj.status == '1'){

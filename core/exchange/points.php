@@ -30,8 +30,28 @@ if (!class_exists('exchange_points')){
 			{
 				include_once($this->root_path . 'core/data_export.class.php');
 				$myexp = new content_export();
-				$withMemberItems = (isset($params['get']['exclude_memberitems']) && $params['get']['exclude_memberitems'] == 'true') ? false : true;
-				$blnExcludeHTML = (isset($params['get']['exclude_html']) && $params['get']['exclude_html'] == 'true') ? true : false;
+				
+				//MemberData
+				$arrBooleansMemberdata = array();
+				if(isset($params['get']['memberdata']) && strlen($params['get']['memberdata'])){
+					//Available Memberdata
+					$arrMemberdata = array('items', 'adjustments');
+					
+				
+					if(strpos($params['get']['memberdata'], ',')){
+						$arrData = explode(",", $params['get']['memberdata']);
+					} else {
+						$arrData = array($params['get']['memberdata']);
+					}
+					foreach($arrData as $strData){
+						if (in_array($strData, $arrMemberdata)){
+							$arrBooleansMemberdata[$strData] = true;
+						}
+					}
+				}
+				
+				//IncludeHTML
+				$blnIncludeHTML = (isset($params['get']['include_html']) && $params['get']['include_html'] == 'true') ? true : false;
 				
 				//Filter
 				$filter = $filterid = false;
@@ -40,7 +60,7 @@ if (!class_exists('exchange_points')){
 					$filterid = intval($params['get']['filterid']);
 				}
 				
-				return $myexp->export($withMemberItems, $filter, $filterid, $blnExcludeHTML);
+				return $myexp->export((isset($arrBooleansMemberdata['items']) && $arrBooleansMemberdata['items']), (isset($arrBooleansMemberdata['adjustments']) && $arrBooleansMemberdata['adjustments']), $filter, $filterid, $blnIncludeHTML);
 			} else {
 				return $this->pex->error('access denied');
 			}

@@ -1635,6 +1635,7 @@ $lang = array(
 "core_sett_f_disable_xframe_header" => "Einbettung des EQdkp Plus in andere Webseiten erlauben",
 "manexport_title" => 'Daten-Export',
 "export_memberitems" => "Charakter-Items mit exportieren?",
+"export_memberadjustments" => "Charakter-Korrekturen mit exportieren?",
 "export_format"	=> "Ausgabe-Format",
 "export_data" => "Daten",
  );

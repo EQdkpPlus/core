@@ -37,7 +37,7 @@ class content_export extends gen_class {
 		);
 	}
 	
-	public function export($withMemberItems = true, $filter = false, $filterid = false, $blnExcludeHTML = false){
+	public function export($withMemberItems = false, $withMemberAdjustments = false, $filter = false, $filterid = false, $blnIncludeHTML = false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
@@ -104,7 +104,7 @@ class content_export extends gen_class {
 						'points_adjustment_with_twink'	=> (isset($arrPresets['adjustment'])) ? $this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false,
 						
 					);
-					if (!$blnExcludeHTML){
+					if ($blnIncludeHTML){
 						$points['multidkp_points:'.$mdkp]['points_current_html'] 			= (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
 						$points['multidkp_points:'.$mdkp]['points_current_with_twink_html'] = (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
 						$points['multidkp_points:'.$mdkp]['points_earned_html']				= (isset($arrPresets['earned'])) ? $this->pdh->geth($arrPresets['earned'][0], $arrPresets['earned'][1], $arrPresets['earned'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
@@ -130,7 +130,7 @@ class content_export extends gen_class {
 							);
 					}
 				}
-
+				
 				$out['players']['player:'.$member] = array(
 					'id'			=> $member,
 					'name'			=> unsanitize($this->pdh->get('member', 'name', array($member))),
@@ -145,6 +145,21 @@ class content_export extends gen_class {
 					'points'		=> $points,
 					'items'			=> $items,
 				);
+				
+				if ($withMemberAdjustments){
+					$adjustments = array();
+					$adj_list = $this->pdh->get('adjustment', 'adjsofmember', array($member));
+					$i = 0;
+					foreach($adj_list as $adj_id){
+						$adjustments['adjustment:'.$adj_id] = array(
+							'reason'	=> $this->pdh->get('adjustment', 'reason', array($adj_id)),
+							'value'		=> $this->pdh->get('adjustment', 'value', array($adj_id)),
+							'timestamp' => $this->pdh->get('adjustment', 'date', array($adj_id)),
+						);
+						$i++;
+					}
+					$out['players']['player:'.$member]['adjustments'] = $adjustments;
+				}
 			}
 		} else {
 			$out['players'] = '';
