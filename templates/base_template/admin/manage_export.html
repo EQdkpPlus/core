@@ -7,8 +7,14 @@
 	</dl>
 	
 	<dl>
+		<dt><label>{L_export_memberadjustments}</label></dt>
+		<dd><input type="checkbox" id="memberadjs" value="1" onchange="ajax_reload_export()" /></dd>
+	</dl>
+	
+	<dl>
 		<dt><label>{L_export_format}</label></dt>
-		<dd><label><input type="radio" id="format" name="format" value="xml" checked="checked"  onchange="ajax_reload_export()"/>XML</label>
+		<dd><label><input type="radio" id="format" name="format" value="lua" checked="checked"  onchange="ajax_reload_export()"/>LUA</label>
+			<label><input type="radio" id="format" name="format" value="xml"  onchange="ajax_reload_export()"/>XML</label>
 			<label><input type="radio" id="format" name="format" value="json"  onchange="ajax_reload_export()" />JSON</label></dd>
 	</dl>
 	<dl>
@@ -29,9 +35,16 @@ function ajax_reload_export(){
 	} else {
 		memberitems = 0;
 	}
+	
+	var memberadjs = $('#memberadjs').attr("checked");
+	if (memberadjs == "checked") {
+		memberadjs = 1;
+	} else {
+		memberadjs = 0;
+	}
 	var format = $('input[name=format]:checked').val();
 	
-	$.get('manage_export.php{SID}&ajax_export=1&format='+format+'&memberitems='+memberitems, function(data) {
+	$.get('manage_export.php{SID}&ajax_export=1&format='+format+'&memberitems='+memberitems+'&memberadjs='+memberadjs, function(data) {
 		$('#export_data').val(data);
 		document.getElementById("export_data").focus();
 		document.getElementById("export_data").select();

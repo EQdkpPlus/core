@@ -30,9 +30,10 @@ if (!class_exists('exchange_points')){
 				include_once($eqdkp_root_path . 'core/data_export.class.php');
 				$myexp = new content_export();
 				$withMemberItems = (isset($params['get']['exclude_memberitems']) && $params['get']['exclude_memberitems'] == 'true') ? false : true;
+				$withMemberAdjustments = (isset($params['get']['include_memberadjustments']) && $params['get']['include_memberadjustments'] == 'true') ? true : false;
 				$blnExcludeHTML = (isset($params['get']['exclude_html']) && $params['get']['exclude_html'] == 'true') ? true : false;
 
-				return $myexp->export($withMemberItems, $blnExcludeHTML);
+				return $myexp->export($withMemberItems, $withMemberAdjustments, $blnExcludeHTML);
 			} else {
 				return $this->pex->error('access denied');
 			}

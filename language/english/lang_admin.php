@@ -1517,5 +1517,6 @@ $lang = array(
 "export_memberitems" => "Include Character-Items in Export?",
 "export_format"	=> "Export-Format",
 "export_data" => "Data",
+"export_memberadjustments" => "Include Character-Adjustments in Export?",
  );
 ?>

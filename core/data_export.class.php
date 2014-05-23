@@ -38,7 +38,7 @@ class content_export extends gen_class {
 		);
 	}
 	
-	public function export($withMemberItems = true, $blnExcludeHTML = false){
+	public function export($withMemberItems = true, $withMemberAdjustments = false, $blnExcludeHTML = false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
@@ -120,7 +120,7 @@ class content_export extends gen_class {
 							);
 					}
 				}
-
+				
 				$out['players']['player:'.$member] = array(
 					'id'			=> $member,
 					'name'			=> unsanitize($this->pdh->get('member', 'name', array($member))),
@@ -137,6 +137,21 @@ class content_export extends gen_class {
 					'points'		=> $points,
 					'items'			=> $items,
 				);
+				
+				if ($withMemberAdjustments){
+					$adjustments = array();
+					$adj_list = $this->pdh->get('adjustment', 'adjsofmember', array($member));
+					$i = 0;
+					foreach($adj_list as $adj_id){
+						$adjustments['adjustment:'.$adj_id] = array(
+							'reason'	=> $this->pdh->get('adjustment', 'reason', array($adj_id)),
+							'value'		=> $this->pdh->get('adjustment', 'value', array($adj_id)),
+							'timestamp' => $this->pdh->get('adjustment', 'date', array($adj_id)),
+						);
+						$i++;
+					}
+					$out['players']['player:'.$member]['adjustments'] = $adjustments;
+				}
 			}
 		} else {
 			$out['players'] = '';

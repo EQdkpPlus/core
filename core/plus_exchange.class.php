@@ -134,6 +134,8 @@ if( !class_exists( "plus_exchange" ) ) {
 			
 			if ($request_args['get']['format'] == 'json'){
 				return $this->returnJSON($out);
+			} elseif ($request_args['get']['format'] == 'lua'){
+				return $this->returnLua($out, $request_args);
 			} else {
 				return $this->returnXML($out);
 			}
@@ -170,6 +172,15 @@ if( !class_exists( "plus_exchange" ) ) {
 			$dom->formatOutput = true;
 			$string = $dom->saveXML();
 			return trim($string);
+		}
+		
+		private function returnLua($arrData, $arrRequestArgs){
+			if (!isset($arrData['status']) || $arrData['status'] != 0){
+				$arrData['status'] = 1;
+			}
+			include_once($this->root_path."libraries/lua/parser.php");
+			$luaParser = new LuaParser((isset($arrRequestArgs['get']['one_table']) && $arrRequestArgs['get']['one_table'] == "false") ? false : true);
+			return $luaParser->array2lua($arrData);
 		}
 	}//end class
 } //end if

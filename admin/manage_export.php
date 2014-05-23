@@ -42,10 +42,13 @@ class Manage_Export extends page_generic {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
 		$withMemberItems = $this->in->get('memberitems', 0);
-		$arrData = $myexp->export($withMemberItems, true);
+		$withMemberAdjustments = $this->in->get('memberadjs', 0);
+		$arrData = $myexp->export($withMemberItems, $withMemberAdjustments, true);
 		header('content-type: text/html; charset=UTF-8');
 		if ($this->in->get('format') == 'json'){
 			echo $this->returnJSON($arrData);
+		} elseif ($this->in->get('format') == 'lua'){
+			echo $this->returnLua($arrData);
 		} else {
 			echo $this->returnXML($arrData);
 		}
@@ -55,10 +58,10 @@ class Manage_Export extends page_generic {
 	public function display() {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
-		$arrData = $myexp->export(false, true);
+		$arrData = $myexp->export(false, false, true);
 		
 		$this->tpl->assign_vars(array(
-			'EXPORT_DATA' => $this->returnXML($arrData),
+			'EXPORT_DATA' => $this->returnLua($arrData),
 		));
 				
 		$this->core->set_vars(array(
@@ -91,6 +94,15 @@ class Manage_Export extends page_generic {
 		//$dom->formatOutput = true;
 		$string = $dom->saveXML();
 		return trim($string);
+	}
+	
+	private function returnLua($arrData, $arrRequestArgs){
+		if (!isset($arrData['status']) || $arrData['status'] != 0){
+			$arrData['status'] = 1;
+		}
+		include_once($this->root_path."libraries/lua/parser.php");
+		$luaParser = new LuaParser(false);
+		return $luaParser->array2lua($arrData);
 	}
 }
 if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_Manage_Export', Manage_Export::__shortcuts());

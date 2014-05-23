@@ -30,10 +30,10 @@ if (registry::register('config')->get('pk_maintenance_mode')){
 		$myOut = '<?xml version="1.0" encoding="UTF-8"?><response><status>0</status><error>maintenance</error></response>';
 	}
 	header('Content-Length: '.strlen($myOut));
-	if (registry::register('input')->get('format') != 'json'){
-		header('Content-type: text/xml');
+	if (registry::register('input')->get('format') != 'json' && registry::register('input')->get('format') != 'lua'){
+		header('Content-type: text/xml; charset=utf-8');
 	} else {
-		header('Content-type: application/json');
+		header('Content-type: application/json; charset=utf-8');
 	}
 	echo($myOut);
 	exit;
@@ -41,10 +41,10 @@ if (registry::register('config')->get('pk_maintenance_mode')){
 
 $return	= register('plus_exchange')->execute();
 header('Content-Length: '.strlen($return));
-if (registry::register('input')->get('format') != 'json'){
-	header('Content-type: text/xml');
+if (registry::register('input')->get('format') != 'json' && registry::register('input')->get('format') != 'lua'){
+	header('Content-type: text/xml; charset=utf-8');
 } else {
-	header('Content-type: application/json');
+	header('Content-type: application/json; charset=utf-8');
 }
 			
 echo($return);
