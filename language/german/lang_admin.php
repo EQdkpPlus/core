@@ -99,7 +99,7 @@ $lang = array(
 "user_activate_success" => "Der Benutzer <i>%s</i> wurde erfolgreich aktiviert.",
 "user_deactivate_success" => "Der Benutzer <i>%s</i> wurde erfolgreich deaktiviert.",
 "event_icon_header" => "Ereignis Icon auswählen",
-"multidkp_to_event" => "dem Ereignis zugeordnete Multidkp-Konten",
+"multidkp_to_event" => "Dem Ereignis zugeordnete Multidkp-Konten",
 "admin_action" => "Admin-Aktion",
 "account_enabled" => "Account aktiviert",
 "adjitem_del" => "Markierte Korrekturen und Items löschen",
@@ -1638,6 +1638,7 @@ $lang = array(
 "export_memberadjustments" => "Charakter-Korrekturen mit exportieren?",
 "export_format"	=> "Ausgabe-Format",
 "export_data" => "Daten",
+"upload_eventicon" => "Ereignisicon hinzufügen",
  );
 
 ?>

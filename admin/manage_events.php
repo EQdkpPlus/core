@@ -85,39 +85,49 @@ class Manage_Events extends page_generic {
 			$event['mdkp2event'] = $this->pdh->get('event', 'multidkppools', array($event['id']));
 		}
 
-		//get icons
-		if($this->game->icon_exists('events')) {
-			$this->tpl->assign_var('ICONS', true);
-			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/icons/events';
+		//Get Icons
+			$events_folder = $this->pfh->FolderPath('event_icons', 'files');
 			$files = scandir($events_folder);
-			$ignorefiles = array('.', '..', '.svn', 'index.html');
+			$ignorefiles = array('.', '..', '.svn', 'index.html', '.tmb');
+			
 			$icons = array();
 			foreach($files as $file) {
-				if(!in_array($file, $ignorefiles)) $icons[] = $file;
+				if(!in_array($file, $ignorefiles)) $icons[] = $events_folder.'/'.$file;
+			}
+			
+			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/icons/events';
+			if (is_dir($events_folder)){
+				$files = scandir($events_folder);
+				foreach($files as $file) {
+					if(!in_array($file, $ignorefiles)) $icons[] = $events_folder.'/'.$file;
+				}
 			}
 			$num = count($icons);
 			$fields = (ceil($num/6))*6;
-			$i=0;
+			$i = 0;
+
 			while($i<$fields)
 			{
 				$this->tpl->assign_block_vars('files_row', array());
+				$this->tpl->assign_var('ICONS', true);
 				$b = $i+6;
 				for($i; $i<$b; $i++)
 				{
-					$icon = (isset($icons[$i])) ? $icons[$i] : '';
-					$this->tpl->assign_block_vars('files_row.fields', array(
-						'NAME'		=> $icon,
-						'CHECKED'	=> (isset($event['icon']) AND $icon == $event['icon']) ? ' checked="checked"' : '',
-						'IMAGE'		=> "<img src='".$this->root_path."games/".$this->config->get("default_game")."/icons/events/".$icon."' alt='".$icon."' width='48px' />",
+				$icon = (isset($icons[$i])) ? $icons[$i] : '';
+				$this->tpl->assign_block_vars('files_row.fields', array(
+						'NAME'		=> pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION),
+						'CHECKED'	=> (isset($event['icon']) AND pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $event['icon']) ? ' checked="checked"' : '',
+						'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='48px' style='eventicon' />",
 						'CHECKBOX'	=> ($i < $num) ? true : false)
 					);
 				}
 			}
-		} else {
-			$this->tpl->assign_var('NO_ICONS', false);
-		}
+		
+		//Image Uploader
+		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('event_icons','files', 'absolute'), array('title' => $this->user->lang('upload_eventicon'), 'onclosejs' => '$(\'#eventSubmBtn\').click();'));
 
 		$this->confirm_delete(sprintf($this->user->lang('confirm_delete_event'), ((isset($event['name'])) ? $event['name'] : ''), count($this->pdh->get('raid', 'raidids4eventid', array($event['id'])))), 'manage_events.php'.$this->SID.'&event_id='.$event['id'], false, array('height' => 220));
+
 		$this->tpl->assign_vars(array(
 			'S_UPD'			=> ($event['id']) ? TRUE : FALSE,
 			'EVENT_ID'		=> $event['id'],

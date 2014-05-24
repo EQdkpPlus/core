@@ -207,7 +207,6 @@ class input extends gen_class {
 	* @return array
 	*/
 	public function getArray($key, $type, $max_depth = 10){
-		echo "getArray ".$key." Type: ".$type;
 		if(strpos($key, ':')) {
 			$checkarr = $this->_get_deep(explode(':', $key), array());
 		} else {

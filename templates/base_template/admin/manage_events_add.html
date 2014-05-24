@@ -30,7 +30,7 @@
 	</dl>
 	<dl>
 		<dt><label>{L_event_icon_header}:</label></dt>
-		<dd></dd>
+		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_upload_eventicon}</button></dd>
 	</dl>
 	
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
@@ -51,7 +51,7 @@
 </table>
 </fieldset>
 
-<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+<button class="mainoption" type="submit" name="save" id="eventSubmBtn"><i class="fa fa-check"></i>{L_save}</button>
 <!-- IF S_UPD -->
 <input type="hidden" name="event_id" value="{EVENT_ID}" />
 <button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>

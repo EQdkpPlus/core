@@ -1447,21 +1447,25 @@ if (!class_exists("jquery")) {
 		* @param $filter	none / image
 		* @return void
 		*/
-		public function fileBrowser($type = 'user', $filter = 'none', $storageFolder = false){
+		public function fileBrowser($type = 'user', $filter = 'none', $storageFolder = false, $options=array()){
 			$type = ($type == 'user') ? 'user' : 'all';
 			
 			if (!isset($this->file_browser[$type])){
 				$strStorageFolder = ($storageFolder) ? '&sf='.urlencode($this->encrypt->encrypt($storageFolder)) : '';
+				
+				$myclose = (isset($options['onclose'])) ? ", close: function(event, ui) { window.location.href = '".$options['onclose']."'; }" : '';
+				$myclose = (isset($options['onclosejs'])) ? ", close: function(event, ui) { ".$options['onclosejs']." }" : $myclose;
+				
 				$this->tpl->add_js("function elfinder_".$type."(fieldid){
 					jQuery.FrameDialog.create({
 						url: '".$this->server_path."libraries/elfinder/elfinder".(($type == 'user') ? '.useravatars' : '').".php".$this->SID."&type=".$filter.$strStorageFolder."&field='+fieldid,
-						title: '".$this->sanitize($this->user->lang('imageuploader_wintitle'))."',
+						title: '".((isset($options['title'])) ? $this->sanitize($options['title']) : $this->sanitize($this->user->lang('imageuploader_wintitle')))."',
 						height: 500,
 						width: 840,
 						modal: false,
 						resizable: true,
 						draggable: true,
-						buttons: false,
+						buttons: false".$myclose."
 					})
 				}");
 				

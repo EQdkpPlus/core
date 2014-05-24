@@ -1634,6 +1634,8 @@ $lang = array(
 	"export_format"	=> "Export-Format",
 	"export_data" => "Data",
 	"export_memberadjustments" => "Include Character-Adjustments in Export?",
+	
+	"upload_eventicon" => "Upload Eventicon",
 );
 
 ?>
