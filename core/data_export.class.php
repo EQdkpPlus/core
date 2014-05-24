@@ -147,6 +147,7 @@ class content_export extends gen_class {
 							'reason'	=> $this->pdh->get('adjustment', 'reason', array($adj_id)),
 							'value'		=> $this->pdh->get('adjustment', 'value', array($adj_id)),
 							'timestamp' => $this->pdh->get('adjustment', 'date', array($adj_id)),
+							'event_id'	=> $this->pdh->get('adjustment', 'event', array($adj_id)),
 						);
 						$i++;
 					}
