@@ -35,9 +35,15 @@ class mmocms_settings extends page_generic {
 			'ajax'	=> array(
 				array('process' => 'ajax_gamelanguage',	'value' => 'games'),
 			),
+			'dellogo' => array('process' => 'delete_logo'),
 		);
 		parent::__construct(false, $handler, array(), null, '');
 		$this->process();
+	}
+	
+	public function delete_logo(){
+		$this->pfh->Delete( $this->pfh->FolderPath('','files').$this->config->get('custom_logo'));
+		$this->config->set("custom_logo", "");
 	}
 
 	public function ajax_gamelanguage() {
@@ -698,8 +704,9 @@ class mmocms_settings extends page_generic {
 					'custom_logo'	=> array(
 						'type'			=> 'imageuploader',
 						'imgpath'		=> $this->pfh->FolderPath('','files'),
-						'noimgfile'		=> "templates/".$this->user->style['template_path']."/images/logo.png",
+						//'noimgfile'		=> "templates/".$this->user->style['template_path']."/images/logo.png",
 						'returnFormat'	=> 'in_data',
+						'deletelink'	=> $this->root_path.'admin/manage_settings.php'.$this->SID.'&dellogo=true',
 					),
 					'itemhistory_dia'	=> array(
 						'type'		=> 'radio',

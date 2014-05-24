@@ -1434,7 +1434,7 @@ if (!class_exists("jquery")) {
 			}	
 			$out .=	'</div><button class="mainoption" type="button" id="iubutton_'.$inputid.'_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"><i class="fa fa-pencil-square-o"></i>'.$this->user->lang('imageuploader_editbutton').'</button>';
 			if(isset($options['deletelink']) && (isset($imgname) && is_file($imgpath.$imgname))){
-				$out .= '<button class="mainoption" value="" type="button" id="iubutton_'.$inputid.'_delete"><i class="fa fa-times"></i></button>';
+				$out .= '<button class="mainoption" value="" type="button" id="iubutton_'.$inputid.'_delete"><i class="fa fa-trash-o"></i> '.$this->user->lang('delete').'</button>';
 				$this->tpl->add_js("$('#iubutton_".$inputid."_delete').click(function(){ location.href='".$options['deletelink']."' });", 'docready');
 			}
 			return $out;

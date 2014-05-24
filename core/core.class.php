@@ -300,10 +300,8 @@ class core extends gen_class {
 			// the logo...
 			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
 				$headerlogo	= $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo');
-			}else{
-				$headerlogo	= (file_exists($this->root_path.$strHeaderLogoPath."logo.svg")) ? $this->server_path.$strHeaderLogoPath."logo.svg" : $this->server_path.$strHeaderLogoPath."logo.png";
-			}
-
+			} else $headerlogo = "";
+			
 			// Load the jQuery stuff
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
