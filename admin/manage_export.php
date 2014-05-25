@@ -58,7 +58,7 @@ class Manage_Export extends page_generic {
 	public function display() {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
-		$arrData = $myexp->export(false, false, false,false, true);
+		$arrData = $myexp->export(true, true, false,false, true);
 		
 		$this->tpl->assign_vars(array(
 			'EXPORT_DATA' => $this->returnLua($arrData),
