@@ -244,7 +244,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$prefix = '';
 			$hptt_checkboxname	= (isset($this->settings['selectbox_name'])) ? $this->settings['selectbox_name'] : 'selected_ids';
 			if($this->settings['show_select_boxes']){
-				$prefix  .= "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n";
+				$prefix  .= "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.((isset($this->settings['selectbox_valueprefix'])) ? $this->settings['selectbox_valueprefix'] : '').$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n";
 			}
 			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
 				$prefix .= "\t".'<td><div style="float:right;">'.$this->counter.'</div></td>'."\n";
