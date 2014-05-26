@@ -250,7 +250,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 				if ($arrCheckboxCheck !== false) {
 					$blnShowCheckbox = $this->pdh->get($arrCheckboxCheck[0],$arrCheckboxCheck[1],array($view_id));
 				}
-				$prefix  .= ($blnShowCheckbox) ? "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n" : '<td></td>';
+				$prefix  .= ($blnShowCheckbox) ? "\t".'<td class="nowrap" align="center"><input type="checkbox" name="'.$hptt_checkboxname.'[]" value="'.((isset($this->settings['selectbox_valueprefix'])) ? $this->settings['selectbox_valueprefix'] : '').$view_id.'" id="cbrow'.$this->counter.'" /></td>'."\n" : '<td></td>';
 			}
 			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
 				$prefix .= "\t".'<td><div style="float:right;">'.$this->counter.'</div></td>'."\n";
