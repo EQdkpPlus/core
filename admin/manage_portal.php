@@ -235,7 +235,7 @@ class Manage_Portal extends page_generic {
 			$portal_class = $path.'_portal';
 			
 			// initialize form class
-			$this->portal->load_module($path, $plugin)
+			$this->portal->load_module($path, $plugin);
 			$this->form->lang_prefix = $portal_class::get_data('lang_prefix');
 				
 			$this->get_settings($id);
