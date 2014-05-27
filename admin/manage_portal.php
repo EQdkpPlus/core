@@ -230,9 +230,12 @@ class Manage_Portal extends page_generic {
 	//Edit Portal Module
 	public function edit($id=false) {
 		if($id || $id = $this->in->get('id', 0)) {
-			$portal_class = $this->pdh->get('portal', 'path', array($id)).'_portal';
+			$path = $this->pdh->get('portal', 'path', array($id));
+			$plugin = $this->pdh->get('portal', 'plugin', array($id));
+			$portal_class = $path.'_portal';
 			
 			// initialize form class
+			$this->portal->load_module($path, $plugin)
 			$this->form->lang_prefix = $portal_class::get_data('lang_prefix');
 				
 			$this->get_settings($id);
