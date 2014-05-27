@@ -27,11 +27,6 @@ class update_2000 extends sql_update_task {
 	public $version			= '2.0.0.0'; //new plus-version
 	public $ext_version		= '2.0.0'; //new plus-version
 	public $name			= '2.0.0 Migration from 1.x';
-
-	public static function __shortcuts() {
-		$shortcuts = array('time', 'config', 'routing', 'pdc', 'db');
-		return array_merge(parent::__shortcuts(), $shortcuts);
-	}
 	
 	protected $fields2change	= array(
 			'__calendars'		=> array('field' => array('color'), 'id' => 'id'),
