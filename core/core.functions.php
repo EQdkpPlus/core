@@ -597,6 +597,7 @@ function sanitize($input){
  * @return		string
  */
 function unsanitize($input){
+	$input = str_replace("&#34;", "&quot;", $input);
 	return htmlspecialchars_decode($input, ENT_QUOTES);
 }
 
