@@ -352,6 +352,8 @@ class import06 extends task {
 						} elseif($field == 'birthday') {
 							list($d,$m,$y) = explode('.', $row['birthday']);
 							$users[$row['user_id']][$field] = $this->time->mktime(0,0,0,$m,$d,$y);
+						} elseif($field == 'username'){
+							$users[$row['user_id']][$field] = sanitize($value);
 						} elseif($field != 'user_newpassword') {
 							$users[$row['user_id']][$field] = isset($value) ? $value : NULL;
 						}
