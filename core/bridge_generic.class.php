@@ -57,7 +57,7 @@ class bridge_generic extends gen_class {
 		//Callbefore Login
 		if ($this->functions['login']['callbefore'] != '' && method_exists($this, $this->functions['login']['callbefore'])){
 			$method = $this->functions['login']['callbefore'];
-			$this->$method($strUsername, $strPassword, $boolSetAutoLogin, $boolUseHash);
+			$this->$method(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
 		}
 		$boolLoginResult = false;
 		$strPwdHash = '';
@@ -65,16 +65,16 @@ class bridge_generic extends gen_class {
 		//Login
 		if ($this->functions['login']['function'] != '' && method_exists($this, $this->functions['login']['function'])){
 			$method = $this->functions['login']['function'];
-			$arrResult = $this->$method($strUsername, $strPassword, $boolSetAutoLogin, $boolUseHash);
+			$arrResult = $this->$method(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
 			$boolLoginResult = $arrResult['status'];
 			$arrUserdata 	 = $arrResult;
 			$this->pdl->log('login', 'Call Bridge Login method, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 		} else {
 			//Hole User aus der Datenbank		
-			$arrUserdata = $this->get_userdata($strUsername);
+			$arrUserdata = $this->get_userdata(unsanitize($strUsername));
 			if ($arrUserdata){
 				if ($boolUsePassword){
-					$boolLoginResult = $this->check_password($strPassword, $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, $strUsername);
+					$boolLoginResult = $this->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, unsanitize($strUsername));
 					$this->pdl->log('login', 'Check Bridge Password, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 					//Passwort stimmt, jetzt müssen wir schaun, ob er auch in der richtigen Gruppe ist
 					if ($boolLoginResult){
@@ -91,15 +91,15 @@ class bridge_generic extends gen_class {
 		//Callafter Login
 		if ($boolLoginResult && $this->functions['login']['callafter'] != '' && method_exists($this, $this->functions['login']['callafter'])){
 			$method = $this->functions['login']['callafter'];
-			$boolLoginResult = $this->$method($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash);
+			$boolLoginResult = $this->$method(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash);
 			$this->pdl->log('login', 'Bridge callafter, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 		}
 		
 		//Existiert der User im EQdkp? Wenn nicht, lege ihn an
 		if ($boolLoginResult){
 		
-			if ($this->pdh->get('user', 'check_username', array($arrUserdata['name'])) == 'false'){
-				$user_id = $this->pdh->get('user', 'userid', array($arrUserdata['name']));
+			if ($this->pdh->get('user', 'check_username', array(sanitize($arrUserdata['name']))) == 'false'){
+				$user_id = $this->pdh->get('user', 'userid', array(sanitize($arrUserdata['name'])));
 				$arrEQdkpUserdata = $this->pdh->get('user', 'data', array($user_id));
 				
 				list($strEQdkpUserPassword, $strEQdkpUserSalt) = explode(':', $arrEQdkpUserdata['user_password']);
@@ -125,7 +125,7 @@ class bridge_generic extends gen_class {
 				$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
 				$strApiKey = $this->user->generate_apikey($strPassword, $salt);
 				
-				$user_id = $this->pdh->put('user', 'insert_user_bridge', array($arrUserdata['name'], $strPwdHash.':'.$salt, $arrUserdata['email'], false, $strApiKey));
+				$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false, $strApiKey));
 				$this->pdh->process_hook_queue();
 			}
 		}
@@ -241,6 +241,8 @@ class bridge_generic extends gen_class {
 	//Userdata of an User of the CMS/Forum
 	public function get_userdata($name){
 		if (!$this->db) return false;
+		
+		$name = unsanitize($name);
 		
 		//Clean Username if neccessary
 		if (method_exists($this, 'convert_username')){
