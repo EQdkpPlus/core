@@ -80,10 +80,6 @@ class xenforo_bridge extends bridge_generic {
 
 	
 	private function _handle_logins($scheme, $password, $hash, $arrAuthData){
-		d($scheme);
-		d($password);
-		d($hash);
-		d($arrAuthData);
 		switch($scheme){
 			case "XenForo_Authentication_Core12":
 				$passwordHash = new XenForo_PasswordHash($this->passwordIterations, false);
