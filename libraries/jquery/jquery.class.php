@@ -945,12 +945,12 @@ if (!class_exists("jquery")) {
 		public function starrating_js(){
 			//$lang_cancvote	= ($this->user->lang('lib_starrating_cancel')) ?$this->sanitize( $this->user->lang('lib_starrating_cancel')) : 'Cancel Rating';
 			$tmpopt		= array();
-			$tmpopt[] = 'font: true';
-			$tmpopt[] = 'cancelOff: "fa-times-circle-o"';
-			$tmpopt[] = 'cancelOn: "fa-times-circle"';
-			$tmpopt[] = 'starHalf: "fa-star-half"';
-			$tmpopt[] = 'starOff: "fa-star-o"';
-			$tmpopt[] = 'starOn: "fa-star"';
+			$tmpopt[] = 'starType: "i"';
+			$tmpopt[] = 'cancelOff: "fa fa-times-circle-o"';
+			$tmpopt[] = 'cancelOn: "fa fa-times-circle"';
+			$tmpopt[] = 'starHalf: "fa fa-star-half"';
+			$tmpopt[] = 'starOff: "fa fa-star-o"';
+			$tmpopt[] = 'starOn: "fa fa-star"';
 			$tmpopt[] = 'size: 16';
 			$tmpopt[] = 'score: function() { return $(this).attr("data-star-score"); }';
 			$tmpopt[] = 'number: function() { return $(this).attr("data-star-number"); }';

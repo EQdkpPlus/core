@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.1.0
+ * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-01-23T21:10Z
+ * Date: 2014-05-01T17:11Z
  */
 
 (function( global, factory ) {
@@ -59,8 +59,6 @@ var toString = class2type.toString;
 
 var hasOwn = class2type.hasOwnProperty;
 
-var trim = "".trim;
-
 var support = {};
 
 
@@ -69,7 +67,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.0",
+	version = "2.1.1",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -77,6 +75,10 @@ var
 		// Need init if jQuery is called (just allow error to be thrown if not included)
 		return new jQuery.fn.init( selector, context );
 	},
+
+	// Support: Android<4.1
+	// Make sure we trim BOM and NBSP
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
 
 	// Matches dashed string for camelizing
 	rmsPrefix = /^-ms-/,
@@ -108,10 +110,10 @@ jQuery.fn = jQuery.prototype = {
 	get: function( num ) {
 		return num != null ?
 
-			// Return a 'clean' array
+			// Return just the one element from the set
 			( num < 0 ? this[ num + this.length ] : this[ num ] ) :
 
-			// Return just the object
+			// Return all the elements in a clean array
 			slice.call( this );
 	},
 
@@ -267,7 +269,7 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return obj - parseFloat( obj ) >= 0;
+		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
 	},
 
 	isPlainObject: function( obj ) {
@@ -279,16 +281,8 @@ jQuery.extend({
 			return false;
 		}
 
-		// Support: Firefox <20
-		// The try/catch suppresses exceptions thrown when attempting to access
-		// the "constructor" property of certain host objects, ie. |window.location|
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=814622
-		try {
-			if ( obj.constructor &&
-					!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
-				return false;
-			}
-		} catch ( e ) {
+		if ( obj.constructor &&
+				!hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
 			return false;
 		}
 
@@ -398,8 +392,11 @@ jQuery.extend({
 		return obj;
 	},
 
+	// Support: Android<4.1
 	trim: function( text ) {
-		return text == null ? "" : trim.call( text );
+		return text == null ?
+			"" :
+			( text + "" ).replace( rtrim, "" );
 	},
 
 	// results is for internal usage only
@@ -551,14 +548,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.16
+ * Sizzle CSS Selector Engine v1.10.19
  * http://sizzlejs.com/
  *
  * Copyright 2013 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-01-13
+ * Date: 2014-04-18
  */
 (function( window ) {
 
@@ -567,7 +564,9 @@ var i,
 	Expr,
 	getText,
 	isXML,
+	tokenize,
 	compile,
+	select,
 	outermostContext,
 	sortInput,
 	hasDuplicate,
@@ -634,17 +633,23 @@ var i,
 	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
 	identifier = characterEncoding.replace( "w", "w#" ),
 
-	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
-		"*(?:([*^$|!~]?=)" + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
+	// Attribute selectors: http://www.w3.org/TR/selectors/#attribute-selectors
+	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")(?:" + whitespace +
+		// Operator (capture 2)
+		"*([*^$|!~]?=)" + whitespace +
+		// "Attribute values must be CSS identifiers [capture 5] or strings [capture 3 or capture 4]"
+		"*(?:'((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\"|(" + identifier + "))|)" + whitespace +
+		"*\\]",
 
-	// Prefer arguments quoted,
-	//   then not containing pseudos/brackets,
-	//   then attribute selectors/non-parenthetical expressions,
-	//   then anything else
-	// These preferences are here to reduce the number of selectors
-	//   needing tokenize in the PSEUDO preFilter
-	pseudos = ":(" + characterEncoding + ")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)|.*)\\)|)",
+	pseudos = ":(" + characterEncoding + ")(?:\\((" +
+		// To reduce the number of selectors needing tokenize in the preFilter, prefer arguments:
+		// 1. quoted (capture 3; capture 4 or capture 5)
+		"('((?:\\\\.|[^\\\\'])*)'|\"((?:\\\\.|[^\\\\\"])*)\")|" +
+		// 2. simple (capture 6)
+		"((?:\\\\.|[^\\\\()[\\]]|" + attributes + ")*)|" +
+		// 3. anything else (capture 2)
+		".*" +
+		")\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
@@ -689,7 +694,7 @@ var i,
 	funescape = function( _, escaped, escapedWhitespace ) {
 		var high = "0x" + escaped - 0x10000;
 		// NaN means non-codepoint
-		// Support: Firefox
+		// Support: Firefox<24
 		// Workaround erroneous numeric interpretation of +"0x"
 		return high !== high || escapedWhitespace ?
 			escaped :
@@ -1085,7 +1090,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
-				return m && m.parentNode ? [m] : [];
+				return m && m.parentNode ? [ m ] : [];
 			}
 		};
 		Expr.filter["ID"] = function( id ) {
@@ -1165,11 +1170,13 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select t=''><option selected=''></option></select>";
+			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
 
-			// Support: IE8, Opera 10-12
+			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
-			if ( div.querySelectorAll("[t^='']").length ) {
+			// The test attribute must be unknown in Opera but "safe" for WinRT
+			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
+			if ( div.querySelectorAll("[msallowclip^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -1212,7 +1219,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 		});
 	}
 
-	if ( (support.matchesSelector = rnative.test( (matches = docElem.webkitMatchesSelector ||
+	if ( (support.matchesSelector = rnative.test( (matches = docElem.matches ||
+		docElem.webkitMatchesSelector ||
 		docElem.mozMatchesSelector ||
 		docElem.oMatchesSelector ||
 		docElem.msMatchesSelector) )) ) {
@@ -1393,7 +1401,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 		} catch(e) {}
 	}
 
-	return Sizzle( expr, document, null, [elem] ).length > 0;
+	return Sizzle( expr, document, null, [ elem ] ).length > 0;
 };
 
 Sizzle.contains = function( context, elem ) {
@@ -1522,7 +1530,7 @@ Expr = Sizzle.selectors = {
 			match[1] = match[1].replace( runescape, funescape );
 
 			// Move the given value to match[3] whether quoted or unquoted
-			match[3] = ( match[4] || match[5] || "" ).replace( runescape, funescape );
+			match[3] = ( match[3] || match[4] || match[5] || "" ).replace( runescape, funescape );
 
 			if ( match[2] === "~=" ) {
 				match[3] = " " + match[3] + " ";
@@ -1565,15 +1573,15 @@ Expr = Sizzle.selectors = {
 
 		"PSEUDO": function( match ) {
 			var excess,
-				unquoted = !match[5] && match[2];
+				unquoted = !match[6] && match[2];
 
 			if ( matchExpr["CHILD"].test( match[0] ) ) {
 				return null;
 			}
 
 			// Accept quoted arguments as-is
-			if ( match[3] && match[4] !== undefined ) {
-				match[2] = match[4];
+			if ( match[3] ) {
+				match[2] = match[4] || match[5] || "";
 
 			// Strip excess characters from unquoted arguments
 			} else if ( unquoted && rpseudo.test( unquoted ) &&
@@ -1978,7 +1986,7 @@ function setFilters() {}
 setFilters.prototype = Expr.filters = Expr.pseudos;
 Expr.setFilters = new setFilters();
 
-function tokenize( selector, parseOnly ) {
+tokenize = Sizzle.tokenize = function( selector, parseOnly ) {
 	var matched, match, tokens, type,
 		soFar, groups, preFilters,
 		cached = tokenCache[ selector + " " ];
@@ -2043,7 +2051,7 @@ function tokenize( selector, parseOnly ) {
 			Sizzle.error( selector ) :
 			// Cache the tokens
 			tokenCache( selector, groups ).slice( 0 );
-}
+};
 
 function toSelector( tokens ) {
 	var i = 0,
@@ -2120,6 +2128,15 @@ function elementMatcher( matchers ) {
 			return true;
 		} :
 		matchers[0];
+}
+
+function multipleContexts( selector, contexts, results ) {
+	var i = 0,
+		len = contexts.length;
+	for ( ; i < len; i++ ) {
+		Sizzle( selector, contexts[i], results );
+	}
+	return results;
 }
 
 function condense( unmatched, map, filter, context, xml ) {
@@ -2390,7 +2407,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 		superMatcher;
 }
 
-compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
+compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 	var i,
 		setMatchers = [],
 		elementMatchers = [],
@@ -2398,12 +2415,12 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 
 	if ( !cached ) {
 		// Generate a function of recursive functions that can be used to check each element
-		if ( !group ) {
-			group = tokenize( selector );
+		if ( !match ) {
+			match = tokenize( selector );
 		}
-		i = group.length;
+		i = match.length;
 		while ( i-- ) {
-			cached = matcherFromTokens( group[i] );
+			cached = matcherFromTokens( match[i] );
 			if ( cached[ expando ] ) {
 				setMatchers.push( cached );
 			} else {
@@ -2413,74 +2430,83 @@ compile = Sizzle.compile = function( selector, group /* Internal Use Only */ ) {
 
 		// Cache the compiled function
 		cached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );
+
+		// Save selector and tokenization
+		cached.selector = selector;
 	}
 	return cached;
 };
 
-function multipleContexts( selector, contexts, results ) {
-	var i = 0,
-		len = contexts.length;
-	for ( ; i < len; i++ ) {
-		Sizzle( selector, contexts[i], results );
-	}
-	return results;
-}
-
-function select( selector, context, results, seed ) {
+/**
+ * A low-level selection function that works with Sizzle's compiled
+ *  selector functions
+ * @param {String|Function} selector A selector or a pre-compiled
+ *  selector function built with Sizzle.compile
+ * @param {Element} context
+ * @param {Array} [results]
+ * @param {Array} [seed] A set of elements to match against
+ */
+select = Sizzle.select = function( selector, context, results, seed ) {
 	var i, tokens, token, type, find,
-		match = tokenize( selector );
+		compiled = typeof selector === "function" && selector,
+		match = !seed && tokenize( (selector = compiled.selector || selector) );
 
-	if ( !seed ) {
-		// Try to minimize operations if there is only one group
-		if ( match.length === 1 ) {
+	results = results || [];
 
-			// Take a shortcut and set the context if the root selector is an ID
-			tokens = match[0] = match[0].slice( 0 );
-			if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
-					support.getById && context.nodeType === 9 && documentIsHTML &&
-					Expr.relative[ tokens[1].type ] ) {
+	// Try to minimize operations if there is no seed and only one group
+	if ( match.length === 1 ) {
 
-				context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
-				if ( !context ) {
-					return results;
-				}
-				selector = selector.slice( tokens.shift().value.length );
+		// Take a shortcut and set the context if the root selector is an ID
+		tokens = match[0] = match[0].slice( 0 );
+		if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
+				support.getById && context.nodeType === 9 && documentIsHTML &&
+				Expr.relative[ tokens[1].type ] ) {
+
+			context = ( Expr.find["ID"]( token.matches[0].replace(runescape, funescape), context ) || [] )[0];
+			if ( !context ) {
+				return results;
+
+			// Precompiled matchers will still verify ancestry, so step up a level
+			} else if ( compiled ) {
+				context = context.parentNode;
 			}
 
-			// Fetch a seed set for right-to-left matching
-			i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
-			while ( i-- ) {
-				token = tokens[i];
+			selector = selector.slice( tokens.shift().value.length );
+		}
 
-				// Abort if we hit a combinator
-				if ( Expr.relative[ (type = token.type) ] ) {
-					break;
-				}
-				if ( (find = Expr.find[ type ]) ) {
-					// Search, expanding context for leading sibling combinators
-					if ( (seed = find(
-						token.matches[0].replace( runescape, funescape ),
-						rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
-					)) ) {
+		// Fetch a seed set for right-to-left matching
+		i = matchExpr["needsContext"].test( selector ) ? 0 : tokens.length;
+		while ( i-- ) {
+			token = tokens[i];
 
-						// If seed is empty or no tokens remain, we can return early
-						tokens.splice( i, 1 );
-						selector = seed.length && toSelector( tokens );
-						if ( !selector ) {
-							push.apply( results, seed );
-							return results;
-						}
+			// Abort if we hit a combinator
+			if ( Expr.relative[ (type = token.type) ] ) {
+				break;
+			}
+			if ( (find = Expr.find[ type ]) ) {
+				// Search, expanding context for leading sibling combinators
+				if ( (seed = find(
+					token.matches[0].replace( runescape, funescape ),
+					rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
+				)) ) {
 
-						break;
+					// If seed is empty or no tokens remain, we can return early
+					tokens.splice( i, 1 );
+					selector = seed.length && toSelector( tokens );
+					if ( !selector ) {
+						push.apply( results, seed );
+						return results;
 					}
+
+					break;
 				}
 			}
 		}
 	}
 
-	// Compile and execute a filtering function
+	// Compile and execute a filtering function if one is not provided
 	// Provide `match` to avoid retokenization if we modified the selector above
-	compile( selector, match )(
+	( compiled || compile( selector, match ) )(
 		seed,
 		context,
 		!documentIsHTML,
@@ -2488,7 +2514,7 @@ function select( selector, context, results, seed ) {
 		rsibling.test( selector ) && testContext( context.parentNode ) || context
 	);
 	return results;
-}
+};
 
 // One-time assignments
 
@@ -3365,8 +3391,9 @@ jQuery.extend({
 		readyList.resolveWith( document, [ jQuery ] );
 
 		// Trigger any bound ready events
-		if ( jQuery.fn.trigger ) {
-			jQuery( document ).trigger("ready").off("ready");
+		if ( jQuery.fn.triggerHandler ) {
+			jQuery( document ).triggerHandler( "ready" );
+			jQuery( document ).off( "ready" );
 		}
 	}
 });
@@ -3738,11 +3765,15 @@ jQuery.fn.extend({
 				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
 					i = attrs.length;
 					while ( i-- ) {
-						name = attrs[ i ].name;
 
-						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.slice(5) );
-							dataAttr( elem, name, data[ name ] );
+						// Support: IE11+
+						// The attrs elements can be null (#14894)
+						if ( attrs[ i ] ) {
+							name = attrs[ i ].name;
+							if ( name.indexOf( "data-" ) === 0 ) {
+								name = jQuery.camelCase( name.slice(5) );
+								dataAttr( elem, name, data[ name ] );
+							}
 						}
 					}
 					data_priv.set( elem, "hasDataAttrs", true );
@@ -3972,10 +4003,17 @@ var rcheckableType = (/^(?:checkbox|radio)$/i);
 
 (function() {
 	var fragment = document.createDocumentFragment(),
-		div = fragment.appendChild( document.createElement( "div" ) );
+		div = fragment.appendChild( document.createElement( "div" ) ),
+		input = document.createElement( "input" );
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
-	div.innerHTML = "<input type='radio' checked='checked' name='t'/>";
+	// Support: Windows Web Apps (WWA)
+	// `name` and `type` need .setAttribute for WWA
+	input.setAttribute( "type", "radio" );
+	input.setAttribute( "checked", "checked" );
+	input.setAttribute( "name", "t" );
+
+	div.appendChild( input );
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
@@ -3995,7 +4033,7 @@ support.focusinBubbles = "onfocusin" in window;
 
 var
 	rkeyEvent = /^key/,
-	rmouseEvent = /^(?:mouse|contextmenu)|click/,
+	rmouseEvent = /^(?:mouse|pointer|contextmenu)|click/,
 	rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
 	rtypenamespace = /^([^.]*)(?:\.(.+)|)$/;
 
@@ -4564,7 +4602,7 @@ jQuery.event = {
 
 				// Support: Firefox 20+
 				// Firefox doesn't alert if the returnValue field is not set.
-				if ( event.result !== undefined ) {
+				if ( event.result !== undefined && event.originalEvent ) {
 					event.originalEvent.returnValue = event.result;
 				}
 			}
@@ -4615,9 +4653,9 @@ jQuery.Event = function( src, props ) {
 		// Events bubbling up the document may have been marked as prevented
 		// by a handler lower down the tree; reflect the correct value.
 		this.isDefaultPrevented = src.defaultPrevented ||
-				// Support: Android < 4.0
 				src.defaultPrevented === undefined &&
-				src.getPreventDefault && src.getPreventDefault() ?
+				// Support: Android < 4.0
+				src.returnValue === false ?
 			returnTrue :
 			returnFalse;
 
@@ -4664,7 +4702,14 @@ jQuery.Event.prototype = {
 		}
 	},
 	stopImmediatePropagation: function() {
+		var e = this.originalEvent;
+
 		this.isImmediatePropagationStopped = returnTrue;
+
+		if ( e && e.stopImmediatePropagation ) {
+			e.stopImmediatePropagation();
+		}
+
 		this.stopPropagation();
 	}
 };
@@ -4673,7 +4718,9 @@ jQuery.Event.prototype = {
 // Support: Chrome 15+
 jQuery.each({
 	mouseenter: "mouseover",
-	mouseleave: "mouseout"
+	mouseleave: "mouseout",
+	pointerenter: "pointerover",
+	pointerleave: "pointerout"
 }, function( orig, fix ) {
 	jQuery.event.special[ orig ] = {
 		delegateType: fix,
@@ -5098,7 +5145,7 @@ jQuery.extend({
 	},
 
 	cleanData: function( elems ) {
-		var data, elem, events, type, key, j,
+		var data, elem, type, key,
 			special = jQuery.event.special,
 			i = 0;
 
@@ -5107,9 +5154,8 @@ jQuery.extend({
 				key = elem[ data_priv.expando ];
 
 				if ( key && (data = data_priv.cache[ key ]) ) {
-					events = Object.keys( data.events || {} );
-					if ( events.length ) {
-						for ( j = 0; (type = events[j]) !== undefined; j++ ) {
+					if ( data.events ) {
+						for ( type in data.events ) {
 							if ( special[ type ] ) {
 								jQuery.event.remove( elem, type );
 
@@ -5412,14 +5458,15 @@ var iframe,
  */
 // Called only from within defaultDisplay
 function actualDisplay( name, doc ) {
-	var elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
+	var style,
+		elem = jQuery( doc.createElement( name ) ).appendTo( doc.body ),
 
 		// getDefaultComputedStyle might be reliably used only on attached element
-		display = window.getDefaultComputedStyle ?
+		display = window.getDefaultComputedStyle && ( style = window.getDefaultComputedStyle( elem[ 0 ] ) ) ?
 
 			// Use of this method is a temporary fix (more like optmization) until something better comes along,
 			// since it was removed from specification and supported only in FF
-			window.getDefaultComputedStyle( elem[ 0 ] ).display : jQuery.css( elem[ 0 ], "display" );
+			style.display : jQuery.css( elem[ 0 ], "display" );
 
 	// We don't have any data stored on the element,
 	// so use "detach" method as fast way to get rid of the element
@@ -5542,28 +5589,32 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 (function() {
 	var pixelPositionVal, boxSizingReliableVal,
-		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;" +
-			"-moz-box-sizing:content-box;box-sizing:content-box",
 		docElem = document.documentElement,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
+
+	if ( !div.style ) {
+		return;
+	}
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;" +
-		"margin-top:1px";
+	container.style.cssText = "border:0;width:0;height:0;top:0;left:-9999px;margin-top:1px;" +
+		"position:absolute";
 	container.appendChild( div );
 
 	// Executing both pixelPosition & boxSizingReliable tests require only one layout
 	// so they're executed at the same time to save the second computation.
 	function computePixelPositionAndBoxSizingReliable() {
-		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
-			"box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;" +
-			"position:absolute;top:1%";
+		div.style.cssText =
+			// Support: Firefox<29, Android 2.3
+			// Vendor-prefix box-sizing
+			"-webkit-box-sizing:border-box;-moz-box-sizing:border-box;" +
+			"box-sizing:border-box;display:block;margin-top:1%;top:1%;" +
+			"border:1px;padding:1px;width:4px;position:absolute";
+		div.innerHTML = "";
 		docElem.appendChild( container );
 
 		var divStyle = window.getComputedStyle( div, null );
@@ -5573,9 +5624,10 @@ function addGetHookIf( conditionFn, hookFn ) {
 		docElem.removeChild( container );
 	}
 
-	// Use window.getComputedStyle because jsdom on node.js will break without it.
+	// Support: node.js jsdom
+	// Don't assume that getComputedStyle is a property of the global object
 	if ( window.getComputedStyle ) {
-		jQuery.extend(support, {
+		jQuery.extend( support, {
 			pixelPosition: function() {
 				// This test is executed only once but we still do memoizing
 				// since we can use the boxSizingReliable pre-computing.
@@ -5597,7 +5649,13 @@ function addGetHookIf( conditionFn, hookFn ) {
 				// This support function is only executed once so no memoizing is needed.
 				var ret,
 					marginDiv = div.appendChild( document.createElement( "div" ) );
-				marginDiv.style.cssText = div.style.cssText = divReset;
+
+				// Reset CSS: box-sizing; display; margin; border; padding
+				marginDiv.style.cssText = div.style.cssText =
+					// Support: Firefox<29, Android 2.3
+					// Vendor-prefix box-sizing
+					"-webkit-box-sizing:content-box;-moz-box-sizing:content-box;" +
+					"box-sizing:content-box;display:block;margin:0;border:0;padding:0";
 				marginDiv.style.marginRight = marginDiv.style.width = "0";
 				div.style.width = "1px";
 				docElem.appendChild( container );
@@ -5605,9 +5663,6 @@ function addGetHookIf( conditionFn, hookFn ) {
 				ret = !parseFloat( window.getComputedStyle( marginDiv, null ).marginRight );
 
 				docElem.removeChild( container );
-
-				// Clean up the div for other support tests.
-				div.innerHTML = "";
 
 				return ret;
 			}
@@ -5647,8 +5702,8 @@ var
 
 	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 	cssNormalTransform = {
-		letterSpacing: 0,
-		fontWeight: 400
+		letterSpacing: "0",
+		fontWeight: "400"
 	},
 
 	cssPrefixes = [ "Webkit", "O", "Moz", "ms" ];
@@ -5795,13 +5850,10 @@ function showHide( elements, show ) {
 				values[ index ] = data_priv.access( elem, "olddisplay", defaultDisplay(elem.nodeName) );
 			}
 		} else {
+			hidden = isHidden( elem );
 
-			if ( !values[ index ] ) {
-				hidden = isHidden( elem );
-
-				if ( display && display !== "none" || !hidden ) {
-					data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css(elem, "display") );
-				}
+			if ( display !== "none" || !hidden ) {
+				data_priv.set( elem, "olddisplay", hidden ? display : jQuery.css( elem, "display" ) );
 			}
 		}
 	}
@@ -5840,6 +5892,8 @@ jQuery.extend({
 	cssNumber: {
 		"columnCount": true,
 		"fillOpacity": true,
+		"flexGrow": true,
+		"flexShrink": true,
 		"fontWeight": true,
 		"lineHeight": true,
 		"opacity": true,
@@ -5904,9 +5958,6 @@ jQuery.extend({
 
 			// If a hook was provided, use that value, otherwise just set the specified value
 			if ( !hooks || !("set" in hooks) || (value = hooks.set( elem, value, extra )) !== undefined ) {
-				// Support: Chrome, Safari
-				// Setting style to blank string required to delete "style: x !important;"
-				style[ name ] = "";
 				style[ name ] = value;
 			}
 
@@ -5962,7 +6013,7 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return elem.offsetWidth === 0 && rdisplayswap.test( jQuery.css( elem, "display" ) ) ?
+				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
@@ -6283,7 +6334,7 @@ function createTween( value, prop, animation ) {
 
 function defaultPrefilter( elem, props, opts ) {
 	/* jshint validthis: true */
-	var prop, value, toggle, tween, hooks, oldfire, display,
+	var prop, value, toggle, tween, hooks, oldfire, display, checkDisplay,
 		anim = this,
 		orig = {},
 		style = elem.style,
@@ -6327,13 +6378,12 @@ function defaultPrefilter( elem, props, opts ) {
 		// Set display property to inline-block for height/width
 		// animations on inline elements that are having width/height animated
 		display = jQuery.css( elem, "display" );
-		// Get default display if display is currently "none"
-		if ( display === "none" ) {
-			display = defaultDisplay( elem.nodeName );
-		}
-		if ( display === "inline" &&
-				jQuery.css( elem, "float" ) === "none" ) {
 
+		// Test default display if display is currently "none"
+		checkDisplay = display === "none" ?
+			data_priv.get( elem, "olddisplay" ) || defaultDisplay( elem.nodeName ) : display;
+
+		if ( checkDisplay === "inline" && jQuery.css( elem, "float" ) === "none" ) {
 			style.display = "inline-block";
 		}
 	}
@@ -6363,6 +6413,10 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 			orig[ prop ] = dataShow && dataShow[ prop ] || jQuery.style( elem, prop );
+
+		// Any non-fx value stops us from restoring the original display value
+		} else {
+			display = undefined;
 		}
 	}
 
@@ -6405,6 +6459,10 @@ function defaultPrefilter( elem, props, opts ) {
 				}
 			}
 		}
+
+	// If this is a noop like .hide().hide(), restore an overwritten display value
+	} else if ( (display === "none" ? defaultDisplay( elem.nodeName ) : display) === "inline" ) {
+		style.display = display;
 	}
 }
 
@@ -7297,6 +7355,16 @@ jQuery.fn.extend({
 
 jQuery.extend({
 	valHooks: {
+		option: {
+			get: function( elem ) {
+				var val = jQuery.find.attr( elem, "value" );
+				return val != null ?
+					val :
+					// Support: IE10-11+
+					// option.text throws exceptions (#14686, #14858)
+					jQuery.trim( jQuery.text( elem ) );
+			}
+		},
 		select: {
 			get: function( elem ) {
 				var value, option,
@@ -7343,7 +7411,7 @@ jQuery.extend({
 
 				while ( i-- ) {
 					option = options[ i ];
-					if ( (option.selected = jQuery.inArray( jQuery(option).val(), values ) >= 0) ) {
+					if ( (option.selected = jQuery.inArray( option.value, values ) >= 0) ) {
 						optionSet = true;
 					}
 				}
@@ -8550,10 +8618,15 @@ jQuery.ajaxTransport(function( options ) {
 				// Create the abort callback
 				callback = xhrCallbacks[ id ] = callback("abort");
 
-				// Do send the request
-				// This may raise an exception which is actually
-				// handled in jQuery.ajax (so no try/catch here)
-				xhr.send( options.hasContent && options.data || null );
+				try {
+					// Do send the request (this may raise an exception)
+					xhr.send( options.hasContent && options.data || null );
+				} catch ( e ) {
+					// #14683: Only rethrow if this hasn't been notified as an error yet
+					if ( callback ) {
+						throw e;
+					}
+				}
 			},
 
 			abort: function() {
@@ -8760,7 +8833,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		off = url.indexOf(" ");
 
 	if ( off >= 0 ) {
-		selector = url.slice( off );
+		selector = jQuery.trim( url.slice( off ) );
 		url = url.slice( 0, off );
 	}
 
@@ -9068,6 +9141,12 @@ jQuery.fn.andSelf = jQuery.fn.addBack;
 // derived from file names, and jQuery is normally delivered in a lowercase
 // file name. Do this after creating the global so that if an AMD module wants
 // to call noConflict to hide this version of jQuery, it will work.
+
+// Note that for maximum portability, libraries that are not jQuery should
+// declare themselves as anonymous modules, and avoid setting a global if an
+// AMD loader is present. jQuery is a special case. For more information, see
+// https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#wiki-anon
+
 if ( typeof define === "function" && define.amd ) {
 	define( "jquery", [], function() {
 		return jQuery;
@@ -9633,7 +9712,7 @@ jQuery.each( ajaxEvents.split("|"),
 })( jQuery, window );
 
 //! moment.js
-//! version : 2.5.1
+//! version : 2.6.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -9645,8 +9724,10 @@ jQuery.each( ajaxEvents.split("|"),
     ************************************/
 
     var moment,
-        VERSION = "2.5.1",
-        global = this,
+        VERSION = "2.6.0",
+        // the global-scope this is NOT the global object in Node.js
+        globalScope = typeof global !== 'undefined' ? global : this,
+        oldGlobalMoment,
         round = Math.round,
         i,
 
@@ -9675,7 +9756,7 @@ jQuery.each( ajaxEvents.split("|"),
         },
 
         // check for nodeJS
-        hasModule = (typeof module !== 'undefined' && module.exports && typeof require !== 'undefined'),
+        hasModule = (typeof module !== 'undefined' && module.exports),
 
         // ASP.NET json date format regex
         aspNetJsonRegex = /^\/?Date\((\-?\d+)/i,
@@ -9686,7 +9767,7 @@ jQuery.each( ajaxEvents.split("|"),
         isoDurationRegex = /^(-)?P(?:(?:([0-9,.]*)Y)?(?:([0-9,.]*)M)?(?:([0-9,.]*)D)?(?:T(?:([0-9,.]*)H)?(?:([0-9,.]*)M)?(?:([0-9,.]*)S)?)?|([0-9,.]*)W)$/,
 
         // format tokens
-        formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|X|zz?|ZZ?|.)/g,
+        formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|X|zz?|ZZ?|.)/g,
         localFormattingTokens = /(\[[^\[]*\])|(\\)?(LT|LL?L?L?|l{1,4})/g,
 
         // parsing token regexes
@@ -9699,6 +9780,7 @@ jQuery.each( ajaxEvents.split("|"),
         parseTokenTimezone = /Z|[\+\-]\d\d:?\d\d/gi, // +00:00 -00:00 +0000 -0000 or Z
         parseTokenT = /T/i, // T (ISO separator)
         parseTokenTimestampMs = /[\+\-]?\d+(\.\d{1,3})?/, // 123456789 123456789.123
+        parseTokenOrdinal = /\d{1,2}/,
 
         //strict parsing regexes
         parseTokenOneDigit = /\d/, // 0 - 9
@@ -9724,7 +9806,7 @@ jQuery.each( ajaxEvents.split("|"),
 
         // iso time formats and regexes
         isoTimes = [
-            ['HH:mm:ss.SSSS', /(T| )\d\d:\d\d:\d\d\.\d{1,3}/],
+            ['HH:mm:ss.SSSS', /(T| )\d\d:\d\d:\d\d\.\d+/],
             ['HH:mm:ss', /(T| )\d\d:\d\d:\d\d/],
             ['HH:mm', /(T| )\d\d:\d\d/],
             ['HH', /(T| )\d\d/]
@@ -9755,6 +9837,7 @@ jQuery.each( ajaxEvents.split("|"),
             w : 'week',
             W : 'isoWeek',
             M : 'month',
+            Q : 'quarter',
             y : 'year',
             DDD : 'dayOfYear',
             e : 'weekday',
@@ -9930,6 +10013,23 @@ jQuery.each( ajaxEvents.split("|"),
         };
     }
 
+    function deprecate(msg, fn) {
+        var firstTime = true;
+        function printMsg() {
+            if (moment.suppressDeprecationWarnings === false &&
+                    typeof console !== 'undefined' && console.warn) {
+                console.warn("Deprecation warning: " + msg);
+            }
+        }
+        return extend(function () {
+            if (firstTime) {
+                printMsg();
+                firstTime = false;
+            }
+            return fn.apply(this, arguments);
+        }, fn);
+    }
+
     function padToken(func, count) {
         return function (a) {
             return leftZeroFill(func.call(this, a), count);
@@ -9970,6 +10070,7 @@ jQuery.each( ajaxEvents.split("|"),
     function Duration(duration) {
         var normalizedInput = normalizeObjectUnits(duration),
             years = normalizedInput.year || 0,
+            quarters = normalizedInput.quarter || 0,
             months = normalizedInput.month || 0,
             weeks = normalizedInput.week || 0,
             days = normalizedInput.day || 0,
@@ -9991,6 +10092,7 @@ jQuery.each( ajaxEvents.split("|"),
         // which months you are are talking about, so we have to store
         // it separately.
         this._months = +months +
+            quarters * 3 +
             years * 12;
 
         this._data = {};
@@ -10053,34 +10155,23 @@ jQuery.each( ajaxEvents.split("|"),
     }
 
     // helper function for _.addTime and _.subtractTime
-    function addOrSubtractDurationFromMoment(mom, duration, isAdding, ignoreUpdateOffset) {
+    function addOrSubtractDurationFromMoment(mom, duration, isAdding, updateOffset) {
         var milliseconds = duration._milliseconds,
             days = duration._days,
-            months = duration._months,
-            minutes,
-            hours;
+            months = duration._months;
+        updateOffset = updateOffset == null ? true : updateOffset;
 
         if (milliseconds) {
             mom._d.setTime(+mom._d + milliseconds * isAdding);
         }
-        // store the minutes and hours so we can restore them
-        if (days || months) {
-            minutes = mom.minute();
-            hours = mom.hour();
-        }
         if (days) {
-            mom.date(mom.date() + days * isAdding);
+            rawSetter(mom, 'Date', rawGetter(mom, 'Date') + days * isAdding);
         }
         if (months) {
-            mom.month(mom.month() + months * isAdding);
+            rawMonthSetter(mom, rawGetter(mom, 'Month') + months * isAdding);
         }
-        if (milliseconds && !ignoreUpdateOffset) {
-            moment.updateOffset(mom);
-        }
-        // restore the minutes and hours after possibly changing dst
-        if (days || months) {
-            mom.minute(minutes);
-            mom.hour(hours);
+        if (updateOffset) {
+            moment.updateOffset(mom, days || months);
         }
     }
 
@@ -10193,6 +10284,10 @@ jQuery.each( ajaxEvents.split("|"),
 
     function daysInMonth(year, month) {
         return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+    }
+
+    function weeksInYear(year, dow, doy) {
+        return weekOfYear(moment([year, 11, 31 + dow - doy]), dow, doy).week;
     }
 
     function daysInYear(year) {
@@ -10585,6 +10680,8 @@ jQuery.each( ajaxEvents.split("|"),
     function getParseRegexForToken(token, config) {
         var a, strict = config._strict;
         switch (token) {
+        case 'Q':
+            return parseTokenOneDigit;
         case 'DDDD':
             return parseTokenThreeDigits;
         case 'YYYY':
@@ -10653,6 +10750,8 @@ jQuery.each( ajaxEvents.split("|"),
         case 'e':
         case 'E':
             return parseTokenOneOrTwoDigits;
+        case 'Do':
+            return parseTokenOrdinal;
         default :
             a = new RegExp(regexpEscape(unescapeFormat(token.replace('\\', '')), "i"));
             return a;
@@ -10674,6 +10773,12 @@ jQuery.each( ajaxEvents.split("|"),
         var a, datePartArray = config._a;
 
         switch (token) {
+        // QUARTER
+        case 'Q':
+            if (input != null) {
+                datePartArray[MONTH] = (toInt(input) - 1) * 3;
+            }
+            break;
         // MONTH
         case 'M' : // fall through to MM
         case 'MM' :
@@ -10698,6 +10803,11 @@ jQuery.each( ajaxEvents.split("|"),
                 datePartArray[DATE] = toInt(input);
             }
             break;
+        case 'Do' :
+            if (input != null) {
+                datePartArray[DATE] = toInt(parseInt(input, 10));
+            }
+            break;
         // DAY OF YEAR
         case 'DDD' : // fall through to DDDD
         case 'DDDD' :
@@ -10708,7 +10818,7 @@ jQuery.each( ajaxEvents.split("|"),
             break;
         // YEAR
         case 'YY' :
-            datePartArray[YEAR] = toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
+            datePartArray[YEAR] = moment.parseTwoDigitYear(input);
             break;
         case 'YYYY' :
         case 'YYYYY' :
@@ -10797,9 +10907,9 @@ jQuery.each( ajaxEvents.split("|"),
         //compute day of the year from weeks and weekdays
         if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
             fixYear = function (val) {
-                var int_val = parseInt(val, 10);
+                var intVal = parseInt(val, 10);
                 return val ?
-                  (val.length < 3 ? (int_val > 68 ? 1900 + int_val : 2000 + int_val) : int_val) :
+                  (val.length < 3 ? (intVal > 68 ? 1900 + intVal : 2000 + intVal) : intVal) :
                   (config._a[YEAR] == null ? moment().weekYear() : config._a[YEAR]);
             };
 
@@ -11035,7 +11145,7 @@ jQuery.each( ajaxEvents.split("|"),
             makeDateFromStringAndFormat(config);
         }
         else {
-            config._d = new Date(string);
+            moment.createFromInputFallback(config);
         }
     }
 
@@ -11056,8 +11166,11 @@ jQuery.each( ajaxEvents.split("|"),
             config._d = new Date(+input);
         } else if (typeof(input) === 'object') {
             dateFromObject(config);
-        } else {
+        } else if (typeof(input) === 'number') {
+            // from milliseconds
             config._d = new Date(input);
+        } else {
+            moment.createFromInputFallback(config);
         }
     }
 
@@ -11184,7 +11297,7 @@ jQuery.each( ajaxEvents.split("|"),
         var input = config._i,
             format = config._f;
 
-        if (input === null) {
+        if (input === null || (format === undefined && input === '')) {
             return moment.invalid({nullInput: true});
         }
 
@@ -11229,6 +11342,17 @@ jQuery.each( ajaxEvents.split("|"),
 
         return makeMoment(c);
     };
+
+    moment.suppressDeprecationWarnings = false;
+
+    moment.createFromInputFallback = deprecate(
+            "moment construction falls back to js Date. This is " +
+            "discouraged and will be removed in upcoming major " +
+            "release. Please refer to " +
+            "https://github.com/moment/moment/issues/1407 for more info.",
+            function (config) {
+        config._d = new Date(config._i);
+    });
 
     // creating with utc
     moment.utc = function (input, format, lang, strict) {
@@ -11326,6 +11450,10 @@ jQuery.each( ajaxEvents.split("|"),
     // default format
     moment.defaultFormat = isoFormat;
 
+    // Plugins that add properties should also add the key here (null value),
+    // so we can properly clone ourselves.
+    moment.momentProperties = momentProperties;
+
     // This function will be called whenever a moment is mutated.
     // It is intended to keep the offset in sync with the timezone.
     moment.updateOffset = function () {};
@@ -11389,8 +11517,12 @@ jQuery.each( ajaxEvents.split("|"),
         return m;
     };
 
-    moment.parseZone = function (input) {
-        return moment(input).parseZone();
+    moment.parseZone = function () {
+        return moment.apply(null, arguments).parseZone();
+    };
+
+    moment.parseTwoDigitYear = function (input) {
+        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
     };
 
     /************************************
@@ -11577,29 +11709,7 @@ jQuery.each( ajaxEvents.split("|"),
             }
         },
 
-        month : function (input) {
-            var utc = this._isUTC ? 'UTC' : '',
-                dayOfMonth;
-
-            if (input != null) {
-                if (typeof input === 'string') {
-                    input = this.lang().monthsParse(input);
-                    if (typeof input !== 'number') {
-                        return this;
-                    }
-                }
-
-                dayOfMonth = this.date();
-                this.date(1);
-                this._d['set' + utc + 'Month'](input);
-                this.date(Math.min(dayOfMonth, this.daysInMonth()));
-
-                moment.updateOffset(this);
-                return this;
-            } else {
-                return this._d['get' + utc + 'Month']();
-            }
-        },
+        month : makeAccessor('Month', true),
 
         startOf: function (units) {
             units = normalizeUnits(units);
@@ -11609,6 +11719,7 @@ jQuery.each( ajaxEvents.split("|"),
             case 'year':
                 this.month(0);
                 /* falls through */
+            case 'quarter':
             case 'month':
                 this.date(1);
                 /* falls through */
@@ -11633,6 +11744,11 @@ jQuery.each( ajaxEvents.split("|"),
                 this.weekday(0);
             } else if (units === 'isoWeek') {
                 this.isoWeekday(1);
+            }
+
+            // quarters are also special
+            if (units === 'quarter') {
+                this.month(Math.floor(this.month() / 3) * 3);
             }
 
             return this;
@@ -11668,7 +11784,17 @@ jQuery.each( ajaxEvents.split("|"),
             return other > this ? this : other;
         },
 
-        zone : function (input) {
+        // keepTime = true means only change the timezone, without affecting
+        // the local hour. So 5:31:26 +0300 --[zone(2, true)]--> 5:31:26 +0200
+        // It is possible that 5:31:26 doesn't exist int zone +0200, so we
+        // adjust the time as needed, to be valid.
+        //
+        // Keeping the time actually adds/subtracts (one hour)
+        // from the actual represented time. That is why we call updateOffset
+        // a second time. In case it wants us to change the offset again
+        // _changeInProgress == true case, then we have to adjust, because
+        // there is no such time in the given timezone.
+        zone : function (input, keepTime) {
             var offset = this._offset || 0;
             if (input != null) {
                 if (typeof input === "string") {
@@ -11680,7 +11806,14 @@ jQuery.each( ajaxEvents.split("|"),
                 this._offset = input;
                 this._isUTC = true;
                 if (offset !== input) {
-                    addOrSubtractDurationFromMoment(this, moment.duration(offset - input, 'm'), 1, true);
+                    if (!keepTime || this._changeInProgress) {
+                        addOrSubtractDurationFromMoment(this,
+                                moment.duration(offset - input, 'm'), 1, false);
+                    } else if (!this._changeInProgress) {
+                        this._changeInProgress = true;
+                        moment.updateOffset(this, true);
+                        this._changeInProgress = null;
+                    }
                 }
             } else {
                 return this._isUTC ? offset : this._d.getTimezoneOffset();
@@ -11725,8 +11858,8 @@ jQuery.each( ajaxEvents.split("|"),
             return input == null ? dayOfYear : this.add("d", (input - dayOfYear));
         },
 
-        quarter : function () {
-            return Math.ceil((this.month() + 1.0) / 3.0);
+        quarter : function (input) {
+            return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
         },
 
         weekYear : function (input) {
@@ -11761,6 +11894,15 @@ jQuery.each( ajaxEvents.split("|"),
             return input == null ? this.day() || 7 : this.day(this.day() % 7 ? input : input - 7);
         },
 
+        isoWeeksInYear : function () {
+            return weeksInYear(this.year(), 1, 4);
+        },
+
+        weeksInYear : function () {
+            var weekInfo = this._lang._week;
+            return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
+        },
+
         get : function (units) {
             units = normalizeUnits(units);
             return this[units]();
@@ -11787,33 +11929,68 @@ jQuery.each( ajaxEvents.split("|"),
         }
     });
 
-    // helper for adding shortcuts
-    function makeGetterAndSetter(name, key) {
-        moment.fn[name] = moment.fn[name + 's'] = function (input) {
-            var utc = this._isUTC ? 'UTC' : '';
-            if (input != null) {
-                this._d['set' + utc + key](input);
-                moment.updateOffset(this);
+    function rawMonthSetter(mom, value) {
+        var dayOfMonth;
+
+        // TODO: Move this out of here!
+        if (typeof value === 'string') {
+            value = mom.lang().monthsParse(value);
+            // TODO: Another silent failure?
+            if (typeof value !== 'number') {
+                return mom;
+            }
+        }
+
+        dayOfMonth = Math.min(mom.date(),
+                daysInMonth(mom.year(), value));
+        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
+        return mom;
+    }
+
+    function rawGetter(mom, unit) {
+        return mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]();
+    }
+
+    function rawSetter(mom, unit, value) {
+        if (unit === 'Month') {
+            return rawMonthSetter(mom, value);
+        } else {
+            return mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+        }
+    }
+
+    function makeAccessor(unit, keepTime) {
+        return function (value) {
+            if (value != null) {
+                rawSetter(this, unit, value);
+                moment.updateOffset(this, keepTime);
                 return this;
             } else {
-                return this._d['get' + utc + key]();
+                return rawGetter(this, unit);
             }
         };
     }
 
-    // loop through and add shortcuts (Month, Date, Hours, Minutes, Seconds, Milliseconds)
-    for (i = 0; i < proxyGettersAndSetters.length; i ++) {
-        makeGetterAndSetter(proxyGettersAndSetters[i].toLowerCase().replace(/s$/, ''), proxyGettersAndSetters[i]);
-    }
-
-    // add shortcut for year (uses different syntax than the getter/setter 'year' == 'FullYear')
-    makeGetterAndSetter('year', 'FullYear');
+    moment.fn.millisecond = moment.fn.milliseconds = makeAccessor('Milliseconds', false);
+    moment.fn.second = moment.fn.seconds = makeAccessor('Seconds', false);
+    moment.fn.minute = moment.fn.minutes = makeAccessor('Minutes', false);
+    // Setting the hour should keep the time, because the user explicitly
+    // specified which hour he wants. So trying to maintain the same hour (in
+    // a new timezone) makes sense. Adding/subtracting hours does not follow
+    // this rule.
+    moment.fn.hour = moment.fn.hours = makeAccessor('Hours', true);
+    // moment.fn.month is defined separately
+    moment.fn.date = makeAccessor('Date', true);
+    moment.fn.dates = deprecate("dates accessor is deprecated. Use date instead.", makeAccessor('Date', true));
+    moment.fn.year = makeAccessor('FullYear', true);
+    moment.fn.years = deprecate("years accessor is deprecated. Use year instead.", makeAccessor('FullYear', true));
 
     // add plural methods
     moment.fn.days = moment.fn.day;
     moment.fn.months = moment.fn.month;
     moment.fn.weeks = moment.fn.week;
     moment.fn.isoWeeks = moment.fn.isoWeek;
+    moment.fn.quarters = moment.fn.quarter;
 
     // add aliased format methods
     moment.fn.toJSON = moment.fn.toISOString;
@@ -11989,50 +12166,40 @@ jQuery.each( ajaxEvents.split("|"),
         Exposing Moment
     ************************************/
 
-    function makeGlobal(deprecate) {
-        var warned = false, local_moment = moment;
+    function makeGlobal(shouldDeprecate) {
         /*global ender:false */
         if (typeof ender !== 'undefined') {
             return;
         }
-        // here, `this` means `window` in the browser, or `global` on the server
-        // add `moment` as a global object via a string identifier,
-        // for Closure Compiler "advanced" mode
-        if (deprecate) {
-            global.moment = function () {
-                if (!warned && console && console.warn) {
-                    warned = true;
-                    console.warn(
-                            "Accessing Moment through the global scope is " +
-                            "deprecated, and will be removed in an upcoming " +
-                            "release.");
-                }
-                return local_moment.apply(null, arguments);
-            };
-            extend(global.moment, local_moment);
+        oldGlobalMoment = globalScope.moment;
+        if (shouldDeprecate) {
+            globalScope.moment = deprecate(
+                    "Accessing Moment through the global scope is " +
+                    "deprecated, and will be removed in an upcoming " +
+                    "release.",
+                    moment);
         } else {
-            global['moment'] = moment;
+            globalScope.moment = moment;
         }
     }
 
     // CommonJS module is defined
     if (hasModule) {
         module.exports = moment;
-        makeGlobal(true);
     } else if (typeof define === "function" && define.amd) {
         define("moment", function (require, exports, module) {
-            if (module.config && module.config() && module.config().noGlobal !== true) {
-                // If user provided noGlobal, he is aware of global
-                makeGlobal(module.config().noGlobal === undefined);
+            if (module.config && module.config() && module.config().noGlobal === true) {
+                // release the global variable
+                globalScope.moment = oldGlobalMoment;
             }
 
             return moment;
         });
+        makeGlobal(true);
     } else {
         makeGlobal();
     }
 }).call(this);
-
 /*! jQuery UI - v1.10.4 - 2014-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.ui.effect.js, jquery.ui.accordion.js, jquery.ui.autocomplete.js, jquery.ui.button.js, jquery.ui.datepicker.js, jquery.ui.dialog.js, jquery.ui.effect-blind.js, jquery.ui.effect-bounce.js, jquery.ui.effect-clip.js, jquery.ui.effect-drop.js, jquery.ui.effect-explode.js, jquery.ui.effect-fade.js, jquery.ui.effect-fold.js, jquery.ui.effect-highlight.js, jquery.ui.effect-pulsate.js, jquery.ui.effect-scale.js, jquery.ui.effect-shake.js, jquery.ui.effect-slide.js, jquery.ui.effect-transfer.js, jquery.ui.menu.js, jquery.ui.position.js, jquery.ui.progressbar.js, jquery.ui.slider.js, jquery.ui.spinner.js, jquery.ui.tabs.js, jquery.ui.tooltip.js
@@ -41979,9 +42146,9 @@ $.widget( "ui.tooltip", {
 })(jQuery);
     
     
-/*! jQuery Timepicker Addon - v1.4.3 - 2013-11-30
+/*! jQuery Timepicker Addon - v1.4.5 - 2014-05-26
 * http://trentrichardson.com/examples/timepicker
-* Copyright (c) 2013 Trent Richardson; Licensed MIT */
+* Copyright (c) 2014 Trent Richardson; Licensed MIT */
 (function ($) {
 
 	/*
@@ -41997,7 +42164,7 @@ $.widget( "ui.tooltip", {
 	*/
 	$.extend($.ui, {
 		timepicker: {
-			version: "1.4.3"
+			version: "1.4.5"
 		}
 	});
 
@@ -42029,6 +42196,7 @@ $.widget( "ui.tooltip", {
 		this._defaults = { // Global defaults for all the datetime picker instances
 			showButtonPanel: true,
 			timeOnly: false,
+			timeOnlyShowDate: false,
 			showHour: null,
 			showMinute: null,
 			showSecond: null,
@@ -42059,6 +42227,8 @@ $.widget( "ui.tooltip", {
 			microsecMax: 999,
 			minDateTime: null,
 			maxDateTime: null,
+			maxTime: null,
+			minTime: null,
 			onSelect: null,
 			hourGrid: 0,
 			minuteGrid: 0,
@@ -42071,6 +42241,7 @@ $.widget( "ui.tooltip", {
 			altTimeFormat: null,
 			altSeparator: null,
 			altTimeSuffix: null,
+			altRedirectFocus: true,
 			pickerTimeFormat: null,
 			pickerTimeSuffix: null,
 			showTimepicker: true,
@@ -42095,6 +42266,8 @@ $.widget( "ui.tooltip", {
 		millisec_slider: null,
 		microsec_slider: null,
 		timezone_select: null,
+		maxTime: null,
+		minTime: null,
 		hour: 0,
 		minute: 0,
 		second: 0,
@@ -42241,11 +42414,14 @@ $.widget( "ui.tooltip", {
 			tp_inst.$input = $input;
 
 			if (tp_inst._defaults.altField) {
-				tp_inst.$altInput = $(tp_inst._defaults.altField).css({
-					cursor: 'pointer'
-				}).focus(function () {
-					$input.trigger("focus");
-				});
+				tp_inst.$altInput = $(tp_inst._defaults.altField);
+				if (tp_inst._defaults.altRedirectFocus === true) {
+					tp_inst.$altInput.css({
+						cursor: 'pointer'
+					}).focus(function () {
+						$input.trigger("focus");
+					});
+				}
 			}
 
 			if (tp_inst._defaults.minDate === 0 || tp_inst._defaults.minDateTime === 0) {
@@ -42641,6 +42817,44 @@ $.widget( "ui.tooltip", {
 				}
 			}
 
+			if (dp_inst.settings.minTime!==null) {				
+				var tempMinTime=new Date("01/01/1970 " + dp_inst.settings.minTime);				
+				if (this.hour<tempMinTime.getHours()) {
+					this.hour=this._defaults.hourMin=tempMinTime.getHours();
+					this.minute=this._defaults.minuteMin=tempMinTime.getMinutes();							
+				} else if (this.hour===tempMinTime.getHours() && this.minute<tempMinTime.getMinutes()) {
+					this.minute=this._defaults.minuteMin=tempMinTime.getMinutes();
+				} else {						
+					if (this._defaults.hourMin<tempMinTime.getHours()) {
+						this._defaults.hourMin=tempMinTime.getHours();
+						this._defaults.minuteMin=tempMinTime.getMinutes();					
+					} else if (this._defaults.hourMin===tempMinTime.getHours()===this.hour && this._defaults.minuteMin<tempMinTime.getMinutes()) {
+						this._defaults.minuteMin=tempMinTime.getMinutes();						
+					} else {
+						this._defaults.minuteMin=0;
+					}
+				}				
+			}
+			
+			if (dp_inst.settings.maxTime!==null) {				
+				var tempMaxTime=new Date("01/01/1970 " + dp_inst.settings.maxTime);
+				if (this.hour>tempMaxTime.getHours()) {
+					this.hour=this._defaults.hourMax=tempMaxTime.getHours();						
+					this.minute=this._defaults.minuteMax=tempMaxTime.getMinutes();
+				} else if (this.hour===tempMaxTime.getHours() && this.minute>tempMaxTime.getMinutes()) {							
+					this.minute=this._defaults.minuteMax=tempMaxTime.getMinutes();						
+				} else {
+					if (this._defaults.hourMax>tempMaxTime.getHours()) {
+						this._defaults.hourMax=tempMaxTime.getHours();
+						this._defaults.minuteMax=tempMaxTime.getMinutes();					
+					} else if (this._defaults.hourMax===tempMaxTime.getHours()===this.hour && this._defaults.minuteMax>tempMaxTime.getMinutes()) {
+						this._defaults.minuteMax=tempMaxTime.getMinutes();						
+					} else {
+						this._defaults.minuteMax=59;
+					}
+				}						
+			}
+			
 			if (adjustSliders !== undefined && adjustSliders === true) {
 				var hourMax = parseInt((this._defaults.hourMax - ((this._defaults.hourMax - this._defaults.hourMin) % this._defaults.stepHour)), 10),
 					minMax = parseInt((this._defaults.minuteMax - ((this._defaults.minuteMax - this._defaults.minuteMin) % this._defaults.stepMinute)), 10),
@@ -42649,23 +42863,23 @@ $.widget( "ui.tooltip", {
 					microsecMax = parseInt((this._defaults.microsecMax - ((this._defaults.microsecMax - this._defaults.microsecMin) % this._defaults.stepMicrosec)), 10);
 
 				if (this.hour_slider) {
-					this.control.options(this, this.hour_slider, 'hour', { min: this._defaults.hourMin, max: hourMax });
+					this.control.options(this, this.hour_slider, 'hour', { min: this._defaults.hourMin, max: hourMax, step: this._defaults.stepHour });
 					this.control.value(this, this.hour_slider, 'hour', this.hour - (this.hour % this._defaults.stepHour));
 				}
 				if (this.minute_slider) {
-					this.control.options(this, this.minute_slider, 'minute', { min: this._defaults.minuteMin, max: minMax });
+					this.control.options(this, this.minute_slider, 'minute', { min: this._defaults.minuteMin, max: minMax, step: this._defaults.stepMinute });
 					this.control.value(this, this.minute_slider, 'minute', this.minute - (this.minute % this._defaults.stepMinute));
 				}
 				if (this.second_slider) {
-					this.control.options(this, this.second_slider, 'second', { min: this._defaults.secondMin, max: secMax });
+					this.control.options(this, this.second_slider, 'second', { min: this._defaults.secondMin, max: secMax, step: this._defaults.stepSecond });
 					this.control.value(this, this.second_slider, 'second', this.second - (this.second % this._defaults.stepSecond));
 				}
 				if (this.millisec_slider) {
-					this.control.options(this, this.millisec_slider, 'millisec', { min: this._defaults.millisecMin, max: millisecMax });
+					this.control.options(this, this.millisec_slider, 'millisec', { min: this._defaults.millisecMin, max: millisecMax, step: this._defaults.stepMillisec });
 					this.control.value(this, this.millisec_slider, 'millisec', this.millisec - (this.millisec % this._defaults.stepMillisec));
 				}
 				if (this.microsec_slider) {
-					this.control.options(this, this.microsec_slider, 'microsec', { min: this._defaults.microsecMin, max: microsecMax });
+					this.control.options(this, this.microsec_slider, 'microsec', { min: this._defaults.microsecMin, max: microsecMax, step: this._defaults.stepMicrosec });
 					this.control.value(this, this.microsec_slider, 'microsec', this.microsec - (this.microsec % this._defaults.stepMicrosec));
 				}
 			}
@@ -42787,7 +43001,7 @@ $.widget( "ui.tooltip", {
 			this.timeDefined = true;
 			if (hasChanged) {
 				this._updateDateTime();
-				this.$input.focus();
+				//this.$input.focus(); // may automatically open the picker on setDate
 			}
 		},
 
@@ -42836,9 +43050,9 @@ $.widget( "ui.tooltip", {
 			//	return;
 			//}
 
-			if (this._defaults.timeOnly === true) {
+			if (this._defaults.timeOnly === true && this._defaults.timeOnlyShowDate === false) {
 				formattedDateTime = this.formattedTime;
-			} else if (this._defaults.timeOnly !== true && (this._defaults.alwaysSetTime || timeAvailable)) {
+			} else if ((this._defaults.timeOnly !== true && (this._defaults.alwaysSetTime || timeAvailable)) || (this._defaults.timeOnly === true && this._defaults.timeOnlyShowDate === true)) {
 				formattedDateTime += this._defaults.separator + this.formattedTime + this._defaults.timeSuffix;
 			}
 
@@ -42852,8 +43066,8 @@ $.widget( "ui.tooltip", {
 			} else if (this.$altInput) {
 				this.$input.val(formattedDateTime);
 				var altFormattedDateTime = '',
-					altSeparator = this._defaults.altSeparator ? this._defaults.altSeparator : this._defaults.separator,
-					altTimeSuffix = this._defaults.altTimeSuffix ? this._defaults.altTimeSuffix : this._defaults.timeSuffix;
+					altSeparator = this._defaults.altSeparator !== null ? this._defaults.altSeparator : this._defaults.separator,
+					altTimeSuffix = this._defaults.altTimeSuffix !== null ? this._defaults.altTimeSuffix : this._defaults.timeSuffix;
 				
 				if (!this._defaults.timeOnly) {
 					if (this._defaults.altFormat) {
@@ -42868,7 +43082,7 @@ $.widget( "ui.tooltip", {
 					}
 				}
 
-				if (this._defaults.altTimeFormat) {
+				if (this._defaults.altTimeFormat !== null) {
 					altFormattedDateTime += $.datepicker.formatTime(this._defaults.altTimeFormat, this, this._defaults) + altTimeSuffix;
 				}
 				else {
@@ -43040,7 +43254,7 @@ $.widget( "ui.tooltip", {
 			var tmp_args = arguments;
 
 			if (typeof(o) === 'string') {
-				if (o === 'getDate') {
+				if (o === 'getDate'  || (o === 'option' && tmp_args.length === 2 && typeof (tmp_args[1]) === 'string')) {
 					return $.fn.datepicker.apply($(this[0]), tmp_args);
 				} else {
 					return this.each(function () {
@@ -43323,7 +43537,7 @@ $.widget( "ui.tooltip", {
 		var inst = this._getInst($(id)[0]),
 			tp_inst = this._get(inst, 'timepicker');
 
-		if (tp_inst) {
+		if (tp_inst && inst.settings.showTimepicker) {
 			tp_inst._limitMinMaxDateTime(inst, true);
 			inst.inline = inst.stay_open = true;
 			//This way the onSelect handler called from calendarpicker get the full dateTime
@@ -43422,11 +43636,11 @@ $.widget( "ui.tooltip", {
 						altFormattedDateTime = tp_inst.formattedDate + altSeparator + altFormattedDateTime;
 					}
 				}
-				$(altField).val(altFormattedDateTime);
+				$(altField).val( inst.input.val() ? altFormattedDateTime : "");
 			}
 		}
 		else {
-			$.datepicker._base_updateAlternate(inst);
+			$.datepicker._base_updateAlternate(inst);	
 		}
 	};
 
@@ -43560,16 +43774,18 @@ $.widget( "ui.tooltip", {
 	* override setDate() to allow setting time too within Date object
 	*/
 	$.datepicker._base_setDateDatepicker = $.datepicker._setDateDatepicker;
-	$.datepicker._setDateDatepicker = function (target, date) {
+	$.datepicker._setDateDatepicker = function (target, _date) {
 		var inst = this._getInst(target);
+		var date = _date;
 		if (!inst) {
 			return;
 		}
 
-		if (typeof(date) === 'string') {
-			date = new Date(date);
+		if (typeof(_date) === 'string') {
+			date = new Date(_date);
 			if (!date.getTime()) {
-				$.timepicker.log("Error creating Date object from string.");
+				this._base_setDateDatepicker.apply(this, arguments);
+				date = $(target).datepicker('getDate');
 			}
 		}
 
@@ -44015,6 +44231,13 @@ $.widget( "ui.tooltip", {
 			end: {}         // options for end picker
 		}, options);
 
+		// for the mean time this fixes an issue with calling getDate with timepicker()
+		var timeOnly = false;
+		if(method === 'timepicker'){
+			timeOnly = true;
+			method = 'datetimepicker';
+		}
+
 		function checkDates(changed, other) {
 			var startdt = startTime[method]('getDate'),
 				enddt = endTime[method]('getDate'),
@@ -44058,6 +44281,7 @@ $.widget( "ui.tooltip", {
 		}
 
 		$.fn[method].call(startTime, $.extend({
+			timeOnly: timeOnly,
 			onClose: function (dateText, inst) {
 				checkDates($(this), endTime);
 			},
@@ -44066,6 +44290,7 @@ $.widget( "ui.tooltip", {
 			}
 		}, options, options.start));
 		$.fn[method].call(endTime, $.extend({
+			timeOnly: timeOnly,
 			onClose: function (dateText, inst) {
 				checkDates($(this), startTime);
 			},
@@ -44121,12 +44346,12 @@ $.widget( "ui.tooltip", {
 	/*
 	* Keep up with the version
 	*/
-	$.timepicker.version = "1.4.3";
+	$.timepicker.version = "1.4.5";
 
 })(jQuery);
 
 /*!
-	Colorbox v1.4.37 - 2014-02-11
+	Colorbox v1.5.9 - 2014-04-25
 	jQuery lightbox and modal window plugin
 	(c) 2014 Jack Moore - http://www.jacklmoore.com/colorbox
 	license: http://www.opensource.org/licenses/mit-license.php
@@ -44156,9 +44381,6 @@ $.widget( "ui.tooltip", {
 		maxHeight: false,
 		scalePhotos: true,
 		scrolling: true,
-		href: false,
-		title: false,
-		rel: false,
 		opacity: 0.9,
 		preloading: true,
 		className: false,
@@ -44181,7 +44403,7 @@ $.widget( "ui.tooltip", {
 		slideshowSpeed: 2500,
 		slideshowStart: "start slideshow",
 		slideshowStop: "stop slideshow",
-		photoRegex: /\.(gif|png|jp(e|g|eg)|bmp|ico|webp|jxr)((#|\?).*)?$/i,
+		photoRegex: /\.(gif|png|jp(e|g|eg)|bmp|ico|webp|jxr|svg)((#|\?).*)?$/i,
 
 		// alternate image paths for high-res displays
 		retinaImage: false,
@@ -44205,9 +44427,21 @@ $.widget( "ui.tooltip", {
 		onLoad: false,
 		onComplete: false,
 		onCleanup: false,
-		onClosed: false
+		onClosed: false,
+
+		rel: function() {
+			return this.rel;
+		},
+		href: function() {
+			// using this.href would give the absolute url, when the href may have been inteded as a selector (e.g. '#container')
+			return $(this).attr('href');
+		},
+		title: function() {
+			return this.title;
+		}
 	},
-	
+
+
 	// Abstracting the HTML and event identifiers for easy rebranding
 	colorbox = 'colorbox',
 	prefix = 'cbox',
@@ -44242,7 +44476,7 @@ $.widget( "ui.tooltip", {
 	$prev,
 	$close,
 	$groupControls,
-	$events = $('<a/>'), // $([]) would be prefered, but there is an issue with jQuery 1.4.2
+	$events = $('<a/>'), // $({}) would be prefered, but there is an issue with jQuery 1.4.2
 	
 	// Variables for cached values or use across multiple functions
 	settings,
@@ -44250,7 +44484,6 @@ $.widget( "ui.tooltip", {
 	interfaceWidth,
 	loadedHeight,
 	loadedWidth,
-	element,
 	index,
 	photo,
 	open,
@@ -44259,7 +44492,6 @@ $.widget( "ui.tooltip", {
 	loadingTimer,
 	publicMethod,
 	div = "div",
-	className,
 	requests = 0,
 	previousCSS = {},
 	init;
@@ -44289,6 +44521,38 @@ $.widget( "ui.tooltip", {
 		return window.innerHeight ? window.innerHeight : $(window).height();
 	}
 
+	function Settings(element, options) {
+		if (options !== Object(options)) {
+			options = {};
+		}
+
+		this.cache = {};
+		this.el = element;
+
+		this.value = function(key) {
+			var dataAttr;
+
+			if (this.cache[key] === undefined) {
+				dataAttr = $(this.el).attr('data-cbox-'+key);
+
+				if (dataAttr !== undefined) {
+					this.cache[key] = dataAttr;
+				} else if (options[key] !== undefined) {
+					this.cache[key] = options[key];
+				} else if (defaults[key] !== undefined) {
+					this.cache[key] = defaults[key];
+				}
+			}
+
+			return this.cache[key];
+		};
+
+		this.get = function(key) {
+			var value = this.value(key);
+			return $.isFunction(value) ? value.call(this.el, this) : value;
+		};
+	}
+
 	// Determine the next and previous members in a group.
 	function getIndex(increment) {
 		var
@@ -44306,61 +44570,54 @@ $.widget( "ui.tooltip", {
 	// Checks an href to see if it is a photo.
 	// There is a force photo option (photo: true) for hrefs that cannot be matched by the regex.
 	function isImage(settings, url) {
-		return settings.photo || settings.photoRegex.test(url);
+		return settings.get('photo') || settings.get('photoRegex').test(url);
 	}
 
 	function retinaUrl(settings, url) {
-		return settings.retinaUrl && window.devicePixelRatio > 1 ? url.replace(settings.photoRegex, settings.retinaSuffix) : url;
+		return settings.get('retinaUrl') && window.devicePixelRatio > 1 ? url.replace(settings.get('photoRegex'), settings.get('retinaSuffix')) : url;
 	}
 
 	function trapFocus(e) {
-		if ('contains' in $box[0] && !$box[0].contains(e.target)) {
+		if ('contains' in $box[0] && !$box[0].contains(e.target) && e.target !== $overlay[0]) {
 			e.stopPropagation();
 			$box.focus();
 		}
 	}
 
-	// Assigns function results to their respective properties
-	function makeSettings() {
-		var i,
-			data = $.data(element, colorbox);
+	function setClass(str) {
+		if (setClass.str !== str) {
+			$box.add($overlay).removeClass(setClass.str).addClass(str);
+			setClass.str = str;
+		}
+	}
+
+	function getRelated(rel) {
+		index = 0;
 		
-		if (data == null) {
-			settings = $.extend({}, defaults);
-			if (console && console.log) {
-				console.log('Error: cboxElement missing settings object');
+		if (rel && rel !== false) {
+			$related = $('.' + boxElement).filter(function () {
+				var options = $.data(this, colorbox);
+				var settings = new Settings(this, options);
+				return (settings.get('rel') === rel);
+			});
+			index = $related.index(settings.el);
+			
+			// Check direct calls to Colorbox.
+			if (index === -1) {
+				$related = $related.add(settings.el);
+				index = $related.length - 1;
 			}
 		} else {
-			settings = $.extend({}, data);
-		}
-		
-		for (i in settings) {
-			if ($.isFunction(settings[i]) && i.slice(0, 2) !== 'on') { // checks to make sure the function isn't one of the callbacks, they will be handled at the appropriate time.
-				settings[i] = settings[i].call(element);
-			}
-		}
-		
-		settings.rel = settings.rel || element.rel || $(element).data('rel') || 'nofollow';
-		settings.href = settings.href || $(element).attr('href');
-		settings.title = settings.title || element.title;
-		
-		if (typeof settings.href === "string") {
-			settings.href = $.trim(settings.href);
+			$related = $(settings.el);
 		}
 	}
 
-	function trigger(event, callback) {
+	function trigger(event) {
 		// for external use
 		$(document).trigger(event);
-
 		// for internal use
 		$events.triggerHandler(event);
-
-		if ($.isFunction(callback)) {
-			callback.call(element);
-		}
 	}
-
 
 	var slideshow = (function(){
 		var active,
@@ -44373,15 +44630,15 @@ $.widget( "ui.tooltip", {
 		}
 
 		function set() {
-			if (settings.loop || $related[index + 1]) {
+			if (settings.get('loop') || $related[index + 1]) {
 				clear();
-				timeOut = setTimeout(publicMethod.next, settings.slideshowSpeed);
+				timeOut = setTimeout(publicMethod.next, settings.get('slideshowSpeed'));
 			}
 		}
 
 		function start() {
 			$slideshow
-				.html(settings.slideshowStop)
+				.html(settings.get('slideshowStop'))
 				.unbind(click)
 				.one(click, stop);
 
@@ -44400,7 +44657,7 @@ $.widget( "ui.tooltip", {
 				.unbind(event_load, clear);
 
 			$slideshow
-				.html(settings.slideshowStart)
+				.html(settings.get('slideshowStart'))
 				.unbind(click)
 				.one(click, function () {
 					publicMethod.next();
@@ -44422,15 +44679,15 @@ $.widget( "ui.tooltip", {
 
 		return function(){
 			if (active) {
-				if (!settings.slideshow) {
+				if (!settings.get('slideshow')) {
 					$events.unbind(event_cleanup, reset);
 					reset();
 				}
 			} else {
-				if (settings.slideshow && $related[1]) {
+				if (settings.get('slideshow') && $related[1]) {
 					active = true;
 					$events.one(event_cleanup, reset);
-					if (settings.slideshowAuto) {
+					if (settings.get('slideshowAuto')) {
 						start();
 					} else {
 						stop();
@@ -44443,65 +44700,26 @@ $.widget( "ui.tooltip", {
 	}());
 
 
-	function launch(target) {
+	function launch(element) {
+		var options;
+
 		if (!closing) {
-			
-			element = target;
-			
-			makeSettings();
-			
-			$related = $(element);
-			
-			index = 0;
-			
-			if (settings.rel !== 'nofollow') {
-				$related = $('.' + boxElement).filter(function () {
-					var data = $.data(this, colorbox),
-						relRelated;
 
-					if (data) {
-						relRelated =  $(this).data('rel') || data.rel || this.rel;
-					}
-					
-					return (relRelated === settings.rel);
-				});
-				index = $related.index(element);
-				
-				// Check direct calls to Colorbox.
-				if (index === -1) {
-					$related = $related.add(element);
-					index = $related.length - 1;
-				}
-			}
-			
-			$overlay.css({
-				opacity: parseFloat(settings.opacity),
-				cursor: settings.overlayClose ? "pointer" : "auto",
-				visibility: 'visible'
-			}).show();
-			
+			options = $(element).data('colorbox');
 
-			if (className) {
-				$box.add($overlay).removeClass(className);
-			}
-			if (settings.className) {
-				$box.add($overlay).addClass(settings.className);
-			}
-			className = settings.className;
-
-			if (settings.closeButton) {
-				$close.html(settings.close).appendTo($content);
-			} else {
-				$close.appendTo('<div/>');
-			}
+			settings = new Settings(element, options);
+			
+			getRelated(settings.get('rel'));
 
 			if (!open) {
 				open = active = true; // Prevents the page-change action from queuing up if the visitor holds down the left or right keys.
+
+				setClass(settings.get('className'));
 				
 				// Show colorbox so the sizes can be calculated in older versions of jQuery
-				$box.css({visibility:'hidden', display:'block'});
+				$box.css({visibility:'hidden', display:'block', opacity:''});
 				
-				$loaded = $tag(div, 'LoadedContent', 'width:0; height:0; overflow:hidden');
+				$loaded = $tag(div, 'LoadedContent', 'width:0; height:0; overflow:hidden; visibility:hidden');
 				$content.css({width:'', height:''}).append($loaded);
 
 				// Cache values needed for size calculations
@@ -44511,18 +44729,25 @@ $.widget( "ui.tooltip", {
 				loadedWidth = $loaded.outerWidth(true);
 
 				// Opens inital empty Colorbox prior to content being loaded.
-				settings.w = setSize(settings.initialWidth, 'x');
-				settings.h = setSize(settings.initialHeight, 'y');
+				var initialWidth = setSize(settings.get('initialWidth'), 'x');
+				var initialHeight = setSize(settings.get('initialHeight'), 'y');
+				var maxWidth = settings.get('maxWidth');
+				var maxHeight = settings.get('maxHeight');
+
+				settings.w = (maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth;
+				settings.h = (maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight;
+
 				$loaded.css({width:'', height:settings.h});
 				publicMethod.position();
 
-				trigger(event_open, settings.onOpen);
-				
+				trigger(event_open);
+				settings.get('onOpen');
+
 				$groupControls.add($title).hide();
 
 				$box.focus();
 				
-				if (settings.trapFocus) {
+				if (settings.get('trapFocus')) {
 					// Confine focus to the modal
 					// Uses event capturing that is not supported in IE8-
 					if (document.addEventListener) {
@@ -44536,12 +44761,25 @@ $.widget( "ui.tooltip", {
 				}
 
 				// Return focus on closing
-				if (settings.returnFocus) {
+				if (settings.get('returnFocus')) {
 					$events.one(event_closed, function () {
-						$(element).focus();
+						$(settings.el).focus();
 					});
 				}
 			}
+
+			$overlay.css({
+				opacity: parseFloat(settings.get('opacity')) || '',
+				cursor: settings.get('overlayClose') ? 'pointer' : '',
+				visibility: 'visible'
+			}).show();
+			
+			if (settings.get('closeButton')) {
+				$close.html(settings.get('close')).appendTo($content);
+			} else {
+				$close.appendTo('<div/>'); // replace with .detach() when dropping jQuery < 1.4
+			}
+
 			load();
 		}
 	}
@@ -44624,7 +44862,7 @@ $.widget( "ui.tooltip", {
 					publicMethod.close();
 				});
 				$overlay.click(function () {
-					if (settings.overlayClose) {
+					if (settings.get('overlayClose')) {
 						publicMethod.close();
 					}
 				});
@@ -44632,11 +44870,11 @@ $.widget( "ui.tooltip", {
 				// Key Bindings
 				$(document).bind('keydown.' + prefix, function (e) {
 					var key = e.keyCode;
-					if (open && settings.escKey && key === 27) {
+					if (open && settings.get('escKey') && key === 27) {
 						e.preventDefault();
 						publicMethod.close();
 					}
-					if (open && settings.arrowKey && $related[1] && !e.altKey) {
+					if (open && settings.get('arrowKey') && $related[1] && !e.altKey) {
 						if (key === 37) {
 							e.preventDefault();
 							$prev.click();
@@ -44678,34 +44916,44 @@ $.widget( "ui.tooltip", {
 	// ****************
 	
 	publicMethod = $.fn[colorbox] = $[colorbox] = function (options, callback) {
-		var $this = this;
-		
+		var settings;
+		var $obj = this;
+
 		options = options || {};
+
+		if ($.isFunction($obj)) { // assume a call to $.colorbox
+			$obj = $('<a/>');
+			options.open = true;
+		} else if (!$obj[0]) { // colorbox being applied to empty collection
+			return $obj;
+		}
+
+
+		if (!$obj[0]) { // colorbox being applied to empty collection
+			return $obj;
+		}
 		
 		appendHTML();
 
 		if (addBindings()) {
-			if ($.isFunction($this)) { // assume a call to $.colorbox
-				$this = $('<a/>');
-				options.open = true;
-			} else if (!$this[0]) { // colorbox being applied to empty collection
-				return $this;
-			}
-			
+
 			if (callback) {
 				options.onComplete = callback;
 			}
-			
-			$this.each(function () {
-				$.data(this, colorbox, $.extend({}, $.data(this, colorbox) || defaults, options));
+
+			$obj.each(function () {
+				var old = $.data(this, colorbox) || {};
+				$.data(this, colorbox, $.extend(old, options));
 			}).addClass(boxElement);
+
+			settings = new Settings($obj[0], options);
 			
-			if (($.isFunction(options.open) && options.open.call($this)) || options.open) {
-				launch($this[0]);
+			if (settings.get('open')) {
+				launch($obj[0]);
 			}
 		}
 		
-		return $this;
+		return $obj;
 	};
 
 	publicMethod.position = function (speed, loadedCallback) {
@@ -44725,7 +44973,7 @@ $.widget( "ui.tooltip", {
 		scrollTop = $window.scrollTop();
 		scrollLeft = $window.scrollLeft();
 
-		if (settings.fixed) {
+		if (settings.get('fixed')) {
 			offset.top -= scrollTop;
 			offset.left -= scrollLeft;
 			$box.css({position: 'fixed'});
@@ -44736,18 +44984,18 @@ $.widget( "ui.tooltip", {
 		}
 
 		// keeps the top and left positions within the browser's viewport.
-		if (settings.right !== false) {
-			left += Math.max($window.width() - settings.w - loadedWidth - interfaceWidth - setSize(settings.right, 'x'), 0);
-		} else if (settings.left !== false) {
-			left += setSize(settings.left, 'x');
+		if (settings.get('right') !== false) {
+			left += Math.max($window.width() - settings.w - loadedWidth - interfaceWidth - setSize(settings.get('right'), 'x'), 0);
+		} else if (settings.get('left') !== false) {
+			left += setSize(settings.get('left'), 'x');
 		} else {
 			left += Math.round(Math.max($window.width() - settings.w - loadedWidth - interfaceWidth, 0) / 2);
 		}
 		
-		if (settings.bottom !== false) {
-			top += Math.max(winheight() - settings.h - loadedHeight - interfaceHeight - setSize(settings.bottom, 'y'), 0);
-		} else if (settings.top !== false) {
-			top += setSize(settings.top, 'y');
+		if (settings.get('bottom') !== false) {
+			top += Math.max(winheight() - settings.h - loadedHeight - interfaceHeight - setSize(settings.get('bottom'), 'y'), 0);
+		} else if (settings.get('top') !== false) {
+			top += setSize(settings.get('top'), 'y');
 		} else {
 			top += Math.round(Math.max(winheight() - settings.h - loadedHeight - interfaceHeight, 0) / 2);
 		}
@@ -44795,15 +45043,13 @@ $.widget( "ui.tooltip", {
 				$wrap[0].style.width = (settings.w + loadedWidth + interfaceWidth) + "px";
 				$wrap[0].style.height = (settings.h + loadedHeight + interfaceHeight) + "px";
 				
-				if (settings.reposition) {
+				if (settings.get('reposition')) {
 					setTimeout(function () {  // small delay before binding onresize due to an IE8 bug.
-						$window.bind('resize.' + prefix, function(){
-							publicMethod.position();
-						});
+						$window.bind('resize.' + prefix, publicMethod.position);
 					}, 1);
 				}
 
-				if ($.isFunction(loadedCallback)) {
+				if (loadedCallback) {
 					loadedCallback();
 				}
 			},
@@ -44847,7 +45093,7 @@ $.widget( "ui.tooltip", {
 				$loaded.scrollTop(scrolltop);
 			}
 			
-			publicMethod.position(settings.transition === "none" ? 0 : settings.speed);
+			publicMethod.position(settings.get('transition') === "none" ? 0 : settings.get('speed'));
 		}
 	};
 
@@ -44856,9 +45102,9 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 		
-		var callback, speed = settings.transition === "none" ? 0 : settings.speed;
+		var callback, speed = settings.get('transition') === "none" ? 0 : settings.get('speed');
 
-		$loaded.empty().remove(); // Using empty first may prevent some IE7 issues.
+		$loaded.remove();
 
 		$loaded = $tag(div, 'LoadedContent').append(object);
 		
@@ -44875,7 +45121,7 @@ $.widget( "ui.tooltip", {
 		
 		$loaded.hide()
 		.appendTo($loadingBay.show())// content has to be appended to the DOM for accurate size calculations.
-		.css({width: getWidth(), overflow: settings.scrolling ? 'auto' : 'hidden'})
+		.css({width: getWidth(), overflow: settings.get('scrolling') ? 'auto' : 'hidden'})
 		.css({height: getHeight()})// sets the height independently from the width in case the new width influences the value of height.
 		.prependTo($content);
 		
@@ -44885,18 +45131,18 @@ $.widget( "ui.tooltip", {
 		
 		$(photo).css({'float': 'none'});
 
+		setClass(settings.get('className'));
+
 		callback = function () {
 			var total = $related.length,
 				iframe,
-				frameBorder = 'frameBorder',
-				allowTransparency = 'allowTransparency',
 				complete;
 			
 			if (!open) {
 				return;
 			}
 			
-			function removeFilter() { // Needed for IE7 & IE8 in versions of jQuery prior to 1.7.2
+			function removeFilter() { // Needed for IE8 in versions of jQuery prior to 1.7.2
 				if ($.support.opacity === false) {
 					$box[0].style.removeAttribute('filter');
 				}
@@ -44905,41 +45151,34 @@ $.widget( "ui.tooltip", {
 			complete = function () {
 				clearTimeout(loadingTimer);
 				$loadingOverlay.hide();
-				trigger(event_complete, settings.onComplete);
+				trigger(event_complete);
+				settings.get('onComplete');
 			};
 
 			
-			$title.html(settings.title).add($loaded).show();
+			$title.html(settings.get('title')).show();
+			$loaded.show();
 			
 			if (total > 1) { // handle grouping
-				if (typeof settings.current === "string") {
-					$current.html(settings.current.replace('{current}', index + 1).replace('{total}', total)).show();
+				if (typeof settings.get('current') === "string") {
+					$current.html(settings.get('current').replace('{current}', index + 1).replace('{total}', total)).show();
 				}
 				
-				$next[(settings.loop || index < total - 1) ? "show" : "hide"]().html(settings.next);
-				$prev[(settings.loop || index) ? "show" : "hide"]().html(settings.previous);
+				$next[(settings.get('loop') || index < total - 1) ? "show" : "hide"]().html(settings.get('next'));
+				$prev[(settings.get('loop') || index) ? "show" : "hide"]().html(settings.get('previous'));
 				
 				slideshow();
 				
 				// Preloads images within a rel group
-				if (settings.preloading) {
+				if (settings.get('preloading')) {
 					$.each([getIndex(-1), getIndex(1)], function(){
-						var src,
-							img,
+						var img,
 							i = $related[this],
-							data = $.data(i, colorbox);
+							settings = new Settings(i, $.data(i, colorbox)),
+							src = settings.get('href');
 
-						if (data && data.href) {
-							src = data.href;
-							if ($.isFunction(src)) {
-								src = src.call(i);
-							}
-						} else {
-							src = $(i).attr('href');
-						}
-
-						if (src && isImage(data, src)) {
-							src = retinaUrl(data, src);
+						if (src && isImage(settings, src)) {
+							src = retinaUrl(settings, src);
 							img = document.createElement('img');
 							img.src = src;
 						}
@@ -44949,29 +45188,27 @@ $.widget( "ui.tooltip", {
 				$groupControls.hide();
 			}
 			
-			if (settings.iframe) {
-				iframe = $tag('iframe')[0];
+			if (settings.get('iframe')) {
+				iframe = document.createElement('iframe');
 				
-				if (frameBorder in iframe) {
-					iframe[frameBorder] = 0;
+				if ('frameBorder' in iframe) {
+					iframe.frameBorder = 0;
 				}
 				
-				if (allowTransparency in iframe) {
-					iframe[allowTransparency] = "true";
+				if ('allowTransparency' in iframe) {
+					iframe.allowTransparency = "true";
 				}
 
-				if (!settings.scrolling) {
+				if (!settings.get('scrolling')) {
 					iframe.scrolling = "no";
 				}
 				
 				$(iframe)
 					.attr({
-						src: settings.href,
+						src: settings.get('href'),
 						name: (new Date()).getTime(), // give the iframe a unique name to prevent caching
 						'class': prefix + 'Iframe',
-						allowFullScreen : true, // allow HTML5 video to go fullscreen
-						webkitAllowFullScreen : true,
-						mozallowfullscreen : true
+						allowFullScreen : true // allow HTML5 video to go fullscreen
 					})
 					.one('load', complete)
 					.appendTo($loaded);
@@ -44980,21 +45217,21 @@ $.widget( "ui.tooltip", {
 					iframe.src = "//about:blank";
 				});
 
-				if (settings.fastIframe) {
+				if (settings.get('fastIframe')) {
 					$(iframe).trigger('load');
 				}
 			} else {
 				complete();
 			}
 			
-			if (settings.transition === 'fade') {
+			if (settings.get('transition') === 'fade') {
 				$box.fadeTo(speed, 1, removeFilter);
 			} else {
 				removeFilter();
 			}
 		};
 		
-		if (settings.transition === 'fade') {
+		if (settings.get('transition') === 'fade') {
 			$box.fadeTo(speed, 0, function () {
 				publicMethod.position(0, callback);
 			});
@@ -45010,21 +45247,17 @@ $.widget( "ui.tooltip", {
 		
 		photo = false;
 		
-		element = $related[index];
-		
-		makeSettings();
-		
 		trigger(event_purge);
+		trigger(event_load);
+		settings.get('onLoad');
 		
-		trigger(event_load, settings.onLoad);
+		settings.h = settings.get('height') ?
+				setSize(settings.get('height'), 'y') - loadedHeight - interfaceHeight :
+				settings.get('innerHeight') && setSize(settings.get('innerHeight'), 'y');
 		
-		settings.h = settings.height ?
-				setSize(settings.height, 'y') - loadedHeight - interfaceHeight :
-				settings.innerHeight && setSize(settings.innerHeight, 'y');
-		
-		settings.w = settings.width ?
-				setSize(settings.width, 'x') - loadedWidth - interfaceWidth :
-				settings.innerWidth && setSize(settings.innerWidth, 'x');
+		settings.w = settings.get('width') ?
+				setSize(settings.get('width'), 'x') - loadedWidth - interfaceWidth :
+				settings.get('innerWidth') && setSize(settings.get('innerWidth'), 'x');
 		
 		// Sets the minimum dimensions for use in image scaling
 		settings.mw = settings.w;
@@ -45032,109 +45265,109 @@ $.widget( "ui.tooltip", {
 		
 		// Re-evaluate the minimum width and height based on maxWidth and maxHeight values.
 		// If the width or height exceed the maxWidth or maxHeight, use the maximum values instead.
-		if (settings.maxWidth) {
-			settings.mw = setSize(settings.maxWidth, 'x') - loadedWidth - interfaceWidth;
+		if (settings.get('maxWidth')) {
+			settings.mw = setSize(settings.get('maxWidth'), 'x') - loadedWidth - interfaceWidth;
 			settings.mw = settings.w && settings.w < settings.mw ? settings.w : settings.mw;
 		}
-		if (settings.maxHeight) {
-			settings.mh = setSize(settings.maxHeight, 'y') - loadedHeight - interfaceHeight;
+		if (settings.get('maxHeight')) {
+			settings.mh = setSize(settings.get('maxHeight'), 'y') - loadedHeight - interfaceHeight;
 			settings.mh = settings.h && settings.h < settings.mh ? settings.h : settings.mh;
 		}
 		
-		href = settings.href;
+		href = settings.get('href');
 		
 		loadingTimer = setTimeout(function () {
 			$loadingOverlay.show();
 		}, 100);
 		
-		if (settings.inline) {
+		if (settings.get('inline')) {
+			var $target = $(href);
 			// Inserts an empty placeholder where inline content is being pulled from.
 			// An event is bound to put inline content back when Colorbox closes or loads new content.
-			$inline = $tag(div).hide().insertBefore($(href)[0]);
+			$inline = $('<div>').hide().insertBefore($target);
 
 			$events.one(event_purge, function () {
-				$inline.replaceWith($loaded.children());
+				$inline.replaceWith($target);
 			});
 
-			prep($(href));
-		} else if (settings.iframe) {
+			prep($target);
+		} else if (settings.get('iframe')) {
 			// IFrame element won't be added to the DOM until it is ready to be displayed,
 			// to avoid problems with DOM-ready JS that might be trying to run in that iframe.
 			prep(" ");
-		} else if (settings.html) {
-			prep(settings.html);
+		} else if (settings.get('html')) {
+			prep(settings.get('html'));
 		} else if (isImage(settings, href)) {
 
 			href = retinaUrl(settings, href);
 
-			photo = document.createElement('img');
+			photo = new Image();
 
 			$(photo)
 			.addClass(prefix + 'Photo')
 			.bind('error',function () {
-				settings.title = false;
-				prep($tag(div, 'Error').html(settings.imgError));
+				prep($tag(div, 'Error').html(settings.get('imgError')));
 			})
 			.one('load', function () {
-				var percent;
-
 				if (request !== requests) {
 					return;
 				}
 
-				$.each(['alt', 'longdesc', 'aria-describedby'], function(i,val){
-					var attr = $(element).attr(val) || $(element).attr('data-'+val);
-					if (attr) {
-						photo.setAttribute(val, attr);
+				// A small pause because some browsers will occassionaly report a 
+				// img.width and img.height of zero immediately after the img.onload fires
+				setTimeout(function(){
+					var percent;
+
+					$.each(['alt', 'longdesc', 'aria-describedby'], function(i,val){
+						var attr = $(settings.el).attr(val) || $(settings.el).attr('data-'+val);
+						if (attr) {
+							photo.setAttribute(val, attr);
+						}
+					});
+
+					if (settings.get('retinaImage') && window.devicePixelRatio > 1) {
+						photo.height = photo.height / window.devicePixelRatio;
+						photo.width = photo.width / window.devicePixelRatio;
 					}
-				});
 
-				if (settings.retinaImage && window.devicePixelRatio > 1) {
-					photo.height = photo.height / window.devicePixelRatio;
-					photo.width = photo.width / window.devicePixelRatio;
-				}
-
-				if (settings.scalePhotos) {
-					setResize = function () {
-						photo.height -= photo.height * percent;
-						photo.width -= photo.width * percent;
-					};
-					if (settings.mw && photo.width > settings.mw) {
-						percent = (photo.width - settings.mw) / photo.width;
-						setResize();
+					if (settings.get('scalePhotos')) {
+						setResize = function () {
+							photo.height -= photo.height * percent;
+							photo.width -= photo.width * percent;
+						};
+						if (settings.mw && photo.width > settings.mw) {
+							percent = (photo.width - settings.mw) / photo.width;
+							setResize();
+						}
+						if (settings.mh && photo.height > settings.mh) {
+							percent = (photo.height - settings.mh) / photo.height;
+							setResize();
+						}
 					}
-					if (settings.mh && photo.height > settings.mh) {
-						percent = (photo.height - settings.mh) / photo.height;
-						setResize();
+					
+					if (settings.h) {
+						photo.style.marginTop = Math.max(settings.mh - photo.height, 0) / 2 + 'px';
 					}
-				}
-				
-				if (settings.h) {
-					photo.style.marginTop = Math.max(settings.mh - photo.height, 0) / 2 + 'px';
-				}
-				
-				if ($related[1] && (settings.loop || $related[index + 1])) {
-					photo.style.cursor = 'pointer';
-					photo.onclick = function () {
-						publicMethod.next();
-					};
-				}
+					
+					if ($related[1] && (settings.get('loop') || $related[index + 1])) {
+						photo.style.cursor = 'pointer';
+						photo.onclick = function () {
+							publicMethod.next();
+						};
+					}
 
-				photo.style.width = photo.width + 'px';
-				photo.style.height = photo.height + 'px';
-
-				setTimeout(function () { // A pause because Chrome will sometimes report a 0 by 0 size otherwise.
+					photo.style.width = photo.width + 'px';
+					photo.style.height = photo.height + 'px';
 					prep(photo);
 				}, 1);
 			});
 			
-			setTimeout(function () { // A pause because Opera 10.6+ will sometimes not run the onload function otherwise.
-				photo.src = href;
-			}, 1);
+			photo.src = href;
+
 		} else if (href) {
-			$loadingBay.load(href, settings.data, function (data, status) {
+			$loadingBay.load(href, settings.get('data'), function (data, status) {
 				if (request === requests) {
-					prep(status === 'error' ? $tag(div, 'Error').html(settings.xhrError) : $(this).contents());
+					prep(status === 'error' ? $tag(div, 'Error').html(settings.get('xhrError')) : $(this).contents());
 				}
 			});
 		}
@@ -45142,14 +45375,14 @@ $.widget( "ui.tooltip", {
 		
 	// Navigates to the next page/image in a set.
 	publicMethod.next = function () {
-		if (!active && $related[1] && (settings.loop || $related[index + 1])) {
+		if (!active && $related[1] && (settings.get('loop') || $related[index + 1])) {
 			index = getIndex(1);
 			launch($related[index]);
 		}
 	};
 	
 	publicMethod.prev = function () {
-		if (!active && $related[1] && (settings.loop || index)) {
+		if (!active && $related[1] && (settings.get('loop') || index)) {
 			index = getIndex(-1);
 			launch($related[index]);
 		}
@@ -45160,26 +45393,22 @@ $.widget( "ui.tooltip", {
 		if (open && !closing) {
 			
 			closing = true;
-			
 			open = false;
-			
-			trigger(event_cleanup, settings.onCleanup);
-			
+			trigger(event_cleanup);
+			settings.get('onCleanup');
 			$window.unbind('.' + prefix);
+			$overlay.fadeTo(settings.get('fadeOut') || 0, 0);
 			
-			$overlay.fadeTo(settings.fadeOut || 0, 0);
-			
-			$box.stop().fadeTo(settings.fadeOut || 0, 0, function () {
-			
-				$box.add($overlay).css({'opacity': 1, cursor: 'auto'}).hide();
-				
+			$box.stop().fadeTo(settings.get('fadeOut') || 0, 0, function () {
+				$box.hide();
+				$overlay.hide();
 				trigger(event_purge);
-				
-				$loaded.empty().remove(); // Using empty first may prevent some IE7 issues.
+				$loaded.remove();
 				
 				setTimeout(function () {
 					closing = false;
-					trigger(event_closed, settings.onClosed);
+					trigger(event_closed);
+					settings.get('onClosed');
 				}, 1);
 			});
 		}
@@ -45205,131 +45434,12 @@ $.widget( "ui.tooltip", {
 	// A method for fetching the current element Colorbox is referencing.
 	// returns a jQuery object.
 	publicMethod.element = function () {
-		return $(element);
+		return $(settings.el);
 	};
 
 	publicMethod.settings = defaults;
 
 }(jQuery, document, window));
-
-/*!
- * jQuery Cookie Plugin v1.4.0
- * https://github.com/carhartl/jquery-cookie
- *
- * Copyright 2013 Klaus Hartl
- * Released under the MIT license
- */
-(function (factory) {
-	if (typeof define === 'function' && define.amd) {
-		// AMD. Register as anonymous module.
-		define(['jquery'], factory);
-	} else {
-		// Browser globals.
-		factory(jQuery);
-	}
-}(function ($) {
-
-	var pluses = /\+/g;
-
-	function encode(s) {
-		return config.raw ? s : encodeURIComponent(s);
-	}
-
-	function decode(s) {
-		return config.raw ? s : decodeURIComponent(s);
-	}
-
-	function stringifyCookieValue(value) {
-		return encode(config.json ? JSON.stringify(value) : String(value));
-	}
-
-	function parseCookieValue(s) {
-		if (s.indexOf('"') === 0) {
-			// This is a quoted cookie as according to RFC2068, unescape...
-			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-		}
-
-		try {
-			// Replace server-side written pluses with spaces.
-			// If we can't decode the cookie, ignore it, it's unusable.
-			s = decodeURIComponent(s.replace(pluses, ' '));
-		} catch(e) {
-			return;
-		}
-
-		try {
-			// If we can't parse the cookie, ignore it, it's unusable.
-			return config.json ? JSON.parse(s) : s;
-		} catch(e) {}
-	}
-
-	function read(s, converter) {
-		var value = config.raw ? s : parseCookieValue(s);
-		return $.isFunction(converter) ? converter(value) : value;
-	}
-
-	var config = $.cookie = function (key, value, options) {
-
-		// Write
-		if (value !== undefined && !$.isFunction(value)) {
-			options = $.extend({}, config.defaults, options);
-
-			if (typeof options.expires === 'number') {
-				var days = options.expires, t = options.expires = new Date();
-				t.setDate(t.getDate() + days);
-			}
-
-			return (document.cookie = [
-				encode(key), '=', stringifyCookieValue(value),
-				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-				options.path    ? '; path=' + options.path : '',
-				options.domain  ? '; domain=' + options.domain : '',
-				options.secure  ? '; secure' : ''
-			].join(''));
-		}
-
-		// Read
-
-		var result = key ? undefined : {};
-
-		// To prevent the for loop in the first place assign an empty array
-		// in case there are no cookies at all. Also prevents odd result when
-		// calling $.cookie().
-		var cookies = document.cookie ? document.cookie.split('; ') : [];
-
-		for (var i = 0, l = cookies.length; i < l; i++) {
-			var parts = cookies[i].split('=');
-			var name = decode(parts.shift());
-			var cookie = parts.join('=');
-
-			if (key && key === name) {
-				// If second argument (value) is a function it's a converter...
-				result = read(cookie, value);
-				break;
-			}
-
-			// Prevent storing a cookie that we couldn't decode.
-			if (!key && (cookie = read(cookie)) !== undefined) {
-				result[name] = cookie;
-			}
-		}
-
-		return result;
-	};
-
-	config.defaults = {};
-
-	$.removeCookie = function (key, options) {
-		if ($.cookie(key) !== undefined) {
-			// Must not alter options, thus extending a fresh object...
-			$.cookie(key, '', $.extend({}, options, { expires: -1 }));
-			return true;
-		}
-		return false;
-	};
-
-}));
-
 /**
  * Equal Heights Plugin
  * Equalize the heights of elements. Great for columns or any elements
@@ -46640,6 +46750,8 @@ function log() {
 }
 
 }));
+
+
 /*!
  * jQuery Collapser 1.0.0
  *
@@ -46661,15 +46773,13 @@ function log() {
 			var defaults = {
 				state			: 'active',
 				persistence		: true,
-				cookiepath		: '/',
-				cookieexpires	: 365
 			}
 			
 			var debug			= true;
 			var options 		= $.extend(defaults, options);
 			var o				= options;
-			var cookie_name		= 'jcollapser_' + this.attr("id");
-			var state			= $.cookie(cookie_name);
+			var n_persistence	= 'jcollapser.' + this.attr("id");
+			var state			= localStorage.getItem(n_persistence);
 			var container		= this;
 			state				= (state) ? state : options.state;
 			
@@ -46689,10 +46799,10 @@ function log() {
 				$('.toggle_container', container).slideToggle("slow", function() {
 				if(options.persistence){
 					if($('.toggle_container', container).is(":visible")){
-							$.cookie(cookie_name, 'active', { expires: options.cookieexpires, path: options.cookiepath });
+							localStorage.setItem(n_persistence, 'active');
 					}else{
-						$.cookie(cookie_name, null, { expires: options.cookieexpires, path: options.cookiepath});
-						$.cookie(cookie_name, 'inactive', { expires: options.cookieexpires, path: options.cookiepath });
+						//localStorage.setItem(n_persistence, null);
+						localStorage.setItem(n_persistence, 'inactive');
 					}
 				}
 			  });
@@ -51645,319 +51755,400 @@ $.extend(TRUE, QTIP.defaults, {
 
 /*!
  * jQuery Raty - A Star Rating Plugin
- * ------------------------------------------------------------------
  *
- * jQuery Raty is a plugin that generates a customizable star rating.
+ * The MIT License
  *
- * Licensed under The MIT License
- *
- * @version        2.5.2
- * @since          2010.06.11
- * @author         Washington Botelho
- * @documentation  wbotelhos.com/raty
- *
- * ------------------------------------------------------------------
- *
- *  <div id="star"></div>
- *
- *  $('#star').raty();
+ * @author  : Washington Botelho
+ * @doc     : http://wbotelhos.com/raty
+ * @version : 2.6.0
  *
  */
 
 ;(function($) {
 
   var methods = {
-    init: function(settings) {
+    init: function(options) {
       return this.each(function() {
         methods.destroy.call(this);
 
-        this.opt = $.extend(true, {}, $.fn.raty.defaults, settings);
+        this.opt  = $.extend(true, {}, $.fn.raty.defaults, options);
+        this.self = $(this);
 
-        var that  = $(this),
-            inits = ['number', 'readOnly', 'score', 'scoreName'];
+        methods._adjustCallback.call(this);
 
-        methods._callback.call(this, inits);
+        methods._adjustNumber.call(this);
+        methods._adjustWidth.call(this);
+
+        if (this.opt.starType !== 'img') {
+          methods._adjustStarType.call(this);
+        }
+
+        methods._adjustPath.call(this);
+        methods._createStars.call(this);
+
+        if (this.opt.cancel) {
+          methods._createCancel.call(this);
+        }
 
         if (this.opt.precision) {
           methods._adjustPrecision.call(this);
         }
 
-        this.opt.number = methods._between(this.opt.number, 0, this.opt.numberMax);
-
-        this.opt.path = this.opt.path || '';
-
-        if (this.opt.path && this.opt.path.charAt( this.opt.path.length - 1 ) !== '/') {
-          this.opt.path += '/';
-        }
-
-        this.stars = methods._createStars.call(this);
-        this.score = methods._createScore.call(this);
-
+        methods._createScore.call(this);
         methods._apply.call(this, this.opt.score);
-
-        var space  = this.opt.space ? 4 : 0,
-            width  = this.opt.width || (this.opt.number * this.opt.size + this.opt.number * space);
-
-        if (this.opt.cancel) {
-          this.cancel = methods._createCancel.call(this);
-
-          width += (this.opt.size + space);
-        }
+        methods._target.call(this, this.opt.score);
 
         if (this.opt.readOnly) {
           methods._lock.call(this);
         } else {
-          that.css('cursor', 'pointer');
+          this.style.cursor = 'pointer';
+
           methods._binds.call(this);
         }
 
-        if (this.opt.width !== false) {
-			if(this.opt.font == true){
-				that.css('font-size', this.opt.size);
-			}else{
-				that.css('width', width);
-			}
-        }
-
-        methods._target.call(this, this.opt.score);
-
-        that.data({ 'settings': this.opt, 'raty': true });
+        this.self.data('options', this.opt);
       });
-    }, _adjustPrecision: function() {
-      this.opt.targetType = 'score';
-      this.opt.half       = true;
-    }, _apply: function(score) {
-      if (score && score > 0) {
-        score = methods._between(score, 0, this.opt.number);
-        this.score.val(score);
-      }
+    },
 
-      methods._fill.call(this, score);
+    _adjustCallback: function() {
+      var options = ['number', 'readOnly', 'score', 'scoreName'];
 
-      if (score) {
-        methods._roundStars.call(this, score);
-      }
-    }, _between: function(value, min, max) {
-      return Math.min(Math.max(parseFloat(value), min), max);
-    }, _binds: function() {
-      if (this.cancel) {
-        methods._bindCancel.call(this);
-      }
-
-      methods._bindClick.call(this);
-      methods._bindOut.call(this);
-      methods._bindOver.call(this);
-    }, _bindCancel: function() {
-      methods._bindClickCancel.call(this);
-      methods._bindOutCancel.call(this);
-      methods._bindOverCancel.call(this);
-    }, _bindClick: function() {
-      var self = this,
-          that = $(self);
-
-      self.stars.on('click.raty', function(evt) {
-		  if(self.opt.font == true){
-			  self.score.val((self.opt.half || self.opt.precision) ? that.data('score') : $(this).data('ival'));
-		  }else{
-			  self.score.val((self.opt.half || self.opt.precision) ? that.data('score') : this.alt);
-		  }
-        
-
-        if (self.opt.click) {
-          self.opt.click.call(self, parseFloat(self.score.val()), evt);
-        }
-      });
-    }, _bindClickCancel: function() {
-      var self = this;
-
-      self.cancel.on('click.raty', function(evt) {
-        self.score.removeAttr('value');
-
-        if (self.opt.click) {
-          self.opt.click.call(self, null, evt);
-        }
-      });
-    }, _bindOut: function() {
-      var self = this;
-
-      $(this).on('mouseleave.raty', function(evt) {
-        var score = parseFloat(self.score.val()) || undefined;
-
-        methods._apply.call(self, score);
-        methods._target.call(self, score, evt);
-
-        if (self.opt.mouseout) {
-          self.opt.mouseout.call(self, score, evt);
-        }
-      });
-    }, _bindOutCancel: function() {
-      var self = this;
-
-      self.cancel.on('mouseleave.raty', function(evt) {
-		  if(self.opt.font == true){
-		  	$(this).attr('class', 'fa ' + self.opt.cancelOff);
-		  }else{
-		  	 $(this).attr('src', self.opt.path + self.opt.cancelOff);
-		  }
-
-        if (self.opt.mouseout) {
-          self.opt.mouseout.call(self, self.score.val() || null, evt);
-        }
-      });
-    }, _bindOverCancel: function() {
-      var self = this;
-
-      self.cancel.on('mouseover.raty', function(evt) {
-		  if(self.opt.font == true){
-        	  $(this).attr('class', 'fa ' + self.opt.cancelOn);
-			  self.stars.attr('class', 'fa ' + self.opt.starOff);
-		  }else{
-			  $(this).attr('src', self.opt.path + self.opt.cancelOn);
-			  self.stars.attr('src', self.opt.path + self.opt.starOff);
-		  }
-
-        methods._target.call(self, null, evt);
-
-        if (self.opt.mouseover) {
-          self.opt.mouseover.call(self, null);
-        }
-      });
-    }, _bindOver: function() {
-      var self   = this,
-          that   = $(self),
-          action = self.opt.half ? 'mousemove.raty' : 'mouseover.raty';
-
-      self.stars.on(action, function(evt) {
-        var score = ((self.opt.font == true) ? $(this).data('ival') : parseInt(this.alt, 10));
-
-        if (self.opt.half) {
-          var position = parseFloat((evt.pageX - $(this).offset().left) / self.opt.size),
-              plus     = (position > .5) ? 1 : .5;
-
-          score = score - 1 + plus;
-
-          methods._fill.call(self, score);
-
-          if (self.opt.precision) {
-            score = score - plus + position;
-          }
-
-          methods._roundStars.call(self, score);
-
-          that.data('score', score);
-        } else {
-          methods._fill.call(self, score);
-        }
-
-        methods._target.call(self, score, evt);
-
-        if (self.opt.mouseover) {
-          self.opt.mouseover.call(self, score, evt);
-        }
-      });
-    }, _callback: function(options) {
-      for (var i in options) {
+      for (var i = 0; i < options.length; i++) {
         if (typeof this.opt[options[i]] === 'function') {
           this.opt[options[i]] = this.opt[options[i]].call(this);
         }
       }
-    }, _createCancel: function() {
-      var that   = $(this),
-          icon   = ((this.opt.font == true) ? 'fa ' + this.opt.cancelOff : this.opt.path + this.opt.cancelOff),
-          cancel = ((this.opt.font == true) ? $('<i />', { title: this.opt.cancelHint, 'class': 'raty-cancel '+icon}) : $('<img />', { src: icon, alt: 'x', title: this.opt.cancelHint, 'class': 'raty-cancel' }));
+    },
 
-      if (this.opt.cancelPlace == 'left') {
-        that.prepend('&#160;').prepend(cancel);
-      } else {
-        that.append('&#160;').append(cancel);
+    _adjustNumber: function() {
+      this.opt.number = methods._between(this.opt.number, 0, this.opt.numberMax);
+    },
+
+    _adjustPath: function() {
+      this.opt.path = this.opt.path || '';
+
+      if (this.opt.path && this.opt.path.charAt(this.opt.path.length - 1) !== '/') {
+        this.opt.path += '/';
+      }
+    },
+
+    _adjustPrecision: function() {
+      this.opt.half       = true;
+      this.opt.targetType = 'score';
+    },
+
+    _adjustStarType: function() {
+      this.opt.path = '';
+
+      var replaces = ['cancelOff', 'cancelOn', 'starHalf', 'starOff', 'starOn'];
+
+      for (var i = 0; i < replaces.length; i++) {
+        this.opt[replaces[i]] = this.opt[replaces[i]].replace('.', '-');
+      }
+    },
+
+    _adjustWidth: function() {
+      if (this.opt.width !== false && this.opt.starType === 'img') {
+        var
+          space = this.opt.space ? 4 : 0,
+          width = this.opt.width || (this.opt.number * this.opt.size + this.opt.number * space)
+
+        if (this.opt.cancel) {
+          width += this.opt.size + space;
+        }
+
+        this.style.width = width + 'px';
+      }
+    },
+
+    _apply: function(score) {
+      methods._fill.call(this, score);
+
+      if (score) {
+        if (score > 0) {
+          this.score.val(methods._between(score, 0, this.opt.number));
+        }
+
+        methods._roundStars.call(this, score);
+      }
+    },
+
+    _between: function(value, min, max) {
+      return Math.min(Math.max(parseFloat(value), min), max);
+    },
+
+    _binds: function() {
+      if (this.cancel) {
+        methods._bindOverCancel.call(this);
+        methods._bindClickCancel.call(this);
+        methods._bindOutCancel.call(this);
       }
 
-      return cancel;
-    }, _createScore: function() {
-      return $('<input />', { type: 'hidden', name: this.opt.scoreName }).appendTo(this);
-    }, _createStars: function() {
-      var that = $(this);
+      methods._bindOver.call(this);
+      methods._bindClick.call(this);
+      methods._bindOut.call(this);
+    },
 
+    _bindClick: function() {
+      var that = this;
+
+      that.stars.on('click.raty', function(evt) {
+        var star = $(this);
+
+        that.score.val((that.opt.half || that.opt.precision) ? that.self.data('score') : (this.alt || star.data('alt')));
+
+        if (that.opt.click) {
+          that.opt.click.call(that, +that.score.val(), evt);
+        }
+      });
+    },
+
+    _bindClickCancel: function() {
+      var that = this;
+
+      that.cancel.on('click.raty', function(evt) {
+        that.score.removeAttr('value');
+
+        if (that.opt.click) {
+          that.opt.click.call(that, null, evt);
+        }
+      });
+    },
+
+    _bindOut: function() {
+      var that = this;
+
+      that.self.on('mouseleave.raty', function(evt) {
+        var score = +that.score.val() || undefined;
+
+        methods._apply.call(that, score);
+        methods._target.call(that, score, evt);
+
+        if (that.opt.mouseout) {
+          that.opt.mouseout.call(that, score, evt);
+        }
+      });
+    },
+
+    _bindOutCancel: function() {
+      var that = this;
+
+      that.cancel.on('mouseleave.raty', function(evt) {
+        var
+          cancel    = $(this),
+          cancelOff = that.opt.path + that.opt.cancelOff;
+
+        if (that.opt.starType === 'img') {
+          cancel.attr('src', cancelOff);
+        } else {
+          var cancelOn = that.opt.path + that.opt.cancelOn;
+
+          cancel.removeClass(cancelOn).addClass(cancelOff);
+        }
+
+        if (that.opt.mouseout) {
+          var score = +that.score.val() || undefined;
+
+          that.opt.mouseout.call(that, score, evt);
+        }
+      });
+    },
+
+    _bindOver: function() {
+      var that   = this,
+          action = that.opt.half ? 'mousemove.raty' : 'mouseover.raty';
+
+      that.stars.on(action, function(evt) {
+        var
+          star  = $(this),
+          score = parseInt(this.alt || star.data('alt'), 10);
+
+        if (that.opt.half) {
+          var percent = parseFloat((evt.pageX - star.offset().left) / that.opt.size);
+
+          if (that.opt.precision) {
+            score = score - 1 + percent;
+          } else {
+            score = score - 1 + (percent > 0.5 ? 1 : 0.5);
+          }
+
+          methods._fill.call(that, score);
+          methods._roundStars.call(that, score);
+
+          that.self.data('score', score);
+        } else {
+          methods._fill.call(that, score);
+        }
+
+        methods._target.call(that, score, evt);
+
+        if (that.opt.mouseover) {
+          that.opt.mouseover.call(that, score, evt);
+        }
+      });
+    },
+
+    _bindOverCancel: function() {
+      var that = this;
+
+      that.cancel.on('mouseover.raty', function(evt) {
+        var
+          cancelOn  = that.opt.path + that.opt.cancelOn,
+          star      = $(this),
+          starOff   = that.opt.path + that.opt.starOff;
+
+        if (that.opt.starType === 'img') {
+          star.attr('src', cancelOn);
+          that.stars.attr('src', starOff);
+        } else {
+          that.stars.attr('class', starOff);
+
+          var cancelOff = that.opt.path + that.opt.cancelOff;
+
+          star.removeClass(cancelOff).addClass(cancelOn);
+        }
+
+        methods._target.call(that, null, evt);
+
+        if (that.opt.mouseover) {
+          that.opt.mouseover.call(that, null);
+        }
+      });
+    },
+
+    _buildScoreField: function() {
+      return $('<input />', { name: this.opt.scoreName, type: 'hidden' }).appendTo(this);
+    },
+
+    _createCancel: function() {
+      var icon   = this.opt.path + this.opt.cancelOff,
+          cancel = $('<' + this.opt.starType + ' />', { title: this.opt.cancelHint, 'class': 'raty-cancel' });
+
+      if (this.opt.starType === 'img') {
+        cancel.attr({ src: icon, alt: 'x' });
+      } else {
+        // TODO: use $.data
+        cancel.attr('data-alt', 'x').addClass(icon);
+      }
+
+      if (this.opt.cancelPlace === 'left') {
+        this.self.prepend('&#160;').prepend(cancel);
+      } else {
+        this.self.append('&#160;').append(cancel);
+      }
+
+      this.cancel = cancel;
+    },
+
+    _createScore: function() {
+      var score = $(this.opt.targetScore);
+
+      this.score = score.length ? score : methods._buildScoreField.call(this);
+    },
+
+    _createStars: function() {
       for (var i = 1; i <= this.opt.number; i++) {
-        var title = methods._getHint.call(this, i),
-            icon  = (this.opt.score && this.opt.score >= i) ? 'starOn' : 'starOff';
+        var
+          attrs ,
+          icon  = (this.opt.score && this.opt.score >= i) ? 'starOn' : 'starOff',
+          title = methods._getHint.call(this, i);
 
-        icon = ((this.opt.font == true) ? 'fa ' + this.opt[icon] : this.opt.path + this.opt[icon]);
+        // TODO: extract as icon: && alt:
+        icon = this.opt.path + this.opt[icon];
 
-		if(this.opt.font == true){
-			$('<i />', { 'class' : 'fa ' + icon, title: title }).data('ival', i).appendTo(this);
-		}else{
-			$('<img />', { src : icon, alt: i, title: title }).appendTo(this);
-		}
-        
+        if (this.opt.starType !== 'img') {
+          // TODO: use $.data.
+          attrs = { 'data-alt': i, 'class': icon };
+        } else {
+          attrs = { src: icon, alt: i };
+        }
+
+        attrs.title = title;
+
+        $('<' + this.opt.starType + ' />', attrs).appendTo(this);
 
         if (this.opt.space) {
-          that.append((i < this.opt.number) ? '&#160;' : '');
+          this.self.append(i < this.opt.number ? '&#160;' : '');
         }
       }
 
-	  if(this.opt.font == true){
-		  return that.children('i');
-	  }else{
-		  return that.children('img');
-	  }
-      
-    }, _error: function(message) {
-      $(this).html(message);
+      this.stars = this.self.children(this.opt.starType);
+    },
+
+    _error: function(message) {
+      $(this).text(message);
 
       $.error(message);
-    }, _fill: function(score) {
-      var self  = this,
-          hash  = 0;
+    },
 
-      for (var i = 1; i <= self.stars.length; i++) {
-        var star   = self.stars.eq(i - 1),
-            select = self.opt.single ? (i == score) : (i <= score);
+    _fill: function(score) {
+      var hash = 0;
 
-        if (self.opt.iconRange && self.opt.iconRange.length > hash) {
-          var irange = self.opt.iconRange[hash],
-              on     = irange.on  || self.opt.starOn,
-              off    = irange.off || self.opt.starOff,
-              icon   = select ? on : off;
+      for (var i = 1; i <= this.stars.length; i++) {
+        var star   = this.stars.eq(i - 1),
+            turnOn = methods._turnOn.call(this, i, score);
+
+        if (this.opt.iconRange && this.opt.iconRange.length > hash) {
+          var irange = this.opt.iconRange[hash],
+              icon   = methods._getIconRange.call(this, irange, turnOn);
 
           if (i <= irange.range) {
-			  if(this.opt.font == true){
-				  star.attr('class', 'fa ' + icon);
-			  }else{
-				  star.attr('src', self.opt.path + icon);
-			  }
-            
+            // TODO: extract.
+            if (this.opt.starType === 'img') {
+              star.attr('src', icon);
+            } else {
+              star.attr('class', icon);
+            }
           }
 
-          if (i == irange.range) {
+          if (i === irange.range) {
             hash++;
           }
         } else {
-          var icon = select ? 'starOn' : 'starOff';
+          var icon = this.opt.path + this.opt[turnOn ? 'starOn' : 'starOff'];
 
-		  if(this.opt.font == true){
-			  star.attr('class', 'fa ' + this.opt[icon]);
-		  }else{
-			  star.attr('src', this.opt.path + this.opt[icon]);
-		  }
+          // TODO: extract.
+          if (this.opt.starType === 'img') {
+            star.attr('src', icon);
+          } else {
+            star.attr('class', icon);
+          }
         }
       }
-    }, _getHint: function(score) {
+    },
+
+    _getIconRange: function(irange, turnOn) {
+      return this.opt.path + (turnOn ? irange.on || this.opt.starOn : irange.off || this.opt.starOff);
+    },
+
+    _turnOn: function(i, score) {
+      return this.opt.single ? (i === score) : (i <= score);
+    },
+
+    _getHint: function(score) {
       var hint = this.opt.hints[score - 1];
-      return (hint === '') ? '' : (hint || score);
-    }, _lock: function() {
+
+      return hint === '' ? '' : hint || score;
+    },
+
+    _lock: function() {
       var score = parseInt(this.score.val(), 10), // TODO: 3.1 >> [['1'], ['2'], ['3', '.1', '.2']]
           hint  = score ? methods._getHint.call(this, score) : this.opt.noRatedMsg;
 
-      $(this).data('readonly', true).css('cursor', '').attr('title', hint);
+      this.style.cursor   = '';
+      this.title          = hint;
 
-      this.score.attr('readonly', 'readonly');
-      this.stars.attr('title', hint);
+      this.score.prop('readonly', true);
+      this.stars.prop('title', hint);
 
       if (this.cancel) {
         this.cancel.hide();
       }
-    }, _roundStars: function(score) {
+
+      this.self.data('readonly', true);
+    },
+
+    _roundStars: function(score) {
       var rest = (score - Math.floor(score)).toFixed(2);
 
       if (rest > this.opt.round.down) {
@@ -51968,40 +52159,44 @@ $.extend(TRUE, QTIP.defaults, {
         } else if (rest < this.opt.round.full) {             // Down: [x.00 .. x.5]
           icon = 'starOff';
         }
-
-		if(this.opt.font == true){
-			this.stars.eq(Math.ceil(score) - 1).attr('class', 'fa ' + this.opt[icon]);
-		}else{
-			this.stars.eq(Math.ceil(score) - 1).attr('src', this.opt.path + this.opt[icon]);
-		}
-       
+        if (this.opt.starType === 'img') {
+          this.stars.eq(Math.ceil(score) - 1).attr('src', this.opt.path + this.opt[icon]);
+        } else {
+          this.stars.eq(Math.ceil(score) - 1).attr('class', '');
+          this.stars.eq(Math.ceil(score) - 1).addClass(this.opt[icon]);
+        }
       }                              // Full down: [x.00 .. x.25]
-    }, _target: function(score, evt) {
+    },
+
+    _target: function(score, evt) {
       if (this.opt.target) {
         var target = $(this.opt.target);
 
-        if (target.length === 0) {
+        if (!target.length) {
           methods._error.call(this, 'Target selector invalid or missing!');
         }
 
+        // TODO: remove this check.
         if (this.opt.targetFormat.indexOf('{score}') < 0) {
           methods._error.call(this, 'Template "{score}" missing!');
         }
 
-        var mouseover = evt && evt.type == 'mouseover';
+        var mouseover = evt && evt.type === 'mouseover';
 
         if (score === undefined) {
           score = this.opt.targetText;
         } else if (score === null) {
           score = mouseover ? this.opt.cancelHint : this.opt.targetText;
         } else {
-          if (this.opt.targetType == 'hint') {
+          if (this.opt.targetType === 'hint') {
             score = methods._getHint.call(this, Math.ceil(score));
           } else if (this.opt.precision) {
             score = parseFloat(score).toFixed(1);
           }
 
-          if (!mouseover && !this.opt.targetKeep) {
+          var mousemove = evt && evt.type === 'mousemove';
+
+          if (!mouseover && !mousemove && !this.opt.targetKeep) {
             score = this.opt.targetText;
           }
         }
@@ -52016,7 +52211,9 @@ $.extend(TRUE, QTIP.defaults, {
           target.html(score);
         }
       }
-    }, _unlock: function() {
+    },
+
+    _unlock: function() {
       $(this).data('readonly', false).css('cursor', 'pointer').removeAttr('title');
 
       this.score.removeAttr('readonly', 'readonly');
@@ -52072,17 +52269,37 @@ $.extend(TRUE, QTIP.defaults, {
       });
 
       return (score.length > 1) ? score : score[0];
-    }, readOnly: function(readonly) {
+    },
+
+    move: function(score) {
+      return $(this).each(function() {
+        var
+          integer  = parseInt(score, 10),
+          opt      = $(this).data('options'),
+          decimal  = Number(score).toFixed(1).split('.')[1];
+
+        if (integer > opt.number) {
+          integer = opt.number - 1;
+          decimal = 10;
+        }
+
+        var
+          point    = opt.size / 10,
+          star     = $(this.stars[integer]),
+          percent = star.offset().left + point * parseInt(decimal, 10),
+          evt      = $.Event('mousemove', { pageX: percent });
+
+        star.trigger(evt);
+      });
+    },
+
+    readOnly: function(readonly) {
       return this.each(function() {
         var that = $(this);
 
         if (that.data('readonly') !== readonly) {
           if (readonly) {
-			 if(this.opt.font == true){
-				 that.off('.raty').children('i').off('.raty');
-			 }else{
-				 that.off('.raty').children('img').off('.raty');
-			 }
+            that.off('.raty').children('img').off('.raty');
 
             methods._lock.call(this);
           } else {
@@ -52097,11 +52314,11 @@ $.extend(TRUE, QTIP.defaults, {
       return methods.set.call(this, {});
     }, score: function() {
       return arguments.length ? methods.setScore.apply(this, arguments) : methods.getScore.call(this);
-    }, set: function(settings) {
+    }, set: function(options) {
       return this.each(function() {
         var that   = $(this),
-            actual = that.data('settings'),
-            news   = $.extend({}, actual, settings);
+            actual = that.data('options'),
+            news   = $.extend({}, actual, options);
 
         that.raty(news);
       });
@@ -52126,40 +52343,41 @@ $.extend(TRUE, QTIP.defaults, {
   };
 
   $.fn.raty.defaults = {
-    cancel        : false,
-    cancelHint    : 'Cancel this rating!',
-    cancelOff     : 'cancel-off.png',
-    cancelOn      : 'cancel-on.png',
-    cancelPlace   : 'left',
-    click         : undefined,
-    half          : false,
-    halfShow      : true,
-    hints         : ['bad', 'poor', 'regular', 'good', 'gorgeous'],
-    iconRange     : undefined,
-    mouseout      : undefined,
-    mouseover     : undefined,
-    noRatedMsg    : 'Not rated yet!',
-    number        : 5,
-    numberMax     : 20,
-    path          : '',
-    precision     : false,
-    readOnly      : false,
-    round         : { down: .25, full: .6, up: .76 },
-    score         : undefined,
-    scoreName     : 'score',
-    single        : false,
-    size          : 16,
-    space         : true,
-    starHalf      : 'star-half.png',
-    starOff       : 'star-off.png',
-    starOn        : 'star-on.png',
-    target        : undefined,
-    targetFormat  : '{score}',
-    targetKeep    : false,
-    targetText    : '',
-    targetType    : 'hint',
-    width         : undefined,
-	font          : false,
+    cancel       : false,
+    cancelHint   : 'Cancel this rating!',
+    cancelOff    : 'cancel-off.png',
+    cancelOn     : 'cancel-on.png',
+    cancelPlace  : 'left',
+    click        : undefined,
+    half         : false,
+    halfShow     : true,
+    hints        : ['bad', 'poor', 'regular', 'good', 'gorgeous'],
+    iconRange    : undefined,
+    mouseout     : undefined,
+    mouseover    : undefined,
+    noRatedMsg   : 'Not rated yet!',
+    number       : 5,
+    numberMax    : 20,
+    path         : undefined,
+    precision    : false,
+    readOnly     : false,
+    round        : { down: .25, full: .6, up: .76 },
+    score        : undefined,
+    scoreName    : 'score',
+    single       : false,
+    size         : 16,
+    space        : true,
+    starHalf     : 'star-half.png',
+    starOff      : 'star-off.png',
+    starOn       : 'star-on.png',
+    starType     : 'img',
+    target       : undefined,
+    targetFormat : '{score}',
+    targetKeep   : false,
+    targetScore  : undefined,
+    targetText   : '',
+    targetType   : 'hint',
+    width        : undefined
   };
 
 })(jQuery);
@@ -52423,7 +52641,7 @@ $.extend(TRUE, QTIP.defaults, {
 		return d
 	}
 })(jQuery);
-// Spectrum Colorpicker v1.3.1
+// Spectrum Colorpicker v1.3.4
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
@@ -52456,10 +52674,12 @@ $.extend(TRUE, QTIP.defaults, {
         chooseText: "choose",
         clearText: "Clear Color Selection",
         preferredFormat: false,
-        className: "",
+        className: "", // Deprecated - use containerClassName and replacerClassName instead.
+        containerClassName: "",
+        replacerClassName: "",
         showAlpha: false,
         theme: "sp-light",
-        palette: ['fff', '000'],
+        palette: [["#ffffff", "#000000", "#ff0000", "#ff8000", "#ffff00", "#008000", "#0000ff", "#4b0082", "#9400d3"]],
         selectionPalette: [],
         disabled: false
     },
@@ -52527,14 +52747,14 @@ $.extend(TRUE, QTIP.defaults, {
                     "<div class='sp-initial sp-thumb sp-cf'></div>",
                     "<div class='sp-button-container sp-cf'>",
                         "<a class='sp-cancel' href='#'></a>",
-                        "<button class='sp-choose'></button>",
+                        "<button type='button' class='sp-choose'></button>",
                     "</div>",
                 "</div>",
             "</div>"
         ].join("");
     })();
 
-    function paletteTemplate (p, color, className) {
+    function paletteTemplate (p, color, className, tooltipFormat) {
         var html = [];
         for (var i = 0; i < p.length; i++) {
             var current = p[i];
@@ -52543,8 +52763,9 @@ $.extend(TRUE, QTIP.defaults, {
                 var c = tiny.toHsl().l < 0.5 ? "sp-thumb-el sp-thumb-dark" : "sp-thumb-el sp-thumb-light";
                 c += (tinycolor.equals(color, current)) ? " sp-thumb-active" : "";
 
+                var formattedString = tiny.toString(tooltipFormat || "rgb");
                 var swatchStyle = rgbaSupport ? ("background-color:" + tiny.toRgbString()) : "filter:" + tiny.toFilter();
-                html.push('<span title="' + tiny.toRgbString() + '" data-color="' + tiny.toRgbString() + '" class="' + c + '"><span class="sp-thumb-inner" style="' + swatchStyle + ';" /></span>');
+                html.push('<span title="' + formattedString + '" data-color="' + tiny.toRgbString() + '" class="' + c + '"><span class="sp-thumb-inner" style="' + swatchStyle + ';" /></span>');
             } else {
                 var cls = 'sp-clear-display';
                 html.push('<span title="No Color Selected" data-color="" style="background-color:transparent;" class="' + cls + '"></span>');
@@ -52598,6 +52819,7 @@ $.extend(TRUE, QTIP.defaults, {
             currentAlpha = 1,
             palette = [],
             paletteArray = [],
+            paletteLookup = {},
             selectionPalette = opts.selectionPalette.slice(0),
             maxSelectionSize = opts.maxSelectionSize,
             draggingClass = "sp-dragging",
@@ -52624,7 +52846,7 @@ $.extend(TRUE, QTIP.defaults, {
             isInput = boundElement.is("input"),
             isInputTypeColor = isInput && inputTypeColorSupport && boundElement.attr("type") === "color",
             shouldReplace = isInput && !flat,
-            replacer = (shouldReplace) ? $(replaceInput).addClass(theme).addClass(opts.className) : $([]),
+            replacer = (shouldReplace) ? $(replaceInput).addClass(theme).addClass(opts.className).addClass(opts.replacerClassName) : $([]),
             offsetElement = (shouldReplace) ? replacer : boundElement,
             previewElement = replacer.find(".sp-preview-inner"),
             initialColor = opts.color || (isInput && boundElement.val()),
@@ -52644,6 +52866,13 @@ $.extend(TRUE, QTIP.defaults, {
             if (opts.palette) {
                 palette = opts.palette.slice(0);
                 paletteArray = $.isArray(palette[0]) ? palette : [palette];
+                paletteLookup = {};
+                for (var i = 0; i < paletteArray.length; i++) {
+                    for (var j = 0; j < paletteArray[i].length; j++) {
+                        var rgb = tinycolor(paletteArray[i][j]).toRgbString();
+                        paletteLookup[rgb] = true;
+                    }
+                }
             }
 
             container.toggleClass("sp-flat", flat);
@@ -52654,7 +52883,7 @@ $.extend(TRUE, QTIP.defaults, {
             container.toggleClass("sp-palette-disabled", !opts.showPalette);
             container.toggleClass("sp-palette-only", opts.showPaletteOnly);
             container.toggleClass("sp-initial-disabled", !opts.showInitial);
-            container.addClass(opts.className);
+            container.addClass(opts.className).addClass(opts.containerClassName);
 
             reflow();
         }
@@ -52688,25 +52917,7 @@ $.extend(TRUE, QTIP.defaults, {
                 appendTo.append(container);
             }
 
-            if (localStorageKey && window.localStorage) {
-
-                // Migrate old palettes over to new format.  May want to remove this eventually.
-                try {
-                    var oldPalette = window.localStorage[localStorageKey].split(",#");
-                    if (oldPalette.length > 1) {
-                        delete window.localStorage[localStorageKey];
-                        $.each(oldPalette, function(i, c) {
-                             addColorToSelectionPalette(c);
-                        });
-                    }
-                }
-                catch(e) { }
-
-                try {
-                    selectionPalette = window.localStorage[localStorageKey].split(";");
-                }
-                catch (e) { }
-            }
+            updateSelectionPaletteFromStorage();
 
             offsetElement.bind("click.spectrum touchstart.spectrum", function (e) {
                 if (!disabled) {
@@ -52842,8 +53053,8 @@ $.extend(TRUE, QTIP.defaults, {
                 }
                 else {
                     set($(this).data("color"));
-                    updateOriginalInput(true);
                     move();
+                    updateOriginalInput(true);
                     hide();
                 }
 
@@ -52855,11 +53066,34 @@ $.extend(TRUE, QTIP.defaults, {
             initialColorContainer.delegate(".sp-thumb-el:nth-child(1)", paletteEvent, { ignore: true }, palletElementClick);
         }
 
+        function updateSelectionPaletteFromStorage() {
+
+            if (localStorageKey && window.localStorage) {
+
+                // Migrate old palettes over to new format.  May want to remove this eventually.
+                try {
+                    var oldPalette = window.localStorage[localStorageKey].split(",#");
+                    if (oldPalette.length > 1) {
+                        delete window.localStorage[localStorageKey];
+                        $.each(oldPalette, function(i, c) {
+                             addColorToSelectionPalette(c);
+                        });
+                    }
+                }
+                catch(e) { }
+
+                try {
+                    selectionPalette = window.localStorage[localStorageKey].split(";");
+                }
+                catch (e) { }
+            }
+        }
+
         function addColorToSelectionPalette(color) {
             if (showSelectionPalette) {
-                var colorRgb = tinycolor(color).toRgbString();
-                if ($.inArray(colorRgb, selectionPalette) === -1) {
-                    selectionPalette.push(colorRgb);
+                var rgb = tinycolor(color).toRgbString();
+                if (!paletteLookup[rgb] && $.inArray(rgb, selectionPalette) === -1) {
+                    selectionPalette.push(rgb);
                     while(selectionPalette.length > maxSelectionSize) {
                         selectionPalette.shift();
                     }
@@ -52876,25 +53110,12 @@ $.extend(TRUE, QTIP.defaults, {
 
         function getUniqueSelectionPalette() {
             var unique = [];
-            var p = selectionPalette;
-            var paletteLookup = {};
-            var rgb;
-
             if (opts.showPalette) {
+                for (i = 0; i < selectionPalette.length; i++) {
+                    var rgb = tinycolor(selectionPalette[i]).toRgbString();
 
-                for (var i = 0; i < paletteArray.length; i++) {
-                    for (var j = 0; j < paletteArray[i].length; j++) {
-                        rgb = tinycolor(paletteArray[i][j]).toRgbString();
-                        paletteLookup[rgb] = true;
-                    }
-                }
-
-                for (i = 0; i < p.length; i++) {
-                    rgb = tinycolor(p[i]).toRgbString();
-
-                    if (!paletteLookup.hasOwnProperty(rgb)) {
-                        unique.push(p[i]);
-                        paletteLookup[rgb] = true;
+                    if (!paletteLookup[rgb]) {
+                        unique.push(selectionPalette[i]);
                     }
                 }
             }
@@ -52907,11 +53128,13 @@ $.extend(TRUE, QTIP.defaults, {
             var currentColor = get();
 
             var html = $.map(paletteArray, function (palette, i) {
-                return paletteTemplate(palette, currentColor, "sp-palette-row sp-palette-row-" + i);
+                return paletteTemplate(palette, currentColor, "sp-palette-row sp-palette-row-" + i, opts.preferredFormat);
             });
 
+            updateSelectionPaletteFromStorage();
+
             if (selectionPalette) {
-                html.push(paletteTemplate(getUniqueSelectionPalette(), currentColor, "sp-palette-row sp-palette-row-selection"));
+                html.push(paletteTemplate(getUniqueSelectionPalette(), currentColor, "sp-palette-row sp-palette-row-selection", opts.preferredFormat));
             }
 
             paletteContainer.html(html.join(""));
@@ -52921,7 +53144,7 @@ $.extend(TRUE, QTIP.defaults, {
             if (opts.showInitial) {
                 var initial = colorOnShow;
                 var current = get();
-                initialColorContainer.html(paletteTemplate([initial, current], current, "sp-palette-row-initial"));
+                initialColorContainer.html(paletteTemplate([initial, current], current, "sp-palette-row-initial", opts.preferredFormat));
             }
         }
 
@@ -53143,7 +53366,9 @@ $.extend(TRUE, QTIP.defaults, {
                         alphaSliderInner.css("background", "-webkit-" + gradient);
                         alphaSliderInner.css("background", "-moz-" + gradient);
                         alphaSliderInner.css("background", "-ms-" + gradient);
-                        alphaSliderInner.css("background", gradient);
+                        // Use current syntax gradient on unprefixed property.
+                        alphaSliderInner.css("background",
+                            "linear-gradient(to right, " + realAlpha + ", " + realHex + ")");
                     }
                 }
 
