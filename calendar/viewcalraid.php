@@ -430,10 +430,12 @@ class viewcalraid extends page_generic {
 		if(is_array($this->attendees_raw)){
 			$this->attendees = $this->attendees_count = array();
 			foreach($this->attendees_raw as $attendeeid=>$attendeedata){
-				$attclassid = (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $this->pdh->get('member', 'classid', array($attendeeid));
-				$role_class = (($eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $attclassid);
-				$this->attendees[$attendeedata['signup_status']][$role_class][$attendeeid] = $attendeedata;
-				$this->attendees_count[$attendeedata['signup_status']][$attendeeid] = true;
+				if($attendeeid > 0){
+					$attclassid = (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $this->pdh->get('member', 'classid', array($attendeeid));
+					$role_class = (($eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $attclassid);
+					$this->attendees[$attendeedata['signup_status']][$role_class][$attendeeid] = $attendeedata;
+					$this->attendees_count[$attendeedata['signup_status']][$attendeeid] = true;
+				}
 			}
 		}else{
 			$this->attendees = array();
