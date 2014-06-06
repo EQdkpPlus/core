@@ -101,15 +101,15 @@ class config extends gen_class {
 
 	public function get_config($plugin=''){
 		if(count($this->config) < 1){
-			$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+			/* $file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
 			if(is_file($file)){
 				include($file);
 				$this->config = $localconf;
-			}
-			if(!isset($this->config['server_path'], $this->config['cookie_name'], $this->config['plus_version'])) {
+			} */
+			// if(!isset($this->config['server_path'], $this->config['cookie_name'], $this->config['plus_version'])) {
 				// important configs are missing, probably an empty/not available localconf.php ... Load from Database..
 				$this->get_dbconfig();
-			}
+			// }
 		}
 		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
 	}
@@ -199,7 +199,7 @@ class config extends gen_class {
 				//include multiselects and sliders of core (they have numerical keys)
 				if(!is_array($value) || is_numeric(key($value))) {
 					// Core
-					$value = array($name => $value);
+					$value = array($name => (is_array($value) ? serialize($value) : $value));
 					$name = 'core';
 				}
 				foreach($value as $pname=>$pvalue){
@@ -228,7 +228,7 @@ class config extends gen_class {
 			$this->save_backup($this->config);
 		}
 		// Build the plain file config
-		ksort($this->config);
+		/* ksort($this->config);
 		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
 		$data = "<?php\n";
 		$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
@@ -238,7 +238,7 @@ class config extends gen_class {
 		$data .= ">";
 		$this->pfh->putContent($file, $data);
 		$this->config_modified = false;
-
+ */
 	}
 	
 	public function flush(){
