@@ -946,7 +946,7 @@ class import06 extends task {
 					
 					$members[$row['member_id']]['profiledata'] = json_encode($profilefields);
 					
-					$members[$row['member_id']]['member_name'] = sanitize($member_name);
+					$members[$row['member_id']]['member_name'] = sanitize($row['member_name']);
 				}
 			}
 
