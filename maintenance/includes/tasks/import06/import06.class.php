@@ -880,7 +880,7 @@ class import06 extends task {
 				$m2cr[$row['member_id']]['class'] = $row['class_name'];
 				$m2cr[$row['member_id']]['race'] = $row['race_name'];
 				
-				$members[$row['member_id']]['member_name'] = sanitize($member_name);
+				$members[$row['member_id']]['member_name'] = sanitize($row['member_name']);
 			}
 			$this->old[0]->free_result($result);
 			$this->new[0]->query("TRUNCATE ".$this->new[1]."members;");
