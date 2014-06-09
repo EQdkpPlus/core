@@ -928,7 +928,7 @@ function array_extend($a, $b){
 function search_in_array($child, $haystack, $strict=false, $key='') {
 	foreach ($haystack as $k => $v){
 		if(is_array($v)){
-			$return = search_in_array($child, $v);
+			$return = search_in_array($child, $v, $strict, $key);
 			if(is_array($return)){
 				return array($k => $return);
 			}
