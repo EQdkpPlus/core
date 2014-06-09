@@ -110,7 +110,7 @@ class mycharacters_pageobject extends pageobject {
 		// The javascript for the mainchar change
 		$this->tpl->add_js("
 			$('.cmainradio').change( function(){
-				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $(this).val() },
+				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $( \"input:radio[name=mainchar]:checked\" ).val() },
 					function(data){
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: true, speed: 1000});
 					});

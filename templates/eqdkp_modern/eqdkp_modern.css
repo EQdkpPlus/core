@@ -2523,7 +2523,7 @@ a.tool-item i {
 }
 
 
-#personalArea .dropdown-menu li > a {
+#personalArea .dropdown-menu li > a{
     clear: both;
     color: #333333;
     display: block;
@@ -2533,12 +2533,20 @@ a.tool-item i {
     white-space: nowrap;
 }
 
-.notification-tooltip-container, .user-tooltip-container {
+ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
+	color: #333;
+}
+
+.mychars-points-target img {
+	max-height: 16px;
+}
+
+.fe-tooltip-container, .notification-tooltip-container, .user-tooltip-container,.mychars-points-tooltip-container {
 	display: inline;
 	position: relative;
 }
 
-.notification-tooltip-container a, .user-tooltip-container a {
+.fe-tooltip-container a, .notification-tooltip-container a, .user-tooltip-container a, .mychars-points-tooltip-container a {
 	cursor: pointer;
 }
 
@@ -2546,8 +2554,25 @@ a.tool-item i {
 	min-width: 160px;
 }
 
-.notification-tooltip, .user-tooltip {
+.fe-tooltip, .notification-tooltip, .user-tooltip, .mychars-points-tooltip {
 	display: none;
+}
+
+.mychars-points-tooltip {
+	padding: 10px;
+}
+
+.mychars-points-tooltip table {
+	border: 0;
+}
+
+
+.mychars-points-tooltip td {
+	padding: 4px;
+}
+
+.mychars-points-tooltip tr.active {
+	background-color: #efefef;
 }
 
 .user-tooltip-avatar {

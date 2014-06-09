@@ -111,12 +111,13 @@ if(!class_exists('routing')){
 			return array();
 		}
 		
-		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false){
+		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false, $blnAddExtension=true){
 			$strPath = ($blnControllerPathPlain) ? $this->controller_path_plain : $this->controller_path;
 			$strPath .= ucfirst($this->get($strPageObject, true));
 			if ($strParamText || $strParam) $strPath .= '/';
 			if ($strParamText) $strPath .= $this->clean($strParamText);
 			if ($strParam) $strPath .= '-'.$strParam;
+			if(!$blnAddExtension) return $strPath;
 			switch((int)$this->config->get('seo_extension')){
 				case 1: $strPath .= '.html';
 				break;

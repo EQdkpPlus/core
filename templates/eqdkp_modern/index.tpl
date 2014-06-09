@@ -39,7 +39,7 @@
 				user_clock();
 			
 				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->410<!-- ELSE -->310<!-- ENDIF -->,
+					height: <!-- IF S_BRIDGE_INFO -->450<!-- ELSE -->350<!-- ENDIF -->,
 					width: 530,
 					modal: true,
 					autoOpen: false,
@@ -77,13 +77,51 @@
 					window.location="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}";		
 				});
 				
+				$('.mychars-points-tooltip-trigger').on('click', function(event){
+					event.preventDefault();
+					$("#mychars-points-tooltip").show('fast');
+					$(document).on('click', function(event) {
+						var count = $(event.target).parents('.mychars-points-tooltip-container').length;									
+						if (count == 0){
+							$("#mychars-points-tooltip").hide('fast');
+						}
+					});					
+				});
+				
 				$('ul.mainmenu li.link_li_indexphp a.link_indexphp').html('');
 				$('ul.mainmenu').addClass('sf-menu');
 				jQuery('ul.mainmenu').superfish({
 						delay:		400,
 						animation:	{opacity:'show',height:'show'},
 						speed:		'fast'
-					});
+				});
+				
+				<!-- IF S_MYCHARS_POINTS and U_CHARACTERS != "" -->
+				/* My Chars Points */
+				$('.mychars-points-tooltip .char').on('click', function(){
+					$(this).parent().parent().children('tr').removeClass("active");
+					$(this).parent().addClass("active");
+					var current = $(this).parent().find('.current').html();
+					var icons = $(this).parent().find('.icons').html();
+					$(".mychars-points-target").html(icons + " "+current);
+					var id = $(this).parent().attr('id');
+					localStorage.setItem('mcp_{USER_ID}', id);
+				});
+				var saved = localStorage.getItem('mcp_{USER_ID}');
+
+				if (saved && saved != "" && $('#'+saved).find('.current').html() != undefined){
+					$('#'+saved).addClass("active");
+					var current = $('#'+saved).find('.current').html();
+					var icons = $('#'+saved).find('.icons').html();
+					$(".mychars-points-target").html(icons + " "+current);
+				} else {
+					$('.mychars-points-tooltip .main').addClass("active");
+					var current = $('.mychars-points-tooltip .main').find('.current').html();
+					var icons = $('.mychars-points-tooltip .main').find('.icons').html();
+					$(".mychars-points-target").html(icons + " "+current);
+				}
+				<!-- ENDIF -->
+				
 			});
 			//]]>
 		</script>
@@ -96,7 +134,7 @@
 				<div id="personalAreaUser">
 					<!-- IF not S_LOGGED_IN -->
 					<ul>
-						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in"></i> {L_login}</a></li>
+						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in fa-lg"></i> {L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
@@ -107,7 +145,7 @@
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user"></i> {USER_NAME}</a>
+									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user fa-lg"></i> {USER_NAME}</a>
 									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
 										<li><a href="{U_USER_PROFILE}">
 												<div class="user-tooltip-avatar">
@@ -120,17 +158,38 @@
 											</a>
 										</li>
 										<li class="tooltip-divider"></li>
-										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog"></i> {L_settings}</a></li>
-										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out"></i> {L_logout}</a></li>
+										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog fa-lg"></i> {L_settings}</a></li>
+										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out fa-lg"></i> {L_logout}</a></li>
 									</ul>
 								</div>
 							</li>
-							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog"></i> {L_menu_admin_panel}</a></li><!-- ENDIF -->
+							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</a></li><!-- ENDIF -->
 							
-							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group"></i> {L_menu_members}</a></li><!-- ENDIF -->
+							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group fa-lg"></i> {L_menu_members}</a></li><!-- ENDIF -->
+							
+							<!-- IF S_MYCHARS_POINTS and U_CHARACTERS != "" -->
+								<li>
+									<div class="mychars-points-tooltip-container">
+									<a class="mychars-points-tooltip-trigger"><i class="fa fa-money fa-lg"></i> <span class="mychars-points-target"></span></a>
+									<ul class="dropdown-menu mychars-points-tooltip" role="menu" id="mychars-points-tooltip"><li>
+										<table>
+										<!-- BEGIN mychars_points -->
+											<tr <!-- IF mychars_points.IS_MAIN -->class="main"<!-- ENDIF --> id="mcp{mychars_points.ID}">
+												<td class="nowrap char hand"><span class="icons">{mychars_points.CHARICON}</span> {mychars_points.CHARNAME}</td>
+												<td>{mychars_points.POOLNAME}</td>
+												<td class="current">{mychars_points.CURRENT}</td>
+												<td><a href="{mychars_points.CHARLINK}"><i class="fa fa-external-link fa-lg"></i></a></td>
+											</tr>
+										<!-- END mychars_points -->
+										</table></li>
+									</ul>
+								</div>
+								</li>
+							<!-- ENDIF -->
+							
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt"></i> {L_notifications}</a>
+									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt fa-lg"></i> {L_notifications}</a>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 										<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_RED > 0 -->
@@ -184,12 +243,12 @@
 				</div>
 				<div id="personalAreaTime" class="hiddenSmartphone">
 					<ul>
-						<li class="personalAreaTime"><i class="fa fa-clock-o"></i> <span class="user_time">{USER_TIME}</span></li>
+						<li class="personalAreaTime"><i class="fa fa-clock-o fa-lg"></i> <span class="user_time">{USER_TIME}</span></li>
 						<li><!-- IF S_SEARCH -->
 						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}" id="search_form">
 							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>
 							<button type="submit" class="search_button" value="" title="{L_search_do}">
-								<i class="fa fa-search"></i>
+								<i class="fa fa-search fa-lg"></i>
 							</button>
 						</form>
 					<!-- ENDIF -->	</li>

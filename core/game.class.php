@@ -115,7 +115,7 @@ class game extends gen_class {
 	private function decorate_classes($class_id, $profile=array(), $size=16, $pathonly=false){	
 		if(is_file($this->root_path.'games/'.$this->game.'/icons/classes/'.$class_id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/classes/'.$class_id.'.png';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" width="'.$size.'" height="'.$size.'"  alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
 		}
 		return false;
 	}
@@ -138,7 +138,7 @@ class game extends gen_class {
 
 		if(is_file($icon_path)){
 			$icon_path = str_replace($this->root_path, $this->server_path, $icon_path);
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='race ".$race_id."' class=\"".$this->game."_raceicon raceicon\" title=\"".$this->get_name('races', $race_id)."\" />";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='race ".$race_id."' class=\"".$this->game."_raceicon raceicon\" title=\"".$this->get_name('races', $race_id)."\" />";
 		}
 		return false;
 	}
@@ -156,7 +156,7 @@ class game extends gen_class {
 		
 		if(strlen($strRankIcon) && is_file($this->root_path.'games/'.$this->game.'/icons/ranks/'.$strRankIcon)){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/ranks/'.$strRankIcon;
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='rank ".$rank_id."' class=\"".$this->game."_rankicon\" />";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='rank ".$rank_id."' class=\"".$this->game."_rankicon\" />";
 		}
 	}
 
@@ -186,10 +186,10 @@ class game extends gen_class {
 	private function decorate_events($event_id, $profile=array(), $size=20, $pathonly=false){			
 		if(is_file($this->pfh->FolderPath("event_icons", "files").$this->pdh->get('event', 'icon', array($event_id)))){			
 			$icon_path = $this->pfh->FolderPath("event_icons", "files", "serverpath").$this->pdh->get('event', 'icon', array($event_id));
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}elseif(is_file($this->root_path.'games/'.$this->game.'/icons/events/'.$this->pdh->get('event', 'icon', array($event_id)))){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/events/'.$this->pdh->get('event', 'icon', array($event_id));
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}
 	}
 	
@@ -204,7 +204,7 @@ class game extends gen_class {
 	private function decorate_def_events($event_id, $profile=array(), $size=20, $pathonly=false){	
 		if(is_file($this->root_path.$this->deficon_path['events'].$this->pdh->get('event', 'icon', array($event_id)))){
 			$icon_path = $this->server_path.$this->deficon_path['events'].$this->pdh->get('event', 'icon', array($event_id));
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}
 	}
 	
@@ -220,7 +220,7 @@ class game extends gen_class {
 	private function decorate_roles($role_id, $profile=array(), $size=20, $pathonly=false){	
 		if(is_file($this->root_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png';
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
 		}
 		return false;
 	}
@@ -237,7 +237,7 @@ class game extends gen_class {
 	private function decorate_def_roles($role_id, $profile=array(), $size=20, $pathonly=false){	
 		if(is_file($this->root_path.$this->deficon_path['roles'].$role_id.'.png')){
 			$icon_path = $this->server_path.$this->deficon_path['roles'].$role_id.'.png';
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' width='".$size."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
 		}
 	}
 

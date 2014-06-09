@@ -219,8 +219,8 @@ $(document).ready(function(){
 		</ul>
 
 		<input type="hidden" name="old_username" value="{USERNAME}" />
-		<input type="hidden" name="user_id[]" value="{USER_ID}" />
-		<input type="hidden" name="u" value="{USER_ID}" />
+		<input type="hidden" name="user_id[]" value="{USERID}" />
+		<input type="hidden" name="u" value="{USERID}" />
 
 		<!-- BEGIN tabs -->
 		<div id="fragment-{tabs.ID}">
@@ -366,7 +366,7 @@ $(document).ready(function(){
 			<button class="liteoption" type="reset" name="reset"><i class="fa fa-trash-o"></i>{L_reset}</button>
 			<!-- IF S_SETTING_ADMIN -->	
 			<!-- IF not S_PROTECT_USER -->
-			<button class="liteoption cancel" type="button" name="del" onclick="delete_warning({USER_ID});" id="delete_button"><i class="fa fa-times"></i>{L_delete}</button>
+			<button class="liteoption cancel" type="button" name="del" onclick="delete_warning({USERID});" id="delete_button"><i class="fa fa-times"></i>{L_delete}</button>
 			<!-- ENDIF -->
 			<button class="mainoption cancel" type="submit" name=""><i class="fa fa-chevron-left"></i>{L_back}</button>
 			<!-- ENDIF -->

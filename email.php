@@ -101,7 +101,7 @@ class email extends page_generic {
 			$this->core->message($this->user->lang('error_user_not_found'), $this->user->lang('error'), 'red');
 		} else {
 			$this->tpl->assign_vars(array(
-				'USER_ID' => $user_id,
+				'TO_USER_ID' => $user_id,
 				'USERNAME'=> $this->pdh->get('user', 'name', array($user_id)),
 				'BODY'	=> $this->in->get('body', ''),
 				'SUBJECT' => $this->in->get('subject', ''),

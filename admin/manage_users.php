@@ -594,7 +594,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			'S_MU_TABLE'				=> true,
 			'JS_TAB_SELECT'				=> $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 3 : 0)),
 			'S_PROTECT_USER'			=> ($this->user->data['user_id'] == $user_id || (isset($memberships[2]) && !isset($adm_memberships[2]))) ? true : false,
-			'USER_ID'					=> $user_id,
+			'USERID'					=> $user_id,
 			'USERNAME'					=> $user_data['username'],
 
 			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true)),

@@ -317,6 +317,7 @@ class core extends gen_class {
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 				'TEMPLATE_PATH'				=> $this->server_path . 'templates/' . $this->user->style['template_path'],
 				'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
+				'USER_ID'					=> $this->user->id,
 				'USER_NAME'					=> isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous'),
 				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
@@ -393,6 +394,8 @@ class core extends gen_class {
 			foreach($arrGroupmemberships as $groupID => $status){
 				if ($status) $this->tpl->assign_var("S_AUTH_GROUP_".$groupID, true);
 			}
+			
+			$this->mycharacters();
 		}
 		
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){
@@ -412,14 +415,7 @@ class core extends gen_class {
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
 			$arrItems = array(
-				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home')),				
-				//array('link' => 'listcharacters.php'.$this->SID,	'text' => $this->user->lang('menu_standings'),	'check' => 'u_member_view'),
-				//array('link' => 'roster.php'.$this->SID,			'text' => $this->user->lang('menu_roster'),		'check' => 'u_roster_list'),
-				//array('link' => 'listraids.php'.$this->SID,			'text' => $this->user->lang('menu_raids'),		'check' => 'u_raid_view'),
-				//array('link' => 'listevents.php'.$this->SID,		'text' => $this->user->lang('menu_events'),		'check' => 'u_event_view'),
-				//array('link' => 'listitems.php'.$this->SID,			'text' => $this->user->lang('menu_itemhist'),	'check' => 'u_item_view'),
-				//array('link' => 'viewnews.php'.$this->SID,			'text' => $this->user->lang('menu_news'),		'check' => 'u_news_view'),
-				//array('link' => 'calendar/index.php'.$this->SID,	'text' => $this->user->lang('menu_calendar'),	'check' => 'u_calendar_view'),
+				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home')),
 				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
 			);
 			
@@ -973,6 +969,46 @@ class core extends gen_class {
 				return '<i class="fa '.$icon.(($size)? ' '.$size : '').'"></i>';
 			}else{
 				return '';
+			}
+		}
+		
+		public function mycharacters(){
+			if (!$this->config->get('disable_points') && $this->user->id != ANONYMOUS){
+				
+				//get member ID from UserID
+				$memberids = $this->pdh->get('member', 'connection_id', array($this->user->id));
+				$multidkps	= $this->pdh->sort($this->pdh->get('multidkp', 'id_list'), 'multidkp', 'sortid');
+				$preset		= $this->pdh->pre_process_preset('current', array(), 0);
+		
+				if(is_array($memberids) && count($memberids) > 0){
+					// start the output
+					foreach($memberids as $member_id) {
+						if(!$this->config->get('show_twinks') && !$this->pdh->get('member', 'is_main', array($member_id))) {
+							continue;
+						}
+
+						$member_class = $this->game->decorate_character($member_id).' '.$this->pdh->geth('member', 'memberlink', array($member_id, $this->routing->build('character',false,false,false), '', false, false, false, true));
+						$quickdkp .= '<tr><td colspan="2">'.$member_class.'</td></tr>';
+						$i = 0;
+						foreach($multidkps as $mdkpid) {
+							$current = $this->pdh->geth($preset[0], $preset[1], $preset[2], array('%member_id%' => $member_id, '%dkp_id%' => $mdkpid, '%with_twink%' =>!$this->config->get('show_twinks')));
+
+							$this->tpl->assign_block_vars('mychars_points', array(
+								'CHARICON' => $this->game->decorate_character($member_id),
+								'CHARNAME' => $this->pdh->geth('member', 'name', array($member_id)),
+								'CHARLINK' => $this->pdh->get('member', 'memberlink', array($member_id, $this->routing->simpleBuild("character"), '', true)),
+								'POOLNAME' => $this->pdh->get('multidkp', 'name', array($mdkpid)),
+								'CURRENT'  => $current,
+								'IS_MAIN'  => ($this->pdh->get('member', 'is_main', array($member_id)) && ($i==0)),
+								'ID'	   => md5($this->user->id.'m'.$member_id.'mdkp'.$mdkpid),
+							));
+							
+							$this->tpl->assign_var("S_MYCHARS_POINTS", true);
+							$i++;
+						}
+						
+					}
+				}
 			}
 		}
 }
