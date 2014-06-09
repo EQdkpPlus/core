@@ -706,7 +706,7 @@ class game extends gen_class {
 	private function build_assoc_array($type, $dep_order, $child_ids, $todisplay, $filter=array(), $lang=false, $parent_id=false) {
 		$assoc_array = array();
 		$data = $this->get($type, $filter, $lang);
-		if(count($todisplay) == 1) return array_keys($data);
+		if(count($todisplay) == 1) return (($data) ? array_keys($data) : array());
 		foreach($data as $id => $name) {
 			// filter out ids not allowed
 			if($parent_id !== false) {

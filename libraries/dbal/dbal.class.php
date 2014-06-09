@@ -241,7 +241,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Result
 	 */
 	public function execute($strQuery){
-		$strQuery = str_replace(' __', ' '.$this->strTablePrefix, $strQuery);
+		$strQuery = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $strQuery);
 		
 		// log the query
 		$this->pdl->log($this->strDebugPrefix . 'sql_query', $strQuery);
@@ -256,7 +256,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Result
 	 */
 	public function query($strQuery, $blnGetFirstRow=false){
-		$strQuery = str_replace( '__', ' '.$this->strTablePrefix, $strQuery);
+		$strQuery = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $strQuery);
 		$this->intQueryCount++;
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		try {
