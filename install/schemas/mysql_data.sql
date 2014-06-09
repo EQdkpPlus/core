@@ -102,3 +102,7 @@ INSERT INTO `__portal_layouts` (`id`, `name`, `blocks`, `modules`) VALUES (1, 'S
 
 #raid groups
 INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`) VALUES (1, 'Default','',0,1,1);
+
+#portal blocks
+INSERT INTO `__portal_blocks` (`id`, `name`, `wide_content`) VALUES (1, 'Header', 0);
+INSERT INTO `__portal_blocks` (`id`, `name`, `wide_content`) VALUES (2, 'Footer', 0);

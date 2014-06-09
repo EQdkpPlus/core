@@ -998,7 +998,7 @@ class core extends gen_class {
 								'CHARNAME' => $this->pdh->geth('member', 'name', array($member_id)),
 								'CHARLINK' => $this->pdh->get('member', 'memberlink', array($member_id, $this->routing->simpleBuild("character"), '', true)),
 								'POOLNAME' => $this->pdh->get('multidkp', 'name', array($mdkpid)),
-								'CURRENT'  => $current,
+								'CURRENT'  => $current.' '.$this->config->get('dkp_name'),
 								'IS_MAIN'  => ($this->pdh->get('member', 'is_main', array($member_id)) && ($i==0)),
 								'ID'	   => md5($this->user->id.'m'.$member_id.'mdkp'.$mdkpid),
 							));

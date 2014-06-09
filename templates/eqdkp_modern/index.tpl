@@ -170,14 +170,14 @@
 							<!-- IF S_MYCHARS_POINTS and U_CHARACTERS != "" -->
 								<li>
 									<div class="mychars-points-tooltip-container">
-									<a class="mychars-points-tooltip-trigger"><i class="fa fa-money fa-lg"></i> <span class="mychars-points-target"></span></a>
+									<a class="mychars-points-tooltip-trigger"><i class="fa fa-trophy fa-lg"></i> <span class="mychars-points-target"></span></a>
 									<ul class="dropdown-menu mychars-points-tooltip" role="menu" id="mychars-points-tooltip"><li>
 										<table>
 										<!-- BEGIN mychars_points -->
 											<tr <!-- IF mychars_points.IS_MAIN -->class="main"<!-- ENDIF --> id="mcp{mychars_points.ID}">
 												<td class="nowrap char hand"><span class="icons">{mychars_points.CHARICON}</span> {mychars_points.CHARNAME}</td>
 												<td>{mychars_points.POOLNAME}</td>
-												<td class="current">{mychars_points.CURRENT}</td>
+												<td class="nowrap current">{mychars_points.CURRENT}</td>
 												<td><a href="{mychars_points.CHARLINK}"><i class="fa fa-external-link fa-lg"></i></a></td>
 											</tr>
 										<!-- END mychars_points -->
@@ -273,6 +273,7 @@
 				
 					<div class="clear noheight">&nbsp;</div>
 				</div>
+				{PORTAL_BLOCK1}
 			</div> <!-- close header-->
 		</header>
 		
@@ -363,6 +364,7 @@
 		</section>
 		
 		<footer id="footer">
+				{PORTAL_BLOCK2}
 				{EQDKP_PLUS_COPYRIGHT}
 		</footer><!-- close footer -->
 	</div><!-- close wrapper -->
