@@ -127,6 +127,7 @@ class config extends gen_class {
 	private function get_dbconfig(){
 		if(!is_object($this->db)){return true;}
 		$this->config_modified = true;
+		$this->config = array();
 		$objQuery = $this->db->query("SELECT * FROM __backup_cnf;");
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc() ){
