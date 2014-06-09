@@ -101,15 +101,16 @@ class config extends gen_class {
 
 	public function get_config($plugin=''){
 		if(count($this->config) < 1){
-			/* $file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+			// load cache file
+			$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
 			if(is_file($file)){
 				include($file);
 				$this->config = $localconf;
-			} */
-			// if(!isset($this->config['server_path'], $this->config['cookie_name'], $this->config['plus_version'])) {
-				// important configs are missing, probably an empty/not available localconf.php ... Load from Database..
+			}
+			if(!isset($this->config['server_path'], $this->config['cookie_name'], $this->config['plus_version'])) {
+				// important configs are missing in cache-file, probably an empty/not available localconf.php ... Load from Database..
 				$this->get_dbconfig();
-			// }
+			}
 		}
 		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
 	}
@@ -123,7 +124,7 @@ class config extends gen_class {
 		return $val;
 	}
 
-	public function get_dbconfig(){
+	private function get_dbconfig(){
 		if(!is_object($this->db)){return true;}
 		$this->config_modified = true;
 		$objQuery = $this->db->query("SELECT * FROM __backup_cnf;");
@@ -227,8 +228,9 @@ class config extends gen_class {
 			$this->config = (is_array($manual) ? $manual : $this->config);
 			$this->save_backup($this->config);
 		}
-		// Build the plain file config
-		/* ksort($this->config);
+		// Build the plain file config cache, reload from database first
+		$this->get_dbconfig();
+		ksort($this->config);
 		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
 		$data = "<?php\n";
 		$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
@@ -238,7 +240,6 @@ class config extends gen_class {
 		$data .= ">";
 		$this->pfh->putContent($file, $data);
 		$this->config_modified = false;
- */
 	}
 	
 	public function flush(){
