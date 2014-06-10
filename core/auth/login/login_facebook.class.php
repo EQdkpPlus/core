@@ -1,5 +1,6 @@
 <?php
- /*
+ use Facebook\FacebookSession;
+/*
  * Project:		EQdkp-Plus
  * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -21,8 +22,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_facebook extends gen_class {
-	public $fb = false;
-	private $js_loaded = false;
+	private $fb_loaded = false;
 	
 	public static $functions = array(
 		'login_button'		=> 'login_button',
@@ -39,75 +39,6 @@ class login_facebook extends gen_class {
 	public function __construct(){
 	}
 	
-	public function init_fb(){
-		if (!is_object($this->fb)){
-			//Init Facebook Api			
-			try {
-				require_once($this->root_path.'libraries/facebook/facebook.php');
-				if (class_exists('Facebook')){
-					$facebook = new Facebook(array(
-						'appId'  => $this->config->get('login_fb_appid'),
-						'secret' => $this->config->get('login_fb_appsecret'),
-						'cookie' => true,
-					));
-					
-					$this->fb = $facebook;
-				}
-			} catch (Exception $e) {
-				$this->core->message('Facebook-Class requires CURL Extension', 'Exception', 'red');
-			}
-		}
-	}
-	
-	public function init_js(){
-		if (!$this->js_loaded){
-			$this->init_fb();
-			if (!$this->fb) return false;
-			
-			$this->tpl->staticHTML('<div id="fb-root"></div>');
-			$this->tpl->add_js("
-				window.fbAsyncInit = function() {
-					FB.init({
-					  appId   : '".$this->fb->getAppId()."',
-					  status  : true, // check login status
-					  cookie  : true, // enable cookies to allow the server to access the session
-					  oauth	  : true,		  
-					  xfbml   : true // parse XFBML
-					});
-				}
-				
-				  $(document).ready(function(){
-					var e = document.createElement('script');
-					e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-					e.async = true;
-					$('body').append(e);	  
-				  });				  
-			");
-			$this->js_loaded = true;
-		}
-	}
-	
-	public function get_me(){
-		$this->init_fb();
-		if (!$this->fb) return false;
-		
-		$user = $this->fb->getUser();
-		if ($user){
-			 try {
-				// Proceed knowing you have a logged in user who's authenticated.
-				$user_profile = $this->fb->api('/me');
-			  } catch (FacebookApiException $e) {
-				error_log($e);
-				$user = null;
-			  }
-		}
-		
-		if ($user && $user_profile){
-			return array('me' => $user_profile, 'uid' => $user);
-		}
-		return false;
-	}
-	
 	public function settings(){
 		$settings = array(
 			'login_fb_appid'	=> array(
@@ -120,14 +51,109 @@ class login_facebook extends gen_class {
 		return $settings;
 	}
 	
+	public function init_fb(){
+		if (!$this->fb_loaded){
+		
+			//Init Facebook Api			
+			try {
+				//Exceptions
+				include_once($this->root_path.'libraries/facebook/FacebookSDKException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookRequestException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookAuthorizationException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookPermissionException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookServerException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookThrottleException.php');
+				
+				include_once($this->root_path.'libraries/facebook/FacebookHttpable.php');
+				include_once($this->root_path.'libraries/facebook/FacebookCanvasLoginHelper.php');
+				include_once($this->root_path.'libraries/facebook/FacebookClientException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookCurl.php');
+				include_once($this->root_path.'libraries/facebook/FacebookCurlHttpClient.php');
+				include_once($this->root_path.'libraries/facebook/FacebookJavaScriptLoginHelper.php');
+				include_once($this->root_path.'libraries/facebook/FacebookOtherException.php');
+				include_once($this->root_path.'libraries/facebook/FacebookPageTabHelper.php');
+				include_once($this->root_path.'libraries/facebook/FacebookRedirectLoginHelper.php');
+				include_once($this->root_path.'libraries/facebook/FacebookRequest.php');
+				include_once($this->root_path.'libraries/facebook/FacebookResponse.php');
+				include_once($this->root_path.'libraries/facebook/FacebookSession.php');
+				
+				include_once($this->root_path.'libraries/facebook/GraphObject.php');
+				include_once($this->root_path.'libraries/facebook/GraphAlbum.php');
+				include_once($this->root_path.'libraries/facebook/GraphLocation.php');
+				include_once($this->root_path.'libraries/facebook/GraphSessionInfo.php');
+				include_once($this->root_path.'libraries/facebook/GraphUser.php');
+				
+				session_start();
+				Facebook\FacebookSession::setDefaultApplication($this->config->get('login_fb_appid'), $this->config->get('login_fb_appsecret'));
+	
+			} catch (Exception $e) {
+				$this->core->message($e->getMessage(), "Facebook Exception", 'error');
+			}
+			
+			$this->init_js();
+			$this->fb_loaded = true;
+		
+		}
+	}
+	
+	public function init_js(){
+			
+		$this->tpl->staticHTML('<div id="fb-root"></div>');
+		$this->tpl->add_js("
+
+			window.fbAsyncInit = function() {
+				FB.init({
+				  appId   : '".$this->config->get('login_fb_appid')."',
+				  status  : true, // check login status
+				  cookie  : true, // enable cookies to allow the server to access the session
+				  xfbml   : true,
+				  version : 'v2.0'
+				});
+			}
+			
+			  $(document).ready(function(){
+				var e = document.createElement('script');
+				e.src = document.location.protocol + '//connect.facebook.net/en_US/sdk.js';
+				e.async = true;
+				$('body').append(e);	  
+			  });				  
+		");
+	}
+	
+	
+	public function getMe($session){
+		if (!$session) return false;
+		
+		// Request for user data
+		try {
+			$request = new Facebook\FacebookRequest( $session, 'GET', '/me' );
+			$response = $request->execute();
+			// Responce
+			$data = $response->getGraphObject();
+		
+			if ($data){
+				return array(
+					'data'	=> $data,
+					'uid'	=> $data->getProperty("id"),
+				);
+			}
+			
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception getMe()", 'error');
+		}
+		
+		return false;
+	}
+	
 	public function login_button(){
 		$this->init_js();
+		
 		$this->tpl->add_js("
 			function facebook_login(){
 				FB.login(function(response) {
 				   if (response.authResponse) {
 					 console.log('Welcome!  Fetching your information.... ');
-					 window.location.href='".$this->controller_path."Login/".$this->SID."&login&lmethod=facebook';
+					if (response.status == 'connected') window.location.href='".$this->controller_path."Login/".$this->SID."&login&lmethod=facebook&act='+response.authResponse.accessToken;
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
@@ -140,12 +166,13 @@ class login_facebook extends gen_class {
 	
 	public function register_button(){
 		$this->init_js();
+		
 		$this->tpl->add_js("		
 			function facebook_register(){
 				FB.login(function(response) {
 				   if (response.authResponse) {
 					 console.log('Welcome!  Fetching your information.... ');
-					 window.location.href='".$this->controller_path."Register/".$this->SID."&register&lmethod=facebook';
+					 if (response.status == 'connected') window.location.href='".$this->controller_path."Register/".$this->SID."&register&lmethod=facebook&act='+response.authResponse.accessToken;
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
@@ -158,22 +185,22 @@ class login_facebook extends gen_class {
 	
 	public function account_button(){
 		$this->init_fb();
-		if (!$this->fb) return false;
 		
-		if ($this->get_me()){
-			$me = $this->get_me();
-			$uid = $me['uid'];
-			$me = $me['me'];
-			return $me['name'].' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
+		$helper = new Facebook\FacebookJavaScriptLoginHelper();
+		$session = $helper->getSession();
+		if ($session){
+			$me = $this->getMe($session);
+			if ($me){
+				$uid = $me['uid'];
+				return $me['data']->getProperty("name")	.' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
+			}
 		} else {
-			$this->init_js();
-			
 			$this->tpl->add_js("		
 			function facebook_connect_acc(){
 				FB.login(function(response) {
 				   if (response.authResponse) {
 					 console.log('Welcome!  Fetching your information.... ');
-					 window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=facebook';
+					  if (response.status == 'connected') window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=facebook&act='+response.authResponse.accessToken;
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
@@ -181,73 +208,125 @@ class login_facebook extends gen_class {
 			}	  
 			");
 			return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>';		
+		
 		}
 	}
 	
 	public function get_account(){
-		if ($this->get_me()){
-			$me = $this->get_me();
-			$uid = $me['uid'];
-			return $uid;
+		$this->init_fb();
+		
+		try {
+			$helper = new Facebook\FacebookJavaScriptLoginHelper();
+			$session = $helper->getSession();
+			if ($session){
+				$me = $this->getMe($session);
+				if ($me){
+					$uid = $me['uid'];
+					return $uid;
+				}
+			} elseif($this->in->get('act') != ""){
+				$session = new FacebookSession($this->in->get('act'));
+				$me = $this->getMe($session);
+				if ($me){
+					$uid = $me['uid'];
+					return $uid;
+				}
+			}
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception get_account()", 'error');
 		}
+
 		return false;
 	}
 	
 	public function pre_register(){
 		$this->init_fb();
-		if (!$this->fb) return false;
-		
-		if ($this->get_me()){
-			$me = $this->get_me();
-			$uid = $me['uid'];
-			$me = $me['me'];
-			
-			switch($me['gender']){
-				case 'male' : $gender = '1'; break;
-				case 'female' : $gender = '2'; break;
-				default: $gender = '0';
+		try {
+			$session = new FacebookSession($this->in->get('act'));
+			$me = $this->getMe($session);
+	
+			if ($me){
+				
+				switch($me['data']->getProperty('gender')){
+					case 'male' : $gender = '1'; break;
+					case 'female' : $gender = '2'; break;
+					default: $gender = '0';
+				}
+				
+				if ($me['data']->getProperty('locale')){
+					list($locale1, $locale2) = explode('_', $me['data']->getProperty('locale'));
+				}
+				
+				return array(
+						'username'			=> $this->in->get('username', ($me['data']->getProperty('name') != null) ? $me['data']->getProperty('name') : ''),
+						'user_email'		=> $this->in->get('user_email', ($me['data']->getProperty('email')  != null) ? $me['data']->getProperty('email') : ''),
+						'user_email2'		=> $this->in->get('user_email2', ($me['data']->getProperty('email')  != null) ? $me['data']->getProperty('email') : ''),
+						'first_name'		=> $this->in->get('first_name', ($me['data']->getProperty('first_name')  != null) ? $me['data']->getProperty('first_name') : ''),
+	
+						'country'			=> $this->in->get('country', $locale2),
+						'user_lang'			=> $this->in->get('user_lang',	$this->config->get('default_lang')),
+						'user_style'		=> $this->in->get('user_style', $this->config->get('default_style')),
+						'user_timezone'		=> $this->in->get('user_timezone',	$this->config->get('timezone')),
+						'user_password1'	=> $this->in->get('new_user_password1'),
+						'user_password2'	=> $this->in->get('new_user_password2'),
+						'auth_account'		=> $me['uid'],
+				);
 			}
-			
-			if ($me['locale']){
-				list($locale1, $locale2) = explode('_', $me['locale']);
-			}
-
-			return array(
-				'username'			=> $this->in->get('username', isset($me['name']) ? $me['name'] : ''),
-				'user_email'		=> $this->in->get('user_email', isset($me['email']) ? $me['email'] : ''),
-				'user_email2'		=> $this->in->get('user_email2', isset($me['email']) ? $me['email'] : ''),
-				'first_name'		=> $this->in->get('first_name', isset($me['first_name']) ? $me['first_name'] : ''),
-				'gender'			=> $this->in->get('gender', $gender),
-				'country'			=> $this->in->get('country', $locale2),
-				'user_lang'			=> $this->in->get('user_lang',	$this->config->get('default_lang')),
-				'user_style'		=> $this->in->get('user_style', $this->config->get('default_style')),
-				'user_timezone'		=> $this->in->get('user_timezone',	$this->config->get('timezone')),
-				'user_password1'	=> $this->in->get('new_user_password1'),
-				'user_password2'	=> $this->in->get('new_user_password2'),
-				'auth_account'		=> $uid
-			);
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception preRegister()", 'error');
 		}
+
 		return false;
 	}
 	
 	public function after_register(){
-		if ($this->get_me()){
-			$me = $this->get_me();
-			$_uid = $me['uid'];
-			$uid = '';
-			$me = $me['me'];
-			$out = false;
-			if ($me['birthday']){
-				list ($m, $d, $y) = explode('/', $me['birthday']);
-				$out['birthday'] = $this->time->mktime(0,0,0,$m,$d,$y);
+		$this->init_fb();
+		
+		$out = false;
+		try {
+			$helper = new Facebook\FacebookJavaScriptLoginHelper();
+			$session = $helper->getSession();
+			if ($session){
+				$me = $this->getMe($session);
+				if ($me){
+
+					//Gender
+					switch($me['data']->getProperty('gender')){
+						case 'male' : $gender = '1'; break;
+						case 'female' : $gender = '2'; break;
+						default: $gender = '0';
+					}
+					
+					//Birthday
+					if ($me['data']->getProperty("birthday")){
+						list ($m, $d, $y) = explode('/', $me['data']->getProperty("birthday"));
+						$out['birthday'] = $this->time->mktime(0,0,0,$m,$d,$y);
+					}
+					
+					//Check Email
+					if ($this->in->get('user_email') == $me['data']->getProperty('email')){
+						$out['user_active'] = 1;
+					}
+					
+					//First Name
+					if($me['data']->getProperty('first_name')  != null)  $out['first_name'] = $me['data']->getProperty('first_name');
+					//Last Name
+					if($me['data']->getProperty('last_name')  != null)  $out['last_name'] = $me['data']->getProperty('last_name');
+					
+					//Country
+					if ($me['data']->getProperty('locale')){
+						list($locale1, $locale2) = explode('_', $me['data']->getProperty('locale'));
+						$out['country'] = $locale2;
+					}
+					
+					return $out;
+				}
 			}
-						
-			if ($this->in->get('user_email') == $me['email']){
-				$out['user_active'] = 1;
-			}
-	
-			return $out;
+				
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception afterRegister()", 'error');
 		}
+
 		return false;
 	}
 	
@@ -260,27 +339,33 @@ class login_facebook extends gen_class {
 	* @return bool/array	
 	*/	
 	public function login($strUsername, $strPassword, $boolUseHash = false){
+		$this->init_fb();
+		
 		$blnLoginResult = false;
-				
-		if ($this->get_me() && $strPassword == ''){
-			$me = $this->get_me();
-			$uid = $me['uid'];
-			$me = $me['me'];
+		try {
+			$session = new FacebookSession($this->in->get('act'));
 			
-			$userid = $this->pdh->get('user', 'userid_for_authaccount', array($uid));
-			if ($userid){
-				$userdata = $this->pdh->get('user', 'data', array($userid));
-				if ($userdata){
-					list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-					return array(
-						'status'		=> 1,
-						'user_id'		=> $userdata['user_id'],
-						'password_hash'	=> $strPwdHash,
-						'autologin'		=> true,
-						'user_login_key' => $userdata['user_login_key'],
-					);
+			$me = $this->getMe($session);
+
+			if ($me && $strPassword == ''){
+				$userid = $this->pdh->get('user', 'userid_for_authaccount', array($me['uid'], 'facebook'));
+				if ($userid){
+					$userdata = $this->pdh->get('user', 'data', array($userid));
+					if ($userdata){
+						list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
+						return array(
+							'status'		=> 1,
+							'user_id'		=> $userdata['user_id'],
+							'password_hash'	=> $strPwdHash,
+							'autologin'		=> true,
+							'user_login_key' => $userdata['user_login_key'],
+						);
+					}
 				}
 			}
+			
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception login()", 'error');
 		}
 		
 		return false;
@@ -293,14 +378,21 @@ class login_facebook extends gen_class {
 	*/
 	public function logout(){
 		$this->init_fb();
-		if (!$this->fb) return true;
-		
-		if ($this->get_me()){
-			$me = $this->get_me();
-			$uid = $me['uid'];
-			$me = $me['me'];
-			redirect($this->fb->getLogoutUrl(), false, true);
-		}		
+		try {
+			$helper = new Facebook\FacebookJavaScriptLoginHelper();
+			$session = $helper->getSession();
+			if ($session){
+				$me = $this->getMe($session);
+				if ($me){
+					$helper = new Facebook\FacebookRedirectLoginHelper( $this->env->link.$this->controller_path_plain );
+					redirect($helper->getLogoutUrl($session, $this->env->link.$this->controller_path_plain.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout")), false, true);	
+				}
+			}
+			
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception logout()", 'error');
+		}
+			
 		return true;
 	}
 	
@@ -311,16 +403,26 @@ class login_facebook extends gen_class {
 	* @return bool
 	*/
 	public function autologin($arrCookieData){
-		if ($this->get_me()){
-			$me = $this->get_me();
-			$uid = $me['uid'];
-			$me = $me['me'];
+		$this->init_fb();
+		try {
+			$helper = new Facebook\FacebookJavaScriptLoginHelper();
+			$session = $helper->getSession();
 			
-			$userid = $this->pdh->get('user', 'userid_for_authaccount', array($uid));
-			if ($userid){
-				$userdata = $this->pdh->get('user', 'data', array($userid));
-				return ($userdata) ? $userdata : false;
-			}	
+			if ($session){
+				$me = $this->getMe($session);
+				if ($me){
+					$uid = $me['uid'];
+					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($uid, 'facebook'));
+					if ($userid){
+						$userdata = $this->pdh->get('user', 'data', array($userid));
+						return ($userdata) ? $userdata : false;
+					}
+					
+				}
+			}
+			
+		} catch(Exception $e){
+			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception autologin()", 'error');
 		}
 		
 		return false;

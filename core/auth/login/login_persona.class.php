@@ -145,7 +145,7 @@ initLogin();
 			$verifyAssertion = $this->verify_assertion($this->in->get('assertion'));
 			
 			if ($verifyAssertion) {
-					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($verifyAssertion));
+					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($verifyAssertion, 'persona'));
 					if ($userid){
 						$userdata = $this->pdh->get('user', 'data', array($userid));
 						if ($userdata){

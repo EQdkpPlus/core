@@ -151,7 +151,7 @@ class login_openid extends gen_class {
 			} else {
 			
 				if ($this->oid->validate() ){
-					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($this->oid->identity));
+					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($this->oid->identity, 'openid'));
 					if ($userid){
 						$userdata = $this->pdh->get('user', 'data', array($userid));
 						if ($userdata){

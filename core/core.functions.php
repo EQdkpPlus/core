@@ -71,6 +71,15 @@ function sdir( $path='.', $mask='*', $strip='', $nocache=0 ){
 	return ($sdir);
 }
 
+
+function includeLibraries($path, $mask){
+	$arrFiles = sdir($path, $mask);
+	foreach($arrFiles as $file){
+		include($path.'/'.$file);
+	}
+}
+
+
 /**
  * Rundet je nach Einstellungen im Eqdkp Plus Admin Menu die DKP Werte
  *

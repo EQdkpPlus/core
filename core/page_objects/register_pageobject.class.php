@@ -173,7 +173,7 @@ class register_pageobject extends pageobject {
 		//Add auth-account
 		if ($this->in->exists('auth_account')){
 			$auth_account = $this->crypt->decrypt($this->in->get('auth_account'));
-			if ($this->pdh->get('user', 'check_auth_account', array($auth_account))){
+			if ($this->pdh->get('user', 'check_auth_account', array($auth_account, $this->in->get('lmethod')))){
 				$this->pdh->put('user', 'add_authaccount', array($user_id, $auth_account, $this->in->get('lmethod')));
 			}
 		}

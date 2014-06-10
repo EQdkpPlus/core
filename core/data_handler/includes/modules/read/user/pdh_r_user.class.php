@@ -128,7 +128,7 @@ if (!class_exists("pdh_r_user")){
 			return (is_array(search_in_array($email, $this->users, true, 'user_email_clean'))) ? 'false' : 'true';
 		}
 
-		public function get_check_auth_account($name){
+		public function get_check_auth_account($name, $strMethod){
 			return (is_array(search_in_array($name, $this->users, true, 'auth_account'))) ? false : true;
 		}
 		
@@ -141,9 +141,9 @@ if (!class_exists("pdh_r_user")){
 			return ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 		}
 
-		public function get_userid_for_authaccount($strAuthAccount){
+		public function get_userid_for_authaccount($strAuthAccount, $strMethod){
 			if ($strAuthAccount != ""){
-				$arrResult = search_in_array($strAuthAccount, $this->users, true, 'auth_account');
+				$arrResult = search_in_array($strAuthAccount, $this->users, true, $strMethod);
 				if (is_array($arrResult)){
 					$arrResultKeys = array_keys($arrResult);
 					return $arrResultKeys[0];

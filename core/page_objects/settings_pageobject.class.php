@@ -84,7 +84,7 @@ class settings_pageobject extends pageobject {
 	public function add_authaccount() {
 		$strMethod = $this->in->get('lmethod');
 		$account = $this->user->handle_login_functions('get_account', $strMethod);
-		if ($strMethod && !is_array($account) && $this->pdh->get('user', 'check_auth_account', array($account))){
+		if ($strMethod && !is_array($account) && $this->pdh->get('user', 'check_auth_account', array($account, $strMethod))){
 			$this->pdh->put('user', 'add_authaccount', array($this->user->id, $account, $strMethod));
 			$this->pdh->process_hook_queue();
 			$this->user->data['auth_account'][$strMethod] = $account;
@@ -285,10 +285,12 @@ class settings_pageobject extends pageobject {
 			if (isset($options['connect_accounts']) && $options['connect_accounts']){
 				if (isset($this->user->data['auth_account'][$method]) && strlen($this->user->data['auth_account'][$method])){
 					$display = $this->user->handle_login_functions('display_account', $method, array($this->user->data['auth_account'][$method]));
-					if (is_array($display)) $display = $this->user->data['auth_account'][$method];
+					if (is_array($display) || $display == "") {
+						$display = $this->user->data['auth_account'][$method];
+					}
 					$field_opts = array(
 						'dir_lang'	=> ($this->user->lang('login_'.$method)) ? $this->user->lang('login_'.$method) : ucfirst($method),
-						'text'		=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="{L_delte}"></i></a>',
+						'text'		=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="'.$this->user->lang('delete').'"></i></a>',
 						'help'		=> 'auth_accounts_help',
 					);
 				} else {
