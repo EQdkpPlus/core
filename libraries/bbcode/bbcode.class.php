@@ -424,6 +424,56 @@ if (!class_exists("bbcode")) {
 
 			return $text;
 		}
+		
+		public function remove_bbcode($text){
+			$text = trim($text);
+		
+			// BBCode to find...
+			$in = array(
+					'/\[code\](.*?)\[\/code\]/ms',
+					'/\[b\](.*?)\[\/b\]/msi',
+					'/\[i\](.*?)\[\/i\]/msi',
+					'/\[u\](.*?)\[\/u\]/msi',
+					'/\[quote](.*?)\[\/quote\]/msi',
+					'/\[center](.*?)\[\/center\]/msi',
+					'/\[left](.*?)\[\/left\]/msi',
+					'/\[right](.*?)\[\/right\]/msi',
+					'/\[list\](.*?)\[\/list\]/msi',
+					'/\[\*\]\s?(.*?)\[br\]/msi',
+					'/\[br\]/msi',
+					'/&#10;/msi',
+					'/\[img\](.*?)\[\/img\]/msi',
+					'/\[url\="?(.*?)"?\](.*?)\[\/url\]/msi',
+					'/\[color\="?(.*?)"?\](.*?)\[\/color\]/msi',
+					'/\[size\="?(.*?)"?\](.*?)\[\/size\]/msi',
+					'/\[list\=(.*?)\](.*?)\[\/list\]/msi'
+			);
+		
+			$out = array(
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'\1',
+					'',
+					'',
+					'\1',
+					'\2',
+					'\2',
+					'\2',
+					
+			);
+			
+			$text = preg_replace($in, $out, $text);
+		
+		
+			return $text;
+		}
 
 	}
 }
