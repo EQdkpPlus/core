@@ -826,7 +826,7 @@ class calendarevent_pageobject extends pageobject {
 			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 40)),
 			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->simpleBuild('character'), '', false, false, true))) : '',
 			'RAIDVALUE'				=> ($eventdata['extension']['raid_value'] > 0) ? $eventdata['extension']['raid_value'] : '0',
-			'RAIDNOTE'				=> ($eventdata['notes']) ? nl2br($eventdata['notes']) : '',
+			'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'RAID_ADDEDBY'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'RAIDDATE'				=> $this->time->user_date($eventdata['timestamp_start']),
 			'RAIDTIME_START'		=> $this->time->user_date($eventdata['timestamp_start'], false, true),
