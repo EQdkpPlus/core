@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date: 2014-01-26 17:17:59 +0100 (So, 26 Jan 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy_leon $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13952 $
+ * @version		$Rev$
  *
- * $Id: manage_settings.php 13952 2014-01-26 16:17:59Z hoofy_leon $
+ * $Id$
  */
 
 define('EQDKP_INC', true);

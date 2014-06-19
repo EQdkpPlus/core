@@ -5,15 +5,15 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2009
-* Date:			$Date: 2013-05-23 22:19:25 +0200 (Do, 23 Mai 2013) $
+* Date:			$Date$
 * -----------------------------------------------------------------------
-* @author		$Author: godmod $
+* @author		$Author$
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkpplus
-* @version		$Rev: 13378 $
+* @version		$Rev$
 *
-* $Id: manage_menus.php 13378 2013-05-23 20:19:25Z godmod $
+* $Id$
 */
 
 //tbody not allowed withoud thead, 
