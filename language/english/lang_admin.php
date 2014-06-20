@@ -915,6 +915,7 @@ $lang = array(
 	"apa_arg_value" => 'Previous value',
 	"apa_arg_date" => 'Date of creation',
 	"apa_arg_ref_date" => 'Date of calculation',
+	"apa_arg_ref_val" => 'Original value',
 	"apa_arg_decay_times" => 'Amount of decays',
 	"apa_func_example" => 'Insert calculation example',
 	"apa_func_example_choose" => 'Select calculation example',
