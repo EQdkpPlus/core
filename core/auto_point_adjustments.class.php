@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
 		
 		private $apa_func_file		= 'apafunc.php';
 		private $calc_func			= array();
-		private $func_args			= array('value', 'ref_date', 'date');
+		private $func_args			= array('value', 'ref_date', 'date', 'ref_val');
 		private $valid_symbols		= array('+', '-', '*', '/', ',', '(', ')', '?', ':', '==', '<=', '>=', '>', '<', '!=', '!', '&&', '||', '%'); //symbols left of a symbol should not occur in symbols to the right of them
 		
 		private $decayed_pools		= array();
