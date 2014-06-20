@@ -136,14 +136,26 @@ class viewcharacters extends page_generic {
 		// the profile fields
 		if(!$profile_owntpl){
 			$pfields	= $this->pdh->get('profile_fields', 'fields');
+			$category	= array();
+			$this->jquery->Tab_header('profile_field_data', true);
 			if(is_array($pfields) && count($pfields) > 0){
 				foreach($pfields as $pfname=>$pfoption){
 					// only relevant data!
-					if($pfoption['category'] == 'character' && $pfoption['enabled'] == '1'){
-						$this->tpl->assign_block_vars('pfield_data', array(
-							'NAME'		=> $pfoption['language'],
-							'VALUE'		=> $this->pdh->get('member', 'html_profile_field', array($this->url_id, $pfname))
-						));
+					$category[$pfoption['category']][$pfname]	= $pfoption;
+				}
+				foreach($category as $catname=>$catvalues){
+					$this->tpl->assign_block_vars('cat_data', array(
+						'NAME'		=> ($this->game->glang('uc_cat_'.$catname)) ? $this->game->glang('uc_cat_'.$catname) : $this->user->lang('uc_cat_'.$catname),
+						'ID'		=> 'id_'.$catname
+					));
+					
+					foreach($catvalues as $pfname=>$pfoption){
+						if($pfoption['category'] == $catname && $pfoption['enabled'] == '1'){
+							$this->tpl->assign_block_vars('cat_data.pfield_data', array(
+								'NAME'		=> $pfoption['language'],
+								'VALUE'		=> $this->pdh->get('member', 'html_profile_field', array($this->url_id, $pfname))
+							));
+						}
 					}
 				}
 				$this->tpl->assign_var('S_PFIELDS', true);

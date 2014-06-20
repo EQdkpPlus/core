@@ -5,15 +5,26 @@
 	<div class="charguild">{DATA_GUILDTAG}</div>
 </div>
 <!-- IF S_PFIELDS -->
-<div class="profile_information">
-	<fieldset class="settings mediumsettings">
-		<!-- BEGIN pfield_data -->
-		<dl>
-			<dt><label>{pfield_data.NAME}</label></dt>
-			<dd>{pfield_data.VALUE}</dd>
-		</dl>
-		<!-- END pfield_data -->
-	</fieldset>
+<div class="profile_information" id="profile_field_data">
+	<ul>
+		<!-- BEGIN cat_data -->
+		<li><a href='#{cat_data.ID}'><span>{cat_data.NAME}</span></a></li>
+		<!-- END cat_data -->
+	</ul>
+	
+	<!-- BEGIN cat_data -->
+	<div id="{cat_data.ID}">
+		<fieldset class="settings mediumsettings">
+			<!-- BEGIN pfield_data -->
+			<dl>
+				<dt><label>{cat_data.pfield_data.NAME}</label></dt>
+				<dd>{cat_data.pfield_data.VALUE}</dd>
+			</dl>
+			<!-- END pfield_data -->
+		</fieldset>
+	</div>
+	<!-- END cat_data -->
+	
 </div>
 <!-- ENDIF -->
 
@@ -35,6 +46,20 @@
 		<li><a href='#fragment-5'><span>{L_tab_attendance}</span></a></li>
 		<li><a href='#fragment-6'><span><img src="images/global/admin_flag.png" /> {L_tab_notes}</span></a></li>
 	</ul>
+
+	<!-- ALL PROFILE FIELDS TABLE -->
+	<!-- IF CUSTOM_FIELDS -->
+	<div id="fragment-2-0">
+		<fieldset class="settings mediumsettings">
+			<!-- BEGIN pfield_custom -->
+			<dl>
+				<dt><label>{pfield_custom.NAME}</label></dt>
+				<dd>{pfield_custom.VALUE}</dd>
+			</dl>
+			<!-- END pfield_custom -->
+		</fieldset>
+	</div>
+	<!-- ENDIF -->
 
 	<!-- RAIDS TABLE -->
 	<div id="fragment-2">
