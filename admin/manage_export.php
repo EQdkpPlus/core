@@ -30,7 +30,7 @@ class Manage_Export extends page_generic {
 	}
 
 	public function __construct(){
-		$this->user->check_auth('a_');
+		$this->user->check_auth('a_export_data');
 		$handler = array(
 			'ajax_export' => array('process' => 'ajax_export'),
 		);
