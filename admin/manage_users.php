@@ -159,16 +159,29 @@ class Manage_Users extends page_generic {
 
 			$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
 			
+			$plugin_settings = array();
+			if (is_array($this->pm->get_menus('settings'))){
+				foreach ($this->pm->get_menus('settings') as $plugin => $options){
+			
+					foreach ($values as $key=>$setting){
+						$plugin_settings[] = $key;
+					}
+				}
+			}
+			
 			//copy all other values to appropriate array
 			$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
 			$privArray = array();
 			$customArray = array();
+			$pluginArray = array();
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
 				if(in_array($name, user_core::$privFields)) 
 					$privArray[$name] = $value;
 				elseif(in_array($name, user_core::$customFields)) 
 					$customArray[$name] = $value;
+				elseif(in_array($name, $plugin_settings))
+					$pluginArray[$name] = $value;
 				else 
 					$query_ary[$name] = $value;
 			}
@@ -181,24 +194,8 @@ class Manage_Users extends page_generic {
 			
 			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
+			$query_ary['plugin_settings']		= serialize($pluginArray);
 			unset($query_ary['send_new_pw']);
-			
-			/* NYI - TODO
-			$plugin_settings = array();
-			if (is_array($this->pm->get_menus('settings'))){
-				foreach ($this->pm->get_menus('settings') as $plugin => $values){
-					
-					foreach ($values as $key=>$setting){
-					if ($key == 'icon' || $key == 'name') continue;
-						$name = $setting['name'];
-						$setting['name'] = $plugin.':'.$setting['name'];
-						$setting['plugin'] = $plugin;
-						$plugin_settings[$plugin][$name] = $this->html->widget_return($setting);
-					}
-				}
-			}
-			$query_ary['plugin_settings']	= serialize($plugin_settings);
-			*/
 			
 			$this->pdh->put('user', 'update_user', array($user_id, $query_ary));
 			$this->pdh->put('user', 'activate', array($user_id, $this->in->get('user_active', 0)));
@@ -213,8 +210,19 @@ class Manage_Users extends page_generic {
 				'user_email'			=> $this->crypt->encrypt($values['user_email'])
 			);
 			
+			$plugin_settings = array();
+			if (is_array($this->pm->get_menus('settings'))){
+				foreach ($this->pm->get_menus('settings') as $plugin => $options){
+			
+					foreach ($values as $key=>$setting){
+						$plugin_settings[] = $key;
+					}
+				}
+			}
+			
 			$privArray = array();
 			$customArray = array();
+			$pluginArray = array();
 			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter');
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
@@ -222,6 +230,8 @@ class Manage_Users extends page_generic {
 					$privArray[$name] = $value;
 				elseif(in_array($name, user_core::$customFields)) 
 					$customArray[$name] = $value;
+				elseif(in_array($name, $plugin_settings))
+					$pluginArray[$name] = $value;
 				else 
 					$query_ar[$name] = $value;
 			}
@@ -232,26 +242,10 @@ class Manage_Users extends page_generic {
 				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
 			}
 			
-			
-			$plugin_settings = array();
-			/* NYI - TODO
-			if (is_array($this->pm->get_menus('settings'))){
-				foreach ($this->pm->get_menus('settings') as $plugin => $values){
-					
-					foreach ($values as $key=>$setting){
-					if ($key == 'icon' || $key == 'name') continue;
-						$name = $setting['name'];
-						$setting['name'] = $plugin.':'.$setting['name'];
-						$setting['plugin'] = $plugin;
-						$plugin_settings[$plugin][$name] = $this->html->widget_return($setting);
-					}
-				}
-			}
-			*/
 
 			$query_ar['privacy_settings']	= serialize($privArray);
 			$query_ar['custom_fields']		= serialize($customArray);
-			$query_ar['plugin_settings']	= serialize($plugin_settings);
+			$query_ar['plugin_settings']	= serialize($pluginArray);
 			$user_id = $this->pdh->put('user', 'insert_user', array($query_ar, true, false));
 		}
 
@@ -582,6 +576,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			$user_data = $this->pdh->get('user', 'data', array($user_id));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'privacy_settings', array($user_id)));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'custom_fields', array($user_id)));
+			$user_data = array_merge($user_data, $this->pdh->get('user', 'plugin_settings', array($user_id)));
 		}
 		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br />'.((isset($user_data['username'])) ? sanitize($user_data['username']) : '').'<br /><label><input type="checkbox" name="delete_associated_members" value="1"> '. $this->user->lang('delete_associated members').'</label>', '', true, array('height'	=> 300, 'custom_js' => "if($('input[name=delete_associated_members]').is(':checked')){ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID+'&del_assocmem=1';}else{ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID;}"));
 		$this->jquery->Tab_header('usersettings_tabs');
@@ -616,39 +611,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 
 		// Output
 		$this->form->output($user_data);
-	
-		/* NYI - TODO
-		//Generate Plugin-Tabs
-		if (is_array($this->pm->get_menus('settings'))){
-			foreach ($this->pm->get_menus('settings') as $plugin => $values){
-				$name	= ($values['name']) ? $values['name'] : $this->user->lang($plugin);
 
-				$this->tpl->assign_block_vars('plugin_settings_row', array(
-					'KEY'		=> $plugin,
-					'PLUGIN'	=> $name,
-					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'fa-puzzle-piece', 'fa-lg', $image_path),
-				));
-				unset($values['name'], $values['icon']);
-				$this->tpl->assign_block_vars('plugin_usersettings_div', array(
-					'KEY'		=> $plugin,
-					'PLUGIN'	=> $name,
-				));
-
-				foreach ($values as $key=>$setting){
-					$help				= (isset($setting['help']) AND $setting['help']) ? ( ($this->user->lang($setting['help'])) ? $this->user->lang($setting['help']) : $setting['help'] ) : '';
-					$setting['value']	= $setting['selected'] = $this->user->data['plugin_settings'][$plugin][$setting['name']];
-					$setting['name']	= $plugin.'['.$setting['name'].']';
-					$setting['plugin']	= $plugin;
-
-					$this->tpl->assign_block_vars('plugin_usersettings_div.plugin_usersettings', array(
-						'NAME'	=> $this->user->lang($setting['language']),
-						'FIELD'	=> $this->html->widget($setting),
-						'HELP'	=> $help,
-						'S_TH'	=> ($setting['type'] == 'tablehead') ? true : false,
-					));
-				}
-			}
-		}*/
 
 		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 3+count($this->pm->get_menus('settings')) : 0)));
 
@@ -680,6 +643,19 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		// add send-new-password-button (if editing user)
 		if($user_id > 0) {
 			$this->form->add_field('send_new_pw', array('type' => 'button', 'buttontype' => 'submit', 'class' => 'mainoption bi_mail', 'buttonvalue' => 'user_sett_f_send_new_pw', 'tolang' => true), 'registration_info', 'registration_info');
+		}
+		
+		//Plugin Settings
+		if (is_array($this->pm->get_menus('settings'))){
+			$arrPluginSettings = array();
+			foreach ($this->pm->get_menus('settings') as $plugin => $values){
+				unset($values['name'], $values['icon']);
+				foreach($values as $key => $setting){
+					$arrPluginSettings[$plugin][$key] = $setting;
+				}
+		
+			}
+			$this->form->add_tabs($arrPluginSettings);
 		}
 	}
 }

@@ -158,10 +158,21 @@ class settings_pageobject extends pageobject {
 		$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
 		$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($this->user->id));
 		
+		$plugin_settings = array();
+		if (is_array($this->pm->get_menus('settings'))){
+			foreach ($this->pm->get_menus('settings') as $plugin => $options){
+		
+				foreach ($values as $key=>$setting){
+					$plugin_settings[] = $key;
+				}
+			}
+		}
+		
 		//copy all other values to appropriate array
 		$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
 		$privArray = array();
 		$customArray = array();
+		$pluginArray = array();
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
 			if (strpos($name, "auth_account_") === 0) continue;
@@ -170,6 +181,8 @@ class settings_pageobject extends pageobject {
 				$privArray[$name] = $value;
 			elseif(in_array($name, user_core::$customFields)) 
 				$customArray[$name] = $value;
+			elseif(in_array($name, $plugin_settings))
+				$pluginArray[$name] = $value;
 			else 
 				$query_ary[$name] = $value;
 		}
@@ -182,23 +195,8 @@ class settings_pageobject extends pageobject {
 		
 		$query_ary['privacy_settings']		= serialize($privArray);
 		$query_ary['custom_fields']			= serialize($customArray);
+		$query_ary['plugin_settings']		= serialize($pluginArray);
 
-		/* NYI - TODO
-		$plugin_settings = array();
-		if (is_array($this->pm->get_menus('settings'))){
-			foreach ($this->pm->get_menus('settings') as $plugin => $values){
-				
-				foreach ($values as $key=>$setting){
-				if ($key == 'icon' || $key == 'name') continue;
-					$name = $setting['name'];
-					$setting['name'] = $plugin.':'.$setting['name'];
-					$setting['plugin'] = $plugin;
-					$plugin_settings[$plugin][$name] = $this->html->widget_return($setting);
-				}
-			}
-		}
-		$query_ary['plugin_settings']	= serialize($plugin_settings);
-		*/
 		
 		$blnResult = $this->pdh->put('user', 'update_user', array($this->user->id, $query_ary));
 		$this->pdh->process_hook_queue();
@@ -214,7 +212,7 @@ class settings_pageobject extends pageobject {
 		
 		$this->create_form();
 		
-		$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields']);
+		$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings']);
 
 		// Output
 		$this->form->output($userdata);
@@ -304,38 +302,19 @@ class settings_pageobject extends pageobject {
 			}
 		}
 		
-		//Generate Plugin-Tabs - NYI
-		/* TODO
+		//Plugin Settings
 		if (is_array($this->pm->get_menus('settings'))){
+			$arrPluginSettings = array();
 			foreach ($this->pm->get_menus('settings') as $plugin => $values){
-				$name = ($values['name']) ? $values['name'] : $this->user->lang($plugin);
-
-				$this->tpl->assign_block_vars('plugin_settings_row', array(
-					'KEY'		=> $plugin,
-					'PLUGIN'	=> $name,
-					'ICON'		=> $this->core->icon_font((isset($values['icon'])) ? $values['icon'] : 'fa-puzzle-piece', 'fa-lg', $image_path),
-				));
 				unset($values['name'], $values['icon']);
-				$this->tpl->assign_block_vars('plugin_usersettings_div', array(
-					'KEY'		=> $plugin,
-					'PLUGIN'	=> $name,
-				));
-
-				foreach ($values as $key=>$setting){
-					$helpstring = ($this->user->lang(@$setting['help'])) ? $this->user->lang(@$setting['help']) : @$setting['help'];
-					$help = (isset($setting['help'])) ? " ".$helpstring : '';
-					$setting['value']	= $setting['selected'] = @$this->user->data['plugin_settings'][$plugin][$setting['name']];
-					$setting['name'] = $plugin.'['.((isset($setting['name'])) ? $setting['name'] : '').']';
-					$setting['plugin'] = $plugin;
-					$this->tpl->assign_block_vars('plugin_usersettings_div.plugin_usersettings', array(
-						'NAME'	=> $this->user->lang($setting['language']),
-						'FIELD'	=> $this->html->widget($setting),
-						'HELP'	=> $help,
-						'S_TH'	=> ($setting['type'] == 'tablehead') ? true : false,
-					));
+				foreach($values as $key => $setting){
+					$arrPluginSettings[$plugin][$key] = $setting; 
 				}
+				
 			}
-		}*/
+			$this->form->add_tabs($arrPluginSettings);
+		}
+		
 	}
 
 }
