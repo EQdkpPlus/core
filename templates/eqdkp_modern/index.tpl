@@ -88,7 +88,7 @@
 					});					
 				});
 				
-				$('ul.mainmenu li.link_li_indexphp a.link_indexphp').html('');
+				$('ul.mainmenu li.link_li_indexphp a.link_indexphp, ul.mainmenu li.link_li_entry_home a.link_entry_home').html('');
 				$('ul.mainmenu').addClass('sf-menu');
 				jQuery('ul.mainmenu').superfish({
 						delay:		400,
