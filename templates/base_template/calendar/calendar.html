@@ -124,12 +124,14 @@
 					});
 				}
 			},
-			eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+			eventResize: function(event,delta,revertFunc) {
 				// Save after event-drop is finished, use ajax() cause of error callback
+				var minutesdelta = (parseInt(delta.hours())*60)+parseInt(delta.minutes());
+				console.log(minutesdelta);
 				$.ajax({
 					type: "POST",
 					url: '{U_CALENDAR}&link_hash={CSRF_RESIZE_TOKEN}',
-					data: { "resize": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "eventid": event.eventid },
+					data: { "resize": true, "daydelta": delta.days(), "minutedelta": minutesdelta, "eventid": event.eventid },
 					error: function(){
 						revertFunc();
 					},
@@ -138,12 +140,14 @@
 					}
 				});
 			},
-			eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
+			eventDrop: function(event,delta,revertFunc) {
 				// Save after event-drop is finished, use ajax() cause of error callback
+				var minutesdelta = (parseInt(delta.hours())*60)+parseInt(delta.minutes());
+				var allDay			= ($.fullCalendar.moment(event.start).hasTime()) ? false : true;
 				$.ajax({
 					type: "POST",
 					url: '{U_CALENDAR}&link_hash={CSRF_MOVE_TOKEN}',
-					data: { "move": true, "daydelta": dayDelta, "minutedelta": minuteDelta, "allday": allDay, "eventid": event.eventid },
+					data: { "move": true, "daydelta": delta.days(), "minutedelta": minutesdelta, "allday": allDay, "eventid": event.eventid },
 					error: function(){
 						revertFunc();
 					},
