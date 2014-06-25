@@ -290,6 +290,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				break;
 
 				case 'dropdown':
+					//Check if Value is in dropdown options
+					
+					if (!in_array($strMemberValue, array_keys($arrField['data']['options']))) return '';
+				
 					if ($strImage && !$nameOnly){
 						$out = '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
 						if ($arrField['options_language'] != ""){
@@ -302,6 +306,16 @@ if ( !class_exists( "pdh_r_member" ) ) {
 							if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
 						}
 					} else {
+						if ($arrField['options_language'] != ""){
+							if (strpos($arrField['options_language'], 'lang:') === 0){
+								$arrSplitted = explode(':', $arrField['options_language']);
+								$arrGlang = $this->game->glang($arrSplitted[1]);				
+								$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+								
+							} else $arrLang = $this->game->get($arrField['options_language']);
+							if (isset($arrLang[$strMemberValue])) return $arrLang[$strMemberValue];
+						}
+					
 						$strType = $this->game->get_type_for_name($profile_field);
 						if ($strType){
 							return ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberValue) : $this->game->decorate($strType, $strMemberValue, $this->data[$member_id]);
@@ -664,7 +678,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			if (is_array($this->data)){
 				foreach($this->data as $id => $value) {
 					if(stripos($value['name'], $search_value) !== false OR
-					stripos($value['class_name'], $search_value) !== false OR
+					stripos($this->get_classname($id), $search_value) !== false OR
 					stripos($value['race_name'], $search_value) !== false OR
 					stripos($this->get_rankname($id), $search_value) !== false) {
 
