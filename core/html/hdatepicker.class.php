@@ -43,11 +43,13 @@ class hdatepicker extends html {
 	public $allow_empty = false;
 	
 	private $out = '';
+	private $php_format = '';
+	private $php_timeformat = '';
 	private $all_options = array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'timepicker', 'return_function');
 	
 	protected function _construct() {	
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
-			$this->value = $this->time->date($this->calendarformat(), $this->value);
+			$this->value = $this->time->date($this->js_calendarformat(), $this->value);
 		}
 		$out = '<span class="input-icon-append"><input type="text" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -58,8 +60,16 @@ class hdatepicker extends html {
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		
-		if(isset($this->format)) $this->format = $this->time->translateformat2js($this->format);
-		if(isset($this->timeformat)) $this->timeformat = $this->time->translateformat2js($this->timeformat);
+		if(isset($this->format)) {
+			$this->php_format = $this->format;
+			$this->format = $this->time->translateformat2js($this->format);
+		}
+		
+		if(isset($this->timeformat)) {
+			$this->php_timeformat = $this->timeformat;
+			$this->timeformat = $this->time->translateformat2js($this->timeformat);
+		}
+		
 		//copy options
 		$opts = array();
 		foreach($this->all_options as $opt) {
@@ -77,7 +87,7 @@ class hdatepicker extends html {
 	public function inpval() {
 		$input = $this->in->get($this->name, '');
 		if($this->allow_empty && empty($input)) return null;
-		return $this->time->fromformat($input, $this->calendarformat());
+		return $this->time->fromformat($input, $this->php_calendarformat());
 	}
 			
 	/**
@@ -86,7 +96,16 @@ class hdatepicker extends html {
 	 * @array 	$options		Option-Array in HTML-Widget format
 	 * @return 	dateformat
 	 */
-	public function calendarformat() {
+	public function php_calendarformat() {
+		// Load default settings if no custom ones are defined..
+		if(!isset($this->php_format)) $this->php_format = $this->user->style['date_notime_short'];
+		if(!isset($this->php_timeformat)) $this->php_timeformat = $this->user->style['time'];
+		$format = $this->php_format;
+		if(isset($this->timepicker)) $format .= ' '.$this->php_timeformat;
+		return $format;
+	}
+	
+	public function js_calendarformat(){
 		// Load default settings if no custom ones are defined..
 		if(!isset($this->format)) $this->format = $this->user->style['date_notime_short'];
 		if(!isset($this->timeformat)) $this->timeformat = $this->user->style['time'];
