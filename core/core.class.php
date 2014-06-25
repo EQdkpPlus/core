@@ -451,14 +451,20 @@ class core extends gen_class {
 		}
 		
 		public function build_link_hash($arrLinkData){
+		
 			if (isset( $arrLinkData['category'])) {
 				return md5('category'.$arrLinkData['id']);
 			} elseif (isset( $arrLinkData['category']) ) {
 				return md5('article'.$arrLinkData['id']);
 			} elseif (isset($arrLinkData['id'])) {
 				return md5('pluslink'.$arrLinkData['id']);
-			}	
-			return md5($this->user->removeSIDfromString($arrLinkData['link']));
+			} else {
+				$toHash = $this->user->removeSIDfromString($arrLinkData['link']);
+				$toHash = str_replace(array("index.php/", ".html", ".php"), "", $toHash);
+				if (substr($toHash, -1) == "/") $toHash = substr($toHash, 0, -1);
+				return md5($toHash);
+				
+			}
 		}
 		
 		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
