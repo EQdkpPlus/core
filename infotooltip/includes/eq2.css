@@ -137,6 +137,9 @@ var.eq2-icon-sml img {height:16px;width:16px}
 .itemd_adiconpurple {
 	background-image: url(./images/eq2/purple.jpg); width: 32px; height: 32px; display: table-cell;
 }
+.itemd_adiconcyan {
+	background-image: url(./images/eq2/cyan.jpg); width: 32px; height: 32px; display: table-cell;
+}
 .itemd_recipe {
 	color: #e6e970; margin-top: 12px; height: 150px; overflow: auto;
 }
