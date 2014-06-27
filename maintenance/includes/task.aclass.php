@@ -120,17 +120,17 @@ if ( !class_exists( "task" ) ){
 				array_push($this->steps, 0);
 			}
 			asort($this->steps);
-			$this->step_data = unserialize($this->config->get('maintenance_step_data_'.$this->task_name));
+			$this->step_data = $this->config->get('maintenance_step_data_'.$this->task_name);
 			$this->construct();
 		}
 
 		public function a_destruct() {
-			$this->destruct();
+			$this->destruct();		
 			if(!$this->end) {
 				$this->config->set('maintenance_task_'.$this->task_name, $this->task_name);
 				$this->config->set('maintenance_step_standby_'.$this->task_name, $this->current_step);
 				$this->config->set('maintenance_this_steps_'.$this->task_name, implode(',',$this->steps));
-				$this->config->set('maintenance_step_data_'.$this->task_name, serialize($this->step_data));
+				$this->config->set('maintenance_step_data_'.$this->task_name, $this->step_data);
 			}
 		}
 

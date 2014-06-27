@@ -825,7 +825,7 @@ $lang = array(
 "profilefield_optionen" => "Dropdown-Optionen",
 "options_language" => "Sprachvariable",
 "options_language_help" => "Sprachvariable in der Spiel-Sprache. Befindet sich die Variablen in einem Subarray, benutze ':' um zu trenne. Beispiele: 'professions', 'lang:talents:{CLASSID}'",
-"profilefields_help" => "Als Platzhalter können {VALUE} (= ausgewählter Wert), {CHARNAME}, {SERVERNAME}, {SERVERLOC}, {CLASSID} und {RACEID} verwendet werden",
+"profilefields_help" => "Als Platzhalter können {VALUE} (= ausgewählter Wert), {CHARNAME}, {SERVERNAME}, {SERVERLOC}, und {CLASSID} verwendet werden",
 "pf_enable_suc" => "Profilfeld \"%s\" wurde erfolgreich aktiviert.",
 "pf_enable_nosuc" => "Profilfeld \"%s\" konnte nicht aktiviert werden.",
 "pf_disable_suc" => "Profilfeld \"%s\" wurde erfolgreich deaktiviert.",

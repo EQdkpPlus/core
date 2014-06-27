@@ -244,7 +244,6 @@ class config extends gen_class {
 	}
 	
 	public function flush(){
-		d(get_chmod());
 		$this->config_save();
 	}
 }

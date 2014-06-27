@@ -195,6 +195,7 @@ class import06 extends task {
 	}
 
 	protected function parse_first_step() {
+		$this->step_data = array();
 		if(!$this->get('first') AND !$this->get('no_import')) {
 			$this->pdl->log('maintenance', 'Nothing to do.');
 			return false;
@@ -203,6 +204,7 @@ class import06 extends task {
 			return true;
 		}
 		if($this->get('db_else')) {
+			$this->step_data = array();
 			$this->step_data['old_db_data'] = array(true, 'host' => $this->get('db_host'), 'name' => $this->get('db_name'), 'user' => $this->get('db_user'), 'pass' => $this->get('db_pass'), 'prefix' => $this->get('table_prefix'));
 		} else {
 			if(!$this->get('table_prefix')) {
@@ -552,9 +554,11 @@ class import06 extends task {
 		}
 		if($this->get('log')) {
 			$logs = array();
+
 			list($d,$m,$y) = explode('.',$this->get('logs_date', '1.1.1970'));
 			$date = mktime(0,0,0,$m,$d,$y);
 			$sql = "SELECT l.*, u.username FROM ".$this->old[1]."logs l LEFT JOIN ".$this->old[1]."users u ON l.admin_id=u.user_id WHERE log_date > ".$date." LIMIT 5000;";
+			
 			$result = $this->old[0]->query($sql);
 			include($this->root_path.'maintenance/includes/tasks/import06/plugin_logs.php');
 			if ($result){
