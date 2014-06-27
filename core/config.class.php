@@ -176,7 +176,7 @@ class config extends gen_class {
 		$objQuery = $this->db->query("SELECT COUNT(config_name) as count FROM __backup_cnf;");
 		if ($objQuery){
 			$arrResult =  $objQuery->fetchAssoc();
-			$row_count = $arrResult['config_name'];	
+			$row_count = (int)$arrResult['count'];	
 		} else $row_count = 0;
 
 		$array_count = 0;

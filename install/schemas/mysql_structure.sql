@@ -9,7 +9,7 @@
 DROP TABLE IF EXISTS __backup_cnf;
 CREATE TABLE `__backup_cnf` (
 	`config_name` varchar(255) COLLATE utf8_bin NOT NULL,
-	`config_plugin` varchar(25) COLLATE utf8_bin NOT NULL DEFAULT 'core',
+	`config_plugin` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT 'core',
 	`config_value` text COLLATE utf8_bin,
 	PRIMARY KEY (`config_name`, `config_plugin`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

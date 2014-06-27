@@ -149,7 +149,7 @@ class import06 extends task {
 		$result = $this->old[0]->query("SELECT * FROM ".$this->old[1].$table_name.";");
 		while ( $row = $this->old[0]->fetch_record($result) ) {
 			foreach($row as $field => $value) {
-				$data[$ind][$field] = $this->old[0]->escape($value);
+				$data[$ind][$field] = $this->old[0]->escapeString($value);
 			}
 			$ind++;
 		}
@@ -536,7 +536,7 @@ class import06 extends task {
 			if ($result){
 				while($row = $result->fetchAssoc()){
 					foreach($row as $field => $value) {
-						$comments[$row['id']][$field] = $this->new[0]->escape($value);
+						$comments[$row['id']][$field] = $this->new[0]->escapeString($value);
 					}
 				}
 			}
@@ -567,25 +567,25 @@ class import06 extends task {
 					if(isset($this->step_data['replace_users'][$row['admin_id']])) {
 						$row['admin_id'] = $this->step_data['replace_users'][$row['admin_id']];
 					}
-					$current_log['log_id'] = $this->new[0]->escape($row['log_id']);
-					$current_log['log_date'] = $this->new[0]->escape($row['log_date']);
+					$current_log['log_id'] = $this->new[0]->escapeString($row['log_id']);
+					$current_log['log_date'] = $this->new[0]->escapeString($row['log_date']);
 					eval($row['log_action']);
 					if(isset($log_action['header'])) preg_match("/\{L_(.+)\}/", $log_action['header'], $to_replace);
-					else preg_match("/\{L_(.+)\}/", $this->new[0]->escape($row['log_type']), $to_replace);
+					else preg_match("/\{L_(.+)\}/", $this->new[0]->escapeString($row['log_type']), $to_replace);
 					if(!isset($to_replace[1]) || !$to_replace[1]) continue;
 					unset($log_action['header']);
-					$current_log['log_value'] = $this->new[0]->escape(serialize($log_action));
-					$current_log['log_ipaddress'] = $this->new[0]->escape($row['log_ipaddress']);
-					$current_log['log_sid'] = $this->new[0]->escape($row['log_sid']);
-					$current_log['log_result'] = ($this->new[0]->escape($row['log_result']) == '{L_SUCCESS}') ? 1 : 0;
-					$current_log['log_tag'] = strtolower($to_replace[1]);
-					$current_log['log_plugin'] = (in_array($row['log_type'], array_keys($plugin_logs))) ? $this->new[0]->escape($plugin_logs[$row['log_type']]) : 'core';
+					$current_log['log_value'] = $this->new[0]->escapeString(serialize($log_action));
+					$current_log['log_ipaddress'] = $this->new[0]->escapeString($row['log_ipaddress']);
+					$current_log['log_sid'] = $this->new[0]->escapeString($row['log_sid']);
+					$current_log['log_result'] = ($this->new[0]->escapeString($row['log_result']) == '{L_SUCCESS}') ? 1 : 0;
+					$current_log['log_tag'] = $this->new[0]->escapeString(strtolower($to_replace[1]));
+					$current_log['log_plugin'] = $this->new[0]->escapeString((in_array($row['log_type'], array_keys($plugin_logs))) ? $this->new[0]->escapeString($plugin_logs[$row['log_type']]) : 'core');
 					$current_log['log_flag'] = 1;
 
 					if(isset($this->step_data['replace_users'][$row['admin_id']])) {
 						$current_log['user_id'] = $this->step_data['replace_users'][$row['admin_id']];
 					} else $current_log['user_id'] = -1;
-					$current_log['username'] = ($row['username'] == "") ? "Unknown" : $this->new[0]->escape($row['username']);
+					$current_log['username'] = $this->new[0]->escapeString(($row['username'] == "") ? "Unknown" : $row['username']);
 
 					if(in_array($current_log['log_plugin'], $copy)) $logs[$row['log_id']] = $current_log;
 				}
@@ -599,7 +599,7 @@ class import06 extends task {
 			foreach($logs as $id => $log) {
 				$k = $counter/1000;
 				settype($k, 'int');
-				$sqls[$k][] = "('".implode("', '", $log)."')";
+				$sqls[$k][] = "(".implode(", ", $log).")";
 				$counter++;
 			}
 			foreach($sqls as $sql_post) {
@@ -671,10 +671,8 @@ class import06 extends task {
 			$result = $this->old[0]->query($sql);
 			if ($result){
 				while($row = $result->fetchAssoc()){
-					foreach($row as $field => $value) {
-						$events[$row['event_id']][$field] = $this->new[0]->escape($value);
-					}
-					$events[$row['event_id']]['event_name'] = sanitize($events[$row['event_id']]['event_name']);
+					$events[$row['event_id']][$field] = $this->new[0]->escapeString($value);
+					if($field == "event_name") $events[$row['event_id']]['event_name'] = sanitize($events[$row['event_id']]['event_name']);
 				}
 			}
 			
@@ -685,7 +683,7 @@ class import06 extends task {
 			$sql = "INSERT INTO ".$this->new[1]."events (".$fields.") VALUES ";
 			$sqls = array();
 			foreach($events as $event) {
-				$sqls[] = "('".implode("', '", $event)."')";
+				$sqls[] = "(".implode(", ", $event).")";
 			}
 			$this->new[0]->query($sql.implode(', ', $sqls).';');
 			unset($events);
@@ -770,7 +768,7 @@ class import06 extends task {
 			$sql = "INSERT INTO ".$this->new[1]."multidkp (multidkp_id, multidkp_name, multidkp_desc) VALUES ";
 			$sqls = array();
 			foreach($multis as $multi_id => $multi) {
-				$sqls[] = "('".$this->new[0]->escape($multi_id)."', '".$this->new[0]->escape($multi['name'])."', '".$this->new[0]->escape($multi['desc'])."')";
+				$sqls[] = "('".$this->new[0]->escapeString($multi_id)."', '".$this->new[0]->escapeString($multi['name'])."', '".$this->new[0]->escapeString($multi['desc'])."')";
 			}
 			$this->new[0]->query($sql.implode(', ', $sqls).';');
 			$multi2ev = array();
@@ -787,7 +785,7 @@ class import06 extends task {
 			$sql = "INSERT INTO ".$this->new[1]."multidkp2event (multidkp2event_multi_id, multidkp2event_event_id) VALUES ";
 			$sqls = array();
 			foreach($multi2ev as $m2e_id => $mu2ev) {
-				$sqls[] = "('".$this->new[0]->escape($mu2ev['multi_id'])."', '".$this->new[0]->escape($mu2ev['event_id'])."')";
+				$sqls[] = "('".$this->new[0]->escapeString($mu2ev['multi_id'])."', '".$this->new[0]->escapeString($mu2ev['event_id'])."')";
 			}
 			$this->new[0]->query($sql.implode(', ', $sqls).';');
 			unset($multi2ev);
@@ -799,7 +797,7 @@ class import06 extends task {
 			$sqls2 = array();
 			$iid = 1;
 			foreach($multis as $id => $multi) {
-				$sqls1[] = "('".$iid."', '".$this->new[0]->escape($multi['name'])."', '".$this->new[0]->escape($multi['desc'])."')";
+				$sqls1[] = "('".$iid."', '".$this->new[0]->escapeString($multi['name'])."', '".$this->new[0]->escapeString($multi['desc'])."')";
 				$sqls2[] = "('".$iid."', '".$id."')";
 				$iid++;
 			}
@@ -903,7 +901,7 @@ class import06 extends task {
 			$sql = "REPLACE INTO ".$this->new[1]."member_ranks (rank_id, rank_name, rank_hide, rank_prefix, rank_suffix) VALUES ";
 			$sqls = array();
 			foreach($ranks as $rank_id => $rank) {
-				$sqls[] = "('".$this->new[0]->escape($rank_id)."', '".$this->new[0]->escape($rank['name'])."', '".$rank['hide']."', '".$this->new[0]->escape($rank['prefix'])."', '".$this->new[0]->escape($rank['suffix'])."')";
+				$sqls[] = "('".$this->new[0]->escapeString($rank_id)."', '".$this->new[0]->escapeString($rank['name'])."', '".$rank['hide']."', '".$this->new[0]->escapeString($rank['prefix'])."', '".$this->new[0]->escapeString($rank['suffix'])."')";
 			}
 			$this->new[0]->query($sql.implode(', ', $sqls).';');
 		}
@@ -934,9 +932,9 @@ class import06 extends task {
 				while($row = $result->fetchAssoc()){
 					foreach($row as $field => $value) {
 						if(in_array($field, array('member_id', 'member_name', 'member_status', 'member_rank_id'))) {
-							$members[$row['member_id']][$field] = $this->new[0]->escape($value);
+							$members[$row['member_id']][$field] = $this->new[0]->escapeString($value);
 						} elseif($field == 'member_current') {
-							$this->step_data['import_data']['members'][$row['member_id']] = $this->new[0]->escape($value);
+							$this->step_data['import_data']['members'][$row['member_id']] = $this->new[0]->escapeString($value);
 						}
 					}
 					$members[$row['member_id']]['member_main_id'] = $row['member_id'];
@@ -1068,7 +1066,7 @@ class import06 extends task {
 			while($row = $result->fetchAssoc()){
 				foreach($row as $field => $value) {
 					if($field != 'raid_name') {
-						$raids[$row['raid_id']][$field] = $this->new[0]->escape($value);
+						$raids[$row['raid_id']][$field] = $this->new[0]->escapeString($value);
 					}
 				}
 				if($this->step_data['import_data']['raids'][$row['raid_id']]) {
@@ -1357,7 +1355,7 @@ class import06 extends task {
 			$i++;
 		}
 		foreach ($sqls as $arrQuerys) {
-			$this->new[0]->query("INSERT INTO ".$this->new[1]."items :params", $arrQuerys);
+			$this->new[0]->prepare("INSERT INTO ".$this->new[1]."items :p")->set($arrQuerys)->execute();
 		}
 		unset($items);
 		return true;
@@ -1502,7 +1500,7 @@ class import06 extends task {
 				unset($row['member_name']);
 				unset($row['raid_name']);
 				foreach($row as $field => $value) {
-					$value = $this->new[0]->escape($value);
+					$value = $this->new[0]->escapeString($value);
 					$adjs[$row['adjustment_id']][$field] = ($value != '') ? $value : null;
 				}
 			}
@@ -1510,7 +1508,7 @@ class import06 extends task {
 
 		unset($this->step_data['import_data']['adjustments']);
 		$this->new[0]->query("TRUNCATE ".$this->new[1]."adjustments;");
-		$this->new[0]->query("INSERT INTO ".$this->new[1]."adjustments :params;", $adjs);
+		$this->new[0]->prepare("INSERT INTO ".$this->new[1]."adjustments :p")->set($adjs)->execute();
 		unset($adjs);
 		return true;
 	}
