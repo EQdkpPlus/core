@@ -227,7 +227,9 @@ class template extends gen_class {
 			foreach($arrFiles as $strFile){
 				$strContent = file_get_contents($strFile);
 				$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
-				$strPathDir = str_replace("./", "EQDKP_ROOT_PATH", $strPathDir);
+				if (strpos($strPathDir, "./") === 0){
+					$strPathDir = "EQDKP_ROOT_PATH".substr($strPathDir, 2);
+				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
@@ -288,7 +290,9 @@ class template extends gen_class {
 				$strContent = file_get_contents($strFile);
 				$arrHash[] = md5($strContent);
 				$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
-				$strPathDir = str_replace("./", "EQDKP_ROOT_PATH", $strPathDir);
+				if (strpos($strPathDir, "./") === 0){
+					$strPathDir = "EQDKP_ROOT_PATH".substr($strPathDir, 2);
+				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
@@ -1166,6 +1170,7 @@ class template extends gen_class {
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
 		if ($path) {
+			$path = str_replace("EQDKP_ROOT_PATH", "./", $path);
 			$arrPaths = explode("/", $path);
 			$arrSE = $arrRE = array();
 			$strSE = '../';
