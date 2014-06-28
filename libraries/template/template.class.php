@@ -227,8 +227,9 @@ class template extends gen_class {
 			foreach($arrFiles as $strFile){
 				$strContent = file_get_contents($strFile);
 				$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
+				
 				if (strpos($strPathDir, "./") === 0){
-					$strPathDir = "EQDKP_ROOT_PATH".substr($strPathDir, 2);
+					$strPathDir = str_replace($this->root_path, "", $strPathDir);
 				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
@@ -237,7 +238,7 @@ class template extends gen_class {
 			foreach($data as $val){
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
 			}
-			
+
 			$minify = new Minify_CSS();
 			$strCSS = $minify->minify($strCSS);
 			
@@ -1169,8 +1170,8 @@ class template extends gen_class {
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
+		
 		if ($path) {
-			//$path = str_replace("EQDKP_ROOT_PATH", "./", $path);
 			$arrPaths = explode("/", $path);
 			$arrSE = $arrRE = array();
 			$strSE = '../';
@@ -1178,7 +1179,9 @@ class template extends gen_class {
 			for($i=0; $i<=count($arrPaths); $i++){
 				$arrSE[] = '#'.preg_quote($strSE).'([a-zA-Z0-9])#';
 				array_pop($arrPaths);
-				$arrRE[] = str_replace("./", "EQDKP_ROOT_PATH", implode('/', $arrPaths).'/$1');
+				$myPath = "EQDKP_ROOT_PATH".implode('/', $arrPaths).'/$1';
+				
+				$arrRE[] = $myPath;
 				$strSE = '../'.$strSE;
 			}
 			$arrSE[] = '#'.preg_quote($strSE).'([a-zA-Z0-9])#';
@@ -1187,6 +1190,7 @@ class template extends gen_class {
 			$arrRE = array_reverse($arrRE);
 			$strCSS = preg_replace($arrSE, $arrRE, $strCSS);
 		}
+
 
 		if (file_exists($this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg')){
 			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
@@ -1307,6 +1311,7 @@ class template extends gen_class {
 		);
 		
 		$data = preg_replace($in, $out, $strCSS);
+		
 		return $data;
 	}
 
