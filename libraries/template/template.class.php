@@ -237,7 +237,7 @@ class template extends gen_class {
 			foreach($data as $val){
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
 			}
-						
+			
 			$minify = new Minify_CSS();
 			$strCSS = $minify->minify($strCSS);
 			
@@ -1170,7 +1170,7 @@ class template extends gen_class {
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
 		if ($path) {
-			$path = str_replace("EQDKP_ROOT_PATH", "./", $path);
+			//$path = str_replace("EQDKP_ROOT_PATH", "./", $path);
 			$arrPaths = explode("/", $path);
 			$arrSE = $arrRE = array();
 			$strSE = '../';
@@ -1178,7 +1178,7 @@ class template extends gen_class {
 			for($i=0; $i<=count($arrPaths); $i++){
 				$arrSE[] = '#'.preg_quote($strSE).'([a-zA-Z0-9])#';
 				array_pop($arrPaths);
-				$arrRE[] = implode('/', $arrPaths).'/$1';
+				$arrRE[] = str_replace("./", "EQDKP_ROOT_PATH", implode('/', $arrPaths).'/$1');
 				$strSE = '../'.$strSE;
 			}
 			$arrSE[] = '#'.preg_quote($strSE).'([a-zA-Z0-9])#';
@@ -1187,7 +1187,7 @@ class template extends gen_class {
 			$arrRE = array_reverse($arrRE);
 			$strCSS = preg_replace($arrSE, $arrRE, $strCSS);
 		}
-		
+
 		if (file_exists($this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg')){
 			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		} else {

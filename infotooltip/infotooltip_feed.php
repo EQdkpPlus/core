@@ -28,6 +28,7 @@ try {
 	//init our db-class
 	registry::load_config();
 	require($eqdkp_root_path.'libraries/dbal/dbal.class.php');
+	if (registry::get_const('dbtype') == 'mysql') registry::set_const('dbtype', 'mysqli');
 	require_once($eqdkp_root_path.'libraries/dbal/'.registry::get_const('dbtype').'.dbal.class.php');
 	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));
 	#error_reporting(E_ALL);
