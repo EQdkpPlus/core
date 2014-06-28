@@ -199,6 +199,10 @@ tr.cm_confirm{
 	text-decoration:line-through;
 	font-style:italic;
 }
+td.middle{
+	text-align:center !important;
+	vertical-align: middle !important;
+}
 .linethrough{
 	text-decoration:line-through;
 }
