@@ -43,11 +43,11 @@ class hdatepicker extends html {
 	public $allow_empty = false;
 	
 	private $out = '';
-	private $php_format = '';
-	private $php_timeformat = '';
+	private $php_format = false;
+	private $php_timeformat = false;
 	private $all_options = array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'timepicker', 'return_function');
 	
-	protected function _construct() {	
+	protected function _construct() {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
 			$this->value = $this->time->date($this->js_calendarformat(), $this->value);
 		}
@@ -98,8 +98,8 @@ class hdatepicker extends html {
 	 */
 	public function php_calendarformat() {
 		// Load default settings if no custom ones are defined..
-		if(!isset($this->php_format)) $this->php_format = $this->user->style['date_notime_short'];
-		if(!isset($this->php_timeformat)) $this->php_timeformat = $this->user->style['time'];
+		if($this->php_format === false) $this->php_format = $this->user->style['date_notime_short'];
+		if($this->php_timeformat === false) $this->php_timeformat = $this->user->style['time'];
 		$format = $this->php_format;
 		if(isset($this->timepicker)) $format .= ' '.$this->php_timeformat;
 		return $format;

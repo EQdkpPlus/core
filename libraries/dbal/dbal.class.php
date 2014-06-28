@@ -670,7 +670,7 @@ abstract class DatabaseStatement {
 		{
 			throw new Exception('Empty param array');
 		}
-		$arrParams = $this->escapeParams($arrParams);
+		$arrParams = $this->escapeParams($arrParams, true);
 		
 		$this->strQuery = str_replace(':in', "IN (".implode(',', $arrParams).")", $this->strQuery);
 		return $this;
@@ -786,13 +786,15 @@ abstract class DatabaseStatement {
 	 * @param array
 	 * @return array
 	 */
-	protected function escapeParams($arrParams){
+	protected function escapeParams($arrParams, $blnIgnoreKeys=false){
 		foreach ($arrParams as $k=>$v)
 		{
 			switch (gettype($v))
 			{
 				case 'string':
-					if(strpos($v, $k) === 0){
+					if(!$blnIgnoreKeys && strpos($v, $k) === 0){
+						echo 'debug: '.$v.' -> '.$k.'<br/>';
+						
 						$v = trim(substr($v, strlen($k)));
 						$sign = substr($v, 0, 1);
 						$arrParams[$k] = $k.' '.$sign.' '.intval(trim(substr($v, 2)));

@@ -44,7 +44,7 @@ class htimepicker extends html {
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->value.'"';
+		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->time->date("H:i", $this->value).'"';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf);
 		$this->out = $out.' />';
