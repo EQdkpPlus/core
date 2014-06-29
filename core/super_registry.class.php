@@ -125,7 +125,6 @@ abstract class super_registry {
 			
 			include_once(self::$const['root_path'].'core/core.functions.php');
 			MagicQuotesFix();
-			#RunGlobalsFix(); --> is this still necessary?
 			registry::register('environment');
 			if(!registry::register('config')->get('server_path')) self::fix_server_path();
 			self::$const['server_path'] = registry::register('config')->get('server_path');
