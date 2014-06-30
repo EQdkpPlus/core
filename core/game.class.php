@@ -907,6 +907,7 @@ class game extends gen_class {
 					'lang'			=> 'uc_'.$class['name'],
 					'undeletable'	=> 1,
 					'category'		=> 'character',
+					'no_custom'		=> true,
 				);
 			} else {
 				$z++;
@@ -918,6 +919,7 @@ class game extends gen_class {
 					'undeletable'	=> 1,
 					'options'		=> array('-----'),
 					'sort' 			=> $z,
+					'no_custom'		=> true,
 				);
 			}
 			if (is_array($class_deps[$class['name']])){
@@ -931,9 +933,10 @@ class game extends gen_class {
 		$xml_fields = $this->gameinfo()->profilefields();
 		if(is_array($xml_fields)){
 			foreach($xml_fields as $name=>$values) {
-				$values['name'] = $name;
+				$values['no_custom']	= true;
+				$values['name']			= $name;
 				// move the static profilefields behind the class-stuff
-				$values['sort'] = $values['sort'] + $z;
+				$values['sort']			= $values['sort'] + $z;
 				$this->pdh->put('profile_fields', 'insert_field', array($values));
 			}
 		}
