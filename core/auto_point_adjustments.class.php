@@ -183,8 +183,8 @@ if ( !defined('EQDKP_INC') ){
 				foreach($this->apa_tab as $apa) {
 					$modules = $this->get_apa_type($apa['type'])->modules_affected();
 					foreach($apa['pools'] as $dkp_id) {
-						foreach($modules as $module) {
-							$this->decayed_pools[$dkp_id][] = $module;
+						foreach($modules as $_module) {
+							$this->decayed_pools[$dkp_id][] = $_module;
 						}
 					}
 				}
@@ -218,7 +218,6 @@ if ( !defined('EQDKP_INC') ){
 		public function get_decay_val($module, $dkp_id, $date=0, $data=array()) {
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
-			//load cached data
 			$cache_date = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_cache_date($date, $apa_id);
 			if(!isset($this->cached_data[$apa_id][$cache_date])) $this->cached_data[$apa_id][$cache_date] = $this->pdc->get('apa_'.$apa_id.'_'.$cache_date);
 			//check if update is necessary

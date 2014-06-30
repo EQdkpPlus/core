@@ -314,7 +314,7 @@ if(!class_exists('pdh_r_item')){
 						'url' => $this->root_path."infotooltip/infotooltip_feed.php?name=".urlencode(base64_encode($this->get_name($item_id)))."&lang=".$lang."&update=1&direct=1",
 						'height' => '340',
 						'width' => '400',
-						'onclose' => $_SERVER['REQUEST_URI']
+						'onclose' => $this->env->request
 					);
 					if($this->get_game_itemid($item_id) != '') {
 						$options['url'] .= "&game_id=".$this->get_game_itemid($item_id);

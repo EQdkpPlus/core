@@ -288,8 +288,8 @@ function reload_settings(){
 	}, 'json');
 }
 $('.js_reload').change(reload_settings);", 'docready');
-		}		
-		$this->tpl->assign_var('ACTION', $_SERVER['SCRIPT_NAME'].$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
+		}
+		$this->tpl->assign_var('ACTION', $this->env->phpself.$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal_moduleconfig.html',

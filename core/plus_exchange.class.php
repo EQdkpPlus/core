@@ -116,7 +116,7 @@ if( !class_exists( "plus_exchange" ) ) {
 
 		public function execute(){
 			//Get all Arguments
-			$request_url = $_SERVER['REQUEST_URI'];
+			$request_url = $this->env->request;
 			$request_method = $_SERVER['REQUEST_METHOD'];
 
 			$request_args['get'] = $_GET;

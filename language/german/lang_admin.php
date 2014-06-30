@@ -930,6 +930,7 @@ $lang = array(
 "apa_fv_name" => "Der Name ist notwendig.",
 "apa_fv_calc_func" => "Die Berechnungsfunktion ist notwendig.",
 "apa_fv_exectime" => "Die Ausführzeit ist notwendig.",
+"apa_modules"	 => "Module, auf die der Zeitl. Verfall angewendet werden soll",
 "uc_import_adm_update" => "Benutzerprofile aktualisieren",
 "uc_import_guild_wh" => "Importiere Charaktere einer Gilde",
 "rolemanager_footcount" => "... %1\$d Rolle(n) gefunden",

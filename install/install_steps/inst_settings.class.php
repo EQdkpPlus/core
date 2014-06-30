@@ -131,7 +131,7 @@ class inst_settings extends install_generic {
 		// Build the default language & Locales dropdowns
 		if(!$this->def_lang) $this->def_lang = $this->in->get('inst_lang');
 		if(!$this->def_game_lang) $this->def_game_lang = $this->in->get('inst_lang');
-		if(!$this->def_server_path) $this->def_server_path = str_replace('install/index.php', '', $_SERVER['SCRIPT_NAME']);
+		if(!$this->def_server_path) $this->def_server_path = str_replace('install/index.php', '', $this->env->phpself);
 		if(!$this->def_timezone) $this->def_timezone = date_default_timezone_get();
 		if(!$this->def_startday) $this->def_startday = ($this->in->get('inst_lang') == 'german') ? 'monday' : 'sunday';
 		$langs = sdir($this->root_path.'language');

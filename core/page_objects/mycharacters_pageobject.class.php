@@ -79,6 +79,7 @@ class mycharacters_pageobject extends pageobject {
 				$mselect_selected[] = $member_id;
 			}
 		}
+		natcasesort($mselect_list);
 
 		// Action Menu
 		$cm_addmenu = array(

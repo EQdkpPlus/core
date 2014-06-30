@@ -84,7 +84,7 @@ if (!class_exists("socialplugins")) {
 		private function opengraph_tags($title, $description, $image){
 			$strMetatags = '<meta property="og:title" content="'.$title.'" />
 							<meta property="og:type" content="article" />
-							<meta property="og:url" content="'.(($this->env->ssl) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].xhtml_entity_decode($_SERVER['REQUEST_URI']).'" />
+							<meta property="og:url" content="'.(($this->env->ssl) ? 'https://' : 'http://').$this->env->httpHost.xhtml_entity_decode($this->env->request).'" />
 							<meta property="og:description" content="'.htmlspecialchars(trim(strip_tags($description)), ENT_QUOTES).'" />
 							<meta property="og:image" content="'.$image.'" />';
 

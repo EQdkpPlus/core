@@ -62,17 +62,6 @@ class core extends gen_class {
 		$this->page_tail();
 	}
 
-	private function httpHost(){
-		$protocol = ($_SERVER['SSL_SESSION_ID'] || $_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ? 'https://' : 'http://';
-		$xhost		= preg_replace('/[^A-Za-z0-9\.:-]/', '', $_SERVER['HTTP_X_FORWARDED_HOST']);
-		$host			= $_SERVER['HTTP_HOST'];
-		if (empty($host)){
-			$host  = $_SERVER['SERVER_NAME'];
-			$host .= ($_SERVER['SERVER_PORT'] != 80) ? ':' . $_SERVER['SERVER_PORT'] : '';
-		}
-		return $protocol.(!empty($xhost) ? $xhost . '/' : '').preg_replace('/[^A-Za-z0-9\.:-]/', '', $host);
-	}
-
 	public function check_auth(){
 		if (!$this->user->check_auth('a_maintenance', false)){
 			if ($this->config->get('pk_maintenance_mode') == '1'){

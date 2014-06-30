@@ -117,7 +117,7 @@ initLogin();
 	private function verify_assertion($assertion){
 		$jsonRequest = $this->puf->post('https://browserid.org/verify', "assertion=".strval(
 		   $assertion
-		)."&audience=".$_SERVER["HTTP_HOST"], "application/x-www-form-urlencoded");
+		)."&audience=".$this->env->httpHost, "application/x-www-form-urlencoded");
 		
 		$arrResult = json_decode($jsonRequest);
 

@@ -44,13 +44,17 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 				'default'	=> 'now',
 				'class'		=> 'input'
 			),
+			'modules' => array(
+				'type' => 'multiselect',
+				'options' => array('item' => 'Items', 'raid' => 'Raids', 'adjustment' => 'Adjustments'),
+			),				
 			'calc_func' => array(
 				'type'		=> 'dropdown',
 				'options'	=> array(),
 			)
 		);
 		
-		private $modules_affected = array('item', 'raid', 'adjustment');
+		private $modules_affected = array();
 		
 		private $cached_data = array();
 
@@ -64,6 +68,8 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 				$this->ext_options['calc_func']['options'][$func] = $func;
 			}
 			$this->options = array_merge($this->options, $this->ext_options);
+			
+			$this->modules_affected = $this->options['modules'];
 		}
 		
 		public function add_layout_changes($apa_id) {

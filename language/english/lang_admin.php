@@ -932,6 +932,7 @@ $lang = array(
 	"apa_fv_name" => 'The name is mandatory.',
 	"apa_fv_calc_func" => 'The calculation function is mandatory.',
 	"apa_fv_exectime" => 'The execution time is mandatory.',
+	"apa_modules"	=> 'Select modules that should be decayed',
 	"uc_import_adm_update" => 'Refresh User Profile',
 	"uc_import_guild_wh" => 'Import characters of a guild',
 	"rolemanager_footcount" => '... %1$d role(s) found',

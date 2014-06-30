@@ -36,9 +36,10 @@ class controller extends gen_class {
 		if ($this->in->exists('savevote')){
 			$this->saveRating();
 		}
-	
-		$this->game->get_class_color(1, 1);
 		
+		d($this->env);
+		d($_SERVER);
+
 		$this->display();
 	}
 	
