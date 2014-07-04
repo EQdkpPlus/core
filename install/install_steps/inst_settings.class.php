@@ -299,7 +299,7 @@ class inst_settings extends install_generic {
 	
 	private function InsertStartNews(){
 		$this->do_sql("INSERT INTO `__news` (`news_headline`, `news_message`, `news_date`, `user_id`, `showRaids_id`, `extended_message`, `nocomments`, `news_permissions`, `news_flags`, `news_category`, `news_start`, `news_stop`) VALUES 
-		('".$this->lang['welcome_news_title']."', '".$this->lang['welcome_news']."', ".time().", 1, '', '', 0, 0, 1, 1, '', '');");
+		('".$this->db->escape($this->lang['welcome_news_title'])."', '".$this->db->escape($this->lang['welcome_news'])."', ".time().", 1, '', '', 0, 0, 1, 1, '', '');");
 	}
 	
 	private function InsertGroupPermissions($grp_id, $perms=false, $noperms=false) {

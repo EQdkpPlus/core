@@ -118,7 +118,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			if(!method_exists($this, 'get_'.$tag) || $tag == 'viewicon' || $tag == 'value' || $tag == 'id_list' || $tag == 'lastxlogs') return $id_list;
 
 			$direction = ($direction == 'asc') ? 'ASC' : 'DESC';
-						if($tag == 'user') { 
+			if($tag == 'user') { 
 				$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY username ".$direction.";");
 			} else {
 				$result = $this->db->query("SELECT log_id FROM __logs WHERE log_id IN ('".implode("', '", $id_list)."') ORDER BY log_".$tag." ".$direction.";");
