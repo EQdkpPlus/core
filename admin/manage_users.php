@@ -223,6 +223,7 @@ class Manage_Users extends page_generic {
 			$privArray = array();
 			$customArray = array();
 			$pluginArray = array();
+			$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
 			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter');
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
@@ -594,7 +595,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 
 			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true)),
 			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),
-			'ACTIVE_RADIO'				=> new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : '1'))),
+			'ACTIVE_RADIO'				=> new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : true))),
 
 			// Validation
 			'VALIDTAELNK_PREFIX'		=> '../',
@@ -602,7 +603,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		if($user_id) {
 			$this->tpl->assign_vars(array(
 				//Validation
-				'AJAXEXTENSION_USER'		=> '&olduser='.$user_data['username'],
+				'AJAXEXTENSION_USER'		=> '&olduser='.urlencode($user_data['username']),
 				'AJAXEXTENSION_MAIL'		=> '&oldmail='.urlencode($user_data['user_email']),
 
 				'L_SEND_MAIL2'				=> sprintf($this->user->lang('adduser_send_mail2'), $user_data['username']),

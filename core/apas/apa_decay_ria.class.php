@@ -68,14 +68,14 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 				$this->ext_options['calc_func']['options'][$func] = $func;
 			}
 			$this->options = array_merge($this->options, $this->ext_options);
-			
-			$this->modules_affected = $this->options['modules'];
 		}
 		
 		public function add_layout_changes($apa_id) {
 			$layout = $this->pdh->make_editable($this->config->get('eqdkp_layout'));
 			if(!$layout) return false;
 			//generate presets
+			$this->modules_affected = $this->apa->get_data('modules', $apa_id);
+			
 			foreach($this->modules_affected as $module) {
 				$preset_name = $module.'_decay_'.$apa_id;
 				$pools = $this->apa->get_data('pools', $apa_id);
@@ -122,6 +122,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		}
 		
 		public function update_layout_changes($apa_id) {
+			$this->modules_affected = $this->apa->get_data('modules', $apa_id);
 			foreach($this->modules_affected as $module) {
 				$preset_name = $module.'_decay_'.$apa_id;
 				$this->pdh->update_user_preset($preset_name, false, $this->apa->get_data('name', $apa_id));
@@ -141,6 +142,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 				}
 			}
 			$this->pdh->save_layout($this->config->get('eqdkp_layout'), $layout_def);
+			$this->modules_affected = $this->apa->get_data('modules', $apa_id);
 			foreach($this->modules_affected as $module) {
 				$preset_name = $module.'_decay_'.$apa_id;
 				$this->pdh->delete_user_preset($preset_name);
@@ -148,8 +150,8 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			return true;
 		}
 		
-		public function modules_affected() {
-			return $this->modules_affected;
+		public function modules_affected($apa_id) {
+			return $this->apa->get_data('modules', $apa_id);
 		}
 		
 		// get date of last calculation
@@ -164,6 +166,10 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			//length of decay-period
 			$date -= ($date - $decay_start)%$max_ttl;
 			return $date;
+		}
+		
+		public function get_decay_history($apa_id, $cache_date, $module, $dkp_id, $data) {
+			
 		}
 		
 		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) {

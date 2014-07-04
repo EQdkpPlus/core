@@ -22,7 +22,8 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_points" ) ) {
 	class pdh_r_points extends pdh_r_generic{
-
+		public static $shortcuts = array('apa' => 'auto_point_adjustments');
+		
 		public $default_lang = 'english';
 
 		public $points;
@@ -52,7 +53,17 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			'current' => 'summed_up',
 		);
 
-		public function reset(){
+		public function reset($affected_ids=array()){
+			//tell apas which ids to delete
+			if (empty($affected_ids)){
+				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
+					foreach($this->pdh->get('member', 'id_list')  as $memberid){
+						$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
+					}
+				}
+			} else $apaAffectedIDs = $affected_ids;
+			$this->apa->enqueue_update('current', $apaAffectedIDs);
+			
 			$this->pdc->del('pdh_points_table');
 			$this->points = NULL;
 		}
@@ -157,9 +168,32 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		public function get_html_adjustment($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			return '<span class="'.color_item($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'">'.runden($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'</span>';
 		}
+		
+		public function get_current_history($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true){
+			$arrPoints = $this->pdh->get('points_history', 'history', array($member_id, $multidkp_id, $from, $to, $event_id, $itempool_id, $with_twink));
+			$intValue = 0;
+			foreach($arrPoints as $val){
+				if ($val['type'] == 'earned') $intValue += (float)$val['value'];
+				if ($val['type'] == 'spent') $intValue -= (float)$val['value'];
+				if ($val['type'] == 'adjustment') $intValue += (float)$val['value'];
+			}
+			return $intValue;
+		}
 
 		public function get_current($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true){
-			return ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
+			if ($this->apa->is_decay('current', $multidkp_id)){
+				$data =  array(
+					'id'			=> $multidkp_id.'_'.$member_id,
+					'member_id'		=> $member_id,
+					'dkp_id'		=> $multidkp_id,
+					'event_id'		=> $event_id,
+					'itempool_id'	=> $itempool_id,
+					'with_twink'	=> ($with_twink) ? true : false,
+				);
+				return $this->apa->get_decay_val('current', $multidkp_id, $this->time->time, $data);
+			} else {
+				return ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
+			}
 		}
 
 		public function get_html_current($member_id, $multidkp_id,  $event_id=0, $itempool_id=0, $with_twink=true){

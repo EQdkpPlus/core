@@ -45,7 +45,7 @@ if( !class_exists( "apa_type_generic" ) ) {
 		protected $ext_options = array();
 
 		
-		abstract public function modules_affected();
+		abstract public function modules_affected($apa_id);
 		abstract public function get_decay_val($apa_id, $date, $module, $dkp_id, $data);
 		abstract public function get_cache_date($date, $apa_id);
 		

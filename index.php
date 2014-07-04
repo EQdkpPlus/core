@@ -36,9 +36,6 @@ class controller extends gen_class {
 		if ($this->in->exists('savevote')){
 			$this->saveRating();
 		}
-		
-		d($this->env);
-		d($_SERVER);
 
 		$this->display();
 	}

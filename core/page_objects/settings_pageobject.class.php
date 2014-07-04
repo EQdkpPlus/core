@@ -20,14 +20,14 @@
 //AJAX
 if(register('in')->get('ajax', 0) === 1){
 	if($_POST['username']){
-		if(register('in')->exists('olduser') && register('in')->get('olduser') === $_POST['username']){
+		if(register('in')->exists('olduser') && urldecode(register('in')->get('olduser')) === sanitize($_POST['username'])){
 			echo 'true';
 		}else{
 			echo register('pdh')->get('user', 'check_username', array(register('in')->get('username')));
 		}
 	}
 	if($_POST['email_address']){
-		if(register('in')->exists('oldmail') && register('in')->get('oldmail') === $_POST['email_address']){
+		if(register('in')->exists('oldmail') && urldecode(register('in')->get('oldmail')) === sanitize($_POST['email_address'])){
 			echo 'true';
 		}else{
 			echo register('pdh')->get('user', 'check_email', array(register('in')->get('email_address')));
@@ -227,7 +227,7 @@ class settings_pageobject extends pageobject {
 			'USERNAME'						=> $this->user->data['username'],
 
 			// Validation
-			'AJAXEXTENSION_USER'			=> '&olduser='.$this->user->data['username'],
+			'AJAXEXTENSION_USER'			=> '&olduser='.urlencode($this->user->data['username']),
 			'AJAXEXTENSION_MAIL'			=> '&oldmail='.urlencode($this->user->data['user_email']),
 		));
 

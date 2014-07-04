@@ -114,7 +114,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 			return $options;
 		}
 		
-		public function modules_affected() { return array(); }
+		public function modules_affected($apa_id) { return array(); }
 		public function get_cache_date($date, $apa_id) { return; }
 		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) { return; }
 	}//end class

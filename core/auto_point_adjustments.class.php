@@ -141,7 +141,7 @@ if ( !defined('EQDKP_INC') ){
 		
 		public function get_apa_id($dkp_id, $module) {
 			foreach($this->apa_tab as $apa_id => $options) {
-				if(!isset($apa_modules[$options['type']])) $apa_modules[$options['type']] = $this->get_apa_type($options['type'])->modules_affected();
+				if(!isset($apa_modules[$options['type']])) $apa_modules[$options['type']] = $this->get_apa_type($options['type'])->modules_affected($apa_id);
 				if(in_array($dkp_id, $options['pools']) && in_array($module, $apa_modules[$options['type']])) return $apa_id;
 			}
 			return false;
@@ -180,8 +180,8 @@ if ( !defined('EQDKP_INC') ){
 		public function is_decay($module, $pool) {
 			if(empty($this->apa_tab)) return false;
 			if(empty($this->decayed_pools)) {
-				foreach($this->apa_tab as $apa) {
-					$modules = $this->get_apa_type($apa['type'])->modules_affected();
+				foreach($this->apa_tab as $apa_id=> $apa) {
+					$modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
 					foreach($apa['pools'] as $dkp_id) {
 						foreach($modules as $_module) {
 							$this->decayed_pools[$dkp_id][] = $_module;

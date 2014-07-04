@@ -96,6 +96,7 @@ class character_pageobject extends pageobject {
 
 		$this->comments->SetVars(array('attach_id'=>$this->url_id, 'page'=>'member'));
 		$this->jquery->Tab_header('profile_information', true);
+		
 
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
