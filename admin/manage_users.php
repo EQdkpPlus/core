@@ -540,7 +540,7 @@ class Manage_Users extends page_generic {
 
 			$this->tpl->assign_vars(array(
 				//Validation
-				'AJAXEXTENSION_USER'		=> '&olduser='.$this->user_data['username'],
+				'AJAXEXTENSION_USER'		=> '&olduser='.urlencode($this->user_data['username']),
 				'AJAXEXTENSION_MAIL'		=> '&oldmail='.urlencode($this->user_data['user_email']),
 
 				'L_SEND_MAIL2'				=> sprintf($this->user->lang('adduser_send_mail2'), $this->user_data['username']),

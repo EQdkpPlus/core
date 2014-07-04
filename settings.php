@@ -23,14 +23,14 @@ include_once($eqdkp_root_path . 'common.php');
 //AJAX
 if(registry::fetch('in')->get('ajax', 0) === 1){
 	if($_POST['username']){
-		if(registry::fetch('in')->exists('olduser') && registry::fetch('in')->get('olduser') === $_POST['username']){
+		if(registry::fetch('in')->exists('olduser') && urldecode(registry::fetch('in')->get('olduser')) === sanitize($_POST['username'])){
 			echo 'true';
 		}else{
 			echo registry::fetch('pdh')->get('user', 'check_username', array(registry::fetch('in')->get('username')));
 		}
 	}
 	if($_POST['email_address']){
-		if(registry::fetch('in')->exists('oldmail') && registry::fetch('in')->get('oldmail') === $_POST['email_address']){
+		if(registry::fetch('in')->exists('oldmail') && urldecode(registry::fetch('in')->get('oldmail')) === sanitize($_POST['email_address'])){
 			echo 'true';
 		}else{
 			echo registry::fetch('pdh')->get('user', 'check_email', array(registry::fetch('in')->get('email_address')));
@@ -576,7 +576,7 @@ class user_settings extends page_generic {
 			'USERNAME'						=> $this->user->data['username'],
 
 			// Validation
-			'AJAXEXTENSION_USER'			=> '&olduser='.$this->user->data['username'],
+			'AJAXEXTENSION_USER'			=> '&olduser='.urlencode($this->user->data['username']),
 			'AJAXEXTENSION_MAIL'			=> '&oldmail='.urlencode($this->user->data['user_email']),
 		));
 
