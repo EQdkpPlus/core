@@ -27,6 +27,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		public $default_lang = 'english';
 
 		public $points;
+		// initialise array to store multipools which are decayed
+		private $decayed = array();
 
 		public $hooks = array(
 			'adjustment_update',
@@ -181,7 +183,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		}
 
 		public function get_current($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true){
-			if ($this->apa->is_decay('current', $multidkp_id)){
+			if(!isset($this->decayed[$multidkp_id])) $this->decayed[$multidkp_id] = $this->apa->is_decay('current', $multidkp_id);
+			if($this->decayed[$multidkp_id]) {
 				$data =  array(
 					'id'			=> $multidkp_id.'_'.$member_id,
 					'member_id'		=> $member_id,
