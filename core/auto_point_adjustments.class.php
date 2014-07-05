@@ -20,7 +20,7 @@ if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
 	class auto_point_adjustments extends gen_class {
-		public static $dependencies = array('pdc');
+		public static $dependencies = array('pdc', 'pfh', 'pdl');
 
 		private $apa_tab			= array();
 		private $apa_tab_file		= 'apatab.php';
@@ -332,14 +332,14 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		public function __destruct() {
-			#foreach($this->ttls as $apa_id => $data) {
-			#	foreach($data as $cache_date => $ttl) {
-			#		$this->pdc->put('apa_'.$apa_id.'_'.$cache_date, $this->cached_data[$apa_id][$cache_date], $ttl);
-			#	}
-			#}
-			#$this->pdc->put('apa_update_table', $this->needs_update, 15768000); //cache half a year
-			#unset($this->cached_data);
-			#unset($this->ttls);
+			foreach($this->ttls as $apa_id => $data) {
+				foreach($data as $cache_date => $ttl) {
+					$this->pdc->put('apa_'.$apa_id.'_'.$cache_date, $this->cached_data[$apa_id][$cache_date], $ttl);
+				}
+			}
+			$this->pdc->put('apa_update_table', $this->needs_update, 15768000); //cache half a year
+			unset($this->cached_data);
+			unset($this->ttls);
 			parent::__destruct();
 		}
 	}//end class
