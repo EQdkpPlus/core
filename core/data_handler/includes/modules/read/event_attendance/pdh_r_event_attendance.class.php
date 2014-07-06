@@ -97,6 +97,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 						$this->counts[$first_date['main']][$event_id]++;
 					}
 				}
+				$this->pdc->put('pdh_event_att_count', $this->counts);
 			}
 			//get raids
 			$raid_ids = array();
