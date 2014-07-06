@@ -281,12 +281,12 @@ class inst_settings extends install_generic {
 	
 	private function install_permissions() {
 		$b[] = $this->do_sql("INSERT INTO __groups_user (`groups_user_id`, `groups_user_name`, `groups_user_desc`, `groups_user_deletable`, `groups_user_default`, `groups_user_hide`) VALUES
-			(1,'".$this->lang['grp_guest']."','".$this->lang['grp_guest_desc']."','0','0','1'),
-			(2,'".$this->lang['grp_super_admins']."','".$this->lang['grp_super_admins_desc']."','0','0','0'),
-			(3,'".$this->lang['grp_admins']."','".$this->lang['grp_admins_desc']."','0','0','0'),
-			(4,'".$this->lang['grp_member']."','".$this->lang['grp_member_desc']."','0','1','0'),
-			(5,'".$this->lang['grp_officers']."','".$this->lang['grp_officers_desc']."','1','0','0'),
-			(6,'".$this->lang['grp_writers']."','".$this->lang['grp_writers_desc']."','1','0','0');
+			(1,'".$this->db->escape($this->lang['grp_guest'])."','".$this->db->escape($this->lang['grp_guest_desc'])."','0','0','1'),
+			(2,'".$this->db->escape($this->lang['grp_super_admins'])."','".$this->db->escape($this->lang['grp_super_admins_desc'])."','0','0','0'),
+			(3,'".$this->db->escape($this->lang['grp_admins'])."','".$this->db->escape($this->lang['grp_admins_desc'])."','0','0','0'),
+			(4,'".$this->db->escape($this->lang['grp_member'])."','".$this->db->escape($this->lang['grp_member_desc'])."','0','1','0'),
+			(5,'".$this->db->escape($this->lang['grp_officers'])."','".$this->db->escape($this->lang['grp_officers_desc'])."','1','0','0'),
+			(6,'".$this->db->escape($this->lang['grp_writers'])."','".$this->db->escape($this->lang['grp_writers_desc'])."','1','0','0');
 		");
 		$b[] = $this->InsertGroupPermissions(1, array('u_event_view', 'u_item_view', 'u_raid_view', 'u_member_view', 'u_userlist', 'u_news_view', 'u_search', 'u_roster_list'));
 		$b[] = $this->InsertGroupPermissions(3, false, array('a_backup', 'a_logs_del', 'a_maintenance', 'a_reset', 'a_files_man'));
