@@ -186,12 +186,21 @@ if(!class_exists('pdh_r_raid')){
 		public function get_raidids4memberid($member_id){
 			$raids4member = array();
 			foreach($this->index as $raid_id){
-				$arrMembers = $this->get_raid_attendees($id, false);
+				$arrMembers = $this->get_raid_attendees($raid_id, false);
 				if(is_array($arrMembers) && in_array($member_id, $arrMembers)){
 					$raids4member[] = $raid_id;
 				}
 			}
 			return $raids4member;
+		}
+		
+		public function get_raidids4memberids($arrMemberIDs){
+			$raids4member = array();
+			foreach($arrMemberIDs as $member_id){
+				$arrRaids = $this->get_raidids4memberid($member_id);
+				if (is_array($arrRaids)) $raids4member = array_merge($raids4member, $arrRaids);
+			}
+			return array_unique($raids4member);
 		}
 		
 		//Finished

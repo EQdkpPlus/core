@@ -68,14 +68,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 			//add new member
 			} else {
-				/*if($takechar) {
-					$data['mainid'] = $this->pdh->get('member','mainchar',array($this->user->data['user_id']));
-				}
-				if(empty($data['mainid']) || $data['mainid'] == 0) {
-					$this->db->getNextId("__members");
-					$data['mainid'] = $this->db->getNextId("__members");
-				}*/
-				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->data['user_id'])) : 0;
+				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->data['user_id'])) : $data['mainid'];
 				if(empty($data['profiledata'])) $data['profiledata'] = $this->profilefields($data);
 			}
 

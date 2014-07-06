@@ -35,42 +35,46 @@ class character_pageobject extends pageobject {
 		if($member_name == ''){
 			message_die($this->user->lang('error_invalid_name_provided'));
 		}
-
+		
+		$withTwinks = (!$this->config->get('show_twinks')) ? $this->in->get('with_twinks', 0) : (!$this->config->get('show_twinks'));
+		$arrChars = ($withTwinks) ? array_merge(array($this->url_id), $this->pdh->get('member', 'other_members', array($this->url_id))) : array($this->url_id);
+		$twinkSortSuffix = $this->in->exists('with_twinks') ? 'with_twinks='.(($withTwinks) ? 1 : 0).'&' : '';
+		
 		// Raid Attendance
-		$view_list			= $this->pdh->get('raid', 'raidids4memberid', array($this->url_id));
+		$view_list			= $this->pdh->get('raid', 'raidids4memberids', array($arrChars));
 		$hptt_page_settings	= $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_raidlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('raid'), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), $this->url_id, 'rsort');
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('raid'), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), $this->url_id.'.'.$withTwinks, 'rsort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'RAID_OUT'			=> $hptt->get_html_table($this->in->get('rsort', ''), $this->vc_build_url('rsort'), $this->in->get('rstart', 0), $this->user->data['user_rlimit']),
-			'RAID_PAGINATION'	=> generate_pagination($this->vc_build_url('rstart', true), count($view_list), $this->user->data['user_rlimit'], $this->in->get('rstart', 0), 'rstart')
+			'RAID_PAGINATION'	=> generate_pagination($this->vc_build_url('rstart', true), count($view_list), $this->user->data['user_rlimit'], $this->in->get('rstart', 0), $twinkSortSuffix.'rstart')
 		));
 
 		// Item History
 		infotooltip_js();
-		$view_list			= $this->pdh->get('item', 'itemids4memberid', array($this->url_id));
+		$view_list			= $this->pdh->get('item', 'itemids4memberids', array($arrChars));
 		$hptt_page_settings	= $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_itemlist');
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('item'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'isort');
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('item'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id.'.'.$withTwinks, 'isort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort', ''), $this->vc_build_url('isort'), $this->in->get('istart', 0), $this->user->data['user_ilimit']),
-			'ITEM_PAGINATION'	=> generate_pagination($this->vc_build_url('istart', true), count($view_list), $this->user->data['user_ilimit'], $this->in->get('istart', 0), 'istart')
+			'ITEM_PAGINATION'	=> generate_pagination($this->vc_build_url('istart', true), count($view_list), $this->user->data['user_ilimit'], $this->in->get('istart', 0), $twinkSortSuffix.'istart')
 		));
 
 		// Individual Adjustment History
-		$view_list = $this->pdh->get('adjustment', 'adjsofmember', array($this->url_id));
+		$view_list = $this->pdh->get('adjustment', 'adjsofmembers', array($arrChars));
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_adjlist');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id, 'asort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id.'.'.$withTwinks, 'asort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'ADJUSTMENT_OUT' => $hptt->get_html_table($this->in->get('asort', ''), $this->vc_build_url('asort'), $this->in->get('astart', 0), $this->user->data['user_alimit']),
-			'ADJUSTMENT_PAGINATION'	=> generate_pagination($this->vc_build_url('astart', true), count($view_list), $this->user->data['user_alimit'], $this->in->get('astart', 0), 'astart')
+			'ADJUSTMENT_PAGINATION'	=> generate_pagination($this->vc_build_url('astart', true), count($view_list), $this->user->data['user_alimit'], $this->in->get('astart', 0), $twinkSortSuffix.'astart')
 		));
 
 		//Event-Attendance
 		$view_list = $this->pdh->get('event', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_eventatt');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%link_url%' => $this->routing->simpleBuild('event'), '%link_url_suffix%' => '', '%with_twinks%' => false, '%use_controller%' => true), $this->url_id, 'esort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%link_url%' => $this->routing->simpleBuild('event'), '%link_url_suffix%' => '', '%with_twinks%' => $withTwinks, '%use_controller%' => true), $this->url_id.'.'.$withTwinks, $twinkSortSuffix.'esort');
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array (
 			'EVENT_ATT_OUT' => $hptt->get_html_table($this->in->get('esort', ''), $this->vc_build_url('esort')),
@@ -101,7 +105,7 @@ class character_pageobject extends pageobject {
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_points');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => !$this->config->get('show_twinks'), '%use_controller%' => true), $this->url_id, 'msort');
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => $withTwinks, '%use_controller%' => true), $this->url_id.'.'.$withTwinks, $twinkSortSuffix.'msort');
 		$hptt->setPageRef($this->strPath);
 		$profile_out = array(
 			'PROFILE_OUTPUT'		=> $profile_tplfile,
@@ -115,7 +119,9 @@ class character_pageobject extends pageobject {
 			'DATA_GUILDTAG'			=> $this->config->get('guildtag'),
 			'DATA_NAME'				=> $member_name,
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
-
+			'S_SHOW_TWINKS'			=> ($this->config->get('show_twinks')),
+			'S_WITH_TWINKS'			=> $withTwinks,
+				
 			// images
 			'IMG_CLASSICON'			=> $this->game->decorate('primary', $member['class_id'], $this->pdh->get('member', 'profiledata', array($this->url_id))),
 		);

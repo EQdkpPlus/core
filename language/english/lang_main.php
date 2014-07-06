@@ -938,7 +938,7 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"lib_pupd_intro" => 'There are new Versions available:',
 	"lib_pupd_updtxt_tt" => '<b>%1$s</b>: Version %2$s from %4$s',
 	"extensions" => 'Extensions',
-	
+	"points_for_this_char" => "Show the points information for this Char only"
 );
 
 ?>

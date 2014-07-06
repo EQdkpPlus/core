@@ -263,6 +263,15 @@ if(!class_exists('pdh_r_item')){
 			return $items4member;
 		}
 		
+		public function get_itemids4memberids($arrMemberIDs){
+			$items4member = array();
+			foreach($arrMemberIDs as $member_id){
+				$arrItems = $this->get_itemids4memberid($member_id);
+				if (is_array($arrItems)) $items4member = array_merge($items4member, $arrItems);
+			}
+			return array_unique($items4member);
+		}
+		
 		//Finished
 		public function get_itemids4userid($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));

@@ -924,6 +924,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "lib_pupd_updtxt_tt" => "<b>%1\$s</b>: Version %2\$s vom %4\$s",
 "extensions" => "Erweiterungen",
 "confirm_password" => "Passwort wiederholen",
+"points_for_this_char" => "Zeige die Punkte-Informationen nur für diesen Charakter an"		
  );
 
 ?>

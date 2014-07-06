@@ -161,6 +161,16 @@ if(!class_exists('pdh_r_adjustment')){
 			return $adjustment_ids;
 		}
 		
+		public function get_adjsofmembers($arrMemberIDs){
+			$adj4member = array();
+			foreach($arrMemberIDs as $member_id){
+				$arrAdj = $this->get_adjsofmember($member_id);
+				if (is_array($arrAdj)) $adj4member = array_merge($adj4member, $arrAdj);
+			}
+			return array_unique($adj4member);
+		}
+
+		
 		public function get_adjsofuser($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
 			$adjustment_ids = array();
