@@ -70,11 +70,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 			//add new member
 			} else {
-				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->data['user_id'])) : 0;
-				/*if(empty($data['mainid']) || $data['mainid'] == 0) {
-					$table_infos = $this->db->get_table_information('__members');
-					$data['mainid'] = $table_infos['auto_increment'];
-				}*/
+				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->id)) : $data['mainid'];
 				if(empty($data['profiledata'])) $data['profiledata'] = $this->profilefields($data);
 			}
 			
@@ -100,7 +96,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'{L_NAME_BEFORE}'		=> $old['name'],
 						'{L_LEVEL_BEFORE}'		=> $old['lvl'],
 						'{L_RACE_BEFORE}'		=> $this->game->get_name('races', $old['raceid']),
-						'{L_CLASS_BEFORE}'		=> $this->game->get_name('races', $old['classid']),
+						'{L_CLASS_BEFORE}'		=> $this->game->get_name('classes', $old['classid']),
 						'{L_RANK_BEFORE}'		=> $this->pdh->get('rank', 'name', array($old['rankid'])),
 						'{L_MAINC_BEFORE}'		=> $this->pdh->get('member', 'name', array($old['mainid'])),
 						'{L_STATUS_BEFORE}'		=> $old['status'],
