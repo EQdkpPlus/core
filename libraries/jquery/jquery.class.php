@@ -1169,7 +1169,7 @@ if (!class_exists("jquery")) {
 		* @return HTML Code
 		*/
 		private function charts_line($id, $data, $options=''){
-			$js_array		= $this->Array2jsArray($data, false);
+			$js_array		= $this->Array2jsArray($data, false);#echo$js_array;
 
 			// switch the renderers
 			switch ($options['xrenderer']){
@@ -1187,8 +1187,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[]		= "axes:{xaxis:{".(($options['autoscale_x']) ? 'autoscale:true' : $renderer)."},yaxis:{".(($options['autoscale_y']) ? 'autoscale:true' : '')."}}";
 			$tmpopt[]		= "series:[{lineWidth:".((isset($options['lineWidth'])) ? $options['lineWidth'] : 4).", markerOptions:{style:'".((isset($options['markerStyle'])) ? $options['markerStyle'] : 'square')."'}}]";
 			$this->tpl->add_js(" 
-					line1 = ".$js_array.";
-					plot_".$id." = $.jqplot('".$id."', [line1], ".$this->gen_options($tmpopt).");", 'docready');
+					plot_".$id." = $.jqplot('".$id."', ".$js_array.", ".$this->gen_options($tmpopt).");", 'docready');
 
 			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
 		}

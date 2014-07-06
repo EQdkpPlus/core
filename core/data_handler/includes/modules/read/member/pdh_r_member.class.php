@@ -410,7 +410,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_classname($member_id){
-			return $this->game->get_name('primary', $this->get_classid($member_id));
+			return $this->game->get_name('primary', (int)$this->get_classid($member_id));
 		}
 
 		public function get_html_classname($member_id){

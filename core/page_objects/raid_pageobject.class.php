@@ -96,16 +96,16 @@ class raid_pageobject extends pageobject {
 			$items		= $this->pdh->get('item', 'itemsofraid', array($raid_id));
 			$chartcolorsLootdisti = array();
 			foreach($items as $item_id){
-				$buyer_id = $this->pdh->get('item', 'buyer', array($item_id));
-
+				$buyer_id	= (int)$this->pdh->get('item', 'buyer', array($item_id));
 				$class_name	= $this->pdh->get('member', 'classname', array($buyer_id));
-				$class_id	= $this->pdh->get('member', 'classid', array($buyer_id));
+				$class_id	= (int)$this->pdh->get('member', 'classid', array($buyer_id));
 
 				if(isset($loot_dist[$class_id])){
 					$loot_dist[$class_id]['value']++;
 				}else{
-					$loot_dist[$class_id] = array('value' => 1, 'name' => $class_name);
-					$chartcolorsLootdisti[$class_id] = $this->game->get_class_color($class_id);
+					$loot_dist[$class_id]	= array('value' => 1, 'name' => $class_name);
+					$tmp_classcolor			= $this->game->get_class_color($class_id);
+					$chartcolorsLootdisti[$class_id] = ($tmp_classcolor != '') ? $tmp_classcolor : 'gray';
 				}
 
 				$this->tpl->assign_block_vars('items_row', array(
@@ -123,21 +123,20 @@ class raid_pageobject extends pageobject {
 			foreach($attendee_copy as $member_id => $member_name){
 				$member_class		= $this->pdh->get('member', 'classname', array($member_id));
 				$member_class_id	= $this->pdh->get('member', 'classid', array($member_id));
+				if($member_name != ''){
+					$html_prefix	= ( isset($ranks[$member_name]) ) ? $ranks[$member_name]['prefix'] : '';
+					$html_suffix	= ( isset($ranks[$member_name]) ) ? $ranks[$member_name]['suffix'] : '';
 
-			if($member_name != ''){
-				$html_prefix	= ( isset($ranks[$member_name]) ) ? $ranks[$member_name]['prefix'] : '';
-				$html_suffix	= ( isset($ranks[$member_name]) ) ? $ranks[$member_name]['suffix'] : '';
-
-				if(isset($class_dist[$member_class_id]['names']) && isset($class_dist[$member_class_id]['count'])){
-					$class_dist[$member_class_id]['names'] .= ", " . $html_prefix . $member_name . $html_suffix ;
-					$class_dist[$member_class_id]['count']++;
-				}else{
-					$class_dist[$member_class_id] = array(
-						'names'	=> $html_prefix . $member_name . $html_suffix,
-						'count'	=> 1
-					);
+					if(isset($class_dist[$member_class_id]['names']) && isset($class_dist[$member_class_id]['count'])){
+						$class_dist[$member_class_id]['names'] .= ", " . $html_prefix . $member_name . $html_suffix ;
+						$class_dist[$member_class_id]['count']++;
+					}else{
+						$class_dist[$member_class_id] = array(
+							'names'	=> $html_prefix . $member_name . $html_suffix,
+							'count'	=> 1
+						);
+					}
 				}
-			}
 			}
 
 			unset($ranks);
@@ -148,11 +147,11 @@ class raid_pageobject extends pageobject {
 			foreach ( $class_dist as $class_id => $details ){
 				$percentage		= ($total_attendee_count > 0) ? round(($details['count'] / $total_attendee_count) * 100) : 0;
 				$class			= $this->game->get_name('primary', $class_id);
-				$chartarray[]	= array('value' => $percentage, 'name' => $class." (".$class_dist[$class_id]['count']." - ".$percentage."%)");
-				$chartcolors[]	= (strlen($this->game->get_class_color($class_id))) ? $this->game->get_class_color($class_id) : "#000";
+				$chartarray[]	= array('value' => $percentage, 'name' => (($class) ? $class : $this->user->lang('unknown'))." (".$class_dist[$class_id]['count']." - ".$percentage."%)");
+				$chartcolors[]	= (strlen($this->game->get_class_color($class_id))) ? $this->game->get_class_color($class_id) : "gray";
 
 				$this->tpl->assign_block_vars('class_row', array(
-					'CLASS'			=> $this->game->decorate('primary', $class_id).' <span class="class_'.$class_id.'">'.$class.'</span>',
+					'CLASS'			=> $this->game->decorate('primary', $class_id).' <span class="class_'.$class_id.'">'.(($class_id > 0) ? $class : $this->user->lang('unknown')).'</span>',
 					'BAR'			=> $this->jquery->progressbar('bar_'.md5($class), $percentage, array('text' => '%percentage%')),
 					'ATTENDEES'		=> $class_dist[$class_id]['names']
 				));
@@ -163,9 +162,9 @@ class raid_pageobject extends pageobject {
 				'piemargin'		=> 2,
 				'datalabels'	=> true,
 				'legend'		=> true,
-				'background'	=> 'transparent'
+				'background'	=> 'rgba(255, 255, 255, 0.1)'
 			);
-			$chartoptionsLootDistri = $chartoptions;		
+			$chartoptionsLootDistri = $chartoptions;
 			if ($this->game->get_class_color(1) != ''){
 				$chartoptions['color_array']			= $chartcolors;
 				$chartoptionsLootDistri['color_array']	= $chartcolorsLootdisti;
@@ -227,7 +226,6 @@ class raid_pageobject extends pageobject {
 						'S_ADJUSTMENTS'			=> count($arrAdjustments),
 				));
 			}	
-			
 
 			$this->tpl->assign_vars(array(
 				'L_MEMBERS_PRESENT_AT'	=> sprintf($this->user->lang('members_present_at'),
@@ -265,7 +263,7 @@ class raid_pageobject extends pageobject {
 				'RAID_DATE'				=> $this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), true, false, true),
 				'U_RAIDLIST'			=> $this->routing->build('raids'),
 			));
-			
+			print_r(array_filter($linksArray));
 			chartooltip_js();
 			
 			$this->set_vars(array(
