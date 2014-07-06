@@ -36,7 +36,8 @@ class character_pageobject extends pageobject {
 			message_die($this->user->lang('error_invalid_name_provided'));
 		}
 		
-		$withTwinks = (!$this->config->get('show_twinks')) ? $this->in->get('with_twinks', 0) : (!$this->config->get('show_twinks'));
+		$withTwinks = $this->in->get('with_twinks', 1);
+
 		$arrChars = ($withTwinks) ? array_merge(array($this->url_id), $this->pdh->get('member', 'other_members', array($this->url_id))) : array($this->url_id);
 		$twinkSortSuffix = $this->in->exists('with_twinks') ? 'with_twinks='.(($withTwinks) ? 1 : 0).'&' : '';
 		

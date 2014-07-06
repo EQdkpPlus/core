@@ -32,6 +32,8 @@
 <div class="tableHeader">
 	<h2>{L_DKP_NAME}</h2>
 </div>
+<input type="checkbox" onchange="window.location='{SID}&with_twinks='+ ((this.checked) ? 0 : 1)" name="with_twinks" value="1" <!-- IF not S_WITH_TWINKS -->checked="checked"<!-- ENDIF -->/> {L_points_for_this_char}
+<br /><br />
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless colorswitch">
 	{MEMBER_POINTS}
 </table>
