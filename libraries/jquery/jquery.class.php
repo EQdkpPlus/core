@@ -29,9 +29,13 @@ if (!class_exists("jquery")) {
 		private $language_set			= array();
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
-		private $colorpicker_init		= false;
-		private $starrating_init		= false;
-		private $formvalid_init			= false;
+		private $inits					= array(
+			'colorpicker'		=> false,
+			'starrating'		=> false,
+			'formvalidation'	=> false,
+			'fullcalendar'		=> false,
+			'jqplot'			=> false,
+		);
 		
 		/**
 		* Construct of the jquery class
@@ -52,14 +56,6 @@ if (!class_exists("jquery")) {
 			// jquery language file
 			$langfile = '';
 			$this->langfile('lang_jquery.js');
-			/*if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
-				$langfile = $this->root_path.'language/'.$this->user->data['user_lang'].'/lang_jquery.js';
-			}elseif(is_object($this->core)){
-				$langfile = $this->root_path.'language/'.$this->config->get('default_lang').'/lang_jquery.js';
-			}
-			if(is_file($langfile)){
-				$this->tpl->js_file($langfile);
-			}*/
 
 			// set the custom UI for jquery.ui
 			$this->CustomUI($this->user->style['template_path']);
@@ -104,16 +100,41 @@ if (!class_exists("jquery")) {
 
 		public function fullcalendar(){
 			// include the calendar js/css.. css is included in base template dir, but can be overwritten by adding to template
-			$this->tpl->js_file($this->path."js/fullcalendar/fullcalendar.min.js");
-			if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
-				$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css');
-			}else{
-				$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.css');
-			}
-			$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
+			if(!$this->inits['fullcalendar']){
+				$this->tpl->js_file($this->path."js/fullcalendar/fullcalendar.min.js");
+				if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
+					$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css');
+				}else{
+					$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.css');
+				}
+				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
 			
-			// now laod the fullcalendar language file
-			$this->langfile('lang_fullcalendar.js');
+				// now load the fullcalendar language file
+				$this->langfile('lang_fullcalendar.js');
+				$this->inits['fullcalendar']	= true;
+			}
+		}
+
+		public function init_jqplot($mobile=false){
+			// include the jqplot files
+			if(!$this->inits['jqplot']){
+				$this->tpl->js_file($this->path."js/jqplot/jquery.jqplot.min.js");
+				$this->tpl->js_file($this->path."js/jqplot/jqplot.canvasAxisTickRenderer.min.js");
+				$this->tpl->js_file($this->path."js/jqplot/jqplot.canvasTextRenderer.min.js");
+				$this->tpl->js_file($this->path."js/jqplot/jqplot.categoryAxisRenderer.min.js");
+				$this->tpl->js_file($this->path."js/jqplot/jqplot.dateAxisRenderer.min.js");
+				$this->tpl->js_file($this->path."js/jqplot/jqplot.highlighter.min.js");
+				$this->tpl->js_file($this->path."js/jqplot/jqplot.pieRenderer.min.js");
+				if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/jquery.jqplot.css')){
+					$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/jquery.jqplot.css');
+				}else{
+					$this->tpl->css_file($this->path."js/jqplot/jquery.jqplot.css");
+				}
+				if($mobile){
+					$this->tpl->js_file($this->path."js/jqplot/jqplot.mobile.min.js");
+				}
+				$this->inits['jqplot']	= true;
+			}
 		}
 
 		/**
@@ -866,9 +887,9 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function colorpicker($id, $value, $name='', $size='14', $jscode=''){
-			if(!$this->colorpicker_init) {
+			if(!$this->inits['colorpicker']) {
 				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
-				$this->colorpicker_init = true;
+				$this->inits['colorpicker'] = true;
 			}
 			return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 		}
@@ -926,7 +947,7 @@ if (!class_exists("jquery")) {
 		* @return JScode
 		*/
 		public function init_formvalidation(){
-			if(!$this->formvalid_init){
+			if(!$this->inits['formvalidation']){
 				$this->tpl->add_js("
 				$('.fv_checkit input[required]').change(function() {
 					var forminputvalue=$.trim($(this).val());
@@ -936,7 +957,7 @@ if (!class_exists("jquery")) {
 						$(this).next('.fv_msg').show();
 					}
 				}).trigger('change');", 'docready');
-				$this->formvalid_init = true;
+				$this->inits['formvalidation'] = true;
 			}
 		}
 
@@ -949,9 +970,9 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function starrating($name, $url, $options=''){
-			if(!$this->starrating_init){
+			if(!$this->inits['starrating']){
 				$this->starrating_js();
-				$this->starrating_init = true;
+				$this->inits['starrating'] = true;
 			}
 			$tmpopt		= array();
 			$tmpopt[]	= 'data-star-number="'.((isset($options['number']) && $options['number'] > 0) ? $options['number'] : 5).'"';
@@ -1099,6 +1120,7 @@ if (!class_exists("jquery")) {
 		* @return HTML Code
 		*/
 		public function charts($type, $id, $data, $options=''){
+			$this->init_jqplot();
 			switch($type){
 				case 'line':	return $this->charts_line($id, $data, $options);break;
 				case 'pie':		return $this->charts_pie($id, $data, $options);break;
@@ -1357,6 +1379,17 @@ if (!class_exists("jquery")) {
 			return $output;
 		}
 
+		/**
+		* Image uploader
+		* 
+		* @param $type				The type of the filebrowser
+		* @param $inputid			The ID of the input
+		* @param $imgname			The image name
+		* @param $imgpath			The image path
+		* @param $options			The options array
+		* @param $storageFolder		Storage folder
+		* @return void
+		*/
 		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
 			$this->fileBrowser($type, 'image', $storageFolder);
 			
@@ -1414,7 +1447,15 @@ if (!class_exists("jquery")) {
 				$this->file_browser[$type] = true;
 			}
 		}
-		
+
+		/**
+		* Toolbar
+		* 
+		* @param $id			The ID of the toolbar
+		* @param $arrItems		The item elements
+		* @param $options		The options array
+		* @return void
+		*/
 		public function toolbar($id, $arrItems, $options=array()){
 			$position = (!isset($options['position'])) ? 'top' : $options['position'];
 			$hideOnClick = (!isset($options['hideOnClick'])) ? true : $options['hideOnClick'];
