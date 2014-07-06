@@ -61,7 +61,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 
 			//cached data not outdated?
 			$this->attendance[$time_period][$member_id] = $this->pdc->get('pdh_event_attendance_'.$time_period.'_'.$member_id);
-			if($this->attendance[$time_period][$member_id] != null || is_array($this->attendance[$time_period][$member_id])){
+			if($this->attendance[$time_period][$member_id] != null || is_array($this->attendance[$time_period][$member_id])) {
 				return true;
 			}
 			$main_id = $this->pdh->get('member', 'mainid', array($member_id));
@@ -92,6 +92,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 						$this->counts[$first_date['main']][$event_id]++;
 					}
 				}
+				$this->pdc->put('pdh_event_att_count', $this->counts);
 			}
 			//get raids
 			$raid_ids = array();
