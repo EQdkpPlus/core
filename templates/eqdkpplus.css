@@ -505,3 +505,37 @@ i.icon-color-gray{
 	display: none;
 }
 
+/* HTML5 form validation */
+.fv_msg {
+	padding: 0;
+	margin-top: 14px;
+	height: 0px;
+	line-height: 0;
+}
+
+.fv_checkit [required]:invalid ~ .fv_msg:after {
+	content: attr(data-errormessage);
+	color: red;
+}
+
+.fv_checkit [pattern]:invalid ~ .fv_msg:after {
+	content: attr(data-errormessage);
+	color: red;
+}
+
+.fv_checkit [pattern]:invalid ~ .fv_msg:before, [required]:invalid ~ .fv_msg:before {
+	font-family: FontAwesome;
+	content: "\f071";
+	margin-right: 6px;
+	color: red;
+}
+
+.fv_checkit input.fv_success:valid ~ .fv_msg:before {
+	font-family: FontAwesome;
+	content: "\f058";
+	color: green;
+}
+
+.fv_checkit [required]:invalid {
+	border: 1px solid red!important;
+}

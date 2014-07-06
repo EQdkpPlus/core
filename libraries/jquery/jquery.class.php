@@ -31,6 +31,7 @@ if (!class_exists("jquery")) {
 		private $file_browser			= array();
 		private $colorpicker_init		= false;
 		private $starrating_init		= false;
+		private $formvalid_init			= false;
 		
 		/**
 		* Construct of the jquery class
@@ -920,6 +921,26 @@ if (!class_exists("jquery")) {
 		}
 
 		/**
+		* Init the formvalidation "hide-message-if-empty-inout" functionality
+		*
+		* @return JScode
+		*/
+		public function init_formvalidation(){
+			if(!$this->formvalid_init){
+				$this->tpl->add_js("
+				$('.fv_checkit input[required]').change(function() {
+					var forminputvalue=$.trim($(this).val());
+					if(forminputvalue.length == 0){
+						$(this).next('.fv_msg').hide();
+					}else{
+						$(this).next('.fv_msg').show();
+					}
+				}).trigger('change');", 'docready');
+				$this->formvalid_init = true;
+			}
+		}
+
+		/**
 		* Star Rating Widget
 		*
 		* @param $name			name/id of the rating thing
@@ -1336,85 +1357,6 @@ if (!class_exists("jquery")) {
 			return $output;
 		}
 
-		/**
-		* Validate the Form
-		* 
-		* @param $formid		Id of the Form to validate
-		* @return Tooltip
-		*/
-		public function Validate($formid, $mssgarray=false, $customcode=''){
-			$messages	= (is_array($mssgarray)) ? ', '.$this->Array2jsArray($mssgarray, true) : '';
-			$customcode	= ($customcode) ? ','.$customcode : '';
-			$this->tpl->add_js("
-				var validator_".$formid." = '';
-					$(document).ready(function() {
-						validator_".$formid." =$('#".$formid."').validate({
-						ignore: '.ignore_validation'".$messages.$customcode."
-					});
-				});
-			");
-		}
-
-		/**
-		* Validate the Form
-		* 
-		* @param $formid		Id of the Form to validate
-		* @return Tooltip
-		*/
-		public function ValidateTab($formid, $mssgarray=false){
-			$messages = (is_array($mssgarray)) ? ', '.$this->Array2jsArray($mssgarray, true, "'") : '';
-			$this->tpl->add_js('
-					$("#'.$formid.'").validate({
-						invalidHandler: function(form, validator) {
-							var errors = validator.numberOfInvalids();
-							if (errors) {
-								var invalidPanels = $(validator.invalidElements()).closest(".ui-tabs-panel", form);
-								if (invalidPanels.size() > 0) {
-									$.each($.unique(invalidPanels.get()), function(){
-										$(this).siblings(".ui-tabs-nav")
-											.find("a[href=\'#" + this.id + "\']").parent().not(".ui-tabs-selected")
-											.addClass("ui-state-error")
-											.show("pulsate",{times: 3});
-									});
-								}
-							}
-						},
-						unhighlight: function(element, errorClass, validClass) {
-							$(element).removeClass(errorClass);
-							$(element.form).find("label[for=" + element.id + "]").removeClass(errorClass);
-							var $panel = $(element).closest(".ui-tabs-panel", element.form);
-							if ($panel.size() > 0) {
-								var removeerror = true;
-								$panel.find("." + errorClass).each(function(index) {
-									if($(this).text()){
-										removeerror = false;
-									}
-								});
-								if (removeerror === true && $panel.find("." + errorClass + ":visible").length === 0) {
-									$panel.siblings(".ui-tabs-nav").find("a[href=\'#" + $panel[0].id + "\']")
-										.parent().removeClass("ui-state-error");
-								}
-							}
-						},
-						ignore: ".ignore_validation"'.$messages.'
-					});
-			', 'docready');
-		}
-
-		/**
-		* Reset the Form Validation
-		* 
-		* @param $formid		Id of the Form to validate
-		* @return Tooltip
-		*/
-		public function ResetValidate($formid){
-			$this->tpl->add_js("
-				function reset_validator_".$formid."(){
-					validator_".$formid.".resetForm();
-				}
-			");
-		}
-
 		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
 			$this->fileBrowser($type, 'image', $storageFolder);
 			
@@ -1603,6 +1545,90 @@ if (!class_exists("jquery")) {
 				$mssg = str_replace(array("\n", "\r"), '', $mssg);
 			}
 			return addslashes($mssg);
+		}
+		
+		// *************************** DEPRECATED - will be removed before alpha phase *******************//
+		
+		/**
+		* Validate the Form
+		* 
+		* @param $formid		Id of the Form to validate
+		* @return Tooltip
+		*/
+		public function Validate($formid, $mssgarray=false, $customcode=''){
+			$this->pdl->log('deprecated', 'use new form validation'); 
+			$messages	= (is_array($mssgarray)) ? ', '.$this->Array2jsArray($mssgarray, true) : '';
+			$customcode	= ($customcode) ? ','.$customcode : '';
+			$this->tpl->add_js("
+				var validator_".$formid." = '';
+					$(document).ready(function() {
+						validator_".$formid." =$('#".$formid."').validate({
+						ignore: '.ignore_validation'".$messages.$customcode."
+					});
+				});
+			");
+		}
+
+		/**
+		* Validate the Form
+		* 
+		* @param $formid		Id of the Form to validate
+		* @return Tooltip
+		*/
+		public function ValidateTab($formid, $mssgarray=false){
+			$this->pdl->log('deprecated', 'use new form validation'); 
+			$messages = (is_array($mssgarray)) ? ', '.$this->Array2jsArray($mssgarray, true, "'") : '';
+			$this->tpl->add_js('
+					$("#'.$formid.'").validate({
+						invalidHandler: function(form, validator) {
+							var errors = validator.numberOfInvalids();
+							if (errors) {
+								var invalidPanels = $(validator.invalidElements()).closest(".ui-tabs-panel", form);
+								if (invalidPanels.size() > 0) {
+									$.each($.unique(invalidPanels.get()), function(){
+										$(this).siblings(".ui-tabs-nav")
+											.find("a[href=\'#" + this.id + "\']").parent().not(".ui-tabs-selected")
+											.addClass("ui-state-error")
+											.show("pulsate",{times: 3});
+									});
+								}
+							}
+						},
+						unhighlight: function(element, errorClass, validClass) {
+							$(element).removeClass(errorClass);
+							$(element.form).find("label[for=" + element.id + "]").removeClass(errorClass);
+							var $panel = $(element).closest(".ui-tabs-panel", element.form);
+							if ($panel.size() > 0) {
+								var removeerror = true;
+								$panel.find("." + errorClass).each(function(index) {
+									if($(this).text()){
+										removeerror = false;
+									}
+								});
+								if (removeerror === true && $panel.find("." + errorClass + ":visible").length === 0) {
+									$panel.siblings(".ui-tabs-nav").find("a[href=\'#" + $panel[0].id + "\']")
+										.parent().removeClass("ui-state-error");
+								}
+							}
+						},
+						ignore: ".ignore_validation"'.$messages.'
+					});
+			', 'docready');
+		}
+
+		/**
+		* Reset the Form Validation
+		* 
+		* @param $formid		Id of the Form to validate
+		* @return Tooltip
+		*/
+		public function ResetValidate($formid){
+			$this->pdl->log('deprecated', 'use new form validation'); 
+			$this->tpl->add_js("
+				function reset_validator_".$formid."(){
+					validator_".$formid.".resetForm();
+				}
+			");
 		}
 	}
 }
