@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2007
- * Date:		$Date: 2014-02-05 21:00:21 +0100 (Mi, 05 Feb 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy_leon $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 13999 $
+ * @version		$Rev$
  *
- * $Id: pdh_r_points.class.php 13999 2014-02-05 20:00:21Z hoofy_leon $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){

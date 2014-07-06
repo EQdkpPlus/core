@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2014-06-20 14:15:16 +0200 (Fr, 20 Jun 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy_leon $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14357 $
+ * @version		$Rev$
  * 
- * $Id: apa_decay_current.class.php 14357 2014-06-20 12:15:16Z hoofy_leon $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){
