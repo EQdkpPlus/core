@@ -30,6 +30,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * class		(string)	class for the input
  * enablesecs	(boolean) 	wether seconds shall be used
  * hourf		(int) 		24 or 12 hour format
+ * required		(boolean)	field required to be filled for form submission?
  */
 class htimepicker extends html {
 
@@ -39,15 +40,18 @@ class htimepicker extends html {
 	public $enablesecs = false;
 	public $hourf = 24;
 	public $value = 0;
+	public $required = false;
 	
 	private $out = '';
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->time->date("H:i", $this->value).'"';
-		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
+		if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
+		if($this->required) $out .= ' required="required"';
 		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf);
 		$this->out = $out.' />';
+		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 	}
 	
 	public function _toString() {

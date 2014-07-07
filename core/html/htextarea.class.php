@@ -44,6 +44,7 @@ class htextarea extends html {
 	public $disabled = false;
 	public $codeinput = false;
 	public $bbcodeeditor = false;
+	public $required = false;
 	
 	private $out = '';
 	
@@ -58,7 +59,10 @@ class htextarea extends html {
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
+		if($this->required) $out .= 'required="required" ';
+		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		$this->out = $out.'>'.$this->value.'</textarea>';
+		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 	}
 	
 	public function _toString() {

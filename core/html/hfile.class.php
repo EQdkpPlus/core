@@ -44,6 +44,7 @@ class hfile extends html {
 	public $readonly = false;
 	public $class = 'input';
 	public $inptype = '';
+	public $required = false;
 	
 	
 	protected $mimetypes = false;
@@ -62,6 +63,7 @@ class hfile extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$this->out = $out.' />';
+		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 	}
 	
 	public function _toString() {

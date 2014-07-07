@@ -37,6 +37,8 @@ class hpassword extends html {
 	
 	public $name = '';
 	public $set_value = false;
+	public $required = true;
+	public $pattern = 'password';
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -45,10 +47,14 @@ class hpassword extends html {
 	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
 		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
+		if(!empty($this->pattern)) $this->class .= ' fv_success';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
+		if($this->required) $out .= 'required="required" ';
+		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		return $out.' />';
+		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 	}
 	
 	public function inpval() {

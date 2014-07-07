@@ -30,6 +30,7 @@ class form extends gen_class {
 	public $use_tabs 		= false;
 	public $use_fieldsets 	= false;
 	public $use_dependency 	= false;
+	public $validate		= false;
 	public $assign2tpl 		= true;
 	public $ajax_url		= '';
 	
@@ -272,11 +273,17 @@ class form extends gen_class {
 				}
 			}
 		}
+		// initialise form validate
+		if($this->validate) {
+			$this->jquery->init_formvalidation();
+			$this->form_class .= ' fv_checkit';
+		}
 
 		if($this->assign2tpl) 
 			$this->tpl->assign_vars(array(
 				'FORM_ID'	=> $this->form_id,
-				'HIDDEN'	=> $this->hidden
+				'HIDDEN'	=> $this->hidden,
+				'FORMCLASS'	=> $this->form_class,
 			));
 		else return $out;
 	}

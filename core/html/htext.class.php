@@ -44,6 +44,7 @@ class htext extends html {
 	public $readonly = false;
 	public $spinner = false;
 	public $colorpicker = false;
+	public $required = false;
 	public $autocomplete = array();
 	public $class = 'input';
 	public $inptype = '';
@@ -66,11 +67,17 @@ class htext extends html {
 			$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
 		}
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
+		if(!empty($this->pattern)) $this->class .= ' fv_success';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
+		if($this->required) $out .= 'required="required" ';
+		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
+		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$this->out = $out.' />';
+		if(!empty($this->pattern)) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_sample_pattern').'"></span>';
+		elseif($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 	}
 	
 	public function _toString() {

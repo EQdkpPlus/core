@@ -619,7 +619,6 @@ class user_core extends gen_class {
 		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
 		$birthday_format = str_replace('y', 'Y', $birthday_format);
 		
-		// commented lines are for form-validate - NYI
 		$settingsdata = array(
 			'registration_info'	=> array(
 				'registration_info'	=> array(
@@ -628,30 +627,34 @@ class user_core extends gen_class {
 						'lang'		=> 'username',
 						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
 						'size'		=> 40,
-						#'required'	=> true,
+						'required'	=> true,
 					),
 					'user_email' => array(
 						'type'		=> 'text',
 						'lang'		=> 'email_address',
 						'size'		=> 40,
 						'id'		=> 'useremail',
-						#'required'	=> true,
+						'required'	=> true,
+						'pattern'	=> 'email',
 					),
 					'current_password'	=> array(
 						'type'	=> 'password',
 						'size'		=> 40,
 						'id'		=> 'oldpassword',
-						#'required'	=> true,
+						'required'	=> true,
+						'pattern'	=> 'password',
 					),
 					'new_password' => array(
 						'type'		=> 'password',
 						'size'		=> 40,
 						'id'		=> 'password1',
+						'required'	=> false,
 					),
 					'confirm_password' => array(
 						'type'		=> 'password',
 						'size'		=> 40,
 						'id'		=> 'password2',
+						'required'	=> false,
 					),
 				),
 			),

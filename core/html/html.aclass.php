@@ -56,5 +56,28 @@ abstract class html {
 			$out = str_replace(array('[', ']'), array('_', ''), $input);
 			return 'clid_'.$out;
 	}
+	
+	/*
+	 *	some predefined patterns
+	 */
+	protected function pattern($pattern) {
+		switch( $pattern ){
+			case 'email':
+				if(empty($this->placeholder)) $this->placeholder = 'email@example.com';
+				return '\w+(\.\w+)*@\w+(\.\w+)+';
+				
+			case 'url':
+				if(empty($this->placeholder)) $this->placeholder = 'http(s)://example.com';
+				return 'http(s){0,1}://\w+(\.\w+)+';
+				
+			case 'password':
+				$minlength = 6;
+				if(empty($this->placeholder)) $this->placeholder = sprintf(registry::fetch('user')->lang('fv_password_placeholder'), $minlength-1);
+				return '.{'.$minlength.',}';
+				
+			default: 
+				return $pattern;
+		}
+	}
 }
 ?>
