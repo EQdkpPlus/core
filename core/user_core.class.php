@@ -155,8 +155,8 @@ class user_core extends gen_class {
 			$this->style['date_short']				= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
 
 			$this->data['privacy_settings'] 	= ($this->data['privacy_settings'] && unserialize($this->data['privacy_settings'])) ? unserialize($this->data['privacy_settings']) : array();
-			$this->data['custom_fields'] 			= ($this->data['custom_fields'] && unserialize($this->data['custom_fields'])) ? unserialize($this->data['custom_fields']) : array();
-			$this->data['plugin_settings'] 		= unserialize($this->data['plugin_settings']);
+			$this->data['custom_fields'] 		= ($this->data['custom_fields'] && unserialize($this->data['custom_fields'])) ? unserialize($this->data['custom_fields']) : array();
+			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize($this->data['plugin_settings'])) ? unserialize($this->data['plugin_settings']) : array();
 			list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
 			$this->data['user_email'] = register('encrypt')->decrypt($this->data['user_email']);
 			$this->data['auth_account'] = @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
