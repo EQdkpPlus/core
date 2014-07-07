@@ -74,7 +74,7 @@ function createEmbeddLink(){
 	<div class="clear"></div>
 </div>
 
-<form method="post" action="{ACTION}&amp;l={LAYOUT_ID}" name="post" id="portal_layout_form">
+<form method="post" action="{ACTION}&amp;l={LAYOUT_ID}" name="post" id="portal_layout_form"  class="fv_checkit">
 <div class="contentHeader">
 	<h1 class="contentTitle">{L_portalplugin_management}</h1>
 </div>
@@ -82,7 +82,7 @@ function createEmbeddLink(){
 <fieldset class="settings">
 	<dl>
 		<dt><label>{L_name}:</label></dt>
-		<dd><input type="text" name="name" value="{NAME}" class="input required" /></dd>
+		<dd><input type="text" name="name" value="{NAME}" class="input" required /></dd>
 	</dl>
 	<dl>
 		<dt><label>{L_portal_blocks}:</label></dt>
@@ -110,7 +110,7 @@ function createEmbeddLink(){
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={left_row.ID}&amp;l={LAYOUT_ID}"><i class="fa fa-plus fa-lg"></i></a></div>
 						<!-- ENDIF -->
 						<!-- IF left_row.S_CHILD -->
-						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({left_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({left_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
 					</div>
 						{left_row.INFO}
@@ -137,7 +137,7 @@ function createEmbeddLink(){
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={middle_row.ID}&amp;l={LAYOUT_ID}"><i class="fa fa-plus fa-lg"></i></a></div>
 						<!-- ENDIF -->
 						<!-- IF middle_row.S_CHILD -->
-						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
 					</div>
 						{middle_row.INFO}
@@ -166,7 +166,7 @@ function createEmbeddLink(){
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={bottom_row.ID}&amp;l={LAYOUT_ID}"><i class="fa fa-plus fa-lg"></i></a></div>
 						<!-- ENDIF -->
 						<!-- IF bottom_row.S_CHILD -->
-						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
 					</div>
 						{bottom_row.INFO}
@@ -280,7 +280,7 @@ function createEmbeddLink(){
 </form>
 
 <div id="dialog-embeddmodule" title="{L_embedd}">
-		<fieldset class="settings mediumsettings">	
+		<fieldset class="settings mediumsettings">
 			<dl>
 				<dt><label>{L_embedd_show_header}:</label></dt>
 				<dd><input name="" type="checkbox" id="embedd_show_header" value="1" checked class="onchangeEmbedd" /></dd>
@@ -290,12 +290,12 @@ function createEmbeddLink(){
 				<dd>
 					<input type="radio" name="embedd_position" value="left" checked class="onchangeEmbedd"/> {L_portalplugin_left}
 					<input type="radio" name="embedd_position" value="middle" class="onchangeEmbedd" /> {L_embedd_middle}
-					<input type="radio" name="embedd_position" value="right" class="onchangeEmbedd"/> {L_portalplugin_right}	 	
+					<input type="radio" name="embedd_position" value="right" class="onchangeEmbedd"/> {L_portalplugin_right}
 				</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_wide_content}:</label></dt>
-				<dd><input name="" type="checkbox" id="embedd_wide_content" value="1" class="onchangeEmbedd" /></dd>		
+				<dd><input name="" type="checkbox" id="embedd_wide_content" value="1" class="onchangeEmbedd" /></dd>
 			</dl>
 			<textarea style="width: 90%" rows="5" readonly="readonly" name="data" onclick="$(this).select()" id="embedd_html"></textarea>
 		</fieldset>

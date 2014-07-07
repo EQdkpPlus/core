@@ -25,7 +25,7 @@ class login_twofactor extends gen_class {
 	public static $options = array(
 		'connect_accounts'	=> true,
 	);
-	
+
 	public static $functions = array(
 		'account_button'	=> 'account_button',
 		'get_account'		=> 'get_account',
@@ -33,11 +33,11 @@ class login_twofactor extends gen_class {
 		'display_account'	=> 'display_account',
 	);
 	
-	public function __construct(){		
+	public function __construct(){
 	}
 	
 	public function account_button(){
-		$this->jquery->dialog('twofactor_init', $this->user->lang('login_twofactor_connect'), array('url' => $this->server_path.'libraries/twofactor/init.php'.$this->SID, 'height'	=> 600, 'width' => 700));	
+		$this->jquery->dialog('twofactor_init', $this->user->lang('login_twofactor_connect'), array('url' => $this->server_path.'libraries/twofactor/init.php'.$this->SID, 'height'	=> 600, 'width' => 700));
 		return '<button type="button" class="mainoption" onclick="twofactor_init()">'.$this->user->lang('login_twofactor_connect').'</button>';
 	}
 	
@@ -48,11 +48,11 @@ class login_twofactor extends gen_class {
 		
 		include_once $this->root_path.'libraries/twofactor/googleAuthenticator.class.php';
 		$ga = new PHPGangsta_GoogleAuthenticator();
-		$checkResult = $ga->verifyCode($secret, $code, 5);    // 2 = 2*30sec clock tolerance
+		$checkResult = $ga->verifyCode($secret, $code, 5);		// 2 = 2*30sec clock tolerance
 		if ($checkResult) {
 			return register('encrypt')->encrypt(serialize(array(
 				'secret' => $secret,
-				'emergency_token' => $ga->createSecret(8),	
+				'emergency_token' => $ga->createSecret(8),
 			)));
 		}
 		
@@ -66,7 +66,7 @@ class login_twofactor extends gen_class {
 		return $out;
 	}
 	
-	public function after_login($arrOptions){		
+	public function after_login($arrOptions){
 		if ($arrOptions[0] && $arrOptions[0]['user_id'] != ANONYMOUS && !$this->in->exists('lmethod')){
 			//Get Auth Account
 			$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($arrOptions[0]['user_id']));
@@ -75,8 +75,8 @@ class login_twofactor extends gen_class {
 				if ($data){
 					$cookie = get_cookie("twofactor");
 					$cookie_secret = unserialize(register('encrypt')->decrypt($cookie));
-					if (($cookie_secret['secret'] === $data['secret']) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;			
-					
+					if (($cookie_secret['secret'] === $data['secret']) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;
+
 					$this->tpl->assign_vars(array(
 						'TWOFACTOR_DATA'		=>  register('encrypt')->encrypt(serialize($arrOptions[0]['user_id'])),
 						'TWOFACTOR_AUTOLOGIN'	=> ($arrOptions[4]) ? 'checked' : '',
@@ -94,11 +94,10 @@ class login_twofactor extends gen_class {
 								if ((int)$arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
 									$blnShowCaptcha = true;
 								}
-							}							
+							}
 						}
 					}
-					
-					
+
 					//Captcha
 					if ($blnShowCaptcha){
 						require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
@@ -108,18 +107,15 @@ class login_twofactor extends gen_class {
 								'S_DISPLAY_CATPCHA'		=> true,
 						));
 					}
-					
-					$this->jquery->Validate('login');
-						
+
 					$this->core->set_vars(array(
 							'page_title'		=> $this->user->lang("login_twofactor"),
 							'template_file'		=> 'twofactor_login.html',
 							'display'			=> true)
-					);			
+					);
 				}
 			}
 		}
-
 		return false;
 	}
 	
@@ -143,17 +139,16 @@ class login_twofactor extends gen_class {
 			if ($arrAuthAccounts['twofactor'] != ""){
 				$data = unserialize(register('encrypt')->decrypt($arrAuthAccounts['twofactor']));
 				if ($data){
-					//
 					if ($code === $data['emergency_token']){
 						$this->pdh->put('user', 'delete_authaccount', array($user, "twofactor"));
 						$userdata = $this->pdh->get('user', 'data', array($user));
 						if ($userdata){
 							list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-						
+
 							if ($this->in->get('twofactor_cookie', 0)){
 								set_cookie("twofactor", register('encrypt')->encrypt(serialize(array('secret' => $data['secret'], 'user_id' => $userdata['user_id']))), time()+60*60*24*30);
 							}
-						
+
 							return array(
 									'status'		=> 1,
 									'user_id'		=> $userdata['user_id'],
@@ -161,7 +156,7 @@ class login_twofactor extends gen_class {
 									'autologin'		=> true,
 									'user_login_key' => $userdata['user_login_key'],
 							);
-						}	
+						}
 					}
 					
 					//Check Code
@@ -174,25 +169,25 @@ class login_twofactor extends gen_class {
 							$userdata = $this->pdh->get('user', 'data', array($user));
 							if ($userdata){
 								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-								
+
 								if ($this->in->get('twofactor_cookie', 0)){
 									set_cookie("twofactor", register('encrypt')->encrypt(serialize(array('secret' => $data['secret'], 'user_id' => $userdata['user_id']))), time()+60*60*24*30);
 								}
-								
+
 								return array(
-										'status'		=> 1,
-										'user_id'		=> $userdata['user_id'],
-										'password_hash'	=> $strPwdHash,
-										'autologin'		=> true,
-										'user_login_key' => $userdata['user_login_key'],
+									'status'			=> 1,
+									'user_id'			=> $userdata['user_id'],
+									'password_hash'		=> $strPwdHash,
+									'autologin'			=> true,
+									'user_login_key'	 => $userdata['user_login_key'],
 								);
 							}
-						}					
+						}
 					}
 				}
 			}
 			
-		}		
+		}
 		
 		return false;
 	}

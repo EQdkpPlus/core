@@ -374,20 +374,30 @@
 	<!-- ENDIF -->
 
 	<div id="dialog-login" title="{L_login}">
-		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login">
+		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login" class="fv_checkit">
 			<!-- IF S_BRIDGE_INFO -->
 			<div class="infobox infobox-large infobox-blue clearfix">
 				<i class="fa fa-info-circle fa-4x pull-left"></i> {L_login_bridge_notice}
 			</div>
 			<!-- ENDIF -->
-			<fieldset class="settings mediumsettings">	
+			<fieldset class="settings mediumsettings">
 				<dl>
 					<dt><label>{L_username}:</label></dt>
-					<dd><div class="input-icon"><i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input required username" id="username" placeholder="{L_username}" /></div></dd>
+					<dd>
+						<div class="input-icon">
+							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required />
+							<span class="fv_msg" data-errormessage="{L_fv_required_user}"></span>
+						</div>
+					</dd>
 				</dl>
 				<dl>
 					<dt><label>{L_password}:</label></dt>
-					<dd><div class="input-icon"><i class="fa fa-key"></i><input type="password" name="password" size="30" maxlength="32" class="input required password" id="password" placeholder="{L_password}"/></div>
+					<dd>
+						<div class="input-icon">
+							<i class="fa fa-key"></i>
+							<input type="password" name="password" size="30" maxlength="32" class="input password" id="password" placeholder="{L_password}" required />
+							<span class="fv_msg" data-errormessage="{L_fv_required_password}"></span>
+						</div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}<br />
 						<!-- ENDIF -->

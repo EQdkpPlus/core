@@ -47,14 +47,14 @@ class register_pageobject extends pageobject {
 
 	public function __construct() {
 		$handler = array(
-			'submit' => array('process' => 'submit',  'csrf' => true),
-			'register' => array('process' => 'display_form'),
-			'guildrules' => array('process' => 'display_guildrules'),
-			'deny' => array('process' => 'process_deny'),
-			'confirmed' => array('process' => 'process_confirmed'),
-			'activate'	=> array('process' => 'process_activate'),
-			'resendactivation' => array('process' => 'display_resend_activation_mail'),
-			'resend_activation'=> array('process' => 'process_resend_activation'),
+			'submit'			=> array('process' => 'submit',  'csrf' => true),
+			'register'			=> array('process' => 'display_form'),
+			'guildrules'		=> array('process' => 'display_guildrules'),
+			'deny'				=> array('process' => 'process_deny'),
+			'confirmed'			=> array('process' => 'process_confirmed'),
+			'activate'			=> array('process' => 'process_activate'),
+			'resendactivation'	=> array('process' => 'display_resend_activation_mail'),
+			'resend_activation'	=> array('process' => 'process_resend_activation'),
 		);
 		parent::__construct(false, $handler);
 		if ($this->user->data['rules'] == 1){
@@ -200,20 +200,20 @@ class register_pageobject extends pageobject {
 		$title = '';
 		
 		if ($this->config->get('account_activation') == 1) {
-			$success_message = sprintf($this->user->lang('register_activation_self'), $this->in->get('user_email'));
-			$email_template = 'register_activation_self';
-			$email_subject	= $this->user->lang('email_subject_activation_self');
-			$title = $this->user->lang('email_subject_activation_self');
+			$success_message	= sprintf($this->user->lang('register_activation_self'), $this->in->get('user_email'));
+			$email_template		= 'register_activation_self';
+			$email_subject		= $this->user->lang('email_subject_activation_self');
+			$title				= $this->user->lang('email_subject_activation_self');
 		} elseif ($this->config->get('account_activation') == 2) {
-			$success_message = sprintf($this->user->lang('register_activation_admin'), $this->in->get('user_email'));
-			$email_template = 'register_activation_admin';
-			$email_subject	= $this->user->lang('email_subject_activation_admin');
-			$title = $this->user->lang('email_subject_activation_admin');
+			$success_message	= sprintf($this->user->lang('register_activation_admin'), $this->in->get('user_email'));
+			$email_template		= 'register_activation_admin';
+			$email_subject		= $this->user->lang('email_subject_activation_admin');
+			$title				= $this->user->lang('email_subject_activation_admin');
 		} else {
 			$success_message = sprintf($this->user->lang('register_activation_none'), '<a href="'.$this->controller_path.'Login/'.$this->SID.'">', '</a>', $this->in->get('user_email'));
-			$email_template = 'register_activation_none';
-			$email_subject	= $this->user->lang('email_subject_activation_none');
-			$title = $this->user->lang('success');
+			$email_template		= 'register_activation_none';
+			$email_subject		= $this->user->lang('email_subject_activation_none');
+			$title				= $this->user->lang('success');
 		}
 
 		// Email a notice
@@ -233,11 +233,11 @@ class register_pageobject extends pageobject {
 		if ( $this->config->get('account_activation') == 2 ) {
 			$this->email->Set_Language($this->config->get('default_lang'));
 			$bodyvars = array(
-				'USERNAME'   => $this->in->get('username'),
+				'USERNAME'		=> $this->in->get('username'),
 				'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
 			);
 			if(!$this->email->SendMailFromAdmin(register('encrypt')->decrypt($this->config->get('admin_email')), $this->user->lang('email_subject_activation_admin_act'), 'register_activation_admin_activate.html', $bodyvars)){
-				$success_message = $this->user->lang('email_subject_send_error');
+				$success_message	= $this->user->lang('email_subject_send_error');
 				$title = '';
 			}
 		}
@@ -245,12 +245,6 @@ class register_pageobject extends pageobject {
 	}
 
 	public function display_resend_activation_mail(){
-		$this->jquery->Validate('lost_password', array(
-			array('name' => 'username', 'value'=> $this->user->lang('fv_required_user')),
-			array('name'=>'user_email', 'value'=>$this->user->lang('fv_required_email'))
-		));
-		$this->jquery->ResetValidate('lost_password');
-
 		$this->tpl->add_js('document.lost_password.username.focus();', 'docready');
 		$this->tpl->assign_vars(array(
 			'BUTTON_NAME'			=> 'resend_activation',
@@ -475,5 +469,4 @@ class register_pageobject extends pageobject {
 		);
 	}
 }
-
 ?>

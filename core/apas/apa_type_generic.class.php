@@ -26,14 +26,14 @@ if( !class_exists( "apa_type_generic" ) ) {
 			'name'	=> array(
 				'type'		=> 'text',
 				'size'		=> 20,
-				'class'		=> 'input required'
+				'required'	=> true,
 			),
 			'exectime'	=> array(
 				'type'		=> 'timepicker',
 				'default'	=> 14400,
 				'hour'		=> 4,
 				'min'		=> 0,
-				'class'		=> 'required'
+				'required'	=> true,
 			),
 			'pools'	=> array(
 				'type'		=> 'multiselect',

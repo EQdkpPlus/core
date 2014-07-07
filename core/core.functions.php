@@ -525,7 +525,6 @@ function message_die($text = '', $title = '', $type = 'normal', $login_form = fa
 	//Login-Form
 	if ($login_form){
 		if (!registry::fetch('user')->is_signedin()){
-			registry::register('jquery')->Validate('login', array(array('name' => 'username', 'value'=> registry::fetch('user')->lang('fv_required_user')), array('name'=>'password', 'value'=>registry::fetch('user')->lang('fv_required_password'))));
 			registry::register('template')->add_js('$("#username");', 'docready');
 
 			$redirect = registry::register('environment')->eqdkp_request_page;

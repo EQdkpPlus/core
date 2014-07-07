@@ -112,10 +112,6 @@ class addcharacter_pageobject extends pageobject {
 
 		$arrHistoryReceivers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
 		asort($arrHistoryReceivers);
-		$this->jquery->Validate('addchar', array(
-			array('name' => 'name', 'value' => '<br/>'.$this->user->lang('fv_required_name'))
-		));
-		$this->jquery->ResetValidate('addchar');
 		$this->tpl->assign_vars(array(
 			// Permissions
 			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
@@ -147,11 +143,12 @@ class addcharacter_pageobject extends pageobject {
 		// Static fields
 		$static_fields = array(
 			'name'	=> array(
-				'type'	=> 'text',
-				'lang'	=> 'name',
-				'class'	=> 'input {validate:{required:true, minlength:3}}',
-				'readonly' => ($this->url_id > 0 && !$this->in->get('adminmode')) ? true : false,
-				'size'	=> 20
+				'type'		=> 'text',
+				'lang'		=> 'name',
+				'required'	=> true,
+				'pattern'	=> '.{3,}',
+				'readonly'	=> ($this->url_id > 0 && !$this->in->get('adminmode')) ? true : false,
+				'size'		=> 20
 			),
 		);
 		if($this->url_id > 0) {

@@ -37,11 +37,11 @@ if ( !class_exists( "apa_decay_current" ) ) {
 				'type'		=> 'datepicker',
 				'timepicker' => true,
 				'default'	=> 'now',
-				'class'		=> 'input'
 			),			
 			'calc_func' => array(
 				'type'		=> 'dropdown',
 				'options'	=> array(),
+				'required'	=> true,
 			),
 		);
 		

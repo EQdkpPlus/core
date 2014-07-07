@@ -158,17 +158,16 @@ class login_pageobject extends pageobject {
 				if ( !(int)$row['user_active'] ) {
 					message_die($this->user->lang('error_account_inactive'));
 				}
-				
+
 				$user_salt = $this->user->generate_salt();
 				$user_password = $this->in->get('password1');
-				
+
 				$arrSet = array(
 						'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
 						'user_key' => '',
 				);
 				
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
-				
 				if ($objQuery){
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
 					$this->display();
@@ -210,30 +209,29 @@ class login_pageobject extends pageobject {
 			} else {
 				$row['user_email'] = $this->crypt->decrypt($row['user_email']);
 			}
-			
+
 			//We have an hit
 			if ($row) {
 				// Account's inactive, can't give them their password
 				if ( !$row['user_active'] ) {
 					message_die($this->user->lang('error_account_inactive'));
 				}
-			
 				$username = $row['username'];
-			
+
 				// Create a new activation key
 				$user_key = $this->pdh->put('user', 'create_new_activationkey', array($row['user_id']));
 				if(!strlen($user_key)) {
 					$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
 					$this->display();
 				}
-			
+
 				// Email them their new password
 				$bodyvars = array(
 						'USERNAME'		=> $row['username'],
 						'DATETIME'		=> $this->time->user_date(false, true),
 						'U_ACTIVATE'	=> $this->env->link . $this->controller_path_plain. '/Login/NewPassword/?key=' . $user_key,
 				);
-			
+
 				if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
 					message_die($this->user->lang('password_sent'), $this->user->lang('get_new_password'));
 				} else {
@@ -251,13 +249,6 @@ class login_pageobject extends pageobject {
 	}
 
 	public function display_new_password(){
-		$this->jquery->Validate('new_password', array(
-			array('name' => 'password1', 'value' => $this->user->lang('fv_required_password')),
-			array('name' => 'password2', 'value' => $this->user->lang('fv_required_password_repeat'))
-		));
-
-		$this->jquery->ResetValidate('new_password');
-
 		$this->tpl->add_js('document.new_password.password1.focus();', 'docready');
 
 		$this->tpl->assign_vars(array(
@@ -272,11 +263,6 @@ class login_pageobject extends pageobject {
 	}
 
 	public function display_lost_password(){
-		$this->jquery->Validate('lost_password', array(
-			array('name' => 'username', 'value' => $this->user->lang('fv_required_user')),
-		));
-		$this->jquery->ResetValidate('lost_password');
-
 		$this->tpl->add_js('document.lost_password.username.focus();', 'docready');
 		$this->tpl->assign_vars(array(
 			'BUTTON_NAME'			=> 'lost_password',
@@ -308,8 +294,7 @@ class login_pageobject extends pageobject {
 				}
 			}
 		}
-		
-		
+
 		//Captcha
 		if ($blnShowCaptcha){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
@@ -320,12 +305,6 @@ class login_pageobject extends pageobject {
 			));
 		}
 
-
-		$this->jquery->Validate('login', array(
-			array('name' => 'username', 'value'=> $this->user->lang('fv_required_user')),
-			array('name'=>'password', 'value'=>$this->user->lang('fv_required_password'))
-		));
-		
 		$arrPWresetLink = $this->core->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'pwreset');
 
 		$this->tpl->add_js('$("#username").focus();', 'docready');

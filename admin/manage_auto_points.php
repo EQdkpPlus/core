@@ -276,11 +276,6 @@ class ManageAutoPoints extends page_generic {
 				edit_function();
 			});", 'docready');
 
-		$this->jquery->Validate('apa_post', array(
-			array('name' => 'name', 'value'=> $this->user->lang('apa_fv_name')),
-			array('name' => 'calc_func', 'value'=> $this->user->lang('apa_fv_calc_func')),
-			array('name' => 'exectime', 'value'=> $this->user->lang('apa_fv_exectime'))
-		));
 		//fetch events
 		$events_dd = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events_dd);

@@ -483,7 +483,7 @@ i.eqdkp-icon-offline {
 i.icon-color-green{
 	color: #00a400;
 }
-i.icon-color-red{
+i.icon-color-red, span.error-message-red{
 	color: #E80000;
 }
 i.icon-color-yellow{
