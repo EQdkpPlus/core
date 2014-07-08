@@ -134,39 +134,39 @@ class user_core extends gen_class {
 		if(empty($this->data['user_timezone']) || $this->data['user_timezone'] == '') $this->data['user_timezone'] = $this->config->get('timezone');
 
 		if ($this->data['user_id'] == ANONYMOUS){
-			$this->data['user_alimit']				= $this->config->get('default_alimit');
-			$this->data['user_elimit']				= $this->config->get('default_elimit');
-			$this->data['user_ilimit']				= $this->config->get('default_ilimit');
-			$this->data['user_nlimit']				= $this->config->get('default_nlimit');
-			$this->data['user_rlimit']				= $this->config->get('default_rlimit');
+			$this->data['user_alimit']			= $this->config->get('default_alimit');
+			$this->data['user_elimit']			= $this->config->get('default_elimit');
+			$this->data['user_ilimit']			= $this->config->get('default_ilimit');
+			$this->data['user_nlimit']			= $this->config->get('default_nlimit');
+			$this->data['user_rlimit']			= $this->config->get('default_rlimit');
 
 			$this->style['date_notime_long']	= ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long');
 			$this->style['date_notime_short']	= ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->lang('style_date_short');
-			$this->style['time']							= ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->lang('style_time');
-			$this->style['date_time']					= $this->style['date_notime_short'].' '.$this->style['time'];
-			$this->style['date']							= 'l, '.$this->style['date_notime_long'];
-			$this->style['date_short']				= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
+			$this->style['time']				= ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->lang('style_time');
+			$this->style['date_time']			= $this->style['date_notime_short'].' '.$this->style['time'];
+			$this->style['date']				= 'l, '.$this->style['date_notime_long'];
+			$this->style['date_short']			= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
 		} else {
 			$this->style['date_notime_long']	= ($this->data['user_date_long']) ? $this->data['user_date_long'] : (($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long'));
 			$this->style['date_notime_short']	= ($this->data['user_date_short']) ? $this->data['user_date_short'] : (($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->lang('style_date_short'));
-			$this->style['time']							= ($this->data['user_date_time']) ? $this->data['user_date_time'] : (($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->lang('style_time'));
-			$this->style['date_time']					= $this->style['date_notime_short'].' '.$this->style['time'];
-			$this->style['date']							= 'l, '.$this->style['date_notime_long'];
-			$this->style['date_short']				= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
+			$this->style['time']				= ($this->data['user_date_time']) ? $this->data['user_date_time'] : (($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->lang('style_time'));
+			$this->style['date_time']			= $this->style['date_notime_short'].' '.$this->style['time'];
+			$this->style['date']				= 'l, '.$this->style['date_notime_long'];
+			$this->style['date_short']			= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
 
 			$this->data['privacy_settings'] 	= ($this->data['privacy_settings'] && unserialize($this->data['privacy_settings'])) ? unserialize($this->data['privacy_settings']) : array();
 			$this->data['custom_fields'] 		= ($this->data['custom_fields'] && unserialize($this->data['custom_fields'])) ? unserialize($this->data['custom_fields']) : array();
 			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize($this->data['plugin_settings'])) ? unserialize($this->data['plugin_settings']) : array();
 			list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
-			$this->data['user_email'] = register('encrypt')->decrypt($this->data['user_email']);
+			$this->data['user_email']			= register('encrypt')->decrypt($this->data['user_email']);
 			$this->data['auth_account'] = @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
-			$this->data['birthday'] = ($this->data['birthday'] === 0) ? '' : $this->data['birthday'];
+			$this->data['birthday']				= ($this->data['birthday'] === 0) ? '' : $this->data['birthday'];
 		}
 
-		$this->style['column_left_width'] = ($this->style['column_left_width'] != '0px' && $this->style['column_left_width'] != '0%') ? $this->style['column_left_width'] : 0;
-		$this->style['column_right_width'] = ($this->style['column_right_width'] != '0px' && $this->style['column_right_width'] != '0%') ? $this->style['column_right_width'] : 0;
-		$this->style['portal_width'] = ($this->style['portal_width'] != '0px' && $this->style['portal_width'] != '0%') ? $this->style['portal_width'] : 0;
-		$this->style['logo_position'] = ($this->style['logo_position'] != '') ? $this->style['logo_position'] : 'center';
+		$this->style['column_left_width']		= ($this->style['column_left_width'] != '0px' && $this->style['column_left_width'] != '0%') ? $this->style['column_left_width'] : 0;
+		$this->style['column_right_width']		= ($this->style['column_right_width'] != '0px' && $this->style['column_right_width'] != '0%') ? $this->style['column_right_width'] : 0;
+		$this->style['portal_width']			= ($this->style['portal_width'] != '0px' && $this->style['portal_width'] != '0%') ? $this->style['portal_width'] : 0;
+		$this->style['logo_position']			= ($this->style['logo_position'] != '') ? $this->style['logo_position'] : 'center';
 
 		if (!$this->lite_mode) {
 			$this->tpl->set_template($this->style['template_path']);
@@ -176,9 +176,9 @@ class user_core extends gen_class {
 
 		//Global Warning if somebody has overtaken user permissions
 		if (!$this->lite_mode && isset($this->data['session_perm_id']) && $this->data['session_perm_id'] > 0){
-			$username = $this->pdh->get('user', 'username', array((int)$this->data['session_perm_id']));
-			$message = sprintf($this->lang('info_overtaken_permissions'), $username);
-			$message .= '<br /><b><a href="'.$this->server_path.'index.php'.$this->SID.'&mode=rstperms">'.$this->lang('link_overtaken_permissions')."</a></b>";
+			$username	= $this->pdh->get('user', 'username', array((int)$this->data['session_perm_id']));
+			$message	= sprintf($this->lang('info_overtaken_permissions'), $username);
+			$message	.= '<br /><b><a href="'.$this->server_path.'index.php'.$this->SID.'&mode=rstperms">'.$this->lang('link_overtaken_permissions')."</a></b>";
 			$this->core->global_warning($message);
 		}
 	}
@@ -625,7 +625,7 @@ class user_core extends gen_class {
 					'username'	=> array(
 						'type'		=> 'text',
 						'lang'		=> 'username',
-						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i>',
+						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i><span id="error_username" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.$this->user->lang('fv_username_alreadyuse').'</span>',
 						'size'		=> 40,
 						'required'	=> true,
 					),
@@ -635,10 +635,11 @@ class user_core extends gen_class {
 						'size'		=> 40,
 						'id'		=> 'useremail',
 						'required'	=> true,
+						'text'		=> '<span id="error_email" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.$this->user->lang('fv_email_alreadyuse').'</span>',
 						'pattern'	=> 'email',
 					),
 					'current_password'	=> array(
-						'type'	=> 'password',
+						'type'		=> 'password',
 						'size'		=> 40,
 						'id'		=> 'oldpassword',
 						'required'	=> true,
@@ -655,6 +656,7 @@ class user_core extends gen_class {
 						'size'		=> 40,
 						'id'		=> 'password2',
 						'required'	=> false,
+						'equalto'	=> 'password1',
 					),
 				),
 			),
@@ -833,10 +835,12 @@ class user_core extends gen_class {
 						'default'	=> register('config')->get('default_style'),
 					),
 					'user_alimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'adjustments_per_page',
-						'size'	=> 5,
-						'step'	=> 10,
+						'type'		=> 'spinner',
+						'lang'		=> 'adjustments_per_page',
+						'size'		=> 5,
+						'step'		=> 10,
+						'min'		=> 1,
+						'required'	=> true,
 						'default'	=> (register('config')->get('default_alimit')) ? register('config')->get('default_alimit') : 100,
 					),
 					'user_climit'	=> array(
@@ -844,6 +848,8 @@ class user_core extends gen_class {
 						'lang'	=> 'characters_per_page',
 						'size'	=> 5,
 						'step' => 10,
+						'min'		=> 1,
+						'required'	=> true,
 						'default'	=> (register('config')->get('default_climit')) ? register('config')->get('default_climit') : 100,
 					),
 					'user_elimit'	=> array(
@@ -851,6 +857,8 @@ class user_core extends gen_class {
 						'lang'	=> 'events_per_page',
 						'size'	=> 5,
 						'step' => 10,
+						'min'		=> 1,
+						'required'	=> true,
 						'default'	=> (register('config')->get('default_elimit')) ? register('config')->get('default_elimit') : 100,
 					),
 					'user_ilimit'	=> array(
@@ -858,6 +866,8 @@ class user_core extends gen_class {
 						'lang'	=> 'items_per_page',
 						'size'	=> 5,
 						'step' => 10,
+						'min'		=> 1,
+						'required'	=> true,
 						'default'	=> (register('config')->get('default_ilimit')) ? register('config')->get('default_ilimit') : 100,
 					),
 					'user_rlimit'	=> array(
@@ -865,12 +875,16 @@ class user_core extends gen_class {
 						'lang'	=> 'raids_per_page',
 						'size'	=> 5,
 						'step' => 10,
+						'min'		=> 1,
+						'required'	=> true,
 						'default'	=> (register('config')->get('default_rlimit')) ? register('config')->get('default_rlimit') : 100,
 					),
 					'user_nlimit'	=> array(
 						'type'	=> 'spinner',
 						'lang'	=> 'news_per_page',
 						'size'	=> 5,
+						'min'		=> 1,
+						'required'	=> true,
 						'default'	=> (register('config')->get('default_nlimit')) ? register('config')->get('default_nlimit') : 10,
 					),
 					'user_date_time'	=> array(

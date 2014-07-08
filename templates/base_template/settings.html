@@ -1,116 +1,34 @@
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-	$("#{FORM_ID}").validate({
-		rules: {
-			username: {
-				required: true,
-				minlength: 2,
-				remote: {
-					type: "POST",
-					url: "{EQDKP_CONTROLLER_PATH}Settings/{SID}&ajax=1{AJAXEXTENSION_USER}"
-				}
-			},
-			email_address: {
-				required: true,
-				email: true,
-				minlength: 2,
-				remote: {
-					type: "POST",
-					url: "{EQDKP_CONTROLLER_PATH}Settings/{SID}&ajax=1{AJAXEXTENSION_MAIL}"
-				}
-			},
-			confirm_password: {
-				equalTo: "#password1"
-			},
-			user_alimit: {
-				required: true,
-				min: 1,
-				number: true
-			},
-			user_climit: {
-				required: true,
-				min: 1,
-				number: true
-			},
-			user_elimit: {
-				required: true,
-				min: 1,
-				number: true
-			},
-			user_ilimit: {
-				required: true,
-				min: 1,
-				number: true
-			},
-			user_nlimit: {
-				required: true,
-				min: 1,
-				number: true
-			},
-			user_rlimit: {
-				required: true,
-				min: 1,
-				number: true
-			},
-		},
-		onkeyup: false,
-		messages: {
-			username: {
-				required: "{L_fv_required_username}",
-				minlength: jQuery.format("{L_fv_username_toshort}"),
-				remote: jQuery.format("{L_fv_username_alreadyuse}")
-			},
-			email_address: {
-				required: "{L_fv_required_email}",
-				minlength: "{L_fv_email_notvalid}",
-				remote: jQuery.format("{L_fv_email_alreadyuse}")
-			},
-			user_alimit: '{L_fv_required_number}',
-			user_climit: '{L_fv_required_number}',
-			user_elimit: '{L_fv_required_number}',
-			user_ilimit: '{L_fv_required_number}',
-			user_nlimit: '{L_fv_required_number}',
-			user_rlimit: '{L_fv_required_number}',
-			new_password: '{L_fv_required_password}',
-			confirm_password: '{L_fv_required_password_repeat}',
-			recaptcha_response_field: '{L_fv_recaptcha}',
-		},
-		invalidHandler: function(form, validator) {
-			var errors = validator.numberOfInvalids();
-			if (errors) {
-				var invalidPanels = $(validator.invalidElements()).closest(".ui-tabs-panel", form);
-				if (invalidPanels.size() > 0) {
-					$.each($.unique(invalidPanels.get()), function(){
-						$(this).siblings(".ui-tabs-nav")
-						.find("a[href='#" + this.id + "']").parent().not(".ui-tabs-selected")
-						.addClass("ui-state-error")
-						.show("pulsate",{times: 3});
-					});
-				}
+	$('#username').change(function() {
+		var username = $(this).val();
+		$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { username: username }, function(result){
+			if(result == 'true'){
+				$("#error_username").hide();
+				$("#tick_username").show();
+			}else{
+				errortext	= $("#error_username").html();
+				$('#error_username').html(errortext.replace(new RegExp("\\{0\\}", "g"), username));
+				$("#tick_username").hide();
+				$("#error_username").show();
 			}
-		},
-		unhighlight: function(element, errorClass, validClass) {
-			$(element).removeClass(errorClass);
-			if(element.id != ''){
-				$(element.form).find("label[for=" + element.id + "]").hide();
-				$(element.form).find("label[for=" + element.id + "]").removeClass(errorClass);
+		});
+	});
+
+	$('#useremail').change(function() {
+		var user_email = $(this).val();
+		$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { user_email: user_email }, function(result){
+			if(result == 'true'){
+				$("#error_email").hide();
+				$("#tick_mail").show();
+			}else{
+				errortext	= $("#error_email").html();
+				$('#error_email').html(errortext.replace(new RegExp("\\{0\\}", "g"), user_email));
+				$("#tick_mail").hide();
+				$("#error_email").show();
 			}
-			var $panel = $(element).closest(".ui-tabs-panel", element.form);
-			if ($panel.size() > 0) {
-				var removeerror = true;
-				$panel.find("." + errorClass).each(function(index) {
-					if($(this).text()){
-						removeerror = false;
-					}
-				});
-				if (removeerror === true && $panel.find("." + errorClass + ":visible").length === 0) {
-					$panel.siblings(".ui-tabs-nav").find("a[href='#" + $panel[0].id + "']")
-					.parent().removeClass("ui-state-error");
-				}
-			}
-		},
-		ignore: ".ignore_validation"
+		});
 	});
 
 	<!-- IF S_SETTING_ADMIN -->
