@@ -797,6 +797,10 @@ class template extends gen_class {
 		}
 
 		// This will handle the remaining root-level varrefs
+		//Check modifier on language Vars
+		$text_blocks = preg_replace("/\{(L|GL)_([a-z0-9\-_]*?)\|([a-z0-9\-_]+?)\}/is", "'.\$this->handleModifier('{"."$1_$2"."}', '$3').'", $text_blocks);
+		
+		
 		//normal language
 		$text_blocks	= preg_replace('#\{L_([a-z0-9\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['L_\\1'])) ? \$this->_data['.'][0]['L_\\1'] : ((\$this->lang('\\1')) ? \$this->lang('\\1') : '{ ' . ucfirst(strtolower(str_replace('_', ' ', '\\1'))) . '         }')) . '", $text_blocks);
 		//game language
@@ -804,6 +808,17 @@ class template extends gen_class {
 		$text_blocks	= preg_replace('#\{([a-z0-9\:\@\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['\\1'])) ? \$this->_data['.'][0]['\\1'] : '') . '", $text_blocks);
 		return;
 	}
+	
+	private function handleModifier($strLangString, $strModifier){
+		switch($strModifier){
+			case 'jsencode':
+					return "'".str_replace("'", "\'", $strLangString)."'";
+				break;
+			
+			default: return $strLangString;
+		}
+	}
+	
 	
 	private function pre_compile($tag_args){
 		$var = $this->_data['.'][0][$tag_args];

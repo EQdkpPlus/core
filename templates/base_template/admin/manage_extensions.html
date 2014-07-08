@@ -21,7 +21,7 @@ function set_progress_bar_value(recentNumber, labeltext){
 
 function update_error(data){
 	$("#lu_error").show();
-	$("#lu_error_label").html("<b>{L_liveupdate_step_error}</b>" + data);
+	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + data);
 	$("#lu_loading_img").hide();
 }
 

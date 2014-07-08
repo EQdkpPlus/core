@@ -28,7 +28,7 @@
 					handle_prefix(1);
 					load_prefixes(false);
 				} else {
-					error_message('{L_bridge_error_db}');
+					error_message({L_bridge_error_db|jsencode});
 					show_div('button_check_database');
 				}
 		 });
@@ -79,7 +79,7 @@
 						handle_usergroups(1);
 						load_usergroups();
 					} else {
-						error_message('{L_bridge_error_usertable}');
+						error_message({L_bridge_error_usertable|jsencode});
 						show_div('button_check_usertable') ;
 					}
 
@@ -121,7 +121,7 @@
 				 if ($.trim(data) == 'true'){
 					window.location = 'manage_bridge.php{SID}&activate=true';
 				} else {
-					error_message('{L_bridge_error_login}');
+					error_message({L_bridge_error_login|jsencode});
 					show_div('button_check_useraccount');
 				}
 			});
