@@ -77,9 +77,11 @@ class htext extends html {
 		if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		$this->out = $out.' />';
+		$out .= ' />';
 		if(!empty($this->pattern)) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_sample_pattern').'"></span>';
 		elseif($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		if(!empty($this->equalto)) $out .= '<span class="errormessage error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i>'.registry::fetch('user')->lang('fv_required_password_repeat').'</span>';
+		$this->out = $out;
 	}
 	
 	public function _toString() {

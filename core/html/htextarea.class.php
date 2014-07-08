@@ -61,8 +61,9 @@ class htextarea extends html {
 		if(!empty($this->js)) $out.= $this->js.' ';
 		if($this->required) $out .= 'required="required" ';
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
-		$this->out = $out.'>'.$this->value.'</textarea>';
+		$out .= '>'.$this->value.'</textarea>';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		$this->out = $out;
 	}
 	
 	public function _toString() {

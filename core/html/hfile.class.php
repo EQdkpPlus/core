@@ -62,8 +62,9 @@ class hfile extends html {
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		$this->out = $out.' />';
+		$out .= ' />';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		$this->out = $out;
 	}
 	
 	public function _toString() {

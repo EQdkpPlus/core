@@ -50,8 +50,9 @@ class htimepicker extends html {
 		if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
 		if($this->required) $out .= ' required="required"';
 		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf);
-		$this->out = $out.' />';
+		$out .= ' />';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		$this->out = $out;
 	}
 	
 	public function _toString() {
