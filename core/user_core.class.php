@@ -625,7 +625,7 @@ class user_core extends gen_class {
 					'username'	=> array(
 						'type'		=> 'text',
 						'lang'		=> 'username',
-						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i><span id="error_username" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.$this->user->lang('fv_username_alreadyuse').'</span>',
+						'text'		=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display: none;"></i><span id="error_username" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.register('user')->lang('fv_username_alreadyuse').'</span>',
 						'size'		=> 40,
 						'required'	=> true,
 					),
@@ -635,7 +635,7 @@ class user_core extends gen_class {
 						'size'		=> 40,
 						'id'		=> 'useremail',
 						'required'	=> true,
-						'text'		=> '<span id="error_email" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.$this->user->lang('fv_email_alreadyuse').'</span>',
+						'text'		=> '<span id="error_email" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.register('user')->lang('fv_email_alreadyuse').'</span>',
 						'pattern'	=> 'email',
 					),
 					'current_password'	=> array(

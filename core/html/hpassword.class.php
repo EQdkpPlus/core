@@ -48,10 +48,12 @@ class hpassword extends html {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
 		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern)) $this->class .= ' fv_success';
+		if(!empty($this->equalto)) $this->class .= ' equalto';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= 'required="required" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
+		if(!empty($this->equalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		return $out.' />';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';

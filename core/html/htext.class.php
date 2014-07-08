@@ -68,11 +68,13 @@ class htext extends html {
 		}
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern)) $this->class .= ' fv_success';
+		if(!empty($this->equalto)) $this->class .= ' equalto';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= 'required="required" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
+		if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$this->out = $out.' />';
