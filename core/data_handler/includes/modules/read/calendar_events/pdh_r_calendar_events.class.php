@@ -313,6 +313,28 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 	    /* -----------------------------------------------------------------------
+	    * Planned raid to RLI/Raid creation
+	    * -----------------------------------------------------------------------*/
+		public function get_export_data($id, $json=false){
+			$exportdata = $this->get_data($id);
+			
+			// unset the extension sub array
+			unset($exportdata['extension']);
+			
+			//now, add the extension array on the same level
+			$exportdata =array_merge($exportdata, $this->get_extension($id));
+
+			// now add the attendee data
+			$exportdata['attendees']['confirmed']	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($id, '0'));
+			$exportdata['attendees']['signedin']	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($id, '1'));
+			$exportdata['attendees']['signedoff']	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($id, '2'));
+			$exportdata['attendees']['backup']		= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($id, '3'));
+			$exportdata['attendees']['guests']		= $this->pdh->get('calendar_raids_guests', 'members', array($id));
+			
+			return ($json) ? json_encode($exportdata) : $exportdata;
+		}
+
+	    /* -----------------------------------------------------------------------
 	    * Statistic stuff
 		* - amount of raids in the x days
 	    * -----------------------------------------------------------------------*/
