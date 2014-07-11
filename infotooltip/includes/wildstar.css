@@ -1,0 +1,308 @@
+._whtooltip .item-tooltip-body-wrapper {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.231;
+	overflow: hidden;
+	width: 387px;
+	text-align: left !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.428571429;
+}
+
+._whtooltip .item-tooltip-icon {
+	float: left;
+	width: 64px;
+	height: 64px;
+	margin-right: 10px;
+}
+
+._whtooltip .item-tooltip {
+	width: 313px;
+	float: left;
+}
+
+._whtooltip .item-tooltip-inner {
+	width: 313px;
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_wide.png) no-repeat;
+	min-height: 120px;
+	background-position: 0 0;
+	text-align: left !important;
+}
+
+._whtooltip .item-tooltip-body-wrapper {
+	padding-top: 5px;
+}
+
+._whtooltip .item-tooltip-header {
+	height: 55px !important;
+	padding: 23px 28px;
+	padding-bottom: 0;
+	color: #7d7d7d;
+}
+
+._whtooltip .item-tooltip-name {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+._whtooltip .item-tooltip-type {
+	font-size: 12px;
+}
+
+._whtooltip .item-tooltip-base {
+	padding: 0 25px 0 25px;
+	font-size: 11px;
+	overflow: hidden;
+	color: #3ab6d4;
+}
+
+._whtooltip .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_1.png) repeat-y;
+	padding: 10px 25px 10px 25px;
+	font-size: 11px;
+	color: #3ab6d4;
+}
+
+._whtooltip .item-tooltip-properties {
+	background: url(http://static.wildheap.com/tooltips2/hr1.png) no-repeat top center;
+	padding: 15px 0 10px 0;
+}
+
+._whtooltip .item-tooltip-imbuement {
+	background: url(http://static.wildheap.com/tooltips2/hr1.png) no-repeat top center;
+	padding-top: 20px;
+}
+
+._whtooltip .item-tooltip-base-left {
+	width: 50%;
+	float: left;
+}
+
+._whtooltip .item-tooltip-base-right {
+	text-align: right;
+	width: 50%;
+	float: right;
+}
+
+._whtooltip .item-tooltip-footer-cap {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_wide.png) no-repeat;
+	background-position: -2191px 0;
+	width: 313px;
+	height: 25px;
+}
+
+._whtooltip .item-property-innate, ._whtooltip .item-tooltip-imbuement-title {
+	font-size: 16px;
+	color: #54aa80;
+}
+
+._whtooltip .item-tooltip-imbuement {
+	color: #42da00;
+	font-size: 11px;
+}
+
+._whtooltip .item-tooltip-footer {
+	margin-top: 10px;
+	background: url(http://static.wildheap.com/tooltips2/hr2.png) no-repeat top center;
+	padding-top: 10px;
+	padding-bottom: 3px;
+	color: #9aaea4;
+	font-size: 11px;
+}
+
+._whtooltip .item-tooltip-flavor {
+	color: #9aaea4;
+	border: 1px solid #041e22;
+	padding: 5px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-moz-box-shadow:    inset 2px 2px 0 2px #000;
+	-webkit-box-shadow: inset 2px 2px 0 2px #000;
+	box-shadow:         inset 2px 2px 0 2px #000;
+}
+
+/* Item Tooltips Quality */
+._whtooltip.item-quality-1 .item-tooltip-header, ._whtooltip.item-quality-1 {
+	color: #7d7d7d !important;
+}
+._whtooltip.item-quality-1 .item-tooltip-inner {
+	background-position: 0 0;
+}
+._whtooltip.item-quality-1 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_1.png) repeat-y;
+}
+._whtooltip.item-quality-1 .item-tooltip-footer-cap {
+	background-position: -2191px 0;
+}
+
+._whtooltip.item-quality-2 .item-tooltip-header, ._whtooltip.item-quality-2 {
+	color: #ffffff !important;
+}
+._whtooltip.item-quality-2 .item-tooltip-inner {
+	background-position: -313px 0;
+}
+._whtooltip.item-quality-2 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_2.png) repeat-y;
+}
+._whtooltip.item-quality-2 .item-tooltip-footer-cap {
+	background-position: -2191px -25px;
+}
+
+._whtooltip.item-quality-3 .item-tooltip-header, ._whtooltip.item-quality-3 {
+	color: #a7e065 !important;
+}
+._whtooltip.item-quality-3 .item-tooltip-inner {
+	background-position: -626px 0;
+}
+._whtooltip.item-quality-3 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_3.png) repeat-y;
+}
+._whtooltip.item-quality-3 .item-tooltip-footer-cap {
+	background-position: -2191px -50px;
+}
+
+._whtooltip.item-quality-4 .item-tooltip-header, ._whtooltip.item-quality-4 {
+	color: #67a8e1 !important;
+}
+._whtooltip.item-quality-4 .item-tooltip-inner {
+	background-position: -939px 0;
+}
+._whtooltip.item-quality-4 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_4.png) repeat-y;
+}
+._whtooltip.item-quality-4 .item-tooltip-footer-cap {
+	background-position: -2191px -75px;
+}
+
+._whtooltip.item-quality-5 .item-tooltip-header, ._whtooltip.item-quality-5 {
+	color: #7133ff !important;
+}
+._whtooltip.item-quality-5 .item-tooltip-inner {
+	background-position: -1252px 0;
+}
+._whtooltip.item-quality-5 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_5.png) repeat-y;
+}
+._whtooltip.item-quality-5 .item-tooltip-footer-cap {
+	background-position: -2504px -0px;
+}
+
+._whtooltip.item-quality-6 .item-tooltip-header, ._whtooltip.item-quality-6 {
+	color: #ffad5c !important;
+}
+._whtooltip.item-quality-6 .item-tooltip-inner {
+	background-position: -1565px 0;
+}
+._whtooltip.item-quality-6 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_6.png) repeat-y;
+}
+._whtooltip.item-quality-6 .item-tooltip-footer-cap {
+	background-position: -2504px -25px;
+}
+
+._whtooltip.item-quality-7 .item-tooltip-header, ._whtooltip.item-quality-7 {
+	color: #e167a8 !important;
+}
+._whtooltip.item-quality-7 .item-tooltip-inner {
+	background-position: -1878px 0;
+}
+._whtooltip.item-quality-7 .item-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/tooltips_bg_7.png) repeat-y;
+}
+._whtooltip.item-quality-7 .item-tooltip-footer-cap {
+	background-position: -2504px -50px;
+}
+._whtooltip .spell-tooltip {
+	width: 280px;
+	float: left;
+}
+
+._whtooltip .spell-tooltip-header {
+	padding: 6px 12px 0 12px;
+	overflow: hidden;
+}
+
+._whtooltip .spell-tooltip-name {
+	font-size: 16pt;
+	color: #6dd99e;
+	font-weight: bold;
+	float: left;
+}
+
+._whtooltip .spell-tooltip-tier {
+	font-size: 14pt;
+	padding-top: 2px;
+	color: #32fcf6;
+	font-weight: bold;
+	float: right;
+}
+
+._whtooltip .spell-tooltip-base {
+	padding: 0 12px 0 12px;
+	font-size: 11px;
+	overflow: hidden;
+	color: #3ab6d4;
+}
+
+._whtooltip .spell-tooltip-inner {
+	width: 280px;
+	background: url(http://static.wildheap.com/tooltips2/stooltips.png) no-repeat;
+	min-height: 76px;
+	background-position: 0 0;
+}
+
+._whtooltip .spell-tooltip-body {
+	background: url(http://static.wildheap.com/tooltips2/stooltips_bg_1.jpg) repeat-y;
+	padding: 10px 12px 10px 12px;
+	font-size: 11px;
+	color: #3ab6d4;
+}
+
+._whtooltip .spell-tooltip-flavor {
+	color: #9aaea4;
+	border: 1px solid #12353c;
+	padding: 10px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-moz-box-shadow:    inset 2px 2px 10px 2px #000;
+	-webkit-box-shadow: inset 2px 2px 10px 2px #000;
+	box-shadow:         inset 2px 2px 10px 2px #000;
+}
+
+._whtooltip .spell-tooltip-tier-upgrade {
+	padding-top: 10px;
+	color: #80ffba;
+}
+
+._whtooltip .spell-tooltip-tier-upgrade div {
+	font-size: 13px;
+}
+
+._whtooltip .spell-tooltip-footer-cap {
+	background: url(http://static.wildheap.com/tooltips2/stooltips.png) no-repeat;
+	background-position: -280px 0;
+	width: 280px;
+	height: 9px;
+}
+
+._whtooltip .spell-tooltip-footer {
+	margin-top: 10px;
+	background: url(http://static.wildheap.com/tooltips2/hr1.png) no-repeat top center;
+	padding-top: 10px;
+	padding-bottom: 3px;
+	color: #9aaea4;
+	font-size: 11px;
+}
+
+._whtooltip .spell-tooltip-major-upgrade {
+	color: #3094ac;
+}
+
+._whtooltip .spell-tooltip-major-upgrade div {
+	color: #32fcf6;
+	padding: 4px 0 2px 0;
+	font-size: 13px;
+}
