@@ -479,12 +479,17 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		$adm_memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
 
 		foreach ( $user_permissions as $group => $checks ){
+		
 			$this->tpl->assign_block_vars('permissions_row', array(
-				'GROUP' => $group)
-			);
+				'GROUP' => $group,
+			));
+			
+			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
 
 			$a_set = $u_set = false;
 			foreach ( $checks as $data ){
+				if (!is_array($data)) continue;
+			
 				//Superadmin-Permissions
 				if (isset($superadm_only_perms[$data['CBNAME']]) && !isset($adm_memberships[2])) continue;
 
@@ -492,6 +497,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 					case 'a_': if (!$a_set){
 									$this->tpl->assign_block_vars('a_permissions_row', array(
 										'GROUP' => $group,
+										'ICON'	=> $icon,
 									));
 									$a_set = true;
 								}
@@ -500,6 +506,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 					case 'u_': if (!$u_set){
 									$this->tpl->assign_block_vars('u_permissions_row', array(
 										'GROUP' => $group,
+										'ICON'	=> $icon,
 									));
 									$u_set = true;
 								}

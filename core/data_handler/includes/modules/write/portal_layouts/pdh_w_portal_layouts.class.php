@@ -29,6 +29,14 @@ if(!class_exists('pdh_w_portal_layouts')) {
 
 		public function delete($id) {
 			$objQuery = $this->db->prepare("DELETE FROM __portal_layouts WHERE id =?")->execute($id);
+			
+			$arrQuery = array(
+				'portal_layout' => 1,
+			);
+			
+			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set($arrQuery)->execute($id);
+			
+			$this->pdh->enqueue_hook('article_categories_update');
 			$this->pdh->enqueue_hook('portal_layouts_update');
 			return $objQuery;
 		}

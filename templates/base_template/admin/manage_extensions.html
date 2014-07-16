@@ -55,7 +55,7 @@ function repo_install(cat, extensioncode){
 }
 
 function repo_step1(cat, extensioncode, mode){
-	set_progress_bar_value(0, '{L_repo_step1}...');
+	set_progress_bar_value(0, {L_repo_step1|jsencode}+'...');
 	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode, function(data) {
 		  if ($.trim(data) == 'true'){
 			repo_step2(cat, extensioncode, mode);
@@ -66,7 +66,7 @@ function repo_step1(cat, extensioncode, mode){
 }
 
 function repo_step2(cat, extensioncode, mode){
-	set_progress_bar_value(1, '{L_repo_step2}...');
+	set_progress_bar_value(1, {L_repo_step2|jsencode}+'...');
 	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode, function(data) {
 		  if ($.trim(data) == 'true'){
 			repo_step3(cat, extensioncode, mode);
@@ -77,7 +77,7 @@ function repo_step2(cat, extensioncode, mode){
 }
 
 function repo_step3(cat, extensioncode, mode){
-	set_progress_bar_value(2, '{L_repo_step3}...');
+	set_progress_bar_value(2, {L_repo_step3|jsencode}+'...');
 	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode, function(data) {
 		  if ($.trim(data) == 'true'){
 			repo_step4(cat, extensioncode, mode);
@@ -88,7 +88,7 @@ function repo_step3(cat, extensioncode, mode){
 }
 
 function repo_step4(cat, extensioncode, mode){
-	set_progress_bar_value(3, '{L_repo_step4}...');
+	set_progress_bar_value(3, {L_repo_step4|jsencode}+'...');
 	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode, function(data) {
 		  if ($.trim(data) == 'true'){
 			repo_step5(cat, extensioncode, mode);

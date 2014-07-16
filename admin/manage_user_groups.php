@@ -345,9 +345,11 @@ class Manage_User_Groups extends page_generic {
 		$superadm_only_perms = $this->acl->get_superadmin_only_permissions();
 
 		foreach ( $permission_boxes as $group => $checks ){
-						
+			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
 			$a_set = $u_set = false;
 			foreach ( $checks as $data ){
+				if (!is_array($data)) continue;
+				
 				//Guests won't get admin-permissions
 				if (($groupID == 1 && substr($data['CBNAME'], 0, 2)== "a_")) continue;
 				//Superadmin permission
@@ -357,6 +359,7 @@ class Manage_User_Groups extends page_generic {
 					case 'a_': if (!$a_set){
 									$this->tpl->assign_block_vars('a_permissions_row', array(
 										'GROUP' => $group,
+										'ICON'	=> $icon,
 									));
 									$a_set = true;
 								}
@@ -365,6 +368,7 @@ class Manage_User_Groups extends page_generic {
 					case 'u_': if (!$u_set){
 									$this->tpl->assign_block_vars('u_permissions_row', array(
 										'GROUP' => $group,
+										'ICON'	=> $icon,
 									));
 									$u_set = true;
 								}
@@ -439,8 +443,12 @@ class Manage_User_Groups extends page_generic {
 		$grps = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 		
 		foreach ( $permission_boxes as $group => $checks ){
+			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
+			
 			$this->tpl->assign_block_vars('permissions_row', array(
-				'GROUP' => $group)
+				'GROUP' => $group,
+				'ICON'	=> (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '',
+				)
 			);
 			foreach($grps as $group_id => $group){
 				$this->tpl->assign_block_vars('permissions_row.headline_row', array(
@@ -449,6 +457,8 @@ class Manage_User_Groups extends page_generic {
 			}
 
 			foreach ( $checks as $data ){
+				if(!is_array($data)) continue;
+			
 				$this->tpl->assign_block_vars('permissions_row.check_group', array(
 					'CBNAME'		=> $data['TEXT'],
 					'S_ADMIN'		=> (strpos($data['CBNAME'], 'a_') !== false) ? true : false
