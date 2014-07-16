@@ -642,7 +642,7 @@ class user_core extends gen_class {
 						'type'		=> 'password',
 						'size'		=> 40,
 						'id'		=> 'oldpassword',
-						'required'	=> true,
+						'required'	=> false,
 						'pattern'	=> 'password',
 					),
 					'new_password' => array(
