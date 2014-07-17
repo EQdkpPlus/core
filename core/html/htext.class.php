@@ -67,7 +67,7 @@ class htext extends html {
 			$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
 		}
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
-		if(!empty($this->pattern)) $this->class .= ' fv_success';
+		if(!empty($this->pattern) && !empty($this->successmsg)) $this->class .= ' fv_success';
 		if(!empty($this->equalto)) $this->class .= ' equalto';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
