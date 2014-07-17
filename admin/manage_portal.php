@@ -109,6 +109,9 @@ class Manage_Portal extends page_generic {
 			$this->form->add_fields($data);
 		}
 		
+		//Custom Header title
+		$this->form->add_field('custom_header', array('type' => 'text', 'lang' => 'portal_customheader'));
+		
 		// Visibility - User groups
 		$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 		$drpdwn_rights[0] = $this->user->lang('cl_all');

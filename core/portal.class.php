@@ -420,7 +420,9 @@ abstract class portal_generic extends gen_class {
 	}
 	
 	public function get_header() {
-		return (isset($this->header)) ? $this->header : $this->user->lang(static::$path, true, false);
+		$customHeader = $this->config('custom_header');
+		$header = ($customHeader && strlen($customHeader)) ? $customHeader : ((isset($this->header)) ? $this->header : $this->user->lang(static::$path, true, false));
+		return $header;
 	}
 	
 	public function update_function($old_version) {

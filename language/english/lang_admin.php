@@ -633,6 +633,7 @@ $lang = array(
 	"portalplugin_left" => 'Left',
 	"portalplugin_rights" => 'Visibility',
 	"portal_collapsable" => 'Collapsable',
+	"portal_customheader" => 'Custom Header',
 	"portal_dragndrop_info" => 'Here you can arrange your portal modules. Use drag and drop for moving a module to the desired position.<br>A selected module may only be placed in the green marked areas.',
 	"portal_saved" => 'Portalmodule changes saved!',
 	"portal_not_saved" => 'Portalmodule changes not saved!',

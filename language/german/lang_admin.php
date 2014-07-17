@@ -630,6 +630,7 @@ $lang = array(
 "portalplugin_left" => "Links",
 "portalplugin_rights" => "Berechtigung",
 "portal_collapsable" => "Einklappbar",
+"portal_customheader" => "Eigener Titel des Moduls",
 "portal_dragndrop_info" => "Hier kannst du die Portalmodule anordnen. Klicke dazu ein Portalmodul an und verschiebe es an die gewünschte Stelle. <br />Ein ausgewähltes Modul darf nur in grün markierte Bereiche positioniert werden.",
 "portal_saved" => "Portalmodul-Änderungen gespeichert!",
 "portal_not_saved" => "Portalmodul-Änderungen nicht gespeichert!",
