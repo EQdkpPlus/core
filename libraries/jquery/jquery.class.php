@@ -96,6 +96,7 @@ if (!class_exists("jquery")) {
 						$(this).next("span.errormessage").hide();
 					}
 				});', 'docready');
+			$this->init_formvalidation();
 		}
 		public function langfile($file){
 			if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
