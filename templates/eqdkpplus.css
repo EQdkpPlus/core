@@ -536,6 +536,6 @@ i.icon-color-gray{
 	color: green;
 }
 
-.fv_checkit [required]:invalid {
+.fv_checkit .fv_inp_invalid {
 	border: 1px solid red!important;
 }

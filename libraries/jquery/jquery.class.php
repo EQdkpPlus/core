@@ -964,8 +964,10 @@ if (!class_exists("jquery")) {
 					var forminputvalue=$.trim($(this).val());
 					if(forminputvalue.length == 0){
 						$(this).next('.fv_msg').hide();
+						$(this).removeClass('fv_inp_invalid');
 					}else{
 						$(this).next('.fv_msg').show();
+						$(this).addClass('fv_inp_invalid');
 					}
 				}).trigger('change');", 'docready');
 				$this->inits['formvalidation'] = true;
