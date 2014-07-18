@@ -325,6 +325,14 @@ class calendar_pageobject extends pageobject {
 			}
 		}
 
+		// hooks
+		if ($this->hooks->isRegistered('calendar')){
+			$arrHooksData = $this->hooks->process('calendar', $arrHooksData, false);
+			if (count($arrHooksData) > 0){
+				$event_json = array_merge($arrHooksData, $event_json);
+			}
+		}
+
 		// Output the array as JSON
 		echo json_encode($event_json);exit;
 	}
