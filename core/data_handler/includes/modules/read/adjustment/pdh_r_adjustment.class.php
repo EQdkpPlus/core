@@ -140,7 +140,7 @@ if(!class_exists('pdh_r_adjustment')){
 			return isset($this->adjustments[$adj_id]) ? $this->adjustments[$adj_id]['reason'] : '';
 		}
 
-		public function get_raid_id($adj_id,$base_url, $url_suffix = ''){
+		public function get_raid_id($adj_id){
 			return $this->adjustments[$adj_id]['raid_id'];
 		}
 		

@@ -192,6 +192,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					'event_id'		=> $event_id,
 					'itempool_id'	=> $itempool_id,
 					'with_twink'	=> ($with_twink) ? true : false,
+					'date'			=> $this->time->time,
 				);
 				return $this->apa->get_decay_val('current', $multidkp_id, $this->time->time, $data);
 			} else {

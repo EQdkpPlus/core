@@ -143,7 +143,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				$this->points[$memberid][$multidkpid]['multi'] = array();
 				
 				//main points
-				if (is_array($this->points[$memberid][$multidkpid]['single'])) $this->points[$memberid][$multidkpid]['multi'] = $this->points[$memberid][$multidkpid]['single'];
+				if (!empty($this->points[$memberid][$multidkpid]['single'])) $this->points[$memberid][$multidkpid]['multi'] = $this->points[$memberid][$multidkpid]['single'];
 
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
@@ -241,14 +241,16 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 			$arrSpent = array();
 			
 			//Get Array
-			foreach($this->points[$member_id][$multidkp_id][$strTwink]['spent'] as $_event_id => $itempools) {
-				if ($event_id != 0 && $_event_id != $event_id) continue;
-				foreach($itempools as $_itempool_id => $spent){
-					
-					if ($itempool_id != 0 && $itempool_id != $_itempool_id) continue;
-					foreach($spent as $val){
-						if ($val[1] < $from || $val[1] > $to) continue;
-						$arrSpent[] = $val;
+			if(!empty($this->points[$member_id][$multidkp_id][$strTwink]['spent'])) {
+				foreach($this->points[$member_id][$multidkp_id][$strTwink]['spent'] as $_event_id => $itempools) {
+					if ($event_id != 0 && $_event_id != $event_id) continue;
+					foreach($itempools as $_itempool_id => $spent){
+						
+						if ($itempool_id != 0 && $itempool_id != $_itempool_id) continue;
+						foreach($spent as $val){
+							if ($val[1] < $from || $val[1] > $to) continue;
+							$arrSpent[] = $val;
+						}
 					}
 				}
 			}

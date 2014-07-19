@@ -222,12 +222,31 @@ if ( !defined('EQDKP_INC') ){
 			if(!isset($this->cached_data[$apa_id][$cache_date])) $this->cached_data[$apa_id][$cache_date] = $this->pdc->get('apa_'.$apa_id.'_'.$cache_date);
 			//check if update is necessary
 			if(!isset($this->cached_data[$apa_id][$cache_date][$module][$data['id']]) || $this->needs_update($module, $data['id'])) {
-				list($val, $ttl) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data);
-				$this->cached_data[$apa_id][$cache_date][$module][$data['id']] = $val;
+				list($val, $adj, $ttl) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data);
+				$this->cached_data[$apa_id][$cache_date][$module][$data['id']]['val'] = $val;
+				$this->cached_data[$apa_id][$cache_date][$module][$data['id']]['adj'] = $adj;
 				$this->ttls[$apa_id][$cache_date] = $ttl;
 				$this->update_done($module, $data['id']);
 			}
-			return $this->cached_data[$apa_id][$cache_date][$module][$data['id']];
+			return $this->cached_data[$apa_id][$cache_date][$module][$data['id']]['val'];
+		}
+		
+		public function get_decay_history($module, $dkp_id, $data=array()) {
+			$apa_id = $this->get_apa_id($dkp_id, $module);
+			// init cache with a call to get_decay_val
+			$this->get_decay_val($module, $dkp_id, 0, $data);
+			// create history array
+			$arrOut = array();
+			foreach($this->cached_data[$apa_id] as $cache_date => $decay_data) {				
+				$arrOut[] = array(
+					'value' => $decay_data[$module][$data['id']]['adj'],
+					'date'	=> $cache_date,
+					'type'	=> 'apa',
+					'id'	=> $apa_id,
+					'character' => $char_id,
+				);
+			}
+			return $arrOut;
 		}
 		
 		public function enqueue_update($module, $ids) {

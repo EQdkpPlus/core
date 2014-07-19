@@ -160,16 +160,11 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			$exectime = $this->apa->get_data('exectime', $apa_id); //exectime as seconds from midnight
 			$decay_start = $this->apa->get_data('start_date', $apa_id); //start_date for fetching first day (wether we start on monday, thursday or w/e)
 			//set decay_start to next exectime
-			$exectime = $this->apa->get_data('exectime', $apa_id);
 			if(($decay_start%86400) > $exectime) $decay_start += 86400;
 			$decay_start = $decay_start + $exectime - $decay_start%86400;
 			//length of decay-period
 			$date -= ($date - $decay_start)%$max_ttl;
 			return $date;
-		}
-		
-		public function get_decay_history($apa_id, $cache_date, $module, $dkp_id, $data) {
-			
 		}
 		
 		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) {
@@ -178,13 +173,15 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			if($decay_start > $data['date']) return NULL;
 			if(($cache_date - $this->apa->get_data('zero_time', $apa_id)*2592000) > $data['date']) {
 				$decayed_val = 0;
+				$decay_adj = 0;
 			} else {
 				$previous_calc = $cache_date - $this->apa->get_data('decay_time', $apa_id)*86400;
 				$value = ($previous_calc < $data['date']) ? $data['value'] : $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
 				$decayed_val = ($cache_date < $data['date']) ? $data['value'] : $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $cache_date, $data['date'], $data['value']));
+				$decay_adj = $value - $decayed_val;
 			}
 			$ttl = $this->apa->get_data('decay_time', $apa_id)*86400*3; //3 times decay_period
-			return array($decayed_val, $ttl);
+			return array($decayed_val, $decay_adj, $ttl);
 		}
 	}//end class
 }//end if
