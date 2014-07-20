@@ -309,6 +309,7 @@ $lang = array(
 "fv_required_name" => "Das Namens-Feld ist notwendig.",
 "fv_required_number" => "Das Feld ist notwendig und muss eine Zahl sein.",
 "fv_required_password" => "Du musst ein Passwort eingeben.",
+"fv_required_password_pattern" => "Du musst ein gültiges Passwort eingeben.",
 "fv_required_user" => "Das Benutzernamen-Feld ist notwendig.",
 "fv_required_username" => "Gib einen Benutzernamen an",
 "fv_username_toshort" => "Gib mindestens {0} Zeichen ein",

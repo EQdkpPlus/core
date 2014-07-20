@@ -65,27 +65,27 @@
 					event.preventDefault();
 					$("#user-tooltip").show('fast');
 					$(document).on('click', function(event) {
-						var count = $(event.target).parents('.user-tooltip-container').length;									
+						var count = $(event.target).parents('.user-tooltip-container').length;
 						if (count == 0){
 							$("#user-tooltip").hide('fast');
 						}
-					});					
+					});
 				});
 				
 				$('.user-tooltip-trigger').on('dblclick', function(event){
 					$("#user-tooltip").hide('fast');
-					window.location="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}";		
+					window.location="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}";
 				});
 				
 				$('.mychars-points-tooltip-trigger').on('click', function(event){
 					event.preventDefault();
 					$("#mychars-points-tooltip").show('fast');
 					$(document).on('click', function(event) {
-						var count = $(event.target).parents('.mychars-points-tooltip-container').length;									
+						var count = $(event.target).parents('.mychars-points-tooltip-container').length;
 						if (count == 0){
 							$("#mychars-points-tooltip").hide('fast');
 						}
-					});					
+					});
 				});
 				
 				$('ul.mainmenu li.link_li_indexphp a.link_indexphp, ul.mainmenu li.link_li_entry_home a.link_entry_home').html('');
@@ -141,7 +141,7 @@
 						<!-- END personal_area_addition -->
 					</ul>
 					
-					<!-- ELSE -->					
+					<!-- ELSE -->
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
@@ -238,7 +238,7 @@
 							<!-- BEGIN personal_area_addition -->
 							<li>{personal_area_addition.TEXT}</li>
 							<!-- END personal_area_addition -->
-						</ul>				
+						</ul>
 					<!-- ENDIF -->
 				</div>
 				<div id="personalAreaTime" class="hiddenSmartphone">
@@ -252,7 +252,7 @@
 							</button>
 						</form>
 					<!-- ENDIF -->	</li>
-					</ul>			
+					</ul>
 				</div>
 				<div class="clear"></div>
 			</div> <!-- close personalArea -->
@@ -311,7 +311,7 @@
 					<!-- IF S_PORTAL_LEFT -->
 					<aside class="first column portal-left" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						<div class="columnInner">
-							{PORTAL_LEFT}						
+							{PORTAL_LEFT}
 						</div> <!-- close first column -->
 					</aside>
 					<!-- ENDIF -->
@@ -340,7 +340,7 @@
 							</aside>
 							<footer class="debug">
 							<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
-							<!-- IF S_SHOW_DEBUG -->							
+							<!-- IF S_SHOW_DEBUG -->
 							<br /><div class="center">
 								<span class="debug-info">SQL Querys: {EQDKP_QUERYCOUNT} | in {EQDKP_RENDERTIME} | {EQDKP_MEM_PEAK} |
 									<a href="http://validator.w3.org/check/referer" target="_top">XHTML Validate</a>
@@ -354,7 +354,7 @@
 					<!-- IF S_PORTAL_RIGHT -->
 					<aside class="third column portal-right" style="<!-- IF T_COLUMN_RIGHT_WIDTH -->min-width:{T_COLUMN_RIGHT_WIDTH};max-width:{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						<div class="columnInner">
-							{PORTAL_RIGHT}						
+							{PORTAL_RIGHT}
 						</div>
 					</aside>
 					<!-- ENDIF -->
@@ -386,7 +386,7 @@
 					<dd>
 						<div class="input-icon">
 							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required />
-							<span class="fv_msg" data-errormessage=""></span>
+							<div class="fv_msg" data-errormessage="{L_fv_required_user}"></div>
 						</div>
 						
 					</dd>
@@ -396,8 +396,8 @@
 					<dd>
 						<div class="input-icon">
 							<i class="fa fa-key"></i>
-							<input type="password" name="password" size="30" maxlength="32" class="input password" id="password" placeholder="{L_password}" required />
-							<span class="fv_msg" data-errormessage=""></span>
+							<input type="password" name="password" pattern=".{3,}" size="30" maxlength="32" class="input password" id="password" placeholder="{L_password}" required />
+							<div class="fv_msg" data-errormessage="{L_fv_required_password_pattern}"></div>
 						</div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}<br />

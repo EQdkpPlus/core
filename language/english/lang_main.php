@@ -346,6 +346,7 @@ $lang = array(
 	"fv_required_name" => 'The name field is required.',
 	"fv_required_number" => 'This field is required and must be an integer',
 	"fv_required_password" => 'The password field is required.',
+	"fv_required_password_pattern" => "Enter a valid password.",
 	"fv_required_user" => 'The username field is required.',
 	"fv_required_username" => 'Enter a username',
 	"fv_username_toshort" => 'Enter at least {0} characters',
