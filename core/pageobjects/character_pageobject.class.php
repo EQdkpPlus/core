@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2009
- * Date:		$Date: 2014-07-06 13:10:13 +0200 (So, 06 Jul 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14431 $
+ * @version		$Rev$
  *
- * $Id: character_pageobject.class.php 14431 2014-07-06 11:10:13Z godmod $
+ * $Id$
  */
 
 define('ITEMSTATS', true);

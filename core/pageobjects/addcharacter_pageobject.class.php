@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date: 2014-07-07 19:47:02 +0200 (Mo, 07 Jul 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14441 $
+ * @version		$Rev$
  * 
- * $Id: addcharacter_pageobject.class.php 14441 2014-07-07 17:47:02Z wallenium $
+ * $Id$
  */
 
 class addcharacter_pageobject extends pageobject {

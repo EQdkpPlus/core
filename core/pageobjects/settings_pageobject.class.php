@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date: 2014-07-07 13:58:57 +0200 (Mo, 07 Jul 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: hoofy_leon $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14440 $
+ * @version		$Rev$
  *
- * $Id: settings_pageobject.class.php 14440 2014-07-07 11:58:57Z hoofy_leon $
+ * $Id$
  */
 
  

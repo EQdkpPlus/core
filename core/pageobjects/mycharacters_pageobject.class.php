@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date: 2014-06-30 20:39:09 +0200 (Mo, 30 Jun 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14411 $
+ * @version		$Rev$
  * 
- * $Id: mycharacters_pageobject.class.php 14411 2014-06-30 18:39:09Z godmod $
+ * $Id$
  */
 
 class mycharacters_pageobject extends pageobject {

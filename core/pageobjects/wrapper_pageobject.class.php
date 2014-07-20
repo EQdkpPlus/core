@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2006
- * Date:		$Date: 2014-03-01 16:14:48 +0100 (Sa, 01 Mrz 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14105 $
+ * @version		$Rev$
  *
- * $Id: wrapper_pageobject.class.php 14105 2014-03-01 15:14:48Z godmod $
+ * $Id$
  */
 
 class wrapper_pageobject extends pageobject {

@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date: 2014-07-12 18:10:03 +0200 (Sa, 12 Jul 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14464 $
+ * @version		$Rev$
  *
- * $Id: calendarevent_pageobject.class.php 14464 2014-07-12 16:10:03Z godmod $
+ * $Id$
  */
 class calendarevent_pageobject extends pageobject {
 

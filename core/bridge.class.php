@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date: 2014-06-01 12:02:07 +0200 (So, 01 Jun 2014) $
+ * Date:		$Date$
  * -----------------------------------------------------------------------
- * @author		$Author: godmod $
+ * @author		$Author$
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev: 14322 $
+ * @version		$Rev$
  * 
- * $Id: bridge_generic.class.php 14322 2014-06-01 10:02:07Z godmod $
+ * $Id$
  */
 
 if ( !defined('EQDKP_INC') ){
