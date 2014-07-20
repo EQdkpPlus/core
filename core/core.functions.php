@@ -1183,6 +1183,8 @@ function da($TheArray){ // Note: the function is recursive
 	echo "</table>\n";
 }
 
+// Magic Quotes are deprecated in PHP 5.3 and removed in PHP 5.4 (http://php.net/manual/de/security.magicquotes.php)
+// REMOVE if min req >= PHP 5.4
 function MagicQuotesFix(){
 	if (get_magic_quotes_gpc()) {
 		function stripslashes_gpc(&$value)

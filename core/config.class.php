@@ -107,8 +107,9 @@ class config extends gen_class {
 				include($file);
 				$this->config = $localconf;
 			}
-			if(!isset($this->config['server_path'], $this->config['cookie_name'], $this->config['plus_version'])) {
-				// important configs are missing in cache-file, probably an empty/not available localconf.php ... Load from Database..
+			
+			// If the config file is empty, load it out of the database
+			if(count($this->config) < 1){
 				$this->get_dbconfig();
 			}
 		}
@@ -124,11 +125,21 @@ class config extends gen_class {
 		return $val;
 	}
 
+	// this fallback is for users with an empty localhost and the old table __backup_cnf (1.x to 2.x). Its just for 
+	// reducing the amount of support tickets ;) Could be removed in 3.0
+	private function fallback_oldtable2newtable(){
+		if(!$this->db->checkQuery("SELECT * FROM __config;")){
+			$this->db->query("RENAME TABLE `__backup_cnf` TO `__config`;");
+			$this->db->query("ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(255) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';");
+		}
+	}
+
 	private function get_dbconfig(){
 		if(!is_object($this->db)){return true;}
-		$this->config_modified = true;
-		$this->config = array();
-		$objQuery = $this->db->query("SELECT * FROM __config;");
+		$this->config_modified	= true;
+		$this->config			= array();
+		$this->fallback_oldtable2newtable();
+		$objQuery				= $this->db->query("SELECT * FROM __config;");
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc() ){
 				if($row['config_plugin'] != 'core'){
