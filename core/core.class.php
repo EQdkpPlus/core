@@ -774,7 +774,7 @@ class core extends gen_class {
 			$image = ($this->image != '') ? $this->image : $image;
 			$description = ($this->description != '') ? $this->description : (($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
-			$this->checkAdminTasks();
+			$this->admin_tasks->createNotifications();
 			
 			//Check for unpublished articles
 			$arrCategories = $this->pdh->get('article_categories', 'unpublished_articles_notify', array());
@@ -941,32 +941,6 @@ class core extends gen_class {
 			}
 		}
 
-		public function checkAdminTasks(){
-			$iTaskCount = 0;
-			if ($this->user->check_auth('a_members_man', false)){
-				$arrConfirmMembers = $this->pdh->get('member', 'confirm_required');
-				$arrConfirmMemberCount = count($arrConfirmMembers);
-				$iTaskCount += $arrConfirmMemberCount;
-				if ($arrConfirmMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_confirm_required'), $arrConfirmMemberCount), $this->server_path.'admin/manage_tasks.php'.$this->SID, $arrConfirmMemberCount);
-
-				$arrDeleteMembers = $this->pdh->get('member', 'delete_requested');
-				$intDeleteMemberCount = count($arrDeleteMembers);
-				$iTaskCount += $intDeleteMemberCount;
-				if ($intDeleteMemberCount) $this->ntfy->add('yellow', $this->user->lang('manage_members'), sprintf($this->user->lang('notification_char_delete_requested'), $intDeleteMemberCount),  $this->server_path.'admin/manage_tasks.php'.$this->SID, $intDeleteMemberCount);
-			}
-			if ($this->user->check_auth('a_users_man', false) && $this->config->get('account_activation') == 2){
-				$arrInactiveUser = $this->pdh->get('user', 'inactive');
-				$intInactiveUserCount = count($arrInactiveUser);
-				$iTaskCount += $intInactiveUserCount;
-				if ($intInactiveUserCount) $this->ntfy->add('yellow', $this->user->lang('manage_users'), sprintf($this->user->lang('notification_user_enable'), $intInactiveUserCount),  $this->server_path.'admin/manage_tasks.php'.$this->SID, $intInactiveUserCount);
-			}
-
-			if ($iTaskCount > 0){
-				//$this->message('<a href="'.$this->root_path.'admin/manage_tasks.php'.$this->SID.'">'.sprintf($this->user->lang('cm_todo_txt'),$iTaskCount).'</a>', $this->user->lang('cm_todo_head'), 'default', false);
-			}
-
-			return $iTaskCount;
-		}
 		
 		public function icon_font($icon, $size="", $pathext=""){
 			if(isset($icon) && pathinfo($icon, PATHINFO_EXTENSION) == 'png'){

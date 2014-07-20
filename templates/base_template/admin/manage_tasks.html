@@ -13,107 +13,37 @@
 <div class="infobox infobox-large infobox-blue clearfix">
 	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_uc_tasks_info}
 </div>
-<br />
-<!-- IF S_NOTHING -->
-<div class="infobox infobox-large infobox-green clearfix">
-	<i class="fa fa-check fa-4x pull-left"></i> {L_uc_no_tasks}
-</div>
-<!-- ENDIF -->
-<form method="post" action="{ACTION}" name="manage_tasks">
-	<!-- IF S_CONFIRM -->
-	<div class="tableHeader">
-		<h2>{L_uc_confirm_list}</h2>
-	</div>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr>
-			<th width="35" class="nowrap"><input type="checkbox" id="selall_confirm_chars" value="1"/></th>
-			<th align="left">{L_name}</th>
-			<th align="left" class="nowrap">{L_level}</th>
-			<th align="left" class="nowrap">{L_user}</th>
-		</tr>
-		<!-- BEGIN confirm_row -->
-		<tr>
-			<td class="nowrap"><input type="checkbox" value="{confirm_row.ID}" name="confirm_chars[]"></td>
-			<td class="nowrap"><span class="classes{confirm_row.CLASSID}"><a href="javascript:EditChar({confirm_row.ID})">{confirm_row.NAME}</a></span></td>
-			<td class="nowrap">{confirm_row.LEVEL}</td>
-			<td class="nowrap">{confirm_row.USER}</td>
-		</tr>
-		<!-- END confirm_row -->
-	</table>
-	<div class="contentFooter">
-		{BUTTON_MENU_CONFIRM_CHARS}
-	
-		<button  type="button" class="mainoption" onclick="ConfirmChars();" id="confirmCharsTrigger" style="display:none;"></button>
-		<button  type="button" class="mainoption" onclick="DeleteConfirmChars();" id="deleteConfirmCharsTrigger" style="display:none;"></button>
-		
-		<button  type="submit" name="deleteConfirmChars" class="mainoption" style="display:none;" id="deleteConfirmChars"></button>
-		<button  type="submit" name="confirmChars" class="mainoption" style="display:none;" id="confirmChars"></button>
-		<div class="clear"></div>
-	</div>
-	<br/>
-	<!-- ENDIF -->
-	
-	<!-- IF S_DELETE -->
-	<div class="tableHeader">
-		<h2>{L_uc_delete_list}</h2>
-	</div>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-		<tr>
-			<th width="35" class="nowrap"><input type="checkbox" id="selall_deleted_chars" value="1"/></th>
-			<th align="left">{L_name}</th>
-			<th align="left" class="nowrap">{L_level}</th>
-		</tr>
-		<!-- BEGIN delete_row -->
-		<tr>
-			<td class="nowrap"><input type="checkbox" value="{delete_row.ID}" name="deleted_chars[]"></td>
-			<td class="nowrap"><span class="classes{confirm_row.CLASSID}"><a href="javascript:EditChar({delete_row.ID})">{delete_row.NAME}</a></span></td>
-			<td class="nowrap">{delete_row.LEVEL}</td>
-		</tr>
-		<!-- END delete_row -->
-	</table>
-	<div class="contentFooter">
-		{BUTTON_MENU_DELETE_CHARS}
-	
-		<button  type="button" class="mainoption" onclick="RevokeChars();" id="revokeCharsTrigger" style="display:none;"></button>
-		<button  type="button" class="mainoption" onclick="DeleteChars();" id="deleteCharsTrigger" style="display:none;"></button>
-		
-		<button  type="submit" name="deleteChars" class="mainoption" style="display:none;" id="deleteChars"></button>
-		<button  type="submit" name="revokeChars" class="mainoption" style="display:none;" id="revokeChars"></button>
-		<div class="clear"></div>
-	</div>
 
-	<br />
-	<!-- ENDIF -->
-	<!-- IF S_INACTIVE -->
+<!-- BEGIN task_row -->
+<form method="post" action="{ACTION}" name="manage_tasks">
 	<div class="tableHeader">
-		<h2>{L_activate_list}</h2>
+		<h2>{task_row.HEADLINE}</h2>
 	</div>
+	
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
 		<tr>
-			<th width="35" class="nowrap"><input type="checkbox" id="selall_user" value="1"/></th>
-			<th align="left" width="33%">{L_name}</th>
-			<th align="left" width="33%" class="nowrap">{L_email}</th>
-			<th align="left" width="33%" class="nowrap">{L_registered_at}</th>
+			<th width="35" class="nowrap"><input type="checkbox" id="{task_row.ID}" value="1"/></th>
+			<!-- BEGIN th_row -->
+			<th class="nowrap">{task_row.th_row.CONTENT}</th>
+			<!-- END th_row -->
 		</tr>
-		<!-- BEGIN activate_row -->
+		<!-- BEGIN content_row -->
 		<tr>
-			<td class="nowrap"><input type="checkbox" value="{activate_row.ID}" name="selected_user[]"></td>
-			<td class="nowrap"><a href="manage_users.php{SID}&amp;u={activate_row.ID}">{activate_row.NAME}</a></td>
-			<td class="nowrap">{activate_row.EMAIL}</td>
-			<td class="nowrap">{activate_row.REG}</td>
+			<td class="nowrap"><input type="checkbox" value="{task_row.content_row.ID}" name="cb_{task_row.ID}[]"></td>
+			<!-- BEGIN td_row -->
+			<td class="nowrap">{task_row.content_row.td_row.CONTENT}</td>
+			<!-- END td_row -->
 		</tr>
-		<!-- END activate_row -->
+		<!-- END content_row -->
 	</table>
 	<div class="contentFooter">
-		{BUTTON_MENU_INACTIVE_USER}
-	
-		<button  type="button" class="mainoption" onclick="ActivateAllUsers();" id="activateUserTrigger" style="display:none;"></button>
-		<button  type="button" class="mainoption" onclick="DeleteUser();" id="deleteUserTrigger" style="display:none;"></button>
-		
-		<button  type="submit" name="activateUser" class="mainoption" style="display:none;" id="activateUser"></button>
-		<button  type="submit" name="deleteUser" class="mainoption" style="display:none;" id="deleteUser"></button>
-		<div class="clear"></div>
+		{task_row.MENU}<input type="hidden" name="cbname" value="cb_{task_row.ID}" />
+		<input type="hidden" name="task" value="{task_row.NAME}" />
+		<!-- BEGIN button_row -->
+		<input type="submit" id="{task_row.button_row.ID}" style="display:none;" name="mode" value="{task_row.button_row.VALUE}"/>
+		<!-- END button_row -->
 	</div>
-	<!-- ENDIF -->
+	<div class="clear"></div><br />
 {CSRF_TOKEN}
 </form>
+<!-- END task_row -->

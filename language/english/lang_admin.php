@@ -1639,6 +1639,7 @@ $lang = array(
 	"export_memberadjustments" => "Include Character-Adjustments in Export?",
 	
 	"upload_eventicon" => "Upload Eventicon",
+	"selected_elements" => "Selected Elements",
 );
 
 ?>

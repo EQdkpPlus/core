@@ -44,6 +44,7 @@ abstract class super_registry {
 	//all classes in here must have their file named after its name, e.g. admin_index.class.php (keep them in alphabetical order, results in easy searching)
 	protected static $locs = array(
 		'admin_index'			=> 'admin/',
+		'admin_tasks'			=> 'core/',
 		'auth_db'				=> 'core/auth/',
 		'datacache'				=> 'core/cache/',
 		'plus_datahandler'		=> 'core/data_handler/',
@@ -82,7 +83,7 @@ abstract class super_registry {
 		'tour'					=> 'core/',
 		'uploader'				=> 'core/',
 		'urlfetcher'			=> 'core/',
-		'user'				=> 'core/',
+		'user'					=> 'core/',
 		'xmltools'				=> 'core/',
 		'zip'					=> 'core/',
 		'infotooltip'			=> 'infotooltip/',

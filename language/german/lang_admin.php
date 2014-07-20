@@ -702,9 +702,9 @@ $lang = array(
 "uc_rewoke_char" => "Charakter wiederherstellen",
 "uc_delete_allchar" => "Alle löschen",
 "uc_confirm_all" => "Alle bestätigen",
-"uc_confirm_list" => "Charakter zum Bestätigen",
+"uc_confirm_list" => "Charaktere bestätigen",
 "uc_confirm_char" => "Charakter bestätigen",
-"uc_delete_list" => "Charakter zum Löschen",
+"uc_delete_list" => "Charaktere löschen",
 "uc_no_tasks" => "Es sind keine Aufgaben vorhanden.",
 "uc_tasks_info" => "Hier kannst Du Aufgaben verwalten, wie z.B. Charaktere bestätigen oder löschen, oder inaktive Benutzer aktivieren. Bitte überprüfe diese Seite regelmäßig, ob Aufgaben vorhanden sind.",
 "raids" => "Raids",
@@ -1642,6 +1642,7 @@ $lang = array(
 "export_format"	=> "Ausgabe-Format",
 "export_data" => "Daten",
 "upload_eventicon" => "Ereignisicon hinzufügen",
+"selected_elements" => "Ausgewählte Elemente",		
  );
 
 ?>

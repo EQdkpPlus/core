@@ -25,219 +25,121 @@ class ManageTasks extends page_generic {
 
 	public function __construct(){
 		$handler = array(
-			'confirmChars' 			=> array('process' => 'confirmChars', 'check' => 'a_members_man', 'csrf'=>true),
-			'revokeChars'  			=> array('process' => 'revokeChars', 'check' => 'a_members_man', 'csrf'=>true),
-			'deleteChars'  			=> array('process' => 'deleteChars', 'check' => 'a_members_man', 'csrf'=>true),
-			'deleteConfirmChars'  	=> array('process' => 'deleteConfirmChars', 'check' => 'a_members_man', 'csrf'=>true),
-			
-			'deleteUser'			=> array('process' => 'deleteUser', 'check' => 'a_users_man', 'csrf'=>true),
-			'activateUser'			=> array('process' => 'activateUser', 'check' => 'a_users_man', 'csrf'=>true),
+			'mode' 					=> array('process' => 'handleAction', 'csrf'=>true),
 		);
-		$this->user->check_auths(array('a_users_man', 'a_members_man'), 'OR');
+		
+		$this->user->check_auth('a_');
 		parent::__construct(false, $handler);
 		$this->process();
+	}
+	
+	public function handleAction(){
+		$strAction = $this->in->get('mode');
+		
+		$strArrayName = $this->in->get('cbname');
+		$arrIDs = $this->in->getArray($strArrayName, 'string');
+		$strTask = $this->in->get('task');
+		
+		$arrTasks = $this->admin_tasks->getTasks();
 
+		if (isset($arrTasks[$strTask])) {
+			$arrTask = $arrTasks[$strTask];
+			if (isset($arrTask['action_func'])){
+				if (isset($arrTask['actions'][$strAction])){
+					//Check Permission
+					$action = $arrTask['actions'][$strAction];
+					if ($this->user->check_auths($action['permissions'], 'OR', false)){
+						call_user_func($arrTask['action_func'], $strAction, $arrIDs, $strTask);
+					}
+						
+				}
+			}
+		}
+		
+		//flush PDH Queue
+		$this->pdh->process_hook_queue();
+	}
 
-	}
-	
-	public function confirmChars(){
-		$arrMemberIDs = $this->in->getArray('confirm_chars', 'int');
-		if (count($arrMemberIDs)){
-			foreach($arrMemberIDs as $char_id){
-				$this->pdh->put('member', 'confirm', array($char_id));				
-			}
-			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('success'), $this->user->lang('uc_delete_char'), 'green');
-				
-		}
-		$this->display();	
-	}
-	
-	public  function revokeChars(){
-		$arrMemberIDs = $this->in->getArray('deleted_chars', 'int');
-		if (count($arrMemberIDs)){
-			foreach($arrMemberIDs as $char_id){
-				$this->pdh->put('member', 'revoke', array($char_id));
-			}
-			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('uc_delete_char'), $this->user->lang('success'),'green');
-				
-		}
-		$this->display();	
-	}
-	
-	public function deleteChars(){
-		$arrMemberIDs = $this->in->getArray('deleted_chars', 'int');
-		if (count($arrMemberIDs)){
-			foreach($arrMemberIDs as $char_id){
-				$this->pdh->put('member', 'delete_member', array($char_id));
-			}
-			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('uc_delete_char'), $this->user->lang('success'),'green');
-				
-		}
-		$this->display();	
-	}
-	
-	public function deleteConfirmChars(){
-		$arrMemberIDs = $this->in->getArray('confirm_chars', 'int');
-		if (count($arrMemberIDs)){
-			foreach($arrMemberIDs as $char_id){
-				$this->pdh->put('member', 'delete_member', array($char_id));
-			}
-			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('uc_delete_char'), $this->user->lang('success'), 'green');
-				
-		}
-		$this->display();		
-	}
-	
-	public function deleteUser(){
-		$arrUserIDs = $this->in->getArray('selected_user', 'int');
-		if (count($arrUserIDs)){
-			foreach($arrUserIDs as $user_id){
-				$this->pdh->put('user', 'delete_user', array($user_id, true));
-			}
-			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('delete_user'), $this->user->lang('success'), 'green');
-			
-		}
-		$this->display();
-	}
-	
-	public function activateUser(){
-		$arrUserIDs = $this->in->getArray('selected_user', 'int');
-		if (count($arrUserIDs)){
-			$this->pdh->put('user', 'activate', array($arrUserIDs));
-			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('activate_user'), $this->user->lang('success'), 'green');		
-		}
-		$this->display();
-	}
 	
 	public function display(){
-		$nothing = true;
+		
+		$arrTasks = $this->admin_tasks->getTasks();
 
-		//Confirm members
-		$confirm = $this->pdh->get('member', 'confirm_required');
-		if (count($confirm) > 0){
-			$nothing = false;
-			foreach ($confirm as $member){
-				$userId = $this->pdh->get('member', 'user', array($member));
-				$this->tpl->assign_block_vars('confirm_row', array(
-					'ID'			=> $member,
-					'NAME'			=> $this->pdh->get('member', 'name_decorated', array($member)),
-					'LEVEL'			=> $this->pdh->get('member', 'level', array($member)),
-					'USER'			=> ($userId) ? $this->pdh->get('user', 'name', array($userId)) : '',
-				));
+		foreach($arrTasks as $taskID => $arrTask){
+			if (isset($arrTask['content_func'])){
+				$arrContent= call_user_func($arrTask['content_func']);
+				if (is_array($arrContent) && count($arrContent)){
+					
+					//Actions
+					$blnPermission = false;
+					$arrMenuItems = array();
+					foreach($arrTask['actions'] as $actionID => $arrActions){
+						if (count($arrActions['permissions'])){
+							if (!$blnPermission && $this->user->check_auths($arrActions['permissions'], 'OR', false)) $blnPermission = true;
+							
+							if ($this->user->check_auths($arrActions['permissions'], 'OR', false)){
+								$arrMenuItems[] = array(
+										'name'	=> $this->user->lang($arrActions['title']),
+										'type'	=> 'button', //link, button, javascript
+										'icon'	=> $arrActions['icon'],
+										'perm'	=> true,
+										'link'	=> '#t_'.md5($taskID.'.'.$actionID).'Trigger',
+										'__action' => $actionID,
+								);
+							}
+							
+							
+						}
+					}
+					
+					if ($blnPermission){
+					
+						$this->tpl->assign_block_vars('task_row', array(
+							'HEADLINE'	=> $this->user->lang($arrTask['name']),
+							'ID'		=> 't_'.md5($taskID),
+							'NAME'		=> $taskID,
+							'MENU'		=> $this->jquery->ButtonDropDownMenu('menu_t_'.md5($taskID), $arrMenuItems, array("input[name=\"cb_t_".md5($taskID)."[]\"]"), '', $this->user->lang('selected_elements').'...', ''),
+						));
+						
+						foreach($arrMenuItems as $val){
+							$this->tpl->assign_block_vars('task_row.button_row', array(
+								'ID' 	=> substr($val['link'],1),
+								'VALUE' => $val['__action'],
+							));
+						}
+						
+						$this->jquery->selectall_checkbox('t_'.md5($taskID), 'cb_t_'.md5($taskID).'[]');
+						
+						//Output
+						//TH
+						foreach($arrContent[0] as $key => $val){
+							if ($key == 'id') continue;
+							
+							$this->tpl->assign_block_vars('task_row.th_row', array(
+								'CONTENT' => $this->user->lang($key),
+							));
+						}
+						
+						foreach($arrContent as $val){
+							$this->tpl->assign_block_vars('task_row.content_row', array(
+								'ID'	=> $val['id'],
+							));
+							
+							foreach($val as $key => $val2){
+								if ($key == 'id') continue;
+								
+								$this->tpl->assign_block_vars('task_row.content_row.td_row', array(
+									'CONTENT' => $val2,
+								));
+							}
+						}
+					
+					}
+				}
 			}
 		}
-
-		//Delete members
-		$deletion = $this->pdh->get('member', 'delete_requested');
-		if (count($deletion) > 0){
-			$nothing = false;
-			foreach ($deletion as $member){
-				$this->tpl->assign_block_vars('delete_row', array(
-					'ID'			=> $member,
-					'NAME'			=> $this->pdh->get('member', 'name_decorated', array($member)),
-					'LEVEL'			=> $this->pdh->get('member', 'level', array($member)),
-				));
-			}
-		}
-
-		//Inactive Users
-		$inactive = $this->pdh->get('user', 'inactive');
-		if (count($inactive) > 0){
-			$nothing = false;
-			foreach ($inactive as $member){
-				
-				$this->tpl->assign_block_vars('activate_row', array(
-					'ID'			=> $member,
-					'NAME'			=> $this->pdh->get('user', 'name', array($member)),
-					'EMAIL'			=> ($this->pdh->get('user', 'email', array($member))) ? '<a href="mailto:'.$this->pdh->get('user', 'email', array($member)).'">'.$this->pdh->get('user', 'email', array($member)).'</a>' : '',
-					'REG'			=> $this->time->user_date($this->pdh->get('user', 'regdate', array($member)), true),
-				));
-			}
-		}
-		
-		$this->jquery->Dialog('ConfirmChars', '', array('url' =>'', 'message'=>$this->user->lang('uc_confirm_msg_all'), 'custom_js' => '$("#confirmChars").click();'), 'confirm');
-		$this->jquery->Dialog('DeleteConfirmChars', '', array('url'=>'', 'message'=>$this->user->lang('uc_del_msg_all'), 'custom_js' => '$("#deleteConfirmChars").click();'), 'confirm');
-		
-		$this->jquery->Dialog('DeleteChars', '', array('url'=>'', 'message'=>$this->user->lang('uc_del_msg_all'), 'custom_js' => '$("#deleteChars").click();'), 'confirm');
-		$this->jquery->Dialog('RevokeChars', '', array('url'=>'', 'message'=>$this->user->lang('uc_revoke_char_confirm'), 'custom_js' => '$("#revokeChars").click();'), 'confirm');
-		
-		$this->jquery->Dialog('ActivateAllUsers', '', array('url'=>'', 'message'=>$this->user->lang('activate_user_warning'), 'custom_js' => '$("#activateUser").click();'), 'confirm');
-		$this->jquery->Dialog('DeleteUser', '', array('url'=>'', 'message'=>$this->user->lang('confirm_delete_user'), 'custom_js' => '$("#deleteUser").click();'), 'confirm');
-
-		$this->jquery->selectall_checkbox("selall_user", "selected_user[]");
-		$this->jquery->selectall_checkbox("selall_deleted_chars", "deleted_chars[]");
-		$this->jquery->selectall_checkbox("selall_confirm_chars", "confirm_chars[]");
-		
-		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=>"../addcharacter.php".$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'640', 'height'=>'520', 'onclose'=> 'manage_tasks.php'.$this->SID));
-				
-		$arrMenuItems = array(
-			0 => array(
-					'name'	=> $this->user->lang('activate_user'),
-					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'fa-check-square-o',
-					'perm'	=> true,
-					'link'	=> '#activateUserTrigger',
-			),
-			1 => array(
-					'name'	=> $this->user->lang('delete'),
-					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'fa-trash-o',
-					'perm'	=> true,
-					'link'	=> '#deleteUserTrigger',
-			),	
-		);
-		
-		$arrDeleteCharsMenuItems = array(
-			0 => array(
-					'name'	=> $this->user->lang('delete'),
-					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'fa-trash-o',
-					'perm'	=> true,
-					'link'	=> '#deleteCharsTrigger',
-			),
-			1 => array(
-					'name'	=> $this->user->lang('uc_rewoke_char'),
-					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'fa-refresh',
-					'perm'	=> true,
-					'link'	=> '#revokeCharsTrigger',
-			),
-		);
-		
-		$arrConfirmCharsMenuItems = array(
 			
-			0 => array(
-					'name'	=> $this->user->lang('uc_confirm_char'),
-					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'fa-check-square-o',
-					'perm'	=> true,
-					'link'	=> '#confirmCharsTrigger',
-			),
-			1 => array(
-					'name'	=> $this->user->lang('delete'),
-					'type'	=> 'button', //link, button, javascript
-					'icon'	=> 'fa-trash-o',
-					'perm'	=> true,
-					'link'	=> '#deleteConfirmCharsTrigger',
-			),
-		);
 		
-		$this->tpl->assign_vars(array(
-			'S_CONFIRM'				=> (count($confirm) > 0) ? true : false,
-			'S_DELETE'				=> (count($deletion) > 0) ? true : false,
-			'S_INACTIVE'			=> (count($inactive) > 0) ? true : false,
-			'S_NOTHING'				=> $nothing,
-			'BUTTON_MENU_INACTIVE_USER'	=> $this->jquery->ButtonDropDownMenu('inaktive_user_menu', $arrMenuItems, array("input[name=\"selected_user[]\"]"), '', $this->user->lang('selected_user').'...', ''),
-			'BUTTON_MENU_DELETE_CHARS'	=> $this->jquery->ButtonDropDownMenu('delete_char_menu', $arrDeleteCharsMenuItems, array("input[name=\"deleted_chars[]\"]"), '', $this->user->lang('selected_chars').'...', ''),
-			'BUTTON_MENU_CONFIRM_CHARS'	=> $this->jquery->ButtonDropDownMenu('confirm_char_menu', $arrConfirmCharsMenuItems, array("input[name=\"confirm_chars[]\"]"), '', $this->user->lang('selected_chars').'...', ''),
-		));
-
 		$this->core->set_vars(array(
 			'page_title'	=> $this->user->lang('uc_delete_manager'),
 			'template_file'	=> 'admin/manage_tasks.html',
