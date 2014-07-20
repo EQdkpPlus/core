@@ -270,6 +270,23 @@ abstract class Database extends gen_class {
 		}
 		return false;
 	}
+
+	/**
+	 * Checks if a Query is executed or not
+	 * @param string
+	 * @return boolean
+	 */
+	public function checkQuery($strQuery){
+		$strQuery = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $strQuery);
+		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
+		try {
+			$objQuery = $objStatement->query($strQuery);
+			return true;
+		} catch(DBALQueryException $e){
+			return false;
+		}
+		return false;
+	}
 	
 	/**
 	 * Return all columns of a particular table as array
