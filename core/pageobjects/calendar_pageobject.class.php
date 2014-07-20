@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2014-07-18 11:34:21 +0200 (Fr, 18 Jul 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14483 $
  *
- * $Id$
+ * $Id: calendar_pageobject.class.php 14483 2014-07-18 09:34:21Z wallenium $
  */
 
 class calendar_pageobject extends pageobject {

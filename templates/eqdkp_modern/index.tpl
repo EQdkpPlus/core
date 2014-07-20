@@ -397,7 +397,7 @@
 						<div class="input-icon">
 							<i class="fa fa-key"></i>
 							<input type="password" name="password" size="30" maxlength="32" class="input password" id="password" placeholder="{L_password}" required />
-							<span class="fv_msg" data-errormessage="></span>
+							<span class="fv_msg" data-errormessage=""></span>
 						</div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}<br />

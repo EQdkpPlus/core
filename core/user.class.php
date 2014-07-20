@@ -5,22 +5,22 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2008
- * Date:		$Date$
+ * Date:		$Date: 2014-07-16 15:01:33 +0200 (Mi, 16 Jul 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14477 $
  *
- * $Id$
+ * $Id: user.class.php 14477 2014-07-16 13:01:33Z wallenium $
  */
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class user_core extends gen_class {
+class user extends gen_class {
 	public static $dependencies = array('pfh');
 	
 	/**

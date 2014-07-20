@@ -126,7 +126,7 @@ class timekeeper extends gen_class {
 	);
 
 	private function init_cronsystem(){
-		$this->system_cron_dir = $this->root_path.'core/crons/';
+		$this->system_cron_dir = $this->root_path.'core/cronjobs/';
 		$this->crontab_file  = $this->pfh->FolderPath('timekeeper', 'eqdkp').'crontab.php';
 		$this->load_crontab();
 		$this->scan_system_crontasks();
@@ -402,7 +402,7 @@ abstract class crontask extends gen_class {
 		'repeat_interval'	=> 1,
 		'multiple'			=> false,
 		'active'			=> false,
-		'path'				=> 'core/crons/',
+		'path'				=> 'core/cronjobs/',
 		'params'			=> array(),
 		'editable'			=> false,
 		'description'		=> null

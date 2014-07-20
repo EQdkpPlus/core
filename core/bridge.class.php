@@ -5,22 +5,22 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2011
- * Date:		$Date$
+ * Date:		$Date: 2014-06-01 12:02:07 +0200 (So, 01 Jun 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14322 $
  * 
- * $Id$
+ * $Id: bridge_generic.class.php 14322 2014-06-01 10:02:07Z godmod $
  */
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class bridge_generic extends gen_class {
+class bridge extends gen_class {
 	public static $shortcuts = array(
 		'crypt'	=> 'encrypt',
 	);

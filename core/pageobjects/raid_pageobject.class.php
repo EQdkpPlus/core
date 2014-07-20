@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date$
+ * Date:		$Date: 2014-07-06 18:13:46 +0200 (So, 06 Jul 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: wallenium $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14437 $
  *
- * $Id$
+ * $Id: raid_pageobject.class.php 14437 2014-07-06 16:13:46Z wallenium $
  */
 
 

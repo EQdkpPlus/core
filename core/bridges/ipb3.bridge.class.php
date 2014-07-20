@@ -20,7 +20,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class ipb3_bridge extends bridge_generic {
+class ipb3_bridge extends bridge {
 	
 	public static $name = "IPB 3";
 	

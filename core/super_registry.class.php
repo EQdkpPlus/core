@@ -82,7 +82,7 @@ abstract class super_registry {
 		'tour'					=> 'core/',
 		'uploader'				=> 'core/',
 		'urlfetcher'			=> 'core/',
-		'user_core'				=> 'core/',
+		'user'				=> 'core/',
 		'xmltools'				=> 'core/',
 		'zip'					=> 'core/',
 		'infotooltip'			=> 'infotooltip/',
@@ -132,11 +132,11 @@ abstract class super_registry {
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			
 			//Bridge
-			include_once($root_path . 'core/bridge_generic.class.php');
+			include_once($root_path . 'core/bridge.class.php');
 			if (registry::register('config')->get('cmsbridge_type') != ''){
 				include_once($root_path . 'core/bridges/'. registry::register('config')->get('cmsbridge_type') .'.bridge.class.php');
 				self::$aliases['bridge'] = registry::register('config')->get('cmsbridge_type').'_bridge';
-			} else self::$aliases['bridge'] = 'bridge_generic';
+			} else self::$aliases['bridge'] = 'bridge';
 			
 			//Auth/User
 			require(self::$const['root_path'] . 'core/auth.class.php');

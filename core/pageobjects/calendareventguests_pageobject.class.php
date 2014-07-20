@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2014-02-09 13:36:41 +0100 (So, 09 Feb 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: hoofy_leon $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14019 $
  * 
- * $Id$
+ * $Id: calendareventguests_pageobject.class.php 14019 2014-02-09 12:36:41Z hoofy_leon $
  */
 
 class calendareventguests_pageobject extends pageobject {

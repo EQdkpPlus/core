@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2010
- * Date:		$Date$
+ * Date:		$Date: 2014-05-11 22:56:43 +0200 (So, 11 Mai 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: godmod $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14192 $
  *
- * $Id$
+ * $Id: search_pageobject.class.php 14192 2014-05-11 20:56:43Z godmod $
  */
 
 class search_pageobject extends pageobject {

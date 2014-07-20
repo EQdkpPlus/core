@@ -5,15 +5,15 @@
 * Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
 * -----------------------------------------------------------------------
 * Began:		2009
-* Date:			$Date$
+* Date:			$Date: 2014-02-06 20:59:13 +0100 (Do, 06 Feb 2014) $
 * -----------------------------------------------------------------------
-* @author		$Author$
+* @author		$Author: wallenium $
 * @copyright	2006-2011 EQdkp-Plus Developer Team
 * @link			http://eqdkp-plus.com
 * @package		eqdkpplus
-* @version		$Rev$
+* @version		$Rev: 14000 $
 *
-* $Id$
+* $Id: editarticle_pageobject.class.php 14000 2014-02-06 19:59:13Z wallenium $
 */
 
 class editarticle_pageobject extends pageobject {

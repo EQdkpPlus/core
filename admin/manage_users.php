@@ -176,9 +176,9 @@ class Manage_Users extends page_generic {
 			$pluginArray = array();
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
-				if(in_array($name, user_core::$privFields)) 
+				if(in_array($name, user::$privFields)) 
 					$privArray[$name] = $value;
-				elseif(in_array($name, user_core::$customFields)) 
+				elseif(in_array($name, user::$customFields)) 
 					$customArray[$name] = $value;
 				elseif(in_array($name, $plugin_settings))
 					$pluginArray[$name] = $value;
@@ -227,9 +227,9 @@ class Manage_Users extends page_generic {
 			$custom_fields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter');
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
-				if(in_array($name, user_core::$privFields)) 
+				if(in_array($name, user::$privFields)) 
 					$privArray[$name] = $value;
-				elseif(in_array($name, user_core::$customFields)) 
+				elseif(in_array($name, user::$customFields)) 
 					$customArray[$name] = $value;
 				elseif(in_array($name, $plugin_settings))
 					$pluginArray[$name] = $value;
@@ -636,7 +636,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		$this->form->use_tabs = true;
 		$this->form->use_fieldsets = true;
 		
-		$settingsdata = user_core::get_settingsdata($user_id);
+		$settingsdata = user::get_settingsdata($user_id);
 		// get rid of current_password field
 		unset($settingsdata['registration_info']['registration_info']['current_password']);
 		// vary help messages for user creation

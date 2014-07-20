@@ -301,8 +301,8 @@ class controller extends gen_class {
 			foreach($arrPageObjects[3] as $key=>$val){
 				$strPageObject = $val;
 				$strHaystack = $arrPageObjects[0][$key];
-				if (!is_file($this->root_path.'core/page_objects/'.$val.'_pageobject.class.php')) continue;
-				include_once($this->root_path.'core/page_objects/'.$val.'_pageobject.class.php');
+				if (!is_file($this->root_path.'core/pageobjects/'.$val.'_pageobject.class.php')) continue;
+				include_once($this->root_path.'core/pageobjects/'.$val.'_pageobject.class.php');
 				$objPage = registry::register($val.'_pageobject');
 				$arrCoreVars = $objPage->get_vars();
 				if ($arrCoreVars['template_file'] != '' ) {

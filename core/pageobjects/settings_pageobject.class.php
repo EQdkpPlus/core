@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2002
- * Date:		$Date$
+ * Date:		$Date: 2014-07-07 13:58:57 +0200 (Mo, 07 Jul 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: hoofy_leon $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 14440 $
  *
- * $Id$
+ * $Id: settings_pageobject.class.php 14440 2014-07-07 11:58:57Z hoofy_leon $
  */
 
  
@@ -177,9 +177,9 @@ class settings_pageobject extends pageobject {
 			if(in_array($name, $ignore)) continue;
 			if (strpos($name, "auth_account_") === 0) continue;
 			
-			if(in_array($name, user_core::$privFields))
+			if(in_array($name, user::$privFields))
 				$privArray[$name] = $value;
-			elseif(in_array($name, user_core::$customFields)) 
+			elseif(in_array($name, user::$customFields)) 
 				$customArray[$name] = $value;
 			elseif(in_array($name, $plugin_settings))
 				$pluginArray[$name] = $value;
@@ -245,7 +245,7 @@ class settings_pageobject extends pageobject {
 		$this->form->use_fieldsets = true;
 		$this->form->validate = true;
 		
-		$settingsdata = user_core::get_settingsdata($this->user->id);
+		$settingsdata = user::get_settingsdata($this->user->id);
 		// set username readonly
 		if($this->config->get('disable_username_change')) {
 			$settingsdata['registration_info']['registration_info']['username']['help'] =  'register_help_disabled_username';

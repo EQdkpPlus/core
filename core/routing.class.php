@@ -99,7 +99,7 @@ if(!class_exists('routing')){
 		}
 				
 		public function getPageObjects($blnIncludeStatic = false){
-			$arrFiles = sdir( $this->root_path.'core/page_objects/', '*_pageobject.class.php');
+			$arrFiles = sdir( $this->root_path.'core/pageobjects/', '*_pageobject.class.php');
 			if (is_array($arrFiles) && count($arrFiles)){
 				$arrOut = array();
 				foreach($arrFiles as $strFilename) {
@@ -161,7 +161,7 @@ if(!class_exists('routing')){
 			if (isset($this->arrStaticLocations[$strObjectName])){
 				$strLocation = $this->arrStaticLocations[$strObjectName];
 			} else {
-				$strLocation = 'core/page_objects';
+				$strLocation = 'core/pageobjects';
 			}
 			if (is_file($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php')){
 				include_once($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php');

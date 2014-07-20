@@ -42,7 +42,7 @@ define('DRUPAL_MAX_HASH_COUNT', 30);
  */
 define('DRUPAL_HASH_LENGTH', 55);
 
-class drupal_bridge extends bridge_generic {
+class drupal_bridge extends bridge {
 	
 	public static $name = 'Drupal';
 	

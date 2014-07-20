@@ -20,9 +20,9 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-if(!class_exists('user_core')) include_once(registry::get_const('root_path').'/core/user_core.class.php');
+if(!class_exists('user')) include_once(registry::get_const('root_path').'/core/user.class.php');
 
-class auth extends user_core {
+class auth extends user {
 
 	public static function __dependencies() {
 		$dependencies = array('timekeeper');

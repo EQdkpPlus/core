@@ -5,15 +5,15 @@
  * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
  * -----------------------------------------------------------------------
  * Began:		2009
- * Date:		$Date$
+ * Date:		$Date: 2014-02-05 21:00:21 +0100 (Mi, 05 Feb 2014) $
  * -----------------------------------------------------------------------
- * @author		$Author$
+ * @author		$Author: hoofy_leon $
  * @copyright	2006-2011 EQdkp-Plus Developer Team
  * @link		http://eqdkp-plus.com
  * @package		eqdkp-plus
- * @version		$Rev$
+ * @version		$Rev: 13999 $
  *
- * $Id$
+ * $Id: usergroup_pageobject.class.php 13999 2014-02-05 20:00:21Z hoofy_leon $
  */
 
 class usergroup_pageobject extends pageobject {
