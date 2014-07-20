@@ -110,6 +110,8 @@ class update_2000 extends sql_update_task {
 				53 => 'Alter member table',
 				54 => 'Alter multidkp table',
 				55 => 'Insert auth_option',
+				56 => 'Alter config table',
+				57 => 'Alter config table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -168,6 +170,8 @@ class update_2000 extends sql_update_task {
 				53 => 'Alter member table',
 				54 => 'Alter multidkp table',
 				55 => 'Insert auth_option',
+				56 => 'Alter config table',
+				57 => 'Alter config table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -333,6 +337,8 @@ class update_2000 extends sql_update_task {
 			53 => "ALTER TABLE `__members` DROP `member_level`, DROP `member_race_id`, DROP `member_class_id`;",
 			54 => "ALTER TABLE `__multidkp` ADD COLUMN `multidkp_sortid` INT(11) UNSIGNED NULL DEFAULT '0';",
 			55 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N');",
+			56 => "RENAME TABLE `__backup_cnf` TO `__config`;",
+			57 => "ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(255) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';",
 		);
 	}
 	

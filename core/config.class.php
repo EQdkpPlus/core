@@ -128,7 +128,7 @@ class config extends gen_class {
 		if(!is_object($this->db)){return true;}
 		$this->config_modified = true;
 		$this->config = array();
-		$objQuery = $this->db->query("SELECT * FROM __backup_cnf;");
+		$objQuery = $this->db->query("SELECT * FROM __config;");
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc() ){
 				if($row['config_plugin'] != 'core'){
@@ -156,7 +156,7 @@ class config extends gen_class {
 			if(strlen(trim($changed['k'])) > 0 && !in_array($changed['k'], $done)) {
 				$done[] = $changed['k'];
 				
-				$this->db->prepare("REPLACE INTO __backup_cnf :p")->set(array(
+				$this->db->prepare("REPLACE INTO __config :p")->set(array(
 					'config_name'	=> $changed['k'],
 					'config_value'	=> (is_array($changed['v'])) ? serialize($changed['v']) : $changed['v'],
 					'config_plugin'	=> $changed['p']
@@ -167,13 +167,13 @@ class config extends gen_class {
 		
 		foreach($this->deleted_keys as $dk => $deleted){
 			if($deleted['k'] != null)
-				$this->db->prepare("DELETE FROM __backup_cnf WHERE config_name = ? AND config_plugin = ?")->execute($deleted['k'], $deleted['p']);
+				$this->db->prepare("DELETE FROM __config WHERE config_name = ? AND config_plugin = ?")->execute($deleted['k'], $deleted['p']);
 			else
-				$this->db->prepare("DELETE FROM __backup_cnf WHERE config_plugin = ?")->execute($deleted['p']);
+				$this->db->prepare("DELETE FROM __config WHERE config_plugin = ?")->execute($deleted['p']);
 			unset($this->deleted_keys[$dk]);
 		}
 		//check if row-counts matches number of configs
-		$objQuery = $this->db->query("SELECT COUNT(config_name) as count FROM __backup_cnf;");
+		$objQuery = $this->db->query("SELECT COUNT(config_name) as count FROM __config;");
 		if ($objQuery){
 			$arrResult =  $objQuery->fetchAssoc();
 			$row_count = (int)$arrResult['count'];	
@@ -195,7 +195,7 @@ class config extends gen_class {
 
 	private function save_backup($array){
 		if(is_array($array)){
-			$this->db->query("TRUNCATE TABLE __backup_cnf");
+			$this->db->query("TRUNCATE TABLE __config");
 			$data = array();
 			foreach($array as $name=>$value){
 				//include multiselects and sliders of core (they have numerical keys)
@@ -214,7 +214,7 @@ class config extends gen_class {
 					}
 				}
 			}
-			$this->db->prepare("REPLACE INTO __backup_cnf :p")->set($data)->execute();
+			$this->db->prepare("REPLACE INTO __config :p")->set($data)->execute();
 		}
 	}
 
