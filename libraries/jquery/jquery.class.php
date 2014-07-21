@@ -730,7 +730,7 @@ if (!class_exists("jquery")) {
 			}
 
 			// some fix variables
-			$expiresval	= (isset($options['expires'])) ? 'true' : 'false';
+			$expiresval	= (isset($options['expires'])) ? $options['expires'] : 'false';
 			$speedval	= (isset($options['speed'])) ? $options['speed'] : 1000;
 			$theme		= (isset($options['theme'])) ? $options['theme'] : 'default';
 

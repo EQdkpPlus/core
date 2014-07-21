@@ -72,7 +72,7 @@ class core extends gen_class {
 					case 'green': $kkind = 'success';break;
 					default: $kkind = 'default';
 				}
-				$this->jquery->notify($text, array('header' => $title,'expires' => false, 'custom'=>true,'theme'  => $kkind, 'parent' => $parent));
+				$this->jquery->notify($text, array('header' => $title,'expires' => (($showalways) ? false : 3000), 'custom'=>true,'theme'  => $kkind, 'parent' => $parent));
 			}
 		}
 

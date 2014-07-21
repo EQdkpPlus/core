@@ -77,7 +77,7 @@ class email extends page_generic {
 					
 					$status = $this->mail->SendMail($this->pdh->get('user', 'email', array($user_id)), $this->user->data['user_email'], $this->in->get('subject'), $this->in->get('body'));
 					if ($status){
-						$this->core->message($this->user->lang('adduser_send_mail_suc'), $this->user->lang('success'), 'green', true);
+						$this->core->message($this->user->lang('adduser_send_mail_suc'), $this->user->lang('success'), 'green');
 						$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 					} else {
 						$this->core->message($this->user->lang('error_email_send'), $this->user->lang('error'), 'red');
