@@ -303,12 +303,15 @@ class controller extends gen_class {
 					
 			', 'docready');
 			
-			$editor->inline_editor('.article_content',array(
+			$editor->inline_editor('.article-inlineedit',array(
 			'relative_urls'	=> false,
 			'link_list'		=> true,
 			'gallery'		=> true,
 			'raidloot'		=> true,
-		));
+			));
+			$this->tpl->assign_vars(array(
+				'S_INLINE_EDIT' => true,
+			));
 		}				
 		if ($arrPermissions['delete']) {
 			$arrToolbarItems[] = array(
@@ -365,6 +368,7 @@ class controller extends gen_class {
 				}
 				if (isset($arrCoreVars['page_title']) && strlen($arrCoreVars['page_title'])) $strAdditionalTitles = ' - '.$arrCoreVars['page_title'];
 			}
+			$this->tpl->assign_var('S_INLINE_EDIT', false);
 		}
 		
 		//Replace Image Gallery

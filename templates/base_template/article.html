@@ -22,7 +22,7 @@
 	
 	<header>
 		<div class="contentHeader">
-			<h1 class="contentTitle"><span class="headline_inlineedit">{ARTICLE_TITLE}</span>
+			<h1 class="contentTitle"><span class="<!-- IF S_INLINE_EDIT -->headline_inlineedit<!-- ENDIF -->">{ARTICLE_TITLE}</span>
 				<!-- IF S_TOOLBAR --> 
 				<div class="floatRight">
 					<div class="toolbar-button">
@@ -57,7 +57,7 @@
 		</ul>
 	</aside>
 	<!-- ENDIF -->
-	<article class="article_content">
+	<article class="article_content <!-- IF S_INLINE_EDIT -->article-inlineedit<!-- ENDIF -->">
 		<!-- PRE ARTICLE_CONTENT -->
 	</article>
 	<div class="clear"></div>

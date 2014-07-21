@@ -65,7 +65,7 @@ $(document).ready(function() {
 	$("#cal_raidtemplate").bind("change", function(e){
 		$(".resettemplate_input").val('');
 		if($(this).val() > 0){
-			$.getJSON("addevent.php{SID}&loadtemplate="+$(this).val(), function(data){
+			$.getJSON("{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&loadtemplate="+$(this).val(), function(data){
 				$.each(data, function(i,item){
 					//if(item.field == 'dw_raidleader'){
 						//$("#dw_raidleader").attr("value","3")
@@ -83,7 +83,7 @@ $(document).ready(function() {
 	// Delete templates
 	$("#template_delbutton").bind("click", function(){
 		if($("#cal_raidtemplate").val() > 0){
-			$.get('addevent.php{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
+			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
 				$('#cal_raidtemplate').find('option').remove();
 				$('#cal_raidtemplate').append(data);
 			});
@@ -95,21 +95,21 @@ $(document).ready(function() {
 
 		if($('#selectmode').val() == 'raid'){
 			if(($('input[name="raid_attendees_count"]').val() < 1) || ($('input[name="raid_attendees_count"]').val() == '0')){
-				ModalAlert('{L_raidevent_event_val_attnd}');
+				ModalAlert({L_raidevent_event_val_attnd|jsencode});
 				return false;
 			}
 			if(($('input[name="raid_eventid"]').val() == '') || ($('input[name="raid_eventid"]').val() < 1)){
-				ModalAlert('{L_raidevent_event_val_name}');
+				ModalAlert({L_raidevent_event_val_name|jsencode});
 				return false;
 			}
 		}else{
 			var dv_eventname = $('input[name="eventname"]').val();
 			if(dv_eventname.length < 3){
-				ModalAlert("{L_raidevent_event_val_name}");
+				ModalAlert({L_raidevent_event_val_name|jsencode});
 				return false;
 			}
 			if($('input[name="calendar_id"]').val() < 1){
-				ModalAlert('{L_raidevent_raid_val_eventid}');
+				ModalAlert({L_raidevent_raid_val_eventid|jsencode});
 				return false;
 			}
 		}
@@ -137,7 +137,7 @@ function changeCalendars(cal_mode){
 
 	// check if a calendar is available for this mode
 	if ($('#calendar_id option').length == 0) {
-		ModalAlert('{L_raidevent_raid_val_addevent}');
+		ModalAlert({L_raidevent_raid_val_addevent|jsencode});
 	}
 }
 
@@ -145,7 +145,7 @@ function ModalAlert(text){
 	$( "<div></div>" ).dialog({
 			height: 200,
 			modal: true,
-			title: '{L_raidevent_raid_errorhead}',
+			title: {L_raidevent_raid_errorhead|jsencode},
 			buttons: { Ok: function() { $(this).dialog('close'); } }
 		}).html('<p class="confirmdialog"><i class="fa fa-exclamation-triangle fa-2x" style="float:left; margin:0 7px 24px 0;"></i>'+text+'</p>');
 }

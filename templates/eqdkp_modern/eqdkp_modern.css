@@ -3118,3 +3118,22 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
     background-color: #fff;
     padding: 10px 15px;
 }
+
+.headline_inlineedit:hover:after{
+	content: "\f1dd";
+	font-family: FontAwesome;
+	color: #9f9f9f;
+	margin-left: 2px;
+	font-weight: normal;
+}
+
+.article-inlineedit:hover:after{
+	content: "\f1dd";
+	font-family: FontAwesome;
+	color: #9f9f9f;
+	margin-left: 2px;
+	font-weight: normal;
+	position:absolute;
+	top: 0px;
+	right: 4px;
+}
