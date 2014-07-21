@@ -1549,7 +1549,6 @@ $lang = array(
 	"error_create_article_category" => 'An error occured while saving the Articlecategory',
 	"success_create_article_category" => 'Articlecategory has been saved succesfully',
 	"error_create_article" => 'An error occured while saving the Article',
-	"success_create_article" => 'Article has been saved succesfully',
 	"admin_reset_voting_success" => 'The votings for %s were resetted.',
 	"admin_delete_comments_success" => 'The comments for %s were successfully deleted.',
 	"perm_rea" => 'Read',

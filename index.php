@@ -255,7 +255,60 @@ class controller extends gen_class {
 				'icon'	=> 'fa-pencil-square-o',
 				'js'	=> 'onclick="editArticle('.$intArticleID.')"',
 				'title'	=> $this->user->lang('edit_article'),
-			); 
+			);
+			
+			$editor = register('tinyMCE');
+			$editor->inline_editor_simple('.headline_inlineedit');
+			
+			
+			$csrf = $this->user->csrfGetToken('editarticle_pageobjectsave_headline');
+			$csrf_raw = $this->user->csrfGetToken('editarticle_pageobjectgetrawarticle');
+			$csrf_article = $this->user->csrfGetToken('editarticle_pageobjectsave_article');
+			
+			$this->tpl->add_js('function save_inline_editor_simple(selector, e){
+				if (e.target.editorManager.activeEditor.isDirty() == false) return true;	
+					
+				var newHeadline = e.target.editorManager.activeEditor.getContent();
+					$.post( "'.$this->controller_path.'EditArticle/'.$this->SID.'&save_headline=1&aid='.$intArticleID.'&link_hash='.$csrf.'", 
+					{ headline: newHeadline }, function( data ) {
+						if (data.status != undefined && data.status == true){
+							$("#notify_container").notify("create", "success", {text: '.$this->tpl->handleModifier($this->user->lang('success_create_article'), 'jsencode').',title: '.$this->tpl->handleModifier($this->user->lang('success'), 'jsencode').',custom: true,},{expires: 3000, speed: 1000});
+						}
+					}, "json");
+			}
+					
+			function focus_inline_editor(selector, e){
+				e.target.editorManager.activeEditor.setContent("<b>Loading... <i class=\"fa fa-spinner fa-spin fa-lg\"></i></b><br /><br />", {format: "raw"});
+						
+				$.get( "'.$this->controller_path.'EditArticle/'.$this->SID.'&get_raw_article=1&aid='.$intArticleID.'&link_hash='.$csrf_raw.'", 
+					function( data ) {
+						if (data.text != undefined && data.text != false){
+							e.target.editorManager.activeEditor.setContent(data.text,  {format: "raw"});
+					
+						}
+					}, "json");
+			}		
+			
+			function save_inline_editor(selector, e){
+				if (e.target.editorManager.activeEditor.isDirty() == false) return true;
+
+				var newText = e.target.editorManager.activeEditor.getContent();
+					$.post( "'.$this->controller_path.'EditArticle/'.$this->SID.'&save_article=1&aid='.$intArticleID.'&link_hash='.$csrf_article.'", 
+					{ text: newText }, function( data ) {
+						if (data.status != undefined && data.status == true){
+							$("#notify_container").notify("create", "success", {text: '.$this->tpl->handleModifier($this->user->lang('success_create_article'), 'jsencode').',title: '.$this->tpl->handleModifier($this->user->lang('success'), 'jsencode').',custom: true,},{expires: 3000, speed: 1000});
+						}
+					}, "json");
+			}
+					
+			', 'docready');
+			
+			$editor->inline_editor('.article_content',array(
+			'relative_urls'	=> false,
+			'link_list'		=> true,
+			'gallery'		=> true,
+			'raidloot'		=> true,
+		));
 		}				
 		if ($arrPermissions['delete']) {
 			$arrToolbarItems[] = array(

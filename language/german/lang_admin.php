@@ -1554,7 +1554,6 @@ $lang = array(
 "error_create_article_category" => "Fehler beim Speichern der Artikelkategorie",
 "success_create_article_category" => "Die Artikelkatorie wurde erfolgreich gespeichert",
 "error_create_article" => 		"Fehler beim Speichern des Artikels",
-"success_create_article" => "Der Artikel wurde erfolgreich gespeichert",
 "admin_reset_voting_success" => "Die Votings für %s wurden zurückgesetzt.",
 "admin_delete_comments_success" => "Die Kommentare zu %s wurden erfolgreich gelöscht.",
 "perm_rea" => "Lesen",

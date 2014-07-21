@@ -22,6 +22,9 @@ class editarticle_pageobject extends pageobject {
 
 	public function __construct(){
 		$handler = array(
+			'save_headline'		=> array('process' => 'ajax_saveheadline', 'csrf' => true),
+			'save_article'		=> array('process' => 'ajax_savearticle', 'csrf' => true),
+			'get_raw_article'	=> array('process' => 'ajax_getrawarticle'),
 			'update'			=> array('process' => 'update', 'csrf' => true),
 			'checkalias'		=> array('process' => 'ajax_checkalias'),
 			'delpreviewimage'	=> array('process' => 'delete_previewimage', 'csrf' => true),
@@ -58,6 +61,43 @@ class editarticle_pageobject extends pageobject {
 			$id = $this->in->get('aid', 0);
 			if ($id) $this->pdh->put('articles', 'delete_previewimage', array($id));
 		}
+	}
+	
+	public function ajax_saveheadline(){
+		$strTitle = $this->in->get('headline');
+		$id = $this->in->get('aid', 0);
+		
+		if ($strTitle != "") {
+			$this->pdh->put('articles', 'update_headline', array($id, $strTitle));
+			$this->pdh->process_hook_queue();
+		}
+		
+		header('Content-type: application/json; charset=utf-8');
+		echo json_encode(array('status' => true));
+		exit();
+	}
+	
+	public function ajax_savearticle(){
+		$strText = $this->in->get('text', '', 'raw');
+		$id = $this->in->get('aid', 0);
+	
+		if ($strText != "") {
+			$this->pdh->put('articles', 'update_article', array($id, $strText));
+			$this->pdh->process_hook_queue();
+		}
+	
+		header('Content-type: application/json; charset=utf-8');
+		echo json_encode(array('status' => true));
+		exit();
+	}
+	
+	public function ajax_getrawarticle(){
+		$id = $this->in->get('aid', 0);
+		$strArticle = $this->pdh->get('articles', 'text', array($id));
+		
+		header('Content-type: application/json; charset=utf-8');
+		echo json_encode(array('text' => unsanitize($strArticle)));
+		exit();
 	}
 		
 	public function ajax_checkalias(){

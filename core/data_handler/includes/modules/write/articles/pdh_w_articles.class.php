@@ -208,6 +208,90 @@ if(!class_exists('pdh_w_articles')) {
 			return false;
 		}
 		
+		public function update_headline($id, $strTitle){
+			$arrOldData = $this->pdh->get('articles', 'data', array($id));
+			
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
+					'title' 			=> $strTitle,
+			))->execute($id);
+
+			if ($objQuery){
+				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
+			
+				//Log changes
+				$arrNew = array(
+						'title' 			=> $strTitle,
+				);
+			
+				$arrOld = array(
+						'title' 			=> $arrOldData["title"],
+				);
+			
+				$arrFlags = array(
+						'text'			=> 1,
+				);
+			
+				$arrChanges = $this->logs->diff($arrOld, $arrNew, $this->arrLang, $arrFlags);
+				if ($arrChanges){
+					$this->log_insert('action_article_updated', $arrChanges, $id, $arrOldData["title"], 1, 'article');
+				}
+			
+				return $id;
+			}
+			return false;
+		}
+		
+		public function update_article($id, $strText){
+			$strText = $this->bbcode->replace_shorttags($strText);
+			$strText = $this->embedly->parseString($strText);
+				
+			$arrPageObjects = array();
+			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', xhtml_entity_decode($strText), $arrTmpPageObjects, PREG_PATTERN_ORDER);
+			if (count($arrTmpPageObjects[0])){
+				foreach($arrTmpPageObjects[3] as $key=>$val){
+					$arrPageObjects[] = $val;
+				}
+			}
+				
+			$arrOldData = $this->pdh->get('articles', 'data', array($id));
+			
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
+					'text'				=> $strText,
+					'page_objects'		=> serialize($arrPageObjects),
+			))->execute($id);
+			
+			if ($objQuery){
+				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
+			
+				//Log changes
+				$arrNew = array(
+						'text'				=> $strText,
+						'page_objects'		=> implode(", ", $arrPageObjects),
+				);
+			
+				$arrOld = array(
+						'text'				=> $arrOldData["text"],
+						'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+				);
+			
+				$arrFlags = array(
+						'text'			=> 1,
+				);
+			
+				$arrChanges = $this->logs->diff($arrOld, $arrNew, $this->arrLang, $arrFlags);
+				if ($arrChanges){
+					$this->log_insert('action_article_updated', $arrChanges, $id, $arrOldData["title"], 1, 'article');
+				}
+			
+				return $id;
+			}
+				
+			return false;
+			
+		}
+		
 		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == "" || $strAlias != $this->pdh->get('articles', 'alias', array($id))){
 				$strAlias = $this->create_alias($strTitle);

@@ -809,7 +809,7 @@ class template extends gen_class {
 		return;
 	}
 	
-	private function handleModifier($strLangString, $strModifier){
+	public function handleModifier($strLangString, $strModifier){
 		switch($strModifier){
 			case 'jsencode':
 					return "'".str_replace("'", "\'", $strLangString)."'";
