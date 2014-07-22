@@ -182,7 +182,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						if(is_array($this->cmfields)){
 							$my_data = $this->data[$bmd_row['member_id']]['profiledata'];
 							foreach($this->cmfields as $mmdata){
-								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
+								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata])) ? $my_data[$mmdata] : '';
 							}
 						}
 					}
@@ -322,6 +322,52 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						}
 					}
 				break;
+				
+				
+				case 'multiselect':
+					$arrOut = array();
+					
+					foreach($strMemberValue as $strMemberVal) {
+						$out = "";
+						//Check if Value is in dropdown options
+						if (!in_array($strMemberVal, array_keys($arrField['data']['options']))) return '';
+
+						if ($strImage && !$nameOnly){
+							$out .= '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
+							if ($arrField['options_language'] != ""){
+								if (strpos($arrField['options_language'], 'lang:') === 0){
+									$arrSplitted = explode(':', $arrField['options_language']);
+									$arrGlang = $this->game->glang($arrSplitted[1]);
+									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+					
+								} else $arrLang = $this->game->get($arrField['options_language']);
+								if (isset($arrLang[$strMemberVal])) $out .= ' '.$arrLang[$strMemberVal];
+							}
+						} else {
+							if ($arrField['options_language'] != ""){
+								if (strpos($arrField['options_language'], 'lang:') === 0){
+									$arrSplitted = explode(':', $arrField['options_language']);
+									$arrGlang = $this->game->glang($arrSplitted[1]);
+									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+					
+								} else $arrLang = $this->game->get($arrField['options_language']);
+								if (isset($arrLang[$strMemberVal])) $out .= $arrLang[$strMemberVal];
+							}
+								
+							$strType = $this->game->get_type_for_name($profile_field);
+							if ($strType){
+								$out .= ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberVal) : $this->game->decorate($strType, $strMemberVal, $this->data[$member_id]);
+							} else {
+								$out .= $arrField['data']['options'][$strMemberVal];
+							}
+						}
+						if (strlen($out)) $arrOut[] = $out;
+					}
+					
+					$out = implode(', ', $arrOut);
+					
+					break;
+				
 			}
 			return $out;
 		}

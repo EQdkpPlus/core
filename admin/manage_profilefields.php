@@ -98,7 +98,8 @@ class ManageProfileFields extends page_generic {
 			'text'		=> 'Text',
 			'int'		=> 'Integer',
 			'dropdown'	=> 'Dropdown',
-			'link'		=> 'Link'
+			'link'		=> 'Link',
+			'multiselect' => 'Multiselect',
 		);
 
 		$categories = array(
@@ -119,10 +120,10 @@ class ManageProfileFields extends page_generic {
 			'CATEGORY_DD'				=> new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])),
 			'SIZE'						=> $field_data['size'],
 			'IMAGE'						=> $field_data['image'],
-			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown') ? '' : 'style="display:none;"',
+			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect') ? '' : 'style="display:none;"',
 		));
 
-		if ($field_data['type'] == 'dropdown'){
+		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect'){
 			foreach ($field_data['options'] as $key => $value){
 				$this->tpl->assign_block_vars('options_row', array(
 					'ID'		=> $key,
@@ -138,7 +139,7 @@ $("#addopt_icon").click(function(){
 	$("#new_options").append(fields);
 });
 $("#type_dd").change(function(){
-	if($("#type_dd").attr("value") == "dropdown") {
+	if($("#type_dd").attr("value") == "dropdown" || $("#type_dd").attr("value") == "multiselect") {
 		$("#options_row").show();
 	} else {
 		$("#options_row").hide();
