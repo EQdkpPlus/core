@@ -37,6 +37,7 @@ if ( !defined('EQDKP_INC') ){
 		private $cached_data		= array();
 		private $ttls				= array();
 		private $needs_update		= array();
+		private $call_start			= false;
 		
 		public $available_types		= array();
 
@@ -216,6 +217,7 @@ if ( !defined('EQDKP_INC') ){
 		 * @return 		float
 		 */
 		public function get_decay_val($module, $dkp_id, $date=0, $data=array()) {
+			if(!$this->call_start) $this->call_start = true;
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
 			$cache_date = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_cache_date($date, $apa_id);
@@ -226,8 +228,10 @@ if ( !defined('EQDKP_INC') ){
 				$this->cached_data[$apa_id][$cache_date][$module][$data['id']]['val'] = $val;
 				$this->cached_data[$apa_id][$cache_date][$module][$data['id']]['adj'] = $adj;
 				$this->ttls[$apa_id][$cache_date] = $ttl;
-				$this->update_done($module, $data['id']);
+				// only flag update done if this is the top-level call (so cache entries for older cache_dates get reset as well)
+				if($this->call_start) $this->update_done($module, $data['id']);
 			}
+			$this->call_start = false;
 			return $this->cached_data[$apa_id][$cache_date][$module][$data['id']]['val'];
 		}
 		
