@@ -1,35 +1,6 @@
 <?php 
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2012 Leo Feyer
- *
- * Formerly known as TYPOlight Open Source CMS.
- *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program. If not, please visit the Free
- * Software Foundation website at <http://www.gnu.org/licenses/>.
- *
- * PHP version 5
- * @copyright  Leo Feyer 2005-2012
- * @author     Leo Feyer <http://www.contao.org>
- * @package    System
- * @license    LGPL
- * @filesource
- */
-
-
-/**
  * Class DB_Mysqli
  *
  * Driver class for MySQLi databases.
@@ -37,11 +8,11 @@
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Driver
  */
-class dbal_mysqli extends Database
+class dbal_mysql_pdo extends Database
 {
 	
-	protected $strDbalName = 'mysql'; // equals php extension
-	protected $strDbmsName = 'MySQL'; // user visible name
+	protected $strDbalName = 'mysql pdo';
+	protected $strDbmsName = 'MySQL PDO'; // user visible name
 	
 	/**
 	 * List tables query
@@ -61,12 +32,15 @@ class dbal_mysqli extends Database
 	 */
 	public function connect($strHost, $strDatabase, $strUser, $strPassword, $intPort=false)
 	{			
-		$intPort = ($intPort !== false) ? $intPort : ini_get("mysqli.default_port");
-		@$this->resConnection = new mysqli($strHost, $strUser, $strPassword, $strDatabase, $intPort);
-		if (@$this->resConnection->connect_error != ""){
-			throw new DBALException(@$this->resConnection->connect_error);
+		$strPort = ($intPort !== false) ? ';port='.$intPort : "";
+		
+		try {
+			$this->resConnection = new PDO('mysql:host='.$strHost.';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, $strUser, $strPassword);
+		} catch (PDOException $e) {
+			$strError =  $e->getMessage();
+			throw new DBALException($strError);
 		}
-		@$this->resConnection->set_charset($this->strCharset);
+
 		$this->strDatabase = $strDatabase;
 	}
 
@@ -76,15 +50,15 @@ class dbal_mysqli extends Database
 	 */
 	protected function disconnect()
 	{
-		@$this->resConnection->close();
+		$this->resConnection = null;
 	}
 	
 	protected function get_client_version() {
-		return @$this->resConnection->get_client_info();
+		return @$this->resConnection->getAttribute(PDO::ATTR_CLIENT_VERSION);
 	}
 	
 	protected function get_server_version(){
-		return @$this->resConnection->get_server_info();
+		return @$this->resConnection->getAttribute(PDO::ATTR_SERVER_VERSION);
 	}
 
 	/**
@@ -93,15 +67,17 @@ class dbal_mysqli extends Database
 	 */
 	protected function get_error()
 	{
-		return @$this->resConnection->error;
+		$arrError = $this->resConnection->errorInfo();
+		return $arrError[2];
 	}
 	
 	protected  function get_errno(){
-		return @$this->resConnection->errno;
+		return @$this->resConnection->errorCode();
 	}
 	
 	protected function get_connerror(){
-		return @$this->resConnection->connect_error;
+		$arrError = $this->resConnection->errorInfo();
+		return $arrError[2];
 	}
 
 
@@ -120,7 +96,7 @@ class dbal_mysqli extends Database
 		}
 		else
 		{
-			return "FIND_IN_SET(" . $strKey . ", '" . $this->resConnection->real_escape_string($strSet) . "')";
+			return "FIND_IN_SET(" . $strKey . ", " . $this->resConnection->quote($strSet) . ")";
 		}
 	}
 
@@ -224,9 +200,16 @@ class dbal_mysqli extends Database
 	protected function set_database($strDatabase=false)
 	{
 		if ($strDatabase === false) $strDatabase = $this->strDatabase;
-		$intPort = (registry::get_const("dbport") !== null) ? registry::get_const("dbport") : ini_get("mysqli.default_port");
-		if (is_object($this->resConnection)) @$this->resConnection->close();		
-		@$this->resConnection = new mysqli(registry::get_const("dbhost"), registry::get_const("dbuser"), registry::get_const("dbpass"), $strDatabase, $intPort);
+		if (is_object($this->resConnection)) $this->resConnection = null;
+		
+		$strPort = (registry::get_const("dbport") !== null) ? ';port='.registry::get_const("dbport") : "";
+		
+		try {
+			$this->resConnection = new PDO('mysql:host='.registry::get_const("dbhost").';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, registry::get_const("dbuser"), registry::get_const("dbpass"));
+		} catch (PDOException $e) {
+			$strError =  $e->getMessage();
+			throw new DBALException($strError);
+		}
 	}
 
 
@@ -235,8 +218,7 @@ class dbal_mysqli extends Database
 	 */
 	protected function begin_transaction()
 	{
-		@$this->resConnection->query("SET AUTOCOMMIT=0");
-		@$this->resConnection->query("BEGIN");
+		$this->resConnection->beginTransaction();
 	}
 
 
@@ -245,8 +227,7 @@ class dbal_mysqli extends Database
 	 */
 	protected function commit_transaction()
 	{
-		@$this->resConnection->query("COMMIT");
-		@$this->resConnection->query("SET AUTOCOMMIT=1");
+		$this->resConnection->commit();
 	}
 
 
@@ -255,8 +236,7 @@ class dbal_mysqli extends Database
 	 */
 	protected function rollback_transaction()
 	{
-		@$this->resConnection->query("ROLLBACK");
-		@$this->resConnection->query("SET AUTOCOMMIT=1");
+		$this->resConnection->rollBack();
 	}
 
 
@@ -272,8 +252,8 @@ class dbal_mysqli extends Database
 		{
 			$arrLocks[] = $table .' '. $mode;
 		}
-
-		@$this->resConnection->query("LOCK TABLES " . implode(', ', $arrLocks));
+		
+		$this->resConnection->query("LOCK TABLES " . implode(', ', $arrLocks));
 	}
 
 
@@ -282,7 +262,7 @@ class dbal_mysqli extends Database
 	 */
 	protected function unlock_tables()
 	{
-		@$this->resConnection->query("UNLOCK TABLES");
+		$this->resConnection->query("UNLOCK TABLES");
 	}
 
 
@@ -294,14 +274,13 @@ class dbal_mysqli extends Database
 	protected function get_size_of($strTable)
 	{
 		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
-										  ->fetch_object();
-
+										  ->fetch(PDO::FETCH_OBJ);
 		return ($objStatus->Data_length + $objStatus->Index_length);
 	}
 	
 	protected function field_information($strTable){
 		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
-		->fetch_object();
+		->fetch(PDO::FETCH_OBJ);
 		return array(
 			'data_length'	=> $objStatus->Data_length,
 			'index_length'	=> $objStatus->Index_length,
@@ -321,7 +300,7 @@ class dbal_mysqli extends Database
 	protected function get_next_id($strTable)
 	{
 		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
-										  ->fetch_object();
+										  ->fetch(PDO::FETCH_OBJ);
 
 		return $objStatus->Auto_increment;
 	}
@@ -378,7 +357,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function string_escape($strString)
 	{
-		return "'" . $this->resConnection->real_escape_string($strString) . "'";
+		return $this->resConnection->quote($strString);
 	}
 
 
@@ -421,7 +400,8 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function get_error()
 	{
-		return @$this->resConnection->error;
+		$arrError = $this->resConnection->errorInfo();
+		return $arrError[2];
 	}
 	
 	/**
@@ -430,7 +410,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function get_errno()
 	{
-		return @$this->resConnection->errno;
+		return @$this->resConnection->errorCode();
 	}
 
 
@@ -440,7 +420,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function affected_rows()
 	{
-		return @$this->resConnection->affected_rows;
+		return @$this->resConnection->rowCount();
 	}
 
 
@@ -450,7 +430,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function insert_id()
 	{
-		return @$this->resConnection->insert_id;
+		return @$this->resConnection->lastInsertId();
 	}
 
 
@@ -460,7 +440,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function explain_query()
 	{
-		return @$this->resConnection->query('EXPLAIN ' . $this->strQuery)->fetch_assoc();
+		return $this->resConnection->query('EXPLAIN ' . $this->strQuery)->fetch(PDO::FETCH_ASSOC);
 	}
 
 	/**
@@ -493,7 +473,7 @@ class DB_Mysqli_Result extends DatabaseResult
 	 */
 	protected function fetch_row()
 	{
-		return @$this->resResult->fetch_row();
+		return @$this->resResult->fetch(PDO::FETCH_NUM);
 	}
 
 
@@ -503,7 +483,7 @@ class DB_Mysqli_Result extends DatabaseResult
 	 */
 	protected function fetch_assoc()
 	{
-		return @$this->resResult->fetch_assoc();
+		return @$this->resResult->fetch(PDO::FETCH_ASSOC);
 	}
 
 
@@ -513,7 +493,7 @@ class DB_Mysqli_Result extends DatabaseResult
 	 */
 	protected function num_rows()
 	{
-		return @$this->resResult->num_rows;
+		return @$this->resResult->rowCount();
 	}
 
 
@@ -523,7 +503,7 @@ class DB_Mysqli_Result extends DatabaseResult
 	 */
 	protected function num_fields()
 	{
-		return @$this->resResult->field_countmysql;
+		return @$this->resResult->columnCount();
 	}
 
 
@@ -534,7 +514,7 @@ class DB_Mysqli_Result extends DatabaseResult
 	 */
 	protected function fetch_field($intOffset)
 	{
-		return @$this->resResult->fetch_field_direct($intOffset);
+		return @$this->resResult->getColumnMeta($intOffset);
 	}
 
 
@@ -545,7 +525,7 @@ class DB_Mysqli_Result extends DatabaseResult
 	{
 		if (is_object($this->resResult))
 		{
-			@$this->resResult->free();
+			@$this->resResult = null;
 		}
 	}
 	}

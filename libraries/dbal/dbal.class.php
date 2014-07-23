@@ -30,19 +30,53 @@ class dbal{
 		
 		require_once(registry::get_const('root_path') . 'libraries/dbal/' . $dbtype . '.dbal.class.php');
 		$classname = 'dbal_' . $dbtype;
-		if(!extension_loaded($dbtype)) throw new DBALException('PHP-Extension ' . $dbtype . ' not available');
+		
+		if (dbal::check_if_pdo($dbtype)){
+			$pdo = dbal::check_if_pdo($dbtype);
+			if (!dbal::check_pdo($pdo)) throw new DBALException('PHP PDO ' . $pdo . ' not available');
+		}  else {
+			if (!dbal::check_extension($dbtype)) throw new DBALException('PHP-Extension ' . $dbtype . ' not available');
+		}
 
 		return registry::register($classname, array($arrOptions));
 	}
 
 	public static function available_dbals() {
-		$arrDbals = array('mysqli'	=> 'MySQLi');
+		$arrDbals = array(
+			'mysqli'	=> 'MySQLi',
+			'mysql_pdo' => 'MySQL PDO',
+		);
+		
 		foreach ($arrDbals as $key => $name){
-			if(!extension_loaded($key)){
-				unset($arrDbals[$key]);
+			if (dbal::check_if_pdo($key)){
+				$blnCheckResult = dbal::check_pdo(dbal::check_if_pdo($key));
+			} else {
+				$blnCheckResult = dbal::check_extension($key);
 			}
+			
+			if(!$blnCheckResult) unset($arrDbals[$key]);
 		}
 		return $arrDbals;
+	}
+	
+	private static function check_extension($strExtensionName){
+		if (extension_loaded($strExtensionName)) return true;
+
+		return false;
+	}
+	
+	private static function check_pdo($strDriverName){
+		if ( extension_loaded('pdo_'.$strDriverName) ) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static function check_if_pdo($strDBType){
+		if (substr($strDBType, -4) == "_pdo") return substr($strDBType, 0, -4);
+		
+		return false;
 	}
 }
 
@@ -77,7 +111,6 @@ class DBALResultException extends Exception {
 		return $this->strQuery;
 	}
 }
-
 
 
 //abstract Database class
@@ -130,7 +163,7 @@ abstract class Database extends gen_class {
 			<b>Database:</b>'		. $log_entry['args'][3] . '<br />
 			<b>Table Prefix:</b>'	. $log_entry['args'][4] . '<br />
 			<b>PHP:</b>'			. phpversion() . ' | Database: ' . $this->strDbalName . '/' . $this->strDbmsName . $this->get_client_version() . '<br /><br />
-			is your EQdkp updated? <a href="' . $this->root_path . 'admin/manage_live_update.php'.$this->SID.'">click to check</a> ';
+			is your EQdkp updated? <a href="' . $this->root_path . 'admin/manage_live_update.php'.$this->SID.'">click to check</a>';
 		return $text;
 	}
 
