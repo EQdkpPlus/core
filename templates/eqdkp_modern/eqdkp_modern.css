@@ -1066,7 +1066,10 @@ img {
 	background: rgba(0, 255, 0, 0.6);
 	min-height: 50px;
 }
-
+.notify_default {
+	background: rgba(0, 0, 0, 0.6);
+	min-height: 50px;
+}
 .ui-notify-message {
 	text-align:left;
 }

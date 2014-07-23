@@ -63,7 +63,7 @@ if (!class_exists("jquery")) {
 			// set the static html for notification
 			$this->tpl->staticHTML('
 				<div id="notify_container">
-					<div id="default">
+					<div id="default"  class="notify_default">
 						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
 						<h1>T{title}</h1>
 						<p>T{text}</p>
@@ -719,23 +719,30 @@ if (!class_exists("jquery")) {
 		*/
 		public function notify($msg, $options){
 			$parenttag	=(isset($options['parent']) && $options['parent'] == true) ? 'parent.' : '';
-			$jsoptions	= array();
+			$JSclick	= $JSoptions = array();
 
-			$jsoptions[] = "text: '".$this->sanitize($msg, true)."'";
+			$JSclick[]		= "text: '".$this->sanitize($msg, true)."'";
 			if(is_array($options)){
-				if(isset($options['header'])){	$jsoptions[]	= "title: '".$options['header']."'";}
-				if(isset($options['custom'])){	$jsoptions[]	= "custom: true";}
-				if(isset($options['stack'])){	$jsoptions[]	= "stack: '".$options['stack']."'";}
-				if(isset($options['click'])){	$jsoptions[]	= "click: function(e,instance){ ".$options['click']."}";}
+				if(isset($options['header']) && !empty($options['header'])){	$JSclick[]		= "title: '".$options['header']."'";}
+				
+				// events (http://www.erichynds.com/blog/a-jquery-ui-growl-ubuntu-notification-widget)
+				if(isset($options['beforeopen'])){	$JSoptions[]	= "beforeopen: function(e,instance){ ".$options['beforeopen']."}";}
+				if(isset($options['open'])){		$JSoptions[]	= "open: function(e,instance){ ".$options['open']."}";}
+				if(isset($options['close'])){		$JSoptions[]	= "close: function(e,instance){ ".$options['close']."}";}
+				if(isset($options['click'])){		$JSoptions[]	= "click: function(e,instance){ ".$options['click']."}";}
+
+				// the options of the notify
+				if(isset($options['stack'])){	$JSoptions[]	= "stack: '".$options['stack']."'";}
+				if(isset($options['custom'])){	$JSoptions[]	= "custom: true";}
 			}
 
 			// some fix variables
-			$expiresval	= (isset($options['expires'])) ? $options['expires'] : 'false';
-			$speedval	= (isset($options['speed'])) ? $options['speed'] : 1000;
-			$theme		= (isset($options['theme'])) ? $options['theme'] : 'default';
+			$JSoptions[]	= 'expires: '.((isset($options['expires']) && (int)$options['expires'] > 0) ? $options['expires'] : 'false');
+			$JSoptions[]	= 'speed: '.((isset($options['speed'])) ? $options['speed'] : 1000);
+			$theme			= (isset($options['theme'])) ? $options['theme'] : 'default';
 
 			// generate the output
-			$this->tpl->add_js($parenttag.'$("#notify_container").notify("create", "'.$theme.'", '.$this->gen_options($jsoptions).',{expires: '.$expiresval.', speed: '.$speedval.'});', 'docready');
+			$this->tpl->add_js($parenttag.'$("#notify_container").notify("create", "'.$theme.'", '.$this->gen_options($JSclick).','.$this->gen_options($JSoptions).');', 'docready');
 		}
 
 		public function lightbox($id, $options){
