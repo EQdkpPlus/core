@@ -119,11 +119,11 @@ if (!class_exists("styles")){
 					$xml = simplexml_load_file($installer_file);
 					if ($xml){
 						$data = array(
-							'style_name'	=> $xml->name,
-							'style_version'	=> $xml->version,
-							'style_author'	=> $xml->author,
-							'style_contact'	=> $xml->authorEmail,
-							'template_path'	=>($xml->settings->template_path) ? $xml->settings->template_path : $style['template_path'],
+							'style_name'	=> (string)$xml->name,
+							'style_version'	=> (string)$xml->version,
+							'style_author'	=> (string)$xml->author,
+							'style_contact'	=> (string)$xml->authorEmail,
+							'template_path'	=>($xml->settings->template_path) ? (string)$xml->settings->template_path : $style['template_path'],
 							'enabled'		=> '1'
 						);
 
@@ -149,7 +149,7 @@ if (!class_exists("styles")){
 							}
 							
 						} else {
-							$this->pdh->put('styles', 'update_version', array($xml->version, $styleid));
+							$this->pdh->put('styles', 'update_version', array((string)$xml->version, $styleid));
 						}
 					}
 					
@@ -186,11 +186,11 @@ if (!class_exists("styles")){
 				$xml = simplexml_load_file($installer_file);
 				if ($xml){
 					$data = array(
-						'style_name'	=> $xml->name,
-						'style_version'	=> $xml->version,
-						'style_author'	=> $xml->author,
-						'style_contact'	=> $xml->authorEmail,
-						'template_path'	=>($xml->folder) ? $xml->folder : $stylename,
+						'style_name'	=> (string)$xml->name,
+						'style_version'	=> (string)$xml->version,
+						'style_author'	=> (string)$xml->author,
+						'style_contact'	=> (string)$xml->authorEmail,
+						'template_path'	=>($xml->folder) ? (string)$xml->folder : $stylename,
 						'enabled'				=> '1'
 					);
 					if (!in_array($data['style_name'], $styles)){
@@ -202,7 +202,7 @@ if (!class_exists("styles")){
 							$settings_xml = simplexml_load_file($settings_file);
 							if ($settings_xml){
 								foreach($this->allowed_colors as $color){
-									$data_array[$color] = $settings_xml->$color;
+									$data_array[$color] = (string)$settings_xml->$color;
 								}
 								$data		= array_merge($data, $data_array);
 								
