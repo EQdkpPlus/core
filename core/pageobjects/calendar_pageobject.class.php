@@ -189,11 +189,11 @@ class calendar_pageobject extends pageobject {
 							// set the date for the events
 							$allday			= (isset($enddate['hour']) && isset($startdate['hour'])) ? false : true;
 							if($allday){
-								$startdate_out	= $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'].' 00:00';
-								$enddate_out	= $enddate['year'].'-'.$enddate['month'].'-'.sprintf("%02d", $enddate['day']-1).' 00:00';
+								$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' 00:00';
+								$enddate_out	= sprintf("%04d", $enddate['year']).'-'.sprintf("%02d", $enddate['month']).'-'.sprintf("%02d", $enddate['day']-1).' 00:00';
 							}else{
-								$startdate_out	= $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'].' '.((isset($startdate['hour'])) ? $startdate['hour'].':'.$startdate['min'] : '00:00');
-								$enddate_out	= $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
+								$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' '.((isset($startdate['hour'])) ? sprintf("%02d", $startdate['hour']).':'.sprintf("%02d", $startdate['min']) : '00:00');
+								$enddate_out	= sprintf("%04d", $enddate['year']).'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
 							}
 
 							// build the event colours
