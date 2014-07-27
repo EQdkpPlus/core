@@ -3,32 +3,42 @@
 $(document).ready(function(){
 	$('#username').change(function() {
 		var username = $(this).val();
-		$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { username: username }, function(result){
-			if(result == 'true'){
-				$("#error_username").hide();
-				$("#tick_username").show();
-			}else{
-				errortext	= $("#error_username").html();
-				$('#error_username').html(errortext.replace(new RegExp("\\{0\\}", "g"), username));
-				$("#tick_username").hide();
-				$("#error_username").show();
-			}
-		});
+		if(username.length > 0){
+			$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { username: username }, function(result){
+				if(result == 'true'){
+					$("#error_username").hide();
+					$("#tick_username").show();
+				}else{
+					errortext	= $("#error_username").html();
+					$('#error_username').html(errortext.replace(new RegExp("\\{0\\}", "g"), username));
+					$("#tick_username").hide();
+					$("#error_username").show();
+				}
+			});
+		}else{
+			$("#tick_username").hide();
+			$("#error_username").hide();
+		}
 	});
 
 	$('#useremail').change(function() {
 		var user_email = $(this).val();
-		$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { user_email: user_email }, function(result){
-			if(result == 'true'){
-				$("#error_email").hide();
-				$("#tick_mail").show();
-			}else{
-				errortext	= $("#error_email").html();
-				$('#error_email').html(errortext.replace(new RegExp("\\{0\\}", "g"), user_email));
-				$("#tick_mail").hide();
-				$("#error_email").show();
-			}
-		});
+		if(user_email.length > 0){
+			$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { user_email: user_email }, function(result){
+				if(result == 'true'){
+					$("#error_email").hide();
+					$("#tick_mail").show();
+				}else{
+					errortext	= $("#error_email").html();
+					$('#error_email').html(errortext.replace(new RegExp("\\{0\\}", "g"), user_email));
+					$("#tick_mail").hide();
+					$("#error_email").show();
+				}
+			});
+		}else{
+			$("#tick_mail").hide();
+			$("#error_email").hide();
+		}
 	});
 
 	<!-- IF S_SETTING_ADMIN -->
