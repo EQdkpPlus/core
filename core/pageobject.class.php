@@ -61,6 +61,40 @@ if(!class_exists('pageobject')){
 				'PATH'		=> $strPath,
 			));
 		}
+		
+		
+		//@Override
+		protected function process() {
+			foreach($this->handler as $key => $process) {
+				if($this->in->exists($key) AND !is_array(current($process))) {
+					if($this->pre_check && $process['check'] !== false) $this->user->check_auth($process['check']);
+						
+					if(isset($process['csrf']) && $process['csrf']) {
+						$blnResult = $this->checkCSRF($key);
+						if (!$blnResult) break;
+					}
+		
+					if(method_exists($this, $process['process'])) $this->$process['process']();
+					break;
+				} elseif($this->in->get($key) AND is_array(current($process))) {
+					foreach($process as $subprocess) {
+						if($subprocess['value'] == $this->in->get($key)) {
+							if($this->pre_check && $subprocess['check'] !== false) $this->user->check_auth($subprocess['check']);
+								
+							if(isset($subprocess['csrf']) && $subprocess['csrf']) {
+								$blnResult = $this->checkCSRF($key);
+								if (!$blnResult) break;
+							}
+								
+							$this->$subprocess['process']();
+							break 2;
+						}
+					}
+				}
+			}
+			if($this->pre_check) $this->user->check_auth($this->pre_check);
+			if (!isset($this->arrVars['display']) || $this->arrVars['display'] == false) $this->display();
+		}
 				
 	}
 }

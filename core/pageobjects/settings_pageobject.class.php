@@ -207,6 +207,7 @@ class settings_pageobject extends pageobject {
 	}
 	
 	public function display($userdata=array()) {
+		
 		if ($this->in->exists('save')){
 			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
 		}
@@ -232,7 +233,7 @@ class settings_pageobject extends pageobject {
 			'AJAXEXTENSION_MAIL'			=> '&oldmail='.urlencode($this->user->data['user_email']),
 		));
 
-		$this->core->set_vars(array(
+		$this->set_vars(array(
 			'page_title'	=> $this->user->lang('settings_title'),
 			'template_file'	=> 'settings.html',
 			'display'		=> true)

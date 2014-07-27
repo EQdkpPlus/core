@@ -243,10 +243,10 @@ if ( !defined('EQDKP_INC') ){
 			$arrOut = array();
 			foreach($this->cached_data[$apa_id] as $cache_date => $decay_data) {				
 				$arrOut[] = array(
-					'value' => $decay_data[$module][$data['id']]['adj'],
-					'date'	=> $cache_date,
-					'type'	=> 'apa',
-					'id'	=> $apa_id,
+					'value' 	=> $decay_data[$module][$data['id']]['adj'],
+					'date'		=> $cache_date,
+					'type'		=> 'apa',
+					'id'		=> $apa_id,
 					'character' => $char_id,
 				);
 			}

@@ -310,11 +310,11 @@ class dbal_mysql_pdo extends Database
 	 * Create a Database_Statement object
 	 * @param resource
 	 * @param boolean
-	 * @return DB_Mysqli_Statement
+	 * @return DB_Mysql_PDO_Statement
 	 */
 	protected function createStatement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit)
 	{
-		return new DB_Mysqli_Statement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit);
+		return new DB_Mysql_PDO_Statement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit);
 	}
 	
 	protected function show_create_table($strTable){	
@@ -330,14 +330,14 @@ class dbal_mysql_pdo extends Database
 
 
 /**
- * Class DB_Mysqli_Statement
+ * Class DB_Mysql_PDO_Statement
  *
  * Driver class for MySQLi databases.
  * @copyright  Leo Feyer 2005-2012
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Driver
  */
-class DB_Mysqli_Statement extends DatabaseStatement
+class DB_Mysql_PDO_Statement extends DatabaseStatement
 {
 
 	/**
@@ -451,7 +451,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function createResult($resResult, $strQuery)
 	{
-		return new DB_Mysqli_Result($resResult, $strQuery);
+		return new DB_Mysql_PDO_Result($resResult, $strQuery);
 	}
 }
 
@@ -464,7 +464,7 @@ class DB_Mysqli_Statement extends DatabaseStatement
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Driver
  */
-class DB_Mysqli_Result extends DatabaseResult
+class DB_Mysql_PDO_Result extends DatabaseResult
 {
 
 	/**

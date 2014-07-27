@@ -30,7 +30,7 @@ if(!class_exists('page_generic')){
 		private $pre_check = '';
 		private $params = array();
 		
-		private $handler = array(
+		protected $handler = array(
 			'del'	=> array('process' => 'delete', 'csrf'=>true),
 			'add'	=> array('process' => 'add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>true),
