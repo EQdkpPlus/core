@@ -46,6 +46,7 @@ class hdropdown extends html {
 	public $options_only = false;
 	public $no_key = false;
 	public $format = false;
+	public $opt_extra = array();
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -71,22 +72,24 @@ class hdropdown extends html {
 					$dropdown .= "<optgroup label='".$key."'>";
 					foreach ($value as $key2 => $value2) {
 						if($this->no_key) $key2 = $value2;
-						$dep = (!empty($this->dependency[$key2])) ? ' data-form-change="'.implode(',', $this->dependency[$key2]).'"' : '';
+						$dep = $this->gen_form_change($this->dependency[$key2]);
+						$extra = (isset($this->opt_extra[$key2])) ? $this->opt_extra[$key2] : '';
 						if($this->tolang) $value2 = ($this->user->lang($value2, false, false)) ? $this->user->lang($value2) : (($this->game->glang($value2)) ? $this->game->glang($value2) : $value2);
 						if($this->format && function_exists($this->format)) $value2 = call_user_func($this->format, $value2);
 						$selected_choice = ($key2 == $this->value) ? ' selected="selected"' : '';
 						$disabled = (isset($this->todisable[$key]) && is_array($this->todisable[$key]) && (($key2 === 0 && in_array($key2, $this->todisable[$key], true)) || ($key2 !== 0 && in_array($key2, $this->todisable[$key])))) ? ' disabled="disabled"' : '';
-						$dropdown .= "<option value='".$key2."'".$selected_choice.$disabled.$dep.">".$value2."</option>";
+						$dropdown .= "<option value='".$key2."'".$selected_choice.$disabled.$dep.$extra.">".$value2."</option>";
 					}
 					$dropdown .= "</optgroup>";
 				}else{
 					if($this->no_key) $key = $value;
-					$dep = (!empty($this->dependency[$key])) ? ' data-form-change="'.implode(',', $this->dependency[$key]).'"' : ' data-form-change=""';
+					$dep = $this->gen_form_change($this->dependency[$key]);
+					$extra = (isset($this->opt_extra[$key])) ? $this->opt_extra[$key] : '';
 					if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 					if($this->format && function_exists($this->format)) $value = call_user_func($this->format, $value);
 					$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
 					$selected_choice = (($key == $this->value)) ? 'selected="selected"' : '';
-					$dropdown .= "<option value=\"".$key."\" ".$selected_choice.$disabled.$dep.">".$value."</option>";
+					$dropdown .= "<option value=\"".$key."\" ".$selected_choice.$disabled.$dep.$extra.">".$value."</option>";
 				}
 			}
 		}else{

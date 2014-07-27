@@ -74,6 +74,10 @@ if(!class_exists('page_generic')){
 		public function set_url_id($name, $param){
 			$this->url_id = $param;
 			$this->url_id_ext = '&amp;'.$name.'='.$param;
+			$this->action = $this->env->phpself.$this->SID.$this->simple_head_url.$this->url_id_ext;
+			$this->tpl->assign_vars(array(
+				'ACTION'	=> $this->action,
+			));
 		}
 		
 		public function get_hptt($hptt_settings, $full_list, $filtered_list, $sub_array, $cache_suffix = '', $sort_suffix = 'sort') {

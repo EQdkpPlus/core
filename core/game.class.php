@@ -690,6 +690,7 @@ class game extends gen_class {
 		}
 		// get all single dependencies
 		$relevant_deps = array();
+		$child_ids = array();
 		foreach($class_dep as $class) {
 			if($class['parent'] && isset($name2type[key($class['parent'])])) {
 				$relevant_deps[$name2type[key($class['parent'])]] = $class['type'];
@@ -817,7 +818,6 @@ class game extends gen_class {
 			return $this->data[$type][$lang][$id];
 		} else {
 			$this->pdl->log('game', 'ID "'.$id.'" does not exists for type "'.$type.'".');
-			pd();
 			return false;
 		}
 	}
@@ -922,9 +922,14 @@ class game extends gen_class {
 					'no_custom'		=> true,
 				);
 			}
-			if (is_array($class_deps[$class['name']])){
+			if(isset($class_deps[$class['name']])) {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
+				}
+			} else {
+				foreach($class_data as $iclass) {
+					if($iclass['name'] == $class['name'])
+						$field['options'] = $this->get($iclass['type']);
 				}
 			}
 			$this->pdh->put('profile_fields', 'insert_field', array($field));

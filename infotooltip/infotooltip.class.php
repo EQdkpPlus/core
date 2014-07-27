@@ -57,14 +57,24 @@ if(!class_exists('infotooltip')) {
 		 *	$root_path: path to eqdkp-plus root folder
 		 */
 		public function __construct($config=false) {
-			//pdl
+			// pdl
 			$this->pdl->register_type('infotooltip', null, array($this, 'html_format_debug'), array(2,3));
 			
-			//set config
+			// set config
 			$this->copy_config($config);
 			
-			//scan available source-reader for default_game
-			$this->avail_parser[] = $this->get_parserlist();			
+			// scan available source-reader for default_game
+			$this->avail_parser = $this->get_parserlist();
+
+			// check prio-array for valid data
+			foreach($this->config['prio'] as $parse) {
+				if(!in_array($parse, $this->avail_parser) AND $parse) {
+					$this->pdl->log('infotooltip', 'Invalid element in prio-list!');
+				}
+			}
+			if(in_array('armory', $this->config['prio']) AND !in_array($this->config['armory_region'], array('us', 'eu', 'kr', 'tw', 'cn'))) {
+				$this->pdl->log('infotooltip', 'Wrong or no region for armory given!');
+			}
 		}
 
 		/*
@@ -182,16 +192,6 @@ if(!class_exists('infotooltip')) {
 			$this->config['lang_prio'][1] = $cconfig['itt_langprio1'];
 			$this->config['lang_prio'][2] = $cconfig['itt_langprio2'];
 			$this->config['lang_prio'][3] = $cconfig['itt_langprio3'];
-			//check prio-array for valid data
-			
-			foreach($this->config['prio'] as $parse) {
-				if(!in_array($parse, $this->avail_parser) AND $parse) {
-					$this->pdl->log('infotooltip', 'Invalid element in prio-list!');
-				}
-			}
-			if(in_array('armory', $this->config['prio']) AND !in_array($this->config['armory_region'], array('us', 'eu', 'kr', 'tw', 'cn'))) {
-				$this->pdl->log('infotooltip', 'Wrong or no region for armory given!');
-			}
 		}
 
 		/*
@@ -262,12 +262,10 @@ if(!class_exists('infotooltip')) {
 					$this->pdl->log('infotooltip', 'Item-color not added to items_table.');
 				}
 			}
-			$this->pdl->log('infotooltip', $item['name'].$ext.' added to cache in lang '.$item['lang'].'.');
-			$this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['name'].$ext).'.itt', 'itt_cache'), $data);
-			$this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$name2search.$ext).'.itt', 'itt_cache'), $data);
-			if(!empty($item['id'])) {
-				$this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['id'].$ext).'.itt', 'itt_cache'), $data);
-			}
+			$this->pdl->log('infotooltip', $item['name'].' added to cache in lang '.$item['lang'].'.');
+			if(!empty($item['name'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['name'].$ext).'.itt', 'itt_cache'), $data);
+			if(!empty($name2search)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$name2search.$ext).'.itt', 'itt_cache'), $data);
+			if(!empty($item['id'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['id'].$ext).'.itt', 'itt_cache'), $data);
 			return true;
 		}
 
@@ -280,9 +278,11 @@ if(!class_exists('infotooltip')) {
 		private function delete_item($item_name, $lang, $game_id, $ext='') {
 			$iddel = true;
 			$namedel = true;
-			$this->pdl->log('infotooltip', $this->config['game'].'_'.$lang.'_'.$item_name.$ext.' deleted from cache.');
-			$filepath = $this->pfh->FilePath(md5($this->config['game'].'_'.$lang.'_'.$item_name.$ext).'.itt');
-			if(is_file($filepath)) $namedel = $this->pfh->Delete($filepath);
+			if($item_name) {
+				$this->pdl->log('infotooltip', $this->config['game'].'_'.$lang.'_'.$item_name.$ext.' deleted from cache.');
+				$filepath = $this->pfh->FilePath(md5($this->config['game'].'_'.$lang.'_'.$item_name.$ext).'.itt');
+				if(is_file($filepath)) $namedel = $this->pfh->Delete($filepath);
+			}
 			if($game_id) {
 				$this->pdl->log('infotooltip', $this->config['game'].'_'.$lang.'_'.$game_id.$ext.' deleted from cache.');
 				$filepath = $this->pfh->FilePath(md5($this->config['game'].'_'.$lang.'_'.$game_id.$ext).'.itt');
@@ -310,6 +310,9 @@ if(!class_exists('infotooltip')) {
 			$arrParser = $this->load_parser();
 			$this->init_cache();
 			$ext = '';
+			if(count($data) > 0) {
+				$ext = '_'.base64_encode(serialize($data));
+			}
 			foreach($arrParser as $parse) {
 				if(!$parse->av_langs[$lang]) {
 					$lang = $this->config['game_lang'];
@@ -318,10 +321,7 @@ if(!class_exists('infotooltip')) {
 					}
 				}
 				$this->pdl->log('infotooltip', 'Call getitem for parser: '.get_class($parse));
-				if($item = $parse->getitem($item_name, $lang, $game_id, false, $data)) {
-					if($data[0] && $data[1]) {
-						$ext = '_'.$data[0].'_'.$data[1];
-					}
+				if($item = $parse->getitem($item_name, $lang, $game_id, $data)) {
 					if(isset($item['baditem']) && $item['baditem']) {
 						$item['name'] = $item_name;
 						$item['icon'] = $this->config['default_icon'];
@@ -350,12 +350,12 @@ if(!class_exists('infotooltip')) {
 			$lang = (!$lang || $lang == '') ? $this->config['game_language'] : $lang;
 			$this->init_cache();
 			$ext = '';
-			if($data[0] && $data[1]) {
-				$ext = '_'.$data[0].'_'.$data[1];
+			if(count($data) > 0) {
+				$ext = '_'.base64_encode(serialize($data));
 			}
 
 			if(!$forceupdate) {
-				$cache_name = $this->config['game'].'_'.$lang.'_'.((is_numeric($game_id) AND $game_id > 0) ? $game_id : $item_name).$ext;
+				$cache_name = $this->config['game'].'_'.$lang.'_'.($game_id ? $game_id : $item_name).$ext;
 				$this->pdl->log('infotooltip', 'Search in cache: '.$cache_name);
 				$cache_name = md5($cache_name).'.itt';
 				if(in_array($cache_name, $this->cached)) {
@@ -445,7 +445,7 @@ if(!function_exists('itt_replace_bbcode')) {
 			}
 			$direct = ($data['direct']) ? 1 : 0;
 			unset($data['direct']);
-			$id = uniqid();
+			$id = unique_id();
 			$data['lang'] = ($lang && !$data['lang']) ? $lang : $data['lang'];
 			$insert = '<span class="infotooltip" id="bb_'.$id.'" title="'.$direct.urlencode(base64_encode(serialize($data))).'">'.$data['name'].'</span>';
 			$text = str_replace($matches[0][$k], $insert, $text);

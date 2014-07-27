@@ -75,7 +75,7 @@ if ( !defined('EQDKP_INC') ){
 
 		public function add_apa($type, $options=array()) {
 			//generate unique id
-			$unique_id = uniqid();
+			$unique_id = unique_id();
 			//check if all necessary information are given
 			if(!$this->type_exists($type)) return false;
 			$required = $this->get_apa_type($type)->required();

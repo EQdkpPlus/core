@@ -91,7 +91,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		}
 
 		public function get_fields($name=''){
-			return ($name) ? $this->profile_fields[$name] : $this->profile_fields;
+			return ($name) ? (isset($this->profile_fields[$name]) ? $this->profile_fields[$name] : null) : $this->profile_fields;
 		}
 
 		public function get_fieldlist(){

@@ -26,6 +26,7 @@ registry::add_const('root_path', $eqdkp_root_path);
 
 try {
 	//init our db-class
+	registry::add_const('lite_mode', true);
 	registry::load_config();
 	require($eqdkp_root_path.'libraries/dbal/dbal.class.php');
 	if (registry::get_const('dbtype') == 'mysql') registry::add_const('dbtype', 'mysqli');
@@ -68,26 +69,32 @@ try {
 		$data['onlyicon'] = $in->get('onlyicon', 0);
 		$data['game_id'] = $in->get('game_id');
 		$data['name'] = base64_decode($in->get('name'));
-		$data['server'] = $in->get('server');
-		$data['char_name'] = $in->get('cname');
 		$data['noicon'] = $in->get('noicon', false);
-		$data['slot'] = $in->get('slot', '');
+		$data['update'] = $in->get('update', false);
+		$data['data'] = array($in->get('server'), $in->get('cname'), $in->get('slot', ''));
 	}
+	if(!isset($data['update'])) $data['update'] = $in->get('update', false);
+	$data['lang'] = substr($in->get('lang'),0,2);
 
 	//only for armory
 	$data['server'] = (isset($data['server'])) ? $data['server'] : 0;
 	$data['char_name'] = (isset($data['char_name'])) ? $data['char_name'] : 0;
 	$data['name'] = html_entity_decode($data['name'], ENT_QUOTES, 'UTF-8');
-	$item = $itt->getitem($data['name'], $data['lang'], $data['game_id'], $in->get('update', false), array($data['server'], $data['char_name'], $data['slot']));
+	$item = $itt->getitem($data['name'], $data['lang'], $data['game_id'], $data['update'], $data['data']);
 	$item['icon'] = (isset($item['icon'])) ? $item['icon'] : '';
 	$display_name = (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
 	if($in->get('update', false)) {
+		$cssfile = $eqdkp_root_path.'games/'.$itt->config['game'].'/infotooltip/'.$itt->config['game'].'.css';
+		if(!is_file($cssfile)) $cssfile = $eqdkp_root_path.'infotooltip/includes/'.$itt->config['game'].'.css';
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html><head>';
-		echo '<title>Itemtooltip Update</title><link rel="stylesheet" href="'.$eqdkp_root_path.'infotooltip/includes/'.$itt->config['game'].'.css" type="text/css" /></head><body>';
+		if(is_file($cssfile)) echo '<title>Itemtooltip Update</title><link rel="stylesheet" href="'.$cssfile.'" type="text/css" /></head><body>';
 	}
 	if($direct) {
-		echo str_replace('{ITEM_ICON_LINK}', $itt->config['icon_path'].$item['icon'].$itt->config['icon_ext'], $item['html']);
+		$item['html'] = str_replace('{ITEM_ICON_LINK}', $itt->config['icon_path'].$item['icon'].$itt->config['icon_ext'], $item['html']);
+		$item['html'] = str_replace('{ITEM_ICON_PATH}', $itt->config['icon_path'], $item['html']);
+		$item['html'] = str_replace('{ITEM_ICON_EXT}', $itt->config['icon_ext'], $item['html']);
+		echo $item['html'];
 	} else {
 		if(isset($item['icon']) && !$data['noicon']) {
 			if($data['onlyicon'] > 0) {

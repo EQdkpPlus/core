@@ -46,8 +46,8 @@ class htooltip extends html {
 	private $out = '';
 
 	public function _construct() {
-		if(empty($this->name)) $this->name = uniqid();
-		if(empty($this->id)) $this->id = uniqid();
+		if(empty($this->name)) $this->name = unique_id();
+		if(empty($this->id)) $this->id = unique_id();
 		$options = array();
 		foreach($this->all_opts as $opt) {
 			$options[$opt] = $this->$opt;

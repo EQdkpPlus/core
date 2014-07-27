@@ -171,8 +171,9 @@ class template extends gen_class {
 	/**
 	* Assign custom CSS File to the Header
 	*/
-	public function css_file($varval, $media='screen'){
-		$this->tpl_output['css_file'][]			= array('file'=>$varval, 'type'=>'text/css', 'media'=> $media);
+	public function css_file($varval, $media='screen', $first=false){
+		if($first) $this->tpl_output['css_file'] 	= array_merge(array(array('file'=>$varval, 'type'=>'text/css', 'media'=> $media)), $this->tpl_output['css_file']);
+		else $this->tpl_output['css_file'][] 		= array('file'=>$varval, 'type'=>'text/css', 'media'=> $media);
 	}
 
 	/**
@@ -480,7 +481,6 @@ class template extends gen_class {
 		// Load the CSS Files..
 		if(!$this->get_templateout('css_file')){
 			if(is_array($this->get_templatedata('css_file'))){
-				
 				$this->assign_var('CSS_FILES', $this->implode_cssjsfiles("<link rel='stylesheet' href='", " />", "\n", $this->get_templatedata('css_file')));
 				$this->set_templateout('css_file', true);
 			}

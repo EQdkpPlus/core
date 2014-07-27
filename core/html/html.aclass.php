@@ -71,6 +71,11 @@ abstract class html {
 			return 'clid_'.$out;
 	}
 	
+	protected function gen_form_change($dep) {
+		if(empty($dep)) return ' data-form-change=""';
+		return ' data-form-change="'.(is_array($dep) ? implode(',', $dep) : $dep).'"';
+	}
+	
 	/*
 	 *	some predefined patterns
 	 */

@@ -535,6 +535,7 @@ class Manage_Extensions extends page_generic {
 				$row = 'green';
 				$link = '';
 				$plugin_code = $value['path'];
+				$class_name = $plugin_code.'_portal';
 				//Ignore Plugin Moduls in terms of repo-updates
 				if (empty($value['plugin'])) {
 					if (isset($urgendUpdates[$plugin_code])){
@@ -556,7 +557,7 @@ class Manage_Extensions extends page_generic {
 					'NAME'				=> (isset($arrExtensionListNamed[3][$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.$value['name'].'</a>' : $value['name'],
 					'VERSION'			=> sanitize($value['version']),
 					'CODE'				=> sanitize($value['path']),
-					'CONTACT'			=> sanitize($value['autor']),
+					'CONTACT'			=> sanitize($class_name::get_data('contact')),
 					'ACTION_LINK'		=> $link,
 					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['description'], 100)).'</a>' : '',
 				));

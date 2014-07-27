@@ -331,7 +331,7 @@ if(!class_exists('pdh_r_item')){
 					$this->jquery->Dialog("infotooltip_update", "Item-Update", $options);
 					$ext = '<span style="cursor:pointer;" onclick="infotooltip_update()">Refresh</span>';
 				}
-				return infotooltip($this->get_name($item_id), $this->get_game_itemid($item_id), $lang, $direct, $onlyicon, $noicon, '', false, false, $in_span, $this->get_item_color($item_id)).$ext;
+				return infotooltip($this->get_name($item_id), $this->get_game_itemid($item_id), $lang, $direct, $onlyicon, $noicon, array(), $in_span, $this->get_item_color($item_id)).$ext;
 			}
 			return $this->get_name($item_id);
 		}

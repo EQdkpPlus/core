@@ -364,7 +364,7 @@ function infotooltip_js() {
 	if(!$added AND registry::register('config')->get('infotooltip_use')) {
 		registry::register('template')->js_file(registry::get_const('server_path').'infotooltip/jquery.infotooltip.js');
 		$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
-			$js .= "$('.infotooltip').tooltip({
+			$js .= "$('.infotooltip-tt').tooltip({
 						track: true,
 						content: function(response) {
 							var direct = $(this).attr('title').substr(0,1);
@@ -401,19 +401,20 @@ function infotooltip_js() {
  * @string $name: name of the item
  * @int $game_id: ingame-item-id
  * @string $lang: display language
- * @int $direct: 0: tooltip as tooltip, 1: direct display of tooltip
+ * @int $direct: 0: tooltip as tooltip, 1: direct display of tooltip, 2: direct display + force update
  * @int $onlyicon: >0: icon-size and only icon is displayed
  * @string $in_span: if you like to display something else, except itemname before loading tooltip
  * return @string
  */
-function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $char_name='', $server=false, $in_span=false, $class_add='', $slot=''){
-	$server = ($server) ? $server : registry::register('config')->get("uc_servername");
+function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
+	if(empty($data['server'])) $data['server'] = registry::register('config')->get("uc_servername");
 	$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
-	$id = uniqid();
-	$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'server' => $server, 'char_name'=> $char_name, 'slot' => $slot);
+	$id = unique_id();
+	$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
+	if($direct > 1) $data['update'] = true;
 	$data = serialize($data);
 	$direct = ($direct) ? 1 : 0;
-	$str = '<span class="infotooltip '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
+	$str = '<span class="infotooltip infotooltip-tt'.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
 	return $str.(($in_span !== false) ? $in_span : $name).'</span>';
 }
 
@@ -1181,6 +1182,20 @@ function da($TheArray){ // Note: the function is recursive
 		echo "</tr>\n";
 	}
 	echo "</table>\n";
+}
+
+/*
+ * Fix for uniqid()
+ * Since it returns the same ID when called multiple times per microsecond
+ *
+ * @param string $prefix
+ * @param boolean $more_entropy
+ * @return string
+ */
+function unique_id($prefix='', $more_entropy=false) {
+	$id = uniqid($prefix, $more_entropy);
+	usleep(1);
+	return $id;
 }
 
 // Magic Quotes are deprecated in PHP 5.3 and removed in PHP 5.4 (http://php.net/manual/de/security.magicquotes.php)

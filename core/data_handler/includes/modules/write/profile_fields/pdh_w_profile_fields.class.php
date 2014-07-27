@@ -96,7 +96,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 
 		public function insert_field($data=array()){
 			if(!isset($data['name'])) {
-				$data['name'] = ((isset($data['type'])) ? $data['type'] : $this->in->get('type')).'_'.uniqid();
+				$data['name'] = ((isset($data['type'])) ? $data['type'] : $this->in->get('type')).'_'.unique_id();
 			}
 			//End if a field with this name exists
 			$fields = $this->pdh->get('profile_fields', 'fields');

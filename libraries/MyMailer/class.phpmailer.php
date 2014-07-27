@@ -1372,7 +1372,7 @@ class PHPMailer extends gen_class{
     $result = '';
 
     // Set the boundaries
-    $uniq_id = md5(uniqid(time()));
+    $uniq_id = md5(unique_id());
     $this->boundary[1] = 'b1_' . $uniq_id;
     $this->boundary[2] = 'b2_' . $uniq_id;
     $this->boundary[3] = 'b3_' . $uniq_id;

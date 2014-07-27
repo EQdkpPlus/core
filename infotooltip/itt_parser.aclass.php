@@ -59,7 +59,7 @@ if(!class_exists('itt_parser')) {
 		 * @int		$game_id
 		 * @string	$type (optional, see above)
 		 */
-		final public function getitem($item_name='', $lang=false, $game_id=false, $type=false, $data=array()){
+		final public function getitem($item_name='', $lang=false, $game_id=false, $data=array()){
 			$lang = ($lang) ? $lang : $this->config['game_language'];
 			$name = trim($item_name);
 			if(empty($name) && !$game_id) return null;
@@ -68,7 +68,7 @@ if(!class_exists('itt_parser')) {
 				$item_id = $this->searchItemID($name, $lang);
 			} else {
 				$item_id[0] = $game_id;
-				$item_id[1] = ($type) ? $type : 'items';
+				$item_id[1] = isset($data['type']) ? $data['type'] : 'items';
 			}
 			return $this->getItemData($item_id[0], $lang, $name, $item_id[1], $data);
 		}
