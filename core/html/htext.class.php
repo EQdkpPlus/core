@@ -81,6 +81,7 @@ class htext extends html {
 		if(!empty($this->pattern)) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_sample_pattern').'"></span>';
 		elseif($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 		if(!empty($this->equalto)) $out .= '<span class="errormessage error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i>'.registry::fetch('user')->lang('fv_required_password_repeat').'</span>';
+		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		$this->out = $out;
 	}
 	
