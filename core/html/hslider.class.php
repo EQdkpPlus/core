@@ -53,7 +53,7 @@ class hslider extends html {
 		return $this->out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		return ($this->range) ? $this->in->getArray($this->name, 'int') : $this->in->get($this->name, 0);
 	}
 }

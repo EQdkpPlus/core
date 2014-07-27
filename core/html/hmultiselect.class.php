@@ -88,7 +88,7 @@ class hmultiselect extends html {
 		return $this->out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		return $this->in->getArray($this->name, $this->datatype);
 	}
 }

@@ -71,7 +71,7 @@ class hfile extends html {
 		return $this->out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		$tempname		= $_FILES[$this->name]['tmp_name'];
 		$filename		= $_FILES[$this->name]['name'];
 		$filetype		= $_FILES[$this->name]['type'];

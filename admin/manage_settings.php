@@ -411,6 +411,7 @@ class mmocms_settings extends page_generic {
 					),
 					'lib_email_smtp_pw'	=> array(
 						'type'			=> 'password',
+						'required'		=> false,
 						'size'			=> 30,
 					),
 					'lib_email_signature'	=> array(

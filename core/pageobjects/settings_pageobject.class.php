@@ -96,7 +96,12 @@ class settings_pageobject extends pageobject {
 	public function update() {
 		$this->create_form();
 		$values = $this->form->return_values();
+		pd($values);
 		// Error-check the form
+		if($this->form->error) {
+			$this->display($values);
+			return;
+		}
 		$change_username = ( $values['username'] != $this->user->data['username'] ) ? true : false;
 		$change_password = ( $values['new_password'] != '' || $values['confirm_password'] != '') ? true : false;
 		$change_email = ( $values['user_email'] != $this->user->data['user_email']) ? true : false;
@@ -104,7 +109,7 @@ class settings_pageobject extends pageobject {
 		//Check username
 		if ($change_username && $this->pdh->get('user', 'check_username', array($values['username'])) == 'false'){
 			$this->core->message(str_replace('{0}', $values['username'], $this->user->lang('fv_username_alreadyuse')), $this->user->lang('error'), 'red');
-			$this->display();
+			$this->display($values);
 			return;
 		}
 
@@ -112,12 +117,8 @@ class settings_pageobject extends pageobject {
 		if ($change_email){
 			if ($this->pdh->get('user', 'check_email', array($values['user_email'])) == 'false'){
 				$this->core->message(str_replace('{0}', $values['user_email'], $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
-				$this->display();
+				$this->display($values);
 				return;
-			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $values['user_email']) ){
-					$this->core->message($this->user->lang('fv_invalid_email'), $this->user->lang('error'), 'red');
-					$this->display();
-					return;
 			}
 		}
 		
@@ -125,13 +126,13 @@ class settings_pageobject extends pageobject {
 		if($change_password) {
 			if($values['new_password'] != $values['confirm_password']) {
 				$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
-				$this->display();
+				$this->display($values);
 				return;
 			}
 		}
 		if ($change_password && strlen($values['new_password']) > 64) {
 			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
-			$this->display();
+			$this->display($values);
 			return;
 		}
 		
@@ -139,7 +140,7 @@ class settings_pageobject extends pageobject {
 		if ( ($change_username) || ($change_password) || ($change_email)){
 			if (!$this->user->checkPassword($values['current_password'], $this->user->data['user_password'])){
 				$this->core->message($this->user->lang('incorrect_password'), $this->user->lang('error'), 'red');
-				$this->display();
+				$this->display($values);
 				return;
 			}
 		}
@@ -205,14 +206,14 @@ class settings_pageobject extends pageobject {
 		return;
 	}
 	
-	public function display() {
+	public function display($userdata=array()) {
 		if ($this->in->exists('save')){
 			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
 		}
-		
-		$this->create_form();
-		
-		$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings']);
+		if(empty($userdata)) {
+			$this->create_form();			
+			$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings']);
+		}
 
 		// Output
 		$this->form->output($userdata);
@@ -231,7 +232,7 @@ class settings_pageobject extends pageobject {
 			'AJAXEXTENSION_MAIL'			=> '&oldmail='.urlencode($this->user->data['user_email']),
 		));
 
-		$this->set_vars(array(
+		$this->core->set_vars(array(
 			'page_title'	=> $this->user->lang('settings_title'),
 			'template_file'	=> 'settings.html',
 			'display'		=> true)

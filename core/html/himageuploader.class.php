@@ -32,7 +32,7 @@ class himageuploader extends hhidden {
 	public $imageuploader = true;
 	public $returnFormat = '';
 	
-	public function inpval() {
+	public function _inpval() {
 		switch($this->returnFormat){
 			case 'relative': return str_replace($this->environment->link, $this->root_path, $this->in->get($this->name, ''));
 			

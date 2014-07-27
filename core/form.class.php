@@ -69,6 +69,9 @@ class form extends gen_class {
 	private $jq_checkbox 	= false;
 	private $jq_radio 		= false;
 	
+	// error flag (to redisplay form in case of wrong input)
+	private $error			= false;
+	
 	/**
 	 *	shortcut to create a field
 	 *
@@ -108,6 +111,16 @@ class form extends gen_class {
 	
 	public function __construct($form_id) {
 		$this->form_id = $form_id;
+	}
+	
+	public function __get($name) {
+		switch($name) {
+			case 'error':
+				return $this->error;
+				
+			default:
+				return parent::__get($name);
+		}
 	}
 	
 	public function reset_fields() {
@@ -299,14 +312,26 @@ class form extends gen_class {
 			if($tabname == 'f') {
 				// variable fieldsets holds fields in this case
 				foreach($fieldsets as $name => $options) {
-					$values[$name] = self::value($name, $options);
+					try {
+						$values[$name] = self::value($name, $options);
+					} catch (FormException $e) {
+						$this->error = true;
+						$this->jquery->notify($e->getMessage(), array('title' => $this->user->lang('fv_form_error'), 'theme' => 'error'));
+						$values[$name] = '';
+					}
 				}
 				continue;
 			}
 			foreach($fieldsets as $fieldsetname => $fields) {
 				if(strpos($fieldsetname, '_') === 0) continue;
 				foreach($fields as $name => $options) {
-					$values[$name] = self::value($name, $options);
+					try {
+						$values[$name] = self::value($name, $options);
+					} catch (FormException $e) {
+						$this->error = true;
+						$this->jquery->notify($e->getMessage(), array('title' => $this->user->lang('fv_form_error'), 'theme' => 'error'));
+						$values[$name] = '';
+					}
 				}
 			}
 		}
@@ -453,4 +478,6 @@ class form extends gen_class {
 		return ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $fallback);
 	}
 }
+
+class FormException extends Exception {}
 ?>

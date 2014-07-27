@@ -32,7 +32,7 @@ class hspinner extends htext {
 	public $default = 0;
 	public $size = 5;
 	
-	public function inpval() {
+	public function _inpval() {
 		return $this->in->get($this->name, 0);
 	}
 }

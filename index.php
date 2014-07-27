@@ -90,6 +90,7 @@ class controller extends gen_class {
 		$arrPath = array_filter(explode('/', $strPath));
 		$arrPath = array_reverse($arrPath);
 		$arrPath = $this->filterPathArray($arrPath);
+		// TODO: check if this is necessary ... always loading all plugin data might be unnecessary
 		register('pm');
 		
 		if (count($arrPath) == 0){
@@ -717,6 +718,7 @@ class controller extends gen_class {
 				registry::add_const('page', $strPath);
 			}
 			if ($strPageObject){
+				$this->core->set_vars('portal_layout', $arrCategory['portal_layout']);
 				$objPage = $this->routing->getPageObject($strPageObject);
 				if ($objPage){
 					$arrVars = $objPage->get_vars();

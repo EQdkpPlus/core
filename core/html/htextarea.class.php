@@ -70,7 +70,7 @@ class htextarea extends html {
 		return $this->out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		$value = $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : '');
 		return $value;
 	}

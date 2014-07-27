@@ -38,7 +38,21 @@ abstract class html {
 	
 	abstract protected function _toString();
 	
-	abstract public function inpval();
+	public function inpval() {
+		$value = $this->_inpval();
+		if(isset($this->required) && $this->required && empty($value)) {
+			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_required'),$this->name));
+		}
+		if(!empty($this->pattern) && !empty($value)) {
+			// add a delimiter to pattern
+			$pattern = $this->pattern($this->pattern);
+			$pattern = (strpos($pattern,'~') === false) ? '~'.$pattern.'~' : '#'.$pattern.'#';
+			if(!preg_match($pattern,$value)) {
+				throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_sample_pattern'),$this->name));
+			}
+		}
+		return $value;
+	}
 	
 	public function __get($name) {
 		if($name == 'type') return self::$type;

@@ -56,7 +56,7 @@ class hcheckbox extends html {
 		return $out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		return $this->in->get($this->name, 0);
 	}
 }

@@ -96,7 +96,7 @@ class hdropdown extends html {
 		return $dropdown;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}
 }

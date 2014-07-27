@@ -61,7 +61,7 @@ class hpassword extends html {
 		return $out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}
 }

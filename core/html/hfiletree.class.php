@@ -94,7 +94,7 @@ class hfiletree extends html {
 		return $this->out;
 	}
 	
-	public function inpval() {
+	public function _inpval() {
 		return $this->in->get($this->name, '', $this->inptype);
 	}
 	
