@@ -143,7 +143,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'{L_CLASS}'		=> $this->game->get_name('classes', $data['classid']),
 						'{L_STATUS}'	=> !empty($data['status']) ? $data['status'] : 1,
 					);
-					if($member_id != $data['mainid']) $log_action['{L_MAINC}'] = $this->pdh->get('member', 'name', array($data['mainid']));
+					if($member_id != $data['mainid']) $log_action['{L_MAINCHAR}'] = $this->pdh->get('member', 'name', array($data['mainid']));
 					$this->log_insert('action_member_added', $log_action);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					

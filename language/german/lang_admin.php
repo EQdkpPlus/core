@@ -1518,6 +1518,9 @@ $lang = array(
 "export_memberadjustments" => "Charakter-Korrekturen mit exportieren?",
 "export_format"	=> "Ausgabe-Format",
 "export_data" => "Daten",
+
+"itempool_before" => "Itempool vorher",
+"itempool_after" => "Itempool nachher",
  );
 
 ?>
