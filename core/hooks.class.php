@@ -78,7 +78,7 @@ class hooks extends gen_class {
 	}
 	
 	public function isRegistered($strHookname){
-		if (isset($this->hooks[$strHook])) return true;
+		if (isset($this->hooks[$strHookname])) return true;
 		
 		return false;
 	}

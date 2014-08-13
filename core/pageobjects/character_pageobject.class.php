@@ -176,6 +176,20 @@ class character_pageobject extends pageobject {
 
 		// Start the Output
 		$this->tpl->assign_vars($profile_out);
+		
+		
+		
+		
+		
+		
+		//=============================================
+		//Point History: Alpha
+		
+		
+		
+		
+		
+		//=============================================
 
 		$this->set_vars(array(
 			'page_title'		=> $member_name,
