@@ -876,80 +876,74 @@ body .ui-tooltip {
 	border: 12px solid #fff;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
-   
-    #cboxContent{background:#fff; overflow:hidden;}
-        .cboxIframe{background:#fff;}
-        #cboxError{padding:50px; border:1px solid #ccc;}
-        #cboxLoadedContent{margin-bottom:52px;}
-        #cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:#949494;}
-        #cboxCurrent{position:absolute; bottom:4px; left:0px; color:#949494;}
-        #cboxLoadingOverlay{background:url(images/loading_background.png) no-repeat center center;}
-        #cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
 
-        /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
-        #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
-        
-        /* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
-        #cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+#cboxContent{background:#fff; overflow:hidden;}
+.cboxIframe{background:#fff;}
+#cboxError{padding:50px; border:1px solid #ccc;}
+#cboxLoadedContent{margin-bottom:52px;}
+#cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:#949494;}
+#cboxCurrent{position:absolute; bottom:4px; left:0px; color:#949494;}
+#cboxLoadingOverlay{background:url(images/loading_background.png) no-repeat center center;}
+#cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
 
-        #cboxSlideshow{position:absolute; bottom:4px; right:0px; color:#0092ef;}
-        #cboxPrevious{
-			background-color: #FFFFFF;
-			bottom: 55%;
-			color: #0092EF;
-			font-size: 25px;
-			left: 2px;
-			overflow: hidden;
-			position: relative;
-			width: 27px;
-		}
-		#cboxPrevious:before{
-			content: "\f0a8";
-			font-family: FontAwesome;
-			color: #000;
-			margin-right: 3px;
-		}
-        #cboxPrevious:hover{background-position:-75px -25px;}
-        #cboxNext{
-			background-color: #FFFFFF;
-			bottom: 55%;
-			color: #0092EF;
-			font-size: 25px;
-			right: 2px;
-			overflow: hidden;
-			position: relative;
-			width: 27px;
-			float: right;
-			text-indent: -51px;
-			margin-right: 2px;
-		}
-		#cboxNext:after {
-			content: "\f0a9";
-			font-family: FontAwesome;
-			color: #000;
-			margin-left: 3px;
-		}
-		
-		
-		
-        #cboxNext:hover{background-position:-50px -25px;}
-        #cboxClose{display:none;}
-        #cboxClose:hover{background-position:-25px -25px;}
+/* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
+#cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
 
-/*
-  The following fixes a problem where IE7 and IE8 replace a PNG's alpha transparency with a black fill
-  when an alpha filter (opacity change) is set on the element or ancestor element.  This style is not applied to or needed in IE9.
-  See: http://jacklmoore.com/notes/ie-transparency-problems/
-*/
-.cboxIE #cboxTopLeft,
-.cboxIE #cboxTopCenter,
-.cboxIE #cboxTopRight,
-.cboxIE #cboxBottomLeft,
-.cboxIE #cboxBottomCenter,
-.cboxIE #cboxBottomRight,
-.cboxIE #cboxMiddleLeft,
-.cboxIE #cboxMiddleRight {
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+/* avoid outlines on :active (mouseclick), but preserve outlines on :focus (tabbed navigating) */
+#cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+
+#cboxSlideshow{
+	position:absolute;
+	bottom:4px;
+	right:0px;
+	color:#0092ef;
+}
+#cboxPrevious{
+	background-color: #FFFFFF;
+	bottom: 55%;
+	color: #0092EF;
+	font-size: 25px;
+	left: 2px;
+	overflow: hidden;
+	position: relative;
+	width: 27px;
+}
+#cboxPrevious:before{
+	content: "\f0a8";
+	font-family: FontAwesome;
+	color: #000;
+	margin-right: 3px;
+}
+#cboxPrevious:hover{
+	background-position:-75px -25px;
+}
+#cboxNext{
+	background-color: #FFFFFF;
+	bottom: 55%;
+	color: #0092EF;
+	font-size: 25px;
+	right: 2px;
+	overflow: hidden;
+	position: relative;
+	width: 27px;
+	float: right;
+	text-indent: -51px;
+	margin-right: 2px;
+}
+#cboxNext:after {
+	content: "\f0a9";
+	font-family: FontAwesome;
+	color: #000;
+	margin-left: 3px;
+}
+#cboxNext:hover{
+	background-position:-50px -25px;
+}
+#cboxClose{
+	display:none;
+}
+#cboxClose:hover{
+	background-position:-25px -25px;
 }
 .ui-multiselect { padding:2px 0 2px 4px; text-align:left }
 .ui-multiselect span.ui-icon { float:right }
@@ -1599,7 +1593,7 @@ body .ui-tooltip {
 
 
 /***
-Spectrum Colorpicker v1.3.4
+Spectrum Colorpicker v1.4.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
@@ -1734,6 +1728,9 @@ License: MIT
 .sp-container.sp-buttons-disabled .sp-button-container {
     display: none;
 }
+.sp-container.sp-palette-buttons-disabled .sp-palette-button-container {
+    display: none;
+}
 .sp-palette-only .sp-picker-container {
     display: none;
 }
@@ -1855,20 +1852,17 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     border: solid 1px #f0c49B;
     padding: 0;
 }
-.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear
-{
+.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
     font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
-.sp-top
-{
+.sp-top {
     margin-bottom: 3px;
 }
-.sp-color, .sp-hue, .sp-clear
-{
+.sp-color, .sp-hue, .sp-clear {
     border: solid 1px #666;
 }
 
@@ -1894,29 +1888,29 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .sp-input:focus  {
     border: 1px solid orange;
 }
-.sp-input.sp-validation-error
-{
+.sp-input.sp-validation-error {
     border: 1px solid red;
     background: #fdd;
 }
-.sp-picker-container , .sp-palette-container
-{
+.sp-picker-container , .sp-palette-container {
     float:left;
     position: relative;
     padding: 10px;
     padding-bottom: 300px;
     margin-bottom: -290px;
 }
-.sp-picker-container
-{
+.sp-picker-container {
     width: 172px;
     border-left: solid 1px #fff;
 }
 
 /* Palettes */
-.sp-palette-container
-{
+.sp-palette-container {
     border-right: solid 1px #ccc;
+}
+
+.sp-palette-only .sp-palette-container {
+    border: 0;
 }
 
 .sp-palette .sp-thumb-el {
@@ -1932,14 +1926,12 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .sp-palette .sp-thumb-el:hover, .sp-palette .sp-thumb-el.sp-thumb-active {
     border-color: orange;
 }
-.sp-thumb-el
-{
+.sp-thumb-el {
     position:relative;
 }
 
 /* Initial */
-.sp-initial
-{
+.sp-initial {
     float: left;
     border: solid 1px #333;
 }
@@ -1957,6 +1949,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 
 /* Buttons */
+.sp-palette-button-container,
 .sp-button-container {
     float: right;
 }
@@ -1991,8 +1984,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     float:left;
     font-size:10px;
 }
-.sp-preview
-{
+.sp-preview {
     position:relative;
     width:25px;
     height: 20px;
@@ -2002,21 +1994,18 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     z-index: 0;
 }
 
-.sp-palette
-{
+.sp-palette {
     *width: 220px;
     max-width: 220px;
 }
-.sp-palette .sp-thumb-el
-{
+.sp-palette .sp-thumb-el {
     width:16px;
     height: 16px;
     margin:2px 1px;
     border: solid 1px #d0d0d0;
 }
 
-.sp-container
-{
+.sp-container {
     padding-bottom:0;
 }
 
@@ -2061,8 +2050,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     -o-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
     box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
 }
-.sp-cancel
-{
+.sp-cancel {
     font-size: 11px;
     color: #d93f3f !important;
     margin:0;
@@ -2072,43 +2060,36 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     text-decoration:none;
 
 }
-.sp-cancel:hover
-{
+.sp-cancel:hover {
     color: #d93f3f !important;
     text-decoration: underline;
 }
 
 
-.sp-palette span:hover, .sp-palette span.sp-thumb-active
-{
+.sp-palette span:hover, .sp-palette span.sp-thumb-active {
     border-color: #000;
 }
 
-.sp-preview, .sp-alpha, .sp-thumb-el
-{
+.sp-preview, .sp-alpha, .sp-thumb-el {
     position:relative;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
 }
-.sp-preview-inner, .sp-alpha-inner, .sp-thumb-inner
-{
+.sp-preview-inner, .sp-alpha-inner, .sp-thumb-inner {
     display:block;
     position:absolute;
     top:0;left:0;bottom:0;right:0;
 }
 
-.sp-palette .sp-thumb-inner
-{
+.sp-palette .sp-thumb-inner {
     background-position: 50% 50%;
     background-repeat: no-repeat;
 }
 
-.sp-palette .sp-thumb-light.sp-thumb-active .sp-thumb-inner
-{
+.sp-palette .sp-thumb-light.sp-thumb-active .sp-thumb-inner {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIVJREFUeNpiYBhsgJFMffxAXABlN5JruT4Q3wfi/0DsT64h8UD8HmpIPCWG/KemIfOJCUB+Aoacx6EGBZyHBqI+WsDCwuQ9mhxeg2A210Ntfo8klk9sOMijaURm7yc1UP2RNCMbKE9ODK1HM6iegYLkfx8pligC9lCD7KmRof0ZhjQACDAAceovrtpVBRkAAAAASUVORK5CYII=);
 }
 
-.sp-palette .sp-thumb-dark.sp-thumb-active .sp-thumb-inner
-{
+.sp-palette .sp-thumb-dark.sp-thumb-active .sp-thumb-inner {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAMdJREFUOE+tkgsNwzAMRMugEAahEAahEAZhEAqlEAZhEAohEAYh81X2dIm8fKpEspLGvudPOsUYpxE2BIJCroJmEW9qJ+MKaBFhEMNabSy9oIcIPwrB+afvAUFoK4H0tMaQ3XtlrggDhOVVMuT4E5MMG0FBbCEYzjYT7OxLEvIHQLY2zWwQ3D+9luyOQTfKDiFD3iUIfPk8VqrKjgAiSfGFPecrg6HN6m/iBcwiDAo7WiBeawa+Kwh7tZoSCGLMqwlSAzVDhoK+6vH4G0P5wdkAAAAASUVORK5CYII=);
 }
 

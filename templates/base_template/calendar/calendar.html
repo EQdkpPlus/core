@@ -2,7 +2,6 @@
 //<![CDATA[
 	$(document).ready(function() {
 		$('#calendar').fullCalendar({
-			firstDay: {STARTDAY},
 
 			// define the time formats
 			axisFormat: 'H(:mm)',
@@ -23,6 +22,7 @@
 				agenda: 'H:mm{ - H:mm}',	// 5:00 - 6:30
 				'': ''
 			},
+			eventLimit: true,
 			dayClick: function(date, allDay, jsEvent, view) {
 				if (allDay) {
 					jQuery.FrameDialog.create({
@@ -39,20 +39,20 @@
 			},
 			eventRender: function(event, element) {
 				if(event.icon){
-					element.find('.fc-event-time').hide();
-					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='absmiddle' />"));
+					element.find('.fc-time').hide();
+					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='absmiddle' />"));
 				}
 
 				if(event.flag){
-					element.find(".fc-event-title").after($("<span class=\"fc-event-flag\"></span>").html(event.flag));
+					element.find(".fc-title").after($("<span class=\"fc-flag\"></span>").html(event.flag));
 				}
 
 				if(event.closed){
-					element.find(".fc-event-title").addClass("linethrough");
+					element.find(".fc-title").addClass("linethrough");
 				}
 				// onclick Event Tooltip
 				if(event.className == 'cal_birthday'){
-					element.find(".fc-event-title").after($("<span class=\"fc-event-icons\"></span>").html("<i class='absmiddle fa fa-gift'></i> "));
+					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<i class='fa fa-gift fa-fw fa-lg'></i> "));
 				}else if(!event.url){
 					if(event.allDay){
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}')+"</div>";
@@ -240,7 +240,7 @@
 	function addCalButton(where, text, id) {
 	    var my_button = '<span class="fc-header-space"></span>' +
 	                    '<span id="' + id + '" class="cal-button">' + text +'</span>';
-	    $("td.fc-header-" + where).append(my_button);
+	    $("div.fc-" + where).append(my_button);
 	    $("#" + id).button();
 	}
 

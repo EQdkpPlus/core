@@ -1819,7 +1819,7 @@ ul.breamcrumb .current::before{
 
 .manage_menues_block .toggle_button {
 	font-family: 'Trebuchet MS',Arial,sans-serif;
-    font-weight: bold;
+	font-weight: bold;
 	border-bottom: 1px solid #CCCCCC;
 	background-color: #EAEAEA;
 	padding: 3px;
@@ -1913,10 +1913,7 @@ ul.portal_block {
  
  /* calendar: global */
 #calendar_loading{
-	-webkit-border-radius: 10px; 
-    -khtml-border-radius: 10px; 
-    -moz-border-radius: 10px; 
-    border-radius: 10px;
+	border-radius: 10px;
 	width: 160px;
 	height: 100px;
 	text-align: center;
@@ -1935,31 +1932,44 @@ ul.portal_block {
 #calendar_loading img{
 	margin: 0px 5px 0px 5px;
 }
-.fc-event-icons{
+.fc-icons{
 	margin-left: 4px;
 	margin-top:2px;
 	border: 0px;
 	display:block;
 	float:left;
 }
-.fc-event-flag{
+.fc-flag{
 	margin-right: 4px;
 	margin-top:2px;
 	border: 0px;
 	display:block;
 	float:right;
 }
-.fc-event-title{
+.fc-title{
 	vertical-align: middle;
+}
+/* fix for the buttons in modern template */
+.fc-button-group .ui-corner-left {
+    border-radius: 4px 0px 0px 4px;
+}
+.fc-button-group .ui-corner-right {
+	border-radius: 0px 4px 4px 0px;
+}
+.fc-button-group .fc-agendaWeek-button {
+	border-radius: 0;
+}
+.fc button {
+	box-shadow: none;
 }
 
 /* calendar: raidevent view */
 .raidcal_name {
 	font-size: 28px;
 	font-family: 'Trebuchet MS',Arial,sans-serif;
-    font-weight: bold;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
 	border-bottom: 1px solid #CCCCCC;
 	margin-top: 5px;
 }
@@ -1971,10 +1981,10 @@ ul.portal_block {
 }
 
 #raidcal_signin_form h2 span.toggle_button:before,  #toogleRaidcalModeration h2 span.toggle_button:before {
-    float: none !important;
-    font-size: 13px;
-    line-height: 18px;
-    margin-left: 6px;
+	float: none !important;
+	font-size: 13px;
+	line-height: 18px;
+	margin-left: 6px;
 	font-weight: normal;
 }
 
@@ -2041,12 +2051,10 @@ a.attendee_Link:hover{
 	display: none;
 	background: #000000;
 	border:1px solid #111111;
-	-webkit-border-radius: 20px 0px 0px 20px;
 	border-radius: 20px 0px 0px 20px; 
 	width: 350px;
 	height: auto;
 	padding: 30px 30px 30px 50px;
-	filter: alpha(opacity=85);
 	opacity: .85;
 	z-index: 9999;
 	color: #fff;
