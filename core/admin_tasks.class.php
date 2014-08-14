@@ -75,8 +75,6 @@ class admin_tasks extends gen_class {
 				}
 			}
 		}
-		
-		
 		return $arrTasks;
 	}
 	
@@ -102,7 +100,8 @@ class admin_tasks extends gen_class {
 				$arrContent= call_user_func($arrTask['notify_func']);
 				if (is_array($arrContent) && count($arrContent)){
 					foreach($arrContent as $val){
-						$this->ntfy->add($val['type'], $val['category'],$val['msg'], $this->server_path.'admin/manage_tasks.php'.$this->SID.'#t_'.md5($taskID), $val['count']);
+						$caticon	= (isset($val['caticon'])) ? '<i class="fa '.$val['caticon'].' fa-fw"></i> ' : '';
+						$this->ntfy->add($val['type'], $caticon.$val['category'], $val['msg'], $this->server_path.'admin/manage_tasks.php'.$this->SID.'#t_'.md5($taskID), $val['count']);
 					}
 				}
 			}
@@ -121,12 +120,12 @@ class admin_tasks extends gen_class {
 			$nothing = false;
 			foreach ($confirm as $member){
 				$userId = $this->pdh->get('member', 'user', array($member));
-				
+
 				$arrContent[] = array(
-						'id' => $member,
-						'name' => $this->pdh->get('member', 'name_decorated', array($member)),
-						'level' => $this->pdh->get('member', 'level', array($member)),
-						'user' => ($userId) ? $this->pdh->get('user', 'name', array($userId)) : '',
+					'id'	=> $member,
+					'name'	=> $this->pdh->get('member', 'name_decorated', array($member)),
+					'level'	=> $this->pdh->get('member', 'level', array($member)),
+					'user'	=> ($userId) ? $this->pdh->get('user', 'name', array($userId)) : '',
 				);
 			}
 		}
@@ -138,73 +137,65 @@ class admin_tasks extends gen_class {
 		$deletion = $this->pdh->get('member', 'confirm_required');
 		if (count($deletion) > 0){
 			return array(array(
-					'type' => 'yellow',
-					'count'=> count($deletion),
-					'msg'  => sprintf($this->user->lang('notification_char_confirm_required'), count($deletion)),
-					'category' => $this->user->lang('manage_members'),
+				'type'		=> 'yellow',
+				'count'		=> count($deletion),
+				'msg'		=> sprintf($this->user->lang('notification_char_confirm_required'), count($deletion)),
+				'category'	=> $this->user->lang('manage_members'),
+				'caticon'	=> 'fa-user',
 			));
 		}
-	
 		return array();
 	}
-	
-	
+
 	public function contentInactiveUsers(){
 		$arrContent = array();
-		
+
 		//Inactive Users
 		$inactive = $this->pdh->get('user', 'inactive');
 		if (count($inactive) > 0){
 			$nothing = false;
 			foreach ($inactive as $member){
 				$arrContent[] = array(
-					'id' => $member,
-					'name' => $this->pdh->get('user', 'name', array($member)),
-					'email' => ($this->pdh->get('user', 'email', array($member))) ? '<a href="mailto:'.$this->pdh->get('user', 'email', array($member)).'">'.$this->pdh->get('user', 'email', array($member)).'</a>' : '',
-					'registered_at' => $this->time->user_date($this->pdh->get('user', 'regdate', array($member)), true), 	
+					'id'			=> $member,
+					'name'			=> $this->pdh->get('user', 'name', array($member)),
+					'email'			=> ($this->pdh->get('user', 'email', array($member))) ? '<a href="mailto:'.$this->pdh->get('user', 'email', array($member)).'">'.$this->pdh->get('user', 'email', array($member)).'</a>' : '',
+					'registered_at'	=> $this->time->user_date($this->pdh->get('user', 'regdate', array($member)), true), 	
 				);
 			}
 		}
-		
 		return $arrContent;
 	}
-	
+
 	public function ntfyInactiveUsers(){
 		if ($this->config->get('account_activation') != 2) return array();
-		
-		$arrNotifications = array(
-			
-		);
-		
+
 		$inactive = $this->pdh->get('user', 'inactive');
 		if (count($inactive) > 0){
 			return array(array(
-				'type' => 'yellow',
-				'count'=> count($inactive),
-				'msg'  => sprintf($this->user->lang('notification_user_enable'), count($inactive)),
-				'category' => $this->user->lang('manage_users'),
+				'type'		=> 'yellow',
+				'count'		=> count($inactive),
+				'msg'		=> sprintf($this->user->lang('notification_user_enable'), count($inactive)),
+				'category'	=> $this->user->lang('manage_users'),
+				'caticon'	=> 'fa-users',
 			));
 		}
-		
 		return array();
 	}
-	
-	
+
 	public function contentDeleteChars(){
 		$arrContent = array();
-		
+
 		$deletion = $this->pdh->get('member', 'delete_requested');
 		if (count($deletion) > 0){
 			$nothing = false;
 			foreach ($deletion as $member){
 				$arrContent[] = array(
-					'id' => $member,
-					'name' => $this->pdh->get('member', 'name_decorated', array($member)),
-					'level' => $this->pdh->get('member', 'level', array($member)),
+					'id'		=> $member,
+					'name'		=> $this->pdh->get('member', 'name_decorated', array($member)),
+					'level'		=> $this->pdh->get('member', 'level', array($member)),
 				);
 			}
 		}
-		
 		return $arrContent;
 	}
 	
@@ -212,13 +203,13 @@ class admin_tasks extends gen_class {
 		$deletion = $this->pdh->get('member', 'delete_requested');
 		if (count($deletion) > 0){
 			return array(array(
-					'type' => 'yellow',
-					'count'=> count($deletion),
-					'msg'  => sprintf($this->user->lang('notification_char_delete_requested'), count($deletion)),
-					'category' => $this->user->lang('manage_members'),
+					'type'		=> 'yellow',
+					'count'		=> count($deletion),
+					'msg'		=> sprintf($this->user->lang('notification_char_delete_requested'), count($deletion)),
+					'category'	=> $this->user->lang('manage_members'),
+					'caticon'	=> 'fa-user',
 			));
 		}
-	
 		return array();
 	}
 
@@ -233,7 +224,7 @@ class admin_tasks extends gen_class {
 				$this->core->message($this->user->lang('success'), $this->user->lang('uc_confirm_char'), 'green');
 			}
 		}
-		
+
 		if ($strAction == 'restore'){
 			if (count($arrIDs)){
 				foreach($arrIDs as $char_id){
@@ -244,7 +235,7 @@ class admin_tasks extends gen_class {
 			
 			}
 		}
-		
+
 		if($strAction == 'delete'){
 			if (count($arrIDs)){
 				foreach($arrIDs as $char_id){
@@ -256,7 +247,7 @@ class admin_tasks extends gen_class {
 			}
 		}
 	}
-	
+
 	public function actionInactiveUsers($strAction, $arrIDs, $strTaskID){
 		if($strAction == 'delete'){
 			if (count($arrIDs)){
@@ -265,7 +256,6 @@ class admin_tasks extends gen_class {
 				}
 				$this->pdh->process_hook_queue();
 				$this->core->message($this->user->lang('delete_user'), $this->user->lang('success'), 'green');
-					
 			}
 		}
 		
