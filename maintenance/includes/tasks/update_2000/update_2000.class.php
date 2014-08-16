@@ -338,7 +338,7 @@ class update_2000 extends sql_update_task {
 			54 => "ALTER TABLE `__multidkp` ADD COLUMN `multidkp_sortid` INT(11) UNSIGNED NULL DEFAULT '0';",
 			55 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N');",
 			56 => "RENAME TABLE `__backup_cnf` TO `__config`;",
-			57 => "ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(255) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';",
+			57 => "ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(40) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';",
 		);
 	}
 	
@@ -352,7 +352,7 @@ class update_2000 extends sql_update_task {
 			$profiledata['class'] = $row['class'];
 			$profiledata['race'] = $row['race'];
 			$profiledata['level'] = $row['level'];
-			$this->db->query("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => $profiledata))->execute($row['member_id']);
+			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => $profiledata))->execute($row['member_id']);
 		}
 		return true;
 	}
@@ -369,6 +369,8 @@ class update_2000 extends sql_update_task {
 		$this->config->set('default_style_overwrite', 1);
 		$this->config->set('mainmenu', 'a:6:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"828e0013b8f3bc1bb22b4f57172b019d";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"fd613a0f87638ad1372d9b06bad29cb3";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}}}}');
 		
+		//Set Dummy Game as default
+		$this->config->set('default_game', 'dummy');
 		
 		//Migrate News		
 		$sql = "SELECT * FROM __news";

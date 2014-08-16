@@ -219,6 +219,8 @@ class template extends gen_class {
 		$strHash = md5(implode(";", $arrHash));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.css';
 
+		if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
+		
 		if (is_file($combinedFile)){
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 			return $combinedFile;
@@ -245,6 +247,7 @@ class template extends gen_class {
 			
 			$this->pfh->putContent($combinedFile, $strCSS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
+			if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 		}
 		return $combinedFile;
@@ -253,6 +256,8 @@ class template extends gen_class {
 	public function combine_js(){
 		$arrHash = $data = $arrFiles = array();
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
+		
+		if (!is_array($this->tpl_output['js_file'])) $this->tpl_output['js_file'] = array();
 
 		foreach($this->tpl_output['js_file'] as $key => $val){
 			if ($this->server_path == "/") {
