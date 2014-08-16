@@ -1144,6 +1144,7 @@ if(!class_exists('game_generic')) {
 	abstract class game_generic extends gen_class {
 		private $icons_checked = false;
 		public $icons = array();
+		protected $dependency			= array();
 
 		public function __construct(){
 			$this->path = $this->root_path.'games/'.$this->this_game.'/';
@@ -1165,6 +1166,23 @@ if(!class_exists('game_generic')) {
 					$this->langs[] = $language;
 				}
 			}
+		}
+		
+		protected function add_dependency($type, $dependency = '') {
+			if(!is_array($type)) $type = array($type => $dependency);
+			foreach($type as $i_dep => $dependency) {
+				if(!in_array($i_dep, array('plus_version'))) {
+					$this->pdl->log('game_error', $this->this_game, 'Invalid type of dependency: "'.$i_dep.'".');
+					continue;
+				}
+				$this->dependency[$i_dep] = $dependency;
+			}
+			return true;
+		}
+		
+		public function get_dependency($dependency) {
+			if(isset($this->dependency[$dependency])) return $this->dependency[$dependency];
+			return false;
 		}
 		
 		/**
