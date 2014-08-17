@@ -490,12 +490,12 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 										if (in_array($value['plugin'], $arrPortalList)){
 											//Module belongs to an plugin
 											$moduleid = array_search($value['plugin'], $arrPortalList);
-											if (strlen($this->pdh->get('portal', 'plugin', array($moduleid)))) break;
+											if (strlen($this->pdh->get('portal', 'plugin', array($moduleid)))) break;											
 											if ($only_installed){
 												$status = (int)$this->pdh->get('portal', 'enabled', array($moduleid));
 												if ($status != 1) break;
 											}
-
+											$blnUpdateAvailable = (compareVersion(trim($value['version']),$this->pdh->get('portal', 'version', array($moduleid)))==1);
 											if ($blnUpdateAvailable) $recent_version = $this->pdh->get('portal', 'version', array($moduleid));
 										}
 
