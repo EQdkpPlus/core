@@ -344,7 +344,7 @@ class register_pageobject extends pageobject {
 						$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
 						$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
 					}
-					message_die($success_message);
+					message_die($success_message, $this->user->lang('success'), 'ok');
 				}
 				
 			} else {

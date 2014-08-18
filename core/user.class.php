@@ -635,7 +635,7 @@ class user extends gen_class {
 						'size'		=> 40,
 						'id'		=> 'useremail',
 						'required'	=> true,
-						'after_txt'	=> '<span id="error_email" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.register('user')->lang('fv_email_alreadyuse').'</span>',
+						'after_txt'	=> '<i class="fa fa-check fa-lg icon-color-green" id="tick_mail" style="display: none;"></i><span id="error_email" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> '.register('user')->lang('fv_email_alreadyuse').'</span>',
 						'pattern'	=> 'email',
 					),
 					'current_password'	=> array(
