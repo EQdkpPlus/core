@@ -80,14 +80,15 @@ abstract class html {
 	 *	some predefined patterns
 	 */
 	protected function pattern($pattern) {
+		$w = '[\w_-]';
 		switch( $pattern ){
 			case 'email':
 				if(empty($this->placeholder)) $this->placeholder = 'email@example.com';
-				return '\w+(\.\w+)*@\w+(\.\w+)+';
+				return $w.'+(\.'.$w.'+)*@'.$w.'+(\.'.$w.'+)+';
 				
 			case 'url':
 				if(empty($this->placeholder)) $this->placeholder = 'http(s)://example.com';
-				return 'http(s){0,1}://\w+(\.\w+)+';
+				return 'http(s){0,1}://'.$w.'+(\.'.$w.'+)+';
 				
 			case 'password':
 				$minlength = 6;
