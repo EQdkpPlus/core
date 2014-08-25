@@ -188,29 +188,6 @@ function color_item($item, $percentage = false){
 	return $class;
 }
 
-
-/**
-* Toggle Icons
-* 
-* @param $value			on or off?
-* @param $icon_on		image for on
-* @param $icon_off		image for off
-* @param $path			path for images
-* @param $iconAltText	alt text for the images
-* @param $url			url
-* @return Tooltip
-*/
-function toggleIcons($value, $icon_on, $icon_off, $path, $iconAltText='', $url='', $notitle=false){
-	$mytitle = ($notitle) ? ' title="'.$iconAltText.'"' : '';
-	$icon = (!empty($value) || $value === true)? $icon_on : $icon_off;
-	$ret_val =	'<img src="'.registry::get_const('root_path').$path.$icon.'" alt="'.$iconAltText.$mytitle.'" />';
-
-	if (!empty($url)){
-		$ret_val = '<a href="'.$url.'">'.$ret_val.'</a>';
-	}
-	return $ret_val;
-}
-
 /**
  * Returns coloured member names
  *
@@ -612,6 +589,27 @@ function arraykey_for_array($keyArray, $haystack){
 	return false;
 }
 
+// in_array for multiple search items
+function multi_array_search($array, $search){
+	// Create the result array
+	$result = array();
+
+	// Iterate over each array element
+	foreach ($array as $key => $value){
+		// Iterate over each search condition
+		foreach ($search as $k => $v){
+			// If the array element does not meet the search condition then continue to the next element
+			if (!isset($value[$k]) || $value[$k] != $v){
+				continue 2;
+			}
+		}
+		// Add the array element's key to the result array
+		$result[] = $key;
+	}
+	// Return the result array
+	return $result;
+}
+
 function countWhere($input = array(), $operator = '==', $value = null, $key = null, $i=0){
 	$supported_ops	= array('<','>','<=', '>=','==', '!=', '===');
 	$operator		= !in_array($operator, $supported_ops) ? '==' : $operator;
@@ -715,19 +713,20 @@ function is_utf8($str){
 		}
 	}
 	
-  $strlen = strlen($str);
-  for($i=0; $i<$strlen; $i++){
-    $ord = ord($str[$i]);
-    if($ord < 0x80) continue; // 0bbbbbbb
-    elseif(($ord&0xE0)===0xC0 && $ord>0xC1) $n = 1; // 110bbbbb (exkl C0-C1)
-    elseif(($ord&0xF0)===0xE0) $n = 2; // 1110bbbb
-    elseif(($ord&0xF8)===0xF0 && $ord<0xF5) $n = 3; // 11110bbb (exkl F5-FF)
-    else return false; // ungültiges UTF-8-Zeichen
-    for($c=0; $c<$n; $c++) // $n Folgebytes? // 10bbbbbb
-      if(++$i===$strlen || (ord($str[$i])&0xC0)!==0x80)
-        return false; // ungültiges UTF-8-Zeichen
-  }
-  return true; // kein ungültiges UTF-8-Zeichen gefunden
+	$strlen = strlen($str);
+	for($i=0; $i<$strlen; $i++){
+		$ord = ord($str[$i]);
+		
+		if($ord < 0x80) continue; // 0bbbbbbb
+		elseif(($ord&0xE0)===0xC0 && $ord>0xC1) $n = 1; // 110bbbbb (exkl C0-C1)
+		elseif(($ord&0xF0)===0xE0) $n = 2; // 1110bbbb
+		elseif(($ord&0xF8)===0xF0 && $ord<0xF5) $n = 3; // 11110bbb (exkl F5-FF)
+		else return false; // ungültiges UTF-8-Zeichen
+		for($c=0; $c<$n; $c++) // $n Folgebytes? // 10bbbbbb
+			if(++$i===$strlen || (ord($str[$i])&0xC0)!==0x80)
+				return false; // ungültiges UTF-8-Zeichen
+	}
+	return true; // kein ungültiges UTF-8-Zeichen gefunden
 }
 
 function clean_username($strUsername){
@@ -773,17 +772,15 @@ function generateRandomBytes($length = 16)
 	* have a buggy PHP version use it.
 	*/
 	if (function_exists('openssl_random_pseudo_bytes')
-	&& (version_compare(PHP_VERSION, '5.3.4') >= 0 || IS_WIN))
-	{
+	&& (version_compare(PHP_VERSION, '5.3.4') >= 0 || IS_WIN)){
 		$sslStr = openssl_random_pseudo_bytes($length, $strong);
 
-		if ($strong)
-		{
+		if ($strong){
 			$hex   = bin2hex($sslStr);
 			return substr($hex, 0, $length);
 		}
 	}
-	
+
 	/*
 	 * Collect any entropy available in the system along with a number
 	* of time measurements of operating system randomness.
@@ -793,11 +790,11 @@ function generateRandomBytes($length = 16)
 	$shaHashLength = 20;
 	$randomStr = '';
 	$total = $length;
-	
+
 	// Check if we can use /dev/urandom.
 	$urandom = false;
 	$handle = null;
-	
+
 	// This is PHP 5.3.3 and up
 	if (function_exists('stream_set_read_buffer') && @is_readable('/dev/urandom'))
 	{
@@ -808,12 +805,12 @@ function generateRandomBytes($length = 16)
 			$urandom = true;
 		}
 	}
-	
+
 	while ($length > strlen($randomStr))
 	{
 		$bytes = ($total > $shaHashLength)? $shaHashLength : $total;
 		$total -= $bytes;
-	
+
 		/*
 		 * Collect any entropy available from the PHP system and filesystem.
 		* If we have ssl data that isn't strong, we use it once.
@@ -822,7 +819,7 @@ function generateRandomBytes($length = 16)
 		$entropy .= implode('', @fstat(fopen(__FILE__, 'r')));
 		$entropy .= memory_get_usage();
 		$sslStr = '';
-	
+
 		if ($urandom)
 		{
 			stream_set_read_buffer($handle, 0);
@@ -839,59 +836,59 @@ function generateRandomBytes($length = 16)
 			*/
 			$samples = 3;
 			$duration = 0;
-	
+
 			for ($pass = 0; $pass < $samples; ++$pass)
 			{
 				$microStart = microtime(true) * 1000000;
 				$hash = sha1(mt_rand(), true);
-	
+
 				for ($count = 0; $count < 50; ++$count)
 				{
 					$hash = sha1($hash, true);
 				}
-	
+
 				$microEnd = microtime(true) * 1000000;
 				$entropy .= $microStart . $microEnd;
-	
+
 				if ($microStart >= $microEnd)
 				{
 					$microEnd += 1000000;
 				}
-	
+
 				$duration += $microEnd - $microStart;
 			}
-	
+
 			$duration = $duration / $samples;
-	
+
 			/*
 			 * Based on the average time, determine the total rounds so that
 			* the total running time is bounded to a reasonable number.
 			*/
 			$rounds = (int) (($maxTimeMicro / $duration) * 50);
-	
+
 			/*
 			 * Take additional measurements. On average we can expect
 			* at least $bitsPerRound bits of entropy from each measurement.
 			*/
 			$iter = $bytes * (int) ceil(8 / $bitsPerRound);
-	
+
 			for ($pass = 0; $pass < $iter; ++$pass)
 			{
 				$microStart = microtime(true);
 				$hash = sha1(mt_rand(), true);
-	
+
 				for ($count = 0; $count < $rounds; ++$count)
 				{
 					$hash = sha1($hash, true);
 				}
-	
+
 				$entropy .= $microStart . microtime(true);
 			}
 		}
-	
+
 		$randomStr .= sha1($entropy, true);
 	}
-	
+
 	if ($urandom)
 	{
 		@fclose($handle);

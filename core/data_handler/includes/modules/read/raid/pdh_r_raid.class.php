@@ -194,6 +194,20 @@ if(!class_exists('pdh_r_raid')){
 			return $raids4member;
 		}
 		
+		// get the raids of a member with certain item ids
+		public function get_raidids4memberid_item($member_id, $item_ids){
+			$item_ids		= (!is_array($item_ids)) ? array($item_ids) : $item_ids;
+			$raids4member	= array();
+			foreach($this->index as $raid_id){
+				$arrMembers	= $this->get_raid_attendees($raid_id, false);
+				$arrItems	= $this->pdh->get('item', 'itemsofraid', array($raid_id));
+				if(is_array($arrMembers) && in_array($member_id, $arrMembers) && multi_array_search($arrItems, $item_ids)){
+					$raids4member[]	= $raid_id;
+				}
+			}
+			return $raids4member;
+		}
+
 		public function get_raidids4memberids($arrMemberIDs){
 			$raids4member = array();
 			foreach($arrMemberIDs as $member_id){
