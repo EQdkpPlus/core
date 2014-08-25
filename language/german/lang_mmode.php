@@ -26,7 +26,7 @@ $lang = array(
 	'maintenance_mode' => 'Wartungsbereich',
 	'task_manager' => 'Task-Manager',
 	'admin_acp' => 'Administration',
-	'activate_info'	=> '<h1>Wartungsmodus aktivieren</h1><br />Im Wartungsbereich Deines EQdkps kannst zu z.B. dein System aktualisieren und Daten von einer älteren Version des EQdkps importieren. <br />Ein Update oder Import ist nur möglich, wenn sich dein System im Wartungsmodus befindet und anderen Benutzern die Anmeldung verweigert, um Probleme zu verhindern.<br /><br />Grund, der den Benutzern angezeigt werden soll (optional):<br/>',
+	'activate_info'	=> '<h1>Wartungsmodus aktivieren</h1><br />Im Wartungsbereich Deines EQdkps kannst du z.B. dein System aktualisieren und Daten von einer älteren Version des EQdkps importieren. <br />Ein Update oder Import ist nur möglich, wenn sich dein System im Wartungsmodus befindet und anderen Benutzern die Anmeldung verweigert, um Probleme zu verhindern.<br /><br />Grund, der den Benutzern angezeigt werden soll (optional):<br/>',
 	'activate_mmode'	=> 'Wartungsmodus aktivieren',
 	'deactivate_mmode'	=> 'Wartungsmodus beenden',
 	'leave_mmode'	=> 'Abbrechen',
@@ -42,7 +42,7 @@ $lang = array(
 	'username' => 'Benutzer',
 	'password' => 'Passwort',
 	'remember_password' => 'Passwort merken?',
-	'invalid_login_warning' => 'Fehlerhafte Anmeldung! Bitte überprüfe deinen Benutzernamen und Dein Passwort. Nur Administratoren ist es erlaubt, sich anzumelden.',
+	'invalid_login_warning' => 'Fehlerhafte Anmeldung! Bitte überprüfe deinen Benutzernamen und dein Passwort. Nur Administratoren ist es erlaubt, sich anzumelden.',
 
 	//Task manager
 	'is_necessary' => 'Notwendig?',

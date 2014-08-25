@@ -47,7 +47,7 @@ $lang['page'] = 'Seite';
 //first step
 $lang['database_info'] = 'Informationen über das zu importierende EQdkp Plus';
 $lang['database_other'] = 'Daten liegen in einer anderen Datenbank?';
-$lang['only_other'] = ' (nur auszufüllen wenn Daten in andere Datenbank)';
+$lang['only_other'] = ' (nur auszufüllen wenn Daten in anderer Datenbank)';
 $lang['host'] = 'Datenbank-Server'.$lang['only_other'];
 $lang['db_name'] = 'Datenbank-Name'.$lang['only_other'];
 $lang['user'] = 'Datenbank-Benutzer'.$lang['only_other'];
