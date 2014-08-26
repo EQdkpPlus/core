@@ -968,7 +968,7 @@ class core extends gen_class {
 						}
 
 						$member_class = $this->game->decorate_character($member_id).' '.$this->pdh->geth('member', 'memberlink', array($member_id, $this->routing->build('character',false,false,false), '', false, false, false, true));
-						$quickdkp .= '<tr><td colspan="2">'.$member_class.'</td></tr>';
+						#$quickdkp .= '<tr><td colspan="2">'.$member_class.'</td></tr>';
 						$i = 0;
 						foreach($multidkps as $mdkpid) {
 							$current = $this->pdh->geth($preset[0], $preset[1], $preset[2], array('%member_id%' => $member_id, '%dkp_id%' => $mdkpid, '%with_twink%' =>!$this->config->get('show_twinks')));

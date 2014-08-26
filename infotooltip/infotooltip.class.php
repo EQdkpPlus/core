@@ -403,7 +403,7 @@ if(!class_exists('infotooltip')) {
 		private function item_return($item) {
 			if(!isset($item['html']) OR !$item['html'] OR !isset($item['name'])) {
 				$item['html'] = file_get_contents($this->root_path.'games/'.$this->config['game'].'/infotooltip/templates/'.$this->config['game'].'_popup.tpl');
-				$item['html'] = str_replace('{ITEM_HTML}', $item['name']."<br />Item not found.<br />", $item['html']);
+				$item['html'] = str_replace('{ITEM_HTML}', ((isset($item['name'])) ? $item['name'] : 'unknown')."<br />Item not found.<br />", $item['html']);
 			}
 			if($this->config['debug']) {
 				$item['html'] = str_replace('{DEBUG}', '<br />'.$this->pdl->get_html_log(3, 'infotooltip'), $item['html']);
