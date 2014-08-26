@@ -31,7 +31,7 @@
 			function user_clock(){	
 				var mydate = mymoment.format(user_clock_format);
 				$('.user_time').html(mydate);
-				mymoment.add('s', 1);
+				mymoment.add(1, 's');
 				window.setTimeout("user_clock()", 1000);
 			}
 			
