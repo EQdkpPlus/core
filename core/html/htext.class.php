@@ -49,7 +49,7 @@ class htext extends html {
 	public $class = 'input';
 	public $inptype = '';
 	
-	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector');
+	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector', 'onlyinteger');
 	private $out = '';
 	
 	public function _construct() {

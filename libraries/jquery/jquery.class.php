@@ -491,6 +491,7 @@ if (!class_exists("jquery")) {
 			if(isset($options['numberformat'])){ $tmpopt[] = 'numberformat: '.$options['numberformat'];}
 			if(isset($options['incremental'])){ $tmpopt[] = 'incremental: true';}
 			if(isset($options['change'])) { $tmpopt[] = 'change: function( event, ui ) {'.$options['change'].'}';}
+			if(!isset($options['change']) && isset($options['onlyinteger'])) { $tmpopt[] =  'change: function( event, ui ) { var val = $(event.target).val(); value = val.replace(/,/,"."); $(this).spinner("value", parseInt(val) || 1);}';}
 			$selector = (isset($options['multiselector'])) ? '' : '#';
 			$this->tpl->add_js('$("'.$selector.$id.'").spinner('.$this->gen_options($tmpopt).');', 'docready');
 		}
