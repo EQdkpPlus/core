@@ -38,10 +38,14 @@ class plugin_generic extends gen_class {
 	protected $exchange_feeds		= array();
 	protected $pdh_read_modules		= array();
 	protected $pdh_write_modules	= array();
-
+	
 	public function __construct() {
 		$this->code = get_class($this);
 		$this->user->register_plug_language($this->code);
+	}
+	
+	public static function getApiLevel(){
+		return (isset(static::$apiLevel)) ? static::$apiLevel : 0;
 	}
 	
 	protected function add_sql($type, $sql, $order='') {

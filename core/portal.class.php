@@ -25,8 +25,12 @@ class portal extends gen_class {
 	private $lang_inits	= array();
 	private $objs		= array();
 	private $loaded 	= array();
+	
+	protected $apiLevel		= 20;	//API Level of Portal Class
 
 	public function __construct() {
+		$this->pdl->register_type('portal');
+		
 		// init the variables...
 		$this->isAdmin			= $this->user->check_auth('a_config_man', false);
 		// get a list of all potentially used modules
@@ -48,6 +52,7 @@ class portal extends gen_class {
 				$this->register_global_hooks($module_id);
 			}
 		}
+		
 	}
 	
 	public function get_module_external($intModuleID){
@@ -263,6 +268,17 @@ class portal extends gen_class {
 			if($cwd = $this->check_file($path, $plugin)) {
 				include_once($cwd);
 				$this->loaded[$path] = class_exists($path.'_portal') ? true : false;
+				
+				//Check API Level
+				$classname = $path.'_portal';
+				$intAPILevel = $classname::getApiLevel();
+				if (!$intAPILevel || $intAPILevel < $this->apiLevel-2){
+					$this->pdl->log('portal', 'The Portal API Level of the Portal Module \''.$path.'\' is too old ('.$intAPILevel.' vs. '.$this->apiLevel.')');
+					$this->loaded[$path] = false;
+				} elseif ($intAPILevel < $this->apiLevel) {
+					$this->pdl->log('portal', 'The Portal API Level of the Portal Module \''.$path.'\' should be updated ('.$intAPILevel.' vs. '.$this->apiLevel.')');
+					$this->loaded[$path] = false;
+				}
 			} else $this->loaded[$path] = false;
 		}
 		return $this->loaded[$path];
@@ -372,13 +388,14 @@ abstract class portal_generic extends gen_class {
 	protected $reset_pdh_hooks 	= array();
 	protected $hooks 			= array();
 	
-	// TODO: $css does not seem to be used, what was it intended for?
-	// protected $css = array('files' => array(), 'content' => '');
-	
 	final public function __construct($module_id, $position='', $wideContent = false) {
 		$this->position = $position;
 		$this->id = $module_id;
 		$this->wide_content = $wideContent;
+	}
+	
+	public static function getApiLevel(){
+		return (isset(static::$apiLevel)) ? static::$apiLevel : 0;
 	}
 
 	final public static function get_data($type='') {

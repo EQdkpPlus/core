@@ -32,7 +32,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 		);
 		
 		public function add_adjustment($adjustment_value, $adjustment_reason, $member_ids, $event_id, $raid_id=NULL, $time=false, $group_key = null) {
-			$time = ($time) ? $time : time();
+			$time = ($time) ? $time : $this->time->time;
 			$group_key = ($group_key == null) ? $this->gen_group_key($time, array($adjustment_reason, $adjustment_value, $event_id, $raid_id)) : $group_key;
 			$ids = array();
 			if(!empty($member_ids) && !is_array($member_ids)) $member_ids = array($member_ids);
@@ -69,7 +69,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 		}
 
 		public function update_adjustment($group_key_or_id, $adj_value, $adj_reason, $member_ids, $event_id, $raid_id=NULL, $time=false, $id=false, $recalculate_group_key = true){
-			$time = ($time) ? $time : time();
+			$time = ($time) ? $time : $this->time->time;
 			$new_group_key = $this->gen_group_key($time, array($adj_reason, $adj_value, $event_id, $raid_id));
 			
 			//fetch old-data

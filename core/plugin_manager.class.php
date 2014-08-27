@@ -24,6 +24,8 @@ class plugin_manager extends gen_class {
 	public $plugins 		= array();		// Store Plugin-Objects
 	public $status			= array();		// Store Plugin-Status
 	
+	protected $apiLevel		= 20;	//API Level of Plugin Class
+	
 	public static $valid_data_types = array(
 		'id',
 		'code',
@@ -111,6 +113,18 @@ class plugin_manager extends gen_class {
 			$this->broken($plugin_code);
 			return false;
 		}
+		//Check API Level
+		$intAPILevel = $plugin_code::getApiLevel();
+		if (!$intAPILevel || $intAPILevel < $this->apiLevel-2){
+			$this->pdl->log('plugin_error', $plugin_code, 'The Plugin API Level of the Plugin \''.$plugin_code.'\' is too old ('.$intAPILevel.' vs. '.$this->apiLevel.')');
+			$this->broken($plugin_code);
+			return false;
+		} elseif ($intAPILevel < $this->apiLevel) {
+			$this->pdl->log('plugin_error', $plugin_code, 'The Plugin API Level of the Plugin \''.$plugin_code.'\' should be updated ('.$intAPILevel.' vs. '.$this->apiLevel.')');
+			$this->broken($plugin_code);
+			return false;
+		}
+		
 		$plugin_object = registry::register($plugin_code);
 		if(!is_object($plugin_object)) {
 			$this->pdl->log('plugin_error', $plugin_code, 'Class "'.$plugin_code.'" not instantiatable.');

@@ -24,6 +24,8 @@ if ( !defined('EQDKP_INC') ){
 
 class game extends gen_class {
 	public static $shortcuts = array('itt' => 'infotooltip');
+	
+	protected $apiLevel		= 20;
 
 	private $data			= array();
 	private $games			= array();
@@ -69,11 +71,26 @@ class game extends gen_class {
 	private function init_gameclass(){
 		include_once($this->root_path.'games/'.$this->game.'/'.$this->game.'.class.php');
 		if(!class_exists($this->game)) {
-			$this->pdl->log('game', 'Tried to initialize undefined game \''.$this->game.'\', default to game \'wow\'.');
 			$this->game = 'dummy';
-			$this->config->set('default_game', 'dummy');
+			include_once($this->root_path.'games/'.$this->game.'/'.$this->game.'.class.php');
+			$this->pdl->log('game', 'Tried to initialize undefined game \''.$this->game.'\', default to game \''.$this->game.'\'.');
+			$this->config->set('default_game', $this->game);
 			return $this->init_gameclass();
+		} else {
+			//Check API Level
+			$strClassname = $this->game;
+			$intAPILevel = $strClassname::getApiLevel();
+			if (!$intAPILevel || $intAPILevel < $this->apiLevel-2){
+				//Default to dummy, API is deprecated
+				$this->game = 'dummy';
+				include_once($this->root_path.'games/'.$this->game.'/'.$this->game.'.class.php');
+				$this->pdl->log('game', 'The Game API Level of the Game \''.$this->game.'\' is too old ('.$intAPILevel.' vs. '.$this->apiLevel.'), defaulted to dummy game.');
+				$this->config->set('default_game', $this->game);
+			} elseif ($intAPILevel < $this->apiLevel) {
+				$this->pdl->log('game', 'The Game API Level of the Game \''.$this->game.'\' should be updated ('.$intAPILevel.' vs. '.$this->apiLevel.')');
+			}
 		}
+		
 		// check for selected language
 		if(!in_array($this->lang_name, $this->gameinfo()->langs)) {
 			// file in selected language available but not listed, add it to the list
@@ -1144,7 +1161,6 @@ if(!class_exists('game_generic')) {
 	abstract class game_generic extends gen_class {
 		private $icons_checked = false;
 		public $icons = array();
-		protected $dependency			= array();
 
 		public function __construct(){
 			$this->path = $this->root_path.'games/'.$this->this_game.'/';
@@ -1159,6 +1175,10 @@ if(!class_exists('game_generic')) {
 			return parent::__get($name);
 		}
 		
+		public static function getApiLevel(){
+			return (isset(static::$apiLevel)) ? static::$apiLevel : 0;
+		}
+		
 		protected function scan_languages() {
 			$languages = sdir($this->path.'language/', '*.php', '.php');
 			foreach($languages as $language) {
@@ -1167,21 +1187,9 @@ if(!class_exists('game_generic')) {
 				}
 			}
 		}
-		
-		protected function add_dependency($type, $dependency = '') {
-			if(!is_array($type)) $type = array($type => $dependency);
-			foreach($type as $i_dep => $dependency) {
-				if(!in_array($i_dep, array('plus_version'))) {
-					$this->pdl->log('game_error', $this->this_game, 'Invalid type of dependency: "'.$i_dep.'".');
-					continue;
-				}
-				$this->dependency[$i_dep] = $dependency;
-			}
-			return true;
-		}
-		
+				
 		public function get_dependency($dependency) {
-			if(isset($this->dependency[$dependency])) return $this->dependency[$dependency];
+			if(isset($this->dependencies[$dependency])) return $this->dependencies[$dependency];
 			return false;
 		}
 		

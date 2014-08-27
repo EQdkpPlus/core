@@ -78,6 +78,9 @@ class smf2_bridge extends bridge {
 		'cmsbridge_sso_cookiename'	=> array(
 			'type'	=> 'text',
 		),
+		'cmsbridge_sso_cookiedomain' => array(
+			'type'	=> 'text',
+		),
 	);
 	
 	//Needed function
@@ -127,16 +130,18 @@ class smf2_bridge extends bridge {
 		$password = sha1($arrUserdata['passwd'].$arrUserdata['password_salt']);
 		$data = serialize(array($arrUserdata['id'], $password, time() + $cookie_length, $cookie_state));
 		
-		$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
 		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
-		
-		$arrDomains = explode('.', $strBoardURL);
-		$arrDomainsReversed = array_reverse($arrDomains);
-		if (count($arrDomainsReversed) > 1){
-			$cookieDomain = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
-		} else {
-			$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
-		}
+		if($this->config->get('cmsbridge_sso_cookiedomain') == '') {
+				$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
+				
+				$arrDomains = explode('.', $strBoardURL);
+				$arrDomainsReversed = array_reverse($arrDomains);
+				if (count($arrDomainsReversed) > 1){
+					$cookieDomain = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
+				} else {
+					$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
+				}
+		} else $cookieDomain = $this->config->get('cmsbridge_sso_cookiedomain');
 		
 		$res = setcookie($this->config->get('cmsbridge_sso_cookiename'), $data, time() + $cookie_length, $strBoardPath, $cookieDomain, $this->env->ssl);
 	
