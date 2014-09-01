@@ -822,6 +822,33 @@ class mmocms_settings extends page_generic {
 			}
 		}
 
+		// Importer API Key Wizzard
+		$apikey_config	= $this->game->get_importers('apikey');
+		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $apikey_config && !defined('GAME_IMPORT_APIKEY')){
+			if($apikey_config['status'] == 'required' || $apikey_config['status'] == 'optional'){
+				if(isset($apikey_config['steps']) && is_array($apikey_config['steps']) && count($apikey_config['steps']) > 0){
+					$appisetts	= array();
+					foreach($apikey_config['steps'] as $title=>$val){
+						$appisetts[$this->game->glang($title)]	= $this->game->glang($val);
+					}
+
+					// now, let us add the API-Key-Field to the last element of the array
+					$setting_apikey		= $this->config->get('game_importer_apikey');
+					$apikeyform			= new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30'));
+					end($appisetts);
+					$key				= key($appisetts);
+					reset($appisetts);
+					$appisetts[$key]	= str_replace('{APIKEY_FORM}', $apikeyform, $appisetts[$key]);
+
+					$this->form->add_field('settings_apikey', array(
+						'type'		=> 'accordion',
+						'options'	=> $appisetts,
+						'active'	=> (($setting_apikey != '') ? (count($appisetts)-1) : 0),
+					), 'importer', 'game');
+				}
+			}
+		}
+
 		// The importer settings
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
 			if($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == ''){
@@ -884,7 +911,10 @@ class mmocms_settings extends page_generic {
 			$save_array = $this->form->return_values();
 			//check for changed game
 			$game_changed = false;
-			
+
+			// add the API key save code
+			$save_array['game_importer_apikey']	= $this->in->get('game_importer_apikey', '');
+
 			if (($this->in->get('default_game') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
 				$game_changed = true;
 			}

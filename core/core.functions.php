@@ -1194,19 +1194,4 @@ function unique_id($prefix='', $more_entropy=false) {
 	usleep(1);
 	return $id;
 }
-
-// Magic Quotes are deprecated in PHP 5.3 and removed in PHP 5.4 (http://php.net/manual/de/security.magicquotes.php)
-// REMOVE if min req >= PHP 5.4
-function MagicQuotesFix(){
-	if (get_magic_quotes_gpc()) {
-		function stripslashes_gpc(&$value)
-		{
-			$value = stripslashes($value);
-		}
-		array_walk_recursive($_GET, 'stripslashes_gpc');
-		array_walk_recursive($_POST, 'stripslashes_gpc');
-		array_walk_recursive($_COOKIE, 'stripslashes_gpc');
-		array_walk_recursive($_REQUEST, 'stripslashes_gpc');
-	}
-}
 ?>

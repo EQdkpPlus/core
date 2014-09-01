@@ -694,11 +694,16 @@ if (!class_exists("jquery")) {
 		* @param $list		Content array in the format: title => content
 		* @return CHAR
 		*/
-		public function Accordion($name, $list){
+		public function Accordion($name, $list, $options=''){
+			$tmpopt = array();
+			$tmpopt[] = 'heightStyle: "content"';
+			if(isset($options['active'])){ $tmpopt[] = 'active: '.$options['active'];}
+			if(isset($options['collapsible'])){ $tmpopt[] = 'collapsible: true';}
+			if(isset($options['disabled'])){ $tmpopt[] = 'disabled: true';}
+			if(isset($options['event'])){ $tmpopt[] = 'event: "'.$options['event'].'"';}
+
 			$this->tpl->add_js("
-					jQuery('#".$name."').accordion({
-						heightStyle: 'content'
-					});
+					jQuery('#".$name."').accordion(".$this->gen_options($tmpopt).");
 			", 'docready');
 			$acccode   = '<div id="'.$name.'">';
 			if(is_array($list)){
