@@ -823,7 +823,8 @@ class mmocms_settings extends page_generic {
 		}
 
 		// Importer API Key Wizzard
-		$apikey_config	= $this->game->get_importers('apikey');
+		$apikey_config		= $this->game->get_importers('apikey');
+		$setting_apikey		= $this->config->get('game_importer_apikey');
 		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $apikey_config && !defined('GAME_IMPORT_APIKEY')){
 			if($apikey_config['status'] == 'required' || $apikey_config['status'] == 'optional'){
 				if(isset($apikey_config['steps']) && is_array($apikey_config['steps']) && count($apikey_config['steps']) > 0){
@@ -833,7 +834,6 @@ class mmocms_settings extends page_generic {
 					}
 
 					// now, let us add the API-Key-Field to the last element of the array
-					$setting_apikey		= $this->config->get('game_importer_apikey');
 					$apikeyform			= new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30'));
 					end($appisetts);
 					$key				= key($appisetts);
@@ -851,7 +851,7 @@ class mmocms_settings extends page_generic {
 
 		// The importer settings
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
-			if($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == ''){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == '') || $this->game->get_require_apikey()){
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" disabled="disabled" />';
 			}else{
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" class="mainoption" onclick="javascript:GuildImport()" />';
@@ -864,7 +864,7 @@ class mmocms_settings extends page_generic {
 		}
 
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			if($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == ''){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == '')  || $this->game->get_require_apikey()){
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" disabled="disabled" />';
 			}else{
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" class="mainoption" onclick="javascript:MassUpdateChars()" />';

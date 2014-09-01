@@ -288,6 +288,11 @@ class game extends gen_class {
 		return ($this->user->check_auth($myperm, false) && $this->get_importers($import)) ? true : false;
 	}
 
+	public function get_require_apikey(){
+		$setting_apikey		= $this->config->get('game_importer_apikey');
+		$apikey_config		= $this->get_importers('apikey');
+		return ($apikey_config['status'] == 'required' && empty($setting_apikey)) ? true : false;
+	}
 
 	/**
 	 * returns all available games
