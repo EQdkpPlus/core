@@ -574,6 +574,7 @@ class calendarevent_pageobject extends pageobject {
 						$membertooltip		= array();
 						$memberrank			= $this->pdh->get('member', 'rankname', array($memberid));
 
+						
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
@@ -582,6 +583,7 @@ class calendarevent_pageobject extends pageobject {
 						if($memberrank){
 							$membertooltip[]	= $this->user->lang('rank').": ".$memberrank;
 						}
+						$membertooltip[]	= $this->user->lang('user').": ".$this->pdh->get('user', 'name', array($this->pdh->get('member', 'userid', array($memberid))));
 						$membertooltip[]	= $this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($memberdata['timestamp_signup'], true, false, true);
 						if($memberdata['timestamp_change'] > 0){
 							$membertooltip[]	= $this->user->lang('raidevent_raid_changed').": ".$this->time->user_date($memberdata['timestamp_change'], true, false, true);
