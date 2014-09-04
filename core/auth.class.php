@@ -512,7 +512,7 @@ class auth extends user {
 		foreach($arrLoginMethods as $strMethod){
 			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
 			$strClassname = 'login_'.$strMethod;
-			if (isset($strClassname::$options)){
+			if (class_exists($strClassname) && isset($strClassname::$options)){
 				$options[$strMethod] = $strClassname::$options;
 			}
 		}
@@ -528,7 +528,7 @@ class auth extends user {
 			foreach($arrLoginMethods as $strMethod){
 				include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
 				$classname = 'login_'.$strMethod;
-				$functions = isset($classname::$functions) ? $classname::$functions : array();
+				$functions = (class_exists($classname) && isset($classname::$functions)) ? $classname::$functions : array();
 				
 				if (isset($functions[$method])){
 					$objClass = register('login_'.$strMethod);

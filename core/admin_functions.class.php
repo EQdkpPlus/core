@@ -531,7 +531,7 @@ class admin_functions extends gen_class {
 			'link'	=> 'admin/manage_extensions.php'.$this->SID.'&tab=1',
 			'text'	=> $this->user->lang('styles_title'),
 			'check'	=> 'a_extensions_man',
-			'icon'	=> 'fa-leaf fa-lg fa-fw',
+			'icon'	=> 'fa-paint-brush fa-lg fa-fw',
 		);
 			
 		$i = 2;

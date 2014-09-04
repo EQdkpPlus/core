@@ -50,7 +50,10 @@ class Manage_User_Groups extends page_generic {
 		}
 	
 		$members = $this->in->getArray('group_user', 'int');
-		if ($intGroupID == 2){unset($members[$this->user->id]);}
+		if ($intGroupID == 2){
+			$key = array_search($this->user->id, $members);
+			if ($key !== false) unset($members[$key]);
+		}
 		
 		if (count($members) > 0){
 			$this->pdh->put('user_groups_users', 'delete_users_from_group', array($members, $intGroupID));

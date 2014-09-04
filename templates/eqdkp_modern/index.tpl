@@ -19,6 +19,7 @@
 		<style type="text/css">
 			{CSS_CODE}
 		</style>
+		
 		<script type="text/javascript">
 			//<![CDATA[
 			{JS_CODE}
@@ -145,7 +146,7 @@
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user fa-lg"></i> {USER_NAME}</a>
+									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user fa-lg"></i> <span class="hiddenSmartphone">{USER_NAME}</span></a>
 									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
 										<li><a href="{U_USER_PROFILE}">
 												<div class="user-tooltip-avatar">
@@ -163,12 +164,12 @@
 									</ul>
 								</div>
 							</li>
-							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</a></li><!-- ENDIF -->
+							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> <span class="hiddenSmartphone">{L_menu_admin_panel}</span></a></li><!-- ENDIF -->
 							
-							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group fa-lg"></i> {L_menu_members}</a></li><!-- ENDIF -->
+							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group fa-lg"></i> <span class="hiddenSmartphone">{L_menu_members}</span></a></li><!-- ENDIF -->
 							
 							<!-- IF S_MYCHARS_POINTS and U_CHARACTERS != "" -->
-								<li>
+								<li class="hiddenSmartphone">
 									<div class="mychars-points-tooltip-container">
 									<a class="mychars-points-tooltip-trigger"><i class="fa fa-trophy fa-lg"></i> <span class="mychars-points-target"></span></a>
 									<ul class="dropdown-menu mychars-points-tooltip" role="menu" id="mychars-points-tooltip"><li>
@@ -189,7 +190,7 @@
 							
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt fa-lg"></i> {L_notifications}</a>
+									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt fa-lg"></i> <span class="hiddenSmartphone">{L_notifications}</span></a>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
 										<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
 											<!-- IF NOTIFICATION_COUNT_RED > 0 -->
@@ -233,7 +234,7 @@
 								<!-- ENDIF -->
 							</li>
 							<!-- IF S_SEARCH -->
-							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="fa fa-search"></i> {L_search}</a></li>
+							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="fa fa-search"></i></a></li>
 							<!-- ENDIF -->
 							<!-- BEGIN personal_area_addition -->
 							<li>{personal_area_addition.TEXT}</li>
@@ -421,6 +422,13 @@
 	<script type="text/javascript">
 		{JS_CODE_EOP}
 		{JS_CODE_EOP2}
+		
+		
+		//Reponsivness
+		if ($('body').hasClass('responsive')) {
+			$('.stackcolumns').stackcolumns({myClass:'stackcolumns hiddenDesktop' });
+			$('.stacktable').stacktable({myClass:'stacktable hiddenDesktop'});
+		}
 	</script>		
 	<a id="bottom"></a>
 	</body>
