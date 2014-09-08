@@ -403,7 +403,7 @@ if(!class_exists('pdh_w_articles')) {
 			))->execute($id);
 			
 			if ($objQuery) {
-				$this->log_insert('action_article_reset_votes', array(), $id, $this->pdh->get('articles', 'title', array($id)), '', 1, 'article');
+				$this->log_insert('action_article_reset_votes', array(), $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 				
 				$this->pdh->enqueue_hook('articles_update');
 				return true;

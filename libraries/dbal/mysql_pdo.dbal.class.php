@@ -72,6 +72,7 @@ class dbal_mysql_pdo extends Database
 	}
 	
 	protected  function get_errno(){
+		return 0;
 		return @$this->resConnection->errorCode();
 	}
 	
@@ -390,6 +391,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		// Log the Query
 		$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery);
 		
+		$objStatement = $this->resConnection->query($this->strQuery);
+		if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
 		return @$this->resConnection->query($this->strQuery);
 	}
 
@@ -410,6 +413,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	 */
 	protected function get_errno()
 	{
+		return 0;
 		return @$this->resConnection->errorCode();
 	}
 

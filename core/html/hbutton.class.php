@@ -48,16 +48,17 @@ class hbutton extends html {
 	private $out = '';
 	
 	public function _construct() {
-		$out = '<input type="'.$this->buttontype.'" name="'.$this->name.'" ';
+		$out = '<button type="'.$this->buttontype.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
 		if(empty($this->buttonvalue)) $this->buttonvalue = $this->name;
 		$value = $this->buttonvalue;
+		
 		if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
-		$out .= 'value="'.$value.'" ';
+		$out .= 'value="'.strip_tags($value).'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		$this->out = $out.' />';
+		$this->out = $out.' >'.$value.'</button>';
 	}
 	
 	public function _toString() {

@@ -70,6 +70,22 @@ table {
 	color:#6E6E6E;
 }
 
+.icon-sm1{
+	font-size:0.8em;
+}
+
+.icon-sm2{
+	font-size:0.6em;
+}
+
+.icon-sm3{
+	font-size:0.5em;
+}
+
+.icon-red {
+	color: red;
+}
+
 /* body */
 html {
 	min-height: 100%;

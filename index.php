@@ -35,8 +35,8 @@ class controller extends gen_class {
 		}
 		if ($this->in->exists('savevote')){
 			$this->saveRating();
-		}
-
+		}	
+		
 		$this->display();
 	}
 	
@@ -89,7 +89,7 @@ class controller extends gen_class {
 		$arrPath = array_filter(explode('/', $strPath));
 		$arrPath = array_reverse($arrPath);
 		$arrPath = $this->filterPathArray($arrPath);
-		// TODO: check if this is necessary ... always loading all plugin data might be unnecessary
+		//Required, otherwise the Routing of Plugin URLS wont work.
 		register('pm');
 		
 		if (count($arrPath) == 0){
@@ -102,6 +102,7 @@ class controller extends gen_class {
 			$arrPath = array_filter(explode('/', $strPath));
 			$arrPath = array_reverse($arrPath);
 		}
+		registry::add_const('patharray', $arrPath);
 		$intArticleID = $intCategoryID = $strSpecificID = 0;
 
 		//Suche Alias in Artikeln
@@ -370,6 +371,13 @@ class controller extends gen_class {
 			$this->tpl->assign_var('S_INLINE_EDIT', false);
 		}
 		
+		//Hook to replace content
+		if ($this->hooks->isRegistered('article_parse')){
+			$arrHooks = $this->hooks->process('article_parse', array('content' => $strContent, 'view' => 'article', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID));
+			if (isset($arrHooks['content'])) $strContent = $arrHooks['content'];
+		}
+		
+		
 		//Replace Image Gallery
 		$arrGalleryObjects = array();
 		preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strContent, $arrGalleryObjects, PREG_PATTERN_ORDER);
@@ -500,6 +508,12 @@ class controller extends gen_class {
 				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
 				
 				$strText = $this->bbcode->parse_shorttags($arrContent[0]);
+				
+				//Hook to replace content
+				if ($this->hooks->isRegistered('article_parse')){
+					$arrHooks = $this->hooks->process('article_parse', array('content' => $strContent, 'view' => 'category', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID));
+					if (isset($arrHooks['content'])) $strContent = $arrHooks['content'];
+				}
 				
 				//Replace Image Gallery
 				$arrGalleryObjects = array();
@@ -679,54 +693,61 @@ class controller extends gen_class {
 				'portal_layout'		=> $arrCategory['portal_layout'],
 				'display'			=> true)
 			);
-		} elseif (register('routing')->staticRoute($arrPath[0]) || register('routing')->staticRoute($arrPath[1])){
-			//Static Page Object
-			$strPageObject = register('routing')->staticRoute($arrPath[0]);
-			if (!$strPageObject) {			
-				$strPageObject = register('routing')->staticRoute($arrPath[1]);
-				if ($strPageObject){
-					//Zerlege .html
-					$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
-					$arrMatches = array();
-					preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
-					if (isset($arrMatches[0]) && count($arrMatches[0])){
-						if (count($arrMatches[0]) == 2){
-							if(is_numeric($arrMatches[0][1])) $arrMatches[0][1] = intval($arrMatches[0][1]);
-							$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
+		} else {
+			foreach($arrPath as $intPathPart => $strPathPart){
+				if (register('routing')->staticRoute($strPathPart)){
+					if ($intPathPart == 0){
+						$strPageObject = register('routing')->staticRoute($strPathPart);
+						registry::add_const('page_path', $strPath);
+						registry::add_const('page', $strPath);
+					} else {
+					
+						//Static Page Object
+						$strPageObject = register('routing')->staticRoute($arrPath[$intPathPart]);
+						if ($strPageObject){
+							//Zerlege .html
+							$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
+							$arrMatches = array();
+							preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
+							if (isset($arrMatches[0]) && count($arrMatches[0])){
+								if (count($arrMatches[0]) == 2){
+									if(is_numeric($arrMatches[0][1])) $arrMatches[0][1] = intval($arrMatches[0][1]);
+									$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
+								}
+							}
+							if (strlen($strID)) {
+								if(is_numeric($strID)) $strID = intval($strID);
+								registry::add_const('url_id', $strID);
+							} elseif (strlen($arrPath[0])){
+								registry::add_const('url_id', $arrPath[0]);
+								$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
+							}
+							registry::add_const('page', str_replace('/'.$arrPath[0], '', $strPath));
+							registry::add_const('page_path', $strPath);
+							registry::add_const('speaking_name', str_replace('-'.$strID, '', $arrPath[0]));
+							break;
 						}
 					}
-					if (strlen($strID)) {
-						if(is_numeric($strID)) $strID = intval($strID);
-						registry::add_const('url_id', $strID);
-					} elseif (strlen($arrPath[0])){
-						registry::add_const('url_id', $arrPath[0]);
-						$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
-					}
-					registry::add_const('page', str_replace('/'.$arrPath[0], '', $strPath));
-					registry::add_const('page_path', $strPath);
-					registry::add_const('speaking_name', str_replace('-'.$strID, '', $arrPath[0]));
 				}
-			} else {
-				registry::add_const('page_path', $strPath);
-				registry::add_const('page', $strPath);
 			}
+			
 			if ($strPageObject){
 				$this->core->set_vars('portal_layout', $arrCategory['portal_layout']);
 				$objPage = $this->routing->getPageObject($strPageObject);
 				if ($objPage){
 					$arrVars = $objPage->get_vars();
 					$this->core->set_vars(array(
-						'page_title'		=> $arrVars['page_title'],
-						'template_file'		=> $arrVars['template_file'],
-						'portal_layout'		=> $arrCategory['portal_layout'],
-						'display'			=> true)
+							'page_title'		=> $arrVars['page_title'],
+							'template_file'		=> $arrVars['template_file'],
+							'portal_layout'		=> $arrCategory['portal_layout'],
+							'display'			=> true)
 					);
 				} else {
 					redirect();
 				}
+			} else {
+				message_die($this->user->lang('article_not_found'));
 			}
-		} else {
-			message_die($this->user->lang('article_not_found'));
 		}
 	}
 	

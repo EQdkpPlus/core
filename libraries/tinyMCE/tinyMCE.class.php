@@ -38,7 +38,10 @@ class tinyMCE extends gen_class {
 	public function editor_bbcode($settings=false){
 		if(!$this->trigger['bbcode']){
 			$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
-
+				
+			$arrHooks = (($this->hooks->isRegistered('tinymce_bbcode_setup')) ? $this->hooks->process('tinymce_bbcode_setup', array('js' => '', 'env' => $this->env), true): array());
+			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			
 			$this->tpl->add_js('
 				function initialize_bbcode_editor(){
 				$(".mceEditor_bbcode").tinymce({
@@ -47,12 +50,16 @@ class tinyMCE extends gen_class {
 
 					// General options
 					plugins: [
-        "bbcode autolink link image charmap",
-        "searchreplace visualblocks code fullscreen",
-        "media paste textcolor"
-    ],
+        				"bbcode autolink link image charmap",
+        				"searchreplace visualblocks code fullscreen",
+        				"media paste textcolor"
+    				],
 					//language : "'.$this->language.'",
 					theme : "modern",
+					
+					setup: function(editor){
+						'.$strHooks.'
+					},
 
 					// Theme options
 					
@@ -115,7 +122,10 @@ class tinyMCE extends gen_class {
 				$link_list .= '
 				]}],';
 			}
-			
+
+			$arrHooks = (($this->hooks->isRegistered('tinymce_normal_setup')) ? $this->hooks->process('tinymce_normal_setup', array('js' => '', 'env' => $this->env), true): array());
+			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+								
 			$this->tpl->add_js('
 				$(".mceEditor").tinymce({
 					// Location of TinyMCE script
@@ -124,7 +134,7 @@ class tinyMCE extends gen_class {
 					// General options
 					theme: "modern",
 					image_advtab: true,
-					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot",
+					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot | custom_buttons",
 					//language : "'.$this->language.'",
 					 plugins: [
         "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
@@ -135,6 +145,9 @@ class tinyMCE extends gen_class {
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }],
 					extended_valid_elements : "p[class|id|style|data-sort|data-folder|data-id|title]",
+					setup: function(editor){
+						'.$strHooks.'
+					},
 					'.$link_list.'
 					file_browser_callback : function(field_name, url, type, win){
 						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.php'.$this->SID.'";    // use an absolute path!
@@ -168,6 +181,7 @@ class tinyMCE extends gen_class {
 					'.$resizing.$relative_url.$removeHost.'
 										
 				});
+						
 			', 'docready');
 
 			$this->trigger['normal'] = true;
@@ -181,6 +195,9 @@ class tinyMCE extends gen_class {
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 		
+			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_simple_setup')) ? $this->hooks->process('tinymce_inline_simple_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
+			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			
 			$this->tpl->add_js('
 				$("'.$selector.'").tinymce({
 					// Location of TinyMCE script
@@ -197,6 +214,7 @@ class tinyMCE extends gen_class {
 			        	editor.on("blur", function(e) {
 			            	save_inline_editor_simple("'.$selector.'", e);
 			        	});
+						'.$strHooks.'
    					},					
 					entity_encoding : "raw",
 		
@@ -251,6 +269,9 @@ class tinyMCE extends gen_class {
 				$link_list .= '
 				]}],';
 			}
+			
+			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_setup')) ? $this->hooks->process('tinymce_inline_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
+			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 				
 			$this->tpl->add_js('
 				$("'.$selector.'").tinymce({
@@ -308,8 +329,9 @@ class tinyMCE extends gen_class {
 					
 					 	editor.on("focus", function(e) {
 							focus_inline_editor("'.$selector.'", e);
+       					});
 					
-       					 });
+						'.$strHooks.'
 
    					},
 					

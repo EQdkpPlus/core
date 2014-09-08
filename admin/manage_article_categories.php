@@ -200,19 +200,20 @@ class Manage_Article_Categories extends page_generic {
 				'ALIAS'		=> $this->pdh->get('article_categories', 'alias', array($id)),
 				'PER_PAGE'	=> $this->pdh->get('article_categories', 'per_page', array($id)),
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => $this->pdh->get('article_categories', 'portal_layout', array($id)))),
-				'PUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'published', array($id))) ? 'checked="checked"' : '',
-				'DD_PARENT' => new hdropdown('parent', array('options' => $arrCategories, 'value' => $this->pdh->get('article_categories', 'parent', array($id)))),
+				'R_PUBLISHED'	=> new hradio('published', array('value' => ($this->pdh->get('article_categories', 'published', array($id))))),	
+				'DD_PARENT' => new hdropdown('parent', array('js' => 'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => $this->pdh->get('article_categories', 'parent', array($id)))),
 				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')), 'value' => $this->pdh->get('article_categories', 'list_type', array($id)))),
-				'SHOW_CHILDS_CHECKED' => ($this->pdh->get('article_categories', 'show_childs', array($id))) ? 'checked="checked"' : '',
+				'R_SHOW_CHILDS' => new hradio('show_childs', array('value' => ($this->pdh->get('article_categories', 'show_childs', array($id))))),	
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, $this->pdh->get('article_categories', 'aggregation', array($id))),
-				'FEATURED_ONLY_CHECKED' => ($this->pdh->get('article_categories', 'featured_only', array($id))) ? 'checked="checked"' : '',
-				'SHOW_SSB_CHECKED' => ($this->pdh->get('article_categories', 'social_share_buttons', array($id))) ? 'checked="checked"' : '',
-				'HIDE_ON_RSS_CHECKED' => ($this->pdh->get('article_categories', 'hide_on_rss', array($id))) ? 'checked="checked"' : '',
-				// TODO: use radio here?
-				'DD_PUBLISHED_STATE' => new hdropdown('article_published_state]', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))),
-				'NOTIFY_UNPUBLISHED_CHECKED' => ($this->pdh->get('article_categories', 'notify_on_onpublished_articles', array($id))) ? 'checked="checked"' : '',
-				'FEATURED_ONTOP_CHECKED' => ($this->pdh->get('article_categories', 'featured_ontop', array($id))) ? 'checked="checked"' : '',
-				'HIDE_HEADER_CHECKED' => ($this->pdh->get('article_categories', 'hide_header', array($id))) ? 'checked="checked"' : '',
+				'R_FEATURED_ONLY' => new hradio('featured_only', array('value' => ($this->pdh->get('article_categories', 'featured_only', array($id))))),
+
+				'R_SHOW_SSB' => new hradio('show_ssb', array('value' => ($this->pdh->get('article_categories', 'social_share_buttons', array($id))))),
+				'R_FEATURED_ONTOP' => new hradio('featured_ontop', array('value' => ($this->pdh->get('article_categories', 'featured_ontop', array($id))))),
+				'R_HIDE_ON_RSS' => new hradio('hide_on_rss', array('value' => ($this->pdh->get('article_categories', 'hide_on_rss', array($id))))),
+				'R_NOTIFY_UNPUBLISHED' => new hradio('notify_unpublished', array('value' => ($this->pdh->get('article_categories', 'notify_on_onpublished_articles', array($id))))),
+				'R_HIDE_HEADER' => new hradio('hide_header', array('value' => ($this->pdh->get('article_categories', 'hide_header', array($id))))),
+					
+				'R_PUBLISHED_STATE' => new hradio('article_published_state]', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))),
 				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => $this->user->lang('sortation_types'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
 			));
 			
@@ -221,13 +222,19 @@ class Manage_Article_Categories extends page_generic {
 			$this->tpl->assign_vars(array(
 				'PER_PAGE' => 25,
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)),
-				'PUBLISHED_CHECKED' => 'checked="checked"',
-				'DD_PARENT' => new hdropdown('parent', array('options' => $arrCategories, 'value' => 0)),
+				'R_PUBLISHED'	=> new hradio('published', array('value' => 1)),
+				'R_SHOW_CHILDS' => new hradio('show_childs', array('value' => 1)),
+				'DD_PARENT' => new hdropdown('parent', array('js' => 'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => 0)),
 				'DD_LIST_TYPE' => new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')))),
 				'MS_AGGREGATION' => $this->jquery->MultiSelect('aggregation', $arrAggregation, array()),
-				// TODO: use radio here?
-				'DD_PUBLISHED_STATE' => new hdropdown('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)),
+				'R_PUBLISHED_STATE' => new hradio('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)),
 				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => array($this->user->lang('sortation_types')), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
+				'R_FEATURED_ONLY' => new hradio('featured_only', array('value' => 0)),
+				'R_SHOW_SSB' => new hradio('show_ssb', array('value' => 0)),
+				'R_FEATURED_ONTOP' => new hradio('featured_ontop', array('value' => 0)),
+				'R_HIDE_ON_RSS' => new hradio('hide_on_rss', array('value' => 0)),
+				'R_NOTIFY_UNPUBLISHED' => new hradio('notify_unpublished', array('value' => 0)),
+				'R_HIDE_HEADER' => new hradio('hide_header', array('value' => 0)),
 			));
 		}
 		$this->jquery->Spinner('article_per_page', array('min' => 0));

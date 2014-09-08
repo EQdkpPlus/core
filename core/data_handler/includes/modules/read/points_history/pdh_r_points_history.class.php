@@ -270,11 +270,13 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 			$strTwink = ($with_twink) ? 'multi' : 'single';
 			$arrEarned = array();
 			//Get Array
-			foreach($this->points[$member_id][$multidkp_id][$strTwink]['earned'] as $_event_id => $earned){
-				if ($event_id != 0 && $_event_id != $event_id) continue;
-				foreach($earned as $val){
-					if ($val[1] < $from || $val[1] > $to) continue;
-					$arrEarned[] = $val;
+			if (isset($this->points[$member_id][$multidkp_id][$strTwink]['earned'])){
+				foreach($this->points[$member_id][$multidkp_id][$strTwink]['earned'] as $_event_id => $earned){
+					if ($event_id != 0 && $_event_id != $event_id) continue;
+					foreach($earned as $val){
+						if ($val[1] < $from || $val[1] > $to) continue;
+						$arrEarned[] = $val;
+					}
 				}
 			}
 				
@@ -293,11 +295,13 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 			
 			$arrAdjustment = array();
 			//Get Array
-			foreach($this->points[$member_id][$multidkp_id][$strTwink]['adjustment'] as $_event_id => $earned){
-			if ($event_id != 0 && $_event_id != $event_id) continue;
-				foreach($earned as $val){
-					if ($val[1] < $from || $val[1] > $to) continue;
-					$arrAdjustment[] = $val;
+			if (isset($this->points[$member_id][$multidkp_id][$strTwink]['adjustment'])) {
+				foreach($this->points[$member_id][$multidkp_id][$strTwink]['adjustment'] as $_event_id => $earned){
+				if ($event_id != 0 && $_event_id != $event_id) continue;
+					foreach($earned as $val){
+						if ($val[1] < $from || $val[1] > $to) continue;
+						$arrAdjustment[] = $val;
+					}
 				}
 			}
 			

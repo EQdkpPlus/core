@@ -93,7 +93,7 @@ class Manage_Articles extends page_generic {
 		if ($id) {
 			$this->pdh->put('comment', 'delete_attach_id', array('articles', $id));
 			$this->pdh->process_hook_queue();
-			$this->logs->add('action_article_reset_comments', array(), $id, $this->pdh->get('articles', 'title', array($id)), '', 1, 'article');
+			$this->logs->add('action_article_reset_comments', array(), $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 			$this->core->message(sprintf($this->user->lang('admin_delete_comments_success'), $this->pdh->get('articles', 'title', array($id))), $this->user->lang('success'), 'green');
 		}
 		$this->edit();

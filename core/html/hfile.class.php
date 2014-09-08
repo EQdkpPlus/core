@@ -45,6 +45,7 @@ class hfile extends html {
 	public $class = 'input';
 	public $inptype = '';
 	public $required = false;
+	public $preview = false;
 	
 	
 	protected $mimetypes = false;
@@ -62,8 +63,26 @@ class hfile extends html {
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
+		if($this->preview) $out .= 'onchange="previewImage_'.$this->name.'(this);"';
 		$out .= ' />';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		if ($this->preview){
+			$out = '<img src="'.((isset($this->value)) ? $this->value : registry::get_const('server_path').'images/global/default-image.svg').'" class="uploadPreview" style="max-height: 60px;"/>'.$out;
+			
+			register('tpl')->add_js('
+			function previewImage_'.$this->name.'(object) {
+				if (object.files[0].type == "image/jpeg" || object.files[0].type == "image/png" || object.files[0].type == "image/gif"){
+					var oFReader = new FileReader();
+					oFReader.readAsDataURL(object.files[0]);
+			
+					oFReader.onload = function (oFREvent) {
+						$(object).parent().find(\'.uploadPreview\').attr(\'src\', oFREvent.target.result);
+					};
+				}
+			};'
+					
+			);
+		}
 		$this->out = $out;
 	}
 	

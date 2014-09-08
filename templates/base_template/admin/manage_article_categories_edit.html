@@ -42,6 +42,10 @@ function calculate_permission(perm, gid, obj){
 			}
 		});
 }
+
+function renew_all_permissions(){
+	$('#permissions select').trigger('change');
+}
 //]]>
 </script>
 
@@ -91,7 +95,7 @@ function calculate_permission(perm, gid, obj){
 			</dl>
 			<dl>
 				<dt><label>{L_published}</label></dt>
-				<dd><input type="checkbox" name="published" id="published" value="1" {PUBLISHED_CHECKED} /></dd>
+				<dd>{R_PUBLISHED}</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_portal_layout}</label></dt>
@@ -113,7 +117,7 @@ function calculate_permission(perm, gid, obj){
 			</dl>
 			<dl>
 				<dt><label>{L_show_child_categories}</label></dt>
-				<dd><input type="checkbox" name="show_childs" id="show_childs" value="1" {SHOW_CHILDS_CHECKED} /></dd>
+				<dd>{R_SHOW_CHILDS}</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_aggregation}</label></dt>
@@ -121,37 +125,37 @@ function calculate_permission(perm, gid, obj){
 			</dl>
 			<dl>
 				<dt><label>{L_featured_only}</label></dt>
-				<dd><input type="checkbox" name="featured_only" id="featured_only" value="1" {FEATURED_ONLY_CHECKED} /></dd>
+				<dd>{R_FEATURED_ONLY}</dd>
 			</dl>
 			
 			<dl>
 				<dt><label>{L_featured_ontop}</label></dt>
-				<dd><input type="checkbox" name="featured_ontop" id="featured_ontop" value="1" {FEATURED_ONTOP_CHECKED} /></dd>
+				<dd>{R_FEATURED_ONTOP}</dd>
 			</dl>
 			
 			<dl>
 				<dt><label>{L_social_share_buttons}</label></dt>
-				<dd><input type="checkbox" name="show_ssb" id="show_ssb" value="1" {SHOW_SSB_CHECKED} /></dd>
+				<dd>{R_SHOW_SSB}</dd>
 			</dl>
 			
 			<dl>
 				<dt><label>{L_article_published_state}</label></dt>
-				<dd>{DD_PUBLISHED_STATE}</dd>
+				<dd>{R_PUBLISHED_STATE}</dd>
 			</dl>
 			
 			<dl>
 				<dt><label>{L_notify_on_unpublished_articles}</label></dt>
-				<dd><input type="checkbox" name="notify_unpublished" id="notify_unpublished" value="1" {NOTIFY_UNPUBLISHED_CHECKED} /></dd>
+				<dd>{R_NOTIFY_UNPUBLISHED}</dd>
 			</dl>
 			
 			<dl>
 				<dt><label>{L_hide_header}</label></dt>
-				<dd><input type="checkbox" name="hide_header" id="hide_header" value="1" {HIDE_HEADER_CHECKED} /></dd>
+				<dd>{R_HIDE_HEADER}</dd>
 			</dl>
 			
 			<dl>
 				<dt><label>{L_hide_on_rss}</label></dt>
-				<dd><input type="checkbox" name="hide_on_rss" id="hide_on_rss" value="1" {HIDE_ON_RSS_CHECKED} /></dd>
+				<dd>{R_HIDE_ON_RSS}</dd>
 			</dl>
 			
 			<dl>
