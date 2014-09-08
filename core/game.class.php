@@ -948,11 +948,10 @@ class game extends gen_class {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
 				}
-			} else {
-				foreach($class_data as $iclass) {
-					if($iclass['name'] == $class['name'])
-						$field['options'] = $this->get($iclass['type']);
-				}
+			}
+			foreach($class_data as $iclass) {
+				if($iclass['name'] == $class['name'])
+					$field['options'] = $this->get($iclass['type']);
 			}
 			$this->pdh->put('profile_fields', 'insert_field', array($field));
 		}
