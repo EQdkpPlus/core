@@ -296,7 +296,8 @@ class calendar_pageobject extends pageobject {
 							'allDay'		=> ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false,
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'color'			=> $eventcolor,
-							'textColor'		=> $eventcolor_txt
+							'textColor'		=> $eventcolor_txt,
+							'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
 						);
 					}
 				}

@@ -67,6 +67,7 @@
 					if(event.note){
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
 					}
+					tmpttcontent += "<div class='calendartt_note'>{L_creator}: "+event.author+"</div>";
 					element.qtip({
 						content: {
 							text: tmpttcontent,

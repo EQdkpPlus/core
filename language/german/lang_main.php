@@ -120,6 +120,7 @@ $lang = array(
 "categories" => "Kategorien",
 "category" => "Kategorie",
 "note" => "Notiz",
+"creator" => "Ersteller",
 "online" => "Online",
 "options" => "Einstellungen",
 "percent" => "Prozent",

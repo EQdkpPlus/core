@@ -168,6 +168,7 @@ $lang = array(
 	"categories" => 'Categories',
 	"category" => 'Category',
 	"note" => 'Note',
+	"creator" => "Creator",
 	"online" => 'Online',
 	"options" => 'Options',
 	"percent" => 'Percent',
