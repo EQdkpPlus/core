@@ -75,7 +75,10 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			$ep		= $this->get_ep($member_id, $multidkp_id, false, $with_twink);
 			$gp		= $this->get_gp($member_id, $multidkp_id, false, $with_twink);
 			$bp 	= intval($this->pdh->get_layout_config('base_points'));
-			return $epgp = (($gp + $bp) == 0)? $ep : ($ep/($gp + $bp));
+			$min_ep = intval($this->pdh->get_layout_config('min_ep'));
+			$epgp	= (($gp + $bp) == 0) ? $ep : ($ep/($gp + $bp));
+			
+			return (($min_ep > 0) && ($ep < $min_ep)) ? 0 : $epgp;
 		}
 
 		public function calculate_ep($member_id, $multidkp_id, $with_twink=true){

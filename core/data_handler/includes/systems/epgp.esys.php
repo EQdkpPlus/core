@@ -50,6 +50,12 @@ $system_def = array(
 		'size'	=> 5,
 		'value' => 0
 	  ),
+	  'min_ep'	=> array(
+		'lang'	=> 'Min EP',
+		'type'	=> 'int',
+		'size'	=> 5,
+		'value' => 0
+	  ),
 	),
 
 	'substitutions' => array(

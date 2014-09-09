@@ -447,6 +447,14 @@ class core extends gen_class {
 			//Plus Links
 			$arrItems = array_merge($arrItems, $this->pdh->get('links', 'menu', array($show_hidden)));
 			
+			//Hooks
+			if ($this->hooks->isRegistered('main_menu_items')){
+				$arrHooks = $this->hooks->process('main_menu_items', array());
+				foreach($arrHooks as $arrHookItems){
+					if (is_array($arrHookItems)) $arrItems = array_merge($arrItems, $arrHookItems);
+				}
+			}
+			
 			return $arrItems;
 		}
 		
@@ -531,7 +539,7 @@ class core extends gen_class {
 			}
 			
 			foreach($arrToDo as $hash => $item){
-				$item['hidden'] = (isset($item['article']) || isset($item['category'])) ? 1 : 0;
+				$item['hidden'] = (isset($item['article']) || isset($item['category']) || isset($item['default_hide'])) ? 1 : 0;
 				if (!$show_hidden && $item['hidden']) continue;
 				$arrOut[] = $item;
 				$arrOutOneLevel[] = $item;

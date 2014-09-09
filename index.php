@@ -277,17 +277,21 @@ class controller extends gen_class {
 						}
 					}, "json");
 			}
-					
+
+			var InlineLoaded = new Array();
 			function focus_inline_editor(selector, e){
+				if (InlineLoaded[selector] == undefined){	
+					
 				e.target.editorManager.activeEditor.setContent("<b>Loading... <i class=\"fa fa-spinner fa-spin fa-lg\"></i></b><br /><br />", {format: "raw"});
 						
 				$.get( "'.$this->controller_path.'EditArticle/'.$this->SID.'&get_raw_article=1&aid='.$intArticleID.'&link_hash='.$csrf_raw.'", 
 					function( data ) {
 						if (data.text != undefined && data.text != false){
 							e.target.editorManager.activeEditor.setContent(data.text,  {format: "raw"});
-					
+							InlineLoaded[selector] = 1;
 						}
 					}, "json");
+				}
 			}		
 			
 			function save_inline_editor(selector, e){
@@ -373,7 +377,7 @@ class controller extends gen_class {
 		
 		//Hook to replace content
 		if ($this->hooks->isRegistered('article_parse')){
-			$arrHooks = $this->hooks->process('article_parse', array('content' => $strContent, 'view' => 'article', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID));
+			$arrHooks = $this->hooks->process('article_parse', array('content' => $strContent, 'view' => 'article', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID), true);
 			if (isset($arrHooks['content'])) $strContent = $arrHooks['content'];
 		}
 		
@@ -511,8 +515,8 @@ class controller extends gen_class {
 				
 				//Hook to replace content
 				if ($this->hooks->isRegistered('article_parse')){
-					$arrHooks = $this->hooks->process('article_parse', array('content' => $strContent, 'view' => 'category', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID));
-					if (isset($arrHooks['content'])) $strContent = $arrHooks['content'];
+					$arrHooks = $this->hooks->process('article_parse', array('content' => $strText, 'view' => 'category', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID), true);
+					if (isset($arrHooks['content'])) $strText = $arrHooks['content'];
 				}
 				
 				//Replace Image Gallery
@@ -694,9 +698,10 @@ class controller extends gen_class {
 				'display'			=> true)
 			);
 		} else {
-			foreach($arrPath as $intPathPart => $strPathPart){
+			foreach($arrPath as $intPathPart => $strPathPart){	
 				if (register('routing')->staticRoute($strPathPart)){
 					if ($intPathPart == 0){
+
 						$strPageObject = register('routing')->staticRoute($strPathPart);
 						registry::add_const('page_path', $strPath);
 						registry::add_const('page', $strPath);
@@ -704,9 +709,11 @@ class controller extends gen_class {
 					
 						//Static Page Object
 						$strPageObject = register('routing')->staticRoute($arrPath[$intPathPart]);
+
 						if ($strPageObject){
 							//Zerlege .html
 							$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
+
 							$arrMatches = array();
 							preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 							if (isset($arrMatches[0]) && count($arrMatches[0])){
@@ -732,14 +739,14 @@ class controller extends gen_class {
 			}
 			
 			if ($strPageObject){
-				$this->core->set_vars('portal_layout', $arrCategory['portal_layout']);
+				$this->core->set_vars('portal_layout', 1);
 				$objPage = $this->routing->getPageObject($strPageObject);
 				if ($objPage){
 					$arrVars = $objPage->get_vars();
 					$this->core->set_vars(array(
 							'page_title'		=> $arrVars['page_title'],
 							'template_file'		=> $arrVars['template_file'],
-							'portal_layout'		=> $arrCategory['portal_layout'],
+							'portal_layout'		=> 1,
 							'display'			=> true)
 					);
 				} else {

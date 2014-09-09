@@ -85,7 +85,7 @@ if ( !defined('EQDKP_INC') ){
 				}
 			} else {
 				foreach($arrNew as $key => $val){
-					$arrChanged[$arrLang[$key]] = $arrNew[$key];
+					if (isset($arrLang[$key])) $arrChanged[$arrLang[$key]] = $arrNew[$key];
 				}	
 			}
 			
