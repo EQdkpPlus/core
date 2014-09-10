@@ -365,9 +365,18 @@ if (!class_exists("jquery")) {
 		public function Slider($id, $options, $type='normal'){
 			switch($type){
 				case 'normal' :
-					$this->tpl->add_js('$("#'.$id.'").slider();', 'docready');
+					if (!isset($options['value'])) $options['value'] = 0;
+					$this->tpl->add_js('$("#'.$id.'").slider({
+						slide: function(event, ui) {
+							console.log(ui);
+								$("#'.$id.'-label").html(ui.value);
+								$("#'.$id.'_0").val(ui.value);
+						},
+						value: '.(int)$options['value'].'
+					});', 'docready');
 					$class = (!empty($options['class'])) ? ' class="'.$options['class'].'"' : '';
-					return '<div id="'.$id.'"'.$class.'></div>';
+					return '<label for="'.$id.'-label">'.$options['label'].': <span id="'.$id.'-label">'.$options['value'].'</span></label><div id="'.$id.'"'.$class.' style="width:'.((isset($options['width'])) ? $options['width'] : '100%').';"></div>
+							<input type="hidden" id="'.$id.'_0" name="'.$options['name'].'" value="'.$options['value'].'" />';
 				break;
 
 				case 'range' :
