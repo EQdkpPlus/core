@@ -325,33 +325,34 @@ class register_pageobject extends pageobject {
 				
 				// If they're already active, just bump them back
 				if ( ($row['user_active'] == '1') && ($row['user_key'] == '') ) {
-					message_die($this->user->lang('error_already_activated'));
+					message_die($this->user->lang('error_already_activated'), $this->user->lang('error'), 'error');
 				} else {
-					$this->pdh->put('user', 'activate', array($row['user_id']));
-	
-					// E-mail the user if this was activated by the admin
-					if ( $this->config->get('account_activation') == 2 ) {
-						$this->email->Set_Language($row['user_lang']);
-						$bodyvars = array(
-							'USERNAME' => $row['username'],
-						);
-						if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
+					
+					//Activate User; Email is sent in activation method
+					$blnResult = $this->pdh->put('user', 'activate', array($row['user_id']));
+					
+					if ($blnResult) {
+						$type = 'ok';
+						
+						// E-mail the user if this was activated by the admin
+						if ( $this->config->get('account_activation') == 2 ) {
 							$success_message = $this->user->lang('account_activated_admin');
-						}else{
-							$success_message = $this->user->lang('email_subject_send_error');
-						}
+						} else {
+							$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
+							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
+						}				
 					} else {
-						$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
-						$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
+						message_die($this->user->lang('email_subject_send_error'), $this->user->lang('success'), 'error');
 					}
+					
 					message_die($success_message, $this->user->lang('success'), 'ok');
 				}
 				
 			} else {
-				message_die($this->user->lang('error_invalid_key'));
+				message_die($this->user->lang('error_invalid_key'), $this->user->lang('error'), 'error');
 			}
 		} else {
-			message_die('Could not obtain user information', '', 'error', false, __FILE__, __LINE__, $sql);
+			message_die('Could not obtain user information', '', 'error');
 		}
 	}
 

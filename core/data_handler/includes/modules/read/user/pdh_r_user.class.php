@@ -190,6 +190,10 @@ if (!class_exists("pdh_r_user")){
 			return '';
 		}
 		
+		public function get_lang($user_id){
+			return $this->users[$user_id]['user_lang'];
+		}
+		
 		public function get_html_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($this->check_privacy($user_id) && $this->user->is_signedin() && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
 				return '<a href="javascript:usermailer('.$user_id.');"><i class="fa fa-envelope"></i>'.$this->user->lang('adduser_send_mail').'</a>';
