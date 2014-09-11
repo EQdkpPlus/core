@@ -494,7 +494,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'EMBEDD_URL'		=> str_replace(array("https:", "http:"), "", $this->env->link),
 		));
 		
-		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclose' => 'manage_portal.php'.$this->SID.'&l='.$intLayoutID));
+		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs' => '$("#save").click();'));
 		$this->tpl->add_css(".portal_disabled { float:left; margin-left: 4px; width:230px; min-height: 16px;}");
 		$this->tpl->add_js('$(".equalHeights").equalHeights();', 'docready');
 		$this->core->set_vars(array(

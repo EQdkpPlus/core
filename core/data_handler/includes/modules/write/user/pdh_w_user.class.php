@@ -22,7 +22,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_user')) {
 	class pdh_w_user extends pdh_w_generic {
-		public static $shortcuts = array('crypt' => 'encrypt');
+		public static $shortcuts = array('crypt' => 'encrypt', 'email' => 'MyMailer');
 
 		public function insert_user($arrData, $logging = true, $toDefaultGroup = true){
 			$arrData = $this->set_defaults($arrData);
@@ -209,6 +209,13 @@ if(!class_exists('pdh_w_user')) {
 			))->execute($user_id);
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
+			
+			//Send out notification email
+			$bodyvars = array(
+				'USERNAME'		=> $this->pdh->get('user', 'name', array($user_id)),
+			);
+			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_activation_self.html', $bodyvars);
+			
 			return true;
 		}
 
