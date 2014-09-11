@@ -9712,7 +9712,7 @@ jQuery.each( ajaxEvents.split("|"),
 })( jQuery, window );
 
 //! moment.js
-//! version : 2.8.2
+//! version : 2.8.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -9723,7 +9723,7 @@ jQuery.each( ajaxEvents.split("|"),
     ************************************/
 
     var moment,
-        VERSION = '2.8.2',
+        VERSION = '2.8.3',
         // the global-scope this is NOT the global object in Node.js
         globalScope = typeof global !== 'undefined' ? global : this,
         oldGlobalMoment,
@@ -11206,6 +11206,9 @@ jQuery.each( ajaxEvents.split("|"),
         for (i = 0; i < config._f.length; i++) {
             currentScore = 0;
             tempConfig = copyConfig({}, config);
+            if (config._useUTC != null) {
+                tempConfig._useUTC = config._useUTC;
+            }
             tempConfig._pf = defaultParsingFlags();
             tempConfig._f = config._f[i];
             makeDateFromStringAndFormat(tempConfig);
@@ -11270,6 +11273,14 @@ jQuery.each( ajaxEvents.split("|"),
         }
     }
 
+    function map(arr, fn) {
+        var res = [], i;
+        for (i = 0; i < arr.length; ++i) {
+            res.push(fn(arr[i], i));
+        }
+        return res;
+    }
+
     function makeDateFromInput(config) {
         var input = config._i, matched;
         if (input === undefined) {
@@ -11281,7 +11292,9 @@ jQuery.each( ajaxEvents.split("|"),
         } else if (typeof input === 'string') {
             makeDateFromString(config);
         } else if (isArray(input)) {
-            config._a = input.slice(0);
+            config._a = map(input.slice(0), function (obj) {
+                return parseInt(obj, 10);
+            });
             dateFromConfig(config);
         } else if (typeof(input) === 'object') {
             dateFromObject(config);
@@ -11836,7 +11849,7 @@ jQuery.each( ajaxEvents.split("|"),
                 this._isUTC = false;
 
                 if (keepLocalTime) {
-                    this.add(this._d.getTimezoneOffset(), 'm');
+                    this.add(this._dateTzOffset(), 'm');
                 }
             }
             return this;
@@ -11854,7 +11867,7 @@ jQuery.each( ajaxEvents.split("|"),
         diff : function (input, units, asFloat) {
             var that = makeAs(input, this),
                 zoneDiff = (this.zone() - that.zone()) * 6e4,
-                diff, output;
+                diff, output, daysAdjust;
 
             units = normalizeUnits(units);
 
@@ -11865,11 +11878,12 @@ jQuery.each( ajaxEvents.split("|"),
                 output = ((this.year() - that.year()) * 12) + (this.month() - that.month());
                 // adjust by taking difference in days, average number of days
                 // and dst in the given months.
-                output += ((this - moment(this).startOf('month')) -
-                        (that - moment(that).startOf('month'))) / diff;
+                daysAdjust = (this - moment(this).startOf('month')) -
+                    (that - moment(that).startOf('month'));
                 // same as above but with zones, to negate all dst
-                output -= ((this.zone() - moment(this).startOf('month').zone()) -
-                        (that.zone() - moment(that).startOf('month').zone())) * 6e4 / diff;
+                daysAdjust -= ((this.zone() - moment(this).startOf('month').zone()) -
+                        (that.zone() - moment(that).startOf('month').zone())) * 6e4;
+                output += daysAdjust / diff;
                 if (units === 'year') {
                     output = output / 12;
                 }
@@ -11978,18 +11992,33 @@ jQuery.each( ajaxEvents.split("|"),
         },
 
         isAfter: function (input, units) {
-            units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) > +moment(input).startOf(units);
+            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this > +input;
+            } else {
+                return +this.clone().startOf(units) > +moment(input).startOf(units);
+            }
         },
 
         isBefore: function (input, units) {
-            units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) < +moment(input).startOf(units);
+            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this < +input;
+            } else {
+                return +this.clone().startOf(units) < +moment(input).startOf(units);
+            }
         },
 
         isSame: function (input, units) {
-            units = units || 'ms';
-            return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            units = normalizeUnits(units || 'millisecond');
+            if (units === 'millisecond') {
+                input = moment.isMoment(input) ? input : moment(input);
+                return +this === +input;
+            } else {
+                return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            }
         },
 
         min: deprecate(
@@ -12029,7 +12058,7 @@ jQuery.each( ajaxEvents.split("|"),
                     input = input * 60;
                 }
                 if (!this._isUTC && keepLocalTime) {
-                    localAdjust = this._d.getTimezoneOffset();
+                    localAdjust = this._dateTzOffset();
                 }
                 this._offset = input;
                 this._isUTC = true;
@@ -12047,7 +12076,7 @@ jQuery.each( ajaxEvents.split("|"),
                     }
                 }
             } else {
-                return this._isUTC ? offset : this._d.getTimezoneOffset();
+                return this._isUTC ? offset : this._dateTzOffset();
             }
             return this;
         },
@@ -12151,10 +12180,15 @@ jQuery.each( ajaxEvents.split("|"),
         // instance.  Otherwise, it will return the locale configuration
         // variables for this instance.
         locale : function (key) {
+            var newLocaleData;
+
             if (key === undefined) {
                 return this._locale._abbr;
             } else {
-                this._locale = moment.localeData(key);
+                newLocaleData = moment.localeData(key);
+                if (newLocaleData != null) {
+                    this._locale = newLocaleData;
+                }
                 return this;
             }
         },
@@ -12165,14 +12199,19 @@ jQuery.each( ajaxEvents.split("|"),
                 if (key === undefined) {
                     return this.localeData();
                 } else {
-                    this._locale = moment.localeData(key);
-                    return this;
+                    return this.locale(key);
                 }
             }
         ),
 
         localeData : function () {
             return this._locale;
+        },
+
+        _dateTzOffset : function () {
+            // On Firefox.24 Date#getTimezoneOffset returns a floating point.
+            // https://github.com/moment/moment/pull/1871
+            return Math.round(this._d.getTimezoneOffset() / 15) * 15;
         }
     });
 
@@ -12370,19 +12409,21 @@ jQuery.each( ajaxEvents.split("|"),
             var days, months;
             units = normalizeUnits(units);
 
-            days = this._days + this._milliseconds / 864e5;
             if (units === 'month' || units === 'year') {
+                days = this._days + this._milliseconds / 864e5;
                 months = this._months + daysToYears(days) * 12;
                 return units === 'month' ? months : months / 12;
             } else {
-                days += yearsToDays(this._months / 12);
+                // handle milliseconds separately because of floating point math errors (issue #1867)
+                days = this._days + yearsToDays(this._months / 12);
                 switch (units) {
-                    case 'week': return days / 7;
-                    case 'day': return days;
-                    case 'hour': return days * 24;
-                    case 'minute': return days * 24 * 60;
-                    case 'second': return days * 24 * 60 * 60;
-                    case 'millisecond': return days * 24 * 60 * 60 * 1000;
+                    case 'week': return days / 7 + this._milliseconds / 6048e5;
+                    case 'day': return days + this._milliseconds / 864e5;
+                    case 'hour': return days * 24 + this._milliseconds / 36e5;
+                    case 'minute': return days * 24 * 60 + this._milliseconds / 6e4;
+                    case 'second': return days * 24 * 60 * 60 + this._milliseconds / 1000;
+                    // Math.floor prevents floating point math errors here
+                    case 'millisecond': return Math.floor(days * 24 * 60 * 60 * 1000) + this._milliseconds;
                     default: throw new Error('Unknown unit ' + units);
                 }
             }
@@ -28902,7 +28943,7 @@ var tooltip = $.widget( "ui.tooltip", {
 
 
 }));
-/*! jQuery Timepicker Addon - v1.4.6 - 2014-08-09
+/*! jQuery Timepicker Addon - v1.5.0 - 2014-09-01
 * http://trentrichardson.com/examples/timepicker
 * Copyright (c) 2014 Trent Richardson; Licensed MIT */
 (function ($) {
@@ -28920,7 +28961,7 @@ var tooltip = $.widget( "ui.tooltip", {
 	*/
 	$.extend($.ui, {
 		timepicker: {
-			version: "1.4.6"
+			version: "1.5.0"
 		}
 	});
 
@@ -29936,7 +29977,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			// select methods
 			select: {
 				create: function (tp_inst, obj, unit, val, min, max, step) {
-					var sel = '<select class="ui-timepicker-select" data-unit="' + unit + '" data-min="' + min + '" data-max="' + max + '" data-step="' + step + '">',
+					var sel = '<select class="ui-timepicker-select ui-state-default ui-corner-all" data-unit="' + unit + '" data-min="' + min + '" data-max="' + max + '" data-step="' + step + '">',
 						format = tp_inst._defaults.pickerTimeFormat || tp_inst._defaults.timeFormat;
 
 					for (var i = min; i <= max; i += step) {
@@ -30291,14 +30332,17 @@ var tooltip = $.widget( "ui.tooltip", {
 	$.datepicker._base_selectDate = $.datepicker._selectDate;
 	$.datepicker._selectDate = function (id, dateStr) {
 		var inst = this._getInst($(id)[0]),
-			tp_inst = this._get(inst, 'timepicker');
+			tp_inst = this._get(inst, 'timepicker'),
+			was_inline;
 
 		if (tp_inst && inst.settings.showTimepicker) {
 			tp_inst._limitMinMaxDateTime(inst, true);
+			was_inline = inst.inline;
 			inst.inline = inst.stay_open = true;
 			//This way the onSelect handler called from calendarpicker get the full dateTime
 			this._base_selectDate(id, dateStr);
-			inst.inline = inst.stay_open = false;
+			inst.inline = was_inline;
+			inst.stay_open = false;
 			this._notifyChange(inst);
 			this._updateDatepicker(inst);
 		} else {
@@ -30433,7 +30477,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		selectLocalTimezone(tp_inst);
 		var now = new Date();
 		this._setTime(inst, now);
-		$('.ui-datepicker-today', $dp).click();
+		this._setDate(inst, now);
 	};
 
 	/*
@@ -30665,7 +30709,10 @@ var tooltip = $.widget( "ui.tooltip", {
 				onselect = null,
 				overrides = tp_inst._defaults.evnts,
 				fns = {},
-				prop;
+				prop,
+				ret,
+				oldVal,
+				$target;
 			if (typeof name === 'string') { // if min/max was set with the string
 				if (name === 'minDate' || name === 'minDateTime') {
 					min = value;
@@ -30722,6 +30769,17 @@ var tooltip = $.widget( "ui.tooltip", {
 				tp_inst._defaults.maxDateTime = max;
 			} else if (onselect) {
 				tp_inst._defaults.onSelect = onselect;
+			}
+
+			// Datepicker will override our date when we call _base_optionDatepicker when 
+			// calling minDate/maxDate, so we will first grab the value, call 
+			// _base_optionDatepicker, then set our value back.
+			if(min || max){
+				$target = $(target);
+				oldVal = $target.datetimepicker('getDate');
+				ret = this._base_optionDatepicker.call($.datepicker, target, name_clone || name, value);
+				$target.datetimepicker('setDate', oldVal);
+				return ret;
 			}
 		}
 		if (value === undefined) {
@@ -31031,6 +31089,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					date.setMilliseconds(date.getMilliseconds() - options.minInterval);
 				}
 			}
+			
 			if (date.getTime) {
 				other[method].call(other, 'option', option, date);
 			}
@@ -31056,8 +31115,10 @@ var tooltip = $.widget( "ui.tooltip", {
 		}, options, options.end));
 
 		checkDates(startTime, endTime);
+		
 		selected(startTime, endTime, 'minDate');
 		selected(endTime, startTime, 'maxDate');
+
 		return $([startTime.get(0), endTime.get(0)]);
 	};
 
@@ -31066,9 +31127,9 @@ var tooltip = $.widget( "ui.tooltip", {
 	 * @param  {Object} err pass any type object to log to the console during error or debugging
 	 * @return {void}
 	 */
-	$.timepicker.log = function (err) {
+	$.timepicker.log = function () {
 		if (window.console) {
-			window.console.log(err);
+			window.console.log.apply(window.console, Array.prototype.slice.call(arguments));
 		}
 	};
 
@@ -31102,7 +31163,7 @@ var tooltip = $.widget( "ui.tooltip", {
 	/*
 	* Keep up with the version
 	*/
-	$.timepicker.version = "1.4.6";
+	$.timepicker.version = "1.5.0";
 
 })(jQuery);
 
