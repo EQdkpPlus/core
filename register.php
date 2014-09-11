@@ -327,7 +327,7 @@ class Register extends page_generic {
 					$bodyvars = array(
 						'USERNAME' => $row['username'],
 					);
-					if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
+					if($this->email->SendMailFromAdmin($this->crypt->decrypt($row['user_email']), $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
 						$success_message = $this->user->lang('account_activated_admin');
 					}else{
 						$success_message = $this->user->lang('email_subject_send_error');
