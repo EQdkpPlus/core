@@ -114,7 +114,7 @@ class Manage_Raid_Groups extends page_generic {
 			foreach($group_post as $key=>$group) {
 				$standard = ($this->in->get('raid_groups_standard') == $group['id']) ? 1 : 0;
 				$func = (in_array($group['id'], $id_list)) ? 'update_grp' : 'add_grp';
-				$retu[] = $this->pdh->put('raid_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $key));
+				$retu[] = $this->pdh->put('raid_groups', $func, array($group['id'], $group['name'], $group['color'], $group['desc'], $standard, $key));
 				$names[] = $group['name'];
 				$add_name = (in_array($group['id'], $id_list)) ? '' : $group['name'];
 			}
@@ -184,14 +184,15 @@ class Manage_Raid_Groups extends page_generic {
 		
 		foreach($grps as $id => $name){
 			$this->tpl->assign_block_vars('raid_groups', array(
-				'KEY'	=> $key,
-				'ID'	=> $id,
-				'NAME'	=> $name,
-				'DESC'	=> $this->pdh->get('raid_groups', 'desc', array($id)),
-				'USER_COUNT'	=> $this->pdh->get('raid_groups_members', 'groupcount', array($id)),
-				'S_DELETABLE' => ($this->pdh->get('raid_groups', 'deletable', array($id))) ? true : false,
-				'STANDARD'	=> ($this->pdh->get('raid_groups', 'standard', array($id))) ? 'checked="checked"' : '',
-				'S_IS_GRPLEADER' => $this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $id)),
+				'KEY'				=> $key,
+				'ID'				=> $id,
+				'NAME'				=> $name,
+				'DESC'				=> $this->pdh->get('raid_groups', 'desc', array($id)),
+				'COLOR'				=> $this->jquery->colorpicker('raidgroup_'.$key, $this->pdh->get('raid_groups', 'color', array($id)), 'raid_groups['.$key.'][color]'),
+				'USER_COUNT'		=> $this->pdh->get('raid_groups_members', 'groupcount', array($id)),
+				'S_DELETABLE'		=> ($this->pdh->get('raid_groups', 'deletable', array($id))) ? true : false,
+				'STANDARD'			=> ($this->pdh->get('raid_groups', 'standard', array($id))) ? 'checked="checked"' : '',
+				'S_IS_GRPLEADER'	=> $this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $id)),
 			));
 			$key++;
 			$new_id = ($id >= $new_id) ? $id+1 : $new_id;
@@ -312,6 +313,7 @@ class Manage_Raid_Groups extends page_generic {
 						'id'		=> $this->in->get('raid_groups:'.$key.':id',0),
 						'name'		=> $this->in->get('raid_groups:'.$key.':name',''),
 						'desc'		=> $this->in->get('raid_groups:'.$key.':desc',''),
+						'color'		=> $this->in->get('raid_groups:'.$key.':color',''),
 						'deletable'	=> $this->in->get('raid_groups:'.$key.':deletable',false)
 					);
 				}
@@ -332,6 +334,7 @@ class Manage_Raid_Groups extends page_generic {
 						'id'		=> $this->in->get('raid_groups:'.$key.':id',0),
 						'name'		=> $this->in->get('raid_groups:'.$key.':name',''),
 						'desc'		=> $this->in->get('raid_groups:'.$key.':desc',''),
+						'color'		=> $this->in->get('raid_groups:'.$key.':color',''),
 						'deletable'	=> $this->in->get('raid_groups:'.$key.':deletable',false)
 					);
 				}

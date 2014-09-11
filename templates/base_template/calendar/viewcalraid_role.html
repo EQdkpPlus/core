@@ -45,7 +45,7 @@
 												<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}"<!-- ENDIF --> href="../viewcharacter.php{SID}&amp;member_id={raidstatus.classes.status.MEMBERID}" target="_blank">{raidstatus.classes.status.NAME}</a>
 												<!-- IF SHOW_RANDOMVALUE -->
 												<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
-											  	[{raidstatus.classes.status.RANDOM}]
+												[{raidstatus.classes.status.RANDOM}]
 												<!-- ENDIF -->
 												<!-- ENDIF -->
 											</span>
@@ -57,7 +57,7 @@
 											<!-- ENDIF -->
 											<!-- ENDIF -->
 											<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
-											<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}"></i>
+											<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
 											<!-- ENDIF -->
 											<!-- IF IS_OPERATOR -->
 											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-charadmintt-id="member_{raidstatus.classes.status.MEMBERID}"></span>

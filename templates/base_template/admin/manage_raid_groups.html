@@ -86,6 +86,7 @@
 			<th colspan="2" width="20" class="nowrap">{L_action}</th>
 			<th>{L_name}</th>
 			<th>{L_description}</th>
+			<th>{L_groupcolor}</th>
 			<th width="50" class="nowrap">{L_group_members}</th>
 			<th>{L_default_group}</th>
 		</tr>
@@ -101,8 +102,9 @@
 				<a href="javascript:delete_single_warning({raid_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				<!-- ENDIF -->
 			</td>
-			<td><input type="text" name="raid_groups[{raid_groups.KEY}][name]" size="40" maxlength="50" value="{raid_groups.NAME}" class="maininput" style="width:95%" /></td>    
+			<td><input type="text" name="raid_groups[{raid_groups.KEY}][name]" size="40" maxlength="50" value="{raid_groups.NAME}" class="maininput" style="width:95%" /></td>
 			<td><input type="text" name="raid_groups[{raid_groups.KEY}][desc]" size="50" maxlength="75" value="{raid_groups.DESC}" class="maininput" style="width:95%" /></td>
+			<td>{raid_groups.COLOR}</td>
 			<td>{raid_groups.USER_COUNT}</td>
 			<td width="50" class="nowrap"><input type="radio" value="{raid_groups.ID}" name="raid_groups_standard" {raid_groups.STANDARD} /></td>
 		</tr>
@@ -123,7 +125,7 @@
 			<td align="center"></td>
 			<td align="center"></td>
 			<td align="center"></td>
-			<td><input type="hidden" name="raid_groups[KEY][id]" value="ID" /><input type="text" name="raid_groups[KEY][name]" size="40" maxlength="50" value="NAME" class="maininput" style="width:95%" /></td>    
+			<td><input type="hidden" name="raid_groups[KEY][id]" value="ID" /><input type="text" name="raid_groups[KEY][name]" size="40" maxlength="50" value="NAME" class="maininput" style="width:95%" /></td>
 			<td><input type="text" name="raid_groups[KEY][desc]" size="50" maxlength="75" value="DESC" class="maininput" style="width:95%" /></td>
 			<td></td>
 			<td width="50" class="nowrap"></td>
@@ -157,7 +159,7 @@
 		<!-- IF raid_groups.S_IS_GRPLEADER -->
 		<tr>
 			<td align="center"><a href="manage_raid_groups.php{SID}&amp;g={raid_groups.ID}&amp;edit=true" title="{L_manage_raid_group}"><i class="fa fa-user fa-lg"></i></a></td>
-			<td>{raid_groups.NAME}</td>    
+			<td>{raid_groups.NAME}</td>
 			<td>{raid_groups.DESC}</td>
 			<td>{raid_groups.USER_COUNT}</td>
 		</tr>

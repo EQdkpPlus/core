@@ -722,6 +722,7 @@ $lang = array(
 	"delete_selected_group" => 'Delete selected groups',
 	"add_user_group" => 'Add a user group',
 	"add_raid_group" => 'Add a raid group',
+	"groupcolor" => "Group color",
 	"del_user_from_group_success" => 'The selected users were successfully deleted from the group.',
 	"add_user_to_group_success" => 'The selected users were successfully added to the group.',
 	"confirm_delete_groups" => 'Are you sure that you want to delete these user groups?',

@@ -23,7 +23,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_raid_groups')) {
 	class pdh_w_raid_groups extends pdh_w_generic{
 
-		public function add_grp($id, $name, $desc='', $standard=0, $sortid=0,$deletable=1) {
+		public function add_grp($id, $name, $color, $desc='', $standard=0, $sortid=0,$deletable=1) {
 			
 			$arrSet = array(
 				'groups_raid_id' 		=> $id,
@@ -32,6 +32,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 				'groups_raid_deletable' => $deletable,
 				'groups_raid_default'	=> $standard,
 				'groups_raid_sortid'	=> $sortid,
+				'groups_raid_color'		=> $color
 			);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __groups_raid :p")->set($arrSet)->execute();
@@ -43,9 +44,10 @@ if(!class_exists('pdh_w_raid_groups')) {
 			return true;
 		}
 
-		public function update_grp($id, $name='', $desc='', $standard=0, $sortid=0) {
+		public function update_grp($id, $name='', $color=0, $desc='', $standard=0, $sortid=0) {
 			$old = array();
 			$old['name']		= $this->pdh->get('raid_groups', 'name', array($id));
+			$old['color']		= $this->pdh->get('raid_groups', 'color', array($id));
 			$old['desc']		= $this->pdh->get('raid_groups', 'desc', array($id));
 			$old['standard']	= (int)$this->pdh->get('raid_groups', 'standard', array($id));
 			$old['sortid']		= (int)$this->pdh->get('raid_groups', 'sortid', array($id));
@@ -67,6 +69,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 					'groups_raid_desc'		=> $desc,
 					'groups_raid_default'	=> $standard,
 					'groups_raid_sortid'	=> $sortid,
+					'groups_raid_color'		=> $color
 				);
 				
 				$objQuery = $this->db->prepare("UPDATE __groups_raid :p WHERE groups_raid_id=?")->set($arrSet)->execute($id);
