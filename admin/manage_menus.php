@@ -315,19 +315,22 @@ class Manage_Menus extends page_generic {
 		$drpdwn_rights[0] = $this->user->lang('cl_all');
 		ksort($drpdwn_rights);
 		
-		$this->tpl->assign_vars(array(				
+		$arrLinkTypes = array('internal' => $this->user->lang('link_type_internal'), 'external' => $this->user->lang('link_type_external'));
+		
+		$arrLinkCategories = $this->build_link_categories();
+		if (count($arrLinkCategories)) $arrLinkTypes = array_merge($arrLinkTypes, $arrLinkCategories);
+		
+		$this->tpl->assign_vars(array(		
 			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
 			'DD_LINK_WINDOW'		=> new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')),
 			'MS_LINK_VISIBILITY'	=> $this->jquery->MultiSelect("editlink-visibility", $drpdwn_rights, 0),
 			'DD_LINK_VISIBILITY'	=> new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')),
-			'DD_LINK_TYPE'			=> new hdropdown('link_type', array('options' => array('internal' => $this->user->lang('link_type_internal'), 'external' => $this->user->lang('link_type_external')), 'class' => 'link_type')),
+			'DD_LINK_TYPE'			=> new hdropdown('link_type', array('options' => $arrLinkTypes, 'class' => 'link_type')),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
 			'DD_ARTICLES'			=> new hdropdown('editlink-article', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')),
 		));
-		
-		
 				
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_menus'),
@@ -343,7 +346,7 @@ class Manage_Menus extends page_generic {
 			if ( !is_array($v) )continue;
 
 			if (!isset($v['childs'])){
-				if (!$this->check_for_hidden_article($v)) {
+				if (!$this->check_for_hidden_article($v) && (isset($v['article']) || isset($v['category']))) {
 					if (isset($v['category'])){
 						$arrOut[$v['_hash']] = $this->pdh->get('article_categories', 'name_prefix', array($v['id'])).$this->pdh->get('article_categories', 'name', array($v['id']));
 					} else {
@@ -358,7 +361,7 @@ class Manage_Menus extends page_generic {
 	
 	private function build_menu_ol(){
 		$arrItems = $this->core->build_menu_array(true);
-			
+
 		$html  = '<ol class="sortable">';
 		$id = 0;
 		foreach($arrItems as $k => $v){
@@ -402,8 +405,34 @@ class Manage_Menus extends page_generic {
 	}
 	
 	private function check_for_hidden_article($arrLink){
-		if ((int)$arrLink['hidden'] && (isset($arrLink['article']) || isset($arrLink['category']))) return false;
+		if ((int)$arrLink['hidden'] && (isset($arrLink['article']) || isset($arrLink['category']) || isset($arrLink['default_hide']))) return false;
 		return true;
+	}
+	
+	private function build_link_categories(){
+		$arrItems = $this->core->build_menu_array(true);
+		
+		$arrCategories = array();
+		$arrOptions = array();
+		
+		foreach($arrItems as $k => $v){
+			if (isset($v['link_category'])) {
+				if (!isset($arrCategories[md5($v['link_category'])])){
+					$arrCategories[md5($v['link_category'])] = $this->user->lang($v['link_category']);
+				}
+				$strHash = $this->core->build_link_hash($v);
+				$arrOptions[md5($v['link_category'])][] =  $v['text'];
+			}
+		}
+		
+		foreach($arrCategories as $strCategoryID => $strCategoryName){
+			$this->tpl->assign_block_vars('link_type_row', array(
+					'ID'	=> $strCategoryID,
+					'NAME'	=> $strCategoryName,
+					'DD'	=> new hdropdown('links_'.$strCategoryID, array('options' => $arrOptions[$strCategoryID])),
+			));
+		}
+		return $arrCategories;
 	}
 	
 	private function create_li($arrLink, $id){
@@ -427,7 +456,7 @@ class Manage_Menus extends page_generic {
 					<input type="hidden" value="'.$plinkid.'"  name="mainmenu['.$id.'][specialid]" class="link-specialid">
 				';
 			} else {
-				$html .= ''.$arrLink['text'].' ('.$this->user->removeSIDfromString($arrLink['link']).')';
+				$html .= ''.$arrLink['text'].' ('.$this->user->removeSIDfromString($arrLink['link']).') <i class="fa fa-trash-o fa-lg hand" title="{L_delete}" onclick="softdelete_row(this);"></i>';
 			}	
 			$html .= '
 			<input type="hidden" value="'.(($blnPluslink) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			

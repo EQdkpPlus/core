@@ -7,21 +7,36 @@
 			autoOpen: false,
 		});
 		
+		var visible_linktype =  'internal';
+		
 		$('.link_type').on('change', function(event){
 			if ($('.link_type').val() == 'internal'){
 				$('.internalLink').show();
 				$('.externalLink').hide();
+				$('.otherLinks').hide();
+				visible_linktype =  'internal';
 			} else {
-				$('.internalLink').hide();
-				$('.externalLink').show();
+				if($('.link_type').val() == 'external') {
+					$('.internalLink').hide();
+					$('.externalLink').show();
+					$('.otherLinks').hide();
+					visible_linktype =  'external';
+				} else{
+					$('.otherLinks').hide();
+					$('.internalLink').hide();
+					$('.externalLink').hide();
+					
+					visible_linktype =  $('.link_type').val();
+	
+					$('.'+$('.link_type').val()).show();
+				}
 			}
 		});
 		
 		function editMenuLink(){
 			$('.edit-menulink-trigger').on('click', function(event){
-				$('.internalLink').hide();
-				$('.externalLink').show();
 				$('.link_type').val('external');
+				$('.link_type').trigger('change');
 				
 				var parent = $(this).parent();
 				var linkid = $(this).parent().attr('data-linkid');
@@ -53,11 +68,11 @@
 		editMenuLink();
 		
 		$('#editlink-button').on('click', function(event){
-			var article = $('#editlink-article').val();			
+			var article = $('#editlink-article').val();
 			var linkid  = $('#editlink-button').val();
 			var container = $('div[data-linkid='+linkid+']');
 			
-			if (article == "") {
+			if (visible_linktype == "external") {
 				var name = $('.editlink-name').val();
 				var url = $('.editlink-url').val();
 				var window = $('.editlink-window').val();
@@ -74,13 +89,22 @@
 				
 				container.find('.edit-menulink-trigger').html(name + ' ('+url+')');
 			} else {
-				var selected_text = $("#editlink-article option:selected").text();
-				$('#list_'+linkid).remove();
+				if (visible_linktype == 'internal'){
+					var selected_text = $("#editlink-article option:selected").text();
+					$('#list_'+linkid).remove();
+				} else {
+					article = $('#links_'+visible_linktype).val();
+					selected_text = $('#links_'+visible_linktype+' option:selected').text();
+					$('#list_'+linkid).remove();
+				}
+				
 				var new_row = $('#addArticleItemTemplate').html()+"";
 				new_row = new_row.replace(/KEY/g, linkid);
 				new_row = new_row.replace(/HASH/g, article);
 				new_row = new_row.replace(/TEXT/g, selected_text);
 				$(".sortable").append('<li id="list_'+linkid+'" class="mjs-nestedSortable-leaf">'+new_row+'</li>');
+				
+				hide();
 			}
 			
 			$( "#dialog-edit-menuitem" ).dialog( "close" );
@@ -160,6 +184,17 @@
 		}
 	}
 	
+	function softdelete_row(obj){
+		var container = $(obj).closest('div');
+		var siblings = container.siblings('ol');
+		if (siblings.length){
+			alert("{L_pluslink_delete_warning}");
+		} else {
+			$(obj).closest('li').find('.link-hidden').val(1);
+			$(obj).closest('li').hide();
+		}
+	}
+	
 	function delete_plink(pid, obj){
 		var container = $(obj).closest('div');
 		var siblings = container.siblings('ol');
@@ -202,6 +237,7 @@
 					</dd>
 				</dl>
 				</div>
+				
 				<div class="externalLink" style="display:none;">
 					<dl>
 						<dt><label>{L_menu_entry}:</label></dt>
@@ -226,6 +262,15 @@
 						<dd>{MS_LINK_VISIBILITY}</dd>
 					</dl>
 				</div>
+				
+				<!-- BEGIN link_type_row -->
+				<div class="otherLinks {link_type_row.ID}" style="display:none;">
+					<dl>
+						<dt><label>{link_type_row.NAME}:</label></dt>
+						<dd>{link_type_row.DD}</dd>
+					</dl>
+				</div>
+				<!-- END link_type_row -->
 			</fieldset>
 			<button type="button" id="editlink-button"><i class="fa fa-check"></i> {L_submit}</button>
 	</div>
@@ -253,7 +298,7 @@
 		<div data-linkid="KEY">
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;
 			<span class="link-hide eye"></span>&nbsp;
-			<a href="javascript:void(0);" class="edit-menulink-trigger">Neuer Link</a> <i class="fa fa-trash-o fa-lg hand" title="{L_delte}" onclick="delete_row(this);"></i>
+			<a href="javascript:void(0);" class="edit-menulink-trigger">Neuer Link</a> <i class="fa fa-trash-o fa-lg hand" title="{L_delete}" onclick="delete_row(this);"></i>
 			<input type="hidden" value=""  name="mainmenu[KEY][url]" class="link-url">
 			<input type="hidden" value=""  name="mainmenu[KEY][name]" class="link-name">
 			<input type="hidden" value=""  name="mainmenu[KEY][window]" class="link-window">
@@ -271,7 +316,7 @@
 		<div data-linkid="KEY">
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;
 			<span class="link-hide eye"></span>&nbsp;
-			TEXT
+			TEXT <i class="fa fa-trash-o fa-lg hand" title="{L_delete}" onclick="softdelete_row(this);"></i>
 			<input type="hidden" value="normal"  name="mainmenu[KEY][type]" class="link-type">			
 			<input type="hidden" value="0"  name="mainmenu[KEY][hidden]" class="link-hidden">
 			<input type="hidden" value="HASH"  name="mainmenu[KEY][id]" class="link-id">
