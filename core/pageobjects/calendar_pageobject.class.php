@@ -134,7 +134,7 @@ class calendar_pageobject extends pageobject {
 
 	public function export_tooltip(){
 		// first, lets generate the link
-		$exportlink	= $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
+		$exportlink	= $this->env->link.'exchange.php'.$this->SID.'out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
 
 		// build the output
 		echo '<form><fieldset class="settings mediumsettings">
@@ -328,7 +328,7 @@ class calendar_pageobject extends pageobject {
 
 		// hooks
 		if ($this->hooks->isRegistered('calendar')){
-			$arrHooksData = $this->hooks->process('calendar', $arrHooksData, false);
+			$arrHooksData = $this->hooks->process('calendar',array('start' => $range_start, 'end' => $range_end), false);
 			if (count($arrHooksData) > 0){
 				$event_json = array_merge($arrHooksData, $event_json);
 			}

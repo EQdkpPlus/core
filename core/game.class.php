@@ -114,11 +114,18 @@ class game extends gen_class {
 	 * @return string
 	 */
 	public function chartooltip($intCharID){
+		$tt = "";
+		
 		if ($this->type_exists('chartooltip')){
-			$tt = $this->gameinfo()->chartooltip($intCharID);
-			return str_replace($this->root_path, register('env')->link, $tt);
+			$tt = $this->gameinfo()->chartooltip($intCharID);		
 		}
-		return '';
+		
+		if ($this->hooks->isRegistered('game_chartooltip')){
+			$hook_tt = $this->hooks->process('game_chartooltip', array('tooltip' => $tt, 'char_id' => $intCharID), true);
+			$tt = $hook_tt['tooltip'];
+		}
+		
+		return str_replace($this->root_path, register('env')->link, $tt);
 	}
 
 	/**

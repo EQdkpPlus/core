@@ -356,7 +356,7 @@ function infotooltip_js() {
 							if (cached_itts['t_'+$(this).attr('title')] != undefined){
 								return cached_itts['t_'+$(this).attr('title')];
 							} else {
-								var bla = $.get('".registry::get_const('server_path')."infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
+								var bla = $.get('".registry::get_const('server_path')."infotooltip/infotooltip_feed.php".registry::get_const('SID')."&direct=1&data='+$(this).attr('title'), response);
 								bla.success(function(data) {
 									cached_itts['t_'+mytitle] = $.trim(data);
 								});
@@ -410,7 +410,7 @@ function chartooltip_js() {
 							if (cached_charTT['t_'+$(this).attr('title')] != undefined){
 								return cached_charTT['t_'+$(this).attr('title')];
 							} else {
-								var bla = $.get('".registry::get_const('server_path')."exchange.php?out=chartooltip&charid='+$(this).attr('title'), response);
+								var bla = $.get('".registry::get_const('server_path')."exchange.php".registry::get_const('SID')."&out=chartooltip&charid='+$(this).attr('title'), response);
 								bla.success(function(data) {
 									cached_charTT['t_'+mytitle] = $.trim(data);
 								});

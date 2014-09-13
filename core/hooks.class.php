@@ -26,6 +26,7 @@ class hooks extends gen_class {
 	public static $dependencies = array('pm');
 	
 	private $hooks = array();
+	private $blnScanned = false;
 	
 	/*
 	 * Register Hook
@@ -51,12 +52,6 @@ class hooks extends gen_class {
 	 * return @array
 	 */
 	public function process($strHook, $arrParams=array(), $blnRecursive=false){
-		//Init Plugins and Portal modules for registering hooks
-		register('pm');
-		register('portal');
-		//Register global hooks
-		$this->scanGlobalHookFolder();
-		
 		if (!isset($this->hooks[$strHook])) return ($blnRecursive) ? $arrParams : array();
 		
 		$arrOutput = ($blnRecursive) ? $arrParams : array();
@@ -78,6 +73,15 @@ class hooks extends gen_class {
 	}
 	
 	public function isRegistered($strHookname){
+		if (!$this->blnScanned){
+			//Init Plugins and Portal modules for registering hooks
+			register('pm');
+			register('portal');
+			//Register global hooks
+			$this->scanGlobalHookFolder();
+			$this->blnScanned = true;
+		}
+		
 		if (isset($this->hooks[$strHookname])) return true;
 		
 		return false;
@@ -90,8 +94,10 @@ class hooks extends gen_class {
 					$path_parts = pathinfo($file);
 					$filename = str_replace("_hook", "", $path_parts['filename']);
 					$filename= str_replace(".class", "", $filename);
+					$start = strpos($filename, '_');
 					
-					$strHook = substr($filename, strrpos($filename, '_')+1);
+					
+					$strHook = substr($filename, $start+1);
 					$strClassname = str_replace(".class", "", $path_parts['filename']);
 					$strMethodname = $strHook;
 					$strClasspath ='core/hooks';

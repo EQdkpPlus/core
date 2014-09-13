@@ -613,6 +613,18 @@ class calendarevent_pageobject extends pageobject {
 								$membertooltip[]	= $this->user->lang('twinks').': '.implode(', ', $twinknames);
 							}
 						}
+						
+						//Hook for Tooltip:
+						if ($this->hooks->isRegistered('calendarevent_chartooltip', array('member_id' => $memberid))){
+							$arrPluginsHooks = $this->hooks->process('calendarevent_chartooltip');
+							if (is_array($arrPluginsHooks)){
+								foreach ($arrPluginsHooks as $plugin => $value){
+									if (is_array($value)){
+										$membertooltip = array_merge($membertooltip, $value);
+									}
+								}
+							}
+						}
 
 						$drpdwn_twinks = $drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->twinks[$memberid]));
 						if($eventdata['extension']['raidmode'] == 'role'){
