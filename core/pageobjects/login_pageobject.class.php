@@ -24,10 +24,10 @@ class login_pageobject extends pageobject {
 			//Process
 			'login' 				=> array('process' => 'process_login'),
 			'logout' 				=> array('process' => 'process_logout','csrf' => true),
-			'lostpassword'			=> array('process' => 'display_lost_password'),
-			'newpassword'			=> array('process' => 'display_new_password'),
-			'new_password' 			=> array('process' => 'process_new_password', 'csrf' => true),
 			'lost_password' 		=> array('process' => 'process_lost_password', 'csrf' => true),
+			'lostpassword'			=> array('process' => 'display_lost_password'),
+			'new_password' 			=> array('process' => 'process_new_password', 'csrf' => true),
+			'newpassword'			=> array('process' => 'display_new_password'),
 			'resendactivation'		=> array('process' => 'redirect_resend_activation'),
 		);
 		parent::__construct(false, $handler);
