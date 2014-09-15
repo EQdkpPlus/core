@@ -316,7 +316,7 @@ class form extends gen_class {
 						$values[$name] = self::value($name, $options);
 					} catch (FormException $e) {
 						$this->error = true;
-						$this->jquery->notify($e->getMessage(), array('title' => $this->user->lang('fv_form_error'), 'theme' => 'error'));
+						$this->core->message($e->getMessage(), $this->user->lang('fv_form_error'), 'red');
 						$values[$name] = '';
 					}
 				}
@@ -329,7 +329,7 @@ class form extends gen_class {
 						$values[$name] = self::value($name, $options);
 					} catch (FormException $e) {
 						$this->error = true;
-						$this->jquery->notify($e->getMessage(), array('title' => $this->user->lang('fv_form_error'), 'theme' => 'error'));
+						$this->core->message($e->getMessage(), $this->user->lang('fv_form_error'), 'red');
 						$values[$name] = '';
 					}
 				}
