@@ -116,7 +116,7 @@ if(!class_exists('page_generic')){
 		}
 		
 		protected function process() {
-			foreach($this->handler as $key => $process) {
+			foreach($this->handler as $key => $process) {				
 				if($this->in->exists($key) AND !is_array(current($process))) {
 					if($this->pre_check && $process['check'] !== false) $this->user->check_auth($process['check']);
 					

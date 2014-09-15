@@ -126,16 +126,26 @@ class MyMailer extends PHPMailer {
 		if($this->myoptions['template_type'] == 'input'){
 			$body   = $templatename;
 		}else{
+			//Specific Email Template
 			if (strpos($templatename, $this->root_path) === 0){
-				$body   = $this->getFile($templatename);
+				$content   = $this->getFile($templatename);
 			} else {
-				$body   = $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
+				$content    = $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
 			}
+			
+			//General Body Email Template
+			$intDefaultTemplate = register('config')->get('default_template');
+			$strTemplatePath = register('pdh')->get('styles', 'templatepath', array($intDefaultTemplate));
+				
+			if (is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){
+				$body = $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
+				$body = str_replace('{CONTENT}', $content, $body);
+			} else $body = $content;
 		}
-		$body   = str_replace("[\]",'',$body);
+		$body    = str_replace("[\]",'',$body );
 		if(is_array($inputs)){
 			foreach($inputs as $name => $value){
-				$body = str_replace("{".$name."}",$value,$body);
+				$body  = str_replace("{".$name."}",$value,$body );
 			}
 		}
 		return $body;
