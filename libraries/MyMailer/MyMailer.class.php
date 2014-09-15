@@ -73,7 +73,7 @@ class MyMailer extends PHPMailer {
 	}
 
 	public function Set_Language($lang){
-		$this->mydeflang = $lang;
+		$this->mydeflang	= $lang;
 	}
 
 	public function generateSubject($input){
@@ -117,35 +117,48 @@ class MyMailer extends PHPMailer {
 	/**
 	* Template
 	*
-	* @param $templatename	Name of the Email template to use
-	* @param $inputs				Array with input variables to change in mail body
+	* @param $templatename		Name of the Email template to use
+	* @param $inputs			Array with input variables to change in mail body
 	* @return traue/false
 	*/
 	private function Template($templatename, $inputs){
 		// Check if the template is from a file or not
 		if($this->myoptions['template_type'] == 'input'){
-			$body   = $templatename;
+			$body	= $templatename;
 		}else{
 			//Specific Email Template
 			if (strpos($templatename, $this->root_path) === 0){
-				$content   = $this->getFile($templatename);
+				$content	= $this->getFile($templatename);
 			} else {
-				$content    = $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
+				$content	= $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
 			}
 			
 			//General Body Email Template
-			$intDefaultTemplate = register('config')->get('default_template');
-			$strTemplatePath = register('pdh')->get('styles', 'templatepath', array($intDefaultTemplate));
+			$intDefaultTemplate	= register('config')->get('default_template');
+			$strTemplatePath	= register('pdh')->get('styles', 'templatepath', array($intDefaultTemplate));
 				
-			if (is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){
-				$body = $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
-				$body = str_replace('{CONTENT}', $content, $body);
+			if(is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){
+				// get the logo
+				if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
+					$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').$this->config->get('custom_logo');
+				}else{
+					$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').'templates/eqdkp_modern/images/logo.svg';
+				}
+
+				// replace the stuff
+				$body	= $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
+				$body	= str_replace('{CONTENT}', $content, $body);
+				$body	= str_replace('{LOGO}', $headerlogo, $body);
+				$body	= str_replace('{PLUSVERSION}', VERSION_EXT, $body);
+				$body	= str_replace('{SUBJECT}', $this->Subject, $body);
+				$body	= str_replace('{PLUSLINK}', $this->pfh->FolderPath('','files', 'absolute'), $body);
+				
 			} else $body = $content;
 		}
-		$body    = str_replace("[\]",'',$body );
+		$body	= str_replace("[\]",'',$body );
 		if(is_array($inputs)){
 			foreach($inputs as $name => $value){
-				$body  = str_replace("{".$name."}",$value,$body );
+				$body	= str_replace("{".$name."}",$value,$body );
 			}
 		}
 		return $body;
@@ -160,12 +173,12 @@ class MyMailer extends PHPMailer {
 	* @return traue/false
 	*/
 	private function GenerateMail($subject, $templatename, $bodyvars, $from){
-		$this->From     = $from;
+		$this->From		= $from;
 		$this->CharSet	= 'UTF-8';
-		$this->FromName = $this->dkpname;
-		$this->Subject  = $this->generateSubject($subject);
+		$this->FromName	= $this->dkpname;
+		$this->Subject	= $this->generateSubject($subject);
 		$tmp_body		= $this->Template($templatename, $bodyvars);
-		$signature 		= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
+		$signature		= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
 
 		if($this->myoptions['mail_type'] == 'text'){
 			// Text Mail
@@ -173,7 +186,7 @@ class MyMailer extends PHPMailer {
 		}else{
 			// HTML Mail
 			$this->MsgHTML($tmp_body.nl2br($signature));
-			$this->AltBody = $this->nohtmlmssg;
+			$this->AltBody	= $this->nohtmlmssg;
 		}
 		
 		if (DEBUG == 4){
@@ -203,9 +216,9 @@ class MyMailer extends PHPMailer {
 				$this->Sendmail	= $this->config->get('lib_email_sendmail_path');
 			}
 		}else{
-			$this->Mailer   = 'mail';
+			$this->Mailer	= 'mail';
 		}
-		$sendput = $this->Send();
+		$sendput			= $this->Send();
 		$this->ClearAddresses();
 		return $sendput;
 	}

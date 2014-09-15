@@ -1,13 +1,30 @@
-Hallo {USERNAME},<br/>
-Es wurde ein neuer Raid mit dem Namen {RAID_NAME} hinzugefügt.<br/>
-<br/>
-Raidname: {RAID_NAME}<br/>
-Raidleiter: {RAIDLEADER}<br/>
-Datum: {RAID_DATE}<br/>
-Notiz: {RAID_NOTE}<br/>
-<br/>
-Bitte melde dich hier an:<br/>
-<a href="{RAID_LINK}">Zum Raid</a><br/>
-<br/>
-Danke<br/>
-Die Raidleitung
+<div>Hallo {USERNAME},</div>
+<div>Es wurde ein neuer Raid mit dem Namen {RAID_NAME} hinzugefügt.</div>
+<div>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Wert</th>
+		</tr>
+		<tr>
+			<td>Raidname</td>
+			<td>{RAID_NAME}</td>
+		</tr>
+		<tr>
+			<td>Raidleiter</td>
+			<td>{RAIDLEADER}</td>
+		</tr>
+		<tr>
+			<td>Datum</td>
+			<td>{RAID_DATE}</td>
+		</tr>
+		<tr>
+			<td>Notiz</td>
+			<td>{RAID_NOTE}</td>
+		</tr>
+	</table>
+</div>
+<div>Bitte melde dich hier an:</div>
+<div><a href="{RAID_LINK}">Zum Raid</a></div><br/>
+<div>Danke</div>
+<div>Die Raidleitung</div>

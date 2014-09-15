@@ -1,11 +1,26 @@
-Hello {USERNAME},<br/>
-the Raid {RAID_NAME} at {DATE} has been  {CLOSEDOPEN}<br/>
-<br/>
-Raidleader: {RAIDLEADER}<br/>
-Raidname: {RAID_NAME}<br/>
-Date: {DATE}<br/>
-<br/>
-You will get more information here:<br/>
-<a href="{RAID_LINK}">Get to this Raid</a><br/>
-Thanks<br/>
-the Raidleaders
+<div>Hello {USERNAME},</div>
+<div>the Raid {RAID_NAME} at {DATE} has been {CLOSEDOPEN}.</div><br/>
+<div>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+		<tr>
+			<td>Raidleader</td>
+			<td>{RAIDLEADER}</td>
+		</tr>
+		<tr>
+			<td>Raidname</td>
+			<td>{RAID_NAME}</td>
+		</tr>
+		<tr>
+			<td>Date</td>
+			<td>{DATE}</td>
+		</tr>
+	</table>
+</div>
+<div>You will get more information here:</div>
+<div><a href="{RAID_LINK}">Get to this Raid</a></div>
+<div>Thanks,</div>
+<div>the Raidleaders</div>

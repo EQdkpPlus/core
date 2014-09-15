@@ -1,13 +1,30 @@
-Hello {USERNAME},<br/>
-a new Raid with title {RAID_NAME} has been created.<br/>
-<br/>
-Raidname: {RAID_NAME}<br/>
-Raidleader: {RAIDLEADER}<br/>
-Date: {RAID_DATE}<br/>
-Note: {RAID_NOTE}<br/>
-<br/>
-Please sign in here:<br/>
-<a href="{RAID_LINK}">Get to this Raid</a><br/>
-<br/>
-Thanks,<br/>
-the Raidleaders
+<div>Hello {USERNAME},</div>
+<div>a new Raid with title {RAID_NAME} has been created.</div>
+<div>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Value</th>
+		</tr>
+		<tr>
+			<td>Raidname</td>
+			<td>{RAID_NAME}</td>
+		</tr>
+		<tr>
+			<td>Raidleader</td>
+			<td>{RAIDLEADER}</td>
+		</tr>
+		<tr>
+			<td>Date</td>
+			<td>{RAID_DATE}</td>
+		</tr>
+		<tr>
+			<td>Note</td>
+			<td>{RAID_NOTE}</td>
+		</tr>
+	</table>
+</div>
+<div>Please sign in here:</div>
+<div><a href="{RAID_LINK}">Get to this Raid</a></div><br/>
+<div>Thanks,</div>
+<div>the Raidleaders</div>
