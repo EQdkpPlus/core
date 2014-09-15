@@ -291,7 +291,7 @@ class register_pageobject extends pageobject {
 				// Email them their new password
 				$bodyvars = array(
 					'USERNAME'		=> $row['username'],
-					'DATETIME'		=> $this->time->user_date(false, true),
+					'DATETIME'		=> $this->time->user_date($this->time->time, true),
 					'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
 				);
 

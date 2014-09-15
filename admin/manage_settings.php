@@ -414,6 +414,7 @@ class mmocms_settings extends page_generic {
 						'required'		=> false,
 						'pattern'		=> '',
 						'size'			=> 30,
+						'set_value'		=> true,
 					),
 					'lib_email_signature'	=> array(
 						'type'			=> 'radio',

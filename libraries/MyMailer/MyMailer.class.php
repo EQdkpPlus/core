@@ -134,7 +134,7 @@ class MyMailer extends PHPMailer {
 			}
 			
 			//General Body Email Template
-			$intDefaultTemplate	= register('config')->get('default_template');
+			$intDefaultTemplate	= register('config')->get('default_style');
 			$strTemplatePath	= register('pdh')->get('styles', 'templatepath', array($intDefaultTemplate));
 				
 			if(is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){

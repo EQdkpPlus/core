@@ -226,10 +226,11 @@ class login_pageobject extends pageobject {
 				}
 
 				// Email them their new password
+
 				$bodyvars = array(
 						'USERNAME'		=> $row['username'],
-						'DATETIME'		=> $this->time->user_date(false, true),
-						'U_ACTIVATE'	=> $this->env->link . $this->controller_path_plain. '/Login/NewPassword/?key=' . $user_key,
+						'DATETIME'		=> $this->time->user_date($this->time->time, true),
+						'U_ACTIVATE'	=> $this->env->link . $this->controller_path_plain. 'Login/NewPassword/?key=' . $user_key,
 				);
 
 				if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {
