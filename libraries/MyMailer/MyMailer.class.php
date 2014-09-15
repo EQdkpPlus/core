@@ -22,6 +22,8 @@ if ( !defined('EQDKP_INC') ){
 
 // Include Needed files...
 include_once('class.phpmailer.php');
+include_once('class.pop3.php');
+include_once('class.smtp.php');
 
 /**************** OPTIONS HELP *****************
 	$options = array(
@@ -142,7 +144,7 @@ class MyMailer extends PHPMailer {
 				if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
 					$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').$this->config->get('custom_logo');
 				}else{
-					$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').'templates/eqdkp_modern/images/logo.svg';
+					$headerlogo	= $this->env->buildlink().'templates/eqdkp_modern/images/logo.svg';
 				}
 
 				// replace the stuff
@@ -151,9 +153,9 @@ class MyMailer extends PHPMailer {
 				$body	= str_replace('{LOGO}', $headerlogo, $body);
 				$body	= str_replace('{PLUSVERSION}', VERSION_EXT, $body);
 				$body	= str_replace('{SUBJECT}', $this->Subject, $body);
-				$body	= str_replace('{PLUSLINK}', $this->pfh->FolderPath('','files', 'absolute'), $body);
-				
-			} else $body = $content;
+				$body	= str_replace('{PLUSLINK}', $this->env->buildlink(), $body);
+				$body	= str_replace('{SIGNATURE}', nl2br($this->Signature), $body);
+			} else $body = $content.nl2br($this->Signature);
 		}
 		$body	= str_replace("[\]",'',$body );
 		if(is_array($inputs)){
@@ -173,19 +175,19 @@ class MyMailer extends PHPMailer {
 	* @return traue/false
 	*/
 	private function GenerateMail($subject, $templatename, $bodyvars, $from){
-		$this->From		= $from;
-		$this->CharSet	= 'UTF-8';
-		$this->FromName	= $this->dkpname;
-		$this->Subject	= $this->generateSubject($subject);
-		$tmp_body		= $this->Template($templatename, $bodyvars);
-		$signature		= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
+		$this->From			= $from;
+		$this->CharSet		= 'UTF-8';
+		$this->FromName		= $this->dkpname;
+		$this->Subject		= $this->generateSubject($subject);
+		$this->Signature	= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
+		$tmp_body			= $this->Template($templatename, $bodyvars);
 
 		if($this->myoptions['mail_type'] == 'text'){
 			// Text Mail
-			$this->Body	= $tmp_body.$signature;
+			$this->Body		= $tmp_body.$this->Signature;
 		}else{
 			// HTML Mail
-			$this->MsgHTML($tmp_body.nl2br($signature));
+			$this->MsgHTML($tmp_body);
 			$this->AltBody	= $this->nohtmlmssg;
 		}
 		

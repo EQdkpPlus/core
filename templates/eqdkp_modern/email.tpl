@@ -64,6 +64,9 @@
 				padding:10px;
 				color: #fff;
 			}
+			#signature{
+				margin-top:1em;
+			}
 			h1, h2, h3 {
 				font-family: 'Trebuchet MS',Arial,sans-serif;
 				font-weight: bold;
@@ -115,6 +118,11 @@
 				<div id="content">
 					<h1>{SUBJECT}</h1>
 					{CONTENT}
+				</div>
+				
+				<div id="signature">
+					{SIGNATURE}
+				</div>
 			</div>
 		</div>
 		<div id="footer">
