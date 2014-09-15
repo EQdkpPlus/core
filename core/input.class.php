@@ -243,7 +243,7 @@ class input extends gen_class {
 	* @return float
 	*/
 	public function floatvalue($value) {
-		return floatval(preg_replace('#^([-]*[0-9\.,]+?)((\.|,)([0-9-]+))*$#e', "str_replace(array('.', ','), '', '\\1') . '.\\4'", $value));
+		return floatval(preg_replace('#([-]?)([0-9]+)([\.,]?)([0-9]*)#', "\\1\\2.\\4", $value));
 	}
 
 	/**
