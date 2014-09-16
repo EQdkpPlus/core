@@ -127,11 +127,12 @@
 			//]]>
 		</script>
 	</head>
-	<body id="top" class="responsive <!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}">
+	<body id="top" class="responsive <!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF -->">
 		{STATIC_HTMLCODE}
 		<!-- IF S_NORMAL_HEADER -->
 		<header>
 			<div id="personalArea">
+				<div id="personalAreaInner">
 				<div id="personalAreaUser">
 					<!-- IF not S_LOGGED_IN -->
 					<ul>
@@ -256,9 +257,10 @@
 					</ul>
 				</div>
 				<div class="clear"></div>
+				</div>
 			</div> <!-- close personalArea -->
 		</header>
-		<div id="wrapper" <!-- IF T_PORTAL_WIDTH -->class="fixed_width"<!-- ENDIF -->>
+		<div id="wrapper">
 			
 		<header>
 			<div id="header">

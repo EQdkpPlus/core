@@ -392,6 +392,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery);
 		
 		$objStatement = $this->resConnection->query($this->strQuery);
+		
+		$this->resConnection->affectedRows = $objStatement->rowCount();
 		if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
 		return @$this->resConnection->query($this->strQuery);
 	}
@@ -424,7 +426,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	 */
 	protected function affected_rows()
 	{
-		return @$this->resConnection->rowCount();
+		return @$this->resConnection->affectedRows;
 	}
 
 

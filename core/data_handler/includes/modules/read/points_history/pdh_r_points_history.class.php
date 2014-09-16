@@ -148,14 +148,14 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
 					foreach($twinks as $twinkid){
-						if(is_array($this->points[$twinkid][$multidkpid]['single']['earned'])){
+						if(isset($this->points[$twinkid][$multidkpid]) && isset($this->points[$twinkid][$multidkpid]['single']['earned'])){
 							foreach($this->points[$twinkid][$multidkpid]['single']['earned'] as $event_id => $earned){
 								if(!is_array($this->points[$memberid][$multidkpid]['multi']['earned'][$event_id])) $this->points[$memberid][$multidkpid]['multi']['earned'][$event_id] = array(); 
 								$this->points[$memberid][$multidkpid]['multi']['earned'][$event_id] = array_merge($this->points[$memberid][$multidkpid]['multi']['earned'][$event_id], $earned);
 							}
 						}
 						
-						if(is_array($this->points[$twinkid][$multidkpid]['single']['spent'])){
+						if(isset($this->points[$twinkid][$multidkpid]) && isset($this->points[$twinkid][$multidkpid]['single']['spent'])){
 							foreach($this->points[$twinkid][$multidkpid]['single']['spent'] as $event_id => $itempools) {
 								foreach($itempools as $itempool_id => $spent){
 									if(!is_array($this->points[$memberid][$multidkpid]['multi']['spent'][ $event_id][$itempool_id])) $this->points[$memberid][$multidkpid]['multi']['spent'][ $event_id][$itempool_id] = array();
@@ -165,9 +165,9 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 							}
 						}
 						
-						if(is_array($this->points[$twinkid][$multidkpid]['single']['adjustment'])){
+						if(isset($this->points[$twinkid][$multidkpid]) && isset($this->points[$twinkid][$multidkpid]['single']['adjustment'])){
 							foreach($this->points[$twinkid][$multidkpid]['single']['adjustment'] as $event_id => $adjustment){
-								if(!is_array($this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id])) $this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id] = array();
+								if(!isset($this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id])) $this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id] = array();
 								$this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id] = array_merge($this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id], $adjustment);
 							}
 						}

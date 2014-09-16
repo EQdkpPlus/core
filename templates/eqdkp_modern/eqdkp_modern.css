@@ -102,6 +102,7 @@ body {
 	font-size: 13px;
 	font-family: Tahoma,Arial,Verdana,sans-serif;
 	color: #000000;
+	text-align: center;
 }
 
 body.simple-header {
@@ -285,23 +286,30 @@ h3 {
 	width:100%;
 }
 
+.fixed_width #wrapper {
+	min-width: T_PORTAL_WIDTH !important;
+}
+
 #wrapper {
 	margin-bottom:20px;
 	text-align: left;
 	min-width:100%;
 	display:inline-block;
+	text-align: left;
 }
 
-.fixed_width {
-	min-width: T_PORTAL_WIDTH !important;
-}
 
-.fixed_width .portal .second {
+.fixed_width #wrapper .portal .second {
 	width: T_PORTAL_WIDTH_WITHOUT_BOTH_COLUMNS !important;
 }
 
-.fixed_width .portal .second.no_third_column {
+.fixed_width #wrapper .portal .second.no_third_column {
 	width: T_PORTAL_WIDTH_WITHOUT_LEFT_COLUMN !important;
+}
+
+.fixed_width #personalAreaInner {
+	width: T_PORTAL_WIDTH !important;
+	margin: auto;
 }
 
 /* Header and Site-Titles */
