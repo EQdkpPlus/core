@@ -831,7 +831,7 @@ class core extends gen_class {
 					foreach($log as $type => $log_entries) {
 						$debug_tabs_header .= "<li><a href='#error-".$i."'><span>".$type." (".count($log_entries).")"."</span></a></li>";
 						$debug_tabs .= '<div id="error-'.$i.'">';
-						$debug_tabs .= '<table width="99%" border="0" cellspacing="1" cellpadding="0" class="colorswitch">';
+						$debug_tabs .= '<table width="99%" border="0" cellspacing="1" cellpadding="0" class="colorswitch scrollable-x">';
 						foreach($log_entries as $log_entry){
 							$debug_tabs .= '<tr><td>'.$this->pdl->html_format_log_entry($type, $log_entry).'</td></tr>';
 						}

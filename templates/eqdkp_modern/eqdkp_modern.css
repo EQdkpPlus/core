@@ -299,6 +299,7 @@ h3 {
 }
 
 
+
 .fixed_width #wrapper .portal .second {
 	width: T_PORTAL_WIDTH_WITHOUT_BOTH_COLUMNS !important;
 }
@@ -310,6 +311,15 @@ h3 {
 .fixed_width #personalAreaInner {
 	width: T_PORTAL_WIDTH !important;
 	margin: auto;
+}
+
+.fixed_width.frontend table.scrollable-x {
+	table-layout: fixed;	
+}
+
+.fixed_width.frontend table.scrollable-x tbody {
+	display: block;
+	overflow-x: auto;
 }
 
 /* Header and Site-Titles */
