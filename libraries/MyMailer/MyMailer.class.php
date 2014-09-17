@@ -141,11 +141,13 @@ class MyMailer extends PHPMailer {
 				
 			if(is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){
 				// get the logo
-				if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
-					$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').$this->config->get('custom_logo');
+				if(is_file(register('file_handler')->FolderPath('','files').register('config')->get('custom_logo'))){
+					$headerlogo	= register('file_handler')->FolderPath('','files').register('config')->get('custom_logo');
 				}else{
-					$headerlogo	= $this->env->buildlink().'templates/eqdkp_modern/images/logo.svg';
+					$headerlogo	= register('environment')->buildlink().'templates/eqdkp_modern/images/logo.svg';
 				}
+				$this->AddEmbeddedImage($headerlogo, 'headerlogo');
+				$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.svg', 'backgroundimage');
 
 				// replace the stuff
 				$body	= $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
@@ -153,7 +155,7 @@ class MyMailer extends PHPMailer {
 				$body	= str_replace('{LOGO}', $headerlogo, $body);
 				$body	= str_replace('{PLUSVERSION}', VERSION_EXT, $body);
 				$body	= str_replace('{SUBJECT}', $this->Subject, $body);
-				$body	= str_replace('{PLUSLINK}', $this->env->buildlink(), $body);
+				$body	= str_replace('{PLUSLINK}', register('environment')->buildlink(), $body);
 				$body	= str_replace('{SIGNATURE}', nl2br($this->Signature), $body);
 			} else $body = $content.nl2br($this->Signature);
 		}
