@@ -170,13 +170,14 @@ if(!class_exists('infotooltip')) {
 				$cconfig = $config;
 			}
 			$needed_configs = array(
-				'game'				=> 'default_game',
-				'icon_path'			=> 'itt_icon_loc',
-				'icon_ext'			=> 'itt_icon_ext',
-				'default_icon'		=> 'itt_default_icon',
-				'useitemlist'		=> 'itt_useitemlist',
-				'armory_region'		=> 'uc_server_loc',
-				'debug'				=> 'itt_debug',
+				'game'					=> 'default_game',
+				'icon_path'				=> 'itt_icon_loc',
+				'icon_ext'				=> 'itt_icon_ext',
+				'default_icon'			=> 'itt_default_icon',
+				'useitemlist'			=> 'itt_useitemlist',
+				'armory_region'			=> 'uc_server_loc',
+				'debug'					=> 'itt_debug',
+				'game_importer_apikey'	=> 'game_importer_apikey',
 			);
 			//only copy the "wanted" configs array('game', 'icon_path', 'icon_ext', 'default_icon', 'useitemlist', 'armory_region', 'debug', 'game_language', 'prio', 'lang_prio')
 			foreach($needed_configs as $name => $key) {
