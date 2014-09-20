@@ -139,7 +139,7 @@ if(!class_exists('pdh_w_multidkp')) {
 
 		public function delete_multidkp($id) {
 			$this->db->beginTransaction();
-			$objQuery = $this->db->prepare("DELETE FROM __multidkp WHERE multidkp_id =?")->set($id)->execute();
+			$objQuery = $this->db->prepare("DELETE FROM __multidkp WHERE multidkp_id =?")->execute($id);
 			if($objQuery) {
 				$objQuery = $this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_multi_id=?")->execute($id);
 				$retu[] = ($objQuery);
