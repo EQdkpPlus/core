@@ -117,44 +117,37 @@ class ManagePageLayouts extends page_generic {
 	}
 
 	public function add_preset() {
-		$new_preset_xml = $this->in->get('new_preset_xml', '', 'raw');
-		if ($new_preset_xml != ""){
-			try {
-				$newxml = new SimpleXMLElement($new_preset_xml);
-			} catch(Exception $e) {
-				$this->pdl->log('php_error', 'EXCEPTION', 0, $e->getMessage(), __FILE__, __LINE__);
-				$message = array('title' => $this->user->lang('error'), 'text' => $this->user->lang('lm_up_xml_error'), 'color' => 'red');
-				$this->display($message, 1, $this->in->get('new_preset_xml', '', 'raw'));
-			}
-			$arr = $this->xmltools->simplexml2array($newxml, true);
-			$changed = false;
-			$user_presets = $this->pdh->get_user_presets();
-			$user_presets_lang = $this->pdh->get_user_preset_lang();
-	
-			foreach($arr as $preset_name => $options){
-				$ps[0] = $options['module'];
-				$ps[1] = $options['tag'];
-				$cpars = array();
-				if(is_array($options['cpar'])){
-					foreach($options['cpar'] as $parameter){
-						$cpars[] = $parameter;
-					}
-				}
-				$dpars = array();
-				if(is_array($options['dpar'])){
-					foreach($options['dpar'] as $parameter){
-						$dpars[] = $parameter;
-					}
-				}
-				$ps[2] = $cpars;
-				$ps[3] = $dpars;		
-				$this->pdh->update_user_preset($preset_name, $ps, $options['lang']);
-				$changed = true;
+		$strModul = $this->in->get('pdh_r_module');
+		$strTag = $this->in->get('pdh_method');
+		
+		$arrParams = $this->in->getArray('param', 'string');
+		$arrCaption = $this->in->getArray('caption', 'string');
+		
+		$strPresetName = $strTag.'_'.substr(md5(rand()), 0, 8);
+		
+		if ($strModul !="" && $strTag != ""){
+			$strColumnTitle = $this->in->get('lang');
+			
+			$ps[0] = $strModul;
+			$ps[1] = $strTag;
+			
+			foreach($arrParams as $param){
+				if ($param === 'true') $param = true;
+				if ($param === 'false') $param = false;
+				
+				$ps[2][] = (is_numeric($param)) ? intval($param) : $param;
 			}
 			
-			if($changed) $this->pdc->flush();
+			foreach($arrCaption as $caption){
+				$ps[3][] = (is_numeric($caption)) ? intval($caption) : $caption; 
+			}
+			
+			
+			$this->pdh->update_user_preset($strPresetName, $ps, $strColumnTitle);
+			$this->pdc->flush();
 		}
-		$this->display(false, '1');
+
+		$this->display(false);
 	}
 	
 	public function delete_preset(){
@@ -256,16 +249,98 @@ class ManagePageLayouts extends page_generic {
 					'DPARAM'	=> implode(', ', $value[3]),
 				));
 			}
-		}	
+		}
+		
+		$arrReadModules = $this->pdh->get_read_modules();
+		$arrModuleDD = array('' => '');
+		foreach($arrReadModules as $strReadModule => $val){
+			$arrModuleDD[$strReadModule] = $strReadModule;
+		}
+		
+		
+		$arrMethods = array('' => '');
+		if ($this->in->get('pdh_r_module') != ""){
+			$object = register('pdh_r_'.$this->in->get('pdh_r_module'));
+			$methods = get_class_methods($object);
+			foreach($methods as $strMethodName){
+				if (strpos($strMethodName, 'get_') === 0){
+					$strMethodName_withoutget = substr($strMethodName, 4);
+					if (strpos($strMethodName_withoutget, 'caption_') === 0) continue;
+					
+					if (strpos($strMethodName_withoutget, 'html_') === 0){					
+						continue;
+					} else {
+						if (!isset($arrMethods['html_'.$strMethodName_withoutget])) {
+							$arrMethods[$strMethodName_withoutget] = $strMethodName_withoutget;
+						}
+					}
+				}
+				
+			}		
+		}
+		
+		if ($this->in->get('pdh_r_module') != "" && $this->in->get('pdh_method') != "" && $this->in->get('pdh_r_module') == $this->in->get('pdh_r_old')){			
+			$className = 'pdh_r_'.$this->in->get('pdh_r_module');
+			$methodName = 'get_'.$this->in->get('pdh_method');
+			if (method_exists($className, $methodName)){			
+				$r = new ReflectionMethod($className, $methodName);
+				$params = $r->getParameters();
+							
+				foreach ($params as $param) {
+					try{
+						$default = $param->getDefaultValue();
+						if ($default === true) $default = 'true';
+						if ($default === false) $default = 'false';
+					}catch(ReflectionException $e){
+						$default = '';
+					}
+
+					$this->tpl->assign_block_vars('param_row', array(
+						'NAME' 			=> $param->getName(),
+						'IS_OPTIONAL'	=> $param->isOptional(),
+						'DEFAULT'		=> $default,
+					));
+				}
+			}
+			
+			//Caption
+			$strCaptionMethod = str_replace(array('html_', 'get_'), array('', 'get_caption_'), $methodName);
+
+			if (method_exists($className, $strCaptionMethod)){
+				$r = new ReflectionMethod($className, $strCaptionMethod);
+				$params = $r->getParameters();
+					
+				foreach ($params as $param) {
+					try{
+						$default = $param->getDefaultValue();
+						if ($default === true) $default = 'true';
+						if ($default === false) $default = 'false';
+					}catch(ReflectionException $e){
+						$default = '';
+					}
+			
+					$this->tpl->assign_block_vars('caption_row', array(
+							'NAME' 			=> $param->getName(),
+							'IS_OPTIONAL'	=> $param->isOptional(),
+							'DEFAULT'		=> $default,
+					));
+				}
+			}
+		}
 		
 		$this->tpl->assign_vars(array (
 			'NEW_PRESET_XML'			=> $readd_xml,
 			'LAYOUT_DROPDOWN'			=> new hdropdown('new_layout_source', array('options' => $layout_options, 'value' => $this->config->get('eqdkp_layout'))),
-			'JS_LM_TABS'				=> $this->jquery->Tab_header('lm_tabs'),
+			'JS_LM_TABS'				=> $this->jquery->Tab_header('lm_tabs', true),
 			'CSRF_DEL_TOKEN'			=> $this->CSRFGetToken('del'),
 			'CSRF_DELPRESET_TOKEN'		=> $this->CSRFGetToken('del_pre'),
+			
+			'PDH_R_DD'					=> new hdropdown('pdh_r_module', array('options' => $arrModuleDD, 'value' => $this->in->get('pdh_r_module'), 'js'=>'onchange="this.form.submit()"')),
+			'PDH_METHODS_DD'			=> new hdropdown('pdh_method', array('options' => $arrMethods, 'value' => $this->in->get('pdh_method'), 'js'=>'onchange="this.form.submit()"')),
+			'PDH_R_OLD'					=> new hhidden('pdh_r_old', array('value' => $this->in->get('pdh_r_module'))),	
 		));
-		$this->jquery->Tab_Select('lm_tabs', $tab);	
+		
+		//$this->jquery->Tab_Select('lm_tabs', $tab);	
 	
 		$this->core->set_vars(array (
 			'page_title'		=> $this->user->lang('lm_title'),

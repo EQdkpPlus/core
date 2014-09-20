@@ -112,9 +112,17 @@ if(!class_exists('routing')){
 			return array();
 		}
 		
-		public function build($strPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false, $blnAddExtension=true){
+		public function build($arrPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false, $blnAddExtension=true){
 			$strPath = ($blnControllerPathPlain) ? $this->controller_path_plain : $this->controller_path;
-			$strPath .= ucfirst($this->get($strPageObject, true));
+			if (is_array($arrPageObject)){
+				foreach($arrPageObject as $key => $strPageObject){
+					if ($key == 0){
+						$strPath .= ucfirst($this->get($strPageObject, true));
+					} else {
+						$strPath .= '/'.$strPageObject;
+					}
+				}
+			} else $strPath .= ucfirst($this->get($arrPageObject, true));
 			if ($strParamText || $strParam) $strPath .= '/';
 			if ($strParamText) $strPath .= $this->clean($strParamText);
 			if ($strParam) $strPath .= '-'.$strParam;

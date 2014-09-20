@@ -393,7 +393,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		
 		$objStatement = $this->resConnection->query($this->strQuery);
 		
-		$this->resConnection->affectedRows = $objStatement->rowCount();
+		if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
 		if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
 		return @$this->resConnection->query($this->strQuery);
 	}

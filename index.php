@@ -420,6 +420,7 @@ class controller extends gen_class {
 		}
 
 			$this->tpl->assign_vars(array(
+				'ARTICLE_ID'		=> $intArticleID,	
 				'PAGINATION'		=> generate_pagination($this->controller_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
 				'ARTICLE_CONTENT'	=> $strContent,
 				'ARTICLE_TITLE'		=> $arrTitles[$intPageID],
@@ -586,6 +587,7 @@ class controller extends gen_class {
 				$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
 
 				$this->tpl->assign_block_vars('article_row', array(
+					'ARTICLE_ID'			=> $intArticleID,
 					'ARTICLE_CONTENT'		=> $strText,
 					'ARTICLE_TITLE'			=> $this->pdh->get('articles',  'title', array($intArticleID)),
 					'ARTICLE_SUBMITTED'		=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
@@ -684,6 +686,7 @@ class controller extends gen_class {
 				'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 				'LIST_TYPE'				=> $arrCategory['list_type'],
 				'S_HIDE_HEADER'			=> $arrCategory['hide_header'],
+				'CATEGORY_ID'			=> $intCategoryID,
 			));
 			
 			$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));

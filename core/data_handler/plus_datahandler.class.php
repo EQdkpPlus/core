@@ -93,6 +93,10 @@ if( !class_exists( "plus_datahandler")){
 
 			return $text;
 		}
+		
+		public function get_read_modules(){
+			return $this->read_modules;
+		}
 
 		/*
 		* Module update methods

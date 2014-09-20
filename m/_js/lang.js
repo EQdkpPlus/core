@@ -54,6 +54,7 @@ l['de']['comment_button'] = 'Absenden';
 l['de']['write_comment'] = 'Kommentar schreiben';
 l['de']['icalfeed'] = 'iCal Feed';
 l['de']['loc_uareloggedin'] = 'Du bist bereits angemeldet.';
+l['de']['raidgroup'] = 'Raidgruppe';
 
 l['en'] = new Array();
 l['en']['username'] = 'Username';
@@ -103,3 +104,4 @@ l['en']['comment_button'] = 'Submit';
 l['en']['write_comment'] = 'Write comment';
 l['en']['icalfeed'] = 'iCal Feed';
 l['en']['loc_uareloggedin'] = 'You are logged in.';
+l['en']['raidgroup'] = 'Raidgroup';

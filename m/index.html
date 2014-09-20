@@ -85,6 +85,7 @@
 	var loadinginfo_forum = false;
 	var loc = new Array();
 	var lang_loaded = false;
+	var intDefaultRaidgroup = 0;
 		
 	$( document ).delegate("#main", "pagecreate", function() {
 		load_news();
@@ -182,6 +183,7 @@
 		$('#signup_button').html(loc['signup']);
 		$('.loc_login').html(loc['login']);
 		$('.loc_showraid').html(loc['showraid']);
+		$('.loc_raidgroup').html(loc['raidgroup']);
 		//Shouts
 		$('#shoutButton').val(loc['shout']);
 		
@@ -411,6 +413,16 @@
 							}
 						});
 						
+						var intRaidgroups = 0;
+						var Raidgroups = new Array();
+						$.each(obj.raidgroups, function(key, value){
+							if (value.default == 1) {
+								intDefaultRaidgroup = value.id;
+							}
+							Raidgroups[value.id] = value.name;
+							intRaidgroups++;
+						});
+						
 						
 						//Display Char-Dropdown
 						$('#charSelect').html('');
@@ -461,6 +473,17 @@
 							} else {
 								$('#rolerow').hide();
 							}
+
+							//Display Raidgroup Dropdown
+							if (intRaidgroups > 1){
+								$('#raidgroup_row').show();
+								$('#raidgroupSelect').html('');
+								$.each(obj.raidgroups, function(key, value){
+									$('#raidgroupSelect').append( '<option value="'+value.id+'">'+value.name+'</option>' ).trigger('create').selectmenu('refresh');
+								});
+							} else {
+								$('#raidgroup_row').hide();
+							}
 							
 							//Display Status-Dropdown
 							$('#statusSelect').html('');
@@ -475,6 +498,10 @@
 								
 								var role = (obj.categories != 'classes') ? ', '+loc['role']+': ' + obj.user_status.char_role : '';
 								var output = loc['raidstatus']+": <i class=\"status"+obj.user_status.status+" fa fa-flag\"></i> " + obj.user_status.status_name + '<br /> '+loc['char']+': ' + obj.user_status.char_name + role + '</div>';
+								if (intRaidgroups > 1){
+									myraidgroup = (obj.user_status.raidgroup == 0) ? intDefaultRaidgroup : obj.user_status.raidgroup;
+									output = output + '<br />'+loc['raidgroup']+': '+Raidgroups[myraidgroup];
+								}
 								$('#infos').html(output).show();
 							}
 							
@@ -537,12 +564,15 @@
 		var roleid = $("#roleSelect").val();
 		var status = $("#statusSelect").val();
 		var note = $("#note").val();
-		$('#signup_button').button().button('disable');
+		var raidgroup = $("#raidgroupSelect").val();
+		if (raidgroup == undefined){
+			raidgroup = intDefaultRaidgroup;
+		}
 		
 		$.ajax({
 		   type: "POST",
 		   url: "../api.php?function=raid_signup&format=json&s="+sid,
-		   data: "<request><eventid>"+eventid+"</eventid><memberid>"+memberid+"</memberid><status>"+status+"</status><role>"+roleid+"</role><note>"+note+"</note></request>",
+		   data: "<request><eventid>"+eventid+"</eventid><memberid>"+memberid+"</memberid><status>"+status+"</status><role>"+roleid+"</role><note>"+note+"</note><raidgroup>"+raidgroup+"</raidgroup></request>",
 		   success: function(msg){
 				var obj = msg;
 				if (obj.status == '1'){
@@ -1335,6 +1365,10 @@
 				<div data-role="fieldcontain">
 					<label for="statusSelect" class="loc_select_status">Select Status</label>
 					<select id="statusSelect" name="statusSelect" data-native-menu="false"></select>
+				</div>
+				<div data-role="fieldcontain" id="raidgroup_row">
+					<label for="raidgroupSelect" class="loc_raidgroup">Select Raidgroup</label>
+					<select id="raidgroupSelect" name="raidgroupSelect" data-native-menu="false"></select>
 				</div>
 				<div data-role="fieldcontain">
 					<label for="note" class="loc_note">Note</label>

@@ -181,6 +181,7 @@ if (!class_exists('exchange_calevents_details')){
 									'main'		=> ($key == $mainchar) ? 1 : 0,
 									'class'		=> $this->pdh->get('member', 'classid', array($key)),
 									'roles'		=> $arrRoles,
+									'raidgroup' => $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($event_id, $key)),
 								);
 							}
 						}
@@ -192,6 +193,7 @@ if (!class_exists('exchange_calevents_details')){
 							$userstatus['char_id'] = $this->mystatus['member_id'];
 							$userstatus['char_class'] = $this->pdh->get('member', 'classid', array($this->mystatus['member_id']));
 							$userstatus['char_name'] = $this->pdh->get('member', 'name', array($this->mystatus['member_id']));
+							$userstatus['raidgroup'] = $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($event_id, $this->mystatus['member_id']));
 							if ($this->mystatus['member_role'] > 0 ) $userstatus['char_roleid'] = $this->mystatus['member_role'];
 							if ($this->mystatus['member_role'] > 0 ) $userstatus['char_role'] = $this->pdh->get('roles', 'name', array($this->mystatus['member_role']));
 						}
@@ -202,6 +204,17 @@ if (!class_exists('exchange_calevents_details')){
 							'attachid' => $event_id,
 							'comments' => $arrComments,
 						);
+						
+						$arrRaidgroups = array();
+						foreach ($this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))) as $raidgroupid => $raidgroupname){
+							$arrRaidgroups['raidgroup:'.$raidgroupid] = array(
+								'id'		=> $raidgroupid,
+								'name'		=> $raidgroupname,
+								'default'	=> ($this->pdh->get('raid_groups', 'standard', array($raidgroupid))) ? 1 : 0,
+								'color'		=> $this->pdh->get('raid_groups', 'color', array($raidgroupid)),
+							);
+						}
+						
 						
 						
 						$out = array(
@@ -225,6 +238,7 @@ if (!class_exists('exchange_calevents_details')){
 							'comments'		=> $arrCommentsOut,
 							'calendar'		=> $eventdata['calendar_id'],
 							'calendar_name'	=> $this->pdh->get('calendar_events', 'calendar', array($event_id)),
+							'raidgroups'	=> $arrRaidgroups,
 						);
 					} else {
 						$out = array(

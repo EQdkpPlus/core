@@ -108,10 +108,38 @@ $(document).ready(function() {
 		<fieldset class="settings smallsettings">
 		<legend>{L_lm_add_preset}</legend>
 		<dl>
-			<dt><label>{L_lm_up_xml}: *</label></dt>
-			<dd><textarea name="new_preset_xml" rows="20" class="input" style="width: 90%">{NEW_PRESET_XML}</textarea></dd>
+			<dt><label>{L_lm_module}: </label></dt>
+			<dd>{PDH_R_DD}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_lm_tag}: </label></dt>
+			<dd>{PDH_METHODS_DD}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_lm_lang}: </label></dt>
+			<dd><input type="text" name="lang" value="" />
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_lm_aparam}: </label></dt>
+			<dd><!-- BEGIN param_row -->
+				<!-- IF param_row.IS_OPTIONAL -->(<!-- ENDIF -->
+					{param_row.NAME}: <input type="text" name="param[]" value="{param_row.DEFAULT}" />
+					<!-- IF param_row.IS_OPTIONAL -->)<!-- ENDIF --><br />			
+				<!-- END param_row -->
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_lm_dparam}: </label></dt>
+			<dd><!-- BEGIN caption_row -->
+				<!-- IF caption_row.IS_OPTIONAL -->(<!-- ENDIF -->
+					{caption_row.NAME}: <input type="text" name="caption[]" value="{caption_row.DEFAULT}" />
+					<!-- IF caption_row.IS_OPTIONAL -->)<!-- ENDIF --><br />			
+				<!-- END caption_row -->
+			</dd>
 		</dl>
 		</fieldset>
+		{PDH_R_OLD}
 		<button name="add_preset" type="submit" class="mainoption" id="add_preset"><i class="fa fa-check"></i>{L_lm_add_preset}</button>
 	</div>
 </div>
