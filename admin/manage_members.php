@@ -132,7 +132,7 @@ class Manage_Members extends page_generic {
 		$character_count	= count($view_list);
 		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), $character_count);
 
-		$onclose_url = "window.location.href = '".$this->root_path."admin/manage_members.php".$this->SID."';";
+		$onclose_url = "window.location.href = '".$this->server_path."admin/manage_members.php".$this->SID."';";
 		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
 		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID.'&adminmode=1', 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
 		$this->confirm_delete($this->user->lang('confirm_delete_members'));
