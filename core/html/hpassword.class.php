@@ -37,7 +37,7 @@ class hpassword extends html {
 	
 	public $name = '';
 	public $set_value = false;
-	public $required = true;
+	public $required = false;
 	public $pattern = 'password';
 	
 	public function _construct() {
