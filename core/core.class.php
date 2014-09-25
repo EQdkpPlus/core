@@ -919,6 +919,7 @@ class core extends gen_class {
 		 */
 		private function pagetitle($title = ''){
 			$pt_prefix		= (defined('IN_ADMIN')) ? $this->user->lang('admin_title_prefix') : $this->user->lang('title_prefix');
+			$dkp_name 		= ($this->config->get('disable_points')) ? '' : $this->config->get('dkp_name');
 			$main_title		= sprintf($pt_prefix, $this->config->get('guildtag'), $this->config->get('dkp_name'));
 			return sanitize((( $title != '' ) ? $title.' - ' : '').$main_title);
 		}
