@@ -230,7 +230,8 @@ if(!class_exists('pdh_w_article_categories')) {
 		private function create_alias($strName){
 			$strAlias = utf8_strtolower($strName);
 			$strAlias = str_replace(' ', '-', $strAlias);
-			$strAlias = preg_replace("/[^a-zA-Z0-9_-]/","",$strAlias);
+			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$");
+			$strAlias = str_replace($a_satzzeichen, "", $strAlias);
 			return $strAlias;
 		}
 		
