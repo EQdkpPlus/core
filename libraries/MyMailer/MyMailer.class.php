@@ -147,7 +147,22 @@ class MyMailer extends PHPMailer {
 					$headerlogo	= register('environment')->buildlink().'templates/eqdkp_modern/images/logo.svg';
 				}
 				$this->AddEmbeddedImage($headerlogo, 'headerlogo');
-				$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.svg', 'backgroundimage');
+				
+				// load the images out of the template/images/email folder. If the image is a svg, also include png woth same name if available
+				$images	= glob($this->root_path."templates/eqdkp_modern/images/emails/*.{jpg,png,svg}", GLOB_BRACE);
+				$arrEmbedd	= array();
+				foreach($images as $image){
+					$imageinfo	= pathinfo($image);
+					$arrEmbedd[str_replace('-','', $imageinfo["filename"])][] = array('filename' => $imageinfo["basename"], 'extension' => $imageinfo["extension"]);
+				}
+				foreach($arrEmbedd as $fileid=>$filedata){
+					foreach($filedata as $image){
+						$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/emails/'.$image['filename'], $fileid.'_'.$image['extension']);
+					}
+				}
+				#d($arrEmbedd);die();
+				#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.svg', 'backgroundimage');
+				#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.png', 'backgroundimage_fallback');
 
 				// replace the stuff
 				$body	= $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
