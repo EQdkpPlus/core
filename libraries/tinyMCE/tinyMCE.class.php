@@ -188,46 +188,49 @@ class tinyMCE extends gen_class {
 		}
 	}
 	
-	public function inline_editor_simple($selector){
+	public function inline_editor_simple($selector, $settings=array()){
 		if(!$this->trigger['inline_simple.'.$selector]){
-			$this->language	= (isset($settings['language'])) ? $settings['language'] : $this->language;
 			
-			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
-			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
-		
+			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
+			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
+			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
+			
+			//Hooks
 			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_simple_setup')) ? $this->hooks->process('tinymce_inline_simple_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			
+			$tinyid = md5($selector);
+			
 			$this->tpl->add_js('
-				$("'.$selector.'").tinymce({
-					// Location of TinyMCE script
-					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
-					document_base_url : "'.$this->env->link.'",
-					
-					// General options
-					theme: "modern",
-    				inline: true,
-    				toolbar: "undo redo",
-    				menubar: false,
-					plugins: ["save"],
-					setup: function(editor) {
-			        	editor.on("blur", function(e) {
-			            	save_inline_editor_simple("'.$selector.'", e);
-			        	});
-						'.$strHooks.'
-   					},					
-					entity_encoding : "raw",
-		
-					'.$relative_url.$removeHost.'
-		
-				});
+				function tinyinlinesimple_'.$tinyid.'() {
+					$("'.$selector.'").tinymce({
+						// Location of TinyMCE script
+						script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
+						document_base_url : "'.$this->env->link.'",
+						
+						// General options
+						theme: "modern",
+	    				inline: true,
+	    				toolbar: "undo redo",
+	    				menubar: false,
+						plugins: ["save"],
+						setup: function(editor) {
+							'.$strSetup.$strHooks.'
+	   					},					
+						entity_encoding : "raw",
+						relative_urls : false,
+						remove_script_host : false,
+						auto_focus: '.$strAutofocus.'			
+					});
+				}
+				'.(($blnStart) ? 'tinyinlinesimple_'.$tinyid.'()' : '').'
 			', 'docready');
 		
 			$this->trigger['inline_simple.'.$selector] = true;
 		}
 	}
 	
-	public function inline_editor($selector, $settings=false){
+	public function inline_editor($selector, $settings=false, $blnStart=true){
 		if(!$this->trigger['inline.'.$selector]){
 			$this->language	= (isset($settings['language'])) ? $settings['language'] : $this->language;
 			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
@@ -237,7 +240,11 @@ class tinyMCE extends gen_class {
 			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot']) ? ' eqdkp_raidloot' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
-				
+			
+			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
+			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
+			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
+			
 			$link_list = '';
 			if (isset($settings['link_list'])){
 				//Articles & Categories
@@ -272,8 +279,11 @@ class tinyMCE extends gen_class {
 			
 			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_setup')) ? $this->hooks->process('tinymce_inline_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			
+			$tinyid = md5($selector);
 				
 			$this->tpl->add_js('
+				function tinyinline_'.$tinyid.'(){	
 				$("'.$selector.'").tinymce({
 					// Location of TinyMCE script
 					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
@@ -322,27 +332,19 @@ class tinyMCE extends gen_class {
 						});
 						return false;
 					},
-					setup: function(editor) {
-			        	editor.on("blur", function(e) {
-							save_inline_editor("'.$selector.'", e);
-			        	});
-					
-					 	editor.on("focus", function(e) {
-							focus_inline_editor("'.$selector.'", e);
-       					});
-					
-						'.$strHooks.'
-
+					setup: function(editor) {					
+						'.$strSetup.$strHooks.'
    					},
 					
     				save_onsavecallback: function() {
-						console.log("Save");
-						console.log(this.editorManager.activeEditor.getContent());
 					},
+					auto_focus: '.$strAutofocus.',
 			
 					'.$resizing.$relative_url.$removeHost.'
 	
 				});
+			}
+			'.(($blnStart) ? 'tinyinline_'.$tinyid.'()' : '').'
 			', 'docready');
 	
 			$this->trigger['inline.'.$selector] = true;

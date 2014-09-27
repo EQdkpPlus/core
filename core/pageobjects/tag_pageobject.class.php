@@ -17,7 +17,8 @@
  */
 
 class tag_pageobject extends pageobject {
-
+	public static $shortcuts = array('social' => 'socialplugins');
+	
 	public function __construct() {
 		$handler = array(
 		);

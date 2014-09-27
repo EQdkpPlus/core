@@ -259,7 +259,15 @@ class controller extends gen_class {
 			);
 			
 			$editor = register('tinyMCE');
-			$editor->inline_editor_simple('.headline_inlineedit');
+			
+			//Init Inline Editor
+			$editor->inline_editor_simple('.headline_inlineedit', array(
+				'setup' => 'editor.on("blur", function(e) {
+				            	save_inline_editor_simple(".headline_inlineedit", e);
+				        	});',
+				'autofocus' => true,
+				'start_onload' => false,
+			));
 			
 			
 			$csrf = $this->user->csrfGetToken('editarticle_pageobjectsave_headline');
@@ -305,14 +313,34 @@ class controller extends gen_class {
 						}
 					}, "json");
 			}
+					
+
+
+			$(".headline_inlineedit").on("dblclick", function(){
+					tinyinlinesimple_21c3d11533bdc5e57418db4d323adbf5();
+					$(".headline_inlineedit").off("dblclick");
+			})
+			$(".article-inlineedit").on("dblclick", function(){
+					tinyinline_70f6da87ee4b4befde3c0e12de677bcc();
+					$(".article-inlineedit").off("dblclick");
+			})
 			', 'docready');
 
 			$editor->inline_editor('.article-inlineedit',array(
-			'relative_urls'	=> false,
-			'link_list'		=> true,
-			'gallery'		=> true,
-			'raidloot'		=> true,
-			));
+				'relative_urls'	=> false,
+				'link_list'		=> true,
+				'gallery'		=> true,
+				'raidloot'		=> true,
+				'setup'			=> 'editor.on("blur", function(e) {
+							save_inline_editor(".article-inlineedit", e);
+			        	});
+					
+					 	editor.on("focus", function(e) {
+							focus_inline_editor(".article-inlineedit", e);
+       					});',
+				'start_onload'	=> false,
+				'autofocus'		=> true,
+			),false);
 			$this->tpl->assign_vars(array(
 				'S_INLINE_EDIT' => true,
 			));
