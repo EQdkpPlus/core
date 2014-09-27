@@ -112,6 +112,8 @@ class update_2000 extends sql_update_task {
 				55 => 'Insert auth_option',
 				56 => 'Alter config table',
 				57 => 'Alter config table',
+				58 => 'Alter config table',
+				59 => 'Alter config table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -172,6 +174,8 @@ class update_2000 extends sql_update_task {
 				55 => 'Insert auth_option',
 				56 => 'Alter config table',
 				57 => 'Alter config table',
+				58 => 'Alter config table',
+				59 => 'Alter config table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -339,6 +343,8 @@ class update_2000 extends sql_update_task {
 			55 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N');",
 			56 => "RENAME TABLE `__backup_cnf` TO `__config`;",
 			57 => "ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(40) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';",
+			58 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_man','N');",
+			59 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_grpleader','N');",
 		);
 	}
 	
