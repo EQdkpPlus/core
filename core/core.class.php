@@ -156,6 +156,10 @@ class core extends gen_class {
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
 			
+			if($this->config->get('game_importer_apikey')){
+				define('GAME_IMPORTER_APIKEY', $this->config->get('game_importer_apikey'));
+			}
+			
 			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1){
 				if(stripos($this->env->path, 'register') === false){
 					redirect($this->controller_path_plain.'Register/');
