@@ -34,6 +34,7 @@ class game extends gen_class {
 	private $game			= '';
 	private $lang_name		= '';
 	private $installer		= false;
+	public $import_apikey	= false;
 	private $deficon_path	= array(
 								'roles'		=> 'images/roles/',
 								'events'	=> 'images/events/',
@@ -43,14 +44,17 @@ class game extends gen_class {
 	//fill data with gameinfos (classes, races, factions, filters, etc.)
 	public function __construct($installer=false, $lang_name=''){
 		if(!$installer){
-			$this->lang_name = $this->user->lang_name;
-			$this->game = $this->config->get('default_game');
+			$this->lang_name		= $this->user->lang_name;
+			$this->game				= $this->config->get('default_game');
+			if($this->config->get('game_importer_apikey')){
+				$this->import_apikey	= $this->config->get('game_importer_apikey');
+			}
 			$this->init_gameclass();
 			$this->pdl->register_type('game');
 		}
-		if($installer) {
-			$this->installer = true;
-			$this->lang_name = $lang_name;
+		if($installer){
+			$this->installer	= true;
+			$this->lang_name	= $lang_name;
 		}
 	}
 
@@ -282,6 +286,10 @@ class game extends gen_class {
 		}else{
 			return $this->gameinfo()->importers;
 		}
+	}
+
+	public function get_import_apikey(){
+		return $this->import_apikey;
 	}
 
 	/**
