@@ -93,7 +93,7 @@ class Manage_Ranks extends page_generic {
 		$arrRankImagesDD = array('' => '');
 		$blnRankImages = $this->game->icon_exists('ranks');
 		if($blnRankImages){
-			$arrRankImages = sdir($this->root_path.'games/'.$this->game->get_game().'/ranks');
+			$arrRankImages = sdir($this->root_path.'games/'.$this->game->get_game().'/icons/ranks');
 			foreach($arrRankImages as $strRankImage){
 				$arrRankImagesDD[$strRankImage] = $strRankImage;
 			}
@@ -186,7 +186,7 @@ class Manage_Ranks extends page_generic {
 				'PREFIX' => $this->pdh->get('rank', 'prefix', array($id)),
 				'SUFFIX' => $this->pdh->get('rank', 'suffix', array($id)),
 				'DEFAULT' => ($id == $default_rank) ? 'checked="checked"' : '',
-				'ICON' => $this->pdh->get('rank', 'icon', array($id)),
+				'ICON' => $this->pdh->geth('rank', 'icon', array($id)),
 			));
 			$key++;
 

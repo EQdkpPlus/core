@@ -88,7 +88,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		}
 
 		public function get_rank_image($rank_id){
-			$strGameFolder = 'games/'.$this->game->get_game().'/ranks/';
+			$strGameFolder = 'games/'.$this->game->get_game().'/icons/ranks/';
 			$strIcon = $this->get_icon($rank_id);
 			
 			$rankimage = (strlen($strIcon) && is_file($this->root_path.$strGameFolder.$strIcon)) ? $this->server_path.$strGameFolder.$strIcon : "";
@@ -113,6 +113,10 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		
 		public function get_icon($rank_id){
 			return $this->ranks[$rank_id]['icon'];
+		}
+		
+		public function get_html_icon($rank_id){
+			return $this->get_rank_image($rank_id);
 		}
 		
 		public function get_default_value($rank_id){
