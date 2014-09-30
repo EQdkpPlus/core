@@ -1187,6 +1187,16 @@ $lang = array(
 	"core_sett_f_login_fb_appid_help" => 'Enter the application number of your facebook application here. You can create a new application <a href="https://developers.facebook.com/apps" target="_blank">here</a>',
 	"core_sett_f_login_fb_appsecret" => 'Application secret code',
 	"core_sett_f_login_fb_appsecret_help" => 'Enter the application secret code of your facebook application here.',
+	"core_sett_f_login_bnet_appid" => "Battle.net Key",
+	"core_sett_f_help_login_bnet_appid" => "Enter the Key of your Mashery Application from dev.battle.net.",
+	"core_sett_f_login_bnet_appsecret" => "Battle.net Secret",
+	"core_sett_f_login_bnet_eqdkp_relay" => "Use the EQdkp Plus Relay Service",
+	"core_sett_f_help_login_bnet_eqdkp_relay" => "Using the Battle.net Login only works, if your site uses SSL. If you can't use SSL, you can use the EQdkp Plus Relay Service. More Information here: https://eqdkp-plus.eu/wiki/Battle.net_Login",
+	"core_sett_f_login_bnet_eqdkp_appid" => "EQdkp Plus App-ID",
+	"core_sett_f_help_login_bnet_eqdkp_appid" => "Insert here the EQdkp Plus App-ID created at https://eqdkp-plus.eu/repository/MyApps/.",
+	"core_sett_f_login_bnet_eqdkp_appsecret" => "EQdkp Plus App-Secret",
+	
+	
 	"core_sett_f_disable_embedly" => 'Disable automatic conversion of links to embedded videos/pictures',
 	"core_sett_f_help_disable_embedly" => 'Links to video/pictures (e.g. youtube) will be converted automatically to embedded objects',
 	"core_sett_tab_global" => 'Global',

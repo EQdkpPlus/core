@@ -154,6 +154,7 @@ h3 {
 	-webkit-box-shadow: 10px 10px 5px #888;
 	box-shadow: 0px 2px 3px #000;
 	margin-bottom: 10px;
+	text-align:left;
 }
 
 #personalArea a {
@@ -3212,4 +3213,8 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 .greenbox a:hover, .bluebox a:hover{
 	color:black;
 	text-decoration: underline;
+}
+
+.ui-dialog {
+	text-align: left;
 }

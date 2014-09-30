@@ -39,7 +39,6 @@ if(!class_exists('routing')){
 			'rss'			=> 'rss',
 			'external'		=> 'wrapper',
 			'tag'			=> 'tag',
-			'gamebuilder'	=> 'gamebuilder',
 				
 			//Static Pages for Calendar
 			'editcalendarevent' => 'editcalendarevent',
