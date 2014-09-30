@@ -206,7 +206,7 @@ class input extends gen_class {
 	* @param string $max_depth Maximum depth to recurse to
 	* @return array
 	*/
-	public function getArray($key, $type, $max_depth = 10){
+	public function getArray($key, $type = 'string', $max_depth = 10){
 		if(strpos($key, ':')) {
 			$checkarr = $this->_get_deep(explode(':', $key), array());
 		} else {

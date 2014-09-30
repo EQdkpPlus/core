@@ -197,12 +197,12 @@ class timekeeper extends gen_class {
 		}
 	}
 
-	public function run_cron($task_name, $force_run = false){
+	public function run_cron($task_name, $force_run = false, $force_non_ajax=false){
 		if(!$force_run && !$this->cron_necessary($task_name)){
 			return false;
 		}
 
-		if ($this->crontab[$task_name]['ajax'] === true){		
+		if ($this->crontab[$task_name]['ajax'] === true && !$force_non_ajax){		
 			if ($force_run){
 				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true");');
 			} else {

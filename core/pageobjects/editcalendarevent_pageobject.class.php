@@ -263,7 +263,7 @@ class editcalendarevent_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 		
 		if($this->in->get('repeating') != 'none'){
-			$this->timekeeper->run_cron('calevents_repeatable', true);
+			$this->timekeeper->run_cron('calevents_repeatable', true, true);
 		}
 		
 		$this->pdh->process_hook_queue();
