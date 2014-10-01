@@ -386,7 +386,7 @@ class update_2000 extends sql_update_task {
 			$profiledata['class'] = $row['class'];
 			$profiledata['race'] = $row['race'];
 			$profiledata['level'] = $row['level'];
-			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => $profiledata))->execute($row['member_id']);
+			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => json_encode($profiledata)))->execute($row['member_id']);
 		}
 		return true;
 	}
