@@ -367,7 +367,7 @@ class update_2000 extends sql_update_task {
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			61 => "CREATE TABLE `__groups_raid_members` (
 				`group_id` int(22) NOT NULL,
-				`user_id` int(22) NOT NULL,
+				`member_id` int(22) NOT NULL,
 				`grpleader` int(1) NOT NULL DEFAULT '0'
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			62 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');",
