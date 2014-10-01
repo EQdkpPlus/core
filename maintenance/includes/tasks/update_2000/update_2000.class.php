@@ -115,8 +115,10 @@ class update_2000 extends sql_update_task {
 				58 => 'Alter config table',
 				59 => 'Alter config table',
 				60 => 'Create groups_raid table',
-				61 => 'Create groups_raid_users table',
+				61 => 'Create groups_raid_members table',
 				62 => 'Add default raid group',
+				63 => 'Add sort field to member_profilefields',
+				64 => 'Add description field to repository table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -180,8 +182,10 @@ class update_2000 extends sql_update_task {
 				58 => 'Alter config table',
 				59 => 'Alter config table',
 				60 => 'Create groups_raid table',
-				61 => 'Create groups_raid_users table',
+				61 => 'Create groups_raid_members table',
 				62 => 'Add default raid group',
+				63 => 'Add sort field to member_profilefields',
+				64 => 'Add description field to repository table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -361,13 +365,14 @@ class update_2000 extends sql_update_task {
 				`groups_raid_sortid` smallint(5) unsigned NOT NULL DEFAULT '0',
 				PRIMARY KEY (`groups_raid_id`)
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
-			61 => "CREATE TABLE `__groups_raid_users` (
+			61 => "CREATE TABLE `__groups_raid_members` (
 				`group_id` int(22) NOT NULL,
 				`user_id` int(22) NOT NULL,
 				`grpleader` int(1) NOT NULL DEFAULT '0'
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
-			62 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');
-",
+			62 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');",
+			63 => "ALTER TABLE `__member_profilefields` ADD `sort` SMALLINT(2)  UNSIGNED  NULL  DEFAULT '1' AFTER `image`;",
+			64 => 'ALTER TABLE `__repository` ADD `description` TEXT  CHARACTER SET utf8  BINARY  NULL  AFTER `author`;',
 		);
 	}
 	

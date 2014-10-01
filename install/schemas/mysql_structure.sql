@@ -284,8 +284,8 @@ CREATE TABLE `__groups_raid` (
 	PRIMARY KEY (`groups_raid_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-DROP TABLE IF EXISTS __groups_raid_users;
-CREATE TABLE `__groups_raid_users` (
+DROP TABLE IF EXISTS __groups_raid_members;
+CREATE TABLE `__groups_raid_members` (
 	`group_id` int(22) NOT NULL,
 	`user_id` int(22) NOT NULL,
 	`grpleader` int(1) NOT NULL DEFAULT '0'
