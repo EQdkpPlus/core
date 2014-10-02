@@ -117,8 +117,7 @@ class update_2000 extends sql_update_task {
 				60 => 'Create groups_raid table',
 				61 => 'Create groups_raid_members table',
 				62 => 'Add default raid group',
-				63 => 'Add sort field to member_profilefields',
-				64 => 'Add description field to repository table',
+				63 => 'Add description field to repository table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -184,8 +183,7 @@ class update_2000 extends sql_update_task {
 				60 => 'Create groups_raid table',
 				61 => 'Create groups_raid_members table',
 				62 => 'Add default raid group',
-				63 => 'Add sort field to member_profilefields',
-				64 => 'Add description field to repository table',
+				63 => 'Add description field to repository table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -371,8 +369,7 @@ class update_2000 extends sql_update_task {
 				`grpleader` int(1) NOT NULL DEFAULT '0'
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			62 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');",
-			63 => "ALTER TABLE `__member_profilefields` ADD `sort` SMALLINT(2)  UNSIGNED  NULL  DEFAULT '1' AFTER `image`;",
-			64 => 'ALTER TABLE `__repository` ADD `description` TEXT  CHARACTER SET utf8  BINARY  NULL  AFTER `author`;',
+			63 => 'ALTER TABLE `__repository` ADD `description` TEXT  CHARACTER SET utf8  BINARY  NULL  AFTER `author`;',
 		);
 	}
 	

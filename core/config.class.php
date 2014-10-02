@@ -130,7 +130,7 @@ class config extends gen_class {
 	private function fallback_oldtable2newtable(){
 		if(!$this->db->checkQuery("SELECT * FROM __config;")){
 			$this->db->query("RENAME TABLE `__backup_cnf` TO `__config`;");
-			$this->db->query("ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(255) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';");
+			$this->db->query("ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(40) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';");
 		}
 	}
 
