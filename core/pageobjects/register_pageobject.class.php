@@ -363,22 +363,12 @@ class register_pageobject extends pageobject {
 	public function display() {
 		$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 		$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
-	
-		$button = ($this->user->is_signedin()) ? 'confirmed' : 'register';
-		$intSocialPlugins = count(register('socialplugins')->getSocialPlugins(true));
-
-		$this->tpl->assign_vars(array(
-			'SUBMIT_BUTTON'	=> ($blnGuildrules) ? 'guildrules' : $button,
-			'HEADER'		=> $this->user->lang('register_title').' - '.$this->user->lang('licence_agreement'),
-			'TEXT'			=> $this->user->lang('register_licence').(($intSocialPlugins) ? $this->user->lang('social_privacy_statement') : ''),
-			'S_LICENCE'		=> true,
-		));
-
-		$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('register_title'),
-			'template_file'		=> 'register.html',
-			'display'			=> true)
-		);
+		
+		if ($blnGuildrules){
+			$this->display_guildrules();
+		} else {
+			$this->display_form();
+		}
 	}
 
 	public function display_guildrules() {

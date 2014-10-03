@@ -58,7 +58,7 @@ class embedly extends gen_class {
 		$intLinks = preg_match_all('@((("|:)?)https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string, $arrLinks);
 		if ($intLinks){
 			foreach ($arrLinks[0] as $link){
-				if (substr($link, 0, 1) != '"' && substr($link, 0, 1) != ':') $embedlyUrls[] =  strip_tags($link);
+				if (substr($link, 0, 1) != '"' && substr($link, 0, 1) != ':') $embedlyUrls[] = strip_tags($link);
 			}	
 		}
 
@@ -70,7 +70,6 @@ class embedly extends gen_class {
 		//And now let's replace the Links with the Videos or pictures
 		foreach ($oembeds as $key => $oembed){
 			$out = $this->formatEmbedded($oembed);
-
 			if (strlen($out)){
 				$string = str_replace($arrLinks[0][$key], $out, $string);
 			}
@@ -95,6 +94,7 @@ class embedly extends gen_class {
 					$out .= '</div></div>';
 					break;
 				case 'link':
+					return $out;
 				case 'rich':
 				case 'video':
 					$out = '<div class="embed-content"><div class="embed-media">';

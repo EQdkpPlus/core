@@ -163,11 +163,12 @@ class Manage_Articles extends page_generic {
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('success_create_article'), $this->user->lang('success'), 'green');
+			$this->edit($id);
 		} else {
 			$this->core->message($this->user->lang('error_create_article'), $this->user->lang('error'), 'red');
+			$this->display();
 		}
 		
-		$this->display();
 	}
 	
 	public function save(){		
@@ -199,8 +200,8 @@ class Manage_Articles extends page_generic {
 		$this->pdh->process_hook_queue();
 	}
 	
-	public function edit(){
-		$id = $this->in->get('a', 0);
+	public function edit($aid=false){
+		$id = ($aid === false) ? $this->in->get('a', 0) : $aid;
 		$cid = $this->in->get('c', 0);
 		
 		$this->jquery->Tab_header('article_category-tabs');

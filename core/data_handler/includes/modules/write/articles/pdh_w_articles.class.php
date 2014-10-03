@@ -293,9 +293,9 @@ if(!class_exists('pdh_w_articles')) {
 		}
 		
 		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
-			if ($strAlias == "" || $strAlias != $this->pdh->get('articles', 'alias', array($id))){
+			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strTitle);
-			} else {
+			} elseif($strAlias != $this->pdh->get('articles', 'alias', array($id))) {
 				$strAlias = $this->create_alias($strAlias);
 			}
 			

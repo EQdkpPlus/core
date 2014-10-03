@@ -26,6 +26,9 @@ $eqdkp_root_path = './../';
 ini_set("display_errors", 0);
 define('DEBUG', 99);
 
+@set_time_limit(0);
+@ignore_user_abort(true);
+
 include_once($eqdkp_root_path.'core/super_registry.class.php');
 include_once($eqdkp_root_path.'core/registry.class.php');
 include_once($eqdkp_root_path.'core/gen_class.class.php');

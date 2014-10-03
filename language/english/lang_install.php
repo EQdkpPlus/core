@@ -164,6 +164,29 @@ $lang = array(
 	"no_pw_match" => 'The passwords do not match.',
 	"install_end_text" => 'The installation can now be completed successfully.',
 	
+	//Categories
+	'category1'	=> 'System',
+	'category2'	=> 'News',
+	'category3'	=> 'Events',
+	'category4'	=> 'Items',
+	'category5'	=> 'Raids',
+	'category6'	=> 'Calendar',
+	
+	//Articles
+	'article2' => 'Raid',
+	'article3' => 'Item',
+	'article4' => 'Event',
+	'article5' => 'Character',
+	'article6' => 'Roster',
+	'article7' => 'Events',
+	'article8' => 'Items',
+	'article9' => 'Points',
+	'article10' => 'Raids',
+	'article12' => 'Calendarevent',
+	'article13' => 'Calendar',
+	'article14' => 'Guild Rules',
+	'article15' => 'Privacy Policy',
+	'article16' => 'Legal Notice',
 );
 
 ?>

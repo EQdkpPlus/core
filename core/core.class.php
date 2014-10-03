@@ -156,7 +156,9 @@ class core extends gen_class {
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
 			
-			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1){
+			$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
+			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
+			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1 && $blnGuildrules){
 				if(stripos($this->env->path, 'register') === false){
 					redirect($this->controller_path_plain.'Register/');
 				}
@@ -384,6 +386,17 @@ class core extends gen_class {
 					$message .= '<br /><br /><a href="'.$this->routing->build('mycharacters').'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);
 				}
+			}
+			
+			//EU Cookie Usage Hint			
+			if ((int)$this->config->get('cookie_euhint_show') && $this->user->blnFirstVisit){
+				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array('PrivacyPolicy'));
+				if ($intArticleID) $url = $this->controller_path.$this->pdh->get('articles', 'path', array($intArticleID));
+				
+				$this->tpl->assign_vars(array(
+					'S_SHOW_COOKIE_HINT'	=> true,
+					'COOKIE_HINT'			=> str_replace("{COOKIE_LINK}", $url.'#Cookies', $this->user->lang('cookie_usage_hint')),
+				));
 			}
 			
 			//Do portal hook
@@ -867,46 +880,8 @@ class core extends gen_class {
 		}
 
 		public function Copyright(){
-			$disclaimer_txt = '';
-			if($this->config->get('disclaimer_show')){
-				$array_contactdetails = array(
-					'name'		=> $this->config->get('disclaimer_name'),
-					'address'	=> $this->config->get('disclaimer_address'),
-					'email'		=> $this->config->get('disclaimer_email'),
-					'messenger'	=> $this->config->get('disclaimer_messenger'),
-					'irc'		=> $this->config->get('disclaimer_irc'),
-					'custom'	=> $this->config->get('disclaimer_custom'),
-				);
 
-				$static_disclaimer = '
-					<div id="dialog_disclaimer" title="'.$this->user->lang('disclaimer_win_title').'">
-
-							<fieldset class="settings">
-								<legend>'.$this->user->lang('disclaimer_c_title').'</legend>';
-				foreach($array_contactdetails as $stname=>$stvalue){
-					if(trim($stvalue) != ''){
-						$static_disclaimer .= '<dl>
-										<dt><label>'.$this->user->lang('disclaimer_c_'.$stname).'</label></dt>
-										<dd>'.$stvalue.'</dd>
-									</dl>';
-					}
-				}
-				$static_disclaimer .= '</fieldset>';
-				$disclaimerfile = $this->root_path.'language/'.$this->user->data['user_lang'].'/disclaimer.php' ;
-				if (file_exists($disclaimerfile)){
-					include_once($disclaimerfile);
-					$static_disclaimer .= '<fieldset class="settings">
-								<legend>'.$this->user->lang('disclaimer_c_disclaimer').'</legend>
-								<div style="text-align:left;">'.$disclaimer.'</div>
-						</fieldset>';
-				}
-				$static_disclaimer .= '
-					</div>';
-				$this->tpl->staticHTML($static_disclaimer);
-				$this->tpl->add_js('$("#impressum").click(function(){ $("#dialog_disclaimer").dialog({height: 400, width: 600, modal: true }); });', 'docready');
-				$disclaimer_txt = '<div id="impressum" class="hand">'.$this->user->lang('disclaimer').'</div>';
-			}
-			return $disclaimer_txt.'<div class="copyright">
+			return '<div class="copyright">
 						<a href="'.EQDKP_ABOUT_URL.'" target="new">EQDKP-PLUS '.((DEBUG > 3) ? '[FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version').']' : VERSION_EXT).' &copy; '.$this->time->date('Y', $this->time->time).' by EQdkp-Plus Team</a>
 					</div>';
 		}

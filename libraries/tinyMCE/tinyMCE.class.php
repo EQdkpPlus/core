@@ -143,7 +143,7 @@ class tinyMCE extends gen_class {
     ],
 
 					entity_encoding : "raw",
-					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }],
+					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
 					extended_valid_elements : "p[class|id|style|data-sort|data-folder|data-id|title]",
 					setup: function(editor){
 						'.$strHooks.'
@@ -301,7 +301,7 @@ class tinyMCE extends gen_class {
     ],
 	
 					entity_encoding : "raw",
-					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }],
+					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
 					extended_valid_elements : "p[class|id|style|data-sort|data-folder|data-id|title]",
 					'.$link_list.'
 					file_browser_callback : function(field_name, url, type, win){

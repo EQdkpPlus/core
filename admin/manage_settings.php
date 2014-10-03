@@ -290,37 +290,6 @@ class mmocms_settings extends page_generic {
 						'size'		=> 40
 					),
 				),
-				'disclaimer'	=> array(
-					'disclaimer_show'	=> array(
-						'type'			=> 'radio',
-						'dependency'	=> array(1 => array('disclaimer_name', 'disclaimer_address', 'disclaimer_email', 'disclaimer_irc', 'disclaimer_messenger', 'disclaimer_custom'))
-					),
-					'disclaimer_name'	=> array(
-						'type'			=> 'text',
-						'size'			=> 40,
-					),
-					'disclaimer_address'	=> array(
-						'type'			=> 'textarea',
-						'cols'			=> 50,
-						'rows'			=> 4,
-					),
-					'disclaimer_email'	=> array(
-						'type'			=> 'text',
-						'size'			=> 40
-					),
-					'disclaimer_irc'	=> array(
-						'type'			=> 'text',
-						'size'			=> 40,
-					),
-					'disclaimer_messenger'	=> array(
-						'type'			=> 'text',
-						'size'			=> 40,
-					),
-					'disclaimer_custom'	=> array(
-						'type'			=> 'text',
-						'size'			=> 50,
-					)
-				)
 			),
 			'system'	=> array(
 				'globalsettings'	=> array(
@@ -364,6 +333,9 @@ class mmocms_settings extends page_generic {
 					'cookie_path'	=> array(
 						'type'		=> 'text',
 						'size'		=> 25,
+					),
+					'cookie_euhint_show'	=> array(
+						'type'		=> 'radio',
 					),
 				),
 				'email'				=> array(

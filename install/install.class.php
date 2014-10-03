@@ -90,6 +90,7 @@ class install extends gen_class {
 			die('Could not include the language files! Check to make sure that "' . $this->root_path . 'language/'.$language.'/lang_install.php" exists!');
 		}
 		registry::add_const('lang', $lang);
+		registry::add_const('language', $language);
 	}
 	
 	private function scan_steps() {

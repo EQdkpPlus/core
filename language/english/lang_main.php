@@ -496,25 +496,6 @@ $lang = array(
 	"spl_autoload_register_notavailable" => 'The PHP function "spl_autoload_register" could not be found. The reason of this may be that this EQdkp Plus is hosted at a so called "freehoster" which doesn\'t allow this function.',
 	"php_too_old" => 'Your PHP version %1$s is too old. The minimum requirement is PHP version %2$s.',
 	"requirements_notfilled" => 'Your server doesn\'t meet the requirements to run EQdkp Plus.',
-	"register_licence" => '
-This policy explains in detail how this website along with its affiliated companies (hereinafter “we”, “us”, “our”) and EQdkp Plus (hereinafter “they”, “them”, “their”, “EQdkp Plus software”, “EQdkp Plus Teams”) use any information collected during any session of usage by you (hereinafter “your information”).<br />
-<b>You have to accept this policy to create an account.</b>
-<h2>Information collection</h2>
-Your information is collected via two ways.
-<ul><li>
-Firstly, by browsing our website will cause the EQdkp Plus software to create a number of cookies, which are small text files that are downloaded on to your computer’s web browser temporary files. The first two cookies just contain a user identifier (hereinafter “user-id”, can contain the encrypted user password if the "Remember password"-option was set) and an anonymous session identifier (hereinafter “session-id”), automatically assigned to you by the EQdkp Plus software. More cookies can be set in order to improve your user experience.
-
-We may also create cookies external to the EQdkp Plus software whilst browsing our website, though these are outside the scope of this document which is intended to only cover the pages created by the EQdkp Plus software. 
-</li><li>The second way in which we collect your information is by what you submit to us. This can be, and is not limited to: registering on our website (hereinafter “your account”) and posts submitted by you after registration and whilst logged in (hereinafter “your posts”).
-Your account will at a bare minimum contain a uniquely identifiable name (hereinafter “your user name”), a personal password used for logging into your account (hereinafter “your password”) and a personal, valid e-mail address (hereinafter “your e-mail”). Your information for your account at our website is protected by data-protection laws applicable in the country that hosts us. Any information beyond your user name, your password, and your e-mail address required by our website during the registration process is either mandatory or optional, at the discretion of our website. In all cases, you have the option of what information in your account is publicly displayed. Furthermore, within your account, you have the option to opt-in or opt-out of automatically generated e-mails from the EQdkp Plus software.
-</li></ul>
-Your password is ciphered (a one-way hash) so that it is secure. However, it is recommended that you do not reuse the same password across a number of different websites. Your password is the means of accessing your account at our website, so please guard it carefully and under no circumstance will anyone affiliated with our website, EQdkp Plus or another 3rd party, legitimately ask you for your password. Should you forget your password for your account, you can use the “I forgot my password” feature provided by the EQdkp Plus software. This process will ask you to submit your user name and your e-mail, then the EQdkp Plus software will send you an e-mail containing further information generating your new password.
-',
-	"social_privacy_statement" => '<h2>Usage of Facebook-Plugins</h2>Our website uses social plugins (“plugins”) provided by the social network facebook.com, operated by Facebook Inc., 1601 S. California Avenue, Palo Alto, CA 94304, USA (“Facebook”). The plugins are identifiable by a Facebook logo (white letter f on blue background or a thumb up icon) or the notice “Facebook Social Plugin”. For a full list of all social Plugins please seehttp://developers.facebook.com/plugins.
-When you visit a page of our website that contains a social plugin, your browser establishes a direct connection to Facebook servers. Facebook directly transfers the plugin content to your browser which embeds the latter into the website, enabling Facebook to receive information about your having accessed the respective page of our website. Thus we have no influence on the data gathered by the plugin and inform you according to our state of knowledge:
-The embedded plugins provide Facebook with the information that you have accessed the corresponding page of our website. If you are logged into Facebook, your visit can be assigned to your Facebook account. If you interact with the plugins, for example by clicking “Like”, or entering a comment, the corresponding information is transmitted from your browser directly to Facebook and stored by it. Even if you are not logged into Facebook, there is possibility that the plugins transmits your IP-address to Facebook.
-For the information on the purpose and scope of data collection and procession by Facebook, as well as your rights in this respect and settings options for protecting your privacy please visit Facebook\'s privacy policy:http://www.facebook.com/policy.php.
-If you are a Facebook member and do not want Facebook to connect the data concerning your visit to our website with your member data already stored by Facebook, please log off Facebook before entering our website. Further you can block Facebook social Plugins by using add-ons for your browser, like the “Facebook Blocker“.',
 	"deny" => 'Reject',
 	"accept" => 'Accept',
 	"guildrules" => 'Guild rules',
@@ -528,16 +509,6 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"forum" => 'Forum',
 	"dkp_system" => '%s-System',
 	"version" => 'Version',
-	"disclaimer" => 'Imprint',
-	"disclaimer_win_title" => 'Imprint of this page',
-	"disclaimer_c_title" => 'Contact details',
-	"disclaimer_c_name" => 'Contact person',
-	"disclaimer_c_address" => 'Address',
-	"disclaimer_c_email" => 'E-Mail address',
-	"disclaimer_c_messenger" => 'Messenger',
-	"disclaimer_c_irc" => 'IRC-Channel',
-	"disclaimer_c_custom" => 'Addition',
-	"disclaimer_c_disclaimer" => 'Disclaimer',
 	"images_not_available" => 'The embedded image is not available at the moment',
 	"images_userposted" => 'User Posted Image',
 	"manage_members" => 'Manage chars',
@@ -947,6 +918,8 @@ If you are a Facebook member and do not want Facebook to connect the data concer
 	"extensions" => 'Extensions',
 	"points_for_this_char" => "Show the points information for this Char only",
 	"success_create_article" => 'Article has been saved succesfully',
+	"cookie_usage_hint" => "This site uses cookies. By continuing to browse this site, you are agreeing to our use of cookies. <a href=\"{COOKIE_LINK}\">More details</a>"
+	
 );
 
 ?>

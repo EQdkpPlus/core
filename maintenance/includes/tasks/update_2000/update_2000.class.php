@@ -398,10 +398,13 @@ class update_2000 extends sql_update_task {
 		
 		$this->config->set('default_style', (int)$arrData['style_id']);
 		$this->config->set('default_style_overwrite', 1);
-		$this->config->set('mainmenu', 'a:6:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"828e0013b8f3bc1bb22b4f57172b019d";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"fd613a0f87638ad1372d9b06bad29cb3";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}}}}');
-		
+		$this->config->set('mainmenu', 'a:8:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"d41d8cd98f00b204e9800998ecf8427e";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"8f9bfe9d1345237cb3b2b205864da075";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:2:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"cd5f542b7201c8d9b8f697f97a2dcc52";s:6:"hidden";s:1:"0";}}}}i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"292299380781735bd110e74fe0ada4ac";s:6:"hidden";s:1:"0";}}i:7;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"2a91cf06beec2894ebd9266c884558c3";s:6:"hidden";s:1:"0";}}}');	
+		$this->config->set('cookie_euhint_show',1);
 		//Set Dummy Game as default
 		$this->config->set('default_game', 'dummy');
+		
+		//Set Start Date of Default Articles before inserting the next ones.
+		$this->db->prepare("UPDATE __articles SET date=?, last_edited=?;")->execute($this->time->time,$this->time->time);
 		
 		//Migrate News		
 		$sql = "SELECT * FROM __news";
@@ -479,6 +482,15 @@ class update_2000 extends sql_update_task {
 			}
 			$this->db->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
 		}
+		
+		//Legal Notice and Privacy Policy
+		if (is_file($this->root_path.'language/'.$this->user->data['user_lang'].'/disclaimer.php')){
+			include_once($this->root_path.'language/'.$this->user->data['user_lang'].'/disclaimer.php');
+			
+			$this->db->prepare("INSERT INTO `__articles` (`title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`, `page_objects`, `hide_header`) VALUES ('Privacy Policy', ?, 1, 0, 0, 0, 1, '', '', 1, ?, '', 'privacypolicy', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, NULL, ?, 1, 'a:0:{}', 1)")->execute($privacy, $this->time->time, $this->time->time);
+			$this->db->prepare("INSERT INTO `__articles` (`title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`, `page_objects`, `hide_header`) VALUES ('Legal Notice', ?, 1, 0, 0, 0, 1, '', '', 1, ?, '', 'legalnotice', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, NULL, ?, 1, 'a:0:{}', 1);")->execute($disclaimer, $this->time->time, $this->time->time);
+		}
+		
 		//Update Colors
 		$this->update_colors();
 		
@@ -543,16 +555,6 @@ class update_2000 extends sql_update_task {
 				'pk_oc_time' 	=> 'time'
 			),
 		);
-		
-		/* standalone code to get output for settings conversion
-	$data =array(
-		// paste old settings here
-	);
-	
-	foreach ($data as $key => $stuff) {
-		echo "'".$key."'\t \t => '".str_replace('pk_oc_', '', $key)."',<br />";
-	}
-	*/
 		
 		//Clear cache
 		$this->pdc->flush();

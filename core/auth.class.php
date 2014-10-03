@@ -35,6 +35,7 @@ class auth extends user {
 	private $current_time 			= 0;
 	//minimum session_length
 	private $session_length			= 3600;
+	public $blnFirstVisit		= false;
 
 	private $settings = array(
 		'session_length'	=> array(
@@ -131,6 +132,8 @@ class auth extends user {
 					}
 				}
 			}
+		} else {			
+			$this->blnFirstVisit = true;
 		}
 		
 		$this->data['user_id'] = ANONYMOUS;

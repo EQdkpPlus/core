@@ -177,7 +177,31 @@ $lang = array(
 &lt;h3&gt;Portalverwaltung&lt;/h3&gt;
 &lt;p&gt;Früher gab es nur ein ein Portallayout, d.h. auf allen Seiten waren die Portalmodule gleich. Das hat sich nun geändert. So kann man Artikelkategorien andere Portallayouts zuweisen.&lt;/p&gt;
 &lt;p&gt;Desweiteren besteht die Möglichkeit, eigene Portalblöcke anzulegen, so dass man diese im Template einbindet, um z.B. Links im Footer einfacher verwalten zu können.&lt;/p&gt;',
-
+	
+	//Categories
+	'category1'	=> 'System',
+	'category2'	=> 'News',
+	'category3'	=> 'Events',
+	'category4'	=> 'Items',
+	'category5'	=> 'Raids',
+	'category6'	=> 'Kalender',
+		
+	//Articles
+	'article2' => 'Raid',
+	'article3' => 'Item',
+	'article4' => 'Event',
+	'article5' => 'Charakter',
+	'article6' => 'Roster',
+	'article7' => 'Events',
+	'article8' => 'Items',
+	'article9' => 'Punktestand',
+	'article10' => 'Raids',
+	'article12' => 'Kalenderevent',
+	'article13' => 'Kalender',
+	'article14' => 'Gildenregeln',
+	'article15' => 'Datenschutz',
+	'article16' => 'Impressum',
+		
 	//Fallback role-names
 	'role_healer' 			=> 'Heiler',
 	'role_tank' 			=> 'Tank',

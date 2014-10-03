@@ -321,13 +321,18 @@
 					
 					<article class="second column <!-- IF not S_PORTAL_RIGHT -->no_third_column<!-- ENDIF -->">
 						<div class="columnInner">
+							<!-- IF S_SHOW_COOKIE_HINT -->
+							<div class="infobox infobox-large infobox-blue clearfix">
+								<i class="fa-info-circle fa pull-left fa-2x"></i> {COOKIE_HINT}
+							</div>
+							<!-- ENDIF -->	
 							<!-- BEGIN global_warnings -->
 							<header>
 								<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
 									<i class="{global_warnings.ICON} fa-4x pull-left"></i> {global_warnings.MESSAGE}
 								</div>
 							</header>
-							<!-- END global_warnings -->
+							<!-- END global_warnings -->	
 							<aside id="portal-middle">
 								{PORTAL_MIDDLE}
 							</aside>

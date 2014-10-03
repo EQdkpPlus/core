@@ -461,35 +461,6 @@ $lang = array(
 "spl_autoload_register_notavailable" => "Die PHP-Funktion \"spl_autoload_register\" konnte nicht gefunden werden. Dies liegt vermutlich daran, dass du bei einem Freehoster bist, der diese Funktion nicht zur Verfügung stellt.",
 "php_too_old" => "Deine PHP-Version %1\$s ist zu alt. Benötigt wird mindestens die PHP-Version %2\$s.",
 "requirements_notfilled" => "Dein Server erfüllt nicht die Voraussetzungen, um EQdkp Plus betreiben zu können.",
-"register_licence" => "
-Diese Richtlinie beschreibt, wie diese Website und ggf. verbundene Institutionen (im Folgenden „das CMS“) und EQdkp Plus die Daten verwenden, die während deines CMS-Besuchs gesammelt werden.<br />
-<b>Du musst diese Richtlinie bestätigen, damit du einen Benutzeraccount in diesem CMS anlegen kannst.</b>
-<h2>Umfang und Art der Datenspeicherung</h2>
-Deine Daten werden auf zwei verschiedene Arten gesammelt:
-<ul><li>EQdkp Plus erstellt bei deinem Besuch des CMS mehrere Cookies. Cookies sind kleine Textdateien, die dein Browser als temporäre Dateien ablegt. Zwei dieser Cookies enthalten eine eindeutige Benutzer-Kennung (u.a. auch das verschlüsselte Passwort, wenn die Funktion \"automatisches Anmelden\" aktiviert ist) sowie eine anonyme Sitzungs-Nummer (Session-ID), die dir von EQdkp Plus automatisch zugewiesen wird. Weitere Cookies können bei Bedarf angelegt werden, um die Benutzbarkeit des CMS zu steigern.</li>
-<li>Weitere Daten werden gesammelt, wenn Informationen an den Betreiber übermittelt werden. Dies betrifft — ohne Anspruch auf Vollständigkeit — zum Beispiel Daten, die im Rahmen der Registrierung erfasst werden und die von dir nach deiner Registrierung erstellten Nachrichten, Kommentare o.ä. Dein Benutzerkonto besteht mindestens aus einem eindeutigen Benutzernamen, einem Passwort zur Anmeldung mit diesem Konto und einer persönlichen und gültigen E-Mail-Adresse.</li>
-</ul>
-Dein Passwort wird mit einer Einwege-Verschlüsselung (gesalzener Hash) gespeichert, so dass es sicher ist. Jedoch wird dir empfohlen, dieses Passwort nicht auf einer Vielzahl von Webseiten zu verwenden. Das Passwort ist dein Schlüssel zu deinem Benutzerkonto für das CMS, also geh mit ihm sorgsam um. Insbesondere wird dich kein Vertreter des Betreibers, oder ein Dritter berechtigterweise nach deinem Passwort fragen. Solltest du dein Passwort vergessen haben, so kannst du die Funktion „Ich habe mein Passwort vergessen“ benutzen. Die EQdkp Plus-Software fragt dich dann nach deinem Benutzernamen und deiner E-Mail-Adresse und sendet anschließend einen Link an diese Adresse, über den du dein Passwort ändern kannst.
-<h2>Gestattung der Datenspeicherung</h2>
-Du gestattest dem Betreiber, die von dir im Rahmen der Registrierung eingegebenen Daten sowie laufende Zugriffsdaten (Datum und Uhrzeit der Nutzung, IP-Adresse und weitere von deinem Browser übermittelte Daten) zu speichern und für den Betrieb des CMS zu verwenden.
-<h2>Regelungen bezüglich der Weitergabe deiner Daten</h2>
-Der Betreiber wird diese Daten nur mit deiner Zustimmung an Dritte weitergeben, sofern er nicht auf Grund gesetzlicher Regelungen zur Weitergabe der Daten verpflichtet ist oder die Daten zur Durchsetzung rechtlicher Interessen erforderlich sind.<br />
-Du nimmst zur Kenntnis, dass die von dir in deinem Profil angegebenen Daten und deine Beiträge je nach Konfiguration im Internet verfügbar und von jedermann abrufbar sein können.
-<h2>Gestattung der Kontaktaufnahme</h2>
-Du gestattest dem Betreiber darüber hinaus, dich unter den von dir angegebenen Kontaktdaten zu kontaktieren, sofern dies zur Übermittlung zentraler Informationen über das CMS erforderlich ist. Darüber hinaus dürfen er und andere Benutzer dich kontaktieren, sofern du dies an entsprechender Stelle erlaubt hast.
-<h2>Geltungsbereich dieser Richtlinie</h2>
-Diese Richtlinie umfasst nur den Bereich der Seiten, die die EQdkp Plus-Software umfassen. Sofern der Betreiber in anderen Bereichen seiner Software weitere personenbezogene Daten verarbeitet, wird er dich darüber gesondert informieren.
-<h2>Auskunftsrecht</h2>
-Der Betreiber erteilt dir auf Anfrage Auskunft, welche Daten über dich gespeichert sind.<br />
-Du kannst jederzeit die Löschung bzw. Sperrung deiner Daten verlangen. Kontaktiere hierzu bitte den Betreiber.",
-"social_privacy_statement" => "<h2>Nutzung von Facebook-Plugins</h2>
-Unser Internetauftritt verwendet Social Plugins (\"Plugins\") des sozialen Netzwerkes facebook.com, welches von der Facebook Inc., 1601 S. California Ave, Palo Alto, CA 94304, USA betrieben wird (\"Facebook\"). Die Plugins sind an einem der Facebook Logos erkennbar (weißes „f“ auf blauer Kachel oder ein „Daumen hoch“-Zeichen) oder sind mit dem Zusatz \"Facebook Social Plugin\" gekennzeichnet. Die Liste und das Aussehen der Facebook Social Plugins kann hier eingesehen werden: http://developers.facebook.com/plugins.
-Wenn Sie eine Webseite unseres Internetauftritts aufrufen, die ein solches Plugin enthält, baut Ihr Browser eine direkte Verbindung mit den Servern von Facebook auf. Der Inhalt des Plugins wird von Facebook direkt an Ihren Browser übermittelt und von diesem in die Webseite eingebunden. Wir haben daher keinen Einfluss auf den Umfang der Daten, die Facebook mit Hilfe dieses Plugins erhebt und informieren Sie daher entsprechend unserem Kenntnisstand:
-Durch die Einbindung der Plugins erhält Facebook die Information, dass Sie die entsprechende Seite unseres Internetauftritts aufgerufen haben. Sind Sie bei Facebook eingeloggt, kann Facebook den Besuch Ihrem Facebook-Konto zuordnen. Wenn Sie mit den Plugins interagieren, zum Beispiel den Like Button betätigen oder einen Kommentar abgeben, wird die entsprechende Information von Ihrem Browser direkt an Facebook übermittelt und dort gespeichert. Falls Sie kein Mitglied von Facebook sind, besteht trotzdem die Möglichkeit, dass Facebook Ihre IP-Adresse in Erfahrung bringt und speichert.
-Zweck und Umfang der Datenerhebung und die weitere Verarbeitung und Nutzung der Daten durch Facebook sowie Ihre diesbezüglichen Rechte und Einstellungsmöglichkeiten zum Schutz Ihrer Privatssphäre entnehmen Sie bitte den Datenschutzhinweisen von Facebook: http://www.facebook.com/policy.php.
-Wenn Sie Facebookmitglied sind und nicht möchten, dass Facebook über unseren Internetauftritt Daten über Sie sammelt und mit Ihren bei Facebook gespeicherten Mitgliedsdaten verknüpft, müssen Sie sich vor Ihrem Besuch unseres Internetauftritts bei Facebook ausloggen.
-Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser zu blocken, zum Beispiel mit dem \"Facebook Blocker\".
-",
 "deny" => "Ablehnen",
 "accept" => "Akzeptieren",
 "guildrules" => "Gildenregeln",
@@ -504,16 +475,6 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "forum" => "Forum",
 "dkp_system" => "%s-System",
 "version" => "Version",
-"disclaimer" => "Impressum",
-"disclaimer_win_title" => "Impressum dieser Seite",
-"disclaimer_c_title" => "Kontaktdetails",
-"disclaimer_c_name" => "Kontaktperson",
-"disclaimer_c_address" => "Adresse",
-"disclaimer_c_email" => "E-Mailadresse",
-"disclaimer_c_messenger" => "Messenger",
-"disclaimer_c_irc" => "IRC-Channel",
-"disclaimer_c_custom" => "Zusatz",
-"disclaimer_c_disclaimer" => "Haftungsausschluss",
 "images_not_available" => "Das eingebettete Bild ist zur Zeit leider nicht verfügbar.",
 "images_userposted" => "Hochgeladenes Bild",
 "manage_members" => "Charaktere verwalten",
@@ -934,6 +895,7 @@ Ebenfalls ist es möglich Facebook-Social-Plugins mit Add-ons für Ihren Browser
 "confirm_password" => "Passwort wiederholen",
 "points_for_this_char" => "Zeige die Punkte-Informationen nur für diesen Charakter an",
 "success_create_article" => "Der Artikel wurde erfolgreich gespeichert",
+"cookie_usage_hint" => "Diese Seite verwendet Cookies. Durch die Nutzung unserer Seite erklärst du dich damit einverstanden, dass wir Cookies setzen. <a href=\"{COOKIE_LINK}\">Weitere Informationen</a>"		
  );
 
 ?>
