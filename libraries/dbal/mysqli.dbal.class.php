@@ -406,8 +406,9 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	 */
 	protected function execute_query()
 	{
-		$this->strQuery = str_replace(' __', ' '.$this->strTablePrefix, $this->strQuery);
 		
+		$this->strQuery  = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
+
 		// Log the Query
 		$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery);
 		
