@@ -189,7 +189,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					if(is_array($this->cmfields)){
 						$my_data = $this->xmltools->Database2Array($bmd_row['profiledata']);
 						foreach($this->cmfields as $mmdata){
-							$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? $my_data[$mmdata] : '';
+							$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata]) && !is_array($my_data[$mmdata])) ? sanitize($my_data[$mmdata]) : '';
 						}
 					}
 				}
