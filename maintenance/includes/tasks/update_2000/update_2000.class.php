@@ -430,7 +430,7 @@ class update_2000 extends sql_update_task {
 						'user_id'			=> $row['user_id'],
 						'date'				=> $row['news_date'],
 						'previewimage'		=> "",
-						'alias'				=> $this->routing->clean($row['news_headline'].''.$row['news_id']),
+						'alias'				=> $this->create_alias($row['news_headline'].''.$row['news_id']),
 						'hits'				=> 0,
 						'sort_id'			=> 0,
 						'tags'				=> serialize(array()),
@@ -467,7 +467,7 @@ class update_2000 extends sql_update_task {
 						'user_id'			=> $row['page_edit_user'],
 						'date'				=> $row['page_edit_date'],
 						'previewimage'		=> "",
-						'alias'				=> $this->routing->clean($row['page_title'].''.$row['page_id']),
+						'alias'				=> $this->create_alias($row['page_title'].''.$row['page_id']),
 						'hits'				=> 0,
 						'sort_id'			=> 0,
 						'tags'				=> serialize(array()),
@@ -560,6 +560,14 @@ class update_2000 extends sql_update_task {
 		$this->pdc->flush();
 		
 		return true;
+	}
+	
+	private function create_alias($strTitle){
+		$strAlias = utf8_strtolower($strTitle);
+		$strAlias = str_replace(' ', '-', $strAlias);
+		$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^");
+		$strAlias = str_replace($a_satzzeichen, "", $strAlias);
+		return $strAlias;
 	}
 }
 

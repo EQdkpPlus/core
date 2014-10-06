@@ -560,7 +560,7 @@ if(!class_exists('pdh_w_articles')) {
 		private function create_alias($strTitle){
 			$strAlias = utf8_strtolower($strTitle);
 			$strAlias = str_replace(' ', '-', $strAlias);
-			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$");
+			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^");
 			$strAlias = str_replace($a_satzzeichen, "", $strAlias);
 			return $strAlias;
 		}
