@@ -154,7 +154,8 @@ if(!class_exists('routing')){
 		public function clean($strText){
 			$strText = utf8_strtolower($strText);
 			$strText = str_replace(' ', '-', $strText);
-			$strText = preg_replace("/[^a-zA-Z0-9üÜäÄöÖ_-]/","",$strText);
+			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^");
+			$strText = str_replace($a_satzzeichen, "", $strText);
 			return ucfirst($strText);
 		}
 		
