@@ -3215,6 +3215,6 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	text-decoration: underline;
 }
 
-.ui-dialog {
+.ui-dialog, .ui-autocomplete {
 	text-align: left;
 }
