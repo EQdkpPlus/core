@@ -113,11 +113,10 @@ class update_2000 extends sql_update_task {
 				56 => 'Alter config table',
 				57 => 'Alter config table',
 				58 => 'Alter config table',
-				59 => 'Alter config table',
-				60 => 'Create groups_raid table',
-				61 => 'Create groups_raid_members table',
-				62 => 'Add default raid group',
-				63 => 'Add description field to repository table',
+				59 => 'Create groups_raid table',
+				60 => 'Create groups_raid_members table',
+				61 => 'Add default raid group',
+				62 => 'Add description field to repository table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -179,11 +178,10 @@ class update_2000 extends sql_update_task {
 				56 => 'Alter config table',
 				57 => 'Alter config table',
 				58 => 'Alter config table',
-				59 => 'Alter config table',
-				60 => 'Create groups_raid table',
-				61 => 'Create groups_raid_members table',
-				62 => 'Add default raid group',
-				63 => 'Add description field to repository table',
+				59 => 'Create groups_raid table',
+				60 => 'Create groups_raid_members table',
+				61 => 'Add default raid group',
+				62 => 'Add description field to repository table',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -349,11 +347,10 @@ class update_2000 extends sql_update_task {
 			53 => "ALTER TABLE `__members` DROP `member_level`, DROP `member_race_id`, DROP `member_class_id`;",
 			54 => "ALTER TABLE `__multidkp` ADD COLUMN `multidkp_sortid` INT(11) UNSIGNED NULL DEFAULT '0';",
 			55 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N');",
-			56 => "RENAME TABLE `__backup_cnf` TO `__config`;",
-			57 => "ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(40) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';",
-			58 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_man','N');",
-			59 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_grpleader','N');",
-			60 => "CREATE TABLE `__groups_raid` (
+			56 => "ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(40) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';",
+			57 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_man','N');",
+			58 => "INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_grpleader','N');",
+			59 => "CREATE TABLE `__groups_raid` (
 				`groups_raid_id` int(11) NOT NULL AUTO_INCREMENT,
 				`groups_raid_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 				`groups_raid_color` varchar(10) COLLATE utf8_bin DEFAULT NULL,
@@ -363,18 +360,21 @@ class update_2000 extends sql_update_task {
 				`groups_raid_sortid` smallint(5) unsigned NOT NULL DEFAULT '0',
 				PRIMARY KEY (`groups_raid_id`)
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
-			61 => "CREATE TABLE `__groups_raid_members` (
+			60 => "CREATE TABLE `__groups_raid_members` (
 				`group_id` int(22) NOT NULL,
 				`member_id` int(22) NOT NULL,
 				`grpleader` int(1) NOT NULL DEFAULT '0'
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
-			62 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');",
-			63 => 'ALTER TABLE `__repository` ADD `description` TEXT  CHARACTER SET utf8  BINARY  NULL  AFTER `author`;',
+			61 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');",
+			62 => 'ALTER TABLE `__repository` ADD `description` TEXT  CHARACTER SET utf8  BINARY  NULL  AFTER `author`;',
 		);
 	}
 	
 	// Transfer data into new format
 	public function before_update_function() {
+		// receive a config value to initiate the config table rename process
+		$this->config->get('start_page');
+		
 		// convert profile-fields from xml to json
 		$objQuery = $this->db->query("SELECT member_id, profiledata, member_race_id as race, member_level as level, member_class_id as class FROM __members;");
 		$profiledata = array();
