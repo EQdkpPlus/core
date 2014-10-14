@@ -266,7 +266,9 @@
 			<div id="header">
 				<div id="logoContainer" class="{T_LOGO_POSITION}">
 					<div id="logoArea" class="hiddenSmartphone">
+						<!-- IF HEADER_LOGO -->
 						<img src="{HEADER_LOGO}" alt="{MAIN_TITLE}" id="mainlogo" />
+						<!-- ENDIF -->
 					</div><!-- close logoArea -->
 					
 					<hgroup id="titles">
