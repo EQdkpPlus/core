@@ -68,7 +68,7 @@ class login_battlenet extends gen_class {
 	
 	public function init_oauth(){
 		if (!$this->oauth_loaded){
-			require($this->root_path.'libraries/oauth/client.php');
+			require($this->root_path.'libraries/oauth/Client.php');
 			require($this->root_path.'libraries/oauth/GrantType/IGrantType.php');
 			require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
 			
