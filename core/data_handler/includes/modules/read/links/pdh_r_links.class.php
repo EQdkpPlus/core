@@ -111,7 +111,8 @@ if ( !class_exists( "pdh_r_links" ) ){
 								break ;
 							case '2':
 							case '3':
-							case '4': $url = $this->routing->build("external", $link['name'], $link['id'], true, true);
+							case '4': 
+							case '5': 	$url = $this->routing->build("external", $link['name'], $link['id'], true, true);
 								break ;
 						}
 
