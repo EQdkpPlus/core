@@ -1638,6 +1638,9 @@ $lang = array(
 	
 	"upload_eventicon" => "Upload Eventicon",
 	"selected_elements" => "Selected Elements",
+	
+	"show_on_teamlist" => "Show on Teampage",
+	"show_teamlist" => "Teampage",
 );
 
 ?>

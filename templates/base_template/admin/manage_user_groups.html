@@ -14,6 +14,7 @@
 			$('.addgroup-name').val('');
 			$('.addgroup-desc').val('');
 			$('.addgroup-hidden').prop("checked", false);
+			$('.addgroup-team').prop("checked", false);
 			
 			$( "#dialog-add-usergroup" ).dialog( "open" );
 		});
@@ -25,14 +26,20 @@
 			var name = $('.addgroup-name').val();
 			var desc = $('.addgroup-desc').val();
 			var hidden = $('.addgroup-hidden').prop("checked");
-			var strHidden = (hidden) ? 'checked="checked"' : "";
+			var strHidden = (hidden) ? 'hide]" checked="checked"' : 'hide]"';
+			
+			var team = $('.addgroup-team').prop("checked");
+			var strTeam = (team) ? 'team]" checked="checked"' : 'team]"';
 			
 			var new_row = $('#usergroup_template>tbody').html()+"";
 			new_row = new_row.replace(/KEY/g, newkey);
 			new_row = new_row.replace(/ID/g, newid);
 			new_row = new_row.replace(/NAME/g, name);
 			new_row = new_row.replace(/DESC/g, desc);
-			new_row = new_row.replace(/checked="checked"/g, strHidden);
+
+			new_row = new_row.replace(/hide]"/g, strHidden);
+			new_row = new_row.replace(/team]"/g, strTeam);
+
 			newkey++;
 			newid++;
 
@@ -60,6 +67,10 @@
 			<dl>
 				<dt><label>{L_hidden}:</label></dt>					
 				<dd><input type="checkbox" class="addgroup-hidden" value="1"/></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_show_on_teamlist}:</label></dt>					
+				<dd><input type="checkbox" class="addgroup-team" value="1"/></dd>
 			</dl>
 		</fieldset>
 		<button type="button" id="addgroup-button"><i class="fa fa-check"></i> {L_submit}</button>
@@ -93,6 +104,7 @@
 			<th width="50" class="nowrap">{L_group_members}</th>
 			<th>{L_default_group}</th>
 			<th>{L_hide}</th>
+			<th>{L_show_teamlist}</th>
 		</tr>
 		</thead>
 		<tbody class="add_container">
@@ -111,6 +123,7 @@
 			<td>{user_groups.USER_COUNT}</td>
 			<td width="50" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
 			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][hide]" {user_groups.HIDE} />&nbsp;</td>
+			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][team]" {user_groups.TEAM} />&nbsp;</td>
 		</tr>
 		<!-- END user_groups -->
 		</tbody>
@@ -133,7 +146,8 @@
 			<td><input type="text" name="user_groups[KEY][desc]" size="50" maxlength="75" value="DESC" class="maininput" style="width:95%" /></td>
 			<td></td>
 			<td width="50" class="nowrap"></td>
-			<td><input type="checkbox" value="1" name="user_groups[KEY][hide]" checked="checked"/></td>
+			<td><input type="checkbox" value="1" name="user_groups[KEY][hide]" /></td>
+			<td><input type="checkbox" value="1" name="user_groups[KEY][team]" /></td>
 		</tr>
 	</table>
 	

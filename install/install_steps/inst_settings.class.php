@@ -299,9 +299,9 @@ class inst_settings extends install_generic {
 			(5,".$this->db->escapeString($this->lang['grp_officers']).",".$this->db->escapeString($this->lang['grp_officers_desc']).",'1','0','0'),
 			(6,".$this->db->escapeString($this->lang['grp_writers']).",".$this->db->escapeString($this->lang['grp_writers_desc']).",'1','0','0');
 		");
-		$b[] = $this->InsertGroupPermissions(1, array('u_userlist', 'u_search'));
+		$b[] = $this->InsertGroupPermissions(1, array('u_userlist', 'u_search', 'u_team_list'));
 		$b[] = $this->InsertGroupPermissions(3, false, array('a_backup', 'a_logs_del', 'a_maintenance', 'a_reset', 'a_files_man'));
-		$b[] = $this->InsertGroupPermissions(4, array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del', 'u_userlist', 'u_calendar_view', 'u_search', 'u_usermailer', 'u_files_man'));
+		$b[] = $this->InsertGroupPermissions(4, array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del', 'u_userlist', 'u_calendar_view', 'u_search', 'u_usermailer', 'u_files_man', 'u_team_list'));
 		$b[] = $this->InsertGroupPermissions(5, array('a_event_add', 'a_event_upd', 'a_event_del', 'a_item_add', 'a_item_upd', 'a_item_del', 'a_raid_add', 'a_raid_upd', 'a_raid_del', 'a_members_man', 'a_calendars_man', 'a_cal_event_man', 'a_articles_man'));
 		$b[] = $this->InsertGroupPermissions(6, array('a_articles_man', 'a_files_man'));
 		if(in_array(false, $b, true)) return false;

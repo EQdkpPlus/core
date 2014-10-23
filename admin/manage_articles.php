@@ -163,7 +163,7 @@ class Manage_Articles extends page_generic {
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('success_create_article'), $this->user->lang('success'), 'green');
-			$this->edit($id);
+			$this->edit($blnResult);
 		} else {
 			$this->core->message($this->user->lang('error_create_article'), $this->user->lang('error'), 'red');
 			$this->display();

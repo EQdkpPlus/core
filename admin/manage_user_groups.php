@@ -121,7 +121,7 @@ class Manage_User_Groups extends page_generic {
 			foreach($group_post as $key=>$group) {
 				$standard = ($this->in->get('user_groups_standard') == $group['id']) ? 1 : 0;
 				$func = (in_array($group['id'], $id_list)) ? 'update_grp' : 'add_grp';
-				$retu[] = $this->pdh->put('user_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $group['hide'], $key));
+				$retu[] = $this->pdh->put('user_groups', $func, array($group['id'], $group['name'], $group['desc'], $standard, $group['hide'], $group['team'], $key));
 				$names[] = $group['name'];
 				$add_name = (in_array($group['id'], $id_list)) ? '' : $group['name'];
 			}
@@ -200,6 +200,7 @@ class Manage_User_Groups extends page_generic {
 				'S_NO_STANDARD' => ($id == 2 || $id == 3) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('user_groups', 'standard', array($id))) ? 'checked="checked"' : '',
 				'HIDE'	=> ($this->pdh->get('user_groups', 'hide', array($id))) ? 'checked="checked"' : '',
+				'TEAM'	=> ($this->pdh->get('user_groups', 'team', array($id))) ? 'checked="checked"' : '',
 				'S_IS_GRPLEADER' => $this->pdh->get('user_groups_users', 'is_grpleader', array($this->user->id, $id)),
 			));
 			$key++;
@@ -545,6 +546,7 @@ class Manage_User_Groups extends page_generic {
 						'name'	=> $this->in->get('user_groups:'.$key.':name',''),
 						'desc'	=> $this->in->get('user_groups:'.$key.':desc',''),
 						'hide'	=> $this->in->get('user_groups:'.$key.':hide',0),
+						'team'	=> $this->in->get('user_groups:'.$key.':team',0),
 						'deletable' => $this->in->get('user_groups:'.$key.':deletable',false)
 					);
 				}
@@ -566,6 +568,7 @@ class Manage_User_Groups extends page_generic {
 						'name'	=> $this->in->get('user_groups:'.$key.':name',''),
 						'desc'	=> $this->in->get('user_groups:'.$key.':desc',''),
 						'hide'	=> $this->in->get('user_groups:'.$key.':hide',0),
+						'team'	=> $this->in->get('user_groups:'.$key.':team',0),
 						'deletable' => $this->in->get('user_groups:'.$key.':deletable',false)
 					);
 				}

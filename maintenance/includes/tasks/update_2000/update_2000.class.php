@@ -117,6 +117,7 @@ class update_2000 extends sql_update_task {
 				60 => 'Create groups_raid_members table',
 				61 => 'Add default raid group',
 				62 => 'Add description field to repository table',
+				64 => 'Insert Article',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 			'german' => array(
@@ -182,6 +183,7 @@ class update_2000 extends sql_update_task {
 				60 => 'Create groups_raid_members table',
 				61 => 'Add default raid group',
 				62 => 'Add description field to repository table',
+				64 => 'Insert Article',
 				'update_function' => 'Set Settings, Migrate News and Pages, Update Colors',
 			),
 		);
@@ -367,6 +369,7 @@ class update_2000 extends sql_update_task {
 				)	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			61 => "INSERT INTO `__groups_raid` (`groups_raid_id`, `groups_raid_name`, `groups_raid_desc`, `groups_raid_deletable`, `groups_raid_default`, `groups_raid_sortid`, `groups_raid_color`) VALUES (1, 'Default','',0,1,1, '#000000');",
 			62 => 'ALTER TABLE `__repository` ADD `description` TEXT  CHARACTER SET utf8  BINARY  NULL  AFTER `author`;',
+			64 => "INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`, `page_objects`, `hide_header`) VALUES (17, 'Team', '&lt;p class=&quot;system-article&quot; title=&quot;team&quot;&gt;team&lt;/p&gt;\r\n&lt;p&gt; &lt;/p&gt;', 1, 0, 0, 0, 1, '', '', 1, 1414051680, '', 'team', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, NULL, 1414051775, 1, 'a:1:{i:0;s:4:\"team\";}', 1);",
 		);
 	}
 	

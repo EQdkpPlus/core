@@ -44,12 +44,13 @@ if(!class_exists('pdh_w_user_groups')) {
 			return true;
 		}
 
-		public function update_grp($id, $name='', $desc='', $standard=0, $hide=0, $sortid=0) {
+		public function update_grp($id, $name='', $desc='', $standard=0, $hide=0, $team=0, $sortid=0) {
 			$old = array();
 			$old['name']		= $this->pdh->get('user_groups', 'name', array($id));
 			$old['desc']		= $this->pdh->get('user_groups', 'desc', array($id));
 			$old['standard']	= (int)$this->pdh->get('user_groups', 'standard', array($id));
 			$old['hide']		= (int)$this->pdh->get('user_groups', 'hide', array($id));
+			$old['team']		= (int)$this->pdh->get('user_groups', 'team', array($id));
 			$old['sortid']		= (int)$this->pdh->get('user_groups', 'sortid', array($id));
 			$changes = false;
 			
@@ -69,6 +70,7 @@ if(!class_exists('pdh_w_user_groups')) {
 					'groups_user_desc' => $desc,
 					'groups_user_default' => $standard,
 					'groups_user_hide' => $hide,
+					'groups_user_team' => $team,
 					'groups_user_sortid' => $sortid,
 				);
 				

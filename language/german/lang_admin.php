@@ -1638,7 +1638,9 @@ $lang = array(
 "export_format"	=> "Ausgabe-Format",
 "export_data" => "Daten",
 "upload_eventicon" => "Ereignisicon hinzufügen",
-"selected_elements" => "Ausgewählte Elemente",		
+"selected_elements" => "Ausgewählte Elemente",
+"show_on_teamlist" => "Auf Teamseite anzeigen",
+"show_teamlist" => "Teamseite",		
  );
 
 ?>

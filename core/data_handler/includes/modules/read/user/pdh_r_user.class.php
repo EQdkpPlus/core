@@ -364,8 +364,13 @@ if (!class_exists("pdh_r_user")){
 			$arrMemberships2 = $this->get_groups($params2[0]);
 			$intGroup1 = array_shift($arrMemberships1);
 			$intGroup2 = array_shift($arrMemberships2);
+			$myArrayToSort = array($intGroup1, $intGroup2);
+			$arrSorted = $this->pdh->sort($myArrayToSort, 'user_groups', 'sortid');
+			if (array_shift($arrSorted) == array_shift($myArrayToSort)){
+				return 1;
+			}
 			
-			return ($intGroup1 > $intGroup2) ? 1 : -1;
+			return -1;
 		}
 
 		public function get_stylecount($styleid){

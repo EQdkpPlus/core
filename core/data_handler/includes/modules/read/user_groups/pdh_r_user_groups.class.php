@@ -42,13 +42,14 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 			$objQuery = $this->db->query("SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
-					$this->user_groups[$row['groups_user_id']]['id']		= $row['groups_user_id'];
+					$this->user_groups[$row['groups_user_id']]['id']		= (int)$row['groups_user_id'];
 					$this->user_groups[$row['groups_user_id']]['name']		= $row['groups_user_name'];
 					$this->user_groups[$row['groups_user_id']]['desc']		= $row['groups_user_desc'];
-					$this->user_groups[$row['groups_user_id']]['deletable']	= $row['groups_user_deletable'];
-					$this->user_groups[$row['groups_user_id']]['default']	= $row['groups_user_default'];
-					$this->user_groups[$row['groups_user_id']]['hide']		= $row['groups_user_hide'];
-					$this->user_groups[$row['groups_user_id']]['sortid']	= $row['groups_user_sortid'];
+					$this->user_groups[$row['groups_user_id']]['deletable']	= (int)$row['groups_user_deletable'];
+					$this->user_groups[$row['groups_user_id']]['default']	= (int)$row['groups_user_default'];
+					$this->user_groups[$row['groups_user_id']]['hide']		= (int)$row['groups_user_hide'];
+					$this->user_groups[$row['groups_user_id']]['sortid']	= (int)$row['groups_user_sortid'];
+					$this->user_groups[$row['groups_user_id']]['team']		= (int)$row['groups_user_team'];
 					if ($row['groups_user_default'] == 1){
 						$this->user_standard_group = $row['groups_user_id'];
 					}
@@ -93,6 +94,10 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 			return $this->user_groups[$groups_user_id]['hide'];
 		}
 		
+		public function get_team($groups_user_id){
+			return $this->user_groups[$groups_user_id]['team'];
+		}
+		
 		public function get_sortid($groups_user_id){
 			return $this->user_groups[$groups_user_id]['sortid'];
 		}
@@ -103,6 +108,16 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 			} else {
 				return 4;
 			}
+		}
+		
+		public function get_team_groups(){
+			$out = array();
+			foreach ($this->user_groups as $key=>$value){
+				if ($value['team'] == 1){
+					$out[$key] = $key;
+				}
+			}
+			return $out;
 		}
 	}//end class
 }//end if

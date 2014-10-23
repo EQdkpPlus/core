@@ -60,6 +60,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'charname'		=> array('name_decorated',	array('%member_id%'),	array()),
 			'cmainchar'		=> array('mainchar_radio',	array('%member_id%'),	array()),
 			'cdefrole'		=> array('char_defrole',	array('%member_id%'),	array()),
+			'mraidgroups'	=> array('raidgroups',	array('%member_id%'),	array()),
 			'mlink_decorated'=> array('memberlink_decorated', array('%member_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 		);
 
@@ -711,6 +712,19 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_html_user($memberid){
 			return $this->pdh->get('user', 'name', array($this->get_user($memberid)));
+		}
+		
+		public function get_raidgroups($memberid){
+			return $this->pdh->get('raid_groups_members', 'memberships', array($memberid));
+		}
+		
+		public function get_html_raidgroups($memberid){
+			$arrOut = array();
+			$arrMemberships = $this->get_raidgroups($memberid);
+			foreach($arrMemberships as $raidgroupid){
+				$arrOut[] = '<span style="color:'.$this->pdh->get('raid_groups', 'color', $raidgroupid).'">'.$this->pdh->get('raid_groups', 'name', $raidgroupid).'</span>';
+			}
+			return implode(', ', $arrOut);
 		}
 		
 		public function comp_user($params1, $params2) {

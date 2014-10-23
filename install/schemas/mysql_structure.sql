@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS `__groups_user` (
 	`groups_user_default` tinyint(1) NOT NULL DEFAULT 0,
 	`groups_user_hide` tinyint(1) NOT NULL DEFAULT 0,
 	`groups_user_sortid` smallint(5) unsigned NOT NULL DEFAULT 0,
+	`groups_user_team` tinyint(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`groups_user_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
