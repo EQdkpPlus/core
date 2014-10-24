@@ -56,7 +56,8 @@ class portal extends gen_class {
 	}
 	
 	public function get_module_external($intModuleID){
-		if(in_array(PMOD_VIS_EXT, $this->config->get('visibility', 'pmod_'.$intModuleID))) {
+
+		if(in_array(PMOD_VIS_EXT, $this->config->get('visibility', 'pmod_'.$intModuleID)) || in_array(0, $this->config->get('visibility', 'pmod_'.$intModuleID))) {
 			$position = $this->in->get('position', 'left');
 			$wide = ($this->in->get('wide', 0));
 			
