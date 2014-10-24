@@ -208,11 +208,23 @@ class wrapper_pageobject extends pageobject {
 
 				if (currentfr){
 					currentfr.style.display = "block";
-					if (currentfr.contentDocument && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
+					if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
 						currentfr.height = currentfr.contentDocument.body.offsetHeight;
-					} else if (currentfr.Document && currentfr.Document.body.scrollHeight) {//ie5+ syntax
+					} else if (currentfr.Document && currentfr.Document.body && currentfr.Document.body.scrollHeight) {//ie5+ syntax
 						currentfr.height = currentfr.Document.body.scrollHeight;
 					}
+				
+					//Set correct width
+					if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.scrollWidth) {//ie5+ syntax
+						var scrollwidth = currentfr.contentDocument.body.scrollWidth;
+						var myscrollwidth = currentfr.scrollWidth;
+
+						if (scrollwidth >  myscrollwidth+5){
+							currentfr.width = scrollwidth;
+						}	
+					}
+
+				
 					if (currentfr.addEventListener) {
 						currentfr.addEventListener("load", readjustIframe, false);
 					} else if (currentfr.attachEvent){
