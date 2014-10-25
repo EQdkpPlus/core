@@ -532,7 +532,7 @@ if(!class_exists('pdh_w_articles')) {
 				if ($log_action) $this->log_insert('action_article_updated', $log_action, $id, $this->pdh->get('articles', 'title', array($id)), 1, 'article');
 			}
 			
-			$objQuery = $this->db->prepare("UPDATE __articles WHERE id :in")->set(array(
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id :in")->set(array(
 				'category' => $intCategoryID,	
 			))->in($arrIDs)->execute();
 			

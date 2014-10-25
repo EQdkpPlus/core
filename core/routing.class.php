@@ -122,21 +122,26 @@ if(!class_exists('routing')){
 					}
 				}
 			} else $strPath .= ucfirst($this->get($arrPageObject, true));
+			
 			if ($strParamText || $strParam) $strPath .= '/';
 			if ($strParamText) $strPath .= $this->clean($strParamText);
 			if ($strParam) $strPath .= '-'.$strParam;
 			if(!$blnAddExtension) return $strPath;
 			
-			$strPath .= $this->getSeoExtension();
+			$lastChar = substr($strPath, -1, 1);
+			if ($lastChar != "/"){
+				$strPath .= $this->getSeoExtension();
 
-			if ($blnAddSID) $strPath .= $this->SID;
+				if ($blnAddSID) $strPath .= $this->SID;
+			}
 			return $strPath;
 		}
 		
 		public function simpleBuild($strPageObject){
 			$strPath = $this->controller_path;
 			$strPath .= ucfirst($this->get($strPageObject, true));
-			return $strPath.'/';
+			if (substr($strPath, -1, 1) != "/") $strPath .= '/';
+			return $strPath;
 		}
 		
 		public function getSeoExtension(){

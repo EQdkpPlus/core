@@ -559,6 +559,19 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return $arrChilds;
 		}
 		
+		public function get_index_article($intCategoryID){
+			$arrArticles = $this->pdh->get('articles', 'id_list', array($intCategoryID));
+			foreach($arrArticles as $intArticleID){
+				if ($this->pdh->get('articles', 'published', array($intArticleID))){
+					$strAlias = $this->pdh->get('articles', 'alias', array($intArticleID));
+					if (strpos($strAlias, 'index_') === 0){
+						return $intArticleID;
+					}
+				}
+			}
+			return false;
+		}
+		
 		public function get_unpublished_articles_notify(){
 			$arrOut = array();
 			foreach($this->categories as $intCategoryID => $val){

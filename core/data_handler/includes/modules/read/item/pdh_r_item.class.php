@@ -236,7 +236,7 @@ if(!class_exists('pdh_r_item')){
 
 		//Finished
 		public function get_link($item_id, $baseurl, $url_suffix='', $blnUseController=false){
-			if ($blnUseController  && $blnUseController !== '%use_controller%') return $baseurl.register('routing')->clean($this->get_name($item_id)).'-'.$item_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
+			if ($blnUseController  && $blnUseController !== '%use_controller%') return $baseurl.register('routing')->clean($this->get_name($item_id)).'-i'.$item_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
 			return $baseurl.$this->SID.'&amp;i='.$item_id.$url_suffix;
 		}
 
@@ -355,7 +355,7 @@ if(!class_exists('pdh_r_item')){
 				$arrSearchResults[] = array(
 					'id'	=> $this->get_html_date($id),
 					'name'	=> $this->get_name($id),
-					'link'	=> $this->routing->build('item', $this->get_name($id), $id),
+					'link'	=> $this->routing->build('items', $this->get_name($id), 'i'.$id),
 				);
 			}
 			

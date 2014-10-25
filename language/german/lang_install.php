@@ -185,11 +185,11 @@ $lang = array(
 	'category4'	=> 'Items',
 	'category5'	=> 'Raids',
 	'category6'	=> 'Kalender',
+	'category7'	=> 'Roster',
+	'category8'	=> 'Punktestand',
+	'category9'	=> 'Charakter',
 		
 	//Articles
-	'article2' => 'Raid',
-	'article3' => 'Item',
-	'article4' => 'Event',
 	'article5' => 'Charakter',
 	'article6' => 'Roster',
 	'article7' => 'Events',

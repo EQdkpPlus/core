@@ -171,11 +171,11 @@ $lang = array(
 	'category4'	=> 'Items',
 	'category5'	=> 'Raids',
 	'category6'	=> 'Calendar',
+	'category7'	=> 'Roster',
+	'category8'	=> 'Points',
+	'category9'	=> 'Character',
 	
 	//Articles
-	'article2' => 'Raid',
-	'article3' => 'Item',
-	'article4' => 'Event',
 	'article5' => 'Character',
 	'article6' => 'Roster',
 	'article7' => 'Events',

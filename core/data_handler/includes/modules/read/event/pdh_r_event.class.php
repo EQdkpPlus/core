@@ -106,7 +106,7 @@ if(!class_exists('pdh_r_event')){
 		}
 
 		public function get_eventlink($event_id, $baseurl, $url_suffix='', $blnUseController=false){
-			if($blnUseController && $blnUseController !== "%use_controller%") return $baseurl.register('routing')->clean($this->get_name($event_id)).'-'.$event_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
+			if($blnUseController && $blnUseController !== "%use_controller%") return $baseurl.register('routing')->clean($this->get_name($event_id)).'-e'.$event_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
 			return $baseurl.$this->SID.'&amp;event_id='.$event_id.$url_suffix;
 		}
 
@@ -166,7 +166,7 @@ if(!class_exists('pdh_r_event')){
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_icon($id),
 							'name'	=> $this->get_name($id),
-							'link'	=> $this->routing->build('event', $value['name'], $id),
+							'link'	=> $this->routing->build('events', $value['name'], $id),
 						);
 					}
 				}

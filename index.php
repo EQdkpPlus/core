@@ -111,6 +111,14 @@ class controller extends gen_class {
 		if (!$intArticleID){
 			//Suche Alias in Kategorien
 			$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array($arrPath[0]));
+			//Is there an index-Article in this Category?
+			if ($intCategoryID){
+				$intIndexArticle = $this->pdh->get('article_categories', 'index_article', array($intCategoryID));
+				if ($intIndexArticle) {
+					$intArticleID = $intIndexArticle;
+					$intCategoryID = false;
+				}
+			}
 			
 			//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
 			if (!$intCategoryID && isset($arrPath[1])) {
@@ -136,7 +144,39 @@ class controller extends gen_class {
 						registry::add_const('url_id', $arrPath[0]);
 						$strSpecificID = $arrPath[0];
 					}
+				} else {
+					$intCategoryID = $this->pdh->get('article_categories', 'resolve_alias', array($arrPath[1]));
+					if ($intCategoryID){
+						$intIndexArticle = $this->pdh->get('article_categories', 'index_article', array($intCategoryID));
+						if ($intIndexArticle) {
+							$intArticleID = $intIndexArticle;
+							$intCategoryID = false;
+							
+							//Zerlege .html
+							$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
+							$arrMatches = array();
+							preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
+
+							if (isset($arrMatches[0]) && count($arrMatches[0])){
+								if (count($arrMatches[0]) == 2){
+									if(is_numeric($arrMatches[0][1])) $arrMatches[0][1] = intval($arrMatches[0][1]);
+									$this->in->inject($arrMatches[0][0], $arrMatches[0][1]);
+								}
+							}
+							if (strlen($strID)) {
+								if(is_numeric($strID)) $strID = intval($strID);
+								registry::add_const('url_id', $strID);
+								$strSpecificID = $strID;
+							} elseif (strlen($arrPath[0])){
+								$this->in->inject(utf8_strtolower($arrPath[0]), 'injected');
+								registry::add_const('url_id', $arrPath[0]);
+								$strSpecificID = $arrPath[0];
+							}
+							
+						}
+					}
 				}
+
 			}
 		}
 		
@@ -460,7 +500,7 @@ class controller extends gen_class {
 				'S_PAGINATION'		=> ($pageCount > 1) ? true : false,
 				'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$strPath, strip_tags($arrArticle['title'])) : '',
 				'PERMALINK'			=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
-				'BREADCRUMB'		=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles)),
+				'BREADCRUMB'		=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'))),
 				'ARTICLE_RATING'	=> ($arrArticle['votes']) ? $this->jquery->starrating($intArticleID, $this->controller_path.$strPath.'&savevote&link_hash='.$this->CSRFGetToken('savevote'), array('score' => (($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), 'number' => 10)) : '',
 				//'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 				'ARTICLE_TOOLBAR'	=> $jqToolbar['id'],
