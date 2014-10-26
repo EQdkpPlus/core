@@ -159,8 +159,10 @@ if(!class_exists('routing')){
 		public function clean($strText){
 			$strText = utf8_strtolower($strText);
 			$strText = str_replace(' ', '-', $strText);
-			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^", '"', "'");
+			$strText = html_entity_decode($strText, ENT_QUOTES);
+			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^", '"', "'", ">", "<");
 			$strText = str_replace($a_satzzeichen, "", $strText);
+			$strText = htmlspecialchars($strText);
 			return ucfirst($strText);
 		}
 		
