@@ -134,7 +134,7 @@ class calendar_pageobject extends pageobject {
 
 	public function export_tooltip(){
 		// first, lets generate the link
-		$exportlink	= $this->env->link.'exchange.php'.$this->SID.'out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
+		$exportlink	= $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
 
 		// build the output
 		echo '<form><fieldset class="settings mediumsettings">

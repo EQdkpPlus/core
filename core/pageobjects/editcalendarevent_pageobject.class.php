@@ -263,6 +263,8 @@ class editcalendarevent_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 		
 		if($this->in->get('repeating') != 'none'){
+			//Process Queue, so the Cronjob has reliable data
+			$this->pdh->process_hook_queue();
 			$this->timekeeper->run_cron('calevents_repeatable', true, true);
 		}
 		

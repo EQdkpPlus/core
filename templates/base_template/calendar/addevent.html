@@ -1,7 +1,26 @@
 <script type='text/javascript'>
 //<![CDATA[
+function openAddTemplate(){
+	$( "#dialog-add-template" ).dialog( "open" );
+}
+	
 $(document).ready(function() {
-
+	$( "#dialog-add-template" ).dialog({
+		height: 200,
+		width: 400,
+		modal: true,
+		autoOpen: false,
+	});
+	
+	$('#addtemplate-button').on('click', function(){
+		var templatename = $('#mytemplatename').val();
+		$( "#dialog-add-template" ).dialog( "close" );
+		if (templatename != ""){
+			$('#templatename').val(templatename);
+			$('#addtemplate-submitbtn').click();
+		}
+	})
+	
 	$('#selectmode').change(function() {
 		if($(this).val() == 'raid'){
 			changeCalendars('1');
@@ -181,7 +200,7 @@ function attendeeCount(){
 		<dl class="raid">
 			<dt><label>{L_raidevent_template}</label></dt>
 			<dd>{DR_TEMPLATE} 
-				<button type="button" name="delete_template" id="template_delbutton"><i class="fa fa-times"></i></button>
+				<button type="button" name="delete_template" id="template_delbutton"><i class="fa fa-trash-o"></i></button>
 			</dd>
 		</dl>
 		<hr />
@@ -205,10 +224,6 @@ function attendeeCount(){
 			</dd>
 		</dl>
 		<dl class="raid">
-			<dt><label>{L_raidevent_templatename}:</label></dt>
-			<dd><input type="text" name="templatename" value="{TEMPLATE_NAME}" class="input resettemplate_input" id="name" /> {HELP_TEMPLATE}</dd>
-		</dl>
-		<dl class="raid">
 			<dt><label>{L_raidevent_value}:</label></dt>
 			<dd><input type="text" name="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input resettemplate_input" id="input_dkpvalue" /> {HELP_VALUE}</dd>
 		</dl>
@@ -224,13 +239,13 @@ function attendeeCount(){
 			<dt><label>{L_calendar_deadline}:</label></dt>
 			<dd><input type="text" name="deadlinedate" id="deadlinedate" size="5" maxlength="255" value="{DATE_DEADLINE}" /> {L_calendar_deadline_entity}</dd>
 		</dl>
-		<dl>
-			<dt><label>{L_calendar_repeat}:</label></dt>
-			<dd>{DR_REPEAT}</dd>
-		</dl>
 		<dl class="event">
 			<dt><label>{L_calendar_allday_event}:</label></dt>
 			<dd>{CB_ALLDAY}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_calendar_repeat}:</label></dt>
+			<dd>{DR_REPEAT}</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_note}:</label></dt>
@@ -281,12 +296,28 @@ function attendeeCount(){
 
 	<!-- IF IS_EDIT -->
 		<button type="submit" name="upd" class="mainoption"><i class="fa fa-check"></i>{L_calendars_upd_button}</button>
-		<button type="submit" name="addtemplate" class="liteoption raid"><i class="fa fa-clipboard"></i>{L_raidevent_savetemplate}</button>
+		<button type="button" class="liteoption raid" onclick="openAddTemplate();"><i class="fa fa-clipboard"></i>{L_raidevent_savetemplate}</button>
+		<button type="submit" name="addtemplate" class="liteoption displayNone" id="addtemplate-submitbtn"></button>
 	<!-- ELSE -->
 		<input type="hidden" name="addevent"/>
 		<button type="submit" name="addevent" id="submittheform" class="mainoption"><i class="fa fa-check"></i>{L_calendars_add_button}</button>
-		<button type="submit" name="addtemplate" class="liteoption raid" id="save_template"><i class="fa fa-clipboard"></i>{L_raidevent_savetemplate}</button>
+		<button type="button" class="liteoption raid" onclick="openAddTemplate();"><i class="fa fa-clipboard"></i>{L_raidevent_savetemplate}</button>
+		<button type="submit" name="addtemplate" class="liteoption displayNone" id="addtemplate-submitbtn"></button>
 		<button type="reset"  name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
 	<!-- ENDIF -->
+	
+	<input type="hidden" name="templatename" value="{TEMPLATE_NAME}" class="input resettemplate_input" id="templatename" />
 {CSRF_TOKEN}
 </form>
+
+<div id="dialog-add-template" title="{L_raidevent_savetemplate}" style="display:none;">
+			<fieldset class="settings mediumsettings">
+				<dl>
+					<dt><label>{L_name}:</label></dt>
+					<dd>
+						<input type="text" id="mytemplatename" style="width: 90%"/>
+					</dd>
+				</dl>
+			</fieldset>
+		<button type="button" id="addtemplate-button"><i class="fa fa-check"></i> {L_submit}</button>
+</div>

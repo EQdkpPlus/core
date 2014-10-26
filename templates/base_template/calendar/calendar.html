@@ -23,6 +23,7 @@
 				'': ''
 			},
 			eventLimit: true,
+			<!-- IF IS_OPERATOR -->
 			dayClick: function(date, allDay, jsEvent, view) {
 				if (allDay) {
 					jQuery.FrameDialog.create({
@@ -37,6 +38,7 @@
 					return false;
 				}
 			},
+			<!-- ENDIF -->
 			eventRender: function(event, element) {
 				if(event.icon){
 					element.find('.fc-time').hide();
@@ -302,6 +304,18 @@
 
 //]]>
 </script>
+
+<!-- IF IS_OPERATOR -->
+<style>
+td.fc-day:hover:after {
+	content: "Click to add Event";
+	color: #9f9f9f;
+	font-weight: normal;
+	float: right;
+	font-style:italic;
+}
+</style>
+<!-- ENDIF -->
 
 <div id="confirm_caleventdelete_all" style="display:none;" title="{L_calendars_delete_title}">
 	<p>
