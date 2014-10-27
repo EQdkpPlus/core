@@ -36,8 +36,8 @@ try {
 	header('content-type: text/html; charset=UTF-8');
 	include($eqdkp_root_path.'infotooltip/infotooltip.class.php');
 
-	$itt = registry::register('infotooltip');
-	$in = registry::register('input');
+	$itt	= registry::register('infotooltip');
+	$in		= registry::register('input');
 	registry::$aliases['bridge'] = 'bridge';
 	
 	if (!function_exists("get_chmod")){
@@ -58,49 +58,50 @@ try {
 		$data				= array();
 		$data['name']		= $in->get('name');
 		$data['game_id']	= $in->get('game_id');
-		#var_dump($data);die();
-		$direct = ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
+		$direct				= ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
 	}elseif($in->exists('data')) {
-		$direct = ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
-		$data = unserialize(base64_decode(substr($in->get('data'), 1)));
+		$direct				= ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
+		$data				= unserialize(base64_decode(substr($in->get('data'), 1)));
 	} else {
-		$direct = $in->get('direct', 0);
-		$data['lang'] = substr($in->get('lang'),0,2);
-		$data['onlyicon'] = $in->get('onlyicon', 0);
-		$data['game_id'] = $in->get('game_id');
-		$data['name'] = base64_decode($in->get('name'));
-		$data['noicon'] = $in->get('noicon', false);
-		$data['update'] = $in->get('update', false);
-		$data['data'] = array($in->get('server'), $in->get('cname'), $in->get('slot', ''));
+		$direct				= $in->get('direct', 0);
+		$data['lang']		= substr($in->get('lang'),0,2);
+		$data['onlyicon']	= $in->get('onlyicon', 0);
+		$data['game_id']	= $in->get('game_id');
+		$data['name']		= base64_decode($in->get('name'));
+		$data['noicon']		= $in->get('noicon', false);
+		$data['update']		= $in->get('update', false);
+		$data['data']		= array($in->get('server'), $in->get('cname'), $in->get('slot', ''));
 	}
 	if(!isset($data['update'])) $data['update'] = $in->get('update', false);
-	$data['lang'] = substr($in->get('lang'),0,2);
+	$data['lang']			= substr($in->get('lang'),0,2);
 
 	//only for armory
-	$data['server'] = (isset($data['server'])) ? $data['server'] : 0;
-	$data['char_name'] = (isset($data['char_name'])) ? $data['char_name'] : 0;
-	$data['name'] = html_entity_decode($data['name'], ENT_QUOTES, 'UTF-8');
-	$item = $itt->getitem($data['name'], $data['lang'], $data['game_id'], $data['update'], $data['data']);
-	$item['icon'] = (isset($item['icon'])) ? $item['icon'] : '';
-	$display_name = (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
+	$data['server']			= (isset($data['server'])) ? $data['server'] : 0;
+	$data['char_name']		= (isset($data['char_name'])) ? $data['char_name'] : 0;
+	$data['name']			= html_entity_decode($data['name'], ENT_QUOTES, 'UTF-8');
+	$item					= $itt->getitem($data['name'], $data['lang'], $data['game_id'], $data['update'], $data['data']);
+	$item['icon']			= (isset($item['icon'])) ? $item['icon'] : '';
+	$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
+	$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $itt->config['icon_path'];
+	$iconext				= (isset($item['params']) && isset($item['params']['ext']) && !empty($item['params']['ext'])) ? $item['params']['ext'] : $itt->config['icon_ext'];
 	if($in->get('update', false)) {
-		$cssfile = $eqdkp_root_path.'games/'.$itt->config['game'].'/infotooltip/'.$itt->config['game'].'.css';
+		$cssfile			= $eqdkp_root_path.'games/'.$itt->config['game'].'/infotooltip/'.$itt->config['game'].'.css';
 		if(!is_file($cssfile)) $cssfile = $eqdkp_root_path.'infotooltip/includes/'.$itt->config['game'].'.css';
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html><head>';
 		if(is_file($cssfile)) echo '<title>Itemtooltip Update</title><link rel="stylesheet" href="'.$cssfile.'" type="text/css" /></head><body>';
 	}
 	if($direct) {
-		$item['html'] = str_replace('{ITEM_ICON_LINK}', $itt->config['icon_path'].$item['icon'].$itt->config['icon_ext'], $item['html']);
-		$item['html'] = str_replace('{ITEM_ICON_PATH}', $itt->config['icon_path'], $item['html']);
-		$item['html'] = str_replace('{ITEM_ICON_EXT}', $itt->config['icon_ext'], $item['html']);
+		$item['html']		= str_replace('{ITEM_ICON_LINK}', $iconpath.$item['icon'].$iconext, $item['html']);
+		$item['html']		= str_replace('{ITEM_ICON_PATH}', $iconpath, $item['html']);
+		$item['html']		= str_replace('{ITEM_ICON_EXT}', $iconpath, $item['html']);
 		echo $item['html'];
 	} else {
 		if(isset($item['icon']) && !$data['noicon']) {
 			if($data['onlyicon'] > 0) {
-				$visible = '<img src="'.$itt->config['icon_path'].$item['icon'].$itt->config['icon_ext'].'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" />';
+				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" />';
 			} else {
-				$visible = '<img src="'.$itt->config['icon_path'].$item['icon'].$itt->config['icon_ext'].'" width="16" height="16" style="margin-top: 1px;" alt="icon" /> '.$display_name;
+				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="16" height="16" style="margin-top: 1px;" alt="icon" /> '.$display_name;
 			}
 		} else {
 			$visible = $display_name;
