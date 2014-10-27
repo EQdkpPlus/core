@@ -48,6 +48,7 @@ $module_lang = array(
 	'memberlink_decorated'		=> 'Charaktername',
 	'last_update'				=> 'Letzte Aktualisierung',
 	'defaultrole'				=> 'Rolle',
+	'raidgroups'				=> 'Raidgruppen',
 );
 
 $preset_lang = array(
@@ -79,6 +80,7 @@ $preset_lang = array(
 	'charmenu'	=> 'Charakter-Menü',
 	'cmainchar'	=> 'Radiobox Hauptcharakter',
 	'mrole'		=> 'Charakter-Rolle',
+	'mraidgroups' => 'Charakter-Raidgruppen',
 );
 
 ?>

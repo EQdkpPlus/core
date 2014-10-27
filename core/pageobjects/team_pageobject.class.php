@@ -19,7 +19,7 @@
 class team_pageobject extends pageobject {
 	public function __construct() {
 		$handler = array();
-		$this->user->check_auth('u_team_list');
+
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
