@@ -102,6 +102,9 @@ class wordpress_bridge extends bridge {
 
 }
 
+
+
+if (!class_exists('PasswordHash')){
 #
 # Written by Solar Designer <solar at openwall.com> in 2004-2006 and placed in
 # the public domain.  Revised in subsequent years, still public domain.
@@ -350,5 +353,6 @@ class PasswordHash {
 
 		return $hash == $stored_hash;
 	}
+}
 }
 ?>
