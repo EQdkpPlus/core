@@ -504,7 +504,7 @@ if (!class_exists("pdh_r_user")){
 			$fields = unserialize($this->users[$user_id]['plugin_settings']);
 			if ($fields){
 				if ($plugin){
-					return $fields[$plugin];
+					return isset($fields[$plugin]) ? $fields[$plugin] : array();
 				}
 				return $fields;
 			} else {

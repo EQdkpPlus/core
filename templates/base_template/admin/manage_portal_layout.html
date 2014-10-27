@@ -241,7 +241,7 @@ function createEmbeddLink(){
 	<div style="width:100%;">
 		<div class="portal_block_border">
 			<h2>{L_portalplugin_disabled}:</h2>
-			<ul id="disabled" class="connectedSortable portal_block" style="float:left;">
+			<ul id="disabled" class="connectedSortable portal_block">
 				<!-- BEGIN disabled_row -->
 				<li class="ui-state-hover {disabled_row.CLASS} portal_disabled equalHeights" id="item_{disabled_row.ID}" style="padding: 7px; margin-top: 4px;">
 					<div style="width: 70px;" class="floatRight">
@@ -261,6 +261,8 @@ function createEmbeddLink(){
 					<input type="hidden" name="pos[{disabled_row.ID}]" value="{disabled_row.POS}" id="block_item_{disabled_row.ID}" />
 				</li>
 				<!-- END disabled_row-->
+				
+				
 			</ul>
 			<div style="clear:both;"></div>
 		</div>
