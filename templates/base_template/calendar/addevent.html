@@ -190,13 +190,7 @@ function attendeeCount(){
 	<!-- ENDIF -->
 
 	<fieldset class="settings mediumsettings floatLeft" id="eventsettings" style="width: 540px;">
-		<legend class="event">{L_calendar_mode_event}</legend>
-		<legend class="raid">{L_calendar_mode_raid}</legend>
-
-		<dl>
-			<dt><label>{L_calendar_mode}</label></dt>
-			<dd>{DR_CALENDARMODE}</dd>
-		</dl>
+		<legend>{DR_CALENDARMODE}</legend>
 		<dl class="raid">
 			<dt><label>{L_raidevent_template}</label></dt>
 			<dd>{DR_TEMPLATE} 
@@ -223,10 +217,12 @@ function attendeeCount(){
 				<button type="button" name="add_event" onclick="AddEventDialog()"><i class="fa fa-plus"></i></button>
 			</dd>
 		</dl>
+		<!-- IF DKP_ENABLED -->
 		<dl class="raid">
 			<dt><label>{L_raidevent_value}:</label></dt>
 			<dd><input type="text" name="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input resettemplate_input" id="input_dkpvalue" /> {HELP_VALUE}</dd>
 		</dl>
+		<!-- ENDIF -->
 		<dl class="raid">
 			<dt><label>{L_raidevent_raidleader}:</label></dt>
 			<dd>{DR_RAIDLEADER}</dd>
