@@ -95,35 +95,83 @@ if(!class_exists('wowhead')) {
 		}
 
 		protected function getItemData($item_id, $lang, $itemname='', $type='items'){
-			settype($item_id, 'int');
+			$orig_id = $item_id;
+			
 			if(!$item_id) {
 				$item['baditem'] = true;
 				return $item;
 			}
+			
+			$bonus = 0;
+			
+			$myItemData = array(
+					'ench' => 0,
+					'gems' => array(),
+					'lvl'  => 0,
+					'upgd' => 0,
+					'bonus' => array(),
+			);
+			
+			$arrItemData = explode(':', $item_id);
+			if (count($arrItemData) > 1){
+				$item_id = $arrItemData[0];
+				$arrBonus = array();
+
+				foreach($arrItemData as $key => $val){
+					if ($key == 1) $myItemData['ench'] = $val;
+					if ($key == 8) $myItemData['lvl'] = $val;
+					if ($key == 9) $myItemData['upgd'] = $val;
+					if ($key > 2 && $key < 7){
+						$myItemData['gems'][] = $val;
+					}
+					
+					if ($key > 11){
+						$myItemData['bonus'][] = $val;
+					}
+				}
+				//112417:0:0:0:0:0:0:0:lvl90:upg 491:dif 5:2:448:449
+				//itemID:enchant:gem1:gem2:gem3:gem4:suffixID:uniqueID:level:upgradeId:instanceDifficultyID:numBonusIDs:bonusID1:bonusID2...
+				
+			}
+
 			$item = array('id' => $item_id);
 			$url = ($lang == 'en') ? 'www' : $lang;
-			$item['link'] = 'http://'.$url.'.wowhead.com/item='.$item['id'].'&xml';
+			
+			$item['link'] = 'http://'.$url.'.wowhead.com/item='.$item['id'].'&power&bonus='.implode(':', $myItemData['bonus']).'&upgd='.$myItemData['upgd'].'&lvl='.$myItemData['lvl'].'&ench='.$myItemData['ench'].'&gems='.implode(',',$myItemData['gems']);
+
 			$this->pdl->log('infotooltip', 'fetch item-data from: '.$item['link']);
-			$itemxml = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
-			if($itemxml AND $itemxml != 'ERROR') $itemxml = simplexml_load_string($itemxml);
+			$someJS = $this->puf->fetch($item['link'], array('Cookie: cookieLangId="'.$lang.'";'));
+			if ($someJS){
+				$arrMatches = array();
+				$intCount = preg_match("/name_(.*): '(.*)',(\s*)quality: (.*),(\s*)icon: '(.*)',(\s*)tooltip_(.*): '(.*)'/", $someJS, $arrMatches);
+				if ($intCount){
 
-			$item['name'] = ((!is_numeric($itemname) AND strlen($itemname) > 0) OR !is_object($itemxml)) ? $itemname : trim($itemxml->item->name);
-			$item['lang'] = $lang;
-
-			//filter baditems
-			if(!is_object($itemxml) OR !isset($itemxml->item->htmlTooltip) OR strlen($itemxml->item->htmlTooltip) < 5) {
-				$this->pdl->log('infotooltip', 'no xml-object returned');
+					$item['name'] = htmlentities(stripslashes($arrMatches[2]));
+					
+					$html = $arrMatches[9];
+					$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/wow_popup.tpl'));
+					$item['html'] = str_replace('{ITEM_HTML}', stripslashes($html), $template_html);
+					$item['lang'] = $lang;
+					
+					$item['icon'] = htmlentities($arrMatches[6]);
+					$item['color'] = 'q'.(int)$arrMatches[4];
+					
+					//Reset Item ID, because the full name is the one we should store in DB
+					$item['id'] = $orig_id;
+					return $item;
+					
+				} else {
+					$this->pdl->log('infotooltip', 'no match found');
+					$item['baditem'] = true;
+					return $item;
+				}
+			} else {
+				$this->pdl->log('infotooltip', 'no data from URL');
 				$item['baditem'] = true;
 				return $item;
 			}
 
-			//build itemhtml
-			$html = str_replace('"', "'", $itemxml->item->htmlTooltip);
-			$template_html = trim(file_get_contents($this->root_path.'infotooltip/includes/parser/templates/wow_popup.tpl'));
-			$item['html'] = str_replace('{ITEM_HTML}', stripslashes($html), $template_html);
-			$item['lang'] = $lang;
-			$item['icon'] = (string) strtolower($itemxml->item->icon);
-			$item['color'] = 'q'.$this->convert_color((string) $itemxml->item->quality);
+			$item['baditem'] = true;
 			return $item;
 		}
 

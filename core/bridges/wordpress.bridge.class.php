@@ -95,6 +95,7 @@ class wordpress_bridge extends bridge_generic {
 
 }
 
+if (!class_exists('PasswordHash')){
 #
 # Written by Solar Designer <solar at openwall.com> in 2004-2006 and placed in
 # the public domain.  Revised in subsequent years, still public domain.
@@ -343,6 +344,7 @@ class PasswordHash {
 
 		return $hash == $stored_hash;
 	}
+}
 }
 
 if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_wordpress_bridge',wordpress_bridge::$shortcuts);
