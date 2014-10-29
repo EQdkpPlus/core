@@ -22,11 +22,12 @@ class items_pageobject extends pageobject {
 		$handler = array(	
 			'i' => array('process' => 'display_item'),
 		);
-		parent::__construct(false, $handler, array());
+		parent::__construct(false, $handler, array(), null, '', 'i');
 		$this->process();
 	}
 	
 	public function display_item(){
+		$this->url_id = $this->in->get('i', 0);
 		// We want to view items by name and not id, so get the name
 		$item_name = $this->pdh->get('item', 'name', array($this->url_id));
 	
