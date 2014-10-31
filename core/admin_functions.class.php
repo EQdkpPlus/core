@@ -366,7 +366,7 @@ class admin_functions extends gen_class {
 				}
 
 				if ($intArticleID){
-					$strOut = $this->user->lang('article').': <a href="'.$this->server_path.$this->pdh->get('articles', 'path', array($intArticleID)).'">'.$this->pdh->get('articles', 'title', array($intArticleID)).'</a>';
+					$strOut = $this->user->lang('article').': <a href="'.$this->controller_path.$this->pdh->get('articles', 'path', array($intArticleID)).'">'.$this->pdh->get('articles', 'title', array($intArticleID)).'</a>';
 				} elseif($intCategoryID) {
 					$strOut = $this->user->lang('category').': <a href="'.$this->server_path.$this->pdh->get('article_categories', 'path', array($intCategoryID)).'">'.$this->pdh->get('article_categories', 'name', array($intCategoryID)).'</a>';
 				} elseif (register('routing')->staticRoute($arrPath[0]) || register('routing')->staticRoute($arrPath[1])) {
@@ -403,7 +403,7 @@ class admin_functions extends gen_class {
 							case 'addcharacter': $strOut = '';
 								break;
 							case 'editarticle': $strOut = $this->user->lang('manage_articles');
-								if (isset($arrQuery['aid']) && $arrQuery['aid']) $strOut .= ': <a href="'.$this->server_path.$this->pdh->get('articles', 'path', array($arrQuery['aid'])).'">'.$this->pdh->get('articles', 'title', array($arrQuery['aid'])).'</a>';
+								if (isset($arrQuery['aid']) && $arrQuery['aid']) $strOut .= ': <a href="'.$this->controller_path.$this->pdh->get('articles', 'path', array($arrQuery['aid'])).'">'.$this->pdh->get('articles', 'title', array($arrQuery['aid'])).'</a>';
 								break;
 							case 'user': $strOut = $this->user->lang('user');
 								if ($myVar) $strOut .= ': <a href="'.$this->server_path.sanitize($strPage).'">'.$this->pdh->get('user', 'name', array($myVar)).'</a>';
