@@ -59,7 +59,7 @@
 					if(event.allDay){
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}')+"</div>";
 						if((moment(event.end).format('dd') != moment(event.start).format('dd')) || (moment(event.end).format('MM') != moment(event.start).format('MM'))){
-							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}')+"</div>";
+							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).subtract(1, 'days').format('{JS_DATEFORMAT}')+"</div>";
 						}
 						tmpttcontent += "<div class='calendartt_allday'>{L_calendar_allday}</div>";
 					}else{

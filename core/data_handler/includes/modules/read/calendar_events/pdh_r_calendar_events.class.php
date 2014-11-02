@@ -221,8 +221,8 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return $this->time->user_date($this->events[$id]['timestamp_start'], false, true);
 		}
 
-		public function get_time_end($id){
-			return $this->events[$id]['timestamp_end'];
+		public function get_time_end($id, $exclusivefix=false){
+			return ($exclusivefix) ? $this->time->adddays($this->events[$id]['timestamp_end']) : $this->events[$id]['timestamp_end'];
 		}
 
 		public function get_html_time_end($id) {

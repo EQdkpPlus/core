@@ -392,7 +392,7 @@ if (!class_exists("timehandler")){
 			}
 			return $stamp;
 		}
-		
+
 		/*
 		 * Transforms a php-date-format so it can be used for jquery
 		 *
@@ -402,9 +402,7 @@ if (!class_exists("timehandler")){
 		public function translateformat2js($format) {
 			return str_replace(array_keys($this->formtrans), array_values($this->formtrans), $format);
 		}
-		
-		
-		
+
 		/**
 		 * Transforms php date format into moment.js format
 		 * 
@@ -534,6 +532,10 @@ if (!class_exists("timehandler")){
 			return $out;
 		}
 
+		function adddays($timestamp,$daystoadd=1){
+			return $timestamp +(60*60*24*$daystoadd);
+		}
+
 		public function dateDiff($ts1, $ts2, $out='sec'){
 			// Build the Dates
 			if(!is_numeric($ts1)) {
@@ -569,8 +571,8 @@ if (!class_exists("timehandler")){
 
 		// Count Entries in an array between two dates
 		public function countBetweenDates($array, $startdate, $enddate){
-			$this->cbd_enddate    = ($enddate) ? $enddate : $this->gen_time();
-			$this->cbd_startdate  = $startdate;
+			$this->cbd_enddate		= ($enddate) ? $enddate : $this->gen_time();
+			$this->cbd_startdate	= $startdate;
 			if(is_array($array)){
 				return count(array_filter($array, array($this, 'helper_countbetweendates')));
 			}else{
