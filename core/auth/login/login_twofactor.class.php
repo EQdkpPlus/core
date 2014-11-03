@@ -73,7 +73,7 @@ class login_twofactor extends gen_class {
 			if ($arrAuthAccounts['twofactor'] != ""){
 				$data = unserialize(register('encrypt')->decrypt($arrAuthAccounts['twofactor']));
 				if ($data){
-					$cookie = get_cookie("twofactor");
+					$cookie = $this->in->getEQdkpCookie("twofactor");
 					$cookie_secret = unserialize(register('encrypt')->decrypt($cookie));
 					if (($cookie_secret['secret'] === $data['secret']) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;
 

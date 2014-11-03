@@ -71,8 +71,8 @@ class auth extends user {
 		}
 		//Cookie-Data
 		$arrCookieData = array();
-		$arrCookieData['sid']	= get_cookie('sid');
-		$arrCookieData['data']	= get_cookie('data');
+		$arrCookieData['sid']	= $this->in->getEQdkpCookie('sid');
+		$arrCookieData['data']	= $this->in->getEQdkpCookie('data');
 		$arrCookieData['data']	= ( !empty($arrCookieData['data']) ) ? unserialize(base64_decode(stripslashes($arrCookieData['data']))) : '';
 
 		//Let's get a Session
@@ -225,7 +225,7 @@ class auth extends user {
 		// set the cookies
 		set_cookie('data', base64_encode(serialize($arrCookieData)), $this->current_time + 2592000); //30 days
 		set_cookie('sid', $this->sid, 0);
-		$strCookieSID = get_cookie('sid');
+		$strCookieSID = $this->in->getEQdkpCookie('sid');
 		//Check if cookie was set
 
 		registry::add_const('SID', '?s=' . (( empty($strCookieSID) ) ? $this->sid : ''));

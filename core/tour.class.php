@@ -36,10 +36,10 @@ class tour extends gen_class {
 			$this->start();
 		};
 
-		$this->cookie = unserialize(get_cookie('tour'));
+		$this->cookie = unserialize(base64_decode($this->in->getEQdkpCookie('tour')));
 		$this->cookie_time = time() + 3600;
 
-		if (strlen(get_cookie('tour')) && $this->user->is_signedin()){
+		if (strlen($this->cookie) && $this->user->is_signedin()){
 			$this->init_steps();
 
 			$step = $this->cookie['step'];
@@ -82,7 +82,7 @@ class tour extends gen_class {
 	}
 
 	public function start(){
-		set_cookie('tour', serialize(array('step'	=> 0)), $this->cookie_time);
+		set_cookie('tour', base64_encode(serialize(array('step'	=> 0))), $this->cookie_time);
 		redirect('index.php'.$this->SID);
 	}
 
@@ -143,7 +143,7 @@ class tour extends gen_class {
 
 	public function execute_step($step, $show){
 		if (!$show && $this->steps[$step]['url'] != ''){
-			set_cookie('tour', serialize(array('step'	=> $step)), $this->cookie_time);
+			set_cookie('tour', base64_encode(serialize(array('step'	=> $step))), $this->cookie_time);
 			redirect($this->steps[$step]['url'].$this->SID.'&tour=show');
 		} else {
 
@@ -158,7 +158,7 @@ class tour extends gen_class {
 					tour_step();
 				});"
 			);
-			set_cookie('tour', serialize(array('step'	=> $step, 'shown' => true)), $this->cookie_time);
+			set_cookie('tour', base64_encode(serialize(array('step'	=> $step, 'shown' => true))), $this->cookie_time);
 		}
 	}
 }

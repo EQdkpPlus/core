@@ -40,18 +40,6 @@ class input extends gen_class {
 		if (filter_has_var(INPUT_GET, $key)){
 			return INPUT_GET;
 		}
-
-		if (filter_has_var(INPUT_COOKIE, $key)){
-			return INPUT_COOKIE;
-		}
-
-		if (filter_has_var(INPUT_SERVER, $key)){
-			return INPUT_SERVER;
-		}
-
-		if (filter_has_var(INPUT_ENV, $key)){
-			return INPUT_ENV;
-		}
 		
 		// the fallback
 		return false;
@@ -146,19 +134,14 @@ class input extends gen_class {
 		//get the data
 		eval("if(isset(\$_GET".$allkey.")) \$get = \$_GET".$allkey.";");
 		eval("if(isset(\$_POST".$allkey.")) \$post = \$_POST".$allkey.";");
-		eval("if(isset(\$_SESSION".$allkey.")) \$session = \$SESSION".$allkey.";");
-		eval("if(isset(\$_COOKIE".$allkey.")) \$cookie = \$_COOKIE".$allkey.";");
+
 		if(isset($get)) {
 			$retval = $get;
 		}
 		if(isset($post)) {
 			$retval = $post;
-		} elseif(isset($session)) {
-			$retval = $session;
 		}
-		if(isset($cookie)) {
-			$retval = $cookie;
-		}
+
 		return $retval;
 	}
 
@@ -254,6 +237,31 @@ class input extends gen_class {
 	*/
 	public function decode_entity($value){
 		return html_entity_decode($value, ENT_QUOTES);
+	}
+	
+	public function getCookie($key, $default='') {
+		$type = $this->_getType($default, '');
+		$filter = $this->_getFilter($type);
+		
+		$out		= filter_input(INPUT_COOKIE, $key, $filter, $this->_options($type));
+		$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
+
+		return (isset($filter) && $filter != '') ? $this->_convert($out, $type) : $out;
+	}
+	
+	public function getSession($key, $default='') {
+		$type = $this->_getType($default, '');
+		$filter = $this->_getFilter($type);
+		
+		$out		= filter_input(INPUT_SESSION, $key, $filter, $this->_options($type));
+		$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
+
+		return (isset($filter) && $filter != '') ? $this->_convert($out, $type) : $out;
+	}
+	
+	public function getEQdkpCookie($key, $default=''){
+		$cookie_name = registry::register('config')->get('cookie_name') . '_' . $key;
+		return $this->getCookie($cookie_name, $default);
 	}
 }
 ?>

@@ -664,11 +664,6 @@ if(!function_exists('fnmatch')) {
 	}
 }
 
-function get_cookie($name){
-	$cookie_name = registry::register('config')->get('cookie_name') . '_' . $name;
-	return ( isset($_COOKIE[$cookie_name]) ) ? $_COOKIE[$cookie_name] : '';
-}
-
 function set_cookie($name, $cookie_data, $cookie_time){
 	//dont set cookies if we dont have a cookie-name or cookie-path
 	$cname = register('config')->get('cookie_name');
