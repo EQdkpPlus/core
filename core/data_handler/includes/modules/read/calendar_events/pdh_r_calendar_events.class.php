@@ -280,12 +280,52 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return ($next_eventid > 0 && $next_eventid != $id) ? $next_eventid : false;
 		}
 		
+		public function get_next_raid($id){
+			$this->helper_set_pointer($this->event_timestamps, $id);
+			$blnRaidFound = false;
+			$next_raid = 0;
+			
+			while(!$blnRaidFound){
+				$nextResult = next($this->event_timestamps);
+				if (!$nextResult) break;
+				
+				$next_eventid	= key($this->event_timestamps);
+				if ($this->get_calendartype($next_eventid) == '1'){
+					$next_raid = $next_eventid;
+					$blnRaidFound = true;
+					break;
+				}
+			}
+			reset($this->event_timestamps);
+			return ($next_raid > 0 && $next_raid != $id) ? $next_raid : false;
+		}
+		
 		public function get_prev_event($id){
 			$this->helper_set_pointer($this->event_timestamps, $id);
 			prev($this->event_timestamps);
 			$prev_eventid	= key($this->event_timestamps);
 			reset($this->event_timestamps);
 			return ($prev_eventid > 0 && $prev_eventid != $id) ? $prev_eventid : false;
+		}
+		
+		public function get_prev_raid($id){
+			$this->helper_set_pointer($this->event_timestamps, $id);
+			$blnRaidFound = false;
+			$prev_raid = 0;
+				
+			while(!$blnRaidFound){
+				$prevResult = prev($this->event_timestamps);
+				if (!$prevResult) break;
+		
+				$prev_eventid	= key($this->event_timestamps);
+				if ($this->get_calendartype($prev_eventid) == '1'){
+					$prev_raid = $prev_eventid;
+					$blnRaidFound = true;
+					break;
+				}
+			}
+			reset($this->event_timestamps);
+			return ($prev_raid > 0 && $prev_raid != $id) ? $prev_raid : false;
 		}
 		
 		private function helper_set_pointer(&$array,$key){

@@ -684,7 +684,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// Dropdown Menu Array
-		$nextraidevent	= $this->pdh->get('calendar_events', 'next_event', array($this->url_id));
+		$nextraidevent	= $this->pdh->get('calendar_events', 'next_raid', array($this->url_id));
 		if($nextraidevent){
 			$nextevent = $this->pdh->get('calendar_events', 'data', array($nextraidevent));
 			
@@ -695,7 +695,7 @@ class calendarevent_pageobject extends pageobject {
 				'NEXT_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
 			));
 		}
-		$prevraidevent = $this->pdh->get('calendar_events', 'prev_event', array($this->url_id));
+		$prevraidevent = $this->pdh->get('calendar_events', 'prev_raid', array($this->url_id));
 		if($prevraidevent){
 			$prevevent = $this->pdh->get('calendar_events', 'data', array($prevraidevent));
 				
