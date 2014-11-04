@@ -311,7 +311,8 @@ class calendar_pageobject extends pageobject {
 			$birthdays	= $this->pdh->get('user', 'birthday_list');
 			if(is_array($birthdays)){
 				foreach($birthdays as $birthday_uid=>$birthday_ts){
-					if($birthday_ts > $range_start && $birthday_ts < $range_end){
+					$birthday_month	= $this->time->date('m', $birthday_ts);
+					if($birthday_month >= $this->time->date('m', $range_start) && $birthday_month <= $this->time->date('m', $range_end)){
 						$event_json[] = array(
 							'className'				=> 'cal_birthday',
 							'title'					=> $this->pdh->get('user', 'name', array($birthday_uid)),
