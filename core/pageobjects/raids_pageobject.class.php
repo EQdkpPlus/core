@@ -109,7 +109,7 @@ class raids_pageobject extends pageobject {
 	
 				$this->tpl->assign_block_vars('items_row', array(
 						'BUYER'			=> $this->pdh->get('member', 'html_memberlink', array($buyer_id, $this->routing->simpleBuild('character'), '', false, false, true, true)),
-						'ITEM'			=> $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('item'), '', false,false,false,false,false,true)),
+						'ITEM'			=> $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('items'), '', false,false,false,false,false,true)),
 						'VALUE'			=> runden($this->pdh->get('item', 'value', array($item_id))))
 				);
 			}
@@ -192,7 +192,7 @@ class raids_pageobject extends pageobject {
 			);
 			if (!$this->config->get('disable_points')) $arrItemListSettings['table_presets'][] = array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => '');
 			$hptt_page_settings	= $arrItemListSettings;
-			$hptt				= $this->get_hptt($hptt_page_settings, $items, $items, array('%link_url%' => $this->routing->simpleBuild('item'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->simpleBuild('character')), 'raid_'.$this->url_id, 'isort');
+			$hptt				= $this->get_hptt($hptt_page_settings, $items, $items, array('%link_url%' => $this->routing->simpleBuild('items'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->simpleBuild('character')), 'raid_'.$this->url_id, 'isort');
 			$hptt->setPageRef($this->strPath);
 			$this->tpl->assign_vars(array (
 					'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort'), '', null, false, sprintf($this->user->lang('viewitem_footcount'), count($items))),
@@ -218,7 +218,7 @@ class raids_pageobject extends pageobject {
 				);
 				$arrAdjustments = $this->pdh->get('adjustment', 'adjsofraid', array($this->url_id));
 				$hptt_page_settings = $arrAdjListSettings;
-				$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->simpleBuild('raid'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
+				$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
 				$hptt->setPageRef($this->strPath);
 				$this->tpl->assign_vars(array (
 						'ADJUSTMENT_OUT' 		=> $hptt->get_html_table($this->in->get('asort', ''),''),
