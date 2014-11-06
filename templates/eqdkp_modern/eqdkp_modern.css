@@ -2965,6 +2965,9 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	top: 0px;
 	right: 4px;
 }
+.nextevent_statusrow {
+	margin-right: 5px;
+}
 
 	
 @media all and (max-width: 480px) {
