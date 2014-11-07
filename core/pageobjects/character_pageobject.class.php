@@ -22,12 +22,17 @@ class character_pageobject extends pageobject {
 
 	public function __construct() {
 		$handler = array();
-		parent::__construct(false, $handler, array(), null, '', 'member_id');
+		parent::__construct(false, $handler, array());
 
 		$this->process();
 	}
 
-	public function display(){		
+	public function display(){
+		if (!$this->url_id){
+			redirect($this->routing->build('roster',false,false,true,true));
+		}
+		
+		
 		$member_name	= $this->pdh->get('member', 'name', array($this->url_id));
 
 		if($member_name == ''){

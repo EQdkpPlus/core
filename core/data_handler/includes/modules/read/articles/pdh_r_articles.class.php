@@ -420,6 +420,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			
 			$strAlias = ucfirst($this->get_alias($intArticleID));
 			if (stripos($strAlias, 'index_') === 0){
+				$strPath .= ($this->SID == "?s=") ? '?' : $this->SID;
 				return $strPath;
 			}
 
@@ -432,7 +433,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				break;
 				default: $strPath .= '/';
 			}
-			return $strPath.$this->SID;
+			return $strPath.(($this->SID == "?s=") ? '?' : $this->SID);
 		}
 		
 		private function add_path($intCategoryID, $strPath=''){

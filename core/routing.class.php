@@ -131,8 +131,11 @@ if(!class_exists('routing')){
 			$lastChar = substr($strPath, -1, 1);
 			if ($lastChar != "/"){
 				$strPath .= $this->getSeoExtension();
-
-				if ($blnAddSID) $strPath .= $this->SID;
+				if ($blnAddSID) $strPath .= ($this->SID == "?s=") ? '?' : $this->SID;
+			} else {
+				if ($blnAddSID) {
+					$strPath .= ($this->SID == "?s=") ? '?' : $this->SID;
+				}
 			}
 			return $strPath;
 		}
