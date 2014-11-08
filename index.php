@@ -464,12 +464,15 @@ class controller extends gen_class {
 		
 		//Replace Raidloot
 		$arrRaidlootObjects = array();
-		preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)">(.*)</p>#iU', $strContent, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+
+		preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strContent, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+
 		if (count($arrRaidlootObjects[0])){
 			include_once($this->root_path.'core/gallery.class.php');
 			foreach($arrRaidlootObjects[3] as $key=>$val){
 				$objGallery = registry::register('gallery');
-				$strRaidlootContent = $objGallery->raidloot((int)$val);
+				$withChars = ($arrRaidlootObjects[5][$key] == "true") ? true : false;
+				$strRaidlootContent = $objGallery->raidloot((int)$val, $withChars);
 				$strContent = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strContent);
 			}
 		}
@@ -603,12 +606,13 @@ class controller extends gen_class {
 				
 				//Replace Raidloot
 				$arrRaidlootObjects = array();
-				preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+				preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
 				if (count($arrRaidlootObjects[0])){
 					include_once($this->root_path.'core/gallery.class.php');
 					foreach($arrRaidlootObjects[3] as $key=>$val){
 						$objGallery = registry::register('gallery');
-						$strRaidlootContent = $objGallery->raidloot((int)$val);
+						$withChars = ($arrRaidlootObjects[5][$key] == "true") ? true : false;
+						$strRaidlootContent = $objGallery->raidloot((int)$val, $withChars);
 						$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 					}
 				}

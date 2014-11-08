@@ -19,7 +19,6 @@ if ($user->is_signedin()){
 	
 	$raids = array_slice($raids, 0, 20, true);
 	
-	
 	foreach($raids as $key => $value){
 		$outArray[] = array(
 			'id' 	=> $key,

@@ -120,7 +120,7 @@ if(!class_exists('gallery')){
 			return $strOut;
 		}
 		
-		public function raidloot($intRaidID){
+		public function raidloot($intRaidID, $blnWithChars=false){
 			//Get Raid-Infos:
 			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
 			if ($intEventID){
@@ -139,11 +139,18 @@ if(!class_exists('gallery')){
 						$strOut .=  $this->pdh->get('item', 'link_itt', array($item, register('routing')->simpleBuild('items'), '', false, false, false, false, false, true)). ' - '.$this->pdh->geth('member', 'memberlink', array($buyer, register('routing')->simpleBuild('character'), '', false,false,true,true)).
 						', '.round($this->pdh->get('item', 'value', array($item))).' '.$this->config->get('dkp_name').'<br />';
 					}
-					
-				} else {
-					return '';
 				}
 				
+				if ($blnWithChars){
+					$attendees_ids = $this->pdh->get('raid', 'raid_attendees', array($intRaidID));
+					if (count($attendees_ids)){
+						$strOut .= '<br /><h3>'.$this->user->lang('attendees').'</h3>';
+						
+						foreach($attendees_ids as $intAttendee){
+							$strOut.= $this->pdh->get('member', 'html_memberlink', array($intAttendee, $this->routing->simpleBuild('character'), '', false, false, true, true)).'<br/>';
+						}
+					}
+				}
 				
 				return $strOut.'</div>';
 			}

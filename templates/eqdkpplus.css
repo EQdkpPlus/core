@@ -440,6 +440,11 @@ i.mce-i-trophy:before{
 	font-family:'FontAwesome';
 }
 
+i.mce-i-users:before{
+	content:"\f0c0";
+	font-family:'FontAwesome';
+}
+
 i.mce-i-pageobject:before{
 	content:"\f0f6";
 	font-family:'FontAwesome';

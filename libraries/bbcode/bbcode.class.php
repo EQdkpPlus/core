@@ -344,9 +344,11 @@ if (!class_exists("bbcode")) {
 						}
 						break;
 
-					case 'char':	$member_id = $this->pdh->get('member', 'id', array($elements[1]));
+					case 'char':	if (is_numeric($elements[1])){
+										$member_id = intval($elements[1]);
+									} else $member_id = $this->pdh->get('member', 'id', array($elements[1]));
 									if ($member_id){
-										$arrCache[$strTag] = $this->pdh->get('member', 'html_memberlink', array($member_id, $this->routing->simpleBuild('character'), '', false, false, true));
+										$arrCache[$strTag] = $this->pdh->get('member', 'html_memberlink', array($member_id, $this->routing->simpleBuild('character'), '', false, false, true, true));
 									}
 						break;
 
