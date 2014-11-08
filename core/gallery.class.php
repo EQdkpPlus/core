@@ -136,7 +136,7 @@ if(!class_exists('gallery')){
 				if (count($arrItemlist)){
 					foreach($arrItemlist as $item){
 						$buyer = $this->pdh->get('item', 'buyer', array($item));
-						$strOut .=  $this->pdh->get('item', 'link_itt', array($item, register('routing')->simpleBuild('items'), '', false, false, false, false, false, true)). ' - '.$this->pdh->geth('member', 'memberlink', array($buyer, register('routing')->simpleBuild('character'), '', false,false,true,true)).
+						$strOut .=  $this->pdh->get('item', 'link_itt', array($item, register('routing')->simpleBuild('items'), '', false, false, false, false, false, true)). ' - '.$this->pdh->geth('member', 'memberlink_decorated', array($buyer, register('routing')->simpleBuild('character'), '', true)).
 						', '.round($this->pdh->get('item', 'value', array($item))).' '.$this->config->get('dkp_name').'<br />';
 					}
 				}
@@ -147,7 +147,7 @@ if(!class_exists('gallery')){
 						$strOut .= '<br /><h3>'.$this->user->lang('attendees').'</h3>';
 						
 						foreach($attendees_ids as $intAttendee){
-							$strOut.= $this->pdh->get('member', 'html_memberlink', array($intAttendee, $this->routing->simpleBuild('character'), '', false, false, true, true)).'<br/>';
+							$strOut.= $this->pdh->get('member', 'memberlink_decorated', array($intAttendee, $this->routing->simpleBuild('character'), '', true)).'<br/>';
 						}
 					}
 				}
