@@ -93,7 +93,7 @@ $lang = array(
 	'ftp_datawriteerror'	=> 'Der Data Ordner konnte nicht beschrieben werden. Ist der FTP Root path richtig?',
 	'ftp_info'				=> 'Anstatt bestimmten EQdkp Plus Dateiordnern Schreibrechte zu geben, kannst du einen FTP-Benutzer deines Servers benutzen, was die Sicherheit als auch die Funktionalität deines EQdkp Plus erhöht.',
 	'ftp_tmpinstallwriteerror' => 'Der Ordner <b>./data/97384261b8bbf966df16e5ad509922db/tmp/</b> ist nicht beschreibbar.<br />Damit die Konfigurations-Datei geschrieben werden kann, ist CHMOD 777 notwendig. Dieser Ordner wird nach der Installation entfernt.',
-	'ftp_tmpwriteerror' 	=> 'Der Ordner <b>./data/%s/tmp/</b> ist nicht beschreibbar.<br />Damit der FTP-Modus verwendet werden kann, ist CHMOD 777 für diesen Ordner notwendig. Dies ist der einzige Ordner, für den Schreibrechte benötigt werden.',
+	'ftp_tmpwriteerror' 	=> 'Der Ordner <b>./%stmp/</b> ist nicht beschreibbar.<br />Damit der FTP-Modus verwendet werden kann, ist CHMOD 777 für diesen Ordner notwendig. Dies ist der einzige Ordner, für den Schreibrechte benötigt werden.',
 	
 	
 		
