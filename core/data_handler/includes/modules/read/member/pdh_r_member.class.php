@@ -662,7 +662,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_memberlink($member_id, $base_url, $url_suffix = '', $blnUseController=false){
 			if ($blnUseController  && ($blnUseController !== '%use_controller%')){
-				return $strLink = $base_url.register('routing')->clean($this->get_name($member_id)).'-'.$member_id.register('routing')->getSeoExtension().$this->SID;
+				return $strLink = $base_url.register('routing')->clean($this->get_name($member_id)).'-'.$member_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
 			}
 			return $base_url.$this->SID . '&amp;member_id='.$member_id.$url_suffix;
 		}

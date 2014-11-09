@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("environment")) {
 	class environment extends gen_class {
 
-		public $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax;
+		public $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
 
 		public function __construct() {
 			$this->ip 				= $this->get_ipaddress();
@@ -41,6 +41,7 @@ if (!class_exists("environment")) {
 			$this->path				= $this->path();
 			$this->agent			= $this->agent();
 			$this->is_ajax			= $this->is_ajax();
+			$this->referer			= $this->get_referer();
 		}
 		
 		/**
@@ -200,6 +201,13 @@ if (!class_exists("environment")) {
 		
 		public function is_ajax(){
 			return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
+		}
+		
+		public function get_referer(){
+			if (!isset($_SERVER['HTTP_REFERER'])) return '';
+			$ref = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
+			$ref = str_replace(array($this->buildlink(), 'index.php/'), '', $ref);
+			return $ref;
 		}
 		
 		public function agent(){

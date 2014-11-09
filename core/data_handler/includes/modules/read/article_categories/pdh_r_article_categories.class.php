@@ -485,7 +485,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				default: $strPath .= '/';
 			}
 			
-			return $strPath.$this->SID;
+			return $strPath.(($this->SID == "?s=") ? '?' : $this->SID);
 		}
 		
 		public function get_permalink($intCategoryID){

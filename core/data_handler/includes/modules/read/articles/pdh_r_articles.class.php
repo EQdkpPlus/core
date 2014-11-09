@@ -414,17 +414,19 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return $strPath;
 		}
 		
-		public function get_path($intArticleID){		
+		public function get_path($intArticleID,$url_id=false,$arrPath=array()){		
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
 			
 			$strAlias = ucfirst($this->get_alias($intArticleID));
-			if (stripos($strAlias, 'index_') === 0){
+			if (stripos($strAlias, 'index_') === 0 && !$url_id){
 				$strPath .= ($this->SID == "?s=") ? '?' : $this->SID;
 				return $strPath;
+			} elseif($url_id){
+				$strPath .= ucfirst($arrPath[0]);
+			} else {
+				$strPath .= ucfirst($this->get_alias($intArticleID));
 			}
-
-			$strPath .= ucfirst($this->get_alias($intArticleID));
 			
 			switch((int)$this->config->get('seo_extension')){
 				case 1: $strPath .= '.html';
@@ -448,15 +450,15 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return $strPath;
 		}
 		
-		public function get_breadcrumb($intArticleID, $strAdditionalString='', $url_id=false){			
+		public function get_breadcrumb($intArticleID, $strAdditionalString='', $url_id=false, $arrPath=array()){
 			$strAlias = ucfirst($this->get_alias($intArticleID));
 			if (stripos($strAlias, 'index_') === 0 && !$url_id){
 				$intCategoryID = $this->get_category($intArticleID);
 				return $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID));
 			}
-			
+
 			$strBreadcrumb = $this->add_breadcrumb($this->get_category($intArticleID));
-			$strBreadcrumb .=  '<li class="current"><a href="'.$this->controller_path.$this->get_path($intArticleID).'">'.$this->get_title($intArticleID).$strAdditionalString.'</a></li>';
+			$strBreadcrumb .=  '<li class="current"><a href="'.$this->controller_path.$this->get_path($intArticleID, $url_id, $arrPath).'">'.$this->get_title($intArticleID).$strAdditionalString.'</a></li>';
 			return $strBreadcrumb;
 		}
 		

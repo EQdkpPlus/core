@@ -29,10 +29,17 @@ class character_pageobject extends pageobject {
 
 	public function display(){
 		if (!$this->url_id){
-			redirect($this->routing->build('roster',false,false,true,true));
+			$strReferer = $this->env->get_referer();
+			if (stripos($strReferer, "ref=mc")!==0){
+				redirect($this->routing->build('MyCharacters',false,false,true,true));
+			} else {
+				if ($this->config->get('disable_points'))
+					redirect($this->routing->build('roster',false,false,true,true));
+				else
+					redirect($this->routing->build('points',false,false,true,true));
+			}
 		}
-		
-		
+				
 		$member_name	= $this->pdh->get('member', 'name', array($this->url_id));
 
 		if($member_name == ''){

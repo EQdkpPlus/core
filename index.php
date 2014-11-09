@@ -503,7 +503,7 @@ class controller extends gen_class {
 				'S_PAGINATION'		=> ($pageCount > 1) ? true : false,
 				'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$strPath, strip_tags($arrArticle['title'])) : '',
 				'PERMALINK'			=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
-				'BREADCRUMB'		=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'))),
+				'BREADCRUMB'		=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 				'ARTICLE_RATING'	=> ($arrArticle['votes']) ? $this->jquery->starrating($intArticleID, $this->controller_path.$strPath.'&savevote&link_hash='.$this->CSRFGetToken('savevote'), array('score' => (($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), 'number' => 10)) : '',
 				//'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 				'ARTICLE_TOOLBAR'	=> $jqToolbar['id'],
