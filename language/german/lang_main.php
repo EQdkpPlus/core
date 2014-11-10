@@ -622,6 +622,7 @@ $lang = array(
 "calendar_allday_event" => "ganztägiges Ereignis",
 "calendar_win_edit" => "Kalendereintrag bearbeiten",
 "calendar_win_add" => "Kalendereintrag erstellen",
+"calendar_click_add" => "Klicke um Event anzulegen",
 "calendars_delete_title" => "Kalendereintrag löschen",
 "calendars_delete_text" => "Das Ereignis wird dauerhaft gelöscht und kann nicht wiederhergestellt werden. Sind Sie sicher dass das Ereignis gelöscht werden soll?",
 "calendar_deleteall_drpdwn_this" => "Lösche das Ereignis",

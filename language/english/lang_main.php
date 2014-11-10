@@ -671,6 +671,7 @@ $lang = array(
 	"calendar_distri" => 'Raidmode',
 	"calendar_repeat" => 'Repeat',
 	"calendar_startdate" => 'from',
+	"calendar_click_add" => "Click to add Event",
 	"calendar_enddate" => 'to',
 	"calendar_deadline_entity" => 'hour(s) for raid start',
 	"calendar_deadline" => 'Signup deadline',
