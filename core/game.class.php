@@ -1005,11 +1005,19 @@ class game extends gen_class {
 	}	
 
 	
-	public function installGame($newgame, $lang){
-		
-		
+	public function installGame($newgame, $lang){		
 		//Uninstall old game
 		$this->uninstallGame();
+		
+		//Reset Data
+		$this->resetEvents();
+		$this->resetItempools();
+		$this->resetMultiDKPPools();
+		$this->resetRanks();
+		
+		//Add Default Pools
+		$intItempoolDefault = $this->addItempool("Default", "Default Itempool");
+		$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array($intItempoolDefault));
 		
 		//Install new game
 		$this->game = $newgame;
@@ -1095,7 +1103,7 @@ class game extends gen_class {
 		$this->pdh->put("event", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
-	
+		
 	public function addEvent($strName, $intValue, $strIcon){
 		return $this->pdh->put("event", "add_event", array($strName, $intValue, $strIcon));
 	}
@@ -1125,6 +1133,10 @@ class game extends gen_class {
 	
 	public function addMultiDKPPool($strName, $strDescription, $arrEventIDs, $arrItempoolIDs){
 		return $this->pdh->put("multidkp", "add_multidkp", array($strName, $strDescription, $arrEventIDs, $arrItempoolIDs));
+	}
+	
+	public function updateDefaultMultiDKPPool($strName, $strDescription, $arrEventIDs){
+		return $this->pdh->put("multidkp", "update_multidkp", array(1, $strName, $strDescription, $arrEventIDs, array(1), array()));
 	}
 	
 	public function resetRanks(){

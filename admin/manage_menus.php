@@ -197,7 +197,7 @@ class Manage_Menus extends page_generic {
 			$compare_array = array();
 			$favs_array = array();
 			if ($this->config->get('admin_favs')){
-				$favs_array = unserialize(stripslashes($this->config->get('admin_favs')));
+				$favs_array = $this->config->get('admin_favs');
 				$no_favs = true;
 					if (is_array($favs_array)){
 						foreach ($favs_array as $fav_key => $fav){

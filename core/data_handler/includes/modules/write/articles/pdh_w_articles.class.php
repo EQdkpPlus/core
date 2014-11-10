@@ -125,6 +125,8 @@ if(!class_exists('pdh_w_articles')) {
 			//Check Alias
 			$blnAliasResult = $this->check_alias(0, $strAlias);			
 			
+			//Replace Breakline
+			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
 			$strText = $this->embedly->parseString($strText);
 			
@@ -243,6 +245,7 @@ if(!class_exists('pdh_w_articles')) {
 		}
 		
 		public function update_article($id, $strText){
+			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
 			$strText = $this->embedly->parseString($strText);
 				
@@ -303,6 +306,7 @@ if(!class_exists('pdh_w_articles')) {
 			$blnAliasResult = $this->check_alias($id, $strAlias);
 			if (!$blnAliasResult) return false;
 			
+			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
 			$strText = $this->embedly->parseString($strText);
 			

@@ -522,7 +522,7 @@ class admin_functions extends gen_class {
 		//Now get the admin-favorits
 		$favs_array = array();
 		if($this->config->get('admin_favs')) {
-			$favs_array = @unserialize(stripslashes($this->config->get('admin_favs')));
+			$favs_array = $this->config->get('admin_favs');
 		}
 		$admin_menu['favorits']['icon'] = 'fa-star fa-lg fa-fw';
 		$admin_menu['favorits']['name'] = $this->user->lang('favorits');
