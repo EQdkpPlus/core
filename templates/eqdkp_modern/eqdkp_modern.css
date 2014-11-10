@@ -2199,6 +2199,15 @@ div.error { display: none; }
 .profile_header.charlevel{}
 .profile_header.charguild{}
 
+.profile_picture {
+	float:left;
+}
+
+.profile_picture img {
+	max-width: 300px;
+}
+
+
 .floatRight {
 	float: right;
 }
@@ -2969,12 +2978,16 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	margin-right: 5px;
 }
 
+.reponsiveTestClass {text-align:right;}
 	
 @media all and (max-width: 480px) {
 	body.responsive, html , .responsive #personalArea{
 		font-size: 13px;
 		line-height: 14px;
 	}
+	
+	.reponsiveTestClass {text-align:center;}
+	
 	.responsive #personalArea {
 		line-height: 22px;
 		font-size: 16px;

@@ -55,7 +55,7 @@ $opts = array(
 			'uploadDeny'	=> array('all'),
 			//'uploadOrder'	=> array('allow', 'deny'),
 			'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),
-			'maxFilesInDir' => 10,
+			'maxFilesInDir' => MAX_FILES_USERFOLDER,
 			'tmbPathMode'	=> get_chmod(),
 		)
 	)

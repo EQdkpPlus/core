@@ -52,6 +52,9 @@ define('PMOD_VIS_EXT', -1);
 define('SQL_INSTALL',	1);
 define('SQL_UNINSTALL',	2);
 
+//Max Images in Useravatar Folder
+define('MAX_FILES_USERFOLDER', 20);
+
 //URLs
 //-------------------------------------------------------------------------
 //Sourceforge

@@ -546,11 +546,11 @@ if(!class_exists('pdh_w_articles')) {
 			if ($id){
 				$strMyAlias = $this->pdh->get('articles', 'alias', array($id));
 				if ($strMyAlias == $strAlias) return true;		
-				$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias));
+				$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias, true));
 				return $blnResult;
 				
 			} else {
-				$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias));
+				$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias, true));
 				return $blnResult;
 				
 			}

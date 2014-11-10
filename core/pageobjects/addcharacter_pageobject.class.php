@@ -20,6 +20,7 @@ class addcharacter_pageobject extends pageobject {
 
 	private $data = array();
 	private $form_build = false;
+	private $adminmode = false;
 	
 	public static $shortcuts = array('form' => array('form', array('addchar')));
 
@@ -37,6 +38,10 @@ class addcharacter_pageobject extends pageobject {
 			message_die($this->user->lang('uc_not_loggedin'));
 		}
 		
+		//Check if Adminmode
+		$this->adminmode = ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)) ? true : false;
+		
+		//Default Rank
 		$this->data['rank_id'] = $this->pdh->get('rank', 'default', array());
 		
 		parent::__construct('u_member_', $handler, array(), null, '', 'editid');
@@ -48,7 +53,7 @@ class addcharacter_pageobject extends pageobject {
 		$this->build_form();
 		$data = $this->form->return_values();
 		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
-		$data['picture'] = $this->in->get('picture');
+
 		if (strlen($data['name'])){
 			$this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 		
@@ -65,13 +70,13 @@ class addcharacter_pageobject extends pageobject {
 		$this->build_form();
 		$data = $this->form->return_values();
 		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
-		$data['picture'] = $this->in->get('picture');
+
 		// dont allow name-change if not in adminmode
-		if(!($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false))) unset($data['name']);
+		if(!$this->adminmode) unset($data['name']);
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 
 		//Transfer character history
-		if ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false) && ($this->url_id != $this->in->get('history_receiver', 0)) && $this->in->get('history_receiver', 0) > 0){
+		if ($this->adminmode && ($this->url_id != $this->in->get('history_receiver', 0)) && $this->in->get('history_receiver', 0) > 0){
 			$this->pdh->put('member', 'trans_member', array($this->url_id, $this->in->get('history_receiver', 0)));
 		}
 		$this->pdh->process_hook_queue();
@@ -106,7 +111,7 @@ class addcharacter_pageobject extends pageobject {
 		}
 		
 		$this->build_form();
-		
+				
 		// Fill fields with values
 		$this->form->output($member_data);
 
@@ -116,12 +121,11 @@ class addcharacter_pageobject extends pageobject {
 			// Permissions
 			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
 			'USER_CAN_CONNECT'		=> ($this->user->check_auth('u_member_conn', false)) ? true : false,
-			'ADMINMODE'				=> ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)),
+			'ADMINMODE'				=> $this->adminmode,
 
 			// Data
 			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
 			'DD_HISTORY_RECEIVER'	=> new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)),
-			'MEMBER_PICTURE'		=> '<input type="hidden" value="'.$member_data['picture'].'" name="picture"/>',
 		));
 
 		$this->core->set_vars(array(
@@ -147,31 +151,36 @@ class addcharacter_pageobject extends pageobject {
 				'lang'		=> 'name',
 				'required'	=> true,
 				'pattern'	=> '.{3,}',
-				'readonly'	=> ($this->url_id > 0 && !$this->in->get('adminmode')) ? true : false,
+				'readonly'	=> ($this->url_id > 0 && !$this->adminmode) ? true : false,
 				'size'		=> 20
+			),
+			'picture' => array(
+				'type'			=> 'imageuploader',
+				'returnFormat'	=> 'relative',
+				'imgup_type'	=> 'user',
 			),
 		);
 		if($this->url_id > 0) {
 			$static_fields['editid'] = array(
 				'type'	=> 'hidden',
 			);
-			if($this->in->get('adminmode')) {
+			if($this->adminmode) {
 				$static_fields['status'] = array(
 					'type'	=> 'radio',
 					'lang'	=> 'member_active',
 				);
 			}
 		}
-		if(!($this->in->get('adminmode') && $this->url_id > 0)) {
+		if(!($this->adminmode && $this->url_id > 0)) {
 			$static_fields['overtakechar'] = array(
 				'type'	=> 'radio',
 				'lang'	=> 'overtake_char',
 				'disabled' => ($this->user->check_auth('u_member_conn', false)) ? false : true,
 			);
 			// is the char connected to the user?
-			if(!$static_fields['overtakechar']['disabled'] && !$this->in->get('adminmode')) $static_fields['overtakechar']['value'] = 1;
+			if(!$static_fields['overtakechar']['disabled'] && !$this->adminmode) $static_fields['overtakechar']['value'] = 1;
 		}
-		if($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)) {
+		if($this->adminmode) {
 			$maincharsel = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,false,true,true))));
 			if (!$this->url_id){
 				asort($maincharsel);

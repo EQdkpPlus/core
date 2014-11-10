@@ -315,6 +315,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								
 							} else $arrLang = $this->game->get($arrField['options_language']);
 							if (isset($arrLang[$strMemberValue])) return $arrLang[$strMemberValue];
+						} else {
+							$strVal = $arrField['data']['options'][$strMemberValue];
+							$strGlang = $this->game->glang($strVal);
+							if ($strGlang) return $strGlang;
 						}
 					
 						$strType = $this->game->get_type_for_name($profile_field);
@@ -496,6 +500,17 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_picture($member_id){
 			return $this->data[$member_id]['picture'];
+		}
+		
+		public function get_html_picture($member_id){
+			$strPicture = $this->get_picture($member_id);
+			if (!strlen($strPicture)){
+				$strImg = $this->server_path.'images/global/avatar-default.svg';
+			} else {
+				$strImg = str_replace($this->root_path, $this->server_path, $strPicture);
+			}
+				
+			return '<img src="'.$strImg.'" class="member-charimage" alt="" />';
 		}
 
 		/*

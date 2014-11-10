@@ -34,14 +34,14 @@ class himageuploader extends hhidden {
 	
 	public function _inpval() {
 		switch($this->returnFormat){
-			case 'relative': return str_replace($this->environment->link, $this->root_path, $this->in->get($this->name, ''));
+			case 'relative': return str_replace($this->environment->link, registry::get_const('root_path'), urldecode($this->in->get($this->name, '')));
 			
-			case 'in_data': return str_replace($this->pfh->FileLink('', 'files', 'absolute'), '', $this->in->get($this->name, ''));
+			case 'in_data': return str_replace($this->pfh->FileLink('', 'files', 'absolute'), '', urldecode($this->in->get($this->name, '')));
 			
-			case 'filename': return  pathinfo($this->in->get($this->name, ''), PATHINFO_BASENAME);
+			case 'filename': return  pathinfo(urldecode($this->in->get($this->name, '')), PATHINFO_BASENAME);
 			
 			case 'absolute':
-			default: return $this->in->get($this->name, '');
+			default: return urldecode($this->in->get($this->name, ''));
 		}
 	}
 }

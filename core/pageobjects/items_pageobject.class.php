@@ -57,37 +57,36 @@ class items_pageobject extends pageobject {
 			$colspan++;
 		}
 	
-			//init infotooltip
-			infotooltip_js();
-	
-			$hptt_page_settings		= $this->pdh->get_page_settings('viewitem', 'hptt_viewitem_buyerslist');
+		//init infotooltip
+		infotooltip_js();
+
+		$hptt_page_settings		= $this->pdh->get_page_settings('viewitem', 'hptt_viewitem_buyerslist');
 		$hptt					= $this->get_hptt($hptt_page_settings, $item_ids, $item_ids, array('%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), $this->url_id);
-					$hptt->setPageRef($this->strPath);
-	
-					//linechart data
-			if($this->config->get('itemhistory_dia') && !$this->config->get('disable_points')) {
-			$a_items = array();
-				foreach($item_ids as $item_id) {
+		$hptt->setPageRef($this->strPath);
+
+		//linechart data
+		if($this->config->get('itemhistory_dia') && !$this->config->get('disable_points')) {
+		$a_items = array();
+			foreach($item_ids as $item_id) {
 				$a_items[] = array('name' => $this->time->date("Y-m-d h:i:s", $this->pdh->get('item', 'date', array($item_id))), 'value' => $this->pdh->get('item', 'value', array($item_id)));
 			}
-			}
-	
-			$this->tpl->assign_vars(array(
-					'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
-					'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('line', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500)) : '',
-	
-							'SHOW_ITEMSTATS'			=> ($this->config->get('infotooltip_use')) ? true : false,
-									'SHOW_ITEMHISTORYA'			=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') == 1 ) ? true : false,
-											'SHOW_COLSPAN'				=> $colspan,
-											'BUYERS_TABLE'				=> $hptt->get_html_table($sort, '', 0, 100, sprintf($this->user->lang('viewitem_footcount'), $counter)),
-											'L_PURCHASE_HISTORY_FOR'	=> sprintf($this->user->lang('purchase_history_for'), stripslashes($item_name)),
-									));
-	
-			$this->set_vars(array(
-					'page_title'		=> $item_name,
-					'template_file'		=> 'viewitem.html',
-					'display'			=> true)
-			);
+		}
+
+		$this->tpl->assign_vars(array(
+				'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
+				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('line', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500)) : '',
+				'SHOW_ITEMSTATS'			=> ($this->config->get('infotooltip_use')) ? true : false,
+				'SHOW_ITEMHISTORYA'			=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') == 1 ) ? true : false,
+				'SHOW_COLSPAN'				=> $colspan,
+				'BUYERS_TABLE'				=> $hptt->get_html_table($sort, '', 0, 100, sprintf($this->user->lang('viewitem_footcount'), $counter)),
+				'L_PURCHASE_HISTORY_FOR'	=> sprintf($this->user->lang('purchase_history_for'), stripslashes($item_name)),
+		));
+
+		$this->set_vars(array(
+				'page_title'		=> $item_name,
+				'template_file'		=> 'viewitem.html',
+				'display'			=> true)
+		);
 	}
 
 	public function display(){

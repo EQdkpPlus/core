@@ -123,7 +123,10 @@ class character_pageobject extends pageobject {
 
 			// common data
 			'DATA_GUILDTAG'			=> $this->config->get('guildtag'),
-			'DATA_NAME'				=> $member_name,
+			'CHARDATA_NAME'			=> $member_name,
+			'S_CHARDATA_PICTURE'	=> ($this->pdh->get('member', 'picture', array($this->url_id)) != "") ? true : false,
+			'CHARDATA_PICTURE'		=> $this->pdh->geth('member', 'picture', array($this->url_id)),
+			'DATA_CLASSNAME'		=> $this->pdh->get('member', 'classname', array($this->url_id)),
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
 
 			// images
@@ -142,6 +145,7 @@ class character_pageobject extends pageobject {
 		// the profile fields
 		if(!$profile_owntpl){
 			$pfields	= $this->pdh->get('profile_fields', 'fields');
+
 			$category	= array();
 			$this->jquery->Tab_header('profile_field_data', true);
 			if(is_array($pfields) && count($pfields) > 0){
@@ -156,9 +160,9 @@ class character_pageobject extends pageobject {
 					));
 					
 					foreach($catvalues as $pfname=>$pfoption){
-						if($pfoption['category'] == $catname && $pfoption['enabled'] == '1'){
+						if($pfoption['category'] == $catname && $pfoption['enabled'] == '1' && $pfoption['type'] != 'hidden'){
 							$this->tpl->assign_block_vars('cat_data.pfield_data', array(
-								'NAME'		=> $pfoption['language'],
+								'NAME'		=> $this->pdh->get('member', 'html_caption_profile_field', array($pfname)),
 								'VALUE'		=> $this->pdh->get('member', 'html_profile_field', array($this->url_id, $pfname))
 							));
 						}

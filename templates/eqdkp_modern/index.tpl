@@ -427,14 +427,13 @@
 			<!-- ENDIF -->
 		</form>
 	</div>
-	
+	<div class="reponsiveTestClass" style="display:none;"><!-- This div is for testing the responsiveness --></div>
 	<script type="text/javascript">
 		{JS_CODE_EOP}
 		{JS_CODE_EOP2}
 		
-		
-		//Reponsivness
-		if ($('body').hasClass('responsive')) {
+		//Reponsivness - fired only if breakpoint is reached
+		if ($('body').hasClass('responsive') && $(".reponsiveTestClass").css("text-align") == "center" ) {
 			$('.stackcolumns').stackcolumns({myClass:'stackcolumns hiddenDesktop' });
 			$('.stacktable').stacktable({myClass:'stacktable hiddenDesktop'});
 		}

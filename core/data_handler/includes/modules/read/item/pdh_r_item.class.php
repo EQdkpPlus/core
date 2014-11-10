@@ -320,7 +320,7 @@ if(!class_exists('pdh_r_item')){
 				$ext = '';
 				if($direct) {
 					$options = array(
-						'url' => $this->root_path."infotooltip/infotooltip_feed.php?name=".urlencode(base64_encode($this->get_name($item_id)))."&lang=".$lang."&update=1&direct=1",
+						'url' => $this->server_path."infotooltip/infotooltip_feed.php?name=".urlencode(base64_encode($this->get_name($item_id)))."&lang=".$lang."&update=1&direct=1",
 						'height' => '340',
 						'width' => '400',
 						'onclose' => $this->env->request
