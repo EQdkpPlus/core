@@ -1503,7 +1503,12 @@ if (!class_exists("jquery")) {
 					content: '#".$toolbar_id."-options', 
 					position: '".$position."',
 					hideOnClick: ".(($hideOnClick) ? 'true' :  'false')."
-				});",
+				});
+				$('.".$toolbar_id."').on('toolbarItemClick',
+					function( event ) {
+						$('.".$toolbar_id."').toolbar('hide');
+					}
+				);",
 			'docready');
 			
 			$strItems = '';

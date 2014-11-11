@@ -65,13 +65,17 @@ class ManageCrons extends page_generic {
 	}
 
 	public function update(){
-		$options = array();
-			
-		if ($this->crons[$this->in->get('cron')]['editable']){
+		$strCronname = $this->in->get('cron');
+		$arrOptions = $this->buildCrontaskOptions($strCronname);
+		$form = register('form', array('cronjob_settings'));
+		$form->add_fields($arrOptions);
+		
+		if ($this->crons[$strCronname]['editable']){
 			$options['description'] = $this->in->get('cron_desc');
 			$options['repeat'] = ($this->in->get('cron_repeat') == 1) ? true : false;
-			$options['params'] = $this->in->getArray('params', 'string');
-			$options['params'] = is_array($options['params']) ? $options['params'] : array();		
+			
+			$options['params'] = $form->return_values();
+			$options['params'] = is_array($options['params']) ? $options['params'] : array();	
 			
 			$options['repeat_interval'] = $this->in->get('repeat_value', 0);
 			$options['repeat_type'] =  $this->in->get('repeat_key', 'hourly');
@@ -154,35 +158,50 @@ class ManageCrons extends page_generic {
 			'display'			=> true)
 		);
 	}
+	
+	private function buildCrontaskOptions($strCrontask){
+		$file_name = $strCrontask.'_crontask.class.php';
+		$file_path = $this->root_path.$this->crons[$strCrontask]['path'].$file_name;
+		if(file_exists($file_path)){
+			require_once($file_path);
+			$class = $strCrontask.'_crontask';
+			$cron_task = registry::register($class);
+			$options = $cron_task->options();
+		}
+		
+		return $options;
+	}
 
 	public function edit(){
-		if (!$this->crons[$this->in->get('cron')] || $this->crons[$this->in->get('cron')]['editable'] == false){
+		$strCronname = $this->in->get('cron');
+		
+		if (!$this->crons[$strCronname] || $this->crons[$strCronname]['editable'] == false){
 			$this->display_list();
 		}
 		
-		$cron_data = $this->crons[$this->in->get('cron')];
+		$cron_data = $this->crons[$strCronname];
 
-		$file_name = $this->in->get('cron').'_crontask.class.php';
-		$file_path = $this->root_path.$this->crons[$this->in->get('cron')]['path'].$file_name;
+		$file_name = $strCronname.'_crontask.class.php';
+		$file_path = $this->root_path.$this->crons[$strCronname]['path'].$file_name;
 		
 		if(file_exists($file_path)){
-			require($file_path);
-			$class = $this->in->get('cron').'_crontask';
+			require_once($file_path);
+			$class = $strCronname.'_crontask';
 			$cron_task = registry::register($class);
-			$params = $this->crons[$this->in->get('cron')]['params'];
-			$options = $cron_task->options();
+			$params = $this->crons[$strCronname]['params'];
 		}
-		if (is_array($options)){
-			foreach ($options as $key=>$value){
-				$value['value'] = isset($params[$key]) ? $params[$key] : '';
-				$name = 'params['.$key.']';
-				$this->tpl->assign_block_vars('param_row', array(
-					'NAME'	=> ($this->user->lang('cron_'.$this->in->get('cron').'_'.$key, false, false)) ? $this->user->lang('cron_'.$this->in->get('cron').'_'.$key) : $value['lang'],
-					'HELP'	=> ($this->user->lang('cron_'.$this->in->get('cron').'_'.$key.'_help', false, false)) ? $this->user->lang('cron_'.$this->in->get('cron').'_'.$key.'_help') : '',
-					'FIELD'	=> form::field($name, $value),
-				));
+		
+		$arrOptions = $this->buildCrontaskOptions($strCronname);
+		$form = register('form', array('cronjob_settings'));
+		
+		if (is_array($arrOptions)){
+			foreach($arrOptions as $key => $val){
+				$form->add_fields($arrOptions);
 			}
+			
+			$form->output($params);
 		}
+
 		
 		$repeat_dd = array(
 			'minutely'		=> $this->user->lang('minutely'),
@@ -194,8 +213,8 @@ class ManageCrons extends page_generic {
 		);
 			
 		$this->tpl->assign_vars(array(
-			'S_PARAMS'				=> (count($options) > 0) ? true : false,
-			'CRON_NAME'				=> sanitize($this->in->get('cron')),
+			'S_PARAMS'				=> (count($arrOptions) > 0) ? true : false,
+			'CRON_NAME'				=> sanitize($strCronname),
 			'CRON_DESC'				=> sanitize($cron_data['description']),
 			'CRON_REPEAT'			=> ($cron_data['repeat']) ? 'checked="checked"' : '',
 			'CRON_REPEAT_VALUE'		=> $cron_data['repeat_interval'],

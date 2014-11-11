@@ -40,31 +40,31 @@ class search_pageobject extends pageobject {
 				'category'	=> $this->user->lang('calendar'),
 				'module'	=> 'calendar_events',
 				'method'	=> 'search',
-				'permissions'	=> array('u_calendar_view'),
+				'permission' => $this->user->check_pageobjects(array('calendar', 'calendarevent'), 'AND', false)
 			),
 			'members'	=> array(
 				'category'	=> $this->user->lang('members'),
 				'module'	=> 'member',
 				'method'	=> 'search',
-				'permissions'	=> array('u_member_view'),
+				'permission' => $this->user->check_pageobjects(array('character'), 'AND', false)
 			),
 			'raids'	=> array(
 				'category'	=> $this->user->lang('menu_raids'),
 				'module'	=> 'raid',
 				'method'	=> 'search',
-				'permissions'	=> array('u_raid_view'),
+				'permission' => $this->user->check_pageobjects(array('raids'), 'AND', false)
 			),
 			'items'	=> array(
 				'category'	=> $this->user->lang('items'),
 				'module'	=> 'item',
 				'method'	=> 'search',
-				'permissions'	=> array('u_item_view'),
+				'permission' => $this->user->check_pageobjects(array('items'), 'AND', false)
 			),
 			'events'	=> array(
 				'category'	=> $this->user->lang('events'),
 				'module'	=> 'event',
 				'method'	=> 'search',
-				'permissions'	=> array('u_event_view'),
+				'permission' => $this->user->check_pageobjects(array('events'), 'AND', false)
 			),
 			'user'	=> array(
 				'category'	=> $this->user->lang('users'),
@@ -92,6 +92,10 @@ class search_pageobject extends pageobject {
 			$blnSearched = true;
 			foreach ($this->search_array as $key => $value){
 				$blnPermission = true;
+				if (isset($value['permission']) && !$value['permission']){
+					$blnPermission = false;
+				}
+				
 				if (is_array($value['permissions']) && count($value['permissions']) > 0){
 					foreach ($value['permissions'] as $perm){
 						if (!$this->user->check_auth($perm, false)){
@@ -100,6 +104,7 @@ class search_pageobject extends pageobject {
 						}
 					}
 				}
+				
 				if ($blnPermission){
 					$retArray = $this->pdh->get($value['module'], $value['method'], array($this->in->get('svalue')));
 					if (is_array($retArray) && count($retArray) > 0){

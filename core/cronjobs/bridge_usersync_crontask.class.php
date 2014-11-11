@@ -22,6 +22,13 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "bridge_usersync_crontask" ) ) {
 	class bridge_usersync_crontask extends crontask {
+		public $options = array(
+				'delete_eqdkp_user'	=> array(
+					'lang'	=> 'Delete EQdkp Plus user, that are not in CMS',
+					'type'	=> 'radio',
+				),
+		);
+		
 		public function __construct(){
 			$this->defaults['repeat']		= true;
 			$this->defaults['repeat_type']	= 'daily';
@@ -32,13 +39,19 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 		}
 
 		public function run(){
+			$crons		= $this->timekeeper->list_crons();
+			$params		= $crons['bridge_usersync']['params'];
+			
+			
 			$a = $this->bridge->get_users();
 			$arrUser = array();
+			$arrCMSUsernames = array();
 			foreach($a as $val){
 				$id = intval($val['id']);
 				if ($this->bridge->check_user_group($id)){
 					$arrUser[] = $val;
 				}
+				$arrCMSUsernames[] = clean_username($val['name']);
 			}
 		
 			foreach($arrUser as $arrUserdata){
@@ -53,6 +66,18 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					$this->pdh->process_hook_queue();
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
+				}
+			}
+			
+			//Delete EQdkp Plus User, except Admins and Superadmins
+			if ((int)$params['delete_eqdkp_user'] == 1){
+				$arrEQdkpUser = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(true))));
+				foreach($arrEQdkpUser as $userid => $username){
+					$username = clean_username($username);
+					if (!in_array($username, $arrCMSUsernames)){
+						if ($this->user->check_group(2, false, $userid) || $this->user->check_group(3, false, $userid)) continue;
+						$this->pdh->put('user', 'delete_user', array($userid));
+					}
 				}
 			}
 		}

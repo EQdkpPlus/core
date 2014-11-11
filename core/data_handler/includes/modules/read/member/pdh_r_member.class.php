@@ -746,20 +746,17 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return strcasecmp($this->pdh->get('user', 'name', array($this->get_user($params1[0]))), $this->pdh->get('user', 'name', array($this->get_user($params2[0]))));
 		}
 		
-		// TODO: needs some work  (class_name and race_name doesnt exist anymore)
 		public function get_search($search_value) {
-			return array(); // temporary, to prevent any errors
 			$arrSearchResults = array();
 			if (is_array($this->data)){
 				foreach($this->data as $id => $value) {
 					if(stripos($value['name'], $search_value) !== false OR
 					stripos($this->get_classname($id), $search_value) !== false OR
-					stripos($value['race_name'], $search_value) !== false OR
 					stripos($this->get_rankname($id), $search_value) !== false) {
 
 						$arrSearchResults[] = array(
-							'id'	=> $this->game->decorate('primary', array($this->pdh->get('member', 'classid', array($id)), false, $id)).$this->game->decorate('races', array($this->pdh->get('member', 'raceid', array($id)), $this->get_gender($id), $id)),
-							'name'	=> $this->get_html_name($id),
+							'id'	=> '#'.$id,
+							'name'	=> $this->get_memberlink_decorated($id, $this->routing->simpleBuild('character'), '', true),
 							'link'	=> $this->routing->build('character', $value['name'], $id),
 						);
 					}

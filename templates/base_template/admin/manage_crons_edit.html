@@ -39,12 +39,13 @@
 	<!-- IF S_PARAMS -->
 	<fieldset class="settings">
 	<legend>{L_settings}</legend>
-		<!-- BEGIN param_row -->
+		<!-- BEGIN fields -->
 		<dl>
-			<dt><label>{param_row.NAME}:</label><br /><span>{param_row.HELP}</span></dt>
-			<dd>{param_row.FIELD}</dd>
+			<dt><label>{fields.NAME}</label><br /><span>{fields.HELP}</span></dt>
+			<dd>{fields.FIELD}</dd>
 		</dl>
-		<!-- END param_row -->
+		<!-- END fields -->
+
 	</fieldset>
 	<!-- ENDIF -->
 	<button name="upd" type="submit" class="mainoption" id="update" ><i class="fa fa-check"></i>{L_save}</button>

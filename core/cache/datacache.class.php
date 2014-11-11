@@ -503,7 +503,7 @@ if( !class_exists( "cachePagination" ) ) {
 				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." = ".$escapedString;
 			}
 
-			$objQuery = $this->db->prepare($strQuery)->execute();
+			$objQuery = $this->db->query($strQuery);
 			$arrOut = array();
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){

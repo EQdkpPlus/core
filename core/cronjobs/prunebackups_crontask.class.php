@@ -25,13 +25,11 @@ if ( !class_exists( "prunebackups_crontask" ) ) {
 		public $options = array(
 			'days'	=> array(
 				'lang'	=> 'Delete Backups older than x days',
-				'name'	=> 'days',
 				'type'	=> 'int',
 				'size'	=> 3,
 			),
 			'count'	=> array(
 				'lang'	=> 'Delete more than x backups',
-				'name'	=> 'count',
 				'type'	=> 'int',
 				'size'	=> 3,
 			),

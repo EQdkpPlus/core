@@ -311,7 +311,7 @@ class bridge extends gen_class {
 		$objQuery = $this->db->query($strQuery);
 		$arrResult = false;
 		if ($objQuery){
-			$arrResult = $arrResult->fetchAllAssoc();
+			$arrResult = $objQuery->fetchAllAssoc();
 		}
 		
 		return $arrResult;

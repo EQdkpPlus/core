@@ -316,9 +316,9 @@ class inst_settings extends install_generic {
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category4'])." WHERE id=4;");
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category5'])." WHERE id=5;");
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category6'])." WHERE id=6;");
-		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category7'])." WHERE id=6;");
-		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category8'])." WHERE id=6;");
-		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category9'])." WHERE id=6;");
+		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category7'])." WHERE id=7;");
+		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category8'])." WHERE id=8;");
+		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category9'])." WHERE id=9;");
 		
 		
 		//Language for Default Pagetitles
