@@ -268,7 +268,8 @@ if(!class_exists('pdh_w_user')) {
 			
 			//Delete Avatars
 			$this->pfh->Delete('users/'.$user_id, 'files');
-			$this->pfh->Delete($this->pdh->get('user', 'avatarimglink', array($user_id)));
+			$strAvatar = $this->pdh->get('user', 'avatarimglink', array($user_id));
+			if (strlen($strAvatar)) $this->pfh->Delete($strAvatar);
 			
 			$log_action = array(
 				'{L_USER}'		=> $this->pdh->get('user', 'name', array($user_id)),
