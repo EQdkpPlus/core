@@ -1052,6 +1052,7 @@ body .ui-tooltip {
     The following CSS is consistent between example themes and should not be altered.
 */
 #colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxWrapper {max-width:none;}
 #cboxOverlay{position:fixed; width:100%; height:100%;}
 #cboxMiddleLeft, #cboxBottomLeft{clear:left;}
 #cboxContent{position:relative;}
@@ -1060,7 +1061,7 @@ body .ui-tooltip {
 #cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
 #cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
 .cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
-.cboxIframe{width:100%; height:100%; display:block; border:0;}
+.cboxIframe{width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
 
 /* 
@@ -1087,8 +1088,7 @@ body .ui-tooltip {
 #cboxLoadedContent{margin-bottom:52px;}
 #cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:#949494;}
 #cboxCurrent{position:absolute; bottom:4px; left:0px; color:#949494;}
-#cboxLoadingOverlay{background:url(images/loading_background.png) no-repeat center center;}
-#cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+#cboxLoadingOverlay{background:#fff url(images/loading.gif) no-repeat 5px 5px;}
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
@@ -1103,6 +1103,7 @@ body .ui-tooltip {
 	color:#0092ef;
 }
 #cboxPrevious{
+	float: left;
 	background-color: #FFFFFF;
 	bottom: 55%;
 	color: #0092EF;
@@ -1138,7 +1139,7 @@ body .ui-tooltip {
 	content: "\f0a9";
 	font-family: FontAwesome;
 	color: #000;
-	margin-left: 3px;
+	margin-left: 13px;
 }
 #cboxNext:hover{
 	background-position:-50px -25px;

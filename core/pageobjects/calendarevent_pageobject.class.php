@@ -448,8 +448,12 @@ class calendarevent_pageobject extends pageobject {
 				if($attendeeid > 0){
 					$attclassid = (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $this->pdh->get('member', 'classid', array($attendeeid));
 					$role_class = (($eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $attclassid);
-					$this->attendees[$attendeedata['signup_status']][$role_class][$attendeeid] = $attendeedata;
-					$this->attendees_count[$attendeedata['signup_status']][$attendeeid] = true;
+
+					// we need a roleID or a classID. If not, the char is not shown but counted
+					if($role_class > 0){
+						$this->attendees[$attendeedata['signup_status']][$role_class][$attendeeid] = $attendeedata;
+						$this->attendees_count[$attendeedata['signup_status']][$attendeeid] = true;
+					}
 				}
 			}
 		}else{
@@ -493,8 +497,8 @@ class calendarevent_pageobject extends pageobject {
 
 			// sort the array
 			foreach ($this->unsigned as $k_unsigned => $v_unsigned) {
-				$sort_names[$k_unsigned]    = $v_unsigned['name'];
-			    $sort_class[$k_unsigned]    = $v_unsigned['classid'];
+				$sort_names[$k_unsigned]	= $v_unsigned['name'];
+				$sort_class[$k_unsigned]	= $v_unsigned['classid'];
 			}
 			if($this->config->get('calendar_raid_notsigned_classsort')){
 				array_multisort($sort_class, SORT_ASC, $sort_names, SORT_ASC, $this->unsigned);
@@ -590,7 +594,7 @@ class calendarevent_pageobject extends pageobject {
 						}
 
 						if($this->config->get('calendar_raid_random') == 1 && $memberdata['random_value'] > 0){
-							$membertooltip[]	=  $this->user->lang('raidevent_raid_memtt_roll').': '.$memberdata['random_value'];
+							$membertooltip[]	= $this->user->lang('raidevent_raid_memtt_roll').': '.$memberdata['random_value'];
 						}
 
 						// Per game additional tooltip stuff
@@ -716,7 +720,7 @@ class calendarevent_pageobject extends pageobject {
 			),
 			2 => array(
 				'name'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
-				'link'	=> ($eventdata['closed'] == '1') ? $this->strPath.$this->SID.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') :  $this->strPath.$this->SID.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
+				'link'	=> ($eventdata['closed'] == '1') ? $this->strPath.$this->SID.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') : $this->strPath.$this->SID.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
 				'icon'	=> ($eventdata['closed'] == '1') ? 'fa-unlock fa-lg' : 'fa-lock fa-lg',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
