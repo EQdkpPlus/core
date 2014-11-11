@@ -187,17 +187,14 @@ class Manage_Bridge extends page_generic {
 			
 			$this->config->set('cmsbridge_onlycmsuserlogin', $this->in->get('cms_onlycmsuserlogin', 0));
 
-			//Specific Bridge-Settings
+			//Bridge Settings
 			$settings = $this->bridge->get_settings();
+			$form = register('form', array('bridge_settings'));
+			
 			if (is_array($settings)){
-				$save_array = array();
-				foreach($settings as $name=>$confvars){
-					$savetype = ($confvars['default']) ? $confvars['default'] : '';
-					$tmp_get = (isset($confvars['serialized'])) ? serialize($this->in->getArray($name, $confvars['datatype'])) : $this->in->get($name, $savetype);
-					$tmp_get = (isset($confvars['edecode'])) ? html_entity_decode($tmp_get) : $tmp_get;
-					$save_array[$name] = $tmp_get;
-				}
-				$this->config->set($save_array);
+				$form->add_fields($settings);
+				$arrValues = $form->return_values();
+				$this->config->set($arrValues);
 			}
 
 		} else {
@@ -262,19 +259,16 @@ class Manage_Bridge extends page_generic {
 
 		//Bridge Settings
 		$settings = $this->bridge->get_settings();
+		$form = register('form', array('bridge_settings'));
+		
 		if (is_array($settings)){
+			$form->add_fields($settings);
+			
+			//Build Settings Array
 			foreach($settings as $name=>$confvars){
-				if((isset($confvars['disabled']) && $confvars['disabled']===true)){
-					continue;
-				}
-				$confvars['value'] = $this->config->get($name);
-
-				$this->tpl->assign_block_vars('field', array(
-					'NAME'		=> ($this->user->lang($name)) ? $this->user->lang($name) : $name,
-					'HELP'		=> ($this->user->lang($name.'_help')) ? $this->user->lang($name.'_help') : $confvars['help'],
-					'FIELD'		=> form::field($name, $confvars),
-				));
+				$arrValues[$name] = $this->config->get($name);
 			}
+			$form->output($arrValues);
 		}
 		$arrBridges = $this->bridge->get_available_bridges();
 		ksort($arrBridges);
