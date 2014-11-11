@@ -88,7 +88,7 @@ $(function(){
 	});
 
 	var checkboxes = $('[name="modstat_change[]"]').click(function(event){
-		$('#button_confirmall').prop("disabled", checkboxes.filter(':checked').length == 0);
+		$('#moderate_status_btn').prop("disabled", checkboxes.filter(':checked').length == 0);
 	});
 });
 
@@ -406,7 +406,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 				<dt><label>{L_raidevent_raid_mod_select}</label></dt>
 				<dd>
 					{DD_MODSIGNUPSTATUS} 
-					<input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" />
+					<input type="submit" disabled="disabled" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" id="moderate_status_btn"/>
 				</dd>
 			</dl>
 			<!-- IF SHOW_RAIDGROUPS -->
@@ -420,7 +420,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			<!-- ENDIF -->
 			<dl>
 				<dt><label>{L_raidevent_raid_confirmall}</label></dt>
-				<dd><input type="submit" disabled="disabled" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" id="button_confirmall"/></dd>
+				<dd><input type="submit" name="confirmall" value="{L_raidevent_raid_confirmall}" class="mainoption bi_ok" id="button_confirmall"/></dd>
 			</dl>
 		</fieldset>
 	</div>
