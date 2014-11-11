@@ -1575,6 +1575,7 @@ $lang = array(
 "add_portal_layout" => "Portal-Layout hinzufügen",
 "add_portal_block" => "Portal-Block hinzufügen",
 "edit_portal_block"	=> "Portal-Block bearbeiten",
+"portal_block_info" => "Auf dieser Seite kannst du eigene Portal-Blöcke anlegen. Diese eigenen Portalblöcke musst du selber in der index.tpl deines Styles positionieren. Dazu brauchst du nur die angegebene Template-Variable {PORTAL_BLOCKX} an der gewünschten Stelle einfügen.",
 "wide_content"	=> "Breiten Inhalt bevorzugen",
 "hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
 "perm_u_files_man" => "Bilder verwalten",

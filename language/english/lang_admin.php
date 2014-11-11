@@ -1572,6 +1572,7 @@ $lang = array(
 	"add_portal_layout" => 'Add Portallayout',
 	"add_portal_block" => 'Add Portalblock',
 	"edit_portal_block" => 'Edit Portalblock',
+	"portal_block_info" => "You can add own portalblocks, but have to position them in the index.tpl file of your Style. To position them, just take the Template-Var {PORTAL_BLOCKX} and add it to the position you want in the Template-File.",
 	"wide_content" => 'Prefer wide content',
 	"hide_on_rss" => 'Exclude this category on RSS-Feed',
 	"perm_u_files_man" => 'Manage Images',
