@@ -2874,6 +2874,14 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	top:auto;
 }
 
+#cboxNext:after {
+	margin-left: 13px;
+}
+
+#cboxPrevious {
+	float: left;
+}
+
 .permalink, .rsslink {
 	display:none;
 }

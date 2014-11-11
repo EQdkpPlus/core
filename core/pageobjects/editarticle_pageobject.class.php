@@ -187,7 +187,6 @@ class editarticle_pageobject extends pageobject {
 			$this->core->message($this->user->lang('error_create_article'), $this->user->lang('error'), 'red');
 		}
 		
-		
 		$this->pdh->process_hook_queue();
 	}
 	

@@ -337,7 +337,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		public function get_html_name($intCategoryID){
-			return $this->get_name_prefix($intCategoryID).'<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'">'.$this->get_name($intCategoryID).'</a>';
+			return $this->get_name_prefix($intCategoryID).'<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'" class="articles-link">'.$this->get_name($intCategoryID).'</a>';
 		}
 		
 		public function get_check_alias($strAlias, $blnCheckArticles=false){

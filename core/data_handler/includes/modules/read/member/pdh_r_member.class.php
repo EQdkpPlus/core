@@ -258,6 +258,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_html_profile_field($member_id, $profile_field, $nameOnly=false){
 			$arrField = $this->pdh->get('profile_fields', 'fields', array($profile_field));
 			if (!$arrField) return '';
+
 			$strMemberValue = $this->get_profile_field($member_id, $profile_field);
 			$out = $strMemberValue;
 			
@@ -319,11 +320,15 @@ if ( !class_exists( "pdh_r_member" ) ) {
 							$strVal = $arrField['data']['options'][$strMemberValue];
 							$strGlang = $this->game->glang($strVal);
 							if ($strGlang) return $strGlang;
+							$out = $strVal;
 						}
-					
+
 						$strType = $this->game->get_type_for_name($profile_field);
+
 						if ($strType){
-							return ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberValue) : $this->game->decorate($strType, $strMemberValue, $this->data[$member_id]);
+							return $strDecorated = ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberValue) : $this->game->decorate($strType, $strMemberValue, $this->data[$member_id], 16, false,false);
+						} else {
+							return $out;
 						}
 					}
 				break;

@@ -259,6 +259,8 @@ class Manage_Article_Categories extends page_generic {
 				cursor: 'pointer',
 			});
 		", "docready");
+		
+		$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
 	
 		$view_list = $this->pdh->get('article_categories', 'id_list', array());
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_article_categories', 'hptt_admin_manage_article_categories_categorylist');

@@ -54,3 +54,13 @@ body {
 	}
 }
 */
+
+/*============================================================================================*/
+
+/* Give Article Headlines of some categories (here: Category #2) a special color */
+
+/*
+.article-container[data-article-category-id="2"] h2 a, .article_detail_container[data-article-category-id="2"] h1{
+	color: #efefef;
+}
+*/

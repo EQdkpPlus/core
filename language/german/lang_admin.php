@@ -1576,6 +1576,7 @@ $lang = array(
 "add_portal_block" => "Portal-Block hinzufügen",
 "edit_portal_block"	=> "Portal-Block bearbeiten",
 "portal_block_info" => "Auf dieser Seite kannst du eigene Portal-Blöcke anlegen. Diese eigenen Portalblöcke musst du selber in der index.tpl deines Styles positionieren. Dazu brauchst du nur die angegebene Template-Variable {PORTAL_BLOCKX} an der gewünschten Stelle einfügen.",
+"portal_layout_info" => "Du kannst mehrere Portallayouts anlegen, um in verschiedenen Artikelkategorien unterschiedliche Portalmodule anzeigen zu lassen. Für Seiten ohne Kategorien, z.B. Plugins, wird das Standard-Layout verwendet.",
 "wide_content"	=> "Breiten Inhalt bevorzugen",
 "hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
 "perm_u_files_man" => "Bilder verwalten",
@@ -1641,7 +1642,8 @@ $lang = array(
 "upload_eventicon" => "Ereignisicon hinzufügen",
 "selected_elements" => "Ausgewählte Elemente",
 "show_on_teamlist" => "Auf Teamseite anzeigen",
-"show_teamlist" => "Teamseite",		
+"show_teamlist" => "Teamseite",
+"link_to_articles" => "Hier klicken um zu den Artikeln in dieser Kategorie zu gelangen",
  );
 
 ?>
