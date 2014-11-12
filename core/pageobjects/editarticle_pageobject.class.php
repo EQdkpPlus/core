@@ -147,7 +147,7 @@ class editarticle_pageobject extends pageobject {
 		if ($intPublished && !$intDefaultPublished) $intPublished = 0;
 		
 		$intFeatured = $this->in->get('featured', 0);
-		$intCategory = $cid;
+		$intCategory = ($this->in->exists('category')) ? $this->in->get('category', 0) : $cid;
 		$intUserID = $this->user->id;
 		$intComments = $this->in->get('comments', 0);
 		$intVotes = $this->in->get('votes', 0);
@@ -203,6 +203,14 @@ class editarticle_pageobject extends pageobject {
 			'gallery'		=> true,
 			'raidloot'		=> true,
 		));
+		
+		$arrSubcategories = $this->pdh->get('article_categories', 'all_childs', array($cid));
+		$arrCategories = array();
+		foreach ($arrSubcategories as $caid){
+			$arrPerms = $this->pdh->get('article_categories', 'user_permissions', array($caid, $this->user->id));
+			if (!$arrPerms['update'] || !$arrPerms['create']) continue;
+			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
+		}
 
 		if ($id){
 			$cid = $this->pdh->get('articles', 'category', array($id));
@@ -211,6 +219,7 @@ class editarticle_pageobject extends pageobject {
 				'TEXT'	=> $this->pdh->get('articles', 'text', array($id)),
 				'ALIAS'	=> $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'	=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
+				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $this->pdh->get('articles', 'category', array($id)))),
 				'PUBLISHED_CHECKED' => ($this->pdh->get('articles', 'published', array($id))) ? 'checked="checked"' : '',
 				'FEATURED_CHECKED' => ($this->pdh->get('articles', 'featured', array($id))) ? 'checked="checked"' : '',
 				'COMMENTS_CHECKED' => ($this->pdh->get('articles', 'comments', array($id))) ? 'checked="checked"' : '',
@@ -230,6 +239,7 @@ class editarticle_pageobject extends pageobject {
 		} else {
 			
 			$this->tpl->assign_vars(array(
+				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)),
 				'PUBLISHED_CHECKED'=> 'checked="checked"',
 				'COMMENTS_CHECKED' => 'checked="checked"',
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -244,13 +254,14 @@ class editarticle_pageobject extends pageobject {
 		
 		$routing = register('routing');
 		$arrPageObjects = $routing->getPageObjects();
-
+		
 		$this->tpl->assign_vars(array(
-			'CID' => $cid,
-			'AID' => $id,
-			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
-			'ARTICLE_NAME' => $this->pdh->get('articles', 'title', array($id)),
+			'CID' 				=> $cid,
+			'AID' 				=> $id,
+			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
+			'ARTICLE_NAME' 		=> $this->pdh->get('articles', 'title', array($id)),
 			'DD_PAGE_OBJECTS'	=> new hdropdown('page_objects', array('options' => $arrPageObjects)),
+			'S_SHOW_CATEGORIES' => (count($arrCategories) > 0) ? true : false,
 		));
 		
 		$this->core->set_vars(array(

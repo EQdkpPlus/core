@@ -3253,3 +3253,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	background-color:#efefef !important;
 	color: #000;
 }
+
+.simple-header .ui-dialog {
+	max-width: 90%;
+}

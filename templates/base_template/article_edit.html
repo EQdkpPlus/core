@@ -81,6 +81,12 @@ function check_alias() {
 				<dt><label>{L_featured}</label></dt>
 				<dd><input type="checkbox" name="featured" id="featured" value="1" {FEATURED_CHECKED} /></dd>
 			</dl>
+			<!-- IF S_SHOW_CATEGORIES -->
+			<dl>
+				<dt><label>{L_category}</label></dt>
+				<dd>{DD_CATEGORY}</dd>
+			</dl>
+			<!-- ENDIF -->
 			<dl>
 				<dt><label>{L_date}</label></dt>
 				<dd>{DATE_PICKER}</dd>

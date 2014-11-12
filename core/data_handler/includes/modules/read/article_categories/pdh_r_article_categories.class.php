@@ -436,6 +436,25 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return array_flip($outArray);
 		}
 		
+		public function get_all_childs($intCategoryID){
+			$arrCategories = $this->get_sortation();
+			$arrOut = array();
+			$blnStart = false;
+			$myPreset = false;
+			foreach($arrCategories as $catid => $key){
+				if ($catid == $intCategoryID) {
+					$blnStart = true;
+					$myPreset = $this->get_name_prefix($catid);
+					$arrOut[] = $catid;
+				} elseif ($blnStart){
+					if ($myPreset === $this->get_name_prefix($catid)) break;
+					$arrOut[] = $catid;
+				}				
+			}
+			
+			return $arrOut;
+		}
+		
 		public function add_array($key, &$arrOut, $arrChildArray){
 			if (isset($arrChildArray[$key])){
 				foreach($arrChildArray[$key] as $val){

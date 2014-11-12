@@ -38,7 +38,7 @@
 			
 			$(document).ready(function() {
 				user_clock();
-			
+				
 				$( "#dialog-login" ).dialog({
 					height: <!-- IF S_BRIDGE_INFO -->450<!-- ELSE -->350<!-- ENDIF -->,
 					width: 530,

@@ -54,6 +54,11 @@ if(!registry::fetch('user')->is_signedin()){
 				}).elfinder('instance');
 			});
 		</script>
+		<style>
+		.elfinder-navbar {
+			display: none !important;
+		}
+		</style>
 	</head>
 	<body>
 
