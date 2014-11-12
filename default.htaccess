@@ -16,7 +16,8 @@
 ##
 
 # EQDKP-SEO-START
-# Please adjust your Rewrite Base and set it to the server-path your EQdkp Plus is installed, e.g. /eqdkp, or / if your have EQdkp installed in your Root-Path
+# Please adjust your Rewrite Base and set it to the path your EQdkp Plus is reachable, e.g. /eqdkp, or / if your have EQdkp is reached directly under your domain.
+# To activate the SEO, remove the trailing # from the next line until the EQDKP-SEO-END (not included)
 #
 #	<IfModule mod_rewrite.c>
 #		RewriteEngine On
@@ -27,15 +28,6 @@
 #		RewriteRule (.*)$ index.php/$1 [L]
 #	</IfModule>
 #
-
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule (.*)$ index.php/$1 [L]
-</IfModule>
 # EQDKP-SEO-END
 
 

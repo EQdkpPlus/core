@@ -1557,7 +1557,7 @@ $lang = array(
 	"perm_chs" => 'Change published state',
 	"core_sett_fs_seo" => 'Search Engine Optimization',
 	"core_sett_f_seo_remove_index" => 'Remove index.php from URLs',
-	"core_sett_f_help_seo_remove_index" => 'To use this feature, you have to uncomment the SEO-Options and to adjust the server-path in the .htaccess-file.',
+	"core_sett_f_help_seo_remove_index" => 'To use this feature, you have to uncomment the SEO-Options and to adjust the server-path in the .htaccess-file. Also, take a loot at our Siehe dazu unsere <a href=\"https://eqdkp-plus.eu/wiki/SEO\">Wiki</a>',
 	"core_sett_f_seo_extension" => 'URL-Extension for index.php-Paths',
 	"featured_ontop" => 'Show featured articles ontop',
 	"sortation_type" => 'Sortation of articles',

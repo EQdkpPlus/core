@@ -1560,7 +1560,7 @@ $lang = array(
 "perm_chs" => "Veröffentlichungsstatus ändern",
 "core_sett_fs_seo" => "Suchmaschinenoptimierung",
 "core_sett_f_seo_remove_index" => "index.php aus URLs entfernen",
-"core_sett_f_help_seo_remove_index" => "Um diese Funktion verwenden zu können, musst Du in der .htaccess die SEO-Optionen einkommentieren und den Server-Pfad anpassen. Siehe dazu unsere Wiki.",
+"core_sett_f_help_seo_remove_index" => "Um diese Funktion verwenden zu können, musst Du in der .htaccess die SEO-Optionen einkommentieren und den Server-Pfad anpassen. Siehe dazu unsere <a href=\"https://eqdkp-plus.eu/wiki/SEO\">Wiki</a>.",
 "core_sett_f_seo_extension"	=> "Dateiendung für index.php-URLs",
 "featured_ontop" => "Featured Artikel oben anzeigen",
 "sortation_type" => "Sortierung der Artikel",

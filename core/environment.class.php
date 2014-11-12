@@ -195,8 +195,9 @@ if (!class_exists("environment")) {
 		}
 		
 		public function path(){
-			if (!isset($_SERVER['PATH_INFO'])) return '';
-			return filter_var($_SERVER['PATH_INFO'], FILTER_SANITIZE_STRING);
+			$path_info = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
+			if (!strlen($path_info)) return '';
+			return filter_var($path_info, FILTER_SANITIZE_STRING);
 		}
 		
 		public function is_ajax(){
