@@ -213,7 +213,7 @@ class Manage_Article_Categories extends page_generic {
 				'R_NOTIFY_UNPUBLISHED' => new hradio('notify_unpublished', array('value' => ($this->pdh->get('article_categories', 'notify_on_onpublished_articles', array($id))))),
 				'R_HIDE_HEADER' => new hradio('hide_header', array('value' => ($this->pdh->get('article_categories', 'hide_header', array($id))))),
 					
-				'R_PUBLISHED_STATE' => new hradio('article_published_state]', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))),
+				'R_PUBLISHED_STATE' => new hradio('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))),
 				'DD_SORTATION_TYPE' => new hdropdown('sortation_type', array('options' => $this->user->lang('sortation_types'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))),
 			));
 			

@@ -41,6 +41,7 @@ class hdatepicker extends html {
 	public $name = '';
 	public $disabled = false;
 	public $allow_empty = false;
+	public $readonly = false;
 	
 	private $out = '';
 	private $php_format = false;
@@ -57,6 +58,7 @@ class hdatepicker extends html {
 		if(!empty($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
+		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		
@@ -75,9 +77,12 @@ class hdatepicker extends html {
 		foreach($this->all_options as $opt) {
 			if(isset($this->$opt)) $opts[$opt] = $this->$opt;
 		}
-		$this->jquery->Calendar($this->name, $this->value, '', $opts);
 		
-		$this->out = $out.' /><i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i></span>';
+		if (!$this->readonly){
+			$this->jquery->Calendar($this->name, $this->value, '', $opts);
+		}
+		
+		$this->out = $out.' />'.((!$this->readonly) ? '<i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i>' : '<i class="fa fa-calendar"></i>').'</span>';
 	}
 	
 	public function _toString() {

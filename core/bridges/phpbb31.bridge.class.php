@@ -77,6 +77,11 @@ class phpbb31_bridge extends bridge {
 		'birthday',
 		'user_email',
 		'username',
+		'skype',
+		'youtube',
+		'twitter',
+		'facebook',
+		'work',
 	);
 
 	//Needed function
@@ -362,12 +367,31 @@ class phpbb31_bridge extends bridge {
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
-		$sync_array = array(
-			'icq' 			=> $arrUserdata['user_icq'],
-			'town'			=> $arrUserdata['user_from'],
-			'interests'		=> $arrUserdata['user_interests'],
-			'birthday'		=> $this->_handle_birthday($arrUserdata['user_birthday']),
-		);
+		$sync_array = array();
+		
+		$user_id = $arrUserdata['user_id'];
+		$query = $this->db->prepare("SELECT * FROM ".$this->prefix."profile_fields_data WHERE user_id=?")->execute($user_id);
+		if ($query){
+			$arrProfileData = $query->fetchAssoc();
+			
+			if (is_array($arrProfileData) && count($arrProfileData)){
+				
+					$sync_array = array(
+							'icq' 			=> $arrProfileData['pf_phpbb_icq'],
+							'town'			=> $arrProfileData['pf_phpbb_location'],
+							'interests'		=> $arrProfileData['pf_phpbb_interests'],
+							'skype'			=> $arrProfileData['pf_phpbb_skype'],
+							'youtube'		=> $arrProfileData['pf_phpbb_youtube'],
+							'twitter'		=> $arrProfileData['pf_phpbb_twitter'],
+							'facebook'		=> $arrProfileData['pf_phpbb_facebook'],
+							'work'			=> $arrProfileData['pf_phpbb_occupation'],
+					);
+				
+			}
+		}
+		
+		$sync_array['birthday'] = $this->_handle_birthday($arrUserdata['user_birthday']);
+		
 		return $sync_array;
 	}
 	
