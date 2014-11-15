@@ -45,6 +45,8 @@ class character_pageobject extends pageobject {
 		if($member_name == ''){
 			message_die($this->user->lang('error_invalid_name_provided'));
 		}
+		
+		$withTwinksDKP = ($this->in->exists('with_twinks')) ? $this->in->get('with_twinks') : !$this->config->get('show_twinks');
 
 		// Raid Attendance
 		$view_list			= $this->pdh->get('raid', 'raidids4memberid', array($this->url_id));
@@ -111,8 +113,10 @@ class character_pageobject extends pageobject {
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_points');
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => !$this->config->get('show_twinks'), '%use_controller%' => true), $this->url_id, 'msort');
+		if (!$withTwinksDKP) $hptt_page_settings['show_detail_twink'] = false;
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => $withTwinksDKP, '%use_controller%' => true), $this->url_id.'.'.$withTwinksDKP, 'msort');
 		$hptt->setPageRef($this->strPath);
+		
 		$profile_out = array(
 			'PROFILE_OUTPUT'		=> $profile_tplfile,
 			'COMMENT'				=> ($this->config->get('enable_comments') == 1) ? $this->comments->Show() : '',
@@ -128,6 +132,7 @@ class character_pageobject extends pageobject {
 			'CHARDATA_PICTURE'		=> $this->pdh->geth('member', 'picture', array($this->url_id)),
 			'DATA_CLASSNAME'		=> $this->pdh->get('member', 'classname', array($this->url_id)),
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
+			'S_WITH_TWINK_DKP'		=> ($withTwinksDKP) ? true : false,
 
 			// images
 			'IMG_CLASSICON'			=> $this->game->decorate('primary', $member[$this->game->get_primary_class(true)], $this->pdh->get('member', 'profiledata', array($this->url_id))),

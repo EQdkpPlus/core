@@ -273,9 +273,9 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 
 					$view_row .= "\t".'<td '.$td_add.' class="twinktd">';
 					if($this->config->get('detail_twink') AND $this->settings['show_detail_twink']) {
-						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
+						$view_row .= $this->detail_twink(array_search('%member_id%', $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} elseif(isset($this->settings['perm_detail_twink']) && $this->settings['perm_detail_twink']) {
-						$view_row .= $this->detail_twink(array_search($this->id_tag, $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
+						$view_row .= $this->detail_twink(array_search('%member_id%', $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} else {
 						$view_row .= $this->pdh->geth($module, $tag, $params, $this->sub_array);
 					}
@@ -329,7 +329,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		public function detail_twink($view_id_key, $wt_key, $cid, $module, $tag, $params) {
 			$dt_tags = $this->pdh->get_dt_tags($module);
 			if (!$dt_tags) $dt_tags = array();
-			$member_id = $this->sub_array[$this->id_tag];
+			$member_id = $this->sub_array['%member_id%'];
 			if(!array_key_exists($tag, $dt_tags) || !$this->pdh->get('member', 'other_members', $member_id)) {
 				return $this->pdh->geth($module, $tag, $params, $this->sub_array); //no detail-twink available for this tag
 			}

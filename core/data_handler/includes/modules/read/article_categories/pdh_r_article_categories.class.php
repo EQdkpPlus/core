@@ -323,6 +323,8 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			} else {
 				$strImage = '<div><div class="eye-gray eyeToggleTrigger"></div><input type="hidden" class="published_cb" name="published['.$intCategoryID.']" value="0"/></div>';
 			}
+			
+			if ($intCategoryID == 1) $strImage = '<div><div class="eye"></div><input type="hidden" class="published_cb" name="published['.$intCategoryID.']" value="1"/></div>';
 			return $strImage;
 		}
 		

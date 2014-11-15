@@ -1225,7 +1225,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[]		= "axes:{xaxis:{".(($options['autoscale_x']) ? 'autoscale:true' : $renderer)."},yaxis:{".(($options['autoscale_y']) ? 'autoscale:true' : '')."}}";
 			$tmpopt[]		= "series:[{lineWidth:".((isset($options['lineWidth'])) ? $options['lineWidth'] : 4).", markerOptions:{style:'".((isset($options['markerStyle'])) ? $options['markerStyle'] : 'square')."'}}]";
 			$this->tpl->add_js(" 
-					plot_".$id." = $.jqplot('".$id."', ".$js_array.", ".$this->gen_options($tmpopt).");", 'docready');
+					plot_".$id." = $.jqplot('".$id."', [".$js_array."], ".$this->gen_options($tmpopt).");", 'docready');
 
 			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
 		}

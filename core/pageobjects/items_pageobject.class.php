@@ -43,9 +43,9 @@ class items_pageobject extends pageobject {
 	
 		$item_ids = array();
 		if ($game_id > 1){
-		$item_ids = $this->pdh->get('item', 'ids_by_ingameid', array($game_id));
+			$item_ids = $this->pdh->get('item', 'ids_by_ingameid', array($game_id));
 		}else{
-		$item_ids = $this->pdh->get('item', 'ids_by_name', array($item_name));
+			$item_ids = $this->pdh->get('item', 'ids_by_name', array($item_name));
 		}
 		$counter = sizeof($item_ids);
 	
@@ -66,7 +66,8 @@ class items_pageobject extends pageobject {
 
 		//linechart data
 		if($this->config->get('itemhistory_dia') && !$this->config->get('disable_points')) {
-		$a_items = array();
+			$a_items = array();
+
 			foreach($item_ids as $item_id) {
 				$a_items[] = array('name' => $this->time->date("Y-m-d h:i:s", $this->pdh->get('item', 'date', array($item_id))), 'value' => $this->pdh->get('item', 'value', array($item_id)));
 			}
