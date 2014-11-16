@@ -622,7 +622,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'name'		=> $this->game->glang('uc_updat_armory'),
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
 					'icon'		=> 'fa-refresh',
-					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update'),
+					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update') && !$this->game->get_require_apikey(),
 				),
 			);
 			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, '<i class="fa fa-wrench fa-lg"></i>');
