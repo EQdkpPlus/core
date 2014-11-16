@@ -398,6 +398,7 @@ class ManagePageLayouts extends page_generic {
 
 		// The value fields
 		$(".sortable", row).attr("name", prefix+"[sortable]["+selected+"]");
+		$("label.sortable input", row).attr("name", prefix+"[sortable]["+selected+"]");		
 		$(".default_sort", row).val(selected);
 		$(".td_add", row).attr("name", prefix+"[td_add]["+selected+"]");
 		$(".th_add", row).attr("name", prefix+"[th_add]["+selected+"]");

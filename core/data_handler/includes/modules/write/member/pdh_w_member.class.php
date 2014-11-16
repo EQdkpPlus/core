@@ -342,6 +342,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			}
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata'=>$data['profiledata']))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update');
+			return ($objQuery) ? true : false;
 		}
 
 		public function change_rank($member_id, $rankid){
@@ -349,7 +350,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					'member_rank_id'	=> $rankid			
 			))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update');
-			return $result;
+			return ($objQuery) ? true : false;
 		}
 
 		public function change_status($member_id, $status){
@@ -357,7 +358,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					'member_status'	=> $status
 			))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update');
-			return $result;
+			return ($objQuery) ? true : false;
 		}
 		
 		public function change_defaultrole($member_id, $roleid){
@@ -365,6 +366,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'defaultrole'	=> $roleid
 			))->execute($member_id);
 			$this->pdh->enqueue_hook('member_update', array($member_id));
+			return ($objQuery) ? true : false;
 		}
 
 		public function trans_member($fromid, $toid) {

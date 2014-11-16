@@ -188,6 +188,7 @@ class raids_pageobject extends pageobject {
 							array('name' => 'ibuyerlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'ilink_itt', 'sort' => true, 'th_add' => '', 'td_add' => 'style="height:21px;"'),
 							array('name' => 'ipoolname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+							array('name' => 'idroprate', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 			);
 			if (!$this->config->get('disable_points')) $arrItemListSettings['table_presets'][] = array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => '');

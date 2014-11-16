@@ -36,9 +36,7 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 				
 				$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
 				
-				$special_users = unserialize(stripslashes($this->config->get('special_user')));
-				unset($special_users[$muser['user_id']]);
-				$this->config->set('special_user', serialize($special_users));
+				$this->pdh->put('user', 'delete_special_user', array($muser['user_id']));
 				$this->logs->add('action_maintenanceuser_deleted', array(), $muser['user_id'], $this->user->lang('maintenanceuser_user'));
 			}
 			$this->config->set('maintenance_user', '');

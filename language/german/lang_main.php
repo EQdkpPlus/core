@@ -899,6 +899,8 @@ $lang = array(
 "cookie_usage_hint" => "Diese Seite verwendet Cookies. Durch die Nutzung unserer Seite erklärst du dich damit einverstanden, dass wir Cookies setzen. <a href=\"{COOKIE_LINK}\">Weitere Informationen</a>",
 "team" => "Team-Mitglieder",
 "addchar_f_picture" => "Charakterbild",
+"other_items" => "Andere Items",
+"droprate" => "Droprate",
  );
 
 ?>

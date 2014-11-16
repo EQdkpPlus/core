@@ -67,9 +67,39 @@ class items_pageobject extends pageobject {
 		//linechart data
 		if($this->config->get('itemhistory_dia') && !$this->config->get('disable_points')) {
 			$a_items = array();
+			$arrPoolItems = array();
 
 			foreach($item_ids as $item_id) {
 				$a_items[] = array('name' => $this->time->date("Y-m-d h:i:s", $this->pdh->get('item', 'date', array($item_id))), 'value' => $this->pdh->get('item', 'value', array($item_id)));
+				$itempool = $this->pdh->get('item', 'itempool_id', array($item_id));
+				
+				if (!isset($arrPoolItems[$itempool])) $arrPoolItems[$itempool] = 0; 
+				$arrPoolItems[$itempool]++;
+			}
+			
+			
+			//Droprate by Itempool
+			$arrItempools = $this->pdh->get('itempool', 'id_list');
+			foreach($arrItempools as $itempoolid){
+				$intDrops = (isset($arrPoolItems[$itempoolid])) ? intval($arrPoolItems[$itempoolid]) : 0;
+				$intTotalItems = count($this->pdh->get('item', 'item_ids_of_itempool', array($itempoolid)));
+				
+				$intDroprate = round(($intDrops / $intTotalItems) * 100);
+				$arrData = array();
+				$arrData[] = array('value' => $intDroprate, 'name' => $item_name.' '.$intDroprate.'%');
+				$arrData[] = array('value' => 100-$intDroprate, 'name' => $this->user->lang('other_items').' '.(100-$intDroprate).'%');
+				
+				$this->jquery->charts('pie', 'item_drop_'.$itempoolid, $arrData, array(
+						'border'		=> '0.0',
+						'piemargin'		=> 2,
+						'datalabels'	=> true,
+						'legend'		=> true,
+						'background'	=> 'rgba(255, 255, 255, 0.1)',
+				));
+				$this->tpl->assign_block_vars('droprate', array(
+					'CHART'		=> 'item_drop_'.$itempoolid,
+					'POOLNAME'	=> $this->pdh->get('itempool', 'name', array($itempoolid)),
+				));
 			}
 		}
 

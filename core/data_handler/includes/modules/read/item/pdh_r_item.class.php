@@ -42,6 +42,7 @@ if(!class_exists('pdh_r_item')){
 			'iname' => array('name', array('%item_id%'), array()),
 			'ipoolname' => array('itempool_name', array('%item_id%'), array()),
 			'ivalue' => array('value', array('%item_id%'), array()),
+			'idroprate' => array('droprate', array('%item_id%'), array()),
 			'ibuyername' => array('buyer_name', array('%item_id%'), array()),
 			'ibuyerlink' => array('buyer_link', array('%item_id%', '%member_link_url%', '%member_link_url_suffix%', '%use_controller%'), array()),
 			'ibuyers' => array('m4igk4i', array('%item_id%'), array()),
@@ -360,6 +361,37 @@ if(!class_exists('pdh_r_item')){
 			}
 			
 			return $arrSearchResults;
+		}
+		
+		public function get_droprate($item_id){
+			$game_id = $this->get_game_itemid($item_id);
+			$item_name = $this->pdh->get('item', 'name', array($item_id));
+			$intItempoolID = $this->get_itempool_id($item_id);
+			
+			//Get Same Items
+			$item_ids = array();
+			if ($game_id > 1){
+				$item_ids = $this->pdh->get('item', 'ids_by_ingameid', array($game_id));
+			}else{
+				$item_ids = $this->pdh->get('item', 'ids_by_name', array($item_name));
+			}
+			
+			//Get Same Items in Itempool
+			$arrPoolItems = array();
+			foreach($item_ids as $iid){
+				$itempool = $this->get_itempool_id($iid);
+				if ($itempool === $intItempoolID) $arrPoolItems[] = $iid;
+			}
+			
+			$intPoolItems = count($arrPoolItems);
+			$intTotalPoolItems = count($this->get_item_ids_of_itempool($intItempoolID));
+			
+			if ($intTotalPoolItems === 0) return 0;
+			return round(($intPoolItems / $intTotalPoolItems) * 100);
+		}
+		
+		public function get_html_droprate($item_id){
+			return $this->get_droprate($item_id).' %';
 		}
 	}
 }

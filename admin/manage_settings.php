@@ -481,7 +481,7 @@ class mmocms_settings extends page_generic {
 					),
 					'special_user'	=> array(
 						'type'			=> 'multiselect',
-						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))),
+						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false)))),
 						'datatype'		=> 'int'
 					),
 				)

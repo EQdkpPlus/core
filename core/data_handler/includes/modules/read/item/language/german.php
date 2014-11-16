@@ -33,6 +33,7 @@ $module_lang = array(
 	'raididlink'	=> 'Raid',
 	'link_itt'		=> 'Name',
 	'editicon'		=> '',
+	'droprate'		=> 'Droprate',
 );
 
 $preset_lang = array(
@@ -47,7 +48,8 @@ $preset_lang = array(
 	'iname'			=> 'Item-Name',
 	'ibuyername'	=> 'Item-Käufer',
 	'ilink_itt'		=> 'Item-Link-ITT',
-	'itemsedit'		=> 'Item-Bearbeiten-Button'
+	'itemsedit'		=> 'Item-Bearbeiten-Button',
+	'idroprate'		=> 'Item Droprate (für Itempool)',
 );
 
 ?>

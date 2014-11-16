@@ -263,6 +263,21 @@ if(!class_exists('pdh_w_user')) {
 			$this->pdh->enqueue_hook('user');
 			return $app_key;
 		}
+		
+		public function add_special_user($user_id){
+			$special_users = $this->config->get('special_user');
+			if (!is_array($special_users)) $special_users = array();
+			$special_users[$user_id] = $user_id;
+			$this->config->set('special_user', serialize($special_users));
+		}
+		
+		public function delete_special_user($user_id){
+			$special_users = $this->config->get('special_user');
+			if (!is_array($special_users)) return;
+			
+			if(isset($special_users[$user_id])) unset($special_users[$user_id]);
+			$this->config->set('special_user', serialize($special_users));
+		}
 
 		public function delete_user($user_id, $delete_member = false) {
 			

@@ -59,9 +59,7 @@ class maintenance_user extends page_generic {
 		$this->pdh->put('user_groups_users', 'add_user_to_group', array($user_id, 2));
 		$this->config->set('maintenance_user', $this->crypt->encrypt(serialize($user_data)));
 		
-		$special_users = unserialize(stripslashes($this->config->get('special_user')));
-		$special_users[$user_id] = $user_id;
-		$this->config->set('special_user', serialize($special_users));
+		$this->pdh->put('user', 'add_special_user', array($user_id));
 		$this->timekeeper->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $this->in->get('valid_until_days', 0), 'active' => true), true);
 		$log_action = array(
 			'{L_maintenanceuser_valid}'	=> "{D_".$valid_until."}",
@@ -94,9 +92,7 @@ class maintenance_user extends page_generic {
 			$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
 			$this->config->set('maintenance_user', '');
 		
-			$special_users = unserialize(stripslashes($this->config->get('special_user')));
-			unset($special_users[$muser['user_id']]);
-			$this->config->set('special_user', serialize($special_users));
+			$this->pdh->put('user', 'delete_special_user', array($user_id));
 			$this->logs->add('action_maintenanceuser_deleted', array(), $muser['user_id'], $this->user->lang('maintenanceuser_user'));
 		}
 		
