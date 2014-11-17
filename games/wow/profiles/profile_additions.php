@@ -206,6 +206,8 @@
 		.raideventicon.id6067 { background-position:  -1830px 0; }
 		.raideventicon.id6622 { background-position:  -1891px 0; }
 		.raideventicon.id6738 { background-position:  -1952px 0; }
+		.raideventicon.id6967 { background-position:  -2013px 0; }
+		.raideventicon.id6996 { background-position:  -2074px 0; }
 		
 		#wow_icons_left .q img, #wow_icons_right .q img, #wow_icons_bottom .q img {
 			border: 1px solid #ffd100;
