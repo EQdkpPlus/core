@@ -72,7 +72,11 @@ class addcharacter_pageobject extends pageobject {
 		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
 
 		// dont allow name-change if not in adminmode
-		if(!$this->adminmode) unset($data['name']);
+		if(!$this->adminmode) {
+			unset($data['name']);
+			unset($data['mainid']);
+			unset($data['rankid']);
+		}
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 
 		//Transfer character history

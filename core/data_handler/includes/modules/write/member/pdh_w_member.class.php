@@ -74,9 +74,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 
 			//dont allow chars without a name
 			if(empty($data['name'])) return false;
+
 			$querystr = array(
 				'member_name'		=> trim($data['name']),
-				'member_rank_id'	=> !empty($data['rankid']) ? $data['rankid'] : $this->pdh->get('rank', 'default', array()),
+				'member_rank_id'	=> (!empty($data['rankid']) || $data['rankid'] === '0' || $data['rankid'] === 0) ? $data['rankid'] : $this->pdh->get('rank', 'default', array()),
 				'member_main_id'	=> $data['mainid'],
 				'member_status'		=> isset($data['status']) ? $data['status'] : 1,
 				'notes'				=> !empty($data['notes']) ? $data['notes'] : '',
@@ -84,6 +85,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'last_update'		=> !empty($data['lastupdate']) ? $data['lastupdate'] : time(),
 				'picture'			=> !empty($data['picture']) ? $data['picture'] : ''
 			);
+			
 			if($member_id > 0) {
 				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set($querystr)->execute($member_id);
 				
