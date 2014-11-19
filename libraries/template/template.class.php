@@ -1173,8 +1173,15 @@ class template extends gen_class {
 			//User additions
 			$strUserFile = $this->root_path . 'templates/'.$stylepath.'/custom.css';
 			if (file_exists($strUserFile)){
-				$content = file_get_contents($strUserFile);
-				$data .= $this->replace_paths_css($content);
+				d(file_exists($strUserFile));
+				//is there an edited userfile?
+				if (file_exists($storage_folder.'custom.css')){
+					$content = file_get_contents($storage_folder.'custom.css');
+					$data .= $this->replace_paths_css($content);
+				} else {
+					$content = file_get_contents($strUserFile);
+					$data .= $this->replace_paths_css($content);
+				}
 			}
 
 			$minify = new Minify_CSS();
