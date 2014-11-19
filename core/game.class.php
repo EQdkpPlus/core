@@ -158,7 +158,7 @@ class game extends gen_class {
 	 */
 	private function decorate_races($race_id, $profile=array(), $size=16, $pathonly=false){
 		$gender = (isset($profile['gender'])) ? $profile['gender'] : '';
-		if ($gender == "Female" && is_file($this->root_path.'games/'.$this->game.'/icons/races/'.$race_id.'f.png')){
+		if (strtolower($gender) == "female" && is_file($this->root_path.'games/'.$this->game.'/icons/races/'.$race_id.'f.png')){
 			$icon_path = $this->root_path.'games/'.$this->game.'/icons/races/'.$race_id.'f.png';
 		} else {
 			$icon_path = $this->root_path.'games/'.$this->game.'/icons/races/'.$race_id.'.png';
