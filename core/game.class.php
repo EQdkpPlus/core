@@ -1009,16 +1009,20 @@ class game extends gen_class {
 		//Uninstall old game
 		$this->uninstallGame();
 		
-		//Reset Data
-		$this->resetEvents();
-		$this->resetItempools();
-		$this->resetMultiDKPPools();
+		if ($this->config->get('update_first_game_inst') !== 1){
+			//Reset some data
+			$this->resetEvents();
+			$this->resetItempools();
+			$this->resetMultiDKPPools();
+			
+			//Add Default Pools
+			$intItempoolDefault = $this->addItempool("Default", "Default Itempool");
+			$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array($intItempoolDefault));
+		}
+		
+		//Reset Ranks
 		$this->resetRanks();
-		
-		//Add Default Pools
-		$intItempoolDefault = $this->addItempool("Default", "Default Itempool");
-		$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array($intItempoolDefault));
-		
+
 		//Install new game
 		$this->game = $newgame;
 		$this->init_gameclass();
@@ -1026,8 +1030,6 @@ class game extends gen_class {
 		if(!in_array($lang, $this->gameinfo()->langs)) {
 			$lang = $this->gameinfo()->langs[0];
 		}
-		
-		
 		
 		$this->gameinfo()->lang = $lang;
 		$install = (defined('EQDKP_INSTALLED') && EQDKP_INSTALLED) ? false : true;
@@ -1084,6 +1086,8 @@ class game extends gen_class {
 		//roles
 		$this->load_default_roles();
 		if (!$install) {$this->tpl->parse_cssfile();}
+		
+		$this->config->del('update_first_game_inst');
 		
 		//Reset PDH Cache
 		$this->pdh->process_hook_queue();

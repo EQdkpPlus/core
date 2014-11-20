@@ -2949,6 +2949,11 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	padding-left: 20px;
 }
 
+.boxContent ol, .article_content ol {
+	list-style-type: decimal;
+	padding-left: 20px;
+}
+
 .panel {
 	border: 1px solid #ddd;
 	border-radius: 4px;

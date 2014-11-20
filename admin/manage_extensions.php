@@ -456,7 +456,7 @@ class Manage_Extensions extends page_generic {
 				$link = ($row['style_id'] == $default_style) ? '' :'<a href="javascript:style_delete_warning('.$row['style_id'].');">' . $this->user->lang('uninstall') . '</a>';
 			}
 
-			$this->jquery->Dialog('style_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&style='+ styleid+'", 'width'=>'750', 'height'=>'520', 'modal'=>true, 'withid' => 'styleid'));
+			$this->jquery->Dialog('style_preview', $this->user->lang('template_preview'), array('url'=>$this->server_path."".$this->SID."&style='+ styleid+'", 'width'=>'750', 'height'=>'520', 'modal'=>true, 'withid' => 'styleid'));
 
 			$this->tpl->assign_block_vars('styles_row_'.$rowname, array(
 				'ID'				=> $row['style_id'],
