@@ -21,23 +21,25 @@ if ( !defined('EQDKP_INC') ){
 }
 $german_array = array(
 	'classes' => array(
-		0 => 'Unbekannt',
-		1 => 'Barde',
-		2 => 'Hauptmann',
-		3 => 'Jäger',
-		4 => 'Kundiger',
-		5 => 'Schurke',
-		6 => 'Wächter',
-		7 => 'Waffenmeister',
-		8 => 'Runenbewahrer',
-		9 => 'Hüter',
+		0	=> 'Unbekannt',
+		1	=> 'Barde',
+		2	=> 'Hauptmann',
+		3	=> 'Jäger',
+		4	=> 'Kundiger',
+		5	=> 'Schurke',
+		6	=> 'Wächter',
+		7	=> 'Waffenmeister',
+		8	=> 'Runenbewahrer',
+		9	=> 'Hüter',
+		10	=> 'Beorninger',
 	),
 	'races' => array(
-		'Unknown',
-		'Mensch',
-		'Hobbit',
-		'Elb',
-		'Zwerg'
+		0	=> 'Unknown',
+		1	=> 'Mensch',
+		2	=> 'Hobbit',
+		4	=> 'Elb',
+		5	=> 'Zwerg',
+		6	=> 'Beorninger',
 	),
 	'factions' => array(
 		'Freie Völker',
@@ -45,10 +47,10 @@ $german_array = array(
 	),
 	'roles' => array(
 		1 => array(1,8),
-		2 => array(6,7,9),
+		2 => array(6,7,9,10),
 		3 => array(4,5),
-		4 => array(3,7,8,9),
-		5 => array(2)
+		4 => array(3,7,8,9,10),
+		5 => array(2,10)
 	),
 	'lang' => array(
 		'lotro' => 'Der Herr der Ringe Online',

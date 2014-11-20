@@ -49,7 +49,7 @@ if(!class_exists('lotro')) {
 		protected $lang_file	= array();
 		protected $path			= '';
 		public  $lang			= false;
-		public $version	= '2.2.2';
+		public $version	= '2.15.0';
 
 		/**
 		* Initialises filters
@@ -86,7 +86,8 @@ if(!class_exists('lotro')) {
 				6 => '#990000',
 				7 => '#CC3300',
 				8 => '#1A3CAA',
-				9 => '#FFF468'
+				9 => '#FFF468',
+				10=> '#FFFFFF',
 			);
 
 			//Do this SQL Query NOT if the Eqdkp is installed -> only @ the first install

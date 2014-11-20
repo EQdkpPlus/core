@@ -21,23 +21,25 @@ if ( !defined('EQDKP_INC') ){
 }
 $english_array = array(
 	'classes' => array(
-		0 => 'Unknown',
-		1 => 'Minstrel',
-		2 => 'Captain',
-		3 => 'Hunter',
-		4 => 'Lore-master',
-		5 => 'Burglar',
-		6 => 'Guardian',
-		7 => 'Champion',
-		8 => 'Runekeeper',
-		9 => 'Warden',
+		0	=> 'Unknown',
+		1	=> 'Minstrel',
+		2	=> 'Captain',
+		3	=> 'Hunter',
+		4	=> 'Lore-master',
+		5	=> 'Burglar',
+		6	=> 'Guardian',
+		7	=> 'Champion',
+		8	=> 'Runekeeper',
+		9	=> 'Warden',
+		10	=> 'Beorning',
 	),
 	'races' => array(
-		'Unknown',
-		'Man',
-		'Hobbit',
-		'Elf',
-		'Dwarf'
+		0	=> 'Unknown',
+		1	=> 'Man',
+		2	=> 'Hobbit',
+		3	=> 'Elf',
+		4	=> 'Dwarf',
+		5	=> 'Beorning',
 	),
 	'factions' => array(
 		'Free People',
@@ -45,10 +47,10 @@ $english_array = array(
 	),
 	'roles' => array(
 		1 => array(1,8),
-		2 => array(6,7,9),
+		2 => array(6,7,9,10),
 		3 => array(4,5),
-		4 => array(3,7,8,9),
-		5 => array(2)
+		4 => array(3,7,8,9,10),
+		5 => array(2,10)
 	),
 	'lang' => array(
 		'lotro' => 'The Lord of the Rings Online',
