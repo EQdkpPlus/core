@@ -1173,7 +1173,6 @@ class template extends gen_class {
 			//User additions
 			$strUserFile = $this->root_path . 'templates/'.$stylepath.'/custom.css';
 			if (file_exists($strUserFile)){
-				d(file_exists($strUserFile));
 				//is there an edited userfile?
 				if (file_exists($storage_folder.'custom.css')){
 					$content = file_get_contents($storage_folder.'custom.css');
@@ -1346,11 +1345,6 @@ class template extends gen_class {
 		if ($handle === false) $handle = $this->handle;
 
 		if(!$this->error_message){
-			// fix for upgrade from 1.0 to 2.0 with deleted old template folder. This fix redirects directly to the maintenance mode
-			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()'){
-				redirect('maintenance/task_manager.php');
-			}
-			
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
 
