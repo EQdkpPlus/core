@@ -162,6 +162,10 @@
 			loading: function(bool) {
 				$('#calendar_loading').toggle(bool);
 			},
+			defaultView: localStorage.getItem("calendar.viewname") || 'month',
+			viewRender: function( view ){
+				localStorage.setItem("calendar.viewname", view.name);
+			},
 			events: {
 				url: '{U_CALENDAR}&json=true',
 				//error: function() {

@@ -44,6 +44,15 @@ $lang = array(
 	5 => 'Saturday',
 	6 => 'Sunday',
 	),
+	"time_daynames_short" => array(
+	0 => 'Mon',
+	1 => 'Tue',
+	2 => 'Wed',
+	3 => 'Thu',
+	4 => 'Fri',
+	5 => 'Sat',
+	6 => 'Sun',
+	),
 	"time_monthnames" => array(
 	0 => 'January',
 	1 => 'February',
