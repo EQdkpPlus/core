@@ -137,7 +137,7 @@ if (!class_exists("timehandler")){
 		* @return timestamp
 		*/
 		private function helper_dtime($dtime){
-			return (($dtime && !is_object($dtime)) ? ((is_numeric($dtime)) ? "@$dtime" : $dtime) : "now");	
+			return (($dtime && !is_object($dtime)) ? ((is_numeric($dtime)) ? "@$dtime" : $dtime) : "now");
 		}
 
 		/**
@@ -254,28 +254,27 @@ if (!class_exists("timehandler")){
 			}
 
 			// check validity of date
-			if(empty($unix_date)) {   
+			if(empty($unix_date)) {
 				return "Bad date";
 			}
 
 			// is it future date or past date
 			$langTense = $this->user->lang('time_tense');
-			if($now > $unix_date) {   
-				$difference     = $now - $unix_date;
-				$tense         = $langTense[1];		   
+			if($now > $unix_date) {
+				$difference		= $now - $unix_date;
+				$tense			= $langTense[1];
 			} else {
-				$difference     = $unix_date - $now;
-				$tense         = $langTense[0];
+				$difference		= $unix_date - $now;
+				$tense			= $langTense[0];
 			}
 			
 			if ($differenceForDeactivating && $difference > $differenceForDeactivating) return $this->user_date($time, $withtime, $timeonly, $long, $fromformat, $withday);
-		   
+
 			for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
 				$difference /= $lengths[$j];
 			}
-		   
 			$difference = round($difference);
-		   
+
 			if($difference != 1) {
 				$langPeriods = $this->user->lang('time_periods');
 				$period = $langPeriods[$j];
@@ -305,8 +304,8 @@ if (!class_exists("timehandler")){
 					$this->pdl->log('time_error', 'Unexpected end in '.$string.' compared to format '.$format.'.');
 					return false;
 				}
-				$c = substr($format, $i, 1);
-				$ca = substr($format, ($i+1), 1);
+				$c	= substr($format, $i, 1);
+				$ca	= substr($format, ($i+1), 1);
 				if($c == '\\' && $cb != '\\') {
 					$escape = true;
 					$cb = $c;
@@ -446,20 +445,17 @@ if (!class_exists("timehandler")){
 		 * @param string $offset
 		 * @return string
 		 */
-		private static function formatOffset($offset)
-		{
-				$hours = $offset / 3600;
-				$remainder = $offset % 3600;
-				$sign = $hours > 0 ? '+' : '-';
-				$hour = (int) abs($hours);
-				$minutes = (int) abs($remainder / 60);
+		private static function formatOffset($offset){
+			$hours		= $offset / 3600;
+			$remainder	= $offset % 3600;
+			$sign		= $hours > 0 ? '+' : '-';
+			$hour		= (int) abs($hours);
+			$minutes	= (int) abs($remainder / 60);
 
-				if ($hour == 0 AND $minutes == 0) {
-					$sign = ' ';
-				}
-				
-				return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
-
+			if ($hour == 0 AND $minutes == 0) {
+				$sign = ' ';
+			}
+			return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
 		}
 		
 		/**
@@ -469,7 +465,6 @@ if (!class_exists("timehandler")){
 		*/
 		public static function fetch_timezones(){
 			if(!is_array(self::$ArrTimezones) || empty(self::$ArrTimezones)) {
-
 				$timezone_data = DateTimeZone::listIdentifiers(1022);
 				$timezone_ab = DateTimeZone::listAbbreviations();
 				
@@ -511,14 +506,14 @@ if (!class_exists("timehandler")){
 		* @return RFC2822 Time String
 		*/
 		public function RFC2822($dtime){
-			$date = new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
+			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RFC3339);
 		}
 		
 		public function getdate($dtime='') {
-			$dtime = $this->gen_time($dtime);
-			$data = array($dtime);
-			$date = $this->date('s.i.H.d.w.m.Y.z.l.F', $dtime);
+			$dtime	= $this->gen_time($dtime);
+			$data	= array($dtime);
+			$date	= $this->date('s.i.H.d.w.m.Y.z.l.F', $dtime);
 			list($data['seconds'], $data['minutes'], $data['hours'], $data['mday'], $data['wday'], $data['mon'], $data['year'], $data['yday'], $data['weekday'], $data['month']) = explode('.', $date);
 			return $data;
 		}
@@ -547,22 +542,21 @@ if (!class_exists("timehandler")){
 				$ts2	= $dt2->format('U');
 			}
 			// calculate the difference
-			$secs['sec'] = 1;
-			$secs['min'] = 60;
-			$secs['hour'] = $secs['min']*60;
-			$secs['day'] = $secs['hour']*24;
-			$secs['week'] = $secs['day']*7;
-			$secs['month'] = $secs['day']*30;
-			$secs['year'] = $secs['day']*365;
+			$secs['sec']	= 1;
+			$secs['min']	= 60;
+			$secs['hour']	= $secs['min']*60;
+			$secs['day']	= $secs['hour']*24;
+			$secs['week']	= $secs['day']*7;
+			$secs['month']	= $secs['day']*30;
+			$secs['year']	= $secs['day']*365;
 			return ($ts2 - $ts1 - ($ts2 - $ts1)%$secs[$out])/$secs[$out];
 		}
 
 		public function age($date) {
 			if(!$date) return 0;
-			$bday = $this->getdate($date);
-			$today = $this->getdate();
-			
-			$yeardiff = ($today['year'] - $bday['year']);
+			$bday		= $this->getdate($date);
+			$today		= $this->getdate();
+			$yeardiff	= ($today['year'] - $bday['year']);
 			if (($today['mon'] < $bday['mon']) || (($today['mon'] == $bday['mon']) && ($today['mday'] < $bday['mday']))) {
 				$yeardiff = $yeardiff - 1;
 			}
@@ -594,8 +588,9 @@ if (!class_exists("timehandler")){
 // Helper to make the datetime translatable
 class DateTimeLocale extends DateTime {
 	// define the english names
-	private static $english_days 	= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
-	private static $english_months 	= array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	private static $english_days		= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+	private static $english_days_short	= array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
+	private static $english_months		= array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	
 	public function __construct($time='now', $timezone=null) {
 		try {
@@ -611,7 +606,6 @@ class DateTimeLocale extends DateTime {
 		switch($name) {
 			case 'getTimestamp':
 				return $this->format('U');
-			
 			default:
 				return;
 		}
@@ -619,7 +613,8 @@ class DateTimeLocale extends DateTime {
 
 	public function format($format) {
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
-			$out = str_replace(self::$english_days, registry::fetch('user')->lang('time_daynames', false, false), parent::format($format));
+			$out	= str_replace(self::$english_days, registry::fetch('user')->lang('time_daynames', false, false), parent::format($format));
+			$out	= str_replace(self::$english_days_short, registry::fetch('user')->lang('time_daynames_short', false, false), $out);
 			return str_replace(self::$english_months, registry::fetch('user')->lang('time_monthnames', false, false), $out);
 		}else{
 			return parent::format($format);
@@ -629,6 +624,7 @@ class DateTimeLocale extends DateTime {
 	public static function createFromFormat($format, $string, $timezone=null) {
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
 			$string = str_replace(registry::fetch('user')->lang('time_daynames', false, false), self::$english_days, $string);
+			$string = str_replace(registry::fetch('user')->lang('time_daynames_short', false, false), self::$english_days_short, $string);
 			$string = str_replace(registry::fetch('user')->lang('time_monthnames', false, false), self::$english_months, $string);
 		}
 		return parent::createFromFormat($format, $string, $timezone);

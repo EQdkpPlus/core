@@ -29,6 +29,7 @@ $lang = array(
 "style_jsdate_short" => "d.M",
 "style_jstime" => "H:mm",
 "time_daynames" => array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'),
+"time_daynames_short" => array('Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'),
 "time_monthnames" => array('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'),
 'time_period'		=> array("Sekunde", "Minute", "Stunde", "Tag", "Woche", "Monat", "Jahr", "Jahrzehnt"),
 'time_periods'		=> array("Sekunden", "Minuten", "Stunden", "Tagen", "Wochen", "Monaten", "Jahren", "Jahrzehnten"),
