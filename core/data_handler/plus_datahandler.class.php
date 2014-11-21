@@ -469,7 +469,7 @@ if( !class_exists( "plus_datahandler")){
 				$get_method = 'get_'.$tag;
 				$value1		= $this->get( $module, $tag, $params1 );
 				$value2		= $this->get( $module, $tag, $params2 );
-				if(!is_numeric($value1) && !is_numeric($value2)) return strcasecmp($value1, $value2)*$direction;
+				if(!is_numeric($value1) && !is_numeric($value2)) return strnatcasecmp($value1, $value2)*$direction;
 				if( $value1 > $value2 ) {
 					return 1 * $direction;
 				}
@@ -477,6 +477,7 @@ if( !class_exists( "plus_datahandler")){
 					return( - 1 ) * $direction;
 				}
 			}
+			return 0;
 		}
 
 		public function sort( $id_list, $module, $tag, $direction = 'asc', $params = array( ), $id_position = 0 ) {
