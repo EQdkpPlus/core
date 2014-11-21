@@ -891,7 +891,7 @@ $lang = array(
 "apa_func_args" => "Verfügbare Werte in der Funktion",
 "apa_func_add_expr" => "Neue Hilfsvariable hinzufügen",
 "apa_func_help" => "Die Berechnungsfunktion wird benötigt, um zu errechnen wie viel die Punkte mit der Zeit weniger Wert sind. Um deine Berechnung übersichtlicher zu gestalten, kannst du Hilfsvariablen anlegen, die du dann in der Punkte-Zeile benutzen kannst. Kommazahlen müssen mit Punkt geschrieben werden! Schreibe anstatt 4^3 (\"4 hoch 3\") pow(4,3)!
-<br /><b>Weitere Informationen zu Berechnungsfunktionen findest du in unserem <a href=\"".EQDKP_WIKI_URL."/de/index.php?title=Berechnungsfunktionen\">Wiki</a>.</b>",
+<br /><b>Weitere Informationen zu Berechnungsfunktionen findest du in unserem <a href=\"".EQDKP_WIKI_URL."/Berechnungsfunktionen\">Wiki</a>.</b>",
 "apa_func_example_1" => "5% Decay",
 "apa_func_example_2" => "20 Punkte Decay",
 "apa_valid_symbols" => "Nutzbare Zeichen",

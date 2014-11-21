@@ -81,12 +81,14 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		public function update_startdkp($apa_id, $last_date) {
 			$members = $this->pdh->get('member', 'id_list', array(true, false, true, !$this->apa->get_data('twinks', $apa_id)));
 			if(!$last_date) $last_date = $this->apa->get_data('start_date', $apa_id);
-			$startdkp_before = ($this->config->get('cron_startdkp_before')) ? unserialize($this->config->get('cron_startdkp_before')) : array();
+			$startdkp_before = ($this->config->get('cron_startdkp_before')) ? $this->config->get('cron_startdkp_before') : array();
+
 			if($this->apa->get_data('before', $apa_id) && !in_array($apa_id, $startdkp_before)) {
 				$last_date = -1;
 				$startdkp_before[] = $apa_id;
 				$this->config->set('cron_startdkp_before', serialize($startdkp_before));
 			}
+
 			if($this->apa->get_data('creation', $apa_id)) {
 				$dates = $this->pdh->aget('member', 'creation_date', 0, array($members));
 			} else {
@@ -95,14 +97,18 @@ if ( !class_exists( "apa_startpoints" ) ) {
 				foreach($mdkpids as $mdkpid) {
 					$cur_dates = $this->pdh->aget('member_dates', 'first_raid', 0, array($members, $mdkpid, !$this->apa->get_data('twinks', $apa_id)));
 					foreach($cur_dates as $member_id => $date) {
+						if ($date === 0) $date = 1;
 						if(empty($dates[$member_id]) || $dates[$member_id] > $date) $dates[$member_id] = $date;
 					}
 				}
 			}
+
 			foreach($dates as $member_id => $date) {
 				if(($date && $date < $last_date) || !$date) continue;
+				if ($date === 1) $date = $this->time->time;
 				$this->pdh->put('adjustment', 'add_adjustment', array($this->apa->get_data('value', $apa_id), $this->apa->get_data('name', $apa_id), $member_id, $this->apa->get_data('event', $apa_id), NULL, $date));
 			}
+
 		}
 		
 		public function pre_save_func($apa_id, $options) {

@@ -74,11 +74,11 @@ class ManageAutoPoints extends page_generic {
 			}
 		}
 		$message = NULL;
-		$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
+
 		if(!$result) {
 			$message = array('text' => $this->user->lang('apa_save_nosuc').'<br />'.$this->user->lang('apa_all_necessary'), 'title' => $this->user->lang('error'), 'color' => 'red', 'parent' => true);
 		} else {
-			$this->tpl->add_js("parent.location.href='manage_auto_points.php".$this->SID."'", 'docready');
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 		}
 		$this->display($message);
 	}
@@ -339,13 +339,15 @@ class ManageAutoPoints extends page_generic {
 			'url' => "manage_auto_points.php".$this->SID."&simple_head=true&edit=true&id='+content+'",
 			'width' =>'700',
 			'height' =>'550',
-			'withid' => 'content'
+			'withid' => 'content',
+			'onclose' =>$this->env->link."admin/manage_auto_points.php".$this->SID
 		));
 		$this->jquery->dialog('apa_new', sprintf($this->user->lang('apa_new'), ''), array(
 			'url' => "manage_auto_points.php".$this->SID."&simple_head=true&edit=true&type='+content+'",
 			'width' =>'700',
 			'height' =>'550',
-			'withid' => 'content'
+			'withid' => 'content',
+			'onclose' =>$this->env->link."admin/manage_auto_points.php".$this->SID
 		));
 		$this->jquery->dialog('func_edit', $this->user->lang('apa_edit_function'), array(
 			'url' => "manage_auto_points.php".$this->SID."&simple_head=true&edit_func=true&func='+content+'",
