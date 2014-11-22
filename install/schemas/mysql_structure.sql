@@ -202,8 +202,7 @@ CREATE TABLE `__members` (
 	`requested_del` tinyint(1) NOT NULL DEFAULT 0,
 	`require_confirm` tinyint(1) NOT NULL DEFAULT 0,
 	`defaultrole` tinyint(2) NOT NULL DEFAULT '0',
-	PRIMARY KEY (`member_id`),
-	UNIQUE KEY `member_name` (`member_name`)
+	PRIMARY KEY (`member_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __classcolors;

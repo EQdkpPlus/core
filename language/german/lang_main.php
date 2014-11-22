@@ -902,6 +902,7 @@ $lang = array(
 "addchar_f_picture" => "Charakterbild",
 "other_items" => "Andere Items",
 "droprate" => "Droprate",
+"error_saving_char" => "Beim Speichern des Charakters ist ein Fehler aufgetreten. Wahrscheinlich ist dieser Charakter schon im System vorhanden."
  );
 
 ?>

@@ -34,10 +34,18 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		);
 
 		public function addorupdate_member($member_id=0, $data=array(), $takechar=false) {
+			$orig_member_id = $member_id;
+			
 			if($member_id > 0){
 				$member_id	= ($this->pdh->get('member', 'name', array($member_id))) ? $member_id : false;
+				//Check Unique
+				$membername = (isset($data['name'])) ? $data['name'] : $this->pdh->get('member', 'name', array($member_id));
+				$uniqueID = $this->pdh->get('member', 'id', array($membername, $data));
+				if ($uniqueID && $member_id !== $uniqueID) return false;
 			}else{
-				$member_id	= $this->pdh->get('member', 'id', array($data['name']));
+				$member_id	= $this->pdh->get('member', 'id', array($data['name'], $data));
+				//Check Unique
+				if ($member_id) return false;
 			}
 
 			// Update the member

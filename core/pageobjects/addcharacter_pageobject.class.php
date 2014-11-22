@@ -55,11 +55,17 @@ class addcharacter_pageobject extends pageobject {
 		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
 
 		if (strlen($data['name'])){
-			$this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
+			$blnResult = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 		
 			$this->pdh->process_hook_queue();
-			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
-			return true;
+			
+			if ($blnResult){
+				$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+				return true;
+			} else {
+				$this->core->message($this->user->lang('error_saving_char'), $this->user->lang('error'), 'red', true);
+				$this->display($data);
+			}
 		} else {
 			$this->core->message($this->user->lang('missing_values').$this->user->lang('name'), $this->user->lang('error'), 'red', true);
 			$this->display($data);
@@ -77,6 +83,7 @@ class addcharacter_pageobject extends pageobject {
 			unset($data['mainid']);
 			unset($data['rankid']);
 		}
+		
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 
 		//Transfer character history
@@ -84,7 +91,14 @@ class addcharacter_pageobject extends pageobject {
 			$this->pdh->put('member', 'trans_member', array($this->url_id, $this->in->get('history_receiver', 0)));
 		}
 		$this->pdh->process_hook_queue();
-		$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		
+		if ($id){
+			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+			return true;
+		} else {
+			$this->core->message($this->user->lang('error_saving_char'), $this->user->lang('error'), 'red', true);
+			$this->display($data);
+		}
 	}
 	
 	public function display($member_data=array()) {
@@ -147,6 +161,7 @@ class addcharacter_pageobject extends pageobject {
 		$this->form->lang_prefix = 'addchar_';
 		$this->form->use_tabs = true;
 		$this->form->ajax_url = html_entity_decode($this->action);
+		$this->form->validate = true;
 		
 		// Static fields
 		$static_fields = array(
@@ -184,6 +199,7 @@ class addcharacter_pageobject extends pageobject {
 			// is the char connected to the user?
 			if(!$static_fields['overtakechar']['disabled'] && !$this->adminmode) $static_fields['overtakechar']['value'] = 1;
 		}
+		
 		if($this->adminmode) {
 			$maincharsel = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,false,true,true))));
 			if (!$this->url_id){
@@ -214,9 +230,14 @@ class addcharacter_pageobject extends pageobject {
 		foreach($categorynames as $catname) {
 			$this->form->add_tab(array('name' => $catname, 'lang' => 'uc_cat_'.$catname));
 		}
+		
+		$arrGameUniqueIDs = $this->game->get_char_unique_ids();
+		if (!$arrGameUniqueIDs || !is_array($arrGameUniqueIDs)) $arrGameUniqueIDs = array();
+		
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
 		foreach($profilefields as $fieldname => $fielddata) {
+			if (in_array($fieldname, $arrGameUniqueIDs)) $fielddata['required'] = true;
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$this->form->add_field($fieldname, $fielddata, '', $tab);
 		}

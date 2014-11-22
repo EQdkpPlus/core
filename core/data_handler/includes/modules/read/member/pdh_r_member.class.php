@@ -412,6 +412,45 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_rankimage($member_id){
 			return $this->pdh->get('rank', 'rank_image', array($this->data[$member_id]['rank_id']));
 		}
+		
+		
+		public function get_check_member_exists($strMembername, $arrProfileData){
+			$arrGameUniqueIDs = $this->game->get_char_unique_ids();
+			if (!$arrGameUniqueIDs || count($arrGameUniqueIDs)===0){
+				//Check Membername only
+				foreach($this->data as $mid => $detail){
+					if($detail['name'] === $strMembername){
+						return true;
+					}
+				}
+			} else {
+				foreach($this->data as $mid => $detail){
+					$blnNameCheck = false;
+					$blnResultArray = array();
+					
+					//First, check Charname
+					if($detail['name'] === $strMembername){
+						$blnNameCheck = true;
+					}
+					
+					if ($blnNameCheck){
+						//Now check Profilefields
+						foreach($arrGameUniqueIDs as $profilekey){
+							if ($detail[$profilekey] === $arrProfileData[$profilekey]){
+								$blnResultArray[] = true;
+							}
+						}
+						
+						//Check Count on Result Array;
+						$intTotalCount = count($arrGameUniqueIDs);
+						if (count($blnResultArray) === $intTotalCount) return true;
+					}
+				}	
+			}
+			
+			//Char does not exist
+			return false;
+		}
 
 		public function get_name($member_id, $rank_prefix = false, $rank_suffix = false){
 			if($member_id > 0){
@@ -434,14 +473,45 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 		}
 
-		public function get_id($member_name){
-			if (is_array($this->data)){
+		
+		//TODO: check occurence
+		public function get_id($strMembername, $arrProfileData=array()){
+			$arrGameUniqueIDs = $this->game->get_char_unique_ids();
+			if (!$arrGameUniqueIDs || count($arrGameUniqueIDs)===0){
+				//Check Membername only
 				foreach($this->data as $mid => $detail){
-					if($detail['name'] == $member_name){
+					if($detail['name'] === $strMembername){
 						return $mid;
 					}
 				}
+			} else {
+				foreach($this->data as $mid => $detail){
+					$blnNameCheck = false;
+					$blnResultArray = array();
+						
+					//First, check Charname
+					if($detail['name'] === $strMembername){
+						$blnNameCheck = true;
+					}
+					
+					if ($blnNameCheck){
+						//Now check Profilefields
+						foreach($arrGameUniqueIDs as $profilekey){
+							$strProfilevalue = isset($arrProfileData[$profilekey]) ? $arrProfileData[$profilekey] : $this->config->get($profilekey);
+							
+							if ($detail[$profilekey] === $arrProfileData[$profilekey]){
+								$blnResultArray[] = true;
+							}
+						}
+			
+						//Check Count on Result Array;
+						$intTotalCount = count($arrGameUniqueIDs);
+						if (count($blnResultArray) === $intTotalCount) return $mid;
+					}
+				}
 			}
+				
+			//Char does not exist
 			return false;
 		}
 

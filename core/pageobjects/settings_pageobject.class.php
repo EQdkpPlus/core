@@ -131,9 +131,12 @@ class settings_pageobject extends pageobject {
 			}
 		}
 		if ($change_password && strlen($values['new_password']) > 64) {
+
 			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 			$this->display($values);
+
 			return;
+
 		}
 		
 		// If they changed their username or password, we have to confirm their current password
@@ -160,11 +163,14 @@ class settings_pageobject extends pageobject {
 		$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($this->user->id));
 		
 		$plugin_settings = array();
+		d($this->pm->get_menus('settings'));
 		if (is_array($this->pm->get_menus('settings'))){
-			foreach ($this->pm->get_menus('settings') as $plugin => $options){
-		
-				foreach ($values as $key=>$setting){
-					$plugin_settings[] = $key;
+			foreach ($this->pm->get_menus('settings') as $plugin => $pvalues){
+				unset($pvalues['name'], $pvalues['icon']);
+				foreach($pvalues as $key => $settings){
+					foreach($settings as $setkey => $setval){
+						$plugin_settings[] = $setkey; 
+					}
 				}
 			}
 		}
@@ -174,10 +180,11 @@ class settings_pageobject extends pageobject {
 		$privArray = array();
 		$customArray = array();
 		$pluginArray = array();
+		d($plugin_settings);
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
 			if (strpos($name, "auth_account_") === 0) continue;
-			
+						
 			if(in_array($name, user::$privFields))
 				$privArray[$name] = $value;
 			elseif(in_array($name, user::$customFields)) 
@@ -198,7 +205,7 @@ class settings_pageobject extends pageobject {
 		$query_ary['custom_fields']			= serialize($customArray);
 		$query_ary['plugin_settings']		= serialize($pluginArray);
 
-		
+		d($query_ary);
 		$blnResult = $this->pdh->put('user', 'update_user', array($this->user->id, $query_ary));
 		$this->pdh->process_hook_queue();
 		//Only redirect if saving was successfull so we can grad an error message

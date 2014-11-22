@@ -265,7 +265,6 @@ class login_facebook extends gen_class {
 	
 						'country'			=> $this->in->get('country', $locale2),
 						'user_lang'			=> $this->in->get('user_lang',	$this->config->get('default_lang')),
-						'user_style'		=> $this->in->get('user_style', $this->config->get('default_style')),
 						'user_timezone'		=> $this->in->get('user_timezone',	$this->config->get('timezone')),
 						'user_password1'	=> $this->in->get('new_user_password1'),
 						'user_password2'	=> $this->in->get('new_user_password2'),

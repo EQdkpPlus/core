@@ -933,6 +933,7 @@ $lang = array(
 	"addchar_f_picture" => "Characterimage",
 	"other_items" => "Other Items",
 	"droprate" => "Droprate",
+	"error_saving_char" => "An error occured while saving this charcter. Maybe the character is already in the system."
 );
 
 ?>

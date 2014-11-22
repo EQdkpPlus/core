@@ -268,6 +268,14 @@ class game extends gen_class {
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
 		}
 	}
+	
+	
+	/**
+	 * get unique ID settings of Game. If set, chars will be identified by charname AND the given Profilesettings
+	 */
+	public function get_char_unique_ids(){
+		return (isset($this->gameinfo()->character_unique_ids)) ? ($this->gameinfo()->character_unique_ids) : false;
+	}
 
 	/**
 	 * get available importers (p.e. wow armory)
@@ -1196,6 +1204,7 @@ if(!class_exists('game_generic')) {
 	abstract class game_generic extends gen_class {
 		private $icons_checked = false;
 		public $icons = array();
+		public $character_unique_ids = false;
 
 		public function __construct(){
 			$this->path = $this->root_path.'games/'.$this->this_game.'/';

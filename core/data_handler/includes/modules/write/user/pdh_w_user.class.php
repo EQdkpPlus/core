@@ -49,6 +49,7 @@ if(!class_exists('pdh_w_user')) {
 				$this->pdh->put('user_groups_users', 'add_user_to_group', array($user_id, $this->pdh->get('user_groups', 'standard_group'), false));
 			}
 			$this->pdh->enqueue_hook('user');
+			$this->pdh->enqueue_hook('styles_update');
 
 			return $user_id;
 		}
@@ -79,6 +80,7 @@ if(!class_exists('pdh_w_user')) {
 
 			$user_id = $this->insert_user($arrSave);
 			$this->pdh->enqueue_hook('user');
+			$this->pdh->enqueue_hook('styles_update');
 			return $user_id;
 		}
 
@@ -93,6 +95,7 @@ if(!class_exists('pdh_w_user')) {
 			);
 			$user_id = $this->insert_user($arrData, false);
 			$this->pdh->enqueue_hook('user');
+			$this->pdh->enqueue_hook('styles_update');
 			return $user_id;
 		}
 
@@ -135,6 +138,7 @@ if(!class_exists('pdh_w_user')) {
 			}
 			
 			$this->pdh->enqueue_hook('user');
+			$this->pdh->enqueue_hook('styles_update');
 			return ($objQuery) ? true : false;
 		}
 
@@ -200,6 +204,7 @@ if(!class_exists('pdh_w_user')) {
 			))->execute();
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
+			$this->pdh->enqueue_hook('styles_update');
 			return true;
 		}
 
@@ -312,6 +317,7 @@ if(!class_exists('pdh_w_user')) {
 			$this->pdh->enqueue_hook('comment_update');
 			$this->pdh->enqueue_hook('member_update');
 			$this->pdh->enqueue_hook('update_connection');
+			$this->pdh->enqueue_hook('styles_update');
 		}
 
 		public function reset() {
@@ -319,6 +325,11 @@ if(!class_exists('pdh_w_user')) {
 			$this->db->prepare("DELETE FROM __member_user WHERE user_id !=?")->execute($this->user->id);
 
 			$this->pdh->enqueue_hook('user');
+			$this->pdh->enqueue_hook('user_groups_update');
+			$this->pdh->enqueue_hook('comment_update');
+			$this->pdh->enqueue_hook('member_update');
+			$this->pdh->enqueue_hook('update_connection');
+			$this->pdh->enqueue_hook('styles_update');
 		}
 	}
 }
