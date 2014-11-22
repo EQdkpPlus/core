@@ -42,7 +42,7 @@ if(!class_exists('pdh_w_styles')) {
 		}
 
 		public function delete_style($styleid){
-			$this->db->prepare("DELETE FROM __styles WHERE style_id=?")->execute($style_id);
+			$this->db->prepare("DELETE FROM __styles WHERE style_id=?")->execute($styleid);
 
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_style=?")->set(array(
 					'user_style' => $this->config->get('default_style'),
