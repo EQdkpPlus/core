@@ -237,7 +237,10 @@ class addcharacter_pageobject extends pageobject {
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
 		foreach($profilefields as $fieldname => $fielddata) {
-			if (in_array($fieldname, $arrGameUniqueIDs)) $fielddata['required'] = true;
+			if (in_array($fieldname, $arrGameUniqueIDs)) {
+				$fielddata['required'] = true;
+				$fielddata['default'] = $this->config->get('servername');
+			}
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$this->form->add_field($fieldname, $fielddata, '', $tab);
 		}

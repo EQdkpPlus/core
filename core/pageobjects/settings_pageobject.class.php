@@ -96,7 +96,7 @@ class settings_pageobject extends pageobject {
 	public function update() {
 		$this->create_form();
 		$values = $this->form->return_values();
-		pd($values);
+
 		// Error-check the form
 		if($this->form->error) {
 			$this->display($values);
@@ -163,7 +163,7 @@ class settings_pageobject extends pageobject {
 		$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($this->user->id));
 		
 		$plugin_settings = array();
-		d($this->pm->get_menus('settings'));
+
 		if (is_array($this->pm->get_menus('settings'))){
 			foreach ($this->pm->get_menus('settings') as $plugin => $pvalues){
 				unset($pvalues['name'], $pvalues['icon']);
@@ -180,7 +180,7 @@ class settings_pageobject extends pageobject {
 		$privArray = array();
 		$customArray = array();
 		$pluginArray = array();
-		d($plugin_settings);
+
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
 			if (strpos($name, "auth_account_") === 0) continue;
@@ -205,7 +205,6 @@ class settings_pageobject extends pageobject {
 		$query_ary['custom_fields']			= serialize($customArray);
 		$query_ary['plugin_settings']		= serialize($pluginArray);
 
-		d($query_ary);
 		$blnResult = $this->pdh->put('user', 'update_user', array($this->user->id, $query_ary));
 		$this->pdh->process_hook_queue();
 		//Only redirect if saving was successfull so we can grad an error message
