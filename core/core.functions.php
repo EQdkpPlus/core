@@ -384,7 +384,7 @@ function infotooltip_js() {
  * return @string
  */
 function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
-	if(empty($data['server'])) $data['server'] = registry::register('config')->get("uc_servername");
+	if(empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 	$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
 	$id = unique_id();
 	$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);

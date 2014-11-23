@@ -824,7 +824,7 @@ class mmocms_settings extends page_generic {
 
 		// The importer settings
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == '') || $this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || $this->game->get_require_apikey()){
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" disabled="disabled" />';
 			}else{
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" class="mainoption" onclick="javascript:GuildImport()" />';
@@ -837,7 +837,7 @@ class mmocms_settings extends page_generic {
 		}
 
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('uc_servername') == '')  || $this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || $this->game->get_require_apikey()){
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" disabled="disabled" />';
 			}else{
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" class="mainoption" onclick="javascript:MassUpdateChars()" />';

@@ -262,10 +262,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			$strMemberValue = $this->get_profile_field($member_id, $profile_field);
 			$out = $strMemberValue;
 			
-			$arrField['options_language'] = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $arrField['options_language']);
+			$arrField['options_language'] = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $arrField['options_language']);
 			
 			if($arrField['image'] != "" && $out){
-				$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $arrField['image']);
+				$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $arrField['image']);
 				if (is_file($this->root_path.$strPlainImage)){
 					$strImage =  $this->server_path.$strPlainImage;
 				}
@@ -281,7 +281,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				break;
 
 				case 'link':
-					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('uc_servername'), $this->get_classid($member_id)), $strMemberValue);
+					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $strMemberValue);
 					$out = '<a href="'.$strMemberValue.'">';
 					if ($strImage && !$nameOnly){
 						$out .= '<img src="'.$strImage.'" alt="'.$arrField['language'].'" title="'.$arrField['language'].'" />';

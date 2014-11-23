@@ -61,7 +61,7 @@ class content_export extends gen_class {
 			'name'				=> $this->config->get('default_game'),
 			'version'			=> $this->config->get('game_version'),
 			'language'			=> $this->config->get('game_language'),
-			'server_name'		=> unsanitize($this->config->get('uc_servername')),
+			'server_name'		=> unsanitize($this->config->get('servername')),
 			'server_loc'		=> $this->config->get('uc_server_loc'),
 		);				
 		$out['info'] = array(

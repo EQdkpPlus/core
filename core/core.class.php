@@ -310,7 +310,7 @@ class core extends gen_class {
 				'MAIN_TITLE'				=> $this->config->get('main_title'),
 				'SUB_TITLE'					=> $this->config->get('sub_title'),
 				'GUILD_TAG'					=> $this->config->get('guildtag'),
-				'META_KEYWORDS'				=> ($this->config->get('meta_keywords') && strlen($this->config->get('meta_keywords'))) ? $this->config->get('meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('uc_servername'))) ? ', '.$this->config->get('uc_servername') : ''),
+				'META_KEYWORDS'				=> ($this->config->get('meta_keywords') && strlen($this->config->get('meta_keywords'))) ? $this->config->get('meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('servername'))) ? ', '.$this->config->get('servername') : ''),
 				'META_DESCRIPTION'			=> ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'),
 				'EQDKP_ROOT_PATH'			=> $this->server_path,
 				'EQDKP_IMAGE_PATH'			=> $this->server_path.'images/',

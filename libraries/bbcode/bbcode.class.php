@@ -318,7 +318,7 @@ if (!class_exists("bbcode")) {
 					case 'server':
 						switch($elements[1]){
 							case 'name':
-								$arrCache[$strTag] = $this->config->get('uc_servername');
+								$arrCache[$strTag] = $this->config->get('servername');
 								break;
 
 							case 'location':
