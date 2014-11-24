@@ -83,6 +83,10 @@ if( !class_exists( "apa_type_generic" ) ) {
 		public function delete_layout_changes($apa_id) {
 			return true;
 		}
+		
+		public function recalculate($apa_id){
+			return true;
+		}
 	}
 }
 ?>

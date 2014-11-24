@@ -84,7 +84,9 @@ class ManageAutoPoints extends page_generic {
 	}
 
 	public function recalculate(){
-		$this->pdc->flush(); //maybe there will be more necessary if we support different types of apas
+		$this->apa->recalculate_apa($this->in->get('id'));
+		$this->pdh->process_hook_queue();
+		$this->pdc->flush();
 		$this->display(array('text' => $this->user->lang('apa_recalc_suc'), 'title' => $this->user->lang('success'), 'color' => 'green'));
 	}
 	

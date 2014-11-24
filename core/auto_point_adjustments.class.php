@@ -123,6 +123,11 @@ if ( !defined('EQDKP_INC') ){
 			$this->save_apa_tab($this->apa_tab);
 			return true;
 		}
+		
+		public function recalculate_apa($apa_id){
+			$apa_obj = $this->get_apa_type($this->apa_tab[$apa_id]['type']);
+			$apa_obj->recalculate($apa_id);
+		}
 
 		public function list_apas(){
 			return $this->apa_tab;
