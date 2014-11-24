@@ -110,7 +110,7 @@ $(function(){
 	});
 
 	// the search filed
-	var unsigned_attendees_f 	= unsigned_attendees;
+	var unsigned_attendees_f	= unsigned_attendees;
 
 	$('#notsignedfilter, #notsignedlevel, #notsignedactive').bind('keyup change', function(){
 		searchname				= $('#notsignedfilter').val();
@@ -121,14 +121,14 @@ $(function(){
 		// show only active members
 		if($('#notsignedactive').is(':checked')){
 			unsigned_attendees_f = $.grep(unsigned_attendees_f, function(unsignarr){
-		    	return unsignarr.active > 0;
+				return unsignarr.active > 0;
 			});
 		}
 
 		// filter by level
 		if(levelfilter > 0 && levelfilter != ''){
 			unsigned_attendees_f = $.grep(unsigned_attendees_f, function(unsignarr){
-		    	return unsignarr.level > levelfilter;
+				return unsignarr.level >= levelfilter;
 			});
 		}
 
@@ -145,7 +145,6 @@ $(function(){
 				filter_unsigned.push(item.id);
 			});
 		}
-		
 
 		// populate now
 		populate_unsigned(unsigned_attendees, a_checkboxes, filter_unsigned);
@@ -263,7 +262,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 				<dd><input type="checkbox" name="notsignedactive" value="1" id="notsignedactive" /></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_raidevent_raid_unsigned_level}</label></dt>
+				<dt><label>{L_raidevent_raid_unsigned_level}</label><br /><span>{L_raidevent_raid_unsigned_level_help}</span></dt>
 				<dd><input type="text" name="notsignedlevel" id="notsignedlevel" value="0" size="5" /></dd>
 			</dl>
 		</fieldset>

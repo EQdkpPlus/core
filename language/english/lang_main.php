@@ -724,7 +724,8 @@ $lang = array(
 	"raidevent_raid_unsigned_head" => 'Unsigned characters',
 	"raidevent_raid_unsigned_search" => 'Search for a character',
 	"raidevent_raid_unsigned_active" => 'Only show active character',
-	"raidevent_raid_unsigned_level" => 'Filter by level (0 = no filter)',
+	"raidevent_raid_unsigned_level" => "Filter: Level",
+	"raidevent_raid_unsigned_level_help" => "0 = All, Show all results larger or equal to the selected level",
 	"raidevent_raid_unsigned_button" => 'Unsigned chars',
 	"raidevent_raid_status" => array(
 	0 => 'confirmed',

@@ -691,7 +691,8 @@ $lang = array(
 "raidevent_raid_unsigned_head" => "Noch nicht angemeldete Charaktere",
 "raidevent_raid_unsigned_search" => "Suche nach einem Charakter",
 "raidevent_raid_unsigned_active" => "Nur aktive Charakter zeigen",
-"raidevent_raid_unsigned_level" => "Filtere nach Level (0 = Alle)",
+"raidevent_raid_unsigned_level" => "Filter: Level",
+"raidevent_raid_unsigned_level_help" => "0 = Alle, Zeigt alle Ergebnisse größer oder gleich der Eingabe an",
 "raidevent_raid_unsigned_button" => "Unangemeldete Chars",
 "raidevent_raid_status" => array(
 	0	=> 'Bestätigt',
