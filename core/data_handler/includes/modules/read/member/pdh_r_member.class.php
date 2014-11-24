@@ -513,7 +513,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}
 				
 				//We're still here, but havent found him yet. Lets just take the first one with the name
-				if ($intByName !== false) return $intByName;
+				if ($intByName !== false && count($arrProfileData)===0) return $intByName;
 			}
 				
 			//Char does not exist
