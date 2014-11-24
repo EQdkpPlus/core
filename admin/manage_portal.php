@@ -258,7 +258,13 @@ function reload_settings(){
 		if (data.new){
 			$.each(data.new, function(index, value) {
 				var help = (value.help) ? value.help : '';
-				$('#'+index).parent().parent().remove();
+				var parent = $('#'+index).parent().parent();
+				var parenttag = parent.prop(\"tagName\");
+				if (parenttag != 'DL'){
+					parent = $('#'+index).parent().parent().parent();
+				}			
+				parent.remove();
+					
 				$('#visibility').parent().parent().before('<dl><dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd></dl>');
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
@@ -273,8 +279,14 @@ function reload_settings(){
 		}
 		if (data.changed){
 			$.each(data.changed, function(index, value) {
-				var help = (value.help) ? value.help : '';	
-				$('#'+index).parent().parent().html('<dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd>');
+				var help = (value.help) ? value.help : '';
+				var parent = $('#'+index).parent().parent();
+				var parenttag = parent.prop(\"tagName\");
+				if (parenttag != 'DL'){
+					parent = $('#'+index).parent().parent().parent();
+				}
+			
+				parent.html('<dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd>');
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
 				}
@@ -285,7 +297,13 @@ function reload_settings(){
 		}
 		if (data.removed){
 			$.each(data.removed, function(index, value) {
-				$('#'+index).parent().parent().remove();
+				var parent = $('#'+index).parent().parent();
+				var parenttag = parent.prop(\"tagName\");
+				if (parenttag != 'DL'){
+					parent = $('#'+index).parent().parent().parent();
+				}
+			
+				parent.remove();
 			});
 		}
 	}, 'json');
