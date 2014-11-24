@@ -11,40 +11,41 @@
 		<h1 class="contentTitle">{L_manage_profilefields}</h1>
 	</div>
 	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" name="ResetProfileFields" onclick="ResetProfileFields();"><i class="fa fa-refresh"></i>{L_reset_profilefields}</button>
 		<button class="mainoption" name="new" type="submit" id="new"><i class="fa fa-plus"></i>{L_new_profilefield}</button>
 	</div>
 	<div class="clear"></div>
-  <table width="100%" cellpadding="2" cellspacing="1" class="colorswitch">
-    <tr>
-      <th class="nowrap">&nbsp;</th>
-      <th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
-      <th colspan="2" class="nowrap">{L_action}</th>
-      <th class="nowrap">{L_name}</th>
-      <th class="nowrap">{L_ID}</th>
-      <th class="nowrap">{L_type}</th>
-      <th class="nowrap">{L_category}</th>
-    </tr>
-    <!-- BEGIN profile_row -->
-    <tr>
-      <td width="20" class="nowrap" align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
-      <td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
-      <td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a><!-- ENDIF --></td>
-      <td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
-      <td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
-      <td>{profile_row.ID}</td>
-      <td>{profile_row.TYPE}</td>
-      <td>{profile_row.CATEGORY}</td>
-    </tr>
-    <!-- END profile_row -->
-    <tr >
-      <th colspan="8" class="footer">
-		{FC_PROFILEFIELDS}
-		</th>
-	</tr>
-</table>
-<div class="contentFooter">
-	<button class="mainoption" name="del" type="button" id="delete" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
-	<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-</div>
-{CSRF_TOKEN}
+	<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch">
+		<tr>
+			<th class="nowrap">&nbsp;</th>
+			<th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
+			<th colspan="2" class="nowrap">{L_action}</th>
+			<th class="nowrap">{L_name}</th>
+			<th class="nowrap">{L_ID}</th>
+			<th class="nowrap">{L_type}</th>
+			<th class="nowrap">{L_category}</th>
+		</tr>
+		<!-- BEGIN profile_row -->
+		<tr>
+			<td width="20" class="nowrap" align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
+			<td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
+			<td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a><!-- ENDIF --></td>
+			<td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
+			<td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
+			<td>{profile_row.ID}</td>
+			<td>{profile_row.TYPE}</td>
+			<td>{profile_row.CATEGORY}</td>
+		</tr>
+		<!-- END profile_row -->
+		<tr >
+			<th colspan="8" class="footer">
+				{FC_PROFILEFIELDS}
+			</th>
+		</tr>
+	</table>
+	<div class="contentFooter">
+		<button class="mainoption" name="del" type="button" id="delete" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
+		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+	</div>
+	{CSRF_TOKEN}
 </form>

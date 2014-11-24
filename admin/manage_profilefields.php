@@ -26,9 +26,10 @@ class ManageProfileFields extends page_generic {
 	public function __construct(){
 		$this->user->check_auth('a_config_man');
 		$handler = array(
-			'enable' => array('process' => 'enable', 'csrf'=>true),
-			'disable' => array('process' => 'disable', 'csrf'=>true),
-			'new'	=> array('process' => 'edit'),
+			'enable'	=> array('process' => 'enable', 'csrf'=>true),
+			'disable'	=> array('process' => 'disable', 'csrf'=>true),
+			'new'		=> array('process' => 'edit'),
+			'reset'		=> array('process' => 'process_reset','csrf'=>true)
 		);
 		parent::__construct(false, $handler, array('profile_fields', 'lang'), null, 'del_ids[]');
 		$this->process();
@@ -72,6 +73,11 @@ class ManageProfileFields extends page_generic {
 			$message = array('title' => $this->user->lang('error'), 'text' => $this->user->lang('pf_delete_nosuc'), 'color' => 'red');
 		}
 		$this->display($message);
+	}
+	
+	public function process_reset(){
+		$this->game->AddProfileFields();
+		$this->display();
 	}
 	
 	public function add(){
@@ -158,6 +164,10 @@ $("#type_dd").change(function(){
 			$this->pdh->process_hook_queue();
 			$this->core->messages($message);
 		}
+		
+		$this->jquery->Dialog('ResetProfileFields', '', array('custom_js'=> "window.location = 'manage_profilefields.php".$this->SID."&reset=true&link_hash=".$this->CSRFGetToken('reset')."';", 'message'=> $this->user->lang('reset_profilefieldstext')), 'confirm');
+		
+		
 		$this->confirm_delete($this->user->lang('confirm_del_profilefields'));
 		$fields = $this->pdh->get('profile_fields', 'fields');
 		if (is_array($fields)) {
