@@ -121,9 +121,6 @@
 						}
 					});
 				}
-				
-				// save the current date
-				localStorage.setItem("calendar.currentdate", $('#calendar').fullCalendar('getDate'));
 			},
 			eventResize: function(event,delta,revertFunc) {
 				// Save after event-drop is finished, use ajax() cause of error callback
@@ -162,8 +159,9 @@
 			},
 			defaultView: localStorage.getItem("calendar.viewname") || 'month',
 			defaultDate: localStorage.getItem("calendar.currentdate") || moment().format("YYYY-MM-DDTHH:mm:ssZZ"),
-			viewRender: function( view ){
+			viewRender: function(view){
 				localStorage.setItem("calendar.viewname", view.name);
+				localStorage.setItem("calendar.currentdate", view.start);
 			},
 			events: {
 				url: '{U_CALENDAR}&json=true',
