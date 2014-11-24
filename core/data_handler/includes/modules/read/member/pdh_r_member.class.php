@@ -480,18 +480,20 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			if (!$arrGameUniqueIDs || count($arrGameUniqueIDs)===0){
 				//Check Membername only
 				foreach($this->data as $mid => $detail){
-					if($detail['name'] === $strMembername){
+					if(utf8_strtolower($detail['name']) === utf8_strtolower($strMembername)){
 						return $mid;
 					}
 				}
 			} else {
+				$intByName = false;
 				foreach($this->data as $mid => $detail){
 					$blnNameCheck = false;
 					$blnResultArray = array();
 						
 					//First, check Charname
-					if($detail['name'] === $strMembername){
+					if(utf8_strtolower($detail['name']) === utf8_strtolower($strMembername)){
 						$blnNameCheck = true;
+						$intByName = $mid;
 					}
 					
 					if ($blnNameCheck){
@@ -499,7 +501,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						foreach($arrGameUniqueIDs as $profilekey){
 							$strProfilevalue = isset($arrProfileData[$profilekey]) ? $arrProfileData[$profilekey] : $this->config->get($profilekey);
 							
-							if ($detail[$profilekey] === $arrProfileData[$profilekey]){
+							if ($detail[$profilekey] === $strProfilevalue){
 								$blnResultArray[] = true;
 							}
 						}
@@ -509,6 +511,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						if (count($blnResultArray) === $intTotalCount) return $mid;
 					}
 				}
+				
+				//We're still here, but havent found him yet. Lets just take the first one with the name
+				if ($intByName !== false) return $intByName;
 			}
 				
 			//Char does not exist
