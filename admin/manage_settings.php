@@ -706,25 +706,6 @@ class mmocms_settings extends page_generic {
 				)
 			),
 			'itemtooltip'	=> array(),	// placeholder for sorting..
-			'sms'		=> array(
-				'sms'	=> array(
-					'sms_enable'	=> array(
-						'type'			=> 'radio',
-						'dependency'	=> array(1 => array('sms_username', 'sms_password'))
-					),
-					'sms_username'	=> array(
-						'type'		=> 'text',
-						'size'		=> 40,
-					),
-					'sms_password'	=> array(
-						'type'		=> 'password',
-						'set_value'	=> true,
-						'required'	=> false,
-						'pattern'	=> '',
-						'size'		=> 40,
-					)
-				)
-			),
 		);
 		$this->form->add_tabs($settingsdata);
 

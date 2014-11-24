@@ -22,7 +22,6 @@ if ( !defined('EQDKP_INC') ){
 
 $module_lang = array(
 	'name'			=> 'Username',
-	'sms_checkbox'  => '',
 	'avatarimglink' => 'Avatar',
 	'email'			=> 'Email-Address',
 	'country'		=> 'Country',
@@ -42,7 +41,6 @@ $module_lang = array(
 
 $preset_lang = array(
 	'username'		=> 'Username',
-	'usersmscheckbox' => 'User SMS Checkbox',
 	'useravatar'	=> 'Useravatar',
 	'useremail'		=> 'Usermailer',
 	'usercountry'	=> 'Country',

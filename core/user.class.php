@@ -27,7 +27,7 @@ class user extends gen_class {
 	 *	Field Definitions
 	 */
 	public static $customFields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube', 'user_gravatar_mail', 'user_avatar_type');
-	public static $privFields 	= array('priv_no_boardemails', 'priv_set', 'priv_phone', 'priv_nosms', 'priv_bday', 'priv_wall_posts_read', 'priv_wall_posts_write');
+	public static $privFields 	= array('priv_no_boardemails', 'priv_set', 'priv_phone', 'priv_bday', 'priv_wall_posts_read', 'priv_wall_posts_write');
 
 	private $lang			= array();		// Loaded language pack
 	private $loaded_plugs	= array();		// Not loaded plug-langs
@@ -789,10 +789,6 @@ class user extends gen_class {
 						'tolang'	=> true,
 						'options'	=> $priv_phone_array,
 						'default'	=> '1',
-					),
-					'priv_nosms'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
 					),
 					'priv_bday'	=> array(
 						'type'		=> 'radio',

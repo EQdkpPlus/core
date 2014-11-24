@@ -252,11 +252,6 @@ class acl_manager extends gen_class {
 				'icon' => 'fa fa-floppy-o la-lg',
 				array('CBNAME' => 'a_backup', 'TEXT' => $this->user->lang('backup_database'))
 			),
-			 // SMS
-			$this->user->lang('sms_perm') => array(
-				'icon' => 'fa fa-mobile-phone la-lg',
-				array('CBNAME' => 'a_sms_send', 'TEXT' => $this->user->lang('sms_perm2')),
-			),
 			 // Search
 			$this->user->lang('search') => array(
 				'icon' => 'fa fa-search la-lg',

@@ -306,7 +306,6 @@ $system_def = array(
 				'table_sort_col' => 3,
 				'table_sort_dir' => 'asc',
 				'table_presets' => array(
-					array('name' => 'usersmscheckbox', 'sort' => false, 'th_add' => 'width="10"', 'td_add' => 'nowrap="nowrap"'),
 					array('name' => 'useronlinestatus', 'sort' => false, 'th_add' => '', 'td_add' => 'width="10" nowrap="nowrap"'),
 					array('name' => 'useravatar', 'sort' => false, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 					array('name' => 'username', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),

@@ -428,13 +428,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				$strPath .= ucfirst($this->get_alias($intArticleID));
 			}
 			
-			switch((int)$this->config->get('seo_extension')){
-				case 1: $strPath .= '.html';
-				break;
-				case 2: $strPath .= '.php';
-				break;
-				default: $strPath .= '/';
-			}
+			if(substr($strPath, -1) == "/") $strPath = substr($strPath, 0, -1);
+			$strPath .= $this->routing->getSeoExtension();
+
 			return $strPath.(($this->SID == "?s=") ? '?' : $this->SID);
 		}
 		

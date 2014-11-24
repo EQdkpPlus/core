@@ -21,42 +21,11 @@ class user_pageobject extends pageobject {
 	
 	public function __construct() {
 		$handler = array(
-			'send'				=> array('process' => 'process_sendSMS'),
 			'u'					=> array('process' => 'viewuser'),
 		);
 		$this->user->check_auth('u_userlist');
 		parent::__construct(false, $handler, array());
 		$this->process();
-	}
-
-	public function process_sendSMS(){
-		if ($this->in->get('submit') != ''){
-			$this->user->check_auth('a_sms_send');
-
-			$objSMS			= register('sms', array($this->config->get('sms_username'), $this->config->get('sms_password')));
-
-			$arrReceiver	= array();
-			$strMessage		= ($this->in->get('text_area') != '')? $this->in->get('text_area') : '';
-			$blnReturn		= false;
-
-			if (is_array($this->in->getArray('sendto', 'string')) && strlen($strMessage)){
-				$arrReceiverEmails = $this->in->getArray('sendto', 'string');
-
-				foreach($arrReceiverEmails as $email){
-					$arrReceiver[] = $this->crypt->decrypt($email);
-				}
-
-				$blnReturn = $objSMS->send($strMessage, $arrReceiver);
-			}
-
-			if ($blnReturn){
-				$this->core->message($this->user->lang('sms_success'), $this->user->lang('success'), 'green');
-			} else {
-				$this->core->message($objSMS->getError(), $this->user->lang('error'), 'red');
-			}
-
-		}
-		$this->display();
 	}
 
 	public function viewuser(){
@@ -423,17 +392,6 @@ class user_pageobject extends pageobject {
 			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
 			'USER_PAGINATION'	=> generate_pagination('listusers.php'.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
 		));
-
-		if (((int)$this->config->get('sms_enable') == 1) && $this->user->check_auth('a_sms_send', false)){
-				if(strlen(($this->config->get('sms_username'))) < 1 || strlen(($this->config->get('sms_password')))){
-					$sms_info = $this->user->lang('sms_info_account')." ".$this->user->lang('sms_info_account_link') ;
-				}
-
-				$this->tpl->assign_vars(array(
-					'F_SMS'				=> true,
-					'F_ACC_INFO'		=> $sms_info,
-				));
-		}
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
 

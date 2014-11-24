@@ -32,7 +32,6 @@ if (!class_exists("pdh_r_user")){
 		);
 		
 		public $presets = array(
-			'usersmscheckbox'  => array('sms_checkbox', array('%user_id%'), array()),
 			'username' => array('name', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 			'userfullname' => array('fullname', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 			'useravatar'  => array('avatarimglink', array('%user_id%'), array()),
@@ -479,20 +478,11 @@ if (!class_exists("pdh_r_user")){
 				$fields['priv_set'] = ((isset($fields['priv_set'])) ? (int)$fields['priv_set'] : 1);
 				$fields['priv_phone'] = ((isset($fields['priv_phone'])) ? (int)$fields['priv_phone'] : 1);
 				$fields['priv_no_boardemails'] = ((isset($fields['priv_no_boardemails'])) ? (int)$fields['priv_no_boardemails'] : 0);
-				$fields['priv_nosms'] = ((isset($fields['priv_nosms'])) ? (int)$fields['priv_nosms'] : 0);
 				$fields['priv_bday'] = ((isset($fields['priv_bday'])) ? (int)$fields['priv_bday'] : 0);
 				return $fields;
 			} else {
-				return array('priv_set' => 1, 'priv_phone' => 1, 'priv_no_boardemails' => 0, 'priv_nosms' => 0, 'priv_bday' => 0);
+				return array('priv_set' => 1, 'priv_phone' => 1, 'priv_no_boardemails' => 0, 'priv_bday' => 0);
 			}
-		}
-		
-		public function get_sms_checkbox($user_id){
-			$privacy = $this->get_privacy_settings($user_id);
-			if((int)$this->config->get('sms_enable') == 1 && strlen($this->get_cellphone($user_id)) && $privacy['priv_nosms'] != 1 && $this->user->check_auth('a_sms_send', false)){
-				return '<input type="checkbox" name="sendto['.$user_id.']" value="'.$this->encrypt->encrypt($this->get_cellphone($user_id).';'.$this->get_name($user_id)).'" class="cellphonebox" />';
-			}
-			return '';
 		}
 
 		public function get_mainchar($user_id){

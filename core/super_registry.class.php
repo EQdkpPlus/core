@@ -75,7 +75,6 @@ abstract class super_registry {
 		'portal'				=> 'core/',
 		'repository'			=> 'core/',
 		'routing'				=> 'core/',
-		'sms'					=> 'core/',
 		'socialplugins'			=> 'core/',
 		'styles'				=> 'core/',
 		'timehandler'			=> 'core/',
