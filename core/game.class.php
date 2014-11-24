@@ -989,6 +989,9 @@ class game extends gen_class {
 				$this->pdh->put('profile_fields', 'insert_field', array($values));
 			}
 		}
+		
+		//Reset Cache
+		$this->pdh->process_hook_queue();
 	}
 	
 	/**
