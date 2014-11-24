@@ -2639,6 +2639,7 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 }
 .user-tooltip-avatar img {
 	height: 40px;
+	max-widht: 60px;
 	border: 1px solid #CCCCCC;
 	border-radius: 4px 4px 4px 4px;
 	background-color: #FFFFFF;

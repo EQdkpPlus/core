@@ -157,7 +157,7 @@ class login_facebook extends gen_class {
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
-				 });
+				 }, {scope: 'email,public_profile'});
 			}
 		");
 		
@@ -176,7 +176,7 @@ class login_facebook extends gen_class {
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
-				 }, {scope: 'email,user_birthday,user_location'});
+				 }, {scope: 'email,public_profile'});
 			}	  
 	  ");
 	  		
@@ -204,7 +204,7 @@ class login_facebook extends gen_class {
 				   } else {
 					 console.log('User cancelled login or did not fully authorize.');
 				   }
-				 });
+				 }, {scope: 'email,public_profile'});
 			}	  
 			");
 			return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>';		
@@ -294,12 +294,6 @@ class login_facebook extends gen_class {
 						case 'male' : $gender = '1'; break;
 						case 'female' : $gender = '2'; break;
 						default: $gender = '0';
-					}
-					
-					//Birthday
-					if ($me['data']->getProperty("birthday")){
-						list ($m, $d, $y) = explode('/', $me['data']->getProperty("birthday"));
-						$out['birthday'] = $this->time->mktime(0,0,0,$m,$d,$y);
 					}
 					
 					//Check Email
