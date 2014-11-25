@@ -1020,7 +1020,7 @@ class game extends gen_class {
 		//Uninstall old game
 		$this->uninstallGame();
 		
-		if ($this->config->get('update_first_game_inst') !== 1){
+		if ((int)$this->config->get('update_first_game_inst') !== 1){
 			//Reset some data
 			$this->resetEvents();
 			$this->resetItempools();
