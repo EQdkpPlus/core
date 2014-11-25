@@ -648,6 +648,7 @@ class calendarevent_pageobject extends pageobject {
 						$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $memberid));
 						$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 							'MEMBERID'			=> $memberid,
+							'MEMBERLINK'		=> $this->pdh->get('member', 'memberlink', array($memberid, $this->routing->simpleBuild('character'), '', true)),
 							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 1 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
