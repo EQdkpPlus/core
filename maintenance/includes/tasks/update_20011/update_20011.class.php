@@ -48,6 +48,7 @@ class update_20011 extends sql_update_task {
 					12 => 'Insert Profilefield',
 					13 => 'Insert Profilefield',
 					14 => 'Insert Profilefield',
+					15 => 'Remove Userfields',
 				),
 			'german' => array(
 				'update_20011'		=> 'EQdkp Plus 2.0 Update 2',
@@ -65,6 +66,7 @@ class update_20011 extends sql_update_task {
 					12 => 'Füge Profilfeld ein',
 					13 => 'Füge Profilfeld ein',
 					14 => 'Füge Profilfeld ein',
+					15 => 'Entferne Spalten aus Benutzertabelle',
 			),
 		);
 		
@@ -103,7 +105,18 @@ class update_20011 extends sql_update_task {
 				12 =>"INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (11, 'mobile', 'userpf_mobile', 'text', 30, 6, '[0-9\\+\\/\\-]+', 0, 0, 1, 11, 1, '%s', 'fa-mobile-phone', NULL, NULL, 1);",
 				13 =>"INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (12, 'name', 'userpf_name', 'text', 50, 1, '', 0, 0, 1, 0, 0, NULL, NULL, NULL, NULL, 1);",
 				14 =>"INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (13, 'lastname', 'userpf_lastname', 'text', 50, 1, '', 0, 0, 1, 1, 0, NULL, NULL, NULL, NULL, 1);",
-		
+		15 => "ALTER TABLE `__users`
+	DROP COLUMN `first_name`,
+	DROP COLUMN `last_name`,
+	DROP COLUMN `town`,
+	DROP COLUMN `state`,
+	DROP COLUMN `ZIP_code`,
+	DROP COLUMN `phone`,
+	DROP COLUMN `cellphone`,
+	DROP COLUMN `address`,
+	DROP COLUMN `icq`,
+	DROP COLUMN `skype`,
+	DROP COLUMN `irq`;",
 		);
 	}
 	
