@@ -158,7 +158,7 @@
 				$('#calendar_loading').toggle(bool);
 			},
 			defaultView: localStorage.getItem("calendar.viewname") || 'month',
-			defaultDate: localStorage.getItem("calendar.currentdate") || moment().format("YYYY-MM-DDTHH:mm:ssZZ"),
+			defaultDate: localStorage.getItem("calendar.currentdate") || moment(),
 			viewRender: function(view){
 				localStorage.setItem("calendar.viewname", view.name);
 				localStorage.setItem("calendar.currentdate", ((view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start));
