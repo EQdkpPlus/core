@@ -25,8 +25,8 @@ if ( !defined('EQDKP_INC') ){
  * CORE VERSIONS
  * -------------------------------------------------------------------------
  */
-define('VERSION_INT',		'2.0.0.11');				// the internal version number for updates & update check
-define('VERSION_EXT',		'2.0.0 Alpha 1');		// the external version number to be shown in the footer
+define('VERSION_INT',		'2.0.0.11');			// the internal version number for updates & update check
+define('VERSION_EXT',		'2.0.0 Alpha 2');		// the external version number to be shown in the footer
 define('VERSION_WIP',		true);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.4.0');				// required version of PHP
 define('VERSION_PHP_REC',	'5.5.0');				// recommended version of PHP
@@ -58,14 +58,14 @@ define('MAX_FILES_USERFOLDER', 20);
 //URLs
 //-------------------------------------------------------------------------
 //Sourceforge
-define('EQDKP_PROJECT_URL', "http://eqdkp-plus.eu");
-define('EQDKP_ABOUT_URL', "http://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL', "https://sourceforge.net/projects/eqdkp-plus/files/");
-define('EQDKP_REPO_URL', "http://eqdkp-plus.eu/repository/");
-define('EQDKP_NOTIFICATIONS_URL', "http://eqdkp-plus.eu/rss/notifications.xml");
-define('EQDKP_TWITTER_SCREENNAME', "EQdkpPlus");
-define('EQDKP_BOARD_URL', "http://eqdkp-plus.eu/forum");
-define('EQDKP_CRL_URL', "https://eqdkp-plus.googlecode.com/files/crl.txt");
-define('EQDKP_WIKI_URL', "http://eqdkp-plus.eu/wiki/");
-define('EQDKP_BUGTRACKER_URL', "http://eqdkp-plus.eu/bugtracker/");
+define('EQDKP_PROJECT_URL',			"http://eqdkp-plus.eu");
+define('EQDKP_ABOUT_URL',			"http://eqdkp-plus.eu/about");
+define('EQDKP_DOWNLOADS_URL',		"https://sourceforge.net/projects/eqdkp-plus/files/");
+define('EQDKP_REPO_URL',			"http://eqdkp-plus.eu/repository/");
+define('EQDKP_NOTIFICATIONS_URL',	"http://eqdkp-plus.eu/rss/notifications.xml");
+define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");
+define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
+define('EQDKP_CRL_URL',				"https://eqdkp-plus.googlecode.com/files/crl.txt");
+define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
+define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
 ?>
