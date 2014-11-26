@@ -56,9 +56,10 @@ class phpbb31_bridge extends bridge {
 			'function' 		=> '',
 			'callafter'		=> 'phpbb3_callafter',
 		),
-		'logout' 	=> 'phpbb3_logout',
-		'autologin' => 'phpbb3_autologin',	
-		'sync'		=> 'phpbb3_sync',
+		'logout' 		=> 'phpbb3_logout',
+		'autologin' 	=> 'phpbb3_autologin',	
+		'sync'			=> 'phpbb3_sync',
+		'sync_fields'	=> 'phpbb3_sync_fields',
 	);
 		
 	public $settings = array(
@@ -68,20 +69,6 @@ class phpbb31_bridge extends bridge {
 		'cmsbridge_disable_sync' => array(
 			'type'	=> 'radio',
 		),
-	);
-		
-	public $sync_fields = array(
-		'icq',
-		'town',
-		'interests',
-		'birthday',
-		'user_email',
-		'username',
-		'skype',
-		'youtube',
-		'twitter',
-		'facebook',
-		'work',
 	);
 
 	//Needed function
@@ -363,30 +350,35 @@ class phpbb31_bridge extends bridge {
 		setcookie($arrConfig['cookie_name'].'_k', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 	}
 	
+	
+	public function phpbb3_sync_fields(){
+		$query = $this->db->prepare("SELECT * FROM ".$this->prefix."profile_fields")->execute();
+		$arrFields = array();
+		if ($query){
+			while($row = $query->fetchAssoc()){
+				$arrFields['pf_'.$row['field_ident']] = $row['field_name'];
+			}
+		}
+		
+		return $arrFields;
+	}
+	
 	public function phpbb3_sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
 		$sync_array = array();
 		
-		$user_id = $arrUserdata['user_id'];
+		$user_id = $arrUserdata['user_id'];		
+		
 		$query = $this->db->prepare("SELECT * FROM ".$this->prefix."profile_fields_data WHERE user_id=?")->execute($user_id);
 		if ($query){
 			$arrProfileData = $query->fetchAssoc();
 			
 			if (is_array($arrProfileData) && count($arrProfileData)){
-				
-					$sync_array = array(
-							'icq' 			=> $arrProfileData['pf_phpbb_icq'],
-							'town'			=> $arrProfileData['pf_phpbb_location'],
-							'interests'		=> $arrProfileData['pf_phpbb_interests'],
-							'skype'			=> $arrProfileData['pf_phpbb_skype'],
-							'youtube'		=> $arrProfileData['pf_phpbb_youtube'],
-							'twitter'		=> $arrProfileData['pf_phpbb_twitter'],
-							'facebook'		=> $arrProfileData['pf_phpbb_facebook'],
-							'work'			=> $arrProfileData['pf_phpbb_occupation'],
-					);
-				
+				foreach($arrProfileData as $key => $val){
+					$sync_array[$key] = $val;
+				}	
 			}
 		}
 		

@@ -54,9 +54,10 @@ class mybb_bridge extends bridge {
 			'function' 		=> '',
 			'callafter'		=> 'mybb_callafter',
 		),
-		'logout' 	=> 'mybb_logout',
-		'autologin' => '',
-		'sync'		=> 'mybb_sync',
+		'logout' 		=> 'mybb_logout',
+		'autologin' 	=> '',
+		'sync'			=> 'mybb_sync',
+		'sync_fields'	=> 'mybb_sync_fields'
 	);
 
 	public $settings = array(
@@ -66,13 +67,6 @@ class mybb_bridge extends bridge {
 		'cmsbridge_disable_sync' => array(
 			'type'	=> 'radio',
 		),
-	);
-
-	public $sync_fields = array(
-		'icq',
-		'birthday',
-		'user_email',
-		'username',
 	);
 
 	//Needed function
@@ -130,6 +124,13 @@ class mybb_bridge extends bridge {
 			'birthday'		=> $this->_handle_birthday($arrUserdata['birthday']),
 		);
 		return $sync_array;
+	}
+	
+	public function mybb_sync_fields(){
+		return array(
+			'icq'		=> 'ICQ',
+			'birthday'	=> 'Birthday'
+		);
 	}
 
 	private function _handle_birthday($date){

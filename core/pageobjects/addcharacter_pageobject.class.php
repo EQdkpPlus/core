@@ -239,7 +239,7 @@ class addcharacter_pageobject extends pageobject {
 		foreach($profilefields as $fieldname => $fielddata) {
 			if (in_array($fieldname, $arrGameUniqueIDs)) {
 				$fielddata['required'] = true;
-				$fielddata['default'] = $this->config->get('servername');
+				$fielddata['default'] = $this->config->get($fieldname);
 			}
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$this->form->add_field($fieldname, $fielddata, '', $tab);

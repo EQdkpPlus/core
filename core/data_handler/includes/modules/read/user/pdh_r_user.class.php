@@ -26,6 +26,7 @@ if (!class_exists("pdh_r_user")){
 		public $users;
 		private $countries = false;
 		private $online_user = false;
+		private $userProfileFields = false;
 
 		public $hooks = array(
 			'user', 'user_groups_update'
@@ -33,7 +34,6 @@ if (!class_exists("pdh_r_user")){
 		
 		public $presets = array(
 			'username' => array('name', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
-			'userfullname' => array('fullname', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 			'useravatar'  => array('avatarimglink', array('%user_id%'), array()),
 			'useremail'  => array('email', array('%user_id%', true), array()),
 			'usercountry'  => array('country', array('%user_id%'), array()),
@@ -41,14 +41,18 @@ if (!class_exists("pdh_r_user")){
 			'usergroups'  => array('groups', array('%user_id%', '%use_controller%'), array()),
 			'usercharnumber'  => array('charnumber', array('%user_id%'), array()),
 			'useronlinestatus' => array('is_online', array('%user_id%'), array()),
-			"usericq" => array('icq', array('%user_id%'), array()),
-			"userskype" => array('skype', array('%user_id%'), array()),
-			"usercellphone" => array('cellphone', array('%user_id%'), array()),
-			"userphone" => array('phone', array('%user_id%'), array()),
-			"usertwitter" => array('twitter', array('%user_id%'), array()),
-			"userfacebook" => array('facebook', array('%user_id%'), array()),
-			"usertown" => array('town', array('%user_id%'), array()),
 		);
+		
+		public function init_presets(){
+			//generate presets
+			$this->userProfileFields = $this->pdh->get('user_profilefields', 'id_list');
+			if(is_array($this->userProfileFields)) {
+				foreach($this->userProfileFields as $intFieldID){
+					$this->presets['userprofile_'.$intFieldID] = array('profilefield', array('%user_id%', $intFieldID), array($intFieldID));
+					$this->preset_lang['userprofile_'.$intFieldID] = 'Benutzerprofil-'.$this->pdh->geth('user_profilefields', 'name', array($intFieldID));
+				}
+			}
+		}
 
 		public function reset(){
 			$this->users = NULL;
@@ -109,14 +113,6 @@ if (!class_exists("pdh_r_user")){
 			return strcasecmp($this->pdh->get('user', 'name', array($params1[0])), $this->pdh->get('user', 'name', array($params2[0])));
 		}
 		
-		public function get_fullname($user_id){
-			return (($this->users[$user_id]['first_name'] != '') ? sanitize($this->users[$user_id]['first_name']).' ' : '').(($this->users[$user_id]['last_name'] != '') ? sanitize($this->users[$user_id]['last_name']) : '');
-		}
-		
-		public function comp_fullname($params1, $params2) {
-			return strcasecmp($this->pdh->get('user', 'fullname', array($params1[0])), $this->pdh->get('user', 'fullname', array($params2[0])));
-		}
-
 		public function get_check_username($name){
 			$name = clean_username($name);
 			return (is_array(search_in_array($name, $this->users, true, 'username_clean'))) ? 'false' : 'true';
@@ -194,8 +190,8 @@ if (!class_exists("pdh_r_user")){
 		}
 		
 		public function get_html_email($user_id, $checkForIgnoreMailsFlag = false){
-			if ($this->check_privacy($user_id) && $this->user->is_signedin() && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
-				return '<a href="javascript:usermailer('.$user_id.');"><i class="fa fa-envelope"></i>'.$this->user->lang('adduser_send_mail').'</a>';
+			if ($this->get_check_privacy($user_id, 'userprofile_email') && $this->user->is_signedin() && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
+				return '<a href="javascript:usermailer('.$user_id.');"><i class="fa fa-envelope fa-lg"></i>'.$this->user->lang('adduser_send_mail').'</a>';
 			}
 		
 			return '';
@@ -214,6 +210,8 @@ if (!class_exists("pdh_r_user")){
 		}
 		
 		public function get_html_country($user_id){
+			if (!$this->get_check_privacy($user_id, 'userprofile_country')) return '';
+			
 			$country = $this->get_country($user_id);
 			if (strlen($country)){
 				$this->init_countries();
@@ -229,84 +227,11 @@ if (!class_exists("pdh_r_user")){
 		public function get_failed_logins($user_id) {
 			return $this->users[$user_id]['failed_login_attempts'];	
 		}
-		
-		public function get_town($user_id){
-			return $this->users[$user_id]['town'];
-		}
-
-		public function get_cellphone($user_id){
-			return $this->users[$user_id]['cellphone'];
-		}
 
 		public function get_exchange_key($user_id){
 			return $this->users[$user_id]['exchange_key'];
 		}
-		
-		public function get_html_cellphone($user_id){
-			if ($this->check_phone_privacy($user_id) && strlen($this->get_cellphone($user_id))){
-				return $this->get_cellphone($user_id);
-			}
-			return '';
-		}
-		
-		public function get_phone($user_id){
-			return $this->users[$user_id]['phone'];
-		}
-		
-		public function get_html_phone($user_id){
-			if ($this->check_phone_privacy($user_id) && strlen($this->get_phone($user_id))){
-				return $this->get_phone($user_id);
-			}
-			return '';
-		}
-		
-		public function get_icq($user_id){
-			return $this->users[$user_id]['icq'];
-		}
-		
-		public function get_html_icq($user_id){
-			if ($this->check_privacy($user_id) && strlen($this->get_icq($user_id))){
-				return '<a href="http://www.icq.com/people/'.$this->get_icq($user_id).'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.$this->get_icq($user_id).'&amp;img=5" alt="icq" /></a>';
-			}
-			return '';
-		}
-		
-		public function get_skype($user_id){
-			return $this->users[$user_id]['skype'];
-		}
-		
-		public function get_html_skype($user_id){
-			if ($this->check_privacy($user_id) && strlen($this->get_skype($user_id))){
-				return '<a href="skype:'.$this->get_skype($user_id).'?add"><i class="fa fa-skype fa-lg"></i>'.sanitize($this->get_skype($user_id)).'</a>';
-			}
-			return '';
-		}
-		
-		public function get_twitter($user_id){
-			$twitter = $this->get_custom_fields($user_id, 'twitter');
-			if (is_array($twitter)) return '';
-			return $twitter;
-		}
-		
-		public function get_html_twitter($user_id){
-			if ($this->check_privacy($user_id) && strlen($this->get_twitter($user_id))){
-				return '<a href="http://twitter.com/'.$this->get_twitter($user_id).'" target="_blank"><i class="fa fa-twitter fa-lg"></i>'.$this->get_twitter($user_id).'</a>';
-			}
-			return '';	
-		}
-		
-		public function get_facebook($user_id){
-			$fb = $this->get_custom_fields($user_id, 'facebook');
-			if (is_array($fb)) return '';
-			return $fb;
-		}
-		
-		public function get_html_facebook($user_id){
-			if ($this->check_privacy($user_id) && strlen($this->get_facebook($user_id))){
-				return '<a href="http://facebook.com/'.((is_numeric($this->get_facebook($user_id))) ? 'profile.php?id='.$this->get_facebook($user_id) : $this->get_facebook($user_id)).'" target="_blank"><i class="fa fa-facebook fa-lg"></i>'.sanitize($this->get_facebook($user_id)).'</a>';
-			}
-			return '';	
-		}
+
 		
 		public function get_data($user_id=''){
 			if ($user_id == ''){
@@ -421,6 +346,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_custom_fields($user_id, $field = false){
 			if(!isset($this->users[$user_id])) return array();
 			$fields = unserialize($this->users[$user_id]['custom_fields']);
+
 			if ($fields){
 				if ($field){
 					return $fields[$field];
@@ -474,15 +400,7 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_privacy_settings($user_id) {
 			$fields = unserialize($this->users[$user_id]['privacy_settings']);
-			if ($fields){
-				$fields['priv_set'] = ((isset($fields['priv_set'])) ? (int)$fields['priv_set'] : 1);
-				$fields['priv_phone'] = ((isset($fields['priv_phone'])) ? (int)$fields['priv_phone'] : 1);
-				$fields['priv_no_boardemails'] = ((isset($fields['priv_no_boardemails'])) ? (int)$fields['priv_no_boardemails'] : 0);
-				$fields['priv_bday'] = ((isset($fields['priv_bday'])) ? (int)$fields['priv_bday'] : 0);
-				return $fields;
-			} else {
-				return array('priv_set' => 1, 'priv_phone' => 1, 'priv_no_boardemails' => 0, 'priv_bday' => 0);
-			}
+			return ($fields) ? $fields : array();
 		}
 
 		public function get_mainchar($user_id){
@@ -523,65 +441,93 @@ if (!class_exists("pdh_r_user")){
 			return $arrSearchResults;
 		}
 		
-		private function check_privacy($user_id){
-			$arrPrivacy = $this->get_privacy_settings($user_id);
+		public function get_profilefield($user_id, $intFieldID){
+			if (!$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
+			
+			return $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
+		}
+		
+		public function get_html_profilefield($user_id, $intFieldID){
+			if (!$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
+			
+			return $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
+		}
+		
+		public function get_html_caption_profilefield($param){
+			return $this->pdh->geth('user_profilefields', 'name', array($param));
+		}
+		
+		public function get_check_privacy($user_id, $strField){
+			$arrPrivacySettings = $this->get_privacy_settings($user_id);
+			
+			if (strpos($strField, 'priv_') !== 0) $strField = 'priv_'.$strField;
+			$intUserValue = isset($arrPrivacySettings[$strField]) ? $arrPrivacySettings[$strField] : $this->get_privacy_defaults($strField);
+
+			//Radio Fields
+			$arrRadioFields = array('priv_bday', 'priv_no_boardemails');
+			if (in_array($strField, $arrRadioFields)){
+				return ($intUserValue) ? true : false;
+			}
+			
+			//Now Check
 			$is_user		= ($this->user->is_signedin()) ? true : false;
 			$is_admin		= ($this->user->check_group(2, false) || $this->user->check_group(3, false));
 			
 			$perm = false;
 			
-			switch ($arrPrivacy['priv_set']){
-				case 0: // all
-					$perm = true;
-					break;
-				case 1: // only user
-					if($is_user){
+			if ($strField == 'priv_wall_posts_read' || 'priv_wall_posts_write'){
+				switch ($intUserValue){
+					case 0: // all
 						$perm = true;
-					}
-					break;
-				case 2: // only admins
-					if($is_admin){
+						break;
+					case 1: // only user
+						if($is_user){
+							$perm = true;
+						}
+						break;
+					case 2: // only me
+						if($user_id === $this->user->id){
+							$perm = true;
+						}
+						break;
+				}
+				
+			} else {
+				
+				switch ($intUserValue){
+					case 0: // all
 						$perm = true;
-					}
-				break;
-				default:
-					if($is_user || $is_admin){
-						$perm = true;
-					};
-			}
-			
+						break;
+					case 1: // only user
+						if($is_user){
+							$perm = true;
+						}
+						break;
+					case 2: // only admins
+						if($is_admin){
+							$perm = true;
+						}
+						break;
+					default:
+						if($is_user || $is_admin){
+							$perm = true;
+						};
+				}
+			}	
+				
 			return $perm;
 		}
 		
-		private function check_phone_privacy($user_id){
-			$arrPrivacy = $this->get_privacy_settings($user_id);
-			$is_user		= ($this->user->is_signedin()) ? true : false;
-			$is_admin		= ($this->user->check_group(2, false) || $this->user->check_group(3, false));
-			
-			$phone_perm = false;
-			
-			switch ($arrPrivacy['priv_phone']){
-				case 0: // all
-					// do nothing... everything fine
-					$phone_perm = true;
-					break;
-				case 1: // only user
-					if ($is_user) { $phone_perm = true;}
-					break;
-				case 2: // only admins
-					if ($is_admin) { $phone_perm = true;}
-					break;
-				case 3: // nobody
-					$phone_perm = false;
-					break;
-				default:
-					if ($is_admin || $is_user){
-						$phone_perm = true;
-					}
+		private function get_privacy_defaults($strField){
+			switch($strField){
+				case 'priv_wall_posts_read': return 0;
+				case 'priv_wall_posts_write': return 1;
+				case 'priv_bday': return 0;
+				case 'priv_no_boardemails': return 0;
+				default: return 1;
 			}
-			return $phone_perm;
 		}
-		
+				
 		private function init_countries(){
 			if (!$this->countries){
 				include($this->root_path.'core/country_states.php');

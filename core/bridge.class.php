@@ -144,7 +144,7 @@ class bridge extends gen_class {
 		if ($boolLoginResult){
 			//Userdata-Sync
 			if ($this->functions['sync'] != '' && method_exists($this, $this->functions['sync']) && $this->config->get('cmsbridge_disable_sync') != 1){
-				$this->sync($user_id, $arrUserdata);
+				$this->sync_fields($user_id, $arrUserdata);
 			}
 			//Usergroup-Sync
 			$this->sync_usergroups((int)$arrUserdata['id'], $user_id);
@@ -185,30 +185,46 @@ class bridge extends gen_class {
 	public function get_settings(){
 		return $this->settings;	
 	}
-	
-	public function sync($user_id, $arrUserdata){
+
+	public function sync_fields($user_id, $arrUserdata){
+		//Key: Bridge ID, Value: EQdkp Profilefield ID
+		$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
+		
 		$eqdkp_user_data = $this->pdh->get('user', 'data', array($user_id));
 		$eqdkp_custom_fields = $this->pdh->get('user', 'custom_fields', array($user_id));
 		
 		$method = $this->functions['sync'];
+		//Key: Bridge ID, Value: Bridge Profilefield Value
 		$sync_array = $this->$method($arrUserdata);
-		$save = false;
-		if (is_array($sync_array) && count($sync_array) > 0){
-			foreach ($sync_array as $key=>$value){
-				if (array_key_exists($key, $eqdkp_user_data)){
-					if ($eqdkp_user_data[$key] != $value){
-						$save_array[$key] = $value;
-						$save = true;
-					}
-					
-				} else {
-					if ($eqdkp_custom_fields[$key] != $value){
-						$eqdkp_custom_fields[$key] = $value;
-						$save = true;
-					}
+		
+		foreach($arrMapping as $intBridgeID => $intEQdkpFieldID){
+			if (isset($sync_array[$intBridgeID])){
+				$currentVal = $eqdkp_custom_fields['userprofile_'.$intEQdkpFieldID];
+				$newVal = $sync_array[$intBridgeID];
+				
+				if ($currentVal != $newVal){
+					$save = true;
+					$eqdkp_custom_fields['userprofile_'.$intEQdkpFieldID] = $newVal;
 				}
 			}
 		}
+		
+		//Birthday is a user field
+		if (isset($sync_array['birthday'])){
+			if ($save_array['birthday'] != $sync_array['birthday']){
+				$save_array['birthday'] = $sync_array['birthday'];
+				$save = true;
+			}
+		}
+		
+		//Country is a user field
+		if (isset($sync_array['country'])){
+			if ($save_array['country'] != $sync_array['country']){
+				$save_array['country'] = $sync_array['country'];
+				$save = true;
+			}
+		}
+		
 		if ($save){
 			$save_array['custom_fields'] = serialize($eqdkp_custom_fields);
 			$this->pdh->put('user', 'update_user', array($user_id, $save_array, false, false));
@@ -216,10 +232,13 @@ class bridge extends gen_class {
 		return;
 	}
 	
-	public function get_sync_fields(){
-		if (isset($this->sync_fields) && is_array($this->sync_fields)){
-			return $this->sync_fields;
+	public function get_available_sync_fields(){
+		$method = $this->functions['sync_fields'];
+		if ($method != '' && method_exists($this, $method)){
+			$arrAvailableFields = $this->$method();
+			return $arrAvailableFields;
 		}
+		
 		return false;
 	}
 	

@@ -272,10 +272,13 @@ class Manage_Bridge extends page_generic {
 		}
 		$arrBridges = $this->bridge->get_available_bridges();
 		ksort($arrBridges);
+		
+		$arrSyncFields = $this->bridge->get_available_sync_fields();
 
 		$this->tpl->assign_vars(array(
 			'MS_USERGROUPS'		=> $this->jquery->MultiSelect('usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_groups')), array('height' => 170, 'width' => 300)),
 			'S_BRIDGE_ACTIVE'	=> ($this->config->get('cmsbridge_active') == 1) ? true : false,
+			'S_PROFILEFIELDS_INFO' => ($this->config->get('cmsbridge_active') == 1 && count($arrSyncFields)) ? true : false,
 			'S_BRIDGE_SETTINGS'	=> (is_array($settings) && count($settings) > 0) ? true : false,
 			'DD_SYSTEMS'		=> new hdropdown('cms_type', array('options' => $arrBridges, 'value' => $this->config->get('cmsbridge_type'), 'js' => 'onchange="onchange_type()"')),
 			'S_SAMEDB'			=> ($this->config->get('cmsbridge_notsamedb') == '0' && $this->config->get('cmsbridge_active') == 1) ? true : false,

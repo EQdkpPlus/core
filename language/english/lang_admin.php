@@ -1636,6 +1636,25 @@ $lang = array(
 	"show_on_teamlist" => "Show on Teampage",
 	"show_teamlist" => "Teampage",
 	"link_to_articles" => "Click here to get to the Articles in this Category",
+	
+	/* Manage Userprofilefields */
+	"manage_userpf" => "Userprofilefields Management",
+	"manage_userpf_edit" => "Edit Userprofilefield",
+	"userpf_sett_f_name" => "Name",
+	"userpf_sett_f_lang_var" => "Language var",
+	"userpf_sett_f_type" => "Type",
+	"userpf_sett_f_length" => "Length",
+	"userpf_sett_f_minlength" => "Minimum Length",
+	"userpf_sett_f_validation" => "Validation",
+	"userpf_sett_f_required" => "Required",
+	"userpf_sett_f_show_on_registration" => "Show on Registration",
+	"userpf_sett_f_enabled" => "Enabled",
+	"userpf_sett_f_is_contact" => "Is Contactfield",
+	"userpf_sett_f_contact_url" => "Contact URL",
+	"userpf_sett_f_icon_or_image" => "Icon or Image",
+	"userpf_sett_f_bridge_field" => "Synchroniced Bridge Field",
+	"bridge_profilefields_info" => "This Bridge supports the Synchronisation of Userprofilefields. You can do a mapping of this fields at the <a href=\"manage_user_profilefields.php\">Userprofilefields Management</a>.",
+	
 );
 
 ?>

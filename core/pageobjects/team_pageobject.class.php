@@ -53,7 +53,7 @@ class team_pageobject extends pageobject {
 				//Output
 				$hptt_page_settings	= $this->pdh->get_page_settings('teamlist', 'hptt_team_list');
 					
-				$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'team.php', '%link_url_suffix%' => '', '%use_controller%' => true), 'g.'.$group);
+				$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'team.php', '%link_url_suffix%' => '', '%use_controller%' => true), 'g.'.$group.'.u'.$this->user->id);
 				$hptt->setPageRef($this->strPath);
 				
 				//footer

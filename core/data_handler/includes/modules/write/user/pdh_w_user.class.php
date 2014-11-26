@@ -54,11 +54,20 @@ if(!class_exists('pdh_w_user')) {
 			return $user_id;
 		}
 
-		public function register_user($arrData, $user_active = 1, $user_key = '', $rules = false, $strLoginMethod = false) {
+		public function register_user($arrData, $user_active = 1, $user_key = '', $rules = false, $strLoginMethod = false, $arrProfileData=false) {
 			$new_salt = $this->user->generate_salt();
 			$new_password = $this->user->encrypt_password($arrData['user_password1'], $new_salt).':'.$new_salt;
 			$strApiKey = $this->user->generate_apikey($arrData['user_password1'], $new_salt);
 
+			//User Profilefields
+			$arrUserProfileFields = array();
+			if (is_array($arrProfileData)){
+				foreach($arrProfileData as $key => $value){
+					$newKey = intval(str_replace('userprofile_', '', $key));
+					$arrUserProfileFields[$newKey] = $value;
+				}
+			}
+			
 			$arrSave = array(
 				'username' 				=> $arrData['username'],
 				'user_password'			=> $new_password,
@@ -73,6 +82,7 @@ if(!class_exists('pdh_w_user')) {
 				'user_active'			=> $user_active,
 				'rules'					=> ($rules) ? 1 : 0,
 				'api_key'				=> $strApiKey,
+				'custom_fields'			=> serialize($arrUserProfileFields),
 			);
 			if ($strLoginMethod && $this->user->handle_login_functions('after_register', $strLoginMethod )){
 				$arrSave = array_merge($arrSave, $this->user->handle_login_functions('after_register', $strLoginMethod ));

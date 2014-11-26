@@ -244,7 +244,7 @@ class update_2000 extends sql_update_task {
 			12 => "CREATE TABLE `__articles` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`text` TEXT COLLATE 'utf8_bin' NOT NULL,
+	`text` MEDIUMTEXT COLLATE 'utf8_bin' NOT NULL,
 	`category` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`featured` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	`comments` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',

@@ -57,16 +57,9 @@ class smf2_bridge extends bridge {
 		'logout' 	=> 'smf2_logout',
 		'autologin' => '',	
 		'sync'		=> 'smf2_sync',
+		'sync_fields' => 'smf2_sync_fields',
 	);
 	
-	public $sync_fields = array(
-		'icq',
-		'birthday',
-		'user_email',
-		'username',
-		'town',
-		'gender',
-	);
 	
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
@@ -173,6 +166,15 @@ class smf2_bridge extends bridge {
 			'gender'		=> $arrUserdata['gender'],
 		);
 		return $sync_array;
+	}
+	
+	public function smf2_sync_fields(){
+		return array(
+			'icq'		=> 'ICQ',
+			'birthday'	=> 'Birthday',
+			'town'		=> 'Town',
+			'gender'	=> 'Gender',
+		);
 	}
 	
 	private function _handle_birthday($date){

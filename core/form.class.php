@@ -100,11 +100,26 @@ class form extends gen_class {
 	 *	@param array	$options:	any options for the field
 	 *	@return mixed				returns the input-value of the field
 	 */
-	public static function value($name, $options) {
+	public static function value($name, $options, $lang_prefix=false) {
 		if(empty($options['type'])) $options['type'] = '';
 		$class_name = 'h'.$options['type'];
 		if(!registry::class_exists($class_name)) return null;
 		$class = new $class_name($name, $options);
+		
+		// choose language var
+		if(!isset($options['lang'])) {
+			$lang = ($lang_prefix) ? $lang_prefix.'f_'.$name : $name;
+		} else {
+			$lang = $options['lang'];
+		}
+		// direct language string?
+		if(!empty($options['dir_lang'])) {
+			$language = $options['dir_lang'];
+		} else {
+			$language = (register('user')->lang($lang, false, false)) ? register('user')->lang($lang) : ((register('game')->glang($lang)) ? register('game')->glang($lang) : $lang);
+		}
+		$class->_lang = $language;
+		
 		if(!empty($options['encrypt'])) return register('encrypt')->encrypt($class->inpval());
 		return $class->inpval();
 	}
@@ -313,7 +328,7 @@ class form extends gen_class {
 				// variable fieldsets holds fields in this case
 				foreach($fieldsets as $name => $options) {
 					try {
-						$values[$name] = self::value($name, $options);
+						$values[$name] = self::value($name, $options, $this->lang_prefix);
 					} catch (FormException $e) {
 						$this->error = true;
 						$this->core->message($e->getMessage(), $this->user->lang('fv_form_error'), 'red');
@@ -326,7 +341,7 @@ class form extends gen_class {
 				if(strpos($fieldsetname, '_') === 0) continue;
 				foreach($fields as $name => $options) {
 					try {
-						$values[$name] = self::value($name, $options);
+						$values[$name] = self::value($name, $options, $this->lang_prefix);
 					} catch (FormException $e) {
 						$this->error = true;
 						$this->core->message($e->getMessage(), $this->user->lang('fv_form_error'), 'red');
@@ -382,7 +397,8 @@ class form extends gen_class {
 		}
 		
 		// fill in the field
-		if(!empty($value)) $options['value'] = $value;
+
+		if(!empty($value) || $value === '0' || $value === 0) $options['value'] = $value;
 		
 		// create the field
 		$field = self::field($name, $options);
@@ -412,7 +428,8 @@ class form extends gen_class {
 				$this->tpl->assign_block_vars($key, array(
 					'NAME'		=> $language,
 					'HELP'		=> $help_message,
-					'FIELD'		=> $field
+					'FIELD'		=> $field,
+					'S_REQUIRED'=> ($options['required']) ? true : false,
 				));
 			}
 		} else return array(

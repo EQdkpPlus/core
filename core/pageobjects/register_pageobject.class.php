@@ -44,6 +44,7 @@ class register_pageobject extends pageobject {
 
 	public $server_url	= '';
 	public $data		= array();
+	private $userProfileData = array();
 
 	public function __construct() {
 		$handler = array(
@@ -108,6 +109,16 @@ class register_pageobject extends pageobject {
 			return;
 		}
 		
+		//Check User Profilefields
+		$arrUserProfileFields = $this->pdh->get('user_profilefields', 'registration_fields');
+		if (count($arrUserProfileFields)){
+			$form = register('form', array('register'));
+			$form->validate = true;
+			$form->add_fields($arrUserProfileFields);
+			$arrFieldValues = $form->return_values();
+			$this->userProfileData = $arrFieldValues;
+		}
+		
 		//Check CAPTCHA
 		if ($this->config->get('enable_captcha') == 1){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
@@ -149,6 +160,12 @@ class register_pageobject extends pageobject {
 			$this->display_form();
 			return;
 		}
+		
+		//Check User Profilefields - Part 2
+		if ($form->error){
+			$this->display_form();
+			return;
+		}
 
 		// If the config requires account activation, generate a random key for validation
 		if ( ((int)$this->config->get('account_activation') == 1) || ((int)$this->config->get('account_activation') == 2) ) {
@@ -168,7 +185,7 @@ class register_pageobject extends pageobject {
 		}
 
 		//Insert the user into the DB
-		$user_id = $this->pdh->put('user', 'register_user', array($this->data, $user_active, $user_key, true, $this->in->get('lmethod')));
+		$user_id = $this->pdh->put('user', 'register_user', array($this->data, $user_active, $user_key, true, $this->in->get('lmethod'), $this->userProfileData));
 
 		//Add auth-account
 		if ($this->in->exists('auth_account')){
@@ -432,12 +449,23 @@ class register_pageobject extends pageobject {
 				}
 			}
 		}
+		
+		//User Profilefields
+		$arrUserProfileFields = $this->pdh->get('user_profilefields', 'registration_fields');
+		if (count($arrUserProfileFields)){
+			$form = register('form', array('register'));
+			$form->validate = true;
+			$form->add_fields($arrUserProfileFields);
+			$form->output($this->userProfileData);
+		}
+		
 
 		$this->tpl->assign_vars(array(
 			'S_CURRENT_PASSWORD'			=> false,
 			'S_NEW_PASSWORD'				=> false,
 			'S_SETTING_ADMIN'				=> false,
 			'S_MU_TABLE'					=> false,
+			'S_PROFILEFIELDS'				=> count($arrUserProfileFields) ? true : false,
 
 			'VALID_EMAIL_INFO'				=> ($this->config->get('account_activation') == 1) ? '<br />'.$this->user->lang('valid_email_note') : '',
 			'AUTH_REGISTER_BUTTON'			=> ($arrRegisterButtons = $this->user->handle_login_functions('register_button')) ? implode(' ', $arrRegisterButtons) : '',

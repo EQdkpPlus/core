@@ -32,7 +32,8 @@ abstract class html {
 			if(in_array($key, self::$ignore)) continue;
 			$this->$key = $option;
 		}
-		if(empty($this->value) && isset($this->default)) $this->value = $this->default;
+
+		if(empty($this->value) && isset($this->default) && ($this->value!==0) && ($this->value!=='0')) $this->value = $this->default;
 		if(method_exists($this, '_construct')) $this->_construct();
 	}
 	
@@ -40,17 +41,28 @@ abstract class html {
 	
 	public function inpval() {
 		$value = $this->_inpval();
+		$strfieldname = (isset($this->_lang)) ? $this->_lang : $this->name;
+		
 		if(isset($this->required) && $this->required && empty($value)) {
-			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_required'),$this->name));
+			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_required'),$strfieldname));
 		}
 		if(!empty($this->pattern) && !empty($value)) {
 			// add a delimiter to pattern
 			$pattern = $this->pattern($this->pattern);
 			$pattern = (strpos($pattern,'~') === false) ? '~'.$pattern.'~' : '#'.$pattern.'#';
 			if(!preg_match($pattern,$value)) {
-				throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_sample_pattern'),$this->name));
+				throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_sample_pattern'),$strfieldname));
 			}
 		}
+		
+		if(!empty($this->minlength) && !empty($value) && (strlen($value) < $this->minlength)) {
+			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_minlength_error'),$strfieldname));
+		}
+		
+		if(!empty($this->maxlength) && !empty($value) && (strlen($value) > $this->maxlength)) {
+			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_maxlength_error'),$strfieldname));
+		}
+		
 		return $value;
 	}
 	

@@ -1,0 +1,60 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_manage_userpf}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<form method="post" action="{ACTION}" name="post" >
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_userpf}</h1>
+	</div>
+	<div class="tableHeader floatRight">
+		<button class="mainoption" name="new" type="submit" id="new"><i class="fa fa-plus"></i>{L_new_profilefield}</button>
+	</div>
+	<div class="clear"></div>
+	<table width="100%" cellpadding="2" cellspacing="1" class="colorswitch" id="userprofilefield_table">
+		<thead>
+		<tr class="not-sortable">
+			<th width="10px"></th>
+			<th class="nowrap">&nbsp;</th>
+			<th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
+			<th colspan="2" class="nowrap">{L_action}</th>
+			<th class="nowrap">{L_name}</th>
+			<th class="nowrap">{L_type}</th>
+			<th class="nowrap">{L_userpf_sett_f_required}</th>
+			<th class="nowrap">{L_userpf_sett_f_show_on_registration}</th>
+			<th class="nowrap">{L_userpf_sett_f_is_contact}</th>
+			<!-- IF S_BRIDGE_FIELD -->
+			<th class="nowrap">{L_userpf_sett_f_bridge_field}</th>
+			<!-- ENDIF -->
+		</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN profile_row -->
+		<tr>
+			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"><input type="hidden" name="sort[]" value="{profile_row.ID}"></span></td>
+			<td width="20" class="nowrap" align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
+			<td width="15" class="nowrap" align="center"><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /></td>
+			<td width="10" align="center" class="nowrap"><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a></td>
+			<td width="10" align="center" class="nowrap"><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
+			<td><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a><!-- ELSE -->{profile_row.NAME}<!-- ENDIF --></td>
+			<td>{profile_row.TYPE}</td>
+			<td><!-- IF profile_row.IS_REQUIRED --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
+			<td><!-- IF profile_row.IS_SHOWN_ON_REG --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
+			<td><!-- IF profile_row.IS_CONTACT --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
+			<!-- IF S_BRIDGE_FIELD -->
+			<td>{profile_row.BRIDGE_FIELD}</td>
+			<!-- ENDIF -->
+		</tr>
+		<!-- END profile_row -->
+		</tbody>
+	</table>
+	<div class="contentFooter">
+		<button class="mainoption" name="del" type="button" id="delete" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
+		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		<button class="mainoption" name="savesort" type="submit" id="savesort"><i class="fa fa-check"></i>{L_save}</button>
+	</div>
+	{CSRF_TOKEN}
+</form>

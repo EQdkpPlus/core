@@ -483,7 +483,7 @@ DROP TABLE IF EXISTS __articles;
 CREATE TABLE `__articles` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`title` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`text` TEXT COLLATE 'utf8_bin' NOT NULL,
+	`text` MEDIUMTEXT COLLATE 'utf8_bin' NOT NULL,
 	`category` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`featured` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	`comments` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
@@ -637,3 +637,25 @@ CREATE TABLE `__groups_raid_members` (
 	`member_id` int(22) NOT NULL,
 	`grpleader` int(1) NOT NULL DEFAULT '0'
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+CREATE TABLE `__user_profilefields` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL,
+	`lang_var` VARCHAR(255) NOT NULL,
+	`type` VARCHAR(30) NOT NULL,
+	`length` INT(10) UNSIGNED NOT NULL DEFAULT '30',
+	`minlength` INT(10) UNSIGNED NOT NULL DEFAULT '1',
+	`validation` TEXT NOT NULL COLLATE 'utf8_bin',
+	`required` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`show_on_registration` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`sort_order` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`is_contact` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
+	`contact_url` TEXT NULL COLLATE 'utf8_bin',
+	`icon_or_image` TEXT NULL COLLATE 'utf8_bin',
+	`bridge_field` TEXT NULL COLLATE 'utf8_bin',
+	`options` TEXT NULL COLLATE 'utf8_bin',
+	`editable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

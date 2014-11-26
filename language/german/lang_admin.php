@@ -1636,6 +1636,22 @@ $lang = array(
 "show_on_teamlist" => "Auf Teamseite anzeigen",
 "show_teamlist" => "Teamseite",
 "link_to_articles" => "Hier klicken um zu den Artikeln in dieser Kategorie zu gelangen",
+/* Manage Userprofilefields */
+"manage_userpf" => "Benutzerprofilfelder verwalten",
+"manage_userpf_edit" => "Benutzerprofilfeld bearbeiten",
+"userpf_sett_f_name" => "Name",
+"userpf_sett_f_lang_var" => "Sprachvariable",
+"userpf_sett_f_type" => "Typ",
+"userpf_sett_f_length" => "Länge",
+"userpf_sett_f_minlength" => "Minimale Länge",
+"userpf_sett_f_validation" => "Validierung",
+"userpf_sett_f_required" => "Verpflichtend",
+"userpf_sett_f_show_on_registration" => "Bei der Registrierung anzeigen",
+"userpf_sett_f_enabled" => "Aktiviert",
+"userpf_sett_f_is_contact" => "Ist Kontaktfeld",
+"userpf_sett_f_contact_url" => "Kontakturl",
+"userpf_sett_f_icon_or_image" => "Icon oder Bild",
+"userpf_sett_f_bridge_field" => "Synchronisiertes Bridge-Feld",
+"bridge_profilefields_info" => "Diese Bridge unterstützt das Synchronisieren von Benutzerfeldern. Eine Zuordnung der CMS/Forum-Felder zu den EQdkp Plus-Feldern kannst du in der <a href=\"manage_user_profilefields.php\">Benutzerprofilfeldverwaltung</a> vornehmen.",
  );
-
 ?>

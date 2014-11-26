@@ -59,6 +59,7 @@ class phpbb3_bridge extends bridge {
 		'logout' 	=> 'phpbb3_logout',
 		'autologin' => 'phpbb3_autologin',	
 		'sync'		=> 'phpbb3_sync',
+		'sync_fields' => 'phpbb3_sync_fields',
 	);
 		
 	public $settings = array(
@@ -70,15 +71,6 @@ class phpbb3_bridge extends bridge {
 		),
 	);
 		
-	public $sync_fields = array(
-		'icq',
-		'town',
-		'interests',
-		'birthday',
-		'user_email',
-		'username',
-	);
-
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -280,6 +272,15 @@ class phpbb3_bridge extends bridge {
 			'birthday'		=> $this->_handle_birthday($arrUserdata['user_birthday']),
 		);
 		return $sync_array;
+	}
+	
+	public function phpbb3_sync_fields(){
+		return array(
+			'icq'		=> 'ICQ',
+			'town'		=> 'Town',
+			'interests' => 'Interests',
+			'birthday'	=> 'Birthday',
+		);
 	}
 	
 	private function _handle_birthday($date){

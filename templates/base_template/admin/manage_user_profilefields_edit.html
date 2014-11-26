@@ -1,0 +1,42 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_user_profilefields.php{SID}">{L_manage_userpf}</a></li>
+		<li class="current"><a><!-- IF ID == "" -->{L_new_profilefield}<!-- ELSE -->{LANGUAGE}<!-- ENDIF --></a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<form method="post" action="{F_PAGE_MANAGER}" name="post" id="user_profilefield_edit">
+	<fieldset class="settings">
+		<legend>{L_manage_userpf_edit}</legend>
+		<!-- BEGIN fields -->
+		<dl>
+			<dt><label>{fields.NAME}</label><br /><span>{fields.HELP}</span></dt>
+			<dd>{fields.FIELD}</dd>
+		</dl>
+		<!-- END fields -->
+	</fieldset>
+	
+	<fieldset class="settings" {S_SHOW_OPTIONS} id="options_row">
+		<legend>{L_profilefield_optionen}</legend>
+		<dl>
+			<dt><label>{L_profilefield_optionen}:</label></dt>
+			<dd id="new_options">
+				<!-- BEGIN options_row -->
+					{L_ID}: <input type="text" value="{options_row.ID}" name="option_id[]" class="input" /> {L_name}: <input type="text" value="{options_row.LANGUAGE}" name="option_lang[]" class="input" /><br />
+				<!-- END options_row -->
+				<span>
+					{L_ID}: <input type="text" value="" name="option_id[]" class="input" /> {L_name}: <input type="text" value="" name="option_lang[]" class="input" /><i class="fa fa-plus fa-lg hand" id="addopt_icon"></i><br />
+				</span>
+			</dd>
+		</dl>
+	</fieldset>
+	<div class="contentFooter">
+		<input type="hidden" name="id" value="{ID}" />
+		<button class="mainoption" name="add" type="submit" id="add"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="liteoption" name="cancel" type="button" id="cancel" onclick="window.location='manage_user_profilefields.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+{CSRF_TOKEN}
+</form>

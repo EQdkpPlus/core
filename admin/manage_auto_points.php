@@ -271,7 +271,7 @@ class ManageAutoPoints extends page_generic {
 		$job_list = $this->apa->list_apas();
 		
 		//Add function button
-		$beforeclose = "$('#calc_func').append('<option value=\"'+$('body').data('func_name')+'\">'+$('body').data('func_name')+'<option>');";
+		$beforeclose = "$('#calc_func').append('<option value=\"func_'+$('body').data('func_name')+'\">func_'+$('body').data('func_name')+'<option>');";
 		$this->jquery->dialog('edit_function', $this->user->lang('apa_edit_function'), array('url' => "manage_auto_points.php".$this->SID."&simple_head=true&edit_func=true", 'width' =>'650', 'height' =>'600', 'beforeclose' => $beforeclose));
 		$this->tpl->add_js("
 			$('#add_func').click(function(){

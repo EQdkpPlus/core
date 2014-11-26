@@ -131,7 +131,21 @@ $(document).ready(function() {
 			</fieldset>
 
 		</div>
-
+		
+		<!-- IF S_PROFILEFIELDS -->
+		<div id="profilefields">
+			<fieldset class="settings">
+				<legend>{L_user_sett_fs_profile}</legend>
+				<!-- BEGIN fields -->
+				<dl>
+					<dt><label><!-- IF fields.S_REQUIRED -->* <!-- ENDIF -->{fields.NAME}</label><br /><span>{fields.HELP}</span></dt>
+					<dd>{fields.FIELD}</dd>
+				</dl>
+				<!-- END fields -->
+			</fieldset>
+		</div>
+		<!-- ENDIF -->
+		
 		<div id="view">
 			<fieldset class="settings">
 				<legend>{L_user_sett_tab_view_options}</legend>

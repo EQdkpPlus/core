@@ -184,15 +184,16 @@ class settings_pageobject extends pageobject {
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
 			if (strpos($name, "auth_account_") === 0) continue;
-						
-			if(in_array($name, user::$privFields))
+			
+			if(strpos($name, "priv_") === 0){
 				$privArray[$name] = $value;
-			elseif(in_array($name, user::$customFields)) 
+			} elseif(in_array($name, user::$customFields) || (strpos($name, "userprofile_") === 0)){
 				$customArray[$name] = $value;
-			elseif(in_array($name, $plugin_settings))
+			} elseif(in_array($name, $plugin_settings)){
 				$pluginArray[$name] = $value;
-			else 
+			} else {
 				$query_ary[$name] = $value;
+			}
 		}
 		
 		//Create Thumbnail for User Avatar
@@ -265,9 +266,13 @@ class settings_pageobject extends pageobject {
 		//Deactivate Profilefields synced by Bridge
 		if ($this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('cmsbridge_disable_sync') != 1) {
 			$synced_fields = array('user_email', 'username', 'current_password', 'new_password', 'confirm_password');
-			if ($this->bridge->get_sync_fields()){;
-				$synced_fields = array_merge($synced_fields, $this->bridge->get_sync_fields());
+			
+			$arrBridgeFields = $this->pdh->get('user_profilefields', 'bridge_mapping');
+
+			foreach($arrBridgeFields as $intBridgeFieldID => $strEQdkpFieldID){
+				$synced_fields[] = 'userprofile_'.$strEQdkpFieldID;
 			}
+			
 			foreach($synced_fields as $sync_field) {
 				foreach($settingsdata as &$fieldsets) {
 					foreach($fieldsets as &$fields) {

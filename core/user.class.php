@@ -26,8 +26,7 @@ class user extends gen_class {
 	/**
 	 *	Field Definitions
 	 */
-	public static $customFields = array('user_avatar', 'work', 'interests', 'hardware', 'facebook', 'twitter', 'youtube', 'user_gravatar_mail', 'user_avatar_type');
-	public static $privFields 	= array('priv_no_boardemails', 'priv_set', 'priv_phone', 'priv_bday', 'priv_wall_posts_read', 'priv_wall_posts_write');
+	public static $customFields = array('user_avatar', 'user_gravatar_mail', 'user_avatar_type');
 
 	private $lang			= array();		// Loaded language pack
 	private $loaded_plugs	= array();		// Not loaded plug-langs
@@ -560,14 +559,6 @@ class user extends gen_class {
 	 */	
 	public static function get_settingsdata($user_id=-1) {
 		$settingsdata = array();
-
-		//Privacy - Phone numbers
-		$priv_phone_array = array(
-			'0'=>'user_priv_all',
-			'1'=>'user_priv_user',
-			'2'=>'user_priv_admin',
-			'3'=>'user_priv_no'
-		);
 		
 		$priv_wall_posts_read_array = array(
 			'0'=>'user_priv_all',
@@ -662,14 +653,6 @@ class user extends gen_class {
 			),
 			'profile'	=> array(
 				'profile'	=> array(
-					'first_name'	=> array(
-						'type'		=> 'text',
-						'size'		=> 40,
-					),
-					'last_name'	=> array(
-						'type'		=> 'text',
-						'size'		=> 40,
-					),
 					'gender' => array(
 						'type'		=> 'radio',
 						'tolang'	=> true,
@@ -678,19 +661,6 @@ class user extends gen_class {
 					'country' => array(
 						'type'		=> 'dropdown',
 						'options'	=> $country_array,
-					),
-					'state' => array(
-						'type'		=> 'dropdown',
-						'options'	=> $state_array,
-					),
-					'ZIP_code'	=> array(
-						'type'		=> 'text',
-						'inptype'	=> 'int',
-						'size'		=> 5,
-					),
-					'town'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
 					),
 					'birthday'	=> array(
 						'type'			=> 'datepicker',
@@ -721,79 +691,38 @@ class user extends gen_class {
 						'size'	=> 40,
 					),
 				),
-				'user_contact' => array(
-					'phone'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'cellphone'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'icq'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'skype'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'youtube'=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'irq'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-						'help'	=> 'register_help_irc',
-					),
-					'twitter'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'facebook'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-				),
-				'misc' => array(
-					'work'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'interests'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-					'hardware'	=> array(
-						'type'	=> 'text',
-						'size'	=> 40,
-					),
-
-				),
 			),
 			'privacy_options' => array(
 				'user_priv' => array(
-					'priv_no_boardemails'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
-					),
-					'priv_set'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $priv_set_array,
-						'default'	=> '1',
-					),
-					'priv_phone'	=> array(
-						'type'		=> 'dropdown',
-						'tolang'	=> true,
-						'options'	=> $priv_phone_array,
-						'default'	=> '1',
-					),
 					'priv_bday'	=> array(
 						'type'		=> 'radio',
 						'default'	=> 0,
 					),
+					'priv_userprofile_age' => array(
+							'type'		=> 'dropdown',
+							'options'	=> $priv_set_array,
+							'tolang'	=> true,
+							'default'	=> 1,
+					),
+					'priv_userprofile_country' => array(
+							'type'		=> 'dropdown',
+							'options'	=> $priv_set_array,
+							'tolang'	=> true,
+							'default'	=> 1,
+					),
+				),
+				'user_priv_contact' => array(
+						'priv_no_boardemails'	=> array(
+								'type'		=> 'radio',
+								'default'	=> 0,
+						),
+						'priv_userprofile_email' => array(
+							'type'		=> 'dropdown',
+							'options'	=> $priv_set_array,
+							'tolang'	=> true,
+							'default'	=> 1,
+						),
+						
 				),
 				'user_wall' => array(
 					'priv_wall_posts_read'	=> array(
@@ -904,6 +833,36 @@ class user extends gen_class {
 				),
 			),
 		);
+		
+		//Contact Fields
+		$arrContactFields = register('pdh')->get('user_profilefields', 'contact_fields');
+		if (count($arrContactFields)) $settingsdata['profile']['user_contact'] = $arrContactFields;
+		
+		//Normal Profile Fields
+		$arrProfileFields = register('pdh')->get('user_profilefields', 'usersettings_fields');
+		foreach($arrProfileFields as $key => $val){
+			$settingsdata['profile']['profile'][$key] = $val;
+		}
+		
+		//Privacy Options
+		foreach($arrContactFields as $key => $val){
+			$settingsdata['privacy_options']['user_priv_contact']['priv_'.$key] = array(
+				'type'		=> 'dropdown',
+				'options'	=> $priv_set_array,
+				'tolang'	=> true,
+				'lang'		=> $val['lang'],
+				'default'	=> 1,
+			);
+		}
+		foreach($arrProfileFields as $key => $val){
+			$settingsdata['privacy_options']['user_priv']['priv_'.$key] = array(
+					'type'		=> 'dropdown',
+					'options'	=> $priv_set_array,
+					'tolang'	=> true,
+					'lang'		=> $val['lang'],
+					'default'	=> 1,
+			);
+		}
 
 		return $settingsdata;
 	}

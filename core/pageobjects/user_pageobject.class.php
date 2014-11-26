@@ -37,55 +37,8 @@ class user_pageobject extends pageobject {
 			$this->display();
 			return;
 		}
-		$is_user	=($this->user->is_signedin()) ? true : false;
-		$is_admin	= ($this->user->check_group(2, false) || $this->user->check_group(3, false));
-		$privacy	= unserialize($row['privacy_settings']);
-		$custom		= unserialize($row['custom_fields']);
 
-		//check the pricacy permissions. if we dont have the permission unset() the data array
-		$perm = false;
-		$privacy['priv_set'] = (isset($privacy['priv_set'])) ? $privacy['priv_set'] : -1;
-		switch ((int)$privacy['priv_set']){
-			case 0: // all
-				$perm = true;
-				break;
-			case 1: // only user
-				if($is_user){
-					$perm = true;
-				}
-				break;
-			case 2: // only admins
-				if($is_admin){
-					$perm = true;
-				}
-			break;
-			default:
-				if($is_user || $is_admin){
-					$perm = true;
-				};
-		}
-
-		$phone_perm = false;
-		$privacy['priv_phone'] = (isset($privacy['priv_phone'])) ? $privacy['priv_phone'] : -1;
-		switch ((int)$privacy['priv_phone']){
-			case 0: // all
-				// do nothing... everything fine
-				$phone_perm = true;
-				break;
-			case 1: // only user
-				if ($is_user) { $phone_perm = true;}
-				break;
-			case 2: // only admins
-				if ($is_admin) { $phone_perm = true;}
-				break;
-			case 3: // nobody
-				$phone_perm = false;
-				break;
-			default:
-				if ($is_admin || $is_user){
-					$phone_perm = true;
-				}
-		}
+		$arrUserCustomFieldsData = $this->pdh->get('user', 'custom_fields');
 		
 		//Gender
 		switch($row['gender']){
@@ -97,9 +50,10 @@ class user_pageobject extends pageobject {
 		}
 		
 		$this->jquery->Tab_header('userprofile_tabs', true);
+		
 		$this->tpl->assign_vars(array(
 			'USER_PROFILE_ID' => $user_id,
-			'USER_PROFILE_AVATAR' => ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($user_id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($user_id)), false, 'absolute') : $this->server_path.'images/global/avatar-default.svg',
+			'USER_PROFILE_AVATAR' => ($this->pdh->get('user', 'avatarimglink', array($user_id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($user_id)), false, 'absolute') : $this->server_path.'images/global/avatar-default.svg',
 			'USER_PROFILE_USERNAME'	=> sanitize($row['username']),
 			'USER_PROFILE_GENDER' => $strGender,
 			'USER_PROFILE_REGISTERED'	=> $this->pdh->geth('user', 'regdate', array($user_id)),
@@ -108,34 +62,9 @@ class user_pageobject extends pageobject {
 		));
 		
 		//Wall Permissions
-		$blnWallRead = false;
-		if (!isset($privacy['priv_wall_posts_read'])) {
-			if ($is_user) $blnWallRead = true;
-		} else {		
-			switch($privacy['priv_wall_posts_read']){
-				case '0' : $blnWallRead = true;
-				break;
-				case '1' : if ($is_user)  $blnWallRead = true;
-				break;
-				case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallRead = true;
-				break;
-				default: if ($is_admin)  $blnWallRead = true;
-			}
-		}
-		
-		$blnWallWrite = false;
-		if (!isset($privacy['priv_wall_posts_write'])) {
-			if ($is_user)  $blnWallWrite = true;
-		} else {
-			switch($privacy['priv_wall_posts_write']){
-				case '1' : if ($is_user)  $blnWallWrite = true;
-				break;
-				case '2' : if (($user_id == $this->user->id) || $is_admin) $blnWallWrite = true;
-				break;
-				default: if ($is_admin)  $blnWallWrite = true;
-			}
-		}
-		
+		$blnWallRead = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_wall_posts_read'));
+		$blnWallWrite = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_wall_posts_write'));
+
 		//Wall
 		$this->comments->SetVars(array(
 			'attach_id'	=> $user_id,
@@ -150,63 +79,83 @@ class user_pageobject extends pageobject {
 		));
 		
 		//Personal Profile Information
-		$arrProfile = array();
-		if ($row['first_name'] != "" || $row['last_name'] != "") $arrProfile['name'] = (($row['first_name'] != '') ? sanitize($row['first_name']).' ' : '').(($row['last_name'] != '') ? sanitize($row['last_name']) : '');
-		$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
-		if (strlen($age)) $arrProfile['age'] = ($privacy['priv_bday'] == 1) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
-		if ($row['town'] != "") $arrProfile['town'] = (($row['ZIP_code'] != "") ? sanitize($row['ZIP_code']).' ': '').sanitize($row['town']);
-		if ($row['state'] != "") $arrProfile['state'] = sanitize($row['state']);
-		if ($row['country'] != "") $arrProfile['country'] = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.svg" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+		$blnPersonal = $blnContact = false;
 		
-		foreach($arrProfile as $key => $val){
-			$this->tpl->assign_block_vars('profile_personal_row', array(
-				'NAME' => $this->user->lang("user_sett_f_".$key) ? $this->user->lang("user_sett_f_".$key) : $this->user->lang($key),
-				'TEXT' => $val,
-			));
-			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
+		if($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_age'))){
+			$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
+			if (strlen($age)) {
+				$val = ($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_bday'))) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
+				$this->tpl->assign_block_vars('profile_personal_row', array(
+					'NAME' => $this->user->lang("user_sett_f_priv_userprofile_age"),
+					'TEXT' => $val,
+				));
+				$this->tpl->assign_var('USER_PROFILE_AGE', $val);
+				$blnPersonal = true;
+			}
 		}
+		
+		if($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_country'))){
+
+			if (strlen($row['country'])) {
+				$val = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.svg" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+				$this->tpl->assign_block_vars('profile_personal_row', array(
+						'NAME' => $this->user->lang("user_sett_f_priv_userprofile_country"),
+						'TEXT' => $val,
+				));
+				$this->tpl->assign_var('USER_PROFILE_COUNTRY', $val);
+				$blnPersonal = true;
+			}
+		}
+
+		
+		$arrProfileFields = $this->pdh->get('user_profilefields', 'usersettings_fields', array(true));
+		foreach($arrProfileFields as $intFieldID){
+			$blnPerm = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_'.$intFieldID));
+			if (!$blnPerm) continue;
+			
+			$val = $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
+
+			if ($val == "") continue;
+			
+			$this->tpl->assign_block_vars('profile_personal_row', array(
+					'NAME' => $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
+					'TEXT' => $val,
+			));
+			$blnPersonal = true;
+			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($intFieldID), $val);
+		}
+		
+		
 		
 		//Contact Information
-		$arrContact = array();
-		if ($perm && ($this->user->is_signedin()) && strlen($row['user_email'])) $arrContact['email_address'] = '<a href="javascript:usermailer();"><i class="fa fa-envelope fa-lg"></i> '.$this->user->lang('adduser_send_mail').'</a>';
-		if ($phone_perm && strlen($row['cellphone'])) $arrContact['cellphone'] = '<i class="fa fa-mobile fa-lg"></i> '.sanitize($row['cellphone']);
-		if ($phone_perm && strlen($row['phone'])) $arrContact['phone'] = '<i class="fa fa-phone fa-lg"></i> '.sanitize($row['phone']);
-		if ($perm && strlen($row['icq'])) $arrContact['icq'] = '<a href="http://www.icq.com/people/'.sanitize($row['icq']).'" target="_blank"><img src="http://status.icq.com/online.gif?icq='.sanitize($row['icq']).'&amp;img=5" alt="icq" /> '.sanitize($row['icq']).'</a>';
-		if ($perm && strlen($row['skype'])) $arrContact['skype'] = '<a href="skype:'.sanitize($row['skype']).'?add"><i class="fa fa-skype fa-lg"></i> '.sanitize($row['skype']).'</a>';
-		if ($perm && strlen($custom['twitter'])) $arrContact['twitter'] = '<a href="https://twitter.com/'.sanitize($custom['twitter']).'" target="_blank"><i class="fa fa-twitter fa-lg"></i> '.sanitize($custom['twitter']).'</a>';
-		if ($perm && strlen($custom['facebook'])) $arrContact['facebook'] = '<a href="https://facebook.com/'.((is_numeric($custom['facebook'])) ? 'profile.php?id='.sanitize($custom['facebook']) : sanitize($custom['facebook'])).'" target="_blank"><i class="fa fa-facebook fa-lg"></i> '.sanitize($custom['facebook']).'</a>';
-		if ($perm && strlen($custom['youtube'])) $arrContact['youtube'] = '<a href="https://www.youtube.com/user/'.sanitize($custom['youtube']).'" target="_blank"><i class="fa fa-youtube fa-lg"></i> '.sanitize($custom['youtube']).'</a>';
-		
-		if($row['irq'] != ""){
-			$irc_parts			= explode('@',$row['irq']);
-			$data['irq']		= '<a href="irc://'.((isset($irc_parts[1])) ? $irc_parts[1] : 'irc.de.quakenet.org').'/'.str_replace('#', '', $irc_parts[0]).'" >'.$row['irq'].'</a>';
-		} else {
-			$data['irq'] = '';
-		}
-		if ($perm && strlen($data['irq'])) $arrContact['irq'] = $data['irq'];
-		
-		foreach($arrContact as $key => $val){
-			$this->tpl->assign_block_vars('profile_contact_row', array(
-				'NAME' => $this->user->lang("user_sett_f_".$key) ? $this->user->lang("user_sett_f_".$key) : $this->user->lang($key),
-				'TEXT' => $val,
-			));
-			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
+		if ($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_email'))){
+			$strEmail = $this->pdh->geth('user', 'email', array($user_id, true));
+			if ($strEmail != ""){	
+				$this->tpl->assign_block_vars('profile_contact_row', array(
+						'NAME' => $this->user->lang("email_address"),
+						'TEXT' => $strEmail,
+				));
+				$blnContact = true;
+			}
 		}
 		
-		//Misc Profile Information
-		$arrMisc = array();
-		if (strlen($custom['hardware'])) $arrMisc['hardware'] = sanitize($custom['hardware']);
-		if (strlen($custom['work'])) $arrMisc['work'] = sanitize($custom['work']);
-		if (strlen($custom['interests'])) $arrMisc['interests'] = sanitize($custom['interests']);
-		
-		foreach($arrMisc as $key => $val){
-			$this->tpl->assign_block_vars('profile_misc_row', array(
-				'NAME' => $this->user->lang("user_sett_f_".$key) ? $this->user->lang("user_sett_f_".$key) : $this->user->lang($key),
-				'TEXT' => $val,
-			));
-			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($key), $val);
-		}
+		$arrContactFields = $this->pdh->get('user_profilefields', 'contact_fields', array(true));
+		foreach($arrContactFields as $intFieldID){
+			$blnPerm = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_'.$intFieldID));
+			if (!$blnPerm) continue;
 				
+			$val = $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
+		
+			if ($val == "") continue;
+				
+			$this->tpl->assign_block_vars('profile_contact_row', array(
+					'NAME' => $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
+					'TEXT' => $val,
+			));
+			$blnPersonal = true;
+			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($intFieldID), $val);
+		}
+								
 		$hptt_page_settings = array('name' => 'hptt_listmembers_memberlist_overview',
 			'table_main_sub' => '%member_id%',
 			'table_subs' => array('%member_id%', '%link_url%', '%link_url_suffix%', '%with_twink%'),
@@ -233,9 +182,9 @@ class user_pageobject extends pageobject {
 		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), 'userprofile_'.$user_id);
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array(
-			'S_PROFILE_PERSONAL_ROW' => count($arrProfile),
-			'S_PROFILE_CONTACT_ROW' => count($arrContact),
-			'S_PROFILE_MISC_ROW' 	=> count($arrMisc),
+			'S_PROFILE_PERSONAL_ROW' => $blnPersonal,
+			'S_PROFILE_CONTACT_ROW' => $blnContact,
+
 			'PROFILE_CHARS' 		=> $hptt->get_html_table($this->in->get('sort'), '', null, 1, sprintf($this->user->lang('listmembers_footcount'), count( $this->pdh->get('member', 'connection_id', array($user_id))))),
 			'S_PROFILE_CHARACTERS'	=> count($arrMemberList),
 		));
@@ -382,7 +331,7 @@ class user_pageobject extends pageobject {
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
 			
-		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => '', '%use_controller%' => true));
+		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => '', '%use_controller%' => true), $this->user->id);
 		$hptt->setPageRef($this->strPath);
 		//footer
 		$user_count			= count($view_list);
@@ -421,6 +370,5 @@ class user_pageobject extends pageobject {
 		}
 		return $url;
 	}
-
 }
 ?>

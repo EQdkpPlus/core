@@ -161,10 +161,12 @@ class Manage_Users extends page_generic {
 			
 			$plugin_settings = array();
 			if (is_array($this->pm->get_menus('settings'))){
-				foreach ($this->pm->get_menus('settings') as $plugin => $options){
-			
-					foreach ($values as $key=>$setting){
-						$plugin_settings[] = $key;
+				foreach ($this->pm->get_menus('settings') as $plugin => $pvalues){
+					unset($pvalues['name'], $pvalues['icon']);
+					foreach($pvalues as $key => $settings){
+						foreach($settings as $setkey => $setval){
+							$plugin_settings[] = $setkey; 
+						}
 					}
 				}
 			}
@@ -174,16 +176,20 @@ class Manage_Users extends page_generic {
 			$privArray = array();
 			$customArray = array();
 			$pluginArray = array();
+			
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
-				if(in_array($name, user::$privFields)) 
+				if (strpos($name, "auth_account_") === 0) continue;
+					
+				if(strpos($name, "priv_") === 0){
 					$privArray[$name] = $value;
-				elseif(in_array($name, user::$customFields)) 
+				} elseif(in_array($name, user::$customFields) || (strpos($name, "userprofile_") === 0)){
 					$customArray[$name] = $value;
-				elseif(in_array($name, $plugin_settings))
+				} elseif(in_array($name, $plugin_settings)){
 					$pluginArray[$name] = $value;
-				else 
+				} else {
 					$query_ary[$name] = $value;
+				}
 			}
 			
 			//Create Thumbnail for User Avatar

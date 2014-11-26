@@ -66,6 +66,7 @@ class hdropdown extends html {
 				$this->todisable = array($this->todisable);
 			} else $this->todisable = array();
 		}
+
 		if(is_array($this->options) && count($this->options) > 0){
 			foreach ($this->options as $key => $value) {
 				if(is_array($value)){
