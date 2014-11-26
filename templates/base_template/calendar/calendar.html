@@ -161,7 +161,7 @@
 			defaultDate: localStorage.getItem("calendar.currentdate") || moment().format("YYYY-MM-DDTHH:mm:ssZZ"),
 			viewRender: function(view){
 				localStorage.setItem("calendar.viewname", view.name);
-				localStorage.setItem("calendar.currentdate", view.start);
+				localStorage.setItem("calendar.currentdate", ((view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start));
 			},
 			events: {
 				url: '{U_CALENDAR}&json=true',
