@@ -36,7 +36,7 @@
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"><input type="hidden" name="sort[]" value="{profile_row.ID}"></span></td>
 			<td width="20" class="nowrap" align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
-			<td width="15" class="nowrap" align="center"><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /></td>
+			<td width="15" class="nowrap" align="center"><!-- IF profile_row.S_EDITABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
 			<td width="10" align="center" class="nowrap"><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a></td>
 			<td width="10" align="center" class="nowrap"><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
 			<td><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a><!-- ELSE -->{profile_row.NAME}<!-- ENDIF --></td>
