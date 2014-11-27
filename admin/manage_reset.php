@@ -50,7 +50,8 @@ class reset_eqdkp extends page_generic {
 	
 	public function delete(){
 		//Make a backup
-		$this->backup->create();		
+		$this->backup->createDatabaseBackup('zip',true,false,true);	
+			
 		$this->toreset = $this->in->getArray('selected', 'string');
 		$log_action = array('{L_entries_reset}' => '');
 		foreach ($this->toreset as $value){
