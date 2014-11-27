@@ -313,6 +313,15 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			return false;
 		}
 		
+		public function get_field_by_name($strName){
+			foreach($this->user_profilefields as $intFieldID => $arrValue){
+				if (utf8_strtolower($arrValue['name']) === utf8_strtolower($strName)){
+					return $intFieldID;
+				}
+			}
+			return false;
+		}
+		
 		public function get_registration_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
 			

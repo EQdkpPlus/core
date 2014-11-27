@@ -441,16 +441,32 @@ if (!class_exists("pdh_r_user")){
 			return $arrSearchResults;
 		}
 		
-		public function get_profilefield($user_id, $intFieldID){
-			if (!$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
+		public function get_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false){
+			if (!$blnIgnorePrivacyCheck && !$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
 			
 			return $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
 		}
 		
-		public function get_html_profilefield($user_id, $intFieldID){
-			if (!$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
+		public function get_html_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false){
+			if (!$blnIgnorePrivacyCheck && !$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
 			
 			return $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
+		}
+		
+		public function get_profilefield_by_name($intUserID, $strName, $blnIgnorePrivacyCheck=false){
+			$intFieldID = $this->pdh->get('user_profilefields', 'field_by_name', array($strName));
+			if ($intFieldID){
+				return $this->get_profilefield($intUserID, $intFieldID, $blnIgnorePrivacyCheck);
+			}
+			return false;
+		}
+		
+		public function get_html_profilefield_by_name($intUserID, $strName, $blnIgnorePrivacyCheck=false){
+			$intFieldID = $this->pdh->get('user_profilefields', 'field_by_name', array($strName));
+			if ($intFieldID){
+				return $this->get_html_profilefield($intUserID, $intFieldID, $blnIgnorePrivacyCheck);
+			}
+			return false;
 		}
 		
 		public function get_html_caption_profilefield($param){
@@ -516,6 +532,11 @@ if (!class_exists("pdh_r_user")){
 			}	
 				
 			return $perm;
+		}
+		
+		public function get_country_list(){
+			$this->init_countries();
+			return $this->countries;
 		}
 		
 		private function get_privacy_defaults($strField){
