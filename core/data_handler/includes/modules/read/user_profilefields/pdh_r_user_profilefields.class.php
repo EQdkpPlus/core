@@ -451,7 +451,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		
 		public function get_html_display_field($intFieldID, $intUserID, $blnWithIcon=true){
 			if ($blnWithIcon && $this->get_icon_or_image($intFieldID) != ""){
-				$strIcon = $this->core->icon_font($this->get_icon_or_image($intFieldID), 'fa-lg').' ';
+				$strIcon = $this->core->icon_font($this->get_icon_or_image($intFieldID), 'fa-lg', $this->server_path.'images/').' ';
 			} else $strIcon = "";
 			
 			$strUserValue = $this->pdh->get('user', 'custom_fields', array($intUserID, 'userprofile_'.$intFieldID));
