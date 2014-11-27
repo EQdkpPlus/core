@@ -250,6 +250,22 @@ class ftp_handler{
 		unlink($tmplfilename);
 		return $result;
 	}
+	
+	public function add_string($remote_file, $data, $mode=FTP_BINARY, $startpos=0){
+		$tmplfilename = $this->tmp_dir.md5(generateRandomBytes());
+		$this->ftp_copy($remote_file, $tmplfilename);
+		
+		$tmpHandle = fopen($tmplfilename, 'a');
+		if ($tmpHandle){
+			$intBits = fwrite($tmpHandle, $data);
+			fclose($tmpHandle);
+		}
+
+		$result = $this->put_upload($remote_file, $tmplfilename, $mode);
+		@ftp_chmod($this->link_id, 0755, $this->root_dir.$remote_file);
+		unlink($tmplfilename);
+		return $result;
+	}
 
 	public function ftp_copy($from , $to){
 		$tmplfilename = $this->tmp_dir.md5(generateRandomBytes());

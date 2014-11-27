@@ -25,10 +25,10 @@ class EQDKPBackup extends page_generic{
 	public function __construct(){
 		$this->user->check_auth('a_backup');
 		$handler = array(
-			'backup' => array('process' => 'do_backup', 'csrf'=>true),
-			'restore' => array('process' => 'restore_backup', 'csrf'=>true),
-			'backup_delete' => array('process' => 'delete_backup', 'csrf'=>true),
-			'backup_download' => array('process' => 'download_backup', 'csrf'=>true),
+			'backup' => array('process' => 'process_backup', 'csrf'=>true),
+			'restore' => array('process' => 'process_restore', 'csrf'=>true),
+			'backup_delete' => array('process' => 'process_delete', 'csrf'=>true),
+			'backup_download' => array('process' => 'process_download', 'csrf'=>true),
 		);
 		parent::__construct(false, $handler, false, null, 'user_id');
 		$this->process();
@@ -46,35 +46,28 @@ class EQDKPBackup extends page_generic{
 		}
 
 		//Read out all of our backups
-		$files = array();
 		$path = $this->pfh->FolderPath('backup', 'eqdkp');
-		if($dir=opendir($path)){
-			while($file=readdir($dir)){
-				if (!is_dir($file) && $file != "." && $file != ".." && $file != "index.html" && $file != ".htaccess"){
-					$files[$file]=$file;
-				}
-			}
-			closedir($dir);
-		}
+		$arrFiles = sdir($path);
 				
-		//Generate backup-array, only list eqdkp-backups
-		foreach ($files as $elem){
-			if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $elem, $matches)){
-				$backups[$elem] = $matches[1];
+		//Generate backup-array, list eqdkp-backups and .sql files
+		foreach ($arrFiles as $elem){
+			$strExtension = strtolower(pathinfo($elem, PATHINFO_EXTENSION));
+			$matches = array();
+			if (preg_match('/eqdkp-(.?)backup_([0-9]{10})_(.*)\.(sql|zip)/', $elem, $matches)){
+				$backups[$elem] = $matches[2]; //Save Time
+				if ($matches[1] === "f") $full[] = $elem; //Its fullbackup
+			}elseif($strExtension === 'sql'){
+				$backups[$elem] = filemtime($path.$elem);
 			}
-			if (preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $elem, $matches)){
-				$backups[$elem] = $matches[1];
-				$full[] = $elem;
-
-			}
-
 		}
+		
 		if (isset($backups) && is_array($backups)){
 			//Sort the arrays the get the newest ones on top
 			array_multisort($backups, SORT_DESC);
 		}
 
 		$js_output = '';
+		
 		//Brink the Backups to template
 		if (isset($backups) && is_array($backups)){
 			foreach ($backups as $key=>$elem){
@@ -109,7 +102,7 @@ class EQDKPBackup extends page_generic{
 					$js_output .= '";';
 
 				} else {
-					$js_output .= 'metadata["'.$key.'"]= "'.$this->user->lang('no_metadata').'";';
+					$js_output .= 'metadata["'.$key.'"]= "<b>'.$this->user->lang('name').'</b>: '.$key.'<br />'.$this->user->lang('no_metadata').'";';
 				}
 
 			}
@@ -135,20 +128,6 @@ class EQDKPBackup extends page_generic{
 		));
 
 		$this->tpl->add_js("
-			function checkForm(value){
-				//data-Folder
-				if (value){
-				$('#action_download, #method_zip, #create_table_n').attr('checked', true);
-				$('#action_download, #action_store, #action_both, #create_table_y, #create_table_n, #method_zip, #method_text').attr('disabled', true);
-
-				} else {
-				//DB
-				$('#action_store, #create_table_y').attr('checked', true);
-				$('#action_download, #action_store, #action_both, #create_table_y, #create_table_n, #method_zip, #method_text').attr('disabled', false);
-
-				}
-			}
-
 			function submit_form(button){
 				$('#mode').attr('name', button);
 				$(\"#backup_form\").submit();
@@ -176,69 +155,69 @@ class EQDKPBackup extends page_generic{
 		));
 	}
 
-	// ---------------------------------------------------------
-	// Restore a Backup
-	// ---------------------------------------------------------
-	public function restore_backup(){
-		$file_name = $this->in->get('backups');
-		$file = $this->pfh->FolderPath('backup', 'eqdkp').$file_name;
+	public function process_backup(){
+		$arrTables = $this->in->getArray('tables', 'string');
+		$strFormat = $this->in->get('method', 'zip');
+		$strAction = $this->in->get('action');
+		$blnCreateTable = ($strAction == 'store') ?  true : (($this->in->get('create_table', 'Y') == 'Y') ? true : false);
 
-		if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $file_name, $matches) || preg_match('#^eqdkp-fbackup_([0-9]{10})_(([0-9a-zA-Z]{1,32})\.(sql|zip?)$#', $file_name, $matches)){
-
-			switch ($matches[3])
-			{
-				case 'sql':
-					$fp = fopen($file, 'rb');
-				break;
-
-				case 'zip':
-					//Copy the archive to the tmp-folder
-					$new_file = $this->pfh->FolderPath('backup/tmp', 'eqdkp').$file_name;
-					$this->pfh->copy($file,  $new_file);
-					$base = pathinfo($file_name);
-					$archive = registry::register('zip', array($new_file));
-					$archive->extract($this->pfh->FolderPath('backup/tmp', 'eqdkp'), array($base['filename'].'.sql'));
-
-					//Now extract the data-Folder and replace existing files
-					if ($this->in->get('restore_data', 0) == 1){
-						$archive->extract($this->root_path);
-						$this->pfh->Delete($this->root_path.$base['filename'].'.sql');
-					}
-
-					$this->pfh->Delete($new_file);
-					$backup_file = $this->pfh->FolderPath('backup/tmp', 'eqdkp').$base['filename'].'.sql';
-
-					$fp = fopen($backup_file, 'rb');
-				break;
+		$strFilename = $this->backup->createDatabaseBackup($strFormat, $blnCreateTable, $arrTables, (($strAction == 'store' || $strAction == 'both') ?  true : false));
+		$blnResult = ($strFilename && strlen($strFilename)) ? true : false;
+		
+		//Create Log entry
+		if ($strAction == 'store' || $strAction == 'both'){
+			if ($blnResult){
+				$log_action = array(
+					'{L_TABLES}' => implode(', ', $arrTables),
+				);
+				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), true);
+				$this->core->message($this->user->lang('backup_store_success'),$this->user->lang('backup'),'green');
+			
+				//Move File to the correct folder
+				$strFilename = $this->backup->moveBackupToBackupFolder($strFilename);
+			
+			} else {
+				$this->core->message($this->user->lang('error'),$this->user->lang('backup'),'red');
+				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), false);
 			}
-			$read = 'fread';
-			$seek = 'fseek';
-			$eof = 'feof';
-			$close = 'fclose';
-			$fgetd = 'fgetd';
-			@set_time_limit(0);
-			while (($sql = $this->$fgetd($fp, ";\n", $read, $seek, $eof)) !== false){
-				if (strpos($sql, "--") === false && $sql != ""){
-					$this->db->query($sql);
+
+		}
+		
+		//Download the File
+		if ($strAction == 'download' || $strAction == 'both') {
+			if ($blnResult){
+				$name = pathinfo($strFilename, PATHINFO_FILENAME);
+				
+				switch ($strFormat){
+					case 'zip':
+		
+						@header('Pragma: no-cache');
+						@header("Content-Type: application/zip; name=\"$name.zip\"");
+						@header("Content-disposition: attachment; filename=$name.zip");
+						readfile($strFilename);
+						if ($this->in->get('action') == 'download'){
+							$this->pfh->Delete($strFilename);
+						}
+						exit;
+						break;
+		
+					default:
+						@header('Pragma: no-cache');
+						@header("Content-Type: text/x-sql; name=\"$name.sql\"");
+						@header("Content-disposition: attachment; filename=$name.sql");
+						readfile($strFilename);
+						if ($this->in->get('action') == 'download'){
+							$this->pfh->Delete($strFilename);
+						}
+						exit;
 				}
 			}
-			$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $matches[1])),$this->user->lang('backup'),'green');
-			//Flush cache
-			$this->pdc->flush();
-			
-			//Insert Log
-			$this->logs->add('action_backup_restored', array(), $this->time->date("Y-m-d H:i", $matches[1]), $file_name);
+		
 		}
-		if (strlen($backup_file)){
-			$this->pfh->Delete($backup_file);
-		}
-		$this->display('1');
-	}
-
-	// ---------------------------------------------------------
-	// Delete a stored backup
-	// ---------------------------------------------------------
-	public function delete_backup(){
+		
+	} //close process_backup
+	
+	public function process_delete(){
 		$file = $this->pfh->FolderPath('backup', 'eqdkp').$this->in->get('backups');
 		$metafile = $this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($this->in->get('backups'), strpos($this->in->get('backups'), '.')), "", $this->in->get('backups')).'.meta.php';
 		if (file_exists($file)) {
@@ -249,163 +228,89 @@ class EQDKPBackup extends page_generic{
 			$this->pfh->Delete($metafile);
 		}
 		$this->display('1');
-
-	}
-
-	// ---------------------------------------------------------
-	// Download a stored backup
-	// ---------------------------------------------------------
-	public function download_backup(){
-		if ($this->in->get('backups') != ""){
-
-			$file_name = $this->pfh->FolderPath('backup', 'eqdkp').$this->in->get('backups');
-
-			if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $this->in->get('backups'), $matches) || preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $this->in->get('backups'), $matches) ){
-
-				$name = 'eqdkp-backup_' . $this->time->date('Y-m-d_Hi', $matches[1]).".".$matches[3];
-
-				switch ($matches[3]){
-					case 'sql':
-						$mimetype = 'text/x-sql';
-					break;
-					case 'zip':
-						$mimetype = 'application/zip';
-					break;
-				}
-
-				header('Pragma: no-cache');
-				header("Content-Type: $mimetype; name=\"$name\"");
-				header("Content-disposition: attachment; filename=$name");
-
-				@set_time_limit(0);
-
-				$fp = @fopen($file_name, 'rb');
-
-				if ($fp !== false){
-					while (!feof($fp)){
-						echo fread($fp, 8192);
-					}
-					fclose($fp);
-				}
-				flush();
-			}
-			exit();
-			//$this->display('1');
-		} else {
-		}
-	}
-
-	// ---------------------------------------------------------
-	// Main Backup Script
-	// ---------------------------------------------------------
-	public function do_backup(){
-				if ($this->in->get('system') == 'data'){
-				//Download data-Folder
-					$file = $this->pfh->FolderPath('backup/tmp', 'eqdkp').md5(generateRandomBytes()).'.zip';
-					$archive = registry::register('zip', array($file));
-					$archive->add($this->pfh->get_cachefolder(), $this->pfh->get_cachefolder());
-					$archive->delete('cache/');
-					$archive->delete('eqdkp/armory/');
-					$archive->delete('eqdkp/backup/tmp/');
-					$archive->delete('tmp/');
-					$archive->delete('live_update/');
-					$archive->delete('repository/');
-					$archive->create();
-
-					if (file_exists($file)){
-							$name = 'data_'.date('Y-m-d_Hi', time()).'.zip';
-							@header('Pragma: no-cache');
-							@header("Content-Type: application/x-gzip; name=\"$name\"");
-							@header("Content-disposition: attachment; filename=$name");
-							readfile($file);
-							$this->pfh->Delete($file);
-							exit;
-					}
-
-				} else {
-				//SQL-Backup
-					$in_tables = $this->in->getArray('tables', 'string');
-					$format = $this->in->get('method', 'zip');
-					$action = $this->in->get('action');
-					$create_table = ($action == 'store') ?  'Y' : $this->in->get('create_table');
-
-					$result = $this->backup->create($action, $format, $create_table, $in_tables);
-
-					if ($this->in->get('action') == 'store' || $this->in->get('action') == 'both'){
-						if ($result){
-							$log_action = array(
-								'{L_TABLES}' => implode(', ', $in_tables),
-							);
-							$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), $result);
-							$this->core->message($this->user->lang('backup_store_success'),$this->user->lang('backup'),'green');
-						} else {
-							$this->core->message($this->user->lang('error'),$this->user->lang('backup'),'red');
-						}
-					}
-
-					if ($this->in->get('action') == 'download' || $this->in->get('action') == 'both') {
-						if ($result){
-							$name = 'eqdkp-backup_'  . $this->time->date('Y-m-d_Hi');
-							switch ($format){
-									case 'zip':
-
-										@header('Pragma: no-cache');
-										@header("Content-Type: application/zip; name=\"$name.zip\"");
-										@header("Content-disposition: attachment; filename=$name.zip");
-										readfile($this->pfh->FolderPath('backup', 'eqdkp').$result.'.zip');
-										if ($this->in->get('action') == 'download'){
-											$this->pfh->Delete($this->pfh->FolderPath('backup', 'eqdkp').$result.'.zip');
-										}
-										exit;
-									break;
-
-									default:
-										@header('Pragma: no-cache');
-										@header("Content-Type: text/x-sql; name=\"$name.sql\"");
-										@header("Content-disposition: attachment; filename=$name.sql");
-										echo $result;
-										exit;
-							}
-					}
-
-				}
-			}
-			$this->display();
-	} //close function
-
-	// modified from PHP.net
-	public function fgetd(&$fp, $delim, $read, $seek, $eof, $buffer = 8192){
-		$record = '';
-		$delim_len = strlen($delim);
-
-		while (!$eof($fp)){
-			$pos = strpos($record, $delim);
-			if ($pos === false){
-				$record .= $read($fp, $buffer);
-				if ($eof($fp) && ($pos = strpos($record, $delim)) !== false){
-					$seek($fp, $pos + $delim_len - strlen($record), SEEK_CUR);
-					return trim(substr($record, 0, $pos));
-				}
-			}else{
-				$seek($fp, $pos + $delim_len - strlen($record), SEEK_CUR);
-				return trim(substr($record, 0, $pos));
-			}
-		}
-		return false;
 	}
 	
-	private function do_sql($sql) {
-		if($sql && !$this->sql_error) {
-			$objQuery = $this->db->query($sql.';');
-			if (!$objQuery){		
-				$this->pdl->log('install_error', 'SQL-Error:<br />Query: '.$sql.';<br />Code: '.$this->db->errno.'<br />Message: '.$this->db->error);
-				$this->undo();
-				$this->sql_error = true;
-				return false;
+	
+	public function process_download(){
+		$strFilename = $this->in->get('backups');
+		//Sanitize Filename a bit
+		$strFilename = preg_replace("/[^a-zA-Z0-9-_.]/", "", $strFilename);
+		
+		if ($strFilename != ""){
+			$strFilename = $this->pfh->FolderPath('backup', 'eqdkp').$strFilename;
+			$strFormat = pathinfo($strFilename, PATHINFO_EXTENSION);
+			$name = pathinfo($strFilename, PATHINFO_FILENAME);
+			
+			switch ($strFormat){
+				case 'zip':
+			
+					@header('Pragma: no-cache');
+					@header("Content-Type: application/zip; name=\"$name.zip\"");
+					@header("Content-disposition: attachment; filename=$name.zip");
+					@set_time_limit(0);
+					
+					$fp = @fopen($strFilename, 'rb');
+					if ($fp !== false){
+						while (!feof($fp)){
+							echo fread($fp, 8192);
+						}
+						fclose($fp);
+					}
+					flush();
+
+					exit;
+					break;
+			
+				default:
+					@header('Pragma: no-cache');
+					@header("Content-Type: text/x-sql; name=\"$name.sql\"");
+					@header("Content-disposition: attachment; filename=$name.sql");
+					
+					$fp = @fopen($strFilename, 'rb');
+					if ($fp !== false){
+						while (!feof($fp)){
+							echo fread($fp, 8192);
+						}
+						fclose($fp);
+					}
+					flush();
+
+					exit;
 			}
+
+			exit();
+			//$this->display('1');
 		}
-		return true;
 	}
+
+	public function process_restore(){
+		$strFilename = $this->in->get('backups');
+		//Sanitize Filename a bit
+		$strFilename = preg_replace("/[^a-zA-Z0-9-_.]/", "", $strFilename);
+		$strPlainFilename = $strFilename;
+		
+		if ($strFilename != ""){
+			$strFilename = $this->pfh->FolderPath('backup', 'eqdkp').$strFilename;
+			$strFormat = pathinfo($strFilename, PATHINFO_EXTENSION);
+			$this->backup->restoreDatabaseBackup($strFilename);
+
+			//Flush cache
+			$this->pdc->flush();
+			
+			if (preg_match('/eqdkp-(.?)backup_([0-9]{10})_(.*)\.(sql|zip)/', $strPlainFilename, $matches)){
+				$strTime = $matches[2]; //Save Time
+				$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $strTime)),$this->user->lang('backup'),'green');
+			} else {
+				$this->core->message($this->user->lang('action_backup_restored'),$this->user->lang('backup'),'green');
+			}
+				
+			//Insert Log
+			$this->logs->add('action_backup_restored', array(), $this->time->date("Y-m-d H:i", $matches[1]), $strPlainFilename);
+		}
+		
+		$this->display('1');
+	}
+
 }
 registry::register('EQDKPBackup');
 ?>

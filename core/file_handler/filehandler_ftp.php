@@ -139,6 +139,12 @@ if (!class_exists("filehandler_ftp")) {
 			$filename = $this->remove_rootpath($filename);
 			return $this->ftp->put_string($filename, $data);
 		}
+		
+		public function addContent($filename, $data){
+			if (!$this->init_ftp()) return false;
+			$filename = $this->remove_rootpath($filename);
+			return $this->ftp->add_string($filename, $data);
+		}
 
 		/**
 		* Return a path to the file

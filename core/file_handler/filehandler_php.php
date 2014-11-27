@@ -92,6 +92,16 @@ if (!class_exists("filehandler_php")) {
 			@chmod($filename, get_chmod());
 			return ($intBits !== false) ? true : false;
 		}
+		
+		public function addContent($filename, $data){
+			$tmpHandle = fopen($filename, 'a');
+			if ($tmpHandle){
+				$intBits = fwrite($tmpHandle, $data);
+				fclose($tmpHandle);
+				return ($intBits !== false) ? true : false;
+			}
+			return false;
+		}
 
 		/**
 		* Return a path to the file

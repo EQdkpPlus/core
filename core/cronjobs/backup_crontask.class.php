@@ -32,11 +32,12 @@ if ( !class_exists( "backup_crontask" ) ) {
 		}
 
 		public function run(){
-			$this->backup->create();
+			$blnResult = $this->backup->createDatabaseBackup('zip', true, false, true);
+
 			$log_action = array(
 					'{L_TABLES}' => '{L_ALL}',
 			);
-			$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), $result);
+			$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), $blnResult);
 		}
 	}
 }

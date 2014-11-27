@@ -37,6 +37,7 @@ if ( !interface_exists( "plus_filehandler" ) ){
 		public function FileMove($filename, $tofile, $tmpmove=false);
 		public function thumbnail($image, $thumbfolder, $filename, $resize_value=400);
 		public function putContent($filename, $data);
+		public function addContent($filename, $data);
 		public function is_writable($file, $testfile=false);
 		public function get_errors();
 		public function get_cachefolder($blnPlain=false);

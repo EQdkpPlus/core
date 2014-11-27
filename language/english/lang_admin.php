@@ -222,7 +222,7 @@ $lang = array(
 	"confirm_delete_logs" => 'Do you really want to delete all logs?',
 	"confirm_delete_partial_logs" => 'Are you really want to delete the selected logs?',
 	"confirm_delete_backup" => 'Do you really want to delete this backup?',
-	"confirm_restore_backup" => 'Do you really want to restore this backup? This will overwrite all existing data. By restoring a not compatible backup it is possible that the database gets destroyed!<br /><br /><label><input type="checkbox" onclick="restore_data(this.checked)" value="1" checked="checked"> Restore important settings which are saved in the data-folder? (only for zip archives)</label>',
+	"confirm_restore_backup" => 'Do you really want to restore this backup? This will overwrite all existing data. By restoring a not compatible backup it is possible that the database gets destroyed!',
 	"action_event_added" => 'Event Added',
 	"action_event_deleted" => 'Event Deleted',
 	"action_event_updated" => 'Event Updated',

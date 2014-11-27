@@ -21,6 +21,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class backup extends gen_class {
+	
 	public function __construct(){
 		//Secure the backup-folder
 		//Check if .htaccess exists
@@ -39,39 +40,45 @@ class backup extends gen_class {
 			}
 		} //END Check .htaccess
 	}
-
-	public function create($action = 'store', $format = 'zip', $create_table = 'N', $in_tables = false){
-		set_time_limit(0);
 	
-		if (!$in_tables){
-			$in_tables		= $this->db->listTables();
+	
+	public function createDatabaseBackup($strFormat = 'zip', $blnCreateTableCmd = true, $arrTables=false, $blnForStorage=false){
+		set_time_limit(0);
+		
+		if ($arrTables === false){
+			$arrTables = $this->db->listTables();
 		}
-
-		$uncomplete = false;
-
-		$all_tables		= $this->db->listTables();
-		$tables = array();
-		foreach( $all_tables as $tablename ){
-			//If not eqdkp table
-			if (!$this->db->isEQdkpTable($tablename)) continue;
+		
+		$blnUncomplete = false;
+		
+		$arrAllTables = $this->db->listTables();
+		
+		//Check if its an uncomplete backup
+		$arrTablesToBackup = array();
+		foreach($arrAllTables as $strTablename){
+			//Continue if not eqdkp Table
+			if (!$this->db->isEQdkpTable($strTablename)) continue;
 			
-			if (in_array($tablename, $in_tables)){
-				$tables[]		= $tablename;
+			if (in_array($strTablename, $arrTables)){
+				$arrTablesToBackup[] = $strTablename;
 			} else {
-				$uncomplete		= true;
+				$blnUncomplete = true;
 			}
 		}
-
-		$time			= $this->time->time;
-		$run_comp		= false;
-
-		$create_table	= ($action == 'store') ?  'Y' : $create_table;
-		$addition		= ($uncomplete) ? '' : 'f';
-
+		
+		//Filenames
+		$strRandom = substr(md5(generateRandomBytes()), 0, 8);
+		$strFilepath = $this->pfh->FolderPath('backup/tmp', 'eqdkp');
+		$strTime = $this->time->time;
+		$strAddition = ($blnUncomplete) ? '' : 'f';
+		$strFilename = 'eqdkp-'.$strAddition.'backup_' .$strTime.'_'.$strRandom;
+		$strSQLFile = $strFilepath.$strFilename.'.sql';
+		$strZipFile = $strFilepath.$strFilename.'.zip';
+		
 		//
 		// Generate the backup
 		//
-
+		
 		//Lets write our header
 		$data = '';
 		$data .= "-- EQDKP-PLUS SQL Dump " . "\n";
@@ -83,124 +90,119 @@ class backup extends gen_class {
 		if( !empty($this->table_prefix) ){
 			$data .= "-- Table-Prefix: ". $this->table_prefix . "\n";
 		}
-		$data .= "-- Generation Time: " . date('M d, Y \a\t g:iA', $time) . "\n";
+		$data .= "-- Generation Time: " . date('M d, Y \a\t g:iA', $strTime) . "\n";
 		$data .= "-- \n";
 		$data .= "-- --------------------------------------------------------" . "\n";
 		$data .= "\n";
-
-		foreach ( $tables as $table ){
+		
+		$this->pfh->putContent($strSQLFile, $data);
+		$data = "";
+		
+		foreach ( $arrTablesToBackup as $table ){
+			$data = "";
 			$tablename			= $table;
 			$table_sql_string	= $this->_create_table_sql_string($tablename);
 			$data_sql_string	= $this->_create_data_sql_string($tablename);
-
+		
 			// NOTE: Error checking for table or data sql strings here?
-			if ( $create_table == 'Y' ){
+			if ( $blnCreateTableCmd ){
 				$data .= "\n" . "-- \n";
 				$data .= "-- Table structure for table `{$tablename}`" . ";\n\n";
 				$data .= $table_sql_string . "\n";
 			}
-
+		
 			if ( $table != '__sessions' ) {
 				$data .= "\n" . "-- \n";
 				$data .= "-- Dumping data for table `{$tablename}`" . ";\n\n";
 				$data .= (($data_sql_string) ? $data_sql_string : "-- No data available;\n");
 			}
+			
+			$this->pfh->addContent($strSQLFile, $data);
 		}
-		unset($tablename, $table_sql_string, $data_sql_string);
-
-		$random = md5(generateRandomBytes());
-
-		$name = 'eqdkp-'.$addition.'backup_' .$time.'_'.$random;
-
-		switch($format){
-			//Zip - with important data-folders
-			case 'zip':
-				switch($action){
-					case 'store' :
-					case 'both' :
-						$result = $this->store($data, $name, $format);
-						$this->save_metadata($name, $time, $random, $uncomplete, $tables, $this->config->get('plus_version'), $this->table_prefix);
-						return $name;
-					break;
-					case 'download' :
-						$result = $this->store($data, $name, $format);
-						return $name;
-					break;
-				}
-			break;
-
-			//TEXT - Pure SQL
-			default:
-				switch($action){
-					case 'store' :
-						$name = 'eqdkp-'.$addition.'backup_' .$time.'_'.$random;
-						$result = $this->store($data, $name, $format);
-						$this->save_metadata($name, $time, $random, $uncomplete, $tables, $this->config->get('plus_version'), $this->table_prefix);
-						return $name;
-					break;
-					case 'download' :
-						return $data;
-					break;
-					case 'both' :
-						$name = 'eqdkp-'.$addition.'backup_' .$time.'_'.$random;
-						$result = $this->store($data, $name, $format);
-						$this->save_metadata($name, $time, $random, $uncomplete, $tables, $this->config->get('plus_version'), $this->table_prefix);
-						if ($result){
-							return $data;
-						} else {
-							return false;
-						}
-					break;
-				}
-		}
-	} //close function
-
-	public function save_metadata($name, $time, $random, $uncomplete, $tables = false, $eqdkp_version = false, $prefix = false){
-		$data['time']			= $time;
-		$data['random']			= $random;
-		$data['uncomplete']		= $uncomplete;
-		$data['tables']			= ($tables) ? $tables : 'all';
-		$data['eqdkp_version']	= ($eqdkp_version) ? $eqdkp_version : $this->config->get('plus_version');
-		$data['table_prefix']	= ($prefix) ? $prefix : $this->table_prefix;
-		$result = $this->pfh->putContent($this->pfh->FolderPath('backup/meta', 'eqdkp').$name.'.meta.php', serialize($data));
-		if ($result > 0){
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function store($data, $name, $format = 'zip'){
-		//Save this sql-file temporarly
-		if ($format == 'zip'){
-			$folder = 'tmp/';
-		}
-
-		$filename = $folder.$name.'.sql';
-		$result = $this->pfh->putContent($this->pfh->FolderPath('backup', 'eqdkp').$filename, $data);
-
-		//And now create the whole zip-file with the special data-folders
-		if ($format == 'zip'){
-			$file = $this->pfh->FolderPath('backup', 'eqdkp').$name.'.zip';
-			$archive = registry::register('zip', array($file));
-			$archive->add($this->pfh->FolderPath('backup', 'eqdkp').$filename, $this->pfh->FolderPath('backup', 'eqdkp').$folder);
-			$archive->add($this->pfh->FolderPath('apa', 'eqdkp'), $this->root_path);
-			$archive->add($this->pfh->FolderPath('config', 'eqdkp'), $this->root_path);
-			$archive->add($this->pfh->FolderPath('layouts', 'eqdkp'), $this->root_path);
-			$archive->add($this->pfh->FolderPath('timekeeper', 'eqdkp'), $this->root_path);
+		unset($tablename, $table_sql_string, $data_sql_string, $data);
+		
+		if($blnForStorage) $this->saveBackupMetadata($strFilename, $strTime, $blnUncomplete, $arrTablesToBackup);
+		
+		//Create Zip File
+		if ($strFormat === 'zip'){
+			$archive = registry::register('zip', array($strZipFile));
+			$archive->add($strSQLFile, $this->pfh->FolderPath('backup/tmp', 'eqdkp'));
 			$archive->create();
-
-			$this->pfh->Delete($this->pfh->FolderPath('backup', 'eqdkp').$filename);
+			
+			$this->pfh->Delete($strSQLFile);
+			return $strZipFile;
 		}
-
+		
+		return $strSQLFile;
+	}
+	
+	public function restoreDatabaseBackup($strFilename){
+		$strFileExtension = strtolower(pathinfo($strFilename, PATHINFO_EXTENSION));
+		$strSQLFile = "";
+		
+		if ($strFileExtension == 'zip'){
+			//Copy the archive to the tmp-folder
+			$strFrom = $strFilename;
+			$strPlainFilename = pathinfo($strFilename, PATHINFO_FILENAME);
+			$strTo = $this->pfh->FolderPath('backup/tmp', 'eqdkp').$strPlainFilename.'.'.$strFileExtension;
+			$this->pfh->copy($strFrom, $strTo);
+			
+			//Lets unpack the File
+			$archive = registry::register('zip', array($strTo));
+			$strRandom = substr(md5(generateRandomBytes()), 0, 8);
+			$archive->extract($this->pfh->FolderPath('backup/tmp/'.$strRandom, 'eqdkp'));
+			$archive->close();
+			//Try to find an .sql file
+			$arrFiles = sdir($this->pfh->FolderPath('backup/tmp/'.$strRandom, 'eqdkp'));
+			$strDeletePath = $this->pfh->FolderPath('backup/tmp/'.$strRandom, 'eqdkp');
+			
+			$this->pfh->Delete($strTo);
+			
+			foreach($arrFiles as $strFile){
+				$strExt = strtolower(pathinfo($strFile, PATHINFO_EXTENSION));
+				if ($strExt === 'sql') {
+					$strSQLFile = $this->pfh->FolderPath('backup/tmp/'.$strRandom, 'eqdkp').$strFile;
+					break;
+				}
+			}
+			
+		} elseif($strFileExtension == 'sql'){
+			$strSQLFile = $strFilename;
+		} else return false;
+		
+		if ($strSQLFile != "" && is_file($strSQLFile)){
+		
+			@set_time_limit(0);
+			
+			$fp = fopen($strSQLFile, 'rb');
+			while (($sql = $this->fgetd($fp, ";\n", 'fread', 'fseek', 'feof')) !== false){
+				if (strpos($sql, "--") === false && $sql != ""){
+					$this->db->query($sql);
+				}
+			}
+			fclose($fp);
+		}
+		
+		if(isset($strDeletePath)) $this->pfh->Delete($strDeletePath);
+	}
+	
+	
+	private function saveBackupMetadata($strFilename, $strTime, $blnUncomplete, $arrTables){
+		$data['time']			= $strTime;
+		$data['uncomplete']		= $blnUncomplete;
+		$data['tables']			= ($arrTables) ? $arrTables : 'all';
+		$data['eqdkp_version']	= $this->config->get('plus_version');
+		$data['table_prefix']	= $this->table_prefix;
+		
+		$result = $this->pfh->putContent($this->pfh->FolderPath('backup/meta', 'eqdkp').$strFilename.'.meta.php', serialize($data));
 		if ($result > 0){
 			return true;
 		} else {
 			return false;
 		}
 	}
-
-	public function prune_backups($days = false, $count = false){
+	
+	public function pruneBackups($intDays=false, $intCount=false){
 		//Read out all of our backups
 		$path = $this->pfh->FolderPath('backup', 'eqdkp');
 		if($dir=opendir($path)){
@@ -211,26 +213,23 @@ class backup extends gen_class {
 			}
 			closedir($dir);
 		}
-
+		
 		//Generate backup-array, only list eqdkp-backups
 		if (is_array($files)){
-
+		
 			foreach ($files as $elem){
-			
-				if (preg_match('#^eqdkp-backup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $elem, $matches)){
-					$backups[$elem]		= $matches[1];
-				}
-				if (preg_match('#^eqdkp-fbackup_([0-9]{10})_([0-9]{1,10})\.(sql|zip?)$#', $elem, $matches)){
-					$backups[$elem]		= $matches[1];
-					$full[]				= $elem;
+				if (preg_match('/eqdkp-(.?)backup_([0-9]{10})_(.*)\.(sql|zip)/', $elem, $matches)){
+					$backups[$elem] = $matches[2]; //Save Time
+					if ($matches[1] === "f") $full[] = $elem; //Its fullbackup
+					
 				}
 			}
 			//Sort the arrays the get the newest ones on top
 			array_multisort($backups, SORT_DESC);
-				
+		
 			//Delete all backups except the x newest ones
-			if ($count > 0){
-				$tmp_backups = array_slice($backups, $count);
+			if ($intCount > 0){
+				$tmp_backups = array_slice($backups, $intCount);
 				foreach ($tmp_backups as $key=>$value){
 					$file		= $this->pfh->FolderPath('backup', 'eqdkp').$key;
 					$metafile	= $this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($key, strpos($key, '.')), "", $key).'.meta.php';
@@ -242,13 +241,13 @@ class backup extends gen_class {
 					}
 				}
 			} //close delete all backups except the x newest ones
-
+		
 			//Delete backups older than x days
-			if ($days && intval($days) > 0){
-
+			if ($intDays && intval($intDays) > 0){
+		
 				foreach ($backups as $key => $value){
-					
-					if (($value + intval($days)*86400) < time()){
+						
+					if (($value + intval($intDays)*86400) < time()){
 						$file		= $this->pfh->FolderPath('backup', 'eqdkp').$key;
 						$metafile	= $this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($key, strpos($key, '.')), "", $key).'.meta.php';
 						if (file_exists($file)) {
@@ -261,9 +260,19 @@ class backup extends gen_class {
 				}
 			}
 		}
-	} //close function
+	}
+	
+	public function moveBackupToBackupFolder($strFilename){
+		$strOldFile = $strFilename;
+		$strFilename = pathinfo($strOldFile, PATHINFO_FILENAME);
+		$strExtension = pathinfo($strOldFile, PATHINFO_EXTENSION);
+		$strNewFilename = $this->pfh->FolderPath('backup', 'eqdkp').$strFilename.'.'.$strExtension;
+		$this->pfh->FileMove($strOldFile, $strNewFilename);
+		
+		return $strNewFilename;
+	}
 
-	public function _create_table_sql_string($tablename){
+	private function _create_table_sql_string($tablename){
 		// Generate the SQL string for this table
 
 		$createTable	= $this->db->showCreateTable($tablename);
@@ -276,7 +285,7 @@ class backup extends gen_class {
 	}
 
 	//This sql data construction method is thanks to phpBB3.
-	public function _create_data_sql_string($tablename){
+	private function _create_data_sql_string($tablename){
 		// Initialise the sql string
 		$sql_string		= "";
 
@@ -288,8 +297,8 @@ class backup extends gen_class {
 			if (!is_numeric($key)) continue;
 			$field_set[] = $value['name'];
 		}
-		$search				= array("\\", "'", "\x00", "\x0a", "\x0d", "\x1a", '"');
-		$replace			= array("\\\\", "\\'", '\0', '\n', '\r', '\Z', '\\"');
+		$search				= array("\\", "'", "\x00", "\x0a", "\x0d", "\x1a");
+		$replace			= array("\\\\", "\\'", '\0', '\n', '\r', '\Z');
 		$fields				= implode(', ', $field_set);
 		$field_string		= 'INSERT INTO `' . $tablename . '` (' . $fields . ') VALUES ';
 
@@ -318,6 +327,27 @@ class backup extends gen_class {
 			}
 		}
 		return $sql_string;
+	}
+	
+	// modified from PHP.net
+	private function fgetd(&$fp, $delim, $read, $seek, $eof, $buffer = 8192){
+		$record = '';
+		$delim_len = strlen($delim);
+	
+		while (!$eof($fp)){
+			$pos = strpos($record, $delim);
+			if ($pos === false){
+				$record .= $read($fp, $buffer);
+				if ($eof($fp) && ($pos = strpos($record, $delim)) !== false){
+					$seek($fp, $pos + $delim_len - strlen($record), SEEK_CUR);
+					return trim(substr($record, 0, $pos));
+				}
+			}else{
+				$seek($fp, $pos + $delim_len - strlen($record), SEEK_CUR);
+				return trim(substr($record, 0, $pos));
+			}
+		}
+		return false;
 	}
 
 }

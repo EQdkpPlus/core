@@ -217,7 +217,7 @@ $lang = array(
 "confirm_delete_logs" => "Möchstest du wirklich alle Logs löschen?",
 "confirm_delete_partial_logs" => "Möchtest du wirklich die ausgewählten Logs löschen?",
 "confirm_delete_backup" => "Möchstest du dieses Backup wirklich löschen?",
-"confirm_restore_backup" => "Möchstest du dieses Backup wirklich einspielen? Dieser Vorgang überschreibt alle vorhandenen Daten! Beim Einspielen eines nicht kompatiblen Backups kann die Datenbank deines EQdkps zerstört werden!<br /><br /><label><input type=\"checkbox\" onclick=\"restore_data(this.checked)\" value=\"1\" checked=\"checked\"> Wichtige Einstellungen, die im data-Ordner gespeichert sind, wiederherstellen? (nur für zip-Archive)</label>",
+"confirm_restore_backup" => "Möchstest du dieses Backup wirklich einspielen? Dieser Vorgang überschreibt alle vorhandenen Daten! Beim Einspielen eines nicht kompatiblen Backups kann die Datenbank deines EQdkps zerstört werden!",
 "action_event_added" => "Ereignis zugefügt",
 "action_event_deleted" => "Ereignis gelöscht",
 "action_event_updated" => "Ereignis aktualisiert",

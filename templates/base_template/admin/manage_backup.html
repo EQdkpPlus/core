@@ -26,12 +26,6 @@
 	<fieldset class="settings">
 		<legend>{L_backup_title}</legend>
 		
-
-		<dl>
-			<dt><label>{L_backup_system}</label><br /><span></span></dt>
-			<dd><label><input type="radio" name="system" value="db" checked="checked" onchange="checkForm(false);" />{L_backup_system_db}</label>&nbsp;<label><input type="radio" name="system" value="data" onchange="checkForm(true);" />{L_backup_system_data}</label></dd>
-		</dl>
-		
 		<dl>
 			<dt><label>{L_create_table}</label><br /><span></span></dt>
 			<dd><label><input type="radio" name="create_table" value="Y" checked="checked" id="create_table_y" />{L_yes}</label> &nbsp;<label><input type="radio" name="create_table" value="N" id="create_table_n" />{L_no}</label></dd>
@@ -86,8 +80,8 @@
 		<dl>
 			<dt><label>{L_backup_select}</label><br /><span></span></dt>
 			<dd><!-- IF not NO_BACKUPS --><div style="float:left;"><select size="10" name="backups" onchange="show_metadata(this.value)"> <!-- BEGIN backup_list --><option value="{backup_list.FILE}">{backup_list.NAME}</option><!-- END backup_list --></select></div>
-				<div style="float:left; margin-left: 20px; "><b>{L_metadata}:</b><br />
-      <br /><div id="metadata"></div></div>
+				<div style="float:left; margin-left: 20px;"><b style="font-weight:bold;">{L_metadata}:</b><br />
+      			<br /><div id="metadata"></div></div>
 				<!-- ELSE --> {L_backup_no_files}<!-- ENDIF -->
 			</dd>
 		</dl>

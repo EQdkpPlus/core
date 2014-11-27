@@ -162,6 +162,10 @@ if (!class_exists("file_handler")) {
 		public function putContent($filename, $data){
 			return $this->fhandler->putContent($filename, $data);
 		}
+		
+		public function addContent($filename, $data){
+			return $this->fhandler->addContent($filename, $data);
+		}
 
 		public function is_writable($file, $testfile=false){
 			return $this->fhandler->is_writable($file, $testfile);

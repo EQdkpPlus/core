@@ -46,6 +46,10 @@ if (!class_exists("zip")) {
 			}
 		}
 		
+		public function close(){
+			$this->__destruct();
+		}
+		
 		//Add files that will be written to the archiv when calling create()
 		public function add($mixFiles, $strRemovePath = false, $strAddPath = false){
 
