@@ -843,14 +843,16 @@ abstract class DatabaseStatement {
 			{
 				case 'string':
 					if(!$blnIgnoreKeys && strpos($v, $k) === 0){
-						$orig_v = $v;				
+						$orig_v = $v;
 						$v = trim(substr($v, strlen($k)));
 						$sign = substr($v, 0, 1);
-						if (in_array(array('+', '-', '*'. '/'), $sign)){
+
+						if (in_array($sign, array('+', '-', '*'. '/'))){
 							$arrParams[$k] = $k.' '.$sign.' '.intval(trim(substr($v, 2)));
 						} else {
 							$arrParams[$k] = $this->string_escape($orig_v);
 						}
+
 					} else {								
 						$arrParams[$k] = $this->string_escape($v);
 					}

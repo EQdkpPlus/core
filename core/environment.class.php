@@ -138,8 +138,8 @@ if (!class_exists("environment")) {
 		public function get_current_page($blnWithQuery = true){
 			$strPage = $this->clean_request($this->get_request());
 			$url_parts = parse_url($strPage);
-			$path_parts = pathinfo($url_parts['path']);
-			$retStrPage = ((isset($path_parts['dirname']) && $path_parts['dirname'] != '' && $path_parts['dirname'] != '.') ? $path_parts['dirname'].'/' : '').$path_parts['filename'];
+			$path_parts = isset($url_parts['path']) ? pathinfo($url_parts['path']) : array();
+			$retStrPage = ((isset($path_parts['dirname']) && $path_parts['dirname'] != '' && $path_parts['dirname'] != '.') ? $path_parts['dirname'].'/' : '').((isset($path_parts['filename'])) ? $path_parts['filename'] : '');
 			if (isset($url_parts['query']) && $url_parts['query'] != '' && $blnWithQuery){
 				$query = preg_replace('#(&)?s\=([0-9A-Za-z]{1,40})?#', '', $url_parts['query']);
 				if ($query != '') $retStrPage .= ((substr($query, 0, 1) != '&') ? '&': '').$query;

@@ -43,6 +43,7 @@ $module_lang = array(
 	'last_update'				=> 'Last update',
 	'defaultrole'				=> 'Role',
 	'raidgroups'				=> 'Raidgroups',
+	'picture'					=> 'Avatar',
 );
 
 $preset_lang = array(
