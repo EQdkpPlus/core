@@ -261,14 +261,21 @@ class core extends gen_class {
 			$this->tpl->add_js("
 			$('a.lightbox').each(function(index) {
 				var image = $(this).html();
+				var image_obj = $(this).find('img');
+				var image_parent = image_obj.parent();
+				var image_string = image_parent.html();
+					
 				var fullimage = $(this).attr('href');
+				var imagetitle = image_obj.attr('alt');
+				$(this).attr('title', imagetitle);			
+
 				var image_style = $(this).children().attr('style');
 				if (image_style) {
 					if (image_style == \"display: block; margin-left: auto; margin-right: auto;\") image_style = image_style + \" text-align:center;\";
 					$(this).attr('style', image_style);
 				}
 				var randomId = parseInt(Math.random() * 1000);
-				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a href=\"'+fullimage+'\" class=\"lightbox\"><span class=\"fa-stack fa-lg\"><i class=\"fa fa-square fa-stack-2x image_zoom\"></i><i class=\"fa fa-search-plus fa-stack-1x fa-inverse\"></i></span><\/a><\/div><a href=\"'+fullimage+'\" class=\"lightbox\">'+image+'<\/a><\/div>';
+				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a title=\"'+imagetitle+'\" href=\"'+fullimage+'\" class=\"lightbox\"><span class=\"fa-stack fa-lg\"><i class=\"fa fa-square fa-stack-2x image_zoom\"></i><i class=\"fa fa-search-plus fa-stack-1x fa-inverse\"></i></span><\/a><\/div>'+image_string+'<\/div>';
 				$(this).html(zoomIcon);
 			});
 			", 'docready');
