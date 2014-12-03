@@ -627,6 +627,7 @@ $lang = array(
 "calendar_export_dl_ical" => "Download *.ics",
 "calendar_export_download" => "Download Ereignisse",
 "raidevent_raidleader" => "Raidleiter",
+"raidevent_no_guest_note" => 'Keine Notiz hinterlegt',
 "raidevent_autogroups" => "Autom. hinzufügen (Gruppe)",
 "raidevent_value" => "Punkte für Raid",
 "raidevent_template" => "gespeicherte Raidvorlagen",

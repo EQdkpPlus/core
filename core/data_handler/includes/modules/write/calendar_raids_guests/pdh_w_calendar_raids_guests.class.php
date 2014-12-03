@@ -37,9 +37,8 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'class'					=> $classid,
 				'raidgroup'				=> $group
 			))->execute();
+			$this->pdh->enqueue_hook('guests_update', array($objQuery->insertId));
 			if ($objQuery) return $objQuery->insertId;
-			$this->pdh->enqueue_hook('guests_update');
-			
 			return false;
 		}
 

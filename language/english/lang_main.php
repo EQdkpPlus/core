@@ -666,6 +666,7 @@ $lang = array(
 	"calendar_export_dl_ical" => 'Download *.ics',
 	"calendar_export_download" => 'Download Events',
 	"raidevent_raidleader" => 'Raidleader',
+	"raidevent_no_guest_note" => 'No note available',
 	"raidevent_value" => 'Points for this raid',
 	"raidevent_template" => 'Saved raid templates',
 	"raidevent_attendees" => 'Attendees',

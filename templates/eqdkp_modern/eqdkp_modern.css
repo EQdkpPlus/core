@@ -2058,6 +2058,10 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	fill: white;
 }
 
+.guesttooltip-data {
+	line-height: 1.4em;
+}
+
 .default-avatar{
 	background: url(EQDKP_IMAGE_PATHsvg/avatar-default.svg) no-repeat;
 	background-size: contain;

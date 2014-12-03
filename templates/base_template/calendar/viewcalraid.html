@@ -1,6 +1,23 @@
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 $(function(){
+	$('.guesttooltip').each(function() {
+		$(this).qtip({
+			content: $(this).next('.guesttooltip-data'),
+			position: {
+				at: 'bottom center',
+				my: 'top center'
+			},
+			style: {
+				tip: {
+					corner: true
+				},
+				width: 300,
+				widget: true
+			}
+		});
+	});
+	
 	$(".guesteditpanel").click( function(){
 		$(".guestpanel", this).show();
 	});

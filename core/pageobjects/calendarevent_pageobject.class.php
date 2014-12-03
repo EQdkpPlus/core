@@ -675,9 +675,9 @@ class calendarevent_pageobject extends pageobject {
 		if(is_array($this->guests) && count($this->guests) > 0){
 			foreach($this->guests as $guestid=>$guestsdata){
 				$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
-				$guest_tooltip 	= $this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true)."<br/>".
-									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class'])."<br/>".
-									$guestsdata['note'];
+				$guest_tooltip 	= '<i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'<br/><i class="fa fa-user fa-lg"></i> '.
+									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
+									((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note'));
 				$this->tpl->assign_block_vars('guests', array(
 					'NAME'		=> $guestsdata['name'],
 					'ID'		=> $guestid,
@@ -844,7 +844,7 @@ class calendarevent_pageobject extends pageobject {
 			'ATTENDEES_COLSPAN'		=> count($this->raidcategories),
 			'RAIDNAME'				=> $this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])),
 			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 40)),
-			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->simpleBuild('character'), '', false, false, true))) : '',
+			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->simpleBuild('character'), '', false, false, true, true))) : '',
 			'RAIDVALUE'				=> ($eventdata['extension']['raid_value'] > 0) ? $eventdata['extension']['raid_value'] : '0',
 			'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'RAID_ADDEDBY'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),

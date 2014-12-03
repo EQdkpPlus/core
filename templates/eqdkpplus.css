@@ -233,7 +233,7 @@ td.middle{
 .bi_openid{
 	background:url(../images/global/openid.svg) no-repeat 2px center;
 	height: 16px;
-    width: 16px;
+	width: 16px;
 	display: inline-block;
 	vertical-align: middle;
 	margin-right: 3px;
@@ -241,7 +241,7 @@ td.middle{
 .bi_persona{
 	background:url(../images/global/persona.png) no-repeat 2px center;
 	height: 16px;
-    width: 16px;
+	width: 16px;
 	display: inline-block;
 	vertical-align: middle;
 	margin-right: 3px;
@@ -286,12 +286,12 @@ td.middle{
 
 /* Full Calendar Button Hack */
 .cal-button {
-    height: 24px;
+	height: 24px;
 }
 
 .cal-button span {
-    position: relative;
-    top: -3px;
+	position: relative;
+	top: -3px;
 }
 
 /* Progress Bar with text */
@@ -418,7 +418,7 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
 .mce-btn button {
 	border-radius: 0px !important;
 	box-shadow: none !important;
-	background: none !important;	
+	background: none !important;
 }
 
 .mce-btn button:hover {
@@ -456,33 +456,31 @@ i.mce-i-readmore:before{
 }
 
 i.eqdkp-icon-online {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  background-color: #32CD32;
-  font-size: 12px;
-  
-  border-radius: 50%;
-  box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
-  background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-  background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
-  background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-  background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	background-color: #32CD32;
+	font-size: 12px;
+	border-radius: 50%;
+	box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
+	background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
+	background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
 
 i.eqdkp-icon-offline {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  background-color: #E80000;
-  font-size: 12px;
-  
-  border-radius: 50%;
-  box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
-  background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-  background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
-  background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-  background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	background-color: #E80000;
+	font-size: 12px;
+	border-radius: 50%;
+	box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
+	background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
+	background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
 
 i.icon-color-green{
