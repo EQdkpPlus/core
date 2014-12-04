@@ -984,7 +984,7 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js("
 				$('.fv_checkit input[required]').change(function(e) {
 					var forminputvalue=$.trim($(this).val());
-					console.log('valid: '+$(this)[0].checkValidity());
+					//console.log('valid: '+$(this)[0].checkValidity());
 					if(forminputvalue.length == 0){
 						$(this).next('.fv_msg').hide();
 						$(this).removeClass('fv_inp_invalid');

@@ -1,6 +1,12 @@
 <script type='text/javascript'>
 //<![CDATA[
 	$(document).ready(function() {
+		
+		//var i;
+		//console.log("local storage");
+		//for (i=0; i<localStorage.length; i++) {
+		//	console.log(localStorage.key(i)+"=["+localStorage.getItem(localStorage.key(i))+"]");
+		//}
 		$('#calendar').fullCalendar({
 
 			// define the time formats
@@ -125,7 +131,6 @@
 			eventResize: function(event,delta,revertFunc) {
 				// Save after event-drop is finished, use ajax() cause of error callback
 				var minutesdelta = (parseInt(delta.hours())*60)+parseInt(delta.minutes());
-				console.log(minutesdelta);
 				$.ajax({
 					type: "POST",
 					url: '{U_CALENDAR}&link_hash={CSRF_RESIZE_TOKEN}',
@@ -161,7 +166,10 @@
 			defaultDate: localStorage.getItem("calendar.currentdate") || moment(),
 			viewRender: function(view){
 				localStorage.setItem("calendar.viewname", view.name);
-				localStorage.setItem("calendar.currentdate", ((view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start));
+				
+				// get the date and set it to the variable
+				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
+				localStorage.setItem("calendar.currentdate", date2save.format());
 			},
 			events: {
 				url: '{U_CALENDAR}&json=true',
