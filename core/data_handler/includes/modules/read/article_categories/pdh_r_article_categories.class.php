@@ -109,7 +109,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		//Get all published article IDs
-		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false, $blnFeaturedOnly=NULL){
+		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false, $blnFeaturedOnly=NULL, $isAdmin=false){
 			if($blnFeaturedOnly === NULL) $blnFeaturedOnly = $this->get_featured_only($intCategoryID);
 			if (!$this->get_published($intCategoryID)) return array();
 			if ($intUserID === false) $intUserID = $this->user->id;
@@ -131,7 +131,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					$arrArticles = $this->pdh->get('articles', 'id_list', array($intCatID));
 					foreach($arrArticles as $intArticleID){
 						//Check published
-						if (!$this->pdh->get('articles', 'published', array($intArticleID))) continue;
+						if (!$this->pdh->get('articles', 'published', array($intArticleID)) && !$isAdmin) continue;
 						//Check featured
 						if ($blnFeaturedOnly && !$this->pdh->get('articles', 'featured', array($intArticleID))) continue;
 						//Check start from/to
