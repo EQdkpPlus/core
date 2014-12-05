@@ -320,6 +320,7 @@ if(!class_exists('pdh_w_user')) {
 			$this->db->prepare("DELETE FROM __comments WHERE userid=?")->execute($user_id);
 			
 			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
+			$this->pdh->put('notifications', 'delete_by_user', array($user_id));
 			
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('user_groups_update');

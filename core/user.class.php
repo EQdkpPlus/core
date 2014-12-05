@@ -156,9 +156,11 @@ class user extends gen_class {
 			$this->data['privacy_settings'] 	= ($this->data['privacy_settings'] && unserialize($this->data['privacy_settings'])) ? unserialize($this->data['privacy_settings']) : array();
 			$this->data['custom_fields'] 		= ($this->data['custom_fields'] && unserialize($this->data['custom_fields'])) ? unserialize($this->data['custom_fields']) : array();
 			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize($this->data['plugin_settings'])) ? unserialize($this->data['plugin_settings']) : array();
+			$this->data['notification_settings'] = ($this->data['notifications'] && unserialize($this->data['notifications'])) ? unserialize($this->data['notifications']) : array();
+				
 			list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
 			$this->data['user_email']			= register('encrypt')->decrypt($this->data['user_email']);
-			$this->data['auth_account'] = @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
+			$this->data['auth_account'] 		= @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
 			$this->data['birthday']				= ($this->data['birthday'] === 0) ? '' : $this->data['birthday'];
 		}
 
@@ -832,6 +834,11 @@ class user extends gen_class {
 					),
 				),
 			),
+			'notifications' => array(
+				'notifications' => array(
+					'info' => true,
+				),		
+			),
 		);
 		
 		//Contact Fields
@@ -862,6 +869,29 @@ class user extends gen_class {
 					'lang'		=> $val['lang'],
 					'default'	=> 1,
 			);
+		}
+		
+		//Notifications
+		$arrNotificationTypes = register('pdh')->get('notification_types', 'id_list');
+		foreach($arrNotificationTypes as $strNotificationType){
+			if ($strNotificationType === 'comment_new_article'){
+				$arrCategoryIDs = register('pdh')->sort(register('pdh')->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');
+				$arrCategories = array();
+				foreach($arrCategoryIDs as $caid){
+					$arrCategories[$caid] = register('pdh')->get('article_categories', 'name_prefix', array($caid)).register('pdh')->get('article_categories', 'name', array($caid));
+				}
+				
+				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
+						'type'		=> 'multiselect',
+						'options'	=> $arrCategories,
+						'default'	=> array_keys($arrCategories),
+				);
+			} else {
+				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
+						'type'		=> 'radio',
+						'default'	=> register('pdh')->get('notification_types', 'default', array($strNotificationType)),
+				);
+			}
 		}
 
 		return $settingsdata;

@@ -353,6 +353,7 @@ function infotooltip_js() {
 							if (mytitle == ''){
 								return;
 							}
+
 							if (cached_itts['t_'+$(this).attr('title')] != undefined){
 								return cached_itts['t_'+$(this).attr('title')];
 							} else {

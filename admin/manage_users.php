@@ -176,6 +176,7 @@ class Manage_Users extends page_generic {
 			$privArray = array();
 			$customArray = array();
 			$pluginArray = array();
+			$notificationArray = array();
 			
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
@@ -183,6 +184,8 @@ class Manage_Users extends page_generic {
 					
 				if(strpos($name, "priv_") === 0){
 					$privArray[$name] = $value;
+				}elseif(strpos($name, "ntfy_") === 0){
+					$notificationArray[$name] = $value;
 				} elseif(in_array($name, user::$customFields) || (strpos($name, "userprofile_") === 0)){
 					$customArray[$name] = $value;
 				} elseif(in_array($name, $plugin_settings)){
@@ -201,6 +204,7 @@ class Manage_Users extends page_generic {
 			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
 			$query_ary['plugin_settings']		= serialize($pluginArray);
+			$query_ary['notifications']			= serialize($notificationArray);
 			unset($query_ary['send_new_pw']);
 			
 			$this->pdh->put('user', 'update_user', array($user_id, $query_ary));
@@ -633,7 +637,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		$this->form->output($user_data);
 
 
-		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 3+count($this->pm->get_menus('settings')) : 0)));
+		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 5+count($this->pm->get_menus('settings')) : 0)));
 
 		$this->core->set_vars(array(
 			'page_title'		=> ($user_id) ? $this->user->lang('manage_users').': '.sanitize($user_data['username']) : $this->user->lang('user_creation'),

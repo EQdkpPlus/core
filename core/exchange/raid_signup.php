@@ -74,6 +74,17 @@ if (!class_exists('exchange_raid_signup')){
 								$mystatus['member_id'],
 								($xml->note) ? filter_var((string)$xml->note, FILTER_SANITIZE_STRING) : '',
 							));
+							
+							//Send Notification to Raidlead, Creator and Admins
+							$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
+							$arrSendTo			= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+							$arrSendTo[] 		= $this->pdh->get('calendar_events', 'creatorid', array($eventid));
+							$arrAdmins 			= $this->pdh->get('user', 'users_with_permission', array('a_cal_revent_conf'));
+							$arrSendTo			= array_merge($arrSendTo, $arrAdmins);
+							$arrSendTo			= array_unique($arrSendTo);
+							$strEventTitle		= sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+							if (!in_array($this->user->id, $arrSendTo)) $this->ntfy->add('calendarevent_char_statuschange', $eventid.'_'.$memberid, $this->pdh->get('member', 'name', array($memberid)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventid)), $eventid, true, true), $arrSendTo, $strEventTitle);
+								
 							$this->pdh->process_hook_queue();
 							
 							return array('status'	=> 1);

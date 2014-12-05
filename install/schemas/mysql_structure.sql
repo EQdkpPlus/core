@@ -648,3 +648,29 @@ CREATE TABLE `__user_profilefields` (
 	`editable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `__notification_types` (
+	`id` VARCHAR(50) NOT NULL,
+	`name` VARCHAR(50) NOT NULL,
+	`category` VARCHAR(50) NULL DEFAULT NULL,
+	`prio` INT(11) NOT NULL DEFAULT '0',
+	`default` TINYINT(4) NOT NULL DEFAULT '0',
+	`group` TINYINT(4) NOT NULL DEFAULT '0',
+	`group_name` VARCHAR(80) NULL DEFAULT NULL,
+	`group_at` INT(5) NOT NULL DEFAULT '0',
+	`icon` VARCHAR(50) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `__notifications` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`type` VARCHAR(50) NOT NULL,
+	`user_id` INT(11) NOT NULL,
+	`time` INT(11) NOT NULL,
+	`read` TINYINT(4) NOT NULL DEFAULT '0',
+	`username` TEXT NULL,
+	`dataset_id` VARCHAR(255) NULL DEFAULT NULL,
+	`link` TEXT NULL,
+	`additional_data` TEXT NULL,
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

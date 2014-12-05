@@ -29,6 +29,7 @@ if (!class_exists("comments")){
 		public $showReplies = false;
 		private $id = '';
 		private $showFormForGuests=false;
+		public $notification = false;
 
 		// ---------------------------------------------------------
 		// Constructor
@@ -66,6 +67,10 @@ if (!class_exists("comments")){
 			if(isset($array['formforguests'])){
 				$this->showFormForGuests = $array['formforguests'];
 			}
+			/* type, link, title, category */
+			if(isset($array['notification'])){
+				$this->notification = $array['notification'];
+			}
 		}
 
 		// ---------------------------------------------------------
@@ -92,7 +97,35 @@ if (!class_exists("comments")){
 			$data = $this->hooks->process('comments_save', $data, true);
 			
 			if($data['permission']){
-				$this->pdh->put('comment', 'insert', array($data['attach_id'], $data['user_id'], $data['comment'], $data['page'], $data['reply_to']));
+				$intCommentId = $this->pdh->put('comment', 'insert', array($data['attach_id'], $data['user_id'], $data['comment'], $data['page'], $data['reply_to']));
+				
+				$intToUserID = (int)$data['attach_id'];
+				$intFromUserId = (int)$data['user_id'];
+				$strToUsername = $this->pdh->get('user', 'name', array($intToUserID));
+				$strFromUsername = $this->pdh->get('user', 'name', array($intFromUserId));
+				
+				//Notifications
+				if ($data['page'] === 'userwall' && (intval($data['attach_id']) != intval($data['user_id']))){
+					if ($this->in->get('reply_to', 0) === 0){
+						$this->ntfy->add('comment_new_userwall', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), (int)$data['attach_id']);
+					} else {
+						$this->ntfy->add('comment_new_userwall_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), (int)$data['attach_id']);
+					}
+				}
+				
+				$ntfyType = $this->in->get('ntfy_type');
+				if ($ntfyType != "" && $ntfyType != "comment_new_userwall" && $ntfyType != "comment_new_userwall_response"){
+					$ntfyLink = $this->in->get('ntfy_link').'#comments';
+					$ntfyCategory = $this->in->get('ntfy_category', 0);
+					$ntfyTitle = $this->in->get('ntfy_title');
+					
+					if ($ntfyType === 'comment_new_article'){
+						$this->ntfy->add('comment_new_article', $intCommentId, $strFromUsername, $ntfyLink, false, $ntfyTitle, $ntfyCategory);
+					} else {
+						$this->ntfy->add($ntfyType, $intCommentId, $strFromUsername, $ntfyLink, false, $ntfyTitle);
+					}
+				}				
+				
 				$this->pdh->process_hook_queue();
 				echo $this->Content($data['attach_id'], $data['page'], ($data['reply_to'] || $this->in->get('replies', 0)));
 			}
@@ -102,8 +135,14 @@ if (!class_exists("comments")){
 		// Delete the Comment
 		// ---------------------------------------------------------
 		public function Delete($page, $blnShowReplies=false){
-			if($this->isAdmin || $this->pdh->get('comment', 'userid', array($this->in->get('deleteid', 0))) == $this->UserID){
-				$this->pdh->put('comment', 'delete', array($this->in->get('deleteid',0)));
+			$intCommentID = $this->in->get('deleteid',0);
+			
+			if($this->isAdmin || $this->pdh->get('comment', 'userid', array($intCommentID)) == $this->UserID){
+				$this->pdh->put('comment', 'delete', array($intCommentID));
+				$this->ntfy->deleteNotification('comment_new_article', $intCommentID);
+				$this->ntfy->deleteNotification('comment_new_userwall', $intCommentID);
+				$this->ntfy->deleteNotification('comment_new_userwall_response', $intCommentID);
+				
 				$this->pdh->process_hook_queue();
 				echo $this->Content($this->in->get('attach_id',''), $this->in->get('page'), $blnShowReplies);
 			}
@@ -117,7 +156,9 @@ if (!class_exists("comments")){
 			$html	= '<div id="plusComments'.$this->id.'"><div id="htmlCommentTable'.$this->id.'">';
 			$html	.= $this->Content($this->attach_id, $this->page);
 			$html	.= '</div>';
-			$html .= $this->ReplyForm($this->attach_id, $this->page);
+			if ($this->showReplies){
+				$html .= $this->ReplyForm($this->attach_id, $this->page);
+			}
 
 			// the line for the comment to be posted
 			if(($this->user->is_signedin() && $this->userPerm) || $this->showFormForGuests){
@@ -243,8 +284,15 @@ if (!class_exists("comments")){
 			$html .= '<div class="boxContent"><br/>';
 			$html .= '<form id="comment_data'.$this->id.'" name="comment_data" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments&replies='.(($this->showReplies) ? 1 : 0).'" method="post">
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
-						<input type="hidden" name="page" value="'.$page.'"/>
-						<div class="clearfix">
+						<input type="hidden" name="page" value="'.$page.'"/>';
+			if ($this->notification){
+				$html .= '<input type="hidden" name="ntfy_type" value="'.$this->notification['type'].'"/>
+						<input type="hidden" name="ntfy_category" value="'.$this->notification['category'].'"/>
+						<input type="hidden" name="ntfy_title" value="'.$this->notification['title'].'"/>
+						<input type="hidden" name="ntfy_link" value="'.$this->notification['link'].'"/>';
+			}
+			
+			$html .=	'<div class="clearfix">
 							<div class="comment_avatar_container">
 								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
 							</div>

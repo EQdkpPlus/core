@@ -3282,3 +3282,84 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 .simple-header .ui-dialog {
 	max-width: 90%;
 }
+
+.notification-tooltip-container .dropdown-menu {
+	min-width: 300px;
+}
+
+#personalAreaUser ul.dropdown-menu li.notification-action-bar{
+	margin-bottom: 10px;
+}
+
+#personalAreaUser ul.dropdown-menu li.notification-action-bar-btm {
+	text-align: center;
+	margin-top: 10px;
+}
+
+#personalAreaUser ul.dropdown-menu li.notification-content {
+	max-height: 400px;
+	overflow-y: scroll;
+}
+
+#personalArea .dropdown-menu li ul li  {
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-left: 4px;
+	border-bottom: 1px solid #ccc;
+	margin-right: 4px;
+}
+
+#personalArea .dropdown-menu li ul li > a {
+	display: inline;
+	white-space: normal;
+	padding-left: 0px;
+}
+
+#personalArea .dropdown-menu li ul li .time {
+	color: #666;
+	font-size: 0.8em;
+}
+
+li.prio_0 {
+	border-left: 4px solid #468847;
+}
+
+li.prio_1 {
+	border-left: 4px solid #F89406;
+}
+
+li.prio_2 {
+	border-left: 4px solid #B94A48;
+}
+
+.notification-bubble-green.filtered {
+	background-color: #ddd !important;
+	border: 1px solid #468847 !important;
+}
+
+.notification-bubble-yellow.filtered {
+	background-color: #ddd !important;
+	border: 1px solid #F89406 !important;
+}
+
+.notification-bubble-red.filtered {
+	background-color: #ddd !important;
+	border: 1px solid #B94A48 !important;
+}
+
+.notification_list li{
+	padding-bottom: 6px;
+	padding-top: 6px;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-bottom: 1px solid #ccc;
+}
+
+.notification_list li.unread {
+	background-color: #EAEAEA;
+}
+
+.notification_list li:first-child{
+	border-top: 1px solid #ccc;
+}

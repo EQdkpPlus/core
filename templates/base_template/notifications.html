@@ -1,0 +1,57 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li class="current"><a href="{EQDKP_CONTROLLER_PATH}Notifications/{SID}">{L_notifications}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_notifications}</h1>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('.notification_list_mark_as_read').on('click', function(event){
+		var id = $(this).parent().parent().data('id');
+		$(this).parent().parent().removeClass("unread");
+		$(this).parent().parent().addClass("read");
+		$(this).remove();
+		$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&markread&ids="+id);
+	});
+});
+</script>
+
+<!-- IF S_PERSISTENT -->
+<h2>{L_notifications_persistent}</h2>
+<ul class="notification_list">
+<!-- BEGIN persistent_row -->
+<li class="prio_{persistent_row.PRIO} {persistent_row.CLASS}">
+	<a href="{persistent_row.LINK}">{persistent_row.ICON}{persistent_row.NAME}</a>
+</li>
+<!-- END persistent_row -->
+</ul>
+<br />
+<!-- ENDIF -->
+
+<!-- BEGIN day_row -->
+<h2>{day_row.DAY}</h2>
+<ul class="notification_list">
+<!-- BEGIN notification_row -->
+<li class="prio_{day_row.notification_row.PRIO} {day_row.notification_row.CLASS}" data-id="{day_row.notification_row.ID}">
+	{day_row.notification_row.TIME} <a href="{day_row.notification_row.LINK}">{day_row.notification_row.ICON}{day_row.notification_row.NAME}</a>
+	<!-- IF not day_row.notification_row.READ -->
+	<div class="floatRight">
+		<i class="fa fa-eye hand notification_list_mark_as_read"></i>
+	</div>
+	<!-- ENDIF -->
+	<div class="clear"></div>
+</li>
+<!-- END notification_row -->
+</ul>
+<br />
+<!-- END day_row -->
+
+<div class="center pagination_wrapper">
+	{PAGINATION}
+</div>

@@ -761,7 +761,7 @@ class core extends gen_class {
 			return $arrData;
 		}
 
-		public function page_tail(){
+		public function page_tail(){			
 			if ( !empty($this->template_path) ){
 				$this->tpl->set_template($this->user->style['template_path'], '', $this->template_path);
 			}
@@ -782,7 +782,8 @@ class core extends gen_class {
 				if (count($objRepository->updates)){
 					$arrUpdates = $objRepository->updates;
 					if (isset($arrUpdates['pluskernel']) && $this->user->check_auth("a_maintenance")){
-						$this->ntfy->add("red", "EQdkp Plus", $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID);
+						$this->ntfy->add_persistent('eqdkp_core_update', $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID, 2, 'fa-cog');
+
 						unset($arrUpdates['pluskernel']);
 					}
 
@@ -791,7 +792,7 @@ class core extends gen_class {
 						foreach($arrUpdates as $id => $data){
 							$text	.= "<br />".sprintf($this->user->lang('lib_pupd_updtxt_tt'), (($this->user->lang($data['plugin'])) ? $this->user->lang($data['plugin']) : $data['name']), $data['version'], $data['plugin'], $data['release']);
 						}
-						$this->ntfy->add("red", $this->user->lang("extensions"), $this->user->lang("lib_pupd_intro").$text, $this->server_path.'admin/manage_extensions.php'.$this->SID, count($arrUpdates));
+						$this->ntfy->add_persistent('eqdkp_extensions_update', $this->user->lang("lib_pupd_intro").$text, $this->server_path.'admin/manage_extensions.php'.$this->SID, 2, 'fa-cogs');
 					}
 				}
 			}
@@ -808,27 +809,24 @@ class core extends gen_class {
 			$arrCategories = $this->pdh->get('article_categories', 'unpublished_articles_notify', array());
 			if (count($arrCategories) > 0 && $this->user->check_auth('a_articles_man',false)){
 				foreach($arrCategories as $intCategoryID => $intUnpublishedCount){
-					register('ntfy')->add('green', 
-						$this->user->lang('article'),
+					$this->ntfy->add_persistent(
+						'eqdkp_article_unpublished',
 						sprintf($this->user->lang('notify_unpublished_articles'), $intUnpublishedCount, $this->pdh->get('article_categories', 'name', array($intCategoryID))),
 						$this->server_path.'admin/manage_articles.php'.$this->SID.'&amp;c='.$intCategoryID,
-						$intUnpublishedCount
+						1,
+						'fa-file'
 					);
 				}
 			}
 			
 			//Notifications
-			$arrNotificationGreen	= register('ntfy')->get('green');
-			$arrNotificationRed		= register('ntfy')->get('red');
-			$arrNotificationYellow	= register('ntfy')->get('yellow');
+			$arrNotifications = $this->ntfy->createNotifications();
 			$this->tpl->assign_vars(array(
-				'NOTIFICATION_COUNT_RED'	=> $arrNotificationRed['count'],
-				'NOTIFICATION_COUNT_YELLOW' => $arrNotificationYellow['count'],
-				'NOTIFICATION_COUNT_GREEN' 	=> $arrNotificationGreen['count'],
-				'NOTIFICATION_RED'			=> $arrNotificationRed['html'],
-				'NOTIFICATION_YELLOW'		=> $arrNotificationYellow['html'],
-				'NOTIFICATION_GREEN'		=> $arrNotificationGreen['html'],
-				'NOTIFICATION_COUNT_TOTAL'	=> $arrNotificationRed['count'] + $arrNotificationYellow['count'] + $arrNotificationGreen['count'],
+				'NOTIFICATION_COUNT_RED'	=> $arrNotifications['count2'],
+				'NOTIFICATION_COUNT_YELLOW' => $arrNotifications['count1'],
+				'NOTIFICATION_COUNT_GREEN' 	=> $arrNotifications['count0'],
+				'NOTIFICATION_COUNT_TOTAL'	=> $arrNotifications['count'],
+				'NOTIFICATIONS'				=> $arrNotifications['html'],
 			));
 
 			if(DEBUG) {

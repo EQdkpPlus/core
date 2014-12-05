@@ -402,6 +402,78 @@ if (!class_exists("pdh_r_user")){
 			$fields = unserialize($this->users[$user_id]['privacy_settings']);
 			return ($fields) ? $fields : array();
 		}
+		
+		public function get_notification_settings($user_id){
+			$fields = unserialize($this->users[$user_id]['notifications']);
+			return ($fields) ? $fields : array();
+		}
+		
+		public function get_notification_abos($strNotificationID){
+			$arrUser = $this->get_id_list();
+			$arrOut = array();
+			foreach($arrUser as $intUserID){
+				if ($this->get_notification_abo($strNotificationID, $intUserID)) $arrOut[] = $intUserID;
+			}
+			return $arrOut;
+		}
+		
+		public function get_notification_abo($strNotificationID, $intUserID=false){
+			if ($intUserID === false) $intUserID = $this->user->id;
+			
+			$arrNotificationSettings = $this->get_notification_settings($intUserID);
+			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_'.$strNotificationID])){
+				if ((int)$arrNotificationSettings['ntfy_'.$strNotificationID]) return true;
+			} else {
+				//Default Value
+				$intDefault = $this->pdh->get('notification_types', 'default', array($strNotificationID));
+				if ($intDefault) return true;
+			}
+			
+			return false;
+		}
+		
+		public function get_notification_articlecategory_abo($intCategoryID, $intUserID=false){
+			if ($intUserID === false) $intUserID = $this->user->id;
+			
+			$arrNotificationSettings = $this->get_notification_settings($intUserID);
+			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_notification_newcomment_article'])){
+				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article'];
+				if (in_array($intCategoryID, $arrCategories)) {
+					return true;
+				} else {
+					return false;
+				}
+				
+			} else {
+				//Default Value
+				$intDefault = $this->pdh->get('notification_types', 'default', array('comment_new_article'));
+				if ($intDefault) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+				
+			return true;
+		}
+		
+		public function get_notification_articlecategory_abos($intCategoryID){
+			$arrUser = $this->get_id_list();
+			$arrOut = array();
+			foreach($arrUser as $intUserID){
+				if ($this->get_notification_articlecategory_abo($intCategoryID, $intUserID)) $arrOut[] = $intUserID;
+			}
+			return $arrOut;
+		}
+		
+		public function get_users_with_permission($strPermission){
+			$arrOut = array();
+			$arrUser = $this->get_id_list();
+			foreach($arrUser as $intUserID){
+				if ($this->user->check_auth($strPermission, false, $intUserID)) $arrOut[] = $intUserID;
+			}
+			return $arrOut;
+		}
 
 		public function get_mainchar($user_id){
 			$members = $this->pdh->get('member', 'connection_id', array($user_id));

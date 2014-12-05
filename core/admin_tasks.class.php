@@ -100,8 +100,7 @@ class admin_tasks extends gen_class {
 				$arrContent= call_user_func($arrTask['notify_func']);
 				if (is_array($arrContent) && count($arrContent)){
 					foreach($arrContent as $val){
-						$caticon	= (isset($val['caticon'])) ? '<i class="fa '.$val['caticon'].' fa-fw"></i> ' : '';
-						$this->ntfy->add($val['type'], $caticon.$val['category'], $val['msg'], $this->server_path.'admin/manage_tasks.php'.$this->SID.'#t_'.md5($taskID), $val['count']);
+						$this->ntfy->add_persistent($val['type'], $val['msg'], $this->server_path.'admin/manage_tasks.php'.$this->SID.'#t_'.md5($taskID), $val['prio'], $val['icon']);
 					}
 				}
 			}
@@ -137,11 +136,11 @@ class admin_tasks extends gen_class {
 		$deletion = $this->pdh->get('member', 'confirm_required');
 		if (count($deletion) > 0){
 			return array(array(
-				'type'		=> 'yellow',
+				'type'		=> 'eqdkp_char_confirm_required',
+				'prio'		=> 1,
 				'count'		=> count($deletion),
 				'msg'		=> sprintf($this->user->lang('notification_char_confirm_required'), count($deletion)),
-				'category'	=> $this->user->lang('manage_members'),
-				'caticon'	=> 'fa-user',
+				'icon'		=> 'fa-user',
 			));
 		}
 		return array();
@@ -172,11 +171,11 @@ class admin_tasks extends gen_class {
 		$inactive = $this->pdh->get('user', 'inactive');
 		if (count($inactive) > 0){
 			return array(array(
-				'type'		=> 'yellow',
+				'type'		=> 'eqdkp_user_enable_requested',
 				'count'		=> count($inactive),
 				'msg'		=> sprintf($this->user->lang('notification_user_enable'), count($inactive)),
-				'category'	=> $this->user->lang('manage_users'),
-				'caticon'	=> 'fa-users',
+				'icon'		=> 'fa-users',
+				'prio'		=> 1,
 			));
 		}
 		return array();
@@ -203,11 +202,10 @@ class admin_tasks extends gen_class {
 		$deletion = $this->pdh->get('member', 'delete_requested');
 		if (count($deletion) > 0){
 			return array(array(
-					'type'		=> 'yellow',
+					'type'		=> 'eqdkp_char_delete_requested',
 					'count'		=> count($deletion),
 					'msg'		=> sprintf($this->user->lang('notification_char_delete_requested'), count($deletion)),
-					'category'	=> $this->user->lang('manage_members'),
-					'caticon'	=> 'fa-user',
+					'icon'		=> 'fa-trash',
 			));
 		}
 		return array();

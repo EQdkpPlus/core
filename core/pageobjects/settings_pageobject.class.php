@@ -180,6 +180,7 @@ class settings_pageobject extends pageobject {
 		$privArray = array();
 		$customArray = array();
 		$pluginArray = array();
+		$notificationArray = array();
 
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
@@ -187,6 +188,8 @@ class settings_pageobject extends pageobject {
 			
 			if(strpos($name, "priv_") === 0){
 				$privArray[$name] = $value;
+			}elseif(strpos($name, "ntfy_") === 0){
+				$notificationArray[$name] = $value;
 			} elseif(in_array($name, user::$customFields) || (strpos($name, "userprofile_") === 0)){
 				$customArray[$name] = $value;
 			} elseif(in_array($name, $plugin_settings)){
@@ -205,6 +208,7 @@ class settings_pageobject extends pageobject {
 		$query_ary['privacy_settings']		= serialize($privArray);
 		$query_ary['custom_fields']			= serialize($customArray);
 		$query_ary['plugin_settings']		= serialize($pluginArray);
+		$query_ary['notifications']			= serialize($notificationArray);
 
 		$blnResult = $this->pdh->put('user', 'update_user', array($this->user->id, $query_ary));
 		$this->pdh->process_hook_queue();
@@ -220,7 +224,7 @@ class settings_pageobject extends pageobject {
 		}
 		if(empty($userdata)) {
 			$this->create_form();			
-			$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings']);
+			$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings'], $this->user->data['notification_settings']);
 		}
 
 		// Output

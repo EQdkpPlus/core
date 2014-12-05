@@ -33,7 +33,7 @@ class update_20011 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_20011'		=> 'EQdkp Plus 2.0 Update 2',
+				'update_20011'		=> 'EQdkp Plus 2.0 Update 3',
 					1 => 'Create User Profilefield Table',
 					2 => 'Insert Profilefield',
 					3 => 'Insert Profilefield',
@@ -51,7 +51,7 @@ class update_20011 extends sql_update_task {
 					15 => 'Remove Userfields',
 				),
 			'german' => array(
-				'update_20011'		=> 'EQdkp Plus 2.0 Update 2',
+				'update_20011'		=> 'EQdkp Plus 2.0 Update 3',
 					1 => 'Erstelle Benutzerprofilfeld Tabelle',
 					2 => 'Füge Profilfeld ein',
 					3 => 'Füge Profilfeld ein',

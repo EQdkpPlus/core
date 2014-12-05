@@ -36,9 +36,69 @@
 				window.setTimeout("user_clock()", 1000);
 			}
 			
+			function recalculate_notification_bubbles(){
+				var red = 0; var green = 0; var yellow = 0;
+				$('.notification-content ul li').each(function( index ) {
+					var myclass = $(this).attr('class');
+					var count = $(this).data('count');
+					
+					if (myclass == 'prio_0') green += parseInt(count);
+					if(myclass == 'prio_1') yellow += parseInt(count);
+					if(myclass == 'prio_2') red += parseInt(count);
+				});
+				if (green > 0) {
+					$('.notification-bubble-green').html(green).show();
+				} else {
+					$('.notification-bubble-green').html(green).hide();
+				}
+				if (yellow > 0) {
+					$('.notification-bubble-yellow').html(yellow).show();
+				} else {
+					$('.notification-bubble-yellow').html(yellow).hide();
+				}
+				if (red > 0) {
+					$('.notification-bubble-red').html(red).show();
+				} else {
+					$('.notification-bubble-red').html(red).hide();
+				}
+				
+				if (yellow ==0 && green==0 && red==0){
+					$('.notification-content ul').html({L_notification_none|jsencode});
+				}
+			}
+			
+			function notification_show_only(name){
+				if (name === 'all'){
+					$('.notification-filter').removeClass('filtered');
+					$('.notification-content ul li.prio_0, .notification-content ul li.prio_1, .notification-content ul li.prio_2').show();
+				} else {
+					$('.notification-content ul li.prio_0, .notification-content ul li.prio_1, .notification-content ul li.prio_2').hide();
+					$('.notification-filter').addClass('filtered');
+					$('.'+name+'.notification-filter').removeClass('filtered');
+					if (name === 'notification-bubble-green') $('.notification-content ul li.prio_0').show();
+					if (name === 'notification-bubble-yellow') $('.notification-content ul li.prio_1').show();
+					if (name === 'notification-bubble-red') $('.notification-content ul li.prio_2').show();
+				}
+			}
+			
+			function notification_update(){
+				//ToDo: Resolve Problems with Persistend Notifications
+				return;
+			
+				$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&load", function(data){
+					$('.notification-content ul').html(data);
+					recalculate_notification_bubbles();
+				});
+					
+				//5 Minute
+				window.setTimeout("notification_update()", 1000*60*5);
+			}
+
+			
 			$(document).ready(function() {
 				user_clock();
 				
+				/* Login Dialog */
 				$( "#dialog-login" ).dialog({
 					height: <!-- IF S_BRIDGE_INFO -->450<!-- ELSE -->350<!-- ENDIF -->,
 					width: 530,
@@ -49,18 +109,57 @@
 					$( "#dialog-login" ).dialog( "open" );
 				});
 				
+				/* Notifications */
 				$('.notification-tooltip-trigger').on('click', function(event){
-					var dest = $(this).attr('data-type');
 					$(".notification-tooltip").hide('fast');
-					$("#notification-tooltip-"+dest).show('fast');
+					$("#notification-tooltip-all").show('fast');
+					notification_show_only('all');
+					var classList = $(this).attr('class').split(/\s+/);
+					for (var i = 0; i < classList.length; i++) {
+					   if (classList[i] === 'notification-bubble-red' || classList[i] === 'notification-bubble-yellow' || classList[i] === 'notification-bubble-green') {
+					     notification_show_only(classList[i]);
+					     break;
+					   }
+					}
+					
 					$(document).on('click', function(event) {
 						var count = $(event.target).parents('.notification-tooltip-container').length;
-						if (count == 0){
+						if (count == 0 && (!$(event.target).hasClass('notification-markasread')) ){
 							$(".notification-tooltip").hide('fast');
 						}
 					});
 					
 				});
+				$('.notification-mark-all-read').on('click', function(event){
+					$('.notification-content ul').html({L_notification_none|jsencode});
+					$('.notification-bubble-red, .notification-bubble-yellow, .notification-bubble-green').hide();
+					$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&markallread");
+				});
+				$('.notification-markasread').on('click', function(event){
+					var ids = $(this).parent().parent().data('ids');
+					$(this).parent().parent().remove();
+					recalculate_notification_bubbles();
+					$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&markread&ids="+ids);
+				});
+				$('.notification-filter').on('click', function(event){
+					if ($(this).hasClass('filtered')){
+						//Show all of this
+						if ($(this).hasClass('notification-bubble-green')) $('.notification-content ul li.prio_0').show();
+						if ($(this).hasClass('notification-bubble-yellow')) $('.notification-content ul li.prio_1').show();
+						if ($(this).hasClass('notification-bubble-red')) $('.notification-content ul li.prio_2').show();
+						
+						$(this).removeClass('filtered');
+					} else {
+						//hide all of this
+						if ($(this).hasClass('notification-bubble-green')) $('.notification-content ul li.prio_0').hide();
+						if ($(this).hasClass('notification-bubble-yellow')) $('.notification-content ul li.prio_1').hide();
+						if ($(this).hasClass('notification-bubble-red')) $('.notification-content ul li.prio_2').hide();
+						$(this).addClass('filtered');
+					}
+				});
+				//Periodic Update of Notifications
+				window.setTimeout("notification_update()", 1000*60*5);
+				
 				
 				$('.user-tooltip-trigger').on('click', function(event){
 					event.preventDefault();
@@ -191,49 +290,35 @@
 							
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger" data-type="all"><i class="fa fa-bolt fa-lg"></i> <span class="hiddenSmartphone">{L_notifications}</span></a>
+									<a class="notification-tooltip-trigger"><i class="fa fa-bolt fa-lg"></i> <span class="hiddenSmartphone">{L_notifications}</span></a>
+									<span class="notification-tooltip-trigger notification-bubble-red hand" <!-- IF NOTIFICATION_COUNT_RED == 0 -->style="display:none;"<!-- ENDIF --> >{NOTIFICATION_COUNT_RED}</span>
+									<span class="notification-tooltip-trigger notification-bubble-yellow hand" <!-- IF NOTIFICATION_COUNT_YELLOW == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_YELLOW}</span>
+									<span class="notification-tooltip-trigger notification-bubble-green hand" <!-- IF NOTIFICATION_COUNT_GREEN == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_GREEN}</span>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
-										<li><!-- IF NOTIFICATION_COUNT_TOTAL == 0 -->{L_notification_none}<!-- ENDIF -->
-											<!-- IF NOTIFICATION_COUNT_RED > 0 -->
-											<h2><span class="notification-bubble-red">{NOTIFICATION_COUNT_RED}</span>{L_notification_red_prio}</h2>
-											<ul>{NOTIFICATION_RED}</ul>
-											<!-- ENDIF -->
-											<!-- IF NOTIFICATION_COUNT_YELLOW > 0 -->
-											<h2><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span>{L_notification_yellow_prio}</h2>
-											<ul>{NOTIFICATION_YELLOW}</ul>
-											<!-- ENDIF -->
-											<!-- IF NOTIFICATION_COUNT_GREEN > 0 -->
-											<h2><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span>{L_notification_green_prio}</h2>
-											<ul>{NOTIFICATION_GREEN}</ul>
-											<!-- ENDIF -->
+										<li class="notification-action-bar"> 
+											<div class="floatLeft">
+												<span class="notification-bubble-red notification-filter hand" <!-- IF NOTIFICATION_COUNT_RED == 0 -->style="display:none;"<!-- ENDIF --> >{NOTIFICATION_COUNT_RED}</span>
+												<span class="notification-bubble-yellow notification-filter hand" <!-- IF NOTIFICATION_COUNT_YELLOW == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_YELLOW}</span>
+												<span class="notification-bubble-green notification-filter hand" <!-- IF NOTIFICATION_COUNT_GREEN == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_GREEN}</span>
+											</div>
+												
+											<div class="floatRight">
+												<span class="hand notification-mark-all-read">{L_mark_all_as_read}</span> &bull; <span class="hand" onclick="window.location='{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}#fragment-notifications'"><i class="fa fa-cog fa-lg"></i></span>
+											</div>
+											
+											<div class="clear"></div>
 										</li>
+										<li class="tooltip-divider"></li>
+										<li class="notification-content">
+											<ul>{NOTIFICATIONS}</ul>
+										</li>
+										<li class="tooltip-divider"></li>
+										<li class="notification-action-bar-btm"> <span class="hand" onclick="window.location='{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}'">{L_show_all}</span></li>
 									</ul>
 								</div>
-								<!-- IF NOTIFICATION_COUNT_RED > 0 -->
-								<div class="notification-tooltip-container">
-								<a class="notification-tooltip-trigger" data-type="red"><span class="notification-bubble-red">{NOTIFICATION_COUNT_RED}</span></a>
-									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-red">
-										{NOTIFICATION_RED}
-									</ul>
-								</div>
-								<!-- ENDIF -->
-								<!-- IF NOTIFICATION_COUNT_YELLOW > 0 -->
-								<div class="notification-tooltip-container">
-								<a class="notification-tooltip-trigger" data-type="yellow"><span class="notification-bubble-yellow">{NOTIFICATION_COUNT_YELLOW}</span></a>
-									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-yellow">
-										{NOTIFICATION_YELLOW}
-									</ul>
-								</div>
-								<!-- ENDIF -->
-								<!-- IF NOTIFICATION_COUNT_GREEN > 0 -->
-								<div class="notification-tooltip-container">
-								<a class="notification-tooltip-trigger" data-type="green"><span class="notification-bubble-green">{NOTIFICATION_COUNT_GREEN}</span></a>
-									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-green">
-										{NOTIFICATION_GREEN}
-									</ul>
-								</div>
-								<!-- ENDIF -->
 							</li>
+							
+							
 							<!-- IF S_SEARCH -->
 							<li class="hiddenDesktop"><a href="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}"><i class="fa fa-search"></i></a></li>
 							<!-- ENDIF -->
