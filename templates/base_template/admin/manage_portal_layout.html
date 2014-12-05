@@ -91,9 +91,7 @@ function createEmbeddLink(){
 </fieldset>
 
 <div class="contentDivider"></div>
-<div>
-{L_portalplugin_filter}: {PERM_FILTER}
-</div>
+
 <div id="positions">
 	
 	<br />
@@ -103,7 +101,7 @@ function createEmbeddLink(){
 			<ul id="left" class="connectedSortable portal_block">
 				<!-- BEGIN left_row -->
 				<li class="ui-state-hover {left_row.CLASS}" id="item_{left_row.ID}" style="padding: 7px; margin-top: 4px;">
-					<div style="width: 70px;" class="floatRight">
+					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="fa fa-link fa-lg"></i></div>
 						<!-- IF left_row.S_MULTIPLE -->
@@ -112,6 +110,7 @@ function createEmbeddLink(){
 						<!-- IF left_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({left_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
+						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{left_row.PERMISSIONS}"></i></div>
 					</div>
 						{left_row.INFO}
 						{left_row.NAME}
@@ -130,7 +129,7 @@ function createEmbeddLink(){
 			<ul id="middle" class="connectedSortable portal_block">
 				<!-- BEGIN middle_row -->
 				<li class="ui-state-hover {middle_row.CLASS}" id="item_{middle_row.ID}" style="padding: 7px; margin-top: 4px;">
-					<div style="width: 70px;" class="floatRight">
+					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="fa fa-link fa-lg"></i></div>
 						<!-- IF middle_row.S_MULTIPLE -->
@@ -139,6 +138,7 @@ function createEmbeddLink(){
 						<!-- IF middle_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
+						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{middle_row.PERMISSIONS}"></i></div>
 					</div>
 						{middle_row.INFO}
 						{middle_row.NAME}
@@ -159,7 +159,7 @@ function createEmbeddLink(){
 			<ul id="bottom" class="connectedSortable portal_block">
 				<!-- BEGIN bottom_row -->
 				<li class="ui-state-hover {bottom_row.CLASS}" id="item_{bottom_row.ID}" style="padding: 7px; margin-top: 4px;">
-					<div style="width: 70px;" class="floatRight">
+					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="fa fa-link fa-lg"></i></div>
 						<!-- IF bottom_row.S_MULTIPLE -->
@@ -168,6 +168,7 @@ function createEmbeddLink(){
 						<!-- IF bottom_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
+						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{bottom_row.PERMISSIONS}"></i></div>
 					</div>
 						{bottom_row.INFO}
 						{bottom_row.NAME}
@@ -186,7 +187,7 @@ function createEmbeddLink(){
 			<ul id="right" class="connectedSortable portal_block">
 				<!-- BEGIN right_row -->
 				<li class="ui-state-hover {right_row.CLASS}" id="item_{right_row.ID}" style="padding: 7px; margin-top: 4px;">
-					<div style="width: 70px;" class="floatRight">
+					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="fa fa-link fa-lg"></i></div>
 						<!-- IF right_row.S_MULTIPLE -->
@@ -195,6 +196,7 @@ function createEmbeddLink(){
 						<!-- IF right_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
 						<!-- ENDIF -->
+						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{right_row.PERMISSIONS}"></i></div>
 					</div>
 						{right_row.INFO}
 						{right_row.NAME}
@@ -214,7 +216,7 @@ function createEmbeddLink(){
 			<ul id="block{block_row.ID}" class="connectedSortable portal_block">
 				<!-- BEGIN module_row -->
 				<li class="ui-state-hover {block_row.module_row.CLASS}" id="item_{block_row.module_row.ID}" style="padding: 7px; margin-top: 4px;">
-					<div style="width: 70px;" class="floatRight">
+					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))"><i class="fa fa-link fa-lg"></i></div>
 						<!-- IF block_row.module_row.S_MULTIPLE -->
@@ -223,6 +225,7 @@ function createEmbeddLink(){
 						<!-- IF block_row.module_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({block_row.module_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
 						<!-- ENDIF -->
+						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{block_row.PERMISSIONS}"></i></div>
 					</div>
 						{block_row.module_row.INFO}
 						{block_row.module_row.NAME}
@@ -244,7 +247,7 @@ function createEmbeddLink(){
 			<ul id="disabled" class="connectedSortable portal_block">
 				<!-- BEGIN disabled_row -->
 				<li class="ui-state-hover {disabled_row.CLASS} portal_disabled equalHeights" id="item_{disabled_row.ID}" style="padding: 7px; margin-top: 4px;">
-					<div style="width: 70px;" class="floatRight">
+					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))" ><i class="fa fa-link fa-lg"></i></div>
 						<!-- IF disabled_row.S_MULTIPLE -->
@@ -253,6 +256,7 @@ function createEmbeddLink(){
 						<!-- IF disabled_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
 						<!-- ENDIF -->
+						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{disabled_row.PERMISSIONS}"></i></div>
 					</div>
 						{disabled_row.INFO}
 						{disabled_row.NAME}

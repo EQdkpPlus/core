@@ -381,6 +381,10 @@ $('.js_reload').change(reload_settings);", 'docready');
 			
 		$modules = $this->pdh->aget('portal', 'path', 0, array($arrModuleIDs), true);
 		
+		$filter_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
+		$filter_rights[0] = $this->user->lang('portalplugin_filter3_all');
+		ksort($filter_rights);
+		
 		$arrModulesForOwnBlocks = array();
 		foreach($modules as $id => $data) {
 			$path = $data['path'];
@@ -416,6 +420,15 @@ $('.js_reload').change(reload_settings);", 'docready');
 				$icon = 'fa-info-circle';
 			}
 			
+			// Build Permission Info
+			$arrGroups = $this->config->get('visibility', 'pmod_'.$id);
+			$arrGroupsOut = array();
+			foreach($arrGroups as $intGroupID){
+				$arrGroupsOut[] = $filter_rights[$intGroupID];
+			}
+			if (count($arrGroupsOut) === 0) $arrGroupsOut[] = $filter_rights[0];
+			$data['perms'] = $arrGroupsOut;
+			
 			// start the description text
 			$data['desc']		= (string) new htooltip('mptt_'.$id, array('content' => $data['desc'], 'label' => $this->core->icon_font($icon, 'fa-lg')));
 			$data['multiple']	= ($portalinfos['multiple'] && !$pdata['child']) ? true : false;
@@ -429,12 +442,12 @@ $('.js_reload').change(reload_settings);", 'docready');
 			if($data['tpl_posi'] != 'later' && $data['tpl_posi'] != 'disabled') {
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', array(
 					'NAME'			=> $data['name'].$data['header'],
-					#'CLASS'			=> $data['class'],				// does not seem to be used?
 					'ID'			=> $id,
 					'POS'			=> $data['tpl_posi'],
 					'INFO'			=> $data['desc'],
 					'S_MULTIPLE'	=> $data['multiple'],
 					'S_CHILD'		=> $data['child'],
+					'PERMISSIONS'	=> implode('<br />', $arrGroupsOut),
 				));
 				unset($data);
 				unset($modules[$id]);
@@ -451,12 +464,12 @@ $('.js_reload').change(reload_settings);", 'docready');
 		foreach($modules as $id => $data) {
 			$tpl_data = array(
 				'NAME'			=> $data['name'].$data['header'],
-				#'CLASS'			=> $data['class'],				// does not seem to be used?
 				'ID'			=> $id,
 				'POS'			=> $data['tpl_posi'],
 				'INFO'			=> $data['desc'],
 				'S_MULTIPLE'	=> $data['multiple'],
 				'S_CHILD'		=> $data['child'],
+				'PERMISSIONS'	=> implode('<br />', $data['perms'])
 			);
 			
 			if ($data['tpl_posi'] == 'later'){
@@ -469,10 +482,6 @@ $('.js_reload').change(reload_settings);", 'docready');
 		}
 		$this->portal->init_portalsettings();
 		$this->confirm_delete($this->user->lang('portal_delete_warn'), 'manage_portal.php'.$this->SID.'&del=true&l='.$intLayoutID, true, array('function' => 'delete_portal'));
-
-		$filter_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
-		$filter_rights[0] = $this->user->lang('portalplugin_filter3_all');
-		ksort($filter_rights);
 		
 		$arrBlockList = array(
 			'left'		=> $this->user->lang('portalplugin_left'), 
@@ -501,7 +510,6 @@ $('.js_reload').change(reload_settings);", 'docready');
 		}
 		
 		$this->tpl->assign_vars(array(
-				'PERM_FILTER' 		=> new hdropdown('fvisibility', array('options' => $filter_rights, 'value' => $this->in->get('fvisibility', 0), 'js' => 'onchange="javascript:form.submit();"')),
 				'NAME'				=> ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '',
 				'MS_PORTAL_BLOCKS'	=> $this->jquery->MultiSelect('portal_blocks', $arrBlockList, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), array('width' => 300)),
 				'S_RIGHT_HIDDEN'	=> (!in_array('right', $arrUsedBlocks)),

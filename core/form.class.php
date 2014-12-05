@@ -340,6 +340,8 @@ class form extends gen_class {
 			foreach($fieldsets as $fieldsetname => $fields) {
 				if(strpos($fieldsetname, '_') === 0) continue;
 				foreach($fields as $name => $options) {
+					if (!is_array($options)) continue;
+					
 					try {
 						$values[$name] = self::value($name, $options, $this->lang_prefix);
 					} catch (FormException $e) {
@@ -373,6 +375,8 @@ class form extends gen_class {
 	
 	private function f2tpl($name, $options, $key, $value) {
 		// TODO: check 'disabled'
+		
+		if (!is_array($options)) return;
 		
 		// choose language var
 		if(!isset($options['lang'])) {
@@ -429,7 +433,7 @@ class form extends gen_class {
 					'NAME'		=> $language,
 					'HELP'		=> $help_message,
 					'FIELD'		=> $field,
-					'S_REQUIRED'=> ($options['required']) ? true : false,
+					'S_REQUIRED'=> (isset($options['required']) && $options['required']) ? true : false,
 				));
 			}
 		} else return array(

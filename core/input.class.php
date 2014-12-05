@@ -157,24 +157,26 @@ class input extends gen_class {
 	public function get($key, $default='', $owntype=''){
 		$type = $this->_getType($default, $owntype);
 		$filter = $this->_getFilter($type);
+		$options = $this->_options($type);
+		$cache_name = md5($filter.'.'.$options);
 	
-		if($this->_caching && isset($this->_cache[$filter][$key])){
-			$out = $this->_cache[$filter][$key];
+		if($this->_caching && isset($this->_cache[$cache_name][$key])){
+			$out = $this->_cache[$cache_name][$key];
 		}else{	
 			if(strpos($key,':')) {
-				$out		= filter_var($this->_get_deep(explode(':', $key),$default), $filter, $this->_options($type));
+				$out		= filter_var($this->_get_deep(explode(':', $key),$default), $filter, $options);
 			} else {
-				$out		= filter_input($this->_superglobal($key), $key, $filter, $this->_options($type));
+				$out		= filter_input($this->_superglobal($key), $key, $filter, $options);
 				//Could be in own array
 				if ($out === false || $out === NULL){
 					if (isset($this->_own[$key])){
-						$out = filter_var($this->_own[$key], $filter, $this->_options($type));
+						$out = filter_var($this->_own[$key], $filter, $options);
 					}
 				}
 				
 			}
 			$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
-			$this->_cache[$filter][$key] = $out;
+			$this->_cache[$cache_name][$key] = $out;
 		}
 		return (isset($filter) && $filter != '') ? $this->_convert($out, $type) : $out;
 	}

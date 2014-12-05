@@ -1026,9 +1026,8 @@ class game extends gen_class {
 			$this->resetItempools();
 			$this->resetMultiDKPPools();
 			
-			//Add Default Pools
-			$intItempoolDefault = $this->addItempool("Default", "Default Itempool");
-			$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array($intItempoolDefault));
+			//Add Default Pools - There is always an itempool with ID 1
+			$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array(1));
 		}
 		
 		//Reset Ranks

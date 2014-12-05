@@ -368,7 +368,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			$options = $this->get_options($intFieldID);
 			if ($options && isset($options['options'])){
 				$arrOptions = $options['options'];
-			}
+			} else $arrOptions = array();
 			
 			$strType = $this->get_type($intFieldID);
 			if ($strType == 'link') $strType = "text";

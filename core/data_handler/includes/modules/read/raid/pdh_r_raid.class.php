@@ -242,7 +242,7 @@ if(!class_exists('pdh_r_raid')){
 
 		
 		public function get_raididsindateinterval($start_date, $end_date, $event_ids=false){
-			$objQuery = $this->db->query("SELECT raid_id,event_id FROM __raids WHERE raid_date >= ? AND raid_date <= ? ORDER BY raid_date DESC")->execute($start_date, $end_date);
+			$objQuery = $this->db->prepare("SELECT raid_id,event_id FROM __raids WHERE raid_date >= ? AND raid_date <= ? ORDER BY raid_date DESC")->execute($start_date, $end_date);
 			$arrRaids = array();
 			if ($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -259,7 +259,7 @@ if(!class_exists('pdh_r_raid')){
 
 		//Finished
 		public function get_lastnraids($count = 1){
-			$objQuery = $this->db->query("SELECT raid_id FROM __raids ORDER BY raid_date DESC")->limit($count)->execute();
+			$objQuery = $this->db->prepare("SELECT raid_id FROM __raids ORDER BY raid_date DESC")->limit($count)->execute();
 			$arrRaids = array();
 			if ($objQuery){
 				while($row = $objQuery->fetchAssoc()){

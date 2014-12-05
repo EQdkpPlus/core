@@ -56,36 +56,13 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 				$this->pdc->put('pdh_portal_table', $this->portal, null);
 			}
 		}
-
-		private function filter($type, $ids) {
-			if(is_array($type[1])) {
-				foreach($type[1] as $s_type) {
-					$ids = $this->filter(array($type[0], $s_type), $ids);
-				}
-			} elseif(is_array($ids)) {
-				foreach($ids as $key => $id) {
-					$val = $this->portal[$id][$type[0]];
-					if(is_array($val)) {
-						if(!in_array($type[1], $val)) unset($ids[$key]);
-					} else {
-						if(($type[1] === 0 AND $val !== $type[1]) OR ($type[1] !== 0 AND $val != $type[1])) unset($ids[$key]);
-					}
-				}
-				return $ids;
-			}
-		}
-
+		
 		public function get_portal($id=''){
 			return ($id) ? $this->portal[$id] : $this->portal;
 		}
 
-		public function get_id_list($filters=array()) {
+		public function get_id_list() {
 			$ids = (!empty($this->portal)) ? array_keys($this->portal) : array();
-			if(count($filters) > 0) {
-				foreach($filters as $filter => $val) {
-					$ids = $this->filter(array($filter, $val), $ids);
-				}
-			}
 			return $ids;
 		}
 
