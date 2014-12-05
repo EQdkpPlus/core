@@ -45,7 +45,11 @@
 		<!-- BEGIN article_row -->
 		<article class="article-container list-type1" data-article-id="{article_row.ARTICLE_ID}" data-article-category-id="{article_row.ARTICLE_REAL_CATEGORY}">
 			<header>
-				<h2><a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a>
+				<h2>
+				<!-- IF not article_row.ARTICLE_PUBLISHED -->
+				<i class="fa fa-eye-slash fa-lg "></i>
+				<!-- ENDIF -->
+				<a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a>
 					<!-- IF article_row.S_TOOLBAR --> 
 					<div class="floatRight">
 						<div class="toolbar-button">
@@ -70,6 +74,12 @@
 				</div>
 			</header>
 			<div class="article_content">
+				<!-- IF not article_row.ARTICLE_PUBLISHED -->
+				<div class="infobox infobox-large infobox-red clearfix">
+					<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
+				</div>
+				<!-- ENDIF -->
+
 				{article_row.ARTICLE_CONTENT}
 			</div>
 			<!-- IF article_row.S_READMORE -->
@@ -99,7 +109,11 @@
 		<!-- BEGIN article_row -->
 		<article class="article-container list-type2">
 			<header>
-				<h3><a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a></h3> 
+				<h3>
+				<!-- IF not article_row.ARTICLE_PUBLISHED -->
+				<i class="fa fa-eye-slash fa-lg "></i>
+				<!-- ENDIF -->
+				<a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a></h3> 
 			</header>
 			<p>
 			{article_row.ARTICLE_DATE} - {article_row.ARTICLE_SUBMITTED}<!-- IF article_row.S_COMMENTS --> (<a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i>{article_row.COMMENTS_COUNTER}</a>)<!-- ENDIF -->
@@ -112,7 +126,11 @@
 		<!-- BEGIN article_row -->
 		<article class="article-container list-type3">
 			<header>
-				<h2><a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a>
+				<h2>
+				<!-- IF not article_row.ARTICLE_PUBLISHED -->
+				<i class="fa fa-eye-slash fa-lg "></i>
+				<!-- ENDIF -->
+				<a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a>
 				<!-- IF article_row.S_TOOLBAR --> 
 					<div class="floatRight">
 						<div class="toolbar-button">
@@ -136,6 +154,11 @@
 				</div>
 			</header>	
 			<div class="article_content">
+				<!-- IF not article_row.ARTICLE_PUBLISHED -->
+				<div class="infobox infobox-large infobox-red clearfix">
+					<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
+				</div>
+				<!-- ENDIF -->
 				{article_row.ARTICLE_CUTTED_CONTENT}
 			</div>
 			<footer>

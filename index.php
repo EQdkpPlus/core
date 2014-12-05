@@ -33,10 +33,13 @@ class controller extends gen_class {
 		if ($this->in->exists('unpublish') && ($blnCheckPost || $blnCheckPostOld || $this->user->checkCsrfGetToken($this->in->get('link_hash'), get_class($this).'unpublish'))){
 			$this->unpublish();
 		}
+		if ($this->in->exists('publish') && ($blnCheckPost || $blnCheckPostOld || $this->user->checkCsrfGetToken($this->in->get('link_hash'), get_class($this).'publish'))){
+			$this->publish();
+		}
 		if ($this->in->exists('savevote')){
 			$this->saveRating();
 		}
-
+		
 		$this->display();
 	}
 	
@@ -65,6 +68,21 @@ class controller extends gen_class {
 				$this->pdh->put('articles', 'set_unpublished', array(array($intArticleID)));
 
 				$this->core->message($strArticleTitle, $this->user->lang('article_unpublish_success'), 'green');
+				$this->pdh->process_hook_queue();
+			}
+		}
+	}
+	
+	public function publish(){
+		$intArticleID = $this->in->get('aid', 0);
+		$intCategoryID = $this->pdh->get('articles','category', array($intArticleID));
+		if ($intCategoryID){
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+			if ($arrPermissions && $arrPermissions['change_state']){
+				$strArticleTitle = $this->pdh->get('articles', 'title', array($intArticleID));
+				$this->pdh->put('articles', 'set_published', array(array($intArticleID)));
+	
+				$this->core->message($strArticleTitle, $this->user->lang('article_publish_success'), 'green');
 				$this->pdh->process_hook_queue();
 			}
 		}
@@ -206,12 +224,16 @@ class controller extends gen_class {
 			//Check Start to/start from
 			if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] < $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] > $this->time->time)) $intPublished = false;
 			
-			//Check Category Permission
+			//Get Category Data
 			$intCategoryID = $arrArticle['category'];
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			
+			//Category Permissions
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
+			if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
+			
 			//Check Start to/start from
-			if (!$intPublished || !$arrCategory['published']) message_die($this->user->lang('article_unpublished'));
+			if ((!$intPublished && (!$arrPermissions['update'] && !$arrPermissions['change_state'])) || !$arrCategory['published']) message_die($this->user->lang('article_unpublished'));
 			
 			registry::add_const('page_path', $strPath);
 			$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
@@ -220,10 +242,7 @@ class controller extends gen_class {
 			//User Memberships
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
 			
-			//Category Permissions
-			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
-			if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
-			
+
 			//Page divisions
 			$strText = xhtml_entity_decode($arrArticle['text']);
 			$arrPagebreaks = array();
@@ -393,11 +412,19 @@ class controller extends gen_class {
 			);
 		}
 		if ($arrPermissions['change_state']) {
-			$arrToolbarItems[] = array(
-				'icon'	=> 'fa-eye-slash',
-				'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
-				'title'	=> $this->user->lang('article_unpublish'),
-			);
+			if ($intPublished){
+				$arrToolbarItems[] = array(
+					'icon'	=> 'fa-eye-slash',
+					'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
+					'title'	=> $this->user->lang('article_unpublish'),
+				);
+			} else {
+				$arrToolbarItems[] = array(
+						'icon'	=> 'fa-eye',
+						'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&publish&link_hash='.$this->CSRFGetToken('publish').'&aid='.$intArticleID.'\'"',
+						'title'	=> $this->user->lang('article_publish'),
+				);
+			}
 		}
 
 		$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
@@ -417,7 +444,10 @@ class controller extends gen_class {
 			}
 		}
 
-		$this->comments->SetVars(array('attach_id'=> $intArticleID.(($strSpecificID) ? '|'.$strSpecificID : ''), 'page'=>'articles'));
+		$this->comments->SetVars(array(
+			'attach_id'		=> $intArticleID.(($strSpecificID) ? '|'.$strSpecificID : ''), 
+			'page'			=>'articles',
+		));
 		$intCommentsCount = $this->comments->Count();
 		
 		//Replace page objects from Content
@@ -499,6 +529,7 @@ class controller extends gen_class {
 				'ARTICLE_DATE'		=> $this->time->user_date($arrArticle['date'], false, false, true),
 				'ARTICLE_TIMETAG'	=> $this->time->createTimeTag($arrArticle['date'], $this->time->user_date($arrArticle['date'], false, false, true).', '.$this->time->user_date($arrArticle['date'], false, true)),
 				'ARTICLE_AUTHOR'	=> $userlink,
+				'ARTICLE_PUBLISHED' => ($intPublished) ? true : false,
 				'ARTICLE_TIME'		=> $this->time->user_date($arrArticle['date'], false, true),
 				'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
 				'S_PAGINATION'		=> ($pageCount > 1) ? true : false,
@@ -524,6 +555,12 @@ class controller extends gen_class {
 					'attach_id'	=> $intArticleID.(($strSpecificID) ? '_'.$strSpecificID : ''),
 					'page'		=> 'articles',
 					'auth'		=> 'a_articles_man',
+					'notification'	=> array(
+							'type' 		=> 'comment_new_article',
+							'title'		=> $arrArticle['title'].$strAdditionalTitles,
+							'link' 		=> $this->controller_path_plain.$this->page_path.$this->SID,
+							'category'	=> $intCategoryID,
+					),
 				));
 				$this->tpl->assign_vars(array(
 					'COMMENTS'		=> $this->comments->Show(),
@@ -552,7 +589,7 @@ class controller extends gen_class {
 
 			if (!$arrPermissions['read']) message_die($this->user->lang('category_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 
-			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID));
+			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, false, false, NULL, (($arrPermissions['change_state']) ? true : false)));
 			switch($arrCategory['sortation_type']){
 				case 2: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
 				break;
@@ -585,6 +622,7 @@ class controller extends gen_class {
 				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
 				
 				$strText = $this->bbcode->parse_shorttags($arrContent[0]);
+				$blnPublished = $this->pdh->get('articles', 'published', array($intArticleID));
 				
 				//Hook to replace content
 				if ($this->hooks->isRegistered('article_parse')){
@@ -641,11 +679,19 @@ class controller extends gen_class {
 					);
 				}
 				if ($arrPermissions['change_state']) {
-					$arrToolbarItems[] = array(
-						'icon'	=> 'fa-eye-slash',
-						'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
-						'title'	=> $this->user->lang('article_unpublish'),
-					);
+					if ($blnPublished){
+						$arrToolbarItems[] = array(
+							'icon'	=> 'fa-eye-slash',
+							'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
+							'title'	=> $this->user->lang('article_unpublish'),
+						);
+					} else {
+						$arrToolbarItems[] = array(
+								'icon'	=> 'fa-eye',
+								'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&publish&link_hash='.$this->CSRFGetToken('publish').'&aid='.$intArticleID.'\'"',
+								'title'	=> $this->user->lang('article_publish'),
+						);
+					}
 				}
 
 				if ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']){
@@ -672,6 +718,7 @@ class controller extends gen_class {
 					'ARTICLE_PATH'			=> $this->controller_path.$this->pdh->get('articles',  'path', array($intArticleID)),
 					'ARTICLE_SOCIAL_BUTTONS'=> ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
 					'ARTICLE_TOOLBAR'		=> $jqToolbar['id'],
+					'ARTICLE_PUBLISHED'		=> ($blnPublished) ? true : false,
 					'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
 					'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
@@ -775,6 +822,7 @@ class controller extends gen_class {
 				'display'			=> true)
 			);
 		} else {
+			$strPageObject = false;
 			foreach($arrPath as $intPathPart => $strPathPart){	
 				if (register('routing')->staticRoute($strPathPart)){
 					if ($intPathPart == 0){
@@ -833,6 +881,7 @@ class controller extends gen_class {
 				message_die($this->user->lang('article_not_found'));
 			}
 		}
+
 	}
 	
 	protected function CSRFGetToken($strProcess){

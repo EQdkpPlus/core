@@ -22,7 +22,12 @@
 	
 	<header>
 		<div class="contentHeader">
-			<h1 class="contentTitle"><span class="<!-- IF S_INLINE_EDIT -->headline_inlineedit<!-- ENDIF -->">{ARTICLE_TITLE}</span>
+			<h1 class="contentTitle">
+				<!-- IF not ARTICLE_PUBLISHED -->
+				<i class="fa fa-eye-slash fa-lg "></i>
+				<!-- ENDIF -->
+				
+			<span class="<!-- IF S_INLINE_EDIT -->headline_inlineedit<!-- ENDIF -->">{ARTICLE_TITLE}</span>
 				<!-- IF S_TOOLBAR --> 
 				<div class="floatRight">
 					<div class="toolbar-button">
@@ -58,6 +63,12 @@
 	</aside>
 	<!-- ENDIF -->
 	<article class="article_content <!-- IF S_INLINE_EDIT -->article-inlineedit<!-- ENDIF -->">
+		<!-- IF not ARTICLE_PUBLISHED -->
+		<div class="infobox infobox-large infobox-red clearfix">
+			<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
+		</div>
+		<!-- ENDIF -->
+	
 		<!-- PRE ARTICLE_CONTENT -->
 	</article>
 	<div class="clear"></div>
