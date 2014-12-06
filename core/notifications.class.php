@@ -31,7 +31,7 @@ class notifications extends gen_class {
 		if ($strType != ""){
 			$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $this->user->id));
 		} else $blnHasAbo = true;
-		
+
 		if ($blnHasAbo){
 			$this->arrPersistentNotifications[] = array(
 				'id'			=> 0,

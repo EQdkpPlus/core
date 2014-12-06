@@ -28,6 +28,7 @@ class core extends gen_class {
 		public $template_path	= '';				// Path to template_file	@var template_path
 		public $description		= '';				// Description of the page, relevant for META-Tags
 		public $page_image		= '';				// Preview-Image, relevant for META-Tags
+		private $notifications	= false;			// Flag if notifications have been done
 
 		/**
 		* Construct
@@ -149,6 +150,7 @@ class core extends gen_class {
 
 		public function generate_page(){
 			$this->check_requirements();
+			$this->notifications();
 			$this->page_header();
 			$this->page_tail();
 		}
@@ -760,6 +762,50 @@ class core extends gen_class {
 			if (!$editable) $arrData['editable'] = false;
 			return $arrData;
 		}
+		
+		//Everything that creates Notifications
+		public function notifications(){
+			if ($this->notifications) return;
+			
+			//Update Warnings
+			if ($this->user->check_auths(array('a_extensions_man', 'a_maintenance'), 'or', false)){
+				$objRepository = register("repository");
+				if (count($objRepository->updates)){
+					$arrUpdates = $objRepository->updates;
+					if (isset($arrUpdates['pluskernel']) && $this->user->check_auth("a_maintenance")){
+						$this->ntfy->add_persistent('eqdkp_core_update', $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID, 2, 'fa-cog');
+						unset($arrUpdates['pluskernel']);
+					}
+			
+					if (count($arrUpdates)){
+						$text = "";
+						foreach($arrUpdates as $id => $data){
+							$text	.= "<br />".sprintf($this->user->lang('lib_pupd_updtxt_tt'), (($this->user->lang($data['plugin'])) ? $this->user->lang($data['plugin']) : $data['name']), $data['version'], $data['plugin'], $data['release']);
+						}
+						$this->ntfy->add_persistent('eqdkp_extensions_update', $this->user->lang("lib_pupd_intro").$text, $this->server_path.'admin/manage_extensions.php'.$this->SID, 2, 'fa-cogs');
+					}
+				}
+			}
+			
+			//Check for unpublished articles
+			$arrCategories = $this->pdh->get('article_categories', 'unpublished_articles_notify', array());
+			if (count($arrCategories) > 0 && $this->user->check_auth('a_articles_man',false)){
+				foreach($arrCategories as $intCategoryID => $intUnpublishedCount){
+					$this->ntfy->add_persistent(
+							'eqdkp_article_unpublished',
+							sprintf($this->user->lang('notify_unpublished_articles'), $intUnpublishedCount, $this->pdh->get('article_categories', 'name', array($intCategoryID))),
+							$this->server_path.'admin/manage_articles.php'.$this->SID.'&amp;c='.$intCategoryID,
+							1,
+							'fa-file'
+					);
+				}
+			}
+			
+			//Admin Tasks
+			$this->admin_tasks->createNotifications();
+			
+			$this->notifications = true;
+		}
 
 		public function page_tail(){			
 			if ( !empty($this->template_path) ){
@@ -776,49 +822,13 @@ class core extends gen_class {
 				'EQDKP_PLUS_COPYRIGHT'		=> $this->Copyright())
 			);
 			
-			//Update Warnings
-			if ($this->user->check_auths(array('a_extensions_man', 'a_maintenance'), 'or', false)){
-				$objRepository = register("repository");
-				if (count($objRepository->updates)){
-					$arrUpdates = $objRepository->updates;
-					if (isset($arrUpdates['pluskernel']) && $this->user->check_auth("a_maintenance")){
-						$this->ntfy->add_persistent('eqdkp_core_update', $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID, 2, 'fa-cog');
-
-						unset($arrUpdates['pluskernel']);
-					}
-
-					if (count($arrUpdates)){
-						$text = "";
-						foreach($arrUpdates as $id => $data){
-							$text	.= "<br />".sprintf($this->user->lang('lib_pupd_updtxt_tt'), (($this->user->lang($data['plugin'])) ? $this->user->lang($data['plugin']) : $data['name']), $data['version'], $data['plugin'], $data['release']);
-						}
-						$this->ntfy->add_persistent('eqdkp_extensions_update', $this->user->lang("lib_pupd_intro").$text, $this->server_path.'admin/manage_extensions.php'.$this->SID, 2, 'fa-cogs');
-					}
-				}
-			}
-
 			//Call Social Plugins
 			$default_img_link	= $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/";
 			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : ((file_exists($default_img_link."logo.svg")) ? $default_img_link."logo.svg": $default_img_link."logo.png"));
 			$image = ($this->image != '') ? $this->image : $image;
 			$description = ($this->description != '') ? $this->description : (($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
-			$this->admin_tasks->createNotifications();
-			
-			//Check for unpublished articles
-			$arrCategories = $this->pdh->get('article_categories', 'unpublished_articles_notify', array());
-			if (count($arrCategories) > 0 && $this->user->check_auth('a_articles_man',false)){
-				foreach($arrCategories as $intCategoryID => $intUnpublishedCount){
-					$this->ntfy->add_persistent(
-						'eqdkp_article_unpublished',
-						sprintf($this->user->lang('notify_unpublished_articles'), $intUnpublishedCount, $this->pdh->get('article_categories', 'name', array($intCategoryID))),
-						$this->server_path.'admin/manage_articles.php'.$this->SID.'&amp;c='.$intCategoryID,
-						1,
-						'fa-file'
-					);
-				}
-			}
-			
+						
 			//Notifications
 			$arrNotifications = $this->ntfy->createNotifications();
 			$this->tpl->assign_vars(array(

@@ -65,6 +65,27 @@
 				if (yellow ==0 && green==0 && red==0){
 					$('.notification-content ul').html({L_notification_none|jsencode});
 				}
+				
+				notification_favicon(red, yellow, green);
+			}
+			
+			var favicon;
+			function notification_favicon(red, yellow, green){
+				if (typeof favicon === 'undefined') return;
+				
+				if (red > 0) {
+					favicon.badge(red, {bgColor: '#d00'});
+					return;
+				}
+				if (yellow > 0) {
+					favicon.badge(yellow, {bgColor: '#F89406'});
+					return;
+				}
+				if (green > 0) {
+					favicon.badge(green, {bgColor: '#468847'});
+					return;
+				}
+				favicon.reset();
 			}
 			
 			function notification_show_only(name){
@@ -81,10 +102,7 @@
 				}
 			}
 			
-			function notification_update(){
-				//ToDo: Resolve Problems with Persistend Notifications
-				return;
-			
+			function notification_update(){			
 				$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&load", function(data){
 					$('.notification-content ul').html(data);
 					recalculate_notification_bubbles();
@@ -159,7 +177,9 @@
 				});
 				//Periodic Update of Notifications
 				window.setTimeout("notification_update()", 1000*60*5);
-				
+				//Update Favicon
+				favicon = new Favico({animation:'none'});
+				notification_favicon({NOTIFICATION_COUNT_RED}, {NOTIFICATION_COUNT_YELLOW}, {NOTIFICATION_COUNT_GREEN});
 				
 				$('.user-tooltip-trigger').on('click', function(event){
 					event.preventDefault();
@@ -522,6 +542,13 @@
 			$('.stackcolumns').stackcolumns({myClass:'stackcolumns hiddenDesktop' });
 			$('.stacktable').stacktable({myClass:'stacktable hiddenDesktop'});
 		}
+		
+		//Reset Favicon, for Bookmarks
+		$( window ).unload(function() {
+			if (typeof favicon !== 'undefined'){
+				favicon.reset();
+			}
+		});
 	</script>		
 	<a id="bottom"></a>
 	</body>

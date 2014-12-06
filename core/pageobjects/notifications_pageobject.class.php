@@ -24,7 +24,7 @@ class notifications_pageobject extends pageobject {
 			'redirect'		=> array('process' => 'process_redirect'),
 			'load'			=> array('process' => 'process_load_notifications'),
 		);
-		
+		if(!$this->user->is_signedin()) $this->user->check_auth('u_something');
 		
 		parent::__construct(false, $handler, array());
 		$this->process();
@@ -53,6 +53,8 @@ class notifications_pageobject extends pageobject {
 	
 	public function process_load_notifications(){
 		if(!$this->user->is_signedin()) exit;
+		
+		$this->core->notifications();
 		
 		header('Content-type: text/html; charset=utf-8');
 		$arrNotifications = $this->ntfy->createNotifications();
@@ -84,6 +86,8 @@ class notifications_pageobject extends pageobject {
 		//Cleanup
 		$this->ntfy->cleanup(31);
 		
+		$this->core->notifications();
+		
 		$arrNotifications = $this->ntfy->getAllUserNotifications();
 		
 		$intTotalCount = count($arrNotifications);
@@ -105,7 +109,9 @@ class notifications_pageobject extends pageobject {
 		}
 		
 		//Bring Persistent to Template
-		foreach($arrPersistent as $arrNotification){
+		foreach($arrPersistent as $intKey){
+			$arrNotification = $arrNotifications[$intKey];
+			
 			$this->tpl->assign_block_vars('persistent_row', array(
 					'NAME'	=> $arrNotification['name'],
 					'PRIO'	=> $arrNotification['prio'],

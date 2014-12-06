@@ -48,6 +48,7 @@ class update_20012 extends sql_update_task {
 					12 => 'Insert Notification Type',
 					13 => 'Insert Notification Type',
 					14 => 'Insert Notification Type',
+					15 => 'Extend User Table',
 				),
 			'german' => array(
 				'update_20012'		=> 'EQdkp Plus 2.0 Update 4',
@@ -65,6 +66,7 @@ class update_20012 extends sql_update_task {
 					12 => 'Füge Notification Types ein',
 					13 => 'Füge Notification Types ein',
 					14 => 'Füge Notification Types ein',
+					15 => 'Erweitere Benutzer-Tabelle',
 			),
 		);
 		
@@ -107,7 +109,7 @@ class update_20012 extends sql_update_task {
 				12 => "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('eqdkp_user_enable_requested', 'notification_user_enable_requested', 'user', 1, 1, 1, 'notification_user_enable_requested_grouped', 3, 'fa-user');",
 				13 => "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('calenderevent_closed', 'notification_calendarevent_closed', 'calendarevent', 0, 1, 0, '', 3, 'fa-lock');",
 				14 => "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('calenderevent_opened', 'notification_calendarevent_opened', 'calendarevent', 0, 1, 0, '', 3, 'fa-unlock');",
-				
+				15 => "ALTER TABLE `__users` ADD COLUMN `notifications` TEXT NULL COLLATE 'utf8_bin' AFTER `hide_nochar_info`;",
 				
 		);
 	}

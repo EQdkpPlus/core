@@ -424,9 +424,13 @@ if (!class_exists("pdh_r_user")){
 			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_'.$strNotificationID])){
 				if ((int)$arrNotificationSettings['ntfy_'.$strNotificationID]) return true;
 			} else {
-				//Default Value
-				$intDefault = $this->pdh->get('notification_types', 'default', array($strNotificationID));
-				if ($intDefault) return true;
+				if (!$this->pdh->get('notification_types', 'check_existing_type', array($strNotificationID))){
+					$intDefault = $this->pdh->get('notification_types', 'default', array($strNotificationID));
+					return ($intDefault) ? true : false;
+					
+				} else {
+					return true;
+				}
 			}
 			
 			return false;
