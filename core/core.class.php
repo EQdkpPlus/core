@@ -407,10 +407,7 @@ class core extends gen_class {
 					'COOKIE_HINT'			=> str_replace("{COOKIE_LINK}", $url.'#Cookies', $this->user->lang('cookie_usage_hint')),
 				));
 			}
-			
-			//Do portal hook
-			register('hooks')->process('portal', array($this->env->eqdkp_page));
-			
+						
 			//Template Vars for Group Memberships
 			$arrGroupmemberships = $this->acl->get_user_group_memberships($this->user->id);
 			foreach($arrGroupmemberships as $groupID => $status){
@@ -803,6 +800,10 @@ class core extends gen_class {
 			
 			//Admin Tasks
 			$this->admin_tasks->createNotifications();
+			
+			
+			//Do portal hook
+			register('hooks')->process('portal', array($this->env->eqdkp_page));
 			
 			$this->notifications = true;
 		}
