@@ -29,7 +29,11 @@ if (!class_exists("comments")){
 		public $showReplies = false;
 		private $id = '';
 		private $showFormForGuests=false;
-		public $notification = false;
+		public $ntfy_link = false;
+		public $ntfy_user = false;
+		public $ntfy_type = false;
+		public $ntfy_title = false;
+		public $ntfy_category = 0;
 
 		// ---------------------------------------------------------
 		// Constructor
@@ -67,9 +71,20 @@ if (!class_exists("comments")){
 			if(isset($array['formforguests'])){
 				$this->showFormForGuests = $array['formforguests'];
 			}
-			/* type, link, title, category */
-			if(isset($array['notification'])){
-				$this->notification = $array['notification'];
+			if(isset($array['ntfy_link'])){
+				$this->ntfy_link = $array['ntfy_link'];
+			}
+			if(isset($array['ntfy_title'])){
+				$this->ntfy_title = $array['ntfy_title'];
+			}
+			if(isset($array['ntfy_user'])){
+				$this->ntfy_user = $array['ntfy_user'];
+			}
+			if(isset($array['ntfy_type'])){
+				$this->ntfy_type = $array['ntfy_type'];
+			}
+			if(isset($array['ntfy_category'])){
+				$this->ntfy_category = $array['ntfy_category'];
 			}
 		}
 
@@ -104,27 +119,39 @@ if (!class_exists("comments")){
 				$strToUsername = $this->pdh->get('user', 'name', array($intToUserID));
 				$strFromUsername = $this->pdh->get('user', 'name', array($intFromUserId));
 				
-				//Notifications
-				if ($data['page'] === 'userwall' && (intval($data['attach_id']) != intval($data['user_id']))){
+				//Notifications Userwall
+				if ($data['page'] === 'userwall'){
 					if ($this->in->get('reply_to', 0) === 0){
-						$this->ntfy->add('comment_new_userwall', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), (int)$data['attach_id']);
+						$this->ntfy->add('comment_new_userwall', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), $intToUserID);
 					} else {
-						$this->ntfy->add('comment_new_userwall_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), (int)$data['attach_id']);
+						//Userwall User
+						$this->ntfy->add('comment_new_userwall_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), $intToUserID);
+						//Owner of Comment
+						$userid = $this->pdh->get('comment', 'userid', array($this->in->get('reply_to', 0)));
+						if ($userid) $this->ntfy->add('comment_new_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), $userid, $this->user->lang('user_wall').' '.$strToUsername);	
 					}
 				}
 				
+				//Other Notifications
 				$ntfyType = $this->in->get('ntfy_type');
 				if ($ntfyType != "" && $ntfyType != "comment_new_userwall" && $ntfyType != "comment_new_userwall_response"){
 					$ntfyLink = $this->in->get('ntfy_link').'#comments';
 					$ntfyCategory = $this->in->get('ntfy_category', 0);
 					$ntfyTitle = $this->in->get('ntfy_title');
+					$ntfyUser = (strlen($this->in->get('ntfy_user'))) ? explode(',', $this->in->get('ntfy_user')) : false;
 					
 					if ($ntfyType === 'comment_new_article'){
-						$this->ntfy->add('comment_new_article', $intCommentId, $strFromUsername, $ntfyLink, false, $ntfyTitle, $ntfyCategory);
+						$this->ntfy->add('comment_new_article', $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle, $ntfyCategory);
 					} else {
-						$this->ntfy->add($ntfyType, $intCommentId, $strFromUsername, $ntfyLink, false, $ntfyTitle);
+						$this->ntfy->add($ntfyType, $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle);
 					}
-				}				
+				
+					//Notify Comment Writer if its a reply
+					if ($this->in->get('reply_to', 0) !== 0){
+						$userid = $this->pdh->get('comment', 'user_id', array($this->in->get('reply_to', 0)));
+						if ($userid) $this->ntfy->add('comment_new_response', $intCommentId, $strFromUsername, $ntfyLink, $userid);
+					}
+				}
 				
 				$this->pdh->process_hook_queue();
 				echo $this->Content($data['attach_id'], $data['page'], ($data['reply_to'] || $this->in->get('replies', 0)));
@@ -285,11 +312,13 @@ if (!class_exists("comments")){
 			$html .= '<form id="comment_data'.$this->id.'" name="comment_data" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments&replies='.(($this->showReplies) ? 1 : 0).'" method="post">
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
 						<input type="hidden" name="page" value="'.$page.'"/>';
-			if ($this->notification){
-				$html .= '<input type="hidden" name="ntfy_type" value="'.$this->notification['type'].'"/>
-						<input type="hidden" name="ntfy_category" value="'.$this->notification['category'].'"/>
-						<input type="hidden" name="ntfy_title" value="'.$this->notification['title'].'"/>
-						<input type="hidden" name="ntfy_link" value="'.$this->notification['link'].'"/>';
+			if ($this->ntfy_type !== false){
+				
+				$html .= '<input type="hidden" name="ntfy_type" value="'.$this->ntfy_type.'"/>
+						<input type="hidden" name="ntfy_category" value="'.$this->ntfy_category.'"/>
+						<input type="hidden" name="ntfy_title" value="'.$this->ntfy_title.'"/>
+						<input type="hidden" name="ntfy_user" value="'.implode(',',$this->ntfy_user).'"/>
+						<input type="hidden" name="ntfy_link" value="'.$this->ntfy_link.'"/>';
 			}
 			
 			$html .=	'<div class="clearfix">

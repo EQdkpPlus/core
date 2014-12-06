@@ -3298,7 +3298,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 
 #personalAreaUser ul.dropdown-menu li.notification-content {
 	max-height: 400px;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 #personalArea .dropdown-menu li ul li  {

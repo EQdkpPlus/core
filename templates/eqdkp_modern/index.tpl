@@ -148,12 +148,13 @@
 					});
 					
 				});
-				$('.notification-mark-all-read').on('click', function(event){
-					$('.notification-content ul').html({L_notification_none|jsencode});
+				$('.notification-mark-all-read').on('click', function() {
+				    $('.notification-content ul').html({L_notification_none|jsencode});
 					$('.notification-bubble-red, .notification-bubble-yellow, .notification-bubble-green').hide();
+					notification_favicon(0, 0, 0);
 					$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&markallread");
 				});
-				$('.notification-markasread').on('click', function(event){
+				$('.notification-content').on('click', '.notification-markasread', function() {
 					var ids = $(this).parent().parent().data('ids');
 					$(this).parent().parent().remove();
 					recalculate_notification_bubbles();

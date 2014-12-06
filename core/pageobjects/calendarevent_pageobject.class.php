@@ -52,6 +52,7 @@ class calendarevent_pageobject extends pageobject {
 		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
 		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
 		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+		if (!is_array($raidleaders_users)) $raidleaders_users = array();
 		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
 	}
 
@@ -274,7 +275,7 @@ class calendarevent_pageobject extends pageobject {
 		// send the email to the attendees
 		$this->email_openclose('open');
 		//Notify
-		$this->notify_openclose('closed');
+		$this->notify_openclose('open');
 	}
 
 	// EMAIL function: status change of an attendee
@@ -341,7 +342,8 @@ class calendarevent_pageobject extends pageobject {
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 		$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 		
-		$attendees = $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));	
+		$attendees = $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
+		$attendees = array_unique($attendees);
 		foreach($attendees as $attuserid){
 			if ($status == 'open') {
 				$this->ntfy->add('calenderevent_opened', $eventID, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
@@ -872,6 +874,20 @@ class calendarevent_pageobject extends pageobject {
 		if(isset($status_dropdown[0]) && $mysignedstatus != 0){
 			unset($status_dropdown[0]);
 		}
+		
+		//Notify attendees, raidlead and admins on new comments
+		$arrUserToNotify		= $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
+		$arrRaidleaderChars		= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
+		$arrRaidleaderUser		= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+		if ($arrRaidleaderUser && is_array($arrRaidleaderUser)) $arrUserToNotify	= array_merge($arrUserToNotify, $arrRaidleaderUser);
+		$arrUserToNotify[] 		= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
+		$arrAdmins 				= $this->pdh->get('user', 'users_with_permission', array('a_cal_revent_conf'));
+		if($arrAdmins && is_array($arrAdmins)) $arrUserToNotify = array_merge($arrUserToNotify, $arrAdmins);
+		$arrUserToNotify = array_unique($arrUserToNotify);
+		
+		$this->comments->SetVars(array(
+			'ntfy_user'		=> $arrUserToNotify,
+		));
 
 		$this->tpl->assign_vars(array(
 			// error messages

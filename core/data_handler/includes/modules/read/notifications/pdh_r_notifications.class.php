@@ -58,6 +58,8 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 				return true;
 			}		
 
+			$this->notifications = $this->user_notifications = array();
+			
 			$objQuery = $this->db->query('SELECT * FROM __notifications ORDER BY time DESC');
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){

@@ -106,10 +106,12 @@ class character_pageobject extends pageobject {
 			$profile_owntpl		= true;
 		}
 
-		$this->comments->SetVars(array('attach_id'=>$this->url_id, 'page'=>'member'));
+		$this->comments->SetVars(array(
+			'ntfy_user'		=> array($this->pdh->get('member', 'user', (array($this->url_id)))),
+		));
+
 		$this->jquery->Tab_header('profile_information', true);
 		
-
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_points');

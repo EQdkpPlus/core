@@ -19,6 +19,11 @@ $(document).ready(function() {
 		$(this).remove();
 		$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&markread&ids="+id);
 	});
+	$('.notification_list_delete').on('click', function(event){
+		var id = $(this).parent().parent().data('id');
+		$(this).parent().parent().remove();
+		$.get("{EQDKP_CONTROLLER_PATH}Notifications{SEO_EXTENSION}{SID}&delete&ids="+id);
+	});
 });
 </script>
 
@@ -42,7 +47,8 @@ $(document).ready(function() {
 	{day_row.notification_row.TIME} <a href="{day_row.notification_row.LINK}">{day_row.notification_row.ICON}{day_row.notification_row.NAME}</a>
 	<!-- IF not day_row.notification_row.READ -->
 	<div class="floatRight">
-		<i class="fa fa-eye hand notification_list_mark_as_read"></i>
+		<i class="fa fa-lg fa-trash hand notification_list_delete"></i>
+		<i class="fa fa-lg fa-eye hand notification_list_mark_as_read"></i>
 	</div>
 	<!-- ENDIF -->
 	<div class="clear"></div>

@@ -49,6 +49,7 @@ class notifications extends gen_class {
 	}
 	
 	public function add($strType, $intDatasetID, $strFromUsername, $strLink, $intUserID=false, $strAdditionalData="", $intCategoryID=false){
+		
 		if ($intUserID === false){
 			if ($strType === 'comment_new_article'){
 				if ($intCategoryID === false) return false;
@@ -58,7 +59,7 @@ class notifications extends gen_class {
 			}
 			
 			foreach($arrUsers as $intUserID){
-				if ($intUserID === $this->user->id) continue;
+				if ((int)$intUserID === $this->user->id) continue;
 				
 				$this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
 			}
@@ -70,7 +71,7 @@ class notifications extends gen_class {
 				
 				if (is_array($intUserID)){
 					foreach($intUserID as $intUID){
-						if ($intUserID === $this->user->id) continue;
+						if ((int)$intUID === $this->user->id) continue;
 						$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $intUID));
 							
 						if ($blnHasAbo){
@@ -82,7 +83,7 @@ class notifications extends gen_class {
 				} else {
 					$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $intUserID));
 					
-					if ($blnHasAbo && $intUserID !== $this->user->id){
+					if ($blnHasAbo && intval($intUserID) !== $this->user->id){
 						$this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
 						$this->pdh->process_hook_queue();
 					}
@@ -92,7 +93,7 @@ class notifications extends gen_class {
 			} else {
 				if (is_array($intUserID)){
 					foreach($intUserID as $intUID){
-						if ($intUserID === $this->user->id) continue;
+						if ((int)$intUID === $this->user->id) continue;
 						
 						$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $intUID));
 						if ($blnHasAbo){
@@ -104,7 +105,7 @@ class notifications extends gen_class {
 				} else {
 				
 					$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $intUserID));
-					if ($blnHasAbo && $intUserID !== $this->user->id){
+					if ($blnHasAbo && intval($intUserID) !== $this->user->id){
 						$this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
 						$this->pdh->process_hook_queue();
 					}
@@ -244,6 +245,9 @@ class notifications extends gen_class {
 				$strAndMore = sprintf($this->user->lang('notification_and_more'), (count($arrUsers)));
 				
 				$strUsernames = implode(', ', $arrNewUser).$strAndMore;
+				$strLang = $arrNotificationType['group_name'];
+			} elseif (count($arrUsers) === 2){
+				$strUsernames = implode(' & ', $arrUsers);
 				$strLang = $arrNotificationType['group_name'];
 			} elseif (count($arrUsers) === 1){
 				$strUsernames = implode('', $arrUsers);

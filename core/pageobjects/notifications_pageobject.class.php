@@ -21,6 +21,7 @@ class notifications_pageobject extends pageobject {
 		$handler = array(
 			'markread'		=> array('process' => 'process_ajax_markread'),
 			'markallread'	=> array('process' => 'process_ajax_markallread'),
+			'delete'		=> array('process' => 'process_ajax_delete'),
 			'redirect'		=> array('process' => 'process_redirect'),
 			'load'			=> array('process' => 'process_load_notifications'),
 		);
@@ -51,6 +52,21 @@ class notifications_pageobject extends pageobject {
 		exit;
 	}
 	
+	public function process_ajax_delete(){
+		if(!$this->user->is_signedin()) exit;
+		
+		$strIDs = $this->in->get('ids');
+		$arrIDs = explode(',', $strIDs);
+		
+		foreach($arrIDs as $intID){
+			$intID = intval($intID);
+			$intUserID = $this->pdh->get('notifications', 'user_id', array($intID));
+			if ($intUserID === $this->user->id) $this->pdh->put('notifications', 'delete', array($intID));
+		}
+		$this->pdh->process_hook_queue();
+		exit;
+	}
+	
 	public function process_load_notifications(){
 		if(!$this->user->is_signedin()) exit;
 		
@@ -72,6 +88,8 @@ class notifications_pageobject extends pageobject {
 			$this->pdh->put('notifications', 'mark_as_read', array($intID));
 		}
 		
+		$this->pdh->process_hook_queue();
+		
 		$intFirst = intval(array_shift($arrIDs));
 		$strLink = $this->pdh->get('notifications', 'link', array($intFirst));
 		if (strlen($strLink)){
@@ -85,6 +103,7 @@ class notifications_pageobject extends pageobject {
 	public function display(){
 		//Cleanup
 		$this->ntfy->cleanup(31);
+		$this->pdh->process_hook_queue();
 		
 		$this->core->notifications();
 		

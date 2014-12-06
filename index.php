@@ -226,6 +226,7 @@ class controller extends gen_class {
 			
 			//Get Category Data
 			$intCategoryID = $arrArticle['category'];
+			registry::add_const('categoryid', $intCategoryID);
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			
 			//Category Permissions
@@ -445,9 +446,15 @@ class controller extends gen_class {
 		}
 
 		$this->comments->SetVars(array(
-			'attach_id'		=> $intArticleID.(($strSpecificID) ? '|'.$strSpecificID : ''), 
-			'page'			=>'articles',
+				'attach_id'	=> $intArticleID.(($strSpecificID) ? '_'.$strSpecificID : ''),
+				'page'		=> 'articles',
+				'auth'		=> 'a_articles_man',
+				'ntfy_type' => 'comment_new_article',
+				'ntfy_title'=> $arrArticle['title'],
+				'ntfy_link' => $this->controller_path_plain.$this->page_path.$this->SID,
+				'ntfy_category' => $intCategoryID,
 		));
+		
 		$intCommentsCount = $this->comments->Count();
 		
 		//Replace page objects from Content
@@ -552,15 +559,7 @@ class controller extends gen_class {
 			//Comments
 			if ($arrArticle['comments'] && $this->config->get('enable_comments') == 1){
 				$this->comments->SetVars(array(
-					'attach_id'	=> $intArticleID.(($strSpecificID) ? '_'.$strSpecificID : ''),
-					'page'		=> 'articles',
-					'auth'		=> 'a_articles_man',
-					'notification'	=> array(
-							'type' 		=> 'comment_new_article',
-							'title'		=> $arrArticle['title'].$strAdditionalTitles,
-							'link' 		=> $this->controller_path_plain.$this->page_path.$this->SID,
-							'category'	=> $intCategoryID,
-					),
+					'ntfy_title'	=> $arrArticle['title'].$strAdditionalTitles,
 				));
 				$this->tpl->assign_vars(array(
 					'COMMENTS'		=> $this->comments->Show(),
@@ -582,6 +581,8 @@ class controller extends gen_class {
 			$intPublished = $arrCategory['published'];
 
 			if (!$intPublished) message_die($this->user->lang('category_unpublished'));
+			
+			registry::add_const('categoryid', $intCategoryID);
 
 			//User Memberships
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);

@@ -206,6 +206,7 @@ class admin_tasks extends gen_class {
 					'count'		=> count($deletion),
 					'msg'		=> sprintf($this->user->lang('notification_char_delete_requested'), count($deletion)),
 					'icon'		=> 'fa-trash',
+					'prio'		=> 1,
 			));
 		}
 		return array();
