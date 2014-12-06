@@ -45,9 +45,11 @@ $(document).ready(function() {
 <!-- BEGIN notification_row -->
 <li class="prio_{day_row.notification_row.PRIO} {day_row.notification_row.CLASS}" data-id="{day_row.notification_row.ID}">
 	{day_row.notification_row.TIME} <a href="{day_row.notification_row.LINK}">{day_row.notification_row.ICON}{day_row.notification_row.NAME}</a>
-	<!-- IF not day_row.notification_row.READ -->
 	<div class="floatRight">
 		<i class="fa fa-lg fa-trash hand notification_list_delete"></i>
+	</div>
+	<!-- IF not day_row.notification_row.READ -->
+	<div class="floatRight" style="margin-right: 5px;">
 		<i class="fa fa-lg fa-eye hand notification_list_mark_as_read"></i>
 	</div>
 	<!-- ENDIF -->
