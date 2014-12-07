@@ -24,6 +24,16 @@
 			//<![CDATA[
 			{JS_CODE}
 			
+			$(document).ready(function() {
+				/* Login Dialog */
+				$( "#dialog-login" ).dialog({
+					height: <!-- IF S_BRIDGE_INFO -->450<!-- ELSE -->350<!-- ENDIF -->,
+					width: 530,
+					modal: true,
+					autoOpen: false,
+				});
+			});
+			
 			<!-- IF S_NORMAL_HEADER -->
 			var user_timestamp_atom = "{USER_TIMESTAMP_ATOM}";
 			var user_clock_format = "dddd, {USER_DATEFORMAT_LONG} {USER_TIMEFORMAT}";
@@ -116,14 +126,7 @@
 			
 			$(document).ready(function() {
 				user_clock();
-				
-				/* Login Dialog */
-				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->450<!-- ELSE -->350<!-- ENDIF -->,
-					width: 530,
-					modal: true,
-					autoOpen: false,
-				});
+
 				$( ".openLoginModal" ).on('click', function() {
 					$( "#dialog-login" ).dialog( "open" );
 				});

@@ -231,7 +231,7 @@ class settings_pageobject extends pageobject {
 		$this->form->output($userdata);
 
 		$this->jquery->Tab_header('usersettings_tabs', true);
-		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->controller_path.$this->SID."&style='+ $(\"select[name='style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
+		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->controller_path.$this->SID."&style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
 		$this->tpl->assign_vars(array(
 			'S_CURRENT_PASSWORD'			=> true,
 			'S_NEW_PASSWORD'				=> true,

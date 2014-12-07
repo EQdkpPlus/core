@@ -116,7 +116,9 @@ class addcharacter_pageobject extends pageobject {
 
 		// test
 		if($this->in->get('ajax', false)) {
-			$data = $this->game->get_dep_classes($this->in->get('parent'), $this->in->get('child'), $this->in->get('requestid'));
+			$requestID = ($this->in->exists('requestid') && strlen($this->in->get('requestid'))) ? $this->in->get('requestid') : $this->config->get($this->in->get('parent'));
+			
+			$data = $this->game->get_dep_classes($this->in->get('parent'), $this->in->get('child'), $requestID);
 			$options = array(
 				'options_only'	=> true,
 				'options' 		=> $data,
@@ -236,6 +238,7 @@ class addcharacter_pageobject extends pageobject {
 		
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
+
 		foreach($profilefields as $fieldname => $fielddata) {
 			if (in_array($fieldname, $arrGameUniqueIDs)) {
 				$fielddata['required'] = true;

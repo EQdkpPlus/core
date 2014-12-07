@@ -237,6 +237,7 @@ class Manage_Users extends page_generic {
 			$privArray = array();
 			$customArray = array();
 			$pluginArray = array();
+			$notificationArray = array();
 	
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
@@ -244,6 +245,8 @@ class Manage_Users extends page_generic {
 				
 				if(strpos($name, "priv_") === 0){
 					$privArray[$name] = $value;
+				}elseif(strpos($name, "ntfy_") === 0){
+					$notificationArray[$name] = $value;
 				} elseif(in_array($name, user::$customFields) || (strpos($name, "userprofile_") === 0)){
 					$customArray[$name] = $value;
 				} elseif(in_array($name, $plugin_settings)){
@@ -263,7 +266,13 @@ class Manage_Users extends page_generic {
 			$query_ar['privacy_settings']	= serialize($privArray);
 			$query_ar['custom_fields']		= serialize($customArray);
 			$query_ar['plugin_settings']	= serialize($pluginArray);
+			$query_ar['notifications']		= serialize($notificationArray);
 			$user_id = $this->pdh->put('user', 'insert_user', array($query_ar, true, false));
+			if (!$user_id){
+				$this->core->message($this->user->lang('save_nosuc'), $this->user->lang('error'), 'red');
+				return;
+			}
+			
 		}
 
 		// Permissions

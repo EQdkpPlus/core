@@ -953,6 +953,7 @@ class game extends gen_class {
 					'undeletable'	=> 1,
 					'category'		=> 'character',
 					'no_custom'		=> true,
+					'options_language'=> $class['type'],
 				);
 			} else {
 				$z++;
@@ -965,6 +966,7 @@ class game extends gen_class {
 					'options'		=> array('-----'),
 					'sort' 			=> $z,
 					'no_custom'		=> true,
+					'options_language'=> $class['type'],
 				);
 			}
 			if(isset($class_deps[$class['name']])) {
