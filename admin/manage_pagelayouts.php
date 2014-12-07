@@ -48,6 +48,8 @@ class ManagePageLayouts extends page_generic {
 		$layout_def['data']['description'] = addslashes($this->in->get('description', 'No description given.'));
 		$page_list = $this->pdh->get_page_list();
 	
+		registry::load('form');
+		
 		//general options
 		if (is_array($layout_def['options']) && !empty($layout_def['options'])){
 			foreach ($layout_def['options'] as $key=>&$value) {
@@ -446,6 +448,8 @@ class ManagePageLayouts extends page_generic {
 		$table_sort_dirs['asc'] = $this->user->lang('lm_sort_asc');
 		$table_sort_dirs['desc'] = $this->user->lang('lm_sort_desc');
 
+		registry::load('form');
+		
 		//general options
 		if (is_array($layout_def['options']) && !empty($layout_def['options'])){
 			foreach ($layout_def['options'] as $key=>$value){

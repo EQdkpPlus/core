@@ -144,6 +144,8 @@ if (!class_exists("styles")){
 										$this->ClassColorManagement($style_id, $settings_xml->classcolors, true);
 									}
 								}
+							} else {
+								$this->pdh->put('class_colors', 'delete_classcolor', array($styleid));
 							}
 							
 						} else {

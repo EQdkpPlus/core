@@ -1424,6 +1424,7 @@ $lang = array(
 "lm_hptt_latest_logs" => "Letzte Logeinträge",
 "lm_hptt_roster" => "Charakter-Tabelle",
 'lm_hptt_listusers_userlist' => "Benutzerliste",
+"lm_page_teamlist" => "Teamliste",
 "massmail" => "Massen-E-Mail",
 "massmail_to_user" => "An Benutzer versenden",
 "massmail_to_group" => "An Gruppe versenden",

@@ -693,6 +693,7 @@ class game extends gen_class {
 		foreach($class_dep as $class) {
 			if(isset($class['roster']) && $class['roster']) $todisplay[] = $class['type'];
 		}
+		
 		return $this->get_assoc_classes($todisplay, $filter, $lang);
 	}
 	
@@ -722,12 +723,14 @@ class game extends gen_class {
 	 * @param 	string	$lang
 	 * @return 	array
 	 */
-	public function get_assoc_classes($todisplay, $filter=array(), $lang=false) {
+	public function get_assoc_classes($todisplay, $filter=array(), $lang=false, $blnWithAdminData=true) {
 		/*
 		 *	a fully linear dependency for all classes with flag roster is assumed, ordering has to be correct beforehand
 		 *	means, e.g. faction => race => class => talent
 		 */
 		$class_dep = $this->gameinfo()->get_class_dependencies();
+		$admin_data = ($blnWithAdminData) ? $this->get_admin_classdata(true) : array();
+		
 		// create a name 2 type array
 		$name2type = array();
 		foreach($class_dep as $class) {
@@ -742,18 +745,27 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
+
 		// build associative array
 		return array(
 			'todisplay'	=> $todisplay,
-			'data'		=> $this->build_assoc_array(current($todisplay), $relevant_deps, $child_ids, $todisplay, $filter, $lang),
+			'data'		=> $this->build_assoc_array(key($relevant_deps), $relevant_deps, $child_ids, $todisplay, $filter, $lang, false, $admin_data)
 		);
 	}
 	
-	private function build_assoc_array($type, $dep_order, $child_ids, $todisplay, $filter=array(), $lang=false, $parent_id=false) {
+	private function build_assoc_array($type, $dep_order, $child_ids, $todisplay, $filter=array(), $lang=false, $parent_id=false, $admin_data=array()) {
 		$assoc_array = array();
 		$data = $this->get($type, $filter, $lang);
-		if(count($todisplay) == 1) return (($data) ? array_keys($data) : array());
+		
+		//if(count($todisplay) == 1) return (($data) ? array_keys($data) : array());
 		foreach($data as $id => $name) {
+			
+			if (isset($admin_data[$type])){
+				if ($id !== $admin_data[$type]){
+					continue;
+				}
+			}
+			
 			// filter out ids not allowed
 			if($parent_id !== false) {
 				$true_ids = $child_ids[array_search($type, $dep_order)][$parent_id];
@@ -762,6 +774,7 @@ class game extends gen_class {
 			}
 			// last "level" reached
 			if($dep_order[$type] == end($todisplay)) {
+				
 				if($child_ids[$type][$id] == 'all') {
 					$child_ids[$type][$id] = array_keys($this->get($dep_order[$type], $filter, $lang));
 				}
@@ -772,18 +785,21 @@ class game extends gen_class {
 				}
 			} else {
 				if(in_array($type, $todisplay)) {
-					$assoc_array[$id] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id);
+					$assoc_array[$id] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data);
 				} else {
+
 					if(in_array($dep_order[$type], $todisplay)) {
-						$assoc_array = $assoc_array + $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id);
+						$assoc_array = $assoc_array + $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data);
 					} else {
-						$assoc_array = array_unique(array_merge($assoc_array, $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id)));
+						$assoc_array = array_unique(array_merge($assoc_array, $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data)));
 					}
 				}
 			}
 		}
+
 		return $assoc_array;
 	}
+
 	
 	/**
 	 * Returns a data-array containing all admin-selected class stuff
@@ -1034,6 +1050,8 @@ class game extends gen_class {
 		
 		//Reset Ranks
 		$this->resetRanks();
+		//Reset Raidgroups
+		$this->resetRaidgroups();
 
 		//Install new game
 		$this->game = $newgame;
@@ -1114,7 +1132,7 @@ class game extends gen_class {
 		}
 	}
 	
-	
+	//Delets all events
 	public function resetEvents(){
 		$this->pdh->put("event", "reset", array());
 		$this->pdh->process_hook_queue();
@@ -1124,6 +1142,7 @@ class game extends gen_class {
 		return $this->pdh->put("event", "add_event", array($strName, $intValue, $strIcon));
 	}
 	
+	//Deletes all itempools execept the one with ID 1
 	public function resetItempools(){
 		$this->pdh->put("itempool", "reset", array());
 		$this->pdh->process_hook_queue();
@@ -1142,6 +1161,7 @@ class game extends gen_class {
 		$this->pdh->process_hook_queue();
 	}
 	
+	//Deletes all MultiDKP Pools. Default one will be created on game install.
 	public function resetMultiDKPPools(){
 		$this->pdh->put("multidkp", "reset", array());
 		$this->pdh->process_hook_queue();
@@ -1150,11 +1170,12 @@ class game extends gen_class {
 	public function addMultiDKPPool($strName, $strDescription, $arrEventIDs, $arrItempoolIDs){
 		return $this->pdh->put("multidkp", "add_multidkp", array($strName, $strDescription, $arrEventIDs, $arrItempoolIDs));
 	}
-	
+	//Updates the Default MultiDKP Pools
 	public function updateDefaultMultiDKPPool($strName, $strDescription, $arrEventIDs){
 		return $this->pdh->put("multidkp", "update_multidkp", array(1, $strName, $strDescription, $arrEventIDs, array(1), array()));
 	}
 	
+	//Deletes all ranks
 	public function resetRanks(){
 		$this->pdh->put("rank", "truncate", array());
 		$this->pdh->process_hook_queue();
@@ -1162,6 +1183,16 @@ class game extends gen_class {
 	
 	public function addRank($intID, $strName, $blnDefault=false, $strIcon=''){
 		return $this->pdh->put("rank", "add_rank", array($intID, $strName, false, '', '', $intID+1, $blnDefault, $strIcon));
+	}
+	
+	//Delete all Raidgroups except the Default Raidgroup with ID 1
+	public function resetRaidgroups(){
+		$this->pdh->put('raid_groups', 'reset', array());
+		$this->pdh->process_hook_queue();
+	}
+	
+	public function addRaidgroup($name, $color, $desc='', $standard=0, $sortid=0, $deletable=1){
+		$this->pdh->put('raid_groups', 'add', array($name, $color, $desc, $standard, $sortid, $deletable));
 	}
 	
 	
