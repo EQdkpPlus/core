@@ -32,22 +32,51 @@
 	</ul>
 	<div class="clear"></div>
 </div>
-<form method="post" action="{ACTION}" name="managerole">
-	<div class="contentHeader">
-		<h1 class="contentTitle">{L_rolemanager}</h1>
+
+<div id="roles_tabs">
+	<ul>
+		<li><a href='#roles'>{L_rolemanager}</a></li>
+		<li><a href='#defaultroles'>{L_classes_defaultroles}</a></li>
+	</ul>
+	<div id="roles">
+		<form method="post" action="{ACTION}" name="managerole">
+			<div class="contentHeader">
+				<h1 class="contentTitle">{L_rolemanager}</h1>
+			</div>
+			<div class="tableHeader floatRight">
+				<button class="mainoption" name="newRoleManager" type="button" onclick="newRole()"><i class="fa fa-plus"></i>{L_add_role}</button>
+				<button class="mainoption" type="button" name="ResetRoles3" onclick="ResetRoles();"><i class="fa fa-refresh"></i>{L_reset_roles}</button>
+			</div>
+			<div class="clear"></div>
+			<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+				{ROLES}
+			</table>
+			<div class="contentFooter">
+				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+				<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
+			</div>
+			{CSRF_TOKEN}
+		</form>
 	</div>
-	<div class="tableHeader floatRight">
-		<button class="mainoption" name="newRoleManager" type="button" onclick="newRole()"><i class="fa fa-plus"></i>{L_add_role}</button>
-		<button class="mainoption" type="button" name="ResetRoles3" onclick="ResetRoles();"><i class="fa fa-refresh"></i>{L_reset_roles}</button>
+	<div id="defaultroles">
+		<form method="post" action="{ACTION}" name="defaultroles_form">
+			<div class="contentHeader">
+				<h1 class="contentTitle">{L_classes_defaultroles}</h1>
+			</div>
+			<div class="clear"></div>
+			<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
+				<!-- BEGIN defaultclasses -->
+				<tr>
+					<td>{defaultclasses.NAME}</td>
+					<td>{defaultclasses.ROLES}</td>
+				</tr>
+				<!-- END defaultclasses -->
+			</table>
+			<div class="contentFooter">
+				<button class="mainoption" type="submit" name="defaultroles" ><i class="fa fa-save"></i>{L_save}</button>
+			</div>
+			{CSRF_TOKEN}
+		</form>
 	</div>
-	<div class="clear"></div>
-<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
-	{ROLES}
-</table>
-<div class="contentFooter">
-<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
 </div>
-{CSRF_TOKEN}
-</form>
 <!-- ENDIF -->

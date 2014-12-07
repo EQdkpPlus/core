@@ -927,6 +927,7 @@ $lang = array(
 	"rolemanager_footcount" => '... %1$d role(s) found',
 	"delete_rolestext" => 'Are you sure, you want to delete the roles %s ?',
 	"rolemanager" => 'Roles Management',
+	"classes_defaultroles" => "Default roles of classes",
 	"delete_role" => 'Delete role',
 	"edit_role" => 'Edit role',
 	"role_new" => 'Add new role',

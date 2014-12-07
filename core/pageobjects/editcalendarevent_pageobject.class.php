@@ -202,9 +202,33 @@ class editcalendarevent_pageobject extends pageobject {
 
 		// close the dialog
 		if($this->in->exists('simple_head')){
-			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');	
+			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 		}else{
 			redirect($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->url_id, true, true));
+		}
+	}
+
+	// check if there are attendees and if they have a role set
+	private function check_roleraid_attendees($eventid){
+		$attendees	= $this->pdh->get('calendar_raids_attendees', 'attendees', array($this->url_id));
+		
+		// check if there are attendees in this raid
+		if(is_array($attendees) && count($attendees) > 0){
+			foreach($attendees as $attendeeid=>$attendeedata){
+				$member_role_id	= (int)$attendeedata['member_role'];
+				
+				// check if the role is empty or null
+				if(!$member_role_id || $member_role_id == 0){
+					// update the role for that event
+					$default_role	= $this->pdh->get('member', 'defaultrole', array($attendeeid));
+					if($default_role > 0){
+						$this->pdh->put('calendar_attendees', 'update_role', array($eventid, $attendeeid, $default_role));
+					}else{
+						// remove that attendee
+					}
+					
+				}
+			}
 		}
 	}
 
@@ -216,6 +240,7 @@ class editcalendarevent_pageobject extends pageobject {
 				foreach($this->pdh->get('roles', 'roles', array()) as $classid=>$classname){
 					$raid_clsdistri[$classid] = $this->in->get('roles_'.$classid.'_count', 0);
 				}
+				$this->check_roleraid_attendees($this->url_id);
 			}else{
 				$classdata = $this->game->get_primary_classes(array('id_0'));
 				foreach($classdata as $classid=>$classname){

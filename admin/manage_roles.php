@@ -26,9 +26,10 @@ class Manage_Roles extends page_generic {
 	public function __construct(){
 		$this->user->check_auth('a_members_man');
 		$handler = array(
-			'editid'	=> array('process' => 'display_edit'),
-			'adddialog'	=> array('process' => 'display_edit'),
-			'reset'		=> array('process' => 'process_reset','csrf'=>true)
+			'editid'		=> array('process' => 'display_edit'),
+			'adddialog'		=> array('process' => 'display_edit'),
+			'defaultroles'	=> array('process' => 'save_defaultrole'),
+			'reset'			=> array('process' => 'process_reset','csrf'=>true)
 		);
 		parent::__construct(false, $handler, array('roles', 'name'), null, 'selected_ids[]');
 		$this->process();
@@ -42,6 +43,12 @@ class Manage_Roles extends page_generic {
 
 	public function process_reset(){
 		$this->game->load_default_roles();
+		$this->display();
+	}
+	
+	public function save_defaultrole(){
+		$roles = $this->in->getArray('defclassroles', 'int');
+		$this->config->set('roles_defaultclasses', json_encode($roles));
 		$this->display();
 	}
 	
@@ -107,6 +114,20 @@ class Manage_Roles extends page_generic {
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '?sort='.$this->in->get('sort');
 
+		// build the class list
+		$classes			= $this->game->get_primary_classes(array('id_0'));
+		$roles				= $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list')));
+		$defautrole_config	= json_decode($this->config->get('roles_defaultclasses'), true);
+
+		foreach($classes as $classid=>$classname){
+			$this->tpl->assign_block_vars('defaultclasses', array(
+				'NAME'		=> $this->game->decorate('primary', $classid).' '.$this->game->get_name('primary', $classid),
+				'ID'		=> $classid,
+				'ROLES'		=> new hdropdown('defclassroles['.$classid.']', array('options' => $roles, 'value' => ((isset($defautrole_config[$classid])) ? $defautrole_config[$classid] : 1)))
+			));
+		}
+
+		$this->jquery->tab_header('roles_tabs');
 		$this->tpl->assign_vars(array(
 			'ROLES'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, $footer_text),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),

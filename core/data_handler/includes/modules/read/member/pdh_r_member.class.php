@@ -609,14 +609,19 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_defaultrole($member_id){
-			return $this->data[$member_id]['defaultrole'];
+			$member_defaultrole	= $this->data[$member_id]['defaultrole'];
+			if($member_defaultrole > 0){
+				return $member_defaultrole;
+			}else{
+				$defautrole_config	= json_decode($this->config->get('roles_defaultclasses'), true);
+				$classid			= $this->pdh->get('member', 'classid', array($member_id));
+				return ($defautrole_config > 0 && $classid > 0 && isset($defautrole_config[$classid])) ? $defautrole_config[$classid] : 0;
+			}
 		}
 		
 		public function get_html_defaultrole($member_id){
 			return $this->pdh->get("roles", "name", array($member_id));
 		}
-		
-		
 
 		public function get_gender($member_id){
 			return (isset($this->data[$member_id]['gender'])) ? $this->data[$member_id]['gender'] : false;
