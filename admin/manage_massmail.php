@@ -37,17 +37,41 @@ class Manage_Massmail extends page_generic {
 	}
 
 	public function process_data(){
-		//Latest News List
-		$arrNews = $this->pdh->aget('news', 'news', 0, array($this->pdh->sort($this->pdh->get('news', 'id_list', array()), 'news', 'date', 'desc')));
-		$arrNewsList = array();
-		if (is_array($arrNews )) {
-			foreach ($arrNews as $newsid => $value){
-				$arrNewsList[] = array(
-					'date'		=> $this->pdh->get('news', 'html_date', array($newsid)),
-					'headline'	=> sanitize($value['news_headline']),
-					'content'	=> '<b><u><a href="'.$this->env->link.'viewnews.php?id='.$newsid.'">'.$value['news_headline'].'</a></u></b><br /> '.xhtml_entity_decode($value['news_message']),
-				);
+		//Latest Articles
+		$arrArticles = $this->pdh->get('articles', 'id_list', array());
+		$arrArticles = $this->pdh->limit($arrArticles, 0, 25);
+		$arrArticles = $this->pdh->sort($arrArticles, 'articles', 'date', 'desc');
+		foreach($arrArticles as $intArticleID){
+			$strText = $this->pdh->get('articles',  'text', array($intArticleID));
+			$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
+			
+			$strText = $this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrContent[0]));
+			
+			//Replace Image Gallery
+			$arrGalleryObjects = array();
+			preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
+			if (count($arrGalleryObjects[0])){
+				include_once($this->root_path.'core/gallery.class.php');
+				foreach($arrGalleryObjects[4] as $key=>$val){
+					$strText = str_replace($arrGalleryObjects[0][$key], "", $strText);
+				}
 			}
+			
+			//Replace Raidloot
+			$arrRaidlootObjects = array();
+			preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
+			if (count($arrRaidlootObjects[0])){
+				include_once($this->root_path.'core/gallery.class.php');
+				foreach($arrRaidlootObjects[3] as $key=>$val){
+					$strText = str_replace($arrRaidlootObjects[0][$key], "", $strText);
+				}
+			}
+			
+			$arrNewsList[] = array(
+					'date'		=> $this->pdh->get('articles', 'html_date', array($intArticleID)),
+					'headline'	=> $this->pdh->get('articles', 'title', array($intArticleID)),
+					'content'	=> '<b><u><a href="'.$this->user->removeSIDfromString($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID))).'">'.unsanitize($this->pdh->get('articles', 'title', array($intArticleID))).'</a></u></b><br /> '.$strText,
+			);
 		}
 
 		//Next Events List

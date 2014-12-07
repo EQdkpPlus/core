@@ -23,7 +23,8 @@
 		<script type="text/javascript">
 			//<![CDATA[
 			{JS_CODE}
-					
+			
+			<!-- IF S_NORMAL_HEADER -->
 			var user_timestamp_atom = "{USER_TIMESTAMP_ATOM}";
 			var user_clock_format = "dddd, {USER_DATEFORMAT_LONG} {USER_TIMEFORMAT}";
 			var user_timezone = "{USER_TIMEZONE}";
@@ -244,6 +245,9 @@
 				<!-- ENDIF -->
 				
 			});
+			<!-- ELSE -->
+				<!-- JS for simple header. Above is for normal header only -->
+			<!-- ENDIF -->
 			//]]>
 		</script>
 	</head>
@@ -545,11 +549,11 @@
 		}
 		
 		//Reset Favicon, for Bookmarks
-		$( window ).unload(function() {
-			if (typeof favicon !== 'undefined'){
+		$(window).on('unload', function() {
+            if (typeof favicon !== 'undefined'){
 				favicon.reset();
 			}
-		});
+   		 });
 	</script>		
 	<a id="bottom"></a>
 	</body>
