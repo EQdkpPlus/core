@@ -278,6 +278,21 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
+		public function get_html_previewimage($intArticleID, $intSize=120){
+			$strPreviewImage = $this->get_previewimage($intArticleID);
+			if ($strPreviewImage == "") return "";
+			
+			$extension = pathinfo($strPreviewImage, PATHINFO_EXTENSION);
+			$thumbnailname = "thumb_articlepreview_".md5($intArticleID.'.'.$strPreviewImage).'_'.$intSize.'.'.$extension;
+			$thumbnailfolder = $this->pfh->FolderPath('thumbnails', '');
+			
+			if (!is_file($thumbnailfolder.$thumbnailname)){
+				$origImage = $this->pfh->FilePath($strPreviewImage,'files');
+				$this->pfh->thumbnail($origImage, $thumbnailfolder, $thumbnailname, $intSize);
+			}
+			return $this->pfh->FolderPath('thumbnails', '', 'absolute').$thumbnailname;
+		}
+		
 		public function get_alias($intArticleID){
 			if (isset($this->articles[$intArticleID])){
 				return $this->articles[$intArticleID]['alias'];

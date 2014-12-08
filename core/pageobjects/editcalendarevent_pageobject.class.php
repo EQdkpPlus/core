@@ -222,7 +222,7 @@ class editcalendarevent_pageobject extends pageobject {
 					// update the role for that event
 					$default_role	= $this->pdh->get('member', 'defaultrole', array($attendeeid));
 					if($default_role > 0){
-						$this->pdh->put('calendar_attendees', 'update_role', array($eventid, $attendeeid, $default_role));
+						$this->pdh->put('calendar_raids_attendees', 'update_role', array($eventid, $attendeeid, $default_role));
 					}else{
 						// remove that attendee
 					}

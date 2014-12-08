@@ -569,7 +569,7 @@ class controller extends gen_class {
 			$this->core->set_vars(array(
 				'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
-				'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pfh->FileLink($this->pdh->get('articles', 'previewimage', array($intArticleID)),'files', 'absolute') : '',
+				'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '',
 				'template_file'		=> 'article.html',
 				'portal_layout'		=> $arrCategory['portal_layout'],
 				'display'			=> true)
@@ -721,6 +721,7 @@ class controller extends gen_class {
 					'ARTICLE_TOOLBAR'		=> $jqToolbar['id'],
 					'ARTICLE_PUBLISHED'		=> ($blnPublished) ? true : false,
 					'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
+					'ARTICLE_PREVIEW_IMAGE' => ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '',
 					'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 					'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
