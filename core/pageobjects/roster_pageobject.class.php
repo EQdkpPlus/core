@@ -99,6 +99,9 @@ class roster_pageobject extends pageobject {
 	
 	private function build_class_block($arrData, $arrToDisplay, $arrRosterMembers, $level = 0, $string = ""){
 		foreach ($arrData as $key => $val) {
+			//Chang Key to Integer
+			$key = intval($key);
+			
 			if (is_array($val)){
 				
 				$this->tpl->assign_block_vars('class_row', array(

@@ -745,7 +745,8 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
-
+		ini_set('display_errors', 1);
+		
 		// build associative array
 		return array(
 			'todisplay'	=> $todisplay,
@@ -754,44 +755,57 @@ class game extends gen_class {
 	}
 	
 	private function build_assoc_array($type, $dep_order, $child_ids, $todisplay, $filter=array(), $lang=false, $parent_id=false, $admin_data=array()) {
+		//echo "build assoc array ".$type."<br />";
+		
 		$assoc_array = array();
 		$data = $this->get($type, $filter, $lang);
-		
-		//if(count($todisplay) == 1) return (($data) ? array_keys($data) : array());
+
 		foreach($data as $id => $name) {
+			//echo "foreach ".$type." id ".$id."<br />";
 			
 			if (isset($admin_data[$type])){
-				if ($id !== $admin_data[$type]){
+				if ($id !== $admin_data[$type] && strlen($admin_data[$type])){
+					//echo "Admin data and not in ".$type."<br />";
 					continue;
 				}
 			}
 			
 			// filter out ids not allowed
 			if($parent_id !== false) {
+				//echo "parent_id filter out ".$type."<br />";
 				$true_ids = $child_ids[array_search($type, $dep_order)][$parent_id];
 				if(!((!is_array($true_ids) && $true_ids == 'all') || in_array($id, $true_ids)))
 					continue;
 			}
 			// last "level" reached
 			if($dep_order[$type] == end($todisplay)) {
-				
+				//echo "last level ".$type." id ".$id." end ".end($todisplay)."<br />";
 				if($child_ids[$type][$id] == 'all') {
 					$child_ids[$type][$id] = array_keys($this->get($dep_order[$type], $filter, $lang));
 				}
 				if(in_array($type, $todisplay)) {
-					$assoc_array[$id] = $child_ids[$type][$id];
+					$assoc_array[$id.'_'] = $child_ids[$type][$id];
 				} else {
 					$assoc_array = array_unique(array_merge($assoc_array, $child_ids[$type][$id]));
 				}
 			} else {
+				//echo "not level ".$type." id ".$id." end ".end($todisplay)."<br />";
 				if(in_array($type, $todisplay)) {
-					$assoc_array[$id] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data);
+					$assoc_array[$id.'_'] = $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data);
 				} else {
 
 					if(in_array($dep_order[$type], $todisplay)) {
+						//d($assoc_array);
 						$assoc_array = $assoc_array + $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data);
+						//echo "Vereinigung ".$type." mit ".$dep_order[$type]."id ".$id." end ".end($todisplay)."<br />";
 					} else {
-						$assoc_array = array_unique(array_merge($assoc_array, $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data)));
+						//echo "Merge ".$type." mit ".$dep_order[$type]."id ".$id." end ".end($todisplay)."<br />";
+		
+						$assoc_array = array_merge($assoc_array, $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data));
+						if(!is_array(current($assoc_array))) $assoc_array = array_unique($assoc_array);
+						//echo "Merge ".$type." mit ".$dep_order[$type]."id ".$id." end ".end($todisplay)."<br />";
+						
+						//d($assoc_array);
 					}
 				}
 			}
