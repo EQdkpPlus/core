@@ -112,7 +112,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 				$objQuery = $this->db->prepare("DELETE FROM __groups_raid WHERE (groups_raid_id = ? AND groups_raid_deletable != '0' AND groups_raid_default != '1');")->execute($id);
 
 				if($objQuery) {
-					$this->pdh->put('raid_groups_users', 'delete_all_member_from_group', $id);
+					$this->pdh->put('raid_groups_members', 'delete_all_member_from_group', $id);
 					$this->pdh->enqueue_hook('raid_groups_update');
 					$this->log_insert('action_raidgroups_deleted', array(), $id, $old['name']);
 					return true;

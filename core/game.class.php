@@ -1043,11 +1043,21 @@ class game extends gen_class {
 			$this->pdh->put('roles', 'insert_role', array(3, $role_lang[2]));
 			$this->pdh->put('roles', 'insert_role', array(4, $role_lang[3]));
 		}
+		$this->load_default_classroles();
 		$this->pdh->process_hook_queue();
 	}	
 
-	
-	public function installGame($newgame, $lang){		
+	// load the default role for each class if available in game file
+	public function load_default_classroles() {
+		if($this->type_exists('classrole')) {
+			$roles = $this->gameinfo()->default_classrole;
+			if(is_array($roles) && count($roles)){
+				$this->config->set('roles_defaultclasses', json_encode($roles));
+			}
+		}
+	}
+
+	public function installGame($newgame, $lang){
 		//Uninstall old game
 		$this->uninstallGame();
 		
