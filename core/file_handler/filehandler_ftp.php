@@ -391,9 +391,14 @@ if (!class_exists("filehandler_ftp")) {
 						case 2:	ImageJPEG($img,	$this->tmp_Folder.$filename, 95);		break;	// JPG
 						case 3:	ImagePNG($img,	$this->tmp_Folder.$filename, 0);		break;	// PNG
 					}
+					
+					$this->rename($this->tmp_Folder.$filename, $thumbfolder.$filename);
+					$this->Delete($this->tmp_Folder.$filename);
+				
+				} else {
+					$this->copy($image, $thumbfolder.$filename);
 				}
-				$this->rename($this->tmp_Folder.$filename, $thumbfolder.$filename);
-				$this->Delete($this->tmp_Folder.$filename);
+				
 			}
 		}
 		

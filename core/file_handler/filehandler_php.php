@@ -355,7 +355,11 @@ if (!class_exists("filehandler_php")) {
 					case 2:	ImageJPEG($img,	$thumbfolder.$filename, 95);	break;	// JPG
 					case 3:	ImagePNG($img,	$thumbfolder.$filename, 0);	break;	// PNG
 				}
+			} else {
+				$this->copy($image, $thumbfolder.$filename);
 			}
+			
+			
 			@chmod($thumbfolder.$filename, 0777);
 		}
 	}
