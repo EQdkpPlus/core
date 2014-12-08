@@ -745,7 +745,6 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
-		ini_set('display_errors', 1);
 		
 		// build associative array
 		return array(
