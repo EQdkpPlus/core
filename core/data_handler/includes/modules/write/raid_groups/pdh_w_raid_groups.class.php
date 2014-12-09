@@ -118,6 +118,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 					return true;
 				}
 			}
+			$this->pdh->enqueue_hook('raid_groups_update');
 		}
 		
 		public function reset(){
@@ -127,6 +128,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 				
 				$this->delete_grp($intGroupID);
 			}
+			$this->pdh->enqueue_hook('raid_groups_update');
 		}
 	}
 }
