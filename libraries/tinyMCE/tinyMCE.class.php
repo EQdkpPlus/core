@@ -50,10 +50,10 @@ class tinyMCE extends gen_class {
 
 					// General options
 					plugins: [
-        				"bbcode autolink link image charmap",
-        				"searchreplace visualblocks code fullscreen",
-        				"media paste textcolor"
-    				],
+						"bbcode autolink link image charmap",
+						"searchreplace visualblocks code fullscreen",
+						"media paste textcolor"
+					],
 					//language : "'.$this->language.'",
 					theme : "modern",
 					
@@ -116,7 +116,7 @@ class tinyMCE extends gen_class {
 								$link_list .= '{text: "'.$value['text'].'", value: "{{article_url::'.$value['id'].'}}"},';
 							}
 							
-						$link_list .= ']},';					
+						$link_list .= ']},';
 					}
 					//$link_list .= '{}';
 				$link_list .= '
@@ -137,10 +137,10 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					//language : "'.$this->language.'",
 					 plugins: [
-        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
-        "searchreplace visualblocks code fullscreen",
-        "media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
-    ],
+					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
+						"searchreplace visualblocks code fullscreen",
+						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
+					],
 
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
@@ -179,7 +179,7 @@ class tinyMCE extends gen_class {
 					},
 					
 					'.$resizing.$relative_url.$removeHost.'
-										
+
 				});
 						
 			', 'docready');
@@ -210,17 +210,17 @@ class tinyMCE extends gen_class {
 						
 						// General options
 						theme: "modern",
-	    				inline: true,
-	    				toolbar: "undo redo",
-	    				menubar: false,
+						inline: true,
+						toolbar: "undo redo",
+						menubar: false,
 						plugins: ["save"],
 						setup: function(editor) {
 							'.$strSetup.$strHooks.'
-	   					},					
+						},
 						entity_encoding : "raw",
 						relative_urls : false,
 						remove_script_host : false,
-						auto_focus: '.$strAutofocus.'			
+						auto_focus: '.$strAutofocus.'
 					});
 				}
 				'.(($blnStart) ? 'tinyinlinesimple_'.$tinyid.'()' : '').'
@@ -269,7 +269,7 @@ class tinyMCE extends gen_class {
 					foreach($arrItems[$val['id']] as $value){
 						$link_list .= '{text: "'.$value['text'].'", value: "{{article_url::'.$value['id'].'}}"},';
 					}
-						
+
 					$link_list .= ']},';
 				}
 				//$link_list .= '{}';
@@ -295,11 +295,10 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars",
 					//language : "'.$this->language.'",
 					 plugins: [
-        "advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
-        "searchreplace visualblocks code fullscreen",
-        "save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
-    ],
-	
+					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
+						"searchreplace visualblocks code fullscreen",
+						"save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
+					],
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
 					extended_valid_elements : "p[class|id|style|data-sort|data-folder|data-id|title]",
@@ -332,11 +331,10 @@ class tinyMCE extends gen_class {
 						});
 						return false;
 					},
-					setup: function(editor) {					
+					setup: function(editor) {	
 						'.$strSetup.$strHooks.'
-   					},
-					
-    				save_onsavecallback: function() {
+					},
+					save_onsavecallback: function() {
 					},
 					auto_focus: '.$strAutofocus.',
 			

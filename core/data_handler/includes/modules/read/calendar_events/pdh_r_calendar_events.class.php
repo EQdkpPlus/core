@@ -214,7 +214,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_time_start($id){
-			return 	$this->events[$id]['timestamp_start'];
+			return (isset($this->events[$id]['timestamp_start']) ? $this->events[$id]['timestamp_start'] : 0);
 		}
 
 		public function get_html_time_start($id) {

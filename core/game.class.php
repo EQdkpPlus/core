@@ -936,7 +936,9 @@ class game extends gen_class {
 		foreach($class_dep as $class) {
 			if(isset($class['decorate']) && $class['decorate']) {
 				$fields = $this->pdh->get('member', 'profiledata', array($char_id));
-				$decor .= ' '.$this->decorate($class['type'], $fields[$class['name']], $fields, $size);
+				if(isset($fields[$class['name']])){
+					$decor .= ' '.$this->decorate($class['type'], $fields[$class['name']], $fields, $size);
+				}
 			}
 		}
 		return $decor;

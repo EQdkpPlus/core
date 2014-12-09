@@ -121,7 +121,14 @@ if(!class_exists('pdh_w_raid_groups')) {
 			$this->pdh->enqueue_hook('raid_groups_update');
 		}
 		
+		public function set_default($id){
+			$objQuery = $this->db->prepare("UPDATE __groups_raid :p")->set(array('groups_raid_default' => 0))->execute($id);
+			$objQuery = $this->db->prepare("UPDATE __groups_raid :p WHERE groups_raid_id=?")->set(array('groups_raid_default' => 1))->execute($id);
+			$this->pdh->enqueue_hook('raid_groups_update');
+		}
+		
 		public function reset(){
+			$this->set_default(1);
 			$id_list = $this->pdh->get('raid_groups', 'id_list', array());
 			foreach($id_list as $intGroupID){
 				if ((int)$intGroupID === 1) continue;
