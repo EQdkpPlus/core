@@ -57,7 +57,7 @@
 				$(document).ready(function() {
 					$("#memberTTtrigger{users_row.USER_ID}").qtip({
 					content: {
-						text: '<!-- BEGIN members_row -->{users_row.members_row.CLASS} <span class="hand" onclick="edit_char({users_row.members_row.MEMBER_ID}, {users_row.USER_ID});">{users_row.members_row.NAME}</span> - {users_row.members_row.RANK}<br /><!-- END members_row -->',
+						text: '<!-- BEGIN members_row --><div>{users_row.members_row.RADIO} {users_row.members_row.CLASS} <span class="hand" onclick="edit_char({users_row.members_row.MEMBER_ID}, {users_row.USER_ID});">{users_row.members_row.NAME}</span> - {users_row.members_row.RANK}</div><!-- END members_row -->',
 						title: {
 							text: "{L_chars}",
 							button: true
@@ -82,6 +82,15 @@
 					}
 				});
 				});
+				
+				function change_mainchar(userid, memberid){
+					$.post('{SID}&link_hash={CSRF_MAINCHARCHANGE}', { maincharchange: memberid, user: userid },
+						function(data){
+							$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
+						}
+					);
+				}
+				
 				</script>
 				<a href="javascript:void(0);" id="memberTTtrigger{users_row.USER_ID}">{users_row.MEMBER_COUNT} {L_chars}</a>
 			</td>

@@ -37,8 +37,13 @@ class mycharacters_pageobject extends pageobject {
 	}
 
 	public function update_connection(){
-		$this->pdh->put('member', 'update_connection', array($this->in->getArray('member_id', 'int')));
-		$this->pdh->process_hook_queue();
+		$arrNewMembers = $this->in->getArray('member_id', 'int');
+		$arrOldMembers = $this->pdh->get('member', 'connection_id', array($this->user->id));
+		$diff = array_diff($arrNewMembers, $arrOldMembers);
+		if (count($diff) !== 0){
+			$this->pdh->put('member', 'update_connection', array($this->in->getArray('member_id', 'int')));
+			$this->pdh->process_hook_queue();
+		}
 		$this->display();
 	}
 	
@@ -111,14 +116,19 @@ class mycharacters_pageobject extends pageobject {
 		// The javascript for the mainchar change
 		$this->tpl->add_js("
 			$('.cmainradio').change( function(){
+				$('#connection_submit').attr('disabled', 'disabled');
+				
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $( \"input:radio[name=mainchar]:checked\" ).val() },
 					function(data){
+						$('#connection_submit').removeAttr('disabled');
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
 					});
 				});
 			$('.cdefroledd').change( function(){
+				$('#connection_submit').attr('disabled', 'disabled');
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){
+						$('#connection_submit').removeAttr('disabled');
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
 					});
 			});

@@ -1098,16 +1098,16 @@ img {
 
 /* notify messages */
 .notify_error{
-	background: rgba(255, 0, 0, 0.6);
+	background: rgba(255, 0, 0, 0.6) !important;
 	min-height: 50px;
 }
 .notify_success{
 	color: black;
-	background: rgba(0, 255, 0, 0.6);
+	background: rgba(0, 255, 0, 0.6) !important;
 	min-height: 50px;
 }
 .notify_default {
-	background: rgba(0, 0, 0, 0.6);
+	background: rgba(0, 0, 0, 0.6) !important;
 	min-height: 50px;
 }
 .ui-notify-message {

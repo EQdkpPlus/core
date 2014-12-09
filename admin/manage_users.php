@@ -27,8 +27,9 @@ class Manage_Users extends page_generic {
 	public function __construct(){
 		$this->user->check_auth('a_users_man');
 		$handler = array(
+			'maincharchange' => array('process' => 'maincharchange', 'csrf' => true),
 			'mode' => array(
-				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),
+				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),	
 				array('process' => 'deactivate', 'value' => 'deactivate', 'csrf' => true),
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
 				),
@@ -86,6 +87,16 @@ class Manage_Users extends page_generic {
 			$this->user->overtake_permissions($this->in->get('u', 0));
 			redirect('index.php'.$this->SID);
 		}
+	}
+	
+	public function maincharchange(){
+		$memberid = $this->in->get('maincharchange', 0);
+		$userid = $this->in->get('user', 0);
+		
+		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($userid)), $memberid));
+		$this->pdh->process_hook_queue();
+		echo($this->user->lang('uc_savedmsg_main'));
+		exit();
 	}
 
 	// ---------------------------------------------------------
@@ -443,7 +454,8 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 						'MEMBER_ID'		=> $member_id,
 						'CLASS'			=> $member['classid'],
 						'NAME'			=> $member['name'],
-						'RANK'			=> $member['rankname']
+						'RANK'			=> $member['rankname'],
+						'RADIO'			=> new hradio('mainchar_'.$user_id, array('options' => array($member_id=>''), 'value' => $this->pdh->get('member', 'mainid', array($member_id)), 'class' => 'cmainradio', 'nodiv' => true, 'js' => 'onchange="change_mainchar('.$user_id.', '.$member_id.')"')),
 					));
 				}
 			}
@@ -466,6 +478,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			'UPARROW'				=> $this->root_path.'images/arrows/up_arrow',
 			'DOWNARROW'				=> $this->root_path.'images/arrows/down_arrow',
 			'RED'.$order[0].$order[1] => '_red',
+			'CSRF_MAINCHARCHANGE' => $this->CSRFGetToken('maincharchange'),
 
 			// Page vars
 			'U_MANAGE_USERS'		=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',

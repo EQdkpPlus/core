@@ -473,7 +473,7 @@ class core extends gen_class {
 					if (is_array($arrHookItems)) $arrItems = array_merge($arrItems, $arrHookItems);
 				}
 			}
-			
+
 			return $arrItems;
 		}
 		
@@ -720,6 +720,16 @@ class core extends gen_class {
 						break;
 					}
 					if (!$perm) return false;
+				}
+				
+				if (isset($arrLinkData['article'])){
+					$arrPermission = $this->pdh->get('articles', 'user_permissions', array(intval($arrLinkData['article']), $this->user->id));
+					if (!$arrPermission['read']) return false;
+				}
+				
+				if (isset($arrLinkData['category'])){
+					$arrPermission = $this->pdh->get('article_categories', 'user_permissions', array(intval($arrLinkData['category']), $this->user->id));
+					if (!$arrPermission['read']) return false;
 				}
 				
 				return true;

@@ -62,7 +62,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('raid_groups_update');
-			return true;
+			return $objQuery->insertId;
 		}
 
 		public function update_grp($id, $name='', $color=0, $desc='', $standard=0, $sortid=0) {

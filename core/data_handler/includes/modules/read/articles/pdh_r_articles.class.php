@@ -562,6 +562,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public function get_tags_array(){
 			return (is_array($this->tags)) ? $this->tags : array();
 		}
+		
+		public function get_user_permissions($intArticleID, $intUserID){
+			$intCategoryID = $this->get_category($intArticleID);
+			$arrCategoryPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
+			return $arrCategoryPermissions;
+		}
+		
 
 	}//end class
 }//end if

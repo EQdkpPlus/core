@@ -40,6 +40,8 @@ class hradio extends html {
 	public $default = 0;
 	public $class = '';
 	public $tolang = false;
+	public $nodiv = false;
+	public $js = "";
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -61,10 +63,12 @@ class hradio extends html {
 			if(!empty($this->class)) $radiobox .= ' class="'.$this->class.'"';
 			$data = (!empty($this->dependency[$key])) ? implode(',', $this->dependency[$key]) : '';
 			$dep = (!empty($this->dependency)) ? ' data-form-change="'.$data.'"' : '';
+			$js = (!empty($this->js)) ? ' '.$this->js.' ' : '';
 			if($this->tolang) $opt = $this->user->lang($opt);
-			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/> '.$opt.'</label>&nbsp;';
+			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.$js.'/> '.$opt.'</label>&nbsp;';
 		}
-		return '<div id="'.$this->id.'">'.$radiobox.'</div>';
+
+		return ($this->nodiv) ? $radiobox: '<div id="'.$this->id.'">'.$radiobox.'</div>';
 	}
 	
 	public function _inpval() {
