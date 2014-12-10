@@ -722,13 +722,13 @@ class core extends gen_class {
 					if (!$perm) return false;
 				}
 				
-				if (isset($arrLinkData['article'])){
-					$arrPermission = $this->pdh->get('articles', 'user_permissions', array(intval($arrLinkData['article']), $this->user->id));
+				if (isset($arrLinkData['article']) && $arrLinkData['article']){
+					$arrPermission = $this->pdh->get('articles', 'user_permissions', array(intval($arrLinkData['id']), $this->user->id));
 					if (!$arrPermission['read']) return false;
 				}
 				
-				if (isset($arrLinkData['category'])){
-					$arrPermission = $this->pdh->get('article_categories', 'user_permissions', array(intval($arrLinkData['category']), $this->user->id));
+				if (isset($arrLinkData['category']) && $arrLinkData['category']){
+					$arrPermission = $this->pdh->get('article_categories', 'user_permissions', array(intval($arrLinkData['id']), $this->user->id));
 					if (!$arrPermission['read']) return false;
 				}
 				
