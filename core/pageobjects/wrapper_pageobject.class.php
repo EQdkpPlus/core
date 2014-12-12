@@ -184,9 +184,9 @@ class wrapper_pageobject extends pageobject {
 
 		//Add the Server path to the whitelist
 		if (is_array($arrWhitelist)){
-			array_push($arrWhitelist, $this->config->get('server_name'));
+			array_push($arrWhitelist, $this->env->server_name);
 		} else {
-			$arrWhitelist = array($this->config->get('server_name'));
+			$arrWhitelist = array($this->env->server_name);
 		}
 
 		// Check if the Server matches the whitelist...

@@ -26,7 +26,7 @@ class Manage_Members extends page_generic {
 	public function __construct(){
 		$this->user->check_auth('a_members_man');
 		$handler = array(
-			'mdel' => array('process' => 'member_del', 'csrf'=>true),
+			'del' => array('process' => 'member_del', 'csrf'=>true),
 			'mstatus' => array('process' => 'member_status', 'csrf'=>true),
 			'rankc' => array('process' => 'member_ranks', 'csrf'=>true),
 			'defrolechange'	=> array('process' => 'ajax_defaultrole', 'csrf'=>true),

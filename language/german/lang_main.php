@@ -924,6 +924,10 @@ $lang = array(
 "article_publish_success" => "Artikel wurde veröffentlicht",
 "article_publish" => "Artikel veröffentlichen",
 "article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",		
+		
+"sp_btn_twitter_share" => "Tweet",
+"sp_btn_facebook_share" => "Teilen",		
+
 );
 
 ?>

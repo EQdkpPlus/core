@@ -185,6 +185,12 @@ if(registry::register('input')->get('out') != ''){
 			echo registry::register('portal')->get_module_external(registry::register('input')->get('id', 0));
 			exit;
 		break;
+		
+		case 'socialcounts':
+			header('Content-type: application/json; charset=utf-8');
+			echo registry::register('socialplugins')->getSocialButtonCount(rawurldecode(registry::register('input')->get('url')), registry::register('input')->get('target'));
+			exit;
+		break;
 	}
 	
 
