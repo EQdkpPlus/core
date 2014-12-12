@@ -209,7 +209,7 @@ class notifications extends gen_class {
 				$strLink = (isset($arrData['persistent'])) ? $arrData['link'] : $this->routing->build('Notifications').'&redirect='.$arrData['ids'];
 				$strOut .= '<li class="prio_'.$arrData['prio'].'" data-ids="'.$arrData['ids'].'" data-count="'.$arrData['count'].'"><a href="'.$strLink.'">'.$strIcon.$arrData['name'].'</a>';
 				if (!isset($arrData['persistent'])){
-					$strOut .= '<div class="clear"></div><div class="floatLeft time">'.$this->time->nice_date($arrData['time']).'</div> <div class="floatRight"><i class="fa fa-eye hand notification-markasread"></i></div><div class="clear"></div>';
+					$strOut .= '<div class="clear"></div><div class="floatLeft time">'.$this->time->nice_date($arrData['time']).'</div> <div class="floatRight"><i class="fa fa-check hand notification-markasread"></i></div><div class="clear"></div>';
 				}
 				$strOut .= '</li>';
 			}
