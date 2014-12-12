@@ -46,17 +46,17 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->calendars[$row['id']] = array(
-						'id'						=> $row['id'],
-						'name'						=> $row['name'],
-						'color'						=> $row['color'],
-						'private'					=> $row['private'],
-						'feed'						=> $row['feed'],
-						'system'					=> $row['system'],
-						'type'						=> $row['type'],
-						'restricted'				=> $row['restricted'],
+						'id'				=> $row['id'],
+						'name'				=> $row['name'],
+						'color'				=> $row['color'],
+						'private'			=> $row['private'],
+						'feed'				=> $row['feed'],
+						'system'			=> $row['system'],
+						'type'				=> $row['type'],
+						'restricted'		=> $row['restricted'],
+						'affiliation'		=> $row['affiliation'],
 					);
 				}
-				
 				$this->pdc->put('pdh_calendars_table', $this->calendars, null);
 			}
 		}
@@ -115,6 +115,10 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 
 		public function get_restricted($id){
 			return 	(isset($this->calendars[$id]['restricted'])) ? $this->calendars[$id]['restricted'] : 0;
+		}
+
+		public function get_affiliation($id){
+			return 	(isset($this->calendars[$id]['affiliation'])) ? $this->calendars[$id]['affiliation'] : 'user';
 		}
 
 		public function get_type($id){

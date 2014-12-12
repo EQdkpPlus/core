@@ -23,12 +23,12 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_raid_groups')) {
 	class pdh_w_raid_groups extends pdh_w_generic{
 
-		public function add($name, $color, $desc='', $standard=0, $sortid=0, $deletable=1) {
+		public function add($name, $color, $desc='', $standard=0, $sortid=0, $system=0) {
 				
 			$arrSet = array(
 					'groups_raid_name'		=> $name,
 					'groups_raid_desc'		=> $desc,
-					'groups_raid_deletable' => $deletable,
+					'groups_raid_system'	=> $system,
 					'groups_raid_default'	=> $standard,
 					'groups_raid_sortid'	=> $sortid,
 					'groups_raid_color'		=> $color
@@ -40,29 +40,12 @@ if(!class_exists('pdh_w_raid_groups')) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('raid_groups_update');
-			return true;
+			return $objQuery->insertId;
 		}
 		
 		
-		public function add_grp($id, $name, $color, $desc='', $standard=0, $sortid=0,$deletable=1) {
-			
-			$arrSet = array(
-				'groups_raid_id' 		=> $id,
-				'groups_raid_name'		=> $name,
-				'groups_raid_desc'		=> $desc,
-				'groups_raid_deletable' => $deletable,
-				'groups_raid_default'	=> $standard,
-				'groups_raid_sortid'	=> $sortid,
-				'groups_raid_color'		=> $color
-			);
-			
-			$objQuery = $this->db->prepare("INSERT INTO __groups_raid :p")->set($arrSet)->execute();
-			
-			if(!$objQuery) {
-				return false;
-			}
-			$this->pdh->enqueue_hook('raid_groups_update');
-			return $objQuery->insertId;
+		public function add_grp($id, $name, $color, $desc='', $standard=0, $sortid=0,$system=0) {
+			return $this->add($name, $color, $desc, $standard, $sortid, $system);
 		}
 
 		public function update_grp($id, $name='', $color=0, $desc='', $standard=0, $sortid=0) {
@@ -109,7 +92,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 			} else {
 				$old['name'] = $this->pdh->get('raid_groups', 'name', array($id));
 				
-				$objQuery = $this->db->prepare("DELETE FROM __groups_raid WHERE (groups_raid_id = ? AND groups_raid_deletable != '0' AND groups_raid_default != '1');")->execute($id);
+				$objQuery = $this->db->prepare("DELETE FROM __groups_raid WHERE (groups_raid_id = ? AND groups_raid_system != '1' AND groups_raid_default != '1');")->execute($id);
 
 				if($objQuery) {
 					$this->pdh->put('raid_groups_members', 'delete_all_member_from_group', $id);
@@ -131,7 +114,7 @@ if(!class_exists('pdh_w_raid_groups')) {
 			$this->set_default(1);
 			$id_list = $this->pdh->get('raid_groups', 'id_list', array());
 			foreach($id_list as $intGroupID){
-				if ((int)$intGroupID === 1) continue;
+				if($this->pdh->get('raid_groups', 'system', array($intGroupID))>0) continue;
 				
 				$this->delete_grp($intGroupID);
 			}

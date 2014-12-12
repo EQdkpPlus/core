@@ -268,7 +268,7 @@ CREATE TABLE `__groups_raid` (
 	`groups_raid_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`groups_raid_color` varchar(10) COLLATE utf8_bin DEFAULT NULL,
 	`groups_raid_desc` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`groups_raid_deletable` tinyint(1) NOT NULL DEFAULT '0',
+	`groups_raid_system` tinyint(1) NOT NULL DEFAULT '0',
 	`groups_raid_default` tinyint(1) NOT NULL DEFAULT '0',
 	`groups_raid_sortid` smallint(5) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`groups_raid_id`)
@@ -581,6 +581,7 @@ CREATE TABLE `__calendars` (
 	`system` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`restricted` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`affiliation` VARCHAR(30) COLLATE utf8_bin  NOT NULL DEFAULT 'user',
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
