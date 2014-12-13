@@ -1,19 +1,22 @@
 <?php
- /*
- * Project:		EQdkp-Plus
- * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:		2009
- * Date:		$Date: 2014-07-20 19:43:25 +0200 (So, 20 Jul 2014) $
- * -----------------------------------------------------------------------
- * @author		$Author: wallenium $
- * @copyright	2006-2011 EQdkp-Plus Developer Team
- * @link		http://eqdkp-plus.com
- * @package		eqdkp-plus
- * @version		$Rev: 14491 $
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-plus
+ *	Link:		http://eqdkp-plus.eu
  *
- * $Id: team_pageobject.class.php 14491 2014-07-20 17:43:25Z wallenium $
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 class team_pageobject extends pageobject {

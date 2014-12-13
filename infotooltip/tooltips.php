@@ -1,20 +1,22 @@
 <?php
-
- /*
- * Project:		EQdkp-Plus
- * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:		2010
- * Date:		$Date$
- * -----------------------------------------------------------------------
- * @author		$Author$
- * @copyright	2006-2011 EQdkp-Plus Developer Team
- * @link		http://eqdkp-plus.com
- * @package		eqdkp-plus
- * @version		$Rev$
- * 
- * $Id$
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-plus
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 define('EQDKP_INC', true);
@@ -42,23 +44,26 @@ $strPath = substr(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['S
 $eqdkp_path = httpHost().$strPath;
 
 ?>
- /*
- * Project:		EQdkp-Plus
- * License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:		2010
- * Date:		$Date$
- * -----------------------------------------------------------------------
- * @author		$Author$
- * @copyright	2006-2011 EQdkp-Plus Developer Team
- * @link		http://eqdkp-plus.com
- * @package		eqdkp-plus
- * @version		$Rev$
- * 
- * $Id$
+
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-plus
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
  
 var EQdkpTooltip = new function(){
 	//Init Vars
@@ -69,7 +74,7 @@ var EQdkpTooltip = new function(){
 	function addResources(){
 		
 		if ("complete" != document.readyState && "loaded" != document.readyState) setTimeout(addResources, 50);
-		else {      
+		else {
 			var head = document.getElementsByTagName("head")[0];
 			//Jquery CSS
 			var ac = document.createElement("link");
@@ -161,10 +166,10 @@ var EQdkpTooltip = new function(){
 				}
 				
 				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" data-name="'+itemname.toString()+'" '+itemdatatag+' title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+itemname+'</span>';
-					
+
 				$(this).html(out);
 			});
-									
+
 			$('.infotooltip').infotooltips();
 			
 			$('.infotooltip').tooltip({
@@ -200,54 +205,51 @@ var EQdkpTooltip = new function(){
 		addResources();
 	}
 	
-		function base64_encode (data) {
-	  // http://kevin.vanzonneveld.net
-	  // +   original by: Tyler Akins (http://rumkin.com)
-	  // +   improved by: Bayron Guevara
-	  // +   improved by: Thunder.m
-	  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +   bugfixed by: Pellentesque Malesuada
-	  // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
-	  // +   improved by: Rafał Kukawski (http://kukawski.pl)
-	  // *     example 1: base64_encode('Kevin van Zonneveld');
-	  // *     returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
-	  // mozilla has this native
-	  // - but breaks in 2.0.0.12!
-	  //if (typeof this.window['btoa'] == 'function') {
-	  //    return btoa(data);
-	  //}
-	  var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-	  var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+	function base64_encode (data) {
+		// http://kevin.vanzonneveld.net
+		// +   original by: Tyler Akins (http://rumkin.com)
+		// +   improved by: Bayron Guevara
+		// +   improved by: Thunder.m
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   bugfixed by: Pellentesque Malesuada
+		// +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+		// +   improved by: Rafał Kukawski (http://kukawski.pl)
+		// *     example 1: base64_encode('Kevin van Zonneveld');
+		// *     returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
+		// mozilla has this native
+		// - but breaks in 2.0.0.12!
+		//if (typeof this.window['btoa'] == 'function') {
+		//    return btoa(data);
+		//}
+		var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
 		ac = 0,
 		enc = "",
 		tmp_arr = [];
 
-	  if (!data) {
-		return data;
-	  }
+		if (!data) {
+			return data;
+		}
 
-	  do { // pack three octets into four hexets
-		o1 = data.charCodeAt(i++);
-		o2 = data.charCodeAt(i++);
-		o3 = data.charCodeAt(i++);
+		do { // pack three octets into four hexets
+			o1 = data.charCodeAt(i++);
+			o2 = data.charCodeAt(i++);
+			o3 = data.charCodeAt(i++);
 
-		bits = o1 << 16 | o2 << 8 | o3;
+			bits = o1 << 16 | o2 << 8 | o3;
 
-		h1 = bits >> 18 & 0x3f;
-		h2 = bits >> 12 & 0x3f;
-		h3 = bits >> 6 & 0x3f;
-		h4 = bits & 0x3f;
+			h1 = bits >> 18 & 0x3f;
+			h2 = bits >> 12 & 0x3f;
+			h3 = bits >> 6 & 0x3f;
+			h4 = bits & 0x3f;
 
-		// use hexets to index into b64, and append result to encoded string
-		tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-	  } while (i < data.length);
+			// use hexets to index into b64, and append result to encoded string
+			tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+		} while (i < data.length);
 
-	  enc = tmp_arr.join('');
-
-	  var r = data.length % 3;
-
-	  return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
-
+		enc = tmp_arr.join('');
+		var r = data.length % 3;
+		return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 	}
 
 

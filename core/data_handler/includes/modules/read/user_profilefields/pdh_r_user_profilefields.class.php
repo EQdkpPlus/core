@@ -1,39 +1,42 @@
 <?php
-/*
-* Project:		EQdkp-Plus
-* License:		Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
-* Link:			http://creativecommons.org/licenses/by-nc-sa/3.0/
-* -----------------------------------------------------------------------
-* Began:		2010
-* Date:			$Date: 2013-01-29 17:35:08 +0100 (Di, 29 Jan 2013) $
-* -----------------------------------------------------------------------
-* @author		$Author: wallenium $
-* @copyright	2006-2014 EQdkp-Plus Developer Team
-* @link			http://eqdkp-plus.eu
-* @package		eqdkpplus
-* @version		$Rev: 12937 $
-*
-* $Id: pdh_r_articles.class.php 12937 2013-01-29 16:35:08Z wallenium $
-*/
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-plus
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
-				
+
 if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 	class pdh_r_user_profilefields extends pdh_r_generic{
 		public static function __shortcuts() {
 		$shortcuts = array();
 		return array_merge(parent::$shortcuts, $shortcuts);
-	}				
-	
+	}
+
 	public $default_lang = 'english';
 	public $user_profilefields = null;
 
 	public $hooks = array(
 		'user_profilefields_update',
-	);		
-			
+	);
+
 	public $presets = array(
 		'user_profilefields_id' => array('id', array('%intFieldID%'), array()),
 		'user_profilefields_name' => array('name', array('%intFieldID%'), array()),
@@ -50,19 +53,19 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		'user_profilefields_icon_or_image' => array('icon_or_image', array('%intFieldID%'), array()),
 		'user_profilefields_bridge_field' => array('bridge_field', array('%intFieldID%'), array()),
 	);
-				
+
 	public function reset(){
 			$this->pdc->del('pdh_user_profilefields_table');
 			
 			$this->user_profilefields = NULL;
 	}
-					
+
 	public function init(){
-			$this->user_profilefields	= $this->pdc->get('pdh_user_profilefields_table');				
-					
+			$this->user_profilefields	= $this->pdc->get('pdh_user_profilefields_table');
+
 			if($this->user_profilefields !== NULL){
 				return true;
-			}		
+			}
 
 			$objQuery = $this->db->query('SELECT * FROM __user_profilefields ORDER BY sort_order ASC');
 			if($objQuery){
@@ -88,7 +91,6 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						'editable'				=> (int)$drow['editable'],
 					);
 				}
-				
 				$this->pdc->put('pdh_user_profilefields_table', $this->user_profilefields, null);
 			}
 
@@ -96,7 +98,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		/**
 		 * @return multitype: List of all IDs
-		 */				
+		 */	
 		public function get_id_list(){
 			if ($this->user_profilefields === null) return array();
 			return array_keys($this->user_profilefields);
@@ -119,7 +121,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 				
 		/**
-		 * Returns id for $intFieldID				
+		 * Returns id for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype id
 		 */
@@ -131,7 +133,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns name for $intFieldID				
+		 * Returns name for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype name
 		 */
@@ -149,7 +151,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns type for $intFieldID				
+		 * Returns type for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype type
 		 */
@@ -161,7 +163,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns length for $intFieldID				
+		 * Returns length for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype length
 		 */
@@ -173,7 +175,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns minlength for $intFieldID				
+		 * Returns minlength for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype minlength
 		 */
@@ -185,7 +187,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns validation for $intFieldID				
+		 * Returns validation for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype validation
 		 */
@@ -197,7 +199,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns required for $intFieldID				
+		 * Returns required for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype required
 		 */
@@ -209,7 +211,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns show_on_registration for $intFieldID				
+		 * Returns show_on_registration for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype show_on_registration
 		 */
@@ -221,7 +223,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns enabled for $intFieldID				
+		 * Returns enabled for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype enabled
 		 */
@@ -233,7 +235,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns sort_order for $intFieldID				
+		 * Returns sort_order for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype sort_order
 		 */
@@ -245,7 +247,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns is_contact for $intFieldID				
+		 * Returns is_contact for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype is_contact
 		 */
@@ -257,7 +259,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns contact_url for $intFieldID				
+		 * Returns contact_url for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype contact_url
 		 */
@@ -269,7 +271,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns icon_or_image for $intFieldID				
+		 * Returns icon_or_image for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype icon_or_image
 		 */
@@ -281,7 +283,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		/**
-		 * Returns bridge_field for $intFieldID				
+		 * Returns bridge_field for $intFieldID
 		 * @param integer $intFieldID
 		 * @return multitype bridge_field
 		 */
@@ -291,28 +293,28 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_options($intFieldID){
 			if (isset($this->user_profilefields[$intFieldID])){
 				return unserialize($this->user_profilefields[$intFieldID]['options']);
 			}
 			return false;
 		}
-		
+
 		public function get_lang_var($intFieldID){
 			if (isset($this->user_profilefields[$intFieldID])){
 				return $this->user_profilefields[$intFieldID]['lang_var'];
 			}
 			return false;
 		}
-		
+
 		public function get_editable($intFieldID){
 			if (isset($this->user_profilefields[$intFieldID])){
 				return $this->user_profilefields[$intFieldID]['editable'];
 			}
 			return false;
 		}
-		
+
 		public function get_field_by_name($strName){
 			foreach($this->user_profilefields as $intFieldID => $arrValue){
 				if (utf8_strtolower($arrValue['name']) === utf8_strtolower($strName)){
@@ -321,7 +323,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_registration_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
 			
@@ -335,7 +337,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			
 			return ($blnIDsOnly) ? $fieldids : $fields;
 		}
-		
+
 		public function get_usersettings_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
 				
@@ -346,10 +348,10 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					$fieldids[] = $intFieldID;
 				}
 			}
-				
+
 			return ($blnIDsOnly) ? $fieldids : $fields;
 		}
-		
+
 		public function get_contact_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
 		
@@ -360,26 +362,25 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					$fieldids[] = $intFieldID;
 				}
 			}
-		
 			return ($blnIDsOnly) ? $fieldids : $fields;
 		}
-		
+
 		public function get_create_field($intFieldID){
 			$options = $this->get_options($intFieldID);
 			if ($options && isset($options['options'])){
 				$arrOptions = $options['options'];
 			} else $arrOptions = array();
-			
+
 			$strType = $this->get_type($intFieldID);
 			if ($strType == 'link') $strType = "text";
-			
+
 			$myField =  array(
 				'type'		=> $strType,
 				'lang'		=> $this->get_html_name($intFieldID),
 				'required'	=> ($this->get_required($intFieldID)) ? true : false,
 				'options'	=> $arrOptions,
 			);
-			
+
 			$strPattern = $this->get_validation($intFieldID);
 			if ($strPattern != "") $myField['pattern'] = $strPattern;
 			
@@ -387,18 +388,18 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				if ($this->get_length($intFieldID) > 0) $myField['maxlength'] = $this->get_length($intFieldID);
 				if ($this->get_minlength($intFieldID) > 0) $myField['minlength'] = $this->get_minlength($intFieldID);
 			}
-			
+
 			if ($strType == 'text'){
 				$myField['size'] = 40;
 			}
-			
+
 			if ($strType == 'textarea'){
 				$myField['cols'] = 40;
 			}
-				
+
 			return $myField;
 		}
-		
+
 		public function get_bridge_mapping(){
 			$fields = array();
 			$arrIDList = $this->get_id_list();
@@ -410,7 +411,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			
 			return $fields;
 		}
-		
+
 		public function get_display_field($intFieldID, $intUserID){
 			$strUserValue = $this->pdh->get('user', 'custom_fields', array($intUserID, 'userprofile_'.$intFieldID));
 			if ($strUserValue == "") return "";
@@ -430,7 +431,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						$arrOptions = $this->get_options($intFieldID);
 						if (!in_array($strUserValue, array_keys($arrOptions['options']))) return '';
 						return $arrOptions['options'][$strUserValue];
-						
+
 					case 'multiselect':
 						$arrOut = array();
 						$arrUserValue = $strUserValue;	
@@ -438,10 +439,10 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						foreach($arrUserValue as $strMemberVal) {
 							//Check if Value is in dropdown options
 							if (!in_array($strMemberVal, array_keys($arrOptions['options']))) return '';
-						
+
 							$arrOut[] = $arrOptions['options'][$strMemberVal];
 						}
-							
+
 						$out = implode(', ', $arrOut);
 						return $out;
 				}
@@ -464,7 +465,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				$strFormat = $this->get_contact_url($intFieldID);
 				if ($strFormat == "") $strFormat = "%s";
 				$strFormattedString = sprintf($strFormat, $strUserValue);
-			}  else $strFormattedString = $strUserValue;
+			} else $strFormattedString = $strUserValue;
 			
 			switch($strType){
 				case 'text':
@@ -487,14 +488,11 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		
 						$arrOut[] = $arrOptions['options'][$strMemberVal];
 					}
-						
 					$out = implode(', ', $arrOut);
 					return $strIcon.$out;
 			}
 	
 		}
-
-		
 
 	}//end class
 }//end if
