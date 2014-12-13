@@ -49,12 +49,30 @@ $lang = array(
 	//Step: licence
 	"welcome"				=> "Willkommen zur Installation von EQdkp Plus. Um dieses Gamer CMS & DKP-System zu installieren, lies dir bitte die Lizenzbedingungen durch und klicke anschließend auf 'Akzeptieren & Installation starten'",
 	'accept'				=> 'Akzeptieren & Installation starten',
-	'license_text'			=> '<b>EQdkp Plus ist unter Creative Commons Lizenz "Namensnennung-Nicht-kommerziell-Weitergabe unter gleichen Bedingungen 3.0 Deutschland (CC BY-NC-SA 3.0)" veröffentlicht.</b><br /><br /> Der vollständige Lizenztext kann unter https://creativecommons.org/licenses/by-nc-sa/3.0/de/ abgerufen werden.<br /><br />
-	Nachfolgend eine vereinfachte Zusammenfassung des rechtsverbindlichen Lizenzvertrages in allgemeinverständlicher Sprache:<br /><br />
-	<b>Sie dürfen:</b><ul><li>das Werk bzw. den Inhalt vervielfältigen, verbreiten und öffentlich zugänglich machen</li><li>Abwandlungen und Bearbeitungen des Werkes bzw. Inhaltes anfertigen</li></ul>
-	<b>Zu den folgenden Bedingungen:</b><ul><li><b>Namensnennung</b> — Sie müssen den Namen des Autors/Rechteinhabers in der von ihm festgelegten Weise nennen. </li><li><b>Keine kommerzielle Nutzung</b> — Dieses Werk bzw. dieser Inhalt darf nicht für kommerzielle Zwecke verwendet werden. </li><li><b>Weitergabe unter gleichen Bedingungen</b> — Wenn Sie das lizenzierte Werk bzw. den lizenzierten Inhalt bearbeiten oder in anderer Weise erkennbar als Grundlage für eigenes Schaffen verwenden, dürfen Sie die daraufhin neu entstandenen Werke bzw. Inhalte nur unter Verwendung von Lizenzbedingungen weitergeben, die mit denen dieses Lizenzvertrages identisch oder vergleichbar sind. </li></ul>
-	<b>Wobei gilt:</b><ul><li><b>Verzichtserklärung</b> — Jede der vorgenannten Bedingungen kann aufgehoben werden, sofern Sie die ausdrückliche Einwilligung des Rechteinhabers dazu erhalten.</li><li><b>Public Domain (gemeinfreie oder nicht-schützbare Inhalte)</b> — Soweit das Werk, der Inhalt oder irgendein Teil davon zur Public Domain der jeweiligen Rechtsordnung gehört, wird dieser Status von der Lizenz in keiner Weise berührt.</li><li><b>Sonstige Rechte</b> — Die Lizenz hat keinerlei Einfluss auf die folgenden Rechte:<ul><li>Die Rechte, die jedermann wegen der Schranken des Urheberrechts oder aufgrund gesetzlicher Erlaubnisse zustehen (in einigen Ländern als grundsätzliche Doktrin des fair use etabliert); </li><li>Das Urheberpersönlichkeitsrecht des Rechteinhabers; </li><li>Rechte anderer Personen, entweder am Lizenzgegenstand selber oder bezüglich seiner Verwendung, zum Beispiel Persönlichkeitsrechte abgebildeter Personen. </li></ul> </li><li><b>Hinweis</b> — Im Falle einer Verbreitung müssen Sie anderen alle Lizenzbedingungen mitteilen, die für dieses Werk gelten. Am einfachsten ist es, an entsprechender Stelle einen Link auf diese Seite (https://creativecommons.org/licenses/by-nc-sa/3.0/de/) einzubinden. </li></ul>
-	',
+	'license_text'			=> '<b>EQdkp Plus ist unter der AGPL v3.0 Lizenz veröffentlicht.</b><br /><br /> Der vollständige Lizenztext kann unter <a href="http://opensource.org/licenses/AGPL-3.0" target="_blank">http://opensource.org/licenses/AGPL-3.0</a> abgerufen werden.<br /><br />
+	
+		Nachfolgend eine Zusammenfassung der wichtigsten Punkte der AGPL v3.0. Es besteht kein Anspruch auf Vollständigkeit, Korrektheit und richtige Übersetzung.<br /><br />
+	<h3><strong>Du darfst:</strong></h3>
+<ul>
+<li>die Software für kommerzielle Zwecke einsetzen</li>
+<li>die Software verbreiten</li>
+<li>die Software verändern</li>
+</ul>
+<h3><strong>Du musst:</strong></h3>
+<ul>
+<li>den Quelltext deiner gesamten&nbsp;Anwendung, die EQdkp Plus verwendet, veröffentlichen&nbsp;wenn du diese weitergibst/verbreitest</li>
+<li>den Quelltext deiner&nbsp;gesamten Anwendung, die EQdkp Plus verwendet, zur Verfügung stellen, auch wenn diese nicht weitergegeben wird, sondern über ein Netzwerk genutzt wird ("Hosting", "SaaS")</li>
+<li>die sicht- und unsichtbaren Copyright-Hinweise bestehen lassen und eine Kopie der AGPL Lizenz deiner&nbsp;Anwendung beilegen</li>
+<li>Änderungen am Quelltext kenntlich machen, wenn du deine Anwendung weitergibst/verbreitest</li>
+</ul>
+<h3><strong>Du darfst nicht:</strong></h3>
+<ul>
+<li>den Autor/die Autoren von EQdkp Plus&nbsp;verantwortlich für Schäden etc. machen. Die Software wird ohne Garantie ausgeliefert.</li>
+<li>deine Software, die EQdkp Plus verwendet, unter eine andere Lizenz als die AGPL stellen</li>
+</ul>
+		
+		
+		',
 	//Step: php_check
 	'table_pcheck_name'		=> 'Name',
 	'table_pcheck_required'	=> 'Benötigt',

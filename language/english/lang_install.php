@@ -35,7 +35,7 @@ $lang = array(
 	"retry" => 'Retry',
 	"skip" => 'Skip',
 	"step_order_error" => 'Step-Order error: Step not found. Please ensure that all files are uploaded correctly. For further information please visit our forums at <a href="http://eqdkp-plus.eu/forum">http://eqdkp-plus.eu/forum</a>.',
-	"licence" => 'Licence Agreement',
+	"licence" => 'License Agreement',
 	"php_check" => 'Pre-installation Check',
 	"ftp_access" => 'FTP Settings',
 	"encryptionkey" => 'Encryption Key',
@@ -46,12 +46,26 @@ $lang = array(
 	"end" => 'Complete the installation',
 	"welcome" => 'Welcome to the installer for EQdkp Plus. We have worked hard to make this process easy and fast. To get started simply accept our license agreement by clicking \'Accept & Start Installation\' below.',
 	"accept" => 'Accept & Start Installation',
-	"license_text" => '<b>EQdkp Plus is published under Creative Commons Licence "Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)".</b><br /><br /> The full licence text can be found at https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode.<br /><br />
-	This is a human-readable summary of the Legal Code:<br /><br />
-	<b>You are free:</b><ul><li><b>to Share</b> — to copy, distribute and transmit the work </li><li><b>to Remix</b> — to adapt the work </li></ul>
-	<b>Under the following conditions:</b><ul><li><b>Attribution</b> — You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work).</li><li><b>Noncommercial</b> — You may not use this work for commercial purposes. </li><li><b>Share Alike</b> — If you alter, transform, or build upon this work, you may distribute the resulting work only under the same or similar license to this one. </li></ul>
-	<b>With the understanding that: </b><ul><li><b>Waiver</b> — Any of the above conditions can be waived if you get permission from the copyright holder. </li><li><b>Public Domain</b> — Where the work or any of its elements is in the public domain under applicable law, that status is in no way affected by the license. </li><li><b>Other Rights</b> — In no way are any of the following rights affected by the license: <ul><li>Your fair dealing or fair use rights, or other applicable copyright exceptions and limitations; </li><li>The author\'s moral rights; </li><li>Rights other persons may have either in the work itself or in how the work is used, such as publicity or privacy rights. </li></ul> </li><li><b>Notice</b> — For any reuse or distribution, you must make clear to others the license terms of this work. The best way to do this is with a link to this web page (https://creativecommons.org/licenses/by-nc-sa/3.0/). </li></ul>
-',
+	"license_text" => '<b>EQdkp Plus is published under AGPL v3.0 license.</b><br /><br /> The full license text can be found at <a href="http://opensource.org/licenses/AGPL-3.0" target="_blank">http://opensource.org/licenses/AGPL-3.0</a>.<br /><br />
+	This is a summary of the most important terms of the AGPL v3.0. There is no claim to completeness and correctness.<br /><br />
+	<h3><strong>You are permitted:</strong></h3>
+<ul>
+<li>to use this software for commercial use</li>
+<li>to distribute this software</li>
+<li>to modify this software</li>
+</ul>
+<h3><strong>You are required:</strong></h3>
+<ul>
+<li>to disclose the sourcecode of your complete application that uses EQdkp Plus, when&nbsp;you distribute your application</li>
+<li>to disclose the sourcecode of your complete application that uses EQdkp Plus, if you don\'t distribute it, but users are using the software via network ("Hosting", "SaaS")</li>
+<li>to remain the visible and unvisible Copyright Notices of this Project and to include a copy of the AGPL License at your application</li>
+<li>to indicate significant changes made to the code</li>
+</ul>
+<h3><strong>It\'s forbidden:</strong></h3>
+<ul>
+<li>to held the author(s) of this software liable for any damages, the software is provided without warranty.</li>
+<li>to license your application under another license than the AGPL</li>
+</ul>',
 	"table_pcheck_name" => 'Name',
 	"table_pcheck_required" => 'Required',
 	"table_pcheck_installed" => 'Current',
