@@ -1,0 +1,17 @@
+LICENSE INFORMATION EQDKP Plus
+==============================
+
+The project "EQdkp Plus" and all its extensions (Plugins, Portal modules, 
+Templates, other Tools), that have been developed by the EQdkp Plus Team 
+are licenced - unless stated otherwise - under the GNU AFFERO GENERAL 
+PUBLIC LICENSE, Version 3.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/agpl.txt>.
+
+For other purposes, like commercial ones, you can choose different licences
+for EQdkp Plus. If you are interested, please visit 
+<https://eqdkp-plus.eu/en/licence.html>.
+
+If you have questions about the licence of EQdkp Plus, please feel free to ask
+at <http://eqdkp-plus.eu/>.
