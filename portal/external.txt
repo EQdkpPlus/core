@@ -1,1 +1,0 @@
-//svn.code.sf.net/p/eqdkp-plus/code/portal_moduls/latestnews/tags/0.1.0 latestnews
