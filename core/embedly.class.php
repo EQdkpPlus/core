@@ -51,17 +51,24 @@ class embedly extends gen_class {
 	}
 	
 	//Parse an String for Hyperlinks and replace Videos and Images
-	public function parseString($string, $maxwidth=false){
+	public function parseString($string, $maxwidth=false, $blnEncodeMediaTags=false){
 		if (strlen($string) == 0) return '';
 		
-		$string = html_entity_decode($string);
+
 		$embedlyUrls = array();
 		//First, get the links
 		$arrLinks = array();
 		$intLinks = preg_match_all('@((("|:)?)https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string, $arrLinks);
+		
+		$arrDecodedLinks = array();
 		if ($intLinks){
-			foreach ($arrLinks[0] as $link){
-				if (substr($link, 0, 1) != '"' && substr($link, 0, 1) != ':') $embedlyUrls[] = strip_tags($link);
+			foreach ($arrLinks[0] as $key => $link){
+				$orig_link = $link;
+				$link = html_entity_decode($link);
+				if (substr($link, 0, 1) != '"' && substr($link, 0, 1) != ':') {
+					$embedlyUrls[$key] = strip_tags($link);
+					$arrDecodedLinks[$key] = $orig_link;
+				}
 			}	
 		}
 
@@ -74,10 +81,11 @@ class embedly extends gen_class {
 		foreach ($oembeds as $key => $oembed){
 			$out = $this->formatEmbedded($oembed);
 			if (strlen($out)){
-				$string = str_replace($arrLinks[0][$key], $out, $string);
+				$out = ($blnEncodeMediaTags) ? htmlspecialchars($out) : $out;
+				$string = str_replace($arrDecodedLinks[$key], $out, $string);
 			}
 		}
-		return htmlspecialchars($string);	
+		return $string;
 	}
 		
 		

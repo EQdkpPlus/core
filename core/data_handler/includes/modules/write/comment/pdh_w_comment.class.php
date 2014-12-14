@@ -27,8 +27,8 @@ if(!class_exists('pdh_w_comment')) {
 	class pdh_w_comment extends pdh_w_generic {
 
 		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
-			$strComment = xhtml_entity_decode($this->embedly->parseString($comment, 400));
-			
+			$strComment = $this->embedly->parseString($comment, 400, false);
+
 			$objQuery = $this->db->prepare("INSERT INTO __comments :p")->set(array(
 					'attach_id'		=> $attach_id,
 					'date'			=> $this->time->time,

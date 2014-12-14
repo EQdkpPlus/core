@@ -131,15 +131,18 @@ if(!class_exists('pdh_w_articles')) {
 			//Replace Breakline
 			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
-			$strText = $this->embedly->parseString($strText);
+			$strText = $this->embedly->parseString($strText, false, false);
 			
 			$arrPageObjects = array();
-			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', xhtml_entity_decode($strText), $arrTmpPageObjects, PREG_PATTERN_ORDER);
+			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strText, $arrTmpPageObjects, PREG_PATTERN_ORDER);
 			if (count($arrTmpPageObjects[0])){
 				foreach($arrTmpPageObjects[3] as $key=>$val){
 					$arrPageObjects[] = $val;
 				}
 			}
+			
+			$strText = htmlspecialchars($strText);
+			
 			$objQuery = $this->db->prepare("INSERT INTO __articles :p")->set(array(
 				'title' 			=> $strTitle,
 				'text'				=> $strText,
@@ -250,15 +253,17 @@ if(!class_exists('pdh_w_articles')) {
 		public function update_article($id, $strText){
 			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
-			$strText = $this->embedly->parseString($strText);
+			$strText = $this->embedly->parseString($strText, false, false);
 				
 			$arrPageObjects = array();
-			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', xhtml_entity_decode($strText), $arrTmpPageObjects, PREG_PATTERN_ORDER);
+			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strText, $arrTmpPageObjects, PREG_PATTERN_ORDER);
 			if (count($arrTmpPageObjects[0])){
 				foreach($arrTmpPageObjects[3] as $key=>$val){
 					$arrPageObjects[] = $val;
 				}
 			}
+			
+			$strText = htmlspecialchars($strText);
 				
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			
@@ -311,15 +316,17 @@ if(!class_exists('pdh_w_articles')) {
 			
 			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
-			$strText = $this->embedly->parseString($strText);
+			$strText = $this->embedly->parseString($strText, false, false);
 			
 			$arrPageObjects = array();
-			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', xhtml_entity_decode($strText), $arrTmpPageObjects, PREG_PATTERN_ORDER);
+			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strText, $arrTmpPageObjects, PREG_PATTERN_ORDER);
 			if (count($arrTmpPageObjects[0])){
 				foreach($arrTmpPageObjects[3] as $key=>$val){
 					$arrPageObjects[] = $val;
 				}
 			}
+			
+			$strText = htmlspecialchars($strText);
 			
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			
