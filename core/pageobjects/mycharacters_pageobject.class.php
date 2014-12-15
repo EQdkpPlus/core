@@ -43,7 +43,8 @@ class mycharacters_pageobject extends pageobject {
 		$arrNewMembers = $this->in->getArray('member_id', 'int');
 		$arrOldMembers = $this->pdh->get('member', 'connection_id', array($this->user->id));
 		$diff = array_diff($arrNewMembers, $arrOldMembers);
-		if (count($diff) !== 0){
+		$diff2 = array_diff($arrOldMembers, $arrNewMembers);
+		if (count($diff) !== 0 || count($diff2) !== 0 ){
 			$this->pdh->put('member', 'update_connection', array($this->in->getArray('member_id', 'int')));
 			$this->pdh->process_hook_queue();
 		}
