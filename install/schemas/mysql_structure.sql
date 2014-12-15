@@ -532,6 +532,7 @@ DROP TABLE IF EXISTS __repository;
 CREATE TABLE `__repository` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`plugin` varchar(255) COLLATE utf8_bin NOT NULL,
+	`plugin_id` INT(1) NULL,
 	`name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`date` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`author` varchar(255) COLLATE utf8_bin DEFAULT NULL,

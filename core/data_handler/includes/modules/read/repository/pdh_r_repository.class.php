@@ -63,6 +63,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						'rating'		=> $row['rating'],
 						'dep_coreversion'=> $row['dep_coreversion'],
 						'dep_php'		=> $row['dep_php'],
+						'plugin_id'		=> $row['plugin_id'],
 					);
 				}
 				

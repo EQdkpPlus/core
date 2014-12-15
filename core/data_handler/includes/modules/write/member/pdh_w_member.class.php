@@ -309,11 +309,13 @@ if ( !class_exists( "pdh_w_member" ) ) {
 
 		public function suspend($member_id){
 			if ($member_id == 'all'){
-				$objQuery = $this->db->prepare("UPDATE __members :p")->set(array(
-				'member_status' => 0,
-				'requested_del' => 1,
-				))->execute();
-
+				$id_list = $this->pdh->get('member', 'id_list');
+				if (count($id_list)){
+					$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id :in")->set(array(
+						'member_status' => 0,
+						'requested_del' => 1,
+					))->in($id_list)->execute();
+				}
 			} else {
 				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id=?")->set(array(
 					'member_status' => 0,

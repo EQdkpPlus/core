@@ -25,81 +25,81 @@ function update_error(data){
 	$("#lu_loading_img").hide();
 }
 
-function repo_update(cat, extensioncode){
+function repo_update(extid, cat, extensioncode){
 	<!-- IF S_HIDE_UPDATEWARNING -->
-	repo_update_start(cat, extensioncode);
+	repo_update_start(extid, cat, extensioncode);
 	<!-- ELSE -->
 	if (cat != 2) {
-		update_confirm(cat, extensioncode);
+		update_confirm(extid, cat, extensioncode);
 	} else {
-		repo_update_start(cat, extensioncode);
+		repo_update_start(extid, cat, extensioncode);
 	}
 	<!-- ENDIF -->
 }
 
-function repo_update_start(cat, extensioncode){
+function repo_update_start(extid, cat, extensioncode){
 	$("#lu_error").hide();
 	$("#nl_progressbar").show();
 	$("#lu_loading_img").show();
 
-	repo_step1(cat, extensioncode, 'update');
+	repo_step1(extid, cat, extensioncode, 'update');
 }
 
-function repo_install(cat, extensioncode){
+function repo_install(extid, cat, extensioncode){
 	
 	$("#lu_error").hide();
 	$("#nl_progressbar").show();
 	$("#lu_loading_img").show();
 
-	repo_step1(cat, extensioncode, 'install');
+	repo_step1(extid, cat, extensioncode, 'install');
 }
 
-function repo_step1(cat, extensioncode, mode){
+function repo_step1(extid, cat, extensioncode, mode){
 	set_progress_bar_value(0, {L_repo_step1|jsencode}+'...');
-	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode, function(data) {
+	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
 		  if ($.trim(data) == 'true'){
-			repo_step2(cat, extensioncode, mode);
+			repo_step2(extid, cat, extensioncode, mode);
 		  } else {
 			update_error(data);
 		  }
 	});
 }
 
-function repo_step2(cat, extensioncode, mode){
+function repo_step2(extid, cat, extensioncode, mode){
 	set_progress_bar_value(1, {L_repo_step2|jsencode}+'...');
-	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode, function(data) {
+	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
 		  if ($.trim(data) == 'true'){
-			repo_step3(cat, extensioncode, mode);
+			repo_step3(extid, cat, extensioncode, mode);
 		  } else {
 			update_error(data);
 		  }
 	});
 }
 
-function repo_step3(cat, extensioncode, mode){
+function repo_step3(extid, cat, extensioncode, mode){
 	set_progress_bar_value(2, {L_repo_step3|jsencode}+'...');
-	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode, function(data) {
+	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
 		  if ($.trim(data) == 'true'){
-			repo_step4(cat, extensioncode, mode);
+			repo_step4(extid, cat, extensioncode, mode);
 		  } else {
 			update_error(data);
 		  }
 	});
 }
 
-function repo_step4(cat, extensioncode, mode){
+function repo_step4(extid, cat, extensioncode, mode){
 	set_progress_bar_value(3, {L_repo_step4|jsencode}+'...');
-	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode, function(data) {
+	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
 		  if ($.trim(data) == 'true'){
-			repo_step5(cat, extensioncode, mode);
+			repo_step5(extid, cat, extensioncode, mode);
 		  } else {
 			update_error(data);
 		  }
 	});
 }
 
-function repo_step5(cat, extensioncode, mode){
-	window.location='manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&link_hash={CSRF_MODE_TOKEN}';
+function repo_step5(extid, cat, extensioncode, mode){
+	window.location='manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}';
 	return;	
 }
 

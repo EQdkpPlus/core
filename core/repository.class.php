@@ -161,18 +161,19 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 							}
 							
 							$this->pdh->put('repository', 'insert', array(array(
-								'plugin'			=> $ext->plugin,
-								'name'				=> $ext->name,
-								'date'				=> $ext->releasedate,
-								'author'			=> $ext->author,
-								'description'		=> $ext->shortdesc,
-								'version'			=> $ext->version,
-								'category'			=> $ext->category,
-								'level'				=> $ext->level,
-								'changelog'			=> $ext->changelog,
+								'plugin'			=> (string)$ext->plugin,
+								'plugin_id'			=> (int)$ext->plugin_id,
+								'name'				=> (string)$ext->name,
+								'date'				=> (int)$ext->releasedate,
+								'author'			=> (string)$ext->author,
+								'description'		=> (string)$ext->shortdesc,
+								'version'			=> (string)$ext->version,
+								'category'			=> (int)$ext->category,
+								'level'				=> (string)$ext->level,
+								'changelog'			=> (string)$ext->changelog,
 								'updated'			=> $this->time->time,
 								'rating'			=> (int)round((float)$ext->rating),
-								'dep_coreversion'	=> $ext->dep_coreversion,
+								'dep_coreversion'	=> (string)$ext->dep_coreversion,
 								'version_ext'		=> (isset($ext->version_ext)) ? $ext->version_ext : $ext->version,
 								'dep_php'			=> ($ext->dep_php) ? $ext->dep_php : '',
 							)));
@@ -197,8 +198,9 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		}
 
 		// generate download link for extension
-		public function getExtensionDownloadLink($intCategory, $strExtensionName){
-			$response = $this->puf->fetch($this->RepoEndpoint.'download_link&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName.'&core='.$this->plusversion, "", 1);
+		public function getExtensionDownloadLink($intExtensionID, $intCategory, $strExtensionName){
+			d($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName);
+			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 1);
 			$arrJson = json_decode($response);
 			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->link)){
 				return array('link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
@@ -538,6 +540,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 							if ($blnUpdateAvailable){
 								$pluginscheck[$value['plugin']] = array(
 											'plugin'			=> $value['plugin'],
+											'plugin_id'			=> $value['plugin_id'],
 											'name'				=> $value['name'],
 											'version'			=> $value['version_ext'],
 											'version_int'		=> $value['version'],
