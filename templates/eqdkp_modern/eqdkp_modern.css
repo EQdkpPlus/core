@@ -2333,6 +2333,7 @@ div.error { display: none; }
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 	margin-left: 130px;
+	word-break: break-all;
 }
 
 .comment_container:after, .comment_write_container:after {
