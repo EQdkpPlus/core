@@ -121,7 +121,7 @@ class core extends gen_class {
 			'L_ADMIN_PANEL' => $this->user->lang('admin_acp'),
 			'L_MMODE' => $this->user->lang('maintenance_mode'),
 			'L_TASK_MANAGER' => $this->user->lang('task_manager'),
-			'U_MMODE' => $this->root_path.'maintenance/task_manager.php'.$this->SID,
+			'U_MMODE' => $this->root_path.'maintenance/'.$this->SID,
 			'L_ACTIVATE_INFO' => $this->user->lang('activate_info'),
 			'L_ACTIVATE_MMODE' => $this->user->lang('activate_mmode'),
 			'L_LEAVE_MMODE' => $this->user->lang('leave_mmode'),

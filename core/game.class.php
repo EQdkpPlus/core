@@ -696,7 +696,6 @@ class game extends gen_class {
 		foreach($class_dep as $class) {
 			if(isset($class['roster']) && $class['roster']) $todisplay[] = $class['type'];
 		}
-		
 		return $this->get_assoc_classes($todisplay, $filter, $lang);
 	}
 	
@@ -747,6 +746,13 @@ class game extends gen_class {
 				$relevant_deps[$name2type[key($class['parent'])]] = $class['type'];
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
+		}
+		
+		if (count($relevant_deps) === 0){
+			return array(
+				'todisplay'	=> $todisplay,
+				'data'		=> array_keys($this->get($todisplay[0], $filter, $lang)),
+			);
 		}
 		
 		// build associative array

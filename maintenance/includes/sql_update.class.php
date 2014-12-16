@@ -116,7 +116,7 @@ class sql_update extends task {
 	}
 
 	public function step_end() {
-		return $this->form."</table><br /><a href='".$this->root_path."maintenance/task_manager.php".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i>".$this->user->lang('task_manager')."</button></a>";
+		return $this->form."</table><br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i>".$this->user->lang('task_manager')."</button></a>";
 	}
 
 	protected function do_sql($sqls, $version, $lang, $task_name) {

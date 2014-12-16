@@ -544,6 +544,13 @@ class ManagePageLayouts extends page_generic {
 					'ROSTER_SHOW_HIDDEN' => ($this->config->get('roster_show_hidden')) ? ' checked="checked"' : '',
 				));
 			}
+			
+			//SK Startlist
+			/*
+			if ($page == 'listmembers' && ($layout_def['base_layout'] == 'sk' || $layout_def['base_layout'] == 'sk_bottom' || $layout_def['base_layout'] == 'sk_fixed')){
+								
+			}
+			*/
 						
 			//iterate through defined objects
 			foreach($page_settings as $page_object => $options) {

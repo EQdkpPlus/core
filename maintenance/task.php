@@ -92,7 +92,7 @@ class task_display extends gen_class {
 				));
 			}
 			$timer_end = microtime(true);
-			$this->core->create_breadcrump($this->user->lang($task_obj->type), 'task_manager.php'.$this->SID.'&amp;type='.$task_obj->type);
+			$this->core->create_breadcrump($this->user->lang($task_obj->type), $this->SID.'&amp;type='.$task_obj->type);
 			$this->core->create_breadcrump($task_obj->lang[$task]);
 
 

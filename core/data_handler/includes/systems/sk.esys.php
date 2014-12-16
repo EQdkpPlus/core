@@ -41,9 +41,6 @@ $system_def = array(
 		'rval' => 1,
 	),
 
-	'options' => array(
-	),
-
 	'substitutions' => array(
 	),
 

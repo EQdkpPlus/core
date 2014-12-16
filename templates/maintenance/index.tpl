@@ -62,7 +62,7 @@
 			<div id="layer">
 			</div>
 			<div id="inner_layer">
-				<form action="task_manager.php{SID}" method="post" name="post">
+				<form action="index.php{SID}" method="post" name="post">
 					{L_ACTIVATE_INFO}
 					<input type="text" name="maintenance_message" value="{MAINTENANCE_MESSAGE}" style="width:98%" /><br /><br />
 
@@ -81,7 +81,7 @@
 				<h2>{L_SPLASH_WELCOME}</h2>
 				<p>{L_SPLASH_DESC}</p><br/>
 				<div><span class="fa-stack fa-3x"  style="float:left;"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-tachometer fa-stack-1x fa-inverse"></i></span>
-					<br />{L_SPLASH_NEW} <br /> <strong><a href="task_manager.php{SID}&start_tour=true">{L_TOUR_START}</a>
+					<br />{L_SPLASH_NEW} <br /> <strong><a href="index.php{SID}&start_tour=true">{L_TOUR_START}</a>
 					<div class="clear"></div>
 				</div>
 				<p>
@@ -92,18 +92,18 @@
 						</tr>
 					</table>
 				</p>
-				<input type="button" value="{L_TOUR_START}" class="mainoption" onclick="window.location='task_manager.php{SID}&start_tour=true'" />
-				<input type="button" value="{L_JUMP_TOUR}" class="mainoption" onclick="window.location='task_manager.php{SID}&no_tour=true'" />
+				<input type="button" value="{L_TOUR_START}" class="mainoption" onclick="window.location='index.php{SID}&start_tour=true'" />
+				<input type="button" value="{L_JUMP_TOUR}" class="mainoption" onclick="window.location='index.php{SID}&no_tour=true'" />
 				<br /><br />
 				<input type="button" value="{L_06_IMPORT}" class="mainoption" onclick="window.location='{SID}&type=import'" />
-				<input type="button" value="{L_GUILD_IMPORT} *" class="mainoption" onclick="window.location='task_manager.php{SID}&guild_import=true'" /> <br />{L_GUILD_IMPORT_INFO}
+				<input type="button" value="{L_GUILD_IMPORT} *" class="mainoption" onclick="window.location='index.php{SID}&guild_import=true'" /> <br />{L_GUILD_IMPORT_INFO}
 			</div>
 			<!-- ENDIF -->
 			
 			<!-- IF NO_LEAVE -->
 			<div id="layer"></div>
 			<div id="inner_layer">
-				<form action="task_manager.php{SID}" method="post" name="no_leave">
+				<form action="index.php{SID}" method="post" name="no_leave">
 					{L_NO_LEAVE}
 					<br />
 					<br />

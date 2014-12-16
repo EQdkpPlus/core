@@ -795,7 +795,7 @@ if( !class_exists( "plus_datahandler")){
 
 			//prepare substitution array
 			$system_def['config'] = array( );
-			if( is_array( $system_def['options'] ) && !empty( $system_def['options'] ) ) {
+			if( isset($system_def['options']) && is_array( $system_def['options'] ) && !empty( $system_def['options'] ) ) {
 				foreach( $system_def['options'] as $name => $options ) {
 					$system_def['config'][$name] = $options['value'];
 				}

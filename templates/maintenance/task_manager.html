@@ -2,14 +2,14 @@
 <div class="infobox infobox-large infobox-blue clearfix">
 	<i class="fa fa-info-circle fa-4x pull-left"></i>
 	{L_MMODE_INFO}<br />
-	<button onclick="window.location='task_manager.php{SID}&amp;disable=true'">{L_DEACTIVATE_MMODE}</button>
+	<button onclick="window.location='index.php{SID}&amp;disable=true'">{L_DEACTIVATE_MMODE}</button>
 </div>
 <br />
 <!-- ENDIF -->
 
 <ul class="nav nav-tabs">
 	<!-- BEGIN task_types -->
-	<li {task_types.ACTIVE}><a href="task_manager.php{SID}&amp;type={task_types.TYPE}">{task_types.L_TYPE}</a></li>
+	<li {task_types.ACTIVE}><a href="index.php{SID}&amp;type={task_types.TYPE}">{task_types.L_TYPE}</a></li>
 	<!-- END task_types -->
   </ul>
 <br />

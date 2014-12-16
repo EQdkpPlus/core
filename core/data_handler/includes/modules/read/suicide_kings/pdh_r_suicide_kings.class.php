@@ -55,22 +55,34 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			if($this->sk_list !== null){
 				return true;
 			}
-		
-			//base list for all mdkp pools
-			$member_hash = array();
-			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
-				$member_hash['single'][$member_id] = md5($this->pdh->get('member','name', array($member_id)));
-				$intMainID = $this->pdh->get('member', 'mainid', array($member_id));
-				$member_hash['multi'][$intMainID] = md5($this->pdh->get('member','name', array($intMainID)));
-			}
-			asort($member_hash['single']);
-			asort($member_hash['multi']);
-			
-			//With twinks (mainchar)
+			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
+			$member_hash = array('single' => array(), 'multi' => array());
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
-				$i = 1;
-				foreach($member_hash['multi'] as $member_id => $hash){
-					$this->sk_list['multi'][$mdkp_id][$member_id] = $i++;
+				$startList = $this->config->get('sk_startlist_'.$mdkp_id);
+				if (!$startList){
+					shuffle($arrMembers);
+					$this->config->set('sk_startlist_'.$mdkp_id, serialize($arrMembers));
+				}
+				
+				foreach($startList as $intMemberID){
+					if (in_array($intMemberID, $arrMembers)){
+						$member_hash['single'][] = $intMemberID;
+						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
+						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
+					}
+				}
+				//New Members at the bottom
+				foreach($arrMembers as $intMemberID){
+					if (!in_array($intMemberID, $startList)){
+						$member_hash['single'][] = $intMemberID;
+						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
+						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
+					}
+				}
+
+				//With twinks (mainchar)
+				foreach($member_hash['multi'] as $pos => $member_id){
+					$this->sk_list['multi'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
 			
@@ -132,9 +144,8 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			//No twinks (all chars)
 		
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
-				$i = 1;
-				foreach($member_hash['single'] as $member_id => $hash){
-					$this->sk_list['single'][$mdkp_id][$member_id] = $i++;
+				foreach($member_hash['single'] as $pos => $member_id){
+					$this->sk_list['single'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
 			//now the fun begins

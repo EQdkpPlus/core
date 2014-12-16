@@ -168,7 +168,7 @@ abstract class super_registry {
 					if(registry::register('mmtaskmanager')->status['necessary_tasks']) {
 						registry::register('config')->set('pk_maintenance_mode', true);
 						if (!defined('NO_MMODE_REDIRECT')){
-							redirect('maintenance/task_manager.php'.self::get_const('SID'));
+							redirect('maintenance/index.php'.self::get_const('SID'));
 						}
 					}
 				}
@@ -177,7 +177,7 @@ abstract class super_registry {
 				if(count(registry::register('file_handler')->get_errors()) > 0) {
 					registry::register('config')->set('pk_maintenance_mode', true);
 					if (!defined('NO_MMODE_REDIRECT')){
-						redirect('maintenance/task_manager.php'.self::get_const('SID'));
+						redirect('maintenance/index.php'.self::get_const('SID'));
 					}
 				}
 				
