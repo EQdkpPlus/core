@@ -47,7 +47,7 @@ class update_20014 extends sql_update_task {
 		
 		// init SQL querys
 		$this->sqls = array(
-			1 => "ALTER TABLE `__repository` ADD COLUMN `plugin_id` INT(1) NULL;`;",
+			1 => "ALTER TABLE `__repository` ADD COLUMN `plugin_id` INT NULL;",
 		);
 	}
 }
