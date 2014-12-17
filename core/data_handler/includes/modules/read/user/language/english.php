@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,47 +18,52 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'name'			=> 'Username',
-	'avatarimglink' => 'Avatar',
-	'email'			=> 'Email-Address',
-	'country'		=> 'Country',
-	'regdate'		=> 'Registerdate',
-	'groups'		=> 'Groupmemberships',
-	'charnumber'	=> 'Characters',
-	'is_online'		=> '',
-	'icq'			=> 'ICQ',
-	'skype'			=> 'Skype',
-	'cellphone'		=> 'Cellphone',
-	'phone'			=> 'Phone',
-	'twitter'		=> 'Twitter',
-	'facebook'		=> 'Facebook',
-	'fullname'		=> 'Name',
-	'town'			=> 'Town',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/user/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'username'		=> 'Username',
-	'useravatar'	=> 'Useravatar',
-	'useremail'		=> 'Usermailer',
-	'usercountry'	=> 'Country',
-	'userregdate'	=> 'Registerdate',
-	'usergroups'	=> 'Groupmemberships',
-	'usercharnumber'=> 'Count characters',
-	'useronlinestatus' => 'Online status',
-	'usericq'		=> 'ICQ',
-	'userskype'		=> 'Skype',
-	'usercellphone'	=> 'Cellphone',
-	'userphone'		=> 'Phone',
-	'usertwitter'	=> 'Twitter-Account',
-	'userfacebook'	=> 'Facebook-Account',
-	'userfullname'	=> 'Fullname',
-	'usertown'		=> 'City',
-);
+$module_lang = array(
+	"name" => 'Username',
+	"avatarimglink" => 'Avatar',
+	"email" => 'Email-Address',
+	"country" => 'Country',
+	"regdate" => 'Registerdate',
+	"groups" => 'Groupmemberships',
+	"charnumber" => 'Characters',
+	"is_online" => '',
+	"icq" => 'ICQ',
+	"skype" => 'Skype',
+	"cellphone" => 'Cellphone',
+	"phone" => 'Phone',
+	"twitter" => 'Twitter',
+	"facebook" => 'Facebook',
+	"fullname" => 'Name',
+	"town" => 'Town',
+	);
+	$preset_lang = array(
+	"username" => 'Username',
+	"useravatar" => 'Useravatar',
+	"useremail" => 'Usermailer',
+	"usercountry" => 'Country',
+	"userregdate" => 'Registerdate',
+	"usergroups" => 'Groupmemberships',
+	"usercharnumber" => 'Count characters',
+	"useronlinestatus" => 'Online status',
+	"usericq" => 'ICQ',
+	"userskype" => 'Skype',
+	"usercellphone" => 'Cellphone',
+	"userphone" => 'Phone',
+	"usertwitter" => 'Twitter-Account',
+	"userfacebook" => 'Facebook-Account',
+	"userfullname" => 'Fullname',
+	"usertown" => 'City',
+	);
+	
 
 ?>

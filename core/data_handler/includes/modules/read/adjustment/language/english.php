@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,31 +18,36 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-    header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'date'				=> 'Date',
-	'link'				=> 'Reason',
-	'event_name'		=> 'Event',
-	'm4agk4a'			=> 'Chars',
-	'value'				=> 'Value',
-	'raid_id'			=> 'Raid',
-	'editicon'			=> '',
-	'reason'			=> 'Reason',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/adjustment/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'adj_date'			=> 'Adjustment-Date',
-	'adj_reason_link'	=> 'Adjustment-Reason (linked)', 
-	'adj_event'			=> 'Adjustment-Event',
-	'adj_members'		=> 'Adjustment-Chars',
-	'adj_value'			=> 'Adjustment-Value',
-	'adj_raid'			=> 'Adjustment-Raid',
-	'adj_reason'		=> 'Adjustment-Reason',
-	'adjedit'			=> 'Adjustment-Edit Button',
-);
+$module_lang = array(
+	"date" => 'Date',
+	"link" => 'Reason',
+	"event_name" => 'Event',
+	"m4agk4a" => 'Chars',
+	"value" => 'Value',
+	"raid_id" => 'Raid',
+	"editicon" => '',
+	"reason" => 'Reason',
+	);
+	$preset_lang = array(
+	"adj_date" => 'Adjustment-Date',
+	"adj_reason_link" => 'Adjustment-Reason (linked)',
+	"adj_event" => 'Adjustment-Event',
+	"adj_members" => 'Adjustment-Chars',
+	"adj_value" => 'Adjustment-Value',
+	"adj_raid" => 'Adjustment-Raid',
+	"adj_reason" => 'Adjustment-Reason',
+	"adjedit" => 'Adjustment-Edit Button',
+	);
+	
 
 ?>

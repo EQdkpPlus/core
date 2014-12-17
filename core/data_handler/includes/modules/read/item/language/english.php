@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,40 +18,46 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-    header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'date'			=> 'Date',
-	'buyer_name'	=> 'Buyer',
-	'buyer_Link'	=> 'Buyer',
-	'value'			=> 'Value',
-	'name'			=> 'Name',
-	'itempool_name'	=> 'Itempool',
-	'link'			=> 'Name',
-	'raidlink'		=> 'Raid',
-	'm4igk4i'		=> 'Buyers',
-	'raididlink'	=> 'Raid',
-	'link_itt'		=> 'Name',
-	'editicon'		=> '',
-	'droprate'		=> 'Droprate',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/item/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'idate'			=> 'Item-Date',
-	'ilink'			=> 'Item-Link',
-	'ibuyers'		=> 'Item-Buyer',
-	'ibuyerlink'	=> 'Item-Buyer (linked)',
-	'iraididlink'	=> 'Item-Raid (detailed)',
-	'ivalue'		=> 'Item-Value',
-	'ipoolname'		=> 'Itempool-Name',
-	'iraidlink'		=> 'Item-Raid',
-	'iname'			=> 'Item-Name',
-	'ibuyername'	=> 'Item-Buyer',
-	'ilink_itt'		=> 'Item-Link-ITT',
-	'itemsedit'		=> 'Item-Edit-Button',
-	'idroprate'		=> 'Item Droprate (for Itempool)',
-);
+$module_lang = array(
+	"date" => 'Date',
+	"buyer_name" => 'Buyer',
+	"buyer_link" => 'Buyer',
+	"value" => 'Value',
+	"name" => 'Name',
+	"itempool_name" => 'Itempool',
+	"link" => 'Name',
+	"raidlink" => 'Raid',
+	"m4igk4i" => 'Buyers',
+	"raididlink" => 'Raid',
+	"link_itt" => 'Name',
+	"editicon" => '',
+	"droprate" => 'Droprate',
+	);
+	$preset_lang = array(
+	"idate" => 'Item-Date',
+	"ilink" => 'Item-Link',
+	"ibuyers" => 'Item-Buyer',
+	"ibuyerlink" => 'Item-Buyer (linked)',
+	"iraididlink" => 'Item-Raid (detailed)',
+	"ivalue" => 'Item-Value',
+	"ipoolname" => 'Itempool-Name',
+	"iraidlink" => 'Item-Raid',
+	"iname" => 'Item-Name',
+	"ibuyername" => 'Item-Buyer',
+	"ilink_itt" => 'Item-Link-ITT',
+	"itemsedit" => 'Item-Edit-Button',
+	"idroprate" => 'Item Droprate (for Itempool)',
+	);
+	
+
 ?>

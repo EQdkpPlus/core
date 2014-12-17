@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,20 +18,26 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-    header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'attendance'	=> 'Raids (%d days)',
-	'lifetime'		=> 'Raids (lifetime)',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/member_attendance/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'attendance_30'	=> 'Raid attendance (30 days)',
-	'attendance_60'	=> 'Raid attendance (60 days)',
-	'attendance_90'	=> 'Raid attendance (90 days)',
-	'attendance_lt'	=> 'Raid attendance (lifetime)',
-);
+$module_lang = array(
+	"attendance" => 'Raids (%d days)',
+	"lifetime" => 'Raids (lifetime)',
+	);
+	$preset_lang = array(
+	"attendance_30" => 'Raid attendance (30 days)',
+	"attendance_60" => 'Raid attendance (60 days)',
+	"attendance_90" => 'Raid attendance (90 days)',
+	"attendance_lt" => 'Raid attendance (lifetime)',
+	);
+	
+
 ?>

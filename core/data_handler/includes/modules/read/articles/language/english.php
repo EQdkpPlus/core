@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,33 +18,38 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'sort_id'				=> '',
-	'editicon'				=> '',
-	'published'				=> '',
-	'featured'				=> '',
-	'title'					=> 'Title',
-	'alias'					=> 'Alias',
-	'user_id'				=> 'User',
-	'date'					=> 'Date',
-	'last_edited'			=> 'Last edited',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/articles/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'article_sortable'		=> 'Article Sortation',
-	'article_editicon'		=> 'Article Editlink',
-	'article_published'		=> 'Article Published state',
-	'article_title'			=> 'Article Title',
-	'article_alias'			=> 'Article Alias',
-	'article_date'			=> 'Article Date',
-	'article_user'			=> 'Article User',
-	'article_featured'		=> 'Article Featured',
-	'article_last_edited'	=> 'Article Last edited',
-);
+$module_lang = array(
+	"sort_id" => '',
+	"editicon" => '',
+	"published" => '',
+	"featured" => '',
+	"title" => 'Title',
+	"alias" => 'Alias',
+	"user_id" => 'User',
+	"date" => 'Date',
+	"last_edited" => 'Last edited',
+	);
+	$preset_lang = array(
+	"article_sortable" => 'Article Sortation',
+	"article_editicon" => 'Article Editlink',
+	"article_published" => 'Article Published state',
+	"article_title" => 'Article Title',
+	"article_alias" => 'Article Alias',
+	"article_date" => 'Article Date',
+	"article_user" => 'Article User',
+	"article_featured" => 'Article Featured',
+	"article_last_edited" => 'Article Last edited',
+	);
+	
 
 ?>

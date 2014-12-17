@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,16 +18,22 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/portal_layouts/language/english.php
+//Source-Language: german
+
 $module_lang = array(
-	'editicon'				=> '',
-	'name'					=> 'Name',
-	'blocks'				=> 'Used blocks',
-	'usedby'				=> 'Used by categories'
-);
+	"editicon" => '',
+	"name" => 'Name',
+	"blocks" => 'Used blocks',
+	"usedby" => 'Used by categories',
+	);
+	
 
 ?>

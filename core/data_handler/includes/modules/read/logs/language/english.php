@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -18,32 +18,38 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'date'		=> 'Date',
-	'tag'		=> 'Type',
-	'plugin'	=> 'Plugin',
-	'user'		=> 'User',
-	'ipaddress'	=> 'IP Adress',
-	'result'	=> 'Result',
-	'viewicon'	=> '',
-	'record'	=> 'Record',
-	'recordid'	=> 'Record-ID',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//File: core/data_handler/includes/modules/read/logs/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'logdate'		=> 'Log-Date',
-	'logtype'		=> 'Log-Type',
-	'logplugin'		=> 'Log-Plugin',
-	'loguser'		=> 'Log-User',
-	'logipaddress'	=> 'Log-IP-Adress',
-	'logresult'		=> 'Log-Result',
-	'viewlog'		=> 'Log-View Button',
-	'logrecord'		=> 'Log-Record',
-	'logrecordid'	=> 'Log-Record-ID',
-);
+$module_lang = array(
+	"date" => 'Date',
+	"tag" => 'Type',
+	"plugin" => 'Plugin',
+	"user" => 'User',
+	"ipaddress" => 'IP Adress',
+	"result" => 'Result',
+	"viewicon" => '',
+	"record" => 'Record',
+	"recordid" => 'Record-ID',
+	);
+	$preset_lang = array(
+	"logdate" => 'Log-Date',
+	"logtype" => 'Log-Type',
+	"logplugin" => 'Log-Plugin',
+	"loguser" => 'Log-User',
+	"logipaddress" => 'Log-IP-Adress',
+	"logresult" => 'Log-Result',
+	"viewlog" => 'Log-View Button',
+	"logrecord" => 'Log-Record',
+	"logrecordid" => 'Log-Record-ID',
+	);
+	
+
 ?>
