@@ -1225,8 +1225,8 @@ class game extends gen_class {
 		$this->pdh->process_hook_queue();
 	}
 	
-	public function addRaidgroup($name, $color, $desc='', $standard=0, $sortid=0, $deletable=1){
-		$this->pdh->put('raid_groups', 'add', array($name, $color, $desc, $standard, $sortid, $deletable));
+	public function addRaidgroup($name, $color, $desc='', $standard=0, $sortid=0, $system=0){
+		$this->pdh->put('raid_groups', 'add', array($name, $color, $desc, $standard, $sortid, $system));
 	}
 	
 	
