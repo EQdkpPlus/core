@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English	
-//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: core/data_handler/includes/modules/read/articles/language/english.php
 //Source-Language: german
 
@@ -37,7 +37,7 @@ $module_lang = array(
 	"alias" => 'Alias',
 	"user_id" => 'User',
 	"date" => 'Date',
-	"last_edited" => 'Last edited',
+	"last_edited" => 'Last changed',
 	);
 	$preset_lang = array(
 	"article_sortable" => 'Article Sortation',

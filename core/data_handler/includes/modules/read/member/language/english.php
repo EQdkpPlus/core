@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English	
-//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: core/data_handler/includes/modules/read/member/language/english.php
 //Source-Language: german
 
@@ -34,7 +34,7 @@ $module_lang = array(
 	"memberlink" => 'Name',
 	"memberlink_detail_twink" => 'Name',
 	"rankname" => 'Rank',
-	"rankname_sortid" => 'Rang',
+	"rankname_sortid" => 'Rank',
 	"rankimage" => 'Rank image',
 	"rankname_detail_twink" => 'Rank',
 	"active" => 'Status',

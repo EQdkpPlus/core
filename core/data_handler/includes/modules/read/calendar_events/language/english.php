@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English	
-//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: core/data_handler/includes/modules/read/calendar_events/language/english.php
 //Source-Language: german
 
@@ -32,7 +32,7 @@ $module_lang = array(
 	"roleid" => 'Role-ID',
 	"duration" => 'Duration',
 	"date" => 'Date',
-	"html_weekday" => 'Weekday',
+	"html_weekday" => 'Day of week',
 	"name" => 'Name',
 	"creator" => 'Creator',
 	"calendar" => 'Calendar',
@@ -44,11 +44,11 @@ $module_lang = array(
 	"detailslink" => '',
 	);
 	$preset_lang = array(
-	"calevents_id" => 'Calendar events ID',
-	"calevents_date" => 'Calendar events date',
-	"calevents_weekday" => 'Calendar events weekday',
-	"calevents_duration" => 'Calendar events duration',
-	"calevents_name" => 'Calendar events name',
+	"calevents_id" => 'Calendar Event ID',
+	"calevents_date" => 'Calendar event date',
+	"calevents_weekday" => 'Calendar event day of week',
+	"calevents_duration" => 'Calendar event duration',
+	"calevents_name" => 'Calendar event name',
 	"calevents_creator" => 'Calendar events creator',
 	"calevents_calendar" => 'Calendar events calendar',
 	"calevents_edit" => 'Calendar events edit',

@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English	
-//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: core/data_handler/includes/modules/read/suicide_kings_fixed/language/english.php
 //Source-Language: german
 
@@ -32,8 +32,8 @@ $module_lang = array(
 	"position" => 'Position',
 	);
 	$preset_lang = array(
-	"sk_fixed_position_all" => 'Suicide-Kings-Fixed position (all)',
-	"sk_fixed_position" => 'Suicide-Kings-Fixed position',
+	"sk_fixed_position_all" => 'Suicide-Kings-Fixed Position (all)',
+	"sk_fixed_position" => 'Suicide-Kings-Fixed Position',
 	);
 	
 

@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English	
-//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: core/data_handler/includes/modules/read/raid/language/english.php
 //Source-Language: german
 
@@ -39,14 +39,14 @@ $module_lang = array(
 	"editicon" => '',
 	);
 	$preset_lang = array(
-	"rdate" => 'Raid-Date',
+	"rdate" => 'Raid-date',
 	"rlink" => 'Raid-Link',
-	"rattcount" => 'Raid-Attendeecount',
-	"ritemcount" => 'Raid-Itemcount',
-	"rvalue" => 'Raid-Value',
-	"revent" => 'Raid-Event',
-	"rnote" => 'Raid-Note',
-	"raidedit" => 'Raid-Edit-Button',
+	"rattcount" => 'Raid attendees count',
+	"ritemcount" => 'Raid items count',
+	"rvalue" => 'Raid value',
+	"revent" => 'Raid event',
+	"rnote" => 'Raid note',
+	"raidedit" => 'Raid edit button',
 	);
 	
 

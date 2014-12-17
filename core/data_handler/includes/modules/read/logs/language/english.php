@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 //Language: English	
-//Created by EQdkp Plus Translation Tool on  2014-12-17 21:28
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: core/data_handler/includes/modules/read/logs/language/english.php
 //Source-Language: german
 
@@ -33,22 +33,22 @@ $module_lang = array(
 	"tag" => 'Type',
 	"plugin" => 'Plugin',
 	"user" => 'User',
-	"ipaddress" => 'IP Adress',
+	"ipaddress" => 'IP address',
 	"result" => 'Result',
 	"viewicon" => '',
-	"record" => 'Record',
-	"recordid" => 'Record-ID',
+	"record" => 'Dataset',
+	"recordid" => 'Dataset-ID',
 	);
 	$preset_lang = array(
-	"logdate" => 'Log-Date',
-	"logtype" => 'Log-Type',
-	"logplugin" => 'Log-Plugin',
-	"loguser" => 'Log-User',
-	"logipaddress" => 'Log-IP-Adress',
-	"logresult" => 'Log-Result',
-	"viewlog" => 'Log-View Button',
-	"logrecord" => 'Log-Record',
-	"logrecordid" => 'Log-Record-ID',
+	"logdate" => 'Log date',
+	"logtype" => 'Log type',
+	"logplugin" => 'Log plugin',
+	"loguser" => 'Log user',
+	"logipaddress" => 'Log IP address',
+	"logresult" => 'Log result',
+	"viewlog" => 'Log view button',
+	"logrecord" => 'Log dataset',
+	"logrecordid" => 'Log dataset-ID',
 	);
 	
 
