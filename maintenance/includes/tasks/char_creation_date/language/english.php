@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
@@ -19,11 +19,20 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if ( !defined('EQDKP_INC') ){
-  header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$lang['char_creation_date'] = 'Fix character-creation-date by first raid/item/adjustment.';
-$lang['fix_creation_date_done'] = 'Character-creation-dates fixed.';
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
+//File: maintenance/includes/tasks/char_creation_date/language/english.php
+//Source-Language: german
+
+$lang = array( 
+	"char_creation_date" => 'Corrects character creation date on base of first Raids/Items or first adjustment.',
+	"fix_creation_date_done" => 'Character creation date fixed for all characters.',
+	
+);
 
 ?>

@@ -1,30 +1,38 @@
 <?php
- /*
- * Project:     EQdkp-Plus
- * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:       2002
- * -----------------------------------------------------------------------
- * @copyright   2006-2011 EQdkp-Plus Developer Team
- * @link        http://eqdkp-plus.com
- * @package     eqdkp-plus
- * 
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-Plus Language File
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
  
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English 2.0	
-//Created by EQdkp Plus Translation Tool on  2014-02-20 10:10
-//File: language/english_2.0/lang_main.php
-//Source-Language: german_2.0
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
+//File: language/english/lang_main.php
+//Source-Language: german
 
 $lang = array( 
 	
-'LANG_VERSION' => '1.0.7',
-"LANG_VERSION" => '1.0.7',
+'LANG_VERSION' => '2.0.0.7',
+"LANG_VERSION" => '2.0.0.7',
 	"XML_LANG" => 'en',
 	"ISO_LANG_SHORT" => 'en_EN',
 	"ISO_LANG_NAME" => 'English',
@@ -177,7 +185,7 @@ $lang = array(
 	"categories" => 'Categories',
 	"category" => 'Category',
 	"note" => 'Note',
-	"creator" => "Creator",
+	"creator" => 'Creator',
 	"online" => 'Online',
 	"options" => 'Options',
 	"percent" => 'Percent',
@@ -219,8 +227,8 @@ $lang = array(
 	"user_sett_fs_user_contact" => 'Contact information',
 	"user_sett_tab_privacy_options" => 'Privacy',
 	"user_sett_fs_user_priv" => 'Profileinformation',
-	"user_sett_fs_user_priv_contact" => "Contact",
-	"user_sett_f_priv_userprofile_email" => "Email-Address",
+	"user_sett_fs_user_priv_contact" => 'Contact',
+	"user_sett_f_priv_userprofile_email" => 'Email-Address',
 	"user_sett_f_priv_no_boardemails" => 'Disable email reception for board-mails like Calendar, Massmails, ...',
 	"user_sett_f_priv_bday" => 'Display birthdate additionally to the age',
 	"user_sett_fs_user_wall" => 'Wall',
@@ -337,7 +345,7 @@ $lang = array(
 	"fv_required_name" => 'The name field is required.',
 	"fv_required_number" => 'This field is required and must be an integer',
 	"fv_required_password" => 'The password field is required.',
-	"fv_required_password_pattern" => "Enter a valid password.",
+	"fv_required_password_pattern" => 'Enter a valid password.',
 	"fv_required_user" => 'The username field is required.',
 	"fv_required_username" => 'Enter a username',
 	"fv_username_toshort" => 'Enter at least {0} characters',
@@ -347,10 +355,11 @@ $lang = array(
 	"fv_required_password_repeat" => 'You have to reenter the password for security reasons',
 	"fv_required_email2" => 'Confirm your email adress',
 	"fv_recaptcha" => 'You have to enter both words from above.',
+	"fv_email_not_match" => 'The emailaddresses do not match.',
 	"fv_sample_pattern" => 'Please follow the sample pattern.',
 	"fv_php_sample_pattern" => 'The input in field \'%s\' was not valid!',
 	"fv_password_placeholder" => 'length > %d',
-	"fv_form_error"	=> 'Error in formular',
+	"fv_form_error" => 'Error in formular',
 	"template_preview" => 'Template preview',
 	"anonymous" => '<i>Guest</i>',
 	"added" => 'Added',
@@ -576,7 +585,7 @@ $lang = array(
 	"uc_no_prmissions" => 'You don\'t have the right to view this page. Please ask an administrator.',
 	"save_nosuc" => 'Error while saving',
 	"save_suc" => 'Saved successfully',
-	"maintenance_mode_warn" => 'Your system is currently in maintenance mode, restricting normal user access. Please check the <a href="'.registry::get_const('server_path').'maintenance/index.php">maintenance tool</a> and disable the maintenance mode when done.<ul><li><a href="'.registry::get_const('server_path').'maintenance/task_manager.php">Go to maintenance tool</a></li><li><a href="'.registry::get_const('server_path').'maintenance/task_manager.php?disable=true">Deactivate Maintenance mode</a></li></ul>',
+	"maintenance_mode_warn" => 'Your system is currently in maintenance mode, restricting normal user access. Please check the <a href="'.registry::get_const('server_path').'maintenance/index.php">maintenance tool</a> and disable the maintenance mode when done.<ul><li><a href="'.registry::get_const('server_path').'maintenance/index.php">Go to maintenance tool</a></li><li><a href="'.registry::get_const('server_path').'maintenance/index.php?disable=true">Deactivate Maintenance mode</a></li></ul>',
 	"home_of_eqdkpplus" => 'Home of the EQdkp Plus project',
 	"manage_bridge" => 'Bridge Management',
 	"templates_error" => 'Template error',
@@ -617,7 +626,7 @@ $lang = array(
 	"belonging_itempools" => 'Linked item pools',
 	"information" => 'Information',
 	"uc_profile_updater" => 'Profil is loading, Please Wait...',
-	"info_overtaken_permissions" => 'You are viewing the EQdkp Plus-System with the permissions of the user <b>%s</b>.<br /><b><a href="'.registry::get_const('server_path').'index.php?mode=rstperms">Click here, to restore your own permissions.</a></b>',
+	"info_overtaken_permissions" => 'You are viewing the EQdkp Plus-System with the permissions of the user <b>%s</b>.',
 	"link_overtaken_permissions" => 'Click here to restore your Permissions.',
 	"calendar_edit" => 'Edit calendar',
 	"menu_calendar" => 'Calendar',
@@ -627,9 +636,13 @@ $lang = array(
 	"calendar_allday_event" => 'All day event',
 	"calendar_win_edit" => 'Edit calendar event',
 	"calendar_win_add" => 'Add calendar event',
+	"calendar_click_add" => 'Click to add Event',
 	"calendars_delete_title" => 'Delete calendar event',
 	"calendars_delete_text" => 'The Event is permanently deleted and can\'t be restored. Are you sure, you want to proceed?',
-	"calendars_deleteall_text" => 'Delete the event including all follow-ups',
+	"calendar_deleteall_drpdwn_this" => 'Delete this Event',
+	"calendar_deleteall_drpdwn_all" => 'Delete this Event including all repetitions',
+	"calendar_deleteall_drpdwn_future" => 'Delete this Event including all future repetitions',
+	"calendar_deleteall_drpdwn_past" => 'Delete this Event including all past repetitions',
 	"calendars" => 'Calendar',
 	"calendars_add_title" => 'Add calendar event',
 	"calendars_add_button" => 'Save event',
@@ -643,8 +656,8 @@ $lang = array(
 	"calendar_no_distri" => 'No distribution',
 	"calendar_distri" => 'Raidmode',
 	"calendar_repeat" => 'Repeat',
+	"calendar_date" => 'Start- and Endtime',
 	"calendar_startdate" => 'from',
-	"calendar_click_add" => "Click to add Event",
 	"calendar_enddate" => 'to',
 	"calendar_deadline_entity" => 'hour(s) for raid start',
 	"calendar_deadline" => 'Signup deadline',
@@ -654,6 +667,7 @@ $lang = array(
 	"calendar_event_clones_info" => 'You are editing an recurring event. Should the changes affect only this occurence or all occurences?',
 	"calendar_event_editone" => 'Just this event',
 	"calendar_event_editall" => 'All events',
+	"calendar_event_editall_future" => 'All future Events',
 	"calendar_event_name" => 'Name of the event',
 	"calendar_raidgroup" => 'Raidgroup',
 	"raideventlist_masssignin" => 'Signup to selected raids',
@@ -667,6 +681,7 @@ $lang = array(
 	"calendar_export_download" => 'Download Events',
 	"raidevent_raidleader" => 'Raidleader',
 	"raidevent_no_guest_note" => 'No note available',
+	"raidevent_autogroups" => 'Automatic adding (Groups)',
 	"raidevent_value" => 'Points for this raid',
 	"raidevent_template" => 'Saved raid templates',
 	"raidevent_attendees" => 'Attendees',
@@ -676,8 +691,9 @@ $lang = array(
 	"raidevent_raidevent_add" => 'Add new raid event',
 	"raidevent_raidevent_view" => 'Raid view',
 	"raidevent_raid_closed" => 'This raid was canceled by a raidleader.',
-	"raidevent_raid_nochar" => 'Your user ID has not been assigned any characters. In the Character Manager you can create and assign new characters or assign existing characters. <br/> <a href=".'.registry::get_const('server_path').'characters.php">Character Manager</a>',
+	"raidevent_raid_nochar" => 'Your user ID has not been assigned any characters. In the Character Manager you can create and assign new characters or assign existing characters. <br/> <a href="'.registry::get_const('server_path').'Mycharacters/'.registry::get_const('SID').'">Character Manager</a>',
 	"raidevent_raid_note" => 'Raid note',
+	"raidevent_raid_statuschange_warning" => 'WARNING: if you change your character, your signup status will be resetted to "signed up".',
 	"raidevent_raid_addedby" => 'added by',
 	"raidevent_raid_transform" => 'Transform to raid',
 	"raidevent_raid_adminnote" => 'Signed up by a raid leader',
@@ -706,8 +722,8 @@ $lang = array(
 	"raidevent_raid_unsigned_head" => 'Unsigned characters',
 	"raidevent_raid_unsigned_search" => 'Search for a character',
 	"raidevent_raid_unsigned_active" => 'Only show active character',
-	"raidevent_raid_unsigned_level" => "Filter: Level",
-	"raidevent_raid_unsigned_level_help" => "0 = All, Show all results larger or equal to the selected level",
+	"raidevent_raid_unsigned_level" => 'Filter: Level',
+	"raidevent_raid_unsigned_level_help" => '0 = All, Show all results larger or equal to the selected level',
 	"raidevent_raid_unsigned_button" => 'Unsigned chars',
 	"raidevent_raid_status" => array(
 	0 => 'confirmed',
@@ -814,9 +830,6 @@ $lang = array(
 	"icalfeed_description" => 'An ical feed exported by EQDKP-PLUS',
 	"grpleaders" => 'Groupleaders',
 	"group_members" => 'Group members',
-	"notification_red_prio" => 'High Priority',
-	"notification_yellow_prio" => 'Medium Priority',
-	"notification_green_prio" => 'Low Priority',
 	"notification_char_confirm_required" => '%s Chars have to be confirmed',
 	"notification_char_delete_requested" => '%s Chars have to be deleted',
 	"notification_user_enable" => '%s Users have to be activated',
@@ -892,80 +905,74 @@ $lang = array(
 	"lib_pupd_intro" => 'There are new Versions available:',
 	"lib_pupd_updtxt_tt" => '<b>%1$s</b>: Version %2$s from %4$s',
 	"extensions" => 'Extensions',
-	"points_for_this_char" => "Show the points information for this Char only",
+	"points_for_this_char" => 'Show the points information for this Char only',
 	"success_create_article" => 'Article has been saved succesfully',
-	"cookie_usage_hint" => "This site uses cookies. By continuing to browse this site, you are agreeing to our use of cookies. <a href=\"{COOKIE_LINK}\">More details</a>",
-	"team" => "Team-Members",
-	"addchar_f_picture" => "Characterimage",
-	"other_items" => "Other Items",
-	"droprate" => "Droprate",
-	"error_saving_char" => "An error occured while saving this charcter. Maybe the character is already in the system.",
-	
-	//User Profilefields
-	"userpf_location" => "Location",
-	"userpf_website" => "Website",
-	"userpf_interests" => "Interests",
-	"userpf_occupation" => "Occupation",
-	"userpf_facebook" => "Facebook",
-	"userpf_twitter" => "Twitter",
-	"userpf_skype" => "Skype",
-	"userpf_youtube" => "Youtube",
-	"userpf_googleplus" => "Google Plus",
-	"userpf_icq" => "ICQ",
-	"userpf_mobile" => "Mobile Number",
-	"userpf_country" => "County",
-	"userpf_name" => "Name",
-	"userpf_lastname" => "Lastname",
+	"cookie_usage_hint" => 'This site uses cookies. By continuing to browse this site, you are agreeing to our use of cookies. <a href="{COOKIE_LINK}">More details</a>',
+	"team" => 'Team-Members',
+	"addchar_f_picture" => 'Characterimage',
+	"other_items" => 'Other Items',
+	"droprate" => 'Droprate',
+	"error_saving_char" => 'An error occured while saving this charcter. Maybe the character is already in the system.',
+	"userpf_location" => 'Location',
+	"userpf_website" => 'Website',
+	"userpf_interests" => 'Interests',
+	"userpf_occupation" => 'Occupation',
+	"userpf_facebook" => 'Facebook',
+	"userpf_twitter" => 'Twitter',
+	"userpf_skype" => 'Skype',
+	"userpf_youtube" => 'Youtube',
+	"userpf_googleplus" => 'Google Plus',
+	"userpf_icq" => 'ICQ',
+	"userpf_mobile" => 'Mobile Number',
+	"userpf_country" => 'County',
+	"userpf_name" => 'Name',
+	"userpf_lastname" => 'Lastname',
 	"fv_php_minlength_error" => 'The input in field \'%s\' was too short!',
 	"fv_php_maxlength_error" => 'The input in field \'%s\' was too long!',
-	"user_sett_f_priv_userprofile_age" => "Age",
-	"user_sett_f_priv_userprofile_country" => "Country",
+	"user_sett_f_priv_userprofile_age" => 'Age',
+	"user_sett_f_priv_userprofile_country" => 'Country',
+	"user_sett_tab_notifications" => 'Notifications',
+	"user_sett_fs_notifications" => 'Notifications',
+	"user_sett_fs_info_notifications" => 'Please note that you get some notifications dependet of your permissions, even you enabled the notifications.',
+	"user_sett_f_ntfy_calendarevent_char_statuschange" => 'Statuschange of a Character at a Raid',
+	"user_sett_f_ntfy_comment_new_article" => 'New comment at an article of the selected categories',
+	"user_sett_f_ntfy_comment_new_userwall" => 'New entry at your userwall',
+	"user_sett_f_ntfy_comment_new_userwall_response" => 'New answer at your userwall',
+	"user_sett_f_ntfy_eqdkp_article_unpublished" => 'Unpublished article',
+	"user_sett_f_ntfy_eqdkp_char_confirm_required" => 'Character requires activation',
+	"user_sett_f_ntfy_eqdkp_char_delete_requested" => 'Character required deletion',
+	"user_sett_f_ntfy_eqdkp_user_enable_requested" => 'User required activation',
+	"user_sett_f_ntfy_calendarevent_mod_groupchange" => 'Groupchange by moderator at a Raid',
+	"user_sett_f_ntfy_calendarevent_mod_statuschange" => 'Statuschange by moderator at a Raid',
+	"user_sett_f_ntfy_calenderevent_closed" => 'Raid was canceled',
+	"user_sett_f_ntfy_calenderevent_opened" => 'Raid was reopened',
+	"user_sett_f_ntfy_comment_new_response" => 'Reply to a comment of mine',
+	"mark_all_as_read" => 'Mark all as read',
+	"show_all" => 'Show all',
+	"notifications_persistent" => 'Persistent Notifications',
+	"notification_and_more" => ' and %s more ',
+	"notification_newcomment_userwall_grouped" => '{PRIMARY} wrote on your userwall',
+	"notification_newcomment_userwall" => '{PRIMARY} wrote on your userwall',
+	"notification_newcomment_userwall_response" => '{PRIMARY} has answered on a comment on your userwall',
+	"notification_newcomment_userwall_response_grouped" => '{PRIMARY} have answered on a comment on your userwall',
+	"notification_newcomment_article_grouped" => '{PRIMARY} wrote a comment in article "{ADDITIONAL}"',
+	"notification_newcomment_article" => '{PRIMARY} wrote a comment in article "{ADDITIONAL}"',
+	"notification_calendarevent_statuschange" => '{PRIMARY} has changed his status at Raid "{ADDITIONAL}"',
+	"notification_calendarevent_statuschange_grouped" => '{PRIMARY} have changed their status at Raid "{ADDITIONAL}"',
+	"notification_calendarevent_mod_statuschange" => 'Your status at Raid "{ADDITIONAL}" was changed to {PRIMARY}',
+	"notification_calendarevent_mod_statuschange_grouped" => 'Your status at Raid "{ADDITIONAL}" was changed {COUNT} times',
+	"notification_calendarevent_mod_groupchange" => 'Your raidgroup at Raid "{ADDITIONAL}" was changed to {PRIMARY}',
+	"notification_calendarevent_mod_groupchange_grouped" => 'Your raidgroup at Raid "{ADDITIONAL}" was changed {COUNT} times',
+	"notification_calendarevent_closed" => 'Raid "{ADDITIONAL}" was canceled',
+	"notification_calendarevent_opened" => 'Raid "{ADDITIONAL}" was reopened',
+	"notification_newcomment_response" => '{PRIMARY} answered to your comment in "{ADDITIONAL}"',
+	"notification_newcomment_response_grouped" => '{PRIMARY} answered to your comment in "{ADDITIONAL}"',
+	"article_publish_success" => 'Article has been published',
+	"article_publish" => 'Article published',
+	"article_unpublished_note" => 'Note: this article is not published yet.',
+	"sp_btn_twitter_share" => 'Tweet',
+	"sp_btn_facebook_share" => 'Share',
 	
-	//Notifications
-	"user_sett_tab_notifications" => "Notifications",
-	"user_sett_fs_notifications" => "Notifications",
-	"user_sett_fs_info_notifications" => "Please note that you get some notifications dependet of your permissions, even you enabled the notifications.",
-	"user_sett_f_ntfy_calendarevent_char_statuschange" => "Statuschange of a Character at a Raid",
-	"user_sett_f_ntfy_comment_new_article" => "New comment at an article of the selected categories",
-	"user_sett_f_ntfy_comment_new_userwall" => "New entry at your userwall",
-	"user_sett_f_ntfy_comment_new_userwall_response" => "New answer at your userwall",
-	"user_sett_f_ntfy_eqdkp_article_unpublished" => "Unpublished article",
-	"user_sett_f_ntfy_eqdkp_char_confirm_required" => "Character requires activation",
-	"user_sett_f_ntfy_eqdkp_char_delete_requested" => "Character required deletion",
-	"user_sett_f_ntfy_eqdkp_user_enable_requested" => "User required activation",
-	"user_sett_f_ntfy_calendarevent_mod_groupchange" => "Groupchange by moderator at a Raid",
-	"user_sett_f_ntfy_calendarevent_mod_statuschange" => "Statuschange by moderator at a Raid",
-	"user_sett_f_ntfy_calenderevent_closed" => "Raid was canceled",
-	"user_sett_f_ntfy_calenderevent_opened" => "Raid was reopened",
-	"user_sett_f_ntfy_comment_new_response" => "Reply to a comment of mine",
-	"mark_all_as_read" => "Mark all as read",
-	"show_all" => "Show all",
-	
-	"notifications_persistent" => "Persistent Notifications",
-	"notification_and_more" => " and %s more ",
-	"notification_newcomment_userwall_grouped" => "{PRIMARY} wrote on your userwall",
-	"notification_newcomment_userwall" => "{PRIMARY} wrote on your userwall",
-	"notification_newcomment_userwall_response" => "{PRIMARY} has answered on a comment on your userwall",
-	"notification_newcomment_userwall_response_grouped" => "{PRIMARY} have answered on a comment on your userwall",
-	"notification_newcomment_article_grouped" => "{PRIMARY} wrote a comment in article \"{ADDITIONAL}\"",
-	"notification_newcomment_article" => "{PRIMARY} wrote a comment in article \"{ADDITIONAL}\"",
-	"notification_calendarevent_statuschange" => "{PRIMARY} has changed his status at Raid \"{ADDITIONAL}\"",
-	"notification_calendarevent_statuschange_grouped" => "{PRIMARY} have changed their status at Raid \"{ADDITIONAL}\"",
-	"notification_calendarevent_mod_statuschange" => "Your status at Raid \"{ADDITIONAL}\" was changed to {PRIMARY}",
-	"notification_calendarevent_mod_statuschange_grouped" => "Your status at Raid \"{ADDITIONAL}\" was changed {COUNT} times",
-	"notification_calendarevent_mod_groupchange" => "Your raidgroup at Raid \"{ADDITIONAL}\" was changed to {PRIMARY}",
-	"notification_calendarevent_mod_groupchange_grouped" => "Your raidgroup at Raid \"{ADDITIONAL}\" was changed {COUNT} times",
-	"notification_calendarevent_closed" => "Raid \"{ADDITIONAL}\" was canceled",
-	"notification_calendarevent_opened" => "Raid \"{ADDITIONAL}\" was reopened",
-	"notification_newcomment_response" => "{PRIMARY} answered to your comment in \"{ADDITIONAL}\"",
-	"notification_newcomment_response_grouped" => "{PRIMARY} answered to your comment in \"{ADDITIONAL}\"",
-	
-	"article_publish_success" => "Article has been published",
-	"article_publish" => "Article published",
-	"article_unpublished_note" => "Note: this article is not published yet.",
-	
-	"sp_btn_twitter_share" => "Tweet",
-	"sp_btn_facebook_share" => "Share",
 );
 
 ?>

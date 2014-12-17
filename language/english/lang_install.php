@@ -1,25 +1,33 @@
 <?php
- /*
- * Project:     EQdkp-Plus
- * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:       2002
- * -----------------------------------------------------------------------
- * @copyright   2006-2011 EQdkp-Plus Developer Team
- * @link        http://eqdkp-plus.com
- * @package     eqdkp-plus
- * 
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-Plus Language File
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
  
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English 2.0	
-//Created by EQdkp Plus Translation Tool on  2014-02-20 09:20
-//File: language/english_2.0/lang_install.php
-//Source-Language: german_2.0
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
+//File: language/english/lang_install.php
+//Source-Language: german
 
 $lang = array( 
 	"page_title" => 'EQDKP-PLUS %s Installation',
@@ -56,7 +64,7 @@ $lang = array(
 </ul>
 <h3><strong>You are required:</strong></h3>
 <ul>
-<li>to disclose the sourcecode of your complete application that uses EQdkp Plus, when&nbsp;you distribute your application</li>
+<li>to disclose the sourcecode of your complete application that uses EQdkp Plus, when you distribute your application</li>
 <li>to disclose the sourcecode of your complete application that uses EQdkp Plus, if you don\'t distribute it, but users are using the software via network ("Hosting", "SaaS")</li>
 <li>to remain the visible and unvisible Copyright Notices of this Project and to include a copy of the AGPL License at your application</li>
 <li>to indicate significant changes made to the code</li>
@@ -69,7 +77,7 @@ $lang = array(
 	"table_pcheck_name" => 'Name',
 	"table_pcheck_required" => 'Required',
 	"table_pcheck_installed" => 'Current',
-	'table_pcheck_rec'		=> 'Rec.',
+	"table_pcheck_rec" => 'Recommended',
 	"module_php" => 'PHP version',
 	"module_mysql" => 'MySQL database',
 	"module_zLib" => 'zLib PHP module',
@@ -80,7 +88,7 @@ $lang = array(
 	"module_autoload" => 'spl_autoload_register PHP function',
 	"module_hash" => 'hash PHP function',
 	"module_memory" => 'PHP memory limit',
-	'module_json'			=> 'JSON PHP module',
+	"module_json" => 'JSON PHP module',
 	"safemode_warning" => '<strong>WARNING</strong><br/>Because the PHP Safe mode is active, you have to use the FTP mode in the next Step in order to use EQdkp Plus!',
 	"phpcheck_success" => 'The minimum requirements for the installation of EQDKP-Plus are met. The installation can proceed.',
 	"phpcheck_failed" => 'The minimum requirements for the installation of EQDKP-Plus are not met.<br />A selection of suitable hosting companies can be found on our <a href="http://eqdkp-plus.eu" target="_blank">website</a>',
@@ -103,7 +111,7 @@ $lang = array(
 	"ftp_datawriteerror" => 'The Data folder could not be written to. Is the FTP root path set  correctly?',
 	"ftp_info" => 'To improve security and functionality, you can choose to allow an ftp account of your choosing to perform file interactions on the server. This reduces the need to use more open server permissions, and may be required on some hosting configurations. To use this optional setting please provide a ftp user with permissions to access your installation, and select the \'FTP Mode\' tick box. If you are not using FTP Mode you may simply select proceed on this page.',
 	"ftp_tmpinstallwriteerror" => 'The folder <b>'.registry::get_const('root_path').'data/97384261b8bbf966df16e5ad509922db/tmp/</b> is not writable.<br />To write the config-file, CHMOD 777 is required. This folder will be deleted after the installation process.',
-	"ftp_tmpwriteerror" => 'The folder <b>'.registry::get_const('root_path').'%stmp/</b> is not writable.<br />Using FTP-Mode requires CHMOD 777 for this folder. This is the only folder needing writing permissions.',
+	"ftp_tmpwriteerror" => 'The folder <b>'.registry::get_const('root_path').'data/%s/tmp/</b> is not writable.<br />Using FTP-Mode requires CHMOD 777 for this folder. This is the only folder needing writing permissions.',
 	"dbtype" => 'Database type',
 	"dbhost" => 'Database host',
 	"dbname" => 'Database name',
@@ -164,6 +172,26 @@ $lang = array(
 <p>Have fun with EQdkp Plus! Your EQdkp Plus team</p>',
 	"feature_news_title" => 'New Features of EQdkp Plus',
 	"feature_news" => '<p>EQdkp Plus 2.0 contains a lot of new Features. This article should introduce the most importent of them.</p> <h3>Articlesystem</h3> <p>Instead of news and infopages, we introduced a complete new article system. Each news and page is now an article. You can group your articles using article-categories. Moreover, you can realise for example blogs for your guild and users.</p> <p>You can divide a single article using the Readmore- and Pagebreak-Methods. Also, you can insert Image-Galeries, Items or Raidloot using the appropriate Editor-Buttons.</p> <h3>Media-Management</h3> <p>Using the new Media-Management in ACP or Editor, you can now easily insert Media into your articles. For example, files can be uploaded using Drag&Drop. Also, you can even edit images in the Filebrowser.</p> <h3>Menu-Management</h3> <p>We have removed all menus except one. And the last one could be totally configured. You can position the entries using Drag&Drop in 3 levels, so it\'s possible to create submenus. You can still create links to external pages, but also add direct links to articles or articlecategories.</p> <h3>Portal-Management</h3> <p>In former times, there was only one portallayout, you had on every page the same portal modules. That\'s why we implemented the portallayouts. Now you can assign a portallayout to each articlecategory.</p> <p>Furthermore, you can create own portal blocks that you can embedd in your template, for example for editing links in your footer.</p>',
+	"category1" => 'System',
+	"category2" => 'News',
+	"category3" => 'Events',
+	"category4" => 'Items',
+	"category5" => 'Raids',
+	"category6" => 'Calendar',
+	"category7" => 'Roster',
+	"category8" => 'Points',
+	"category9" => 'Character',
+	"article5" => 'Character',
+	"article6" => 'Roster',
+	"article7" => 'Events',
+	"article8" => 'Items',
+	"article9" => 'Points',
+	"article10" => 'Raids',
+	"article12" => 'Calendarevent',
+	"article13" => 'Calendar',
+	"article14" => 'Guild Rules',
+	"article15" => 'Privacy Policy',
+	"article16" => 'Legal Notice',
 	"role_healer" => 'Healer',
 	"role_tank" => 'Tank',
 	"role_range" => 'Ranged DPS',
@@ -178,29 +206,6 @@ $lang = array(
 	"no_pw_match" => 'The passwords do not match.',
 	"install_end_text" => 'The installation can now be completed successfully.',
 	
-	//Categories
-	'category1'	=> 'System',
-	'category2'	=> 'News',
-	'category3'	=> 'Events',
-	'category4'	=> 'Items',
-	'category5'	=> 'Raids',
-	'category6'	=> 'Calendar',
-	'category7'	=> 'Roster',
-	'category8'	=> 'Points',
-	'category9'	=> 'Character',
-	
-	//Articles
-	'article5' => 'Character',
-	'article6' => 'Roster',
-	'article7' => 'Events',
-	'article8' => 'Items',
-	'article9' => 'Points',
-	'article10' => 'Raids',
-	'article12' => 'Calendarevent',
-	'article13' => 'Calendar',
-	'article14' => 'Guild Rules',
-	'article15' => 'Privacy Policy',
-	'article16' => 'Legal Notice',
 );
 
 ?>

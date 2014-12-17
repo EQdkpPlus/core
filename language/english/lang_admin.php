@@ -1,25 +1,33 @@
 <?php
- /*
- * Project:     EQdkp-Plus
- * License:     Creative Commons - Attribution-Noncommercial-Share Alike 3.0 Unported
- * Link:		http://creativecommons.org/licenses/by-nc-sa/3.0/
- * -----------------------------------------------------------------------
- * Began:       2002
- * -----------------------------------------------------------------------
- * @copyright   2006-2011 EQdkp-Plus Developer Team
- * @link        http://eqdkp-plus.com
- * @package     eqdkp-plus
- * 
+/*	Project:	EQdkp-Plus
+ *	Package:	EQdkp-Plus Language File
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
  
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English 2.0	
-//Created by EQdkp Plus Translation Tool on  2014-03-08 23:41
-//File: language/english_2.0/lang_admin.php
-//Source-Language: german_2.0
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
+//File: language/english/lang_admin.php
+//Source-Language: german
 
 $lang = array( 
 	"php_warning" => 'The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version '.VERSION_PHP_RQ.'. For any questions about updating your php version, please contact your hoster.',
@@ -603,9 +611,8 @@ $lang = array(
 	"core_sett_tab_user" => 'User',
 	"core_sett_tab_portal" => 'Portal',
 	"core_sett_tab_chars" => 'Characters',
-	"core_sett_f_cookie_euhint_show" => "Notice User on cookie usage",
-	"core_sett_f_help_cookie_euhint_show" => "According to the EU directive 2009/136/EG websites are required to inform visitors on their cookie usage.",
-	"pk_contact_owner" => 'Owner infos:',
+	"core_sett_f_cookie_euhint_show" => 'Notice User on cookie usage',
+	"core_sett_f_help_cookie_euhint_show" => 'According to the EU directive 2009/136/EG websites are required to inform visitors on their cookie usage.',
 	"core_sett_fs_meta" => 'Meta-Information',
 	"core_sett_f_meta_keywords" => 'Meta-Keywords',
 	"core_sett_f_help_meta_keywords" => 'Keywords are used for search engine optimazation.',
@@ -709,7 +716,7 @@ $lang = array(
 	"delete_selected_group" => 'Delete selected groups',
 	"add_user_group" => 'Add a user group',
 	"add_raid_group" => 'Add a raid group',
-	"groupcolor" => "Group color",
+	"groupcolor" => 'Group color',
 	"del_user_from_group_success" => 'The selected users were successfully deleted from the group.',
 	"add_user_to_group_success" => 'The selected users were successfully added to the group.',
 	"confirm_delete_groups" => 'Are you sure that you want to delete these user groups?',
@@ -921,20 +928,20 @@ $lang = array(
 	"apa_fv_name" => 'The name is mandatory.',
 	"apa_fv_calc_func" => 'The calculation function is mandatory.',
 	"apa_fv_exectime" => 'The execution time is mandatory.',
-	"apa_modules"	=> 'Select modules that should be decayed',
+	"apa_modules" => 'Select modules that should be decayed',
 	"uc_import_adm_update" => 'Refresh User Profile',
 	"uc_import_guild_wh" => 'Import characters of a guild',
 	"rolemanager_footcount" => '... %1$d role(s) found',
 	"delete_rolestext" => 'Are you sure, you want to delete the roles %s ?',
 	"rolemanager" => 'Roles Management',
-	"classes_defaultroles" => "Default roles of classes",
+	"classes_defaultroles" => 'Default roles of classes',
 	"delete_role" => 'Delete role',
 	"edit_role" => 'Edit role',
 	"role_new" => 'Add new role',
 	"add_role" => 'Add role',
 	"edit_role2" => 'Edit role',
 	"reset_roles" => 'Load default roles',
-	"reset_profilefields" => "Load default profile fields",
+	"reset_profilefields" => 'Load default profile fields',
 	"reset_rolestext" => 'All current roles will be lost!',
 	"reset_profilefieldstext" => 'All current pofile fields will be lost!',
 	"role_classes" => 'Classes for the role',
@@ -971,6 +978,8 @@ $lang = array(
 	"core_sett_f_help_calendar_raid_classbreak" => 'If you are using a game with many classes, e.g. Everquest2, this line break prevents the page from being too wide.',
 	"core_sett_f_calendar_raid_status" => 'Which raidstati shall be used?',
 	"core_sett_f_help_calendar_raid_status" => 'The different raidstatus elements in the raid-view in calendar. There should be at least two activated.',
+	"core_sett_f_calendar_raid_statuschange_status" => 'Raidstatus after change of character',
+	"core_sett_f_help_calendar_raid_statuschange_status" => 'The status will be changed to the selected value if character was changed',
 	"core_sett_f_calendar_raid_nsfilter" => 'Which characters to show, except mains, at the \'not signed-in window\'.',
 	"core_sett_f_help_calendar_raid_nsfilter" => 'You can select, which characters should be visible in the list of unsigned characters.',
 	"raidevent_raid_nsf_twink" => 'Twinks',
@@ -1079,6 +1088,8 @@ $lang = array(
 	"core_sett_f_help_inactive_period" => 'Amount of days, a character can be absent from raids and stay active. Insert 0 to disable inactivation.',
 	"core_sett_fs_game" => 'Game settings',
 	"core_sett_fs_importer" => 'Importer settings',
+	"core_sett_f_settings_apikey" => 'API Key',
+	"core_sett_f_help_settings_apikey" => 'The external Data import/update requires an API key.',
 	"core_sett_f_game_language" => 'Language of the game',
 	"core_sett_f_default_game" => 'Game',
 	"core_sett_f_help_default_game" => 'The game the guild using this website is playing.',
@@ -1086,8 +1097,6 @@ $lang = array(
 	"core_sett_fs_portal" => 'Portal settings',
 	"core_sett_fs_article" => 'Article settings',
 	"core_sett_f_start_page" => 'Default index page',
-	'core_sett_f_settings_apikey' => 'API Key',
-	'core_sett_f_help_settings_apikey' => 'The external Data import/update requires an API key.',
 	"pk_permanent_portal" => 'Display the chosen portal column on every page',
 	"pk_permanent_portal_help" => 'Show selected portal-columns on every page.',
 	"core_sett_fs_social_sharing" => 'Social Plugins',
@@ -1168,16 +1177,14 @@ $lang = array(
 	"core_sett_f_login_fb_appid_help" => 'Enter the application number of your facebook application here. You can create a new application <a href="https://developers.facebook.com/apps" target="_blank">here</a>',
 	"core_sett_f_login_fb_appsecret" => 'Application secret code',
 	"core_sett_f_login_fb_appsecret_help" => 'Enter the application secret code of your facebook application here.',
-	"core_sett_f_login_bnet_appid" => "Battle.net Key",
-	"core_sett_f_help_login_bnet_appid" => "Enter the Key of your Mashery Application from dev.battle.net.",
-	"core_sett_f_login_bnet_appsecret" => "Battle.net Secret",
-	"core_sett_f_login_bnet_eqdkp_relay" => "Use the EQdkp Plus Relay Service",
-	"core_sett_f_help_login_bnet_eqdkp_relay" => "Using the Battle.net Login only works, if your site uses SSL. If you can't use SSL, you can use the EQdkp Plus Relay Service. More Information here: https://eqdkp-plus.eu/wiki/Battle.net_Login",
-	"core_sett_f_login_bnet_eqdkp_appid" => "EQdkp Plus App-ID",
-	"core_sett_f_help_login_bnet_eqdkp_appid" => "Insert here the EQdkp Plus App-ID created at https://eqdkp-plus.eu/repository/MyApps/.",
-	"core_sett_f_login_bnet_eqdkp_appsecret" => "EQdkp Plus App-Secret",
-	
-	
+	"core_sett_f_login_bnet_appid" => 'Battle.net Key',
+	"core_sett_f_help_login_bnet_appid" => 'Enter the Key of your Mashery Application from dev.battle.net.',
+	"core_sett_f_login_bnet_appsecret" => 'Battle.net Secret',
+	"core_sett_f_login_bnet_eqdkp_relay" => 'Use the EQdkp Plus Relay Service',
+	"core_sett_f_help_login_bnet_eqdkp_relay" => 'Using the Battle.net Login only works, if your site uses SSL. If you can\'t use SSL, you can use the EQdkp Plus Relay Service. More Information here: https://eqdkp-plus.eu/wiki/Battle.net_Login',
+	"core_sett_f_login_bnet_eqdkp_appid" => 'EQdkp Plus App-ID',
+	"core_sett_f_help_login_bnet_eqdkp_appid" => 'Insert here the EQdkp Plus App-ID created at https://eqdkp-plus.eu/repository/MyApps/.',
+	"core_sett_f_login_bnet_eqdkp_appsecret" => 'EQdkp Plus App-Secret',
 	"core_sett_f_disable_embedly" => 'Disable automatic conversion of links to embedded videos/pictures',
 	"core_sett_f_help_disable_embedly" => 'Links to video/pictures (e.g. youtube) will be converted automatically to embedded objects',
 	"core_sett_tab_global" => 'Global',
@@ -1329,8 +1336,8 @@ $lang = array(
 	"lm_column_preset" => 'Column',
 	"lm_column_sortable" => 'sortable',
 	"lm_column_default_sort" => 'Default sorting order',
-	"lm_column_th_add" => 'HTML &lt;th&gt; addition',
-	"lm_column_td_add" => 'HTML &lt;td&gt; addition',
+	"lm_column_th_add" => 'HTML <th> addition',
+	"lm_column_td_add" => 'HTML <td> addition',
 	"lm_add_row" => 'Add column',
 	"lm_delete_row" => 'Delete column',
 	"lm_table_settings" => 'Table configuration',
@@ -1370,7 +1377,7 @@ $lang = array(
 	"lm_tag" => 'Day',
 	"lm_aparam" => 'Call params',
 	"lm_dparam" => 'Description params',
-	"lm_lang"	=> 'Column Title',
+	"lm_lang" => 'Column Title',
 	"lm_layout_normal" => 'Default EQdkp-Plus layout.',
 	"lm_layout_epgp" => 'EPGP EQdkp-Plus layout.',
 	"lm_layout_sk" => 'Suizide Kings EQdkp-Plus layout. Suicide victim drops behind last raid attendee.',
@@ -1427,7 +1434,7 @@ $lang = array(
 	"lm_hptt_latest_logs" => 'Last log entries',
 	"lm_hptt_roster" => 'Member-Table',
 	"lm_hptt_listusers_userlist" => 'Userlist',
-	"lm_page_teamlist" => "Teamlist",
+	"lm_page_teamlist" => 'Teamlist',
 	"massmail" => 'Mass mail',
 	"massmail_to_user" => 'Send to user',
 	"massmail_to_group" => 'Send to group',
@@ -1551,7 +1558,7 @@ $lang = array(
 	"perm_chs" => 'Change published state',
 	"core_sett_fs_seo" => 'Search Engine Optimization',
 	"core_sett_f_seo_remove_index" => 'Remove index.php from URLs',
-	"core_sett_f_help_seo_remove_index" => 'To use this feature, you have to uncomment the SEO-Options and to adjust the server-path in the .htaccess-file. Also, take a loot at our <a href=\"https://eqdkp-plus.eu/wiki/SEO\">Wiki</a>',
+	"core_sett_f_help_seo_remove_index" => 'To use this feature, you have to uncomment the SEO-Options and to adjust the server-path in the .htaccess-file. Also, take a loot at our <a href="https://eqdkp-plus.eu/wiki/SEO">Wiki</a>',
 	"core_sett_f_seo_extension" => 'URL-Extension for index.php-Paths',
 	"featured_ontop" => 'Show featured articles ontop',
 	"sortation_type" => 'Sortation of articles',
@@ -1566,8 +1573,8 @@ $lang = array(
 	"add_portal_layout" => 'Add Portallayout',
 	"add_portal_block" => 'Add Portalblock',
 	"edit_portal_block" => 'Edit Portalblock',
-	"portal_block_info" => "You can add own portalblocks, but have to position them in the index.tpl file of your Style. To position them, just take the Template-Var {PORTAL_BLOCKX} and add it to the position you want in the Template-File.",
-	"portal_layout_info" => "You can add portallayout to show different portal modules on different categories. Pages that have no category, like Plugins, are using the default portallayout.",
+	"portal_block_info" => 'You can add own portalblocks, but have to position them in the index.tpl file of your Style. To position them, just take the Template-Var {PORTAL_BLOCKX} and add it to the position you want in the Template-File.',
+	"portal_layout_info" => 'You can add portallayout to show different portal modules on different categories. Pages that have no category, like Plugins, are using the default portallayout.',
 	"wide_content" => 'Prefer wide content',
 	"hide_on_rss" => 'Exclude this category on RSS-Feed',
 	"perm_u_files_man" => 'Manage Images',
@@ -1624,46 +1631,41 @@ $lang = array(
 	"link_type" => 'Select link type',
 	"link_type_internal" => 'Internal link',
 	"link_type_external" => 'External link',
-	"core_sett_f_disable_xframe_header" => "Allow embedding EQdkp Plus in other Websites",
-	
+	"core_sett_f_disable_xframe_header" => 'Allow embedding EQdkp Plus in other Websites',
 	"manexport_title" => 'Data-Export',
-	"export_memberitems" => "Include Character-Items in Export?",
-	"export_format"	=> "Export-Format",
-	"export_data" => "Data",
-	"export_memberadjustments" => "Include Character-Adjustments in Export?",
-	
-	"upload_eventicon" => "Upload Eventicon",
-	"selected_elements" => "Selected Elements",
-	
-	"show_on_teamlist" => "Show on Teampage",
-	"show_teamlist" => "Teampage",
-	"link_to_articles" => "Click here to get to the Articles in this Category",
-	
-	/* Manage Userprofilefields */
-	"manage_userpf" => "Userprofilefields Management",
-	"manage_userpf_edit" => "Edit Userprofilefield",
-	"userpf_sett_f_name" => "Name",
-	"userpf_sett_f_help_lang_var" => "Insert here the EQdkp Plus Language Var. If none exists, leave field empty, and the Name Field is used.",
-	"userpf_sett_f_help_length" => "Insert here the maximum input length of this field.",
-	"userpf_sett_f_help_minlength" => "Insert here the minimum input length of this field.",
-	"userpf_sett_f_help_validation" => "You can validate the input using a regular expression (not required)",
-	"userpf_sett_f_help_is_contact" => "Enable this option, if field should be shown at contact section",
-	"userpf_sett_f_help_contact_url" => "Insert the URL that should be used when clicking on the Field Output. %s will be replaced with the User Input.",
-	"userpf_sett_f_help_icon_or_image" => "Insert here the CSS Class of the Icon, or an path to an .png image in images-Folder.",
-	"userpf_sett_f_help_bridge_field" => "Select the Field from other Forum/CMS which values should be imported in this field.",
-	"userpf_sett_f_lang_var" => "Language var",
-	"userpf_sett_f_type" => "Type",
-	"userpf_sett_f_length" => "Length",
-	"userpf_sett_f_minlength" => "Minimum Length",
-	"userpf_sett_f_validation" => "Validation",
-	"userpf_sett_f_required" => "Required",
-	"userpf_sett_f_show_on_registration" => "Show on Registration",
-	"userpf_sett_f_enabled" => "Enabled",
-	"userpf_sett_f_is_contact" => "Is Contactfield",
-	"userpf_sett_f_contact_url" => "Contact URL",
-	"userpf_sett_f_icon_or_image" => "Icon or Image",
-	"userpf_sett_f_bridge_field" => "Synchroniced Bridge Field",
-	"bridge_profilefields_info" => "This Bridge supports the Synchronisation of Userprofilefields. You can do a mapping of this fields at the <a href=\"manage_user_profilefields.php\">Userprofilefields Management</a>.",
+	"export_memberitems" => 'Include Character-Items in Export?',
+	"export_memberadjustments" => 'Include Character-Adjustments in Export?',
+	"export_format" => 'Export-Format',
+	"export_data" => 'Data',
+	"upload_eventicon" => 'Upload Eventicon',
+	"selected_elements" => 'Selected Elements',
+	"show_on_teamlist" => 'Show on Teampage',
+	"show_teamlist" => 'Teampage',
+	"link_to_articles" => 'Click here to get to the Articles in this Category',
+	"manage_userpf" => 'Userprofilefields Management',
+	"manage_userpf_edit" => 'Edit Userprofilefield',
+	"userpf_sett_f_name" => 'Name',
+	"userpf_sett_f_lang_var" => 'Language var',
+	"userpf_sett_f_help_lang_var" => 'Insert here the EQdkp Plus Language Var. If none exists, leave field empty, and the Name Field is used.',
+	"userpf_sett_f_type" => 'Type',
+	"userpf_sett_f_length" => 'Length',
+	"userpf_sett_f_help_length" => 'Insert here the maximum input length of this field.',
+	"userpf_sett_f_minlength" => 'Minimum Length',
+	"userpf_sett_f_help_minlength" => 'Insert here the minimum input length of this field.',
+	"userpf_sett_f_validation" => 'Validation',
+	"userpf_sett_f_help_validation" => 'You can validate the input using a regular expression (not required)',
+	"userpf_sett_f_required" => 'Required',
+	"userpf_sett_f_show_on_registration" => 'Show on Registration',
+	"userpf_sett_f_enabled" => 'Enabled',
+	"userpf_sett_f_is_contact" => 'Is Contactfield',
+	"userpf_sett_f_help_is_contact" => 'Enable this option, if field should be shown at contact section',
+	"userpf_sett_f_contact_url" => 'Contact URL',
+	"userpf_sett_f_help_contact_url" => 'Insert the URL that should be used when clicking on the Field Output. %s will be replaced with the User Input.',
+	"userpf_sett_f_icon_or_image" => 'Icon or Image',
+	"userpf_sett_f_help_icon_or_image" => 'Insert here the CSS Class of the Icon, or an path to an .png image in images-Folder.',
+	"userpf_sett_f_bridge_field" => 'Synchroniced Bridge Field',
+	"userpf_sett_f_help_bridge_field" => 'Select the Field from other Forum/CMS which values should be imported in this field.',
+	"bridge_profilefields_info" => 'This Bridge supports the Synchronisation of Userprofilefields. You can do a mapping of this fields at the <a href="manage_user_profilefields.php">Userprofilefields Management</a>.',
 	
 );
 
