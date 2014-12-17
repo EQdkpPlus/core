@@ -429,7 +429,9 @@ class core extends gen_class {
 			if (isset($arrLinkData['icon']) && strlen($arrLinkData['icon'])){
 				$icon = '<i class="'.$arrLinkData['icon'].'"></i>';
 			}
-			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
+			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
+			if ($strHref == $this->server_path.'#') $strHref = "#";
+			
 			if ($blnHrefOnly) return $strHref;
 			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
 		}
@@ -642,7 +644,6 @@ class core extends gen_class {
 		
 		public function build_menu_ul(){
 			$arrItems = $this->build_menu_array(false);
-			
 			$html  = '<ul class="mainmenu">';
 			
 			foreach($arrItems as $k => $v){
