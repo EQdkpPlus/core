@@ -353,6 +353,20 @@ class game extends gen_class {
 		}
 		return $versions;
 	}
+	
+	/**
+	 * returns an array containing versions of all games
+	 */
+	public function get_authors() {
+		$authors = array();
+		foreach($this->get_games() as $gme) {
+			if(!class_exists($gme)) include_once($this->root_path . 'games/'.$gme.'/'.$gme.'.class.php');
+			$object = registry::register($gme);
+			$authors[$gme] = $object->author;
+			unset($object);
+		}
+		return $authors;
+	}
 
 	/**
 	 * @return string full game-name
@@ -1274,6 +1288,8 @@ if(!class_exists('game_generic')) {
 		private $icons_checked = false;
 		public $icons = array();
 		public $character_unique_ids = false;
+		public $author = "";
+		public $version = "";
 
 		public function __construct(){
 			$this->path = $this->root_path.'games/'.$this->this_game.'/';

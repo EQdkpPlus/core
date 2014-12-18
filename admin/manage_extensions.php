@@ -57,6 +57,7 @@ class Manage_Extensions extends page_generic {
 		$extension = $this->pdh->get('repository', 'row', $this->in->get('info', 0));
 		
 		$this->tpl->assign_vars(array(
+			'EXTID'				=> sanitize($extension['plugin_id']),
 			'CATEGORY'			=> sanitize($extension['category']),
 			'CODE'				=> sanitize($extension['plugin']),
 			'NAME'				=> sanitize($extension['name']),
@@ -608,6 +609,7 @@ class Manage_Extensions extends page_generic {
 		//Games
 		$arrGames = $this->game->get_games();
 		$arrGameVersions = $this->game->get_versions();
+		$arrGameAuthors = $this->game->get_authors();
 		$arrTmpExtension = array();
 		
 		if (isset($arrExtensionList[7]) && is_array($arrExtensionList[7])){
@@ -636,7 +638,7 @@ class Manage_Extensions extends page_generic {
 					'NAME'				=> (isset($arrExtensionListNamed[7][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.$this->game->game_name($plugin_code).'</a>' : $this->game->game_name($plugin_code),
 					'VERSION'			=> $arrGameVersions[$plugin_code],
 					'CODE'				=> sanitize($plugin_code),
-					'CONTACT'			=> (isset($arrTmpExtension[$plugin_code])) ? $arrTmpExtension[$plugin_code]['author'] : '',
+					'CONTACT'			=> (isset($arrTmpExtension[$plugin_code])) ? $arrTmpExtension[$plugin_code]['author'] : $arrGameAuthors[$plugin_code],
 					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['description'], 100).'</a>' : '',
 					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->starrating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), $this->env->phpself , array('score' => $arrTmpExtension[$plugin_code]['rating'], 'readonly' => true)) : '',
 					'ACTION_LINK'		=> $link,
