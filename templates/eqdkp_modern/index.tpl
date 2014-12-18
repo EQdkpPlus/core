@@ -246,7 +246,6 @@
 					$(".mychars-points-target").html(icons + " "+current);
 				}
 				<!-- ENDIF -->
-				
 			});
 			<!-- ELSE -->
 				<!-- JS for simple header. Above is for normal header only -->

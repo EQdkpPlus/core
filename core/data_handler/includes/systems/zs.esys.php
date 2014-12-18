@@ -316,6 +316,30 @@ $system_def = array(
 			),
 		),
 			
+			'userprofile' => array(
+					'hptt_userprofile_memberlist_overview' => array(
+							'name' => 'hptt_userprofile_memberlist_overview',
+							'table_main_sub' => '%member_id%',
+							'table_subs' => array('%member_id%', '%link_url%', '%link_url_suffix%', '%with_twink%'),
+							'page_ref' => $this->strPath,
+							'show_numbers' => false,
+							'show_select_boxes' => false,
+							'show_detail_twink' => false,
+							'perm_detail_twink' => true,
+							'table_sort_col' => 0,
+							'table_sort_dir' => 'asc',
+							'table_presets' => array(
+									array('name' => 'mlink_decorated', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+									array('name' => 'mlevel', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+									array('name' => 'mrank', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+									array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+									array('name' => 'current_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+									array('name' => 'attendance_30_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+									array('name' => 'attendance_lt_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+							),
+					),
+			),
+			
 			'teamlist' => array(
 					'hptt_team_list' => array(
 							'name' => 'hptt_team_list',

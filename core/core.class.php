@@ -242,25 +242,53 @@ class core extends gen_class {
 						if (event.target.type !== 'checkbox') {
 							$(':checkbox', this).trigger('click');
 						}
-					});", 'docready');
+					});
+					
+					$(function(){
+						var search = $('#loginarea_search');
+						original_val = search.val();
+						search.focus(function(){
+							if($(this).val()===original_val){
+								$(this).val('');
+							}
+						})
+						.blur(function(){
+							if($(this).val()===''){
+								$(this).val(original_val);
+							}
+						});
+					});
+					
+					$('.paginationPageSelector').on('click', function(){
+						var base_url = $(this).parent().parent().data('base-url');
+						var pages = $(this).parent().parent().data('pages');
+						var per_page = $(this).parent().parent().data('per-page');
+						var hint = '".$this->user->lang('pagination_goto_hint')."';
+						hint = hint.replace(/PAGE/g, pages);
+					
+						$('<div></div>')
+								.html('<fieldset class=\"settings mediumsettings\"><dl><dt><label>".$this->user->lang('pagination_goto').":</label></dt><dd><input type=\"text\" size=\"10\" maxlength=\"30\" class=\"input\" id=\"goToPageInput\" placeholder=\"'+hint+'\" /><br />'+hint+'</dd></dl></fieldset>')
+								.dialog({
+								bgiframe: true,
+								modal: true,
+								height: 250,
+								width: 350,
+								title: '".$this->user->lang('pagination_goto')."',
+								buttons: {
+									Ok: function() {
+										var page = $('#goToPageInput').val();
+										if (page > 0 && page <= pages){
+											var start = (page-1)*per_page;
+											window.location = base_url+start;
+										}
+										$(this).dialog('close');
+									},
+								}
+						});
+					});
+					
+					", 'docready');
 
-
-			$this->tpl->add_js('$(function(){
-				var $search = $("#loginarea_search");
-				original_val = $search.val();
-				$search.focus(function(){
-					if($(this).val()===original_val){
-						$(this).val("");
-					}
-				})
-				.blur(function(){
-					if($(this).val()===""){
-						$(this).val(original_val);
-					}
-				});
-			});
-
-			', 'docready');
 
 			//Lightbox Zoom-Image
 			$this->tpl->add_js("

@@ -1403,6 +1403,7 @@ $lang = array(
 "lm_page_admin_manage_logs" => "Logs-Verwaltung",
 "lm_page_admin_index" => "Admin-Index",
 "lm_page_listusers" => "Benutzerliste",
+"lm_page_userprofile" => 'Benutzerprofil',
 "admin_page" => "Admin-Seite",
 "lm_page_roster" => "Roster",
 "lm_hptt_listraids_raidlist" => "Raid-Tabelle",

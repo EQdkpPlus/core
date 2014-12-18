@@ -934,7 +934,8 @@ $lang = array(
 		
 "sp_btn_twitter_share" => "Tweet",
 "sp_btn_facebook_share" => "Teilen",		
-
+"pagination_goto" => "Gehe zu Seite",
+"pagination_goto_hint" => "Gebe einen Wert zwischen 1 und PAGE ein.",		
 );
 
 ?>

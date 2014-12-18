@@ -289,7 +289,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 
 		$base_url = $url . $uri_symbol . $start_variable;
 		//First Page
-		$pagination = '<div class="pagination"><ul>';
+		$pagination = '<div class="pagination"><ul data-pages="'.$total_pages.'" data-base-url="'.$base_url.'=" data-per-page="'.$per_page.'">';
 		if ($recent_page == 1){
 			$pagination .= '<li class="active"><a href="#">1</a></li>';
 		} else {
@@ -312,7 +312,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 			$start_count = min(max(1, $recent_page - 5), $total_pages - 4);
 			$end_count = max(min($total_pages, $recent_page + 5), 4);
 
-			$pagination .= ( $start_count > 1 ) ? '<li><a href="#">...</a></li>' : '';
+			$pagination .= ( $start_count > 1 ) ? '<li><a class="paginationPageSelector hand">...</a></li>' : '';
 
 			for ( $i = $start_count + 1; $i < $end_count; $i++ ){
 				if ($i == $recent_page){
@@ -321,7 +321,7 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 					$pagination .= '<li><a href="'.$base_url.'='.( (($i - 1) * $per_page)+$offset).'" title="'.registry::fetch('user')->lang('page').' '.$i.'" class="pagination">'.$i.'</a></li>';
 				}
 			}
-			$pagination .= ($end_count < $total_pages ) ? '<li><a href="#">...</a></li>' : '';
+			$pagination .= ($end_count < $total_pages ) ? '<li><a class="paginationPageSelector hand">...</a></li>' : '';
 		} //close else
 
 

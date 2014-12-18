@@ -1405,6 +1405,7 @@ $lang = array(
 	"lm_page_admin_manage_logs" => 'Log settings',
 	"lm_page_admin_index" => 'Admin-index',
 	"lm_page_listusers" => 'Userlist',
+	"lm_page_userprofile" => 'Userprofile',
 	"admin_page" => 'Admin page',
 	"lm_page_roster" => 'Roster',
 	"lm_hptt_listraids_raidlist" => 'Raid table',

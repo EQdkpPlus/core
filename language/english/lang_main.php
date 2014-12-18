@@ -972,7 +972,8 @@ $lang = array(
 	"article_unpublished_note" => 'Note: this article is not published yet.',
 	"sp_btn_twitter_share" => 'Tweet',
 	"sp_btn_facebook_share" => 'Share',
-	
+	"pagination_goto" => "Go to page",
+	"pagination_goto_hint" => "Insert a value between 1 and PAGE.",
 );
 
 ?>
