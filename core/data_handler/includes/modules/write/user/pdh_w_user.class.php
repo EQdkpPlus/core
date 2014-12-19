@@ -230,6 +230,7 @@ if(!class_exists('pdh_w_user')) {
 			//Send out notification email
 			$bodyvars = array(
 				'USERNAME'		=> $this->pdh->get('user', 'name', array($user_id)),
+				'GUILDTAG'		=> $this->config->get('guildtag'),
 			);
 			$this->email->Set_Language($this->pdh->get('user', 'lang', array($user_id)));
 			$result = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);

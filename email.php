@@ -48,48 +48,27 @@ class email extends page_generic {
 		} elseif ($this->in->get('body') == '' || $this->in->get('subject') == '') {
 			$this->core->message($this->user->lang('adduser_send_mail_error_fields'), $this->user->lang('error'), 'red');
 		} else {
-			$priv = $this->pdh->get('user', 'privacy_settings', array($user_id));
-			$perm = false;
-			
-			$priv['priv_set'] = (isset($priv['priv_set'])) ? $priv['priv_set'] : 1;
-			switch ((int)$privacy['priv_set']){
-				case 0: // all
-					$perm = true;
-					break;
-				case 1: // only user
-					if($this->user->is_signedin()){
-						$perm = true;
-					}
-					break;
-				case 2: // only admins
-					if($this->user->check_group(2, false) || $this->user->check_group(3, false)){
-						$perm = true;
-					}
-				break;
-			}
+			$strEmail = $this->pdh->get('user', 'email', array($user_id, true));
+			$blnPrivacyCheck = $this->pdh->get('user', 'check_privacy', array($user_id, 'userprofile_email'));
 			
 			//Permission to send
-			if ($perm) {
-				if (strlen($this->pdh->get('user', 'email', array($user_id))) && strlen($this->user->data['user_email'])){
-					$options = array(
-						'template_type'		=> 'input',
-					);
+			if ($blnPrivacyCheck && strlen($strEmail)) {
 
-					//Set E-Mail-Options
-					$this->mail->SetOptions($options);
-					
-					$status = $this->mail->SendMail($this->pdh->get('user', 'email', array($user_id)), $this->user->data['user_email'], $this->in->get('subject'), $this->in->get('body'));
-					if ($status){
-						$this->core->message($this->user->lang('adduser_send_mail_suc'), $this->user->lang('success'), 'green');
-						$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
-					} else {
-						$this->core->message($this->user->lang('error_email_send'), $this->user->lang('error'), 'red');
-					}
+				$options = array(
+					'template_type'		=> 'input',
+				);
 
+				//Set E-Mail-Options
+				$this->mail->SetOptions($options);
+				
+				$status = $this->mail->SendMail($this->pdh->get('user', 'email', array($user_id)), $this->user->data['user_email'], $this->in->get('subject'), $this->in->get('body'));
+				if ($status){
+					$this->core->message($this->user->lang('adduser_send_mail_suc'), $this->user->lang('success'), 'green');
+					$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 				} else {
-					$this->core->message($this->user->lang('fv_invalid_email'), $this->user->lang('error'), 'red');
-				}			
-			
+					$this->core->message($this->user->lang('error_email_send'), $this->user->lang('error'), 'red');
+				}
+
 			} else {
 				message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied');
 			}
