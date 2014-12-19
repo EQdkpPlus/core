@@ -125,6 +125,6 @@ try {
 		echo "</body></html>";
 	}
 } catch (DBALException $e){
-	var_dump($e);
+	echo ($e->message);
 }
 ?>

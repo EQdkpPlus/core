@@ -177,8 +177,23 @@ abstract class Database extends gen_class {
 			Code: "		. $log_entry['args'][2] . "\t
 			DB: "		. $log_entry['args'][3] . "\t
 			Prfx: "		. $log_entry['args'][4] . "\t
-			Trace:\n"	. $log_entry['args'][5];
+			Trace:\n"	. $this->clean_errormessage($log_entry['args'][5]);
 		return $text;
+	}
+	
+	public function clean_errormessage($strErrorMessage){
+		$strErrorMessage = str_replace(registry::get_const("dbpass"), '*******', $strErrorMessage);
+		if (strlen(registry::get_const("dbuser")) > 3){
+			$strSuffix = substr(registry::get_const("dbuser"), 0, 3);
+			$strUserReplace = str_pad($strSuffix, strlen(registry::get_const("dbuser")), '*');
+		}
+		$strErrorMessage = str_replace(registry::get_const("dbuser"), $strUserReplace, $strErrorMessage);
+		if (strlen(registry::get_const("dbhost")) > 6){
+			$strSuffix = substr(registry::get_const("dbhost"), 0, 6);
+			$strHostReplace = str_pad($strSuffix, strlen(registry::get_const("dbhost")), '*');
+		}
+		$strErrorMessage = str_replace(registry::get_const("dbhost"), $strHostReplace, $strErrorMessage);
+		return $strErrorMessage;
 	}
 	
 	// Highlight certain keywords in a SQL query
