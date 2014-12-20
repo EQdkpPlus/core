@@ -379,7 +379,7 @@ class template extends gen_class {
 	}
 
 	 // Generate a full path & the filename for a given filename (absolute or relative)
-	private function fullpath_filename($filename, $basefile=false){
+	public function fullpath_filename($filename, $basefile=false){
 
 		if(substr($filename, 0, 1) == '/' || substr($filename, 0, 2) == './'){
 			$myfile			= $filename;
@@ -724,6 +724,15 @@ class template extends gen_class {
 		}
 		return true;
 	}
+	
+	public function compileString($strString, $arrVars=array()){
+		$this->core->addCommonTemplateVars();
+		$this->assign_vars($arrVars);
+		$strCompiled = $this->compile($strString, true, 'return');
+		@eval($strCompiled);
+
+		return $return;
+	}
 
 	//Compiles the given string of code, and returns the result in a string.
 	private function compile($code, $do_not_echo = false, $retvar = ''){
@@ -785,7 +794,7 @@ class template extends gen_class {
 			$trim_check_block		= ( isset($compile_blocks[$i]) ) ? trim($compile_blocks[$i]) : '';
 			$template_php			.= (!$do_not_echo) ? ((!empty($trim_check_text)) ? 'echo \'' . $text_blocks[$i] . '\';' : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] : '') : ((!empty($trim_check_text)) ? $text_blocks[$i] . "\n" : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] . "\n" : '');
 		}
-		return (!$do_not_echo) ? $template_php : '$' . $retvar . '.= \'' . $template_php . '\'';
+		return (!$do_not_echo) ? $template_php : '$' . $retvar . '.= \'' . $template_php . '\';';
 	}
 
 	private function compile_var_tags(&$text_blocks){
@@ -1345,6 +1354,8 @@ class template extends gen_class {
 
 	public function generate_error($content, $handle = false, $sprintf = '', $function = ''){
 		if ($handle === false) $handle = $this->handle;
+		
+		debug_print_backtrace();
 
 		if(!$this->error_message){
 			$title			= $this->lang('templates_error');

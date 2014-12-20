@@ -345,42 +345,24 @@ class core extends gen_class {
 			} else $headerlogo = "";
 			
 			// Load the jQuery stuff
+			$this->addCommonTemplateVars();
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
-				'MAIN_TITLE'				=> $this->config->get('main_title'),
-				'SUB_TITLE'					=> $this->config->get('sub_title'),
-				'GUILD_TAG'					=> $this->config->get('guildtag'),
-				'META_KEYWORDS'				=> ($this->config->get('meta_keywords') && strlen($this->config->get('meta_keywords'))) ? $this->config->get('meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('servername'))) ? ', '.$this->config->get('servername') : ''),
-				'META_DESCRIPTION'			=> ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'),
-				'EQDKP_ROOT_PATH'			=> $this->server_path,
-				'EQDKP_IMAGE_PATH'			=> $this->server_path.'images/',
-				'EQDKP_CONTROLLER_PATH'		=> $this->controller_path,
 				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
-				'TEMPLATE_PATH'				=> $this->server_path . 'templates/' . $this->user->style['template_path'],
-				'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
-				'USER_ID'					=> $this->user->id,
-				'USER_NAME'					=> isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous'),
 				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
-				
-				'S_POINTS_DISABLED'			=> ($this->config->get('disable_points')) ? true : false,
 				'S_NORMAL_HEADER'			=> ($this->header_format != 'simple') ? true : false,
 				'S_NORMAL_FOOTER'			=> ($this->header_format != 'simple') ? true : false,
 				'S_NO_HEADER_FOOTER'		=> ($this->header_format == 'none') ? true : false,
-				'S_ADMIN'					=> $this->user->check_auth('a_', false),
 				'S_IN_ADMIN'				=> $s_in_admin,
 				'S_SEARCH'					=> $this->user->check_auth('u_search', false),
-				'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
-				'GAME'						=> $this->config->get('default_game'),
-				'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 				'FIRST_C'					=> true,
 				'T_PORTAL_WIDTH'			=> $this->user->style['portal_width'],
 				'T_COLUMN_LEFT_WIDTH'		=> $this->user->style['column_left_width'],
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'S_REGISTER'				=> !(int)$this->config->get('disable_registration'),
-				'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
 				'U_REGISTER'				=> $registerLink,
@@ -397,7 +379,6 @@ class core extends gen_class {
 				'USER_DATEFORMAT_LONG'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_long']),
 				'USER_DATEFORMAT_SHORT'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_short']),
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
-				'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
 				'MAIN_MENU_SELECT'			=> $this->build_menu_select(),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 			));
@@ -446,6 +427,30 @@ class core extends gen_class {
 			}
 			
 			$this->mycharacters();
+		}
+		
+		public function addCommonTemplateVars(){
+			$this->tpl->assign_vars(array(
+					'MAIN_TITLE'				=> $this->config->get('main_title'),
+					'SUB_TITLE'					=> $this->config->get('sub_title'),
+					'GUILD_TAG'					=> $this->config->get('guildtag'),
+					'META_KEYWORDS'				=> ($this->config->get('meta_keywords') && strlen($this->config->get('meta_keywords'))) ? $this->config->get('meta_keywords') : $this->config->get('guildtag').', '.$this->config->get('default_game').((strlen($this->config->get('servername'))) ? ', '.$this->config->get('servername') : ''),
+					'META_DESCRIPTION'			=> ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'),
+					'EQDKP_ROOT_PATH'			=> $this->server_path,
+					'EQDKP_IMAGE_PATH'			=> $this->server_path.'images/',
+					'EQDKP_CONTROLLER_PATH'		=> $this->controller_path,
+					'TEMPLATE_PATH'				=> $this->server_path . 'templates/' . $this->user->style['template_path'],
+					'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
+					'USER_ID'					=> $this->user->id,
+					'USER_NAME'					=> isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous'),
+					'S_POINTS_DISABLED'			=> ($this->config->get('disable_points')) ? true : false,
+					'S_ADMIN'					=> $this->user->check_auth('a_', false),
+					'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
+					'GAME'						=> $this->config->get('default_game'),
+					'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
+					'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
+					'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
+			));
 		}
 		
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){
