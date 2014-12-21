@@ -502,7 +502,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					if ($blnNameCheck){
 						//Now check Profilefields
 						foreach($arrGameUniqueIDs as $profilekey){
-							$strProfilevalue = isset($arrProfileData[$profilekey]) ? $arrProfileData[$profilekey] : $this->config->get($profilekey);
+							$strProfilevalue = (isset($arrProfileData[$profilekey]) && strlen($arrProfileData[$profilekey])) ? $arrProfileData[$profilekey] : $this->config->get($profilekey);
 							
 							if ($detail[$profilekey] === $strProfilevalue){
 								$blnResultArray[] = true;

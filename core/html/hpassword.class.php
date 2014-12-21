@@ -42,6 +42,7 @@ class hpassword extends html {
 	public $set_value = false;
 	public $required = false;
 	public $pattern = 'password';
+	public $autocomplete = false;
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -55,6 +56,7 @@ class hpassword extends html {
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= 'required="required" ';
+		if(!$this->autocomplete) $out .= 'autocomplete="off" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->equalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
