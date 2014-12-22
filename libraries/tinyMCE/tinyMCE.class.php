@@ -25,12 +25,14 @@ if ( !defined('EQDKP_INC') ){
 
 class tinyMCE extends gen_class {
 
-	protected $tinymce_version = '3.5.6';
+	protected $tinymce_version = '4.1.7';
 	protected $language	= 'en';
 	protected $trigger	= array(
 		'bbcode'	=> false,
 		'normal'	=> false
 	);
+	protected $skin = 'lightgray';
+	protected $theme = 'modern';
 	
 	public function __construct($nojsinclude=false){
 		if(!$nojsinclude) $this->tpl->js_file($this->server_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
@@ -40,8 +42,13 @@ class tinyMCE extends gen_class {
 
 	public function editor_bbcode($settings=false){
 		if(!$this->trigger['bbcode']){
-			$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
-				
+			
+			//Language
+			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
+				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+			} else $this->language = 'en';
+			
 			$arrHooks = (($this->hooks->isRegistered('tinymce_bbcode_setup')) ? $this->hooks->process('tinymce_bbcode_setup', array('js' => '', 'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			
@@ -57,8 +64,9 @@ class tinyMCE extends gen_class {
 						"searchreplace visualblocks code fullscreen",
 						"media paste textcolor"
 					],
-					//language : "'.$this->language.'",
-					theme : "modern",
+					language : "'.$this->language.'",
+					theme : "'.$this->theme.'",
+					skin : "'.$this->skin.'",
 					
 					setup: function(editor){
 						'.$strHooks.'
@@ -85,7 +93,12 @@ class tinyMCE extends gen_class {
 
 	public function editor_normal($settings=false){
 		if(!$this->trigger['normal']){
-			$this->language	= (isset($settings['language'])) ? $settings['language'] : $this->language;
+			//Language
+			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
+				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+			} else $this->language = 'en';
+
 			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
 			$pageobjects	= (isset($settings['pageobjects']) && $settings['pageobjects']) ? ' eqdkp_pageobject' : '';
 			$readmore		= (isset($settings['readmore']) && !$settings['readmore']) ? '' : ' eqdkp_pagebreak_readmore';
@@ -135,10 +148,11 @@ class tinyMCE extends gen_class {
 					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
 					document_base_url : "'.$this->env->link.'",
 					// General options
-					theme: "modern",
+					theme : "'.$this->theme.'",
+					skin : "'.$this->skin.'",
 					image_advtab: true,
 					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
-					//language : "'.$this->language.'",
+					language : "'.$this->language.'",
 					 plugins: [
 					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
 						"searchreplace visualblocks code fullscreen",
@@ -193,6 +207,11 @@ class tinyMCE extends gen_class {
 	
 	public function inline_editor_simple($selector, $settings=array()){
 		if(!$this->trigger['inline_simple.'.$selector]){
+			//Language
+			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
+				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+			} else $this->language = 'en';
 			
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
 			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
@@ -212,7 +231,9 @@ class tinyMCE extends gen_class {
 						document_base_url : "'.$this->env->link.'",
 						
 						// General options
-						theme: "modern",
+						language : "'.$this->language.'",
+						theme : "'.$this->theme.'",
+						skin : "'.$this->skin.'",
 						inline: true,
 						toolbar: "undo redo",
 						menubar: false,
@@ -235,7 +256,12 @@ class tinyMCE extends gen_class {
 	
 	public function inline_editor($selector, $settings=false, $blnStart=true){
 		if(!$this->trigger['inline.'.$selector]){
-			$this->language	= (isset($settings['language'])) ? $settings['language'] : $this->language;
+			//Language
+			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
+				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+			} else $this->language = 'en';
+			
 			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
 			$pageobjects	= (isset($settings['pageobjects']) && $settings['pageobjects']) ? ' eqdkp_pageobject' : '';
 			$readmore		= (isset($settings['readmore']) && !$settings['readmore']) ? '' : ' eqdkp_pagebreak_readmore';
@@ -293,10 +319,11 @@ class tinyMCE extends gen_class {
 					document_base_url : "'.$this->env->link.'",
 					// General options
 					inline: true,
-					theme: "modern",
+					theme : "'.$this->theme.'",
+					skin : "'.$this->skin.'",
 					image_advtab: true,
 					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars",
-					//language : "'.$this->language.'",
+					language : "'.$this->language.'",
 					 plugins: [
 					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser",
 						"searchreplace visualblocks code fullscreen",
