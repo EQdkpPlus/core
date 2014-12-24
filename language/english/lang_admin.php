@@ -904,6 +904,7 @@ $lang = array(
 	"apa_func_help" => 'Help (incomplete): If you want to use the value of the first expression, write \'Var0\'. Use pow(4,3) instead of 4^3.',
 	"apa_func_example_1" => '5% Decay',
 	"apa_func_example_2" => '20 Points-Decay',
+	"apa_func_example_2" => '10000 Points-Cap (using with decay on current)',
 	"apa_valid_symbols" => 'Usable symbols',
 	"apa_func_error" => 'Error in expression %1$s.',
 	"apa_func_name_error" => 'The name of the function may only contain alphanumeric characters as well as the _!',

@@ -156,10 +156,15 @@ class Manage_Extensions extends page_generic {
 	public function process_step4(){
 		if ($this->in->get('cat', 0) && strlen($this->code)){
 			$srcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
-			if (is_dir($srcFolder.$this->code)){
-				$srcFolder .= $this->code;
-			} elseif (is_dir($srcFolder.strtolower($this->code))){
-				$srcFolder .= strtolower($this->code);
+			
+			//Subfolder detection
+			$arrSubfolder = scandir($srcFolder);
+			if(is_array($arrSubfolder) && count($arrSubfolder) === 3){
+				foreach($arrSubfolder as $strSubfolder){
+					if ($strSubfolder != "." || $strSubfolder != ".."){
+						$srcFolder .= $strSubfolder;
+					}
+				}
 			}
 
 			switch ((int)$this->in->get('cat', 0)){

@@ -901,6 +901,7 @@ $lang = array(
 <br /><b>Weitere Informationen zu Berechnungsfunktionen findest du in unserem <a href=\"".EQDKP_WIKI_URL."/Berechnungsfunktionen\">Wiki</a>.</b>",
 "apa_func_example_1" => "5% Decay",
 "apa_func_example_2" => "20 Punkte Decay",
+"apa_func_example_3" => "10000 Punkte Cap (bei Verfall auf aktuelle Punkte)",		
 "apa_valid_symbols" => "Nutzbare Zeichen",
 "apa_func_error" => "Fehler in Ausdruck %1\$s.",
 "apa_func_name_error" => "Der Funktionsname darf nur alphanumerische Zeichen, sowie _ enthalten!",

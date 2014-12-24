@@ -1193,4 +1193,12 @@ function unique_id($prefix='', $more_entropy=false) {
 	usleep(1);
 	return $id;
 }
+
+function inline_svg($strFile){
+	$strContent = "";
+	if (is_file($strFile)){
+		$strContent = file_get_contents($strFile);
+	}
+	return $strContent;
+}
 ?>

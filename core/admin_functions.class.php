@@ -266,19 +266,19 @@ class admin_functions extends gen_class {
 	function resolve_browser($string){
 		$string = sanitize($string);
 		if( preg_match("/opera/i",$string)){
-			return "<img src=\"".$this->root_path."images/browser/opera.svg\" alt=\"Opera\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/opera.svg")."</div>";
 		}else if( preg_match("/msie/i",$string)){
-			return "<img src=\"".$this->root_path."images/browser/ie.svg\" alt=\"Internet Explorer\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/ie.svg")."</div>";	
 		}else if( preg_match("/chrome/i", $string)){
-			return "<img src=\"".$this->root_path."images/browser/chrome.svg\" alt=\"Google Chrome\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<div class=\"coretip-left browser-icon chrome\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/chrome.svg")."</div>";
 		}else if( preg_match("/konqueror/i",$string)){
-			return "<img src=\"".$this->root_path."images/browser/konqueror.svg\" alt=\"Konqueror\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<div class=\"coretip-left browser-icon konqueror\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/konqueror.svg")."</div>";
 		}else if( preg_match("/safari/i",$string) ){
-			return "<img src=\"".$this->root_path."images/browser/safari.svg\" alt=\"Safari\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<div class=\"coretip-left browser-icon safari\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/safari.svg")."</div>";
 		}else if( preg_match("/lynx/i",$string) ){
 			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">Lynx</span>";
 		}else if( preg_match("/mozilla/i",$string) ){
-			return "<img src=\"".$this->root_path."images/browser/firefox.svg\" alt=\"Firefox\" class=\"coretip-left browser-icon\" data-coretip=\"".$string."\" />";
+			return "<div class=\"coretip-left browser-icon firefox\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/firefox.svg")."</div>";
 		}else if( preg_match("/w3m/i",$string) ){
 			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">w3m</span>";
 		}else{

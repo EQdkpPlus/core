@@ -1790,9 +1790,12 @@ ul.breamcrumb .current::before{
 
 /* ACP: index, browsers */
 .browser-icon{
+	display: inline;
+}
+.browser-icon svg {
 	width:24px;
 	height:24px;
-	color: grey;
+	/* fill:grey; */
 }
 
 /* ACP: index, rss notifications */

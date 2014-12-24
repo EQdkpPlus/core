@@ -186,6 +186,7 @@ class ManageAutoPoints extends page_generic {
 			'no_sel'	=> $this->user->lang('apa_func_example_choose'),
 			1			=> $this->user->lang('apa_func_example_1'),
 			2			=> $this->user->lang('apa_func_example_2'),
+			3			=> $this->user->lang('apa_func_example_3'),
 		);
 		
 		$this->tpl->assign_vars(array(
@@ -199,6 +200,7 @@ class ManageAutoPoints extends page_generic {
 			func_examples['no_sel'] = '';
 			func_examples[1] = \"value * 0.95\";
 			func_examples[2] = \"value - 20\";
+			func_examples[3] = \"( value > 10000) ? 10000 : value\";	
 			
 			$('#add_expr').click(function(){
 				var row = $('#exprs_block > dl:last').clone();
