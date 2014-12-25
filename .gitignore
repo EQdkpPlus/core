@@ -1,0 +1,8 @@
+_mytests/pdh_readmodule_generator.php
+_mytests/test.html
+_mytests/__ide_includes.php
+.project
+.buildpath
+.settings/org.eclipse.php.core.prefs
+.settings/org.eclipse.wst.common.project.facet.core.xml
+pdh_readmodule_generator.php
