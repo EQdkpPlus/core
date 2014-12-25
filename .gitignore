@@ -6,3 +6,5 @@ _mytests/__ide_includes.php
 .settings/org.eclipse.php.core.prefs
 .settings/org.eclipse.wst.common.project.facet.core.xml
 pdh_readmodule_generator.php
+data/
+config.php
