@@ -809,6 +809,7 @@ class user extends gen_class {
 						'required'	=> true,
 						'default'	=> (register('config')->get('default_rlimit')) ? register('config')->get('default_rlimit') : 100,
 					),
+					/*
 					'user_nlimit'	=> array(
 						'type'	=> 'spinner',
 						'lang'	=> 'news_per_page',
@@ -817,6 +818,7 @@ class user extends gen_class {
 						'required'	=> true,
 						'default'	=> (register('config')->get('default_nlimit')) ? register('config')->get('default_nlimit') : 10,
 					),
+					*/
 					'user_date_time'	=> array(
 						'type'	=> 'text',
 						'size'	=> 40,
