@@ -113,7 +113,7 @@ class controller extends gen_class {
 		//Required, otherwise the Routing of Plugin URLS wont work.
 		register('pm');
 		
-		if (count($arrPath) == 0){
+		if (count($arrPath) == 0 || str_replace('index.php', '', $strPath) === $this->config->get('server_path')){
 			//Get Start Page
 			if ($this->config->get('start_page') != ""){
 				$strPath = $this->config->get('start_page');

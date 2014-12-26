@@ -373,6 +373,7 @@ class form extends gen_class {
 		$this->tpl->assign_block_vars($key, array(
 			'NAME'		=> $this->lang($lang),
 			'INFO'		=> $this->lang($info, false),
+			'ID'		=> 'fs_'.substr(md5($fieldsetname), 0, 10),
 		));
 	}
 	
@@ -436,6 +437,7 @@ class form extends gen_class {
 					'NAME'		=> $language,
 					'HELP'		=> $help_message,
 					'FIELD'		=> $field,
+					'ID'		=> 'f_'.substr(md5($name), 0, 10),
 					'S_REQUIRED'=> (isset($options['required']) && $options['required']) ? true : false,
 				));
 			}
