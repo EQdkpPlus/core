@@ -212,13 +212,13 @@ class auth_db extends auth {
 			
 		} else {
 			$this->pdl->log('login', 'User successfull authenticated');
-			$this->hooks->process('user_login_successful', array('auth_method' => 'db', 'user_id' => $arrStatus['user_id']));
+			$this->hooks->process('user_login_successful', array('auth_method' => 'db', 'user_id' => $arrStatus['user_id'], 'autologin' => ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
 			//User successfull authenticated - destroy old session and create a new one
 			$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array('failed_login_attempts' => 0))->execute($arrStatus['user_id']);
 
 			$this->destroy();
 			$this->create($arrStatus['user_id'], (isset($arrStatus['user_login_key']) ? $arrStatus['user_login_key'] : ''), ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin));
-			return true;	
+			return true;
 		}
 		return false;
 	}
