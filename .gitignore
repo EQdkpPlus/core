@@ -8,3 +8,4 @@ _mytests/__ide_includes.php
 pdh_readmodule_generator.php
 data/
 config.php
+plugins/
