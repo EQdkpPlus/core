@@ -70,6 +70,8 @@ class eqdkp_bridge extends bridge {
 			'type'	=> 'radio',
 		),
 	);
+	
+	protected $blnSyncEmail = false;
 		
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash){

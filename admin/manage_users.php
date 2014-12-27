@@ -515,7 +515,8 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		//Get Superadmin-only-Permissions
 		$superadm_only_perms = $this->acl->get_superadmin_only_permissions();
 		//Get group-memberships of the user
-		$memberships = ($user_id) ? $this->acl->get_user_group_memberships($user_id) : array($this->pdh->get('user_groups', 'standard_group', array()));
+		$defaultGroup = $this->pdh->get('user_groups', 'standard_group', array());
+		$memberships = ($user_id) ? $this->acl->get_user_group_memberships($user_id) : array( $defaultGroup => $defaultGroup);
 		//Get group-permission of the admin
 		$adm_memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
 

@@ -33,6 +33,7 @@ class bridge extends gen_class {
 	protected $functions			= array();
 	protected $settings				= array();
 	protected $callbacks			= array();
+	protected $blnSyncEmail			= true;
 	public $db						= false;
 	public $prefix			= '';
 
@@ -120,11 +121,13 @@ class bridge extends gen_class {
 				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword) || !$strEQdkpUserSalt;
 				
 				//Update Email und Password - den Rest soll die Sync-Funktion machen	
-				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($arrUserdata['email'] != $arrEQdkpUserdata['user_email']) || $blnHashNeedsUpdate){
+				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate){
 					$strSalt = $this->user->generate_salt();
 					$strApiKey = $this->user->generate_apikey($strPassword, $strSalt);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
-					$this->pdh->put('user', 'update_user', array($user_id, array('user_email' => $this->crypt->encrypt($arrUserdata['email']), 'user_password' => $strPwdHash.':'.$strSalt, 'api_key'=>$strApiKey), false, false));
+					$arrToSync = array('user_password' => $strPwdHash.':'.$strSalt, 'api_key'=>$strApiKey);
+					if ($this->blnSyncEmail) $arrToSync['user_email'] = $this->crypt->encrypt($arrUserdata['email']);
+					$this->pdh->put('user', 'update_user', array($user_id, $arrToSync, false, false));
 					$this->pdh->process_hook_queue();
 				}
 				//Ist EQdkp-User active?
