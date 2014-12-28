@@ -199,34 +199,14 @@ class core extends gen_class {
 				}
 			}
 
-			// Load a template specific template css out of template folder
-			$css_theme		= $this->root_path.'templates/'.$this->user->style['template_path'].'/'.$this->user->style['template_path'].'.css';
-			$global_css		= $this->root_path.'templates/eqdkpplus.css';
-			$customcss		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.css';
-			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
-
-			$storage_folder = $this->pfh->FolderPath('templates/'.$this->user->style['template_path'], 'eqdkp');
-
 			// add the custom JS file
+			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
 			if(is_file($customjs)){
 				$this->tpl->js_file($customjs);
 			}
 			
-
-			if (!is_file($storage_folder.'main.css')){
-				//Create combined CSS File
-				$this->tpl->parse_cssfile();
-				$this->tpl->css_file($storage_folder.'main.css', 'screen', true);
-			} else{
-				//There is a combined CSS File
-				
-				//Renew file?
-				if ($this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($css_theme) ||
-					$this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($global_css) || (is_file($customcss) && $this->timekeeper->get('tpl_cache_'.$this->user->style['template_path'], 'main.css') < @filemtime($customcss))){
-					$this->tpl->parse_cssfile();
-				}
-				$this->tpl->css_file($storage_folder.'main.css', 'screen', true);
-			}
+			//CSS
+			$this->tpl->add_common_cssfiles();
 			
 			if ($this->config->get('pk_maintenance_mode') && $this->user->check_auth('a_', false)){
 				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'fa-cog');
@@ -928,6 +908,13 @@ class core extends gen_class {
 					'S_SHOW_QUERIES'	=> false)
 				);
 			}
+			
+			//Add custom CSS file - as late as possible
+			$css_custom = $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.css';
+			if(file_exists($css_custom)){
+				$this->tpl->css_file($css_custom);
+			}
+			
 			$this->tpl->display();
 		}
 

@@ -207,6 +207,10 @@ class template extends gen_class {
 				} else {
 					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 				}
+				//Resolve file
+				$val['file'] = $this->resolve_css_file($val['file']);
+				if(!$val['file']) continue;
+				
 				if ($val['media'] == 'screen' && is_file($val['file'])){
 					if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
 					$arrHash[] = md5_file($val['file']);
@@ -254,6 +258,24 @@ class template extends gen_class {
 		}
 		return $combinedFile;
 	}
+	
+	public function resolve_css_file($cssfile){
+		//Check data dir for exact match
+		$strWithoutRoot = str_replace($this->root_path, '', $cssfile);
+		
+		if(file_exists($this->data_root.$strWithoutRoot)){
+			return $this->data_root.$strWithoutRoot;
+		} elseif(strpos($cssfile, '/base_template/')){
+			$strSpecificTemplate = str_replace('/base_template/', '/'.$this->template.'/', $cssfile);
+			if (file_exists($strSpecificTemplate)){
+				return $strSpecificTemplate;
+			}
+		}
+
+		//if it contains base_template, check first specific template folder, then use base_template
+		return file_exists($cssfile) ? $cssfile : false;
+	}
+	
 	//Combining JS Files
 	public function combine_js(){
 		$arrHash = $data = $arrFiles = array();
@@ -1144,33 +1166,21 @@ class template extends gen_class {
 
 	}
 	
-	//Parse Main CSS File
-	public function parse_cssfile($stylepath = false, $data = false) {
-		$style = ($data) ? $data : $this->user->style;
-		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
-		$root_path = '../../../../../';
-
-		$storage_folder = $this->pfh->FolderPath('templates/'.$stylepath, 'eqdkp');
-		if (file_exists($storage_folder.$stylepath.'.css')){
-			$file = $storage_folder.$stylepath.'.css';
-		} elseif (file_exists($this->root_path . 'templates/'.$stylepath.'/'.$stylepath.'.css')) {
-			$file = $this->root_path . 'templates/'.$stylepath.'/'.$stylepath.'.css';
-		}
-
-		if (strlen($file)){
-			//The global css file
-			$content = file_get_contents($this->root_path.'templates/eqdkpplus.css');
-			$data = $this->replace_paths_css($content, $stylepath, $style);
-
-			$content = file_get_contents($file);
-			//Replace everything
-			$data .= $this->replace_paths_css($content, $stylepath, $style);
-
-			//Now the class colors
-			$gameclasses = $this->game->get_primary_classes();
-			if(isset($gameclasses) && is_array($gameclasses)){
-				foreach($gameclasses as $class_id => $class_name) {
-					$data .= '
+	
+	public function add_common_cssfiles(){
+		//Global CSS
+		$global_css		= $this->root_path.'templates/eqdkpplus.css';
+		$this->tpl->css_file($global_css, 'screen', true);
+		//Template CSS
+		$css_theme		= $this->root_path.'templates/'.$this->style_code.'/'.$this->style_code.'.css';
+		$this->tpl->css_file($css_theme, 'screen', true);
+		
+		//Now the class colors
+		$gameclasses = $this->game->get_primary_classes();
+		$data = "";
+		if(isset($gameclasses) && is_array($gameclasses)){
+			foreach($gameclasses as $class_id => $class_name) {
+				$data .= '
 						.class_'.$class_id.', .class_'.$class_id.':link, .class_'.$class_id.':visited, .class_'.$class_id.':active,
 						.class_'.$class_id.':link:hover, td.class_'.$class_id.' a:hover, td.class_'.$class_id.' a:active,
 						td.class_'.$class_id.', td.class_'.$class_id.' a:link, td.class_'.$class_id.' a:visited{
@@ -1178,30 +1188,11 @@ class template extends gen_class {
 							color: '.$this->game->get_class_color($class_id).' !important;
 						}
 					';
-				}
 			}
-			
-			//User additions
-			$strUserFile = $this->root_path . 'templates/'.$stylepath.'/custom.css';
-			if (file_exists($strUserFile)){
-				//is there an edited userfile?
-				if (file_exists($storage_folder.'custom.css')){
-					$content = file_get_contents($storage_folder.'custom.css');
-					$data .= $this->replace_paths_css($content);
-				} else {
-					$content = file_get_contents($strUserFile);
-					$data .= $this->replace_paths_css($content);
-				}
-			}
-
-			$minify = new Minify_CSS();
-			$data = $minify->minify($data);
-
-			$this->pfh->putContent($storage_folder.'main.css', $data);
-			$this->timekeeper->put('tpl_cache_'.$stylepath, 'main.css');
+			$this->add_css($data);
 		}
-
 	}
+	
 	
 	private function replace_paths_css($strCSS, $stylepath = false, $data = false, $path=false){
 		$style = ($data) ? $data : $this->user->style;

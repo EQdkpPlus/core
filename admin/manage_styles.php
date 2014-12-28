@@ -164,7 +164,7 @@ class Manage_Styles extends page_generic{
 
 			$admin_folder = (substr($filename, 0, 6) == 'admin/') ? '/admin' : '';
 			$filename = str_replace('admin/', '', $filename);
-
+			
 			$storage_folder  = $this->pfh->FolderPath('templates/'.$this->style['template_path'].$admin_folder, 'eqdkp');
 			$this->pfh->FilePath($storage_folder.$filename);
 			$this->pfh->putContent($storage_folder.$filename, $this->in->get('template_edit', '', 'raw'));
@@ -315,26 +315,73 @@ class Manage_Styles extends page_generic{
 		}
 
 		//First: the base templates
-		$arrBaseTemplates = $this->objStyles->scan_templates($this->core->root_path . 'templates/base_template');
+		$arrBaseTemplates = $this->objStyles->scan_templates($this->core->root_path . 'templates/base_template/');
 		//Now the files from the template
-		$arrTemplates = $this->objStyles->scan_templates($this->core->root_path . 'templates/'.$this->style['template_path']);
+		$arrTemplates = $this->objStyles->scan_templates($this->core->root_path . 'templates/'.$this->style['template_path'].'/');
 		$arrTemplates = array_merge($arrBaseTemplates, $arrTemplates);
+		
+		//Scan Plugin Templates
+		$arrPlugins = $this->pm->get_plugins();
+		foreach($arrPlugins as $strPlugin){
+			$pluginTemplatePath = $this->pm->get_data($strPlugin, 'template_path');
+			//First: base_template
+			$arrPluginBaseTemplates = $this->objStyles->scan_templates($this->core->root_path.$pluginTemplatePath.'base_template', $this->core->root_path);
+			$arrPluginTemplates = $this->objStyles->scan_templates($this->core->root_path.$pluginTemplatePath.$this->style['template_path'], $this->core->root_path);
+			$arrPluginTemplates = array_merge($arrPluginBaseTemplates, $arrPluginTemplates);
+			
+			$arrPluginTemplatesCleaned = array();
+			foreach($arrPluginTemplates as $key => $val){
+				$strKey = str_replace('templates/base_template/', '', $key);
+				$strKey = str_replace('templates/'.$this->style['template_path'], '', $strKey);
+				$arrPluginTemplatesCleaned[$strKey] = $val;
+			}
+			
+			$arrTemplates = array_merge($arrTemplates, $arrPluginTemplatesCleaned);
+		}
+		
 		$files[""] = "";
 		foreach ($arrTemplates as $path => $name){
 			$files[base64_encode($path)] = $path;
 		}
+		
 
 		//Read an spezific template-file to edit
 		$editor_type = 'html_js';
 		if ($this->in->get('template') != "" && !is_numeric(base64_decode($this->in->get('template')))){
 			$filename = base64_decode($this->in->get('template'));
 
-			if (file_exists($this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename)){
-				$filename = $this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename;
-			} elseif (file_exists($this->core->root_path . 'templates/'.$this->style['template_path'].'/'.$filename)){
-				$filename = $this->core->root_path . 'templates/'.$this->style['template_path'].'/'.$filename;
+			if(substr($filename, 0, 8) === 'plugins/'){
+				$realFilename = str_replace("plugins/", "", $filename);
+				$intFirstSlash = (strpos($realFilename, '/'));
+				$strPluginName = substr($realFilename, 0, $intFirstSlash);
+				$realFilename = str_replace($strPluginName.'/', "", $realFilename);
+
+				$data_path = $this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename;
+				$template_path = $this->core->root_path.'templates/'.$this->style['template_path'].'/'.$filename;
+				$plugin_path = $this->core->root_path.'plugins/'.$strPluginName.'/templates/'.$this->style['template_path'].'/'.$realFilename;
+				$base_template_path =  $this->core->root_path.'plugins/'.$strPluginName.'/templates/base_template/'.$realFilename;
+				
+				if(file_exists($data_path)){
+					$filename = $data_path;
+				} elseif(file_exists($template_path)){
+					$filename = $template_path;
+				} elseif(file_exists($plugin_path)){
+					$filename = $plugin_path;
+				} else {
+					$filename = $base_template_path;
+				}
+
+				d($filename);
+				
 			} else {
-				$filename = $this->core->root_path . 'templates/base_template/'.$filename;
+				if (file_exists($this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename)){
+					$filename = $this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename;
+				} elseif (file_exists($this->core->root_path . 'templates/'.$this->style['template_path'].'/'.$filename)){
+					$filename = $this->core->root_path . 'templates/'.$this->style['template_path'].'/'.$filename;
+				} else {
+					$filename = $this->core->root_path . 'templates/base_template/'.$filename;
+				}
+				
 			}
 
 			if (file_exists($filename)){
