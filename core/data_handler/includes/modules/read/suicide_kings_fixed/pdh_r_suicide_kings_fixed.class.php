@@ -61,6 +61,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			}
 
 			//base list for all mdkp pools
+			/*
 			$member_list = $this->pdh->get('member', 'id_list');
 			$member2main = $this->pdh->aget('member', 'mainid', 0, array($member_list));
 			$main2member = $this->pdh->aget('member', 'other_members', 0, array(array_unique($member2main)));
@@ -71,6 +72,8 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			}
 			$member_list = array_flip($member_list);
 			$main_list = array_flip(array_values(array_flip($main_list)));
+			*/
+			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
 			
 			// mdkp2event list
 			$mdkplist = $this->pdh->aget('multidkp', 'event_ids', 0, array($this->pdh->get('multidkp',  'id_list', array())));
@@ -80,6 +83,28 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			
 			foreach($mdkplist as $mdkp_id => $events) {
 				// initialise list
+				$startList = $this->config->get('sk_btm_startlist_'.$mdkp_id);
+				if (!$startList){
+					shuffle($arrMembers);
+					$this->config->set('sk_btm_startlist_'.$mdkp_id, serialize($arrMembers));
+				}
+				
+				foreach($startList as $intMemberID){
+					if (in_array($intMemberID, $arrMembers)){
+						$member_list[] = $intMemberID;
+						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
+						if (!in_array($intMainID, $main_list)) $main_list[] = $intMainID;
+					}
+				}
+				//New Members at the bottom
+				foreach($arrMembers as $intMemberID){
+					if (!in_array($intMemberID, $startList)){
+						$member_list[] = $intMemberID;
+						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
+						if (!in_array($intMainID, $main_list)) $main_list[] = $intMainID;
+					}
+				}
+				
 				if(!isset($this->sk_list['multi'][$mdkp_id])) $this->sk_list['multi'][$mdkp_id] = $main_list;
 				if(!isset($this->sk_list['single'][$mdkp_id])) $this->sk_list['single'][$mdkp_id] = $member_list;
 				// iterate through raids
