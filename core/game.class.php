@@ -1163,7 +1163,6 @@ class game extends gen_class {
 		
 		//roles
 		$this->load_default_roles();
-		if (!$install) {$this->tpl->parse_cssfile();}
 		
 		$this->config->del('update_first_game_inst');
 		

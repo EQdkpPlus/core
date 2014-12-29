@@ -74,10 +74,6 @@ class Manage_Styles extends page_generic{
 			$admin_folder = (substr($filename, 0, 6) == 'admin/') ? '/admin' : '';
 			$storage_folder  = $this->pfh->FolderPath('templates/'.$this->style['template_path'].$admin_folder, 'eqdkp');
 
-			if ($filename == $this->style['template_path'].'.css'){
-				$this->tpl->parse_cssfile($this->style['template_path'], $this->style);
-			}
-
 			$this->pfh->Delete($storage_folder.$filename);
 			$this->edit();
 			return;
@@ -169,12 +165,6 @@ class Manage_Styles extends page_generic{
 			$this->pfh->FilePath($storage_folder.$filename);
 			$this->pfh->putContent($storage_folder.$filename, $this->in->get('template_edit', '', 'raw'));
 
-			//Create new parsed css file
-			$fileextension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-			if ($filename == $this->style['template_path'].'.css' || $fileextension == 'css'){
-				$this->tpl->parse_cssfile($this->style['template_path'], $this->style);
-			}
-
 			$this->core->message( $this->user->lang('edit_template_suc'), $this->user->lang('save_suc'), 'green');
 
 			$this->tpl->delete_cache($this->style['template_path']);
@@ -196,9 +186,7 @@ class Manage_Styles extends page_generic{
 		$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		
-		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));
-		$this->tpl->parse_cssfile($this->style['template_path'], $this->style);
-		
+		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));		
 	}
 
 	private function get_data() {

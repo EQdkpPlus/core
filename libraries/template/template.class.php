@@ -200,6 +200,7 @@ class template extends gen_class {
 		$data[] = array('content' => $strInlineCSS, 'path' => false);
 			
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
+		
 		if (is_array($this->tpl_output['css_file'])){
 			foreach($this->tpl_output['css_file'] as $key => $val){
 				if ($this->server_path == "/") {
@@ -1170,10 +1171,10 @@ class template extends gen_class {
 	public function add_common_cssfiles(){
 		//Global CSS
 		$global_css		= $this->root_path.'templates/eqdkpplus.css';
-		$this->tpl->css_file($global_css, 'screen', true);
+		$this->tpl->css_file($global_css, 'screen');
 		//Template CSS
 		$css_theme		= $this->root_path.'templates/'.$this->style_code.'/'.$this->style_code.'.css';
-		$this->tpl->css_file($css_theme, 'screen', true);
+		$this->tpl->css_file($css_theme, 'screen');
 		
 		//Now the class colors
 		$gameclasses = $this->game->get_primary_classes();
