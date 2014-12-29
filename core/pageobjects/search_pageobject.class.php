@@ -107,8 +107,8 @@ class search_pageobject extends pageobject {
 						}
 					}
 				}
-				
 				if ($blnPermission){
+
 					$retArray = $this->pdh->get($value['module'], $value['method'], array($this->in->get('svalue')));
 					if (is_array($retArray) && count($retArray) > 0){
 						$blnResults = true;

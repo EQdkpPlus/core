@@ -621,7 +621,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_article_count($id),
 							'name'	=> $this->get_name($id),
-							'link'	=> $this->server_path.$this->get_path($id),
+							'link'	=> $this->controller_path.$this->get_path($id),
 						);
 					}
 				}

@@ -514,7 +514,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_date($id),
 							'name'	=> $this->get_title($id),
-							'link'	=> $this->server_path.$this->get_path($id),
+							'link'	=> $this->controller_path.$this->get_path($id),
 						);
 					}
 				}

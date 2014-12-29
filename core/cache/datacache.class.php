@@ -500,10 +500,10 @@ if( !class_exists( "cachePagination" ) ) {
 		public function search($strObjectTag, $strSearchValue, $allowParts=false){
 			if ($allowParts){
 				$escapedString = $this->db->escapeString('%'.$strSearchValue.'%');
-				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." LIKE ".$escapedString;	
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE LOWER(".$strObjectTag.") LIKE ".$escapedString;	
 			} else {
 				$escapedString = $this->db->escapeString($strSearchValue);
-				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE ".$strObjectTag." = ".$escapedString;
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE LOWER(".$strObjectTag.") = ".$escapedString;
 			}
 
 			$objQuery = $this->db->query($strQuery);

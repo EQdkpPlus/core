@@ -516,7 +516,7 @@ if (!class_exists("pdh_r_user")){
 
 						$arrSearchResults[] = array(
 							'id'	=> '',
-							'name'	=> $this->get_name($id),
+							'name'	=> $this->get_html_avatarimglink($id).' '.$this->get_name($id),
 							'link'	=> $this->routing->build('user', $value['username'], 'u'.$id),
 						);
 					}
