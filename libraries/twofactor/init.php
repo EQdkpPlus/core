@@ -44,7 +44,7 @@ class TwofactorInit extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'TWOFACTOR_KEY' 		=> $secret,
-			'TWOFACTOR_QR'			=> $ga->getQRCodeGoogleUrl('EQdkp Plus '.$this->config->get('guildtag'), $secret),
+			'TWOFACTOR_QR'			=> $ga->getQRCodeGoogleUrl(str_replace('' , '_', 'EQdkp Plus '.$this->config->get('guildtag')), $secret),
 			'TWOFACTOR_KEY_ENCR'	=> rawurlencode(register('encrypt')->encrypt($secret)),
 		));
 
