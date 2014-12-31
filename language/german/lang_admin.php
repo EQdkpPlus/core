@@ -1672,5 +1672,7 @@ $lang = array(
 "userpf_sett_f_bridge_field" => "Synchronisiertes Bridge-Feld",
 "userpf_sett_f_help_bridge_field" => "Wähle das entsprechende Feld im Forum/CMS aus, dessen Daten in das EQdkp Plus Feld importiert werden soll.",
 "bridge_profilefields_info" => "Diese Bridge unterstützt das Synchronisieren von Benutzerfeldern. Eine Zuordnung der CMS/Forum-Felder zu den EQdkp Plus-Feldern kannst du in der <a href=\"manage_user_profilefields.php\">Benutzerprofilfeldverwaltung</a> vornehmen.",
+"pi_title" => "Plugin",
+		
 );
 ?>
