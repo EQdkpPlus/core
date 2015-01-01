@@ -620,7 +620,7 @@ if (!class_exists("jquery")) {
 		* @param $scndclass		Class of the menu
 		* @return CHAR
 		*/
-		private function MenuConstruct_html($array, $name, $mnuimagepth, $nodefimage, $scndclass='sf-admin'){
+		public function MenuConstruct_html($array, $name, $mnuimagepth, $nodefimage, $scndclass='sf-admin'){
 			$hhm  = '<ul class="'.$name.' '.$scndclass.'">';
 
 			// Header row

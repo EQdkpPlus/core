@@ -347,6 +347,7 @@ class core extends gen_class {
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul(),
+				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul('mainmenu-mobile'),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
 				'BROWSER_CLASS'				=> $this->env->agent->class,
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
@@ -359,7 +360,6 @@ class core extends gen_class {
 				'USER_DATEFORMAT_LONG'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_long']),
 				'USER_DATEFORMAT_SHORT'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_short']),
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
-				'MAIN_MENU_SELECT'			=> $this->build_menu_select(),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 			));
 						
@@ -588,76 +588,11 @@ class core extends gen_class {
 
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
-		
-		public function build_menu_select(){
-			$arrItems = $this->build_menu_array(false);
-			
-			$html  = '<select onchange="window.location=this.value"><option value="'.$this->server_path.'">Navigation</option>';
-				
-			foreach($arrItems as $k => $v){
-				if ( !is_array($v) )continue;
-			
-				if (!isset($v['childs'])){
-					if ( $this->check_url_for_permission($v)) {
-						$class = $this->clean_url($v['link']);
-						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
-						$html .= '<option value="'.$this->createLink($v, '', true).'">'.$v['text'].'</option>';
-					} else {
-						continue;
-					}
-						
-				} else {
-					if ( $this->check_url_for_permission($v)) {
-						$class = $this->clean_url($v['link']);
-						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
-						$html .= '<option value="'.$this->createLink($v, '', true).'">'.$v['text'].'</option>';
-					} else {
-						continue;
-					}
-						
-					foreach($v['childs'] as $k2 => $v2){
-						if (!isset($v2['childs'])){
-							if ( $this->check_url_for_permission($v2)) {
-								$class = $this->clean_url($v2['link']);
-								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
-								$html .= '<option value="'.$this->createLink($v2, '', true).'">&nbsp;&nbsp;&nbsp;'.$v2['text'].'</option>';
-							} else {
-								continue;
-							}
-						} else {
-							if ( $this->check_url_for_permission($v2)) {
-								$class = $this->clean_url($v2['link']);
-								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
-								$html .= '<option value="'.$this->createLink($v2, '', true).'">&nbsp;&nbsp;&nbsp;'.$v2['text'].'</option>';
-							} else {
-								continue;
-							}
-								
-							foreach($v2['childs'] as $k3 => $v3){
-								if ( $this->check_url_for_permission($v3)) {
-									$class = $this->clean_url($v3['link']);
-									if (!strlen($class)) $class = "entry_".$this->clean_url($v3['text']);
-									$html .= '<option value="'.$this->createLink($v3, '', true).'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$v3['text'].'</option>';
-								} else {
-									continue;
-								}
-							}
-								
-						}
-							
-					}
 
-				}
-			
-			}
-				
-			$html .= '</select>';
-			return $html;
-		}
 		
-		public function build_menu_ul(){
+		public function build_menu_ul($strClass="mainmenu"){
 			$arrItems = $this->build_menu_array(false);
-			$html  = '<ul class="mainmenu">';
+			$html  = '<ul class="'.$strClass.'">';
 			
 			foreach($arrItems as $k => $v){
 				if ( !is_array($v) )continue;

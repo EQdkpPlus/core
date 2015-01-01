@@ -104,7 +104,8 @@ class admin_index extends gen_class {
 			'L_ADMINISTRATION'	=> $this->user->lang('administration'),
 			'L_ADMIN_INDEX'		=> $this->user->lang('admin_index'),
 			'L_EQDKP_INDEX'		=> $this->user->lang('eqdkp_index'),
-			'ADMIN_MENU'		=> $this->jquery->SuckerFishMenu($this->admin_menu,'sf-menu',$this->root_path.'images/admin/')
+			'ADMIN_MENU'		=> $this->jquery->SuckerFishMenu($this->admin_menu,'sf-menu',$this->root_path.'images/admin/'),
+			'ADMIN_MENU_MOBILE' => $this->jquery->MenuConstruct_html($this->admin_functions->adminmenu(false, "", "", 'adminmenu-mobile'), 'adminmenu-mobile', $this->root_path.'images/admin/', false, ""),
 		));
 	}
 

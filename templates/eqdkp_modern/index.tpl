@@ -404,9 +404,18 @@
 							{MAIN_MENU}
 							<div class="clear noheight">&nbsp;</div>
 						</div>
-						<div class="hiddenDesktop mainmenu">
-							<i class="fa fa-list"></i>
-							{MAIN_MENU_SELECT}
+						<div class="hiddenDesktop nav-mobile">
+							<i class="fa fa-list hand" onclick="$('.nav-mobile-overlay').toggle();"></i>
+							<div class="nav-mobile-overlay">
+								<div class="nav-mobile-closebtn" onclick="$('.nav-mobile-overlay').toggle();">
+									<i class="fa fa-lg fa-times hand"></i>
+								</div>
+							{MAIN_MENU_MOBILE}
+							<!-- IF S_IN_ADMIN -->
+							<div class="admin-headline"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</div>
+							{ADMIN_MENU_MOBILE}
+							<!-- ENDIF -->
+							</div>
 						</div>
 					</div><!-- close mainmenu -->
 					
@@ -414,9 +423,6 @@
 					<div id="adminmenu">
 						<div class="hiddenSmartphone">
 							{ADMIN_MENU}
-						</div>
-						<div class="hiddenDesktop">
-							<select><option>Admin Navigation</option></select>
 						</div>
 					</div>
 					<!-- ENDIF -->
