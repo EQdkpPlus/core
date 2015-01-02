@@ -3147,7 +3147,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-top: 5px;
 	}
 	
-	.responsive #personalAreaUser, .responsive #titles, .responsive #titles h1, .responsive #titles h2, .responsive fieldset.settings dd, .responsive fieldset.settings dt{
+	.responsive #personalAreaUser, .responsive #titles, .responsive #titles h1, .responsive #titles h2, .responsive:not(.simple-header) fieldset.settings dd, .responsive:not(.simple-header) fieldset.settings dt, .responsive.simple-header.mobile fieldset.settings dd, .responsive.simple-header.mobile fieldset.settings dt{
 		display:block;
 		float:none;
 		margin:0px;
@@ -3170,19 +3170,19 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		padding: 0px;
 	}
 	
-	.responsive fieldset.settings dd {
+	.responsive:not(.simple-header) fieldset.settings dd {
 		border-left: none;
 		margin: 0px;
 		float:none;
 	}
 	
-	.responsive fieldset.settings dt {
+	.responsive:not(.simple-header) fieldset.settings dt {
 		width: 100%;
 		border-right: none;
 		float: none;
 	}
 	
-	.responsive fieldset.settings dl:hover dt,fieldset.settings dl:hover dd{
+	.responsive:not(.simple-header) fieldset.settings dl:hover dt, .responsive:not(.simple-header) fieldset.settings dl:hover dd, .responsive.simple-header.mobile fieldset.settings dl:hover dt, .responsive.simple-header.mobile fieldset.settings dl:hover dd{
 		border-right: none;
 		border-left: none;
 	}
@@ -3191,7 +3191,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		max-width: 95%;
 	}
 	
-	.responsive .ui-tabs-nav li {
+	.responsive:not(.simple-header) .ui-tabs-nav li, .responsive.simple-header.mobile .ui-tabs-nav li {
 		float: none;
 		width: 100%;
 		height: 30px;
@@ -3199,15 +3199,16 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		font-size: 15px;
 	}
 	
-	.responsive .ui-tabs-anchor {
+	.responsive:not(.simple-header) .ui-tabs-anchor, .responsive.simple-header.mobile .ui-tabs-anchor {
 		display: block;
 	}
 	
-	.responsive .settings input[type='text'], .responsive .settings input[type='password'], .responsive .settings select {
+	.responsive:not(.simple-header) .settings input[type='text'], .responsive:not(.simple-header) .settings input[type='password'], .responsive:not(.simple-header) .settings select,
+	.responsive.simple-header.mobile .settings input[type='text'], .responsive.simple-header.mobile .settings input[type='password'], .responsive.simple-header.mobile .settings select {
 		width: 90% !important;
 	}
 	
-	.responsive .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	.responsive:not(.simple-header) .ui-tabs .ui-tabs-nav .ui-tabs-anchor, .responsive.simple-header.mobile .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 		float: none;
 	}
 	
@@ -3277,7 +3278,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: auto !important;
 	}
 	
-	.responsive.simple-header .floatRight {
+	.responsive.simple-header.mobile .floatRight {
 		float: none;
 	}
 	
@@ -3381,6 +3382,56 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: 100%;
 	}
 }
+
+@media all and (max-width: 600px) {
+
+	.responsive fieldset.settings dd, .responsive fieldset.settings dt{
+		display:block;
+		float:none;
+		margin:0px;
+		padding:0px;
+	}
+
+	.responsive fieldset.settings dd {
+		border-left: none;
+		margin: 0px;
+		float:none;
+	}
+	
+	.responsive fieldset.settings dt {
+		width: 100%;
+		border-right: none;
+		float: none;
+	}
+	
+	.responsive fieldset.settings dl:hover dt, .responsive fieldset.settings dl:hover dd{
+		border-right: none;
+		border-left: none;
+	}
+	
+	.responsive .ui-tabs-nav li {
+		float: none;
+		width: 100%;
+		height: 30px;
+		line-heigt: 22px;
+		font-size: 15px;
+	}
+	
+	.responsive .ui-tabs-anchor {
+		display: block;
+	}
+	
+	.responsive .settings input[type='text'], .responsive .settings input[type='password'], .responsive .settings select {
+		width: 90% !important;
+	}
+	
+	.responsive .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+		float: none;
+	}
+
+}
+
+
 
 /*****************************************/
 /* DEPRECATED                            */
