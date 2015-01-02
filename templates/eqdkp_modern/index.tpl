@@ -8,6 +8,7 @@
 		<meta name="keywords" content="{META_KEYWORDS}" />
 		<meta name="description" content="{META_DESCRIPTION}" />
 		<meta name="author" content="{GUILD_TAG}" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		{META}
 		{LINK}
 		<title>{PAGE_TITLE}</title>
