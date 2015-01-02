@@ -177,7 +177,6 @@ class Manage_Members extends page_generic {
 		
 		$this->tpl->assign_vars(array(
 			'SID'				=> $this->SID,
-			'S_RACE'			=> $this->game->type_exists('races'),
 			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
 			'PAGINATION'		=> generate_pagination('manage_members.php'.$sort_suffix, $character_count, $this->user->data['user_climit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),

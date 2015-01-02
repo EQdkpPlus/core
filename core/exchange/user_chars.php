@@ -55,8 +55,6 @@ if (!class_exists('exchange_user_chars')){
 							'main'	=> ($key == $mainchar) ? 1 : 0,
 							'class'	=> $this->pdh->get('member', 'classid', array($key)),
 							'classname'	=> $this->pdh->get('member', 'classname', array($key)),
-							'race'		=> $this->pdh->get('member', 'raceid', array($key)),
-							'racename'	=> $this->pdh->get('member', 'racename', array($key)),
 							'roles'	=> $arrRoles,
 						);
 					}

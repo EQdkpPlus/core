@@ -71,7 +71,6 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'memberlink'	=> 'lang:summed_up',
 			'memberlink_decorated'	=> 'lang:summed_up',
 			'level'			=> false,
-			'racename'		=> false,
 			'rankname'		=> false,
 			'active'		=> false,
 			'classname'		=> false,
@@ -595,17 +594,6 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				
 			return '<img src="'.$strImg.'" class="member-charimage" alt="" />';
 		}
-
-		/*
-		public function get_raceid($member_id){
-			return $this->data[$member_id]['race_id'];
-		}
-
-		
-		public function get_racename($member_id){
-			return $this->game->get_name('races', $this->get_raceid($member_id));
-		}
-		*/
 
 		public function get_profiledata($member_id){
 			return $this->data[$member_id]['profiledata'];
