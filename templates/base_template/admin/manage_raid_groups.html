@@ -87,7 +87,7 @@
 			<th>{L_name}</th>
 			<th>{L_description}</th>
 			<th>{L_groupcolor}</th>
-			<th width="50" class="nowrap">{L_group_members}</th>
+			<th width="50" class="hiddenSmartphone">{L_group_members}</th>
 			<th>{L_default_group}</th>
 		</tr>
 		</thead>
@@ -105,7 +105,7 @@
 			<td><input type="text" name="raid_groups[{raid_groups.KEY}][name]" size="40" maxlength="50" value="{raid_groups.NAME}" class="maininput" style="width:95%" /></td>
 			<td><input type="text" name="raid_groups[{raid_groups.KEY}][desc]" size="50" maxlength="75" value="{raid_groups.DESC}" class="maininput" style="width:95%" /></td>
 			<td>{raid_groups.COLOR}</td>
-			<td>{raid_groups.USER_COUNT}</td>
+			<td class="hiddenSmartphone">{raid_groups.USER_COUNT}</td>
 			<td width="50" class="nowrap"><input type="radio" value="{raid_groups.ID}" name="raid_groups_standard" {raid_groups.STANDARD} /></td>
 		</tr>
 		<!-- END raid_groups -->

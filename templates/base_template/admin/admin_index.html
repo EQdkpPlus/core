@@ -57,7 +57,7 @@
 	<div class="tableHeader">
 		<h2>{L_statistics}</h2>
 	</div>
-    <table width="100%" border="0" cellspacing="1" cellpadding="2">
+    <table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x">
       <tr>
         <td class="row2" width="25%">{L_liveupdate_installed_version}:</td>
         <td class="row1" width="25%">{EQDKP_VERSION}</td>
@@ -98,32 +98,32 @@
   </div>
 
   <div id="fragment-3">
-    <table width="100%" border="0">
+    <table width="100%" border="0" class="scrollable-x colorswitch">
      <tr>
           <th>{L_adminc_phpname}</th>
           <th>{L_adminc_phpvalue}</th>
         </tr>
-        <tr class="row1">
+        <tr>
           <td>PHP Safe Mode</td>
           <td>{SERVERINFO_SAFEMODE}</td>
         </tr>
-        <tr class="row2">
+        <tr>
           <td>Register Globals</td>
           <td>{SERVERINFO_REGGLOBAL}</td>
         </tr>
-         <tr class="row1">
+         <tr>
           <td>CURL</td>
           <td>{SERVERINFO_CURL}</td>
         </tr>
-         <tr class="row2">
+         <tr>
           <td>Fopen</td>
           <td>{SERVERINFO_FOPEN}</td>
         </tr>
-         <tr class="row1">
+         <tr>
           <td>PHP Version</td>
           <td>{SERVERINFO_PHP} <em>(<a href="info_php.php{SID}">{L_adminc_server}</a>)</em></td>
         </tr>
-        <tr class="row2">
+        <tr>
           <td>Mysql Version</td>
           <td>{SERVERINFO_MYSQL}</td>
         </tr>
@@ -159,20 +159,20 @@
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
     <tr>
       <th align="left" width="20%" class="nowrap">{L_username}</th>
-      <th align="left" width="20%" class="nowrap">{L_logged_in}</th>
-      <th align="left" width="20%" class="nowrap">{L_last_update}</th>
-      <th align="left" width="20%" class="nowrap">{L_location}</th>
-      <th align="left" width="20%" class="nowrap">{L_ip_address}</th>
-      <th align="left" width="20%" class="nowrap">{L_browser}</th>
+      <th align="left" width="20%" class="hiddenSmartphone">{L_logged_in}</th>
+      <th align="left" width="20%">{L_last_update}</th>
+      <th align="left" width="20%">{L_location}</th>
+      <th align="left" width="20%" class="hiddenSmartphone">{L_ip_address}</th>
+      <th align="left" width="20%" class="hiddenSmartphone">{L_browser}</th>
     </tr>
     <!-- BEGIN online_row -->
     <tr>
       <td width="20%" class="nowrap">{online_row.USERNAME}</td>
-      <td width="20%" class="nowrap">{online_row.LOGIN}</td>
-      <td width="20%" class="nowrap">{online_row.LAST_UPDATE}</td>
-      <td width="20%" class="nowrap">{online_row.LOCATION}</td>
-      <td width="20%" class="nowrap"><span class="ip_resolver" title="{online_row.IP_ADDRESS}">{online_row.IP_ADDRESS}</span></td>
-      <td width="20%" align="center" class="nowrap">{online_row.BROWSER}</td>
+      <td width="20%" class="hiddenSmartphone">{online_row.LOGIN}</td>
+      <td width="20%">{online_row.LAST_UPDATE}</td>
+      <td width="20%">{online_row.LOCATION}</td>
+      <td width="20%" class="hiddenSmartphone"><span class="ip_resolver" title="{online_row.IP_ADDRESS}">{online_row.IP_ADDRESS}</span></td>
+      <td width="20%" align="center" class="hiddenSmartphone">{online_row.BROWSER}</td>
     </tr>
     <!-- END online_row -->
     <tr>

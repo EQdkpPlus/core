@@ -2416,6 +2416,10 @@ em {
 	display: inline;
 }
 
+td.hiddenSmartphone, th.hiddenSmartphone {
+	display: table-cell;
+}
+
 .ui-notify h1 {
 	border: none;
 }
@@ -3189,10 +3193,14 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	.responsive .ui-tabs-nav li {
 		float: none;
-		width: 95%;
-		height: 24px;
+		width: 100%;
+		height: 30px;
 		line-heigt: 22px;
 		font-size: 15px;
+	}
+	
+	.responsive .ui-tabs-anchor {
+		display: block;
 	}
 	
 	.responsive .settings input[type='text'], .responsive .settings input[type='password'], .responsive .settings select {
@@ -3269,7 +3277,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: auto !important;
 	}
 	
-	.floatRight {
+	.responsive.simple-header .floatRight {
 		float: none;
 	}
 	
@@ -3350,6 +3358,28 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-top: 6px;
 	}
 	
+	#admininfos_tabs div, #admininfos_tabs div div {
+		float: none;
+		width: 95% !important;
+	}
+	
+	table.scrollable-x {
+		table-layout: fixed;	
+	}
+
+	table.scrollable-x tbody {
+		display: block;
+		overflow-x: auto;
+	}
+	
+	fieldset.settings {
+		max-width: 100%;
+	}
+	
+	.permissions {
+		float: none;
+		width: 100%;
+	}
 }
 
 /*****************************************/

@@ -101,7 +101,7 @@
 			<th colspan="2" width="20" class="nowrap">{L_action}</th>
 			<th>{L_name}</th>
 			<th>{L_description}</th>
-			<th width="50" class="nowrap">{L_group_members}</th>
+			<th width="50" class="hiddenSmartphone">{L_group_members}</th>
 			<th>{L_default_group}</th>
 			<th>{L_hide}</th>
 			<th>{L_show_teamlist}</th>
@@ -120,7 +120,7 @@
 			</td>
 			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>    
 			<td><input type="text" name="user_groups[{user_groups.KEY}][desc]" size="50" maxlength="75" value="{user_groups.DESC}" class="maininput" style="width:95%" /></td>
-			<td>{user_groups.USER_COUNT}</td>
+			<td class="hiddenSmartphone">{user_groups.USER_COUNT}</td>
 			<td width="50" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
 			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][hide]" {user_groups.HIDE} />&nbsp;</td>
 			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][team]" {user_groups.TEAM} />&nbsp;</td>

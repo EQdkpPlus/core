@@ -550,12 +550,6 @@
 		{JS_CODE_EOP}
 		{JS_CODE_EOP2}
 		
-		//Reponsivness - fired only if breakpoint is reached
-		if ($('body').hasClass('responsive') && $(".reponsiveTestClass").css("text-align") == "center" ) {
-			$('.stackcolumns').stackcolumns({myClass:'stackcolumns hiddenDesktop' });
-			$('.stacktable').stacktable({myClass:'stacktable hiddenDesktop'});
-		}
-		
 		//Reset Favicon, for Bookmarks
 		$(window).on('unload', function() {
             if (typeof favicon !== 'undefined'){

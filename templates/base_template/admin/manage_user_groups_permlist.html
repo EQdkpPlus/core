@@ -16,17 +16,17 @@
 	</div>
 	<div class="clear"></div>
 
-	<table border="0" cellspacing="1" cellpadding="2" id="user_groups_table2" class="colorswitch hoverrows">
+	<table border="0" cellspacing="1" cellpadding="2" id="user_groups_table2" class="colorswitch hoverrows scrollable-x">
 		<!-- BEGIN permissions_row -->
 		<tr>
-			<th width="120">{permissions_row.ICON} {permissions_row.GROUP}</th>
+			<th>{permissions_row.ICON} {permissions_row.GROUP}</th>
 			<!-- BEGIN headline_row -->
 			<th>{permissions_row.headline_row.GROUP}</th>
 			<!-- END headline_row -->
 		</tr>
 		<!-- BEGIN check_group -->
 		<tr>
-			<td class="nowrap">
+			<td>
 				<!-- IF permissions_row.check_group.S_ADMIN -->
 				<span class="adminicon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
 				<b>{permissions_row.check_group.CBNAME}</b>

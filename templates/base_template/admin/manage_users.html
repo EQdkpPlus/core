@@ -23,22 +23,22 @@
 				<a href="{U_MANAGE_USERS}o=0.0"><span class="down_arrow{RED00}"></span></a><a href="{U_MANAGE_USERS}o=0.1"><span class="up_arrow{RED01}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_USERNAME}">{L_username}</a>
 			</th>
-			<th align="left" width="35%">{L_associated_members}</th>
-			<th align="left" width="100">
+			<th align="left" width="35%" class="hiddenSmartphone">{L_associated_members}</th>
+			<th align="left" width="100" class="hiddenSmartphone">
 				<a href="{U_MANAGE_USERS}o=1.0"><span class="down_arrow{RED10}"></span></a><a href="{U_MANAGE_USERS}o=1.1"><span class="up_arrow{RED11}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_EMAIL}">{L_email_address}</a>
 			</th>
-			<th align="left" width="150" class="nowrap"><a href="{U_MANAGE_USERS}o=4.0"><span class="down_arrow{RED40}"></span></a><a href="{U_MANAGE_USERS}o=4.1"><span class="up_arrow{RED41}"></span></a>
+			<th align="left" width="150" class="hiddenSmartphone"><a href="{U_MANAGE_USERS}o=4.0"><span class="down_arrow{RED40}"></span></a><a href="{U_MANAGE_USERS}o=4.1"><span class="up_arrow{RED41}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_REG_DATE}">{L_registered_at}</a></th>
-			<th align="left" width="150" class="nowrap">
+			<th align="left" width="150" class="hiddenSmartphone">
 				<a href="{U_MANAGE_USERS}o=2.0"><span class="down_arrow{RED20}"></span></a><a href="{U_MANAGE_USERS}o=2.1"><span class="up_arrow{RED21}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_LAST_VISIT}">{L_last_visit}</a>
 			</th>
-			<th align="left" width="60" class="nowrap">
+			<th align="left" width="60" class="hiddenSmartphone">
 				<a href="{U_MANAGE_USERS}o=3.0"><span class="down_arrow{RED30}"></span></a><a href="{U_MANAGE_USERS}o=3.1"><span class="up_arrow{RED31}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_ACTIVE}">{L_active}</a>
 			</th>
-			<th align="left" width="60" class="nowrap">{L_online}</th>
+			<th align="left" width="60" class="hiddenSmartphone">{L_online}</th>
 		</tr>
 		<!-- BEGIN users_row -->
 		<tr>
@@ -52,7 +52,7 @@
 			<td width="5">{users_row.ADMIN_ICON}</td>
 			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
 			
-			<td width="35%">
+			<td width="35%" class="hiddenSmartphone">
 				<script type="text/javascript">
 				$(document).ready(function() {
 					$("#memberTTtrigger{users_row.USER_ID}").qtip({
@@ -94,11 +94,11 @@
 				</script>
 				<a href="javascript:void(0);" id="memberTTtrigger{users_row.USER_ID}">{users_row.MEMBER_COUNT} {L_chars}</a>
 			</td>
-			<td width="100" class="nowrap"><a href="mailto:{users_row.EMAIL}">{users_row.EMAIL}</a></td>
-			<td width="150" class="nowrap">{users_row.REG_DATE}</td>
-			<td width="150" class="nowrap">{users_row.LAST_VISIT}</td>
-			<td width="60" align="center" class="nowrap">{users_row.ACTIVE}</td>
-			<td width="60" align="center" class="nowrap">{users_row.ONLINE}</td>
+			<td width="100" class="hiddenSmartphone"><a href="mailto:{users_row.EMAIL}">{users_row.EMAIL}</a></td>
+			<td width="150" class="hiddenSmartphone">{users_row.REG_DATE}</td>
+			<td width="150" class="hiddenSmartphone">{users_row.LAST_VISIT}</td>
+			<td width="60" align="center" class="hiddenSmartphone">{users_row.ACTIVE}</td>
+			<td width="60" align="center" class="hiddenSmartphone">{users_row.ONLINE}</td>
 		</tr>
 		<!-- END users_row -->
 		<tr>

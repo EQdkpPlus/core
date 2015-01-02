@@ -21,11 +21,11 @@
 			<th width="20px;"></th>
 			<th>{L_name}</th>
 			<th>{L_default}</th>
-			<th>{L_prefix}</th>
-			<th>{L_suffix}</th>
-			<th>{L_hidden}</th>
+			<th class="hiddenSmartphone">{L_prefix}</th>
+			<th class="hiddenSmartphone">{L_suffix}</th>
+			<th class="hiddenSmartphone">{L_hidden}</th>
 			<!-- IF S_RANK_IMAGES -->
-			<th>{L_rank_icon}</th>
+			<th class="hiddenSmartphone">{L_rank_icon}</th>
 			<!-- ENDIF -->
 		</tr>
 		</thead>
@@ -37,11 +37,11 @@
 			<td><a href="manage_ranks.php{SID}&amp;r={ranks.ID}" title="{L_edit_rank}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
 			<td>{ranks.NAME}</td>
 			<td><input type="radio" name="ranks_default" value="{ranks.ID}" {ranks.DEFAULT} /></td>
-			<td>{ranks.PREFIX}</td>
-			<td>{ranks.SUFFIX}</td>
-			<td>{ranks.HIDE}</td>
+			<td class="hiddenSmartphone">{ranks.PREFIX}</td>
+			<td class="hiddenSmartphone">{ranks.SUFFIX}</td>
+			<td class="hiddenSmartphone">{ranks.HIDE}</td>
 			<!-- IF S_RANK_IMAGES -->
-			<td>{ranks.ICON}</td>
+			<td class="hiddenSmartphone">{ranks.ICON}</td>
 			<!-- ENDIF -->
 		</tr>
 		<!-- END ranks -->

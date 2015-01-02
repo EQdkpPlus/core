@@ -146,30 +146,30 @@ function hide_update_warning(status){
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		<tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" class="nowrap" width="16">{L_action}</th>
-			<th align="left" class="nowrap">{L_name}</th>
-			<th align="left" class="nowrap" colspan="{DEP_COUNT}">{L_plug_dep_title}</th>
-			<th align="left" class="nowrap">{L_version}</th>
-			<th align="left" class="nowrap">{L_portalplugin_author}</th>
-			<th align="left" class="nowrap">{L_description}</th>
-			<th align="left" class="nowrap">{L_infos}</th>
+			<th align="left" width="16">{L_action}</th>
+			<th align="left">{L_name}</th>
+			<th align="left" colspan="{DEP_COUNT}" class="hiddenSmartphone">{L_plug_dep_title}</th>
+			<th align="left">{L_version}</th>
+			<th align="left" class="hiddenSmartphone">{L_portalplugin_author}</th>
+			<th align="left" class="hiddenSmartphone">{L_description}</th>
+			<th align="left" class="hiddenSmartphone">{L_infos}</th>
 		</tr>
 		<!-- BEGIN plugins_row_red -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td class="nowrap">{plugins_row_red.ACTION_LINK}</td>
-			<td class="nowrap">{plugins_row_red.NAME}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td>{plugins_row_red.ACTION_LINK}</td>
+			<td>{plugins_row_red.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">
+			<td class="hiddenSmartphone">
 				<span class="coretip" data-coretip="{plugins_row_red.dep_row.DEPENDENCY_TT}">
 					<i class="{plugins_row_red.dep_row.ICON}"></i> {plugins_row_red.dep_row.DEPENDENCY_NAME}
 				</span>
 			</td>
 			<!-- END dep_row -->
-			<td class="nowrap">{plugins_row_red.VERSION}</td>
-			<td class="nowrap">{plugins_row_red.CONTACT}</td>
-			<td>{plugins_row_red.DESCRIPTION}</td>
-			<td class="nowrap">
+			<td>{plugins_row_red.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_red.CONTACT}</td>
+			<td class="hiddenSmartphone">{plugins_row_red.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">
 				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_red.LONG_DESCRIPTION}"></i>
 				<!-- IF plugins_row_red.HOMEPAGE_LINK -->
 				<span dlass="coretip" data-coretip="{plugins_row_red.HOMEPAGE}"><a href="{plugins_row_red.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
@@ -182,20 +182,20 @@ function hide_update_warning(status){
 		<!-- END plugins_row_red -->
 		<!-- BEGIN plugins_row_yellow -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
-			<td class="nowrap">{plugins_row_yellow.ACTION_LINK}</td>
-			<td class="nowrap">{plugins_row_yellow.NAME}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td>{plugins_row_yellow.ACTION_LINK}</td>
+			<td>{plugins_row_yellow.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">
+			<td class="hiddenSmartphone">
 				<span class="coretip" data-coretip="{plugins_row_yellow.dep_row.DEPENDENCY_TT}">
 					<i class="{plugins_row_yellow.dep_row.ICON}"></i> {plugins_row_yellow.dep_row.DEPENDENCY_NAME}
 				</span>
 			</td>
 			<!-- END dep_row -->
-			<td class="nowrap">{plugins_row_yellow.VERSION}</td>
-			<td class="nowrap">{plugins_row_yellow.CONTACT}</td>
-			<td>{plugins_row_yellow.DESCRIPTION}</td>
-			<td class="nowrap">
+			<td>{plugins_row_yellow.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_yellow.CONTACT}</td>
+			<td class="hiddenSmartphone">{plugins_row_yellow.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">
 				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_yellow.LONG_DESCRIPTION}"></i>
 				<!-- IF plugins_row_yellow.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_yellow.HOMEPAGE}"><a href="{plugins_row_yellow.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
@@ -208,20 +208,20 @@ function hide_update_warning(status){
 		<!-- END plugins_row_yellow -->
 		<!-- BEGIN plugins_row_green -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
-			<td class="nowrap">{plugins_row_green.ACTION_LINK}</td>
-			<td class="nowrap">{plugins_row_green.NAME}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td>{plugins_row_green.ACTION_LINK}</td>
+			<td>{plugins_row_green.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">
+			<td class="hiddenSmartphone">
 				<span class="coretip" data-coretip="{plugins_row_green.dep_row.DEPENDENCY_TT}">
 					<i class="{plugins_row_green.dep_row.ICON}"></i> {plugins_row_green.dep_row.DEPENDENCY_NAME}
 				</span>
 			</td>
 			<!-- END dep_row -->
-			<td class="nowrap">{plugins_row_green.VERSION}</td>
-			<td class="nowrap">{plugins_row_green.CONTACT}</td>
-			<td>{plugins_row_green.DESCRIPTION}</td>
-			<td class="nowrap">
+			<td>{plugins_row_green.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_green.CONTACT}</td>
+			<td class="hiddenSmartphone">{plugins_row_green.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">
 				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_green.LONG_DESCRIPTION}"></i>
 				<!-- IF plugins_row_green.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_green.HOMEPAGE}"><a href="{plugins_row_green.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
@@ -234,20 +234,20 @@ function hide_update_warning(status){
 		<!-- END plugins_row_green -->
 		<!-- BEGIN plugins_row_grey -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td class="nowrap">{plugins_row_grey.ACTION_LINK}</td>
-			<td class="nowrap">{plugins_row_grey.NAME}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td>{plugins_row_grey.ACTION_LINK}</td>
+			<td>{plugins_row_grey.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">
+			<td class="hiddenSmartphone">
 				<span class="coretip" data-coretip="{plugins_row_grey.dep_row.DEPENDENCY_TT}">
 					<i class="{plugins_row_grey.dep_row.ICON}"></i> {plugins_row_grey.dep_row.DEPENDENCY_NAME}
 				</span>
 			</td>
 			<!-- END dep_row -->
-			<td class="nowrap">{plugins_row_grey.VERSION}</td>
-			<td class="nowrap">{plugins_row_grey.CONTACT}</td>
-			<td>{plugins_row_grey.DESCRIPTION}</td>
-			<td class="nowrap">
+			<td>{plugins_row_grey.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey.CONTACT}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">
 				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey.LONG_DESCRIPTION}"></i>
 				<!-- IF plugins_row_grey.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_grey.HOMEPAGE}"><a href="{plugins_row_grey.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
@@ -260,20 +260,20 @@ function hide_update_warning(status){
 		<!-- END plugins_row_grey -->
 		<!-- BEGIN plugins_row_grey_repo -->
 		<tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td class="nowrap">{plugins_row_grey_repo.ACTION_LINK}</td>
-			<td class="nowrap">{plugins_row_grey_repo.NAME}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td>{plugins_row_grey_repo.ACTION_LINK}</td>
+			<td>{plugins_row_grey_repo.NAME}</td>
 			<!-- BEGIN dep_row -->
-			<td class="nowrap">
+			<td class="hiddenSmartphone">
 				<span class="coretip" data-coretip="{plugins_row_grey_repo.dep_row.DEPENDENCY_TT}">
 					<i class="{plugins_row_grey_repo.dep_row.ICON}"></i> {plugins_row_grey_repo.dep_row.DEPENDENCY_NAME}
 				</span>
 			</td>
 			<!-- END dep_row -->
-			<td class="nowrap">{plugins_row_grey_repo.VERSION}</td>
-			<td class="nowrap">{plugins_row_grey_repo.CONTACT}</td>
-			<td>{plugins_row_grey_repo.DESCRIPTION}</td>
-			<td class="nowrap">
+			<td>{plugins_row_grey_repo.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey_repo.CONTACT}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey_repo.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">
 				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey_repo.LONG_DESCRIPTION}"></i>
 				<!-- IF grey_repo.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{grey_repo.HOMEPAGE}"><a href="{grey_repo.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
@@ -286,7 +286,7 @@ function hide_update_warning(status){
 		<!-- END plugins_row_grey_repo -->
 		<!-- BEGIN plugins_row_broken -->
 		<tr>
-			 <td width="20" align="center" class="nowrap"></td>
+			 <td width="20" align="center"></td>
 			<td><!-- IF plugins_row_broken.DELETE --><a href="{plugins_row_broken.DEL_LINK}" title="{L_delete_plugin}"><i class="fa fa-exclamation-triangle fa-fw"></i>&nbsp;{L_delete}</a><!-- ENDIF -->&nbsp;</td>
 			<td colspan="20">{plugins_row_broken.NAME}: {L_broken_plugin}</td>
 		</tr>
@@ -314,153 +314,153 @@ function hide_update_warning(status){
 		<input type="hidden" name="override" value="0" />
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch hoverrows">
 		  <tr>
-			<th width="20" class="nowrap">&nbsp;</th>
-			<th colspan="6" align="left" class="nowrap">{L_action}</th>
-			<th width="16" align="left" class="nowrap">&nbsp;</th>
-			<th align="left" class="nowrap">{L_name}</th>
-			<th align="left" class="nowrap">{L_template_files}</th>
-			<th align="left" class="nowrap">{L_users}</th>
-			<th align="left" class="nowrap">{L_version}</th>
-			<th align="left" class="nowrap">{L_portalplugin_author}</th>
-			<th align="left" class="nowrap">{L_preview}</th>
+			<th width="20">&nbsp;</th>
+			<th colspan="6" align="left">{L_action}</th>
+			<th width="16" align="left">&nbsp;</th>
+			<th align="left">{L_name}</th>
+			<th align="left" class="hiddenSmartphone">{L_template_files}</th>
+			<th align="left" class="hiddenSmartphone">{L_users}</th>
+			<th align="left">{L_version}</th>
+			<th align="left" class="hiddenSmartphone">{L_portalplugin_author}</th>
+			<th align="left" class="hiddenSmartphone">{L_preview}</th>
 			</tr>
 		  <!-- BEGIN styles_row_red_local -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td width="10" class="nowrap">{styles_row_red_local.ACTION_LINK}</td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
+		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td width="10">{styles_row_red_local.ACTION_LINK}</td>
+			<td width="10"><!-- IF not styles_row_red_local.S_DEFAULT -->
 			  <a href="{styles_row_red_local.U_ENABLE}" title="{styles_row_red_local.L_ENABLE}"><i class="{styles_row_red_local.ENABLE} fa-lg"></i></a>
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_red_local.S_DEFAULT -->
+			<td width="10"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
+			<td width="10"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
+			<td width="10"><!-- IF not styles_row_red_local.S_DEFAULT -->
 				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
-			<td width="10" class="nowrap">
+			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
-			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><span class="coretip" data-coretip='{styles_row_red_local.TT_CONTENT}'>{styles_row_red_local.TT_NAME}</span> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<td width="25" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><span class="coretip" data-coretip='{styles_row_red_local.TT_CONTENT}'>{styles_row_red_local.TT_NAME}</span> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
-			<td class="nowrap">{styles_row_red_local.TEMPLATE}</td>
-			<td class="nowrap">{styles_row_red_local.USERS}</td>
-			<td class="nowrap">{styles_row_red_local.VERSION}</td>
-			<td class="nowrap">{styles_row_red_local.AUTHOR}</td>
-			<td class="nowrap"><a href="javascript:style_preview({styles_row_red_local.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">{styles_row_red_local.TEMPLATE}</td>
+			<td class="hiddenSmartphone">{styles_row_red_local.USERS}</td>
+			<td>{styles_row_red_local.VERSION}</td>
+			<td class="hiddenSmartphone">{styles_row_red_local.AUTHOR}</td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red_local.ID});">{L_preview}</a></td>
 			</tr>
 		   <!-- END styles_row_red_local -->
 		  <!-- BEGIN styles_row_red -->
 		  <tr>
-		  <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td width="10" class="nowrap">{styles_row_red.ACTION_LINK}</td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
+		  <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td width="10">{styles_row_red.ACTION_LINK}</td>
+			<td width="10"><!-- IF not styles_row_red.S_DEFAULT -->
 			<a href="{styles_row_red.U_ENABLE}" title="{styles_row_red.L_ENABLE}"><i class="{styles_row_red.ENABLE} fa-lg"></i></a>
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_red.S_DEFAULT -->
+			<td width="10"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
+			<td width="10"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
+			<td width="10"><!-- IF not styles_row_red.S_DEFAULT -->
 				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
-			<td width="10" class="nowrap">
+			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
-			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_red.TT_CONTENT}'>{styles_row_red.TT_NAME}</span></a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<td width="25" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_red.TT_CONTENT}'>{styles_row_red.TT_NAME}</span></a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
-			<td class="nowrap">{styles_row_red.TEMPLATE}</td>
-			<td class="nowrap">{styles_row_red.USERS}</td>
-			<td class="nowrap">{styles_row_red.VERSION}</td>
-			<td class="nowrap">{styles_row_red.AUTHOR}</td>
-			<td class="nowrap"><a href="javascript:style_preview({styles_row_red.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">{styles_row_red.TEMPLATE}</td>
+			<td class="hiddenSmartphone">{styles_row_red.USERS}</td>
+			<td>{styles_row_red.VERSION}</td>
+			<td class="hiddenSmartphone">{styles_row_red.AUTHOR}</td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red.ID});">{L_preview}</a></td>
 			</tr>
 		   <!-- END styles_row_red -->
 			<!-- BEGIN styles_row_yellow -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
-			<td width="10" class="nowrap">{styles_row_yellow.ACTION_LINK}</td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
+		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td width="10">{styles_row_yellow.ACTION_LINK}</td>
+			<td width="10"><!-- IF not styles_row_yellow.S_DEFAULT -->
 			<a href="{styles_row_yellow.U_ENABLE}" title="{styles_row_yellow.L_ENABLE}"><i class="{styles_row_yellow.ENABLE} fa-lg"></i></a>
 			<!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_yellow.S_DEFAULT -->
+			<td width="10"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
+			<td width="10"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
+			<td width="10"><!-- IF not styles_row_yellow.S_DEFAULT -->
 				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
-			<td width="10" class="nowrap">
+			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
-			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_yellow.TT_CONTENT}'>{styles_row_yellow.TT_NAME}</span></a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<td width="25" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_yellow.TT_CONTENT}'>{styles_row_yellow.TT_NAME}</span></a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
-			<td class="nowrap">{styles_row_yellow.TEMPLATE}</td>
-			<td class="nowrap">{styles_row_yellow.USERS}</td>
-			<td class="nowrap">{styles_row_yellow.VERSION}</td>
-			<td class="nowrap">{styles_row_yellow.AUTHOR}</td>
-			<td class="nowrap"><a href="javascript:style_preview({styles_row_yellow.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">{styles_row_yellow.TEMPLATE}</td>
+			<td class="hiddenSmartphone">{styles_row_yellow.USERS}</td>
+			<td>{styles_row_yellow.VERSION}</td>
+			<td class="hiddenSmartphone">{styles_row_yellow.AUTHOR}</td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_yellow.ID});">{L_preview}</a></td>
 			</tr>
 		   <!-- END styles_row_yellow -->
 		<!-- BEGIN styles_row_green -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
-			<td width="10" class="nowrap">{styles_row_green.ACTION_LINK}</td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
+		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td width="10">{styles_row_green.ACTION_LINK}</td>
+			<td width="10"><!-- IF not styles_row_green.S_DEFAULT -->
 			  <a href="{styles_row_green.U_ENABLE}" title="{styles_row_green.L_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>  
 			  <!-- ENDIF --></td>
-			<td width="10" class="nowrap"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg"></i></a></td>
-			<td width="10" class="nowrap"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a></td>
-			<td width="10" class="nowrap"><!-- IF not styles_row_green.S_DEFAULT -->
+			<td width="10"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg"></i></a></td>
+			<td width="10"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a></td>
+			<td width="10"><!-- IF not styles_row_green.S_DEFAULT -->
 				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
 				<!-- ENDIF --></td>
-			<td width="10" class="nowrap">
+			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
 			
-			<td width="25" class="nowrap" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td class="nowrap"><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_green.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_green.TT_CONTENT}'>{styles_row_green.TT_NAME}</span></a> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<td width="25" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_green.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_green.TT_CONTENT}'>{styles_row_green.TT_NAME}</span></a> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
-			<td class="nowrap">{styles_row_green.TEMPLATE}</td>
-			<td class="nowrap">{styles_row_green.USERS}</td>
-			<td class="nowrap">{styles_row_green.VERSION}</td>
-			<td class="nowrap">{styles_row_green.AUTHOR}</td>
-			<td class="nowrap"><a href="javascript:style_preview({styles_row_green.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">{styles_row_green.TEMPLATE}</td>
+			<td class="hiddenSmartphone">{styles_row_green.USERS}</td>
+			<td>{styles_row_green.VERSION}</td>
+			<td class="hiddenSmartphone">{styles_row_green.AUTHOR}</td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_green.ID});">{L_preview}</a></td>
 			</tr>
 		   <!-- END styles_row_green -->
 		<!-- BEGIN styles_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td width="10" class="nowrap">{styles_row_grey.ACTION_LINK}</td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>			
-			<td width="25" class="nowrap" align="center"></td>
-			<td class="nowrap"><span class="coretip" data-coretip='{styles_row_grey.TT_CONTENT}'>{styles_row_grey.TT_NAME}</span></td>
-			<td class="nowrap">{styles_row_grey.TEMPLATE}</td>
-			<td class="nowrap">0</td>
-			<td class="nowrap">{styles_row_grey.VERSION}</td>
-			<td class="nowrap">{styles_row_grey.AUTHOR}</td>
-			<td class="nowrap"></td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td width="10">{styles_row_grey.ACTION_LINK}</td>
+			<td width="10"></td>
+			<td width="10"></td>
+			<td width="10"></td>
+			<td width="10"></td>
+			<td width="10"></td>			
+			<td width="25" align="center"></td>
+			<td><span class="coretip" data-coretip='{styles_row_grey.TT_CONTENT}'>{styles_row_grey.TT_NAME}</span></td>
+			<td class="hiddenSmartphone">{styles_row_grey.TEMPLATE}</td>
+			<td class="hiddenSmartphone">0</td>
+			<td>{styles_row_grey.VERSION}</td>
+			<td class="hiddenSmartphone">{styles_row_grey.AUTHOR}</td>
+			<td class="hiddenSmartphone"></td>
 			</tr>
 		   <!-- END styles_row_grey -->
 		<!-- BEGIN styles_row_grey_repo -->
 		  <tr>
-		   <td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td width="10" class="nowrap">{styles_row_grey_repo.ACTION_LINK}</td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>
-			<td width="10" class="nowrap"></td>		
-			<td width="25" class="nowrap"><span class="coretip" data-coretip='{styles_row_grey_repo.TT_CONTENT}'>{styles_row_grey_repo.TT_NAME}</span></td>
-			<td class="nowrap">{styles_row_grey_repo.TEMPLATE}</td>
-			<td class="nowrap">0</td>
-			<td class="nowrap">{styles_row_grey_repo.VERSION}</td>
-			<td class="nowrap">{styles_row_grey_repo.AUTHOR}</td>
-			<td class="nowrap"></td>
+		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td width="10">{styles_row_grey_repo.ACTION_LINK}</td>
+			<td width="10"></td>
+			<td width="10"></td>
+			<td width="10"></td>
+			<td width="10"></td>
+			<td width="10"></td>		
+			<td width="25"><span class="coretip" data-coretip='{styles_row_grey_repo.TT_CONTENT}'>{styles_row_grey_repo.TT_NAME}</span></td>
+			<td class="hiddenSmartphone">{styles_row_grey_repo.TEMPLATE}</td>
+			<td class="hiddenSmartphone">0</td>
+			<td>{styles_row_grey_repo.VERSION}</td>
+			<td class="hiddenSmartphone">{styles_row_grey_repo.AUTHOR}</td>
+			<td class="hiddenSmartphone"></td>
 			</tr>
 		   <!-- END styles_row_grey_repo -->
 		</table>
@@ -479,55 +479,55 @@ function hide_update_warning(status){
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" class="nowrap" width="16">{L_action}</th>
-			<th align="left" class="nowrap">{L_name}</th>
-			<th align="left" class="nowrap">{L_version}</th>
-			<th align="left" class="nowrap">{L_contact}</th>
-			<th align="left" class="nowrap">{L_description}</th>
-			<th align="left" class="nowrap" style="width: 90px">{L_pi_rating}</th>
+			<th align="left" width="16">{L_action}</th>
+			<th align="left">{L_name}</th>
+			<th align="left">{L_version}</th>
+			<th align="left" class="hiddenSmartphone">{L_contact}</th>
+			<th align="left" class="hiddenSmartphone">{L_description}</th>
+			<th align="left" style="width: 90px" class="hiddenSmartphone">{L_pi_rating}</th>
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td class="nowrap">{pm_row_red.ACTION_LINK}</td>
-			<td class="nowrap">{pm_row_red.NAME}</td>
-			<td class="nowrap">{pm_row_red.VERSION}</td>
-			<td class="nowrap">{pm_row_red.CONTACT}</td>
-			<td>{pm_row_red.DESCRIPTION}</td>
-			<td class="nowrap">{pm_row_red.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td>{pm_row_red.ACTION_LINK}</td>
+			<td>{pm_row_red.NAME}</td>
+			<td>{pm_row_red.VERSION}</td>
+			<td class="hiddenSmartphone">{pm_row_red.CONTACT}</td>
+			<td class="hiddenSmartphone">{pm_row_red.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{pm_row_red.RATING}</td>
 		  </tr>
 		  <!-- END pm_row_red -->
 		  <!-- BEGIN pm_row_yellow -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
-			<td class="nowrap">{pm_row_yellow.ACTION_LINK}</td>
-			<td class="nowrap">{pm_row_yellow.NAME}</td>
-			<td class="nowrap">{pm_row_yellow.VERSION}</td>
-			<td class="nowrap">{pm_row_yellow.CONTACT}</td>
-			<td>{pm_row_yellow.DESCRIPTION}</td>
-			<td class="nowrap">{pm_row_yellow.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td>{pm_row_yellow.ACTION_LINK}</td>
+			<td>{pm_row_yellow.NAME}</td>
+			<td>{pm_row_yellow.VERSION}</td>
+			<td class="hiddenSmartphone">{pm_row_yellow.CONTACT}</td>
+			<td class="hiddenSmartphone">{pm_row_yellow.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{pm_row_yellow.RATING}</td>
 		  </tr>
 		  <!-- END pm_row_yellow -->
 		  <!-- BEGIN pm_row_green -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
-			<td class="nowrap">{pm_row_green.ACTION_LINK}</td>
-			<td class="nowrap">{pm_row_green.NAME}</td>
-			<td class="nowrap">{pm_row_green.VERSION}</td>
-			<td class="nowrap">{pm_row_green.CONTACT}</td>
-			<td>{pm_row_green.DESCRIPTION}</td>
-			<td class="nowrap">{pm_row_green.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td>{pm_row_green.ACTION_LINK}</td>
+			<td>{pm_row_green.NAME}</td>
+			<td>{pm_row_green.VERSION}</td>
+			<td class="hiddenSmartphone">{pm_row_green.CONTACT}</td>
+			<td class="hiddenSmartphone">{pm_row_green.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{pm_row_green.RATING}</td>
 		  </tr>
 		  <!-- END pm_row_green -->
 		  <!-- BEGIN pm_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td class="nowrap">{pm_row_grey.ACTION_LINK}</td>
-			<td class="nowrap">{pm_row_grey.NAME}</td>
-			<td class="nowrap">{pm_row_grey.VERSION}</td>
-			<td class="nowrap">{pm_row_grey.CONTACT}</td>
-			<td>{pm_row_grey.DESCRIPTION}</td>
-			<td class="nowrap">{pm_row_grey.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td>{pm_row_grey.ACTION_LINK}</td>
+			<td>{pm_row_grey.NAME}</td>
+			<td>{pm_row_grey.VERSION}</td>
+			<td class="hiddenSmartphone">{pm_row_grey.CONTACT}</td>
+			<td class="hiddenSmartphone">{pm_row_grey.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{pm_row_grey.RATING}</td>
 		  </tr>
 		  <!-- END pm_row_grey -->
 		</table>
@@ -540,55 +540,55 @@ function hide_update_warning(status){
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" class="nowrap" width="16">{L_action}</th>
-			<th align="left" class="nowrap">{L_name}</th>
-			<th align="left" class="nowrap">{L_version}</th>
-			<th align="left" class="nowrap">{L_contact}</th>
-			<th align="left" class="nowrap">{L_description}</th>
-			<th align="left" class="nowrap" style="width: 90px">{L_pi_rating}</th>
+			<th align="left" width="16">{L_action}</th>
+			<th align="left">{L_name}</th>
+			<th align="left">{L_version}</th>
+			<th align="left" class="hiddenSmartphone">{L_contact}</th>
+			<th align="left" class="hiddenSmartphone">{L_description}</th>
+			<th align="left" style="width: 90px" class="hiddenSmartphone">{L_pi_rating}</th>
 		  </tr>
 		  <!-- BEGIN games_row_red -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td class="nowrap">{games_row_red.ACTION_LINK}</td>
-			<td class="nowrap">{games_row_red.NAME}</td>
-			<td class="nowrap">{games_row_red.VERSION}</td>
-			<td class="nowrap">{games_row_red.CONTACT}</td>
-			<td>{games_row_red.DESCRIPTION}</td>
-			<td class="nowrap">{games_row_red.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td>{games_row_red.ACTION_LINK}</td>
+			<td>{games_row_red.NAME}</td>
+			<td>{games_row_red.VERSION}</td>
+			<td class="hiddenSmartphone">{games_row_red.CONTACT}</td>
+			<td class="hiddenSmartphone">{games_row_red.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{games_row_red.RATING}</td>
 		  </tr>
 		  <!-- END games_row_red -->
 		  <!-- BEGIN games_row_yellow -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
-			<td class="nowrap">{games_row_yellow.ACTION_LINK}</td>
-			<td class="nowrap">{games_row_yellow.NAME}</td>
-			<td class="nowrap">{games_row_yellow.VERSION}</td>
-			<td class="nowrap">{games_row_yellow.CONTACT}</td>
-			<td>{games_row_yellow.DESCRIPTION}</td>
-			<td class="nowrap">{games_row_yellow.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td>{games_row_yellow.ACTION_LINK}</td>
+			<td>{games_row_yellow.NAME}</td>
+			<td>{games_row_yellow.VERSION}</td>
+			<td class="hiddenSmartphone">{games_row_yellow.CONTACT}</td>
+			<td class="hiddenSmartphone">{games_row_yellow.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{games_row_yellow.RATING}</td>
 		  </tr>
 		  <!-- END games_row_yellow -->
 		  <!-- BEGIN games_row_green -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
-			<td class="nowrap">{games_row_green.ACTION_LINK}</td>
-			<td class="nowrap">{games_row_green.NAME}</td>
-			<td class="nowrap">{games_row_green.VERSION}</td>
-			<td class="nowrap">{games_row_green.CONTACT}</td>
-			<td>{games_row_green.DESCRIPTION}</td>
-			<td class="nowrap">{games_row_green.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td>{games_row_green.ACTION_LINK}</td>
+			<td>{games_row_green.NAME}</td>
+			<td>{games_row_green.VERSION}</td>
+			<td class="hiddenSmartphone">{games_row_green.CONTACT}</td>
+			<td class="hiddenSmartphone">{games_row_green.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{games_row_green.RATING}</td>
 		  </tr>
 		  <!-- END games_row_green -->
 		  <!-- BEGIN games_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td class="nowrap">{games_row_grey.ACTION_LINK}</td>
-			<td class="nowrap">{games_row_grey.NAME}</td>
-			<td class="nowrap">{games_row_grey.VERSION}</td>
-			<td class="nowrap">{games_row_grey.CONTACT}</td>
-			<td>{games_row_grey.DESCRIPTION}</td>
-			<td class="nowrap">{games_row_grey.RATING}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td>{games_row_grey.ACTION_LINK}</td>
+			<td>{games_row_grey.NAME}</td>
+			<td>{games_row_grey.VERSION}</td>
+			<td class="hiddenSmartphone">{games_row_grey.CONTACT}</td>
+			<td class="hiddenSmartphone">{games_row_grey.DESCRIPTION}</td>
+			<td class="hiddenSmartphone">{games_row_grey.RATING}</td>
 		  </tr>
 		  <!-- END games_row_grey -->
 		  </table>
@@ -602,40 +602,40 @@ function hide_update_warning(status){
 		<table width="100%" border="0" cellspacing="1" cellpadding="4" class="colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" class="nowrap" width="16">{L_action}</th>
-			<th align="left" class="nowrap">{L_name}</th>
-			<th align="left" class="nowrap">{L_version}</th>
+			<th align="left" width="16">{L_action}</th>
+			<th align="left">{L_name}</th>
+			<th align="left">{L_version}</th>
 		  </tr>
 		  <!-- BEGIN language_row_red -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td class="nowrap">{language_row_red.ACTION_LINK}</td>
-			<td class="nowrap">{language_row_red.NAME}</td>
-			<td class="nowrap">{language_row_red.VERSION}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td>{language_row_red.ACTION_LINK}</td>
+			<td>{language_row_red.NAME}</td>
+			<td>{language_row_red.VERSION}</td>
 		  </tr>
 		  <!-- END language_row_red -->
 		  <!-- BEGIN language_row_yellow -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
-			<td class="nowrap">{language_row_yellow.ACTION_LINK}</td>
-			<td class="nowrap">{language_row_yellow.NAME}</td>
-			<td class="nowrap">{language_row_yellow.VERSION}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td>{language_row_yellow.ACTION_LINK}</td>
+			<td>{language_row_yellow.NAME}</td>
+			<td>{language_row_yellow.VERSION}</td>
 		  </tr>
 		  <!-- END language_row_yellow -->
 		  <!-- BEGIN language_row_green -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
-			<td class="nowrap">{language_row_green.ACTION_LINK}</td>
-			<td class="nowrap">{language_row_green.NAME}</td>
-			<td class="nowrap">{language_row_green.VERSION}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td>{language_row_green.ACTION_LINK}</td>
+			<td>{language_row_green.NAME}</td>
+			<td>{language_row_green.VERSION}</td>
 		  </tr>
 		  <!-- END language_row_green -->
 		  <!-- BEGIN language_row_grey -->
 		  <tr>
-			<td width="20" align="center" class="nowrap"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td class="nowrap">{language_row_grey.ACTION_LINK}</td>
-			<td class="nowrap">{language_row_grey.NAME}</td>
-			<td class="nowrap">{language_row_grey.VERSION}</td>
+			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td>{language_row_grey.ACTION_LINK}</td>
+			<td>{language_row_grey.NAME}</td>
+			<td>{language_row_grey.VERSION}</td>
 		  </tr>
 		  <!-- END language_row_grey -->
 		  </table>

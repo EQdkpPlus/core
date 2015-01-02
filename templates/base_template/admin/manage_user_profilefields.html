@@ -18,16 +18,16 @@
 		<thead>
 		<tr class="not-sortable">
 			<th width="10px"></th>
-			<th class="nowrap">&nbsp;</th>
-			<th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
-			<th colspan="2" class="nowrap">{L_action}</th>
-			<th class="nowrap">{L_name}</th>
-			<th class="nowrap">{L_type}</th>
-			<th class="nowrap">{L_userpf_sett_f_required}</th>
-			<th class="nowrap">{L_userpf_sett_f_show_on_registration}</th>
-			<th class="nowrap">{L_userpf_sett_f_is_contact}</th>
+			<th >&nbsp;</th>
+			<th ><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
+			<th colspan="2" >{L_action}</th>
+			<th >{L_name}</th>
+			<th class="hiddenSmartphone">{L_type}</th>
+			<th class="hiddenSmartphone">{L_userpf_sett_f_required}</th>
+			<th class="hiddenSmartphone">{L_userpf_sett_f_show_on_registration}</th>
+			<th class="hiddenSmartphone">{L_userpf_sett_f_is_contact}</th>
 			<!-- IF S_BRIDGE_FIELD -->
-			<th class="nowrap">{L_userpf_sett_f_bridge_field}</th>
+			<th class="hiddenSmartphone">{L_userpf_sett_f_bridge_field}</th>
 			<!-- ENDIF -->
 		</tr>
 		</thead>
@@ -35,17 +35,17 @@
 		<!-- BEGIN profile_row -->
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"><input type="hidden" name="sort[]" value="{profile_row.ID}"></span></td>
-			<td width="20" class="nowrap" align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
-			<td width="15" class="nowrap" align="center"><!-- IF profile_row.S_EDITABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
-			<td width="10" align="center" class="nowrap"><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a></td>
-			<td width="10" align="center" class="nowrap"><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
+			<td width="20"  align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
+			<td width="15"  align="center"><!-- IF profile_row.S_EDITABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
+			<td width="10" align="center" ><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a></td>
+			<td width="10" align="center" ><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
 			<td><!-- IF profile_row.S_EDITABLE --><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a><!-- ELSE -->{profile_row.NAME}<!-- ENDIF --></td>
-			<td>{profile_row.TYPE}</td>
-			<td><!-- IF profile_row.IS_REQUIRED --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
-			<td><!-- IF profile_row.IS_SHOWN_ON_REG --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
-			<td><!-- IF profile_row.IS_CONTACT --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
+			<td class="hiddenSmartphone">{profile_row.TYPE}</td>
+			<td class="hiddenSmartphone"><!-- IF profile_row.IS_REQUIRED --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
+			<td class="hiddenSmartphone"><!-- IF profile_row.IS_SHOWN_ON_REG --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
+			<td class="hiddenSmartphone"><!-- IF profile_row.IS_CONTACT --><i class="fa fa-check fa-lg"></i><!-- ENDIF --></td>
 			<!-- IF S_BRIDGE_FIELD -->
-			<td>{profile_row.BRIDGE_FIELD}</td>
+			<td class="hiddenSmartphone">{profile_row.BRIDGE_FIELD}</td>
 			<!-- ENDIF -->
 		</tr>
 		<!-- END profile_row -->

@@ -20,7 +20,7 @@
 		<th width="300" class="nowrap">{L_apa_type}</th>
 		<th width="150" class="nowrap">{L_name}</th>
 		<th width="80" class="nowrap">{L_apa_exectime}</th>
-		<th>{L_apa_pools}</th>
+		<th class="hiddenSmartphone">{L_apa_pools}</th>
 	</tr>
 	<!-- BEGIN apa_row -->
 	<tr>
@@ -30,7 +30,7 @@
 		<td>{apa_row.TYPE}</td>
 		<td>{apa_row.NAME}</td>
 		<td>{apa_row.EXECTIME}</td>
-		<td>{apa_row.POOLS}</td>
+		<td class="hiddenSmartphone">{apa_row.POOLS}</td>
 	</tr>
 	<!-- END apa_row -->
 </table>
@@ -45,16 +45,16 @@
 	<tr>
 		<th colspan="2">{L_action}</th>
 		<th width="200">{L_apa_func_name}</th>
-		<th width="300">{L_apa_func_used}</th>
-		<th>call function(50, now, now-2weeks, 100)</th>
+		<th width="300" class="hiddenSmartphone">{L_apa_func_used}</th>
+		<th class="hiddenSmartphone">call function(50, now, now-2weeks, 100)</th>
 	</tr>
 	<!-- BEGIN func_row -->
 	<tr>
 		<td width="20"><i class="fa fa-pencil fa-lg hand func_edit" alt="{func_row.NAME}" title="{L_edit}"></i></td>
 		<td width="20"><i class="fa fa-trash-o fa-lg hand func_del" alt="{func_row.NAME}" title="{L_delete}" <!-- IF func_row.NODEL --> style="display:none;"<!-- ENDIF -->></i></td>
 		<td>{func_row.NAME}</td>
-		<td>{func_row.USED}</td>
-		<td>{func_row.EXPL}</td>
+		<td class="hiddenSmartphone">{func_row.USED}</td>
+		<td class="hiddenSmartphone">{func_row.EXPL}</td>
 	</tr>
 	<!-- END func_row -->
 </table>
