@@ -322,6 +322,8 @@ class core extends gen_class {
 			// the logo...
 			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
 				$headerlogo	= $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo');
+			} else if(file_exists($this->root_path.$strHeaderLogoPath.'logo.svg')){
+				$headerlogo	= $this->server_path.$strHeaderLogoPath.'logo.svg';
 			} else $headerlogo = "";
 			
 			// Load the jQuery stuff
@@ -787,8 +789,10 @@ class core extends gen_class {
 			
 			//Call Social Plugins
 			$default_img_link	= $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/";
-			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : ((file_exists($default_img_link."logo.svg")) ? $default_img_link."logo.svg": $default_img_link."logo.png"));
+			$default_img_link_rel = $this->root_path."templates/".$this->user->style['template_path']."/images/";
+			$image = ((is_file($this->pfh->FolderPath('logo','eqdkp').$this->config->get('custom_logo'))) ? $this->env->buildlink().$this->pfh->FolderPath('logo','eqdkp', true).$this->config->get('custom_logo') : ((file_exists($default_img_link_rel."logo.svg")) ? $default_img_link."logo.svg": $default_img_link."logo.png"));
 			$image = ($this->image != '') ? $this->image : $image;
+
 			$description = ($this->description != '') ? $this->description : (($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
 						
