@@ -261,7 +261,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_detailslink($id){
-			return '<a href="'.$this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$id.'"><i class="fa fa-lg fa-arrow-right"></i></a>';
+			return '<a href="'.$this->routing->build('calendarevent', $this->get_name($id), $id).'"><i class="fa fa-lg fa-arrow-right"></i></a>';
 		}
 
 		public function get_edit($id){
@@ -347,7 +347,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						$arrSearchResults[] = array(
 							'id'	=> $this->get_html_date($id).' '.$this->get_html_time_start($id),
 							'name'	=> $this->get_name($id),
-							'link'	=> $this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;event_id='.$id,
+							'link'	=> $this->routing->build('calendarevent', $this->get_name($id), $id),
 						);
 					}
 				}
