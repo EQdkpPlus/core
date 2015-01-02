@@ -83,11 +83,11 @@ function check_alias() {
 			</dl>
 			<dl>
 				<dt><label>{L_published}</label></dt>
-				<dd><input type="checkbox" name="published" id="published" value="1" {PUBLISHED_CHECKED} /></dd>
+				<dd>{PUBLISHED_RADIO}</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_featured}</label></dt>
-				<dd><input type="checkbox" name="featured" id="featured" value="1" {FEATURED_CHECKED} /></dd>
+				<dd>{FEATURED_RADIO}</dd>
 			</dl>
 			<dl>
 				<dt><label>{L_category}</label></dt>
@@ -111,15 +111,15 @@ function check_alias() {
 			</dl>
 			<dl>
 				<dt><label>{L_info_comments}</label></dt>
-				<dd><input type="checkbox" name="comments" id="comments" value="1" {COMMENTS_CHECKED} /> <button class="mainoption" type="submit" name="del_comments"><i class="fa fa-times"></i>{L_info_delete_comments}</button></dd>
+				<dd>{COMMENTS_RADIO} <button class="mainoption" type="submit" name="del_comments"><i class="fa fa-times"></i>{L_info_delete_comments}</button></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_info_voting}</label></dt>
-				<dd><input type="checkbox" name="votes" id="votes" value="1" {VOTES_CHECKED} /> <button class="mainoption" type="submit" name="del_votes"><i class="fa fa-times"></i>{L_info_reset_votings}</button></dd>
+				<dd>{VOTES_RADIO} <button class="mainoption" type="submit" name="del_votes"><i class="fa fa-times"></i>{L_info_reset_votings}</button></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_hide_header}</label></dt>
-				<dd><input type="checkbox" name="hide_header" id="hide_header" value="1" {HIDE_HEADER_CHECKED} /></dd>
+				<dd>{HIDE_HEADER_RADIO}</dd>
 			</dl>
 			
 			</fieldset>
