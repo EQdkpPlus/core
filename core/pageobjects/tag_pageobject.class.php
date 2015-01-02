@@ -73,7 +73,8 @@ class tag_pageobject extends pageobject {
 				include_once($this->root_path.'core/gallery.class.php');
 				foreach($arrRaidlootObjects[3] as $key=>$val){
 					$objGallery = registry::register('gallery');
-					$strRaidlootContent = $objGallery->raidloot((int)$val);
+					$withChars = ($arrRaidlootObjects[5][$key] == "true") ? true : false;
+					$strRaidlootContent = $objGallery->raidloot((int)$val, $withChars);
 					$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 				}
 			}
@@ -89,8 +90,8 @@ class tag_pageobject extends pageobject {
 					'ARTICLE_TITLE'	  => $this->pdh->get('articles',  'title', array($intArticleID)),
 					'ARTICLE_SUBMITTED'=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
 					'ARTICLE_DATE'	  => $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true),
-					'ARTICLE_PATH'		=> $this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)),
-					'ARTICLE_SOCIAL_BUTTONS'  => ($this->pdh->get('article_categories', 'social_share_buttons', array($intCategoryID))) ? $this->social->createSocialButtons($this->server_path.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
+					'ARTICLE_PATH'			=> $this->controller_path.$this->pdh->get('articles',  'path', array($intArticleID)),
+					'ARTICLE_SOCIAL_BUTTONS'=> ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID)), strip_tags($this->pdh->get('articles',  'title', array($intArticleID)))) : '',
 					'PERMALINK'		=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TAGS'		=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
 					'ARTICLE_CUTTED_CONTENT' => truncate($strText, 600, '...', false, true),
