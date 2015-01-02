@@ -3381,6 +3381,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		float: none;
 		width: 100%;
 	}
+	
+	.ui-notify-close {
+		font-size: 20px;
+	}
 }
 
 @media all and (max-width: 600px) {

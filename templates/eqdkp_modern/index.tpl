@@ -414,6 +414,8 @@
 							<!-- IF S_IN_ADMIN -->
 							<div class="admin-headline"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</div>
 							{ADMIN_MENU_MOBILE}
+							<!-- ELSE -->
+								<!-- IF S_ADMIN --><div class="admin-headline"><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</a></div><!-- ENDIF -->
 							<!-- ENDIF -->
 							</div>
 						</div>

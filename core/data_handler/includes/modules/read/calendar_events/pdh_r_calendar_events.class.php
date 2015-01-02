@@ -261,7 +261,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_detailslink($id){
-			return '<a href="'.$this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$id.'" class="arrowright"></a>';
+			return '<a href="'.$this->root_path.'calendar/viewcalraid.php'.$this->SID.'&amp;eventid='.$id.'"><i class="fa fa-lg fa-arrow-right"></i></a>';
 		}
 
 		public function get_edit($id){
