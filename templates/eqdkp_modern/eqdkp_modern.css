@@ -3385,6 +3385,15 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.ui-notify-close {
 		font-size: 20px;
 	}
+	
+	#mainlogo {
+		max-height: 50px;
+	}
+	
+	#titles {
+		float: left;
+		margin-left: 6px;
+	}
 }
 
 @media all and (max-width: 600px) {

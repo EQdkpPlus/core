@@ -377,7 +377,7 @@
 		<header>
 			<div id="header">
 				<div id="logoContainer" class="{T_LOGO_POSITION}">
-					<div id="logoArea" class="hiddenSmartphone">
+					<div id="logoArea">
 						<!-- IF HEADER_LOGO -->
 						<img src="{HEADER_LOGO}" alt="{MAIN_TITLE}" id="mainlogo" />
 						<!-- ENDIF -->
