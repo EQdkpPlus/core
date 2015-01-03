@@ -42,7 +42,7 @@ class htimepicker extends html {
 	public $name = '';
 	public $enablesecs = false;
 	public $hourf = 24;
-	public $value = 0;
+	public $value = '';
 	public $required = false;
 	
 	private $out = '';
