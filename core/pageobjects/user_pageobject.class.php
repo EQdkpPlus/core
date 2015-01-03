@@ -189,10 +189,10 @@ class user_pageobject extends pageobject {
 				'table_sort_dir' => 'desc',
 				'table_presets' => array(
 					array('name' => 'idate', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'ibuyerlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'ilink_itt', 'sort' => true, 'th_add' => '', 'td_add' => 'style="height:21px;"'),
+					array('name' => 'ibuyerlink', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
+					array('name' => 'ilink_itt', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'iraidlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'ipoolname', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'ipoolname', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'ivalue', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				),
 		);
@@ -221,7 +221,7 @@ class user_pageobject extends pageobject {
 				'table_sort_dir' => 'desc',
 				'table_presets' => array(
 					array('name' => 'adj_date', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'adj_members', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'adj_members', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'adj_reason', 'sort' => true, 'th_add' => 'width="70%"', 'td_add' => ''),
 					array('name' => 'adj_value', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 				),
@@ -253,7 +253,7 @@ class user_pageobject extends pageobject {
 				'table_presets' => array(
 					array('name' => 'rdate', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'rlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'rnote', 'sort' => true, 'th_add' => 'width="70%"', 'td_add' => 'nowrap="nowrap"'),
+					array('name' => 'rnote', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'rvalue', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				),
 		);
@@ -279,7 +279,7 @@ class user_pageobject extends pageobject {
 				'table_sort_col' => 0,
 				'table_sort_dir' => 'desc',
 				'table_presets' => array(
-					array('name' => 'eicon', 'sort' => false, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'eicon', 'sort' => false, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'elink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'event_attendance', 'sort' => true, 'th_add' => '', 'td_add' => 'width="80%"'),
 				),

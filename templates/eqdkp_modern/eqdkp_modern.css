@@ -3156,10 +3156,12 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	.responsive #titles h1 {
 		font-size: 30px;
+		line-height: 30px;
 	}
 	
 	.responsive #titles h2 {
 		font-size: 20px;
+		line-height: 18px;
 	}
 	
 	.responsive .column {
@@ -3393,6 +3395,29 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	#titles {
 		float: left;
 		margin-left: 6px;
+	}
+	
+	.nowrap.desktopOnly{
+		white-space: normal;
+	}
+	
+	#personalAreaUser ul li:last-child{
+		margin-right: 0;
+	}
+	
+	.comment_avatar_container{ 
+		display: none;
+	}
+	.comment_container, #comment_button, .reply-trigger, .reply_button, .comment_write_container {
+		margin-left: 6px;
+	}
+
+	.user-profile > .user-avatar img {
+		height: 48px;
+	}
+	
+	.comment-reply {
+		margin-left: 30px;
 	}
 }
 

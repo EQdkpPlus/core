@@ -643,7 +643,7 @@ $system_def = array(
 				'table_sort_dir'	=> 'desc',
 				'table_sort_col'	=> 0,
 				'table_presets'		=> array(
-					array('name' => 'logdatetime',	'sort' => true, 'th_add' => 'width="150"', 'td_add' => ''),
+					array('name' => 'logdatetime',	'sort' => true, 'th_add' => '', 'td_add' => 'class="nowrap desktopOnly"'),
 					array('name' => 'logtype',		'sort' => true, 'th_add' => 'width="50%"', 'td_add' => ''),
 					array('name' => 'logrecordid',	'sort' => true, 'th_add' => 'width="20%" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'logrecord',	'sort' => true, 'th_add' => 'width="30%"', 'td_add' => ''),
