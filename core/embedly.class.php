@@ -23,7 +23,7 @@ class embedly extends gen_class {
 
 	public function __construct(){
 		include_once($this->root_path.'libraries/embedly/embedly.php');
-		$this->embedly = new libEmbedly();
+		$this->embedly = new libEmbedly(array('key' => $this->config->get('embedly_key')));
 	}
 	
 	//Parse one single Link
@@ -62,12 +62,14 @@ class embedly extends gen_class {
 		
 		$arrDecodedLinks = array();
 		if ($intLinks){
-			foreach ($arrLinks[0] as $key => $link){
+			$key = 0;
+			foreach ($arrLinks[0] as $link){
 				$orig_link = $link;
 				$link = html_entity_decode($link);
 				if (substr($link, 0, 1) != '"' && substr($link, 0, 1) != ':') {
 					$embedlyUrls[$key] = strip_tags($link);
 					$arrDecodedLinks[$key] = $orig_link;
+					$key++;
 				}
 			}	
 		}
@@ -85,6 +87,7 @@ class embedly extends gen_class {
 				$string = str_replace($arrDecodedLinks[$key], $out, $string);
 			}
 		}
+
 		return $string;
 	}
 		

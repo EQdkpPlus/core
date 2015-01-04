@@ -971,6 +971,7 @@ $lang = array(
 "core_sett_fs_calendar" => "Kalendereinstellungen",
 "core_sett_fs_raids" => "Einstellungen für Raids",
 "core_sett_fs_calendar_mails" => "E-Mail Benachrichtigungen",
+"core_sett_f_embedly_key" => "Embedly API-Key",				
 "core_sett_f_calendar_raid_guests" => "Gästeverwaltung für Raids aktivieren",
 "core_sett_f_help_calendar_raid_guests" => "Es können Gäste die nur an einem einzigen Raid und ohne Punktevergaben teilnehmen hinzugefügt werden.",
 "core_sett_f_calendar_raid_random" => "Zufallswerte anzeigen",
