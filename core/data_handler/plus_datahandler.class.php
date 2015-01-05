@@ -931,6 +931,7 @@ if( !class_exists( "plus_datahandler")){
 
 		public function auto_update_layout( $layout_name ) {
 			$layout_def = $this->get_eqdkp_layout( $layout_name );
+
 			//check if base layout got some new settings
 			$layout_base = $this->get_eqdkp_layout( $layout_def['base_layout'] );
 			$changes = false;
@@ -984,15 +985,28 @@ if( !class_exists( "plus_datahandler")){
 			}
 			
 			//Pageobjects
-			
-			$arrResult = $this->patch_pageobjects($layout_name, $layout_def);
-			$layout_def = $arrResult[0];
-			$changes = (!$changes) ? $arrResult[1] : $changes;
-			
+			if($layout_name == $layout_def['base_layout']){
+				$arrResult = $this->patch_pageobjects($layout_name, $layout_def, false);
+				$layout_def = $arrResult[0];
+				$changes = (!$changes) ? $arrResult[1] : $changes;
+				if($changes){
+					$user_layout_name = 'user_'.$layout_name;
+					$arrResult = $this->patch_pageobjects($user_layout_name, $layout_def);
+					$layout_def = $arrResult[0];
+					if($this->config->get('eqdkp_layout') == $layout_name) $this->config->set('eqdkp_layout', $user_layout_name);
+					$this->save_layout( $user_layout_name, $layout_def );
+				}
+				
+			} else {
+				$arrResult = $this->patch_pageobjects($layout_name, $layout_def);
+				$layout_def = $arrResult[0];
+				$changes = (!$changes) ? $arrResult[1] : $changes;
+				
+				if( $changes ){
+					$this->save_layout( $layout_name, $layout_def );
+				}
+			}
 
-
-			if( $changes )
-				$this->save_layout( $layout_name, $layout_def );
 		}
 
 		/******************************************************************************************************************************
@@ -1000,7 +1014,7 @@ if( !class_exists( "plus_datahandler")){
 		 * Adding new Pages/Objects
 		 */
 		
-		public function patch_pageobjects($layout_name, $layout_def){
+		public function patch_pageobjects($layout_name, $layout_def, $blnSetPatched=true){			
 			$this->init_page_objects();
 			$blnChanged = false;
 			
@@ -1015,19 +1029,20 @@ if( !class_exists( "plus_datahandler")){
 					unset($arrToPatch['pages'][$key_pages]['_patched']);
 					$layout_def = array_merge_recursive($layout_def, $arrToPatch);
 					
-					$this->set_page_patched($key_pages, $layout_name);
+					if($blnSetPatched) $this->set_page_patched($key_pages, $layout_name);
 					
 					$blnPatchedPage = true;
 					$blnChanged = true;
 				}
-				
+
 				//Next subs
 				foreach ($pages as $key_page => $page) {
 					$arrPatched = (isset($page['_patched'])) ? $page['_patched'] : array();
 					$blnPatchedObject = false;
 					
 					if ($blnPatchedPage) {
-						$this->set_object_patched($key_pages, $key_page, $layout_name);
+						if($blnSetPatched) $this->set_object_patched($key_pages, $key_page, $layout_name);
+						$blnPatchedObject = true;
 					} elseif (!in_array($layout_name, $arrPatched)){
 						//Patch Object
 						$arrToPatch = array();
@@ -1035,36 +1050,38 @@ if( !class_exists( "plus_datahandler")){
 						unset($arrToPatch['pages'][$key_pages][$key_page]['_patched']);
 						$layout_def = array_merge_recursive($layout_def, $arrToPatch);
 							
-						$this->set_object_patched($key_pages, $key_page, $layout_name);
+						if($blnSetPatched) $this->set_object_patched($key_pages, $key_page, $layout_name);
 					
 						$blnChanged = true;
 						$blnPatchedObject = true;
 					}
 					
 					//Next table presets
-					foreach ($page['table_presets'] as $key_preset => $preset) {
-						$arrPatched = (isset($preset['_patched'])) ? $preset['_patched'] : array();
-						$blnPatchedPreset = false;
-							
-						if ($blnPatchedObject) {
-							$this->set_tablepreset_patched($key_pages, $key_page, $preset['name'], $layout_name);
-						} elseif (!in_array($layout_name, $arrPatched)){
-							//Patch Preset
-							$arrToPatch = array();
-							$arrToPatch['pages'][$key_pages][$key_page]['table_presets'][] = $preset;
-							$layout_def = array_merge_recursive($layout_def, $arrToPatch);
+					if(isset($page['table_presets'])){
+						foreach ($page['table_presets'] as $key_preset => $preset) {
+							$arrPatched = (isset($preset['_patched'])) ? $preset['_patched'] : array();
+							$blnPatchedPreset = false;
 								
-							$this->set_tablepreset_patched($key_pages, $key_page, $preset['name'], $layout_name);
-								
-							$blnChanged = true;
-							$blnPatchedPreset = true;
+							if ($blnPatchedObject) {
+								if($blnSetPatched) $this->set_tablepreset_patched($key_pages, $key_page, $preset['name'], $layout_name);
+							} elseif (!in_array($layout_name, $arrPatched)){
+								//Patch Preset
+								$arrToPatch = array();
+								$arrToPatch['pages'][$key_pages][$key_page]['table_presets'][] = $preset;
+								$layout_def = array_merge_recursive($layout_def, $arrToPatch);
+									
+								if($blnSetPatched) $this->set_tablepreset_patched($key_pages, $key_page, $preset['name'], $layout_name);
+									
+								$blnChanged = true;
+								$blnPatchedPreset = true;
+							}
+						
 						}
-					
 					}
 					
 				}
 			}
-			
+
 			return array($layout_def, $blnChanged);
 		}
 
