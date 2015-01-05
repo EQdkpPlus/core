@@ -565,6 +565,8 @@ i.icon-color-gray{
 .grid {
 	margin: 0 auto;
 	padding: 0 0 0 1%;
+	overflow: auto;
+	width: 100%;
 }
 
 .grid .onerow {
@@ -593,6 +595,7 @@ i.icon-color-gray{
 .col10 { width: 82%; }
 .col11 { width: 90.5%; }
 .col12 { width: 99%; margin: 0; }
+
 
 @media all and (max-width: 899px) {
 	.onerow {

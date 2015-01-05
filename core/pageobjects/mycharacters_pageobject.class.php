@@ -42,6 +42,7 @@ class mycharacters_pageobject extends pageobject {
 	public function update_connection(){
 		$arrNewMembers = $this->in->getArray('member_id', 'int');
 		$arrOldMembers = $this->pdh->get('member', 'connection_id', array($this->user->id));
+		if(!is_array($arrOldMembers)) $arrOldMembers = array();
 		$diff = array_diff($arrNewMembers, $arrOldMembers);
 		$diff2 = array_diff($arrOldMembers, $arrNewMembers);
 		if (count($diff) !== 0 || count($diff2) !== 0 ){
