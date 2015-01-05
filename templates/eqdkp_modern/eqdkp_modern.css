@@ -3439,6 +3439,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	  margin: 10px 0;
 	  overflow: hidden;
 	}
+	
+	.ui-notify {
+		max-width: 95%;
+	}
 }
 
 @media all and (max-width: 600px) {
