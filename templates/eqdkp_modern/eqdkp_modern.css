@@ -3361,11 +3361,6 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-top: 6px;
 	}
 	
-	#admininfos_tabs div, #admininfos_tabs div div {
-		float: none;
-		width: 95% !important;
-	}
-	
 	table.scrollable-x {
 		table-layout: fixed;	
 	}

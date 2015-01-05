@@ -8,3 +8,6 @@ data/
 config.php
 plugins/
 games/wow/
+templates/eqdkp_luna
+templates/eqdkp_diablo
+templates/eqdkp_swtor
