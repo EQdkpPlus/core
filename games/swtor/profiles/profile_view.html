@@ -1,0 +1,151 @@
+
+
+		<div align="center">
+		<div class="profile_header">
+		<div class="sw-charname"><p>&nbsp;<p>{CHARDATA_NAME}</div>
+		<div class="sw-guilde">{DATA_GUILDTAG} @ {DATA_SERVERNAME}</div>
+		</div>
+	<table class="sw-tab" width="700" height="215">
+		<tr>
+			<td width="160">
+			<p align="center">
+			<img src="{SW_FACTION}.png">
+			</td>
+			<td width="200">	
+				<table border="0" cellspacing="0" cellpadding="2" width="100%">
+					<tr>
+						<th colspan="2" align="center" >{DATA_FACTION}</div></th>
+					</tr>
+					<tr class="row2 profession-row">
+						<td><span class="profession-name">{L_level} {DATA_LEVEL}</span></td>
+					</tr>
+					<tr class="row2 profession-row">
+						<td><span class="profession-name">{DATA_CLASSNAME}</span></td>
+					</tr>
+					<tr class="row2 profession-row">
+						<td><span class="profession-name">{DATA_SKILL}</span></td>
+					</tr>
+				</table>
+			</td>
+			<td width="300">
+				<table border="0" width="100%" cellspacing="0" cellpadding="2" >
+					<tr>
+						<th colspan="2" align="center" >{GL_uc_prof_professions}</th>
+					</tr>
+					<!-- BEGIN professions -->
+					<tr class="row2 profession-row">
+						<td><span class="profession-icon icon-frame frame-14"><img src="{professions.ICON}" alt="" /></span><span class="profession-name">{professions.NAME}</span></td>
+						<td width="60%">{professions.BAR}</td>
+					</tr>
+					<!-- END professions -->
+				</table>
+			</td>
+		</tr>
+		<tr class="sw-tab">
+			<td colspan="3" align="center"><div class="sw-picture">{CHARDATA_PICTURE}</div></td>
+		</tr>
+	</table>
+	
+		<p>&nbsp;</p>
+	
+<div class="tableHeader">
+	<h2>{L_DKP_NAME}</h2>
+		</div>
+
+<input type="checkbox" onchange="window.location='{SID}&with_twinks='+ ((this.checked) ? 0 : 1)" name="with_twinks" value="1" <!-- IF not S_WITH_TWINKS -->checked="checked"<!-- ENDIF -->/> {L_points_for_this_char}
+<br /><br />
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="hptt colorswitch scrollable-x borderless">
+	{MEMBER_POINTS}
+</table>
+<br />
+<div id='profile_information'>
+	<ul>
+		<!-- IF CUSTOM_FIELDS --><li><a href='#fragment-2-0'><span>{L_tab_customfields}</span></a></li><!-- ENDIF -->
+		<li><a href='#fragment-2-1'><span>{L_tab_raids}</span></a></li>
+		<li><a href='#fragment-2-2'><span>{L_tab_items}</span></a></li>
+		<!-- IF not S_POINTS_DISABLED -->
+		<li><a href='#fragment-2-3'><span>{L_tab_adjustments}</span></a></li>
+		<!-- ENDIF -->
+		<li><a href='#fragment-2-4'><span>{L_tab_attendance}</span></a></li>
+		<li><a href='#fragment-2-5'><span>{GL_tab_reputation}</span></a></li>
+	</ul>
+
+	<!-- ALL PROFILE FIELDS TABLE -->
+	<!-- IF CUSTOM_FIELDS -->
+	<div id="fragment-2-0">
+		<fieldset class="settings mediumsettings">
+			<!-- BEGIN pfield_custom -->
+			<dl>
+				<dt><label>{pfield_custom.NAME}</label></dt>
+				<dd>{pfield_custom.VALUE}</dd>
+			</dl>
+			<!-- END pfield_custom -->
+		</fieldset>
+	</div>
+	<!-- ENDIF -->
+
+	<!-- RAIDS TABLE -->
+	<div id="fragment-2-1">
+		<div class="tableHeader">
+			<h2>{L_raid_attendance_history}</h2>
+		</div>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="hptt colorswitch scrollable-x">
+		{RAID_OUT}
+		</table>
+		<div class="center pagination_wrapper">
+			{RAID_PAGINATION}
+		</div>
+	</div>
+
+	<!-- ITEMS TABLE -->
+	<div id="fragment-2-2">
+		<div class="tableHeader">
+			<h2>{L_item_purchase_history}</h2>
+		</div>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="hptt colorswitch scrollable-x">
+		{ITEM_OUT}
+		</table>
+		<div class="center pagination_wrapper">
+			{ITEM_PAGINATION}
+		</div>
+	</div>
+	
+	<!-- IF not S_POINTS_DISABLED -->
+	<!-- ADJUSTMENTS TABLE-->
+	<div id="fragment-2-3">
+		<div class="tableHeader">
+			<h2>{L_individual_adjustment_history}</h2>
+		</div>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="hptt colorswitch scrollable-x">
+		{ADJUSTMENT_OUT}
+		</table>
+		<div class="center pagination_wrapper">
+			{ADJUSTMENT_PAGINATION}
+		</div>
+	</div>
+	<!-- ENDIF -->
+
+	<!-- ATTENDANCE -->
+	<div id="fragment-2-4">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="hptt colorswitch scrollable-x">
+		{EVENT_ATT_OUT}
+		</table>
+	</div>
+	
+	<div id="fragment-2-5">
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="hptt colorswitch scrollable-x">
+			<tr>
+				<th width="5%">{GL_ruflevel}</th>
+				<th width="20%">{GL_head_reputation_name}</th>
+				<th width="75%">{GL_head_reputation_perc}</th>
+			</tr>
+			<!-- BEGIN reputation -->
+			<tr>
+				<td><img src="{reputation.REPUTATIONICON}" title="{reputation.TOOL}"></td>
+				<td>{reputation.NAME}</td>
+				<td>{reputation.BAR}</td>
+			</tr>
+			<!-- END reputation -->
+		</table>
+	</div>
+</div>
