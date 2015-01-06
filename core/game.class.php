@@ -784,7 +784,6 @@ class game extends gen_class {
 
 		foreach($data as $id => $name) {
 			//echo "foreach ".$type." id ".$id."<br />";
-			if($id === "" || $id === "_select") continue;
 			
 			if (isset($admin_data[$type])){
 				if ($id !== $admin_data[$type] && strlen($admin_data[$type])){
