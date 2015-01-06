@@ -439,7 +439,7 @@ abstract class Database extends gen_class {
 	 * @param string
 	 * @return boolean
 	 */
-	public function setDatabase($strDatabase){
+	public function setDatabase($strDatabase=false){
 		return $this->set_database($strDatabase);
 	}
 	

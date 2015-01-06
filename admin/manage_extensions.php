@@ -159,11 +159,12 @@ class Manage_Extensions extends page_generic {
 			
 			//Subfolder detection
 			$arrSubfolder = scandir($srcFolder);
-			if(is_array($arrSubfolder) && count($arrSubfolder) === 3){
-				foreach($arrSubfolder as $strSubfolder){
-					if ($strSubfolder != "." || $strSubfolder != ".."){
-						$srcFolder .= $strSubfolder;
-					}
+			
+			$arrIgnore = array(".", "..", "package.xml", "index.html");
+			$arrDiff = array_diff($arrSubfolder, $arrIgnore);
+			if(is_array($arrDiff) && count($arrDiff) === 1){
+				foreach($arrDiff as $strSubfolder){
+					$srcFolder .= $strSubfolder;
 				}
 			}
 
