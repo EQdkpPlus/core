@@ -64,6 +64,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						'dep_coreversion'=> $row['dep_coreversion'],
 						'dep_php'		=> $row['dep_php'],
 						'plugin_id'		=> $row['plugin_id'],
+						'bugtracker_url'=> $row['bugtracker_url'],
 					);
 				}
 				
@@ -96,6 +97,12 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 				}
 			}
 			return 0;
+		}
+		
+		public function get_bugtracker_url($cat, $id){
+			if(isset($this->repository[$cat][$id])){
+				return $this->repository[$cat][$id]['bugtracker_url'];
+			}
 		}
 	}//end class
 }//end if

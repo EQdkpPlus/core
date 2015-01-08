@@ -40,6 +40,7 @@
 		function close_menuitem(){
 			if (last_action === "add"){
 				$('#list_'+(newitemid-1)).remove();
+				last_action = '';
 			}
 		}
 		
@@ -116,7 +117,7 @@
 				
 				hide();
 			}
-			
+			last_action = '';
 			$( "#dialog-edit-menuitem" ).dialog( "close" );
 		});
 		

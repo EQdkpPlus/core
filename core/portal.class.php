@@ -210,8 +210,8 @@ class portal extends gen_class {
 		}
 	}
 	
-	public function get_module($module_id, $position='', $wideContent = false) {
-		if(!isset($this->objs[$module_id])) {
+	public function get_module($module_id, $position='', $wideContent = false, $force=false) {
+		if(!isset($this->objs[$module_id]) || $force) {
 			$path = $this->pdh->get('portal', 'path', array($module_id));
 			$plugin = $this->pdh->get('portal', 'plugin', array($module_id));
 			if($this->load_module($path, $plugin)) {
@@ -290,12 +290,13 @@ class portal extends gen_class {
 	
 	private function check_update($id, $path) {
 		$class_name = $path.'_portal';
-		if(version_compare($class_name::get_data('version'), $this->pdh->get('portal', 'version', array($id))) <= 0) return true;
+		if(version_compare($class_name::get_data('version'), $this->pdh->get('portal', 'version', array($id))) <= 0) return false;
 		//update settings, contact, autor, version
 		$this->pdh->put('portal', 'update', array($id, array('version' => $class_name::get_data('version'))));
 		//maybe they have something else to do
 		if(method_exists($this->objs[$id], 'update_function')) $this->objs[$id]->update_function($this->pdh->get('portal', 'version', array($id)));
 		$this->pdh->process_hook_queue();
+		return true;
 	}
 
 	public function get_all_modules() {
@@ -333,7 +334,8 @@ class portal extends gen_class {
 		$modules = $this->pdh->aget('portal', 'path', 0, array($this->pdh->get('portal', 'id_list')));
 		foreach($modules as $id => $path) {
 			if(!$this->get_module($id)) continue;
-			$this->check_update($id, $path);
+			$blnResult = $this->check_update($id, $path);
+			if ($blnResult) $this->get_module($id, "", false, true);
 		}
 		return $this->objs;
 	}

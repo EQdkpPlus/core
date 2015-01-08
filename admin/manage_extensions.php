@@ -198,6 +198,7 @@ class Manage_Extensions extends page_generic {
 
 	//Installing and Uninstalling Extensions
 	public function mode() {
+		$arrMessage = array();
 		switch((int)$this->in->get('cat', 0)){
 			//Plugins
 			case 1:		$modes = array('install', 'enable', 'uninstall', 'delete');
@@ -206,9 +207,9 @@ class Manage_Extensions extends page_generic {
 						$this->pm->search();
 						$result = $this->pm->$mode($this->code);
 						if($result) {
-							$this->core->message(sprintf($this->user->lang('plugin_inst_message'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('success'), 'green');
+							$arrMessage = array(sprintf($this->user->lang('plugin_inst_message'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('success'), 'green');
 						} else {
-							$this->core->message(sprintf($this->user->lang('plugin_inst_errormsg'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('error'), 'red');
+							$arrMessage = array(sprintf($this->user->lang('plugin_inst_errormsg'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('error'), 'red');
 						}
 						$this->pdh->process_hook_queue();
 			break;
@@ -241,13 +242,21 @@ class Manage_Extensions extends page_generic {
 						
 						$this->portal->uninstall($path, $plugin);
 						$this->portal->install($path, $plugin);
-						$this->core->message(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
+						$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
+						$this->portal->get_all_modules();
 						$this->pdh->process_hook_queue();
 			break;
 		}
+		redirect('admin/manage_extensions.php'.$this->SID.'&mes='.rawurlencode(base64_encode(serialize($arrMessage))));
 	}
 
 	public function display(){
+		if($this->in->exists('mes')){
+			$arrMessage = unserialize(base64_decode($this->in->get('mes')));
+			$this->core->message($arrMessage[0],$arrMessage[1],$arrMessage[2]);
+		}
+		
+		
 		//Get Extensions
 		$arrExtensionList = $this->repo->getExtensionList();
 		$arrExtensionListNamed = array();
@@ -287,6 +296,7 @@ class Manage_Extensions extends page_generic {
 			$manuallink			= $this->pm->get_data($plugin_code, 'manuallink');
 			$homepagelink		= $this->pm->get_data($plugin_code, 'homepage');
 			$author				= $this->pm->get_data($plugin_code, 'author');
+			$bugtracker_url		= (isset($arrExtensionListNamed[1][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(1, $arrExtensionListNamed[1][$plugin_code]))) : '';
 
 			if($this->pm->check($plugin_code, PLUGIN_BROKEN)) {
 				$this->tpl->assign_block_vars('plugins_row_broken', array(
@@ -348,6 +358,7 @@ class Manage_Extensions extends page_generic {
 				'MANUAL_LINK'		=> ($homepagelink != '') ? $homepagelink : false,
 				'MANUAL'			=> $this->user->lang('manual'),
 				'ACTION_LINK'		=> $link,
+				'BUGTRACKER_URL'	=> $bugtracker_url,
 			));
 
 			foreach($dep as $key => $depdata) {
@@ -377,6 +388,7 @@ class Manage_Extensions extends page_generic {
 					'CONTACT'			=> sanitize($extension['author']),
 					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
+					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 				));
 
 				foreach($dep as $key => $depdata) {
@@ -489,6 +501,8 @@ class Manage_Extensions extends page_generic {
 				'TEMPLATE'			=> $row['template_path'],
 				'USERS'				=> $row['users'],
 				'ACTION_LINK'		=> $link,
+				'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[2][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(2, $arrExtensionListNamed[2][$plugin_code]))) : '',
+						
 			));
 			
 			$arrStyles[] = $plugin_code;
@@ -509,6 +523,7 @@ class Manage_Extensions extends page_generic {
 					'TEMPLATE'			=> sanitize($extension['plugin']),
 					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
+					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 				));
 
 			}
@@ -572,6 +587,8 @@ class Manage_Extensions extends page_generic {
 					'CONTACT'			=> sanitize($class_name::get_data('contact')),
 					'ACTION_LINK'		=> $link,
 					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['description'], 100)).'</a>' : '',
+					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[3][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(3, $arrExtensionListNamed[3][$plugin_code]))) : '',
+							
 				));
 
 			}
@@ -593,7 +610,8 @@ class Manage_Extensions extends page_generic {
 					'CONTACT'			=> sanitize($extension['author']),
 					'DESCRIPTION'		=> '<a href="javascript:repoinfo('.$id.')">'.sanitize(cut_text($extension['description'])).'</a>',
 					'ACTION_LINK'		=> $link,
-					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself , array('score' => $extension['rating'], 'readonly' => true))
+					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself , array('score' => $extension['rating'], 'readonly' => true)),
+					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),		
 				));
 
 			}
@@ -648,6 +666,7 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['description'], 100).'</a>' : '',
 					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->starrating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), $this->env->phpself , array('score' => $arrTmpExtension[$plugin_code]['rating'], 'readonly' => true)) : '',
 					'ACTION_LINK'		=> $link,
+					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[7][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(7, $arrExtensionListNamed[7][$plugin_code]))) : '',		
 				));
 			}
 		}
@@ -667,6 +686,7 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> sanitize(cut_text($extension['description'], 100)),
 					'ACTION_LINK'		=> $link,
 					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself , array('score' => $extension['rating'], 'readonly' => true)),
+					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 				));
 
 			}
@@ -719,6 +739,7 @@ class Manage_Extensions extends page_generic {
 					'NAME'				=> (isset($arrExtensionListNamed[11][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[11][$plugin_code].')">'.$value.'</a>' : $value,
 					'VERSION'			=> $arrLanguageVersions[$plugin_code],
 					'ACTION_LINK'		=> $link,
+					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[11][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(11, $arrExtensionListNamed[11][$plugin_code]))) : '',	
 				));
 			}
 		}
@@ -734,6 +755,7 @@ class Manage_Extensions extends page_generic {
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
 					'ACTION_LINK'		=> $link,
+					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 				));
 
 			}

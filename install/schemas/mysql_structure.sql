@@ -548,6 +548,7 @@ CREATE TABLE `__repository` (
 	`dep_coreversion` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`rating` int(10) unsigned NOT NULL DEFAULT '0',
 	`updated` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`bugtracker_url` TEXT COLLATE utf8_bin NULL,
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

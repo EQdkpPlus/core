@@ -395,7 +395,7 @@ class phpbb31_bridge extends bridge {
 	private function _handle_birthday($date){
 		list($d, $m, $y) = explode('-', $date);
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
-			return $this->time->mktime(1,1,0,$m,$d,$y);
+			return $this->time->mktime(0,1,0,$m,$d,$y);
 		}
 		return 0;
 	}

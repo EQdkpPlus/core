@@ -176,6 +176,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 								'dep_coreversion'	=> (string)$ext->dep_coreversion,
 								'version_ext'		=> (isset($ext->version_ext)) ? $ext->version_ext : $ext->version,
 								'dep_php'			=> ($ext->dep_php) ? $ext->dep_php : '',
+								'bugtracker_url'	=> (string)$ext->bugtracker_url,
 							)));
 						}
 					}
@@ -496,7 +497,6 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 											$blnUpdateAvailable = (compareVersion(trim($value['version']),$this->pdh->get('portal', 'version', array($moduleid)))==1);
 											if ($blnUpdateAvailable) $recent_version = $this->pdh->get('portal', 'version', array($moduleid));
 										}
-
 								break;
 
 								//Games

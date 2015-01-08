@@ -170,12 +170,15 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{plugins_row_red.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_red.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_red.LONG_DESCRIPTION}"></i>
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_red.DESCRIPTION}"></i>
 				<!-- IF plugins_row_red.HOMEPAGE_LINK -->
-				<span dlass="coretip" data-coretip="{plugins_row_red.HOMEPAGE}"><a href="{plugins_row_red.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
+				<span class="coretip" data-coretip="{plugins_row_red.HOMEPAGE}"><a href="{plugins_row_red.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
 				<!-- IF plugins_row_red.MANUAL_LINK -->
-				<span dlass="coretip" data-coretip="{plugins_row_red.MANUAL}"><a href="{plugins_row_red.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<span class="coretip" data-coretip="{plugins_row_red.MANUAL}"><a href="{plugins_row_red.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_red.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{plugins_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
 				<!-- ENDIF -->
 			</td>
 		</tr>
@@ -196,12 +199,15 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{plugins_row_yellow.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_yellow.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_yellow.LONG_DESCRIPTION}"></i>
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_yellow.DESCRIPTION}"></i>
 				<!-- IF plugins_row_yellow.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_yellow.HOMEPAGE}"><a href="{plugins_row_yellow.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
 				<!-- IF plugins_row_yellow.MANUAL_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_yellow.MANUAL}"><a href="{plugins_row_yellow.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_yellow.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{plugins_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
 				<!-- ENDIF -->
 			</td>
 		</tr>
@@ -222,12 +228,15 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{plugins_row_green.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_green.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_green.LONG_DESCRIPTION}"></i>
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_green.DESCRIPTION}"></i>
 				<!-- IF plugins_row_green.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_green.HOMEPAGE}"><a href="{plugins_row_green.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
 				<!-- IF plugins_row_green.MANUAL_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_green.MANUAL}"><a href="{plugins_row_green.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_green.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{plugins_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
 				<!-- ENDIF -->
 			</td>
 		</tr>
@@ -248,12 +257,15 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{plugins_row_grey.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_grey.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey.LONG_DESCRIPTION}"></i>
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey.DESCRIPTION}"></i>
 				<!-- IF plugins_row_grey.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_grey.HOMEPAGE}"><a href="{plugins_row_grey.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
 				<!-- IF plugins_row_grey.MANUAL_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_grey.MANUAL}"><a href="{plugins_row_grey.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_grey.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{plugins_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
 				<!-- ENDIF -->
 			</td>
 		</tr>
@@ -274,12 +286,15 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{plugins_row_grey_repo.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_grey_repo.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey_repo.LONG_DESCRIPTION}"></i>
-				<!-- IF grey_repo.HOMEPAGE_LINK -->
-				<span class="coretip" data-coretip="{grey_repo.HOMEPAGE}"><a href="{grey_repo.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
+				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey_repo.DESCRIPTION}"></i>
+				<!-- IF plugins_row_grey_repo.HOMEPAGE_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_grey_repo.HOMEPAGE}"><a href="{plugins_row_grey_repo.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
-				<!-- IF grey_repo.MANUAL_LINK -->
-				<span class="coretip" data-coretip="{grey_repo.MANUAL}"><a href="{grey_repo.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- IF plugins_row_grey_repo.MANUAL_LINK -->
+				<span class="coretip" data-coretip="{plugins_row_grey_repo.MANUAL}"><a href="{plugins_row_grey_repo.MANUAL_LINK}" target="_blank" rel="nofollow"><i class="fa fa-question-circle fa-lg"></i></a></span>
+				<!-- ENDIF -->
+				<!-- IF plugins_row_grey_repo.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{plugins_row_grey_repo.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
 				<!-- ENDIF -->
 			</td>
 		</tr>
@@ -323,6 +338,7 @@ function hide_update_warning(status){
 			<th align="left">{L_version}</th>
 			<th align="left" class="hiddenSmartphone">{L_portalplugin_author}</th>
 			<th align="left" class="hiddenSmartphone">{L_preview}</th>
+			<th align="left" class="hiddenSmartphone">{L_infos}</th>
 			</tr>
 		  <!-- BEGIN styles_row_red_local -->
 		  <tr>
@@ -348,6 +364,11 @@ function hide_update_warning(status){
 			<td>{styles_row_red_local.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_red_local.AUTHOR}</td>
 			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red_local.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">
+				<!-- IF styles_row_red_local.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_red_local.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>		
 			</tr>
 		   <!-- END styles_row_red_local -->
 		  <!-- BEGIN styles_row_red -->
@@ -374,6 +395,11 @@ function hide_update_warning(status){
 			<td>{styles_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_red.AUTHOR}</td>
 			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">
+				<!-- IF styles_row_red.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 			</tr>
 		   <!-- END styles_row_red -->
 			<!-- BEGIN styles_row_yellow -->
@@ -400,6 +426,11 @@ function hide_update_warning(status){
 			<td>{styles_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_yellow.AUTHOR}</td>
 			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_yellow.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">
+				<!-- IF styles_row_yellow.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 			</tr>
 		   <!-- END styles_row_yellow -->
 		<!-- BEGIN styles_row_green -->
@@ -426,6 +457,11 @@ function hide_update_warning(status){
 			<td>{styles_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_green.AUTHOR}</td>
 			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_green.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone">
+				<!-- IF styles_row_green.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 			</tr>
 		   <!-- END styles_row_green -->
 		<!-- BEGIN styles_row_grey -->
@@ -444,6 +480,11 @@ function hide_update_warning(status){
 			<td>{styles_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_grey.AUTHOR}</td>
 			<td class="hiddenSmartphone"></td>
+			<td class="hiddenSmartphone">
+				<!-- IF styles_row_grey.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 			</tr>
 		   <!-- END styles_row_grey -->
 		<!-- BEGIN styles_row_grey_repo -->
@@ -461,6 +502,11 @@ function hide_update_warning(status){
 			<td>{styles_row_grey_repo.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_grey_repo.AUTHOR}</td>
 			<td class="hiddenSmartphone"></td>
+			<td class="hiddenSmartphone">
+				<!-- IF styles_row_grey_repo.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_grey_repo.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 			</tr>
 		   <!-- END styles_row_grey_repo -->
 		</table>
@@ -485,6 +531,7 @@ function hide_update_warning(status){
 			<th align="left" class="hiddenSmartphone">{L_contact}</th>
 			<th align="left" class="hiddenSmartphone">{L_description}</th>
 			<th align="left" style="width: 90px" class="hiddenSmartphone">{L_pi_rating}</th>
+			<th align="left" class="hiddenSmartphone">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
 		  <tr>
@@ -495,6 +542,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{pm_row_red.CONTACT}</td>
 			<td class="hiddenSmartphone">{pm_row_red.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{pm_row_red.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF pm_row_red.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END pm_row_red -->
 		  <!-- BEGIN pm_row_yellow -->
@@ -506,6 +558,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{pm_row_yellow.CONTACT}</td>
 			<td class="hiddenSmartphone">{pm_row_yellow.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{pm_row_yellow.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF pm_row_yellow.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END pm_row_yellow -->
 		  <!-- BEGIN pm_row_green -->
@@ -517,6 +574,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{pm_row_green.CONTACT}</td>
 			<td class="hiddenSmartphone">{pm_row_green.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{pm_row_green.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF pm_row_green.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END pm_row_green -->
 		  <!-- BEGIN pm_row_grey -->
@@ -528,6 +590,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{pm_row_grey.CONTACT}</td>
 			<td class="hiddenSmartphone">{pm_row_grey.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{pm_row_grey.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF pm_row_grey.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END pm_row_grey -->
 		</table>
@@ -546,6 +613,7 @@ function hide_update_warning(status){
 			<th align="left" class="hiddenSmartphone">{L_contact}</th>
 			<th align="left" class="hiddenSmartphone">{L_description}</th>
 			<th align="left" style="width: 90px" class="hiddenSmartphone">{L_pi_rating}</th>
+			<th align="left" class="hiddenSmartphone">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN games_row_red -->
 		  <tr>
@@ -556,6 +624,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{games_row_red.CONTACT}</td>
 			<td class="hiddenSmartphone">{games_row_red.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{games_row_red.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF games_row_red.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END games_row_red -->
 		  <!-- BEGIN games_row_yellow -->
@@ -567,6 +640,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{games_row_yellow.CONTACT}</td>
 			<td class="hiddenSmartphone">{games_row_yellow.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{games_row_yellow.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF games_row_yellow.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END games_row_yellow -->
 		  <!-- BEGIN games_row_green -->
@@ -578,6 +656,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{games_row_green.CONTACT}</td>
 			<td class="hiddenSmartphone">{games_row_green.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{games_row_green.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF games_row_green.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END games_row_green -->
 		  <!-- BEGIN games_row_grey -->
@@ -589,6 +672,11 @@ function hide_update_warning(status){
 			<td class="hiddenSmartphone">{games_row_grey.CONTACT}</td>
 			<td class="hiddenSmartphone">{games_row_grey.DESCRIPTION}</td>
 			<td class="hiddenSmartphone">{games_row_grey.RATING}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF games_row_grey.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END games_row_grey -->
 		  </table>
@@ -605,6 +693,7 @@ function hide_update_warning(status){
 			<th align="left" width="16">{L_action}</th>
 			<th align="left">{L_name}</th>
 			<th align="left">{L_version}</th>
+			<th align="left" class="hiddenSmartphone">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN language_row_red -->
 		  <tr>
@@ -612,6 +701,11 @@ function hide_update_warning(status){
 			<td class="nowrap desktopOnly">{language_row_red.ACTION_LINK}</td>
 			<td>{language_row_red.NAME}</td>
 			<td>{language_row_red.VERSION}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF language_row_red.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{language_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END language_row_red -->
 		  <!-- BEGIN language_row_yellow -->
@@ -620,6 +714,11 @@ function hide_update_warning(status){
 			<td class="nowrap desktopOnly">{language_row_yellow.ACTION_LINK}</td>
 			<td>{language_row_yellow.NAME}</td>
 			<td>{language_row_yellow.VERSION}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF language_row_yellow.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{language_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END language_row_yellow -->
 		  <!-- BEGIN language_row_green -->
@@ -628,6 +727,11 @@ function hide_update_warning(status){
 			<td class="nowrap desktopOnly">{language_row_green.ACTION_LINK}</td>
 			<td>{language_row_green.NAME}</td>
 			<td>{language_row_green.VERSION}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF language_row_green.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{language_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END language_row_green -->
 		  <!-- BEGIN language_row_grey -->
@@ -636,6 +740,11 @@ function hide_update_warning(status){
 			<td class="nowrap desktopOnly">{language_row_grey.ACTION_LINK}</td>
 			<td>{language_row_grey.NAME}</td>
 			<td>{language_row_grey.VERSION}</td>
+			<td class="hiddenSmartphone">
+				<!-- IF language_row_grey.BUGTRACKER_URL != "" -->
+				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{language_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<!-- ENDIF -->
+			</td>
 		  </tr>
 		  <!-- END language_row_grey -->
 		  </table>
