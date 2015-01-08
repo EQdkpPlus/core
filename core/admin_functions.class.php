@@ -478,7 +478,7 @@ class admin_functions extends gen_class {
 				'icon'	=> 'fa-home fa-lg fa-fw',
 				'name'	=> $this->user->lang('portal'),
 				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_config_man',	'icon' => 'fa-columns fa-lg fa-fw'),
-				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => 'a_articles_man',	'icon' => 'fa-file-text fa-lg fa-fw'),
+				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => array('OR', array('a_articles_man', 'a_article_categories_man')),	'icon' => 'fa-file-text fa-lg fa-fw'),
 				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'fa-table fa-lg fa-fw'),
 				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'fa-list fa-lg fa-fw'),
 				

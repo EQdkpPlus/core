@@ -579,10 +579,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$arrArticles = $this->pdh->get('articles', 'id_list', array($intCategoryID));
 			foreach($arrArticles as $intArticleID){
 				if ($this->pdh->get('articles', 'published', array($intArticleID))){
-					$strAlias = $this->pdh->get('articles', 'alias', array($intArticleID));
-					if (strpos($strAlias, 'index_') === 0){
-						return $intArticleID;
-					}
+					if($this->pdh->get('articles', 'index', array($intArticleID))) return $intArticleID;
 				}
 			}
 			return false;

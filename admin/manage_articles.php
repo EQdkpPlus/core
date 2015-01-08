@@ -174,12 +174,14 @@ class Manage_Articles extends page_generic {
 		
 	}
 	
-	public function save(){		
+	public function save(){
+		$cid = $this->in->get('c', 0);
 		$arrPublished = $this->in->getArray('published', 'int');
 		$arrFeatured = $this->in->getArray('featured', 'int');
 		foreach($arrPublished as $key => $val){
 			$this->pdh->put('articles', 'update_featuredandpublished', array($key, $arrFeatured[$key], $val));
 		}
+		$this->pdh->put('articles', 'update_index', array($this->in->get('index', 0), $cid));
 		$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 	}

@@ -47,6 +47,8 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			'article_alias' => array('alias', array('%article_id%'), array()),
 			'article_user' => array('user_id', array('%article_id%'), array()),
 			'article_date' => array('date', array('%article_id%'), array()),
+			'article_index' => array('index', array('%article_id%'), array()),
+			'article_index_cb' => array('index_cb', array('%article_id%'), array()),
 			'article_last_edited' => array('last_edited', array('%article_id%'), array()),
 		);
 
@@ -103,6 +105,8 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 						'last_edited_user'	=> (int)$drow['last_edited_user'],
 						'page_objects'		=> $drow['page_objects'],
 						'hide_header'		=> (int)$drow['hide_header'],
+						'index'			=> (int)$drow['index'],
+						'undeletable'			=> (int)$drow['undeletable'],
 					);
 					
 					if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
@@ -225,6 +229,26 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				return $this->articles[$intArticleID]['published'];
 			}
 			return false;
+		}
+		
+		public function get_index($intArticleID){
+			if (isset($this->articles[$intArticleID])){
+				return $this->articles[$intArticleID]['index'];
+			}
+			return false;
+		}
+		
+		public function get_index_cb($intArticleID){
+			$intCategoryIndex = $this->pdh->get('article_categories', 'index_article', array($this->get_category($intArticleID)));
+			if($intCategoryIndex){
+				if($intCategoryIndex == $intArticleID){
+					return '<input type="checkbox" class="index_cb" value="'.$intArticleID.'" name="index" checked="checked"/>';
+				} else {
+					return '<input type="checkbox" class="index_cb" value="'.$intArticleID.'" name="index" disabled="disabled"/>';
+				}
+			} else {
+				return '<input type="checkbox" class="index_cb" value="'.$intArticleID.'" name="index" />';
+			}
 		}
 		
 		public function get_html_published($intArticleID){
@@ -381,6 +405,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
+		public function get_undeletable($intArticleID){
+			if (isset($this->articles[$intArticleID])){
+				return $this->articles[$intArticleID]['undeletable'];
+			}
+			return false;
+		}
+		
 		public function get_html_last_edited_user($intArticleID){
 			return $this->pdh->get('user', 'name', array($this->get_last_edited_user($intArticleID)));
 		}
@@ -424,7 +455,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
 			$strAlias = $this->get_alias($intArticleID);
-			if (strpos($strAlias, 'index_') === 0){
+			if ($this->get_index($intArticleID)){
 				return $strPath;
 			}
 			
@@ -437,7 +468,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$strPath = $this->add_path($this->get_category($intArticleID));
 			
 			$strAlias = ucfirst($this->get_alias($intArticleID));
-			if (stripos($strAlias, 'index_') === 0 && !$url_id){
+			if ($this->get_index($intArticleID) && !$url_id){
 				$strPath .= ($this->SID == "?s=") ? '?' : $this->SID;
 				return $strPath;
 			} elseif($url_id){
@@ -466,7 +497,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		
 		public function get_breadcrumb($intArticleID, $strAdditionalString='', $url_id=false, $arrPath=array()){
 			$strAlias = ucfirst($this->get_alias($intArticleID));
-			if (stripos($strAlias, 'index_') === 0 && !$url_id){
+			if ($this->get_index($intArticleID) && !$url_id){
 				$intCategoryID = $this->get_category($intArticleID);
 				return $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID));
 			}

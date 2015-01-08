@@ -102,9 +102,9 @@ try {
 	} else {
 		if(isset($item['icon']) && !$data['noicon']) {
 			if($data['onlyicon'] > 0) {
-				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" />';
+				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
 			} else {
-				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="16" height="16" style="margin-top: 1px;" alt="icon" /> '.$display_name;
+				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
 			}
 		} else {
 			$visible = $display_name;

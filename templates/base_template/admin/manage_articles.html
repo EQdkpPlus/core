@@ -25,6 +25,16 @@
 				$(this).addClass('featured');
 			}
 		});
+		
+		$('.index_cb').on('click', function(){
+			if(this.checked){
+				$('.index_cb').prop('disabled', true);
+				$(this).prop('disabled', false);
+			} else {
+				$('.index_cb').prop('disabled', false);
+				$('.index_cb').prop('checked', false);
+			}
+		})
 	});
 </script>
 

@@ -28,9 +28,11 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_manage_article_categories}</h1>
 	</div>
+	<!-- IF not S_NO_PERMISSION -->
 	<div class="tableHeader floatRight">
 		<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_article_categories.php{SID}&amp;c=0'"><i class="fa fa-plus"></i>{L_add_article_category}</button>
 	</div>
+	<!-- ENDIF -->
 	<div class="clear"></div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch" id="article_categories-table">
 		{CATEGORY_LIST}
@@ -38,10 +40,12 @@
 	<div class="center pagination_wrapper">
 		{PAGINATION}
 	</div>
+	<!-- IF not S_NO_PERMISSION -->
 	<div class="contentFooter">
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
 	</div>
+	<!-- ENDIF -->
 {CSRF_TOKEN}	
 </form>

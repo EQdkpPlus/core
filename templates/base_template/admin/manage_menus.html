@@ -5,9 +5,13 @@
 			width: 500,
 			modal: true,
 			autoOpen: false,
+			close: function(){
+				close_menuitem();
+			}
 		});
 		
 		var visible_linktype =  'internal';
+		var last_action = '';
 		
 		$('.link_type').on('change', function(event){
 			if ($('.link_type').val() == 'internal'){
@@ -32,6 +36,12 @@
 				}
 			}
 		});
+		
+		function close_menuitem(){
+			if (last_action === "add"){
+				$('#list_'+(newitemid-1)).remove();
+			}
+		}
 		
 		function editMenuLink(){
 			$('.edit-menulink-trigger').on('click', function(event){
@@ -60,7 +70,7 @@
 				} else {
 					$('#dw_editlink-visibility').multiselect('uncheckAll');
 				}
-				
+				last_action = "edit";
 				$( "#dialog-edit-menuitem" ).dialog( "open" );
 			});
 		}
@@ -163,7 +173,8 @@
 			$('.editlink-window').val(0);
 			$('.editlink-windowsize').val(4024);
 			$('#dw_editlink-visibility').val(0);
-			$('#dw_editlink-visibility').multiselect('refresh');	
+			$('#dw_editlink-visibility').multiselect('refresh');
+			last_action = "add";
 			$( "#dialog-edit-menuitem" ).dialog( "open" );
 			
 			newitemid = newitemid + 1;
