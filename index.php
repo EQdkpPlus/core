@@ -883,7 +883,7 @@ class controller extends gen_class {
 					redirect();
 				}
 			} else {
-				message_die($this->user->lang('article_not_found'));
+				if(!$this->env->is_ajax) message_die($this->user->lang('article_not_found'));
 			}
 		}
 

@@ -174,12 +174,14 @@ class Manage_Articles extends page_generic {
 		
 	}
 	
-	public function save(){		
+	public function save(){
+		$cid = $this->in->get('c', 0);
 		$arrPublished = $this->in->getArray('published', 'int');
 		$arrFeatured = $this->in->getArray('featured', 'int');
 		foreach($arrPublished as $key => $val){
 			$this->pdh->put('articles', 'update_featuredandpublished', array($key, $arrFeatured[$key], $val));
 		}
+		$this->pdh->put('articles', 'update_index', array($this->in->get('index', 0), $cid));
 		$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 	}
@@ -196,7 +198,12 @@ class Manage_Articles extends page_generic {
 		}
 
 		if(!empty($pos)) {
-			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
+			if(in_array(false, $retu)) {
+				$messages[] = array('title' => $this->user->lang('del_nosuc'), 'text' => implode(', ', $pos), 'color' => 'red');
+			} else {
+				$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
+			}
+
 			$this->core->messages($messages);
 		}
 		
@@ -296,6 +303,7 @@ class Manage_Articles extends page_generic {
 	// ---------------------------------------------------------
 	public function display() {
 		$cid = $this->in->get('c', 0);
+		if(!$cid) redirect('admin/manage_article_categories.php'.$this->SID);
 		
 		$view_list = $this->pdh->get('articles', 'id_list', array($cid));
 

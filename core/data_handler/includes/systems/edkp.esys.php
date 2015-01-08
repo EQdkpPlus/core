@@ -762,6 +762,7 @@ $system_def = array(
 					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_featured', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_index_cb', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_title','sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'article_alias','sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'article_user',		'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),

@@ -140,7 +140,7 @@ if (!class_exists("timehandler")){
 		* @return timestamp
 		*/
 		private function helper_dtime($dtime){
-			return (($dtime && !is_object($dtime)) ? ((is_numeric($dtime)) ? "@$dtime" : $dtime) : "now");
+			return ($dtime && !is_object($dtime)) ? (is_numeric($dtime) ? "@$dtime" : $dtime) : "now";
 		}
 
 		/**
@@ -167,7 +167,7 @@ if (!class_exists("timehandler")){
 		*/
 		private function gen_time($dtime=''){
 			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
-			return strtotime($dateTime->format("Y-m-d H:i:s"));
+			return $dateTime->format("U");
 		}
 
 		/**

@@ -187,7 +187,7 @@ class game extends gen_class {
 		
 		if(strlen($strRankIcon) && is_file($this->root_path.'games/'.$this->game.'/icons/ranks/'.$strRankIcon)){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/ranks/'.$strRankIcon;
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='rank ".$rank_id."' class=\"".$this->game."_rankicon\" />";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='rank ".$rank_id."' class=\"".$this->game."_rankicon rankicon\" />";
 		}
 	}
 

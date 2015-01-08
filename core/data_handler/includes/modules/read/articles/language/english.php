@@ -38,6 +38,7 @@ $module_lang = array(
 	"user_id" => 'User',
 	"date" => 'Date',
 	"last_edited" => 'Last changed',
+	"index_cb" => "Index",
 	);
 	$preset_lang = array(
 	"article_sortable" => 'Article Sortation',
@@ -49,6 +50,7 @@ $module_lang = array(
 	"article_user" => 'Article User',
 	"article_featured" => 'Article Featured',
 	"article_last_edited" => 'Article Last edited',
+	"article_index_cb" => 'Article Index Checkbox',
 	);
 	
 

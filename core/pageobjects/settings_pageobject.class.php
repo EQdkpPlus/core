@@ -273,8 +273,10 @@ class settings_pageobject extends pageobject {
 		//Deactivate Profilefields synced by Bridge
 		if ($this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('cmsbridge_disable_sync') != 1) {
 			$synced_fields = array('user_email', 'username', 'current_password', 'new_password', 'confirm_password');
+			$arrAvailableBridgeFields = $this->bridge->get_available_sync_fields();
 			
-			$arrBridgeFields = $this->pdh->get('user_profilefields', 'bridge_mapping');
+			if($this->bridge->blnSyncBirthday) $synced_fields[] = 'birthday';
+			if($this->bridge->blnSyncCountry) $synced_fields[] = 'country';
 
 			foreach($arrBridgeFields as $intBridgeFieldID => $strEQdkpFieldID){
 				$synced_fields[] = 'userprofile_'.$strEQdkpFieldID;
