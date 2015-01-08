@@ -295,6 +295,7 @@ class portal extends gen_class {
 		$this->pdh->put('portal', 'update', array($id, array('version' => $class_name::get_data('version'))));
 		//maybe they have something else to do
 		if(method_exists($this->objs[$id], 'update_function')) $this->objs[$id]->update_function($this->pdh->get('portal', 'version', array($id)));
+		$this->pdh->process_hook_queue();
 	}
 
 	public function get_all_modules() {
