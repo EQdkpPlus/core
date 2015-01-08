@@ -198,7 +198,12 @@ class Manage_Articles extends page_generic {
 		}
 
 		if(!empty($pos)) {
-			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
+			if(in_array(false, $retu)) {
+				$messages[] = array('title' => $this->user->lang('del_nosuc'), 'text' => implode(', ', $pos), 'color' => 'red');
+			} else {
+				$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
+			}
+
 			$this->core->messages($messages);
 		}
 		
