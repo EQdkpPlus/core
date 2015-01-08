@@ -34,6 +34,8 @@ class bridge extends gen_class {
 	protected $settings				= array();
 	protected $callbacks			= array();
 	protected $blnSyncEmail			= true;
+	protected $blnSyncBirthday		= false;
+	protected $blnSyncCountry		= false;
 	public $db						= false;
 	public $prefix			= '';
 

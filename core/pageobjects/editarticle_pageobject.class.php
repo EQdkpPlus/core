@@ -223,11 +223,14 @@ class editarticle_pageobject extends pageobject {
 				'ALIAS'	=> $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'	=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
 				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $this->pdh->get('articles', 'category', array($id)))),
-				'PUBLISHED_CHECKED' => ($this->pdh->get('articles', 'published', array($id))) ? 'checked="checked"' : '',
-				'FEATURED_CHECKED' => ($this->pdh->get('articles', 'featured', array($id))) ? 'checked="checked"' : '',
-				'COMMENTS_CHECKED' => ($this->pdh->get('articles', 'comments', array($id))) ? 'checked="checked"' : '',
-				'VOTES_CHECKED' 	=> ($this->pdh->get('articles', 'votes', array($id))) ? 'checked="checked"' : '',
-				'HIDE_HEADER_CHECKED' => ($this->pdh->get('articles', 'hide_header', array($id))) ? 'checked="checked"' : '',
+				
+				'PUBLISHED_RADIO' => new hradio('published', array('value' => ($this->pdh->get('articles', 'published', array($id))))),
+				'FEATURED_RADIO' => new hradio('featured', array('value' => ($this->pdh->get('articles', 'featured', array($id))))),
+				'COMMENTS_RADIO' => new hradio('comments', array('value' => ($this->pdh->get('articles', 'comments', array($id))))),
+				'VOTES_RADIO' => new hradio('votes', array('value' => ($this->pdh->get('articles', 'votes', array($id))))),
+				'HIDE_HEADER_RADIO' => new hradio('hide_header', array('value' => ($this->pdh->get('articles', 'hide_header', array($id))))),
+				
+				
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -243,8 +246,11 @@ class editarticle_pageobject extends pageobject {
 			
 			$this->tpl->assign_vars(array(
 				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)),
-				'PUBLISHED_CHECKED'=> 'checked="checked"',
-				'COMMENTS_CHECKED' => 'checked="checked"',
+				'PUBLISHED_RADIO' => new hradio('published', array('value' => 1)),
+				'FEATURED_RADIO' => new hradio('featured', array()),
+				'COMMENTS_RADIO' => new hradio('comments', array('value' => 1)),
+				'VOTES_RADIO' => new hradio('votes', array()),
+				'HIDE_HEADER_RADIO' => new hradio('hide_header', array()),
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),

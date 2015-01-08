@@ -159,11 +159,12 @@ class Manage_Extensions extends page_generic {
 			
 			//Subfolder detection
 			$arrSubfolder = scandir($srcFolder);
-			if(is_array($arrSubfolder) && count($arrSubfolder) === 3){
-				foreach($arrSubfolder as $strSubfolder){
-					if ($strSubfolder != "." || $strSubfolder != ".."){
-						$srcFolder .= $strSubfolder;
-					}
+			
+			$arrIgnore = array(".", "..", "package.xml", "index.html");
+			$arrDiff = array_diff($arrSubfolder, $arrIgnore);
+			if(is_array($arrDiff) && count($arrDiff) === 1){
+				foreach($arrDiff as $strSubfolder){
+					$srcFolder .= $strSubfolder;
 				}
 			}
 
@@ -392,9 +393,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[1]['red']){
-			$badge = '<span class="update_available">'.$arrUpdateCount[1]['red'].'</span>';
+			$badge = '<span class="update_available">'.(int)$arrUpdateCount[1]['red'].'</span>';
 		} elseif ($arrUpdateCount[1]['yellow']){
-			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[1]['yellow'].'</span>';
+			$badge = '<span class="update_available_yellow">'.(int)$arrUpdateCount[1]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
@@ -520,9 +521,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[2]['red']){
-			$badge = '<span class="update_available">'.$arrUpdateCount[2]['red'].'</span>';
+			$badge = '<span class="update_available">'.(int)$arrUpdateCount[2]['red'].'</span>';
 		} elseif ($arrUpdateCount[2]['yellow']){
-			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[2]['yellow'].'</span>';
+			$badge = '<span class="update_available_yellow">'.(int)$arrUpdateCount[2]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
@@ -601,9 +602,9 @@ class Manage_Extensions extends page_generic {
 		$badge = '';
 
 		if ($arrUpdateCount[3]['red']){
-			$badge = '<span class="update_available">'.count($arrUpdateCount[3]['red']).'</span>';
+			$badge = '<span class="update_available">'.(int)$arrUpdateCount[3]['red'].'</span>';
 		} elseif ($arrUpdateCount[3]['yellow']){
-			$badge = '<span class="update_available_yellow">'.count($arrUpdateCount[3]['yellow']).'</span>';
+			$badge = '<span class="update_available_yellow">'.(int)$arrUpdateCount[3]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
@@ -673,9 +674,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[7]['red']){
-			$badge = '<span class="update_available">'.$arrUpdateCount[7]['red'].'</span>';
+			$badge = '<span class="update_available">'.(int)$arrUpdateCount[7]['red'].'</span>';
 		} elseif ($arrUpdateCount[7]['yellow']){
-			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[7]['yellow'].'</span>';
+			$badge = '<span class="update_available_yellow">'.(int)$arrUpdateCount[7]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(
@@ -740,9 +741,9 @@ class Manage_Extensions extends page_generic {
 
 		$badge = '';
 		if ($arrUpdateCount[11]['red']){
-			$badge = '<span class="update_available">'.$arrUpdateCount[11]['red'].'</span>';
+			$badge = '<span class="update_available">'.(int)$arrUpdateCount[11]['red'].'</span>';
 		} elseif ($arrUpdateCount[11]['yellow']){
-			$badge = '<span class="update_available_yellow">'.$arrUpdateCount[11]['yellow'].'</span>';
+			$badge = '<span class="update_available_yellow">'.(int)$arrUpdateCount[11]['yellow'].'</span>';
 		}
 
 		$this->tpl->assign_vars(array(

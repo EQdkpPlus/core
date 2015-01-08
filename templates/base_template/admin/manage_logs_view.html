@@ -61,6 +61,7 @@
 <style>
  .log-comp-pre pre {
  	white-space: pre-wrap;
+ 	word-break: break-word;
  }
 </style>
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch">
@@ -69,7 +70,7 @@
 	</tr>
 	<!-- BEGIN log_compare_row -->
 	<tr>
-		<td>{log_compare_row.KEY}</td><td>{log_compare_row.OLD}</td><td class="log-comp-pre">{log_compare_row.NEW}</td>
+		<td style="font-weight: bold;">{log_compare_row.KEY}</td><td style="white-space: pre-wrap; word-break: break-word;">{log_compare_row.OLD}</td><td class="log-comp-pre">{log_compare_row.NEW}</td>
 	</tr>
 	<!-- END log_compare_row -->
 </table>

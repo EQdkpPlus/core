@@ -27,7 +27,7 @@ include_once($eqdkp_root_path . 'common.php');
 class Manage_Article_Categories extends page_generic {
 
 	public function __construct(){
-		$this->user->check_auth('a_articles_man');
+		$this->user->check_auths(array('a_articles_man', 'a_article_categories_man'), 'OR');
 		$handler = array(
 			'save' 		=> array('process' => 'save', 'csrf' => true),
 			'update'	=> array('process' => 'update', 'csrf' => true),
@@ -74,6 +74,8 @@ class Manage_Article_Categories extends page_generic {
 	}
 	
 	public function update(){
+		$this->user->check_auth('a_article_categories_man');
+		
 		$id = $this->in->get('c', 0);
 		$strName = $this->in->get('name');
 		$strDescription = $this->in->get('description', '', 'raw');
@@ -118,6 +120,8 @@ class Manage_Article_Categories extends page_generic {
 	}
 	
 	public function save(){
+		$this->user->check_auth('a_article_categories_man');
+		
 		$arrSortables = $this->in->getArray('sortCategories', 'int');
 		$arrSortablesFlipped = array_flip($arrSortables);
 	
@@ -130,6 +134,8 @@ class Manage_Article_Categories extends page_generic {
 	}
 	
 	public function delete(){
+		$this->user->check_auth('a_article_categories_man');
+		
 		$retu = array();
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
@@ -150,6 +156,8 @@ class Manage_Article_Categories extends page_generic {
 	}
 	
 	public function edit(){
+		$this->user->check_auth('a_article_categories_man');
+		
 		$id = $this->in->get('c', 0);
 		
 		$arrPermissionDropdown = array(
@@ -255,31 +263,69 @@ class Manage_Article_Categories extends page_generic {
 	// Display form
 	// ---------------------------------------------------------
 	public function display() {
+		$blnHasEditPermission = $this->user->check_auth('a_article_categories_man', false);
+		
+		if($blnHasEditPermission){
+			$this->tpl->add_js("
+				$(\"#article_categories-table tbody\").sortable({
+					cancel: '.not-sortable, input, tr th.footer, th',
+					cursor: 'pointer',
+				});
+			", "docready");
+			
+			$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
+		
+			$view_list = $this->pdh->get('article_categories', 'id_list', array());
+			$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_article_categories', 'hptt_admin_manage_article_categories_categorylist');
+			
+			$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_article_categories.php', '%link_url_suffix%' => '&amp;upd=true'));
+			$page_suffix = '&amp;start='.$this->in->get('start', 0);
+			$sort_suffix = '?sort='.$this->in->get('sort');
+			
+			$item_count = count($view_list);
+			
+			$this->confirm_delete($this->user->lang('confirm_delete_article_category'));
 	
-		$this->tpl->add_js("
-			$(\"#article_categories-table tbody\").sortable({
-				cancel: '.not-sortable, input, tr th.footer, th',
-				cursor: 'pointer',
-			});
-		", "docready");
-		
-		$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
-	
-		$view_list = $this->pdh->get('article_categories', 'id_list', array());
-		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_article_categories', 'hptt_admin_manage_article_categories_categorylist');
-		
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_article_categories.php', '%link_url_suffix%' => '&amp;upd=true'));
-		$page_suffix = '&amp;start='.$this->in->get('start', 0);
-		$sort_suffix = '?sort='.$this->in->get('sort');
-		
-		$item_count = count($view_list);
-		
-		$this->confirm_delete($this->user->lang('confirm_delete_article_category'));
-
-		$this->tpl->assign_vars(array(
-			'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
-			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
-		);
+			$this->tpl->assign_vars(array(
+				'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
+				'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
+			);
+		} else {
+			$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
+			
+			$view_list = $this->pdh->get('article_categories', 'id_list', array());
+			$hptt_page_settings = array(
+				'name'				=> 'hptt_admin_manage_article_categories_categorylist',
+				'table_main_sub'	=> '%category_id%',
+				'table_subs'		=> array('%category_id%', '%article_id%'),
+				'page_ref'			=> 'manage_article_categories.php',
+				'show_numbers'		=> false,
+				'show_select_boxes'	=> false,
+				'selectboxes_checkall'=> false,
+				'show_detail_twink'	=> false,
+				'table_sort_dir'	=> 'asc',
+				'table_sort_col'	=> 0,
+				'table_presets'		=> array(
+						array('name' => 'category_sortable',	'sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
+						array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
+						array('name' => 'category_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'category_alias',		'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
+						array('name' => 'category_portallayout','sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
+				),
+			);
+				
+			$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_article_categories.php', '%link_url_suffix%' => '&amp;upd=true'), 'noperm');
+			$page_suffix = '&amp;start='.$this->in->get('start', 0);
+			$sort_suffix = '?sort='.$this->in->get('sort');
+				
+			$item_count = count($view_list);
+			$this->tpl->assign_vars(array(
+					'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
+					'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+					'S_NO_PERMISSION'	=> true,
+			)
+			);
+		}
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_article_categories'),

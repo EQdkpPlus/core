@@ -86,8 +86,8 @@ if (!class_exists("feed")) {
 		}
 
 		private function specialchars($strString){
-			$arrFind = array('"', "'", '<', '>');
-			$arrReplace = array('&#34;', '&#39;', '&lt;', '&gt;');
+			$arrFind = array('"', "'", '<', '>', '&');
+			$arrReplace = array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
 			return str_replace($arrFind, $arrReplace, $strString);
 		}
 

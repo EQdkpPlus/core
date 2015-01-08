@@ -658,6 +658,11 @@ class mmocms_settings extends page_generic {
 				'article'		=> array(
 					'disable_embedly'	=> array(
 						'type'	=> 'radio',
+						'dependency' => array(0=>array('embedly_key')),
+					),
+					'embedly_key' => array(
+						'type'		=> 'text',
+						'size'		=> 35
 					),
 					'thumbnail_defaultsize' => array(
 						'type'		=> 'spinner',

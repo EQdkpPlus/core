@@ -33,6 +33,7 @@ $module_lang = array(
 	'user_id'				=> 'Benutzer',
 	'date'					=> 'Datum',
 	'last_edited'			=> 'Zuletzt geändert',
+	'index_cb'				=> 'Index',
 );
 
 $preset_lang = array(
@@ -45,6 +46,7 @@ $preset_lang = array(
 	'article_user'			=> 'Artikel Benutzer',
 	'article_featured'		=> 'Artikel Featured',
 	'article_last_edited'	=> 'Artikel Letztes Änderungsdatum',
+	'article_index_cb'		=> 'Artikel Index Checkbox',
 );
 
 ?>

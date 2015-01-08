@@ -1,5 +1,8 @@
 <script type="text/javascript">
 //<![CDATA[
+$(document).ready(function(){
+	$('#alias').change(check_alias);
+});
 
 function check_alias() {
 	var alias = $('#alias').val();

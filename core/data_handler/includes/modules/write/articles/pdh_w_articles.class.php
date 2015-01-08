@@ -51,6 +51,8 @@ if(!class_exists('pdh_w_articles')) {
 
 		public function delete($id) {
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
+			if($arrOldData['undeletable']) return false;
+			
 			$objQuery = $this->db->prepare("DELETE FROM __articles WHERE id =?")->execute($id);
 			
 			$this->pdh->put("comment", "delete_attach_id", array("articles", $id));
@@ -87,30 +89,38 @@ if(!class_exists('pdh_w_articles')) {
 			$arrArticles = $this->pdh->get('articles', 'id_list', $intCategoryID);
 			foreach($arrArticles as $intArticleID){
 				$arrOldData = $this->pdh->get('articles', 'data', array($intArticleID));
-				$this->pdh->put("comment", "delete_attach_id", array("articles", $intArticleID));
-					
-				$arrOld = array(
-						'title' 			=> $arrOldData["title"],
-						'text'				=> $arrOldData["text"],
-						'category'			=> $arrOldData["category"],
-						'featured'			=> $arrOldData["featured"],
-						'comments'			=> $arrOldData["comments"],
-						'votes'				=> $arrOldData["votes"],
-						'published'			=> $arrOldData["published"],
-						'show_from'			=> $arrOldData["show_from"],
-						'show_to'			=> $arrOldData["show_to"],
-						'user_id'			=> $arrOldData["user_id"],
-						'date'				=> $arrOldData["date"],
-						'previewimage'		=> $arrOldData["previewimage"],
-						'alias'				=> $arrOldData["alias"],
-						'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
-						'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
-						'hide_header'		=> $arrOldData["hide_header"],
-				);
+				if($arrOldData['undeletable']){
+					//Move undeletable article to System category
+					$this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
+							'category' => 1,
+					))->execute($intArticleID);
+				} else {
 				
-				$arrChanges = $this->logs->diff(false, $arrOld, $this->arrLang);
-				if ($arrChanges){
-					$this->log_insert('action_article_deleted', $arrChanges, $intArticleID, $arrOldData["title"], 1, 'article');
+					$this->pdh->put("comment", "delete_attach_id", array("articles", $intArticleID));
+						
+					$arrOld = array(
+							'title' 			=> $arrOldData["title"],
+							'text'				=> $arrOldData["text"],
+							'category'			=> $arrOldData["category"],
+							'featured'			=> $arrOldData["featured"],
+							'comments'			=> $arrOldData["comments"],
+							'votes'				=> $arrOldData["votes"],
+							'published'			=> $arrOldData["published"],
+							'show_from'			=> $arrOldData["show_from"],
+							'show_to'			=> $arrOldData["show_to"],
+							'user_id'			=> $arrOldData["user_id"],
+							'date'				=> $arrOldData["date"],
+							'previewimage'		=> $arrOldData["previewimage"],
+							'alias'				=> $arrOldData["alias"],
+							'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
+							'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+							'hide_header'		=> $arrOldData["hide_header"],
+					);
+					
+					$arrChanges = $this->logs->diff(false, $arrOld, $this->arrLang);
+					if ($arrChanges){
+						$this->log_insert('action_article_deleted', $arrChanges, $intArticleID, $arrOldData["title"], 1, 'article');
+					}
 				}
 			}
 			
@@ -330,7 +340,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			
-			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
+			$arrData = array(
 				'title' 			=> $strTitle,
 				'text'				=> $strText,
 				'category'			=> $intCategory,
@@ -349,7 +359,17 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
 				'hide_header'		=> $intHideHeader,
-			))->execute($id);
+			);
+			
+			//if category changed, make sure that there is only one index article
+			if($intCategory != $arrOldData["category"]) {
+				$intIndexArticle = $this->pdh->get('article_categories', 'index_article', array($intCategoryID));
+				if($intIndexArticle > 0){
+					$arrData['`index`'] = 0;
+				}
+			}
+			
+			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set($arrData)->execute($id);
 				
 			if ($objQuery){
 				$this->pdh->enqueue_hook('articles_update');
@@ -494,6 +514,29 @@ if(!class_exists('pdh_w_articles')) {
 			return false;
 		}
 		
+		public function update_index($intIndex, $intCategoryID){
+			if($intIndex){
+				$objQuery = $this->db->prepare("UPDATE __articles :p WHERE category=?")->set(array(
+						'`index`'		=> 0,
+				))->execute($intCategoryID);
+				$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
+						'`index`'		=> 1,
+				))->execute($intIndex);
+				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
+				return true;
+			} else {
+				$objQuery = $this->db->prepare("UPDATE __articles :p WHERE category=?")->set(array(
+						'`index`'		=> 0,
+				))->execute($intCategoryID);
+				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
+				return true;
+			}
+
+			return false;
+		}
+		
 		public function set_published($arrIDs){
 			
 			foreach($arrIDs as $id){
@@ -538,7 +581,15 @@ if(!class_exists('pdh_w_articles')) {
 			$arrNew = array(
 					'category'	=> $intCategoryID,
 			);
+			$intIndexArticle = $this->pdh->get('article_categories', 'index_article', array($intCategoryID));
+			
 			foreach($arrIDs as $id){
+				if($intIndexArticle > 0 && $this->pdh->get('articles', 'index', array($id))){
+					$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
+						'`index`' => 0,	
+					))->execute($id);
+				}
+				
 				$arrOld = array(
 						'category'=> $this->pdh->get('articles', 'category', array($id))
 				);
