@@ -298,6 +298,7 @@ class Manage_Articles extends page_generic {
 	// ---------------------------------------------------------
 	public function display() {
 		$cid = $this->in->get('c', 0);
+		if(!$cid) redirect('admin/manage_article_categories.php'.$this->SID);
 		
 		$view_list = $this->pdh->get('articles', 'id_list', array($cid));
 

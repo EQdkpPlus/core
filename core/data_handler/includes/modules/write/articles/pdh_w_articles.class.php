@@ -525,6 +525,13 @@ if(!class_exists('pdh_w_articles')) {
 				$this->pdh->enqueue_hook('articles_update');
 				$this->pdh->enqueue_hook('article_categories_update');
 				return true;
+			} else {
+				$objQuery = $this->db->prepare("UPDATE __articles :p WHERE category=?")->set(array(
+						'`index`'		=> 0,
+				))->execute($intCategoryID);
+				$this->pdh->enqueue_hook('articles_update');
+				$this->pdh->enqueue_hook('article_categories_update');
+				return true;
 			}
 
 			return false;
