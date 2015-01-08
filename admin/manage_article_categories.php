@@ -27,7 +27,7 @@ include_once($eqdkp_root_path . 'common.php');
 class Manage_Article_Categories extends page_generic {
 
 	public function __construct(){
-		$this->user->check_auth('a_articles_man');
+		$this->user->check_auths(array('a_articles_man', 'a_article_categories_man'), 'OR');
 		$handler = array(
 			'save' 		=> array('process' => 'save', 'csrf' => true),
 			'update'	=> array('process' => 'update', 'csrf' => true),
