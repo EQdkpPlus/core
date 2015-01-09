@@ -358,8 +358,6 @@ class Manage_Styles extends page_generic{
 				} else {
 					$filename = $base_template_path;
 				}
-
-				d($filename);
 				
 			} else {
 				if (file_exists($this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename)){

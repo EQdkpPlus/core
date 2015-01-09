@@ -462,7 +462,7 @@ class Manage_Extensions extends page_generic {
 				'ACTION_LINK'	=> $link,
 				'TEMPLATE'		=> $key,
 			));
-			$arrStyles[] = (($install_xml->name) ? $install_xml->name : stripslashes($key));
+			$arrStyles[] = (($install_xml->folder) ? $install_xml->folder : stripslashes($key));
 		}
 
 		foreach($arrTemplates as $row){
@@ -528,7 +528,7 @@ class Manage_Extensions extends page_generic {
 
 				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',2, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
 				$this->tpl->assign_block_vars('styles_row_'.$row, array(
-					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
+					'TT_NAME'			=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
 					'CODE'				=> sanitize($extension['plugin']),
 					'AUTHOR'			=> sanitize($extension['author']),
@@ -536,6 +536,7 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
 					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
+					'TT_CONTENT'		=> '<img src="http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$extension['plugin_id'].'" style="max-width:300px;" alt="No Preview available" />',
 				));
 
 			}
