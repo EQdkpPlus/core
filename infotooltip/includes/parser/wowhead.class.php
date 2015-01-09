@@ -65,9 +65,13 @@ if(!class_exists('wowhead')) {
 
 			$encoded_name = urlencode($name);
 			$encoded_name = str_replace('+' , '%20' , $encoded_name);
-			$url = ($lang == 'en') ? 'www' : $lang;#
+			$url = ($lang == 'en') ? 'www' : $lang;
+			
+			$item_encoded_name = $encoded_name;
+			$item_encoded_name = str_replace("%C3%", "%C3%20%", $item_encoded_name);
+			
 			$lang_prefix = $url;
-			$url = 'http://'.$url.'.wowhead.com/item='.$encoded_name.'&xml';
+			$url = 'http://'.$url.'.wowhead.com/item='.$item_encoded_name.'&xml';
 			$this->pdl->log('infotooltip', 'Search for ItemID at '.$url);
 			$item_data = $this->puf->fetch($url);
 			
