@@ -62,6 +62,8 @@ function repo_step1(extid, cat, extensioncode, mode){
 		  } else {
 			update_error(data);
 		  }
+	}).fail(function(){
+		update_error('Error 500');
 	});
 }
 
@@ -73,6 +75,8 @@ function repo_step2(extid, cat, extensioncode, mode){
 		  } else {
 			update_error(data);
 		  }
+	}).fail(function(){
+		update_error('Error 500');
 	});
 }
 
@@ -84,6 +88,8 @@ function repo_step3(extid, cat, extensioncode, mode){
 		  } else {
 			update_error(data);
 		  }
+	}).fail(function(){
+		update_error('Error 500');
 	});
 }
 
@@ -95,6 +101,8 @@ function repo_step4(extid, cat, extensioncode, mode){
 		  } else {
 			update_error(data);
 		  }
+	}).fail(function(){
+		update_error('Error 500');
 	});
 }
 
@@ -125,7 +133,7 @@ function hide_update_warning(status){
 </div>
 
 <div id="nl_progressbar" style="display:none; margin-bottom: 20px;">
-	<span class="nl_progressbar_label"><i class="fa fa-spinner fa-spin fa-lg lu_loading_img"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
+	<span class="nl_progressbar_label"><i class="fa fa-spinner fa-spin fa-lg" id="lu_loading_img"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 
 <div id='plus_plugins_tab'>

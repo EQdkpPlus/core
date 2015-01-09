@@ -111,6 +111,9 @@ class Manage_Extensions extends page_generic {
 	//Download Package
 	public function process_step2(){
 		if ($this->in->get('cat', 0) && strlen($this->code)){
+			@set_time_limit(0);
+			@ignore_user_abort(true);
+			
 			$downloadLink 		= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_link', 'repository'));
 			$downloadHash 		= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_hash', 'repository'));
 			$downloadSignature	= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_signature', 'repository'));
@@ -135,6 +138,9 @@ class Manage_Extensions extends page_generic {
 	//Unzip Package
 	public function process_step3(){
 		if ($this->in->get('cat', 0) && strlen($this->code)){
+			@set_time_limit(0);
+			@ignore_user_abort(true);
+			
 			$destFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
 			$srcFolder = $this->pfh->FolderPath('','repository');
 			$filename = 'repo_'.md5($this->in->get('cat', 0).$this->code).'.zip';
@@ -155,6 +161,9 @@ class Manage_Extensions extends page_generic {
 	//Copy files
 	public function process_step4(){
 		if ($this->in->get('cat', 0) && strlen($this->code)){
+			@set_time_limit(0);
+			@ignore_user_abort(true);
+			
 			$srcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
 			
 			//Subfolder detection
@@ -251,9 +260,12 @@ class Manage_Extensions extends page_generic {
 	}
 
 	public function display(){
+		//Show error / success messages
 		if($this->in->exists('mes')){
 			$arrMessage = unserialize(base64_decode($this->in->get('mes')));
-			$this->core->message($arrMessage[0],$arrMessage[1],$arrMessage[2]);
+			if(isset($arrMessage[0]) && $arrMessage[1]){
+				$this->core->message($arrMessage[0],$arrMessage[1],$arrMessage[2]);
+			}
 		}
 		
 		
