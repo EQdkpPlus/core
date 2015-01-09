@@ -66,6 +66,7 @@ if(!class_exists('wowhead')) {
 			$encoded_name = urlencode($name);
 			$encoded_name = str_replace('+' , '%20' , $encoded_name);
 			$url = ($lang == 'en') ? 'www' : $lang;#
+			$lang_prefix = $url;
 			$url = 'http://'.$url.'.wowhead.com/item='.$encoded_name.'&xml';
 			$this->pdl->log('infotooltip', 'Search for ItemID at '.$url);
 			$item_data = $this->puf->fetch($url);
@@ -76,6 +77,20 @@ if(!class_exists('wowhead')) {
 			} else {
 				$this->pdl->log('infotooltip', 'Invalid XML');
 			}
+			
+			//Use normal search
+			if(!$item_id){
+				$url = 'http://'.$lang_prefix.'.wowhead.com/search?q='.$encoded_name;
+				$search_data = $this->puf->fetch($url);
+				$arrSearchMatches = array();
+				preg_match_all("/\"id\":([0-9]*),\"level\":([0-9]*),\"name\":\"([0-9])".$itemname."\"/", $search_data, $arrSearchMatches);
+				if (isset($arrSearchMatches[1]) && count($arrSearchMatches[1])){
+					$arrUniqueIDs = array_unique($arrSearchMatches[1]);
+					//Take the first one
+					$item_id = $arrUniqueIDs[0];
+				}
+			}	
+			
 			//search in other languages
 			if(!$item_id AND $searchagain < count($this->av_langs)) {
 				$this->pdl->log('infotooltip', 'No Items found.');
