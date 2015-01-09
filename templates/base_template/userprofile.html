@@ -32,6 +32,9 @@
 			<!-- IF S_PROFILE_CHARACTERS -->
 			<li><a href="#characters">{L_chars}</a></li>
 			<!-- ENDIF -->
+			<!-- BEGIN custom_tabs -->
+			<li><a href="#{custom_tabs.ID}">{custom_tabs.NAME}</a></li>
+			<!-- ENDIF -->
 		</ul>
 		
 		<div id="wall">
@@ -142,6 +145,12 @@
 		<!-- ENDIF -->
 		
 		</div>
+		
+		<!-- BEGIN custom_tabs -->
+		<div id="{custom_tabs.ID}">
+			{custom_tabs.CONTENT}
+		</div>
+		<!-- ENDIF -->
 
 </div>
 

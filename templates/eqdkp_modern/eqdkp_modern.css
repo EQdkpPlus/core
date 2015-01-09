@@ -1193,7 +1193,9 @@ div[aria-describedby="dialog-login"] .password-forgot{
 	font-family: Tahoma, Arial, sans-serif;
 }
 
-.ui-tabs .ui-tabs-nav .ui-tabs-anchor { min-height:1.7em; }
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor { min-height:1.7em; } /* Fixes for update badges */
+
+.sf-admin > li > a{ min-height: 1.4em; } /* Fixes for update badges */
 
 #contentBody .ui-tabs th.footer {
 	background-color: #fff !important;

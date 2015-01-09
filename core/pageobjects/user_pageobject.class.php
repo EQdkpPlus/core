@@ -172,7 +172,22 @@ class user_pageobject extends pageobject {
 			'PROFILE_CHARS' 		=> $hptt->get_html_table($this->in->get('sort'), '', null, 1, sprintf($this->user->lang('listmembers_footcount'), count( $this->pdh->get('member', 'connection_id', array($user_id))))),
 			'S_PROFILE_CHARACTERS'	=> count($arrMemberList),
 		));
-
+		
+		//Custom Tabs
+		$arrHooks = $this->hooks->process('userprofile_customtabs');
+		if (is_array($arrHooks)){
+			foreach ($arrHooks as $plugin => $value){
+				$title = $value['title'];
+				$id = substr(md5($title), 0, 9);
+				$content = $value['content'];
+				
+				$this->tpl->assign_block_vars('custom_tabs', array(
+					'ID'		=> $id,
+					'NAME'		=> $title,
+					'CONTENT'	=> $content,	
+				));
+			}
+		}
 
 		$this->jquery->Tab_header('userprofile_dkp_tabs', true);
 		
