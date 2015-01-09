@@ -356,7 +356,7 @@ if(!class_exists('infotooltip')) {
 			}
 
 			if(!$forceupdate) {
-				$cache_name = $this->config['game'].'_'.$lang.'_'.((is_numeric($game_id) AND $game_id > 0) ? $game_id : $item_name).$ext;
+				$cache_name = $this->config['game'].'_'.$lang.'_'.(($game_id && $game_id != "") ? $game_id : $item_name).$ext;
 				$this->pdl->log('infotooltip', 'Search in cache: '.$cache_name);
 				$cache_name = md5($cache_name).'.itt';
 				if(in_array($cache_name, $this->cached)) {
