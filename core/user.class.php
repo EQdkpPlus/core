@@ -917,6 +917,17 @@ class user extends gen_class {
 		return $language_array;
 	}
 	
+	public function multilangValue($strRawContent){
+		$arrValues = unserialize($strRawContent);
+		$strDefLang = $this->config->get('default_lang');
+		if(isset($arrValues[$this->lang_name]) && strlen($arrValues[$this->lang_name])){
+			return $arrValues[$this->lang_name];
+		} elseif(isset($arrValues[$strDefLang])){
+			return $arrValues[$strDefLang];
+		}
+		return "";
+	}
+	
 
 	public function __destruct() {
 		if(is_array($this->unused) && count($this->unused) > 0) $this->pfh->putContent($this->pfh->FilePath('unused.lang', 'eqdkp'), serialize($this->unused));
