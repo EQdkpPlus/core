@@ -566,11 +566,11 @@ input[type=radio], input[type=checkbox]{
 	resize: both;
 }
 
-.input-icon, .input-icon-append {
+.input-icon, .input-icon-append, .input-multilang {
 	white-space: nowrap;
 }
 
-.input-icon i {
+.input-icon i, .multilang-switcher {
 	border-radius: 4px 0 0 4px;
 	background-color: #EEEEEE;
 	border: 1px solid #CCCCCC;
@@ -583,7 +583,46 @@ input[type=radio], input[type=checkbox]{
 	display: inline-block;
 }
 
-.input-icon input {
+.input-multilang.textarea .multilang-switcher {
+	border-radius: 4px 4px 0 0;
+	margin-left: 3px;
+}
+
+.input-multilang.textarea textarea{
+	border-radius: 0 4px 4px 4px;
+	margin-top: -1px;
+}
+
+.multilang-switcher-container {
+	position: relative;
+}
+
+.multilang-dropdown {
+	position: absolute;	
+	background-color: #EEEEEE;
+	border: 1px solid #CCCCCC;
+	border-radius: 4px 0px 4px 4px;
+	margin-top: -4px;
+	padding: 4px 8px 0px 8px !important;
+	display: none;
+}
+
+.input-multilang.textarea .multilang-dropdown {
+	margin-top: -1px;
+	border-radius: 0 0 4px 4px;
+}
+
+.multilang-dropdown li {
+	margin-bottom: 6px;
+}
+
+.multilang-dropdown li.active:before {
+	content: "\f00c";
+	font-family: FontAwesome;
+	margin-right: 2px;
+}
+
+.input-icon input, .input-multilang input {
 	border-radius: 0 4px 4px 0;
 	margin-left: 0px;
 	height: 20px;

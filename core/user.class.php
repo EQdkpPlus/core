@@ -902,6 +902,21 @@ class user extends gen_class {
 		return $settingsdata;
 	}
 
+	public function getAvailableLanguages(){
+		$language_array = array();
+		// Build language array
+		if($dir = @opendir($root_path . 'language/')){
+			while ( $file = @readdir($dir) ){
+				if ((!is_file($root_path . 'language/' . $file)) && (!is_link($root_path . 'language/' . $file)) && valid_folder($file)){
+					include($root_path.'language/'.$file.'/lang_main.php');
+					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
+					$language_array[$file]					= $lang_name_tp;
+				}
+			}
+		}
+		return $language_array;
+	}
+	
 
 	public function __destruct() {
 		if(is_array($this->unused) && count($this->unused) > 0) $this->pfh->putContent($this->pfh->FilePath('unused.lang', 'eqdkp'), serialize($this->unused));

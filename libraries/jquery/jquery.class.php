@@ -38,6 +38,7 @@ if (!class_exists("jquery")) {
 			'formvalidation'	=> false,
 			'fullcalendar'		=> false,
 			'jqplot'			=> false,
+			'multilang'			=> false,
 		);
 		
 		/**
@@ -148,6 +149,30 @@ if (!class_exists("jquery")) {
 					$this->tpl->js_file($this->path."js/jqplot/jqplot.mobile.min.js");
 				}
 				$this->inits['jqplot']	= true;
+			}
+		}
+		
+		public function init_multilang(){
+			if(!$this->inits['multilang']){
+				$this->tpl->add_js("
+				$('body').on('click', '.multilang-switcher', function(){
+					$(this).parent().find('.multilang-dropdown').toggle();
+				})
+				$('body').on('click', '.multilang-dropdown ul li', function(){
+					console.log($(this));
+					$(this).parent().find('li').removeClass('active');
+					$(this).addClass('active');
+					var langkey = $(this).data('key');
+					var langname = 	$(this).data('lang');
+					$(this).parent().parent().parent().find('.multilang-switcher span').html(langname);
+					$(this).parent().parent().parent().find('input').hide();
+					$(this).parent().parent().parent().find('textarea').hide();
+					$(this).parent().parent().parent().find('.'+langkey).show();
+					$(this).parent().parent().hide();
+				})
+				", "docready");
+				
+				$this->inits['multilang']	= true;
 			}
 		}
 
@@ -503,7 +528,7 @@ if (!class_exists("jquery")) {
 			if(isset($options['numberformat'])){ $tmpopt[] = 'numberformat: '.$options['numberformat'];}
 			if(isset($options['incremental'])){ $tmpopt[] = 'incremental: true';}
 			if(isset($options['change'])) { $tmpopt[] = 'change: function( event, ui ) {'.$options['change'].'}';}
-			if(!isset($options['change']) && isset($options['onlyinteger'])) { $tmpopt[] =  'change: function( event, ui ) { var val = $(event.target).val(); value = val.replace(/,/,"."); $(this).spinner("value", parseInt(val) || 1);}';}
+			if(!isset($options['change']) && isset($options['onlyinteger'])) { $tmpopt[] =  'change: function( event, ui ) { var val = $(event.target).val(); value = val.replace(/,/,"."); $(this).spinner("value", parseInt(val));}';}
 			$selector = (isset($options['multiselector'])) ? '' : '#';
 			$this->tpl->add_js('$("'.$selector.$id.'").spinner('.$this->gen_options($tmpopt).');', 'docready');
 		}
