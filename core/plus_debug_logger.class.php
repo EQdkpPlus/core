@@ -511,6 +511,7 @@ if ( !defined('EQDKP_INC') ){
 					
 					//template errors
 					if ($error['type'] == 4 && strpos($error['file'], 'template.class.php') && strpos($error['file'], ": eval()'d code")){
+
 						echo register('tpl')->generate_error('
 							You have a parsing error in a template file.<br /> Please see "Body-File" and "Path" for getting the files responsible for this error.<br />
 							If the bugged template-file is located in data-folder, you can fix this error by deleting this file. Otherwise you should restore the original template file.

@@ -1347,8 +1347,6 @@ class template extends gen_class {
 	public function generate_error($content, $handle = false, $sprintf = '', $function = ''){
 		if ($handle === false) $handle = $this->handle;
 		
-		debug_print_backtrace();
-
 		if(!$this->error_message){
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
