@@ -298,23 +298,10 @@ class core extends gen_class {
 			$this->jquery->qtip(".coretip-large", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>400));
 			$this->jquery->qtip(".coretip-left", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top right', 'at' => 'bottom right'));
 			$this->jquery->qtip(".coretip-right", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top left', 'at' => 'bottom left'));
-
-			//Responsive Opt-Out
-			$blnResponsive = true;
-			if($this->in->exists('toggleResponsive')){
-				$arrAllowed = array('mobile', 'desktop');
-				$strView = $this->in->get('toggleResponsive');
-				if(in_array($strView, $arrAllowed)){
-					set_cookie('resp', $strView, $this->time->time+3600*24*30);
-					if($strView == 'desktop') $blnResponsive = false;
-				}
-			} elseif($this->in->getEQdkpCookie('resp', '') != ''){
-				if($this->in->getEQdkpCookie('resp', '') == 'desktop') $blnResponsive = false;
-			}
 			
 			//Portal Output
 			$intPortalLayout = ($this->portal_layout != NULL) ? $this->portal_layout : 1;
-			$intPortalLayout = (strlen($this->config->get('mobile_portallayout')) && $this->env->agent->mobile && $blnResponsive) ? $this->config->get('mobile_portallayout') : $intPortalLayout;
+			$intPortalLayout = ($this->config->get('mobile_portallayout') && strlen($this->config->get('mobile_portallayout')) && $this->env->agent->mobile && registry::get_const('mobile_view')) ? $this->config->get('mobile_portallayout') : $intPortalLayout;
 			$this->portal->module_output($intPortalLayout);
 			
 			//Registration Link
@@ -364,7 +351,7 @@ class core extends gen_class {
 				'MAIN_MENU'					=> $this->build_menu_ul(),
 				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul('mainmenu-mobile'),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
-				'BROWSER_CLASS'				=> (!$blnResponsive) ? str_replace(" mobile", "", $this->env->agent->class) : $this->env->agent->class,
+				'BROWSER_CLASS'				=> (!registry::get_const('mobile_view')) ? str_replace(" mobile", "", $this->env->agent->class) : $this->env->agent->class,
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
 				'S_BRIDGE_INFO'				=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
@@ -376,7 +363,7 @@ class core extends gen_class {
 				'USER_DATEFORMAT_SHORT'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_short']),
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
-				'S_REPONSIVE'				=> $blnResponsive,
+				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){

@@ -45,7 +45,7 @@
 		<div class="tableHeader">
 			<h2>{L_lm_roster_settings}</h2>
 		</div>
-		<table width="100%" id="table_roster" class="colorswitch">
+		<table id="table_roster" class="table fullwidth colorswitch">
 			<tr>
 				<td class="nowrap" width="50">{L_lm_roster_classorrole}</td>
 				<td>{ROSTER_DD}</td>
@@ -65,7 +65,7 @@
 		<div class="tableHeader">
 			<h2>{L_lm_leaderbord_settings}</h2>
 		</div>
-		<table width="100%" id="table_leaderbord" class="colorswitch">
+		<table id="table_leaderbord" class="table fullwidth colorswitch">
 			<tr>
 				<td class="nowrap">{L_lm_lb_maxpercolumn}</td>
 				<td><input type="text" size="4" name="lb_maxpercolumn" value="{LB_MAXPERCOLUMN}" class="input" /></td>
@@ -90,7 +90,7 @@
 		<div class="tableHeader">
 			<h2>{L_lm_lb_class_sort}</h2>
 		</div>
-		<table width="100%" id="leaderboard_classid" class="sortingtable" {CLASSDISPLAY}>
+		<table id="leaderboard_classid" class="table fullwidth sortingtable" {CLASSDISPLAY}>
 			<!-- BEGIN class_row -->
 			<tr>
 				<td width="50" align="center">
@@ -106,7 +106,7 @@
 		<div class="tableHeader" {ROLEDISPLAY}>
 			<h2>{L_lm_lb_role_sort}</h2>
 		</div>
-		<table width="100%" id="leaderboard_defaultrole" class="sortingtable" {ROLEDISPLAY}>
+		<table id="leaderboard_defaultrole" class="table fullwidth sortingtable" {ROLEDISPLAY}>
 			<!-- BEGIN role_row -->
 			<tr>
 				<td width="50" align="center">
@@ -130,7 +130,7 @@
 		<div class="tableHeader">
 			<h2>{page_row.page_object_row.TABLE_TITLE}</h2>
 		</div>
-		<table width="100%" id="table_{page_row.page_object_row.ID}" class="colorswitch sortingtable">
+		<table id="table_{page_row.page_object_row.ID}" class="table fullwidth colorswitch sortingtable">
 			<thead>
 				<tr class="not-sortable">
 					<th colspan="8">{L_lm_table_settings}</th>

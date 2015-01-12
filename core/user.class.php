@@ -116,7 +116,7 @@ class user extends gen_class {
 		}
 
 		//Mobile Device?
-		$intStyleID = (strlen($this->config->get('mobile_template')) && $this->env->agent->mobile) ? intval($this->config->get('mobile_template')) : $intStyleID;
+		$intStyleID = ($this->config->get('mobile_template') && strlen($this->config->get('mobile_template')) && $this->env->agent->mobile && registry::get_const('mobile_view')) ? intval($this->config->get('mobile_template')) : $intStyleID;
 		
 		//Get Style-Information
 		$objQuery = $this->db->prepare("SELECT * FROM __styles WHERE style_id=?")->execute($intStyleID);

@@ -201,9 +201,21 @@ abstract class super_registry {
 			}
 			
 			if(!$lite) {
+				//Get Info about mobile/desktop
+				if(registry::register('input')->exists('toggleResponsive')){
+					$arrAllowed = array('mobile', 'desktop');
+					$strView = registry::register('input')->get('toggleResponsive');
+					if(in_array($strView, $arrAllowed)){
+						set_cookie('resp', $strView, time()+3600*24*30);
+						registry::add_const('mobile_view', (($strView == 'mobile') ? true : false));
+					}
+				} elseif(registry::register('input')->getEQdkpCookie('resp', '') == 'desktop'){
+					registry::add_const('mobile_view', false);
+				} else registry::add_const('mobile_view', true);
+				
 				//initiate PDH
 				$strPageLayout = ((registry::register('config')->get('eqdkp_layout') ) ? registry::register('config')->get('eqdkp_layout') : 'normal');
-				$strPageLayout = (strlen(registry::register('config')->get('mobile_pagelayout')) && registry::register('environment')->agent->mobile) ? registry::register('config')->get('mobile_pagelayout') : $strPageLayout;
+				$strPageLayout = (registry::register('config')->get('mobile_pagelayout') && strlen(registry::register('config')->get('mobile_pagelayout')) && registry::register('environment')->agent->mobile && registry::get_const('mobile_view')) ? registry::register('config')->get('mobile_pagelayout') : $strPageLayout;
 				
 				registry::register('plus_datahandler')->init_eqdkp_layout($strPageLayout);
 
