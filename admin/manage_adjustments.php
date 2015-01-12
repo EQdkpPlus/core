@@ -42,10 +42,10 @@ class ManageAdjs extends page_generic {
 		} else {
 			$retu = $this->pdh->put('adjustment', 'add_adjustment', array($adj['value'], $adj['reason'], $adj['members'], $adj['event'], $adj['raid_id'], $adj['date']));
 		}
-		if($retu) {
-			$message = array('title' => $this->user->lang('save_suc'), 'text' => $adj['reason'], 'color' => 'green');
-		} else {
+		if(!$retu) {
 			$message = array('title' => $this->user->lang('save_nosuc'), 'text' => $adj['reason'], 'color' => 'red');
+		} else {
+			$message = array('title' => $this->user->lang('save_suc'), 'text' => $adj['reason'], 'color' => 'green');
 		}
 		$this->display($message);
 	}

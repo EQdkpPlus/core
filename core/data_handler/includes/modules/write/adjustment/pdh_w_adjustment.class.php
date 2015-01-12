@@ -71,12 +71,26 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			return $ids;
 		}
 
-		public function update_adjustment($group_key_or_id, $adj_value, $adj_reason, $member_ids, $event_id, $raid_id=NULL, $time=false, $id=false, $recalculate_group_key = true){
+		/**
+		 * Update an Adjustment. Returns false if error occured, otherwise returns array with IDs of Updated/Inserted Adjustments
+		 * 
+		 * @param string $group_key_or_id GroupKey or ID. If ID, set $first_param_is_id to true
+		 * @param float $adj_value
+		 * @param string $adj_reason
+		 * @param array $member_ids
+		 * @param integer $event_id
+		 * @param integer $raid_id
+		 * @param integer $time
+		 * @param boolean $first_param_is_id Set to true if first Param is an ID and not an Group Key
+		 * @param boolean $recalculate_group_key
+		 * @return multitype:boolean mixed Return false if error occured, otherwise returns array with IDs
+		 */
+		public function update_adjustment($group_key_or_id, $adj_value, $adj_reason, $member_ids, $event_id, $raid_id=NULL, $time=false, $first_param_is_id=false, $recalculate_group_key = true){
 			$time = ($time) ? $time : $this->time->time;
 			$new_group_key = $this->gen_group_key($time, array($adj_reason, $adj_value, $event_id, $raid_id));
 			
 			//fetch old-data
-			$group_key = (!$id) ? $group_key_or_id : $this->pdh->get('adjustment', 'group_key', array($group_key_or_id));
+			$group_key = (!$first_param_is_id) ? $group_key_or_id : $this->pdh->get('adjustment', 'group_key', array($group_key_or_id));
 			if($recalculate_group_key == false) $new_group_key = $group_key;  
 			$old['ids'] = $this->pdh->get('adjustment', 'ids_of_group_key', array($group_key));
 			foreach($old['ids'] as $adjustment_id){
@@ -112,7 +126,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 					if(!$objQuery){
 						$retu[] = false;
 						break;
-					}
+					} else $retu[] = $adj_id;
 				}else{
 					$added_mems[] = $member_id;
 					$arrSet = array(
@@ -130,6 +144,8 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 					if(!$objQuery){
 						$retu[] = false;
 						break;
+					} else {
+						$retu[] = $objQuery->insertId;
 					}
 				}
 			}
@@ -167,7 +183,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				
 				$this->log_insert('action_indivadj_updated', $log_action, $new_group_key, $old['reason']);
 				$this->pdh->enqueue_hook('adjustment_update', $hook_id);
-				return true;
+				return $retu;
 			}
 			return false;
 		}

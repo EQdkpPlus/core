@@ -174,7 +174,7 @@ class user_pageobject extends pageobject {
 		));
 		
 		//Custom Tabs
-		$arrHooks = $this->hooks->process('userprofile_customtabs');
+		$arrHooks = $this->hooks->process('userprofile_customtabs', array('user_id' => $user_id));
 		if (is_array($arrHooks)){
 			foreach ($arrHooks as $plugin => $value){
 				$title = $value['title'];
