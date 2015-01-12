@@ -903,6 +903,7 @@ class user extends gen_class {
 	}
 
 	public function getAvailableLanguages(){
+		$root_path = registry::get_const('root_path');
 		$language_array = array();
 		// Build language array
 		if($dir = @opendir($root_path . 'language/')){
@@ -918,7 +919,8 @@ class user extends gen_class {
 	}
 	
 	public function multilangValue($strRawContent){
-		$arrValues = unserialize($strRawContent);
+		$arrValues = @unserialize($strRawContent);
+		if(!$arrValues) return $strRawContent;
 		$strDefLang = $this->config->get('default_lang');
 		if(isset($arrValues[$this->lang_name]) && strlen($arrValues[$this->lang_name])){
 			return $arrValues[$this->lang_name];

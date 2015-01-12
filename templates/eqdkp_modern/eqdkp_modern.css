@@ -1112,7 +1112,6 @@ fieldset.mediumsettings dd{
 	margin: 0 0 0 35%;
 }
 fieldset.settings dl {
-	overflow: hidden;
 	margin-bottom: 10px;
 	font-size: 0.95em;
 	padding-bottom: 1px;

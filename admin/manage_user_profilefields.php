@@ -144,7 +144,7 @@ class ManageUserProfileFields extends page_generic {
 	private function edit_settings(){
 		$arrFields = array(
 				'name' => array(
-						'type' 		=> 'text',
+						'type' 		=> 'textmultilang',
 						'required'	=> true,
 						'size'		=> 30,
 				),

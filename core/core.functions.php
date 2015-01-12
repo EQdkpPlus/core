@@ -1201,4 +1201,13 @@ function inline_svg($strFile){
 	}
 	return $strContent;
 }
+
+function is_serialized($strValue){
+	$data = @unserialize($strValue);
+	if ($str === 'b:0;' || $data !== false) {
+		return true;
+	} else {
+		return false;
+	}
+}
 ?>

@@ -54,6 +54,8 @@ class htextmultilang extends html {
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
 		
+		if(is_serialized($this->value)) $this->value = unserialize($this->value);
+		
 		$this->out = '<div class="input-multilang">
 			<div class="multilang-switcher-container hand"><div class="multilang-switcher"><span>'.$arrLanguages[$strDefaultLanguage].'</span> <i class="fa fa-caret-down fa-lg"></i></div>
 			<div class="multilang-dropdown"><ul>
@@ -67,7 +69,7 @@ class htextmultilang extends html {
 			$out = '<input type="'.self::$type.'" name="'.$this->name.'['.$strKey.']" ';
 			if(empty($this->id)) $this->id = $this->cleanid($this->name);
 			$out .= 'id="'.$this->id.'" ';
-			if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
+			if(isset($this->value) && isset($this->value[$strKey])) $out .= 'value="'.$this->value[$strKey].'" ';
 			$class = $this->class;
 			if(!empty($this->pattern) && !empty($this->successmsg)) $class .= ' fv_success';
 			$class .= ' '.$strKey;

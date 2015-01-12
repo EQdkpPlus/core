@@ -147,7 +147,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		public function get_html_name($intFieldID){
 			$strLangVar = $this->get_lang_var($intFieldID);
 			if ($strLangVar && strlen($strLangVar) && strlen($this->user->lang($strLangVar))) return $this->user->lang($strLangVar);
-			return $this->get_name($intFieldID);
+			return $this->user->multilangValue($this->get_name($intFieldID));
 		}
 
 		/**
