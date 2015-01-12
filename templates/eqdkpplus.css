@@ -598,12 +598,12 @@ i.icon-color-gray{
 
 
 @media all and (max-width: 899px) {
-	.reponsive .onerow {
+	.responsive .onerow {
 		padding: 0;
 	}
 
-	.reponsive .col1, .reponsive .col2, .reponsive .col3, .reponsive .col4, .reponsive .col5, .reponsive .col6, .reponsive .col7, .reponsive .col8, .reponsive .col9, .reponsive .col10, .reponsive .col11 {
-		float: none;
-		width: 100%;
+	.responsive .col1, .responsive .col2, .responsive .col3, .responsive .col4, .responsive .col5, .responsive .col6, .responsive .col7, .responsive .col8, .responsive .col9, .responsive .col10, .responsive .col11 {
+		float: none !important;
+		width: 100% !important;
 	}
 }
