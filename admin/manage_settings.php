@@ -147,8 +147,10 @@ class mmocms_settings extends page_generic {
 		}
 		
 		$mobile_portallayout_array = array("" => $this->user->lang('default_setting'));
-		$mobile_portallayout_array = array_merge($mobile_portallayout_array, $this->pdh->aget('portal_layouts', 'name', 0, array($this->pdh->get('portal_layouts', 'id_list'))));
-		
+		foreach($this->pdh->get('portal_layouts', 'id_list') as $layoutid){
+			$mobile_portallayout_array[$layoutid] = $this->pdh->get('portal_layouts', 'name', array($layoutid));
+		}
+
 		$mobile_pagelayout_array = array("" => $this->user->lang('default_setting'));
 		foreach($this->pdh->get_layout_list() as $key => $val){
 			$mobile_pagelayout_array[$val] = $val;
@@ -645,14 +647,17 @@ class mmocms_settings extends page_generic {
 					'mobile_template' => array(
 						'type'		=> 'dropdown',
 						'options'	=> $mobile_template_array,
+						'default'	=> "",
 					),
 					'mobile_portallayout' => array(
 						'type'		=> 'dropdown',
 						'options'	=> $mobile_portallayout_array,
+						'default'	=> "",
 					),
 					'mobile_pagelayout' => array(
 						'type'		=> 'dropdown',
 						'options'	=> $mobile_pagelayout_array,
+						'default'	=> -1,
 					),
 				),
 				'article'		=> array(

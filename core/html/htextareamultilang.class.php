@@ -54,7 +54,13 @@ class htextareamultilang extends html {
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
 		
-		if(is_serialized($this->value)) $this->value = unserialize($this->value);
+		if(is_serialized($this->value)) {
+			$this->value = @unserialize($this->value);
+		} elseif(!is_array($this->value) && $this->value != ""){
+			$strValue = $this->value;
+			$this->value = array();
+			$this->value[$strDefaultLanguage] = $strValue;
+		}
 		
 		$this->out = '<div class="input-multilang textarea">
 			<div class="multilang-switcher-container hand"><div class="multilang-switcher"><span>'.$arrLanguages[$strDefaultLanguage].'</span> <i class="fa fa-caret-down fa-lg"></i></div>
@@ -74,7 +80,7 @@ class htextareamultilang extends html {
 			$out .= 'class="'.$class.'" ';
 			if($this->disabled) $out .= 'disabled="disabled" ';
 			if(!empty($this->js)) $out.= $this->js.' ';
-			if($this->required) $out .= 'required="required" ';
+			if($this->required && $strKey == $strDefaultLanguage) $out .= 'required="required" ';
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 			if ($strKey != $strDefaultLanguage)  $out .= ' style="display:none;"';
 			$out .= '>';

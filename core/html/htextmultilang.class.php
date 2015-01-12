@@ -54,7 +54,14 @@ class htextmultilang extends html {
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
 		
-		if(is_serialized($this->value)) $this->value = unserialize($this->value);
+		if(is_serialized($this->value)) {
+			$this->value = @unserialize($this->value);
+		} elseif(!is_array($this->value) && $this->value != ""){
+			$strValue = $this->value;
+			$this->value = array();
+			$this->value[$strDefaultLanguage] = $strValue;
+		}
+
 		
 		$this->out = '<div class="input-multilang">
 			<div class="multilang-switcher-container hand"><div class="multilang-switcher"><span>'.$arrLanguages[$strDefaultLanguage].'</span> <i class="fa fa-caret-down fa-lg"></i></div>
@@ -77,7 +84,7 @@ class htextmultilang extends html {
 			if(!empty($this->class)) $out .= 'class="'.$class.'" ';
 			if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 			if($this->readonly) $out .= 'readonly="readonly" ';
-			if($this->required) $out .= 'required="required" ';
+			if($this->required && $strKey == $strDefaultLanguage) $out .= 'required="required" ';
 			if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 			if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
