@@ -326,6 +326,19 @@ class core extends gen_class {
 				$headerlogo	= $this->server_path.$strHeaderLogoPath.'logo.svg';
 			} else $headerlogo = "";
 			
+			//Responsive Opt-Out
+			$blnResponsive = true;
+			if($this->in->exists('toggleResponsive')){
+				$arrAllowed = array('mobile', 'desktop');
+				$strView = $this->in->get('toggleResponsive');
+				if(in_array($strView, $arrAllowed)){
+					set_cookie('resp', $strView, $this->time->time+3600*24*30);
+					if($strView == 'desktop') $blnResponsive = false;
+				}
+			} elseif($this->in->getEQdkpCookie('resp', '') != ''){
+				if($this->in->getEQdkpCookie('resp', '') == 'desktop') $blnResponsive = false;
+			}
+			
 			// Load the jQuery stuff
 			$this->addCommonTemplateVars();
 			$this->tpl->assign_vars(array(
@@ -363,6 +376,7 @@ class core extends gen_class {
 				'USER_DATEFORMAT_SHORT'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_short']),
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
+				'S_REPONSIVE'				=> $blnResponsive,
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
@@ -826,7 +840,7 @@ class core extends gen_class {
 					foreach($log as $type => $log_entries) {
 						$debug_tabs_header .= "<li><a href='#error-".$i."'><span>".$type." (".count($log_entries).")"."</span></a></li>";
 						$debug_tabs .= '<div id="error-'.$i.'">';
-						$debug_tabs .= '<table width="99%" border="0" cellspacing="1" cellpadding="0" class="colorswitch scrollable-x">';
+						$debug_tabs .= '<table class="table fullwidth colorswitch scrollable-x">';
 						foreach($log_entries as $log_entry){
 							$debug_tabs .= '<tr><td>'.$this->pdl->html_format_log_entry($type, $log_entry).'</td></tr>';
 						}

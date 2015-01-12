@@ -951,6 +951,8 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 /* Tables */
 .table {
 	display: table;
+}
+.table.fullwidth {
 	width: 100%;
 }
 .tr { display: table-row;}
@@ -959,7 +961,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	padding: 2px;
 }
 
-#contentBody th, .portalbox_content th {
+.table th, .portalbox_content th {
 	font-weight: bold;
 	background-color: #e8e8e8;
 	white-space:nowrap;
@@ -967,7 +969,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	font-family:'Trebuchet MS',Arial,sans-serif;
 }
 
-#contentBody th, #contentBody td {
+.table th, .table td {
 	border-top: 1px solid #DDDDDD;
 	border-bottom: 1px solid #DDDDDD;
 	line-height: 20px;
@@ -988,15 +990,15 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	border-top: 1px solid #DDDDDD;
 }
 
-#contentBody .row1, .portalbox_content .row1, .colorswitch tr:nth-child(even),.colorswitch>td:nth-child(even), .colorswitch > div:nth-child(even){
+.table .row1, .portalbox_content .row1, .colorswitch tr:nth-child(even),.colorswitch>td:nth-child(even), .colorswitch > div:nth-child(even){
 	background-color: #F9F9F9;
 }
 
-#contentBody .row2,.portalbox_content .row2,.helpline, .colorswitch tr:nth-child(odd),.colorswitch>td:nth-child(odd), .colorswitch > div:nth-child(odd){
+.table .row2,.portalbox_content .row2,.helpline, .colorswitch tr:nth-child(odd),.colorswitch>td:nth-child(odd), .colorswitch > div:nth-child(odd){
 	background-color: #F5F5F5;
 }
 
-#contentBody th.footer {
+.table th.footer {
 	font-style:italic;
 	font-weight: normal;
 	text-align: right;
@@ -1004,13 +1006,13 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	border-bottom: none;
 }
 
-#contentBody th a {
+.table th a {
 	text-decoration: none;
 	color: #000;
 	font-family:'Trebuchet MS',Arial,sans-serif;
 }
 
-#contentBody th a:hover {
+.table th a:hover {
 	color: #999;
 }
 
@@ -3393,65 +3395,65 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-top: 6px;
 	}
 	
-	table.scrollable-x {
+	.responsive table.scrollable-x {
 		table-layout: fixed;	
 	}
 
-	table.scrollable-x tbody {
+	.responsive table.scrollable-x tbody {
 		display: block;
 		overflow-x: auto;
 	}
 	
-	fieldset.settings {
+	.responsive fieldset.settings {
 		max-width: 100%;
 	}
 	
-	.permissions {
+	.responsive .permissions {
 		float: none;
 		width: 100%;
 	}
 	
-	.ui-notify-close {
+	.responsive .ui-notify-close {
 		font-size: 20px;
 	}
 	
-	#mainlogo {
+	.responsive #mainlogo {
 		max-height: 50px;
 	}
 	
-	#titles {
+	.responsive #titles {
 		float: left;
 		margin-left: 6px;
 	}
 	
-	.nowrap.desktopOnly{
+	.responsive .nowrap.desktopOnly{
 		white-space: normal;
 	}
 	
-	#personalAreaUser ul li:last-child{
+	.responsive #personalAreaUser ul li:last-child{
 		margin-right: 0;
 	}
 	
-	.comment_avatar_container{ 
+	.responsive .comment_avatar_container{ 
 		display: none;
 	}
-	.comment_container, #comment_button, .reply-trigger, .reply_button, .comment_write_container {
+	.responsive .comment_container, .responsive #comment_button, .responsive .reply-trigger, .responsive .reply_button, .responsive .comment_write_container {
 		margin-left: 6px;
 	}
 
-	.user-profile > .user-avatar img {
+	.responsive .user-profile > .user-avatar img {
 		height: 48px;
 	}
 	
-	.comment-reply {
+	.responsive .comment-reply {
 		margin-left: 30px;
 	}
 	
-	.article_content img:not(.itt-icon):not(.classicon):not(.raceicon):not(.rankicon):not(.talenticon):not(.eventicon):not(.roleicon):not(.gameicon) {
+	.responsive .article_content img:not(.itt-icon):not(.classicon):not(.raceicon):not(.rankicon):not(.talenticon):not(.eventicon):not(.roleicon):not(.gameicon) {
 		width: 100% !important;
 	}
 	
-	.embed-content div iframe {
+	.responsive .embed-content div iframe {
 	    position: absolute;
 	    top: 0;
 	    left: 0;
@@ -3459,7 +3461,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	    height: 100%;
 	}
 	
-	.embed-content {
+	.responsive .embed-content {
 	  position: relative;
 	  padding-bottom: 67.5%;
 	  height: 0;
@@ -3467,7 +3469,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	  overflow: hidden;
 	}
 	
-	.ui-notify {
+	.responsive .ui-notify {
 		max-width: 95%;
 	}
 }
@@ -3690,3 +3692,6 @@ li.prio_2 {
 	border-top: 1px solid #ccc;
 }
 
+.toggleResponsive {
+	margin-bottom: 6px;
+}

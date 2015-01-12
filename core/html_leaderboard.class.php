@@ -61,12 +61,12 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 			$mdkp_sel = new hdropdown('lb_mdkpid', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'js' => ' onchange="$(\'#lbc\').val(1); form.submit();"', 'value' => $this->mdkpid));
 
-			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<table width="100%" border="0" cellpadding="1" cellspacing="1" class="leaderboard scrollable-x">';
+			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<table class="table fullwidth leaderboard scrollable-x">';
 			$colnr = 0;
 			foreach($columns as $col) {
 				if(!isset($column_list[$col])) continue;
 				$member_ids = $column_list[$col];
-				$leaderboard .= '<td align="center" valign="top" width="200"><table class="borderless nowrap colorswitch" border="0" cellpadding="2" cellspacing="0" width="100%"><tr><th colspan="2">';
+				$leaderboard .= '<td align="center" valign="top" width="200"><table class="table fullwidth borderless nowrap colorswitch"><tr><th colspan="2">';
 				$leaderboard .= ($column == 'classid') ? $this->game->decorate('primary', $col).' <span class="class_'.$col.'">'.$this->game->get_name('primary', $col).'</span>' : $this->game->decorate('roles', $col).' '.$this->pdh->get('roles', 'name', array($col));
 				$leaderboard .= '</th></tr>';
 				usort($member_ids, array(&$this, "sort_by_points"));

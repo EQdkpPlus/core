@@ -974,6 +974,8 @@ $lang = array(
 	"sp_btn_facebook_share" => 'Share',
 	"pagination_goto" => "Go to page",
 	"pagination_goto_hint" => "Insert a value between 1 and PAGE.",
+	"mobile_version" => "Mobile Version",
+	"desktop_version" => "Desktop Version",
 );
 
 ?>

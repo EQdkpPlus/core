@@ -8,7 +8,9 @@
 		<meta name="keywords" content="{META_KEYWORDS}" />
 		<meta name="description" content="{META_DESCRIPTION}" />
 		<meta name="author" content="{GUILD_TAG}" />
+		<!-- IF S_REPONSIVE -->
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<!-- ENDIF -->
 		{META}
 		{LINK}
 		<title>{PAGE_TITLE}</title>
@@ -254,7 +256,7 @@
 			//]]>
 		</script>
 	</head>
-	<body id="top" class="responsive <!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF --><!-- IF S_IN_ADMIN --> admin<!-- ELSE --> frontend<!-- ENDIF -->">
+	<body id="top" class="<!-- IF S_REPONSIVE -->responsive<!-- ENDIF --> <!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF --><!-- IF S_IN_ADMIN --> admin<!-- ELSE --> frontend<!-- ENDIF -->">
 		{STATIC_HTMLCODE}
 		<!-- IF S_NORMAL_HEADER -->
 		<header>
@@ -496,6 +498,12 @@
 		
 		<footer id="footer">
 				{PORTAL_BLOCK2}
+				
+				<!-- IF S_REPONSIVE -->
+				<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
+				<!-- ELSE -->
+				<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
+				<!-- ENDIF -->
 				{EQDKP_PLUS_COPYRIGHT}
 		</footer><!-- close footer -->
 	</div><!-- close wrapper -->
