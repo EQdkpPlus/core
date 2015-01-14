@@ -263,7 +263,7 @@ class settings_pageobject extends pageobject {
 		
 		$settingsdata = user::get_settingsdata($this->user->id);
 		// set username readonly
-		if($this->config->get('disable_username_change')) {
+		if(!$this->config->get('enable_username_change')) {
 			$settingsdata['registration_info']['registration_info']['username']['help'] =  'register_help_disabled_username';
 			$settingsdata['registration_info']['registration_info']['username']['readonly'] = true;
 		}

@@ -58,6 +58,7 @@ class update_20017 extends sql_update_task {
 		$this->config->set('enable_registration', !$this->config->get('disable_registration'));
 		$this->config->set('enable_embedly', !$this->config->get('disable_embedly'));
 		$this->config->set('enable_points', !$this->config->get('disable_points'));
+		$this->config->set('enable_username_change', !$this->config->get('disable_username_change'));
 	}
 }
 

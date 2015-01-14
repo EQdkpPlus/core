@@ -478,7 +478,7 @@ class mmocms_settings extends page_generic {
 					'enable_captcha'	=> array(
 						'type'		=> 'radio',
 					),
-					'disable_username_change'	=> array(
+					'enable_username_change'	=> array(
 						'type'		=> 'radio',
 					),
 					'default_style_overwrite'	=> array(
