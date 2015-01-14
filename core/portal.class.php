@@ -71,9 +71,8 @@ class portal extends gen_class {
 			$jsOut = '<div class="module_script"><script type="text/javascript">';
 			
 			$headerJS = $this->tpl->get_header_js();
-			$arrSplitted = explode('"hex6"});', $headerJS);
-			unset($arrSplitted[0]);
-			$headerJS = "jQuery(document).ready(function($) {".str_replace("$", "jQuery",  implode('"hex6"});', $arrSplitted));
+		
+			$headerJS = "jQuery(document).ready(function($) {".str_replace("$", "jQuery",  $headerJS).'});';
 			
 			$headerJS = str_replace("$", "jQuery", $headerJS);
 			

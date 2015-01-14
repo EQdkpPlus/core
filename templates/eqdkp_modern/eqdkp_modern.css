@@ -3473,7 +3473,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	}
 }
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 590px) {
 
 	.responsive fieldset.settings dd, .responsive fieldset.settings dt{
 		display:block;

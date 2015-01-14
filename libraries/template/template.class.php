@@ -314,7 +314,7 @@ class template extends gen_class {
 		if (is_file($combinedFile)){
 			array_push($this->tpl_output['js_file'], array('file' => $combinedFile));
 			
-			return true;
+			return file_get_contents($combinedFile);
 		} else {
 			//Generate it
 			$strJS = "";
@@ -342,7 +342,9 @@ class template extends gen_class {
 			$this->pfh->putContent($combinedFile, $strJS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.js');
 			$this->tpl_output['js_file'][] = array('file' => $combinedFile);
+			return $strJS;
 		}
+		return "";
 	}
 	
 	public function cleanup_combined(){
