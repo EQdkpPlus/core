@@ -53,6 +53,12 @@ class update_20017 extends sql_update_task {
 			1 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_users_profilefields');",
 		);
 	}
+	
+	public function update_function(){
+		$this->config->set('enable_registration', !$this->config->get('disable_registration'));
+		$this->config->set('enable_embedly', !$this->config->get('disable_embedly'));
+		$this->config->set('enable_points', !$this->config->get('disable_points'));
+	}
 }
 
 

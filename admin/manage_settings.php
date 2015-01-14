@@ -252,7 +252,7 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 40
 					),
-					'disable_points'=> array(
+					'enable_points'=> array(
 						'type'		=> 'radio',
 					),
 					'dkp_name'		=> array(
@@ -472,7 +472,7 @@ class mmocms_settings extends page_generic {
 						'size'		=> 5,
 						'default'	=> 5,
 					),
-					'disable_registration'	=> array(
+					'enable_registration'	=> array(
 						'type'		=> 'radio',
 					),
 					'enable_captcha'	=> array(
@@ -661,7 +661,7 @@ class mmocms_settings extends page_generic {
 					),
 				),
 				'article'		=> array(
-					'disable_embedly'	=> array(
+					'enable_embedly'	=> array(
 						'type'	=> 'radio',
 						'dependency' => array(0=>array('embedly_key')),
 					),
@@ -891,8 +891,8 @@ class mmocms_settings extends page_generic {
 			}
 			
 			//check for changed disable points
-			if((int)$this->config->get('disable_points') != $this->in->get('disable_points', 0)){
-				if ($this->in->get('disable_points', 0) == 1) {$this->config->set('eqdkp_layout', "nopoints");} else $this->config->set('eqdkp_layout', "normal");
+			if((int)$this->config->get('enable_points') != $this->in->get('enable_points', 1)){
+				if ($this->in->get('enable_points', 1) == 0) {$this->config->set('eqdkp_layout', "nopoints");} else $this->config->set('eqdkp_layout', "normal");
 			}
 
 			// Save the settings array

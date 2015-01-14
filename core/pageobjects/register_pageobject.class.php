@@ -65,7 +65,7 @@ class register_pageobject extends pageobject {
 			if( $this->user->is_signedin() && !$this->in->exists('key')) {
 				redirect($this->controller_path_plain.'Settings/'. $this->SID);
 			}
-			if((int)$this->config->get('disable_registration') == 1){
+			if((int)$this->config->get('enable_registration') == 0){
 				redirect($this->controller_path_plain.$this->SID);
 			}
 			if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {

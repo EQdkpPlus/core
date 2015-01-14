@@ -133,7 +133,7 @@ class ManageItems extends page_generic {
 		$arrAutocomplete = array();
 		foreach($this->pdh->get('item', 'id_list') as $intItemID){
 			$arrAutocomplete[] = array(
-				'label'		=> 	$this->pdh->get('item', 'name', array($intItemID)).', '.$this->pdh->geth('item', 'date', array($intItemID)).((!$this->config->get('disable_points')) ? ', '.runden($this->pdh->get('item', 'value', array($intItemID))).' '.$this->config->get('dkp_name') : '').' (#'.$intItemID.')',
+				'label'		=> 	$this->pdh->get('item', 'name', array($intItemID)).', '.$this->pdh->geth('item', 'date', array($intItemID)).(($this->config->get('enable_points')) ? ', '.runden($this->pdh->get('item', 'value', array($intItemID))).' '.$this->config->get('dkp_name') : '').' (#'.$intItemID.')',
 				'ivalue'		=>  runden($this->pdh->get('item', 'value', array($intItemID))),
 				'game_id'	=>	$this->pdh->get('item', 'game_itemid', array($intItemID)),
 				'iname'		=>	$this->pdh->get('item', 'name', array($intItemID)),

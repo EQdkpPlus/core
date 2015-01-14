@@ -306,7 +306,7 @@ class core extends gen_class {
 			
 			//Registration Link
 			$registerLink = '';
-			if ( ! $this->user->is_signedin() && intval($this->config->get('disable_registration')) != 1){
+			if ( ! $this->user->is_signedin() && intval($this->config->get('enable_registration'))){
 				//CMS register?
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
 					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-check-square-o fa-lg'));
@@ -344,7 +344,7 @@ class core extends gen_class {
 				'T_COLUMN_LEFT_WIDTH'		=> $this->user->style['column_left_width'],
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
-				'S_REGISTER'				=> !(int)$this->config->get('disable_registration'),
+				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
 				'U_REGISTER'				=> $registerLink,
@@ -426,7 +426,7 @@ class core extends gen_class {
 					'USER_TIME'					=> $this->time->user_date($this->time->time, true, false, true, true, true),
 					'USER_ID'					=> $this->user->id,
 					'USER_NAME'					=> isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous'),
-					'S_POINTS_DISABLED'			=> ($this->config->get('disable_points')) ? true : false,
+					'S_POINTS_DISABLED'			=> (!$this->config->get('enable_points')) ? true : false,
 					'S_ADMIN'					=> $this->user->check_auth('a_', false),
 					'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
 					'GAME'						=> $this->config->get('default_game'),
@@ -884,7 +884,7 @@ class core extends gen_class {
 		 */
 		private function pagetitle($title = ''){
 			$pt_prefix		= (defined('IN_ADMIN')) ? $this->user->lang('admin_title_prefix') : $this->user->lang('title_prefix');
-			$dkp_name 		= ($this->config->get('disable_points')) ? '' : $this->config->get('dkp_name');
+			$dkp_name 		= (!$this->config->get('enable_points')) ? '' : $this->config->get('dkp_name');
 			$main_title		= sprintf($pt_prefix, $this->config->get('guildtag'), $dkp_name);
 			return sanitize((( $title != '' ) ? $title.' - ' : '').$main_title);
 		}
@@ -927,7 +927,7 @@ class core extends gen_class {
 		}
 		
 		public function mycharacters(){
-			if (!$this->config->get('disable_points') && $this->user->id != ANONYMOUS){
+			if ($this->config->get('enable_points') && $this->user->id != ANONYMOUS){
 				
 				//get member ID from UserID
 				$memberids = $this->pdh->get('member', 'connection_id', array($this->user->id));
