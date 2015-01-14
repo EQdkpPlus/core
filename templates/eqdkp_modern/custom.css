@@ -64,3 +64,40 @@ body {
 	color: #efefef;
 }
 */
+
+/*============================================================================================*/
+
+/* If you want to embedd EQdkp Plus, give the body the class "embedded" and remove the reponsive Block from the body class. */
+
+/*
+body.embedded {
+	background: transparent;
+}
+
+.embedded #header, .embedded .personalAreaTime {
+	display: none;
+}
+
+.embedded #contentContainer {
+	background: transparent;
+	margin:0;
+	box-shadow: none;
+	border: none; 
+}
+
+.embedded #personalArea {
+	padding-right: 20px;
+	padding-left: 20px;
+	margin-bottom: 0;
+	box-shadow: none;
+}
+
+.embedded #contentBody, .embedded #contentBody2 {
+	background: transparent;
+	border: none;
+}
+
+.embedded #footer, .embedded .copyright, .embedded #footer a, .embedded #copyright a {
+	color: inherit;
+}
+*/
