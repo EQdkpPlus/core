@@ -217,8 +217,8 @@ $(document).ready(function(){
 				</dl>
 
 			</fieldset>
-
-						<div id="permission_tabs">
+				<!-- IF S_PERM_PERMISSION -->
+				<div id="permission_tabs">
 				<ul>
 					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
 					<li><a href='#admin_perms'><span class="adminicon">{L_admin_permissions}</span></a></li>
@@ -266,6 +266,7 @@ $(document).ready(function(){
 					<!-- END a_permissions_row -->
 				</div>
 			</div>
+			<!-- ENDIF -->
 		</div>
 
 		<!-- IF S_MU_TABLE -->

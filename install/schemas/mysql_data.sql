@@ -34,6 +34,8 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_man'
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_grpleader','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_article_categories_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_perms','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_profilefields','N');
 
 ### User Permissions
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_man','Y');

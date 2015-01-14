@@ -41,7 +41,7 @@ class user_pageobject extends pageobject {
 			return;
 		}
 
-		$arrUserCustomFieldsData = $this->pdh->get('user', 'custom_fields');
+		$arrUserCustomFieldsData = $this->pdh->get('user', 'custom_fields', array($user_id));
 		
 		//Gender
 		switch($row['gender']){

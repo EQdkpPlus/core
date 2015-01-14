@@ -44,7 +44,7 @@
 		<tr>
 			<td width="25" align="center" class="nowrap"><!-- IF not users_row.PROTECT_SUPERADMIN --><input type="checkbox" name="user_id[]" value="{users_row.USER_ID}" id="user_id_{users_row.USER_ID}"/><!-- ENDIF --></td>
 			<td width="20"><a href="{users_row.U_MANAGE_USER}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
-			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><i class="fa fa-user fa-lg"></i></a><!-- ENDIF --></td>
+			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN and S_PERM_PERMISSION --><a href="{users_row.U_OVERTAKE_PERMS}" title="{L_user_overtake_perms}"><i class="fa fa-user fa-lg"></i></a><!-- ENDIF --></td>
 			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->{users_row.ACTIVATE_ICON}<!-- ENDIF --></td>
 			<td width="20"><!-- IF not users_row.PROTECT_SUPERADMIN -->
 				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><i class="fa fa-trash-o fa-lg"></i></a>    	<!-- ENDIF -->

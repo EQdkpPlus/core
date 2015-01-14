@@ -86,7 +86,7 @@ class Manage_Users extends page_generic {
 	}
 
 	public function overtake_permissions(){
-		if ($this->user->check_group(2, false) || ($this->user->check_auth('a_users_man') && !$this->user->check_group(2, false, $this->in->get('u', 0)))){
+		if ($this->user->check_group(2, false) || ($this->user->check_auth('a_users_perms') && !$this->user->check_group(2, false, $this->in->get('u', 0)))){
 			$this->user->overtake_permissions($this->in->get('u', 0));
 			redirect('index.php'.$this->SID);
 		}
@@ -290,44 +290,56 @@ class Manage_Users extends page_generic {
 		}
 
 		// Permissions
-		$auth_defaults = $this->acl->get_auth_defaults();
-		$superadm_only = $this->acl->get_superadmin_only_permissions();
-		//If the admin is not Superadmin, unset the superadmin-permissions
-		if (!isset($adm_memberships[2])){
-			foreach ($superadm_only as $superperm){
-				unset($auth_defaults[$superperm]);
+		if($this->user->check_auth('a_usergroups_man', false) || $this->user->check_auth('a_users_perms', false) || (isset($adm_memberships[2]) && $adm_memberships[2])){
+			$auth_defaults = $this->acl->get_auth_defaults();
+	
+			$auths_to_update = $arrChanged = array();
+			foreach ( $auth_defaults as $auth_value => $auth_setting ){
+				$r_auth_id    = $this->acl->get_auth_id($auth_value);
+				$r_auth_value = $auth_value;
+	
+				$chk_auth_value = ( !$new_user AND $this->user->check_auth($r_auth_value, false, $user_id, false) ) ? 'Y' : 'N';
+				$db_auth_value  = ( $this->in->exists($r_auth_value) ) ? 'Y' : 'N';
+	
+				if ( $chk_auth_value != $db_auth_value ){
+					$auths_to_update[$r_auth_id] = $db_auth_value;
+					$arrChanged[$r_auth_value] = array('old' => $chk_auth_value, 'new' => $db_auth_value);
+				}
+			}
+			if(count($auths_to_update) > 0)	{
+				$this->acl->update_user_permissions($auths_to_update, $user_id);
+				$this->logs->add('action_user_changed_permissions', $arrChanged, $user_id, $this->pdh->get('user', 'name', array($user_id)));
 			}
 		}
-		$auths_to_update = $arrChanged = array();
-		foreach ( $auth_defaults as $auth_value => $auth_setting ){
-			$r_auth_id    = $this->acl->get_auth_id($auth_value);
-			$r_auth_value = $auth_value;
-
-			$chk_auth_value = ( !$new_user AND $this->user->check_auth($r_auth_value, false, $user_id, false) ) ? 'Y' : 'N';
-			$db_auth_value  = ( $this->in->exists($r_auth_value) ) ? 'Y' : 'N';
-
-			if ( $chk_auth_value != $db_auth_value ){
-				$auths_to_update[$r_auth_id] = $db_auth_value;
-				$arrChanged[$r_auth_value] = array('old' => $chk_auth_value, 'new' => $db_auth_value);
-			}
-		}
-		if(count($auths_to_update) > 0)	{
-			$this->acl->update_user_permissions($auths_to_update, $user_id);
-			$this->logs->add('action_user_changed_permissions', $arrChanged, $user_id, $this->pdh->get('user', 'name', array($user_id)));
-		}
-
+		
+		// Update Chars
 		$this->pdh->put('member', 'update_connection', array($this->in->getArray('member_id', 'int'), $user_id));
 
 		// User-Groups
-		$groups = $this->in->getArray('user_groups', 'int');
-		$group_list = $this->pdh->get('user_groups', 'id_list', 0);
-		$arrMemberships = array_keys($this->acl->get_user_group_memberships($user_id));
-		$this->pdh->put('user_groups_users', 'delete_user_from_groups', array($user_id, $group_list));
-		$this->pdh->put('user_groups_users', 'add_user_to_groups', array($user_id, $groups));
-		$arrayRemoved = array_diff($arrMemberships, $groups);
-		$arrayNew = array_diff($groups, $arrMemberships);
-		if (count($arrayRemoved)) $this->logs->add("action_user_removed_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayRemoved)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
-		if (count($arrayNew)) $this->logs->add("action_user_added_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayNew)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
+		$arrOldMemberships = array_keys($this->acl->get_user_group_memberships($user_id));
+		if ($this->user->check_auth('a_usergroups_man', false) || $this->user->check_auth('a_users_perms', false) || (isset($adm_memberships[2]) && $adm_memberships[2])){
+			$group_list = $this->pdh->get('user_groups', 'id_list', 0);
+		} else {
+			$group_list = array_keys($adm_memberships);
+		}
+
+		$arrNewGroupsRaw = $this->in->getArray('user_groups', 'int');
+
+		foreach($arrNewGroupsRaw as $intGroupID){
+			if(in_array($intGroupID, $group_list)) $arrNewGroups[] = $intGroupID;
+		}
+		
+		$arrayRemoved = array_diff($arrOldMemberships, $arrNewGroups);
+		$arrayNew = array_diff($arrNewGroups, $arrOldMemberships);
+		
+		if (count($arrayRemoved)) {
+			$this->pdh->put('user_groups_users', 'delete_user_from_groups', array($user_id, $arrayRemoved));
+			$this->logs->add("action_user_removed_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayRemoved)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
+		}
+		if (count($arrayNew)) {
+			$this->pdh->put('user_groups_users', 'add_user_to_groups', array($user_id, $arrayNew));
+			$this->logs->add("action_user_added_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayNew)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
+		}
 
 		// E-mail the user if he/she was activated by the admin and admin activation was set in the config
 		$email_success_message = '';
@@ -347,6 +359,7 @@ class Manage_Users extends page_generic {
 				'U_ACTIVATE'=> ($password) ? $this->user->lang('email_changepw').'<br /><br /><a href="'.$strPasswordLink.'">'.$strPasswordLink.'</a>' : '',
 				'GUILDTAG'	=> $this->config->get('guildtag'),
 			);
+
 			if($this->email->SendMailFromAdmin($values['user_email'], $this->user->lang('email_subject_activation_none'), 'register_activation_none.html', $bodyvars)) {
 				$email_success_message = $this->user->lang('account_activated_admin')."\n";
 			}
@@ -429,7 +442,7 @@ class Manage_Users extends page_generic {
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
 			}
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
-$a_members = $this->pdh->get('member', 'connection_id', array($user_id));
+			$a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			$a_members = (is_array($a_members)) ? $this->pdh->maget('member', array('classid', 'name', 'rankname'), 0, array($a_members), null, false, true) : array();
 			
 			$this->tpl->assign_block_vars('users_row', array(
@@ -482,6 +495,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			'DOWNARROW'				=> $this->root_path.'images/arrows/down_arrow',
 			'RED'.$order[0].$order[1] => '_red',
 			'CSRF_MAINCHARCHANGE' => $this->CSRFGetToken('maincharchange'),
+			'S_PERM_PERMISSION'		=> $this->user->check_auth('a_users_perms', false),
 
 			// Page vars
 			'U_MANAGE_USERS'		=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',
@@ -512,8 +526,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		$user_permissions = $this->acl->get_permission_boxes();
 		// Add plugin checkboxes to our array
 		$this->pm->generate_permission_boxes($user_permissions);
-		//Get Superadmin-only-Permissions
-		$superadm_only_perms = $this->acl->get_superadmin_only_permissions();
+
 		//Get group-memberships of the user
 		$defaultGroup = $this->pdh->get('user_groups', 'standard_group', array());
 		$memberships = ($user_id) ? $this->acl->get_user_group_memberships($user_id) : array( $defaultGroup => $defaultGroup);
@@ -531,9 +544,6 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			$a_set = $u_set = false;
 			foreach ( $checks as $data ){
 				if (!is_array($data)) continue;
-			
-				//Superadmin-Permissions
-				if (isset($superadm_only_perms[$data['CBNAME']]) && !isset($adm_memberships[2])) continue;
 
 				switch (substr($data['CBNAME'], 0, 2)){
 					case 'a_': if (!$a_set){
@@ -605,7 +615,13 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 		asort($groups);
 		if (is_array($groups)){
 			foreach ($groups as $key=>$elem){
-				$usergroups[$key] = $elem;
+				//Make sure that you only give groups that you are a member of
+				if($this->user->check_auth('a_usergroups_man', false) || $this->user->check_auth('a_users_perms', false) || (isset($memberships[2]) && $memberships[2])){
+					$usergroups[$key] = $elem;
+				} elseif(isset($memberships[$key]) && $memberships[$key]) {
+					$usergroups[$key] = $elem;
+				}
+				
 				$this->tpl->assign_block_vars('group_permissions', array(
 					'KEY' => $key)
 				);
@@ -641,6 +657,7 @@ $a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			'S_PROTECT_USER'			=> ($this->user->data['user_id'] == $user_id || (isset($memberships[2]) && !isset($adm_memberships[2]))) ? true : false,
 			'USERID'					=> $user_id,
 			'USERNAME'					=> $user_data['username'],
+			'S_PERM_PERMISSION'			=> $this->user->check_auth("a_users_perms", false),
 
 			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true)),
 			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),

@@ -1739,7 +1739,7 @@ ul.breamcrumb .current::before{
 	background: none;
 }
 .sf-btn-ddm > li a, .sf-btn-ddm > li a:visited{
-	color: #d9eef7 !important;
+	color: #fff !important;
 	padding: 0.25em 0.5em;
 }
 .sf-btn-ddm a:hover {

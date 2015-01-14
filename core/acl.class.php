@@ -28,15 +28,6 @@ class acl_manager extends gen_class {
 	private $auth_ids			= array();
 	private $group_permissions	= array();
 
-	//Permissions that are only for a superadmin
-	private $superadmin_only_permissions = array(
-		'a_maintenance'		=> 'a_maintenance',
-		'a_logs_del'		=> 'a_logs_del',
-		'a_backup'			=> 'a_backup',
-		'a_reset'			=> 'a_reset',
-		'a_files_man'		=> 'a_files_man',
-	);
-
 	//Returns the default permissions
 	public function get_auth_defaults($force_requery = false){
 		if(empty($this->auth_defaults) || $force_requery){
@@ -239,7 +230,9 @@ class acl_manager extends gen_class {
 			$this->user->lang('user') => array(
 				'icon' => 'fa fa-group la-lg',
 				array('CBNAME' => 'a_users_man',   'TEXT' => $this->user->lang('manage')),
+				array('CBNAME' => 'a_users_perms',   'TEXT' => $this->user->lang('permissions')),
 				array('CBNAME' => 'a_usergroups_man',   'TEXT' => $this->user->lang('manage_user_groups')),
+				array('CBNAME' => 'a_users_profilefields',   'TEXT' => $this->user->lang('manage_userpf')),
 				array('CBNAME' => 'a_users_massmail',   'TEXT' => $this->user->lang('massmail_send')),
 				array('CBNAME' => 'u_userlist',   'TEXT' => $this->user->lang('view')),
 				array('CBNAME' => 'u_usermailer',   'TEXT' => $this->user->lang('adduser_send_mail')),

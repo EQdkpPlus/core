@@ -28,7 +28,7 @@ class ManageUserProfileFields extends page_generic {
 
 	public function __construct(){
 		
-		$this->user->check_auth('a_users_man');
+		$this->user->check_auth('a_users_profilefields');
 		
 		$handler = array(
 			'savesort'	=> array('process' => 'save_sort', 'csrf'=>true),

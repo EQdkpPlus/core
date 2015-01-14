@@ -465,7 +465,7 @@ class admin_functions extends gen_class {
 				'name'	=> $this->user->lang('users'),
 				1		=> array('link' => 'admin/manage_users.php'.$this->SID,			'text' => $this->user->lang('manage_users'),		'check' => 'a_users_man',	'icon' => 'fa-user fa-lg fa-fw'),
 				2		=> array('link' => 'admin/manage_user_groups.php'.$this->SID,		'text' => $this->user->lang('manage_user_groups'),'check' => array('OR', array('a_usergroups_man', 'a_usergroups_grpleader')),	'icon' => 'fa-group fa-lg fa-fw'),
-				3		=> array('link' => 'admin/manage_user_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_userpf'),	'check' => 'a_users_man',	'icon' => 'fa-sitemap fa-lg fa-fw'),
+				3		=> array('link' => 'admin/manage_user_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_userpf'),	'check' => 'a_users_profilefields',	'icon' => 'fa-sitemap fa-lg fa-fw'),
 				4		=> array('link' => 'admin/manage_maintenance_user.php'.$this->SID,'text' => $this->user->lang('maintenanceuser_user'),'check' => 'a_maintenance','icon' => 'fa-user-md fa-lg fa-fw'),
 				5		=> array('link' => 'admin/manage_massmail.php'.$this->SID,'text' => $this->user->lang('massmail'),'check' => 'a_users_massmail','icon' => 'fa fa-envelope fa-lg fa-fw'),
 			),

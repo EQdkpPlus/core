@@ -236,15 +236,8 @@ class Manage_User_Groups extends page_generic {
 		if ($intGroupID != 2){
 			$auth_defaults = $this->acl->get_auth_defaults(false);
 			$group_permissions = $this->acl->get_group_permissions($intGroupID, true);
-			$superadm_only = $this->acl->get_superadmin_only_permissions();
 			$memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
 			
-			//If not Superadmin, unset the superadmin-permissions
-			if (!isset($memberships[2])){
-				foreach ($superadm_only as $superperm){
-					unset($auth_defaults[$superperm]);
-				}
-			}
 			$arrChanged = array();
 			foreach ( $auth_defaults as $auth_value => $auth_setting ) {
 				$r_auth_id    = $this->acl->get_auth_id($auth_value);
@@ -281,8 +274,7 @@ class Manage_User_Groups extends page_generic {
 			$this->core->messages($messages);
 		}
 		
-		
-		
+
 		//Only a Super-Admin is allowed to manage the super-admin group
 		$memberships = $this->pdh->get('user_groups_users', 'memberships_status', array($this->user->data['user_id']));
 		if ($groupID == 2 && !isset($memberships[2])){message_die($this->user->lang('no_auth_superadmins'), '', 'access_denied');}
@@ -349,7 +341,6 @@ class Manage_User_Groups extends page_generic {
 		$permission_boxes = $this->acl->get_permission_boxes();
 		$this->pm->generate_permission_boxes($permission_boxes);
 		$group_permissions = $this->acl->get_group_permissions($this->in->get('g'), true);
-		$superadm_only_perms = $this->acl->get_superadmin_only_permissions();
 
 		foreach ( $permission_boxes as $group => $checks ){
 			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
@@ -359,8 +350,6 @@ class Manage_User_Groups extends page_generic {
 				
 				//Guests won't get admin-permissions
 				if (($groupID == 1 && substr($data['CBNAME'], 0, 2)== "a_")) continue;
-				//Superadmin permission
-				if (isset($superadm_only_perms[$data['CBNAME']]) && !isset($memberships[2])) continue;
 				
 				switch (substr($data['CBNAME'], 0, 2)){
 					case 'a_': if (!$a_set){
