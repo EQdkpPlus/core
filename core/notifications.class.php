@@ -302,7 +302,7 @@ class notifications extends gen_class {
 	}
 	
 	public function deleteNotificationType($strID){
-		$this->pdh->put('notification_types', 'del_type', array($strID));
+		$this->pdh->put('notifications', 'del_type', array($strID));
 		$this->pdh->process_hook_queue();
 	}
 	
