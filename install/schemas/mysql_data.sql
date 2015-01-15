@@ -26,6 +26,7 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_files_man','N')
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_event_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_calendars_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_revent_conf','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_addrestricted','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_massmail','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_grpleader','N');

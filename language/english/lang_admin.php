@@ -955,6 +955,7 @@ $lang = array(
 	"manage_calendars" => 'Calendar Management',
 	"manage_calevents" => 'Calendarevent Management',
 	"manage_revent_man" => 'Raid Event: Confirm Chars and manage guests in all raids',
+	"add_restricted_calevent" => 'Add calendar events to restricted calendars',
 	"add_calevents" => 'Add calendar entries',
 	"view_calendar" => 'Show calendar',
 	"calendars_color" => 'Colour',

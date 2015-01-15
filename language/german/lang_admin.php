@@ -951,6 +951,7 @@ $lang = array(
 "manage_calendars" => "Kalender verwalten",
 "manage_calevents" => "Kalendereinträge verwalten",
 "manage_revent_man" => "Raid Ereignis: Globales bestätigen von Chars und Gästen",
+"add_restricted_calevent" => 'Kalendereinträge in eingeschränkte Kalender erstellen',
 "add_calevents" => "Kalendereinträge hinzufügen",
 "view_calendar" => "Kalender anzeigen",
 "calendars_color" => "Farbe",

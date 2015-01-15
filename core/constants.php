@@ -28,8 +28,8 @@ if ( !defined('EQDKP_INC') ){
  * CORE VERSIONS
  * -------------------------------------------------------------------------
  */
-define('VERSION_INT',		'2.0.0.16');			// the internal version number for updates & update check
-define('VERSION_EXT',		'2.0.0 Beta 1');		// the external version number to be shown in the footer
+define('VERSION_INT',		'2.0.0.18');			// the internal version number for updates & update check
+define('VERSION_EXT',		'2.0.0 Beta 2');		// the external version number to be shown in the footer
 define('VERSION_WIP',		true);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.4.0');				// required version of PHP
 define('VERSION_PHP_REC',	'5.5.0');				// recommended version of PHP

@@ -441,7 +441,7 @@ class editcalendarevent_pageobject extends pageobject {
 		$calendars		= array();
 		if(is_array($calendar_data)){
 			foreach($calendar_data as $calendar_id=>$calendar_value){
-				if($calendar_value['restricted'] == '1' && !$this->user->check_auth('a_cal_revent_conf', false)){ continue; }
+				if($calendar_value['restricted'] == '1' && !$this->user->check_auth('a_cal_addrestricted', false)){ continue; }
 				if($calendar_value['type'] != '3'){
 					$calendars[$calendar_id] = array(
 						'id'		=> $calendar_id,

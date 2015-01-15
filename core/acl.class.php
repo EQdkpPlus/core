@@ -164,95 +164,96 @@ class acl_manager extends gen_class {
 			// Events
 			$this->user->lang('events') => array(
 				'icon' => 'fa fa-key la-lg',
-				array('CBNAME' => 'a_event_add',  'TEXT' => $this->user->lang('add')),
-				array('CBNAME' => 'a_event_upd',  'TEXT' => $this->user->lang('update')),
-				array('CBNAME' => 'a_event_del',  'TEXT' => $this->user->lang('delete')),
+				array('CBNAME' => 'a_event_add',			'TEXT' => $this->user->lang('add')),
+				array('CBNAME' => 'a_event_upd',			'TEXT' => $this->user->lang('update')),
+				array('CBNAME' => 'a_event_del',			'TEXT' => $this->user->lang('delete')),
 			),
 			// Individual adjustments
 			$this->user->lang('individual_adjustments') => array(
 				'icon' => 'fa fa-tag la-lg',
-				array('CBNAME' => 'a_indivadj_add', 'TEXT' => $this->user->lang('add')),
-				array('CBNAME' => 'a_indivadj_upd', 'TEXT' => $this->user->lang('update')),
-				array('CBNAME' => 'a_indivadj_del', 'TEXT' => $this->user->lang('delete'))
+				array('CBNAME' => 'a_indivadj_add',			'TEXT' => $this->user->lang('add')),
+				array('CBNAME' => 'a_indivadj_upd',			'TEXT' => $this->user->lang('update')),
+				array('CBNAME' => 'a_indivadj_del',			'TEXT' => $this->user->lang('delete'))
 			),
 			// Items
 			$this->user->lang('items') => array(
 				'icon' => 'fa fa-gift la-lg',
-				array('CBNAME' => 'a_item_add',  'TEXT' => $this->user->lang('add')),
-				array('CBNAME' => 'a_item_upd',  'TEXT' => $this->user->lang('update')),
-				array('CBNAME' => 'a_item_del',  'TEXT' => $this->user->lang('delete')),
+				array('CBNAME' => 'a_item_add',				'TEXT' => $this->user->lang('add')),
+				array('CBNAME' => 'a_item_upd',				'TEXT' => $this->user->lang('update')),
+				array('CBNAME' => 'a_item_del',				'TEXT' => $this->user->lang('delete')),
 			),
 			// Article
 			$this->user->lang('articles') => array(
 				'icon' => 'fa fa-file-text la-lg',
-				array('CBNAME' => 'a_articles_man', 'TEXT' => $this->user->lang('manage')),
-				array('CBNAME' => 'a_article_categories_man', 'TEXT' => $this->user->lang('manage_article_categories')),
-				array('CBNAME' => 'u_files_man',   'TEXT' => $this->user->lang('perm_u_files_man')),
+				array('CBNAME' => 'a_articles_man',			'TEXT' => $this->user->lang('manage')),
+				array('CBNAME' => 'a_article_categories_man','TEXT' => $this->user->lang('manage_article_categories')),
+				array('CBNAME' => 'u_files_man',			'TEXT' => $this->user->lang('perm_u_files_man')),
 			),
 			// Raids
 			$this->user->lang('raids') => array(
 				'icon' => 'fa fa-trophy la-lg',
-				array('CBNAME' => 'a_raid_add',  'TEXT' => $this->user->lang('add')),
-				array('CBNAME' => 'a_raid_upd',  'TEXT' => $this->user->lang('update')),
-				array('CBNAME' => 'a_raid_del',  'TEXT' => $this->user->lang('delete')),
+				array('CBNAME' => 'a_raid_add',				'TEXT' => $this->user->lang('add')),
+				array('CBNAME' => 'a_raid_upd',				'TEXT' => $this->user->lang('update')),
+				array('CBNAME' => 'a_raid_del',				'TEXT' => $this->user->lang('delete')),
 			),
 
 			// Calendar
 			$this->user->lang('calendars') => array(
 				'icon' => 'fa fa-calendar la-lg',
-				array('CBNAME' => 'a_calendars_man',  'TEXT' => $this->user->lang('manage_calendars')),
-				array('CBNAME' => 'a_cal_event_man',  'TEXT' => $this->user->lang('manage_calevents')),
-				array('CBNAME' => 'a_cal_revent_conf','TEXT' => $this->user->lang('manage_revent_man')),
-				array('CBNAME' => 'u_cal_event_add', 'TEXT' => $this->user->lang('add_calevents')),
-				array('CBNAME' => 'u_calendar_view', 'TEXT' => $this->user->lang('view_calendar')),
+				array('CBNAME' => 'a_calendars_man',		'TEXT' => $this->user->lang('manage_calendars')),
+				array('CBNAME' => 'a_cal_event_man',		'TEXT' => $this->user->lang('manage_calevents')),
+				array('CBNAME' => 'a_cal_revent_conf',		'TEXT' => $this->user->lang('manage_revent_man')),
+				array('CBNAME' => 'a_cal_addrestricted',	'TEXT' => $this->user->lang('add_restricted_calevent')),
+				array('CBNAME' => 'u_cal_event_add',		'TEXT' => $this->user->lang('add_calevents')),
+				array('CBNAME' => 'u_calendar_view',		'TEXT' => $this->user->lang('view_calendar')),
 			),
 
 			// Members
 			$this->user->lang('chars') => array(
 				'icon' => 'fa fa-user la-lg',
-				array('CBNAME' => 'a_members_man', 'TEXT' => $this->user->lang('manage')),
-				array('CBNAME' => 'a_raidgroups_man',   'TEXT' => $this->user->lang('manage_raid_groups')),
-				array('CBNAME' => 'u_member_add',  'TEXT' => $this->user->lang('charsadd')),
-				array('CBNAME' => 'u_member_man',	'TEXT' => $this->user->lang('charsmanage')),
-				array('CBNAME' => 'u_member_del',  'TEXT' => $this->user->lang('charsdelete')),
-				array('CBNAME' => 'u_member_conn', 'TEXT' => $this->user->lang('charconnect')),
+				array('CBNAME' => 'a_members_man',			'TEXT' => $this->user->lang('manage')),
+				array('CBNAME' => 'a_raidgroups_man',		'TEXT' => $this->user->lang('manage_raid_groups')),
+				array('CBNAME' => 'u_member_add',			'TEXT' => $this->user->lang('charsadd')),
+				array('CBNAME' => 'u_member_man',			'TEXT' => $this->user->lang('charsmanage')),
+				array('CBNAME' => 'u_member_del',			'TEXT' => $this->user->lang('charsdelete')),
+				array('CBNAME' => 'u_member_conn',			'TEXT' => $this->user->lang('charconnect')),
 			),
 			// Manage
 			$this->user->lang('manage') => array(
 				'icon' => 'fa fa-wrench la-lg',
-				array('CBNAME' => 'a_config_man',  'TEXT' => $this->user->lang('configuration')),
-				array('CBNAME' => 'a_extensions_man', 'TEXT' => $this->user->lang('extensions')),
-				array('CBNAME' => 'a_reset',   		'TEXT' => $this->user->lang('reset')),
-				array('CBNAME' => 'a_maintenance',   'TEXT' => $this->user->lang('maintenance')),
-				array('CBNAME' => 'a_files_man',   'TEXT' => $this->user->lang('manage_files')),
+				array('CBNAME' => 'a_config_man',			'TEXT' => $this->user->lang('configuration')),
+				array('CBNAME' => 'a_extensions_man',		'TEXT' => $this->user->lang('extensions')),
+				array('CBNAME' => 'a_reset',				'TEXT' => $this->user->lang('reset')),
+				array('CBNAME' => 'a_maintenance',			'TEXT' => $this->user->lang('maintenance')),
+				array('CBNAME' => 'a_files_man',			'TEXT' => $this->user->lang('manage_files')),
 			),
 			//User
 			$this->user->lang('user') => array(
 				'icon' => 'fa fa-group la-lg',
-				array('CBNAME' => 'a_users_man',   'TEXT' => $this->user->lang('manage')),
-				array('CBNAME' => 'a_users_perms',   'TEXT' => $this->user->lang('permissions')),
-				array('CBNAME' => 'a_usergroups_man',   'TEXT' => $this->user->lang('manage_user_groups')),
-				array('CBNAME' => 'a_users_profilefields',   'TEXT' => $this->user->lang('manage_userpf')),
-				array('CBNAME' => 'a_users_massmail',   'TEXT' => $this->user->lang('massmail_send')),
-				array('CBNAME' => 'u_userlist',   'TEXT' => $this->user->lang('view')),
-				array('CBNAME' => 'u_usermailer',   'TEXT' => $this->user->lang('adduser_send_mail')),
+				array('CBNAME' => 'a_users_man',			'TEXT' => $this->user->lang('manage')),
+				array('CBNAME' => 'a_users_perms',			'TEXT' => $this->user->lang('permissions')),
+				array('CBNAME' => 'a_usergroups_man',		'TEXT' => $this->user->lang('manage_user_groups')),
+				array('CBNAME' => 'a_users_profilefields',	'TEXT' => $this->user->lang('manage_userpf')),
+				array('CBNAME' => 'a_users_massmail',		'TEXT' => $this->user->lang('massmail_send')),
+				array('CBNAME' => 'u_userlist',				'TEXT' => $this->user->lang('view')),
+				array('CBNAME' => 'u_usermailer',			'TEXT' => $this->user->lang('adduser_send_mail')),
 			),
 
 			// Logs
 			$this->user->lang('logs') => array(
 				'icon' => 'fa fa-book la-lg',
-				array('CBNAME' => 'a_logs_view', 'TEXT' => $this->user->lang('view')),
-				array('CBNAME' => 'a_logs_del', 'TEXT' => $this->user->lang('delete'))
+				array('CBNAME' => 'a_logs_view',			'TEXT' => $this->user->lang('view')),
+				array('CBNAME' => 'a_logs_del',				'TEXT' => $this->user->lang('delete'))
 			),
 			// Backup Database
 			$this->user->lang('backup') => array(
 				'icon' => 'fa fa-floppy-o la-lg',
-				array('CBNAME' => 'a_backup', 'TEXT' => $this->user->lang('backup_database'))
+				array('CBNAME' => 'a_backup',				'TEXT' => $this->user->lang('backup_database'))
 			),
 			 // Search
 			$this->user->lang('search') => array(
 				'icon' => 'fa fa-search la-lg',
-				array('CBNAME' => 'u_search', 'TEXT' => $this->user->lang('search')),
+				array('CBNAME' => 'u_search',				'TEXT' => $this->user->lang('search')),
 			),
 		);
 		return $group_permissions;
