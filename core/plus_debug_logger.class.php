@@ -67,7 +67,8 @@ if ( !defined('EQDKP_INC') ){
 			$this->register_type("unknown", null, null, array(0,1,2,3,4), true);
 			$this->register_type("php_error", array($this, 'php_error_pt_formatter'), array($this, 'php_error_html_formatter'), array(3,4), true);
 			$this->register_type("deprecated", null, array($this, 'deprecated_html_formatter'), array(3,4));
-
+			$this->register_type("fatal_error", array($this, 'fatal_error_pt_formatter'), array($this, 'fatal_error_html_formatter'), array(3,4), true);
+			
 			$this->php_error_reporting = intval(ini_get("error_reporting"));
 			$this->eqdkp_cwd = getcwd();
 			if($this->do_file_logging) {
@@ -75,7 +76,8 @@ if ( !defined('EQDKP_INC') ){
 				if(!is_writable($this->logfile_folder))
 					$this->do_file_logging = false;
 			}
-				//register_shutdown_function(array($this, "catch_fatals"));
+			
+			//register_shutdown_function(array($this, "catch_fatals"));
 			if($this->do_file_logging) {
 				$this->logfile_info = unserialize(@file_get_contents($this->logfile_folder.'info.data'));
 				if (is_array($this->logfile_info)){

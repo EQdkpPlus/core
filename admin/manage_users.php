@@ -613,10 +613,17 @@ class Manage_Users extends page_generic {
 		$groups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 
 		asort($groups);
+		$usergroups = $todisable = array();
 		if (is_array($groups)){
 			foreach ($groups as $key=>$elem){
-				//Make sure that you only give groups that you are a member of
-				$usergroups[$key] = $elem;
+				if($this->user->check_auth('a_usergroups_man', false) || $this->user->check_auth('a_users_perms', false) || (isset($memberships[2]) && $memberships[2])){
+					$usergroups[$key] = $elem;
+				} elseif(isset($memberships[$key]) && $memberships[$key]) {
+					$usergroups[$key] = $elem;
+				} else {
+					$todisable[$key] = $key;
+					$usergroups[$key] = $elem;
+				}
 				
 				$this->tpl->assign_block_vars('group_permissions', array(
 					'KEY' => $key)
@@ -655,7 +662,7 @@ class Manage_Users extends page_generic {
 			'USERNAME'					=> $user_data['username'],
 			'S_PERM_PERMISSION'			=> $this->user->check_auth("a_users_perms", false),
 
-			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true)),
+			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true, 'todisable' => $todisable)),
 			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),
 			'ACTIVE_RADIO'				=> new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : true))),
 

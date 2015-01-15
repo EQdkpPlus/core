@@ -221,6 +221,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function activate($user_id, $active=1) {
+			$oldState = intval($this->pdh->get('user', 'active', array($user_id)));
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'user_active'	=> $active
 			))->execute($user_id);
@@ -233,8 +234,10 @@ if(!class_exists('pdh_w_user')) {
 				'GUILDTAG'		=> $this->config->get('guildtag'),
 			);
 			$this->email->Set_Language($this->pdh->get('user', 'lang', array($user_id)));
-			$result = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);
-			if (!$result) return false;
+			if ($active && $oldState === 0){
+				$result = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);		
+				if (!$result) return false;
+			}
 			
 			return true;
 		}

@@ -66,6 +66,8 @@ $(document).ready(function(){
 			});
 			reset_permissions();
 			set_user_permissions();
+			console.log(checkedValues);
+			
 			$.each(checkedValues, function(index, value) {
 				set_group_permissions(value);
 			});
