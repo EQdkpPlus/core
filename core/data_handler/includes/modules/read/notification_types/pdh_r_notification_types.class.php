@@ -211,11 +211,17 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 			return false;
 		}
 		
+		/**
+		 * Checks wheater a notification type exists or not
+		 * 
+		 * @param string $strNotificationTypeID
+		 * @return boolean true if type exists, false if type not exists
+		 */
 		public function get_check_existing_type($strNotificationTypeID){
 			if (isset($this->notification_types[$strNotificationTypeID])){
-				return false;
+				return true;
 			}
-			return true;
+			return false;
 		}
 
 	}//end class
