@@ -22,21 +22,21 @@
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
-				
+
 if ( !class_exists( "pdh_r_notification_types" ) ) {
 	class pdh_r_notification_types extends pdh_r_generic{
 		public static function __shortcuts() {
 		$shortcuts = array();
 		return array_merge(parent::$shortcuts, $shortcuts);
-	}				
-	
+	}
+
 	public $default_lang = 'english';
 	public $notification_types = null;
 
 	public $hooks = array(
 		'notification_types_update',
-	);		
-			
+	);
+
 	public $presets = array(
 		'notification_types_id' => array('id', array('%intNotificationTypeID%'), array()),
 		'notification_types_name' => array('name', array('%intNotificationTypeID%'), array()),
@@ -49,19 +49,19 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		'notification_types_group_name' => array('group_name', array('%intNotificationTypeID%'), array()),
 		'notification_types_group_at' => array('group_at', array('%intNotificationTypeID%'), array()),
 	);
-				
+
 	public function reset(){
 			$this->pdc->del('pdh_notification_types_table');
-			
+
 			$this->notification_types = NULL;
 	}
-					
+
 	public function init(){
-			$this->notification_types	= $this->pdc->get('pdh_notification_types_table');				
-					
+			$this->notification_types	= $this->pdc->get('pdh_notification_types_table');
+
 			if($this->notification_types !== NULL){
 				return true;
-			}		
+			}
 
 			$objQuery = $this->db->query('SELECT * FROM __notification_types');
 			if($objQuery){
@@ -78,7 +78,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 						'icon'				=> $drow['icon'],
 					);
 				}
-				
+
 				$this->pdc->put('pdh_notification_types_table', $this->notification_types, null);
 			}
 
@@ -86,25 +86,25 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 
 		/**
 		 * @return multitype: List of all IDs
-		 */				
+		 */
 		public function get_id_list(){
 			if ($this->notification_types === null) return array();
 			return array_keys($this->notification_types);
 		}
-		
+
 		/**
 		 * Get all data of Element with $strID
 		 * @return multitype: Array with all data
-		 */				
+		 */
 		public function get_data($strNotificationTypeID){
 			if (isset($this->notification_types[$strNotificationTypeID])){
 				return $this->notification_types[$strNotificationTypeID];
 			}
 			return false;
 		}
-				
+
 		/**
-		 * Returns id for $strNotificationTypeID				
+		 * Returns id for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype id
 		 */
@@ -116,7 +116,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns name for $strNotificationTypeID				
+		 * Returns name for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype name
 		 */
@@ -128,7 +128,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns category for $strNotificationTypeID				
+		 * Returns category for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype category
 		 */
@@ -140,7 +140,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns prio for $strNotificationTypeID				
+		 * Returns prio for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype prio
 		 */
@@ -152,7 +152,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns default for $strNotificationTypeID				
+		 * Returns default for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype default
 		 */
@@ -164,7 +164,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns group for $strNotificationTypeID				
+		 * Returns group for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype group
 		 */
@@ -176,7 +176,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns group_name for $strNotificationTypeID				
+		 * Returns group_name for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype group_name
 		 */
@@ -188,7 +188,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		}
 
 		/**
-		 * Returns group_at for $strNotificationTypeID				
+		 * Returns group_at for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
 		 * @return multitype group_at
 		 */
@@ -198,7 +198,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 			}
 			return false;
 		}
-		
+
 		/**
 		 * Returns icon for $strNotificationTypeID
 		 * @param integer $strNotificationTypeID
@@ -210,12 +210,12 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_check_existing_type($strNotificationTypeID){
 			if (isset($this->notification_types[$strNotificationTypeID])){
-				return false;
+				return true;
 			}
-			return true;
+			return false;
 		}
 
 	}//end class
