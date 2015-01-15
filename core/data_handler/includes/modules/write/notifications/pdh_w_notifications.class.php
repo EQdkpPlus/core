@@ -142,6 +142,16 @@ if(!class_exists('pdh_w_notifications')) {
 			}
 			return false;
 		}
+		
+		public function del_type($strType){
+			$objQuery = $this->db->prepare("DELETE FROM __notification_types WHERE id=?")->execute($strType);
+		
+			if($objQuery) {
+				$this->pdh->enqueue_hook('notification_types_update', array());
+				return true;
+			}
+			return false;
+		}
 
 	}
 }

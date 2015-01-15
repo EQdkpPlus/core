@@ -301,6 +301,11 @@ class notifications extends gen_class {
 		return false;
 	}
 	
+	public function deleteNotificationType($strID){
+		$this->pdh->put('notification_types', 'del_type', array($strID));
+		$this->pdh->process_hook_queue();
+	}
+	
 	public function cleanup($intDays){
 		$intTime = $this->time->time;
 		$intTime = $intTime - ($intDays * 3600*24);
