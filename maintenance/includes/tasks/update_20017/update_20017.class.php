@@ -43,14 +43,14 @@ class update_20017 extends sql_update_task {
 			'german' => array(
 				'update_20017'	=> 'EQdkp Plus 2.0 Update 9',
 					1			=> 'Add permission',
-					3			=> 'Add permission',
+					2			=> 'Add permission',
 			),
 		);
 		
 		// init SQL querys
 		$this->sqls = array(
 			1 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_users_perms');",
-			1 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_users_profilefields');",
+			2 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_users_profilefields');",
 		);
 	}
 	
@@ -59,6 +59,7 @@ class update_20017 extends sql_update_task {
 		$this->config->set('enable_embedly', !$this->config->get('disable_embedly'));
 		$this->config->set('enable_points', !$this->config->get('disable_points'));
 		$this->config->set('enable_username_change', !$this->config->get('disable_username_change'));
+		return true;
 	}
 }
 
