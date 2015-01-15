@@ -616,11 +616,7 @@ class Manage_Users extends page_generic {
 		if (is_array($groups)){
 			foreach ($groups as $key=>$elem){
 				//Make sure that you only give groups that you are a member of
-				if($this->user->check_auth('a_usergroups_man', false) || $this->user->check_auth('a_users_perms', false) || (isset($memberships[2]) && $memberships[2])){
-					$usergroups[$key] = $elem;
-				} elseif(isset($memberships[$key]) && $memberships[$key]) {
-					$usergroups[$key] = $elem;
-				}
+				$usergroups[$key] = $elem;
 				
 				$this->tpl->assign_block_vars('group_permissions', array(
 					'KEY' => $key)
