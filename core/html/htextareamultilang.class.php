@@ -71,10 +71,10 @@ class htextareamultilang extends html {
 		$this->out .= '</ul></div><br />';
 		
 		foreach($arrLanguages as $strKey => $strLang){
-			$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
+			$out = '<textarea name="'.$this->name.'['.$strKey.']" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 			if(empty($this->id)) $this->id = $this->cleanid($this->name);
 			$out .= 'id="'.$this->id.'" ';
-			$class = $strKey;
+			$class = "taml_".$this->cleanid($this->name)." ".$strKey;
 			if(!empty($this->class)) $class .= ' '.$this->class;
 			$out .= 'class="'.$class.'" ';
 			if($this->disabled) $out .= 'disabled="disabled" ';

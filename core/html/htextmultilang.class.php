@@ -77,9 +77,9 @@ class htextmultilang extends html {
 			if(empty($this->id)) $this->id = $this->cleanid($this->name);
 			$out .= 'id="'.$this->id.'" ';
 			if(isset($this->value) && isset($this->value[$strKey])) $out .= 'value="'.$this->value[$strKey].'" ';
-			$class = $this->class;
+			$class = "tml_".$this->cleanid($this->name)." ".$strKey;
+			$class .= " ".$this->class;
 			if(!empty($this->pattern) && !empty($this->successmsg)) $class .= ' fv_success';
-			$class .= ' '.$strKey;
 			if(!empty($this->equalto)) $class .= ' equalto';
 			if(!empty($this->class)) $out .= 'class="'.$class.'" ';
 			if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
