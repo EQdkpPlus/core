@@ -56,8 +56,10 @@ class Manage_Logs extends page_generic {
 	}
 
 	public function delete_errors(){
-		$this->pdl->delete_logfile('php_error');
-		$this->pdl->delete_logfile('sql_error');
+		$arrLogFiles = $this->pdl->get_logfiles();
+		foreach($arrLogFiles as $logfile){
+			$this->pdl->delete_logfile(str_replace(".log", "", $logfile));
+		}
 		$this->display();
 	}
 
