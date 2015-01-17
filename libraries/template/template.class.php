@@ -260,6 +260,45 @@ class template extends gen_class {
 		return $combinedFile;
 	}
 	
+	public function debug_css_files(){
+		$strInlineCSS = "";
+		$arrHash = $data = $arrFiles = array();
+				
+		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
+	
+		if (is_array($this->tpl_output['css_file'])){
+			foreach($this->tpl_output['css_file'] as $key => $val){
+				if ($this->server_path == "/") {
+					$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
+				} else {
+					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
+				}
+				//Resolve file
+				$val['file'] = $this->resolve_css_file($val['file']);
+				if(!$val['file']) continue;
+	
+				if ($val['media'] == 'screen' && is_file($val['file'])){
+					if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
+					
+					$strFile = $val['file'];
+					$strContent = file_get_contents($strFile);
+					$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
+					$strFilename = pathinfo($strFile, PATHINFO_FILENAME);
+					if (strpos($strPathDir, "./") === 0){
+						$strPathDir = str_replace($this->root_path, "", $strPathDir);
+					}
+					$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+					$strContent = $this->replace_paths_css($strContent, false, false, $strPathDir);
+					
+					$combinedFile = $storage_folder.$this->style_code.'/dev_'.$strFilename.'.css';
+					$this->pfh->putContent($combinedFile, "/* ".$strFile."*/ \r\n\n\n".$strContent);
+					$this->tpl_output['css_file'][$key]['file'] = $combinedFile;
+				}
+			}
+		}
+
+	}
+	
 	public function resolve_css_file($cssfile){
 		//Check data dir for exact match
 		$strWithoutRoot = str_replace($this->root_path, '', $cssfile);
@@ -508,7 +547,9 @@ class template extends gen_class {
 		}
 
 		//Combine CSS Files and Inline CSS
-		if(!$debug) $this->combine_css();
+		if ($debug) {
+			$this->debug_css_files(); 
+		} else $this->combine_css($debug);
 		
 		// Load the CSS Files..
 		if(!$this->get_templateout('css_file')){

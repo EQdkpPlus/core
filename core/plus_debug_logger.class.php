@@ -592,7 +592,7 @@ if ( !defined('EQDKP_INC') ){
 					$output = $this->error_message_header('Fatal error');
 					$output .= 'A fatal error occured.<br /><br />';
 					$output .= 'Error ID: '.$strErrorID.'<br /><br />';
-					if(defined(DEBUG) && DEBUG == 4){
+					if($this->debug_level > 3){
 					
 						//template errors
 						if ($error['type'] == 4 && strpos($error['file'], 'template.class.php') && strpos($error['file'], ": eval()'d code")){
@@ -645,7 +645,7 @@ if ( !defined('EQDKP_INC') ){
 			$output .= 'A fatal error occured.<br /><br />';
 			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
 			
-			if(defined(DEBUG) && DEBUG == 4){
+			if($this->debug_level > 3){
 				$strErrorMessage = $e->getMessage();
 				$strErrorMessage = str_replace($this->dbpass, '*******', $strErrorMessage);
 				if (strlen($this->dbuser) > 3){
@@ -679,7 +679,7 @@ if ( !defined('EQDKP_INC') ){
 			$output = $this->error_message_header('Fatal error');
 			$output .= 'A fatal error occured.<br /><br />';
 			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
-			if(defined(DEBUG) && DEBUG == 4){
+			if($this->debug_level > 3){
 				$error_message = "Error while loading class <b>'".$class."'</b>: class not found!<br /><br /><b>Debug Backtrace:</b><br />";
 				$data = debug_backtrace();
 				$pos = strrpos($data[max(array_keys($data))]['file'], '/');
@@ -706,7 +706,7 @@ if ( !defined('EQDKP_INC') ){
 			$output = $this->error_message_header('Fatal error');
 			$output .= 'A fatal error occured.<br /><br />';
 			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
-			if(defined(DEBUG) && DEBUG == 4){		
+			if($this->debug_level > 3){		
 				$error_message = "Error while loading file <b>'".$path."'</b>: File not found!<br />";
 				$error_message .= "Please ensure that all files are uploaded correctly!";
 				if($this->debug_level) {
