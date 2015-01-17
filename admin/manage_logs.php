@@ -236,70 +236,49 @@ class Manage_Logs extends page_generic {
 			$view_list			= $this->pdh->get('logs', 'id_list', array());
 		}
 	
-	
+		//
+		//ERRORS ================================================================================
+		//
 
+		//Search Fatal Error ID
+		if($this->in->exists('search_fatal_id')){
+			$arrMatch = $this->pdl->search_fatal_error_id($this->in->get('fatal_error_id'));
+			if($arrMatch){
+				$this->tpl->assign_vars(array(
+					'S_FATAL_ERROR' => true,
+					'FATAL_ERROR_ID' => sanitize($this->in->get('fatal_error_id')),
+					'FATAL_ERROR_TYPE' => str_replace(".log", "", $arrMatch['file']),
+					'FATAL_ERROR_MSG'  => preg_replace("/\t(.*?)\:/s", "<br /><b style='font-weight:bold;'>$1:</b>", nl2br($arrMatch['error'])),
+				));
+			}
+		}
+		
 		$start = $this->in->get('start', 0);
-		$this->jquery->Dialog('delete_all_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
-		$this->confirm_delete($this->user->lang('confirm_delete_partial_logs'));
-		$this->jquery->Tab_header('log_tabs', true);
-		$error_type_array = array(
-			'warning'	=> 'WARNING',
-			'fatal'		=> 'FATAL ERROR',
-			'parse'		=> 'PARSING ERROR',
-			'compile'	=> 'COMPILE ERROR',
-			'error'		=> 'ERROR',
-			'exception' => 'EXCEPTION',
-		);
-		$time_array	= $error_array = $type_array = array();
-		//PHP-Errors
-		$php_errors	= $this->pdl->get_file_log('php_error', 50, $start);
-		if(isset($php_errors['entries'])){
-			foreach($php_errors['entries'] as $key=> $value) {
-				if($this->in->get('error') != '' && 'php' != $this->in->get('error')) break;
-				if($this->in->get('type') != '' && (strpos($php_errors['entries'][$key+1], $error_type_array[$this->in->get('type')]) !== 0)) continue;
-				if(preg_match('/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/', $value)){
-					$error_array[]	= $php_errors['entries'][$key+1];
-					$type_array[]	= 'php';
-					$time_array[]	= strtotime($value);
-				}
-			}
-		}
-		//MySQL
-		$sql_errors = $this->pdl->get_file_log('sql_error', 50, $start);
-		if (isset($sql_errors['entries'])){
-			foreach ($sql_errors['entries'] as $key=>$value){
-				if ($this->in->get('error') != '' && 'db' != $this->in->get('error')) break;
-				if ($this->in->get('type') != '' && strpos($sql_errors['entries'][$key+1], $error_type_array[$this->in->get('type')]) === false) continue;
-				if (preg_match('/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/', $value)){
-					$error_array[]	= $sql_errors['entries'][$key+1];
-					$type_array[]	= 'db';
-					$time_array[]	= strtotime($value);
-				}
-			}
-		}
-		array_multisort($time_array, (($this->in->get('o', '0.0') == '0.0') ? SORT_DESC : SORT_ASC), SORT_NUMERIC, $error_array, SORT_DESC, SORT_NUMERIC, $type_array);
-		$total_errors	= ($this->in->get('type') == '') ? $sql_errors['entrycount'] + $php_errors['entrycount'] : (($this->in->get('type') == 'php') ? $php_errors['entrycount'] : $sql_errors['entrycount']);
-		$max_page = ($php_errors['entrycount'] > $sql_errors['entrycount'] && ($this->in->get('type') == '' || $this->in->get('type') == 'php')) ? $php_errors['entrycount'] : $sql_errors['entrycount'];
-		foreach ($time_array as $key => $value){
-			$this->tpl->assign_block_vars('error_row', array(
-				'DATE'			=> $this->time->user_date($value, true),
-				'MESSAGE'		=> $error_array[$key],
-				'TYPE'			=> $type_array[$key],
+		
+		$arrLogFiles = $this->pdl->get_logfiles();
+		foreach($arrLogFiles as $logfile){
+			
+			$arrErrors= $this->pdl->get_file_log(str_replace(".log", "", $logfile), 50, $start);
+			
+			$this->tpl->assign_block_vars('errorlogs', array(
+					'TYPE' 			=> str_replace(".log", "", $logfile),
+					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $arrErrors['entrycount'], 50, $start),
+					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['entrycount'], 50),
 			));
+			
+			if(isset($arrErrors['entries'])){
+				$arrErrors['entries'] = array_reverse($arrErrors['entries']);
+				foreach($arrErrors['entries'] as $key=> $value) {
+					if(preg_match('/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/', $value)){
+
+						$this->tpl->assign_block_vars('errorlogs.error_row', array(
+							'DATE'			=> $this->time->user_date($value, true),
+							'MESSAGE'		=> nl2br($arrErrors['entries'][$key+1]),
+						));
+					}
+				}
+			}
 		}
-		$error_list = array(
-			''		=> '',
-			'php'	=> 'PHP',
-			'db'	=> 'DB'
-		);
-		$type_list = array(
-			''			=> '',
-			'warning'	=> 'Warning',
-			'error'		=> 'Error',
-			'fatal'		=> 'Fatal Error',
-			'parse'		=> 'Parse Error',
-			'compile'	=> 'Compile Error',
-		);
 
 		$actionlog_count	= count($view_list);
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_logs', 'hptt_managelogs_actions');
@@ -309,6 +288,10 @@ class Manage_Logs extends page_generic {
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort').$strFilterSuffix;
 		$logs_list = $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 100, $footer_text);
 		
+		$this->jquery->Dialog('delete_all_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
+		$this->confirm_delete($this->user->lang('confirm_delete_partial_logs'));
+		$this->jquery->Tab_header('log_tabs', true);
+		$this->jquery->Tab_header('errorlog_tabs', true);
 		$this->jquery->Collapse('#toggleFilter', true);
 		$this->tpl->assign_vars(array(
 			'LOGS_LIST'				=> $logs_list,
@@ -316,9 +299,8 @@ class Manage_Logs extends page_generic {
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
 			'ERROR_FILTER_SELECT'	=> new hdropdown('error_dd', array('options' => $error_list, 'value' => $this->in->get('error'), 'js' => 'onchange="window.location=\'manage_logs.php'.$this->SID.'&error=\'+document.post2.error_dd.value"')),
 			'ERROR_TYPE_SELECT'		=> new hdropdown('error_type_dd', array('options' => $type_list, 'value' => $this->in->get('type'), 'js' => 'onchange="window.location=\'manage_logs.php'.$this->SID.'&type=\'+document.post2.error_type_dd.value"')),
-			'EL_FOOTCOUNT'			=> sprintf($this->user->lang('viewlogs_footcount'), $total_errors, 50),
-			'EL_PAGINATION'			=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $max_page, 50, $start),
 		));
+		
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('viewlogs_title'),
 			'template_file'		=> 'admin/manage_logs.html',

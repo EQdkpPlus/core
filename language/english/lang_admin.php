@@ -1677,6 +1677,9 @@ $lang = array(
 	"userpf_sett_f_help_bridge_field" => 'Select the Field from other Forum/CMS which values should be imported in this field.',
 	"bridge_profilefields_info" => 'This Bridge supports the Synchronisation of Userprofilefields. You can do a mapping of this fields at the <a href="manage_user_profilefields.php">Userprofilefields Management</a>.',
 	"pi_title" => "Plugin",
+	"bugtracker" => "Bugtracker",
+	"extension_install_locked" => "There is already one Extension being updated or installed. You can install or update only one at the same time.",
+	"fatal_error_id" => "Error-ID",
 );
 
 ?>

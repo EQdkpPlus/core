@@ -243,16 +243,16 @@ class Manage_Extensions extends page_generic {
 						
 			//Portalmodules
 			case 3:		$path = $this->in->get('selected_id');
-						if(!$path) return;
-						$idList = $this->pdh->get('portal', 'id_list', array(array('path' => $path)));
-						$id = array_keys($idList);
-						$plugin = $this->pdh->get('portal', 'plugin', array($idList[$id[0]]));
-						$name = $this->pdh->get('portal', 'name', array($idList[$id[0]]));
-						
-						$this->portal->uninstall($path, $plugin);
-						$this->portal->install($path, $plugin);
-						$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
-						$this->portal->get_all_modules();
+						if ($path){
+							$idList = $this->pdh->get('portal', 'id_list', array(array('path' => $path)));
+							$id = array_keys($idList);
+							$plugin = $this->pdh->get('portal', 'plugin', array($idList[$id[0]]));
+							$name = $this->pdh->get('portal', 'name', array($idList[$id[0]]));
+							
+							$this->portal->uninstall($path, $plugin);
+							$this->portal->install($path, $plugin);
+							$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
+						}
 						$this->pdh->process_hook_queue();
 			break;
 		}

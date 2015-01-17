@@ -95,32 +95,60 @@
 		<form method="post" action="{F_DELLOG}" name="post2">  
 		<div class="tableHeader">
 			<h2>{L_error}</h2>
-			<div>
-				{L_filter_type}: {ERROR_FILTER_SELECT} {ERROR_TYPE_SELECT}
+		</div>
+		<fieldset class="settings mediumsettings">
+			<dl>
+				<dt><label>{L_fatal_error_id}</label></dt>
+				<dd><input type="text" name="fatal_error_id" size="40" /> <button type="submit" name="search_fatal_id">{L_search}</button></dd>
+			</dl>
+			<!-- IF S_FATAL_ERROR -->
+			<h2>{L_fatal_error_id}: {FATAL_ERROR_ID}</h2>
+			<dl>
+				<dt><label>{L_type}</label></dt>
+				<dd>{FATAL_ERROR_TYPE}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_error}</label></dt>
+				<dd>{FATAL_ERROR_MSG}</dd>
+			</dl>
+			
+			<!-- ENDIF -->
+		</fieldset>
+		
+		
+		<div id="errorlog_tabs">
+			<ul>
+				<!-- BEGIN errorlogs -->
+				<li><a href='#el_{errorlogs.TYPE}'>{errorlogs.TYPE}</a></li>
+				<!-- END errorlogs -->
+			</ul>
+			<!-- BEGIN errorlogs -->
+			<div id="el_{errorlogs.TYPE}">
+				<h2>{errorlogs.TYPE}</h2>
+				<table  class="table fullwidth colorswitch">
+					<tr>
+						<th align="left" width="150">{L_date}</th>
+						<th align="left">{L_description}</th>
+					</tr>
+					<!-- BEGIN error_row -->
+					<tr>
+						<td width="150">{errorlogs.error_row.DATE}</td>
+						<td>{errorlogs.error_row.MESSAGE}</td>
+					</tr>
+					<!-- END error_row -->
+					<tr>
+						<th colspan="2" class="footer">
+							{errorlogs.FOOTCOUNT}
+						</th>
+					</tr>
+				</table>
+				<div class="center pagination_wrapper">
+					{errorlogs.PAGINATION}
+				</div>
 			</div>
+			<!-- END errorlogs -->
 		</div>
-		<table  class="table fullwidth colorswitch">
-			<tr>
-				<th align="left" width="150">{L_date}</th>
-				<th align="left" width="10">{L_type}</th>
-				<th align="left">{L_description}</th>
-			</tr>
-			<!-- BEGIN error_row -->
-			<tr>
-				<td width="150">{error_row.DATE}</td>
-				<td width="10">{error_row.TYPE}</td>
-				<td>{error_row.MESSAGE}</td>
-			</tr>
-			<!-- END error_row -->
-			<tr>
-				<th colspan="4" class="footer">
-					{EL_FOOTCOUNT}
-				</th>
-			</tr>
-		</table>
-		<div class="center pagination_wrapper">
-			{EL_PAGINATION}
-		</div>
+
 		<div class="contentFooter">
 			<button name="del_errors" type="submit" class="mainoption" id="del_errors"><i class="fa fa-times"></i>{L_clear_all_logs}</button>
 		</div>

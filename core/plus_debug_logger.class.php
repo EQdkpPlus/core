@@ -265,6 +265,42 @@ if ( !defined('EQDKP_INC') ){
 					<b>Error String:</b> ".$log_entry['args'][2]."<br />";
 			return $text;
 		}
+		
+		// pdl html format function for sql errors
+		public function fatal_error_html_formatter($log_entry) {
+			$text =  '<b>Error ID: </b>'		. $log_entry['args'][0] . '<br /><br />
+			<b>Message:</b> '		. $log_entry['args'][2] . '<br /><br />
+			<b>Code:</b>'			. $log_entry['args'][3] . '<br />
+			<b>Backtrace:</b>'		. $log_entry['args'][4] . '<br />';
+			return $text;
+		}
+		
+		// pdl plaintext (logfile) format function for sql errors
+		public function fatal_error_pt_formatter($log_entry) {
+			$text =  '>>>> '.$log_entry['args'][0]." <<<<\t\n";
+			$text .= "Type: "	. $log_entry['args'][1] . "\t\n";
+			$text .= "Message: "	. $log_entry['args'][2] . "\t\n";
+			$text .= "Code: "		. $log_entry['args'][3] . "\t\n";
+			$text .= "Trace:\n";
+			
+			if (count($log_entry['args'][4])){
+				$trace = $log_entry['args'][4];
+			} else {
+				$trace = $log_entry['args'][5];
+			}
+			if(is_array($trace)){
+				foreach($trace as $ddata) {
+					$text .=	'File: '.$ddata['file'].', Line: '.$ddata['line'].', Function: '.$ddata['function'];
+					if(isset($ddata['object'])) $text .= ', Object: '.get_class($ddata['object']);
+					$text .= "\n";
+				}
+			} else {
+				$text .= $trace;
+			}
+			
+			$text .= " <<<<\n";
+			return $text;
+		}
 
 		public function deprecated_html_formatter($log_entry) {
 			$text = "<b>Use of deprecated function/method</b>:<br />
@@ -313,6 +349,39 @@ if ( !defined('EQDKP_INC') ){
 			echo($this->get_html_log($debug_level, $type));
 		}
 
+		
+		public function get_logfiles(){
+			$arrFiles = scandir($this->logfile_folder);
+			$arrLogFiles = array();
+			foreach($arrFiles as $file){
+				if(valid_folder($file) && $file != "info.data" && $file != "unknown.log"){
+					$arrLogFiles[] = $file;
+				}
+			}
+			return $arrLogFiles;
+		}
+		
+		public function search_fatal_error_id($strErrorID){
+			$arrLogFiles = $this->get_logfiles();
+			$arrMatches = array();
+			foreach($arrLogFiles as $logfile){
+				$intMatches = preg_match_all('/>>>> (.*?) <<<<(.*?)<<<</s', file_get_contents($this->logfile_folder.'/'.$logfile), $arrMatches);
+				if($intMatches){
+					foreach($arrMatches[1] as $key => $strFatalID){
+						if(trim($strFatalID) == $strErrorID){
+							return array(
+								'file'		=> $logfile,
+								'number'	=> $key,
+								'error'		=> trim($arrMatches[2][$key]),
+							);
+						}
+					}
+				}
+			}
+			return false;
+		}
+		
+		
 		//return logs from "behind", so most recent first
 		public function get_file_log($error_type, $number=0, $start=0){
 			$file = $this->logfile_folder.'/'.$error_type.'.log';
@@ -482,7 +551,7 @@ if ( !defined('EQDKP_INC') ){
 		}
 		
 		private function error_message_footer($blnShowEQdkpLink = true){
-			return (($blnShowEQdkpLink) ? '<br /><b><a href="'.EQDKP_PROJECT_URL.'">Please visit the EQdkp Plus Homepage!</a></b>' : '').'
+			return (($blnShowEQdkpLink) ? '<br />' : '').'
 					
 							</div>	
 
@@ -511,36 +580,53 @@ if ( !defined('EQDKP_INC') ){
 					$this->myErrorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 					$output = $this->error_message_header();
 					
+					$strErrorID = md5(time().'fatal'.rand());
+					
 					//template errors
 					if ($error['type'] == 4 && strpos($error['file'], 'template.class.php') && strpos($error['file'], ": eval()'d code")){
+						$this->log('fatal_error', $strErrorID, 'Template Error', $error['message'], 'File: '.$error['file'].', Line: '.$error['line'], array(), register('tpl')->get_error_details());
+					} else {
+						$this->log('fatal_error', $strErrorID, ((isset($this->errorType[$error['type']]))?$this->errorType[$error['type']]:'unknown'), $error['message'], 'File: '.$error['file'].', Line: '.$error['line'], array(), debug_backtrace());
+					}
 
-						echo register('tpl')->generate_error('
-							You have a parsing error in a template file.<br /> Please see "Body-File" and "Path" for getting the files responsible for this error.<br />
-							If the bugged template-file is located in data-folder, you can fix this error by deleting this file. Otherwise you should restore the original template file.
-						');
-						exit();
-					}					
-
-					foreach ($error as $key=>$value){
-						if($key == 'type'){
-							$et = (isset($this->errorType[$value]))?$this->errorType[$value]:'unknown';
-							$output .= '<b>'.ucfirst($key).'</b>: '.$et.'<br />';
-						}elseif($key == 'message'){
-							$slash = (strpos($value, '/') !== false) ? '/' : '\\';
-							$real_directory = str_replace($slash.'core', '', realpath(dirname(__FILE__)));
-							$msg = str_replace("\n", "<br />\n", $value);
-							$msg = str_replace("Stack trace", "<b>Stack Trace</b>", $msg);
-							$msg = str_replace($this->dbpass, '*******', $msg);
-							$msg = str_replace($real_directory, '.....', $msg);
-							$output .= '<b>'.ucfirst($key).'</b>: '.$msg.'<br />';
-						}elseif($key == 'file') {
-							$slash = (strpos($value, '/') !== false) ? '/' : '\\';
-							$real_directory = str_replace($slash.'core', '', realpath(dirname(__FILE__)));
-							$value = str_replace($real_directory, '.....', $value);
-							$output .= '<b>File</b>: '.$value.'<br />';
-						} else {
-							$output .= '<b>'.ucfirst($key).'</b>: '.$value.'<br />';
+					$output = $this->error_message_header('Fatal error');
+					$output .= 'A fatal error occured.<br /><br />';
+					$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+					if(defined(DEBUG) && DEBUG == 4){
+					
+						//template errors
+						if ($error['type'] == 4 && strpos($error['file'], 'template.class.php') && strpos($error['file'], ": eval()'d code")){
+	
+							echo register('tpl')->generate_error('
+								You have a parsing error in a template file.<br /> Please see "Body-File" and "Path" for getting the files responsible for this error.<br />
+								If the bugged template-file is located in data-folder, you can fix this error by deleting this file. Otherwise you should restore the original template file.
+							');
+							exit();
+						}					
+	
+						foreach ($error as $key=>$value){
+							if($key == 'type'){
+								$et = (isset($this->errorType[$value]))?$this->errorType[$value]:'unknown';
+								$output .= '<b>'.ucfirst($key).'</b>: '.$et.'<br />';
+							}elseif($key == 'message'){
+								$slash = (strpos($value, '/') !== false) ? '/' : '\\';
+								$real_directory = str_replace($slash.'core', '', realpath(dirname(__FILE__)));
+								$msg = str_replace("\n", "<br />\n", $value);
+								$msg = str_replace("Stack trace", "<b>Stack Trace</b>", $msg);
+								$msg = str_replace($this->dbpass, '*******', $msg);
+								$msg = str_replace($real_directory, '.....', $msg);
+								$output .= '<b>'.ucfirst($key).'</b>: '.$msg.'<br />';
+							}elseif($key == 'file') {
+								$slash = (strpos($value, '/') !== false) ? '/' : '\\';
+								$real_directory = str_replace($slash.'core', '', realpath(dirname(__FILE__)));
+								$value = str_replace($real_directory, '.....', $value);
+								$output .= '<b>File</b>: '.$value.'<br />';
+							} else {
+								$output .= '<b>'.ucfirst($key).'</b>: '.$value.'<br />';
+							}
 						}
+					} else {
+						$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
 					}
 					$output .= $this->error_message_footer();
 					echo $output;
@@ -549,24 +635,34 @@ if ( !defined('EQDKP_INC') ){
 		}
 		
 		public function catch_dbal_exception($e){
+			$strErrorID = md5(time().'dbal_exception'.$e->getMessage());
+			$this->log('fatal_error', $strErrorID, 'DBAL Exception', $e->getMessage(), $e->getCode(), $e->getTrace(), debug_backtrace());
+
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			$output = $this->error_message_header('Database error');
-			$strErrorMessage = $e->getMessage();
-			$strErrorMessage = str_replace($this->dbpass, '*******', $strErrorMessage);
-			if (strlen($this->dbuser) > 3){
-				$strSuffix = substr($this->dbuser, 0, 3);
-				$strUserReplace = str_pad($strSuffix, strlen($this->dbuser), '*');
-			}
-			$strErrorMessage = str_replace($this->dbuser, $strUserReplace, $strErrorMessage);
-			if (strlen($this->dbhost) > 6){
-				$strSuffix = substr($this->dbhost, 0, 6);
-				$strHostReplace = str_pad($strSuffix, strlen($this->dbhost), '*');
-			}
-			$strErrorMessage = str_replace($this->dbhost, $strHostReplace, $strErrorMessage);
+			$output = $this->error_message_header('Fatal error');
+			$output .= 'A fatal error occured.<br /><br />';
+			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
 			
-			$output .= $strErrorMessage.'<br /><br />';
+			if(defined(DEBUG) && DEBUG == 4){
+				$strErrorMessage = $e->getMessage();
+				$strErrorMessage = str_replace($this->dbpass, '*******', $strErrorMessage);
+				if (strlen($this->dbuser) > 3){
+					$strSuffix = substr($this->dbuser, 0, 3);
+					$strUserReplace = str_pad($strSuffix, strlen($this->dbuser), '*');
+				}
+				$strErrorMessage = str_replace($this->dbuser, $strUserReplace, $strErrorMessage);
+				if (strlen($this->dbhost) > 6){
+					$strSuffix = substr($this->dbhost, 0, 6);
+					$strHostReplace = str_pad($strSuffix, strlen($this->dbhost), '*');
+				}
+				$strErrorMessage = str_replace($this->dbhost, $strHostReplace, $strErrorMessage);
+				
+				$output .= $strErrorMessage.'<br /><br />';
+			} else {
+				$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
+			}
 			
 			$output .= $this->error_message_footer(false);
 			echo $output;
@@ -578,18 +674,25 @@ if ( !defined('EQDKP_INC') ){
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			$output = $this->error_message_header('Class loading error');
-			
-			$error_message = "Error while loading class <b>'".$class."'</b>: class not found!<br /><br /><b>Debug Backtrace:</b><br />";
-			$data = debug_backtrace();
-			$pos = strrpos($data[max(array_keys($data))]['file'], '/');
-			if($pos === false) $pos = strrpos($data[max(array_keys($data))]['file'], '\\');
-			foreach($data as $key => $call) {
-				$file = substr($call['file'], $pos);
-				$error_message .= $file.": ".$call['line']."<br />";
+			$strErrorID = md5(time().'class_404'.$class);
+			$this->log('fatal_error', $strErrorID, 'Classloading Error', 'Class "'.$class.'" not found', 404, array(), debug_backtrace());
+			$output = $this->error_message_header('Fatal error');
+			$output .= 'A fatal error occured.<br /><br />';
+			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+			if(defined(DEBUG) && DEBUG == 4){
+				$error_message = "Error while loading class <b>'".$class."'</b>: class not found!<br /><br /><b>Debug Backtrace:</b><br />";
+				$data = debug_backtrace();
+				$pos = strrpos($data[max(array_keys($data))]['file'], '/');
+				if($pos === false) $pos = strrpos($data[max(array_keys($data))]['file'], '\\');
+				foreach($data as $key => $call) {
+					$file = substr($call['file'], $pos);
+					$error_message .= $file.": ".$call['line']."<br />";
+				}
+				$output .= $error_message;
+			} else {
+				$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
 			}
-			$output .= $error_message.$this->error_message_footer();
-			echo $output;
+			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure
 			die();
 		}
@@ -598,22 +701,29 @@ if ( !defined('EQDKP_INC') ){
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			$output = $this->error_message_header('File loading error');
-			
-			$error_message = "Error while loading file <b>'".$path."'</b>: File not found!<br />";
-			$error_message .= "Please ensure that all files are uploaded correctly!";
-			if($this->debug_level) {
-				$error_message .= "<br /><br /><b>Debug Backtrace:</b><br />";
-				$data = debug_backtrace();
-				$pos = strrpos($data[max(array_keys($data))]['file'], '/');
-				if($pos === false) $pos = strrpos($data[max(array_keys($data))]['file'], '\\');
-				foreach($data as $key => $call) {
-					$file = substr($call['file'], $pos);
-					$error_message .= $file.": ".$call['line']."<br />";
+			$strErrorID = md5(time().'file_404'.$path);
+			$this->log('fatal_error', $strErrorID, 'Fileloading Error', 'File "'.$path.'" not found', 404, array(), debug_backtrace());
+			$output = $this->error_message_header('Fatal error');
+			$output .= 'A fatal error occured.<br /><br />';
+			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+			if(defined(DEBUG) && DEBUG == 4){		
+				$error_message = "Error while loading file <b>'".$path."'</b>: File not found!<br />";
+				$error_message .= "Please ensure that all files are uploaded correctly!";
+				if($this->debug_level) {
+					$error_message .= "<br /><br /><b>Debug Backtrace:</b><br />";
+					$data = debug_backtrace();
+					$pos = strrpos($data[max(array_keys($data))]['file'], '/');
+					if($pos === false) $pos = strrpos($data[max(array_keys($data))]['file'], '\\');
+					foreach($data as $key => $call) {
+						$file = substr($call['file'], $pos);
+						$error_message .= $file.": ".$call['line']."<br />";
+					}
 				}
+				$output .= $error_message;
+			} else {
+				$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
 			}
-			$output .= $error_message.$this->error_message_footer(false);
-			echo $output;
+			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure
 			die();
 		}

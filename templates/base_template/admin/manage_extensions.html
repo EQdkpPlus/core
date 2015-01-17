@@ -1,6 +1,8 @@
 <script type="text/javascript">
 //<![CDATA[
 var totalSteps = 4;
+var locked = false;
+var updateWarning = <!-- IF S_HIDE_UPDATEWARNING -->false<!-- ELSE -->true<!-- ENDIF -->;
 
 $(function() {
 	$("#nl_progressbar").progressbar({
@@ -20,24 +22,35 @@ function set_progress_bar_value(recentNumber, labeltext){
 }
 
 function update_error(data){
+	locked = false;
+	
 	$("#lu_error").show();
 	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + data);
 	$("#lu_loading_img").hide();
 }
 
 function repo_update(extid, cat, extensioncode){
-	<!-- IF S_HIDE_UPDATEWARNING -->
-	repo_update_start(extid, cat, extensioncode);
-	<!-- ELSE -->
-	if (cat != 2) {
-		update_confirm(extid, cat, extensioncode);
+	if (locked){
+		alert({L_extension_install_locked|jsencode});
+		return false;
+	}
+	
+	locked = true;
+	
+	if(updateWarning){
+		if (cat != 2) {
+			update_confirm(extid, cat, extensioncode);
+		} else {
+			repo_update_start(extid, cat, extensioncode);
+		}
 	} else {
 		repo_update_start(extid, cat, extensioncode);
 	}
-	<!-- ENDIF -->
 }
 
-function repo_update_start(extid, cat, extensioncode){
+function repo_update_start(extid, cat, extensioncode){	
+	locked = true;
+	
 	$("#lu_error").hide();
 	$("#nl_progressbar").show();
 	$("#lu_loading_img").show();
@@ -46,6 +59,11 @@ function repo_update_start(extid, cat, extensioncode){
 }
 
 function repo_install(extid, cat, extensioncode){
+	if (locked){
+		alert({L_extension_install_locked|jsencode});
+		return false;
+	}
+	locked = true;
 	
 	$("#lu_error").hide();
 	$("#nl_progressbar").show();
@@ -113,6 +131,7 @@ function repo_step5(extid, cat, extensioncode, mode){
 
 function hide_update_warning(status){
 	var hide = (status) ? 1 : 0;
+	if (hide) updateWarning = false;
 	$.get('manage_extensions.php{SID}&hide_update_warning=true&hide='+hide+'&link_hash={CSRF_UPDATEWARNING_TOKEN}');
 }
 

@@ -1682,5 +1682,7 @@ $lang = array(
 "bridge_profilefields_info" => "Diese Bridge unterstützt das Synchronisieren von Benutzerfeldern. Eine Zuordnung der CMS/Forum-Felder zu den EQdkp Plus-Feldern kannst du in der <a href=\"manage_user_profilefields.php\">Benutzerprofilfeldverwaltung</a> vornehmen.",
 "pi_title" => "Plugin",
 "bugtracker" => "Bugtracker",
+"extension_install_locked" => "Es wird bereits eine Erweiterung installiert oder aktualisiert. Du kannst nur eine Erweiterung gleichzeitig installieren oder aktualisieren.",
+"fatal_error_id" => "Fehler-ID",
 );
 ?>

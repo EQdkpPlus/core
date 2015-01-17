@@ -160,11 +160,12 @@ abstract class Database extends gen_class {
 
 	// pdl html format function for sql errors
 	public function pdl_html_format_sql_error($log_entry) {
-		$text = '<b>Query:</b>'		. htmlentities($log_entry['args'][0]) . '<br /><br />
-			<b>Message:</b> '		. $log_entry['args'][1] . '<br /><br />
-			<b>Code:</b>'			. $log_entry['args'][2] . '<br />
-			<b>Database:</b>'		. $log_entry['args'][3] . '<br />
-			<b>Table Prefix:</b>'	. $log_entry['args'][4] . '<br />
+		$text =  '<b>Error ID: </b>'		. $log_entry['args'][0] . '<br /><br />
+			<b>Query:</b>'		. htmlentities($log_entry['args'][1]) . '<br /><br />
+			<b>Message:</b> '		. $log_entry['args'][2] . '<br /><br />
+			<b>Code:</b>'			. $log_entry['args'][3] . '<br />
+			<b>Database:</b>'		. $log_entry['args'][4] . '<br />
+			<b>Table Prefix:</b>'	. $log_entry['args'][5] . '<br />
 			<b>PHP:</b>'			. phpversion() . ' | Database: ' . $this->strDbalName . '/' . $this->strDbmsName . $this->get_client_version() . '<br /><br />
 			is your EQdkp updated? <a href="' . $this->root_path . 'admin/manage_live_update.php'.$this->SID.'">click to check</a>';
 		return $text;
@@ -172,12 +173,13 @@ abstract class Database extends gen_class {
 
 	// pdl plaintext (logfile) format function for sql errors
 	public function pdl_pt_format_sql_error($log_entry) {
-		$text = 'Qry: '	. $log_entry['args'][0] . "\t
-			Msg: "		. $log_entry['args'][1] . "\t
-			Code: "		. $log_entry['args'][2] . "\t
-			DB: "		. $log_entry['args'][3] . "\t
-			Prfx: "		. $log_entry['args'][4] . "\t
-			Trace:\n"	. $this->clean_errormessage($log_entry['args'][5]);
+		$text = '>>>> '.$log_entry['args'][0].' <<<<\t 
+			Query: '	. $log_entry['args'][1] . "\t
+			Message: "		. $log_entry['args'][2] . "\t
+			Code: "		. $log_entry['args'][3] . "\t
+			Database: "		. $log_entry['args'][4] . "\t
+			Prefix: "		. $log_entry['args'][5] . "\t
+			Trace:\n"	. $this->clean_errormessage($log_entry['args'][6])." <<<<\n";
 		return $text;
 	}
 	
@@ -263,15 +265,17 @@ abstract class Database extends gen_class {
 		$this->strError = $strErrorMessage;
 		$this->intErrno = $strErrorCode;
 		
+		$strErrorID = md5('db_error'.$strErrorMessage.time().$this->strDebugPrefix);
+		
 		if(!$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
 	
-			registry::register('core')->message("<b>SQL Error</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a></li></ul>", 'Error', 'red');
+			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a>.</li></ul>", 'Error', 'red');
 			$sys_message = true ;
 		}
 		$exception = new Exception();
-		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
+		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
 	}
 	
 	
@@ -562,15 +566,16 @@ abstract class DatabaseStatement {
 	}
 	
 	protected function error($strErrorMessage, $strQuery, $strErrorCode = '') {
+		$strErrorID = md5('db_error'.$strErrorMessage.time().$this->strDebugPrefix);
 		
 		if(!registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
 	
-			registry::register('core')->message("<b>SQL Error</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a></li></ul>", 'Error', 'red');
+			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a></li></ul>", 'Error', 'red');
 		}
 		$exception = new Exception();
-		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
+		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
 
 	}
 		

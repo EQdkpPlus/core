@@ -1372,6 +1372,21 @@ class template extends gen_class {
 		}
 		
 	}
+	
+	public function get_error_details(){
+		$handle = $this->handle;
+		$message = "";
+		if(!$this->error_message){
+			$message		.= 'File: '.$this->filename[$handle]."\n";
+			if($handle != 'body') $message		.= 'Body-File: '.$this->files['body']."\n";
+			$message		.= 'Path: '.$this->files[$handle]."\n";
+			$message		.= ($function != "") ? 'Function: '.$function."\n" : '';
+			$message		.= 'Style-Code: '.$this->style_code."\n";
+			$message		.= 'Template: '.$this->template."\n";
+			$message		.= 'Handler: '.$handle."\n";
+		}
+		return $message;
+	}
 
 	private function display_error($title, $message) {
 		$this->set_template('maintenance', 'maintenance');
