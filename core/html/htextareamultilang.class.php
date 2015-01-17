@@ -44,7 +44,6 @@ class htextareamultilang extends html {
 	public $rows = 5;
 	public $cols = 10;
 	public $disabled = false;
-	public $codeinput = false;
 	public $required = false;
 	
 	private $out = '';
@@ -99,8 +98,8 @@ class htextareamultilang extends html {
 	}
 	
 	public function _inpval() {
-		$value = $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : '');
-		return $value;
+		$arrInput = $this->in->getArray($this->name, $this->inptype);
+		return serialize($arrInput);
 	}
 }
 ?>
