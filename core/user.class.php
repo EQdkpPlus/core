@@ -918,6 +918,7 @@ class user extends gen_class {
 		return $language_array;
 	}
 	
+	//Should be used for resolve multilang serialized array to display the value for the user in the right language
 	public function multilangValue($strRawContent){
 		$arrValues = @unserialize($strRawContent);
 		if(!$arrValues) return $strRawContent;
