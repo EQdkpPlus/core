@@ -36,12 +36,18 @@ class update_20015 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_20015'	=> 'EQdkp Plus 2.0 Update 7',
-					1			=> 'Alter article Table',
+				'update_20015'		=> 'EQdkp Plus 2.0 Update 7',
+				'update_function'	=> 'Set index for articles',
+				1					=> 'Alter article Table and add index column',
+				2					=> 'Insert authoption for article categories',
+				3					=> 'Alter article Table and add undeletable column',
 				),
 			'german' => array(
-				'update_20015'	=> 'EQdkp Plus 2.0 Update 7',
-					1			=> 'Alter article Table',
+				'update_20015'		=> 'EQdkp Plus 2.0 Update 7',
+				'update_function'	=> 'Set index for articles',
+				1					=> 'Alter article Table',
+				2					=> 'Insert authoption for article categories',
+				3					=> 'Alter article Table and add undeletable column',
 			),
 		);
 		

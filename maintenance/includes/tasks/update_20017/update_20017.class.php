@@ -36,14 +36,16 @@ class update_20017 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_20017'	=> 'EQdkp Plus 2.0 Update 9',
-					1			=> 'Add permission',
-					2			=> 'Add permission',
+				'update_20017'		=> 'EQdkp Plus 2.0 Update 9',
+				'update_function'	=> 'Set default config for some settings',
+				1					=> 'Add permission',
+				2					=> 'Add permission',
 				),
 			'german' => array(
-				'update_20017'	=> 'EQdkp Plus 2.0 Update 9',
-					1			=> 'Add permission',
-					2			=> 'Add permission',
+				'update_20017'		=> 'EQdkp Plus 2.0 Update 9',
+				'update_function'	=> 'Set default config for some settings',
+				1					=> 'Add permission',
+				2					=> 'Add permission',
 			),
 		);
 		
