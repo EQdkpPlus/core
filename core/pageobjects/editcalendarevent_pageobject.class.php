@@ -415,7 +415,7 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 
 		$beforeclosefunc = "
-			$.post('addevent.php".$this->SID."&ajax_dropdown=true', { raidevent_id: $('body').data('raidevent_id') }, function(data) {
+			$.post('".$this->routing->build('editcalendarevent')."&ajax_dropdown=true', { raidevent_id: $('body').data('raidevent_id') }, function(data) {
 				$('#raidevent_dropdown').html(data);
 			});";
 
