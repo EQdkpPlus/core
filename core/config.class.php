@@ -31,6 +31,7 @@ class config extends gen_class {
 	private $changed_keys = array();
 	private $deleted_keys = array();
 	private $added_keys = array();
+	private $blnFileCache = false;
 	
 	public function __construct($pfh=false, $db=false)	{
 		$this->get_config();
@@ -105,14 +106,16 @@ class config extends gen_class {
 	public function get_config($plugin=''){
 		if(count($this->config) < 1){
 			// load cache file
-			$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
-			if(is_file($file)){
-				include($file);
-				$this->config = $localconf;
+			if($blnFileCache){
+				$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+				if(is_file($file)){
+					include($file);
+					$this->config = $localconf;
+				}
 			}
 			
 			// If the config file is empty, load it out of the database
-			if(count($this->config) < 1){
+			if(count($this->config) < 1 || !$blnFileCache){
 				$this->get_dbconfig();
 			}
 		}
@@ -243,17 +246,19 @@ class config extends gen_class {
 			$this->config = (is_array($manual) ? $manual : $this->config);
 			$this->save_backup($this->config);
 		}
-		// Build the plain file config cache, reload from database first
-		$this->get_dbconfig();
-		ksort($this->config);
-		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
-		$data = "<?php\n";
-		$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
-		$data .= '$localconf = ';
-		$data .= var_export($this->config, true);
-		$data .= ";\n?";
-		$data .= ">";
-		$this->pfh->putContent($file, $data);
+		if($blnFileCache){
+			// Build the plain file config cache, reload from database first
+			$this->get_dbconfig();
+			ksort($this->config);
+			$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+			$data = "<?php\n";
+			$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
+			$data .= '$localconf = ';
+			$data .= var_export($this->config, true);
+			$data .= ";\n?";
+			$data .= ">";
+			$this->pfh->putContent($file, $data);
+		}
 		$this->config_modified = false;
 	}
 	

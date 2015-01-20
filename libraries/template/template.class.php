@@ -242,7 +242,7 @@ class template extends gen_class {
 					$strPathDir = str_replace($this->root_path, "", $strPathDir);
 				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
-				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
+				$data[] = array('content' => "\r\n/* ".$strFile." */ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
 			foreach($data as $val){
