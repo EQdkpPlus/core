@@ -1115,7 +1115,17 @@ fieldset.settings dl {
 	margin-bottom: 10px;
 	font-size: 0.95em;
 	padding-bottom: 1px;
+	clear: both;
 }
+
+fieldset.settings dl:after {
+	content: ".";
+    clear: both;
+    display: block;
+    visibility: hidden;
+    height: 0px;
+}
+
 fieldset.settings dl:hover dt{
 	border-right: 1px solid #000;
 }
