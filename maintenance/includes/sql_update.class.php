@@ -98,31 +98,42 @@ class sql_update extends task {
 
 	public function parse_step($step) {
 		include_once($this->task_list[$step]);
-		$current = registry::register($step);
+		$current			= registry::register($step);
 		$current->init_lang();
-		$this->plugin_path = $current->plugin_path;
+		$this->plugin_path	= $current->plugin_path;
+
+		// start the output table
+		$this->form .= '<h2>'.sprintf($this->user->lang('executed_tasks'), $current->name).'</h2>';
+		$this->form .= '<table width="100%" align="center" class="colorswitch">';
+
+		// perform the function "before_update"
 		if(method_exists($current, 'before_update_function')) {
-			$func = $current->before_update_function();
-			$this->form .= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['before_update_function'].'</td></tr>';
+			$func			= $current->before_update_function();
+			$this->form		.= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['before_update_function'].'</td></tr>';
 		}
 		$this->do_sql($current->sqls, $current->version, $current->lang, $current->name);
+
+		// perform the function "update"
 		if(method_exists($current, 'update_function')) {
-			$func = $current->update_function();
-			$this->form .= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['update_function'].'</td></tr>';
+			$func			= $current->update_function();
+			$this->form 	.= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['update_function'].'</td></tr>';
 		}
+
+		// end the output table
+		$this->form .= '</table>';
+
+		// unset the data and flush cache
 		unset($current);
 		registry::register('datacache')->flush();
 		return true;
 	}
 
 	public function step_end() {
-		return $this->form."</table><br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i>".$this->user->lang('task_manager')."</button></a>";
+		return $this->form."<br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i>".$this->user->lang('task_manager')."</button></a>";
 	}
 
 	protected function do_sql($sqls, $version, $lang, $task_name) {
 		//run all queries if this task is necessary
-		$this->form .= '<h2>'.sprintf($this->user->lang('executed_tasks'), $task_name).'</h2>';
-		$this->form .= '<table width="100%" align="center" class="colorswitch">';
 		foreach($sqls as $key => $sql) {
 			$this->form .= '<tr><td>';
 			if($this->db->query($sql)) {
@@ -131,7 +142,6 @@ class sql_update extends task {
 				$this->form .= '<i class="fa fa-times icon-red"></i> ';
 			}
 			$this->form .=  $lang[$key].'</td></tr>';
-				
 		}
 		if($this->plugin_path) {
 			$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
@@ -148,10 +158,10 @@ class sql_update extends task {
 				$current_task = registry::register($task);
 				if($current_task->is_necessary() AND ($all OR (!$all AND $current_task->plugin_path == $this->plugin_path))) {
 					$current_task->init_lang();
-					$this->needed_updates[$current_task->version]['code'] = $task;
-					$this->needed_updates[$current_task->version]['name'] = $current_task->name;
-					$this->needed_updates[$current_task->version]['desc'] = $current_task->lang[$task];
-					$this->needed_updates[$current_task->version]['plugin_path'] = $current_task->plugin_path;
+					$this->needed_updates[$current_task->version]['code']			= $task;
+					$this->needed_updates[$current_task->version]['name']			= $current_task->name;
+					$this->needed_updates[$current_task->version]['desc']			= $current_task->lang[$task];
+					$this->needed_updates[$current_task->version]['plugin_path']	= $current_task->plugin_path;
 				}
 				unset($current_task);
 			}
