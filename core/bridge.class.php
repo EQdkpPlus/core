@@ -458,6 +458,7 @@ class bridge extends gen_class {
 	}
 	
 	public function get_prefix(){
+		if(!$this->db) return array();
 		$alltables = $this->db->listTables();
 		$tables		= array();
 		foreach ($alltables as $name){
