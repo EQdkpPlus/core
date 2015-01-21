@@ -1680,6 +1680,7 @@ $lang = array(
 	"bugtracker" => "Bugtracker",
 	"extension_install_locked" => "There is already one Extension being updated or installed. You can install or update only one at the same time.",
 	"fatal_error_id" => "Error-ID",
+	"core_sett_f_enable_leaderboard" => "Show Leaderboard",
 );
 
 ?>

@@ -259,16 +259,7 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 5,				
 					),
-					'color_items'	=> array(
-						'type'		=> 'slider',
-						'label'		=> $this->user->lang('core_sett_f_color_items'),
-						'min'		=> 0,
-						'max'		=> 100,
-						'width'		=> '300px'
-					),
-					'enable_comments'	=> array(
-						'type'		=> 'radio',
-					),
+					
 					'round_activate'	=> array(
 						'type'		=> 'radio',
 						'default'	=> 0,
@@ -278,6 +269,19 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 2,
 						'default'	=> 0
+					),
+					'enable_leaderboard'=> array(
+						'type'		=> 'radio',
+					),
+					'color_items'	=> array(
+						'type'		=> 'slider',
+						'label'		=> $this->user->lang('core_sett_f_color_items'),
+						'min'		=> 0,
+						'max'		=> 100,
+						'width'		=> '300px'
+					),
+					'enable_comments'	=> array(
+						'type'		=> 'radio',
 					),
 					'debug'	=> array(
 						'type'		=> 'dropdown',

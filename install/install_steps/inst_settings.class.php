@@ -87,6 +87,7 @@ class inst_settings extends install_generic {
 		'enable_registration'			=> 1,
 		'enable_points'					=> 1,
 		'enable_embedly'				=> 1,
+		'enable_leaderboard'			=> 1,
 			
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',

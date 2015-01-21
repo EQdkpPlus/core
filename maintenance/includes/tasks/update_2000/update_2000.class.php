@@ -618,6 +618,7 @@ class update_2000 extends sql_update_task {
 		$this->config->set('enable_embedly', !$this->config->get('disable_embedly'));
 		$this->config->set('enable_points', !$this->config->get('disable_points'));
 		$this->config->set('enable_username_change', !$this->config->get('disable_username_change'));
+		$this->config->set('enable_leaderboard', 1);
 		
 		//Set Dummy Game as default
 		$this->config->set('default_game', 'dummy');

@@ -1684,5 +1684,6 @@ $lang = array(
 "bugtracker" => "Bugtracker",
 "extension_install_locked" => "Es wird bereits eine Erweiterung installiert oder aktualisiert. Du kannst nur eine Erweiterung gleichzeitig installieren oder aktualisieren.",
 "fatal_error_id" => "Fehler-ID",
+"core_sett_f_enable_leaderboard" => "Leaderboard anzeigen",
 );
 ?>
