@@ -241,7 +241,7 @@ class template extends gen_class {
 				if (strpos($strPathDir, "./") === 0){
 					$strPathDir = str_replace($this->root_path, "", $strPathDir);
 				}
-				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+
 				$data[] = array('content' => "\r\n/* ".$strFile." */ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
@@ -282,12 +282,13 @@ class template extends gen_class {
 					
 					$strFile = $val['file'];
 					$strContent = file_get_contents($strFile);
+					
 					$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
 					$strFilename = pathinfo($strFile, PATHINFO_FILENAME);
 					if (strpos($strPathDir, "./") === 0){
 						$strPathDir = str_replace($this->root_path, "", $strPathDir);
 					}
-					$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+					
 					$strContent = $this->replace_paths_css($strContent, false, false, $strPathDir);
 					
 					$combinedFile = $storage_folder.$this->style_code.'/dev_'.$strFilename.'.css';
@@ -296,7 +297,6 @@ class template extends gen_class {
 				}
 			}
 		}
-
 	}
 	
 	public function resolve_css_file($cssfile){
@@ -1215,6 +1215,10 @@ class template extends gen_class {
 		//Global CSS
 		$global_css		= $this->root_path.'templates/eqdkpplus.css';
 		$this->tpl->css_file($global_css, 'screen');
+		
+		//Font Awesome
+		$this->tpl->css_file($this->root_path.'libraries/FontAwesome/font-awesome.min.css', 'screen');
+		
 		//Template CSS
 		$css_theme		= $this->root_path.'templates/'.$this->style_code.'/'.$this->style_code.'.css';
 		$this->tpl->css_file($css_theme, 'screen');
@@ -1243,27 +1247,6 @@ class template extends gen_class {
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
 		
-		if ($path) {
-			$arrPaths = explode("/", $path);
-			$arrSE = $arrRE = array();
-			$strSE = '../';
-			array_pop($arrPaths);
-			for($i=0; $i<=count($arrPaths); $i++){
-				$arrSE[] = '#'.preg_quote($strSE).'([a-zA-Z0-9])#';
-				array_pop($arrPaths);
-				$myPath = "EQDKP_ROOT_PATH".implode('/', $arrPaths).'/$1';
-				
-				$arrRE[] = $myPath;
-				$strSE = '../'.$strSE;
-			}
-			$arrSE[] = '#'.preg_quote($strSE).'([a-zA-Z0-9])#';
-			$arrRE[] = "EQDKP_ROOT_PATH$1";
-			$arrSE = array_reverse($arrSE);
-			$arrRE = array_reverse($arrRE);
-			$strCSS = preg_replace($arrSE, $arrRE, $strCSS);
-		}
-
-
 		if (file_exists($this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg')){
 			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		} else {
@@ -1315,15 +1298,6 @@ class template extends gen_class {
 				"/T_COLUMN_LEFT_WIDTH/",
 				"/T_COLUMN_RIGHT_WIDTH/",
 		
-				"#\.\.\/\.\.\/\.\.\/([a-zA-Z0-9])#",
-				"#\.\.\/\.\.\/([a-zA-Z0-9])#",
-				"#\.\.\/([a-zA-Z0-9])#",
-				"/\(assets/",
-				"/\('assets/",
-				"/\(\"assets/",
-				"/\(images/",
-				"/\('images/",
-				"/\(\"images/",
 				"/EQDKP_ROOT_PATH/",
 				"/EQDKP_IMAGE_PATH/",
 				"/TEMPLATE_IMAGE_PATH/",
@@ -1367,15 +1341,6 @@ class template extends gen_class {
 				$style['column_left_width'],
 				$style['column_right_width'],
 		
-				$root_path."$1",
-				$root_path."$1",
-				$root_path."$1",
-				'('.$root_path.'templates/'.$stylepath.'/assets',
-				'(\''.$root_path.'templates/'.$stylepath.'/assets',
-				'("'.$root_path.'templates/'.$stylepath.'/assets',
-				'('.$root_path.'templates/'.$stylepath.'/images',
-				'(\''.$root_path.'templates/'.$stylepath.'/images',
-				'("'.$root_path.'templates/'.$stylepath.'/images',
 				$root_path,
 				$root_path.'images/',
 				$root_path.'templates/'.$stylepath.'/images',
@@ -1384,6 +1349,60 @@ class template extends gen_class {
 		
 		$data = preg_replace($in, $out, $strCSS);
 		
+		/**
+		 * Contao Open Source CMS
+		 * Copyright (c) 2005-2014 Leo Feyer
+		 * @link    https://contao.org
+		 * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+		 */
+		
+		$content = $data;
+		$strDirname = $path;
+		$strGlue = ($strDirname != '.') ? $strDirname . '/' : '';
+		
+		$strBuffer = '';
+		$chunks = preg_split('/url\(["\']??(.+)["\']??\)/U', $content, -1, PREG_SPLIT_DELIM_CAPTURE);
+		
+		// Check the URLs
+		for ($i=0, $c=count($chunks); $i<$c; $i=$i+2)
+		{
+			$strBuffer .= $chunks[$i];
+		
+			if (!isset($chunks[$i+1]))
+			{
+				break;
+			}
+		
+			$strData = $chunks[$i+1];
+		
+			// Skip absolute links and embedded images (see #5082)
+			if (strncmp($strData, 'data:', 5) !== 0 && strncmp($strData, 'http://', 7) !== 0 && strncmp($strData, 'https://', 8) !== 0 && strncmp($strData, '/', 1) !== 0)
+			{
+				// Make the paths relative to the root (see #4161)
+				if (strncmp($strData, '../', 3) !== 0)
+				{
+					$strData = $root_path . $strGlue . $strData;
+				}
+				else
+				{
+					$dir = $strDirname;
+		
+					// Remove relative paths
+					while (strncmp($strData, '../', 3) === 0)
+					{
+						$dir = dirname($dir);
+						$strData = substr($strData, 3);
+					}
+		
+					$glue = ($dir != '.') ? $dir . '/' : '';
+					$strData = $root_path . $glue . $strData;
+				}
+
+			}
+		
+			$strBuffer .= 'url("' . str_replace("//", "/", $strData) . '")';
+		}
+		$data = $strBuffer;
 		return $data;
 	}
 
