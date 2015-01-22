@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class wordpress_bridge extends bridge {
+class wordpress_bridge extends bridge_generic {
 	
 	
 	public static $name = 'Wordpress';
@@ -47,20 +47,9 @@ class wordpress_bridge extends bridge {
 			'QUERY'	=> '',
 		),
 	);
-	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> '',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		if ( strlen($hash) <= 32 ) {
 			if ($hash === md5($password)) return true;
 		} else {
@@ -75,7 +64,7 @@ class wordpress_bridge extends bridge {
 	
 	public function wordpress_get_groups($blnWithID){
 		$arrGroups = array();
-		$query = $this->db->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
+		$query = $this->bridgedb->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
 		if ($query){
 			$result = $query->fetchAssoc();
 			if ($arrDBGroups = unserialize($result['option_value'])){
@@ -89,7 +78,7 @@ class wordpress_bridge extends bridge {
 	}
 	
 	public function wordpress_get_user_groups($intUserID){
-		$objQuery = $this->db->prepare("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='wp_capabilities' AND user_id=?")->execute($intUserID);
+		$objQuery = $this->bridgedb->prepare("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='wp_capabilities' AND user_id=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($objQuery){
 			$result = $objQuery->fetchAssoc();

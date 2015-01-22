@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class phpbb3_bridge extends bridge {
+class phpbb3_bridge extends bridge_generic {
 	
 	public static $name = "phpBB3";
 	
@@ -52,19 +52,7 @@ class phpbb3_bridge extends bridge {
 		),
 		
 	);
-		
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'phpbb3_callafter',
-		),
-		'logout' 	=> 'phpbb3_logout',
-		'autologin' => 'phpbb3_autologin',	
-		'sync'		=> 'phpbb3_sync',
-		'sync_fields' => 'phpbb3_sync_fields',
-	);
-		
+				
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -76,8 +64,8 @@ class phpbb3_bridge extends bridge {
 	
 	public $blnSyncBirthday = true;
 		
-	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 		if (strlen($hash) == 34)
 		{
@@ -86,7 +74,7 @@ class phpbb3_bridge extends bridge {
 		return (md5($password) === $hash) ? true : false;
 	}
 	
-	public function phpbb3_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 		
@@ -95,18 +83,18 @@ class phpbb3_bridge extends bridge {
 			}
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
-				$this->phpbb3_sso($arrUserdata, $boolAutoLogin);
+				$this->sso($arrUserdata, $boolAutoLogin);
 			}
 		}
 		return true;
 	}
 	
-	public function phpbb3_sso($arrUserdata, $boolAutoLogin = false){
+	public function sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(generateRandomBytes(55));
-		$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
+		$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
 		
-		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
@@ -132,7 +120,7 @@ class phpbb3_bridge extends bridge {
 			'session_forum_id'			=> 0,
 		);
 		
-		$this->db->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
+		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
 				
 		// Set cookie
 		$expire = $this->time->time + 31536000;
@@ -154,7 +142,7 @@ class phpbb3_bridge extends bridge {
 		if ($boolAutoLogin){
 			$strLoginKey = substr($this->user->generate_salt(), 4, 16);
 			
-			$this->db->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
+			$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
 				'key_id'	=> md5($strLoginKey),
 				'last_ip'	=> $ip,
 				'last_login'=> (int)$this->time->time,
@@ -169,8 +157,8 @@ class phpbb3_bridge extends bridge {
 		return true;
 	}
 	
-	public function phpbb3_autologin(){
-		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+	public function autologin($arrCookieData){
+		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
@@ -184,12 +172,12 @@ class phpbb3_bridge extends bridge {
 		
 		if ($SID == NULL || $SID == "") return false;
 	
-		$result = $this->db->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
+		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
 		if ($result){
 			$row = $result->fetchRow();
 			if($row){
 				if ($row['session_ip'] == $ip && $row['session_browser'] == (string) trim(substr($this->env->useragent, 0, 149))){
-					$result2 = $this->db->prepare("SELECT * FROM ".$this->prefix."users WHERE user_id=?")->execute($userID);
+					$result2 = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."users WHERE user_id=?")->execute($userID);
 					if ($result2){
 						$row2 = $result2->fetchRow();
 						if ($row2){
@@ -247,13 +235,13 @@ class phpbb3_bridge extends bridge {
 		return $iip;
 	}
 	
-	public function phpbb3_logout() {
-		$arrUserdata = $this->get_userdata($this->user->data['username']);
+	public function logout() {
+		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
+			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
 		}
 		
-		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
@@ -266,7 +254,7 @@ class phpbb3_bridge extends bridge {
 		setcookie($arrConfig['cookie_name'].'_k', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 	}
 	
-	public function phpbb3_sync($arrUserdata){
+	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
@@ -279,7 +267,7 @@ class phpbb3_bridge extends bridge {
 		return $sync_array;
 	}
 	
-	public function phpbb3_sync_fields(){
+	public function sync_fields(){
 		return array(
 			'icq'		=> 'ICQ',
 			'town'		=> 'Town',

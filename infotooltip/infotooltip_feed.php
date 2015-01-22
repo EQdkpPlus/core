@@ -41,7 +41,6 @@ try {
 
 	$itt	= registry::register('infotooltip');
 	$in		= registry::register('input');
-	registry::$aliases['bridge'] = 'bridge';
 	
 	if (!function_exists("get_chmod")){
 		function get_chmod(){

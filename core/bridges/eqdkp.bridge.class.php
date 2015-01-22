@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class eqdkp_bridge extends bridge {
+class eqdkp_bridge extends bridge_generic {
 	
 	public static $name = "EQdkp 2.0";
 	
@@ -52,34 +52,23 @@ class eqdkp_bridge extends bridge {
 		),
 		
 	);
-		
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'eqdkp_callafter',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> 'eqdkp_sync',
-		'sync_fields' => 'eqdkp_sync_fields',
-	);
-		
+
+	
 	public $settings = array(
 		'cmsbridge_disable_sync' => array(
 			'type'	=> 'radio',
 		),
 	);
 	
-	protected $blnSyncEmail = false;
+	public $blnSyncEmail = false;
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		$blnResult = $this->user->checkPassword($password, $hash, $boolUseHash);
 		return $blnResult;
 	}
 	
-	public function eqdkp_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['active'] == '0') {
@@ -89,7 +78,7 @@ class eqdkp_bridge extends bridge {
 		return true;
 	}
 	
-	public function eqdkp_sync($arrUserdata){
+	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
@@ -105,8 +94,8 @@ class eqdkp_bridge extends bridge {
 		return $sync_array;
 	}
 	
-	public function eqdkp_sync_fields(){
-		$query = $this->db->prepare("SELECT * FROM ".$this->prefix."user_profilefields WHERE enabled=1")->execute();
+	public function sync_fields(){
+		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."user_profilefields WHERE enabled=1")->execute();
 		$arrFields = array();
 		if ($query){
 			while($row = $query->fetchAssoc()){

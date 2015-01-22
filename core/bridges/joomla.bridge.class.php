@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class joomla_bridge extends bridge {
+class joomla_bridge extends bridge_generic {
 	
 	public static $name = "Joomla";
 	
@@ -53,19 +53,9 @@ class joomla_bridge extends bridge {
 		),
 	);
 	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'joomla_callafter',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		// If we are using phpass
 		if (strpos($hash, '$P$') === 0)
 		{
@@ -115,7 +105,7 @@ class joomla_bridge extends bridge {
 		return false;
 	}
 	
-	public function joomla_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['block'] != '0') {
@@ -136,7 +126,7 @@ class joomla_bridge extends bridge {
 	 *
 	 * @since   3.2
 	 */
-	public function timingSafeCompare($known, $unknown)
+	private function timingSafeCompare($known, $unknown)
 	{
 		// Prevent issues if string length is 0
 		$known .= chr(0);
@@ -159,7 +149,7 @@ class joomla_bridge extends bridge {
 		return $result === 0;
 	}
 	
-	public function getCryptedPassword($plaintext, $salt = '', $encryption = 'md5-hex', $show_encrypt = false)
+	private function getCryptedPassword($plaintext, $salt = '', $encryption = 'md5-hex', $show_encrypt = false)
 	{
 		// Get the salt to use.
 		$salt = $this->getSalt($encryption, $salt, $plaintext);
@@ -181,7 +171,7 @@ class joomla_bridge extends bridge {
 		}
 	}
 	
-	public function getSalt($encryption = 'md5-hex', $seed = '', $plaintext = '')
+	private function getSalt($encryption = 'md5-hex', $seed = '', $plaintext = '')
 	{
 		// Encrypt the password.
 		switch ($encryption)

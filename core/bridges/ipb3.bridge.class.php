@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class ipb3_bridge extends bridge {
+class ipb3_bridge extends bridge_generic {
 	
 	public static $name = "IPB 3";
 	
@@ -50,20 +50,9 @@ class ipb3_bridge extends bridge {
 		),
 		
 	);
-	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'ipb3_callafter',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
-	
+		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		
 		$password = md5( md5($strSalt) . md5( $password ) );
 		
@@ -71,7 +60,7 @@ class ipb3_bridge extends bridge {
 	}
 	
 	public function ipb3_get_user_groups($intUserID){
-		$query = $this->db->prepare("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id=?")->execute($intUserID);
+		$query = $this->bridgedb->prepare("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($query){
 			$result = $query->fetchAssoc();
@@ -87,7 +76,7 @@ class ipb3_bridge extends bridge {
 		return $arrReturn;
 	}
 	
-	public function ipb3_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['temp_ban'] != '0' || $arrUserdata['member_banned'] != '0') {

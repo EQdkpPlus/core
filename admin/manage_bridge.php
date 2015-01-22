@@ -231,7 +231,7 @@ class Manage_Bridge extends page_generic {
 	// Display
 	// ---------------------------------------------------------
 	public function display() {
-		if ($this->config->get('cmsbridge_active') == 1 && !$this->bridge->db){
+		if ($this->config->get('cmsbridge_active') == 1 && !$this->bridge->status){
 			$this->bridge->deactivate_bridge();
 			$this->core->message($this->user->lang('bridge_disabled_message'), $this->user->lang('error'), 'red');
 		}

@@ -272,13 +272,15 @@ class settings_pageobject extends pageobject {
 		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode');
 		//Deactivate Profilefields synced by Bridge
 		if ($this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('cmsbridge_disable_sync') != 1) {
-			$synced_fields = array('user_email', 'username', 'current_password', 'new_password', 'confirm_password');
-			$arrAvailableBridgeFields = $this->bridge->get_available_sync_fields();
+			$synced_fields = array('username', 'current_password', 'new_password', 'confirm_password');
 			
-			if($this->bridge->blnSyncBirthday) $synced_fields[] = 'birthday';
-			if($this->bridge->blnSyncCountry) $synced_fields[] = 'country';
-
-			foreach($arrBridgeFields as $intBridgeFieldID => $strEQdkpFieldID){
+			if($this->bridge->objBridge->blnSyncEmail) $synced_fields[] = 'user_email';
+			if($this->bridge->objBridge->blnSyncBirthday) $synced_fields[] = 'birthday';
+			if($this->bridge->objBridge->blnSyncCountry) $synced_fields[] = 'country';
+			
+			//Key: Bridge ID, Value: EQdkp Profilefield ID
+			$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
+			foreach($arrMapping as $intBridgeFieldID => $strEQdkpFieldID){
 				$synced_fields[] = 'userprofile_'.$strEQdkpFieldID;
 			}
 			

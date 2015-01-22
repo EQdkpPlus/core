@@ -106,7 +106,7 @@ class config extends gen_class {
 	public function get_config($plugin=''){
 		if(count($this->config) < 1){
 			// load cache file
-			if($blnFileCache){
+			if($this->blnFileCache){
 				$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
 				if(is_file($file)){
 					include($file);
@@ -115,7 +115,7 @@ class config extends gen_class {
 			}
 			
 			// If the config file is empty, load it out of the database
-			if(count($this->config) < 1 || !$blnFileCache){
+			if(count($this->config) < 1 || !$this->blnFileCache){
 				$this->get_dbconfig();
 			}
 		}
@@ -246,7 +246,7 @@ class config extends gen_class {
 			$this->config = (is_array($manual) ? $manual : $this->config);
 			$this->save_backup($this->config);
 		}
-		if($blnFileCache){
+		if($this->blnFileCache){
 			// Build the plain file config cache, reload from database first
 			$this->get_dbconfig();
 			ksort($this->config);

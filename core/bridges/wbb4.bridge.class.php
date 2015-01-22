@@ -54,17 +54,6 @@ class wbb4_bridge extends bridge {
 		),
 	);
 	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'wbb4_callafter',
-		),
-		'logout' 	=> 'wbb4_logout',
-		'autologin' => 'wbb4_autologin',	
-		'sync'		=> '',
-	);
-	
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -78,7 +67,7 @@ class wbb4_bridge extends bridge {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash, $strUsername){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		$blnResult = $this->__checkPassword($strUsername, $password, $hash);
 
 		if ($blnResult) return true;
@@ -87,7 +76,7 @@ class wbb4_bridge extends bridge {
 	}
 
 	
-	public function wbb4_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['banned'] != '0' || $arrUserdata['activationCode'] != '0') {
@@ -97,14 +86,14 @@ class wbb4_bridge extends bridge {
 		
 		//Single Sign On
 		if ($this->config->get('cmsbridge_disable_sso') != '1'){
-			$this->wbb4_sso($arrUserdata, $boolAutoLogin);
+			$this->sso($arrUserdata, $boolAutoLogin);
 		}
 		return true;
 	}
 	
 	public function get_groups($blnWithID){
 		$strQuery = "SELECT g.groupID as id, groupName as name, l.languageItemValue as lang FROM ".$this->prefix."user_group g LEFT JOIN ".$this->prefix."language_item l ON l.languageItem = g.groupName";
-		$objQuery = $this->db->query($strQuery);
+		$objQuery = $this->bridgedb->query($strQuery);
 		$groups = false;
 		
 		if ($objQuery){
@@ -124,10 +113,10 @@ class wbb4_bridge extends bridge {
 		return false;
 	}
 	
-	public function wbb4_sso($arrUserdata, $boolAutoLogin){
+	private function sso($arrUserdata, $boolAutoLogin){
 		$user_id = intval($arrUserdata['id']);
 		$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 40);
-		$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
+		$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
 			
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
@@ -140,10 +129,10 @@ class wbb4_bridge extends bridge {
 			'requestMethod'				=> 'GET',
 			'sessionVariables'			=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(generateRandomBytes()).'a7w8er45'.'.";}',
 		);
-		$this->db->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSe)->execute();
+		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSe)->execute();
 			
 		$config = array();
-		$objQuery =  $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		$objQuery =  $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
 		if($objQuery){
 			$result = $objQuery->fetchAllAssoc();
 			if (is_array($result)){
@@ -174,9 +163,9 @@ class wbb4_bridge extends bridge {
 		return true;
 	}
 	
-	public function wbb4_autologin(){
+	public function autologin($arrCookieData){
 	$config = array();
-		$objQuery =  $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		$objQuery =  $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
 		if($objQuery){
 			$result = $objQuery->fetchAllAssoc();
 			if (is_array($result)){
@@ -191,12 +180,12 @@ class wbb4_bridge extends bridge {
 		
 		if ($cookieHash == NULL || $cookieHash == "") return false;
 		
-		$result = $this->db->prepare("SELECT * FROM ".$this->prefix."session WHERE userID = ? and sessionID=?")->execute($userID, $cookieHash);
+		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."session WHERE userID = ? and sessionID=?")->execute($userID, $cookieHash);
 		if ($result){
 			$row = $result->fetchRow();
 			if ($row){
 				if ($row['ipAddress'] == self::getIpAddress() && $row['userAgent'] == $this->env->useragent){
-					$result2 = $this->db->prepare("SELECT * FROM ".$this->prefix."user WHERE userID=?")->execute($userID);
+					$result2 = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."user WHERE userID=?")->execute($userID);
 					if ($result2){
 						$row2 = $result2->fetchRow();
 						if($row2){
@@ -213,14 +202,14 @@ class wbb4_bridge extends bridge {
 		return false;
 	}
 	
-	public function wbb4_logout(){
-		$arrUserdata = $this->get_userdata($this->user->data['username']);
+	public function logout(){
+		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
+			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
 		}
 		
 		$config = array();
-		$objQuery =  $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
+		$objQuery =  $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
 		if($objQuery){
 			$result = $objQuery->fetchAllAssoc();
 			if (is_array($result)){
@@ -247,7 +236,7 @@ class wbb4_bridge extends bridge {
 		setcookie($config['cookie_prefix'].'password', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
 	
-	public function __checkPassword($username, $password, $hash) {
+	private function __checkPassword($username, $password, $hash) {
 		$isValid = false;
 		
 		// check if password is a valid bcrypt hash
@@ -273,7 +262,7 @@ class wbb4_bridge extends bridge {
 	 * 
 	 * @return	string
 	 */
-	public static function getIpAddress() {
+	private static function getIpAddress() {
 		$REMOTE_ADDR = '';
 		if (isset($_SERVER['REMOTE_ADDR'])) $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 		
@@ -293,7 +282,7 @@ class wbb4_bridge extends bridge {
 	 * @param	string		$ip
 	 * @return	string
 	 */
-	public static function convertIPv4To6($ip) {
+	private static function convertIPv4To6($ip) {
 		if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
 			// given ip is already ipv6
 			return $ip;

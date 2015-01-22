@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class phpbb31_bridge extends bridge {
+class phpbb31_bridge extends bridge_generic {
 	
 	public static $name = "phpBB3.1";
 	
@@ -53,18 +53,6 @@ class phpbb31_bridge extends bridge {
 		
 	);
 		
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'phpbb3_callafter',
-		),
-		'logout' 		=> 'phpbb3_logout',
-		'autologin' 	=> 'phpbb3_autologin',	
-		'sync'			=> 'phpbb3_sync',
-		'sync_fields'	=> 'phpbb3_sync_fields',
-	);
-		
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -76,8 +64,7 @@ class phpbb31_bridge extends bridge {
 	
 	public $blnSyncBirthday = true;
 
-	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash, $strUsername){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		if (strlen($hash) == 32){
 			
 			//plain md5
@@ -170,12 +157,7 @@ class phpbb31_bridge extends bridge {
 		return false;
 	}
 	
-	private function get_random_salt(){
-		$rand = random_string(false, 22);
-		return base64_encode($rand);
-	}
-	
-	public function phpbb3_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 		
@@ -184,18 +166,18 @@ class phpbb31_bridge extends bridge {
 			}
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
-				$this->phpbb3_sso($arrUserdata, $boolAutoLogin);
+				$this->sso($arrUserdata, $boolAutoLogin);
 			}
 		}
 		return true;
 	}
 	
-	public function phpbb3_sso($arrUserdata, $boolAutoLogin = false){
+	private function sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(generateRandomBytes(55));
-		$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
+		$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
 		
-		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
@@ -221,7 +203,7 @@ class phpbb31_bridge extends bridge {
 			'session_forum_id'			=> 0,
 		);
 		
-		$this->db->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
+		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
 				
 		// Set cookie
 		$expire = $this->time->time + 31536000;
@@ -243,7 +225,7 @@ class phpbb31_bridge extends bridge {
 		if ($boolAutoLogin){
 			$strLoginKey = substr($this->user->generate_salt(), 4, 16);
 			
-			$this->db->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
+			$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
 				'key_id'	=> md5($strLoginKey),
 				'last_ip'	=> $ip,
 				'last_login'=> (int)$this->time->time,
@@ -258,8 +240,8 @@ class phpbb31_bridge extends bridge {
 		return true;
 	}
 	
-	public function phpbb3_autologin(){
-		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+	public function autologin($arrCookieData){
+		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
@@ -273,12 +255,12 @@ class phpbb31_bridge extends bridge {
 		
 		if ($SID == NULL || $SID == "") return false;
 	
-		$result = $this->db->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
+		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
 		if ($result){
 			$row = $result->fetchRow();
 			if($row){
 				if ($row['session_ip'] == $ip && $row['session_browser'] == (string) trim(substr($this->env->useragent, 0, 149))){
-					$result2 = $this->db->prepare("SELECT * FROM ".$this->prefix."users WHERE user_id=?")->execute($userID);
+					$result2 = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."users WHERE user_id=?")->execute($userID);
 					if ($result2){
 						$row2 = $result2->fetchRow();
 						if ($row2){
@@ -294,55 +276,14 @@ class phpbb31_bridge extends bridge {
 		
 		return false;
 	}
-	
-	private function get_ip(){
-		$iip = (!empty($_SERVER['REMOTE_ADDR'])) ? (string) $_SERVER['REMOTE_ADDR'] : '';
-		$iip = preg_replace('# {2,}#', ' ', str_replace(',', ' ', $iip));
-
-		// split the list of IPs
-		$ips = explode(' ', trim($iip));
-
-		// Default IP if REMOTE_ADDR is invalid
-		$iip = '127.0.0.1';
-
-		foreach ($ips as $ip)
-		{
-			if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
-			{
-				$iip = $ip;
-			}
-			else if (preg_match('#^(?:(?:(?:[\dA-F]{1,4}:){6}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:::(?:[\dA-F]{1,4}:){0,5}(?:[\dA-F]{1,4}(?::[\dA-F]{1,4})?|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:):(?:[\dA-F]{1,4}:){4}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,2}:(?:[\dA-F]{1,4}:){3}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,3}:(?:[\dA-F]{1,4}:){2}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,4}:(?:[\dA-F]{1,4}:)(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,5}:(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,6}:[\dA-F]{1,4})|(?:(?:[\dA-F]{1,4}:){1,7}:)|(?:::))$#i', $ip))
-			{
-				// Quick check for IPv4-mapped address in IPv6
-				if (stripos($ip, '::ffff:') === 0)
-				{
-					$ipv4 = substr($ip, 7);
-
-					if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ipv4))
-					{
-						$ip = $ipv4;
-					}
-				}
-
-				$iip = $ip;
-			}
-			else
-			{
-				// We want to use the last valid address in the chain
-				// Leave foreach loop when address is invalid
-				break;
-			}
-		}
-		return $iip;
-	}
-	
-	public function phpbb3_logout() {
-		$arrUserdata = $this->get_userdata($this->user->data['username']);
+		
+	public function logout() {
+		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
+			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
 		}
 		
-		$query = $this->db->query("SELECT * FROM ".$this->prefix."config");
+		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
@@ -356,8 +297,10 @@ class phpbb31_bridge extends bridge {
 	}
 	
 	
-	public function phpbb3_sync_fields(){
-		$query = $this->db->prepare("SELECT * FROM ".$this->prefix."profile_fields")->execute();
+	public function sync_fields(){
+		if(!$this->bridgedb) return array();
+		
+		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."profile_fields")->execute();
 		$arrFields = array();
 		if ($query){
 			while($row = $query->fetchAssoc()){
@@ -368,7 +311,7 @@ class phpbb31_bridge extends bridge {
 		return $arrFields;
 	}
 	
-	public function phpbb3_sync($arrUserdata){
+	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
@@ -376,7 +319,7 @@ class phpbb31_bridge extends bridge {
 		
 		$user_id = $arrUserdata['user_id'];		
 		
-		$query = $this->db->prepare("SELECT * FROM ".$this->prefix."profile_fields_data WHERE user_id=?")->execute($user_id);
+		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."profile_fields_data WHERE user_id=?")->execute($user_id);
 		if ($query){
 			$arrProfileData = $query->fetchAssoc();
 			
@@ -390,6 +333,52 @@ class phpbb31_bridge extends bridge {
 		$sync_array['birthday'] = $this->_handle_birthday($arrUserdata['user_birthday']);
 		
 		return $sync_array;
+	}
+	
+	private function get_ip(){
+		$iip = (!empty($_SERVER['REMOTE_ADDR'])) ? (string) $_SERVER['REMOTE_ADDR'] : '';
+		$iip = preg_replace('# {2,}#', ' ', str_replace(',', ' ', $iip));
+	
+		// split the list of IPs
+		$ips = explode(' ', trim($iip));
+	
+		// Default IP if REMOTE_ADDR is invalid
+		$iip = '127.0.0.1';
+	
+		foreach ($ips as $ip)
+		{
+			if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+			{
+				$iip = $ip;
+			}
+			else if (preg_match('#^(?:(?:(?:[\dA-F]{1,4}:){6}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:::(?:[\dA-F]{1,4}:){0,5}(?:[\dA-F]{1,4}(?::[\dA-F]{1,4})?|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:):(?:[\dA-F]{1,4}:){4}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,2}:(?:[\dA-F]{1,4}:){3}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,3}:(?:[\dA-F]{1,4}:){2}(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,4}:(?:[\dA-F]{1,4}:)(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,5}:(?:[\dA-F]{1,4}:[\dA-F]{1,4}|(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])))|(?:(?:[\dA-F]{1,4}:){1,6}:[\dA-F]{1,4})|(?:(?:[\dA-F]{1,4}:){1,7}:)|(?:::))$#i', $ip))
+			{
+				// Quick check for IPv4-mapped address in IPv6
+				if (stripos($ip, '::ffff:') === 0)
+				{
+					$ipv4 = substr($ip, 7);
+	
+					if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ipv4))
+					{
+						$ip = $ipv4;
+					}
+				}
+	
+				$iip = $ip;
+			}
+			else
+			{
+				// We want to use the last valid address in the chain
+				// Leave foreach loop when address is invalid
+				break;
+			}
+		}
+		return $iip;
+	}
+
+	private function get_random_salt(){
+		$rand = random_string(false, 22);
+		return base64_encode($rand);
 	}
 	
 	private function _handle_birthday($date){

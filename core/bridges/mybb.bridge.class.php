@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class mybb_bridge extends bridge {
+class mybb_bridge extends bridge_generic {
 
 	public static $name = 'MyBB';
 
@@ -51,18 +51,6 @@ class mybb_bridge extends bridge {
 		),
 	);
 
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'mybb_callafter',
-		),
-		'logout' 		=> 'mybb_logout',
-		'autologin' 	=> '',
-		'sync'			=> 'mybb_sync',
-		'sync_fields'	=> 'mybb_sync_fields'
-	);
-
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -72,8 +60,8 @@ class mybb_bridge extends bridge {
 		),
 	);
 
-	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 
 		if($this->salt_password(md5($password), $strSalt) == $hash){
 			return true;
@@ -83,7 +71,7 @@ class mybb_bridge extends bridge {
 	}
 
 	public function mybb_get_user_groups($intUserID){
-		$objQuery = $this->db->prepare("SELECT usergroup, additionalgroups FROM ".$this->prefix."users WHERE uid=?")->execute($intUserID);
+		$objQuery = $this->bridgedb->prepare("SELECT usergroup, additionalgroups FROM ".$this->prefix."users WHERE uid=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($objQuery){
 			$result = $objQuery->fetchAssoc();
@@ -104,7 +92,7 @@ class mybb_bridge extends bridge {
 		return md5(md5($salt).$password);
 	}
 
-	public function mybb_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['usergroup'] == '5') {
@@ -112,13 +100,13 @@ class mybb_bridge extends bridge {
 			}
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
-				$this->mybb_sso($arrUserdata, $boolAutoLogin);
+				$this->sso($arrUserdata, $boolAutoLogin);
 			}
 		}
 		return true;
 	}
 
-	public function mybb_sync($arrUserdata){
+	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
@@ -129,7 +117,7 @@ class mybb_bridge extends bridge {
 		return $sync_array;
 	}
 	
-	public function mybb_sync_fields(){
+	public function sync_fields(){
 		return array(
 			'icq'		=> 'ICQ',
 			'birthday'	=> 'Birthday'
@@ -144,12 +132,12 @@ class mybb_bridge extends bridge {
 		return 0;
 	}
 
-	public function mybb_sso($arrUserdata, $boolAutoLogin = false){
+	public function sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(generateRandomBytes(55));
-		$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($user_id);
+		$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($user_id);
 
-		$query = $this->db->query("SELECT name,value FROM ".$this->prefix."settings");
+		$query = $this->bridgedb->query("SELECT name,value FROM ".$this->prefix."settings");
 		if ($query){
 			$result = $query->fetchAllAssoc();
 			if (is_array($result)){
@@ -173,7 +161,7 @@ class mybb_bridge extends bridge {
 			'location2'	=> 0,
 		);
 		
-		$this->db->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
+		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
 		
 		$logincredentials = $user_id.'_'.$arrUserdata['loginkey'];
 		
@@ -197,7 +185,7 @@ class mybb_bridge extends bridge {
 		return true;
 	}
 
-	function get_ip()
+	private function get_ip()
 	{
 		if(isset($_SERVER['REMOTE_ADDR']))
 		{
@@ -234,8 +222,8 @@ class mybb_bridge extends bridge {
 		return $ip;
 	}
 
-	public function mybb_logout(){
-		$query = $this->db->query("SELECT name,value FROM ".$this->prefix."settings");
+	public function logout(){
+		$query = $this->bridgedb->query("SELECT name,value FROM ".$this->prefix."settings");
 		if ($query){
 			$result = $query->fetchAllAssoc();
 			if (is_array($result)){
@@ -245,9 +233,9 @@ class mybb_bridge extends bridge {
 			}
 		} else return false;
 
-		$arrUserdata = $this->get_userdata($this->user->data['username']);
+		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($arrUserdata['id']);
+			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($arrUserdata['id']);
 		}
 		setcookie($arrConfig['cookieprefix'].'sid', '', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
 		//User-Cookie

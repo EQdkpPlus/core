@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class vbulletin_bridge extends bridge {
+class vbulletin_bridge extends bridge_generic {
 	
 	public static $name = 'vBulletin';
 	
@@ -50,19 +50,8 @@ class vbulletin_bridge extends bridge {
 		),
 	);
 	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> '',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
-	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		if ((md5(md5($password).$strSalt)) == $hash){
 			return true;
 		}
@@ -71,7 +60,7 @@ class vbulletin_bridge extends bridge {
 	}
 	
 	public function vb_get_user_groups($intUserID){
-		$query = $this->db->prepare("SELECT usergroupid, membergroupids FROM ".$this->prefix."user WHERE userid=?")->execute($intUserID);
+		$query = $this->bridgedb->prepare("SELECT usergroupid, membergroupids FROM ".$this->prefix."user WHERE userid=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($query){
 			$result = $query->fetchAssoc();

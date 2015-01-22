@@ -63,14 +63,14 @@ class e107_bridge extends bridge {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ''){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		if (md5($password) == $hash){
 			return true;
 		}
 		return false;
 	}
 	
-	public function e107_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['user_ban'] != '0') {
@@ -81,7 +81,7 @@ class e107_bridge extends bridge {
 	}
 	
 	public function e107_get_user_groups($intUserID){
-		$objQuery = $this->db->prepare("SELECT user_class,user_admin FROM ".$this->prefix."user WHERE user_id=?")->execute($intUserID);
+		$objQuery = $this->bridgedb->prepare("SELECT user_class,user_admin FROM ".$this->prefix."user WHERE user_id=?")->execute($intUserID);
 		if ($objQuery){
 			$arrResult = $objQuery->fetchAssoc();
 			$arrAditionalGroups = explode(',', $arrResult['user_class']);

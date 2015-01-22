@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class wbb3_bridge extends bridge {
+class wbb3_bridge extends bridge_generic {
 	
 	public static $name = 'WBB 3';
 	
@@ -53,17 +53,6 @@ class wbb3_bridge extends bridge {
 		),
 	);
 	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> 'wbb3_callafter',
-		),
-		'logout' 	=> 'wbb3_logout',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
-	
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -71,7 +60,7 @@ class wbb3_bridge extends bridge {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		$settings = $this->get_encryption_settings();
 		$strHashedPassword = $this->getDoubleSaltedHash($settings, $password, $strSalt);
 		if ($hash === $strHashedPassword) return true;
@@ -82,7 +71,7 @@ class wbb3_bridge extends bridge {
 
 	private function get_encryption_settings(){
 		$config = array();
-		$objQuery = $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'encryption_method' OR optionName = 'encryption_enable_salting' OR optionName = 'encryption_salt_position' OR optionName = 'encryption_encrypt_before_salting'");
+		$objQuery = $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'encryption_method' OR optionName = 'encryption_enable_salting' OR optionName = 'encryption_salt_position' OR optionName = 'encryption_encrypt_before_salting'");
 		if ($objQuery){
 			$result = $objQuery->fetchAllAssoc();
 			if (is_array($result)){
@@ -94,7 +83,7 @@ class wbb3_bridge extends bridge {
 		return $config;
 	}
 	
-	public function wbb3_callafter($strUsername, $strPassword, $boolAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['banned'] != '0' || $arrUserdata['activationCode'] != '0') {
@@ -104,20 +93,20 @@ class wbb3_bridge extends bridge {
 		
 		//Single Sign On
 		if ($this->config->get('cmsbridge_disable_sso') != '1'){
-			$this->wbb3_sso($arrUserdata, $boolAutoLogin);
+			$this->sso($arrUserdata, $boolAutoLogin);
 		}
 		return true;
 	}
 	
-	public function wbb3_sso($arrUserdata, $boolAutoLogin){
+	private function sso($arrUserdata, $boolAutoLogin){
 		//Get wbb package ID
-		$query = $this->db->query("SELECT packageID FROM ".$this->prefix."package WHERE package='com.woltlab.wbb'");
+		$query = $this->bridgedb->query("SELECT packageID FROM ".$this->prefix."package WHERE package='com.woltlab.wbb'");
 		if($query){
 			$packageId = $query->fetchAssoc();
 			if (isset($packageId['packageID'])){
 				$user_id = intval($arrUserdata['id']);
 				$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 40);
-				$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
+				$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
 				//PW is true, logg the user into our Forum
 				$arrSet = array(
 					'sessionID'					=> $strSessionID,
@@ -130,10 +119,10 @@ class wbb3_bridge extends bridge {
 					'requestMethod'				=> 'GET',
 					'username'					=> $arrUserdata['username'],
 				);
-				$this->db->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSet)->execute();
+				$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSet)->execute();
 				
 				$config = array();
-				$objQuery = $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
+				$objQuery = $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
 				if ($objQuery){
 					$result = $objQuery->fetchAllAssoc();
 					if (is_array($result)){
@@ -163,13 +152,13 @@ class wbb3_bridge extends bridge {
 		return false;
 	}
 	
-	public function wbb3_logout(){
-		$arrUserdata = $this->get_userdata($this->user->data['username']);
+	public function logout(){
+		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
-			$this->db->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
+			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
 		}
 		$config = array();
-		$objQuery = $this->db->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
+		$objQuery = $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
 		if ($objQuery){
 			$result = $objQuery->fetchAllAssoc();
 			if (is_array($result)){
@@ -200,7 +189,7 @@ class wbb3_bridge extends bridge {
 	 * @param	string		$salt
 	 * @return 	string 		$hash
 	 */
-	public function getDoubleSaltedHash($settings, $value, $salt) {
+	private function getDoubleSaltedHash($settings, $value, $salt) {
 		return $this->encrypt($salt . $this->getSaltedHash($settings, $value, $salt), $settings['encryption_method']);
 	}
 	
@@ -211,7 +200,7 @@ class wbb3_bridge extends bridge {
 	 * @param	string		$salt
 	 * @return 	string 		$hash
 	 */
-	public function getSaltedHash($settings, $value, $salt) {
+	private function getSaltedHash($settings, $value, $salt) {
 		if (!isset($settings['encryption_enable_salting']) || $settings['encryption_enable_salting'] == '1') {
 			$hash = '';
 			// salt
@@ -246,7 +235,7 @@ class wbb3_bridge extends bridge {
 	 * @param 	string 		$value
 	 * @return 	string 		$hash
 	 */
-	public function encrypt($value, $encryption_method = 'sha1') {
+	private function encrypt($value, $encryption_method = 'sha1') {
 		switch ($encryption_method) {
 			case 'sha1': return sha1($value);
 			case 'md5': return md5($value);

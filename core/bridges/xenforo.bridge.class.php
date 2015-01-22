@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class xenforo_bridge extends bridge {
+class xenforo_bridge extends bridge_generic {
 	
 	public static $name = 'XenForo';
 	
@@ -54,25 +54,13 @@ class xenforo_bridge extends bridge {
 			'FUNCTION' => 'get_user',
 		),
 	);
-	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> '',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
-	
+		
 	public $settings = array(
 	);
 	
-	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash, $strUsername){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		$strQuery = "SELECT * FROM ".$this->prefix."user_authenticate WHERE user_id=?";
-		$objQuery = $this->db->prepare($strQuery)->execute($hash);
+		$objQuery = $this->bridgedb->prepare($strQuery)->execute($hash);
 	
 		if ($objQuery){
 			$arrAllResults = $objQuery->fetchAllAssoc();
@@ -87,7 +75,6 @@ class xenforo_bridge extends bridge {
 
 		return false;
 	}
-
 	
 	private function _handle_logins($scheme, $password, $hash, $arrAuthData){
 		switch($scheme){

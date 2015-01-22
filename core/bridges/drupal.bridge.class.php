@@ -45,7 +45,7 @@ define('DRUPAL_MAX_HASH_COUNT', 30);
  */
 define('DRUPAL_HASH_LENGTH', 55);
 
-class drupal_bridge extends bridge {
+class drupal_bridge extends bridge_generic {
 	
 	public static $name = 'Drupal';
 	
@@ -74,20 +74,9 @@ class drupal_bridge extends bridge {
 			'QUERY'	=> '',
 		),
 	);
-	
-	public $functions = array(
-		'login'	=> array(
-			'callbefore'	=> '',
-			'function' 		=> '',
-			'callafter'		=> '',
-		),
-		'logout' 	=> '',
-		'autologin' => '',	
-		'sync'		=> '',
-	);
-	
+		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
 		return $this->user_check_password($password, $hash);
 	}
 	
@@ -95,7 +84,7 @@ class drupal_bridge extends bridge {
 	/**
 	 * Returns a string for mapping an int to the corresponding base 64 character.
 	 */
-	function _password_itoa64() {
+	private function _password_itoa64() {
 	  return './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	}
 
@@ -110,7 +99,7 @@ class drupal_bridge extends bridge {
 	 * @return
 	 *   Encoded string
 	 */
-	function _password_base64_encode($input, $count) {
+	private function _password_base64_encode($input, $count) {
 	  $output = '';
 	  $i = 0;
 	  $itoa64 = $this->_password_itoa64();
@@ -153,7 +142,7 @@ class drupal_bridge extends bridge {
 	 * @return
 	 *   A 12 character string containing the iteration count and a random salt.
 	 */
-	function _password_generate_salt($count_log2) {
+	private function _password_generate_salt($count_log2) {
 	  $output = '$S$';
 	  // Ensure that $count_log2 is within set bounds.
 	  $count_log2 = $this->_password_enforce_log2_boundaries($count_log2);
@@ -175,7 +164,7 @@ class drupal_bridge extends bridge {
 	 * @return
 	 *   Integer within set bounds that is closest to $count_log2.
 	 */
-	function _password_enforce_log2_boundaries($count_log2) {
+	private function _password_enforce_log2_boundaries($count_log2) {
 	  if ($count_log2 < DRUPAL_MIN_HASH_COUNT) {
 		return DRUPAL_MIN_HASH_COUNT;
 	  }
@@ -206,7 +195,7 @@ class drupal_bridge extends bridge {
 	 *   A string containing the hashed password (and salt) or FALSE on failure.
 	 *   The return string will be truncated at DRUPAL_HASH_LENGTH characters max.
 	 */
-	function _password_crypt($algo, $password, $setting) {
+	private function _password_crypt($algo, $password, $setting) {
 	  // The first 12 characters of an existing hash are its setting string.
 	  $setting = substr($setting, 0, 12);
 
@@ -244,7 +233,7 @@ class drupal_bridge extends bridge {
 	/**
 	 * Parse the log2 iteration count from a stored hash or setting string.
 	 */
-	function _password_get_count_log2($setting) {
+	private function _password_get_count_log2($setting) {
 	  $itoa64 = $this->_password_itoa64();
 	  return strpos($itoa64, $setting[3]);
 	}
@@ -261,7 +250,7 @@ class drupal_bridge extends bridge {
 	 * @return
 	 *   A string containing the hashed password (and a salt), or FALSE on failure.
 	 */
-	function user_hash_password($password, $count_log2 = 0) {
+	private function user_hash_password($password, $count_log2 = 0) {
 	  if (empty($count_log2)) {
 		// Use the standard iteration count.
 		$count_log2 = DRUPAL_HASH_COUNT;
@@ -284,7 +273,7 @@ class drupal_bridge extends bridge {
 	 * @return
 	 *   TRUE or FALSE.
 	 */
-	function user_check_password($password, $hash) {
+	private function user_check_password($password, $hash) {
 	  if (substr($hash, 0, 2) == 'U$') {
 		// This may be an updated password from user_update_7000(). Such hashes
 		// have 'U' added as the first character and need an extra md5().

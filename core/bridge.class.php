@@ -28,69 +28,102 @@ class bridge extends gen_class {
 		'crypt'	=> 'encrypt',
 	);
 
-	protected $code					= '';
-	protected $data					= array();
-	protected $functions			= array();
-	protected $settings				= array();
-	protected $callbacks			= array();
-	protected $blnSyncEmail			= true;
-	protected $blnSyncBirthday		= false;
-	protected $blnSyncCountry		= false;
-	public $db						= false;
+	protected $type			= '';
+	public $bridgedb		= false;
 	public $prefix			= '';
+	public $objBridge		= false;
+	public $status			= false;
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
-		$this->code = get_class($this);
-		$this->prefix = $this->config->get('cmsbridge_prefix');
+		$this->type		= $this->config->get('cmsbridge_type');
+		$this->prefix	= $this->config->get('cmsbridge_prefix');
+		//First, try connection
 		$this->connect();
+		//Then include the Bridge and pass DBAL Object
+		$this->init();
 	}
 	
-	public function connect(){
-		//Initialisierung der DB-Connection
+	/**
+	 * Include the Bridge file
+	 * 
+	 * @return boolean
+	 */
+	private function init(){
+		//Dont include if there is no connection
+		if(!$this->status) return false;
+		
+		include_once($this->root_path."core/bridges/bridge_generic.class.php");
+		if (is_file($this->root_path."core/bridges/".$this->type.".bridge.class.php")){
+			include_once($this->root_path."core/bridges/".$this->type.".bridge.class.php");
+			$this->objBridge = registry::register($this->type.'_bridge', array($this->bridgedb, $this->prefix));
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Initialize the Bridge Database Connection
+	 */
+	private function connect(){
 		if ((int)$this->config->get('cmsbridge_notsamedb') == 1){
 			try {
-				$this->db = dbal::factory(array('dbtype' => 'mysqli', 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
-				$this->db->connect($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password')));
+				$this->bridgedb = dbal::factory(array('dbtype' => 'mysqli', 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->bridgedb->connect($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password')));
+				$this->status = true;
 			} catch(DBALException $e){
-				$this->db = false;
+				$this->bridgedb = $this->status = false;
 				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
 			}
 		} else {
 			try {
-				$this->db = dbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->bridgedb = dbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
 			} catch(DBALException $e){
-				$this->db = false;
+				$this->bridgedb = $this->status = false;
 				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
 			}
 		}	
 	}
 			
+	/**
+	 * Login using the Bridge
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param string $strUsername
+	 * @param string $strPassword
+	 * @param boolean $boolSetAutoLogin
+	 * @param boolean $boolUseHash
+	 * @param boolean $blnCreateUser
+	 * @param boolean $boolUsePassword
+	 * @return boolean|array
+	 */
 	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $boolUseHash = false, $blnCreateUser = true, $boolUsePassword = true){
-		if (!$this->db) return false;
+		if (!$this->status) return false;
+		
 		//Check if username is given
 		if (strlen($strUsername) == 0) return false;
 		
-		//Callbefore Login
-		if ($this->functions['login']['callbefore'] != '' && method_exists($this, $this->functions['login']['callbefore'])){
-			$method = $this->functions['login']['callbefore'];
-			$this->$method(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
-		}
+		//Callbefore Login - without any influence
+		$this->objBridge->before_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
+		
 		$boolLoginResult = false;
 		$strPwdHash = '';
 		
 		//Login
-		if ($this->functions['login']['function'] != '' && method_exists($this, $this->functions['login']['function'])){
-			$method = $this->functions['login']['function'];
-			$arrResult = $this->$method(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
-			$boolLoginResult = $arrResult['status'];
-			$arrUserdata 	 = $arrResult;
+		$arrLoginmethodResult = $this->objBridge->login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
+		if($arrLoginmethodResult !== 0){
+			$boolLoginResult = $arrLoginmethodResult['status'];
+			$arrUserdata 	 = $arrLoginmethodResult;
 			$this->pdl->log('login', 'Call Bridge Login method, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 		} else {
 			//Hole User aus der Datenbank		
 			$arrUserdata = $this->get_userdata(unsanitize($strUsername));
 			if ($arrUserdata){
 				if ($boolUsePassword){
-					$boolLoginResult = $this->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, unsanitize($strUsername));
+					$boolLoginResult = $this->objBridge->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, unsanitize($strUsername));
 					$this->pdl->log('login', 'Check Bridge Password, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 					//Passwort stimmt, jetzt müssen wir schaun, ob er auch in der richtigen Gruppe ist
 					if ($boolLoginResult){
@@ -104,12 +137,10 @@ class bridge extends gen_class {
 			}
 		}
 		
-		//Callafter Login
-		if ($boolLoginResult && $this->functions['login']['callafter'] != '' && method_exists($this, $this->functions['login']['callafter'])){
-			$method = $this->functions['login']['callafter'];
-			$boolLoginResult = $this->$method(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash);
-			$this->pdl->log('login', 'Bridge callafter, Result: '.(($boolLoginResult) ? 'true' : 'false'));
-		}
+		//Callafter Login - has influence to loginstatus
+		$boolLoginResult = $this->objBridge->after_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash);
+		$this->pdl->log('login', 'Bridge callafter, Result: '.(($boolLoginResult) ? 'true' : 'false'));
+
 		
 		//Existiert der User im EQdkp? Wenn nicht, lege ihn an
 		if ($boolLoginResult){
@@ -123,12 +154,12 @@ class bridge extends gen_class {
 				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword) || !$strEQdkpUserSalt;
 				
 				//Update Email und Password - den Rest soll die Sync-Funktion machen	
-				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate){
+				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->objBridge->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate){
 					$strSalt = $this->user->generate_salt();
 					$strApiKey = $this->user->generate_apikey($strPassword, $strSalt);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
 					$arrToSync = array('user_password' => $strPwdHash.':'.$strSalt, 'api_key'=>$strApiKey);
-					if ($this->blnSyncEmail) $arrToSync['user_email'] = $this->crypt->encrypt($arrUserdata['email']);
+					if ($this->objBridge->blnSyncEmail) $arrToSync['user_email'] = $this->crypt->encrypt($arrUserdata['email']);
 					$this->pdh->put('user', 'update_user', array($user_id, $arrToSync, false, false));
 					$this->pdh->process_hook_queue();
 				}
@@ -151,7 +182,7 @@ class bridge extends gen_class {
 		//Geb jetzt das Ergebnis zurück
 		if ($boolLoginResult){
 			//Userdata-Sync
-			if ($this->functions['sync'] != '' && method_exists($this, $this->functions['sync']) && $this->config->get('cmsbridge_disable_sync') != 1){
+			if ($this->config->get('cmsbridge_disable_sync') != 1){
 				$this->sync_fields($user_id, $arrUserdata);
 			}
 			//Usergroup-Sync
@@ -169,41 +200,67 @@ class bridge extends gen_class {
 		return false;		
 	}
 	
+	/**
+	 * Logout
+	 * Requires working Bridge Connection.
+	 * 
+	 * @return boolean always true
+	 */
 	public function logout(){
-		if ($this->functions['logout'] != '' && method_exists($this, $this->functions['logout'])){
-			$method = $this->functions['logout'];
-			$this->$method();
-		}
+		if (!$this->status) return true;
+		
+		$this->objBridge->logout();
 		return true;
 	}
 	
+	/**
+	 * Autologin for Bridge
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param array $arrCookieData
+	 * @return boolean
+	 */
 	public function autologin($arrCookieData){
-		$result = false;
-		if ($this->functions['autologin']!= '' && method_exists($this, $this->functions['autologin']) && $this->db){
-			$method = $this->functions['autologin'];
-			$result = $this->$method($arrCookieData);
-		}
+		if (!$this->status) return false;
+		
+		$result = $this->objBridge->autologin($arrCookieData);
 		return $result;
 	}
 	
+	/**
+	 * Deactivate the Bridge
+	 */
 	public function deactivate_bridge() {
 		$this->config->set('cmsbridge_active', 0);
 	}
 	
+	/**
+	 * Returns the Bridge specific settings
+	 * 
+	 * @return array
+	 */
 	public function get_settings(){
-		return $this->settings;	
+		return $this->objBridge->settings;	
 	}
 
+	/**
+	 * Syncs the Fields of a User from CMS to EQdkp
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param integer $user_id
+	 * @param array $arrUserdata
+	 */
 	public function sync_fields($user_id, $arrUserdata){
+		if (!$this->status) return false;
+		
 		//Key: Bridge ID, Value: EQdkp Profilefield ID
 		$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
 		
 		$eqdkp_user_data = $this->pdh->get('user', 'data', array($user_id));
 		$eqdkp_custom_fields = $this->pdh->get('user', 'custom_fields', array($user_id));
 		
-		$method = $this->functions['sync'];
 		//Key: Bridge ID, Value: Bridge Profilefield Value
-		$sync_array = $this->$method($arrUserdata);
+		$sync_array = $this->objBridge->sync($arrUserdata);
 		
 		foreach($arrMapping as $intBridgeID => $intEQdkpFieldID){
 			if (isset($sync_array[$intBridgeID])){
@@ -240,29 +297,38 @@ class bridge extends gen_class {
 		return;
 	}
 	
+	/**
+	 * Returns array with all available Sync Fields from CMS
+	 * Requires working Bridge Connection.
+	 * 
+	 * @return array
+	 */
 	public function get_available_sync_fields(){
-		$method = $this->functions['sync_fields'];
-		if ($method != '' && method_exists($this, $method)){
-			$arrAvailableFields = $this->$method();
-			return $arrAvailableFields;
-		}
+		if (!$this->status) return array();
 		
-		return false;
+		$arrAvailableFields = $this->objBridge->sync_fields();
+		return $arrAvailableFields;
 	}
 	
-	//Returns the usergroups of the CMS/Forum
+	/**
+	 * Get all Usergroups from CMS.
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param boolean $blnWithID Append GroupID to Groupname
+	 * @return mixed
+	 */
 	public function get_user_groups($blnWithID = false){
-		if (!$this->db) return false;
+		if (!$this->status) return false;
 		
 		if ($this->check_function('groups')){
-			$method_name = $this->data['groups']['FUNCTION'];
-			return $this->$method_name($blnWithID);
+			$method_name = $this->objBridge->data['groups']['FUNCTION'];
+			return $this->objBridge->$method_name($blnWithID);
 		} else {
 			if ($this->check_query('groups')){
 				$strQuery = $this->check_query('groups');	
-				$objQuery = $this->db->query($strQuery);		
+				$objQuery = $this->bridgedb->query($strQuery);		
 			} else {
-				$objQuery = $this->db->query("SELECT ".$this->data['groups']['id']." as id, ".$this->data['groups']['name']." as name FROM ".$this->prefix.$this->data['groups']['table']);
+				$objQuery = $this->bridgedb->query("SELECT ".$this->objBridge->data['groups']['id']." as id, ".$this->objBridge->data['groups']['name']." as name FROM ".$this->prefix.$this->objBridge->data['groups']['table']);
 			}
 			
 			if ($objQuery){
@@ -281,15 +347,22 @@ class bridge extends gen_class {
 		return false;
 	}
 	
-	//Userdata of an User of the CMS/Forum
+
+	/**
+	 * Get CMS Userdata of a CMS User.
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param string $name
+	 * @return mixed
+	 */
 	public function get_userdata($name){
-		if (!$this->db) return false;
+		if (!$this->status) return false;
 		
 		$name = unsanitize($name);
 		
 		//Clean Username if neccessary
-		if (method_exists($this, 'convert_username')){
-			$strCleanUsername = $this->convert_username($name);
+		if (method_exists($this->objBridge, 'convert_username')){
+			$strCleanUsername = $this->objBridge->convert_username($name);
 		} else {
 			$strCleanUsername = utf8_strtolower($name);
 		}
@@ -298,19 +371,19 @@ class bridge extends gen_class {
 			$strQuery = str_replace("_USERNAME_", "?", $this->check_query('user'));
 		} else {
 			//Check if there's a user table
-			$arrTables = $this->db->listTables();
-			if (!in_array($this->prefix.$this->data['user']['table'], $arrTables)){
+			$arrTables = $this->bridgedb->listTables();
+			if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
 				$this->deactivate_bridge();
 				return false;
 			}
 		
-			$salt = ($this->data['user']['salt'] != '') ? ', '.$this->data['user']['salt'].' as salt ': '';
-			$strQuery = "SELECT *, ".$this->data['user']['id'].' as id, '.$this->data['user']['name'].' as name, '.$this->data['user']['password'].' as password, '.$this->data['user']['email'].' as email'.$salt.'
-						FROM '.$this->prefix.$this->data['user']['table'].' 
-						WHERE LOWER('.$this->data['user']['where'].") = ?";
+			$salt = ($this->objBridge->data['user']['salt'] != '') ? ', '.$this->objBridge->data['user']['salt'].' as salt ': '';
+			$strQuery = "SELECT *, ".$this->objBridge->data['user']['id'].' as id, '.$this->objBridge->data['user']['name'].' as name, '.$this->objBridge->data['user']['password'].' as password, '.$this->objBridge->data['user']['email'].' as email'.$salt.'
+						FROM '.$this->prefix.$this->objBridge->data['user']['table'].' 
+						WHERE LOWER('.$this->objBridge->data['user']['where'].") = ?";
 		}
 
-		$objQuery = $this->db->prepare($strQuery)->execute($strCleanUsername);
+		$objQuery = $this->bridgedb->prepare($strQuery)->execute($strCleanUsername);
 		if ($objQuery){
 			$arrResult = $objQuery->fetchAssoc();
 			if ($salt == '')  $arrResult['salt'] = '';
@@ -319,23 +392,30 @@ class bridge extends gen_class {
 		return false;
 	}
 	
+	/**
+	 * Get all Users from the CMS.
+	 * Requires working Bridge Connection.
+	 * 
+	 * @return mixed 
+	 */
 	public function get_users(){
-		if (!$this->db) return false;
+		if (!$this->status) return false;
 		
 		if ($this->check_query('user')) return false;
 		
 		//Check if there's a user table
-		$arrTables = $this->db->listTables();
-		if (!in_array($this->prefix.$this->data['user']['table'], $arrTables)){
+		$arrTables = $this->bridgedb->listTables();
+		if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
+			//Disabled Bridge if there is no access to the User Table
 			$this->deactivate_bridge();
 			return false;
 		}
 		
-		$salt = ($this->data['user']['salt'] != '') ? ', '.$this->data['user']['salt'].' as salt ': '';
+		$salt = ($this->objBridge->data['user']['salt'] != '') ? ', '.$this->objBridge->data['user']['salt'].' as salt ': '';
 		
-		$strQuery = "SELECT ".$this->data['user']['id'].' as id, '.$this->data['user']['name'].' as name, '.$this->data['user']['password'].' as password, '.$this->data['user']['email'].' as email'.$salt.', LOWER('.$this->data['user']['where'].') AS username_clean
-						FROM '.$this->prefix.$this->data['user']['table'];
-		$objQuery = $this->db->query($strQuery);
+		$strQuery = "SELECT ".$this->objBridge->data['user']['id'].' as id, '.$this->objBridge->data['user']['name'].' as name, '.$this->objBridge->data['user']['password'].' as password, '.$this->objBridge->data['user']['email'].' as email'.$salt.', LOWER('.$this->objBridge->data['user']['where'].') AS username_clean
+						FROM '.$this->prefix.$this->objBridge->data['user']['table'];
+		$objQuery = $this->bridgedb->query($strQuery);
 		$arrResult = false;
 		if ($objQuery){
 			$arrResult = $objQuery->fetchAllAssoc();
@@ -344,6 +424,13 @@ class bridge extends gen_class {
 		return $arrResult;
 	}
 	
+	/**
+	 * Sync the Usergroups of the User with CMS
+	 * 
+	 * @param integer $intCMSUserID
+	 * @param integer $intUserID
+	 * @return boolean
+	 */
 	public function sync_usergroups($intCMSUserID, $intUserID){
 		$arrGroupsToSync = explode(',', $this->config->get('cmsbridge_sync_groups'));
 		if (!array($arrGroupsToSync) || count($arrGroupsToSync) < 1) return false;
@@ -391,24 +478,31 @@ class bridge extends gen_class {
 		
 	}
 	
-	//Returns array with the Usergroup-IDs the CMS-User is member of
+	/**
+	 * Returns array with the Usergroup-IDs the CMS User is member of.
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param integer $intUserID
+	 * @return boolean|multitype:unknown 
+	 */
 	public function get_usergroups_for_user($intUserID){
-		if (!$this->db) return false;
+		if (!$this->status) return false;
+		
 		$arrReturn = array();
 		
 		if ($this->check_function('user_group')){
-			$method_name = $this->data['user_group']['FUNCTION'];
-			return $this->$method_name($intUserID);
+			$method_name = $this->objBridge->data['user_group']['FUNCTION'];
+			return $this->objBridge->$method_name($intUserID);
 		} else {
 
 			if ($this->check_query('user_group')){
 				$strQuery = str_replace("_USERID_", "?", $this->check_query('user_group'));
 			} else {
-				$strQuery = "SELECT ".$this->data['user_group']['group'].' as group_id 
-							FROM '.$this->prefix.$this->data['user_group']['table'].' 
-							WHERE '.$this->data['user_group']['user']." = ?";
+				$strQuery = "SELECT ".$this->objBridge->data['user_group']['group'].' as group_id 
+							FROM '.$this->prefix.$this->objBridge->data['user_group']['table'].' 
+							WHERE '.$this->objBridge->data['user_group']['user']." = ?";
 			}
-			$objQuery = $this->db->prepare($strQuery)->execute($intUserID);
+			$objQuery = $this->bridgedb->prepare($strQuery)->execute($intUserID);
 			if ($objQuery){
 				$arrResult = $objQuery->fetchAllAssoc();
 				if ($arrResult && is_array($arrResult)){
@@ -424,15 +518,21 @@ class bridge extends gen_class {
 	
 	
 	
-	//Checks if the User is in the groups
+	/**
+	 * Checks if User is in defined CMS Groups
+	 * Requires working Bridge Connection.
+	 * 
+	 * @param integer $intUserID
+	 * @return boolean
+	 */
 	public function check_user_group($intUserID){
-		if (!$this->db) return false;
+		if (!$this->status) return false;
 		
 		$arrAllowedGroups = explode(',', $this->config->get('cmsbridge_groups'));
 		
 		if ($this->check_function('check_user_group')){
-			$method_name = $this->data['check_user_group']['FUNCTION'];
-			return $this->$method_name($intUserID, $arrAllowedGroups);
+			$method_name = $this->objBridge->data['check_user_group']['FUNCTION'];
+			return $this->objBridge->$method_name($intUserID, $arrAllowedGroups);
 		} else {
 
 			$arrGroups = $this->get_usergroups_for_user($intUserID);
@@ -449,7 +549,15 @@ class bridge extends gen_class {
 		return false;
 	}
 		
+	/**
+	 * Checks if Usergroups Table of CMS is accessable.
+	 * Requires working Bridge Connection.
+	 * 
+	 * @return boolean True if accessable, otherwise false
+	 */
 	public function check_user_group_table(){
+		if(!$this->status) return false;
+		
 		if ($this->get_user_groups() && count($this->get_user_groups() > 0)){
 			return true;
 		} else {
@@ -457,9 +565,16 @@ class bridge extends gen_class {
 		}
 	}
 	
+	/**
+	 * Returns all Prefixes for Bridge Database.
+	 * Requires working Bridge Connection.
+	 * 
+	 * @return array 
+	 */
 	public function get_prefix(){
-		if(!$this->db) return array();
-		$alltables = $this->db->listTables();
+		if(!$this->status) return array();
+		
+		$alltables = $this->bridgedb->listTables();
 		$tables		= array();
 		foreach ($alltables as $name){
 			if (strpos($name, '_') !== false){
@@ -473,12 +588,20 @@ class bridge extends gen_class {
 		return $tables;
 	}
 	
+	/**
+	 * Returns array will all available Bridges
+	 * 
+	 * @return array
+	 */
 	public function get_available_bridges(){
+		include_once $this->root_path.'core/bridges/bridge_generic.class.php';
 		$bridges = array();
 		// Build auth array
 		if($dir = @opendir($this->root_path . 'core/bridges/')){
 			while ( $file = @readdir($dir) ){
 				if ((is_file($this->root_path . 'core/bridges/' . $file)) && valid_folder($file)){
+					if ($file == 'bridge_generic.class.php') continue;
+					
 					include_once($this->root_path . 'core/bridges/' . $file);
 					$name = substr($file, 0, strpos($file, '.'));
 					$classname = $name.'_bridge';
@@ -490,17 +613,29 @@ class bridge extends gen_class {
 		return $bridges;
 	}
 	
-	//Checks if we have to use an special query instead of the predefined querys
+	/**
+	 * Checks if there is an special Query instead of the predefined.
+	 * Returns false if there is none, otherwise returns the Querystring.
+	 * 
+	 * @param string $key
+	 * @return mixed|boolean
+	 */
 	private function check_query($key){
-		if ($this->data[$key]['QUERY'] != "") {	
-			return str_replace('___', $this->prefix, $this->data[$key]['QUERY']);
+		if ($this->objBridge->data[$key]['QUERY'] != "") {	
+			return str_replace('___', $this->prefix, $this->objBridge->data[$key]['QUERY']);
 		} else {
 			return false;
 		}
 	}
 	
+	/**
+	 * Checks if there is an special Function instead of the predefined.
+	 * 
+	 * @param string $key
+	 * @return boolean
+	 */
 	private function check_function($key){
-		if (isset($this->data[$key]['FUNCTION']) && $this->data[$key]['FUNCTION'] != "" && method_exists($this, $this->data[$key]['FUNCTION'])){
+		if (isset($this->objBridge->data[$key]['FUNCTION']) && $this->objBridge->data[$key]['FUNCTION'] != "" && method_exists($this->objBridge, $this->objBridge->data[$key]['FUNCTION'])){
 			return true;
 		}
 		return false;

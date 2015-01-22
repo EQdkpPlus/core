@@ -30,7 +30,6 @@ abstract class super_registry {
 		'config' 	=> 'config',
 		'user'		=> '_user_',
 		'db'		=> '_dbal_',
-		'bridge'	=> '_bridge_',
 		'in'		=> 'input',
 		'pdh'		=> 'plus_datahandler',
 		'tpl'		=> 'template',
@@ -57,6 +56,7 @@ abstract class super_registry {
 		'auto_point_adjustments'=> 'core/',
 		'article'				=> 'core/',
 		'backup'				=> 'core/',
+		'bridge'				=> 'core/',
 		'comments'				=> 'core/',
 		'config'				=> 'core/',
 		'core'					=> 'core/',
@@ -96,7 +96,7 @@ abstract class super_registry {
 		'tinyMCE'				=> 'libraries/tinyMCE/',
 		'mmtaskmanager'			=> 'maintenance/includes/',
 	);
-	public static $lite_igno = array('_bridge_');
+	public static $lite_igno = array('bridge');
 
 	protected static $const = array();
 	
@@ -132,14 +132,7 @@ abstract class super_registry {
 			self::$const['server_path'] = registry::register('config')->get('server_path');
 			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
-			
-			//Bridge
-			include_once($root_path . 'core/bridge.class.php');
-			if (registry::register('config')->get('cmsbridge_type') != ''){
-				include_once($root_path . 'core/bridges/'. registry::register('config')->get('cmsbridge_type') .'.bridge.class.php');
-				self::$aliases['bridge'] = registry::register('config')->get('cmsbridge_type').'_bridge';
-			} else self::$aliases['bridge'] = 'bridge';
-			
+						
 			//Auth/User
 			require(self::$const['root_path'] . 'core/auth.class.php');
 			$auth_method = 'auth_'.((registry::register('config')->get('auth_method') != '') ? registry::register('config')->get('auth_method') : 'db');
