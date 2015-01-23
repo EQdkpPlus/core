@@ -292,7 +292,7 @@ class template extends gen_class {
 					if (strpos($strPathDir, "./") === 0){
 						$strPathDir = str_replace($this->root_path, "", $strPathDir);
 					}
-					
+
 					$strContent = $this->replace_paths_css($strContent, false, false, $strPathDir);
 					
 					$combinedFile = $storage_folder.$this->style_code.'/dev_'.$strFilename.'.css';
@@ -1366,7 +1366,7 @@ class template extends gen_class {
 		
 		$content = $data;
 		$strDirname = $path;
-		$strGlue = ($strDirname != '.') ? $strDirname . '/' : '';
+		$strGlue = ($strDirname != '.') ? $strDirname  : '';
 		
 		$strBuffer = '';
 		$chunks = preg_split('/url\(["\']??(.+)["\']??\)/U', $content, -1, PREG_SPLIT_DELIM_CAPTURE);

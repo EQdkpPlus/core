@@ -21,7 +21,7 @@
 
 define('EQDKP_INC', true);
 define('IN_ADMIN', true);
-$eqdkp_root_path = '../';
+$eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class mmocms_settings extends page_generic {

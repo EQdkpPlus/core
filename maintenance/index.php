@@ -23,7 +23,7 @@
 define('EQDKP_INC', true);
 define('MAINTENANCE_MODE',1);
 
-$eqdkp_root_path = '../';
+$eqdkp_root_path = './../';
 $lite = true;
 define('DEBUG', 3);
 require_once($eqdkp_root_path.'common.php');
