@@ -1316,22 +1316,23 @@ if (!class_exists("jquery")) {
 		* @return array with two dropdowns (parent & child)
 		*/
 		public function json_dropdown($id1, $id2, $array1, $jsonname, $selected1, $selected2=''){
-			$this->tpl->add_js("$('#{$id1}{$this->dyndd_counter}').change(function() {
-				$('#{$id2}{$this->dyndd_counter} option').remove();
+			$this->tpl->add_js("$('body').on('change', '.{$id1}{$this->dyndd_counter}', function() {
+				$('.{$id2}{$this->dyndd_counter} option').remove();
 				if($(this).val() > 0){
 					mydata	= {$jsonname}[$(this).val()];
 					if(typeof mydata != 'undefined'){
 						$.each(mydata, function(i, val) {
-							var opt = $('<option />');
-							opt.appendTo($('#{$id2}{$this->dyndd_counter}')).text(val).val(i);
+							$('.{$id2}{$this->dyndd_counter}').append($('<option></option>').val(i).html(val));
 						});
 					}
 				}
-			}).change();", 'docready');
+			}); 
+			$('.{$id1}{$this->dyndd_counter}').trigger('change');
+			", 'docready');
 
 			$output	= array(
-				new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter)),
-				new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter))
+				new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter, 'class' => $id1.$this->dyndd_counter)),
+				new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter, 'class' => $id2.$this->dyndd_counter))
 			);
 			
 			$this->dyndd_counter++;

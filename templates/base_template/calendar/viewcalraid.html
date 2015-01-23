@@ -225,31 +225,34 @@ function check_unsigned(selector, unsigned_attendees_f, a_checkboxes){
 
 function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	attoutput = '';
-	$.each(arrAttendees, function(i, item) {
-		checkbox_checked	= (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
-		filter_applied		= ((typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) || arrFilter == -1) ? '  style="display: none;"' : '';
-		console.log(arrFilter);console.log(filter_applied);
-		attoutput += '<div id="unsigened_'+item.id+'"'+filter_applied+'>';
-		attoutput += '<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="'+item.id+'" id="member'+item.id+'" title="'+item.userid+'" class="notsigned_check" '+checkbox_checked+' /> <!-- ENDIF -->';
-		if(item.class_icon != ''){
-			attoutput += item.class_icon;
-		}
-		attoutput += ' <span class="class_'+item.class_id+'" id="memberid_'+item.id+'">'+item.name+'</span>';
-		
-		if(item.roles != ''){
-			attoutput += '<select size="1" name="memrole['+item.id+']" id="memroles'+item.id+'" class="input">';
-			$.each(item.roles, function(roleindex, rolename) {
-				if (item.defaultrole == roleindex){
-					var selected = ' selected="selected"';
-				} else {
-					var selected = '';
-				}
-				attoutput += '<option value="'+roleindex+'"'+selected+'>'+rolename+'</option>';
-			});
-			attoutput += '</select>';
-		}
-		attoutput += "</div>";
-	});
+	if(arrAttendees != null && arrAttendees.length > 0) {
+		$.each(arrAttendees, function(i, item) {
+			checkbox_checked	= (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
+			filter_applied		= ((typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) || arrFilter == -1) ? '  style="display: none;"' : '';
+			console.log(arrFilter);console.log(filter_applied);
+			attoutput += '<div id="unsigened_'+item.id+'"'+filter_applied+'>';
+			attoutput += '<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="'+item.id+'" id="member'+item.id+'" title="'+item.userid+'" class="notsigned_check" '+checkbox_checked+' /> <!-- ENDIF -->';
+			if(item.class_icon != ''){
+				attoutput += item.class_icon;
+			}
+			attoutput += ' <span class="class_'+item.class_id+'" id="memberid_'+item.id+'">'+item.name+'</span>';
+			
+			if(item.roles != ''){
+				console.log(item.roles);
+				attoutput += '<select size="1" name="memrole['+item.id+']" id="memroles'+item.id+'" class="input">';
+				$.each(item.roles, function(roleindex, rolename) {
+					if (item.defaultrole == roleindex){
+						var selected = ' selected="selected"';
+					} else {
+						var selected = '';
+					}
+					attoutput += '<option value="'+roleindex+'"'+selected+'>'+rolename+'</option>';
+				});
+				attoutput += '</select>';
+			}
+			attoutput += "</div>";
+		});
+	}
 	$("#memberScroller").html(attoutput);
 }
 <!-- ENDIF -->

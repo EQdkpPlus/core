@@ -841,8 +841,8 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// jQuery Windows
-		$this->jquery->Dialog('AddRaid', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'900', 'height'=>'580', 'onclose' => $this->strPath.$this->SID));
-		$this->jquery->Dialog('EditRaid', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'900', 'height'=>'650', 'onclose' => $this->strPath.$this->SID));
+		$this->jquery->Dialog('AddRaid', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'920', 'height'=>'580', 'onclose' => $this->strPath.$this->SID));
+		$this->jquery->Dialog('EditRaid', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'920', 'height'=>'650', 'onclose' => $this->strPath.$this->SID));
 		$this->jquery->Dialog('ExportDialog', $this->user->lang('raidevent_raid_export_win'), array('url'=> $this->routing->build('calendareventexport')."&eventid=".$this->url_id, 'width'=>'640', 'height'=>'470'));
 		$this->jquery->Dialog('EditGuest', $this->user->lang('raidevent_raid_editguest_win'), array('url'=> $this->routing->build('calendareventguests')."&simple_head=true&guestid='+id+'", 'width'=>'490', 'height'=>'160', 'onclose' => $this->strPath.$this->SID, 'withid' => 'id'));
 		$this->jquery->Dialog('TransformRaid', $this->user->lang('raidevent_raid_transform'), array('url'=> $this->routing->build('calendareventtransform')."&simple_head=true&eventid='+eventid+'", 'width'=>'440', 'height'=>'350', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
