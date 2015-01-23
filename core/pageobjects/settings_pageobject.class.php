@@ -228,6 +228,9 @@ class settings_pageobject extends pageobject {
 		if(empty($userdata)) {
 			$this->create_form();			
 			$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings'], $this->user->data['notification_settings']);
+			if(is_array($userdata['ntfy_comment_new_article']) && count($userdata['ntfy_comment_new_article']) == 0){
+				$userdata['ntfy_comment_new_article'] = array('-1' => -1);
+			}
 		}
 
 		// Output

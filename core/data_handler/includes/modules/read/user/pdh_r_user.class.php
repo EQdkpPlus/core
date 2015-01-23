@@ -448,7 +448,7 @@ if (!class_exists("pdh_r_user")){
 			if ($intUserID === false) $intUserID = $this->user->id;
 			
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
-			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_notification_newcomment_article'])){
+			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_comment_new_article'])){
 				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article'];
 				if (in_array($intCategoryID, $arrCategories)) {
 					return true;
