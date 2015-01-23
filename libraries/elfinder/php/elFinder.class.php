@@ -911,6 +911,8 @@ class elFinder {
 		}
 		
 		foreach ($files['name'] as $i => $name) {
+			$name = preg_replace('/[^a-zA-Z0-9-_.]/', "", $name);
+			
 			if (($error = $files['error'][$i]) > 0) {				
 				$result['warning'] = $this->error(self::ERROR_UPLOAD_FILE, $name, $error == UPLOAD_ERR_INI_SIZE || $error == UPLOAD_ERR_FORM_SIZE ? self::ERROR_UPLOAD_FILE_SIZE : self::ERROR_UPLOAD_TRANSFER);
 				$this->uploadDebug = 'Upload error code: '.$error;
