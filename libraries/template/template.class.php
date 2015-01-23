@@ -188,7 +188,7 @@ class template extends gen_class {
 	
 	public function combine_css(){
 		$strInlineCSS = "";
-		$arrHash = $data = $arrFiles = array();
+		$arrHash = $data = $arrFiles = $arrOrigFiles = array();
 		
 		if (is_array($this->tpl_output['css_code'])){
 			foreach($this->tpl_output['css_code'] as $key => $strInlineCode){
@@ -209,13 +209,15 @@ class template extends gen_class {
 					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 				}
 				//Resolve file
+				$val['orig_file'] = $val['file'];
 				$val['file'] = $this->resolve_css_file($val['file']);
 				if(!$val['file']) continue;
 				
 				if ($val['media'] == 'screen' && is_file($val['file'])){
-					if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
+					if (strpos('combined_', $val['file']) !== false) continue;
 					$arrHash[] = md5_file($val['file']);
-					$arrFiles[] = $val['file']; 
+					$arrFiles[] = $val['file'];
+					$arrOrigFiles[] = $val['orig_file'];
 					unset($this->tpl_output['css_file'][$key]);		
 				}
 			}
@@ -234,15 +236,16 @@ class template extends gen_class {
 		} else {
 			//Generate it
 			$strCSS = "";
-			foreach($arrFiles as $strFile){
+			foreach($arrFiles as $key => $strFile){
+				$strOrigFile = $arrOrigFiles[$key];
 				$strContent = file_get_contents($strFile);
-				$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
+				$strPathDir = pathinfo($strOrigFile, PATHINFO_DIRNAME).'/';
 				
 				if (strpos($strPathDir, "./") === 0){
 					$strPathDir = str_replace($this->root_path, "", $strPathDir);
 				}
 
-				$data[] = array('content' => "\r\n/* ".$strFile." */ \r\n".$strContent, 'path' => $strPathDir);
+				$data[] = array('content' => "\r\n/*!\r\n* From File: ".$strFile."\r\n*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
 			foreach($data as $val){
@@ -274,17 +277,18 @@ class template extends gen_class {
 					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
 				}
 				//Resolve file
+				$origFile = $val['file'];
 				$val['file'] = $this->resolve_css_file($val['file']);
 				if(!$val['file']) continue;
-	
+				
 				if ($val['media'] == 'screen' && is_file($val['file'])){
-					if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
+					if (strpos('combined_', $val['file']) !== false) continue;
 					
 					$strFile = $val['file'];
 					$strContent = file_get_contents($strFile);
 					
-					$strPathDir = pathinfo($strFile, PATHINFO_DIRNAME).'/';
-					$strFilename = pathinfo($strFile, PATHINFO_FILENAME);
+					$strPathDir = pathinfo($origFile, PATHINFO_DIRNAME).'/';
+					$strFilename = pathinfo($origFile, PATHINFO_FILENAME);
 					if (strpos($strPathDir, "./") === 0){
 						$strPathDir = str_replace($this->root_path, "", $strPathDir);
 					}
@@ -302,10 +306,14 @@ class template extends gen_class {
 	public function resolve_css_file($cssfile){
 		//Check data dir for exact match
 		$strWithoutRoot = str_replace($this->root_path, '', $cssfile);
-		
+		$strCleaned = str_replace('templates/base_template/', '', $strWithoutRoot);
+		$strCleaned = str_replace('templates/'.$this->style_code, '', $strCleaned);
+
 		if(file_exists($this->data_root.$strWithoutRoot)){
 			return $this->data_root.$strWithoutRoot;
-		} elseif(strpos($cssfile, '/base_template/')){
+		}elseif(file_exists($this->data_root.$strCleaned)){
+			return $this->data_root.$strCleaned;
+		}elseif(strpos($cssfile, '/base_template/')){
 			$strSpecificTemplate = str_replace('/base_template/', '/'.$this->template.'/', $cssfile);
 			if (file_exists($strSpecificTemplate)){
 				return $strSpecificTemplate;
