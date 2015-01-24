@@ -430,17 +430,19 @@ if(!class_exists('pdh_w_calendar_events')) {
 			}
 
 			// auto add and confirm the raidleaders
-			foreach($raidleaders as $raidleaderid){
-				$defaultrole	= $this->pdh->get('member', 'defaultrole', array($raidleaderid));
-				$this->pdh->put('calendar_raids_attendees', 'update_status', array(
-					$raidid,
-					$raidleaderid,
-					(($defaultrole) ? $defaultrole : 0),
-					0,	// status
-					0,
-					0,
-					'',
-				));
+			if(is_array($raidleaders)){
+				foreach($raidleaders as $raidleaderid){
+					$defaultrole	= $this->pdh->get('member', 'defaultrole', array($raidleaderid));
+					$this->pdh->put('calendar_raids_attendees', 'update_status', array(
+						$raidid,
+						$raidleaderid,
+						(($defaultrole) ? $defaultrole : 0),
+						0,	// status
+						0,
+						0,
+						'',
+					));
+				}
 			}
 
 		}

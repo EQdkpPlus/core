@@ -100,7 +100,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 							}
 							array_push($a_data, $parentid);
 							$clonedraidid = $this->pdh->put('calendar_events', 'add_cevent', $a_data);
-							$this->pdh->put('calendar_events', 'auto_addchars', array($eventsdata['extension']['raidmode'], $clonedraidid));
+							$this->pdh->put('calendar_events', 'auto_addchars', array($eventsdata['extension']['raidmode'], $clonedraidid, $eventsdata['extension']['raidleader']));
 
 							// set the date for the next event and handle summertime stuff
 							$date_event_add = $this->handle_summertime($date_event_add+$rptbl_period, $date_event_add);
