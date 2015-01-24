@@ -155,28 +155,30 @@ if (!class_exists("comments")){
 						if ($userid) $this->ntfy->add('comment_new_response', $intCommentId, $strFromUsername, $ntfyLink, $userid);
 					}
 				}
-				
+
 				//Mentions
-				$strContent = $data['comment'];
+				$strContent = unsanitize($data['comment']);
 				$arrMentions = array();
-				$intMatches = preg_match_all("/@(\w*)/", $strContent, $arrNormalMatches);
+				$intMatches = preg_match_all("/@(\w*)/", $strContent, $arrNormalMatches1);
 				if($intMatches){
-					foreach($arrNormalMatches[1] as $strMatch){
+					foreach($arrNormalMatches1[1] as $strMatch){
 						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
 					}
 				}
-				$intMatches = preg_match_all('/@(".*")/', $strContent, $arrNormalMatches);
+
+				$intMatches = preg_match_all('/@[\"](.*)[\"]/', $strContent, $arrNormalMatches2);
 				if($intMatches){
-					foreach($arrNormalMatches[1] as $strMatch){
+					foreach($arrNormalMatches2[1] as $strMatch){
 						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
 					}
 				}
-				$intMatches = preg_match_all("/@('.*')", $strContent, $arrNormalMatches);
+				$intMatches = preg_match_all("/@\'(.*)\'/", $strContent, $arrNormalMatches3);
 				if($intMatches){
-					foreach($arrNormalMatches[1] as $strMatch){
+					foreach($arrNormalMatches3[1] as $strMatch){
 						if($strMatch != "")  $arrMentions[] = utf8_strtolower($strMatch);
 					}
 				}
+
 				if(count($arrMentions) > 0){
 					$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
 					$arrDone = array();
