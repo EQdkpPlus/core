@@ -156,6 +156,45 @@ if (!class_exists("comments")){
 					}
 				}
 				
+				//Mentions
+				$strContent = $data['comment'];
+				$arrMentions = array();
+				$intMatches = preg_match_all("/@(\w*)/", $strContent, $arrNormalMatches);
+				if($intMatches){
+					foreach($arrNormalMatches[1] as $strMatch){
+						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
+					}
+				}
+				$intMatches = preg_match_all('/@(".*")/', $strContent, $arrNormalMatches);
+				if($intMatches){
+					foreach($arrNormalMatches[1] as $strMatch){
+						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
+					}
+				}
+				$intMatches = preg_match_all("/@('.*')", $strContent, $arrNormalMatches);
+				if($intMatches){
+					foreach($arrNormalMatches[1] as $strMatch){
+						if($strMatch != "")  $arrMentions[] = utf8_strtolower($strMatch);
+					}
+				}
+				if(count($arrMentions) > 0){
+					$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
+					$arrDone = array();
+					$ntfyLink = $this->in->get('ntfy_link').'#comment'.$intCommentId;
+					$ntfyTitle = $this->in->get('ntfy_title');
+					foreach($arrMentions as $strMention){
+						foreach($arrUsers as $userid => $username){
+							if(utf8_strtolower($username) === $strMention && !in_array($userid, $arrDone)){
+								$arrDone[] = $userid;
+								$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
+							}
+						}
+					}
+				}
+				
+				
+				
+				
 				$this->pdh->process_hook_queue();
 				echo $this->Content($data['attach_id'], $data['page'], ($data['reply_to'] || $this->in->get('replies', 0)));
 			}
@@ -225,7 +264,7 @@ if (!class_exists("comments")){
 					$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
 
 					// output
-					$out[] .= '<div class="comment '.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
+					$out[] .= '<div class="comment '.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix" id="comment'.$row['id'].'">
 								<div class="comment_id" style="display:none;">'.$row['id'].'</div>
 								<div class="comment_avatar_container">
 									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
@@ -254,7 +293,7 @@ if (!class_exists("comments")){
 							$avatarimg = $this->pdh->get('user', 'avatarimglink', array($com['userid']));
 
 							// output
-							$out[] .= '<div class="clear"></div><br/><div class="comment-reply '.(($j%2) ? 'rowcolor2' : 'rowcolor1').' clearfix">
+							$out[] .= '<div class="clear"></div><br/><div class="comment-reply '.(($j%2) ? 'rowcolor2' : 'rowcolor1').' clearfix" id="comment'.$row['id'].'">
 										<div class="comment_id" style="display:none;">'.$com['id'].'</div>
 										<div class="comment_avatar_container">
 											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>

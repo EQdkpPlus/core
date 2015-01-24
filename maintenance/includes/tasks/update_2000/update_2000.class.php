@@ -168,6 +168,7 @@ class update_2000 extends sql_update_task {
 				107	=> 'Add permission',
 				108	=> 'Add permission',
 				109	=> 'Add permission',
+				110	=> 'Insert Notification Type',
 			),
 			'german' => array(
 				'update_2000'				=> 'EQdkp Plus 2.0 Migration von 1.x',
@@ -280,6 +281,7 @@ class update_2000 extends sql_update_task {
 				107	=> 'Füge Berechtigung ein',
 				108	=> 'Füge Berechtigung ein',
 				109	=> 'Füge Berechtigung ein',
+				110	=> 'Füge Notification Types ein',
 			),
 		);
 		
@@ -564,6 +566,7 @@ class update_2000 extends sql_update_task {
 			107 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_users_profilefields');",
 			108 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_cal_addrestricted');",
 			109 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_article_categories_man');",
+			110 => "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('comment_new_mentioned', 'notification_newmention', 'comment', 0, 1, 0, NULL, 0, 'fa-at');",
 		);
 	}
 	

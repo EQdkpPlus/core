@@ -905,7 +905,8 @@ $lang = array(
 "user_sett_f_ntfy_calendarevent_mod_statuschange" => "Statusänderung durch Moderator im Kalenderevent",
 "user_sett_f_ntfy_calenderevent_closed" => "Kalenderevent wurde abgesagt",
 "user_sett_f_ntfy_calenderevent_opened" => "Kalenderevent wurde wieder geöffnet",	
-"user_sett_f_ntfy_comment_new_response" => "Antwort auf meinen Kommentar",	
+"user_sett_f_ntfy_comment_new_response" => "Antwort auf meinen Kommentar",
+"user_sett_f_ntfy_comment_new_mentioned" => "Erwähnungen in Kommentaren",		
 "mark_all_as_read" => "Alle als gelesen markieren",
 "show_all" => "Alle anzeigen",
 
@@ -926,8 +927,8 @@ $lang = array(
 "notification_calendarevent_closed" => "Das Kalenderevent \"{ADDITIONAL}\" wurde abgesagt",
 "notification_calendarevent_opened" => "Das Kalenderevent \"{ADDITIONAL}\" wurde wieder geöffnet",
 "notification_newcomment_response" => "{PRIMARY} hat auf deinen Kommentar auf der Seite \"{ADDITIONAL}\" geantwortet",
-"notification_newcomment_response_grouped" => "{PRIMARY} haben auf deinen Kommtenar auf der Seite \"{ADDITIONAL}\" geantwortet",
-		
+"notification_newcomment_response_grouped" => "{PRIMARY} haben auf deinen Kommentar auf der Seite \"{ADDITIONAL}\" geantwortet",
+"notification_newmention" => "{PRIMARY} hat dich in seinem Kommentar auf der Seite \"{ADDITIONAL}\" erwähnt",
 "article_publish_success" => "Artikel wurde veröffentlicht",
 "article_publish" => "Artikel veröffentlichen",
 "article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",		
