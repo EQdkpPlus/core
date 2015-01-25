@@ -45,6 +45,19 @@ if(!class_exists('pdh_w_comment')) {
 			}
 			return false;
 		}
+		
+		public function update($intCommentId, $strComment){
+			$strComment = $this->embedly->parseString($strComment, 400, false);
+			
+			$objQuery = $this->db->prepare("UPDATE __comments :p WHERE id=?")->set(array(
+					'text'			=> str_replace("\n", "[br]", $strComment),
+			))->execute($intCommentId);
+				
+			if($objQuery){
+				return true;
+			}
+			return false;
+		}
 
 		public function delete($id) {
 			if(!$id) return false;

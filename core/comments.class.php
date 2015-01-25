@@ -157,46 +157,51 @@ if (!class_exists("comments")){
 				}
 
 				//Mentions
-				$strContent = unsanitize($data['comment']);
-				$arrMentions = array();
-				$intMatches = preg_match_all("/@(\w*)/", $strContent, $arrNormalMatches1);
+				$strContent = $data['comment'];
+				$arrMentions = $arrNormalMatches = array();
+				$intMatches = preg_match_all("/@(\w*)/", $strContent, $arrNormalMatches);
 				if($intMatches){
-					foreach($arrNormalMatches1[1] as $strMatch){
-						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
+					foreach($arrNormalMatches[1] as $key => $strMatch){
+						if($strMatch != "") $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
 
-				$intMatches = preg_match_all('/@[\"](.*)[\"]/', $strContent, $arrNormalMatches2);
+				$intMatches = preg_match_all('/@&#34;(.*?)&#34;/', $strContent, $arrNormalMatches);
 				if($intMatches){
-					foreach($arrNormalMatches2[1] as $strMatch){
-						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
+					foreach($arrNormalMatches[1] as $key => $strMatch){
+						if($strMatch != "") $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
-				$intMatches = preg_match_all("/@\'(.*)\'/", $strContent, $arrNormalMatches3);
+				$intMatches = preg_match_all("/@&#39;(.*?)&#39;/", $strContent, $arrNormalMatches);
 				if($intMatches){
-					foreach($arrNormalMatches3[1] as $strMatch){
-						if($strMatch != "")  $arrMentions[] = utf8_strtolower($strMatch);
+					foreach($arrNormalMatches[1] as $key => $strMatch){
+						if($strMatch != "")  $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
-
+				
 				if(count($arrMentions) > 0){
 					$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
 					$arrDone = array();
 					$ntfyLink = $this->in->get('ntfy_link').'#comment'.$intCommentId;
 					$ntfyTitle = $this->in->get('ntfy_title');
-					foreach($arrMentions as $strMention){
+					$blnTextChanged = false;
+					foreach($arrMentions as $arrMention){
+						$strMention = $arrMention[0];
 						foreach($arrUsers as $userid => $username){
 							if(utf8_strtolower($username) === $strMention && !in_array($userid, $arrDone)){
 								$arrDone[] = $userid;
 								$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
+								$strUserlink = $this->env->link.$this->routing->build('user', $username, 'u'.$userid, false, true);
+								$data['comment'] = str_replace($arrMention[1], '[url="'.$strUserlink.'"]@'.$username.'[/url]', $data['comment']);
+								$blnTextChanged = true;
 							}
 						}
 					}
+					if($blnTextChanged){
+						$this->pdh->put('comment', 'update', array($intCommentId, $data['comment']));
+					}
 				}
-				
-				
-				
-				
+
 				$this->pdh->process_hook_queue();
 				echo $this->Content($data['attach_id'], $data['page'], ($data['reply_to'] || $this->in->get('replies', 0)));
 			}
