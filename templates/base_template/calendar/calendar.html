@@ -29,7 +29,7 @@
 			dayClick: function(date, allDay, jsEvent, view) {
 				if (allDay) {
 					jQuery.FrameDialog.create({
-						url: '{U_EDIT_CALENDAREVENT}&simple_head=true&timestamp='+(Date.parse(date)/1000),
+						url: '{U_EDIT_CALENDAREVENT}&simple_head=true&timestamp='+(moment.utc(date).unix()),
 						title: "{L_calendar_win_add}",
 						width: 940,
 						height:700,

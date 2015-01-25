@@ -530,7 +530,15 @@ if (!class_exists("timehandler")){
 			return $out;
 		}
 
-		function adddays($timestamp,$daystoadd=1){
+		public function newtime($timestamp, $newtime='now'){
+			$newtime	= ($newtime=='now') ? $this->date('H').':'.$this->date('i') : $newtime;
+			$a_times	= explode(':', $newtime);
+			$timestamp -= ($this->date('H', $timestamp)*3600 + $this->date('i', $timestamp)*60);
+			$seconds	= (isset($a_times[2]) && $a_times[2] > 0) ? ($a_times[0]*60) : 0;
+			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds;
+		}
+
+		public function adddays($timestamp,$daystoadd=1){
 			return $timestamp +(60*60*24*$daystoadd);
 		}
 

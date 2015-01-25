@@ -310,11 +310,11 @@ class editcalendarevent_pageobject extends pageobject {
 	public function display() {
 		if(($this->in->get('hookid', 0) > 0) && $this->in->get('hookapp', '') != ''){
 			$arrHookData	= $this->hooks->process('calendarevent_prefill', array('hookapp' => $this->in->get('hookapp'), 'hookid' => $this->in->get('hookid', 0)), true);
-			$eventdata = $arrHookData['eventdata'];
-			$this->values_available	= true;
+			$eventdata					= $arrHookData['eventdata'];
+			$this->values_available		= true;
 		}else{
-			$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
-			$this->values_available	= ($this->url_id > 0) ? true : false;
+			$eventdata					= $this->pdh->get('calendar_events', 'data', array($this->url_id));
+			$this->values_available		= ($this->url_id > 0) ? true : false;
 		}
 		if($this->in->get('debug', 0) == 1){
 			pd($eventdata);
@@ -398,13 +398,12 @@ class editcalendarevent_pageobject extends pageobject {
 			);
 		}else{
 			$default_raidduration	= ((($this->config->get('calendar_addraid_duration')) ? $this->config->get('calendar_addraid_duration') : 120)*60);
-
+			
 			// if the default time should be used, set it...
 			if($this->config->get('calendar_addraid_use_def_start') && preg_match('#[:]#', $this->config->get('calendar_addraid_def_starttime'))){
-				$a_times				= explode(':', $this->config->get('calendar_addraid_def_starttime'));
-				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? ($this->in->get('timestamp', 0) + ($a_times[0]*3600) + ($a_times[1]*60)) : $this->time->fromformat($this->config->get('calendar_addraid_def_starttime'), 'H:i');
+				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? $this->time->newtime($this->in->get('timestamp', 0), $this->config->get('calendar_addraid_def_starttime')) : $this->time->fromformat($this->config->get('calendar_addraid_def_starttime'), $this->user->style['time']);
 			}else{
-				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? ($this->in->get('timestamp', 0) + ($this->time->date('H')*3600) + ($this->time->date('i')*60)) : $this->time->time;
+				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? $this->time->newtime($this->in->get('timestamp', 0)) : $this->time->time;
 			}
 
 			$defdates = array(
@@ -470,8 +469,8 @@ class editcalendarevent_pageobject extends pageobject {
 			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
 			'RADIO_EDITCLONES'	=> new hradio('edit_clones', array('options' => $radio_repeat_array)),
 
-			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
-			'JQ_DATE_END'		=> $this->jquery->Calendar('enddate',$this->time->user_date($defdates['end'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
+			'JQ_DATE_END'		=> $this->jquery->Calendar('enddate',$this->time->user_date($defdates['end'], true, false, false), '', array('timepicker' => true)),
 			'DATE_DEADLINE'		=> ($defdates['deadline'] > 0) ? $defdates['deadline'] : 2,
 
 			// data
