@@ -51,6 +51,7 @@ class tinyMCE extends gen_class {
 			
 			$arrHooks = (($this->hooks->isRegistered('tinymce_bbcode_setup')) ? $this->hooks->process('tinymce_bbcode_setup', array('js' => '', 'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			$mention  = (isset($settings['mention']) && $settings['mention']) ? ' mention' : '';
 			
 			$this->tpl->add_js('
 				function initialize_bbcode_editor(){
@@ -62,11 +63,21 @@ class tinyMCE extends gen_class {
 					plugins: [
 						"bbcode autolink link image charmap",
 						"searchreplace visualblocks code fullscreen",
-						"media paste textcolor"
+						"media paste textcolor'.$mention.'"
 					],
 					language : "'.$this->language.'",
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
+					mentions: {
+						source: function(query, process, delimiter){
+							$.getJSON("'.$this->server_path.'libraries/tinyMCE/tinymce/plugins/mention/users.php", function (data) {
+					          process(data);
+					       });
+						},
+						insert: function(item) {
+						    return "@\'" + item.name + "\'";
+						}
+					},
 					
 					setup: function(editor){
 						'.$strHooks.'

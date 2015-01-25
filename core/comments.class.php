@@ -155,46 +155,56 @@ if (!class_exists("comments")){
 						if ($userid) $this->ntfy->add('comment_new_response', $intCommentId, $strFromUsername, $ntfyLink, $userid);
 					}
 				}
-				
+
 				//Mentions
 				$strContent = $data['comment'];
-				$arrMentions = array();
+				$arrMentions = $arrNormalMatches = array();
 				$intMatches = preg_match_all("/@(\w*)/", $strContent, $arrNormalMatches);
 				if($intMatches){
-					foreach($arrNormalMatches[1] as $strMatch){
-						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
+					foreach($arrNormalMatches[1] as $key => $strMatch){
+						if($strMatch != "") $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
-				$intMatches = preg_match_all('/@(".*")/', $strContent, $arrNormalMatches);
+
+				$intMatches = preg_match_all('/@&#34;(.*?)&#34;/', $strContent, $arrNormalMatches);
 				if($intMatches){
-					foreach($arrNormalMatches[1] as $strMatch){
-						if($strMatch != "") $arrMentions[] = utf8_strtolower($strMatch);
+					foreach($arrNormalMatches[1] as $key => $strMatch){
+						if($strMatch != "") $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
-				$intMatches = preg_match_all("/@('.*')", $strContent, $arrNormalMatches);
+				$intMatches = preg_match_all("/@&#39;(.*?)&#39;/", $strContent, $arrNormalMatches);
 				if($intMatches){
-					foreach($arrNormalMatches[1] as $strMatch){
-						if($strMatch != "")  $arrMentions[] = utf8_strtolower($strMatch);
+					foreach($arrNormalMatches[1] as $key => $strMatch){
+						if($strMatch != "")  $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
+
 				if(count($arrMentions) > 0){
 					$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
 					$arrDone = array();
 					$ntfyLink = $this->in->get('ntfy_link').'#comment'.$intCommentId;
 					$ntfyTitle = $this->in->get('ntfy_title');
-					foreach($arrMentions as $strMention){
+					$blnTextChanged = false;
+					foreach($arrMentions as $arrMention){
+						$strMention = $arrMention[0];
 						foreach($arrUsers as $userid => $username){
-							if(utf8_strtolower($username) === $strMention && !in_array($userid, $arrDone)){
-								$arrDone[] = $userid;
-								$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
+							if(utf8_strtolower($username) === $strMention){
+								if(!in_array($userid, $arrDone)){
+									$arrDone[] = $userid;
+									$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
+								}
+								
+								$strUserlink = $this->env->link.$this->routing->build('user', $username, 'u'.$userid, false, true);
+								$data['comment'] = str_replace($arrMention[1], '[url="'.$strUserlink.'"]@'.$username.'[/url]', $data['comment']);
+								$blnTextChanged = true;
 							}
 						}
 					}
+					if($blnTextChanged){
+						$this->pdh->put('comment', 'update', array($intCommentId, $data['comment']));
+					}
 				}
-				
-				
-				
-				
+
 				$this->pdh->process_hook_queue();
 				echo $this->Content($data['attach_id'], $data['page'], ($data['reply_to'] || $this->in->get('replies', 0)));
 			}
@@ -346,7 +356,7 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		private function Form($attachid, $page){
 			$editor = registry::register('tinyMCE');
-			$editor->editor_bbcode();
+			$editor->editor_bbcode(array('mention' => true));
 			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
 			$html = '<div class="contentBox writeComments">';
 			$html .= '<div class="boxHeader"><h1>'.$this->user->lang('comments_write').'</h1></div>';
@@ -382,7 +392,7 @@ if (!class_exists("comments")){
 		
 		private function ReplyForm($attachid, $page){
 			$editor = registry::register('tinyMCE');
-			$editor->editor_bbcode();
+			$editor->editor_bbcode(array('mention' => true));
 			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
 			
 			$html = '<div class="commentReplyForm" style="display:none;">
