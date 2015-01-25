@@ -403,7 +403,9 @@ class controller extends gen_class {
        					});',
 				'start_onload'	=> false,
 				'autofocus'		=> true,
+				'autoresize'	=> true,
 			),false);
+			
 			$this->tpl->assign_vars(array(
 				'S_INLINE_EDIT' => true,
 			));

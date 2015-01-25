@@ -178,7 +178,7 @@ if (!class_exists("comments")){
 						if($strMatch != "")  $arrMentions[] = array(utf8_strtolower($strMatch), $arrNormalMatches[0][$key]);
 					}
 				}
-				
+
 				if(count($arrMentions) > 0){
 					$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
 					$arrDone = array();
@@ -188,9 +188,12 @@ if (!class_exists("comments")){
 					foreach($arrMentions as $arrMention){
 						$strMention = $arrMention[0];
 						foreach($arrUsers as $userid => $username){
-							if(utf8_strtolower($username) === $strMention && !in_array($userid, $arrDone)){
-								$arrDone[] = $userid;
-								$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
+							if(utf8_strtolower($username) === $strMention){
+								if(!in_array($userid, $arrDone)){
+									$arrDone[] = $userid;
+									$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
+								}
+								
 								$strUserlink = $this->env->link.$this->routing->build('user', $username, 'u'.$userid, false, true);
 								$data['comment'] = str_replace($arrMention[1], '[url="'.$strUserlink.'"]@'.$username.'[/url]', $data['comment']);
 								$blnTextChanged = true;
@@ -353,7 +356,7 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		private function Form($attachid, $page){
 			$editor = registry::register('tinyMCE');
-			$editor->editor_bbcode();
+			$editor->editor_bbcode(array('mention' => true));
 			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
 			$html = '<div class="contentBox writeComments">';
 			$html .= '<div class="boxHeader"><h1>'.$this->user->lang('comments_write').'</h1></div>';
@@ -389,7 +392,7 @@ if (!class_exists("comments")){
 		
 		private function ReplyForm($attachid, $page){
 			$editor = registry::register('tinyMCE');
-			$editor->editor_bbcode();
+			$editor->editor_bbcode(array('mention' => true));
 			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
 			
 			$html = '<div class="commentReplyForm" style="display:none;">
