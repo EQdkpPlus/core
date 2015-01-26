@@ -257,7 +257,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 
 						// fetch the ids to delete
 						if($del_cc_selection == 'future' || $del_cc_selection == 'past'){
-							$objQuery2 = $this->db->prepare("SELECT id FROM __calendar_events WHERE ((cloneid=?) OR (id=?)) AND timestamp_start ".(($del_cc_selection == 'future') ? '>' : '<')." ?")->execute($row['cloneid'], $row['cloneid'], $current_time);
+							$objQuery2 = $this->db->prepare("SELECT id FROM __calendar_events WHERE ((cloneid=?) OR (id=?)) AND timestamp_start ".(($del_cc_selection == 'future') ? '>=' : '<=')." ?")->execute($row['cloneid'], $row['cloneid'], $current_time);
 						}else{
 							$objQuery2 = $this->db->prepare("SELECT id FROM __calendar_events WHERE (cloneid=?) OR (id=?)")->execute($row['cloneid'], $row['cloneid']);
 						}
