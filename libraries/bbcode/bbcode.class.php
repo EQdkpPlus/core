@@ -68,9 +68,9 @@ if (!class_exists("bbcode")) {
 			);
 
 			$out = array(
-				'<img alt=":)" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
-				'<img alt=":)" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
-				'<img alt=":D" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
+				'<img alt=":)" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
+				'<img alt=":)" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
+				'<img alt=":D" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
 				'<img alt=":o" src="'.$this->smiliepath.'/surprised.svg" class="smilies" />',
 				'<img alt=":p" src="'.$this->smiliepath.'/tongue.svg" class="smilies" />',
 				'<img alt=":(" src="'.$this->smiliepath.'/unhappy.svg" class="smilies" />',

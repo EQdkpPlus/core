@@ -3699,3 +3699,9 @@ li.prio_2 {
 .toggleResponsive {
 	margin-bottom: 6px;
 }
+
+.rte-autocomplete.dropdown-menu {
+	margin-top: 12px;
+	text-align: left;
+	padding-left: 6px;
+}
