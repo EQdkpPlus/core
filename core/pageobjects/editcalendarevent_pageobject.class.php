@@ -178,13 +178,16 @@ class editcalendarevent_pageobject extends pageobject {
 					'created_on'		=> $this->time->time,
 				)
 			));
+
+			// if the raid had been added, do the rest...
+			if($raidid > 0){
+				// Auto confirm / confirm by raid-add-setting
+				$asi_groups	= $this->in->getArray('asi_group');
+				$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status') : false;
 			
-			// Auto confirm / confirm by raid-add-setting
-			$asi_groups	= $this->in->getArray('asi_group');
-			$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status') : false;
-			
-			$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int'), $asi_groups, $asi_status));
-			$this->email_newraid($raidid);
+				$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int'), $asi_groups, $asi_status));
+				$this->email_newraid($raidid);
+			}
 		}else{
 			$withtime = ($this->in->get('allday') == '1') ? 0 : 1;
 			$this->pdh->put('calendar_events', 'add_cevent', array(
