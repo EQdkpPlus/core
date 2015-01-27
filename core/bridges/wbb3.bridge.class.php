@@ -84,18 +84,21 @@ class wbb3_bridge extends bridge_generic {
 	}
 	
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
-		//Is user active?
 		if ($boolLoginResult){
+			//Is user active?
 			if ($arrUserdata['banned'] != '0' || $arrUserdata['activationCode'] != '0') {
 				return false;
 			}
+			
+			//Single Sign On
+			if ($this->config->get('cmsbridge_disable_sso') != '1'){
+				$this->sso($arrUserdata, $boolAutoLogin);
+			}
+			
+			return true;
 		}
 		
-		//Single Sign On
-		if ($this->config->get('cmsbridge_disable_sso') != '1'){
-			$this->sso($arrUserdata, $boolAutoLogin);
-		}
-		return true;
+		return false;
 	}
 	
 	private function sso($arrUserdata, $boolAutoLogin){

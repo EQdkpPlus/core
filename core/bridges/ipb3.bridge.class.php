@@ -82,8 +82,10 @@ class ipb3_bridge extends bridge_generic {
 			if ($arrUserdata['temp_ban'] != '0' || $arrUserdata['member_banned'] != '0') {
 				return false;
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 }

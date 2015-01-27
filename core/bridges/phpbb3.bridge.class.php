@@ -85,8 +85,10 @@ class phpbb3_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolAutoLogin);
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	public function sso($arrUserdata, $boolAutoLogin = false){

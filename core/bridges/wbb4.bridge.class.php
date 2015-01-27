@@ -82,13 +82,16 @@ class wbb4_bridge extends bridge {
 			if ($arrUserdata['banned'] != '0' || $arrUserdata['activationCode'] != '0') {
 				return false;
 			}
+			
+			//Single Sign On
+			if ($this->config->get('cmsbridge_disable_sso') != '1'){
+				$this->sso($arrUserdata, $boolAutoLogin);
+			}
+			
+			return true;
 		}
 		
-		//Single Sign On
-		if ($this->config->get('cmsbridge_disable_sso') != '1'){
-			$this->sso($arrUserdata, $boolAutoLogin);
-		}
-		return true;
+		return false;
 	}
 	
 	public function get_groups($blnWithID){

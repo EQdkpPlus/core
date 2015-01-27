@@ -114,12 +114,13 @@ class Manage_Bridge extends page_generic {
 				$this->config->del('cmsbridge_notsamedb');
 			}
 		}
-
+		sleep(1);
 		echo "false";
 		exit;
 	}
 
 	public function ajax_check_usertable(){
+		sleep(1);
 		header('content-type: text/html; charset=UTF-8');
 		$prefix = $this->in->get('prefix');
 		$this->config->set('cmsbridge_prefix', $prefix);

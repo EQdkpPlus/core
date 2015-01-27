@@ -111,8 +111,10 @@ class joomla_bridge extends bridge_generic {
 			if ($arrUserdata['block'] != '0') {
 				return false;
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	/**

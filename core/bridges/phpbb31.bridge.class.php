@@ -168,8 +168,10 @@ class phpbb31_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolAutoLogin);
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private function sso($arrUserdata, $boolAutoLogin = false){

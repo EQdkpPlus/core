@@ -100,8 +100,10 @@ class smf2_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $strPassword, $boolAutoLogin);
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private function sso($arrUserdata, $strPassword, $boolAutoLogin = false){

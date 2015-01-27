@@ -56,6 +56,7 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';");
 			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';");
 			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';");
+			$this->tpl->add_js("var mmocms_userid = ".$this->user->id.";");
 
 			// jquery language file
 			$langfile = '';

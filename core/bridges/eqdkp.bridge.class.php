@@ -74,8 +74,10 @@ class eqdkp_bridge extends bridge_generic {
 			if ($arrUserdata['active'] == '0') {
 				return false;
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	public function sync($arrUserdata){

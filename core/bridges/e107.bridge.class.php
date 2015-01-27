@@ -76,8 +76,10 @@ class e107_bridge extends bridge {
 			if ($arrUserdata['user_ban'] != '0') {
 				return false;
 			}
+			
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	public function e107_get_user_groups($intUserID){
