@@ -177,7 +177,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				$raidname = $this->pdh->get('event', 'name', array($extension['raid_eventid']));
 				return ($raidname) ? $raidname : $this->user->lang('raidevent_raid_notitle');
 			}else{
-				return	$this->events[$id]['name'];
+				return	isset($this->events[$id]) ? $this->events[$id]['name'] : '';
 			}
 		}
 
