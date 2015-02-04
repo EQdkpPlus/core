@@ -275,7 +275,7 @@ class Manage_Logs extends page_generic {
 
 						$this->tpl->assign_block_vars('errorlogs.error_row', array(
 							'DATE'			=> $this->time->user_date($value, true),
-							'MESSAGE'		=> nl2br($arrErrors['entries'][$key+1]),
+							'MESSAGE'		=> nl2br($arrErrors['entries'][$key-1]),
 						));
 					}
 				}
