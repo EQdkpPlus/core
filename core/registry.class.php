@@ -55,7 +55,11 @@ final class registry extends super_registry{
 		if($diff_inst) {
 			$hash = $diff_inst;
 		} elseif(!empty($params)) {
-			$hash = md5(serialize($params));
+			try {
+				$hash = md5(serialize($params));
+			} catch(Exception $e){
+				$hash = md5(rand());
+			}
 		}
 		if(isset(self::$inst[$classname][$hash])) {
 			return self::$inst[$classname][$hash];

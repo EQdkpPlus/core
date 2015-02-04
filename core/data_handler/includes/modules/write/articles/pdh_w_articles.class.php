@@ -58,6 +58,7 @@ if(!class_exists('pdh_w_articles')) {
 			$this->pdh->put("comment", "delete_attach_id", array("articles", $id));
 
 			$this->pdh->enqueue_hook('articles_update');
+			$this->pdh->enqueue_hook('article_categories_update');
 			
 			$arrOld = array(
 					'title' 			=> $arrOldData["title"],
@@ -83,6 +84,7 @@ if(!class_exists('pdh_w_articles')) {
 			if ($arrChanges){
 				$this->log_insert('action_article_deleted', $arrChanges, $id, $arrOldData["title"], 1, 'article');
 			}
+			return true;
 		}
 		
 		public function delete_category($intCategoryID){
@@ -126,6 +128,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			$objQuery = $this->db->prepare("DELETE FROM __articles WHERE category =?")->execute($intCategoryID);
 			$this->pdh->enqueue_hook('articles_update');
+			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
 		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){

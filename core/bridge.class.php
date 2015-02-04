@@ -441,11 +441,15 @@ class bridge extends gen_class {
 		$arrUserGroups = $this->get_usergroups_for_user($intCMSUserID);
 		
 		//Get all EQdkp Groups
-		$arrEQdkpGroups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
-		
+		$arrEQdkpGroups = array();
+		foreach($this->pdh->get('user_groups', 'id_list') as $key){
+			$arrEQdkpGroups[$key] = utf8_strtolower($this->pdh->get('user_groups', 'name', array($key)));
+		}
+
 		//Get all CMS Groups
 		$arrCMSGroups = $this->get_user_groups();
 		foreach($arrCMSGroups as $groupID => $groupName){
+			$groupName = utf8_strtolower($groupName);
 			//If group should be synced, and it does not exist, create it
 			if (in_array($groupID, $arrGroupsToSync)){
 				if (!in_array($groupName, $arrEQdkpGroups)){
