@@ -366,7 +366,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		
 		public function get_calculated_permissions($intCategoryID, $strPermission, $intUsergroupID, $myPermission=false, $intParentID=false, $intCall = 0){
 			$arrPermissions = $this->get_permissions($intCategoryID);
-			$myPermission = ($myPermission !== false && $intCall == 0) ? $myPermission : ((isset($arrPermissions[$strPermission][$intUsergroupID])) ? $arrPermissions[$strPermission][$intUsergroupID] : -1);
+			$myPermission = ($myPermission !== false && $intCall == 0) ? $myPermission : ((isset($arrPermissions[$strPermission][$intUsergroupID])) ? $arrPermissions[$strPermission][$intUsergroupID] : ((isset($arrPermissions[$strPermission][1])) ? $arrPermissions[$strPermission][0] : -1));
 			
 			if ($strPermission == 'rea'){
 				switch($myPermission){
