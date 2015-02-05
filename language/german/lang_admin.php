@@ -1064,7 +1064,7 @@ $lang = array(
 "reset_success" => "Die ausgewählten Elemente wurden erfolgreich zurückgesetzt!",
 "Multi_events" => "Dem Konto zugeordnete Ereignisse",
 "Multi_discnottolong" => "( = Spaltenname) - nicht zu lang wählen, da sonst die Tabellen zu breit werden. Wähle z.b. MC, BWL, AQ usw.!",
-"Multi_eventsnoatt" => "Ereignisse, die nicht in Anwesenheit einfließen sollen",
+"Multi_eventsnoatt" => "Davon Ereignisse, die nicht in Anwesenheit einfließen sollen",
 "Multi_addkonto" => "Konto zufügen",
 "Multi_chooseevents" => "Ereignisse auswählen",
 "Multi_chooseitempools" => "Item-Pools auswählen",

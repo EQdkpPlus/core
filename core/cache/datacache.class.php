@@ -498,6 +498,8 @@ if( !class_exists( "cachePagination" ) ) {
 		 * @return array IDs
 		 */
 		public function search($strObjectTag, $strSearchValue, $allowParts=false){
+			$strSearchValue = utf8_strtolower($strSearchValue);
+			
 			if ($allowParts){
 				$escapedString = $this->db->escapeString('%'.$strSearchValue.'%');
 				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE LOWER(".$strObjectTag.") LIKE ".$escapedString;	
