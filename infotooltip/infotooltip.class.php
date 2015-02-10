@@ -168,7 +168,7 @@ if(!class_exists('infotooltip')) {
 		private function copy_config($config) {
 			//fetch config from file or from input-var
 			if(!is_array($config)) {
-				$cconfig = $this->settings->get_config();
+				$cconfig = $this->settings->get_config_cached();
 			} else {
 				$cconfig = $config;
 			}

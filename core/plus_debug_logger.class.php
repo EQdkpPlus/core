@@ -383,32 +383,32 @@ if ( !defined('EQDKP_INC') ){
 		
 		
 		//return logs from "behind", so most recent first
-		public function get_file_log($error_type, $number=0, $start=0){
+		public function get_file_log($error_type, $number=25, $start=0){
 			$file = $this->logfile_folder.'/'.$error_type.'.log';
-			$max_entries = (isset($this->logfile_info[$error_type])) ? count($this->logfile_info[$error_type]) : 0;
-			if (($max_entries - $start) < 0) return array();
+			
+			$regexp = '/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/';
+
 			if(file_exists($file)){
-				$filearray['filesize'] = filesize($file);
-				$length = $filearray['filesize'];
-				//size where log start saved, so add one to get end of previous log
-				if($start AND isset($this->logfile_info[$error_type][$max_entries - $start + 1])) $length = $this->logfile_info[$error_type][$max_entries - $start + 1];
-				$offset = 0;
-				if($number AND $number < ($max_entries - $start) AND isset($this->logfile_info[$error_type][$max_entries -$start +1 -$number])) {
-					$offset = $this->logfile_info[$error_type][$max_entries - $start + 1 - $number];
-					$length -= $offset;
-				}
+				$contents = file_get_contents($file);
+				$arrSplitted = preg_split($regexp, $contents, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 				
-				$handle = fopen($file, "r+");
-				if($offset) fseek($handle, $offset);
-				$content = fread($handle, $length);
-				fclose($handle);
-				$regexp = '/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/';
-				$filearray['entries'] = preg_split($regexp, $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-				$filearray['entrycount'] = $max_entries;
-				return $filearray;
-			}else{
-				return null;
+				// even items become keys, odd items become values
+				$exceptions = call_user_func_array('array_merge', array_map(
+						function($v) {
+							return array($v[0] => $v[1]);
+						},
+						array_chunk($arrSplitted, 2)
+				));
+				
+				unset($contents);
 			}
+			
+			if(is_array($exceptions) && count($exceptions)){
+				$exceptions = array_reverse($exceptions);
+				$arrSliced = array_slice( $exceptions, $start, $number);
+				return array('entries' => $arrSliced, 'count' => count($exceptions));
+			}
+			return array('entries' => 0, 'count' => 0);
 		}
 
 		public function delete_logfile($type) {

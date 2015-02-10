@@ -260,26 +260,23 @@ class Manage_Logs extends page_generic {
 		$arrLogFiles = $this->pdl->get_logfiles();
 		foreach($arrLogFiles as $logfile){
 			
-			$arrErrors= $this->pdl->get_file_log(str_replace(".log", "", $logfile), 50, $start);
+			$arrErrors = $this->pdl->get_file_log(str_replace(".log", "", $logfile), 50, $start);
 			
 			$this->tpl->assign_block_vars('errorlogs', array(
 					'TYPE' 			=> str_replace(".log", "", $logfile),
-					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $arrErrors['entrycount'], 50, $start),
-					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['entrycount'], 50),
+					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $arrErrors['count'], 50, $start),
+					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['count'], 50),
 			));
 			
-			if(isset($arrErrors['entries'])){
-				$arrErrors['entries'] = array_reverse($arrErrors['entries']);
-				foreach($arrErrors['entries'] as $key=> $value) {
-					if(preg_match('/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/', $value)){
+			foreach($arrErrors['entries'] as $date => $entry) {
 
-						$this->tpl->assign_block_vars('errorlogs.error_row', array(
-							'DATE'			=> $this->time->user_date($value, true),
-							'MESSAGE'		=> nl2br($arrErrors['entries'][$key-1]),
-						));
-					}
-				}
+				$this->tpl->assign_block_vars('errorlogs.error_row', array(
+					'DATE'			=> $this->time->user_date($date, true),
+					'MESSAGE'		=> nl2br($entry),
+				));
+
 			}
+
 		}
 
 		$actionlog_count	= count($view_list);
@@ -299,8 +296,6 @@ class Manage_Logs extends page_generic {
 			'LOGS_LIST'				=> $logs_list,
 			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-			'ERROR_FILTER_SELECT'	=> new hdropdown('error_dd', array('options' => $error_list, 'value' => $this->in->get('error'), 'js' => 'onchange="window.location=\'manage_logs.php'.$this->SID.'&error=\'+document.post2.error_dd.value"')),
-			'ERROR_TYPE_SELECT'		=> new hdropdown('error_type_dd', array('options' => $type_list, 'value' => $this->in->get('type'), 'js' => 'onchange="window.location=\'manage_logs.php'.$this->SID.'&type=\'+document.post2.error_type_dd.value"')),
 		));
 		
 		$this->core->set_vars(array(

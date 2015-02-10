@@ -31,10 +31,11 @@ class config extends gen_class {
 	private $changed_keys = array();
 	private $deleted_keys = array();
 	private $added_keys = array();
-	private $blnFileCache = false;
+	private $blnCacheConfigLoaded = false;
+	private $blnRealConfigLoaded = false;
 	
 	public function __construct($pfh=false, $db=false)	{
-		$this->get_config();
+		$this->init_config();
 	}
 
 	public function __destruct() {
@@ -42,9 +43,52 @@ class config extends gen_class {
 		parent::__destruct();
 	}
 	
+	/**
+	 * Return Config var from Database
+	 * 
+	 * @param string $config_name
+	 * @param string $plugin
+	 * @return mixed
+	 */
 	public function get($name, $plugin='') {
+		if(!$this->blnRealConfigLoaded) $this->get_dbconfig();
+
 		if($plugin) return (isset($this->config[$plugin][$name])) ? $this->config[$plugin][$name] : false;
 		return (isset($this->config[$name])) ? $this->config[$name] : false;
+	}
+	
+	/**
+	 * Return Config var from Cache
+	 * 
+	 * @param string $config_name
+	 * @param string $plugin
+	 * @return mixed
+	 */
+	public function get_cached($name, $plugin='') {		
+		if($plugin) return (isset($this->config[$plugin][$name])) ? $this->config[$plugin][$name] : false;
+		return (isset($this->config[$name])) ? $this->config[$name] : false;
+	}
+	
+	/**
+	 * Get Config from Database
+	 * 
+	 * @param string $plugin
+	 * @return multitype:
+	 */
+	public function get_config($plugin=''){
+		if(!$this->blnRealConfigLoaded) $this->get_dbconfig();
+		
+		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
+	}
+	
+	/**
+	 * Get Config from Cache
+	 * 
+	 * @param string $plugin
+	 * @return multitype:
+	 */
+	public function get_config_cached($plugin=''){
+		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
 	}
 
 	public function set($config_name, $config_value='', $plugin=''){
@@ -102,25 +146,7 @@ class config extends gen_class {
 		}
 		return false;
 	}
-
-	public function get_config($plugin=''){
-		if(count($this->config) < 1){
-			// load cache file
-			if($this->blnFileCache){
-				$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
-				if(is_file($file)){
-					include($file);
-					$this->config = $localconf;
-				}
-			}
-			
-			// If the config file is empty, load it out of the database
-			if(count($this->config) < 1 || !$this->blnFileCache){
-				$this->get_dbconfig();
-			}
-		}
-		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
-	}
+	
 	
 	private function unserialize($val) {
 		//check for '{', only in this case we try an unserialize
@@ -140,7 +166,7 @@ class config extends gen_class {
 		}
 	}
 
-	private function get_dbconfig(){
+	private function get_dbconfig(){		
 		if(!is_object($this->db)){return true;}
 		$this->config_modified	= true;
 		$this->config			= array();
@@ -154,9 +180,30 @@ class config extends gen_class {
 					$this->config[$row['config_name']] = $this->unserialize($row['config_value']);
 				}
 			}
+			$this->blnRealConfigLoaded = true;
 		}
 
 		return $this->config;
+	}
+	
+	private function get_cacheconfig(){
+		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+		if(is_file($file)){
+			include($file);
+			if(isset($localconf)) $this->config = $localconf;
+			$this->blnCacheConfigLoaded = true;
+		}
+		
+		return $this->config;
+	}
+	
+	private function init_config(){
+		$this->get_cacheconfig();
+				
+		// If the config file is empty, load it out of the database
+		if(count($this->config) < 1){
+			$this->get_dbconfig();
+		}
 	}
 
 	public function install_set($array){
@@ -246,19 +293,19 @@ class config extends gen_class {
 			$this->config = (is_array($manual) ? $manual : $this->config);
 			$this->save_backup($this->config);
 		}
-		if($this->blnFileCache){
-			// Build the plain file config cache, reload from database first
-			$this->get_dbconfig();
-			ksort($this->config);
-			$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
-			$data = "<?php\n";
-			$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
-			$data .= '$localconf = ';
-			$data .= var_export($this->config, true);
-			$data .= ";\n?";
-			$data .= ">";
-			$this->pfh->putContent($file, $data);
-		}
+
+		// Build the plain file config cache, reload from database first
+		$this->get_dbconfig();
+		ksort($this->config);
+		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+		$data = "<?php\n";
+		$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
+		$data .= '$localconf = ';
+		$data .= var_export($this->config, true);
+		$data .= ";\n?";
+		$data .= ">";
+		$this->pfh->putContent($file, $data);
+
 		$this->config_modified = false;
 	}
 	

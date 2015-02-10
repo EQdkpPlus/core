@@ -173,8 +173,8 @@ abstract class Database extends gen_class {
 
 	// pdl plaintext (logfile) format function for sql errors
 	public function pdl_pt_format_sql_error($log_entry) {
-		$text = '>>>> '.$log_entry['args'][0].' <<<<\t 
-			Query: '	. $log_entry['args'][1] . "\t
+		$text = '>>>> '.$log_entry['args'][0]." <<<<\t 
+			Query: "	. $log_entry['args'][1] . "\t
 			Message: "		. $log_entry['args'][2] . "\t
 			Code: "		. $log_entry['args'][3] . "\t
 			Database: "		. $log_entry['args'][4] . "\t

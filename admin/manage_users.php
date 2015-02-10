@@ -32,10 +32,11 @@ class Manage_Users extends page_generic {
 		$handler = array(
 			'maincharchange' => array('process' => 'maincharchange', 'csrf' => true),
 			'mode' => array(
+				array('process' => 'delete_authaccount', 'value' => 'delauthacc', 'csrf' => true),
 				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),	
 				array('process' => 'deactivate', 'value' => 'deactivate', 'csrf' => true),
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
-				),
+			),
 			'submit' => array('process' => 'submit', 'csrf' => true),
 			'send_new_pw' => array('process' => 'send_new_pw', 'csrf' => true),
 			'u' => array('process' => 'edit'),
@@ -509,6 +510,14 @@ class Manage_Users extends page_generic {
 			'display'			=> true)
 		);
 	}
+	
+	public function delete_authaccount() {
+		$strMethod = $this->in->get('lmethod');
+		$this->pdh->put('user', 'delete_authaccount', array($this->in->get('u'), $strMethod));
+		$this->pdh->process_hook_queue();
+		$this->edit();
+	}
+	
 	// ---------------------------------------------------------
 	// Process Display User
 	// ---------------------------------------------------------
@@ -699,6 +708,7 @@ class Manage_Users extends page_generic {
 		$this->form->use_fieldsets = true;
 		
 		$settingsdata = user::get_settingsdata($user_id);
+		
 		// get rid of current_password field
 		unset($settingsdata['registration_info']['registration_info']['current_password']);
 		// vary help messages for user creation
@@ -714,6 +724,34 @@ class Manage_Users extends page_generic {
 		if($user_id > 0) {
 			$this->form->add_field('send_new_pw', array('type' => 'button', 'buttontype' => 'submit', 'class' => 'mainoption bi_mail', 'buttonvalue' => 'user_sett_f_send_new_pw', 'tolang' => true), 'registration_info', 'registration_info');
 		}
+		
+		// add various auth-accounts
+		$auth_options = $this->user->get_loginmethod_options();
+		$auth_array = array();
+		
+		$user_data = array();
+		if($user_id > 0) {
+			$user_data = $this->pdh->get('user', 'data', array($user_id));
+		}
+
+		foreach($auth_options as $method => $options){
+			if (isset($options['connect_accounts']) && $options['connect_accounts']){
+				if (isset($user_data['auth_account'][$method]) && strlen($user_data['auth_account'][$method])){
+					$display = $this->user->handle_login_functions('display_account', $method, array($this->user->data['auth_account'][$method]));
+					if (is_array($display) || $display == "") {
+						$display = $this->user->data['auth_account'][$method];
+					}
+					$field_opts = array(
+							'dir_lang'	=> ($this->user->lang('login_'.$method)) ? $this->user->lang('login_'.$method) : ucfirst($method),
+							'text'		=> '<a href="manage_users.php'.$this->SID.'&amp;u='.$user_id.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="'.$this->user->lang('delete').'"></i></a>',
+							'help'		=> 'auth_accounts_help',
+					);
+					
+					$this->form->add_field('auth_account_'.$method, $field_opts, 'auth_accounts', 'registration_info');
+				}
+			}
+		}
+		
 		
 		//Plugin Settings
 		if (is_array($this->pm->get_menus('settings'))){
