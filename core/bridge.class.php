@@ -81,6 +81,7 @@ class bridge extends gen_class {
 		} else {
 			try {
 				$this->bridgedb = dbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->status = true;
 			} catch(DBALException $e){
 				$this->bridgedb = $this->status = false;
 				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());

@@ -52,20 +52,22 @@ class ManagePageLayouts extends page_generic {
 		$page_list = $this->pdh->get_page_list();
 	
 		registry::load('form');
-		
+
 		//general options
 		if (is_array($layout_def['options']) && !empty($layout_def['options'])){
-			foreach ($layout_def['options'] as $key=>&$value) {
-				$name = 'params['.$key.']';
-				$value['value'] = form::value($name, $value);
+
+			foreach ($layout_def['options'] as $key=>$value) {
+				$name = 'params_'.$key;
+
+				$layout_def['options'][$key]['value'] = form::value($name, $value);
 			}
 		}
 
 		//substitutions
 		if (is_array($layout_def['substitutions']) && !empty($layout_def['substitutions'])){
-			foreach ($layout_def['substitutions'] as $key=>&$value){
-				$name = 'subs['.$key.']';
-				$value['value'] = form::value($name, $value);
+			foreach ($layout_def['substitutions'] as $key=>$value){
+				$name = 'subs_'.$key;
+				$layout_def['options'][$key]['value'] = form::value($name, $value);
 			}
 		}
 	
@@ -456,7 +458,7 @@ class ManagePageLayouts extends page_generic {
 		//general options
 		if (is_array($layout_def['options']) && !empty($layout_def['options'])){
 			foreach ($layout_def['options'] as $key=>$value){
-				$name = 'params['.$key.']';
+				$name = 'params_'.$key;
 				$this->tpl->assign_block_vars('param_row', array(
 					'NAME'	=> $value['lang'],
 					'FIELD'	=> form::field($name, $value),
@@ -467,7 +469,7 @@ class ManagePageLayouts extends page_generic {
 		//substitutions
 		if (is_array($layout_def['substitutions']) && !empty($layout_def['substitutions'])){
 			foreach ($layout_def['substitutions'] as $key=>$value){
-				$name = 'subs['.$key.']';
+				$name = 'subs_'.$key;
 				$this->tpl->assign_block_vars('subs_row', array(
 					'NAME'	=> $value['lang'],
 					'FIELD'	=> form::field($name, $value),

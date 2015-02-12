@@ -47,6 +47,7 @@ if( !class_exists( "plus_datahandler")){
 		
 		//layout stuff
 		private $system_settings			= array( );
+		private $system_name				= '';
 		
 		//page_objects stuff
 		private $page_objects = array();
@@ -758,6 +759,7 @@ if( !class_exists( "plus_datahandler")){
 		public function init_eqdkp_layout( $layout ) {
 			$this->system_settings = array( );
 			$this->system_settings = $this->get_eqdkp_layout( $layout );
+			$this->system_name = $layout;
 		}
 		
 		public function get_layout_config( $name = false ){
@@ -846,7 +848,7 @@ if( !class_exists( "plus_datahandler")){
 					return $settings;
 				} else {
 					if( $layoutname == '' ) {
-						return $this->get_page_settings( $page, $object, $this->system_settings['base_layout'] );
+						return $this->get_page_settings( $page, $object, $this->system_name );
 					} else {
 						$this->auto_update_layout($layoutname);
 						$layout = $this->get_eqdkp_layout( $layoutname );
