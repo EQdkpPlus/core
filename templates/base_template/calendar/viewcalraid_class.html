@@ -68,14 +68,14 @@
 													<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
 													<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
 													{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-													<button type="button" name="submit_charchange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
+													<br /><button type="button" name="submit_charchange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
 												</fieldset><br/>
 												<!-- ENDIF -->
 												<fieldset class="settings">
 													<legend class="smaller"><i class="fa fa-comment fa-lg"></i> {L_raidevent_raid_changenotemenu}</legend>
 													<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-													<textarea name="notechange_note" cols="30" rows="3">{raidstatus.classes.status.NOTE}</textarea>
-													<button type="button" name="submit_notechange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
+													<textarea name="notechange_note" rows="3" style="width:95%">{raidstatus.classes.status.NOTE}</textarea>
+													<br /><button type="button" name="submit_notechange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
 												</fieldset>
 												<!-- IF SHOW_RAIDGROUPS -->
 												<br/>
@@ -83,7 +83,7 @@
 													<legend class="smaller"><i class="fa fa-users fa-lg"></i> {L_raidevent_raid_groupsmenu}</legend>
 													{raidstatus.classes.status.GROUPS}
 													<input type="hidden" name="groupchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-													<button type="button" name="submit_groupchange" class="submit_groupchange" value="" style="float:right;"><i class="fa fa-check fa-lg"></i></button>
+													<br /><button type="button" name="submit_groupchange" class="submit_groupchange" value="" style="float:right;"><i class="fa fa-check fa-lg"></i></button>
 												</fieldset>
 												<!-- ENDIF -->
 											</div>
