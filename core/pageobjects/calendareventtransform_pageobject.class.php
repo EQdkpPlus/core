@@ -25,7 +25,8 @@ class calendareventtransform_pageobject extends pageobject {
 		$handler = array(
 			'transformraid'			=> array('process' => 'transform_raid'),
 		);
-		$this->user->check_auth('u_cal_event_add');
+		$this->user->check_auth('a_raid_add');
+		
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
 		$this->process();
 	}
