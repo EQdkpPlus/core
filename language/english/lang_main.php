@@ -586,6 +586,7 @@ $lang = array(
 	"save_nosuc" => 'Error while saving',
 	"save_suc" => 'Saved successfully',
 	"maintenance_mode_warn" => 'Your system is currently in maintenance mode, restricting normal user access. Please check the <a href="'.registry::get_const('server_path').'maintenance/index.php">maintenance tool</a> and disable the maintenance mode when done.<ul><li><a href="'.registry::get_const('server_path').'maintenance/index.php">Go to maintenance tool</a></li><li><a href="'.registry::get_const('server_path').'maintenance/index.php?disable=true">Deactivate Maintenance mode</a></li></ul>',
+	"maintenance_mode_noauth_warn" => "Your maintenance mode is accessable for everyone. Please remove the Flag 'EQDKP_UPDATE' from your config.php, as soon as you have finished your work.",
 	"home_of_eqdkpplus" => 'Home of the EQdkp Plus project',
 	"manage_bridge" => 'Bridge Management',
 	"templates_error" => 'Template error',

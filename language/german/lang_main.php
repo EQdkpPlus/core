@@ -538,6 +538,7 @@ $lang = array(
 "save_nosuc" => "Speichern nicht erfolgreich",
 "save_suc" => "Speichern erfolgreich",
 "maintenance_mode_warn" => "Dein System befindet sich momentan im Wartungsmodus und verweigert normalen Benutzern den Zugriff. Bitte überprüfe das <a href=\"".registry::get_const('server_path')."maintenance/index.php\">Wartungstool</a> und deaktiviere den Modus wenn alle Wartungen durchgeführt wurden.<ul><li><a href=\"".registry::get_const('server_path')."maintenance/index.php\">Zum Wartungsbereich</a></li><li><a href=\"".registry::get_const('server_path')."maintenance/index.php?disable=true\">Wartungsmodus beenden</a></li></ul>",
+"maintenance_mode_noauth_warn" => "Dein Wartungsmodus ist öffentlich erreichbar. Entferne bitte das Flag 'EQDKP_UPDATE' aus deiner config.php, sobald du mit deinen Wartungsarbeiten fertig bist.",	
 "home_of_eqdkpplus" => "home of the EQDKP Plus Projekt",
 "manage_bridge" => "Bridge verwalten",
 "templates_error" => "Template-Fehler",

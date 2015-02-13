@@ -66,6 +66,8 @@ class core extends gen_class {
 	}
 
 	public function check_auth(){
+		if(defined('EQDKP_UPDATE') && EQDKP_UPDATE) return true;
+		
 		if (!$this->user->check_auth('a_maintenance', false)){
 			if ($this->config->get('pk_maintenance_mode') == '1'){
 				redirect('maintenance/maintenance.php'.$this->SID);
@@ -126,7 +128,7 @@ class core extends gen_class {
 			'L_ACTIVATE_MMODE' => $this->user->lang('activate_mmode'),
 			'L_LEAVE_MMODE' => $this->user->lang('leave_mmode'),
 			'L_DEACTIVATE_MMODE' => $this->user->lang('deactivate_mmode'),
-			'S_MMODE_ACTIVE' => ($this->config->get('pk_maintenance_mode') == 1) ?  true : false,
+			'S_MMODE_ACTIVE' => ($this->config->get('pk_maintenance_mode') == 1 || (defined('EQDKP_UPDATE') && EQDKP_UPDATE)) ?  true : false,
 			'MAINTENANCE_MESSAGE' => $this->config->get('pk_maintenance_message'),
 			'S_SPLASH' => ($this->in->get('splash') == 'true') ? true : false,
 			'SID'	=> $this->SID,

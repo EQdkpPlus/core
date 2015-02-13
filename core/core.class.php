@@ -211,6 +211,10 @@ class core extends gen_class {
 			if ($this->config->get('pk_maintenance_mode') && $this->user->check_auth('a_', false)){
 				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'fa-cog');
 			}
+			
+			if(defined('EQDKP_UPDATE') && EQDKP_UPDATE){
+				$this->global_warning($this->user->lang('maintenance_mode_noauth_warn'), 'fa-cog');
+			}
 
 			$s_in_admin		= (((defined('IN_ADMIN') ) ? IN_ADMIN : false) && ($this->user->check_auth('a_', false)) ) ? true : false;
 			if (file_exists($this->root_path.'install') && EQDKP_INSTALLED && $this->user->check_auth('a_', false) && $s_in_admin && !VERSION_WIP){
