@@ -94,6 +94,15 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 			return count($this->tasks);
 		}
 		
+		public function get_task_hash(){
+			$arrTasks = $this->tasks;
+			asort($arrTasks);
+			
+			$arrKeys = array_keys($arrTasks);
+			$strHash = md5(serialize($arrKeys));
+			return $strHash;
+		}
+		
 		public function init_tasks() {
 			require_once($this->root_path.'maintenance/includes/task.aclass.php');
 			$this->get_task_list();

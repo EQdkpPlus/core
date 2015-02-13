@@ -108,6 +108,7 @@ class task_manager_display extends gen_class {
 			}
 			return $ret;
 		}
+		
 		//output tasks
 		if($this->in->get('type', 'home') == 'home'){
 			$update_all = false;

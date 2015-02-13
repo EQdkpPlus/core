@@ -151,12 +151,11 @@ abstract class super_registry {
 				}
 
 				//Maintenance Modus for admins
-				$task_count = registry::register('mmtaskmanager')->get_task_count();
-
-				//redirect if there are necessary tasks or errors from pfh
-				if(!registry::register('config')->get('pk_known_task_count')) registry::register('config')->set('pk_known_task_count', $task_count);
-				if(registry::register('config')->get('pk_known_task_count') != $task_count){
-					registry::register('config')->set('pk_known_task_count', $task_count);
+				$task_hash = registry::register('mmtaskmanager')->get_task_hash();
+				
+				//redirect if there are necessary tasks or errors from pfh				
+				if(!registry::register('config')->get('pk_known_task_hash') || registry::register('config')->get('pk_known_task_hash') !== $task_hash){
+					registry::register('config')->set('pk_known_task_hash', $task_hash);
 					registry::register('mmtaskmanager')->init_tasks();
 					if(registry::register('mmtaskmanager')->status['necessary_tasks']) {
 						registry::register('config')->set('pk_maintenance_mode', true);
