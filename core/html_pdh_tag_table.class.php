@@ -58,7 +58,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$this->initialise($hptt_settings);
 			$this->full_list		= $full_list;
 			$this->filtered_list	= $filtered_list;
-			$this->cache_suffix		= ($cache_suffix != '') ? '_'.$cache_suffix : '';
+			$this->cache_suffix		= '_'.$this->user->lang_name.(($cache_suffix != '') ? '_'.$cache_suffix : '');
 			$this->sort_suffix		= $sort_suffix;
 
 		}
