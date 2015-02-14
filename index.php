@@ -225,7 +225,7 @@ class controller extends gen_class {
 			$intPublished = $arrArticle['published'];
 			
 			//Check Start to/start from
-			if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] < $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] > $this->time->time)) $intPublished = false;
+			if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] > $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] < $this->time->time)) $intPublished = false;
 			
 			//Get Category Data
 			$intCategoryID = $arrArticle['category'];

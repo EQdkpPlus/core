@@ -138,7 +138,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						//Check featured
 						if ($blnFeaturedOnly && !$this->pdh->get('articles', 'featured', array($intArticleID))) continue;
 						//Check start from/to
-						if (($this->pdh->get('articles', 'show_from', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_from', array($intArticleID)) < $this->time->time) || ($this->pdh->get('articles', 'show_to', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_to', array($intArticleID)) > $this->time->time)) continue;
+						if (($this->pdh->get('articles', 'show_from', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_from', array($intArticleID)) > $this->time->time) || ($this->pdh->get('articles', 'show_to', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_to', array($intArticleID)) < $this->time->time)) continue;
 						
 						$arrOut[] = $intArticleID;
 					}	
