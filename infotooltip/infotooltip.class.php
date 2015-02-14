@@ -403,6 +403,52 @@ if(!class_exists('infotooltip')) {
 			$item = $this->update($item_name, $lang, $game_id, $data);
 			return $this->item_return($item);
 		}
+		
+		public function getcacheditem($item_name, $lang=false, $game_id=false, $onlyicon=false, $noicon=false, $data=array()){
+			$item_name = htmlspecialchars_decode($item_name, ENT_QUOTES);
+			$game = $this->config['game'];
+			$lang = (!$lang || $lang == '') ? $this->config['game_language'] : $lang;
+			$this->init_cache();
+			$ext = '';
+			if(count($data) > 0) {
+				$ext = '_'.base64_encode(serialize($data));
+			}
+			
+			$cache_name = $game.'_'.$lang.'_'.($game_id ? $game_id : $item_name).$ext;
+			$cache_name = md5($cache_name).'.itt';
+			
+			if(in_array($cache_name, $this->cached)) {
+				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
+				if($item && !isset($item['baditem'])){
+					//We found it in Cache
+					$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $this->config['icon_path'];
+					$iconext				= (isset($item['params']) && isset($item['params']['ext']) && !empty($item['params']['ext'])) ? $item['params']['ext'] : $this->config['icon_ext'];
+					$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
+					
+					if(isset($item['icon']) && !$noicon) {
+						if($onlyicon > 0) {
+							$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
+						} else {
+							$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
+						}
+					} else {
+						$visible = $display_name;
+					}
+					
+					if(isset($item['color'])) {
+						if (substr($item['color'], 0, 1) == "#"){
+							$visible = '<span style="color:'.$item['color'].'">'.$visible.'</span>';
+						} else {
+							$visible = '<span class="'.$item['color'].'">'.$visible.'</span>';
+						}
+					}
+					
+					return $visible;
+				}
+			}
+			
+			return false;
+		}
 
 		private function item_return($item) {
 			if(!isset($item['html']) OR !$item['html'] OR !isset($item['name'])) {

@@ -388,14 +388,23 @@ function infotooltip_js() {
  * return @string
  */
 function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
+	
+	
 	if(empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 	$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
+	
+	$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
+	
 	$id = unique_id();
 	$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
 	if($direct > 1) $data['update'] = true;
 	$data = serialize($data);
 	$direct = ($direct) ? 1 : 0;
-	$str = '<span class="infotooltip infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
+	if($cachedname){
+		$str = '<span class="infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">'.$cachedname;
+	} else {
+		$str = '<span class="infotooltip infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
+	}
 	return $str.(($in_span !== false) ? $in_span : $name).'</span>';
 }
 
