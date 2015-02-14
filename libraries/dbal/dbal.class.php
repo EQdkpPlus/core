@@ -151,7 +151,8 @@ abstract class Database extends gen_class {
 			$this->objLogger->register_type($this->strDebugPrefix.'sql_query', null, array($this, 'pdl_html_format_sql_query'), array(2,3,4));
 		if(isset($arrOptions['open'])) {
 			$intPort = (registry::get_const("dbport") !== null) ? registry::get_const("dbport") : ini_get("mysqli.default_port");
-			$this->connect(registry::get_const("dbhost"), registry::get_const("dbname"), registry::get_const("dbuser"), registry::get_const("dbpass"));
+			$blnPersistent = (registry::get_const("dbpers") !== null) ? registry::get_const("dbpers") : false;
+			$this->connect(registry::get_const("dbhost"), registry::get_const("dbname"), registry::get_const("dbuser"), registry::get_const("dbpass"), $intPort, $blnPersistent);
 			//dont print any error-messages for this query
 			if(DEBUG) $this->query("SET SESSION sql_mode = 'STRICT_TRANS_TABLES'");
 		}
@@ -517,7 +518,7 @@ abstract class Database extends gen_class {
 		return $objStatement->escapeString($strString);
 	}
 	
-	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false);
+	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false, $blnPersistent=false);
 	abstract protected function disconnect();
 	abstract protected function get_client_version();
 	abstract protected function get_server_version();

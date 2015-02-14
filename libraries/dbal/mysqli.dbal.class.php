@@ -59,9 +59,11 @@ class dbal_mysqli extends Database
 	/**
 	 * Connect to the database server and select the database
 	 */
-	public function connect($strHost, $strDatabase, $strUser, $strPassword, $intPort=false)
+	public function connect($strHost, $strDatabase, $strUser, $strPassword, $intPort=false, $blnPersistent=false)
 	{			
 		$intPort = ($intPort !== false) ? $intPort : ini_get("mysqli.default_port");
+		if($blnPersistent) $strHost = 'p:'.$strHost;
+		
 		@$this->resConnection = new mysqli($strHost, $strUser, $strPassword, $strDatabase, $intPort);
 		if (@$this->resConnection->connect_error != ""){
 			throw new DBALException(@$this->resConnection->connect_error);

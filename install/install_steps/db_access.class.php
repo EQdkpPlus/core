@@ -153,9 +153,11 @@ class db_access extends install_generic {
 		$content = preg_replace('/\\n{3,}/', "\n\n", $content);
 		$content .= '$dbtype = \''.$this->dbtype.'\';'."\n";
 		$content .= '$dbhost = \''.$this->dbhost.'\';'."\n";
+		$content .= '$dbport = false;'."\n";
 		$content .= '$dbname = \''.$this->dbname.'\';'."\n";
 		$content .= '$dbuser = \''.$this->dbuser.'\';'."\n";
 		$content .= '$dbpass = \''.$this->dbpass.'\';'."\n";
+		$content .= '$dbpers = false;'."\n";
 		$content .= '$table_prefix = \''.$this->table_prefix.'\';'."\n\n";
 		$content .= '?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);

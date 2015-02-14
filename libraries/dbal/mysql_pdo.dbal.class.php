@@ -30,12 +30,14 @@ class dbal_mysql_pdo extends Database
 	/**
 	 * Connect to the database server and select the database
 	 */
-	public function connect($strHost, $strDatabase, $strUser, $strPassword, $intPort=false)
+	public function connect($strHost, $strDatabase, $strUser, $strPassword, $intPort=false, $blnPersistent=false)
 	{			
 		$strPort = ($intPort !== false) ? ';port='.$intPort : "";
+		$arrOptions = array();
+		if($blnPersistent) $arrOptions[PDO::ATTR_PERSISTENT] = true;
 		
 		try {
-			$this->resConnection = new PDO('mysql:host='.$strHost.';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, $strUser, $strPassword);
+			$this->resConnection = new PDO('mysql:host='.$strHost.';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, $strUser, $strPassword, $arrOptions);
 		} catch (PDOException $e) {
 			$strError =  $e->getMessage();
 			throw new DBALException($strError);
