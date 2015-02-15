@@ -43,7 +43,7 @@
 	<div class="article-container-wrapper">
 		<!-- IF LIST_TYPE == 1 -->
 		<!-- BEGIN article_row -->
-		<article class="article-container list-type1" data-article-id="{article_row.ARTICLE_ID}" data-article-category-id="{article_row.ARTICLE_REAL_CATEGORY}">
+		<article class="article-container list-type1 <!-- IF article_row.S_FEATURED -->featured<!-- ENDIF -->" data-article-id="{article_row.ARTICLE_ID}" data-article-category-id="{article_row.ARTICLE_REAL_CATEGORY}">
 			<header>
 				<h2>
 				<!-- IF not article_row.ARTICLE_PUBLISHED -->
@@ -107,7 +107,7 @@
 
 		<!-- IF LIST_TYPE == 2 -->
 		<!-- BEGIN article_row -->
-		<article class="article-container list-type2">
+		<article class="article-container list-type2 <!-- IF article_row.S_FEATURED -->featured<!-- ENDIF -->" data-article-id="{article_row.ARTICLE_ID}" data-article-category-id="{article_row.ARTICLE_REAL_CATEGORY}">
 			<header>
 				<!-- IF article_row.ARTICLE_PREVIEW_IMAGE != "" -->
 					<img src="{article_row.ARTICLE_PREVIEW_IMAGE}" class="floatLeft articlePreviewImage" style="margin-right: 5px;"/>
@@ -133,7 +133,7 @@
 
 		<!-- IF LIST_TYPE == 3 -->
 		<!-- BEGIN article_row -->
-		<article class="article-container list-type3">
+		<article class="article-container list-type3 <!-- IF article_row.S_FEATURED -->featured<!-- ENDIF -->" data-article-id="{article_row.ARTICLE_ID}" data-article-category-id="{article_row.ARTICLE_REAL_CATEGORY}">
 			<header>
 				<h2>
 				<!-- IF not article_row.ARTICLE_PUBLISHED -->

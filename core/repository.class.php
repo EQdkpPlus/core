@@ -189,8 +189,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				$plist = $this->pdh->get('repository', 'repository');
 				if ($plist == null){
 					$this->pdh->put('repository', 'insert', array(array(
-								'plugin'			=> 'dummy',
-								'name'				=> 'dummy',
+						'plugin'			=> 'no_connection',
+						'name'				=> 'no_connection',
 					)));
 				}
 				$this->pdh->process_hook_queue();				

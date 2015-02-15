@@ -556,6 +556,7 @@ class controller extends gen_class {
 				'COMMENTS_COUNTER'	=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 				'S_COMMENTS'		=> ($arrArticle['comments']) ? true : false,
 				'S_HIDE_HEADER'		=> ($arrArticle['hide_header']),
+				'S_FEATURED'		=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 			));
 			
 			$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('articles', 'permalink', array($intArticleID)).'" />');

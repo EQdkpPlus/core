@@ -1951,6 +1951,17 @@ ul.breamcrumb .current::before{
 	font-size: 16px;
 }
 
+.article-container.featured h2:before {
+	content: "\f005";
+	font-family: FontAwesome;
+	color: gold;
+	font-size: 16px;
+}
+
+.article-container.featured:before {
+	content: none;
+}
+
 /* ACP: portal module management */
 .portal_block_border {
 	padding: 5px;
