@@ -435,7 +435,7 @@ if(!class_exists('infotooltip')) {
 						$visible = $display_name;
 					}
 					
-					if(isset($item['color'])) {
+					if(isset($item['color']) && !$onlyicon) {
 						if (substr($item['color'], 0, 1) == "#"){
 							$visible = '<span style="color:'.$item['color'].'">'.$visible.'</span>';
 						} else {
