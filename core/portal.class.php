@@ -188,7 +188,7 @@ class portal extends gen_class {
 			$editbutton = '<span class="portal_fe_edit" onclick="fe_portalsettings(\''.$module_id.'\')"><i class="fa fa-wrench hand" title="'.$this->user->lang('portalplugin_settings').'"></i></span>';
 			$this->init_portalsettings();
 		}
-		$out = $obj->output();
+		$out = $this->handle_output($obj);
 		return 
 '				<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">
 					<div class="portalbox_head">'.(($this->config->get('collapsable', 'pmod_'.$module_id) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'
@@ -200,6 +200,30 @@ class portal extends gen_class {
 						<div class="toggle_container">'.$out.'</div>
 					</div>
 				</div>';
+	}
+	
+	private function handle_output($obj){
+		$out = "";
+		if($obj->template_file != ""){
+			$portalname = str_replace("_portal", "", get_class($obj));
+			
+			if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/portal/'.$portalname.'/'.$obj->template_file)){
+				$strContent = file_get_contents($this->root_path.'templates/'.$this->user->style['template_path'].'/portal/'.$portalname.'/'.$obj->template_file);
+			} elseif(is_file($this->root_path.'portal/'.$portalname.'/templates/'.$obj->template_file)){
+				$strContent = file_get_contents($this->root_path.'portal/'.$portalname.'/templates/'.$obj->template_file);
+			} else {
+				return "Error: Cannot load template file.";
+			}
+			
+			if($strContent != ""){
+				$obj->output();
+				$out = $this->tpl->compileString($strContent);
+			}
+			
+		} else {
+			$out = $obj->output();
+		}
+		return $out;
 	}
 	
 	public function init_portalsettings() {
@@ -393,6 +417,7 @@ abstract class portal_generic extends gen_class {
 	protected $settings			= array();
 	protected $reset_pdh_hooks 	= array();
 	protected $hooks 			= array();
+	public $template_file	= '';
 	
 	final public function __construct($module_id, $position='', $wideContent = false) {
 		$this->position = $position;
