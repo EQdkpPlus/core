@@ -214,10 +214,10 @@
 .ui-timepicker-rtl dl dt{ float: right; clear: right; }
 .ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
 /*!
- * jQuery UI CSS Framework 1.11.2
+ * jQuery UI CSS Framework 1.11.3
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -1798,7 +1798,7 @@ body .ui-tooltip {
 
 
 /***
-Spectrum Colorpicker v1.5.1
+Spectrum Colorpicker v1.6.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
