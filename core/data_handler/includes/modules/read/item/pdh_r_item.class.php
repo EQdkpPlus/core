@@ -320,7 +320,7 @@ if(!class_exists('pdh_r_item')){
 			if (!in_array($item_id, $this->index)) return false;
 
 			if($this->config->get('infotooltip_use')) {
-				$lang = (!$lang) ? $this->user->lang('XML_LANG') : $lang;
+				$lang = (!$lang || $lang='') ? $this->user->lang('XML_LANG') : $lang;
 				$ext = '';
 				if($direct) {
 					$options = array(

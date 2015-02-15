@@ -74,8 +74,9 @@ try {
 		$data['update']		= $in->get('update', false);
 		$data['data']		= array($in->get('server'), $in->get('cname'), $in->get('slot', ''));
 	}
+	
 	if(!isset($data['update'])) $data['update'] = $in->get('update', false);
-	$data['lang']			= substr($in->get('lang'),0,2);
+	if($in->exists('lang')) $data['lang'] = substr($in->get('lang'),0,2);
 
 	//only for armory
 	$data['server']			= (isset($data['server'])) ? $data['server'] : 0;
