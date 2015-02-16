@@ -328,7 +328,7 @@ if(!class_exists('infotooltip')) {
 				if($item = $parse->getitem($item_name, $lang, $game_id, $data)) {
 					if(isset($item['baditem']) && $item['baditem']) {
 						$item['name'] = $item_name;
-						$item['icon'] = $this->config['default_icon'];
+						$item['icon'] = (isset($parse->default_icon) && $parse->default_icon != '') ? $parse->default_icon : $this->config['default_icon'];
 						$item['lang'] = $lang;
 						continue; //item not fully fetched
 					}
