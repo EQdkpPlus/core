@@ -102,7 +102,7 @@ class bridge extends gen_class {
 	 * @return boolean|array
 	 */
 	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $boolUseHash = false, $blnCreateUser = true, $boolUsePassword = true){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		//Check if username is given
 		if (strlen($strUsername) == 0) return false;
@@ -208,7 +208,7 @@ class bridge extends gen_class {
 	 * @return boolean always true
 	 */
 	public function logout(){
-		if (!$this->status) return true;
+		if (!$this->status || !$this->objBridge) return true;
 		
 		$this->objBridge->logout();
 		return true;
@@ -222,7 +222,7 @@ class bridge extends gen_class {
 	 * @return boolean
 	 */
 	public function autologin($arrCookieData){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		$result = $this->objBridge->autologin($arrCookieData);
 		return $result;
@@ -252,7 +252,7 @@ class bridge extends gen_class {
 	 * @param array $arrUserdata
 	 */
 	public function sync_fields($user_id, $arrUserdata){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		//Key: Bridge ID, Value: EQdkp Profilefield ID
 		$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
@@ -305,7 +305,7 @@ class bridge extends gen_class {
 	 * @return array
 	 */
 	public function get_available_sync_fields(){
-		if (!$this->status) return array();
+		if (!$this->status || !$this->objBridge) return array();
 		
 		$arrAvailableFields = $this->objBridge->sync_fields();
 		return $arrAvailableFields;
@@ -319,7 +319,7 @@ class bridge extends gen_class {
 	 * @return mixed
 	 */
 	public function get_user_groups($blnWithID = false){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		if ($this->check_function('groups')){
 			$method_name = $this->objBridge->data['groups']['FUNCTION'];
@@ -357,7 +357,7 @@ class bridge extends gen_class {
 	 * @return mixed
 	 */
 	public function get_userdata($name){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		$name = unsanitize($name);
 		
@@ -400,7 +400,7 @@ class bridge extends gen_class {
 	 * @return mixed 
 	 */
 	public function get_users(){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		if ($this->check_query('user')) return false;
 		
@@ -491,7 +491,7 @@ class bridge extends gen_class {
 	 * @return boolean|multitype:unknown 
 	 */
 	public function get_usergroups_for_user($intUserID){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		$arrReturn = array();
 		
@@ -531,7 +531,7 @@ class bridge extends gen_class {
 	 * @return boolean
 	 */
 	public function check_user_group($intUserID){
-		if (!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		$arrAllowedGroups = explode(',', $this->config->get('cmsbridge_groups'));
 		
@@ -561,7 +561,7 @@ class bridge extends gen_class {
 	 * @return boolean True if accessable, otherwise false
 	 */
 	public function check_user_group_table(){
-		if(!$this->status) return false;
+		if (!$this->status || !$this->objBridge) return false;
 		
 		if ($this->get_user_groups() && count($this->get_user_groups() > 0)){
 			return true;
@@ -577,7 +577,7 @@ class bridge extends gen_class {
 	 * @return array 
 	 */
 	public function get_prefix(){
-		if(!$this->status) return array();
+		if (!$this->status) return array();
 		
 		$alltables = $this->bridgedb->listTables();
 		$tables		= array();
@@ -626,7 +626,7 @@ class bridge extends gen_class {
 	 * @return mixed|boolean
 	 */
 	private function check_query($key){
-		if ($this->objBridge->data[$key]['QUERY'] != "") {	
+		if ($this->objBridge && $this->objBridge->data[$key]['QUERY'] != "") {	
 			return str_replace('___', $this->prefix, $this->objBridge->data[$key]['QUERY']);
 		} else {
 			return false;
@@ -640,7 +640,7 @@ class bridge extends gen_class {
 	 * @return boolean
 	 */
 	private function check_function($key){
-		if (isset($this->objBridge->data[$key]['FUNCTION']) && $this->objBridge->data[$key]['FUNCTION'] != "" && method_exists($this->objBridge, $this->objBridge->data[$key]['FUNCTION'])){
+		if ($this->objBridge && isset($this->objBridge->data[$key]['FUNCTION']) && $this->objBridge->data[$key]['FUNCTION'] != "" && method_exists($this->objBridge, $this->objBridge->data[$key]['FUNCTION'])){
 			return true;
 		}
 		return false;
