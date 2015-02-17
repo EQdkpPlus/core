@@ -81,7 +81,6 @@ class game extends gen_class {
 			$this->game = 'dummy';
 			include_once($this->root_path.'games/'.$this->game.'/'.$this->game.'.class.php');
 			$this->pdl->log('game', 'Tried to initialize undefined game \''.$this->game.'\', default to game \''.$this->game.'\'.');
-			$this->config->set('default_game', $this->game);
 			return $this->init_gameclass();
 		} else {
 			//Check API Level
