@@ -248,7 +248,6 @@ class Manage_Article_Categories extends page_generic {
 				'R_HIDE_HEADER' => new hradio('hide_header', array('value' => 0)),
 			));
 		}
-		$this->jquery->Spinner('article_per_page', array('min' => 0));
 		$this->tpl->assign_vars(array(
 			'CID' => $id,
 		));
