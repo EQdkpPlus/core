@@ -46,6 +46,7 @@ class Manage_Extensions extends page_generic {
 				array('value' => '3', 'process'	=> 'process_step3'),
 				array('value' => '4', 'process'	=> 'process_step4'),
 			),
+			'upload' => array('process' => 'process_upload', 'csrf'=>true),
 			'hide_update_warning'	=> array('process' => 'hide_update_warning', 'csrf'=>true),
 		);
 		parent::__construct(false, $handler);
@@ -86,6 +87,106 @@ class Manage_Extensions extends page_generic {
 			$this->config->set('repo_hideupdatewarning', 1);
 		}
 		exit;
+	}
+	
+	public function process_upload(){
+		$tempname		= $_FILES['extension']['tmp_name'];
+		$name			= $_FILES['extension']['name'];
+		$filetype		= $_FILES['extension']['type'];
+		$upload_id		= md5(time().rand());
+	
+		$mime_types = array(
+				'zip'	=> 'application/zip',
+		);
+	
+		// get the mine....
+		$fileEnding		= pathinfo($name, PATHINFO_EXTENSION);
+		$mime = false;
+		if(function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')){
+			$finfo			= finfo_open(FILEINFO_MIME);
+			$mime			= finfo_file($finfo, $tempname);
+			finfo_close($finfo);
+		}elseif(function_exists('mime_content_type')){
+			$mime			= mime_content_type( $tempname );
+		}else{
+			// try to get the extension... not really secure...
+				
+			if (array_key_exists($fileEnding, $mime_types)) {
+				$mime			= $mime_types[$fileEnding];
+			}
+		}
+	
+		$mime = array_shift(preg_split('/[; ]/', $mime));
+		$blnTypeAllowed = false;
+		switch ($mime) {
+			case 'application/zip':
+			case 'application/x-zip': $blnTypeAllowed = true;
+		}
+	
+		if (!strlen($tempname)){
+			$this->core->message($this->user->lang('plugin_upload_error1'), $this->user->lang('error'), 'red');
+		} elseif (!$blnTypeAllowed){
+			$this->core->message(sprintf($this->user->lang('plugin_upload_error2'), $name, $mime), $this->user->lang('error'), 'red');
+		} else {
+			//Everything ok, lets unpack it
+			$this->pfh->FolderPath('tmp', 'repository');
+			$this->pfh->secure_folder('tmp', 'repository');
+			$blnResult = $this->repo->unpackPackage($tempname, $this->pfh->FolderPath('tmp/'.$upload_id, 'repository'));
+			if ($blnResult){
+				$src_path = $extension_name = false;
+	
+				if (is_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml')){
+					$xml = simplexml_load_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml');
+	
+					if ($xml && $xml->folder != ''){
+						$extension_name = $xml->folder;
+						
+						//Subfolder detection
+						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
+						$arrSubfolder = scandir($src_path);
+							
+						$arrIgnore = array(".", "..", "package.xml", "index.html");
+						$arrDiff = array_diff($arrSubfolder, $arrIgnore);
+						if(is_array($arrDiff) && count($arrDiff) === 1){
+							foreach($arrDiff as $strSubfolder){
+								$src_path .= $strSubfolder;
+							}
+						}
+	
+						$arrAttributes = $xml->attributes();
+	
+						switch ($arrAttributes['type']){
+							case 'plugin':			$target = $this->root_path.'plugins';	$cat=1; 	break;
+							case 'game':			$target = $this->root_path.'games';		$cat=7;		break;
+							case 'template':		$target = $this->root_path.'templates';	$cat=2;		break;
+							case 'portal':			$target = $this->root_path.'portal';	$cat=3;		break;
+							case 'language':		$target = $this->root_path;				$cat=11;	break;
+							default: $target = false;
+						}
+	
+						$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
+						
+						if (!$blnResult){
+							$this->core->message($this->user->lang('plugin_package_error3'), $this->user->lang('error'), 'red');
+						} else {
+							$this->pm->search();
+							redirect('admin/manage_extensions.php'.$this->SID.'&cat='.$cat.'&mode=install&code='.$extension_name.'&link_hash='.$this->CSRFGetToken('mode'));
+						}
+	
+					} else {
+						$this->core->message($this->user->lang('plugin_package_error2'), $this->user->lang('error'), 'red');
+					}
+	
+				} else {
+					$this->core->message($this->user->lang('plugin_package_error1'), $this->user->lang('error'), 'red');
+	
+				}
+	
+			} else {
+				$this->core->message($this->user->lang('plugin_upload_error3'), $this->user->lang('error'), 'red');
+			}
+			$this->pfh->Delete('tmp/'.$upload_id, 'repository');
+		}
 	}
 
 	//Get Extension Download-Link

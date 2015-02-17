@@ -1681,6 +1681,17 @@ $lang = array(
 	"extension_install_locked" => "There is already one Extension being updated or installed. You can install or update only one at the same time.",
 	"fatal_error_id" => "Error-ID",
 	"core_sett_f_enable_leaderboard" => "Show Leaderboard",
+		
+	"pi_manualupload" => "Manual upload",
+	"pi_manualupload_info" => "Here you can upload extensions like styles, plugins or portal modules that you downloaded formerly. To install the extensions, go to the corresponding management page.<br/><b>Further extensions may be downloaded from our project website: <a href=\"".EQDKP_PROJECT_URL."\" target=\"_blank\">".EQDKP_PROJECT_URL."</a>.</b>",
+	"pi_choose_file" => "Choose file to upload",
+	"pi_upload_button" => "Upload",
+	"plugin_upload_error1" => "Please choose a file",
+	"plugin_upload_error2" => "Only zip-files are allowed to be uploaded (uploade file: %s, mime type: %s).",
+	"plugin_upload_error3" => "An error occured while extracting the archive!",
+	"plugin_package_error1" => "The uploaded package does not contain control files and therefore is invalid!",
+	"plugin_package_error2" => "The uploaded package contains a broken control file. The category could not be determined successfully!",
+	"plugin_package_error3" => "The files could not be copied, probably due to missing write permissions.",
 );
 
 ?>

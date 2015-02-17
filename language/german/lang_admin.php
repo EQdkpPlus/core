@@ -1685,5 +1685,16 @@ $lang = array(
 "extension_install_locked" => "Es wird bereits eine Erweiterung installiert oder aktualisiert. Du kannst nur eine Erweiterung gleichzeitig installieren oder aktualisieren.",
 "fatal_error_id" => "Fehler-ID",
 "core_sett_f_enable_leaderboard" => "Leaderboard anzeigen",
+		
+"pi_manualupload" => "Manueller Upload",
+"pi_manualupload_info" => "Hier kannst du heruntergeladene Erweiterungen wie z.B. Styles, Plugins oder Portalmodule hochladen. Um die Erweiterungen abschließend zu installieren, gehe auf die entsprechende Verwaltungsseite.<br /><b>Weitere Erweitungen kannst du von unserer Projektseite herunterladen: <a href=\"".EQDKP_REPO_URL."\" target=\"_blank\">".EQDKP_REPO_URL."</a>.</b>",
+"pi_choose_file" => "Erweiterung zum Hochladen auswählen",
+"pi_upload_button" => "Hochladen",
+"plugin_upload_error1" => "Es wurde keine Datei ausgewählt",
+"plugin_upload_error2" => "Es dürfen nur zip-Archive hochgeladen werden. (Hochgeladene Datei: %s, Mime-Typ: %s)",
+"plugin_upload_error3" => "Es ist ein Fehler beim Entpacken des Archives aufgetreten",
+"plugin_package_error1" => "Das hochgeladene Packet enthällt keine Infodatei und ist somit nicht gültig!",
+"plugin_package_error2" => "Das hochgeladene Packet enthällt eine fehlerhafte Infodatei und kann deshalb nicht hochgeladen werden.",
+"plugin_package_error3" => "Die Dateien konnten nicht kopiert werden, wahrscheinlich aufgrund fehlender Schreibrechte.",
 );
 ?>
