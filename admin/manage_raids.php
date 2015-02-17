@@ -266,6 +266,7 @@ class ManageRaids extends page_generic {
 			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new') ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
 			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new') ? true : false,
+			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$this->in->exists('refresh') && !$this->in->exists('itemadj_del') && !$force_refresh) ? true : false,
 		));
 
 		$this->tpl->add_js("
