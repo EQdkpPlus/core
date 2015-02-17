@@ -46,6 +46,8 @@ if(!class_exists('pdh_w_user')) {
 				);
 				$this->log_insert('action_user_added', $log_action, $user_id, sanitize($arrData['username']));
 			}
+			
+			$this->hooks->process('user_inserted', array('user_id' => $user_id, 'username' => $arrData['username'], 'data' => $arrData));
 
 			//Put him to the default group
 			if ($this->pdh->get('user_groups', 'standard_group') && $toDefaultGroup){

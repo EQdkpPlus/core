@@ -268,13 +268,13 @@ class Manage_Logs extends page_generic {
 					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['count'], 50),
 			));
 			
-			foreach($arrErrors['entries'] as $date => $entry) {
-
-				$this->tpl->assign_block_vars('errorlogs.error_row', array(
-					'DATE'			=> $this->time->user_date($date, true),
-					'MESSAGE'		=> nl2br($entry),
-				));
-
+			foreach($arrErrors['entries'] as $key => $entry) {
+				if(($key % 2) === 1){
+					$this->tpl->assign_block_vars('errorlogs.error_row', array(
+						'DATE'			=> $this->time->user_date($entry, true),
+						'MESSAGE'		=> nl2br($arrErrors['entries'][$key-1]),
+					));
+				}
 			}
 
 		}

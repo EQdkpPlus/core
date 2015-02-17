@@ -364,18 +364,37 @@ if ( !defined('EQDKP_INC') ){
 		public function search_fatal_error_id($strErrorID){
 			$arrLogFiles = $this->get_logfiles();
 			$arrMatches = array();
+			$exception = array();
+			$blnRecord=false;
+			
 			foreach($arrLogFiles as $logfile){
-				$intMatches = preg_match_all('/>>>> (.*?) <<<<(.*?)<<<</s', file_get_contents($this->logfile_folder.'/'.$logfile), $arrMatches);
-				if($intMatches){
-					foreach($arrMatches[1] as $key => $strFatalID){
-						if(trim($strFatalID) == $strErrorID){
-							return array(
-								'file'		=> $logfile,
-								'number'	=> $key,
-								'error'		=> trim($arrMatches[2][$key]),
-							);
+				$handle = fopen($this->logfile_folder.'/'.$logfile, "r");
+				if ($handle) {
+					while (!feof($handle)) {
+						$buffer = fgets($handle, 4096);
+
+						if(preg_match('/>>>> (.*?) <<<</', $buffer, $arrMatches)){
+							if($arrMatches[1] === $strErrorID){
+								$blnRecord = true;
+							} else {
+								$blnRecord = false;
+							}
+						}
+						
+						if($blnRecord){		
+							if(count($exception) && preg_match("/<<<</", $buffer)){
+								unset($exception[0]);
+								return array(
+									'file'		=> $logfile,
+									'error'		=> implode("", $exception),
+								);
+								
+							}
+
+							$exception[] = $buffer;
 						}
 					}
+					fclose($handle);
 				}
 			}
 			return false;
@@ -387,28 +406,62 @@ if ( !defined('EQDKP_INC') ){
 			$file = $this->logfile_folder.'/'.$error_type.'.log';
 			
 			$regexp = '/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/';
-
+			$count = 0;
+			$blnRecord = "false";
+			$exceptions = array();
+			
 			if(file_exists($file)){
-				$contents = file_get_contents($file);
-				$arrSplitted = preg_split($regexp, $contents, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+				//Read total number
+				$handle = fopen($file, "r");
+				if ($handle) {
+					while (!feof($handle)) {
+						$buffer = fgets($handle, 4096);
 				
-				// even items become keys, odd items become values
-				$exceptions = call_user_func_array('array_merge', array_map(
-						function($v) {
-							return array($v[0] => $v[1]);
-						},
-						array_chunk($arrSplitted, 2)
-				));
+						if(preg_match($regexp, $buffer)){								
+							$count++;
+						}
+					}
+					fclose($handle);
+				}
 				
-				unset($contents);
+				//now get the entries
+				$s = $count-$start-$number;
+				if($s < 0) $s=0;
+				$e = $count-$start;
+				$i = 0;
+
+				$handle = fopen($file, "r");
+				if ($handle) {
+					while (!feof($handle)) {
+						$buffer = fgets($handle, 4096);
+
+						if(preg_match($regexp, $buffer)){						
+							if($i >= $s && $i < $e){
+								$blnRecord = true;
+							} else {
+								$blnRecord = false;
+							}
+							$i++;
+						}
+						
+						if($blnRecord){
+							$exceptions[] = $buffer;
+						}
+					}
+					fclose($handle);
+				}
 			}
 			
-			if(is_array($exceptions) && count($exceptions)){
-				$exceptions = array_reverse($exceptions);
-				$arrSliced = array_slice( $exceptions, $start, $number);
-				return array('entries' => $arrSliced, 'count' => count($exceptions));
+			$strException = implode("", $exceptions);
+			
+			$arrSplitted = preg_split($regexp, $strException, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+			$arrSplitted = array_reverse($arrSplitted);
+			
+			if(is_array($arrSplitted) && $count){
+				return array('entries' => $arrSplitted, 'count' => $count);
 			}
-			return array('entries' => 0, 'count' => 0);
+			return array('entries' => array(), 'count' => 0);
 		}
 
 		public function delete_logfile($type) {
