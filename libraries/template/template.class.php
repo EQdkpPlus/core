@@ -1417,12 +1417,12 @@ class template extends gen_class {
 	public function generate_error($content, $handle = false, $sprintf = '', $function = ''){
 		if ($handle === false) $handle = $this->handle;
 		
-		if(!$this->error_message){
+		if(!$this->error_message){		
 			// fix for upgrade from 1.0 to 2.0 with deleted old template folder. This fix redirects directly to the maintenance mode
-			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()'){
+			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()' && version_compare('2.0', $this->config->get('plus_version')) > 0){			
 				redirect('maintenance/index.php');
 			}
-			
+
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
 
