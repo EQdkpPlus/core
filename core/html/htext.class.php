@@ -51,19 +51,14 @@ class htext extends html {
 	public $autocomplete = array();
 	public $class = 'input';
 	public $inptype = '';
-	
-	private $spinner_opts = array('step', 'max', 'min', 'value', 'numberformat', 'incremental', 'change', 'multiselector', 'onlyinteger');
+
 	private $out = '';
 	
 	public function _construct() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
-		if($this->spinner) {
-			$spin_options = array();
-			foreach($this->spinner_opts as $opt) $spin_options[$opt] = $this->$opt;
-			$this->jquery->Spinner($this->id, $spin_options);
-		} elseif(!empty($this->autocomplete)) {
+		if(!empty($this->autocomplete)) {
 			$this->jquery->Autocomplete($this->id, $this->autocomplete);
 		} elseif($this->colorpicker) {
 			$this->jquery->colorpicker(0,0);
@@ -72,12 +67,18 @@ class htext extends html {
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern) && !empty($this->successmsg)) $this->class .= ' fv_success';
 		if(!empty($this->equalto)) $this->class .= ' equalto';
+		if($this->spinner) $this->class .= ' core-spinner';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= 'required="required" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
+		if($this->spinner){
+			$out .= (isset($this->min) && !empty($this->min)) ? 'data-min="'.$this->min.'"' : '';
+			$out .= (isset($this->max) && !empty($this->max)) ? 'data-max="'.$this->max.'"' : '';
+			$out .= (isset($this->step) && !empty($this->step)) ? 'data-step="'.$this->step.'"' : '';
+		}
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';

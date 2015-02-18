@@ -38,6 +38,7 @@ if (!class_exists("jquery")) {
 			'formvalidation'	=> false,
 			'fullcalendar'		=> false,
 			'jqplot'			=> false,
+			'spinner'			=> false,
 			'multilang'			=> false,
 		);
 		
@@ -102,6 +103,7 @@ if (!class_exists("jquery")) {
 					}
 				});', 'docready');
 			$this->init_formvalidation();
+			$this->init_spinner();
 		}
 		public function langfile($file){
 			if ((isset($this->user->data['user_id'])) && ($this->user->is_signedin()) && (!empty($this->user->data['user_lang']))) {
@@ -206,7 +208,7 @@ if (!class_exists("jquery")) {
 							padding-top: .4em;
 						}
 						.CodeMirror-wrapping{
-							background: #f5f5f5;	
+							background: #f5f5f5;
 						}
 					");
 				}
@@ -513,25 +515,21 @@ if (!class_exists("jquery")) {
 			}
 		}
 		
-		/**
-		* Spinner
-		*
-		* @param $id			ID of the css class (must be unique)
-		* @param $options		Options Array
-		* @return false
-		*/
-		public function Spinner($id, $options=''){
-			$tmpopt = array();
-			if(isset($options['step'])){ $tmpopt[] = 'step: '.$options['step'];}
-			if(isset($options['max'])){ $tmpopt[] = 'max: '.$options['max'];}
-			if(isset($options['min'])){ $tmpopt[] = 'min: '.$options['min'];}
-			if(isset($options['value'])){ $tmpopt[] = 'value: '.$options['value'];}
-			if(isset($options['numberformat'])){ $tmpopt[] = 'numberformat: '.$options['numberformat'];}
-			if(isset($options['incremental'])){ $tmpopt[] = 'incremental: true';}
-			if(isset($options['change'])) { $tmpopt[] = 'change: function( event, ui ) {'.$options['change'].'}';}
-			if(!isset($options['change']) && isset($options['onlyinteger'])) { $tmpopt[] =  'change: function( event, ui ) { var val = $(event.target).val(); value = val.replace(/,/,"."); $(this).spinner("value", parseInt(val));}';}
-			$selector = (isset($options['multiselector'])) ? '' : '#';
-			$this->tpl->add_js('$("'.$selector.$id.'").spinner('.$this->gen_options($tmpopt).');', 'docready');
+		public function init_spinner(){
+			if(!$this->inits['spinner']){
+				$this->tpl->add_js("$('.core-spinner').each(function() {
+										var self = $(this),
+											min = self.data('min'),
+											max = self.data('max'),
+											step = self.data('step');
+										$(this).spinner({
+											min: min,
+											max: max,
+											step: step,
+										});
+									});", 'docready');
+				$this->inits['spinner'] = true;
+			}
 		}
 		
 		/**
