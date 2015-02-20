@@ -12,6 +12,8 @@ games/swtor/
 templates/eqdkp_luna
 templates/eqdkp_diablo
 templates/eqdkp_swtor
+templates/eqdkp_bluesky
+templates/eqdkp_tsw_orochi
 games/lotro
 portal/articleslider
 portal/birthday
@@ -39,6 +41,7 @@ portal/weather
 portal/whoisonline
 portal/wordofthemoment
 portal/wowprogress
+portal/test
 games/ac2
 games/aion
 games/allods

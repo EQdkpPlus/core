@@ -213,7 +213,10 @@
 		if (siblings.length){
 			alert("{L_pluslink_delete_warning}");
 		} else {
-			window.location.href='manage_menus.php{SID}&mode=del_plink&id='+pid+'&link_hash={CSRF_MODE_TOKEN}';
+			var value = $('#delete-pluslinks').val();
+			value = value + ',' + pid;
+			$('#delete-pluslinks').val(value);
+			$(obj).closest('li').hide();
 		}
 	}
 	
@@ -304,6 +307,7 @@
 	
 	{MENU_OL}
 	<input type="hidden" value="" id="menuitems-serialized" name="serialized"/>
+	<input type="hidden" value="0" id="delete-pluslinks" name="del_pluslinks"/>
 	<button type="button" id="addMenuItem"><i class="fa fa-plus"></i>{L_pluslink_add}</button>
 	
 	<div id="addMenuItemTemplate" style="display:none;">

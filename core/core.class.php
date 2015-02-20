@@ -459,8 +459,8 @@ class core extends gen_class {
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
 			$arrItems = array(
-				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home')),
-				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),		'check' => 'u_userlist'),
+				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home'), 'static' => 1),
+				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),'check' => 'u_userlist', 'static' => 1),
 			);
 			
 			//Articles & Categories
