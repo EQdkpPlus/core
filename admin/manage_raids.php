@@ -144,7 +144,7 @@ class ManageRaids extends page_generic {
 		
 		$data = array();
 		if($force_refresh){
-			$data = $this->get_post();
+			$data = $this->get_post(true);
 			$this->pdh->process_hook_queue();
 		}
 
@@ -264,12 +264,12 @@ class ManageRaids extends page_generic {
 			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
 			
 			
-			'ADJ_KEY'			=> (($intAdjKey > 0) ? $intAdjKey+1 : 0),
+			'ADJ_KEY'			=> $intAdjKey+1,
 			'MEMBER_DROPDOWN'	=> $this->jquery->MultiSelect('adjs[KEY][members]', $members, array(), array('width' => 250, 'id'=>'adjs_KEY_members', 'filter' => true)),
 			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),	
 			'EVENT_DROPDOWN'	=> new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
-			'ITEM_KEY'			=> (($intItemKey > 0) ? $intItemKey+1 : 0),
+			'ITEM_KEY'			=> $intItemKey+1,
 			'ITEMPOOL_DROPDOWN' => new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY')),
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 				
@@ -408,7 +408,7 @@ class ManageRaids extends page_generic {
 		return $ret_items;
 	}
 
-	private function get_post() {
+	private function get_post($refresh=false) {
 		$data = array();
 		$data['raid']['id'] = $this->url_id;
 		$data['raid']['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
@@ -438,16 +438,20 @@ class ManageRaids extends page_generic {
 				}
 			}
 		}
-
+		
 		if(is_array($this->in->getArray('items', 'int'))) {
 			foreach($this->in->getArray('items', 'int') as $key => $item) {
 				if(!isset($item['delete'])){
 					if(!isset($item['members'])) {
 						$data['false'][] = 'items_members';
 					}
+					if($this->in->get('items:'.$key.':name','') == "" && $this->in->get('items:'.$key.':itemid','') == ""){
+						$data['false'][] = 'item';
+					}
+					
 					$data['items'][$key]['group_key'] = $this->in->get('items:'.$key.':group_key','','hash');
 					$data['items'][$key]['name'] = $this->in->get('items:'.$key.':name','');
-					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid','');
+					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid','');					
 					$data['items'][$key]['members'] = $this->in->getArray('items:'.$key.':members','int');
 					$data['items'][$key]['value'] = $this->in->get('items:'.$key.':value',0.0);
 					$data['items'][$key]['itempool_id'] = $this->in->get('items:'.$key.':itempool_id',0);
@@ -460,7 +464,7 @@ class ManageRaids extends page_generic {
 			}
 		}
 		
-		if(isset($data['false'])) {
+		if(isset($data['false']) && !$refresh) {
 			$missing = '';
 			foreach($data['false'] as $miss) {
 				$params = explode('_', $miss);
@@ -468,6 +472,7 @@ class ManageRaids extends page_generic {
 			}
 			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => $missing, 'color' => 'red'), true);
 		}
+		
 		return $data;
 	}
 }
