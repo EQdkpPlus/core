@@ -213,6 +213,7 @@ class ManageRaids extends page_generic {
 			if(!empty($data['adjs'])) $adjs = $data['adjs'];
 			if(!empty($data['items'])) $items = $data['items'];
 		}
+		$intAdjKey = 0;
 		if(isset($adjs) AND is_array($adjs)) {
 			foreach($adjs as $key => $adj) {
 				$this->tpl->assign_block_vars('adjs', array(
@@ -224,11 +225,13 @@ class ManageRaids extends page_generic {
 					'VALUE'		=> $adj['value'])
 				);
 				$adjs_ids[] = 'adjs_'.$key;
+				if($key > $intAdjKey) $intAdjKey = $key;
 			}
 			if(isset($adjs_ids) AND is_array($adjs_ids)){
 				$this->jquery->Autocomplete($adjs_ids, array_unique($adjustment_reasons));
 			}
 		}
+		$intItemKey = 0;
 		if(isset($items) AND is_array($items)) {
 			foreach($items as $key => $item) {
 				$this->tpl->assign_block_vars('items', array(
@@ -241,6 +244,7 @@ class ManageRaids extends page_generic {
 					'ITEMPOOL'	=> new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)),
 				));
 				$item_ids[] = 'items_'.$key;
+				if($key > $intItemKey) $intItemKey = $key;
 			}
 			if (isset($item_ids) AND is_array($item_ids)){
 				$this->jquery->Autocomplete($item_ids, array_unique($item_names));
@@ -260,12 +264,12 @@ class ManageRaids extends page_generic {
 			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
 			
 			
-			'ADJ_KEY'			=> (is_array($adjs) ? count($adjs) : 0),
+			'ADJ_KEY'			=> (($intAdjKey > 0) ? $intAdjKey+1 : 0),
 			'MEMBER_DROPDOWN'	=> $this->jquery->MultiSelect('adjs[KEY][members]', $members, array(), array('width' => 250, 'id'=>'adjs_KEY_members', 'filter' => true)),
 			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),	
 			'EVENT_DROPDOWN'	=> new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
-			'ITEM_KEY'			=> (is_array($items) ? count($items) : 0),
+			'ITEM_KEY'			=> (($intItemKey > 0) ? $intItemKey+1 : 0),
 			'ITEMPOOL_DROPDOWN' => new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY')),
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 				
