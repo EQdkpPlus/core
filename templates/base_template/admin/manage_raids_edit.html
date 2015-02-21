@@ -18,6 +18,67 @@
 		loadEventValue($("#event").val());
 	});
 	<!-- ENDIF -->
+	
+	function delete_row(obj){
+		$(obj).parent().parent().remove();
+	}
+	
+	function delete_adj(obj, id){
+		$(obj).parent().find("input[type='checkbox']").attr("checked", "checked");
+		$(obj).parent().parent().hide();
+		var value = $("#del_adjustments").val();
+		$("#del_adjustments").val(value+","+id);
+	}
+	
+	function delete_item(obj, id){
+		$(obj).parent().find("input[type='checkbox']").attr("checked", "checked");
+		$(obj).parent().parent().hide();
+		var value = $("#del_items").val();
+		$("#del_items").val(value+","+id);
+	}
+	
+	var auto_adj_reason = {ADJ_REASON_AUTOCOMPLETE};
+	var adj_key = {ADJ_KEY};
+	$(document).ready(function(){
+		$('#add-adjustment-btn').on('click', function(){
+			var event = $('#event').val();
+			$('#event_KEY').val(event);
+			
+			var new_row = $('#template-adjustments>tbody').html()+"";
+			new_row = new_row.replace(/KEY/g, adj_key);
+
+			$('.add_adjustment_container').append(new_row);
+			$('#event_'+adj_key).val(event);
+			$('#adjs_'+adj_key+'_members').parent().find('.ui-multiselect').remove();
+			$("#adjs_"+adj_key+"_members").multiselect({height: 200,minWidth: 250,selectedList: 5,multiple: true}).multiselectfilter({label: "{L_filter}"});
+
+			$("#adjs_"+adj_key).autocomplete({
+				source: auto_adj_reason
+			});
+
+			adj_key++;
+		});
+	});
+	
+	var auto_itemname = {ITEM_AUTOCOMPLETE};
+	var item_key = {ITEM_KEY};
+	$(document).ready(function(){
+		$('#add-item-btn').on('click', function(){			
+			var new_row = $('#template-items>tbody').html()+"";
+			new_row = new_row.replace(/KEY/g, item_key);
+
+			$('.add_item_container').append(new_row);
+
+			$('#items_'+item_key+'_members').parent().find('.ui-multiselect').remove();
+			$("#items_"+item_key+"_members").multiselect({height: 200,minWidth: 250,selectedList: 5,multiple: true}).multiselectfilter({label: "{L_filter}"});
+
+			$("#items_"+item_key).autocomplete({
+				source: auto_itemname
+			});
+
+			item_key++;
+		});
+	});
 </script>
 <form action='manage_raids.php{SID}&r={RAID_ID}' method='post' name='post'>
 <div id="toggleRaidInfos">
@@ -60,65 +121,78 @@
 	</fieldset>
 </div>
 <!-- IF not S_POINTS_DISABLED -->
-<div id="toggleAdjustments">
-	<h2>{L_adjustments}<span class="toggle_button"></span></h2>
+<div id="toggleAdjustments" class="panel">
+	<div class="panel-heading">
+		<h3><i class="fa fa-tag fa-lg"></i> {L_adjustments}<span class="toggle_button"></span></h3>
+	</div>
 	<div class="toggle_container">
 		<div class="tableHeader floatRight">
-			<button type="submit" name="refresh" class="mainoption" value="{L_add_aadjustment}"><i class="fa fa-plus"></i>{L_add_aadjustment}</button>
+			<button type="button" name="refresh" class="mainoption" value="{L_add_aadjustment}" id="add-adjustment-btn"><i class="fa fa-plus"></i>{L_add_aadjustment}</button>
 		</div>
 		<div class="clear"></div>
 		<table class="table fullwidth colorswitch">
-			<tr>
-				<th width="25">&nbsp;</th><th width="200">{L_member}</th><th colspan="2">{L_reason}</th><th width="170">{L_event}</th><th width="120">{L_value}</th>
-			</tr>
-			<!-- BEGIN adjs -->
-			<tr>
-				<td><input type="checkbox" name="adjs[{adjs.KEY}][delete]" value="true" class="input" /><input type="hidden" name="adjs[{adjs.KEY}][group_key]" value="{adjs.GK}" /></td>
-				<td>{adjs.MEMBER}</td>
-				<td colspan="2"><input type="text" name="adjs[{adjs.KEY}][reason]" value="{adjs.REASON}" class="input" size="80" id="adjs_{adjs.KEY}" /></td>
-				<td>{adjs.EVENT}</td>
-				<td><input type="text" name="adjs[{adjs.KEY}][value]" value="{adjs.VALUE}" class="input" /></td>
-			</tr>
-			<!-- END adjs -->
+			<thead>
+				<tr>
+					<th width="25">&nbsp;</th><th width="200">{L_member}</th><th colspan="2">{L_reason}</th><th width="170">{L_event}</th><th width="120">{L_value}</th>
+				</tr>
+			</thead>
+			<tbody class="add_adjustment_container">
+				<!-- BEGIN adjs -->
+				<tr>
+					<td><i class="fa fa-trash fa-lg hand" onclick="delete_adj(this, {adjs.KEY})"></i><input type="checkbox" name="adjs[{adjs.KEY}][delete]" value="true" class="input" style="display:none;"/><input type="hidden" name="adjs[{adjs.KEY}][group_key]" value="{adjs.GK}" /></td>
+					<td>{adjs.MEMBER}</td>
+					<td colspan="2"><input type="text" name="adjs[{adjs.KEY}][reason]" value="{adjs.REASON}" class="input" size="80" id="adjs_{adjs.KEY}" /></td>
+					<td>{adjs.EVENT}</td>
+					<td><input type="text" name="adjs[{adjs.KEY}][value]" value="{adjs.VALUE}" class="input" /></td>
+				</tr>
+				<!-- END adjs -->
+			</tbody>
 		</table>	
-		<br />
 	</div>
+		
 </div>
+<br />
 <!-- ENDIF -->
-<div id="toggleItems">
-	<h2>{L_items}<span class="toggle_button"></span></h2>
+<div id="toggleItems" class="panel">
+	<div class="panel-heading">
+		<h3><i class="fa fa-gift fa-lg"></i> {L_items}<span class="toggle_button"></span></h3>
+	</div>
 	<div class="toggle_container">
 
 		<div class="tableHeader floatRight">
-			<button type="submit" name="refresh" class="mainoption" value="{L_add_aitem}"><i class="fa fa-plus"></i>{L_add_aitem}</button>
+			<button type="button" name="refresh" class="mainoption" value="{L_add_aitem}" id="add-item-btn"><i class="fa fa-plus"></i>{L_add_aitem}</button>
 		</div>
 		<div class="clear"></div>
 		<table class="table fullwidth colorswitch">
-			<tr>
-				<th width="25">&nbsp;</th><th>{L_item}</th><th>{L_item_id}</th><th>{L_itempool}</th><th>{L_member}</th>
-				<!-- IF not S_POINTS_DISABLED -->
-				<th>{L_value}</th>
-				<!-- ENDIF -->
-			</tr>
-			<!-- BEGIN items -->
-			<tr>
-				<td><input type="checkbox" name="items[{items.KEY}][delete]" value="true" class="input" /><input type="hidden" name="items[{items.KEY}][group_key]" value="{items.GK}" /></td>
-				<td><input type="text" name="items[{items.KEY}][name]" value="{items.NAME}" class="input" size="40" id="items_{items.KEY}"/></td>
-				<td><input type="text" name="items[{items.KEY}][itemid]" value="{items.ITEMID}" class="input" /></td>
-				<td>{items.ITEMPOOL}</td>
-				<td>{items.MEMBER}</td>
-				<!-- IF not S_POINTS_DISABLED -->
-				<td><input type="text" name="items[{items.KEY}][value]" value="{items.VALUE}" class="input" /></td>
-				<!-- ENDIF -->
-			</tr>
-			<!-- END items -->
+			<thead>
+				<tr>
+					<th width="25">&nbsp;</th><th>{L_item}</th><th>{L_item_id}</th><th>{L_itempool}</th><th>{L_member}</th>
+					<!-- IF not S_POINTS_DISABLED -->
+					<th>{L_value}</th>
+					<!-- ENDIF -->
+				</tr>
+			</thead>
+			<tbody class="add_item_container">
+				<!-- BEGIN items -->
+				<tr>
+					<td><i class="fa fa-trash fa-lg hand" onclick="delete_item(this, {items.KEY})"></i> <input type="checkbox" name="items[{items.KEY}][delete]" value="true" class="input" style="display:none;"/><input type="hidden" name="items[{items.KEY}][group_key]" value="{items.GK}" /></td>
+					<td><input type="text" name="items[{items.KEY}][name]" value="{items.NAME}" class="input" size="40" id="items_{items.KEY}"/></td>
+					<td><input type="text" name="items[{items.KEY}][itemid]" value="{items.ITEMID}" class="input" /></td>
+					<td>{items.ITEMPOOL}</td>
+					<td>{items.MEMBER}</td>
+					<!-- IF not S_POINTS_DISABLED -->
+					<td><input type="text" name="items[{items.KEY}][value]" value="{items.VALUE}" class="input" /></td>
+					<!-- ENDIF -->
+				</tr>
+				<!-- END items -->
+			</tbody>
 		</table>
+			
 	</div>
 </div>
 <br />
 <div class="contentFooter">
 	<input type="hidden" name="raid_id" value="{RAID_ID}" />
-	<button class="liteoption" type="submit" name="itemadj_del"><i class="fa fa-times"></i>{L_adjitem_del}</button>
 	<button class="mainoption" type="submit" name="save" id="save_button"><i class="fa fa-check"></i>{L_RAID_SAVE}</button>
 	<!-- IF S_RAID_UPD -->
 	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_raid}</button>
@@ -129,3 +203,26 @@
 </div>
 {CSRF_TOKEN}
 </form>
+
+<table id="template-adjustments" style="display:none;">
+	<tr>
+		<td><i class="fa fa-trash fa-lg hand" onclick="delete_row(this)"></i> <input type="hidden" name="adjs[KEY][group_key]" value="new" /></td>
+		<td>{MEMBER_DROPDOWN}</td>
+		<td colspan="2"><input type="text" name="adjs[KEY][reason]" value="" class="input" size="80" id="adjs_KEY" /></td>
+		<td>{EVENT_DROPDOWN}</td>
+		<td><input type="text" name="adjs[KEY][value]" value="" class="input" /></td>
+	</tr>
+</table>
+
+<table id="template-items" style="display:none;">
+	<tr>				
+		<td><i class="fa fa-trash fa-lg hand" onclick="delete_row(this)"></i> <input type="hidden" name="items[KEY][group_key]" value="new" /></td>
+		<td><input type="text" name="items[KEY][name]" value="" class="input" size="40" id="items_KEY"/></td>
+		<td><input type="text" name="items[KEY][itemid]" value="" class="input" /></td>
+		<td>{ITEMPOOL_DROPDOWN}</td>
+		<td>{MEMBER_ITEM_DROPDOWN}</td>
+		<!-- IF not S_POINTS_DISABLED -->
+		<td><input type="text" name="items[KEY][value]" value="" class="input" /></td>
+		<!-- ENDIF -->
+	</tr>
+</table>

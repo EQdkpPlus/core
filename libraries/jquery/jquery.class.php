@@ -491,7 +491,9 @@ if (!class_exists("jquery")) {
 							source: jquiac_'.$id.'
 						});
 					', 'docready');
+				return '['.$js_array.']';
 			}
+			return '[]';
 		}
 		
 		public function AutocompleteMultiple($id, $myarray, $js_function){

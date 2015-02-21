@@ -333,7 +333,7 @@ if(!class_exists('pdh_r_item')){
 						$options['url'] .= "&game_id=".$this->get_game_itemid($item_id);
 					}
 					$this->jquery->Dialog("infotooltip_update", "Item-Update", $options);
-					$ext = '<span style="cursor:pointer;" onclick="infotooltip_update()">Refresh</span>';
+					$ext = '<br /><span style="cursor:pointer;" onclick="infotooltip_update()"><i class="fa fa-refresh"></i> Refresh Item</span>';
 				}
 				return infotooltip($this->get_name($item_id), $this->get_game_itemid($item_id), $lang, $direct, $onlyicon, $noicon, array(), $in_span, $this->get_item_color($item_id)).$ext;
 			}

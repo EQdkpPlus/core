@@ -116,7 +116,7 @@ if ( !defined('EQDKP_INC') ){
 			}
 
 			//we filter some errors, don't think thats the best way to do it
-			//if(substr($errfile, -9) != 'mysql.php' && substr($errfile, -20) != 'config_itemstats.php' && $errno != E_STRICT && $errno != E_NOTICE && (substr($errfile, -10) != 'config.php' && $errline != 275)){
+			if(substr($errfile, -16) == "config.class.php" && $errline == 154 && $errno == 8) return false;
 
 			//so lets do it better and use the set php error reporting level from common..
 			if( $errno & $this->php_error_reporting ){
