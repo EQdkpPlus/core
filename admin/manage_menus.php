@@ -32,7 +32,6 @@ class Manage_Menus extends page_generic {
 		$this->user->check_auth('a_config_man');
 		$handler = array(
 			'save' => array('process' => 'save','csrf'=>true),
-			'mode' => array('process' => 'delete_plink', 'csrf'=>true)
 		);
 		parent::__construct(false, $handler);
 		$this->process();
@@ -43,6 +42,21 @@ class Manage_Menus extends page_generic {
 	// ---------------------------------------------------------
 	public function save() {
 	
+		//Plus links deletion
+		$strPlusDelete = $this->in->get('del_pluslinks');
+		if($strPlusDelete != "0"){
+			$arrPlusLinks = explode(',', $strPlusDelete);
+			$arrPlusLinks = array_unique($arrPlusLinks);
+			
+			foreach($arrPlusLinks as $pid){
+				$pid = intval($pid);
+				if($pid === 0) continue;
+				
+				$this->pdh->put('links', 'delete_link', array($pid));
+			}
+		}
+		
+		//MENU
 		$json = $this->in->get('serialized', '', 'noencquotes');
 		$arrItems = $this->in->getArray('mainmenu', 'string');
 		
@@ -96,14 +110,6 @@ class Manage_Menus extends page_generic {
 		$this->config->set('admin_favs', serialize($favs));
 		
 		redirect('admin/manage_menus.php'.$this->SID.'&status=saved');
-	}
-
-	public function delete_plink() {
-		if ($this->in->get('id', 0) > 0){
-			$this->pdh->put('links', 'delete_link', $this->in->get('id', 0));
-			$this->pdh->process_hook_queue();
-		}
-		redirect('admin/manage_menus.php'.$this->SID);
 	}
 
 	// ---------------------------------------------------------
@@ -357,6 +363,10 @@ class Manage_Menus extends page_generic {
 						$arrOut[$v['_hash']] = $this->pdh->get('article_categories', 'name_prefix', array($catid)).' -> '.$this->pdh->get('articles', 'title', array($v['id']));
 					}
 				}
+				if(!$this->check_for_hidden_article($v) && (isset($v['static']))){
+					$arrOut[$v['_hash']] = $v['text'];
+				}
+				
 			}
 		}
 		return $arrOut;
@@ -364,7 +374,7 @@ class Manage_Menus extends page_generic {
 	
 	private function build_menu_ol(){
 		$arrItems = $this->core->build_menu_array(true);
-
+		
 		$html  = '<ol class="sortable">';
 		$id = 0;
 		foreach($arrItems as $k => $v){
@@ -408,7 +418,7 @@ class Manage_Menus extends page_generic {
 	}
 	
 	private function check_for_hidden_article($arrLink){
-		if ((int)$arrLink['hidden'] && (isset($arrLink['article']) || isset($arrLink['category']) || isset($arrLink['default_hide']))) return false;
+		if ((int)$arrLink['hidden'] && (isset($arrLink['article']) || isset($arrLink['category']) || isset($arrLink['default_hide']) || isset($arrLink['static']))) return false;
 		return true;
 	}
 	
@@ -459,7 +469,7 @@ class Manage_Menus extends page_generic {
 					<input type="hidden" value="'.$plinkid.'"  name="mainmenu['.$id.'][specialid]" class="link-specialid">
 				';
 			} else {
-				$html .= ''.$arrLink['text'].' ('.$this->user->removeSIDfromString($arrLink['link']).') <i class="fa fa-trash-o fa-lg hand" title="{L_delete}" onclick="softdelete_row(this);"></i>';
+				$html .= ''.$arrLink['text'].' ('.$this->user->removeSIDfromString($arrLink['link']).') <i class="fa fa-trash-o fa-lg hand" title="'.$this->user->lang('delete').'" onclick="softdelete_row(this);"></i>';
 			}	
 			$html .= '
 			<input type="hidden" value="'.(($blnPluslink) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			

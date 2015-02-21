@@ -56,7 +56,7 @@ class Manage_Users extends page_generic {
 		$bodyvars = array(
 			'USERNAME'		=> $this->pdh->get('user', 'name', array($this->in->get('u', 0))),
 			'DATETIME'		=> $this->time->user_date(),
-			'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'/Login/NewPassword/&amp;key=' . $pwkey,
+			'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'/Login/NewPassword/?key=' . $pwkey,
 		);
 
 		if($this->email->SendMailFromAdmin($this->in->get('user_email'), $this->user->lang('email_subject_new_pw'), 'user_new_password.html', $bodyvars)) {

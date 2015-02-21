@@ -148,7 +148,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// fetch the extension list and save to database
 		private function fetchExtensionList(){
-			$response = $this->puf->fetch($this->RepoEndpoint.'extension_list'.$this->getChannelURL()."&core=".$this->plusversion, "", 1);
+			$response = $this->puf->fetch($this->RepoEndpoint.'extension_list'.$this->getChannelURL()."&core=".$this->plusversion, "", 10);
 			if ($response){
 				$this->ResetExtensionList();		
 				$arrJson = json_decode($response);
@@ -200,7 +200,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// generate download link for extension
 		public function getExtensionDownloadLink($intExtensionID, $intCategory, $strExtensionName){
-			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 1);
+			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 5);
 			$arrJson = json_decode($response);
 			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->link)){
 				return array('link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
@@ -211,7 +211,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// generate download link for core update
 		public function getCoreUpdateDownloadLink(){
-			$response = $this->puf->fetch($this->RepoEndpoint.'core_update&old='.$this->plusversion.'&new='.$this->new_version.$this->getChannelURL(), "", 1);
+			$response = $this->puf->fetch($this->RepoEndpoint.'core_update&old='.$this->plusversion.'&new='.$this->new_version.$this->getChannelURL(), "", 5);
 			$arrJson = json_decode($response);
 			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->link)){
 				return array('link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);

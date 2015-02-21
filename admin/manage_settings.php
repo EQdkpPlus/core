@@ -560,6 +560,8 @@ class mmocms_settings extends page_generic {
 					'calendar_addraid_duration'	=> array(
 						'type'		=> 'spinner',
 						'size'		=> 5,
+						'min'			=> 10,
+						'step'		=> 10,
 						'default'	=> 120
 					),
 					'calendar_addraid_use_def_start'	=> array(
@@ -573,6 +575,8 @@ class mmocms_settings extends page_generic {
 					'calendar_repeat_crondays'	=> array(
 						'type'		=> 'spinner',
 						'size'		=> 5,
+						'min'			=> 5,
+						'step'		=> 5,
 						'default'	=> 40
 					),
 					'calendar_raid_autoconfirm'	=> array(
@@ -677,7 +681,8 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'spinner',
 						'size'		=> 3,
 						'default'	=> 500,
-						'step'		=> 25
+						'step'		=> 25,
+						'min'			=> 25
 					),
 				),
 				'seo'	=> array(
@@ -707,18 +712,27 @@ class mmocms_settings extends page_generic {
 				'default'	=> array(
 					'default_alimit'	=> array(
 						'type'		=> 'spinner',
+						'min'			=> 10,
+						'step'		=> 10,
 					),
 					'default_elimit'	=> array(
 						'type'		=> 'spinner',
+						'min'			=> 10,
+						'step'		=> 10,
 					),
 					'default_ilimit'	=> array(
 						'type'		=> 'spinner',
+						'min'			=> 10,
+						'step'		=> 10,
 					),
 					'default_nlimit'	=> array(
 						'type'		=> 'spinner',
+						'min'			=> 0,
 					),
 					'default_rlimit'	=> array(
 						'type'		=> 'spinner',
+						'min'			=> 10,
+						'step'		=> 10,
 					),
 				)
 			),

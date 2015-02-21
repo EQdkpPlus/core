@@ -45,7 +45,8 @@ class auth extends user {
 			'type'		=> 'spinner',
 			'size'		=> 7,
 			'default'	=> 3600,
-			'step'		=> 900
+			'step'		=> 900,
+			'min'			=> 0,
 		)
 	);
 
