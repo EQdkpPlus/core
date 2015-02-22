@@ -18,9 +18,9 @@ var providers_large = {
 		name : 'Google',
 		url : 'https://www.google.com/accounts/o8/id'
 	},
-	yahoo : {
-		name : 'Yahoo',
-		url : 'http://me.yahoo.com/'
+	steam : {
+		name : 'Steam',
+		url : 'https://steamcommunity.com/openid'
 	},
 	myopenid : {
 		name : 'MyOpenID',
@@ -64,7 +64,16 @@ var providers_small = {
 		name : 'Профіль Google',
 		label : 'Введіть ваше ім\'я на Google Profile',
 		url : 'http://www.google.com/profiles/{username}'
-	}
+	},
+	aol : {
+		name : 'AOL',
+		label : 'Enter your AOL screenname.',
+		url : 'http://openid.aol.com/{username}'
+	},
+	yahoo : {
+		name : 'Yahoo',
+		url : 'http://me.yahoo.com/'
+	},
 };
 
 openid.locale = 'uk';
@@ -72,3 +81,4 @@ openid.sprite = 'ru'; // use same sprite as russian localization
 openid.demo_text = 'В демонстраційному режимі на клієнті. Насправді пройшов би сабміт наступного OpenID:';
 openid.signin_text = 'Увійти';
 openid.image_title = 'увійти з {provider}';
+openid.no_sprite = true;

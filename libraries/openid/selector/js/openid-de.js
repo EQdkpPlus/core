@@ -14,10 +14,9 @@ var providers_large = {
 		name : 'Yahoo',
 		url : 'http://me.yahoo.com/'
 	},
-	aol : {
-		name : 'AOL',
-		label : 'Bitte den AOL Benutzernamen eingeben.',
-		url : 'http://openid.aol.com/{username}'
+	steam : {
+		name : 'Steam',
+		url : 'https://steamcommunity.com/openid'
 	},
 	myopenid : {
 		name : 'MyOpenID',
@@ -86,7 +85,12 @@ var providers_small = {
 		name : 'Google Profile',
 		label : 'Bitte den Google Profile Benutzernamen eingeben',
 		url : 'http://www.google.com/profiles/{username}'
-	}
+	},
+	aol : {
+		name : 'AOL',
+		label : 'Bitte den AOL Benutzernamen eingeben.',
+		url : 'http://openid.aol.com/{username}'
+	},
 };
 
 openid.locale = 'de';
@@ -94,3 +98,4 @@ openid.sprite = 'en'; // use same sprite as english localization
 openid.demo_text = 'Demo Modus. Normalerweise würde die folgende OpenID übermittelt werden:';
 openid.signin_text = 'Anmelden';
 openid.image_title = 'Mit {provider} anmelden';
+openid.no_sprite = true;

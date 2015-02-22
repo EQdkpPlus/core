@@ -122,7 +122,7 @@ class auth extends user {
 						if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
 							$this->db->prepare("UPDATE __sessions :p WHERE session_id = ?")->set(array(
 								'session_current'	=> $this->current_time,
-								'session_page'		=> strlen($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
+								'session_page'		=> strlen($this->env->current_page) ? substr(utf8_strtolower($this->env->current_page), 0, 254) : '',
 							))->execute($this->sid);
 						}
 						//The Session is valid, copy the user-data to the data-array and finish the init. You you can work with this data.
@@ -206,7 +206,7 @@ class auth extends user {
 				'session_current'		=> $this->current_time,
 				'session_ip'			=> $this->env->ip,
 				'session_browser'		=> $this->env->useragent,
-				'session_page'			=> ($this->env->current_page) ? utf8_strtolower($this->env->current_page) : '',
+				'session_page'			=> ($this->env->current_page) ? substr(utf8_strtolower($this->env->current_page),0,254) : '',
 				'session_key'			=> $strSessionKey,
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);

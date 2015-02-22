@@ -14,10 +14,9 @@ var providers_large = {
 		name : 'Yahoo',
 		url : 'http://me.yahoo.com/'
 	},
-	aol : {
-		name : 'AOL',
-		label : 'Enter your AOL screenname.',
-		url : 'http://openid.aol.com/{username}'
+	steam : {
+		name : 'Steam',
+		url : 'https://steamcommunity.com/openid'
 	},
 	myopenid : {
 		name : 'MyOpenID',
@@ -86,7 +85,12 @@ var providers_small = {
 		name : 'Google Profile',
 		label : 'Enter your Google Profile username',
 		url : 'http://www.google.com/profiles/{username}'
-	}
+	},
+	aol : {
+		name : 'AOL',
+		label : 'Enter your AOL screenname.',
+		url : 'http://openid.aol.com/{username}'
+	},
 };
 
 openid.locale = 'en';
@@ -94,3 +98,4 @@ openid.sprite = 'en'; // reused in german& japan localization
 openid.demo_text = 'In client demo mode. Normally would have submitted OpenID:';
 openid.signin_text = 'Sign-In';
 openid.image_title = 'log in with {provider}';
+openid.no_sprite = true;

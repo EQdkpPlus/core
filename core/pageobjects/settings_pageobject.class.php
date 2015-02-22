@@ -272,7 +272,7 @@ class settings_pageobject extends pageobject {
 		}
 		// add delete-avatar link and set upload-type to user
 		$settingsdata['profile']['user_avatar']['user_avatar']['imgup_type'] = 'user';
-		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = 'settings.php'.$this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode');
+		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = $this->server_path.$this->controller_path_plain.'Settings/'. $this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode');
 		//Deactivate Profilefields synced by Bridge
 		if ($this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('cmsbridge_disable_sync') != 1) {
 			$synced_fields = array('username', 'current_password', 'new_password', 'confirm_password');
@@ -316,7 +316,7 @@ class settings_pageobject extends pageobject {
 					}
 					$field_opts = array(
 						'dir_lang'	=> ($this->user->lang('login_'.$method)) ? $this->user->lang('login_'.$method) : ucfirst($method),
-						'text'		=> $display.' <a href="settings.php'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="'.$this->user->lang('delete').'"></i></a>',
+						'text'		=> $display.' <a href="'.$this->server_path.$this->controller_path_plain.'Settings/'.$this->SID.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="'.$this->user->lang('delete').'"></i></a>',
 						'help'		=> 'auth_accounts_help',
 					);
 				} else {

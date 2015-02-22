@@ -281,7 +281,7 @@ class login_pageobject extends pageobject {
 
 	public function display(){
 		if ($this->user->is_signedin()){
-			redirect('settings.php'.$this->SID);
+			redirect($this->controller_path_plain.'Settings/'. $this->SID);
 		}
 		$blnShowCaptcha = false;
 		if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
