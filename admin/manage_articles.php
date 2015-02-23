@@ -362,11 +362,11 @@ class Manage_Articles extends page_generic {
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
 
 		$this->tpl->assign_vars(array(
-			'ARTICLE_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_nlimit'], $footer_text),
-			'PAGINATION' => generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
+			'ARTICLE_LIST' 		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), 25, $footer_text),
+			'PAGINATION' 		=> generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, 25, $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
-			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
-			'CID'			=> $cid,
+			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
+			'CID'				=> $cid,
 			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), '', $this->user->lang('selected_articles').'...', ''),		
 		));
 
