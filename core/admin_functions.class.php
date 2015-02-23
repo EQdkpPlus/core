@@ -298,7 +298,7 @@ class admin_functions extends gen_class {
 		$strPath = $matches[0];
 
 		if (strlen($strPath)){
-			$strQuery = $matches[1];
+			$strQuery = (isset($matches[1])) ? $matches[1] : "";
 			$arrQuery = array();
 			parse_str($strQuery, $arrQuery);
 			$arrFolder = explode('/', $strPath);

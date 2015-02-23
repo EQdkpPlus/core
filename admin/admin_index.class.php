@@ -277,20 +277,31 @@ class admin_index extends gen_class {
 							GROUP BY u.username, s.session_ip
 							ORDER BY u.username, s.session_current DESC';
 		$result = $this->db->query($sql);
+		$arrOnlineUsers = $arrBots = array();
 		if ($result){
 			while ($row = $result->fetchAssoc()){
-				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->admin_functions->resolve_bots($row['session_browser'])) ? $this->admin_functions->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
-				$this->tpl->assign_block_vars('online_row', array(
-					'USERNAME'		=> sanitize($username),
-					'LOGIN'			=> $this->time->user_date($row['session_start'], true),
-					'LAST_UPDATE'	=> $this->time->createTimeTag($row['session_current'], $this->time->user_date($row['session_current'], true)),
-					'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
-					'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
-					'IP_ADDRESS'	=> sanitize($row['session_ip']))
-				);
+				$isBot = $this->admin_functions->resolve_bots($row['session_browser']) ? true : false;
+				if(!$isBot || ($isBot && !in_array($this->admin_functions->resolve_bots($row['session_browser']), $arrBots))){
+					$arrOnlineUsers[] = $row;
+					if($isBot) $arrBots[] = $this->admin_functions->resolve_bots($row['session_browser']);
+				}				
 			}
 			$online_count = $result->numRows;
 		} else $online_count = 0;
+		
+		if($online_count){
+			foreach($arrOnlineUsers as $row){
+				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->admin_functions->resolve_bots($row['session_browser'])) ? $this->admin_functions->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
+				$this->tpl->assign_block_vars('online_row', array(
+						'USERNAME'		=> sanitize($username),
+						'LOGIN'			=> $this->time->user_date($row['session_start'], true),
+						'LAST_UPDATE'	=> $this->time->createTimeTag($row['session_current'], $this->time->user_date($row['session_current'], true)),
+						'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
+						'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
+						'IP_ADDRESS'	=> sanitize($row['session_ip']))
+				);
+			}
+		}
 
 		// Log Actions
 		$s_logs = false;

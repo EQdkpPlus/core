@@ -152,7 +152,7 @@ class Manage_Articles extends page_generic {
 		
 		
 		if ($strTitle == "" ) {
-			$this->core->message('', '', 'red');
+			$this->core->message($this->user->lang('headline'), $this->user->lang('adduser_send_mail_error_fields'), 'red');
 			$this->edit();
 			return;
 		}
