@@ -31,7 +31,7 @@ class ManageRaids extends page_generic {
 			'raidvalue' => array('process' => 'ajax_raidvalue', 'check' => false),
 			'save' => array('process' => 'save', 'check' => 'a_raid_add', 'csrf'=>true),
 			'itemadj_del' => array('process' => 'update', 'check' => 'a_raid_del', 'csrf'=>true),
-			'refresh'	=> array('process' => 'update', 'check' => 'a_raid_'),
+			'copy'		=> array('process' => 'copy', 'check' => 'a_raid_add'),
 			'upd'		=> array('process' => 'update', 'csrf'=>false),			
 		);
 		parent::__construct('a_raid_', $handler, array('raid', 'event_name'), null, 'selected_ids[]', 'r');
@@ -46,6 +46,11 @@ class ManageRaids extends page_generic {
 		$event_value = $this->pdh->geth("event", "value", array($event_id));
 		echo runden($event_value);
 		die();
+	}
+	
+	public function copy(){
+		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
+		$this->update(false, false, true);
 	}
 
 	public function delete() {
@@ -137,7 +142,7 @@ class ManageRaids extends page_generic {
 		$this->display($messages);
 	}
 
-	public function update($message=false, $force_refresh=false) {
+	public function update($message=false, $force_refresh=false, $copy=false) {
 		if($message) {
 			$this->core->messages($message);
 		}
@@ -218,7 +223,7 @@ class ManageRaids extends page_generic {
 			foreach($adjs as $key => $adj) {
 				$this->tpl->assign_block_vars('adjs', array(
 					'KEY'		=> $key,
-					'GK'		=> $adj['group_key'],
+					'GK'		=> ($copy) ? 'new' : $adj['group_key'],
 					'MEMBER'	=> $this->jquery->MultiSelect('adjs['.$key.'][members]', $members, $adj['members'], array('width' => 250, 'id'=>'adjs_'.$key.'_members', 'filter' => true)),
 					'REASON'	=> sanitize($adj['reason']),
 					'EVENT'		=> new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key)),
@@ -236,7 +241,7 @@ class ManageRaids extends page_generic {
 			foreach($items as $key => $item) {
 				$this->tpl->assign_block_vars('items', array(
 					'KEY'		=> $key,
-					'GK'		=> $item['group_key'],
+					'GK'		=> ($copy) ? 'new' : $item['group_key'],
 					'NAME'		=> stripslashes($item['name']),
 					'ITEMID'	=> $item['item_id'],
 					'MEMBER'	=> $this->jquery->MultiSelect('items['.$key.'][members]', $members, $item['members'], array('width' => 250, 'id'=>'items_'.$key.'_members', 'filter' => true)),
@@ -258,7 +263,7 @@ class ManageRaids extends page_generic {
 			'EVENT'				=> new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')),
 			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
 			'RAID_DATE'			=> $this->time->user_date($raid['date']),
-			'RAID_ID'			=> ($raid['id']) ? $raid['id'] : 0,
+			'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
 			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
@@ -274,10 +279,10 @@ class ManageRaids extends page_generic {
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 				
 			//language vars
-			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new') ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
+			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
-			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new') ? true : false,
-			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$this->in->exists('refresh') && !$this->in->exists('itemadj_del') && !$force_refresh) ? true : false,
+			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
+			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh) ? true : false,
 		));
 
 		$this->tpl->add_js("

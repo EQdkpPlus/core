@@ -933,7 +933,8 @@ $lang = array(
 "article_publish_success" => "Artikel wurde veröffentlicht",
 "article_publish" => "Artikel veröffentlichen",
 "article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",		
-		
+"copy" => "Eintrag duplizieren",
+"copy_info" => "Du arbeitest mit einer Kopie der Daten des alten Eintrages. Ein neuer Eintrag mit diesen Daten wird erst nach dem Speichern erstellt.",				
 "sp_btn_twitter_share" => "Tweet",
 "sp_btn_facebook_share" => "Teilen",		
 "pagination_goto" => "Gehe zu Seite",

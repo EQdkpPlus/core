@@ -30,9 +30,15 @@ class ManageItems extends page_generic {
 		$handler = array(
 			'save' => array('process' => 'save', 'check' => 'a_item_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
+			'copy' => array('process' => 'copy', 'check' => 'a_item_add'),
 		);
 		parent::__construct('a_item_', $handler, array('item', 'name'), null, 'selected_ids[]');
 		$this->process();
+	}
+	
+	public function copy(){
+		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
+		$this->update(false, true);
 	}
 
 	public function save() {
@@ -81,7 +87,7 @@ class ManageItems extends page_generic {
 		$this->display($messages);
 	}
 
-	public function update($message=false) {
+	public function update($message=false, $copy=false) {
 		//fetch members for select
 		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
 
@@ -154,7 +160,7 @@ class ManageItems extends page_generic {
 
 		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".((isset($item['name'])) ? $item['name'] : ''), '', true);
 		$this->tpl->assign_vars(array(
-			'GRP_KEY'		=> (isset($grp_key)) ? $grp_key : '',
+			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 			'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
 			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))),
 			'BUYERS'		=> $this->jquery->MultiSelect('buyers', $members, ((isset($item['buyers'])) ? $item['buyers'] : ''), array('width' => 350, 'filter' => true)),

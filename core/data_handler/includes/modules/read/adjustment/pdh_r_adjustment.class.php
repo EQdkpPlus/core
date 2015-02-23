@@ -240,9 +240,15 @@ if(!class_exists('pdh_r_adjustment')){
 		}
 
 		public function get_editicon($adj_id, $baseurl, $url_suffix='') {
-			return "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>
+			$out = "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>
 						<i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i>
 					</a>";
+			
+			$out .= '<a href="'.$this->get_link($adj_id, $baseurl, '&copy=true').'">
+				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
+			</a>';
+				
+			return $out;
 		}
 
 		public function get_m4agk4a($adj_id) {

@@ -30,14 +30,20 @@ class ManageAdjs extends page_generic {
 		$handler = array(
 			'save' => array('process' => 'save', 'check' => 'a_indivadj_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
+			'copy'		=> array('process' => 'copy', 'check' => 'a_raid_add'),
 		);
 		parent::__construct('a_indivadj_', $handler, array('adjustment', 'reason'), null, 'selected_ids[]', 'a');
 		$this->process();
 	}
+	
+	public function copy(){
+		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
+		$this->update(false, true);
+	}
 
 	public function save() {
 		$adj = $this->get_post();
-		if($this->in->get('a',0)) {
+		if($this->in->get('a',0) && !$this->in->exists('copy')) {
 			$retu = $this->pdh->put('adjustment', 'update_adjustment', array($this->in->get('a',0), $adj['value'], $adj['reason'], $adj['members'], $adj['event'], $adj['raid_id'], $adj['date'], true));
 		} else {
 			$retu = $this->pdh->put('adjustment', 'add_adjustment', array($adj['value'], $adj['reason'], $adj['members'], $adj['event'], $adj['raid_id'], $adj['date']));
@@ -82,7 +88,7 @@ class ManageAdjs extends page_generic {
 		$this->display($messages);
 	}
 
-	public function update($message=false) {
+	public function update($message=false, $copy=false) {
 		//fetch members for select
 		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
 		
@@ -135,12 +141,13 @@ class ManageAdjs extends page_generic {
 		$this->confirm_delete($this->user->lang('confirm_delete_adjustment')."<br />".((isset($adj['reason'])) ? $adj['reason'] : ''), '', true);
 		
 		$this->tpl->assign_vars(array(
-			'GRP_KEY'		=> (isset($grp_key)) ? $grp_key : '',
+			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 			'REASON'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
 			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))),
 			'MEMBERS'		=> $this->jquery->MultiSelect('members', $members, ((isset($adj['members'])) ? $adj['members'] : ''), array('width' => 350, 'filter' => true)),
 			'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'VALUE'			=> (isset($adj['value'])) ? $adj['value'] : '',
+			'S_COPY'		=> ($copy) ? true : false,
 			'EVENT'			=> new hdropdown('event', array('options' => $events, 'value' => ((isset($adj['event'])) ? $adj['event'] : ''))),
 		));
 
