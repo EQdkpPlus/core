@@ -72,7 +72,7 @@ class team_pageobject extends pageobject {
 		}
 	
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
-		
+		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('Team', false, false, false, true).'" />');
 		$this->set_vars(array(
 			//'page_title'		=> $this->user->lang('team'),
 			'template_file'		=> 'team.html',

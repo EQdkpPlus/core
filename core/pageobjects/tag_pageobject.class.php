@@ -119,6 +119,8 @@ class tag_pageobject extends pageobject {
 				'PAGINATION' => generate_pagination($this->strPath.$this->SID, count($arrArticleIDs), $this->user->data['user_nlimit'], $intStart, 'start'),
 		));
 		
+		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('tag', $tag, false, false, true).'" />');
+		
 		$this->core->set_vars(array(
 				'page_title' 		=> $this->user->lang("tag").': '.sanitize($strTag),
 				'template_file'		=> 'tag.html',

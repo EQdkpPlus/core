@@ -63,6 +63,9 @@ class usergroup_pageobject extends pageobject {
 		$user_count			= count($view_list);
 		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
 
+		
+		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupID)), $groupID, false, true).'" />');
+		
 		$this->tpl->assign_vars(array (
 			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
 			'USER_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),

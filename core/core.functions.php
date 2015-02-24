@@ -402,7 +402,7 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 	$direct = ($direct) ? 1 : 0;
 	if($cachedname && !$direct){
 		$str = '<span class="infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">'.$cachedname;
-		return $str.(($in_span !== false) ? $in_span : '').'</span>';
+		return $str.'</span>';
 	} else {
 		$str = '<span class="infotooltip infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
 	}
