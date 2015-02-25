@@ -48,14 +48,37 @@ if (!class_exists('exchange_user_chars')){
 								);
 							}
 						}
+						
+						//Raidgroups
+						$arrRaidgroups = array();
+						$arrTotalRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
+						if(count($arrTotalRaidgroups)){
+							foreach($arrTotalRaidgroups as $raidgroupid => $raidgroupname) {
+								$status = $this->pdh->get('raid_groups_members', 'membership_status', array($key, $raidgroupid));
+								if($status !== false){
+									$status = $status+1;
+								} else {
+									$status = (count($arrTotalRaidgroups) === 1) ? 1 : 0;
+								}								
+								
+								$arrRaidgroups['raidgroup:'.$raidgroupid] = array(
+										'id'		=> $raidgroupid,
+										'name'		=> $raidgroupname,
+										'default'	=> ($this->pdh->get('raid_groups', 'standard', array($raidgroupid))) ? 1 : 0,
+										'color'		=> $this->pdh->get('raid_groups', 'color', array($raidgroupid)),
+										'status'	=> $status,
+								);
+							}
+						}
 
 						$arrUserChars['char:'.$key] = array(
-							'id'	=> $key,
-							'name'	=> unsanitize($charname),
-							'main'	=> ($key == $mainchar) ? 1 : 0,
-							'class'	=> $this->pdh->get('member', 'classid', array($key)),
-							'classname'	=> $this->pdh->get('member', 'classname', array($key)),
-							'roles'	=> $arrRoles,
+							'id'			=> $key,
+							'name'			=> unsanitize($charname),
+							'main'			=> ($key == $mainchar) ? 1 : 0,
+							'class'			=> $this->pdh->get('member', 'classid', array($key)),
+							'classname'		=> $this->pdh->get('member', 'classname', array($key)),
+							'roles'			=> $arrRoles,
+							'raidgroups'	=> $arrRaidgroups,
 						);
 					}
 				}
