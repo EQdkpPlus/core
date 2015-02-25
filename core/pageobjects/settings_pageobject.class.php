@@ -157,8 +157,6 @@ class settings_pageobject extends pageobject {
 		if ( $change_password ) {
 			$new_salt = $this->user->generate_salt();
 			$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
-			$strApiKey = $this->user->generate_apikey($values['new_password'], $new_salt);
-			$query_ary['api_key'] = $strApiKey;
 			$query_ary['user_login_key'] = '';
 		}
 

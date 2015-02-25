@@ -169,6 +169,7 @@ class update_2000 extends sql_update_task {
 				108	=> 'Add permission',
 				109	=> 'Add permission',
 				110	=> 'Insert Notification Type',
+				111 => 'Drop apikey Column',
 			),
 			'german' => array(
 				'update_2000'				=> 'EQdkp Plus 2.0 Migration von 1.x',
@@ -282,6 +283,7 @@ class update_2000 extends sql_update_task {
 				108	=> 'Füge Berechtigung ein',
 				109	=> 'Füge Berechtigung ein',
 				110	=> 'Füge Notification Types ein',
+				111 => 'Entferne apikey Spalte',
 			),
 		);
 		
@@ -567,6 +569,7 @@ class update_2000 extends sql_update_task {
 			108 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_cal_addrestricted');",
 			109 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_article_categories_man');",
 			110 => "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('comment_new_mentioned', 'notification_newmention', 'comment', 0, 1, 0, NULL, 0, 'fa-at');",
+			111 => "ALTER TABLE `__users` DROP COLUMN `api_key`;",
 		);
 	}
 	

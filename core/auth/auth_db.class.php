@@ -84,11 +84,9 @@ class auth_db extends auth {
 							
 								$strNewSalt		= $this->generate_salt();
 								$strNewPassword	= $this->encrypt_password($strPassword, $strNewSalt);
-								$strApiKey		= $this->generate_apikey($strPassword, $strNewSalt);
 								
 								$this->db->prepare("UPDATE  __users :p WHERE user_id=?")->set(array(
 										'user_password' => $strNewPassword.':'.$strNewSalt,
-										'api_key'		=> $strApiKey
 								))->execute($row['user_id']);
 																		
 								$arrStatus = array(

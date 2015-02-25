@@ -550,13 +550,6 @@ class user extends gen_class {
 	public function generate_salt(){
 		return substr(md5(generateRandomBytes(55)), 0, 23);
 	}
-
-	public function generate_apikey($strPassword, $strSalt){
-		$strRandom = md5(generateRandomBytes(55));
-		$objCrypt = register('encrypt', array($this->pw->prehash($strPassword, $strSalt)));
-		$strEncrypted = $objCrypt->encrypt($strRandom);
-		return $strRandom.':'.$strEncrypted;
-	}
 	
 	
 	/**
