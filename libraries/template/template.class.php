@@ -919,12 +919,47 @@ class template extends gen_class {
 	private function compile_tag_block($tag_args){
 		$tag_template_php = '';
 		array_push($this->block_names, $tag_args);
+		
+		// Allow for control of looping (indexes start from zero):
+		// foo(2)    : Will start the loop on the 3rd entry
+		// foo(-2)   : Will start the loop two entries from the end
+		// foo(3,4)  : Will start the loop on the fourth entry and end it on the fifth
+		// foo(3,-4) : Will start the loop on the fourth entry and end it four from last
+		if (preg_match('#^([^()]*)\(([\-\d]+)(?:,([\-\d]+))?\)$#', $tag_args, $match))
+		{
+			$tag_args = $match[1];
+			if ($match[2] < 0)
+			{
+				$loop_start = '($_' . $tag_args . '_count ' . $match[2] . ' < 0 ? 0 : $_' . $tag_args . '_count ' . $match[2] . ')';
+			}
+			else
+			{
+				$loop_start = '($_' . $tag_args . '_count < ' . $match[2] . ' ? $_' . $tag_args . '_count : ' . $match[2] . ')';
+			}
+			if (strlen($match[3]) < 1 || $match[3] == -1)
+			{
+				$loop_end = '$_' . $tag_args . '_count';
+			}
+			else if ($match[3] >= 0)
+			{
+				$loop_end = '(' . ($match[3] + 1) . ' > $_' . $tag_args . '_count ? $_' . $tag_args . '_count : ' . ($match[3] + 1) . ')';
+			}
+			else //if ($match[3] < -1)
+			{
+				$loop_end = '$_' . $tag_args . '_count' . ($match[3] + 1);
+			}
+		}
+		else
+		{
+			$loop_start = 0;
+			$loop_end = '$_' . $tag_args . '_count';
+		}
 
 		if (sizeof($this->block_names) < 2){
 			// Block is not nested.
 			$tag_template_php	= '$_' . $tag_args . '_count = (isset($this->_data[\'' . $tag_args . '.\'])) ?  sizeof($this->_data[\'' . $tag_args . '.\']) : 0;' . "\n";
 			$tag_template_php	.= 'if ($_' . $tag_args . '_count) {' . "\n";
-			$tag_template_php	.= 'for ($_' . $tag_args . '_i = 0; $_' . $tag_args . '_i < $_' . $tag_args . '_count; $_' . $tag_args . '_i++)';
+			$tag_template_php	.= 'for ($_' . $tag_args . '_i = '.$loop_start.'; $_' . $tag_args . '_i < '.$loop_end.'; $_' . $tag_args . '_i++)';
 
 		// This block is nested.
 		}else{
@@ -938,7 +973,7 @@ class template extends gen_class {
 			// Create the for loop code to iterate over this block.
 			$tag_template_php	= '$_' . $tag_args . '_count = (isset(' . $varref . ')) ? sizeof(' . $varref . ') : 0;' . "\n";
 			$tag_template_php	.= 'if ($_' . $tag_args . '_count) {' . "\n";
-			$tag_template_php	.= 'for ($_' . $tag_args . '_i = 0; $_' . $tag_args . '_i < $_' . $tag_args . '_count; $_' . $tag_args . '_i++)';
+			$tag_template_php	.= 'for ($_' . $tag_args . '_i = '.$loop_start.'; $_' . $tag_args . '_i < ' . $loop_end . '; $_' . $tag_args . '_i++)';
 		}
 		$tag_template_php		.= "\n{\n";
 		return $tag_template_php;
