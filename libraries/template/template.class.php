@@ -1305,6 +1305,7 @@ class template extends gen_class {
 				"/T_PORTAL_WIDTH/",
 				"/T_COLUMN_LEFT_WIDTH/",
 				"/T_COLUMN_RIGHT_WIDTH/",
+				"/T_BACKGROUND_POSITION/",
 		
 				"/EQDKP_ROOT_PATH/",
 				"/EQDKP_IMAGE_PATH/",
@@ -1348,6 +1349,7 @@ class template extends gen_class {
 				$style['portal_width'],
 				$style['column_left_width'],
 				$style['column_right_width'],
+				(($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
 		
 				$root_path,
 				$root_path.'images/',

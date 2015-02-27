@@ -89,6 +89,8 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 						'attendees_columns'		=> $drow['attendees_columns'],
 						'logo_position'			=> $drow['logo_position'],
 						'background_img'		=> $drow['background_img'],
+						'background_pos'		=> $drow['background_pos'],
+						'background_type'		=> (int)$drow['background_type'],
 						'css_file'				=> $drow['css_file'],
 						'use_db_vars'			=> $drow['use_db_vars'],
 						'portal_width'			=> $drow['portal_width'],

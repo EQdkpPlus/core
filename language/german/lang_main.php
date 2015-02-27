@@ -941,6 +941,8 @@ $lang = array(
 "pagination_goto_hint" => "Gebe einen Wert zwischen 1 und PAGE ein.",
 "mobile_version" => "Mobile Version",
 "desktop_version" => "Desktop Version",
+"redirection" => "Weiterleitung",
+"redirection_info" => "Hier klicken, wenn die automatische Weiterleitung nicht funktionieren sollte.",
 );
 
 ?>

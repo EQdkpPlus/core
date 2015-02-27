@@ -54,6 +54,25 @@
 	<div class="clear"></div>
 </div>
 
+<script>
+
+$(document).ready(function(){
+	$('input[name="background_type"]').on('change', function(){
+		if($(this).val() == "2"){
+			$("#background_image").attr("disabled", false);
+		} else {
+			$("#background_image").attr("disabled", true);
+		}
+	})
+	var recent = $('input[name="background_type"]:checked').val();
+	if(recent == "2"){
+		$("#background_image").attr("disabled", false);
+	} else {
+		$("#background_image").attr("disabled", true);
+	}
+})
+</script>
+
 <form method="post" action="{F_ADD_STYLE}" name="post">
 <div id="style_tabs">
 <ul>
@@ -86,6 +105,13 @@
 			<dt><label>{L_logo_position}</label></dt>
 			<dd>{DD_LOGO_POSITION}</dd>
 		</dl>
+	</fieldset>
+	<fieldset class="settings">
+		<legend>{L_background_image}</legend>	
+		<dl>
+			<dt><label>{L_background_image_type}</label><br /><span>{L_background_image_type_help}</span></dt>
+			<dd>{RADIO_BACKGROUND_IMAGE_TYPE}</dd>
+		</dl>
 		<dl>
 			<dt><label>{L_background_image}</label><br /><span>{L_background_image_note}</span></dt>
 			<dd>
@@ -94,6 +120,10 @@
 			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('background_image');"></i>
 			</div>
 			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_background_position}</label></dt>
+			<dd>{RADIO_BACKGROUND_POSITION}</dd>
 		</dl>
 	</fieldset>
 
@@ -117,6 +147,12 @@
 </div>
 <!-- IF S_USE_DBVARS -->
 <div id="colors">
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_style_settings_info}
+</div>
+
+
+
 	<fieldset class="settings">
 		<legend>{L_color_settings}</legend>
 		<dl>

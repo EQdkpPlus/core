@@ -21,6 +21,16 @@
 		{RSS_FEEDS}
 		<style type="text/css">
 			{CSS_CODE}
+			<!-- IF T_BACKGROUND_TYPE > 0 -->
+			body {
+				background:#000000 url('{TEMPLATE_BACKGROUND}') no-repeat center top;
+				background-attachment: {T_BACKGROUND_POSITION};
+			}
+			
+			#wrapper header {
+				background: none !important;
+			}
+			<!-- ENDIF -->
 		</style>
 		
 		<script type="text/javascript">

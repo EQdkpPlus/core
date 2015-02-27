@@ -981,7 +981,8 @@ $lang = array(
 	"desktop_version" => "Desktop Version",
 	"copy" => "Duplicate entry",
 	"copy_info" => "You're working with a copy of the old entry. A new entry will be created after saving this entry.",
-		
+	"redirection" => "Redirection",
+	"redirection_info" => "Click here, if the automatic redirection doesn't work.",
 );
 
 ?>

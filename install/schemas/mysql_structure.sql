@@ -51,7 +51,6 @@ CREATE TABLE `__users` (
 	`auth_account` text COLLATE utf8_bin,
 	`failed_login_attempts` INT(3) NOT NULL DEFAULT '0',
 	`exchange_key` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`api_key` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`hide_nochar_info` TINYINT(1) NULL DEFAULT '0',
 	`notifications` TEXT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`user_id`),
@@ -391,6 +390,8 @@ CREATE TABLE `__styles` (
 	`column_right_width` VARCHAR(20) COLLATE utf8_bin NULL DEFAULT '',
 	`column_left_width` VARCHAR(20) COLLATE utf8_bin NULL DEFAULT '',
 	`portal_width` VARCHAR(20) COLLATE utf8_bin NULL DEFAULT '',
+	`background_pos` VARCHAR(20) NULL DEFAULT 'normal',
+	`background_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`style_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

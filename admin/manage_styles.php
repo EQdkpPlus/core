@@ -241,14 +241,18 @@ class Manage_Styles extends page_generic{
 			'input_border_width'	=> $this->in->get('input_border_width', NULL),
 			'input_border_color'	=> $this->in->get('input_border_color'),
 			'input_border_style'	=> $this->in->get('input_border_style'),
-
+				
+			'background_type'		=> $this->in->get('background_type', 0),
+			'background_pos'		=> $this->in->get('background_pos'),
+			'background_img'		=> $this->in->get('background_img'),
+				
 			'portal_width'			=> $portal_width,
 			'column_left_width'		=> $column_left_width,
 			'column_right_width'	=> $column_right_width,
 
 			'attendees_columns'		=> $this->in->get('attendees_columns'),
 			'logo_position'			=> $this->in->get('logo_position', 'center'),
-			'background_img'		=> $this->in->get('background_img'),
+			
 			'css_file'				=> $this->in->get('css_file'),
 			'use_db_vars'			=> $this->in->get('use_db_vars')
 		);
@@ -429,6 +433,9 @@ class Manage_Styles extends page_generic{
 			'DD_ATTENDEE_COLUMNS'	=> new hdropdown('attendees_columns', array('options' => $attendee_colums, 'value' => $this->style['attendees_columns'])),
 			'DD_LOGO_POSITION'		=> new hdropdown('logo_position', array('options' => $logo_positions, 'value' => $this->style['logo_position'])),
 
+			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'])),
+			'RADIO_BACKGROUND_POSITION' => new hradio('background_pos', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'])),
+				
 			// Color pickers
 			'CP_BODY_BG'			=> $this->jquery->colorpicker('body_background', $this->style['body_background']),
 			'CP_FONTCOLOR1'			=> $this->jquery->colorpicker('fontcolor1', $this->style['fontcolor1']),

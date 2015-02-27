@@ -36,6 +36,8 @@ if (!class_exists("styles")){
 			'attendees_columns',
 			'logo_position',
 			'background_img',
+			'background_pos',
+			'background_type',
 			'css_file',
 			'use_db_vars',
 

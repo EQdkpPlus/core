@@ -185,20 +185,32 @@ class core extends gen_class {
 			}
 
 			// some style additions (header, background image..)
-			if ($this->user->style['background_img'] != ''){
-				if (strpos($this->user->style['background_img'],'://') > 1){
-					$template_background_file = $this->user->style['background_img'];
-				} else {
-					$template_background_file = $this->root_path .$this->user->style['background_img'];
-				}
-			} else {
+			$template_background_file = "";
+			switch($this->user->style['background_type']){
+				//Game
+				case 1: $template_background_file = $this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+					break;
+					
+				//Own
+				case 2:
+					if ($this->user->style['background_img'] != ''){
+						if (strpos($this->user->style['background_img'],'://') > 1){
+							$template_background_file = $this->user->style['background_img'];
+						} else {
+							$template_background_file = $this->root_path .$this->user->style['background_img'];
+						}
+					}
+					break;
+				
+				//Style
+				default: $template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
+			}
+			if($template_background_file == ""){
+				//Cannot find a background file, let's take the game specific
 				$template_background_file = $this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
-
-				if (!file_exists($template_background_file)){
-					$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
-				}
 			}
 
+			
 			// add the custom JS file
 			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
 			if(is_file($customjs)){
@@ -336,6 +348,7 @@ class core extends gen_class {
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
 				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
+
 				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
 				'S_NORMAL_HEADER'			=> ($this->header_format != 'simple') ? true : false,
@@ -348,6 +361,8 @@ class core extends gen_class {
 				'T_COLUMN_LEFT_WIDTH'		=> $this->user->style['column_left_width'],
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
+				'T_BACKGROUND_TYPE'			=> $this->user->style['background_type'],
+				'T_BACKGROUND_POSITION'		=> ($this->user->style['background_pos'] == 'normal') ? 'scroll' : 'fixed',
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
