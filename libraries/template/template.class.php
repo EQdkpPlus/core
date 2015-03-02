@@ -1460,10 +1460,11 @@ class template extends gen_class {
 					$glue = ($dir != '.') ? $dir . '/' : '';
 					$strData = $root_path . $glue . $strData;
 				}
-
+				
+				$strData = str_replace("//", "/", $strData);
 			}
-		
-			$strBuffer .= 'url("' . str_replace("//", "/", $strData) . '")';
+			
+			$strBuffer .= 'url("' . $strData . '")';
 		}
 		$data = $strBuffer;
 		return $data;
