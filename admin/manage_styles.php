@@ -186,6 +186,8 @@ class Manage_Styles extends page_generic{
 		$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		
+		//Delete Template Cache
+		$this->tpl->delete_cache();
 		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));		
 	}
 
