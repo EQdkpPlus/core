@@ -95,6 +95,10 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 		}
 		
 		public function get_task_hash(){
+			if(empty($this->tasks)){
+				$this->scan_tasks();
+			}
+			
 			$arrTasks = $this->tasks;
 			asort($arrTasks);
 			
