@@ -203,7 +203,12 @@ class core extends gen_class {
 					break;
 				
 				//Style
-				default: $template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
+				default: 
+					if(is_file($this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png')){
+						$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png';
+					} else {
+						$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
+					}
 			}
 			if($template_background_file == ""){
 				//Cannot find a background file, let's take the game specific

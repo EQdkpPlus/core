@@ -1289,18 +1289,36 @@ class template extends gen_class {
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
+
+		//Background Image
+		$template_background_file = "";
+		switch($style['background_type']){
+			//Game
+			case 1: $template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+			break;
+				
+			//Own
+			case 2:
+				if ($style['background_img'] != ''){
+					if (strpos($style['background_img'],'://') > 1){
+						$template_background_file = $style['background_img'];
+					} else {
+						$template_background_file = $root_path.$style['background_img'];
+					}
+				}
+				break;
 		
-		if (file_exists($this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg')){
-			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
-		} else {
-			$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.jpg';
+			//Style
+			default:
+				if(is_file($this->root_path . 'templates/' . $style['template_path'] . '/images/template_background.png')){
+					$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.png';
+				} else {
+					$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.jpg';
+				}
 		}
-		if ($style['background_img'] != ''){
-			if (strpos($style['background_img'],'://') > 1){
-				$template_background_file = $style['background_img'];
-			} else {
-				$template_background_file = $root_path.$style['background_img'];
-			}
+		if($template_background_file == ""){
+			//Cannot find a background file, let's take the game specific
+			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		}
 		
 		$in = array(
