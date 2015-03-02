@@ -1360,10 +1360,10 @@ class template extends gen_class {
 				"/T_COLUMN_RIGHT_WIDTH/",
 				"/T_BACKGROUND_POSITION/",
 		
-				"/EQDKP_ROOT_PATH/",
-				"/EQDKP_IMAGE_PATH/",
-				"/TEMPLATE_IMAGE_PATH/",
-				"/TEMPLATE_BACKGROUND/",
+				"~EQDKP_ROOT_PATH~",
+				"~EQDKP_IMAGE_PATH~",
+				"~TEMPLATE_IMAGE_PATH~",
+				"~TEMPLATE_BACKGROUND~",
 		);
 		
 		$out = array(
@@ -1404,10 +1404,10 @@ class template extends gen_class {
 				$style['column_right_width'],
 				(($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
 		
-				$root_path,
-				$root_path.'images/',
-				$root_path.'templates/'.$stylepath.'/images',
-				$template_background_file,
+				preg_quote ($root_path, "/"),
+				preg_quote ($root_path.'images/', "/"),
+				preg_quote ($root_path.'templates/'.$stylepath.'/images', "/"),
+				preg_quote ($template_background_file, "/"),
 		);
 		
 		$data = preg_replace($in, $out, $strCSS);
