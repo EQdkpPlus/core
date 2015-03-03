@@ -148,11 +148,10 @@ if(registry::register('input')->get('out') != ''){
 
 								// generate the ical output
 								$e = new vevent;
-								$e->setProperty('dtstart',        array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_start', array($calid)), "tz" => registry::register('config')->get('timezone')));
-								$e->setProperty('dtend',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_end', array($calid)), "tz" => registry::register('config')->get('timezone')));
+								$e->setProperty('dtstart',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_start', array($calid)).'Z'));
+								$e->setProperty('dtend',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_end', array($calid)).'Z'));
 								$e->setProperty('summary',		registry::register('plus_datahandler')->get('calendar_events', 'name', array($calid)));
 								$e->setProperty('description',	$description_data);
-								//$e->setProperty('comment',		'This is a comment');
 								$e->setProperty('class',		'PUBLIC');
 								$e->setProperty('categories',	'PERSONAL');
 								$v->setComponent($e);

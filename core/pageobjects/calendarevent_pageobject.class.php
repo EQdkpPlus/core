@@ -422,8 +422,8 @@ class calendarevent_pageobject extends pageobject {
 
 		// Generate the vevents...
 		$e = new vevent;
-		$e->setProperty('dtstart',		array("timestamp" => $eventdata['timestamp_start'], "tz" => registry::register('config')->get('timezone')));
-		$e->setProperty('dtend',		array("timestamp" => $eventdata['timestamp_end'], "tz" => registry::register('config')->get('timezone')));
+		$e->setProperty('dtstart',		array("timestamp" => $eventdata['timestamp_start'].'Z'));
+		$e->setProperty('dtend',		array("timestamp" => $eventdata['timestamp_end'].'Z'));
 		$e->setProperty('dtstamp',		array("timestamp" => $this->time->time));
 		$e->setProperty('summary',		$this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])));
 		$e->setProperty('description',	$eventdata['notes']);
