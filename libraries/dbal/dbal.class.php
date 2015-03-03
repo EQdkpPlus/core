@@ -893,6 +893,11 @@ abstract class DatabaseStatement {
 				case 'array':
 					$arrParams[$k] = $this->string_escape(serialize($v));
 					break;
+					
+				case 'double':
+				case 'float': 
+					$arrParams[$k] = preg_replace('#([-]?)([0-9]+)([\.,]?)([0-9]*)#', "\\1\\2.\\4", $v);
+					break;
 
 				default:
 					$arrParams[$k] = ($v === NULL) ? 'NULL' : $v;
