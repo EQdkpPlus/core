@@ -1952,6 +1952,10 @@ ul.breamcrumb .current::before{
 	font-size: 16px;
 }
 
+.article-container.featured {
+	display: block;
+}
+
 .article-container.featured h2:before {
 	content: "\f005";
 	font-family: FontAwesome;

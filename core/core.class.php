@@ -726,7 +726,8 @@ class core extends gen_class {
 					break ;
 				case '2':
 				case '3':
-				case '4':  {
+				case '4':  
+				case '5':	{
 							switch($wrapper_id){
 								case 'Board':
 								case 'LostPassword':

@@ -155,23 +155,25 @@ function redirect($url, $return=false, $extern=false){
 		return $out;
 	}else{
 		header('Location: ' . $out);
+
+		if(defined('USER_INITIALIZED')) {
+			registry::register('template')->add_meta('<meta http-equiv="refresh" content="3;URL='.$out.'" />');
 		
-		registry::register('template')->add_meta('<meta http-equiv="refresh" content="3;URL='.$out.'" />');
-		
-		registry::register('template')->assign_vars(array(
-			'MSG_CLASS'		=> 'blue',
-			'MSG_ICON'		=> 'fa-refresh',
-			'MSG_TITLE'		=> registry::register('user')->lang('redirection'),
-			'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>",
-			'S_MESSAGE'		=> true,
-		));
-		
-		registry::register('core')->set_vars(array(
-			'header_format'		=> registry::register('core')->header_format,
-			'page_title'		=> registry::register('user')->lang('redirection'),
-			'template_file'		=> 'message.html'
-		));
-		registry::register('core')->generate_page();
+			registry::register('template')->assign_vars(array(
+				'MSG_CLASS'		=> 'blue',
+				'MSG_ICON'		=> 'fa-refresh',
+				'MSG_TITLE'		=> registry::register('user')->lang('redirection'),
+				'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>",
+				'S_MESSAGE'		=> true,
+			));
+			
+			registry::register('core')->set_vars(array(
+				'header_format'		=> registry::register('core')->header_format,
+				'page_title'		=> registry::register('user')->lang('redirection'),
+				'template_file'		=> 'message.html'
+			));
+			registry::register('core')->generate_page();
+		}
 	}
 }
 
