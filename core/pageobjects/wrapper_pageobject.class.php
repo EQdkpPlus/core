@@ -102,6 +102,7 @@ class wrapper_pageobject extends pageobject {
 		if (!$this->data || $this->data['url'] == ''){
 			message_die('URL not found');
 		} else {
+			$this->data['base_url'] = $this->data['url'];
 			//Direkt link to a page in the wrapper
 			if (strlen($this->in->get('p'))){
 				$arrReplace = array(':', '\\', '&#58');
@@ -128,17 +129,17 @@ class wrapper_pageobject extends pageobject {
 			} else {
 				$this->CreateDynamicIframeJS();
 				$output .='<!--[IF IE]>
-								<iframe id="boardframe" src="'.$this->data['url'].'" allowtransparency="true" width="100%" height="'.$this->data['height'].'" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
+								<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" allowtransparency="true" width="100%" height="'.$this->data['height'].'" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
 							<![if ! IE]><!-->
-								<iframe id="boardframe" src="'.$this->data['url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>
+								<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>
 							<!--><![ENDIF]><![ENDIF]-->';
 			}
 
 			$output .= '</div>';
 
 			$this->tpl->assign_vars(array(
-				'BOARD_OUPUT' => $output)
-			);
+				'BOARD_OUPUT' => $output,
+			));
 		}
 
 		//switch page_body
@@ -293,6 +294,7 @@ class wrapper_pageobject extends pageobject {
 				if (iframeroot) {
 					resizeIframe(iframeroot.id);
 					scrollToPosition(iframeroot.id);
+					setURL(iframeroot.id);
 				}
 			}
 
@@ -308,6 +310,39 @@ class wrapper_pageobject extends pageobject {
 				window.attachEvent("onload", resizeCaller);
 			} else {
 				window.onload=resizeCaller;
+			}
+				
+			function setURL(frameid){
+				var currentfr = document.getElementById(frameid);
+				var location = "";
+				if (currentfr.contentDocument) {
+					location = currentfr.contentDocument.location.href;
+				} else if (currentfr.Document){
+					location = currentfr.Document.location.href;
+				}
+				
+				if(location != ""){
+					var baseurl = $("#"+frameid).data("base-url");
+					var myurl = window.location.search;
+					var param = location.replace(baseurl, "");
+					console.log(param);
+					console.log(myurl);
+					console.log(baseurl);
+					if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) return;
+					var newurl = updateQueryStringParameter(myurl, "p", param);
+					history.pushState(null, document.title, newurl);
+				}
+			}
+				
+			function updateQueryStringParameter(uri, key, value) {
+			  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+			  var separator = uri.indexOf("?") !== -1 ? "&" : "?";
+			  if (uri.match(re)) {
+			    return uri.replace(re, "$1" + key + "=" + value + "$2");
+			  }
+			  else {
+			    return uri + separator + key + "=" + value;
+			  }
 			}
 
 			var aktiv = window.setInterval(resizeCaller, 1000*2); //2 Sekunden
