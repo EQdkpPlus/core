@@ -364,6 +364,9 @@ function infotooltip_js() {
 		$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
 			$js .= "$('.infotooltip-tt').tooltip({
 						track: true,
+						open: function(event, ui) {
+							$(ui.tooltip).siblings('.tooltip').remove();
+						},
 						content: function(response) {
 							var direct = $(this).attr('title').substr(0,1);
 							var mytitle = $(this).attr('title');
@@ -437,6 +440,9 @@ function chartooltip_js() {
 		$js = "var cached_charTT = new Array();";
 			$js .= "$('.chartooltip').tooltip({
 						track: true,
+						open: function(event, ui) {
+							$(ui.tooltip).siblings('.tooltip').remove();
+						},
 						content: function(response) {
 							mytitle = $(this).attr('title');
 							if (cached_charTT['t_'+$(this).attr('title')] != undefined){
