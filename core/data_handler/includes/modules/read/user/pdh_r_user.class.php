@@ -575,7 +575,7 @@ if (!class_exists("pdh_r_user")){
 			
 			$perm = false;
 			
-			if ($strField == 'priv_wall_posts_read' || strField ==  'priv_wall_posts_write'){
+			if ($strField == 'priv_wall_posts_read' || $strField ==  'priv_wall_posts_write'){
 
 				switch ($intUserValue){
 					case 0: // all

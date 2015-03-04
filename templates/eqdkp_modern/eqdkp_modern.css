@@ -2745,7 +2745,7 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 	max-height: 16px;
 }
 
-.fe-tooltip-container, .notification-tooltip-container, .user-tooltip-container,.mychars-points-tooltip-container {
+.fe-tooltip-container, .notification-tooltip-container, .user-tooltip-container, .mychars-points-tooltip-container, .langswitch-tooltip-container {
 	display: inline;
 	position: relative;
 }
@@ -2758,7 +2758,7 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 	min-width: 160px;
 }
 
-.fe-tooltip, .notification-tooltip, .user-tooltip, .mychars-points-tooltip {
+.fe-tooltip, .notification-tooltip, .user-tooltip, .mychars-points-tooltip, .langswitch-tooltip {
 	display: none;
 }
 
@@ -3162,7 +3162,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		font-size: 24px;
 	}
 	
-	.responsive .notification-tooltip-container {
+	.responsive .notification-tooltip-container, .responsive .langswitch-tooltip-container {
 		position: static;
 	}
 	
@@ -3491,6 +3491,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	.responsive .ui-notify {
 		max-width: 95%;
+	}
+	
+	.responsive .langswitch-tooltip-trigger > span {
+		display: none;
 	}
 }
 

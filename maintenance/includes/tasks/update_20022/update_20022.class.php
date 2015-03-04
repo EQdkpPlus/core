@@ -31,6 +31,27 @@ class update_20022 extends sql_update_task {
 	public $ext_version		= '2.0.0'; //new plus-version
 	public $name			= '2.0.0 Update Beta5';
 	
+	protected $fields2change	= array(
+			'__styles'			=> array('field' => array(
+					'body_background',
+					'body_link',
+					'body_hlink',
+					'header_link',
+					'header_hlink',
+					'tr_color1',
+					'tr_color2',
+					'th_color1',
+					'fontcolor1',
+					'fontcolor2',
+					'fontcolor3',
+					'fontcolor_neg',
+					'fontcolor_pos',
+					'table_border_color',
+					'input_color',
+					'input_border_color',
+			), 'id' => 'style_id')
+	);
+	
 	public function __construct(){
 		parent::__construct();
 
@@ -39,11 +60,13 @@ class update_20022 extends sql_update_task {
 				'update_20022'	=> 'EQdkp Plus 2.0 Update Beta5',
 					1			=> 'Alter Styles Table',
 					2			=> 'Alter Styles Table',
+					3			=> 'Alter Session Table',
 				),
 			'german' => array(
 				'update_20022'	=> 'EQdkp Plus 2.0 Update Beta5',
 					1			=> 'Alter Styles Table',
 					2			=> 'Alter Styles Table',
+					3			=> 'Alter Session Table',
 			),
 		);
 		
@@ -51,7 +74,39 @@ class update_20022 extends sql_update_task {
 		$this->sqls = array(
 			1 => "ALTER TABLE `__styles` ADD COLUMN `background_pos` VARCHAR(20) NULL DEFAULT 'normal';",
 			2 => "ALTER TABLE `__styles` ADD COLUMN `background_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0';",
+			3 => "ALTER TABLE `__sessions` ADD COLUMN `session_vars` MEDIUMTEXT COLLATE 'utf8_bin' NULL;"
 		);
+	}
+	
+	public function update_function(){
+		$this->update_colors();
+		
+		return true;
+	}
+	
+	private function update_colors(){
+		//Update Colors
+		foreach($this->fields2change as $dbtable=>$dbfields){
+			foreach($dbfields['field'] as $dbfieldvalue){
+				// now, lets change the values
+				$sql	= 'SELECT '.$dbfieldvalue.' as mycolorvalue, '.$dbfields['id'].' as mycolorid FROM '.$dbtable.';';
+				$query = $this->db->query($sql);
+				$update = array();
+				if ($query){
+					while ($row = $query->fetchAssoc()) {
+						if(trim($row['mycolorvalue']) != ''){
+							// check if the # is already in the value
+							if (preg_match('/^#[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
+								continue;
+							}else if (preg_match('/^[a-f0-9]{6}$/i', $row['mycolorvalue'])) {
+								$sql = "UPDATE ".$dbtable." SET ".$dbfieldvalue." = '#".$row['mycolorvalue']."' WHERE ".$dbfields['id']." = '".$row['mycolorid']."';";
+								$this->db->query($sql);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

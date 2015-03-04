@@ -75,9 +75,20 @@ class user extends gen_class {
 	* @param $intStyleID Style ID to set
 	*/
 	public function setup($strLanguage = '', $intStyleID = 0){
+		$this->data['session_vars'] = (strlen($this->data['session_vars']) && is_serialized($this->data['session_vars'])) ? unserialize($this->data['session_vars']) : array();
+		
+		//Set Session Vars
+		if($strLanguage != ""){
+			$this->setSessionVar("lang", substr($strLanguage, 0, 20));
+		}
+		if($intStyleID > 0 && $this->data['user_id'] == ANONYMOUS){
+			$this->setSessionVar("style", $intStyleID);
+		}
+		
 		//START Language
 		//-----------------------------
 		if ($this->data['user_id'] == ANONYMOUS) {
+			$strLanguage = (isset($this->data['session_vars']['lang']) && strlen($this->data['session_vars']['lang'])) ? $this->data['session_vars']['lang'] : ''; 
 			$this->lang_name = ( $strLanguage != '' && file_exists($this->root_path . 'language/' . $strLanguage) ) ? $strLanguage : $this->config->get('default_lang');
 			$this->data['user_lang'] = $this->lang_name;
 		} else {
@@ -96,6 +107,7 @@ class user extends gen_class {
 		//START Style
 		//-----------------------------
 		//What Style-ID should be used?
+		$intStyleID = (isset($this->data['session_vars']['style']) && strlen($this->data['session_vars']['style'])) ? $this->data['session_vars']['style'] : $intStyleID;
 		if (intval($intStyleID) > 0){
 			$intUserStyleID = (int)$intStyleID;
 		} elseif ($this->data['user_id'] == ANONYMOUS){
@@ -895,16 +907,24 @@ class user extends gen_class {
 		return $settingsdata;
 	}
 
-	public function getAvailableLanguages(){
+	public function getAvailableLanguages($blnWithIsoShort=true, $blnWithIcon=false){
 		$root_path = registry::get_const('root_path');
 		$language_array = array();
+		$icon = "";
 		// Build language array
 		if($dir = @opendir($root_path . 'language/')){
 			while ( $file = @readdir($dir) ){
 				if ((!is_file($root_path . 'language/' . $file)) && (!is_link($root_path . 'language/' . $file)) && valid_folder($file)){
 					include($root_path.'language/'.$file.'/lang_main.php');
-					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
-					$language_array[$file]					= $lang_name_tp;
+					if(isset($lang['ISO_LANG_SHORT'])){
+						list($pre, $post) = explode('_', $lang['ISO_LANG_SHORT']);
+						if($pre != "" && is_file($root_path.'images/flags/'.$pre.'.svg')){
+							$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" title="'.(($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'] : ucfirst($file)).'"/> <span>';
+						}
+					}
+					
+					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].(($blnWithIsoShort) ? ' ('.$lang['ISO_LANG_SHORT'].')' : '') : ucfirst($file));
+					$language_array[$file] = (($blnWithIcon) ? $icon : '').$lang_name_tp.(($blnWithIcon) ? '</span>' : '');
 				}
 			}
 		}
@@ -923,7 +943,6 @@ class user extends gen_class {
 		}
 		return "";
 	}
-	
 
 	public function __destruct() {
 		if(is_array($this->unused) && count($this->unused) > 0) $this->pfh->putContent($this->pfh->FilePath('unused.lang', 'eqdkp'), serialize($this->unused));

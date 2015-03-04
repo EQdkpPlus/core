@@ -349,6 +349,7 @@ class core extends gen_class {
 			
 			// Load the jQuery stuff
 			$this->addCommonTemplateVars();
+
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
 				'HEADER_LOGO'				=> $headerlogo,
@@ -388,6 +389,7 @@ class core extends gen_class {
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
+				'CURRENT_PAGE'				=> sanitize($this->env->request),
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
@@ -437,6 +439,8 @@ class core extends gen_class {
 		}
 		
 		public function addCommonTemplateVars(){
+			$arrLanguages = $this->user->getAvailableLanguages(false, true);
+
 			$this->tpl->assign_vars(array(
 					'MAIN_TITLE'				=> $this->config->get('main_title'),
 					'SUB_TITLE'					=> $this->config->get('sub_title'),
@@ -457,7 +461,16 @@ class core extends gen_class {
 					'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 					'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 					'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
+					'USER_LANGUAGE'				=> $this->user->lang_name,
+					'USER_LANGUAGE_NAME'		=> $arrLanguages[$this->user->lang_name],
 			));
+			
+			foreach($arrLanguages as $strKey => $strLangname){
+				$this->tpl->assign_block_vars('languageswitcher_row', array(
+					'LANGNAME'	=> $strLangname,
+					'LINK'		=> sanitize(preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request)).'&lang='.$strKey,
+				));
+			}
 		}
 		
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){

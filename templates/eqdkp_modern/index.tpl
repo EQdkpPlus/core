@@ -210,6 +210,17 @@
 					});
 				});
 				
+				$('.langswitch-tooltip-trigger').on('click', function(event){
+					event.preventDefault();
+					$("#langswitch-tooltip").show('fast');
+					$(document).on('click', function(event) {
+						var count = $(event.target).parents('.langswitch-tooltip-container').length;
+						if (count == 0){
+							$("#langswitch-tooltip").hide('fast');
+						}
+					});
+				});
+				
 				$('.user-tooltip-trigger').on('dblclick', function(event){
 					$("#user-tooltip").hide('fast');
 					window.location="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}";
@@ -277,6 +288,18 @@
 					<ul>
 						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in fa-lg"></i> {L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
+						
+						<li>
+							<div class="langswitch-tooltip-container">
+								<a href="#" class="langswitch-tooltip-trigger">{USER_LANGUAGE_NAME}</a>
+								<ul class="dropdown-menu langswitch-tooltip" role="menu" id="langswitch-tooltip">
+									<!-- BEGIN languageswitcher_row -->
+									<li><a href="{languageswitcher_row.LINK}">{languageswitcher_row.LANGNAME}</a></li>
+									<!-- END languageswitcher_row -->
+								</ul>
+							</div>
+						</li>
+						
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
 						<!-- END personal_area_addition -->
