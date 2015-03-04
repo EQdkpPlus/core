@@ -208,7 +208,7 @@ if(registry::register('input')->get('out') != ''){
 					if($styleid == $intCurrentStyle){
 						$current = " <i class='fa fa-check-circle fa-lg'></i>";
 					} else $current = "";
-					$link = sanitize(preg_replace('#\&lang\=([a-zA-Z]*)#', "", filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING))).'&style='.$styleid;
+					$link = sanitize(preg_replace('#style\=([0-9]*)#', "", filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING))).'&style='.$styleid;
 					
 					$out .= '<tr><td width="10"><a href="'.$link.'">'.$screenshot.'</a></td><td><a href="'.$link.'">'.$row['style_name'].$current.'</a></td></tr>';
 			}
