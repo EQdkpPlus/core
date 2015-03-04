@@ -102,7 +102,7 @@ $(document).ready(function() {
 	// Delete templates
 	$("#template_delbutton").bind("click", function(){
 		if($("#cal_raidtemplate").val() > 0){
-			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
+			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
 				$('#cal_raidtemplate').find('option').remove();
 				$('#cal_raidtemplate').append(data);
 			});
