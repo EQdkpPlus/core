@@ -464,11 +464,11 @@ class core extends gen_class {
 					'USER_LANGUAGE'				=> $this->user->lang_name,
 					'USER_LANGUAGE_NAME'		=> $arrLanguages[$this->user->lang_name],
 			));
-			
+			$url = (preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request));
 			foreach($arrLanguages as $strKey => $strLangname){
 				$this->tpl->assign_block_vars('languageswitcher_row', array(
 					'LANGNAME'	=> $strLangname,
-					'LINK'		=> sanitize(preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request)).'&lang='.$strKey,
+					'LINK'		=> sanitize($url).((strpos($url, "?") === false) ? '?' : '&').'lang='.$strKey,
 				));
 			}
 		}
