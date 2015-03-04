@@ -160,6 +160,7 @@ class user extends gen_class {
 			$this->style['date_time']			= $this->style['date_notime_short'].' '.$this->style['time'];
 			$this->style['date']				= 'l, '.$this->style['date_notime_long'];
 			$this->style['date_short']			= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
+			$this->data['user_style']			= $intStyleID;
 		} else {
 			$this->style['date_notime_long']	= ($this->data['user_date_long']) ? $this->data['user_date_long'] : (($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long'));
 			$this->style['date_notime_short']	= ($this->data['user_date_short']) ? $this->data['user_date_short'] : (($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->lang('style_date_short'));

@@ -136,6 +136,15 @@
 				window.setTimeout("notification_update()", 1000*60*5);
 			}
 
+			function change_style(){
+				$('<div>').html('<div class="style-switch-container"><i class="fa fa-lg fa-spin fa-spinner"></i></div>').dialog(
+					{ open: function( event, ui ) {
+						$.get("{EQDKP_ROOT_PATH}exchange.php{SID}&out=styles", function(data){
+							$('.style-switch-container').html(data);
+						});
+					}, title: {L_change_style|jsencode}, width: 600, height: 500}
+				);
+			}
 			
 			$(document).ready(function() {
 				user_clock();
@@ -531,7 +540,9 @@
 		
 		<footer id="footer">
 				{PORTAL_BLOCK2}
-				
+				<!-- IF not S_LOGGED_IN -->
+				<div class="floatRight"><a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a></div>
+				<!-- ENDIF -->
 				<!-- IF S_REPONSIVE -->
 				<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
 				<!-- ELSE -->

@@ -193,6 +193,29 @@ if(registry::register('input')->get('out') != ''){
 			echo registry::register('socialplugins')->getSocialButtonCount(rawurldecode(registry::register('input')->get('url')), registry::register('input')->get('target'));
 			exit;
 		break;
+		
+		case 'styles':
+			header('content-type: text/html; charset=UTF-8');
+			$out = '<table class="table fullwidth colorswitch hoverrows">';
+			$intCurrentStyle = register('user')->style['style_id'];
+			foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
+					$plugin_code = $row['template_path'];
+					if (file_exists(registry::get_const('root_path').'templates/'.$plugin_code.'/screenshot.png' )){
+						$screenshot = '<img src="'.registry::get_const('server_path').'templates/'.$plugin_code.'/screenshot.png" style="max-width:200px;" alt="" />';
+					} elseif(file_exists(registry::get_const('root_path').'templates/'.$plugin_code.'/screenshot.jpg' )){
+						$screenshot = '<img src="'.registry::get_const('server_path').'templates/'.$plugin_code.'/screenshot.jpg" style="max-width:200px;" alt="" />';
+					} else $screenshot = "<img src='".registry::get_const('server_path')."images/global/default-image.svg' />";
+					if($styleid == $intCurrentStyle){
+						$current = " <i class='fa fa-check-circle fa-lg'></i>";
+					} else $current = "";
+					$link = sanitize(preg_replace('#\&lang\=([a-zA-Z]*)#', "", filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING))).'&style='.$styleid;
+					
+					$out .= '<tr><td width="10"><a href="'.$link.'">'.$screenshot.'</a></td><td><a href="'.$link.'">'.$row['style_name'].$current.'</a></td></tr>';
+			}
+			$out .= '</table>';
+			echo $out;
+			exit;
+		break;
 	}
 	
 

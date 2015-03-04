@@ -943,6 +943,7 @@ $lang = array(
 "desktop_version" => "Desktop Version",
 "redirection" => "Weiterleitung",
 "redirection_info" => "Hier klicken, wenn die automatische Weiterleitung nicht funktionieren sollte.",
+"change_style" => "Stil ändern",
 );
 
 ?>
