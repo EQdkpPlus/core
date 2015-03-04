@@ -274,9 +274,10 @@ class admin_index extends gen_class {
 							FROM ( __sessions s
 							LEFT JOIN __users u
 							ON u.user_id = s.session_user_id )
+							WHERE s.session_current > ?
 							GROUP BY u.username, s.session_ip
 							ORDER BY u.username, s.session_current DESC';
-		$result = $this->db->query($sql);
+		$result = $this->db->prepare($sql)->execute($this->time->time-600);
 		$arrOnlineUsers = $arrBots = array();
 		if ($result){
 			while ($row = $result->fetchAssoc()){
