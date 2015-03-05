@@ -328,7 +328,11 @@ class wrapper_pageobject extends pageobject {
 					console.log(param);
 					console.log(myurl);
 					console.log(baseurl);
-					if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) return;
+					if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) {
+						var newurl = updateQueryStringParameter(myurl, "p", "");
+						history.pushState(null, document.title, newurl);
+						return;
+					}
 					var newurl = updateQueryStringParameter(myurl, "p", param);
 					history.pushState(null, document.title, newurl);
 				}
