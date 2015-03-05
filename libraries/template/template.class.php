@@ -303,18 +303,21 @@ class template extends gen_class {
 		}
 	}
 	
-	public function resolve_css_file($cssfile){
+	public function resolve_css_file($cssfile, $stylecode =false){
+		if(!$stylecode) $stylecode = $this->style_code;
+		
 		//Check data dir for exact match
 		$strWithoutRoot = str_replace($this->root_path, '', $cssfile);
 		$strCleaned = str_replace('templates/base_template/', '', $strWithoutRoot);
-		$strCleaned = str_replace('templates/'.$this->style_code, '', $strCleaned);
+		$strCleaned = str_replace('templates/'.$stylecode, '', $strCleaned);
+		$data_root = $this->pfh->FolderPath('templates/'.$stylecode, 'eqdkp');
 
-		if(file_exists($this->data_root.$strWithoutRoot)){
-			return $this->data_root.$strWithoutRoot;
-		}elseif(file_exists($this->data_root.$strCleaned)){
-			return $this->data_root.$strCleaned;
+		if(file_exists($data_root.$strWithoutRoot)){
+			return $data_root.$strWithoutRoot;
+		}elseif(file_exists($data_root.$strCleaned)){
+			return $data_root.$strCleaned;
 		}elseif(strpos($cssfile, '/base_template/')){
-			$strSpecificTemplate = str_replace('/base_template/', '/'.$this->template.'/', $cssfile);
+			$strSpecificTemplate = str_replace('/base_template/', '/'.$stylecode.'/', $cssfile);
 			if (file_exists($strSpecificTemplate)){
 				return $strSpecificTemplate;
 			}
@@ -458,7 +461,7 @@ class template extends gen_class {
 		}else{
 			if ($basefile){
 				$data_file = $this->data_root.$filename;
-				$tmp_root_file = $this->root_path.'templates/'.$this->style_code.'/'.$filename;				
+				$tmp_root_file = $this->root_path.'templates/'.$this->style_code.'/'.$filename;
 			} else {
 				$data_file = $this->data_root.str_replace('templates/', '', $this->root_dir).$filename;
 				$tmp_root_file = $this->root.'/'.$filename;
@@ -470,6 +473,25 @@ class template extends gen_class {
 			} else {
 				$myfile = $this->base_template.'/'.$filename;
 			}
+		}
+		return $myfile;
+	}
+	
+	public function resolve_templatefile($filename, $stylecode=false){
+		if(!$stylecode) $stylecode = $this->style_code;
+		
+		$data_root = $this->pfh->FolderPath('templates/'.$stylecode, 'eqdkp');
+		$data_file = $data_root.$filename;
+		$tmp_root_file = $this->root_path.'templates/'.$stylecode.'/'.$filename;
+		$base_template = $this->root_path.'templates/base_template';
+		$myfile = false;
+		
+		if (file_exists($data_file)){
+			$myfile = $data_file;
+		} elseif(file_exists($tmp_root_file)){
+			$myfile = $tmp_root_file;
+		} elseif(file_exists($myfile)) {
+			$myfile = $base_template.'/'.$filename;
 		}
 		return $myfile;
 	}

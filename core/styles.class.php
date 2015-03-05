@@ -39,7 +39,6 @@ if (!class_exists("styles")){
 			'background_pos',
 			'background_type',
 			'css_file',
-			'use_db_vars',
 
 			'body_background',
 			'body_link',
