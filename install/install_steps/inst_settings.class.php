@@ -63,8 +63,6 @@ class inst_settings extends install_generic {
 		'account_activation'			=> 1,
 		'default_style_overwrite'		=> '0',
 		'enable_captcha'				=> '1',
-		'lib_recaptcha_okey'			=> '6LdKQMUSAAAAAOFATjZq_IyMruO1jxQL-rSVNF-g',
-		'lib_recaptcha_pkey'			=> '6LdKQMUSAAAAAC-pf92A4AVGjBOImTD9eIGr2WH7',
 		'pk_attendance90'				=> '1',
 		'pk_lastraid'					=> '1',
 		'class_color'					=> '1',

@@ -81,6 +81,12 @@ class update_20022 extends sql_update_task {
 	public function update_function(){
 		$this->update_colors();
 		
+		//Delete global key because it does not work with recaptcha v2
+		if($this->config->get('lib_recaptcha_okey') == '6LdKQMUSAAAAAOFATjZq_IyMruO1jxQL-rSVNF-g'){
+			$this->config->set('lib_recaptcha_okey', '');
+			$this->config->set('lib_recaptcha_pkey', '');
+		}
+		
 		return true;
 	}
 	
