@@ -68,8 +68,8 @@ class auth_db extends auth {
 			//Auth Login, because all other failed
 			if (!$arrStatus){
 				$this->pdl->log('login', 'Try EQdkp Plus Login');
-				$objQuery = $this->db->prepare("SELECT user_id, username, user_password, user_email, user_active, api_key, failed_login_attempts, user_login_key
-								FROM __users 
+				$objQuery = $this->db->prepare("SELECT user_id, username, user_password, user_email, user_active, failed_login_attempts, user_login_key
+								FROM __users
 								WHERE LOWER(username) =?")->execute(clean_username($strUsername));
 				
 				if($objQuery && $objQuery->numRows){		
@@ -77,7 +77,7 @@ class auth_db extends auth {
 					list($strUserPassword, $strUserSalt) = explode(':', $row['user_password']);
 					//If it's an old password without salt or there is a better algorythm
 					$blnNeedsUpdate = ($this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt);
-					if($blnNeedsUpdate || $row['api_key'] == ''){
+					if($blnNeedsUpdate){
 					if (((int)$row['user_active'])){
 						$this->pdl->log('login', 'EQDKP User needs update');
 						if($this->checkPassword($strPassword, $row['user_password'], $boolUseHash)){
