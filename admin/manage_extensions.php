@@ -312,16 +312,18 @@ class Manage_Extensions extends page_generic {
 		switch((int)$this->in->get('cat', 0)){
 			//Plugins
 			case 1:		$modes = array('install', 'enable', 'uninstall', 'delete');
-						if(!in_array($this->in->get('mode'), $modes)) return;
-						$mode = $this->in->get('mode');
-						$this->pm->search();
-						$result = $this->pm->$mode($this->code);
-						if($result) {
-							$arrMessage = array(sprintf($this->user->lang('plugin_inst_message'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('success'), 'green');
-						} else {
-							$arrMessage = array(sprintf($this->user->lang('plugin_inst_errormsg'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('error'), 'red');
+						if($this->in->get('mode') == 'update'){
+							$this->pm->plugin_update_check();
+						} elseif(in_array($this->in->get('mode'), $modes)) {
+							$mode = $this->in->get('mode');
+							$this->pm->search();
+							$result = $this->pm->$mode($this->code);
+							if($result) {
+								$arrMessage = array(sprintf($this->user->lang('plugin_inst_message'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('success'), 'green');
+							} else {
+								$arrMessage = array(sprintf($this->user->lang('plugin_inst_errormsg'), $this->code, $this->user->lang('plugin_inst_'.$mode)), $this->user->lang('error'), 'red');
+							}
 						}
-						$this->pdh->process_hook_queue();
 			break;
 
 			//Templates
@@ -336,10 +338,7 @@ class Manage_Extensions extends page_generic {
 						} elseif(in_array($this->in->get('mode'), $modes)){
 							$mode = $this->in->get('mode');
 							$this->objStyles->$mode();
-						} else {
-							return;
 						}
-						$this->pdh->process_hook_queue();
 			break;
 						
 			//Portalmodules
@@ -354,9 +353,14 @@ class Manage_Extensions extends page_generic {
 							$this->portal->install($path, $plugin);
 							$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
 						}
-						$this->pdh->process_hook_queue();
+						if($this->in->get('mode') == "update"){
+							$this->pdh->process_hook_queue();
+							$this->portal->get_all_modules();
+						}
 			break;
+
 		}
+		$this->pdh->process_hook_queue();
 		redirect('admin/manage_extensions.php'.$this->SID.'&mes='.rawurlencode(base64_encode(serialize($arrMessage))));
 	}
 
