@@ -154,6 +154,12 @@ if(!class_exists('pdh_w_articles')) {
 				}
 			}
 			
+			if(!$this->user->check_auth('u_articles_script', false)){
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$strText = $filter->clean($strText);
+			}
+			
 			$strText = htmlspecialchars($strText);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __articles :p")->set(array(
@@ -276,6 +282,12 @@ if(!class_exists('pdh_w_articles')) {
 				}
 			}
 			
+			if(!$this->user->check_auth('u_articles_script', false)){
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$strText = $filter->clean($strText);
+			}
+			
 			$strText = htmlspecialchars($strText);
 				
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
@@ -337,6 +349,12 @@ if(!class_exists('pdh_w_articles')) {
 				foreach($arrTmpPageObjects[3] as $key=>$val){
 					$arrPageObjects[] = $val;
 				}
+			}
+			
+			if(!$this->user->check_auth('u_articles_script', false)){
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$strText = $filter->clean($strText);
 			}
 			
 			$strText = htmlspecialchars($strText);

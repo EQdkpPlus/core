@@ -188,6 +188,7 @@ class acl_manager extends gen_class {
 				array('CBNAME' => 'a_articles_man',			'TEXT' => $this->user->lang('manage')),
 				array('CBNAME' => 'a_article_categories_man','TEXT' => $this->user->lang('manage_article_categories')),
 				array('CBNAME' => 'u_files_man',			'TEXT' => $this->user->lang('perm_u_files_man')),
+				array('CBNAME' => 'u_articles_script',		'TEXT' => $this->user->lang('perm_u_articles_script')),
 			),
 			// Raids
 			$this->user->lang('raids') => array(

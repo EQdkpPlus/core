@@ -1597,6 +1597,7 @@ $lang = array(
 "wide_content"	=> "Breiten Inhalt bevorzugen",
 "hide_on_rss"	=> "Artikel dieser Kategorie nicht im RSS-Feed anzeigen",
 "perm_u_files_man" => "Bilder verwalten",
+"perm_u_articles_script" => "JavaScript einfügen",
 "pluslink_delete_warning" => "Du kannst diesen Link nicht löschen, solange er weitere Links enthält.",
 "pluslink_frame_length" => "Frame-Länge",
 "pluslink_edit"	=> "Link bearbeiten",
