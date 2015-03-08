@@ -1704,5 +1704,6 @@ $lang = array(
 "plugin_package_error1" => "Das hochgeladene Packet enthällt keine Infodatei und ist somit nicht gültig!",
 "plugin_package_error2" => "Das hochgeladene Packet enthällt eine fehlerhafte Infodatei und kann deshalb nicht hochgeladen werden.",
 "plugin_package_error3" => "Die Dateien konnten nicht kopiert werden, wahrscheinlich aufgrund fehlender Schreibrechte.",
+"update_all_extensions" => "Alle Erweiterungen aktualisieren",		
 );
 ?>

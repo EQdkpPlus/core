@@ -125,7 +125,11 @@ function repo_step4(extid, cat, extensioncode, mode){
 }
 
 function repo_step5(extid, cat, extensioncode, mode){
-	window.location='manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}';
+	var url = 'manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}';
+	if(auto_update){
+		url = url + "&autoupd=1&current="+auto_current+"&try="+auto_try;
+	}
+	window.location=url;
 	return;	
 }
 
@@ -135,6 +139,123 @@ function hide_update_warning(status){
 	$.get('manage_extensions.php{SID}&hide_update_warning=true&hide='+hide+'&link_hash={CSRF_UPDATEWARNING_TOKEN}');
 }
 
+var auto_update = <!-- IF AUTOUPD_ON --> true<!-- ELSE --> false<!-- ENDIF -->;
+var auto_current = {AUTOUPD_CURRENT};
+var auto_try = {AUTOUPD_TRY};
+var updates = new Array();
+
+function init_auto_update(){	
+	$('.needs_update').each(function(){
+		var cat = $(this).data('category');
+		var id = $(this).data('id');
+		if(cat != "2"){
+			updates.push(id);
+		}
+	})
+	updates.sort();
+	if(updates.length){
+		$('.update-all-btn').show();
+	} else {
+		$('.update-all-btn').hide();
+	}
+}
+
+function start_auto_update(){
+	$('.update-all-btn').hide();
+	
+	//get first to update
+	if(updates.length > 0){
+		var myid = updates[0];
+		var myobj = $("a[data-id='"+myid+"']");
+		var mycat = $(myobj).data('category');
+		var mycode = $(myobj).data('code');
+
+		if (locked){
+			alert({L_extension_install_locked|jsencode});
+			return false;
+		}
+		
+		auto_update = 1;
+		auto_current = myid;
+		auto_try = 0;
+		repo_update_start(myid, mycat, mycode);
+	}
+}
+
+function continue_auto_update(){
+	$('.update-all-btn').hide();
+	
+	if(updates.length > 0){
+		var myid = false;
+		
+		$.each(updates, function( index, value ) {
+		 	if(value >= auto_current){
+		 		myid = updates[index];
+		 		return false;
+		 	}
+		});
+		
+		if(!myid){
+			console.log("finished");
+			return;
+		}
+
+		var myobj = $("a[data-id='"+myid+"']");
+		var mycat = $(myobj).data('category');
+		var mycode = $(myobj).data('code');
+		
+		console.log(myid);
+		
+		if(auto_current == myid){
+			console.log(auto_try);
+			if(auto_try > 2){
+				//Too much tries, find next one;
+				myid = false;
+				$.each(updates, function( index, value ) {
+				 	if(value > auto_current){
+				 		myid = updates[index];
+				 		return false;
+				 	}
+				});
+				console.log(myid);
+				if(myid){
+					myobj = $("a[data-id='"+myid+"']");
+					mycat = $(myobj).data('category');
+					mycode = $(myobj).data('code');
+					
+					auto_try = 0;
+					auto_current = myid;
+					repo_update_start(myid, mycat, mycode);
+					
+				} else {
+					console.log("finished");
+					return;
+				}
+				
+			} else {
+				auto_try = auto_try + 1;
+				repo_update_start(myid, mycat, mycode);
+			}
+			
+		} else {
+			auto_try = 0;
+			auto_current = myid;
+			
+			repo_update_start(myid, mycat, mycode);
+		}
+		
+	} else {
+		console.log("finished");
+	}
+}
+
+$(document).ready(function(){
+	init_auto_update();
+	
+	<!-- IF AUTOUPD_ON -->
+	continue_auto_update();
+	<!-- ENDIF -->
+});
 //]]>
 </script>
 
@@ -151,10 +272,14 @@ function hide_update_warning(status){
 	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <span id="lu_error_label"></span>
 </div>
 
-<div id="nl_progressbar" style="display:none; margin-bottom: 20px;">
+<div id="nl_progressbar" style="display:none; margin-bottom: 20px; height: 30px;">
 	<span class="nl_progressbar_label"><i class="fa fa-spinner fa-spin fa-lg" id="lu_loading_img"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 
+<div class="floatRight">
+	<button type="button" class="update-all-btn mainoption" onclick="start_auto_update();" ><i class="fa fa-refresh"></i> {L_update_all_extensions}</button>
+</div>
+<div class="clear"></div>
 <div id='plus_plugins_tab'>
 
 	<ul>

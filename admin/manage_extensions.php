@@ -361,7 +361,12 @@ class Manage_Extensions extends page_generic {
 
 		}
 		$this->pdh->process_hook_queue();
-		redirect('admin/manage_extensions.php'.$this->SID.'&mes='.rawurlencode(base64_encode(serialize($arrMessage))));
+		
+		$url = 'admin/manage_extensions.php'.$this->SID.'&mes='.rawurlencode(base64_encode(serialize($arrMessage)));
+		if($this->in->get('autoupd', 0)){
+			$url .= '&autoupd=1&current='.$this->in->get('current', 0).'&try='.$this->in->get('try', 0);
+		}
+		redirect($url);
 	}
 
 	public function display(){
@@ -447,7 +452,7 @@ class Manage_Extensions extends page_generic {
 			} elseif ($this->pm->check($plugin_code, PLUGIN_INSTALLED)){
 				if (isset($urgendUpdates[$plugin_code])){
 					$row = 'red';
-					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[1]['red'] ++;
 				} else {
 					$row = 'green';
@@ -455,7 +460,7 @@ class Manage_Extensions extends page_generic {
 				}
 			} elseif(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 				$arrUpdateCount[1]['yellow'] ++;
 			} else {
 				$row = 'grey';
@@ -545,7 +550,7 @@ class Manage_Extensions extends page_generic {
 			$plugin_code = $key;
 			if(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$row = 'grey';
@@ -585,12 +590,12 @@ class Manage_Extensions extends page_generic {
 					$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=update&amp;code=' . $row['style_id']. '&amp;link_hash='.$this->CSRFGetToken('mode').'">'.$this->user->lang('uc_bttn_update').'</a>';
 				} else {
 					$rowname = 'red';
-					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 				}
 				$arrUpdateCount[2]['red'] ++;
 			} elseif(isset($allUpdates[$plugin_code])) {
 				$rowname = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$rowname = 'green';
@@ -685,11 +690,11 @@ class Manage_Extensions extends page_generic {
 				if (empty($value['plugin'])) {
 					if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="3" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[3]['red'] ++;
 					}elseif(isset($allUpdates[$plugin_code])){
 						$row = 'yellow';
-						$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="3" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[3]['yellow'] ++;
 					}
 				}
@@ -765,11 +770,11 @@ class Manage_Extensions extends page_generic {
 				$plugin_code = $value;
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');"><i class="fa fa-refresh fa-lg"></i> '.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="7" data-code="'.$plugin_code.'"><i class="fa fa-refresh fa-lg"></i> '.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[7]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
-					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');"><i class="fa fa-refresh fa-lg"></i> '.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="7" data-code="'.$plugin_code.'"><i class="fa fa-refresh fa-lg" ></i> '.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[7]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -842,11 +847,11 @@ class Manage_Extensions extends page_generic {
 				$plugin_code = $id;
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 						$arrUpdateCount[11]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
-					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
 					$arrUpdateCount[11]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -914,6 +919,9 @@ class Manage_Extensions extends page_generic {
 			'S_HIDE_UPDATEWARNING'	=> (int)$this->config->get('repo_hideupdatewarning'),
 			'CSRF_MODE_TOKEN' => $this->CSRFGetToken('mode'),
 			'CSRF_UPDATEWARNING_TOKEN' => $this->CSRFGetToken('hide_update_warning'),
+			'AUTOUPD_ON' => $this->in->get('autoupd', 0) ? true : false,
+			'AUTOUPD_CURRENT' => $this->in->get('current', 0),
+			'AUTOUPD_TRY'	=> $this->in->get('try', 0),
 		));
 
 		$this->tpl->add_css('
