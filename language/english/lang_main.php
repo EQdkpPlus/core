@@ -676,6 +676,12 @@ $lang = array(
 	"raideventlist_export_ical" => 'Export calendar',
 	"raideventlist_export_ical_button" => 'Export calendar',
 	"calendar_export_head" => 'Export calendar',
+	"calendar_export_type" => "Type of events",
+	"calendar_export_types" => array(
+		"Raids",
+		"Appointments",
+		"Raids and appointments"
+	),
 	"calendar_export_feed" => 'Link to the ical feed for external programms such as Outlook or iCal. This is a personal link with a secret hash. Do not share with other persons.',
 	"calendar_export_feedurl" => 'Feed URL',
 	"calendar_export_dl_ical" => 'Download *.ics',

@@ -634,6 +634,12 @@ $lang = array(
 "calendar_export_feedurl"=> "Feed URL",
 "calendar_export_dl_ical" => "Download *.ics",
 "calendar_export_download" => "Download Ereignisse",
+"calendar_export_type" => "Art der Ereignisse",
+"calendar_export_types" => array(
+	"Raids",
+	"Termine",
+	"Raids und Termine"
+),
 "raidevent_raidleader" => "Raidleiter",
 "raidevent_no_guest_note" => 'Keine Notiz hinterlegt',
 "raidevent_autogroups" => "Autom. hinzufügen (Gruppe)",

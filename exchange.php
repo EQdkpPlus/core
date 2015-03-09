@@ -80,7 +80,7 @@ if(registry::register('input')->get('out') != ''){
 		case 'icalfeed':
 			// the permissions for the single modules
 			$permissions	= array(
-				'calendar'=>'u_calendar_view'
+				'calendar'	=> 'u_calendar_view'
 			);
 			$modulename		= registry::register('input')->get('module', '');
 
@@ -99,7 +99,20 @@ if(registry::register('input')->get('out') != ''){
 
 				switch($modulename){
 					case 'calendar':
-						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array(true, registry::register('timekeeper')->time));
+						$eventtypes		= registry::register('input')->get('type', 'raids');
+						switch($eventtypes){
+							case 'raids':
+								$eventsfilter = true;
+							break;
+							case 'all':
+								$eventsfilter = false;
+							break;
+							case 'appointments':
+								$eventsfilter = 'appointments';
+							break;
+						}
+						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array($eventsfilter, registry::register('timehandler')->time));
+
 						if(is_array($caleventids) && count($caleventids) > 0){
 							foreach($caleventids as $calid){
 

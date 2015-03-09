@@ -137,10 +137,28 @@ class calendar_pageobject extends pageobject {
 
 	public function export_tooltip(){
 		// first, lets generate the link
-		$exportlink	= $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
+		$exportlink		= $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
+		$exporttypes	= new hdropdown('type', array('options' => array(
+							'raids'			=> $this->user->lang(array('calendar_export_types', 0)),
+							'appointments'	=> $this->user->lang(array('calendar_export_types', 1)),
+							'all'			=> $this->user->lang(array('calendar_export_types', 2)),
+						)));
 
 		// build the output
-		echo '<form><fieldset class="settings mediumsettings">
+		echo '
+			<script>
+				function replaceQueryParam(param, newval, search) {
+					var regex = new RegExp("([?;&])" + param + "[^&;]*[;&]?")
+					var query = search.replace(regex, "$1").replace(/&$/, "")
+					return (query.length > 2 ? query + "&" : "?") + param + "=" + newval
+				}
+				$("#type").change(function(){
+					str = replaceQueryParam("type", $(this).val(), $("#icalfeedurl").val());
+					$("#icalfeedurl").val(str);
+					$("#icaldllink").prop("href", str);
+				}).trigger("change");
+			</script>
+			<form><fieldset class="settings mediumsettings">
 					<dl>
 						<dt class="onerow">
 							<div class="infobox infobox-large infobox-blue clearfix">
@@ -149,12 +167,16 @@ class calendar_pageobject extends pageobject {
 						</dt>
 					</dl>
 					<dl>
+					<dt><label>'.$this->user->lang('calendar_export_type').'</label><br><span> </span></dt>
+						<dd>'.$exporttypes.'</dd>
+					</dl>
+					<dl>
 					<dt><label>'.$this->user->lang('calendar_export_feedurl').'</label><br><span> </span></dt>
-						<dd><input name="icalfeedurl" onClick="javascript:this.form.icalfeedurl.focus();this.form.icalfeedurl.select();" size="40" value="'.$exportlink.'" /></dd>
+						<dd><input name="icalfeedurl" id="icalfeedurl" onClick="javascript:this.form.icalfeedurl.focus();this.form.icalfeedurl.select();" size="40" value="'.$exportlink.'" /></dd>
 					</dl>
 					<dl>
 					<dt><label>'.$this->user->lang('calendar_export_download').'</label><br><span> </span></dt>
-						<dd><a href="'.$exportlink.'">'.$this->user->lang('calendar_export_dl_ical').'</a></dd>
+						<dd><a id="icaldllink" href="'.$exportlink.'">'.$this->user->lang('calendar_export_dl_ical').'</a></dd>
 					</dl>
 				</fieldset></form>';
 		exit;
