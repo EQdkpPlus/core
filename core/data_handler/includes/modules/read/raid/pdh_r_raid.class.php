@@ -285,7 +285,7 @@ if(!class_exists('pdh_r_raid')){
 				<i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i>
 			</a>';
 			
-			$out .= '<a href="'.$this->get_raidlink($raid_id, $base_url, '&copy=true').'">
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_raidlink($raid_id, $base_url, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
 			

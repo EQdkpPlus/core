@@ -311,7 +311,7 @@ class Manage_Extensions extends page_generic {
 		$arrMessage = array();
 		switch((int)$this->in->get('cat', 0)){
 			//Plugins
-			case 1:		$modes = array('install', 'enable', 'uninstall', 'delete');
+			case 1:		$modes = array('install', 'enable', 'uninstall', 'delete', 'remove');
 						if($this->in->get('mode') == 'update'){
 							$this->pm->plugin_update_check();
 						} elseif(in_array($this->in->get('mode'), $modes)) {
@@ -327,7 +327,7 @@ class Manage_Extensions extends page_generic {
 			break;
 
 			//Templates
-			case 2:		$modesWithParam = array('install', 'uninstall', 'enable', 'disable', 'reset', 'export', 'update', 'process_update');
+			case 2:		$modesWithParam = array('install', 'uninstall', 'enable', 'disable', 'reset', 'export', 'update', 'process_update', 'remove');
 						$modes = array('default_style', 'delete_cache');
 						if(in_array($this->in->get('mode'), $modesWithParam)){
 							$mode = $this->in->get('mode');
@@ -343,19 +343,30 @@ class Manage_Extensions extends page_generic {
 						
 			//Portalmodules
 			case 3:		$path = $this->in->get('selected_id');
-						if ($path){
-							$idList = $this->pdh->get('portal', 'id_list', array(array('path' => $path)));
-							$id = array_keys($idList);
-							$plugin = $this->pdh->get('portal', 'plugin', array($idList[$id[0]]));
-							$name = $this->pdh->get('portal', 'name', array($idList[$id[0]]));
-							
-							$this->portal->uninstall($path, $plugin);
-							$this->portal->install($path, $plugin);
-							$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
-						}
+
 						if($this->in->get('mode') == "update"){
 							$this->pdh->process_hook_queue();
 							$this->portal->get_all_modules();
+						}elseif($this->in->get('mode') == "remove"){
+							$this->portal->remove($this->code);
+						} else {
+							if ($path){
+								$idList = $this->pdh->get('portal', 'id_list', array(array('path' => $path)));
+								$id = array_keys($idList);
+								$plugin = $this->pdh->get('portal', 'plugin', array($idList[$id[0]]));
+								$name = $this->pdh->get('portal', 'name', array($idList[$id[0]]));
+								
+								$this->portal->uninstall($path, $plugin);
+								$this->portal->install($path, $plugin);
+								$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
+							}
+						}
+			break;
+			
+			//Games
+			case 7: 	if($this->in->get('mode') == "remove"){
+							$plugin_code = preg_replace("/[^a-zA-Z0-9-_]/", "", $this->code);
+							if($plugin_code != "") $this->pfh->Delete($this->root_path.'games/'.$plugin_code.'/');
 						}
 			break;
 
@@ -421,12 +432,16 @@ class Manage_Extensions extends page_generic {
 			$bugtracker_url		= (isset($arrExtensionListNamed[1][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(1, $arrExtensionListNamed[1][$plugin_code]))) : '';
 
 			if($this->pm->check($plugin_code, PLUGIN_BROKEN)) {
+				//Delete it from database if plugin is broken - means it isn't there anymore.
+				$this->pm->delete($plugin_code);
+				/*
 				$this->tpl->assign_block_vars('plugins_row_broken', array(
 					'NAME'			=> $plugin_code,
 					'CODE'			=> $plugin_code,
 					'DELETE'		=> (in_array($plugin_code, $db_plugins)) ? true : false,
 					'DEL_LINK'		=> 'manage_extensions.php'.$this->SID.'&amp;cat=1&amp;mode=delete&amp;code='.$plugin_code.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				));
+				*/
 				continue;
 			}
 			//dependencies
@@ -447,24 +462,26 @@ class Manage_Extensions extends page_generic {
 			$dep_all = $dep['plusv'] && $dep['games'] && $dep['phpf'];
 
 			if($this->pm->check($plugin_code, PLUGIN_DISABLED)) {
-				$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=enable&amp;code=' . $plugin_code.'&amp;link_hash='.$this->CSRFGetToken('mode'). '" title="'.$this->user->lang('plug_enable_info').'">' . $this->user->lang('enable') . '</a>' : $this->user->lang('plug_dep_broken_deps');
+				$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=enable&amp;code=' . $plugin_code.'&amp;link_hash='.$this->CSRFGetToken('mode'). '" title="'.$this->user->lang('enable').'"><i class="fa fa-lg fa-toggle-off"></i></a>' : '<i class="fa fa-lg fa-exclamation-triangle" title="'.$this->user->lang('plug_dep_broken_deps').'"></i>';
 				$row = 'yellow';
 			} elseif ($this->pm->check($plugin_code, PLUGIN_INSTALLED)){
 				if (isset($urgendUpdates[$plugin_code])){
 					$row = 'red';
-					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i>/a>';
 					$arrUpdateCount[1]['red'] ++;
 				} else {
 					$row = 'green';
-					$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=uninstall&amp;code=' . $plugin_code.'&amp;link_hash='.$this->CSRFGetToken('mode'). '">' . $this->user->lang('uninstall') . '</a>' : $this->user->lang('plug_dep_broken_deps');
+					$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=uninstall&amp;code=' . $plugin_code.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('uninstall').'"><i class="fa fa-lg fa-toggle-on"></i></a>' : '<i class="fa fa-lg fa-exclamation-triangle" title="'.$this->user->lang('plug_dep_broken_deps').'"></i>';
 				}
 			} elseif(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
 				$arrUpdateCount[1]['yellow'] ++;
+				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			} else {
 				$row = 'grey';
-				$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=install&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'">' . $this->user->lang('install') . '</a>' : $this->user->lang('plug_dep_broken_deps');
+				$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=install&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('install').'"><i class="fa fa-lg fa-toggle-off"></i></a>' : '<i class="fa fa-lg fa-exclamation-triangle" title="'.$this->user->lang('plug_dep_broken_deps').'"></i>';
+				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
 
 			$this->tpl->assign_block_vars('plugins_row_'.$row, array(
@@ -501,7 +518,7 @@ class Manage_Extensions extends page_generic {
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
 				$dep['games']	= 'skip';
 				$dep['phpf']	= 'skip';
-				$dl_link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 1, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
+				$dl_link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 1, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
@@ -550,11 +567,13 @@ class Manage_Extensions extends page_generic {
 			$plugin_code = $key;
 			if(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
+				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$row = 'grey';
-				$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=install&amp;code=' . $key. '&amp;link_hash='.$this->CSRFGetToken('mode').'">' . $this->user->lang('install') . '</a>';
+				$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=install&amp;code=' . $key. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="' . $this->user->lang('install') . '"><i class="fa fa-lg fa-toggle-off"></i></a>';
+				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
 			
 			$screenshot = '';
@@ -587,19 +606,19 @@ class Manage_Extensions extends page_generic {
 			if (isset($urgendUpdates[$plugin_code])){
 				if (isset($arrLocalStyleUpdates[$plugin_code])){
 					$rowname = 'red_local';
-					$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=update&amp;code=' . $row['style_id']. '&amp;link_hash='.$this->CSRFGetToken('mode').'">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=update&amp;code=' . $row['style_id']. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
 				} else {
 					$rowname = 'red';
-					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
 				}
 				$arrUpdateCount[2]['red'] ++;
 			} elseif(isset($allUpdates[$plugin_code])) {
 				$rowname = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$rowname = 'green';
-				$link = ($row['style_id'] == $default_style) ? '' :'<a href="javascript:style_delete_warning('.$row['style_id'].');">' . $this->user->lang('uninstall') . '</a>';
+				$link = ($row['style_id'] == $default_style) ? '' :'<a href="javascript:style_delete_warning('.$row['style_id'].');" title="' . $this->user->lang('uninstall') . '"><i class="fa fa-lg fa-toggle-on"></i></a>';
 			}
 
 			$this->jquery->Dialog('style_preview', $this->user->lang('template_preview'), array('url'=>$this->server_path."".$this->SID."&style='+ styleid+'", 'width'=>'750', 'height'=>'520', 'modal'=>true, 'withid' => 'styleid'));
@@ -636,7 +655,7 @@ class Manage_Extensions extends page_generic {
 				if (in_array($extension['plugin'], $arrStyles)) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',2, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',2, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
 				$this->tpl->assign_block_vars('styles_row_'.$row, array(
 					'TT_NAME'			=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -682,26 +701,30 @@ class Manage_Extensions extends page_generic {
 		$arrModules = $this->pdh->aget('portal', 'portal', 0, array($this->pdh->get('portal', 'id_list')));
 		if (is_array($arrModules)){
 			foreach($arrModules as $id => $value){
+				if((int)$value['child'] === 1) continue;
+				
 				$row = 'green';
 				$link = '';
 				$plugin_code = $value['path'];
 				$class_name = $plugin_code.'_portal';
+				$del_link = "";
 				//Ignore Plugin Moduls in terms of repo-updates
 				if (empty($value['plugin'])) {
 					if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="3" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="3" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>';
 						$arrUpdateCount[3]['red'] ++;
 					}elseif(isset($allUpdates[$plugin_code])){
 						$row = 'yellow';
-						$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="3" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',3, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="3" data-code="'.$plugin_code.'"  title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>';
 						$arrUpdateCount[3]['yellow'] ++;
 					}
+
+					$del_link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=3&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
+
 				}
 				//Add Reinstall Link if no update available
-				if($row == 'green') {
-					$link = '<i class="fa fa-retweet fa-lg" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
-				}
+				$reinst_link = '<i class="fa fa-retweet fa-lg" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
 
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> (isset($arrExtensionListNamed[3][$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.$value['name'].'</a>' : $value['name'],
@@ -709,6 +732,8 @@ class Manage_Extensions extends page_generic {
 					'CODE'				=> sanitize($value['path']),
 					'CONTACT'			=> sanitize($class_name::get_data('contact')),
 					'ACTION_LINK'		=> $link,
+					'REINSTALL_LINK'	=> ($row == 'green') ? $reinst_link : '',
+					'DELETE_LINK'		=> $del_link,
 					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['description'], 100)).'</a>' : '',
 					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[3][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(3, $arrExtensionListNamed[3][$plugin_code]))) : '',
 							
@@ -725,7 +750,7 @@ class Manage_Extensions extends page_generic {
 				if ((is_array(search_in_array($extension['plugin'], $arrModules, true, 'path')))) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',3, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',3, \''.sanitize($extension['plugin']).'\');" title="'.$this->user->lang('install').'"><i class="fa fa-toggle-off fa-lg"></i></a>';
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -770,11 +795,11 @@ class Manage_Extensions extends page_generic {
 				$plugin_code = $value;
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="7" data-code="'.$plugin_code.'"><i class="fa fa-refresh fa-lg"></i> '.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="7" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>';
 						$arrUpdateCount[7]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
-					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="7" data-code="'.$plugin_code.'"><i class="fa fa-refresh fa-lg" ></i> '.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',7, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="7" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg" ></i></a>';
 					$arrUpdateCount[7]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -789,6 +814,7 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> (isset($arrTmpExtension[$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.cut_text($arrTmpExtension[$plugin_code]['description'], 100).'</a>' : '',
 					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->starrating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), $this->env->phpself , array('score' => $arrTmpExtension[$plugin_code]['rating'], 'readonly' => true)) : '',
 					'ACTION_LINK'		=> $link,
+					'DELETE_LINK'		=> ($plugin_code != $this->config->get('default_game')) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=7&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>' : '',
 					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[7][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(7, $arrExtensionListNamed[7][$plugin_code]))) : '',		
 				));
 			}
@@ -800,7 +826,7 @@ class Manage_Extensions extends page_generic {
 				if (in_array($extension['plugin'], $arrGames)) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',7, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i> '.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',7, \''.sanitize($extension['plugin']).'\');" title="'.$this->user->lang('install').'"><i class="fa fa-toggle-off fa-lg"></i></a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -847,11 +873,11 @@ class Manage_Extensions extends page_generic {
 				$plugin_code = $id;
 				if (isset($urgendUpdates[$plugin_code])){
 						$row = 'red';
-						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+						$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>';
 						$arrUpdateCount[11]['red'] ++;
 				}elseif(isset($allUpdates[$plugin_code])){
 					$row = 'yellow';
-					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'">'.$this->user->lang('uc_bttn_update').'</a>';
+					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'"  title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>';
 					$arrUpdateCount[11]['yellow'] ++;
 				} else {
 						$row = 'green';
@@ -873,7 +899,7 @@ class Manage_Extensions extends page_generic {
 				if (isset($arrLanguages[$extension['plugin']])) continue;
 				$row = 'grey';
 
-				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 11, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-download fa-lg"></i>'.$this->user->lang('backup_action_download').'</a>';
+				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 11, \''.sanitize($extension['plugin']).'\');" title="'.$this->user->lang('install').'"><i class="fa fa-toggle-off fa-lg"></i></a>';
 				$this->tpl->assign_block_vars('language_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),

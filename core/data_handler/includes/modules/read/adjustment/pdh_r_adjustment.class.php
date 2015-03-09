@@ -244,7 +244,7 @@ if(!class_exists('pdh_r_adjustment')){
 						<i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i>
 					</a>";
 			
-			$out .= '<a href="'.$this->get_link($adj_id, $baseurl, '&copy=true').'">
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_link($adj_id, $baseurl, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
 				

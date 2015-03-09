@@ -551,6 +551,7 @@ $lang = array(
 "plugin_inst_uninstall" => "deinstalliert",
 "plugin_inst_enable" => "aktiviert",
 "plugin_inst_delete" => "gelöscht",
+"plugin_inst_remove" => "entfernt",		
 "plugin_inst_errormsg" => "%1\$s wurde nicht richtig %2\$s.",
 "plugin_inst_errormsg1" => "Es wurden Fehler wärend des %1\$s-Prozesses festgestellt: %2\$s",
 "background_image" => "Hintergrundbild",

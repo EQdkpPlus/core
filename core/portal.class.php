@@ -274,6 +274,14 @@ class portal extends gen_class {
 		unset($this->objs[$path]);
 	}
 	
+	public function remove($path){
+		$this->uninstall($path);
+		
+		$path = preg_replace("/[^a-zA-Z0-9-_]/", "", $path);
+		if($path == "") return false;
+		$this->pfh->Delete($this->root_path.'portal/'.$path.'/');
+	}
+	
 	// Check if the Portal-Module-File is still available
 	// Checks plugin if plugin bundled module
 	public function check_file($path, $plugin='', $nodelete=false){

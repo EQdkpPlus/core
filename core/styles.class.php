@@ -253,6 +253,12 @@ if (!class_exists("styles")){
 				$this->core->message( $this->user->lang('admin_delete_style_success'), $this->user->lang('success'), 'green');
 			}
 		}
+		
+		public function remove($stylename){
+			$stylename = preg_replace("/[^a-zA-Z0-9-_]/", "", $stylename);
+			if($stylename == "") return false;
+			$this->pfh->Delete($this->root_path.'templates/'.$stylename.'/');
+		}
 
 		public function export($styleid){
 			$styleid = intval($styleid);

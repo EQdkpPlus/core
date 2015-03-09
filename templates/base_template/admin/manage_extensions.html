@@ -483,7 +483,7 @@ $(document).ready(function(){
 		<table class="table fullwidth colorswitch hoverrows">
 		  <tr>
 			<th width="20">&nbsp;</th>
-			<th colspan="6" align="left">{L_action}</th>
+			<th colspan="5" align="left">{L_action}</th>
 			<th width="16" align="left">&nbsp;</th>
 			<th align="left">{L_name}</th>
 			<th align="left" class="hiddenSmartphone">{L_template_files}</th>
@@ -502,9 +502,6 @@ $(document).ready(function(){
 			  <!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
 			<td width="10"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10"><!-- IF not styles_row_red_local.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -533,9 +530,6 @@ $(document).ready(function(){
 			  <!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
 			<td width="10"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10"><!-- IF not styles_row_red.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -564,9 +558,6 @@ $(document).ready(function(){
 			<!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
 			<td width="10"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10"><!-- IF not styles_row_yellow.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -595,9 +586,6 @@ $(document).ready(function(){
 			  <!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg"></i></a></td>
 			<td width="10"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a></td>
-			<td width="10"><!-- IF not styles_row_green.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -624,7 +612,6 @@ $(document).ready(function(){
 			<td width="10"></td>
 			<td width="10"></td>
 			<td width="10"></td>
-			<td width="10"></td>
 			<td width="10"></td>			
 			<td width="25" align="center"></td>
 			<td><span class="coretip" data-coretip='{styles_row_grey.TT_CONTENT}'>{styles_row_grey.TT_NAME}</span></td>
@@ -640,28 +627,6 @@ $(document).ready(function(){
 			</td>
 			</tr>
 		   <!-- END styles_row_grey -->
-		<!-- BEGIN styles_row_grey_repo -->
-		  <tr>
-		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_grey_repo.ACTION_LINK}</td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>		
-			<td width="25"><span class="coretip" data-coretip='{styles_row_grey_repo.TT_CONTENT}'>{styles_row_grey_repo.TT_NAME}</span></td>
-			<td class="hiddenSmartphone">{styles_row_grey_repo.TEMPLATE}</td>
-			<td class="hiddenSmartphone">0</td>
-			<td>{styles_row_grey_repo.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_grey_repo.AUTHOR}</td>
-			<td class="hiddenSmartphone"></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_grey_repo.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_grey_repo.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
-				<!-- ENDIF -->
-			</td>
-			</tr>
-		   <!-- END styles_row_grey_repo -->
 		</table>
 		<div class="contentFooter">
 			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="fa fa-check"></i>{L_make_default_style}</button>
@@ -672,13 +637,16 @@ $(document).ready(function(){
 	</div>
 
 	<div id="fragment-3">
+		<div class="tableHeader floatRight">
+			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}'"><i class="fa fa-columns"></i> {L_portalplugin_management}</button>
+		</div>
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_3}</h1>
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16">{L_action}</th>
+			<th align="left" width="16" colspan="3">{L_action}</th>
 			<th align="left">{L_name}</th>
 			<th align="left">{L_version}</th>
 			<th align="left" class="hiddenSmartphone">{L_contact}</th>
@@ -690,6 +658,8 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_red.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_red.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_red.DELETE_LINK}</td>
 			<td>{pm_row_red.NAME}</td>
 			<td>{pm_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_red.CONTACT}</td>
@@ -706,6 +676,8 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_yellow.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_yellow.DELETE_LINK}</td>
 			<td>{pm_row_yellow.NAME}</td>
 			<td>{pm_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_yellow.CONTACT}</td>
@@ -722,6 +694,8 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_green.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_green.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_green.DELETE_LINK}</td>
 			<td>{pm_row_green.NAME}</td>
 			<td>{pm_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_green.CONTACT}</td>
@@ -738,6 +712,8 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_grey.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_grey.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_grey.DELETE_LINK}</td>
 			<td>{pm_row_grey.NAME}</td>
 			<td>{pm_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_grey.CONTACT}</td>
@@ -754,13 +730,16 @@ $(document).ready(function(){
 	</div>
 
 	<div id="fragment-7">
+		<div class="tableHeader floatRight">
+			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_settings.php{SID}#fragment-game'"><i class="fa fa-wrench"></i> {L_core_sett_fs_game}</button>
+		</div>
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_7}</h1>
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16">{L_action}</th>
+			<th align="left" width="16" colspan="2">{L_action}</th>
 			<th align="left">{L_name}</th>
 			<th align="left">{L_version}</th>
 			<th align="left" class="hiddenSmartphone">{L_contact}</th>
@@ -772,6 +751,7 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{games_row_red.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_red.DELETE_LINK}</td>
 			<td>{games_row_red.NAME}</td>
 			<td>{games_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_red.CONTACT}</td>
@@ -788,6 +768,7 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{games_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_yellow.DELETE_LINK}</td>
 			<td>{games_row_yellow.NAME}</td>
 			<td>{games_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_yellow.CONTACT}</td>
@@ -804,6 +785,7 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{games_row_green.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_green.DELETE_LINK}</td>
 			<td>{games_row_green.NAME}</td>
 			<td>{games_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_green.CONTACT}</td>
@@ -820,6 +802,7 @@ $(document).ready(function(){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{games_row_grey.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_grey.DELETE_LINK}</td>
 			<td>{games_row_grey.NAME}</td>
 			<td>{games_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_grey.CONTACT}</td>

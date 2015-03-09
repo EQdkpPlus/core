@@ -212,9 +212,17 @@ class Manage_Portal extends page_generic {
 	
 	// Duplicate Portal Module (create child)
 	public function duplicate(){
-		$path = $this->pdh->get('portal', 'path', array($this->in->get('selected_id', 0)));
+		$id = $this->in->get('selected_id', 0);
+		$path = $this->pdh->get('portal', 'path', array($id));
+		$plugin = $this->pdh->get('portal', 'plugin', array($id));
 		$portal_class = $path.'_portal';
-		if(!$path || !class_exists($portal_class) || !$portal_class::get_data('multiple')) $this->display();
+			
+		// initialize form class
+		$this->portal->load_module($path, $plugin);
+
+		if(!$path || !class_exists($portal_class) || !$portal_class::get_data('multiple')) {
+			$this->edit_portallayout();
+		}
 		$plugin = $this->pdh->get('portal', 'plugin', array($this->in->get('selected_id')));
 		$name = $portal_class::get_data('name');
 		$this->core->message(sprintf($this->user->lang('portal_duplicated_success'), $name), $this->user->lang('success'), 'green');
