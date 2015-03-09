@@ -819,7 +819,28 @@ class mmocms_settings extends page_generic {
 				$this->core->message($this->user->lang('itt_default_success'), $this->user->lang('success'), 'green');
 			}
 		}
-
+		//Own Tooltips
+		
+		$fields = array(
+			'infotooltip_own_enabled'	=> array(
+				'type'		=> 'radio',
+				'dependency'	=> array(1 => array('infotooltip_own_script', 'infotooltip_own_link')),
+			),
+			'infotooltip_own_script'	=> array(
+				'type'			=> 'textarea',
+				'cols'			=> 80,
+				'rows'			=> 5,
+				'codeinput'		=> true,
+			),
+			'infotooltip_own_link'	=> array(
+				'type'			=> 'textarea',
+				'cols'			=> 80,
+				'rows'			=> 2,
+				'codeinput'		=> true,
+			),
+		);
+		$this->form->add_fields($fields, 'ittownscripts', 'itemtooltip');
+			
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');
 		$setting_apikey		= $this->config->get('game_importer_apikey');

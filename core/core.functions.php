@@ -360,38 +360,43 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 function infotooltip_js() {
 	static $added = 0;
 	if(!$added AND registry::register('config')->get('infotooltip_use')) {
-		registry::register('template')->js_file(registry::get_const('server_path').'infotooltip/jquery.infotooltip.js');
-		$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
-			$js .= "$('.infotooltip-tt').tooltip({
-						track: true,
-						open: function(event, ui) {
-							$(ui.tooltip).siblings('.tooltip').remove();
-						},
-						content: function(response) {
-							var direct = $(this).attr('title').substr(0,1);
-							var mytitle = $(this).attr('title');
-							if(direct == '1') {
-								$(this).attr('title', '');
-								return '';
-							}
-							if (mytitle == ''){
-								return;
-							}
-
-							if (cached_itts['t_'+$(this).attr('title')] != undefined){
-								return cached_itts['t_'+$(this).attr('title')];
-							} else {
-								var bla = $.get('".registry::get_const('server_path')."infotooltip/infotooltip_feed.php".registry::get_const('SID')."&direct=1&data='+$(this).attr('title'), response);
-								bla.success(function(data) {
-									cached_itts['t_'+mytitle] = $.trim(data);
-								});
-								return '<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".registry::fetch('user')->lang('lib_loading')."';
-							}
-						},
-						tooltipClass: \"ui-infotooltip\",
-					});";
-		registry::register('template')->add_js($js, 'docready');
-		registry::register('template')->css_file(registry::get_const('server_path').'games/'.registry::register('config')->get('default_game').'/infotooltip/'.registry::register('config')->get('default_game').'.css');
+		$blnUseOwnTooltips = register('config')->get('infotooltip_own_enabled');
+		if($blnUseOwnTooltips){
+			registry::register('template')->add_meta(register('config')->get('infotooltip_own_script'));
+		} else {
+			registry::register('template')->js_file(registry::get_const('server_path').'infotooltip/jquery.infotooltip.js');
+			$js = "$('.infotooltip').infotooltips(); var cached_itts = new Array();";
+				$js .= "$('.infotooltip-tt').tooltip({
+							track: true,
+							open: function(event, ui) {
+								$(ui.tooltip).siblings('.tooltip').remove();
+							},
+							content: function(response) {
+								var direct = $(this).attr('title').substr(0,1);
+								var mytitle = $(this).attr('title');
+								if(direct == '1') {
+									$(this).attr('title', '');
+									return '';
+								}
+								if (mytitle == ''){
+									return;
+								}
+	
+								if (cached_itts['t_'+$(this).attr('title')] != undefined){
+									return cached_itts['t_'+$(this).attr('title')];
+								} else {
+									var bla = $.get('".registry::get_const('server_path')."infotooltip/infotooltip_feed.php".registry::get_const('SID')."&direct=1&data='+$(this).attr('title'), response);
+									bla.success(function(data) {
+										cached_itts['t_'+mytitle] = $.trim(data);
+									});
+									return '<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".registry::fetch('user')->lang('lib_loading')."';
+								}
+							},
+							tooltipClass: \"ui-infotooltip\",
+						});";
+			registry::register('template')->add_js($js, 'docready');
+			registry::register('template')->css_file(registry::get_const('server_path').'games/'.registry::register('config')->get('default_game').'/infotooltip/'.registry::register('config')->get('default_game').'.css');
+		}
 	}
 	$added = 1;
 	return true;
@@ -409,25 +414,31 @@ function infotooltip_js() {
  * return @string
  */
 function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
-	
-	
-	if(empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
-	$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
-	
-	$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
-	
-	$id = unique_id();
-	$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
-	if($direct > 1) $data['update'] = true;
-	$data = serialize($data);
-	$direct = ($direct) ? 1 : 0;
-	if($cachedname && !$direct){
-		$str = '<span class="infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">'.$cachedname;
-		return $str.'</span>';
+	$blnUseOwnTooltips = register('config')->get('infotooltip_own_enabled');
+	if($blnUseOwnTooltips){
+		$strLink = register('config')->get('infotooltip_own_link');
+		$strLink = str_replace(array('{ITEMID}', '{ITEMNAME}', '{ITEMLINK}'), array($game_id, $name, 'data-eqdkplink=""'), $strLink);
+		
+		return $strLink;
 	} else {
-		$str = '<span class="infotooltip infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
+		if(empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
+		$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
+		
+		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
+		
+		$id = unique_id();
+		$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
+		if($direct > 1) $data['update'] = true;
+		$data = serialize($data);
+		$direct = ($direct) ? 1 : 0;
+		if($cachedname && !$direct){
+			$str = '<span class="infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">'.$cachedname;
+			return $str.'</span>';
+		} else {
+			$str = '<span class="infotooltip infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">';
+		}
+		return $str.(($in_span !== false) ? $in_span : $name).'</span>';
 	}
-	return $str.(($in_span !== false) ? $in_span : $name).'</span>';
 }
 
 /*
