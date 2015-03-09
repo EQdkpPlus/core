@@ -299,6 +299,19 @@ class mmocms_settings extends page_generic {
 						'size'		=> 40
 					),
 				),
+				'js' => array(
+					'global_js'	=> array(
+							'type'			=> 'textarea',
+							'cols'			=> 80,
+							'rows'			=> 5,
+							'codeinput'		=> true,
+					),
+					'global_css'=> array(
+							'type'			=> 'textarea',
+							'cols'			=> 80,
+							'rows'			=> 5,
+					),
+				),
 			),
 			'system'	=> array(
 				'globalsettings'	=> array(

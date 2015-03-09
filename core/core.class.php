@@ -221,6 +221,10 @@ class core extends gen_class {
 			if(is_file($customjs)){
 				$this->tpl->js_file($customjs);
 			}
+			if(strlen($this->config->get('global_js'))){
+				$global_js = $this->config->get('global_js');
+				$this->tpl->assign_var('FOOTER_CODE', $global_js);
+			}
 			
 			//CSS
 			$this->tpl->add_common_cssfiles();
@@ -891,6 +895,11 @@ class core extends gen_class {
 			$css_custom = $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.css';
 			if(file_exists($css_custom)){
 				$this->tpl->css_file($css_custom);
+			}
+			
+			//Global CSS - Direct Output into template
+			if(strlen($this->config->get('global_css'))){
+				$this->tpl->add_css($this->config->get('global_css'), true);
 			}
 			
 			$this->tpl->display();

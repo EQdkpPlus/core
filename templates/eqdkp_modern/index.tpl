@@ -611,7 +611,8 @@
 				favicon.reset();
 			}
    		 });
-	</script>		
+	</script>
+	{FOOTER_CODE}
 	<a id="bottom"></a>
 	</body>
 </html>

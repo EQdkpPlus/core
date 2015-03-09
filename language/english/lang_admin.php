@@ -1701,7 +1701,13 @@ $lang = array(
 	"plugin_package_error1" => "The uploaded package does not contain control files and therefore is invalid!",
 	"plugin_package_error2" => "The uploaded package contains a broken control file. The category could not be determined successfully!",
 	"plugin_package_error3" => "The files could not be copied, probably due to missing write permissions.",
-	"update_all_extensions" => "Update all Extensions",	
+	"update_all_extensions" => "Update all Extensions",
+		
+	"core_sett_fs_js" => "Global JavaScript & CSS",
+	"core_sett_f_global_js" => "Global Footer-Code",
+	"core_sett_f_help_global_js" => "The inserted code will be placed into the footer of each page.",
+	"core_sett_f_global_css" => "Global CSS",
+	"core_sett_f_help_global_css" => "The inserted CSS-Definitions will be added to each page.",
 );
 
 ?>

@@ -56,6 +56,7 @@ class template extends gen_class {
 										'js_code'		=> false,
 										'js_file'		=> false,
 										'css_code'		=> false,
+										'css_code_direct'=> false,
 										'css_file'		=> false,
 										'rss_feeds'		=> false,
 										'statichtml'	=> false,
@@ -181,8 +182,10 @@ class template extends gen_class {
 	/**
 	* Assign custom CSS Code to the Header
 	*/
-	public function add_css($varval){
-		$this->tpl_output['css_code'][] = $varval;
+	public function add_css($varval, $blnDirect=false){
+		if($blnDirect){
+			$this->tpl_output['css_code_direct'][] = $varval;
+		} else $this->tpl_output['css_code'][] = $varval;
 	}
 	
 	
@@ -590,12 +593,19 @@ class template extends gen_class {
 		}
 		
 		// Pass CSS Code to template..
-		if(!$this->get_templateout('css_code')){
+		if(!$this->get_templateout('css_code') || !$this->get_templateout('css_code_direct')){
+			$imploded_css = "";
 			if(is_array($this->get_templatedata('css_code'))){
-				$imploded_css = implode("\n", $this->get_templatedata('css_code'));
-				$this->assign_var('CSS_CODE', (($debug) ? $imploded_css : Minify_CSS::minify($imploded_css)));
-				$this->set_templateout('css_code', true);
+				$imploded_css .= implode("\n", $this->get_templatedata('css_code'));
 			}
+			if(is_array($this->get_templatedata('css_code_direct'))){
+				$imploded_css .= implode("\n", $this->get_templatedata('css_code_direct'));
+			}
+			if($imploded_css != ""){
+				$this->assign_var('CSS_CODE', (($debug) ? $imploded_css : Minify_CSS::minify($imploded_css)));
+			}
+			$this->set_templateout('css_code', true);
+			$this->set_templateout('css_code_direct', true);
 		}
 
 		// Load the JS Files..
