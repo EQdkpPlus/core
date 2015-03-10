@@ -3331,7 +3331,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-bottom: 10px;
 	}
 	
-	.responsive div.table {
+	.responsive div.table:not(.noMobileTransform)) {
 		display: inline;
 	}
 	
