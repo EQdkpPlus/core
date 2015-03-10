@@ -3244,7 +3244,12 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	}
 	
 	.responsive .ui-dialog {
-		max-width: 95%;
+		max-width: 98%;
+		height: auto !important;
+	}
+		
+	.responsive .mce-toolbar[role="menubar"] { 
+		display: none;
 	}
 	
 	.responsive:not(.simple-header) .ui-tabs-nav li, .responsive.simple-header.mobile .ui-tabs-nav li {

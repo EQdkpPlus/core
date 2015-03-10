@@ -755,21 +755,25 @@ class mmocms_settings extends page_generic {
 
 		// add some additional fields
 		// ItemTooltip Inject
+		$fields = array(
+				'infotooltip_use'	=> array(
+						'type'		=> 'radio',
+				),
+		);
+		$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
+		
 		if(count($this->itt->get_parserlist())){
 			$fields = array(
-				'infotooltip_use'	=> array(
-					'type'		=> 'radio',
-				),
 				'itt_debug'	=> array(
-					'type'		=> 'radio',
+						'type'		=> 'radio',
 				),
 				'itt_trash'	=> array(
-					'type'		=> 'direct',
-					'text'		=> '<input type="submit" name="itt_reset" value="'.$this->user->lang('itt_reset').'" class="mainoption bi_reset" />',
+						'type'		=> 'direct',
+						'text'		=> '<input type="submit" name="itt_reset" value="'.$this->user->lang('itt_reset').'" class="mainoption bi_reset" />',
 				),
 			);
 			$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
-
+			
 			$itt_parserlist	= $this->itt->get_parserlist();
 
 			$fields	= array(
