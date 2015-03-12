@@ -467,7 +467,7 @@ class Manage_Extensions extends page_generic {
 			} elseif ($this->pm->check($plugin_code, PLUGIN_INSTALLED)){
 				if (isset($urgendUpdates[$plugin_code])){
 					$row = 'red';
-					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i>/a>';
+					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 1, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="1" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i>';
 					$arrUpdateCount[1]['red'] ++;
 				} else {
 					$row = 'green';

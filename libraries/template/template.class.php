@@ -629,6 +629,14 @@ class template extends gen_class {
 				$imploded_feeds = implode("\n", $feeds);
 				$this->assign_var('RSS_FEEDS', $imploded_feeds);
 				$this->set_templateout('rss_feeds', true);
+				
+				$this->assign_var('S_GLOBAL_RSSFEEDS', true);
+				foreach($this->get_templatedata('rss_feeds') as $feed){
+					$this->tpl->assign_block_vars('global_rss_row', array(
+						'LINK' => $feed['url'],
+						'NAME' => $feed['name'],
+					));
+				}
 			}
 		}
 

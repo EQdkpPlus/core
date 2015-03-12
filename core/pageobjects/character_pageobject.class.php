@@ -141,6 +141,7 @@ class character_pageobject extends pageobject {
 
 			// images
 			'IMG_CLASSICON'			=> $this->game->decorate('primary', $member[$this->game->get_primary_class(true)], $this->pdh->get('member', 'profiledata', array($this->url_id))),
+			'IMG_FULLYDECORATED'	=> $this->game->decorate_character($this->url_id, $char_id),
 		);
 
 		// Add the game-specific Fields...
