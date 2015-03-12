@@ -244,11 +244,11 @@ if (!class_exists("styles")){
 			if ($styleid == $this->config->get('default_style')){
 				$this->core->message( $this->user->lang('admin_delete_style_error_defaultstyle'), $this->user->lang('error'), 'red');
 			}else{
+				$style = $this->pdh->get('styles', 'styles', array($styleid));
 				$this->pdh->put('styles', 'delete_style', array($styleid));
 				$this->pdh->process_hook_queue();
-				$style = $this->pdh->get('styles', 'styles', array($styleid));
-
 				$storage_folder = $this->pfh->FolderPath('templates/'.$style['template_path'], 'eqdkp');
+
 				if (file_exists($storage_folder)){$this->pfh->Delete($storage_folder);}
 				$this->core->message( $this->user->lang('admin_delete_style_success'), $this->user->lang('success'), 'green');
 			}

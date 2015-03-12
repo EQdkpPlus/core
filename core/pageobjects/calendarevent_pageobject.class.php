@@ -892,6 +892,9 @@ class calendarevent_pageobject extends pageobject {
 		$this->comments->SetVars(array(
 			'ntfy_user'		=> $arrUserToNotify,
 		));
+		
+		//RSS-Feed for next Raids
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('u_calendar_view'));
 
 		$this->tpl->assign_vars(array(
 			// error messages

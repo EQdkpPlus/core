@@ -177,11 +177,12 @@ if (!class_exists("environment")) {
 
 
 		protected function is_ssl(){
+			if(defined('NO_SSL') && NO_SSL) return false;
 			return ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) || isset($_SERVER['SSL_SESSION_ID']) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ));
 		}
 
 		protected function httpHost(){
-			$protocol = (isset($_SERVER['SSL_SESSION_ID']) || (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1))) ? 'https://' : 'http://';
+			$protocol = ($this->is_ssl()) ? 'https://' : 'http://';
  			$xhost    = preg_replace('/[^A-Za-z0-9\.:-]/', '',(isset( $_SERVER['HTTP_X_FORWARDED_HOST']) ?  $_SERVER['HTTP_X_FORWARDED_HOST'] : ''));
 			$host		= $_SERVER['HTTP_HOST'];
 			if (empty($host)){
