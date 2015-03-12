@@ -270,7 +270,22 @@ class game extends gen_class {
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
 		}
 	}
-	
+
+	/**
+	 * Returns image for generic type
+	 *
+	 * @param int $class_id
+	 * @param bool $big
+	 * @param bool $pathonly
+	 * @return html string
+	 */
+	private function decorate_generic($type, $id, $profile=array(), $size=16, $pathonly=false){
+		if(is_file($this->root_path.'games/'.$this->game.'/icons/'.$type.'/'.$id.'.png')){
+			$icon_path = $this->server_path.'games/'.$this->game.'/icons/'.$type.'/'.$id.'.png';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
+		}
+		return false;
+	}
 	
 	/**
 	 * get unique ID settings of Game. If set, chars will be identified by charname AND the given Profilesettings
@@ -933,7 +948,9 @@ class game extends gen_class {
 				return call_user_func_array(array($this->gameinfo(), 'decorate_'.$type), array($id, $profile, $size, $pathonly));
 			} elseif(method_exists($this, 'decorate_'.$type)) {
 				return call_user_func_array(array($this, 'decorate_'.$type), array($id, $profile, $size, $pathonly));
-			}		
+			} else {
+				return $this->decorate_generic($type, $id, $profile, $size, $pathonly);
+			}
 		// there are no game specific icons, check if there are default ones
 		}elseif($this->default_icons($type)){
 			return call_user_func_array(array($this, 'decorate_def_'.$type), array($id, $profile, $size, $pathonly));
