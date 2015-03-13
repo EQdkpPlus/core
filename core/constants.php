@@ -63,12 +63,12 @@ define('MAX_FILES_USERFOLDER', 20);
 //Sourceforge
 define('EQDKP_PROJECT_URL',			"http://eqdkp-plus.eu");
 define('EQDKP_ABOUT_URL',			"http://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL',		"https://sourceforge.net/projects/eqdkp-plus/files/");
+define('EQDKP_DOWNLOADS_URL',		"http://eqdkp-plus.eu/repository/");
 define('EQDKP_REPO_URL',			"http://eqdkp-plus.eu/repository/");
 define('EQDKP_NOTIFICATIONS_URL',	"http://eqdkp-plus.eu/rss/notifications.xml");
 define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");
 define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
-define('EQDKP_CRL_URL',				"https://eqdkp-plus.googlecode.com/files/crl.txt");
+define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl/master/crl.txt");
 define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
 define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
 
