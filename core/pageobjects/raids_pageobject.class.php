@@ -220,7 +220,7 @@ class raids_pageobject extends pageobject {
 								array('name' => 'adj_value', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 						),
 				);
-				$arrAdjustments = $this->pdh->get('adjustment', 'adjsofraid', array($this->url_id));
+				$arrAdjustments = $this->pdh->get('adjustment', 'adjsofraid', array($raid_id));
 				$hptt_page_settings = $arrAdjListSettings;
 				$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
 				$hptt->setPageRef($this->strPath);
