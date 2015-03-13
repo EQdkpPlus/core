@@ -70,10 +70,11 @@ class Minify_CSS {
         }
         if ($options['compress']) {
             if (! $options['preserveComments']) {
-            	require_once 'CSS/Compressor.php';
+            	require_once 'Compressor.php';
                 $css = Minify_CSS_Compressor::process($css, $options);
             } else {
             	require_once 'CommentPreserver.php';
+            	require_once 'Compressor.php';
                 $css = Minify_CommentPreserver::process(
                     $css
                     ,array('Minify_CSS_Compressor', 'process')
@@ -84,6 +85,7 @@ class Minify_CSS {
         if (! $options['currentDir'] && ! $options['prependRelativePath']) {
             return $css;
         }
+        require_once 'UriRewriter.php';
         if ($options['currentDir']) {
             return Minify_CSS_UriRewriter::rewrite(
                 $css
