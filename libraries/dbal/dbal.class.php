@@ -268,7 +268,7 @@ abstract class Database extends gen_class {
 		
 		$strErrorID = md5('db_error'.$strErrorMessage.time().$this->strDebugPrefix);
 		
-		if(!$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
+		if(defined('USER_INITIALIZED') && !$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
 	

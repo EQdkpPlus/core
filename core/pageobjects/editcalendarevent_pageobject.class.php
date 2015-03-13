@@ -81,7 +81,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'RAIDLEADER'	=> ($this->in->getArray('raidleader', 'int') > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($this->in->getArray('raidleader', 'int')))) : '',
 				'RAID_DATE'		=> $raiddate,
 				'RAID_NOTE'		=> ($raidnotes) ? nl2br($raidnotes) : '',
-				'RAID_LINK'		=> $this->env->link.'calendar/viewcalraid.php?eventid='.$raidid,
+				'RAID_LINK'		=> $this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($raidid)), $raidid, false, true),
 			);
 
 			// send the email to all attendees
