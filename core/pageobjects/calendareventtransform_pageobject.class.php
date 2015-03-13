@@ -55,6 +55,16 @@ class calendareventtransform_pageobject extends pageobject {
 				$attendees = array_unique($attendees);
 			}
 		}
+		
+		//Additional Data like Roles
+		if($this->in->get('roleinfo', 0) && $raidext['raidmode'] != 'class'){
+			$additional_data = "";
+			foreach($attendees as $attendee_id){
+				$additional_data .= $this->pdh->get('member', 'name', array($attendee_id)).': ';
+				$roleid = $this->pdh->get('calendar_raids_attendees', 'role', array($this->url_id, $attendee_id));
+				$additional_data .= $this->pdh->get('roles', 'name', array($roleid))."\n";
+			}
+		} else $additional_data = "";
 
 		$htmlcode	= '<html>
 			<body onload="document.transform.submit();">
@@ -64,7 +74,8 @@ class calendareventtransform_pageobject extends pageobject {
 			<input name="date" value="'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id)), true, false, false, function_exists('date_create_from_format')).'" type="hidden">
 			<input name="rnote" value="'.$this->pdh->get('calendar_events', 'notes', array($this->url_id)).'" type="hidden">
 			<input name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'" type="hidden" />
-			';
+			<textarea name="additional_data">'.$additional_data.'</textarea>
+					';
 		foreach($attendees as $mattids){
 			$htmlcode	.= '<input name="attendees[]" value="'.$mattids.'" type="hidden">';
 		}

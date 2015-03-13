@@ -1711,6 +1711,11 @@ $lang = array(
 "core_sett_f_infotooltip_own_script" => "Code für die eigenen Tooltips",
 "core_sett_f_help_infotooltip_own_script" => "Füge hier den Code für die eigenen Tooltips ein. Das ist der Code des Tooltip-Anbieters, der in den header-Bereich eingefügt werden soll.",
 "core_sett_f_infotooltip_own_link" => "Link zu den Items des externen Anbieters",
-"core_sett_f_help_infotooltip_own_link" => "Die Erkennung von Tooltips funktioniert normalerweise über Links zur Webseite des externen Anbieters. Gebe hier an, wie der Link aussehen soll. Du kannst dabei auf die Parameter {ITEMID}, {ITEMNAME} und {ITEMLINK} zurückgreifen. ITEMLINK sorgt dafür, dass die Verlinkung auf EQdkp Seiten richtig funktioniert. Beispiel: &lt;a href=\"http://wod.wowhead.com/item={ITEMID}\" {ITEMLINK}&gt; {ITEMNAME}&lt;/a&gt;",		
+"core_sett_f_help_infotooltip_own_link" => "Die Erkennung von Tooltips funktioniert normalerweise über Links zur Webseite des externen Anbieters. Gebe hier an, wie der Link aussehen soll. Du kannst dabei auf die Parameter {ITEMID}, {ITEMNAME} und {ITEMLINK} zurückgreifen. ITEMLINK sorgt dafür, dass die Verlinkung auf EQdkp Seiten richtig funktioniert. Beispiel: &lt;a href=\"http://wod.wowhead.com/item={ITEMID}\" {ITEMLINK}&gt; {ITEMNAME}&lt;/a&gt;",
+"core_sett_fs_js" => "Globales JavaScript & CSS",
+"core_sett_f_global_js" => "Globaler Footer-Code",
+"core_sett_f_help_global_js" => "Der hier eingefügte Code wird in den Footer-Bereich jeder Seite eingebunden.",
+"core_sett_f_global_css" => "Globales CSS",
+"core_sett_f_help_global_css" => "Die hier eingefügten CSS-Definitionen werden jedem Style hinzugefügt.",
 );
 ?>

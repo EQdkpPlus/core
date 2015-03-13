@@ -771,6 +771,7 @@ $lang = array(
 	"raidevent_transform_notsure" => 'Convert backup characters',
 	"raidevent_transform_unsigned" => 'Convert unsigned characters',
 	"raidevent_transform_leaders" => 'Convert Raidleaders',
+	"raidevent_transform_roleinfo" => 'Convert roles info',
 	"raidevent_transform_button" => 'Transform',
 	"twinks" => 'Twinks',
 	"raidevent_raid_errorhead" => 'ERROR',
@@ -989,7 +990,8 @@ $lang = array(
 	"copy_info" => "You're working with a copy of the old entry. A new entry will be created after saving this entry.",
 	"redirection" => "Redirection",
 	"redirection_info" => "Click here, if the automatic redirection doesn't work.",
-	"change_style" => "Change style",		
+	"change_style" => "Change style",
+	"additional_infos" => "Additional information",
 );
 
 ?>

@@ -265,6 +265,8 @@ class raids_pageobject extends pageobject {
 					'LOOT_PERCENT_CHART'	=> (count($loot_dist) > 0) ? $this->jquery->charts('pie', 'loot_dist', $loot_dist, $chartoptionsLootDistri) : '',
 					'RAID_DATE'				=> $this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), true, false, true),
 					'U_RAIDLIST'			=> $this->routing->build('raids'),
+					'S_ADDITIONAL_DATA'		=> strlen($this->pdh->get('raid', 'additional_data', array($raid_id))) ? true : false,
+					'RAID_ADDITIONAL_DATA'	=> $this->pdh->geth('raid', 'additional_data', array($raid_id)),
 			));
 			print_r(array_filter($linksArray));
 			chartooltip_js();

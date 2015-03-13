@@ -38,16 +38,19 @@ class update_20023 extends sql_update_task {
 			'english' => array(
 				'update_20023'	=> 'EQdkp Plus 2.0 Update Beta6',
 					1			=> 'Add Permission',
+					2			=> 'Add Column in raids-table',
 				),
 			'german' => array(
 				'update_20023'	=> 'EQdkp Plus 2.0 Update Beta6',
 					1			=> 'Add Permission',
+					2			=> 'Add Column in raids-table',
 			),
 		);
 		
 		// init SQL querys
 		$this->sqls = array(
 			1 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('u_articles_script');",
+			2 => "ALTER TABLE `__raids` ADD COLUMN `raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin';",
 		);
 	}
 	

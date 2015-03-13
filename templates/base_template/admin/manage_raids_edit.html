@@ -79,6 +79,21 @@
 			item_key++;
 		});
 	});
+	
+	var show_additional = {ADDITIONAL_INFOS};
+	$(document).ready(function(){
+		if(show_additional){
+			$('.additional-note-btn').hide();
+		} else {
+			$('.additional-note-container').hide();
+		}
+		
+		$('.additional-note-btn').on('click', function(){
+			$('.additional-note-container').show();
+			$(this).hide();
+		});
+	});
+	
 </script>
 <form action='manage_raids.php{SID}&r={RAID_ID}' method='post' name='post'>
 <div id="toggleRaidInfos">
@@ -98,7 +113,11 @@
 				</dl>
 				<dl>
 					<dt><label>{L_note}:</label></dt>
-					<dd><input type="text" name="rnote" value="{NOTE}" class="input" size="55" id="note" /></dd>
+					<dd><input type="text" name="rnote" value="{NOTE}" class="input" size="55" id="note" /><button type="button" class="additional-note-btn"><i class="fa fa-plus"></i> {L_additional_infos}</button>
+						<div class="additional-note-container">
+						{ADDITIONAL_INFOS_EDITOR}
+						</div>
+					</dd>
 				</dl>
 				<dl>
 					<dt><label>{L_event}:</label></dt>
@@ -114,8 +133,8 @@
 				<dl>
 					<dt><label>{L_attendees}:</label></dt>
 					<dd>{NEW_MEM_SEL}
-					<button class="liteoption" type="button" name="addmem" id="r_add_mem"><i class="fa fa-plus"></i>{L_add_member}</button>
-				</dd>
+						<button class="liteoption" type="button" name="addmem" id="r_add_mem"><i class="fa fa-plus"></i>{L_add_member}</button>
+					</dd>
 				</dl>
 		</div>
 	</fieldset>

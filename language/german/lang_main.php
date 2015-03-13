@@ -725,6 +725,7 @@ $lang = array(
 "raidevent_transform_notsure" => "Charaktere auf der Ersatzbank übernehmen",
 "raidevent_transform_unsigned" => "Abgemeldete Charaktere übernehmen",
 "raidevent_transform_leaders" => "Raidleiter mit übernehmen",
+"raidevent_transform_roleinfo" => 'Rolleninfo übernehmen',		
 "raidevent_transform_button" => "Umwandeln",
 "twinks" => "Twinks",
 "raidevent_raid_errorhead" => "FEHLER",
@@ -950,12 +951,7 @@ $lang = array(
 "redirection" => "Weiterleitung",
 "redirection_info" => "Hier klicken, wenn die automatische Weiterleitung nicht funktionieren sollte.",
 "change_style" => "Stil ändern",
-		
-"core_sett_fs_js" => "Globales JavaScript & CSS",
-"core_sett_f_global_js" => "Globaler Footer-Code",			
-"core_sett_f_help_global_js" => "Der hier eingefügte Code wird in den Footer-Bereich jeder Seite eingebunden.",
-"core_sett_f_global_css" => "Globales CSS",
-"core_sett_f_help_global_css" => "Die hier eingefügten CSS-Definitionen werden jedem Style hinzugefügt.",		
+"additional_infos" => "Zusätzliche Informationen",				
 );
 
 ?>

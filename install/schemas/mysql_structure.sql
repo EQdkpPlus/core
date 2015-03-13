@@ -251,6 +251,7 @@ CREATE TABLE `__raids` (
 	`raid_value` float(6,2) NOT NULL DEFAULT '0.00',
 	`raid_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`raid_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
+	`raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`raid_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
