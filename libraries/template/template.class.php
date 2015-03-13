@@ -255,13 +255,15 @@ class template extends gen_class {
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
 			}
 
-			$minify = new Minify_CSS();
-			$strCSS = $minify->minify($strCSS);
-			
-			$this->pfh->putContent($combinedFile, $strCSS);
-			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
-			if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
-			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
+			if(strlen($strCSS)){
+				$minify = new Minify_CSS();
+				$strCSS = $minify->minify($strCSS);
+				
+				$this->pfh->putContent($combinedFile, $strCSS);
+				$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
+				if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
+				array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
+			}
 		}
 		return $combinedFile;
 	}
