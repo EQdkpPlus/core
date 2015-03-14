@@ -99,17 +99,17 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		
 		public function get_filtered_id_list($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to, $recordid, $record){
 			$strQuery = "SELECT log_id FROM __logs WHERE ";
-			if ($plugin !== false) $strQuery .= " log_plugin= '".$this->db->escapeString($plugin). "' AND";
+			if ($plugin !== false) $strQuery .= " log_plugin= ".$this->db->escapeString($plugin). " AND";
 			if ($result !== false) $strQuery .= " log_result= ".$this->db->escapeString($result). " AND";
 			if ($ip !== false) $strQuery .= " log_ipaddress LIKE ".$this->db->escapeString('%'.$ip.'%'). " AND";
 			if ($sid !== false) $strQuery .= " log_sid LIKE ".$this->db->escapeString('%'.$sid.'%'). " AND";
-			if ($tag !== false) $strQuery .= " log_tag = '".$this->db->escapeString($tag). "' AND";
+			if ($tag !== false) $strQuery .= " log_tag = ".$this->db->escapeString($tag). " AND";
 			if ($user_id !== false) $strQuery .= " user_id =".$this->db->escapeString($user_id). " AND";
 			if ($value !== false) $strQuery .= " log_value LIKE ".$this->db->escapeString("%".$value."%"). " AND";
 			if ($date_from !== false) $strQuery .= " log_date > ".$this->db->escapeString($date_from). " AND";
 			if ($date_to !== false) $strQuery .= " log_date < ".$this->db->escapeString($date_to)." AND";
-			if ($recordid !== false) $strQuery .= " log_record_id = '".$this->db->escapeString($recordid). "' AND";
-			if ($record !== false) $strQuery .= " log_record= '".$this->db->escapeString($record). "' AND";
+			if ($recordid !== false) $strQuery .= " log_record_id = ".$this->db->escapeString($recordid). " AND";
+			if ($record !== false) $strQuery .= " log_record= ".$this->db->escapeString($record). " AND";
 			
 			$strQuery .= " log_id > 0";
 			

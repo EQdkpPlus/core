@@ -830,6 +830,12 @@ class calendarevent_pageobject extends pageobject {
 				'icon'	=> 'fa-envelope',
 				'perm'	=> $this->user->check_auth('a_users_massmail', false),
 			),
+			8 => array(
+				'name'	=> $this->user->lang('view_logs'),
+				'link'	=> $this->server_path.'admin/manage_logs.php'.$this->SID.'&filter=1&filter_plugin=calendar&filter_recordid='.$this->url_id,
+				'icon'	=> 'fa-book',
+				'perm'	=> $this->user->check_auth('a_logs_view', false),
+			),
 		);
 
 		// preselect the memberid if not signed in

@@ -120,7 +120,7 @@ class user extends gen_class {
 		if (is_numeric($intUserStyleID) && $intUserStyleID > 0){
 			$intStyleID = $intUserStyleID;
 		} else {
-			$objQuery = $this->db->prepare("SELECT style_id FROM __styles;")->limit(1)->execute();
+			$objQuery = $this->db->prepare("SELECT style_id FROM __styles")->limit(1)->execute();
 			if ($objQuery && $objQuery->numRows) {
 				$arrData = $objQuery->fetchAssoc();
 				$intStyleID = $arrData['style_id'];
