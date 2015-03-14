@@ -265,10 +265,15 @@ class raids_pageobject extends pageobject {
 					'LOOT_PERCENT_CHART'	=> (count($loot_dist) > 0) ? $this->jquery->charts('pie', 'loot_dist', $loot_dist, $chartoptionsLootDistri) : '',
 					'RAID_DATE'				=> $this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), true, false, true),
 					'U_RAIDLIST'			=> $this->routing->build('raids'),
+					'RAID_ID'				=> $raid_id,
 					'S_ADDITIONAL_DATA'		=> strlen($this->pdh->get('raid', 'additional_data', array($raid_id))) ? true : false,
 					'RAID_ADDITIONAL_DATA'	=> $this->pdh->geth('raid', 'additional_data', array($raid_id)),
+					'S_PERM_RAID_ADMIN'		=> $this->user->check_auth('a_raid_upd', false),
 			));
-			print_r(array_filter($linksArray));
+			if($this->user->check_auth('a_raid_upd', false)){
+				$this->jquery->dialog('editRaid', $this->user->lang('raidevent_raid_edit'), array('url' => $this->server_path."admin/manage_raids.php".$this->SID."&r=".$raid_id."&upd=true&simple_head=simple",'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path.$this->SID));
+			}
+
 			chartooltip_js();
 				
 			$this->set_vars(array(

@@ -698,7 +698,7 @@ class core extends gen_class {
 			}
 			
 			$html .= '</ul>';
-			return $html;
+			return str_replace("<ul></ul>", "", $html);
 		}
 		
 		public function clean_url($strUrl){

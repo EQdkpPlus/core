@@ -93,6 +93,11 @@ class ManageRaids extends page_generic {
 		if(!empty($neg)) {
 			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
 		}
+		
+		if($this->in->get('simple_head') != ""){
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
+		}
+		
 		$this->display($messages);
 	}
 
@@ -138,6 +143,10 @@ class ManageRaids extends page_generic {
 			$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
 		} else {
 			$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
+		}
+		
+		if($this->in->get('simple_head') != ""){
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 		}
 		$this->display($messages);
 	}

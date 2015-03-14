@@ -390,6 +390,10 @@ class portal extends gen_class {
 		$this->lang_inits[$portal] = true;
 		return true;
 	}
+	
+	public function get_module_config($moduleid, $value){
+		return $this->config->get($value, 'pmod_'.$moduleid);
+	}
 }
 
 abstract class portal_generic extends gen_class {
