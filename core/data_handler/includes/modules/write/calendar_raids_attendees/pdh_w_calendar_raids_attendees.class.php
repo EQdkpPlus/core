@@ -197,7 +197,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				'member_role'		=> $role
 			))->execute($memberid, $eventid);
 			
-			$log_action = $this->logs->diff(array($old_role), array($role), array("{L_ROLE}"));
+			$log_action = $this->logs->diff(array($this->pdh->get('roles', 'name', array($old_role))), array($this->pdh->get('roles', 'name', array($role))), array("{L_ROLE}"));
 			if($log_action) {
 				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
 				$this->log_insert('calendar_log_updatedrole', $log_action, $eventid, $role, true, 'calendar');
