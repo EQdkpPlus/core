@@ -770,6 +770,7 @@ $lang = array(
 "calendar_log_twinkchanged" => "Twink gewechselt",
 "calendar_log_updatedgroup"	=> "Raidgruppe aktualisiert",
 "calendar_log_updatednote"	=> "Charakter-Notiz aktualisiert",
+"calendar_log_updatedrole"	=> "Charakter-Rolle aktualisiert",		
 "pv_tab_skills" => "Skillung",
 "pv_tab_profiler" => "Profiler",
 "pv_tab_profession" => "Berufe",
@@ -951,7 +952,9 @@ $lang = array(
 "redirection" => "Weiterleitung",
 "redirection_info" => "Hier klicken, wenn die automatische Weiterleitung nicht funktionieren sollte.",
 "change_style" => "Stil ändern",
-"additional_infos" => "Zusätzliche Informationen",				
+"additional_infos" => "Zusätzliche Informationen",
+"new_value"	=> "Neuer Wert",
+"old_value"	=> "Alter Wert",
 );
 
 ?>

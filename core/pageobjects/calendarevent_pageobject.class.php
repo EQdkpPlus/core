@@ -43,6 +43,7 @@ class calendarevent_pageobject extends pageobject {
 			'change_note'		=> array('process' => 'change_note',			'csrf'=>true),
 			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
+			'logs'				=> array('process' => 'display_logs'),
 		);
 
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
@@ -58,6 +59,50 @@ class calendarevent_pageobject extends pageobject {
 		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
 		if (!is_array($raidleaders_users)) $raidleaders_users = array();
 		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
+	}
+	
+	public function display_logs(){
+		$this->user->check_auth('a_logs_view');
+		
+		//Show Logs
+		$view_list = $this->pdh->get('logs', 'filtered_id_list', array('calendar', false, false, false, false, false,false,false,false, $this->url_id));
+		
+		$hptt_psettings		= array(
+				'name'				=> 'hptt_managelogs_actions',
+				'table_main_sub'	=> '%log_id%',
+				'table_subs'		=> array('%log_id%', '%link_url%', '%link_url_suffix%'),
+				'page_ref'			=> $this->strPath,
+				'show_numbers'		=> false,
+				'show_select_boxes'	=> false,
+				'selectboxes_checkall'=>false,
+				'show_detail_twink'	=> false,
+				'table_sort_dir'	=> 'desc',
+				'table_sort_col'	=> 0,
+				'table_presets'		=> array(
+						array('name' => 'logdatetime',	'sort' => true, 'th_add' => '', 'td_add' => 'class="nowrap desktopOnly"'),
+						array('name' => 'logtype',		'sort' => true, 'th_add' => 'width="10%"', 'td_add' => 'class="nowrap desktopOnly"'),
+						array('name' => 'logvalue',		'sort' => true, 'th_add' => 'width="80%"', 'td_add' => ''),
+						array('name' => 'loguser',		'sort' => true, 'th_add' => 'width="100" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
+				),
+		);
+		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => '', md5($strFilterSuffix)));
+
+		$page_suffix		= '&amp;start='.$this->in->get('start', 0).'&logs&eventid='.$this->url_id.'&simple_head=true';
+		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort');
+		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix);
+		$this->tpl->assign_vars(array(
+				'LOGS_LIST'				=> $logs_list,
+				'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
+				'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
+				'S_COMMENTS'				=> false,		
+		));
+		
+		$this->core->set_vars(array(
+				'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true),
+				'template_file'		=> 'calendar/viewlogs.html',
+				'header_format'		=> $this->simple_head,
+				'display'			=> true
+		));
 	}
 
 	// the role dropdown, attached to the character selection
@@ -832,7 +877,7 @@ class calendarevent_pageobject extends pageobject {
 			),
 			8 => array(
 				'name'	=> $this->user->lang('view_logs'),
-				'link'	=> $this->server_path.'admin/manage_logs.php'.$this->SID.'&filter=1&filter_plugin=calendar&filter_recordid='.$this->url_id,
+				'link'	=> 'javascript:ViewLogs('.$this->url_id.')',
 				'icon'	=> 'fa-book',
 				'perm'	=> $this->user->check_auth('a_logs_view', false),
 			),
@@ -854,7 +899,8 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('TransformRaid', $this->user->lang('raidevent_raid_transform'), array('url'=> $this->routing->build('calendareventtransform')."&simple_head=true&eventid='+eventid+'", 'width'=>'440', 'height'=>'350', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'230', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('DeleteGuest', $this->user->lang('raidevent_raid_guest_del'), array('custom_js'=>"document.guestp.submit();", 'message'=>$this->user->lang('raidevent_raid_guest_delmsg'), 'withid'=>'id', 'onlickjs'=>'$("#guestid_field").val(id);', 'buttontxt'=>$this->user->lang('delete')), 'confirm');
-
+		$this->jquery->Dialog('ViewLogs', $this->user->lang('view_logs'), array('url'=>$this->routing->build('calendarevent')."&logs&eventid='+eventid+'&simple_head=true", 'width'=>'900', 'height'=>'600', 'withid' => 'eventid'));
+		
 		// already signed in message
 		if($presel_charid > 0){
 			$sstat_mname = $this->pdh->get('member', 'name', array($presel_charid));

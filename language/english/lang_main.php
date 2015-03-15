@@ -992,6 +992,8 @@ $lang = array(
 	"redirection_info" => "Click here, if the automatic redirection doesn't work.",
 	"change_style" => "Change style",
 	"additional_infos" => "Additional information",
+	"new_value" => 'New Value',
+	"old_value" => 'Old Value',
 );
 
 ?>
