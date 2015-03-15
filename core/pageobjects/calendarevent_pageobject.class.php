@@ -62,7 +62,8 @@ class calendarevent_pageobject extends pageobject {
 	}
 	
 	public function display_logs(){
-		$this->user->check_auth('a_logs_view');
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission() || 	$this->user->check_auth('a_logs_view', false)){
+		} else $this->user->check_auth('a_something');
 		
 		//Show Logs
 		$view_list = $this->pdh->get('logs', 'filtered_id_list', array('calendar', false, false, false, false, false,false,false,false, $this->url_id));

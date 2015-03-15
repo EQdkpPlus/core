@@ -147,7 +147,7 @@ class register_pageobject extends pageobject {
 		
 		//Check Email
 		if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
-			$this->core->message($this->user->lang('fv_email_alreadyuse'), $this->user->lang('error'), 'red');
+			$this->core->message(str_replace("{0}", $this->in->get('user_email'), $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;
 		} elseif (!preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$this->in->get('user_email'))){
@@ -158,13 +158,13 @@ class register_pageobject extends pageobject {
 
 		//Check Username
 		if ($this->pdh->get('user', 'check_username', array($this->in->get('username'))) == 'false'){
-			$this->core->message($this->user->lang('fv_username_alreadyuse'), $this->user->lang('error'), 'red');
+			$this->core->message(str_replace("{0}", $this->in->get('username'), $this->user->lang('fv_username_alreadyuse')), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;
 		}
 		
 		//Check User Profilefields - Part 2
-		if ($form->error){
+		if (is_object($form) && $form->error){
 			$this->display_form();
 			return;
 		}
