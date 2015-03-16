@@ -215,12 +215,13 @@ class raids_pageobject extends pageobject {
 						'table_sort_col' => 0,
 						'table_sort_dir' => 'desc',
 						'table_presets' => array(
-								array('name' => 'adj_members', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+								array('name' => 'adj_member', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 								array('name' => 'adj_reason', 'sort' => true, 'th_add' => 'width="70%"', 'td_add' => ''),
 								array('name' => 'adj_value', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 						),
 				);
 				$arrAdjustments = $this->pdh->get('adjustment', 'adjsofraid', array($raid_id));
+
 				$hptt_page_settings = $arrAdjListSettings;
 				$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
 				$hptt->setPageRef($this->strPath);
