@@ -113,7 +113,7 @@ if (!class_exists('exchange_calevents_details')){
 
 								if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 									foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
-										//$shownotes_ugroups = $this->config->get('calendar_raid_shownotes');
+										//$shownotes_ugroups = $this->acl->get_groups_with_active_auth('u_calendar_raidnotes');
 
 										$arrChars['char:'.$memberid] = array(
 											'id'			=> $memberid,

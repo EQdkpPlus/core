@@ -38,6 +38,7 @@ $module_lang = array(
 	"viewicon" => '',
 	"record" => 'Dataset',
 	"recordid" => 'Dataset-ID',
+	"value"	=> "Value",
 	);
 	$preset_lang = array(
 	"logdate" => 'Log date',
@@ -49,6 +50,7 @@ $module_lang = array(
 	"viewlog" => 'Log view button',
 	"logrecord" => 'Log dataset',
 	"logrecordid" => 'Log dataset-ID',
+	"logvalue"	=> 'Logentry',
 	);
 	
 

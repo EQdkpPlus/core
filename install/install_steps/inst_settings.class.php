@@ -63,8 +63,6 @@ class inst_settings extends install_generic {
 		'account_activation'			=> 1,
 		'default_style_overwrite'		=> '0',
 		'enable_captcha'				=> '1',
-		'lib_recaptcha_okey'			=> '6LdKQMUSAAAAAOFATjZq_IyMruO1jxQL-rSVNF-g',
-		'lib_recaptcha_pkey'			=> '6LdKQMUSAAAAAC-pf92A4AVGjBOImTD9eIGr2WH7',
 		'pk_attendance90'				=> '1',
 		'pk_lastraid'					=> '1',
 		'class_color'					=> '1',
@@ -98,7 +96,6 @@ class inst_settings extends install_generic {
 		'calendar_addraid_deadline'		=> '1',
 		'calendar_addraid_duration'		=> '120',
 		'calendar_repeat_crondays'		=> '40',
-		'calendar_raid_shownotes'		=> array(2, 3),
 		'calendar_email_statuschange'	=> '1',
 	);
 	private $auth_ids			= array();

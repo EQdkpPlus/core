@@ -32,9 +32,10 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				'note'		=> '{L_NOTE}',
 				'value'		=> '{L_VALUE}',
 				'date'		=> '{L_DATE}',
+				'additional_data' => '{L_ADDITIONAL_INFOS}',
 		);
 
-		public function add_raid($raid_date, $raid_attendees, $event_id, $raid_note, $raid_value) {
+		public function add_raid($raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='') {
 			//check for correct data
 			if(!$raid_date OR !is_array($raid_attendees) OR !$event_id) {
 				return false;
@@ -46,7 +47,8 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				'raid_date'		=> $raid_date,
 				'raid_note'		=> $raid_note,
 				'raid_value'	=> $raid_value,
-				'raid_added_by'	=> $this->admin_user
+				'raid_added_by'	=> $this->admin_user,
+				'raid_additional_data' => $additional_data,
 			))->execute();
 			if($objQuery) {
 				$raid_id = $objQuery->insertId;
@@ -74,6 +76,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'{L_NOTE}'		=> $raid_note,
 					'{L_VALUE}'		=> $raid_value,
 					'{L_DATE}'		=> '{D_'.$raid_date.'}',
+					'{L_ADDITIONAL_INFOS}' => $additional_data,
 				);
 				$this->log_insert('action_raid_added', $log_action, $raid_id, $this->pdh->get('event', 'name', array($event_id)));
 				//call pdh hooks
@@ -84,13 +87,15 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			}
 		}
 
-		public function update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value) {
+		public function update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='') {
 			//get old-data
 			$old['event'] = $this->pdh->get('raid', 'event', array($raid_id));
 			$old['note'] = $this->pdh->get('raid', 'note', array($raid_id));
 			$old['value'] = $this->pdh->get('raid', 'value', array($raid_id));
 			$old['date'] = $this->pdh->get('raid', 'date', array($raid_id));
 			$old['members'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+			$old['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
+			
 			//get member names for log
 			$old['m_names'] = $this->pdh->aget('member', 'name', 0, array($old['members']));
 
@@ -99,6 +104,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'raid_note' => $raid_note,
 					'raid_value' => $raid_value,
 					'raid_date' => $raid_date,
+					'raid_additional_data' => $additional_data
 			);
 			
 			$objQuery = $this->db->prepare("UPDATE __raids :p WHERE raid_id=?")->set($arrSet)->execute($raid_id);
@@ -125,6 +131,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'note'		=> $old['note'],
 					'value'		=> $old['value'],
 					'date'		=> '{D_'.$old['date'].'}',
+					'additional_data' => $old['additional_data'],
 				);
 				$arrNew = array(
 					'event' 	=> $this->pdh->get('event', 'name', array($event_id)),
@@ -132,6 +139,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'note'		=> $raid_note,
 					'value'		=> $raid_value,
 					'date'		=> '{D_'.$raid_date.'}',
+					'additional_data' => $additional_data,
 				);
 				
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
@@ -153,6 +161,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			$old['note']		= $this->pdh->get('raid', 'note', array($raid_id));
 			$old['value']		= $this->pdh->get('raid', 'value', array($raid_id));
 			$old['date']		= $this->pdh->get('raid', 'date', array($raid_id));
+			$old['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
 			$old['members']		= $this->pdh->aget('member', 'name', 0, array($this->pdh->get('raid', 'raid_attendees', array($raid_id))));
 			
 			$objQuery = $this->db->prepare("DELETE FROM __raids WHERE raid_id = ?")->execute($raid_id);
@@ -182,7 +191,8 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 						'{L_EVENT}'		=> $old['event'],
 						'{L_ATTENDEES}'	=> implode(', ', $old['members']),
 						'{L_NOTE}'		=> $old['note'],
-						'{L_VALUE}'		=> $old['value']
+						'{L_VALUE}'		=> $old['value'],
+						'{L_ADDITIONAL_INFOS}' => $old['additional_data'],
 					);
 					$this->log_insert('action_raid_deleted', $log_action, $raid_id, $old['event']);
 

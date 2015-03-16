@@ -299,6 +299,19 @@ class mmocms_settings extends page_generic {
 						'size'		=> 40
 					),
 				),
+				'js' => array(
+					'global_js'	=> array(
+							'type'			=> 'textarea',
+							'cols'			=> 80,
+							'rows'			=> 5,
+							'codeinput'		=> true,
+					),
+					'global_css'=> array(
+							'type'			=> 'textarea',
+							'cols'			=> 80,
+							'rows'			=> 5,
+					),
+				),
 			),
 			'system'	=> array(
 				'globalsettings'	=> array(
@@ -589,11 +602,6 @@ class mmocms_settings extends page_generic {
 						'options'	=> $a_groups,
 						'datatype'	=> 'int',
 					),
-					'calendar_raid_shownotes'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $a_groups,
-						'datatype'	=> 'int',
-					),
 					'calendar_raid_notsigned_classsort'	=> array(
 						'type'		=> 'radio',
 					),
@@ -742,21 +750,25 @@ class mmocms_settings extends page_generic {
 
 		// add some additional fields
 		// ItemTooltip Inject
+		$fields = array(
+				'infotooltip_use'	=> array(
+						'type'		=> 'radio',
+				),
+		);
+		$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
+		
 		if(count($this->itt->get_parserlist())){
 			$fields = array(
-				'infotooltip_use'	=> array(
-					'type'		=> 'radio',
-				),
 				'itt_debug'	=> array(
-					'type'		=> 'radio',
+						'type'		=> 'radio',
 				),
 				'itt_trash'	=> array(
-					'type'		=> 'direct',
-					'text'		=> '<input type="submit" name="itt_reset" value="'.$this->user->lang('itt_reset').'" class="mainoption bi_reset" />',
+						'type'		=> 'direct',
+						'text'		=> '<input type="submit" name="itt_reset" value="'.$this->user->lang('itt_reset').'" class="mainoption bi_reset" />',
 				),
 			);
 			$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
-
+			
 			$itt_parserlist	= $this->itt->get_parserlist();
 
 			$fields	= array(
@@ -806,7 +818,28 @@ class mmocms_settings extends page_generic {
 				$this->core->message($this->user->lang('itt_default_success'), $this->user->lang('success'), 'green');
 			}
 		}
-
+		//Own Tooltips
+		
+		$fields = array(
+			'infotooltip_own_enabled'	=> array(
+				'type'		=> 'radio',
+				'dependency'	=> array(1 => array('infotooltip_own_script', 'infotooltip_own_link')),
+			),
+			'infotooltip_own_script'	=> array(
+				'type'			=> 'textarea',
+				'cols'			=> 80,
+				'rows'			=> 5,
+				'codeinput'		=> true,
+			),
+			'infotooltip_own_link'	=> array(
+				'type'			=> 'textarea',
+				'cols'			=> 80,
+				'rows'			=> 2,
+				'codeinput'		=> true,
+			),
+		);
+		$this->form->add_fields($fields, 'ittownscripts', 'itemtooltip');
+			
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');
 		$setting_apikey		= $this->config->get('game_importer_apikey');

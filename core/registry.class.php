@@ -92,6 +92,30 @@ final class registry extends super_registry{
 		} elseif(registry::class_exists($name)) return self::register($name, $params);
 		return false;
 	}
+	
+	/**
+	 * Add a class to the registry, so it's accessable with register();
+	 * 
+	 * @param string $strClassname - your classname, e.g. plus_datahandler
+	 * @param string $strLocation - the location of the class, without a rootpath, e.h. plugins/blupp/classes/
+	 * @param string $strAlias - an alias for your classname, for shorter accessability, e.g. pdh
+	 * @return false if classname has been already registered. Otherwise Classname or Alias, if Alias has been set successfully
+	 */
+	public static function add_class($strClassname, $strLocation, $strAlias=false){
+		if(!isset(registry::$locs[$strClassname])){
+			registry::$locs[$strClassname] = str_replace(registry::get_const('root_path'), "", $strLocation);
+			
+			if($strAlias !== false){
+				if(!isset(registry::$aliases[$strAlias])){
+					registry::$aliases[$strAlias] = $strClassname;
+					return $strAlias;
+				}
+			}
+			return $strClassname;
+		} 
+		
+		return false;
+	}
 
 	public static function destruct($class, $class_hash='') {
 		if(self::$destruct_started) return;

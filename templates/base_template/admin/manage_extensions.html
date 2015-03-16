@@ -125,7 +125,11 @@ function repo_step4(extid, cat, extensioncode, mode){
 }
 
 function repo_step5(extid, cat, extensioncode, mode){
-	window.location='manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}';
+	var url = 'manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}';
+	if(auto_update){
+		url = url + "&autoupd=1&current="+auto_current+"&try="+auto_try;
+	}
+	window.location=url;
 	return;	
 }
 
@@ -135,6 +139,123 @@ function hide_update_warning(status){
 	$.get('manage_extensions.php{SID}&hide_update_warning=true&hide='+hide+'&link_hash={CSRF_UPDATEWARNING_TOKEN}');
 }
 
+var auto_update = <!-- IF AUTOUPD_ON --> true<!-- ELSE --> false<!-- ENDIF -->;
+var auto_current = {AUTOUPD_CURRENT};
+var auto_try = {AUTOUPD_TRY};
+var updates = new Array();
+
+function init_auto_update(){	
+	$('.needs_update').each(function(){
+		var cat = $(this).data('category');
+		var id = $(this).data('id');
+		if(cat != "2"){
+			updates.push(id);
+		}
+	})
+	updates.sort();
+	if(updates.length){
+		$('.update-all-btn').show();
+	} else {
+		$('.update-all-btn').hide();
+	}
+}
+
+function start_auto_update(){
+	$('.update-all-btn').hide();
+	
+	//get first to update
+	if(updates.length > 0){
+		var myid = updates[0];
+		var myobj = $("a[data-id='"+myid+"']");
+		var mycat = $(myobj).data('category');
+		var mycode = $(myobj).data('code');
+
+		if (locked){
+			alert({L_extension_install_locked|jsencode});
+			return false;
+		}
+		
+		auto_update = 1;
+		auto_current = myid;
+		auto_try = 0;
+		repo_update_start(myid, mycat, mycode);
+	}
+}
+
+function continue_auto_update(){
+	$('.update-all-btn').hide();
+	
+	if(updates.length > 0){
+		var myid = false;
+		
+		$.each(updates, function( index, value ) {
+		 	if(value >= auto_current){
+		 		myid = updates[index];
+		 		return false;
+		 	}
+		});
+		
+		if(!myid){
+			console.log("finished");
+			return;
+		}
+
+		var myobj = $("a[data-id='"+myid+"']");
+		var mycat = $(myobj).data('category');
+		var mycode = $(myobj).data('code');
+		
+		console.log(myid);
+		
+		if(auto_current == myid){
+			console.log(auto_try);
+			if(auto_try > 2){
+				//Too much tries, find next one;
+				myid = false;
+				$.each(updates, function( index, value ) {
+				 	if(value > auto_current){
+				 		myid = updates[index];
+				 		return false;
+				 	}
+				});
+				console.log(myid);
+				if(myid){
+					myobj = $("a[data-id='"+myid+"']");
+					mycat = $(myobj).data('category');
+					mycode = $(myobj).data('code');
+					
+					auto_try = 0;
+					auto_current = myid;
+					repo_update_start(myid, mycat, mycode);
+					
+				} else {
+					console.log("finished");
+					return;
+				}
+				
+			} else {
+				auto_try = auto_try + 1;
+				repo_update_start(myid, mycat, mycode);
+			}
+			
+		} else {
+			auto_try = 0;
+			auto_current = myid;
+			
+			repo_update_start(myid, mycat, mycode);
+		}
+		
+	} else {
+		console.log("finished");
+	}
+}
+
+$(document).ready(function(){
+	init_auto_update();
+	
+	<!-- IF AUTOUPD_ON -->
+	continue_auto_update();
+	<!-- ENDIF -->
+});
 //]]>
 </script>
 
@@ -151,10 +272,14 @@ function hide_update_warning(status){
 	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <span id="lu_error_label"></span>
 </div>
 
-<div id="nl_progressbar" style="display:none; margin-bottom: 20px;">
+<div id="nl_progressbar" style="display:none; margin-bottom: 20px; height: 30px;">
 	<span class="nl_progressbar_label"><i class="fa fa-spinner fa-spin fa-lg" id="lu_loading_img"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 
+<div class="floatRight">
+	<button type="button" class="update-all-btn mainoption" onclick="start_auto_update();" ><i class="fa fa-refresh"></i> {L_update_all_extensions}</button>
+</div>
+<div class="clear"></div>
 <div id='plus_plugins_tab'>
 
 	<ul>
@@ -358,7 +483,7 @@ function hide_update_warning(status){
 		<table class="table fullwidth colorswitch hoverrows">
 		  <tr>
 			<th width="20">&nbsp;</th>
-			<th colspan="6" align="left">{L_action}</th>
+			<th colspan="5" align="left">{L_action}</th>
 			<th width="16" align="left">&nbsp;</th>
 			<th align="left">{L_name}</th>
 			<th align="left" class="hiddenSmartphone">{L_template_files}</th>
@@ -377,9 +502,6 @@ function hide_update_warning(status){
 			  <!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
 			<td width="10"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10"><!-- IF not styles_row_red_local.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red_local.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -408,9 +530,6 @@ function hide_update_warning(status){
 			  <!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
 			<td width="10"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10"><!-- IF not styles_row_red.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_red.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -439,9 +558,6 @@ function hide_update_warning(status){
 			<!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
 			<td width="10"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10"><!-- IF not styles_row_yellow.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_yellow.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -470,9 +586,6 @@ function hide_update_warning(status){
 			  <!-- ENDIF --></td>
 			<td width="10"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg"></i></a></td>
 			<td width="10"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a></td>
-			<td width="10"><!-- IF not styles_row_green.S_DEFAULT -->
-				<a href="javascript:style_delete_warning({styles_row_green.ID})" title="{L_delete_style}"><i class="fa fa-trash-o fa-lg"></i></a>
-				<!-- ENDIF --></td>
 			<td width="10">
 				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 			</td>
@@ -499,7 +612,6 @@ function hide_update_warning(status){
 			<td width="10"></td>
 			<td width="10"></td>
 			<td width="10"></td>
-			<td width="10"></td>
 			<td width="10"></td>			
 			<td width="25" align="center"></td>
 			<td><span class="coretip" data-coretip='{styles_row_grey.TT_CONTENT}'>{styles_row_grey.TT_NAME}</span></td>
@@ -515,28 +627,6 @@ function hide_update_warning(status){
 			</td>
 			</tr>
 		   <!-- END styles_row_grey -->
-		<!-- BEGIN styles_row_grey_repo -->
-		  <tr>
-		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_grey_repo.ACTION_LINK}</td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>		
-			<td width="25"><span class="coretip" data-coretip='{styles_row_grey_repo.TT_CONTENT}'>{styles_row_grey_repo.TT_NAME}</span></td>
-			<td class="hiddenSmartphone">{styles_row_grey_repo.TEMPLATE}</td>
-			<td class="hiddenSmartphone">0</td>
-			<td>{styles_row_grey_repo.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_grey_repo.AUTHOR}</td>
-			<td class="hiddenSmartphone"></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_grey_repo.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_grey_repo.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
-				<!-- ENDIF -->
-			</td>
-			</tr>
-		   <!-- END styles_row_grey_repo -->
 		</table>
 		<div class="contentFooter">
 			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="fa fa-check"></i>{L_make_default_style}</button>
@@ -547,13 +637,16 @@ function hide_update_warning(status){
 	</div>
 
 	<div id="fragment-3">
+		<div class="tableHeader floatRight">
+			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}'"><i class="fa fa-columns"></i> {L_portalplugin_management}</button>
+		</div>
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_3}</h1>
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16">{L_action}</th>
+			<th align="left" width="16" colspan="3">{L_action}</th>
 			<th align="left">{L_name}</th>
 			<th align="left">{L_version}</th>
 			<th align="left" class="hiddenSmartphone">{L_contact}</th>
@@ -565,6 +658,8 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_red.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_red.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_red.DELETE_LINK}</td>
 			<td>{pm_row_red.NAME}</td>
 			<td>{pm_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_red.CONTACT}</td>
@@ -581,6 +676,8 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_yellow.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_yellow.DELETE_LINK}</td>
 			<td>{pm_row_yellow.NAME}</td>
 			<td>{pm_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_yellow.CONTACT}</td>
@@ -597,6 +694,8 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_green.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_green.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_green.DELETE_LINK}</td>
 			<td>{pm_row_green.NAME}</td>
 			<td>{pm_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_green.CONTACT}</td>
@@ -613,6 +712,8 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_grey.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_grey.REINSTALL_LINK}</td>
+			<td class="nowrap desktopOnly">{pm_row_grey.DELETE_LINK}</td>
 			<td>{pm_row_grey.NAME}</td>
 			<td>{pm_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_grey.CONTACT}</td>
@@ -629,13 +730,16 @@ function hide_update_warning(status){
 	</div>
 
 	<div id="fragment-7">
+		<div class="tableHeader floatRight">
+			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_settings.php{SID}#fragment-game'"><i class="fa fa-wrench"></i> {L_core_sett_fs_game}</button>
+		</div>
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_7}</h1>
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
 			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16">{L_action}</th>
+			<th align="left" width="16" colspan="2">{L_action}</th>
 			<th align="left">{L_name}</th>
 			<th align="left">{L_version}</th>
 			<th align="left" class="hiddenSmartphone">{L_contact}</th>
@@ -647,6 +751,7 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{games_row_red.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_red.DELETE_LINK}</td>
 			<td>{games_row_red.NAME}</td>
 			<td>{games_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_red.CONTACT}</td>
@@ -663,6 +768,7 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{games_row_yellow.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_yellow.DELETE_LINK}</td>
 			<td>{games_row_yellow.NAME}</td>
 			<td>{games_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_yellow.CONTACT}</td>
@@ -679,6 +785,7 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{games_row_green.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_green.DELETE_LINK}</td>
 			<td>{games_row_green.NAME}</td>
 			<td>{games_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_green.CONTACT}</td>
@@ -695,6 +802,7 @@ function hide_update_warning(status){
 		  <tr>
 			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{games_row_grey.ACTION_LINK}</td>
+			<td class="nowrap desktopOnly">{games_row_grey.DELETE_LINK}</td>
 			<td>{games_row_grey.NAME}</td>
 			<td>{games_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_grey.CONTACT}</td>

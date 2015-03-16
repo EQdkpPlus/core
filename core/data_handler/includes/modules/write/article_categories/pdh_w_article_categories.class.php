@@ -57,6 +57,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			$this->pdh->enqueue_hook('article_categories_update');
 			return true;
 		}
+		
 		private function delete_recursiv($intCategoryID){
 			if ($this->pdh->get('article_categories', 'childs', array($intCategoryID))){
 				foreach($this->pdh->get('article_categories', 'childs', array($intCategoryID)) as $intChildID){
@@ -92,6 +93,12 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			$strDescription = $this->embedly->parseString($strDescription);
+			
+			if(!$this->user->check_auth('u_articles_script', false)){
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$strDescription = htmlspecialchars($filter->clean($strDescription));
+			}			
 			
 			$arrQuery  = array(
 				'name' 			=> $strName,
@@ -151,6 +158,12 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			$strDescription = $this->embedly->parseString($strDescription);
+			
+			if(!$this->user->check_auth('u_articles_script', false)){
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$strDescription = htmlspecialchars($filter->clean($strDescription));
+			}
 			
 			$arrQuery = array(
 				'name' 			=> $strName,

@@ -75,9 +75,20 @@ class user extends gen_class {
 	* @param $intStyleID Style ID to set
 	*/
 	public function setup($strLanguage = '', $intStyleID = 0){
+		$this->data['session_vars'] = (strlen($this->data['session_vars']) && is_serialized($this->data['session_vars'])) ? unserialize($this->data['session_vars']) : array();
+		
+		//Set Session Vars
+		if($strLanguage != ""){
+			$this->setSessionVar("lang", substr($strLanguage, 0, 20));
+		}
+		if($intStyleID > 0 && $this->data['user_id'] == ANONYMOUS){
+			$this->setSessionVar("style", $intStyleID);
+		}
+		
 		//START Language
 		//-----------------------------
 		if ($this->data['user_id'] == ANONYMOUS) {
+			$strLanguage = (isset($this->data['session_vars']['lang']) && strlen($this->data['session_vars']['lang'])) ? $this->data['session_vars']['lang'] : ''; 
 			$this->lang_name = ( $strLanguage != '' && file_exists($this->root_path . 'language/' . $strLanguage) ) ? $strLanguage : $this->config->get('default_lang');
 			$this->data['user_lang'] = $this->lang_name;
 		} else {
@@ -96,6 +107,7 @@ class user extends gen_class {
 		//START Style
 		//-----------------------------
 		//What Style-ID should be used?
+		$intStyleID = (isset($this->data['session_vars']['style']) && strlen($this->data['session_vars']['style'])) ? $this->data['session_vars']['style'] : $intStyleID;
 		if (intval($intStyleID) > 0){
 			$intUserStyleID = (int)$intStyleID;
 		} elseif ($this->data['user_id'] == ANONYMOUS){
@@ -108,7 +120,7 @@ class user extends gen_class {
 		if (is_numeric($intUserStyleID) && $intUserStyleID > 0){
 			$intStyleID = $intUserStyleID;
 		} else {
-			$objQuery = $this->db->prepare("SELECT style_id FROM __styles;")->limit(1)->execute();
+			$objQuery = $this->db->prepare("SELECT style_id FROM __styles")->limit(1)->execute();
 			if ($objQuery && $objQuery->numRows) {
 				$arrData = $objQuery->fetchAssoc();
 				$intStyleID = $arrData['style_id'];
@@ -148,6 +160,7 @@ class user extends gen_class {
 			$this->style['date_time']			= $this->style['date_notime_short'].' '.$this->style['time'];
 			$this->style['date']				= 'l, '.$this->style['date_notime_long'];
 			$this->style['date_short']			= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
+			$this->data['user_style']			= $intStyleID;
 		} else {
 			$this->style['date_notime_long']	= ($this->data['user_date_long']) ? $this->data['user_date_long'] : (($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long'));
 			$this->style['date_notime_short']	= ($this->data['user_date_short']) ? $this->data['user_date_short'] : (($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->lang('style_date_short'));
@@ -550,13 +563,6 @@ class user extends gen_class {
 	public function generate_salt(){
 		return substr(md5(generateRandomBytes(55)), 0, 23);
 	}
-
-	public function generate_apikey($strPassword, $strSalt){
-		$strRandom = md5(generateRandomBytes(55));
-		$objCrypt = register('encrypt', array($this->pw->prehash($strPassword, $strSalt)));
-		$strEncrypted = $objCrypt->encrypt($strRandom);
-		return $strRandom.':'.$strEncrypted;
-	}
 	
 	
 	/**
@@ -902,16 +908,24 @@ class user extends gen_class {
 		return $settingsdata;
 	}
 
-	public function getAvailableLanguages(){
+	public function getAvailableLanguages($blnWithIsoShort=true, $blnWithIcon=false){
 		$root_path = registry::get_const('root_path');
 		$language_array = array();
+		$icon = "";
 		// Build language array
 		if($dir = @opendir($root_path . 'language/')){
 			while ( $file = @readdir($dir) ){
 				if ((!is_file($root_path . 'language/' . $file)) && (!is_link($root_path . 'language/' . $file)) && valid_folder($file)){
 					include($root_path.'language/'.$file.'/lang_main.php');
-					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].' ('.$lang['ISO_LANG_SHORT'].')' : ucfirst($file));
-					$language_array[$file]					= $lang_name_tp;
+					if(isset($lang['ISO_LANG_SHORT'])){
+						list($pre, $post) = explode('_', $lang['ISO_LANG_SHORT']);
+						if($pre != "" && is_file($root_path.'images/flags/'.$pre.'.svg')){
+							$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" title="'.(($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'] : ucfirst($file)).'"/> <span>';
+						}
+					}
+					
+					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].(($blnWithIsoShort) ? ' ('.$lang['ISO_LANG_SHORT'].')' : '') : ucfirst($file));
+					$language_array[$file] = (($blnWithIcon) ? $icon : '').$lang_name_tp.(($blnWithIcon) ? '</span>' : '');
 				}
 			}
 		}
@@ -930,7 +944,6 @@ class user extends gen_class {
 		}
 		return "";
 	}
-	
 
 	public function __destruct() {
 		if(is_array($this->unused) && count($this->unused) > 0) $this->pfh->putContent($this->pfh->FilePath('unused.lang', 'eqdkp'), serialize($this->unused));

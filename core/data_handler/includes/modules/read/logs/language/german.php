@@ -33,6 +33,7 @@ $module_lang = array(
 	'viewicon'	=> '',
 	'record'	=> 'Datensatz',
 	'recordid'	=> 'Datensatz-ID',
+	'value'		=> 'Eintrag',
 );
 
 $preset_lang = array(
@@ -45,5 +46,6 @@ $preset_lang = array(
 	'viewlog'		=> 'Log-Ansehen Button',
 	'logrecord'		=> 'Log-Datensatz',
 	'logrecordid'	=> 'Log-Datensatz-ID',
+	'logvalue'		=> 'Logeintrag',
 );
 ?>

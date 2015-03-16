@@ -629,6 +629,8 @@ $lang = array(
 	"uc_profile_updater" => 'Profil is loading, Please Wait...',
 	"info_overtaken_permissions" => 'You are viewing the EQdkp Plus-System with the permissions of the user <b>%s</b>.',
 	"link_overtaken_permissions" => 'Click here to restore your Permissions.',
+	"option_false" => "false",
+	"option_true" => "true",
 	"calendar_edit" => 'Edit calendar',
 	"menu_calendar" => 'Calendar',
 	"calendar" => 'Calendar',
@@ -652,6 +654,10 @@ $lang = array(
 	"calendar_repeat_weekly" => 'weekly',
 	"calendar_repeat_daily" => 'daily',
 	"calendar_repeat_2weeks" => 'two weeks',
+	"calendar_log_repeat_none" => 'Single event',
+	"calendar_log_repeat_week" => 'weekly',
+	"calendar_log_repeat_day" => 'daily',
+	"calendar_log_repeat_twoweeks" => 'two weeks',
 	"calendar_role_distri" => 'Role distribution',
 	"calendar_class_distri" => 'Class distribution',
 	"calendar_no_distri" => 'No distribution',
@@ -676,6 +682,12 @@ $lang = array(
 	"raideventlist_export_ical" => 'Export calendar',
 	"raideventlist_export_ical_button" => 'Export calendar',
 	"calendar_export_head" => 'Export calendar',
+	"calendar_export_type" => "Type of events",
+	"calendar_export_types" => array(
+		"Raids",
+		"Appointments",
+		"Raids and appointments"
+	),
 	"calendar_export_feed" => 'Link to the ical feed for external programms such as Outlook or iCal. This is a personal link with a secret hash. Do not share with other persons.',
 	"calendar_export_feedurl" => 'Feed URL',
 	"calendar_export_dl_ical" => 'Download *.ics',
@@ -765,6 +777,7 @@ $lang = array(
 	"raidevent_transform_notsure" => 'Convert backup characters',
 	"raidevent_transform_unsigned" => 'Convert unsigned characters',
 	"raidevent_transform_leaders" => 'Convert Raidleaders',
+	"raidevent_transform_roleinfo" => 'Convert roles info',
 	"raidevent_transform_button" => 'Transform',
 	"twinks" => 'Twinks',
 	"raidevent_raid_errorhead" => 'ERROR',
@@ -981,7 +994,12 @@ $lang = array(
 	"desktop_version" => "Desktop Version",
 	"copy" => "Duplicate entry",
 	"copy_info" => "You're working with a copy of the old entry. A new entry will be created after saving this entry.",
-		
+	"redirection" => "Redirection",
+	"redirection_info" => "Click here, if the automatic redirection doesn't work.",
+	"change_style" => "Change style",
+	"additional_infos" => "Additional information",
+	"new_value" => 'New Value',
+	"old_value" => 'Old Value',
 );
 
 ?>

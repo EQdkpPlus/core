@@ -125,7 +125,7 @@ class register_pageobject extends pageobject {
 		if ($this->config->get('enable_captcha') == 1){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
-			$response = $captcha->recaptcha_check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('recaptcha_challenge_field'), $this->in->get('recaptcha_response_field'));
+			$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
 			if (!$response->is_valid) {
 				$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
 				$this->display_form();
@@ -147,7 +147,7 @@ class register_pageobject extends pageobject {
 		
 		//Check Email
 		if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
-			$this->core->message($this->user->lang('fv_email_alreadyuse'), $this->user->lang('error'), 'red');
+			$this->core->message(str_replace("{0}", $this->in->get('user_email'), $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;
 		} elseif (!preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$this->in->get('user_email'))){
@@ -158,13 +158,13 @@ class register_pageobject extends pageobject {
 
 		//Check Username
 		if ($this->pdh->get('user', 'check_username', array($this->in->get('username'))) == 'false'){
-			$this->core->message($this->user->lang('fv_username_alreadyuse'), $this->user->lang('error'), 'red');
+			$this->core->message(str_replace("{0}", $this->in->get('username'), $this->user->lang('fv_username_alreadyuse')), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;
 		}
 		
 		//Check User Profilefields - Part 2
-		if ($form->error){
+		if (is_object($form) && $form->error){
 			$this->display_form();
 			return;
 		}
@@ -438,7 +438,7 @@ class register_pageobject extends pageobject {
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$this->tpl->assign_vars(array(
-				'CAPTCHA'				=> $captcha->recaptcha_get_html($this->config->get('lib_recaptcha_okey')),
+				'CAPTCHA'				=> $captcha->get_html($this->config->get('lib_recaptcha_okey')),
 				'S_DISPLAY_CATPCHA'		=> true,
 			));
 		}

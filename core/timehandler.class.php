@@ -624,9 +624,15 @@ class DateTimeLocale extends DateTime {
 
 	public function format($format) {
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
-			$out	= str_replace(self::$english_days, registry::fetch('user')->lang('time_daynames', false, false), parent::format($format));
-			$out	= str_replace(self::$english_days_short, registry::fetch('user')->lang('time_daynames_short', false, false), $out);
-			return str_replace(self::$english_months, registry::fetch('user')->lang('time_monthnames', false, false), $out);
+			$arrSearch = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
+			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false), registry::fetch('user')->lang('time_daynames_short', false, false), registry::fetch('user')->lang('time_monthnames', false, false));			
+			$out =  parent::format($format);
+			foreach($arrSearch as $key => $val){
+				$out = preg_replace('/\b'.$val.'\b/u', $arrReplace[$key], $out);
+			}
+
+			return $out;
+
 		}else{
 			return parent::format($format);
 		}
@@ -634,9 +640,12 @@ class DateTimeLocale extends DateTime {
 	
 	public static function createFromFormat($format, $string, $timezone=null) {
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false)) && count(registry::fetch('user')->lang('time_daynames', false, false)) > 1){
-			$string = str_replace(registry::fetch('user')->lang('time_daynames', false, false), self::$english_days, $string);
-			$string = str_replace(registry::fetch('user')->lang('time_daynames_short', false, false), self::$english_days_short, $string);
-			$string = str_replace(registry::fetch('user')->lang('time_monthnames', false, false), self::$english_months, $string);
+			$arrReplace = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
+			$arrSearch = array_merge(registry::fetch('user')->lang('time_daynames', false, false), registry::fetch('user')->lang('time_daynames_short', false, false), registry::fetch('user')->lang('time_monthnames', false, false));
+
+			foreach($arrSearch as $key => $val){
+				$string = preg_replace('/\b'.$val.'\b/u', $arrReplace[$key], $string);
+			}
 		}
 		return parent::createFromFormat($format, $string, $timezone);
 	}

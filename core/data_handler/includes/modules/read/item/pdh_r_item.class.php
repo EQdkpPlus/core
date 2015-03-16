@@ -255,7 +255,7 @@ if(!class_exists('pdh_r_item')){
 				<i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i>
 			</a>";
 			
-			$out .= '<a href="'.$this->get_link($item_id, $baseurl, '&copy=true').'">
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_link($item_id, $baseurl, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
 				
@@ -328,7 +328,7 @@ if(!class_exists('pdh_r_item')){
 			if($this->config->get('infotooltip_use')) {
 				$lang = (!$lang || $lang='') ? $this->user->lang('XML_LANG') : $lang;
 				$ext = '';
-				if($direct) {
+				if($direct && !register('config')->get('infotooltip_own_enabled')) {
 					$options = array(
 						'url' => $this->server_path."infotooltip/infotooltip_feed.php?name=".urlencode(base64_encode($this->get_name($item_id)))."&lang=".$lang."&update=1&direct=1",
 						'height' => '340',
@@ -348,7 +348,15 @@ if(!class_exists('pdh_r_item')){
 
 		//Finished
 		public function get_link_itt($item_id, $baseurl, $url_suffix='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $in_span=false, $blnUseController=false) {
-			return "<a href=\"".$this->get_link($item_id, $baseurl, $url_suffix, $blnUseController)."\">".$this->get_itt_itemname($item_id, $lang, $direct, $onlyicon, $noicon, $in_span)."</a>";
+			$blnUseOwnTooltips = register('config')->get('infotooltip_own_enabled');
+			if($blnUseOwnTooltips){
+				$link = $this->get_itt_itemname($item_id, $lang, $direct, $onlyicon, $noicon, $in_span);
+				$eqdkp_link = ' onclick="window.location=\''.$this->get_link($item_id, $baseurl, $url_suffix, $blnUseController).'\'; return false;"';
+
+				return str_replace('data-eqdkplink=""', $eqdkp_link, $link);
+			} else {
+				return "<a href=\"".$this->get_link($item_id, $baseurl, $url_suffix, $blnUseController)."\">".$this->get_itt_itemname($item_id, $lang, $direct, $onlyicon, $noicon, $in_span)."</a>";
+			}
 		}
 
 		//Finished

@@ -80,7 +80,7 @@ if(registry::register('input')->get('out') != ''){
 		case 'icalfeed':
 			// the permissions for the single modules
 			$permissions	= array(
-				'calendar'=>'u_calendar_view'
+				'calendar'	=> 'u_calendar_view'
 			);
 			$modulename		= registry::register('input')->get('module', '');
 
@@ -99,7 +99,20 @@ if(registry::register('input')->get('out') != ''){
 
 				switch($modulename){
 					case 'calendar':
-						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array(true, registry::register('timekeeper')->time));
+						$eventtypes		= registry::register('input')->get('type', 'raids');
+						switch($eventtypes){
+							case 'raids':
+								$eventsfilter = true;
+							break;
+							case 'all':
+								$eventsfilter = false;
+							break;
+							case 'appointments':
+								$eventsfilter = 'appointments';
+							break;
+						}
+						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array($eventsfilter, registry::register('timehandler')->adddays(registry::register('timehandler')->time, -30)));
+
 						if(is_array($caleventids) && count($caleventids) > 0){
 							foreach($caleventids as $calid){
 
@@ -148,11 +161,10 @@ if(registry::register('input')->get('out') != ''){
 
 								// generate the ical output
 								$e = new vevent;
-								$e->setProperty('dtstart',        array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_start', array($calid)), "tz" => registry::register('config')->get('timezone')));
-								$e->setProperty('dtend',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_end', array($calid)), "tz" => registry::register('config')->get('timezone')));
+								$e->setProperty('dtstart',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_start', array($calid)).'Z'));
+								$e->setProperty('dtend',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_end', array($calid)).'Z'));
 								$e->setProperty('summary',		registry::register('plus_datahandler')->get('calendar_events', 'name', array($calid)));
 								$e->setProperty('description',	$description_data);
-								//$e->setProperty('comment',		'This is a comment');
 								$e->setProperty('class',		'PUBLIC');
 								$e->setProperty('categories',	'PERSONAL');
 								$v->setComponent($e);
@@ -192,6 +204,30 @@ if(registry::register('input')->get('out') != ''){
 		case 'socialcounts':
 			header('Content-type: application/json; charset=utf-8');
 			echo registry::register('socialplugins')->getSocialButtonCount(rawurldecode(registry::register('input')->get('url')), registry::register('input')->get('target'));
+			exit;
+		break;
+		
+		case 'styles':
+			header('content-type: text/html; charset=UTF-8');
+			$out = '<table class="table fullwidth colorswitch hoverrows">';
+			$intCurrentStyle = register('user')->style['style_id'];
+			foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
+					$plugin_code = $row['template_path'];
+					if (file_exists(registry::get_const('root_path').'templates/'.$plugin_code.'/screenshot.png' )){
+						$screenshot = '<img src="'.registry::get_const('server_path').'templates/'.$plugin_code.'/screenshot.png" style="max-width:200px;" alt="" />';
+					} elseif(file_exists(registry::get_const('root_path').'templates/'.$plugin_code.'/screenshot.jpg' )){
+						$screenshot = '<img src="'.registry::get_const('server_path').'templates/'.$plugin_code.'/screenshot.jpg" style="max-width:200px;" alt="" />';
+					} else $screenshot = "<img src='".registry::get_const('server_path')."images/global/default-image.svg' />";
+					if($styleid == $intCurrentStyle){
+						$current = " <i class='fa fa-check-circle fa-lg'></i>";
+					} else $current = "";
+					$url = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
+					$link = sanitize(preg_replace('#style\=([0-9]*)#', "", $url)).((strpos($url, "?") === false) ? '?' : '&').'style='.$styleid;
+					
+					$out .= '<tr><td width="10"><a href="'.$link.'">'.$screenshot.'</a></td><td><a href="'.$link.'">'.$row['style_name'].$current.'</a></td></tr>';
+			}
+			$out .= '</table>';
+			echo $out;
 			exit;
 		break;
 	}

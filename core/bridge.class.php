@@ -157,9 +157,8 @@ class bridge extends gen_class {
 				//Update Email und Password - den Rest soll die Sync-Funktion machen	
 				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->objBridge->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate){
 					$strSalt = $this->user->generate_salt();
-					$strApiKey = $this->user->generate_apikey($strPassword, $strSalt);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
-					$arrToSync = array('user_password' => $strPwdHash.':'.$strSalt, 'api_key'=>$strApiKey);
+					$arrToSync = array('user_password' => $strPwdHash.':'.$strSalt);
 					if ($this->objBridge->blnSyncEmail) $arrToSync['user_email'] = $this->crypt->encrypt($arrUserdata['email']);
 					$this->pdh->put('user', 'update_user', array($user_id, $arrToSync, false, false));
 					$this->pdh->process_hook_queue();
@@ -173,9 +172,8 @@ class bridge extends gen_class {
 				//Neu anlegen
 				$salt = $this->user->generate_salt();
 				$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
-				$strApiKey = $this->user->generate_apikey($strPassword, $salt);
 				
-				$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false, $strApiKey));
+				$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false));
 				$this->pdh->process_hook_queue();
 			}
 		}

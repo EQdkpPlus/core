@@ -155,26 +155,26 @@ if(!class_exists('pdh_w_calendar_events')) {
 				
 				// add log entry
 				$arrOld = array(
-					'calendar_id'			=> $old['cal_id'],
+					'calendar_id'			=> $this->pdh->get('calendars', 'name', array($old['cal_id'])),
 					'name'					=> $old['name'],
 					'timestamp_start'		=> "{D_".$old['startdate']."}",
 					'timestamp_end'			=> "{D_".$old['enddate']."}",
-					'allday'				=> $old['allday'],
+					'allday'				=> $this->logs->option_lang($old['allday']),
 					'notes'					=> $old['notes'],
-					'repeating'				=> $old['repeat'],
+					'repeating'				=> '{L_calendar_log_repeat_'.$old['repeat'].'}',
 					'extension'				=> serialize($extdata),
-					'mode'					=> $extdata['calendarmode'],
+					'mode'					=> '{L_calendar_mode_'.$extdata['calendarmode'].'}',
 				);
 				$arrNew = array(
-					'calendar_id'			=> $cal_id,
+					'calendar_id'			=> $this->pdh->get('calendars', 'name', array($cal_id)),
 					'name'					=> $name,
 					'timestamp_start'		=> "{D_".$startdate."}",
 					'timestamp_end'			=> "{D_".$enddate."}",
-					'allday'				=> $allday,
+					'allday'				=> $this->logs->option_lang($allday),
 					'notes'					=> $notes,
-					'repeating'				=> $repeat,
+					'repeating'				=> '{L_calendar_log_repeat_'.$repeat.'}',
 					'extension'				=> serialize($extension),
-					'mode'					=> $extension['calendarmode'],
+					'mode'					=> '{L_calendar_mode_'.$extension['calendarmode'].'}',
 				);
 				
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
@@ -211,20 +211,20 @@ if(!class_exists('pdh_w_calendar_events')) {
 			if ($objQuery){
 				$id = $objQuery->insertId;
 				$arrNew = array(
-					'calendar_id'			=> $cal_id,
+					'calendar_id'			=> $this->pdh->get('calendars', 'name', array($cal_id)),
 					'name'					=> (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name),
-					'creator'				=> $creator,
+					'creator'				=> $this->pdh->get('user', 'name', array($creator)),
 					'timestamp_start'		=> "{D_".$startdate."}",
 					'timestamp_end'			=> "{D_".$enddate."}",
-					'allday'				=> ($allday > 0) ? $allday : 0,
-					'private'				=> 0,
-					'visible'				=> 1,
-					'closed'				=> 0,
+					'allday'				=> $this->logs->option_lang(($allday > 0) ? $allday : 0),
+					'private'				=> $this->logs->option_lang(0),
+					'visible'				=> $this->logs->option_lang(1),
+					'closed'				=> $this->logs->option_lang(0),
 					'notes'					=> $notes,
-					'repeating'				=> $repeat,
+					'repeating'				=> '{L_calendar_log_repeat_'.$repeat.'}',
 					'extension'				=> (is_array($extension)) ? serialize($extension) : '',
 					'cloneid'				=> ($cloneid > 0) ? $cloneid : 0,
-					'mode'					=> $extension['calendarmode'],
+					'mode'					=> '{L_calendar_mode_'.$extension['calendarmode'].'}',
 				);
 				
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
@@ -364,7 +364,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'timestamp_end'		=> "{D_".($eventdata['timestamp_end'] + (int)$general_delta_sec)."}",
 					'allday'			=> (($move) ? (($allday == 'true') ? 1 : 0) : $eventdata['allday']),
 				);
-				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);				
+				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 				
 				return $result;

@@ -575,7 +575,7 @@ if (!class_exists("pdh_r_user")){
 			
 			$perm = false;
 			
-			if ($strField == 'priv_wall_posts_read' || strField ==  'priv_wall_posts_write'){
+			if ($strField == 'priv_wall_posts_read' || $strField ==  'priv_wall_posts_write'){
 
 				switch ($intUserValue){
 					case 0: // all
@@ -643,7 +643,7 @@ if (!class_exists("pdh_r_user")){
 		
 		private function init_online_user(){
 			if (!$this->online_user){
-				$objQuery = $this->db->query("SELECT session_user_id FROM __sessions;");
+				$objQuery = $this->db->prepare("SELECT session_user_id FROM __sessions WHERE session_current > ? AND session_user_id > 0;")->execute($this->time->time-600);
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$this->online_user[] = $row['session_user_id'];

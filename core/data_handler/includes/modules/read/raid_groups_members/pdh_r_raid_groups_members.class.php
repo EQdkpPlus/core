@@ -112,6 +112,14 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 				return array();
 			}
 		}
+		
+		public function get_membership_status($member_id, $group_id){
+			if (isset($this->raid_memberships[$member_id][$group_id])){
+				return $this->raid_memberships[$member_id][$group_id];
+			} else {
+				return false;
+			}
+		}
 
 		public function get_groupcount($group_id){
 			return ((isset($this->raid_groups_members[$group_id])) ? count($this->raid_groups_members[$group_id]) : 0);

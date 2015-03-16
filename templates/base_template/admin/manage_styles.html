@@ -54,19 +54,36 @@
 	<div class="clear"></div>
 </div>
 
+<script>
+
+$(document).ready(function(){
+	$('input[name="background_type"]').on('change', function(){
+		if($(this).val() == "2"){
+			$("#background_image").attr("disabled", false);
+		} else {
+			$("#background_image").attr("disabled", true);
+		}
+	})
+	var recent = $('input[name="background_type"]:checked').val();
+	if(recent == "2"){
+		$("#background_image").attr("disabled", false);
+	} else {
+		$("#background_image").attr("disabled", true);
+	}
+})
+</script>
+
 <form method="post" action="{F_ADD_STYLE}" name="post">
 <div id="style_tabs">
 <ul>
 <li><a href="#settings">{L_style_settings}</a></li>
-<!-- IF S_USE_DBVARS --><li><a href="#colors">{L_color_settings}</a></li><!-- ENDIF -->
+<li><a href="#colors">{L_color_settings}</a></li>
 <li><a href="#class_colors">{L_core_sett_f_class_colors}</a></li>
 <li><a href="#templates">{L_edit_templates}</a></li>
 </ul>
 
 <input type="hidden" name="styleid" value="{STYLE_ID}" />
-<!-- IF S_USE_DBVARS -->
-<input type="hidden" name="use_db_vars" value="1" />
-<!-- ENDIF -->
+
 <div id="settings">
 	<fieldset class="settings">
 		<legend>{L_style_settings}</legend>
@@ -86,10 +103,25 @@
 			<dt><label>{L_logo_position}</label></dt>
 			<dd>{DD_LOGO_POSITION}</dd>
 		</dl>
+	</fieldset>
+	<fieldset class="settings">
+		<legend>{L_background_image}</legend>	
+		<dl>
+			<dt><label>{L_background_image_type}</label><br /><span>{L_background_image_type_help}</span></dt>
+			<dd>{RADIO_BACKGROUND_IMAGE_TYPE}</dd>
+		</dl>
 		<dl>
 			<dt><label>{L_background_image}</label><br /><span>{L_background_image_note}</span></dt>
-			<dd><input id="background_image" type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" />
-			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('background_image');"></i></dd>
+			<dd>
+			<div class="input-icon-append">
+			<input id="background_image" type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" {BACKGROUND_IMG_DISABLED}/>
+			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('background_image');"></i>
+			</div>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_background_position}</label></dt>
+			<dd>{RADIO_BACKGROUND_POSITION}</dd>
 		</dl>
 	</fieldset>
 
@@ -97,22 +129,28 @@
 		<legend>{L_pk_set_portal_head}</legend>
 		<dl>
 			<dt><label>{L_style_portal_width}</label></dt>
-			<dd><input type="text" name="portal_width" size="5" maxlength="5" value="{STYLE_PORTAL_WIDTH}" class="input" /> {DD_PORTAL_WIDTH}</dd>
+			<dd><input type="text" name="portal_width" size="5" maxlength="5" value="{STYLE_PORTAL_WIDTH}" class="input" {STYLE_PORTAL_WIDTH_DISABLED}/> {DD_PORTAL_WIDTH}</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_style_column_left_width}</label></dt>
-			<dd><input type="text" name="column_left_width" size="5" maxlength="5" value="{STYLE_COLUMN_LEFT_WIDTH}" class="input" /> {DD_COLUMN_LEFT_WIDTH}</dd>
+			<dd><input type="text" name="column_left_width" size="5" maxlength="5" value="{STYLE_COLUMN_LEFT_WIDTH}" class="input" {STYLE_COLUMN_LEFT_DISABLED}/> {DD_COLUMN_LEFT_WIDTH}</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_style_column_right_width}</label></dt>
-			<dd><input type="text" name="column_right_width" size="5" maxlength="5" value="{STYLE_COLUMN_RIGHT_WIDTH}" class="input" /> {DD_COLUMN_RIGHT_WIDTH}</dd>
+			<dd><input type="text" name="column_right_width" size="5" maxlength="5" value="{STYLE_COLUMN_RIGHT_WIDTH}" class="input" {STYLE_COLUMN_RIGHT_DISABLED}/> {DD_COLUMN_RIGHT_WIDTH}</dd>
 		</dl>
 	</fieldset>
 
 
 </div>
-<!-- IF S_USE_DBVARS -->
+
 <div id="colors">
+<div class="infobox infobox-large infobox-blue clearfix">
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_style_settings_info}
+</div>
+
+
+
 	<fieldset class="settings">
 		<legend>{L_color_settings}</legend>
 		<dl>
@@ -124,27 +162,27 @@
 		<legend>{L_fonts}</legend>
 		<dl>
 			<dt><label>{L_fontface1}</label><br /><span>{L_fontface1_note}</span></dt>
-			<dd><input type="text" name="fontface1" size="35" maxlength="60" value="{FONTFACE1}" class="input" /></dd>
+			<dd><input type="text" name="fontface1" size="35" maxlength="60" value="{FONTFACE1}" class="input" {FONTFACE1_DISABLED} /></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_fontface2}</label><br /><span>{L_fontface2_note}</span></dt>
-			<dd><input type="text" name="fontface2" size="35" maxlength="60" value="{FONTFACE2}" class="input" /></dd>
+			<dd><input type="text" name="fontface2" size="35" maxlength="60" value="{FONTFACE2}" class="input" {FONTFACE2_DISABLED} /></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_fontface3}</label><br /><span>{L_fontface3_note}</span></dt>
-			<dd><input type="text" name="fontface3" size="35" maxlength="60" value="{FONTFACE3}" class="input" /></dd>
+			<dd><input type="text" name="fontface3" size="35" maxlength="60" value="{FONTFACE3}" class="input" {FONTFACE3_DISABLED} /></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_fontsize1}</label><br /><span>{L_fontsize1_note}</span></dt>
-			<dd><input type="text" name="fontsize1" size="3" maxlength="4" value="{FONTSIZE1}" class="input" /> px</dd>
+			<dd><input type="text" name="fontsize1" size="3" maxlength="4" value="{FONTSIZE1}" class="input" {FONTSIZE1_DISABLED} /> px</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_fontsize2}</label><br /><span>{L_fontsize2_note}</span></dt>
-			<dd><input type="text" name="fontsize2" size="3" maxlength="4" value="{FONTSIZE2}" class="input" /> px</dd>
+			<dd><input type="text" name="fontsize2" size="3" maxlength="4" value="{FONTSIZE2}" class="input" {FONTSIZE2_DISABLED} /> px</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_fontsize3}</label><br /><span>{L_fontsize3_note}</span></dt>
-			<dd><input type="text" name="fontsize3" size="3" maxlength="4" value="{FONTSIZE3}" class="input" /> px</dd>
+			<dd><input type="text" name="fontsize3" size="3" maxlength="4" value="{FONTSIZE3}" class="input" {FONTSIZE3_DISABLED} /> px</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_fontcolor1}</label><br /><span>{L_fontcolor1_note}</span></dt>
@@ -218,7 +256,7 @@
 		</dl>
 		<dl>
 			<dt><label>{L_table_border_width}</label></dt>
-			<dd><input type="text" name="table_border_width" size="2" maxlength="3" value="{TABLE_BORDER_WIDTH}" class="input" /> px</dd>
+			<dd><input type="text" name="table_border_width" size="2" maxlength="3" value="{TABLE_BORDER_WIDTH}" class="input" {TABLE_BORDER_WIDTH_DISABLED} /> px</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_table_border_color}</label></dt>
@@ -237,7 +275,7 @@
 		</dl>
 		<dl>
 			<dt><label>{L_input_border_width}</label></dt>
-			<dd><input type="text" name="input_border_width" size="2" maxlength="3" value="{INPUT_BORDER_WIDTH}" class="input" /> px</dd>
+			<dd><input type="text" name="input_border_width" size="2" maxlength="3" value="{INPUT_BORDER_WIDTH}" class="input" {INPUT_BORDER_WIDTH_DISABLED} /> px</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_input_border_color}</label></dt>
@@ -249,7 +287,6 @@
 		</dl>
 	</fieldset>
 </div>
-<!-- ENDIF -->
 
 
 <div id="class_colors">

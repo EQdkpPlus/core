@@ -56,6 +56,7 @@ class template extends gen_class {
 										'js_code'		=> false,
 										'js_file'		=> false,
 										'css_code'		=> false,
+										'css_code_direct'=> false,
 										'css_file'		=> false,
 										'rss_feeds'		=> false,
 										'statichtml'	=> false,
@@ -68,8 +69,8 @@ class template extends gen_class {
 
 	public function __construct($install=false) {
 		$this->is_install = $install;
-		require_once($this->root_path . 'libraries/_statics/CSS.php');
-		require_once($this->root_path . 'libraries/_statics/JSMin.php');
+		require_once($this->root_path . 'libraries/_statics/CSS/CSS.php');
+		require_once($this->root_path . 'libraries/_statics/JS/JShrink.php');
 	}
 	
 	/*
@@ -181,8 +182,10 @@ class template extends gen_class {
 	/**
 	* Assign custom CSS Code to the Header
 	*/
-	public function add_css($varval){
-		$this->tpl_output['css_code'][] = $varval;
+	public function add_css($varval, $blnDirect=false){
+		if($blnDirect){
+			$this->tpl_output['css_code_direct'][] = $varval;
+		} else $this->tpl_output['css_code'][] = $varval;
 	}
 	
 	
@@ -252,13 +255,15 @@ class template extends gen_class {
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
 			}
 
-			$minify = new Minify_CSS();
-			$strCSS = $minify->minify($strCSS);
-			
-			$this->pfh->putContent($combinedFile, $strCSS);
-			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
-			if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
-			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
+			if(strlen($strCSS)){
+				$minify = new Minify_CSS();
+				$strCSS = $minify->minify($strCSS);
+				
+				$this->pfh->putContent($combinedFile, $strCSS);
+				$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
+				if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
+				array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
+			}
 		}
 		return $combinedFile;
 	}
@@ -303,18 +308,21 @@ class template extends gen_class {
 		}
 	}
 	
-	public function resolve_css_file($cssfile){
+	public function resolve_css_file($cssfile, $stylecode =false){
+		if(!$stylecode) $stylecode = $this->style_code;
+		
 		//Check data dir for exact match
 		$strWithoutRoot = str_replace($this->root_path, '', $cssfile);
 		$strCleaned = str_replace('templates/base_template/', '', $strWithoutRoot);
-		$strCleaned = str_replace('templates/'.$this->style_code, '', $strCleaned);
+		$strCleaned = str_replace('templates/'.$stylecode, '', $strCleaned);
+		$data_root = $this->pfh->FolderPath('templates/'.$stylecode, 'eqdkp');
 
-		if(file_exists($this->data_root.$strWithoutRoot)){
-			return $this->data_root.$strWithoutRoot;
-		}elseif(file_exists($this->data_root.$strCleaned)){
-			return $this->data_root.$strCleaned;
+		if(file_exists($data_root.$strWithoutRoot)){
+			return $data_root.$strWithoutRoot;
+		}elseif(file_exists($data_root.$strCleaned)){
+			return $data_root.$strCleaned;
 		}elseif(strpos($cssfile, '/base_template/')){
-			$strSpecificTemplate = str_replace('/base_template/', '/'.$this->template.'/', $cssfile);
+			$strSpecificTemplate = str_replace('/base_template/', '/'.$stylecode.'/', $cssfile);
 			if (file_exists($strSpecificTemplate)){
 				return $strSpecificTemplate;
 			}
@@ -379,12 +387,6 @@ class template extends gen_class {
 			foreach($data as $val){
 				$strJS .= ' '.$val['content'];
 			}
-			
-			/*
-			 * Don't minify, because we are using minified files and minifying again will slow down the page
-			$minify = new JSMin($strJS);
-			$strJS = $minify->min();
-			*/
 			
 			$this->pfh->putContent($combinedFile, $strJS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.js');
@@ -458,7 +460,7 @@ class template extends gen_class {
 		}else{
 			if ($basefile){
 				$data_file = $this->data_root.$filename;
-				$tmp_root_file = $this->root_path.'templates/'.$this->style_code.'/'.$filename;				
+				$tmp_root_file = $this->root_path.'templates/'.$this->style_code.'/'.$filename;
 			} else {
 				$data_file = $this->data_root.str_replace('templates/', '', $this->root_dir).$filename;
 				$tmp_root_file = $this->root.'/'.$filename;
@@ -470,6 +472,25 @@ class template extends gen_class {
 			} else {
 				$myfile = $this->base_template.'/'.$filename;
 			}
+		}
+		return $myfile;
+	}
+	
+	public function resolve_templatefile($filename, $stylecode=false){
+		if(!$stylecode) $stylecode = $this->style_code;
+		
+		$data_root = $this->pfh->FolderPath('templates/'.$stylecode, 'eqdkp');
+		$data_file = $data_root.$filename;
+		$tmp_root_file = $this->root_path.'templates/'.$stylecode.'/'.$filename;
+		$base_template = $this->root_path.'templates/base_template';
+		$myfile = false;
+		
+		if (file_exists($data_file)){
+			$myfile = $data_file;
+		} elseif(file_exists($tmp_root_file)){
+			$myfile = $tmp_root_file;
+		} elseif(file_exists($myfile)) {
+			$myfile = $base_template.'/'.$filename;
 		}
 		return $myfile;
 	}
@@ -536,20 +557,20 @@ class template extends gen_class {
 					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
 					$imploded_jscode .= "});";
 				}
-				$this->assign_var('JS_CODE', (($debug) ? $imploded_jscode : JSMin::minify($imploded_jscode)));
+				$this->assign_var('JS_CODE', (($debug) ? $imploded_jscode : \JShrink\Minifier::minify($imploded_jscode)));
 				$this->set_templateout('js_code', true);
 			}
 
 			// JS on end of page
 			if(is_array($this->get_templatedata('js_code_eop'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
-				$this->assign_var('JS_CODE_EOP', (($debug) ? $imploded_jscodeeop : JSMin::minify($imploded_jscodeeop)));
+				$this->assign_var('JS_CODE_EOP', (($debug) ? $imploded_jscodeeop : \JShrink\Minifier::minify($imploded_jscodeeop)));
 				$this->set_templateout('js_code', true);
 			}
 			// JS on end of page
 			if(is_array($this->get_templatedata('js_code_eop2'))){
 				$imploded_jscodeeop2 = implode("\n", $this->get_templatedata('js_code_eop2'));
-				$this->assign_var('JS_CODE_EOP2', (($debug) ? $imploded_jscodeeop2 : JSMin::minify($imploded_jscodeeop2)));
+				$this->assign_var('JS_CODE_EOP2', (($debug) ? $imploded_jscodeeop2 : \JShrink\Minifier::minify($imploded_jscodeeop2)));
 				$this->set_templateout('js_code', true);
 			}
 		}
@@ -568,12 +589,19 @@ class template extends gen_class {
 		}
 		
 		// Pass CSS Code to template..
-		if(!$this->get_templateout('css_code')){
+		if(!$this->get_templateout('css_code') || !$this->get_templateout('css_code_direct')){
+			$imploded_css = "";
 			if(is_array($this->get_templatedata('css_code'))){
-				$imploded_css = implode("\n", $this->get_templatedata('css_code'));
-				$this->assign_var('CSS_CODE', (($debug) ? $imploded_css : Minify_CSS::minify($imploded_css)));
-				$this->set_templateout('css_code', true);
+				$imploded_css .= implode("\n", $this->get_templatedata('css_code'));
 			}
+			if(is_array($this->get_templatedata('css_code_direct'))){
+				$imploded_css .= implode("\n", $this->get_templatedata('css_code_direct'));
+			}
+			if($imploded_css != ""){
+				$this->assign_var('CSS_CODE', (($debug) ? $imploded_css : Minify_CSS::minify($imploded_css)));
+			}
+			$this->set_templateout('css_code', true);
+			$this->set_templateout('css_code_direct', true);
 		}
 
 		// Load the JS Files..
@@ -597,6 +625,14 @@ class template extends gen_class {
 				$imploded_feeds = implode("\n", $feeds);
 				$this->assign_var('RSS_FEEDS', $imploded_feeds);
 				$this->set_templateout('rss_feeds', true);
+				
+				$this->assign_var('S_GLOBAL_RSSFEEDS', true);
+				foreach($this->get_templatedata('rss_feeds') as $feed){
+					$this->tpl->assign_block_vars('global_rss_row', array(
+						'LINK' => $feed['url'],
+						'NAME' => $feed['name'],
+					));
+				}
 			}
 		}
 
@@ -919,12 +955,47 @@ class template extends gen_class {
 	private function compile_tag_block($tag_args){
 		$tag_template_php = '';
 		array_push($this->block_names, $tag_args);
+		
+		// Allow for control of looping (indexes start from zero):
+		// foo(2)    : Will start the loop on the 3rd entry
+		// foo(-2)   : Will start the loop two entries from the end
+		// foo(3,4)  : Will start the loop on the fourth entry and end it on the fifth
+		// foo(3,-4) : Will start the loop on the fourth entry and end it four from last
+		if (preg_match('#^([^()]*)\(([\-\d]+)(?:,([\-\d]+))?\)$#', $tag_args, $match))
+		{
+			$tag_args = $match[1];
+			if ($match[2] < 0)
+			{
+				$loop_start = '($_' . $tag_args . '_count ' . $match[2] . ' < 0 ? 0 : $_' . $tag_args . '_count ' . $match[2] . ')';
+			}
+			else
+			{
+				$loop_start = '($_' . $tag_args . '_count < ' . $match[2] . ' ? $_' . $tag_args . '_count : ' . $match[2] . ')';
+			}
+			if (strlen($match[3]) < 1 || $match[3] == -1)
+			{
+				$loop_end = '$_' . $tag_args . '_count';
+			}
+			else if ($match[3] >= 0)
+			{
+				$loop_end = '(' . ($match[3] + 1) . ' > $_' . $tag_args . '_count ? $_' . $tag_args . '_count : ' . ($match[3] + 1) . ')';
+			}
+			else //if ($match[3] < -1)
+			{
+				$loop_end = '$_' . $tag_args . '_count' . ($match[3] + 1);
+			}
+		}
+		else
+		{
+			$loop_start = 0;
+			$loop_end = '$_' . $tag_args . '_count';
+		}
 
 		if (sizeof($this->block_names) < 2){
 			// Block is not nested.
 			$tag_template_php	= '$_' . $tag_args . '_count = (isset($this->_data[\'' . $tag_args . '.\'])) ?  sizeof($this->_data[\'' . $tag_args . '.\']) : 0;' . "\n";
 			$tag_template_php	.= 'if ($_' . $tag_args . '_count) {' . "\n";
-			$tag_template_php	.= 'for ($_' . $tag_args . '_i = 0; $_' . $tag_args . '_i < $_' . $tag_args . '_count; $_' . $tag_args . '_i++)';
+			$tag_template_php	.= 'for ($_' . $tag_args . '_i = '.$loop_start.'; $_' . $tag_args . '_i < '.$loop_end.'; $_' . $tag_args . '_i++)';
 
 		// This block is nested.
 		}else{
@@ -938,7 +1009,7 @@ class template extends gen_class {
 			// Create the for loop code to iterate over this block.
 			$tag_template_php	= '$_' . $tag_args . '_count = (isset(' . $varref . ')) ? sizeof(' . $varref . ') : 0;' . "\n";
 			$tag_template_php	.= 'if ($_' . $tag_args . '_count) {' . "\n";
-			$tag_template_php	.= 'for ($_' . $tag_args . '_i = 0; $_' . $tag_args . '_i < $_' . $tag_args . '_count; $_' . $tag_args . '_i++)';
+			$tag_template_php	.= 'for ($_' . $tag_args . '_i = '.$loop_start.'; $_' . $tag_args . '_i < ' . $loop_end . '; $_' . $tag_args . '_i++)';
 		}
 		$tag_template_php		.= "\n{\n";
 		return $tag_template_php;
@@ -1254,62 +1325,81 @@ class template extends gen_class {
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
+
+		//Background Image
+		$template_background_file = "";
+		switch($style['background_type']){
+			//Game
+			case 1: $template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+			break;
+				
+			//Own
+			case 2:
+				if ($style['background_img'] != ''){
+					if (strpos($style['background_img'],'://') > 1){
+						$template_background_file = $style['background_img'];
+					} else {
+						$template_background_file = $root_path.$style['background_img'];
+					}
+				}
+				break;
 		
-		if (file_exists($this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg')){
-			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
-		} else {
-			$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.jpg';
+			//Style
+			default:
+				if(is_file($this->root_path . 'templates/' . $style['template_path'] . '/images/template_background.png')){
+					$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.png';
+				} else {
+					$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.jpg';
+				}
 		}
-		if ($style['background_img'] != ''){
-			if (strpos($style['background_img'],'://') > 1){
-				$template_background_file = $style['background_img'];
-			} else {
-				$template_background_file = $root_path.$style['background_img'];
-			}
+		if($template_background_file == ""){
+			//Cannot find a background file, let's take the game specific
+			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		}
 		
 		$in = array(
-				"/T_FONTFACE1/",
-				"/T_FONTFACE2/",
-				"/T_FONTFACE3/",
-				"/T_FONTSIZE1/",
-				"/T_FONTSIZE2/",
-				"/T_FONTSIZE3/",
-				"/T_FONTCOLOR1/",
-				"/T_FONTCOLOR2/",
-				"/T_FONTCOLOR3/",
-				"/T_FONTCOLOR_NEG/",
-				"/T_FONTCOLOR_POS/",
-				"/T_BODY_BACKGROUND/",
-				"/T_TABLE_BORDER_WIDTH/",
-				"/T_TABLE_BORDER_COLOR/",
-				"/T_TABLE_BORDER_STYLE/",
-				"/T_BODY_LINK_STYLE/",
-				"/T_BODY_LINK/",
-				"/T_BODY_HLINK_STYLE/",
-				"/T_BODY_HLINK/",
-				"/T_HEADER_LINK_STYLE/",
-				"/T_HEADER_LINK/",
-				"/T_HEADER_HLINK_STYLE/",
-				"/T_HEADER_HLINK/",
+				"T_FONTFACE1",
+				"T_FONTFACE2",
+				"T_FONTFACE3",
+				"T_FONTSIZE1",
+				"T_FONTSIZE2",
+				"T_FONTSIZE3",
+				"T_FONTCOLOR1",
+				"T_FONTCOLOR2",
+				"T_FONTCOLOR3",
+				"T_FONTCOLOR_NEG",
+				"T_FONTCOLOR_POS",
+				"T_BODY_BACKGROUND",
+				"T_TABLE_BORDER_WIDTH",
+				"T_TABLE_BORDER_COLOR",
+				"T_TABLE_BORDER_STYLE",
+				"T_BODY_LINK_STYLE",
+				"T_BODY_LINK",
+				"T_BODY_HLINK_STYLE",
+				"T_BODY_HLINK",
+				"T_HEADER_LINK_STYLE",
+				"T_HEADER_LINK",
+				"T_HEADER_HLINK_STYLE",
+				"T_HEADER_HLINK",
 		
-				"/T_TH_COLOR1/",
-				"/T_TR_COLOR1/",
-				"/T_TR_COLOR2/",
-				"/T_INPUT_BACKGROUND/",
-				"/T_INPUT_BORDER_WIDTH/",
-				"/T_INPUT_BORDER_COLOR/",
-				"/T_INPUT_BORDER_STYLE/",
-				"/T_PORTAL_WIDTH_WITHOUT_BOTH_COLUMNS/",
-				"/T_PORTAL_WIDTH_WITHOUT_LEFT_COLUMN/",
-				"/T_PORTAL_WIDTH/",
-				"/T_COLUMN_LEFT_WIDTH/",
-				"/T_COLUMN_RIGHT_WIDTH/",
+				"T_TH_COLOR1",
+				"T_TR_COLOR1",
+				"T_TR_COLOR2",
+				"T_INPUT_BACKGROUND",
+				"T_INPUT_BORDER_WIDTH",
+				"T_INPUT_BORDER_COLOR",
+				"T_INPUT_BORDER_STYLE",
+				"T_PORTAL_WIDTH_WITHOUT_BOTH_COLUMNS",
+				"T_PORTAL_WIDTH_WITHOUT_LEFT_COLUMN",
+				"T_PORTAL_WIDTH",
+				"T_COLUMN_LEFT_WIDTH",
+				"T_COLUMN_RIGHT_WIDTH",
+				"T_BACKGROUND_POSITION",
 		
-				"/EQDKP_ROOT_PATH/",
-				"/EQDKP_IMAGE_PATH/",
-				"/TEMPLATE_IMAGE_PATH/",
-				"/TEMPLATE_BACKGROUND/",
+				"EQDKP_ROOT_PATH",
+				"EQDKP_IMAGE_PATH",
+				"TEMPLATE_IMAGE_PATH",
+				"TEMPLATE_BACKGROUND",
 		);
 		
 		$out = array(
@@ -1348,6 +1438,7 @@ class template extends gen_class {
 				$style['portal_width'],
 				$style['column_left_width'],
 				$style['column_right_width'],
+				(($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
 		
 				$root_path,
 				$root_path.'images/',
@@ -1355,7 +1446,7 @@ class template extends gen_class {
 				$template_background_file,
 		);
 		
-		$data = preg_replace($in, $out, $strCSS);
+		$data = str_replace($in, $out, $strCSS);
 		
 		/**
 		 * Contao Open Source CMS
@@ -1405,10 +1496,11 @@ class template extends gen_class {
 					$glue = ($dir != '.') ? $dir . '/' : '';
 					$strData = $root_path . $glue . $strData;
 				}
-
+				
+				$strData = str_replace("//", "/", $strData);
 			}
-		
-			$strBuffer .= 'url("' . str_replace("//", "/", $strData) . '")';
+			
+			$strBuffer .= 'url("' . $strData . '")';
 		}
 		$data = $strBuffer;
 		return $data;

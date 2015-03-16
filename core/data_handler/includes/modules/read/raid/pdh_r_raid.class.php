@@ -155,6 +155,16 @@ if(!class_exists('pdh_r_raid')){
 			return bl_note2link($this->get_note($id), $this->get_event_name($id));*/
 			return $this->get_note($id);
 		}
+		
+		//Finished
+		public function get_additional_data($id){
+			return $this->objPagination->get($id, 'raid_additional_data');
+		}
+		
+		public function get_html_additional_data($id){
+			$strData = $this->get_additional_data($id);
+			return $this->bbcode->toHTML($strData);
+		}
 
 		//Finished
 		public function get_raid_attendees($id, $skip_special = true){
@@ -285,7 +295,7 @@ if(!class_exists('pdh_r_raid')){
 				<i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i>
 			</a>';
 			
-			$out .= '<a href="'.$this->get_raidlink($raid_id, $base_url, '&copy=true').'">
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_raidlink($raid_id, $base_url, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
 			

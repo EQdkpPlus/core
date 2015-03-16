@@ -66,6 +66,10 @@ if ( !defined('EQDKP_INC') ){
 			return $variable;
 		}
 		
+		public function option_lang($option){
+			return ($option == 1) ? '{L_OPTION_TRUE}' : '{L_OPTION_FALSE}';
+		}
+		
 		/*
 		 * $arrOld = array(1,2,3)
 		 * $arrNew = array(4,5,6)

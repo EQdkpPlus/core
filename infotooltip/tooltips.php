@@ -174,6 +174,9 @@ var EQdkpTooltip = new function(){
 			
 			$('.infotooltip').tooltip({
 				track: true,
+				open: function(event, ui) {
+					$(ui.tooltip).siblings(".tooltip").remove();
+				},
 				content: function(response) {
 					var direct = $(this).attr('title').substr(0,1);
 					var mytitle = $(this).attr('title');

@@ -138,11 +138,12 @@ abstract class super_registry {
 			$auth_method = 'auth_'.((registry::register('config')->get('auth_method') != '') ? registry::register('config')->get('auth_method') : 'db');
 			require_once(self::get_const('root_path') . 'core/auth/'. $auth_method . '.class.php');
 			self::$aliases['user'] = $auth_method;
-
+			
 			registry::fetch('user')->start();
 			
 			registry::fetch('user')->setup(registry::register('input')->get('lang', ''), registry::register('input')->get('style', 0));
 			self::set_timezone();
+			define('USER_INITIALIZED', true);
 			
 			if (!defined('MAINTENANCE_MODE')){
 				//Maintenance mode redirect for non admins
@@ -183,7 +184,7 @@ abstract class super_registry {
 			
 			// Set the locale
 			setlocale(LC_ALL, registry::register('config')->get('default_locale'));
-			setlocale(LC_NUMERIC, "eng");
+			setlocale(LC_NUMERIC, "en_EN", "en", "eng");
 
 			// Populate the admin menu if we're in an admin page, they have admin permissions
 			if(defined('IN_ADMIN') && IN_ADMIN === true){

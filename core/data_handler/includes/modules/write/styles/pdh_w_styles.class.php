@@ -72,6 +72,8 @@ if(!class_exists('pdh_w_styles')) {
 		}
 		
 		public function add_style($data){
+			if(!isset($data['background_type']) || $data['background_type'] == "") $data['background_type'] = 1;
+			
 			$objQuery = $this->db->prepare("INSERT INTO __styles :p")->set($data)->execute();
 			if ($objQuery){
 				$this->pdh->enqueue_hook('styles_update');

@@ -309,7 +309,9 @@ class user_pageobject extends pageobject {
 		
 		
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user=".$row['user_id'], 'width'=>'660', 'height'=>'450'));
-
+	
+		
+		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', $row['username'], 'u'.$row['user_id'], false, true).'" />');
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('user').': '.sanitize($row['username']),
 			'template_file'		=> 'userprofile.html',
@@ -342,7 +344,7 @@ class user_pageobject extends pageobject {
 		));
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
-
+		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', false, false, false, true).'" />');
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('user_list'),
 			'template_file'		=> 'listusers.html',

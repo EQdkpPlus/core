@@ -267,16 +267,17 @@ abstract class Database extends gen_class {
 		$this->intErrno = $strErrorCode;
 		
 		$strErrorID = md5('db_error'.$strErrorMessage.time().$this->strDebugPrefix);
+
+		$exception = new Exception();
+		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
 		
-		if(!$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
+		if(defined('USER_INITIALIZED') && !$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
 	
 			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a>.</li></ul>", 'Error', 'red');
 			$sys_message = true ;
 		}
-		$exception = new Exception();
-		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
 	}
 	
 	
@@ -892,6 +893,11 @@ abstract class DatabaseStatement {
 
 				case 'array':
 					$arrParams[$k] = $this->string_escape(serialize($v));
+					break;
+					
+				case 'double':
+				case 'float': 
+					$arrParams[$k] = preg_replace('#([-]?)([0-9]+)([\.,]?)([0-9]*)#', "\\1\\2.\\4", $v);
 					break;
 
 				default:

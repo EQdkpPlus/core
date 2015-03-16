@@ -45,6 +45,7 @@ if(!class_exists('pdh_r_adjustment')){
 			'adj_value'			=> array('value', array('%adjustment_id%'), array()),
 			'adj_reason_link'	=> array('link', array('%adjustment_id%', '%link_url%', '%link_url_suffix%'), array()),
 			'adj_event'			=> array('event_name', array('%adjustment_id%'), array()),
+			'adj_member'		=> array('member_name', array('%adjustment_id%'), array()),
 			'adj_members'		=> array('m4agk4a', array('%adjustment_id%'), array()),
 			'adj_raid'			=> array('raid_id', array('%adjustment_id%', '%raid_link_url%', '%raid_link_url_suffix%'), array()),
 			'adjedit'			=> array('editicon', array('%adjustment_id%', '%link_url%', '%link_url_suffix%'), array()),
@@ -244,7 +245,7 @@ if(!class_exists('pdh_r_adjustment')){
 						<i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i>
 					</a>";
 			
-			$out .= '<a href="'.$this->get_link($adj_id, $baseurl, '&copy=true').'">
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_link($adj_id, $baseurl, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
 				

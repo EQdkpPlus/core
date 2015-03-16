@@ -37,6 +37,7 @@ $module_lang = array(
 	"raid_id" => 'Raid',
 	"editicon" => '',
 	"reason" => 'Reason',
+	'member_name' => 'Character',
 	);
 	$preset_lang = array(
 	"adj_date" => 'Adjustment-Date',
@@ -47,6 +48,7 @@ $module_lang = array(
 	"adj_raid" => 'Adjustment-Raid',
 	"adj_reason" => 'Adjustment-Reason',
 	"adjedit" => 'Adjustment-Edit Button',
+	"adj_member" => 'Adjustment-Character',
 	);
 	
 

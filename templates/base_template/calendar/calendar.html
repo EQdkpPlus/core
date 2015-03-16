@@ -10,19 +10,12 @@
 		$('#calendar').fullCalendar({
 			firstDay: {STARTDAY},
 
-			// define the time formats
-			axisFormat: 'H(:mm)',
-
 			// The rest
 			theme: true,
 			header: {
 				left: 'prev,next today',
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
-			},
-			timeFormat: {
-				agenda: 'H:mm{ - H:mm}',	// 5:00 - 6:30
-				'': ''
 			},
 			eventLimit: true,
 			<!-- IF IS_OPERATOR -->

@@ -28,8 +28,8 @@ if ( !defined('EQDKP_INC') ){
  * CORE VERSIONS
  * -------------------------------------------------------------------------
  */
-define('VERSION_INT',		'2.0.0.21');			// the internal version number for updates & update check
-define('VERSION_EXT',		'2.0.0 Beta 4');		// the external version number to be shown in the footer
+define('VERSION_INT',		'2.0.0.23');			// the internal version number for updates & update check
+define('VERSION_EXT',		'2.0.0 Beta 6');		// the external version number to be shown in the footer
 define('VERSION_WIP',		true);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.4.0');				// required version of PHP
 define('VERSION_PHP_REC',	'5.5.0');				// recommended version of PHP
@@ -63,12 +63,56 @@ define('MAX_FILES_USERFOLDER', 20);
 //Sourceforge
 define('EQDKP_PROJECT_URL',			"http://eqdkp-plus.eu");
 define('EQDKP_ABOUT_URL',			"http://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL',		"https://sourceforge.net/projects/eqdkp-plus/files/");
+define('EQDKP_DOWNLOADS_URL',		"http://eqdkp-plus.eu/repository/");
 define('EQDKP_REPO_URL',			"http://eqdkp-plus.eu/repository/");
 define('EQDKP_NOTIFICATIONS_URL',	"http://eqdkp-plus.eu/rss/notifications.xml");
 define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");
 define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
-define('EQDKP_CRL_URL',				"https://eqdkp-plus.googlecode.com/files/crl.txt");
+define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl/master/crl.txt");
 define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
 define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
+
+//Tag Blacklist for filtering article content
+define('TAG_BLACKLIST', array(
+	'applet',
+	'body',
+	'bgsound',
+	'base',
+	'basefont',
+	'frame',
+	'frameset',
+	'head',
+	'html',
+	'id',
+	'ilayer',
+	'layer',
+	'link',
+	'meta',
+	'name',
+	'script',
+	'title',
+	'xml',
+	'iframe',
+));
+
+//Attribute Blacklist for filtering article content
+define('ATTR_BLACKLIST', array(
+	'onclick',
+	"ondblclick",
+	"onkeydown",
+	"onkeypress",
+	"onkeyup",
+	"onmousedown",
+	"onmousemove",
+	"onmouseout",
+	"onmouseover",
+	"onmouseup",
+	"onchange",
+	'action',
+	'background',
+	'codebase',
+	'dynsrc',
+	'lowsrc',
+));
+
 ?>

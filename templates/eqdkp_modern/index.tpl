@@ -21,6 +21,16 @@
 		{RSS_FEEDS}
 		<style type="text/css">
 			{CSS_CODE}
+			<!-- IF T_BACKGROUND_TYPE > 0 -->
+			body {
+				background:#000000 url('{TEMPLATE_BACKGROUND}') no-repeat center top;
+				background-attachment: {T_BACKGROUND_POSITION};
+			}
+			
+			#wrapper header {
+				background: none !important;
+			}
+			<!-- ENDIF -->
 		</style>
 		
 		<script type="text/javascript">
@@ -126,6 +136,15 @@
 				window.setTimeout("notification_update()", 1000*60*5);
 			}
 
+			function change_style(){
+				$('<div>').html('<div class="style-switch-container"><i class="fa fa-lg fa-spin fa-spinner"></i></div>').dialog(
+					{ open: function( event, ui ) {
+						$.get("{EQDKP_ROOT_PATH}exchange.php{SID}&out=styles", function(data){
+							$('.style-switch-container').html(data);
+						});
+					}, title: {L_change_style|jsencode}, width: 600, height: 500}
+				);
+			}
 			
 			$(document).ready(function() {
 				user_clock();
@@ -189,13 +208,14 @@
 				favicon = new Favico({animation:'none'});
 				notification_favicon({NOTIFICATION_COUNT_RED}, {NOTIFICATION_COUNT_YELLOW}, {NOTIFICATION_COUNT_GREEN});
 				
-				$('.user-tooltip-trigger').on('click', function(event){
+				$('.tooltip-trigger').on('click', function(event){
 					event.preventDefault();
-					$("#user-tooltip").show('fast');
+					var mytooltip = $(this).data('tooltip');
+					$("#"+mytooltip).show('fast');
 					$(document).on('click', function(event) {
-						var count = $(event.target).parents('.user-tooltip-container').length;
+						var count = $(event.target).parents('.'+mytooltip+'-container').length;
 						if (count == 0){
-							$("#user-tooltip").hide('fast');
+							$("#"+mytooltip).hide('fast');
 						}
 					});
 				});
@@ -203,17 +223,6 @@
 				$('.user-tooltip-trigger').on('dblclick', function(event){
 					$("#user-tooltip").hide('fast');
 					window.location="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}";
-				});
-				
-				$('.mychars-points-tooltip-trigger').on('click', function(event){
-					event.preventDefault();
-					$("#mychars-points-tooltip").show('fast');
-					$(document).on('click', function(event) {
-						var count = $(event.target).parents('.mychars-points-tooltip-container').length;
-						if (count == 0){
-							$("#mychars-points-tooltip").hide('fast');
-						}
-					});
 				});
 				
 				$('ul.mainmenu li.link_li_indexphp a.link_indexphp, ul.mainmenu li.link_li_entry_home a.link_entry_home').html('');
@@ -267,6 +276,18 @@
 					<ul>
 						<li><a href="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" class="openLoginModal" onclick="return false;"><i class="fa fa-sign-in fa-lg"></i> {L_login}</a></li>
 						<!-- IF U_REGISTER != "" --><li>{U_REGISTER}</li><!-- ENDIF -->
+						
+						<li>
+							<div class="langswitch-tooltip-container">
+								<a href="#" class="langswitch-tooltip-trigger tooltip-trigger" data-tooltip="langswitch-tooltip">{USER_LANGUAGE_NAME}</a>
+								<ul class="dropdown-menu langswitch-tooltip" role="menu" id="langswitch-tooltip">
+									<!-- BEGIN languageswitcher_row -->
+									<li><a href="{languageswitcher_row.LINK}">{languageswitcher_row.LANGNAME}</a></li>
+									<!-- END languageswitcher_row -->
+								</ul>
+							</div>
+						</li>
+						
 						<!-- BEGIN personal_area_addition -->
 						<li>{personal_area_addition.TEXT}</li>
 						<!-- END personal_area_addition -->
@@ -276,7 +297,7 @@
 						<ul>
 							<li>
 								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger"><i class="fa fa-user fa-lg"></i> <span class="hiddenSmartphone">{USER_NAME}</span></a>
+									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger tooltip-trigger" data-tooltip="user-tooltip"><i class="fa fa-user fa-lg"></i> <span class="hiddenSmartphone">{USER_NAME}</span></a>
 									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
 										<li><a href="{U_USER_PROFILE}">
 												<div class="user-tooltip-avatar">
@@ -301,7 +322,7 @@
 							<!-- IF S_MYCHARS_POINTS and U_CHARACTERS != "" -->
 								<li class="hiddenSmartphone">
 									<div class="mychars-points-tooltip-container">
-									<a class="mychars-points-tooltip-trigger"><i class="fa fa-trophy fa-lg"></i> <span class="mychars-points-target"></span></a>
+									<a class="mychars-points-tooltip-trigger tooltip-trigger" data-tooltip="mychars-points-tooltip"><i class="fa fa-trophy fa-lg"></i> <span class="mychars-points-target"></span></a>
 									<ul class="dropdown-menu mychars-points-tooltip" role="menu" id="mychars-points-tooltip"><li>
 										<table>
 										<!-- BEGIN mychars_points -->
@@ -493,17 +514,36 @@
 					<!-- ENDIF -->
 				</div>
 			</div>
-		
+			
+			<footer id="contentFooter">
+				<div class="floatLeft">
+					<!-- IF S_REPONSIVE -->
+					<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
+					<!-- ELSE -->
+					<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
+					<!-- ENDIF -->
+				</div>
+				<div class="floatRight">
+					<!-- IF not S_LOGGED_IN -->
+					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
+					<!-- ENDIF -->
+					
+					<!-- IF S_GLOBAL_RSSFEEDS -->
+					<div class="rss-tooltip-container">
+						<a class="rss-tooltip-trigger tooltip-trigger" data-tooltip="rss-tooltip"><i class="fa hand fa-rss fa-lg"></i></a>
+						<ul class="dropdown-menu right-bottom rss-tooltip" role="menu" id="rss-tooltip">
+							<!-- BEGIN global_rss_row -->
+							<li><a href="{global_rss_row.LINK}"><i class="fa hand fa-rss fa-lg"></i> {global_rss_row.NAME}</a></li>
+							<!-- END global_rss_row -->
+						</ul>
+					</div>
+					<!-- ENDIF -->
+				</div>
+			</footer>
 		</section>
 		
 		<footer id="footer">
 				{PORTAL_BLOCK2}
-				
-				<!-- IF S_REPONSIVE -->
-				<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
-				<!-- ELSE -->
-				<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
-				<!-- ENDIF -->
 				{EQDKP_PLUS_COPYRIGHT}
 		</footer><!-- close footer -->
 	</div><!-- close wrapper -->
@@ -567,7 +607,8 @@
 				favicon.reset();
 			}
    		 });
-	</script>		
+	</script>
+	{FOOTER_CODE}
 	<a id="bottom"></a>
 	</body>
 </html>

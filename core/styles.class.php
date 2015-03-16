@@ -36,8 +36,9 @@ if (!class_exists("styles")){
 			'attendees_columns',
 			'logo_position',
 			'background_img',
+			'background_pos',
+			'background_type',
 			'css_file',
-			'use_db_vars',
 
 			'body_background',
 			'body_link',
@@ -243,14 +244,20 @@ if (!class_exists("styles")){
 			if ($styleid == $this->config->get('default_style')){
 				$this->core->message( $this->user->lang('admin_delete_style_error_defaultstyle'), $this->user->lang('error'), 'red');
 			}else{
+				$style = $this->pdh->get('styles', 'styles', array($styleid));
 				$this->pdh->put('styles', 'delete_style', array($styleid));
 				$this->pdh->process_hook_queue();
-				$style = $this->pdh->get('styles', 'styles', array($styleid));
-
 				$storage_folder = $this->pfh->FolderPath('templates/'.$style['template_path'], 'eqdkp');
+
 				if (file_exists($storage_folder)){$this->pfh->Delete($storage_folder);}
 				$this->core->message( $this->user->lang('admin_delete_style_success'), $this->user->lang('success'), 'green');
 			}
+		}
+		
+		public function remove($stylename){
+			$stylename = preg_replace("/[^a-zA-Z0-9-_]/", "", $stylename);
+			if($stylename == "") return false;
+			$this->pfh->Delete($this->root_path.'templates/'.$stylename.'/');
 		}
 
 		public function export($styleid){

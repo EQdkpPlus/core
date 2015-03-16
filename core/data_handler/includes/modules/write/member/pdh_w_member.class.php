@@ -186,7 +186,9 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$prof_fields = $this->pdh->get('profile_fields', 'fieldlist');
 			$myxml = array();
 			foreach($fielddata as $pfname => $value){
-				$myxml[$pfname] = in_array($pfname, $prof_fields) ? $value : '';
+				if(in_array($pfname, $prof_fields)){
+					$myxml[$pfname] = $value;
+				}
 			}
 			return json_encode($myxml);
 		}

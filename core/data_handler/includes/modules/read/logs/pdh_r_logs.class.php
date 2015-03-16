@@ -45,6 +45,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			'loguser'		=> array('user',		array('%log_id%'), array()),
 			'logipaddress'	=> array('ipaddress',	array('%log_id%'), array()),
 			'logresult'		=> array('result',		array('%log_id%'), array()),
+			'logvalue'		=> array('value',		array('%log_id%'), array()),
 			'logrecord'		=> array('record',		array('%log_id%'), array()),
 			'logrecordid'	=> array('recordid',	array('%log_id%'), array()),
 			'viewlog'		=> array('viewicon',	array('%log_id%', '%link_url%', '%link_url_suffix%'), array()),
@@ -97,19 +98,19 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			return $arrTags;
 		}
 		
-		public function get_filtered_id_list($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to, $recordid, $record){
+		public function get_filtered_id_list($plugin=false, $result=false, $ip=false, $sid=false, $tag=false, $user_id=false, $value=false, $date_from=false, $date_to=false, $recordid=false, $record=false){
 			$strQuery = "SELECT log_id FROM __logs WHERE ";
-			if ($plugin !== false) $strQuery .= " log_plugin= '".$this->db->escapeString($plugin). "' AND";
+			if ($plugin !== false) $strQuery .= " log_plugin= ".$this->db->escapeString($plugin). " AND";
 			if ($result !== false) $strQuery .= " log_result= ".$this->db->escapeString($result). " AND";
 			if ($ip !== false) $strQuery .= " log_ipaddress LIKE ".$this->db->escapeString('%'.$ip.'%'). " AND";
 			if ($sid !== false) $strQuery .= " log_sid LIKE ".$this->db->escapeString('%'.$sid.'%'). " AND";
-			if ($tag !== false) $strQuery .= " log_tag = '".$this->db->escapeString($tag). "' AND";
+			if ($tag !== false) $strQuery .= " log_tag = ".$this->db->escapeString($tag). " AND";
 			if ($user_id !== false) $strQuery .= " user_id =".$this->db->escapeString($user_id). " AND";
 			if ($value !== false) $strQuery .= " log_value LIKE ".$this->db->escapeString("%".$value."%"). " AND";
 			if ($date_from !== false) $strQuery .= " log_date > ".$this->db->escapeString($date_from). " AND";
 			if ($date_to !== false) $strQuery .= " log_date < ".$this->db->escapeString($date_to)." AND";
-			if ($recordid !== false) $strQuery .= " log_record_id = '".$this->db->escapeString($recordid). "' AND";
-			if ($record !== false) $strQuery .= " log_record= '".$this->db->escapeString($record). "' AND";
+			if ($recordid !== false) $strQuery .= " log_record_id = ".$this->db->escapeString($recordid). " AND";
+			if ($record !== false) $strQuery .= " log_record= ".$this->db->escapeString($record). " AND";
 			
 			$strQuery .= " log_id > 0";
 			
@@ -191,6 +192,68 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_value($id){
 			return $this->objPagination->get($id, 'log_value');
 		}
+		
+		public function get_html_value($id){
+			$strValue = $this->objPagination->get($id, 'log_value');
+			
+			$log_value = unserialize($strValue);
+			$arrTable = array();
+			$arrCompare = array();
+			$objLogs = register('logs');
+			
+			if(is_array($log_value)) {
+				foreach ($log_value as $k => $v){
+					if($k != 'header'){
+						//Enable Compare view
+						if (is_array($v)){
+			
+							if ($v['flag'] == 1){
+								require_once($this->root_path.'libraries/diff/diff.php');
+								require_once($this->root_path.'libraries/diff/engine.php');
+								require_once($this->root_path.'libraries/diff/renderer.php');
+								$diff = new diff(xhtml_entity_decode($objLogs->lang_replace($v['old'])), xhtml_entity_decode($objLogs->lang_replace($v['new'])), true);
+								$renderer = new diff_renderer_inline();
+									
+								$new = $content = $renderer->get_diff_content($diff);
+							} else {
+								$new = nl2br($objLogs->lang_replace($v['new']));
+							}
+							$arrCompare[] = array($objLogs->lang_replace(stripslashes($k)), nl2br($objLogs->lang_replace($v['old'])), $new, $v['flag']);
+		
+						} else {
+							$arrTable[] = array($objLogs->lang_replace(stripslashes($k)), $objLogs->lang_replace(stripslashes($v)));
+						}
+					}
+				}
+			}
+			$out = "";
+			if(count($arrTable)){
+				$out .= '<table class="table fullwidth">';
+				foreach($arrTable as $val){
+					if(is_serialized($val[1])){
+						$val[1] = print_r(unserialize($val[1]), true);
+					}
+					$out .= '<tr><td style="font-weight: bold;">'.$val[0].':</td><td>'.$val[1].'</td></tr>';
+				}
+				$out .= '</table><br />';
+			}
+			
+			if(count($arrCompare)){
+				$out .= '<table  class="table fullwidth colorswitch">
+				<tr>
+				<th>'.$this->user->lang('value').'</th><th>'.$this->user->lang('old_value').'</th><th>'.$this->user->lang('new_value').'</th>
+				</tr>';
+				foreach($arrCompare as $val){
+					$out .= '<tr>
+				<td style="font-weight: bold;">'.$val[0].'</td><td style="white-space: pre-wrap; word-break: break-word;">'.$val[1].'</td><td class="log-comp-pre">'.$val[2].'</td>
+				</tr>';
+				}
+
+				$out .= '</table>';
+			}
+			
+			return $out;
+		}
 
 		public function get_ipaddress($id){
 			return $this->objPagination->get($id, 'log_ipaddress');
@@ -234,6 +297,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			$link = $link.$this->SID . '&amp;logid='.$id.$suffix;
 			return '<a href="'.$link.'"><i class="fa fa-search fa-lg"></i></a>';
 		}
+		
 	}//end class
 }//end if
 ?>

@@ -26,6 +26,8 @@ class Minify_CSS {
      * 'preserveComments': (default true) multi-line comments that begin
      * with "/*!" will be preserved with newlines before and after to
      * enhance readability.
+     *
+     * 'removeCharsets': (default true) remove all @charset at-rules
      * 
      * 'prependRelativePath': (default null) if given, this string will be
      * prepended to all relative URIs in import/url declarations
@@ -45,33 +47,51 @@ class Minify_CSS {
      * array('//symlink' => '/real/target/path') // unix
      * array('//static' => 'D:\\staticStorage')  // Windows
      * </code>
+     *
+     * 'docRoot': (default = $_SERVER['DOCUMENT_ROOT'])
+     * see Minify_CSS_UriRewriter::rewrite
      * 
      * @return string
      */
     public static function minify($css, $options = array()) 
     {
-        require_once 'CSS/Compressor.php';
-        if (isset($options['preserveComments']) 
-            && !$options['preserveComments']) {
-            $css = Minify_CSS_Compressor::process($css, $options);
-        } else {
-            require_once 'CommentPreserver.php';
-            $css = Minify_CommentPreserver::process(
-                $css
-                ,array('Minify_CSS_Compressor', 'process')
-                ,array($options)
-            );
+        $options = array_merge(array(
+            'compress' => true,
+            'removeCharsets' => true,
+            'preserveComments' => true,
+            'currentDir' => null,
+            'docRoot' => $_SERVER['DOCUMENT_ROOT'],
+            'prependRelativePath' => null,
+            'symlinks' => array(),
+        ), $options);
+        
+        if ($options['removeCharsets']) {
+            $css = preg_replace('/@charset[^;]+;\\s*/', '', $css);
         }
-        if (! isset($options['currentDir']) && ! isset($options['prependRelativePath'])) {
+        if ($options['compress']) {
+            if (! $options['preserveComments']) {
+            	require_once 'Compressor.php';
+                $css = Minify_CSS_Compressor::process($css, $options);
+            } else {
+            	require_once 'CommentPreserver.php';
+            	require_once 'Compressor.php';
+                $css = Minify_CommentPreserver::process(
+                    $css
+                    ,array('Minify_CSS_Compressor', 'process')
+                    ,array($options)
+                );
+            }
+        }
+        if (! $options['currentDir'] && ! $options['prependRelativePath']) {
             return $css;
         }
-        require_once 'CSS/UriRewriter.php';
-        if (isset($options['currentDir'])) {
+        require_once 'UriRewriter.php';
+        if ($options['currentDir']) {
             return Minify_CSS_UriRewriter::rewrite(
                 $css
                 ,$options['currentDir']
-                ,isset($options['docRoot']) ? $options['docRoot'] : $_SERVER['DOCUMENT_ROOT']
-                ,isset($options['symlinks']) ? $options['symlinks'] : array()
+                ,$options['docRoot']
+                ,$options['symlinks']
             );  
         } else {
             return Minify_CSS_UriRewriter::prepend(

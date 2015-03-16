@@ -121,8 +121,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				$query = $this->db->query($sqlstring);
 				if ($query){
 					if($raids_only) {
+						$what2filter	= (($raids_only === 'appointments') ? '2' : '1');
 						while ( $row = $query->fetchAssoc() ){
-							if($this->get_calendartype($row['id']) == '1'){
+							if($this->get_calendartype($row['id']) == $what2filter){
 								$ids[] = $row['id'];
 							}
 						}

@@ -77,7 +77,7 @@ class input extends gen_class {
 			case 'raw':					$out = FILTER_UNSAFE_RAW;				break;
 			//float and double need a special handling, so "0,5" can be correctly interpreted as 0.5 (function floatvalue() )
 			case 'float':
-			case 'double':				$out = FILTER_SANITIZE_NUMBER_FLOAT; 	break;
+			case 'double':
 			case 'string':
 			case 'noencquotes':
 			default:					$out = FILTER_SANITIZE_STRING;
@@ -104,10 +104,6 @@ class input extends gen_class {
 	private function _options($type){
 		switch($type){
 			case 'noencquotes' : $out = FILTER_FLAG_NO_ENCODE_QUOTES;
-				break;
-			
-			case 'float':
-			case 'double': $out = FILTER_FLAG_ALLOW_FRACTION;
 				break;
 				
 			default: $out = '';

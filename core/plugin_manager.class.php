@@ -223,6 +223,21 @@ class plugin_manager extends gen_class {
 		return false;
 	}
 	
+	
+	/**
+	 * Removes the whole plugin from the EQdkp Installation
+	 * 
+	 * @param string $plugin_code
+	 */
+	public function remove($plugin_code){
+		$this->delete($plugin_code);
+		$plugin_code = preg_replace("/[^a-zA-Z0-9-_]/", "", $plugin_code);
+		if($plugin_code == "") return false;
+		$this->pfh->Delete($this->root_path.'plugins/'.$plugin_code.'/');
+		
+		return true;
+	}
+	
 	public function search($plugin_code = '') {
 		if($plugin_code) {
 			if(!$this->check($plugin_code, PLUGIN_REGISTERED)) return $this->initialize($plugin_code, true);

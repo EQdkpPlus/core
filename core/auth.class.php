@@ -457,6 +457,13 @@ class auth extends user {
 	}
 
 
+	public function setSessionVar($strVarname, $strValue){
+		$this->data['session_vars'][$strVarname] = $strValue;
+	
+		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
+				'session_vars' => serialize($this->data['session_vars']),
+		))->execute($this->sid);
+	}
 
 	/**
 	* Attempt to log out a user
@@ -583,6 +590,5 @@ class auth extends user {
 		if (count($this->settings) > 0) return $this->settings;
 		return false;
 	}
-
 }
 ?>

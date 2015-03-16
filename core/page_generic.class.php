@@ -46,7 +46,7 @@ if(!class_exists('page_generic')){
 	
 		public function __construct($pre_check, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			$this->pre_check = $pre_check;
-			$this->simple_head = ($this->in->get('simple_head', false)) ? 'simple' : 'full';
+			$this->simple_head = ($this->in->exists('simple_head')) ? 'simple' : 'full';
 			$this->simple_head_url = ($this->simple_head == 'simple') ? '&amp;simple_head=simple' : '';
 			$this->url_id_ext = '';
 			if($url_id) {

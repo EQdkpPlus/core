@@ -93,16 +93,21 @@ class ManageRaids extends page_generic {
 		if(!empty($neg)) {
 			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
 		}
+		
+		if($this->in->get('simple_head') != ""){
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
+		}
+		
 		$this->display($messages);
 	}
 
 	public function save() {
 		$data = $this->get_post();
 		if(!$data['raid']['id']) {
-			$raid_upd = $this->pdh->put('raid', 'add_raid', array($data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value']));
+			$raid_upd = $this->pdh->put('raid', 'add_raid', array($data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
 			$data['raid']['id'] = ($raid_upd) ? $raid_upd : false;
 		} else {
-			$raid_upd = $this->pdh->put('raid', 'update_raid', array($data['raid']['id'], $data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value']));
+			$raid_upd = $this->pdh->put('raid', 'update_raid', array($data['raid']['id'], $data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
 		}
 		if($raid_upd) {
 			$adj_upd = array(true);
@@ -138,6 +143,10 @@ class ManageRaids extends page_generic {
 			$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
 		} else {
 			$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
+		}
+		
+		if($this->in->get('simple_head') != ""){
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 		}
 		$this->display($messages);
 	}
@@ -212,6 +221,7 @@ class ManageRaids extends page_generic {
 			$raid['id']	 = 0;
 			$raid['date']	 = $this->time->time;
 		}
+		
 		//we're refreshing the view
 		if($force_refresh) {
 			if(!empty($data['raid'])) $raid = $data['raid'];
@@ -283,6 +293,8 @@ class ManageRaids extends page_generic {
 			//other needed vars
 			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
 			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh) ? true : false,
+			'ADDITIONAL_INFOS_EDITOR' => new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))),
+			'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
 		));
 
 		$this->tpl->add_js("
@@ -345,6 +357,7 @@ class ManageRaids extends page_generic {
 		$raid['event'] = $this->pdh->get('raid', 'event', array($raid_id));
 		$raid['note'] = $this->pdh->get('raid', 'note', array($raid_id));
 		$raid['value'] = $this->pdh->get('raid', 'value', array($raid_id));
+		$raid['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
 		if($attendees) {
 			$raid['attendees'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 		}
@@ -418,6 +431,7 @@ class ManageRaids extends page_generic {
 		$data['raid']['id'] = $this->url_id;
 		$data['raid']['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
 		$data['raid']['note'] = $this->in->get('rnote','');
+		$data['raid']['additonal_data'] = $this->in->get('additional_data','');
 		$data['raid']['event'] = $this->in->get('event',0);
 		$data['raid']['value'] = $this->in->get('value',0.0);
 		$data['raid']['attendees'] = $this->in->getArray('raid_attendees','int');

@@ -421,13 +421,13 @@ class controller extends gen_class {
 			if ($intPublished){
 				$arrToolbarItems[] = array(
 					'icon'	=> 'fa-eye-slash',
-					'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
+					'js'	=> 'onclick="window.location=\''.$this->env->link.$this->controller_path_plain.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
 					'title'	=> $this->user->lang('article_unpublish'),
 				);
 			} else {
 				$arrToolbarItems[] = array(
 						'icon'	=> 'fa-eye',
-						'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&publish&link_hash='.$this->CSRFGetToken('publish').'&aid='.$intArticleID.'\'"',
+						'js'	=> 'onclick="window.location=\''.$this->env->link.$this->controller_path_plain.$this->page_path.$this->SID.'&publish&link_hash='.$this->CSRFGetToken('publish').'&aid='.$intArticleID.'\'"',
 						'title'	=> $this->user->lang('article_publish'),
 				);
 			}
@@ -689,13 +689,13 @@ class controller extends gen_class {
 					if ($blnPublished){
 						$arrToolbarItems[] = array(
 							'icon'	=> 'fa-eye-slash',
-							'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
+							'js'	=> 'onclick="window.location=\''.$this->env->link.$this->controller_path_plain.$this->page_path.$this->SID.'&unpublish&link_hash='.$this->CSRFGetToken('unpublish').'&aid='.$intArticleID.'\'"',
 							'title'	=> $this->user->lang('article_unpublish'),
 						);
 					} else {
 						$arrToolbarItems[] = array(
 								'icon'	=> 'fa-eye',
-								'js'	=> 'onclick="window.location=\''.$this->controller_path.$this->page_path.$this->SID.'&publish&link_hash='.$this->CSRFGetToken('publish').'&aid='.$intArticleID.'\'"',
+								'js'	=> 'onclick="window.location=\''.$this->env->link.$this->controller_path_plain.$this->page_path.$this->SID.'&publish&link_hash='.$this->CSRFGetToken('publish').'&aid='.$intArticleID.'\'"',
 								'title'	=> $this->user->lang('article_publish'),
 						);
 					}

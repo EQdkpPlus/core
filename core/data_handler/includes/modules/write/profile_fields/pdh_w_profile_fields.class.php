@@ -35,6 +35,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
+				$this->pdh->enqueue_hook('member_update');
 				return true;
 			} else {
 				return false;
@@ -48,6 +49,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
+				$this->pdh->enqueue_hook('member_update');
 				return true;
 			} else {
 				return false;
@@ -60,6 +62,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 					$objQuery = $this->db->prepare('DELETE FROM __member_profilefields WHERE name=?')->execute($value);
 				}
 				$this->pdh->enqueue_hook('game_update');
+				$this->pdh->enqueue_hook('member_update');
 				return true;
 			}
 			return false;
@@ -94,17 +97,18 @@ if(!class_exists('pdh_w_profile_fields')) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('game_update');
+			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
 
 		public function insert_field($data=array()){
 			if(!isset($data['name'])) {
-				$data['name'] = ((isset($data['type'])) ? $data['type'] : $this->in->get('type')).'_'.unique_id();
+				$data['name'] = utf8_strtolower((isset($data['lang'])) ? $data['lang'] : $this->in->get('language'));			
 			}
-			//End if a field with this name exists
+
 			$fields = $this->pdh->get('profile_fields', 'fields');
 			if (isset($fields[$data['name']])){
-				return false;
+				$data['name'] = $data['name'].'_'.unique_id();
 			}
 
 			$options = array();
@@ -143,12 +147,14 @@ if(!class_exists('pdh_w_profile_fields')) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('game_update');
+			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
 		
 		public function truncate_fields() {
 			$this->db->query('TRUNCATE TABLE __member_profilefields');
 			$this->pdh->enqueue_hook('game_update');
+			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
 	}

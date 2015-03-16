@@ -1,3 +1,8 @@
+<!-- IF S_PERM_RAID_ADMIN -->
+<div class="floatRight">
+<i class="hand fa fa-lg fa-pencil" onclick="editRaid()" title="{L_raidevent_raid_edit}"></i>
+</div>
+<!-- ENDIF -->
 <div class="contentHeader">
 	<h1 class="contentTitle">{EVENT_ICON} {EVENT_NAME}, {RAID_DATE}</h1>
 </div>
@@ -24,6 +29,13 @@
 		<dl>
 			<dt><label>{DKP_NAME} {L_value}</label></dt>
 			<dd><span class="positive">{RAID_VALUE}</span>
+			</dd>
+		</dl>
+		<!-- ENDIF -->
+		<!-- IF S_ADDITIONAL_DATA -->
+		<dl>
+			<dt><label>{L_additional_infos}</label></dt>
+			<dd>{RAID_ADDITIONAL_DATA}
 			</dd>
 		</dl>
 		<!-- ENDIF -->

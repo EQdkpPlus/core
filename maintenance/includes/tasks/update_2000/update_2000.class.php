@@ -169,6 +169,9 @@ class update_2000 extends sql_update_task {
 				108	=> 'Add permission',
 				109	=> 'Add permission',
 				110	=> 'Insert Notification Type',
+				111 => 'Drop apikey Column',
+				112 => 'Alter Styles Table',
+				113 => 'Alter Styles Table',
 			),
 			'german' => array(
 				'update_2000'				=> 'EQdkp Plus 2.0 Migration von 1.x',
@@ -282,6 +285,9 @@ class update_2000 extends sql_update_task {
 				108	=> 'Füge Berechtigung ein',
 				109	=> 'Füge Berechtigung ein',
 				110	=> 'Füge Notification Types ein',
+				111 => 'Entferne apikey Spalte',
+				112	=> 'Erweitere Styles Tabelle',
+				113	=> 'Erweitere Styles Tabelle',
 			),
 		);
 		
@@ -567,6 +573,9 @@ class update_2000 extends sql_update_task {
 			108 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_cal_addrestricted');",
 			109 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('a_article_categories_man');",
 			110 => "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('comment_new_mentioned', 'notification_newmention', 'comment', 0, 1, 0, NULL, 0, 'fa-at');",
+			111 => "ALTER TABLE `__users` DROP COLUMN `api_key`;",
+			112 => "ALTER TABLE `__styles` ADD COLUMN `background_pos` VARCHAR(20) NULL DEFAULT 'normal';",
+			113 => "ALTER TABLE `__styles` ADD COLUMN `background_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0';",
 		);
 	}
 	
@@ -616,12 +625,24 @@ class update_2000 extends sql_update_task {
 		// set other default config settings
 		$this->config->set('default_style_overwrite', 1);
 		$this->config->set('mainmenu', 'a:8:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"d41d8cd98f00b204e9800998ecf8427e";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"8f9bfe9d1345237cb3b2b205864da075";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:2:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"cd5f542b7201c8d9b8f697f97a2dcc52";s:6:"hidden";s:1:"0";}}}}i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"292299380781735bd110e74fe0ada4ac";s:6:"hidden";s:1:"0";}}i:7;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"2a91cf06beec2894ebd9266c884558c3";s:6:"hidden";s:1:"0";}}}');	
-		$this->config->set('cookie_euhint_show',1);
+		$this->config->set('cookie_euhint_show', 1);
+		$this->config->set('enable_leaderboard', 1);
+		$this->config->set('color_items', $this->config->get('pk_color_items'));
+		$this->config->set('enable_comments', $this->config->get('pk_enable_comments'));
+		$this->config->set('round_activate', $this->config->get('pk_round_activate'));
+		$this->config->set('round_precision', $this->config->get('pk_round_precision'));
+		$this->config->set('meta_keywords', $this->config->get('pk_meta_keywords'));
+		$this->config->set('meta_description', $this->config->get('pk_meta_description'));
+		$this->config->set('date_startday', $this->config->get('pk_date_startday'));
+		$this->config->set('enable_captcha', $this->config->get('pk_enable_captcha'));
+		
 		$this->config->set('enable_registration', !$this->config->get('disable_registration'));
 		$this->config->set('enable_embedly', !$this->config->get('disable_embedly'));
-		$this->config->set('enable_points', !$this->config->get('disable_points'));
-		$this->config->set('enable_username_change', !$this->config->get('disable_username_change'));
-		$this->config->set('enable_leaderboard', 1);
+		$this->config->set('enable_username_change', !$this->config->get('pk_disable_username_change'));
+		$this->config->set('class_color', $this->config->get('pk_class_color'));
+		$this->config->set('show_twinks', $this->config->get('pk_show_twinks'));
+		$this->config->set('detail_twink', $this->config->get('pk_detail_twink'));
+		$this->config->set('itemhistory_dia', $this->config->get('pk_itemhistory_dia'));
 		
 		//Set Dummy Game as default
 		$this->config->set('default_game', 'dummy');

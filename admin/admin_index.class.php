@@ -28,7 +28,7 @@ class admin_index extends gen_class {
 
 	protected $core_updates			= '';
 	protected $extension_updates	= '';
-	protected $rsscachetime			= 48;
+	protected $rsscachetime			= 3;
 	public $admin_menu				= '';
 	public $admin_functions			= NULL;
 
@@ -72,28 +72,7 @@ class admin_index extends gen_class {
 
 		//new plugin-update-check (only minor, without db-updates)
 		$this->pm->plugin_update_check();
-		
-		/* DISABLED - It doesnt make sense to reinstall the game if an update occured, since it is impossible for the system to know wether it overwrites data changed by the user
-						Use maintenance Updates for adding new things to the database (placed in e.g. games/wow/updates)
-		//game-update-check
-		if(compareVersion($this->game->gameVersion(), $this->config->get('game_version')) == 1) {
-			//check for game-task
-			$found = false;
-			if(!isset($tasks)) $tasks = registry::register('mmtaskmanager')->get_task_list(true);
-			foreach($tasks as $task => $file) {
-				if(strpos($task, 'update_'.$this->config->get('default_game')) === 0) {
-					include_once($file);
-					if(compareVersion(registry::register($task)->version, $this->config->get('game_version')) == 1) {
-						$found = true;
-					}
-				}
-			}
-			//no update: reinstall the game
-			if(!$found) {
-				$this->game->installGame($this->config->get('default_game'), $this->config->get('game_language'));
-			}
-		}
-		*/
+
 	}
 	
 	public function adminmenu_output(){
@@ -274,9 +253,10 @@ class admin_index extends gen_class {
 							FROM ( __sessions s
 							LEFT JOIN __users u
 							ON u.user_id = s.session_user_id )
+							WHERE s.session_current > ?
 							GROUP BY u.username, s.session_ip
 							ORDER BY u.username, s.session_current DESC';
-		$result = $this->db->query($sql);
+		$result = $this->db->prepare($sql)->execute($this->time->time-600);
 		$arrOnlineUsers = $arrBots = array();
 		if ($result){
 			while ($row = $result->fetchAssoc()){

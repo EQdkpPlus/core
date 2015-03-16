@@ -161,7 +161,7 @@ class Manage_Massmail extends page_generic {
 		if ($this->in->get('event_id', 0) > 0){
 			$event_id = $this->in->get('event_id', 0);
 			$arrSearch = array('{EVENT_NAME}', '{EVENT_DATE}', '{EVENT_LINK}');
-			$arrReplace = array($this->pdh->get('calendar_events', 'name', array($event_id)), $this->pdh->get('calendar_events', 'html_date', array($event_id)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($event_id)), '<a href="'.$this->env->link.'calendar/viewcalraid.php?eventid='.$event_id.'">'.$this->pdh->get('calendar_events', 'html_date', array($event_id)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($event_id)).': '.$this->pdh->get('calendar_events', 'name', array($event_id)).'</a>');
+			$arrReplace = array($this->pdh->get('calendar_events', 'name', array($event_id)), $this->pdh->get('calendar_events', 'html_date', array($event_id)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($event_id)), '<a href="'.$this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($event_id)), $event_id, false, true).'">'.$this->pdh->get('calendar_events', 'html_date', array($event_id)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($event_id)).': '.$this->pdh->get('calendar_events', 'name', array($event_id)).'</a>');
 
 			$body = str_replace($arrSearch, $arrReplace, $body);
 			$subject = str_replace($arrSearch, $arrReplace, $subject);
@@ -273,7 +273,7 @@ class Manage_Massmail extends page_generic {
 		$eventid = (int)$this->in->get('event_id', 0);
 		$body = $subject = '';
 		if ($bnlEventId){
-			$body .= '<p>&nbsp;</p><p><a href="'.$this->env->link.'calendar/viewcalraid.php?eventid='.$eventid.'">'.$this->pdh->get('calendar_events', 'html_date', array($eventid)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($eventid)).': '.$this->pdh->get('calendar_events', 'name', array($eventid)).'</a></p>';
+			$body .= '<p>&nbsp;</p><p><a href="'.$this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventid)), $eventid, false, true).'">'.$this->pdh->get('calendar_events', 'html_date', array($eventid)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($eventid)).': '.$this->pdh->get('calendar_events', 'name', array($eventid)).'</a></p>';
 			$this->tpl->assign_vars(array(
 				'DD_STATUS'	=> $this->jquery->MultiSelect('status', $this->user->lang('raidevent_raid_status'), $this->in->getArray('status', 'int'), array('width' => 400)),
 			));

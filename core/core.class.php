@@ -185,24 +185,45 @@ class core extends gen_class {
 			}
 
 			// some style additions (header, background image..)
-			if ($this->user->style['background_img'] != ''){
-				if (strpos($this->user->style['background_img'],'://') > 1){
-					$template_background_file = $this->user->style['background_img'];
-				} else {
-					$template_background_file = $this->root_path .$this->user->style['background_img'];
-				}
-			} else {
+			$template_background_file = "";
+			switch($this->user->style['background_type']){
+				//Game
+				case 1: $template_background_file = $this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+					break;
+					
+				//Own
+				case 2:
+					if ($this->user->style['background_img'] != ''){
+						if (strpos($this->user->style['background_img'],'://') > 1){
+							$template_background_file = $this->user->style['background_img'];
+						} else {
+							$template_background_file = $this->root_path .$this->user->style['background_img'];
+						}
+					}
+					break;
+				
+				//Style
+				default: 
+					if(is_file($this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png')){
+						$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png';
+					} else {
+						$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
+					}
+			}
+			if($template_background_file == ""){
+				//Cannot find a background file, let's take the game specific
 				$template_background_file = $this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
-
-				if (!file_exists($template_background_file)){
-					$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
-				}
 			}
 
+			
 			// add the custom JS file
 			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
 			if(is_file($customjs)){
 				$this->tpl->js_file($customjs);
+			}
+			if(strlen($this->config->get('global_js'))){
+				$global_js = $this->config->get('global_js');
+				$this->tpl->assign_var('FOOTER_CODE', $global_js);
 			}
 			
 			//CSS
@@ -332,10 +353,12 @@ class core extends gen_class {
 			
 			// Load the jQuery stuff
 			$this->addCommonTemplateVars();
+
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
 				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
+
 				'USER_AVATAR'				=> $strAvatarImg,
 				'AUTH_LOGIN_BUTTON'			=> (!$this->user->is_signedin()) ? implode(' ', $this->user->handle_login_functions('login_button')) : '',
 				'S_NORMAL_HEADER'			=> ($this->header_format != 'simple') ? true : false,
@@ -348,6 +371,8 @@ class core extends gen_class {
 				'T_COLUMN_LEFT_WIDTH'		=> $this->user->style['column_left_width'],
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
+				'T_BACKGROUND_TYPE'			=> $this->user->style['background_type'],
+				'T_BACKGROUND_POSITION'		=> ($this->user->style['background_pos'] == 'normal') ? 'scroll' : 'fixed',
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
@@ -368,6 +393,7 @@ class core extends gen_class {
 				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
+				'CURRENT_PAGE'				=> sanitize($this->env->request),
 			));
 						
 			if (isset($this->page_body) && $this->page_body == 'full'){
@@ -417,6 +443,8 @@ class core extends gen_class {
 		}
 		
 		public function addCommonTemplateVars(){
+			$arrLanguages = $this->user->getAvailableLanguages(false, true);
+
 			$this->tpl->assign_vars(array(
 					'MAIN_TITLE'				=> $this->config->get('main_title'),
 					'SUB_TITLE'					=> $this->config->get('sub_title'),
@@ -437,7 +465,16 @@ class core extends gen_class {
 					'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 					'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 					'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
+					'USER_LANGUAGE'				=> $this->user->lang_name,
+					'USER_LANGUAGE_NAME'		=> $arrLanguages[$this->user->lang_name],
 			));
+			$url = (preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request));
+			foreach($arrLanguages as $strKey => $strLangname){
+				$this->tpl->assign_block_vars('languageswitcher_row', array(
+					'LANGNAME'	=> $strLangname,
+					'LINK'		=> sanitize($url).((strpos($url, "?") === false) ? '?' : '&').'lang='.$strKey,
+				));
+			}
 		}
 		
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){
@@ -661,7 +698,7 @@ class core extends gen_class {
 			}
 			
 			$html .= '</ul>';
-			return $html;
+			return str_replace("<ul></ul>", "", $html);
 		}
 		
 		public function clean_url($strUrl){
@@ -706,7 +743,8 @@ class core extends gen_class {
 					break ;
 				case '2':
 				case '3':
-				case '4':  {
+				case '4':  
+				case '5':	{
 							switch($wrapper_id){
 								case 'Board':
 								case 'LostPassword':
@@ -857,6 +895,11 @@ class core extends gen_class {
 			$css_custom = $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.css';
 			if(file_exists($css_custom)){
 				$this->tpl->css_file($css_custom);
+			}
+			
+			//Global CSS - Direct Output into template
+			if(strlen($this->config->get('global_css'))){
+				$this->tpl->add_css($this->config->get('global_css'), true);
 			}
 			
 			$this->tpl->display();

@@ -69,26 +69,45 @@ class roster_pageobject extends pageobject {
 							'CLASS_NAME'	=> $value,
 							'CLASS_ICONS'	=> $this->game->decorate('roles', $key, array(), 48),
 							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
+							'CLASS_LEVEL'	=> 2,
+							'ENDLEVEL'		=> true,	
 						));
 					}
 				
+			} elseif($this->config->get('roster_classorrole') == 'raidgroup') {
+				
+				$arrMembers = $this->pdh->aget('member', 'defaultrole', 0, array($this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks))));
+				$arrRaidGroups = $this->pdh->get('raid_groups', 'id_list', array());
+				foreach($arrRaidGroups as $intRaidGroupID){
+					$arrGroupMembers = $this->pdh->get('raid_groups_members', 'member_list', array($intRaidGroupID));
+							
+					$hptt = $this->get_hptt($this->hptt_page_settings, $arrGroupMembers, $arrGroupMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'raidgroup_'.$intRaidGroupID);
+					
+					$this->tpl->assign_block_vars('class_row', array(
+							'CLASS_NAME'	=> $this->pdh->get('raid_groups', 'name', array($intRaidGroupID)),
+							'CLASS_ICONS'	=> '',
+							'CLASS_LEVEL'	=> 2,
+							'ENDLEVEL'		=> true,
+							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
+					));
+				}
+		
 			} else {
 				$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
 				
 				$rosterClasses = $this->game->get_roster_classes();
-
+				
 				$arrRosterMembers = array();
 				foreach($arrMembers as $memberid){
 					$string = "";
 					foreach($rosterClasses['todisplay'] as $key => $val){
 						$string .= $this->pdh->get('member', 'profile_field', array($memberid, $this->game->get_name_for_type($val)))."_";
 					}
-						
+				
 					$arrRosterMembers[$string][] = $memberid;
 				}
 				
 				$this->build_class_block($rosterClasses['data'], $rosterClasses['todisplay'], $arrRosterMembers);
-		
 			}
 		}
 

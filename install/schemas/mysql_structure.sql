@@ -51,7 +51,6 @@ CREATE TABLE `__users` (
 	`auth_account` text COLLATE utf8_bin,
 	`failed_login_attempts` INT(3) NOT NULL DEFAULT '0',
 	`exchange_key` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`api_key` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`hide_nochar_info` TINYINT(1) NULL DEFAULT '0',
 	`notifications` TEXT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`user_id`),
@@ -119,6 +118,7 @@ CREATE TABLE `__sessions` (
 	`session_type` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_perm_id` smallint(5) NULL DEFAULT '-1',
 	`session_failed_logins` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`session_vars` MEDIUMTEXT COLLATE 'utf8_bin' NULL,
 	PRIMARY KEY (`session_id`),
 	KEY `session_current` (`session_current`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -251,6 +251,7 @@ CREATE TABLE `__raids` (
 	`raid_value` float(6,2) NOT NULL DEFAULT '0.00',
 	`raid_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`raid_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
+	`raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`raid_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -391,6 +392,8 @@ CREATE TABLE `__styles` (
 	`column_right_width` VARCHAR(20) COLLATE utf8_bin NULL DEFAULT '',
 	`column_left_width` VARCHAR(20) COLLATE utf8_bin NULL DEFAULT '',
 	`portal_width` VARCHAR(20) COLLATE utf8_bin NULL DEFAULT '',
+	`background_pos` VARCHAR(20) NULL DEFAULT 'normal',
+	`background_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`style_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
