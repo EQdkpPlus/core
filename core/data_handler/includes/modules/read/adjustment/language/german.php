@@ -32,6 +32,7 @@ $module_lang = array(
 	'raid_id'			=> 'Raid',
 	'editicon'			=> '',
 	'reason'			=> 'Grund',
+	'member_name'		=> 'Charakter',
 );
 
 $preset_lang = array(
@@ -43,6 +44,7 @@ $preset_lang = array(
 	'adj_raid'			=> 'Korrektur-Raid',
 	'adj_reason'		=> 'Korrektur-Grund',
 	'adjedit'			=> 'Korrektur-Bearbeiten Button',
+	'adj_member'		=> 'Korrektur-Charakter',
 );
 
 ?>
