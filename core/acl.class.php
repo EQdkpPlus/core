@@ -109,6 +109,18 @@ class acl_manager extends gen_class {
 		return $this->group_permissions[$group_id];
 	}
 
+	public function get_groups_with_active_auth($auth_value){
+		$groups = $this->pdh->get('user_groups', 'id_list');
+		$output	= array();
+		foreach($groups as $group_id){
+			$active_auths	= $this->get_group_permissions($group_id);
+			if(array_key_exists($auth_value, $active_auths)){
+				$output[] = $group_id;
+			}
+		}
+		return $output;
+	}
+
 	public function update_auth_option($auth_value, $auth_default){
 		$auth_id = $this->get_auth_id($auth_value);
 		if ( $auth_id ){			
@@ -207,6 +219,7 @@ class acl_manager extends gen_class {
 				array('CBNAME' => 'a_cal_addrestricted',	'TEXT' => $this->user->lang('add_restricted_calevent')),
 				array('CBNAME' => 'u_cal_event_add',		'TEXT' => $this->user->lang('add_calevents')),
 				array('CBNAME' => 'u_calendar_view',		'TEXT' => $this->user->lang('view_calendar')),
+				array('CBNAME' => 'u_calendar_raidnotes',	'TEXT' => $this->user->lang('calendar_acl_raidnotes')),
 			),
 
 			// Members

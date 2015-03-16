@@ -39,11 +39,13 @@ class update_20023 extends sql_update_task {
 				'update_20023'	=> 'EQdkp Plus 2.0 Update Beta6',
 					1			=> 'Add Permission',
 					2			=> 'Add Column in raids-table',
+					3			=> 'Add Permission for calendar raidnotes',
 				),
 			'german' => array(
 				'update_20023'	=> 'EQdkp Plus 2.0 Update Beta6',
-					1			=> 'Add Permission',
-					2			=> 'Add Column in raids-table',
+					1			=> 'Füge Berechtigung für Artikel-Skript hinzu',
+					2			=> 'Füge Zelle in Raids-Tabelle hinzu',
+					3			=> 'Füge Berechtigung für Kalender-Raidnotizen hinzu',
 			),
 		);
 		
@@ -51,6 +53,7 @@ class update_20023 extends sql_update_task {
 		$this->sqls = array(
 			1 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('u_articles_script');",
 			2 => "ALTER TABLE `__raids` ADD COLUMN `raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin';",
+			3 => "INSERT INTO `__auth_options` (`auth_value`) VALUES ('u_calendar_raidnotes');",
 		);
 	}
 	

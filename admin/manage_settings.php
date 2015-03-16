@@ -602,11 +602,6 @@ class mmocms_settings extends page_generic {
 						'options'	=> $a_groups,
 						'datatype'	=> 'int',
 					),
-					'calendar_raid_shownotes'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $a_groups,
-						'datatype'	=> 'int',
-					),
 					'calendar_raid_notsigned_classsort'	=> array(
 						'type'		=> 'radio',
 					),

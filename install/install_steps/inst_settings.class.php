@@ -96,7 +96,6 @@ class inst_settings extends install_generic {
 		'calendar_addraid_deadline'		=> '1',
 		'calendar_addraid_duration'		=> '120',
 		'calendar_repeat_crondays'		=> '40',
-		'calendar_raid_shownotes'		=> array(2, 3),
 		'calendar_email_statuschange'	=> '1',
 	);
 	private $auth_ids			= array();

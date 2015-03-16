@@ -559,7 +559,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
 		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
-		$shownotes_ugroups		= $this->config->get('calendar_raid_shownotes');
+		$shownotes_ugroups		= $this->acl->get_groups_with_active_auth('u_calendar_raidnotes');
 		$this->raidgroup_dd		= $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 
 		// Build the attendees aray for this raid by class
