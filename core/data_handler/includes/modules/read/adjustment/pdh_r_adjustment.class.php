@@ -188,16 +188,17 @@ if(!class_exists('pdh_r_adjustment')){
 			return $adjustment_ids;
 		}
 
-		public function get_adjsofraid($raid_id){
-			$adjustment_ids = array();
+		public function get_adjsofraid($raid_id, $blnGroupedByAdjKey=false){
+			$adjustment_ids = $adjGrouped = array();
 			if(is_array($this->adjustments)){
 				foreach($this->adjustments as $id => $adj){
 					if($raid_id == $adj['raid_id']){
 						$adjustment_ids[] = $id;
+						$adjGrouped[$this->get_group_key($id)] = $id;
 					}
 				}
 			}
-			return $adjustment_ids;
+			return ($blnGroupedByAdjKey) ? $adjGrouped : $adjustment_ids;
 		}
 
 		public function get_adjsofeventid($event_id) {
