@@ -246,6 +246,10 @@ class admin_functions extends gen_class {
 				'bot_agent' => 'YahooSeeker/',
 				'bot_name' => 'YahooSeeker [Bot]',
 			),
+			array( // row #50
+				'bot_agent' => 'YandexBot/',
+				'bot_name' => 'Yandex [Bot]',
+			),
 			
 		);
 		
