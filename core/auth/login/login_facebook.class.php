@@ -141,7 +141,7 @@ class login_facebook extends gen_class {
 			}
 			
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception getMe()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception getMe()", 'red');
 		}
 		
 		return false;
@@ -187,30 +187,33 @@ class login_facebook extends gen_class {
 	
 	public function account_button(){
 		$this->init_fb();
-		
-		$helper = new Facebook\FacebookJavaScriptLoginHelper();
-		$session = $helper->getSession();
-		if ($session){
-			$me = $this->getMe($session);
-			if ($me){
-				$uid = $me['uid'];
-				return $me['data']->getProperty("name")	.' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
+		try {
+			$helper = new Facebook\FacebookJavaScriptLoginHelper();
+			$session = $helper->getSession();
+			if ($session){
+				$me = $this->getMe($session);
+				if ($me){
+					$uid = $me['uid'];
+					return $me['data']->getProperty("name")	.' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
+				}
+			} else {
+				$this->tpl->add_js("		
+				function facebook_connect_acc(){
+					FB.login(function(response) {
+					   if (response.authResponse) {
+						 console.log('Welcome!  Fetching your information.... ');
+						  if (response.status == 'connected') window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=facebook&act='+response.authResponse.accessToken;
+					   } else {
+						 console.log('User cancelled login or did not fully authorize.');
+					   }
+					 }, {scope: 'email,public_profile'});
+				}	  
+				");
+				return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>';		
+			
 			}
-		} else {
-			$this->tpl->add_js("		
-			function facebook_connect_acc(){
-				FB.login(function(response) {
-				   if (response.authResponse) {
-					 console.log('Welcome!  Fetching your information.... ');
-					  if (response.status == 'connected') window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=facebook&act='+response.authResponse.accessToken;
-				   } else {
-					 console.log('User cancelled login or did not fully authorize.');
-				   }
-				 }, {scope: 'email,public_profile'});
-			}	  
-			");
-			return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>';		
-		
+		} catch(Exception $e){
+			$this->core->message($e->getMessage(), "Facebook Exception get_account()", 'error');
 		}
 	}
 	
@@ -235,7 +238,7 @@ class login_facebook extends gen_class {
 				}
 			}
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception get_account()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception get_account()", 'red');
 		}
 
 		return false;
@@ -274,7 +277,7 @@ class login_facebook extends gen_class {
 				);
 			}
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception preRegister()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception preRegister()", 'red');
 		}
 
 		return false;
@@ -319,7 +322,7 @@ class login_facebook extends gen_class {
 			}
 				
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception afterRegister()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception afterRegister()", 'red');
 		}
 
 		return false;
@@ -360,7 +363,7 @@ class login_facebook extends gen_class {
 			}
 			
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception login()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception login()", 'red');
 		}
 		
 		return false;
@@ -385,7 +388,7 @@ class login_facebook extends gen_class {
 			}
 			
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception logout()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception logout()", 'red');
 		}
 			
 		return true;
@@ -417,7 +420,7 @@ class login_facebook extends gen_class {
 			}
 			
 		} catch(Exception $e){
-			if (DEBUG > 1) $this->core->message($e->getMessage(), "Facebook Exception autologin()", 'error');
+			$this->core->message($e->getMessage(), "Facebook Exception autologin()", 'red');
 		}
 		
 		return false;

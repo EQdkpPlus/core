@@ -72,8 +72,13 @@ class core extends gen_class {
 		public function message($text='', $title='', $kind='default', $showalways=true, $parent=false){
 			if($showalways || (!$showalways && $this->header_format != 'simple')){
 				switch($kind){
-					case 'red': $kkind = 'error';break;
-					case 'green': $kkind = 'success';break;
+					case 'error':
+					case 'red': $kkind = 'error';
+						break;
+					case 'success':
+					case 'ok':
+					case 'green': $kkind = 'success';
+						break;
 					default: $kkind = 'default';
 				}
 				$this->jquery->notify($text, array('header' => $title,'expires' => (($showalways) ? false : 3000), 'custom'=>true,'theme'  => $kkind, 'parent' => $parent));
