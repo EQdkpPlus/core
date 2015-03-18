@@ -557,20 +557,20 @@ class template extends gen_class {
 					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
 					$imploded_jscode .= "});";
 				}
-				$this->assign_var('JS_CODE', (($debug) ? $imploded_jscode : \JShrink\Minifier::minify($imploded_jscode)));
+				$this->assign_var('JS_CODE', $imploded_jscode);
 				$this->set_templateout('js_code', true);
 			}
 
 			// JS on end of page
 			if(is_array($this->get_templatedata('js_code_eop'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
-				$this->assign_var('JS_CODE_EOP', (($debug) ? $imploded_jscodeeop : \JShrink\Minifier::minify($imploded_jscodeeop)));
+				$this->assign_var('JS_CODE_EOP', $imploded_jscodeeop);
 				$this->set_templateout('js_code', true);
 			}
 			// JS on end of page
 			if(is_array($this->get_templatedata('js_code_eop2'))){
 				$imploded_jscodeeop2 = implode("\n", $this->get_templatedata('js_code_eop2'));
-				$this->assign_var('JS_CODE_EOP2', (($debug) ? $imploded_jscodeeop2 : \JShrink\Minifier::minify($imploded_jscodeeop2)));
+				$this->assign_var('JS_CODE_EOP2', $imploded_jscodeeop2);
 				$this->set_templateout('js_code', true);
 			}
 		}
