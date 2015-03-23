@@ -122,7 +122,7 @@ class register_pageobject extends pageobject {
 		}
 		
 		//Check CAPTCHA
-		if ($this->config->get('enable_captcha') == 1){
+		if ($this->config->get('enable_captcha') == 1 && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));

@@ -73,7 +73,7 @@ class login_pageobject extends pageobject {
 				}
 			}
 		
-			if ($blnShowCaptcha){
+			if ($blnShowCaptcha && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
 				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 				$captcha = new recaptcha;
 				$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
@@ -300,7 +300,7 @@ class login_pageobject extends pageobject {
 		}
 
 		//Captcha
-		if ($blnShowCaptcha){
+		if ($blnShowCaptcha && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$this->tpl->assign_vars(array(
