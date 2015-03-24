@@ -27,16 +27,16 @@ class gravatar extends gen_class {
 
 	public static $shortcuts = array('puf' => 'urlfetcher');
 	
-	private $url = 'http://gravatar.com/avatar/%s?s=%d&r=g&d=%s';
+	private $url = 'https://secure.gravatar.com/avatar/%s?s=%d&r=g&d=%s';
 	private $intCachingTime = 24; //hours
 	
-	public function getAvatar($strEmail, $intSize = 64){
+	public function getAvatar($strEmail, $intSize = 64, $blnIgnoreNotFound=false){
 		$strHash = $this->buildHash($strEmail);
 		
 		$strCachedImage = $this->getCachedImage($strHash, $intSize);
 		if (!$strCachedImage){
 			//Download
-			$result = $this->cacheImage($strHash, $intSize);
+			$result = $this->cacheImage($strHash, $intSize, $blnIgnoreNotFound);
 			return $result;
 		}
 		return $strCachedImage;
@@ -55,17 +55,27 @@ class gravatar extends gen_class {
 		return false;
 	}
 	
-	public function cacheImage($strHash, $intSize){
+	public function cacheImage($strHash, $intSize, $blnIgnoreNotFound=false){
 		$strImage = $strHash.'_'.$intSize.'.jpg';
 		$strCacheFolder = $this->pfh->FolderPath('gravatar','eqdkp');
 		$strRelativeFile = $strCacheFolder.$strImage;
 		
-		$strAvatarURL = sprintf($this->url, $strHash, $intSize, '404');
-		$result = $this->puf->fetch($strAvatarURL);
-		if($result &&  trim($result) != "404 Not Found"){
-			$this->pfh->putContent($strRelativeFile, $result);
-			if (is_file($strRelativeFile)) return $strRelativeFile;
+		if($blnIgnoreNotFound){
+			$strAvatarURL = sprintf($this->url, $strHash, $intSize, 'identicon');
+			$result = $this->puf->fetch($strAvatarURL);
+			if($result){
+				$this->pfh->putContent($strRelativeFile, $result);
+				if (is_file($strRelativeFile)) return $strRelativeFile;
+			}
+		} else {
+			$strAvatarURL = sprintf($this->url, $strHash, $intSize, '404');
+			$result = $this->puf->fetch($strAvatarURL);
+			if($result &&  trim($result) != "404 Not Found"){
+				$this->pfh->putContent($strRelativeFile, $result);
+				if (is_file($strRelativeFile)) return $strRelativeFile;
+			}
 		}
+		
 		return false;
 	}
 	

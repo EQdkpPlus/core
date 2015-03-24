@@ -256,8 +256,10 @@ class template extends gen_class {
 			}
 
 			if(strlen($strCSS)){
-				$minify = new Minify_CSS();
-				$strCSS = $minify->minify($strCSS);
+				if(!defined('DISABLE_CSS_MINIFY')){
+					$minify = new Minify_CSS();
+					$strCSS = $minify->minify($strCSS);
+				}
 				
 				$this->pfh->putContent($combinedFile, $strCSS);
 				$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
@@ -578,7 +580,7 @@ class template extends gen_class {
 		//Combine CSS Files and Inline CSS
 		if ($debug) {
 			$this->debug_css_files(); 
-		} else $this->combine_css($debug);
+		} else $this->combine_css();
 		
 		// Load the CSS Files..
 		if(!$this->get_templateout('css_file')){
@@ -598,7 +600,7 @@ class template extends gen_class {
 				$imploded_css .= implode("\n", $this->get_templatedata('css_code_direct'));
 			}
 			if($imploded_css != ""){
-				$this->assign_var('CSS_CODE', (($debug) ? $imploded_css : Minify_CSS::minify($imploded_css)));
+				$this->assign_var('CSS_CODE', (($debug || defined('DISABLE_JS_MINIFY')) ? $imploded_css : Minify_CSS::minify($imploded_css)));
 			}
 			$this->set_templateout('css_code', true);
 			$this->set_templateout('css_code_direct', true);

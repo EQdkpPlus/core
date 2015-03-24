@@ -1714,5 +1714,7 @@ $lang = array(
 "core_sett_f_help_global_js" => "Der hier eingefügte Code wird in den Footer-Bereich jeder Seite eingebunden.",
 "core_sett_f_global_css" => "Globales CSS",
 "core_sett_f_help_global_css" => "Die hier eingefügten CSS-Definitionen werden jedem Style hinzugefügt.",
+"core_sett_f_gravatar_defaultavatar" => "Gravatar Defaultavatar verwenden",
+"core_sett_f_help_gravatar_defaultavatar" => "Diese Option sorgt dafür, dass alle Benutzer ohne einem Avatar ein individuelles Avatar zur besseren Unterscheidung bekommen",				
 );
 ?>

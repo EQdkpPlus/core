@@ -372,12 +372,21 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_avatarimglink($user_id, $fullSize=false){
 			$intAvatarType = intval($this->get_custom_fields($user_id, 'user_avatar_type'));
+
 			if ($intAvatarType == 0){
-				if($avatarimg = $this->get_custom_fields($user_id, 'user_avatar')){
+				$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
+				
+				if($avatarimg && strlen($avatarimg)){
 					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
 					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);		
 					if (!$fullSize && is_file($thumbnail)) return $thumbnail;
 					return $fullSizeImage;
+				} elseif($this->config->get('gravatar_defaultavatar')){
+					//Gravatar Default Avatars
+					include_once $this->root_path.'core/gravatar.class.php';
+					$gravatar = registry::register('gravatar');
+					$result = $gravatar->getAvatar($this->get_name($user_id), (($fullSize) ? 400 : 68), true);
+					if ($result) return $result;
 				}
 			} elseif($intAvatarType == 1){
 				//Gravatar

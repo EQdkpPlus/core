@@ -506,6 +506,9 @@ class mmocms_settings extends page_generic {
 						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false)))),
 						'datatype'		=> 'int'
 					),
+					'gravatar_defaultavatar'	=> array(
+							'type'		=> 'radio',
+					),
 				)
 			),
 			'chars'		=> array(
