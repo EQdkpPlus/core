@@ -115,25 +115,14 @@ class wrapper_pageobject extends pageobject {
 					$this->data['url'] = $this->data['url'].$direktLink;
 				}		
 			}
-
-			$sop = parse_url($this->data['url']);
-			$sop = ( $sop['host'] == $this->env->server_name) ? true : false;
 			$output = '<div id="wrapper">';
-
-			if(!$sop){
-				$output .='<!--[IF IE]>
-								<iframe id="boardframe" src="'.$this->data['url'].'" allowtransparency="true" height="'.$this->data['height'].'" width="100%" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
-							<![if ! IE]><!-->
-								<iframe id="boardframe" src="'.$this->data['url'].'" height="'.$this->data['height'].'" width="100%" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
-							<!--><![ENDIF]><![ENDIF]-->';
-			} else {
-				$this->CreateDynamicIframeJS();
-				$output .='<!--[IF IE]>
-								<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" allowtransparency="true" width="100%" height="'.$this->data['height'].'" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
-							<![if ! IE]><!-->
-								<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>
-							<!--><![ENDIF]><![ENDIF]-->';
-			}
+			$this->CreateDynamicIframeJS();
+			$output .='<!--[IF IE]>
+							<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" allowtransparency="true" width="100%" height="'.$this->data['height'].'" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
+						<![if ! IE]><!-->
+							<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>
+						<!--><![ENDIF]><![ENDIF]-->';
+	
 
 			$output .= '</div>';
 
@@ -206,75 +195,92 @@ class wrapper_pageobject extends pageobject {
 		$out = '
 			//ID of iFrame
 			var iframeid = "boardframe";
+			var wrapper_url = "'.$this->data['url'].'";
+			var wrapper_base_url = "'.$this->data['base_url'].'";
+			var wrapper_eqdkp_url = "'.$this->env->buildlink().'";
 
-			function resizeIframe(frameid){
-				var currentfr = document.getElementById(frameid);
-
+			function onloadIframeAdjustments(){
+				resizeIframe();
+				scrollToPosition();
+				registerInnerIframeEvents();
+				setURL();
+			}
+			
+			function perodicIframeAdjustment(){
+				resizeIframe();
+			}
+					
+					
+			//Resizes the Iframe		
+			function resizeIframe(){
+				var currentfr = document.getElementById(iframeid);
+	
 				if (currentfr){
-					currentfr.style.display = "block";
-					if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
-						currentfr.height = currentfr.contentDocument.body.offsetHeight;
-					} else if (currentfr.Document && currentfr.Document.body && currentfr.Document.body.scrollHeight) {//ie5+ syntax
-						currentfr.height = currentfr.Document.body.scrollHeight;
-					}
-				
-					//Set correct width
-					if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.scrollWidth) {//ie5+ syntax
-						var scrollwidth = currentfr.contentDocument.body.scrollWidth;
-						var myscrollwidth = currentfr.scrollWidth;
-
-						if (scrollwidth >  myscrollwidth+5){
-							currentfr.width = scrollwidth;
-						}	
-					}
-
-				
-					if (currentfr.addEventListener) {
-						currentfr.addEventListener("load", readjustIframe, false);
-					} else if (currentfr.attachEvent){
-						currentfr.detachEvent("onload", readjustIframe); // Bug fix line
-						currentfr.attachEvent("onload", readjustIframe);
-					}
+					try {
+						currentfr.style.display = "block";
+						if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
+							currentfr.height = currentfr.contentDocument.body.offsetHeight;
+						} else if (currentfr.Document && currentfr.Document.body && currentfr.Document.body.scrollHeight) {//ie5+ syntax
+							currentfr.height = currentfr.Document.body.scrollHeight;
+						}
+					
+						//Set correct width
+						if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.scrollWidth) {//ie5+ syntax
+							var scrollwidth = currentfr.contentDocument.body.scrollWidth;
+							var myscrollwidth = currentfr.scrollWidth;
+	
+							if (scrollwidth >  myscrollwidth+5){
+								currentfr.width = scrollwidth;
+							}	
+						}
+					} catch (e) {
+						currentfr.height = 4000;
+					}	
 				}
 			}
 
-			function scrollToPosition(frameid){
-				var currentfr = document.getElementById(frameid);
-				var hash = "";
-				if (currentfr.contentDocument) {
-					hash = currentfr.contentDocument.location.hash;
-				} else if (currentfr.Document){
-					hash = currentfr.Document.location.hash;
-				}
-
-				if (hash && hash!= ""){
-					hash = hash.substring(1);
-
-					var el = false;
-
+			function scrollToPosition(){
+				try {
+					var currentfr = document.getElementById(iframeid);
+					var hash = "";
 					if (currentfr.contentDocument) {
-						el = currentfr.contentDocument.getElementById(hash);
-						if (!el){
-							el = currentfr.contentDocument.getElementsByName(hash)[0];
-						}
+						hash = currentfr.contentDocument.location.hash;
 					} else if (currentfr.Document){
-						el = currentfr.Document.getElementById(hash);
-						if (!el){
-							el = currentfr.Document.getElementsByName(hash)[0];
-						}
+						hash = currentfr.Document.location.hash;
 					}
-
-					if (el){
-						var elpos = findPos(el)[1];
-						var framepos = findPos(currentfr)[1];
-						scrollTo(0,elpos + framepos);
+	
+					if (hash && hash!= ""){
+						hash = hash.substring(1);
+	
+						var el = false;
+	
+						if (currentfr.contentDocument) {
+							el = currentfr.contentDocument.getElementById(hash);
+							if (!el){
+								el = currentfr.contentDocument.getElementsByName(hash)[0];
+							}
+						} else if (currentfr.Document){
+							el = currentfr.Document.getElementById(hash);
+							if (!el){
+								el = currentfr.Document.getElementsByName(hash)[0];
+							}
+						}
+	
+						if (el){
+							var elpos = findPos(el)[1];
+							var framepos = findPos(currentfr)[1];
+							scrollTo(0,elpos + framepos);
+						} else {
+							scrollTo(0,0);
+						}
+	
 					} else {
 						scrollTo(0,0);
 					}
-
-				} else {
-					scrollTo(0,0);
-				}
+					
+				} catch (e) {
+					console.log(e);
+				}			
 			}
 
 			function findPos(obj) {
@@ -287,55 +293,36 @@ class wrapper_pageobject extends pageobject {
 				}
 				return [curleft,curtop];
 			}
-
-			function readjustIframe(loadevt) {
-				var crossevt=(window.event) ? event : loadevt;
-				var iframeroot=(crossevt.currentTarget)? crossevt.currentTarget : crossevt.srcElement;
-				if (iframeroot) {
-					resizeIframe(iframeroot.id);
-					scrollToPosition(iframeroot.id);
-					setURL(iframeroot.id);
-				}
-			}
-
-			function resizeCaller() {
-				resizeIframe(iframeid);
-				var tempobj = document.getElementById(iframeid);
-				tempobj.style.display = "block";
-			}
-
-			if (window.addEventListener){
-				window.addEventListener("load", resizeCaller, false);
-			} else if (window.attachEvent) {
-				window.attachEvent("onload", resizeCaller);
-			} else {
-				window.onload=resizeCaller;
-			}
 				
-			function setURL(frameid){
-				var currentfr = document.getElementById(frameid);
-				var location = "";
-				if (currentfr.contentDocument) {
-					location = currentfr.contentDocument.location.href;
-				} else if (currentfr.Document){
-					location = currentfr.Document.location.href;
-				}
-				
-				if(location != ""){
-					var baseurl = $("#"+frameid).data("base-url");
-					var myurl = window.location.search;
-					var param = location.replace(baseurl, "");
-					console.log(param);
-					console.log(myurl);
-					console.log(baseurl);
-					if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) {
-						var newurl = updateQueryStringParameter(myurl, "p", "");
-						history.pushState(null, document.title, newurl);
-						return;
+			function setURL(){
+				try {
+					var currentfr = document.getElementById(iframeid);
+					var location = "";
+					if (currentfr.contentDocument) {
+						location = currentfr.contentDocument.location.href;
+					} else if (currentfr.Document){
+						location = currentfr.Document.location.href;
 					}
-					var newurl = updateQueryStringParameter(myurl, "p", param);
-					history.pushState(null, document.title, newurl);
-				}
+					
+					if(location != ""){
+						var baseurl = $("#"+iframeid).data("base-url");
+						var myurl = window.location.search;
+						var param = location.replace(baseurl, "");
+						
+						param = escape(param);
+						
+						if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) {
+							var newurl = updateQueryStringParameter(myurl, "p", "");
+							history.pushState(null, document.title, newurl);
+							return;
+						}
+						var newurl = updateQueryStringParameter(myurl, "p", param);
+						history.pushState(null, document.title, newurl);
+					}
+	
+				} catch (e) {
+					console.log(e);
+				}		
 			}
 				
 			function updateQueryStringParameter(uri, key, value) {
@@ -348,8 +335,101 @@ class wrapper_pageobject extends pageobject {
 			    return uri + separator + key + "=" + value;
 			  }
 			}
+					
+			function check_base_url(url){
+				var parser = document.createElement("a");
+				parser.href = url;
+						
+				var eqdkp_parser = document.createElement("a");
+				eqdkp_parser.href = wrapper_base_url;
 
-			var aktiv = window.setInterval(resizeCaller, 1000*2); //2 Sekunden
+				console.log(parser.href);
+				console.log(eqdkp_parser.href);
+					
+				if(parser.hostname == eqdkp_parser.hostname){
+					if(parser.pathname.lastIndexOf(eqdkp_parser.pathname, 0) === 0){
+						return true;
+					}
+				}
+						
+				return false;
+			}
+					
+			function beforechangeEventhandler(e){
+				console.log(e);
+			}
+					
+			function iframeonclickEventhandler(e){
+				console.log(e);
+					
+				var elemntTagName = e.target.tagName;
+					
+			    if(elemntTagName==\'A\')
+			    {
+			        var newurl = e.target.getAttribute("href");
+					console.log(newurl);
+					console.log(check_base_url(newurl));
+					
+					if(!check_base_url(newurl) && newurl.lastIndexOf("http", 0) === 0){
+						e.preventDefault();
+						window.location.href = newurl;
+					}
+					
+			    }
+			}
+					
+			function registerInnerIframeEvents(){
+				try {
+					console.log("registerInnerFrameEvents");
+					var currentfr = document.getElementById(iframeid);
+					if (currentfr){
+						var iframeDoc = currentfr.contentDocument || currentfr.contentWindow.document;
+						var iframeWin = currentfr.contentWindow || currentfr.contentDocument;
+						/*
+						if (typeof iframeWin.addEventListener != "undefined") {
+						    iframeWin.addEventListener("beforeunload", beforechangeEventhandler, false);
+						} else if (typeof iframeDoc.attachEvent != "undefined") {
+						    iframeWin.attachEvent("onbeforeunload", beforechangeEventhandler);
+						}
+						*/
+					
+						if (typeof iframeDoc.addEventListener != "undefined") {
+						    iframeDoc.addEventListener("click", iframeonclickEventhandler, false);
+						} else if (typeof iframeDoc.attachEvent != "undefined") {
+						    iframeDoc.attachEvent("onclick", iframeonclickEventhandler);
+						}
+					}
+				} catch (e) {
+					console.log(e);
+				}		
+			}		
+					
+			function registerIframeEvents(){
+				try {
+					var currentfr = document.getElementById(iframeid);
+					if (currentfr){
+						if (currentfr.addEventListener) {
+							currentfr.addEventListener("load", onloadIframeAdjustments, false);
+						} else if (currentfr.attachEvent){
+							currentfr.detachEvent("onload", onloadIframeAdjustments); // Bug fix line
+							currentfr.attachEvent("onload", onloadIframeAdjustments);
+						}					
+					}
+				} catch (e) {
+					
+				}	
+			}
+	
+			function init_wrapper(){
+				var tempobj = document.getElementById(iframeid);
+				tempobj.style.display = "block";
+				
+				registerIframeEvents();	
+			}
+
+			init_wrapper();		
+					
+			var aktiv = window.setInterval(perodicIframeAdjustment, 1000*2); //2 Sekunden
 		';
 
 		 $this->tpl->add_js($out, 'docready');
