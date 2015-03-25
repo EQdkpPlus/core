@@ -285,6 +285,29 @@ if (!class_exists("environment")) {
 			$return->mobile   = $mobile;
 			return $return;
 		}
+		
+		
+		/**
+		 * Checks if Operating System is Windows IIS
+		 * 
+		 * @return boolean
+		 */
+		function on_iis() {
+			$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
+			if ( strpos($sSoftware, "microsoft-iis") !== false )
+				return true;
+			else
+				return false;
+		}
+		
+		/**
+		 * Returns String for Operating System
+		 * 
+		 * @return mixed
+		 */
+		function get_operating_system(){
+			return filter_var($_SERVER["SERVER_SOFTWARE"], FILTER_SANITIZE_STRING);;
+		}
 	}
 }
 ?>

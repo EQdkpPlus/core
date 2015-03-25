@@ -92,7 +92,7 @@ if (!class_exists("filehandler_php")) {
 
 		public function putContent($filename, $data){
 			$intBits = file_put_contents($filename, $data);
-			@chmod($filename, get_chmod());
+			if(!$this->env->on_iis()) @chmod($filename, get_chmod());
 			return ($intBits !== false) ? true : false;
 		}
 		
@@ -232,7 +232,7 @@ if (!class_exists("filehandler_php")) {
 				}
 			}
 			if(is_file($path)){
-				@chmod($path, 0777);
+				if(!$this->env->on_iis()) @chmod($path, get_chmod());
 				return true;
 			}
 			
@@ -303,7 +303,7 @@ if (!class_exists("filehandler_php")) {
 		public function FileMove($filename, $tofile, $tmpmove=false) {
 			$blnResult = $this->rename($filename, $tofile);
 			#unlink($filename);
-			@chmod($tofile, 0777);
+			if(!$this->env->on_iis()) @chmod($tofile, get_chmod());
 			
 			return $blnResult;
 		}
@@ -363,7 +363,7 @@ if (!class_exists("filehandler_php")) {
 			}
 			
 			
-			@chmod($thumbfolder.$filename, 0777);
+			if(!$this->env->on_iis()) @chmod($thumbfolder.$filename, get_chmod());
 		}
 	}
 }

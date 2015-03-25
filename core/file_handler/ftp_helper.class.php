@@ -155,7 +155,7 @@ class ftp_handler{
 				if(!@ftp_mkdir($this->link_id, $path)){
 					$ret=false;break;
 				}else{
-					@ftp_chmod($this->link_id, $mode, $path);
+					if(!$this->on_iis()) @ftp_chmod($this->link_id, $mode, $path);
 				}
 			}
 		}
@@ -170,6 +170,8 @@ class ftp_handler{
 	}
 
 	public function chmod($file, $mode=0666){
+		if($this->on_iis()) return true;
+		
 		$this->login();
 		$this->cdToHome();
 		return @ftp_chmod($this->link_id,$mode,$this->root_dir.$file);
@@ -240,7 +242,7 @@ class ftp_handler{
 		$this->login();
 		$this->cdToHome();
 		$result = ftp_put($this->link_id,$this->root_dir.$newfile,$tmplfilename,$mode);
-		@ftp_chmod($this->link_id, 0755, $this->root_dir.$newfile);
+		if(!$this->on_iis()) @ftp_chmod($this->link_id, 0755, $this->root_dir.$newfile);
 		unlink($tmplfilename);
 		return $result;
 	}
@@ -249,7 +251,7 @@ class ftp_handler{
 		$tmplfilename = $this->tmp_dir.md5($this->generateRandomBytes());
 		file_put_contents($tmplfilename, $data);
 		$result = $this->put_upload($remote_file, $tmplfilename, $mode);
-		@ftp_chmod($this->link_id, 0755, $this->root_dir.$remote_file);
+		if(!$this->on_iis()) @ftp_chmod($this->link_id, 0755, $this->root_dir.$remote_file);
 		unlink($tmplfilename);
 		return $result;
 	}
@@ -265,7 +267,7 @@ class ftp_handler{
 		}
 
 		$result = $this->put_upload($remote_file, $tmplfilename, $mode);
-		@ftp_chmod($this->link_id, 0755, $this->root_dir.$remote_file);
+		if(!$this->on_iis()) @ftp_chmod($this->link_id, 0755, $this->root_dir.$remote_file);
 		unlink($tmplfilename);
 		return $result;
 	}
@@ -431,6 +433,14 @@ class ftp_handler{
 		$hex   = bin2hex($randomStr);
 		return substr($hex, 0, $length);
 	
+	}
+	
+	private function on_iis() {
+		$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
+		if ( strpos($sSoftware, "microsoft-iis") !== false )
+			return true;
+		else
+			return false;
 	}
 }
 ?>
