@@ -186,7 +186,7 @@ class Manage_Styles extends page_generic{
 		$this->pdh->process_hook_queue();
 		
 		//Delete Template Cache
-		$this->tpl->delete_cache();
+		$this->objStyles->delete_cache(true);
 		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));		
 	}
 

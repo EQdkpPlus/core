@@ -92,6 +92,8 @@ class tinyMCE extends gen_class {
 					convert_fonts_to_spans : false,
 					force_p_newlines : false,
 					menubar: false,
+					relative_urls : false,
+					remove_script_host : false,
 					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | forecolor | blockquote image link",
 					statusbar : false,
 				});
