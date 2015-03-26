@@ -182,12 +182,13 @@ class Manage_Styles extends page_generic{
 		// add the class colors to the database
 		$this->objStyles->ClassColorManagement($this->url_id, false);
 		$this->pdh->put('styles', 'update_style', array($this->url_id, $this->get_data()));
-		$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
+		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));		
 		
 		//Delete Template Cache
-		$this->objStyles->delete_cache(true);
-		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));		
+		$this->objStyles->deleteStyleCache($this->style['template_path']);
+		
+		$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
 	}
 
 	private function get_data() {
@@ -471,7 +472,7 @@ class Manage_Styles extends page_generic{
 	}
 
 	public function display(){
-		redirect('admin/manage_extensions.php'.$this->SID);
+		redirect('admin/manage_extensions.php'.$this->SID, false, false, false);
 	}
 	
 	private function get_used_variables($style_path){

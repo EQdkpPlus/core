@@ -174,7 +174,7 @@ if (!class_exists("styles")){
 			}
 
 			//Delete Cache
-			$this->helperDeleteCache();
+			$this->helperDeleteCompleteCache();
 		}
 
 		public function install($stylename){
@@ -403,9 +403,9 @@ if (!class_exists("styles")){
 			$this->reset($styleid, $updateColors, $deleteChangedFiles, true);
 		}
 
-		public function delete_cache($blnNoMsg=false){
-			$this->helperDeleteCache();
-			if(!$blnNoMsg) $this->core->message($this->user->lang('delete_template_cache_success'), $this->user->lang('success'), 'green');
+		public function delete_cache(){
+			$this->helperDeleteCompleteCache();
+			$this->core->message($this->user->lang('delete_template_cache_success'), $this->user->lang('success'), 'green');
 		}
 
 		public function getLocalStyleUpdates(){
@@ -486,7 +486,7 @@ if (!class_exists("styles")){
 						$files = array_merge($files, $files_rec);
 					} else {
 						$ext = pathinfo($file, PATHINFO_EXTENSION);
-						if ($file != "index.php" && $file != "index.html" && $file != 'user_additions.css' && $file != 'jquery_tmpl.css' && $file != "main.css" && in_array($ext, $this->allowed_extensions)){
+						if ($file != "index.php" && $file != "index.html" && $file != 'user_additions.css' && $file != 'jquery_tmpl.css' && in_array($ext, $this->allowed_extensions)){
 							$filepath = ($remove_templatepath) ? str_replace($orig_templatepath, '', $templatepath.'/'.$file) : $file;
 							$filepath = (substr($filepath, 0, 1) === '/') ? substr($filepath, 1) : $filepath;
 							$files[$filepath] = $file;
@@ -505,7 +505,7 @@ if (!class_exists("styles")){
 			if ( $dir = @opendir($this->pfh->FolderPath('templates/'.$templatepath, 'eqdkp')) ){
 				while ($file = @readdir($dir)){
 					$ext = pathinfo($file, PATHINFO_EXTENSION);
-					if (!is_dir($file) && $file != "ads.html" && $file != "index.php" && $file != "index.html" && $file != "main.css" && in_array($ext, $this->allowed_extensions)){
+					if (!is_dir($file) && $file != "ads.html" && $file != "index.php" && $file != "index.html" && in_array($ext, $this->allowed_extensions)){
 						if (strpos($file, "combined") === 0) continue;
 						$files[$this->pfh->FolderPath('templates/'.$templatepath, 'eqdkp').$file] = $file;
 					}
@@ -522,19 +522,35 @@ if (!class_exists("styles")){
 			return $files;
 		}
 
-		private function helperDeleteCache(){
+		private function helperDeleteCompleteCache(){
 			$this->tpl->delete_cache();
 
 			//Also delete the main.css-files from the styles
 			$storage_folder  = $this->pfh->FolderPath('templates', 'eqdkp');
 
 			if ( $dir = @opendir($storage_folder) ){
-				while ($file = @readdir($dir)){
-					if (file_exists($storage_folder.$file.'/main.css')){
-						$this->pfh->Delete($storage_folder.$file.'/main.css');
+				while ($file = @readdir($dir)){					
+					//Delete the Combined Files
+					if(is_dir($storage_folder.$file)){
+						$arrDir = sdir($storage_folder.$file, 'combined_*');
+						foreach($arrDir as $file){
+							$this->pfh->Delete('templates/'.$templatepath.'/'.$file, 'eqdkp');
+						}
 					}
 				}
 			}
+			
+			
+		}
+		
+		public function deleteStyleCache($templatepath){
+			//Delete the Combined Files
+			$arrDir = sdir($storage_folder = $this->pfh->FolderPath('templates', 'eqdkp').$templatepath, 'combined_*');
+			foreach($arrDir as $file){
+				$this->pfh->Delete('templates/'.$templatepath.'/'.$file, 'eqdkp');
+			}
+			
+			$this->tpl->delete_cache($templatepath);
 		}
 
 	}

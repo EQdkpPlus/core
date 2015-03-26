@@ -149,14 +149,14 @@ function get_sortedids($tosort, $order, $sort_order){
  * @param		bool		$extern			Is it an external link (other server) or an internal link?
  * @return		mixed						null, else the parsed redirect url if return is true.
  */
-function redirect($url, $return=false, $extern=false){
+function redirect($url, $return=false, $extern=false, $blnShowPage=true){
 	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::fetch('user')->removeSIDfromString($url);
 	if ($return){
 		return $out;
 	}else{
 		header('Location: ' . $out);
 
-		if(defined('USER_INITIALIZED')) {
+		if(defined('USER_INITIALIZED') && $blnShowPage) {
 			registry::register('template')->add_meta('<meta http-equiv="refresh" content="3;URL='.$out.'" />');
 		
 			registry::register('template')->assign_vars(array(
