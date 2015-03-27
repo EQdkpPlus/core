@@ -204,6 +204,8 @@ class wrapper_pageobject extends pageobject {
 				scrollToPosition();
 				registerInnerIframeEvents();
 				setURL();
+				$("#"+iframeid).data("message", "false");
+				sendMessagesToIframe();
 			}
 			
 			function perodicIframeAdjustment(){
@@ -212,29 +214,44 @@ class wrapper_pageobject extends pageobject {
 					
 					
 			//Resizes the Iframe		
-			function resizeIframe(){
+			function resizeIframe(height, width){					
 				var currentfr = document.getElementById(iframeid);
 	
 				if (currentfr){
 					try {
 						currentfr.style.display = "block";
-						if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
-							currentfr.height = currentfr.contentDocument.body.offsetHeight;
-						} else if (currentfr.Document && currentfr.Document.body && currentfr.Document.body.scrollHeight) {//ie5+ syntax
-							currentfr.height = currentfr.Document.body.scrollHeight;
+						if(height == undefined){
+							if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
+								currentfr.height = currentfr.contentDocument.body.offsetHeight;
+							} else if (currentfr.Document && currentfr.Document.body && currentfr.Document.body.scrollHeight) {//ie5+ syntax
+								currentfr.height = currentfr.Document.body.scrollHeight;
+							}
+						} else {
+							currentfr.height = height;
 						}
 					
 						//Set correct width
-						if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.scrollWidth) {//ie5+ syntax
-							var scrollwidth = currentfr.contentDocument.body.scrollWidth;
+						if(width == undefined){
+							if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.scrollWidth) {//ie5+ syntax
+								var scrollwidth = currentfr.contentDocument.body.scrollWidth;
+								var myscrollwidth = currentfr.scrollWidth;
+		
+								if (scrollwidth >  myscrollwidth+5){
+									currentfr.width = scrollwidth;
+								}	
+							}
+						} else {
 							var myscrollwidth = currentfr.scrollWidth;
-	
-							if (scrollwidth >  myscrollwidth+5){
-								currentfr.width = scrollwidth;
-							}	
+		
+							if (width >  myscrollwidth+5){
+								currentfr.width = width;
+							}
 						}
+
 					} catch (e) {
-						currentfr.height = 4000;
+						sendMessagesToIframe();
+						
+						if($("#"+iframeid).data("message") == "false") currentfr.height = 4000;
 					}	
 				}
 			}
@@ -385,6 +402,7 @@ class wrapper_pageobject extends pageobject {
 					if (currentfr){
 						var iframeDoc = currentfr.contentDocument || currentfr.contentWindow.document;
 						var iframeWin = currentfr.contentWindow || currentfr.contentDocument;
+
 						/*
 						if (typeof iframeWin.addEventListener != "undefined") {
 						    iframeWin.addEventListener("beforeunload", beforechangeEventhandler, false);
@@ -419,12 +437,45 @@ class wrapper_pageobject extends pageobject {
 					
 				}	
 			}
+					
+			function sendMessagesToIframe(){
+				try {
+					var currentfr = document.getElementById(iframeid);
+					if (currentfr){
+						var iframeWin = currentfr.contentWindow || currentfr.contentDocument;
+						iframeWin.postMessage("height", "*");
+						console.log("send message to iframe");
+					}
+				} catch (e) {
+					
+				}	
+			}
+					
+			function messageEventhandler(event){
+				if(event.data.type == "height"){
+					var height = event.data.height;
+					var width = event.data.width;
+					
+					$("#"+iframeid).data("message", "true");
+					resizeIframe(height, width);
+				}
+					
+				if(event.data.type == "link"){
+					$("#"+iframeid).data("message", "true");
+				}
+			}
 	
 			function init_wrapper(){
 				var tempobj = document.getElementById(iframeid);
 				tempobj.style.display = "block";
 				
-				registerIframeEvents();	
+				registerIframeEvents();
+					
+				if (window.addEventListener){
+				  addEventListener("message", messageEventhandler, false);
+				} else {
+				  attachEvent("onmessage", messageEventhandler);
+				}
 			}
 
 			init_wrapper();		
