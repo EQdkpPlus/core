@@ -736,6 +736,7 @@ class controller extends gen_class {
 					'COMMENTS_COUNTER'		=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 					'S_COMMENTS'			=> ($this->pdh->get('articles',  'comments', array($intArticleID))) ? true : false,
 					'S_FEATURED'			=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
+					'S_HIDE_HEADER'			=> ($this->pdh->get('articles',  'hide_header', array($intArticleID))),
 				));
 
 				if (count($arrTags) && $arrTags[0] != ""){
