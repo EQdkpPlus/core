@@ -78,6 +78,8 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			if(!$layout) return false;
 			//generate presets
 			$this->modules_affected = $this->apa->get_data('modules', $apa_id);
+			if(count($this->modules_affected) == 0) return true;
+			
 			
 			foreach($this->modules_affected as $module) {
 				$preset_name = $module.'_decay_'.$apa_id;
@@ -97,17 +99,23 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 					foreach($single_page['table_presets'] as $preset) {
 						$key_conv[$i] = $i+$added;
 						if($preset['name'] == 'rvalue') {
-							$new_presets[$i+1] = $preset;
-							$new_presets[$i+1]['name'] = 'raid_decay_'.$apa_id;
-							$added++;
+							if(in_array('raid', $this->modules_affected)){
+								$new_presets[$i+1] = $preset;
+								$new_presets[$i+1]['name'] = 'raid_decay_'.$apa_id;
+								$added++;
+							}
 						} elseif($preset['name'] == 'ivalue') {
-							$new_presets[$i+1] = $preset;
-							$new_presets[$i+1]['name'] = 'item_decay_'.$apa_id;
-							$added++;
+							if(in_array('item', $this->modules_affected)){
+								$new_presets[$i+1] = $preset;
+								$new_presets[$i+1]['name'] = 'item_decay_'.$apa_id;
+								$added++;
+							}
 						} elseif($preset['name'] == 'adj_value') {
-							$new_presets[$i+1] = $preset;
-							$new_presets[$i+1]['name'] = 'adjustment_decay_'.$apa_id;
-							$added++;
+							if(in_array('adjustment', $this->modules_affected)){
+								$new_presets[$i+1] = $preset;
+								$new_presets[$i+1]['name'] = 'adjustment_decay_'.$apa_id;
+								$added++;
+							}
 						}
 						$i++;
 					}
