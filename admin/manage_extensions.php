@@ -494,7 +494,7 @@ class Manage_Extensions extends page_generic {
 				'LONG_DESCRIPTION'	=> $long_description,
 				'HOMEPAGE_LINK'		=> ($homepagelink != '') ? $homepagelink : false,
 				'HOMEPAGE'			=> $this->user->lang('homepage'),
-				'MANUAL_LINK'		=> ($homepagelink != '') ? $homepagelink : false,
+				'MANUAL_LINK'		=> ($manuallink != '') ? $manuallink : false,
 				'MANUAL'			=> $this->user->lang('manual'),
 				'ACTION_LINK'		=> $link,
 				'BUGTRACKER_URL'	=> $bugtracker_url,
