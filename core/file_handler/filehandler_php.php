@@ -92,7 +92,7 @@ if (!class_exists("filehandler_php")) {
 
 		public function putContent($filename, $data){
 			$intBits = file_put_contents($filename, $data);
-			if(!$this->env->on_iis()) @chmod($filename, get_chmod());
+			if(!$this->on_iis()) @chmod($filename, get_chmod());
 			return ($intBits !== false) ? true : false;
 		}
 		
@@ -232,7 +232,7 @@ if (!class_exists("filehandler_php")) {
 				}
 			}
 			if(is_file($path)){
-				if(!$this->env->on_iis()) @chmod($path, get_chmod());
+				if(!$this->on_iis()) @chmod($path, get_chmod());
 				return true;
 			}
 			
@@ -303,7 +303,7 @@ if (!class_exists("filehandler_php")) {
 		public function FileMove($filename, $tofile, $tmpmove=false) {
 			$blnResult = $this->rename($filename, $tofile);
 			#unlink($filename);
-			if(!$this->env->on_iis()) @chmod($tofile, get_chmod());
+			if(!$this->on_iis()) @chmod($tofile, get_chmod());
 			
 			return $blnResult;
 		}
@@ -363,7 +363,16 @@ if (!class_exists("filehandler_php")) {
 			}
 			
 			
-			if(!$this->env->on_iis()) @chmod($thumbfolder.$filename, get_chmod());
+			if(!$this->on_iis()) @chmod($thumbfolder.$filename, get_chmod());
+		}
+		
+
+		private function on_iis() {
+			$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
+			if ( strpos($sSoftware, "microsoft-iis") !== false )
+				return true;
+			else
+				return false;
 		}
 	}
 }
