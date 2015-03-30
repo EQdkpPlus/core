@@ -847,7 +847,7 @@ class template extends gen_class {
 	}
 
 	//Compiles the given string of code, and returns the result in a string.
-	private function compile($code, $do_not_echo = false, $retvar = ''){
+	private function compile($code, $do_not_echo = false, $retvar = 'return'){
 		$this->strip_tags_php($code);
 
 		// match the template tags
@@ -894,7 +894,7 @@ class template extends gen_class {
 					default:
 						$this->compile_var_tags($blocks[0][$curr_tb]);
 						$trim_check = trim($blocks[0][$curr_tb]);
-						$compile_blocks[] = (!$do_not_echo) ? ((!empty($trim_check)) ? 'echo \'' . $blocks[0][$curr_tb] . '\';' : '') : ((!empty($trim_check)) ? $blocks[0][$curr_tb] : '');
+						$compile_blocks[] = ((!empty($trim_check)) ? 'echo \'' . $blocks[0][$curr_tb] . '\';' : '');
 						break;
 				}	// switch
 			}	// isset
@@ -904,9 +904,16 @@ class template extends gen_class {
 		for ($i = 0; $i < count($text_blocks); $i++){
 			$trim_check_text		= ( isset($text_blocks[$i]) ) ? trim($text_blocks[$i]) : '';
 			$trim_check_block		= ( isset($compile_blocks[$i]) ) ? trim($compile_blocks[$i]) : '';
-			$template_php			.= (!$do_not_echo) ? ((!empty($trim_check_text)) ? 'echo \'' . $text_blocks[$i] . '\';' : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] : '') : ((!empty($trim_check_text)) ? $text_blocks[$i] . "\n" : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] . "\n" : '');
+			$template_php			.= ((!empty($trim_check_text)) ? 'echo \'' . $text_blocks[$i] . '\';' : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] : '') ;
 		}
-		return (!$do_not_echo) ? $template_php : '$' . $retvar . '.= \'' . $template_php . '\';';
+		
+		if($do_not_echo){
+			$template_php = '$' . $retvar . ' = "";'."\n".$template_php;
+			$template_php = str_replace("echo '", '$' . $retvar . ' .= \'', $template_php);
+			return $template_php;
+		}
+		
+		return $template_php;
 	}
 
 	private function compile_var_tags(&$text_blocks){
