@@ -95,7 +95,7 @@ class Manage_Bridge extends page_generic {
 		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('pw') != '' && $this->in->get('name') != ''){
 			$error = array();
 			try {
-				$db = dbal::factory(array('dbtype' => 'mysqli'));
+				$db = dbal::factory(array('dbtype' => registry::get_const('dbtype')));
 				$db->connect($this->in->get('host'),$this->in->get('name'),$this->in->get('user'),$this->in->get('pw'));
 				//Schreibe die Daten in die Config
 				$this->config->set('cmsbridge_host', $this->crypt->encrypt($this->in->get('host')));

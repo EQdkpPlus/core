@@ -71,7 +71,7 @@ class bridge extends gen_class {
 	private function connect(){
 		if ((int)$this->config->get('cmsbridge_notsamedb') == 1){
 			try {
-				$this->bridgedb = dbal::factory(array('dbtype' => 'mysqli', 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->bridgedb = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
 				$this->bridgedb->connect($this->crypt->decrypt($this->config->get('cmsbridge_host')),$this->crypt->decrypt($this->config->get('cmsbridge_database')),$this->crypt->decrypt($this->config->get('cmsbridge_user')),$this->crypt->decrypt($this->config->get('cmsbridge_password')));
 				$this->status = true;
 			} catch(DBALException $e){
@@ -80,7 +80,7 @@ class bridge extends gen_class {
 			}
 		} else {
 			try {
-				$this->bridgedb = dbal::factory(array('dbtype' => 'mysqli', 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
+				$this->bridgedb = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
 				$this->status = true;
 			} catch(DBALException $e){
 				$this->bridgedb = $this->status = false;
