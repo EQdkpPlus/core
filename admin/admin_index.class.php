@@ -266,7 +266,7 @@ class admin_index extends gen_class {
 					if($isBot) $arrBots[] = $this->admin_functions->resolve_bots($row['session_browser']);
 				}				
 			}
-			$online_count = $result->numRows;
+			$online_count = count($arrOnlineUsers);
 		} else $online_count = 0;
 		
 		if($online_count){
