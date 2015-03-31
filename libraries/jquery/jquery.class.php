@@ -1268,14 +1268,19 @@ if (!class_exists("jquery")) {
 		*/
 		public function qtip($name, $content, $options=array()){
 			if(!isset($this->tt_init[$name])){
-				$content = (isset($options['contfunc'])) ? '{ text: function(api) { '.$content.' } }' : '"'.$content.'"';
-				$extra_class = (isset($options['classes'])) ? 'classes: "'.$options['classes'].'",' : '';
-				$my		= (isset($options['my'])) ? $options['my'] : 'top center';
-				$at		= (isset($options['at'])) ? $options['at'] : 'bottom center';
-				$width	= (isset($options['width'])) ? 'width: '.$options['width'].',' : '';
+				$content			= (isset($options['contfunc'])) ? '{ text: function(api) { '.$content.' } }' : '"'.$content.'"';
+				$viewport		= (isset($options['custom_viewport'])) ? $options['custom_viewport'] : '$(window)';
+				$adjust_pos		= (isset($options['position_adjustment'])) ? $options['position_adjustment'] : 'shift none';
+				$extra_class	= (isset($options['classes'])) ? 'classes: "'.$options['classes'].'",' : '';
+				$my				= (isset($options['my'])) ? $options['my'] : 'top center';
+				$at				= (isset($options['at'])) ? $options['at'] : 'bottom center';
+				$width			= (isset($options['width'])) ? 'width: '.$options['width'].',' : '';
 				$this->tpl->add_js('$("'.$name.'").qtip({
 					content: '.$content.',
 					position: {
+						adjust: {
+						},
+						viewport: '.$viewport.',
 						at: "'.$at.'",
 						my: "'.$my.'"
 					},
