@@ -1279,6 +1279,7 @@ if (!class_exists("jquery")) {
 					content: '.$content.',
 					position: {
 						adjust: {
+							method: "'.$adjust_pos.'"
 						},
 						viewport: '.$viewport.',
 						at: "'.$at.'",
