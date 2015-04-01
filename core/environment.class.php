@@ -308,6 +308,229 @@ if (!class_exists("environment")) {
 		function get_operating_system(){
 			return filter_var($_SERVER["SERVER_SOFTWARE"], FILTER_SANITIZE_STRING);;
 		}
+		
+		/**
+		 * Checks if Useragent is Bot. If yes, returns the Botname. Returns false if not a Bot.
+		 * 
+		 * @param string $strUseragent
+		 * @return Ambigous <string>|boolean
+		 */
+		public function is_bot($strUseragent){
+			$arrBots = array(
+				array( // row #0
+					'bot_agent' => 'AdsBot-Google',
+					'bot_name' => 'AdsBot [Google]',
+				),
+				array( // row #1
+					'bot_agent' => 'ia_archiver',
+					'bot_name' => 'Alexa [Bot]',
+				),
+				array( // row #2
+					'bot_agent' => 'Scooter/',
+					'bot_name' => 'Alta Vista [Bot]',
+				),
+				array( // row #3
+					'bot_agent' => 'Ask Jeeves',
+					'bot_name' => 'Ask Jeeves [Bot]',
+				),
+				array( // row #4
+					'bot_agent' => 'Baiduspider+(',
+					'bot_name' => 'Baidu [Spider]',
+				),
+				array( // row #5
+					'bot_agent' => 'Exabot/',
+					'bot_name' => 'Exabot [Bot]',
+				),
+				array( // row #6
+					'bot_agent' => 'FAST Enterprise Crawler',
+					'bot_name' => 'FAST Enterprise [Crawler]',
+				),
+				array( // row #7
+					'bot_agent' => 'FAST-WebCrawler/',
+					'bot_name' => 'FAST WebCrawler [Crawler]',
+				),
+				array( // row #8
+					'bot_agent' => 'http://www.neomo.de/',
+					'bot_name' => 'Francis [Bot]',
+				),
+				array( // row #9
+					'bot_agent' => 'Gigabot/',
+					'bot_name' => 'Gigabot [Bot]',
+				),
+				array( // row #10
+					'bot_agent' => 'Mediapartners-Google',
+					'bot_name' => 'Google Adsense [Bot]',
+				),
+				array( // row #11
+					'bot_agent' => 'Google Desktop',
+					'bot_name' => 'Google Desktop',
+				),
+				array( // row #12
+					'bot_agent' => 'Feedfetcher-Google',
+					'bot_name' => 'Google Feedfetcher',
+				),
+				array( // row #13
+					'bot_agent' => 'Googlebot',
+					'bot_name' => 'Google [Bot]',
+				),
+				array( // row #14
+					'bot_agent' => 'heise-IT-Markt-Crawler',
+					'bot_name' => 'Heise IT-Markt [Crawler]',
+				),
+				array( // row #15
+					'bot_agent' => 'heritrix/1.',
+					'bot_name' => 'Heritrix [Crawler]',
+				),
+				array( // row #16
+					'bot_agent' => 'ibm.com/cs/crawler',
+					'bot_name' => 'IBM Research [Bot]',
+				),
+				array( // row #17
+					'bot_agent' => 'ICCrawler - ICjobs',
+					'bot_name' => 'ICCrawler - ICjobs',
+				),
+				array( // row #18
+					'bot_agent' => 'ichiro/',
+					'bot_name' => 'ichiro [Crawler]',
+				),
+				array( // row #19
+					'bot_agent' => 'MJ12bot/',
+					'bot_name' => 'Majestic-12 [Bot]',
+				),
+				array( // row #20
+					'bot_agent' => 'MetagerBot/',
+					'bot_name' => 'Metager [Bot]',
+				),
+				array( // row #21
+					'bot_agent' => 'msnbot-NewsBlogs/',
+					'bot_name' => 'MSN NewsBlogs',
+				),
+				array( // row #22
+					'bot_agent' => 'msnbot/',
+					'bot_name' => 'MSN [Bot]',
+				),
+				array( // row #23
+					'bot_agent' => 'msnbot-media/',
+					'bot_name' => 'MSNbot Media',
+				),
+				array( // row #24
+					'bot_agent' => 'NG-Search/',
+					'bot_name' => 'NG-Search [Bot]',
+				),
+				array( // row #25
+					'bot_agent' => 'http://lucene.apache.org/nutch/',
+					'bot_name' => 'Nutch [Bot]',
+				),
+				array( // row #26
+					'bot_agent' => 'NutchCVS/',
+					'bot_name' => 'Nutch/CVS [Bot]',
+				),
+				array( // row #27
+					'bot_agent' => 'OmniExplorer_Bot/',
+					'bot_name' => 'OmniExplorer [Bot]',
+				),
+				array( // row #28
+					'bot_agent' => 'online link validator',
+					'bot_name' => 'Online link [Validator]',
+				),
+				array( // row #29
+					'bot_agent' => 'psbot/0',
+					'bot_name' => 'psbot [Picsearch]',
+				),
+				array( // row #30
+					'bot_agent' => 'Seekbot/',
+					'bot_name' => 'Seekport [Bot]',
+				),
+				array( // row #31
+					'bot_agent' => 'Sensis Web Crawler',
+					'bot_name' => 'Sensis [Crawler]',
+				),
+				array( // row #32
+					'bot_agent' => 'SEO search Crawler/',
+					'bot_name' => 'SEO Crawler',
+				),
+				array( // row #33
+					'bot_agent' => 'Seoma [SEO Crawler]',
+					'bot_name' => 'Seoma [Crawler]',
+				),
+				array( // row #34
+					'bot_agent' => 'SEOsearch/',
+					'bot_name' => 'SEOSearch [Crawler]',
+				),
+				array( // row #35
+					'bot_agent' => 'Snappy/1.1 ( http://www.urltrends.com/ )',
+					'bot_name' => 'Snappy [Bot]',
+				),
+				array( // row #36
+					'bot_agent' => 'http://www.tkl.iis.u-tokyo.ac.jp/~crawler/',
+					'bot_name' => 'Steeler [Crawler]',
+				),
+				array( // row #37
+					'bot_agent' => 'SynooBot/',
+					'bot_name' => 'Synoo [Bot]',
+				),
+				array( // row #38
+					'bot_agent' => 'crawleradmin.t-info@telekom.de',
+					'bot_name' => 'Telekom [Bot]',
+				),
+				array( // row #39
+					'bot_agent' => 'TurnitinBot/',
+					'bot_name' => 'TurnitinBot [Bot]',
+				),
+				array( // row #40
+					'bot_agent' => 'voyager/1.0',
+					'bot_name' => 'Voyager [Bot]',
+				),
+				array( // row #41
+					'bot_agent' => 'W3 SiteSearch Crawler',
+					'bot_name' => 'W3 [Sitesearch]',
+				),
+				array( // row #42
+					'bot_agent' => 'W3C-checklink/',
+					'bot_name' => 'W3C [Linkcheck]',
+				),
+				array( // row #43
+					'bot_agent' => 'W3C_*Validator',
+					'bot_name' => 'W3C [Validator]',
+				),
+				array( // row #44
+					'bot_agent' => 'http://www.WISEnutbot.com',
+					'bot_name' => 'WiseNut [Bot]',
+				),
+				array( // row #45
+					'bot_agent' => 'yacybot',
+					'bot_name' => 'YaCy [Bot]',
+				),
+				array( // row #46
+					'bot_agent' => 'Yahoo-MMCrawler/',
+					'bot_name' => 'Yahoo MMCrawler [Bot]',
+				),
+				array( // row #47
+					'bot_agent' => 'Yahoo! DE Slurp',
+					'bot_name' => 'Yahoo Slurp [Bot]',
+				),
+				array( // row #48
+					'bot_agent' => 'Yahoo! Slurp',
+					'bot_name' => 'Yahoo [Bot]',
+				),
+				array( // row #49
+					'bot_agent' => 'YahooSeeker/',
+					'bot_name' => 'YahooSeeker [Bot]',
+				),
+				array( // row #50
+					'bot_agent' => 'YandexBot/',
+					'bot_name' => 'Yandex [Bot]',
+				),
+				
+			);
+			
+			foreach ($arrBots as $row){
+				if (preg_match('#' . str_replace('\*', '.*?', preg_quote($row['bot_agent'], '#')) . '#i', $strUseragent)){
+					return $row['bot_name'];
+				}
+			}
+			return false;
+		}
 	}
 }
 ?>

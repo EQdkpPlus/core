@@ -260,10 +260,10 @@ class admin_index extends gen_class {
 		$arrOnlineUsers = $arrBots = array();
 		if ($result){
 			while ($row = $result->fetchAssoc()){
-				$isBot = $this->admin_functions->resolve_bots($row['session_browser']) ? true : false;
-				if(!$isBot || ($isBot && !in_array($this->admin_functions->resolve_bots($row['session_browser']), $arrBots))){
+				$isBot = $this->env->is_bot($row['session_browser']) ? true : false;
+				if(!$isBot || ($isBot && !in_array($this->env->is_bot($row['session_browser']), $arrBots))){
 					$arrOnlineUsers[] = $row;
-					if($isBot) $arrBots[] = $this->admin_functions->resolve_bots($row['session_browser']);
+					if($isBot) $arrBots[] = $this->env->is_bot($row['session_browser']);
 				}				
 			}
 			$online_count = count($arrOnlineUsers);
@@ -271,7 +271,7 @@ class admin_index extends gen_class {
 		
 		if($online_count){
 			foreach($arrOnlineUsers as $row){
-				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->admin_functions->resolve_bots($row['session_browser'])) ? $this->admin_functions->resolve_bots($row['session_browser']) : $this->user->lang('anonymous'));
+				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->env->is_bot($row['session_browser'])) ? $this->env->is_bot($row['session_browser']) : $this->user->lang('anonymous'));
 				$this->tpl->assign_block_vars('online_row', array(
 						'USERNAME'		=> sanitize($username),
 						'LOGIN'			=> $this->time->user_date($row['session_start'], true),
