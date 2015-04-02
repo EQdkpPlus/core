@@ -55,7 +55,7 @@ class joomla_bridge extends bridge_generic {
 	
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		// If we are using phpass
 		if (strpos($hash, '$P$') === 0)
 		{

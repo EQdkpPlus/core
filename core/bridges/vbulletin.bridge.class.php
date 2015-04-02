@@ -51,7 +51,7 @@ class vbulletin_bridge extends bridge_generic {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		if ((md5(md5($password).$strSalt)) == $hash){
 			return true;
 		}

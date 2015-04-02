@@ -64,7 +64,7 @@ class phpbb31_bridge extends bridge_generic {
 	
 	public $blnSyncBirthday = true;
 
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		if (strlen($hash) == 32){
 			
 			//plain md5

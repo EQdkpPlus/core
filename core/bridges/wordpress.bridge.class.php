@@ -49,7 +49,7 @@ class wordpress_bridge extends bridge_generic {
 	);
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		if ( strlen($hash) <= 32 ) {
 			if ($hash === md5($password)) return true;
 		} else {

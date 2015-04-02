@@ -66,7 +66,7 @@ class smf2_bridge extends bridge_generic {
 		),
 	);
 	
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		//Use normal strtolower and not utf8_strotolower, because SMF2 does the same...
 		if (sha1(strtolower($strUsername).$password) == $hash){
 			return true;

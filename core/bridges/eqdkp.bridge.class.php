@@ -63,7 +63,7 @@ class eqdkp_bridge extends bridge_generic {
 	public $blnSyncEmail = false;
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		$blnResult = $this->user->checkPassword($password, $hash, $boolUseHash);
 		return $blnResult;
 	}

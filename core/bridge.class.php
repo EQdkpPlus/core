@@ -124,7 +124,7 @@ class bridge extends gen_class {
 			$arrUserdata = $this->get_userdata(unsanitize($strUsername));
 			if ($arrUserdata){
 				if ($boolUsePassword){
-					$boolLoginResult = $this->objBridge->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, unsanitize($strUsername));
+					$boolLoginResult = $this->objBridge->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, unsanitize($strUsername), $arrUserdata);
 					$this->pdl->log('login', 'Check Bridge Password, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 					//Passwort stimmt, jetzt müssen wir schaun, ob er auch in der richtigen Gruppe ist
 					if ($boolLoginResult){

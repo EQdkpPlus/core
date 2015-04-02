@@ -23,70 +23,63 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class ipb3_bridge extends bridge_generic {
+class vbulletin51_bridge extends bridge_generic {
 	
-	public static $name = "IPB 3";
+	public static $name = 'vBulletin 5.1';
 	
 	public $data = array(
-		'user'	=> array( //User
-			'table'	=> 'members',
-			'id'	=> 'member_id',
-			'name'	=> 'name',
-			'where'	=> 'name',
-			'password' => 'members_pass_hash',
-			'email'	=> 'email',
-			'salt'	=> 'members_pass_salt',
-			'QUERY'	=> '',
-		),
+		//Data
 		'groups' => array( //Where I find the Usergroup
-			'table'	=> 'groups',
-			'id'	=> 'g_id',
-			'name'	=> 'g_title',
+			'table'	=> 'usergroup', //without prefix
+			'id'	=> 'usergroupid',
+			'name'	=> 'title',
 			'QUERY'	=> '',
 		),
 		'user_group' => array( //Zuordnung User zu Gruppe
-			'QUERY'	=> '',
-			'FUNCTION'	=> 'ipb3_get_user_groups',
+			'FUNCTION'	=> 'vb_get_user_groups',
 		),
-		
+		'user'	=> array( //User
+			'table'	=> 'user',
+			'id'	=> 'userid',
+			'name'	=> 'username',
+			'where'	=> 'username',
+			'password' => 'token',
+			'email'	=> 'email',
+			'salt'	=> 'secret',
+			'QUERY'	=> '',
+		),
 	);
-		
+	
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
-		
-		$password = md5( md5($strSalt) . md5( $password ) );
-		
-		return ($password === $hash) ? true : false;
-	}
-	
-	public function ipb3_get_user_groups($intUserID){
-		$query = $this->bridgedb->prepare("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id=?")->execute($intUserID);
-		$arrReturn = array();
-		if ($query){
-			$result = $query->fetchAssoc();
-			$arrReturn[] = (int)$result['member_group_id'];
-			$arrAditionalGroups = explode(',', $result['mgroup_others']);
-			if (is_array($arrAditionalGroups)){
-				foreach ($arrAditionalGroups as $group){
-					if ($group != '') $arrReturn[] = (int)$group;
-				}
-			}
-		}		
-		
-		return $arrReturn;
-	}
-	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
-		//Is user active?
-		if ($boolLoginResult){
-			if ($arrUserdata['temp_ban'] != '0' || $arrUserdata['member_banned'] != '0') {
-				return false;
-			}
+		if($arrUserdata['scheme'] == 'legacy'){
+			list($storedHash, $storedSalt) = explode(' ', $hash);
+			return ($storedHash == md5(md5($password) . $storedSalt));
 			
-			return true;
+		} elseif(strpos($arrUserdata['scheme'], 'blowfish') !== false){
+			return (crypt(md5($password), $hash) == $hash);
 		}
+
 		return false;
 	}
 	
+	public function vb_get_user_groups($intUserID){
+		$query = $this->bridgedb->prepare("SELECT usergroupid, membergroupids FROM ".$this->prefix."user WHERE userid=?")->execute($intUserID);
+		$arrReturn = array();
+		if ($query){
+			$result = $query->fetchAssoc();
+			
+			$arrReturn[] = (int)$result['usergroupid'];
+			
+			$arrAditionalGroups = explode(',', $result['membergroupids']);
+			if (is_array($arrAditionalGroups)){
+				foreach ($arrAditionalGroups as $group){
+					$arrReturn[] = (int)$group;
+				}
+			}
+		}
+		
+		return $arrReturn;
+	}
 }
 ?>

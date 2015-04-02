@@ -61,7 +61,7 @@ class mybb_bridge extends bridge_generic {
 	);
 
 
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 
 		if($this->salt_password(md5($password), $strSalt) == $hash){
 			return true;

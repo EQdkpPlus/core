@@ -60,7 +60,7 @@ class wbb3_bridge extends bridge_generic {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		$settings = $this->get_encryption_settings();
 		$strHashedPassword = $this->getDoubleSaltedHash($settings, $password, $strSalt);
 		if ($hash === $strHashedPassword) return true;

@@ -67,7 +67,7 @@ class wbb4_bridge extends bridge_generic {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = ""){
+	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		$blnResult = $this->__checkPassword($strUsername, $password, $hash);
 
 		if ($blnResult) return true;

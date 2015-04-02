@@ -82,7 +82,7 @@ abstract class bridge_generic extends gen_class {
 	 * @param string $strUsername	Username
 	 * @return boolean true if password matches
 	 */
-	abstract public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "");
+	abstract public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array());
 	
 	/**
 	 * Returns Array with fields that are available to sync
