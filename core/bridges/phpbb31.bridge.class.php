@@ -177,7 +177,7 @@ class phpbb31_bridge extends bridge_generic {
 	private function sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(generateRandomBytes(55));
-		$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
+		//$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
 		
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){

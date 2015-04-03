@@ -119,7 +119,7 @@ class wbb4_bridge extends bridge_generic {
 	private function sso($arrUserdata, $boolAutoLogin){
 		$user_id = intval($arrUserdata['id']);
 		$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 40);
-		$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
+		//$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
 			
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
@@ -132,7 +132,7 @@ class wbb4_bridge extends bridge_generic {
 			'requestMethod'				=> 'GET',
 			'sessionVariables'			=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(generateRandomBytes()).'a7w8er45'.'.";}',
 		);
-		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSe)->execute();
+		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSet)->execute();
 			
 		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
