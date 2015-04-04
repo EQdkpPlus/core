@@ -31,13 +31,15 @@ if (!defined('EQDKP_INC')) {
 $module_lang = array(
 	"attendance" => 'Raids (%d days)',
 	"lifetime" => 'Raids (lifetime)',
-	);
-	$preset_lang = array(
+	'attendance_fromto' => 'Raid attendance',
+);
+$preset_lang = array(
 	"attendance_30" => 'Raid attendance (30 days)',
 	"attendance_60" => 'Raid attendance (60 days)',
 	"attendance_90" => 'Raid attendance (90 days)',
 	"attendance_lt" => 'Raid attendance (lifetime)',
-	);
+	'attendance_fromto_all' => 'Raid attendance (def. days)',
+);
 	
 
 ?>

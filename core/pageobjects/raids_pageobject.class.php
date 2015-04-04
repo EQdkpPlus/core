@@ -300,9 +300,56 @@ class raids_pageobject extends pageobject {
 			$date_suffix	= '&amp;timestamps=1&amp;from='.$date1.'&amp;to='.$date2;
 			$view_list		= $this->pdh->get('raid', 'raididsindateinterval', array($date1, $date2));
 			$date2			-= 86400; // Shows THAT day
+			
+			
+			//Create a Summary
+			$arrRaidstatsSettings = array(
+					'name' => 'hptt_viewmember_itemlist',
+					'table_main_sub' => '%member_id%',
+					'table_subs' => array('%member_id%', '%link_url%', '%link_url_suffix%', '%raid_link_url%', '%raid_link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%', '%from%', '%to%'),
+					'page_ref' => 'viewcharacter.php',
+					'show_numbers' => false,
+					'show_select_boxes' => false,
+					'show_detail_twink' => false,
+					'table_sort_col' => 0,
+					'table_sort_dir' => 'asc',
+					'table_presets' => array(
+						array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'attendance_fromto_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'dattendance_fromto_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+					),
+			);
+			
+			$show_twinks = $this->config->get('show_twinks');
+			$statsuffix = $date_suffix;
+			if($this->in->exists('show_twinks')){
+				$show_twinks = true;
+				$statsuffix .= '&amp;show_twinks=1';
+			}
+
+			$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
+
+			$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.$show_twinks), 'statsort');
+			$hptt->setPageRef($this->strPath);
+			
+			//footer
+			$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($arrMemberlist));
+			//$sort = $this->in->get('statsort');
+			//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
+			
+			$this->tpl->assign_vars(array (
+				'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, $footer_text),
+				'S_RAIDSTATS'			=> true,
+				'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
+				'S_SHOW_TWINKS'			=> !$this->config->get('show_twinks'),
+			));
+			
 		}else{
 			$view_list		= $this->pdh->get('raid', 'id_list');
-			$date1			= $date2 = time();
+			$date1			= time()-(30*86400);
+			$date2			= time();
 			$date_suffix	= '';
 		}
 

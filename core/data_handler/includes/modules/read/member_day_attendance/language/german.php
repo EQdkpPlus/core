@@ -26,6 +26,7 @@ if ( !defined('EQDKP_INC') ){
 $module_lang = array(
 	'dattendance'		=> 'Tage (%d Tage)',
 	'dlifetime'			=> 'Tage (Lebenszeit)',
+	'dattendance_fromto' => 'Tagesteilnahme',
 );
 
 $preset_lang = array(
@@ -33,5 +34,6 @@ $preset_lang = array(
 	'dattendance_60'	=> 'Tagesteilnahme (60 Tage)',
 	'dattendance_90'	=> 'Tagesteilnahme (90 Tage)',
 	'dattendance_lt'	=> 'Tagesteilnahme (Lebenszeit)',
+	'dattendance_fromto_all' => 'Tagesteilnahme (def. Zeitraum)',
 );
 ?>

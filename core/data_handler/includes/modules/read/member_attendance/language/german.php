@@ -26,6 +26,7 @@ if ( !defined('EQDKP_INC') ){
 $module_lang = array(
 	'attendance'	=> 'Raids (%d Tage)',
 	'lifetime'		=> 'Raids (Lebenszeit)',
+	'attendance_fromto' => 'Raidteilnahme',
 );
 
 $preset_lang = array(
@@ -33,5 +34,6 @@ $preset_lang = array(
 	'attendance_60'	=> 'Raidteilnahme (60 Tage)',
 	'attendance_90'	=> 'Raidteilnahme (90 Tage)',
 	'attendance_lt'	=> 'Raidteilnahme (Lebenszeit)',
+	'attendance_fromto_all' => 'Raidteilnahme (def. Zeitraum)',
 );
 ?>

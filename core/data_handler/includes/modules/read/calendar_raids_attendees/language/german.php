@@ -30,6 +30,10 @@ $module_lang = array(
 	'html_calstat_raids_signedin'		=> 'Angemeldet',
 	'html_calstat_raids_signedoff'		=> 'Abgemeldet',
 	'html_calstat_raids_backup'			=> 'Ersatzbank',
+	'html_calstat_raids_confirmed_fromto' => 'Teilgenommen',
+	'html_calstat_raids_signedin_fromto'	=> 'Angemeldet',
+	'html_calstat_raids_signedoff_fromto'	=> 'Abgemeldet',
+	'html_calstat_raids_backup_fromto'		=> 'Ersatzbank'
 );
 
 $preset_lang = array(
@@ -47,5 +51,9 @@ $preset_lang = array(
 	'raidcalstats_raids_signedin_30'	=> 'Kalender-Statsitik-Angemeldete Raids (30 Tage)',
 	'raidcalstats_raids_signedoff_30'	=> 'Kalender-Statsitik-Abgemeldete Raids (30 Tage)',
 	'raidcalstats_raids_backup_30'		=> 'Kalender-Statsitik-Ersatzbank Raids (30 Tage)',
+	'raidcalstats_raids_confirmed_fromto'	=> 'Kalender-Statsitik-Bestätigte Raids (Def. Zeitraum)',
+	'raidcalstats_raids_signedin_fromto'	=> 'Kalender-Statsitik-Angemeldete Raids (Def. Zeitraum)',
+	'raidcalstats_raids_signedoff_fromto'	=> 'Kalender-Statsitik-Abgemeldete Raids (Def. Zeitraum)',
+	'raidcalstats_raids_backup_fromto'		=> 'Kalender-Statsitik-Ersatzbank Raids (Def. Zeitraum)',
 );
 ?>

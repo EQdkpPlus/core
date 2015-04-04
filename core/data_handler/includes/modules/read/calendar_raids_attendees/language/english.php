@@ -35,8 +35,12 @@ $module_lang = array(
 	"html_calstat_raids_signedin" => 'Signedin',
 	"html_calstat_raids_signedoff" => 'Signedoff',
 	"html_calstat_raids_backup" => 'Backup',
-	);
-	$preset_lang = array(
+	"html_calstat_raids_confirmed_fromto" => 'Attended',
+	"html_calstat_raids_signedin_fromto" => 'Signedin',
+	"html_calstat_raids_signedoff_fromto" => 'Signedoff',
+	"html_calstat_raids_backup_fromto" => 'Backup',
+);
+$preset_lang = array(
 	"raidattendees_status" => 'Calendar-Raid-Attendee Status',
 	"raidcalstats_lastraid" => 'Calendar-Stats-Last Raid',
 	"raidcalstats_raids_confirmed_90" => 'Calendar-Stats-Raids confirmed (90 days)',
@@ -51,7 +55,12 @@ $module_lang = array(
 	"raidcalstats_raids_signedin_30" => 'Calendar-Stats-Raids signedin (30 days)',
 	"raidcalstats_raids_signedoff_30" => 'Calendar-Stats-Raids signedoff (30 days)',
 	"raidcalstats_raids_backup_30" => 'Calendar-Stats-Raids backup (30 days)',
-	);
+		
+	"raidcalstats_raids_confirmed_fromto" => 'Calendar-Stats-Raids confirmed (def. days)',
+	"raidcalstats_raids_signedin_fromto" => 'Calendar-Stats-Raids signedin (def. days)',
+	"raidcalstats_raids_signedoff_fromto" => 'Calendar-Stats-Raids signedoff (def. days)',
+	"raidcalstats_raids_backup_fromto" => 'Calendar-Stats-Raids backup (def. days)',
+);
 	
 
 ?>

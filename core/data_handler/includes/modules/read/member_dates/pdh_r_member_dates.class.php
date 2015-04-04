@@ -81,6 +81,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			$this->fl_raid_dates = array();
 			$raid_ids = $this->pdh->get('raid', 'id_list');
 			$main_ids = $this->pdh->aget('member', 'mainid', 0, array($this->pdh->get('member', 'id_list', array(false, false, false, false))));
+			$member_list = $this->pdh->get('member', 'id_list', array(false, false, false));
 			foreach($raid_ids as $raid_id){
 				$date = $this->pdh->get('raid', 'date', array($raid_id));
 				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
@@ -88,6 +89,8 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 				$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($event_id));
 				if(is_array($attendees)) {
 					foreach($attendees as $attendee_id){
+						if(!in_array($attendee_id, $member_list)) continue;
+						
 						if(!isset($this->fl_raid_dates['single'][$attendee_id]['total']['first_date']) || $date < $this->fl_raid_dates['single'][$attendee_id]['total']['first_date']) {
 							$this->fl_raid_dates['single'][$attendee_id]['total']['first_date'] = $date;
 						}
@@ -146,6 +149,9 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			$itempools = $this->pdh->aget('multidkp', 'mdkpids4itempoolid', 0, array($this->pdh->get('itempool', 'id_list')));
 			foreach($item_ids as $item_id){
 				$member_id = $this->pdh->get('item', 'buyer', array($item_id));
+				$member_list = $this->pdh->get('member', 'id_list', array(false, false, false));
+				if(!in_array($member_id, $member_list)) continue;	
+				
 				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 				$item_date = $this->pdh->get('item', 'date', array($item_id));
 				if(!isset($this->fl_item_dates['single'][$member_id]['total']['last']['date']) || $item_date > $this->fl_item_dates['single'][$member_id]['total']['last']['date']){
@@ -180,7 +186,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 					$this->fl_item_dates['multi'][$main_ids[$member_id]]['itempool'][$itempool_id]['first']['date'] = $item_date;
 					$this->fl_item_dates['multi'][$main_ids[$member_id]]['itempool'][$itempool_id]['first']['item_id'] = $item_id;
 				}
-				if(is_array($itempools[$itempool_id])) {
+				if(isset($itempools[$itempool_id]) && is_array($itempools[$itempool_id])) {
 					foreach($itempools[$itempool_id] as $mdkp_id){
 						if(!isset($this->fl_item_dates['single'][$member_id]['mdkp'][$mdkp_id]['last']['date']) || $item_date > $this->fl_item_dates['single'][$member_id]['mdkp'][$mdkp_id]['last']['date']){
 							$this->fl_item_dates['single'][$member_id]['mdkp'][$mdkp_id]['last']['date'] = $item_date;

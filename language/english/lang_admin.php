@@ -329,7 +329,6 @@ $lang = array(
 	"number_of_members" => 'Number of characters (Active / Inactive)',
 	"number_of_raids" => 'Number of Raids',
 	"raids_per_day" => 'Raids per Day',
-	"statistics" => 'Statistics',
 	"totals" => 'Totals',
 	"who_online" => 'Who\'s Online',
 	"lim_func_fromformat" => 'The function date_create_from_format() isn\'t available. You have to use the format \'YYYY-MM-DD HH:MM\' (eg. 2011-03-14 23:02) for all dates. date_create_from_format will be available with php-version 5.3.',

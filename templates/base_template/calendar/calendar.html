@@ -336,6 +336,7 @@ td.fc-day:hover:after {
 	<ul>
 		<li><a href='#fragment-calendar'><span>{L_calendar}</span></a></li>
 		<li><a href='#fragment-list'><span>{L_calendar_list}</span></a></li>
+		<li><a href='#fragment-raidstats'><span>{L_statistics}</span></a></li>
 	</ul>
 
 	<div id="fragment-calendar">
@@ -366,6 +367,39 @@ td.fc-day:hover:after {
 		<table class="table fullwidth colorswitch">
 			{RAID_LIST}
 		</table>
+		{CSRF_TOKEN}
+		</form>
+	</div>
+	
+	<div id="fragment-raidstats">
+		<form name="raidstats" method="post" action="{ACTION}">
+		
+		<fieldset class="settings mediumsettings" id="toggleRaidsummary">
+		<legend>{L_viewraid_create_summ}<span class="toggle_button"></span></legend>
+		<div class="toggle_container">
+			<dl>
+				<dt><label>{L_starting_date}</label></dt>
+				<dd>{DATEPICK_DATE_FROM}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_ending_date}</label></dt>
+				<dd>{DATEPICK_DATE_TO}</dd>
+			</dl>
+			<!-- IF S_SHOW_TWINKS -->
+			<dl>
+				<dt><label>{L_show_twinks}</label></dt>
+				<dd><label><input type="checkbox" name="show_twinks" value="1" {SHOW_TWINKS_CHECKED} /></label></dd>
+			</dl>
+			<!-- ENDIF -->
+			<button class="mainoption" type="submit" name="submit" id="raidSumformSubmitBtn"><i class="fa fa-check"></i>{L_viewraid_create_summ}</button>
+		</div>
+		</fieldset>
+		<br />
+		<!-- IF S_RAIDSTATS -->
+		<table class="table fullwidth hptt colorswitch scrollable-x">
+			{RAIDSTATS_OUT}
+		</table>
+		<!-- ENDIF -->
 		{CSRF_TOKEN}
 		</form>
 	</div>

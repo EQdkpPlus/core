@@ -1000,6 +1000,7 @@ $lang = array(
 	"additional_infos" => "Additional information",
 	"new_value" => 'New Value',
 	"old_value" => 'Old Value',
+	"statistics" => 'Statistics',
 );
 
 ?>

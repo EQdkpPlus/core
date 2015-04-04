@@ -1,4 +1,4 @@
-<form method="post" action="{ACTION}" name="post">
+<form method="post" action="{ACTION}" id="listraids_form">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_listraids_title}</h1>
 	</div>
@@ -14,7 +14,7 @@
 				<dd>{DATEPICK_DATE_TO}</dd>
 			</dl>
 			
-			<button class="mainoption" type="submit" name="submit"><i class="fa fa-check"></i>{L_viewraid_create_summ}</button>
+			<button class="mainoption" type="submit" name="submit" id="raidSumformSubmitBtn"><i class="fa fa-check"></i>{L_viewraid_create_summ}</button>
 			<button type="button" class="" onclick="window.location='listraids.php{SID}'"><i class="fa fa-trash-o"></i>{L_reset}</button>
 		</div>
 	</fieldset>
@@ -26,4 +26,17 @@
 			{RAID_PAGINATION}
 	</div>
 {CSRF_TOKEN}
+
+<!-- IF S_SHOW_TWINKS -->
+<div class="tableHeader">
+{L_filter}: <label><input type="checkbox" name="show_twinks" value="1" onchange="$('#raidSumformSubmitBtn').click()" {SHOW_TWINKS_CHECKED} /> {L_show_twinks}</label>
+
+</div>
+<!-- ENDIF -->
+
+<!-- IF S_RAIDSTATS -->
+<table class="table fullwidth hptt colorswitch scrollable-x">
+	{RAIDSTATS_OUT}
+</table>
+<!-- ENDIF -->
 </form>

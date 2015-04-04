@@ -961,6 +961,7 @@ $lang = array(
 "additional_infos" => "Zusätzliche Informationen",
 "new_value"	=> "Neuer Wert",
 "old_value"	=> "Alter Wert",
+"statistics" => "Statistiken",		
 );
 
 ?>

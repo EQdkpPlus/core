@@ -389,6 +389,13 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			});
 			return ($retcount) ? count($raids) : $raids;
 		}
+		
+		public function get_amount_raids_fromto($from, $to, $retcount=true){
+			$raids = array_filter($this->events, function ($element) use (&$from, &$to) {
+				return ($element['timestamp_start'] > ($from) && ($element['timestamp_end'] < $to));
+			});
+			return ($retcount) ? count($raids) : $raids;
+		}
 
 	}//end class
 }//end if

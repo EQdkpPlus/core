@@ -41,9 +41,16 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			'raidcalstats_raids_signedin_30'	=> array('html_calstat_raids_signedin', array('%member_id%', '30'), array()),
 			'raidcalstats_raids_signedoff_30'	=> array('html_calstat_raids_signedoff', array('%member_id%', '30'), array()),
 			'raidcalstats_raids_backup_30'		=> array('html_calstat_raids_backup', array('%member_id%', '30'), array()),
+		
+			'raidcalstats_raids_confirmed_fromto' => array('html_calstat_raids_confirmed_fromto', array('%member_id%', '%from%', '%to%'), array()),
+			'raidcalstats_raids_signedin_fromto' => array('html_calstat_raids_signedin_fromto', array('%member_id%', '%from%', '%to%'), array()),
+			'raidcalstats_raids_signedoff_fromto' => array('html_calstat_raids_signedoff_fromto', array('%member_id%', '%from%', '%to%'), array()),
+			'raidcalstats_raids_backup_fromto' => array('html_calstat_raids_backup_fromto', array('%member_id%', '%from%', '%to%'), array()),
 		);
 
 		private $attendees;
+		private $attendees_fromto;
+		
 		public $hooks = array(
 			'calendar_raid_attendees_update',
 		);
@@ -61,6 +68,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$this->pdc->del('pdh_calendar_raids_table.attendees');
 			$this->pdc->del('pdh_calendar_raids_table.lastraid');
 			$this->pdc->del('pdh_calendar_raids_table.attendee_status');
+			$this->pdc->del_prefix('pdh_calendar_raids_table.attendees_fromto');
 			$this->attendees		= NULL;
 			$this->lastraid			= NULL;
 			$this->attendee_status	= NULL;
@@ -75,7 +83,8 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			// try to get from cache first
 			$this->attendees		= $this->pdc->get('pdh_calendar_raids_table.attendees');
 			$this->lastraid			= $this->pdc->get('pdh_calendar_raids_table.lastraid');
-			$this->lastraid			= $this->pdc->get('pdh_calendar_raids_table.attendee_status');
+			$this->attendee_status	= $this->pdc->get('pdh_calendar_raids_table.attendee_status');
+			
 			if($this->attendees !== NULL && $this->lastraid !== NULL && $this->attendee_status !== NULL){
 				return true;
 			}
@@ -135,6 +144,38 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				$this->pdc->put('pdh_calendar_raids_table.attendee_status', $this->attendee_status, NULL);
 			}
 			
+			return true;
+		}
+		
+		public function init_fromto($from, $to){
+			$strTimeHash = md5($from.'.'.$to);
+			
+			$this->attendees_fromto[$strTimeHash] = $this->pdc->get('pdh_calendar_raids_table.attendees_fromto.'.$strTimeHash);
+			
+			if($this->attendees_fromto[$strTimeHash] !== NULL){
+				return true;
+			}
+			
+			// empty array as default
+			$this->attendees_fromto	= array();
+			$arrRaids = $this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to, false));
+
+			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_attendees');
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					if(in_array($row['calendar_events_id'], array_keys($arrRaids))){
+						// attendee status array
+						if(isset($this->attendees_fromto[$strTimeHash][$row['member_id']][$row['signup_status']])){
+							$this->attendees_fromto[$strTimeHash][$row['member_id']][$row['signup_status']]++;
+						}else{
+							$this->attendees_fromto[$strTimeHash][$row['member_id']][$row['signup_status']] = 1;
+						}
+					}
+				}
+
+				$this->pdc->put('pdh_calendar_raids_table.attendees_fromto.'.$strTimeHash, $this->attendees_fromto[$strTimeHash], NULL);
+			}
+				
 			return true;
 		}
 
@@ -285,19 +326,20 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return ($timestamp > 0) ? $this->time->user_date($timestamp) : '--';
 		}
 
-		public function get_calstat_raids_status($memberid, $status=false, $days='90'){
+		public function get_calstat_raids_status($memberid, $status=false, $days='90'){			
 			switch($days){
 				case '30':
 					$statsperdays	= $this->attendee_status[$memberid][$status]['30'];
 				break;
 				case '30':
-					$statsperdays	= array_merge($this->attendee_status[$memberid][$status]['30'],$this->attendee_status[$memberid][$status]['60']);
+					$statsperdays	= $this->attendee_status[$memberid][$status]['30'] + $this->attendee_status[$memberid][$status]['60'];
 				break;
 				case '90':
-					$statsperdays	= array_merge($this->attendee_status[$memberid][$status]['30'],$this->attendee_status[$memberid][$status]['60'],$this->attendee_status[$memberid][$status]['90']);
+					$statsperdays	= $this->attendee_status[$memberid][$status]['30'] + $this->attendee_status[$memberid][$status]['60'] + $this->attendee_status[$memberid][$status]['90'];
 				break;
 			}
-			return ($status) ? $statsperdays : $this->attendee_status[$memberid];
+
+			return ($status !== false) ? $statsperdays : $this->attendee_status[$memberid];
 		}
 
 		public function get_html_calstat_raids_confirmed($memberid, $days){
@@ -324,10 +366,53 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		
 		public function get_html_calstat_raids_backup($memberid, $days){
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
-			$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 2, $days);
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 3, $days);
 			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 		}
+		
+		/* -----------------------------------------------------------------------
+		 * From To Attendance
+		 * -----------------------------------------------------------------------*/
+		public function get_html_calstat_raids_confirmed_fromto ($memberid, $from, $to){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 0, $from, $to);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
+		}
+		
+		public function get_html_calstat_raids_signedin_fromto ($memberid, $from, $to){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 1, $from, $to);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
+				
+		}
+		
+		public function get_html_calstat_raids_signedoff_fromto ($memberid, $from, $to){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 2, $from, $to);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
+		}
+		
+		public function get_html_calstat_raids_backup_fromto ($memberid, $from, $to){
+			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
+			$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 3, $from, $to);
+			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
+		}
+		
+		public function get_calstat_raids_status_fromto($memberid, $status, $from, $to){
+			$strTimeHash = md5($from.'.'.$to);
+			$statsperdays = 0;
+			if(!isset($this->attendees_fromto[$strTimeHash])) $this->init_fromto($from, $to);
+			if(isset($this->attendees_fromto[$strTimeHash][$memberid]))
+				$statsperdays = $this->attendees_fromto[$strTimeHash][$memberid][$status];
+			
+			return $statsperdays;
+		}
+		
 	    /* -----------------------------------------------------------------------
 	    * Tools
 	    * -----------------------------------------------------------------------*/
