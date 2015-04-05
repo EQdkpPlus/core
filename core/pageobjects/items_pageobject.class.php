@@ -50,7 +50,7 @@ class items_pageobject extends pageobject {
 		}else{
 			$item_ids = $this->pdh->get('item', 'ids_by_name', array($item_name));
 		}
-		$counter = sizeof($item_ids);
+		$counter = count($item_ids);
 	
 		//default now col
 		$colspan = ($this->config->get('infotooltip_use')) ? 1 : 0 ;
@@ -73,8 +73,15 @@ class items_pageobject extends pageobject {
 			$arrPoolItems = array();
 
 			foreach($item_ids as $item_id) {
-				$a_items[] = array('name' => $this->time->date("Y-m-d h:i:s", $this->pdh->get('item', 'date', array($item_id))), 'value' => $this->pdh->get('item', 'value', array($item_id)));
 				$itempool = $this->pdh->get('item', 'itempool_id', array($item_id));
+				$strItempoolName = $this->pdh->get('itempool', 'name', array($itempool));
+				if(!isset($a_items[$itempool])){
+					$a_items[$itempool] = array(
+						'data' => array(),
+						'name' => (strlen($strItempoolName)) ? $strItempoolName : $this->user->lang('unknown'),	
+					);
+				}
+				$a_items[$itempool]['data'][] = array($this->time->date("Y-m-d h:i:s", $this->pdh->get('item', 'date', array($item_id))), $this->pdh->get('item', 'value', array($item_id)));
 				
 				if (!isset($arrPoolItems[$itempool])) $arrPoolItems[$itempool] = 0; 
 				$arrPoolItems[$itempool]++;
@@ -105,10 +112,10 @@ class items_pageobject extends pageobject {
 				));
 			}
 		}
-
+		
 		$this->tpl->assign_vars(array(
 				'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
-				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('line', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500)) : '',
+				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('multiline', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500, 'legend' => true, 'legendPosition' => 'nw')) : '',
 				'SHOW_ITEMSTATS'			=> ($this->config->get('infotooltip_use')) ? true : false,
 				'SHOW_ITEMHISTORYA'			=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') == 1 ) ? true : false,
 				'SHOW_COLSPAN'				=> $colspan,

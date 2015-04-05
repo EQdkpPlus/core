@@ -1190,6 +1190,7 @@ if (!class_exists("jquery")) {
 			$this->init_jqplot();
 			switch($type){
 				case 'line':	return $this->charts_line($id, $data, $options);break;
+				case 'multiline': return $this->charts_multiline($id, $data, $options); break;
 				case 'pie':		return $this->charts_pie($id, $data, $options);break;
 			}
 		}
@@ -1236,7 +1237,7 @@ if (!class_exists("jquery")) {
 		* @return HTML Code
 		*/
 		private function charts_line($id, $data, $options=''){
-			$js_array		= $this->Array2jsArray($data, false);#echo$js_array;
+			$js_array		= $this->Array2jsArray($data, false);
 
 			// switch the renderers
 			switch ($options['xrenderer']){
@@ -1258,6 +1259,54 @@ if (!class_exists("jquery")) {
 
 			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
 		}
+		
+		/**
+		 * jqPlot: MultiLineChart
+		 *
+		 * @param $id					ID of the css class (must be unique)
+		 * @param $data					Array with data
+		 * $data = array('series1' => array('name' => 'Name of Series1', 'lineWidth' => 4, 'markerStyle' => 'square', 'data' => array(array(0,1), array(1, 10), array(2, 15))), 'series2' => ..... );
+		 * 
+		 * 
+		 * @param $options				The options array
+		 * @return HTML Code
+		 */
+		private function charts_multiline($id, $data, $options=''){
+			// switch the renderers
+			switch ($options['xrenderer']){
+				case 'date':	$renderer = 'renderer:$.jqplot.DateAxisRenderer';break;
+				default:		$renderer = 'renderer:$.jqplot.CategoryAxisRenderer';
+			}
+		
+			$tmpopt		= array();
+			if(isset($options['highlighter']) && $options['highlighter']){
+				$tmpopt[]	= 'highlighter: { show: true }';
+			}
+			if(isset($options['legend']) && $options['legend']){
+				$tmpopt[]	= 'legend: { show: true, location:\''.((isset($options['legendPosition'])) ? $options['legendPosition'] : 'ne').'\' }';
+			}
+			
+			if(isset($options['title']) && $options['title']){
+				$tmpopt[]	= "title: '".$options['title']."'";
+			}
+			$arrData = array();
+			$strSeriesOut = "series:[";
+			$arrTmpSeries = array();
+			foreach($data as $key => $seriendata){
+				$arrTmpSeries[] = '{lineWidth:'.((isset($seriendata['lineWidth'])) ? $seriendata['lineWidth'] : 4).', markerOptions:{style:\''.((isset($seriendata['markerStyle'])) ? $seriendata['markerStyle'] : 'square')."'}, label:'".((isset($seriendata['name'])) ? $seriendata['name'] : "Series".$key)."'}";
+				$arrData[] = $seriendata['data'];
+			}
+			$strSeriesOut .= implode(', ', $arrTmpSeries)."]";
+			$tmpopt[] = $strSeriesOut;
+			
+			$tmpopt[]		= "axes:{xaxis:{".(($options['autoscale_x']) ? 'autoscale:true' : $renderer)."},yaxis:{".(($options['autoscale_y']) ? 'autoscale:true' : '')."}}";
+			
+			$this->tpl->add_js("
+					plot_".$id." = $.jqplot('".$id."', ".json_encode($arrData).", ".$this->gen_options($tmpopt).");", 'docready');
+		
+			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
+		}
+		
 
 		/**
 		* ToolTip
