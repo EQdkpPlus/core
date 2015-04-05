@@ -115,7 +115,7 @@ class items_pageobject extends pageobject {
 		
 		$this->tpl->assign_vars(array(
 				'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
-				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('multiline', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500, 'legend' => true, 'legendPosition' => 'nw')) : '',
+				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('multiline', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500, 'legend' => true, 'legendPosition' => 'nw', 'highlighter' => true)) : '',
 				'SHOW_ITEMSTATS'			=> ($this->config->get('infotooltip_use')) ? true : false,
 				'SHOW_ITEMHISTORYA'			=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') == 1 ) ? true : false,
 				'SHOW_COLSPAN'				=> $colspan,
