@@ -1716,7 +1716,7 @@ $lang = array(
 "core_sett_f_gravatar_defaultavatar" => "Gravatar Defaultavatar verwenden",
 "core_sett_f_help_gravatar_defaultavatar" => "Diese Option sorgt dafür, dass alle Benutzer ohne einen Avatar, einen individuellen Avatar zur besseren Unterscheidung bekommen.",				
 "core_sett_f_login_google_publickey" => "Google Client-ID",
-"core_sett_f_login_google_privatekey" => "Google Client Secret",		
+"core_sett_f_login_google_privatekey" => "Google Client Secret",
 		
 );
 ?>

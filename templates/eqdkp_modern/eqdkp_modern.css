@@ -3808,3 +3808,38 @@ li.prio_2 {
 	text-align: left;
 	padding-left: 6px;
 }
+
+button.thirdpartylogin.facebook {
+	background: #3b5998;
+	color: #fff;
+	border-radius: 3px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.google {
+	background: #dd4b39;
+	color: #fff;
+	border-radius: 3px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.battlenet {
+	background: #0e98d8;
+	color: #fff;
+	border-radius: 3px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.persona {
+	background: #448bc9;
+	color: #fff;
+	border-radius: 3px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.openid {
+	background: #d5d5d5;
+	color: #000;
+	border-radius: 3px;
+	border-color: transparent;
+}

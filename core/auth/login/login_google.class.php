@@ -68,15 +68,15 @@ class login_google extends gen_class {
 	}
 	
 	public function login_button(){
-		return '<button type="button" class="mainoption" onclick="window.location=\''.$this->controller_path."Login/".$this->SID.'&login&lmethod=google&status=start\'"><i class="fa fa-google-plus-square fa-lg"></i> Google</button>';
+		return '<button type="button" class="mainoption thirdpartylogin google loginbtn" onclick="window.location=\''.$this->controller_path."Login/".$this->SID.'&login&lmethod=google&status=start\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
 	}
 	
 	public function register_button(){
-		return '<button type="button" class="mainoption" onclick="window.location=\''.$this->controller_path."Register/".$this->SID.'&register&lmethod=google&status=start\'"><i class="fa fa-google-plus-square fa-lg"></i> Google</button>';		
+		return '<button type="button" class="mainoption thirdpartylogin google registerbtn" onclick="window.location=\''.$this->controller_path."Register/".$this->SID.'&register&lmethod=google&status=start\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';		
 	}
 	
 	public function account_button(){
-		return '<button type="button" class="mainoption" onclick="window.location=\''.$this->controller_path."Settings/".$this->SID.'&mode=addauthacc&lmethod=google&status=start\'"><i class="fa fa-google-plus-square fa-lg"></i> Google</button>';
+		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$this->controller_path."Settings/".$this->SID.'&mode=addauthacc&lmethod=google&status=start\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
 	}
 	
 	public function get_account(){

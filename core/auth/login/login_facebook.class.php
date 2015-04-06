@@ -163,7 +163,7 @@ class login_facebook extends gen_class {
 			}
 		");
 		
-		return '<button type="button" class="mainoption" onclick="facebook_login()"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>';	
+		return '<button type="button" class="mainoption thirdpartylogin facebook loginbtn" onclick="facebook_login()"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';	
 	}
 	
 	public function register_button(){
@@ -182,7 +182,7 @@ class login_facebook extends gen_class {
 			}	  
 	  ");
 	  		
-		return '<button type="button" class="mainoption" onclick="facebook_register()"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook registerbtn" onclick="facebook_register()"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
 	}
 	
 	public function account_button(){
@@ -194,7 +194,7 @@ class login_facebook extends gen_class {
 				$me = $this->getMe($session);
 				if ($me){
 					$uid = $me['uid'];
-					return $me['data']->getProperty("name")	.' <button type="button" class="mainoption" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>'.new hhidden('auth_account', array('value' => $uid));
+					return $me['data']->getProperty("name")	.' <button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook fa-lg"></i> Facebook</button>'.new hhidden('auth_account', array('value' => $uid));
 				}
 			} else {
 				$this->tpl->add_js("		
@@ -209,7 +209,7 @@ class login_facebook extends gen_class {
 					 }, {scope: 'email,public_profile'});
 				}	  
 				");
-				return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>';		
+				return '<button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="facebook_connect_acc()"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';		
 			
 			}
 		} catch(Exception $e){
