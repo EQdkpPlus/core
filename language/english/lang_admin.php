@@ -1711,7 +1711,8 @@ $lang = array(
 	"core_sett_f_help_infotooltip_own_script" => "Insert here the code from the external tooltip source. Normally it's the code that should be added to the header-area of a page.",
 	"core_sett_f_infotooltip_own_link" => "Item-Link for the tooltips",
 	"core_sett_f_help_infotooltip_own_link" => "Item-detection if done by external tooltips normally by checking the page for links to their page. Insert here how the link should look like. You can use the placeholders {ITEMID}, {ITEMNAME} and {ITEMLINK}. ITEMLINK is for correct linking to EQdkp pages. Example: &lt;a href=\"http://wod.wowhead.com/item={ITEMID}\" {ITEMLINK}&gt; {ITEMNAME}&lt;/a&gt;",
-
+	"core_sett_f_login_google_publickey" => "Google Client-ID",
+	"core_sett_f_login_google_privatekey" => "Google Client Secret",
 	"core_sett_f_gravatar_defaultavatar" => "Use Gravatar default avatar",
 	"core_sett_f_help_gravatar_defaultavatar" => "This options ensures that each user without an avatar gets an individual one to keep the user better seperated",
 );

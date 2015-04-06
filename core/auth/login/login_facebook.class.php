@@ -163,7 +163,7 @@ class login_facebook extends gen_class {
 			}
 		");
 		
-		return '<button type="button" class="mainoption" onclick="facebook_login()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('login_title').'</button>';	
+		return '<button type="button" class="mainoption" onclick="facebook_login()"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>';	
 	}
 	
 	public function register_button(){
@@ -182,7 +182,7 @@ class login_facebook extends gen_class {
 			}	  
 	  ");
 	  		
-		return '<button type="button" class="mainoption" onclick="facebook_register()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('register_title').'</button>';
+		return '<button type="button" class="mainoption" onclick="facebook_register()"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>';
 	}
 	
 	public function account_button(){
@@ -209,7 +209,7 @@ class login_facebook extends gen_class {
 					 }, {scope: 'email,public_profile'});
 				}	  
 				");
-				return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i>'.$this->user->lang('auth_connect_account').'</button>';		
+				return '<button type="button" class="mainoption" onclick="facebook_connect_acc()"><i class="fa fa-facebook-square fa-lg"></i> Facebook</button>';		
 			
 			}
 		} catch(Exception $e){

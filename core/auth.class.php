@@ -508,12 +508,12 @@ class auth extends user {
 
 	public function get_loginmethod_settings(){
 		$arrLoginMethods = $this->get_active_loginmethods();
-		$settings = false;
+		$settings = array();
 		foreach($arrLoginMethods as $strMethod){
 			include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
 			$objClass = register('login_'.$strMethod);
 			if (method_exists($objClass, 'settings')){
-				$settings = $objClass->settings();
+				$settings = array_merge($settings, $objClass->settings());
 			}
 		}
 		return $settings;

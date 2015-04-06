@@ -100,7 +100,7 @@ class login_battlenet extends gen_class {
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
 		
 		
-		return '<button type="button" class="mainoption" onclick="window.location=\''.$auth_url.'\'"><img src="'.$this->server_path.'images/global/bnet.png" class="absmiddle" /> Battle.net '.$this->user->lang('login_title').'</button>';
+		return '<button type="button" class="mainoption" onclick="window.location=\''.$auth_url.'\'"><img src="'.$this->server_path.'images/global/bnet.png" class="absmiddle" /> Battle.net</button>';
 	}
 	
 	
@@ -120,7 +120,7 @@ class login_battlenet extends gen_class {
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
 		
 		
-		return '<button type="button" class="mainoption" onclick="window.location=\''.$auth_url.'\'"><img src="'.$this->server_path.'images/global/bnet.png" class="absmiddle" /> '.$this->user->lang('auth_connect_account').'</button>';		
+		return '<button type="button" class="mainoption" onclick="window.location=\''.$auth_url.'\'"><img src="'.$this->server_path.'images/global/bnet.png" class="absmiddle" /> Battle.net</button>';		
 	}
 	
 	public function get_account(){
