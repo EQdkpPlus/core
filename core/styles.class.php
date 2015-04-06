@@ -277,7 +277,7 @@ if (!class_exists("styles")){
 	<author>'.$data['style_author'].'</author>
 	<authorEmail>'.$data['style_contact'].'</authorEmail>
 	<authorUrl>'.EQDKP_PROJECT_URL.'</authorUrl>
-	<creationDate>'.$this->time->RFC2822($this->time->time).'</creationDate>
+	<creationDate>'.$this->time->RFC3339($this->time->time).'</creationDate>
 	<copyright>'.$data['style_author'].'</copyright>
 	<license>CC</license>
 	<version>'.$data['style_version'].'</version>

@@ -199,10 +199,13 @@ if (!class_exists("timehandler")){
 		* @return Formatted		time string
 		*/
 		public function date($format="Y-m-d H:i:s", $dtime='', $chk_summer=true){
+			$observeDST = $this->timeZoneObservesDST($this->userTimeZone);
+
 			//check for summer time
-			if($this->summertime && $chk_summer) {
+			if($this->summertime && $chk_summer && $observeDST) {
 				$summertime = ($this->date('I', $dtime, false)) ? true : false;
-				if($summertime !== $this->summertime) {
+
+				if($summertime !== $this->summertime && is_numeric($dtime)) {
 					$dtime += 3600;
 				}
 			}
@@ -210,6 +213,14 @@ if (!class_exists("timehandler")){
 			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
 			$dateTime->setTimezone($this->userTimeZone);
 			return $dateTime->format($format);
+		}
+		
+		private function timeZoneObservesDST($objDateTimeZone){
+			$dateTime1 = new DateTime("@".strtotime('June 1'));
+			$dateTime1->setTimezone($objDateTimeZone);
+			$dateTime2 = new DateTime("@".strtotime('Jan 1'));
+			$dateTime2->setTimezone($objDateTimeZone);
+			return ($dateTime1->format("I") !== $dateTime2->format("I"));
 		}
 
 		/**
@@ -509,6 +520,17 @@ if (!class_exists("timehandler")){
 		* @return RFC2822 Time String
 		*/
 		public function RFC2822($dtime){
+			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
+			return $date->format(DATE_RFC2822);
+		}
+		
+		/**
+		 * Return Date in RFC 3339 Compatible Output
+		 *
+		 * @param $tstamp		Timestamp
+		 * @return RFC3339 Time String
+		 */
+		public function RFC3339($dtime){
 			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RFC3339);
 		}

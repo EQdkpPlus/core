@@ -227,7 +227,7 @@ abstract class super_registry {
 			//Restore Permissions
 			if (registry::register('input')->get('mode', '') == 'rstperms'){
 				registry::fetch('user')->restore_permissions();
-				redirect();
+				redirect('', false, false, false);
 			}
 		} catch (DBALException $e){
 			registry::register('plus_debug_logger')->catch_dbal_exception($e);
