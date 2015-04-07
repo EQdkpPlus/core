@@ -282,9 +282,9 @@ if (!class_exists("pdh_r_user")){
 			foreach($arrMemberships as $groupid){
 				if ($this->pdh->get('user_groups', 'hide', array($groupid))) continue;
 				if ($blnUseController) {
-					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'" data-usergroup-id="'.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'" data-usergroup-id="'.$groupid.'"'.(($this->pdh->get('user_groups_users', 'is_grpleader', array($user_id, $groupid))) ? ' data-isgroupleader="1"' : ' data-isgroupleader="0"').'>'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				} else {
-					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'" data-usergroup-id="'.$groupid.'">'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
+					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'" data-usergroup-id="'.$groupid.'"'.(($this->pdh->get('user_groups_users', 'is_grpleader', array($user_id, $groupid))) ? ' data-isgroupleader="1"' : ' data-isgroupleader="0"').'>'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				}			
 			}
 			$arrOut[] = '</div>';
