@@ -145,9 +145,9 @@ $lang = array(
 "user_sett_f_help_new_password" => "Du brauchst nur ein neues Passwort einzugeben, wenn Du es ändern willst.",
 "user_sett_f_confirm_password" => "Neues Passwort bestätigen",
 "user_sett_f_help_confirm_password" => "Du musst Dein Passwort nur bestätigen, wenn Du es oben geändert hast.",
-"user_app_key"	=> "Privater Anwendungsschlüssel",
-"user_create_new appkey" => "Neuen Anwendungsschlüssel generieren",
-"user_create_new appkey_success" => "Ein neuer Anwendungsschlüssel wurde erstellt. Deine alten URLs sind nun nicht mehr gültig.",
+"user_app_key"	=> "Privater Austauschlüssel",
+"user_create_new_appkey" => "Neue private Schlüssel generieren",
+"user_create_new_appkey_success" => "Es wurde neue private Schlüssel erstellt. Deine alten URLs sind nun nicht mehr gültig.",
 "user_sett_fs_auth_accounts" => "Verknüpfte Konten",
 "auth_accounts_help" => "Verknüpfte dein Benutzerkonto mit dem Konto bei oben genannten Anbieter, um dich damit anmelden zu können",
 "auth_connect_account" => "Account verknüpfen",
@@ -961,7 +961,8 @@ $lang = array(
 "additional_infos" => "Zusätzliche Informationen",
 "new_value"	=> "Neuer Wert",
 "old_value"	=> "Alter Wert",
-"statistics" => "Statistiken",		
+"statistics" => "Statistiken",
+"user_api_key" => "Privater API-Schlüssel",	
 );
 
 ?>

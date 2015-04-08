@@ -62,6 +62,23 @@ class user extends gen_class {
 		
 		return ANONYMOUS;
 	}
+	
+	public function deriveKeyFromExchangekey($userID, $strDerivedType){
+		$strExchangeKey = $this->pdh->get('user', 'exchange_key', array($userID));
+		$strDerivedKey = hash("sha256", md5($strExchangeKey).md5($strDerivedType));
+		return $strDerivedKey;
+	}
+	
+	public function getUserIDfromDerivedExchangekey($strDerivedKey, $strDerivedType){
+		$arrUserList = $this->pdh->get('user', 'id_list');
+		foreach($arrUserList as $intUserID){
+			$strExchangeKey = $this->pdh->get('user', 'exchange_key', array($intUserID));
+			$strUserDerivedKey = hash("sha256", md5($strExchangeKey).md5($strDerivedType));
+			if($strUserDerivedKey === $strDerivedKey) return $intUserID;
+		}
+		
+		return ANONYMOUS;
+	}
 
 	//Returns true, if user to recent session is logged in
 	public function is_signedin(){

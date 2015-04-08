@@ -200,9 +200,9 @@ $lang = array(
 	"user_sett_f_help_new_password" => 'You only have to enter a password, if you want to change it.',
 	"user_sett_f_confirm_password" => 'Confirm Password',
 	"user_sett_f_help_confirm_password" => 'You only need to confirm your password if you changed it above.',
-	"user_app_key" => 'Private Applicationkey',
-	"user_create_new appkey" => 'Generate new Applicationkey',
-	"user_create_new appkey_success" => 'New Applicationkey was created. Your old URLs are not longer valid.',
+	"user_app_key" => 'Private Exchangekey',
+	"user_create_new_appkey" => 'Generate new private keys',
+	"user_create_new_appkey_success" => 'New private Keys have been created. Your old URLs are not longer valid.',
 	"user_sett_fs_auth_accounts" => 'Connected accounts',
 	"auth_accounts_help" => 'Connect your user with your account at the given provider, using it to log into EQdkp Plus',
 	"auth_connect_account" => 'Connect account',
@@ -1001,6 +1001,7 @@ $lang = array(
 	"new_value" => 'New Value',
 	"old_value" => 'Old Value',
 	"statistics" => 'Statistics',
+	"user_api_key" => "Private API-Key",
 );
 
 ?>

@@ -40,7 +40,10 @@ if (!class_exists('exchange_add_item')){
 		* Returns: Status 0 on error, Status 1 and inserted Item-ID on succes
 		*/
 		public function post_add_item($params, $body){
-			if ($this->user->check_auth('a_item_add', false)){
+			$intUserID = $this->pex->getAuthenticatedUserID();
+			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			
+			if ($this->user->check_auth('a_item_add', false, $intUserID) || $isAPITokenRequest){
 				$xml = simplexml_load_string($body);
 				if ($xml){
 					//Check required values

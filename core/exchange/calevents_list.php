@@ -29,7 +29,10 @@ if (!class_exists('exchange_calevents_list')){
 		public $options		= array();
 
 		public function get_calevents_list($params, $body){
-			if ($this->user->check_auth('u_calendar_view', false)){
+			$intUserID = $this->pex->getAuthenticatedUserID();
+			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			
+			if ($this->user->check_auth('u_calendar_view', false, $intUserID) || $isAPITokenRequest){
 	
 				//Input-Vars:
 				// - raids_only 0/1(default: 1)
@@ -89,7 +92,7 @@ if (!class_exists('exchange_calevents_list')){
 						}
 						$rstatusdata['required'] = ((isset($eventextension['attendee_count'])) ? $eventextension['attendee_count'] : 0);
 						
-						$memberdata = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($intRaidID, $this->user->data['user_id']));
+						$memberdata = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($intRaidID, $intUserID));
 						if($memberdata['member_id'] > 0){
 							$memberstatus = $this->pdh->get('calendar_raids_attendees', 'status', array($intRaidID, $memberdata['member_id']));
 						} else {
@@ -115,7 +118,7 @@ if (!class_exists('exchange_calevents_list')){
 							'color'			=> $eventcolor,
 							'calendar'		=> $this->pdh->get('calendar_events', 'calendar_id', array($intRaidID)),
 							'calendar_name'	=> unsanitize($this->pdh->get('calendar_events', 'calendar', array($intRaidID))),
-							'icalfeed'		=> ($this->user->is_signedin()) ? $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'] : '',
+							'icalfeed'		=> ($this->user->is_signedin() || $intUserID) ? $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->pdh->get('user', 'exchange_key', array($intUserID)) : '',
 						);
 					}
 					$out['events'] = $arrRaids;

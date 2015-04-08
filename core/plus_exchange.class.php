@@ -31,6 +31,8 @@ if( !class_exists( "plus_exchange" ) ) {
 		public $modules					= array();
 		public $feeds					= array();
 		private $modulepath				= 'core/exchange/';
+		private  $userID					= ANONYMOUS;
+		private  $isCoreAPIToken			= false;
 
 		//Constructor
 		public function __construct( ) {
@@ -127,6 +129,8 @@ if( !class_exists( "plus_exchange" ) ) {
 			$request_body = file_get_contents("php://input");
 			parse_str($request_body, $request_args['put']);
 			parse_str($request_body, $request_args['delete']);
+			
+			$this->authenticateUser();
 
 			$function = $request_args['get']['function'];
 
@@ -195,6 +199,54 @@ if( !class_exists( "plus_exchange" ) ) {
 			include_once($this->root_path."libraries/lua/parser.php");
 			$luaParser = new LuaParser((isset($arrRequestArgs['get']['one_table']) && $arrRequestArgs['get']['one_table'] == "false") ? false : true);
 			return $luaParser->array2lua($arrData);
+		}
+		
+		private function authenticateUser(){
+			if($this->in->exists('atoken') && strlen($this->in->get('atoken'))){
+				$strToken = $this->in->get('atoken');
+				$strTokenType = $this->in->get('atype');
+				
+				if($strTokenType === 'api'){
+					if($strToken === $this->config->get('api_key')){
+						$this->isCoreAPIToken = true;
+					}
+				} else {
+					$userID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
+					$this->userID = $userID;
+					return $this->userID;
+				}
+				
+			} elseif(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION']) && strlen($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
+				$arrToken = array();
+				parse_str($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'], $arrToken);
+				$strToken = isset($arrToken['token']) ? $arrToken['token'] : "";
+				$strTokenType = isset($arrToken['type']) ? $arrToken['type'] : "";
+				
+				if(strlen($strTokenType) && strlen($strToken)){
+					if($strTokenType === 'api'){
+						if(strlen($strToken) && $strToken === $this->config->get('api_key')){
+							$this->isCoreAPIToken = true;
+						}
+					} else {
+						$userID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
+						$this->userID = $userID;
+						return $this->userID;
+					}
+					
+				}
+			}
+			
+			//Normal Session ID
+			$this->userID = $this->user->id;
+			return $this->userID;
+		}
+		
+		public function getAuthenticatedUserID(){
+			return $this->userID;
+		}
+		
+		public function getIsApiTokenRequest(){
+			return $this->isCoreAPIToken;
 		}
 	}//end class
 } //end if

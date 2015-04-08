@@ -36,6 +36,7 @@ class Manage_Export extends page_generic {
 		$this->user->check_auth('a_export_data');
 		$handler = array(
 			'ajax_export' => array('process' => 'ajax_export'),
+			'regenerate_apikey' => array('process' => 'regenerate_apikey', 'csrf' => true)
 		);
 		parent::__construct(false, $handler);
 		$this->process();
@@ -57,14 +58,27 @@ class Manage_Export extends page_generic {
 		}
 		exit();
 	}
+	
+	public function regenerate_apikey(){
+		$strApiKey = generateRandomBytes(48);
+		$this->config->set('api_key', $strApiKey);
+	}
 
 	public function display() {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
 		$arrData = $myexp->export(true, true, false,false, true);
 		
+		$strApiKey = $this->config->get('api_key');
+		if(!$strApiKey){
+			$strApiKey = generateRandomBytes(48);
+			$this->config->set('api_key', $strApiKey);
+		}
+		
 		$this->tpl->assign_vars(array(
-			'EXPORT_DATA' => $this->returnLua($arrData),
+			'EXPORT_DATA'	=> $this->returnLua($arrData),
+			'API_KEY'		=> $strApiKey,
+			'S_SHOW_APIKEY' => $this->user->check_group(2, false),
 		));
 				
 		$this->core->set_vars(array(

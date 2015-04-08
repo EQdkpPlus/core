@@ -68,7 +68,7 @@ class settings_pageobject extends pageobject {
 	public function renew_exchangekey(){
 		$app_key = $this->pdh->put('user', 'create_new_exchangekey', array($this->user->id));
 		$this->user->data['exchange_key'] = $app_key;
-		if ($app_key) $this->core->message($this->user->lang('user_create_new appkey_success'), $this->user->lang('success'), 'green');
+		if ($app_key) $this->core->message($this->user->lang('user_create_new_appkey_success'), $this->user->lang('success'), 'green');
 	}
 
 	public function delete_avatar() {
@@ -300,8 +300,9 @@ class settings_pageobject extends pageobject {
 		$this->form->add_tabs($settingsdata);
 		
 		// add user-app-key 
-		$this->form->add_field('exchange_key', array('lang' => 'user_app_key', 'text' => $this->user->data['exchange_key'].'<br /><button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new appkey').'</button>'), 'registration_info', 'registration_info');
-		
+		$this->form->add_field('exchange_key', array('lang' => 'user_app_key', 'text' => $this->user->data['exchange_key']), 'registration_info', 'registration_info');
+		$this->form->add_field('api_key', array('lang' => 'user_api_key', 'text' => $this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')), 'registration_info', 'registration_info');
+		$this->form->add_field('regenerate_keys', array('lang' => 'user_create_new_appkey', 'text' => '<button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new_appkey').'</button>'), 'registration_info', 'registration_info');
 		// add various auth-accounts
 		$auth_options = $this->user->get_loginmethod_options();
 		$auth_array = array();

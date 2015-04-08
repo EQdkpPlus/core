@@ -28,7 +28,10 @@ if (!class_exists('exchange_calevents_details')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 
 		public function get_calevents_details($params, $body){
-			if ($this->user->check_auth('u_calendar_view', false)){
+			$intUserID = $this->pex->getAuthenticatedUserID();
+			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			
+			if ($this->user->check_auth('u_calendar_view', false, $intUserID) || $isAPITokenRequest){
 				if ( intval($params['get']['eventid']) > 0){
 					$event_id = intval($params['get']['eventid']);
 					$eventdata	= $this->pdh->get('calendar_events', 'data', array($event_id));
@@ -77,7 +80,7 @@ if (!class_exists('exchange_calevents_details')){
 						// Guests / rest
 						$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($event_id));
 						$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
-						$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($event_id, $this->user->data['user_id']));
+						$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($event_id, $intUserID));
 
 						// Build the attendees aray for this raid by class
 						if(is_array($this->attendees_raw)){
@@ -120,7 +123,7 @@ if (!class_exists('exchange_calevents_details')){
 											'name'			=> unsanitize($this->pdh->get('member', 'name', array($memberid))),
 											'classid'		=> $this->pdh->get('member', 'classid', array($memberid)),
 											'signedbyadmin'	=> ($memberdata['signedbyadmin']) ? 1 : 0,
-											'note'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : ''),
+											'note'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false, $intUserID)) ? $memberdata['note'] : ''),
 											'rank'			=> $this->pdh->get('member', 'rankname', array($memberid)),
 										);
 
@@ -160,8 +163,8 @@ if (!class_exists('exchange_calevents_details')){
 						}
 
 						//UserChars
-						$user_chars = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
-						$mainchar = $this->pdh->get('user', 'mainchar', array($this->user->data['user_id']));
+						$user_chars = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($intUserID))));
+						$mainchar = $this->pdh->get('user', 'mainchar', array($intUserID));
 						$arrRoles = array();
 						if (is_array($user_chars)){
 							foreach ($user_chars as $key=>$charname){

@@ -60,3 +60,16 @@ function ajax_reload_export(){
 	});
 }
 </script>
+<!-- IF S_SHOW_APIKEY -->
+<form action="" method="post">
+<fieldset class="settings mediumsettings">
+	<legend>{L_core_sett_f_settings_apikey}</legend>
+	
+	<dl>
+		<dt><label>{L_core_sett_f_settings_apikey}</label></dt>
+		<dd>{API_KEY}<br /><button type="submit" name="regenerate_apikey"><i class="fa fa-lg fa-refresh"></i> {L_user_create_new_appkey}</button></dd>
+	</dl>
+</fieldset>
+{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->

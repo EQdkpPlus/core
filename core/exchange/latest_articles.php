@@ -29,6 +29,9 @@ if (!class_exists('exchange_latest_articles')){
 		public $options		= array();
 
 		public function get_latest_articles($params, $body){
+			$intUserID = $this->pex->getAuthenticatedUserID();
+			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			
 				//Get Number; default: 10
 				$intNumber = (intval($params['get']['number']) > 0) ?  intval($params['get']['number']) : 10;
 				//Get sort direction; default: desc
@@ -36,7 +39,7 @@ if (!class_exists('exchange_latest_articles')){
 				
 				$intCategoryID = (isset($params['get']['c'])) ? intval($params['get']['c']) : 0;
 				
-				$user_id = $this->user->id;
+				$user_id = $intUserID;
 				
 				$response = array();
 								
