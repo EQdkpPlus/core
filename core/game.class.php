@@ -110,6 +110,8 @@ class game extends gen_class {
 			$this->gameinfo()->flush($type);
 		}
 		$this->gameinfo()->flush($this->gameinfo()->lang, true);
+		
+		$this->autoUpdateClassProfileFields();
 		return true;
 	}
 
@@ -992,6 +994,68 @@ class game extends gen_class {
 		return $this->gameinfo()->version;
 	}
 	
+	private function autoUpdateClassProfileFields(){
+		// add fields for classes/subclasses etc
+		$class_data = $this->gameinfo()->get_class_dependencies();
+		
+		$strClassdataHash = md5(serialize($class_data));
+		if($strClassdataHash === $this->config->get('game_classdata_hash')){
+			return;
+		}
+		
+		// build an array with parent-name , child-name => child-type
+		$class_deps = array();
+		foreach($class_data as $class) {
+			if(!is_array($class['parent'])) continue;
+			foreach($class['parent'] as $parent => $ids) {
+				$class_deps[$parent][$class['name']] = $class['type'];
+			}
+		}
+		$z = 0;
+		foreach($class_data as $class) {
+			if($class['admin']) {
+				// make it a hidden field
+				$field = array(
+						'name'			=> $class['name'],
+						'type'			=> 'hidden',
+						'lang'			=> 'uc_'.$class['name'],
+						'undeletable'	=> 1,
+						'category'		=> 'character',
+						'no_custom'		=> true,
+						'options_language'=> $class['type'],
+				);
+			} else {
+				$z++;
+				$field = array(
+						'name'			=> $class['name'],
+						'type'			=> 'dropdown',
+						'lang'			=> 'uc_'.$class['name'],
+						'category'		=> 'character',
+						'undeletable'	=> 1,
+						'options'		=> array('-----'),
+						'sort' 			=> $z,
+						'no_custom'		=> true,
+						'options_language'=> $class['type'],
+				);
+			}
+			if(isset($class_deps[$class['name']])) {
+				foreach($class_deps[$class['name']] as $child => $type) {
+					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
+				}
+			}
+			foreach($class_data as $iclass) {
+				if($iclass['name'] == $class['name'])
+					$field['options'] = $this->get($iclass['type']);
+			}
+			
+			$this->pdh->put('profile_fields', 'delete_fields', array(array($field['name'])));
+			$this->pdh->process_hook_queue();
+			$this->pdh->put('profile_fields', 'insert_field', array($field));
+			$this->pdh->process_hook_queue();
+			
+			$this->config->set('game_classdata_hash', $strClassdataHash);
+		}
+	}
 	
 
 	/**
