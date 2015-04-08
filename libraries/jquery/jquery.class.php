@@ -636,7 +636,6 @@ if (!class_exists("jquery")) {
 					}, 
 					onHide: function(){
 						var ul = $(this);
-						console.log(focused_".$id.");
 						if(focused_".$id." != null){
 						   this.stop(true, true);
 						   //ul.css('display', 'block');
