@@ -616,7 +616,34 @@ if (!class_exists("jquery")) {
 			$dmmenu .= '</ul>
 					</li>
 				</ul>';
-			$this->tpl->add_js("$('#".$id."').superfish(); ", 'docready');
+			$this->tpl->add_js("
+				var focused_".$id." = null;
+				$('#".$id."').superfish({
+					onInit: function(){
+						var ul = $(this);
+				        var inputs = ul.find('input, select');
+				        inputs.each(function(index, elt){
+							$(elt).on('click', function(event){
+					            focused_".$id." = $(elt);
+					            event.stopPropagation();
+					        });
+					        $(document).on('click', function(event){
+					            /*to allow people to choose to quit the menu*/
+					            focused_".$id." = null;
+					        });
+					       
+						})
+					}, 
+					onHide: function(){
+						var ul = $(this);
+						console.log(focused_".$id.");
+						if(focused_".$id." != null){
+						   this.stop(true, true);
+						   //ul.css('display', 'block');
+						   this.show();
+						}
+					}
+			}); ", 'docready');
 			return $dmmenu;
 		}
 		
@@ -631,9 +658,9 @@ if (!class_exists("jquery")) {
 		* @param $nodefimage	Do not use a default image
 		* @return CHAR
 		*/
-		public function SuckerFishMenu($array, $name, $mnuimagepth, $nodefimage=false){
+		public function SuckerFishMenu($array, $name, $mnuimagepth, $nodefimage=false, $scndclass=''){
 			$this->MenuConstruct_js($name);
-			return $this->MenuConstruct_html($array, $name, $mnuimagepth, $nodefimage);
+			return $this->MenuConstruct_html($array, $name, $mnuimagepth, $nodefimage, $scndclass);
 		}
 
 		/**
