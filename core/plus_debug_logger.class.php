@@ -679,7 +679,7 @@ if ( !defined('EQDKP_INC') ){
 							}
 						}
 					} else {
-						$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
+						$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
 					}
 					$output .= $this->error_message_footer();
 					echo $output;
@@ -714,7 +714,7 @@ if ( !defined('EQDKP_INC') ){
 				
 				$output .= $strErrorMessage.'<br /><br />';
 			} else {
-				$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
+				$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
 			}
 			
 			$output .= $this->error_message_footer(false);
@@ -743,7 +743,7 @@ if ( !defined('EQDKP_INC') ){
 				}
 				$output .= $error_message;
 			} else {
-				$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
+				$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
 			}
 			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure
@@ -774,7 +774,7 @@ if ( !defined('EQDKP_INC') ){
 				}
 				$output .= $error_message;
 			} else {
-				$output .= 'The error message can be looked up at the fatal_error.log or at "ACP >> Logs >> Errors"';
+				$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
 			}
 			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure
