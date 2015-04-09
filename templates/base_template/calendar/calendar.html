@@ -52,14 +52,17 @@
 					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<i class='fa fa-gift fa-fw fa-lg'></i> "));
 				}else if(!event.url){
 					if(event.allDay){
+						show_enddate = (!event.end) ? false : true;
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}')+"</div>";
-						if((moment(event.end).format('dd') != moment(event.start).format('dd')) || (moment(event.end).format('MM') != moment(event.start).format('MM'))){
+						if(event.end && ((moment(event.end).format('dd') != moment(event.start).format('dd')) || (moment(event.end).format('MM') != moment(event.start).format('MM')))){
 							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).subtract(1, 'days').format('{JS_DATEFORMAT}')+"</div>";
 						}
 						tmpttcontent += "<div class='calendartt_allday'>{L_calendar_allday}</div>";
 					}else{
-						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
-						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";console.log('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')
+						if(event.end){
+							tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+						}
 					}
 					if(event.note){
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";

@@ -257,7 +257,7 @@ class mmocms_settings extends page_generic {
 					),
 					'dkp_name'		=> array(
 						'type'		=> 'text',
-						'size'		=> 5,				
+						'size'		=> 5,
 					),
 					
 					'round_activate'	=> array(
@@ -465,11 +465,6 @@ class mmocms_settings extends page_generic {
 						'size'		=> 20,
 						'default'	=> $this->user->lang('style_jsdate_nrml')
 					),
-					'default_jsdate_short'	=> array(
-						'type'		=> 'text',
-						'size'		=> 20,
-						'default'	=> $this->user->lang('style_jsdate_short')
-					)
 				)
 			),
 			'user'	=> array(
