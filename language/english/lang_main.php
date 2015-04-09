@@ -31,8 +31,8 @@ if (!defined('EQDKP_INC')) {
 
 $lang = array( 
 	
-'LANG_VERSION' => '2.1.0.0',
-"LANG_VERSION" => '2.1.0.0',
+'LANG_VERSION' => '2.0.0.7',
+"LANG_VERSION" => '2.0.0.7',
 	"XML_LANG" => 'en',
 	"ISO_LANG_SHORT" => 'en_EN',
 	"ISO_LANG_NAME" => 'English',
@@ -40,8 +40,8 @@ $lang = array(
 	"style_date_long" => 'F j, Y',
 	"style_date_short" => 'd/m/y',
 	"style_date_short_noyear" => 'd/m',
-	"style_jsdate_nrml" => 'DD/MM/YYYY',
-	"style_jsdate_short" => 'D/M',
+	"style_jsdate_nrml" => 'dd/MM/YYYY',
+	"style_jsdate_short" => 'd.M',
 	"style_jstime" => 'h:mm tt',
 	"time_daynames" => array(
 	0 => 'Monday',
