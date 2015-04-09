@@ -15,7 +15,7 @@ $(document).ready(function() {
 	$("#repeat_dd").change(function(){
 		var ddvalue = $(this).val();
 		if(ddvalue == 'custom'){
-			$('#repeating').val(1);
+			$('#repeating').val($('#repeating').data('savedvalue'));
 			$('#custom_repeat_div').show();
 		}else{
 			$('#repeating').val(ddvalue);
@@ -255,7 +255,7 @@ function attendeeCount(){
 			<dt><label>{L_calendar_repeat}:</label></dt>
 			<dd>{DR_REPEAT}
 				<span id="custom_repeat_div">
-					<input type="text" name="repeating" value="" class="input" id="repeating" /> {L_days}
+					<input type="text" name="repeating" value="{REPEAT_CUSTOM}" data-savedvalue="{REPEAT_CUSTOM}" class="input" id="repeating" /> {L_days}
 				</span>
 			</dd>
 		</dl>
