@@ -46,6 +46,7 @@ class template extends gen_class {
 	protected $statcontent_file		= array('main'=>'index.tpl');
 	protected $body_filename		= '';
 	protected $is_install			= false;
+	protected $intErrorCount		= 0;
 
 	// Various counters and storage arrays
 	protected $block_names			= array();
@@ -1518,9 +1519,14 @@ class template extends gen_class {
 	public function generate_error($content, $handle = false, $sprintf = '', $function = ''){
 		if ($handle === false) $handle = $this->handle;
 		
+		$this->intErrorCount++;
+		if($this->intErrorCount > 3){
+			throw new Exception("Infinite Template Error. Generating Error aborted.");
+		}
+		
 		if(!$this->error_message){		
 			// fix for upgrade from 1.0 to 2.0 with deleted old template folder. This fix redirects directly to the maintenance mode
-			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()' && version_compare('2.0', $this->config->get('plus_version')) > 0){			
+			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()' && ($this->config->get('plus_version') === false || version_compare('2.0', $this->config->get('plus_version')) > 0)){			
 				redirect('maintenance/index.php');
 			}
 
