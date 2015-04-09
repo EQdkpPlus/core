@@ -192,10 +192,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 				return 0;
 			}
 			
+			$timezone_creator	= $this->pdh->get('user', 'timezone', array($creator));
 			$objQuery = $this->db->prepare('INSERT INTO __calendar_events :p')->set(array(
 				'calendar_id'			=> $cal_id,
 				'name'					=> $name,
 				'creator'				=> $creator,
+				'timezone'				=> $timezone_creator,
 				'timestamp_start'		=> $startdate,
 				'timestamp_end'			=> $enddate,
 				'allday'				=> ($allday > 0) ? $allday : 0,
@@ -214,6 +216,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'calendar_id'			=> $this->pdh->get('calendars', 'name', array($cal_id)),
 					'name'					=> (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name),
 					'creator'				=> $this->pdh->get('user', 'name', array($creator)),
+					'timezone'				=> $timezone_creator,
 					'timestamp_start'		=> "{D_".$startdate."}",
 					'timestamp_end'			=> "{D_".$enddate."}",
 					'allday'				=> $this->logs->option_lang(($allday > 0) ? $allday : 0),
