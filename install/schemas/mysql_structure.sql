@@ -574,7 +574,8 @@ CREATE TABLE `__calendar_events` (
 	`closed` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`extension` text COLLATE utf8_bin,
 	`notes` TEXT COLLATE utf8_bin,
-	`repeating` varchar(255) DEFAULT NULL,
+	`repeating` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	`timezone` varchar(255) DEFAULT NULL,
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

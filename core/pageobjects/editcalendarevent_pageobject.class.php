@@ -201,7 +201,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('allday'),
 			));
 		}
-		if($this->in->get('repeating') != 'none'){
+		if($this->in->get('repeating') > 0){
 			$this->timekeeper->run_cron('calevents_repeatable', true);
 		}
 		$this->pdh->process_hook_queue();
@@ -293,7 +293,7 @@ class editcalendarevent_pageobject extends pageobject {
 		//Flush Cache so the Cronjob can access the new data
 		$this->pdh->process_hook_queue();
 		
-		if($this->in->get('repeating') != 'none'){
+		if($this->in->get('repeating') > 0){
 			//Process Queue, so the Cronjob has reliable data
 			$this->pdh->process_hook_queue();
 			$this->timekeeper->run_cron('calevents_repeatable', true, true);
@@ -325,10 +325,11 @@ class editcalendarevent_pageobject extends pageobject {
 
 		// the repeat array
 		$drpdwn_repeat = array(
-			'none'		=> '--',
-			'day'		=> $this->user->lang('calendar_repeat_daily'),
-			'week'		=> $this->user->lang('calendar_repeat_weekly'),
-			'twoweeks'	=> $this->user->lang('calendar_repeat_2weeks'),
+			'0'			=> '--',
+			'1'			=> $this->user->lang('calendar_repeat_daily'),
+			'7'			=> $this->user->lang('calendar_repeat_weekly'),
+			'14'		=> $this->user->lang('calendar_repeat_2weeks'),
+			'custom'	=> $this->user->lang('calendar_repeat_custom'),
 		);
 
 		// raid/ role distri
@@ -455,12 +456,12 @@ class editcalendarevent_pageobject extends pageobject {
 
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
-			'IS_CLONED'			=> ((isset($eventdata['repeating']) && $eventdata['repeating'] != 'none') ? true : false),
+			'IS_CLONED'			=> ((isset($eventdata['repeating']) && $eventdata['repeating'] > 0) ? true : false),
 			'DKP_ENABLED'		=> ($this->config->get('disable_points') == 0) ? true :false,
 			#'IS_OPERATOR'		=> $this->user->check_auth('a_cal_revent_conf', false),
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
 			'DR_CALENDAR_CID'	=> (isset($eventdata['calendar_id'])) ? $eventdata['calendar_id'] : 0,
-			'DR_REPEAT'			=> new hdropdown('repeating', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating'])) ? $eventdata['repeating'] : ''))),
+			'DR_REPEAT'			=> new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating'])) ? $eventdata['repeating'] : ''))),
 			'DR_TEMPLATE'		=> new hdropdown('raidtemplate', array('options' => $this->pdh->get('calendar_raids_templates', 'dropdowndata'), 'id' => 'cal_raidtemplate')),
 			'DR_CALENDARMODE'	=> new hdropdown('calendarmode', array('options' => $calendar_mode_array, 'value' => $calendermode, 'id' => 'selectmode', 'class' => 'dropdown')),
 			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),

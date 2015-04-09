@@ -209,6 +209,10 @@ if (!class_exists("pdh_r_user")){
 			return $this->users[$user_id]['user_lastvisit'];
 		}
 		
+		public function get_timezone($user_id) {
+			return $this->users[$user_id]['user_timezone'];
+		}
+		
 		public function get_html_last_visit($user_id) {
 			return $this->time->user_date($this->get_last_visit($user_id), true);
 		}

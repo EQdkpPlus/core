@@ -89,12 +89,13 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						'notes'					=> $row['notes'],
 						'repeating'				=> $row['repeating'],
 						'cloneid'				=> $row['cloneid'],
+						'timezone'				=> $row['timezone'],
 					);
 					$this->events[$row['id']]['extension']	= unserialize($row['extension']);
 					$this->event_timestamps[$row['id']]		= $row['timestamp_start'];
 	
 					// set the repeatable array
-					if($row['repeating'] != 'none'){
+					if($row['repeating'] > 0){
 						$parentid	= ($row['cloneid'] > 0) ? $row['cloneid'] : $row['id'];
 						$this->repeatable_events[$parentid][] = $row['id'];
 					}
@@ -158,6 +159,10 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		public function get_data($id=''){
 			return 	($id) ? $this->events[$id] : $this->events;
+		}
+		
+		public function get_timezone($id=''){
+			return (isset($this->events[$id]['timezone'])) ? $this->events[$id]['timezone'] : '';
 		}
 
 		public function get_raidstatus($id){
@@ -258,7 +263,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_repeating($id){
-			return ($this->events[$id]['repeating']) ? $this->events[$id]['repeating'] : 'none';
+			return ($this->events[$id]['repeating']) ? $this->events[$id]['repeating'] : 0;
 		}
 
 		public function get_detailslink($id){

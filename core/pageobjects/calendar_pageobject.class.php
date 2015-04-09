@@ -185,7 +185,7 @@ class calendar_pageobject extends pageobject {
 	// Check if an event is repeatable
 	public function get_event_repeatable(){
 		$repeatingval = $this->pdh->get('calendar_events', 'repeating', array($this->in->get('checkrepeatable', 0)));
-		echo(($repeatingval != 'none') ? 'true' : 'false');
+		echo(($repeatingval > 0) ? 'true' : 'false');
 		exit;
 	}
 

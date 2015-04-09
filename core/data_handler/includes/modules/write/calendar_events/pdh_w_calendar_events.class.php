@@ -272,7 +272,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						// end the mass-event-series if future events are deleted
 						if($del_cc_selection == 'future'){
 							$objTest = $this->db->prepare("UPDATE __calendar_events :p WHERE id=? OR cloneid=?")->set(array(
-								'repeating'		=> 'none',
+								'repeating'		=> 0,
 							))->execute($row['cloneid'], $row['cloneid']);
 						}
 					}
@@ -320,6 +320,16 @@ if(!class_exists('pdh_w_calendar_events')) {
 		public function update_note($id, $note=''){
 			$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 					'notes'	=> $note,
+			))->execute($id);
+			
+			$this->pdh->enqueue_hook('calendar_events_update', array($id));
+			return $id;
+
+		}
+		
+		public function update_timezone($id, $timezone=''){
+			$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
+					'timezone'	=> $timezone,
 			))->execute($id);
 			
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));

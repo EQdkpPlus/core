@@ -12,6 +12,18 @@ $(document).ready(function() {
 		autoOpen: false,
 	});
 	
+	$("#repeat_dd").change(function(){
+		var ddvalue = $(this).val();
+		if(ddvalue == 'custom'){
+			$('#repeating').val(1);
+			$('#custom_repeat_div').show();
+		}else{
+			$('#repeating').val(ddvalue);
+			$('#custom_repeat_div').hide()
+		}
+		
+	}).trigger('change');
+	
 	$('#addtemplate-button').on('click', function(){
 		var templatename = $('#mytemplatename').val();
 		$( "#dialog-add-template" ).dialog( "close" );
@@ -241,7 +253,11 @@ function attendeeCount(){
 		</dl>
 		<dl>
 			<dt><label>{L_calendar_repeat}:</label></dt>
-			<dd>{DR_REPEAT}</dd>
+			<dd>{DR_REPEAT}
+				<span id="custom_repeat_div">
+					<input type="text" name="repeating" value="" class="input" id="repeating" /> {L_days}
+				</span>
+			</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_note}:</label></dt>

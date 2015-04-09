@@ -49,12 +49,8 @@ if(!class_exists("calevents_repeatable_crontask")){
 						$eventduration		= $end_timestamp - $start_timestamp;
 						$end_cronjob		= $this->time->time+((($this->config->get('calendar_repeat_crondays') > 0) ? $this->config->get('calendar_repeat_crondays') : 40) * 86400);
 
-						switch($this->pdh->get('calendar_events', 'repeating', array($parentid))){
-							case 'day':			$rptbl_period = 86400; break;
-							case 'week':		$rptbl_period = 604800; break;
-							case 'twoweeks':	$rptbl_period = 1209600; break;
-							default:			$rptbl_period = 604800; break;
-						}
+						$repeating_value	= $this->pdh->get('calendar_events', 'repeating', array($parentid));
+						$rptbl_period		= 86400*$repeating_value;
 
 						// if the calendar id is < 1, continue
 						if($eventsdata['calendar_id'] < 1){
