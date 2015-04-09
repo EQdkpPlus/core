@@ -29,10 +29,9 @@ if (!class_exists('exchange_comment_add')){
 		public $options		= array();
 
 		public function post_comment_add($params, $body){
-			$intUserID = $this->pex->getAuthenticatedUserID();
 			
 			 // be sure user is logged in
-			if ($this->user->is_signedin() || $intUserID){
+			if ($this->user->is_signedin()){
 				 $xml = simplexml_load_string($body);
 				 if ($xml && strlen($xml->comment)){
 					//Check for page and attachid
@@ -40,7 +39,7 @@ if (!class_exists('exchange_comment_add')){
 					
 					$intReplyTo = ((int)$xml->reply_to) ? (int)$xml->reply_to : 0;
 					
-					$this->pdh->put('comment', 'insert', array((string)$xml->attachid, $intUserID, (string)strip_tags($xml->comment), (string)$xml->page, $intReplyTo));
+					$this->pdh->put('comment', 'insert', array((string)$xml->attachid, $this->user->id, (string)strip_tags($xml->comment), (string)$xml->page, $intReplyTo));
 					
 					$this->pdh->process_hook_queue();
 					return array('status'	=> 1);

@@ -30,10 +30,9 @@ if (!class_exists('exchange_events')){
 		
 
 		public function get_events($params, $body){
-			$intUserID = $this->pex->getAuthenticatedUserID();
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if($this->user->check_pageobjects(array('event', 'events'), 'AND', false, $intUserID) || $isAPITokenRequest){
+			if($this->user->check_pageobjects(array('event', 'events'), 'AND', false) || $isAPITokenRequest){
 				$arrEvents = $this->pdh->get('event', 'id_list');
 				$out = array();
 				foreach($arrEvents as $eventid){

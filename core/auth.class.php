@@ -277,7 +277,31 @@ class auth extends user {
 		return true;
 	}
 
-
+	/**
+	 * Changes User of the current Session
+	 * 
+	 * @param integer $intUserID
+	 */
+	public function changeSessionUser($intUserID){
+		$objQuery = $this->db->prepare("SELECT *
+						FROM __users
+						WHERE user_id = ?")->execute($intUserID);
+		if($objQuery){
+			$arrUserData = $objQuery->fetchAssoc();
+			if($arrUserData && count($arrUserData)){
+				$this->id = $intUserID;
+				$this->data = $arrUserData;
+				
+				$this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
+					'session_user_id' => $intUserID,
+				))->execute($this->sid);
+				
+				$this->setup();
+			}
+		}
+	}
+	
+	
 	/**
 	* Deletes old Sessions and updating of last-visit-date of the uers
 	*

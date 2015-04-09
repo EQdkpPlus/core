@@ -29,11 +29,10 @@ if (!class_exists('exchange_user_chars')){
 		public $options		= array();
 
 		public function get_user_chars($params, $body){
-			$intUserID = $this->pex->getAuthenticatedUserID();
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if ($this->user->check_auth('u_calendar_view', false, $intUserID) || $isAPITokenRequest){
-				$userid = (intval($params['get']['userid']) > 0) ? intval($params['get']['userid']) : $intUserID;
+			if ($this->user->check_auth('u_calendar_view', false) || $isAPITokenRequest){
+				$userid = (intval($params['get']['userid']) > 0) ? intval($params['get']['userid']) : $this->user->id;
 				//UserChars
 				$user_chars = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($userid))));
 				$mainchar = $this->pdh->get('user', 'mainchar', array($userid));

@@ -31,8 +31,7 @@ if( !class_exists( "plus_exchange" ) ) {
 		public $modules					= array();
 		public $feeds					= array();
 		private $modulepath				= 'core/exchange/';
-		private  $userID					= ANONYMOUS;
-		private  $isCoreAPIToken			= false;
+		private  $isCoreAPIToken		= false;
 
 		//Constructor
 		public function __construct( ) {
@@ -211,9 +210,9 @@ if( !class_exists( "plus_exchange" ) ) {
 						$this->isCoreAPIToken = true;
 					}
 				} else {
-					$userID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
-					$this->userID = $userID;
-					return $this->userID;
+					$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
+					$this->user->changeSessionUser($intUserID);
+					return $intUserID;
 				}
 				
 			} elseif(isset($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION']) && strlen($_SERVER['HTTP_X_CUSTOM_AUTHORIZATION'])){
@@ -228,21 +227,15 @@ if( !class_exists( "plus_exchange" ) ) {
 							$this->isCoreAPIToken = true;
 						}
 					} else {
-						$userID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
-						$this->userID = $userID;
-						return $this->userID;
+						$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
+						$this->user->changeSessionUser($intUserID);
+						return $intUserID;
 					}
 					
 				}
 			}
-			
-			//Normal Session ID
-			$this->userID = $this->user->id;
-			return $this->userID;
-		}
-		
-		public function getAuthenticatedUserID(){
-			return $this->userID;
+
+			return $this->user->id;
 		}
 		
 		public function getIsApiTokenRequest(){
