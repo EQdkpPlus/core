@@ -230,7 +230,7 @@ class login_facebook extends gen_class {
 					return $uid;
 				}
 			} elseif($this->in->get('act') != ""){
-				$session = new FacebookSession($this->in->get('act'));
+				$session = new Facebook\FacebookSession($this->in->get('act'));
 				$me = $this->getMe($session);
 				if ($me){
 					$uid = $me['uid'];
@@ -341,7 +341,7 @@ class login_facebook extends gen_class {
 		
 		$blnLoginResult = false;
 		try {
-			$session = new FacebookSession($this->in->get('act'));
+			$session = new Facebook\FacebookSession($this->in->get('act'));
 			
 			$me = $this->getMe($session);
 
