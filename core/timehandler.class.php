@@ -88,7 +88,6 @@ if (!class_exists("timehandler")){
 		);
 		
 		private $timestamp = 0;
-		public $summertime = 0;
 		private $userTimeZone = 0;
 		private $serverTimeZone = 0;
 
@@ -96,7 +95,6 @@ if (!class_exists("timehandler")){
 			$tmp_timezone			= $this->get_serverTimezone();
 			date_default_timezone_set($tmp_timezone);
 			$this->timestamp		= time();
-			$this->summertime		= (date('I',$this->timestamp)) ? true : false;
 			$this->userTimeZone		= new DateTimeZone('GMT');
 			$this->serverTimeZone	= new DateTimeZone($tmp_timezone);
 			$this->pdl->register_type('time_error', null, null, array(2,3,4));
@@ -132,15 +130,6 @@ if (!class_exists("timehandler")){
 				break;
 			}
 			return parent::__get($strKey);
-		}
-
-		/**
-		* Return the Date, an timestamp or now...
-		*
-		* @return timestamp
-		*/
-		private function helper_dtime($dtime){
-			return ($dtime && !is_object($dtime)) ? (is_numeric($dtime) ? "@$dtime" : $dtime) : "now";
 		}
 
 		/**
@@ -198,17 +187,8 @@ if (!class_exists("timehandler")){
 		* @param $tstamp		Timestamp
 		* @return Formatted		time string
 		*/
-		public function date($format="Y-m-d H:i:s", $dtime='', $chk_summer=true){
+		public function date($format="Y-m-d H:i:s", $dtime=''){
 			$observeDST = $this->timeZoneObservesDST($this->userTimeZone);
-
-			//check for summer time
-			if($this->summertime && $chk_summer && $observeDST) {
-				$summertime = ($this->date('I', $dtime, false)) ? true : false;
-
-				if($summertime !== $this->summertime && is_numeric($dtime)) {
-					$dtime += 3600;
-				}
-			}
 			
 			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
 			$dateTime->setTimezone($this->userTimeZone);
@@ -398,11 +378,6 @@ if (!class_exists("timehandler")){
 			$stamp = $dateTime->getTimestamp();
 			// hack to allow negative timestamps
 			if(!$stamp) $stamp = $dateTime->format('U');
-			//check for summer time
-			if($this->summertime) {
-				$summertime = ($this->date('I', $stamp, false)) ? true : false;
-				if($summertime !== $this->summertime) $stamp -= 3600;
-			}
 			return $stamp;
 		}
 
@@ -606,8 +581,37 @@ if (!class_exists("timehandler")){
 				return false;
 			}
 		}
+		
+		/**
+		 * Adds Seconds to a given UTC Timestamp. 
+		 * Respects Winter/Summertime, because of given Timezone of Event
+		 * Returns UTC Timestamp
+		 * 
+		 * @param integer $intUtcTimestamp
+		 * @param integer $intSecondsToAdd
+		 * @param string $strEventTimezone
+		 * @return integer UTC Timestamp
+		 */
+		public function createRepeatableEvents($intUtcTimestamp, $intSecondsToAdd, $strEventTimezone=''){
+			$objTimeZone = ($strEventTimezone === '') ? $this->userTimeZone : new DateTimeZone($strEventTimezone);
+			
+			$objTime = new DateTimeLocale($intUtcTimestamp, $objTimeZone);
+			$objTime->setTimezone($objTimeZone);
+			
+			$objTime->add(new DateInterval("PT".($intSecondsToAdd)."S"));
+			return $objTime->format("U");
+		}
 
 		// HELPER FUNCTIONS
+		/**
+		 * Return the Date, an timestamp or now...
+		 *
+		 * @return timestamp
+		 */
+		private function helper_dtime($dtime){
+			return ($dtime && !is_object($dtime)) ? (is_numeric($dtime) ? "@$dtime" : $dtime) : "now";
+		}
+		
 		private function helper_countbetweendates($timez){
 			return $timez < $this->cbd_enddate && $timez > $this->cbd_startdate;
 		}
