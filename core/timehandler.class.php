@@ -95,8 +95,9 @@ if (!class_exists("timehandler")){
 			$tmp_timezone			= $this->get_serverTimezone();
 			date_default_timezone_set($tmp_timezone);
 			$this->timestamp		= time();
-			$this->userTimeZone		= new DateTimeZone('GMT');
+			$this->userTimeZone		= new DateTimeZone('UTC');
 			$this->serverTimeZone	= new DateTimeZone($tmp_timezone);
+			
 			$this->pdl->register_type('time_error', null, null, array(2,3,4));
 		}
 
@@ -113,7 +114,7 @@ if (!class_exists("timehandler")){
 				case 'user_tz':
 					return $this->userTimeZone->getName();
 				break;
-				case 'gmt_tz':
+				case 'server_tz':
 					return $this->serverTimeZone->getName();
 				break;
 				case 'timezones':
@@ -150,17 +151,17 @@ if (!class_exists("timehandler")){
 		}
 		
 		/**
-		* Generate time() in GMT
+		* Generate time() in UTC
 		*
 		* @return timestamp
 		*/
 		private function gen_time($dtime=''){
-			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
+			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), new DateTimeZone('UTC'));
 			return $dateTime->format("U");
 		}
 
 		/**
-		* Mktime in GMT
+		* Mktime in UTC
 		*
 		* @param $hour		Hour		int
 		* @param $min		Minutes		int
@@ -187,20 +188,10 @@ if (!class_exists("timehandler")){
 		* @param $tstamp		Timestamp
 		* @return Formatted		time string
 		*/
-		public function date($format="Y-m-d H:i:s", $dtime=''){
-			$observeDST = $this->timeZoneObservesDST($this->userTimeZone);
-			
-			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->serverTimeZone);
+		public function date($format="Y-m-d H:i:s", $dtime=''){			
+			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), new DateTimeZone('UTC'));
 			$dateTime->setTimezone($this->userTimeZone);
 			return $dateTime->format($format);
-		}
-		
-		private function timeZoneObservesDST($objDateTimeZone){
-			$dateTime1 = new DateTime("@".strtotime('June 1'));
-			$dateTime1->setTimezone($objDateTimeZone);
-			$dateTime2 = new DateTime("@".strtotime('Jan 1'));
-			$dateTime2->setTimezone($objDateTimeZone);
-			return ($dateTime1->format("I") !== $dateTime2->format("I"));
 		}
 
 		/**
@@ -374,7 +365,7 @@ if (!class_exists("timehandler")){
 					return $this->time;
 				}
 			}
-			$dateTime->setTimezone($this->serverTimeZone);
+			$dateTime->setTimezone($this->userTimeZone);
 			$stamp = $dateTime->getTimestamp();
 			// hack to allow negative timestamps
 			if(!$stamp) $stamp = $dateTime->format('U');
@@ -535,10 +526,6 @@ if (!class_exists("timehandler")){
 			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds;
 		}
 
-		public function adddays($timestamp,$daystoadd=1){
-			return $timestamp +(60*60*24*$daystoadd);
-		}
-
 		public function dateDiff($ts1, $ts2, $out='sec'){
 			// Build the Dates
 			if(!is_numeric($ts1)) {
@@ -597,8 +584,11 @@ if (!class_exists("timehandler")){
 			
 			$objTime = new DateTimeLocale($intUtcTimestamp, $objTimeZone);
 			$objTime->setTimezone($objTimeZone);
-			
-			$objTime->add(new DateInterval("PT".($intSecondsToAdd)."S"));
+			if($intSecondsToAdd > 0){
+				$objTime->add(new DateInterval("PT".($intSecondsToAdd)."S"));
+			} else {
+				$objTime->sub(new DateInterval("PT".($intSecondsToAdd)."S"));
+			}
 			return $objTime->format("U");
 		}
 

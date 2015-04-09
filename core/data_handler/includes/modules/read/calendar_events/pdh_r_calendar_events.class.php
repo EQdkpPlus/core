@@ -231,7 +231,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_time_end($id, $exclusivefix=false){
-			return ($exclusivefix) ? $this->time->adddays($this->events[$id]['timestamp_end']) : $this->events[$id]['timestamp_end'];
+			return ($exclusivefix) ? $this->time->createRepeatableEvents($this->events[$id]['timestamp_end'], 86400, $this->get_timezone($id)) : $this->events[$id]['timestamp_end'];
 		}
 
 		public function get_html_time_end($id) {
