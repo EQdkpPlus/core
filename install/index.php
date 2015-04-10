@@ -28,6 +28,7 @@ $eqdkp_root_path = './../';
 
 ini_set("display_errors", 0);
 define('DEBUG', 99);
+define('INSTALLER', true);
 
 @set_time_limit(0);
 @ignore_user_abort(true);

@@ -46,7 +46,7 @@ class game extends gen_class {
 
 	//fill data with gameinfos (classes, races, factions, filters, etc.)
 	public function __construct($installer=false, $lang_name=''){
-		if(!$installer){
+		if(!$installer && !defined('INSTALLER')){
 			$this->lang_name		= $this->user->lang_name;
 			$this->game				= $this->config->get('default_game');
 			if($this->config->get('game_importer_apikey')){
@@ -55,7 +55,7 @@ class game extends gen_class {
 			$this->init_gameclass();
 			$this->pdl->register_type('game');
 		}
-		if($installer){
+		if($installer || defined('INSTALLER')){
 			$this->installer	= true;
 			$this->lang_name	= $lang_name;
 		}

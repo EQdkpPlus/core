@@ -637,7 +637,7 @@ CREATE TABLE `__groups_raid_members` (
 	`grpleader` int(1) NOT NULL DEFAULT '0'
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
+DROP TABLE IF EXISTS __user_profilefields;
 CREATE TABLE `__user_profilefields` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
@@ -659,6 +659,7 @@ CREATE TABLE `__user_profilefields` (
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+DROP TABLE IF EXISTS __notification_types;
 CREATE TABLE `__notification_types` (
 	`id` VARCHAR(50) NOT NULL,
 	`name` VARCHAR(50) NOT NULL,
@@ -672,6 +673,7 @@ CREATE TABLE `__notification_types` (
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+DROP TABLE IF EXISTS __notifications;
 CREATE TABLE `__notifications` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`type` VARCHAR(50) NOT NULL,
