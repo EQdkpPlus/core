@@ -320,7 +320,7 @@ class notifications extends gen_class {
 		$this->pdh->process_hook_queue();
 	}
 	
-	public function getAvailableNotificationMethods(){
+	public function getAvailableNotificationMethods($blnAllMethods=false){
 		include_once $this->root_path.'core/notifications/generic_notification.class.php';
 		$types = array();
 		// Build auth array
@@ -333,9 +333,57 @@ class notifications extends gen_class {
 					$name = substr($file, 0, strpos($file, '.'));
 					$classname = $name.'_notification';
 					$blnIsAvailable = register($classname)->isAvailable();
-					if(!$blnIsAvailable) continue;
+					if(!$blnIsAvailable && !$blnAllMethods) continue;
 					$static_name = $this->user->lang('notification_type_'.$name);
 					$types[$name] = (strlen($static_name)) ? $static_name : $name;
+				}
+			}
+		}
+		return $types;
+	}
+	
+	public function getNotificationMethodsAdminSettings(){
+		include_once $this->root_path.'core/notifications/generic_notification.class.php';
+		$types = array();
+		// Build auth array
+		if($dir = @opendir($this->root_path . 'core/notifications/')){
+			while ( $file = @readdir($dir) ){
+				if ((is_file($this->root_path . 'core/notifications/' . $file)) && valid_folder($file)){
+					if ($file == 'generic_notification.class.php') continue;
+		
+					include_once($this->root_path . 'core/notifications/' . $file);
+					$name = substr($file, 0, strpos($file, '.'));
+					$classname = $name.'_notification';
+					$arrAdminSettings = register($classname)->getAdminSettings();
+					if(count($arrAdminSettings)){
+						$types = array_merge($types, $arrAdminSettings);
+					}
+				}
+			}
+		}
+		return $types;
+	}
+	
+	public function getNotificationMethodsUserSettings($blnAllMethods=false){
+		include_once $this->root_path.'core/notifications/generic_notification.class.php';
+		$types = array();
+		// Build auth array
+		if($dir = @opendir($this->root_path . 'core/notifications/')){
+			while ( $file = @readdir($dir) ){
+				if ((is_file($this->root_path . 'core/notifications/' . $file)) && valid_folder($file)){
+					if ($file == 'generic_notification.class.php') continue;
+	
+					include_once($this->root_path . 'core/notifications/' . $file);
+					$name = substr($file, 0, strpos($file, '.'));
+					$classname = $name.'_notification';
+					$objNotificationMethod = register($classname);
+					$blnIsAvailable = $objNotificationMethod->isAvailable();
+					if(!$blnIsAvailable && !$blnAllMethods) continue;
+					
+					$arrUserSettings = $objNotificationMethod->getUserSettings();
+					if(count($arrUserSettings)){
+						$types = array_merge($types, $arrUserSettings);
+					}
 				}
 			}
 		}

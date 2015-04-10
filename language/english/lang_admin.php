@@ -1715,6 +1715,19 @@ $lang = array(
 	"core_sett_f_login_google_privatekey" => "Google Client Secret",
 	"core_sett_f_gravatar_defaultavatar" => "Use Gravatar default avatar",
 	"core_sett_f_help_gravatar_defaultavatar" => "This options ensures that each user without an avatar gets an individual one to keep the user better seperated",
+
+	"core_sett_fs_notifications" => "Notifications",
+	"core_sett_f_xmpp_server" => "Jabber Server",
+	"core_sett_f_help_xmpp_server" => "E.g. jabber.domain.com",
+	"core_sett_f_xmpp_port" => "Jabber Port",
+	"core_sett_f_help_xmpp_port" => "Port of the Jabber Server. Default port is 5222.",
+	"core_sett_f_xmpp_user" => "Jabber User or JID",
+	"core_sett_f_help_xmpp_user" => "Insert the Jabber user for the given server, or a JID like username@jabber.org",
+	"core_sett_f_xmpp_password" => "Jabber Password",
+	"core_sett_f_help_xmpp_password" => "Password of given Jabber User",
+	"core_sett_f_xmpp_use_ssl" => "Use SSL for Connection",
+	"core_sett_f_help_xmpp_use_ssl" => "If this Option is enabled, you maybe have to adjust the Jabber Server Port.",
+		
 );
 
 ?>

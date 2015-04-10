@@ -44,7 +44,7 @@ class plugin_generic extends gen_class {
 	
 	public function __construct() {
 		$this->code = get_class($this);
-		$this->user->register_plug_language($this->code);
+		$this->user->objLanguage->register_plug_language($this->code);
 	}
 	
 	public static function getApiLevel(){

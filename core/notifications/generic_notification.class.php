@@ -48,6 +48,7 @@ abstract class generic_notification extends gen_class {
 	
 	/**
 	 * Settings the User has to set, e.g. Twitter Account for DMs
+	 * All Settings have to start with ntfy_
 	 * 
 	 * @return array
 	 */

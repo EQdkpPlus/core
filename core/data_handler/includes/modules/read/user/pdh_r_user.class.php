@@ -278,6 +278,23 @@ if (!class_exists("pdh_r_user")){
 			return $arrMemberships;
 		}
 		
+
+		public function get_style($user_id){
+			return $this->users[$user_id]['user_style'];
+		}
+		
+		public function get_date_time($user_id){
+			return $this->users[$user_id]['user_date_time'];
+		}
+		
+		public function get_date_short($user_id){
+			return $this->users[$user_id]['user_date_short'];
+		}
+		
+		public function get_date_long($user_id){
+			return $this->users[$user_id]['user_date_long'];
+		}
+		
 		public function get_html_groups($user_id, $blnUseController=false){
 			$arrMemberships = $this->get_groups($user_id);
 			

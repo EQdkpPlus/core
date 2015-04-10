@@ -855,7 +855,7 @@ class core extends gen_class {
 			));
 
 			if(DEBUG) {
-				$this->user->output_unused();
+				$this->user->objLanguage->output_unused();
 				$log = $this->pdl->get_log();
 				$this->tpl->assign_vars(array(
 					'S_SHOW_DEBUG'			=> true,

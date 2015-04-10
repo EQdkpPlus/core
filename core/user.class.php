@@ -32,21 +32,15 @@ class user extends gen_class {
 	public static $customFields = array('user_avatar', 'user_gravatar_mail', 'user_avatar_type');
 
 	private $lang			= array();		// Loaded language pack
-	private $loaded_plugs	= array();		// Not loaded plug-langs
-	private $plugs_to_load	= array();		// Plugins, which have language to load
-	private $unused			= array();		// Unused language keys
 	public $style			= array();		// Style data
 	public $lang_name		= '';			// Pack name (ie 'english')
+	public $objLanguage		= null;
 
 	/**
 	* Constructor
 	*/
 	public function __construct(){
-        if(!$this->pdl->type_known("language"))
-			$this->pdl->register_type("language", false, array($this, 'pdl_html_format_language'), array(4));
-        if(!$this->pdl->type_known("unused_language"))
-			$this->pdl->register_type("unused_language", array($this, 'pdl_pt_format_unused_language'), array($this, 'pdl_html_format_unused_language'), array(4));
-	}
+    }
 
 	public function getUserIDfromExchangeKey($strKey){
 		if (!strlen($strKey)) return ANONYMOUS;
@@ -113,7 +107,9 @@ class user extends gen_class {
 			$this->lang_name = ( $strLanguage != '' && file_exists($this->root_path . 'language/' . $strLanguage) ) ? $strLanguage : $this->lang_name;
 			$this->data['user_lang'] = $this->lang_name;
 		}
-		$this->init_lang($this->lang_name);
+		
+		$this->objLanguage = register('language', array($this->lang_name));
+		
 		if ($this->lang_name == "german") {
 			setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'deu_deu');
 		}
@@ -217,196 +213,14 @@ class user extends gen_class {
 		}
 	}
 
-	public function pdl_html_format_language($log_entry) {
-		return "Variable ".$log_entry['args'][0]." not found".((isset($log_entry['args'][3])) ? " in language ".$log_entry['args'][3] : "").".<br />File: ".$log_entry['args'][1]."<br />Line: ".$log_entry['args'][2];
-	}
-/* Unused language addition start */
-	public function pdl_pt_format_unused_language($log_entry) {
-		return serialize($log_entry['args']);
-	}
-
-	public function pdl_html_format_unused_language($log_entry) {
-		$text = 'array('.count($log_entry['args'][0]).') {<br />';
-		foreach($log_entry['args'][0] as $key => $val) {
-			if(is_array($val)) continue;
-			$text .= '&nbsp;&nbsp;&nbsp;&nbsp;["'.$key.'"] => "'.htmlspecialchars($val).'",<br />';
+	public function lang($key, $return_key=false, $error=true, $lang=false, $error_key=''){
+		if(!is_object($this->objLanguage)){
+			$this->objLanguage = register('language');
 		}
-		return $text.'}';
+
+		return $this->objLanguage->get($this->lang_name, $key, $return_key, $error, $lang, $error_key);
 	}
-
-	private function init_unused_lang() {
-		if(count($this->unused) > 0) return true;
-		$file = $this->pfh->FilePath('unused.lang', 'eqdkp');
-		$data = unserialize(file_get_contents($file));
-		if(is_array($data) && count($data) > 0) {
-			$this->unused = $data;
-			//check for deleted keys
-			foreach($this->unused as $key => $val) {
-				if(!isset($this->lang[$this->lang_name][$key])) unset($this->unused[$key]);
-			}
-		} elseif(DEBUG >= 4) {
-			$this->unused = array();
-			$this->read_folder($this->root_path);
-		}
-	}
-
-	private function read_folder($folder){
-		$folder = preg_replace('/\/$/', '', $folder);
-		$ignore = array('.', '..', '.svn', '.htaccess', 'index.html', 'language');
-		if ( $dir = opendir($folder) ){
-			while ( $path = readdir($dir) ){
-				if ( !in_array(basename($path), $ignore) && is_dir($folder . '/' . $path) ){
-					$this->read_folder($folder . '/' . $path);
-				}elseif ( !in_array(basename($path), $ignore) && is_file($folder . '/' . $path) ){
-					$this->read_file_html($folder . '/' . $path);
-					$this->read_file_php($folder . '/' . $path);
-				}
-			}
-		}
-	}
-
-	private $used = array();
-	private function read_file_html($path){
-		// Check if its a php, tpl or html file
-		if (!preg_match('/\.html$/', $path) || !preg_match('/\.tpl$/', $path)){ return; }
-		$search = (count($this->unused) < 1) ? $this->lang[$this->lang_name] : $this->unused;
-		$file = file_get_contents($path);
-		preg_match_all('#\{L_([a-zA-Z0-9_]+)\}#', $file, $matches, PREG_SET_ORDER);
-		if (count($matches) > 0 ){
-			foreach ( $matches as $match ){
-				if(isset($search[$match[1]])) $this->used[$match[1]] = $search[$match[1]];
-			}
-			$this->unused = array_diff_key($search, $this->used);
-		}
-	}
-
-	private function read_file_php($path){
-		// Check if its a php, tpl or html file
-		if (!preg_match('/\.php$/', $path)){ return; }
-		$search = (count($this->unused) < 1) ? $this->lang[$this->lang_name] : $this->unused;
-		$file = file_get_contents($path);
-		preg_match_all('/lang\(\'([\w]+)\'\)/', $file, $matches, PREG_SET_ORDER);
-		if (count($matches) > 0 ){
-			foreach ( $matches as $match ){
-				if(isset($search[$match[1]])) $this->used[$match[1]] = $search[$match[1]];
-			}
-			$this->unused = array_diff_key($search, $this->used);
-		}
-	}
-
-	private function lang_used($key) {
-		if(isset($this->unused[$key])) unset($this->unused[$key]);
-	}
-
-	public function output_unused() {
-		$this->pdl->log('unused_language', $this->unused);
-	}
-/* Unused language addition end */
-
-	private function init_lang($lang_name) {
-		if(!$lang_name) return false;
-		if(isset($this->lang[$lang_name])) return true;
-		$file_path = $this->root_path . 'language/' . $lang_name . '/';
-		$tmp_lang = array();
-		include($file_path . 'lang_main.php');
-		if (is_array($lang)) {
-			$tmp_lang = array_merge($tmp_lang, $lang);
-			unset($lang);
-		}
-		if (defined('IN_ADMIN') || $this->config->get('debug') >= 4) {
-			include($file_path . 'lang_admin.php');
-			if (is_array($lang)) {
-				$tmp_lang = array_merge($tmp_lang, $lang);
-				unset($lang);
-			}
-		}
-		if (defined('MAINTENANCE_MODE')) {
-			include($file_path . 'lang_mmode.php');
-			if (is_array($lang)) {
-				$tmp_lang = array_merge($tmp_lang, $lang);
-				unset($lang);
-			}
-		}
-		
-		$this->lang[$lang_name] = &$tmp_lang;
-		if($this->lang_name == $lang_name && !$this->lite_mode) $this->init_unused_lang($lang_name);
-	}
-
-	private function init_plug_lang($lang_name) {
-		$lang = array();
-		foreach($this->plugs_to_load as $plug) {
-			$file_path = $this->root_path.'plugins/'.$plug.'/language/'.$lang_name.'/lang_main.php';
-			if(file_exists($file_path)) {
-				include($file_path);
-			}
-			$this->loaded_plugs[$plug][$lang_name] = true;
-		}
-		if(count($this->plugs_to_load) > 0) $this->add_lang($lang_name, $lang);
-	}
-
-	private function missing_plug_lang($lang_name) {
-		foreach($this->plugs_to_load as $code) {
-			if(!isset($this->loaded_plugs[$code][$lang_name])) return true;
-		}
-		return false;
-	}
-
-	public function register_plug_language($plugin) {
-		$this->plugs_to_load[] = $plugin;
-	}
-
-	public function add_lang($lang_name, $langtoadd) {
-		if(!is_array($langtoadd)) return false;
-		$this->lang[$lang_name] = (isset($this->lang[$lang_name]) && is_array($this->lang[$lang_name])) ? array_merge($this->lang[$lang_name], $langtoadd) : $langtoadd;
-	}
-
-	private function lang_error($key, $return_key, $warning=false, $error=true) {
-		if($error) {
-			$debug = debug_backtrace();
-			if(!$warning) $this->pdl->log('language', $key, $debug[1]['file'], $debug[1]['line']);
-			else $this->pdl->log('language', $key, $debug[1]['file'], $debug[1]['line'], $this->lang_name);
-			unset($debug);
-		}
-		return ($return_key) ? $key : false;
-	}
-
-	public function lang($key, $return_key=false, $error=true, $lang=false, $error_key='') {
-		if(is_array($key)) {
-			$keys = $key;
-			$key = array_shift($keys);
-		}
-		if(!is_array($lang)) {
-			$cur_lang_name = ($lang !== false) ? $lang : $this->lang_name;
-			if(!isset($this->lang[$cur_lang_name][$key])) {
-				//check if plugin_lang initialized first
-				if($this->missing_plug_lang($cur_lang_name)) $this->init_plug_lang($cur_lang_name);
-				if(!isset($this->lang[$cur_lang_name][$key]) && $cur_lang_name != $this->config->get('default_lang')) {
-					$this->init_lang($this->config->get('default_lang'));
-					$cur_lang_name = $this->config->get('default_lang');
-					$default_chosen = true;
-				}
-				if(!isset($this->lang[$cur_lang_name][$key]) && $this->missing_plug_lang($cur_lang_name)) $this->init_plug_lang($cur_lang_name);
-				if(!isset($this->lang[$cur_lang_name][$key]) && $this->lang_name != 'english' &&  $this->config->get('default_lang') != 'english') {
-					$this->init_lang('english');
-					$cur_lang_name = 'english';
-					$default_chosen = true;
-				}
-				if(!isset($this->lang[$cur_lang_name][$key]) && $this->missing_plug_lang($cur_lang_name)) $this->init_plug_lang($cur_lang_name);
-			}
-			$lang = $this->lang[$cur_lang_name];
-		}
-		if(!isset($lang[$key])) {
-			return $this->lang_error($error_key.$key, $return_key, false, $error);
-		}
-		if(isset($default_chosen) && $error) {
-			$this->lang_error($key, false, true);
-		}
-		if(isset($keys) && count($keys) > 0) return $this->lang($keys, $return_key, $error, $lang[$key], $error_key.$key.' -> ');
-		$this->lang_used($key);
-		return $lang[$key];
-	}
-
-
+	
 	/**
 	* Checks if a user has permission to do ($auth_value)
 	*
@@ -925,6 +739,12 @@ class user extends gen_class {
 						'default'	=> register('pdh')->get('notification_types', 'default', array($strNotificationType)),
 				);
 			}
+		}
+		
+		$arrNotificationUsersettings = register('ntfy')->getNotificationMethodsUserSettings();
+
+		if(count($arrNotificationUsersettings)){
+			$settingsdata['notifications']['notification_settings'] = $arrNotificationUsersettings;
 		}
 
 		return $settingsdata;

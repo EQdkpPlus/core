@@ -623,17 +623,6 @@ class mmocms_settings extends page_generic {
 						'datatype'	=> 'int'
 					),
 				),
-				'calendar_mails'	=> array(
-					'calendar_email_statuschange'	=> array(
-						'type'		=> 'radio',
-					),
-					'calendar_email_newraid'	=> array(
-						'type'		=> 'radio',
-					),
-					'calendar_email_openclose'	=> array(
-						'type'		=> 'radio',
-					),
-				)
 			),
 			'game'		=> array(
 				'game'	=> array(
@@ -922,6 +911,10 @@ class mmocms_settings extends page_generic {
 		if ($arrLoginmethodSettings = $this->user->get_loginmethod_settings()){
 			$this->form->add_fields($arrLoginmethodSettings, 'login', 'system');
 		}
+		
+		//Notifications
+		$this->form->add_fields($this->ntfy->getNotificationMethodsAdminSettings(), 'notifications', 'user');
+
 
 		// Inject Plugin Settings
 		// PLACEHOLDER.. maybe we will do that one day...

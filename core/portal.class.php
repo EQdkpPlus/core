@@ -377,14 +377,14 @@ class portal extends gen_class {
 		$file = $this->root_path.'portal/'.$portal.'/language/';
 		if(is_file($file.$this->user->lang_name.'.php')) {
 			include($file.$this->user->lang_name.'.php');
-			$this->user->add_lang($this->user->lang_name, $lang);
+			$this->user->objLanguage->add_lang($this->user->lang_name, $lang);
 		} else {
 			if(is_file($file.$this->config->get('default_lang').'.php')){
 				include($file.$this->config->get('default_lang').'.php');
-				$this->user->add_lang($this->config->get('default_lang'), $lang);
+				$this->user->objLanguage->add_lang($this->config->get('default_lang'), $lang);
 			} else {
 				include($file.'english.php');
-				$this->user->add_lang('english', $lang);
+				$this->user->objLanguage->add_lang('english', $lang);
 			}
 		}
 		$this->lang_inits[$portal] = true;

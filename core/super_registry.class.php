@@ -69,6 +69,7 @@ abstract class super_registry {
 		'html_leaderboard'		=> 'core/',
 		'html_pdh_tag_table'	=> 'core/',
 		'input'					=> 'core/',
+		'language'				=> 'core/',
 		'logs'					=> 'core/',
 		'notifications'			=> 'core/',
 		'password'				=> 'core/',

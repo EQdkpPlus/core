@@ -922,12 +922,13 @@ $lang = array(
 "user_sett_f_ntfy_calenderevent_closed" => "Kalenderevent wurde abgesagt",
 "user_sett_f_ntfy_calenderevent_opened" => "Kalenderevent wurde wieder geöffnet",	
 "user_sett_f_ntfy_comment_new_response" => "Antwort auf meinen Kommentar",
-"user_sett_f_ntfy_comment_new_mentioned" => "Erwähnungen in Kommentaren",		
+"user_sett_f_ntfy_comment_new_mentioned" => "Erwähnungen in Kommentaren",
+"user_sett_f_ntfy_calendarevent_new" => "Neues Kalenderevent",
 "mark_all_as_read" => "Alle als gelesen markieren",
 "show_all" => "Alle anzeigen",
 "notification_type_twitterdm" => "Twitter Direct Message",
 "notification_type_email" => "Email",
-"notification_type_xmpp" => "XMPP (Jabber)",
+"notification_type_xmpp" => "Jabber (XMPP)",
 "notification_type_none" => "Keine",
 "notification_type_eqdkp" => "EQdkp Plus",
 "new_notification" => "Neue Benachrichtigung",
@@ -951,6 +952,7 @@ $lang = array(
 "notification_newcomment_response" => "{PRIMARY} hat auf deinen Kommentar auf der Seite \"{ADDITIONAL}\" geantwortet",
 "notification_newcomment_response_grouped" => "{PRIMARY} haben auf deinen Kommentar auf der Seite \"{ADDITIONAL}\" geantwortet",
 "notification_newmention" => "{PRIMARY} hat dich in seinem Kommentar auf der Seite \"{ADDITIONAL}\" erwähnt",
+"notification_calendarevent_new" => "Es wurde ein neues Kalenderevent angelegt: {ADDITIONAL}, {PRIMARY}",
 "article_publish_success" => "Artikel wurde veröffentlicht",
 "article_publish" => "Artikel veröffentlichen",
 "article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",		
@@ -969,6 +971,9 @@ $lang = array(
 "new_value"	=> "Neuer Wert",
 "old_value"	=> "Alter Wert",
 "statistics" => "Statistiken",
-"user_api_key" => "Privater API-Schlüssel",);
-
+"user_api_key" => "Privater API-Schlüssel",
+"user_sett_fs_notification_settings" => "Einstellungen",
+"user_sett_f_ntfy_xmpp_user" => "Jabber Account",
+"user_sett_f_help_ntfy_xmpp_user" => "Trage hier den Jabber Account ein, der Benachrichtigungen erhalten soll, z.B. user@jabber.org",
+);
 ?>

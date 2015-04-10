@@ -30,6 +30,6 @@ class twitterdm_notification extends generic_notification {
 	}
 	
 	public function isAvailable(){
-		return true;
+		return false;
 	}
 }

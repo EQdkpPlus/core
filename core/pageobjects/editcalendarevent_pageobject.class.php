@@ -69,31 +69,14 @@ class editcalendarevent_pageobject extends pageobject {
 	}
 
 	// send the email of the created raid to all users
-	private function email_newraid($raidid){
-		if($this->config->get('calendar_email_newraid') == 1){
-			// fetch the static data of the raid
-			$raidname		= $this->pdh->get('event', 'name', array($this->in->get('raid_eventid', 0)));
-			$raidnotes		= $this->pdh->get('calendar_events', 'notes', array($raidid));
-			$raiddate		= $this->time->user_date($this->time->fromformat($this->in->get('startdate'), 1), true);
-			$mailsubject	= sprintf($this->user->lang('raidevent_mail_subject_newraid'), $raidname, $raiddate);
-			$bodyvars = array(
-				'RAID_NAME'		=> $raidname,
-				'RAIDLEADER'	=> ($this->in->getArray('raidleader', 'int') > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($this->in->getArray('raidleader', 'int')))) : '',
-				'RAID_DATE'		=> $raiddate,
-				'RAID_NOTE'		=> ($raidnotes) ? nl2br($raidnotes) : '',
-				'RAID_LINK'		=> $this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($raidid)), $raidid, false, true),
-			);
-
-			// send the email to all attendees
-			$a_users = $this->pdh->get('user', 'active_users');
-			if(is_array($a_users) && count($a_users) > 0){
-				foreach($a_users as $userid){
-					$emailadress	= $this->pdh->get('user', 'email', array($userid, true));
-					if($emailadress && strlen($emailadress)){
-						$bodyvars['USERNAME'] = $this->pdh->get('user', 'name', array($userid));
-						$this->email->SendMailFromAdmin($emailadress, $mailsubject, 'calendar_viewcalraid_new.html', $bodyvars, $this->config->get('lib_email_method'));
-					}
-				}
+	private function notify_newraid($eventID){
+		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
+		$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
+		
+		$a_users = $this->pdh->get('user', 'active_users');
+		if(is_array($a_users) && count($a_users) > 0){
+			foreach($a_users as $userid){
+				$this->ntfy->add('calendarevent_new', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
 			}
 		}
 	}
@@ -186,7 +169,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status') : false;
 			
 				$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int'), $asi_groups, $asi_status));
-				$this->email_newraid($raidid);
+				$this->notify_newraid($raidid);
 			}
 		}else{
 			$withtime = ($this->in->get('allday') == '1') ? 0 : 1;

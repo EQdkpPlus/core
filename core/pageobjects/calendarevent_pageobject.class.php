@@ -327,11 +327,11 @@ class calendarevent_pageobject extends pageobject {
 		$eventID = $this->url_id;
 		
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-		$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 		
 		$attendees = $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
 		$attendees = array_unique($attendees);
 		foreach($attendees as $attuserid){
+			$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 			if ($status == 'open') {
 				$this->ntfy->add('calenderevent_opened', $eventID, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
 			} else {
@@ -343,12 +343,11 @@ class calendarevent_pageobject extends pageobject {
 	private function notify_statuschange($eventID, $a_attendees, $status=0){
 		if(is_array($a_attendees) && count($a_attendees) > 0){
 			$strStatus = $this->user->lang(array('raidevent_raid_status', $status));
-			
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-			$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
-			
+
 			foreach($a_attendees as $attendeeid){
-				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));		
+				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
+				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);		
 				$this->ntfy->add('calendarevent_mod_statuschange', $eventID.'_'.$attendeeid, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
 			}
 		}
@@ -358,12 +357,11 @@ class calendarevent_pageobject extends pageobject {
 		if(is_array($a_attendees) && count($a_attendees) > 0){
 				
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-			$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
-			
 			$strStatus = $this->pdh->get('raid_groups', 'name', array($group));
 			
 			foreach($a_attendees as $attendeeid){
 				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
+				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 				$this->ntfy->add('calendarevent_mod_groupchange', $eventID.'_'.$attendeeid, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
 			}
 		}

@@ -963,6 +963,7 @@ $lang = array(
 	"user_sett_f_ntfy_calenderevent_opened" => 'Raid was reopened',
 	"user_sett_f_ntfy_comment_new_response" => 'Reply to a comment of mine',
 	"user_sett_f_ntfy_comment_new_mentioned" => 'Mentions at comments',
+	"user_sett_f_ntfy_calendarevent_new" => "New Raid",
 	"mark_all_as_read" => 'Mark all as read',
 	"show_all" => 'Show all',
 	"notifications_persistent" => 'Persistent Notifications',
@@ -984,9 +985,10 @@ $lang = array(
 	"notification_newcomment_response" => '{PRIMARY} answered to your comment in "{ADDITIONAL}"',
 	"notification_newcomment_response_grouped" => '{PRIMARY} answered to your comment in "{ADDITIONAL}"',
 	"notification_newmention" => '{PRIMARY} mentioned you in his comment in "{ADDITIONAL}"',
+	"notification_calendarevent_new" => "A new Raid has been created: {ADDITIONAL}, {PRIMARY}",
 	"notification_type_twitterdm" => "Twitter Direct Message",
 	"notification_type_email" => "Email",
-	"notification_type_xmpp" => "XMPP (Jabber)",
+	"notification_type_xmpp" => "Jabber (XMPP)",
 	"notification_type_none" => "None",
 	"notification_type_eqdkp" => "EQdkp Plus",
 	"new_notification" => "New Notificatin",	
@@ -1009,6 +1011,10 @@ $lang = array(
 	"old_value" => 'Old Value',
 	"statistics" => 'Statistics',
 	"user_api_key" => "Private API-Key",
+	"user_sett_fs_notification_settings" => "Settings",
+	"user_sett_f_ntfy_xmpp_user" => "Jabber Account",
+	"user_sett_f_help_ntfy_xmpp_user" => "Insert here the Jabber Account that will get the Notifications, e.g. user@jabber.org",
+		
 );
 
 ?>

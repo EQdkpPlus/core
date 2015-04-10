@@ -186,6 +186,7 @@ class Manage_Users extends page_generic {
 			
 			//copy all other values to appropriate array
 			$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
+			$values['ntfy_comment_new_article_categories'] = $this->in->getArray('ntfy_comment_new_article_categories', 'int');
 			$privArray = array();
 			$customArray = array();
 			$pluginArray = array();
