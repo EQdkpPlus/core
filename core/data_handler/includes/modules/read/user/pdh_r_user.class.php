@@ -443,7 +443,7 @@ if (!class_exists("pdh_r_user")){
 			
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
 			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_'.$strNotificationID])){
-				if ((int)$arrNotificationSettings['ntfy_'.$strNotificationID]) return true;
+				if ($arrNotificationSettings['ntfy_'.$strNotificationID] != "" || (int)$arrNotificationSettings['ntfy_'.$strNotificationID] > 0) return true;
 			} else {
 				if ($this->pdh->get('notification_types', 'check_existing_type', array($strNotificationID))){
 					$intDefault = $this->pdh->get('notification_types', 'default', array($strNotificationID));
@@ -461,8 +461,8 @@ if (!class_exists("pdh_r_user")){
 			if ($intUserID === false) $intUserID = $this->user->id;
 			
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
-			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_comment_new_article'])){
-				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article'];
+			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_comment_new_article_categories'])){
+				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article_categories'];
 				if (in_array($intCategoryID, $arrCategories)) {
 					return true;
 				} else {

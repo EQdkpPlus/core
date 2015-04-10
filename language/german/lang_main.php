@@ -910,7 +910,7 @@ $lang = array(
 "user_sett_fs_notifications" => "Benachrichtigungen",
 "user_sett_fs_info_notifications" => "Bitte beachte, dass du einige Benachrichtungen nur abhängig von deinen Berechtigungen bekommst, auch wenn du sie aboniert hast.",	
 "user_sett_f_ntfy_calendarevent_char_statuschange" => "Statuswechsel eines Charakters im Kalenderevent",
-"user_sett_f_ntfy_comment_new_article" => "Neuer Kommentar in einem Artikel der ausgewählten Kategorien",
+"user_sett_f_ntfy_comment_new_article" => "Neuer Kommentar in einem Artikel",
 "user_sett_f_ntfy_comment_new_userwall" => "Neuer Eintrag auf deiner Pinnwand",
 "user_sett_f_ntfy_comment_new_userwall_response" => "Neue Antwort auf deiner Pinnwand",
 "user_sett_f_ntfy_eqdkp_article_unpublished" => "Unveröffentlichter Artikel",
@@ -925,15 +925,21 @@ $lang = array(
 "user_sett_f_ntfy_comment_new_mentioned" => "Erwähnungen in Kommentaren",		
 "mark_all_as_read" => "Alle als gelesen markieren",
 "show_all" => "Alle anzeigen",
-
+"notification_type_twitterdm" => "Twitter Direct Message",
+"notification_type_email" => "Email",
+"notification_type_xmpp" => "XMPP (Jabber)",
+"notification_type_none" => "Keine",
+"notification_type_eqdkp" => "EQdkp Plus",
+"new_notification" => "Neue Benachrichtigung",
+		
 "notifications_persistent" => "Dauerhafte Benachrichtigungen", 
 "notification_and_more" => " und %s weitere ",		
 "notification_newcomment_userwall_grouped" => "{PRIMARY} haben an deine Pinnwand geschrieben",
 "notification_newcomment_userwall" => "{PRIMARY} hat an deine Pinnwand geschrieben",
 "notification_newcomment_userwall_response" => "{PRIMARY} hat auf einen Betrag an deiner Pinnwand geantwortet",
 "notification_newcomment_userwall_response_grouped" => "{PRIMARY} haben auf einen Betrag an deiner Pinnwand geantwortet",
-"notification_newcomment_article_grouped" => "{PRIMARY} haben einen Kommentar in Artikel \"{ADDITIONAL}\" geschrieben",
-"notification_newcomment_article" => "{PRIMARY} hat einen Kommentar in Artikel \"{ADDITIONAL}\" geschrieben",
+"notification_newcomment_article_grouped" => "{PRIMARY} haben einen Kommentar im Artikel \"{ADDITIONAL}\" geschrieben",
+"notification_newcomment_article" => "{PRIMARY} hat einen Kommentar im Artikel \"{ADDITIONAL}\" geschrieben",
 "notification_calendarevent_statuschange" => "{PRIMARY} hat seinen Status im Kalenderevent \"{ADDITIONAL}\" geändert",
 "notification_calendarevent_statuschange_grouped" => "{PRIMARY} haben ihren Status im Kalenderevent \"{ADDITIONAL}\" geändert",
 "notification_calendarevent_mod_statuschange" => "Dein Status im Kalenderevent \"{ADDITIONAL}\" wurde auf {PRIMARY} geändert",
@@ -963,7 +969,6 @@ $lang = array(
 "new_value"	=> "Neuer Wert",
 "old_value"	=> "Alter Wert",
 "statistics" => "Statistiken",
-"user_api_key" => "Privater API-Schlüssel",	
-);
+"user_api_key" => "Privater API-Schlüssel",);
 
 ?>

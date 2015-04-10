@@ -35,7 +35,7 @@ abstract class generic_notification extends gen_class {
 	abstract public function isAvailable();
 	
 	
-	abstract public function sendNotification();
+	abstract public function sendNotification($arrNotificationData);
 	
 	/**
 	 * Settings the Admin has to set, e.g. API Keys or Server Settings

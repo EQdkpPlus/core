@@ -36,6 +36,8 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * options		(array)		list of all available options
  * todisable	(array)		list of all options which shall not be selectable
  * tolang		(boolean)	apply language function on values of option-array
+ * text_after	(string)	Text added after the Multiselect
+ * text_before	(string)	Text added before the Multiselect
  * 
  * additional options for jquery->multiselect
  * height 		(int)		height of the dropdown in px
@@ -58,13 +60,17 @@ class hmultiselect extends html {
 	public $preview_num = 5;
 	public $datatype = 'string';
 	public $tolang = false;
+	public $text_after = "";
+	public $text_before = "";
 	
 	private $jq_options = array('id', 'height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter');
 	private $out = '';
 	
 	public function _construct() {
+		$dropdown = "";
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$dropdown = '<select name="'.$this->name.'[]" id="'.$this->id.'" multiple="multiple"';
+		if(strlen($this->text_before)) $dropdown = $this->text_before;
+		$dropdown .= '<select name="'.$this->name.'[]" id="'.$this->id.'" multiple="multiple"';
 		if(!empty($this->class)) $dropdown .= ' class="'.$this->class.'"';
 		if($this->disabled) $dropdown .= ' disabled="disabled"';
 		if(!empty($this->js)) $dropdown.= ' '.$this->js;
@@ -84,6 +90,7 @@ class hmultiselect extends html {
 		$options = array();
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
 		$this->jquery->MultiSelect('', array(), array(), $options);
+		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		$this->out = $dropdown;
 	}
 	

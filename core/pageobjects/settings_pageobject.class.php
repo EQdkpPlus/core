@@ -182,6 +182,7 @@ class settings_pageobject extends pageobject {
 		$customArray = array();
 		$pluginArray = array();
 		$notificationArray = array();
+		$values['ntfy_comment_new_article_categories'] = $this->in->getArray('ntfy_comment_new_article_categories', 'int');
 
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;

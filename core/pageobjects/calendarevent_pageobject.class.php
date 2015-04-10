@@ -212,9 +212,6 @@ class calendarevent_pageobject extends pageobject {
 				$this->in->getArray('modstat_change', 'int')
 			));
 
-			// send mail to attendees
-			$this->email_statuschange($this->in->getArray('modstat_change', 'int'), $this->in->get('moderation_raidstatus'));
-			
 			// notify attendees
 			$this->notify_statuschange($this->url_id, $this->in->getArray('modstat_change', 'int'), $this->in->get('moderation_raidstatus'));
 			
@@ -259,8 +256,8 @@ class calendarevent_pageobject extends pageobject {
 			));
 			$this->pdh->process_hook_queue();
 
-			// send mail to attendees
-			$this->email_statuschange($this->in->getArray('memberid', 'int'), $this->in->get('notsigned_raidstatus'));
+			// notify attendees			
+			$this->notify_statuschange($this->url_id, $this->in->getArray('memberid', 'int'), $this->in->get('notsigned_raidstatus'));
 		}
 	}
 
@@ -310,8 +307,6 @@ class calendarevent_pageobject extends pageobject {
 			$this->pdh->put('calendar_events', 'change_closeraidstatus', array($this->url_id));
 			$this->pdh->process_hook_queue();
 		}
-		// send the email to the attendees
-		$this->email_openclose('closed');
 		//Notify
 		$this->notify_openclose('closed');
 	}
@@ -322,69 +317,11 @@ class calendarevent_pageobject extends pageobject {
 			$this->pdh->put('calendar_events', 'change_closeraidstatus', array($this->url_id, false));
 			$this->pdh->process_hook_queue();
 		}
-		// send the email to the attendees
-		$this->email_openclose('open');
+
 		//Notify
 		$this->notify_openclose('open');
 	}
-
-	// EMAIL function: status change of an attendee
-	private function email_statuschange($a_attendees, $status=0){
-		if($this->config->get('calendar_email_statuschange') == 1){
-			// fetch the static data of the raid
-			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-			$raidname		= $this->pdh->get('calendar_events', 'name', array($this->url_id));
-			$raiddate		= $this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id)));
-			$mailsubject	= sprintf($this->user->lang('raidevent_mail_subject_schange'), $raidname, $raiddate);
-			$bodyvars = array(
-				'RAID_NAME'		=> $raidname,
-				'STATUS'		=> $this->user->lang(array('raidevent_raid_status', $status)),
-				'RAIDLEADER'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
-				'DATE'			=> $raiddate,
-				'RAID_LINK'		=> $this->env->link.$this->routing->build('calendarevent', $raidname, $this->url_id, false, true),
-			);
-
-			// send the email to all attendees
-			if(is_array($a_attendees) && count($a_attendees) > 0){
-				foreach($a_attendees as $attendeeid){
-					$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
-					$emailadress	= $this->pdh->get('user', 'email', array($attuserid, true));
-
-					if($emailadress && strlen($emailadress)){
-						$bodyvars['USERNAME'] = $this->pdh->get('user', 'name', array($attuserid));
-						$this->email->SendMailFromAdmin($emailadress, $mailsubject, 'calendar_viewcalraid_statuschange.html', $bodyvars, $this->config->get('lib_email_method'));
-					}
-				}
-			}
-		}
-	}
-
-	// EMAIL function: open & close of an event
-	private function email_openclose($status='closed'){
-		if($this->config->get('calendar_email_openclose') == 1){
-			// fetch the static data of the raid
-			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-			$mailsubject	= ($status == 'open') ? sprintf($this->user->lang('raidevent_mail_subject_open'), $this->config->get('guildtag')) : sprintf($this->user->lang('raidevent_mail_subject_close'), $this->config->get('guildtag'));
-			$bodyvars = array(
-				'RAID_NAME'		=> $this->pdh->get('calendar_events', 'name', array($this->url_id)),
-				'CLOSEDOPEN'	=> ($status == 'open') ? $this->user->lang('raidevent_mail_opened') : $this->user->lang('raidevent_mail_closed'),
-				'RAIDLEADER'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
-				'DATE'			=> $this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id))),
-				'RAID_LINK'		=> $this->env->link.$this->routing->build('calendarevent', $raidname, $this->url_id, false, true),
-			);
-
-			// send the email to all attendees
-			$attendees = $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
-			foreach($attendees as $attuserid){
-				$emailadress = $this->pdh->get('user', 'email', array($attuserid, true));
-				if($emailadress && strlen($emailadress)){
-					$bodyvars['USERNAME'] = $this->pdh->get('user', 'name', array($attuserid));
-					$this->email->SendMailFromAdmin($emailadress, $mailsubject, 'calendar_viewcalraid_openclose.html', $bodyvars, $this->config->get('lib_email_method'));
-				}
-			}
-		}
-	}
-	
+		
 	private function notify_openclose($status='closed'){
 		$strStatus = ($status == 'open') ? $this->user->lang('raidevent_mail_opened') : $this->user->lang('raidevent_mail_closed');
 		$eventID = $this->url_id;
@@ -444,8 +381,8 @@ class calendarevent_pageobject extends pageobject {
 				}
 			}
 
-			// send mail to attendees
-			$this->email_statuschange($a_attendees);
+			// notify attendees
+			$this->notify_statuschange($this->url_id, $a_attendees);
 			
 			// set the new status for the attendees
 			$this->pdh->put('calendar_raids_attendees', 'confirm_all', array($this->url_id));

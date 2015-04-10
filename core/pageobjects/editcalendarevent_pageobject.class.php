@@ -201,7 +201,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('allday'),
 			));
 		}
-		if($this->in->get('repeating') > 0){
+		if($this->in->get('repeating', 0) > 0){
 			$this->timekeeper->run_cron('calevents_repeatable', true);
 		}
 		$this->pdh->process_hook_queue();

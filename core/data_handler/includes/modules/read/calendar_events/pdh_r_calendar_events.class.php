@@ -76,28 +76,28 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->events[$row['id']] = array(
-						'id'					=> $row['id'],
-						'calendar_id'			=> $row['calendar_id'],
+						'id'					=> (int)$row['id'],
+						'calendar_id'			=> (int)$row['calendar_id'],
 						'name'					=> $row['name'],
-						'creator'				=> $row['creator'],
-						'timestamp_start'		=> $row['timestamp_start'],
-						'timestamp_end'			=> $row['timestamp_end'],
-						'allday'				=> $row['allday'],
-						'private'				=> $row['private'],
-						'visible'				=> $row['visible'],
-						'closed'				=> $row['closed'],
+						'creator'				=> (int)$row['creator'],
+						'timestamp_start'		=> (int)$row['timestamp_start'],
+						'timestamp_end'			=> (int)$row['timestamp_end'],
+						'allday'				=> (int)$row['allday'],
+						'private'				=> (int)$row['private'],
+						'visible'				=> (int)$row['visible'],
+						'closed'				=> (int)$row['closed'],
 						'notes'					=> $row['notes'],
-						'repeating'				=> $row['repeating'],
-						'cloneid'				=> $row['cloneid'],
+						'repeating'				=> (int)$row['repeating'],
+						'cloneid'				=> (int)$row['cloneid'],
 						'timezone'				=> $row['timezone'],
 					);
 					$this->events[$row['id']]['extension']	= unserialize($row['extension']);
-					$this->event_timestamps[$row['id']]		= $row['timestamp_start'];
+					$this->event_timestamps[$row['id']]		= (int)$row['timestamp_start'];
 	
 					// set the repeatable array
-					if($row['repeating'] > 0){
-						$parentid	= ($row['cloneid'] > 0) ? $row['cloneid'] : $row['id'];
-						$this->repeatable_events[$parentid][] = $row['id'];
+					if((int)$row['repeating'] > 0){
+						$parentid	= ((int)$row['cloneid'] > 0) ? (int)$row['cloneid'] : (int)$row['id'];
+						$this->repeatable_events[$parentid][] = (int)$row['id'];
 					}
 				}
 				

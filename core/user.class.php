@@ -375,8 +375,8 @@ class user extends gen_class {
 			$keys = $key;
 			$key = array_shift($keys);
 		}
-		if(!$lang) {
-			$cur_lang_name = $this->lang_name;
+		if(!is_array($lang)) {
+			$cur_lang_name = ($lang !== false) ? $lang : $this->lang_name;
 			if(!isset($this->lang[$cur_lang_name][$key])) {
 				//check if plugin_lang initialized first
 				if($this->missing_plug_lang($cur_lang_name)) $this->init_plug_lang($cur_lang_name);
@@ -901,6 +901,10 @@ class user extends gen_class {
 		
 		//Notifications
 		$arrNotificationTypes = register('pdh')->get('notification_types', 'id_list');
+		$arrNotificationMethods = register('ntfy')->getAvailableNotificationMethods();
+		array_unshift($arrNotificationMethods, register('user')->lang('notification_type_none'), register('user')->lang('notification_type_eqdkp'));
+		$arrNotificationSettings = register('pdh')->get('user', 'notification_settings', array($user_id));
+		
 		foreach($arrNotificationTypes as $strNotificationType){
 			if ($strNotificationType === 'comment_new_article'){
 				$arrCategoryIDs = register('pdh')->sort(register('pdh')->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');
@@ -910,13 +914,14 @@ class user extends gen_class {
 				}
 				
 				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
-						'type'		=> 'multiselect',
-						'options'	=> $arrCategories,
-						'default'	=> array_keys($arrCategories),
+						'type'		=> 'dropdown',
+						'options'	=> $arrNotificationMethods,
+						'text_after'=> new hmultiselect('ntfy_comment_new_article_categories', array('options' => $arrCategories, 'default'	=> array_keys($arrCategories), 'value' => $arrNotificationSettings['ntfy_comment_new_article_categories'])).'<br />',
 				);
 			} else {
 				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
-						'type'		=> 'radio',
+						'type'		=> 'dropdown',
+						'options'	=> $arrNotificationMethods,
 						'default'	=> register('pdh')->get('notification_types', 'default', array($strNotificationType)),
 				);
 			}

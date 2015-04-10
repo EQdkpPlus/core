@@ -1984,11 +1984,15 @@ ul.breamcrumb .current::before{
 	font-size: 16px;
 }
 
-.article-container.featured {
+.article-container.featured{
 	display: block;
 }
 
-.article-container.featured h2:before {
+.article_detail_container.featured:before {
+	display: none;
+}
+
+.article-container.featured h2:before, .article_detail_container.featured h1.contentTitle:before {
 	content: "\f005";
 	font-family: FontAwesome;
 	color: gold;

@@ -37,6 +37,8 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * tolang		(boolean)	whether to put the vals of the list into language
  * disabled		(boolean)	disabled field
  * todisable	(array)		if not empty: array containing the elements which shall be disabled
+ * text_after	(string)	Text added after the Multiselect
+ * text_before	(string)	Text added before the Multiselect
  */
 class hdropdown extends html {
 
@@ -50,13 +52,17 @@ class hdropdown extends html {
 	public $no_key = false;
 	public $format = false;
 	public $opt_extra = array();
+	public $text_after = "";
+	public $text_before = "";
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 	
 	public function _toString() {
-		$dropdown = '<select size="1" name="'.$this->name.'"';
+		$dropdown = "";
+		if(strlen($this->text_before)) $dropdown = $this->text_before;
+		$dropdown .= '<select size="1" name="'.$this->name.'"';
 		$dropdown .= ' id="'.$this->id.'"';
 		if(!empty($this->dependency)) $this->class .= ' form_change';
 		if(!empty($this->class)) $dropdown .= ' class="'.$this->class.'"';
@@ -100,6 +106,7 @@ class hdropdown extends html {
 			$dropdown .= "<option value=''></option>";
 		}
 		if(!$this->options_only) $dropdown .= "</select>";
+		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		return $dropdown;
 	}
 	
