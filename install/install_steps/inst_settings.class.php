@@ -133,7 +133,8 @@ class inst_settings extends install_generic {
 
 	public function get_output() {
 		$games = array();
-		$this->game->__construct(true, $this->in->get('inst_lang')); //set lang_name in game-class
+		$this->game = registry::register('game', array(true, $this->in->get('inst_lang'))); //set lang_name in game-class
+
 		foreach($this->game->get_games() as $sgame){
 			$games[$sgame] = $this->game->game_name($sgame);
 		}
@@ -225,7 +226,12 @@ class inst_settings extends install_generic {
 		foreach($sqls as $sql) {
 			if(!$this->do_sql($sql)) return false;
 			//recognize table
-			if(strpos($sql, 'DROP TABLE') === false) $this->data['installed_tables'][] = preg_replace('/(CREATE\sTABLE\sIF\sNOT\sEXISTS\s?`?|CREATE\sTABLE\s?`?)([a-zA-Z_0-9]*)(`?\s?\(.*)/', '\2', $sql);
+			if(strpos($sql, 'DROP TABLE') === false) {
+				preg_match('/(CREATE\sTABLE\sIF\sNOT\sEXISTS\s?`?|CREATE\sTABLE\s?`?)([a-zA-Z_0-9]*)(`?\s?\(.*)/U', $sql, $arrMatches);
+				if(isset($arrMatches[2])){
+					$this->data['installed_tables'][] = $arrMatches[2];
+				}
+			}
 		}
 		//structure set up, fill with data now
 		$sqls = $this->parse_sql_file($this->root_path.'install/schemas/mysql_data.sql');
