@@ -1014,6 +1014,8 @@ $lang = array(
 	"user_sett_fs_notification_settings" => "Settings",
 	"user_sett_f_ntfy_xmpp_user" => "Jabber Account",
 	"user_sett_f_help_ntfy_xmpp_user" => "Insert here the Jabber Account that will get the Notifications, e.g. user@jabber.org",
+	"user_sett_f_ntfy_twitter_user" => "Twitter-Account",
+	"user_sett_f_help_ntfy_twitter_user" => "Insert here the Twitter-Account that will get the Notifications. He must follow \"{TWITTER}\" at Twitter to receive the Notifications."
 		
 );
 

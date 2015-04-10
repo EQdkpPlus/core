@@ -1727,7 +1727,14 @@ $lang = array(
 	"core_sett_f_help_xmpp_password" => "Password of given Jabber User",
 	"core_sett_f_xmpp_use_ssl" => "Use SSL for Connection",
 	"core_sett_f_help_xmpp_use_ssl" => "If this Option is enabled, you maybe have to adjust the Jabber Server Port.",
-		
+	"core_sett_f_twitter_screen_name" => "Twitter Account",
+	"core_sett_f_help_twitter_screen_name" => "Name of the Twitter Account where you created the App",
+	"core_sett_f_twitter_consumer_key" => "Twitter App Consumer Key",
+	"core_sett_f_help_twitter_consumer_key" => "You have to create a new app at https://apps.twitter.com/app/new to get the Consumer Credentials.",
+	"core_sett_f_twitter_consumer_secret" => "Twitter AppConsumer Secret",
+	"core_sett_f_twitter_access_token" => "Twitter App Access Token",
+	"core_sett_f_help_twitter_access_token" => "You can create the Access Token at the Settings of your created App.",
+	"core_sett_f_twitter_access_token_secret" => "Twitter App Access Token Secret",
 );
 
 ?>

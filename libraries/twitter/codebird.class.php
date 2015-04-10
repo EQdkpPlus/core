@@ -746,17 +746,21 @@ class Codebird
             //$ch = curl_init($this->_sign($httpmethod, $url, $params));
 
         } else {
-			/*
+			
             if ($multipart) {
                 $authorization = $this->_sign('POST', $url, array(), true);
                 $post_fields = $params;
             } else {
                 $post_fields = $this->_sign('POST', $url, $params);
             }
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-			*/
+           
+			if (isset($authorization)) {
+	           $request_headers[] = 'Authorization: ' . $authorization;
+        	   $request_headers[] = 'Expect:';
+	        }
+	        
+	        $reply = register('urlfetcher')->post($url, $post_fields, 'application/x-www-form-urlencoded', $request_headers);
+
         }
         /*
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -764,12 +768,7 @@ class Codebird
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        if (isset($authorization)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                $authorization,
-                'Expect:'
-            ));
-        }
+       
         $reply = curl_exec($ch);
 		
         $httpstatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);

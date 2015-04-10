@@ -652,7 +652,7 @@ class DateTimeLocale extends DateTime {
 	private static $english_days		= array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
 	private static $english_days_short	= array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 	private static $english_months		= array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-	private $language = false;
+	private static $language = false;
 	
 	public function __construct($time='now', $timezone=null, $language=false) {
 		try {
@@ -662,7 +662,7 @@ class DateTimeLocale extends DateTime {
 			registry::register('plus_debug_logger')->log('time_error', 'Unable to create DateTime-object with given time-string \''.$time.'\', using \'now\' as fallback.');
 			registry::register('plus_debug_logger')->log('php_error', 'EXCEPTION', 0, $e->getMessage(), __FILE__, __LINE__);
 		}
-		$this->language = $language;
+		self::$language = $language;
 	}
 	
 	public function __call($name, $arguments) {
@@ -675,9 +675,9 @@ class DateTimeLocale extends DateTime {
 	}
 
 	public function format($format) {
-		if(is_array(registry::fetch('language')->get('time_daynames', false, false, $this->language)) && count(registry::fetch('user')->lang('time_daynames', false, false, $this->language)) > 1){
+		if(is_array(registry::fetch('language')->get('time_daynames', false, false, self::$language)) && count(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) > 1){
 			$arrSearch = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
-			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false, $this->language), registry::fetch('user')->lang('time_daynames_short', false, false, $this->language), registry::fetch('user')->lang('time_monthnames', false, false, $this->language));			
+			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false, self::$language), registry::fetch('user')->lang('time_daynames_short', false, false, self::$language), registry::fetch('user')->lang('time_monthnames', false, false, self::$language));			
 			$out =  parent::format($format);
 			foreach($arrSearch as $key => $val){
 				$out = preg_replace('/\b'.$val.'\b/u', $arrReplace[$key], $out);
@@ -691,9 +691,9 @@ class DateTimeLocale extends DateTime {
 	}
 	
 	public static function createFromFormat($format, $string, $timezone=null) {
-		if(is_array(registry::fetch('user')->lang('time_daynames', false, false, $this->language)) && count(registry::fetch('user')->lang('time_daynames', false, false, $this->language)) > 1){
+		if(is_array(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) && count(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) > 1){
 			$arrReplace = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
-			$arrSearch = array_merge(registry::fetch('user')->lang('time_daynames', false, false, $this->language), registry::fetch('user')->lang('time_daynames_short', false, false, $this->language), registry::fetch('user')->lang('time_monthnames', false, false, $this->language));
+			$arrSearch = array_merge(registry::fetch('user')->lang('time_daynames', false, false, self::$language), registry::fetch('user')->lang('time_daynames_short', false, false, self::$language), registry::fetch('user')->lang('time_monthnames', false, false, self::$language));
 
 			foreach($arrSearch as $key => $val){
 				$string = preg_replace('/\b'.$val.'\b/u', $arrReplace[$key], $string);
