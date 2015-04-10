@@ -162,7 +162,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 		
 		public function get_timezone($id=''){
-			return (isset($this->events[$id]['timezone'])) ? $this->events[$id]['timezone'] : '';
+			return (isset($this->events[$id]['timezone'])) ? $this->events[$id]['timezone'] : 'UTC';
 		}
 
 		public function get_raidstatus($id){

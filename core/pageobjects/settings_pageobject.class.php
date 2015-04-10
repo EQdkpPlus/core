@@ -177,7 +177,7 @@ class settings_pageobject extends pageobject {
 		}
 		
 		//copy all other values to appropriate array
-		$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
+		$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password', 'regenerate_keys', 'api_key');
 		$privArray = array();
 		$customArray = array();
 		$pluginArray = array();

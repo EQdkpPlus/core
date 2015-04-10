@@ -89,18 +89,21 @@ if (!class_exists("timehandler")){
 		
 		private $timestamp = 0;
 		private $userTimeZone = 0;
-		private $serverTimeZone = 0;
+		private $utcTimeZone = 0;
 
 		public function __construct() {
-			$tmp_timezone			= $this->get_serverTimezone();
-			date_default_timezone_set($tmp_timezone);
+			date_default_timezone_set('UTC');
 			$this->timestamp		= time();
 			$this->userTimeZone		= new DateTimeZone('UTC');
-			$this->serverTimeZone	= new DateTimeZone($tmp_timezone);
+			$this->utcTimeZone		= new DateTimeZone('UTC');
 			
 			$this->pdl->register_type('time_error', null, null, array(2,3,4));
 		}
 
+		/**
+		 * Sets the User Timezone
+		 * @param string $value Timezone
+		 */
 		public function setTimezone($value){
 			$this->userTimeZone	= new DateTimeZone($value);	
 		}
@@ -115,8 +118,11 @@ if (!class_exists("timehandler")){
 					return $this->userTimeZone->getName();
 				break;
 				case 'server_tz':
-					return $this->serverTimeZone->getName();
+					return $this->get_serverTimezone()->getName();
 				break;
+				case 'utz_tz':
+					return $this->utcTimeZone->getName();
+					break;
 				case 'timezones':
 					return $this->fetch_timezones();
 				break;
@@ -146,7 +152,7 @@ if (!class_exists("timehandler")){
 			}elseif(date_default_timezone_get()){
 				return @date_default_timezone_get();
 			}else{
-				return 'GMT';
+				return 'UTC';
 			}
 		}
 		
@@ -156,7 +162,7 @@ if (!class_exists("timehandler")){
 		* @return timestamp
 		*/
 		private function gen_time($dtime=''){
-			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), new DateTimeZone('UTC'));
+			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->utcTimeZone);
 			return $dateTime->format("U");
 		}
 
@@ -189,7 +195,7 @@ if (!class_exists("timehandler")){
 		* @return Formatted		time string
 		*/
 		public function date($format="Y-m-d H:i:s", $dtime=''){			
-			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), new DateTimeZone('UTC'));
+			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->utcTimeZone);
 			$dateTime->setTimezone($this->userTimeZone);
 			return $dateTime->format($format);
 		}

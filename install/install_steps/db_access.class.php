@@ -29,7 +29,7 @@ class db_access extends install_generic {
 	public $next_button		= 'test_db';
 
 	//default settings
-	private $table_prefix	= 'eqdkp20_';
+	private $table_prefix	= 'eqdkp21_';
 	private $dbtype			= 'mysqli';
 	private $dbhost			= 'localhost';
 	private $dbname			= '';
