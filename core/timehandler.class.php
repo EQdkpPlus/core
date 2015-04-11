@@ -615,13 +615,13 @@ if (!class_exists("timehandler")){
 		 */
 		public function createRepeatableEvents($intUtcTimestamp, $intSecondsToAdd, $strEventTimezone=''){
 			$objTimeZone = ($strEventTimezone === '') ? $this->userTimeZone : new DateTimeZone($strEventTimezone);
-			
-			$objTime = new DateTimeLocale($intUtcTimestamp, $objTimeZone);
+			$objTime = new DateTimeLocale($this->helper_dtime($intUtcTimestamp), $objTimeZone);
 			$objTime->setTimezone($objTimeZone);
+
 			if($intSecondsToAdd > 0){
-				$objTime->add(new DateInterval("PT".($intSecondsToAdd)."S"));
+				$objTime->add(new DateInterval("PT".$intSecondsToAdd."S"));
 			} else {
-				$objTime->sub(new DateInterval("PT".($intSecondsToAdd)."S"));
+				$objTime->sub(new DateInterval("PT".$intSecondsToAdd."S"));
 			}
 			return $objTime->format("U");
 		}

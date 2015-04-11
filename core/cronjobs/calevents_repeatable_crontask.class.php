@@ -61,10 +61,6 @@ if(!class_exists("calevents_repeatable_crontask")){
 						$max_childid	= max($a_childid);
 						$date_max_child	= $this->pdh->get('calendar_events', 'time_start', array($max_childid));
 						$date_event_add	= $this->time->createRepeatableEvents($date_max_child, $rptbl_period, $timezone);
-						
-						$date_max_child+$rptbl_period;
-						
-						
 
 						// add an event if needed
 						while($date_event_add < $end_cronjob){

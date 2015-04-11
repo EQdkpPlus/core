@@ -295,7 +295,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$arrOld['timestamp_end'] = "{D_".$arrOld['timestamp_end']."}";
 			$arrOld['extension'] = serialize($arrOld['extension']);
 			$log_action = $this->logs->diff(false, $arrOld, $this->arrLogLang);
-			$this->log_insert('calendar_log_eventdeleted', $log_action, (is_array($id) ? $id[0] : $id), $arrOld['name'], true, 'calendar');
+			$this->log_insert('calendar_log_eventdeleted', $log_action, (is_array($id) ? $id[0] : $id), (isset($arrOld['name']) && strlen($arrOld['name'])) ? $arrOld['name'] : "", true, 'calendar');
 			
 			// perform the hooks
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
