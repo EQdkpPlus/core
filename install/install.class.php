@@ -114,7 +114,7 @@ class install extends gen_class {
 			die('Could not include the language files! Check to make sure that "' . $this->root_path . 'language/'.$language.'/lang_install.php" exists!');
 		}
 		registry::add_const('lang', $lang);
-		registry::add_const('language', $language);
+		registry::add_const('langcode', $language);
 	}
 	
 	private function scan_steps() {
@@ -242,7 +242,7 @@ class install extends gen_class {
 		}
 		sort($options);
 		foreach($options as $option) {
-			$selected = ($this->language == $option) ? ' selected="selected"' : '';
+			$selected = ($this->langcode == $option) ? ' selected="selected"' : '';
 			$drop .= '<option value="'.$option.'"'.$selected.'>'.ucfirst($option).'</option>';
 		}
 		return $drop.'</select>';

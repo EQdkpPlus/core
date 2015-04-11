@@ -348,8 +348,8 @@ class inst_settings extends install_generic {
 		
 		
 		//Disclaimer & Privacy Policy
-		if (is_file($this->root_path.'language/'.$this->language.'/disclaimer.php')){
-			include_once($this->root_path.'language/'.$this->language.'/disclaimer.php');
+		if (is_file($this->root_path.'language/'.$this->langcode.'/disclaimer.php')){
+			include_once($this->root_path.'language/'.$this->langcode.'/disclaimer.php');
 			$this->do_sql("UPDATE __articles SET text=".$this->db->escapeString($privacy)." WHERE id=15;");
 			$this->do_sql("UPDATE __articles SET text=".$this->db->escapeString($disclaimer)." WHERE id=16;");
 		} else {
