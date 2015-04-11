@@ -50,6 +50,7 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_calendar_raidno
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_search','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_usermailer','Y');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_files_man','Y');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_articles_script','N');
 
 ### Style presets
 

@@ -46,7 +46,7 @@ class game extends gen_class {
 
 	//fill data with gameinfos (classes, races, factions, filters, etc.)
 	public function __construct($installer=false, $lang_name=''){
-		if(!$installer && !defined('INSTALLER')){
+		if(!$installer){
 			$this->lang_name		= $this->user->lang_name;
 			$this->game				= $this->config->get('default_game');
 			if($this->config->get('game_importer_apikey')){
@@ -55,9 +55,10 @@ class game extends gen_class {
 			$this->init_gameclass();
 			$this->pdl->register_type('game');
 		}
-		if($installer || defined('INSTALLER')){
+		if($installer){
 			$this->installer	= true;
 			$this->lang_name	= $lang_name;
+			$this->game			= $this->config->get('default_game');
 		}
 	}
 
@@ -111,7 +112,7 @@ class game extends gen_class {
 		}
 		$this->gameinfo()->flush($this->gameinfo()->lang, true);
 		
-		$this->autoUpdateClassProfileFields();
+		if(!defined("INSTALLER")) $this->autoUpdateClassProfileFields();
 		return true;
 	}
 
@@ -1167,6 +1168,7 @@ class game extends gen_class {
 		//Uninstall old game
 		$this->uninstallGame();
 		
+		$this->game = $newgame;
 		if ((int)$this->config->get('update_first_game_inst') !== 1){
 			//Reset some data
 			$this->resetEvents();
@@ -1183,7 +1185,6 @@ class game extends gen_class {
 		$this->resetRaidgroups();
 
 		//Install new game
-		$this->game = $newgame;
 		$this->init_gameclass();
 		
 		if(!in_array($lang, $this->gameinfo()->langs)) {
