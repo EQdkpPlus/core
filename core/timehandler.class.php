@@ -675,7 +675,7 @@ class DateTimeLocale extends DateTime {
 	}
 
 	public function format($format) {
-		if(is_array(registry::fetch('language')->get('time_daynames', false, false, self::$language)) && count(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) > 1){
+		if(is_array(registry::fetch('language')->get(self::$language, 'time_daynames')) && count(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) > 1){
 			$arrSearch = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
 			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false, self::$language), registry::fetch('user')->lang('time_daynames_short', false, false, self::$language), registry::fetch('user')->lang('time_monthnames', false, false, self::$language));			
 			$out =  parent::format($format);
