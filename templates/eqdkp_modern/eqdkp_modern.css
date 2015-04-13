@@ -1984,7 +1984,7 @@ ul.breamcrumb .current::before{
 	font-size: 16px;
 }
 
-.article-container.featured {
+.article-container.featured, .article_detail_container.featured {
 	display: block;
 }
 
