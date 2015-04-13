@@ -501,8 +501,8 @@ class core extends gen_class {
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
 			$arrItems = array(
-				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home'), 'static' => 1),
-				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),'check' => 'u_userlist', 'static' => 1),
+				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home'), 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
+				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),'check' => 'u_userlist', 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
 			);
 			
 			//Articles & Categories
@@ -617,11 +617,11 @@ class core extends gen_class {
 									$arrOutOneLevel[] = $arrHashArray[$hash];
 								}	
 							}
-							$show = true;
 						}
+						$show = true;
 					}
-					$show = true;
 				}
+				$show = true;
 			}
 			
 			foreach($arrToDo as $hash => $item){

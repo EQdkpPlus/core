@@ -374,7 +374,6 @@ class Manage_Menus extends page_generic {
 	
 	private function build_menu_ol(){
 		$arrItems = $this->core->build_menu_array(true);
-		
 		$html  = '<ol class="sortable">';
 		$id = 0;
 		foreach($arrItems as $k => $v){
@@ -434,7 +433,7 @@ class Manage_Menus extends page_generic {
 					$arrCategories[md5($v['link_category'])] = $this->user->lang($v['link_category']);
 				}
 				$strHash = $this->core->build_link_hash($v);
-				$arrOptions[md5($v['link_category'])][] =  $v['text'];
+				$arrOptions[md5($v['link_category'])][$strHash] =  $v['text'];
 			}
 		}
 		
@@ -455,7 +454,7 @@ class Manage_Menus extends page_generic {
 		$html = '
 			<div data-linkid="'.$id.'">
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'" style="display:inline-block;"></span>&nbsp;
-			<span class="link-hide '.(((int)$arrLink['hidden']) ? 'eye-gray' : 'eye').'"></span>&nbsp;';
+			<span class="link-hide '.(((int)$arrLink['hidden']) ? 'eye-gray' : 'eye').'" '.(( (isset($arrLink['article']) || isset($arrLink['category']) || isset($arrLink['static']))) ? 'style="display:none;"' : '').'></span>&nbsp;';
 			if ($blnPluslink){
 				$plinkid = intval(str_replace("pluslink", "", $arrLink['id']));
 				$arrPluslinkData = $this->pdh->get('links', 'data', array($plinkid));

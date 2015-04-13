@@ -115,7 +115,7 @@ class controller extends gen_class {
 		//Required, otherwise the Routing of Plugin URLS wont work.
 		register('pm');
 		
-		if (count($arrPath) == 0 || str_replace('index.php', '', $strPath) === $this->config->get('server_path')){
+		if (count($arrPath) == 0 || str_ireplace('index.php', '', $strPath) === $this->config->get('server_path')){
 			//Get Start Page
 			if ($this->config->get('start_page') != ""){
 				$strPath = $this->config->get('start_page');
@@ -760,6 +760,8 @@ class controller extends gen_class {
 						'S_CHILDS'	=> true,
 					));
 					foreach($arrChilds as $intChildID){
+						if(!$this->pdh->get('article_categories', 'published', array($intChildID))) continue;
+						
 						$this->tpl->assign_block_vars('child_row', array(
 							'NAME'	=> $this->pdh->get('article_categories', 'name', array($intChildID)),
 							'U_PATH'=> $this->controller_path.$this->pdh->get('article_categories', 'path', array($intChildID)),
