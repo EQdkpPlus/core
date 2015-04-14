@@ -193,7 +193,7 @@ class core extends gen_class {
 			$template_background_file = "";
 			switch($this->user->style['background_type']){
 				//Game
-				case 1: $template_background_file = $this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+				case 1: $template_background_file = $this->server_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 					break;
 					
 				//Own
@@ -202,7 +202,7 @@ class core extends gen_class {
 						if (strpos($this->user->style['background_img'],'://') > 1){
 							$template_background_file = $this->user->style['background_img'];
 						} else {
-							$template_background_file = $this->root_path .$this->user->style['background_img'];
+							$template_background_file = $this->server_path .$this->user->style['background_img'];
 						}
 					}
 					break;
@@ -210,14 +210,14 @@ class core extends gen_class {
 				//Style
 				default: 
 					if(is_file($this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png')){
-						$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png';
+						$template_background_file	= $this->server_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png';
 					} else {
-						$template_background_file	= $this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
+						$template_background_file	= $this->server_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.jpg';
 					}
 			}
 			if($template_background_file == ""){
 				//Cannot find a background file, let's take the game specific
-				$template_background_file = $this->root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+				$template_background_file = $this->server_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 			}
 
 			
