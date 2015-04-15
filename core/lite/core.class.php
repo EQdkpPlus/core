@@ -70,9 +70,9 @@ class core extends gen_class {
 		
 		if (!$this->user->check_auth('a_maintenance', false)){
 			if ($this->config->get('pk_maintenance_mode') == '1'){
-				redirect('maintenance/maintenance.php'.$this->SID);
+				redirect('maintenance/maintenance.php'.$this->SID, false, false, false);
 			} else {
-				redirect('index.php'.$this->SID);
+				redirect('index.php'.$this->SID, false, false, false);
 			}
 		}
 	}

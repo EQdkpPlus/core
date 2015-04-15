@@ -47,7 +47,7 @@ class task_manager_display extends gen_class {
 			));
 		}
 		if ($this->in->get('leave') != ""){
-			redirect('admin/index.php');
+			redirect('admin/index.php', false, false, false);
 		}
 		$this->mmt->init_tasks();
 		$task_data = $this->mmt->task_data;
@@ -90,7 +90,7 @@ class task_manager_display extends gen_class {
 					$redirect_url	= 'admin/index.php'.$this->SID;
 				}
 
-				redirect($redirect_url);
+				redirect($redirect_url, false, false, false);
 			} else {
 				$this->tpl->assign_vars(array(
 					'NO_LEAVE'			=> 1,
