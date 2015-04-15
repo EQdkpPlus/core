@@ -33,7 +33,7 @@
 						</a> 
 						{L_username}
 					</th>
-					<th>{L_email}</th>
+					<!-- IF S_USERGROUP_ADMIN --><th>{L_email}</th><!-- ENDIF -->
 					<th>{L_last_visit}</th>
 					<th>{L_active}</th>
 					<th>{L_online}</th>
@@ -52,7 +52,7 @@
 					<td>
 						<a href="manage_users.php{SID}&amp;u={user_row_grpleader.ID}">{user_row_grpleader.NAME}</a>
 					</td>
-					<td>{user_row_grpleader.EMAIL}</td>
+					<!-- IF S_USERGROUP_ADMIN --><td>{user_row_grpleader.EMAIL}</td><!-- ENDIF -->
 					<td>{user_row_grpleader.LAST_VISIT}</td>
 					<td>{user_row_grpleader.ACTIVE}</td>
 					<td>{user_row_grpleader.ONLINE}</td>
@@ -69,7 +69,7 @@
 					<td>
 						<a href="manage_users.php{SID}&amp;u={user_row.ID}">{user_row.NAME}</a>
 					</td>
-					<td>{user_row.EMAIL}</td>
+					<!-- IF S_USERGROUP_ADMIN --><td>{user_row.EMAIL}</td><!-- ENDIF -->
 					<td>{user_row.LAST_VISIT}</td>
 					<td>{user_row.ACTIVE}</td>
 					<td>{user_row.ONLINE}</td>

@@ -337,10 +337,10 @@ class acl extends acl_manager {
 					while ( $row = $result->fetchAssoc() ){
 						if ($row['auth_setting'] == "Y" && substr($row['auth_value'], 0, 2)!= "a_"){
 								$this->user_group_permissions[$user_id][$row['auth_value']] = $row['auth_setting'];
-						}
-							$this->user_group_memberships[$user_id][1] = 1;
+						}	
 					}
 				}
+				$this->user_group_memberships[$user_id][1] = 1;
 		}
 	}
 }

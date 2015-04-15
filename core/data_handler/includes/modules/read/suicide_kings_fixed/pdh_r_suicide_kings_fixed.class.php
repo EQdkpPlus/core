@@ -61,18 +61,10 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			}
 
 			//base list for all mdkp pools
-			/*
 			$member_list = $this->pdh->get('member', 'id_list');
 			$member2main = $this->pdh->aget('member', 'mainid', 0, array($member_list));
 			$main2member = $this->pdh->aget('member', 'other_members', 0, array(array_unique($member2main)));
-			$member_list = $this->pdh->sort($member_list, 'member', 'creation_date', 'asc');
-			$main_list = array();
-			foreach($member_list as $key => $member_id) {
-				$main_list[$member2main[$member_id]] = $key;
-			}
-			$member_list = array_flip($member_list);
-			$main_list = array_flip(array_values(array_flip($main_list)));
-			*/
+			
 			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
 			
 			// mdkp2event list
@@ -82,6 +74,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			$raidlist = $this->pdh->maget(array('raid', 'raid', 'item'), array('event', 'raid_attendees', 'itemsofraid'), 0, array($raid_ids));
 			
 			foreach($mdkplist as $mdkp_id => $events) {
+				$member_list = $main_list = array();
 				// initialise list
 				$startList = $this->config->get('sk_btm_startlist_'.$mdkp_id);
 				if (!$startList){
@@ -104,6 +97,8 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 						if (!in_array($intMainID, $main_list)) $main_list[] = $intMainID;
 					}
 				}
+				$member_list = array_flip($member_list);
+				$main_list = array_flip($main_list);
 				
 				if(!isset($this->sk_list['multi'][$mdkp_id])) $this->sk_list['multi'][$mdkp_id] = $main_list;
 				if(!isset($this->sk_list['single'][$mdkp_id])) $this->sk_list['single'][$mdkp_id] = $member_list;
