@@ -384,6 +384,10 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$footer .= "</th>\n</tr>\n";
 			return $footer;
 		}
+		
+		public function get_view_list(){
+			return $this->view_list;
+		}
 	}//end class
 }//end if
 ?>
