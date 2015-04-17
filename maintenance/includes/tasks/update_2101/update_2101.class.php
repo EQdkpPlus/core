@@ -62,7 +62,11 @@ class update_2101 extends sql_update_task {
 			
 			$this->pdh->put('user', 'update_user', array($intUserID, array('notifications' => serialize($arrNotificationSettings)), false, false));
 		}
-		
+
+		// update the js date settings
+		$this->config->set('default_jsdate_nrml', $this->user->lang('style_jsdate_nrml'));
+		$this->config->set('default_jsdate_short', $this->user->lang('style_jsdate_short'));
+
 		return true;
 	}
 }
