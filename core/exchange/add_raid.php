@@ -39,7 +39,6 @@ if (!class_exists('exchange_add_raid')){
 		*/
 		public function post_add_raid($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
 			if ($this->user->check_auth('a_raid_add', false) || $isAPITokenRequest){
 				$xml = simplexml_load_string($body);
 				if ($xml){
