@@ -407,11 +407,11 @@ if(!class_exists('pdh_w_calendar_events')) {
 		
 		public function auto_addchars($raidtype, $raidid, $raidleaders=array(), $group=false, $status=false){
 			//Auto confirm Groups
-			$arrAutoconfirmGroups = unserialize($this->config->get('calendar_raid_autoconfirm'));
+			$arrAutoconfirmGroups = $this->config->get('calendar_raid_autoconfirm');
 			$signupstatus	= 1; //Angemeldet
 
 			// auto add groups
-			$usergroups = ($group && is_array($group)) ? $group : unserialize($this->config->get('calendar_raid_autocaddchars'));
+			$usergroups = ($group && is_array($group)) ? $group : $this->config->get('calendar_raid_autocaddchars');
 			if(is_array($usergroups) && count($usergroups) > 0){
 				$userids = $this->pdh->get('user_groups_users', 'user_list', array($usergroups));
 				if(is_array($userids)){
