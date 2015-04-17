@@ -524,7 +524,7 @@
 					<!-- ENDIF -->
 				</div>
 				<div class="floatRight">
-					<!-- IF not S_LOGGED_IN -->
+					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
 					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
 					<!-- ENDIF -->
 					
