@@ -44,9 +44,9 @@ class tinyMCE extends gen_class {
 		if(!$this->trigger['bbcode']){
 			
 			//Language
-			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			$lang = ( !isset($settings['language']) ) ? $this->language : $settings['language'];
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
-				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+				$this->language	= ( !isset($settings['language']) ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
 			
 			$arrHooks = (($this->hooks->isRegistered('tinymce_bbcode_setup')) ? $this->hooks->process('tinymce_bbcode_setup', array('js' => '', 'env' => $this->env), true): array());

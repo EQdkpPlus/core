@@ -619,6 +619,12 @@ class controller extends gen_class {
 						'S_HIDE_HEADER'		=> ($arrArticle['hide_header']),
 						'S_FEATURED'		=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 				));
+				
+				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
+				
+				if(!strlen($strPreviewImage)) $strPreviewImage = $this->social->getFirstImage($strContent);
+				$this->social->callSocialPlugins($arrTitles[$intPageID], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($strContent, 600, '...', false, true))))), $strPreviewImage);
+				
 					
 				$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('articles', 'permalink', array($intArticleID)).'" />');
 				$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
@@ -772,6 +778,8 @@ class controller extends gen_class {
 					$intCommentsCount = $this->comments->Count();
 					//Tags
 					$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
+					
+					$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
 			
 					$this->tpl->assign_block_vars('article_row', array(
 							'ARTICLE_ID'			=> $intArticleID,
@@ -788,7 +796,7 @@ class controller extends gen_class {
 							'ARTICLE_TOOLBAR'		=> $jqToolbar['id'],
 							'ARTICLE_PUBLISHED'		=> ($blnPublished) ? true : false,
 							'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
-							'ARTICLE_PREVIEW_IMAGE' => ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '',
+							'ARTICLE_PREVIEW_IMAGE' => $strPreviewImage,
 							'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 							'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 							'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
@@ -799,7 +807,7 @@ class controller extends gen_class {
 							'S_FEATURED'			=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 							'S_HIDE_HEADER'			=> ($this->pdh->get('articles',  'hide_header', array($intArticleID))),
 					));
-			
+							
 					if (count($arrTags) && $arrTags[0] != ""){
 						foreach($arrTags as $tag){
 							$this->tpl->assign_block_vars('article_row.tag_row', array(
@@ -881,6 +889,8 @@ class controller extends gen_class {
 						'S_HIDE_HEADER'			=> $arrCategory['hide_header'],
 						'CATEGORY_ID'			=> $intCategoryID,
 				));
+				
+				$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), '');
 					
 				$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 				$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('article_categories', 'permalink', array($intCategoryID)).'" />');
