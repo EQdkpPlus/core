@@ -60,14 +60,6 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 			//base list for all mdkp pools
 			$member_hash = array();
 			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
-
-			/*
-			foreach($member_list as $member_id){
-				$member_hash['single'][$member_id] = md5($this->pdh->get('member','name', array($member_id)));
-				$intMainID = $this->pdh->get('member', 'mainid', array($member_id));
-				$member_hash['multi'][$intMainID] = md5($this->pdh->get('member','name', array($intMainID)));
-			}
-			*/
 			
 			//With Twinks (mainchar only)
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){

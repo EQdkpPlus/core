@@ -664,7 +664,7 @@ class template extends gen_class {
 			if ($this->server_path == "/") {
 				$relative_file = $this->root_path.str_replace($this->root_path, "", $item['file']);
 			} else {
-				$val['file'] = str_replace($this->server_path, $this->root_path, $item['file']);
+				$relative_file = str_replace($this->server_path, $this->root_path, $item['file']);
 			}
 
 			$filetime	= (substr($item['file'],0,4) == "http") ? rand(1,100000000) : @filemtime($relative_file);

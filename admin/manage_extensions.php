@@ -163,6 +163,12 @@ class Manage_Extensions extends page_generic {
 							case 'language':		$target = $this->root_path;				$cat=11;	break;
 							default: $target = false;
 						}
+						
+						//Delete custom files, because they should not be overwritten during update
+						if($cat === 2){
+							$this->pfh->Delete($src_path.'/custom.css');
+							$this->pfh->Delete($src_path.'/custom.js');
+						}
 	
 						$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
 						
@@ -285,6 +291,13 @@ class Manage_Extensions extends page_generic {
 				case 7:			$target = $this->root_path.'games/'.strtolower($this->code);	break;
 				case 11:		$target = $this->root_path; break;
 			}
+			
+			//Delete custom files, because they should not be overwritten during update
+			if((int)$this->in->get('cat', 0) === 2){
+				$this->pfh->Delete($srcFolder.'/custom.css');
+				$this->pfh->Delete($srcFolder.'/custom.js');
+			}
+			
 
 			if($target){
 				$result = $this->repo->full_copy($srcFolder, $target);
