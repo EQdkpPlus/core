@@ -285,6 +285,12 @@ class Manage_Extensions extends page_generic {
 				case 7:			$target = $this->root_path.'games/'.strtolower($this->code);	break;
 				case 11:		$target = $this->root_path; break;
 			}
+			
+			//Delete custom files, because they should not be overwritten during update
+			if((int)$this->in->get('cat', 0) === 2){
+				$this->pfh->Delete($srcFolder.'/custom.css');
+				$this->pfh->Delete($srcFolder.'/custom.js');
+			}
 
 			if($target){
 				$result = $this->repo->full_copy($srcFolder, $target);

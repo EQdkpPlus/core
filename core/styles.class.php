@@ -505,8 +505,8 @@ if (!class_exists("styles")){
 			if ( $dir = @opendir($this->pfh->FolderPath('templates/'.$templatepath, 'eqdkp')) ){
 				while ($file = @readdir($dir)){
 					$ext = pathinfo($file, PATHINFO_EXTENSION);
-					if (!is_dir($file) && $file != "ads.html" && $file != "index.php" && $file != "index.html" && in_array($ext, $this->allowed_extensions)){
-						if (strpos($file, "combined") === 0) continue;
+					if (!is_dir($file) && $file != "index.php" && $file != "index.html" && in_array($ext, $this->allowed_extensions)){
+						if (strpos($file, "combined") === 0 || strpos($file, "dev_") === 0) continue;
 						$files[$this->pfh->FolderPath('templates/'.$templatepath, 'eqdkp').$file] = $file;
 					}
 				}
@@ -514,7 +514,7 @@ if (!class_exists("styles")){
 			if ( $dir = @opendir($this->pfh->FolderPath('templates/'.$templatepath.'/admin', 'eqdkp')) ){
 				while ($file = @readdir($dir)){
 					$ext = pathinfo($file, PATHINFO_EXTENSION);
-					if (!is_dir($file) && $file != "ads.html" && $file != "index.php" && $file != "index.html" && in_array($ext, $this->allowed_extensions)){
+					if (!is_dir($file) && $file != "index.php" && $file != "index.html" && in_array($ext, $this->allowed_extensions)){
 						$files[$this->pfh->FolderPath('templates/'.$templatepath, 'eqdkp').'admin/'.$file] = 'admin/'.$file;
 					}
 				}
