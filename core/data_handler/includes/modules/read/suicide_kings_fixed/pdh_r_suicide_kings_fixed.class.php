@@ -100,6 +100,8 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 				$member_list = array_flip($member_list);
 				$main_list = array_flip($main_list);
 				
+				$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($mdkp_id));
+				
 				if(!isset($this->sk_list['multi'][$mdkp_id])) $this->sk_list['multi'][$mdkp_id] = $main_list;
 				if(!isset($this->sk_list['single'][$mdkp_id])) $this->sk_list['single'][$mdkp_id] = $member_list;
 				// iterate through raids
@@ -131,8 +133,12 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 						$redistribute['multi'][] = $posi;
 					}
 					$items = $this->pdh->aget('item', 'buyer', 0, array($this->pdh->sort($raid['itemsofraid'], 'item', 'date', 'asc')));
-					foreach($items as $memberid) {
+					foreach($items as $itemid => $memberid) {
 						if(!in_array($memberid, $raid['raid_attendees'])) continue; // ignore items assigned to members not present in raid - most likely special members
+						//Ignore Items from different Itempool in this raid
+						$itempool_id = $this->pdh->get('item', 'itempool_id', array($itemid));
+						if(!in_array($itempool_id, $arrItempools)) continue;
+						
 						$key = array_search($memberid, $temp_list['single']);
 						unset($temp_list['single'][$key]);
 						$temp_list['single'][] = $memberid;
