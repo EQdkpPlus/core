@@ -95,6 +95,7 @@ class notifications_pageobject extends pageobject {
 		
 		$intFirst = intval(array_shift($arrIDs));
 		$strLink = $this->pdh->get('notifications', 'link', array($intFirst));
+
 		if (strlen($strLink)){
 			redirect($strLink);
 			return;

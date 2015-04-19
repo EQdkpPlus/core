@@ -112,6 +112,21 @@ if(!class_exists('pdh_r_comment')){
 			}
 			return (isset($this->count[$page][$attach_id])) ? $this->count[$page][$attach_id] : 0;
 		}
+		
+		public function get_involved_users($page, $attach_id){
+			$arrUsers = array();
+			
+			foreach($this->comments as $id => $comment) {
+				if($comment['page'] != $page) continue;
+				if($attach_id > 0 AND $comment['attach_id'] != $attach_id) continue;
+				
+				if(!in_array($comment['userid'], $arrUsers)){
+					$arrUsers[] = $comment['userid'];
+				}
+			}
+			
+			return $arrUsers;
+		}
 	}
 }
 ?>
