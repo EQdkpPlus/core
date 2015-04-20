@@ -59,7 +59,7 @@ class embedly extends gen_class {
 		$embedlyUrls = array();
 		//First, get the links
 		$arrLinks = array();
-		$intLinks = preg_match_all('@((("|:)?)https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string, $arrLinks);
+		$intLinks = preg_match_all('@((("|:)?)https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\-\.]*(\?[^<\s]+)?)?)?)@', $string, $arrLinks);
 		
 		$arrDecodedLinks = array();
 		if ($intLinks){
