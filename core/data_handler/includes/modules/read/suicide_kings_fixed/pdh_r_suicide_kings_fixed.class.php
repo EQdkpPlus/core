@@ -166,11 +166,8 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			if ($with_twink == 'multi'){
 				$member_id = ($this->pdh->get('member', 'is_main', array($member_id))) ? $member_id : $this->pdh->get('member', 'mainid', array($member_id));
 			}
-			return (isset( $this->sk_list[$with_twink][$multidkp_id][$member_id] )) ? $this->sk_list[$with_twink][$multidkp_id][$member_id] : 0;
-		}
-		
-		public function get_html_position($member_id, $multidkp_id, $with_twink=true) {
-			return $this->get_position($member_id, $multidkp_id, $with_twink)+1;
+			$intPosition = (isset( $this->sk_list[$with_twink][$multidkp_id][$member_id] )) ? $this->sk_list[$with_twink][$multidkp_id][$member_id] : 0;
+			return $intPosition+1;
 		}
 
 		public function get_html_caption_position($mdkpid, $showname = false, $showtooltip = false, $tt_options = array()){
