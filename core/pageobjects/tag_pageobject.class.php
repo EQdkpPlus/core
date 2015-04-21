@@ -30,7 +30,7 @@ class tag_pageobject extends pageobject {
 	}
 	
 	public function display(){
-		$strTag = utf8_strtolower($this->url_id);
+		$strTag = utf8_strtolower($this->patharray[0]);
 		if (!strlen($strTag)) redirect($this->controller_path_plain.$this->SID);
 		
 		$arrArticleIDs = $this->pdh->get('articles', 'articles_for_tag', array($strTag));

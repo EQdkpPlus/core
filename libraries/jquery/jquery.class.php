@@ -821,6 +821,8 @@ if (!class_exists("jquery")) {
 				if(isset($options['slideshowAuto'])){	$jsoptions[]	= "slideshowAuto: ".(($options['slideshowAuto'] == true) ? "true" : "false");}
 				if(isset($options['transition'])){	$jsoptions[]	= "transition: '".$options['transition']."'";}
 				if(isset($options['slideshowSpeed'])){	$jsoptions[]	= "slideshowSpeed:".$options['slideshowSpeed'];}
+				if(isset($options['type'])){	$jsoptions[]	= $options['type'].": true";}
+				if(isset($options['title_function'])){	$jsoptions[]	= "title: function(){".$options['title_function']."}";}
 			}
 			$jsoptions[] = 'rel:"'.$id.'"';
 			$jsoptions[] = 'maxWidth:"90%"';

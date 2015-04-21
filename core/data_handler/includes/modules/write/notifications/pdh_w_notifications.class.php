@@ -27,8 +27,13 @@ if(!class_exists('pdh_w_notifications')) {
 	class pdh_w_notifications extends pdh_w_generic {
 		
 		public function add($strType, $intToUserID, $strFromUsername, $strRecordsetId, $strLink, $strAdditonalData=''){
-
-			$strLink = str_replace($this->server_path, '{SERVER_PATH}', $strLink);
+			
+			if($this->server_path != "/" && $this->server_path != ""){
+				$strLink = str_replace($this->server_path, '{SERVER_PATH}', $strLink);
+			} else {
+				$strLink = '{SERVER_PATH}'.$strLink;
+			}
+			$strLink = str_replace($this->root_path, '{SERVER_PATH}', $strLink);
 			$strLink = str_replace($this->SID, '{SID}', $strLink);
 			$strLink = str_replace('?', '{SID}', $strLink);
 			$strLink = str_replace('//', '/', $strLink);

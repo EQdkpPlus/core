@@ -33,7 +33,7 @@ if (!class_exists("comments")){
 		private $id = '';
 		private $showFormForGuests=false;
 		public $ntfy_link = false;
-		public $ntfy_user = false;
+		public $ntfy_user = array();
 		public $ntfy_type = false;
 		public $ntfy_title = false;
 		public $ntfy_category = 0;

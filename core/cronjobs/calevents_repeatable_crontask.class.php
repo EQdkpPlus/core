@@ -35,6 +35,10 @@ if(!class_exists("calevents_repeatable_crontask")){
 			$this->defaults['description']		= 'Creating repeatable events';
 		}
 
+		public function cleanExtensionField($value){
+			return (isset($value) && is_array($value) && count($value) > 0) ? $value : false;
+		}
+
 		public function run(){
 			// fetch the raid ids of the repeatable raids
 			$repeatable_events = $this->pdh->get('calendar_events', 'repeatable_events');
@@ -94,7 +98,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 							}
 							array_push($a_data, $parentid);
 							$clonedraidid = $this->pdh->put('calendar_events', 'add_cevent', $a_data);
-							$this->pdh->put('calendar_events', 'auto_addchars', array($eventsdata['extension']['raidmode'], $clonedraidid, $eventsdata['extension']['raidleader']));
+							$this->pdh->put('calendar_events', 'auto_addchars', array($eventsdata['extension']['raidmode'], $clonedraidid, $eventsdata['extension']['raidleader'], $this->cleanExtensionField($eventsdata['extension']['autosignin_group']), $this->cleanExtensionField($eventsdata['extension']['autosignin_status'])));
 
 							// set the date for the next event
 							$date_event_add	= $this->time->createRepeatableEvents($date_event_add, $rptbl_period, $timezone);

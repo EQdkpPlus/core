@@ -310,6 +310,9 @@
 											</a>
 										</li>
 										<li class="tooltip-divider"></li>
+										<!-- BEGIN user_tooltip_addition -->
+										<li class="{user_tooltip_addition.CLASS}">{user_tooltip_addition.TEXT}</li>
+										<!-- END user_tooltip_addition -->
 										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog fa-lg"></i> {L_settings}</a></li>
 										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out fa-lg"></i> {L_logout}</a></li>
 									</ul>
@@ -524,7 +527,7 @@
 					<!-- ENDIF -->
 				</div>
 				<div class="floatRight">
-					<!-- IF not S_LOGGED_IN -->
+					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
 					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
 					<!-- ENDIF -->
 					

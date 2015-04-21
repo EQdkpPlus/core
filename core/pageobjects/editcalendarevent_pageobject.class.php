@@ -150,15 +150,17 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('note'),
 				0,
 				array(
-					'raid_eventid'		=> $this->in->get('raid_eventid', 0),
-					'calendarmode'		=> $this->in->get('calendarmode'),
-					'raid_value'		=> $this->in->get('raid_value', 0),
-					'deadlinedate'		=> $this->in->get('deadlinedate', 0.5),
-					'raidmode'			=> $this->in->get('raidmode'),
-					'raidleader'		=> $this->in->getArray('raidleader', 'int'),
-					'distribution'		=> $raid_clsdistri,
-					'attendee_count'	=> $this->in->get('raid_attendees_count', 0),
-					'created_on'		=> $this->time->time,
+					'raid_eventid'			=> $this->in->get('raid_eventid', 0),
+					'calendarmode'			=> $this->in->get('calendarmode'),
+					'raid_value'			=> $this->in->get('raid_value', 0),
+					'deadlinedate'			=> $this->in->get('deadlinedate', 0.5),
+					'raidmode'				=> $this->in->get('raidmode'),
+					'raidleader'			=> $this->in->getArray('raidleader', 'int'),
+					'distribution'			=> $raid_clsdistri,
+					'attendee_count'		=> $this->in->get('raid_attendees_count', 0),
+					'created_on'			=> $this->time->time,
+					'autosignin_group'	=> $asi_groups,
+					'autosignin_status'	=> $asi_status,
 				)
 			));
 

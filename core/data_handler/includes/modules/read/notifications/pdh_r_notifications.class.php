@@ -229,8 +229,7 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 		public function get_link($intNotificationID){
 			if (isset($this->notifications[$intNotificationID])){
 				$strLink = $this->notifications[$intNotificationID]['link'];
-				$strLink = str_replace(array('{SERVER_PATH}', '{CONTROLLER_PATH_PLAIN}', '{CONTROLLER_PATH}','{SID}'), array($this->server_path, $this->controller_path_plain, $this->controller_path, $this->SID), $strLink);
-				
+				$strLink = str_replace(array('{SERVER_PATH}', '{CONTROLLER_PATH_PLAIN}', '{CONTROLLER_PATH}','{SID}', '{ROOT_PATH}'), array('', $this->controller_path_plain, $this->controller_path, $this->SID, ''), $strLink);
 				return $strLink;
 			}
 			return false;

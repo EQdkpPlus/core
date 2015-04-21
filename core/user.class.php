@@ -736,11 +736,11 @@ class user extends gen_class {
 				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
 						'type'		=> 'dropdown',
 						'options'	=> $arrNotificationMethods,
-						'default'	=> register('pdh')->get('notification_types', 'default', array($strNotificationType)),
+						'default'	=> (string)register('pdh')->get('notification_types', 'default', array($strNotificationType)),
 				);
 			}
 		}
-		
+
 		$arrNotificationUsersettings = register('ntfy')->getNotificationMethodsUserSettings();
 
 		if(count($arrNotificationUsersettings)){
