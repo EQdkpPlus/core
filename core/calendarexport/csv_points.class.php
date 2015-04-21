@@ -50,13 +50,13 @@ if(!function_exists('CSVpointexport')){
 		
 		$arrPoints = $arrMember = array();
 		foreach($attendees as $id_attendees=>$d_attendees){
-			$arrPoints[] = (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => false)) : 0;
+			$arrPoints[] = (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval($this->config->get('show_twinks'))) ? 0 : 1)) : 0;
 			$arrMember[] = array(
 				'id'			=> $id_attendees,
 				'name'			=> unsanitize(registry::register('plus_datahandler')->get('member', 'name', array($id_attendees))),
 				'status'		=> $d_attendees['signup_status'],
 				'guest'			=> false,
-				'point'			=> (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => false)) : 0,
+				'point'			=> (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval($this->config->get('show_twinks'))) ? 0 : 1)) : 0,
 			);
 		}
 
