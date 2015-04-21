@@ -70,7 +70,7 @@ class hfile extends html {
 		$out .= ' />';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
 		if ($this->preview){
-			$out = '<img src="'.((isset($this->value)) ? $this->value : registry::get_const('server_path').'images/global/default-image.svg').'" class="uploadPreview" style="max-height: 60px;"/>'.$out;
+			$out = '<img src="'.((isset($this->value) && $this->value) ? $this->value : registry::get_const('server_path').'images/global/default-image.svg').'" class="uploadPreview" style="max-height: 60px;"/>'.$out;
 			
 			register('tpl')->add_js('
 			function previewImage_'.$this->name.'(object) {
