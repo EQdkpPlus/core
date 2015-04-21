@@ -54,6 +54,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 						$end_cronjob		= $this->time->time+((($this->config->get('calendar_repeat_crondays') > 0) ? $this->config->get('calendar_repeat_crondays') : 40) * 86400);
 						$timezone			= $this->pdh->get('calendar_events', 'timezone', array($parentid));
 						$repeating_value	= $this->pdh->get('calendar_events', 'repeating', array($parentid));
+						$repeating_value	= ($repeating_value > 1) ? $repeating_value : 1;
 						$rptbl_period		= 86400*$repeating_value;
 
 						// if the calendar id is < 1, continue
