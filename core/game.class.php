@@ -43,6 +43,7 @@ class game extends gen_class {
 								'events'	=> 'images/events/',
 							);
 	public $obj				= array();
+	private	$blnClassUpdateChecked = false;
 
 	//fill data with gameinfos (classes, races, factions, filters, etc.)
 	public function __construct($installer=false, $lang_name=''){
@@ -111,8 +112,7 @@ class game extends gen_class {
 			$this->gameinfo()->flush($type);
 		}
 		$this->gameinfo()->flush($this->gameinfo()->lang, true);
-		
-		if(!defined("INSTALLER")) $this->autoUpdateClassProfileFields();
+
 		return true;
 	}
 
@@ -618,6 +618,11 @@ class game extends gen_class {
 	 * @return 	string
 	 */
 	public function get_primary_class($returnName = false) {
+		if(!$this->blnClassUpdateChecked){
+			$this->autoUpdateClassProfileFields();
+			$this->blnClassUpdateChecked = true;
+		}
+		
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		foreach($class_dep as $class) {
 			if(isset($class['primary']) && $class['primary']) {
