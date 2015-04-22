@@ -141,12 +141,12 @@ class wbb41_bridge extends bridge_generic {
 				$strSessionID = $arrResult['sessionID'];
 				
 				//Check if there is an existing virtual Session
-				$objQuery = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."session WHERE sessionID=? AND ipAddress=? AND userAgent=?")->execute($arrResult['sessionID'], $arrSet['ipAddress'], $arrSet['userAgent']);
+				$objQuery = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."session_virtual WHERE sessionID=? AND ipAddress=? AND userAgent=?")->execute($arrResult['sessionID'], self::getIpAddress(), $this->env->useragent);
 				if($objQuery){
 					$intResult = $objQuery->numRows;
 					if($intResult > 0){
 						//There is a existing virtual Session, use this Session ID
-						$this->bridgedb->prepare("UPDATE ".$this->prefix."session :p WHERE sessionID=? AND ipAddress=? AND userAgent=?")->set(array('lastActivityTime' => time()))->execute($arrResult['sessionID'], $arrSet['ipAddress'], $arrSet['userAgent']);
+						$this->bridgedb->prepare("UPDATE ".$this->prefix."session_virtual :p WHERE sessionID=? AND ipAddress=? AND userAgent=?")->set(array('lastActivityTime' => time()))->execute($arrResult['sessionID'], self::getIpAddress(), $this->env->useragent);
 					} else {
 						//Create a new virtual Session for this IP and Useragent
 						$arrVirtualSet = array(
