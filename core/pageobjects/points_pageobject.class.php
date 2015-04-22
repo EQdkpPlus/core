@@ -153,7 +153,7 @@ class points_pageobject extends pageobject {
 			if (!$this->config->get('disable_points')){
 				$myleaderboard			= registry::register('html_leaderboard');
 				$this->tpl->assign_vars(array (
-						'LEADERBOARD'				=> $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings),
+						'LEADERBOARD' => $myleaderboard->get_html_leaderboard($lb_id, $view_list, $leaderboard_settings, !$show_twinks),
 				));
 			}
 		}

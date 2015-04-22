@@ -28,7 +28,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 		private $mdkpid;
 		private $vpre;
 
-		public function get_html_leaderboard($mdkpid, $view_list, $settings) {
+		public function get_html_leaderboard($mdkpid, $view_list, $settings, $with_twinks=false) {
 			$arrMdkpIDList = $this->pdh->get('multidkp', 'id_list');
 			$this->mdkpid = ($mdkpid) ? $mdkpid : $settings['default_pool'];
 			$this->mdkpid = (in_array($this->mdkpid, $arrMdkpIDList)) ? $this->mdkpid : ((isset($arrMdkpIDList[0])) ? $arrMdkpIDList[0] : 0);
@@ -63,6 +63,9 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<table class="table fullwidth leaderboard scrollable-x">';
 			$colnr = 0;
+			
+			$with_twinks = ($with_twinks === false) ? (!intval($this->config->get('show_twinks'))) : $with_twinks;
+			
 			foreach($columns as $col) {
 				if(!isset($column_list[$col])) continue;
 				$member_ids = $column_list[$col];
@@ -73,7 +76,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 				$rows = ($max_member < count($member_ids)) ? $max_member : count($member_ids);
 				for($i=0; $i<$rows; $i++){
-					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], register('routing')->build('character', false, false,false), '', false,false,true,true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%use_controller%' => true, '%with_twink%' => !intval($this->config->get('show_twinks')))).'</td></tr>';
+					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], register('routing')->build('character', false, false,false), '', false,false,true,true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%use_controller%' => true, '%with_twink%' => $with_twinks)).'</td></tr>';
 				}
 				$leaderboard .= '</table></td>';
 				$colnr++;
