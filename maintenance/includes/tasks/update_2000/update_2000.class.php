@@ -589,6 +589,9 @@ class update_2000 extends sql_update_task {
 		$profiledata = array();
 		while($objQuery && $row = $objQuery->fetchAssoc()) {
 			$profiledata			= $this->xmltools->Database2Array($row['profiledata']);
+			foreach($profiledata as $key => $val){
+				if(!is_numeric($val)) $profiledata[$key] = filter_var($val, FILTER_SANITIZE_STRING);
+			}
 			$profiledata['class']	= $row['class'];
 			$profiledata['race']	= $row['race'];
 			$profiledata['level']	= $row['level'];
