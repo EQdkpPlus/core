@@ -112,7 +112,7 @@ if (!class_exists("environment")) {
 		}
 
 		private function get_useragent(){
-			$strUserAgent = (!empty($_SERVER['HTTP_USER_AGENT']))	? $_SERVER['HTTP_USER_AGENT']	: $_ENV['HTTP_USER_AGENT'];
+			$strUserAgent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT']	: $_ENV['HTTP_USER_AGENT'];
 			$strUserAgent = strip_tags($strUserAgent);
 			$strUserAgent = preg_replace('/javascript|vbscri?pt|script|applet|alert|document|write|cookie/i', '', $strUserAgent);
 			return $strUserAgent;
@@ -130,16 +130,18 @@ if (!class_exists("environment")) {
 
 		private function get_request_query(){
 			$strRequest = (!empty($_SERVER['QUERY_STRING'])) ? '?' . $_SERVER['QUERY_STRING'] : '';
+			if(defined('URL_COMPMODE')) $strRequest = str_replace($this->path(), '', $strRequest);
 			return $this->clean_request($strRequest);
 		}
 
 		private function get_eqdkp_request_page(){
-			$strPage = $this->clean_request($this->get_request());
+			$strPage = ((defined('URL_COMPMODE')) ? 'index.php/' : '').$this->clean_request($this->get_request());
 			return $strPage;
 		}
 
 		public function get_current_page($blnWithQuery = true){
 			$strPage = $this->clean_request($this->get_request());
+			if(defined('URL_COMPMODE')) $strPage = 'index.php/'.$strPage;
 			$url_parts = parse_url($strPage);
 			$path_parts = isset($url_parts['path']) ? pathinfo($url_parts['path']) : array();
 			$retStrPage = ((isset($path_parts['dirname']) && $path_parts['dirname'] != '' && $path_parts['dirname'] != '.') ? $path_parts['dirname'].'/' : '').((isset($path_parts['filename'])) ? $path_parts['filename'] : '');
@@ -199,6 +201,12 @@ if (!class_exists("environment")) {
 		}
 		
 		public function path(){
+			if(defined('URL_COMPMODE')){
+				$arrParts = explode("&", $_SERVER['QUERY_STRING']);
+				if(isset($arrParts[0])) return $arrParts[0];
+				return "";
+			}
+			
 			$path_info = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
 			if (!strlen($path_info)) return '';
 			return filter_var($path_info, FILTER_SANITIZE_STRING);
