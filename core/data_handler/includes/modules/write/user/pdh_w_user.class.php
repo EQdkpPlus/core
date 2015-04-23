@@ -303,6 +303,14 @@ if(!class_exists('pdh_w_user')) {
 			
 			//Delete Avatars
 			$this->pfh->Delete('users/'.$user_id, 'files');
+			$intAvatarType = intval($this->pdh->get('user', 'custom_fields', array($user_id, 'user_avatar_type')));
+			if($intAvatarType == 1 || $this->config->get('gravatar_defaultavatar')){
+				include_once $this->root_path.'core/gravatar.class.php';
+				$gravatar = registry::register('gravatar');
+				$gravatar->deleteAvatar($this->pdh->get('user', 'email', array($user_id)), 400);
+				$gravatar->deleteAvatar($this->pdh->get('user', 'email', array($user_id)), 68);
+			}
+			
 			$strAvatar = $this->pdh->get('user', 'avatarimglink', array($user_id));
 			if (strlen($strAvatar)) $this->pfh->Delete($strAvatar);
 			

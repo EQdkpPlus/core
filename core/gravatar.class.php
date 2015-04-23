@@ -42,6 +42,14 @@ class gravatar extends gen_class {
 		return $strCachedImage;
 	}
 	
+	public function deleteAvatar($strEmail, $intSize=64){
+		$strHash = $this->buildHash($strEmail);
+		$strCachedImage = $this->getCachedImage($strHash, $intSize);
+		if($strCachedImage){
+			$this->pfh->Delete($strCachedImage);
+		}
+	}
+	
 	public function getCachedImage($strHash, $intSize){
 		$strImage = $strHash.'_'.$intSize.'.jpg';
 		
