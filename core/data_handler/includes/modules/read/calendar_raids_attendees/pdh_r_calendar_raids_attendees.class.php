@@ -356,7 +356,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 			
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 		}
 
@@ -373,7 +373,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 1, $days);
 			}
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 			
 		}
@@ -391,7 +391,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 2, $days);
 			}
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 		}
 		
@@ -409,7 +409,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 			
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 		}
 		
@@ -429,7 +429,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 0, $from, $to);
 			}
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
 		
@@ -447,7 +447,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 			
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 				
 		}
@@ -465,7 +465,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 2, $from, $to);
 			}
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
 		
@@ -482,7 +482,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 3, $from, $to);
 			}
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
-			$percentage				= runden(($number_of_raids_att/$number_of_raids_all)*100);
+			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
 		
