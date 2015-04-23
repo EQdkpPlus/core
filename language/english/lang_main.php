@@ -694,6 +694,7 @@ $lang = array(
 	"calendar_export_dl_ical" => 'Download *.ics',
 	"calendar_export_download" => 'Download Events',
 	"raidevent_raidleader" => 'Raidleader',
+	"raidevent_export_seperator" => "CSV Seperator:",
 	"raidevent_no_guest_note" => 'No note available',
 	"raidevent_autogroups" => 'Automatic adding (Groups)',
 	"raidevent_value" => 'Points for this raid',

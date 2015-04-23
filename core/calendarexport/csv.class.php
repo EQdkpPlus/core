@@ -27,7 +27,7 @@ $rpexport_plugin['csv.class.php'] = array(
 	'name'			=> 'CSV',
 	'function'		=> 'CSVexport',
 	'contact'		=> 'webmaster@wallenium.de',
-	'version'		=> '1.0.0');
+	'version'		=> '2.0.0');
 
 if(!function_exists('CSVexport')){
 	function CSVexport($raid_id){
@@ -54,16 +54,18 @@ if(!function_exists('CSVexport')){
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\']").change(function (){
+			$("input[type=\'checkbox\'], #ip_seperator").change(function (){
 				genOutput()
 			});
+			
 		', "docready");
 
 		registry::register('template')->add_js('
 		function genOutput(){
 			var attendee_data = '.$json.';
-			output = "";
+			var data = [];
 
+			ip_seperator	= ($("#ip_seperator").val() != "") ? $("#ip_seperator").val() : ",";
 			cb_guests		= ($("#cb_guests").attr("checked")) ? true : false;
 			cb_confirmed	= ($("#cb_confirmed").attr("checked")) ? true : false;
 			cb_signedin		= ($("#cb_signedin").attr("checked")) ? true : false;
@@ -71,10 +73,10 @@ if(!function_exists('CSVexport')){
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					output += item.name + " ";
+					data.push(item.name);
 				}
 			});
-			$("#attendeeout").html(output.substring(0, output.length0));
+			$("#attendeeout").html(data.join(ip_seperator));
 		}
 			');
 
@@ -82,6 +84,7 @@ if(!function_exists('CSVexport')){
 		$text .= "<input type='checkbox' checked='checked' name='guests' id='cb_guests' value='true'> ".registry::fetch('user')->lang('raidevent_raid_guests');
 		$text .= "<input type='checkbox' checked='checked' name='signedin' id='cb_signedin' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 1));
 		$text .= "<input type='checkbox' name='backup' id='cb_backup' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 3));
+		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_seperator')." <input type='text' name='seperator' id='ip_seperator' value=',' size='4' />";
 		$text .= "<br/>";
 		$text .= "<textarea name='group".rand()."' id='attendeeout' cols='60' rows='10' onfocus='this.select()' readonly='readonly'>";
 		$text .= "</textarea>";
