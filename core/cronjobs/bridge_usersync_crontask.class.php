@@ -51,14 +51,14 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 			$arrCMSUsernames = array();
 			foreach($a as $val){
 				$id = intval($val['id']);
-				if ($this->bridge->check_user_group($id)){
-					$arrUser[] = $val;
-				}
+				$arrUser[] = $val;
 				$arrCMSUsernames[] = clean_username($val['name']);
 			}
 		
 			foreach($arrUser as $arrUserdata){
 				if ($this->pdh->get('user', 'check_username', array($arrUserdata['name'])) != 'false'){
+					if(!$this->bridge->check_user_group($id)) continue;
+					
 					//Neu anlegen
 					$salt = $this->user->generate_salt();
 					$strPassword = random_string(false, 32);
@@ -66,6 +66,10 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					
 					$user_id = $this->pdh->put('user', 'insert_user_bridge', array($arrUserdata['name'], $strPwdHash.':'.$salt, $arrUserdata['email'], false));
 					$this->pdh->process_hook_queue();
+					//Sync Usergroups
+					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
+				} else {
+					$user_id = $this->pdh->get('user', 'userid', array($arrUserdata['name']));
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
 				}
