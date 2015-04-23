@@ -57,7 +57,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 		
 			foreach($arrUser as $arrUserdata){
 				if ($this->pdh->get('user', 'check_username', array($arrUserdata['name'])) != 'false'){
-					if(!$this->bridge->check_user_group($id)) continue;
+					if(!$this->bridge->check_user_group($arrUserdata['id'])) continue;
 					
 					//Neu anlegen
 					$salt = $this->user->generate_salt();
