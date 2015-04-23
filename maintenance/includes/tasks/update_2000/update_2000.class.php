@@ -724,7 +724,7 @@ class update_2000 extends sql_update_task {
 						'last_edited_user'	=> $row['page_edit_user'],
 						'page_objects'		=> serialize(array()),
 						'hide_header'		=> 0,
-						'index'				=> (strpos($strAlias, "index_") ===0) ? 1 : 0,
+						'`index`'				=> (strpos($strAlias, "index_") ===0) ? 1 : 0,
 				))->execute();
 			}
 			$this->db->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
