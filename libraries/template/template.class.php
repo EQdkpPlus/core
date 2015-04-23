@@ -160,8 +160,10 @@ class template extends gen_class {
 	/**
 	* Assign custom JS File to the Header
 	*/
-	public function js_file($varval){
-		$this->tpl_output['js_file'][] = array('file' => $varval);
+	public function js_file($varval, $key=false){
+		if($key !== false){
+			$this->tpl_output['js_file'][$key] = array('file' => $varval);
+		} else $this->tpl_output['js_file'][] = array('file' => $varval);
 	}
 
 	public function staticHTML($varval){
@@ -370,7 +372,7 @@ class template extends gen_class {
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.js';
 		
 		if (is_file($combinedFile)){
-			array_push($this->tpl_output['js_file'], array('file' => $combinedFile));
+			array_unshift($this->tpl_output['js_file'], array('file' => $combinedFile));
 			
 			return file_get_contents($combinedFile);
 		} else {
@@ -393,7 +395,7 @@ class template extends gen_class {
 			
 			$this->pfh->putContent($combinedFile, $strJS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.js');
-			$this->tpl_output['js_file'][] = array('file' => $combinedFile);
+			array_unshift($this->tpl_output['js_file'], array('file' => $combinedFile));
 			return $strJS;
 		}
 		return "";
