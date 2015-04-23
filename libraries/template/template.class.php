@@ -209,11 +209,8 @@ class template extends gen_class {
 		
 		if (is_array($this->tpl_output['css_file'])){
 			foreach($this->tpl_output['css_file'] as $key => $val){
-				if ($this->server_path == "/") {
-					$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
-				} else {
-					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
-				}
+				$val['file'] = $this->env->server_to_rootpath($val['file']);
+
 				//Resolve file
 				$val['orig_file'] = $val['file'];
 				$val['file'] = $this->resolve_css_file($val['file']);
@@ -281,11 +278,8 @@ class template extends gen_class {
 	
 		if (is_array($this->tpl_output['css_file'])){
 			foreach($this->tpl_output['css_file'] as $key => $val){
-				if ($this->server_path == "/") {
-					$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
-				} else {
-					$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
-				}
+				$val['file'] = $this->env->server_to_rootpath($val['file']);
+
 				//Resolve file
 				$origFile = $val['file'];
 				$val['file'] = $this->resolve_css_file($val['file']);
@@ -345,11 +339,7 @@ class template extends gen_class {
 		if (!is_array($this->tpl_output['js_file'])) $this->tpl_output['js_file'] = array();
 
 		foreach($this->tpl_output['js_file'] as $key => $val){
-			if ($this->server_path == "/") {
-				$val['file'] = $this->root_path.str_replace($this->root_path, "", $val['file']);
-			} else {
-				$val['file'] = str_replace($this->server_path, $this->root_path, $val['file']);
-			}
+			$val['file'] = $this->env->server_to_rootpath($val['file']);
 			
 			//Put the jquery lang file at the end of all other JS files
 			if (pathinfo($val['file'], PATHINFO_FILENAME) == 'lang_jquery'){
@@ -663,11 +653,7 @@ class template extends gen_class {
 		$output = '';
 
 		foreach($array as $item){
-			if ($this->server_path == "/") {
-				$relative_file = $this->root_path.str_replace($this->root_path, "", $item['file']);
-			} else {
-				$relative_file = str_replace($this->server_path, $this->root_path, $item['file']);
-			}
+			$relative_file = $this->env->server_to_rootpath($item['file']);
 
 			$filetime	= (substr($item['file'],0,4) == "http") ? rand(1,100000000) : @filemtime($relative_file);
 			$type		= (is_array($item) && isset($item['type'])) ? "' type='".$item['type']."'" : '';

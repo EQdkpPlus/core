@@ -539,6 +539,28 @@ if (!class_exists("environment")) {
 			}
 			return false;
 		}
+		
+		public function server_to_rootpath($strPath){
+			//String starts with the server_path
+			if(stripos($strPath, $this->server_path ) === 0){
+				$strPath = $this->root_path.substr($strPath, strlen($this->server_path));
+			} elseif(stripos($strPath, $this->root_path) === false){
+				//String starts not with root_path, means he starts with nothing
+				$strPath = $this->root_path.$strPath;
+			}
+			return $strPath;
+		}
+		
+		public function root_to_serverpath($strPath){
+			if(stripos($strPath, $this->root_path ) === 0){
+				$strPath = $this->server_path.substr($strPath, strlen($this->root_path));
+			} elseif(stripos($strPath, $this->server_path) === false){
+				//String starts not with server_path, means he starts with nothing
+				$strPath = $this->server_path.$strPath;
+			}
+			
+			return $strPath;
+		}
 	}
 }
 ?>
