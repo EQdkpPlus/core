@@ -24,10 +24,10 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $rpexport_plugin['csv_points.class.php'] = array(
-	'name'			=> 'CSV + DKP MDKP1',
+	'name'			=> 'CSV & DKP',
 	'function'		=> 'CSVpointexport',
 	'contact'		=> 'webmaster@wallenium.de',
-	'version'		=> '1.0.0');
+	'version'		=> '2.0.0');
 
 if(!function_exists('CSVpointexport')){
 	function CSVpointexport($raid_id){
@@ -49,7 +49,8 @@ if(!function_exists('CSVpointexport')){
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
 		$mdkp		= 1;			//Change here the Multidkp Pool
-		$a_json		= array();
+		$a_json_d	= array();
+		$a_json_a	= array();
 		
 		$arrPoints = $arrMember = array();
 		foreach($attendees as $id_attendees=>$d_attendees){
@@ -65,7 +66,17 @@ if(!function_exists('CSVpointexport')){
 
 		array_multisort($arrPoints, SORT_NUMERIC, SORT_DESC, $arrMember);
 		foreach($arrMember as $arrData){
-			$a_json[] = array(
+			$a_json_d[] = array(
+				'name'		=> $arrData['name'],
+				'status'	=> $arrData['status'],
+				'guest'		=> $arrData['guest'],
+				'point'		=> $arrData['point'],
+			);
+		}
+		
+		array_multisort($arrPoints, SORT_NUMERIC, SORT_ASC, $arrMember);
+		foreach($arrMember as $arrData){
+			$a_json_a[] = array(
 				'name'		=> $arrData['name'],
 				'status'	=> $arrData['status'],
 				'guest'		=> $arrData['guest'],
@@ -74,29 +85,33 @@ if(!function_exists('CSVpointexport')){
 		}
 
 		foreach($guests as $guestsdata){
-			$a_json[]	= array(
+			$a_json_d[]	= $a_json_a[] = array(
 				'name'		=> $guestsdata['name'],
 				'status'	=> false,
 				'guest'		=> true,
 				'point'		=> 0
 			);
 		}
-		
-		$json = json_encode($a_json);
+
+		$json_asc	= json_encode($a_json_a);
+		$json_desc	= json_encode($a_json_d);
 		unset($a_json);
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\']").change(function (){
+			$("input[type=\'checkbox\'], #ip_seperator, #dd_sorting").change(function (){
 				genOutput()
 			});
 		', "docready");
 
 		registry::register('template')->add_js('
 		function genOutput(){
-			var attendee_data = '.$json.';
-			output = "";
+			var json_asc		= '.$json_asc.';
+			var json_desc		= '.$json_desc.';
+			var attendee_data = ($("#dd_sorting").val() != "asc") ? json_asc : json_desc;
+			var data = [];
 
+			ip_seperator	= ($("#ip_seperator").val() != "") ? $("#ip_seperator").val() : ",";
 			cb_guests		= ($("#cb_guests").attr("checked")) ? true : false;
 			cb_confirmed	= ($("#cb_confirmed").attr("checked")) ? true : false;
 			cb_signedin		= ($("#cb_signedin").attr("checked")) ? true : false;
@@ -104,10 +119,10 @@ if(!function_exists('CSVpointexport')){
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					output += item.name + " " + item.point + " ";
+					data.push(item.name + " " + item.point);
 				}
 			});
-			$("#attendeeout").html(output.substring(0, output.length0));
+			$("#attendeeout").html(data.join(ip_seperator));
 		}
 			');
 
@@ -115,6 +130,11 @@ if(!function_exists('CSVpointexport')){
 		$text .= "<input type='checkbox' checked='checked' name='guests' id='cb_guests' value='true'> ".registry::fetch('user')->lang('raidevent_raid_guests');
 		$text .= "<input type='checkbox' checked='checked' name='signedin' id='cb_signedin' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 1));
 		$text .= "<input type='checkbox' name='backup' id='cb_backup' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 3));
+		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_seperator')." <input type='text' name='seperator' id='ip_seperator' value=',' size='4' />";
+		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_sorting')." <select name='sorting' id='dd_sorting'>
+						<option value='desc'>ASC</option>
+						<option value='asc'>DESC</option>
+					</select>";
 		$text .= "<br/>";
 		$text .= "<textarea name='group".rand()."' id='attendeeout' cols='60' rows='10' onfocus='this.select()' readonly='readonly'>";
 		$text .= "</textarea>";
