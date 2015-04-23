@@ -23,14 +23,14 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-$rpexport_plugin['csv_points.class.php'] = array(
-	'name'			=> 'CSV + DKP MDKP1',
-	'function'		=> 'CSVpointexport',
+$rpexport_plugin['csv_position.class.php'] = array(
+	'name'			=> 'CSV + SKS MDKP1',
+	'function'		=> 'CSVpositionexport',
 	'contact'		=> 'webmaster@wallenium.de',
-	'version'		=> '1.0.0');
+	'version'		=> '1.1.0');
 
-if(!function_exists('CSVpointexport')){
-	function CSVpointexport($raid_id){
+if(!function_exists('CSVpositionexport')){
+	function CSVpositionexport($raid_id){
 		$presets = array(
 			array('name'	=> 'earned', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 			array('name'	=> 'spent', 'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -48,22 +48,22 @@ if(!function_exists('CSVpointexport')){
 
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
-		$mdkp		= 1;			//Change here the Multidkp Pool
+		$mdkp		= 1; 					//Change here the Multidkp Pool
 		$a_json		= array();
 		
 		$arrPoints = $arrMember = array();
 		foreach($attendees as $id_attendees=>$d_attendees){
-			$arrPoints[] = (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval(registry::register('config')->get('show_twinks'))) ? 0 : 1)) : 0;
+			$arrPoints[] = (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval(registry::register('config')->get('show_twinks'))) ? 0 : 1)) : 0; 
 			$arrMember[] = array(
 				'id'			=> $id_attendees,
 				'name'			=> unsanitize(registry::register('plus_datahandler')->get('member', 'name', array($id_attendees))),
 				'status'		=> $d_attendees['signup_status'],
 				'guest'			=> false,
-				'point'			=> (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval(registry::register('config')->get('show_twinks'))) ? 0 : 1)) : 0,
+				'point'			=> (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval(registry::register('config')->get('show_twinks'))) ? 0 : 1)) : 0, 
 			);
 		}
 
-		array_multisort($arrPoints, SORT_NUMERIC, SORT_DESC, $arrMember);
+		array_multisort($arrPoints, SORT_NUMERIC, SORT_ASC, $arrMember);
 		foreach($arrMember as $arrData){
 			$a_json[] = array(
 				'name'		=> $arrData['name'],
@@ -112,7 +112,7 @@ if(!function_exists('CSVpointexport')){
 			');
 
 		$text  = "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));
-		$text .= "<input type='checkbox' checked='checked' name='guests' id='cb_guests' value='true'> ".registry::fetch('user')->lang('raidevent_raid_guests');
+		$text .= "<input type='checkbox' name='guests' id='cb_guests' value='true'> ".registry::fetch('user')->lang('raidevent_raid_guests');
 		$text .= "<input type='checkbox' checked='checked' name='signedin' id='cb_signedin' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 1));
 		$text .= "<input type='checkbox' name='backup' id='cb_backup' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 3));
 		$text .= "<br/>";
