@@ -71,10 +71,10 @@ if(!function_exists('CSVexport')){
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					output += item.name + ",";
+					output += item.name + " ";
 				}
 			});
-			$("#attendeeout").html(output.substring(0, output.length-1));
+			$("#attendeeout").html(output.substring(0, output.length0));
 		}
 			');
 
