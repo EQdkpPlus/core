@@ -197,7 +197,7 @@ class wbb41_bridge extends bridge_generic {
 			}
 		} else $config['cookie_domain'] = $this->config->get('cmsbridge_sso_cookiedomain');
 		
-		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiedomain') : '/';
+		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiepath') : '/';
 
 		//SID Cookie
 		setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
@@ -272,7 +272,7 @@ class wbb41_bridge extends bridge_generic {
 			}
 		} else $config['cookie_domain'] = $this->config->get('cmsbridge_sso_cookiedomain');
 		
-		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiedomain') : '/';
+		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiepath') : '/';
 		
 		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 		setcookie($config['cookie_prefix'].'userID', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
