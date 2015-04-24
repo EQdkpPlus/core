@@ -256,6 +256,9 @@ class template extends gen_class {
 			}
 
 			if(strlen($strCSS)){
+				//Parse LESS
+				$strCSS = $this->parseLess($strCSS);
+				
 				if(!defined('DISABLE_CSS_MINIFY')){
 					$minify = new Minify_CSS();
 					$strCSS = $minify->minify($strCSS);
@@ -298,6 +301,8 @@ class template extends gen_class {
 					}
 
 					$strContent = $this->replace_paths_css($strContent, false, false, $strPathDir);
+					
+					$strContent = $this->parseLess($strContent, 'dev_'.$strFilename);
 					
 					$combinedFile = $storage_folder.$this->style_code.'/dev_'.$strFilename.'.css';
 					$this->pfh->putContent($combinedFile, "/* ".$strFile."*/ \r\n\n\n".$strContent);
@@ -1580,6 +1585,115 @@ class template extends gen_class {
 	private function strip_tags_php(&$code){
 		$code = preg_replace(array("#<([\?%])=?.*?\1>#s", "#<\?php(?:\r\n?|[ \n\t]).*?\?>#s"), '', $code);
 	}
+	
+	public function parseLess($strCSS, $strMapFile=false){
+		$style = ($data) ? $data : $this->user->style;
+		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
+		$root_path = '../../../../../';
+		
+		//Background Image
+		$template_background_file = "";
+		switch($style['background_type']){
+			//Game
+			case 1: $template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+			break;
+		
+			//Own
+			case 2:
+				if ($style['background_img'] != ''){
+					if (strpos($style['background_img'],'://') > 1){
+						$template_background_file = $style['background_img'];
+					} else {
+						$template_background_file = $root_path.$style['background_img'];
+					}
+				}
+				break;
+		
+				//Style
+			default:
+				if(is_file($this->root_path . 'templates/' . $style['template_path'] . '/images/template_background.png')){
+					$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.png';
+				} else {
+					$template_background_file	= $root_path . 'templates/' . $style['template_path'] . '/images/template_background.jpg';
+				}
+		}
+		if($template_background_file == ""){
+			//Cannot find a background file, let's take the game specific
+			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
+		}
+		
+		
+		$options = array();
+		$lessVars = array(
+			'eqdkpRootPath' => '"'.$root_path.'"',
+			'eqdkpImagePath'=> '"'.$root_path.'images/"',
+			'eqdkpTemplateImagePath' => '"'.$root_path.'templates/'.$stylepath.'/images/"',
+			'eqdkpTemplateBackground' => '"'.$template_background_file.'"',
+			
+			'eqdkpTemplateBackgroundPositions' => (($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
+			'eqdkpPortalWidth' => $style['portal_width'],
+			'eqdkpColumnLeftWidth' => $style['column_left_width'],
+			'eqdkpColumnRightWidth' => $style['column_right_width'],
+			'eqdkpPortalWidthWithoutBothColumns' => (intval($style['portal_width']) - intval($style['column_left_width']) - intval($style['column_right_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
+			'eqdkpPortalWidthWithoutLeftColumn' => (intval($style['portal_width']) - intval($style['column_left_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
+			'eqdkpFontface1' => $style['fontface1'],
+			'eqdkpFontface2' => $style['fontface2'],
+			'eqdkpFontface3' => $style['fontface3'],
+			'eqdkpFontsize1' => $style['fontsize1'],
+			'eqdkpFontsize2' => $style['fontsize2'],
+			'eqdkpFontsize3' => $style['fontsize3'],
+			'eqdkpFontcolor1' => $style['fontcolor1'],
+			'eqdkpFontcolor2' => $style['fontcolor2'],
+			'eqdkpFontcolor3' => $style['fontcolor3'],
+			'eqdkpFontcolorNegative' => $style['fontcolor_neg'],
+			'eqdkpFontcolorPositive' => $style['fontcolor_pos'],
+			'eqdkpBodyBackground' => $style['body_background'],
+			'eqdkpTableBorderWidth' => $style['table_border_width'],
+			'eqdkpTableBorderColor' => $style['table_border_color'],
+			'eqdkpTableBorderStyle' => $style['table_border_style'],
+			'eqdkpBodyLinkStyle' =>	$style['body_link_style'],
+			'eqdkpBodyLink' =>	$style['body_link'],
+			'eqdkpBodyLinkStyleHover' =>	$style['body_hlink_style'],
+			'eqdkpBodyLinkHover' =>	$style['body_hlink'],
+			'eqdkpHeaderLinkStyle' =>	$style['header_link_style'],
+			'eqdkpHeaderLink' =>	$style['header_link'],
+			'eqdkpHeaderLinkStyleHover' =>	$style['header_hlink_style'],
+			'eqdkpHeaderLinkHover' =>	$style['header_hlink'],
+			'eqdkpTableHeadColor1' =>	$style['th_color1'],
+			'eqdkpTableRowColor1' =>	$style['tr_color1'],
+			'eqdkpTableRowColor2' =>	$style['tr_color2'],
+			'eqdkpInputColor' =>	$style['input_color'],
+			'eqdkpInputBorderWidth' =>	$style['input_border_width'],
+			'eqdkpInputBorderColor' =>	$style['input_border_color'],
+			'eqdkpInputBorderStyle' =>	$style['input_border_style'],
+		);
+		
+		try{
+			
+			if($strMapFile){
+				$options['sourceMap']        = true;
+				$options['sourceMapWriteTo'] = $this->pfh->FolderPath('less', 'cache').$strMapFile.'.map';
+				$options['sourceMapURL']     = $this->pfh->FolderPath('less', 'cache', 'absolute').$strMapFile.'.map';
+			}
+			
+			include_once $this->root_path.'libraries/less/Less.php';
+			$options['cache_dir'] = $this->pfh->FolderPath('less', 'cache');
+
+			$parser = new Less_Parser($options);
+			
+			$strVariables;
+			
+			
+			$parser->ModifyVars( $lessVars );
+			$parser->parse( $strCSS );
+			$strCSS = $parser->getCss();
+		}catch(Exception $e){
+			$error_message = $e->getMessage();
+			var_dump("Error parsing less-File: ".$error_message);
+		}
+		return $strCSS;
+	}
+
 
 	public function __destruct() {
 		$this->_data = array();

@@ -42,9 +42,7 @@ class controller extends gen_class {
 		if ($this->in->exists('savevote')){
 			$this->saveRating();
 		}
-		
-		//$this->ntfy->add("comment_new_article", 15, "Pep", "index.php/News/New-features.html{SID}#comments", 1, "Neue Funktionen von EQdkp Plus", 2);
-		
+
 		$this->display();
 	}
 	
