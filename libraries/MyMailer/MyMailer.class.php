@@ -129,7 +129,7 @@ class MyMailer extends PHPMailer {
 	private function Template($templatename, $inputs){
 		// Check if the template is from a file or not
 		if($this->myoptions['template_type'] == 'input'){
-			$body	= $templatename;
+			$body	= $templatename.nl2br($this->Signature);
 		}else{
 			//Specific Email Template
 			if (strpos($templatename, $this->root_path) === 0){
