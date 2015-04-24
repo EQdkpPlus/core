@@ -542,8 +542,9 @@ if (!class_exists("environment")) {
 		
 		public function server_to_rootpath($strPath){
 			//String starts with the server_path
-			if(stripos($strPath, $this->server_path ) === 0){
-				$strPath = $this->root_path.substr($strPath, strlen($this->server_path));
+			$strServerpath = $this->config->get('server_path');
+			if(stripos($strPath, $strServerpath ) === 0){
+				$strPath = $this->root_path.substr($strPath, strlen($strServerpath));
 			} elseif(stripos($strPath, $this->root_path) === false){
 				//String starts not with root_path, means he starts with nothing
 				$strPath = $this->root_path.$strPath;
@@ -552,11 +553,12 @@ if (!class_exists("environment")) {
 		}
 		
 		public function root_to_serverpath($strPath){
+			$strServerpath = $this->config->get('server_path');
 			if(stripos($strPath, $this->root_path ) === 0){
-				$strPath = $this->server_path.substr($strPath, strlen($this->root_path));
-			} elseif(stripos($strPath, $this->server_path) === false){
+				$strPath = $strServerpath.substr($strPath, strlen($this->root_path));
+			} elseif(stripos($strPath, $strServerpath) === false){
 				//String starts not with server_path, means he starts with nothing
-				$strPath = $this->server_path.$strPath;
+				$strPath = $strServerpath.$strPath;
 			}
 			
 			return $strPath;
