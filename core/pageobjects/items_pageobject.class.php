@@ -183,7 +183,7 @@ class items_pageobject extends pageobject {
 		}
 
 		// Set the search array
-		if($filter_type){
+		if($filter_type != ""){
 			foreach($view_list as $item_id){
 				if(preg_match("/".$mySearch."/i", $this->pdh->get('item', $filter_type, array($item_id)))){
 					$filtered_list[] = $item_id;

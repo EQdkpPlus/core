@@ -269,9 +269,10 @@ if( !class_exists( "cachePagination" ) ) {
 				$objQuery = $this->db->query($strQuery);
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
-						$this->index[] = $row[$this->strID];
+						$this->index[$row[$this->strID]] = $row[$this->strID];
 					}
 				}
+				
 				$this->pdc->put('pdh_'.$this->strCacheKey.'_index', $this->index, null);
 			}
 			return true;
@@ -295,7 +296,7 @@ if( !class_exists( "cachePagination" ) ) {
 		public function initObject($intObjectID){
 			$intChunkID = $this->calculateChunkID($intObjectID);
 
-			if (!in_array($intObjectID, $this->index)) return false;
+			if (!isset($this->index[$intObjectID])) return false;
 			
 			if (!isset($this->data[$intChunkID])){
 				//Load Chunk
