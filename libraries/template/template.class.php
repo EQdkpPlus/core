@@ -257,7 +257,9 @@ class template extends gen_class {
 
 			if(strlen($strCSS)){
 				//Parse LESS
-				$strCSS = $this->parseLess($strCSS);
+				if(!defined('DISABLE_LESS')){
+					$strCSS = $this->parseLess($strCSS);
+				}
 				
 				if(!defined('DISABLE_CSS_MINIFY')){
 					$minify = new Minify_CSS();
@@ -1625,6 +1627,8 @@ class template extends gen_class {
 		
 		$options = array();
 		$lessVars = array(
+			'eqdkpURL'		=> '"'.$this->env->link.'"',
+			'eqdkpServerPath' => '"'.$this->server_path.'"',
 			'eqdkpRootPath' => '"'.$root_path.'"',
 			'eqdkpImagePath'=> '"'.$root_path.'images/"',
 			'eqdkpTemplateImagePath' => '"'.$root_path.'templates/'.$stylepath.'/images/"',
@@ -1668,29 +1672,15 @@ class template extends gen_class {
 			'eqdkpInputBorderStyle' =>	$style['input_border_style'],
 		);
 		
-		try{
-			
-			if($strMapFile){
-				$options['sourceMap']        = true;
-				$options['sourceMapWriteTo'] = $this->pfh->FolderPath('less', 'cache').$strMapFile.'.map';
-				$options['sourceMapURL']     = $this->pfh->FolderPath('less', 'cache', 'absolute').$strMapFile.'.map';
-			}
-			
-			include_once $this->root_path.'libraries/less/Less.php';
-			$options['cache_dir'] = $this->pfh->FolderPath('less', 'cache');
-
-			$parser = new Less_Parser($options);
-			
-			$strVariables;
-			
-			
-			$parser->ModifyVars( $lessVars );
-			$parser->parse( $strCSS );
-			$strCSS = $parser->getCss();
-		}catch(Exception $e){
-			$error_message = $e->getMessage();
-			var_dump("Error parsing less-File: ".$error_message);
+		try {
+			include_once $this->root_path.'libraries/less/lessc.inc.php';
+			$less = new lessc;
+			//$less->setVariables($lessVars);
+			$strCSS = $less->compile($strCSS);
+		} catch (exception $e) {
+			echo "fatal error parsing less: " . $e->getMessage();
 		}
+		
 		return $strCSS;
 	}
 
