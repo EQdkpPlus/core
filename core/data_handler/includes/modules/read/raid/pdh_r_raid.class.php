@@ -62,13 +62,13 @@ if(!class_exists('pdh_r_raid')){
 			$this->apa->enqueue_update('raid', $apaAffectedIDs);
 				
 			$affected_ids = (empty($affected_ids) || !$affected_ids) ? false : $affected_ids;
-			$this->objPagination = register("cachePagination", array("raids", "raid_id", "__raids", array('additionalData' => "SELECT member_id, raid_id as object_key FROM __raid_attendees WHERE raid_id >= ? AND raid_id"), 200));
+			$this->objPagination = register("cachePagination", array("raids", "raid_id", "__raids", array('additionalData' => "SELECT member_id, raid_id as object_key FROM __raid_attendees WHERE raid_id >= ? AND raid_id"), 100));
 			return $this->objPagination->reset($affected_ids);
 		}
 	
 		//Finished
 		public function init(){
-			$this->objPagination = register("cachePagination", array("raids", "raid_id", "__raids", array('additionalData' => "SELECT member_id, raid_id as object_key FROM __raid_attendees WHERE raid_id >= ? AND raid_id"), 200));
+			$this->objPagination = register("cachePagination", array("raids", "raid_id", "__raids", array('additionalData' => "SELECT member_id, raid_id as object_key FROM __raid_attendees WHERE raid_id >= ? AND raid_id"), 100));
 			$this->objPagination->initIndex();
 			$this->index = $this->objPagination->getIndex();
 		}

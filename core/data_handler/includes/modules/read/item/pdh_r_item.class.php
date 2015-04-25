@@ -65,13 +65,13 @@ if(!class_exists('pdh_r_item')){
 			$this->apa->enqueue_update('item', $apaAffectedIDs);
 			
 			$affected_ids = (empty($affected_ids) || !$affected_ids) ? false : $affected_ids;
-			$this->objPagination = register("cachePagination", array("items", "item_id", "__items", array(), 500));
+			$this->objPagination = register("cachePagination", array("items", "item_id", "__items", array(), 250));
 			return $this->objPagination->reset($affected_ids);
 		}
 		
 		//Finished
 		public function init(){
-			$this->objPagination = register("cachePagination", array("items", "item_id", "__items", array(), 500));
+			$this->objPagination = register("cachePagination", array("items", "item_id", "__items", array(), 250));
 			$this->objPagination->initIndex();
 			$this->index = $this->objPagination->getIndex();
 		}
