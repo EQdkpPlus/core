@@ -7,7 +7,7 @@
 	<column_right_width>0px</column_right_width>
 	<column_left_width>0px</column_left_width>
 	<portal_width>0px</portal_width>
-	<background_pos></background_pos>
+	<background_pos>normal</background_pos>
 	<background_type>0</background_type>
 	<body_background_color>rgb(46, 120, 176)</body_background_color>
 	<body_font_color>rgb(255, 255, 255)</body_font_color>

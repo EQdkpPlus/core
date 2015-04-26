@@ -60,7 +60,6 @@ if(!class_exists('pdh_w_styles')) {
 				'style_name'	=> $style,
 				'template_path'	=> $style,
 				'enabled'		=> 1,
-				'use_db_vars'	=> 1,	
 			))->execute();
 
 			if ($objQuery){
