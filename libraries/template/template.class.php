@@ -203,7 +203,6 @@ class template extends gen_class {
 				unset($this->tpl_output['css_code'][$key]);
 			}
 		}
-		$data[] = array('content' => $strInlineCSS, 'path' => false);
 			
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
 		
@@ -233,12 +232,14 @@ class template extends gen_class {
 
 		if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
 		
-		if (is_file($combinedFile)){
+		//if (is_file($combinedFile)){
+		if(false){
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 			return $combinedFile;
 		} else {
 			//Generate it
 			$strCSS = "";
+
 			foreach($arrFiles as $key => $strFile){
 				$strOrigFile = $arrOrigFiles[$key];
 				$strContent = file_get_contents($strFile);
@@ -250,6 +251,7 @@ class template extends gen_class {
 
 				$data[] = array('content' => "\r\n/*!\r\n* From File: ".$strFile."\r\n*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
+			$data[] = array('content' => $strInlineCSS, 'path' => false);
 
 			foreach($data as $val){
 				$strCSS .= $this->replace_paths_css($val['content'], false, false, $val['path']);
@@ -1601,6 +1603,16 @@ class template extends gen_class {
 				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name] : '""';
 			}
 		}
+		
+		$gameclasses = $this->game->get_primary_classes();
+		if(isset($gameclasses) && is_array($gameclasses)){
+			foreach($gameclasses as $class_id => $class_name) {
+				$lessVars['eqdkpClasscolor'.$class_id] = ($this->game->get_class_color($class_id) != "") ? $this->game->get_class_color($class_id) : '""';
+			}
+		}
+		
+		d($lessVars);
+		die();
 
 		try {
 			include_once $this->root_path.'libraries/less/lessc.inc.php';
