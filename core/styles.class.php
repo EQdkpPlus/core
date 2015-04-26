@@ -61,6 +61,7 @@ if (!class_exists("styles")){
 			'content_contrast_color',	
 			'content_contrast_background_color',
 			'content_contrast_border_color',
+			'content_highlight_color',
 			'content_positive_color',
 			'content_negative_color',
 			'content_neutral_color',
@@ -98,6 +99,9 @@ if (!class_exists("styles")){
 			'misc_color1',
 			'misc_color2',
 			'misc_color3',
+			'misc_text1',
+			'misc_text2',
+			'misc_text3',
 		);
 
 		public $allowed_extensions = array(
@@ -605,6 +609,7 @@ if (!class_exists("styles")){
 					'content_contrast_color'=> 'color',
 					'content_contrast_background_color'=> 'color',
 					'content_contrast_border_color'=> 'color',
+					'content_highlight_color'=> 'color',
 					'content_positive_color'=> 'color',
 					'content_negative_color'=> 'color',
 					'content_neutral_color'=> 'color',
@@ -656,6 +661,9 @@ if (!class_exists("styles")){
 					'misc_color1' => 'color',
 					'misc_color2' => 'color',
 					'misc_color3' => 'color',
+					'misc_text1' => 'font-family',
+					'misc_text2' => 'font-family',
+					'misc_text3' => 'font-family',
 				)
 			);
 			

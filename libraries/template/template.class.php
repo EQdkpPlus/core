@@ -1578,6 +1578,7 @@ class template extends gen_class {
 		$options = array();
 		$lessVars = array(
 			'eqdkpURL'							=> '"'.$this->env->link.'"',
+			'eqdkpGame'							=> '"'.$this->config->get('default_game').'"',
 			'eqdkpServerPath'					=> '"'.$this->server_path.'"',
 			'eqdkpRootPath'						=> '"'.$root_path.'"',
 			'eqdkpImagePath'					=> '"'.$root_path.'images/"',
@@ -1609,6 +1610,9 @@ class template extends gen_class {
 				$lessVars['eqdkpClasscolor'.$class_id] = ($this->game->get_class_color($class_id) != "") ? $this->game->get_class_color($class_id) : '""';
 			}
 		}
+		
+		//Add Additional LESS
+		$strCSS .= $style['additional_less'];
 
 		try {
 			include_once $this->root_path.'libraries/less/lessc.inc.php';

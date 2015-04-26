@@ -3207,9 +3207,9 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 }
 
 .user-groups a {
-	background: none repeat scroll 0 0 #4E7FA8;
+	background: none repeat scroll 0 0 @eqdkpContentHighlightColor;
 	border-radius: 8px 8px 8px 8px;
-	color: #FFFFFF;
+	color: @eqdkpContentBackgroundColor;
 	display: inline-block;
 	font-size: 11px;
 	font-weight: bold;

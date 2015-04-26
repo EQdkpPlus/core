@@ -190,6 +190,7 @@ class Manage_Styles extends page_generic{
 			'column_right_width'	=> $column_right_width,
 			'attendees_columns'		=> $this->in->get('attendees_columns'),
 			'logo_position'			=> $this->in->get('logo_position', 'center'),
+			'additional_less'		=> $this->in->get('additional_less', '', 'raw'),
 		);
 		
 		$arrOptions = $this->objStyles->styleOptions();
@@ -369,6 +370,7 @@ class Manage_Styles extends page_generic{
 			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'], 'disabled' => ((!in_array('background_image', $arrUsedVariables)) ? true : false))),
 			'RADIO_BACKGROUND_POSITION' => new hradio('background_image_position', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_image_position', $arrUsedVariables) && !in_array('background_pos', $arrUsedVariables)) ? true : false))),
 			'BACKGROUND_IMG_DISABLED' => ((!in_array('background_image', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
+			'ADDITIONAL_LESS'		=> $this->style['additional_less'],
 	
 			// Language
 			'L_TEMPLATE_WARNING'	=> sprintf($this->user->lang('template_warning'), $this->pfh->FileLink('templates', 'eqdkp').'/'.$this->style['template_path']),
@@ -408,6 +410,8 @@ class Manage_Styles extends page_generic{
 			}
 		}
 
+		$this->jquery->Collapse('#toggleColorsettingsadditional_less', true);
+		
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('styles_title'),
 			'template_file'		=> 'admin/manage_styles.html',

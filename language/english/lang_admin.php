@@ -1762,6 +1762,11 @@ $lang = array(
 		'stylesettings_misc_color1' => 'Miscellaneous color 1',
 		'stylesettings_misc_color2' => 'Miscellaneous color 2',
 		'stylesettings_misc_color3' => 'Miscellaneous color 3',
+		'stylesettings_misc_text1' => 'Miscellaneous text 1',
+		'stylesettings_misc_text2' => 'Miscellaneous text 2',
+		'stylesettings_misc_text3' => 'Miscellaneous text 3',
+		'stylesettings_additional_less' => 'Additional LESS',
+		'stylesettings_content_highlight_color' => 'Highlight color',
 );
 
 ?>

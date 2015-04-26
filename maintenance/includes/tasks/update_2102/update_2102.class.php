@@ -143,6 +143,12 @@ class update_2102 extends sql_update_task {
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_color2` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_color3` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		
+		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_text1` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin'");
+		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_text2` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin'");
+		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_text3` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin'");
+		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `additional_less` TEXT COLLATE 'utf8_bin' NULL DEFAULT NULL");
+		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `content_highlight_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
+		
 		$arrSet = array(
 				'style_version' => '0.2.0',
 				'body_background_color' => 'rgb(46, 120, 176)', 
@@ -198,9 +204,7 @@ class update_2102 extends sql_update_task {
 				'input_background_color_active' => 'rgb(255, 255, 255)', 
 				'input_border_color_active' => 'rgba(82, 168, 236, 0.8)', 
 				'input_font_color_active' => 'rgb(85, 85, 85)', 
-				'misc_color1' => '', 
-				'misc_color2' => '', 
-				'misc_color3' => '', 		
+				'content_highlight_color' => 'rgb(78, 127, 168)',
 		);
 		
 		

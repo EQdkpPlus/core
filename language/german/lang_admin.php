@@ -1721,6 +1721,7 @@ $lang = array(
 'stylesettings_content_positive_color' => 'Farbe Positiv',
 'stylesettings_content_negative_color' => 'Farbe Negativ',
 'stylesettings_content_neutral_color' => 'Farbe Neutral',
+'stylesettings_content_highlight_color' => 'Highlight-Farbe',
 'stylesettings_heading_userarea' => 'Benutzerbereich',
 'stylesettings_userarea_background_color' => 'Hintergrundfarbe',
 'stylesettings_userarea_font_color' => 'Schriftfarbe',
@@ -1762,5 +1763,9 @@ $lang = array(
 'stylesettings_misc_color1' => 'Sonstige Farbe 1',
 'stylesettings_misc_color2' => 'Sonstige Farbe 2',
 'stylesettings_misc_color3' => 'Sonstige Farbe 3',
+'stylesettings_misc_text1' => 'Sonstiger Text 1',
+'stylesettings_misc_text2' => 'Sonstiger Text 2',
+'stylesettings_misc_text3' => 'Sonstiger Text 3',
+'stylesettings_additional_less' => 'Zusätzliche LESS-Definitionen',
 );
 ?>
