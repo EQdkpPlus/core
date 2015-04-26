@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install type="template" version="1.1.0">
+<install type="template" version="2.1.0.2">
 	<name>EQdkp Modern</name>
 	<author>GodMod</author>
 	<authorEmail></authorEmail>
 	<authorUrl>http://eqdkp-plus.eu</authorUrl>
-	<creationDate>2013-01-12T10:26:19+00:00</creationDate>
+	<creationDate>2015-04-26T09:10:38+00:00</creationDate>
 	<copyright>GodMod</copyright>
 	<license>AGPL v3</license>
-	<version>0.0.1</version>
+	<version>0.2.0</version>
 	<description></description>
 	<folder>eqdkp_modern</folder>
 </install>

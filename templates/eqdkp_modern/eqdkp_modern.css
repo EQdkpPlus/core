@@ -114,7 +114,7 @@ h1, h2, h3 {
 	font-weight: bold;
 	margin-bottom: 10px;
 	padding-bottom: 5px;
-	border-bottom: 1px solid #CCCCCC;
+	border-bottom: 1px solid @eqdkpContentBorderColor;
 	margin-top: 5px;
 	color: @eqdkpContentFontColorHeadings;
 }
@@ -414,6 +414,33 @@ h3 {
 	padding: 5px;
 	background-color: @eqdkpContentBackgroundColor;
 	text-align: left;
+}
+
+/* Sidebar */
+.contentSidebar {
+	display: flex;
+	overflow: hidden !important;
+}
+
+.contentSidebarRight {
+	border-left: 1px solid @eqdkpSidebarBorderColor;
+	background-color: @eqdkpSidebarBackgroundColor;
+	color: @eqdkpSidebarFontColor;
+	padding: 10px;
+}
+
+.contentSidebarLeft {
+	border-right: 1px solid @eqdkpSidebarBorderColor;
+	background-color: @eqdkpSidebarBackgroundColor;
+	color: @eqdkpSidebarFontColor;
+	padding: 10px;
+}
+
+/* Contrast */
+.contentContrast {
+	color: @eqdkpContentContrastColor;
+	background-color: @eqdkpContentContrastBackgroundColor;
+	border-color: @eqdkpContentContrastBorderColor;
 }
 
 #contentFooter {
@@ -943,13 +970,13 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 
 /* general: positive/negative/neutral */
 .positive {
-	color: #33cc33;
+	color: @eqdkpContentPositiveColor;
 }
 .negative {
-	color: #e23b30;
+	color: @eqdkpContentNegativeColor;
 }
 .neutral {
-	color: #999;
+	color: @eqdkpContentNeutralColor;
 }
 
 /* Hack for tinymce in colorswitch tables */
@@ -3607,6 +3634,17 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	.responsive .langswitch-tooltip-trigger > span {
 		display: none;
+	}
+	
+	.responsive .contentSidebar, .responsive .contentSidebarRight, .responsive .contentSidebarLeft {
+		display: block;
+		border: none;
+		background: none;
+	}
+	
+	.responsive .contentSidebarRight, .responsive .contentSidebarLeft {
+		width: auto !important;
+		border-top: 1px solid @eqdkpSidebarBorderColor;
 	}
 }
 

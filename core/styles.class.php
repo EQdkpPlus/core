@@ -58,6 +58,12 @@ if (!class_exists("styles")){
 			'content_link_color_hover',
 			'content_border_color',
 			'content_accent_color',
+			'content_contrast_color',	
+			'content_contrast_background_color',
+			'content_contrast_border_color',
+			'content_positive_color',
+			'content_negative_color',
+			'content_neutral_color',
 			'userarea_background_color',
 			'userarea_font_color',
 			'userarea_link_color',
@@ -89,6 +95,9 @@ if (!class_exists("styles")){
 			'input_background_color_active',
 			'input_border_color_active',
 			'input_font_color_active',
+			'misc_color1',
+			'misc_color2',
+			'misc_color3',
 		);
 
 		public $allowed_extensions = array(
@@ -593,6 +602,12 @@ if (!class_exists("styles")){
 					'content_link_color_hover' => 'color',
 					'content_border_color' => 'color',
 					'content_accent_color' => 'color',	
+					'content_contrast_color'=> 'color',
+					'content_contrast_background_color'=> 'color',
+					'content_contrast_border_color'=> 'color',
+					'content_positive_color'=> 'color',
+					'content_negative_color'=> 'color',
+					'content_neutral_color'=> 'color',
 				),
 				'userarea' => array(
 					'userarea_background_color' => 'color',
@@ -636,6 +651,11 @@ if (!class_exists("styles")){
 					'input_background_color_active' => 'color',
 					'input_border_color_active' => 'color',
 					'input_font_color_active' => 'color',
+				),
+				'misc' => array(
+					'misc_color1' => 'color',
+					'misc_color2' => 'color',
+					'misc_color3' => 'color',
 				)
 			);
 			
@@ -644,7 +664,12 @@ if (!class_exists("styles")){
 
 		
 		public function convertNameToLessVar($strName){
-			$strName = preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')", $strName); 
+			$strName = preg_replace_callback(
+					"/(?:^|_)(.?)/",
+					function($m) { return strtoupper($m[1]); },
+					$strName
+			);
+
 			$strName = 'eqdkp'.$strName;
 			return $strName;
 		}

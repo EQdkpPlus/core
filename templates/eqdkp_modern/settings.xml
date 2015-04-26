@@ -56,4 +56,13 @@
 	<input_background_color_active>rgb(255, 255, 255)</input_background_color_active>
 	<input_border_color_active>rgba(82, 168, 236, 0.8)</input_border_color_active>
 	<input_font_color_active>rgb(85, 85, 85)</input_font_color_active>
+	<content_contrast_color>rgb(0, 0, 0)</content_contrast_color>
+	<content_contrast_background_color>rgb(252, 253, 254)</content_contrast_background_color>
+	<content_contrast_border_color>rgb(204, 204, 204)</content_contrast_border_color>
+	<content_positive_color>rgb(51, 204, 51)</content_positive_color>
+	<content_negative_color>rgb(226, 59, 48)</content_negative_color>
+	<content_neutral_color>rgb(153, 153, 153)</content_neutral_color>
+	<misc_color1></misc_color1>
+	<misc_color2></misc_color2>
+	<misc_color3></misc_color3>
 </settings>

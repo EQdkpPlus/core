@@ -111,6 +111,15 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 						'input_background_color_active'	=> $drow['input_background_color_active'],
 						'input_border_color_active'	=> $drow['input_border_color_active'],
 						'input_font_color_active'	=> $drow['input_font_color_active'],
+						'content_contrast_color'	=> $drow['content_contrast_color'],
+						'content_contrast_background_color'=> $drow['content_contrast_background_color'],
+						'content_contrast_border_color'=> $drow['content_contrast_border_color'],
+						'content_positive_color'	=> $drow['content_positive_color'],
+						'content_negative_color'	=> $drow['content_negative_color'],
+						'content_neutral_color'		=> $drow['content_neutral_color'],
+						'misc_color1' 				=> $drow['misc_color1'],
+						'misc_color2' 				=> $drow['misc_color2'],
+						'misc_color3' 				=> $drow['misc_color3'],
 						'users'						=> $this->pdh->get('user','stylecount', array($drow['style_id']))
 					);
 				}

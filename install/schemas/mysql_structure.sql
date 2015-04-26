@@ -409,6 +409,15 @@ CREATE TABLE `__styles` (
 	`input_background_color_active` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`input_border_color_active` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`input_font_color_active` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`content_contrast_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`content_contrast_background_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`content_contrast_border_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`content_positive_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`content_negative_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`content_neutral_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`misc_color1` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`misc_color2` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`misc_color3` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`style_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
