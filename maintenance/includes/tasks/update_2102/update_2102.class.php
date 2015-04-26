@@ -164,7 +164,7 @@ class update_2102 extends sql_update_task {
 				'table_border_color' => 'rgb(221, 221, 221)',
 				'menu_background_color' => 'rgb(69, 72, 77)',
 				'menu_font_color' => 'rgb(217, 215, 215)',
-				'menu_item_background_color' => 'rgb(69, 72, 77)',
+				'menu_item_background_color' => 'rgba(255, 255, 255, 0)',
 				'menu_item_background_color_hover' => 'rgb(0, 0, 0)',
 				'menu_item_font_color_hover' => 'rgb(217, 215, 215)',
 				'sidebar_background_color' => 'rgb(234, 234, 234)',

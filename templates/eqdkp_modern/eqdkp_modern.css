@@ -417,14 +417,14 @@ h3 {
 }
 
 #contentFooter {
-	background: #45484d; /* Old browsers */
-	background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #45484d 0%,#000000 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+	background: @eqdkpMenuBackgroundColor; /* Old browsers */
+	background: -moz-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @eqdkpMenuBackgroundColor), color-stop(100%, darken(@eqdkpMenuBackgroundColor, 20) )); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* IE10+ */
+	background: linear-gradient(to bottom, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@eqdkpMenuBackgroundColor', endColorstr='darken(@eqdkpMenuBackgroundColor, 20) ',GradientType=0 ); /* IE6-9 */
 	min-height: 2.5em;
 	line-height: 2.5em;
 	padding-right: 5px;
@@ -432,14 +432,14 @@ h3 {
 }
 
 #contentFooter a, #contentFooter a:visited, #contentFooter a:hover{
-	color: #fff;
+	color: @eqdkpMenuFontColor;
 	text-decoration: none;
 }
 
 #contentFooter a:hover {
 	text-decoration: underline;
 }
-#contentFooter .dropdown-menu, #contentFooter .dropdown-menu a{
+#contentFooter .dropdown-menu, #contentFooter .dropdown-menu a {
 	color: #000;
 }	
 		
@@ -873,7 +873,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 }
 .blue:hover, .button:hover, input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover, button:not(.ui-widget):hover {
 	color: @eqdkpButtonFontColorHover;
-	background: #007ead;
+	background:@eqdkpButtonBackgroundColorHover;
 	background: -webkit-gradient(linear, left top, left bottom, from(@eqdkpButtonBackgroundColorHover), to(darken(@eqdkpButtonBackgroundColorHover, 20)));
 	background: -moz-linear-gradient(top, @eqdkpButtonBackgroundColorHover, darken(@eqdkpButtonBackgroundColorHover, 20));
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@eqdkpButtonBackgroundColorHover', endColorstr='darken(@eqdkpButtonBackgroundColorHover, 20)');
@@ -881,7 +881,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 }
 .blue:active, .button:hover, input[type="submit"]:active, input[type="button"]:active, input[type="reset"]:active, button:not(.ui-widget):active {
 	color: @eqdkpButtonFontColorHover;
-	background: #007ead;
+	background:@eqdkpButtonBackgroundColorHover;
 	background: -webkit-gradient(linear, left top, left bottom, from(@eqdkpButtonBackgroundColorHover), to(darken(@eqdkpButtonBackgroundColorHover, 20)));
 	background: -moz-linear-gradient(top, @eqdkpButtonBackgroundColorHover, darken(@eqdkpButtonBackgroundColorHover, 20));
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@eqdkpButtonBackgroundColorHover', endColorstr='darken(@eqdkpButtonBackgroundColorHover, 20)');
@@ -1653,27 +1653,27 @@ ul.breamcrumb .current::before{
 
 /* general: superfish - admin menu style */
 .sf-admin, .mainmenu {
-	background: #45484d; /* Old browsers */
-	background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #45484d 0%,#000000 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+	background: @eqdkpMenuBackgroundColor; /* Old browsers */
+	background: -moz-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @eqdkpMenuBackgroundColor), color-stop(100%, darken(@eqdkpMenuBackgroundColor, 20) )); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* IE10+ */
+	background: linear-gradient(to bottom, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@eqdkpMenuBackgroundColor', endColorstr='darken(@eqdkpMenuBackgroundColor, 20) ',GradientType=0 ); /* IE6-9 */
 	width: 100%;
 	min-height: 3em;
 }
 .sf-admin a, .mainmenu a, .sf-admin a:visited, .mainmenu a:visited{
-	color: #D9D7D7;
+	color: @eqdkpMenuFontColor;
 }
 .sf-admin li , .mainmenu li{
-	background: transparent;
+	background: @eqdkpMenuItemBackgroundColor;
 	border-right: 1px solid #424242;
 	border-left: 1px solid #000;
 }
 .sf-admin li li, .mainmenu li li {
-	background: #2f3033;
+	background: darken(@eqdkpMenuBackgroundColor, 10);
 	border-top: 1px solid #000;
 }
 .mainmenu li li,.mainmenu li li li {
@@ -1681,12 +1681,14 @@ ul.breamcrumb .current::before{
 }
 
 .sf-admin li li li , .mainmenu li li li{
-	background: #2f3033;
+	background: darken(@eqdkpMenuBackgroundColor, 10);
 	border-top: 1px solid #000;
 }
+
 .sf-admin li:hover, .sf-menu.sf-admin li.sfHover,
 .sf-admin a:focus, .sf-menu.sf-admin a:hover, .sf-menu.sf-admin a:active, .mainmenu li:hover, .mainmenu a:focus , .sf-menu.mainmenu li.sfHover, .sf-menu.mainmenu a:hover{
-	background: #000000 !important;
+	background: @eqdkpMenuItemBackgroundColorHover !important;
+	color: @eqdkpMenuItemFontColorHover;
 }
 
 .sf-admin.sf-menu li li a {
@@ -1719,12 +1721,12 @@ ul.breamcrumb .current::before{
 	font: 14px/100% Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	padding: .3em 1em .32em;
-	background: #0095cd;
-	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
-	background: -moz-linear-gradient(top, #00adee, #0078a5);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
-	color: #d9eef7;
-	border: solid 1px #0076a3;
+	background: @eqdkpButtonBackgroundColor;
+	background: -webkit-gradient(linear, left top, left bottom, from(@eqdkpButtonBackgroundColor), to(darken(@eqdkpButtonBackgroundColor, 20)));
+	background: -moz-linear-gradient(top, @eqdkpButtonBackgroundColor, darken(@eqdkpButtonBackgroundColor, 20));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@eqdkpButtonBackgroundColor', endColorstr='darken(@eqdkpButtonBackgroundColor, 20)');
+	color: @eqdkpButtonFontColor;
+	border: solid 1px @eqdkpButtonBorderColor;
 	vertical-align: baseline;
 	margin: 0 2px;
 	outline: none;
@@ -1758,10 +1760,12 @@ ul.breamcrumb .current::before{
 }
 
 .sf-ddm li.sfHover {
-	background: #00678e;
-	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
-	background: -moz-linear-gradient(top, #0095cc, #00678e);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+	color: @eqdkpButtonFontColorHover;
+	background:@eqdkpButtonBackgroundColorHover;
+	background: -webkit-gradient(linear, left top, left bottom, from(@eqdkpButtonBackgroundColorHover), to(darken(@eqdkpButtonBackgroundColorHover, 20)));
+	background: -moz-linear-gradient(top, @eqdkpButtonBackgroundColorHover, darken(@eqdkpButtonBackgroundColorHover, 20));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@eqdkpButtonBackgroundColorHover', endColorstr='darken(@eqdkpButtonBackgroundColorHover, 20)');
+	border-color: @eqdkpButtonBorderColorHover;
 }
 
 .sf-menu.sf-ddm ul {
@@ -1810,12 +1814,12 @@ ul.breamcrumb .current::before{
 	font: 14px/100% Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	padding: .3em 1em .32em;
-	background: #0095cd;
-	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
-	background: -moz-linear-gradient(top, #00adee, #0078a5);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
-	color: #d9eef7;
-	border: solid 1px #0076a3;
+	color: @eqdkpButtonFontColor;
+	border: solid 1px @eqdkpButtonBorderColor;
+	background: @eqdkpButtonBackgroundColor;
+	background: -webkit-gradient(linear, left top, left bottom, from(@eqdkpButtonBackgroundColor), to(darken(@eqdkpButtonBackgroundColor, 20)));
+	background: -moz-linear-gradient(top, @eqdkpButtonBackgroundColor, darken(@eqdkpButtonBackgroundColor, 20));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@eqdkpButtonBackgroundColor', endColorstr='darken(@eqdkpButtonBackgroundColor, 20)');
 	vertical-align: baseline;
 	margin: 0 2px;
 	outline: none;
@@ -1849,10 +1853,12 @@ ul.breamcrumb .current::before{
 }
 
 .sf-btn-ddm li.sfHover {
-	background: #00678e;
-	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
-	background: -moz-linear-gradient(top, #0095cc, #00678e);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+	color: @eqdkpButtonFontColorHover;
+	background:@eqdkpButtonBackgroundColorHover;
+	background: -webkit-gradient(linear, left top, left bottom, from(@eqdkpButtonBackgroundColorHover), to(darken(@eqdkpButtonBackgroundColorHover, 20)));
+	background: -moz-linear-gradient(top, @eqdkpButtonBackgroundColorHover, darken(@eqdkpButtonBackgroundColorHover, 20));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@eqdkpButtonBackgroundColorHover', endColorstr='darken(@eqdkpButtonBackgroundColorHover, 20)');
+	border-color: @eqdkpButtonBorderColorHover;
 }
 
 .sf-menu.sf-btn-ddm ul{
@@ -2943,24 +2949,27 @@ table.leaderboard tbody tr td {
 }
 
 table.leaderboard tbody tr td table.borderless tbody tr td {
-	border-bottom: 1px solid #DDDDDD !important;
-	border-top: 1px solid #DDDDDD !important;
+	border-bottom: 1px solid @eqdkpTableBorderColor !important;
+	border-top: 1px solid @eqdkpTableBorderColor !important;
 }
 
 /* Colorpicker */
 .sp-replacer {
 	border-radius: 4px 4px 4px 4px;
-	background-color: #FFFFFF;
-	border: 1px solid #CCCCCC;
+	background-color: @eqdkpInputBackgroundColor;
+	border: 1px solid @eqdkpInputBorderColor;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
 	padding: 4px 6px;
-	color: #555555;
+	color: @eqdkpInputFontColor;
 }
 
 .sp-replacer:hover, .sp-replacer.sp-active {
-	border-color: rgba(82, 168, 236, 0.8);
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	border-color: @eqdkpInputBorderColorActive;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px @eqdkpInputBorderColorActive;
+	outline: 0 none;
+	color: @eqdkpInputFontColorActive;
+	background-color: @eqdkpInputBackgroundColorActive;
 	outline: 0 none;
 }
 
@@ -3444,14 +3453,14 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	/* Mobile Navigation */
 	.nav-mobile {
-		background: #45484d; /* Old browsers */
-		background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top, #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top, #45484d 0%,#000000 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top, #45484d 0%,#000000 100%); /* IE10+ */
-		background: linear-gradient(to bottom, #45484d 0%,#000000 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+		background: @eqdkpMenuBackgroundColor; /* Old browsers */
+		background: -moz-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @eqdkpMenuBackgroundColor), color-stop(100%, darken(@eqdkpMenuBackgroundColor, 20) )); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* IE10+ */
+		background: linear-gradient(to bottom, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20)  100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@eqdkpMenuBackgroundColor', endColorstr='darken(@eqdkpMenuBackgroundColor, 20) ',GradientType=0 ); /* IE6-9 */
 		width: 100%;
 		min-height: 3em;
 	}
