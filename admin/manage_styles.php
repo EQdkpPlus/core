@@ -380,8 +380,11 @@ class Manage_Styles extends page_generic{
 		$arrOptions = $this->objStyles->styleOptions();
 		foreach($arrOptions as $key => $val){
 			$this->tpl->assign_block_vars('fieldset_row', array(
-				'LEGEND' => $key,	
+				'LEGEND' => $this->user->lang('stylesettings_heading_'.$key),
+				'KEY'	=> $key,
 			));
+			
+			$this->jquery->Collapse('#toggleColorsettings'.$key);
 			
 			foreach($val as $name=>$elem){
 				$field = "";
@@ -398,7 +401,7 @@ class Manage_Styles extends page_generic{
 				
 				
 				$this->tpl->assign_block_vars('fieldset_row.option_row', array(
-					'NAME' => $name,
+					'NAME' => $this->user->lang('stylesettings_'.$name),
 					'FIELD'=> $field,
 					'HELP' => '@'.$this->objStyles->convertNameToLessVar($name),
 				));

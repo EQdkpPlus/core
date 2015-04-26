@@ -149,14 +149,16 @@ $(document).ready(function(){
 	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_style_settings_info}
 </div>
 	<!-- BEGIN fieldset_row -->
-	<fieldset class="settings">
-		<legend>{fieldset_row.LEGEND}</legend>
+	<fieldset class="settings" id="toggleColorsettings{fieldset_row.KEY}">
+		<legend>{fieldset_row.LEGEND}<span class="toggle_button"></span></legend>
+		<div class="toggle_container">
 		<!-- BEGIN option_row -->
 		<dl>
 			<dt><label>{fieldset_row.option_row.NAME}</label><br /><span>{fieldset_row.option_row.HELP}</span></dt>
 			<dd>{fieldset_row.option_row.FIELD}</dd>
 		</dl>
 		<!-- END option_row -->
+		</div>
 	</fieldset>
 	<!-- END fieldset_row -->
 
