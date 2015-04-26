@@ -111,7 +111,7 @@ $(document).ready(function(){
 			<dd>{RADIO_BACKGROUND_IMAGE_TYPE}</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_background_image}</label><br /><span>{L_background_image_note}</span></dt>
+			<dt><label>{L_background_image}</label><br /><span>{L_background_image_note}<br />@eqdkpBackgroundImage</span></dt>
 			<dd>
 			<div class="input-icon-append">
 			<input id="background_image" type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" {BACKGROUND_IMG_DISABLED}/>
@@ -120,7 +120,7 @@ $(document).ready(function(){
 			</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_background_position}</label></dt>
+			<dt><label>{L_background_position}</label><br /><span>@eqdkpBackgroundImagePosition</span></dt>
 			<dd>{RADIO_BACKGROUND_POSITION}</dd>
 		</dl>
 	</fieldset>
@@ -128,15 +128,15 @@ $(document).ready(function(){
 	<fieldset class="settings">
 		<legend>{L_pk_set_portal_head}</legend>
 		<dl>
-			<dt><label>{L_style_portal_width}</label></dt>
+			<dt><label>{L_style_portal_width}</label><br /><span>@eqdkpPortalWidth</span></dt>
 			<dd><input type="text" name="portal_width" size="5" maxlength="5" value="{STYLE_PORTAL_WIDTH}" class="input" {STYLE_PORTAL_WIDTH_DISABLED}/> {DD_PORTAL_WIDTH}</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_style_column_left_width}</label></dt>
+			<dt><label>{L_style_column_left_width}</label><br /><span>@eqdkpPortalColumnLeftWidth</span></dt>
 			<dd><input type="text" name="column_left_width" size="5" maxlength="5" value="{STYLE_COLUMN_LEFT_WIDTH}" class="input" {STYLE_COLUMN_LEFT_DISABLED}/> {DD_COLUMN_LEFT_WIDTH}</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_style_column_right_width}</label></dt>
+			<dt><label>{L_style_column_right_width}</label><br /><span>@eqdkpPortalColumnRightWidth</span></dt>
 			<dd><input type="text" name="column_right_width" size="5" maxlength="5" value="{STYLE_COLUMN_RIGHT_WIDTH}" class="input" {STYLE_COLUMN_RIGHT_DISABLED}/> {DD_COLUMN_RIGHT_WIDTH}</dd>
 		</dl>
 	</fieldset>
@@ -148,144 +148,18 @@ $(document).ready(function(){
 <div class="infobox infobox-large infobox-blue clearfix">
 	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_style_settings_info}
 </div>
+	<!-- BEGIN fieldset_row -->
+	<fieldset class="settings">
+		<legend>{fieldset_row.LEGEND}</legend>
+		<!-- BEGIN option_row -->
+		<dl>
+			<dt><label>{fieldset_row.option_row.NAME}</label><br /><span>{fieldset_row.option_row.HELP}</span></dt>
+			<dd>{fieldset_row.option_row.FIELD}</dd>
+		</dl>
+		<!-- END option_row -->
+	</fieldset>
+	<!-- END fieldset_row -->
 
-
-
-	<fieldset class="settings">
-		<legend>{L_color_settings}</legend>
-		<dl>
-			<dt><label>{L_background_color}</label></dt>
-			<dd>{CP_BODY_BG}</dd>
-		</dl>
-	</fieldset>
-	<fieldset class="settings">
-		<legend>{L_fonts}</legend>
-		<dl>
-			<dt><label>{L_fontface1}</label><br /><span>{L_fontface1_note}</span></dt>
-			<dd><input type="text" name="fontface1" size="35" maxlength="60" value="{FONTFACE1}" class="input" {FONTFACE1_DISABLED} /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontface2}</label><br /><span>{L_fontface2_note}</span></dt>
-			<dd><input type="text" name="fontface2" size="35" maxlength="60" value="{FONTFACE2}" class="input" {FONTFACE2_DISABLED} /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontface3}</label><br /><span>{L_fontface3_note}</span></dt>
-			<dd><input type="text" name="fontface3" size="35" maxlength="60" value="{FONTFACE3}" class="input" {FONTFACE3_DISABLED} /></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontsize1}</label><br /><span>{L_fontsize1_note}</span></dt>
-			<dd><input type="text" name="fontsize1" size="3" maxlength="4" value="{FONTSIZE1}" class="input" {FONTSIZE1_DISABLED} /> px</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontsize2}</label><br /><span>{L_fontsize2_note}</span></dt>
-			<dd><input type="text" name="fontsize2" size="3" maxlength="4" value="{FONTSIZE2}" class="input" {FONTSIZE2_DISABLED} /> px</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontsize3}</label><br /><span>{L_fontsize3_note}</span></dt>
-			<dd><input type="text" name="fontsize3" size="3" maxlength="4" value="{FONTSIZE3}" class="input" {FONTSIZE3_DISABLED} /> px</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontcolor1}</label><br /><span>{L_fontcolor1_note}</span></dt>
-			<dd>{CP_FONTCOLOR1}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontcolor2}</label><br /><span>{L_fontcolor2_note}</span></dt>
-			<dd>{CP_FONTCOLOR2}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontcolor3}</label><br /><span>{L_fontcolor3_note}</span></dt>
-			<dd>{CP_FONTCOLOR3}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontcolor_neg}</label><br /><span>{L_fontcolor_neg_note}</span></dt>
-			<dd>{CP_FONTCOLOR_NEG}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_fontcolor_pos}</label><br /><span>{L_fontcolor_pos_note}</span></dt>
-			<dd>{CP_FONTCOLOR_POS}</dd>
-		</dl>
-	</fieldset>	
-	<fieldset class="settings">
-		<legend>{L_pk_set_linkstable}</legend>
-		<dl>
-			<dt><label>{L_body_link}</label></dt>
-			<dd>{CP_BODY_LINK}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_body_link_style}</label></dt>
-			<dd>{DD_LINK_STYLE}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_body_hlink}</label></dt>
-			<dd>{CP_BODY_HLINK}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_body_hlink_style}</label></dt>
-			<dd>{DD_HLINK_STYLE}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_header_link}</label></dt>
-			<dd>{CP_HEADER_LINK}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_header_link_style}</label></dt>
-			<dd>{DD_HEAD_LINK_STYLE}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_header_hlink}</label></dt>
-			<dd>{CP_HEADER_HLINK}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_header_hlink_style}</label></dt>
-			<dd>{DD_HEAD_HLINK_STYLE}</dd>
-		</dl>
-	</fieldset>
-	<fieldset class="settings">
-		<legend>{L_tables}</legend>
-		<dl>
-			<dt><label>{L_tr_color1}</label></dt>
-			<dd>{CP_TR_COLOR1}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_tr_color2}</label></dt>
-			<dd>{CP_TR_COLOR2}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_th_color1}</label></dt>
-			<dd>{CP_TH_COLOR1}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_table_border_width}</label></dt>
-			<dd><input type="text" name="table_border_width" size="2" maxlength="3" value="{TABLE_BORDER_WIDTH}" class="input" {TABLE_BORDER_WIDTH_DISABLED} /> px</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_table_border_color}</label></dt>
-			<dd>{CP_TABLE_BORDER}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_table_border_style}</label></dt>
-			<dd>{DD_TABLE_BORDERSTYLE}</dd>
-		</dl>
-	</fieldset>
-	<fieldset class="settings">
-		<legend>{L_inputs}</legend>
-		<dl>
-			<dt><label>{L_input_color}</label></dt>
-			<dd>{CP_INPUT_COLOR}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_input_border_width}</label></dt>
-			<dd><input type="text" name="input_border_width" size="2" maxlength="3" value="{INPUT_BORDER_WIDTH}" class="input" {INPUT_BORDER_WIDTH_DISABLED} /> px</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_input_border_color}</label></dt>
-			<dd>{CP_INPUT_BORDER}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_input_border_style}</label></dt>
-			<dd>{DD_INPUT_BORDERSTYLE}</dd>
-		</dl>
-	</fieldset>
 </div>
 
 

@@ -38,41 +38,57 @@ if (!class_exists("styles")){
 			'background_img',
 			'background_pos',
 			'background_type',
-			'css_file',
-
-			'body_background',
-			'body_link',
-			'body_link_style',
-			'body_hlink',
-			'body_hlink_style',
-			'header_link',
-			'header_link_style',
-			'header_hlink',
-			'header_hlink_style',
-			'tr_color1',
-			'tr_color2',
-			'th_color1',
-			'fontface1',
-			'fontface2',
-			'fontface3',
-			'fontsize1',
-			'fontsize2',
-			'fontsize3',
-			'fontcolor1',
-			'fontcolor2',
-			'fontcolor3',
-			'fontcolor_neg',
-			'fontcolor_pos',
-			'table_border_width',
-			'table_border_color',
-			'table_border_style',
-			'input_color',
-			'input_border_width',
-			'input_border_color',
-			'input_border_style',
 			'column_left_width',
 			'column_right_width',
 			'portal_width',
+				
+			'body_background_color',
+			'body_font_color',
+			'body_font_size',
+			'body_font_family',
+			'body_link_color',
+			'body_link_color_hover',
+			'body_link_decoration',
+			'container_background_color',
+			'container_border_color',
+			'content_background_color',
+			'content_font_color',
+			'content_font_color_headings',
+			'content_link_color',
+			'content_link_color_hover',
+			'content_border_color',
+			'content_accent_color',
+			'userarea_background_color',
+			'userarea_font_color',
+			'userarea_link_color',
+			'userarea_link_color_hover',
+			'table_th_background_color',
+			'table_th_font_color',
+			'table_tr_font_color',
+			'table_tr_background_color1',
+			'table_tr_background_color2',
+			'table_tr_background_color_hover',
+			'table_border_color',
+			'menu_background_color',
+			'menu_font_color',
+			'menu_item_background_color',
+			'menu_item_background_color_hover',
+			'menu_item_font_color_hover',
+			'sidebar_background_color',
+			'sidebar_font_color',
+			'sidebar_border_color',
+			'button_background_color',
+			'button_font_color',
+			'button_border_color',
+			'button_background_color_hover',
+			'button_font_color_hover',
+			'button_border_color_hover',
+			'input_background_color',
+			'input_border_color',
+			'input_font_color',
+			'input_background_color_active',
+			'input_border_color_active',
+			'input_font_color_active',
 		);
 
 		public $allowed_extensions = array(
@@ -552,7 +568,87 @@ if (!class_exists("styles")){
 			
 			$this->tpl->delete_cache($templatepath);
 		}
+		
+		
+		public function styleOptions(){
+			$arrOptions = array(
+				'body' => array(
+					'body_background_color' => 'color',
+					'body_font_color'		=> 'color',
+					'body_font_size'		=> 'size',
+					'body_font_family'		=> 'font-family',
+					'body_link_color'		=> 'color',
+					'body_link_color_hover' => 'color',
+					'body_link_decoration'	=> 'decoration',	
+				),
+				'container' => array(
+					'container_background_color' => 'color',
+					'container_border_color' => 'color',	
+				),
+				'content' => array(
+					'content_background_color' => 'color',
+					'content_font_color' => 'color',
+					'content_font_color_headings' => 'color',
+					'content_link_color' => 'color',
+					'content_link_color_hover' => 'color',
+					'content_border_color' => 'color',
+					'content_accent_color' => 'color',	
+				),
+				'userarea' => array(
+					'userarea_background_color' => 'color',
+					'userarea_font_color' => 'color',
+					'userarea_link_color' => 'color',
+					'userarea_link_color_hover' => 'color',	
+				),
+				'table' => array(
+					'table_th_background_color' => 'color',
+					'table_th_font_color' => 'color',
+					'table_tr_font_color' => 'color',
+					'table_tr_background_color1' => 'color',
+					'table_tr_background_color2' => 'color',
+					'table_tr_background_color_hover' => 'color',
+					'table_border_color' => 'color',
+				),
+				'menu' => array(
+					'menu_background_color' => 'color',
+					'menu_font_color'		=> 'color',
+					'menu_item_background_color' => 'color',
+					'menu_item_background_color_hover' => 'color',
+					'menu_item_font_color_hover' => 'color',	
+				),
+				'sidebar' => array(
+					'sidebar_background_color' => 'color',
+					'sidebar_font_color'		=> 'color',
+					'sidebar_border_color'		=> 'color',	
+				),
+				'button' => array(
+					'button_background_color' => 'color',
+					'button_font_color'			=> 'color',
+					'button_border_color'		=> 'color',
+					'button_background_color_hover' => 'color',
+					'button_font_color_hover'	=> 'color',
+					'button_border_color_hover'	=> 'color',	
+				),
+				'input' => array(
+					'input_background_color' => 'color',
+					'input_border_color'	=> 'color',
+					'input_font_color'		=> 'color',
+					'input_background_color_active' => 'color',
+					'input_border_color_active' => 'color',
+					'input_font_color_active' => 'color',
+				)
+			);
+			
+			return $arrOptions;
+		}
 
+		
+		public function convertNameToLessVar($strName){
+			$strName = preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')", $strName); 
+			$strName = 'eqdkp'.$strName;
+			return $strName;
+		}
 	}
+	
 }
 ?>

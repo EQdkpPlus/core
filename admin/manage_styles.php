@@ -87,23 +87,6 @@ class Manage_Styles extends page_generic{
 		$blnRenderer = true;
 		
 		switch($this->in->get('type')){
-			/*
-			//Show the new file
-			case 'new': {
-				$new_file = file_get_contents($this->root_path.'templates/'.$this->style['template_path'].'/'.$strFilename);
-				$content = '<div class="showfile">'.nl2br(htmlspecialchars($new_file)).'</div>';
-				$blnRenderer = false;
-			}
-			break;
-			
-			//Show modified file
-			case 'mod': {
-				$mod_file = file_get_contents($this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').'/'.$strFilename);
-				$content = '<div class="showfile">'.nl2br(htmlspecialchars($mod_file)).'</div>';
-				$blnRenderer = false;
-			}
-			break;
-			*/
 			
 			//Default: show merged diff
 			default: {
@@ -198,51 +181,25 @@ class Manage_Styles extends page_generic{
 				
 		$data = array(
 			'style_name'			=> $this->in->get('style_name', $this->style['style_name']),
-			'style_version'			=> $this->in->get('style_version', $this->style['style_version']),
-			'body_background'		=> $this->in->get('body_background', $this->style['body_background']),
-			'body_link'				=> $this->in->get('body_link', $this->style['body_link']),
-			'body_link_style'		=> $this->in->get('body_link_style', $this->style['body_link_style']),
-			'body_hlink'			=> $this->in->get('body_hlink', $this->style['body_hlink']),
-			'body_hlink_style'		=> $this->in->get('body_hlink_style', $this->style['body_hlink_style']),
-			'header_link'			=> $this->in->get('header_link', $this->style['header_link']),
-			'header_link_style'		=> $this->in->get('header_link_style', $this->style['header_link_style']),
-			'header_hlink'			=> $this->in->get('header_hlink', $this->style['header_hlink']),
-			'header_hlink_style'	=> $this->in->get('header_hlink_style', $this->style['header_hlink_style']),
-			'tr_color1'				=> $this->in->get('tr_color1', $this->style['tr_color1']),
-			'tr_color2'				=> $this->in->get('tr_color2', $this->style['tr_color2']),
-			'th_color1'				=> $this->in->get('th_color1', $this->style['th_color']),
-			'fontface1'				=> $this->in->get('fontface1', $this->style['fontface1']),
-			'fontface2'				=> $this->in->get('fontface2', $this->style['fontface2']),
-			'fontface3'				=> $this->in->get('fontface3', $this->style['fontface3']),
-			'fontsize1'				=> $this->in->get('fontsize1', $this->style['fontsize1']),
-			'fontsize2'				=> $this->in->get('fontsize2', $this->style['fontsize2']),
-			'fontsize3'				=> $this->in->get('fontsize3', NULL),
-			'fontcolor1'			=> $this->in->get('fontcolor1'),
-			'fontcolor2'			=> $this->in->get('fontcolor2'),
-			'fontcolor3'			=> $this->in->get('fontcolor3'),
-			'fontcolor_neg'			=> $this->in->get('fontcolor_neg'),
-			'fontcolor_pos'			=> $this->in->get('fontcolor_pos'),
-			'table_border_width'	=> $this->in->get('table_border_width', NULL),
-			'table_border_color'	=> $this->in->get('table_border_color'),
-			'table_border_style'	=> $this->in->get('table_border_style'),
-			'input_color'			=> $this->in->get('input_color'),
-			'input_border_width'	=> $this->in->get('input_border_width', NULL),
-			'input_border_color'	=> $this->in->get('input_border_color'),
-			'input_border_style'	=> $this->in->get('input_border_style'),
-				
+			'style_version'			=> $this->in->get('style_version', $this->style['style_version']),				
 			'background_type'		=> $this->in->get('background_type', 0),
 			'background_pos'		=> $this->in->get('background_pos'),
 			'background_img'		=> $this->in->get('background_img'),
-				
 			'portal_width'			=> $portal_width,
 			'column_left_width'		=> $column_left_width,
 			'column_right_width'	=> $column_right_width,
-
 			'attendees_columns'		=> $this->in->get('attendees_columns'),
 			'logo_position'			=> $this->in->get('logo_position', 'center'),
-			
-			'css_file'				=> $this->in->get('css_file'),
 		);
+		
+		$arrOptions = $this->objStyles->styleOptions();
+		foreach($arrOptions as $key => $val){
+			foreach($val as $name => $type)
+			{
+				$data[$name] = $this->in->get($name);
+			}
+		}
+
 		return $data;
 	}
 
@@ -389,26 +346,7 @@ class Manage_Styles extends page_generic{
 			'STYLE_CODE'			=> (isset($this->style['style_code'])) ? $this->style['style_code'] : '',
 			'STYLE_AUTHOR'			=> $this->style['style_author'],
 			'STYLE_CONTACT'			=> $this->style['style_contact'],
-			'STYLE_VERSION'			=> $this->style['style_version'],
-			'FONTFACE1'				=> $this->style['fontface1'],
-			'FONTFACE2'				=> $this->style['fontface2'],
-			'FONTFACE3'				=> $this->style['fontface3'],
-			'FONTSIZE1'				=> $this->style['fontsize1'],
-			'FONTSIZE2'				=> $this->style['fontsize2'],
-			'FONTSIZE3'				=> $this->style['fontsize3'],
-			
-			'FONTFACE1_DISABLED'	=> ((!in_array('fontface1', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'FONTFACE2_DISABLED'	=> ((!in_array('fontface2', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'FONTFACE3_DISABLED'	=> ((!in_array('fontface3', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'FONTSIZE1_DISABLED'	=> ((!in_array('fontsize1', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'FONTSIZE2_DISABLED'	=> ((!in_array('fontsize2', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'FONTSIZE3_DISABLED'	=> ((!in_array('fontsize3', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-
-			'TABLE_BORDER_WIDTH'	=> $this->style['table_border_width'],
-			'INPUT_BORDER_WIDTH'	=> $this->style['input_border_width'],
-
-			'TABLE_BORDER_WIDTH_DISABLED' 	=> ((!in_array('table_border_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'INPUT_BORDER_WIDTH_DISABLED'	=> ((!in_array('input_border_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''), 
+			'STYLE_VERSION'			=> $this->style['style_version'], 
 				
 			'BACKGROUND_IMG'		=> $this->style['background_img'],
 			'CSS_FILE'				=> $this->style['css_file'],
@@ -416,53 +354,55 @@ class Manage_Styles extends page_generic{
 			'STYLE_PORTAL_WIDTH'	=> (isset($this->style['portal_width'])) ? (int)$this->style['portal_width'] : 1100,
 			'STYLE_COLUMN_LEFT_WIDTH'	=> (isset($this->style['column_left_width'])) ? (int)$this->style['column_left_width'] : 180,
 			'STYLE_COLUMN_RIGHT_WIDTH'	=> (isset($this->style['column_right_width'])) ? (int)$this->style['column_right_width'] : 180,
-			'STYLE_PORTAL_WIDTH_DISABLED' => ((!in_array('portal_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'STYLE_COLUMN_LEFT_DISABLED' => ((!in_array('column_left_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'STYLE_COLUMN_RIGHT_DISABLED' => ((!in_array('column_right_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),	
-			'DD_PORTAL_WIDTH'		=> new hdropdown('dd_portal_width', array('options' => $width_options, 'value' => ((strpos($this->style['portal_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_width', $arrUsedVariables)) ? true : false))),
-			'DD_COLUMN_LEFT_WIDTH'	=> new hdropdown('dd_column_left_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_left_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('column_left_width', $arrUsedVariables)) ? true : false))),
-			'DD_COLUMN_RIGHT_WIDTH'	=>new hdropdown('dd_column_right_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_right_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('column_right_width', $arrUsedVariables)) ? true : false))),
-
-			'DD_LINK_STYLE'			=> new hdropdown('body_link_style', array('options' => $text_decoration, 'value' => $this->style['body_link_style'], 'disabled' => ((!in_array('body_link_style', $arrUsedVariables)) ? true : false))),	
-			'DD_HLINK_STYLE'		=> new hdropdown('body_hlink_style', array('options' => $text_decoration, 'value' => $this->style['body_hlink_style'], 'disabled' => ((!in_array('body_hlink_style', $arrUsedVariables)) ? true : false))),
-			'DD_HEAD_LINK_STYLE'	=> new hdropdown('header_link_style', array('options' => $text_decoration, 'value' => $this->style['header_link_style'], 'disabled' => ((!in_array('header_link_style', $arrUsedVariables)) ? true : false))),
-			'DD_HEAD_HLINK_STYLE'	=> new hdropdown('header_hlink_style', array('options' => $text_decoration, 'value' => $this->style['header_hlink_style'], 'disabled' => ((!in_array('header_hlink_style', $arrUsedVariables)) ? true : false))),
-			'DD_TABLE_BORDERSTYLE'	=> new hdropdown('table_border_style', array('options' => $border_style, 'value' => $this->style['table_border_style'], 'disabled' => ((!in_array('table_border_style', $arrUsedVariables)) ? true : false))),
-			'DD_INPUT_BORDERSTYLE'	=> new hdropdown('input_border_style', array('options' => $border_style, 'value' => $this->style['input_border_style'], 'disabled' => ((!in_array('input_border_style', $arrUsedVariables)) ? true : false))),
 			
-				'DD_ATTENDEE_COLUMNS'	=> new hdropdown('attendees_columns', array('options' => $attendee_colums, 'value' => $this->style['attendees_columns'])),
+				'STYLE_PORTAL_WIDTH_DISABLED' => ((!in_array('portal_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
+			'STYLE_COLUMN_LEFT_DISABLED' => ((!in_array('portal_column_left_width', $arrUsedVariables) && !in_array('column_left_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
+			'STYLE_COLUMN_RIGHT_DISABLED' => ((!in_array('portal_column_right_width', $arrUsedVariables) && !in_array('column_right_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),	
+			'DD_PORTAL_WIDTH'		=> new hdropdown('dd_portal_width', array('options' => $width_options, 'value' => ((strpos($this->style['portal_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_width', $arrUsedVariables)) ? true : false))),
+			'DD_COLUMN_LEFT_WIDTH'	=> new hdropdown('dd_column_left_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_left_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_column_left_width', $arrUsedVariables) && !in_array('column_left_width', $arrUsedVariables)) ? true : false))),
+			'DD_COLUMN_RIGHT_WIDTH'	=>new hdropdown('dd_column_right_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_right_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_column_right_width', $arrUsedVariables) && !in_array('column_right_width', $arrUsedVariables)) ? true : false))),
+				
+			'DD_ATTENDEE_COLUMNS'	=> new hdropdown('attendees_columns', array('options' => $attendee_colums, 'value' => $this->style['attendees_columns'])),
 			'DD_LOGO_POSITION'		=> new hdropdown('logo_position', array('options' => $logo_positions, 'value' => $this->style['logo_position'])),
 
-			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'], 'disabled' => ((!in_array('background_type', $arrUsedVariables)) ? true : false))),
-			'RADIO_BACKGROUND_POSITION' => new hradio('background_pos', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_pos', $arrUsedVariables)) ? true : false))),
-			'BACKGROUND_IMG_DISABLED' => ((!in_array('background_img', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
+			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'], 'disabled' => ((!in_array('background_image', $arrUsedVariables)) ? true : false))),
+			'RADIO_BACKGROUND_POSITION' => new hradio('background_image_position', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_image_position', $arrUsedVariables) && !in_array('background_pos', $arrUsedVariables)) ? true : false))),
+			'BACKGROUND_IMG_DISABLED' => ((!in_array('background_image', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 	
-			// Color pickers
-			'CP_BODY_BG'			=> $this->jquery->colorpicker('body_background', $this->style['body_background'], false, 14, ((!in_array('body_background', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_FONTCOLOR1'			=> $this->jquery->colorpicker('fontcolor1', $this->style['fontcolor1'], false, 14, ((!in_array('fontcolor1', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_FONTCOLOR2'			=> $this->jquery->colorpicker('fontcolor2', $this->style['fontcolor2'], false, 14, ((!in_array('fontcolor2', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_FONTCOLOR3'			=> $this->jquery->colorpicker('fontcolor3', $this->style['fontcolor3'], false, 14, ((!in_array('fontcolor3', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_FONTCOLOR_NEG'		=> $this->jquery->colorpicker('fontcolor_neg', $this->style['fontcolor_neg'], false, 14, ((!in_array('fontcolor_neg', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_FONTCOLOR_POS'		=> $this->jquery->colorpicker('fontcolor_pos', $this->style['fontcolor_pos'], false, 14, ((!in_array('fontcolor_pos', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_BODY_LINK'			=> $this->jquery->colorpicker('body_link', $this->style['body_link'], false, 14, ((!in_array('body_link', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_BODY_HLINK'			=> $this->jquery->colorpicker('body_hlink', $this->style['body_hlink'], false, 14, ((!in_array('body_hlink', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_HEADER_LINK'		=> $this->jquery->colorpicker('header_link', $this->style['header_link'], false, 14, ((!in_array('header_link', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_HEADER_HLINK'		=> $this->jquery->colorpicker('header_hlink', $this->style['header_hlink'], false, 14, ((!in_array('header_hlink', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-
-			'CP_TR_COLOR1'			=> $this->jquery->colorpicker('tr_color1', $this->style['tr_color1'], false, 14, ((!in_array('tr_color1', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_TR_COLOR2'			=> $this->jquery->colorpicker('tr_color2', $this->style['tr_color2'], false, 14, ((!in_array('tr_color2', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_TH_COLOR1'			=> $this->jquery->colorpicker('th_color1', $this->style['th_color1'], false, 14, ((!in_array('th_color1', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_TABLE_BORDER'		=> $this->jquery->colorpicker('table_border_color', $this->style['table_border_color'], false, 14, ((!in_array('table_border_color', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-
-			'CP_INPUT_COLOR'		=> $this->jquery->colorpicker('input_color', $this->style['input_color'], false, 14, ((!in_array('input_color', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-			'CP_INPUT_BORDER'		=> $this->jquery->colorpicker('input_border_color', $this->style['input_border_color'], false, 14, ((!in_array('input_border_color', $arrUsedVariables)) ? 'disabled="disabled"' : '')),
-
 			// Language
 			'L_TEMPLATE_WARNING'	=> sprintf($this->user->lang('template_warning'), $this->pfh->FileLink('templates', 'eqdkp').'/'.$this->style['template_path']),
 
 			// Buttons
 			'S_ADD' 				 => ( !$this->url_id ) ? true : false)
 		);
+		
+		$arrOptions = $this->objStyles->styleOptions();
+		foreach($arrOptions as $key => $val){
+			$this->tpl->assign_block_vars('fieldset_row', array(
+				'LEGEND' => $key,	
+			));
+			
+			foreach($val as $name=>$elem){
+				$field = "";
+				
+				if($elem == 'color'){
+					$field = $this->jquery->colorpicker($name, $this->style[$name], false, 14, ((!in_array($name, $arrUsedVariables)) ? 'disabled="disabled"' : ''), array('showAlpha' => true, 'format' => 'rgb', 'group' => 'editstyle'));
+				} elseif($elem == 'decoration'){
+					$field = new hdropdown($name, array('options' => $text_decoration, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false)));
+				} elseif($elem == 'font-family'){
+					$field = new htext($name, array('size' => 30, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false)));
+				} elseif($elem == 'size'){
+					$field = new htext($name, array('after_txt' => 'px', 'value' => $this->style[$name], 'size' => 3, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false)));
+				}
+				
+				
+				$this->tpl->assign_block_vars('fieldset_row.option_row', array(
+					'NAME' => $name,
+					'FIELD'=> $field,
+					'HELP' => '@'.$this->objStyles->convertNameToLessVar($name),
+				));
+			}
+		}
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('styles_title'),
@@ -476,45 +416,15 @@ class Manage_Styles extends page_generic{
 	}
 	
 	private function get_used_variables($style_path){
-		$var_mapping = array(
-				'fontface1' 			=> "T_FONTFACE1",
-				'fontface2' 			=> "T_FONTFACE2",
-				'fontface3' 			=> "T_FONTFACE3",
-				'fontsize1' 			=> "T_FONTSIZE1",
-				'fontsize2' 			=> "T_FONTSIZE2",
-				'fontsize3' 			=> "T_FONTSIZE3",
-				'fontcolor1' 			=> "T_FONTCOLOR1",
-				'fontcolor2' 			=> "T_FONTCOLOR2",
-				'fontcolor3' 			=> "T_FONTCOLOR3",
-				'fontcolor_neg' 		=> 'T_FONTCOLOR_NEG',
-				'fontcolor_pos' 		=> 'T_FONTCOLOR_POS',
-				'background_type' 		=> 'TEMPLATE_BACKGROUND',
-				'background_img' 		=> 'TEMPLATE_BACKGROUND',
-				'background_pos' 		=> 'T_BACKGROUND_POSITION',
-				'body_background' 		=> 'T_BODY_BACKGROUND',
-				'table_border_width' 	=> 'T_TABLE_BORDER_WIDTH',
-				'table_border_color' 	=> 'T_TABLE_BORDER_COLOR',
-				'table_border_style' 	=> 'T_TABLE_BORDER_STYLE',
-				'body_link_style' 		=> 'T_BODY_LINK_STYLE',
-				'body_link' 			=> 'T_BODY_LINK',
-				'body_hlink_style' 		=> 'T_BODY_HLINK_STYLE',
-				'body_hlink' 			=> 'T_BODY_HLINK',
-				'header_link_style' 	=> 'T_HEADER_LINK_STYLE',
-				'header_link' 			=> 'T_HEADER_LINK',
-				'header_hlink_style' 	=> 'T_HEADER_HLINK_STYLE',
-				'header_hlink' 			=> 'T_HEADER_HLINK',
-				'th_color1' 			=> 'T_TH_COLOR1',
-				'tr_color1' 			=> 'T_TR_COLOR1',
-				'tr_color2' 			=> 'T_TR_COLOR2',
-				'input_color' 			=> 'T_INPUT_BACKGROUND',
-				'input_border_width' 	=> 'T_INPUT_BORDER_WIDTH',
-				'input_border_color' 	=> 'T_INPUT_BORDER_COLOR',
-				'input_border_style' 	=> 'T_INPUT_BORDER_STYLE',
-				'portal_width' 			=> 'T_PORTAL_WIDTH',
-				'column_left_width' 	=> 'T_COLUMN_LEFT_WIDTH',
-				'column_right_width' 	=> 'T_COLUMN_RIGHT_WIDTH',
-		);
-		
+		$arrOptions = $this->objStyles->styleOptions();
+		$arrVariablesToLook = array('portal_width', 'portal_column_left_width', 'portal_column_right_width', 'background_image', 'background_image_position', 'column_left_width', 'column_right_width', 'background_pos');
+		foreach($arrOptions as $key => $val){
+			foreach($val as $name => $type)
+			{
+				$arrVariablesToLook[] = $name;
+			}		
+		}
+
 		$arrFiles[] = $this->tpl->resolve_css_file($this->core->root_path . 'templates/'.$style_path.'/'.$style_path.'.css', $style_path);
 		$arrFiles[] = $this->tpl->resolve_css_file($this->core->root_path . 'templates/'.$style_path.'/custom.css', $style_path);
 		$arrFiles[] = $this->tpl->resolve_templatefile('index.tpl', $style_path);
@@ -524,14 +434,23 @@ class Manage_Styles extends page_generic{
 			if($strFilename && is_file($strFilename)){
 				$strContent = file_get_contents($strFilename);
 				
-				foreach($var_mapping as $key => $val){
-					if(strpos($strContent, $val) !== false){
-						$arrVariables[] = $key;
+				foreach($arrVariablesToLook as $val){
+					$myLess = '@'.$this->objStyles->convertNameToLessVar($val);
+					$myTemplate = 'T_'.strtoupper($val);
+
+					if(strpos($strContent, $myLess) !== false || strpos($strContent, $myTemplate) !== false){
+						$arrVariables[] = $val;
 					}
+				}
+				
+				if(strpos($strContent, 'TEMPLATE_BACKGROUND') !== false){
+					$arrVariables[] = 'background_image';
 				}
 			}
 		}
+	
 		$arrVariables = array_unique($arrVariables);
+		
 		return $arrVariables;
 	}
 

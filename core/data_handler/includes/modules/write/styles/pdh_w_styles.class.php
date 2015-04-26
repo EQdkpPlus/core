@@ -83,7 +83,7 @@ if(!class_exists('pdh_w_styles')) {
 			return false;
 		}
 		
-		public function update_style($styleid ,$data){
+		public function update_style($styleid, $data){
 			$objQuery = $this->db->prepare("UPDATE __styles :p WHERE style_id=?")->set($data)->execute($styleid);
 			$this->pdh->enqueue_hook('styles_update');
 			return $styleid;

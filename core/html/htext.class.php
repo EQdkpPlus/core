@@ -51,6 +51,7 @@ class htext extends html {
 	public $autocomplete = array();
 	public $class = 'input';
 	public $inptype = '';
+	public $disabled = false;
 
 	private $out = '';
 	
@@ -72,6 +73,7 @@ class htext extends html {
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= 'required="required" ';
+		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if($this->spinner){

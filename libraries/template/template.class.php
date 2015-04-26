@@ -1368,37 +1368,6 @@ class template extends gen_class {
 		}
 		
 		$in = array(
-				"T_FONTFACE1",
-				"T_FONTFACE2",
-				"T_FONTFACE3",
-				"T_FONTSIZE1",
-				"T_FONTSIZE2",
-				"T_FONTSIZE3",
-				"T_FONTCOLOR1",
-				"T_FONTCOLOR2",
-				"T_FONTCOLOR3",
-				"T_FONTCOLOR_NEG",
-				"T_FONTCOLOR_POS",
-				"T_BODY_BACKGROUND",
-				"T_TABLE_BORDER_WIDTH",
-				"T_TABLE_BORDER_COLOR",
-				"T_TABLE_BORDER_STYLE",
-				"T_BODY_LINK_STYLE",
-				"T_BODY_LINK",
-				"T_BODY_HLINK_STYLE",
-				"T_BODY_HLINK",
-				"T_HEADER_LINK_STYLE",
-				"T_HEADER_LINK",
-				"T_HEADER_HLINK_STYLE",
-				"T_HEADER_HLINK",
-		
-				"T_TH_COLOR1",
-				"T_TR_COLOR1",
-				"T_TR_COLOR2",
-				"T_INPUT_BACKGROUND",
-				"T_INPUT_BORDER_WIDTH",
-				"T_INPUT_BORDER_COLOR",
-				"T_INPUT_BORDER_STYLE",
 				"T_PORTAL_WIDTH_WITHOUT_BOTH_COLUMNS",
 				"T_PORTAL_WIDTH_WITHOUT_LEFT_COLUMN",
 				"T_PORTAL_WIDTH",
@@ -1413,36 +1382,6 @@ class template extends gen_class {
 		);
 		
 		$out = array(
-				$style['fontface1'],
-				$style['fontface2'],
-				$style['fontface3'],
-				$style['fontsize1'],
-				$style['fontsize2'],
-				$style['fontsize3'],
-				$style['fontcolor1'],
-				$style['fontcolor2'],
-				$style['fontcolor3'],
-				$style['fontcolor_neg'],
-				$style['fontcolor_pos'],
-				$style['body_background'],
-				$style['table_border_width'],
-				$style['table_border_color'],
-				$style['table_border_style'],
-				$style['body_link_style'],
-				$style['body_link'],
-				$style['body_hlink_style'],
-				$style['body_hlink'],
-				$style['header_link_style'],
-				$style['header_link'],
-				$style['header_hlink_style'],
-				$style['header_hlink'],
-				$style['th_color1'],
-				$style['tr_color1'],
-				$style['tr_color2'],
-				$style['input_color'],
-				$style['input_border_width'],
-				$style['input_border_color'],
-				$style['input_border_style'],
 				(intval($style['portal_width']) - intval($style['column_left_width']) - intval($style['column_right_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
 				(intval($style['portal_width']) - intval($style['column_left_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
 				$style['portal_width'],
@@ -1455,6 +1394,16 @@ class template extends gen_class {
 				$root_path.'templates/'.$stylepath.'/images',
 				$template_background_file,
 		);
+		
+
+		$arrOptions = register('styles')->styleOptions();
+		foreach($arrOptions as $key => $val){
+			foreach($val as $name => $type)
+			{
+				$in[]	= "T_".strtoupper($name);
+				$out[]	= $style[$name];
+			}
+		}
 		
 		$data = str_replace($in, $out, $strCSS);
 		
@@ -1627,58 +1576,40 @@ class template extends gen_class {
 		
 		$options = array();
 		$lessVars = array(
-			'eqdkpURL'		=> '"'.$this->env->link.'"',
-			'eqdkpServerPath' => '"'.$this->server_path.'"',
-			'eqdkpRootPath' => '"'.$root_path.'"',
-			'eqdkpImagePath'=> '"'.$root_path.'images/"',
-			'eqdkpTemplateImagePath' => '"'.$root_path.'templates/'.$stylepath.'/images/"',
-			'eqdkpTemplateBackground' => '"'.$template_background_file.'"',
-			
-			'eqdkpTemplateBackgroundPositions' => (($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
-			'eqdkpPortalWidth' => $style['portal_width'],
-			'eqdkpColumnLeftWidth' => $style['column_left_width'],
-			'eqdkpColumnRightWidth' => $style['column_right_width'],
+			'eqdkpURL'							=> '"'.$this->env->link.'"',
+			'eqdkpServerPath'					=> '"'.$this->server_path.'"',
+			'eqdkpRootPath'						=> '"'.$root_path.'"',
+			'eqdkpImagePath'					=> '"'.$root_path.'images/"',
+			'eqdkpTemplateImagePath' 			=> '"'.$root_path.'templates/'.$stylepath.'/images/"',
+			'eqdkpTemplateBackground' 			=> '"'.$template_background_file.'"',
+			'eqdkpTemplateBackgroundPositions'	=> (($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
+			'eqdkpPortalWidth' 					=> ($style['portal_width'] != "") ? $style['portal_width'] : '900px',
+			'eqdkpColumnLeftWidth' 				=> ($style['column_left_width'] != "") ? $style['column_left_width'] : '200px',
+			'eqdkpColumnRightWidth' 			=> ($style['column_right_width'] != "") ? $style['column_right_width'] : '200px',
 			'eqdkpPortalWidthWithoutBothColumns' => (intval($style['portal_width']) - intval($style['column_left_width']) - intval($style['column_right_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
-			'eqdkpPortalWidthWithoutLeftColumn' => (intval($style['portal_width']) - intval($style['column_left_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
-			'eqdkpFontface1' => $style['fontface1'],
-			'eqdkpFontface2' => $style['fontface2'],
-			'eqdkpFontface3' => $style['fontface3'],
-			'eqdkpFontsize1' => $style['fontsize1'],
-			'eqdkpFontsize2' => $style['fontsize2'],
-			'eqdkpFontsize3' => $style['fontsize3'],
-			'eqdkpFontcolor1' => $style['fontcolor1'],
-			'eqdkpFontcolor2' => $style['fontcolor2'],
-			'eqdkpFontcolor3' => $style['fontcolor3'],
-			'eqdkpFontcolorNegative' => $style['fontcolor_neg'],
-			'eqdkpFontcolorPositive' => $style['fontcolor_pos'],
-			'eqdkpBodyBackground' => $style['body_background'],
-			'eqdkpTableBorderWidth' => $style['table_border_width'],
-			'eqdkpTableBorderColor' => $style['table_border_color'],
-			'eqdkpTableBorderStyle' => $style['table_border_style'],
-			'eqdkpBodyLinkStyle' =>	$style['body_link_style'],
-			'eqdkpBodyLink' =>	$style['body_link'],
-			'eqdkpBodyLinkStyleHover' =>	$style['body_hlink_style'],
-			'eqdkpBodyLinkHover' =>	$style['body_hlink'],
-			'eqdkpHeaderLinkStyle' =>	$style['header_link_style'],
-			'eqdkpHeaderLink' =>	$style['header_link'],
-			'eqdkpHeaderLinkStyleHover' =>	$style['header_hlink_style'],
-			'eqdkpHeaderLinkHover' =>	$style['header_hlink'],
-			'eqdkpTableHeadColor1' =>	$style['th_color1'],
-			'eqdkpTableRowColor1' =>	$style['tr_color1'],
-			'eqdkpTableRowColor2' =>	$style['tr_color2'],
-			'eqdkpInputColor' =>	$style['input_color'],
-			'eqdkpInputBorderWidth' =>	$style['input_border_width'],
-			'eqdkpInputBorderColor' =>	$style['input_border_color'],
-			'eqdkpInputBorderStyle' =>	$style['input_border_style'],
+			'eqdkpPortalWidthWithoutLeftColumn'	=> (intval($style['portal_width']) - intval($style['column_left_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
 		);
 		
+		$arrOptions = register('styles')->styleOptions();
+		foreach($arrOptions as $key => $val){
+			foreach($val as $name => $type)
+			{
+				if($name == 'body_font_size') {
+					$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name].'px' : '13px';
+					continue;
+				}
+				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name] : '""';
+			}
+		}
+
 		try {
 			include_once $this->root_path.'libraries/less/lessc.inc.php';
 			$less = new lessc;
-			//$less->setVariables($lessVars);
+			$less->setVariables($lessVars);
 			$strCSS = $less->compile($strCSS);
 		} catch (exception $e) {
 			echo "fatal error parsing less: " . $e->getMessage();
+			die();
 		}
 		
 		return $strCSS;

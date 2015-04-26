@@ -976,12 +976,28 @@ if (!class_exists("jquery")) {
 		* @param $jscode	Optional JavaScript Code tags
 		* @return CHAR
 		*/
-		public function colorpicker($id, $value, $name='', $size='14', $jscode=''){
-			if(!$this->inits['colorpicker']) {
-				$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
-				$this->inits['colorpicker'] = true;
+		public function colorpicker($id, $value, $name='', $size='14', $jscode='', $options=array()){
+			if(count($options) === 0){
+				if(!$this->inits['colorpicker']) {
+					$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
+					$this->inits['colorpicker'] = true;
+				}
+				return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
+			} else {
+				$jsoptions[] = 'showInput: true';
+				$jsoptions[] = 'preferredFormat: "'.((isset($options['format'])) ? $options['format'] : 'hex6').'"';
+				if(isset($options['showAlpha'])) $jsoptions[] = 'showAlpha: true';
+				if(isset($options['group'])){
+					if(!isset($this->inits['colorpicker_'.$options['group']])){
+						$this->tpl->add_js('$(".colorpicker_group_'.$options['group'].'").spectrum('.$this->gen_options($jsoptions).');', 'docready');
+						$this->inits['colorpicker_'.$options['group']] = true;
+					}
+				} else {
+					$this->tpl->add_js('$(".colorpicker_'.$id.'").spectrum('.$this->gen_options($jsoptions).');', 'docready');
+				}
+				
+				return '<input type="text" class="colorpicker_group_'.$options['group'].' colorpicker_'.$id.'" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 			}
-			return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 		}
 
 		/**
