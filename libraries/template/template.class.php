@@ -232,8 +232,7 @@ class template extends gen_class {
 
 		if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
 		
-		//if (is_file($combinedFile)){
-		if(false){
+		if (is_file($combinedFile)){
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 			return $combinedFile;
 		} else {
@@ -1610,9 +1609,6 @@ class template extends gen_class {
 				$lessVars['eqdkpClasscolor'.$class_id] = ($this->game->get_class_color($class_id) != "") ? $this->game->get_class_color($class_id) : '""';
 			}
 		}
-		
-		d($lessVars);
-		die();
 
 		try {
 			include_once $this->root_path.'libraries/less/lessc.inc.php';
