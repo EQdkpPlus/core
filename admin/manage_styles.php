@@ -452,7 +452,7 @@ class Manage_Styles extends page_generic{
 				}
 				
 				if(strpos($strContent, 'TEMPLATE_BACKGROUND') !== false){
-					//$arrVariables[] = 'background_image';
+					$arrVariables[] = 'background_image';
 				}
 			}
 		}

@@ -1601,7 +1601,7 @@ class template extends gen_class {
 					$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name].'px' : '13px';
 					continue;
 				}
-				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name] : '""';
+				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name] : ((stripos($name, 'color')) ? '#000' : '""');
 			}
 		}
 		
