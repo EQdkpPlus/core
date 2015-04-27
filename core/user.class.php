@@ -115,21 +115,12 @@ class user extends gen_class {
 		} else {
 			$intUserStyleID = (isset($this->data['user_style']) && !$this->config->get('default_style_overwrite')) ? $this->data['user_style'] : $this->config->get('default_style');
 		}
-		
-		//Fallback to first available style
-		if (is_numeric($intUserStyleID) && $intUserStyleID > 0){
-			$intStyleID = $intUserStyleID;
-		} else {
-			$objQuery = $this->db->prepare("SELECT style_id FROM __styles")->limit(1)->execute();
-			if ($objQuery && $objQuery->numRows) {
-				$arrData = $objQuery->fetchAssoc();
-				$intStyleID = $arrData['style_id'];
-			}
-		}
+
+		$intStyleID = intval($intUserStyleID);
 
 		//Mobile Device?
 		$intStyleID = ($this->config->get('mobile_template') && strlen($this->config->get('mobile_template')) && $this->env->agent->mobile && registry::get_const('mobile_view')) ? intval($this->config->get('mobile_template')) : $intStyleID;
-		
+
 		//Get Style-Information
 		$objQuery = $this->db->prepare("SELECT * FROM __styles WHERE style_id=?")->execute($intStyleID);
 		if ($objQuery && $objQuery->numRows){
@@ -141,6 +132,16 @@ class user extends gen_class {
 			$objQuery = $this->db->prepare("SELECT * FROM __styles WHERE style_id=?")->execute((int)$this->config->get('default_style'));
 			if ($objQuery && $objQuery->numRows){
 				$this->style = $objQuery->fetchAssoc();
+			}
+		}
+		
+		//No infos about default style? Take the first one
+		//Fallback to first available style
+		if ( !$this->style) {
+			$objQuery = $this->db->prepare("SELECT * FROM __styles ORDER BY style_id ASC")->limit(1)->execute();
+			if ($objQuery && $objQuery->numRows) {
+				$this->style = $objQuery->fetchAssoc();
+				$intStyleID = $this->style['style_id'];
 			}
 		}
 		
