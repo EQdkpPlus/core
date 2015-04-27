@@ -30,7 +30,7 @@ if (!class_exists('exchange_logout')){
 		public function post_logout($params, $body){
 			$xml = simplexml_load_string($body);
 			if ($xml && $xml->sid){
-				$this->user->sid = $xml->sid;
+				$this->user->sid = (string)$xml->sid;
 				$this->user->destroy();
 				return array('result' => 1);
 			}
