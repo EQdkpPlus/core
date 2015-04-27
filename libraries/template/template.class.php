@@ -1585,7 +1585,7 @@ class template extends gen_class {
 			'eqdkpTemplateImagePath' 			=> '"'.$root_path.'templates/'.$stylepath.'/images/"',
 			'eqdkpTemplateBackground' 			=> '"'.$template_background_file.'"',
 			'eqdkpBackgroundImage' 				=> '"'.$template_background_file.'"',
-			'eqdkpBackgroundPosition'			=> (($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
+			'eqdkpBackgroundImagePosition'		=> (($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
 			'eqdkpPortalWidth' 					=> ($style['portal_width'] != "") ? $style['portal_width'] : '900px',
 			'eqdkpColumnLeftWidth' 				=> ($style['column_left_width'] != "") ? $style['column_left_width'] : '200px',
 			'eqdkpColumnRightWidth' 			=> ($style['column_right_width'] != "") ? $style['column_right_width'] : '200px',

@@ -368,7 +368,7 @@ class Manage_Styles extends page_generic{
 			'DD_LOGO_POSITION'		=> new hdropdown('logo_position', array('options' => $logo_positions, 'value' => $this->style['logo_position'])),
 
 			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'], 'disabled' => ((!in_array('background_image', $arrUsedVariables)) ? true : false))),
-			'RADIO_BACKGROUND_POSITION' => new hradio('background_pos', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_position', $arrUsedVariables) && !in_array('background_pos', $arrUsedVariables)) ? true : false))),
+			'RADIO_BACKGROUND_POSITION' => new hradio('background_pos', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_position', $arrUsedVariables) && !in_array('background_image_position', $arrUsedVariables)) ? true : false))),
 			'BACKGROUND_IMG_DISABLED' => ((!in_array('background_image', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'ADDITIONAL_LESS'		=> $this->style['additional_less'],
 	
@@ -425,7 +425,7 @@ class Manage_Styles extends page_generic{
 	
 	private function get_used_variables($style_path){
 		$arrOptions = $this->objStyles->styleOptions();
-		$arrVariablesToLook = array('portal_width', 'portal_column_left_width', 'portal_column_right_width', 'background_image', 'background_position', 'column_left_width', 'column_right_width', 'background_pos');
+		$arrVariablesToLook = array('portal_width', 'portal_column_left_width', 'portal_column_right_width', 'background_image', 'background_position', 'background_image_position', 'column_left_width', 'column_right_width');
 		foreach($arrOptions as $key => $val){
 			foreach($val as $name => $type)
 			{
@@ -452,7 +452,7 @@ class Manage_Styles extends page_generic{
 				}
 				
 				if(strpos($strContent, 'TEMPLATE_BACKGROUND') !== false){
-					$arrVariables[] = 'background_image';
+					//$arrVariables[] = 'background_image';
 				}
 			}
 		}
