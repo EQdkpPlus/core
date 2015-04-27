@@ -357,7 +357,7 @@ class Manage_Styles extends page_generic{
 			'STYLE_COLUMN_LEFT_WIDTH'	=> (isset($this->style['column_left_width'])) ? (int)$this->style['column_left_width'] : 180,
 			'STYLE_COLUMN_RIGHT_WIDTH'	=> (isset($this->style['column_right_width'])) ? (int)$this->style['column_right_width'] : 180,
 			
-				'STYLE_PORTAL_WIDTH_DISABLED' => ((!in_array('portal_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
+			'STYLE_PORTAL_WIDTH_DISABLED' => ((!in_array('portal_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'STYLE_COLUMN_LEFT_DISABLED' => ((!in_array('portal_column_left_width', $arrUsedVariables) && !in_array('column_left_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'STYLE_COLUMN_RIGHT_DISABLED' => ((!in_array('portal_column_right_width', $arrUsedVariables) && !in_array('column_right_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),	
 			'DD_PORTAL_WIDTH'		=> new hdropdown('dd_portal_width', array('options' => $width_options, 'value' => ((strpos($this->style['portal_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_width', $arrUsedVariables)) ? true : false))),
@@ -368,7 +368,7 @@ class Manage_Styles extends page_generic{
 			'DD_LOGO_POSITION'		=> new hdropdown('logo_position', array('options' => $logo_positions, 'value' => $this->style['logo_position'])),
 
 			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'], 'disabled' => ((!in_array('background_image', $arrUsedVariables)) ? true : false))),
-			'RADIO_BACKGROUND_POSITION' => new hradio('background_image_position', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_image_position', $arrUsedVariables) && !in_array('background_pos', $arrUsedVariables)) ? true : false))),
+			'RADIO_BACKGROUND_POSITION' => new hradio('background_pos', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_position', $arrUsedVariables) && !in_array('background_pos', $arrUsedVariables)) ? true : false))),
 			'BACKGROUND_IMG_DISABLED' => ((!in_array('background_image', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'ADDITIONAL_LESS'		=> $this->style['additional_less'],
 	
@@ -425,7 +425,7 @@ class Manage_Styles extends page_generic{
 	
 	private function get_used_variables($style_path){
 		$arrOptions = $this->objStyles->styleOptions();
-		$arrVariablesToLook = array('portal_width', 'portal_column_left_width', 'portal_column_right_width', 'background_image', 'background_image_position', 'column_left_width', 'column_right_width', 'background_pos');
+		$arrVariablesToLook = array('portal_width', 'portal_column_left_width', 'portal_column_right_width', 'background_image', 'background_position', 'column_left_width', 'column_right_width', 'background_pos');
 		foreach($arrOptions as $key => $val){
 			foreach($val as $name => $type)
 			{
