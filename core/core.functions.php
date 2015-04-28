@@ -718,7 +718,7 @@ function set_cookie($name, $cookie_data, $cookie_time){
 	$cname = register('config')->get('cookie_name');
 	$cpath = register('config')->get('cookie_path');
 	if(empty($cname) || empty($cpath)) return;
-	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'));
+	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl);
 }
 
 //A workaround because strtolower() does not support UTF8
