@@ -154,12 +154,7 @@ if(!class_exists('pdh_w_articles')) {
 				}
 			}
 			
-			if(!$this->user->check_auth('u_articles_script', false)){
-				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
-				$strText = $filter->clean($strText);
-			}
-			
+			$strText = $this->filter_string($strText);
 			$strText = htmlspecialchars($strText);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __articles :p")->set(array(
@@ -282,12 +277,7 @@ if(!class_exists('pdh_w_articles')) {
 				}
 			}
 			
-			if(!$this->user->check_auth('u_articles_script', false)){
-				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
-				$strText = $filter->clean($strText);
-			}
-			
+			$strText = $this->filter_string($strText);
 			$strText = htmlspecialchars($strText);
 				
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
@@ -351,12 +341,7 @@ if(!class_exists('pdh_w_articles')) {
 				}
 			}
 			
-			if(!$this->user->check_auth('u_articles_script', false)){
-				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
-				$strText = $filter->clean($strText);
-			}
-			
+			$strText = $this->filter_string($strText);
 			$strText = htmlspecialchars($strText);
 			
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
@@ -650,7 +635,60 @@ if(!class_exists('pdh_w_articles')) {
 			$strAlias = str_replace($a_satzzeichen, "", $strAlias);
 			return $strAlias;
 		}
-	
+		
+		private function filter_string($strIn){
+			if(!$this->user->check_auth('u_articles_script', false)){
+				
+				//Tag Blacklist for filtering article content
+				$tag_blacklist = array(
+					'applet',
+					'body',
+					'bgsound',
+					'base',
+					'basefont',
+					'frame',
+					'frameset',
+					'head',
+					'html',
+					'id',
+					'ilayer',
+					'layer',
+					'link',
+					'meta',
+					'name',
+					'script',
+					'title',
+					'xml',
+					'iframe',
+				);
+				
+				//Attribute Blacklist for filtering article content
+				$attr_blacklist = array(
+					'onclick',
+					"ondblclick",
+					"onkeydown",
+					"onkeypress",
+					"onkeyup",
+					"onmousedown",
+					"onmousemove",
+					"onmouseout",
+					"onmouseover",
+					"onmouseup",
+					"onchange",
+					'action',
+					'background',
+					'codebase',
+					'dynsrc',
+					'lowsrc',
+				);
+				
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput($tag_blacklist, $attr_blacklist, 1, 1);
+				$strIn = $filter->clean($strIn);
+			}
+			return $strIn;
+		}
+
 	}
 }
 ?>
