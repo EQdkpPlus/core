@@ -730,6 +730,24 @@ class update_2000 extends sql_update_task {
 			$this->db->query("RENAME TABLE `__pages` TO `!OBSOLETE_".$prefix."pages`;");
 		}
 		
+		//User avatar
+		$sql = "SELECT * FROM __users";
+		$query = $this->db->query($sql);
+		if ($query){
+			while ($row = $query->fetchAssoc()) {
+				$arrCustom = unserialize($row['custom_fields']);
+				if(isset($arrCustom['user_avatar']) && strlen($arrCustom['user_avatar'])){
+					$arrCustom['user_avatar'] = "";
+					$arrCustom = serialize($arrCustom);
+					
+					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+							'custom_fields' 	=> $arrCustom,
+					))->execute($row['user_id']);
+				}
+			}
+		}
+		
+		
 		//Legal Notice and Privacy Policy
 		if (is_file($this->root_path.'language/'.$this->user->data['user_lang'].'/disclaimer.php')){
 			include_once($this->root_path.'language/'.$this->user->data['user_lang'].'/disclaimer.php');
