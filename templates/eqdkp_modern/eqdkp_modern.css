@@ -3474,10 +3474,14 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: auto !important;
 	}
 	
-	.responsive.simple-header.mobile .floatRight {
+	.responsive.simple-header.mobile .floatRight  {
 		float: none;
 	}
 	
+	.responsive div.leaderboard > div.floatLeft {
+		float: none;
+		width: 100% !important;
+	}
 	
 	/* Mobile Navigation */
 	.nav-mobile {
@@ -3910,4 +3914,14 @@ button.thirdpartylogin.openid {
 	color: #000;
 	border-radius: 3px;
 	border-color: transparent;
+}
+
+/* Leaderboard */
+.leaderboard {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.leaderboard > div > div{
+	padding: 6px;
 }

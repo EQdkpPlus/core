@@ -61,15 +61,18 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 			$mdkp_sel = new hdropdown('lb_mdkpid', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'js' => ' onchange="$(\'#lbc\').val(1); form.submit();"', 'value' => $this->mdkpid));
 
-			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<table class="table fullwidth leaderboard scrollable-x">';
+			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<div class="leaderboard">';
 			$colnr = 0;
 			
 			$with_twinks = ($with_twinks === false) ? (!intval($this->config->get('show_twinks'))) : $with_twinks;
 			
+			$intWidth = (count($column_list) < $break) ? floor(100 / count($column_list)) : floor(100 / $break);
+			
 			foreach($columns as $col) {
 				if(!isset($column_list[$col])) continue;
+				
 				$member_ids = $column_list[$col];
-				$leaderboard .= '<td align="center" valign="top" width="200"><table class="table fullwidth borderless nowrap colorswitch"><tr><th colspan="2">';
+				$leaderboard .= '<div class="floatLeft '.(($column == 'classid') ? 'leaderboard_class_'.$col : 'leaderboard_role_'.$col).'" style="width:'.$intWidth.'%"><div><table class="table fullwidth borderless nowrap colorswitch"><tr><th colspan="2">';
 				$leaderboard .= ($column == 'classid') ? $this->game->decorate('primary', $col).' <span class="class_'.$col.'">'.$this->game->get_name('primary', $col).'</span>' : $this->game->decorate('roles', $col).' '.$this->pdh->get('roles', 'name', array($col));
 				$leaderboard .= '</th></tr>';
 				usort($member_ids, array(&$this, "sort_by_points"));
@@ -78,14 +81,10 @@ if ( !class_exists( "html_leaderboard" ) ) {
 				for($i=0; $i<$rows; $i++){
 					$leaderboard .= '<tr><td align="left">'.$this->pdh->geth('member', 'memberlink', array($member_ids[$i], register('routing')->build('character', false, false,false), '', false,false,true,true)).'</td><td align="right">'.$this->pdh->geth($this->vpre[0], $this->vpre[1], $this->vpre[2], array('%member_id%' => $member_ids[$i], '%dkp_id%' => $this->mdkpid, '%use_controller%' => true, '%with_twink%' => $with_twinks)).'</td></tr>';
 				}
-				$leaderboard .= '</table></td>';
-				$colnr++;
-				if(($colnr % $break) == 0 && $colnr < count($column_list)) {
-					$leaderboard .= '</tr><tr>';
-				}
+				$leaderboard .= '</table></div></div>';
 			}
 			$this->jquery->Collapse('#toggleLeaderboard');
-			$leaderboard .= '</tr></table></div></div>';
+			$leaderboard .= '</div><div class="clear"></div></div></div>';
 			return $leaderboard;
 		}
 

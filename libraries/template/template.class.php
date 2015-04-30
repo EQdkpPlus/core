@@ -1618,7 +1618,7 @@ class template extends gen_class {
 		try {		
 			require_once $this->root_path.'libraries/less/ILess/Autoloader.php';
 			ILess_Autoloader::register();
-			$parser = new ILess_Parser();
+			$parser = new ILess_Parser(array('compress' => false));
 			$lessVars = array_reverse($lessVars);
 			
 			foreach ($lessVars as $key => $val){

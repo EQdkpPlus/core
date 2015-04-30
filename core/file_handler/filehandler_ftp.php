@@ -409,6 +409,14 @@ if (!class_exists("filehandler_ftp")) {
 			if (strpos($string, $this->root_path) === 0){
 				return substr($string, strlen($this->root_path));
 			}
+			$strServerpath = $this->config->get('server_path');
+			if(stripos($string, $strServerpath ) === 0)
+				return substr($string, strlen($strServerpath));
+			
+			if (strpos($string, '../') === 0){
+				return str_replace("../", "", $string);
+			}
+			
 			return $string;
 		}
 		

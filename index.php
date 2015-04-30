@@ -594,7 +594,7 @@ class controller extends gen_class {
 				$this->tpl->assign_vars(array(
 						'ARTICLE_ID'		=> $intArticleID,
 						'PAGINATION'		=> generate_pagination($this->controller_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
-						'ARTICLE_CONTENT'	=> nl2br($strContent),
+						'ARTICLE_CONTENT'	=> $strContent,
 						'ARTICLE_TITLE'		=> $arrTitles[$intPageID],
 						'ARTICLE_SUBMITTED'	=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($arrArticle['date'], false, true)),
 						'ARTICLE_DATE'		=> $this->time->user_date($arrArticle['date'], false, false, true),
@@ -778,10 +778,10 @@ class controller extends gen_class {
 					$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
 					
 					$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
-			
+
 					$this->tpl->assign_block_vars('article_row', array(
 							'ARTICLE_ID'			=> $intArticleID,
-							'ARTICLE_CONTENT'		=> nl2br($strText),
+							'ARTICLE_CONTENT'		=> $strText,
 							'ARTICLE_TITLE'			=> $this->pdh->get('articles',  'title', array($intArticleID)),
 							'ARTICLE_SUBMITTED'		=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, true)),
 							'ARTICLE_DATE'			=> $this->time->user_date($this->pdh->get('articles', 'date', array($intArticleID)), false, false, true),
