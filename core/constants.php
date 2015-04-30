@@ -73,7 +73,7 @@ define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
 define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
 
 //Tag Blacklist for filtering article content
-define('TAG_BLACKLIST', array(
+$TAG_BLACKLIST = array(
 	'applet',
 	'body',
 	'bgsound',
@@ -93,10 +93,10 @@ define('TAG_BLACKLIST', array(
 	'title',
 	'xml',
 	'iframe',
-));
+);
 
 //Attribute Blacklist for filtering article content
-define('ATTR_BLACKLIST', array(
+$ATTR_BLACKLIST = array(
 	'onclick',
 	"ondblclick",
 	"onkeydown",
@@ -113,6 +113,6 @@ define('ATTR_BLACKLIST', array(
 	'codebase',
 	'dynsrc',
 	'lowsrc',
-));
+);
 
 ?>
