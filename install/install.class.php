@@ -314,7 +314,7 @@ class install extends gen_class {
 					'.$this->get_content().'
 					<div class="buttonbar">';
 		if($this->previous != 'start' && $this->current_step != 'end') $content .= '
-						<button id="previous_step" class="prevstep"><i class="fa fa-mail-reply"></i> '.$this->lang['back'].'</button>
+						<button type="button" id="previous_step" class="prevstep"><i class="fa fa-mail-reply"></i> '.$this->lang['back'].'</button>
 						<input type="hidden" name="prev" value="'.$this->previous.'" id="back_previous_step" disabled="disabled" />';
 		if($_step->skippable) $content .= '
 						<input type="submit" name="'.(($_step->parseskip) ? 'next' : 'skip').'" value="'.$this->lang['skip'].'" class="'.(($_step->parseskip) ? 'nextstep' : 'skipstep').'" />';
