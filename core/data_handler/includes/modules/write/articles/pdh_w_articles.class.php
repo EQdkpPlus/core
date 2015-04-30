@@ -156,7 +156,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$filter = new FilterInput(get_tag_blacklist(), get_attr_blacklist(), 1,1);
 				$strText = $filter->clean($strText);
 			}
 			
@@ -284,7 +284,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$filter = new FilterInput(get_tag_blacklist(), get_attr_blacklist(), 1,1);
 				$strText = $filter->clean($strText);
 			}
 			
@@ -353,7 +353,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
+				$filter = new FilterInput(get_tag_blacklist(), get_attr_blacklist(), 1,1);
 				$strText = $filter->clean($strText);
 			}
 			

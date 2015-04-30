@@ -1263,4 +1263,15 @@ function is_serialized($strValue){
 		return false;
 	}
 }
+
+/* Workarounds because php does not allow arrays in Constants < 5.6 */
+function get_attr_blacklist(){
+	global $ATTR_BLACKLIST;
+	return $ATTR_BLACKLIST;
+}
+
+function get_tag_blacklist(){
+	global $TAG_BLACKLIST;
+	return $TAG_BLACKLIST;
+}
 ?>
