@@ -1367,6 +1367,10 @@ class game extends gen_class {
 		}
 		return $fields;
 	}
+	
+	public function handle_export_charnames($strCharname, $intCharID){
+		return $this->gameinfo()->handle_export_charnames($strCharname, $intCharID);
+	}
 }
 
 if(!class_exists('game_generic')) {
@@ -1619,6 +1623,10 @@ if(!class_exists('game_generic')) {
 		public function get_class_colors(){
 			if (isset($this->class_colors)) return $this->class_colors;
 			return false;
+		}
+		
+		public function handle_export_charnames($strCharname, $intCharID){
+			return $strCharname;
 		}
 	}
 }
