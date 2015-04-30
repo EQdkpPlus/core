@@ -72,47 +72,4 @@ define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl
 define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
 define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
 
-//Tag Blacklist for filtering article content
-define('TAG_BLACKLIST', array(
-	'applet',
-	'body',
-	'bgsound',
-	'base',
-	'basefont',
-	'frame',
-	'frameset',
-	'head',
-	'html',
-	'id',
-	'ilayer',
-	'layer',
-	'link',
-	'meta',
-	'name',
-	'script',
-	'title',
-	'xml',
-	'iframe',
-));
-
-//Attribute Blacklist for filtering article content
-define('ATTR_BLACKLIST', array(
-	'onclick',
-	"ondblclick",
-	"onkeydown",
-	"onkeypress",
-	"onkeyup",
-	"onmousedown",
-	"onmousemove",
-	"onmouseout",
-	"onmouseover",
-	"onmouseup",
-	"onchange",
-	'action',
-	'background',
-	'codebase',
-	'dynsrc',
-	'lowsrc',
-));
-
 ?>

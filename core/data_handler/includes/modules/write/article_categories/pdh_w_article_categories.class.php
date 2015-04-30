@@ -93,12 +93,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			$strDescription = $this->embedly->parseString($strDescription);
-			
-			if(!$this->user->check_auth('u_articles_script', false)){
-				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
-				$strDescription = htmlspecialchars($filter->clean($strDescription));
-			}			
+			$strDescription = $this->filter_string($strDescription);
 			
 			$arrQuery  = array(
 				'name' 			=> $strName,
@@ -158,12 +153,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			$strDescription = $this->embedly->parseString($strDescription);
-			
-			if(!$this->user->check_auth('u_articles_script', false)){
-				include_once($this->root_path."libraries/inputfilter/input.class.php");
-				$filter = new FilterInput(TAG_BLACKLIST, ATTR_BLACKLIST, 1,1);
-				$strDescription = htmlspecialchars($filter->clean($strDescription));
-			}
+			$strDescription = $this->filter_string($strDescription);
 			
 			$arrQuery = array(
 				'name' 			=> $strName,
@@ -249,6 +239,59 @@ if(!class_exists('pdh_w_article_categories')) {
 			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$");
 			$strAlias = str_replace($a_satzzeichen, "", $strAlias);
 			return $strAlias;
+		}
+		
+		private function filter_string($strIn){
+			if(!$this->user->check_auth('u_articles_script', false)){
+				
+				//Tag Blacklist for filtering article content
+				$tag_blacklist = array(
+					'applet',
+					'body',
+					'bgsound',
+					'base',
+					'basefont',
+					'frame',
+					'frameset',
+					'head',
+					'html',
+					'id',
+					'ilayer',
+					'layer',
+					'link',
+					'meta',
+					'name',
+					'script',
+					'title',
+					'xml',
+					'iframe',
+				);
+				
+				//Attribute Blacklist for filtering article content
+				$attr_blacklist = array(
+					'onclick',
+					"ondblclick",
+					"onkeydown",
+					"onkeypress",
+					"onkeyup",
+					"onmousedown",
+					"onmousemove",
+					"onmouseout",
+					"onmouseover",
+					"onmouseup",
+					"onchange",
+					'action',
+					'background',
+					'codebase',
+					'dynsrc',
+					'lowsrc',
+				);
+				
+				include_once($this->root_path."libraries/inputfilter/input.class.php");
+				$filter = new FilterInput($tag_blacklist, $attr_blacklist, 1, 1);
+				$strIn = $filter->clean($strIn);
+			}
+			return $strIn;
 		}
 		
 	}
