@@ -71,6 +71,7 @@ abstract class super_registry {
 		'input'					=> 'core/',
 		'language'				=> 'core/',
 		'logs'					=> 'core/',
+		'messenger'				=> 'core/',
 		'notifications'			=> 'core/',
 		'password'				=> 'core/',
 		'plugin_manager'		=> 'core/',
