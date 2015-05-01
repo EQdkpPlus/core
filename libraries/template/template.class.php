@@ -1646,19 +1646,15 @@ class template extends gen_class {
 		//Add Additional LESS
 		$strCSS .= $style['additional_less'];
 
-		try {		
-			require_once $this->root_path.'libraries/less/ILess/Autoloader.php';
-			ILess_Autoloader::register();
-			$parser = new ILess_Parser(array('compress' => false));
-			$lessVars = array_reverse($lessVars);
-			
-			foreach ($lessVars as $key => $val){
-				$strCSS = "@".$key.': '.$val.'; '.$strCSS;
-			}
-			$parser->parseString($strCSS);
-			$strCSS = $parser->getCSS();
+		try {
+			require_once $this->root_path.'libraries/less/Less.php';
+			$parser = new Less_Parser();	
+			$parser->ModifyVars($lessVars);
+			$parser->parse($strCSS);
+			$strCSS = $parser->getCss();
+
 		} catch (Exception $e) {
-			echo "fatal error parsing less: " . $e->__toString();
+			echo "fatal error parsing less: " . $e->getMessage();
 			die();
 		}
 		
