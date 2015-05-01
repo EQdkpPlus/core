@@ -114,7 +114,7 @@ class urlfetcher  extends gen_class {
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
-			$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.substr($getdata, 0, 200));
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 			
 			curl_close($curl);
 			if(intval($code) >= 400) return false;
@@ -177,7 +177,7 @@ class urlfetcher  extends gen_class {
 			
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 			$this->pdl->log('urlfetcher', 'Reponse Header: '.$header);
-			$this->pdl->log('urlfetcher', 'Response: '.strlen($page).'; First 200 Chars: '.substr($page, 0, 200));
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($page).'; First 200 Chars: '.htmlspecialchars(substr($page, 0, 200)));
 			 
 			return $page;
 		}
@@ -225,7 +225,7 @@ class urlfetcher  extends gen_class {
 		curl_close($curl);
 		
 		$this->pdl->log('urlfetcher', 'Response Code: '.$code);	
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.substr($getdata, 0, 200));
+		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		return trim($getdata);
 	}
 
@@ -253,8 +253,8 @@ class urlfetcher  extends gen_class {
 		);
 		$context	= @stream_context_create($opts);
 		$getdata	= @file_get_contents($geturl, false, $context);
-		
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.substr($getdata, 0, 200));
+		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
+		else 		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		
 		return $getdata;
 	}
@@ -276,8 +276,8 @@ class urlfetcher  extends gen_class {
 		
 		$context	= @stream_context_create($opts);
 		$getdata	= @file_get_contents($url, false, $context);
-		
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.substr($getdata, 0, 200));
+		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
+		else $this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		
 		return $getdata;
 	
@@ -319,7 +319,7 @@ class urlfetcher  extends gen_class {
 			fclose($fp);
 		}
 		
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.substr($getdata, 0, 200));
+		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		
 		return $getdata;
 	}
@@ -357,7 +357,7 @@ class urlfetcher  extends gen_class {
 			fclose($fp);
 		}
 		
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.substr($getdata, 0, 200));
+		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		
 		return $getdata;
 	}
