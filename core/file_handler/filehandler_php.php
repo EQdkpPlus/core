@@ -65,7 +65,7 @@ if (!class_exists("filehandler_php")) {
 			return $this->FilePath($path.'/index.html', $plugin);
 		}
 
-		private function mkdir_r($name, $chmod=0777){
+		private function mkdir_r($name, $chmod=0755){
 			$dirs = explode('/', $name);
 			$dir	= $part = '';
 			foreach ($dirs as $part) {
@@ -196,7 +196,7 @@ if (!class_exists("filehandler_php")) {
 
 			if(!is_dir($path)){
 				$old = umask(0); 
-				$this->mkdir_r($path, 0777);
+				$this->mkdir_r($path, get_chmod(true));
 				umask($old);
 			}
 			return (is_dir($path)) ? true : false;
