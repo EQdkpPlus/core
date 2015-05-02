@@ -41,7 +41,7 @@ class update_2101 extends sql_update_task {
 				),
 			'german' => array(
 				'update_2101'	=> 'EQdkp Plus 2.1.0 Update 2',
-				'update_function'=> 'Führe einige Updates für Erweiterungen aus',
+				'update_function'=> 'Führe einige Updates für Benachrichtigungen aus',
 			),
 		);
 		
