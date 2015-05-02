@@ -1546,6 +1546,7 @@ $lang = array(
 	),
 	"portal_layouts" => 'Portallayout',
 	"portal_blocks" => 'Portalblocks',
+	"portal_routes" => "Assign this portallayout to static pages",
 	"add_portal_layout" => 'Add Portallayout',
 	"add_portal_block" => 'Add Portalblock',
 	"edit_portal_block" => 'Edit Portalblock',

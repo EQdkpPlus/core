@@ -335,6 +335,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		$intLayoutID = $this->in->get('l', 0);
 		$strName = $this->in->get('name');
 		$arrBlocks = $this->in->getArray('portal_blocks', 'string');
+		$arrRoutes = $this->in->getArray('portal_routes', 'string');
 		
 		$arrBlockModules = array();
 
@@ -344,9 +345,9 @@ $('.js_reload').change(reload_settings);", 'docready');
 		}
 
 		if ($intLayoutID){
-			$blnResult = $this->pdh->put('portal_layouts', 'update', array($intLayoutID, $strName, $arrBlocks, $arrBlockModules));
+			$blnResult = $this->pdh->put('portal_layouts', 'update', array($intLayoutID, $strName, $arrBlocks, $arrBlockModules, $arrRoutes));
 		} else {
-			$blnResult = $this->pdh->put('portal_layouts', 'add', array($strName, $arrBlocks, $arrBlockModules));	
+			$blnResult = $this->pdh->put('portal_layouts', 'add', array($strName, $arrBlocks, $arrBlockModules, $arrRoutes));	
 		}
 		
 		if($blnResult) {
@@ -520,9 +521,22 @@ $('.js_reload').change(reload_settings);", 'docready');
 			}
 		}
 		
+		$arrAllRoutes = array_flip($this->routing->getRoutes());
+		$arrAllRoutes = array_merge($arrAllRoutes, array('startpage' => 'startpage'));
+		$mineRoutes = (($intLayoutID) ? $this->pdh->get('portal_layouts', 'routes', array($intLayoutID)) : array());
+
+		if(!is_array($mineRoutes)) $mineRoutes = array();
+		$arrUsedRoutes = $this->pdh->get('portal_layouts', 'used_routes', array());
+		$arrRoutes = array_diff($arrAllRoutes, $arrUsedRoutes);
+		//Add mine again
+		foreach($mineRoutes as $key => $val){
+			$arrRoutes[$val] = $val;
+		}
+		
 		$this->tpl->assign_vars(array(
 				'NAME'				=> ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '',
 				'MS_PORTAL_BLOCKS'	=> $this->jquery->MultiSelect('portal_blocks', $arrBlockList, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), array('width' => 300)),
+				'MS_PORTAL_ROUTES'	=> $this->jquery->MultiSelect('portal_routes', $arrRoutes, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'routes', array($intLayoutID)) : array()), array('width' => 300)),
 				'S_RIGHT_HIDDEN'	=> (!in_array('right', $arrUsedBlocks)),
 				'S_LEFT_HIDDEN'		=> (!in_array('left', $arrUsedBlocks)),
 				'S_MIDDLE_HIDDEN'	=> (!in_array('middle', $arrUsedBlocks)),

@@ -106,6 +106,7 @@ class controller extends gen_class {
 	}
 
 	public function display(){
+		$blnIsStartpage = false;
 		$strPath = $this->env->path;
 		$arrPath = array_filter(explode('/', $strPath));
 		$arrPath = array_reverse($arrPath);
@@ -114,6 +115,7 @@ class controller extends gen_class {
 		register('pm');
 		
 		if (count($arrPath) == 0 || str_ireplace('index.php', '', $strPath) === $this->config->get('server_path')){
+			$blnIsStartpage = true;
 			//Get Start Page
 			if ($this->config->get('start_page') != ""){
 				$strPath = $this->config->get('start_page');
@@ -172,11 +174,21 @@ class controller extends gen_class {
 			$this->core->set_vars('portal_layout', 1);
 			$objPage = $this->routing->getPageObject($strPageObject);
 			if ($objPage){
+
+				$classname = get_class($objPage);
+				$classname = str_replace("_pageobject", "", $classname);
+					
+				$intPortallayout = $this->pdh->get('portal_layouts', 'layout_for_route', array($classname, true));
+				if($intPortallayout !== false){
+					$portal_layout = $intPortallayout;
+				} else $portal_layout = 1;
+
+				
 				$arrVars = $objPage->get_vars();
 				$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
-						'portal_layout'		=> 1,
+						'portal_layout'		=> $portal_layout,
 						'display'			=> true)
 				);
 			} else {
@@ -637,12 +649,15 @@ class controller extends gen_class {
 					));
 				};
 			
+				$intPortallayout = ($blnIsStartpage) ? $this->pdh->get('portal_layouts', 'layout_for_route', array('startpage', true)) : $arrCategory['portal_layout'];
+				if($intPortallayout === false) $intPortallayout = $arrCategory['portal_layout'];
+				
 				$this->core->set_vars(array(
 						'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
 						'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '',
 						'template_file'		=> 'article.html',
-						'portal_layout'		=> $arrCategory['portal_layout'],
+						'portal_layout'		=> $intPortallayout,
 						'display'			=> true)
 				);
 			
@@ -893,12 +908,15 @@ class controller extends gen_class {
 				$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 				$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('article_categories', 'permalink', array($intCategoryID)).'" />');
 					
+				$intPortallayout = ($blnIsStartpage) ? $this->pdh->get('portal_layouts', 'layout_for_route', array('startpage', true)) : $arrCategory['portal_layout'];
+				if($intPortallayout === false) $intPortallayout = $arrCategory['portal_layout'];
+				
 				$this->core->set_vars(array(
 						'page_title'		=> $arrCategory['name'],
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
 						'image'				=> '',
 						'template_file'		=> 'category.html',
-						'portal_layout'		=> $arrCategory['portal_layout'],
+						'portal_layout'		=> $intPortallayout,
 						'display'			=> true)
 				);
 			}		
