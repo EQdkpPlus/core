@@ -138,11 +138,11 @@ class tinyMCE extends gen_class {
 				$link_list = '
 				link_list : [{text: "'.$this->user->lang('articles').'", value: "", menu: [';
 					foreach($arrCategories as $val){
-						$link_list .= '{text: "'.$val['text'].'", value: "{{category_url::'.$val['id'].'}}", menu: [';
+						$link_list .= '{text: "'.$val['text'].'", value: "{{category_url_plain::'.$val['id'].'}}", menu: [';
 							if(!isset($arrItems[$val['id']])) $arrItems[$val['id']] = array();
-							$link_list .= '{text: "'.$val['text'].'", value: "{{category_url::'.$val['id'].'}}"},';
+							$link_list .= '{text: "'.$val['text'].'", value: "{{category_url_plain::'.$val['id'].'}}"},';
 							foreach($arrItems[$val['id']] as $value){
-								$link_list .= '{text: "'.$value['text'].'", value: "{{article_url::'.$value['id'].'}}"},';
+								$link_list .= '{text: "'.$value['text'].'", value: "{{article_url_plain::'.$value['id'].'}}"},';
 							}
 							
 						$link_list .= ']},';
