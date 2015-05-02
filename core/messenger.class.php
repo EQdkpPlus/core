@@ -27,13 +27,13 @@ class messenger extends gen_class {
 
 	public function sendMessage($strMethod, $intToUserID, $strSubject, $strMessage){
 		
-		if(is_file($this->root_path.'core/messenger/'.$strMethod.'.notification.class.php')){
+		if(is_file($this->root_path.'core/messenger/'.$strMethod.'.messenger.class.php')){
 			include_once($this->root_path.'core/messenger/generic_messenger.class.php');
-			include_once($this->root_path.'core/messenger/'.$strMethod.'.notification.class.php');
-			$objNotificationMethod = register($strMethod.'_messenger');
-			$objNotificationMethod->sendMessage($intToUserID, $strSubject, $strMessage);
+			include_once($this->root_path.'core/messenger/'.$strMethod.'.messenger.class.php');
+			$objMessengerMethod = register($strMethod.'_messenger');
+			$blnResult = $objMessengerMethod->sendMessage($intToUserID, $strSubject, $strMessage);
 				
-			return true;
+			return $blnResult;
 		}
 		return false;
 	}
@@ -53,7 +53,7 @@ class messenger extends gen_class {
 					$blnIsAvailable = register($classname)->isAvailable();
 					if(!$blnIsAvailable && !$blnAllMethods) continue;
 					$static_name = $this->user->lang('messenger_type_'.$name);
-					$types[$name] = (strlen($static_name)) ? $static_name : $name;
+					$types[$name] = (strlen($static_name)) ? $static_name : ucfirst($name);
 				}
 			}
 		}

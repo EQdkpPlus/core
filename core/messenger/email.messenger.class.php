@@ -27,9 +27,14 @@ class email_messenger extends generic_messenger {
 	public static $shortcuts = array('email'=>'MyMailer');
 	
 	public function sendMessage($toUserID, $strSubject, $strMessage){
+		$blnResult = false;
 		$strEmailAdress = $this->pdh->get('user', 'email', array($toUserID, true));
-		$this->email->Set_Language($this->pdh->get('user', 'lang', array($toUserID)));
-		$this->email->SendMailFromAdmin($strEmailAdress, $strSubject, $strMessage);
+		if (preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$strEmailAdress)){
+			$this->email->Set_Language($this->pdh->get('user', 'lang', array($toUserID)));
+			$blnResult = $this->email->SendMailFromAdmin($strEmailAdress, $strSubject, $strMessage);
+			
+		}
+		return $blnResult;
 	}
 	
 	public function isAvailable(){

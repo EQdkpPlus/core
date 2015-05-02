@@ -1424,6 +1424,7 @@ $lang = array(
 	"massmail_add_content" => 'Insert content',
 	"massmail_next_events" => 'Next events',
 	"massmail_select_template" => 'Select Template',
+	"massmail_method" => 'Select sending method',
 	"massmail_template_info" => 'You can create own templates for Massmails. Create a file named "massmail_NAME.html" in folder "language/YOURLANGUAGE/email". You can use the variables beside the Editor in your template.',
 	"liveupdate" => 'Live Update',
 	"liveupdate_step1" => 'Searching update packages',

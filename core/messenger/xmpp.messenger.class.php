@@ -51,6 +51,8 @@ class xmpp_messenger extends generic_messenger {
 		
 		$this->objJabber->send_message($jabberAccount, $strMessage, $strSubject);
 		$this->objJabber->disconnect();
+		
+		return true;
 	}
 	
 	public function getAdminSettings(){

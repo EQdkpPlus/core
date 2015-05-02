@@ -36,6 +36,8 @@ class twitterdm_messenger extends generic_messenger {
 		$cb = Codebird::getInstance();
 		$cb->setToken($this->config->get('twitter_access_token'), $this->config->get('twitter_access_token_secret'));
 		
+		$strMessage = strip_tags($strMessage);
+		
 		$strMessage = substr($strMessage, 0, 160);
 		
 		$params = array(
@@ -44,6 +46,8 @@ class twitterdm_messenger extends generic_messenger {
 		);
 		
 		$reply = $cb->directMessages_new($params);
+		
+		return true;
 	}
 	
 	public function isAvailable(){
