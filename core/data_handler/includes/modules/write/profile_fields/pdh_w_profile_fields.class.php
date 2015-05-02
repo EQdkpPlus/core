@@ -89,7 +89,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'options_language' => $this->in->get('options_language'),
 				'size'			=> $this->in->get('size'),
 				'image'			=> $this->in->get('image'),
-				'sort'			=> $this->in->get('sort', 1),
+				//'sort'			=> $this->in->get('sort', 1),
 				'data'			=> serialize($field['data']),
 			))->execute($id);
 				
@@ -135,7 +135,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),
 				'size'			=> (isset($data['size'])) ? intval($data['size']) : $this->in->get('size', 3),
 				'data'			=> (isset($data['data'])) ? serialize($data['data']) : serialize(array('options' => $options)),
-				'sort'			=> (isset($data['sort'])) ? intval($data['sort']) : $this->in->get('sort', 1),
+				'sort'			=> (max($this->pdh->get('profile_fields', 'id_list', array()))+1),
 				'image'			=> (isset($data['image'])) ? $data['image'] : $this->in->get('image'),
 				'undeletable'	=> (isset($data['undeletable']) && $data['undeletable']) ? '1' : '0',
 				'enabled'		=> 1,
@@ -150,6 +150,23 @@ if(!class_exists('pdh_w_profile_fields')) {
 			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
+		
+		public function set_sortation($strFieldID, $intSortID){
+			$old['sortid'] = $this->pdh->get('profile_fields', 'sortid', array($strFieldID));
+			if ($old['sortid'] != $intSortID){
+				$arrSet = array(
+					'sort'	=> $intSortID,
+				);
+				$objQuery = $this->db->prepare("UPDATE __member_profilefields :p WHERE name=?")->set($arrSet)->execute($strFieldID);
+		
+				if(!$objQuery) {
+					return false;
+				}
+				$this->pdh->enqueue_hook('game_update');
+				$this->pdh->enqueue_hook('member_update');
+			}
+		}
+		
 		
 		public function truncate_fields() {
 			$this->db->query('TRUNCATE TABLE __member_profilefields');
