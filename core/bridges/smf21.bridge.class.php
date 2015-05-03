@@ -23,9 +23,9 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class smf2_bridge extends bridge_generic {
+class smf21_bridge extends bridge_generic {
 
-	public static $name = "SMF 2";
+	public static $name = "SMF 2.1";
 	
 	public $data = array(
 		//Data
@@ -68,10 +68,17 @@ class smf2_bridge extends bridge_generic {
 	
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		//Use normal strtolower and not utf8_strotolower, because SMF2 does the same...
+		$blnResult = false;
+		
 		if (sha1(strtolower($strUsername).$password) == $hash){
-			return true;
+			$blnResult = true;
 		}
-		return false;
+		
+		if(!$blnResult){
+			$blnResult = crypt(strtolower($strUsername).$password, $hash) === $hash;
+		}
+		
+		return $blnResult;
 	}
 	
 	public function smf2_get_user_groups($intUserID){
