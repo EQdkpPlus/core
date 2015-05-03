@@ -2237,6 +2237,9 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	width: 18%;
 	vertical-align:middle;
 }
+.buttonblock{
+	color:black;
+}
 #raidcal_signin_form h2 span.toggle_button:before, #toogleRaidcalModeration h2 span.toggle_button:before {
 	float: none !important;
 	font-size: 13px;
