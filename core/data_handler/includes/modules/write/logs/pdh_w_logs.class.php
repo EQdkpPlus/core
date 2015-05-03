@@ -59,7 +59,9 @@ if(!class_exists('pdh_w_logs')) {
 		}
 
 		public function add_log($tag, $value, $recordid=0, $record='',$admin_action=true, $plugin='', $result=1, $userid = false) {
-			$userid = ($userid) ? $userid : $this->user->id;
+			if(!$userid){
+				$userid = (defined('IN_CRON')) ? CRONJOB : $this->user->id;
+			} 
 			
 			$objQuery = $this->db->prepare('INSERT INTO __logs :p')->set(array(
 				'log_value'			=> serialize($value),

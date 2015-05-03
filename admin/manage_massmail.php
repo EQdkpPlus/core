@@ -151,6 +151,13 @@ class Manage_Massmail extends page_generic {
 		$body = $this->crypt->decrypt($this->in->get('message'));
 		$subject = $this->crypt->decrypt($this->in->get('subject'));
 		$userid = $this->in->get('userid', 0);
+		
+		header('Content-type: application/json; charset=utf-8');	
+			
+		if($userid === 0){
+			echo json_encode(array('status' => 'end', 'name' => ''));
+			exit;
+		}
 
 		//Replace Placeholders
 		$arrSearch = array('{DKP_NAME}', '{EQDKP_LINK}', '{DATE}', '{USERNAME}');
@@ -166,27 +173,15 @@ class Manage_Massmail extends page_generic {
 			$body = str_replace($arrSearch, $arrReplace, $body);
 			$subject = str_replace($arrSearch, $arrReplace, $subject);
 		}
-
-		if (strlen($this->pdh->get('user', 'email', array($userid, true)))){
-			$options = array(
-				'template_type'		=> 'input',
-			);
-
-			//Set E-Mail-Options
-			$this->email->SetOptions($options);
-			
-			$strEmail = $this->pdh->get('user', 'email', array($userid));
-			$status = true;
-			if (preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$strEmail)){
-				$status = $this->email->SendMailFromAdmin($strEmail, $subject, $body, '');
-			}
-
-			if (!$status){
-				echo "error";
-			}
+		
+		$result = $this->messenger->sendMessage($this->in->get('method', 'email'), $userid, $subject, $body);
+		
+		if($result){
+			echo json_encode(array('status' => 'ok', 'name' => $this->pdh->get('user', 'name', array($userid))));
+			exit;
 		}
-
-		echo 'true';
+		
+		echo json_encode(array('status' => 'error', 'name' => $this->pdh->get('user', 'name', array($userid))));
 		exit;
 	}
 
@@ -230,6 +225,7 @@ class Manage_Massmail extends page_generic {
 					'S_SEND'	=> true,
 					'ENCR_MESSAGE'		=> $this->crypt->encrypt($this->in->get('body', '', 'raw')),
 					'ENCR_SUBJECT'		=> $this->crypt->encrypt($this->in->get('subject', '')),
+					'METHOD'			=> $this->in->get('method', 'email'),
 					'RECIPIENTS'		=> implode(',', $arrRecipients),
 					'RECIPIENTS_COUNT'	=> count($arrRecipients),
 					'L_MASSMAIL_SUCCESS'=> sprintf($this->user->lang('massmail_success'), count($arrRecipients)),
@@ -307,6 +303,7 @@ class Manage_Massmail extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
+			'DD_METHOD' => new hdropdown('method', array('options' => $this->messenger->getAvailableMessenger(), 'value' => $this->in->get('method', 'email'))),
 			'DD_GROUPS'	=> $this->jquery->MultiSelect('usergroups', $arrUserGroups, $this->in->getArray('usergroups', 'int'), array('width' => 400, 'filter' => true)),
 			'DD_USERS'	=> $this->jquery->MultiSelect('user', $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->in->getArray('user', 'int'),  array('width' => 400, 'filter' => true)),
 			'SUBJECT'	=> ($this->in->exists('subject')) ? $this->in->get('subject', '') : $subject,

@@ -49,6 +49,8 @@ class urlfetcher  extends gen_class {
 				break;
 			}
 		}
+		
+		if(!$this->pdl->type_known('urlfetcher')) $this->pdl->register_type('urlfetcher', null, null, array(2,3,4));
 	}
 
 	/**
@@ -62,6 +64,7 @@ class urlfetcher  extends gen_class {
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
+		$this->pdl->log('urlfetcher', 'fetch url: '.$geturl.' method: '.$this->method);
 		return $this->{'get_'.$this->method}($geturl, $header, $conn_timeout, $timeout);
 	}
 	
@@ -73,6 +76,7 @@ class urlfetcher  extends gen_class {
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
+		$this->pdl->log('urlfetcher', 'post url: '.$geturl.' method: '.$this->method);
 		return $this->{'post_'.$this->method}($url, $data, $content_type, $header, $conn_timeout, $timeout);
 	}
 
@@ -96,13 +100,25 @@ class urlfetcher  extends gen_class {
 			CURLOPT_HTTPAUTH		=> CURLAUTH_ANY,
 			CURLOPT_HTTPHEADER		=> ((is_array($header) && count($header) > 0) ? $header : array())
 		);
-		if (false) {
+		if (@ini_get('open_basedir') == '' && (!@ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
 			$curlOptions[CURLOPT_FOLLOWLOCATION] = true;
 			
 			$curl = curl_init();
 			curl_setopt_array($curl, $curlOptions);
 			$getdata = curl_exec($curl);
+			
+			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			
+			$arrCurlInfo = curl_getinfo($curl);
+			$curl_error = curl_errno($curl);
+			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
+			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
+			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+			
 			curl_close($curl);
+			if(intval($code) >= 400) return false;
+			
 			return $getdata;	
 		} else {
 			$curlOptions[CURLOPT_HEADER] = true;
@@ -133,6 +149,7 @@ class urlfetcher  extends gen_class {
 						}
 						curl_setopt($curl, CURLOPT_POSTFIELDS, null); //also switch modes after Redirect
 						curl_setopt($curl, CURLOPT_HTTPGET, true);
+						$this->pdl->log('urlfetcher', 'Redirect to '.$newurl.' because of Code '.$code);
 					} else {
 						$code = 0;
 					}
@@ -147,9 +164,20 @@ class urlfetcher  extends gen_class {
 			
 			curl_setopt($curl, CURLOPT_URL, $newurl);
 			$getdata = curl_exec($curl);
+			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			
+			$arrCurlInfo = curl_getinfo($curl);
+			$curl_error = curl_errno($curl);
+			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
+			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
+			
 			curl_close($curl);
 			//Remove Header
 			list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
+			
+			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
+			$this->pdl->log('urlfetcher', 'Reponse Header: '.$header);
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($page).'; First 200 Chars: '.htmlspecialchars(substr($page, 0, 200)));
 			 
 			return $page;
 		}
@@ -187,7 +215,17 @@ class urlfetcher  extends gen_class {
 		$curl = curl_init();
 		curl_setopt_array($curl, $curlOptions);
 		$getdata = curl_exec($curl);
+		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		
+		$arrCurlInfo = curl_getinfo($curl);
+		$curl_error = curl_errno($curl);
+		$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
+		$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
+		
 		curl_close($curl);
+		
+		$this->pdl->log('urlfetcher', 'Response Code: '.$code);	
+		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		return trim($getdata);
 	}
 
@@ -215,6 +253,9 @@ class urlfetcher  extends gen_class {
 		);
 		$context	= @stream_context_create($opts);
 		$getdata	= @file_get_contents($geturl, false, $context);
+		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
+		else 		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+		
 		return $getdata;
 	}
 	
@@ -235,6 +276,9 @@ class urlfetcher  extends gen_class {
 		
 		$context	= @stream_context_create($opts);
 		$getdata	= @file_get_contents($url, false, $context);
+		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
+		else $this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+		
 		return $getdata;
 	
 	}
@@ -274,6 +318,9 @@ class urlfetcher  extends gen_class {
 			}
 			fclose($fp);
 		}
+		
+		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+		
 		return $getdata;
 	}
 	
@@ -309,6 +356,9 @@ class urlfetcher  extends gen_class {
 			}
 			fclose($fp);
 		}
+		
+		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+		
 		return $getdata;
 	}
 

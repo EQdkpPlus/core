@@ -180,6 +180,8 @@ class language extends gen_class {
 	}
 	
 	private function init_unused_lang() {
+		return true;
+		
 		if(count($this->unused) > 0) return true;
 		$file = $this->pfh->FilePath('unused.lang', 'eqdkp');
 		$data = unserialize(file_get_contents($file));

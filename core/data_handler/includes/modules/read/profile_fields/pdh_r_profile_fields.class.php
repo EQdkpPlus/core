@@ -108,6 +108,10 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		public function get_options_language($name) {
 			return $this->profile_fields[$name]['options_language'];
 		}
+		
+		public function get_sortid($name){
+			return $this->profile_fields[$name]['sort'];
+		}
 
 	}//end class
 }//end if

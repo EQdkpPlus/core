@@ -1422,7 +1422,7 @@ $lang = array(
 "massmail_next_events" => "Nächste Events",
 "massmail_select_template" => "Vorlage auswählen",
 "massmail_template_info" => "Du kannst Vorlagen für Massen-Emails anlegen. Lege dazu eine Datei mit dem Namen \"massmail_NAME.html\" im Ordner \"language/DEINESPRACHE/email\" ab. Du kannst in dieser Datei natürlich die links neben dem Editor stehenden Variablen benutzen.",
-
+"massmail_method" => "Versendemethode auswählen",
 "liveupdate" => "Live-Update",
 "liveupdate_step1" => "Suche Update-Paket",
 "liveupdate_step1_error" => "Es konnte kein Paket gefunden werden. Dies kann mehrere Ursachen haben:<ul><li>Der Update-Server von EQdkp Plus ist zur Zeit nicht zu erreichen</li><li>Dein Server wurde geblacklistet. Wende dich an das EQdkp Plus Team, um mehr darüber zu erfahren.</li><li>Für deine EQdkp Plus Version ist kein Update vorhanden.</li></ul>Du kannst unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a> manuell ein Update oder eine Vollversion herunterladen und einspielen.",
@@ -1547,6 +1547,7 @@ $lang = array(
 ),
 "portal_layouts" => "Portal-Layouts",
 "portal_blocks"	=> "Portal-Blöcke",
+"portal_routes" => "Dieses Portal-Layout statischen Seiten zuweisen",
 "add_portal_layout" => "Portal-Layout hinzufügen",
 "add_portal_block" => "Portal-Block hinzufügen",
 "edit_portal_block"	=> "Portal-Block bearbeiten",

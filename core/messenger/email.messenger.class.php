@@ -19,23 +19,25 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('EQDKP_INC')){
-	die('Do not access this file directly.');
+if ( !defined('EQDKP_INC') ){
+	header('HTTP/1.0 404 Not Found');exit;
 }
 
-if (!class_exists('exchange_logout')){
-	class exchange_logout extends gen_class{
-		public static $shortcuts = array('pex'=>'plus_exchange');
-
-		public function post_logout($params, $body){
-			$xml = simplexml_load_string($body);
-			if ($xml && $xml->sid){
-				$this->user->sid = (string)$xml->sid;
-				$this->user->destroy();
-				return array('result' => 1);
-			}
-			$this->pex->error('no sid given');
+class email_messenger extends generic_messenger {
+	public static $shortcuts = array('email'=>'MyMailer');
+	
+	public function sendMessage($toUserID, $strSubject, $strMessage){
+		$blnResult = false;
+		$strEmailAdress = $this->pdh->get('user', 'email', array($toUserID, true));
+		if (preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$strEmailAdress)){
+			$this->email->Set_Language($this->pdh->get('user', 'lang', array($toUserID)));
+			$blnResult = $this->email->SendMailFromAdmin($strEmailAdress, $strSubject, $strMessage);
+			
 		}
+		return $blnResult;
+	}
+	
+	public function isAvailable(){
+		return true;
 	}
 }
-?>

@@ -317,8 +317,18 @@ if (!class_exists("bbcode")) {
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 						
+					case 'article_url_plain':
+						$strPath = $this->controller_path_plain.$this->pdh->get('articles', 'path', array($elements[1]));
+						$arrCache[$strTag] = ($strPath) ? $strPath : '';
+						break;
+						
 					case 'category_url':
 						$strPath = $this->controller_path.$this->pdh->get('article_categories', 'path', array($elements[1]));
+						$arrCache[$strTag] = ($strPath) ? $strPath : '';
+						break;
+						
+					case 'category_url_plain':
+						$strPath = $this->controller_path_plain.$this->pdh->get('article_categories', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 

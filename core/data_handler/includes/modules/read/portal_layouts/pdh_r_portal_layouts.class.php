@@ -28,6 +28,7 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 
 		public $default_lang = 'english';
 		public $layouts;
+		public $routes;
 
 		public $hooks = array(
 			'portal_layouts_update'
@@ -42,11 +43,14 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 
 		public function reset(){
 			$this->pdc->del('pdh_portal_layouts_table');
+			$this->pdc->del('pdh_portal_layouts_routes_table');
 			$this->layouts = NULL;
+			$this->routes = NULL;
 		}
 
 		public function init(){
 			$this->layouts	= $this->pdc->get('pdh_portal_layouts_table');
+			$this->routes	= $this->pdc->get('pdh_portal_layouts_routes_table');
 			if($this->layouts !== NULL){
 				return true;
 			}
@@ -58,11 +62,20 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 						'id'				=> intval($drow['id']),
 						'name'				=> $drow['name'],
 						'blocks'			=> unserialize($drow['blocks']),
-						'modules'			=> unserialize($drow['modules'])
+						'modules'			=> unserialize($drow['modules']),
+						'routes'			=> unserialize($drow['routes']),
 					);
+					
+					$arrRoutes = unserialize($drow['routes']);
+					if(is_array($arrRoutes)){
+						foreach($arrRoutes as $strRoute){
+							$this->routes[$strRoute] = intval($drow['id']);
+						}
+					}
 				}
 				
 				$this->pdc->put('pdh_portal_layouts_table', $this->layouts, null);
+				$this->pdc->put('pdh_portal_layouts_routes_table', $this->routes, null);
 			}
 		}
 
@@ -106,9 +119,17 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 			return false;
 		}
 		
+		public function get_routes($intLayoutID){
+			if (isset($this->layouts[$intLayoutID])){
+				return $this->layouts[$intLayoutID]['routes'];
+			}
+			return false;
+		}
+		
 		public function get_usedby($intLayoutID){
 			return $this->pdh->get('article_categories', 'used_portallayout_number', array($intLayoutID));
 		}
+
 		
 		public function get_editicon($intLayoutID){
 			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;l='.$intLayoutID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
@@ -117,6 +138,22 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 		public function get_checkbox_check($intLayoutID){
 			if ($intLayoutID == 1) return false;
 			return true;
+		}
+		
+		public function get_layout_for_route($strRoute, $blnReturnErrorIfNotAvailable=false){
+			if(isset($this->routes[$strRoute])){
+				return $this->routes[$strRoute];
+			}
+			
+			return ($blnReturnErrorIfNotAvailable) ? false : 1;
+		}
+		
+		public function get_used_routes(){
+			if(is_array($this->routes)){
+				return array_keys($this->routes);
+			}
+			
+			return array();
 		}
 		
 	}//end class

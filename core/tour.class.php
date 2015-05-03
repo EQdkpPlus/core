@@ -42,7 +42,7 @@ class tour extends gen_class {
 		$this->cookie = unserialize(base64_decode($this->in->getEQdkpCookie('tour')));
 		$this->cookie_time = time() + 3600;
 
-		if (strlen($this->cookie) && $this->user->is_signedin()){
+		if (is_array($this->cookie) && $this->user->is_signedin()){
 			$this->init_steps();
 
 			$step = $this->cookie['step'];

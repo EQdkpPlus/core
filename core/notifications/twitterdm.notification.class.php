@@ -32,73 +32,26 @@ class twitterdm_notification extends generic_notification {
 		$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
 		$twitterAccount = str_replace("@", "", $arrNotificationSettings['ntfy_twitter_user']);
 		if($twitterAccount  == "") return false;
-		
-		include_once($this->root_path.'libraries/twitter/codebird.class.php');
-		Codebird::setConsumerKey($this->config->get('twitter_consumer_key'), $this->config->get('twitter_consumer_secret')); // static, see 'Using multiple Codebird instances'
 
-		$cb = Codebird::getInstance();
-		$cb->setToken($this->config->get('twitter_access_token'), $this->config->get('twitter_access_token_secret'));
-		
-		$strMessage = substr($arrNotificationData['name'], 0, 110).'... '.$arrNotificationData['link'];
-
-		$params = array(
-			'screen_name' => $twitterAccount,
-			'text'			=> $strMessage,
-		);
-		
-		$reply = $cb->directMessages_new($params);
+		$strMessage = substr($arrNotificationData['name'], 0, 110).'... '.$arrNotificationData['link'];		
+		$this->messenger->sendMessage('twitterdm', $intUserID, $strSubject, $strMessage);
 	}
 	
 	public function isAvailable(){
-		if($this->config->get('twitter_consumer_key') != "" 
-				&& $this->config->get('twitter_consumer_secret') != "" 
-				&& $this->config->get('twitter_access_token') != "" 
-				&& $this->config->get('twitter_screen_name') != ""
-				&& $this->config->get('twitter_access_token_secret') != ""){
-			return true;
-		}	
-		
-		return false;
+		return $this->messenger->isAvailable('twitterdm');
 	}
 	
 	/*
 	 * @see generic_notification::getUserSettings()
 	 */
 	public function getUserSettings(){
-		return array(
-			'ntfy_twitter_user' => array(
-					'type' => 'text',
-					'size'	=> 40,
-					'dir_help'	=> str_replace("{TWITTER}", $this->config->get('twitter_screen_name'), $this->user->lang('user_sett_f_help_ntfy_twitter_user')),
-			),
-		);
+		return $this->messenger->getMethodUserSettings('twitterdm');
 	}
 	
 	/* 
 	 * @see generic_notification::getAdminSettings()
 	 */
 	public function getAdminSettings(){
-		return array(
-				'twitter_screen_name' => array(
-						'type' => 'text',
-						'size'	=> 40
-				),
-				'twitter_consumer_key' => array(
-						'type' => 'text',
-						'size'	=> 40
-				),
-				'twitter_consumer_secret' => array(
-						'type' => 'text',
-						'size'	=> 40
-				),
-				'twitter_access_token' => array(
-						'type' => 'text',
-						'size'	=> 40
-				),
-				'twitter_access_token_secret' => array(
-						'type' => 'text',
-						'size'	=> 40
-				),
-		);
+		return $this->messenger->getMethodAdminSettings('twitterdm');
 	}
 }

@@ -19,6 +19,7 @@
 		<link rel="shortcut icon" href="{TEMPLATE_PATH}/images/favicon.png" type="image/png" />
 		<link rel="icon" href="{TEMPLATE_PATH}/images/favicon.png" type="image/png" />
 		{RSS_FEEDS}
+		<!-- LISTENER head -->
 		<style type="text/css">
 			{CSS_CODE}
 			<!-- IF T_BACKGROUND_TYPE > 0 -->
@@ -266,6 +267,8 @@
 		</script>
 	</head>
 	<body id="top" class="<!-- IF S_REPONSIVE -->responsive <!-- ENDIF --><!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF --><!-- IF S_IN_ADMIN --> admin<!-- ELSE --> frontend<!-- ENDIF -->">
+		<!-- LISTENER body_top -->
+		
 		{STATIC_HTMLCODE}
 		<!-- IF S_NORMAL_HEADER -->
 		<header>
@@ -403,6 +406,7 @@
 			
 		<header>
 			<div id="header">
+				<!-- LISTENER header_top -->
 				<div id="logoContainer" class="{T_LOGO_POSITION}">
 					<div id="logoArea">
 						<!-- IF HEADER_LOGO -->
@@ -414,16 +418,18 @@
 							<h1>{MAIN_TITLE}</h1><br />
 							<h2>{SUB_TITLE}</h2>
 					</hgroup><!-- close titles-->
-				
+					<!-- LISTENER logo_container -->
 					<div class="clear noheight">&nbsp;</div>
 				</div>
 				{PORTAL_BLOCK1}
+				<!-- LISTENER header_bottom -->
 			</div> <!-- close header-->
 		</header>
 		
 		
 		<section id="contentContainer">
 			<a id="content"></a>
+			<!-- LISTENER content_container_top -->
 			<header>
 				<nav id="nav">
 					<div id="mainmenu">
@@ -446,6 +452,7 @@
 							<!-- ENDIF -->
 							</div>
 						</div>
+						<!-- LISTENER mainmenu -->
 					</div><!-- close mainmenu -->
 					
 					<!-- IF S_IN_ADMIN -->
@@ -453,23 +460,29 @@
 						<div class="hiddenSmartphone">
 							{ADMIN_MENU}
 						</div>
+						<!-- LISTENER adminmenu -->
 					</div>
 					<!-- ENDIF -->
 				</nav>
 			</header>
 			
 			<div class="portal">
+				<!-- LISTENER portal_top -->
 				<div class="columnContainer">
 					<!-- IF S_PORTAL_LEFT -->
 					<aside class="first column portal-left" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						<div class="columnInner">
+							<!-- LISTENER portal_left_top -->
 							{PORTAL_LEFT}
+							<!-- LISTENER portal_left_bottom -->
 						</div> <!-- close first column -->
 					</aside>
 					<!-- ENDIF -->
 					
 					<article class="second column <!-- IF not S_PORTAL_RIGHT -->no_third_column<!-- ENDIF -->">
 						<div class="columnInner">
+							<!-- LISTENER content_middle_top -->
+						
 							<!-- IF S_SHOW_COOKIE_HINT -->
 							<div class="infobox infobox-large infobox-blue clearfix">
 								<i class="fa-info-circle fa pull-left fa-2x"></i> {COOKIE_HINT}
@@ -483,19 +496,28 @@
 							</header>
 							<!-- END global_warnings -->	
 							<aside id="portal-middle">
+								<!-- LISTENER portal-middle-top -->
 								{PORTAL_MIDDLE}
+								<!-- LISTENER portal-middle-bottom -->
 							</aside>
 							<!-- ENDIF -->
 							<div id="contentBody" class="{PAGE_CLASS}<!-- IF not S_NORMAL_HEADER --> simple-header <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER --> simple-footer <!-- ENDIF -->">
 								<div id="contentBody2">
+									<!-- LISTENER content_body_top -->
 									{GBL_CONTENT_BODY}
+									<!-- LISTENER content_body_bottom -->
 								</div>	
 							</div><!-- close contentBody -->
+							<!-- LISTENER content_middle_bottom -->
+							
 							<!-- IF S_NORMAL_FOOTER -->
 							<aside id="portal-footer">
+							<!-- LISTENER portal-bottom-top -->
 							{PORTAL_BOTTOM}
+							<!-- LISTENER portal-bottom-bottom -->
 							</aside>
 							<footer class="debug">
+							<!-- LISTENER content-footer-debug -->
 							<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
 							<!-- IF S_SHOW_DEBUG -->
 							<br /><div class="center">
@@ -511,7 +533,9 @@
 					<!-- IF S_PORTAL_RIGHT -->
 					<aside class="third column portal-right" style="<!-- IF T_COLUMN_RIGHT_WIDTH -->min-width:{T_COLUMN_RIGHT_WIDTH};max-width:{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->min-width: 200px;<!-- ENDIF -->">
 						<div class="columnInner">
+							<!-- LISTENER portal-right-top -->
 							{PORTAL_RIGHT}
+							<!-- LISTENER portal-right-bottom -->
 						</div>
 					</aside>
 					<!-- ENDIF -->
@@ -519,14 +543,19 @@
 			</div>
 			
 			<footer id="contentFooter">
+				<!-- LISTENER content-footer-top -->
 				<div class="floatLeft">
 					<!-- IF S_REPONSIVE -->
 					<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
 					<!-- ELSE -->
 					<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
 					<!-- ENDIF -->
+					
+					<!-- LISTENER content-footer-left -->
 				</div>
 				<div class="floatRight">
+					<!-- LISTENER content-footer-right -->
+				
 					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
 					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
 					<!-- ENDIF -->
@@ -546,17 +575,21 @@
 		</section>
 		
 		<footer id="footer">
+				<!-- LISTENER footer_top -->
 				{PORTAL_BLOCK2}
 				{EQDKP_PLUS_COPYRIGHT}
+				<!-- LISTENER footer_bottom -->
 		</footer><!-- close footer -->
 	</div><!-- close wrapper -->
 	
 	<!-- ELSE -->
 		<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
+		<!-- LISTENER debug -->
 	<!-- ENDIF -->
 
 	<div id="dialog-login" title="{L_login}">
 		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login" class="fv_checkit">
+			<!-- LISTENER login_popup -->
 			<!-- IF S_BRIDGE_INFO -->
 			<div class="infobox infobox-large infobox-blue clearfix">
 				<i class="fa fa-info-circle fa-4x pull-left"></i> {L_login_bridge_notice}
@@ -612,6 +645,7 @@
    		 });
 	</script>
 	{FOOTER_CODE}
+	<!-- LISTENER body_bottom -->
 	<a id="bottom"></a>
 	</body>
 </html>

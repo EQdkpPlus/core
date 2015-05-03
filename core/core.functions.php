@@ -718,7 +718,7 @@ function set_cookie($name, $cookie_data, $cookie_time){
 	$cname = register('config')->get('cookie_name');
 	$cpath = register('config')->get('cookie_path');
 	if(empty($cname) || empty($cpath)) return;
-	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'));
+	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl);
 }
 
 //A workaround because strtolower() does not support UTF8
@@ -1107,9 +1107,16 @@ function get_first_image($strHTML, $blnGetFullImage = false){
 	return '';
 }
 
-function get_chmod(){
-	if (defined("CHMOD")) return CHMOD;
-	return 0777;
+function get_chmod($blnForDirectory=false){
+	if($blnForDirectory){
+		if(defined('CHMOD_DIR')) return CHMOD_DIR;
+		if(defined('CHMOD')) return CHMOD;
+		return 0755;
+	} else {
+		if(defined('CHMOD_FILES')) return CHMOD_FILES;
+		if(defined('CHMOD')) return CHMOD;
+		return 0644;
+	}
 }
 
 function human_filesize($bytes, $dec = 2)
@@ -1262,5 +1269,16 @@ function is_serialized($strValue){
 	} else {
 		return false;
 	}
+}
+
+/* Workarounds because php does not allow arrays in Constants < 5.6 */
+function get_attr_blacklist(){
+	global $ATTR_BLACKLIST;
+	return $ATTR_BLACKLIST;
+}
+
+function get_tag_blacklist(){
+	global $TAG_BLACKLIST;
+	return $TAG_BLACKLIST;
 }
 ?>

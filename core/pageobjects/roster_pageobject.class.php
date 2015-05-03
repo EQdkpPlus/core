@@ -92,6 +92,45 @@ class roster_pageobject extends pageobject {
 					));
 				}
 		
+			} elseif($this->config->get('roster_classorrole') == 'rank') {	
+
+				$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
+				$arrRanks = $this->pdh->get('rank', 'id_list', array());
+				foreach($arrRanks as $intRankID){
+					if($this->pdh->get('rank', 'is_hidden', array($intRankID))) continue;
+						
+					$arrGroupMembers = array();
+					foreach($arrMembers as $intMemberID){
+						if($this->pdh->get('member', 'rankid', array($intMemberID)) == $intRankID){
+							$arrGroupMembers[] = $intMemberID;
+						}
+					}
+						
+					$hptt = $this->get_hptt($this->hptt_page_settings, $arrGroupMembers, $arrGroupMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'rank_'.$intRankID);
+				
+					$this->tpl->assign_block_vars('class_row', array(
+							'CLASS_NAME'	=> $this->pdh->geth('rank', 'name', array($intRankID)),
+							'CLASS_ICONS'	=> $this->game->decorate('ranks', $intRankID),
+							'CLASS_LEVEL'	=> 2,
+							'ENDLEVEL'		=> true,
+							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
+					));
+				}
+				
+			} elseif($this->config->get('roster_classorrole') == 'none') {
+				
+					$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
+				
+					$hptt = $this->get_hptt($this->hptt_page_settings, $arrMembers, $arrMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'none');
+				
+					$this->tpl->assign_block_vars('class_row', array(
+							'CLASS_NAME'	=> '',
+							'CLASS_ICONS'	=> '',
+							'CLASS_LEVEL'	=> 2,
+							'ENDLEVEL'		=> true,
+							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
+					));
+
 			} else {
 				$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
 				

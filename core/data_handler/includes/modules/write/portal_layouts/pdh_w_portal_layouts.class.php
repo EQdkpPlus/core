@@ -44,11 +44,12 @@ if(!class_exists('pdh_w_portal_layouts')) {
 			return $objQuery;
 		}
 		
-		public function add($strName, $arrBlocks, $arrModules){
+		public function add($strName, $arrBlocks, $arrModules, $arrRoutes){
 			$objQuery = $this->db->prepare("INSERT INTO __portal_layouts :p")->set(array(
 				'name' 			=> $strName,
 				'blocks'		=> serialize($arrBlocks),
 				'modules'		=> serialize($arrModules),
+				'routes'		=> serialize($arrRoutes),
 			))->execute();
 			if($objQuery){
 				$this->pdh->enqueue_hook('portal_layouts_update');
@@ -58,11 +59,12 @@ if(!class_exists('pdh_w_portal_layouts')) {
 			return false;
 		}
 		
-		public function update($id, $strName, $arrBlocks, $arrModules){
+		public function update($id, $strName, $arrBlocks, $arrModules, $arrRoutes){
 			$objQuery = $this->db->prepare("UPDATE __portal_layouts :p WHERE id=?")->set(array(
 				'name' 			=> $strName,
 				'blocks'		=> serialize($arrBlocks),
 				'modules'		=> serialize($arrModules),
+				'routes'		=> serialize($arrRoutes),
 			))->execute($id);
 						
 			if ($objQuery){

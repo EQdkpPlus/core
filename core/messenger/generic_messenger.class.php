@@ -19,23 +19,40 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('EQDKP_INC')){
-	die('Do not access this file directly.');
+if ( !defined('EQDKP_INC') ){
+	header('HTTP/1.0 404 Not Found');exit;
 }
 
-if (!class_exists('exchange_logout')){
-	class exchange_logout extends gen_class{
-		public static $shortcuts = array('pex'=>'plus_exchange');
-
-		public function post_logout($params, $body){
-			$xml = simplexml_load_string($body);
-			if ($xml && $xml->sid){
-				$this->user->sid = (string)$xml->sid;
-				$this->user->destroy();
-				return array('result' => 1);
-			}
-			$this->pex->error('no sid given');
-		}
+/**
+ * Messenger Generic. Is abstract class, all Messenger have to extend this class.
+ * @author GodMod
+ */
+abstract class generic_messenger extends gen_class {
+	
+	/**
+	 * Returns true, if this method is available for users (admin has set all options)
+	 */
+	abstract public function isAvailable();
+	
+	
+	abstract public function sendMessage($toUserID, $strSubject, $strMessage);
+	
+	/**
+	 * Settings the Admin has to set, e.g. API Keys or Server Settings
+	 * 
+	 * @return array 
+	 */
+	public function getAdminSettings(){
+		return array();
+	}
+	
+	/**
+	 * Settings the User has to set, e.g. Twitter Account for DMs
+	 * All Settings have to start with ntfy_
+	 * 
+	 * @return array
+	 */
+	public function getUserSettings(){
+		return array();
 	}
 }
-?>

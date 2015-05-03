@@ -32,7 +32,8 @@ class ManageProfileFields extends page_generic {
 			'enable'	=> array('process' => 'enable', 'csrf'=>true),
 			'disable'	=> array('process' => 'disable', 'csrf'=>true),
 			'new'		=> array('process' => 'edit'),
-			'reset'		=> array('process' => 'process_reset','csrf'=>true)
+			'reset'		=> array('process' => 'process_reset','csrf'=>true),
+			'savesort'	=> array('process' => 'save_sort', 'csrf'=>true),
 		);
 		parent::__construct(false, $handler, array('profile_fields', 'lang'), null, 'del_ids[]');
 		$this->process();
@@ -77,6 +78,16 @@ class ManageProfileFields extends page_generic {
 		}
 		$this->display($message);
 	}
+	
+	public function save_sort(){
+		$arrSortOrder = $this->in->getArray('sort', 'string');
+		foreach($arrSortOrder as $intSortID => $intFieldID){
+			$this->pdh->put('profile_fields', 'set_sortation', array($intFieldID, $intSortID));
+		}
+		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('save_suc'), 'color' => 'green');
+		$this->display($message);
+	}
+	
 	
 	public function process_reset(){
 		$this->game->AddProfileFields();
@@ -191,6 +202,13 @@ $("#type_dd").change(function(){
 				));
 			}
 		}
+		
+		$this->tpl->add_js("
+			$(\"#profilefield_table tbody\").sortable({
+				cancel: '.not-sortable, input, select, th',
+				cursor: 'pointer',
+			});
+		", "docready");
 
 		$this->jquery->selectall_checkbox('selall_pfields', 'del_ids[]');
 		$this->tpl->assign_vars(array (

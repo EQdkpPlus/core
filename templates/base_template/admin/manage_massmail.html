@@ -72,6 +72,10 @@ function insert(text){
 	<fieldset class="settings smallsettings">
 		<legend>{L_massmail}</legend>
 		<dl>
+			<dt><label>{L_massmail_method}</label></dt>
+			<dd>{DD_METHOD}</dd>
+		</dl>
+		<dl>
 			<dt><label>{L_massmail_to_group}</label></dt>
 			<dd>{DD_GROUPS}</dd>
 		</dl>
@@ -147,9 +151,15 @@ $(document).ready(function(){
 
  function send_mail(recentNumber){
 	var recipients = [{RECIPIENTS}];
-	$.post("manage_massmail.php{SID}&send=true&link_hash={CSRF_SEND_TOKEN}", { userid: recipients[recentNumber], subject: "{ENCR_SUBJECT}", message: "{ENCR_MESSAGE}", event_id: "{EVENT_ID}"})
+	$.post("manage_massmail.php{SID}&send=true&link_hash={CSRF_SEND_TOKEN}", { userid: recipients[recentNumber], subject: "{ENCR_SUBJECT}", message: "{ENCR_MESSAGE}", event_id: "{EVENT_ID}", method: "{METHOD}"})
 	.success(function(data) {
-		if ($.trim(data) == 'true'){
+		if(data && data.status != undefined){
+			if(data.status == "ok"){
+				$( "<tr><td class=\"positive\"><i class=\"fa fa-check fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
+			} else if(data.status == "error") {
+				$( "<tr><td class=\"negative\"><i class=\"fa fa-times fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
+			}
+			
 			if (recentNumber < totalMails){
 				set_progress_bar_value(recentNumber+1);
 				send_mail(recentNumber+1);
@@ -157,8 +167,9 @@ $(document).ready(function(){
 				set_progress_bar_value(totalMails);
 				success();
 			}
-		
 		} else {
+			console.log(data);
+			console.log(data.status);
 			error();
 		}
 	})
@@ -168,11 +179,13 @@ $(document).ready(function(){
 function error(){
 	$('#massmail_dontclose').hide();
 	$('#massmail_error').show();
+	$('.nl_progressbar_label').hide();
 }
 
 function success(){
 	$('#massmail_dontclose').hide();
 	$('#massmail_success').show();
+	$('.nl_progressbar_label').hide();
 }
 </script>
 
@@ -189,6 +202,9 @@ function success(){
 </div>
 <br /><br />
 <div id="nl_progressbar">
-	<span class="nl_progressbar_label">{L_massmail_sending}</span></div>
+	<span class="nl_progressbar_label"><i class="fa-spin fa-spinner fa fa-lg"></i> {L_massmail_sending}</span></div>
 </div>
+
+<table class="fullwidth table colorswitch" id="massmail_status_table">
+</table>
 <!-- ENDIF -->

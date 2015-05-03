@@ -67,7 +67,7 @@ if ($blnIsAdmin){
 				'uploadDeny'	=> array('application/x-php','application/x-perl','application/x-python-bytecode','application/x-ruby', 'text/x-php', 'text/x-perl', 'text/x-python-bytecode', 'text/x-ruby', 'text/x-c++'),
 				'uploadOrder'	=> array('allow', 'deny'),
 				'disabled'		=> array('extract', 'archive','mkfile','help','edit'),
-				'tmbPathMode'	=> get_chmod(),
+				'tmbPathMode'	=> get_chmod(true),
 			)
 		)
 	);

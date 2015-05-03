@@ -64,6 +64,7 @@ class template extends gen_class {
 										'meta'			=> false,
 									);
 	protected $tpl_output			= array();
+	protected $template_listener	= array();
 	
 	// Save array for states
 	private $states = array();
@@ -191,6 +192,18 @@ class template extends gen_class {
 		} else $this->tpl_output['css_code'][] = $varval;
 	}
 	
+	/**
+	 * Adds HTML Code for a template listener
+	 * 
+	 * @param string $strListenerName
+	 * @param string $strHTML
+	 * @param boolean $blnPrepare
+	 */
+	public function add_listener($strListenerName, $strHTML, $blnPrepare=false){
+		$strListenerName = utf8_strtolower($strListenerName);
+		if(!isset($this->template_listener[$strListenerName])) $this->template_listener[$strListenerName] = array();
+		$this->template_listener[$strListenerName][] = array('html' => $strHTML, 'preparse' => $blnPrepare);
+	}
 	
 	public function combine_css(){
 		$strInlineCSS = "";
@@ -893,6 +906,12 @@ class template extends gen_class {
 						$precompiled = $this->pre_compile($blocks[2][$curr_tb]);
 						$compile_blocks[] = $precompiled;
 						break;
+					case 'LISTENER':
+						$strListenername = strtolower($blocks[2][$curr_tb]);
+						if(isset($this->template_listener[$strListenername])){
+							$compile_blocks[] = "echo \$this->assign_from_listener('".$strListenername."');\n";
+						} else $compile_blocks[] = "";
+						break;
 					default:
 						$this->compile_var_tags($blocks[0][$curr_tb]);
 						$trim_check = trim($blocks[0][$curr_tb]);
@@ -1159,6 +1178,18 @@ class template extends gen_class {
 		}
 		return "\$this->assign_from_include('$tag_args');\n";
 	}
+	
+	private function assign_from_listener($strListenername){
+		$strListener = "";
+		
+		if(isset($this->template_listener[$strListenername])){
+			foreach($this->template_listener[$strListenername] as $listener){
+				$strListener .= ($listener['preparse']) ? $this->compileString($listener['html']) : $listener['html'];
+			}
+		}
+
+		return $strListener;
+	}
 
 	// This is from Smarty
 	private function _parse_is_expr($is_arg, $tokens){
@@ -1323,7 +1354,7 @@ class template extends gen_class {
 						.class_'.$class_id.':link:hover, td.class_'.$class_id.' a:hover, td.class_'.$class_id.' a:active,
 						td.class_'.$class_id.', td.class_'.$class_id.' a:link, td.class_'.$class_id.' a:visited{
 							text-decoration: none;
-							color: '.$this->game->get_class_color($class_id).' !important;
+							color: '.(($this->game->get_class_color($class_id) != "") ? $this->game->get_class_color($class_id) : '#000') .' !important;
 						}
 					';
 			}
@@ -1616,11 +1647,13 @@ class template extends gen_class {
 		$strCSS .= $style['additional_less'];
 
 		try {
-			include_once $this->root_path.'libraries/less/lessc.inc.php';
-			$less = new lessc;
-			$less->setVariables($lessVars);
-			$strCSS = $less->compile($strCSS);
-		} catch (exception $e) {
+			require_once $this->root_path.'libraries/less/Less.php';
+			$parser = new Less_Parser();	
+			$parser->ModifyVars($lessVars);
+			$parser->parse($strCSS);
+			$strCSS = $parser->getCss();
+
+		} catch (Exception $e) {
 			echo "fatal error parsing less: " . $e->getMessage();
 			die();
 		}

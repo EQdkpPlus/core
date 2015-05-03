@@ -495,6 +495,7 @@ CREATE TABLE `__portal_layouts` (
 	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`blocks` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`modules` TEXT COLLATE 'utf8_bin' NOT NULL,
+	`routes` TEXT COLLATE 'utf8_bin' NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
