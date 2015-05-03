@@ -8,6 +8,8 @@ $(function(){
 			if($('#bottommenu_chars').is(":visible")){
 				// move it a bit
 				$('#bottommenu_chars').animate({bottom:'42px'}, 500);
+			}else{
+				$('#bottommenu_admin').addClass("bottommenu_roundedcorner");
 			}
 			$('#bottommenu_admin').fadeIn(800);
 			$('#bottommenu_count').text(lang_attendeetext.replace('#', number_attendees));
@@ -70,6 +72,7 @@ $(function(){
 		var $this		= $(this);
 		
 		if($('#bottommenu_admin').is(":visible")){
+			$('#bottommenu_admin').removeClass("bottommenu_roundedcorner");
 			$('#bottommenu_chars').css("bottom", "42px");
 		}else{
 			$('#bottommenu_chars').css("bottom", "0px");
@@ -80,6 +83,7 @@ $(function(){
 			console.log($('#bottommenu_chars').data('charid'));
 			if($('#bottommenu_chars').data('charid') === charid){
 				$('#bottommenu_chars').fadeOut( "slow");
+				$('#bottommenu_admin').addClass("bottommenu_roundedcorner");
 			}else{
 				$('#bottommenu_chars').data('charid', charid);
 			}
@@ -467,7 +471,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	</div>
 	
 	<div class="row1">
-		<div id="bottommenu_chars" data-charid="">
+		<div id="bottommenu_chars" data-charid="" class="bottommenu_roundedcorner">
 			<span id="bottommenu_chars_html"></span>
 		</div>
 		

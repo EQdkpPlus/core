@@ -2199,6 +2199,9 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	height: 70px;
 	clear: both;
 }
+.bottommenu_roundedcorner{
+	border-radius: 10px 10px 0px 0px;
+}
 .bottommenu_chars_table {
 	height: 70px;
 	width:100%;
