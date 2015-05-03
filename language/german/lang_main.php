@@ -712,6 +712,7 @@ $lang = array(
 "raidevent_raid_modgroup" => 'Raidgruppe ändern',
 "raidevent_raid_noraidnote" => "Keine Raidnotiz vorhanden",
 "raidevent_raid_moderation" => "Moderation des Raids",
+"raidevent_raid_selected_attendees" => "# ausgewählte Teilnehmer",
 "raidevent_raid_time_till" => "bis",
 "raidevent_raid_time_from" => "von",
 "raidevent_raid_deadl_reach" => "Die Anmeldefrist für dieses Ereignis ist bereits überschritten.",

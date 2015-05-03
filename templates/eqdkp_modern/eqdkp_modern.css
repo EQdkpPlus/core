@@ -1366,6 +1366,11 @@ div[aria-describedby="dialog-login"] .password-forgot{
 	color: #468847;
 }
 
+.infobox-opacgrey {
+	background: rgba(0, 0, 0, 0.2);
+	color: #000000;
+}
+
 /* general: pagination */
 div.pagination li {
 	display: inline;
@@ -2176,7 +2181,62 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	font-weight: normal;
 	line-height: 35px;
 }
-
+#bottommenu_admin, #bottommenu_chars{
+	position: fixed;
+	bottom: 0px;
+	background: rgba(0,0,0,.85);
+	float: left;
+	width: 70%;
+	z-index: 99;
+	height: 42px;
+	padding: 0px 0 0px 10px;
+	display:none;
+	color:white;
+	vertical-align:middle;
+	margin:0;
+}
+#bottommenu_chars{
+	height: 70px;
+	clear: both;
+}
+.bottommenu_chars_table {
+	height: 70px;
+	width:100%;
+}
+.bottommenu_admin_table {
+	height: 42px;
+	width:100%;
+}
+.bottommenu_chars_icons {
+	width:65px;
+}
+..bottommenu_admin_icons {
+	width:48px;
+}
+.bottommenu_chars_note {
+	width:60%;
+}
+.hl_attendee_checked{
+	box-shadow: 0px 0px 3px #008AFF;
+	border-color: #008AFF;
+}
+.raidcal_buttonrow{
+	vertical-align:middle;
+	width: 100%;
+	margin: 0px 0px 10px 0px;
+}
+.raidcal_buttonrow_left{
+	width: 60%;
+	vertical-align:middle;
+}
+.raidcal_buttonrow_middle{
+	width: 22%;
+	vertical-align:middle;
+}
+.raidcal_buttonrow_right{
+	width: 18%;
+	vertical-align:middle;
+}
 #raidcal_signin_form h2 span.toggle_button:before, #toogleRaidcalModeration h2 span.toggle_button:before {
 	float: none !important;
 	font-size: 13px;
@@ -2268,7 +2328,6 @@ a.attendee_Link:hover{
 
 span.group_selector {
 	outline: none;
-	float: right;
 	display: block;
 }
 

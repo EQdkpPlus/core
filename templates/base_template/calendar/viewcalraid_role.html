@@ -1,5 +1,5 @@
 <!-- BEGIN raidstatus -->
-<div id="viewraidcal_colapse_{raidstatus.ID}" align="center" >
+<div id="viewraidcal_colapse_{raidstatus.ID}" class="roledistribution" align="center" >
 	<table class="table fullwidth">
 		<tr>
 			<td align="left" width="100%">
@@ -8,15 +8,10 @@
 						<th align="left" width="14px">
 							<span class="toggle_button">&nbsp;</span>
 						</th>
-						<th align="center" colspan="{ATTENDEES_COLSPAN}">
+						<th align="center" colspan="{ATTENDEES_COLSPAN}" class="raidstatushead">
 							<font class="status{raidstatus.ID}"> {raidstatus.NAME}</font>
 							({raidstatus.COUNT}/{raidstatus.MAXCOUNT})
 						</th>
-						<!-- IF S_NOTSIGNED_VISIBLE && raidstatus.FIRSTROW -->
-						<th align="right">
-							<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i>{L_raidevent_raid_unsigned_button}</button>
-						</th>
-						<!-- ENDIF -->
 					</tr>
 				</table>
 			</td>
@@ -35,8 +30,8 @@
 						<tr>
 							<td valign="top">
 								<!-- BEGIN status -->
-								<div class="ui-state-hover table fullwidth noMobileTransform" style="padding: 5px; margin-top: 4px;">
-									<div class="tr">
+								<div class="ui-state-hover table fullwidth noMobileTransform attendee_box" style="padding: 5px; margin-top: 4px;" id="attendee_{raidstatus.classes.status.MEMBERID}">
+									<div class="tr class_{raidstatus.classes.status.CLASSID}">
 										<div class="td" style="vertical-align:middle;">
 											<!-- IF IS_OPERATOR --><input class="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
 										</div>
@@ -50,7 +45,7 @@
 												<!-- ENDIF -->
 											</span>
 										</div>
-										<div class="td" style="float:right;vertical-align:middle;">
+										<div class="td buttonblock" style="float:right;vertical-align:middle;">
 											<!-- IF NOTEPERMISSION -->
 											<!-- IF raidstatus.classes.status.NOTE -->
 											<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
@@ -60,32 +55,35 @@
 											<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
 											<!-- ENDIF -->
 											<!-- IF IS_OPERATOR -->
-											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-charadmintt-id="member_{raidstatus.classes.status.MEMBERID}"></span>
+											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-character-id="member_{raidstatus.classes.status.MEMBERID}" data-status-id="{raidstatus.ID}"></span>
 											<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
-												<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
-												<fieldset class="settings">
-													<legend class="smaller"><i class="fa fa-random fa-lg"></i> {L_raidevent_raid_changecharmenu}</legend>
-													<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-													<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
-													{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-													<br /><button type="button" name="submit_charchange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
-												</fieldset><br/>
-												<!-- ENDIF -->
-												<fieldset class="settings">
-													<legend class="smaller"><i class="fa fa-comment fa-lg"></i> {L_raidevent_raid_changenotemenu}</legend>
-													<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-													<textarea name="notechange_note" rows="3" style="width:95%">{raidstatus.classes.status.NOTE}</textarea>
-													<br /><button type="button" name="submit_notechange" style="float:right;" value=""><i class="fa fa-check fa-lg"></i></button>
-												</fieldset>
-												<!-- IF SHOW_RAIDGROUPS -->
-												<br/>
-												<fieldset class="settings">
-													<legend class="smaller"><i class="fa fa-users fa-lg"></i> {L_raidevent_raid_groupsmenu}</legend>
-													{raidstatus.classes.status.GROUPS}
-													<input type="hidden" name="groupchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-													<br /><button type="button" name="submit_groupchange" class="submit_groupchange" value="" style="float:right;"><i class="fa fa-check fa-lg"></i></button>
-												</fieldset>
-												<!-- ENDIF -->
+												<div class="table bottommenu_chars_table">
+													<div class="tr">
+														<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
+														<div class="td absmiddle bottommenu_chars_icons">
+															<i class="fa fa-random fa-3x"></i>
+														</div>
+														<div class="td absmiddle">
+															{L_raidevent_raid_changecharmenu}<br/>
+															<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+															<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
+															{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
+															<button type="button" name="submit_charchange" value=""><i class="fa fa-check fa-lg"></i></button>
+														</div>
+														<!-- ENDIF -->
+														<div class="td absmiddle bottommenu_chars_icons">
+															<i class="fa fa-comment fa-3x"></i>
+														</div>
+														<div class="td absmiddle">
+															<span>
+																{L_raidevent_raid_changenotemenu}<br/>
+																<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+																<textarea name="notechange_note" class="bottommenu_chars_note" rows="1">{raidstatus.classes.status.NOTE}</textarea>
+																<button type="button" name="submit_notechange" value=""><i class="fa fa-check fa-lg"></i></button>
+															</span>
+														</div>
+													</div>
+												</div>
 											</div>
 											<!-- ENDIF -->
 										</div>
