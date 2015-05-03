@@ -723,6 +723,7 @@ $lang = array(
 	"raidevent_raid_statusbttn" => 'Change status',
 	"raidevent_raid_guests" => 'Guests',
 	"raidevent_raid_addguest_win" => 'Add guest',
+	"raidevent_no_groups_avail" => 'No groups available',
 	"raidevent_raid_gbutton" => 'Add guest',
 	"raidevent_raid_editguest_win" => 'Edit guest',
 	"raidevent_raid_guest_edit" => 'Edit guest',

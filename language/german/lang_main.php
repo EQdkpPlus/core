@@ -718,6 +718,7 @@ $lang = array(
 "raidevent_raid_deadl_reach" => "Die Anmeldefrist für dieses Ereignis ist bereits überschritten.",
 "raidevent_raid_roleswoclass" => "Mindestens eine Rolle hat keine Klassen zugeweisen. Es kann zu Fehlern kommen, zB. das Rollen-Dropdown könnte leer sein! Ein Administrator kann dies im Rollenmanager prüfen!",
 "raidevent_raid_no_status" => "Es wurden kein Status (angemeldet, abgemeldet, usw.) im Administrationsbereich (Einstellungen, Kalender) gespeichert. Bitte neu setzen.",
+"raidevent_no_groups_avail" => 'Keine Raidgruppen verfügbar',
 "raidevent_raid_show_title" => "Kalender: %s",
 "raidevent_raid_move_succ" => "Das Verschieben des Kalendereintrages war erfolgreich",
 "raidevent_raid_move_fail" => "FEHLER: Das Verschieben des Kalendereintrages ist fehlgeschlagen",
