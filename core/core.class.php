@@ -781,7 +781,7 @@ class core extends gen_class {
 				$objRepository = register("repository");
 				if (count($objRepository->updates)){
 					$arrUpdates = $objRepository->updates;
-					if (isset($arrUpdates['pluskernel']) && $this->user->check_auth("a_maintenance")){
+					if (isset($arrUpdates['pluskernel']) && $this->user->check_auth("a_maintenance", false)){
 						$this->ntfy->add_persistent('eqdkp_core_update', $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID, 2, 'fa-cog');
 						unset($arrUpdates['pluskernel']);
 					}
