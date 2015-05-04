@@ -751,7 +751,7 @@ class user extends gen_class {
 		return $settingsdata;
 	}
 
-	public function getAvailableLanguages($blnWithIsoShort=true, $blnWithIcon=false){
+	public function getAvailableLanguages($blnWithIsoShort=true, $blnWithIcon=false, $blnIsoAsKey=false){
 		$root_path = registry::get_const('root_path');
 		$language_array = array();
 		$icon = "";
@@ -768,7 +768,9 @@ class user extends gen_class {
 					}
 					
 					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].(($blnWithIsoShort) ? ' ('.$lang['ISO_LANG_SHORT'].')' : '') : ucfirst($file));
-					$language_array[$file] = (($blnWithIcon) ? $icon : '').$lang_name_tp.(($blnWithIcon) ? '</span>' : '');
+					$key = ($blnIsoAsKey) ? $lang['ISO_LANG_SHORT'] : $file;
+					
+					$language_array[$key] = (($blnWithIcon) ? $icon : '').$lang_name_tp.(($blnWithIcon) ? '</span>' : '');
 				}
 			}
 		}
