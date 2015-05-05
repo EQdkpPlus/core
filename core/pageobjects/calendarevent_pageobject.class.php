@@ -950,6 +950,9 @@ class calendarevent_pageobject extends pageobject {
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('u_calendar_view'));
 
+		
+		$arrRaidgroups = array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
+
 		$this->tpl->assign_vars(array(
 			// error messages
 			'RAID_CLOSED'			=> ($eventdata['closed'] == '1') ? true : false,
@@ -982,7 +985,7 @@ class calendarevent_pageobject extends pageobject {
 			'DD_SIGNUPSTATUS'		=> new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])),
 			'DD_MODSIGNUPSTATUS'	=> new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')),
 			'DD_MODRAIDGROUPS'		=> new hdropdown('moderation_raidgroup', array('options' => $this->raidgroup_dd, 'value' => 0)),
-			'DD_RAIDGROUPS'			=> new hdropdown('raidgroup_filter', array('options' => array_merge(array(0=>$this->user->lang('raidevent_raid_all_raidgroups')), $this->raidgroup_dd), 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')),
+			'DD_RAIDGROUPS'			=> new hdropdown('raidgroup_filter', array('options' => $arrRaidgroups, 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')),
 			'DD_NOTSIGNEDINSTATUS'	=> new hdropdown('notsigned_raidstatus', array('options' => $this->raidstatus, 'value' => '0')),
 
 			'SUBSCRIBED_MEMBER_ID'	=> $this->mystatus['member_id'],
