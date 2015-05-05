@@ -141,7 +141,7 @@ class ftp_handler{
 		return @ftp_mkdir($this->link_id,$this->root_dir.$dir);
 	}
 	
-	public function mkdir_r($path, $mode=0755){
+	public function mkdir_r($path, $mode=0775){
 		$this->login();
 		$this->cdToHome();
 		$dir	= explode("/", $this->root_dir.$path);
@@ -441,6 +441,11 @@ class ftp_handler{
 			return true;
 		else
 			return false;
+	}
+	
+	private function get_chmod(){
+		if(defined('CHMOD')) return CHMOD;
+		return 0775;
 	}
 }
 ?>

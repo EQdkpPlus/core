@@ -1107,16 +1107,9 @@ function get_first_image($strHTML, $blnGetFullImage = false){
 	return '';
 }
 
-function get_chmod($blnForDirectory=false){
-	if($blnForDirectory){
-		if(defined('CHMOD_DIR')) return CHMOD_DIR;
-		if(defined('CHMOD')) return CHMOD;
-		return 0755;
-	} else {
-		if(defined('CHMOD_FILES')) return CHMOD_FILES;
-		if(defined('CHMOD')) return CHMOD;
-		return 0644;
-	}
+function get_chmod(){
+	if(defined('CHMOD')) return CHMOD;
+	return 0775;
 }
 
 function human_filesize($bytes, $dec = 2)

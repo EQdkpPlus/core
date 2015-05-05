@@ -65,7 +65,7 @@ if (!class_exists("filehandler_php")) {
 			return $this->FilePath($path.'/index.html', $plugin);
 		}
 
-		private function mkdir_r($name, $chmod=0755){
+		private function mkdir_r($name, $chmod=0775){
 			$dirs = explode('/', $name);
 			$dir	= $part = '';
 			foreach ($dirs as $part) {

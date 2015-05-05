@@ -44,15 +44,8 @@ try {
 	
 	if (!function_exists("get_chmod")){
 		function get_chmod(){
-			if($blnForDirectory){
-				if(defined('CHMOD_DIR')) return CHMOD_DIR;
-				if(defined('CHMOD')) return CHMOD;
-				return 0755;
-			} else {
-				if(defined('CHMOD_FILES')) return CHMOD_FILES;
-				if(defined('CHMOD')) return CHMOD;
-				return 0644;
-			}
+			if(defined('CHMOD')) return CHMOD;
+			return 0775;
 		}
 	}
 
