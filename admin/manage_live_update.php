@@ -126,8 +126,8 @@ class Manage_Live_Update extends page_generic {
 			function update_error(data){
 				$("#lu_error").show();
 				$("#lu_error_label").html("<b>'.$this->user->lang('liveupdate_step_error').'</b>" + data);
-				$("#lu_loading_img").hide();
-				$("#lu_dontclose").hide();
+				$(".lu_loading_indicator").hide();
+				$(".lu_dontclose_info").hide();
 			}
 		');
 
@@ -171,8 +171,8 @@ class Manage_Live_Update extends page_generic {
 	//Get Download_Link
 	public function process_step1(){
 		$downloadLink = $this->repo->getCoreUpdateDownloadLink();
-
-		if ($downloadLink && strlen($downloadLink['link'])){
+		
+		if($downloadLink && $downloadLink['status'] == 1){
 			$this->config->set('download_link', $this->encrypt->encrypt($downloadLink['link']), 'live_update');
 			$this->config->set('download_hash', $this->encrypt->encrypt($downloadLink['hash']), 'live_update');
 			$this->config->set('download_signature', $this->encrypt->encrypt($downloadLink['signature']), 'live_update');
@@ -180,8 +180,9 @@ class Manage_Live_Update extends page_generic {
 			$this->config->set('download_newversion', $this->encrypt->encrypt($new_version), 'live_update');
 			echo "true";
 		} else {
-			echo $this->user->lang('liveupdate_step1_error');
+			echo $this->user->lang('liveupdate_step1_error_'.$downloadLink['error']);
 		}
+
 		exit;
 	}
 
@@ -519,6 +520,7 @@ class Manage_Live_Update extends page_generic {
 				'NEW_VERSION'	=> $updates['version'],
 				'CHANGELOG'		=> nl2br($updates['changelog']),
 				'RELEASE_DATE'	=> $updates['release'],
+				'S_NO_UPDATE_PACKAGE' => ($updates['dep_php'] == '9.9') ? true : false,
 			));
 		}
 		$this->tpl->assign_vars(array(
@@ -527,7 +529,7 @@ class Manage_Live_Update extends page_generic {
 			'S_UPDATE_BUTTON'	=> ($this->repo->getChannel() != 'stable' || DEBUG > 1),
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
-			'S_REQUIREMENTS'	=> ($updates != NULL && $updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true,
+			'S_REQUIREMENTS'	=> (class_exists("ZipArchive") && (($updates != NULL && $updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true)),
 		));
 
 		$this->core->set_vars(array(

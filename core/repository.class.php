@@ -202,22 +202,30 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		public function getExtensionDownloadLink($intExtensionID, $intCategory, $strExtensionName){
 			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 5);
 			$arrJson = json_decode($response);
-			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->link)){
-				return array('link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
-			} else {
-				return false;
+			if(!$response || !$arrJson) return array('status' => 0, 'error' => 500);
+			
+			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
+				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
+			} elseif((int)$arrJson->status == 1) {
+				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
 			}
+			
+			return false;
 		}
 
 		// generate download link for core update
 		public function getCoreUpdateDownloadLink(){
 			$response = $this->puf->fetch($this->RepoEndpoint.'core_update&old='.$this->plusversion.'&new='.$this->new_version.$this->getChannelURL(), "", 5);
 			$arrJson = json_decode($response);
-			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->link)){
-				return array('link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
-			} else {
-				return false;
+			if(!$response || !$arrJson) return array('status' => 0, 'error' => 500);
+			
+			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
+				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
+			} elseif((int)$arrJson->status == 1) {
+				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
 			}
+			
+			return false;
 		}
 
 		// download package

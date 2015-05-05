@@ -33,7 +33,7 @@ class language extends gen_class {
 	
 	public function __construct($strLanguage=''){
 		if(!$this->pdl->type_known("language"))
-			$this->pdl->register_type("language", false, array($this, 'pdl_html_format_language'), array(4));
+			$this->pdl->register_type("language", false, array($this, 'pdl_html_format_language'), array(3, 4));
 		if(!$this->pdl->type_known("unused_language"))
 			$this->pdl->register_type("unused_language", array($this, 'pdl_pt_format_unused_language'), array($this, 'pdl_html_format_unused_language'), array(4));
 		
@@ -56,6 +56,14 @@ class language extends gen_class {
 		
 		$file_path = $this->root_path . 'language/' . $lang_name . '/';
 		$tmp_lang = array();
+		
+		//If there is no main language file, abbort
+		if(!file_exists($file_path . 'lang_main.php'))  {
+			$this->arrLang[$lang_name] = "error";
+			pd("Error loading language ".$lang_name);
+			return false;
+		}
+		
 		include($file_path . 'lang_main.php');
 		if (is_array($lang)) {
 			$tmp_lang = array_merge($tmp_lang, $lang);
@@ -110,7 +118,7 @@ class language extends gen_class {
 	}
 	
 	private function lang_error($key, $return_key, $warning=false, $error=true) {
-		if($error) {
+		if($error && $this->pdl->should_log('language')) {
 			$debug = debug_backtrace();
 			if(!$warning) $this->pdl->log('language', $key, $debug[2]['file'], $debug[2]['line']);
 			else $this->pdl->log('language', $key, $debug[2]['file'], $debug[2]['line'], $this->strLangCode);
@@ -128,11 +136,15 @@ class language extends gen_class {
 			$cur_lang_name = ($lang !== false) ? $lang : $strLanguage;
 			if(!$cur_lang_name) $cur_lang_name = $this->config->get('default_lang');
 
+			//Current Languages has not been loaded yet
 			if(!isset($this->arrLang[$cur_lang_name])){
 				$this->init_lang($cur_lang_name);
 			}
 			
-			if(!isset($this->arrLang[$cur_lang_name][$key])) {
+			
+			$blnCurrentLanguageLoadingError = ($this->arrLang[$cur_lang_name] == "error" ) ? true : false;
+			//Switch to Default language
+			if($blnCurrentLanguageLoadingError || !isset($this->arrLang[$cur_lang_name][$key])) {
 				//check if plugin_lang initialized first
 				if($this->missing_plug_lang($cur_lang_name)) $this->init_plug_lang($cur_lang_name);
 				if(!isset($this->arrLang[$cur_lang_name][$key]) && $cur_lang_name != $this->config->get('default_lang')) {
@@ -150,10 +162,14 @@ class language extends gen_class {
 			}
 			$lang = $this->arrLang[$cur_lang_name];
 		}
+
+		//key not available at all languages
 		if(!isset($lang[$key])) {
 			return $this->lang_error($error_key.$key, $return_key, false, $error);
 		}
-		if(isset($default_chosen) && $error) {
+		
+		//key is available, but not in current language, but in default one
+		if(isset($default_chosen) && $error && !$blnCurrentLanguageLoadingError) {
 			$this->lang_error($key, false, true);
 		}
 		if(isset($keys) && count($keys) > 0) return $this->get($cur_lang_name, $keys, $return_key, $error, $lang[$key], $error_key.$key.' -> ');

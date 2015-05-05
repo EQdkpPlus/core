@@ -203,6 +203,16 @@ if ( !defined('EQDKP_INC') ){
 				return false;
 			}
 		}
+		
+		public function should_log($type){
+			if(array_key_exists($type, $this->known_types)){
+				if( $this->debug_level == -1 || in_array($this->debug_level, $this->known_types[$type]['loglevel']) ){
+					return true;
+				}
+			}else{
+				return false;
+			}
+		}
 
 		public function pt_format_log_entry($type, &$log_entry){
 			return call_user_func($this->known_types[$type]['pt'], $log_entry);

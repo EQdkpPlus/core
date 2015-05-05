@@ -199,16 +199,23 @@ class Manage_Extensions extends page_generic {
 	public function process_step1(){
 		$intExtensionID = $this->in->get('extid', 0);
 		
+		//Check for Zip Extension
+		if (!class_exists("ZipArchive")){
+			echo $this->user->lang('repo_error_zip');
+			return;
+		}
+		
 		if ($this->in->get('cat', 0) && strlen($this->code)){
 			$downloadLink = $this->repo->getExtensionDownloadLink($intExtensionID, $this->in->get('cat', 0), $this->code);
-			if ($downloadLink && strlen($downloadLink['link'])){
+			if($downloadLink && $downloadLink['status'] == 1){
 				$this->config->set(md5($this->in->get('cat', 0).$this->code).'_link', $this->encrypt->encrypt($downloadLink['link']), 'repository');
 				$this->config->set(md5($this->in->get('cat', 0).$this->code).'_hash', $this->encrypt->encrypt($downloadLink['hash']), 'repository');
 				$this->config->set(md5($this->in->get('cat', 0).$this->code).'_signature', $this->encrypt->encrypt($downloadLink['signature']), 'repository');
 				echo "true";
 			} else {
-				echo $this->user->lang('repo_step1_error');
+				echo $this->user->lang('repo_step1_error_'.$downloadLink['error']);
 			}
+
 		} else {
 			echo $this->user->lang('repo_unknown_error');
 		}

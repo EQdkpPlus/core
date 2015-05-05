@@ -17,7 +17,7 @@
 	</div>
 	<!-- ELSEIF S_NEW_VERSION && not S_REQUIREMENTS -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_liveupdate_update_requirements_failed}
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <!-- IF S_NO_UPDATE_PACKAGE -->{L_liveupdate_update_nopackages_failed}<!-- ELSE -->{L_liveupdate_update_requirements_failed}<!-- ENDIF -->
 	</div>
 	<!-- ELSE -->
 	<div class="infobox infobox-large infobox-green clearfix">
@@ -64,12 +64,12 @@
 	.ui-progressbar { position:relative; height:30px;}
 	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 30px; left:5%; right:5%;}
 </style>
-<div class="infobox infobox-large infobox-blue clearfix">
+<div class="infobox infobox-large infobox-blue clearfix lu_dontclose_info">
 	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_liveupdate_dontclose}
 </div>
 <br />
 <div id="nl_progressbar">
-	<span class="nl_progressbar_label"><i class="fa fa-refresh fa-spin fa-lg"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
+	<span class="nl_progressbar_label"><i class="fa fa-refresh fa-spin fa-lg lu_loading_indicator"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 <!-- ENDIF -->
 

@@ -1654,8 +1654,7 @@ class template extends gen_class {
 			$strCSS = $parser->getCss();
 
 		} catch (Exception $e) {
-			echo "fatal error parsing less: " . $e->getMessage();
-			die();
+			echo "Fatal error parsing less: " . nl2br($e->getMessage());
 		}
 		
 		return $strCSS;
