@@ -86,7 +86,7 @@ if (!class_exists("filehandler_ftp")) {
 					// We need the temp folder.. create it!
 					$blnResult = $this->CheckCreateFolder('', 'tmp');
 					
-					$chmod = (defined('CHMOD') ? CHMOD : 0775;				
+					$chmod = (defined('CHMOD') ? CHMOD : 0775);
 					$this->ftp->chmod($this->remove_rootpath($this->tmp_Folder), $chmod);
 					$this->ftp->setTempDir($this->tmp_Folder);
 					if (!$blnResult){
