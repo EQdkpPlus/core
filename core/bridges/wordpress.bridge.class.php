@@ -78,7 +78,7 @@ class wordpress_bridge extends bridge_generic {
 	}
 	
 	public function wordpress_get_user_groups($intUserID){
-		$objQuery = $this->bridgedb->prepare("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='wp_capabilities' AND user_id=?")->execute($intUserID);
+		$objQuery = $this->bridgedb->prepare("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='".$this->prefix."capabilities' AND user_id=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($objQuery){
 			$result = $objQuery->fetchAssoc();
