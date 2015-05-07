@@ -68,7 +68,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						$changes = true;
 					}
 				}
-			}	
+			}
 			
 			// fix for empty notes
 			if($old['notes'] != '' && $entered_notes == ''){
@@ -82,7 +82,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			unset($tmp_new['updated_on']);
 			asort($tmp_old); 
 			asort($tmp_new);
-			var_dump($notes);die();
+
 			if($changes || (serialize($tmp_old) !== serialize($tmp_new))) {
 				// the extensions array
 
