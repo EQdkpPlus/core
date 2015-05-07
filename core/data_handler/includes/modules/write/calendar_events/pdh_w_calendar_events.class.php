@@ -252,12 +252,15 @@ if(!class_exists('pdh_w_calendar_events')) {
 			// delete mass-raids
 			if($del_repeatable){
 				// select the clone-ids of the events
-				$objQuery = $this->db->prepare("SELECT DISTINCT cloneid FROM __calendar_events WHERE id :in")->in($field)->execute();
+				$objQuery = $this->db->prepare("SELECT DISTINCT cloneid, repeating, id FROM __calendar_events WHERE id :in")->in($field)->execute();
 				if($objQuery){
 					$delete_events = array();
 					while($row = $objQuery->fetchAssoc()){
 						//Don't delete events with cloneid = 0
-						if (intval($row['cloneid']) == 0) continue;
+						#if (intval($row['cloneid']) == 0) continue;
+						if($row['cloneid'] == 0 && $row['repeating'] > 0){
+							$row['cloneid'] = $row['id'];
+						}
 
 						// get the date of the selected event
 						$current_time	= ($arrOld['timestamp_start'] > 0) ? $arrOld['timestamp_start'] : $this->time->time;
