@@ -75,7 +75,6 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$old['notes'] = $notes = '';
 				$changes = true;
 			}
-			var_dump($entered_notes);die();
 			
 			$tmp_old = $extdata_old = $this->pdh->get('calendar_events', 'extension', array($id));
 			if(is_array($extension)) $tmp_new = $extdata = array_merge($extdata_old, $extension);
