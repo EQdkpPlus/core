@@ -50,12 +50,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 		);
 
 		public function update_cevents($id, $cal_id, $name, $startdate, $enddate, $repeat, $editclones, $notes, $allday, $extension=false){
+			$entered_notes			= $notes;
 			$old['cal_id']			= $this->pdh->get('calendar_events', 'calendar_id', array($id));
 			$old['name']			= ($name != false) ? $this->pdh->get('calendar_events', 'name', array($id)) : '';
 			$old['startdate']		= $this->pdh->get('calendar_events', 'time_start', array($id));
 			$old['enddate']			= $this->pdh->get('calendar_events', 'time_end', array($id));
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
-			#$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
+			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
 			$changes				= false;
 
@@ -69,13 +70,20 @@ if(!class_exists('pdh_w_calendar_events')) {
 				}
 			}	
 			
+			// fix for empty notes
+			if($old['notes'] != '' && $entered_notes == ''){
+				$old['notes'] = $notes = '';
+				$changes = true;
+			}
+			var_dump($entered_notes);die();
+			
 			$tmp_old = $extdata_old = $this->pdh->get('calendar_events', 'extension', array($id));
 			if(is_array($extension)) $tmp_new = $extdata = array_merge($extdata_old, $extension);
 			unset($tmp_old['updated_on']);
 			unset($tmp_new['updated_on']);
 			asort($tmp_old); 
 			asort($tmp_new);
-
+			var_dump($notes);die();
 			if($changes || (serialize($tmp_old) !== serialize($tmp_new))) {
 				// the extensions array
 
