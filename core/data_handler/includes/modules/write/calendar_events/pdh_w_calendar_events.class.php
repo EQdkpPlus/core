@@ -50,12 +50,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 		);
 
 		public function update_cevents($id, $cal_id, $name, $startdate, $enddate, $repeat, $editclones, $notes, $allday, $extension=false){
+			$entered_notes			= $notes;
 			$old['cal_id']			= $this->pdh->get('calendar_events', 'calendar_id', array($id));
 			$old['name']			= ($name != false) ? $this->pdh->get('calendar_events', 'name', array($id)) : '';
 			$old['startdate']		= $this->pdh->get('calendar_events', 'time_start', array($id));
 			$old['enddate']			= $this->pdh->get('calendar_events', 'time_end', array($id));
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
-			#$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
+			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
 			$changes				= false;
 
@@ -67,7 +68,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 						$changes = true;
 					}
 				}
-			}	
+			}
+			
+			// fix for empty notes
+			if($old['notes'] != '' && $entered_notes == ''){
+				$old['notes'] = $notes = '';
+				$changes = true;
+			}
 			
 			$tmp_old = $extdata_old = $this->pdh->get('calendar_events', 'extension', array($id));
 			if(is_array($extension)) $tmp_new = $extdata = array_merge($extdata_old, $extension);
@@ -248,12 +255,15 @@ if(!class_exists('pdh_w_calendar_events')) {
 			// delete mass-raids
 			if($del_repeatable){
 				// select the clone-ids of the events
-				$objQuery = $this->db->prepare("SELECT DISTINCT cloneid FROM __calendar_events WHERE id :in")->in($field)->execute();
+				$objQuery = $this->db->prepare("SELECT DISTINCT cloneid, repeating, id FROM __calendar_events WHERE id :in")->in($field)->execute();
 				if($objQuery){
 					$delete_events = array();
 					while($row = $objQuery->fetchAssoc()){
-						//Don't delete events with cloneid = 0
-						if (intval($row['cloneid']) == 0) continue;
+						//Don't delete events which are not
+						#if (intval($row['cloneid']) == 0) continue;
+						if($row['cloneid'] == 0 && $row['repeating'] > 0){
+							$row['cloneid'] = $row['id'];
+						}
 
 						// get the date of the selected event
 						$current_time	= ($arrOld['timestamp_start'] > 0) ? $arrOld['timestamp_start'] : $this->time->time;
