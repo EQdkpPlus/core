@@ -32,6 +32,7 @@ class ManageRaids extends page_generic {
 			'save' => array('process' => 'save', 'check' => 'a_raid_add', 'csrf'=>true),
 			'itemadj_del' => array('process' => 'update', 'check' => 'a_raid_del', 'csrf'=>true),
 			'copy'		=> array('process' => 'copy', 'check' => 'a_raid_add'),
+			'refresh'	=> array('process' => 'refresh', 'check' => 'a_raid_add', 'csrf' => true),
 			'upd'		=> array('process' => 'update', 'csrf'=>false),			
 		);
 		parent::__construct('a_raid_', $handler, array('raid', 'event_name'), null, 'selected_ids[]', 'r');
@@ -151,6 +152,10 @@ class ManageRaids extends page_generic {
 		$this->display($messages);
 	}
 
+	public function refresh(){
+		$this->update(false, true);
+	}
+	
 	public function update($message=false, $force_refresh=false, $copy=false) {
 		if($message) {
 			$this->core->messages($message);
