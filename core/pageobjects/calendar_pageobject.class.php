@@ -402,23 +402,24 @@ class calendar_pageobject extends pageobject {
 		);
 
 		$this->tpl->assign_vars(array(
-			'STARTDAY'		=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
+			'CALENDAR_LANG'	=> ($this->user->lang('XML_LANG') != '') ? $this->user->lang('XML_LANG') : 'en',
+			'STARTDAY'			=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
 			'JS_TIMEFORMAT'	=> ($this->config->get('default_jsdate_time') != '') ? $this->config->get('default_jsdate_time') : $this->user->lang('style_jstime'),
 			'JS_DATEFORMAT'	=> ($this->config->get('default_jsdate_nrml') != '') ? $this->config->get('default_jsdate_nrml') : $this->user->lang('style_jsdate_nrml'),
-			'JS_DATEFORMAT2'=> ($this->config->get('default_jsdate_short') != '') ? $this->config->get('default_jsdate_short') : $this->user->lang('style_jsdate_short'),
-			'RAID_LIST'		=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
-			'DD_CHARS'		=> $memberrole[0],
-			'DD_ROLES'		=> $memberrole[1],
-			'DD_STATUS'		=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
-			'DD_MULTIDEL'	=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
-			'TXT_NOTE'		=> new htext('member_note', array('size' => '20')),
-			'IS_OPERATOR'	=> $this->user->check_auth('u_cal_event_add', false),
+			'JS_DATEFORMAT2'	=> ($this->config->get('default_jsdate_short') != '') ? $this->config->get('default_jsdate_short') : $this->user->lang('style_jsdate_short'),
+			'RAID_LIST'			=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
+			'DD_CHARS'			=> $memberrole[0],
+			'DD_ROLES'			=> $memberrole[1],
+			'DD_STATUS'			=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
+			'DD_MULTIDEL'		=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
+			'TXT_NOTE'			=> new htext('member_note', array('size' => '20')),
+			'IS_OPERATOR'		=> $this->user->check_auth('u_cal_event_add', false),
 
-			'CSRF_MOVE_TOKEN' => $this->CSRFGetToken('move'),
+			'CSRF_MOVE_TOKEN'	=> $this->CSRFGetToken('move'),
 			'CSRF_RESIZE_TOKEN' => $this->CSRFGetToken('resize'),
 			'CSRF_DELETEID_TOKEN' => $this->CSRFGetToken('deleteid'),
-			'U_CALENDAR'	=> $this->strPath.$this->SID,
-			'U_CALENDAREVENT' => $this->routing->build('CalendarEvent'),
+			'U_CALENDAR'		=> $this->strPath.$this->SID,
+			'U_CALENDAREVENT'	=> $this->routing->build('CalendarEvent'),
 			'U_EDIT_CALENDAREVENT' => $this->routing->build('EditCalendarEvent'),
 		));
 		
