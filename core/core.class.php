@@ -580,7 +580,9 @@ class core extends gen_class {
 				$hidden = $item['item']['hidden'];
 				if ($hidden && !$show_hidden) $show = false;
 				$hash = $item['item']['hash'];
-				if (!isset($arrHashArray[$hash])) $show = false;
+				if (!isset($arrHashArray[$hash])) {
+					$show = false;
+				}
 				unset($arrToDo[$hash]);
 				if ($show) {
 					if ($hidden) $arrHashArray[$hash]['hidden'] = 1;
@@ -590,6 +592,8 @@ class core extends gen_class {
 				}
 				//Second Level
 				if (isset($item['_childs']) && is_array($item['_childs'])){
+					$secondlevel_show = $show;
+					
 					foreach($item['_childs'] as $key2 => $item2){
 						$hidden = $item2['item']['hidden'];
 						if ($hidden && !$show_hidden) $show = false;
@@ -618,7 +622,7 @@ class core extends gen_class {
 								}	
 							}
 						}
-						$show = true;
+						$show = $secondlevel_show;
 					}
 				}
 				$show = true;
