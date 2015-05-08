@@ -164,7 +164,7 @@ class tinyMCE extends gen_class {
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					image_advtab: true,
-					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
+					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					language : "'.$this->language.'",
 					plugins: [
 					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
