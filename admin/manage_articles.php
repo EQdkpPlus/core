@@ -73,6 +73,8 @@ class Manage_Articles extends page_generic {
 	public function change_category(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$intCategory = $this->in->get('new_category',0);
+			if($intCategory === 0) return false;
+			
 			$this->pdh->put('articles', 'change_category', array($this->in->getArray('selected_ids', 'int'), $intCategory));
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');

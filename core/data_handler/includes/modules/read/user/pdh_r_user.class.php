@@ -378,7 +378,7 @@ if (!class_exists("pdh_r_user")){
 
 			if ($fields){
 				if ($field){
-					return $fields[$field];
+					return (isset($fields[$field])) ? $fields[$field] : false;
 				}
 				return $fields;
 			} else {

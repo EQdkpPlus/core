@@ -45,7 +45,7 @@ if (!class_exists("filehandler_php")) {
 				$this->CheckCreateFolder('', 'tmp');
 				
 			} else {
-				if(!$this->CheckCreateFolder($this->root_path.'data/', false) || !is_writable($this->root_path.'data/')){
+				if(!$this->CheckCreateFolder($this->root_path.'data/', false) || !$this->is_writable($this->root_path.'data/', true)){
 					$this->errors[] = 'lib_cache_notwriteable';
 				}
 			}

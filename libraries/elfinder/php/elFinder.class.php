@@ -921,13 +921,13 @@ class elFinder {
 			
 			$tmpname = $files['tmp_name'][$i];
 			
-			/*
+			
 			if (($fp = fopen($tmpname, 'rb')) == false) {
 				$result['warning'] = $this->error(self::ERROR_UPLOAD_FILE, $name, self::ERROR_UPLOAD_TRANSFER);
 				$this->uploadDebug = 'Upload error: unable open tmp file';
 				break;
 			}
-			*/
+			
 			
 			if (($file = $volume->upload($fp, $target, $name, $tmpname)) === false) {
 				$result['warning'] = $this->error(self::ERROR_UPLOAD_FILE, $name, $volume->error());
