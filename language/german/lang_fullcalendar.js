@@ -1,10 +1,11 @@
 
 $.fullCalendar.lang("de", {
-	defaultButtonText: {
+	buttonText: {
 		month: "Monat",
 		week: "Woche",
 		day: "Tag",
-		list: "Terminübersicht"
+		list: "Terminübersicht",
+		today: "heute"
 	},
 	allDayText: "Ganztägig",
 	eventLimitText: function(n) {
