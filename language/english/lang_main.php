@@ -780,6 +780,7 @@ $lang = array(
 	"raidevent_transform_unsigned" => 'Convert unsigned characters',
 	"raidevent_transform_leaders" => 'Convert Raidleaders',
 	"raidevent_transform_roleinfo" => 'Convert roles info',
+	"raidevent_transform_raidgroup" => 'Filter by raid group: ',
 	"raidevent_transform_button" => 'Transform',
 	"twinks" => 'Twinks',
 	"raidevent_raid_errorhead" => 'ERROR',

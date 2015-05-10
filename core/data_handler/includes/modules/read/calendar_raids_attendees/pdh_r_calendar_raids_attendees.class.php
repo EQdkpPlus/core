@@ -199,13 +199,26 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 		}
 
-		public function get_attendee_stats($eventid, $status){
-			$origStatus = $status;
-			$status = (!is_array($status)) ? array($status) : $status;
-			$tmpattendee = array();
+		public function get_attendee_stats($eventid, $status, $raidgroup=0){
+			$origStatus		= $status;
+			$status			= (!is_array($status)) ? array($status) : $status;
 			if ($origStatus == 4) $status = array(0,1,2,3);
 			if(isset($this->attendees[$eventid]) && count($this->attendees[$eventid]) > 0){
-				foreach($this->attendees[$eventid] as $attendeeid=>$attendeedata){
+				$temp_attendees_per_id	= $this->attendees[$eventid];
+
+				// filter the attendees by group
+				if($raidgroup > 0){
+					$tmpattendee	= array();
+					foreach($temp_attendees_per_id as $attendeeid=>$attendeedata){
+						if($attendeedata['raidgroup'] != $raidgroup){
+							unset($temp_attendees_per_id[$attendeeid]);
+						}
+					}
+				}
+
+				// now, do the rest
+				$tmpattendee	= array();
+				foreach($temp_attendees_per_id as $attendeeid=>$attendeedata){
 					if(in_array($attendeedata['signup_status'], $status)){
 						$tmpattendee[]	= $attendeeid;
 					}
@@ -215,7 +228,6 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 				} else {
 					return $tmpattendee;
 				}
-				
 			}else{
 				if ($origStatus == 4){
 					return $this->pdh->get('member', 'id_list', array());

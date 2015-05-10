@@ -45,7 +45,7 @@ class calendareventtransform_pageobject extends pageobject {
 			$statarray[] = '3';
 		}
 
-		$attendees	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($this->url_id, $statarray));
+		$attendees	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($this->url_id, $statarray, $this->in->get('raidgroup', 0)));
 		$raidext	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
 
 		// add the raidleaders to the attendees
@@ -60,9 +60,9 @@ class calendareventtransform_pageobject extends pageobject {
 		if($this->in->get('roleinfo', 0) && $raidext['raidmode'] != 'class'){
 			$additional_data = "";
 			foreach($attendees as $attendee_id){
-				$additional_data .= $this->pdh->get('member', 'name', array($attendee_id)).': ';
-				$roleid = $this->pdh->get('calendar_raids_attendees', 'role', array($this->url_id, $attendee_id));
-				$additional_data .= $this->pdh->get('roles', 'name', array($roleid))."\n";
+				$additional_data	.= $this->pdh->get('member', 'name', array($attendee_id)).': ';
+				$roleid				 = $this->pdh->get('calendar_raids_attendees', 'role', array($this->url_id, $attendee_id));
+				$additional_data	.= $this->pdh->get('roles', 'name', array($roleid))."\n";
 			}
 		} else $additional_data = "";
 
@@ -87,8 +87,13 @@ class calendareventtransform_pageobject extends pageobject {
 	}
 
 	public function display(){
+		$this->raidgroup_dd		= $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
+		$arrRaidgroups			= array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
+
 		$this->tpl->assign_vars(array(
 			'EVENTID'		=> $this->in->get('eventid', 0),
+			'SHOW_GROUPS'	=> $this->pdh->get('raid_groups', 'groups_enabled'),
+			'DD_GROUPS'		=> new hdropdown('raidgroup', array('options' => $arrRaidgroups, 'value' => 0)),
 		));
 
 		$this->core->set_vars(array(
