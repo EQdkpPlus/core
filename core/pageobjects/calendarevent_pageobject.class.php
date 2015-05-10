@@ -786,7 +786,7 @@ class calendarevent_pageobject extends pageobject {
 				'name'	=> $this->user->lang('raidevent_raid_transform'),
 				'link'	=> ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? $this->server_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'&checkraid=submit&parser=eqdkp_raid&log='.$this->url_id : "javascript:TransformRaid('".$this->url_id."')",
 				'icon'	=> 'fa-exchange',
-				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
+				'perm'	=> (($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? $this->user->check_auth('a_raidlogimport_dkp', false) : ($this->user->check_auth('a_raid_add', false)),
 			),
 			4 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
