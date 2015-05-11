@@ -38,8 +38,8 @@ try {
 	#error_reporting(E_ALL);
 	header('content-type: text/html; charset=UTF-8');
 	include($eqdkp_root_path.'infotooltip/infotooltip.class.php');
-
 	$itt	= registry::register('infotooltip');
+	$itt->cors_headers();
 	$in		= registry::register('input');
 	
 	if (!function_exists("get_chmod")){
@@ -127,4 +127,8 @@ try {
 } catch (DBALException $e){
 	echo ($e->message);
 }
+
+
+
+
 ?>
