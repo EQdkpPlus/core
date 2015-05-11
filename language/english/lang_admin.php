@@ -1715,6 +1715,9 @@ $lang = array(
 	"core_sett_f_login_google_privatekey" => "Google Client Secret",
 	"core_sett_f_gravatar_defaultavatar" => "Use Gravatar default avatar",
 	"core_sett_f_help_gravatar_defaultavatar" => "This options ensures that each user without an avatar gets an individual one to keep the user better seperated",
+	'core_sett_f_access_control_header' => 'Allowed JavaScript-Domains',
+	'core_sett_f_help_access_control_header' => 'Insert here domains (one per line; including the protocol, e.g. http://eqdkp.myowndomain.com) that are allowed to embedd things like portal modules or Itemtooltips.',
+
 );
 
 ?>

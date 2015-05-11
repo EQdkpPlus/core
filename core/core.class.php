@@ -1021,5 +1021,53 @@ class core extends gen_class {
 				}
 			}
 		}
+		
+		public function cors_headers(){
+			$strDomains = $this->config->get('access_control_header');
+			$arrDomains = explode("\n", $strDomains);
+			
+			$arrAllowedDomains = array();
+			
+			foreach($arrDomains as $strDomain){
+				$strDomain = trim(unsanitize($strDomain));
+				if($strDomain === '*') {
+					header('Access-Control-Allow-Origin: *');
+					return;
+				}
+
+				$arrAllowedDomains[] = $strDomain; // http://mydomain.com
+			}
+			
+			//Some generic domains
+			$strDomain = $this->env->httpHost;
+			$urlData = parse_url($strDomain);
+			$hostData = explode('.', $urlData['host']);
+			$hostData = array_reverse($hostData);
+			if(count($hostData) > 1) $strDomain = $hostData[1].'.'.$hostData[0];
+			else $strDomain = $hostData[0];
+			$arrAllowedDomains[] = $strDomain;
+			
+			$incomingOrigin = array_key_exists('HTTP_ORIGIN', $_SERVER) ? $_SERVER['HTTP_ORIGIN'] : NULL;
+			if($incomingOrigin === NULL) $incomingOrigin = array_key_exists('ORIGIN', $_SERVER) ? $_SERVER['ORIGIN'] : NULL;
+			if($incomingOrigin === NULL){
+				$strReferer = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
+				$arrRefererInfo = parse_url($strReferer);
+				$incomingOrigin = $arrRefererInfo['scheme'].'://'.$arrRefererInfo['host'];
+			}
+			
+			foreach($arrAllowedDomains as $strAllowedDomain){
+				$arrDomainParts = parse_url($strAllowedDomain);
+				if($arrDomainParts['host'] != ""){
+					$pattern = '/^http:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
+					
+					$allow = preg_match($pattern, $incomingOrigin);
+					if ($allow){
+						header('Access-Control-Allow-Origin: '.filter_var($incomingOrigin, FILTER_SANITIZE_URL));
+						return;
+					}
+				}
+			}
+			
+		}
 }
 ?>

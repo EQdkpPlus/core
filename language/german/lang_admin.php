@@ -1718,5 +1718,7 @@ $lang = array(
 "core_sett_f_login_google_publickey" => "Google Client-ID",
 "core_sett_f_login_google_privatekey" => "Google Client Secret",
 		
+'core_sett_f_access_control_header' => 'Erlaubte JavaScript-Domains',
+'core_sett_f_help_access_control_header' => 'Trage hier Domains ein (eine pro Zeile, inklusive Protokoll, z.B. http://eqdkp.meineqdkp.de), von der aus auf JavaScript-Elemente wie Portalmodule oder Itemtooltips zugegriffen werden darf.',
 );
 ?>

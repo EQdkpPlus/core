@@ -660,7 +660,12 @@ class mmocms_settings extends page_generic {
 					),
 					'disable_xframe_header' => array(
 						'type'	=> 'radio',
-					)	
+					),
+					'access_control_header' => array(
+						'type'	=> 'textarea',
+						'cols'	=> 80,
+						'rows'	=> 5,
+					),
 				),
 				'mobile' => array(
 					'mobile_template' => array(
