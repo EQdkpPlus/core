@@ -542,7 +542,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'S_MIDDLE_HIDDEN'	=> (!in_array('middle', $arrUsedBlocks)),
 				'S_BOTTOM_HIDDEN'	=> (!in_array('bottom', $arrUsedBlocks)),
 				'LAYOUT_ID'			=> $intLayoutID,
-				'EMBEDD_URL'		=> str_replace(array("https:", "http:"), "", $this->env->link),
+				'EMBEDD_URL'		=> $this->env->link,
 		));
 		
 		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs' => '$("#save").click();'));
