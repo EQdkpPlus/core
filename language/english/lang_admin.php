@@ -1776,6 +1776,10 @@ $lang = array(
 		'stylesettings_misc_text3' => 'Miscellaneous text 3',
 		'stylesettings_additional_less' => 'Additional LESS',
 		'stylesettings_content_highlight_color' => 'Highlight color',
+		
+		'core_sett_f_access_control_header' => 'Allowed JavaScript-Domains',
+		'core_sett_f_help_access_control_header' => 'Insert here domains (one per line; including the protocol, e.g. http://eqdkp.myowndomain.com) that are allowed to embedd things like portal modules or Itemtooltips.',
+		
 );
 
 ?>

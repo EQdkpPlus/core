@@ -197,6 +197,7 @@ if(registry::register('input')->get('out') != ''){
 		
 		case 'portal':
 			header('content-type: text/html; charset=UTF-8');
+			registry::register('core')->cors_headers();
 			echo registry::register('portal')->get_module_external(registry::register('input')->get('id', 0));
 			exit;
 		break;
