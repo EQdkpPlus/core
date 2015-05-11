@@ -181,6 +181,7 @@ if(!class_exists('infotooltip')) {
 				'armory_region'			=> 'uc_server_loc',
 				'debug'					=> 'itt_debug',
 				'game_importer_apikey'	=> 'game_importer_apikey',
+				'access_control_header' => 'access_control_header',
 			);
 			//only copy the "wanted" configs array('game', 'icon_path', 'icon_ext', 'default_icon', 'useitemlist', 'armory_region', 'debug', 'game_language', 'prio', 'lang_prio')
 			foreach($needed_configs as $name => $key) {
@@ -461,6 +462,72 @@ if(!class_exists('infotooltip')) {
 				$item['html'] = str_replace('{DEBUG}', '', $item['html']);
 			}
 			return $item;
+		}
+		
+		public function cors_headers(){
+			$strDomains = $this->config['access_control_header'];
+			$arrDomains = explode("\n", $strDomains);
+				
+			$arrAllowedDomains = array();
+				
+			foreach($arrDomains as $strDomain){
+				$strDomain = trim(htmlspecialchars_decode($strDomain, ENT_QUOTES));
+				if($strDomain === '*') {
+					header('Access-Control-Allow-Origin: *');
+					return;
+				}
+		
+				$arrAllowedDomains[] = $strDomain; // http://mydomain.com
+			}
+				
+			//Some generic domains
+			$strDomain = $this->httpHost();
+			$urlData = parse_url($strDomain);
+			$hostData = explode('.', $urlData['host']);
+			$hostData = array_reverse($hostData);
+			if(count($hostData) > 1) $strDomain = $hostData[1].'.'.$hostData[0];
+			else $strDomain = $hostData[0];
+			$arrAllowedDomains[] = $strDomain;
+				
+			$incomingOrigin = array_key_exists('HTTP_ORIGIN', $_SERVER) ? $_SERVER['HTTP_ORIGIN'] : NULL;
+			if($incomingOrigin === NULL) $incomingOrigin = array_key_exists('ORIGIN', $_SERVER) ? $_SERVER['ORIGIN'] : NULL;
+			if($incomingOrigin === NULL){
+				$strReferer = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
+				$arrRefererInfo = parse_url($strReferer);
+				if($arrRefererInfo['host'] != "") {
+					$incomingOrigin = $arrRefererInfo['scheme'].'://'.$arrRefererInfo['host'];
+				}
+			}
+				
+			foreach($arrAllowedDomains as $strAllowedDomain){
+				$arrDomainParts = parse_url($strAllowedDomain);
+				if($arrDomainParts['host'] != ""){
+					$pattern = '/^http:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
+						
+					$allow = preg_match($pattern, $incomingOrigin);
+					if ($allow){
+						header('Access-Control-Allow-Origin: '.filter_var($incomingOrigin, FILTER_SANITIZE_URL));
+						return;
+					}
+				}
+			}
+				
+		}
+		
+		protected function is_ssl(){
+			if(defined('NO_SSL') && NO_SSL) return false;
+			return ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) || isset($_SERVER['SSL_SESSION_ID']) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ));
+		}
+		
+		protected function httpHost(){
+			$protocol = ($this->is_ssl()) ? 'https://' : 'http://';
+			$xhost    = preg_replace('/[^A-Za-z0-9\.:-]/', '',(isset( $_SERVER['HTTP_X_FORWARDED_HOST']) ?  $_SERVER['HTTP_X_FORWARDED_HOST'] : ''));
+			$host		= $_SERVER['HTTP_HOST'];
+			if (empty($host)){
+				$host	 = $_SERVER['SERVER_NAME'];
+				$host	.= ($_SERVER['SERVER_PORT'] != 80) ? ':' . $_SERVER['SERVER_PORT'] : '';
+			}
+			return $protocol.preg_replace('/[^A-Za-z0-9\.:-]/', '', (!empty($xhost) ? $xhost : $host));
 		}
 	}#class
 }
