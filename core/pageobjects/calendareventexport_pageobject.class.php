@@ -34,9 +34,13 @@ class calendareventexport_pageobject extends pageobject {
 			$eventid		= $this->in->get('eventid', 0);
 			$output			= $this->in->get('output');
 
+			// raid groups
+			$this->raidgroup_dd		= $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
+			$arrRaidgroups			= array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
+
 			$flipstruc = array_flip($menu_structure);
 			if($output && in_array($output, $flipstruc)){
-				$this->tpl->assign_var('EXPORT_OUTPUT', $output($eventid));
+				$this->tpl->assign_var('EXPORT_OUTPUT', $output($eventid, $arrRaidgroups));
 			}else{
 				$this->tpl->assign_var('EXPORT_OUTPUT', $this->user->lang('raidevent_raid_export_indx'));
 			}
@@ -45,7 +49,6 @@ class calendareventexport_pageobject extends pageobject {
 
 			$this->tpl->assign_vars(array(
 				'DROPDOWN'			=> new hdropdown('link', array('options' => $menu_structure, 'value' => $output, 'id' => 'exportdropdown')),
-				'MACROEXPORT'		=> ($output == 'WoWMacroexport') ? true : false,
 				'EVENT_ID'			=> $eventid,
 				'F_MULTISIGNIN'		=> 'listraids.php',
 			));
