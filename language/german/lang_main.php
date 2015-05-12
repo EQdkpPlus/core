@@ -648,7 +648,8 @@ $lang = array(
 	"Raids und Termine"
 ),
 "raidevent_raidleader" => "Raidleiter",
-"raidevent_export_seperator" => "CSV Seperator:",
+"raidevent_export_seperator" => "CSV Seperator",
+"raidevent_export_raidgroup" => "Raidgruppe",
 "raidevent_export_sorting" => "Sortierung:",
 "raidevent_no_guest_note" => 'Keine Notiz hinterlegt',
 "raidevent_autogroups" => "Autom. hinzufügen (Gruppe)",

@@ -30,7 +30,7 @@ $rpexport_plugin['csv.class.php'] = array(
 	'version'		=> '2.0.0');
 
 if(!function_exists('CSVexport')){
-	function CSVexport($raid_id){
+	function CSVexport($raid_id, $raid_groups){
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
 
@@ -39,14 +39,16 @@ if(!function_exists('CSVexport')){
 			$a_json[]	= array(
 				'name'		=> registry::register('plus_datahandler')->get('member', 'name', array($id_attendees)),
 				'status'	=> $d_attendees['signup_status'],
-				'guest'		=> false
+				'guest'		=> false,
+				'group'		=> $d_attendees['raidgroup']
 			);
 		}
 		foreach($guests as $guestsdata){
 			$a_json[]	= array(
 				'name'		=> $guestsdata['name'],
 				'status'	=> false,
-				'guest'		=> true
+				'guest'		=> true,
+				'group'		=> $guestsdata['raidgroup']
 			);
 		}
 		$json = json_encode($a_json);
@@ -54,7 +56,7 @@ if(!function_exists('CSVexport')){
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\'], #ip_seperator").change(function (){
+			$("input[type=\'checkbox\'], #ip_seperator, #raidgroup").change(function (){
 				genOutput()
 			});
 			
@@ -73,18 +75,29 @@ if(!function_exists('CSVexport')){
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					data.push(item.name);
+					if($("#raidgroup").val() == "0" || (item.group > 0 && item.group == $("#raidgroup").val())){
+						data.push(item.name);
+					}
 				}
 			});
 			$("#attendeeout").html(data.join(ip_seperator));
 		}
 			');
-
-		$text  = "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));
+		$text  = "<dt><label>".registry::fetch('user')->lang('raidevent_export_seperator')."</label></dt>
+					<dd>
+						<input type='text' name='seperator' id='ip_seperator' value=',' size='4' />
+					</dd>
+				</dl><dl>";
+		
+		$text .= "<dt><label>".registry::fetch('user')->lang('raidevent_export_raidgroup')."</label></dt>
+					<dd>
+						".new hdropdown('raidgroup', array('options' => $raid_groups, 'value' => 0, 'id' => 'raidgroup'))."
+					</dd>
+				</dl><dl>";
+		$text .= "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));
 		$text .= "<input type='checkbox' checked='checked' name='guests' id='cb_guests' value='true'> ".registry::fetch('user')->lang('raidevent_raid_guests');
 		$text .= "<input type='checkbox' checked='checked' name='signedin' id='cb_signedin' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 1));
 		$text .= "<input type='checkbox' name='backup' id='cb_backup' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 3));
-		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_seperator')." <input type='text' name='seperator' id='ip_seperator' value=',' size='4' />";
 		$text .= "<br/>";
 		$text .= "<textarea name='group".rand()."' id='attendeeout' cols='60' rows='10' onfocus='this.select()' readonly='readonly'>";
 		$text .= "</textarea>";

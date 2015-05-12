@@ -30,7 +30,7 @@ $rpexport_plugin['csv_points.class.php'] = array(
 	'version'		=> '2.0.0');
 
 if(!function_exists('CSVpointexport')){
-	function CSVpointexport($raid_id){
+	function CSVpointexport($raid_id, $raid_groups){
 		$presets = array(
 			array('name'	=> 'earned', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 			array('name'	=> 'spent', 'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -60,6 +60,7 @@ if(!function_exists('CSVpointexport')){
 				'name'			=> unsanitize(registry::register('plus_datahandler')->get('member', 'name', array($id_attendees))),
 				'status'		=> $d_attendees['signup_status'],
 				'guest'			=> false,
+				'group'			=> $d_attendees['raidgroup'],
 				'point'			=> (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval(registry::register('config')->get('show_twinks'))) ? 0 : 1)) : 0,
 			);
 		}
@@ -71,6 +72,7 @@ if(!function_exists('CSVpointexport')){
 				'status'	=> $arrData['status'],
 				'guest'		=> $arrData['guest'],
 				'point'		=> $arrData['point'],
+				'group'		=> $arrData['group'],
 			);
 		}
 		
@@ -81,6 +83,7 @@ if(!function_exists('CSVpointexport')){
 				'status'	=> $arrData['status'],
 				'guest'		=> $arrData['guest'],
 				'point'		=> $arrData['point'],
+				'group'		=> $arrData['group'],
 			);
 		}
 
@@ -89,7 +92,8 @@ if(!function_exists('CSVpointexport')){
 				'name'		=> $guestsdata['name'],
 				'status'	=> false,
 				'guest'		=> true,
-				'point'		=> 0
+				'point'		=> 0,
+				'group'		=> $guestsdata['raidgroup']
 			);
 		}
 
@@ -99,7 +103,7 @@ if(!function_exists('CSVpointexport')){
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\'], #ip_seperator, #dd_sorting").change(function (){
+			$("input[type=\'checkbox\'], #ip_seperator, #dd_sorting, #raidgroup").change(function (){
 				genOutput()
 			});
 		', "docready");
@@ -119,22 +123,38 @@ if(!function_exists('CSVpointexport')){
 
 			$.each(attendee_data, function(i, item) {
 				if((cb_guests && item.guest == true) || (cb_confirmed && !item.guest && item.status == 0) || (cb_signedin && item.status == 1) || (cb_backup && item.status == 3)){
-					data.push(item.name + " " + item.point);
+					console.log($("#raidgroup").val());
+					if($("#raidgroup").val() == "0" || (item.group > 0 && item.group == $("#raidgroup").val())){
+						data.push(item.name + " " + item.point);
+					}
 				}
 			});
 			$("#attendeeout").html(data.join(ip_seperator));
 		}
 			');
-
-		$text  = "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));
+			$text  = "<dt><label>".registry::fetch('user')->lang('raidevent_export_seperator')."</label></dt>
+						<dd>
+							<input type='text' name='seperator' id='ip_seperator' value=',' size='4' />
+						</dd>
+					</dl><dl>";
+			$text .= "<dt><label>".registry::fetch('user')->lang('raidevent_export_sorting')."</label></dt>
+						<dd>
+							<select name='sorting' id='dd_sorting'>
+								<option value='desc'>ASC</option>
+								<option value='asc'>DESC</option>
+							</select>
+						</dd>
+					</dl><dl>";
+			$text .= "<dt><label>".registry::fetch('user')->lang('raidevent_export_raidgroup')."</label></dt>
+						<dd>
+							".new hdropdown('raidgroup', array('options' => $raid_groups, 'value' => 0, 'id' => 'raidgroup'))."
+						</dd>
+					</dl><dl>";
+		$text .= "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));
 		$text .= "<input type='checkbox' checked='checked' name='guests' id='cb_guests' value='true'> ".registry::fetch('user')->lang('raidevent_raid_guests');
 		$text .= "<input type='checkbox' checked='checked' name='signedin' id='cb_signedin' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 1));
 		$text .= "<input type='checkbox' name='backup' id='cb_backup' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 3));
-		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_seperator')." <input type='text' name='seperator' id='ip_seperator' value=',' size='4' />";
-		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_sorting')." <select name='sorting' id='dd_sorting'>
-						<option value='desc'>ASC</option>
-						<option value='asc'>DESC</option>
-					</select>";
+		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_sorting')." ";
 		$text .= "<br/>";
 		$text .= "<textarea name='group".rand()."' id='attendeeout' cols='60' rows='10' onfocus='this.select()' readonly='readonly'>";
 		$text .= "</textarea>";
