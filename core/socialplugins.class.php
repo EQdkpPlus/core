@@ -33,6 +33,7 @@ if (!class_exists("socialplugins")) {
 		private $js_included = false;
 		private $intCacheTime = 10;
 		private $cache = -1;
+		private $blnMetaAdded = false;
 
 		
 		public function getSocialPlugins($blnOnlyActive = false){
@@ -113,13 +114,17 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		private function opengraph_tags($title, $description, $image){
+			if($this->blnMetaAdded) return;
+			
 			$strMetatags = '<meta property="og:title" content="'.$title.'" />
 							<meta property="og:type" content="article" />
 							<meta property="og:url" content="'.(($this->env->ssl) ? 'https://' : 'http://').$this->env->httpHost.xhtml_entity_decode($this->env->request).'" />
 							<meta property="og:description" content="'.htmlspecialchars(trim(strip_tags($description)), ENT_QUOTES).'" />
 							<meta property="og:image" content="'.$image.'" />';
-
+			
 			$this->tpl->add_meta($strMetatags);
+			
+			$this->blnMetaAdded = true;
 		}
 		
 		public function getFirstImage($strHTML){
