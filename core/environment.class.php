@@ -194,10 +194,10 @@ if (!class_exists("environment")) {
 			return $protocol.preg_replace('/[^A-Za-z0-9\.:-]/', '', (!empty($xhost) ? $xhost : $host));
 		}
 
-		public function buildlink() {
+		public function buildlink($blnWithServerpath=true) {
 			$script_name = preg_replace('/^\/?(.*?)\/?$/', '\1', trim($this->config->get('server_path')));
 			$script_name = ( $script_name != '' ) ? $script_name . '/' : '';
-			return $this->httpHost.'/'.$script_name;
+			return ($blnWithServerpath) ? $this->httpHost.'/'.$script_name : $this->httpHost;
 		}
 		
 		public function path(){
@@ -282,7 +282,7 @@ if (!class_exists("environment")) {
 			// Mark mobile devices
 			if ($mobile)
 			{
-				$return->class .= ' mobile';
+				$return->class .= ' mobile ismobiledevice';
 			}
 						
 			$return->browser  = $browser;

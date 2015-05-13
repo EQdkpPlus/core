@@ -21,7 +21,7 @@
 
 class calendarevent_pageobject extends pageobject {
 
-	public static $shortcuts = array('email'=>'MyMailer');
+	public static $shortcuts = array('email'=>'MyMailer', 'social' => 'socialplugins');
 	
 	public function __construct() {
 		$handler = array(
@@ -887,7 +887,12 @@ class calendarevent_pageobject extends pageobject {
 
 		
 		$arrRaidgroups = array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
+		
+		$intCategoryID = registry::get_const('categoryid');
+		$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 
+		$strPageTitle = sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+		
 		$this->tpl->assign_vars(array(
 			// error messages
 			'RAID_CLOSED'			=> ($eventdata['closed'] == '1') ? true : false,
@@ -952,10 +957,15 @@ class calendarevent_pageobject extends pageobject {
 			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
 				
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
+			'MY_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->strPathPlain, $strPageTitle) : '',
 		));
+		
+		
+		$strPreviewImage = $this->pdh->get('event', 'icon', array($eventdata['extension']['raid_eventid'], true));
+		$this->social->callSocialPlugins($strPageTitle, $strPageTitle, $this->env->buildlink(false).$strPreviewImage);
 
 		$this->set_vars(array(
-			'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true),
+			'page_title'		=> $strPageTitle,
 			'template_file'		=> 'calendar/viewcalraid.html',
 			'header_format'		=> $this->simple_head,
 			'display'			=> true

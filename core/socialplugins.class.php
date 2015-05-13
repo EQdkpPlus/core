@@ -29,7 +29,7 @@ if (!class_exists("socialplugins")) {
 		
 		
 		private $plugins = array('opengraph_tags');
-		private $buttons = array('facebook_share', 'twitter_share', 'google_plusone', 'facebook_like');
+		private $buttons = array('facebook_share', 'twitter_share', 'google_plusone', 'facebook_like', 'whatsapp_share');
 		private $js_included = false;
 		private $intCacheTime = 10;
 		private $cache = -1;
@@ -133,7 +133,7 @@ if (!class_exists("socialplugins")) {
 		
 		private function facebook_share($urlToShare, $text, $height){
 			$intCount = ($this->getCache($urlToShare, 'facebook') !== false) ? $this->getCache($urlToShare, 'facebook') : 0;
-			$html = '<a class="social-bookmarks-count facebook" href="https://www.facebook.com/sharer/sharer.php?t='.rawurlencode($text).'&amp;u='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=500,height=350,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_facebook_share').'"><i class="fa fa-facebook-square"></i> <span class="share-text">'.$this->user->lang('sp_btn_facebook_share').'</span><span class="share-count">'.$intCount.'</span></a>';
+			$html = '<a class="social-bookmarks-count facebook" href="https://www.facebook.com/sharer/sharer.php?u='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=500,height=350,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;"><i class="fa fa-facebook-square"></i> <span class="share-text">'.$this->user->lang('sp_btn_facebook_share').'</span><span class="share-count">'.$intCount.'</span></a>';
 			return $html;
 		}
 		
@@ -151,6 +151,11 @@ if (!class_exists("socialplugins")) {
 		private function google_plusone($urlToShare, $text, $height){
 			$intCount = ($this->getCache($urlToShare, 'gplus') !== false) ? $this->getCache($urlToShare, 'gplus') : 0;
 			$html = '<a class="social-bookmarks-count gplus" href="https://plus.google.com/share?url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=500,height=350,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;"><i class="fa fa-google-plus"></i> <span class="share-text">+1</span><span class="share-count">'.$intCount.'</span></a>';
+			return $html;
+		}
+		
+		private function whatsapp_share($urlToShare, $text, $height){
+			$html = '<a class="social-bookmarks-nocount whatsapp" href="whatsapp://send?text='.rawurlencode($text).' '.rawurlencode($urlToShare).'"><i class="fa fa-whatsapp"></i> '.$this->user->lang('sp_btn_facebook_share').'</a>';
 			return $html;
 		}
 

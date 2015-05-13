@@ -82,7 +82,9 @@ class MyMailer extends PHPMailer {
 	}
 
 	public function generateSubject($input){
-		return $this->config->get('guildtag').' '.$this->config->get('dkp_name').': '.$input;
+		$strMaintitle = $this->config->get('main_title');
+		$strTitle = ($strMaintitle && strlen($strMaintitle)) ? $strMaintitle : ($this->config->get('guildtag').' '.$this->config->get('dkp_name'));
+		return $strTitle.': '.$input;
 	}
 
 	/**

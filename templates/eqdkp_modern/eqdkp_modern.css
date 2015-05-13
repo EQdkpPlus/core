@@ -444,6 +444,10 @@ h3 {
 	border-color: @eqdkpContentContrastBorderColor;
 }
 
+.contentContrast h1, .contentContrast h2, .contentContrast h3 {
+	color: @eqdkpContentContrastColor;
+}
+
 #contentFooter {
 	background: @eqdkpMenuBackgroundColor; /* Old browsers */
 	background: -moz-linear-gradient(top, @eqdkpMenuBackgroundColor 0%, darken(@eqdkpMenuBackgroundColor, 20) 100%); /* FF3.6+ */
@@ -2639,6 +2643,9 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 }
 
 /* Social Bookmarks */
+.social-bookmarks {
+	list-style-type: none !important;
+}
 .social-bookmarks li {
 	float: left;
 	margin-right: 7px;
@@ -2656,9 +2663,20 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 	position: relative;
 }
 
-.social-bookmarks li a.social-bookmarks-count i{
+.social-bookmarks li a.social-bookmarks-count i, .social-bookmarks li a.social-bookmarks-nocount i{
 	font-size: 18px;
 	vertical-align: middle;
+}
+
+.social-bookmarks li a.social-bookmarks-nocount {
+	font-size: 12px;
+	padding: 2px 4px 2px 4px;
+	text-decoration: none;
+	display: block;
+	color: #fff;
+	padding-left: 5px;
+	border-radius: 4px;
+	position: relative;
 }
 
 .social-bookmarks a.twitter {
@@ -2683,6 +2701,22 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 
 .social-bookmarks a.gplus:hover {
 	background-color: #f75b44;
+}
+
+.social-bookmarks a.whatsapp {
+	background-color: #42aa42;
+}
+
+.social-bookmarks .whatsapp_share {
+	display: none;
+}
+
+.social-bookmarks a.whatsapp:hover {
+	background-color: #268132;
+}
+
+.ismobiledevice .social-bookmarks .whatsapp_share {
+	display: block;
 }
 
 .social-bookmarks .share-count {
