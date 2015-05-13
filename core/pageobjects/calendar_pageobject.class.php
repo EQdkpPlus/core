@@ -371,7 +371,7 @@ class calendar_pageobject extends pageobject {
 		$this->jquery->fullcalendar();
 
 		//RSS-Feed for next Raids
-		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('u_calendar_view'));
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('po_calendarevent'));
 
 		//raid-list
 		$settings = $this->pdh->get_page_settings('calendar', 'hptt_calendar_raidlist');

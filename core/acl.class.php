@@ -218,7 +218,6 @@ class acl_manager extends gen_class {
 				array('CBNAME' => 'a_cal_revent_conf',		'TEXT' => $this->user->lang('manage_revent_man')),
 				array('CBNAME' => 'a_cal_addrestricted',	'TEXT' => $this->user->lang('add_restricted_calevent')),
 				array('CBNAME' => 'u_cal_event_add',		'TEXT' => $this->user->lang('add_calevents')),
-				array('CBNAME' => 'u_calendar_view',		'TEXT' => $this->user->lang('view_calendar')),
 				array('CBNAME' => 'u_calendar_raidnotes',	'TEXT' => $this->user->lang('calendar_acl_raidnotes')),
 			),
 

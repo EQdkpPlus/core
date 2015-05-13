@@ -31,7 +31,7 @@ if (!class_exists('exchange_raid_signup')){
 		public function post_raid_signup($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if ($this->user->check_auth('u_calendar_view', false)){
+			if ($this->user->check_auth('po_calendarevent', false)){
 				$xml = simplexml_load_string($body);
 				if ($xml && intval($xml->eventid) > 0){
 					$eventid = intval($xml->eventid);
