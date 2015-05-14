@@ -3750,6 +3750,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: auto !important;
 		border-top: 1px solid @eqdkpSidebarBorderColor;
 	}
+	
+	.responsive #personalAreaUser .user-avatar-smallest>img {
+		margin-top: 4px;
+	}
 }
 
 @media all and (max-width: 590px) {
@@ -3798,6 +3802,17 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		float: none;
 	}
 
+	.responsive .share-text {
+		display: none;
+	}
+	
+	.responsive .social-bookmarks li a.social-bookmarks-count {
+		width: 50px;
+	}
+
+	.responsive #personalAreaUser ul li {
+		margin-right: 10px;
+	}
 }
 
 
