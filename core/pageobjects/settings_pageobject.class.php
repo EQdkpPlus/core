@@ -224,7 +224,7 @@ class settings_pageobject extends pageobject {
 		$log_action = $this->logs->diff($arrOld, $arrNew, $arrLang);
 		if($log_action) {
 			$log_action["{L_USER}"] = $this->pdh->get('user', 'name', array($this->user->id));
-			$this->logs->add('calendar_log_awaymode', $log_action, $this->user->id, '', false, 'calendar');
+			$this->logs->add('calendar_log_awaymode', $log_action, $this->user->id, $this->pdh->get('user', 'name', array($this->user->id)), false, 'calendar');
 		}
 		
 		//Create Thumbnail for User Avatar
