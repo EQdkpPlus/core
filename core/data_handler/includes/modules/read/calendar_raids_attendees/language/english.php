@@ -35,10 +35,11 @@ $module_lang = array(
 	"html_calstat_raids_signedin" => 'Signedin',
 	"html_calstat_raids_signedoff" => 'Signedoff',
 	"html_calstat_raids_backup" => 'Backup',
-	"html_calstat_raids_confirmed_fromto" => 'Attended',
-	"html_calstat_raids_signedin_fromto" => 'Signedin',
-	"html_calstat_raids_signedoff_fromto" => 'Signedoff',
-	"html_calstat_raids_backup_fromto" => 'Backup',
+	"calstat_raids_confirmed_fromto" => 'Attended',
+	"calstat_raids_signedin_fromto" => 'Signedin',
+	"calstat_raids_signedoff_fromto" => 'Signedoff',
+	"calstat_raids_backup_fromto" => 'Backup',
+	"calstat_raids_total_fromto" => 'Total',
 );
 $preset_lang = array(
 	"raidattendees_status" => 'Calendar-Raid-Attendee Status',

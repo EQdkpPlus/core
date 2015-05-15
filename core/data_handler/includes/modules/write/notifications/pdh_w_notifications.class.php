@@ -78,6 +78,17 @@ if(!class_exists('pdh_w_notifications')) {
 			
 		}
 		
+		public function mark_as_read_bytype($strType, $intUserId, $intNotificationID){
+			$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE type=? AND user_id=? AND dataset_id=?;")->set(array(
+					'`read`'	=> 1
+			))->execute($strType, $intUserId, $intNotificationID);
+			if($objQuery) {
+				$this->pdh->enqueue_hook('notifications_update');
+				return true;
+			}
+			return false;
+		}
+		
 		public function delete($intNotificationID){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE id = ?")->execute($intNotificationID);
 			

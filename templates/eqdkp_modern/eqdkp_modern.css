@@ -1925,16 +1925,16 @@ ul.breamcrumb .current::before{
 .browser-icon svg {
 	width:24px;
 	height:24px;
-	/* fill:grey; */
+	fill: @eqdkpContentFontColor;
 }
 
 /* ACP: index, rss notifications */
 #notifications,
 #twitterfeed{
-	background: #F5F5F5;
+	background: @eqdkpContentBackgroundColor;
 	margin:0;
 	padding:5px;
-	border:1px solid #dddddd;
+	border:1px solid @eqdkpContentBorderColor;
 	height:200px;
 	width:auto;
 	overflow: auto;
@@ -1979,10 +1979,10 @@ ul.breamcrumb .current::before{
 
 /* ACP: manage menues */
 .manage_menues_block { 
-	list-style-type: none; padding: 3px; margin:6px; border:1px dashed #666; min-width:180px;
+	list-style-type: none; padding: 3px; margin:6px; border:1px dashed darken(@eqdkpContentBorderColor,40); min-width:180px;
 }
 .manage_menues_block2 {
-	list-style-type: none; padding: 3px; margin:6px; border:3px dashed #666; min-width:180px;
+	list-style-type: none; padding: 3px; margin:6px; border:3px dashed darken(@eqdkpContentBorderColor,40); min-width:180px;
 }
 .manage_menues_block ul {
 	margin:0px;
@@ -1990,15 +1990,20 @@ ul.breamcrumb .current::before{
 }
 .manage_menues_block li, .manage_menues_block2 li {
 	list-style-type: none; padding: 5px;
-	margin:5px; background-color:#F5F5F5; cursor:pointer; color:#666;
+	margin:5px; background-color:@eqdkpContentBackgroundColor; cursor:pointer; color:lighten(@eqdkpContentFontColor,40);
 }
 
 .manage_menues_block .toggle_button {
 	font-family: 'Trebuchet MS',Arial,sans-serif;
 	font-weight: bold;
-	border-bottom: 1px solid #CCCCCC;
-	background-color: #EAEAEA;
+	border-bottom: 1px solid @eqdkpContainerBorderColor;
+	background-color: @eqdkpContainerBackgroundColor;
 	padding: 3px;
+}
+
+.sortable li.mjs-nestedSortable-leaf div, .sortable li div,.sortable li.mjs-nestedSortable-branch div{
+	background: -moz-linear-gradient(top,  lighten(@eqdkpContentBackgroundColor,10) 0%, @eqdkpContentBackgroundColor 47%, darken(@eqdkpContentBackgroundColor,20) 100%);
+	background: -webkit-linear-gradient(top,  lighten(@eqdkpContentBackgroundColor,10) 0%,@eqdkpContentBackgroundColor 47%,darken(@eqdkpContentBackgroundColor,20) 100%);
 }
 
 .eye{
@@ -3336,22 +3341,22 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 }
 
 .panel {
-	border: 1px solid #ddd;
+	border: 1px solid @eqdkpTableBorderColor;
 	border-radius: 4px;
 	margin-bottom: 15px;
 }
 .panel-heading {
-	background-color: #f5f5f5;
-	background-image: linear-gradient(to bottom, #f5f5f5 0px, #e8e8e8 100%);
+	background-color: lighten(@eqdkpTableThBackgroundColor,5);
+	background-image: linear-gradient(to bottom, lighten(@eqdkpTableThBackgroundColor,5) 0px, @eqdkpTableThBackgroundColor 100%);
 	background-repeat: repeat-x;
-	border-color: #ddd;
+	border-color: @eqdkpTableBorderColor;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
-	color: #333;
+	color: lighten(@eqdkpTableThFontColor,20);
 	padding: 10px 15px;
 }
 .panel-body {
-	background-color: #fff;
+	background-color: lighten(@eqdkpTableTrBackgroundColor1,10);
 	padding: 10px 15px;
 }
 
