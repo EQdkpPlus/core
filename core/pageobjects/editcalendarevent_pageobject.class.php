@@ -104,6 +104,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'dw_raidleader'		=> $this->in->getArray('raidleader', 'int'),
 				'deadlinedate'		=> $this->in->get('deadlinedate', 0),
 				'distribution'		=> $raid_clsdistri,
+				'calendar_id'		=> $this->in->get('calendar_id'), 
 			)
 		));
 		$this->pdh->process_hook_queue();
