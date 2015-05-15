@@ -206,6 +206,11 @@ $lang = array(
 "user_sett_f_help_awaymode_enddate" => "Das Enddatum der Abwesenheit",
 "user_sett_f_awaymode_note" => "Bemerkung",
 "user_sett_f_help_awaymode_note" => "Eine Notiz oder Bemerkung zu deiner Abwesenheit",
+"calendar_awaymode_enabled" => "Statusänderung des Abwesenheitsmodus",
+"calendar_awaymode_startdate" => "Starttag der Abwesenheit",
+"calendar_awaymode_enddate" => "Endtag der Abwesenheit",
+"calendar_awaymode_note" => "Notiz",
+"calendar_log_awaymode" => "Kalender Abwesenheitsmodus",
 
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",

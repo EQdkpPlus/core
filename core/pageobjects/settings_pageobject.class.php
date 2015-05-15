@@ -201,6 +201,32 @@ class settings_pageobject extends pageobject {
 			}
 		}
 		
+		// the logging thing for calendar away mode
+		$arrOld = array(
+			'awaymode_enabled'		=> $this->pdh->get('user', 'awaymode_enabled', array($this->user->id)),
+			'awaymode_startdate'	=> "{D_".$this->pdh->get('user', 'awaymode_startdate', array($this->user->id))."}",
+			'awaymode_enddate'		=> "{D_".$this->pdh->get('user', 'awaymode_enddate', array($this->user->id))."}",
+			'awaymode_note'			=> $this->pdh->get('user', 'awaymode_note', array($this->user->id))
+		);
+		$arrNew = array(
+			'awaymode_enabled'		=> $values['awaymode_enabled'],
+			'awaymode_startdate'	=> "{D_".$values['awaymode_startdate']."}",
+			'awaymode_enddate'		=> "{D_".$values['awaymode_enddate']."}",
+			'awaymode_note'			=> $values['awaymode_note']
+		);
+		$arrLang = array(
+			'awaymode_enabled'		=> '{L_CALENDAR_AWAYMODE_ENABLED}',
+			'awaymode_startdate'	=> '{L_CALENDAR_AWAYMODE_STARTDATE}',
+			'awaymode_enddate'		=> '{L_CALENDAR_AWAYMODE_ENDDATE}',
+			'awaymode_note'			=> '{L_NOTE}',
+		);
+		
+		$log_action = $this->logs->diff($arrOld, $arrNew, $arrLang);
+		if($log_action) {
+			$log_action["{L_USER}"] = $this->pdh->get('user', 'name', array($this->user->id));
+			$this->logs->add('calendar_log_awaymode', $log_action, $this->user->id, '', false, 'calendar');
+		}
+		
 		//Create Thumbnail for User Avatar
 		if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($this->user->id)) != $customArray['user_avatar']){
 			$image = $this->pfh->FolderPath('users/'.$this->user->id,'files').$customArray['user_avatar'];
@@ -214,6 +240,7 @@ class settings_pageobject extends pageobject {
 
 		$blnResult = $this->pdh->put('user', 'update_user', array($this->user->id, $query_ary));
 		$this->pdh->process_hook_queue();
+		
 		//Only redirect if saving was successfull so we can grad an error message
 		if ($blnResult) redirect($this->controller_path_plain.'Settings/'.$this->SID.'&amp;save');
 		return;
@@ -225,7 +252,7 @@ class settings_pageobject extends pageobject {
 			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
 		}
 		if(empty($userdata)) {
-			$this->create_form();			
+			$this->create_form();
 			$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings'], $this->user->data['notification_settings']);
 			if(is_array($userdata['ntfy_comment_new_article']) && count($userdata['ntfy_comment_new_article']) == 0){
 				$userdata['ntfy_comment_new_article'] = array('-1' => -1);

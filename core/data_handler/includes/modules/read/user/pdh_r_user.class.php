@@ -236,6 +236,22 @@ if (!class_exists("pdh_r_user")){
 			return $this->users[$user_id]['user_active'];
 		}
 
+		public function get_awaymode_enabled($user_id){
+			return $this->users[$user_id]['awaymode_enabled'];
+		}
+
+		public function get_awaymode_startdate($user_id){
+			return $this->users[$user_id]['awaymode_startdate'];
+		}
+
+		public function get_awaymode_enddate($user_id){
+			return $this->users[$user_id]['awaymode_enddate'];
+		}
+
+		public function get_awaymode_note($user_id){
+			return $this->users[$user_id]['awaymode_note'];
+		}
+
 		public function get_failed_logins($user_id) {
 			return $this->users[$user_id]['failed_login_attempts'];	
 		}
