@@ -1749,7 +1749,7 @@ if (!class_exists("jquery")) {
 		* @param $mssg			The text to sanatize
 		* @return sanatized text
 		*/
-		public function sanitize($mssg, $rmlb=false, $in_js=false){
+		public function sanitize($mssg, $rmlb=false){
 			$mssg = html_entity_decode($mssg, ENT_COMPAT, 'UTF-8');
 			$mssg = str_replace('&#039;', "'", $mssg);
 			$mssg = str_replace('"', "'", $mssg);

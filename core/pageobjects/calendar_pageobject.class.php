@@ -474,7 +474,7 @@ class calendar_pageobject extends pageobject {
 					
 				//footer
 				$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($arrMemberlist));
-				//$sort = $this->in->get('statsort');
+				$sort = $this->in->get('statsort');
 				//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
 					
 				$this->tpl->assign_vars(array (
