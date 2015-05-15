@@ -30,10 +30,11 @@ $module_lang = array(
 	'html_calstat_raids_signedin'		=> 'Angemeldet',
 	'html_calstat_raids_signedoff'		=> 'Abgemeldet',
 	'html_calstat_raids_backup'			=> 'Ersatzbank',
-	'html_calstat_raids_confirmed_fromto' => 'Teilgenommen',
-	'html_calstat_raids_signedin_fromto'	=> 'Angemeldet',
-	'html_calstat_raids_signedoff_fromto'	=> 'Abgemeldet',
-	'html_calstat_raids_backup_fromto'		=> 'Ersatzbank'
+	'calstat_raids_confirmed_fromto' 	=> 'Teilgenommen',
+	'calstat_raids_signedin_fromto'		=> 'Angemeldet',
+	'calstat_raids_signedoff_fromto'	=> 'Abgemeldet',
+	'calstat_raids_backup_fromto'		=> 'Ersatzbank',
+	'calstat_raids_total_fromto'		=> 'Gesamt',
 );
 
 $preset_lang = array(

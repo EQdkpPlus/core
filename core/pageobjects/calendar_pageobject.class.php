@@ -459,7 +459,8 @@ class calendar_pageobject extends pageobject {
 				if(in_array(1, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_signedin_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
 				if(in_array(2, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_signedoff_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
 				if(in_array(3, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_backup_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
-						
+				$arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_total_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
+												
 				$show_twinks = $this->config->get('show_twinks');
 				$statsuffix = $date_suffix;
 				if($this->in->exists('show_twinks')){
@@ -469,7 +470,7 @@ class calendar_pageobject extends pageobject {
 	
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
 	
-				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2), 'statsort');
+				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.$show_twinks), 'statsort');
 				$hptt->setPageRef($this->strPath);
 					
 				//footer
